@@ -1,0 +1,10 @@
+.DS_Store
+/log/
+/data/
+/lib/
+/config/
+game_server
+release
+shard.lock
+/.crystal/
+/.shards/
