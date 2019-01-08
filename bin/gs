@@ -1,0 +1,21 @@
+# !/bin/sh
+
+echo "Starting Game Server"
+
+while :; do
+  ./game_server
+
+  case $? in
+    0)
+      echo "Game Server terminated"
+      break
+      ;;
+    1)
+      echo "Game Server terminated abnormally"
+      break
+      ;;
+    2)
+      echo "Game Server restarted"
+      ;;
+  esac
+done
