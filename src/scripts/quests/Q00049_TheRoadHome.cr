@@ -1,0 +1,15 @@
+require "./abstract_get_scroll_to_hometown_quest"
+
+class Quests::Q00049_TheRoadHome < Quests::AbstractGetScrollToHometownQuest
+  def initialize
+    super(49, self.class.simple_name, "The Road Home")
+  end
+
+  def scroll_item_id
+    SCROLL_OF_ESCAPE_DWARVEN_VILLAGE
+  end
+
+  def parent_quest_name
+    "Q00010_IntoTheWorld"
+  end
+end

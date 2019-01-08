@@ -1,0 +1,3 @@
+enum AnnouncementType : UInt8
+  NORMAL, CRITICAL, EVENT, AUTO_NORMAL, AUTO_CRITICAL
+end

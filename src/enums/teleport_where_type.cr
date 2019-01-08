@@ -1,0 +1,3 @@
+enum TeleportWhereType : UInt8
+  CASTLE, CLANHALL, SIEGEFLAG, TOWN, FORTRESS
+end

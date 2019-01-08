@@ -1,0 +1,3 @@
+enum ShortcutType : UInt8
+  NONE, ITEM, SKILL, ACTION, MACRO, RECIPE, BOOKMARK
+end

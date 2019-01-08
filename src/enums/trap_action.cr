@@ -1,0 +1,3 @@
+enum TrapAction : UInt8
+  TRAP_TRIGGERED, TRAP_DETECTED, TRAP_DISARMED
+end

@@ -1,0 +1,25 @@
+module ItemHandler::EnchantAttribute
+  extend self
+  extend ItemHandler
+
+  def use_item(playable, item, force)
+    unless playable.player?
+      playable.send_packet(SystemMessageId::ITEM_NOT_FOR_PETS)
+      return false
+    end
+
+    pc = playable.acting_player
+
+    return false if pc.casting_now?
+
+    if pc.enchanting?
+      pc.send_packet(SystemMessageId::ENCHANTMENT_ALREADY_IN_PROGRESS)
+      return false
+    end
+
+    pc.active_enchant_attr_item_id = item.l2id
+    pc.send_packet(ExChooseInventoryAttributeItem.new(item))
+
+    true
+  end
+end

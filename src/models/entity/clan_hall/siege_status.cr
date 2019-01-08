@@ -1,0 +1,3 @@
+enum SiegeStatus : UInt8
+  REGISTERING, WAITING_BATTLE, RUNNING
+end

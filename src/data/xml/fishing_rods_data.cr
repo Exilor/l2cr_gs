@@ -1,0 +1,28 @@
+require "../../models/fishing/l2_fishing_rod"
+
+module FishingRodsData
+  extend self
+  extend XMLReader
+
+  private FISHING_RODS = {} of Int32 => L2FishingRod
+
+  def load
+    FISHING_RODS.clear
+    parse_datapack_file("stats/fishing/fishingRods.xml")
+    info "Loaded #{FISHING_RODS.size} fishing rods."
+  end
+
+  def get_fishing_rod(item_id : Int32) : L2FishingRod
+    FISHING_RODS[item_id]
+  end
+
+  private def parse_document(doc, file)
+    doc.find_element("list") do |n|
+      n.find_element("fishingRod") do |d|
+        set = StatsSet.new(d.attributes)
+        fishing_rod = L2FishingRod.new(set)
+        FISHING_RODS[fishing_rod.item_id] = fishing_rod
+      end
+    end
+  end
+end

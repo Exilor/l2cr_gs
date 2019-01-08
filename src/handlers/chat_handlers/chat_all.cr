@@ -1,0 +1,38 @@
+module ChatHandler::ChatAll
+  extend self
+  extend ChatHandler
+
+  def handle_chat(type, pc, params, text)
+    vcd_used = false
+
+    if text.starts_with?('.')
+      debug "TODO: voiced commands."
+    end
+
+    unless vcd_used
+      if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
+        pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)
+        return
+      end
+
+      if /\\.{1}[^\\.]+/ === text
+        pc.send_packet(SystemMessageId::INCORRECT_SYNTAX)
+      else
+        cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.appearance.visible_name, text)
+        pc.known_list.known_players.each_value do |player|
+          if pc.inside_radius?(player, 1250, false, true)
+            unless BlockList.blocked?(player, pc)
+              player.send_packet(cs)
+            end
+          end
+        end
+
+        pc.send_packet(cs)
+      end
+    end
+  end
+
+  def chat_type_list
+    {0}
+  end
+end

@@ -1,0 +1,11 @@
+enum PlayerState : UInt8
+  RESTING
+  MOVING
+  RUNNING
+  STANDING
+  FLYING
+  BEHIND
+  FRONT
+  CHAOTIC
+  OLYMPIAD
+end

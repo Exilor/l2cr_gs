@@ -1,0 +1,12 @@
+enum ListenerRegisterType : UInt8
+  NPC
+  ZONE
+  ITEM
+  CASTLE
+  FORTRESS
+  OLYMPIAD
+  GLOBAL
+  GLOBAL_NPCS
+  GLOBAL_MONSTERS
+  GLOBAL_PLAYERS
+end

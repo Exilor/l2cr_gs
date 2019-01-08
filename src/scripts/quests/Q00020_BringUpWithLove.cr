@@ -1,0 +1,73 @@
+class Quests::Q00020_BringUpWithLove < Quest
+  # NPC
+  private TUNATUN = 31537
+  # Items
+  private WATER_CRYSTAL = 9553
+  private INNOCENCE_JEWEL = 15533
+  # Misc
+  private MIN_LEVEL = 82
+
+  def initialize
+    super(20, self.class.simple_name, "Bring Up With Love")
+
+    add_start_npc(TUNATUN)
+    add_talk_id(TUNATUN)
+  end
+
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
+
+    htmltext = nil
+    case event
+    when "31537-02.htm", "31537-03.htm", "31537-04.htm", "31537-05.htm",
+         "31537-06.htm", "31537-07.htm", "31537-08.htm", "31537-09.htm",
+         "31537-10.htm", "31537-12.htm"
+      htmltext = event
+    when "31537-11.html"
+      st.start_quest
+      htmltext = event
+    when "31537-16.html"
+      if st.cond?(2) && st.has_quest_items?(INNOCENCE_JEWEL)
+        st.give_items(WATER_CRYSTAL, 1)
+        st.take_items(INNOCENCE_JEWEL, -1)
+        st.exit_quest(false, true)
+        htmltext = event
+      end
+    end
+
+    htmltext
+  end
+
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    htmltext = get_no_quest_msg(pc)
+    if st.nil?
+      return htmltext
+    end
+
+    case st.state
+    when State::COMPLETED
+      htmltext = get_already_completed_msg(pc)
+    when State::CREATED
+      htmltext = pc.level >= MIN_LEVEL ? "31537-01.htm" : "31537-13.html"
+    when State::STARTED
+      case st.cond
+      when 1
+        htmltext = "31537-14.html"
+      when 2
+        htmltext = !st.has_quest_items?(INNOCENCE_JEWEL) ? "31537-14.html" : "31537-15.html"
+      end
+    end
+
+    htmltext
+  end
+
+  def self.check_jewel_of_innocence(pc : L2PcInstance)
+    st = pc.get_quest_state(Q00020_BringUpWithLove.simple_name)
+    if st && st.cond?(1) && !st.has_quest_items?(INNOCENCE_JEWEL) && Rnd.rand(100) < 5
+      st.give_items(INNOCENCE_JEWEL, 1)
+      st.set_cond(2, true)
+    end
+  end
+end

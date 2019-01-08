@@ -1,0 +1,3 @@
+enum SiegeClanType : UInt8
+  OWNER, DEFENDER, ATTACKER, DEFENDER_PENDING
+end

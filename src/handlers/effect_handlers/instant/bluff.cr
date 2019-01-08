@@ -1,0 +1,32 @@
+class EffectHandler::Bluff < AbstractEffect
+  @chance : Int32
+
+  def initialize(attach_cond, apply_cond, set, params)
+    super
+    @chance = params.get_i32("chance", 100)
+  end
+
+  def calc_success(info)
+    Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
+  end
+
+  def on_start(info)
+    effected = info.effected
+                      # HQs
+    if effected.id == 35062 || effected.raid? || effected.raid_minion?
+      return
+    end
+
+    effector = info.effector
+
+    start = StartRotation.new(effected.l2id, effected.heading, 1, 65535)
+    effected.broadcast_packet(start)
+    stop = StopRotation.new(effected.l2id, effector.heading, 65535)
+    effected.broadcast_packet(stop)
+    effected.heading = effector.heading
+  end
+
+  def instant?
+    true
+  end
+end

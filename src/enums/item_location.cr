@@ -1,0 +1,13 @@
+enum ItemLocation : UInt8
+  VOID
+  INVENTORY
+  PAPERDOLL
+  WAREHOUSE
+  CLANWH
+  PET
+  PET_EQUIP
+  LEASE
+  REFUND
+  MAIL
+  FREIGHT
+end

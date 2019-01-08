@@ -1,0 +1,22 @@
+class Packets::Outgoing::ExGetBossRecord < GameServerPacket
+  initializer ranking: Int32, total_score: Int32, list: Hash(Int32, Int32)?
+
+  def write_impl
+    c 0xfe
+    h 0x34
+
+    d @ranking
+    d @total_score
+    if list = @list
+      d list.size
+      list.each do |k, v|
+        d k
+        d v
+        d 0
+      end
+    else
+      q 0
+      q 0
+    end
+  end
+end

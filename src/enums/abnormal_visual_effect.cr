@@ -1,0 +1,77 @@
+class AbnormalVisualEffect < EnumClass
+  getter_initializer mask: Int64, type: Int32
+
+  add(NONE, 0x0000000,  0)
+  add(DOT_BLEEDING, 0x00000001, 0)
+  add(DOT_POISON, 0x00000002, 0)
+  add(DOT_FIRE, 0x00000004, 0)
+  add(DOT_WATER, 0x00000008, 0)
+  add(DOT_WIND, 0x00000010, 0)
+  add(DOT_SOIL, 0x00000020, 0)
+  add(STUN, 0x00000040, 0)
+  add(SLEEP, 0x00000080, 0)
+  add(SILENCE, 0x00000100, 0)
+  add(ROOT, 0x00000200, 0)
+  add(PARALYZE, 0x00000400, 0)
+  add(FLESH_STONE, 0x00000800, 0)
+  add(DOT_MP, 0x00001000, 0)
+  add(BIG_HEAD, 0x00002000, 0)
+  add(DOT_FIRE_AREA, 0x00004000, 0)
+  add(CHANGE_TEXTURE, 0x00008000, 0)
+  add(BIG_BODY, 0x00010000, 0)
+  add(FLOATING_ROOT, 0x00020000, 0)
+  add(DANCE_ROOT, 0x00040000, 0)
+  add(GHOST_STUN, 0x00080000, 0)
+  add(STEALTH, 0x00100000, 0)
+  add(SEIZURE1, 0x00200000, 0)
+  add(SEIZURE2, 0x00400000, 0)
+  add(MAGIC_SQUARE, 0x00800000, 0)
+  add(FREEZING, 0x01000000, 0)
+  add(SHAKE, 0x02000000, 0)
+  add(BLIND, 0x04000000, 0)
+  add(ULTIMATE_DEFENCE, 0x08000000, 0)
+  add(VP_UP, 0x10000000, 0)
+  add(REAL_TARGET, 0x20000000, 0)
+  add(DEATH_MARK, 0x40000000, 0)
+  add(TURN_FLEE, 0x80000000, 0)
+  add(VP_KEEP, 0x10000000, 0)
+
+  # Special
+  add(INVINCIBILITY, 0x000001, 1)
+  add(AIR_BATTLE_SLOW, 0x000002, 1)
+  add(AIR_BATTLE_ROOT, 0x000004, 1)
+  add(CHANGE_WP, 0x000008, 1)
+  add(CHANGE_HAIR_G, 0x000010, 1)
+  add(CHANGE_HAIR_P, 0x000020, 1)
+  add(CHANGE_HAIR_B, 0x000040, 1)
+  add(STIGMA_OF_SILEN, 0x000100, 1)
+  add(SPEED_DOWN, 0x000200, 1)
+  add(FROZEN_PILLAR, 0x000400, 1)
+  add(CHANGE_VES_S, 0x000800, 1)
+  add(CHANGE_VES_C, 0x001000, 1)
+  add(CHANGE_VES_D, 0x002000, 1)
+  add(TIME_BOMB, 0x004000, 1)
+  add(MP_SHIELD, 0x008000, 1)
+  add(NAVIT_ADVENT, 0x080000, 1)
+
+  # Event
+  # TODO: Fix, currently not working.
+  add(BR_NONE, 0x000000, 2)
+  add(BR_AFRO_NORMAL, 0x000001, 2)
+  add(BR_AFRO_PINK, 0x000002, 2)
+  add(BR_AFRO_GOLD, 0x000004, 2)
+  add(BR_POWER_OF_EVA, 0x000008, 2)
+  add(BR_HEADPHONE, 0x000010, 2)
+  add(BR_VESPER1, 0x000020, 2)
+  add(BR_VESPER2, 0x000040, 2)
+  add(BR_VESPER3, 0x000080, 2)
+  add(BR_SOUL_AVATAR, 0x000100, 2)
+
+  def special? : Bool
+    @type == 1
+  end
+
+  def event? : Bool
+    @type == 2
+  end
+end

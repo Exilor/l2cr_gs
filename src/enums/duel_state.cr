@@ -1,0 +1,3 @@
+enum DuelState : UInt8
+  NO_DUEL, DUELLING, DEAD, WINNER, INTERRUPTED
+end

@@ -1,0 +1,9 @@
+enum DayOfWeek : UInt8
+  MONDAY = 1
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+end

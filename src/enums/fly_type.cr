@@ -1,0 +1,3 @@
+enum FlyType : UInt8
+  THROW_UP, THROW_HORIZONTAL, DUMMY, CHARGE
+end

@@ -1,0 +1,141 @@
+module HtmCache
+  extend self
+  extend Loggable
+
+  private CACHE = {} of String => String
+
+  class_getter loaded_files = 0
+  @@bytes_buff_len = 0u64
+  @@root = ""
+
+  def load
+    @@root = Config.datapack_root.chomp("/data")
+    reload
+  end
+
+  def reload
+    reload(@@root)
+  end
+
+  def reload(f : String)
+    if !Config.lazy_cache
+      info "Html cache start..."
+      timer = Timer.new
+      parse_dir(f)
+      info "#{memory_usage.round(2)} mb from #{@@loaded_files} files loaded in #{timer.result} s."
+    else
+      CACHE.clear
+      @@loaded_files = 0
+      @@bytes_buff_len = 0u64
+      info "Running lazy cache."
+    end
+  end
+
+  def reload_path(f : String)
+    parse_dir(f)
+    info "Reloaded specified path"
+  end
+
+  def memory_usage
+    @@bytes_buff_len.to_f32 / 1048576
+  end
+
+  private def parse_dir(dir : String)
+    Dir.glob("#{dir}/*") do |path|
+      if !File.directory?(path)
+        File.open(path, "r") { |file| load_file(file) }
+      else
+        parse_dir(path)
+      end
+    end
+  end
+
+  def load_file(file : File)
+    path = file.path
+    unless path.ends_with?(".htm", ".html")
+      return
+    end
+
+    rel_path = path.from(@@root.size + 1)
+    content = file.gets_to_end.gsub(/(?:\s?)<!--.*?-->/, "")
+
+    if old = CACHE[rel_path]?
+      @@bytes_buff_len = (@@bytes_buff_len - old.bytesize) + content.bytesize
+    else
+      @@bytes_buff_len += content.bytesize
+      @@loaded_files += 1
+    end
+
+    CACHE[rel_path] = content
+
+    content
+  end
+
+  def includes?(path : String) : Bool
+    CACHE.has_key?(path)
+  end
+
+  def loadable?(path : String) : Bool
+    return false unless path.ends_with?(".html", ".htm")
+    File.exists?("#{@@root}/#{path}")
+  end
+
+  def get_htm(pc : L2PcInstance, path : String)
+    get_htm(pc.html_prefix, path)
+  end
+
+  def get_htm_force(pc : L2PcInstance, path : String)
+    get_htm_force(pc.html_prefix, path)
+  end
+
+  def get_htm_force(path : String)
+    get_htm_force(nil, path)
+  end
+
+  def get_htm(path : String)
+    get_htm(nil, path)
+  end
+
+  def get_htm_force(prefix : String?, path : String) : String
+    unless content = get_htm(prefix, path)
+      content = "<html><body>My text is missing:<br>#{path}</body></html>"
+      warn "Missing HTML page: \"#{path}\"."
+    end
+
+    content
+  end
+
+  def get_htm(prefix : String?, path : String) : String?
+    new_path = nil
+
+    if prefix && !prefix.empty?
+      new_path = prefix + path
+      if content = internal_get_htm(new_path)
+        return content
+      end
+    end
+
+    content = internal_get_htm(path)
+    if content && new_path
+      CACHE[new_path] = content
+    end
+
+    content
+  end
+
+  private def internal_get_htm(path : String) : String?
+    if path.empty?
+      return ""
+    end
+
+    content = CACHE[path]?
+    if Config.lazy_cache && content.nil?
+      path2 = "#{@@root}/#{path}"
+      if File.exists?(path2)
+        content = File.open(path2, "r") { |f| load_file(f) }
+      end
+    end
+
+    content
+  end
+end

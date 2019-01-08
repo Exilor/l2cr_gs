@@ -1,0 +1,23 @@
+module BypassHandler::ChatLink
+  extend self
+  extend BypassHandler
+
+  def use_bypass(command, pc, target)
+    return false unless npc = target.as?(L2Npc)
+
+    val = command[5]?.try &.to_i || 0
+
+    if val == 0 && npc.has_listener?(EventType::ON_NPC_FIRST_TALK)
+      OnNpcFirstTalk.new(npc, pc).async(npc)
+    else
+      debug "Showing chat window."
+      npc.show_chat_window(pc, val)
+    end
+
+    false
+  end
+
+  def commands
+    {"Chat"}
+  end
+end

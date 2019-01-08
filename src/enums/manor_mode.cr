@@ -1,0 +1,3 @@
+enum ManorMode : UInt8
+  DISABLED, MODIFIABLE, MAINTENANCE, APPROVED
+end
