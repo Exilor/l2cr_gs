@@ -2,6 +2,23 @@
 
 A Lineage 2 (High Five) server emulator ported from [L2J](http://www.l2jserver.com) (written in Java) to Crystal.
 
+# Requirements
+
+In order for the game server to work it needs the following:
+  - The source code that is shared with the login server
+  - L2J's datapack (its html/xml/json/sql files)
+  - A properly set up MySQL database (as if to be used with L2J)
+  - The geodata files (optional)
+  
+# Usage
+The /bin folder contains executables for launching the server after compilation.
+The Rakefile includes tasks meant for development:
+  - ```rake``` or ```rake run``` compiles and runs the server while leaving the executable in the server's folder for future use
+  - ```rake build``` builds the server in release mode and gives the executable a different name so that it won't overwrite the unoptimized executable
+  - ```rake rerun``` runs the executable again if it exists.
+Gracefully estarting the server is only possible when launching it using the executables in /bin or launching it with rake.
+
+# TODO list
 
 - [x] Connect to login server
   - [x] Can connect with Ruby's login server
