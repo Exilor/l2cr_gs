@@ -1,1 +1,187 @@
 # l2_cr
+
+A Lineage 2 (High Five) server emulator ported from [L2J](http://www.l2jserver.com) (written in Java) to Crystal.
+
+
+- [x] Connect to login server
+  - [x] Can connect with Ruby's login server
+  - [ ] Can connect with L2J's login server
+- [x] Database
+  - [x] Working
+  - [x] Compatible with L2J's database
+  - [ ] Use transactions
+  - [ ] Use batch
+- [x] Character creation
+  - [x] Valid name checking
+  - [x] Valid appearance combination checking
+  - [x] Starting equipment
+  - [x] Starting shortcuts
+- [x] Character deletion
+  - [ ] Delayed character deletion (with countdown)
+- [x] Character progression
+  - [x] Exp/sp/level gain
+  - [x] Vitality
+  - [ ] Nevit's Blessing
+- [x] Items
+  - [x] Special abilities
+    - [ ] Soul crystal quest
+  - [x] Enchanting
+  - [x] Augmentations
+  - [x] Shadow items
+  - [x] Equipment preview
+  - [x] Elements (further testing needed)
+  - [x] Crystallizing
+  - [x] Crafting
+  - [x] Armor set bonuses
+  - [x] HP enchant bonuses
+  - [x] Extractable items (items that contain other items)
+- [x] Skills
+  - [x] Skill enchanting
+  - [x] Healer skill transfer
+  - [x] Channelized skills (like Volcano)
+  - [x] Buffs restored on login
+- [x] Pets/Servitors
+  - [x] Riding
+  - [x] Pet feeding
+  - [x] Pet skills (some levels are missing)
+  - [ ] Evolving/exchanging pets
+    - [x] Hatchling to Strider
+    - [ ] All the others
+  - [x] Servitor resummon on login
+  - [ ] Pet resummon on login
+- [x] Cubics
+  - [ ] Storm cubic's damage is wrong
+- [x] Decoys (from arbalester skill)
+- [x] Trading between players
+  - [x] Direct trade
+  - [x] Private store
+    - [ ] Bulk buying/selling
+- [x] Monsters
+  - [x] Can use skills (okay-ish)
+  - [x] On kill rewards
+    - [x] Item drops
+    - [x] Experience / skill points
+    - [x] Spoil
+  - [x] Monster family group aggro
+  - [x] Raid bosses
+    - [x] Raid boss points
+  - [x] Epic bosses (general support)
+    - [x] Core
+    - [ ] All the others
+  - [ ] Treasure chests
+  - [ ] Feedable monsters
+- [x] Walking and talking NPCs
+- [x] Parties
+  - [x] Rewards distribution
+  - [x] Inviting, kicking out, changing leader, exiting
+  - [ ] Command channel
+  - [ ] Party finder (needs more testing)
+- [x] Clans
+  - [x] Creation
+  - [x] Inviting new members
+  - [x] Assigning titles
+  - [x] Crests
+  - [ ] Increasing clan level (only upto level 4)
+  - [ ] Clan skills
+  - [ ] Clan wars
+  - [ ] Alliances
+- [x] Chat
+  - [x] All
+  - [x] Trade
+  - [x] Shout
+  - [x] Party
+  - [x] Clan
+  - [ ] Alliance
+  - [ ] Hero
+  - [x] Party match room
+  - [x] Whisper
+  - [ ] Battlefield
+  - [x] Linking items in chat window
+- [x] Macros
+- [ ] Manor system
+  - [x] Preliminary support
+  - [ ] Harvesting
+  - [ ] Selling crops
+- [ ] Quest system
+  - [x] First class change
+  - [x] Second class change
+  - [ ] Third class change
+  - [x] Low level quests
+  - [x] Transformation quest
+  - [ ] All other quests
+  - [x] Quest radar
+- [x] Boats
+- [x] Airship Gludio-Gracia
+- [x] Friend list
+  - [x] Friend chat
+- [ ] Block list (needs testing)
+- [x] Seven signs
+  - [x] Registration
+  - [x] Contributing seal stones
+    - [x] Ancient adena reward based on contribution
+  - [x] Festival of darkness
+  - [x] Result tallying
+  - [x] Orator of revelations and Preacher of darkness
+  - [x] Dimensional Rift (more testing needed)
+- [x] Zones (peace zone, pvp zone...)
+- [x] Geodata
+- [x] Pathfinding
+  - [x] Using geodata
+  - [ ] Using path node files
+- [x] NPC merchants
+  - [x] Buy/sell items
+  - [x] Multisell (like Giran luxury shop)
+  - [x] Buying back items previously sold
+- [x] Skill trainers
+- [x] Dyes
+- [ ] Monster race
+  - [x] The race itself
+  - [ ] Betting
+- [x] Warehouse
+  - [x] Private
+  - [x] Clan
+  - [ ] Sorted
+  - [ ] Freight
+- [x] Gatekeepers
+  - [x] Low level player discount
+  - [ ] Weekend discount (untested)
+  - [ ] Town-in-siege checking (untested)
+- [ ] Lottery
+- [ ] Clan halls
+  - [ ] Auction (needs testing)
+  - [x] Services (buffs, hp/mp/cp regen...)
+  - [ ] Siegable halls (preliminary support, untested)
+- [ ] Castles (preliminary support, untested)
+- [ ] Fortresses (preliminary support, untested)
+- [ ] Territory War (preliminary support, untested)
+- [x] Instances
+  - [x] The system itself
+  - [x] Pailaka (the first one)
+  - [x] Kamaloka (needs more testing)
+  - [x] Nornil's Garden
+  - [ ] All the others
+- [x] Subclasses
+  - [ ] Subclass quest
+  - [ ] Subclass skills (skills learned on main class depending on subclass)
+  - [ ] Buffs restored on subclass change
+  - [x] Kamael bonus subclass Judicator
+- [x] Fishing
+  - [x] Monsters that appear while fishing
+  - [x] Skills learnt with fishing rewards
+  - [ ] Fishing shots quest
+- [ ] Admin commands (only some of them are implemented)
+- [ ] User commands (only some of them are implemented)
+- [ ] Four Sepulchers (needs testing)
+- [x] Duels
+  - [ ] Party duels (not tested)
+- [x] Mail system
+  - [x] Attachments
+- [ ] Punishment manager (not tested)
+- [x] Cursed weapons
+- [ ] Olympiad
+  - [ ] Heroes
+- [x] Day/night monsters in Forest of the Dead
+- [ ] Community Board (preliminary support)
+  - [x] Clan notice on login
+- [ ] Fantasy Island
+- [x] Server shutdown/restart
