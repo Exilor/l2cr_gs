@@ -12,7 +12,7 @@ module GameDB
 
   def load
     DAOFactory.load
-    @@db = DB.open("mysql://root:00137955@localhost/l2gs")
+    @@db = DB.open(Config.database_url)
   end
 
   def close
@@ -28,10 +28,6 @@ module GameDB
   def query_each(*args)
     db.query_each(*args) { |rs| yield rs }
   end
-
-  # def prepare
-  #   db.prepare
-  # end
 
   def each(*args)
     db.query_each(*args) { |rs| yield ResultSetReader.new(rs) }

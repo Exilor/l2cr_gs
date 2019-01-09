@@ -118,6 +118,7 @@ module GameServer
     if Config.debug
       Loggable.severity = :DEBUG
     end
+    Dir.mkdir_p(Dir.current + "/log")
     f = File.open(Dir.current + "/log/#{Time.ms}.txt", "w")
     Loggable::LOGGABLE_IOS << f
     L2World.load
@@ -297,6 +298,9 @@ module GameServer
     info "Server loaded in #{timer} s."
 
     LoginServerClient.start
+
+    # L2Cr.on_screen_info_task
+    L2Cr.command_line_task
 
     info "Listening for players at #{host}:#{port}"
 
