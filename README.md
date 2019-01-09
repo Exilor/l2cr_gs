@@ -16,7 +16,7 @@ The Rakefile includes tasks meant for development:
   - ```rake``` or ```rake run``` compiles and runs the server while leaving the executable in the server's folder for future use
   - ```rake build``` builds the server in release mode and gives the executable a different name so that it won't overwrite the unoptimized executable
   - ```rake rerun``` runs the executable again if it exists.
-Gracefully estarting the server is only possible when launching it using the executables in /bin or launching it with rake.
+Gracefully restarting the server is only possible when launching it using the executables in /bin or launching it with rake.
 
 # TODO list
 
