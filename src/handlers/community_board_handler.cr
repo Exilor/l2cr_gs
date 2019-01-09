@@ -73,7 +73,7 @@ module CommunityBoardHandler
     end
 
     unless cb = self[cmd]
-      warn "No handler found for command #{cmd.inspect}"
+      debug "No handler found for command #{cmd.inspect}"
       return
     end
 

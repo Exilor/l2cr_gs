@@ -15,27 +15,27 @@ module ItemHandler
   end
 
   def self.register(handler : self)
-    # debug "Registering #{handler}."
     HANDLERS[handler.simple_name] = handler
   end
 
   def self.[](item : L2Item?) : self?
     unless item
-      warn "No item given."
+      debug "No item given."
       return
     end
 
     if handler_name = item.handler_name
       if handler = HANDLERS[handler_name]?
-        handler
+        return handler
       else
-        warn "No handler for #{handler_name.inspect}."
-        nil
+        debug "No handler for #{handler_name.inspect}."
       end
     else
       debug item
       debug item.handler_name.inspect
     end
+
+    nil
   end
 
   abstract def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool

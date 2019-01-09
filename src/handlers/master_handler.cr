@@ -14,14 +14,14 @@ module MasterHandler
   def self.load
     ActionHandler.load
     ActionShiftHandler.load
-    EffectHandler.load
-    TargetHandler.load
-    ItemHandler.load
+    AdminCommandHandler.load
     BypassHandler.load
     ChatHandler.load
-    UserCommandHandler.load
-    AdminCommandHandler.load
     CommunityBoardHandler.load
+    EffectHandler.load
+    ItemHandler.load
+    UserCommandHandler.load
     PunishmentHandler.load
+    TargetHandler.load
   end
 end

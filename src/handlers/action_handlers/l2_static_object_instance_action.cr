@@ -6,7 +6,7 @@ module ActionHandler::L2StaticObjectInstanceAction
     obj = target.as(L2StaticObjectInstance)
 
     if obj.type < 0
-      info "StaticObject with invalid type #{obj.type}."
+      warn "StaticObject with invalid type #{obj.type}."
     end
 
     if pc.target != obj

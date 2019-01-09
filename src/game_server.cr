@@ -97,6 +97,7 @@ require "./data_tables/item_table"
 require "./data_tables/spawn_table"
 require "./data_tables/augmentation_data"
 require "./data_tables/merchant_price_config_table"
+require "./data_tables/bot_report_table"
 require "./cache/htm_cache"
 require "./cache/warehouse_cache"
 require "./shutdown"
@@ -211,7 +212,7 @@ module GameServer
     AugmentationData.load
     CursedWeaponsManager.load
     TransformData.load
-    # BotReportTable.load
+    BotReportTable.load
 
     QuestManager.load
     BoatManager.load

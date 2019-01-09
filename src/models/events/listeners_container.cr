@@ -4,18 +4,18 @@ class ListenersContainer
   include Synchronizable
   include Loggable
 
-  @listeners : EnumMap(EventType, Array(AbstractEventListener))?
+  @listeners : Hash(EventType, Array(AbstractEventListener))?
 
   private def listeners
     @listeners ||= sync do
       @listeners ||= begin
-        EnumMap(EventType, Array(AbstractEventListener)).new
+        Hash(EventType, Array(AbstractEventListener)).new
       end
     end
   end
 
   def add_listener(lst : AbstractEventListener) : AbstractEventListener
-    listeners.put_if_absent(lst.type) { [] of AbstractEventListener } << lst
+    (listeners[lst.type] ||= [] of AbstractEventListener) << lst
     lst
   end
 

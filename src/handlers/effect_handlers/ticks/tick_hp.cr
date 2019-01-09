@@ -18,8 +18,8 @@ class EffectHandler::TickHp < AbstractEffect
     target = info.effected
     skill = info.skill
 
-    if target.player? && @ticks > 0 && skill.abnormal_type.hp_recover?
-      target.send_packet(ExRegenMax.new(info.abnormal_time, @ticks, @power))
+    if target.player? && ticks > 0 && skill.abnormal_type.hp_recover?
+      target.send_packet(ExRegenMax.new(info.abnormal_time, ticks, @power))
     end
   end
 

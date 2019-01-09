@@ -9,7 +9,7 @@ abstract class AbstractEventListener
   # unused
   # property priority : Int32 = 0
 
-  private alias OwnerType = L2Object | AbstractScript | AbstractEffect | NevitSystem
+  private alias OwnerType = L2Object | AbstractScript | AbstractEffect #| NevitSystem
 
   getter_initializer container: ListenersContainer, type: EventType,
     owner: OwnerType?

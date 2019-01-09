@@ -17,7 +17,6 @@ module ActionShiftHandler
   end
 
   def self.register(handler : self)
-    # debug "Registering #{handler}."
     HANDLERS[handler.instance_type] = handler
   end
 
@@ -29,9 +28,7 @@ module ActionShiftHandler
       type = type.parent
     end
 
-    if handler
-      # debug "#{handler} will handle the action requested."
-    else
+    unless handler
       debug "No action shift handler found for #{temp.inspect}."
     end
 

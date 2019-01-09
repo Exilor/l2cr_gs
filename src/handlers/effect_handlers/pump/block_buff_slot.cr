@@ -7,7 +7,7 @@ class EffectHandler::BlockBuffSlot < AbstractEffect
     temp = params.get_string("slot", nil)
 
     if temp && !temp.empty?
-      @slots = temp.split(';').map { |s| AbnormalType.parse(s) }.uniq
+      @slots = temp.split(';').map { |s| AbnormalType.parse(s) }.uniq!
     end
   end
 

@@ -5,7 +5,10 @@ module ActionHandler::L2PcInstanceAction
   private CURSED_WEAPON_VICTIM_MIN_LEVEL = 21
 
   def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
-    # TvT stuff
+    # TODO: TvTEvent
+    # unless TvTEvent.on_action(pc, target.l2id)
+    #   return false
+    # end
 
     return false if pc.out_of_control?
 

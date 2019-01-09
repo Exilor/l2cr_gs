@@ -13,7 +13,7 @@ class EffectHandler::ConsumeMp < AbstractEffect
 
     target = info.effected
     consume = @power * ticks_multiplier
-    mp = target.current_mp.to_f
+    mp = target.current_mp
     if consume < 0 && mp + consume <= 0
       target.send_packet(SystemMessageId::SKILL_REMOVED_DUE_LACK_MP)
       return false
@@ -22,9 +22,5 @@ class EffectHandler::ConsumeMp < AbstractEffect
     target.current_mp = Math.min(mp + consume, target.max_recoverable_mp).to_f64
 
     true
-  end
-
-  def effect_flags
-    EffectFlag::SILENT_MOVE.mask
   end
 end

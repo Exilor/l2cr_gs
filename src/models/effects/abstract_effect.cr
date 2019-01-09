@@ -16,10 +16,7 @@ abstract class AbstractEffect
     name = set.get_string("name")
 
     unless handler = EffectHandler[name]
-      raise "no such effect handler: #{name.inspect}"
-
-      # set = StatsSet {"name" => name}
-      # return NotImplementedEffect.new(attach_cond, apply_cond, set, params)
+      raise "no effect handler for #{name.inspect}"
     end
 
     handler.new(attach_cond, apply_cond, set, params)
@@ -97,24 +94,5 @@ abstract class AbstractEffect
     end
 
     Slice(AbstractFunction).empty
-  end
-end
-
-
-class NotImplementedEffect < AbstractEffect
-  def initialize(attach_cond, apply_cond, set, params)
-    super
-
-    @name = set.get_string("name")
-  end
-
-  def on_start(info)
-    if info.effected.player?
-      debug "Not implemented."
-    end
-  end
-
-  def to_log(io : IO)
-    io << "NotImplementedEffect(#{@name})"
   end
 end

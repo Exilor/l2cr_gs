@@ -20,7 +20,7 @@ class EffectHandler::ConsumeRest < AbstractEffect
     target = info.effected
     return false if target.dead?
 
-    if target.player? && !target.acting_player.sitting?
+    if target.is_a?(L2PcInstance) && !target.sitting?
       return false
     end
 

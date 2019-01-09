@@ -923,10 +923,10 @@ module Config
   class_property login_block_after_ban = 0
   class_property gameserver_hostname = ""
   class_property database_driver : String?
-  class_property database_url : String?
-  class_property database_login : String?
-  class_property database_password : String?
-  class_property database_connection_pool : String?
+  class_property database_url : String = ""
+  class_property database_login : String = ""
+  class_property database_password : String = ""
+  class_property database_connection_pool : String = ""
   class_property database_max_connections = 0
   class_property database_max_idle_time = 0
   class_property maximum_online_users = 0

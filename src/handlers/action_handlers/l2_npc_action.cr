@@ -31,7 +31,6 @@ module ActionHandler::L2NpcAction
         if !npc.can_interact?(pc)
           pc.set_intention(AI::INTERACT, npc)
         else
-          # debug "sending MoveToPawn (npc.can_interact? pc)"
           pc.send_packet(MoveToPawn.new(pc, npc, 100))
           if npc.has_random_animation?
             npc.on_random_animation(Rnd.rand(8))
@@ -42,15 +41,12 @@ module ActionHandler::L2NpcAction
             # L2Event.show_event_html(pc, npc.l2id.to_s)
           else
             if npc.has_listener?(EventType::ON_NPC_QUEST_START)
-              # debug "#{npc} has listener ON_NPC_QUEST_START."
               pc.last_quest_npc_l2id = npc.l2id
             end
 
             if npc.has_listener?(EventType::ON_NPC_FIRST_TALK)
-              # debug "#{npc} has listener ON_NPC_FIRST_TALK."
               OnNpcFirstTalk.new(npc, pc).async(npc)
             else
-              # debug "No listeners. Show chat window."
               npc.show_chat_window(pc)
             end
           end

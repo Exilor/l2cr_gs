@@ -13,7 +13,6 @@ module UserCommandHandler
   end
 
   def self.register(handler : self)
-    # debug "Registering #{handler}."
     handler.commands.each { |cmd| HANDLERS[cmd] = handler }
   end
 

@@ -7,9 +7,7 @@ module EffectHandler
 
   def load
     {% for sub in AbstractEffect.all_subclasses %}
-      {% unless sub.stringify.includes?("NullEffect") %}
-        register({{sub.id}})
-      {% end %}
+      register({{sub.id}})
     {% end %}
   end
 

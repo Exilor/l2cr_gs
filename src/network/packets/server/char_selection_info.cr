@@ -134,8 +134,8 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
 
     cip.race = rs.get_i32("race")
 
-    base_class_id = rs.get_u8("base_class").to_i32
-    active_class_id = rs.get_u8("classid").to_i32
+    base_class_id = rs.get_i32("base_class")
+    active_class_id = rs.get_i32("classid")
 
     cip.x = rs.get_i32("x")
     cip.y = rs.get_i32("y")
