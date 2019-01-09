@@ -1,4 +1,4 @@
-name: game_server
+name: l2cr_gs
 version: 0.0.0
 dependencies:
   db:
