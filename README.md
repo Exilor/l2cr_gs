@@ -69,7 +69,8 @@ Gracefully restarting the server is only possible when launching it using the ex
   - [ ] Pet resummon on login
 - [x] Cubics
   - [ ] Storm cubic's damage is wrong
-- [x] Decoys (from arbalester skill)
+- [x] Traps
+- [x] Decoys
 - [x] Trading between players
   - [x] Direct trade
   - [x] Private store
