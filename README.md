@@ -6,8 +6,8 @@ A Lineage 2 (High Five) server emulator ported from [L2J](http://www.l2jserver.c
 
 In order for the game server to work it needs the following:
   - The Ruby login server
-  - The source code that is shared with the login server
-  - L2J's datapack and settings (.cfg files) folders
+  - The Crystal source code that is shared with the login server
+  - L2J's datapack and configuration (.cfg files) folders
   - A properly set up MySQL database (as if to be used with L2J)
   - The geodata files (optional)
   
@@ -121,14 +121,13 @@ Gracefully restarting the server is only possible when launching it using the ex
   - [x] Preliminary support
   - [ ] Harvesting
   - [ ] Selling crops
-- [ ] Quest system
+- [x] Quest system
   - [x] First class change
   - [x] Second class change
   - [ ] Third class change
   - [x] Low level quests
   - [x] Transformation quest
   - [ ] All other quests
-  - [x] Quest radar
 - [x] Boats
 - [x] Airship Gludio-Gracia
 - [x] Friend list
@@ -160,7 +159,6 @@ Gracefully restarting the server is only possible when launching it using the ex
   - [x] Private
   - [x] Clan
   - [ ] Sorted
-  - [ ] Freight
 - [x] Gatekeepers
   - [x] Low level player discount
   - [ ] Weekend discount (untested)
