@@ -24,10 +24,11 @@ module Config
   end
 
   class ClassMasterSettings
+    @claim_items = {} of Int32 => Array(ItemHolder)
+    @reward_items = {} of Int32 => Array(ItemHolder)
+    @allowed_class_change = {} of Int32 => Bool
+
     def initialize(line)
-      @claim_items = {} of Int32 => Array(ItemHolder)
-      @reward_items = {} of Int32 => Array(ItemHolder)
-      @allowed_class_change = {} of Int32 => Bool
       parse_config_line(line)
     end
 

@@ -44,7 +44,7 @@ class NpcAI::RandomSpawn < AbstractNpcAI
     loc = SPAWN_POINTS[npc.id].sample(Rnd)
     unless npc.inside_radius?(loc, 200, false, false)
       npc.spawn.location = loc
-      task = -> { npc.tele_to_location(loc, false) }
+      task = ->{ npc.tele_to_location(loc, false) }
       ThreadPoolManager.schedule_general(task, 100)
     end
 

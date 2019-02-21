@@ -4,7 +4,7 @@ module PartyMatchWaitingList
 
   private PLAYERS = Set(L2PcInstance).new
 
-  def players
+  def players : Set(L2PcInstance)
     PLAYERS
   end
 

@@ -40,7 +40,7 @@ class NpcAI::ManorManager < AbstractNpcAI
         "manager.htm"
       end
     else
-      get_htm("data/html/npcdefault.htm")
+      get_htm(pc, "data/html/npcdefault.htm")
     end
   end
 

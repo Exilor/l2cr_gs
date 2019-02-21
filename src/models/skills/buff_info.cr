@@ -114,7 +114,7 @@ class BuffInfo
 
     remove_abnormal_visual_effects
     # monster check is custom
-    unless effected.monster? || (effected.summon? && !effected.as(L2Summon).owner.has_summon?)
+    if effected.acting_player? # unless effected.monster? || (effected.summon? && !effected.as(L2Summon).owner.has_summon?)
       if skill.toggle?
         sm = Packets::Outgoing::SystemMessage.s1_has_been_aborted
       elsif removed?
@@ -129,7 +129,7 @@ class BuffInfo
       end
     end
 
-    if self == effected.effect_list.short_buff
+    if same?(effected.effect_list.short_buff)
       effected.effect_list.short_buff_status_update(nil)
     end
   end

@@ -9,7 +9,7 @@ class L2BuyList
   delegate size, to: @products
 
   def products : Enumerable(Product)
-    @products.local_each_value
+    @products.values_slice
   end
 
   def get_product_by_item_id(item_id : Int32) : Product?

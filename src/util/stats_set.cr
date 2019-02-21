@@ -254,7 +254,7 @@ class StatsSet
   end
 
   def get_object(key : String, klass : T.class) forall T
-    @hash[key].as(T)
+    @hash[key]?.as(T)
   end
 
   def get_object(key : String, klass : T.class, default) forall T

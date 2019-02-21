@@ -180,13 +180,13 @@ class Quests::Q00416_PathOfTheOrcShaman < Quest
         st.memo_state=(104)
         st.set_cond(15, true)
         if Rnd.rand(100) < 66
-          npc.broadcast_packet(NpcSay.new(npc.l2id, Packets::Incoming::Say2::NPC_ALL, npc.id, NpcString::MY_DEAR_FRIEND_OF_S1_WHO_HAS_GONE_ON_AHEAD_OF_ME).add_string_parameter(st.player.name))
+          npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::MY_DEAR_FRIEND_OF_S1_WHO_HAS_GONE_ON_AHEAD_OF_ME).add_string_parameter(st.player.name))
         end
       when 105
         st.memo_state=(106)
         st.set_cond(17, true)
         if Rnd.rand(100) < 66
-          npc.broadcast_packet(NpcSay.new(npc.l2id, Packets::Incoming::Say2::NPC_ALL, npc.id, NpcString::LISTEN_TO_TEJAKAR_GANDI_YOUNG_OROKA_THE_SPIRIT_OF_THE_SLAIN_LEOPARD_IS_CALLING_YOU_S1).add_string_parameter(st.player.name))
+          npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::LISTEN_TO_TEJAKAR_GANDI_YOUNG_OROKA_THE_SPIRIT_OF_THE_SLAIN_LEOPARD_IS_CALLING_YOU_S1).add_string_parameter(st.player.name))
         end
       when 107
         st.memo_state=(108)

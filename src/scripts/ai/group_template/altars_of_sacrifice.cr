@@ -36,10 +36,6 @@ class NpcAI::AltarsOfSacrifice < AbstractNpcAI
       end
     end
 
-    def unload
-      despawn_boss
-    end
-
     def has_bosses? : Bool
       !@boss_npc_ids.empty?
     end
@@ -128,14 +124,6 @@ class NpcAI::AltarsOfSacrifice < AbstractNpcAI
 
   private def get_despawn_boss_index(event)
     event.from(EVT_DESPAWN_BOSS_PRE.size).to_i
-  end
-
-  def unload(remove_from_list)
-    info "Unloading altars due to script unloading."
-
-    ALTARS.each &.unload
-
-    super
   end
 
   def on_adv_event(event, npc, player)

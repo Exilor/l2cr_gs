@@ -36,9 +36,9 @@ class InstanceWorld
     return unless victim && victim.player?
     return unless instance = InstanceManager.get_instance(@instance_id)
     pc = victim.acting_player
-    sm = SystemMessage.you_will_be_expelled_in_s1
+    sm = Packets::Outgoing::SystemMessage.you_will_be_expelled_in_s1
     sm.add_int(instance.eject_time / 60 / 1000)
     pc.send_packet(sm)
-    instance.add_eject_task(pc)
+    instance.add_eject_dead_task(pc)
   end
 end

@@ -8,12 +8,12 @@ module TargetHandler::EnemyOnly
         return EMPTY_TARGET_LIST
       end
 
-      pc = char.acting_player?
-
       if target.dead?
         char.send_packet(SystemMessageId::INCORRECT_TARGET)
         return EMPTY_TARGET_LIST
       end
+
+      pc = char.acting_player?
 
       if !target.attackable? && pc && !pc.in_party_with?(target)
         if !pc.in_clan_with?(target) && !pc.in_ally_with?(target)

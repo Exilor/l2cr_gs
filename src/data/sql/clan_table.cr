@@ -47,9 +47,7 @@ module ClanTable
   def create_clan(pc : L2PcInstance, clan_name : String)
     return unless pc
 
-    if Config.debug
-      debug "#{pc.name} (#{pc.l2id}) requested a clan creation."
-    end
+    debug { "#{pc.name} (#{pc.l2id}) requested a clan creation." }
 
     if pc.level < 10
       pc.send_packet(SystemMessageId::YOU_DO_NOT_MEET_CRITERIA_IN_ORDER_TO_CREATE_A_CLAN)

@@ -1,0 +1,139 @@
+class Quests::Q00034_InSearchOfCloth < Quest
+  # NPCs
+  private RADIA = 30088
+  private RALFORD = 30165
+  private VARAN = 30294
+  # Monsters
+  private MOBS = {
+    20560, # Trisalim Spider
+    20561  # Trisalim Tarantula
+  }
+  # Items
+  private SUEDE = 1866
+  private THREAD = 1868
+  private MYSTERIOUS_CLOTH = 7076
+  private SKEIN_OF_YARN = 7161
+  private SPINNERET = 7528
+  # Misc
+  private MIN_LEVEL = 60
+  private SPINNERET_COUNT = 10
+  private SUEDE_COUNT = 3000
+  private THREAD_COUNT = 5000
+
+  def initialize
+    super(34, self.class.simple_name, "In Search of Cloth")
+
+    add_start_npc(RADIA)
+    add_talk_id(RADIA, RALFORD, VARAN)
+    add_kill_id(MOBS)
+    register_quest_items(SKEIN_OF_YARN, SPINNERET)
+  end
+
+  def on_adv_event(event, npc, player)
+    return unless player
+    unless st = get_quest_state(player, false)
+      return
+    end
+
+    htmltext = event
+    case event
+    when "30088-03.htm"
+      st.start_quest
+    when "30294-02.html"
+      st.set_cond(2, true)
+    when "30088-06.html"
+      st.set_cond(3, true)
+    when "30165-02.html"
+      st.set_cond(4, true)
+    when "30165-05.html"
+      if st.get_quest_items_count(SPINNERET) < SPINNERET_COUNT
+        return get_no_quest_msg(player)
+      end
+      st.take_items(SPINNERET, SPINNERET_COUNT)
+      st.give_items(SKEIN_OF_YARN, 1)
+      st.set_cond(6, true)
+    when "30088-10.html"
+      if st.get_quest_items_count(SUEDE) >= SUEDE_COUNT && st.get_quest_items_count(THREAD) >= THREAD_COUNT && st.has_quest_items?(SKEIN_OF_YARN)
+        st.take_items(SKEIN_OF_YARN, 1)
+        st.take_items(SUEDE, SUEDE_COUNT)
+        st.take_items(THREAD, THREAD_COUNT)
+        st.give_items(MYSTERIOUS_CLOTH, 1)
+        st.exit_quest(false, true)
+      else
+        htmltext = "30088-11.html"
+      end
+    else
+      htmltext = nil
+    end
+
+    htmltext
+  end
+
+  def on_kill(npc, player, is_summon)
+    member = get_random_party_member(player, 4)
+    if member && Rnd.bool
+      st = get_quest_state(member, false).not_nil!
+      st.give_items(SPINNERET, 1)
+      if st.get_quest_items_count(SPINNERET) >= SPINNERET_COUNT
+        st.set_cond(5, true)
+      else
+        st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
+      end
+    end
+
+    super
+  end
+
+  def on_talk(npc, player)
+    st = get_quest_state!(player)
+
+    case npc.id
+    when RADIA
+      case st.state
+      when State::CREATED
+        htmltext = player.level >= MIN_LEVEL ? "30088-01.htm" : "30088-02.html"
+      when State::STARTED
+        case st.cond
+        when 1
+          htmltext = "30088-04.html"
+        when 2
+          htmltext = "30088-05.html"
+        when 3
+          htmltext = "30088-07.html"
+        when 6
+          if st.get_quest_items_count(SUEDE) >= SUEDE_COUNT && st.get_quest_items_count(THREAD) >= THREAD_COUNT
+            htmltext = "30088-08.html"
+          else
+            htmltext = "30088-09.html"
+          end
+        end
+      when State::COMPLETED
+        htmltext = get_already_completed_msg(player)
+      end
+    when VARAN
+      if st.started?
+        case st.cond
+        when 1
+          htmltext = "30294-01.html"
+        when 2
+          htmltext = "30294-03.html"
+        end
+      end
+    when RALFORD
+      if st.started?
+        case st.cond
+        when 3
+          htmltext = "30165-01.html"
+        when 4
+          htmltext = "30165-03.html"
+        when 5
+          htmltext = "30165-04.html"
+        when 6
+          htmltext = "30165-06.html"
+        end
+      end
+    end
+
+    htmltext || get_no_quest_msg(player)
+  end
+end

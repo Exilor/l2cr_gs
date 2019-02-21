@@ -1,8 +1,13 @@
 class Packets::Incoming::RequestPackageSendableItemList < GameClientPacket
+  @l2id = 0
+
   def read_impl
+    @l2id = d
   end
 
   def run_impl
-    warn "Not implemented."
+    return unless pc = active_char
+    items = pc.inventory.get_available_items(true, true, true)
+    pc.send_packet(PackageSendableList.new(items, @l2id))
   end
 end

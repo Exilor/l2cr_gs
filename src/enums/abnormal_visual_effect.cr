@@ -52,7 +52,7 @@ class AbnormalVisualEffect < EnumClass
   add(CHANGE_VES_D, 0x002000, 1)
   add(TIME_BOMB, 0x004000, 1)
   add(MP_SHIELD, 0x008000, 1)
-  add(NAVIT_ADVENT, 0x080000, 1)
+  add(NEVIT_ADVENT, 0x080000, 1)
 
   # Event
   # TODO: Fix, currently not working.

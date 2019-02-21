@@ -351,17 +351,25 @@ module Formulas
 
     magic_level = skill.magic_level
 
-    magic_level = target.level + 3 if magic_level <= -1
+    if magic_level <= -1
+      magic_level = target.level + 3
+    end
 
-    target_base_stat =
     case skill.basic_property
-    when BaseStats::STR then target.str
-    when BaseStats::DEX then target.dex
-    when BaseStats::CON then target.con
-    when BaseStats::INT then target.int
-    when BaseStats::WIT then target.wit
-    when BaseStats::MEN then target.men
-    else 0
+    when BaseStats::STR
+      target_base_stat = target.str
+    when BaseStats::DEX
+      target_base_stat = target.dex
+    when BaseStats::CON
+      target_base_stat = target.con
+    when BaseStats::INT
+      target_base_stat = target.int
+    when BaseStats::WIT
+      target_base_stat = target.wit
+    when BaseStats::MEN
+      target_base_stat = target.men
+    else
+      target_base_stat = 0
     end
 
     base_mod = ((((((magic_level - target.level) + 3) * skill.lvl_bonus_rate) + activate_rate) + 30.0) - target_base_stat).to_f
@@ -405,10 +413,10 @@ module Formulas
         sm.add_skill_name(skill)
         attacker.send_packet(sm)
       end
-      attacker.say "Failed #{skill} -> #{target.name} (#{final_rate.to_i}%)."
+      debug { "Failed #{skill} from #{attacker} against #{target.name} (#{final_rate.to_i}%)." }
       return false
     end
-    attacker.say "Landed #{skill} -> #{target.name} (#{final_rate.to_i}%)."
+    debug { "Landed #{skill} from #{attacker} against #{target.name} (#{final_rate.to_i}%)." }
     true
   end
 

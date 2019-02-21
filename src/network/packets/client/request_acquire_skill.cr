@@ -312,7 +312,10 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
 
     # custom
     if st.fishing?
-      NpcAI::Fisherman.show_fish_skill_list(pc)
+      klass = QuestManager.get_quest("Fisherman").class
+      if klass.responds_to?(:show_fish_skill_list)
+        klass.show_fish_skill_list(pc)
+      end
       return
     end
 
@@ -329,6 +332,6 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
 
   def self.can_transform?(pc : L2PcInstance) : Bool
     Config.allow_transform_without_quest ||
-    pc.quest_completed?(Quests::Q00136_MoreThanMeetsTheEye.simple_name)
+    pc.quest_completed?("Q00136_MoreThanMeetsTheEye")
   end
 end

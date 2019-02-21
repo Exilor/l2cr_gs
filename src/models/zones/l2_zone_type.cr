@@ -7,7 +7,7 @@ abstract class L2ZoneType < ListenersContainer
   include Loggable
   include Packets::Outgoing
 
-  @check_affected = true
+  @check_affected = false
   @min_lvl = 0
   @max_lvl = 0xff
   @class_type = 0
@@ -15,18 +15,17 @@ abstract class L2ZoneType < ListenersContainer
   @race : Array(Int32)?
   @class : Array(Int32)?
   @target = InstanceType::L2Character
-  getter id : Int32
   getter instance_template = ""
   getter settings : AbstractZoneSettings?
   getter! zone : L2ZoneForm
   getter? allow_store = true
   property name : String?
-  property instance_id = -1
-  property? enabled = true
+  property instance_id : Int32 = -1
+  property? enabled : Bool = true
 
-  initializer id: Int32
+  getter_initializer id: Int32
 
-  def settings=(settings)
+  def settings=(settings : AbstractZoneSettings)
     @settings.try &.clear
     @settings = settings
   end
@@ -65,7 +64,6 @@ abstract class L2ZoneType < ListenersContainer
 
   def affected?(char : L2Character) : Bool
     return false unless @min_lvl <= char.level <= @max_lvl
-    # debug "#{char.instance_type} <= #{@target} -> #{char.instance_type?(@target)}" if char.player?
     return false unless char.instance_type?(@target)
 
     if char.is_a?(L2PcInstance)
@@ -117,10 +115,10 @@ abstract class L2ZoneType < ListenersContainer
 
   def inside_zone?(x : Int32, y : Int32, z : Int32, instance_id : Int32) : Bool
     if @instance_id == -1 || instance_id == -1 || @instance_id == instance_id
-      zone.inside_zone?(x, y, z)
-    else
-      false
+      return zone.inside_zone?(x, y, z)
     end
+
+    false
   end
 
   def get_distance_to_zone(obj : L2Object) : Float64
@@ -132,17 +130,13 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def revalidate_in_zone(char : L2Character)
-    if @check_affected
-      return unless affected?(char)
+    if @check_affected && !affected?(char)
+      return
     end
-
-    # debug "#{zone} => #{inside_zone?(char)}" if char.player?
 
     if inside_zone?(char)
       unless @character_list.has_key?(char.l2id)
-        # OnCreatureZoneEnter.new(char, self).async(self)
-        evt = OnCreatureZoneEnter.new(char, self)
-        EventDispatcher.async(evt, self)
+        OnCreatureZoneEnter.new(char, self).async(self)
         @character_list[char.l2id] = char
         on_enter(char)
       end
@@ -226,7 +220,7 @@ abstract class L2ZoneType < ListenersContainer
     end
   end
 
-  def target_type
+  def target_type : InstanceType
     @target
   end
 
@@ -235,7 +229,11 @@ abstract class L2ZoneType < ListenersContainer
     @check_affected = true
   end
 
-  def visualize_zone(z)
+  def visualize_zone(z : Int32)
     zone.visualize_zone(z)
+  end
+
+  def to_log(io : IO)
+    io << self.class << '(' << @name << ')'
   end
 end

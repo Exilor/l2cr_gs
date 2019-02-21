@@ -259,7 +259,7 @@ abstract class L2Object < ListenersContainer
   end
 
   {% for const in ZoneId.constants %}
-    def inside_{{const.stringify.downcase.id}}_zone? : Bool
+    def inside_{{const.downcase.id}}_zone? : Bool
       false
     end
   {% end %}
@@ -498,6 +498,10 @@ abstract class L2Object < ListenersContainer
   end
 
   def inspect(io : IO)
+    to_s(io)
+  end
+
+  def to_log(io : IO)
     to_s(io)
   end
 end

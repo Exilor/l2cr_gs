@@ -8,7 +8,7 @@ module BypassHandler::QuestLink
 
   def use_bypass(command, pc, target)
     target = target.unsafe_as(L2Npc)
-    debug "#use_bypass #{command}, #{pc}, #{target}"
+    debug "#use_bypass \"#{command}\", #{pc}, #{target}"
     quest = command.from(5).strip
     if quest.empty?
       show_quest_window(pc, target)

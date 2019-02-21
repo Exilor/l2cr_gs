@@ -314,7 +314,8 @@ class L2AttackableAI < L2CharacterAI
         # For each L2Character check if the target is autoattackable
         if auto_attack_condition(target) # check aggression
           if target.is_a?(L2Playable)
-            term = EventDispatcher.notify(OnAttackableHate.new(active_char, target.acting_player, target.is_a?(L2Summon)), active_char, TerminateReturn)
+            evt = OnAttackableHate.new(active_char, target.acting_player, target.is_a?(L2Summon))
+            term = EventDispatcher.notify(evt, active_char, TerminateReturn)
             if term
               debug "There's a TerminateReturn."
             end

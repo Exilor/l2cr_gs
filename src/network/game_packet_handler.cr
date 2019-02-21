@@ -24,7 +24,8 @@ module GamePacketHandler
       case opcode
       when 0x0e then ProtocolVersion
       when 0x2b then AuthLogin
-      else print_debug(opcode, buffer, state, client)
+      else
+        print_debug(opcode, buffer, state, client)
       end
     when .authed?
       case opcode
@@ -44,9 +45,11 @@ module GamePacketHandler
         when 0x93 then RequestEx2ndPasswordCheck
         when 0x94 then RequestEx2ndPasswordVerify
         when 0x95 then RequestEx2ndPasswordReq
-        else print_debug_double_opcode(opcode, op2, buffer, state, client)
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
         end
-      else print_debug(opcode, buffer, state, client)
+      else
+        print_debug(opcode, buffer, state, client)
       end
     when .in_game?
       case opcode
@@ -132,7 +135,8 @@ module GamePacketHandler
         when 0x01 # SuperCmdSummonCmd
         when 0x02 # SuperCmdServerStatus
         when 0x03 # SendL2ParamSetting
-        else print_debug_double_opcode(opcode, op2, buffer, state, client)
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
         end
       when 0x4d then RequestPledgeMemberList
       when 0x4f # RequestMagicList
@@ -346,7 +350,8 @@ module GamePacketHandler
           when 0x03 then RequestDeleteBookMarkSlot
           when 0x04 then RequestTeleportBookMark
           when 0x05 # RequestChangeBookMarkSlot
-          else print_debug_double_opcode(opcode, op3, buffer, state, client)
+          else
+            print_debug_double_opcode(opcode, op3, buffer, state, client)
           end
         when 0x52 then RequestWithDrawPremiumItem
         when 0x53 # RequestJump
@@ -400,9 +405,11 @@ module GamePacketHandler
         when 0x90 # BrLectureMark
         when 0x91 # RequestGoodsInventoryInfo
         when 0x92 # RequestUseGoodsInventoryItem
-        else print_debug_double_opcode(opcode, op2, buffer, state, client)
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
         end
-      else print_debug(opcode, buffer, state, client)
+      else
+        print_debug(opcode, buffer, state, client)
       end
     end
 

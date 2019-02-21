@@ -29,7 +29,7 @@ class Quests::Q00178_IconicTrinity < Quest
         htmltext = event
       end
     when "32255-11.html", "32256-11.html", "32256-12.html", "32256-13.html"
-      htmltext = get_htm(event)
+      htmltext = get_htm(player, event)
       htmltext = htmltext.gsub("%name1%", player.name)
     when "32138-14.html"
       if qs.memo_state?(10) && player.level <= TWENTY_LEVEL && (player.class_id.male_soldier? || player.class_id.female_soldier?)
@@ -86,7 +86,7 @@ class Quests::Q00178_IconicTrinity < Quest
       if qs.memo_state?(3)
         qs.memo_state = 4
         qs.set_cond(2, true)
-        htmltext = get_htm(event)
+        htmltext = get_htm(player, event)
         htmltext = htmltext.gsub("%name1%", player.name)
       end
     when "32256-02.html"
@@ -131,7 +131,7 @@ class Quests::Q00178_IconicTrinity < Quest
       if qs.memo_state?(6)
         qs.memo_state = 7
         qs.set_cond(3, true)
-        htmltext = get_htm(event)
+        htmltext = get_htm(player, event)
         htmltext = htmltext.gsub("%name1%", player.name)
       end
     when "32257-02.html"
@@ -182,7 +182,7 @@ class Quests::Q00178_IconicTrinity < Quest
       if qs.memo_state?(9)
         qs.memo_state = 10
         qs.set_cond(4, true)
-        htmltext = get_htm(event)
+        htmltext = get_htm(player, event)
         htmltext = htmltext.gsub("%name1%", player.name)
       end
     when "32138-13.html", "32138-16.html", "32255-04.html", "32255-05.html",

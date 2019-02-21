@@ -311,7 +311,7 @@ class L2PcInstance < L2Playable
     initialize(IdFactory.next, class_id, account, app)
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2PcInstance
   end
 
@@ -1222,7 +1222,7 @@ class L2PcInstance < L2Playable
       if learn
         lvl_diff = id == CommonSkill::EXPERTISE.id ? 0 : 9
         if level < learn.get_level - lvl_diff
-          debug "would decrease the level of #{skill} by #{lvl_diff}"
+          debug { "would decrease the level of #{skill} by #{lvl_diff}" }
           decrease_skill_level(skill, lvl_diff)
         end
       end
@@ -1241,10 +1241,10 @@ class L2PcInstance < L2Playable
     end
 
     if next_level == -1
-      debug "Removing #{skill}."
+      debug { "Removing #{skill}." }
       remove_skill(skill, true)
     else
-      debug "Decreasing level of #{skill} from #{skill.level} to #{next_level}."
+      debug { "Decreasing level of #{skill} from #{skill.level} to #{next_level}." }
       add_skill(SkillData[skill.id, next_level], true)
     end
   end
@@ -1252,23 +1252,23 @@ class L2PcInstance < L2Playable
   def use_magic(skill : Skill, force : Bool, still : Bool) : Bool
     if skill.passive?
       action_failed
-      debug "Tried to use passive skill #{skill}."
+      debug { "Tried to use passive skill #{skill}." }
       return false
     end
 
     if casting_now?
       current_skill = current_skill()
       if current_skill && skill.id == current_skill.skill_id
-        # debug "#use_magic(#{skill}, #{force}, #{still}) aborted (a skill is being casted)."
+        # debug { "#use_magic(#{skill}, #{force}, #{still}) aborted (a skill is being casted)." }
         action_failed
         return false
       elsif skill_disabled?(skill)
-        debug "#use_magic(#{skill}, #{force}, #{still}) aborted (skill is disabled)."
+        debug { "#use_magic(#{skill}, #{force}, #{still}) aborted (skill is disabled)." }
         action_failed
         return false
       end
 
-      # debug "#use_magic(#{skill}, #{force}, #{still}) skill queued (char is casting)."
+      # debug { "#use_magic(#{skill}, #{force}, #{still}) skill queued (char is casting)." }
       set_queued_skill(skill, force, still)
       action_failed
       return false
@@ -1298,7 +1298,7 @@ class L2PcInstance < L2Playable
   end
 
   private def check_use_magic_conditions(skill : Skill, force_use : Bool, dont_move : Bool) : Bool
-    # debug "check_use_magic_conditions #{skill}, #{force_use} #{dont_move}"
+    # debug { "check_use_magic_conditions #{skill}, #{force_use} #{dont_move}" }
     if out_of_control? || paralyzed? || stunned? || sleeping? || dead?
       action_failed
       return false
@@ -1345,7 +1345,7 @@ class L2PcInstance < L2Playable
 
     pos = current_skill_world_position
     if target_type.ground? && !pos
-      warn "@current_skill_world_position is nil for skill #{skill}."
+      warn { "@current_skill_world_position is nil for skill #{skill}." }
       action_failed
       return false
     end
@@ -1460,7 +1460,7 @@ class L2PcInstance < L2Playable
       end
 
       if target.is_a?(L2EventMonsterInstance)
-        warn "TODO: #{target} is a L2EventMonsterInstance."
+        warn { "TODO: #{target} is a L2EventMonsterInstance." }
         # if target.event_skill_attack_blocked?
         #   return false
         # end
@@ -1547,7 +1547,7 @@ class L2PcInstance < L2Playable
       ctrl = !!current_skill && current_skill.ctrl?
 
       if target.inside_peace_zone?
-        debug "#check_pvp_skill: #{target} is inside a peace zone."
+        debug { "#check_pvp_skill: #{target} is inside a peace zone." }
         return false
       end
 
@@ -1705,7 +1705,7 @@ class L2PcInstance < L2Playable
     skills_for_store = [] of Skill
 
     skills.each do |sk|
-      info "Learning #{sk.name}"
+      debug { "Learning #{sk.name}" }
       next if get_known_skill(sk.id) == sk
       count += 1 if get_skill_level(sk.id) == -1
 
@@ -1764,7 +1764,7 @@ class L2PcInstance < L2Playable
     Inventory::TOTALSLOTS.times do |i|
       equipped_item = inventory[i]
       if equipped_item && !equipped_item.template.check_condition(self, self, false)
-        debug "#{equipped_item} has failed the item restriction check."
+        debug { "#{equipped_item} has failed the item restriction check." }
         inventory.unequip_item_in_slot(i)
 
         # iu = InventoryUpdate.new
@@ -1989,9 +1989,9 @@ class L2PcInstance < L2Playable
             drop_item("DieDrop", i, killer, true)
 
             if karma_drop
-              info "Dropped #{i} x#{i.count} because he had karma."
+              debug { "Dropped #{i} because he had karma." }
             else
-              info "Dropped #{i} x#{i.count}."
+              debug { "Dropped #{i}." }
             end
 
             drop_count += 1
@@ -2022,9 +2022,9 @@ class L2PcInstance < L2Playable
     elsif killer.playable?
       percent *= calc_stat(Stats::REDUCE_DEATH_PENALTY_BY_PVP)
     end
-    debug "Death penalty chance: #{Config.death_penalty_chance * percent}%."
+    debug { "Death penalty chance: #{Config.death_penalty_chance * percent}%." }
     if Rnd.rand(1..100) <= Config.death_penalty_chance * percent
-      debug "!killer.playable? => #{!killer.playable?}, @karma > 0 => #{@karma > 0}."
+      debug { "!killer.playable? => #{!killer.playable?}, @karma > 0 => #{@karma > 0}." }
       if !killer.playable? || karma > 0
         increase_death_penalty_buff_level
       end
@@ -2051,7 +2051,7 @@ class L2PcInstance < L2Playable
 
     lost_exp = 0i64
 
-    unless false # L2Event.participant?(self)
+    unless false # L2Event.participant?(self) TODO
       if lvl < Config.max_player_level
         lost_exp = (((stat.get_exp_for_level(lvl + 1) - stat.get_exp_for_level(lvl)) * percent_lost) / 100).round
       else
@@ -2068,7 +2068,7 @@ class L2PcInstance < L2Playable
   end
 
   def increase_death_penalty_buff_level
-    debug "Increasing death penalty (current: #{death_penalty_buff_level})."
+    debug { "Increasing death penalty (current: #{death_penalty_buff_level})." }
     return if death_penalty_buff_level >= 15
 
     if death_penalty_buff_level != 0
@@ -2211,7 +2211,7 @@ class L2PcInstance < L2Playable
           disable_auto_shot(item_id)
         end
       else
-        warn "Item with ID #{item_id} not found."
+        warn { "Item with ID #{item_id} not found." }
       end
     end
   end
@@ -2561,7 +2561,7 @@ class L2PcInstance < L2Playable
 
   def exp=(exp : Int64)
     if exp < 0
-      warn "L2PcInstance#exp=: Negative exp #{exp}."
+      warn { "L2PcInstance#exp=: Negative exp #{exp}." }
       exp = 0i64
     end
 
@@ -2607,12 +2607,12 @@ class L2PcInstance < L2Playable
     send_packet(ExBrExtraUserInfo.new(self))
   end
 
-  def add_sp(sp)
+  def add_sp(sp : Int32)
     sub_stat.add_sp(sp)
   end
 
   def add_exp_and_sp(add_to_exp : Int64, add_to_sp : Int32)
-    add_exp_and_sp(add_to_exp, add_to_sp)
+    add_exp_and_sp(add_to_exp, add_to_sp, false)
   end
 
   def add_exp_and_sp(add_to_exp : Int64, add_to_sp : Int32, use_bonuses : Bool)
@@ -3157,7 +3157,7 @@ class L2PcInstance < L2Playable
     if in_olympiad_mode? && target.is_a?(L2PcInstance)
       if target.in_olympiad_mode?
         if target.olympiad_game_id == olympiad_game_id
-          warn "TODO: OlympiadGameManager at line #{__LINE__}."
+          warn { "TODO: OlympiadGameManager at line #{__LINE__}." }
           # OlympiadGameManager.notify_competitor_damage(self, damage)
         end
       end
@@ -3394,7 +3394,7 @@ class L2PcInstance < L2Playable
     if item_id
       ItemTable[item_id].as(L2Weapon)
     else
-      warn "No fists found for #{ClassId[class_id]}."
+      warn { "No fists found for #{ClassId[class_id]}." }
       nil
     end
   end
@@ -3535,7 +3535,7 @@ class L2PcInstance < L2Playable
     set_intention(AI::IDLE)
 
     unless target.item?
-      warn "Tried to pick up a #{target.class}"
+      warn { "Tried to pick up a #{target.class}" }
       return
     end
 
@@ -3609,7 +3609,7 @@ class L2PcInstance < L2Playable
       if handler = ItemHandler[target.etc_item]
         handler.use_item(self, target, false)
       else
-        warn "No item handler for #{target} (id: #{target.id})."
+        warn { "No item handler for #{target} (id: #{target.id})." }
       end
       ItemTable.destroy_item("Consume", target, self, nil)
     elsif CursedWeaponsManager.cursed?(target.id)
@@ -3774,12 +3774,11 @@ class L2PcInstance < L2Playable
   end
 
   def party_banned? : Bool
-    # PunishmentManager.has_punishment?(
-    #   l2id,
-    #   PunishmentAffect::CHARACTER,
-    #   PunishmentType::PARTY_BAN
-    # )
-    false
+    PunishmentManager.has_punishment?(
+      l2id,
+      PunishmentAffect::CHARACTER,
+      PunishmentType::PARTY_BAN
+    )
   end
 
   def check_birthday
@@ -4384,6 +4383,33 @@ class L2PcInstance < L2Playable
     new_item
   end
 
+  def exchange_items_by_id(process, reference, coin_id : Int32, cost : Int64, reward_id : Int32, count : Int64, send_msg : Bool) : Bool
+    inv = inventory
+
+    unless inv.validate_capacity_by_item_id(reward_id, count)
+      if send_msg
+        send_packet(SystemMessageId::SLOTS_FULL)
+      end
+
+      return false
+    end
+
+    unless inv.validate_weight_by_item_id(reward_id, count)
+      if send_msg
+        send_packet(SystemMessageId::WEIGHT_LIMIT_EXCEEDED)
+      end
+
+      return false
+    end
+
+    if destroy_item_by_item_id(process, coin_id, cost, reference, send_msg)
+      add_item(process, reward_id, count, reference, send_msg)
+      return true
+    end
+
+    false
+  end
+
   def mage_class?
     class_id.mage_class?
   end
@@ -4570,19 +4596,32 @@ class L2PcInstance < L2Playable
     @notify_quest_of_death.nil? || notify_quest_of_death.empty?
   end
 
+  def ip_address : String
+    # if client = @client
+    #   return client.connection.address.address
+    # end
+
+    "N/A"
+  end
+
   def close_net_connection(close_client : Bool)
-    if client = @client
-      if client.detached?
-        client.clean_me(true)
-      else
-        unless client.closed?
-          if close_client
-            client.close(LeaveWorld::STATIC_PACKET)
-          else
-            client.close(ServerClose::STATIC_PACKET)
-          end
-        end
-      end
+    unless client = @client
+      return
+    end
+
+    if client.detached?
+      client.clean_me(true)
+      return
+    end
+
+    if client.closed?
+      return
+    end
+
+    if close_client
+      client.close(LeaveWorld::STATIC_PACKET)
+    else
+      client.close(ServerClose::STATIC_PACKET)
     end
   end
 
@@ -4864,7 +4903,7 @@ class L2PcInstance < L2Playable
   def broadcast_snoop(type, name, text)
     return if @snoop_listener.empty?
     sn = Snoop.new(l2id, name(), type, name, text)
-    @snoop_listener.each { |pc| pc.send_packet(sn) }
+    @snoop_listener.each &.send_packet(sn)
   end
 
   def add_snooper(pc : L2PcInstance)
@@ -4883,7 +4922,7 @@ class L2PcInstance < L2Playable
     @snooped_player.delete(pc)
   end
 
-  def sitting?
+  def sitting? : Bool
     @wait_type_sitting
   end
 
@@ -5139,9 +5178,8 @@ class L2PcInstance < L2Playable
   end
 
   def jailed? : Bool
-    # return PunishmentManager.getInstance().hasPunishment(l2id, PunishmentAffect.CHARACTER, PunishmentType.JAIL) || PunishmentManager.getInstance().hasPunishment(getAccountName(), PunishmentAffect.ACCOUNT, PunishmentType.JAIL)
-    #   || PunishmentManager.getInstance().hasPunishment(getIPAddress(), PunishmentAffect.IP, PunishmentType.JAIL);
-    false
+    PunishmentManager.has_punishment?(l2id, PunishmentAffect::CHARACTER, PunishmentType::JAIL) || PunishmentManager.has_punishment?(account_name, PunishmentAffect::ACCOUNT, PunishmentType::JAIL) ||
+    PunishmentManager.has_punishment?(ip_address, PunishmentAffect::IP, PunishmentType::JAIL)
   end
 
   def charges : Int32
@@ -6742,7 +6780,7 @@ class L2PcInstance < L2Playable
       end
 
       broadcast_status_update
-      @exp_before_death = 0
+      self.exp_before_death = 0
 
       if cursed_weapon_equipped?
         CursedWeaponsManager.drop(@cursed_weapon_equipped_id, killer)
@@ -6860,7 +6898,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def revive_request(reviver : L2PcInstance, skill : Skill, pet : Bool, power : Int32, recovery : Int32)
+  def revive_request(reviver : L2PcInstance, skill : Skill?, pet : Bool, power : Int32, recovery : Int32)
     if resurrection_blocked?
       debug "Resurrection is blocked."
       return

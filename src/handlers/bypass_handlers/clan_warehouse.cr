@@ -67,9 +67,9 @@ module BypassHandler::ClanWarehouse
       return
     end
 
-    wh.items.each do |i|
-      if i.time_limited_item? && i.remaining_time <= 0
-        wh.destroy_item("L2ItemInstance", i, pc, nil)
+    wh.items.safe_each do |item|
+      if item.time_limited_item? && item.remaining_time <= 0
+        wh.destroy_item("L2ItemInstance", item, pc, nil)
       end
     end
 

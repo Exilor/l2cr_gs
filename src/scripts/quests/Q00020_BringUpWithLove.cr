@@ -40,9 +40,8 @@ class Quests::Q00020_BringUpWithLove < Quest
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state!(pc)
     htmltext = get_no_quest_msg(pc)
-    if st.nil?
+    unless st = get_quest_state!(pc)
       return htmltext
     end
 

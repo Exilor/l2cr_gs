@@ -241,8 +241,20 @@ class QuestState
     AbstractScript.play_sound(@player, audio)
   end
 
-  def start_quest_timer(name : String, time : Int, npc : L2Npc? = nil)
+  def start_quest_timer(name : String, time : Int)
+    quest.start_quest_timer(name, time.to_i64, nil, @player, false)
+  end
+
+  def start_quest_timer(name : String, time : Int, npc : L2Npc?)
     quest.start_quest_timer(name, time.to_i64, npc, @player, false)
+  end
+
+  def start_repeating_quest_timer(name : String, time : Int)
+    quest.start_quest_timer(name, time.to_i64, nil, @player, true)
+  end
+
+  def start_repeating_quest_timer(name : String, time : Int, npc : L2Npc?)
+    quest.start_quest_timer(name, time.to_i64, npc, @player, true)
   end
 
   def show_question_mark(talker : L2PcInstance, number : Int32)

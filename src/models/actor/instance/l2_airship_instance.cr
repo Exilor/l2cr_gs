@@ -6,7 +6,7 @@ class L2AirshipInstance < L2Vehicle
     ai
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2AirShipInstance
   end
 

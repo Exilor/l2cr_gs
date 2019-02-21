@@ -5,8 +5,7 @@ class NpcAI::ZealotOfShilen < AbstractNpcAI
   def initialize
     super(self.class.simple_name, "gracia/AI/NPC")
 
-    add_spawn_id(ZEALOT)
-    add_spawn_id(GUARDS)
+    add_spawn_id(ZEALOT, *GUARDS)
     add_first_talk_id(GUARDS)
   end
 
@@ -33,13 +32,11 @@ class NpcAI::ZealotOfShilen < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc = npc.as(L2Attackable)
-
     if npc.id == ZEALOT
       npc.no_rnd_walk = true
     else
       npc.invul = true
-      npc.can_return_to_spawn_point = false
+      npc.as(L2Attackable).can_return_to_spawn_point = false
       start_quest_timer("WATCHING", 10000, npc, nil, true)
     end
 

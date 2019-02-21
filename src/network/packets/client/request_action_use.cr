@@ -1,3 +1,5 @@
+require "../../../instance_managers/airship_manager"
+
 class Packets::Incoming::RequestActionUse < GameClientPacket
   no_action_request
 

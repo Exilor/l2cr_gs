@@ -25,7 +25,10 @@ class Quests::Q00411_PathOfTheAssassin < Quest
     add_start_npc(TRISKEL)
     add_talk_id(TRISKEL, GUARD_LEIKAN, ARKENIA)
     add_kill_id(MOONSTONE_BEAST, CALPICO)
-    register_quest_items(SHILENS_CALL, ARKENIAS_LETTER, LEIKANS_NOTE, MOONSTONE_BEASTS_MOLAR, SHILENS_TEARS, ARKENIAS_RECOMMENDATION)
+    register_quest_items(
+      SHILENS_CALL, ARKENIAS_LETTER, LEIKANS_NOTE, MOONSTONE_BEASTS_MOLAR,
+      SHILENS_TEARS, ARKENIAS_RECOMMENDATION
+    )
   end
 
   def on_adv_event(event, npc, player)

@@ -62,13 +62,13 @@ class Shutdown
 
     if self == Shutdown.instance
       # UPnPService.remove_all_ports
-      # UPnPService.info "All port mappings deleted (#{tc1})."
+      # UPnPService.info { "All port mappings deleted (#{tc1})." }
       tc1.start
 
       if (Config.offline_trade_enable || Config.offline_craft_enable) && Config.restore_offliners
         begin
           OfflineTradersTable.store_offliners
-          info "Offline traders stored in #{tc1}."
+          info { "Offline traders stored in #{tc1}." }
           tc1.start
         rescue e
           error e
@@ -77,7 +77,7 @@ class Shutdown
 
       begin
         disconnect_all_characters
-        info "All players disconnected and saved (#{tc1})."
+        info { "All players disconnected and saved (#{tc1})." }
         tc1.start
       rescue e
         error e
@@ -85,7 +85,7 @@ class Shutdown
 
       begin
         GameTimer.cancel
-        info "GameTimer stopped (#{tc1})."
+        info { "GameTimer stopped (#{tc1})." }
         tc1.start
       rescue e
         error e
@@ -95,7 +95,7 @@ class Shutdown
 
       begin
         LoginServerClient.terminate
-        info "LoginServerClient terminated (#{tc1})."
+        info { "LoginServerClient terminated (#{tc1})." }
         tc1.start
       rescue e
         error e
@@ -106,7 +106,7 @@ class Shutdown
 
       # begin
       #   GameServer.close_selector
-      #   GameServer.info "Selector thread has been shut down (#{tc1})."
+      #   GameServer.info { "Selector thread has been shut down (#{tc1})." }
       #   tc1.start
       # rescue e
       #   error e
@@ -117,13 +117,13 @@ class Shutdown
 
       begin
         GameDB.close
-        info "Database connection closed (#{tc1})."
+        info { "Database connection closed (#{tc1})." }
       rescue e
         error e
       end
         tc1.start
 
-      info "The server has been successfully shut down in #{tc2} seconds."
+      info { "The server has been successfully shut down in #{tc2} seconds." }
 
       if Shutdown.instance.shutdown_mode == GM_RESTART
         exit(2)
@@ -204,36 +204,36 @@ class Shutdown
   protected def save_data
     case @shutdown_mode
     when SIGTERM
-      info "SIGTERM received. Shutting down now."
+      info { "SIGTERM received. Shutting down now." }
     when GM_SHUTDOWN
-      info "GM shutdown received. Shutting down now."
+      info { "GM shutdown received. Shutting down now." }
     when GM_RESTART
-      info "GM restart received. Restarting now."
+      info { "GM restart received. Restarting now." }
     end
 
     tc = Timer.new
 
     unless SevenSigns.seal_validation_period?
       SevenSignsFestival.save_festival_data(false)
-      info "Festival data saved in #{tc} seconds."
+      info { "Festival data saved in #{tc} seconds." }
       tc.start
     end
 
     SevenSigns.save_seven_signs_data
-    info "Seven Signs data saved in #{tc} seconds."
+    info { "Seven Signs data saved in #{tc} seconds." }
     tc.start
 
     SevenSigns.save_seven_signs_status
-    info "Seven Signs status saved in #{tc} seconds."
+    info { "Seven Signs status saved in #{tc} seconds." }
     tc.start
     #
     # // Save all raidboss and GrandBoss status ^_^
     RaidBossSpawnManager.clean_up
-    info "Raid boss info saved in #{tc}."
+    info { "Raid boss info saved in #{tc}." }
     tc.start
 
     GrandBossManager.clean_up
-    GrandBossManager.info "Grand boss info saved in #{tc} seconds."
+    GrandBossManager.info { "Grand boss info saved in #{tc} seconds." }
     tc.start
 
     # ItemAuctionManager.getInstance().shutdown();
@@ -243,42 +243,42 @@ class Shutdown
     # Hero.getInstance().shutdown();
     # _log.info("Hero System: Data saved({}ms).", tc.getEstimatedTimeAndRestartCounter());
     ClanTable.store_clan_score
-    info "Clan data saved in #{tc} seconds."
+    info { "Clan data saved in #{tc} seconds." }
     tc.start
     #
     # // Save Cursed Weapons data before closing.
     CursedWeaponsManager.save_data
-    info "Cursed weapons data saved in #{tc} seconds."
+    info { "Cursed weapons data saved in #{tc} seconds." }
     tc.start
     #
     # // Save all manor data
     unless Config.alt_manor_save_all_actions
       CastleManorManager.store_me
-      info "Manor data saved in #{tc} seconds."
+      info { "Manor data saved in #{tc} seconds." }
       tc.start
     end
     #
     CHSiegeManager.on_server_shutdown
-    info "Siegable hall attacker lists saved in #{tc} seconds."
+    info { "Siegable hall attacker lists saved in #{tc} seconds." }
     tc.start
     #
     # // Save all global (non-player specific) Quest data that needs to persist after reboot
     QuestManager.save
-    info "QuestManager data saved in #{tc} seconds."
+    info { "QuestManager data saved in #{tc} seconds." }
     tc.start
     #
     # // Save all global variables data
     GlobalVariablesManager.store_me
-    info "Global variables saved in #{tc} seconds."
+    info { "Global variables saved in #{tc} seconds." }
     tc.start
 
     # Save items on ground before closing
     if Config.save_dropped_item
       ItemsOnGroundManager.save_in_db
-      ItemsOnGroundManager.info "Items saved in #{tc} seconds."
+      ItemsOnGroundManager.info { "Items saved in #{tc} seconds." }
       tc.start
       ItemsOnGroundManager.clean_up
-      ItemsOnGroundManager.info "Cleaned up in #{tc} seconds."
+      ItemsOnGroundManager.info { "Cleaned up in #{tc} seconds." }
       tc.start
     end
     #

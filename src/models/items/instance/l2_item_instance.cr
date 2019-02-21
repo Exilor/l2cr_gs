@@ -361,7 +361,7 @@ class L2ItemInstance < L2Object
     (pc.active_enchant_support_item_id != @l2id) && # Not currently used enchant support item
     (pc.active_enchant_attr_item_id != @l2id) && # Not currently used enchant attribute item
     (allow_adena || (id != Inventory::ADENA_ID)) && # Not Adena
-    ((!pc.current_skill) || (pc.current_skill.not_nil!.skill.item_consume_id != id)) && (!pc.casting_simultaneously_now? || (!pc.last_simultaneous_skill_cast) || (pc.last_simultaneous_skill_cast.not_nil!.item_consume_id != id)) &&
+  ((!pc.current_skill) || (pc.current_skill.not_nil!.skill.item_consume_id != id)) && (!pc.casting_simultaneously_now? || pc.last_simultaneous_skill_cast.nil? || (pc.last_simultaneous_skill_cast.not_nil!.item_consume_id != id)) &&
     (allow_non_tradeable || (tradeable? && (!((@item.item_type == EtcItemType::PET_COLLAR) && pc.has_pet_items?))))
   end
 

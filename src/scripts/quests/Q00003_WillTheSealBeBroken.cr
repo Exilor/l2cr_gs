@@ -22,12 +22,8 @@ class Quests::Q00003_WillTheSealBeBroken < Quest
     add_start_npc(TALLOTH)
 		add_talk_id(TALLOTH)
 		add_kill_id(
-      OMEN_BEAST,
-      TAINTED_ZOMBIE,
-      STINK_ZOMBIE,
-      LESSER_SUCCUBUS,
-      LESSER_SUCCUBUS_TILFO,
-      LESSER_SUCCUBUS_TUREN
+      OMEN_BEAST, TAINTED_ZOMBIE, STINK_ZOMBIE, LESSER_SUCCUBUS,
+      LESSER_SUCCUBUS_TILFO, LESSER_SUCCUBUS_TUREN
     )
 		register_quest_items(OMEN_BEAST_EYE, TAINT_STONE, SUCCUBUS_BLOOD)
   end

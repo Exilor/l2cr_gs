@@ -4,7 +4,7 @@ class NpcAI::EchoCrystals < AbstractNpcAI
 
   private NPCS = {
     31042, # Kantabilon
-    32043 # Octavia
+    32043  # Octavia
   }
   private ADENA = 57
   private COST = 200

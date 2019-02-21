@@ -29,7 +29,8 @@ abstract class L2Character < L2Object
   @hp_update_inc_check = 0.0
   @hp_update_dec_check = 0.0
   @hp_update_interval  = 0.0
-  @zones = Array(Int8).new(ZoneId.size, 0i8)
+  @zones = Bytes.new(ZoneId.size)
+  @zones_mutex = Mutex.new
   @zone_validate_counter = 4i8
   @teleport_lock = Mutex.new
   @attack_lock = Mutex.new # ?
@@ -61,9 +62,9 @@ abstract class L2Character < L2Object
   setter pending_revive : Bool = false
   setter skill_cast : Runnable::DelayedTask?
   setter invul : Bool = false
-  property attack_end_time : Int64 = 0
+  property attack_end_time : Int64 = 0i64
   property bow_attack_end_time : Int32 = 0
-  property cross_bow_attack_end_time : Int64 = 0
+  property cross_bow_attack_end_time : Int64 = 0i64
   property debugger : L2Character?
   property last_skill_cast : Skill?
   property last_simultaneous_skill_cast : Skill?
@@ -1975,7 +1976,7 @@ abstract class L2Character < L2Object
 
   def title=(string : String?)
     if string
-      @title = string.size > 21 ? string[0..20] : string
+      @title = string.size > 21 ? string[0, 20] : string
     else
       @title = ""
     end
@@ -2445,7 +2446,8 @@ abstract class L2Character < L2Object
   end
 
   def update_effect_icons(party_only : Bool)
-    effect_list.update_effect_icons(party_only)
+    # effect_list.update_effect_icons(party_only)
+    # no-op
   end
 
   def start_fake_death
@@ -2569,7 +2571,14 @@ abstract class L2Character < L2Object
         target.acting_player != self &&
         target.acting_player.siege_side == acting_player.siege_side
 
-        debug "L2Character#do_attack: territory war stuff at line #{__LINE__}."
+        if TerritoryWarManager.tw_in_progress?
+          send_packet(SystemMessageId::YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY)
+        else
+          send_packet(SystemMessageId::FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS)
+        end
+
+        action_failed
+        return
       elsif target.inside_peace_zone?(acting_player)
         set_intention(AI::ACTIVE)
         action_failed
@@ -2671,7 +2680,7 @@ abstract class L2Character < L2Object
     # @attack_lock.unlock
   end
 
-  def attack_type
+  def attack_type : WeaponType
     if transformed?
       if template = transformation.get_template(acting_player)
         return template.base_attack_type
@@ -2784,13 +2793,14 @@ abstract class L2Character < L2Object
     attack_random_count_max = calc_stat(Stats::ATTACK_COUNT_MAX)
     attack_percent = 85.0
     attack_count = 0
+    z = z()
 
     known_list.known_objects.each_value do |obj|
       next unless obj.is_a?(L2Character)
       next if obj == target
       next if pet? && unsafe_as(L2PetInstance).owner == self
       next unless Util.in_range?(max_radius, self, obj, false)
-      next if (obj.z - z()).abs > 650
+      next if (obj.z - z).abs > 650
       next unless facing?(obj, max_angle_diff)
       next if attackable? && obj.player? && obj.attackable?
       next if attackable? && obj.attackable? && !unsafe_as(L2Attackable).chaos?
@@ -3204,8 +3214,7 @@ abstract class L2Character < L2Object
     start_abnormal_visual_effect(update, aves)
   end
 
-  def start_abnormal_visual_effect(update : Bool, aves : Enumerable(AbnormalVisualEffect)?)
-    return unless aves
+  def start_abnormal_visual_effect(update : Bool, aves : Enumerable(AbnormalVisualEffect))
     aves.each do |ave|
       if ave.event?
         @abnormal_visual_effects_event |= ave.mask
@@ -3223,9 +3232,7 @@ abstract class L2Character < L2Object
     stop_abnormal_visual_effect(update, aves)
   end
 
-  def stop_abnormal_visual_effect(update : Bool, aves : Enumerable(AbnormalVisualEffect)?)
-    return unless aves
-
+  def stop_abnormal_visual_effect(update : Bool, aves : Enumerable(AbnormalVisualEffect))
     aves.each do |ave|
       if ave.event?
         @abnormal_visual_effects_event &= ~ave.mask
@@ -3381,11 +3388,11 @@ abstract class L2Character < L2Object
     return unless reg = world_region?
 
     if force
-      @zone_validate_counter = 4i64
+      @zone_validate_counter = 4i8
     else
-      @zone_validate_counter -= 1i64
+      @zone_validate_counter -= 1
       if @zone_validate_counter < 0
-        @zone_validate_counter = 4i64
+        @zone_validate_counter = 4i8
       else
         return
       end
@@ -3395,13 +3402,13 @@ abstract class L2Character < L2Object
   end
 
   def set_inside_zone(id : ZoneId, val : Bool)
-    # @zones.sync do
+    @zones_mutex.synchronize do
       if val
-        @zones[id.to_i8] += 1
-      elsif @zones[id.to_i8] > 0
-        @zones[id.to_i8] -= 1
+        @zones[id.to_i] += 1
+      elsif @zones[id.to_i] > 0
+        @zones[id.to_i] -= 1
       end
-    # end
+    end
   end
 
   def inside_zone?(id : ZoneId) : Bool
@@ -3422,11 +3429,11 @@ abstract class L2Character < L2Object
   end
 
   {% for id in ZoneId.constants %}
-    def inside_{{id.stringify.underscore.id}}_zone? : Bool
+    def inside_{{id.underscore.id}}_zone? : Bool
       inside_zone?(ZoneId::{{id}})
     end
 
-    def inside_{{id.stringify.underscore.id}}_zone=(val : Bool)
+    def inside_{{id.underscore.id}}_zone=(val : Bool)
       set_inside_zone(ZoneId::{{id}}, val)
     end
   {% end %}
@@ -3796,7 +3803,7 @@ abstract class L2Character < L2Object
         dx = (x - cur_x).to_f
         dy = (y - cur_y).to_f
         dz = (z - cur_z).to_f
-        distance = vertical_movement_only ? (dz * dz).abs : Math.hypot(dx, dy)
+        distance = vertical_movement_only ? dz.abs2 : Math.hypot(dx, dy)
       end
 
       if Config.pathfinding > 0 && original_distance - distance > 30 && distance < 2000
@@ -3840,7 +3847,7 @@ abstract class L2Character < L2Object
             dx = (x - cur_x).to_f
             dy = (y - cur_y).to_f
             dz = (z - cur_z).to_f
-            distance = vertical_movement_only ? (dz * dz).abs : Math.hypot(dx, dy)
+            distance = vertical_movement_only ? Math.pow(z, 2) : Math.hypot(dx, dy)
             sin = dy / distance
             cos = dx / distance
           end
@@ -4020,20 +4027,12 @@ abstract class L2Character < L2Object
   end
 
   def say(msg : NpcString | String)
-    unless msg.is_a?(NpcString)
-      msg = msg.to_s
-    end
-
-    type = player? ? Packets::Incoming::Say2::ALL : Packets::Incoming::Say2::NPC_ALL
-    broadcast_packet(CreatureSay.new(l2id, type, name || "??", msg))
+    say = player? ? Packets::Incoming::Say2::ALL : Packets::Incoming::Say2::NPC_ALL
+    broadcast_packet(CreatureSay.new(l2id, say, name || "??", msg))
   end
 
   def shout(msg : NpcString | String)
-    unless msg.is_a?(NpcString)
-      msg = msg.to_s
-    end
-
-    type = player? ? Packets::Incoming::Say2::SHOUT : Packets::Incoming::Say2::NPC_SHOUT
-    broadcast_packet(CreatureSay.new(l2id, type, name || "??", msg))
+    say = player? ? Packets::Incoming::Say2::SHOUT : Packets::Incoming::Say2::NPC_SHOUT
+    broadcast_packet(CreatureSay.new(l2id, say, name || "??", msg))
   end
 end

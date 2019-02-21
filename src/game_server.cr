@@ -120,7 +120,8 @@ module GameServer
       Loggable.severity = :DEBUG
     end
     Dir.mkdir_p(Dir.current + "/log")
-    f = File.open(Dir.current + "/log/#{Time.ms}.txt", "w")
+    time = start_time.to_s("%Y-%m-%d %H-%M-%S")
+    f = File.open(Dir.current + "/log/#{time}.txt", "w")
     Loggable::LOGGABLE_IOS << f
     L2World.load
     GameDB.load
@@ -215,14 +216,16 @@ module GameServer
     BotReportTable.load
 
     QuestManager.load
-    BoatManager.load
+    if Config.allow_boat
+      BoatManager.load
+    end
     AirshipManager.load
     # GraciaSeedsManager.load
 
     SpawnTable.load
     DayNightSpawnManager.trim
     DayNightSpawnManager.notify_change_mode
-    FourSepulchersManager.init # 91.816 kb -> 93.594 kb
+    FourSepulchersManager.init
     DimensionalRiftManager.load
     RaidBossSpawnManager.load
 
@@ -300,7 +303,6 @@ module GameServer
 
     LoginServerClient.start
 
-    # L2Cr.on_screen_info_task
     L2Cr.command_line_task
 
     info "Listening for players at #{host}:#{port}"

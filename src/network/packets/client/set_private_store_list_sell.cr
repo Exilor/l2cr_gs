@@ -97,13 +97,13 @@ class Packets::Incoming::SetPrivateStoreListSell < GameClientPacket
   struct Item
     initializer item_id: Int32, count: Int64, price: Int64
 
-    def add_to_trade_list(list : TradeList)
+    def add_to_trade_list(list : TradeList) : Bool
       if Config.max_adena / @count < @price
-        false
-      else
-        list.add_item(@item_id, @count, @price)
-        true
+        return false
       end
+
+      list.add_item(@item_id, @count, @price)
+      true
     end
 
     def price : Int64

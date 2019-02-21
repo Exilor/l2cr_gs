@@ -28,6 +28,6 @@ struct PunishmentHolder
   end
 
   def get_punishment(key : String, type : PunishmentType) : PunishmentTask?
-    @holder.dig(key, type)
+    @holder.dig?(key, type)
   end
 end

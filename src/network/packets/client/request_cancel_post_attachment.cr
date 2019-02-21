@@ -100,7 +100,7 @@ class Packets::Incoming::RequestCancelPostAttachment < GameClientPacket
       iu = InventoryUpdate.new
     end
 
-    attachments.items.each do |item|
+    attachments.items.safe_each do |item|
       count = item.count
 
       new_item = attachments.transfer_item(attachments.name, item.l2id, count, pc.inventory, pc, nil)

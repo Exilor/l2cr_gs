@@ -218,27 +218,7 @@ module GeoData
         end
 
         can_see_through = false
-        # if cur_geo_z <= max_height
-        #   if nswe & Cell::NSWE_NORTH_EAST == Cell::NSWE_NORTH_EAST
-        #     north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, Cell::NSWE_EAST)
-        #     east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, Cell::NSWE_NORTH)
-        #     can_see_through = (north_geo_z <= max_height) && (east_geo_z <= max_height) && (north_geo_z <= get_nearest_z(prev_x, prev_y - 1, bee_cur_z)) && (east_geo_z <= get_nearest_z(prev_x + 1, prev_y, bee_cur_z))
-        #   elsif nswe & Cell::NSWE_NORTH_WEST == Cell::NSWE_NORTH_WEST
-        #     north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, Cell::NSWE_WEST)
-        #     west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, Cell::NSWE_NORTH)
-        #     can_see_through = (north_geo_z <= max_height) && (west_geo_z <= max_height) && (north_geo_z <= get_nearest_z(prev_x, prev_y - 1, bee_cur_z)) && (west_geo_z <= get_nearest_z(prev_x - 1, prev_y, bee_cur_z))
-        #   elsif nswe & Cell::NSWE_SOUTH_EAST == Cell::NSWE_SOUTH_EAST
-        #     south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, Cell::NSWE_EAST)
-        #     east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, Cell::NSWE_SOUTH)
-        #     can_see_through = (south_geo_z <= max_height) && (east_geo_z <= max_height) && (south_geo_z <= get_nearest_z(prev_x, prev_y + 1, bee_cur_z)) && (east_geo_z <= get_nearest_z(prev_x + 1, prev_y, bee_cur_z))
-        #   elsif nswe & Cell::NSWE_SOUTH_WEST == Cell::NSWE_SOUTH_WEST
-        #     south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, Cell::NSWE_WEST)
-        #     west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, Cell::NSWE_SOUTH)
-        #     can_see_through = (south_geo_z <= max_height) && (west_geo_z <= max_height) && (south_geo_z <= get_nearest_z(prev_x, prev_y + 1, bee_cur_z)) && (west_geo_z <= get_nearest_z(prev_x - 1, prev_y, bee_cur_z))
-        #   else
-        #     can_see_through = true
-        #   end
-        # end
+
         if cur_geo_z <= max_height
           if nswe & Cell::NSWE_NORTH_EAST == Cell::NSWE_NORTH_EAST
             north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, Cell::NSWE_EAST)

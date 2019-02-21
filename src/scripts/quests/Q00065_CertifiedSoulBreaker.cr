@@ -350,7 +350,7 @@ class Quests::Q00065_CertifiedSoulBreaker < Quest
         end
       when KEKROPUS
         if memo_state == 1
-          htmltext = get_htm("32138-01.html")
+          htmltext = get_htm(player, "32138-01.html")
           htmltext = htmltext.gsub("%name1%", player.name)
         elsif memo_state == 2
           htmltext = "32138-05.html"

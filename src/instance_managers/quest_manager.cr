@@ -1,6 +1,5 @@
 require "../models/quests/quest"
 require "../models/quests/abstract_npc_ai"
-
 require "../scripts/**"
 
 module QuestManager
@@ -11,14 +10,6 @@ module QuestManager
   private SCRIPTS = Hash(String, Quest).new
 
   def load
-    # {% for sub in AbstractScript.all_subclasses.reject &.abstract? %}
-    #   {% if sub.stringify != "Quest" %}
-    #     q = {{sub.id}}
-    #     # debug "Initializing #{q}"
-    #     q.new
-    #   {% end %}
-    # {% end %}
-
     {% for sub in Quest.all_subclasses.reject &.abstract? %}
       {{sub.id}}.new
     {% end %}
@@ -31,10 +22,6 @@ module QuestManager
       debug "Added quest #{quest.class.simple_name}."
     end
 
-    if old = QUESTS[quest.name]?
-      old.unload
-    end
-
     QUESTS[quest.name] = quest
   end
 
@@ -43,15 +30,11 @@ module QuestManager
       info "Added script #{script.class.simple_name}."
     end
 
-    if old = SCRIPTS[script.class.simple_name]?
-      old.unload
-    end
-
     SCRIPTS[script.class.simple_name] = script
   end
 
   def get_quest(name : String) : Quest?
-    QUESTS.fetch(name) { SCRIPTS[name]? }
+    QUESTS[name]? || SCRIPTS[name]?
   end
 
   def get_quest(quest_id : Int32) : Quest?

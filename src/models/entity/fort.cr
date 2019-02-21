@@ -1,5 +1,6 @@
 require "./fort_siege"
 require "./fort_updater"
+require "../../enums/music"
 
 class Fort < AbstractResidence
   include Loggable

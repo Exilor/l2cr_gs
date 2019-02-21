@@ -79,7 +79,7 @@ class L2TeleporterInstance < L2Npc
 
     html.set_file(pc, file_name)
     html["%objectId%"] = l2id
-    html["%npcname"] = name
+    html["%npcname%"] = name
     pc.send_packet(html)
   end
 
@@ -92,7 +92,7 @@ class L2TeleporterInstance < L2Npc
 
     html.set_file(pc, file_name)
     html["%objectId%"] = l2id
-    html["%npcname"] = name
+    html["%npcname%"] = name
     pc.send_packet(html)
   end
 

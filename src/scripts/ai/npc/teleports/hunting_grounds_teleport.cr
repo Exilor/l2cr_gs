@@ -1,6 +1,5 @@
 class NpcAI::HuntingGroundsTeleport < AbstractNpcAI
   # NPCs
-  # @formatter:off
   private PRIESTS = {
     31078, 31079, 31080, 31081, 31082, 31083, 31084, 31085, 31086, 31087, 31088,
     31089, 31090, 31091, 31168, 31169, 31692, 31693, 31694, 31695, 31997, 31998
@@ -9,7 +8,6 @@ class NpcAI::HuntingGroundsTeleport < AbstractNpcAI
   private DAWN_NPCS = {
     31078, 31079, 31080, 31081, 31082, 31083, 31084, 31168, 31692, 31694, 31997
   }
-  # @formatter:on
 
   def initialize
     super(HuntingGroundsTeleport.simple_name, "ai/npc/Teleports")
@@ -28,8 +26,6 @@ class NpcAI::HuntingGroundsTeleport < AbstractNpcAI
         return "dusk_tele-no.htm"
       end
     end
-
-    htmltext = ""
 
     check = SevenSigns.seal_validation_period? &&
     player_cabal == SevenSigns.get_seal_owner(SevenSigns::SEAL_GNOSIS) &&
@@ -60,6 +56,6 @@ class NpcAI::HuntingGroundsTeleport < AbstractNpcAI
       htmltext = check ? "low_schuttgart.htm" : "hg_schuttgart.htm"
     end
 
-    htmltext
+    htmltext || ""
   end
 end

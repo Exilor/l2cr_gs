@@ -3,16 +3,16 @@ require "../models/zones/form/*"
 require "../models/zones/type/*"
 
 module ZoneManager
+  extend self
   extend XMLReader
   extend Loggable
-  extend self
 
   private SETTINGS = {} of String => AbstractZoneSettings
   private CLASS_ZONES = {} of L2ZoneType.class => Hash(Int32, L2ZoneType)
   private SPAWN_TERRITORIES = {} of String => NpcSpawnTerritory
 
   @@last_dynamic_id = 300_000
-  # @@debug_items : Array(L2ItemInstance)?
+  class_getter(debug_items) { [] of L2ItemInstance }
 
   def load
     timer = Timer.new
@@ -70,7 +70,7 @@ module ZoneManager
           rs << {cd["X"].to_i, cd["Y"].to_i}
         end
 
-        coords = rs.dup
+        coords = rs.clone
         rs.clear
 
         case zone_shape.casecmp
@@ -90,15 +90,15 @@ module ZoneManager
             end
             zone_form = ZoneNPoly.new(ax, ay, min_z, max_z)
           else
-            warn "Bad data for zone #{zone_id} in file #{file}."
+            warn "Bad data for ZoneNPoly zone #{zone_id} in file #{file}."
             next
           end
         when "Cylinder"
           zone_rad = d["rad"].to_i
           if coords.size == 1 && zone_rad > 0
-            zone_form = ZoneCylinder.new(coords[0][0], coords[0][1], min_z, max_z, zone_rad)
+            zone_form = ZoneCylinder.new(*coords[0], min_z, max_z, zone_rad)
           else
-            warn "Bad data for zone #{zone_id} in file #{file}."
+            warn "Bad data for ZoneCylinder zone #{zone_id} in file #{file}."
             next
           end
         else
@@ -111,7 +111,7 @@ module ZoneManager
           next
         end
 
-        constructor_name = "L2#{zone_type}"
+
 
         # constructor =
         # case constructor_name
@@ -148,26 +148,35 @@ module ZoneManager
         # when "L2WaterZone" then L2WaterZone
         # end
 
+        constructor_name = "L2#{zone_type}"
+        # constructor = nil
+        # {% for sub in L2ZoneType.all_subclasses %}
+        #   if constructor_name == {{sub.stringify}}
+        #     constructor = {{sub.id}}
+        #   end
+        # {% end %}
         constructor = nil
-        {% for sub in L2ZoneType.all_subclasses %}
-          if constructor_name == {{sub.stringify}}
-            constructor = {{sub.id}}#.as(L2ZoneType.class)
+        {% begin %}
+          case constructor_name
+          {% for sub in L2ZoneType.all_subclasses %}
+            when {{sub.stringify}}
+              constructor = {{sub}}
+          {% end %}
           end
         {% end %}
 
         if constructor
-          temp = constructor.new(zone_id)#.as(L2ZoneType)
+          temp = constructor.new(zone_id)
           temp.zone = zone_form
         else
-          warn "No zone type with name \"L2#{zone_type}\"."
+          warn "No zone type with name #{constructor_name}."
           next
         end
 
         d.each_element do |cd|
           case cd.name.casecmp
           when "stat"
-            name, val = cd["name"], cd["val"]
-            temp.set_parameter(name, val)
+            temp.set_parameter(cd["name"], cd["val"])
           when "spawn"
             spawn_x = cd["X"].to_i
             spawn_y = cd["Y"].to_i
@@ -182,7 +191,7 @@ module ZoneManager
         end
 
         if check_id(zone_id)
-          warn "Zone #{zone_id} overrides previous definition."
+          warn "Zone with id #{zone_id} overrides previous definition."
         end
 
         if zone_name && !zone_name.empty?
@@ -208,7 +217,8 @@ module ZoneManager
   end
 
   def check_id(id) : Bool
-    !!CLASS_ZONES.find_value { |map| map.has_key?(id) }
+    # !!CLASS_ZONES.find_value { |map| map.has_key?(id) }
+    CLASS_ZONES.local_each_value.any? &.has_key?(id)
   end
 
   def add_zone(id : Int32, zone : L2ZoneType)
@@ -220,11 +230,12 @@ module ZoneManager
   end
 
   def size : Int32
-    size = 0
-    CLASS_ZONES.each_value do |map|
-      size += map.size
-    end
-    size
+    # size = 0
+    # CLASS_ZONES.each_value do |map|
+    #   size += map.size
+    # end
+    # size
+    CLASS_ZONES.local_each_value.sum &.size
   end
 
   def all_zones : Array(L2ZoneType)
@@ -255,6 +266,14 @@ module ZoneManager
     CLASS_ZONES[zone_type][id]?
   end
 
+  def get_zone_by_id!(*args)
+    unless zone = get_zone_by_id(*args)
+      raise "No zone found for args #{args}"
+    end
+
+    zone
+  end
+
   def get_zone(obj : L2Object?, type : T.class) : T? forall T
     return unless obj
     get_zone(*obj.xyz, type)
@@ -270,15 +289,35 @@ module ZoneManager
     get_zones(*obj.xyz)
   end
 
-  def get_zones(x : Int32, y : Int32)
+  def get_zones(x : Int32, y : Int32) : Array(L2ZoneType)
     L2World.get_region(x, y).zones.select do |zone|
       zone.inside_zone?(x, y)
     end
   end
 
-  def get_zones(x : Int32, y : Int32, z : Int32)
+  def get_zones(x : Int32, y : Int32, z : Int32) : Array(L2ZoneType)
     L2World.get_region(x, y).zones.select do |zone|
       zone.inside_zone?(x, y, z)
+    end
+  end
+
+  def get_zones(obj : L2Object, &block : L2ZoneType ->) : Nil
+    get_zones(*obj.xyz) { |zone| yield zone }
+  end
+
+  def get_zones(x : Int32, y : Int32, &block : L2ZoneType ->) : Nil
+    L2World.get_region(x, y).zones.each do |zone|
+      if zone.inside_zone?(x, y)
+        yield zone
+      end
+    end
+  end
+
+  def get_zones(x : Int32, y : Int32, z : Int32, &block : L2ZoneType ->) : Nil
+    L2World.get_region(x, y).zones.each do |zone|
+      if zone.inside_zone?(x, y, z)
+        yield zone
+      end
     end
   end
 
@@ -294,6 +333,14 @@ module ZoneManager
       end
     end
     ret
+  end
+
+  def get_spawn_territories(object : L2Object, &block : NpcSpawnTerritory ->) : Nil
+    SPAWN_TERRITORIES.each_value do |territory|
+      if territory.inside_zone?(*object.xyz)
+        yield territory
+      end
+    end
   end
 
   def get_arena(char : L2Character?) : L2ArenaZone?
@@ -322,7 +369,7 @@ module ZoneManager
 
   def get_closest_zone(obj : L2Object, type : T.class) : T? forall T
     unless zone = get_zone(obj, type)
-      closest = Float::MAX
+      closest = Float64::MAX
       CLASS_ZONES[type].each_value do |temp|
         dist = temp.get_distance_to_zone(obj)
         if dist < closest
@@ -335,15 +382,11 @@ module ZoneManager
     zone
   end
 
-  def debug_items
-    # @debug_items ||= []
-  end
-
   def clear_debug_items
-    # @debug_items &.reverse_each do |item|
-    #   item.decay_me
-    #   @debug_items.delete(item)
-    # end
+    if tmp = @@debug_items
+      tmp.each &.delete_me
+      tmp.clear
+    end
   end
 
   def get_settings(name : String?) : AbstractZoneSettings?

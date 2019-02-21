@@ -5,7 +5,7 @@ require "./event_dispatcher"
 class EventType < EnumClass
   getter event_class, return_class
 
-  def initialize(@event_class : (BaseEvent.class)? = nil, @return_class : AbstractEventReturn.class | Nil.class = Nil)
+  def initialize(@event_class : (BaseEvent.class)? = nil, @return_class : (AbstractEventReturn.class)? = nil)
   end
 
   private macro def_event(name, event_class = nil, return_class = nil, &block)
@@ -36,7 +36,7 @@ class EventType < EnumClass
       end
     {% end %}
 
-    add({{name}}, {{event_class}}.as?(BaseEvent.class), {{return_class}} || Nil)
+    add({{name}}, {{event_class}}.as?(BaseEvent.class), {{return_class}})
   end
 
 
@@ -48,9 +48,10 @@ class EventType < EnumClass
   end
   def_event(ON_ATTACKABLE_ATTACK, OnAttackableAttack) do
     getter target, damage, skill
-    getter! attacker
+    getter attacker
     getter? summon
-    initializer attacker: L2PcInstance?, target: L2Attackable, damage: Int32, skill: Skill?, summon: Bool
+    initializer attacker: L2PcInstance, target: L2Attackable, damage: Int32,
+      skill: Skill?, summon: Bool
   end
   def_event(ON_ATTACKABLE_FACTION_CALL, OnAttackableFactionCall) do
     getter npc, caller, attacker
@@ -59,9 +60,9 @@ class EventType < EnumClass
   end
   def_event(ON_ATTACKABLE_KILL, OnAttackableKill) do
     getter target
-    getter! attacker
+    getter attacker
     getter? summon
-    initializer attacker: L2PcInstance?, target: L2Attackable, summon: Bool
+    initializer attacker: L2PcInstance, target: L2Attackable, summon: Bool
   end
   # Castle events
   def_event(ON_CASTLE_SIEGE_FINISH, OnCastleSiegeFinish) do
@@ -89,7 +90,8 @@ class EventType < EnumClass
   def_event(ON_CREATURE_ATTACK_AVOID, OnCreatureAttackAvoid) do
     getter attacker, target
     getter? damage_over_time
-    initializer attacker: L2Character, target: L2Character, damage_over_time: Bool
+    initializer attacker: L2Character, target: L2Character,
+      damage_over_time: Bool
   end
   def_event(ON_CREATURE_ATTACKED, OnCreatureAttacked, TerminateReturn) do
     getter_initializer attacker: L2Character, target: L2Character
@@ -97,20 +99,25 @@ class EventType < EnumClass
   def_event(ON_CREATURE_DAMAGE_RECEIVED, OnCreatureDamageReceived) do
     getter attacker, target, damage, skill
     getter? critical, damage_over_time, reflect
-    initializer attacker: L2Character, target: L2Character, damage: Float64, skill: Skill?, critical: Bool, damage_over_time: Bool, reflect: Bool
+    initializer attacker: L2Character, target: L2Character, damage: Float64,
+      skill: Skill?, critical: Bool, damage_over_time: Bool, reflect: Bool
   end
   def_event(ON_CREATURE_DAMAGE_DEALT, OnCreatureDamageDealt) do
     getter attacker, target, damage, skill
     getter? critical, damage_over_time, reflect
-    initializer attacker: L2Character, target: L2Character, damage: Float64, skill: Skill?, critical: Bool, damage_over_time: Bool, reflect: Bool
+    initializer attacker: L2Character, target: L2Character, damage: Float64,
+      skill: Skill?, critical: Bool, damage_over_time: Bool, reflect: Bool
   end
   def_event(ON_CREATURE_KILL, OnCreatureKill, TerminateReturn) do
-    getter_initializer attacker: L2Character, target: L2Character
+    getter! attacker
+    getter target
+    initializer attacker: L2Character?, target: L2Character
   end
   def_event(ON_CREATURE_SKILL_USE, OnCreatureSkillUse, TerminateReturn) do
     getter caster, skill, target, targets
     getter? simultaneously
-    initializer caster: L2Character, skill: Skill, simultaneously: Bool, target: L2Character, targets: Array(L2Object)
+    initializer caster: L2Character, skill: Skill, simultaneously: Bool,
+      target: L2Character, targets: Array(L2Object)
   end
   def_event(ON_CREATURE_TELEPORTED, OnCreatureTeleported) do
     getter_initializer creature: L2Character
@@ -132,10 +139,12 @@ class EventType < EnumClass
 
   # Item events
   def_event(ON_ITEM_BYPASS_EVENT, OnItemBypassEvent) do
-    getter_initializer item: L2ItemInstance, active_char: L2PcInstance, event: String
+    getter_initializer item: L2ItemInstance, active_char: L2PcInstance,
+      event: String
   end
   def_event(ON_ITEM_CREATE, OnItemCreate) do
-    getter_initializer process: String?, item: L2ItemInstance, active_char: L2PcInstance?, reference: String | L2Object? # reference should be Object
+    getter_initializer process: String?, item: L2ItemInstance,
+      active_char: L2PcInstance?, reference: String | L2Object? # reference should be Object
   end
   def_event(ON_ITEM_TALK, OnItemTalk) do
     getter_initializer item: L2ItemInstance, active_char: L2PcInstance
@@ -151,7 +160,8 @@ class EventType < EnumClass
     initializer npc: L2Npc, creature: L2Character, summon: Bool
   end
   def_event(ON_NPC_EVENT_RECEIVED, OnNpcEventReceived) do
-    getter_initializer event_name: String, sender: L2Npc, receiver: L2Npc, reference: L2Object?
+    getter_initializer event_name: String, sender: L2Npc, receiver: L2Npc,
+      reference: L2Object?
   end
   def_event(ON_NPC_FIRST_TALK, OnNpcFirstTalk) do
     getter_initializer npc: L2Npc, active_char: L2PcInstance
@@ -177,7 +187,8 @@ class EventType < EnumClass
   def_event(ON_NPC_SKILL_SEE, OnNpcSkillSee) do
     getter target, caster, skill, targets
     getter? summon
-    initializer target: L2Npc, caster: L2PcInstance, skill: Skill, targets: Array(L2Object), summon: Bool
+    initializer target: L2Npc, caster: L2PcInstance, skill: Skill,
+      targets: Array(L2Object), summon: Bool
   end
   def_event(ON_NPC_SPAWN, OnNpcSpawn) do
     getter_initializer npc: L2Npc
@@ -189,12 +200,14 @@ class EventType < EnumClass
   def_event(ON_NPC_MANOR_BYPASS, OnNpcManorBypass) do
     getter active_char, target, request, manor_id
     getter? next_period
-    initializer active_char: L2PcInstance, target: L2Npc, request: Int32, manor_id: Int32, next_period: Bool
+    initializer active_char: L2PcInstance, target: L2Npc, request: Int32,
+      manor_id: Int32, next_period: Bool
   end
 
   # Olympiad events
   def_event(ON_OLYMPIAD_MATCH_RESULT, OnOlympiadMatchResult) do
-    getter_initializer winner: Participant, loser: Participant, competition_type: CompetitionType
+    getter_initializer winner: Participant, loser: Participant,
+      competition_type: CompetitionType
   end
 
   # Playable events
@@ -206,13 +219,15 @@ class EventType < EnumClass
   def_event(ON_PLAYER_AUGMENT, OnPlayerAugment) do
     getter active_char, item, augmentation
     getter? augment
-    initializer active_char: L2PcInstance, item: L2ItemInstance, augmentation: L2Augmentation, augment: Bool
+    initializer active_char: L2PcInstance, item: L2ItemInstance,
+      augmentation: L2Augmentation, augment: Bool
   end
   def_event(ON_PLAYER_BYPASS, OnPlayerBypass) do
     getter_initializer active_char: L2PcInstance, command: String
   end
   def_event(ON_PLAYER_CHAT, OnPlayerChat, ChatFilterReturn) do
-    getter_initializer active_char: L2PcInstance, target: L2PcInstance, text: String, chat_type: Int32
+    getter_initializer active_char: L2PcInstance, target: L2PcInstance,
+      text: String, chat_type: Int32
   end
 
   # Tutorial events (new feature in l2j)
@@ -240,7 +255,8 @@ class EventType < EnumClass
     getter_initializer active_char: L2PcInstance, clan: L2Clan
   end
   def_event(ON_PLAYER_CLAN_LEADER_CHANGE, OnPlayerClanLeaderChange) do
-    getter_initializer old_leader: L2PcInstance, new_leader: L2PcInstance, clan: L2Clan
+    getter_initializer old_leader: L2PcInstance, new_leader: L2PcInstance,
+      clan: L2Clan
   end
   def_event(ON_PLAYER_CLAN_LEFT, OnPlayerClanLeft) do
     getter_initializer active_char: L2ClanMember, clan: L2Clan
@@ -252,28 +268,34 @@ class EventType < EnumClass
 
   # Clan warehouse events
   def_event(ON_PLAYER_CLAN_WH_ITEM_ADD, OnPlayerClanWHItemAdd) do
-    getter_initializer process: String?, active_char: L2PcInstance, item: L2ItemInstance, container: ItemContainer
+    getter_initializer process: String?, active_char: L2PcInstance,
+      item: L2ItemInstance, container: ItemContainer
   end
   def_event(ON_PLAYER_CLAN_WH_ITEM_DESTROY, OnPlayerClanWHItemDestroy) do
-    getter_initializer process: String?, active_char: L2PcInstance, item: L2ItemInstance, count: Int64, container: ItemContainer
+    getter_initializer process: String?, active_char: L2PcInstance,
+      item: L2ItemInstance, count: Int64, container: ItemContainer
   end
   def_event(ON_PLAYER_CLAN_WH_ITEM_TRANSFER, OnPlayerClanWHItemTransfer) do
-    getter_initializer process: String?, active_char: L2PcInstance, item: L2ItemInstance, count: Int64, container: ItemContainer
+    getter_initializer process: String?, active_char: L2PcInstance,
+      item: L2ItemInstance, count: Int64, container: ItemContainer
   end
   def_event(ON_PLAYER_CREATE, OnPlayerCreate) do
-    getter_initializer active_char: L2PcInstance, l2id: Int32, name: String, client: GameClient
+    getter_initializer active_char: L2PcInstance, l2id: Int32, name: String,
+      client: GameClient
   end
   def_event(ON_PLAYER_DELETE, OnPlayerDelete) do
     getter_initializer l2id: Int32, name: String, client: GameClient
   end
   def_event(ON_PLAYER_DLG_ANSWER, OnPlayerDlgAnswer, TerminateReturn) do
-    getter_initializer active_char: L2PcInstance, message_id: Int32, answer: Int32, requester_id: Int32
+    getter_initializer active_char: L2PcInstance, message_id: Int32,
+      answer: Int32, requester_id: Int32
   end
   def_event(ON_PLAYER_EQUIP_ITEM, OnPlayerEquipItem) do
     getter_initializer active_char: L2PcInstance, item: L2ItemInstance
   end
   def_event(ON_PLAYER_FAME_CHANGED, OnPlayerFameChanged) do
-    getter_initializer active_char: L2PcInstance, old_fame: Int32, new_fame: Int32
+    getter_initializer active_char: L2PcInstance, old_fame: Int32,
+      new_fame: Int32
   end
 
   # Henna events
@@ -292,21 +314,25 @@ class EventType < EnumClass
     getter_initializer active_char: L2PcInstance, item: L2ItemInstance
   end
   def_event(ON_PLAYER_ITEM_DROP, OnPlayerItemDrop) do
-    getter_initializer active_char: L2PcInstance, item: L2ItemInstance, location: Location
+    getter_initializer active_char: L2PcInstance, item: L2ItemInstance,
+      location: Location
   end
   def_event(ON_PLAYER_ITEM_PICKUP, OnPlayerItemPickup) do
     getter_initializer active_char: L2PcInstance, item: L2ItemInstance
   end
   def_event(ON_PLAYER_ITEM_TRANSFER, OnPlayerItemTransfer) do
-    getter_initializer active_char: L2PcInstance, item: L2ItemInstance, container: ItemContainer
+    getter_initializer active_char: L2PcInstance, item: L2ItemInstance,
+      container: ItemContainer
   end
 
   # Other player events
   def_event(ON_PLAYER_KARMA_CHANGED, OnPlayerKarmaChanged) do
-    getter_initializer active_char: L2PcInstance, old_karma: Int32, new_karma: Int32
+    getter_initializer active_char: L2PcInstance, old_karma: Int32,
+      new_karma: Int32
   end
   def_event(ON_PLAYER_LEVEL_CHANGED, OnPlayerLevelChanged) do
-    getter_initializer active_char: L2PcInstance, old_level: Int8, new_level: Int8
+    getter_initializer active_char: L2PcInstance, old_level: Int8,
+      new_level: Int8
   end
   def_event(ON_PLAYER_LOGIN, OnPlayerLogin) do
     getter_initializer active_char: L2PcInstance
@@ -315,18 +341,21 @@ class EventType < EnumClass
     getter_initializer active_char: L2PcInstance
   end
   def_event(ON_PLAYER_PK_CHANGED, OnPlayerPKChanged) do
-    getter_initializer active_char: L2PcInstance, old_points: Int32, new_points: Int32
+    getter_initializer active_char: L2PcInstance, old_points: Int32,
+      new_points: Int32
   end
   def_event(ON_PLAYER_PROFESSION_CHANGE, OnPlayerProfessionChange) do
     getter active_char, template
     getter? subclass
-    initializer active_char: L2PcInstance, template: L2PcTemplate, subclass: Bool
+    initializer active_char: L2PcInstance, template: L2PcTemplate,
+      subclass: Bool
   end
   def_event(ON_PLAYER_PROFESSION_CANCEL, OnPlayerProfessionCancel) do
     getter_initializer active_char: L2PcInstance, class_id: Int32
   end
   def_event(ON_PLAYER_PVP_CHANGED, OnPlayerPvPChanged) do
-    getter_initializer active_char: L2PcInstance, old_points: Int32, new_points: Int32
+    getter_initializer active_char: L2PcInstance, old_points: Int32,
+      new_points: Int32
   end
   def_event(ON_PLAYER_PVP_KILL, OnPlayerPvPKill) do
     getter_initializer active_char: L2PcInstance, target: L2PcInstance
@@ -335,10 +364,12 @@ class EventType < EnumClass
     getter_initializer l2id: Int32, name: String, client: GameClient
   end
   def_event(ON_PLAYER_SELECT, OnPlayerSelect, TerminateReturn) do
-    getter_initializer active_char: L2PcInstance, l2id: Int32, name: String, client: GameClient
+    getter_initializer active_char: L2PcInstance, l2id: Int32, name: String,
+      client: GameClient
   end
   def_event(ON_PLAYER_SKILL_LEARN, OnPlayerSkillLearn) do
-    getter_initializer trainer: L2Npc, active_char: L2PcInstance, skill: Skill, acquire_type: AcquireSkillType
+    getter_initializer trainer: L2Npc, active_char: L2PcInstance, skill: Skill,
+      acquire_type: AcquireSkillType
   end
   def_event(ON_PLAYER_SUMMON_SPAWN, OnPlayerSummonSpawn) do
     getter_initializer summon: L2Summon
@@ -358,13 +389,15 @@ class EventType < EnumClass
 
   # Trap events
   def_event(ON_TRAP_ACTION, OnTrapAction) do
-    getter_initializer trap: L2TrapInstance, trigger: L2Character, action: TrapAction
+    getter_initializer trap: L2TrapInstance, trigger: L2Character,
+      action: TrapAction
   end
 
   # TvT events.
   def_event(ON_TVT_EVENT_FINISH, OnTvTEventFinish)
   def_event(ON_TVT_EVENT_KILL, OnTvTEventKill) do
-    getter_initializer killer: L2PcInstance, victim: L2PcInstance, killer_team: TvTEventTeam
+    getter_initializer killer: L2PcInstance, victim: L2PcInstance,
+      killer_team: TvTEventTeam
   end
   def_event(ON_TVT_EVENT_REGISTRATION_START, OnTvTEventRegistrationStart)
   def_event(ON_TVT_EVENT_START, OnTvTEventStart)

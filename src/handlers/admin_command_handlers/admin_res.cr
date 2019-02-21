@@ -46,9 +46,7 @@ module AdminCommandHandler::AdminRes
 
     do_resurrect(obj)
 
-    if Config.debug
-      debug "GM #{pc.name} (#{pc.l2id}) resurrected #{obj}."
-    end
+    debug { "GM #{pc.name} (#{pc.l2id}) resurrected #{obj}." }
   end
 
   private def handle_non_player_res(pc, radius_str = "")

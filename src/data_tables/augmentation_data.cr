@@ -395,9 +395,7 @@ module AugmentationData
 
     stat12 = Rnd.rand(offset..(offset + STAT_SUBBLOCKSIZE) - 1)
 
-    if Config.debug
-      debug "Augmentation success: stat12=#{stat12}, stat34=#{stat34}, result_color=#{result_color}, level=#{ls_level}, grade=#{ls_grade}."
-    end
+    debug { "Augmentation success: stat12=#{stat12}, stat34=#{stat34}, result_color=#{result_color}, level=#{ls_level}, grade=#{ls_grade}." }
 
     L2Augmentation.new((stat34 << 16) + stat12)
   end
@@ -486,9 +484,7 @@ module AugmentationData
     end
     stat12 = base + skills_length + (ACC_STAT_SUBBLOCKSIZE * result_color) + stat12
 
-    if Config.debug
-      debug "Accessory augmentation success: stat12=#{stat12}, stat34=#{stat34}, level=#{ls_level}."
-    end
+    debug { "Accessory augmentation success: stat12=#{stat12}, stat34=#{stat34}, level=#{ls_level}." }
 
     L2Augmentation.new((stat34 << 16) + stat12)
   end

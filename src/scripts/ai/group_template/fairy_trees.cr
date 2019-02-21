@@ -6,7 +6,7 @@ class NpcAI::FairyTrees < AbstractNpcAI
     27185, # Fairy Tree of Wind
     27186, # Fairy Tree of Star
     27187, # Fairy Tree of Twilight
-    27188, # Fairy Tree of Abyss
+    27188  # Fairy Tree of Abyss
   }
 
   # Skill

@@ -14,8 +14,8 @@ class NpcAI::MonasteryOfSilence < AbstractNpcAI
   # Skills
   private ORDEAL_STRIKE     = SkillHolder.new(6303) # Trial of the Coup
   private LEADER_STRIKE     = SkillHolder.new(6304) # Shock
-  private SAVER_STRIKE      = SkillHolder.new(6305) # Sacred Gnosis
-  private SAVER_BLEED       = SkillHolder.new(6306) # Solina Strike
+  private SAVIOR_STRIKE     = SkillHolder.new(6305) # Sacred Gnosis
+  private SAVIOR_BLEED      = SkillHolder.new(6306) # Solina Strike
   private LEARNING_MAGIC    = SkillHolder.new(6308) # Opus of the Wave
   private STUDENT_CANCEL    = SkillHolder.new(6310) # Loss of Quest
   private WARRIOR_THRUSTING = SkillHolder.new(6311) # Solina Thrust
@@ -103,9 +103,9 @@ class NpcAI::MonasteryOfSilence < AbstractNpcAI
         npc.do_cast(ORDEAL_STRIKE)
       end
     when SEEKER
-      if Rnd.rand(100) < 33 && mob.most_hated == player && npc.check_do_cast_conditions(SAVER_STRIKE.skill)
+      if Rnd.rand(100) < 33 && mob.most_hated == player && npc.check_do_cast_conditions(SAVIOR_STRIKE.skill)
         npc.target = npc
-        npc.do_cast(SAVER_STRIKE)
+        npc.do_cast(SAVIOR_STRIKE)
       end
     when ASCETIC
       if mob.most_hated == player && npc.script_value?(0)
@@ -118,12 +118,11 @@ class NpcAI::MonasteryOfSilence < AbstractNpcAI
   end
 
   def on_npc_hate(mob, player, is_summon)
-    # debug "#on_npc_hate: #{mob}, #{player}, #{is_summon}"
     !!player.active_weapon_instance?
   end
 
   def on_aggro_range_enter(npc, pc, is_summon)
-    debug "#on_aggro_range_enter: #{npc}, #{pc}, #{is_summon}"
+    debug { "#on_aggro_range_enter: #{npc}, #{pc}, #{is_summon}" }
     if pc.active_weapon_instance?
       skill = nil
       case npc.id
@@ -132,7 +131,7 @@ class NpcAI::MonasteryOfSilence < AbstractNpcAI
           skill = LEADER_STRIKE
         end
       when SEEKER
-        skill = SAVER_BLEED
+        skill = SAVIOR_BLEED
       when SAVIOR
         skill = LEARNING_MAGIC
       when ASCETIC
@@ -152,7 +151,11 @@ class NpcAI::MonasteryOfSilence < AbstractNpcAI
         npc.do_cast(skill)
       end
 
-      unless npc.in_combat?
+      # unless npc.in_combat? # Doesn't work.
+      #   broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::YOU_CANNOT_CARRY_A_WEAPON_WITHOUT_AUTHORIZATION)
+      # end
+
+      if npc.attack_by_list.empty?
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::YOU_CANNOT_CARRY_A_WEAPON_WITHOUT_AUTHORIZATION)
       end
 
@@ -163,7 +166,7 @@ class NpcAI::MonasteryOfSilence < AbstractNpcAI
   end
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
-    debug "#on_skill_see: #{npc}, #{caster}, #{skill}, #{targets}, #{is_summon}"
+    debug { "#on_skill_see: #{npc}, #{caster}, #{skill}, #{targets}, #{is_summon}" }
     if skill.has_effect_type?(L2EffectType::AGGRESSION) && targets.size != 0
       targets.each do |obj|
         if obj == npc

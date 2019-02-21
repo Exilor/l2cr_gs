@@ -126,7 +126,7 @@ class NpcAI::PriestOfBlessing < AbstractNpcAI
   end
 
   def on_first_talk(npc, pc)
-    content = get_htm("32783.htm")
+    content = get_htm(pc, "32783.htm")
     content.sub("%donate%", Util.format_adena(PRICE_HOURGLASS[get_hg_index(pc.level)]))
   end
 

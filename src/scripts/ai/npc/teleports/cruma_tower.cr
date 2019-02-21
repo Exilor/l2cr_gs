@@ -19,6 +19,7 @@ class NpcAI::CrumaTower < AbstractNpcAI
   def on_talk(npc, pc)
     if pc.level <= MAX_LEVEL
       pc.tele_to_location(TELEPORTS.sample(Rnd))
+      nil
     else
       "30483-1.html"
     end

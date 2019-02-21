@@ -17,26 +17,26 @@ class L2WorldRegion
     @sorrounding_regions << region
   end
 
-  def add_zone(type : L2ZoneType)
-    @zones << type
+  def add_zone(zone : L2ZoneType)
+    @zones << zone
   end
 
-  def remove_zone(type : L2ZoneType)
-    @zones.delete(type)
+  def remove_zone(zone : L2ZoneType)
+    @zones.delete(zone)
   end
 
   def revalidate_zones(char : L2Character)
     unless char.teleporting?
-      @zones.each &.revalidate_in_zone(char)
+      zones.each &.revalidate_in_zone(char)
     end
   end
 
   def remove_from_zones(char : L2Character)
-    @zones.each &.remove_character(char)
+    zones.each &.remove_character(char)
   end
 
   def contains_zone?(id) : Bool
-    @zones.any? { |z| z.id == id }
+    zones.any? { |z| z.id == id }
   end
 
   def check_effect_range_inside_peace_zone(skill : Skill, x : Int32, y : Int32, z : Int32) : Bool
@@ -71,7 +71,7 @@ class L2WorldRegion
     # debug bool ? 'Starting grid.' : 'Stopping grid.'
   end
 
-  def start_activation
+  private def start_activation
     self.active = true
 
     sync do
@@ -85,7 +85,7 @@ class L2WorldRegion
     end
   end
 
-  def start_deactivation
+  private def start_deactivation
     sync do
       if task = @neighbors_task
         task.cancel
@@ -97,7 +97,7 @@ class L2WorldRegion
     end
   end
 
-  def switch_ai(val : Bool)
+  private def switch_ai(val : Bool)
     c = 0
 
     if val
@@ -166,11 +166,11 @@ class L2WorldRegion
   end
 
   def on_death(char : L2Character)
-    @zones.each &.on_die_inside(char)
+    zones.each &.on_die_inside(char)
   end
 
   def on_revive(char : L2Character)
-    @zones.each &.on_revive_inside(char)
+    zones.each &.on_revive_inside(char)
   end
 
   def neighbors_empty? : Bool
@@ -183,6 +183,10 @@ class L2WorldRegion
   end
 
   def inspect(io : IO)
+    to_s(io)
+  end
+
+  def to_log(io : IO)
     to_s(io)
   end
 

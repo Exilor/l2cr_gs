@@ -233,12 +233,12 @@ class Quests::Q00419_GetAPet < Quest
             i8 |= i7
           end
         end
-        htmltext = get_htm(htmltext.not_nil!).not_nil!
-        htmltext = htmltext.gsub("<?reply1?>", LINKS[link_id + reply_offset1])
-        htmltext = htmltext.gsub("<?reply2?>", LINKS[link_id + reply_offset2])
-        htmltext = htmltext.gsub("<?reply3?>", LINKS[link_id + reply_offset3])
-        htmltext = htmltext.gsub("<?reply4?>", LINKS[link_id + reply_offset4])
-        htmltext = htmltext.gsub("<?reply5?>", LINKS[link_id + 5])
+        htmltext = get_htm(pc, htmltext.not_nil!)
+        htmltext = htmltext.sub("<?reply1?>", LINKS[link_id + reply_offset1])
+        htmltext = htmltext.sub("<?reply2?>", LINKS[link_id + reply_offset2])
+        htmltext = htmltext.sub("<?reply3?>", LINKS[link_id + reply_offset3])
+        htmltext = htmltext.sub("<?reply4?>", LINKS[link_id + reply_offset4])
+        htmltext = htmltext.sub("<?reply5?>", LINKS[link_id + 5])
       end
     when "30731-14.html"
       qs.memo_state = 0

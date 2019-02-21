@@ -17,12 +17,6 @@ abstract class AbstractScript
     initialize_annotation_listeners
   end
 
-  def unload
-    @listeners.safe_each &.unregister_me
-    @listeners.clear
-    true
-  end
-
   private def set_attackable_kill_id(*id, &b : OnAttackableKill ->)
     register_consumer(EventType::ON_ATTACKABLE_KILL, ListenerRegisterType::NPC, *id, &b.unsafe_as(Proc(BaseEvent, Nil)))
   end
@@ -47,7 +41,7 @@ abstract class AbstractScript
     register_dummy(EventType::ON_NPC_TALK, ListenerRegisterType::NPC, *id)
   end
 
-  private def set_npc_teleport(*id, &b : OnNpcTeleport ->)
+  private def set_npc_teleport_id(*id, &b : OnNpcTeleport ->)
     register_consumer(EventType::ON_NPC_TELEPORT, ListenerRegisterType::NPC, *id, &b.unsafe_as(Proc(BaseEvent, Nil)))
   end
 
@@ -87,11 +81,11 @@ abstract class AbstractScript
     register_consumer(EventType::ON_NPC_HATE, ListenerRegisterType::NPC, *id, &b.unsafe_as(Proc(BaseEvent, Nil)))
   end
 
-  private def add_npc_hate_id(*id, &b : OnAttackableHate ->)
+  private def add_npc_hate_id(*id, &b : OnAttackableHate -> TerminateReturn)
     register_function(EventType::ON_NPC_HATE, ListenerRegisterType::NPC, *id, &b.unsafe_as(Proc(BaseEvent, TerminateReturn)))
   end
 
-  private def set_npc_can_be_seen_id(*id, &b : OnNpcCanBeSeen ->)
+  private def set_npc_can_be_seen_id(*id, &b : OnNpcCanBeSeen ->) # TerminateReturn! check them all
     register_function(EventType::ON_NPC_CAN_BE_SEEN, ListenerRegisterType::NPC, *id, &b.unsafe_as(Proc(BaseEvent, TerminateReturn)))
   end
 
@@ -870,6 +864,16 @@ abstract class AbstractScript
     AbstractScript.add_spawn(*args)
   end
 
+  def add_trap(trap_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, skill : Skill?, instance_id : Int32) : L2TrapInstance
+    template = NpcData[trap_id]
+    trap = L2TrapInstance.new(template, instance_id, -1)
+    trap.heal!
+    trap.invul = true
+    trap.heading = heading
+    trap.spawn_me(x, y, z)
+    trap
+  end
+
   def self.add_radar(pc : L2PcInstance, x : Int32, y : Int32, z : Int32)
     pc.radar.add_marker(x, y, z)
   end
@@ -965,15 +969,27 @@ abstract class AbstractScript
         register_type = ListenerRegisterType::{{ann[:register]}}
 
         if npc = {{ann[:id]}}
-          ids.concat(npc)
+          if npc.is_a?(Enumerable)
+            ids.concat(npc)
+          else
+            ids << npc
+          end
         end
 
         if npcs = {{ann[:ids]}}
-          ids.concat(npcs)
+          if npcs.is_a?(Enumerable)
+            ids.concat(npcs)
+          else
+            ids << npcs
+          end
         end
 
         if range = {{ann[:range]}}
-          ids.concat(range)
+          if range.is_a?(Enumerable)
+            ids.concat(range)
+          else
+            ids << range
+          end
         end
 
         if ranges = {{ann[:ranges]}}

@@ -158,7 +158,7 @@ class TradeList
           if count != -1 && item.count > count
             item.count = item.count - count
           else
-            @items.delete(item)
+            @items.delete_first(item)
           end
           return item
         end

@@ -58,19 +58,19 @@ abstract class L2Summon < L2Playable
     super.as(L2NpcTemplate)
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Summon
   end
 
-  def id
+  def id : Int32
     template.id
   end
 
-  def karma
+  def karma : Int32
     owner.karma
   end
 
-  def pvp_flag
+  def pvp_flag : Int8
     owner.pvp_flag
   end
 
@@ -94,17 +94,13 @@ abstract class L2Summon < L2Playable
     super
   end
 
-  def party?
+  def party? : L2Party?
     owner?.try &.party?
   end
 
-  def in_party?
+  def in_party? : Bool
     return false unless owner = owner?
     owner.in_party?
-  end
-
-  def summon
-    self
   end
 
   def on_spawn
@@ -137,15 +133,15 @@ abstract class L2Summon < L2Playable
     end
   end
 
-  def control_l2id
+  def control_l2id : Int32
     0
   end
 
-  def soulshots_per_hit
+  def soulshots_per_hit : Int32
     Math.max(template.soulshot, 1)
   end
 
-  def spiritshots_per_hit
+  def spiritshots_per_hit : Int32
     Math.max(template.spiritshot, 1)
   end
 
@@ -259,11 +255,11 @@ abstract class L2Summon < L2Playable
     update_and_broadcast_status(1)
   end
 
-  def auto_attackable?(attacker : L2Character)
+  def auto_attackable?(attacker : L2Character) : Bool
     !!owner? && owner.auto_attackable?(attacker)
   end
 
-  def mountable?
+  def mountable? : Bool
     false
   end
 
@@ -277,7 +273,7 @@ abstract class L2Summon < L2Playable
     ExperienceData.get_exp_for_level(level + 1)
   end
 
-  def team
+  def team : Team
     owner?.try &.team || Team::NONE
   end
 
@@ -319,27 +315,23 @@ abstract class L2Summon < L2Playable
     DecayTaskManager.cancel(self)
   end
 
-  def active_weapon?
+  def active_weapon_item? : L2Weapon?
     # return nil
   end
 
-  def active_weapon_item?
+  def inventory? : PetInventory?
     # return nil
   end
 
-  def inventory?
+  def active_weapon_instance? : L2ItemInstance?
     # return nil
   end
 
-  def active_weapon_instance?
+  def secondary_weapon_instance? : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_instance?
-    # return nil
-  end
-
-  def secondary_weapon_item?
+  def secondary_weapon_item? : L2Weapon?
     # return nil
   end
 
@@ -347,7 +339,7 @@ abstract class L2Summon < L2Playable
     # no-op
   end
 
-  def invul?
+  def invul? : Bool
     super || owner.spawn_protected?
   end
 
@@ -405,9 +397,27 @@ abstract class L2Summon < L2Playable
         return false
       end
 
-      # olympiad check
+      if owner.in_olympiad_mode? && !owner.olympiad_start?
+        action_failed
+        return false
+      end
 
-      # siege check
+      if target.acting_player? && owner.siege_state > 0 && owner.inside_siege_zone?
+        if target.acting_player.siege_state == owner.siege_state
+          if target.acting_player != owner
+            if target.acting_player.siege_side == owner.siege_side
+              if TerritoryWarManager.tw_in_progress?
+                send_packet(SystemMessageId::YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY)
+              else
+                send_packet(SystemMessageId::FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS)
+              end
+
+              action_failed
+              return false
+            end
+          end
+        end
+      end
 
       if target.door?
         unless target.auto_attackable?(owner)
@@ -441,13 +451,14 @@ abstract class L2Summon < L2Playable
         end
       end
 
-      # if owner.in_olympiad_mode? && target.is_a?(L2PcInstance)
-      #   if target.in_olympiad_mode?
-      #     if target.olympiad_game_id == owner.olympiad_game_id
-      #       OlympiadGameManager.notify_competitor_damage(owner, damage)
-      #     end
-      #   end
-      # end
+      if owner.in_olympiad_mode? && target.is_a?(L2PcInstance)
+        if target.in_olympiad_mode?
+          if target.olympiad_game_id == owner.olympiad_game_id
+            warn "TODO: OlympiadGameManager.notify_competitor_damage"
+            # OlympiadGameManager.notify_competitor_damage(owner, damage)
+          end
+        end
+      end
 
       if target.invul? && !target.is_a?(L2NpcInstance)
         send_packet(SystemMessageId::ATTACK_WAS_BLOCKED)
@@ -486,7 +497,7 @@ abstract class L2Summon < L2Playable
     super
   end
 
-  def in_combat?
+  def in_combat? : Bool
     owner.in_combat?
   end
 
@@ -503,15 +514,15 @@ abstract class L2Summon < L2Playable
     end
   end
 
-  def hungry?
+  def hungry? : Bool
     false
   end
 
-  def weapon
+  def weapon : Int32
     0
   end
 
-  def armor
+  def armor : Int32
     0
   end
 
@@ -529,10 +540,10 @@ abstract class L2Summon < L2Playable
 
   def on_teleported
     super
-    send_packet(TeleportToLocation.new(self, x, y, z, heading))
+    send_packet(TeleportToLocation.new(self, *xyz, heading))
   end
 
-  def undead?
+  def undead? : Bool
     template.race.undead?
   end
 
@@ -587,7 +598,18 @@ abstract class L2Summon < L2Playable
       return false
     end
 
-    # siege check
+    if target.acting_player? && owner.siege_state > 0 && owner.inside_siege_zone?
+      if target.acting_player.siege_side == owner.siege_side
+        if TerritoryWarManager.tw_in_progress?
+          send_packet(SystemMessageId::YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY)
+        else
+          send_packet(SystemMessageId::FORCED_ATTACK_IS_IMPOSSIBLE_AGAINST_SIEGE_SIDE_TEMPORARY_ALLIED_MEMBERS)
+        end
+
+        action_failed
+        return false
+      end
+    end
 
     unless owner.access_level.allow_peace_attack?
       if owner.inside_peace_zone?(self, target)
@@ -615,11 +637,11 @@ abstract class L2Summon < L2Playable
     true
   end
 
-  def summon?
+  def summon? : Bool
     true
   end
 
-  def summon
+  def summon : L2Summon
     self
   end
 

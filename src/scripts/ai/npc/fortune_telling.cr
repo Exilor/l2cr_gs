@@ -14,7 +14,7 @@ class NpcAI::FortuneTelling < AbstractNpcAI
       "lowadena.htm"
     else
       take_items(pc, Inventory::ADENA_ID, COST)
-      get_htm("fortune.htm").gsub("%fortune%", Rnd.rand(1800309..1800695).to_s)
+      get_htm(pc, "fortune.htm").sub("%fortune%", Rnd.rand(1800309..1800695).to_s)
     end
   end
 end

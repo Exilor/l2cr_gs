@@ -1,7 +1,7 @@
 require "./l2_npc_instance"
 
 class L2AdventurerInstance < L2NpcInstance
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2AdventurerInstance
   end
 

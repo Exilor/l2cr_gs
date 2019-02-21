@@ -43,6 +43,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       puts "Paperdoll size: #{pc.inventory.@paperdoll.size}"
     when "test"
       L2Cr.test(pc)
+    when "zones"
+      debug pc.world_region?.try &.zones.map &.name
     when "gc"
       GC.collect
     when "abort"
@@ -82,6 +84,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       pc.send_skill_list
     when "destroy_items"
       pc.target.as?(L2PcInstance).try &.inventory.destroy_all_items("GM", pc, nil)
+      pc.send_packet(ItemList.new(pc, false)) if pc == pc.target
     when "sunrise"
       send_packet(SunRise::STATIC_PACKET)
     when "sunset"
@@ -188,15 +191,10 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       all_follow_me
     when /^summon(\s\d+)?/
       summon_npc
-    when /^guard(\s\d+)?/
-      summon_guard
     when "attack"
       attack_my_target
     when "recall_party"
-      pc.party?.try &.each do |m|
-        next if m == self
-        m.tele_to_location(pc, true)
-      end
+      pc.party?.try &.each { |m| m.tele_to_location(pc, true) if m != pc }
     when "invul"
       if pc.invul?
         pc.send_message("Invulnerability disabled.")
@@ -208,11 +206,21 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       pc.target.as?(L2DoorInstance).try &.open_me
     when "close"
       pc.target.as?(L2DoorInstance).try &.close_me
+    when /hb\s\d/
+      set_hellbound_level
+    when "hb"
+      pc.send_message("Level: #{HellboundEngine.level}")
+      pc.send_message("Trust: #{HellboundEngine.trust}")
     else
       return :proceed
     end
 
     nil
+  end
+
+  private def set_hellbound_level
+    level = args.first.to_i
+    HellboundEngine.level = level
   end
 
   private def set_hp
@@ -525,24 +533,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     summon.broadcast_packet(msu)
     summon.@life_task.try &.cancel
     summon.set_running
-  end
-
-  private def summon_guard
-    id = args.first?.try &.to_i
-    id ||= pc.target.as?(L2Npc).try &.id
-    id ||= 31032
-    return unless template = NpcData[id]?
-    guard = L2BodyguardInstance.new(template)
-    guard.pc = pc
-    guard.heal!
-    x = pc.x + Rnd.rand(-100..100)
-    y = pc.y + Rnd.rand(-100..100)
-    guard.set_xyz_invisible(x, y, pc.z)
-    guard.spawn_me
-    msu = MagicSkillUse.new(guard, guard, 5456, 1, 1, 1)
-    guard.broadcast_packet(msu)
-    guard.set_running
-    guard.intention = AI::ACTIVE
   end
 
   private def attack_my_target

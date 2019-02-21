@@ -23,7 +23,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
   private NEWBIE_GUIDE_GLUDIO = 31077
   private ADVENTURERS_GUIDE = 32327
 
-  private GUIDE_MISSION = 41
+  private GUIDE_MISSION = 41 # where is that quest?
 
   # Item
   private SOULSHOT_NO_GRADE_FOR_BEGINNERS = 5789

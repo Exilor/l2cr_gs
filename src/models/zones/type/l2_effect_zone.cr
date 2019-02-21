@@ -1,5 +1,5 @@
 class L2EffectZone < L2ZoneType
-  @skills = Hash(Int32, Int32).new(initial_capacity: 3)
+  @skills = Hash(Int32, Int32).new
   @initial_delay = 0
   @reuse = 30_000
   @bypass_conditions = false
@@ -24,9 +24,9 @@ class L2EffectZone < L2ZoneType
     when "bypassSkillConditions"
       @bypass_conditions = Bool.new(value)
     when "maxDynamicSkillCount"
-      @skills = {} of Int32 => Int32
+      # @skills = {} of Int32 => Int32
     when "skillIdLvl"
-      @skills = {} of Int32 => Int32
+      # skills = {} of Int32 => Int32
       value.split(';').each do |skill|
         split = skill.split('-')
         if split.size != 2
@@ -34,9 +34,10 @@ class L2EffectZone < L2ZoneType
         else
           id = split[0].to_i
           lvl = split[1].to_i
-          @skills.not_nil![id] = lvl
+          @skills[id] = lvl
         end
       end
+      # @skills = skills
     when "showDangerIcon"
       @show_danger_icon = Bool.new(value)
     else
@@ -49,10 +50,12 @@ class L2EffectZone < L2ZoneType
   end
 
   def on_enter(char)
-    if @skills
+    unless @skills.empty?
       unless settings.task
         sync do
-          settings.task ||= ThreadPoolManager.schedule_general_at_fixed_rate(->apply_skill, @initial_delay, @reuse)
+          settings.task ||= ThreadPoolManager.schedule_general_at_fixed_rate(
+            ->apply_skill, @initial_delay, @reuse
+          )
         end
       end
     end
@@ -69,8 +72,11 @@ class L2EffectZone < L2ZoneType
   def on_exit(char)
     if char.is_a?(L2PcInstance)
       char.inside_altered_zone = false
-      unless char.inside_danger_area_zone?
-        char.send_packet(EtcStatusUpdate.new(char.acting_player))
+      if @show_danger_icon
+        char.inside_danger_area_zone = false
+        unless char.inside_danger_area_zone?
+          char.send_packet(EtcStatusUpdate.new(char.acting_player))
+        end
       end
     end
 
@@ -79,8 +85,8 @@ class L2EffectZone < L2ZoneType
     end
   end
 
-  def get_skill(skill_id : Int, skill_lvl : Int) : Skill
-    SkillData[skill_id, skill_lvl]
+  private def get_skill(skill_id : Int, skill_lvl : Int) : Skill?
+    SkillData[skill_id, skill_lvl]?
   end
 
   def add_skill(skill_id : Int, skill_lvl : Int)
@@ -89,9 +95,9 @@ class L2EffectZone < L2ZoneType
       return
     end
 
-    unless @skills
-      sync { @skills ||= {} of Int32 => Int32 }
-    end
+    # unless @skills
+    #   sync { @skills ||= {} of Int32 => Int32 }
+    # end
 
     @skills[skill_id] = skill_lvl
   end
@@ -104,7 +110,7 @@ class L2EffectZone < L2ZoneType
     @skills.clear
   end
 
-  def get_skill_level(skill_id)
+  def get_skill_level(skill_id : Int) : Int32
     @skills.fetch(skill_id, 0)
   end
 

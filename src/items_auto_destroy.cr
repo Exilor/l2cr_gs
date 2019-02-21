@@ -1,6 +1,6 @@
 module ItemsAutoDestroy
-  extend Synchronizable
   extend self
+  extend Synchronizable
 
   private ITEMS = {} of Int32 => L2ItemInstance
 

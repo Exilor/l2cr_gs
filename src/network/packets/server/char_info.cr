@@ -93,6 +93,7 @@ class Packets::Outgoing::CharInfo < GameServerPacket
 
     if template
       c 0x0c
+
       d @l2id
       d template.id + 1_000_000
       d @pc.karma > 0 ? 1 : 0

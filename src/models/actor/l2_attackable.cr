@@ -566,11 +566,6 @@ class L2Attackable < L2Npc
     warn "TODO: L2Attackable#do_event_drop."
   end
 
-  # def active_weapon
-  #   # return nil
-  #   # is this really called anywhere?
-  # end
-
   def in_aggro_list?(char : L2Character) : Bool
     @aggro_list.has_key?(char)
   end
@@ -648,6 +643,7 @@ class L2Attackable < L2Npc
   end
 
   def add_absorber(attacker : L2PcInstance)
+    debug { "L2Attackable#add_absorber(#{attacker})" }
     info = @absorbers_list[attacker.l2id]?
 
     if info

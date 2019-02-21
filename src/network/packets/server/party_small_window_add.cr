@@ -17,6 +17,6 @@ class Packets::Outgoing::PartySmallWindowAdd < GameServerPacket
     d @member.max_mp
     d @member.level
     d @member.class_id.to_i
-    q 0x00 #unknown
+    q 0x00 # unknown
   end
 end

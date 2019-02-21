@@ -10,11 +10,11 @@ class Packets::Outgoing::ConfirmDlg < Packets::Outgoing::AbstractMessagePacket
   property time : Int32 = 0
   property requester_id : Int32 = 0
 
-  def self.new(text : String)
+  def self.new(text : String) : self
     s1.add_string(text)
   end
 
-  def self.new(id : Int32)
+  def self.new(id : Int32) : self
     sm_id = SystemMessageId.get_system_message_id(id)
     new(sm_id)
   end
