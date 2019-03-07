@@ -130,7 +130,7 @@ class Quests::Q00403_PathOfTheRogue < Quest
         npc.broadcast_packet(say)
 
         if has_quest_items?(killer, MOST_WANTED_LIST)
-          random_item = STOLEN_ITEMS.sample(Rnd)
+          random_item = STOLEN_ITEMS.sample(random: Rnd)
           unless has_quest_items?(killer, random_item)
             give_items(killer, random_item, 1)
             if has_quest_items?(killer, STOLEN_ITEMS)

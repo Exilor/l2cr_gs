@@ -65,10 +65,10 @@ class NpcAI::TeleportToUndergroundColiseum < AbstractNpcAI
     if event.ends_with?(".htm")
       return event
     elsif event == "return"
-      player.tele_to_location(RETURN_LOCS.sample(Rnd), false)
+      player.tele_to_location(RETURN_LOCS.sample(random: Rnd), false)
     elsif event.num?
       val = event.to_i - 1
-      player.tele_to_location(MANAGERS_LOCS[val].sample(Rnd), false)
+      player.tele_to_location(MANAGERS_LOCS[val].sample(random: Rnd), false)
     end
 
     nil
@@ -76,9 +76,9 @@ class NpcAI::TeleportToUndergroundColiseum < AbstractNpcAI
 
   def on_talk(npc, player)
     if MANAGERS.includes?(npc.id)
-      player.tele_to_location(RETURN_LOCS.sample(Rnd), false)
+      player.tele_to_location(RETURN_LOCS.sample(random: Rnd), false)
     else
-      player.tele_to_location(COLISEUM_LOCS.sample(Rnd), false)
+      player.tele_to_location(COLISEUM_LOCS.sample(random: Rnd), false)
     end
 
     nil

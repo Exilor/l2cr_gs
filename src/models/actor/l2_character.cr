@@ -99,12 +99,12 @@ abstract class L2Character < L2Object
       @calculators = Formulas.std_door_calculators
     elsif npc?
       @calculators = Formulas.npc_std_calculators
-      template.skills.each_value { |s| add_skill(s) }
+      # template.skills.each_value { |s| add_skill(s) }
     else
       @calculators = Slice(Calculator?).new(Stats.size, nil.as(Calculator?))
-      if summon?
-        template.skills.each_value { |s| add_skill(s) }
-      end
+      # if summon?
+      #   template.skills.each_value { |s| add_skill(s) }
+      # end
 
       Formulas.add_funcs_to_new_character(self)
     end
@@ -3847,7 +3847,7 @@ abstract class L2Character < L2Object
             dx = (x - cur_x).to_f
             dy = (y - cur_y).to_f
             dz = (z - cur_z).to_f
-            distance = vertical_movement_only ? Math.pow(z, 2) : Math.hypot(dx, dy)
+            distance = vertical_movement_only ? Math.pow(dz, 2) : Math.hypot(dx, dy)
             sin = dy / distance
             cos = dx / distance
           end

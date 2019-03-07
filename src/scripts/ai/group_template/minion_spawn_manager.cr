@@ -396,7 +396,7 @@ class NpcAI::MinionSpawnManager < AbstractNpcAI
             add_minion(npc, is.id)
           end
 
-          broadcast_npc_say(npc, Say2::NPC_ALL, ON_ATTACK_MSG.sample(Rnd))
+          broadcast_npc_say(npc, Say2::NPC_ALL, ON_ATTACK_MSG.sample(random: Rnd))
           npc.script_value = 1
         end
       end

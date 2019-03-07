@@ -97,7 +97,7 @@
 #   end
 
 #   def self.sample : Bytes
-#     KEYS.sample(Rnd)
+#     KEYS.sample(random: Rnd)
 #   end
 # end
 
@@ -162,6 +162,6 @@ class GameCrypt
   end
 
   def self.sample : Bytes
-    KEYS.sample(Rnd)
+    KEYS.sample(random: Rnd)
   end
 end

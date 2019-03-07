@@ -46,7 +46,7 @@ abstract class AbstractPlayerGroup
   end
 
   def random_player : L2PcInstance
-    members.sample(Rnd)
+    members.sample(random: Rnd)
   end
 
   def each_with_summon(&block : L2PcInstance | L2Summon ->) : Nil

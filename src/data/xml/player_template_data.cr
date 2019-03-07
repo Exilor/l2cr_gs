@@ -3,7 +3,6 @@ require "../../models/actor/templates/l2_pc_template"
 module PlayerTemplateData
   extend self
   extend XMLReader
-  extend Loggable
 
   private TEMPLATES = EnumMap(ClassId, L2PcTemplate).new
   @@new_character_templates : Array(L2PcTemplate)?

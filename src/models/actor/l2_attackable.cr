@@ -104,6 +104,26 @@ class L2Attackable < L2Npc
   end
 
   def reduce_current_hp(damage : Float64, attacker : L2Character?, awake : Bool, dot : Bool, skill : Skill?)
+    if raid? && !minion? && attacker && attacker.party? && attacker.party.in_command_channel? && attacker.party.command_channel.meets_raid_war_condition?(self)
+      if @first_command_channel_attacked.nil?
+        sync do
+          unless @first_command_channel_attacked
+            if first_command_channel_attacked = attacker.party.command_channel?
+              timer = CommandChannelTimer.new(self)
+              @command_channel_timer = timer
+              @command_channel_last_attack = Time.ms
+              ThreadPoolManager.schedule_general(timer, 10000)
+              cs = CreatureSay.new(0, Packets::Incoming::Say2::PARTYROOM_ALL, "", "You have looting rights!") # L2J TODO: retail message
+              first_command_channel_attacked.broadcast_packet(cs)
+              @first_command_channel_attacked = first_command_channel_attacked
+            end
+          end
+        end
+      elsif attacker.party.command_channel == @first_command_channel_attacked
+        @command_channel_last_attack = Time.ms
+      end
+    end
+
     if event_mob?
       return
     end

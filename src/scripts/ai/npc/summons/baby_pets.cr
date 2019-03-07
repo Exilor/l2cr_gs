@@ -51,7 +51,7 @@ class NpcAI::BabyPets < AbstractNpcAI
     # debug "#{summon} casting #{skill.skill}."
     owner = summon.owner
     if owner.alive? && !summon.hungry?
-      if ((owner.current_hp / owner.max_hp) * 100) < max_hp_per
+      if (owner.current_hp / owner.max_hp) * 100 < max_hp_per
         if summon.check_do_cast_conditions(skill.skill)
           prev_follow_status = summon.follow_status
 

@@ -1,7 +1,6 @@
 module SkillLearnData
   extend self
   extend XMLReader
-  extend Loggable
 
   private SKILL_LEARN = {} of Int32 => Array(ClassId)
 

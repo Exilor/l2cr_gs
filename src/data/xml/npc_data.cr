@@ -6,7 +6,6 @@ module NpcData
   extend self
   extend XMLReader
   extend Synchronizable
-  extend Loggable
 
   private NPCS = Hash(Int32, L2NpcTemplate).new
   private CLANS = Hash(String, Int32).new

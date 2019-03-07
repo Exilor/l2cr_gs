@@ -7,7 +7,6 @@ module CastleManorManager
   extend self
   extend XMLReader
   # extend Storable
-  extend Loggable
 
   private INSERT_PRODUCT = "INSERT INTO castle_manor_production VALUES (?, ?, ?, ?, ?, ?)"
   private INSERT_CROP = "INSERT INTO castle_manor_procure VALUES (?, ?, ?, ?, ?, ?, ?)"

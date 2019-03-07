@@ -19,7 +19,7 @@ class NpcAI::EchoCrystals < AbstractNpcAI
   }
 
   def initialize
-    super(self.class.simple_name, "custom")
+    super(self.class.simple_name, "ai/npc")
 
     add_start_npc(NPCS)
     add_talk_id(NPCS)
@@ -27,6 +27,7 @@ class NpcAI::EchoCrystals < AbstractNpcAI
 
   def on_adv_event(event, npc, pc)
     return unless npc && pc
+
     score = event.to_i
     if tmp = SCORES[score]?
       if !has_quest_items?(pc, score)

@@ -28,6 +28,10 @@ abstract class L2Summon < L2Playable
     x = owner.x + Rnd.rand(-100..100)
     y = owner.y + Rnd.rand(-100..100)
     set_xyz_invisible(x, y, owner.z)
+
+    template.skills.each_value do |skill|
+      add_skill(skill)
+    end
   end
 
   def acting_player?

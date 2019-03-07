@@ -52,7 +52,11 @@ class L2Npc < L2Character
     end
     @current_collision_height = template.f_collision_height
     @current_collision_radius = template.f_collision_radius
-    @flying = template.flying?
+    self.flying = template.flying?
+
+    template.skills.each_value do |skill|
+      add_skill(skill)
+    end
   end
 
   def initialize(npc_id : Int32)

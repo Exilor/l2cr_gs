@@ -17,7 +17,7 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
       return
     end
 
-    # cudtom. I don't see how Fake Death is supposed to work otherwise.
+    # custom. I don't see how Fake Death is supposed to work otherwise.
     if @id == 60 && pc.affected_by_skill?(60)
       pc.stop_skill_effects(true, 60)
       return

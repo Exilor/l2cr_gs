@@ -54,7 +54,7 @@ class L2Party < AbstractPlayerGroup
       m.inventory.validate_capacity_by_item_id(item_id) &&
       Util.in_range?(Config.alt_party_range2, target, m, true)
     end
-    .sample(Rnd)
+    .sample(random: Rnd)
   end
 
   def get_checked_next_looter(item_id : Int32, target : L2Character) : L2PcInstance?
@@ -374,7 +374,7 @@ class L2Party < AbstractPlayerGroup
     if left_over > 0
       keys = rewards.keys
       while left_over > 0
-        rewards[keys.sample(Rnd)] += 1
+        rewards[keys.sample(random: Rnd)] += 1
         left_over -= 1
       end
     end

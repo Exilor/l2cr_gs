@@ -35,7 +35,7 @@ class L2MapRegion
 
   def spawn_loc
     if Config.random_respawn_in_town_enabled
-      spawns.sample(Rnd)
+      spawns.sample(random: Rnd)
     else
       spawns[0]
     end
@@ -44,7 +44,7 @@ class L2MapRegion
   def other_spawn_loc
     if temp = @other_spawns
       if Config.random_respawn_in_town_enabled
-        temp.sample(Rnd)
+        temp.sample(random: Rnd)
       else
         temp[0]
       end
@@ -56,7 +56,7 @@ class L2MapRegion
   def chaotic_spawn_loc
     if temp = @chaotic_spawns
       if Config.random_respawn_in_town_enabled
-        temp.sample(Rnd)
+        temp.sample(random: Rnd)
       else
         temp[0]
       end
@@ -68,7 +68,7 @@ class L2MapRegion
   def banish_spawn_loc
     if temp = @banish_spawns
       if Config.random_respawn_in_town_enabled
-        temp.sample(Rnd)
+        temp.sample(random: Rnd)
       else
         temp[0]
       end

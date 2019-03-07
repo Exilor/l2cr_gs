@@ -63,6 +63,14 @@ class Quest < AbstractScript
     qs || (!init_if_none ? qs : new_quest_state(pc))
   end
 
+  def get_quest_state!(pc : L2PcInstance, init_if_none : Bool) : QuestState
+    unless qs = get_quest_state(pc, init_if_none)
+      raise "QuestState for quest #{name} and player #{pc.name} not found"
+    end
+
+    qs
+  end
+
   def get_quest_state!(pc : L2PcInstance) : QuestState
     get_quest_state(pc, true).not_nil!
   end
@@ -1104,7 +1112,7 @@ class Quest < AbstractScript
     return unless pc
     return pc unless party = pc.party?
     return pc if party.members.empty?
-    party.members.sample(Rnd)
+    party.members.sample(random: Rnd)
   end
 
   def get_random_party_member(pc : L2PcInstance?, cond : Int32) : L2PcInstance?
@@ -1137,7 +1145,7 @@ class Quest < AbstractScript
       temp.get(var).not_nil!.casecmp?(value) &&
       m.inside_radius?(target, 1500, true, false)
     end
-    .sample(Rnd)
+    .sample(random: Rnd)
   end
 
   def get_random_party_member(pc : L2PcInstance?, npc : L2Npc?) : L2PcInstance?
@@ -1198,7 +1206,7 @@ class Quest < AbstractScript
 
     return if candidates.empty?
 
-    qs = candidates.sample(Rnd)
+    qs = candidates.sample(random: Rnd)
 
     qs if check_distance_to_target(qs.player, target)
   end

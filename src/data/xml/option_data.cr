@@ -5,7 +5,6 @@ require "../../models/options/options_skill_type"
 module OptionData
   extend self
   extend XMLReader
-  extend Loggable
 
   private OPTION_DATA = {} of Int32 => Options
 

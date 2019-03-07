@@ -81,6 +81,8 @@ module SiegeManager
         load_trap_upgrade(castle.residence_id)
       end
     end
+
+    sieges # Force Siege initialization.
   end
 
   def add_siege_skills(pc : L2PcInstance)

@@ -53,7 +53,7 @@ class NpcAI::CabalBuffer < AbstractNpcAI
         messages = PREACHER_MSG
       end
 
-      @owner.broadcast_say(@npc, messages.sample(Rnd), nil, -1)
+      @owner.broadcast_say(@npc, messages.sample(random: Rnd), nil, -1)
       ThreadPoolManager.schedule_general(self, 60_000)
     end
   end

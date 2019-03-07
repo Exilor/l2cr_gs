@@ -3,7 +3,6 @@ require "../../enums/category_type"
 module CategoryData
   extend self
   extend XMLReader
-  extend Loggable
 
   private CATEGORIES = EnumMap(CategoryType, Set(Int32)).new
 

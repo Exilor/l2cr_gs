@@ -41,7 +41,7 @@ class NpcAI::RandomSpawn < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    loc = SPAWN_POINTS[npc.id].sample(Rnd)
+    loc = SPAWN_POINTS[npc.id].sample(random: Rnd)
     unless npc.inside_radius?(loc, 200, false, false)
       npc.spawn.location = loc
       task = ->{ npc.tele_to_location(loc, false) }

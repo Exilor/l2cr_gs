@@ -83,7 +83,7 @@ class Quests::Q00142_FallenAngelRequestOfDawn < Quest
 
   def on_kill(npc, player, is_summon)
     if npc.id == FALLEN_ANGEL
-      st = get_quest_state(player, false).not_nil!
+      st = get_quest_state!(player, false)
       if st.cond?(5)
         st.give_items(FALLEN_ANGEL_BLOOD, 1)
         st.set_cond(6, true)

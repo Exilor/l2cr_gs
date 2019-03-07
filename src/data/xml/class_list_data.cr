@@ -4,7 +4,6 @@ require "../../models/class_info"
 module ClassListData
   extend self
   extend XMLReader
-  extend Loggable
 
   private CLASS_DATA = EnumMap(ClassId, ClassInfo).new
 

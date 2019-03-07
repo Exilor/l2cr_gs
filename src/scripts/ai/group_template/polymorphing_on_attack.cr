@@ -44,7 +44,7 @@ class NpcAI::PolymorphingOnAttack < AbstractNpcAI
         if npc.current_hp <= (npc.max_hp * tmp[1]) / 100
           if Rnd.rand(100) < tmp[2]
             if tmp[3] >= 0
-              str = TEXTS[tmp[3]].sample(Rnd)
+              str = TEXTS[tmp[3]].sample(random: Rnd)
               cs = CreatureSay.new(npc.l2id, Say2::NPC_ALL, npc.name, str)
               npc.broadcast_packet(cs)
             end

@@ -115,11 +115,7 @@ class L2ClanMember
 
   def update_pledge_type
     sql = "UPDATE characters SET subpledge=? WHERE charId=?"
-    GameDB.exec(
-      sql,
-      @pledge_type,
-      l2id
-    )
+    GameDB.exec(sql, @pledge_type, l2id)
   rescue e
     error e
   end
@@ -139,11 +135,7 @@ class L2ClanMember
 
   def update_power_grade
     sql = "UPDATE characters SET power_grade=? WHERE charId=?"
-    GameDB.exec(
-      sql,
-      @power_grade,
-      l2id
-    )
+    GameDB.exec(sql, @power_grade, l2id)
   rescue e
     error e
   end

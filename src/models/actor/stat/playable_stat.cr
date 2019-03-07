@@ -126,8 +126,8 @@ class PlayableStat < CharStat
     end
   end
 
-  def add_level(value : Int8) : Bool
-    current_level = level.to_i32
+  def add_level(value : Int32) : Bool
+    current_level = level
 
     if current_level + value > max_level
       if current_level < max_level
@@ -140,7 +140,7 @@ class PlayableStat < CharStat
 
     level_increased = current_level + value > current_level
     value += current_level
-    self.level = value.to_i8
+    self.level = value
 
     if exp >= get_exp_for_level(level + 1) || get_exp_for_level(level) > exp
       self.exp = get_exp_for_level(level)

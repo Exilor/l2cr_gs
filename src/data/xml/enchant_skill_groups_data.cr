@@ -4,7 +4,6 @@ require "../../models/skills/enchant_skill_group"
 module EnchantSkillGroupsData
   extend self
   extend XMLReader
-  extend Loggable
 
   NORMAL_ENCHANT_BOOK  = 6622
   SAFE_ENCHANT_BOOK    = 9627

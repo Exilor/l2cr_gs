@@ -366,11 +366,11 @@ module AugmentationData
     if generate_skill
       case result_color
       when 1
-        stat34 = BLUE_SKILLS[ls_level].sample(Rnd)
+        stat34 = BLUE_SKILLS[ls_level].sample(random: Rnd)
       when 2
-        stat34 = PURPLE_SKILLS[ls_level].sample(Rnd)
+        stat34 = PURPLE_SKILLS[ls_level].sample(random: Rnd)
       when 3
-        stat34 = RED_SKILLS[ls_level].sample(Rnd)
+        stat34 = RED_SKILLS[ls_level].sample(random: Rnd)
       end
     end
 

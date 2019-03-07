@@ -15,7 +15,7 @@ class NpcAI::AltarsOfSacrifice < AbstractNpcAI
         raise "illegal state"
       end
 
-      spawn = L2Spawn.new(@boss_npc_ids.sample(Rnd))
+      spawn = L2Spawn.new(@boss_npc_ids.sample(random: Rnd))
       spawn.amount = 1
       spawn.heading = Rnd.u16.to_i32
 

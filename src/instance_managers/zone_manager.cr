@@ -5,7 +5,6 @@ require "../models/zones/type/*"
 module ZoneManager
   extend self
   extend XMLReader
-  extend Loggable
 
   private SETTINGS = {} of String => AbstractZoneSettings
   private CLASS_ZONES = {} of L2ZoneType.class => Hash(Int32, L2ZoneType)

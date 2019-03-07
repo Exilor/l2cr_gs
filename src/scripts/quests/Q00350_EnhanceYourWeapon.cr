@@ -45,7 +45,7 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
   def on_adv_event(event, npc, player)
     return unless player
     htmltext = event
-    st = get_quest_state(player, false).not_nil!
+    st = get_quest_state!(player, false)
     if event.ends_with?("-04.htm")
       st.start_quest
     elsif event.ends_with?("-09.htm")
@@ -238,9 +238,7 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
       end
     end
     # Init some useful vars
-    unless main_lvl_info = NPC_LEVELING_INFO[mob.id][max_sc_level]
-      # /* throw new NullPointerException("Target: "+mob+ " player: "+killer+" level: "+max_sc_level); */
-      raise ""
+    unless main_lvl_info = NPC_LEVELING_INFO.dig?(mob.id, max_sc_level)
       return
     end
 

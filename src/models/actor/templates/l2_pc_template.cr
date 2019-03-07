@@ -54,7 +54,7 @@ class L2PcTemplate < L2CharTemplate
   end
 
   def creation_point : Location
-    @creation_points.sample(Rnd)
+    @creation_points.sample(random: Rnd)
   end
 
   def set_upgain_value(param : String, level : Int, val : Float)

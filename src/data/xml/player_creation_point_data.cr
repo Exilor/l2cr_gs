@@ -3,7 +3,6 @@ require "../../../enums/class_id"
 module PlayerCreationPointData
   extend self
   extend XMLReader
-  extend Loggable
 
   private DATA = EnumMap(ClassId, Array(Location)).new
 
@@ -14,7 +13,7 @@ module PlayerCreationPointData
   end
 
   def get_creation_point(class_id : ClassId) : Location
-    DATA[class_id].sample(Rnd)
+    DATA[class_id].sample(random: Rnd)
   end
 
   private def parse_document(doc, file)

@@ -1205,8 +1205,8 @@ module SevenSignsFestival
 
   def send_message_to_all(name : String, string : NpcString)
     return unless @@dawn_chat_guide && @@dusk_chat_guide
-      send_message_to_all(name, string, @@dawn_chat_guide.not_nil!)
-      send_message_to_all(name, string, @@dusk_chat_guide.not_nil!)
+    send_message_to_all(name, string, @@dawn_chat_guide.not_nil!)
+    send_message_to_all(name, string, @@dusk_chat_guide.not_nil!)
   end
 
   def send_message_to_all(name : String, string : NpcString, npc : L2Npc)
@@ -1595,7 +1595,6 @@ module SevenSignsFestival
     getter npc_id : Int32
 
     def initialize(@x : Int32, @y : Int32, @z : Int32, heading : Int32)
-      @x, @y, @z = x, y, z
       @heading = heading < 0 ? Rnd.u16.to_i32 : heading
       @npc_id = -1
     end

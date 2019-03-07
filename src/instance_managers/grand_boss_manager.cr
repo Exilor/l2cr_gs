@@ -111,7 +111,7 @@ module GrandBossManager
     !!get_zone(*pc.xyz)
   end
 
-  def get_boss_status(boss_id : Int32)
+  def get_boss_status(boss_id : Int32) : Int32?
     BOSS_STATUS[boss_id]?
   end
 

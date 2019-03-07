@@ -1,4 +1,6 @@
 class Packets::Incoming::UseItem < GameClientPacket
+  private FORMAL_WEAR_ID = 6408
+
   @l2id = 0
   @ctrl = false
   @item_id = 0
@@ -89,7 +91,7 @@ class Packets::Incoming::UseItem < GameClientPacket
     end
 
     if item.equippable?
-      if @item_id == 6408 && pc.cursed_weapon_equipped?
+      if @item_id == FORMAL_WEAR_ID && pc.cursed_weapon_equipped?
         return
       end
 

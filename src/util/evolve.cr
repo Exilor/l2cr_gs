@@ -45,6 +45,8 @@ module Evolve
 
     pet.unsummon(pc)
 
+    pet.destroy_control_item(pc, true)
+
     item = pc.inventory.add_item("Evolve", item_id_give, 1, pc, npc).not_nil!
     unless pet_summon = L2PetInstance.spawn_pet(npc_template, pc, item)
       return false

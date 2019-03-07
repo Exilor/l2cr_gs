@@ -36,7 +36,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
 
   private def add_param(param)
     if @params.size == param_count
-      raise "#{@system_message_id} takes #{param_count} parameters."
+      raise "#{@system_message_id} takes #{param_count} parameters"
     end
 
     @params << param
@@ -156,7 +156,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
 
     if @params.size < param_count
       raise "Too few parameters for #{@system_message_id}: " \
-        "given #{@params.size} but #{param_count} are required."
+        "given #{@params.size} but #{param_count} are required"
     end
 
     d param_count

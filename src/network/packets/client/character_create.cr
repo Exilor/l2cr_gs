@@ -130,7 +130,7 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
     end
 
     if Config.starting_level > 1
-      pc.stat.add_level(Config.starting_level - 1)
+      pc.stat.add_level((Config.starting_level - 1).to_i32)
     end
 
     if Config.starting_sp > 0

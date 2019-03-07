@@ -214,7 +214,7 @@ module DimensionalRiftManager
       end
 
       empty_rooms = get_free_rooms(type)
-      room = empty_rooms.sample(Rnd)
+      room = empty_rooms.sample(random: Rnd)
 
       DimensionalRift.new(pc.party, type, room)
     end

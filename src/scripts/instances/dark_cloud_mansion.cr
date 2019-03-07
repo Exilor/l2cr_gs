@@ -528,7 +528,7 @@ class DarkCloudMansion < AbstractInstance
     temp = Slice.new(6, 0)
     fifth_room = DMCRoom.new
 
-    temp = BELETHS.sample(Rnd)
+    temp = BELETHS.sample(random: Rnd)
 
     fifth_room.reset = 0
     fifth_room.found = 0

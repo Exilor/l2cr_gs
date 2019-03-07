@@ -43,7 +43,7 @@ class EffectHandler::SummonCubic < AbstractEffect
       allowed_count = info.effected.acting_player.stat.max_cubic_count
       current_count = pc.cubics.size
       if current_count >= allowed_count
-        id = pc.cubics.keys_slice.sample(Rnd)
+        id = pc.cubics.keys_slice.sample(random: Rnd)
         cubic = pc.get_cubic_by_id(id).not_nil!
         cubic.stop_action
         cubic.cancel_disappear

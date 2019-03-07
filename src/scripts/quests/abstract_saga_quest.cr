@@ -314,7 +314,7 @@ abstract class Quests::AbstractSagaQuest < Quest
   def on_attack(npc, pc, damage, is_summon)
     if st2 = find_right_state(npc)
       cond = st2.cond
-      st = get_quest_state(pc, false).not_nil!
+      st = get_quest_state!(pc, false)
       npc_id = npc.id
       if npc_id == @mob[2] && st == st2 && cond == 17
         quest0 = st.get_int("Quest0") + 1

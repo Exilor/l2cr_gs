@@ -132,7 +132,7 @@ module SpawnTable
     get_spawns(npc_id).size
   end
 
-  def find_any(npc_id)
+  def find_any(npc_id : Int32) : L2Spawn?
     get_spawns(npc_id).first?
   end
 

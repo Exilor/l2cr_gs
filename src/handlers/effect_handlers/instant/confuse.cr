@@ -43,7 +43,7 @@ class EffectHandler::Confuse < AbstractEffect
     end
 
     unless target_list.empty?
-      new_target = target_list.sample(Rnd)
+      new_target = target_list.sample(random: Rnd)
       target.target = new_target
       debug "#{target} should attack #{new_target}."
       target.set_intention(AI::ATTACK, new_target)

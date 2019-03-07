@@ -2492,7 +2492,7 @@ class L2PcInstance < L2Playable
     end
 
     OnPlayerLevelChanged.new(self, level.to_i8, (level + value).to_i8).async(self)
-    level_increased = sub_stat.add_level(value.to_i8)
+    level_increased = sub_stat.add_level(value)
     on_level_change(level_increased)
 
     level_increased
@@ -5131,7 +5131,6 @@ class L2PcInstance < L2Playable
     end
 
     # if has_tamed_beasts?
-    #   # check if that #delete_me would delete from @tamed_beasts
     #   @tamed_beasts.each &.delete_me
     #   @tamed_beasts.clear
     # end
@@ -6624,11 +6623,6 @@ class L2PcInstance < L2Playable
       if class_index == 0
         self.class_template = base_class
       else
-        # if temp = subclasses[class_index] &.class_id
-        #   self.class_template = temp
-        # else
-        #   return false
-        # end
         begin
           self.class_template = subclasses[class_index].class_id
         rescue e
@@ -6665,9 +6659,9 @@ class L2PcInstance < L2Playable
 
       send_packet(EtcStatusUpdate.new(self))
 
-      # if st = get_quest_state(Quests::Q00422_RepentYourSins.simple_name)
-      #   st.exit_quest(true)
-      # end
+      if st = get_quest_state("Q00422_RepentYourSins")
+        st.exit_quest(true)
+      end
 
       @henna[0] = nil
       @henna[1] = nil
@@ -7069,7 +7063,7 @@ class L2PcInstance < L2Playable
       return
     end
 
-    @fish = fish.sample(Rnd).clone
+    @fish = fish.sample(random: Rnd).clone
     fish.clear
     send_packet(SystemMessageId::CAST_LINE_AND_START_FISHING)
     if !GameTimer.night? && @lure.not_nil!.night_lure?

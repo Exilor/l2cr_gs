@@ -3,7 +3,6 @@ require "../../models/l2_pet_data"
 module PetDataTable
   extend self
   extend XMLReader
-  extend Loggable
 
   private PETS = {} of Int32 => L2PetData
 
@@ -25,7 +24,7 @@ module PetDataTable
         when "set"
           case p["name"]
           when "food"
-            p["val"].split(";").each do |food_id|
+            p["val"].split(';').each do |food_id|
               data.add_food(food_id.to_i)
             end
           when "hungry_limit"
