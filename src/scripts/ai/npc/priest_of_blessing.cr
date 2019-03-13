@@ -71,7 +71,7 @@ class NpcAI::PriestOfBlessing < AbstractNpcAI
       pc = pc.not_nil!
       if pc.adena >= PRICE_VOICE
         value = load_global_quest_var(pc.account_name + "_voice")
-        _reuse_time = value.to_i
+        _reuse_time = value.empty? ? 0 : value.to_i64
 
         if Time.ms > _reuse_time
           take_items(pc, Inventory::ADENA_ID, PRICE_VOICE)
@@ -98,7 +98,7 @@ class NpcAI::PriestOfBlessing < AbstractNpcAI
 
       if pc.adena >= _price_hourglass
         value = load_global_quest_var("#{pc.account_name}_hg_#{_index}")
-        _reuse_time = value.to_i
+        _reuse_time = value.empty? ? 0 : value.to_i64
 
         if Time.ms > _reuse_time
           _hg = HOURGLASSES[_index]

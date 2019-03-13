@@ -114,7 +114,7 @@ class BuffInfo
 
     remove_abnormal_visual_effects
     # monster check is custom
-    if effected.acting_player? # unless effected.monster? || (effected.summon? && !effected.as(L2Summon).owner.has_summon?)
+    if effected.acting_player? && !effected.summon? # unless effected.monster? || (effected.summon? && !effected.as(L2Summon).owner.has_summon?)
       if skill.toggle?
         sm = Packets::Outgoing::SystemMessage.s1_has_been_aborted
       elsif removed?

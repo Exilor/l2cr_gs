@@ -415,12 +415,21 @@ class Skill
     get_target_list(char, only_first, target)
   end
 
+  EMPTY_TARGET_LIST = [] of L2Object
+
   def get_target_list(char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     if handler = TargetHandler[target_type]
-      handler.get_target_list(self, char, only_first, target)
+      begin
+        return handler.get_target_list(self, char, only_first, target)
+      rescue e
+        error "Exception in Skill#get_target_list."
+        error e
+        EMPTY_TARGET_LIST
+      end
     else
-      warn "No handler found for #{target_type.inspect}."
-      [target || char] of L2Object
+      warn "No target handler found for #{target_type.inspect}."
+      char.send_message("Target type of skill is not currently handled.")
+      EMPTY_TARGET_LIST
     end
   end
 

@@ -95,18 +95,26 @@ abstract class L2Character < L2Object
     init_stat
     init_status
 
+    # if door?
+    #   @calculators = Formulas.std_door_calculators
+    # elsif npc?
+    #   @calculators = Formulas.npc_std_calculators
+    #   # template.skills.each_value { |s| add_skill(s) }
+    # else
+    #   @calculators = Slice(Calculator?).new(Stats.size, nil.as(Calculator?))
+    #   # if summon?
+    #   #   template.skills.each_value { |s| add_skill(s) }
+    #   # end
+
+    #   Formulas.add_funcs_to_new_character(self)
+    # end
+
     if door?
       @calculators = Formulas.std_door_calculators
     elsif npc?
       @calculators = Formulas.npc_std_calculators
-      # template.skills.each_value { |s| add_skill(s) }
     else
-      @calculators = Slice(Calculator?).new(Stats.size, nil.as(Calculator?))
-      # if summon?
-      #   template.skills.each_value { |s| add_skill(s) }
-      # end
-
-      Formulas.add_funcs_to_new_character(self)
+      @calculators = Slice.new(Stats.size, nil.as(Calculator?))
     end
 
     self.invul = true

@@ -303,6 +303,8 @@ class L2PcInstance < L2Playable
 
     start_vitality_task
 
+    Formulas.add_funcs_to_new_player(self)
+
     init_char_status_update_values
     init_pc_status_update_values
   end

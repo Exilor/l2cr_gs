@@ -31,6 +31,8 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       end
     end
 
+    client.state = GameClient::State::IN_GAME
+
     if pc.gm?
       if Config.gm_startup_invulnerable
         if AdminData.has_access?("admin_invul", pc.access_level)
@@ -218,6 +220,11 @@ class Packets::Incoming::EnterWorld < GameClientPacket
 
     pc.send_packet(SystemMessageId::WELCOME_TO_LINEAGE)
 
+    pc.send_message(get_text("VGhpcyBzZXJ2ZXIgdXNlcyBMMkosIGEgcHJvamVjdCBmb3VuZGVkIGJ5IEwyQ2hlZg=="))
+    pc.send_message(get_text("YW5kIGRldmVsb3BlZCBieSBMMkogVGVhbSBhdCB3d3cubDJqc2VydmVyLmNvbQ=="))
+    pc.send_message(get_text("Q29weXJpZ2h0IDIwMDQtMjAxOQ=="))
+    pc.send_message(get_text("VGhhbmsgeW91IGZvciAxNSB5ZWFycyE="))
+
     SevenSigns.send_current_period_msg(pc)
     AnnouncementsTable.show_announcements(pc)
 
@@ -362,5 +369,9 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     if partner = L2World.get_player(partner_id)
       partner.send_message("Your partner has logged in.")
     end
+  end
+
+  private def get_text(str)
+    String.new(Base64.decode(str))
   end
 end

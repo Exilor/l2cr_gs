@@ -52,7 +52,7 @@ class NpcAI::Alexandria < AbstractNpcAI
     pc = pc.not_nil!
 
     if event == "30098-02.html"
-      htmltext = event
+      html = event
     elsif tmp = AGATHIONS[event]?
       chance = Rnd.rand(1000)
       chance2 = chance3 = 0
@@ -62,14 +62,14 @@ class NpcAI::Alexandria < AbstractNpcAI
         if chance >= chance2 && chance2 < chance3
           if take_all_items(pc, REQUIRED_ITEMS)
             give_items(pc, agathion)
-            htmltext = "30098-03.html"
+            html = "30098-03.html"
 
             if agathion.is_a?(AdditionalQuestItemHolder)
               give_items(pc, agathion.additional_id, 1)
-              htmltext = "30098-03a.html"
+              html = "30098-03a.html"
             end
           else
-            htmltext = "30098-04.html"
+            html = "30098-04.html"
           end
 
           break
@@ -79,6 +79,6 @@ class NpcAI::Alexandria < AbstractNpcAI
       end
     end
 
-    htmltext
+    html
   end
 end

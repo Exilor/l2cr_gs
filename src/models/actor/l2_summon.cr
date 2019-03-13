@@ -32,6 +32,8 @@ abstract class L2Summon < L2Playable
     template.skills.each_value do |skill|
       add_skill(skill)
     end
+
+    Formulas.add_funcs_to_new_summon(self)
   end
 
   def acting_player?

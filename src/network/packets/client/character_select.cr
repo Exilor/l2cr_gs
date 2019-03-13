@@ -63,7 +63,7 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
 
         send_packet(SSQInfo.new)
 
-        client.state = GameClient::State::IN_GAME
+        client.state = GameClient::State::JOINING
         send_packet(CharSelected.new(pc, client.session_id.play_ok_1))
       end
     end

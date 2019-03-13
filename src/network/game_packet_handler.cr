@@ -19,7 +19,8 @@ module GamePacketHandler
     opcode = buffer.read_bytes(UInt8)
     state = client.state
 
-    packet_type = case state
+    packet_type =
+    case state
     when .connected?
       case opcode
       when 0x0e then ProtocolVersion
@@ -51,6 +52,22 @@ module GamePacketHandler
       else
         print_debug(opcode, buffer, state, client)
       end
+    when .joining?
+      case opcode
+      when 0x11 then EnterWorld
+      when 0xd0
+        if buffer.remaining < 2
+          warn "#{client} sent a 0xd0 without the second opcode."
+          return
+        end
+        case op2 = buffer.read_bytes(UInt16)
+        when 0x01 then RequestManorList
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
+        end
+      else
+        print_debug(opcode, buffer, state, client)
+      end
     when .in_game?
       case opcode
       when 0x00 then Logout
@@ -66,7 +83,7 @@ module GamePacketHandler
       when 0x0b then RequestGiveNickName
       when 0x0f then MoveBackwardToLocation
       when 0x10 # Say
-      when 0x11 then EnterWorld
+      # when 0x11 then EnterWorld
       when 0x12 # CharacterSelect ("Start" was spammed when AUTHED)
         debug "Ignoring duplicate CharacterSelect packet."
       when 0x14 then RequestItemList
@@ -413,7 +430,7 @@ module GamePacketHandler
       end
     end
 
-    if packet_type
+    if packet_type.is_a?(GameClientPacket.class)
       packet_type.allocate
     end
   end
@@ -422,14 +439,14 @@ module GamePacketHandler
     client.on_unknown_packet
     return unless Config.packet_handler_debug
     size = buf.remaining
-    warn "Unknown packet 0x#{opcode.to_s(16)} on state #{state.inspect} of client #{client}:"
+    warn { "Unknown packet 0x#{opcode.to_s(16)} on state #{state.inspect} of client #{client}." }
   end
 
   private def print_debug_double_opcode(op1, op2, buf, state, client)
     client.on_unknown_packet
     return unless Config.packet_handler_debug
     size = buf.remaining
-    warn "Unknown packet 0x#{op1.to_s(16)}:0x#{op2.to_s(16)} on state #{state.inspect} of client #{client}:"
+    warn { "Unknown packet 0x#{op1.to_s(16)}:0x#{op2.to_s(16)} on state #{state.inspect} of client #{client}." }
   end
 
   def accept?(socket)

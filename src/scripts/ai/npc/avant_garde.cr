@@ -42,112 +42,111 @@ class NpcAI::AvantGarde < AbstractNpcAI
     when "32323-02.html", "32323-02a.html", "32323-02b.html",
          "32323-02c.html", "32323-05.html", "32323-05a.html",
          "32323-05no.html", "32323-06.html", "32323-06no.html"
-      htmltext = event
+      html = event
     when "LearnTransformationSkill"
       if Packets::Incoming::RequestAcquireSkill.can_transform?(player)
         AvantGarde.show_transform_skill_list(player)
       else
-        htmltext = "32323-03.html"
+        html = "32323-03.html"
       end
     when "BuyTransformationItems"
       if Packets::Incoming::RequestAcquireSkill.can_transform?(player)
         MultisellData.separate_and_send(32323001, player, npc, false)
       else
-        htmltext = "32323-04.html"
+        html = "32323-04.html"
       end
     when "LearnSubClassSkill"
       unless Packets::Incoming::RequestAcquireSkill.can_transform?(player)
-        htmltext = "32323-04.html"
+        html = "32323-04.html"
       end
       if player.subclass_active?
-        htmltext = "32323-08.html"
+        html = "32323-08.html"
       else
         if ITEMS.any? { |id| player.inventory.get_item_by_item_id(id) }
           AvantGarde.show_subclass_skill_list(player)
         else
-          htmltext = "32323-08.html"
+          html = "32323-08.html"
         end
       end
     when "CancelCertification"
       player.send_message("CancelCertification is not implemented.")
-      # if player.subclasses.size == 0
-      #   htmltext = "32323-07.html"
-      # elsif player.subclass_active?
-      #   htmltext = "32323-08.html"
-      # elsif player.adena < Config.fee_delete_subclass_skills
-      #   htmltext = "32323-08no.html"
-      # else
-      #   st = player.get_quest_state(SubclassSkills.simple_name)
-      #   st ||= QuestManager.get_quest(SubclassSkills.simple_name).not_nil!.new_quest_state(player)
+      if player.subclasses.size == 0
+        html = "32323-07.html"
+      elsif player.subclass_active?
+        html = "32323-08.html"
+      elsif player.adena < Config.fee_delete_subclass_skills
+        html = "32323-08no.html"
+      else
+        st = player.get_quest_state("SubclassSkills")
+        st ||= QuestManager.get_quest("SubclassSkills").not_nil!.new_quest_state(player)
 
-      #   active_certifications = 0
-      #   QUEST_VAR_NAMES.each do |var_name|
-      #     1.upto(Config.max_subclass) do |i|
-      #       qvar = st.get_global_quest_var(var_name + i)
-      #       if !qvar.empty? && (qvar.ends_with?(";") || qvar != "0")
-      #         active_certifications += 1
-      #       end
-      #     end
-      #   end
+        active_certifications = 0
+        QUEST_VAR_NAMES.each do |var_name|
+          1.upto(Config.max_subclass) do |i|
+            qvar = st.get_global_quest_var("#{var_name}#{i}")
+            if !qvar.empty? && (qvar.ends_with?(";") || qvar != "0")
+              active_certifications += 1
+            end
+          end
+        end
 
-      #   if active_certifications == 0
-      #     htmltext = "32323-10no.html"
-      #   else
-      #     QUEST_VAR_NAMES.each do |var_name|
-      #       1.upto(Config.max_subclass) do |i|
-      #         qvar_name = var_name + i
-      #         qvar = st.get_global_quest_var(qvar_name)
-      #         if qvar.ends_with?(";")
-      #           skill_id_var = qvar.gsub(";", "")
-      #           if skill_id_var.num?
-      #             skillId = skill_id_var.to_i
-      #             if sk = SkillData[skillId, 1]
-      #               player.removeSkill(sk)
-      #               st.save_global_quest_var(qvar_name, "0")
-      #             end
-      #           else
-      #             warn "Invalid Subclass skill ID: #{skill_id_var} for player #{player.name}"
-      #           end
-      #         elsif !qvar.empty? && qvar != "0"
-      #           if qvar.num?
-      #             item_obj_id = qvar.to_i
-      #             item_instance = player.inventory.get_item_by_l2id(item_obj_id)
-      #             if item_instance
-      #               player.destroy_item("CancelCertification", item_obj_id, 1, player, false)
-      #             else
-      #               item_instance = player.warehouse.get_item_by_l2id(item_obj_id)
-      #               if item_instance
-      #                 warn "Somehow #{player.name} put a certification book into warehouse!"
-      #                 player.warehouse.destroy_item("CancelCertification", item_instance, 1, player, false)
-      #               else
-      #                 warn "Somehow #{payer.name} deleted a certification book!"
-      #               end
-      #             end
-      #             st.save_global_quest_var(qvar_name, "0")
-      #           else
-      #             warn "Invalid item object Id: #{qvar} for player #{player.name}"
-      #           end
-      #         end
-      #       end
-      #     end
+        if active_certifications == 0
+          html = "32323-10no.html"
+        else
+          QUEST_VAR_NAMES.each do |var_name|
+            1.upto(Config.max_subclass) do |i|
+              qvar_name = "#{var_name}#{i}"
+              qvar = st.get_global_quest_var(qvar_name)
+              if qvar.ends_with?(";")
+                skill_id_var = qvar.sub(";", "")
+                if skill_id_var.num?
+                  skill_id = skill_id_var.to_i
+                  if sk = SkillData[skill_id, 1]?
+                    player.remove_skill(sk)
+                    st.save_global_quest_var(qvar_name, "0")
+                  end
+                else
+                  warn "Invalid Subclass skill ID: #{skill_id_var} for player #{player.name}"
+                end
+              elsif !qvar.empty? && qvar != "0"
+                if qvar.num?
+                  item_obj_id = qvar.to_i
+                  item_instance = player.inventory.get_item_by_l2id(item_obj_id)
+                  if item_instance
+                    player.destroy_item("CancelCertification", item_obj_id, 1, player, false)
+                  else
+                    item_instance = player.warehouse.get_item_by_l2id(item_obj_id)
+                    if item_instance
+                      warn "Somehow #{player.name} put a certification book into warehouse!"
+                      player.warehouse.destroy_item("CancelCertification", item_instance, 1, player, false)
+                    else
+                      warn "Somehow #{player.name} deleted a certification book!"
+                    end
+                  end
+                  st.save_global_quest_var(qvar_name, "0")
+                else
+                  warn "Invalid item object Id: #{qvar} for player #{player.name}"
+                end
+              end
+            end
+          end
 
-      #     player.reduce_adena("Cleanse", Config.fee_delete_subclass_skills, npc, true)
-      #     htmltext = "32323-09no.html"
-      #     player.send_skill_list
-      #   end
-      # end
+          player.reduce_adena("Cleanse", Config.fee_delete_subclass_skills, npc, true)
+          html = "32323-09no.html"
+          player.send_skill_list
+        end
+      end
 
-      # # Let's consume all certification books, even those not present in database.
-      # ITEMS.each do |item_id|
-      #   item = player.inventory.get_item_by_item_id(item_id)
-      #   if item
-      #     warn "Player #{player.name} had 'extra' certification skill books while cancelling sub-class certifications!"
-      #     player.destroy_item("CancelCertificationExtraBooks", item, npc, false)
-      #   end
-      # end
+      # Let's consume all certification books, even those not present in database.
+      ITEMS.each do |item_id|
+        if item = player.inventory.get_item_by_item_id(item_id)
+          warn "Player #{player.name} had 'extra' certification skill books while cancelling sub-class certifications!"
+          player.destroy_item("CancelCertificationExtraBooks", item, npc, false)
+        end
+      end
     end
 
-    htmltext
+    html
   end
 
   def on_first_talk(npc, player)
@@ -189,10 +188,11 @@ class NpcAI::AvantGarde < AbstractNpcAI
     end
 
     if counts == 0
-      minlevel = SkillTreesData.get_min_level_for_new_skill(player, SkillTreesData.transform_skill_tree)
-      if minlevel > 0
+      tree = SkillTreesData.transform_skill_tree
+      min_lvl = SkillTreesData.get_min_level_for_new_skill(player, tree)
+      if min_lvl > 0
         sm = SystemMessage.do_not_have_further_skills_to_learn_s1
-        sm.add_int(minlevel)
+        sm.add_int(min_lvl)
         player.send_packet(sm)
       else
         player.send_packet(SystemMessageId::NO_MORE_SKILLS_TO_LEARN)

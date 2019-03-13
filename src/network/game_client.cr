@@ -510,7 +510,7 @@ class GameClient
   end
 
   enum State : UInt8
-    CONNECTED, AUTHED, IN_GAME
+    CONNECTED, AUTHED, JOINING, IN_GAME
   end
 end
 

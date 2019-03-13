@@ -23,41 +23,46 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
     return unless pc = active_char
 
     unless 1 <= @level <= 1000 && 1 <= @id <= 32000
-      warn "Wrong level and id #{@level} #{@id}"
+      warn { "Wrong level and id #{@level} #{@id}" }
       Util.punish(pc, "wrong packet data in RequestAcquireSkill.")
       return
     end
 
     trainer = pc.last_folk_npc
 
-    return unless trainer.is_a?(L2NpcInstance)
+    unless trainer.is_a?(L2NpcInstance)
+      debug { "#{trainer}:#{trainer.class} is not a L2NpcInstance." }
+      return
+    end
 
     if !trainer.can_interact?(pc) && !pc.gm?
-      debug "#{pc} can't interact with #{pc}."
+      debug { "#{pc} can't interact with #{pc}." }
       return
     end
 
     unless skill = SkillData[@id, @level]?
-      warn "Skill with ID #{@id} and level #{@level} doesn't exist."
+      warn { "Skill with id #{@id} and level #{@level} doesn't exist." }
       return
     end
 
     unless s = SkillTreesData.get_skill_learn(@skill_type, @id, @level, pc)
-      debug "No skill learn data for skill with ID #{@id} and level #{@level}."
+      debug { "No skill learn data for skill with id #{@id} and level #{@level}." }
       return
     end
 
     unless can_be_learnt?(pc, skill, s)
-      debug "Skill with ID #{@id} and level #{@level} can't be learnt by #{pc}."
+      debug { "Skill with id #{@id} and level #{@level} can't be learnt by #{pc}." }
       return
     end
 
+    debug { "Requested to learn #{@skill_type.inspect} #{skill}." }
+
     case @skill_type
-    when .class?
+    when AcquireSkillType::CLASS
       if check_player_skill(pc, trainer, s)
         give_skill(pc, trainer, skill)
       end
-    when .transform?
+    when AcquireSkillType::TRANSFORM
       unless RequestAcquireSkill.can_transform?(pc)
         send_packet(SystemMessageId::NOT_COMPLETED_QUEST_FOR_SKILL_ACQUISITION)
         Util.punish(pc, "requested skill id #{@id}, level #{@level} without prerequisite quests.", IllegalActionPunishmentType::NONE)
@@ -67,11 +72,11 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       if check_player_skill(pc, trainer, s)
         give_skill(pc, trainer, skill)
       end
-    when .fishing?
+    when AcquireSkillType::FISHING
       if check_player_skill(pc, trainer, s)
         give_skill(pc, trainer, skill)
       end
-    when .pledge?
+    when AcquireSkillType::PLEDGE
       return unless pc.clan_leader?
       clan = pc.clan
       rep_cost = s.level_up_sp
@@ -107,7 +112,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
         send_packet(SystemMessageId::ACQUIRE_SKILL_FAILED_BAD_CLAN_REP_SCORE)
         L2VillageMasterInstance.show_pledge_skill_list(pc)
       end
-    when .subpledge?
+    when AcquireSkillType::SUBPLEDGE
       clan = pc.clan
       rep_cost = s.level_up_sp
       if clan.reputation_score < rep_cost
@@ -139,16 +144,16 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       send_packet(AcquireSkillDone::STATIC_PACKET)
 
       show_sub_unit_skill_list(pc)
-    when .transfer?
+    when AcquireSkillType::TRANSFER
       if check_player_skill(pc, trainer, s)
         give_skill(pc, trainer, skill)
       end
-    when .subclass?
+    when AcquireSkillType::SUBCLASS
       unless st = pc.get_quest_state("SubClassSkills")
         if q = QuestManager.get_quest("SubClassSkills")
           st = q.new_quest_state(pc)
         else
-          warn "Quest \"SubClassSkills\" does not exist."
+          warn { "Quest \"SubClassSkills\" does not exist." }
           return
         end
       end
@@ -156,9 +161,10 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       QUEST_VAR_NAMES.each do |var_name|
         1.upto(Config.max_subclass) do |i|
           item_l2id = st.get_global_quest_var("#{var_name}#{i}")
+          debug { "var_name: #{var_name}, item_l2id: #{item_l2id}" }
           if !item_l2id.empty? && !item_l2id.ends_with?(';') && item_l2id != "0"
             if item_l2id.num?
-              item_l2id = item_l2id = item_l2id.to_i
+              item_l2id = item_l2id.to_i
               if item = pc.inventory.get_item_by_l2id(item_l2id)
                 s.required_items.each do |item_id_count|
                   if item.id == item_id_count.id
@@ -171,10 +177,10 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
                   end
                 end
               else
-                warn "Non-existent item for object Id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc.name}."
+                warn { "Non-existent item for object Id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
               end
             else
-              warn "Invalid item object Id #{item_l2id.inspect} for subclass skill id #{@id}, level #{@level} for player #{pc.name}."
+              warn { "Invalid item object Id #{item_l2id.inspect} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
             end
           end
         end
@@ -182,12 +188,12 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
 
       pc.send_packet(SystemMessageId::ITEM_OR_PREREQUISITES_MISSING_TO_LEARN_SKILL)
       show_skill_list(trainer, pc)
-    when .collect?
+    when AcquireSkillType::COLLECT
       if check_player_skill(pc, trainer, s)
         give_skill(pc, trainer, skill)
       end
     else
-      warn "Unknown skill type #{@skill_type}."
+      warn { "Unknown skill type #{@skill_type}." }
     end
   end
 
@@ -210,13 +216,13 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       unless clan.learnable_subpledge_skill?(skill, @sub_type)
         pc.send_packet(SystemMessageId::SQUAD_SKILL_ALREADY_ACQUIRED)
         Util.punish(pc, "requested skill id #{@id}, level #{@level} without knowing its previous level.")
-        warn "#{pc} requested a subpledge skill that he can't learn."
+        warn { "#{pc} requested a subpledge skill that he can't learn." }
         return false
       end
     when .transfer?
       unless skl
         Util.punish(pc, "requested skill id #{@id}, level #{@level} which is not included in transfer skills.")
-        warn "#{pc} requested a transfer skill that he can't learn."
+        warn { "#{pc} requested a transfer skill that he can't learn." }
       end
     when .subclass?
       if pc.subclass_active?
@@ -226,12 +232,12 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       end
     else
       if prev_skill_level == @level
-        warn "#{pc} trying to learn a skill level he already knows."
+        warn { "#{pc} trying to learn a skill level he already knows." }
         return false
       end
 
       if @level != 1 && prev_skill_level != @level - 1
-        warn "#{pc} trying to learn a skill level beyond his ability."
+        warn { "#{pc} trying to learn a skill level beyond his ability." }
         pc.send_packet(SystemMessageId::PREVIOUS_LEVEL_SKILL_NOT_LEARNED)
         Util.punish(pc, "requested skill id #{@id}, level #{@level} without knowing its previous level.")
         return false
@@ -242,7 +248,10 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
   end
 
   private def check_player_skill(pc, trainer, s) : Bool
-    return false unless s
+    unless s
+      debug "No skill given."
+      return false
+    end
 
     if s.skill_id == @id && s.skill_level == @level
       if s.get_level > pc.level
@@ -267,6 +276,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
         s.required_items.each do |item|
           count = pc.inventory.get_inventory_item_count(item.id, -1)
           if count < item.count
+            debug { "#{pc.name} needs #{item.count} of item with id #{item.id} (has #{count})." }
             pc.send_packet(SystemMessageId::ITEM_OR_PREREQUISITES_MISSING_TO_LEARN_SKILL)
             show_skill_list(trainer, pc)
             return false

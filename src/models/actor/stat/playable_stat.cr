@@ -69,10 +69,10 @@ class PlayableStat < CharStat
 
   def sync_exp_level(exp_increased : Bool)
     # debug "#sync_exp_level(#{exp_increased})"
-    minimum_level = active_char.min_level.to_i32
+    minimum_level = active_char.min_level
     current_exp = exp
-    max_level = max_level().to_i32
-    current_level = level.to_i32
+    max_level = max_level()
+    current_level = level
 
     if exp_increased
       tmp = current_level
@@ -107,6 +107,7 @@ class PlayableStat < CharStat
             tmp -= 1
             next
           end
+          tmp -= 1
           if tmp < minimum_level
             tmp = minimum_level
           end
