@@ -8,3 +8,4 @@ release
 shard.lock
 /.crystal/
 /.shards/
+*.rb
