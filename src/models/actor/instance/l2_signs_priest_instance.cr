@@ -377,7 +377,7 @@ class L2SignsPriestInstance < L2Npc
           path = SevenSigns::SEVEN_SIGNS_HTML_PATH + "signs_6_dusk_contribute.htm"
         end
 
-        text = HtmCache.get_htm(pc.html_prefix, path)
+        text = HtmCache.get_htm(pc, path)
 
         if text
           text = text.gsub("%contrib_stone_color%", contrib_stone_color)
@@ -540,7 +540,7 @@ class L2SignsPriestInstance < L2Npc
           path = SevenSigns::SEVEN_SIGNS_HTML_PATH + "signs_17_dusk.htm"
         end
 
-        if content = HtmCache.get_htm(pc.html_prefix, path)
+        if content = HtmCache.get_htm(pc, path)
           content = content.gsub("%stoneColor%", stone_color)
           content = content.gsub("%stoneValue%", stone_value.to_s)
           content = content.gsub("%stoneCount%", stone_count.to_s)

@@ -13,7 +13,7 @@ module ItemHandler::Book
     file_name = "data/html/help/#{item_id}.htm"
     reply = NpcHtmlMessage.new(0, item_id)
 
-    if content = HtmCache.get_htm(file_name)
+    if content = HtmCache.get_htm(playable, file_name)
       reply.html = content
     else
       reply.html = "<html><body>My Text is missing:<br>#{file_name}</body></html>"

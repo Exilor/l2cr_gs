@@ -39,7 +39,9 @@ module NpcAI
     end
 
     def on_adv_event(event, npc, pc)
-      npc = npc.as(L2Attackable)
+      unless npc.is_a?(L2Attackable)
+        raise "#{npc} should be a L2Attackable"
+      end
 
       case event
       when "SPAWN"
@@ -48,11 +50,10 @@ module NpcAI
           npc.decay_me
         else
           target = obj.acting_player
-          broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRINGS_ON_SPAWN.sample(Rnd), target.name)
-          npc.add_damage_hate(target, 0, 2000i64)
+          broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRINGS_ON_SPAWN.sample, target.name)
+          npc.add_damage_hate(target, 0, 2000)
           npc.notify_event(AI::ATTACKED, target)
           npc.add_attacker_to_attack_by_list(target)
-
           start_quest_timer("DESPAWN", DESPAWN_TIME, npc, target)
         end
       when "DESPAWN"
@@ -64,14 +65,14 @@ module NpcAI
 
     def on_attack(npc, attacker, damage, is_summon)
       if Rnd.rand(100) < CHANCE_TO_SHOUT_ON_ATTACK
-        broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRINGS_ON_ATTACK.sample(Rnd))
+        broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRINGS_ON_ATTACK.sample)
       end
 
       super
     end
 
     def on_kill(npc, killer, is_summon)
-      broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRINGS_ON_KILL.sample(Rnd))
+      broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRINGS_ON_KILL.sample)
       cancel_quest_timer("DESPAWN", npc, killer)
 
       super

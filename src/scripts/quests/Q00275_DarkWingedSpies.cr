@@ -62,7 +62,7 @@ class Quests::Q00275_DarkWingedSpies < Quest
   def on_see_creature(npc, creature, is_summon)
     if creature.player?
       npc.set_running
-      npc.as(L2Attackable).add_damage_hate(creature, 0, 1i64)
+      npc.as(L2Attackable).add_damage_hate(creature, 0, 1)
       npc.set_intention(AI::ATTACK, creature)
     end
 

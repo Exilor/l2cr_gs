@@ -250,9 +250,7 @@ module AdminCommandHandler::AdminSkill
         pc.add_skill(skill, true)
         pc.send_skill_list
         pc.send_message("You have the skill #{name} to #{player.name}.")
-        if Config.debug
-          debug "GM #{pc.name} gave skill #{name} to #{player.name}."
-        end
+        debug { "GM #{pc.name} gave skill #{name} to #{player.name}." }
         pc.send_skill_list
       else
         pc.send_message("Error: there is no such skill.")
@@ -273,9 +271,7 @@ module AdminCommandHandler::AdminSkill
       pc.send_message("GM #{pc.name} removed skill #{name} from your skill list.")
       pc.remove_skill(skill)
       pc.send_message("You removed the skill #{name} from #{player.name}.")
-      if Config.debug
-        debug "GM #{pc.name} removed skill #{name} from #{player.name}."
-      end
+      debug { "GM #{pc.name} removed skill #{name} from #{player.name}." }
       pc.send_skill_list
     else
       pc.send_message("Error: no such skill.")

@@ -479,30 +479,34 @@ class CharEffectList
 
     return if info.effected.dead? && info.effector != info.effected
 
-    if skill.abnormal_type.none?
+   if skill.abnormal_type.none?
       stop_skill_effects(false, skill)
     else
-      stacked_info = stacked_effects[skill.abnormal_type]?
-      if stacked_info && skill.abnormal_lvl >= stacked_info.skill.abnormal_lvl
-        if skill.abnormal_instant?
-          if stacked_info.skill.abnormal_instant?
-            stop_skill_effects(false, skill.abnormal_type)
-          end
+      stacked_effects = stacked_effects()
+      if stacked_effects.has_key?(skill.abnormal_type)
+        stacked_info = stacked_effects[skill.abnormal_type]?
 
-          if stacked_info = stacked_effects[skill.abnormal_type]?
-            stacked_info.in_use = false
-            stacked_info.remove_stats
-            @hidden_buffs.add(1)
+        if stacked_info && skill.abnormal_lvl >= stacked_info.skill.abnormal_lvl
+          if skill.abnormal_instant?
+            if stacked_info.skill.abnormal_instant?
+              stop_skill_effects(false, skill.abnormal_type)
+            end
+
+            if stacked_info = stacked_effects[skill.abnormal_type]?
+              stacked_info.in_use = false
+              stacked_info.remove_stats
+              @hidden_buffs.add(1)
+            end
+          else
+            if stacked_info.skill.abnormal_instant?
+              stop_skill_effects(false, skill.abnormal_type)
+            end
+
+            stop_skill_effects(false, skill.abnormal_type)
           end
         else
-          if stacked_info.skill.abnormal_instant?
-            stop_skill_effects(false, skill.abnormal_type)
-          end
-
-          stop_skill_effects(false, skill.abnormal_type)
+          return
         end
-      else
-        return
       end
 
       stacked_effects[skill.abnormal_type] = info

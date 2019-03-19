@@ -193,7 +193,7 @@ class DimensionalRift
       if empty_rooms.empty?
         empty_rooms = DimensionalRiftManager.get_free_rooms(@type)
       end
-      @current_room = empty_rooms.sample(Rnd)
+      @current_room = empty_rooms.sample(random: Rnd)
     end
 
     DimensionalRiftManager.get_room(@type, @current_room).party_inside = true

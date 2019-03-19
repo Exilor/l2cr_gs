@@ -27,7 +27,7 @@ module TargetHandler::Clan
 
       if clan
         clan.members.each do |m|
-          obj = m.player?
+          obj = m.player_instance?
 
           next if obj.nil? || obj == pc
 

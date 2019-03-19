@@ -11,7 +11,7 @@ class L2ClanMember
   @sex : Bool
   @race_ordinal : Int32
   getter clan
-  getter! player : L2PcInstance?
+  getter! player_instance : L2PcInstance?
 
   def initialize(@clan : L2Clan, pc : L2PcInstance)
     @clan = clan
@@ -27,7 +27,7 @@ class L2ClanMember
     @sponsor = 0
     @sex = pc.appearance.sex
     @race_ordinal = pc.race.to_i
-    @player = pc
+    @player_instance = pc
   end
 
   def initialize(@clan : L2Clan, rs)
@@ -44,8 +44,8 @@ class L2ClanMember
     @race_ordinal = rs.get_i32("race")
   end
 
-  def player=(player : L2PcInstance?)
-    pc = @player
+  def player_instance=(player : L2PcInstance?)
+    pc = @player_instance
     if player.nil? && pc
       @name = pc.name
       @level = pc.level
@@ -70,44 +70,44 @@ class L2ClanMember
       end
     end
 
-    @player = player
+    @player_instance = player
   end
 
   def online? : Bool
-    return false unless (pc = @player) && pc.online?
+    return false unless (pc = @player_instance) && pc.online?
     return false if pc.in_offline_mode?
     true
   end
 
   def class_id
-    @player.try &.class_id.to_i || @class_id
+    @player_instance.try &.class_id.to_i || @class_id
   end
 
   def level
-    @player.try &.level || @level
+    @player_instance.try &.level || @level
   end
 
   def name
-    @player.try &.name || @name
+    @player_instance.try &.name || @name
   end
 
   def l2id
-    @player.try &.l2id || @l2id
+    @player_instance.try &.l2id || @l2id
   end
 
   def title
-    @player.try &.title || @title
+    @player_instance.try &.title || @title
   end
 
   def pledge_type
-    @player.try &.pledge_type || @pledge_type
+    @player_instance.try &.pledge_type || @pledge_type
   end
 
   def pledge_type=(type : Int32)
     @pledge_type = type
 
-    if @player
-      @player.pledge_type = type
+    if @player_instance
+      @player_instance.pledge_type = type
     else
       update_pledge_type
     end
@@ -115,22 +115,18 @@ class L2ClanMember
 
   def update_pledge_type
     sql = "UPDATE characters SET subpledge=? WHERE charId=?"
-    GameDB.exec(
-      sql,
-      @pledge_type,
-      l2id
-    )
+    GameDB.exec(sql, @pledge_type, l2id)
   rescue e
     error e
   end
 
   def power_grade
-    @player.try &.power_grade || @power_grade
+    @player_instance.try &.power_grade || @power_grade
   end
 
   def power_grade=(grade : Int32)
     @power_grade = grade
-    if pc = @player
+    if pc = @player_instance
       pc.power_grade = grade
     else
       update_power_grade
@@ -139,11 +135,7 @@ class L2ClanMember
 
   def update_power_grade
     sql = "UPDATE characters SET power_grade=? WHERE charId=?"
-    GameDB.exec(
-      sql,
-      @power_grade,
-      l2id
-    )
+    GameDB.exec(sql, @power_grade, l2id)
   rescue e
     error e
   end
@@ -152,23 +144,23 @@ class L2ClanMember
   end
 
   def race_ordinal
-    @player.try &.race.to_i || @race_ordinal
+    @player_instance.try &.race.to_i || @race_ordinal
   end
 
   def sex
-    @player.try &.appearance.sex || @sex
+    @player_instance.try &.appearance.sex || @sex
   end
 
   def sponsor
-    @player.try &.sponsor || @sponsor
+    @player_instance.try &.sponsor || @sponsor
   end
 
   def apprentice
-    @player.try &.apprentice || @apprentice
+    @player_instance.try &.apprentice || @apprentice
   end
 
   def apprentice_or_sponsor_name : String
-    if pc = @player
+    if pc = @player_instance
       @apprentice = pc.apprentice
       @sponsor = pc.sponsor
     end

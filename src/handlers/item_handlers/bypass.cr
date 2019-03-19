@@ -7,7 +7,7 @@ module ItemHandler::Bypass
 
     item_id = item.id
     file_name = "data/html/item/#{item_id}.htm"
-    content = HtmCache.get_htm(pc.html_prefix, file_name)
+    content = HtmCache.get_htm(pc, file_name)
     html = Packets::Outgoing::NpcHtmlMessage.new(0, item_id)
 
     if content

@@ -19,12 +19,14 @@ module GamePacketHandler
     opcode = buffer.read_bytes(UInt8)
     state = client.state
 
-    packet_type = case state
+    packet_type =
+    case state
     when .connected?
       case opcode
       when 0x0e then ProtocolVersion
       when 0x2b then AuthLogin
-      else print_debug(opcode, buffer, state, client)
+      else
+        print_debug(opcode, buffer, state, client)
       end
     when .authed?
       case opcode
@@ -44,9 +46,27 @@ module GamePacketHandler
         when 0x93 then RequestEx2ndPasswordCheck
         when 0x94 then RequestEx2ndPasswordVerify
         when 0x95 then RequestEx2ndPasswordReq
-        else print_debug_double_opcode(opcode, op2, buffer, state, client)
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
         end
-      else print_debug(opcode, buffer, state, client)
+      else
+        print_debug(opcode, buffer, state, client)
+      end
+    when .joining?
+      case opcode
+      when 0x11 then EnterWorld
+      when 0xd0
+        if buffer.remaining < 2
+          warn "#{client} sent a 0xd0 without the second opcode."
+          return
+        end
+        case op2 = buffer.read_bytes(UInt16)
+        when 0x01 then RequestManorList
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
+        end
+      else
+        print_debug(opcode, buffer, state, client)
       end
     when .in_game?
       case opcode
@@ -63,7 +83,7 @@ module GamePacketHandler
       when 0x0b then RequestGiveNickName
       when 0x0f then MoveBackwardToLocation
       when 0x10 # Say
-      when 0x11 then EnterWorld
+      # when 0x11 then EnterWorld
       when 0x12 # CharacterSelect ("Start" was spammed when AUTHED)
         debug "Ignoring duplicate CharacterSelect packet."
       when 0x14 then RequestItemList
@@ -132,7 +152,8 @@ module GamePacketHandler
         when 0x01 # SuperCmdSummonCmd
         when 0x02 # SuperCmdServerStatus
         when 0x03 # SendL2ParamSetting
-        else print_debug_double_opcode(opcode, op2, buffer, state, client)
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
         end
       when 0x4d then RequestPledgeMemberList
       when 0x4f # RequestMagicList
@@ -346,7 +367,8 @@ module GamePacketHandler
           when 0x03 then RequestDeleteBookMarkSlot
           when 0x04 then RequestTeleportBookMark
           when 0x05 # RequestChangeBookMarkSlot
-          else print_debug_double_opcode(opcode, op3, buffer, state, client)
+          else
+            print_debug_double_opcode(opcode, op3, buffer, state, client)
           end
         when 0x52 then RequestWithDrawPremiumItem
         when 0x53 # RequestJump
@@ -400,13 +422,15 @@ module GamePacketHandler
         when 0x90 # BrLectureMark
         when 0x91 # RequestGoodsInventoryInfo
         when 0x92 # RequestUseGoodsInventoryItem
-        else print_debug_double_opcode(opcode, op2, buffer, state, client)
+        else
+          print_debug_double_opcode(opcode, op2, buffer, state, client)
         end
-      else print_debug(opcode, buffer, state, client)
+      else
+        print_debug(opcode, buffer, state, client)
       end
     end
 
-    if packet_type
+    if packet_type.is_a?(GameClientPacket.class)
       packet_type.allocate
     end
   end
@@ -415,14 +439,14 @@ module GamePacketHandler
     client.on_unknown_packet
     return unless Config.packet_handler_debug
     size = buf.remaining
-    warn "Unknown packet 0x#{opcode.to_s(16)} on state #{state.inspect} of client #{client}:"
+    warn { "Unknown packet 0x#{opcode.to_s(16)} on state #{state.inspect} of client #{client}." }
   end
 
   private def print_debug_double_opcode(op1, op2, buf, state, client)
     client.on_unknown_packet
     return unless Config.packet_handler_debug
     size = buf.remaining
-    warn "Unknown packet 0x#{op1.to_s(16)}:0x#{op2.to_s(16)} on state #{state.inspect} of client #{client}:"
+    warn { "Unknown packet 0x#{op1.to_s(16)}:0x#{op2.to_s(16)} on state #{state.inspect} of client #{client}." }
   end
 
   def accept?(socket)

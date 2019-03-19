@@ -1,20 +1,20 @@
 abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
-  private record SMParam, type : UInt8,
+  private record SMParam, type : Int8,
     value : String | Int32 | Int64 | {Int32, Int32} | {Int32, Int32, Int32}
 
-  private TEXT          =  0u8
-  private INT_NUMBER    =  1u8
-  private NPC_NAME      =  2u8
-  private ITEM_NAME     =  3u8
-  private SKILL_NAME    =  4u8
-  private CASTLE_NAME   =  5u8
-  private LONG_NUMBER   =  6u8
-  private ZONE_NAME     =  7u8
-  private ELEMENT_NAME  =  9u8
-  private INSTANCE_NAME = 10u8
-  private DOOR_NAME     = 11u8
-  private PLAYER_NAME   = 12u8
-  private SYSTEM_STRING = 13u8
+  private TEXT          =  0i8
+  private INT_NUMBER    =  1i8
+  private NPC_NAME      =  2i8
+  private ITEM_NAME     =  3i8
+  private SKILL_NAME    =  4i8
+  private CASTLE_NAME   =  5i8
+  private LONG_NUMBER   =  6i8
+  private ZONE_NAME     =  7i8
+  private ELEMENT_NAME  =  9i8
+  private INSTANCE_NAME = 10i8
+  private DOOR_NAME     = 11i8
+  private PLAYER_NAME   = 12i8
+  private SYSTEM_STRING = 13i8
 
   getter system_message_id
 
@@ -155,7 +155,8 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
     end
 
     if @params.size < param_count
-      raise "Not enough params for #{self.class}: #{@params.size}/#{param_count}"
+      raise "Too few parameters for #{@system_message_id}: " \
+        "given #{@params.size} but #{param_count} are required"
     end
 
     d param_count
@@ -183,6 +184,6 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
   end
 
   def to_s(io : IO)
-    io << {{@type}} << '(' << @system_message_id << ')'
+    io << self.class.simple_name << '(' << @system_message_id << ')'
   end
 end

@@ -103,7 +103,7 @@ class Quests::Q00403_PathOfTheRogue < Quest
         else
           if npc.id == CATS_EYE_BANDIT
             ns = NpcString::YOU_CHILDISH_FOOL_DO_YOU_THINK_YOU_CAN_CATCH_ME
-            say = NpcSay.new(npc, Packets::Incoming::Say2::NPC_ALL, ns)
+            say = NpcSay.new(npc, Say2::NPC_ALL, ns)
             attacker.send_packet(say)
           end
           npc.script_value = 1
@@ -126,11 +126,11 @@ class Quests::Q00403_PathOfTheRogue < Quest
     if qs && qs.started? && npc.script_value?(1) && Util.in_range?(1500, npc, killer, true)
       if npc.id == CATS_EYE_BANDIT
         str = NpcString::I_MUST_DO_SOMETHING_ABOUT_THIS_SHAMEFUL_INCIDENT
-        say = NpcSay.new(npc, Packets::Incoming::Say2::NPC_ALL, str)
+        say = NpcSay.new(npc, Say2::NPC_ALL, str)
         npc.broadcast_packet(say)
 
         if has_quest_items?(killer, MOST_WANTED_LIST)
-          random_item = STOLEN_ITEMS.sample(Rnd)
+          random_item = STOLEN_ITEMS.sample(random: Rnd)
           unless has_quest_items?(killer, random_item)
             give_items(killer, random_item, 1)
             if has_quest_items?(killer, STOLEN_ITEMS)

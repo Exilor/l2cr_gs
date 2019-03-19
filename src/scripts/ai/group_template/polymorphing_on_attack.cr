@@ -44,7 +44,7 @@ class NpcAI::PolymorphingOnAttack < AbstractNpcAI
         if npc.current_hp <= (npc.max_hp * tmp[1]) / 100
           if Rnd.rand(100) < tmp[2]
             if tmp[3] >= 0
-              str = TEXTS[tmp[3]].sample(Rnd)
+              str = TEXTS[tmp[3]].sample(random: Rnd)
               cs = CreatureSay.new(npc.l2id, Say2::NPC_ALL, npc.name, str)
               npc.broadcast_packet(cs)
             end
@@ -53,7 +53,7 @@ class NpcAI::PolymorphingOnAttack < AbstractNpcAI
             new_npc = add_spawn(tmp[0], npc.x, npc.y, npc.z + 10, npc.heading, false, 0, true)
             original_attacker = is_summon ? attacker.summon : attacker
             new_npc.set_running
-            npc.add_damage_hate(original_attacker, 0, 500i64)
+            npc.add_damage_hate(original_attacker, 0, 500)
             new_npc.set_intention(AI::ATTACK, original_attacker)
           end
         end

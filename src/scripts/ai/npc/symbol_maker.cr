@@ -25,7 +25,7 @@ class NpcAI::SymbolMaker < AbstractNpcAI
     return unless pc
 
     case event
-    when /^symbol_maker(?:-[123])?\.htm$/
+    when /\Asymbol_maker(?:-[123])?\.htm\z/
       return event
     when "Draw"
       pc.send_packet(HennaEquipList.new(pc))

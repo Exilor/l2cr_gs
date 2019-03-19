@@ -4,61 +4,39 @@ module BoatManager
   extend self
   extend Loggable
 
-  private BOATS =Hash(Int32, L2BoatInstance).new
+  private BOATS = Hash(Int32, L2BoatInstance).new
   private BUSY_DOCKS = Slice.new(3, false)
 
   TALKING_ISLAND = 0
-  GLUDIN_HARBOR  = 1
-  RUNE_HARBOR    = 2
+  GLUDIN_HARBOR = 1
+  RUNE_HARBOR = 2
 
   def load
-    if boat = get_new_boat(1, -96622, 261660, -3610, 32768)
-      boat.register_engine(BoatTalkingGludin.new(boat))
-      boat.run_engine(180_000)
-      dock_ship(TALKING_ISLAND, true)
-    end
+    boat = get_new_boat(2, 48950, 190613, -3610, 60800)
+    boat.register_engine(BoatGiranTalking.new(boat))
+    boat.run_engine(180_000)
 
-    if boat = get_new_boat(2, 48950, 190613, -3610, 60800)
-      boat.register_engine(BoatGiranTalking.new(boat))
-      boat.run_engine(180_000)
-    end
+    boat = get_new_boat(3, -95686, 150514, -3610, 16723)
+    boat.register_engine(BoatGludinRune.new(boat))
+    boat.run_engine(180_000)
+    dock_ship(GLUDIN_HARBOR, true)
 
-    if boat = get_new_boat(3, -95686, 150514, -3610, 16723)
-      boat.register_engine(BoatGludinRune.new(boat))
-      boat.run_engine(180_000)
-      dock_ship(GLUDIN_HARBOR, true)
-    end
+    boat = get_new_boat(4, 111264, 226240, -3610, 32768)
+    boat.register_engine(BoatInnadrilTour.new(boat))
+    boat.run_engine(180_000)
 
-    if boat = get_new_boat(4, 111264, 226240, -3610, 32768)
-      boat.register_engine(BoatInnadrilTour.new(boat))
-      boat.run_engine(180_000)
-    end
+    boat = get_new_boat(5, 34381, -37680, -3610, 40785)
+    boat.register_engine(BoatRunePrimeval.new(boat))
+    boat.run_engine(180_000)
+    dock_ship(RUNE_HARBOR, true)
 
-    if boat = get_new_boat(5, 34381, -37680, -3610, 40785)
-      boat.register_engine(BoatRunePrimeval.new(boat))
-      boat.run_engine(180_000)
-      dock_ship(RUNE_HARBOR, true)
-    end
-
-
-
-
-    # boat = get_new_boat(5, 38140, -35765, -3615, 32740)
-    # boat.register_engine BoatRuneSoul.new(boat)
-    # boat.run_engine(45_000)
+    boat = get_new_boat(1, -96622, 261660, -3610, 32768)
+    boat.register_engine(BoatTalkingGludin.new(boat))
+    boat.run_engine(180_000)
+    dock_ship(TALKING_ISLAND, true)
   end
 
-  def custom
-    boat = get_new_boat(6, 38140, -35765, -3615, 32740)
-    boat.register_engine BoatRuneSoul.new(boat)
-    boat.run_engine(10_000)
-  end
-
-  def get_new_boat(boat_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32) : L2BoatInstance?
-    unless Config.allow_boat
-      return
-    end
-
+  def get_new_boat(boat_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32) : L2BoatInstance
     set = StatsSet.new
     set["npcId"] = boat_id
     set["level"] = 0

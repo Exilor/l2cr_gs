@@ -2,13 +2,13 @@ class MagicUseTask
   include Runnable
 
   property skill : Skill
-  property targets : Array(L2Object)
+  property targets : Array(L2Object)?
   property skill_time : Int32
   property count : Int32 = 0
   property phase : UInt8 = 1u8
   property? simultaneous : Bool
 
-  initializer character: L2Character, targets: Array(L2Object), skill: Skill,
+  initializer character: L2Character, targets: Array(L2Object)?, skill: Skill,
     skill_time: Int32, simultaneous: Bool
 
   def run

@@ -21,9 +21,9 @@ class NpcAI::FreyasSteward < AbstractNpcAI
   def on_talk(npc, pc)
     if pc.level >= MIN_LEVEL
       pc.tele_to_location(TELEPORT_LOC)
-      nil
-    else
-      "32029-1.html"
+      return
     end
+
+    "32029-1.html"
   end
 end

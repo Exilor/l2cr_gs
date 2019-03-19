@@ -18,13 +18,7 @@ abstract class Inventory < ItemContainer
 
     {% if slot != "TOTALSLOTS" %}
       def {{slot.downcase.id}}_slot? : L2ItemInstance?
-        begin
-          @paperdoll[{{i}}]
-        rescue e
-          error "Index: #{{{i}}}, size: #{@paperdoll.size}"
-          error e
-          nil
-        end
+        @paperdoll[{{i}}]
       end
 
       def {{slot.downcase.id}}_slot : L2ItemInstance

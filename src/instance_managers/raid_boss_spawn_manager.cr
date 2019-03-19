@@ -88,7 +88,7 @@ module RaidBossSpawnManager
   end
 
   def get_raid_boss_status_id(id : Int32) : Status
-    if temp = BOSSES[id]
+    if temp = BOSSES[id]?
       temp.raid_status
     elsif SCHEDULES.has_key?(id)
       Status::DEAD
@@ -107,6 +107,22 @@ module RaidBossSpawnManager
     STORED_INFO[raid.id] = info
     info "Spawning night raid boss #{raid.name}."
     BOSSES[raid.id] = raid
+  end
+
+  def defined?(boss_id : Int32) : Bool
+    SPAWNS.has_key?(boss_id)
+  end
+
+  def bosses : Hash(Int32, L2RaidBossInstance)
+    BOSSES
+  end
+
+  def spawns : Hash(Int32, L2Spawn)
+    SPAWNS
+  end
+
+  def stored_info : Hash(Int32, StatsSet)
+    STORED_INFO
   end
 
   def clean_up
@@ -149,7 +165,9 @@ module RaidBossSpawnManager
   end
 
   def update_status(boss : L2RaidBossInstance, is_dead : Bool)
-    info = STORED_INFO[boss.id]
+    unless info = STORED_INFO[boss.id]?
+      return
+    end
 
     if is_dead
       boss.raid_status = Status::DEAD

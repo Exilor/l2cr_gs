@@ -145,7 +145,7 @@ module CastleManager
       return
     end
 
-    unless pc = member.player?
+    unless pc = member.player_instance?
       return
     end
 

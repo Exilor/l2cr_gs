@@ -24,11 +24,12 @@ module Config
   end
 
   class ClassMasterSettings
+    @claim_items = {} of Int32 => Array(ItemHolder)
+    @reward_items = {} of Int32 => Array(ItemHolder)
+    @allowed_class_change = {} of Int32 => Bool
+
     def initialize(line)
-      @claim_items = {} of Int32 => Array(ItemHolder)
-      @reward_items = {} of Int32 => Array(ItemHolder)
-      @allowed_class_change = {} of Int32 => Bool
-      parse_config_line(line)
+      parse_config_line(line.strip)
     end
 
     private def parse_config_line(line)
@@ -39,9 +40,9 @@ module Config
         @allowed_class_change[job] = true
         required_items = [] of ItemHolder
         unless st.empty?
-          st2 = st.shift.split("[],")
+          st2 = st.shift.split(/\[([^\]]*)\]/).reject &.empty?
           until st2.empty?
-            st3 = st2.shift.split("()")
+            st3 = st2.shift.split(/\(\)/)
             item_id = st3.shift.to_i
             count = st3.shift.to_i64
             required_items << ItemHolder.new(item_id, count)
@@ -52,9 +53,9 @@ module Config
 
         reward_items = [] of ItemHolder
         unless st.empty?
-          st2 = st.shift.split("[],")
+          st2 = st.shift.split(/\[([^\]]*)\]/).reject &.empty?
           until st2.empty?
-            st3 = st2.shift.split("()")
+            st3 = st2.shift.split(/\(\)/)
             item_id = st3.shift.to_i
             count = st3.shift.to_i64
             reward_items << ItemHolder.new(item_id, count)
@@ -66,15 +67,15 @@ module Config
     end
 
     def allowed?(job)
-      @allowed_class_change[job]
+      !!@allowed_class_change[job]?
     end
 
     def get_reward_items(job)
-      @reward_items[job]?
+      @reward_items[job]? || Slice(ItemHolder).empty
     end
 
     def get_require_items(job)
-      @claim_items[job]?
+      @claim_items[job]? || Slice(ItemHolder).empty
     end
   end
 
@@ -139,7 +140,7 @@ module Config
   class_property alt_perfect_shld_block = 0
   class_property effect_tick_ratio = 0i64
   class_property allow_class_masters = false
-  class_property class_master_settings : ClassMasterSettings?
+  class_property! class_master_settings : ClassMasterSettings?
   class_property allow_entire_tree = false
   class_property alternate_class_master = false
   class_property life_crystal_needed = false

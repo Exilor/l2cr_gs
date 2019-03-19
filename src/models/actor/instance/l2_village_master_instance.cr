@@ -167,10 +167,7 @@ class L2VillageMasterInstance < L2NpcInstance
       when 3 # change/cancel subclass
         if pc.subclasses.empty?
           html.set_file(pc, "data/html/villagemaster/SubClass_ModifyEmpty.htm")
-          exit_case = true
-        end
-
-        unless exit_case
+        else
           if pc.total_subclasses > 3
             html.set_file(pc, "data/html/villagemaster/SubClass_ModifyCustom.htm")
             content3 = String.build(200) do |io|
@@ -184,25 +181,25 @@ class L2VillageMasterInstance < L2NpcInstance
               end
             end
             html["%list%"] = content3
-          end
-        else
-          html.set_file(pc, "data/html/villagemaster/SubClass_Modify.htm")
-          if temp = pc.subclasses[1]?.try &.class_id
-            html["%sub1%"] = ClassListData.get_class!(temp).client_code
           else
-            html["<a action=\"bypass -h npc_%objectId%_Subclass 6 1\">%sub1%</a><br>"] = ""
-          end
+            html.set_file(pc, "data/html/villagemaster/SubClass_Modify.htm")
+            if temp = pc.subclasses[1]?.try &.class_id
+              html["%sub1%"] = ClassListData.get_class!(temp).client_code
+            else
+              html["<a action=\"bypass -h npc_%objectId%_Subclass 6 1\">%sub1%</a><br>"] = ""
+            end
 
-          if temp = pc.subclasses[2]?.try &.class_id
-            html["%sub2%"] = ClassListData.get_class!(temp).client_code
-          else
-            html["<a action=\"bypass -h npc_%objectId%_Subclass 6 2\">%sub2%</a><br>"] = ""
-          end
+            if temp = pc.subclasses[2]?.try &.class_id
+              html["%sub2%"] = ClassListData.get_class!(temp).client_code
+            else
+              html["<a action=\"bypass -h npc_%objectId%_Subclass 6 2\">%sub2%</a><br>"] = ""
+            end
 
-          if temp = pc.subclasses[3]?.try &.class_id
-            html["%sub3%"] = ClassListData.get_class!(temp).client_code
-          else
-            html["<a action=\"bypass -h npc_%objectId%_Subclass 6 3\">%sub3%</a><br>"] = ""
+            if temp = pc.subclasses[3]?.try &.class_id
+              html["%sub3%"] = ClassListData.get_class!(temp).client_code
+            else
+              html["<a action=\"bypass -h npc_%objectId%_Subclass 6 3\">%sub3%</a><br>"] = ""
+            end
           end
         end
       when 4 # add subclass (action)
@@ -348,10 +345,10 @@ class L2VillageMasterInstance < L2NpcInstance
 
   private def get_subclass_menu(race : Race) : String
     if Config.alt_game_subclass_everywhere || !race.kamael?
-      "data/html/villagemaster/SubClass.htm"
-    else
-      "data/html/villagemaster/SubClass_NoOther.htm"
+      return "data/html/villagemaster/SubClass.htm"
     end
+
+    "data/html/villagemaster/SubClass_NoOther.htm"
   end
 
   private def subclass_fail : String

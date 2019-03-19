@@ -19,10 +19,11 @@ class Packets::Outgoing::ShopPreviewList < GameServerPacket
       item = product.item
       item.crystal_type.to_i <= @expertise && item.equippable?
     end
-    debug "Sending #{new_length} items."
+
     h new_length
     @list.each do |product|
       item = product.item
+
       if item.crystal_type.to_i <= @expertise && item.equippable?
         d product.item_id
         h item.type_2.id

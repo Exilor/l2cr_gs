@@ -16,7 +16,7 @@ class Condition
       castle = CastleManager.get_castle(pc)
       fort = FortManager.get_fort(pc)
 
-      unless castle && fort
+      unless castle || fort
         can = false
       end
 

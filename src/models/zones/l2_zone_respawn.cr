@@ -45,7 +45,7 @@ abstract class L2ZoneRespawn < L2ZoneType
 
   def spawn_loc
     if Config.random_respawn_in_town_enabled
-      @spawn_locs.not_nil!.sample(Rnd)
+      @spawn_locs.not_nil!.sample(random: Rnd)
     else
       @spawn_locs.not_nil!.first
     end
@@ -54,7 +54,7 @@ abstract class L2ZoneRespawn < L2ZoneType
   def other_spawn_loc
     if @other_spawn_locs
       if Config.random_respawn_in_town_enabled
-        @other_spawn_locs.not_nil!.sample(Rnd)
+        @other_spawn_locs.not_nil!.sample(random: Rnd)
       else
         @other_spawn_locs.not_nil!.first
       end
@@ -66,7 +66,7 @@ abstract class L2ZoneRespawn < L2ZoneType
   def chaotic_spawn_loc
     if @chaotic_spawn_locs
       if Config.random_respawn_in_town_enabled
-        @chaotic_spawn_locs.not_nil!.sample(Rnd)
+        @chaotic_spawn_locs.not_nil!.sample(random: Rnd)
       else
         @chaotic_spawn_locs.not_nil!.first
       end
@@ -78,7 +78,7 @@ abstract class L2ZoneRespawn < L2ZoneType
   def banish_spawn_loc
     if @banish_spawn_locs
       if Config.random_respawn_in_town_enabled
-        @banish_spawn_locs.not_nil!.sample(Rnd)
+        @banish_spawn_locs.not_nil!.sample(random: Rnd)
       else
         @banish_spawn_locs.not_nil!.first
       end

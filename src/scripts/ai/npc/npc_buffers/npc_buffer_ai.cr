@@ -98,8 +98,7 @@ struct NpcAI::NpcBufferAI
     end
 
     if target.is_a?(L2TamedBeastInstance)
-      warn "TODO: when target is a L2TamedBeastInstance."
-      # return enemy?(pc, target.owner)
+      return enemy?(pc, target.owner)
     end
 
     if target.monster?

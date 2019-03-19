@@ -389,8 +389,6 @@ class NpcAI::MinionSpawnManager < AbstractNpcAI
 
   def on_attack(npc, attacker, damage, is_summon)
     if npc.is_a?(L2MonsterInstance) && !npc.teleporting?
-      # p npc.template.parameters.get_i32("SummonPrivateRate", 0)
-      # p npc.script_value?(0)
       if Rnd.rand(1..100) <= npc.template.parameters.get_i32("SummonPrivateRate", 0)
         if npc.script_value?(0)
           # p npc.template.parameters.get_minion_list("Privates")
@@ -398,7 +396,7 @@ class NpcAI::MinionSpawnManager < AbstractNpcAI
             add_minion(npc, is.id)
           end
 
-          broadcast_npc_say(npc, Say2::NPC_ALL, ON_ATTACK_MSG.sample(Rnd))
+          broadcast_npc_say(npc, Say2::NPC_ALL, ON_ATTACK_MSG.sample(random: Rnd))
           npc.script_value = 1
         end
       end

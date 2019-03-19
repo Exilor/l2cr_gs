@@ -1,8 +1,8 @@
 module ItemsOnGroundManager
+  extend self
   extend Runnable
   extend Synchronizable
   extend Loggable
-  extend self
 
   private ITEMS = Array(L2ItemInstance).new
 

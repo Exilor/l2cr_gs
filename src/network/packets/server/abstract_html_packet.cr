@@ -41,7 +41,7 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
   end
 
   def set_file(pc, path : String)
-    unless content = HtmCache.get_htm(path)
+    unless content = HtmCache.get_htm(pc, path)
       self.html = "<html><body>My Text is missing:<br>#{path}</body></html>"
       return false
     end

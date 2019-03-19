@@ -354,7 +354,7 @@ class FortSiege
       end
 
       FortManager.forts.each do |fort|
-        if fort.siege.attacker_clan[pc.clan_id]?
+        if fort.siege.attacker_clans[pc.clan_id]?
           return 3
         end
 
@@ -473,7 +473,7 @@ class FortSiege
     end
 
     if owner = fort.owner_clan?
-      owner.broadcast_to_online_members(SystemMessageId::A_FORTRESS_IS_UNDER_ATTACK)
+      owner.broadcast_to_online_members(SystemMessage.a_fortress_is_under_attack)
     end
 
     task = ->{ schedule_start_siege_task(3600) }

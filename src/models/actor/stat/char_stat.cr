@@ -19,11 +19,11 @@ class CharStat
 
   getter_initializer active_char: L2Character
 
-  def level
+  def level : Int32
     @level.to_i32
   end
 
-  def level=(level : Int)
+  def level=(level : Int32)
     @level = level.to_u8
   end
 

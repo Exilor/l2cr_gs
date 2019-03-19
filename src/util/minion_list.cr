@@ -76,7 +76,7 @@ class MinionList
 
   def on_assist(caller : L2Character, attacker : L2Character?)
     if !@master.looks_dead? && !@master.in_combat?
-      @master.add_damage_hate(attacker, 0, 1i64)
+      @master.add_damage_hate(attacker, 0, 1)
     end
 
     caller_is_master = caller == @master
@@ -87,7 +87,7 @@ class MinionList
 
     @minion_references.each do |minion|
       if minion.alive? && (caller_is_master || !minion.in_combat?)
-        minion.add_damage_hate(attacker, 0, aggro.to_i64)
+        minion.add_damage_hate(attacker, 0, aggro)
       end
     end
   end

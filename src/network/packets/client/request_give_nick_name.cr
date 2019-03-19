@@ -26,7 +26,7 @@ class Packets::Incoming::RequestGiveNickName < GameClientPacket
       end
 
       if member1 = pc.clan.get_clan_member(@target)
-        if member = member1.player
+        if member = member1.player_instance?
           member.title = @title
           member.send_packet(SystemMessageId::TITLE_CHANGED)
           member.broadcast_title_info

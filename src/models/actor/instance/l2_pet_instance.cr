@@ -14,21 +14,17 @@ class L2PetInstance < L2Summon
   getter control_l2id : Int32
   getter current_feed = 0
   getter(inventory) { PetInventory.new(self) }
+  getter! name
   getter? mountable : Bool
   getter? in_support_mode = true # L2J: _bufferMode
-  getter! name
   property? respawned : Bool = false
 
   def initialize(template : L2NpcTemplate, owner : L2PcInstance, control : L2ItemInstance)
-    initialize(
-      template,
-      owner,
-      control,
-      template.display_id == 12564 ? owner.level : template.level
-    )
+    level = template.display_id == 12564 ? owner.level : template.level.to_i32
+    initialize(template, owner, control, level)
   end
 
-  def initialize(template : L2NpcTemplate, owner : L2PcInstance, control : L2ItemInstance, level : Int)
+  def initialize(template : L2NpcTemplate, owner : L2PcInstance, control : L2ItemInstance, level : Int32)
     super(template, owner)
 
     @control_l2id = control.l2id
@@ -36,6 +32,7 @@ class L2PetInstance < L2Summon
     stat.level = Math.max(level, min_level)
 
     @mountable = PetDataTable.mountable?(template.id)
+
     pet_data
     pet_level_data
     inventory.restore
@@ -599,7 +596,7 @@ class L2PetInstance < L2Summon
       return false
     end
 
-    level_increased = stat.add_level(value.to_i8)
+    level_increased = stat.add_level(value)
 
     on_level_change(level_increased)
 

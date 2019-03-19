@@ -1,5 +1,6 @@
 require "./fort_siege"
 require "./fort_updater"
+require "../../enums/music"
 
 class Fort < AbstractResidence
   include Loggable
@@ -125,7 +126,7 @@ class Fort < AbstractResidence
     if old_owner && clan != old_owner
       update_clans_reputation(old_owner, true)
       begin
-        if old_leader = old_owner.leader.player?
+        if old_leader = old_owner.leader.player_instance?
           if old_leader.mount_type.wyvern?
             old_leader.dismount
           end
@@ -529,7 +530,11 @@ class Fort < AbstractResidence
 
   def get_castle_by_ambassador(npc_id : Int32) : Castle?
     castle_id = get_castle_id_by_ambassador(npc_id)
-    CastleManager.get_castle_by_id(castle_id)
+    unless castle = CastleManager.get_castle_by_id(castle_id)
+      raise "No castle found for ambassador with npc_id #{npc_id}"
+    end
+
+    castle
   end
 
   def contracted_castle_id : Int32
@@ -621,8 +626,6 @@ class Fort < AbstractResidence
       sp.z = rs.get_i32("z")
       sp.heading = rs.get_i32("heading")
       sp.respawn_delay = 60
-      sp.do_spawn
-      sp.start_respawn
       @siege_npcs << sp
     end
   rescue e
@@ -640,8 +643,6 @@ class Fort < AbstractResidence
       sp.z = rs.get_i32("z")
       sp.heading = rs.get_i32("heading")
       sp.respawn_delay = 60
-      sp.do_spawn
-      sp.start_respawn
       @npc_commanders << sp
     end
   rescue e
@@ -662,8 +663,6 @@ class Fort < AbstractResidence
       sp.z = rs.get_i32("z")
       sp.heading = rs.get_i32("heading")
       sp.respawn_delay = 60
-      sp.do_spawn
-      sp.start_respawn
       @special_envoys << sp
       @envoy_castles[sp.id] = castle_id
       @available_castles << castle_id

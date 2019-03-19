@@ -4,7 +4,6 @@ require "../../models/admin_command_access_right"
 module AdminData
   extend self
   extend XMLReader
-  extend Loggable
 
   private ACCESS_LEVELS = {} of Int32 => AccessLevel
   private ADMIN_COMMAND_ACCESS_RIGHTS = {} of String => AdminCommandAccessRight

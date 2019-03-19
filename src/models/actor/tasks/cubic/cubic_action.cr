@@ -52,7 +52,7 @@ struct CubicAction
       @current_count.add(1)
     elsif Rnd.rand(100) < @chance
       # debug "Choosing a skill among #{@cubic.skills}."
-      return unless skill = @cubic.skills.sample?(Rnd)
+      return unless skill = @cubic.skills.sample?(random: Rnd)
       debug "Skill: #{skill}."
       if skill.id == L2CubicInstance::SKILL_CUBIC_HEAL
         @cubic.cubic_target_for_heal

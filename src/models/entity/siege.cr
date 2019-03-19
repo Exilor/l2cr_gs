@@ -54,9 +54,9 @@ class Siege
         castle.ticket_buy_count = 0
 
         clan.members.each do |m|
-          pc = m.player?
+          pc = m.player_instance?
           if pc && pc.noble?
-            warn "TODO: Hero."
+            warn "TODO: #{pc.name} is a hero."
             # Hero.set_castle_taken(pc.l2id, castle.residence_id)
           end
         end

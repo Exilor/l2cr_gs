@@ -149,6 +149,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
               handler.use_bypass(@command, pc, nil)
             end
           else
+            debug "#{handler} will handle #{@command}."
             handler.use_bypass(@command, pc, nil)
           end
         else

@@ -7,7 +7,6 @@ module CastleManorManager
   extend self
   extend XMLReader
   # extend Storable
-  extend Loggable
 
   private INSERT_PRODUCT = "INSERT INTO castle_manor_production VALUES (?, ?, ?, ?, ?, ?)"
   private INSERT_CROP = "INSERT INTO castle_manor_procure VALUES (?, ?, ?, ?, ?, ?, ?)"
@@ -218,7 +217,7 @@ module CastleManorManager
         if owner = castle.owner?
           leader = owner.leader?
           if leader && leader.online?
-            leader.player.send_packet(SystemMessageId::THE_MANOR_INFORMATION_HAS_BEEN_UPDATED)
+            leader.player_instance.send_packet(SystemMessageId::THE_MANOR_INFORMATION_HAS_BEEN_UPDATED)
           end
         end
       end
@@ -249,7 +248,7 @@ module CastleManorManager
 
             leader = owner.leader?
             if leader && leader.online?
-              leader.player.send_packet(SystemMessageId::THE_AMOUNT_IS_NOT_SUFFICIENT_AND_SO_THE_MANOR_IS_NOT_IN_OPERATION)
+              leader.player_instance.send_packet(SystemMessageId::THE_AMOUNT_IS_NOT_SUFFICIENT_AND_SO_THE_MANOR_IS_NOT_IN_OPERATION)
             end
           else
             castle.add_to_treasury_no_tax(-manor_cost)

@@ -1,4 +1,4 @@
-struct TerminateReturn < AbstractEventReturn
+class TerminateReturn < AbstractEventReturn
   getter terminate
 
   def initialize(@terminate : Bool, override : Bool, abort : Bool)

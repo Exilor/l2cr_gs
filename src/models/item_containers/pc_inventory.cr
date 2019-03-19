@@ -260,7 +260,7 @@ class PcInventory < Inventory
       @ancient_adena = item
     end
 
-    if actor && item # && item is custom
+    if actor# && item # && item is custom
       if Config.force_inventory_update
         actor.send_packet(ItemList.new(actor, false))
       else
@@ -285,7 +285,8 @@ class PcInventory < Inventory
     if @ancient_adena && (@ancient_adena.not_nil!.count <= 0 || @ancient_adena.not_nil!.owner_id != owner_id)
       @ancient_adena = nil
     end
-    if item # check
+
+    if item
       OnPlayerItemTransfer.new(actor, item, target).async(item.template)
     end
 

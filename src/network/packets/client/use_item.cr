@@ -1,4 +1,6 @@
 class Packets::Incoming::UseItem < GameClientPacket
+  private FORMAL_WEAR_ID = 6408
+
   @l2id = 0
   @ctrl = false
   @item_id = 0
@@ -63,7 +65,7 @@ class Packets::Incoming::UseItem < GameClientPacket
       item.template.skills.try &.each do |holder|
         if skill = holder.skill?
           if skill.has_effect_type?(L2EffectType::TELEPORT)
-            debug "#{pc.name} can't use #{item.template.name} because it's a teleport item and he has karma."
+            debug { "#{pc.name} can't use #{item.template.name} because it's a teleport item and he has karma."}
             return
           end
         end
@@ -89,13 +91,13 @@ class Packets::Incoming::UseItem < GameClientPacket
     end
 
     if item.equippable?
-      if @item_id == 6408 && pc.cursed_weapon_equipped?
+      if @item_id == FORMAL_WEAR_ID && pc.cursed_weapon_equipped?
         return
       end
 
-      # if FortSiegeManager.combat?(@item_id)
-      #   return
-      # end
+      if FortSiegeManager.combat?(@item_id)
+        return
+      end
 
       if pc.combat_flag_equipped?
         return
@@ -127,13 +129,13 @@ class Packets::Incoming::UseItem < GameClientPacket
         end
       when L2Item::SLOT_CHEST, L2Item::SLOT_BACK, L2Item::SLOT_GLOVES, L2Item::SLOT_FEET, L2Item::SLOT_HEAD, L2Item::SLOT_FULL_ARMOR, L2Item::SLOT_LEGS
         if pc.race.kamael? && item.template.item_type == ArmorType::HEAVY
-          debug "#{pc.name} is Kamael and cannot equip heavy armor."
+          debug { "#{pc.name} is Kamael and cannot equip heavy armor." }
           pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
           return
         end
       when L2Item::SLOT_DECO
         if !item.equipped? && pc.inventory.talisman_slots == 0
-          debug "#{pc.name} has no talisman slots."
+          debug { "#{pc.name} has no talisman slots." }
           pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
           return
         end
@@ -142,10 +144,10 @@ class Packets::Incoming::UseItem < GameClientPacket
       if pc.casting_now? || pc.casting_simultaneously_now?
         set_next_action(pc, item)
       elsif pc.attacking_now?
-        time = pc.attack_end_time - Time.ns
-        time /= 1_000_000.0
-        debug "Using equippable item in #{time} ms."
-        schedule_equip(pc, item, time)
+        time = Time.ns_to_ms(pc.attack_end_time - Time.ns)
+        debug { "Using equippable item in #{time} ms." }
+        task = ScheduleEquip.new(pc, item)
+        ThreadPoolManager.schedule_general(task, time)
       else
         pc.use_equippable_item(item, true)
       end
@@ -176,9 +178,14 @@ class Packets::Incoming::UseItem < GameClientPacket
     pc.ai.next_action = next_action
   end
 
-  private def schedule_equip(pc, item, time)
-    task = ->{ pc.use_equippable_item(item, false) }
-    ThreadPoolManager.schedule_general(task, time)
+  private struct ScheduleEquip
+    include Runnable
+
+    initializer pc: L2PcInstance, item: L2ItemInstance
+
+    def run
+      @pc.use_equippable_item(@item, false)
+    end
   end
 
   private def reuse_data(pc : L2PcInstance, item : L2ItemInstance, remaining_time : Int)

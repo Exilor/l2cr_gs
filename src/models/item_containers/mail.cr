@@ -22,7 +22,7 @@ class Mail < ItemContainer
   end
 
   def return_to_wh(wh)
-    @items.each do |item|
+    @items.safe_each do |item|
       if wh
         transfer_item("Expire", item.l2id, item.count, wh, nil, nil)
       else

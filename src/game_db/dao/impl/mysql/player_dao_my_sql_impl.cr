@@ -244,7 +244,6 @@ module GameDB
       )
       info "#{pc.name}'s basic data saved."
     rescue e
-      p [pc.class_id.to_i, pc.base_class]
       error e
     end
 

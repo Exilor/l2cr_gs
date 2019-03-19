@@ -16,6 +16,7 @@ module UserCommandHandler::InstanceZone
 
     if instance_times = InstanceManager.get_all_instance_times(pc.l2id)
       instance_times.each do |instance_id, remaining_time|
+        debug "Remaining time for instance with id #{instance_id}: #{remaining_time}."
         if remaining_time > 60
           if first_message
             first_message = false

@@ -6,7 +6,7 @@ class SystemMessageId
   property static_system_message : Packets::Outgoing::SystemMessage?
 
   private def initialize(@id : Int32)
-    MAP[id] = self
+    MAP[id] = self # cache messages created at runtime or not?
   end
 
   private def initialize(@name : String, @id : Int32)

@@ -104,6 +104,26 @@ class L2Attackable < L2Npc
   end
 
   def reduce_current_hp(damage : Float64, attacker : L2Character?, awake : Bool, dot : Bool, skill : Skill?)
+    if raid? && !minion? && attacker && attacker.party? && attacker.party.in_command_channel? && attacker.party.command_channel.meets_raid_war_condition?(self)
+      if @first_command_channel_attacked.nil?
+        sync do
+          unless @first_command_channel_attacked
+            if first_command_channel_attacked = attacker.party.command_channel?
+              timer = CommandChannelTimer.new(self)
+              @command_channel_timer = timer
+              @command_channel_last_attack = Time.ms
+              ThreadPoolManager.schedule_general(timer, 10000)
+              cs = CreatureSay.new(0, Packets::Incoming::Say2::PARTYROOM_ALL, "", "You have looting rights!") # L2J TODO: retail message
+              first_command_channel_attacked.broadcast_packet(cs)
+              @first_command_channel_attacked = first_command_channel_attacked
+            end
+          end
+        end
+      elsif attacker.party.command_channel == @first_command_channel_attacked
+        @command_channel_last_attack = Time.ms
+      end
+    end
+
     if event_mob?
       return
     end
@@ -347,8 +367,11 @@ class L2Attackable < L2Npc
     error e
   end
 
-  def add_damage_hate(attacker : L2Character?, damage : Int32, aggro : Int64)
+  def add_damage_hate(attacker : L2Character?, damage : Int, aggro : Int)
     return unless attacker
+
+    damage = damage.to_i32
+    aggro = aggro.to_i64
 
     info = @aggro_list[attacker] ||= AggroInfo.new(attacker)
     info.add_damage(damage)
@@ -360,7 +383,7 @@ class L2Attackable < L2Npc
     end
 
     if target_player && aggro == 0
-      add_damage_hate(attacker, 0, 1i64)
+      add_damage_hate(attacker, 0, 1)
 
       if intention.idle?
         set_intention(AI::ACTIVE)
@@ -378,7 +401,8 @@ class L2Attackable < L2Npc
     end
   end
 
-  def reduce_hate(target : L2Character?, amount : Int64)
+  def reduce_hate(target : L2Character?, amount : Int)
+    amount = amount.to_i64
     # if ai.is_a?(L2SiegeGuardAI) || ai.is_a?(L2FortSiegeGuardAI)
     #   stop_hating(target)
     #   self.target = nil
@@ -566,11 +590,6 @@ class L2Attackable < L2Npc
     warn "TODO: L2Attackable#do_event_drop."
   end
 
-  # def active_weapon
-  #   # return nil
-  #   # is this really called anywhere?
-  # end
-
   def in_aggro_list?(char : L2Character) : Bool
     @aggro_list.has_key?(char)
   end
@@ -648,6 +667,7 @@ class L2Attackable < L2Npc
   end
 
   def add_absorber(attacker : L2PcInstance)
+    debug { "L2Attackable#add_absorber(#{attacker})" }
     info = @absorbers_list[attacker.l2id]?
 
     if info

@@ -15,7 +15,7 @@ class NpcAI::AltarsOfSacrifice < AbstractNpcAI
         raise "illegal state"
       end
 
-      spawn = L2Spawn.new(@boss_npc_ids.sample(Rnd))
+      spawn = L2Spawn.new(@boss_npc_ids.sample(random: Rnd))
       spawn.amount = 1
       spawn.heading = Rnd.u16.to_i32
 
@@ -34,10 +34,6 @@ class NpcAI::AltarsOfSacrifice < AbstractNpcAI
         boss.delete_me
         @spawned_boss = nil
       end
-    end
-
-    def unload
-      despawn_boss
     end
 
     def has_bosses? : Bool
@@ -128,14 +124,6 @@ class NpcAI::AltarsOfSacrifice < AbstractNpcAI
 
   private def get_despawn_boss_index(event)
     event.from(EVT_DESPAWN_BOSS_PRE.size).to_i
-  end
-
-  def unload(remove_from_list)
-    info "Unloading altars due to script unloading."
-
-    ALTARS.each &.unload
-
-    super
   end
 
   def on_adv_event(event, npc, player)

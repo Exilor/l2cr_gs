@@ -15,7 +15,7 @@ class EffectHandler::OpenChest < AbstractEffect
       chest.reduce_current_hp(chest.max_hp.to_f64, pc, info.skill)
     else
       pc.broadcast_social_action(13)
-      chest.add_damage_hate(pc, 0, 1i64)
+      chest.add_damage_hate(pc, 0, 1)
       chest.set_intention(AI::ATTACK, pc)
     end
   end

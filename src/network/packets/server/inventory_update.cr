@@ -1,13 +1,13 @@
 class Packets::Outgoing::InventoryUpdate < Packets::Outgoing::AbstractInventoryUpdate
-  def self.added(item)
+  def self.added(item : L2ItemInstance)
     new.tap &.add_new_item(item)
   end
 
-  def self.modified(item)
+  def self.modified(item : L2ItemInstance)
     new.tap &.add_modified_item(item)
   end
 
-  def self.removed(item)
+  def self.removed(item : L2ItemInstance)
     new.tap &.add_removed_item(item)
   end
 

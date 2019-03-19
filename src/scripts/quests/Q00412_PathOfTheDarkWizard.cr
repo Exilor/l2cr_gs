@@ -76,8 +76,7 @@ class Quests::Q00412_PathOfTheDarkWizard < Quest
       elsif !has_quest_items?(player, SEEDS_OF_LUNACY) && has_quest_items?(player, SEEDS_OF_DESPAIR)
         htmltext = "30421-12.html"
       end
-    when "30421-08.html"
-    when "30415-02.html"
+    when "30421-08.html", "30415-02.html"
       htmltext = event
     when "30415-03.html"
       give_items(player, LUCKY_KEY, 1)

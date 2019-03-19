@@ -94,11 +94,22 @@ module ItemTable
 
   def create_item(process : String?, item_id : Int32, count : Int64, actor : L2PcInstance?, reference = nil) : L2ItemInstance
     item = L2ItemInstance.new(IdFactory.next, item_id)
+
+    if process && process.casecmp?("loot")
+      # TODO: command channel and other stuff
+    end
+
+    # if Config::DEBUG
+    #   debug "Created item with oid #{item.l2id} and item id #{item.id}."
+    # end
+
     L2World.store_object(item)
 
     if item.stackable? && count > 1
       item.count = count
     end
+
+    # TODO: Config::LOG_ITEMS
 
     if actor && actor.gm? && Config.gmaudit
       ref = "no-reference"

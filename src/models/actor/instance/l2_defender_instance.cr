@@ -95,7 +95,7 @@ class L2DefenderInstance < L2Attackable
     pc.action_failed
   end
 
-  def add_damage_hate(attacker : L2Character?, damage : Int32, aggro : Int64)
+  def add_damage_hate(attacker : L2Character?, damage : Int, aggro : Int)
     return unless attacker
 
     unless attacker.is_a?(L2DefenderInstance)

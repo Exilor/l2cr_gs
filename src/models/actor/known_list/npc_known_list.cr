@@ -58,12 +58,12 @@ class NpcKnownList < CharKnownList
           (npc.monster? || (npc.is_a?(L2GuardInstance) && pl.karma > 0))
 
           if npc.get_hating(pl) == 0
-            npc.add_damage_hate(pl, 0, 0i64)
+            npc.add_damage_hate(pl, 0, 0)
           end
 
           if !npc.intention.attack? && !npc.core_ai_disabled?
             WalkingManager.stop_moving(npc, false, true)
-            npc.add_damage_hate(pl, 0, 100i64)
+            npc.add_damage_hate(pl, 0, 100)
             npc.set_intention(AI::ATTACK, pl)
           end
         end

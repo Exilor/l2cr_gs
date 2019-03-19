@@ -314,7 +314,8 @@ class L2AttackableAI < L2CharacterAI
         # For each L2Character check if the target is autoattackable
         if auto_attack_condition(target) # check aggression
           if target.is_a?(L2Playable)
-            term = EventDispatcher.notify(OnAttackableHate.new(active_char, target.acting_player, target.is_a?(L2Summon)), active_char, TerminateReturn)
+            evt = OnAttackableHate.new(active_char, target.acting_player, target.is_a?(L2Summon))
+            term = EventDispatcher.notify(evt, active_char, TerminateReturn)
             if term
               debug "There's a TerminateReturn."
             end
@@ -329,7 +330,7 @@ class L2AttackableAI < L2CharacterAI
 
           # Add the attacker to the L2Attackable _aggroList with 0 damage and 1 hate
           if hating == 0
-            npc.add_damage_hate(target, 0, 0i64)
+            npc.add_damage_hate(target, 0, 0)
           end
         end
       end
@@ -589,7 +590,7 @@ class L2AttackableAI < L2CharacterAI
 
     ai_suicide_skills = npc.template.get_ai_skills(AISkillScope::SUICIDE)
     if !ai_suicide_skills.empty? && (npc.current_hp / npc.max_hp) * 100 < 30
-      skill = ai_suicide_skills.sample(Rnd)
+      skill = ai_suicide_skills.sample(random: Rnd)
       if Util.in_range?(skill.affect_range, active_char, most_hate, false) && npc.has_skill_chance?
         if cast(skill)
           return
@@ -871,7 +872,7 @@ class L2AttackableAI < L2CharacterAI
 
     # Long/Short Range skill usage.
     if !npc.short_range_skills.empty? && npc.has_skill_chance?
-      short_range_skill = npc.short_range_skills.sample(Rnd)
+      short_range_skill = npc.short_range_skills.sample(random: Rnd)
       if check_skill_cast_conditions(npc, short_range_skill)
         client_stop_moving
         npc.do_cast(short_range_skill)
@@ -880,7 +881,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     if !npc.long_range_skills.empty? && npc.has_skill_chance?
-      long_range_skill = npc.long_range_skills.sample(Rnd)
+      long_range_skill = npc.long_range_skills.sample(random: Rnd)
       if check_skill_cast_conditions(npc, long_range_skill)
         client_stop_moving
         npc.do_cast(long_range_skill)
@@ -1617,7 +1618,7 @@ class L2AttackableAI < L2CharacterAI
           if most_hate
             actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
           else
-            actor.add_damage_hate(obj, 0, 2000i64)
+            actor.add_damage_hate(obj, 0, 2000)
           end
           actor.target = obj
           self.attack_target = obj
@@ -1636,7 +1637,7 @@ class L2AttackableAI < L2CharacterAI
           if most_hate
             actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
           else
-            actor.add_damage_hate(obj, 0, 2000i64)
+            actor.add_damage_hate(obj, 0, 2000)
           end
           actor.target = obj
           self.attack_target = obj
@@ -1649,7 +1650,7 @@ class L2AttackableAI < L2CharacterAI
             if most_hate
               actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
             else
-              actor.add_damage_hate(obj, 0, 2000i64)
+              actor.add_damage_hate(obj, 0, 2000)
             end
             actor.target = obj
             self.attack_target = obj
@@ -1658,7 +1659,7 @@ class L2AttackableAI < L2CharacterAI
           if most_hate
             actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
           else
-            actor.add_damage_hate(obj, 0, 2000i64)
+            actor.add_damage_hate(obj, 0, 2000)
           end
           actor.target = obj
           self.attack_target = obj
@@ -1692,7 +1693,7 @@ class L2AttackableAI < L2CharacterAI
         if most_hate
           actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
         else
-          actor.add_damage_hate(obj, 0, 2000i64)
+          actor.add_damage_hate(obj, 0, 2000)
         end
         actor.target = obj
         self.attack_target = obj
@@ -1713,7 +1714,7 @@ class L2AttackableAI < L2CharacterAI
           if most_hate && most_hate.alive?
             actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
           else
-            actor.add_damage_hate(obj, 0, 2000i64)
+            actor.add_damage_hate(obj, 0, 2000)
           end
           actor.target = obj
           self.attack_target = obj
@@ -1726,7 +1727,7 @@ class L2AttackableAI < L2CharacterAI
             if most_hate
               actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
             else
-              actor.add_damage_hate(obj, 0, 2000i64)
+              actor.add_damage_hate(obj, 0, 2000)
             end
             actor.target = obj
             self.attack_target = obj
@@ -1735,7 +1736,7 @@ class L2AttackableAI < L2CharacterAI
           if most_hate
             actor.add_damage_hate(obj, 0, actor.get_hating(most_hate))
           else
-            actor.add_damage_hate(obj, 0, 2000i64)
+            actor.add_damage_hate(obj, 0, 2000)
           end
           actor.target = obj
           self.attack_target = obj
@@ -1792,7 +1793,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     # Add the attacker to the _aggroList of the actor
-    me.add_damage_hate(attacker, 0, 1i64)
+    me.add_damage_hate(attacker, 0, 1)
 
     # Set the L2Character movement type to run and send Server->Client packet ChangeMoveType to all others L2PcInstance
     unless me.running?
@@ -1837,7 +1838,7 @@ class L2AttackableAI < L2CharacterAI
 
     if target
       # Add the target to the actor _aggroList or update hate if already present
-      me.add_damage_hate(target, 0, aggro.to_i64)
+      me.add_damage_hate(target, 0, aggro)
 
       # Set the actor AI Intention to ATTACK
       if !intention.attack?

@@ -36,7 +36,9 @@ class NpcAI::Fisherman < AbstractNpcAI
 
   def on_adv_event(event, npc, pc)
     pc = pc.not_nil!
-    npc = npc.as(L2MerchantInstance)
+    unless npc.is_a?(L2MerchantInstance)
+      raise "#{npc} should be a L2MerchantInstance"
+    end
 
     case event
     when "LearnFishSkill"

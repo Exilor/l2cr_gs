@@ -21,7 +21,7 @@ class EffectHandler::RandomizeHate < AbstractEffect
     aggro_list.delete(effector)
     return if aggro_list.empty?
 
-    target = aggro_list.sample(Rnd)
+    target = aggro_list.sample(random: Rnd)
     hate = effected.get_hating(effector)
     effected.stop_hating(effector)
     effected.add_damage_hate(target, 0, hate)

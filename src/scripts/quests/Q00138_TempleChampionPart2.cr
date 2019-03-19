@@ -1,0 +1,159 @@
+class Quests::Q00138_TempleChampionPart2 < Quest
+  # NPCs
+  private SYLVAIN = 30070
+  private PUPINA = 30118
+  private ANGUS = 30474
+  private SLA = 30666
+  private MOBS = {
+    20176, # Wyrm
+    20550, # Guardian Basilisk
+    20551, # Road Scavenger
+    20552  # Fettered Soul
+  }
+  # Items
+  private TEMPLE_MANIFESTO = 10341
+  private RELICS_OF_THE_DARK_ELF_TRAINEE = 10342
+  private ANGUS_RECOMMENDATION = 10343
+  private PUPINAS_RECOMMENDATION = 10344
+
+  def initialize
+    super(138, self.class.simple_name, "Temple Champion - 2")
+
+    add_start_npc(SYLVAIN)
+    add_talk_id(SYLVAIN, PUPINA, ANGUS, SLA)
+    add_kill_id(MOBS)
+    register_quest_items(TEMPLE_MANIFESTO, RELICS_OF_THE_DARK_ELF_TRAINEE, ANGUS_RECOMMENDATION, PUPINAS_RECOMMENDATION)
+  end
+
+  def on_adv_event(event, npc, player)
+    return unless player
+    unless st = get_quest_state(player, false)
+      return get_no_quest_msg(player)
+    end
+
+    case event
+    when "30070-02.htm"
+      st.start_quest
+      st.give_items(TEMPLE_MANIFESTO, 1)
+    when "30070-05.html"
+      st.give_adena(84593, true)
+      if player.level < 42
+        st.add_exp_and_sp(187062, 11307)
+      end
+      st.exit_quest(false, true)
+    when "30070-03.html"
+      st.set_cond(2, true)
+    when "30118-06.html"
+      st.set_cond(3, true)
+    when "30118-09.html"
+      st.set_cond(6, true)
+      st.give_items(PUPINAS_RECOMMENDATION, 1)
+    when "30474-02.html"
+      st.set_cond(4, true)
+    when "30666-02.html"
+      if st.has_quest_items?(PUPINAS_RECOMMENDATION)
+        st.set("talk", "1")
+        st.take_items(PUPINAS_RECOMMENDATION, -1)
+      end
+    when "30666-03.html"
+      if st.has_quest_items?(TEMPLE_MANIFESTO)
+        st.set("talk", "2")
+        st.take_items(TEMPLE_MANIFESTO, -1)
+      end
+    when "30666-08.html"
+      st.set_cond(7, true)
+      st.unset("talk")
+    end
+
+    event
+  end
+
+  def on_kill(npc, player, is_summon)
+    st = get_quest_state(player, false)
+    if st && st.started? && st.cond?(4) && st.get_quest_items_count(RELICS_OF_THE_DARK_ELF_TRAINEE) < 10
+      st.give_items(RELICS_OF_THE_DARK_ELF_TRAINEE, 1)
+      if st.get_quest_items_count(RELICS_OF_THE_DARK_ELF_TRAINEE) >= 10
+        st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
+      else
+        st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
+      end
+    end
+
+    super
+  end
+
+  def on_talk(npc, player)
+    st = get_quest_state!(player)
+
+    case npc.id
+    when SYLVAIN
+      case st.cond
+      when 1
+        htmltext = "30070-02.htm"
+      when 2..6
+        htmltext = "30070-03.html"
+      when 7
+        htmltext = "30070-04.html"
+      else
+        if st.completed?
+          return get_already_completed_msg(player)
+        end
+        if player.level >= 36
+          if player.quest_completed?(Q00137_TempleChampionPart1.simple_name)
+            htmltext = "30070-01.htm"
+          else
+            htmltext = "30070-00a.htm"
+          end
+        else
+          htmltext = "30070-00.htm"
+        end
+      end
+    when PUPINA
+      case st.cond
+      when 2
+        htmltext = "30118-01.html"
+      when 3, 4
+        htmltext = "30118-07.html"
+      when 5
+        htmltext = "30118-08.html"
+        if st.has_quest_items?(ANGUS_RECOMMENDATION)
+          st.take_items(ANGUS_RECOMMENDATION, -1)
+        end
+      when 6
+        htmltext = "30118-10.html"
+      end
+    when ANGUS
+      case st.cond
+      when 3
+        htmltext = "30474-01.html"
+      when 4
+        if st.get_quest_items_count(RELICS_OF_THE_DARK_ELF_TRAINEE) >= 10
+          st.take_items(RELICS_OF_THE_DARK_ELF_TRAINEE, -1)
+          st.give_items(ANGUS_RECOMMENDATION, 1)
+          st.set_cond(5, true)
+          htmltext = "30474-04.html"
+        else
+          htmltext = "30474-03.html"
+        end
+      when 5
+        htmltext = "30474-05.html"
+      end
+    when SLA
+      case st.cond
+      when 6
+        case st.get_int("talk")
+        when 1
+          htmltext = "30666-02.html"
+        when 2
+          htmltext = "30666-03.html"
+        else
+          htmltext = "30666-01.html"
+        end
+      when 7
+        htmltext = "30666-09.html"
+      end
+    end
+
+    htmltext || get_no_quest_msg(player)
+  end
+end

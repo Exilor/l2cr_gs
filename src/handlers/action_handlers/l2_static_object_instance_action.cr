@@ -22,7 +22,7 @@ module ActionHandler::L2StaticObjectInstanceAction
             file_name = "data/html/signboards/pvp_signboard.htm"
           end
           html = NpcHtmlMessage.new(obj.l2id)
-          if content = HtmCache.get_htm(file_name)
+          if content = HtmCache.get_htm(pc, file_name)
             html.html = content
           else
             html.html = "<html><body>Signboard is missing:<br>#{file_name}</body></html>"

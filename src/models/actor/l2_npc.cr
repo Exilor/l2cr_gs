@@ -52,7 +52,11 @@ class L2Npc < L2Character
     end
     @current_collision_height = template.f_collision_height
     @current_collision_radius = template.f_collision_radius
-    @flying = template.flying?
+    self.flying = template.flying?
+
+    template.skills.each_value do |skill|
+      add_skill(skill)
+    end
   end
 
   def initialize(npc_id : Int32)
@@ -460,7 +464,7 @@ class L2Npc < L2Character
   end
 
   def show_pk_deny_chat_window(pc : L2PcInstance, type : String)
-    html = HtmCache.get_htm(pc.html_prefix, "data/html/#{type}/#{id}-pk.htm")
+    html = HtmCache.get_htm(pc, "data/html/#{type}/#{id}-pk.htm")
     if html
       insert_l2id_and_show_chat_window(pc, html)
       pc.action_failed

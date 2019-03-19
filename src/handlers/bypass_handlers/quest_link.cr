@@ -7,10 +7,12 @@ module BypassHandler::QuestLink
   private THE_LEADER_AND_THE_FOLLOWER = 123
 
   def use_bypass(command, pc, target)
-    target = target.unsafe_as(L2Npc)
-    debug "#use_bypass #{command}, #{pc}, #{target}"
+    debug "#use_bypass \"#{command}\", #{pc}, #{target}"
     quest = command.from(5).strip
     if quest.empty?
+      unless target.is_a?(L2Npc)
+        raise "#{target}:#{target.class} is not a L2Npc."
+      end
       show_quest_window(pc, target)
     else
       if quest_name_end = quest.index(' ')
@@ -19,6 +21,9 @@ module BypassHandler::QuestLink
           quest.from(quest_name_end).strip
         )
       else
+        unless target.is_a?(L2Npc)
+          raise "#{target}:#{target.class} is not a L2Npc."
+        end
         show_quest_window(pc, target, quest)
       end
     end

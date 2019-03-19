@@ -47,9 +47,7 @@ module ClanTable
   def create_clan(pc : L2PcInstance, clan_name : String)
     return unless pc
 
-    if Config.debug
-      debug "#{pc.name} (#{pc.l2id}) requested a clan creation."
-    end
+    debug { "#{pc.name} (#{pc.l2id}) requested a clan creation." }
 
     if pc.level < 10
       pc.send_packet(SystemMessageId::YOU_DO_NOT_MEET_CRITERIA_IN_ORDER_TO_CREATE_A_CLAN)
@@ -86,7 +84,7 @@ module ClanTable
     clan = L2Clan.new(IdFactory.next, clan_name)
     leader = L2ClanMember.new(clan, pc)
     clan.leader = leader
-    leader.player = pc
+    leader.player_instance = pc
     clan.store
     pc.clan = clan
     pc.pledge_class = L2ClanMember.calculate_pledge_class(pc)
@@ -134,7 +132,7 @@ module ClanTable
       # end
 
       if leader_member = clan.leader?
-        clan.warehouse.destroy_all_items("ClanRemove", clan.leader.player, nil)
+        clan.warehouse.destroy_all_items("ClanRemove", clan.leader.player_instance, nil)
       else
         clan.warehouse.destroy_all_items("ClanRemove", nil, nil)
       end
@@ -267,7 +265,7 @@ module ClanTable
   def check_surrender(clan1 : L2Clan, clan2 : L2Clan)
     count = 0
     clan.members.each do |pc|
-      if pc.player.wants_peace == 1
+      if pc.player_instance.wants_peace == 1
         count += 1
       end
     end

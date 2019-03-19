@@ -46,9 +46,9 @@ class Skill
   getter abnormal_type : AbnormalType
   getter abnormal_time : Int32
   getter hit_time : Int32
-  getter abnormal_visual_effects : Slice(AbnormalVisualEffect)?
-  getter abnormal_visual_effects_special : Slice(AbnormalVisualEffect)?
-  getter abnormal_visual_effects_event : Slice(AbnormalVisualEffect)?
+  getter abnormal_visual_effects = Slice(AbnormalVisualEffect).empty
+  getter abnormal_visual_effects_special = Slice(AbnormalVisualEffect).empty
+  getter abnormal_visual_effects_event = Slice(AbnormalVisualEffect).empty
   getter hash : Int32
   getter reuse_delay : Int32
   getter lvl_bonus_rate : Int32
@@ -269,18 +269,15 @@ class Skill
   end
 
   def has_abnormal_visual_effects? : Bool
-    return false unless temp = @abnormal_visual_effects
-    !temp.empty?
+    !@abnormal_visual_effects.empty?
   end
 
   def has_abnormal_visual_effects_special? : Bool
-    return false unless temp = @abnormal_visual_effects_special
-    !temp.empty?
+    !@abnormal_visual_effects_special.empty?
   end
 
   def has_abnormal_visual_effects_event? : Bool
-    return false unless temp = @abnormal_visual_effects_event
-    !temp.empty?
+    !@abnormal_visual_effects_event.empty?
   end
 
   def physical? : Bool
@@ -418,13 +415,22 @@ class Skill
     get_target_list(char, only_first, target)
   end
 
+  EMPTY_TARGET_LIST = [] of L2Object
+
   def get_target_list(char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     if handler = TargetHandler[target_type]
-      handler.get_target_list(self, char, only_first, target)
+      begin
+        return handler.get_target_list(self, char, only_first, target)
+      rescue e
+        error "Exception in Skill#get_target_list."
+        error e
+      end
     else
-      warn "No handler found for #{target_type.inspect}."
-      [target || char] of L2Object
+      warn "No target handler found for #{target_type.inspect}."
+      char.send_message("Target type of skill is not currently handled.")
     end
+
+    EMPTY_TARGET_LIST
   end
 
   def get_target_list(char : L2Character) : Array(L2Object)
@@ -568,11 +574,11 @@ class Skill
   end
 
   private def activate_skill(caster : L2Character, cubic : L2CubicInstance?, targets : Enumerable(L2Object))
-    caster = caster.owner if caster.is_a?(L2CubicInstance)
+    # caster = caster.owner if caster.is_a?(L2CubicInstance)
 
     case @id
     when 5852, 5853
-      # block minigame
+      warn "TODO: HandysBlockCheckerManager"
     else
       targets.each do |target|
         target = target.as(L2Character)
@@ -582,7 +588,12 @@ class Skill
           info = BuffInfo.new(caster, target, self)
           apply_effect_scope(EffectScope::GENERAL, info, true, false)
 
-          pvx_scope = caster.playable? && target.attackable? ? EffectScope::PVE : caster.playable? && target.playable? ? EffectScope::PVP : nil
+          if caster.playable? && target.attackable?
+            pvx_scope = EffectScope::PVE
+          elsif caster.playable? && target.playable?
+            pvx_scope = EffectScope::PVP
+          end
+
           apply_effect_scope(pvx_scope, info, true, false)
 
           apply_effect_scope(EffectScope::CHANNELING, info, true, false)
@@ -593,15 +604,19 @@ class Skill
     end
 
     if has_effects?(EffectScope::SELF)
-      if caster.affected_by_skill?(@id)
-        caster.stop_skill_effects(true, @id)
+      if caster.affected_by_skill?(id)
+        caster.stop_skill_effects(true, id)
       end
 
       apply_effects(caster, caster, true, false, true, 0)
     end
 
     if use_spiritshot?
-      caster.set_charged_shot(caster.charged_shot?(ShotType::BLESSED_SPIRITSHOTS) ? ShotType::BLESSED_SPIRITSHOTS : ShotType::SPIRITSHOTS, false)
+      if caster.charged_shot?(ShotType::BLESSED_SPIRITSHOTS)
+        caster.set_charged_shot(ShotType::BLESSED_SPIRITSHOTS, false)
+      else
+        caster.set_charged_shot(ShotType::SPIRITSHOTS, false)
+      end
     elsif use_soulshot?
       caster.set_charged_shot(ShotType::SOULSHOTS, false)
     end
@@ -620,27 +635,36 @@ class Skill
   end
 
   def apply_effects(effector : L2Character, effected : L2Character, this : Bool, passive : Bool, instant : Bool, abnormal_time)
-    return unless effected
+    if effector != effected && bad?
+      if effected.invul?
+        return
+      end
 
-    if (effector != effected) && bad? && (effected.invul? || effector.gm? && !effector.access_level.can_give_damage?)
-      return
+      if effector.gm? && !effector.access_level.can_give_damage?
+      end
     end
 
     if debuff?
-      return if effected.debuff_blocked?
+      if effected.debuff_blocked?
+        return
+      end
     else
-      return if effected.buff_blocked? && !bad?
+      if effected.buff_blocked? && !bad?
+        return
+      end
     end
 
-    return if effected.invul_against?(@id, @level)
+    if effected.invul_against?(id, level)
+      return
+    end
 
     add_continuous_effects = !passive && (@operate_type.toggle? || (@operate_type.continuous? && Formulas.effect_success(effector, effected, self)))
 
     if !this && !passive
       info = BuffInfo.new(effector, effected, self)
 
-      if effector.player? && @max_soul_consume_count > 0
-        info.charges = effector.acting_player.decrease_souls(@max_soul_consume_count)
+      if effector.player? && max_soul_consume_count > 0
+        info.charges = effector.acting_player.decrease_souls(max_soul_consume_count)
       end
 
       if add_continuous_effects && abnormal_time > 0
@@ -649,8 +673,13 @@ class Skill
 
       apply_effect_scope(EffectScope::GENERAL, info, instant, add_continuous_effects)
 
-      pvp_or_pve = effector.playable? && effected.attackable? ? EffectScope::PVE : effector.playable? && effected.playable? ? EffectScope::PVP : nil
-      apply_effect_scope(pvp_or_pve, info, instant, add_continuous_effects)
+      if effector.playable? && effected.attackable?
+        pvx_scope = EffectScope::PVE
+      elsif effector.playable? && effected.playable?
+        pvx_scope = EffectScope::PVP
+      end
+
+      apply_effect_scope(pvx_scope, info, instant, add_continuous_effects)
 
       apply_effect_scope(EffectScope::CHANNELING, info, instant, add_continuous_effects)
 
@@ -658,7 +687,7 @@ class Skill
         effected.effect_list.add(info)
       end
 
-      if effected.player? && effected.has_servitor? && !transformation? && !@abnormal_type.summon_condition?
+      if effected.player? && effected.has_servitor? && !transformation? && !abnormal_type.summon_condition?
         if (add_continuous_effects && continuous? && !debuff?) || recovery_herb?
           apply_effects(effector, effected.summon!, recovery_herb?, 0)
         end
@@ -678,7 +707,7 @@ class Skill
         info.effector.effect_list.add(info)
       end
 
-      if add_continuous_effects && info.effected.player? && info.effected.has_servitor? && continuous? && !debuff? && @id != CommonSkill::SERVITOR_SHARE.id
+      if add_continuous_effects && info.effected.player? && info.effected.has_servitor? && continuous? && !debuff? && id != CommonSkill::SERVITOR_SHARE.id
         apply_effects(effector, info.effected.summon!, false, 0)
       end
     end
@@ -691,22 +720,18 @@ class Skill
   end
 
   def apply_effect_scope(scope : EffectScope?, info : BuffInfo, apply_instant_effects : Bool, add_continuous_effects : Bool)
-    if scope && has_effects?(scope)
-      each_effect scope do |effect|
-        if effect.instant?
-          if apply_instant_effects && effect.calc_success(info)
-            effect.on_start(info)
-          end
-        elsif add_continuous_effects
-          if effect.can_start?(info)
-            info.add_effect(effect)
-          end
+    return unless scope
+    @effect_lists[scope]?.try &.each do |effect|
+      if effect.instant?
+        if apply_instant_effects && effect.calc_success(info)
+          effect.on_start(info)
+        end
+      elsif add_continuous_effects
+        if effect.can_start?(info)
+          info.add_effect(effect)
         end
       end
     end
-  rescue e
-    error e
-    raise e
   end
 
   def has_effects?(scope : EffectScope) : Bool
@@ -714,14 +739,10 @@ class Skill
     !effects.empty?
   end
 
-  def each_effect(scope : EffectScope, &block : AbstractEffect ->)
-    @effect_lists[scope]?.try &.each { |effect| yield effect }
-  end
+  private def parse_abnormal_visual_effect(string)
+    return if string.nil? || string.empty?
 
-  private def parse_abnormal_visual_effect(abnormal_visual_effects)
-    return if abnormal_visual_effects.nil? || abnormal_visual_effects.empty?
-
-    data = abnormal_visual_effects.split(';')
+    data = string.split(';')
     aves_event = nil
     aves_special = nil
     aves = nil

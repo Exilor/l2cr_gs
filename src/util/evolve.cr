@@ -1,5 +1,6 @@
 module Evolve
   extend self
+  extend Loggable
   include Packets::Outgoing
 
   def do_evolve(pc : L2PcInstance, npc : L2Npc, item_id_take : Int32, item_id_give : Int32, pet_min_lvl : Int32) : Bool
@@ -43,6 +44,8 @@ module Evolve
     npc_template = NpcData[npc_id]
 
     pet.unsummon(pc)
+
+    pet.destroy_control_item(pc, true)
 
     item = pc.inventory.add_item("Evolve", item_id_give, 1, pc, npc).not_nil!
     unless pet_summon = L2PetInstance.spawn_pet(npc_template, pc, item)
@@ -110,8 +113,8 @@ module Evolve
 
     npc_template = NpcData[npc_id]
 
-    removed_item = pc.inventory.destroy_item("PetRestore", item, pc, npc)
-    sm = SystemMessage.s1_dissapeared
+    removed_item = pc.inventory.destroy_item("PetRestore", item, pc, npc).not_nil!
+    sm = SystemMessage.s1_disappeared
     sm.add_item_name(removed_item)
     pc.send_packet(sm)
 
@@ -138,7 +141,7 @@ module Evolve
     pet_summon.start_feed
     added_item.enchant_level = pet_summon.level
 
-    pc.send_packet(InventoryUpdate.removed(pc))
+    pc.send_packet(InventoryUpdate.removed(removed_item))
     pc.send_packet(StatusUpdate.current_load(pc))
 
     pc.broadcast_user_info

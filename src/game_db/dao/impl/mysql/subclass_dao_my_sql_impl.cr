@@ -1,7 +1,7 @@
 module GameDB
   module SubclassDAOMySQLImpl
-    extend SubclassDAO
     extend self
+    extend SubclassDAO
 
     private SELECT = "SELECT class_id,exp,sp,level,class_index FROM character_subclasses WHERE charId=? ORDER BY class_index ASC"
     private INSERT = "INSERT INTO character_subclasses (charId,class_id,exp,sp,level,class_index) VALUES (?,?,?,?,?,?)"

@@ -129,7 +129,7 @@ class Quests::Q00227_TestOfTheReformer < Quest
       if npc.summoned_npc_count < 1
         pilgrim = add_spawn(OL_MAHUM_PILGRIM, -9282, -89975, -2331, 0, false, 0)
         wolf = add_spawn(CRIMSON_WEREWOLF, -9382, -89852, -2333, 0, false, 0)
-        wolf.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999i64)
+        wolf.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999)
         wolf.set_intention(AI::ATTACK, pilgrim)
       end
       htmltext = event
@@ -139,7 +139,7 @@ class Quests::Q00227_TestOfTheReformer < Quest
       if npc.summoned_npc_count < 1
         pilgrim = add_spawn(OL_MAHUM_PILGRIM, 125947, -180049, -1778, 0, false, 0)
         lizard = add_spawn(KRUDEL_LIZARDMAN, 126019, -179983, -1781, 0, false, 0)
-        lizard.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999i64)
+        lizard.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999)
         lizard.set_intention(AI::ATTACK, pilgrim)
       end
       htmltext = event
@@ -369,7 +369,7 @@ class Quests::Q00227_TestOfTheReformer < Quest
           if npc.summoned_npc_count < 1
             pilgrim = add_spawn(OL_MAHUM_PILGRIM, -4015, 40141, -3664, 0, false, 0)
             inspector = add_spawn(OL_MAHUM_INSPECTOR, -4034, 40201, -3665, 0, false, 0)
-            inspector.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999i64)
+            inspector.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999)
             inspector.set_intention(AI::ATTACK, pilgrim)
           end
           htmltext = "30668-01.html"

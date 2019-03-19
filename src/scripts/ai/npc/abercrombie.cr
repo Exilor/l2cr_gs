@@ -12,13 +12,11 @@ class NpcAI::Abercrombie < AbstractNpcAI
 
   def on_first_talk(npc, player)
     if has_quest_items?(player, GOLDEN_RAM_BADGE_SOLDIER)
-      htmltext = "31555-07.html"
+      "31555-07.html"
     elsif has_quest_items?(player, GOLDEN_RAM_BADGE_RECRUIT)
-      htmltext = "31555-01.html"
+      "31555-01.html"
     else
-      htmltext = "31555-09.html"
+      "31555-09.html"
     end
-
-    htmltext
   end
 end

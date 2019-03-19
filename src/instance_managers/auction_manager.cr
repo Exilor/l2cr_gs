@@ -97,6 +97,7 @@ module AuctionManager
       if ITEM_INIT_DATA_ID[i] == id
         break
       end
+      i += 1
     end
 
     if i >= ITEM_INIT_DATA_ID.size || ITEM_INIT_DATA_ID[i] != id

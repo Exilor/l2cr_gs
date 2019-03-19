@@ -7,10 +7,6 @@ struct RangeSet(T)
     @ranges = [] of Range(T, T)
   end
 
-  def initialize(initial_size : Int32)
-    @ranges = Array(Range(T, T)).new(initial_size)
-  end
-
   def initialize(*ranges : Range(T, T))
     @ranges = ranges.to_a
   end

@@ -17,7 +17,7 @@ class AggroInfo
   end
 
   def stop_hate
-    @hate = 0
+    @hate = 0i64
   end
 
   def add_hate(value : Int64)

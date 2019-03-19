@@ -27,9 +27,9 @@ module TerritoryWarManager
   @@DEFENDER_MAX_PLAYERS = 0
   @@CLAN_MIN_LEVEL = 0
   @@PLAYER_MIN_LEVEL = 0
-  @@MIN_TW_BADGE_FOR_NOBLESS = 0
-  @@MIN_TW_BADGE_FOR_STRIDERS = 0
-  @@MIN_TW_BADGE_FOR_BIG_STRIDER = 0
+  class_getter min_tw_badge_for_nobless = 0
+  class_getter min_tw_badge_for_striders = 0
+  class_getter min_tw_badge_for_big_strider = 0
   @@WAR_LENGTH = 0i64
   @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE = false
   @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS = false
@@ -54,9 +54,9 @@ module TerritoryWarManager
     @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE = cfg.get_bool("PlayerWithWardCanBeKilledInPeaceZone", false)
     @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS = cfg.get_bool("SpawnWardsWhenTWIsNotInProgress", false)
     @@RETURN_WARDS_WHEN_TW_STARTS = cfg.get_bool("ReturnWardsWhenTWStarts", false)
-    @@MIN_TW_BADGE_FOR_NOBLESS = cfg.get_i32("MinTerritoryBadgeForNobless", 100)
-    @@MIN_TW_BADGE_FOR_STRIDERS = cfg.get_i32("MinTerritoryBadgeForStriders", 50)
-    @@MIN_TW_BADGE_FOR_BIG_STRIDER = cfg.get_i32("MinTerritoryBadgeForBigStrider", 80)
+    @@min_tw_badge_for_nobless = cfg.get_i32("MinTerritoryBadgeForNobless", 100)
+    @@min_tw_badge_for_striders = cfg.get_i32("MinTerritoryBadgeForStriders", 50)
+    @@min_tw_badge_for_big_strider = cfg.get_i32("MinTerritoryBadgeForBigStrider", 80)
 
     begin
       sql = "SELECT * FROM territory_spawnlist"

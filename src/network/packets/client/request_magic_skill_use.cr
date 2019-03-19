@@ -17,6 +17,12 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
       return
     end
 
+    # custom. I don't see how Fake Death is supposed to work otherwise.
+    if @id == 60 && pc.affected_by_skill?(60)
+      pc.stop_skill_effects(true, 60)
+      return
+    end
+
     if pc.fake_death?
       pc.send_packet(SystemMessageId::CANT_MOVE_SITTING)
       action_failed
@@ -32,7 +38,8 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
         end
       end
     end
-
+    # L2J also checks if pc.playable? which is useless because pc can only be a
+    # L2PcInstance and all L2Playable return true on #playable?.
     if pc.in_airship?
       pc.send_packet(SystemMessageId::ACTION_PROHIBITED_WHILE_MOUNTED_OR_ON_AN_AIRSHIP)
       action_failed
@@ -57,7 +64,7 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
     if skill.continuous? && !skill.debuff? && skill.target_type.self? && (!pc.in_airship? && !pc.in_boat?) # custom: L2J uses || instead of the last &&
       pc.set_intention(AI::MOVE_TO, pc.location)
     end
-
+    # custom: allows deactivating a toggle skill while sitting
     if skill.toggle? && pc.affected_by_skill?(skill.id)
       pc.stop_skill_effects(true, skill.id)
     else

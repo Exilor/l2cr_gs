@@ -51,6 +51,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
     unless buy_list.npc_allowed?(merchant.id)
       warn "#{merchant} is not allowed to use buy list with id #{@list_id}."
+      action_failed
       return
     end
 

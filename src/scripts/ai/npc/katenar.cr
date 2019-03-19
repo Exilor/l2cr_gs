@@ -49,7 +49,7 @@ class NpcAI::Katenar < AbstractNpcAI
     if memo_state == 12
       htmltext = "32242-01.html"
     elsif memo_state == 13
-      player = npc.variables.get_object("player0", L2PcInstance?)
+      player = npc.variables.get_object("player0", L2PcInstance)
       if player == talker
         qs.memo_state = 14
         qs.set_cond(13, true)
@@ -72,8 +72,7 @@ class NpcAI::Katenar < AbstractNpcAI
 
   def on_spawn(npc)
     start_quest_timer("CREATED_50", 50000, npc, nil)
-    player = npc.variables.get_object("player0", L2PcInstance?)
-    if player
+    if npc.variables.get_object("player0", L2PcInstance?)
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::I_AM_LATE)
     end
 

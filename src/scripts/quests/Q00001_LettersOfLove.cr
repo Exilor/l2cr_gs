@@ -18,15 +18,12 @@ class Quests::Q00001_LettersOfLove < Quest
     add_start_npc(DARIN)
     add_talk_id(DARIN, ROXXY, BAULRO)
     register_quest_items(
-      DARINS_LETTER,
-      ROXXYS_KERCHIEF,
-      DARINS_RECEIPT,
-      BAULROS_POTION
+      DARINS_LETTER, ROXXYS_KERCHIEF, DARINS_RECEIPT, BAULROS_POTION
     )
   end
 
   def on_adv_event(event, npc, pc)
-    pc = pc.not_nil!
+    return unless pc
     return unless st = get_quest_state(pc, false)
 
     case event

@@ -45,23 +45,22 @@ abstract class AI
 
   {% for const in Intention.constants %}
     {{const.id}} = Intention::{{const.id}}
-    {{const.id}}
   {% end %}
 
   {% for const in Event.constants %}
     {{const.id}} = Event::{{const.id}}
-    {{const.id}}
   {% end %}
 
   private FOLLOW_INTERVAL = 1000
   private ATTACK_FOLLOW_INTERVAL = 500
 
+  # Use Object instead if/when Crystal supports it.
   private alias AIArg = L2Object | Skill | Location | Nil
 
   @move_to_pawn_timeout = 0
   @client_moving_to_pawn_offset = 0
-  @intention_arg_0 : AIArg # Object
-  @intention_arg_1 : AIArg # Object
+  @intention_arg_0 : AIArg
+  @intention_arg_1 : AIArg
   @skill : Skill?
   @client_moving = false
   @client_auto_attacking = false

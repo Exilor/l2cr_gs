@@ -5,8 +5,7 @@ class NpcAI::ZealotOfShilen < AbstractNpcAI
   def initialize
     super(self.class.simple_name, "gracia/AI/NPC")
 
-    add_spawn_id(ZEALOT)
-    add_spawn_id(GUARDS)
+    add_spawn_id(ZEALOT, *GUARDS)
     add_first_talk_id(GUARDS)
   end
 
@@ -19,7 +18,7 @@ class NpcAI::ZealotOfShilen < AbstractNpcAI
       npc.known_list.each_character do |char|
         if char.is_a?(L2MonsterInstance) && char.alive? && !char.decayed?
           npc.set_running
-          npc.add_damage_hate(char, 0, 999i64)
+          npc.add_damage_hate(char, 0, 999)
           npc.set_intention(AI::ATTACK, char)
         end
       end
@@ -33,13 +32,11 @@ class NpcAI::ZealotOfShilen < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc = npc.as(L2Attackable)
-
     if npc.id == ZEALOT
       npc.no_rnd_walk = true
     else
       npc.invul = true
-      npc.can_return_to_spawn_point = false
+      npc.as(L2Attackable).can_return_to_spawn_point = false
       start_quest_timer("WATCHING", 10000, npc, nil, true)
     end
 

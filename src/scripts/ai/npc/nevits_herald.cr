@@ -56,7 +56,7 @@ class NpcAI::NevitsHerald < AbstractNpcAI
       end
     elsif event.casecmp?("text_spam")
       cancel_quest_timer("text_spam", npc, pc)
-      say = NpcSay.new(NEVITS_HERALD, Say2::SHOUT, NEVITS_HERALD, SPAM.sample(Rnd))
+      say = NpcSay.new(NEVITS_HERALD, Say2::SHOUT, NEVITS_HERALD, SPAM.sample(random: Rnd))
       npc.broadcast_packet(say)
       start_quest_timer("text_spam", 60000, npc, pc)
       return

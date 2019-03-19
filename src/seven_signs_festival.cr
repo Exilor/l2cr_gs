@@ -1,14 +1,14 @@
 module SevenSignsFestival
+  extend self
   extend Synchronizable
   extend SpawnListener
   extend Loggable
-  extend self
 
-  GET_CLAN_NAME = "SELECT clan_name FROM clan_data WHERE clan_id = (SELECT clanid FROM characters WHERE char_name = ?)"
+  private GET_CLAN_NAME = "SELECT clan_name FROM clan_data WHERE clan_id = (SELECT clanid FROM characters WHERE char_name = ?)"
 
-  FESTIVAL_MAX_OFFSET_X = 230
-  FESTIVAL_MAX_OFFSET_Y = 230
-  FESTIVAL_DEFAULT_RESPAWN = 60
+  private FESTIVAL_MAX_OFFSET_X = 230
+  private FESTIVAL_MAX_OFFSET_Y = 230
+  private FESTIVAL_DEFAULT_RESPAWN = 60
 
   FESTIVAL_COUNT = 5
   FESTIVAL_LEVEL_MAX_31 = 0
@@ -37,7 +37,7 @@ module SevenSignsFestival
     {-79954, 84697, -5151, 0} # No level limit
   }
 
-  FESTIVAL_DAWN_WITCH_SPAWNS = {
+  private FESTIVAL_DAWN_WITCH_SPAWNS = {
     {-79183, 113052, -4891, 0, 31132}, # 31 and below
     {-75916, 110270, -4891, 0, 31133}, # 42 and below
     {-73979, 111970, -4891, 0, 31134}, # 53 and below
@@ -45,7 +45,7 @@ module SevenSignsFestival
     {-78930, 109664, -4891, 0, 31136} # No level limit
   }
 
-  FESTIVAL_DUSK_WITCH_SPAWNS = {
+  private FESTIVAL_DUSK_WITCH_SPAWNS = {
     {-77199, 88830, -5147, 0, 31142}, # 31 and below
     {-76942, 85438, -5147, 0, 31143}, # 42 and below
     {-74990, 87135, -5147, 0, 31144}, # 53 and below
@@ -53,7 +53,7 @@ module SevenSignsFestival
     {-79952, 84833, -5147, 0, 31146} # No level limit
   }
 
-  FESTIVAL_DAWN_PRIMARY_SPAWNS = {
+  private FESTIVAL_DAWN_PRIMARY_SPAWNS = {
     {
       # Level 31 and Below - Offering of the Branded
       {-78537, 113839, -4895, -1, 18009},
@@ -175,7 +175,7 @@ module SevenSignsFestival
     }
   }
 
-  FESTIVAL_DUSK_PRIMARY_SPAWNS = {
+  private FESTIVAL_DUSK_PRIMARY_SPAWNS = {
     {
       # Level 31 and Below - Offering of the Branded
       {-76542, 89653, -5151, -1, 18009},
@@ -298,7 +298,7 @@ module SevenSignsFestival
     }
   }
 
-  FESTIVAL_DAWN_SECONDARY_SPAWNS = {
+  private FESTIVAL_DAWN_SECONDARY_SPAWNS = {
     {
       # 31 and Below
       {-78757, 112834, -4895, -1, 18016},
@@ -376,7 +376,7 @@ module SevenSignsFestival
     }
   }
 
-  FESTIVAL_DUSK_SECONDARY_SPAWNS = {
+  private FESTIVAL_DUSK_SECONDARY_SPAWNS = {
     {
       # 31 and Below
       {-76844, 89304, -5151, -1, 18011},
@@ -454,7 +454,7 @@ module SevenSignsFestival
     }
   }
 
-  FESTIVAL_DAWN_CHEST_SPAWNS = {
+  private FESTIVAL_DAWN_CHEST_SPAWNS = {
     {
       # Level 31 and Below
       {-78999, 112957, -4927, -1, 18109},
@@ -547,7 +547,7 @@ module SevenSignsFestival
     }
   }
 
-  FESTIVAL_DUSK_CHEST_SPAWNS = {
+  private FESTIVAL_DUSK_CHEST_SPAWNS = {
     {
       # Level 31 and Below
       {-77016, 88726, -5183, -1, 18114},
@@ -1205,8 +1205,8 @@ module SevenSignsFestival
 
   def send_message_to_all(name : String, string : NpcString)
     return unless @@dawn_chat_guide && @@dusk_chat_guide
-      send_message_to_all(name, string, @@dawn_chat_guide.not_nil!)
-      send_message_to_all(name, string, @@dusk_chat_guide.not_nil!)
+    send_message_to_all(name, string, @@dawn_chat_guide.not_nil!)
+    send_message_to_all(name, string, @@dusk_chat_guide.not_nil!)
   end
 
   def send_message_to_all(name : String, string : NpcString, npc : L2Npc)
@@ -1595,7 +1595,6 @@ module SevenSignsFestival
     getter npc_id : Int32
 
     def initialize(@x : Int32, @y : Int32, @z : Int32, heading : Int32)
-      @x, @y, @z = x, y, z
       @heading = heading < 0 ? Rnd.u16.to_i32 : heading
       @npc_id = -1
     end

@@ -278,4 +278,28 @@ module Util
   def format_adena(amount : Number) : String
     sprintf("%.2f", amount)
   end
+
+  def min(val1, val2, *args)
+    min = Math.min(val1, val2)
+
+    args.each do |value|
+      if min > value
+        min = value
+      end
+    end
+
+    min
+  end
+
+  def max(val1, val2, *args)
+    max = Math.max(val1, val2)
+
+    args.each do |value|
+      if max > value
+        max = value
+      end
+    end
+
+    max
+  end
 end

@@ -69,11 +69,11 @@ module L2Cr
       when "info"
         L2Cr.on_screen_info_task
       when /^shutdown\s\d+/
-        Shutdown.start_shutdown(nil, cmd.split(' ')[1].to_i, false)
+        Shutdown.start_shutdown(nil, cmd.split[1].to_i, false)
       when "shutdown"
         Shutdown.start_shutdown(nil, 0, false)
       when /^restart\s\d+/
-        Shutdown.start_shutdown(nil, cmd.split(' ')[1].to_i, true)
+        Shutdown.start_shutdown(nil, cmd.split[1].to_i, true)
       when "restart"
         Shutdown.start_shutdown(nil, 0, true)
       when "ids"
@@ -86,12 +86,36 @@ module L2Cr
           L2Cr.retry_attacks = true
           puts "Attack retrying enabled."
         end
+      when "heal_raids"
+        L2World.objects.each do |o|
+          if o.is_a?(L2RaidBossInstance)
+            if o.current_hp < o.max_hp || o.current_mp < o.max_mp
+              puts "Healing #{o.name}"
+              o.heal!
+            end
+          end
+        end
+      when "check_ids"
+        L2Cr.check_ids
       else
         return "unknown command #{cmd.inspect}"
       end
 
       nil
     end
+  end
+
+  protected def check_ids
+    errors = 0
+    L2World.world_regions.each &.each do |reg|
+      reg.objects.each do |l2id, obj|
+        unless L2World.find_object(l2id)
+          errors += 1
+          puts "#{obj} with object id #{l2id} found in region #{reg} but not in L2World."
+        end
+      end
+    end
+    puts "#{errors} errors."
   end
 
   def test(pc)
@@ -110,3 +134,60 @@ module L2Cr
     # pc.send_packet(SystemMessage.naming_you_cannot_set_name_of_the_pet) # doesnt work
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -204,7 +204,7 @@ class Castle < AbstractResidence
         end
 
         begin
-          if old_leader = old_owner.leader.player?
+          if old_leader = old_owner.leader.player_instance?
             if old_leader.mount_type.wyvern?
               old_leader.dismount
             end
@@ -346,9 +346,9 @@ class Castle < AbstractResidence
     error e
   end
 
-  def update_functions(pc : L2PcInstance, type : Int32, lvl : Int32, lease : Int32, rate : Int64, add_new : Bool) : Bool
+  def update_functions(pc : L2PcInstance, type : Int32, lvl : Int32, lease : Int, rate : Int64, add_new : Bool) : Bool
     if lease > 0
-      unless pc.destroy_item_by_item_id("Consume", Inventory::ADENA_ID, lease, nil, true)
+      unless pc.destroy_item_by_item_id("Consume", Inventory::ADENA_ID, lease.to_i64, nil, true)
         return false
       end
     end
@@ -375,6 +375,7 @@ class Castle < AbstractResidence
     true
   rescue e
     error e
+    false
   end
 
   def activate_instance

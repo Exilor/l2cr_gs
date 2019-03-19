@@ -1096,7 +1096,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
       end
     end
 
-    candidates.sample?(Rnd)
+    candidates.sample?(random: Rnd)
   end
 
   private def get_random_player_from_party_coin(player, npc, memo_state)
@@ -1116,6 +1116,6 @@ class Quests::Q00336_CoinsOfMagic < Quest
       end
     end
 
-    candidates.sample?(Rnd)
+    candidates.sample?(random: Rnd)
   end
 end

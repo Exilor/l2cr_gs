@@ -96,7 +96,7 @@ class L2Clan
   end
 
   def each_player(&block : L2PcInstance ->) : Nil
-    @members.each_value { |m| yield m.player if m.player? }
+    @members.each_value { |m| yield m.player_instance if m.player_instance? }
   end
 
   def each_online_player(&block : L2PcInstance ->) : Nil
@@ -116,9 +116,9 @@ class L2Clan
   end
 
   def set_new_leader(member : L2ClanMember)
-    new_leader = member.player?
+    new_leader = member.player_instance?
     ex_member = leader
-    ex_leader = ex_member.player?
+    ex_leader = ex_member.player_instance?
 
     OnPlayerClanLeaderChange.new(ex_member, member, self).async
 
@@ -170,7 +170,7 @@ class L2Clan
 
   def add_clan_member(member : L2PcInstance)
     m = L2ClanMember.new(self, member)
-    m.player = member
+    m.player_instance = member
     @members[m.l2id] = m
     member.clan = self
     member.pledge_class = L2ClanMember.calculate_pledge_class(member)
@@ -212,8 +212,8 @@ class L2Clan
 
     if ex_member.apprentice != 0
       if apprentice = get_clan_member(ex_member.apprentice)
-        if apprentice.player
-          apprentice.player.sponsor = 0
+        if apprentice.player_instance
+          apprentice.player_instance.sponsor = 0
         else
           apprentice.set_apprentice_and_sponsor(0, 0)
         end
@@ -227,7 +227,7 @@ class L2Clan
       CastleManager.remove_circlet(ex_member, castle_id)
     end
 
-    if pc = ex_member.player?
+    if pc = ex_member.player_instance?
       unless pc.noble?
         pc.title = ""
       end
@@ -306,11 +306,11 @@ class L2Clan
   end
 
   def get_online_members(exclude : Int32, &block : L2PcInstance ->)
-    @members.each_value { |m| yield m.player if m.online? && m.l2id != exclude }
+    @members.each_value { |m| yield m.player_instance if m.online? && m.l2id != exclude }
   end
 
   def get_online_members(exclude : Int32)
-    @members.local_each_value.select { |m| m.online? && m.l2id != exclude }.map &.player
+    @members.local_each_value.select { |m| m.online? && m.l2id != exclude }.map &.player_instance
   end
 
   def online_members_count : Int32
@@ -591,7 +591,14 @@ class L2Clan
           GameDB.exec(sql, new_skill.level, old_skill.id, id)
         else
           sql = "INSERT INTO clan_skills (clan_id,skill_id,skill_level,skill_name,sub_pledge_id) VALUES (?,?,?,?,?)"
-          GameDB.exec(sql, id, new_skill.id, new_skill.level, new_skill.name, subtype)
+          GameDB.exec(
+            sql,
+            id,
+            new_skill.id,
+            new_skill.level,
+            new_skill.name,
+            subtype
+          )
         end
       rescue e
         error e
@@ -601,7 +608,7 @@ class L2Clan
       sm.add_skill_name(new_skill.id)
 
       @members.each_value do |m|
-        if (pc = m.player?) && pc.online?
+        if (pc = m.player_instance?) && pc.online?
           if subtype == -2
             if new_skill.min_pledge_class <= pc.pledge_class
               pc.add_skill(new_skill, false)
@@ -980,10 +987,10 @@ class L2Clan
       end
 
       each do |cm|
-        if cm.online? && cm.power_grade == rank && cm.player?
-          cm.player.clan_privileges.bitmask = privs
-          cm.player.send_packet(UserInfo.new(cm.player))
-          cm.player.send_packet(ExBrExtraUserInfo.new(cm.player))
+        if cm.online? && cm.power_grade == rank && cm.player_instance?
+          cm.player_instance.clan_privileges.bitmask = privs
+          cm.player_instance.send_packet(UserInfo.new(cm.player_instance))
+          cm.player_instance.send_packet(ExBrExtraUserInfo.new(cm.player_instance))
         end
       end
       broadcast_clan_status
@@ -1463,7 +1470,7 @@ class L2Clan
     self.level = level
 
     if leader().online?
-      leader = leader().player
+      leader = leader().player_instance
       if level > 4
         SiegeManager.add_siege_skills(leader)
         leader.send_packet(SystemMessageId::CLAN_CAN_ACCUMULATE_CLAN_REPUTATION_POINTS)
@@ -1485,11 +1492,7 @@ class L2Clan
 
     begin
       sql = "UPDATE clan_data SET crest_id = ? WHERE clan_id = ?"
-      GameDB.exec(
-        sql,
-        crest_id,
-        id
-      )
+      GameDB.exec(sql, crest_id, id)
     rescue e
       error e
     end
@@ -1543,7 +1546,7 @@ class L2Clan
   def learnable_sub_skill?(id : Int32, lvl : Int32) : Bool
     current = @subpledge_skills[id]?
 
-    if current && current + 1 == lvl
+    if current && current.level + 1 == lvl
       return true
     end
 

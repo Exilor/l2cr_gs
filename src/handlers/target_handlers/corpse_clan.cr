@@ -22,7 +22,7 @@ module TargetHandler::CorpseClan
         max_targets = skill.affect_limit
 
         clan.members.each do |m|
-          next unless obj = m.player?
+          next unless obj = m.player_instance?
 
           next if obj == pc
 

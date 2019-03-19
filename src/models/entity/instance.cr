@@ -454,7 +454,7 @@ class Instance
     @eject_dead_tasks[pc.l2id] = ThreadPoolManager.schedule_general(task, @eject_time)
   end
 
-  def notify_death(killer : L2Character, victim : L2Character)
+  def notify_death(killer : L2Character?, victim : L2Character)
     if instance = InstanceManager.get_player_world(victim.acting_player)
       instance.on_death(killer, victim)
     end

@@ -4,7 +4,6 @@ require "../../../enums/class_id"
 module InitialEquipmentData
   extend self
   extend XMLReader
-  extend Loggable
 
   private DATA = EnumMap(ClassId, Array(PcItemTemplate)).new
 

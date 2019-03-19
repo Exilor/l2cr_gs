@@ -8,7 +8,7 @@ class ClanWarehouse < Warehouse
   end
 
   def owner?
-    @clan.leader.player?
+    @clan.leader.player_instance?
   end
 
   def owner_id

@@ -17,7 +17,7 @@ class L2ResidenceTeleportZone < L2ZoneRespawn
     char.inside_no_summon_friend_zone = false
   end
 
-  def oust_all_player
+  def oust_all_players
     players_inside do |pc|
       if pc.online?
         pc.tele_to_location(spawn_loc, 200)

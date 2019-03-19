@@ -111,7 +111,9 @@ module L2World
   end
 
   def get_player(name : String?) : L2PcInstance?
-    PLAYERS.find_value { |pc| pc.name == name } if name
+    if name
+      PLAYERS.find_value { |pc| pc.name == name }
+    end
   end
 
   def get_player(l2id : Int32) : L2PcInstance?

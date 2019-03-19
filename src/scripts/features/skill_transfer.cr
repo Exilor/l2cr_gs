@@ -20,7 +20,6 @@ class NpcAI::SkillTransfer < AbstractNpcAI
 
 
   def on_profession_change(event)
-    # event = event.as(OnPlayerProfessionChange)
     pc = event.active_char
     index = get_transfer_class_index(pc)
 
@@ -37,7 +36,6 @@ class NpcAI::SkillTransfer < AbstractNpcAI
   end
 
   def on_profession_cancel(event)
-    # event = event.as(OnPlayerProfessionCancel)
     pc = event.active_char
     index = get_transfer_class_index(pc)
 

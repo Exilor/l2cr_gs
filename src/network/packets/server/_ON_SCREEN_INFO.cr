@@ -200,10 +200,9 @@ class Packets::Outgoing::ZoneInfo < Packets::Outgoing::OnScreenInfo
 
   def initialize(pc : L2PcInstance)
     @text = String.build do |io|
-      io.puts("[Zones]")
       ZoneId.each do |zone|
         if pc.inside_zone?(zone)
-          io.puts(zone)
+          io << zone << " (" << pc.@zones[zone.to_i] << ")\n"
         end
       end
     end
@@ -224,7 +223,8 @@ class Packets::Outgoing::TargetInfo < Packets::Outgoing::OnScreenInfo
 
     @text = String.build do |io|
       if target.is_a?(L2Object)
-        io.puts "At: #{target.location.x} #{target.location.y} #{target.location.z}"
+        loc = target.location
+        io.puts "At: #{loc.x} #{loc.y} #{loc.z}"
       end
       if target.is_a?(L2Character)
         known_list = target.known_list

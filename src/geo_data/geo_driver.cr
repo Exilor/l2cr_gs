@@ -3,7 +3,7 @@ require "./i_block"
 require "./regions/null_region"
 require "./regions/region"
 
-class GeoDriver
+struct GeoDriver
   include Loggable
 
   # world dimensions: 1048576 * 1048576 = 1099511627776

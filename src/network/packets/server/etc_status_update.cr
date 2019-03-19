@@ -6,7 +6,7 @@ class Packets::Outgoing::EtcStatusUpdate < GameServerPacket
 
     d @pc.charges
     d @pc.weight_penalty
-    d @pc.message_refusal? || @pc.chat_banned? || @pc.silence_mode? ? 1 : 0
+    d (@pc.message_refusal? || @pc.chat_banned? || @pc.silence_mode?) ? 1 : 0
     d @pc.inside_danger_area_zone? ? 1 : 0
     d @pc.expertise_weapon_penalty
     d @pc.expertise_armor_penalty

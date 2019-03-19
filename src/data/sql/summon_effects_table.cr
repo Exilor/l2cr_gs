@@ -21,7 +21,7 @@ module SummonEffectsTable
     if servitor_map = SERVITOR_EFFECTS[pc.l2id]?
       servitor_map[pc.class_index]?
     end
-    # SERVITOR_EFFECTS.dig(pc.l2id, pc.class_index)
+    # SERVITOR_EFFECTS.dig?(pc.l2id, pc.class_index)
   end
 
   private def get_servitor_effects(pc, reference_skill : Int32) : Hash(Int32, SummonEffect)?

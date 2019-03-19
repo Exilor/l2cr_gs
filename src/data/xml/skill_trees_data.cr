@@ -5,7 +5,6 @@ require "../../enums/class_id"
 module SkillTreesData
   extend self
   extend XMLReader
-  extend Loggable
 
   private CLASS_SKILL_TREES    = EnumMap(ClassId, Hash(Int32, L2SkillLearn)).new
   private TRANSFER_SKILL_TREES = EnumMap(ClassId, Hash(Int32, L2SkillLearn)).new

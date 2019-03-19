@@ -115,8 +115,8 @@ module AirshipManager
   end
 
   def has_airship?(owner_id : Int32) : Bool
-    ship = AIRSHIPS[owner_id]?
-    !!ship && (ship.visible? || ship.teleporting?)
+    return false unless ship = AIRSHIPS[owner_id]?
+    ship.visible? || ship.teleporting?
   end
 
   def register_airship_teleport_list(dock_id : Int32, location_id : Int32, tp : Slice(Slice(VehiclePathPoint)), fuel_consumption : Slice(Int32))
@@ -179,7 +179,8 @@ module AirshipManager
       return
     end
 
-    all.routes[index + 1]
+    # all.routes[index + 1]
+    all.routes.unsafe_fetch(index + 1)
   end
 
   private def store_in_db(owner_id)
@@ -187,8 +188,10 @@ module AirshipManager
       return
     end
 
-    GameDB.exec(UPDATE_DB, info.get_i32("fuel"), owner_id)
-  rescue e
-    error e
+    begin
+      GameDB.exec(UPDATE_DB, info.get_i32("fuel"), owner_id)
+    rescue e
+      error e
+    end
   end
 end

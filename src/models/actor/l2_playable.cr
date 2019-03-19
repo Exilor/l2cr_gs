@@ -18,7 +18,7 @@ abstract class L2Playable < L2Character
     self.invul = false
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Playable
   end
 
@@ -50,31 +50,31 @@ abstract class L2Playable < L2Character
     @status = PlayableStatus.new(self)
   end
 
-  def locked_target?
+  def locked_target? : Bool
     !!@locked_target
   end
 
-  def can_be_attacked?
+  def can_be_attacked? : Bool
     true
   end
 
-  def playable?
+  def playable? : Bool
     true
   end
 
-  def noblesse_blessing_affected?
+  def noblesse_blessing_affected? : Bool
     affected?(EffectFlag::NOBLESS_BLESSING)
   end
 
-  def resurrect_special_affected?
+  def resurrect_special_affected? : Bool
     affected?(EffectFlag::RESURRECTION_SPECIAL)
   end
 
-  def protection_blessing_affected?
+  def protection_blessing_affected? : Bool
     affected?(EffectFlag::PROTECTION_BLESSING)
   end
 
-  def silent_move_affected?
+  def silent_move_affected? : Bool
     affected?(EffectFlag::SILENT_MOVE)
   end
 
@@ -91,22 +91,105 @@ abstract class L2Playable < L2Character
     true
   end
 
-  def add_level(level)
+  def add_level(level) : Bool
     false
   end
 
-  def exp
+  def exp : Int64
     0i64
   end
 
-  def sp
+  def sp : Int32
     0
+  end
+
+  def do_die(killer : L2Character?) : Bool
+    evt = OnCreatureKill.new(killer, self)
+    term = EventDispatcher.notify(evt, self, TerminateReturn)
+    if term && term.terminate
+      return false
+    end
+
+    sync do
+      if dead?
+        return false
+      end
+
+      self.current_hp = 0.0
+      self.dead = true
+    end
+
+    self.target = nil
+    stop_move
+
+    status.stop_hp_mp_regeneration
+
+    delete_buffs = true
+
+    if noblesse_blessing_affected?
+      stop_effects(L2EffectType::NOBLESSE_BLESSING)
+      delete_buffs = false
+    end
+
+    if resurrect_special_affected?
+      stop_effects(L2EffectType::RESURRECTION_SPECIAL)
+      delete_buffs = true
+    end
+
+    if player?
+      pc = acting_player
+
+      if pc.charm_of_courage?
+        if pc.in_siege?
+          pc.revive_request(pc, nil, false, 0, 0)
+        end
+        pc.charm_of_courage = false
+        pc.send_packet(EtcStatusUpdate.new(pc))
+      end
+    end
+
+    if delete_buffs
+      stop_all_effects_except_those_that_last_through_death
+    end
+
+    broadcast_status_update
+
+    world_region?.try &.on_death(self)
+
+    pc = acting_player
+
+    unless pc.notify_quest_of_death_empty?
+      pc.notify_quest_of_death.each do |qs|
+        qs.quest.notify_death(killer || self, self, qs)
+      end
+    end
+
+    if instance_id > 0
+      if instance = InstanceManager.get_instance(instance_id)
+        instance.notify_death(killer, self)
+      end
+    end
+
+    if killer
+      if player = killer.acting_player?
+        player.on_kill_update_pvp_karma(self)
+      end
+    end
+
+    notify_event(AI::DEAD)
+    update_effect_icons
+
+    true
+  end
+
+  def update_effect_icons(party_only : Bool)
+    effect_list.update_effect_icons(party_only)
   end
 
   abstract def store_me
   abstract def do_pickup_item(object : L2Object)
   abstract def karma : Int32
-  abstract def pvp_flag : UInt8
+  abstract def pvp_flag : Int8
   abstract def use_magic(skill : Skill, force : Bool, dont_move : Bool) : Bool
   abstract def store_effect(store_effects : Bool)
   abstract def restore_effects

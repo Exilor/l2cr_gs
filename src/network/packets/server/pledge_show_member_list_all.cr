@@ -55,7 +55,7 @@ class Packets::Outgoing::PledgeShowMemberListAll < GameServerPacket
       d m.class_id
 
       # this is useless, the clan window doesn't show this
-      if pc = m.player?
+      if pc = m.player_instance?
         d pc.appearance.sex ? 1 : 0
         d pc.race.to_i
       else

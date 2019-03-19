@@ -28,7 +28,7 @@ class Packets::Incoming::RequestOustPledgeMember < GameClientPacket
       return
     end
 
-    if member.online? && member.player.in_combat?
+    if member.online? && member.player_instance.in_combat?
       pc.send_packet(SystemMessageId::CLAN_MEMBER_CANNOT_BE_DISMISSED_DURING_COMBAT)
       return
     end
@@ -48,7 +48,7 @@ class Packets::Incoming::RequestOustPledgeMember < GameClientPacket
     clan.broadcast_to_online_members(PledgeShowMemberListDelete.new(@target))
 
     if member.online?
-      member.player.send_packet(SystemMessageId::CLAN_MEMBERSHIP_TERMINATED)
+      member.player_instance.send_packet(SystemMessageId::CLAN_MEMBERSHIP_TERMINATED)
     end
   end
 end

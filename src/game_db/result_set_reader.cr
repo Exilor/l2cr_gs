@@ -66,9 +66,9 @@ struct ResultSetReader
       end
     end
 
-    def key_bool?(key : KeyType) : Bool?
-      get(key).as(Bool?)
-    end
+    # def get_bool?(key : KeyType) : Bool?
+    #   get(key).as(Bool?)
+    # end
 
     private def get(key : String)
       @data.each do |pair|

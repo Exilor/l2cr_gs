@@ -1,7 +1,6 @@
 module MerchantPriceConfigTable
   extend self
   # extend InstanceListManager
-  extend Loggable
   extend XMLReader
 
   private MPCS_FILE = "MerchantPriceConfig.xml"
