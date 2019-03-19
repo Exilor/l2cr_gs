@@ -42,7 +42,7 @@ Gracefully restarting the server is only possible when launching it using the ex
   - [ ] Nevit's Blessing
 - [x] Items
   - [x] Special abilities
-    - [ ] Soul crystal quest
+    - [x] Soul crystal quest
   - [x] Enchanting
   - [x] Augmentations
   - [x] Shadow items
@@ -124,7 +124,7 @@ Gracefully restarting the server is only possible when launching it using the ex
 - [x] Quest system
   - [x] First class change
   - [x] Second class change
-  - [ ] Third class change
+  - [x] Third class change
   - [x] Low level quests
   - [x] Transformation quest
   - [ ] All other quests
@@ -173,13 +173,13 @@ Gracefully restarting the server is only possible when launching it using the ex
 - [ ] Territory War (preliminary support, untested)
 - [x] Instances
   - [x] The system itself
-  - [x] Pailaka (the first one)
+  - [x] Pailaka (the first two)
   - [x] Kamaloka (needs more testing)
   - [x] Nornil's Garden
   - [ ] All the others
 - [x] Subclasses
   - [ ] Subclass quest
-  - [ ] Subclass skills (skills learned on main class depending on subclass)
+  - [x] Subclass skills (skills learned on main class depending on subclass)
   - [ ] Buffs restored on subclass change
   - [x] Kamael bonus subclass Judicator
 - [x] Fishing
