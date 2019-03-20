@@ -3,8 +3,9 @@ module KnownListUpdater
   extend Runnable
   extend Loggable
 
-  FULL_UPDATE_TIMER = 100
+  private FULL_UPDATE_TIMER = 100
   private FAILED_REGIONS = Set(L2WorldRegion).new
+
   @@update_pass = true
   @@timer = FULL_UPDATE_TIMER
 

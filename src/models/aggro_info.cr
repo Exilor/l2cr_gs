@@ -6,7 +6,7 @@ class AggroInfo
 
   def_equals_and_hash @attacker
 
-  def check_hate(owner : L2Character)
+  def check_hate(owner : L2Character) : Int64
     a = @attacker
 
     if a.looks_dead? || !a.visible? || !owner.known_list.knows_object?(a)
@@ -25,6 +25,6 @@ class AggroInfo
   end
 
   def add_damage(value : Int32)
-    @damage = Math.min(@damage + value, 999_999_999)
+    @damage = Math.min(@damage + value.to_i64, 999_999_999).to_i32
   end
 end

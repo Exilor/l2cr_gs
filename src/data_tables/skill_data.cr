@@ -13,7 +13,8 @@ module SkillData
     info "Loading skills..."
     timer = Timer.new
 
-    DocumentEngine.load_skills(SKILLS.clear)
+    SKILLS.clear
+    DocumentEngine.load_skills(SKILLS)
     SKILLS_MAX_LEVEL.clear
     ENCHANTABLE.clear
 
