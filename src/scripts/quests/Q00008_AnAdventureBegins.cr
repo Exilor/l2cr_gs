@@ -47,45 +47,46 @@ class Quests::Q00008_AnAdventureBegins < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when JASMINE
       case st.state
       when State::CREATED
         if pc.race.dark_elf? && pc.level >= MIN_LEVEL
-          htmltext = "30134-02.htm"
+          html = "30134-02.htm"
         else
-          htmltext = "30134-01.html"
+          html = "30134-01.html"
         end
       when State::STARTED
         if st.cond?(1)
-          htmltext = "30134-04.html"
+          html = "30134-04.html"
         elsif st.cond?(3)
-          htmltext = "30134-05.html"
+          html = "30134-05.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when ROSELYN
       if st.started?
         if st.cond?(1)
-          htmltext = "30355-01.html"
+          html = "30355-01.html"
         elsif st.cond?(2)
-          htmltext = "30355-03.html"
+          html = "30355-03.html"
         end
       end
     when HARNE
       if st.started?
         if st.cond?(2)
-          htmltext = "30144-01.html"
+          html = "30144-01.html"
         elsif st.cond?(3)
-          htmltext = "30144-04.html"
+          html = "30144-04.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

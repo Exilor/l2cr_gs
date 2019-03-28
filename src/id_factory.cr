@@ -62,7 +62,7 @@ module IdFactory
         clean_invalid_weddings
       end
       clean_up_db
-      debug "Database cleaned in #{timer} s."
+      debug { "Database cleaned in #{timer} s." }
     end
 
     clean_up_timestamps
@@ -85,7 +85,7 @@ module IdFactory
 
     temp.sort!
     temp.each { |id| IDS << id }
-    info "#{temp.size} IDs loaded in #{timer.result(4)} s."
+    info { "#{temp.size} IDs loaded in #{timer.result(4)} s." }
   end
 
   def next : Int32

@@ -47,45 +47,46 @@ class Quests::Q00007_ATripBegins < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when MIRABEL
       case st.state
       when State::CREATED
         if pc.race.elf? && pc.level >= MIN_LEVEL
-          htmltext = "30146-01.htm"
+          html = "30146-01.htm"
         else
-          htmltext = "30146-02.html"
+          html = "30146-02.html"
         end
       when State::STARTED
         if st.cond?(1)
-          htmltext = "30146-04.html"
+          html = "30146-04.html"
         elsif st.cond?(3)
-          htmltext = "30146-05.html"
+          html = "30146-05.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when ARIEL
       if st.started?
         if st.cond?(1)
-          htmltext = "30148-01.html"
+          html = "30148-01.html"
         elsif st.cond?(2)
-          htmltext = "30148-03.html"
+          html = "30148-03.html"
         end
       end
     when ASTERIOS
       if st.started?
         if st.cond?(2)
-          htmltext = "30154-01.html"
+          html = "30154-01.html"
         elsif st.cond?(3)
-          htmltext = "30154-04.html"
+          html = "30154-04.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

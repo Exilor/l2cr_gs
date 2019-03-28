@@ -27,8 +27,6 @@ class EffectHandler::StealAbnormal < AbstractEffect
     return if effected == effector
 
     buffs = Formulas.steal_effects(effector, effected, info.skill, @slot, @rate, @max)
-    return if buffs.empty?
-
     buffs.each do |buff|
       stolen = BuffInfo.new(effected, effector, buff.skill)
       stolen.abnormal_time = buff.time

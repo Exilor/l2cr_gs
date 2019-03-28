@@ -77,11 +77,11 @@ module AugmentationData
     end
 
     if Config.retail_like_augmentation
-      info "Loaded #{AUGMENTATION_CHANCES.size} augmentations."
-      info "Loaded #{AUGMENTATION_CHANCES_ACC.size} accessory augmentations."
+      info { "Loaded #{AUGMENTATION_CHANCES.size} augmentations." }
+      info { "Loaded #{AUGMENTATION_CHANCES_ACC.size} accessory augmentations." }
     else
       10.times do |i|
-        info "Loaded #{BLUE_SKILLS[i].size} blue, #{PURPLE_SKILLS[i].size} purple and #{RED_SKILLS[i].size} red skills for Life Stone lvl #{i}."
+        info { "Loaded #{BLUE_SKILLS[i].size} blue, #{PURPLE_SKILLS[i].size} purple and #{RED_SKILLS[i].size} red skills for Life Stone lvl #{i}." }
       end
     end
   end

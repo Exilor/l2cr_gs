@@ -35,7 +35,7 @@ class Quests::Q00005_MinersFavor < Quest
     return unless pc
     return unless st = get_quest_state(pc, false)
 
-    htmltext = event
+    html = event
 
     case event
     when "30554-03.htm"
@@ -54,21 +54,22 @@ class Quests::Q00005_MinersFavor < Quest
       return
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when BOLTER
       case st.state
       when State::CREATED
-        htmltext = pc.level >= MIN_LEVEL ? "30554-02.htm" : "30554-01.html"
+        html = pc.level >= MIN_LEVEL ? "30554-02.htm" : "30554-01.html"
       when State::STARTED
         if st.cond? 1
-          htmltext = "30554-04.html"
+          html = "30554-04.html"
         else
           give_adena(pc, 2466, true)
           add_exp_and_sp(pc, 5672, 446)
@@ -76,28 +77,28 @@ class Quests::Q00005_MinersFavor < Quest
           st.exit_quest false, true
           msg = NpcString::DELIVERY_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE
           show_on_screen_msg(pc, msg, 2, 5000)
-          htmltext = "30554-06.html"
+          html = "30554-06.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when BRUNON
       if st.started?
         if has_quest_items?(pc, MINERS_PICK)
-          htmltext = "30526-03.html"
+          html = "30526-03.html"
         else
-          htmltext = "30526-01.html"
+          html = "30526-01.html"
         end
       end
     when REED
-      htmltext = give_item(pc, st, npc.id, REDSTONE_BEER)
+      html = give_item(pc, st, npc.id, REDSTONE_BEER)
     when SHARI
-      htmltext = give_item(pc, st, npc.id, BOOMBOOM_POWDER)
+      html = give_item(pc, st, npc.id, BOOMBOOM_POWDER)
     when GARITA
-      htmltext = give_item(pc, st, npc.id, MINING_BOOTS)
+      html = give_item(pc, st, npc.id, MINING_BOOTS)
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   private def check_progress(pc, st)

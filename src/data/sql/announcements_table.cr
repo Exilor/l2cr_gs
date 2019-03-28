@@ -29,7 +29,7 @@ module AnnouncementsTable
       DATA[announce.id] = announce
     end
 
-    info "Loaded #{DATA.size} announcements."
+    info { "Loaded #{DATA.size} announcements." }
   rescue e
     error e
   end

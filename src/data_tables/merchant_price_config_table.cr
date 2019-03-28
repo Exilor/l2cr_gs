@@ -45,7 +45,7 @@ module MerchantPriceConfigTable
 
   def load_instances
     load
-    info "Loaded #{MPCS.size} merchant price configurations."
+    info { "Loaded #{MPCS.size} merchant price configurations." }
   rescue e
     error e
   end

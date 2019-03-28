@@ -365,10 +365,6 @@ class NpcAI::ClassMaster < AbstractNpcAI
     true
   end
 
-  # /**
-  #  * @param level - current skillId level (0 - start, 1 - first, etc)
-  #  * @return minimum player level required for next class transfer
-  #  */
   def get_min_lvl(level)
     case level
     when 0
@@ -382,22 +378,10 @@ class NpcAI::ClassMaster < AbstractNpcAI
     end
   end
 
-  # /**
-  #  * Returns true if class change is possible
-  #  * @param oldCID current player ClassId
-  #  * @param val new class index
-  #  * @return {@code true} if the class ID is valid
-  #  */
   private def validate_class_id(old_cid, val)
     validate_class_id(old_cid, ClassId[val]?)
   end
 
-  # /**
-  #  * Returns true if class change is possible
-  #  * @param oldCID current player ClassId
-  #  * @param newCID new ClassId
-  #  * @return true if class change is possible
-  #  */
   private def validate_class_id(old_cid : ClassId, new_cid : ClassId?)
     !!new_cid && !new_cid.race.none? &&
     (old_cid == new_cid.parent? || (Config.allow_entire_tree && new_cid.child_of?(old_cid)))

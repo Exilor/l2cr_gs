@@ -22,13 +22,13 @@ module SummonSkillsTable
       count += 1
     end
 
-    info "Loaded #{count} pet skills."
+    info { "Loaded #{count} pet skills." }
   end
 
   def get_available_level(s : L2Summon, id : Int32) : Int32
     lvl = 0
     unless tree = SKILL_TREES[s.id]?
-      warn "#{s} doesn't have any skills assigned."
+      warn { "#{s} doesn't have any skills assigned." }
       return lvl
     end
 
@@ -51,24 +51,24 @@ module SummonSkillsTable
         end
       end
     end
-    debug "Available level: #{lvl}."
+    debug { "Available level: #{lvl}." }
     lvl
   end
 
-  def each_available_skill(s : L2Summon)
-    unless tree = SKILL_TREES[s.id]?
-      warn "#{s} doesn't have any skills assigned."
-      return
-    end
-    id = 0
-    tree.each_value do |sk|
-      next if sk.id == id
-      id = sk.id
-      yield sk.id
-    end
-  end
+  # def each_available_skill(s : L2Summon)
+  #   unless tree = SKILL_TREES[s.id]?
+  #     warn { "#{s} doesn't have any skills assigned." }
+  #     return
+  #   end
+  #   id = 0
+  #   tree.each_value do |sk|
+  #     next if sk.id == id
+  #     id = sk.id
+  #     yield sk.id
+  #   end
+  # end
 
-  def get_available_skills(s : L2Summon)
+  def get_available_skills(s : L2Summon) : Array(Int32)
     ret = [] of Int32
     each_available_skill { |id| ret << id }
     ret

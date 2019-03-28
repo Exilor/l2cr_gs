@@ -26,7 +26,7 @@ module ClanTable
       clan_count += 1
     end
 
-    info "Loaded #{clan_count} clans."
+    info { "Loaded #{clan_count} clans." }
 
     alliance_check
     restore_wars
@@ -380,7 +380,7 @@ module ClanTable
           clan.ally_name = nil
           clan.change_ally_crest(0, true)
           clan.update_clan_in_db
-          info "Removed alliance from clan #{clan.name}."
+          info { "Removed alliance from clan #{clan.name}." }
         end
       end
     end

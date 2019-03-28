@@ -1,7 +1,4 @@
 class Olympiad < ListenersContainer
-  include Synchronizable
-  include Loggable
-
   private NOBLES = {} of Int32 => StatsSet
   private HEROS_TO_BE = [] of StatsSet
   private NOBLES_RANK = {} of Int32 => Int32
@@ -69,12 +66,13 @@ class Olympiad < ListenersContainer
 
   @olympiad_end = 0i64
   @validation_end = 0i64
-  protected setter period = 0
+  getter period
+  protected setter period : Int32 = 0
   @next_weekly_change = 0i64
-  @current_cycle = 0
+  getter current_cycle = 0
   @comp_end = 0i64
   @comp_start : Calendar?
-  @comp_period = false
+  getter? comp_period = false
   @comp_started = false
   @scheduled_comp_start : Runnable::DelayedTask?
   @scheduled_comp_end : Runnable::DelayedTask?
@@ -259,17 +257,613 @@ class Olympiad < ListenersContainer
 
     @scheduled_olympiad_end.try &.cancel
 
-    @scheduled_olympiad_end = ThreadPoolManager.schedule_general(OlympiadEndTask.new(HEROS_TO_BE), millis_to_olympiad_end)
+    # task = OlympiadEndTask.new(HEROS_TO_BE)
+    task = ->olympiad_end_task
+    delay = millis_to_olympiad_end
+    @scheduled_olympiad_end = ThreadPoolManager.schedule_general(task, delay)
+
     update_comp_status
   end
 
-  private struct OlympiadEndTask
-    include Runnable
+  private def olympiad_end_task
+    sm = SystemMessage.olympiad_period_s1_has_ended
+    sm.add_int(Olympiad.instance.current_cycle)
 
-    initializer heroes_to_be: Array(StatsSet)
+    Broadcast.to_all_online_players(sm)
+    Broadcast.to_all_online_players("Olympiad Validation Period has begun")
 
-    def run
+    if task = @scheduled_weekly_task
+      task.cancel
     end
+
+    save_noble_data
+
+    @period = 1
+    save_heros_to_be
+    Hero.reset_data
+    Hero.compute_new_heroes(HEROS_TO_BE)
+
+    save_olympiad_status
+    update_monthly_data
+
+    @validation_end = Time.ms + VALIDATION_PERIOD
+
+    load_nobles_rank
+    task = ->validation_end_task
+    delay = millis_to_validation_end
+    @scheduled_validation_task = ThreadPoolManager.schedule_general(task, delay)
+  end
+
+  private def validation_end_task
+    Broadcast.to_all_online_players("Olympiad Validation Period has ended")
+    @period = 0
+    @current_cycle += 1
+    delete_nobles
+    set_new_olympiad_end
+    init
+  end
+
+  private def noble_count : Int32
+    NOBLES.size
+  end
+
+  private def get_noble_stats(l2id) : StatsSet?
+    NOBLES[l2id]?
+  end
+
+  private def update_comp_status
+    sync do
+      ms_to_start = millis_to_comp_begin
+
+      num_secs = ms_to_start.fdiv(1000) % 60
+      countdown = (ms_to_start.fdiv(1000) - num_secs) / 60
+      num_mins = (countdown % 60).floor.to_i
+      countdown = (countdown - num_mins) / 60
+      num_hours = (countdown % 24).to_i
+      num_days = ((countdown - num_hours) / 24).floor.to_i
+
+      info { "Competition Period starts in #{num_days} days, #{num_hours} hours and #{num_mins} minutes." }
+      info { "Event starts/started at #{@comp_start.time}" }
+
+      scheduled_comp_task = -> do
+        if olympiad_end?
+          return
+        end
+
+        @comp_period = true
+
+        sm = SystemMessage.the_olympiad_game_has_started
+        Broadcast.to_all_online_players(sm)
+        info "Olympiad Game Started."
+
+        @game_manager = ThreadPoolManager.schedule_general_at_fixed_rate(OlympiadGameManager, 30000, 30000)
+        if Config.alt_oly_announce_games
+          @game_announcer = ThreadPoolManager.schedule_general_at_fixed_rate(OlympiadAnnouncer.new, 30000, 500)
+        end
+
+        reg_end = millis_to_comp_end - 600_000
+        if reg_end > 0
+          broadcast_task = -> do
+            sm = SystemMessage.olympiad_registration_period_ended
+            Broadcast.to_all_online_players(sm)
+          end
+          ThreadPoolManager.schedule_general(broadcast_task, reg_end)
+
+          scheduled_comp_end = -> do
+            if olympiad_end?
+              return
+            end
+
+            @comp_period = false
+            sm = SystemMessage.the_olympiad_game_has_ended
+            Broadcast.to_all_online_players(sm)
+            info "Olympiad Game ended"
+
+            while OlympiadGameManager.battle_started?
+              sleep(1.minute)
+            end
+
+            if task = @game_manager
+              task.cancel
+              @game_manager = nil
+            end
+
+            if task = @game_announcer
+              task.cancel
+              @game_manager = nil
+            end
+
+            save_olympiad_status
+
+            init
+          end
+
+          @scheduled_comp_end = ThreadPoolManager.schedule_general(scheduled_comp_end, millis_to_comp_end)
+        end
+      end
+
+      @scheduled_comp_task = ThreadPoolManager.schedule_general(scheduled_comp_task, millis_to_comp_begin)
+    end
+  end
+
+  private def millis_to_olympiad_end : Int64
+    @olympiad_end - Time.ms
+  end
+
+  def manual_select_heroes
+    if task = @scheduled_olympiad_end
+      task.cancel
+    end
+
+    task = ->olympiad_end_task
+    @scheduled_olympiad_end = ThreadPoolManager.schedule_general(task, 0)
+  end
+
+  private def millis_to_validation_end : Int64
+    time = Time.ms
+    if @validation_end > time
+      return @validation_end - time
+    end
+
+    10i64
+  end
+
+  def olympiad_end? : Bool
+    @period != 0
+  end
+
+  private def set_new_olympiad_end
+    sm = SystemMessage.olympiad_period_s1_has_started
+    sm.add_int(@current_cycle)
+
+    Broadcast.to_all_online_players(sm)
+
+    cal = Calendar.new
+    cal.add(:MONTH, 1)
+    cal.day = 1
+    cal.hour = 12
+    cal.minute = 0
+    cal.second = 0
+    @olympiad_end = time.ms
+
+    next_change = Time.ms + WEEKLY_PERIOD
+    schedule_weekly_change
+  end
+
+  private def millis_to_comp_begin : Int64
+    time = Time.ms
+
+    if @comp_start.ms < time && @comp_end > time
+      return 10i64
+    end
+
+    if @comp_start.ms > time
+      return @comp_start.ms - time
+    end
+
+    set_new_comp_begin
+  end
+
+  private def set_new_comp_begin : Int64
+    @comp_start = Calendar.new
+    @comp_start.hour = COMP_START
+    @comp_start.minute = COMP_MIN
+    @comp_start.add(:DAY, 1)
+    @comp_end = @comp_start.ms + COMP_PERIOD
+
+    info { "New schedule: #{@comp_start.time}." }
+
+    @comp_start.ms - Time.ms
+  end
+
+  private def millis_to_comp_end : Int64
+    @comp_end - Time.ms
+  end
+
+  private def millis_to_week_change : Int64
+    time = Time.ms
+
+    if @next_weekly_change > time
+      return @next_weekly_change - time
+    end
+
+    10i64
+  end
+
+  private def schedule_weekly_change
+    task = -> do
+      add_weekly_points
+      info "Added weekly points to nobles."
+      reset_weekly_matches
+      info "Reset weekly matches to nobles."
+
+      @next_weekly_change = Time.ms + WEEKLY_PERIOD
+    end
+
+    delay = millis_to_week_change
+    @scheduled_weekly_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, WEEKLY_PERIOD)
+  end
+
+  private def add_weekly_points
+    sync do
+      if @period == 1
+        return
+      end
+
+      NOBLES.each_value do |info|
+        points = info.get_i32(POINTS)
+        points + WEEKLY_POINTS
+        info[POINTS] = points
+      end
+    end
+  end
+
+  private def reset_weekly_matches
+    sync do
+      if @period == 1
+        return
+      end
+
+      NOBLES.each_value do |info|
+        info[COMP_DONE_WEEK] = 0
+        info[COMP_DONE_WEEK_CLASSED] = 0
+        info[COMP_DONE_WEEK_NON_CLASSED] = 0
+        info[COMP_DONE_WEEK_TEAM] = 0
+      end
+    end
+  end
+
+  def player_in_stadium?(pc : L2PcInstance) : Bool
+    !!ZoneManager.get_olympiad_stadium(pc)
+  end
+
+  private def save_noble_data
+    sync do
+      if NOBLES.empty?
+        return
+      end
+
+      begin
+        NOBLES.each do |char_id, info|
+          class_id = info.get_i32(CLASS_ID)
+          points = info.get_i32(POINTS)
+          comp_done = info.get_i32(COMP_DONE)
+          comp_won = info.get_i32(COMP_WON)
+          comp_lost = info.get_i32(COMP_LOST)
+          comp_drawn = info.get_i32(COMP_DRAWN)
+          comp_done_week = info.get_i32(COMP_DONE_WEEK)
+          comp_done_week_classed = info.get_i32(COMP_DONE_WEEK_CLASSED)
+          comp_done_week_non_classed = info.get_i32(COMP_DONE_WEEK_NON_CLASSED)
+          comp_done_week_team = info.get_i32(COMP_DONE_WEEK_TEAM)
+          to_save = info.get_bool("to_save")
+
+          if to_save
+            GameDB.exec(
+              OLYMPIAD_SAVE_NOBLES,
+              char_id,
+              class_id,
+              points,
+              comp_done,
+              comp_won,
+              comp_lost,
+              comp_drawn,
+              comp_done_week,
+              comp_done_week_classed,
+              comp_done_week_non_classed,
+              comp_done_week_team
+            )
+            info["to_save"] = false
+          else
+            GameDB.exec(
+              OLYMPIAD_UPDATE_NOBLES,
+              points,
+              comp_done,
+              comp_won,
+              comp_lost,
+              comp_drawn,
+              comp_done_week,
+              comp_done_week_classed,
+              comp_done_week_non_classed,
+              comp_done_week_team,
+              char_id
+            )
+          end
+        end
+      rescue e
+        error e
+      end
+    end
+  end
+
+  def save_olympiad_status
+    save_noble_data
+
+    begin
+      GameDB.exec(
+        OLYMPIAD_SAVE_DATA,
+        @current_cycle,
+        @period,
+        @olympiad_end,
+        @validation_end,
+        @next_weekly_change,
+        @current_cycle,
+        @period,
+        @olympiad_end,
+        @validation_end,
+        @next_weekly_change
+      )
+    rescue e
+      error e
+    end
+  end
+
+  private def update_monthly_data
+    GameDB.exec(OLYMPIAD_MONTH_CLEAR)
+    GameDB.exec(OLYMPIAD_MONTH_CREATE)
+  rescue e
+    error e
+  end
+
+  private def sort_heros_to_be
+    if @period != 1
+      return
+    end
+
+    # logging
+
+    soul_hounds = [] of StatsSet
+
+    HERO_IDS.each do |element|
+      GameDB.each(OLYMPIAD_GET_HEROS, element) do |rs|
+        hero = StatsSet.new
+        hero[CLASS_ID] = element
+        hero[CHAR_ID] = rs.get_i32(CHAR_ID)
+        hero[CHAR_NAME] = rs.get_i32(CHAR_NAME)
+
+        if element == 132 || element == 133 # male and female soulhounds
+          hero = NOBLES[hero.get_i32(CHAR_ID)]
+          hero[CHAR_ID] = rs.get_i32(CHAR_ID)
+          soul_hounds << hero
+        else
+          # logging
+          HEROS_TO_BE << hero
+        end
+      end
+    end
+
+    case soul_hounds.size
+    when 0
+      # do nothing
+    when 1
+      hero = StatsSet.new
+      winner = soul_hounds[0]
+      hero[CLASS_ID] = winner.get_i32(CLASS_ID)
+      hero[CHAR_ID] = winner.get_i32(CHAR_ID)
+      hero[CHAR_NAME] = winner.get_string(CHAR_NAME)
+
+      # logging
+
+      HEROS_TO_BE << hero
+    when 2
+      hero = StatsSet.new
+      hero1, hero2 = soul_hounds
+      hero_1_points = hero1.get_i32(POINTS)
+      hero_2_points = hero2.get_i32(POINTS)
+      hero_1_comps = hero1.get_i32(COMP_DONE)
+      hero_2_comps = hero2.get_i32(COMP_DONE)
+      hero_1_wins = hero1.get_i32(COMP_WON)
+      hero_2_wins = hero2.get_i32(COMP_WON)
+
+      if hero_1_points > hero_2_points
+        winner = hero1
+      elsif hero_2_points > hero_1_points
+        winner = hero2
+      else
+        if hero_1_comps > hero_2_comps
+          winner = hero1
+        elsif hero_2_comps > hero_1_comps
+          winner = hero2
+        else
+          if hero_1_wins > hero_2_wins
+            winner = hero1
+          else
+            winner = hero2
+          end
+        end
+      end
+
+      hero[CLASS_ID] = winner.get_i32(CLASS_ID)
+      hero[CHAR_ID] = winner.get_i32(CHAR_ID)
+      hero[CHAR_NAME] = winner.get_string(CHAR_NAME)
+
+      # logging
+
+      HEROS_TO_BE < hero
+    end
+
+  rescue e
+    error e
+  end
+
+  def get_class_leader_board(class_id : Int32) : Array(String)
+    names = [] of String
+    if Config.alt_oly_show_monthly_winners
+      if class_id == 134
+        sql = GET_EACH_CLASS_LEADER_SOULHOUND
+      else
+        sql = GET_EACH_CLASS_LEADER
+      end
+    else
+      if class_id == 132
+        sql = GET_EACH_CLASS_LEADER_CURRENT_SOULHOUND
+      else
+        sql = GET_EACH_CLASS_LEADER_CURRENT
+      end
+    end
+
+    begin
+      GameDB.exec(sql, class_id)
+    rescue e
+      error "Couldn't load olympiad leaders from DB."
+      error e
+    end
+
+    names
+  end
+
+  def get_noblesse_passes(pc : L2PcInstance, clear : Bool) : Int32
+    if @period != 1 || NOBLES_RANK.empty?
+      return 0
+    end
+
+    l2id = pc.l2id
+
+    unless NOBLES_RANK[l2id]?
+      return 0
+    end
+
+    unless noble = NOBLES[l2id]?
+      return 0
+    end
+
+    if noble.get_i32(POINTS) == 0
+      return 0
+    end
+
+    if pc.hero? || Hero.unclaimed_hero?(l2id)
+      points = Config.alt_oly_hero_points
+    else
+      points = 0
+    end
+
+    case rank
+    when 1
+      points += Config.alt_oly_rank1_points
+    when 2
+      points += Config.alt_oly_rank2_points
+    when 3
+      points += Config.alt_oly_rank3_points
+    when 4
+      points += Config.alt_oly_rank4_points
+    else
+      points += Config.alt_oly_rank5_points
+    end
+
+    if clear
+      info[POINTS] = 0
+    end
+
+    points * Config.alt_oly_gp_per_point
+  end
+
+  def get_noble_points(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(POINTS)
+    end
+
+    0
+  end
+
+  def get_last_noble_olympiad_points(l2id : Int32) : Int32
+    ret = 0
+
+    begin
+      sql = "SELECT olympiad_points FROM olympiad_nobles_eom WHERE charId = ?"
+      GameDB.query_each(sql, l2id) do |rs|
+        ret = rs.read(Int32)
+      end
+    rescue e
+      error e
+    end
+
+    ret
+  end
+
+  def get_competition_done(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(COMP_DONE)
+    end
+
+    0
+  end
+
+  def get_competition_won(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(COMP_WON)
+    end
+
+    0
+  end
+
+  def get_competition_lost(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(COMP_LOST)
+    end
+
+    0
+  end
+
+  def get_competition_done_week(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(COMP_DONE_WEEK)
+    end
+
+    0
+  end
+
+  def get_competition_done_week_classed(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(COMP_DONE_WEEK_CLASSED)
+    end
+
+    0
+  end
+
+  def get_competition_done_week_non_classed(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(COMP_DONE_WEEK_NON_CLASSED)
+    end
+
+    0
+  end
+
+  def get_competition_done_week_team(l2id : Int32) : Int32
+    if tmp = NOBLES[l2id]?
+      return tmp.get_i32(COMP_DONE_WEEK_TEAM)
+    end
+
+    0
+  end
+
+  def get_remaining_weekly_matches(l2id : Int32) : Int32
+    Math.max(Config.alt_oly_max_weekly_matches - get_competition_done_week(l2id), 0)
+  end
+
+  def get_remaining_weekly_matches_classed(l2id : Int32) : Int32
+    Math.max(Config.alt_oly_max_weekly_matches_classed - get_competition_done_week_classed(l2id), 0)
+  end
+
+  def get_remaining_weekly_matches_non_classed(l2id : Int32) : Int32
+    Math.max(Config.alt_oly_max_weekly_matches_non_classed - get_competition_done_week_non_classed(l2id), 0)
+  end
+
+  def get_remaining_weekly_matches_team(l2id : Int32) : Int32
+    Math.max(Config.alt_oly_max_weekly_matches_team - get_competition_done_week_team(l2id), 0)
+  end
+
+  private def delete_nobles
+    begin
+      GameDB.exec(OLYMPIAD_DELETE_ALL)
+    rescue e
+      error "Couldn't delete nobles from DB."
+      error e
+    end
+
+    NOBLES.clear
+  end
+
+  private def add_noble_stats(l2id : Int32, data : StatsSet)
+    NOBLES[l2id] = data
   end
 
   def self.instance

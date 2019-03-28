@@ -296,16 +296,16 @@ module GameServer
 
     timer2 = Timer.new
     GC.collect
-    debug "Garbage collected in #{timer2} s."
+    debug { "Garbage collected in #{timer2} s." }
 
-    info "Maximum number of connected players: #{Config.maximum_online_users}."
-    info "Server loaded in #{timer} s."
+    info { "Maximum number of connected players: #{Config.maximum_online_users}." }
+    info { "Server loaded in #{timer} s." }
 
     LoginServerClient.start
 
     L2Cr.command_line_task
 
-    info "Listening for players at #{host}:#{port}"
+    info { "Listening for players at #{host}:#{port}" }
 
     listener.run
   end

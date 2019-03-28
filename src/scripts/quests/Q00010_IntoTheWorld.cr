@@ -49,50 +49,51 @@ class Quests::Q00010_IntoTheWorld < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when BALANKI
       case st.state
       when State::CREATED
         if pc.level >= MIN_LEVEL && pc.race.dwarf?
-          htmltext = "30533-01.htm"
+          html = "30533-01.htm"
         else
-          htmltext = "30533-02.html"
+          html = "30533-02.html"
         end
       when State::STARTED
         if st.cond?(1)
-          htmltext = "30533-04.html"
+          html = "30533-04.html"
         elsif st.cond?(4)
-          htmltext = "30533-05.html"
+          html = "30533-05.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when REED
       if st.started?
         case st.cond
         when 1
-          htmltext = "30520-01.html"
+          html = "30520-01.html"
         when 2
-          htmltext = "30520-03.html"
+          html = "30520-03.html"
         when 3
-          htmltext = "30520-04.html"
+          html = "30520-04.html"
         when 4
-          htmltext = "30520-06.html"
+          html = "30520-06.html"
         end
       end
     when GERALD
       if st.started?
         if st.cond?(2)
-          htmltext = "30650-01.html"
+          html = "30650-01.html"
         elsif st.cond?(3)
-          htmltext = "30650-04.html"
+          html = "30650-04.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

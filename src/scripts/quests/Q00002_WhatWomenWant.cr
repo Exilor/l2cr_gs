@@ -32,7 +32,7 @@ class Quests:: Q00002_WhatWomenWant < Quest
     return unless pc
     return unless st = get_quest_state(pc, false)
 
-    case htmltext = event
+    case html = event
     when "30223-04.htm"
       st.start_quest
       give_items(pc, ARUJIENS_LETTER1, 1)
@@ -49,14 +49,14 @@ class Quests:: Q00002_WhatWomenWant < Quest
     when "30223-03.html"
       # do nothing
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
+    html = get_no_quest_msg(pc)
     return unless st = get_quest_state(pc, true)
 
     case npc.id
@@ -64,34 +64,34 @@ class Quests:: Q00002_WhatWomenWant < Quest
       case st.state
       when State::CREATED
         if !pc.race.elf? && !pc.race.human?
-          htmltext = "30223-00.htm"
+          html = "30223-00.htm"
         else
           if pc.level >= MIN_LEVEL
-            htmltext = "30223-02.htm"
+            html = "30223-02.htm"
           else
-            htmltext = "30223-01.html"
+            html = "30223-01.html"
           end
         end
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30223-05.html"
+          html = "30223-05.html"
         when 2
-          htmltext = "30223-06.html"
+          html = "30223-06.html"
         when 3
-          htmltext = "30223-07.html"
+          html = "30223-07.html"
         when 4
-          htmltext = "30223-10.html"
+          html = "30223-10.html"
         when 5
           give_items(pc, EARRING, 1)
           st.exit_quest(false, true)
-          htmltext = "30223-11.html"
+          html = "30223-11.html"
           show_on_screen_msg(pc, NpcString::DELIVERY_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000)
           add_exp_and_sp(pc, 4254, 335)
           give_adena(pc, 1850, true)
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when MIRABEL
       if st.started?
@@ -99,9 +99,9 @@ class Quests:: Q00002_WhatWomenWant < Quest
           st.set_cond(2, true)
           take_items(pc, ARUJIENS_LETTER1, -1)
           give_items(pc, ARUJIENS_LETTER2, 1)
-          htmltext = "30146-01.html"
+          html = "30146-01.html"
         else
-          htmltext = "30146-02.html"
+          html = "30146-02.html"
         end
       end
     when HERBIEL
@@ -110,9 +110,9 @@ class Quests:: Q00002_WhatWomenWant < Quest
           st.set_cond(3, true)
           take_items(pc, ARUJIENS_LETTER2, -1)
           give_items(pc, ARUJIENS_LETTER3, 1)
-          htmltext = "30150-01.html"
+          html = "30150-01.html"
         else
-          htmltext = "30150-02.html"
+          html = "30150-02.html"
         end
       end
     when GREENIS
@@ -121,15 +121,15 @@ class Quests:: Q00002_WhatWomenWant < Quest
           st.set_cond(5, true)
           take_items(pc, POETRY_BOOK, -1)
           give_items(pc, GREENIS_LETTER, 1)
-          htmltext = "30157-02.html"
+          html = "30157-02.html"
         elsif st.cond?(5)
-          htmltext = "30157-03.html"
+          html = "30157-03.html"
         else
-          htmltext = "30157-01.html"
+          html = "30157-01.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 end

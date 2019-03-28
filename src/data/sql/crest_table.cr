@@ -44,7 +44,7 @@ module CrestTable
         if crest_type = L2Crest::CrestType.get_by_id(type)
           CRESTS[id] = L2Crest.new(id, data, crest_type)
         else
-          warn "Unknown crest type found in database: #{type}."
+          warn { "Unknown crest type found in database: #{type}." }
         end
       end
     rescue e
@@ -53,7 +53,7 @@ module CrestTable
 
     move_old_crests_to_db(crests_in_use)
 
-    info "Loaded #{CRESTS.size} crests."
+    info { "Loaded #{CRESTS.size} crests." }
 
     ClanTable.each_clan do |clan|
       if clan.crest_id != 0

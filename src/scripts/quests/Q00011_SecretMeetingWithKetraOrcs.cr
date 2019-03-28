@@ -39,30 +39,31 @@ class Quests::Q00011_SecretMeetingWithKetraOrcs < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case st.state
     when State::CREATED
       if npc.id == CADMON
-        htmltext = pc.level >= 74 ? "31296-01.htm" : "31296-02.html"
+        html = pc.level >= 74 ? "31296-01.htm" : "31296-02.html"
       end
     when State::STARTED
       if npc.id == CADMON && st.cond?(1)
-        htmltext = "31296-04.html"
+        html = "31296-04.html"
       elsif npc.id == LEON
         if st.cond?(1)
-          htmltext = "31256-01.html"
+          html = "31256-01.html"
         elsif st.cond?(2)
-          htmltext = "31256-03.html"
+          html = "31256-03.html"
         end
       elsif npc.id == WAHKAN && st.cond?(2)
-        htmltext = "31371-01.html"
+        html = "31371-01.html"
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(pc)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

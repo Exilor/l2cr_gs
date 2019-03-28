@@ -116,7 +116,7 @@ module OfflineTradersTable
 
       type_id = rs.get_i32("type")
       unless type = PrivateStoreType[type_id]?
-        warn "PrivateStoreType with id #{type_id} does not exist."
+        warn { "PrivateStoreType with id #{type_id} does not exist." }
         next
       end
 

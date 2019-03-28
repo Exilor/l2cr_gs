@@ -47,45 +47,46 @@ class Quests::Q00006_StepIntoTheFuture < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when ROXXY
       case st.state
       when State::CREATED
         if pc.race.human? && pc.level >= MIN_LEVEL
-          htmltext = "30006-02.htm"
+          html = "30006-02.htm"
         else
-          htmltext = "30006-01.html"
+          html = "30006-01.html"
         end
       when State::STARTED
         if st.cond?(1)
-          htmltext = "30006-04.html"
+          html = "30006-04.html"
         elsif st.cond?(3)
-          htmltext = "30006-05.html"
+          html = "30006-05.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when BAULRO
       if st.started?
         if st.cond?(1)
-          htmltext = "30033-01.html"
+          html = "30033-01.html"
         elsif st.cond?(2)
-          htmltext = "30033-03.html"
+          html = "30033-03.html"
         end
       end
     when SIR_COLLIN
       if st.started?
         if st.cond?(2)
-          htmltext = "30311-01.html"
+          html = "30311-01.html"
         elsif st.cond?(3)
-          htmltext = "30311-04.html"
+          html = "30311-04.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

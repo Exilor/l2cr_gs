@@ -52,6 +52,15 @@ class Calendar
     @time > other
   end
 
+  def millisecond=(millisecond)
+    @time = Time.from_ms(@time.ms - @time.millisecond + millisecond)
+    self
+  end
+
+  def millisecond
+    @time.millisecond
+  end
+
   def second
     @time.second
   end

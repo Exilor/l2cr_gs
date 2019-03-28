@@ -158,10 +158,10 @@ module ItemTable
         begin
           GameDB.exec("DELETE FROM pets WHERE item_obj_id=?", item.l2id)
         rescue e
-          error "Failed to delete pet associated with #{item}."
+          error { "Failed to delete pet associated with #{item}." }
           error e
         else
-          debug "Deleted a pet associated with #{item}."
+          debug { "Deleted a pet associated with #{item}." }
         end
       end
     end

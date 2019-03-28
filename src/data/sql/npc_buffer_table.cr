@@ -10,7 +10,7 @@ module NpcBufferTable
       count += load_from("SELECT `npc_id`,`skill_id`,`skill_level`,`skill_fee_id`,`skill_fee_amount`,`buff_group` FROM `custom_npc_buffer` ORDER BY `npc_id` ASC")
     end
 
-    info "Loaded #{BUFFERS.size} buffers and #{count} skills."
+    info { "Loaded #{BUFFERS.size} buffers and #{count} skills." }
   end
 
   private def load_from(table, count = 0) : Int32

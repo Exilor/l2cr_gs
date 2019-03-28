@@ -32,7 +32,7 @@ module SkillData
       end
     end
 
-    info "Loaded #{SKILLS.size} skills (#{ENCHANTABLE.size} enchantables) in #{timer.result} s."
+    info { "Loaded #{SKILLS.size} skills (#{ENCHANTABLE.size} enchantables) in #{timer.result} s." }
   end
 
   def reload
@@ -62,7 +62,7 @@ module SkillData
 
   def []?(id : Int, level : Int) : Skill?
     fetch(id, level) do
-      warn "No skill found for ID #{id} and level #{level}."
+      warn { "No skill found for ID #{id} and level #{level}." }
       nil
     end
   end

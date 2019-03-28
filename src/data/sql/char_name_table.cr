@@ -22,7 +22,7 @@ module CharNameTable
       ACCESS_LEVELS[id] = lvl
       count += 1
     end
-    info "Loaded #{count} names in #{timer.result(4)} s."
+    info { "Loaded #{count} names in #{timer.result(4)} s." }
   end
 
   def add_name(pc : L2PcInstance?)
@@ -143,7 +143,7 @@ module CharNameTable
     if ret.is_a?(Number)
       ret.to_i32
     else
-      warn "#{ret} is not a number, it's a #{ret.class}"
+      warn { "#{ret.inspect} is not a number, it's a #{ret.class}" }
       0
     end
   end

@@ -14,13 +14,12 @@ module GameTimer
   TICKS_SUN_STATE_CHANGE = TICKS_PER_IG_DAY / 4
 
   private MOVING_OBJECTS = Set(L2Character).new
-  # private REFERENCE_TIME = Time.ms
   private REFERENCE_TIME = begin
     c = Calendar.new
     c.hour = 0
     c.minute = 0
     c.second = 0
-    # c.millisecond = 0
+    c.millisecond = 0
     c.ms
   end
 

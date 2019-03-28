@@ -58,33 +58,34 @@ class Quests::Q00003_WillTheSealBeBroken < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case st.state
     when State::CREATED
       if !pc.race.dark_elf?
-        htmltext = "30141-00.htm"
+        html = "30141-00.htm"
       else
         if pc.level >= MIN_LEVEL
-          htmltext = "30141-02.htm"
+          html = "30141-02.htm"
         else
-          htmltext = "30141-01.html"
+          html = "30141-01.html"
         end
       end
     when State::STARTED
       if st.cond? 1
-        htmltext = "30141-04.html"
+        html = "30141-04.html"
       else
         give_items(pc, ENCHANT, 1)
         st.exit_quest(false, true)
-        htmltext = "30141-06.html"
+        html = "30141-06.html"
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(pc)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   private def give_item(pc, st, item, items)

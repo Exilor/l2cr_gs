@@ -37,8 +37,9 @@ class Quests::Q00009_IntoTheCityOfHumans < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when PETUKAI
@@ -46,30 +47,30 @@ class Quests::Q00009_IntoTheCityOfHumans < Quest
       when State::CREATED
         if pc.level >= MIN_LEVEL
           if pc.race.orc?
-            htmltext = "30583-01.htm"
+            html = "30583-01.htm"
           else
-            htmltext = "30583-02.html"
+            html = "30583-02.html"
           end
         else
-          htmltext = "30583-03.html"
+          html = "30583-03.html"
         end
       when State::STARTED
         if st.cond?(1)
-          htmltext = "30583-05.html"
+          html = "30583-05.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when TANAPI
       if st.started?
-        htmltext = st.cond?(1) ? "30571-01.html" : "30571-03.html"
+        html = st.cond?(1) ? "30571-01.html" : "30571-03.html"
       end
     when TAMIL
       if st.started? && st.cond?(2)
-        htmltext = "30576-01.html"
+        html = "30576-01.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

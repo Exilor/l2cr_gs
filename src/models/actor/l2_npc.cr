@@ -434,13 +434,13 @@ class L2Npc < L2Character
         file_name = get_html_path(npc_id, val)
       end
     else
-      if 31865 <= npc_id <= 31918
+      if npc_id.between?(31865, 31918)
         if val == 0
           file_name += "rift/GuardianOfBorder.htm"
         else
           file_name += "rift/GuardianOfBorder-#{val}.htm"
         end
-      elsif 31093 <= npc_id <= 31094 || 31172 <= npc_id <= 31201 || 31239 <= npc_id <= 31254
+      elsif npc_id.between?(31093, 31094) || npc_id.between?(31172, 31201) || npc_id.between?(31239, 31254)
         return
       else
         file_name = get_html_path(npc_id, val)

@@ -15,7 +15,7 @@ module BypassHandler::Festival
       return true
     end
 
-    val = command[9...10].to_i
+    val = command[9].to_i
     case val
     when 1 # Participate
       if SevenSigns.seal_validation_period?

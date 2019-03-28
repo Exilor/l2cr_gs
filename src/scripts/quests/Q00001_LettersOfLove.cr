@@ -40,23 +40,23 @@ class Quests::Q00001_LettersOfLove < Quest
 
   def on_talk(npc, pc)
     return unless st = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
+    html = get_no_quest_msg(pc)
 
     case st.state
     when State::CREATED
-      htmltext = pc.level < MIN_LEVEL ? "30048-01.html" : "30048-02.html"
+      html = pc.level < MIN_LEVEL ? "30048-01.html" : "30048-02.html"
     when State::STARTED
       case st.cond
       when 1
         case npc.id
         when DARIN
-          htmltext = "30048-07.html"
+          html = "30048-07.html"
         when ROXXY
           if has_quest_items?(pc, DARINS_LETTER) && !has_quest_items?(pc, ROXXYS_KERCHIEF)
             take_items(pc, DARINS_LETTER, -1)
             give_items(pc, ROXXYS_KERCHIEF, 1)
             st.set_cond(2, true)
-            htmltext = "30006-01.html"
+            html = "30006-01.html"
           end
         end
       when 2
@@ -66,31 +66,31 @@ class Quests::Q00001_LettersOfLove < Quest
             take_items(pc, ROXXYS_KERCHIEF, -1)
             give_items(pc, DARINS_RECEIPT, 1)
             st.set_cond(3, true)
-            htmltext = "30048-08.html"
+            html = "30048-08.html"
           end
         when ROXXY
           if has_quest_items?(pc, ROXXYS_KERCHIEF)
-            htmltext = "30006-02.html"
+            html = "30006-02.html"
           end
         end
       when 3
         case npc.id
         when DARIN
           if has_quest_items?(pc, DARINS_RECEIPT) || !has_quest_items?(pc, BAULROS_POTION)
-            htmltext = "30048-09.html"
+            html = "30048-09.html"
           end
         when ROXXY
           if has_quest_items?(pc, DARINS_RECEIPT) || !has_quest_items?(pc, BAULROS_POTION)
-            htmltext = "30006-03.html"
+            html = "30006-03.html"
           end
         when BAULRO
           if has_quest_items?(pc, DARINS_RECEIPT)
             take_items(pc, DARINS_RECEIPT, -1)
             give_items(pc, BAULROS_POTION, 1)
             st.set_cond(4, true)
-            htmltext = "30033-01.html"
+            html = "30033-01.html"
           elsif has_quest_items?(pc, BAULROS_POTION)
-            htmltext = "30033-02.html"
+            html = "30033-02.html"
           end
         end
       when 4
@@ -101,21 +101,21 @@ class Quests::Q00001_LettersOfLove < Quest
           add_exp_and_sp(pc, 5672, 446)
           give_adena(pc, 2466, false)
           st.exit_quest(false, true)
-          htmltext = "30048-10.html"
+          html = "30048-10.html"
         when BAULRO
           if has_quest_items?(pc, BAULROS_POTION)
-            htmltext = "30033-02.html"
+            html = "30033-02.html"
           end
         when ROXXY
           if has_quest_items?(pc, BAULROS_POTION)
-            htmltext = "30006-03.html"
+            html = "30006-03.html"
           end
         end
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(pc)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext
+    html
   end
 end

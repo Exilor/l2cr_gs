@@ -47,25 +47,26 @@ class Quests::Q00004_LongLiveThePaagrioLord < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when NAKUSIN
       case st.state
       when State::CREATED
         if !pc.race.orc?
-          htmltext = "30578-00.htm"
+          html = "30578-00.htm"
         else
           if pc.level >= MIN_LEVEL
-            htmltext = "30578-02.htm"
+            html = "30578-02.htm"
           else
-            htmltext = "30578-01.htm"
+            html = "30578-01.htm"
           end
         end
       when State::STARTED
         if st.cond? 1
-          htmltext = "30578-04.html"
+          html = "30578-04.html"
         else
           give_items(pc, CLUB, 1)
           msg = NpcString::DELIVERY_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE
@@ -73,26 +74,26 @@ class Quests::Q00004_LongLiveThePaagrioLord < Quest
           add_exp_and_sp(pc, 4254, 335)
           give_adena(pc, 1850, true)
           st.exit_quest(false, true)
-          htmltext = "30578-06.html"
+          html = "30578-06.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when VARKEES
-      htmltext = give_item(pc, st, npc.id, HONEY_KHANDAR)
+      html = give_item(pc, st, npc.id, HONEY_KHANDAR)
     when URUTU
-      htmltext = give_item(pc, st, npc.id, DEEP_SEA_ORB)
+      html = give_item(pc, st, npc.id, DEEP_SEA_ORB)
     when HESTUI
-      htmltext = give_item(pc, st, npc.id, BEAR_FUR_CLOAK)
+      html = give_item(pc, st, npc.id, BEAR_FUR_CLOAK)
     when KUNAI
-      htmltext = give_item(pc, st, npc.id, SPIDER_DUST)
+      html = give_item(pc, st, npc.id, SPIDER_DUST)
     when USKA
-      htmltext = give_item(pc, st, npc.id, ANCESTOR_SKULL)
+      html = give_item(pc, st, npc.id, ANCESTOR_SKULL)
     when GROOKIN
-      htmltext = give_item(pc, st, npc.id, BLOODY_AXE)
+      html = give_item(pc, st, npc.id, BLOODY_AXE)
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   private def give_item(pc, st, npc_id, item_id)

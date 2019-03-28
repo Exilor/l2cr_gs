@@ -12,14 +12,16 @@ module NpcPersonalAIData
     end
   end
 
-  def get_ai_value(spawn_name : String, param_name : String?)
-    return unless param_name
-    AI_DATA[spawn_name]?.try &.[param_name]? || -1
+  def get_ai_value(spawn_name : String, param_name : String?) : Int32
+    # return -1 unless param_name
+    # AI_DATA[spawn_name]?.try &.[param_name]? || -1
+    AI_DATA.dig?(spawn_name, param_name) || -1
   end
 
-  def has_ai_value?(spawn_name : String, param_name : String?)
-    return false unless param_name
-    !!(AI_DATA[spawn_name]?.try &.[param_name]?)
+  def has_ai_value?(spawn_name : String, param_name : String?) : Bool
+    # return false unless param_name
+    # !!(AI_DATA[spawn_name]?.try &.[param_name]?)
+    !!AI_DATA.dig?(spawn_name, param_name)
   end
 
   def initialize_npc_parameters(npc : L2Npc, spawn : L2Spawn, spawn_name : String?)

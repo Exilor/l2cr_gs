@@ -19,17 +19,17 @@ module SpawnTable
         warn "No spawns were loaded from the database."
       end
 
-      info "Loaded #{spawn_count} NPC spawns in #{timer.result} s."
+      info { "Loaded #{spawn_count} NPC spawns in #{timer.result} s." }
       timer.start
 
       if Config.custom_spawnlist_table
         fill_spawn_table(true)
-        info "Loaded #{SPAWN_TABLE.size - spawn_count} custom NPC spawns in #{timer.result} s."
+        info { "Loaded #{SPAWN_TABLE.size - spawn_count} custom NPC spawns in #{timer.result} s." }
         timer.start
       end
 
       parse_datapack_directory("spawnlist")
-      info "Loaded #{@@xml_spawn_count} NPC spawns from XML files in #{timer.result} s."
+      info { "Loaded #{@@xml_spawn_count} NPC spawns from XML files in #{timer.result} s." }
     end
   end
 
@@ -119,7 +119,7 @@ module SpawnTable
       template.type?("L2RaidBoss") ||
       (!Config.allow_class_masters && template.type?("L2ClassMaster")))
     else
-      error "Data missing in NPC table for ID #{npc_id}."
+      error { "Data missing in NPC table for ID #{npc_id}." }
       false
     end
   end
