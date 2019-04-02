@@ -6,7 +6,9 @@ class CombatFlag
   @player : L2PcInstance?
   @item_instance : L2ItemInstance?
 
-  def initialize(@fort_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, @item_id : Int32)
+  def initialize(fort_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, item_id : Int32)
+    @fort_id = fort_id
+    @item_id = item_id
     @location = Location.new(x, y, z, heading)
   end
 

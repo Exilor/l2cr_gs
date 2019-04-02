@@ -102,7 +102,7 @@ class CharEffectList
     update_effect_list(update)
   end
 
-  def effects
+  def effects : Indexable(BuffInfo)
     return Slice(BuffInfo).empty if empty?
 
     ret = [] of BuffInfo
@@ -130,7 +130,7 @@ class CharEffectList
     ret
   end
 
-  def get_effect_list(skill : Skill)
+  def get_effect_list(skill : Skill) : Deque(BuffInfo)
     return passives  if skill.passive?
     return debuffs   if skill.debuff?
     return triggered if skill.trigger?
@@ -139,7 +139,7 @@ class CharEffectList
     buffs
   end
 
-  def get_first_effect(type : L2EffectType)
+  def get_first_effect(type : L2EffectType) : BuffInfo?
     find { |info| info.effects.any? { |effect| effect.effect_type == type } }
   end
 
@@ -699,6 +699,6 @@ class CharEffectList
   end
 
   def to_log(io : IO)
-    io << "CharEffectList(#{@owner.name})"
+    io << "CharEffectList(" << @owner.name << ')'
   end
 end

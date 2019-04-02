@@ -63,11 +63,11 @@ class ArmorSet
     @shield.includes?(shield_item.id)
   end
 
-  def shield_skill_id
+  def shield_skill_id : Array(SkillHolder)
     @shield_skills
   end
 
-  def enchant_6_skill_id
+  def enchant_6_skill_id : Array(SkillHolder)
     @enchant_6_skill
   end
 

@@ -2168,6 +2168,6 @@ module Config
       @@coord_synchronize = 2
     end
 
-    info "Config files read in #{timer.result} s."
+    info "Config files read in #{timer} s."
   end
 end

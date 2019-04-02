@@ -34,4 +34,61 @@ module OlympiadManager
   def enough_registered_teams? : Bool
     TEAMS_BASED_REGISTERS.size >= Config.alt_oly_teams
   end
+
+  def clear_registered
+    NON_CLASS_BASED_REGISTERS.clear
+    CLASS_BASED_REGISTERS.clear
+    TEAMS_BASED_REGISTERS.clear
+    AntiFeedManager.clear(AntiFeedManager::OLYMPIAD_ID)
+  end
+
+  def registered?(pc : L2PcInstance) : Bool
+    registered?(pc, pc, false)
+  end
+
+  private def registered?(noble : L2PcInstance, pc : L2PcInstance, show_msg : Bool) : Bool
+    l2id = noble.l2id
+
+    TEAMS_BASED_REGISTERS.each do |team|
+      if team.includes?(l2id)
+        if show_msg
+          sm = SystemMessage.c1_is_already_registered_non_class_limited_event_teams
+          sm.add_pc_name(noble)
+          pc.send_packet(sm)
+        end
+
+        return true
+      end
+    end
+
+    if NON_CLASS_BASED_REGISTERS.includes?(l2id)
+      if show_msg
+        sm = SystemMessage.c1_is_already_registered_on_the_non_class_limited_match_waiting_list
+        sm.add_pc_name(noble)
+        pc.send_packet(sm)
+      end
+
+      return true
+    end
+
+    classed = CLASS_BASED_REGISTERS[noble.base_class]?
+    if classed && classed.includes?(l2id)
+      if show_msg
+        sm = SystemMessage.c1_is_already_registered_on_the_class_match_waiting_list
+        sm.add_pc_name(noble)
+        pc.send_packet(sm)
+      end
+
+      return true
+    end
+
+    false
+  end
+
+  def registered_in_comp?(pc : L2PcInstance) : Bool
+    registered?(pc, pc, false) || in_competition?(pc, pc, false)
+  end
+
+  private def in_competition?(noble : L2PcInstance, pc : L2PcInstance, show_msg : Bool) : Bool
+  end
 end

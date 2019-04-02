@@ -24,14 +24,14 @@ class CursedWeapon
   property? activated : Bool = false
   property? dropped : Bool = false
 
-  def initialize(@item_id : Int32, @skill_id : Int32, @name : String)
+  def initialize(item_id : Int32, skill_id : Int32, name : String)
     @item_id = item_id
     @skill_id = skill_id
+    @name = name
     @skill_max_level = SkillData.get_max_level(skill_id)
   end
 
   def end_of_life
-    # debug __method__
     if @activated
       if player? && player.online?
         info "#{@name} being removed online."

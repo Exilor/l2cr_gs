@@ -72,11 +72,11 @@ struct ItemInfo
     @elem_def_attr[i]
   end
 
-  def custom_type_1
+  def custom_type_1 : Int32
     @type_1
   end
 
-  def custom_type_2
+  def custom_type_2 : Int32
     @type_2
   end
 end

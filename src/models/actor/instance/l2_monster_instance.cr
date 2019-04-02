@@ -5,29 +5,29 @@ require "../../../util/minion_list"
 class L2MonsterInstance < L2Attackable
   private MONSTER_MAINTENANCE_INTERVAL = 1000
 
-  setter enable_minions : Bool = true
   @master : L2MonsterInstance?
   @minion_list : MinionList?
   @maintenance_task : Runnable::PeriodicTask?
+  setter enable_minions : Bool = true
 
   def initialize(template : L2NpcTemplate)
     super
     self.auto_attackable = true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2MonsterInstance
   end
 
-  def init_known_list
+  def init_known_list : MonsterKnownList
     @known_list = MonsterKnownList.new(self)
   end
 
-  def auto_attackable?(char)
+  def auto_attackable?(char : L2Character) : Bool
     super && !event_mob?
   end
 
-  def aggressive?
+  def aggressive? : Bool
     template.aggressive? && !event_mob?
   end
 
@@ -57,7 +57,7 @@ class L2MonsterInstance < L2Attackable
     end
   end
 
-  def maintenance_interval
+  def maintenance_interval : Int32
     MONSTER_MAINTENANCE_INTERVAL
   end
 
@@ -76,7 +76,7 @@ class L2MonsterInstance < L2Attackable
     true
   end
 
-  def delete_me
+  def delete_me : Bool
     if task = @maintenance_task
       task.cancel
       @maintenance_task = nil
@@ -93,7 +93,7 @@ class L2MonsterInstance < L2Attackable
     super
   end
 
-  def leader?
+  def leader? : L2MonsterInstance?
     @master
   end
 
@@ -106,7 +106,7 @@ class L2MonsterInstance < L2Attackable
   end
 
   def has_minions? : Bool
-    !@minion_list.nil?
+    !!@minion_list
   end
 
   def minion_list : MinionList

@@ -177,8 +177,8 @@ class L2PcInstance < L2Playable
   getter premium_item_list = Hash(Int32, L2PremiumItem).new # L2J: _premiumItems
   getter event_status : PlayerEventHolder?
   getter fish_combat : L2Fishing?
-  # @forum_mail : Forum?
-  # @forum_memo : Forum?
+  @forum_mail : Forum?
+  @forum_memo : Forum?
   getter(contact_list) { L2ContactList.new(self) }
   getter current_feed = 0
   getter account_name
@@ -1097,6 +1097,56 @@ class L2PcInstance < L2Playable
     if update_db
       GameDB.player.update_online_status(self)
     end
+  end
+
+  def mail : Forum
+    unless @forum_mail
+      self.mail = ForumsBBSManager.get_forum_by_name("MailRoot").not_nil!
+      .get_child_by_name(name)
+
+      unless @forum_mail
+        ForumsBBSManager.create_new_forum(
+          name,
+          ForumsBBSManager.get_forum_by_name("MailRoot"),
+          Forum::MAIL,
+          Forum::OWNERONLY,
+          l2id
+        )
+        self.mail = ForumsBBSManager.get_forum_by_name("MailRoot").not_nil!
+        .get_child_by_name(name)
+      end
+    end
+
+    @forum_mail.not_nil!
+  end
+
+  def mail=(forum : Forum?)
+    @forum_mail = forum
+  end
+
+  def memo : Forum
+    unless @forum_memo
+      self.mail = ForumsBBSManager.get_forum_by_name("MemoRoot").not_nil!
+      .get_child_by_name(@account_name)
+
+      unless @forum_memo
+        ForumsBBSManager.create_new_forum(
+          @account_name,
+          ForumsBBSManager.get_forum_by_name("MemoRoot"),
+          Forum::MEMO,
+          Forum::OWNERONLY,
+          l2id
+        )
+        self.mail = ForumsBBSManager.get_forum_by_name("MemoRoot").not_nil!
+        .get_child_by_name(@account_name)
+      end
+    end
+
+    @forum_memo.not_nil!
+  end
+
+  def memo=(forum : Forum?)
+    @forum_memo = forum
   end
 
   def do_interact(char : L2Character?)
@@ -4567,7 +4617,7 @@ class L2PcInstance < L2Playable
       next if !qs.started? && !Config.developer
       quest = qs.quest
       quest_id = quest.id
-      next if quest_id > 19999 || quest_id < 1
+      next unless quest_id.between?(1, 19999)
       quests << quest
     end
 
@@ -4757,12 +4807,20 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if (check_if_pvp(target) && (target_player.pvp_flag != 0)) || (inside_pvp_zone? && target_player.inside_pvp_zone?)
+    if (check_if_pvp(target) && (target_player.pvp_flag != 0)) ||
+       (inside_pvp_zone? && target_player.inside_pvp_zone?)
+
       increase_pvp_kills(target)
     else
-      if target_player.clan? && clan? && clan.at_war_with?(target_player.clan_id) && target_player.clan.at_war_with?(clan_id) && target_player.pledge_type != L2Clan::SUBUNIT_ACADEMY && pledge_type != L2Clan::SUBUNIT_ACADEMY
-        increase_pvp_kills(target)
-        return
+      if target_player.clan? && clan? && clan.at_war_with?(target_player.clan_id)
+        if target_player.clan.at_war_with?(clan_id)
+          if target_player.pledge_type != L2Clan::SUBUNIT_ACADEMY
+            if pledge_type != L2Clan::SUBUNIT_ACADEMY
+              increase_pvp_kills(target)
+              return
+            end
+          end
+        end
       end
 
       if target_player.karma > 0
@@ -4797,7 +4855,7 @@ class L2PcInstance < L2Playable
     send_packet(ExBrExtraUserInfo.new(self))
   end
 
-  def allowed_to_enchant_skills?
+  def allowed_to_enchant_skills? : Bool
     return true if gm? # CUSTOM
     return false if locked? || transformed? || in_stance?
     return false if AttackStances.includes?(self)
@@ -4807,7 +4865,7 @@ class L2PcInstance < L2Playable
     true
   end
 
-  def need_mp_update?
+  def need_mp_update? : Bool
     current_mp = current_mp()
     max_mp = max_mp()
 
@@ -4854,7 +4912,7 @@ class L2PcInstance < L2Playable
     LoginServerClient.send_access_level(account_name, level)
   end
 
-  def access_level
+  def access_level : AccessLevel
     if Config.everybody_has_admin_rights
       return AdminData.max
     elsif @access_level.nil?
@@ -4868,7 +4926,7 @@ class L2PcInstance < L2Playable
     @last_server_position.set_xyz(x, y, z)
   end
 
-  def locked?
+  def locked? : Bool
     # @subclass_lock.locked?
     false
   end
@@ -4886,7 +4944,7 @@ class L2PcInstance < L2Playable
     @last_location.set_xyz(0, 0, 0)
   end
 
-  def vehicle!
+  def vehicle! : L2Vehicle
     vehicle.not_nil!
   end
 
@@ -4902,7 +4960,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def broadcast_snoop(type, name, text)
+  def broadcast_snoop(type : Int32, name : String, text : String)
     return if @snoop_listener.empty?
     sn = Snoop.new(l2id, name(), type, name, text)
     @snoop_listener.each &.send_packet(sn)
@@ -5154,6 +5212,7 @@ class L2PcInstance < L2Playable
 
   def set_teleporting(tele : Bool, watch : Bool)
     super(tele)
+
     return unless watch
 
     if tele
@@ -5178,11 +5237,6 @@ class L2PcInstance < L2Playable
     @cursed_weapon_equipped_id != 0
   end
 
-  def jailed? : Bool
-    PunishmentManager.has_punishment?(l2id, PunishmentAffect::CHARACTER, PunishmentType::JAIL) || PunishmentManager.has_punishment?(account_name, PunishmentAffect::ACCOUNT, PunishmentType::JAIL) ||
-    PunishmentManager.has_punishment?(ip_address, PunishmentAffect::IP, PunishmentType::JAIL)
-  end
-
   def charges : Int32
     @charges.get
   end
@@ -5194,7 +5248,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def has_refund?
+  def has_refund? : Bool
     return false unless Config.allow_refund
     return false unless refund = @refund
     refund.size > 0
@@ -5231,11 +5285,11 @@ class L2PcInstance < L2Playable
     @clan_id = clan.id
   end
 
-  def spawn_protected?
+  def spawn_protected? : Bool
     @protect_end_time > GameTimer.ticks
   end
 
-  def teleport_protected?
+  def teleport_protected? : Bool
     @teleport_protect_end_time > GameTimer.ticks
   end
 
@@ -5535,7 +5589,7 @@ class L2PcInstance < L2Playable
     @multi_social_target = target_id
   end
 
-  def use_equippable_item(item, abort_attack)
+  def use_equippable_item(item : L2ItemInstance, abort_attack : Bool)
     equipped = item.equipped?
     old_inv_limit = inventory_limit
 
@@ -5615,7 +5669,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def flood_protectors
+  def flood_protectors : FloodProtectors
     client.flood_protectors
   end
 
@@ -5837,8 +5891,27 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def max_feed
+  def max_feed : Int32
     get_pet_level_data(@mount_npc_id).pet_max_feed
+  end
+
+  def feed_consume : Int32
+    data = get_pet_level_data(@mount_npc_id)
+    attacking_now? ? data.pet_feed_battle : data.pet_feed_normal
+  end
+
+  def current_feed=(num : Int32)
+    last_hungry_state = hungry?
+    @current_feed = num > max_feed ? max_feed : num
+    sg = SetupGauge.new(
+      3,
+      (current_feed * 10000) / feed_consume,
+      (max_feed * 10000) / feed_consume
+    )
+    send_packet(sg)
+    if last_hungry_state != hungry?
+      broadcast_user_info
+    end
   end
 
   def hungry? : Bool
@@ -5867,25 +5940,6 @@ class L2PcInstance < L2Playable
     PetDataTable.get_pet_data(npc_id).get_pet_level_data(mount_level)
   end
 
-  def feed_consume
-    data = get_pet_level_data(@mount_npc_id)
-    attacking_now? ? data.pet_feed_battle : data.pet_feed_normal
-  end
-
-  def current_feed=(num : Int32)
-    last_hungry_state = hungry?
-    @current_feed = num > max_feed ? max_feed : num
-    sg = SetupGauge.new(
-      3,
-      (current_feed * 10000) / feed_consume,
-      (max_feed * 10000) / feed_consume
-    )
-    send_packet(sg)
-    if last_hungry_state != hungry?
-      broadcast_user_info
-    end
-  end
-
   def rented_pet? : Bool
     !!@rent_pet_task
   end
@@ -5906,11 +5960,11 @@ class L2PcInstance < L2Playable
     @vehicle = vehicle
   end
 
-  def boat
+  def boat : L2BoatInstance?
     @vehicle.as?(L2BoatInstance)
   end
 
-  def boat!
+  def boat! : L2BoatInstance
     boat.not_nil!
   end
 
@@ -6158,11 +6212,11 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def sell_list
+  def sell_list : TradeList
     @sell_list ||= TradeList.new(self)
   end
 
-  def buy_list
+  def buy_list : TradeList
     @buy_list ||= TradeList.new(self)
   end
 
@@ -6174,7 +6228,8 @@ class L2PcInstance < L2Playable
     @private_store_type = type
 
     if Config.offline_disconnect_finished && type.none?
-      if @client.nil? || client.detached?
+      client = @client
+      if client.nil? || client.detached?
         delete_me
       end
     end
@@ -6233,12 +6288,12 @@ class L2PcInstance < L2Playable
     Config.common_recipe_limit + calc_stat(Stats::REC_C_LIM, 0).to_i
   end
 
-  def common_recipe_book
-    @common_recipe_book.local_each_value
+  def common_recipe_book : Slice(L2RecipeList)
+    @common_recipe_book.values_slice
   end
 
-  def dwarven_recipe_book
-    @dwarven_recipe_book.local_each_value
+  def dwarven_recipe_book : Slice(L2RecipeList)
+    @dwarven_recipe_book.values_slice
   end
 
   def register_common_recipe_list(recipe : L2RecipeList, save_to_db : Bool)
@@ -6288,12 +6343,19 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def chat_banned? : Bool
-    # TODO: PunishmentManager
-    false
+  def jailed? : Bool
+    PunishmentManager.has_punishment?(l2id, PunishmentAffect::CHARACTER, PunishmentType::JAIL) ||
+    PunishmentManager.has_punishment?(account_name, PunishmentAffect::ACCOUNT, PunishmentType::JAIL) ||
+    PunishmentManager.has_punishment?(ip_address, PunishmentAffect::IP, PunishmentType::JAIL)
   end
 
-  def silence_mode?(pc_id : Int32)
+  def chat_banned? : Bool
+    PunishmentManager.has_punishment?(l2id, PunishmentAffect::CHARACTER, PunishmentType::CHAT_BAN) ||
+    PunishmentManager.has_punishment?(account_name, PunishmentAffect::ACCOUNT, PunishmentType::CHAT_BAN) ||
+    PunishmentManager.has_punishment?(ip_address, PunishmentAffect::IP, PunishmentType::CHAT_BAN)
+  end
+
+  def silence_mode?(pc_id : Int32) : Bool
     if Config.silence_mode_exclude && @silence_mode && @silence_mode_excluded
       !@silence_mode_excluded.not_nil!.includes?(pc_id)
     else
@@ -6537,7 +6599,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def add_subclass(class_id, class_index) # Integer, Integer
+  def add_subclass(class_id : Int32, class_index : Int32)
     # unless @subclass_lock.try_lock
     #   debug "Subclass lock is locked."
     #   return false
@@ -6611,7 +6673,7 @@ class L2PcInstance < L2Playable
     add_subclass(new_class_id, class_index)
   end
 
-  def change_active_class(class_index)
+  def change_active_class(class_index : Int32)
     # return false unless @subclass_lock.try_lock
 
     begin
@@ -7109,8 +7171,8 @@ class L2PcInstance < L2Playable
       noob = false
       upper_grade = false
 
-      if @lure
-        lure_id = @lure.not_nil!.id
+      if lure = @lure
+        lure_id = lure.not_nil!.id
         noob = @fish.not_nil!.fish_grade == 0
         upper_grade = @fish.not_nil!.fish_grade == 2
 
@@ -7331,7 +7393,7 @@ class L2PcInstance < L2Playable
     stop_looking_for_fish_task
   end
 
-  def friends
+  def friends : Set(Int32)
     @friends || sync { @friends ||= Set(Int32).new }
   end
 
@@ -7353,7 +7415,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def variables
+  def variables : PlayerVariables
     get_script(PlayerVariables) || add_script(PlayerVariables.new(l2id))
   end
 
@@ -7382,8 +7444,8 @@ class L2PcInstance < L2Playable
     @event_listeners.reject! { |lst| lst.class == klass}
   end
 
-  def teleport_bookmarks
-    @tp_bookmarks.local_each_value
+  def teleport_bookmarks : Slice(TeleportBookmark)
+    @tp_bookmarks.values_slice
   end
 
   def bookmark_slot=(slot : Int32)
@@ -7464,7 +7526,7 @@ class L2PcInstance < L2Playable
     send_packet(ExGetBookMarkInfoPacket.new(self))
   end
 
-  def teleport_bookmark_condition(type : Int32)
+  def teleport_bookmark_condition(type : Int32) : Bool
     if in_combat?
       send_packet(SystemMessageId::YOU_CANNOT_USE_MY_TELEPORTS_DURING_A_BATTLE)
       false
@@ -7502,7 +7564,7 @@ class L2PcInstance < L2Playable
         send_packet(SystemMessageId::YOU_CANNOT_USE_MY_TELEPORTS_TO_REACH_THIS_AREA)
       end
       false
-      # TODO: Instant Zone still not implemented elsif(isInsideZone(ZoneId.INSTANT)) { send_packet(SystemMessage.getSystemMessage(2357)); return; }
+      # L2J TODO: Instant Zone still not implemented elsif(isInsideZone(ZoneId.INSTANT)) { send_packet(SystemMessage.getSystemMessage(2357)); return; }
     else
       true
     end

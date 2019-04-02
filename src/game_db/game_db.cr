@@ -1,7 +1,7 @@
 require "db"
 require "mysql"
 
-require "./result_set_reader"
+# require "./result_set_reader"
 require "./dao/dao_factory"
 
 module GameDB

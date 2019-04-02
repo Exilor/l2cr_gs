@@ -8,7 +8,13 @@ class DimensionalRiftRoom
   getter? boss_room
   property? party_inside : Bool = false
 
-  def initialize(@type : Int8, @room : Int8, x_min : Int32, x_max : Int32, y_min : Int32, y_max : Int32, @z_min : Int32, @z_max : Int32, xt : Int32, yt : Int32, zt : Int32, @boss_room : Bool)
+  def initialize(type : Int8, room : Int8, x_min : Int32, x_max : Int32, y_min : Int32, y_max : Int32, z_min : Int32, z_max : Int32, xt : Int32, yt : Int32, zt : Int32, boss_room : Bool)
+    @type = type
+    @room = room
+    @z_min = z_min
+    @z_max = z_max
+    @boss_room = boss_room
+
     @x_min = x_min + 128
     @x_max = x_max - 128
     @y_min = y_min + 128

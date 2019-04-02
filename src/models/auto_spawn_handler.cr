@@ -15,7 +15,7 @@ module AutoSpawnHandler
     restore_spawn_data
   end
 
-  def size
+  def size : Int32
     REGISTERED_SPAWNS.size
   end
 
@@ -123,10 +123,10 @@ module AutoSpawnHandler
     l2id = sp.l2id
     if spawn_registered?(l2id)
       delay = RUNNING_SPAWNS[l2id]?.try &.delay
-      delay ? Time.s_to_ms(delay) : 0i64
-    else
-      -1i64
+      return delay ? Time.s_to_ms(delay) : 0i64
     end
+
+    -1i64
   end
 
   def get_auto_spawn_instance?(id : Int32, is_l2id : Bool)
@@ -255,6 +255,8 @@ module AutoSpawnHandler
   class AutoSpawnInstance
     # include Identifiable
 
+    @spawn_index = 0
+    @broadcast_announcement = false
     getter location_list = [] of Location
     getter npc_instance_list = [] of L2Npc
     property? spawn_active : Bool = false
@@ -267,8 +269,6 @@ module AutoSpawnHandler
     property last_loc_index : Int32 = -1
     property? spawn_active : Bool = false
     property? random_spawn : Bool = false
-    @spawn_index = 0
-    @broadcast_announcement = false
 
     initializer id: Int32, init_delay: Int32, respawn_delay: Int32,
       despawn_delay: Int32
@@ -285,10 +285,11 @@ module AutoSpawnHandler
       @npc_instance_list.map &.spawn
     end
 
-    def broadcast=(@broadcast_announcement : Bool)
+    def broadcast=(val : Bool)
+      @broadcast_announcement = val
     end
 
-    def broadcasting?
+    def broadcasting? : Bool
       @broadcast_announcement
     end
 

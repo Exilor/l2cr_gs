@@ -1,4 +1,4 @@
-class BlockList
+struct BlockList
   include Loggable
   extend Loggable
 

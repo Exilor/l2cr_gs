@@ -58,7 +58,4 @@ abstract class AbstractPlayerGroup
       end
     end
   end
-
-  # all? -> forEachMember()
-  # includes? -> containsPlayer()
 end

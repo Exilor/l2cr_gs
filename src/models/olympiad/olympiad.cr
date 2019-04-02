@@ -66,13 +66,9 @@ class Olympiad < ListenersContainer
 
   @olympiad_end = 0i64
   @validation_end = 0i64
-  getter period
-  protected setter period : Int32 = 0
   @next_weekly_change = 0i64
-  getter current_cycle = 0
   @comp_end = 0i64
   @comp_start : Calendar?
-  getter? comp_period = false
   @comp_started = false
   @scheduled_comp_start : Runnable::DelayedTask?
   @scheduled_comp_end : Runnable::DelayedTask?
@@ -81,6 +77,10 @@ class Olympiad < ListenersContainer
   @scheduled_validation_task : Runnable::DelayedTask?
   @game_manager : Runnable::DelayedTask?
   @game_announcer : Runnable::DelayedTask?
+  getter current_cycle = 0
+  getter period = 0
+  protected setter period : Int32
+  getter? comp_period = false
 
   private def initialize
     @OLYMPIAD_GET_HEROS = "SELECT olympiad_nobles.charId, characters.char_name FROM olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} AND olympiad_nobles.competitions_won > 0 ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC"

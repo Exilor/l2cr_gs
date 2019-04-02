@@ -22,27 +22,26 @@ class Elementals
   }
 
   getter element, value
-  delegate "element=", "value=", apply_bonus, remove_bonus, to: @boni
 
   def initialize(@element : Int8, @value : Int32)
     @boni = ElementalStatBoni.new(element, value)
   end
 
-  # def element=(@element : Int8)
-  #   @boni.element = element
-  # end
+  def element=(@element : Int8)
+    @boni.element = element
+  end
 
-  # def value=(@value : Int32)
-  #   @boni.value = value
-  # end
+  def value=(@value : Int32)
+    @boni.value = value
+  end
 
-  # def apply_bonus(pc : L2PcInstance, is_armor : Bool)
-  #   @boni.apply_bonus(pc, is_armor)
-  # end
+  def apply_bonus(pc : L2PcInstance, is_armor : Bool)
+    @boni.apply_bonus(pc, is_armor)
+  end
 
-  # def remove_bonus(pc : L2PcInstance)
-  #   @boni.remove_bonus(pc)
-  # end
+  def remove_bonus(pc : L2PcInstance)
+    @boni.remove_bonus(pc)
+  end
 
   def update_bonus(pc : L2PcInstance, is_armor : Bool)
     @boni.remove_bonus(pc)
@@ -50,7 +49,7 @@ class Elementals
   end
 
   def to_s(io : IO)
-    io << Elementals.get_element_name(@element) << " +"  << @value
+    io << Elementals.get_element_name(@element) << " +" << @value
   end
 
   def self.get_item_element(item_id : Int) : Int8

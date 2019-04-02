@@ -222,7 +222,7 @@ class NpcAI::OracleTeleport < AbstractNpcAI
       play_sound(pc, Sound::ITEMSOUND_QUEST_ACCEPT)
       pc.tele_to_location(Location.new(-81261, 86531, -5157))
       pc.in_7s_dungeon = true
-    elsif npc_id >= 31494 && npc_id <= 31507
+    elsif npc_id.between?(31494, 31507)
       if pc.level < 20
         htmltext = "1.htm"
         st.exit_quest(true)
@@ -235,7 +235,7 @@ class NpcAI::OracleTeleport < AbstractNpcAI
         st.state = State::CREATED
         htmltext = "4.htm"
       end
-    elsif (npc_id >= 31095 && npc_id <= 31111) || (npc_id >= 31114 && npc_id <= 31126)
+    elsif npc_id.between?(31095, 31111) || npc_id.between?(31114, 31126)
       lvl = pc.level
       if lvl < 20
         htmltext = "ziggurat_lowlevel.htm"
