@@ -27,7 +27,7 @@ module FishData
     when 2
       fish = HARD
     else
-      warn "Unknown fish grade #{grade}."
+      warn { "Unknown fish grade #{grade}." }
       return result
     end
 
@@ -37,7 +37,7 @@ module FishData
     end
 
     if result.empty?
-      warn "Couldn't find any fish for level #{level}, group #{group} and grade #{grade}."
+      warn { "Couldn't find any fish for level #{level}, group #{group} and grade #{grade}." }
     end
 
     result

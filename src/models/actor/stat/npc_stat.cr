@@ -1,8 +1,8 @@
 require "./char_stat"
 
 class NpcStat < CharStat
-  def level : UInt8
-    active_char.template.level
+  def level : Int32
+    active_char.template.level.to_i32
   end
 
   def active_char

@@ -43,7 +43,7 @@ class Packets::Outgoing::Die < GameServerPacket
 
       castle = CastleManager.get_castle(@char)
       fort = FortManager.get_fort(@char)
-      hall = CHSiegeManager.get_nearby_clan_hall(@char)
+      hall = ClanHallSiegeManager.get_nearby_clan_hall(@char)
       if castle && castle.siege.in_progress?
         siege_clan = castle.siege.get_attacker_clan(clan)
         if siege_clan && castle.siege.defender?(clan)

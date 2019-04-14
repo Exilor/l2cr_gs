@@ -19,7 +19,7 @@ class Quests::Q00504_CompetitionForTheBanditStronghold < Quest
   def initialize
     super(504, self.class.simple_name, "Competition for the Bandit Stronghold")
 
-    @bandit_stronghold = CHSiegeManager.get_siegable_hall!(35)
+    @bandit_stronghold = ClanHallSiegeManager.get_siegable_hall!(35)
 
     add_start_npc(MESSENGER)
     add_talk_id(MESSENGER)

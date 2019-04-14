@@ -40,16 +40,16 @@ class Packets::Incoming::RequestJoinSiege < GameClientPacket
       castle.siege.list_register_clan(pc)
     end
 
-    if hall = CHSiegeManager.get_siegable_hall(@castle_id)
+    if hall = ClanHallSiegeManager.get_siegable_hall(@castle_id)
       if @joining == 1
         if Time.ms < clan.dissolving_expiry_time
           pc.send_packet(SystemMessageId::CANT_PARTICIPATE_IN_SIEGE_WHILE_DISSOLUTION_IN_PROGRESS)
           return
         end
 
-        CHSiegeManager.register_clan(clan, hall, pc)
+        ClanHallSiegeManager.register_clan(clan, hall, pc)
       else
-        CHSiegeManager.unregister_clan(clan, hall)
+        ClanHallSiegeManager.unregister_clan(clan, hall)
       end
 
       pc.send_packet(SiegeInfo.new(hall))

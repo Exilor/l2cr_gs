@@ -2,24 +2,27 @@ class CharStatus
   include Loggable
   include Synchronizable
 
-  REGEN_FLAG_CP = 4i8
-  REGEN_FLAG_HP = 1i8
-  REGEN_FLAG_MP = 2i8
+  private REGEN_FLAG_CP = 4i8
+  private REGEN_FLAG_HP = 1i8
+  private REGEN_FLAG_MP = 2i8
 
   @flags_regen_active = 0i8
+  @reg_task : Runnable::PeriodicTask?
+
   getter current_hp = 0f64
   getter current_mp = 0f64
-  getter status_listener = Set(L2Character).new
-  getter reg_task : Runnable::PeriodicTask?
+  getter(status_listener) { Set(L2Character).new }
 
   getter_initializer active_char: L2Character
 
   def add_status_listener(char : L2Character)
-    @status_listener.add(char) unless char == @active_char
+    unless char == @active_char
+      status_listener.add(char)
+    end
   end
 
   def remove_status_listener(char : L2Character)
-    @status_listener.delete(char)
+    status_listener.delete(char)
   end
 
   def reduce_cp(value : Int32)
@@ -36,12 +39,18 @@ class CharStatus
 
   def reduce_hp(value : Float64, attacker : L2Character?, awake : Bool, dot : Bool, hp_consume : Bool)
     char = @active_char
-    return if char.dead?
-    return if (char.invul? || char.hp_blocked?) && !(dot || hp_consume)
+    if char.dead?
+      return
+    end
+    if (char.invul? || char.hp_blocked?) && !(dot || hp_consume)
+      return
+    end
 
     pc_attacker = attacker.try &.acting_player?
     if pc_attacker && pc_attacker.gm?
-      return unless pc_attacker.access_level.can_give_damage?
+      unless pc_attacker.access_level.can_give_damage?
+        return
+      end
     end
 
     if !dot && !hp_consume
@@ -51,7 +60,9 @@ class CharStatus
       end
     end
 
-    self.current_hp = Math.max(current_hp - value, 0).to_f64 if value > 0
+    if value > 0
+      self.current_hp = Math.max(current_hp - value, 0).to_f64
+    end
 
     if char.current_hp < 0.5 && char.mortal?
       char.abort_attack
@@ -111,7 +122,9 @@ class CharStatus
     if new_hp >= max_hp
       @current_hp = max_hp.to_f
       @flags_regen_active &= ~REGEN_FLAG_HP
-      stop_hp_mp_regeneration if @flags_regen_active == 0
+      if @flags_regen_active == 0
+        stop_hp_mp_regeneration
+      end
     else
       @current_hp = new_hp
       @flags_regen_active |= REGEN_FLAG_HP
@@ -147,16 +160,22 @@ class CharStatus
     current_mp = current_mp().to_i
     max_mp = char.max_mp
 
-    return false if char.dead?
+    sync do
+      if char.dead?
+        return false
+      end
 
-    if new_mp >= max_mp
-      @current_mp = max_mp.to_f
-      @flags_regen_active &= ~REGEN_FLAG_MP
-      stop_hp_mp_regeneration if @flags_regen_active == 0
-    else
-      @current_mp = new_mp
-      @flags_regen_active |= REGEN_FLAG_MP
-      start_hp_mp_regeneration
+      if new_mp >= max_mp
+        @current_mp = max_mp.to_f
+        @flags_regen_active &= ~REGEN_FLAG_MP
+        if @flags_regen_active == 0
+          stop_hp_mp_regeneration
+        end
+      else
+        @current_mp = new_mp
+        @flags_regen_active |= REGEN_FLAG_MP
+        start_hp_mp_regeneration
+      end
     end
 
     changed = current_mp != @current_mp

@@ -21,6 +21,6 @@ module KarmaData
   end
 
   def get_multiplier(level : Int32) : Float64
-    KARMA_TABLE[level]
+    KARMA_TABLE.fetch(level) { raise "No karma data for level #{level}" }
   end
 end

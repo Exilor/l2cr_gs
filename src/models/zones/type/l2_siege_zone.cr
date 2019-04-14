@@ -20,7 +20,7 @@ class L2SiegeZone < L2ZoneType
 
       settings.siegable_id = value.to_i
 
-      hall = CHSiegeManager.conquerable_halls[settings.siegable_id]?
+      hall = ClanHallSiegeManager.conquerable_halls[settings.siegable_id]?
       if hall
         hall.siege_zone = self
       else

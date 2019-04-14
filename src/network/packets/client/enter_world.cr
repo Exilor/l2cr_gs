@@ -117,7 +117,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
         end
       end
 
-      CHSiegeManager.conquerable_halls.each_value do |hall|
+      ClanHallSiegeManager.conquerable_halls.each_value do |hall|
         unless hall.in_siege?
           next
         end

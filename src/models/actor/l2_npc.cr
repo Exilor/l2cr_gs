@@ -279,11 +279,11 @@ class L2Npc < L2Character
   end
 
   def conquerable_hall : SiegableHall
-    CHSiegeManager.get_nearby_clan_hall!(x, y, 10000)
+    ClanHallSiegeManager.get_nearby_clan_hall!(x, y, 10000)
   end
 
   def conquerable_hall? : SiegableHall?
-    CHSiegeManager.get_nearby_clan_hall(x, y, 10000)
+    ClanHallSiegeManager.get_nearby_clan_hall(x, y, 10000)
   end
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)

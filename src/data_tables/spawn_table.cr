@@ -5,6 +5,7 @@ module SpawnTable
   private SELECT_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM spawnlist"
   private SELECT_CUSTOM_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM custom_spawnlist"
   private SPAWN_TABLE = Hash(Int32, Set(L2Spawn)).new
+
   @@xml_spawn_count = 0
 
   def load
@@ -40,7 +41,7 @@ module SpawnTable
 
     sql = is_custom ? SELECT_CUSTOM_SPAWNS : SELECT_SPAWNS
     GameDB.each(sql) do |rs|
-      npc_id = rs.get_i32("npc_templateid").to_u16.to_i32
+      npc_id = rs.get_i32("npc_templateid").to_u16.to_i32 # OverflowError - what's the on-purpose overflow method
       unless check_template(npc_id)
         next
       end
@@ -63,8 +64,8 @@ module SpawnTable
     spawn_count
   end
 
-  private def add_spawn(spwn : L2Spawn)
-    (SPAWN_TABLE[spwn.id] ||= Set(L2Spawn).new) << spwn
+  private def add_spawn(sp : L2Spawn)
+    (SPAWN_TABLE[sp.id] ||= Set(L2Spawn).new) << sp
   end
 
   private def add_spawn(data : StatsSet) : Int32

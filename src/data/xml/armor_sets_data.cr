@@ -13,7 +13,7 @@ module ArmorSetsData
   end
 
   def [](id : Int32) : ArmorSet
-    SETS[id]
+    SETS.fetch(id) { raise "No armor set with id #{id}" }
   end
 
   def []?(id : Int32) : ArmorSet?

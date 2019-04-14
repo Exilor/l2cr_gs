@@ -23,7 +23,7 @@ module FishingMonstersData
   end
 
   def get_fishing_monster(lvl : Int32) : L2FishingMonster?
-    DATA.find_value { |m| lvl >= m.min_level && lvl <= m.max_level }
+    DATA.find_value { |m| lvl.between?(m.min_level, m.max_level) }
   end
 
   def get_fishing_monster_by_id(id : Int32) : L2FishingMonster?

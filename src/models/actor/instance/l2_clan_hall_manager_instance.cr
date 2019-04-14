@@ -1084,7 +1084,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
   def clan_hall? : ClanHall?
     if @clan_hall_id < 0
       unless tmp = ClanHallManager.get_nearby_clan_hall(x, y, 500)
-        tmp = CHSiegeManager.get_nearby_clan_hall(self)
+        tmp = ClanHallSiegeManager.get_nearby_clan_hall(self)
       end
 
       if tmp

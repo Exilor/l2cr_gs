@@ -24,7 +24,7 @@ abstract class ClanHallSiegeEngine < Quest
   def initialize(name : String, descr : String, hall_id : Int32)
     super(-1, name, descr)
 
-    @hall = CHSiegeManager.get_siegable_hall!(hall_id)
+    @hall = ClanHallSiegeManager.get_siegable_hall!(hall_id)
     delay = @hall.next_siege_time - Time.ms - 3600000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
     info "Siege scheduled for #{siege_date.time}."

@@ -1,6 +1,6 @@
 require "../models/entity/clan_hall/siegable_hall"
 
-module CHSiegeManager
+module ClanHallSiegeManager
   extend self
   extend Loggable
   include Packets::Outgoing

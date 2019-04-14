@@ -242,7 +242,7 @@ class Packets::Outgoing::TargetInfo < Packets::Outgoing::OnScreenInfo
         io.puts "Running: #{target.running?}"
         io.puts "HP: #{target.current_hp.to_i}/#{target.max_hp}"
         io.puts "MP: #{target.current_mp.to_i}/#{target.max_mp}"
-        io.puts "Regenerating: #{!!target.status.reg_task}"
+        io.puts "Regenerating: #{!!target.status.@reg_task}"
         io.puts "Target: #{target_info}"
         no_ai = "No AI"
         io.puts "AI: #{target.@ai.try &.intention || no_ai}"

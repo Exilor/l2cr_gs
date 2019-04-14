@@ -30,7 +30,7 @@ require "./instance_managers/merc_ticket_manager"
 require "./instance_managers/siege_manager"
 require "./instance_managers/territory_war_manager"
 require "./instance_managers/fort_siege_manager"
-require "./instance_managers/ch_siege_manager"
+require "./instance_managers/clan_hall_siege_manager"
 require "./instance_managers/day_night_spawn_manager"
 require "./instance_managers/raid_boss_spawn_manager"
 require "./instance_managers/grand_boss_manager"
@@ -175,7 +175,7 @@ module GameServer
     PetDataTable.load
     SummonTable.load
     ClanTable.load
-    CHSiegeManager.load
+    ClanHallSiegeManager.load
     ClanHallManager.load
     AuctionManager.load
 

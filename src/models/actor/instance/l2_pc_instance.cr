@@ -332,7 +332,7 @@ class L2PcInstance < L2Playable
     pc.base_class = pc.class_id
     pc.newbie = 1
     pc.recom_left = 20
-    GameDB.player.insert(pc) ? pc : nil
+    pc if GameDB.player.insert(pc)
   end
 
   def self.load(l2id : Int32) : L2PcInstance?
@@ -496,7 +496,6 @@ class L2PcInstance < L2Playable
       rescue e
         error e
       end
-
 
       if channelized?
         skill_channelized.abort_channelization
@@ -797,7 +796,10 @@ class L2PcInstance < L2Playable
   end
 
   def class_id=(id : Int32)
-    # return unless @subclass_lock.try_lock
+    # unless @subclass_lock.try_lock
+    #   return
+    # end
+
     begin
       if lvl_joined_academy != 0 && @clan && PlayerClass[id].level.third?
         if lvl_joined_academy <= 16
@@ -859,7 +861,9 @@ class L2PcInstance < L2Playable
   end
 
   def inc_recom_have
-    @recom_have += 1 if @recom_have < 255
+    if @recom_have < 255
+      @recom_have += 1
+    end
   end
 
   def recom_have=(value : Int32)
@@ -873,9 +877,12 @@ class L2PcInstance < L2Playable
   end
 
   def recom_bonus_time : Int32
-    return 0 unless task = @reco_bonus_task
-    time = Time.ms_to_s(task.delay)
-    Math.max(time.to_i, 0)
+    if task = @reco_bonus_task
+      time = Time.ms_to_s(task.delay)
+      return Math.max(time.to_i, 0)
+    end
+
+    0
   end
 
   def recom_bonus_type : Int32
@@ -941,12 +948,16 @@ class L2PcInstance < L2Playable
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    send_packet(gsp) unless gsp.is_a?(CharInfo)
+    unless gsp.is_a?(CharInfo)
+      send_packet(gsp)
+    end
 
     gsp.invisible = invisible?
 
     known_list.known_players.each_value do |pc|
-      next unless visible_for?(pc)
+      unless visible_for?(pc)
+        next
+      end
 
       pc.send_packet(gsp)
 
@@ -968,7 +979,9 @@ class L2PcInstance < L2Playable
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Number)
-    send_packet(gsp) unless gsp.is_a?(CharInfo)
+    unless gsp.is_a?(CharInfo)
+      send_packet(gsp)
+    end
 
     gsp.invisible = invisible?
 
@@ -1013,7 +1026,9 @@ class L2PcInstance < L2Playable
       rel |= RelationChanged::LEADER
     end
 
-    if (party = party?) && party == pc.party?
+    party = party?
+
+    if party && party == pc.party?
       rel |= RelationChanged::HAS_PARTY
 
       case i = party.members.index(self)
@@ -1085,7 +1100,7 @@ class L2PcInstance < L2Playable
   end
 
   def online_int : Int32
-    if @online && @client
+    if @online && (client = @client)
       return client.detached? ? 2 : 1
     end
 
@@ -1263,7 +1278,9 @@ class L2PcInstance < L2Playable
   end
 
   def remove_from_boss_zone
-    GrandBossManager.zones.each_value &.remove_player(self)
+    GrandBossManager.zones.each_value do |zone|
+      zone.remove_player(self)
+    end
   rescue e
     error e
   end
@@ -1274,7 +1291,7 @@ class L2PcInstance < L2Playable
       if learn
         lvl_diff = id == CommonSkill::EXPERTISE.id ? 0 : 9
         if level < learn.get_level - lvl_diff
-          debug { "would decrease the level of #{skill} by #{lvl_diff}" }
+          debug { "Decreasing the level of #{skill} by #{lvl_diff}" }
           decrease_skill_level(skill, lvl_diff)
         end
       end
@@ -1718,16 +1735,23 @@ class L2PcInstance < L2Playable
 
     @transform_skills.not_nil![sk.id] = sk
 
-    add_skill(sk, false) if sk.passive?
+    if sk.passive?
+      add_skill(sk, false)
+    end
   end
 
   def get_transform_skill(id : Int32) : Skill?
-    @transform_skills.try &.[id]?
+    if tmp = @transform_skills
+      tmp[id]?
+    end
   end
 
   def has_transform_skill?(id : Int32) : Bool
-    return false unless temp = @transform_skills
-    temp.has_key?(id)
+    if tmp = @transform_skills
+      return tmp.has_key?(id)
+    end
+
+    false
   end
 
   def remove_all_transform_skills
@@ -1735,7 +1759,11 @@ class L2PcInstance < L2Playable
   end
 
   def get_custom_skill(id : Int32) : Skill?
-    @custom_skills.try &.[id]?
+    if tmp = @custom_skills
+      return tmp[id]?
+    end
+
+    nil
   end
 
   # the force parameter is custom and is used in SendBypassBuildCMD
@@ -1813,11 +1841,12 @@ class L2PcInstance < L2Playable
   end
 
   def check_item_restriction
+    inv = inventory
     Inventory::TOTALSLOTS.times do |i|
-      equipped_item = inventory[i]
+      equipped_item = inv[i]
       if equipped_item && !equipped_item.template.check_condition(self, self, false)
         debug { "#{equipped_item} has failed the item restriction check." }
-        inventory.unequip_item_in_slot(i)
+        inv.unequip_item_in_slot(i)
 
         # iu = InventoryUpdate.new
         # iu.add_modified_item equipped_item
@@ -1882,7 +1911,9 @@ class L2PcInstance < L2Playable
   end
 
   def disarm_shield
-    return true unless shld = inventory.lhand_slot?
+    unless shld = inventory.lhand_slot?
+      return true
+    end
 
     old = inventory.unequip_item_in_body_slot_and_record(shld.template.body_part)
     # iu = InventoryUpdate.new
@@ -1930,7 +1961,9 @@ class L2PcInstance < L2Playable
   end
 
   def in_party_with?(target : L2Character) : Bool
-    return false unless in_party? && target.in_party?
+    unless in_party? && target.in_party?
+      return false
+    end
     party.leader_l2id == target.party.leader_l2id
   end
 
@@ -2124,7 +2157,7 @@ class L2PcInstance < L2Playable
     return if death_penalty_buff_level >= 15
 
     if death_penalty_buff_level != 0
-      unless skill = SkillData[5076, death_penalty_buff_level]
+      unless skill = SkillData[5076, death_penalty_buff_level]?
         remove_skill(skill, true)
       end
     end
@@ -2141,7 +2174,7 @@ class L2PcInstance < L2Playable
   def reduce_death_penalty_buff_level
     return if death_penalty_buff_level <= 0
 
-    unless skill = SkillData[5076, death_penalty_buff_level]
+    unless skill = SkillData[5076, death_penalty_buff_level]?
       remove_skill(skill, true)
     end
 
@@ -2418,7 +2451,7 @@ class L2PcInstance < L2Playable
     @html_action_origin_l2ids[scope.to_i] = id
   end
 
-  def last_html_action_origin_id
+  def last_html_action_origin_id : Int32
     @last_html_action_origin_l2id
   end
 

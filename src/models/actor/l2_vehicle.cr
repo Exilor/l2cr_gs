@@ -5,27 +5,28 @@ require "./ai/l2_vehicle_ai"
 require "../vehicle_path_point"
 
 class L2Vehicle < L2Character
-  getter passengers = Array(L2PcInstance).new
-  setter oust_loc : Location?
-  property dock_id : Int32 = 0
   @engine : Runnable?
   @current_path : Array(VehiclePathPoint)? | Slice(VehiclePathPoint)?
   @run_state = 0
+
+  getter passengers = Array(L2PcInstance).new
+  setter oust_loc : Location?
+  property dock_id : Int32 = 0
 
   def initialize(template : L2CharTemplate)
     super
     self.flying = true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Vehicle
   end
 
-  def boat?
+  def boat? : Bool
     false
   end
 
-  def airship?
+  def airship? : Bool
     false
   end
 
@@ -41,11 +42,11 @@ class L2Vehicle < L2Character
     super.as(VehicleStat)
   end
 
-  def in_dock?
+  def in_dock? : Bool
     @dock_id > 0
   end
 
-  def oust_loc
+  def oust_loc : Location
     @oust_loc ||
     MapRegionManager.get_tele_to_location(self, TeleportWhereType::TOWN)
   end
@@ -74,7 +75,7 @@ class L2Vehicle < L2Character
     @passengers.delete(pc)
   end
 
-  def empty?
+  def empty? : Bool
     @passengers.empty?
   end
 
@@ -82,7 +83,7 @@ class L2Vehicle < L2Character
     @passengers.each &.send_packet(gsp)
   end
 
-  def can_be_controlled?
+  def can_be_controlled? : Bool
     @engine.nil?
   end
 
@@ -94,15 +95,16 @@ class L2Vehicle < L2Character
     if engine = @engine
       ThreadPoolManager.schedule_general(engine, delay)
     end
-    nil
   end
 
   def execute_path(path : Array(VehiclePathPoint) | Slice(VehiclePathPoint))
     @run_state = 0
     @current_path = path
 
-    if (temp = @current_path) && !temp.empty?
-      point = temp[0]
+    if path.empty?
+      set_intention(AI::ACTIVE)
+    else
+      point = path[0]
 
       if point.move_speed > 0
         stat.move_speed = point.move_speed.to_f32
@@ -112,8 +114,6 @@ class L2Vehicle < L2Character
       end
 
       set_intention(AI::MOVE_TO, Location.new(*point.xyz, 0))
-    else
-      set_intention(AI::ACTIVE)
     end
   end
 
@@ -286,7 +286,7 @@ class L2Vehicle < L2Character
     # return nil
   end
 
-  def active_weapon_item?
+  def active_weapon_item? : L2Weapon?
     # return nil
   end
 
@@ -294,7 +294,7 @@ class L2Vehicle < L2Character
     # return nil
   end
 
-  def secondary_weapon_item?
+  def secondary_weapon_item? : L2Item?
     # return nil
   end
 

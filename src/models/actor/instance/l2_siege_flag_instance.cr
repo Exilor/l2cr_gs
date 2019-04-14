@@ -25,7 +25,7 @@ class L2SiegeFlagInstance < L2Npc
     @can_talk = true
     @siege = SiegeManager.get_siege(*pc.xyz)
     @siege ||= FortSiegeManager.get_siege(*pc.xyz)
-    @siege ||= CHSiegeManager.get_siege(pc)
+    @siege ||= ClanHallSiegeManager.get_siege(pc)
 
     unless @clan && @siege
       raise "Initialization failed @clan.nil?: #{@clan.nil?}, @siege.nil?: #{@siege.nil?}"

@@ -303,11 +303,11 @@ class Olympiad < ListenersContainer
     init
   end
 
-  private def noble_count : Int32
+  def self.noble_count : Int32
     NOBLES.size
   end
 
-  private def get_noble_stats(l2id) : StatsSet?
+  def self.get_noble_stats(l2id) : StatsSet?
     NOBLES[l2id]?
   end
 
@@ -430,7 +430,7 @@ class Olympiad < ListenersContainer
     schedule_weekly_change
   end
 
-  private def millis_to_comp_begin : Int64
+  def millis_to_comp_begin : Int64
     time = Time.ms
 
     if @comp_start.ms < time && @comp_end > time
@@ -456,11 +456,11 @@ class Olympiad < ListenersContainer
     @comp_start.ms - Time.ms
   end
 
-  private def millis_to_comp_end : Int64
+  def millis_to_comp_end : Int64
     @comp_end - Time.ms
   end
 
-  private def millis_to_week_change : Int64
+  def millis_to_week_change : Int64
     time = Time.ms
 
     if @next_weekly_change > time
@@ -862,8 +862,12 @@ class Olympiad < ListenersContainer
     NOBLES.clear
   end
 
-  private def add_noble_stats(l2id : Int32, data : StatsSet)
+  def self.add_noble_stats(l2id : Int32, data : StatsSet)
     NOBLES[l2id] = data
+  end
+
+  def self.in_comp_period? : Bool
+    instance.in_comp_period?
   end
 
   def self.instance

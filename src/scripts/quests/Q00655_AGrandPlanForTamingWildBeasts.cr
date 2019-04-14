@@ -115,7 +115,7 @@ class Quests::Q00655_AGrandPlanForTamingWildBeasts < Quest
   #  * @return the siege date
   #  */
   private def siege_date
-    if hall = CHSiegeManager.get_siegable_hall(ClanHallSiegeEngine::BEAST_FARM)
+    if hall = ClanHallSiegeManager.get_siegable_hall(ClanHallSiegeEngine::BEAST_FARM)
       format = "%Y-%m-%d %H:%M:%S"
       hall.siege_date.time.to_s(format)
     end
@@ -128,7 +128,7 @@ class Quests::Q00655_AGrandPlanForTamingWildBeasts < Quest
   #  * @return minutes to next siege
   #  */
   private def minutes_to_siege
-    if hall = CHSiegeManager.get_siegable_hall(ClanHallSiegeEngine::BEAST_FARM)
+    if hall = ClanHallSiegeManager.get_siegable_hall(ClanHallSiegeEngine::BEAST_FARM)
       return (hall.next_siege_time - Time.ms) / 3600
     end
 

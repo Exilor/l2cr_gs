@@ -29,7 +29,7 @@ class EffectHandler::HeadquarterCreate < AbstractEffect
     elsif fort = FortManager.get_fort(pc)
       fort.siege.get_flag(pc.clan).not_nil! << flag
     else
-      CHSiegeManager.get_nearby_clan_hall!(pc).siege.get_flag(pc.clan).not_nil! << flag
+      ClanHallSiegeManager.get_nearby_clan_hall!(pc).siege.get_flag(pc.clan).not_nil! << flag
     end
   end
 end

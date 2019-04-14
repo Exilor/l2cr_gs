@@ -258,7 +258,7 @@ class Shutdown
       tc.start
     end
     #
-    CHSiegeManager.on_server_shutdown
+    ClanHallSiegeManager.on_server_shutdown
     info { "Siegable hall attacker lists saved in #{tc} seconds." }
     tc.start
     #

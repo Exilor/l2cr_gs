@@ -156,15 +156,15 @@ module MultisellData
       sm = SystemMessage.s1_deducted_from_clan_rep
       sm.add_long(amount)
       pc.send_packet(sm)
-      true
+      return true
     when FAME
       pc.fame -= amount
       pc.send_packet(UserInfo.new(pc))
       pc.send_packet(ExBrExtraUserInfo.new(pc))
-      true
-    else
-      false
+      return true
     end
+
+    false
   end
 
   def give_special_product(id : Int32, amount : Int64, pc : L2PcInstance)
@@ -197,6 +197,6 @@ module MultisellData
 
   private def verify_ingredient(ing : Ingredient)
     id = ing.item_id
-    (id == CLAN_REPUTATION || id == FAME) || !ing.template.nil?
+    id == CLAN_REPUTATION || id == FAME || !!ing.template
   end
 end

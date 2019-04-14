@@ -15,17 +15,9 @@ class CharStat
   getter attack_traits_count = Slice(Int32).new(TraitType.size)
   getter defence_traits_count = Slice(Int32).new(TraitType.size)
 
-  @level = 1u8
+  property level : Int32 = 1
 
   getter_initializer active_char: L2Character
-
-  def level : Int32
-    @level.to_i32
-  end
-
-  def level=(level : Int32)
-    @level = level.to_u8
-  end
 
   def calc_stat(stat : Stats, value : Number = 1.0, target : L2Character? = nil, skill : Skill? = nil) : Float64
     value = value.to_f64
@@ -48,7 +40,7 @@ class CharStat
   end
 
   def accuracy : Int32
-    calc_stat(ACCURACY_COMBAT, 0.0).round.to_i32
+    calc_stat(ACCURACY_COMBAT, 0.0).round.to_i
   end
 
   def attack_speed_multiplier : Float32
@@ -67,15 +59,15 @@ class CharStat
       val = Math.min(val, Config.max_pcrit_rate)
     end
 
-    val.ceil.to_i32
+    val.ceil.to_i
   end
 
   def get_critical_hit_pos(base : Int32) : Int32
-    calc_stat(CRITICAL_RATE_POS, base).to_i32
+    calc_stat(CRITICAL_RATE_POS, base).to_i
   end
 
   def get_evasion_rate(target : L2Character?) : Int32
-    val = calc_stat(EVASION_RATE, 0, target).round.to_i32
+    val = calc_stat(EVASION_RATE, 0, target).round.to_i
 
     if @active_char.override_max_stats_value?
       val
@@ -85,7 +77,7 @@ class CharStat
   end
 
   def str : Int32
-    calc_stat(STAT_STR, @active_char.template.base_str).to_i32
+    calc_stat(STAT_STR, @active_char.template.base_str).to_i
   end
 
   def dex : Int32
@@ -344,7 +336,7 @@ class CharStat
   end
 
   def get_mp_consume1(skill : Skill) : Int32
-    calc_stat(MP_CONSUME, skill.mp_consume1, nil, skill).to_i32
+    calc_stat(MP_CONSUME, skill.mp_consume1, nil, skill).to_i
   end
 
   def attack_element : Int8
@@ -388,7 +380,8 @@ class CharStat
       calc_stat(HOLY_POWER, @active_char.template.base_holy)
     when Elementals::DARK
       calc_stat(DARK_POWER, @active_char.template.base_dark)
-    else 0#raise "Wrong attack attribute: #{attack_attribute}"
+    else
+      0
     end
     .to_i
   end

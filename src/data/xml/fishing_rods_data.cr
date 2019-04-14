@@ -13,7 +13,9 @@ module FishingRodsData
   end
 
   def get_fishing_rod(item_id : Int32) : L2FishingRod
-    FISHING_RODS[item_id]
+    FISHING_RODS.fetch(item_id) do
+      raise "No fishing rod with item id #{item_id}"
+    end
   end
 
   private def parse_document(doc, file)

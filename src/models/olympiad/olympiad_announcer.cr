@@ -1,0 +1,47 @@
+class OlympiadAnnouncer
+  include Runnable
+
+  private OLY_MANAGER = 31688
+
+  @current_stadium = 0
+  @managers : Indexable(L2Spawn)
+
+  def initialize
+    @managers = SpawnManager.get_spawns(OLY_MANAGER)
+  end
+
+  def run
+    OlympiadGameManager.number_of_stadiums.downto(0) do |i|
+      if @current_stadium > OlympiadGameManager.number_of_stadiums
+        @current_stadium = 0
+      end
+
+      task = OlympiadGameManager.get_olympiad_task(@current_stadium)
+      if task && task.game? && task.need_announce?
+        arena_id = (task.game.stadium_id + 1).to_s
+        case task.game.type
+        when GameState::NON_CLASSED
+          npc_str = NpcString::OLYMPIAD_CLASS_FREE_INDIVIDUAL_MATCH_IS_GOING_TO_BEGIN_IN_ARENA_S1_IN_A_MOMENT
+        when GameState::CLASSED
+          npc_str = NpcString::OLYMPIAD_CLASS_INDIVIDUAL_MATCH_IS_GOING_TO_BEGIN_IN_ARENA_S1_IN_A_MOMENT
+        when GameState::TEAMS
+          npc_str = NpcString::OLYMPIAD_CLASS_FREE_TEAM_MATCH_IS_GOING_TO_BEGIN_IN_ARENA_S1_IN_A_MOMENT
+        else
+          next
+        end
+
+        @managers.each do |sp|
+          if manager = sp.last_spawn
+            say = NpcSay.new(manager.l2id, Say2::NPC_SHOUT, manager.id, npc_str)
+            say.add_string_parameter(arena_id)
+            manager.broadcast_packet(say)
+          end
+        end
+
+        break
+      end
+
+      @current_stadium += 1
+    end
+  end
+end

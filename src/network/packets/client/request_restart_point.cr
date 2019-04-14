@@ -108,7 +108,7 @@ class Packets::Incoming::RequestRestartPoint < GameClientPacket
       siege_clan = nil
       castle = CastleManager.get_castle(pc)
       fort = FortManager.get_fort(pc)
-      hall = CHSiegeManager.get_nearby_clan_hall(pc)
+      hall = ClanHallSiegeManager.get_nearby_clan_hall(pc)
       flag = TerritoryWarManager.get_hq_for_clan(pc.clan)
 
       if castle && castle.siege.in_progress?

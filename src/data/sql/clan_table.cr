@@ -124,7 +124,7 @@ module ClanTable
 
       hall_id = clan.hideout_id
       if hall_id == 0
-        CHSiegeManager.conquerable_halls.each_value &.remove_attacker(clan)
+        ClanHallSiegeManager.conquerable_halls.each_value &.remove_attacker(clan)
       end
 
       # if auction = AuctionManager.get_auction(clan.auction_bidded_at)
@@ -205,7 +205,7 @@ module ClanTable
         end
 
         if hall_id != 0
-          hall = CHSiegeManager.get_siegable_hall(hall_id)
+          hall = ClanHallSiegeManager.get_siegable_hall(hall_id)
           if hall && hall.owner_id == clan_id
             hall.free
           end

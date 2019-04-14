@@ -71,7 +71,7 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
       end
 
       d Time.ms / 1000
-      d CHSiegeManager.get_siegable_hall!(hall.id).next_siege_time / 1000
+      d ClanHallSiegeManager.get_siegable_hall!(hall.id).next_siege_time / 1000
       d 0
     else
       error "No castle and no hall."
