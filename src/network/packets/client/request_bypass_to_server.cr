@@ -120,13 +120,50 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
 
         pc.action_failed
       when @command.starts_with?("item_")
-        debug "TODO: item_"
+        end_of_id = @command.index('_', 5) || -1
+        if end_of_id > 0
+          id = @command[5...end_of_id]
+        else
+          id = @command.from(5)
+        end
+
+        begin
+          item_id = id.to_i
+          if item = pc.inventory.get_item_by_l2id(item_id)
+            item.on_bypass_feedback(pc, @command.from(end_of_id + 1))
+          end
+
+          pc.action_failed
+        rescue e
+          error e
+        end
       when @command.starts_with?("_match")
-        debug "TODO: _match"
+        idx = @command.index('?') || -1
+        idx += 1
+        params = @command.from(idx)
+        st = params.split('&')
+        hero_class = st.shift.split('=')[1].to_i
+        hero_page = st.shift.split('=')[1].to_i
+        hero_id = Hero.get_hero_by_class(hero_class)
+        if hero_id > 0
+          Hero.show_hero_fights(pc, hero_class, hero_id, hero_page)
+        end
       when @command.starts_with?("_diary")
-        debug "TODO: _diary"
+        idx = @command.index('?') || -1
+        idx += 1
+        params = @command.from(idx)
+        st = params.split('&')
+        hero_class = st.shift.split('=')[1].to_i
+        hero_page = st.shift.split('=')[1].to_i
+        hero_id = Hero.get_hero_by_class(hero_class)
+        if hero_id > 0
+          Hero.show_hero_diary(pc, hero_class, hero_id, hero_page)
+        end
       when @command.starts_with?("_olympiad?command")
-        debug "TODO: _olympiad?command"
+        arena_id = @command.split('=')[2].to_i
+        if handler = BypassHandler["arenachange"]
+          handler.use_bypass("arenachange #{arena_id - 1}", pc, nil)
+        end
       when @command.starts_with?("manor_menu_select")
         last_npc = pc.last_folk_npc
         if Config.allow_manor && last_npc && last_npc.can_interact?(pc)

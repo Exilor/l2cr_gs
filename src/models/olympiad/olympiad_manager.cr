@@ -1,8 +1,9 @@
 module OlympiadManager
   extend self
+  include Packets::Outgoing
 
   private NON_CLASS_BASED_REGISTERS = [] of Int32
-  private CLASS_BASED_REGISTERS = {} of Hash(Int32, Array(Int32))
+  private CLASS_BASED_REGISTERS = {} of Int32 => Array(Int32)
   private TEAMS_BASED_REGISTERS = [] of Array(Int32)
 
   def registered_non_class_based : Array(Int32)
@@ -21,7 +22,7 @@ module OlympiadManager
     ret = nil
     CLASS_BASED_REGISTERS.each_value do |class_list|
       if class_list.size >= Config.alt_oly_classed
-        (ret ||= [] of Array(Int32)).concat(class_list)
+        (ret ||= [] of Array(Int32)) << class_list
       end
     end
     ret
@@ -105,15 +106,15 @@ module OlympiadManager
         end
 
         case game.type
-        when GameState::CLASSED
+        when CompetitionType::CLASSED
           sm = SystemMessage.c1_is_already_registered_on_the_class_match_waiting_list
           sm.add_pc_name(noble)
           pc.send_packet(sm)
-        when GameState::NON_CLASSED
+        when CompetitionType::NON_CLASSED
           sm = SystemMessage.c1_is_already_registered_on_the_non_class_limited_match_waiting_list
           sm.add_pc_name(noble)
           pc.send_packet(sm)
-        when GameState::TEAMS
+        when CompetitionType::TEAMS
           sm = SystemMessage.c1_is_already_registered_non_class_limited_event_teams
           sm.add_pc_name(noble)
           pc.send_packet(sm)
@@ -217,7 +218,7 @@ module OlympiadManager
       # L2J TODO: replace with retail message
       if team_points < 10
         pc.send_message("Your team must have at least 10 points in total.")
-        if Config.mod_dualbox_check_max_olympiad_participants_per_ip > 0
+        if Config.dualbox_check_max_olympiad_participants_per_ip > 0
           party.members.each do |unreg|
             AntiFeedManager.remove_player(AntiFeedManager::OLYMPIAD_ID, unreg)
           end
@@ -363,7 +364,7 @@ module OlympiadManager
       dat = StatsSet.new
       dat[Olympiad::CLASS_ID] = noble.base_class
       dat[Olympiad::CHAR_NAME] = noble.name
-      dat[Olympiad::POINTS] = Olympiad::DEFAULT_POINTS
+      dat[Olympiad::POINTS] = Olympiad.default_points
       dat[Olympiad::COMP_DONE] = 0
       dat[Olympiad::COMP_WON] = 0
       dat[Olympiad::COMP_LOST] = 0
@@ -388,7 +389,7 @@ module OlympiadManager
       unless AntiFeedManager.try_add_player(AntiFeedManager::OLYMPIAD_ID, noble, Config.dualbox_check_max_olympiad_participants_per_ip)
         html = NpcHtmlMessage.new(pc.last_html_action_origin_id)
         html.set_file(pc, "data/html/mods/OlympiadIPRestriction.htm")
-        html["%max%"] = AntiFeedManager.get_limit(player, Config.dualbox_check_max_olympiad_participants_per_ip)
+        html["%max%"] = AntiFeedManager.get_limit(pc, Config.dualbox_check_max_olympiad_participants_per_ip)
         pc.send_packet(html)
         return false
       end

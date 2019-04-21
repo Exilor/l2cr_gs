@@ -1,4 +1,9 @@
+require "./olympiad_game_manager"
+require "./olympiad_announcer"
+
 class Olympiad < ListenersContainer
+  private alias SystemMessage = Packets::Outgoing::SystemMessage
+
   private NOBLES = {} of Int32 => StatsSet
   private HEROS_TO_BE = [] of StatsSet
   private NOBLES_RANK = {} of Int32 => Int32
@@ -41,10 +46,10 @@ class Olympiad < ListenersContainer
     134
   }
 
+  OLYMPIAD_HTML_PATH = "data/html/olympiad/"
   private OLYMPIAD_DELETE_ALL = "TRUNCATE olympiad_nobles"
   private OLYMPIAD_MONTH_CLEAR = "TRUNCATE olympiad_nobles_eom"
   private OLYMPIAD_MONTH_CREATE = "INSERT INTO olympiad_nobles_eom SELECT charId, class_id, olympiad_points, competitions_done, competitions_won, competitions_lost, competitions_drawn FROM olympiad_nobles"
-  private OLYMPIAD_HTML_PATH = "data/html/olympiad/"
   private OLYMPIAD_LOAD_DATA = "SELECT current_cycle, period, olympiad_end, validation_end, next_weekly_change FROM olympiad_data WHERE id = 0"
   private OLYMPIAD_SAVE_DATA = "INSERT INTO olympiad_data (id, current_cycle, period, olympiad_end, validation_end, next_weekly_change) VALUES (0,?,?,?,?,?) ON DUPLICATE KEY UPDATE current_cycle=?, period=?, olympiad_end=?, validation_end=?, next_weekly_change=?"
   private OLYMPIAD_LOAD_NOBLES = "SELECT olympiad_nobles.charId, olympiad_nobles.class_id, characters.char_name, olympiad_nobles.olympiad_points, olympiad_nobles.competitions_done, olympiad_nobles.competitions_won, olympiad_nobles.competitions_lost, olympiad_nobles.competitions_drawn, olympiad_nobles.competitions_done_week, olympiad_nobles.competitions_done_week_classed, olympiad_nobles.competitions_done_week_non_classed, olympiad_nobles.competitions_done_week_team FROM olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId"
@@ -68,19 +73,21 @@ class Olympiad < ListenersContainer
   @validation_end = 0i64
   @next_weekly_change = 0i64
   @comp_end = 0i64
-  @comp_start : Calendar?
+  @comp_start = Calendar.new
   @comp_started = false
   @scheduled_comp_start : Runnable::DelayedTask?
   @scheduled_comp_end : Runnable::DelayedTask?
   @scheduled_olympiad_end : Runnable::DelayedTask?
-  @scheduled_weekly_task : Runnable::DelayedTask?
+  @scheduled_weekly_task : Runnable::PeriodicTask?
   @scheduled_validation_task : Runnable::DelayedTask?
-  @game_manager : Runnable::DelayedTask?
-  @game_announcer : Runnable::DelayedTask?
+  @game_manager : Runnable::PeriodicTask?
+  @game_announcer : Runnable::PeriodicTask?
   getter current_cycle = 0
   getter period = 0
   protected setter period : Int32
-  getter? comp_period = false
+  getter? in_comp_period = false
+  class_getter(default_points) { Config.alt_oly_start_points }
+  class_getter(weekly_points) { Config.alt_oly_weekly_points }
 
   private def initialize
     @OLYMPIAD_GET_HEROS = "SELECT olympiad_nobles.charId, characters.char_name FROM olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} AND olympiad_nobles.competitions_won > 0 ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC"
@@ -114,9 +121,9 @@ class Olympiad < ListenersContainer
       GameDB.each(OLYMPIAD_LOAD_DATA) do |rs|
         @current_cycle = rs.get_i32("current_cycle")
         @period = rs.get_i32("period")
-        @olympiad_end = rs.get_i32("olympiad_end")
-        @validation_end = rs.get_i32("validation_end")
-        @next_weekly_change = rs.get_i32("next_weekly_change")
+        @olympiad_end = rs.get_i64("olympiad_end")
+        @validation_end = rs.get_i64("validation_end")
+        @next_weekly_change = rs.get_i64("next_weekly_change")
         loaded = true
       end
     rescue e
@@ -126,7 +133,7 @@ class Olympiad < ListenersContainer
     unless loaded
       warn "Failed to load data from database. Trying to load from file."
       cfg = StatsSet.new
-      cfg.parse(Config::OLYMPIAD_CONFIG_FILE)
+      cfg.parse(Dir.current + Config::OLYMPIAD_CONFIG_FILE)
       # error check
 
       @current_cycle = cfg.get_i32("CurrentCycle", 1)
@@ -146,7 +153,7 @@ class Olympiad < ListenersContainer
     when 1
       if @validation_end > Time.ms
         load_nobles_rank
-        @scheduled_validation_task = ThreadPoolManager.schedule_general(ValidationEndTask.new, millis_to_validation_end)
+        @scheduled_validation_task = ThreadPoolManager.schedule_general(->validation_end_task, millis_to_validation_end)
       else
         @current_cycle += 1
         @period = 0
@@ -210,7 +217,7 @@ class Olympiad < ListenersContainer
 
     begin
       place = 1
-      GameDB.each(GET_ALL_CLASSIFIED_NOBLESS) do |rs|
+      GameDB.each(@GET_ALL_CLASSIFIED_NOBLESS) do |rs|
         tmp[rs.get_i32(CHAR_ID)] = place
         place += 1
       end
@@ -251,9 +258,9 @@ class Olympiad < ListenersContainer
     end
 
     @comp_start = Calendar.new
-    @comp_start.hour = COMP_START
-    @comp_start.minute = COMP_MIN
-    @comp_end = @comp_start.ms + COMP_PERIOD
+    @comp_start.hour = @COMP_START
+    @comp_start.minute = @COMP_MIN
+    @comp_end = @comp_start.ms + @COMP_PERIOD
 
     @scheduled_olympiad_end.try &.cancel
 
@@ -279,14 +286,14 @@ class Olympiad < ListenersContainer
     save_noble_data
 
     @period = 1
-    save_heros_to_be
+    sort_heros_to_be
     Hero.reset_data
     Hero.compute_new_heroes(HEROS_TO_BE)
 
     save_olympiad_status
     update_monthly_data
 
-    @validation_end = Time.ms + VALIDATION_PERIOD
+    @validation_end = Time.ms + @VALIDATION_PERIOD
 
     load_nobles_rank
     task = ->validation_end_task
@@ -330,7 +337,7 @@ class Olympiad < ListenersContainer
           return
         end
 
-        @comp_period = true
+        @in_comp_period = true
 
         sm = SystemMessage.the_olympiad_game_has_started
         Broadcast.to_all_online_players(sm)
@@ -354,7 +361,7 @@ class Olympiad < ListenersContainer
               return
             end
 
-            @comp_period = false
+            @in_comp_period = false
             sm = SystemMessage.the_olympiad_game_has_ended
             Broadcast.to_all_online_players(sm)
             info "Olympiad Game ended"
@@ -424,9 +431,9 @@ class Olympiad < ListenersContainer
     cal.hour = 12
     cal.minute = 0
     cal.second = 0
-    @olympiad_end = time.ms
+    @olympiad_end = Time.ms
 
-    next_change = Time.ms + WEEKLY_PERIOD
+    next_change = Time.ms + @WEEKLY_PERIOD
     schedule_weekly_change
   end
 
@@ -446,10 +453,10 @@ class Olympiad < ListenersContainer
 
   private def set_new_comp_begin : Int64
     @comp_start = Calendar.new
-    @comp_start.hour = COMP_START
-    @comp_start.minute = COMP_MIN
+    @comp_start.hour = @COMP_START
+    @comp_start.minute = @COMP_MIN
     @comp_start.add(:DAY, 1)
-    @comp_end = @comp_start.ms + COMP_PERIOD
+    @comp_end = @comp_start.ms + @COMP_PERIOD
 
     info { "New schedule: #{@comp_start.time}." }
 
@@ -477,11 +484,11 @@ class Olympiad < ListenersContainer
       reset_weekly_matches
       info "Reset weekly matches to nobles."
 
-      @next_weekly_change = Time.ms + WEEKLY_PERIOD
+      @next_weekly_change = Time.ms + @WEEKLY_PERIOD
     end
 
     delay = millis_to_week_change
-    @scheduled_weekly_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, WEEKLY_PERIOD)
+    @scheduled_weekly_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, @WEEKLY_PERIOD)
   end
 
   private def add_weekly_points
@@ -492,7 +499,7 @@ class Olympiad < ListenersContainer
 
       NOBLES.each_value do |info|
         points = info.get_i32(POINTS)
-        points + WEEKLY_POINTS
+        points + @WEEKLY_POINTS
         info[POINTS] = points
       end
     end
@@ -614,7 +621,7 @@ class Olympiad < ListenersContainer
     soul_hounds = [] of StatsSet
 
     HERO_IDS.each do |element|
-      GameDB.each(OLYMPIAD_GET_HEROS, element) do |rs|
+      GameDB.each(@OLYMPIAD_GET_HEROS, element) do |rs|
         hero = StatsSet.new
         hero[CLASS_ID] = element
         hero[CHAR_ID] = rs.get_i32(CHAR_ID)
@@ -678,7 +685,7 @@ class Olympiad < ListenersContainer
 
       # logging
 
-      HEROS_TO_BE < hero
+      HEROS_TO_BE << hero
     end
 
   rescue e
@@ -689,15 +696,15 @@ class Olympiad < ListenersContainer
     names = [] of String
     if Config.alt_oly_show_monthly_winners
       if class_id == 134
-        sql = GET_EACH_CLASS_LEADER_SOULHOUND
+        sql = @GET_EACH_CLASS_LEADER_SOULHOUND
       else
-        sql = GET_EACH_CLASS_LEADER
+        sql = @GET_EACH_CLASS_LEADER
       end
     else
       if class_id == 132
-        sql = GET_EACH_CLASS_LEADER_CURRENT_SOULHOUND
+        sql = @GET_EACH_CLASS_LEADER_CURRENT_SOULHOUND
       else
-        sql = GET_EACH_CLASS_LEADER_CURRENT
+        sql = @GET_EACH_CLASS_LEADER_CURRENT
       end
     end
 
@@ -718,7 +725,7 @@ class Olympiad < ListenersContainer
 
     l2id = pc.l2id
 
-    unless NOBLES_RANK[l2id]?
+    unless rank = NOBLES_RANK[l2id]?
       return 0
     end
 
@@ -750,7 +757,7 @@ class Olympiad < ListenersContainer
     end
 
     if clear
-      info[POINTS] = 0
+      noble[POINTS] = 0
     end
 
     points * Config.alt_oly_gp_per_point
@@ -862,8 +869,12 @@ class Olympiad < ListenersContainer
     NOBLES.clear
   end
 
-  def self.add_noble_stats(l2id : Int32, data : StatsSet)
+  def add_noble_stats(l2id : Int32, data : StatsSet)
     NOBLES[l2id] = data
+  end
+
+  def self.add_noble_stats(*args)
+    instance.add_noble_stats(*args)
   end
 
   def self.in_comp_period? : Bool

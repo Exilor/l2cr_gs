@@ -17,7 +17,7 @@ module AdminCommandHandler::AdminAdmin
 			pc.send_message("Removed from gm list")
 			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_silence")
-			if pc.silence_mode? # already in message refusal mode
+			if pc.silence_mode?
 				pc.silence_mode = false
 				pc.send_packet(SystemMessageId::MESSAGE_ACCEPTANCE_MODE)
 			else
@@ -27,17 +27,17 @@ module AdminCommandHandler::AdminAdmin
 
 			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_saveolymp")
-			# Olympiad.save_olympiad_status
-			# pc.send_message("olympiad system saved.")
+			Olympiad.instance.save_olympiad_status
+			pc.send_message("olympiad system saved.")
     when command.starts_with?("admin_endolympiad")
-			# begin
-			# 	Olympiad.manualSelectHeroes()
-			# rescue => e
-			# 	error "An error occured while ending olympiad:"
-   #      error e
-   #    else
-   #      pc.send_message("Heroes formed.")
-   #    end
+			begin
+				Olympiad.instance.manual_select_heroes
+			rescue e
+				error "An error occured while ending olympiad:"
+        error e
+      else
+        pc.send_message("Heroes formed.")
+      end
     when command.starts_with?("admin_sethero")
 			unless target = pc.target
 				pc.send_packet(SystemMessageId::INCORRECT_TARGET)
@@ -53,17 +53,17 @@ module AdminCommandHandler::AdminAdmin
 				return false
       end
 
-			# target = pc.target.player? ? pc.target.acting_player : pc
-			# if Hero.hero?(target.l2id)
-			# 	pc.send_message("This player has already claimed the hero status.")
-			# 	return false
-   #    end
+      target = pc.target.as?(L2PcInstance) || pc
+			if Hero.hero?(target.l2id)
+				pc.send_message("This player has already claimed the hero status.")
+				return false
+      end
 
-			# if !Hero.unclaimed_hero?(target.l2id)
-			# 	pc.send_message("This player cannot claim the hero status.")
-			# 	return false
-   #    end
-			# Hero.claim_hero(target)
+			if !Hero.unclaimed_hero?(target.l2id)
+				pc.send_message("This player cannot claim the hero status.")
+				return false
+      end
+			Hero.claim_hero(target)
     when command.starts_with?("admin_diet")
       pc.diet_mode = command.ends_with?("on")
       pc.send_message(pc.diet_mode? ? "Diet mode on" : "Diet mode off")
@@ -78,37 +78,45 @@ module AdminCommandHandler::AdminAdmin
       end
 			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_setconfig")
-			# StringTokenizer st = new StringTokenizer(command)
-			# st.nextToken()
-			# try
-			# 	String pName = st.nextToken()
-			# 	String pValue = st.nextToken()
-			# 	if Config.setParameterValue(pName, pValue)
-			# 		pc.send_message "Config parameter " + pName + " set to " + pValue
-			# 	else
-			# 		pc.send_message "Invalid parameter!"
-			# catch (Exception e)
-			# 	pc.send_message "Usage: //setconfig <parameter> <value>"
-			# finally
-			show_config_page(pc)
+			st = command.split
+			st.shift?
+			begin
+				p_name = st.shift
+				p_value = st.shift
+				if Config.set_parameter_value(p_name, p_value)
+					pc.send_message("Config parameter #{p_name} set to #{p_value}")
+				else
+					pc.send_message("Invalid parameter!")
+        end
+			rescue e
+				pc.send_message "Usage: //setconfig <parameter> <value>"
+			ensure
+		    show_config_page(pc)
+      end
     when command.starts_with?("admin_set")
-			# StringTokenizer st = new StringTokenizer(command)
-			# String[] cmd = st.nextToken().split("_")
-			# try
-			# 	String[] parameter = st.nextToken().split("=")
-			# 	String pName = parameter[0].trim()
-			# 	String pValue = parameter[1].trim()
-			# 	if Config.setParameterValue(pName, pValue)
-			# 		pc.send_message "parameter " + pName + " succesfully set to " + pValue
-			# 	else
-			# 		pc.send_message "Invalid parameter!"
-			# catch (Exception e)
-			# 	if cmd.length == 2
-			# 		pc.send_message "Usage: //set parameter=value"
-			# finally
-			# 	if cmd.length == 3
-			# 		if cmd[2].casecmp?("mod")
-			# 			AdminCommandHandler::AdminHtml.show_admin_html pc, "mods_menu.htm"
+			st = command.split
+			cmd = st.shift.split('_')
+			begin
+				parameter = st.shift.split('=')
+				p_name = parameter[0].strip
+				p_value = parameter[1].strip
+				if Config.set_parameter_value(p_name, p_value)
+					pc.send_message("parameter #{p_name} succesfully set to #{p_value}")
+				else
+					pc.send_message("Invalid parameter!")
+        end
+			rescue e
+        warn e
+				if cmd.size == 2
+					pc.send_message("Usage: //set parameter=value")
+        end
+			ensure
+				if cmd.size == 3
+					if cmd[2].casecmp?("mod")
+						AdminCommandHandler::AdminHtml.show_admin_html(pc, "mods_menu.htm")
+          end
+        end
+      end
     when command.starts_with?("admin_gmon")
   		# nothing
     end
@@ -154,7 +162,6 @@ module AdminCommandHandler::AdminAdmin
     admin_reply.html = msg
     pc.send_packet(admin_reply)
   end
-
 
   def commands
     {

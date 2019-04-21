@@ -197,7 +197,7 @@ class L2PcInstance < L2Playable
   getter! clan : L2Clan
   getter! transformation : Transform?
   getter? online = false
-  getter? in_observer_mode = false # L2J: _observerMode, L2R: @observer_mode
+  getter? in_observer_mode = false # L2J: _observerMode
   getter? noble = false
   getter? hero = false
   getter? message_refusal = false
@@ -219,7 +219,7 @@ class L2PcInstance < L2Playable
   property siege_side : Int32 = 0
   property olympiad_game_id : Int32 = -1
   property olympiad_side : Int32 = -1
-  property oly_buffs_count : Int32 = 0
+  property olympiad_buff_count : Int32 = 0
   property duel_state : DuelState = DuelState::NO_DUEL
   property mount_l2id : Int32 = 0
   property tele_mode : Int32 = 0
@@ -519,9 +519,9 @@ class L2PcInstance < L2Playable
         end
       end
 
-      # if OlympiadManager.registered?(self) || olympiad_game_id != -1
-      #   OlympiadManager.remove_disconnected_competitor(self)
-      # end
+      if OlympiadManager.registered?(self) || olympiad_game_id != -1
+        OlympiadManager.remove_disconnected_competitor(self)
+      end
 
       if summon = @summon
         begin
@@ -1910,7 +1910,7 @@ class L2PcInstance < L2Playable
     true
   end
 
-  def disarm_shield
+  def disarm_shield : Bool
     unless shld = inventory.lhand_slot?
       return true
     end
@@ -1947,7 +1947,7 @@ class L2PcInstance < L2Playable
     true
   end
 
-  def reviving_pet?
+  def reviving_pet? : Bool
     @revive_pet
   end
 
@@ -1991,7 +1991,7 @@ class L2PcInstance < L2Playable
     false
   end
 
-  def academy_member?
+  def academy_member? : Bool
     @lvl_joined_academy > 0
   end
 
@@ -3073,14 +3073,19 @@ class L2PcInstance < L2Playable
     need_cp_update = need_cp_update?
     need_hp_update = need_hp_update?
 
-    if @party
+    if party = @party
       if need_cp_update || need_hp_update || need_mp_update?
         packet = PartySmallWindowUpdate.new(self)
         party.broadcast_to_party_members(self, packet)
       end
     end
 
-    # oly broadcast
+    if in_olympiad_mode? && olympiad_start? && (need_cp_update || need_hp_update)
+      game = OlympiadGameManager.get_olympiad_task(olympiad_game_id)
+      if game && game.battle_started?
+        game.zone.broadcast_status_update(self)
+      end
+    end
 
     if in_duel? && (need_cp_update || need_hp_update)
       packet = ExDuelUpdateUserInfo.new(self)
@@ -3242,8 +3247,7 @@ class L2PcInstance < L2Playable
     if in_olympiad_mode? && target.is_a?(L2PcInstance)
       if target.in_olympiad_mode?
         if target.olympiad_game_id == olympiad_game_id
-          warn { "TODO: OlympiadGameManager at line #{__LINE__}." }
-          # OlympiadGameManager.notify_competitor_damage(self, damage)
+          OlympiadGameManager.notify_competitor_damage(self, damage.to_i)
         end
       end
     end
@@ -7109,10 +7113,10 @@ class L2PcInstance < L2Playable
       return false
     end
 
-    # if target.in_olympiad_mode? || OlympiadManager.registered_in_comp?(target)
-    #   send_packet(SystemMessageId::YOU_CANNOT_SUMMON_PLAYERS_WHO_ARE_IN_OLYMPIAD)
-    #   return false
-    # end
+    if target.in_olympiad_mode? || OlympiadManager.registered_in_comp?(target)
+      send_packet(SystemMessageId::YOU_CANNOT_SUMMON_PLAYERS_WHO_ARE_IN_OLYMPIAD)
+      return false
+    end
 
     if target.festival_participant? || target.flying_mounted? || target.combat_flag_equipped?# || !TvTEvent.on_escape_use(target.l2id))
       send_packet(SystemMessageId::YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING)

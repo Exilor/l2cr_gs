@@ -1,3 +1,9 @@
+require "./olympiad_game_task"
+require "./olympiad_manager"
+require "./olympiad_game_teams"
+require "./olympiad_game_classed"
+require "./olympiad_game_non_classed"
+
 module OlympiadGameManager
   extend self
   extend Runnable
@@ -5,7 +11,7 @@ module OlympiadGameManager
 
   private TASKS = [] of OlympiadGameTask
 
-  private class_getter? battle_started = false
+  class_getter? battle_started = false
 
   def load
     unless zones = ZoneManager.get_all_zones(L2OlympiadStadiumZone)
@@ -23,8 +29,8 @@ module OlympiadGameManager
     info { "Loaded #{TASKS.size} stadiums." }
   end
 
-  private def start_battle
-    @battle_started = true
+  def start_battle
+    @@battle_started = true
   end
 
   def run
@@ -32,7 +38,7 @@ module OlympiadGameManager
       return
     end
 
-    if Olympiad.instance.comp_period?
+    if Olympiad.instance.in_comp_period?
       ready_classed = OlympiadManager.enough_registered_classed
       ready_non_classed = OlympiadManager.enough_registered_non_classed?
       ready_teams = OlympiadManager.enough_registered_teams?
@@ -62,7 +68,7 @@ module OlympiadGameManager
               end
 
               if ready_non_classed
-                new_game = OlympiadGameNonClassed.create_game(i, OlympiadManager.registered_non_classed)
+                new_game = OlympiadGameNonClassed.create_game(i, OlympiadManager.registered_non_class_based)
                 if new_game
                   task.attach_game(new_game)
                   next
@@ -80,7 +86,7 @@ module OlympiadGameManager
     else
       if all_tasks_finished?
         OlympiadManager.clear_registered
-        @battle_started = false
+        @@battle_started = false
         info { "All current games finished." }
       end
     end
@@ -96,6 +102,14 @@ module OlympiadGameManager
     end
 
     TASKS.unsafe_fetch(id)
+  end
+
+  def get_olympiad_task!(id : Int32) : OlympiadGameTask
+    unless task = get_olympiad_task(id)
+      raise "No olympiad task found with id #{id}"
+    end
+
+    task
   end
 
   def number_of_stadiums : Int32

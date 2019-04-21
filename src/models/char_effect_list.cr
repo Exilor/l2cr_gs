@@ -621,11 +621,15 @@ class CharEffectList
     end
 
     if os
-      warn "TODO: broadcast packet to olympiad observers."
+      game_id = @owner.acting_player.olympiad_game_id
+      game = OlympiadGameManager.get_olympiad_task(game_id)
+      if game && game.battle_started?
+        game.zone.broadcast_packet_to_observers(os)
+      end
     end
   end
 
-  private def add_icon(info, asu, ps, pss, osi, is_summon)
+  private def add_icon(info, asu, ps, pss, os, is_summon)
     return unless info && info.in_use?
     skill = info.skill
 
@@ -641,7 +645,9 @@ class CharEffectList
       pss.add_skill(info)
     end
 
-    # TODO: deal with the other packets
+    if os
+      os.add_skill(info)
+    end
   end
 
   private def update_effect_list(update)

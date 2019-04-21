@@ -338,7 +338,7 @@ class GameClient
           @detached = true
           if offline_mode?(pc)
             pc.leave_party
-            # OlympiadManager.unregister_noble(pc)
+            OlympiadManager.unregister_noble(pc)
             pc.summon.try &.restore_summon = true
             pc.summon.try &.unsummon(pc)
             pc.summon.try &.broadcast_npc_info(0)

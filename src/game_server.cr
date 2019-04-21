@@ -1,6 +1,6 @@
 require "../../core/src/core"
 
-require "./models/object_hierarchy"
+require "./models/forward_declarations"
 require "./config"
 require "./game_db"
 require "./util/thread_pool_manager"
@@ -43,6 +43,7 @@ require "./instance_managers/anti_feed_manager"
 require "./instance_managers/punishment_manager"
 require "./instance_managers/four_sepulchers_manager"
 require "./instance_managers/auction_manager"
+require "./instance_managers/item_auction_manager"
 require "./task_managers/task_manager"
 require "./task_managers/known_list_updater"
 require "./task_managers/attack_stances"
@@ -102,6 +103,8 @@ require "./cache/htm_cache"
 require "./cache/warehouse_cache"
 require "./shutdown"
 require "./models/entity/instance"
+require "./models/entity/hero"
+require "./models/olympiad/olympiad"
 require "./custom/l2_cr"
 
 module GameServer
@@ -195,10 +198,10 @@ module GameServer
     NpcBufferTable.load
     GrandBossManager.load
     # EventDroplist.load
-    # ItemAuctionManager.load
+    ItemAuctionManager.load
 
-    # Olympiad.load
-    # Hero.load
+    Olympiad.instance
+    Hero.load
 
     AutoSpawnHandler.load # Needs to load before all Seven Signs stuff
     SevenSigns.load
@@ -258,7 +261,7 @@ module GameServer
       CoupleManager.load
     end
 
-    # TaskManager.load
+    TaskManager.load
 
     AntiFeedManager.register_event(AntiFeedManager::GAME_ID)
 

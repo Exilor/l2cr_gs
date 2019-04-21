@@ -413,20 +413,26 @@ class L2Npc < L2Character
       file_name += "festival/festival_witch.htm"
     when 31688
       if pc.noble?
-        warn "TODO: #{pc} is noble."
-        # file_name = Olympiad::OLYMPIAD_HTML_PATH + "noble_main.htm"
+        file_name = Olympiad::OLYMPIAD_HTML_PATH + "noble_main.htm"
       else
         file_name = get_html_path(npc_id, val)
       end
     when 31690, 31769..31772
       if pc.hero? || pc.noble?
-        warn "TODO: #{pc} is a hero or noble."
-        # file_name = Olympiad::OLYMPIAD_HTML_PATH + "noble_main.htm"
+        file_name = Olympiad::OLYMPIAD_HTML_PATH + "noble_main.htm"
       else
         file_name = get_html_path(npc_id, val)
       end
     when 36402
-      warn "TODO: olympiad buffs."
+      if pc.olympiad_buff_count > 0
+        if pc.olympiad_buff_count == Config.alt_oly_max_buffs
+          file_name = Olympiad::OLYMPIAD_HTML_PATH + "olympiad_buffs.htm"
+        else
+          file_name = Olympiad::OLYMPIAD_HTML_PATH + "olympiad_5buffs.htm"
+        end
+      else
+        file_name = Olympiad::OLYMPIAD_HTML_PATH + "olympiad_nobuffs.htm"
+      end
     when 30298 # Blacksmith Pinter
       if pc.academy_member?
         file_name = get_html_path(npc_id, 1)

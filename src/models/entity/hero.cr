@@ -1,4 +1,5 @@
 module Hero
+  include Packets::Outgoing
   extend self
   extend Synchronizable
   extend Loggable
@@ -138,7 +139,7 @@ module Hero
         diary_entry["action"] = "Gained Hero status"
       elsif action == ACTION_CASTLE_TAKEN
         if castle = CastleManager.get_castle_by_id(param)
-          diary_entry[action] = castle.name + " Castle was successful taken"
+          diary_entry["action"] = castle.name + " Castle was successful taken"
         end
       end
 
@@ -162,7 +163,7 @@ module Hero
     data.day = 1
     data.hour = 0
     data.minute = 0
-    # data.millisecond = 0
+    data.millisecond = 0
 
     from = data.ms
     number_of_fights = 0
@@ -257,7 +258,7 @@ module Hero
   end
 
   def get_hero_by_class(class_id : Int32) : Int32
-    HEROES.each do { |k, v|
+    HEROES.each do |k, v|
       if v.get_i32(Olympiad::CLASS_ID) == class_id
         return k
       end
@@ -450,7 +451,7 @@ module Hero
         pc.hero = false
 
         Inventory::TOTALSLOTS.times do |i|
-          if equipped_item = pc.inventory.get_paperdoll_item(i)
+          if equipped_item = pc.inventory[i]
             if equipped_item.hero_item?
               pc.inventory.unequip_item_in_slot(i)
             end
@@ -513,7 +514,7 @@ module Hero
       return
     end
 
-    HEROES.each do |hero, hero_id|
+    HEROES.each do |hero_id, hero|
       if COMPLETE_HEROS.has_key?(hero_id)
         begin
           GameDB.exec(

@@ -107,541 +107,541 @@ module Config
   # --------------------------------------------------
   # L2J Variable Definitions
   # --------------------------------------------------
-  class_property alt_game_delevel = false
-  class_property decrease_skill_level = false
-  class_property alt_weight_limit = 0.0
-  class_property run_spd_boost = 0
-  class_property death_penalty_chance = 0
-  class_property respawn_restore_cp = 0.0
-  class_property respawn_restore_hp = 0.0
-  class_property respawn_restore_mp = 0.0
-  class_property enable_modify_skill_duration = false
-  class_property skill_duration_list = {} of Int32 => Int32
-  class_property enable_modify_skill_reuse = false
-  class_property skill_reuse_list = {} of Int32 => Int32
-  class_property auto_learn_skills = false
-  class_property auto_learn_fs_skills = false
-  class_property auto_loot_herbs = false
-  class_property buffs_max_amount = 0i8
-  class_property triggered_buffs_max_amount = 0i8
-  class_property dances_max_amount = 0i8
-  class_property dance_cancel_buff = false
-  class_property dance_consume_additional_mp = false
-  class_property alt_store_dances = false
-  class_property auto_learn_divine_inspiration = false
-  class_property alt_game_cancel_bow = false
-  class_property alt_game_cancel_cast = false
-  class_property alt_game_magicfailures = false
-  class_property player_fakedeath_up_protection = 0
-  class_property store_skill_cooltime = false
-  class_property subclass_store_skill_cooltime = false
-  class_property summon_store_skill_cooltime = false
-  class_property alt_game_shield_blocks = false
-  class_property alt_perfect_shld_block = 0
-  class_property effect_tick_ratio = 0i64
-  class_property allow_class_masters = false
+  class_property alt_game_delevel : Bool = false
+  class_property decrease_skill_level : Bool = false
+  class_property alt_weight_limit : Float64 = 0.0
+  class_property run_spd_boost : Int32 = 0
+  class_property death_penalty_chance : Int32 = 0
+  class_property respawn_restore_cp : Float64 = 0.0
+  class_property respawn_restore_hp : Float64 = 0.0
+  class_property respawn_restore_mp : Float64 = 0.0
+  class_property enable_modify_skill_duration : Bool = false
+  class_property skill_duration_list : Hash(Int32, Int32) = {} of Int32 => Int32
+  class_property enable_modify_skill_reuse : Bool = false
+  class_property skill_reuse_list : Hash(Int32, Int32) = {} of Int32 => Int32
+  class_property auto_learn_skills : Bool = false
+  class_property auto_learn_fs_skills : Bool = false
+  class_property auto_loot_herbs : Bool = false
+  class_property buffs_max_amount : Int8 = 0i8
+  class_property triggered_buffs_max_amount : Int8 = 0i8
+  class_property dances_max_amount : Int8 = 0i8
+  class_property dance_cancel_buff : Bool = false
+  class_property dance_consume_additional_mp : Bool = false
+  class_property alt_store_dances : Bool = false
+  class_property auto_learn_divine_inspiration : Bool = false
+  class_property alt_game_cancel_bow : Bool = false
+  class_property alt_game_cancel_cast : Bool = false
+  class_property alt_game_magicfailures : Bool = false
+  class_property player_fakedeath_up_protection : Int32 = 0
+  class_property store_skill_cooltime : Bool = false
+  class_property subclass_store_skill_cooltime : Bool = false
+  class_property summon_store_skill_cooltime : Bool = false
+  class_property alt_game_shield_blocks : Bool = false
+  class_property alt_perfect_shld_block : Int32 = 0
+  class_property effect_tick_ratio : Int64 = 0i64
+  class_property allow_class_masters : Bool = false
   class_property! class_master_settings : ClassMasterSettings?
-  class_property allow_entire_tree = false
-  class_property alternate_class_master = false
-  class_property life_crystal_needed = false
-  class_property es_sp_book_needed = false
-  class_property divine_sp_book_needed = false
-  class_property alt_game_skill_learn = false
-  class_property alt_game_subclass_without_quests = false
-  class_property alt_game_subclass_everywhere = false
-  class_property allow_transform_without_quest = false
-  class_property fee_delete_transfer_skills = 0i64
-  class_property fee_delete_subclass_skills = 0i64
-  class_property restore_servitor_on_reconnect = false
-  class_property restore_pet_on_reconnect = false
-  class_property max_bonus_exp = 0.0
-  class_property max_bonus_sp = 0.0
-  class_property max_run_speed = 0
-  class_property max_pcrit_rate = 0
-  class_property max_mcrit_rate = 0
-  class_property max_patk_speed = 0
-  class_property max_matk_speed = 0
-  class_property max_evasion = 0
-  class_property min_abnormal_state_success_rate = 0
-  class_property max_abnormal_state_success_rate = 0
-  class_property max_player_level = 0
-  class_property max_pet_level = 0
-  class_property max_subclass = 0 # byte
-  class_property base_subclass_level = 0 # byte
-  class_property max_subclass_level = 0 # byte
-  class_property max_pvtstoresell_slots_dwarf = 0
-  class_property max_pvtstoresell_slots_other = 0
-  class_property max_pvtstorebuy_slots_dwarf = 0
-  class_property max_pvtstorebuy_slots_other = 0
-  class_property inventory_maximum_no_dwarf = 0
-  class_property inventory_maximum_dwarf = 0
-  class_property inventory_maximum_gm = 0
-  class_property inventory_maximum_quest_items = 0
-  class_property warehouse_slots_dwarf = 0
-  class_property warehouse_slots_no_dwarf = 0
-  class_property warehouse_slots_clan = 0
-  class_property alt_freight_slots = 0
-  class_property alt_freight_price = 0
-  class_property alt_game_karma_player_can_be_killed_in_peacezone = false
-  class_property alt_game_karma_player_can_shop = false
-  class_property alt_game_karma_player_can_teleport = false
-  class_property alt_game_karma_player_can_use_gk = false
-  class_property alt_game_karma_player_can_trade = false
-  class_property alt_game_karma_player_can_use_warehouse = false
-  class_property max_personal_fame_points = 0
-  class_property fortress_zone_fame_task_frequency = 0i64
-  class_property fortress_zone_fame_aquire_points = 0
-  class_property castle_zone_fame_task_frequency = 0i64
-  class_property castle_zone_fame_aquire_points = 0
-  class_property fame_for_dead_players = false
-  class_property is_crafting_enabled = false
-  class_property craft_masterwork = false
-  class_property dwarf_recipe_limit = 0
-  class_property common_recipe_limit = 0
-  class_property alt_game_creation = false
-  class_property alt_game_creation_speed = 0.0
-  class_property alt_game_creation_xp_rate = 0.0
-  class_property alt_game_creation_rare_xpsp_rate = 0.0
-  class_property alt_game_creation_sp_rate = 0.0
-  class_property alt_blacksmith_use_recipes = false
-  class_property alt_clan_leader_date_change = 0
-  class_property alt_clan_leader_hour_change : String?
-  class_property alt_clan_leader_instant_activation = false
-  class_property alt_clan_join_days = 0
-  class_property alt_clan_create_days = 0
-  class_property alt_clan_dissolve_days = 0
-  class_property alt_ally_join_days_when_leaved = 0
-  class_property alt_ally_join_days_when_dismissed = 0
-  class_property alt_accept_clan_days_when_dismissed = 0
-  class_property alt_create_ally_days_when_dissolved = 0
-  class_property alt_max_num_of_clans_in_ally = 0
-  class_property alt_clan_members_for_war = 0
-  class_property alt_members_can_withdraw_from_clanwh = false
-  class_property remove_castle_circlets = false
-  class_property alt_party_range = 0
-  class_property alt_party_range2 = 0
-  class_property alt_leave_party_leader = false
-  class_property initial_equipment_event = false
-  class_property starting_adena = 0i64
-  class_property starting_level = 0i8 # byte
-  class_property starting_sp = 0
-  class_property max_adena = 0i64
-  class_property auto_loot = false
-  class_property auto_loot_raids = false
-  class_property loot_raids_privilege_interval = 0
-  class_property loot_raids_privilege_cc_size = 0
-  class_property unstuck_interval = 0
-  class_property teleport_watchdog_timeout = 0
-  class_property player_spawn_protection = 0
-  class_property spawn_protection_allowed_items = [] of Int32
-  class_property player_teleport_protection = 0
-  class_property random_respawn_in_town_enabled = false
-  class_property offset_on_teleport_enabled = false
-  class_property max_offset_on_teleport = 0
-  class_property petitioning_allowed = false
-  class_property max_petitions_per_player = 0
-  class_property max_petitions_pending = 0
-  class_property alt_game_free_teleport = false
-  class_property delete_days = 0
-  class_property alt_game_exponent_xp = 0f32
-  class_property alt_game_exponent_sp = 0f32
-  class_property party_xp_cutoff_method = ""
-  class_property party_xp_cutoff_percent = 0.0
-  class_property party_xp_cutoff_level = 0
-  class_property party_xp_cutoff_gaps = Array(Array(Int32)).new
-  class_property party_xp_cutoff_gap_percents = [] of Int32
-  class_property disable_tutorial = false
-  class_property expertise_penalty = false
-  class_property store_recipe_shoplist = false
-  class_property store_ui_settings = false
-  class_property forbidden_names = [] of String
-  class_property silence_mode_exclude = false
-  class_property alt_validate_trigger_skills = false
+  class_property allow_entire_tree : Bool = false
+  class_property alternate_class_master : Bool = false
+  class_property life_crystal_needed : Bool = false
+  class_property es_sp_book_needed : Bool = false
+  class_property divine_sp_book_needed : Bool = false
+  class_property alt_game_skill_learn : Bool = false
+  class_property alt_game_subclass_without_quests : Bool = false
+  class_property alt_game_subclass_everywhere : Bool = false
+  class_property allow_transform_without_quest : Bool = false
+  class_property fee_delete_transfer_skills : Int64 = 0i64
+  class_property fee_delete_subclass_skills : Int64 = 0i64
+  class_property restore_servitor_on_reconnect : Bool = false
+  class_property restore_pet_on_reconnect : Bool = false
+  class_property max_bonus_exp : Float64 = 0.0
+  class_property max_bonus_sp : Float64 = 0.0
+  class_property max_run_speed : Int32 = 0
+  class_property max_pcrit_rate : Int32 = 0
+  class_property max_mcrit_rate : Int32 = 0
+  class_property max_patk_speed : Int32 = 0
+  class_property max_matk_speed : Int32 = 0
+  class_property max_evasion : Int32 = 0
+  class_property min_abnormal_state_success_rate : Int32 = 0
+  class_property max_abnormal_state_success_rate : Int32 = 0
+  class_property max_player_level : Int32 = 0
+  class_property max_pet_level : Int32 = 0
+  class_property max_subclass : Int32 = 0 # byte
+  class_property base_subclass_level : Int32 = 0 # byte
+  class_property max_subclass_level : Int32 = 0 # byte
+  class_property max_pvtstoresell_slots_dwarf : Int32 = 0
+  class_property max_pvtstoresell_slots_other : Int32 = 0
+  class_property max_pvtstorebuy_slots_dwarf : Int32 = 0
+  class_property max_pvtstorebuy_slots_other : Int32 = 0
+  class_property inventory_maximum_no_dwarf : Int32 = 0
+  class_property inventory_maximum_dwarf : Int32 = 0
+  class_property inventory_maximum_gm : Int32 = 0
+  class_property inventory_maximum_quest_items : Int32 = 0
+  class_property warehouse_slots_dwarf : Int32 = 0
+  class_property warehouse_slots_no_dwarf : Int32 = 0
+  class_property warehouse_slots_clan : Int32 = 0
+  class_property alt_freight_slots : Int32 = 0
+  class_property alt_freight_price : Int32 = 0
+  class_property alt_game_karma_player_can_be_killed_in_peacezone : Bool = false
+  class_property alt_game_karma_player_can_shop : Bool = false
+  class_property alt_game_karma_player_can_teleport : Bool = false
+  class_property alt_game_karma_player_can_use_gk : Bool = false
+  class_property alt_game_karma_player_can_trade : Bool = false
+  class_property alt_game_karma_player_can_use_warehouse : Bool = false
+  class_property max_personal_fame_points : Int32 = 0
+  class_property fortress_zone_fame_task_frequency : Int64 = 0i64
+  class_property fortress_zone_fame_aquire_points : Int32 = 0
+  class_property castle_zone_fame_task_frequency : Int64 = 0i64
+  class_property castle_zone_fame_aquire_points : Int32 = 0
+  class_property fame_for_dead_players : Bool = false
+  class_property is_crafting_enabled : Bool = false
+  class_property craft_masterwork : Bool = false
+  class_property dwarf_recipe_limit : Int32 = 0
+  class_property common_recipe_limit : Int32 = 0
+  class_property alt_game_creation : Bool = false
+  class_property alt_game_creation_speed : Float64 = 0.0
+  class_property alt_game_creation_xp_rate : Float64 = 0.0
+  class_property alt_game_creation_rare_xpsp_rate : Float64 = 0.0
+  class_property alt_game_creation_sp_rate : Float64 = 0.0
+  class_property alt_blacksmith_use_recipes : Bool = false
+  class_property alt_clan_leader_date_change : Int32 = 0
+  class_property alt_clan_leader_hour_change : String = ""
+  class_property alt_clan_leader_instant_activation : Bool = false
+  class_property alt_clan_join_days : Int32 = 0
+  class_property alt_clan_create_days : Int32 = 0
+  class_property alt_clan_dissolve_days : Int32 = 0
+  class_property alt_ally_join_days_when_leaved : Int32 = 0
+  class_property alt_ally_join_days_when_dismissed : Int32 = 0
+  class_property alt_accept_clan_days_when_dismissed : Int32 = 0
+  class_property alt_create_ally_days_when_dissolved : Int32 = 0
+  class_property alt_max_num_of_clans_in_ally : Int32 = 0
+  class_property alt_clan_members_for_war : Int32 = 0
+  class_property alt_members_can_withdraw_from_clanwh : Bool = false
+  class_property remove_castle_circlets : Bool = false
+  class_property alt_party_range : Int32 = 0
+  class_property alt_party_range2 : Int32 = 0
+  class_property alt_leave_party_leader : Bool = false
+  class_property initial_equipment_event : Bool = false
+  class_property starting_adena : Int64 = 0i64
+  class_property starting_level : Int8 = 0i8 # byte
+  class_property starting_sp : Int32 = 0
+  class_property max_adena : Int64 = 0i64
+  class_property auto_loot : Bool = false
+  class_property auto_loot_raids : Bool = false
+  class_property loot_raids_privilege_interval : Int32 = 0
+  class_property loot_raids_privilege_cc_size : Int32 = 0
+  class_property unstuck_interval : Int32 = 0
+  class_property teleport_watchdog_timeout : Int32 = 0
+  class_property player_spawn_protection : Int32 = 0
+  class_property spawn_protection_allowed_items : Array(Int32) = [] of Int32
+  class_property player_teleport_protection : Int32 = 0
+  class_property random_respawn_in_town_enabled : Bool = false
+  class_property offset_on_teleport_enabled : Bool = false
+  class_property max_offset_on_teleport : Int32 = 0
+  class_property petitioning_allowed : Bool = false
+  class_property max_petitions_per_player : Int32 = 0
+  class_property max_petitions_pending : Int32 = 0
+  class_property alt_game_free_teleport : Bool = false
+  class_property delete_days : Int32 = 0
+  class_property alt_game_exponent_xp : Float32 = 0f32
+  class_property alt_game_exponent_sp : Float32 = 0f32
+  class_property party_xp_cutoff_method : String = ""
+  class_property party_xp_cutoff_percent : Float64 = 0.0
+  class_property party_xp_cutoff_level : Int32 = 0
+  class_property party_xp_cutoff_gaps : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
+  class_property party_xp_cutoff_gap_percents : Array(Int32) = [] of Int32
+  class_property disable_tutorial : Bool = false
+  class_property expertise_penalty : Bool = false
+  class_property store_recipe_shoplist : Bool = false
+  class_property store_ui_settings : Bool = false
+  class_property forbidden_names : Array(String) = [] of String
+  class_property silence_mode_exclude : Bool = false
+  class_property alt_validate_trigger_skills : Bool = false
 
   # --------------------------------------------------
   # ClanHall Settings
   # --------------------------------------------------
-  class_property ch_tele_fee_ratio = 0i64
-  class_property ch_tele1_fee = 0
-  class_property ch_tele2_fee = 0
-  class_property ch_item_fee_ratio = 0i64
-  class_property ch_item1_fee = 0
-  class_property ch_item2_fee = 0
-  class_property ch_item3_fee = 0
-  class_property ch_mpreg_fee_ratio = 0i64
-  class_property ch_mpreg1_fee = 0
-  class_property ch_mpreg2_fee = 0
-  class_property ch_mpreg3_fee = 0
-  class_property ch_mpreg4_fee = 0
-  class_property ch_mpreg5_fee = 0
-  class_property ch_hpreg_fee_ratio = 0i64
-  class_property ch_hpreg1_fee = 0
-  class_property ch_hpreg2_fee = 0
-  class_property ch_hpreg3_fee = 0
-  class_property ch_hpreg4_fee = 0
-  class_property ch_hpreg5_fee = 0
-  class_property ch_hpreg6_fee = 0
-  class_property ch_hpreg7_fee = 0
-  class_property ch_hpreg8_fee = 0
-  class_property ch_hpreg9_fee = 0
-  class_property ch_hpreg10_fee = 0
-  class_property ch_hpreg11_fee = 0
-  class_property ch_hpreg12_fee = 0
-  class_property ch_hpreg13_fee = 0
-  class_property ch_expreg_fee_ratio = 0i64
-  class_property ch_expreg1_fee = 0
-  class_property ch_expreg2_fee = 0
-  class_property ch_expreg3_fee = 0
-  class_property ch_expreg4_fee = 0
-  class_property ch_expreg5_fee = 0
-  class_property ch_expreg6_fee = 0
-  class_property ch_expreg7_fee = 0
-  class_property ch_support_fee_ratio = 0i64
-  class_property ch_support1_fee = 0
-  class_property ch_support2_fee = 0
-  class_property ch_support3_fee = 0
-  class_property ch_support4_fee = 0
-  class_property ch_support5_fee = 0
-  class_property ch_support6_fee = 0
-  class_property ch_support7_fee = 0
-  class_property ch_support8_fee = 0
-  class_property ch_curtain_fee_ratio = 0i64
-  class_property ch_curtain1_fee = 0
-  class_property ch_curtain2_fee = 0
-  class_property ch_front_fee_ratio = 0i64
-  class_property ch_front1_fee = 0
-  class_property ch_front2_fee = 0
-  class_property ch_buff_free = false
+  class_property ch_tele_fee_ratio : Int64 = 0i64
+  class_property ch_tele1_fee : Int32 = 0
+  class_property ch_tele2_fee : Int32 = 0
+  class_property ch_item_fee_ratio : Int64 = 0i64
+  class_property ch_item1_fee : Int32 = 0
+  class_property ch_item2_fee : Int32 = 0
+  class_property ch_item3_fee : Int32 = 0
+  class_property ch_mpreg_fee_ratio : Int64 = 0i64
+  class_property ch_mpreg1_fee : Int32 = 0
+  class_property ch_mpreg2_fee : Int32 = 0
+  class_property ch_mpreg3_fee : Int32 = 0
+  class_property ch_mpreg4_fee : Int32 = 0
+  class_property ch_mpreg5_fee : Int32 = 0
+  class_property ch_hpreg_fee_ratio : Int64 = 0i64
+  class_property ch_hpreg1_fee : Int32 = 0
+  class_property ch_hpreg2_fee : Int32 = 0
+  class_property ch_hpreg3_fee : Int32 = 0
+  class_property ch_hpreg4_fee : Int32 = 0
+  class_property ch_hpreg5_fee : Int32 = 0
+  class_property ch_hpreg6_fee : Int32 = 0
+  class_property ch_hpreg7_fee : Int32 = 0
+  class_property ch_hpreg8_fee : Int32 = 0
+  class_property ch_hpreg9_fee : Int32 = 0
+  class_property ch_hpreg10_fee : Int32 = 0
+  class_property ch_hpreg11_fee : Int32 = 0
+  class_property ch_hpreg12_fee : Int32 = 0
+  class_property ch_hpreg13_fee : Int32 = 0
+  class_property ch_expreg_fee_ratio : Int64 = 0i64
+  class_property ch_expreg1_fee : Int32 = 0
+  class_property ch_expreg2_fee : Int32 = 0
+  class_property ch_expreg3_fee : Int32 = 0
+  class_property ch_expreg4_fee : Int32 = 0
+  class_property ch_expreg5_fee : Int32 = 0
+  class_property ch_expreg6_fee : Int32 = 0
+  class_property ch_expreg7_fee : Int32 = 0
+  class_property ch_support_fee_ratio : Int64 = 0i64
+  class_property ch_support1_fee : Int32 = 0
+  class_property ch_support2_fee : Int32 = 0
+  class_property ch_support3_fee : Int32 = 0
+  class_property ch_support4_fee : Int32 = 0
+  class_property ch_support5_fee : Int32 = 0
+  class_property ch_support6_fee : Int32 = 0
+  class_property ch_support7_fee : Int32 = 0
+  class_property ch_support8_fee : Int32 = 0
+  class_property ch_curtain_fee_ratio : Int64 = 0i64
+  class_property ch_curtain1_fee : Int32 = 0
+  class_property ch_curtain2_fee : Int32 = 0
+  class_property ch_front_fee_ratio : Int64 = 0i64
+  class_property ch_front1_fee : Int32 = 0
+  class_property ch_front2_fee : Int32 = 0
+  class_property ch_buff_free : Bool = false
   # --------------------------------------------------
   # Castle Settings
   # --------------------------------------------------
-  class_property cs_tele_fee_ratio = 0i64
-  class_property cs_tele1_fee = 0
-  class_property cs_tele2_fee = 0
-  class_property cs_mpreg_fee_ratio = 0i64
-  class_property cs_mpreg1_fee = 0
-  class_property cs_mpreg2_fee = 0
-  class_property cs_hpreg_fee_ratio = 0i64
-  class_property cs_hpreg1_fee = 0
-  class_property cs_hpreg2_fee = 0
-  class_property cs_expreg_fee_ratio = 0i64
-  class_property cs_expreg1_fee = 0
-  class_property cs_expreg2_fee = 0
-  class_property cs_support_fee_ratio = 0i64
-  class_property cs_support1_fee = 0
-  class_property cs_support2_fee = 0
-  class_property siege_hour_list = [] of Int32
-  class_property outer_door_upgrade_price2 = 0
-  class_property outer_door_upgrade_price3 = 0
-  class_property outer_door_upgrade_price5 = 0
-  class_property inner_door_upgrade_price2 = 0
-  class_property inner_door_upgrade_price3 = 0
-  class_property inner_door_upgrade_price5 = 0
-  class_property wall_upgrade_price2 = 0
-  class_property wall_upgrade_price3 = 0
-  class_property wall_upgrade_price5 = 0
-  class_property trap_upgrade_price1 = 0
-  class_property trap_upgrade_price2 = 0
-  class_property trap_upgrade_price3 = 0
-  class_property trap_upgrade_price4 = 0
+  class_property cs_tele_fee_ratio : Int64 = 0i64
+  class_property cs_tele1_fee : Int32 = 0
+  class_property cs_tele2_fee : Int32 = 0
+  class_property cs_mpreg_fee_ratio : Int64 = 0i64
+  class_property cs_mpreg1_fee : Int32 = 0
+  class_property cs_mpreg2_fee : Int32 = 0
+  class_property cs_hpreg_fee_ratio : Int64 = 0i64
+  class_property cs_hpreg1_fee : Int32 = 0
+  class_property cs_hpreg2_fee : Int32 = 0
+  class_property cs_expreg_fee_ratio : Int64 = 0i64
+  class_property cs_expreg1_fee : Int32 = 0
+  class_property cs_expreg2_fee : Int32 = 0
+  class_property cs_support_fee_ratio : Int64 = 0i64
+  class_property cs_support1_fee : Int32 = 0
+  class_property cs_support2_fee : Int32 = 0
+  class_property siege_hour_list : Array(Int32) = [] of Int32
+  class_property outer_door_upgrade_price2 : Int32 = 0
+  class_property outer_door_upgrade_price3 : Int32 = 0
+  class_property outer_door_upgrade_price5 : Int32 = 0
+  class_property inner_door_upgrade_price2 : Int32 = 0
+  class_property inner_door_upgrade_price3 : Int32 = 0
+  class_property inner_door_upgrade_price5 : Int32 = 0
+  class_property wall_upgrade_price2 : Int32 = 0
+  class_property wall_upgrade_price3 : Int32 = 0
+  class_property wall_upgrade_price5 : Int32 = 0
+  class_property trap_upgrade_price1 : Int32 = 0
+  class_property trap_upgrade_price2 : Int32 = 0
+  class_property trap_upgrade_price3 : Int32 = 0
+  class_property trap_upgrade_price4 : Int32 = 0
 
   # --------------------------------------------------
   # Fortress Settings
   # --------------------------------------------------
-  class_property fs_tele_fee_ratio = 0i64
-  class_property fs_tele1_fee = 0
-  class_property fs_tele2_fee = 0
-  class_property fs_mpreg_fee_ratio = 0i64
-  class_property fs_mpreg1_fee = 0
-  class_property fs_mpreg2_fee = 0
-  class_property fs_hpreg_fee_ratio = 0i64
-  class_property fs_hpreg1_fee = 0
-  class_property fs_hpreg2_fee = 0
-  class_property fs_expreg_fee_ratio = 0i64
-  class_property fs_expreg1_fee = 0
-  class_property fs_expreg2_fee = 0
-  class_property fs_support_fee_ratio = 0i64
-  class_property fs_support1_fee = 0
-  class_property fs_support2_fee = 0
-  class_property fs_blood_oath_count = 0
-  class_property fs_update_frq = 0
-  class_property fs_max_supply_level = 0
-  class_property fs_fee_for_castle = 0i64
-  class_property fs_max_own_time = 0
+  class_property fs_tele_fee_ratio : Int64 = 0i64
+  class_property fs_tele1_fee : Int32 = 0
+  class_property fs_tele2_fee : Int32 = 0
+  class_property fs_mpreg_fee_ratio : Int64 = 0i64
+  class_property fs_mpreg1_fee : Int32 = 0
+  class_property fs_mpreg2_fee : Int32 = 0
+  class_property fs_hpreg_fee_ratio : Int64 = 0i64
+  class_property fs_hpreg1_fee : Int32 = 0
+  class_property fs_hpreg2_fee : Int32 = 0
+  class_property fs_expreg_fee_ratio : Int64 = 0i64
+  class_property fs_expreg1_fee : Int32 = 0
+  class_property fs_expreg2_fee : Int32 = 0
+  class_property fs_support_fee_ratio : Int64 = 0i64
+  class_property fs_support1_fee : Int32 = 0
+  class_property fs_support2_fee : Int32 = 0
+  class_property fs_blood_oath_count : Int32 = 0
+  class_property fs_update_frq : Int32 = 0
+  class_property fs_max_supply_level : Int32 = 0
+  class_property fs_fee_for_castle : Int64 = 0i64
+  class_property fs_max_own_time : Int32 = 0
   # --------------------------------------------------
   # Feature Settings
   # --------------------------------------------------
-  class_property take_fort_points = 0
-  class_property lose_fort_points = 0
-  class_property take_castle_points = 0
-  class_property lose_castle_points = 0
-  class_property castle_defended_points = 0
-  class_property festival_win_points = 0
-  class_property hero_points = 0
-  class_property royal_guard_cost = 0
-  class_property knight_unit_cost = 0
-  class_property knight_reinforce_cost = 0
-  class_property ballista_points = 0
-  class_property bloodalliance_points = 0
-  class_property bloodoath_points = 0
-  class_property knightsepaulette_points = 0
-  class_property reputation_score_per_kill = 0
-  class_property join_academy_min_rep_score = 0
-  class_property join_academy_max_rep_score = 0
-  class_property raid_ranking_1st = 0
-  class_property raid_ranking_2nd = 0
-  class_property raid_ranking_3rd = 0
-  class_property raid_ranking_4th = 0
-  class_property raid_ranking_5th = 0
-  class_property raid_ranking_6th = 0
-  class_property raid_ranking_7th = 0
-  class_property raid_ranking_8th = 0
-  class_property raid_ranking_9th = 0
-  class_property raid_ranking_10th = 0
-  class_property raid_ranking_up_to_50th = 0
-  class_property raid_ranking_up_to_100th = 0
-  class_property clan_level_6_cost = 0
-  class_property clan_level_7_cost = 0
-  class_property clan_level_8_cost = 0
-  class_property clan_level_9_cost = 0
-  class_property clan_level_10_cost = 0
-  class_property clan_level_11_cost = 0
-  class_property clan_level_6_requirement = 0
-  class_property clan_level_7_requirement = 0
-  class_property clan_level_8_requirement = 0
-  class_property clan_level_9_requirement = 0
-  class_property clan_level_10_requirement = 0
-  class_property clan_level_11_requirement = 0
-  class_property allow_wyvern_always = false
-  class_property allow_wyvern_during_siege = false
+  class_property take_fort_points : Int32 = 0
+  class_property lose_fort_points : Int32 = 0
+  class_property take_castle_points : Int32 = 0
+  class_property lose_castle_points : Int32 = 0
+  class_property castle_defended_points : Int32 = 0
+  class_property festival_win_points : Int32 = 0
+  class_property hero_points : Int32 = 0
+  class_property royal_guard_cost : Int32 = 0
+  class_property knight_unit_cost : Int32 = 0
+  class_property knight_reinforce_cost : Int32 = 0
+  class_property ballista_points : Int32 = 0
+  class_property bloodalliance_points : Int32 = 0
+  class_property bloodoath_points : Int32 = 0
+  class_property knightsepaulette_points : Int32 = 0
+  class_property reputation_score_per_kill : Int32 = 0
+  class_property join_academy_min_rep_score : Int32 = 0
+  class_property join_academy_max_rep_score : Int32 = 0
+  class_property raid_ranking_1st : Int32 = 0
+  class_property raid_ranking_2nd : Int32 = 0
+  class_property raid_ranking_3rd : Int32 = 0
+  class_property raid_ranking_4th : Int32 = 0
+  class_property raid_ranking_5th : Int32 = 0
+  class_property raid_ranking_6th : Int32 = 0
+  class_property raid_ranking_7th : Int32 = 0
+  class_property raid_ranking_8th : Int32 = 0
+  class_property raid_ranking_9th : Int32 = 0
+  class_property raid_ranking_10th : Int32 = 0
+  class_property raid_ranking_up_to_50th : Int32 = 0
+  class_property raid_ranking_up_to_100th : Int32 = 0
+  class_property clan_level_6_cost : Int32 = 0
+  class_property clan_level_7_cost : Int32 = 0
+  class_property clan_level_8_cost : Int32 = 0
+  class_property clan_level_9_cost : Int32 = 0
+  class_property clan_level_10_cost : Int32 = 0
+  class_property clan_level_11_cost : Int32 = 0
+  class_property clan_level_6_requirement : Int32 = 0
+  class_property clan_level_7_requirement : Int32 = 0
+  class_property clan_level_8_requirement : Int32 = 0
+  class_property clan_level_9_requirement : Int32 = 0
+  class_property clan_level_10_requirement : Int32 = 0
+  class_property clan_level_11_requirement : Int32 = 0
+  class_property allow_wyvern_always : Bool = false
+  class_property allow_wyvern_during_siege : Bool = false
 
   # --------------------------------------------------
   # General Settings
   # --------------------------------------------------
-  class_property everybody_has_admin_rights = false
-  class_property server_list_bracket = false
-  class_property server_list_type = 0
-  class_property server_list_age = 0
-  class_property server_gmonly = false
-  class_property gm_hero_aura = false
-  class_property gm_startup_invulnerable = false
-  class_property gm_startup_invisible = false
-  class_property gm_startup_silence = false
-  class_property gm_startup_auto_list = false
-  class_property gm_startup_diet_mode = false
-  class_property gm_item_restriction = false
-  class_property gm_skill_restriction = false
-  class_property gm_trade_restricted_items = false
-  class_property gm_restart_fighting = false
-  class_property gm_announcer_name = false
-  class_property gm_critannouncer_name = false
-  class_property gm_give_special_skills = false
-  class_property gm_give_special_aura_skills = false
-  class_property gameguard_enforce = false
-  class_property gameguard_prohibitaction = false
-  class_property log_chat = false
-  class_property log_auto_announcements = false
-  class_property log_items = false
-  class_property log_items_small_log = false
-  class_property log_item_enchants = false
-  class_property log_skill_enchants = false
-  class_property gmaudit = false
-  class_property skill_check_enable = false
-  class_property skill_check_remove = false
-  class_property skill_check_gm = false
-  class_property debug = false
-  class_property debug_instances = false
-  class_property html_action_cache_debug = false
-  class_property packet_handler_debug = false
-  class_property developer = false
-  class_property no_handlers = false
-  class_property no_quests = false
-  class_property alt_dev_no_spawns = false
-  class_property alt_dev_show_quests_load_in_logs = false
-  class_property alt_dev_show_scripts_load_in_logs = false
-  class_property thread_p_effects = 0
-  class_property thread_p_general = 0
-  class_property thread_e_events = 0
-  class_property general_packet_thread_core_size = 0
-  class_property io_packet_thread_core_size = 0
-  class_property general_thread_core_size = 0
-  class_property ai_max_thread = 0
-  class_property event_max_thread = 0
-  class_property client_packet_queue_size = 0
-  class_property client_packet_queue_max_burst_size = 0
-  class_property client_packet_queue_max_packets_per_second = 0
-  class_property client_packet_queue_measure_interval = 0
-  class_property client_packet_queue_max_average_packets_per_second = 0
-  class_property client_packet_queue_max_floods_per_min = 0
-  class_property client_packet_queue_max_overflows_per_min = 0
-  class_property client_packet_queue_max_underflows_per_min = 0
-  class_property client_packet_queue_max_unknown_per_min = 0
-  class_property deadlock_detector = false
-  class_property deadlock_check_interval = 0
-  class_property restart_on_deadlock = false
-  class_property allow_discarditem = false
-  class_property autodestroy_item_after = 0
-  class_property herb_auto_destroy_time = 0
-  class_property list_protected_items = [] of Int32
-  class_property database_clean_up = false
-  class_property connection_close_time = 0i64
-  class_property char_store_interval = 0i64
-  class_property lazy_items_update = false
-  class_property update_items_on_char_store = false
-  class_property destroy_dropped_player_item = false
-  class_property destroy_equipable_player_item = false
-  class_property save_dropped_item = false
-  class_property empty_dropped_item_table_after_load = false
+  class_property everybody_has_admin_rights : Bool = false
+  class_property server_list_bracket : Bool = false
+  class_property server_list_type : Int32 = 0
+  class_property server_list_age : Int32 = 0
+  class_property server_gmonly : Bool = false
+  class_property gm_hero_aura : Bool = false
+  class_property gm_startup_invulnerable : Bool = false
+  class_property gm_startup_invisible : Bool = false
+  class_property gm_startup_silence : Bool = false
+  class_property gm_startup_auto_list : Bool = false
+  class_property gm_startup_diet_mode : Bool = false
+  class_property gm_item_restriction : Bool = false
+  class_property gm_skill_restriction : Bool = false
+  class_property gm_trade_restricted_items : Bool = false
+  class_property gm_restart_fighting : Bool = false
+  class_property gm_announcer_name : Bool = false
+  class_property gm_critannouncer_name : Bool = false
+  class_property gm_give_special_skills : Bool = false
+  class_property gm_give_special_aura_skills : Bool = false
+  class_property gameguard_enforce : Bool = false
+  class_property gameguard_prohibitaction : Bool = false
+  class_property log_chat : Bool = false
+  class_property log_auto_announcements : Bool = false
+  class_property log_items : Bool = false
+  class_property log_items_small_log : Bool = false
+  class_property log_item_enchants : Bool = false
+  class_property log_skill_enchants : Bool = false
+  class_property gmaudit : Bool = false
+  class_property skill_check_enable : Bool = false
+  class_property skill_check_remove : Bool = false
+  class_property skill_check_gm : Bool = false
+  class_property debug : Bool = false
+  class_property debug_instances : Bool = false
+  class_property html_action_cache_debug : Bool = false
+  class_property packet_handler_debug : Bool = false
+  class_property developer : Bool = false
+  class_property no_handlers : Bool = false
+  class_property no_quests : Bool = false
+  class_property alt_dev_no_spawns : Bool = false
+  class_property alt_dev_show_quests_load_in_logs : Bool = false
+  class_property alt_dev_show_scripts_load_in_logs : Bool = false
+  class_property thread_p_effects : Int32 = 0
+  class_property thread_p_general : Int32 = 0
+  class_property thread_e_events : Int32 = 0
+  class_property general_packet_thread_core_size : Int32 = 0
+  class_property io_packet_thread_core_size : Int32 = 0
+  class_property general_thread_core_size : Int32 = 0
+  class_property ai_max_thread : Int32 = 0
+  class_property event_max_thread : Int32 = 0
+  class_property client_packet_queue_size : Int32 = 0
+  class_property client_packet_queue_max_burst_size : Int32 = 0
+  class_property client_packet_queue_max_packets_per_second : Int32 = 0
+  class_property client_packet_queue_measure_interval : Int32 = 0
+  class_property client_packet_queue_max_average_packets_per_second : Int32 = 0
+  class_property client_packet_queue_max_floods_per_min : Int32 = 0
+  class_property client_packet_queue_max_overflows_per_min : Int32 = 0
+  class_property client_packet_queue_max_underflows_per_min : Int32 = 0
+  class_property client_packet_queue_max_unknown_per_min : Int32 = 0
+  class_property deadlock_detector : Bool = false
+  class_property deadlock_check_interval : Int32 = 0
+  class_property restart_on_deadlock : Bool = false
+  class_property allow_discarditem : Bool = false
+  class_property autodestroy_item_after : Int32 = 0
+  class_property herb_auto_destroy_time : Int32 = 0
+  class_property list_protected_items : Array(Int32) = [] of Int32
+  class_property database_clean_up : Bool = false
+  class_property connection_close_time : Int64 = 0i64
+  class_property char_store_interval : Int64 = 0i64
+  class_property lazy_items_update : Bool = false
+  class_property update_items_on_char_store : Bool = false
+  class_property destroy_dropped_player_item : Bool = false
+  class_property destroy_equipable_player_item : Bool = false
+  class_property save_dropped_item : Bool = false
+  class_property empty_dropped_item_table_after_load : Bool = false
   class_property save_dropped_item_interval = 0
-  class_property clear_dropped_item_table = false
-  class_property autodelete_invalid_quest_data = false
-  class_property precise_drop_calculation = false
-  class_property multiple_item_drop = false
-  class_property force_inventory_update = false
-  class_property lazy_cache = false
-  class_property cache_char_names = false
-  class_property min_npc_animation = 0
-  class_property max_npc_animation = 0
-  class_property min_monster_animation = 0
-  class_property max_monster_animation = 0
-  class_property enable_falling_damage = false
-  class_property grids_always_on = false
-  class_property grid_neighbor_turnon_time = 0
-  class_property grid_neighbor_turnoff_time = 0
-  class_property move_based_knownlist = false
-  class_property knownlist_update_interval = 0i64
-  class_property peace_zone_mode = 0
-  class_property default_global_chat = ""
-  class_property default_trade_chat = ""
-  class_property allow_warehouse = false
-  class_property warehouse_cache = false
-  class_property warehouse_cache_time = 0
-  class_property allow_refund = false
-  class_property allow_mail = false
-  class_property allow_attachments = false
-  class_property allow_wear = false
-  class_property wear_delay = 0
-  class_property wear_price = 0
-  class_property instance_finish_time = 0
-  class_property restore_player_instance = false
-  class_property allow_summon_in_instance = false
-  class_property eject_dead_player_time = 0
-  class_property allow_lottery = false
-  class_property allow_race = false
-  class_property allow_water = false
-  class_property allow_rentpet = false
-  class_property allowfishing = false
-  class_property allow_boat = false
-  class_property boat_broadcast_radius = 0
-  class_property allow_cursed_weapons = false
-  class_property allow_manor = false
-  class_property allow_pet_walkers = false
-  class_property server_news = false
-  class_property enable_community_board = false
-  class_property bbs_default = ""
-  class_property use_say_filter = false
-  class_property chat_filter_chars = ""
-  class_property ban_chat_channels = [] of Int32
-  class_property alt_oly_start_time = 0
-  class_property alt_oly_min = 0
-  class_property alt_oly_max_buffs = 0
-  class_property alt_oly_cperiod = 0i64
-  class_property alt_oly_battle = 0i64
-  class_property alt_oly_wperiod = 0i64
-  class_property alt_oly_vperiod = 0i64
-  class_property alt_oly_start_points = 0
-  class_property alt_oly_weekly_points = 0
-  class_property alt_oly_classed = 0
-  class_property alt_oly_nonclassed = 0
-  class_property alt_oly_teams = 0
-  class_property alt_oly_reg_display = 0
-  class_property alt_oly_classed_reward = Slice(Slice(Int32)).empty
-  class_property alt_oly_nonclassed_reward = Slice(Slice(Int32)).empty
-  class_property alt_oly_team_reward = Slice(Slice(Int32)).empty
-  class_property alt_oly_comp_ritem = 0
-  class_property alt_oly_min_matches = 0
-  class_property alt_oly_gp_per_point = 0
-  class_property alt_oly_hero_points = 0
-  class_property alt_oly_rank1_points = 0
-  class_property alt_oly_rank2_points = 0
-  class_property alt_oly_rank3_points = 0
-  class_property alt_oly_rank4_points = 0
-  class_property alt_oly_rank5_points = 0
-  class_property alt_oly_max_points = 0
-  class_property alt_oly_divider_classed = 0
-  class_property alt_oly_divider_non_classed = 0
-  class_property alt_oly_max_weekly_matches = 0
-  class_property alt_oly_max_weekly_matches_non_classed = 0
-  class_property alt_oly_max_weekly_matches_classed = 0
-  class_property alt_oly_max_weekly_matches_team = 0
-  class_property alt_oly_log_fights = false
-  class_property alt_oly_show_monthly_winners = false
-  class_property alt_oly_announce_games = false
-  class_property list_oly_restricted_items = [] of Int32
-  class_property alt_oly_enchant_limit = 0
-  class_property alt_oly_wait_time = 0
-  class_property alt_manor_refresh_time = 0
-  class_property alt_manor_refresh_min = 0
-  class_property alt_manor_approve_time = 0
-  class_property alt_manor_approve_min = 0
-  class_property alt_manor_maintenance_min = 0
-  class_property alt_manor_save_all_actions = false
-  class_property alt_manor_save_period_rate = 0
-  class_property alt_lottery_prize = 0i64
-  class_property alt_lottery_ticket_price = 0i64
-  class_property alt_lottery_5_number_rate = 0f32
-  class_property alt_lottery_4_number_rate = 0f32
-  class_property alt_lottery_3_number_rate = 0f32
-  class_property alt_lottery_2_and_1_number_prize = 0i64
-  class_property alt_item_auction_enabled = false
-  class_property alt_item_auction_expired_after = 0
-  class_property alt_item_auction_time_extends_on_bid = 0i64
-  class_property fs_time_attack = 0
-  class_property fs_time_cooldown = 0
-  class_property fs_time_entry = 0
-  class_property fs_time_warmup = 0
-  class_property fs_party_member_count = 0
-  class_property rift_min_party_size = 0
-  class_property rift_spawn_delay = 0
-  class_property rift_max_jumps = 0
-  class_property rift_auto_jumps_time_min = 0
-  class_property rift_auto_jumps_time_max = 0
-  class_property rift_boss_room_time_multiply = 0f32
-  class_property rift_enter_cost_recruit = 0
-  class_property rift_enter_cost_soldier = 0
-  class_property rift_enter_cost_officer = 0
-  class_property rift_enter_cost_captain = 0
-  class_property rift_enter_cost_commander = 0
-  class_property rift_enter_cost_hero = 0
+  class_property clear_dropped_item_table : Bool = false
+  class_property autodelete_invalid_quest_data : Bool = false
+  class_property precise_drop_calculation : Bool = false
+  class_property multiple_item_drop : Bool = false
+  class_property force_inventory_update : Bool = false
+  class_property lazy_cache : Bool = false
+  class_property cache_char_names : Bool = false
+  class_property min_npc_animation : Int32 = 0
+  class_property max_npc_animation : Int32 = 0
+  class_property min_monster_animation : Int32 = 0
+  class_property max_monster_animation : Int32 = 0
+  class_property enable_falling_damage : Bool = false
+  class_property grids_always_on : Bool = false
+  class_property grid_neighbor_turnon_time : Int32 = 0
+  class_property grid_neighbor_turnoff_time : Int32 = 0
+  class_property move_based_knownlist : Bool = false
+  class_property knownlist_update_interval : Int64 = 0i64
+  class_property peace_zone_mode : Int32 = 0
+  class_property default_global_chat : String = ""
+  class_property default_trade_chat : String = ""
+  class_property allow_warehouse : Bool = false
+  class_property warehouse_cache : Bool = false
+  class_property warehouse_cache_time : Int32 = 0
+  class_property allow_refund : Bool = false
+  class_property allow_mail : Bool = false
+  class_property allow_attachments : Bool = false
+  class_property allow_wear : Bool = false
+  class_property wear_delay : Int32 = 0
+  class_property wear_price : Int32 = 0
+  class_property instance_finish_time : Int32 = 0
+  class_property restore_player_instance : Bool = false
+  class_property allow_summon_in_instance : Bool = false
+  class_property eject_dead_player_time : Int32 = 0
+  class_property allow_lottery : Bool = false
+  class_property allow_race : Bool = false
+  class_property allow_water : Bool = false
+  class_property allow_rentpet : Bool = false
+  class_property allowfishing : Bool = false
+  class_property allow_boat : Bool = false
+  class_property boat_broadcast_radius : Int32 = 0
+  class_property allow_cursed_weapons : Bool = false
+  class_property allow_manor : Bool = false
+  class_property allow_pet_walkers : Bool = false
+  class_property server_news : Bool = false
+  class_property enable_community_board : Bool = false
+  class_property bbs_default : String = ""
+  class_property use_say_filter : Bool = false
+  class_property chat_filter_chars : String = ""
+  class_property ban_chat_channels : Array(Int32) = [] of Int32
+  class_property alt_oly_start_time : Int32 = 0
+  class_property alt_oly_min : Int32 = 0
+  class_property alt_oly_max_buffs : Int32 = 0
+  class_property alt_oly_cperiod : Int64 = 0i64
+  class_property alt_oly_battle : Int64 = 0i64
+  class_property alt_oly_wperiod : Int64 = 0i64
+  class_property alt_oly_vperiod : Int64 = 0i64
+  class_property alt_oly_start_points : Int32 = 0
+  class_property alt_oly_weekly_points : Int32 = 0
+  class_property alt_oly_classed : Int32 = 0
+  class_property alt_oly_nonclassed : Int32 = 0
+  class_property alt_oly_teams : Int32 = 0
+  class_property alt_oly_reg_display : Int32 = 0
+  class_property alt_oly_classed_reward : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
+  class_property alt_oly_nonclassed_reward : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
+  class_property alt_oly_team_reward : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
+  class_property alt_oly_comp_ritem : Int32 = 0
+  class_property alt_oly_min_matches : Int32 = 0
+  class_property alt_oly_gp_per_point : Int32 = 0
+  class_property alt_oly_hero_points : Int32 = 0
+  class_property alt_oly_rank1_points : Int32 = 0
+  class_property alt_oly_rank2_points : Int32 = 0
+  class_property alt_oly_rank3_points : Int32 = 0
+  class_property alt_oly_rank4_points : Int32 = 0
+  class_property alt_oly_rank5_points : Int32 = 0
+  class_property alt_oly_max_points : Int32 = 0
+  class_property alt_oly_divider_classed : Int32 = 0
+  class_property alt_oly_divider_non_classed : Int32 = 0
+  class_property alt_oly_max_weekly_matches : Int32 = 0
+  class_property alt_oly_max_weekly_matches_non_classed : Int32 = 0
+  class_property alt_oly_max_weekly_matches_classed : Int32 = 0
+  class_property alt_oly_max_weekly_matches_team : Int32 = 0
+  class_property alt_oly_log_fights : Bool = false
+  class_property alt_oly_show_monthly_winners : Bool = false
+  class_property alt_oly_announce_games : Bool = false
+  class_property list_oly_restricted_items : Array(Int32) = [] of Int32
+  class_property alt_oly_enchant_limit : Int32 = 0
+  class_property alt_oly_wait_time : Int32 = 0
+  class_property alt_manor_refresh_time : Int32 = 0
+  class_property alt_manor_refresh_min : Int32 = 0
+  class_property alt_manor_approve_time : Int32 = 0
+  class_property alt_manor_approve_min : Int32 = 0
+  class_property alt_manor_maintenance_min : Int32 = 0
+  class_property alt_manor_save_all_actions : Bool = false
+  class_property alt_manor_save_period_rate : Int32 = 0
+  class_property alt_lottery_prize : Int64 = 0i64
+  class_property alt_lottery_ticket_price : Int64 = 0i64
+  class_property alt_lottery_5_number_rate : Float32 = 0f32
+  class_property alt_lottery_4_number_rate : Float32 = 0f32
+  class_property alt_lottery_3_number_rate : Float32 = 0f32
+  class_property alt_lottery_2_and_1_number_prize : Int64 = 0i64
+  class_property alt_item_auction_enabled : Bool = false
+  class_property alt_item_auction_expired_after : Int32 = 0
+  class_property alt_item_auction_time_extends_on_bid : Int64 = 0i64
+  class_property fs_time_attack : Int32 = 0
+  class_property fs_time_cooldown : Int32 = 0
+  class_property fs_time_entry : Int32 = 0
+  class_property fs_time_warmup : Int32 = 0
+  class_property fs_party_member_count : Int32 = 0
+  class_property rift_min_party_size : Int32 = 0
+  class_property rift_spawn_delay : Int32 = 0
+  class_property rift_max_jumps : Int32 = 0
+  class_property rift_auto_jumps_time_min : Int32 = 0
+  class_property rift_auto_jumps_time_max : Int32 = 0
+  class_property rift_boss_room_time_multiply : Float32 = 0f32
+  class_property rift_enter_cost_recruit : Int32 = 0
+  class_property rift_enter_cost_soldier : Int32 = 0
+  class_property rift_enter_cost_officer : Int32 = 0
+  class_property rift_enter_cost_captain : Int32 = 0
+  class_property rift_enter_cost_commander : Int32 = 0
+  class_property rift_enter_cost_hero : Int32 = 0
   class_property default_punish : IllegalActionPunishmentType = IllegalActionPunishmentType::NONE
-  class_property default_punish_param = 0
-  class_property only_gm_items_free = false
-  class_property jail_is_pvp = false
-  class_property jail_disable_chat = false
-  class_property jail_disable_transaction = false
-  class_property custom_spawnlist_table = false
-  class_property save_gmspawn_on_custom = false
-  class_property custom_npc_data = false
-  class_property custom_teleport_table = false
-  class_property custom_npcbuffer_tables = false
-  class_property custom_skills_load = false
-  class_property custom_items_load = false
-  class_property custom_multisell_load = false
-  class_property custom_buylist_load = false
-  class_property alt_birthday_gift = 0
-  class_property alt_birthday_mail_subject : String?
-  class_property alt_birthday_mail_text : String?
-  class_property enable_block_checker_event = false
-  class_property min_block_checker_team_members = 0
-  class_property hbce_fair_play = false
-  class_property hellbound_without_quest = false
-  class_property player_movement_block_time = 0
-  class_property normal_enchant_cost_multiplier = 0
-  class_property safe_enchant_cost_multiplier = 0
-  class_property botreport_enable = false
-  class_property botreport_resetpoint_hour : Slice(String)?
-  class_property botreport_report_delay = 0i64
-  class_property botreport_allow_reports_from_same_clan_members = false
+  class_property default_punish_param : Int32 = 0
+  class_property only_gm_items_free : Bool = false
+  class_property jail_is_pvp : Bool = false
+  class_property jail_disable_chat : Bool = false
+  class_property jail_disable_transaction : Bool = false
+  class_property custom_spawnlist_table : Bool = false
+  class_property save_gmspawn_on_custom : Bool = false
+  class_property custom_npc_data : Bool = false
+  class_property custom_teleport_table : Bool = false
+  class_property custom_npcbuffer_tables : Bool = false
+  class_property custom_skills_load : Bool = false
+  class_property custom_items_load : Bool = false
+  class_property custom_multisell_load : Bool = false
+  class_property custom_buylist_load : Bool = false
+  class_property alt_birthday_gift : Int32 = 0
+  class_property alt_birthday_mail_subject : String = ""
+  class_property alt_birthday_mail_text : String = ""
+  class_property enable_block_checker_event : Bool = false
+  class_property min_block_checker_team_members : Int32 = 0
+  class_property hbce_fair_play : Bool = false
+  class_property hellbound_without_quest : Bool = false
+  class_property player_movement_block_time : Int32 = 0
+  class_property normal_enchant_cost_multiplier : Int32 = 0
+  class_property safe_enchant_cost_multiplier : Int32 = 0
+  class_property botreport_enable : Bool = false
+  class_property botreport_resetpoint_hour : Slice(String) = Slice(String).empty
+  class_property botreport_report_delay : Int64 = 0i64
+  class_property botreport_allow_reports_from_same_clan_members : Bool = false
 
   # --------------------------------------------------
   # FloodProtector Settings
@@ -665,445 +665,445 @@ module Config
   # --------------------------------------------------
   # L2JMods Settings
   # --------------------------------------------------
-  class_property champion_enable = false
-  class_property champion_passive = false
-  class_property champion_frequency = 0
-  class_property champ_title : String?
-  class_property champ_min_lvl = 0
-  class_property champ_max_lvl = 0
-  class_property champion_hp = 0
-  class_property champion_rewards_exp_sp = 0f32
-  class_property champion_rewards_chance = 0f32
-  class_property champion_rewards_amount = 0f32
-  class_property champion_adenas_rewards_chance = 0f32
-  class_property champion_adenas_rewards_amount = 0f32
-  class_property champion_hp_regen = 0f32
-  class_property champion_atk = 0f32
-  class_property champion_spd_atk = 0f32
-  class_property champion_reward_lower_lvl_item_chance = 0
-  class_property champion_reward_higher_lvl_item_chance = 0
-  class_property champion_reward_id = 0
-  class_property champion_reward_qty = 0
-  class_property champion_enable_vitality = false
-  class_property champion_enable_in_instances = false
-  class_property tvt_event_enabled = false
-  class_property tvt_event_in_instance = false
-  class_property tvt_event_instance_file : String?
-  class_property tvt_event_interval : Slice(String)?
-  class_property tvt_event_participation_time = 0
-  class_property tvt_event_running_time = 0
-  class_property tvt_event_participation_npc_id = 0
-  class_property tvt_event_participation_npc_coordinates = Slice(Int32).new(4)
-  class_property tvt_event_participation_fee = Slice(Int32).new(2)
-  class_property tvt_event_min_players_in_teams = 0
-  class_property tvt_event_max_players_in_teams = 0
-  class_property tvt_event_respawn_teleport_delay = 0
-  class_property tvt_event_start_leave_teleport_delay = 0
-  class_property tvt_event_team_1_name : String?
-  class_property tvt_event_team_1_coordinates = Slice(Int32).new(3)
-  class_property tvt_event_team_2_name : String?
-  class_property tvt_event_team_2_coordinates = Slice(Int32).new(3)
-  class_property tvt_event_rewards = Slice(Slice(Int32)).empty
-  class_property tvt_event_target_team_members_allowed = false
-  class_property tvt_event_scroll_allowed = false
-  class_property tvt_event_potions_allowed = false
-  class_property tvt_event_summon_by_item_allowed = false
-  class_property tvt_doors_ids_to_open = [] of Int32
-  class_property tvt_doors_ids_to_close = [] of Int32
-  class_property tvt_reward_team_tie = false
-  class_property tvt_event_min_lvl = 0i8 # byte
-  class_property tvt_event_max_lvl = 0i8 # byte
+  class_property champion_enable : Bool = false
+  class_property champion_passive : Bool = false
+  class_property champion_frequency : Int32 = 0
+  class_property champ_title : String = ""
+  class_property champ_min_lvl : Int32 = 0
+  class_property champ_max_lvl : Int32 = 0
+  class_property champion_hp : Int32 = 0
+  class_property champion_rewards_exp_sp : Float32 = 0f32
+  class_property champion_rewards_chance : Float32 = 0f32
+  class_property champion_rewards_amount : Float32 = 0f32
+  class_property champion_adenas_rewards_chance : Float32 = 0f32
+  class_property champion_adenas_rewards_amount : Float32 = 0f32
+  class_property champion_hp_regen : Float32 = 0f32
+  class_property champion_atk : Float32 = 0f32
+  class_property champion_spd_atk : Float32 = 0f32
+  class_property champion_reward_lower_lvl_item_chance : Int32 = 0
+  class_property champion_reward_higher_lvl_item_chance : Int32 = 0
+  class_property champion_reward_id : Int32 = 0
+  class_property champion_reward_qty : Int32 = 0
+  class_property champion_enable_vitality : Bool = false
+  class_property champion_enable_in_instances : Bool = false
+  class_property tvt_event_enabled : Bool = false
+  class_property tvt_event_in_instance : Bool = false
+  class_property tvt_event_instance_file : String = ""
+  class_property tvt_event_interval : Slice(String) = Slice(String).empty
+  class_property tvt_event_participation_time : Int32 = 0
+  class_property tvt_event_running_time : Int32 = 0
+  class_property tvt_event_participation_npc_id : Int32 = 0
+  class_property tvt_event_participation_npc_coordinates : Slice(Int32) = Slice(Int32).new(4)
+  class_property tvt_event_participation_fee : Slice(Int32) = Slice(Int32).new(2)
+  class_property tvt_event_min_players_in_teams : Int32 = 0
+  class_property tvt_event_max_players_in_teams : Int32 = 0
+  class_property tvt_event_respawn_teleport_delay : Int32 = 0
+  class_property tvt_event_start_leave_teleport_delay : Int32 = 0
+  class_property tvt_event_team_1_name : String = ""
+  class_property tvt_event_team_1_coordinates : Slice(Int32) = Slice(Int32).new(3)
+  class_property tvt_event_team_2_name : String = ""
+  class_property tvt_event_team_2_coordinates : Slice(Int32) = Slice(Int32).new(3)
+  class_property tvt_event_rewards : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
+  class_property tvt_event_target_team_members_allowed : Bool = false
+  class_property tvt_event_scroll_allowed : Bool = false
+  class_property tvt_event_potions_allowed : Bool = false
+  class_property tvt_event_summon_by_item_allowed : Bool = false
+  class_property tvt_doors_ids_to_open : Array(Int32) = [] of Int32
+  class_property tvt_doors_ids_to_close : Array(Int32) = [] of Int32
+  class_property tvt_reward_team_tie : Bool = false
+  class_property tvt_event_min_lvl : Int8 = 0i8
+  class_property tvt_event_max_lvl : Int8 = 0i8
   class_property tvt_event_effects_removal = 0
-  class_property tvt_event_fighter_buffs = {} of Int32 => Int32
-  class_property tvt_event_mage_buffs = {} of Int32 => Int32
-  class_property tvt_event_max_participants_per_ip = 0
-  class_property tvt_allow_voiced_command = false
-  class_property allow_wedding = false
-  class_property wedding_price = 0
-  class_property wedding_punish_infidelity = false
-  class_property wedding_teleport = false
-  class_property wedding_teleport_price = 0
-  class_property wedding_teleport_duration = 0
-  class_property wedding_samesex = false
-  class_property wedding_formalwear = false
-  class_property wedding_divorce_costs = 0
-  class_property hellbound_status = false
-  class_property banking_system_enabled = false
-  class_property banking_system_goldbars = 0
-  class_property banking_system_adena = 0
-  class_property enable_warehousesorting_clan = false
-  class_property enable_warehousesorting_private = false
-  class_property offline_trade_enable = false
-  class_property offline_craft_enable = false
-  class_property offline_mode_in_peace_zone = false
-  class_property offline_mode_no_damage = false
-  class_property restore_offliners = false
-  class_property offline_max_days = 0
-  class_property offline_disconnect_finished = false
-  class_property offline_set_name_color = false
-  class_property offline_name_color = 0
-  class_property offline_fame = false
-  class_property enable_mana_potions_support = false
-  class_property display_server_time = false
-  class_property welcome_message_enabled = false
+  class_property tvt_event_fighter_buffs : Hash(Int32, Int32) = {} of Int32 => Int32
+  class_property tvt_event_mage_buffs : Hash(Int32, Int32) = {} of Int32 => Int32
+  class_property tvt_event_max_participants_per_ip : Int32 = 0
+  class_property tvt_allow_voiced_command : Bool = false
+  class_property allow_wedding : Bool = false
+  class_property wedding_price : Int32 = 0
+  class_property wedding_punish_infidelity : Bool = false
+  class_property wedding_teleport : Bool = false
+  class_property wedding_teleport_price : Int32 = 0
+  class_property wedding_teleport_duration : Int32 = 0
+  class_property wedding_samesex : Bool = false
+  class_property wedding_formalwear : Bool = false
+  class_property wedding_divorce_costs : Int32 = 0
+  class_property hellbound_status : Bool = false
+  class_property banking_system_enabled : Bool = false
+  class_property banking_system_goldbars : Int32 = 0
+  class_property banking_system_adena : Int32 = 0
+  class_property enable_warehousesorting_clan : Bool = false
+  class_property enable_warehousesorting_private : Bool = false
+  class_property offline_trade_enable : Bool = false
+  class_property offline_craft_enable : Bool = false
+  class_property offline_mode_in_peace_zone : Bool = false
+  class_property offline_mode_no_damage : Bool = false
+  class_property restore_offliners : Bool = false
+  class_property offline_max_days : Int32 = 0
+  class_property offline_disconnect_finished : Bool = false
+  class_property offline_set_name_color : Bool = false
+  class_property offline_name_color : Int32 = 0
+  class_property offline_fame : Bool = false
+  class_property enable_mana_potions_support : Bool = false
+  class_property display_server_time : Bool = false
+  class_property welcome_message_enabled : Bool = false
   class_property welcome_message_text : String?
-  class_property welcome_message_time = 0
-  class_property antifeed_enable = false
-  class_property antifeed_dualbox = false
-  class_property antifeed_disconnected_as_dualbox = false
-  class_property antifeed_interval = 0
-  class_property announce_pk_pvp = false
-  class_property announce_pk_pvp_normal_message = false
-  class_property announce_pk_msg : String?
-  class_property announce_pvp_msg : String?
-  class_property chat_admin = false
-  class_property multilang_enable = false
+  class_property welcome_message_time : Int32 = 0
+  class_property antifeed_enable : Bool = false
+  class_property antifeed_dualbox : Bool = false
+  class_property antifeed_disconnected_as_dualbox : Bool = false
+  class_property antifeed_interval : Int32 = 0
+  class_property announce_pk_pvp : Bool = false
+  class_property announce_pk_pvp_normal_message : Bool = false
+  class_property announce_pk_msg : String = ""
+  class_property announce_pvp_msg : String = ""
+  class_property chat_admin : Bool = false
+  class_property multilang_enable : Bool = false
   class_property multilang_allowed = [] of String
-  class_property multilang_default : String?
-  class_property multilang_voiced_allow = false
-  class_property multilang_sm_enable = false
+  class_property multilang_default : String = ""
+  class_property multilang_voiced_allow : Bool = false
+  class_property multilang_sm_enable : Bool = false
   class_property multilang_sm_allowed = [] of String
-  class_property multilang_ns_enable = false
+  class_property multilang_ns_enable : Bool = false
   class_property multilang_ns_allowed = [] of String
-  class_property l2walker_protection = false
-  class_property debug_voice_command = false
-  class_property dualbox_check_max_players_per_ip = 0
-  class_property dualbox_check_max_olympiad_participants_per_ip = 0
-  class_property dualbox_check_max_l2event_participants_per_ip = 0
-  class_property dualbox_check_whitelist = {} of Int32 => Int32
-  class_property allow_change_password = false
+  class_property l2walker_protection : Bool = false
+  class_property debug_voice_command : Bool = false
+  class_property dualbox_check_max_players_per_ip : Int32 = 0
+  class_property dualbox_check_max_olympiad_participants_per_ip : Int32 = 0
+  class_property dualbox_check_max_l2event_participants_per_ip : Int32 = 0
+  class_property dualbox_check_whitelist : Hash(Int32, Int32) = {} of Int32 => Int32
+  class_property allow_change_password : Bool = false
   # --------------------------------------------------
   # NPC Settings
   # --------------------------------------------------
-  class_property announce_mammon_spawn = false
-  class_property alt_mob_agro_in_peacezone = false
-  class_property alt_attackable_npcs = false
-  class_property alt_game_viewnpc = false
-  class_property max_drift_range = 0
-  class_property deepblue_drop_rules = false
-  class_property deepblue_drop_rules_raid = false
-  class_property show_npc_lvl = false
-  class_property show_crest_without_quest = false
-  class_property enable_random_enchant_effect = false
-  class_property min_npc_lvl_dmg_penalty = 0
-  class_property npc_dmg_penalty = {} of Int32 => Float64
-  class_property npc_crit_dmg_penalty = {} of Int32 => Float64
-  class_property npc_skill_dmg_penalty = {} of Int32 => Float64
-  class_property min_npc_lvl_magic_penalty = 0
-  class_property npc_skill_chance_penalty = {} of Int32 => Float64
-  class_property decay_time_task = 0
-  class_property default_corpse_time = 0
-  class_property spoiled_corpse_extend_time = 0
-  class_property corpse_consume_skill_allowed_time_before_decay = 0
-  class_property guard_attack_aggro_mob = false
-  class_property allow_wyvern_upgrader = false
-  class_property list_pet_rent_npc = [] of Int32
-  class_property raid_hp_regen_multiplier = 0.0
-  class_property raid_mp_regen_multiplier = 0.0
-  class_property raid_pdefence_multiplier = 0.0
-  class_property raid_mdefence_multiplier = 0.0
-  class_property raid_pattack_multiplier = 0.0
-  class_property raid_mattack_multiplier = 0.0
-  class_property raid_minion_respawn_timer = 0.0
-  class_property minions_respawn_time = {} of Int32 => Int32
-  class_property raid_min_respawn_multiplier = 0f32
-  class_property raid_max_respawn_multiplier = 0f32
-  class_property raid_disable_curse = false
-  class_property raid_chaos_time = 0
-  class_property grand_chaos_time = 0
-  class_property minion_chaos_time = 0
-  class_property inventory_maximum_pet = 0
-  class_property pet_hp_regen_multiplier = 0.0
-  class_property pet_mp_regen_multiplier = 0.0
-  class_property drop_adena_min_level_difference = 0
-  class_property drop_adena_max_level_difference = 0
-  class_property drop_adena_min_level_gap_chance = 0.0
-  class_property drop_item_min_level_difference = 0
-  class_property drop_item_max_level_difference = 0
-  class_property drop_item_min_level_gap_chance = 0.0
+  class_property announce_mammon_spawn : Bool = false
+  class_property alt_mob_agro_in_peacezone : Bool = false
+  class_property alt_attackable_npcs : Bool = false
+  class_property alt_game_viewnpc : Bool = false
+  class_property max_drift_range : Int32 = 0
+  class_property deepblue_drop_rules : Bool = false
+  class_property deepblue_drop_rules_raid : Bool = false
+  class_property show_npc_lvl : Bool = false
+  class_property show_crest_without_quest : Bool = false
+  class_property enable_random_enchant_effect : Bool = false
+  class_property min_npc_lvl_dmg_penalty : Int32 = 0
+  class_property npc_dmg_penalty : Hash(Int32, Float64) = {} of Int32 => Float64
+  class_property npc_crit_dmg_penalty : Hash(Int32, Float64) = {} of Int32 => Float64
+  class_property npc_skill_dmg_penalty : Hash(Int32, Float64) = {} of Int32 => Float64
+  class_property min_npc_lvl_magic_penalty : Int32 = 0
+  class_property npc_skill_chance_penalty : Hash(Int32, Float64) = {} of Int32 => Float64
+  class_property decay_time_task : Int32 = 0
+  class_property default_corpse_time : Int32 = 0
+  class_property spoiled_corpse_extend_time : Int32 = 0
+  class_property corpse_consume_skill_allowed_time_before_decay : Int32 = 0
+  class_property guard_attack_aggro_mob : Bool = false
+  class_property allow_wyvern_upgrader : Bool = false
+  class_property list_pet_rent_npc : Array(Int32) = [] of Int32
+  class_property raid_hp_regen_multiplier : Float64 = 0.0
+  class_property raid_mp_regen_multiplier : Float64 = 0.0
+  class_property raid_pdefence_multiplier : Float64 = 0.0
+  class_property raid_mdefence_multiplier : Float64 = 0.0
+  class_property raid_pattack_multiplier : Float64 = 0.0
+  class_property raid_mattack_multiplier : Float64 = 0.0
+  class_property raid_minion_respawn_timer : Float64 = 0.0
+  class_property minions_respawn_time : Hash(Int32, Int32) = {} of Int32 => Int32
+  class_property raid_min_respawn_multiplier : Float32 = 0f32
+  class_property raid_max_respawn_multiplier : Float32 = 0f32
+  class_property raid_disable_curse : Bool = false
+  class_property raid_chaos_time : Int32 = 0
+  class_property grand_chaos_time : Int32 = 0
+  class_property minion_chaos_time : Int32 = 0
+  class_property inventory_maximum_pet : Int32 = 0
+  class_property pet_hp_regen_multiplier : Float64 = 0.0
+  class_property pet_mp_regen_multiplier : Float64 = 0.0
+  class_property drop_adena_min_level_difference : Int32 = 0
+  class_property drop_adena_max_level_difference : Int32 = 0
+  class_property drop_adena_min_level_gap_chance : Float64 = 0.0
+  class_property drop_item_min_level_difference : Int32 = 0
+  class_property drop_item_max_level_difference : Int32 = 0
+  class_property drop_item_min_level_gap_chance : Float64 = 0.0
 
   # --------------------------------------------------
   # PvP Settings
   # --------------------------------------------------
-  class_property karma_drop_gm = false
-  class_property karma_award_pk_kill = false
-  class_property karma_pk_limit = 0
-  class_property karma_nondroppable_pet_items : String?
-  class_property karma_nondroppable_items : String?
-  class_property karma_list_nondroppable_pet_items = [] of Int32
-  class_property karma_list_nondroppable_items = [] of Int32
+  class_property karma_drop_gm : Bool = false
+  class_property karma_award_pk_kill : Bool = false
+  class_property karma_pk_limit : Int32 = 0
+  class_property karma_nondroppable_pet_items : String = ""
+  class_property karma_nondroppable_items : String = ""
+  class_property karma_list_nondroppable_pet_items : Array(Int32) = [] of Int32
+  class_property karma_list_nondroppable_items : Array(Int32) = [] of Int32
 
   # --------------------------------------------------
   # Rate Settings
   # --------------------------------------------------
-  class_property rate_xp = 0f32
-  class_property rate_sp = 0f32
-  class_property rate_party_xp = 0f32
-  class_property rate_party_sp = 0f32
-  class_property rate_hb_trust_increase = 0f32
-  class_property rate_hb_trust_decrease = 0f32
-  class_property rate_extractable = 0f32
-  class_property rate_drop_manor = 0
-  class_property rate_quest_drop = 0f32
-  class_property rate_quest_reward = 0f32
-  class_property rate_quest_reward_xp = 0f32
-  class_property rate_quest_reward_sp = 0f32
-  class_property rate_quest_reward_adena = 0f32
-  class_property rate_quest_reward_use_multipliers = false
-  class_property rate_quest_reward_potion = 0f32
-  class_property rate_quest_reward_scroll = 0f32
-  class_property rate_quest_reward_recipe = 0f32
-  class_property rate_quest_reward_material = 0f32
-  class_property rate_death_drop_amount_multiplier = 0f32
-  class_property rate_corpse_drop_amount_multiplier = 0f32
-  class_property rate_herb_drop_amount_multiplier = 0f32
-  class_property rate_raid_drop_amount_multiplier = 0f32
-  class_property rate_death_drop_chance_multiplier = 0f32
-  class_property rate_corpse_drop_chance_multiplier = 0f32
-  class_property rate_herb_drop_chance_multiplier = 0f32
-  class_property rate_raid_drop_chance_multiplier = 0f32
-  class_property rate_drop_amount_multiplier = {} of Int32 => Float64
-  class_property rate_drop_chance_multiplier = {} of Int32 => Float64
-  class_property rate_karma_lost = 0f32
-  class_property rate_karma_exp_lost = 0f32
-  class_property rate_siege_guards_price = 0f32
-  class_property rate_drop_common_herbs = 0f32
-  class_property rate_drop_hp_herbs = 0f32
-  class_property rate_drop_mp_herbs = 0f32
-  class_property rate_drop_special_herbs = 0f32
-  class_property player_drop_limit = 0
-  class_property player_rate_drop = 0
-  class_property player_rate_drop_item = 0
-  class_property player_rate_drop_equip = 0
-  class_property player_rate_drop_equip_weapon = 0
-  class_property pet_xp_rate = 0f32
-  class_property pet_food_rate = 0
-  class_property sineater_xp_rate = 0f32
-  class_property karma_drop_limit = 0
-  class_property karma_rate_drop = 0
-  class_property karma_rate_drop_item = 0
-  class_property karma_rate_drop_equip = 0
-  class_property karma_rate_drop_equip_weapon = 0
+  class_property rate_xp : Float32 = 0f32
+  class_property rate_sp : Float32 = 0f32
+  class_property rate_party_xp : Float32 = 0f32
+  class_property rate_party_sp : Float32 = 0f32
+  class_property rate_hb_trust_increase : Float32 = 0f32
+  class_property rate_hb_trust_decrease : Float32 = 0f32
+  class_property rate_extractable : Float32 = 0f32
+  class_property rate_drop_manor : Int32 = 0
+  class_property rate_quest_drop : Float32 = 0f32
+  class_property rate_quest_reward : Float32 = 0f32
+  class_property rate_quest_reward_xp : Float32 = 0f32
+  class_property rate_quest_reward_sp : Float32 = 0f32
+  class_property rate_quest_reward_adena : Float32 = 0f32
+  class_property rate_quest_reward_use_multipliers : Bool = false
+  class_property rate_quest_reward_potion : Float32 = 0f32
+  class_property rate_quest_reward_scroll : Float32 = 0f32
+  class_property rate_quest_reward_recipe : Float32 = 0f32
+  class_property rate_quest_reward_material : Float32 = 0f32
+  class_property rate_death_drop_amount_multiplier : Float32 = 0f32
+  class_property rate_corpse_drop_amount_multiplier : Float32 = 0f32
+  class_property rate_herb_drop_amount_multiplier : Float32 = 0f32
+  class_property rate_raid_drop_amount_multiplier : Float32 = 0f32
+  class_property rate_death_drop_chance_multiplier : Float32 = 0f32
+  class_property rate_corpse_drop_chance_multiplier : Float32 = 0f32
+  class_property rate_herb_drop_chance_multiplier : Float32 = 0f32
+  class_property rate_raid_drop_chance_multiplier : Float32 = 0f32
+  class_property rate_drop_amount_multiplier : Hash(Int32, Float64) = {} of Int32 => Float64
+  class_property rate_drop_chance_multiplier : Hash(Int32, Float64) = {} of Int32 => Float64
+  class_property rate_karma_lost : Float32 = 0f32
+  class_property rate_karma_exp_lost : Float32 = 0f32
+  class_property rate_siege_guards_price : Float32 = 0f32
+  class_property rate_drop_common_herbs : Float32 = 0f32
+  class_property rate_drop_hp_herbs : Float32 = 0f32
+  class_property rate_drop_mp_herbs : Float32 = 0f32
+  class_property rate_drop_special_herbs : Float32 = 0f32
+  class_property player_drop_limit : Int32 = 0
+  class_property player_rate_drop : Int32 = 0
+  class_property player_rate_drop_item : Int32 = 0
+  class_property player_rate_drop_equip : Int32 = 0
+  class_property player_rate_drop_equip_weapon : Int32 = 0
+  class_property pet_xp_rate : Float32 = 0f32
+  class_property pet_food_rate : Int32 = 0
+  class_property sineater_xp_rate : Float32 = 0f32
+  class_property karma_drop_limit : Int32 = 0
+  class_property karma_rate_drop : Int32 = 0
+  class_property karma_rate_drop_item : Int32 = 0
+  class_property karma_rate_drop_equip : Int32 = 0
+  class_property karma_rate_drop_equip_weapon : Int32 = 0
 
   # --------------------------------------------------
   # Seven Signs Settings
   # --------------------------------------------------
-  class_property alt_game_castle_dawn = false
-  class_property alt_game_castle_dusk = false
-  class_property alt_game_require_clan_castle = false
-  class_property alt_festival_min_player = 0
-  class_property alt_maximum_player_contrib = 0i64
-  class_property alt_festival_manager_start = 0i64
-  class_property alt_festival_length = 0i64
-  class_property alt_festival_cycle_length = 0i64
-  class_property alt_festival_first_spawn = 0i64
-  class_property alt_festival_first_swarm = 0i64
-  class_property alt_festival_second_spawn = 0i64
-  class_property alt_festival_second_swarm = 0i64
-  class_property alt_festival_chest_spawn = 0i64
-  class_property alt_siege_dawn_gates_pdef_mult = 0.0
-  class_property alt_siege_dusk_gates_pdef_mult = 0.0
-  class_property alt_siege_dawn_gates_mdef_mult = 0.0
-  class_property alt_siege_dusk_gates_mdef_mult = 0.0
-  class_property alt_strict_sevensigns = false
-  class_property alt_sevensigns_lazy_update = false
-  class_property ssq_dawn_ticket_quantity = 0
-  class_property ssq_dawn_ticket_price = 0
-  class_property ssq_dawn_ticket_bundle = 0
-  class_property ssq_manors_agreement_id = 0
-  class_property ssq_join_dawn_adena_fee = 0
+  class_property alt_game_castle_dawn : Bool = false
+  class_property alt_game_castle_dusk : Bool = false
+  class_property alt_game_require_clan_castle : Bool = false
+  class_property alt_festival_min_player : Int32 = 0
+  class_property alt_maximum_player_contrib : Int64 = 0i64
+  class_property alt_festival_manager_start : Int64 = 0i64
+  class_property alt_festival_length : Int64 = 0i64
+  class_property alt_festival_cycle_length : Int64 = 0i64
+  class_property alt_festival_first_spawn : Int64 = 0i64
+  class_property alt_festival_first_swarm : Int64 = 0i64
+  class_property alt_festival_second_spawn : Int64 = 0i64
+  class_property alt_festival_second_swarm : Int64 = 0i64
+  class_property alt_festival_chest_spawn : Int64 = 0i64
+  class_property alt_siege_dawn_gates_pdef_mult : Float64 = 0.0
+  class_property alt_siege_dusk_gates_pdef_mult : Float64 = 0.0
+  class_property alt_siege_dawn_gates_mdef_mult : Float64 = 0.0
+  class_property alt_siege_dusk_gates_mdef_mult : Float64 = 0.0
+  class_property alt_strict_sevensigns : Bool = false
+  class_property alt_sevensigns_lazy_update : Bool = false
+  class_property ssq_dawn_ticket_quantity : Int32 = 0
+  class_property ssq_dawn_ticket_price : Int32 = 0
+  class_property ssq_dawn_ticket_bundle : Int32 = 0
+  class_property ssq_manors_agreement_id : Int32 = 0
+  class_property ssq_join_dawn_adena_fee : Int32 = 0
 
   # --------------------------------------------------
   # Server Settings
   # --------------------------------------------------
-  class_property enable_upnp = false
-  class_property port_game = 0
-  class_property port_login = 0
-  class_property login_bind_address : String?
-  class_property login_try_before_ban = 0
-  class_property login_block_after_ban = 0
-  class_property gameserver_hostname = ""
-  class_property database_driver : String?
+  class_property enable_upnp : Bool = false
+  class_property port_game : Int32 = 0
+  class_property port_login : Int32 = 0
+  class_property login_bind_address : String = ""
+  class_property login_try_before_ban : Int32 = 0
+  class_property login_block_after_ban : Int32 = 0
+  class_property gameserver_hostname : String = ""
+  class_property database_driver : String = ""
   class_property database_url : String = ""
   class_property database_login : String = ""
   class_property database_password : String = ""
   class_property database_connection_pool : String = ""
-  class_property database_max_connections = 0
-  class_property database_max_idle_time = 0
-  class_property maximum_online_users = 0
-  class_property player_name_template = /.*/
-  class_property pet_name_template = /.*/
-  class_property clan_name_template = /.*/
-  class_property max_characters_number_per_account = 0
-  class_property datapack_root = "?" # L2R: String, L2J: File
-  class_property accept_alternate_id = false
-  class_property database_engine = ""
-  class_property request_id = 0
-  class_property reserve_host_on_login = false
-  class_property protocol_list = [] of Int32
-  class_property login_server_schedule_restart = false
-  class_property login_server_schedule_restart_time = 0i64
+  class_property database_max_connections : Int32 = 0
+  class_property database_max_idle_time : Int32 = 0
+  class_property maximum_online_users : Int32 = 0
+  class_property player_name_template : Regex = /.*/
+  class_property pet_name_template : Regex = /.*/
+  class_property clan_name_template : Regex = /.*/
+  class_property max_characters_number_per_account : Int32 = 0
+  class_property datapack_root : String = "?" # L2R: String, L2J: File
+  class_property accept_alternate_id : Bool = false
+  class_property database_engine : String = ""
+  class_property request_id : Int32 = 0
+  class_property reserve_host_on_login : Bool = false
+  class_property protocol_list : Array(Int32) = [] of Int32
+  class_property login_server_schedule_restart : Bool = false
+  class_property login_server_schedule_restart_time : Int64 = 0i64
 
   # --------------------------------------------------
   # MMO Settings
   # --------------------------------------------------
-  class_property mmo_selector_sleep_time = 0
-  class_property mmo_max_send_per_pass = 0
-  class_property mmo_max_read_per_pass = 0
-  class_property mmo_helper_buffer_count = 0
-  class_property mmo_tcp_nodelay = false
+  class_property mmo_selector_sleep_time : Int32 = 0
+  class_property mmo_max_send_per_pass : Int32 = 0
+  class_property mmo_max_read_per_pass : Int32 = 0
+  class_property mmo_helper_buffer_count : Int32 = 0
+  class_property mmo_tcp_nodelay : Bool = false
 
   # --------------------------------------------------
   # Vitality Settings
   # --------------------------------------------------
-  class_property enable_vitality = false
-  class_property recover_vitality_on_reconnect = false
-  class_property enable_drop_vitality_herbs = false
-  class_property rate_vitality_level_1 = 0f32
-  class_property rate_vitality_level_2 = 0f32
-  class_property rate_vitality_level_3 = 0f32
-  class_property rate_vitality_level_4 = 0f32
-  class_property rate_drop_vitality_herbs = 0f32
-  class_property rate_recovery_vitality_peace_zone = 0f32
-  class_property rate_vitality_lost = 0f32
-  class_property rate_vitality_gain = 0f32
-  class_property rate_recovery_on_reconnect = 0f32
-  class_property starting_vitality_points = 0
+  class_property enable_vitality : Bool = false
+  class_property recover_vitality_on_reconnect : Bool = false
+  class_property enable_drop_vitality_herbs : Bool = false
+  class_property rate_vitality_level_1 : Float32 = 0f32
+  class_property rate_vitality_level_2 : Float32 = 0f32
+  class_property rate_vitality_level_3 : Float32 = 0f32
+  class_property rate_vitality_level_4 : Float32 = 0f32
+  class_property rate_drop_vitality_herbs : Float32 = 0f32
+  class_property rate_recovery_vitality_peace_zone : Float32 = 0f32
+  class_property rate_vitality_lost : Float32 = 0f32
+  class_property rate_vitality_gain : Float32 = 0f32
+  class_property rate_recovery_on_reconnect : Float32 = 0f32
+  class_property starting_vitality_points : Int32 = 0
 
   # --------------------------------------------------
   # No classification assigned to the following yet
   # --------------------------------------------------
-  class_property max_item_in_packet = 0
-  class_property check_known = false
-  class_property game_server_login_port = 0
-  class_property game_server_login_host : String?
-  class_property game_server_subnets : Slice(String)?
-  class_property game_server_hosts : Slice(String)?
-  class_property pvp_normal_time = 0
-  class_property pvp_pvp_time = 0
+  class_property max_item_in_packet : Int32 = 0
+  class_property check_known : Bool = false
+  class_property game_server_login_port : Int32 = 0
+  class_property game_server_login_host : String = ""
+  class_property game_server_subnets : Slice(String) = Slice(String).empty
+  class_property game_server_hosts : Slice(String) = Slice(String).empty
+  class_property pvp_normal_time : Int32 = 0
+  class_property pvp_pvp_time : Int32 = 0
 
   # enum IdFactoryType: %i[Compaction BitSet Stack]
 
   # class_property idfactory_type = nil # IdFactoryType
-  class_property bad_id_checking = false
+  class_property bad_id_checking : Bool = false
 
-  class_property enchant_chance_element_stone = 0.0
-  class_property enchant_chance_element_crystal = 0.0
-  class_property enchant_chance_element_jewel = 0.0
-  class_property enchant_chance_element_energy = 0.0
-  class_property enchant_blacklist = [] of Int32
-  class_property augmentation_ng_skill_chance = 0
-  class_property augmentation_ng_glow_chance = 0
-  class_property augmentation_mid_skill_chance = 0
-  class_property augmentation_mid_glow_chance = 0
-  class_property augmentation_high_skill_chance = 0
-  class_property augmentation_high_glow_chance = 0
-  class_property augmentation_top_skill_chance = 0
-  class_property augmentation_top_glow_chance = 0
-  class_property augmentation_basestat_chance = 0
-  class_property augmentation_acc_skill_chance = 0
-  class_property retail_like_augmentation = false
-  class_property retail_like_augmentation_ng_chance = [] of Int32
-  class_property retail_like_augmentation_mid_chance = [] of Int32
-  class_property retail_like_augmentation_high_chance = [] of Int32
-  class_property retail_like_augmentation_top_chance = [] of Int32
-  class_property retail_like_augmentation_accessory = false
-  class_property augmentation_blacklist = [] of Int32
-  class_property alt_allow_augment_pvp_items = false
-  class_property hp_regen_multiplier = 0.0
-  class_property mp_regen_multiplier = 0.0
-  class_property cp_regen_multiplier = 0.0
-  class_property is_telnet_enabled = false
-  class_property show_licence = false
-  class_property accept_new_gameserver = false
-  class_property server_id = 1
+  class_property enchant_chance_element_stone : Float64 = 0.0
+  class_property enchant_chance_element_crystal : Float64 = 0.0
+  class_property enchant_chance_element_jewel : Float64 = 0.0
+  class_property enchant_chance_element_energy : Float64 = 0.0
+  class_property enchant_blacklist : Array(Int32) = [] of Int32
+  class_property augmentation_ng_skill_chance : Int32 = 0
+  class_property augmentation_ng_glow_chance : Int32 = 0
+  class_property augmentation_mid_skill_chance : Int32 = 0
+  class_property augmentation_mid_glow_chance : Int32 = 0
+  class_property augmentation_high_skill_chance : Int32 = 0
+  class_property augmentation_high_glow_chance : Int32 = 0
+  class_property augmentation_top_skill_chance : Int32 = 0
+  class_property augmentation_top_glow_chance : Int32 = 0
+  class_property augmentation_basestat_chance : Int32 = 0
+  class_property augmentation_acc_skill_chance : Int32 = 0
+  class_property retail_like_augmentation : Bool = false
+  class_property retail_like_augmentation_ng_chance : Array(Int32) = [] of Int32
+  class_property retail_like_augmentation_mid_chance : Array(Int32) = [] of Int32
+  class_property retail_like_augmentation_high_chance : Array(Int32) = [] of Int32
+  class_property retail_like_augmentation_top_chance : Array(Int32) = [] of Int32
+  class_property retail_like_augmentation_accessory : Bool = false
+  class_property augmentation_blacklist : Array(Int32) = [] of Int32
+  class_property alt_allow_augment_pvp_items : Bool = false
+  class_property hp_regen_multiplier : Float64 = 0.0
+  class_property mp_regen_multiplier : Float64 = 0.0
+  class_property cp_regen_multiplier : Float64 = 0.0
+  class_property is_telnet_enabled : Bool = false
+  class_property show_licence : Bool = false
+  class_property accept_new_gameserver : Bool = false
+  class_property server_id : Int32 = 1
   class_property hex_id : Bytes = Bytes.empty
-  class_property auto_create_accounts = false
-  class_property flood_protection = false
-  class_property fast_connection_limit = 0
-  class_property normal_connection_time = 0
-  class_property fast_connection_time = 0
-  class_property max_connection_per_ip = 0
+  class_property auto_create_accounts : Bool = false
+  class_property flood_protection : Bool = false
+  class_property fast_connection_limit : Int32 = 0
+  class_property normal_connection_time : Int32 = 0
+  class_property fast_connection_time : Int32 = 0
+  class_property max_connection_per_ip : Int32 = 0
 
   # GrandBoss Settings
 
   # Antharas
-  class_property antharas_wait_time = 0
-  class_property antharas_spawn_interval = 0
-  class_property antharas_spawn_random = 0
+  class_property antharas_wait_time : Int32 = 0
+  class_property antharas_spawn_interval : Int32 = 0
+  class_property antharas_spawn_random : Int32 = 0
 
   # Valakas
-  class_property valakas_wait_time = 0
-  class_property valakas_spawn_interval = 0
-  class_property valakas_spawn_random = 0
+  class_property valakas_wait_time : Int32 = 0
+  class_property valakas_spawn_interval : Int32 = 0
+  class_property valakas_spawn_random : Int32 = 0
 
   # Baium
-  class_property baium_spawn_interval = 0
-  class_property baium_spawn_random = 0
+  class_property baium_spawn_interval : Int32 = 0
+  class_property baium_spawn_random : Int32 = 0
 
   # Core
-  class_property core_spawn_interval = 0
-  class_property core_spawn_random = 0
+  class_property core_spawn_interval : Int32 = 0
+  class_property core_spawn_random : Int32 = 0
 
   # Offen
-  class_property orfen_spawn_interval = 0
-  class_property orfen_spawn_random = 0
+  class_property orfen_spawn_interval : Int32 = 0
+  class_property orfen_spawn_random : Int32 = 0
 
   # Queen Ant
-  class_property queen_ant_spawn_interval = 0
-  class_property queen_ant_spawn_random = 0
+  class_property queen_ant_spawn_interval : Int32 = 0
+  class_property queen_ant_spawn_random : Int32 = 0
 
   # Beleth
-  class_property beleth_min_players = 0
-  class_property beleth_spawn_interval = 0
-  class_property beleth_spawn_random = 0
+  class_property beleth_min_players : Int32 = 0
+  class_property beleth_spawn_interval : Int32 = 0
+  class_property beleth_spawn_random : Int32 = 0
 
   # Gracia Seeds Settings
-  class_property sod_tiat_kill_count = 0
-  class_property sod_stage_2_length = 0i64
+  class_property sod_tiat_kill_count : Int32 = 0
+  class_property sod_stage_2_length : Int64 = 0i64
 
   # chatfilter
-  class_property filter_list = [] of String
+  class_property filter_list : Array(String) = [] of String
 
   # Email
-  class_property email_serverinfo_name : String?
-  class_property email_serverinfo_address : String?
-  class_property email_sys_enabled = false
-  class_property email_sys_host : String?
-  class_property email_sys_port = 0
-  class_property email_sys_smtp_auth = false
-  class_property email_sys_factory : String?
-  class_property email_sys_factory_callback = false
-  class_property email_sys_username : String?
-  class_property email_sys_password : String?
-  class_property email_sys_address : String?
-  class_property email_sys_selectquery : String?
-  class_property email_sys_dbfield : String?
+  class_property email_serverinfo_name : String = ""
+  class_property email_serverinfo_address : String = ""
+  class_property email_sys_enabled : Bool = false
+  class_property email_sys_host : String = ""
+  class_property email_sys_port : Int32 = 0
+  class_property email_sys_smtp_auth : Bool = false
+  class_property email_sys_factory : String = ""
+  class_property email_sys_factory_callback : Bool = false
+  class_property email_sys_username : String = ""
+  class_property email_sys_password : String = ""
+  class_property email_sys_address : String = ""
+  class_property email_sys_selectquery : String = ""
+  class_property email_sys_dbfield : String = ""
 
   # Conquerable Halls Settings
-  class_property chs_clan_minlevel = 0
-  class_property chs_max_attackers = 0
-  class_property chs_max_flags_per_clan = 0
-  class_property chs_enable_fame = false
-  class_property chs_fame_amount = 0
-  class_property chs_fame_frequency = 0
+  class_property chs_clan_minlevel : Int32 = 0
+  class_property chs_max_attackers : Int32 = 0
+  class_property chs_max_flags_per_clan : Int32 = 0
+  class_property chs_enable_fame : Bool = false
+  class_property chs_fame_amount : Int32 = 0
+  class_property chs_fame_frequency : Int32 = 0
 
   # GeoData Settings
-  class_property pathfinding = 0
-  class_property pathnode_dir : String? # L2R: String, L2J: File
-  class_property pathfind_buffers = ""
-  class_property low_weight = 0f32
-  class_property medium_weight = 0f32
-  class_property high_weight = 0f32
-  class_property advanced_diagonal_strategy = false
-  class_property diagonal_weight = 0f32
-  class_property max_postfilter_passes = 0
-  class_property debug_path = false
-  class_property force_geodata = false
-  class_property coord_synchronize = 0
-  class_property geodata_path = "" # L2R: String, L2J: Path
-  class_property try_load_unspecified_regions = false
-  class_property geodata_regions = {} of String => Bool
+  class_property pathfinding : Int32 = 0
+  class_property pathnode_dir : String = "" # L2R: String, L2J: File
+  class_property pathfind_buffers : String = ""
+  class_property low_weight : Float32 = 0f32
+  class_property medium_weight : Float32 = 0f32
+  class_property high_weight : Float32 = 0f32
+  class_property advanced_diagonal_strategy : Bool = false
+  class_property diagonal_weight : Float32 = 0f32
+  class_property max_postfilter_passes : Int32 = 0
+  class_property debug_path : Bool = false
+  class_property force_geodata : Bool = false
+  class_property coord_synchronize : Int32 = 0
+  class_property geodata_path : String = "" # L2R: String, L2J: Path
+  class_property try_load_unspecified_regions : Bool = false
+  class_property geodata_regions : Hash(String, Bool) = {} of String => Bool
 
   private def load_protector_settings(cfg : StatsSet)
     load_flood_protector_config(cfg, @@flood_protector_use_item, "UseItem", 4)
@@ -1153,7 +1153,7 @@ module Config
 
     cfg = StatsSet.new
 
-    ## Server
+    # Server
     cfg.parse(Dir.current + CONFIGURATION_FILE)
     @@enable_upnp = cfg.get_bool("EnableUPnP", true)
     @@gameserver_hostname = cfg.get_string("GameserverHostname", "*")
@@ -1598,7 +1598,7 @@ module Config
     cfg.parse(Dir.current + GENERAL_CONFIG_FILE)
     @@everybody_has_admin_rights = cfg.get_bool("EverybodyHasAdminRights")
     @@server_list_bracket = cfg.get_bool("ServerListBrackets")
-    @@server_list_type = get_server_type_id(cfg.get_string("ServerListType", "Normal").split(","))
+    @@server_list_type = get_server_type_id(cfg.get_string("ServerListType", "Normal").split(','))
     @@server_list_age = cfg.get_i32("ServerListAge", 0)
     @@server_gmonly = cfg.get_bool("ServerGMOnly")
     @@gm_hero_aura = cfg.get_bool("GMHeroAura")
@@ -1959,7 +1959,7 @@ module Config
     @@tvt_event_enabled = cfg.get_bool("TvTEventEnabled")
     @@tvt_event_in_instance = cfg.get_bool("TvTEventInInstance")
     @@tvt_event_instance_file = cfg.get_string("TvTEventInstanceFile", "coliseum.xml")
-    @@tvt_event_interval = cfg.get_string("TvTEventInterval", "20:00").split(",").to_slice
+    @@tvt_event_interval = cfg.get_string("TvTEventInterval", "20:00").split(',').to_slice
     @@tvt_event_participation_time = cfg.get_i32("TvTEventParticipationTime", 3600)
     @@tvt_event_running_time = cfg.get_i32("TvTEventRunningTime", 1800)
     @@tvt_event_participation_npc_id = cfg.get_i32("TvTEventParticipationNpcId", 0)
@@ -2169,5 +2169,581 @@ module Config
     end
 
     info "Config files read in #{timer} s."
+  end
+
+  def set_parameter_value(name : String, value : String) : Bool
+    case name.strip.casecmp
+    when "ratexp"
+      @@rate_xp = value.to_f32
+    when "ratesp"
+      @@rate_sp = value.to_f32
+    when "ratepartyxp"
+      @@rate_party_xp = value.to_f32
+    when "rateextractable"
+      @@rate_extractable = value.to_f32
+    when "ratedropadena"
+      @@rate_drop_amount_multiplier[Inventory::ADENA_ID] = value.to_f
+    when "ratedropmanor"
+      @@rate_drop_manor = value.to_i
+    when "ratequestdrop"
+      @@rate_quest_drop = value.to_f32
+    when "ratequestreward"
+      @@rate_quest_reward = value.to_f32
+    when "ratequestrewardxp"
+      @@rate_quest_reward_xp = value.to_f32
+    when "ratequestrewardsp"
+      @@rate_quest_reward_sp = value.to_f32
+    when "ratequestrewardadena"
+      @@rate_quest_reward_adena = value.to_f32
+    when "usequestrewardmultipliers"
+      @@rate_quest_reward_use_multipliers = Bool.new(value)
+    when "ratequestrewardpotion"
+      @@rate_quest_reward_potion = value.to_f32
+    when "ratequestrewardscroll"
+      @@rate_quest_reward_scroll = value.to_f32
+    when "ratequestrewardrecipe"
+      @@rate_quest_reward_recipe = value.to_f32
+    when "ratequestrewardmaterial"
+      @@rate_quest_reward_material = value.to_f32
+    when "ratehellboundtrustincrease"
+      @@rate_hb_trust_increase = value.to_f32
+    when "ratehellboundtrustdecrease"
+      @@rate_hb_trust_decrease = value.to_f32
+    when "ratevitalitylevel1"
+      @@rate_vitality_level_1 = value.to_f32
+    when "ratevitalitylevel2"
+      @@rate_vitality_level_2 = value.to_f32
+    when "ratevitalitylevel3"
+      @@rate_vitality_level_3 = value.to_f32
+    when "ratevitalitylevel4"
+      @@rate_vitality_level_4 = value.to_f32
+    when "raterecoverypeacezone"
+      @@rate_recovery_vitality_peace_zone = value.to_f32
+    when "ratevitalitylost"
+      @@rate_vitality_lost = value.to_f32
+    when "ratevitalitygain"
+      @@rate_vitality_gain = value.to_f32
+    when "raterecoveryonreconnect"
+      @@rate_recovery_on_reconnect = value.to_f32
+    when "ratekarmaexplost"
+      @@rate_karma_exp_lost = value.to_f32
+    when "ratesiegeguardsprice"
+      @@rate_siege_guards_price = value.to_f32
+    when "ratecommonherbs"
+      @@rate_drop_common_herbs = value.to_f32
+    when "ratehpherbs"
+      @@rate_drop_hp_herbs = value.to_f32
+    when "ratempherbs"
+      @@rate_drop_mp_herbs = value.to_f32
+    when "ratespecialherbs"
+      @@rate_drop_special_herbs = value.to_f32
+    when "ratevitalityherbs"
+      @@rate_drop_vitality_herbs = value.to_f32
+    when "playerdroplimit"
+      @@player_drop_limit = value.to_i
+    when "playerratedrop"
+      @@player_rate_drop = value.to_i
+    when "playerratedropitem"
+      @@player_rate_drop_item = value.to_i
+    when "playerratedropequip"
+      @@player_rate_drop_equip = value.to_i
+    when "playerratedropequipweapon"
+      @@player_rate_drop_equip_weapon = value.to_i
+    when "petxprate"
+      @@pet_xp_rate = value.to_f32
+    when "petfoodrate"
+      @@pet_food_rate = value.to_i
+    when "sineaterxprate"
+      @@sineater_xp_rate = value.to_f32
+    when "karmadroplimit"
+      @@karma_drop_limit = value.to_i
+    when "karmaratedrop"
+      @@karma_rate_drop = value.to_i
+    when "karmaratedropitem"
+      @@karma_rate_drop_item = value.to_i
+    when "karmaratedropequip"
+      @@karma_rate_drop_equip = value.to_i
+    when "karmaratedropequipweapon"
+      @@karma_rate_drop_equip_weapon = value.to_i
+    when "autodestroydroppeditemafter"
+      @@autodestroy_item_after = value.to_i
+    when "destroyplayerdroppeditem"
+      @@destroy_dropped_player_item = Bool.new(value)
+    when "destroyequipableitem"
+      @@destroy_equipable_player_item = Bool.new(value)
+    when "savedroppeditem"
+      @@save_dropped_item = Bool.new(value)
+    when "emptydroppeditemtableafterload"
+      @@empty_dropped_item_table_after_load = Bool.new(value)
+    when "savedroppediteminterval"
+      @@save_dropped_item_interval = value.to_i
+    when "cleardroppeditemtable"
+      @@clear_dropped_item_table = Bool.new(value)
+    when "precisedropcalculation"
+      @@precise_drop_calculation = Bool.new(value)
+    when "multipleitemdrop"
+      @@multiple_item_drop = Bool.new(value)
+    when "lowweight"
+      @@low_weight = value.to_f32
+    when "mediumweight"
+      @@medium_weight = value.to_f32
+    when "highweight"
+      @@high_weight = value.to_f32
+    when "advanceddiagonalstrategy"
+      @@advanced_diagonal_strategy = Bool.new(value)
+    when "diagonalweight"
+      @@diagonal_weight = value.to_f32
+    when "maxpostfilterpasses"
+      @@max_postfilter_passes = value.to_i
+    when "coordsynchronize"
+      @@coord_synchronize = value.to_i
+    when "deletecharafterdays"
+      @@delete_days = value.to_i
+    when "clientpacketqueuesize"
+      @@client_packet_queue_size = value.to_i
+      if @@client_packet_queue_size == 0
+        @@client_packet_queue_size = @@mmo_max_read_per_pass + 1
+      end
+    when "clientpacketqueuemaxburstsize"
+      @@client_packet_queue_max_burst_size = value.to_i
+      if @@client_packet_queue_max_burst_size == 0
+        @@client_packet_queue_max_burst_size = @@mmo_max_read_per_pass
+      end
+    when "clientpacketqueuemaxpacketspersecond"
+      @@client_packet_queue_max_packets_per_second = value.to_i
+    when "clientpacketqueuemeasureinterval"
+      @@client_packet_queue_measure_interval = value.to_i
+    when "clientpacketqueuemaxaveragepacketspersecond"
+      @@client_packet_queue_max_average_packets_per_second = value.to_i
+    when "clientpacketqueuemaxfloodspermin"
+      @@client_packet_queue_max_floods_per_min = value.to_i
+    when "clientpacketqueuemaxoverflowspermin"
+      @@client_packet_queue_max_overflows_per_min = value.to_i
+    when "clientpacketqueuemaxunderflowspermin"
+      @@client_packet_queue_max_underflows_per_min = value.to_i
+    when "clientpacketqueuemaxunknownpermin"
+      @@client_packet_queue_max_unknown_per_min = value.to_i
+    when "allowdiscarditem"
+      @@allow_discarditem = Bool.new(value)
+    when "allowrefund"
+      @@allow_refund = Bool.new(value)
+    when "allowwarehouse"
+      @@allow_warehouse = Bool.new(value)
+    when "allowwear"
+      @@allow_wear = Bool.new(value)
+    when "weardelay"
+      @@wear_delay = value.to_i
+    when "wearprice"
+      @@wear_price = value.to_i
+    when "defaultfinishtime"
+      @@instance_finish_time = value.to_i
+    when "restoreplayerinstance"
+      @@restore_player_instance = Bool.new(value)
+    when "allowsummonininstance"
+      @@allow_summon_in_instance = Bool.new(value)
+    when "ejectdeadplayertime"
+      @@eject_dead_player_time = value.to_i
+    when "allowwater"
+      @@allow_water = Bool.new(value)
+    when "allowrentpet"
+      @@allow_rentpet = Bool.new(value)
+    when "boatbroadcastradius"
+      @@boat_broadcast_radius = value.to_i
+    when "allowcursedweapons"
+      @@allow_cursed_weapons = Bool.new(value)
+    when "allowmanor"
+      @@allow_manor = Bool.new(value)
+    when "allowpetwalkers"
+      @@allow_pet_walkers = Bool.new(value)
+    when "enablecommunityboard"
+      @@enable_community_board = Bool.new(value)
+    when "bbsdefault"
+      @@bbs_default = value
+    when "showservernews"
+      @@server_news = Bool.new(value)
+    when "shownpclevel"
+      @@show_npc_lvl = Bool.new(value)
+    when "showcrestwithoutquest"
+      @@show_crest_without_quest = Bool.new(value)
+    when "forceinventoryupdate"
+      @@force_inventory_update = Bool.new(value)
+    when "autodeleteinvalidquestdata"
+      @@autodelete_invalid_quest_data = Bool.new(value)
+    when "maximumonlineusers"
+      @@maximum_online_users = value.to_i
+    when "peacezonemode"
+      @@peace_zone_mode = value.to_i
+    when "checkknownlist"
+      @@check_known = Bool.new(value)
+    when "maxdriftrange"
+      @@max_drift_range = value.to_i
+    when "usedeepbluedroprules"
+      @@deepblue_drop_rules = Bool.new(value)
+    when "usedeepbluedroprulesraid"
+      @@deepblue_drop_rules_raid = Bool.new(value)
+    when "guardattackaggromob"
+      @@guard_attack_aggro_mob = Bool.new(value)
+    when "maximumslotsfornodwarf"
+      @@inventory_maximum_no_dwarf = value.to_i
+    when "maximumslotsfordwarf"
+      @@inventory_maximum_dwarf = value.to_i
+    when "maximumslotsforgmplayer"
+      @@inventory_maximum_gm = value.to_i
+    when "maximumslotsforquestitems"
+      @@inventory_maximum_quest_items = value.to_i
+    when "maximumwarehouseslotsfornodwarf"
+      @@warehouse_slots_no_dwarf = value.to_i
+    when "maximumwarehouseslotsfordwarf"
+      @@warehouse_slots_dwarf = value.to_i
+    when "maximumwarehouseslotsforclan"
+      @@warehouse_slots_clan = value.to_i
+    when "enchantchanceelementstone"
+      @@enchant_chance_element_stone = value.to_f64
+    when "enchantchanceelementcrystal"
+      @@enchant_chance_element_crystal = value.to_f64
+    when "enchantchanceelementjewel"
+      @@enchant_chance_element_jewel = value.to_f64
+    when "enchantchanceelementenergy"
+      @@enchant_chance_element_energy = value.to_f64
+    when "augmentationngskillchance"
+      @@augmentation_ng_skill_chance = value.to_i
+    when "augmentationngglowchance"
+      @@augmentation_ng_glow_chance = value.to_i
+    when "augmentationmidskillchance"
+      @@augmentation_mid_skill_chance = value.to_i
+    when "augmentationmidglowchance"
+      @@augmentation_mid_glow_chance = value.to_i
+    when "augmentationhighskillchance"
+      @@augmentation_high_skill_chance = value.to_i
+    when "augmentationhighglowchance"
+      @@augmentation_high_glow_chance = value.to_i
+    when "augmentationtopskillchance"
+      @@augmentation_top_skill_chance = value.to_i
+    when "augmentationtopglowchance"
+      @@augmentation_top_glow_chance = value.to_i
+    when "augmentationbasestatchance"
+      @@augmentation_basestat_chance = value.to_i
+    when "hpregenmultiplier"
+      @@hp_regen_multiplier = value.to_f64
+    when "mpregenmultiplier"
+      @@mp_regen_multiplier = value.to_f64
+    when "cpregenmultiplier"
+      @@cp_regen_multiplier = value.to_f64
+    when "raidhpregenmultiplier"
+      @@raid_hp_regen_multiplier = value.to_f64
+    when "raidmpregenmultiplier"
+      @@raid_mp_regen_multiplier = value.to_f64
+    when "raidpdefencemultiplier"
+      @@raid_pdefence_multiplier = value.to_f64 / 100
+    when "raidmdefencemultiplier"
+      @@raid_mdefence_multiplier = value.to_f64 / 100
+    when "raidpattackmultiplier"
+      @@raid_pattack_multiplier = value.to_f64 / 100
+    when "raidmattackmultiplier"
+      @@raid_mattack_multiplier = value.to_f64 / 100
+    when "raidminionrespawntime"
+      @@raid_minion_respawn_timer = value.to_f
+    when "raidchaostime"
+      @@raid_chaos_time = value.to_i
+    when "grandchaostime"
+      @@grand_chaos_time = value.to_i
+    when "minionchaostime"
+      @@minion_chaos_time = value.to_i
+    when "startingadena"
+      @@starting_adena = value.to_i64
+    when "startinglevel"
+      @@starting_level = value.to_i8
+    when "startingsp"
+      @@starting_sp = value.to_i
+    when "unstuckinterval"
+      @@unstuck_interval = value.to_i
+    when "teleportwatchdogtimeout"
+      @@teleport_watchdog_timeout = value.to_i
+    when "playerspawnprotection"
+      @@player_spawn_protection = value.to_i
+    when "playerfakedeathupprotection"
+      @@player_fakedeath_up_protection = value.to_i
+    when "partyxpcutoffmethod"
+      @@party_xp_cutoff_method = value
+    when "partyxpcutoffpercent"
+      @@party_xp_cutoff_percent = value.to_f64
+    when "partyxpcutofflevel"
+      @@party_xp_cutoff_level = value.to_i
+    when "respawnrestorecp"
+      @@respawn_restore_cp = value.to_f64 / 100
+    when "respawnrestorehp"
+      @@respawn_restore_hp = value.to_f64 / 100
+    when "respawnrestoremp"
+      @@respawn_restore_mp = value.to_f64 / 100
+    when "maxpvtstoresellslotsdwarf"
+      @@max_pvtstoresell_slots_dwarf = value.to_i
+    when "maxpvtstoresellslotsother"
+      @@max_pvtstoresell_slots_other = value.to_i
+    when "maxpvtstorebuyslotsdwarf"
+      @@max_pvtstorebuy_slots_dwarf = value.to_i
+    when "maxpvtstorebuyslotsother"
+      @@max_pvtstorebuy_slots_other = value.to_i
+    when "storeskillcooltime"
+      @@store_skill_cooltime = Bool.new(value)
+    when "subclassstoreskillcooltime"
+      @@subclass_store_skill_cooltime = Bool.new(value)
+    when "announcemammonspawn"
+      @@announce_mammon_spawn = Bool.new(value)
+    when "enablefallingdamage"
+      @@enable_falling_damage = Bool.new(value)
+    when "altgamecreation"
+      @@alt_game_creation = Bool.new(value)
+    when "altgamecreationspeed"
+      @@alt_game_creation_speed = value.to_f64
+    when "altgamecreationxprate"
+      @@alt_game_creation_xp_rate = value.to_f64
+    when "altgamecreationrarexpsprate"
+      @@alt_game_creation_rare_xpsp_rate = value.to_f64
+    when "altgamecreationsprate"
+      @@alt_game_creation_sp_rate = value.to_f64
+    when "altweightlimit"
+      @@alt_weight_limit = value.to_f64
+    when "altblacksmithuserecipes"
+      @@alt_blacksmith_use_recipes = Bool.new(value)
+    when "altgameskilllearn"
+      @@alt_game_skill_learn = Bool.new(value)
+    when "removecastlecirclets"
+      @@remove_castle_circlets = Bool.new(value)
+    when "reputationscoreperkill"
+      @@reputation_score_per_kill = value.to_i
+    when "altgamecancelbyhit"
+      @@alt_game_cancel_bow = value.casecmp?("bow") || value.casecmp?("all")
+      @@alt_game_cancel_cast = value.casecmp?("cast") || value.casecmp?("all")
+    when "altshieldblocks"
+      @@alt_game_shield_blocks = Bool.new(value)
+    when "altperfectshieldblockrate"
+      @@alt_perfect_shld_block = value.to_i
+    when "delevel"
+      @@alt_game_delevel = Bool.new(value)
+    when "magicfailures"
+      @@alt_game_magicfailures = Bool.new(value)
+    when "altmobagroinpeacezone"
+      @@alt_mob_agro_in_peacezone = Bool.new(value)
+    when "altgameexponentxp"
+      @@alt_game_exponent_xp = value.to_f32
+    when "altgameexponentsp"
+      @@alt_game_exponent_sp = value.to_f32
+    when "allowclassmasters"
+      @@allow_class_masters = Bool.new(value)
+    when "allowentiretree"
+      @@allow_entire_tree = Bool.new(value)
+    when "alternateclassmaster"
+      @@alternate_class_master = Bool.new(value)
+    when "altpartyrange"
+      @@alt_party_range = value.to_i
+    when "altpartyrange2"
+      @@alt_party_range2 = value.to_i
+    when "altleavepartyleader"
+      @@alt_leave_party_leader = Bool.new(value)
+    when "craftingenabled"
+      @@is_crafting_enabled = Bool.new(value)
+    when "craftmasterwork"
+      @@craft_masterwork = Bool.new(value)
+    when "lifecrystalneeded"
+      @@life_crystal_needed = Bool.new(value)
+    when "autoloot"
+      @@auto_loot = Bool.new(value)
+    when "autolootraids"
+      @@auto_loot_raids = Bool.new(value)
+    when "autolootherbs"
+      @@auto_loot_herbs = Bool.new(value)
+    when "altkarmaplayercanbekilledinpeacezone"
+      @@alt_game_karma_player_can_be_killed_in_peacezone = Bool.new(value)
+    when "altkarmaplayercanshop"
+      @@alt_game_karma_player_can_shop = Bool.new(value)
+    when "altkarmaplayercanusegk"
+      @@alt_game_karma_player_can_use_gk = Bool.new(value)
+    when "altkarmaplayercanteleport"
+      @@alt_game_karma_player_can_teleport = Bool.new(value)
+    when "altkarmaplayercantrade"
+      @@alt_game_karma_player_can_trade = Bool.new(value)
+    when "altkarmaplayercanusewarehouse"
+      @@alt_game_karma_player_can_use_warehouse = Bool.new(value)
+    when "maxpersonalfamepoints"
+      @@max_personal_fame_points = value.to_i
+    when "fortresszonefametaskfrequency"
+      @@fortress_zone_fame_task_frequency = value.to_i64
+    when "fortresszonefameaquirepoints"
+      @@fortress_zone_fame_aquire_points = value.to_i
+    when "castlezonefametaskfrequency"
+      @@castle_zone_fame_task_frequency = value.to_i64
+    when "castlezonefameaquirepoints"
+      @@castle_zone_fame_aquire_points = value.to_i
+    when "altcastlefordawn"
+      @@alt_game_castle_dawn = Bool.new(value)
+    when "altcastlefordusk"
+      @@alt_game_castle_dusk = Bool.new(value)
+    when "altrequireclancastle"
+      @@alt_game_require_clan_castle = Bool.new(value)
+    when "altfreeteleporting"
+      @@alt_game_free_teleport = Bool.new(value)
+    when "altsubclasswithoutquests"
+      @@alt_game_subclass_without_quests = Bool.new(value)
+    when "altsubclasseverywhere"
+      @@alt_game_subclass_everywhere = Bool.new(value)
+    when "altmemberscanwithdrawfromclanwh"
+      @@alt_members_can_withdraw_from_clanwh = Bool.new(value)
+    when "dwarfrecipelimit"
+      @@dwarf_recipe_limit = value.to_i
+    when "commonrecipelimit"
+      @@common_recipe_limit = value.to_i
+    when "championenable"
+      @@champion_enable = Bool.new(value)
+    when "championfrequency"
+      @@champion_frequency = value.to_i
+    when "championminlevel"
+      @@champ_min_lvl = value.to_i
+    when "championmaxlevel"
+      @@champ_max_lvl = value.to_i
+    when "championhp"
+      @@champion_hp = value.to_i
+    when "championhpregen"
+      @@champion_hp_regen = value.to_f32
+    when "championrewardsexpsp"
+      @@champion_rewards_exp_sp = value.to_f32
+    when "championrewardschance"
+      @@champion_rewards_chance = value.to_f32
+    when "championrewardsamount"
+      @@champion_rewards_amount = value.to_f32
+    when "championadenasrewardschance"
+      @@champion_adenas_rewards_chance = value.to_f32
+    when "championadenasrewardsamount"
+      @@champion_adenas_rewards_amount = value.to_f32
+    when "championatk"
+      @@champion_atk = value.to_f32
+    when "championspdatk"
+      @@champion_spd_atk = value.to_f32
+    when "championrewardlowerlvlitemchance"
+      @@champion_reward_lower_lvl_item_chance = value.to_i
+    when "championrewardhigherlvlitemchance"
+      @@champion_reward_higher_lvl_item_chance = value.to_i
+    when "championrewarditemid"
+      @@champion_reward_id = value.to_i
+    when "championrewarditemqty"
+      @@champion_reward_qty = value.to_i
+    when "championenableininstances"
+      @@champion_enable_in_instances = Bool.new(value)
+    when "allowwedding"
+      @@allow_wedding = Bool.new(value)
+    when "weddingprice"
+      @@wedding_price = value.to_i
+    when "weddingpunishinfidelity"
+      @@wedding_punish_infidelity = Bool.new(value)
+    when "weddingteleport"
+      @@wedding_teleport = Bool.new(value)
+    when "weddingteleportprice"
+      @@wedding_teleport_price = value.to_i
+    when "weddingteleportduration"
+      @@wedding_teleport_duration = value.to_i
+    when "weddingallowsamesex"
+      @@wedding_samesex = Bool.new(value)
+    when "weddingformalwear"
+      @@wedding_formalwear = Bool.new(value)
+    when "weddingdivorcecosts"
+      @@wedding_divorce_costs = value.to_i
+    when "tvteventenabled"
+      @@tvt_event_enabled = Bool.new(value)
+    when "tvteventinterval"
+      @@tvt_event_interval = value.split(',').to_slice
+    when "tvteventparticipationtime"
+      @@tvt_event_participation_time = value.to_i
+    when "tvteventrunningtime"
+      @@tvt_event_running_time = value.to_i
+    when "tvteventparticipationnpcid"
+      @@tvt_event_participation_npc_id = value.to_i
+    when "enablewarehousesortingclan"
+      @@enable_warehousesorting_clan = Bool.new(value)
+    when "enablewarehousesortingprivate"
+      @@enable_warehousesorting_private = Bool.new(value)
+    when "enablemanapotionsupport"
+      @@enable_mana_potions_support = Bool.new(value)
+    when "displayservertime"
+      @@display_server_time = Bool.new(value)
+    when "antifeedenable"
+      @@antifeed_enable = Bool.new(value)
+    when "antifeeddualbox"
+      @@antifeed_dualbox = Bool.new(value)
+    when "antifeeddisconnectedasdualbox"
+      @@antifeed_disconnected_as_dualbox = Bool.new(value)
+    when "antifeedinterval"
+      @@antifeed_interval = 1000 * value.to_i
+    when "cangmdropequipment"
+      @@karma_drop_gm = Bool.new(value)
+    when "awardpkkillpvppoint"
+      @@karma_award_pk_kill = Bool.new(value)
+    when "minimumpkrequiredtodrop"
+      @@karma_pk_limit = value.to_i
+    when "pvpvsnormaltime"
+      @@pvp_normal_time = value.to_i
+    when "pvpvspvptime"
+      @@pvp_pvp_time = value.to_i
+    when "globalchat"
+      @@default_global_chat = value
+    when "tradechat"
+      @@default_trade_chat = value
+    else
+      warn "TODO: find a way to dynamically set an instance variable, if at all possible."
+      return false
+      # begin
+      #   if (!pName.startsWith("Interval_") && !pName.startsWith("Random_"))
+      #   {
+      #     pName = pName.toUpperCase();
+      #   }
+      #   Field clazField = Config.class.getField(pName);
+      #   int modifiers = clazField.getModifiers();
+      #   // just in case :)
+      #   if (!Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers) || Modifier.isFinal(modifiers))
+      #   {
+      #     throw new SecurityException("Cannot modify non public, non static or final config!");
+      #   }
+
+      #   if (clazField.getType() == int.class)
+      #   {
+      #     clazField.setInt(clazField, Integer.parseInt(pValue));
+      #   }
+      #   elsif clazField.getType() == short.class
+      #   {
+      #     clazField.setShort(clazField, Short.parseShort(pValue));
+      #   }
+      #   elsif clazField.getType() == byte.class
+      #   {
+      #     clazField.setByte(clazField, Byte.parseByte(pValue));
+      #   }
+      #   elsif clazField.getType() == long.class
+      #   {
+      #     clazField.setLong(clazField, Long.parseLong(pValue));
+      #   }
+      #   elsif clazField.getType() == float.class
+      #   {
+      #     clazField.setFloat(clazField, Float.parseFloat(pValue));
+      #   }
+      #   elsif clazField.getType() == double.class
+      #   {
+      #     clazField.setDouble(clazField, Double.parseDouble(pValue));
+      #   }
+      #   elsif clazField.getType() == boolean.class
+      #   {
+      #     clazField.setBoolean(clazField, Boolean.parseBoolean(pValue));
+      #   }
+      #   elsif clazField.getType() == String.class
+      #   {
+      #     clazField.set(clazField, pValue);
+      #   }
+      #   else
+      #   {
+      #     return false
+      #   end
+      # rescue e
+      #   LOG.warn("Unable to set parameter value!", e);
+      #   return false;
+      # end
+    end
+
+    true
   end
 end

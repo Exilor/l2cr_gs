@@ -206,7 +206,7 @@ class EventType < EnumClass
 
   # Olympiad events
   def_event(ON_OLYMPIAD_MATCH_RESULT, OnOlympiadMatchResult) do
-    getter_initializer winner: Participant, loser: Participant,
+    getter_initializer winner: Participant?, loser: Participant,
       competition_type: CompetitionType
   end
 
@@ -255,13 +255,13 @@ class EventType < EnumClass
     getter_initializer active_char: L2PcInstance, clan: L2Clan
   end
   def_event(ON_PLAYER_CLAN_LEADER_CHANGE, OnPlayerClanLeaderChange) do
-    getter_initializer old_leader: L2PcInstance, new_leader: L2PcInstance,
+    getter_initializer old_leader: L2ClanMember, new_leader: L2ClanMember,
       clan: L2Clan
   end
   def_event(ON_PLAYER_CLAN_LEFT, OnPlayerClanLeft) do
     getter_initializer active_char: L2ClanMember, clan: L2Clan
   end
-   # L2J takes {active_char: L2PcInstance, :clan] but only uses :cha}
+   # L2J takes {active_char: L2PcInstance, :clan] but only uses :clan}
   def_event(ON_PLAYER_CLAN_LVLUP, OnPlayerClanLvlUp) do
     getter_initializer clan: L2Clan
   end

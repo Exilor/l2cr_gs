@@ -97,6 +97,12 @@ module L2Cr
         end
       when "check_ids"
         L2Cr.check_ids
+      when "raise"
+        begin
+          raise "an error"
+        rescue e
+          GameServer.error e
+        end
       else
         return "unknown command #{cmd.inspect}"
       end

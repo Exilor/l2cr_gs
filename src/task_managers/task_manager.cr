@@ -1,5 +1,6 @@
 require "./task"
 require "../enums/task_type"
+require "./tasks/*"
 
 module TaskManager
   extend self
@@ -12,8 +13,8 @@ module TaskManager
     "INSERT INTO global_tasks (task,type,last_activation,param1,param2,param3) VALUES(?,?,?,?,?,?)"
   }
 
-  TASKS = Hash(String, Task).new
-  CURRENT_TASKS = Array(ExecutedTask).new
+  private TASKS = {} of String => Task
+  CURRENT_TASKS = [] of ExecutedTask
 
   def load
     timer = Timer.new
@@ -30,27 +31,26 @@ module TaskManager
     register_task(TaskCleanUp.new)
     register_task(TaskDailySkillReuseClean.new)
     register_task(TaskGlobalVariablesSave.new)
-    register_task(TaskJython.new)
     register_task(TaskOlympiadSave.new)
     register_task(TaskRaidPointsReset.new)
     register_task(TaskRecom.new)
     register_task(TaskRestart.new)
-    register_task(TaskScript.new)
     register_task(TaskSevenSignsUpdate.new)
     register_task(TaskShutdown.new)
   end
 
   def register_task(task : Task)
-    unless TASKS.includes?(task.name)
+    key = task.name
+    unless tmp = TASKS[key]?
       task.init
-      TASKS << task
+      TASKS[key] = task
     end
   end
 
   private def start_all_tasks
     GameDB.each(SQL_STATEMENTS[0]) do |rs|
-      hash = rs.get_string("task").strip.downcase.hash
-      unless task = TASKS[hash]?
+      key = rs.get_string("task").strip.downcase
+      unless task = TASKS[key]?
         next
       end
 
@@ -86,8 +86,8 @@ module TaskManager
       # time stored as seconds as a string
       begin
         desired = task.params[0].to_i64
-        desired = Time.epoch_ms(desired)
-        diff = desired.to_ms - Time.ms
+        desired = Time.from_ms(desired)
+        diff = desired.ms - Time.ms
         if diff >= 0
           task.scheduled = ThreadPoolManager.schedule_general(task, diff)
           return true
@@ -119,7 +119,7 @@ module TaskManager
         error e
         return false
       end
-      delay = min.to_ms - Time.ms
+      delay = min.ms - Time.ms
       # check *after* min
       if check.after?(min) || delay < 0
         delay += interval
@@ -137,15 +137,6 @@ module TaskManager
       none_found = false
     end
 
-    # GameDB.exec(
-    #   SQL_STATEMENTS[3],
-    #   task,
-    #   type.to_s,
-    #   last_activation,
-    #   param1,
-    #   param2,
-    #   param3
-    # )
     if none_found
       add_task(task, type, param1, param2, param3, last_activation)
     end
@@ -170,50 +161,5 @@ module TaskManager
   rescue e
     error e
     false
-  end
-
-  class ExecutedTask
-    include Runnable
-    include Loggable
-
-    getter task
-    getter type
-    getter id : Int32
-    getter params : {String, String, String}
-    getter last_activation : Int64
-    property scheduled : Runnable::DelayedTask?
-
-    def_equals_and_hash @id
-
-    def initialize(@task : Task, @type : TaskType, rs : ResultSetReader)
-      @id = rs.id
-      @last_activation = rs.get_i64("last_activation")
-      @params = {
-        rs.get_string("param1"),
-        rs.get_string("param2"),
-        rs.get_string("param3")
-      }
-    end
-
-    def run
-      task.on_time_elapsed(self)
-      @last_activation = Time.ms
-
-      begin
-        GameDB.exec(SQL_STATEMENTS[1], @last_activation, @id)
-      rescue e
-        error e
-      end
-
-      if @type.scheduled? || @type.time?
-        stop_task
-      end
-    end
-
-    def stop_task
-      task.on_destroy
-      @scheduled.try &.cancel
-      CURRENT_TASKS.delete(self)
-    end
   end
 end

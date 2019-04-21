@@ -26,7 +26,7 @@ class Packets::Outgoing::Die < GameServerPacket
     d @can_teleport ? 1 : 0
 
     if @char.player?
-      if true # !OlympiadManager.registered?(@char) && !@char.on_event?
+      if !OlympiadManager.registered?(@char.acting_player) && !@char.on_event?
         @static_res = @char.inventory.has_item_for_self_resurrection?
       end
 

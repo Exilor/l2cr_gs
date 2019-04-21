@@ -194,7 +194,19 @@ class L2CubicInstance
       end
     end
 
-    # TODO: olympiad check
+    if @owner.in_olympiad_mode?
+      if @owner.olympiad_start?
+        if target_player = @owner.acting_player?
+          if target_player.olympiad_game_id == @owner.olympiad_game_id
+            if target_player.olympiad_side != @owner.olympiad_side
+              @target = owner_target.as(L2Character)
+            end
+          end
+        end
+      end
+
+      return
+    end
 
     if owner_target.is_a?(L2Character) && owner_target != @owner.summon && owner_target != @owner
       if attackable = owner_target.as?(L2Attackable)

@@ -211,8 +211,7 @@ class L2TrapInstance < L2Npc
     if owner.in_olympiad_mode? && target.is_a?(L2PcInstance)
       if target.in_olympiad_mode?
         if target.olympiad_game_id == owner.olympiad_game_id
-          warn "TODO: #{owner} and #{target} are in an Olympiad match."
-          # OlympiadGameManager.notify_competitor_damage(owner, damage)
+          OlympiadGameManager.notify_competitor_damage(owner, damage.to_i)
         end
       end
     end

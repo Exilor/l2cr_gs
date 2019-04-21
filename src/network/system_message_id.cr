@@ -19,6 +19,10 @@ class SystemMessageId
     MAP.fetch(id) { new(id) }
   end
 
+  def self.get_system_message_id?(id : Int32) : self?
+    MAP[id]?
+  end
+
   def to_s(io : IO)
     io << {{@type.stringify + "::"}} << (@name.empty? ? @id : @name)
   end

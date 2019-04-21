@@ -700,7 +700,7 @@ class L2ItemInstance < L2Object
   end
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
-    return unless command.start_with?("Quest")
+    return unless command.starts_with?("Quest")
 
     quest_name = command.from(6)
     if idx = quest_name.index(' ')
@@ -997,6 +997,10 @@ class L2ItemInstance < L2Object
     end
 
     enchant
+  end
+
+  def default_enchant_level : Int32
+    @item.default_enchant_level
   end
 
   def elementable? : Bool

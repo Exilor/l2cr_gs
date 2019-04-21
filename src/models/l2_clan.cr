@@ -156,7 +156,7 @@ class L2Clan
     broadcast_clan_status
 
     sm = SystemMessage.clan_leader_privileges_have_been_transferred_to_c1
-    sm.add_char_name(member.name)
+    sm.add_string(member.name)
     broadcast_to_online_members(sm)
   end
 

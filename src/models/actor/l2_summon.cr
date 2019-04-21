@@ -460,8 +460,7 @@ abstract class L2Summon < L2Playable
       if owner.in_olympiad_mode? && target.is_a?(L2PcInstance)
         if target.in_olympiad_mode?
           if target.olympiad_game_id == owner.olympiad_game_id
-            warn "TODO: OlympiadGameManager.notify_competitor_damage"
-            # OlympiadGameManager.notify_competitor_damage(owner, damage)
+            OlympiadGameManager.notify_competitor_damage(owner, damage.to_i)
           end
         end
       end

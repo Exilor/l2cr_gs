@@ -44,7 +44,11 @@ class Shutdown
 
     @@counter_instance.try &.abort
     @@counter_instance = Shutdown.new(seconds, restart)
-    spawn { @@counter_instance.run }
+    @@counter_instance.start
+  end
+
+  def start
+    spawn { run }
   end
 
   def telnet_abort(ip)
@@ -161,7 +165,7 @@ class Shutdown
 
     @@counter_instance.try &.abort
     @@counter_instance = inst = Shutdown.new(seconds, restart)
-    spawn { inst.run }
+    inst.start
   end
 
   def abort(pc = nil)
@@ -187,7 +191,8 @@ class Shutdown
       when 1..5, 10, 30, 120, 180, 240, 300, 420, 480, 540
         send_server_quit(@seconds_shut)
       when 60
-        LoginServerClient.status = ServerStatus::STATUS_DOWN # prevent new logins
+        # prevent new logins
+        LoginServerClient.status = ServerStatus::STATUS_DOWN
         send_server_quit(60)
       end
 
@@ -226,8 +231,7 @@ class Shutdown
     SevenSigns.save_seven_signs_status
     info { "Seven Signs status saved in #{tc} seconds." }
     tc.start
-    #
-    # // Save all raidboss and GrandBoss status ^_^
+
     RaidBossSpawnManager.clean_up
     info { "Raid boss info saved in #{tc}." }
     tc.start
@@ -236,43 +240,44 @@ class Shutdown
     GrandBossManager.info { "Grand boss info saved in #{tc} seconds." }
     tc.start
 
-    # ItemAuctionManager.getInstance().shutdown();
-    # _log.info("Item Auction Manager: All tasks stopped({}ms).", tc.getEstimatedTimeAndRestartCounter());
-    # Olympiad.getInstance().saveOlympiadStatus();
-    # _log.info("Olympiad System: Data saved({}ms).", tc.getEstimatedTimeAndRestartCounter());
-    # Hero.getInstance().shutdown();
-    # _log.info("Hero System: Data saved({}ms).", tc.getEstimatedTimeAndRestartCounter());
+    ItemAuctionManager.shutdown
+    info { "Item auctions saved in #{tc} seconds." }
+    tc.start
+
+    Olympiad.instance.save_olympiad_status
+    info { "Olympiad data saved in #{tc} seconds." }
+    tc.start
+
+    Hero.shutdown
+    info { "Hero data saved in #{tc} seconds." }
+    tc.start
+
     ClanTable.store_clan_score
     info { "Clan data saved in #{tc} seconds." }
     tc.start
-    #
-    # // Save Cursed Weapons data before closing.
+
     CursedWeaponsManager.save_data
     info { "Cursed weapons data saved in #{tc} seconds." }
     tc.start
-    #
-    # // Save all manor data
+
     unless Config.alt_manor_save_all_actions
       CastleManorManager.store_me
       info { "Manor data saved in #{tc} seconds." }
       tc.start
     end
-    #
+
     ClanHallSiegeManager.on_server_shutdown
     info { "Siegable hall attacker lists saved in #{tc} seconds." }
     tc.start
-    #
-    # // Save all global (non-player specific) Quest data that needs to persist after reboot
+
     QuestManager.save
     info { "QuestManager data saved in #{tc} seconds." }
     tc.start
-    #
-    # // Save all global variables data
+
     GlobalVariablesManager.store_me
     info { "Global variables saved in #{tc} seconds." }
     tc.start
 
-    # Save items on ground before closing
     if Config.save_dropped_item
       ItemsOnGroundManager.save_in_db
       ItemsOnGroundManager.info { "Items saved in #{tc} seconds." }
@@ -281,15 +286,14 @@ class Shutdown
       ItemsOnGroundManager.info { "Cleaned up in #{tc} seconds." }
       tc.start
     end
-    #
-    # // Save bot reports to database
-    # if (Config.BOTREPORT_ENABLE)
-    # {
-    #   BotReportTable.getInstance().saveReportedCharData();
-    #   _log.info("Bot Report Table: Successfully saved reports to database!");
-    # }
 
-    # sleep(5)# rescue nil
+    if Config.botreport_enable
+      BotReportTable.save_reported_char_data
+      info { "Bot reports saved in #{tc} seconds." }
+      tc.start
+    end
+
+    # sleep(5) rescue nil
   end
 
   protected def disconnect_all_characters

@@ -2,6 +2,8 @@ require "../../../models/item_info"
 require "./abstract_item_packet"
 
 abstract class Packets::Outgoing::AbstractInventoryUpdate < Packets::Outgoing::AbstractItemPacket
+  getter items
+
   def initialize
     @items = [] of ItemInfo
   end

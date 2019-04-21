@@ -43,7 +43,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     if pc.transformed?
       unless ExBasicActionList::ACTIONS_ON_TRANSFORM.bincludes?(@id)
         action_failed
-        debug "#{pc.name} requested an action #{@id} which he shouldn't have access to in his transformation."
+        debug { "#{pc.name} requested an action #{@id} which he shouldn't have access to in his transformation." }
         return
       end
     end
@@ -86,7 +86,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
         if s.can_attack?(@ctrl)
           s.do_attack
         else
-          debug "#{s} can't attack"
+          debug { "#{s} can't attack" }
         end
       end
     when 17 # Pet Stop
@@ -124,7 +124,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
         if s.can_attack?(@ctrl)
           s.do_attack
         else
-          debug "#{s} can't attack"
+          debug { "#{s} can't attack" }
         end
       end
     when 23 # Servitor Stop
@@ -213,12 +213,11 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     when 61 # Private Store package sell
       pc.try_open_private_sell_store(true)
     when 65 # Bot Report Button
-      warn "TODO: BotReportTable."
-      # if Config.botreport_enable
-      #   BotReportTable.report_bot(pc)
-      # else
+      if Config.botreport_enable
+        BotReportTable.report_bot(pc)
+      else
         pc.send_message("This feature is disabled.")
-      # end
+      end
     when 67 # Airship Steer
       if pc.in_airship?
         if pc.airship!.set_captain(pc)
@@ -481,7 +480,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     when 66 # Shyness
       try_broadcast_social(15)
     else
-      warn "Warning: #{pc.name} requested an unhandled action type: #{@id}."
+      warn { "Warning: #{pc.name} requested an unhandled action type: #{@id}." }
     end
   end
 
@@ -797,12 +796,12 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
 
     holder = summon.template.parameters.get_object(skill_name, SkillHolder?)
     unless holder
-      warn "#{summon} requested missing skill #{skill_name.inspect}."
+      warn { "#{summon} requested missing skill #{skill_name.inspect}." }
       return
     end
 
     unless skill = holder.skill?
-      warn "#{summon} requested missing skill #{holder}."
+      warn { "#{summon} requested missing skill #{holder}." }
       return
     end
 

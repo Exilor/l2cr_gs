@@ -261,8 +261,7 @@ abstract class AbstractScript
     else
       case register_type
       when ListenerRegisterType::OLYMPIAD
-        warn "(AbstractScript) TODO: Register olympiad listener at line #{__LINE__}."
-        # listeners << Olympiad.add_listener(block.call(Olympiad))
+        listeners << Olympiad.instance.add_listener(block.call(Olympiad.instance))
       when ListenerRegisterType::GLOBAL
         listeners << Containers::GLOBAL.add_listener(block.call(Containers::GLOBAL))
       when ListenerRegisterType::GLOBAL_NPCS
@@ -291,7 +290,7 @@ abstract class AbstractScript
     AbstractScript.show_on_screen_msg(*args)
   end
 
-  def self.play_sound(pc : L2PcInstance, sound : IAudio) # Audio
+  def self.play_sound(pc : L2PcInstance, sound : IAudio)
     pc.send_packet(sound.packet)
   end
 

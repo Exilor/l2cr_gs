@@ -145,6 +145,23 @@ class Calendar
     end
   end
 
+  def day_of_year : Int32
+    @time.day_of_year
+  end
+
+  def day_of_year=(day : Int)
+    target_day = (day - day_of_year).abs
+    if target_day < day_of_year
+      self.day += target_day
+    else
+      self.day -= target_day
+    end
+  end
+
+  def day_of_year=(day : Int)
+    self.day += day - day_of_year
+  end
+
   def ms=(ms : Int) # setTimeInMillis
     @time = Time.from_ms(ms)
   end
