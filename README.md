@@ -10,14 +10,6 @@ In order for the game server to work it needs the following:
   - L2J's datapack and configuration (.cfg files) folders
   - A properly set up MySQL database (as if to be used with L2J)
   - The geodata files (optional)
-  
-# Usage
-The /bin folder contains executables for launching the server after compilation.
-The Rakefile includes tasks meant for development:
-  - ```rake``` or ```rake run``` compiles and runs the server and leaves the executable in the server's folder for future use
-  - ```rake build``` builds the server in release mode and gives the executable a different name so that it won't overwrite the unoptimized executable
-  - ```rake rerun``` runs the executable again if it exists
-Gracefully restarting the server is only possible when launching it using the executables in /bin or using rake.
 
 # TODO list
 
@@ -86,7 +78,14 @@ Gracefully restarting the server is only possible when launching it using the ex
     - [x] Raid boss points
   - [x] Epic bosses (general support)
     - [x] Core
-    - [ ] All the others
+    - [x] Orfen
+    - [ ] Antharas
+    - [ ] Valakas
+    - [ ] Beleth
+    - [ ] Frintezza
+    - [ ] Freya
+    - [ ] Zaken
+    - [ ] Queen Ant
   - [ ] Treasure chests
   - [ ] Feedable monsters
 - [x] Walking and talking NPCs
@@ -195,8 +194,7 @@ Gracefully restarting the server is only possible when launching it using the ex
   - [x] Attachments
 - [ ] Punishment manager (not tested)
 - [x] Cursed weapons
-- [ ] Olympiad
-  - [ ] Heroes
+- [x] Olympiad (untested)
 - [x] Day/night monsters in Forest of the Dead
 - [ ] Community Board (preliminary support)
   - [x] Clan notice on login
