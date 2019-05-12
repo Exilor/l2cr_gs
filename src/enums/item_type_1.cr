@@ -1,5 +1,6 @@
 class ItemType1 < EnumClass
-  getter_initializer id: Int32
+  getter id
+  protected initializer id: Int32
 
   add(WEAPON_RING_EARRING_NECKLACE, 0)
   add(SHIELD_ARMOR, 1)

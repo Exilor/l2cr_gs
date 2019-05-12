@@ -1,4 +1,4 @@
-class Quests::Q00010_IntoTheWorld < Quest
+class Scripts::Q00010_IntoTheWorld < Quest
   # NPCs
 	private REED = 30520
 	private BALANKI = 30533

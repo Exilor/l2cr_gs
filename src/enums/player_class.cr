@@ -3,7 +3,8 @@ require "./class_type"
 require "./class_level"
 
 class PlayerClass < EnumClass
-  getter_initializer race: Race, type: ClassType, level: ClassLevel
+  getter race, type, level
+  protected initializer race: Race, type: ClassType, level: ClassLevel
 
   add(HumanFighter,   Race::HUMAN, ClassType::Fighter, ClassLevel::First)
   add(Warrior,        Race::HUMAN, ClassType::Fighter, ClassLevel::Second)

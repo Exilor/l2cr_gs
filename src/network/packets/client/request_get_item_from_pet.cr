@@ -3,13 +3,13 @@ class Packets::Incoming::RequestGetItemFromPet < GameClientPacket
   @amount = 0i64
   @unknown = 0
 
-  def read_impl
+  private def read_impl
     @l2id = d
     @amount = q
     @unknown = d # 0 for most trades
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless pet = pc.summon.as?(L2PetInstance)
 

@@ -1,4 +1,4 @@
-class NpcAI::ZealotOfShilen < AbstractNpcAI
+class Scripts::ZealotOfShilen < AbstractNpcAI
   private ZEALOT = 18782
   private GUARDS = {32628, 32629}
 

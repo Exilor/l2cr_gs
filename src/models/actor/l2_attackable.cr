@@ -133,7 +133,10 @@ class L2Attackable < L2Npc
     end
 
     if monster?
-      master = unsafe_as(L2MonsterInstance)
+      master = self
+      unless master.is_a?(L2MonsterInstance)
+        raise "Expected #{master}:#{master.class} to be a L2MonsterInstance"
+      end
       if master.has_minions?
         master.minion_list.on_assist(self, attacker)
       end

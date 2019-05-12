@@ -1,4 +1,4 @@
-class NpcAI::DragonVortex < AbstractNpcAI
+class Scripts::DragonVortex < AbstractNpcAI
   # NPC
   private DRAGON_VORTEX = 32871
   # Raids

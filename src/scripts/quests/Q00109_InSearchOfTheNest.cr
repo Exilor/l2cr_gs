@@ -1,4 +1,4 @@
-class Quests::Q00109_InSearchOfTheNest < Quest
+class Scripts::Q00109_InSearchOfTheNest < Quest
   # NPCs
   private PIERCE = 31553
   private SCOUTS_CORPSE = 32015
@@ -14,10 +14,10 @@ class Quests::Q00109_InSearchOfTheNest < Quest
     register_quest_items(SCOUTS_NOTE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
@@ -38,40 +38,40 @@ class Quests::Q00109_InSearchOfTheNest < Quest
     event
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when PIERCE
       case st.state
       when State::CREATED
-        htmltext = player.level < 81 ? "31553-0a.htm" : "31553-0b.htm"
+        html = pc.level < 81 ? "31553-0a.htm" : "31553-0b.htm"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "31553-1.html"
+          html = "31553-1.html"
         when 2
-          htmltext = "31553-2.html"
+          html = "31553-2.html"
         when 3
-          htmltext = "31553-3a.html"
+          html = "31553-3a.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when SCOUTS_CORPSE
       if st.started?
         if st.cond?(1)
-          htmltext = "32015-1.html"
+          html = "32015-1.html"
         elsif st.cond?(2)
-          htmltext = "32015-3.html"
+          html = "32015-3.html"
         end
       end
     when KAHMAN
       if st.started? && st.cond?(3)
-        htmltext = "31554-1.html"
+        html = "31554-1.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00366_SilverHairedShaman < Quest
+class Scripts::Q00366_SilverHairedShaman < Quest
   # NPC
   private DIETER = 30111
   # Item

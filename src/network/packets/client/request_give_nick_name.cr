@@ -2,12 +2,12 @@ class Packets::Incoming::RequestGiveNickName < GameClientPacket
   @target = ""
   @title = ""
 
-  def read_impl
+  private def read_impl
     @target = s
     @title = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if pc.noble? && @target.casecmp?(pc.name)

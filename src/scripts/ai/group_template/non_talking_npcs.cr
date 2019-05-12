@@ -1,4 +1,4 @@
-class NpcAI::NonTalkingNpcs < AbstractNpcAI
+class Scripts::NonTalkingNpcs < AbstractNpcAI
   private NPCS = {
     18684, 18685, 18686, # Red Star Stone
     18687, 18688, 18689, # Blue Star Stone

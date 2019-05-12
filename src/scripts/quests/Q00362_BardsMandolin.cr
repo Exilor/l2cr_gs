@@ -1,4 +1,4 @@
-class Quests::Q00362_BardsMandolin < Quest
+class Scripts::Q00362_BardsMandolin < Quest
   # NPCs
   private WOODROW = 30837
   private NANARIN = 30956

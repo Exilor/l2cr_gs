@@ -1,4 +1,4 @@
-class Quests::Q00190_LostDream < Quest
+class Scripts::Q00190_LostDream < Quest
   # NPCs
   private JURIS = 30113
   private HEAD_BLACKSMITH_KUSTO = 30512

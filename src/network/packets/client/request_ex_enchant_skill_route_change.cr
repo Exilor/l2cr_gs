@@ -2,12 +2,12 @@ class Packets::Incoming::RequestExEnchantSkillRouteChange < GameClientPacket
   @skill_id = 0
   @skill_lvl = 0
 
-  def read_impl
+  private def read_impl
     @skill_id = d
     @skill_lvl = d
   end
 
-  def run_impl
+  private def run_impl
     return if @skill_id <= 0 || @skill_lvl <= 0
     return unless pc = active_char
 

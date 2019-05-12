@@ -36,11 +36,11 @@ abstract class L2Summon < L2Playable
     Formulas.add_funcs_to_new_summon(self)
   end
 
-  def acting_player?
+  def acting_player? : L2PcInstance?
     owner?
   end
 
-  def acting_player
+  def acting_player : L2PcInstance
     owner
   end
 
@@ -60,7 +60,7 @@ abstract class L2Summon < L2Playable
     L2SummonAI.new(self)
   end
 
-  def template
+  def template : L2NpcTemplate
     super.as(L2NpcTemplate)
   end
 
@@ -80,11 +80,11 @@ abstract class L2Summon < L2Playable
     owner.pvp_flag
   end
 
-  def send_packet(gsp)
+  def send_packet(gsp : GameServerPacket)
     owner?.try &.send_packet(gsp)
   end
 
-  def broadcast_packet(gsp)
+  def broadcast_packet(gsp : GameServerPacket)
     if owner?
       gsp.invisible = owner.invisible?
     end
@@ -92,7 +92,7 @@ abstract class L2Summon < L2Playable
     super
   end
 
-  def broadcast_packet(gsp, radius : Int)
+  def broadcast_packet(gsp : GameServerPacket, radius : Number)
     if owner?
       gsp.invisible = owner.invisible?
     end
@@ -506,7 +506,7 @@ abstract class L2Summon < L2Playable
     owner.in_combat?
   end
 
-  def immobilized=(bool)
+  def immobilized=(bool : Bool)
     super
 
     if bool

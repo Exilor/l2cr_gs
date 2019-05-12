@@ -1,4 +1,4 @@
-class Quests::Q00063_PathOfTheWarder < Quest
+class Scripts::Q00063_PathOfTheWarder < Quest
   # NPCs
   private MASTER_SIONE = 32195
   private MASTER_GOBIE = 32198
@@ -37,102 +37,102 @@ class Quests::Q00063_PathOfTheWarder < Quest
     register_quest_items(ORDERS, ORGANIZATION_CHART, GOBIES_ORDERS, LETTER_TO_HUMANS, HUMANS_REOLY, LETTER_TO_THE_DARKELVES, DARK_ELVES_REPLY, REPORT_TO_SIONE, EMPTY_SOUL_CRYSTAL, TAKS_CAPTURED_SOUL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        htmltext = "32195-05.htm"
+        html = "32195-05.htm"
       end
     when "32195-06.html"
       if qs.memo_state?(1)
-        htmltext = event
+        html = event
       end
     when "32195-08.html"
       if qs.memo_state?(1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "32198-03.html"
       if qs.memo_state?(3)
-        take_items(player, GOBIES_ORDERS, 1)
-        give_items(player, LETTER_TO_HUMANS, 1)
+        take_items(pc, GOBIES_ORDERS, 1)
+        give_items(pc, LETTER_TO_HUMANS, 1)
         qs.memo_state = 4
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "32198-07.html"
       if qs.memo_state?(7)
-        htmltext = event
+        html = event
       end
     when "32198-08.html"
       if qs.memo_state?(7)
-        give_items(player, LETTER_TO_THE_DARKELVES, 1)
+        give_items(pc, LETTER_TO_THE_DARKELVES, 1)
         qs.memo_state = 8
         qs.set_cond(7, true)
-        htmltext = event
+        html = event
       end
     when "32198-12.html"
       if qs.memo_state?(12)
-        give_items(player, REPORT_TO_SIONE, 1)
+        give_items(pc, REPORT_TO_SIONE, 1)
         qs.memo_state = 13
         qs.set_cond(9, true)
-        htmltext = event
+        html = event
       end
     when "32198-15.html"
       if qs.memo_state?(14)
         qs.memo_state = 15
-        htmltext = event
+        html = event
       end
     when "32198-16.html"
       if qs.memo_state?(15)
-        give_items(player, EMPTY_SOUL_CRYSTAL, 1)
+        give_items(pc, EMPTY_SOUL_CRYSTAL, 1)
         qs.memo_state = 16
         qs.set("ex", 0)
         qs.set_cond(11, true)
-        htmltext = event
+        html = event
       end
     when "30332-03.html"
       if qs.memo_state?(4)
-        take_items(player, LETTER_TO_HUMANS, 1)
-        give_items(player, HUMANS_REOLY, 1)
+        take_items(pc, LETTER_TO_HUMANS, 1)
+        give_items(pc, HUMANS_REOLY, 1)
         qs.memo_state = 5
-        htmltext = event
+        html = event
       end
     when "30332-05.html"
       if qs.memo_state?(5)
-        htmltext = event
+        html = event
       end
     when "30332-06.html"
       if qs.memo_state?(5)
         qs.memo_state = 6
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "30297-03.html"
       if qs.memo_state?(9)
-        htmltext = event
+        html = event
       end
     when "30297-04.html"
       if qs.memo_state?(9)
         qs.memo_state = 10
-        htmltext = event
+        html = event
       end
     when "30297-06.html"
       if qs.memo_state?(10)
-        give_items(player, DARK_ELVES_REPLY, 1)
+        give_items(pc, DARK_ELVES_REPLY, 1)
         qs.memo_state = 11
         qs.set_cond(8, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -180,141 +180,141 @@ class Quests::Q00063_PathOfTheWarder < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
-    htmltext = get_no_quest_msg(player)
+
     if qs.created?
       if npc.id == MASTER_SIONE
-        if player.class_id.female_soldier? && !has_quest_items?(player, STEELRAZOR_EVALUTION)
-          if player.level >= MIN_LEVEL
-            htmltext = "32195-01.htm"
+        if pc.class_id.female_soldier? && !has_quest_items?(pc, STEELRAZOR_EVALUTION)
+          if pc.level >= MIN_LEVEL
+            html = "32195-01.htm"
           else
-            htmltext = "32195-02.html"
+            html = "32195-02.html"
           end
-        elsif has_quest_items?(player, STEELRAZOR_EVALUTION)
-          htmltext = "32195-03.html"
+        elsif has_quest_items?(pc, STEELRAZOR_EVALUTION)
+          html = "32195-03.html"
         else
-          htmltext = "32195-04.html"
+          html = "32195-04.html"
         end
       end
     elsif qs.started?
       case npc.id
       when MASTER_SIONE
         if memo_state == 1
-          htmltext = "32195-07.html"
+          html = "32195-07.html"
         elsif memo_state == 2
-          if get_quest_items_count(player, ORDERS) < 10 || get_quest_items_count(player, ORGANIZATION_CHART) < 5
-            htmltext = "32195-09.html"
+          if get_quest_items_count(pc, ORDERS) < 10 || get_quest_items_count(pc, ORGANIZATION_CHART) < 5
+            html = "32195-09.html"
           else
-            take_items(player, ORDERS, -1)
-            take_items(player, ORGANIZATION_CHART, -1)
-            give_items(player, GOBIES_ORDERS, 1)
+            take_items(pc, ORDERS, -1)
+            take_items(pc, ORGANIZATION_CHART, -1)
+            give_items(pc, GOBIES_ORDERS, 1)
             qs.memo_state = 3
             qs.set_cond(4, true)
-            htmltext = "32195-10.html"
+            html = "32195-10.html"
           end
         elsif memo_state == 3
-          htmltext = "32195-11.html"
+          html = "32195-11.html"
         elsif memo_state > 3 && memo_state != 13
-          htmltext = "32195-12.html"
+          html = "32195-12.html"
         elsif memo_state == 13
-          take_items(player, REPORT_TO_SIONE, 1)
+          take_items(pc, REPORT_TO_SIONE, 1)
           qs.memo_state = 14
           qs.set_cond(10, true)
-          htmltext = "32195-13.html"
+          html = "32195-13.html"
         end
       when MASTER_GOBIE
         if memo_state < 3
-          htmltext = "32198-01.html"
+          html = "32198-01.html"
         elsif memo_state == 3
-          htmltext = "32198-02.html"
+          html = "32198-02.html"
         elsif memo_state == 4 || memo_state == 5
-          htmltext = "32198-04.html"
+          html = "32198-04.html"
         elsif memo_state == 6
-          take_items(player, HUMANS_REOLY, 1)
+          take_items(pc, HUMANS_REOLY, 1)
           qs.memo_state = 7
-          htmltext = "32198-05.html"
+          html = "32198-05.html"
         elsif memo_state == 7
-          htmltext = "32198-06.html"
+          html = "32198-06.html"
         elsif memo_state == 8
-          htmltext = "32198-09.html"
+          html = "32198-09.html"
         elsif memo_state == 11
-          take_items(player, DARK_ELVES_REPLY, 1)
+          take_items(pc, DARK_ELVES_REPLY, 1)
           qs.memo_state = 12
-          htmltext = "32198-10.html"
+          html = "32198-10.html"
         elsif memo_state == 12
-          give_items(player, REPORT_TO_SIONE, 1)
+          give_items(pc, REPORT_TO_SIONE, 1)
           qs.memo_state = 13
-          htmltext = "32198-11.html"
+          html = "32198-11.html"
         elsif memo_state == 13
-          htmltext = "32198-13.html"
+          html = "32198-13.html"
         elsif memo_state == 14
-          htmltext = "32198-14.html"
+          html = "32198-14.html"
         elsif memo_state == 15
-          give_items(player, EMPTY_SOUL_CRYSTAL, 1)
+          give_items(pc, EMPTY_SOUL_CRYSTAL, 1)
           qs.memo_state = 16
           qs.set("ex", 0)
           qs.set_cond(11, true)
-          htmltext = "32198-17.html"
+          html = "32198-17.html"
         elsif memo_state == 16
-          if !has_quest_items?(player, TAKS_CAPTURED_SOUL)
+          if !has_quest_items?(pc, TAKS_CAPTURED_SOUL)
             qs.set("ex", 0)
-            htmltext = "32198-18.html"
+            html = "32198-18.html"
           else
-            give_adena(player, 163800, true)
-            take_items(player, TAKS_CAPTURED_SOUL, 1)
-            give_items(player, STEELRAZOR_EVALUTION, 1)
-            level = player.level
+            give_adena(pc, 163800, true)
+            take_items(pc, TAKS_CAPTURED_SOUL, 1)
+            give_items(pc, STEELRAZOR_EVALUTION, 1)
+            level = pc.level
             if level >= 20
-              add_exp_and_sp(player, 320534, 22046)
+              add_exp_and_sp(pc, 320534, 22046)
             elsif level == 19
-              add_exp_and_sp(player, 456128, 28744)
+              add_exp_and_sp(pc, 456128, 28744)
             else
-              add_exp_and_sp(player, 591724, 35442)
+              add_exp_and_sp(pc, 591724, 35442)
             end
             qs.exit_quest(false, true)
-            player.send_packet(SocialAction.new(player.l2id, 3))
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
             qs.save_global_quest_var("1ClassQuestFinished", "1")
-            htmltext = "32198-19.html"
+            html = "32198-19.html"
           end
         end
       when CAPTAIN_BATHIS
         if memo_state == 4
-          htmltext = "30332-01.html"
+          html = "30332-01.html"
         elsif memo_state < 4
-          htmltext = "30332-02.html"
+          html = "30332-02.html"
         elsif memo_state == 5
-          htmltext = "30332-04.html"
+          html = "30332-04.html"
         elsif memo_state == 6
-          htmltext = "30332-07.html"
+          html = "30332-07.html"
         elsif memo_state > 6
-          htmltext = "30332-08.html"
+          html = "30332-08.html"
         end
       when MASTER_TOBIAS
         if memo_state == 8
-          take_items(player, LETTER_TO_THE_DARKELVES, 1)
+          take_items(pc, LETTER_TO_THE_DARKELVES, 1)
           qs.memo_state = 9
-          htmltext = "30297-01.html"
+          html = "30297-01.html"
         elsif memo_state == 9
-          htmltext = "30297-02.html"
+          html = "30297-02.html"
         elsif memo_state == 10
-          give_items(player, DARK_ELVES_REPLY, 1)
+          give_items(pc, DARK_ELVES_REPLY, 1)
           qs.memo_state = 11
           qs.set_cond(8, true)
-          htmltext = "30297-05.html"
+          html = "30297-05.html"
         elsif memo_state >= 11
-          htmltext = "30297-07.html"
+          html = "30297-07.html"
         end
       end
     elsif qs.completed?
       if npc.id == MASTER_GOBIE
-        if has_quest_items?(player, STEELRAZOR_EVALUTION)
-          htmltext = "32198-20.html"
+        if has_quest_items?(pc, STEELRAZOR_EVALUTION)
+          html = "32198-20.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

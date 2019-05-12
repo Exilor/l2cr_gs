@@ -4,7 +4,6 @@ require "../item_containers/inventory"
 require "../l2_extractable_product"
 
 class L2EtcItem < L2Item
-  @type : EtcItemType = EtcItemType::NONE
   getter item_type : EtcItemType
   getter handler_name : String?
   getter extractable_items : Slice(L2ExtractableProduct)?
@@ -15,9 +14,9 @@ class L2EtcItem < L2Item
 
     @item_type = set.get_enum("etcitem_type", EtcItemType, EtcItemType::NONE)
 
-    case @default_action
-    when ActionType::SOULSHOT, ActionType::SUMMON_SOULSHOT, ActionType::SPIRITSHOT, ActionType::SUMMON_SPIRITSHOT
-      @type = EtcItemType::SHOT
+    case @default_action # ActionType
+    when .soulshot?, .summon_soulshot?, .spiritshot?, .summon_spiritshot?
+      @item_type = EtcItemType::SHOT
     end
 
     @type_1 = ItemType1::ITEM_QUESTITEM_ADENA
@@ -40,17 +39,17 @@ class L2EtcItem < L2Item
 
         data = part.split(',')
         if data.size != 4
-          warn "Capsuled item part has a size of #{data.size} but should by 4."
+          warn { "Capsuled item part has a size of #{data.size} but should by 4." }
           next
         end
 
         item_id = data.shift.to_i
         min = data.shift.to_i
         max = data.shift.to_i
-        chance = data.shift.to_f64
+        chance = data.shift.to_f
 
         if max < min
-          warn "Capsuled item max amount (#{max}) is smaller than min amount #{min}."
+          warn { "Capsuled item max amount (#{max}) is smaller than min amount #{min}." }
           next
         end
 

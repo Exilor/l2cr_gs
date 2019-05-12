@@ -2,12 +2,12 @@ class Packets::Incoming::RequestGetOnVehicle < GameClientPacket
   @boat_id = 0
   @pos = uninitialized Location
 
-  def read_impl
+  private def read_impl
     @boat_id = d
     @pos = Location.new(d, d, d)
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if pc.in_boat?

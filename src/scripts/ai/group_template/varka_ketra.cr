@@ -1,4 +1,4 @@
-class VarkaKetra < AbstractNpcAI
+class Scripts::VarkaKetra < AbstractNpcAI
   private KETRA = {
     21324, # Ketra Orc Footman
     21325, # Ketra's War Hound

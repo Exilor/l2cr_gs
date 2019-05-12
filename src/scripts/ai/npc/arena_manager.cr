@@ -1,4 +1,4 @@
-class NpcAI::ArenaManager < AbstractNpcAI
+class Scripts::ArenaManager < AbstractNpcAI
   # NPCs
   private ARENA_MANAGER = {
     31226, # Arena Director (Monster Derby Track)

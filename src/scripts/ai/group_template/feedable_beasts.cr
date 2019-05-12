@@ -1,4 +1,4 @@
-class NpcAI::FeedableBeasts < AbstractNpcAI
+class Scripts::FeedableBeasts < AbstractNpcAI
   private GOLDEN_SPICE = 6643
   private CRYSTAL_SPICE = 6644
   private SKILL_GOLDEN_SPICE = 2188
@@ -329,10 +329,10 @@ class NpcAI::FeedableBeasts < AbstractNpcAI
 
       next_npc = L2TamedBeastInstance.new(next_npc_id, player, food - FOOD_SKILL_DIFF, *npc.xyz)
       next_npc.set_running
-      Quests::Q00020_BringUpWithLove.check_jewel_of_innocence(player)
+      Scripts::Q00020_BringUpWithLove.check_jewel_of_innocence(player)
 
       # Support for A Grand Plan for Taming Wild Beasts (655) quest.
-      Quests::Q00655_AGrandPlanForTamingWildBeasts.reward(player, next_npc)
+      Scripts::Q00655_AGrandPlanForTamingWildBeasts.reward(player, next_npc)
 
       # also, perform a rare random chat
       if rand(20) == 0

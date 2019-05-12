@@ -1,4 +1,4 @@
-class NpcAI::CastleWarehouse < AbstractNpcAI
+class Scripts::CastleWarehouse < AbstractNpcAI
   # NPCs
   private NPCS = {
     35099, # Warehouse Keeper (Gludio)

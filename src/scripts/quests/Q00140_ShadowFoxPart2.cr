@@ -1,4 +1,4 @@
-class Quests::Q00140_ShadowFoxPart2 < Quest
+class Scripts::Q00140_ShadowFoxPart2 < Quest
   # NPCs
   private KLUCK = 30895
   private XENOVIA = 30912
@@ -26,16 +26,18 @@ class Quests::Q00140_ShadowFoxPart2 < Quest
     add_start_npc(KLUCK)
     add_talk_id(KLUCK, XENOVIA)
     add_kill_id(MOBS.keys)
-    register_quest_items(DARK_CRYSTAL, DARK_OXYDE, CRYPTOGRAM_OF_THE_GODDESS_SWORD)
+    register_quest_items(
+      DARK_CRYSTAL, DARK_OXYDE, CRYPTOGRAM_OF_THE_GODDESS_SWORD
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30895-05.html", "30895-06.html", "30912-03.html", "30912-04.html",
           "30912-05.html", "30912-08.html", "30895-10.html"
@@ -65,19 +67,19 @@ class Quests::Q00140_ShadowFoxPart2 < Quest
       st.take_items(DARK_CRYSTAL, 5)
     when "30895-11.html"
       st.give_adena(18775, true)
-      if player.level <= MAX_REWARD_LEVEL
+      if pc.level <= MAX_REWARD_LEVEL
         st.add_exp_and_sp(30000, 2000)
       end
       st.exit_quest(false, true)
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 3)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 3)
       return super
     end
 
@@ -91,60 +93,60 @@ class Quests::Q00140_ShadowFoxPart2 < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when KLUCK
       case st.state
       when State::CREATED
-        if player.level >= MIN_LEVEL
-          if player.quest_completed?(Q00139_ShadowFoxPart1.simple_name)
-            htmltext = "30895-01.htm"
+        if pc.level >= MIN_LEVEL
+          if pc.quest_completed?(Q00139_ShadowFoxPart1.simple_name)
+            html = "30895-01.htm"
           else
-            htmltext = "30895-00.htm"
+            html = "30895-00.htm"
           end
         else
-          htmltext = "30895-02.htm"
+          html = "30895-02.htm"
         end
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30895-04.html"
+          html = "30895-04.html"
         when 2, 3
-          htmltext = "30895-08.html"
+          html = "30895-08.html"
         when 4
           if st.set?("talk")
-            htmltext = "30895-10.html"
+            html = "30895-10.html"
           else
             st.take_items(CRYPTOGRAM_OF_THE_GODDESS_SWORD, -1)
             st.set("talk", "1")
-            htmltext = "30895-09.html"
+            html = "30895-09.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when XENOVIA
       if st.started?
         case st.cond
         when 1
-          htmltext = "30912-01.html"
+          html = "30912-01.html"
         when 2
-          htmltext = st.set?("talk") ? "30912-07.html" : "30912-02.html"
+          html = st.set?("talk") ? "30912-07.html" : "30912-02.html"
         when 3
           if st.get_quest_items_count(DARK_CRYSTAL) >= CRYSTAL_COUNT
-            htmltext = "30912-11.html"
+            html = "30912-11.html"
           else
-            htmltext = "30912-10.html"
+            html = "30912-10.html"
           end
         when 4
-          htmltext = "30912-15.html"
+          html = "30912-15.html"
         end
       end
     end
 
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

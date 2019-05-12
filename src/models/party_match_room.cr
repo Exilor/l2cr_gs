@@ -57,7 +57,7 @@ class PartyMatchRoom
     @party_members.size
   end
 
-  def location
+  def location : Int32
     unless temp = MapRegionManager.get_map_region(@party_members[0])
       raise "Couldn't get map region for #{@party_members[0]}."
     end

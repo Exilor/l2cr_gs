@@ -4,14 +4,14 @@ class Packets::Incoming::RequestModifyBookMarkSlot < GameClientPacket
   @icon = 0
   @tag = ""
 
-  def read_impl
+  private def read_impl
     @id = d
     @name = s
     @icon = d
     @tag = s
   end
 
-  def run_impl
+  private def run_impl
     active_char.try &.teleport_bookmark_modify(@id, @icon, @tag, @name)
   end
 end

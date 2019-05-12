@@ -1,4 +1,4 @@
-class Quests::Q00385_YokeOfThePast < Quest
+class Scripts::Q00385_YokeOfThePast < Quest
   private ZIGGURATS = {
     31095, 31096, 31097, 31098, 31099, 31100, 31101,
     31102, 31103, 31104, 31105, 31106, 31107, 31108,
@@ -72,25 +72,25 @@ class Quests::Q00385_YokeOfThePast < Quest
     case event
     when "ziggurat-03.htm", "ziggurat-04.htm", "ziggurat-06.htm",
          "ziggurat-07.htm"
-      htmltext = event
+      html = event
     when "ziggurat-05.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "ziggurat-10.html"
       qs.exit_quest(true, true)
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
     case qs.state
     when State::CREATED
-      htmltext = pc.level >= MIN_LVL ? "ziggurat-01.htm" : "ziggurat-02.htm"
+      html = pc.level >= MIN_LVL ? "ziggurat-01.htm" : "ziggurat-02.htm"
     when State::STARTED
       if has_quest_items?(pc, SCROLL_OF_ANCIENT_MAGIC)
         reward_items(
@@ -98,13 +98,13 @@ class Quests::Q00385_YokeOfThePast < Quest
           get_quest_items_count(pc, SCROLL_OF_ANCIENT_MAGIC)
         )
         take_items(pc, SCROLL_OF_ANCIENT_MAGIC, -1)
-        htmltext = "ziggurat-09.html"
+        html = "ziggurat-09.html"
       else
-        htmltext = "ziggurat-08.html"
+        html = "ziggurat-08.html"
       end
     end
 
-    htmltext || get_no_quest_msg(pc)
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

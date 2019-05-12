@@ -1,4 +1,4 @@
-class Quests::Q00458_PerfectForm < Quest
+class Scripts::Q00458_PerfectForm < Quest
   # NPCs
   private KELLEYIA = 32768
   # Monsters
@@ -41,14 +41,14 @@ class Quests::Q00458_PerfectForm < Quest
     add_kill_id(GRENDELS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    no_quest = get_no_quest_msg(player)
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    no_quest = get_no_quest_msg(pc)
+    unless st = get_quest_state(pc, false)
       return no_quest
     end
 
-    htmltext = event
+    html = event
     overhits = 0
     overhit_html = false
 
@@ -59,46 +59,46 @@ class Quests::Q00458_PerfectForm < Quest
       if st.cond?(2)
         overhits_total = st.get_int("overhitsTotal")
         if overhits_total >= 35
-          htmltext = "32768-14a.html"
+          html = "32768-14a.html"
         elsif overhits_total >= 10
-          htmltext = "32768-14b.html"
+          html = "32768-14b.html"
         else
-          htmltext = "32768-14c.html"
+          html = "32768-14c.html"
         end
         overhits = overhits_total
         overhit_html = true
       else
-        htmltext = no_quest
+        html = no_quest
       end
     when "results2"
       if st.cond?(2)
         overhits_critical = st.get_int("overhitsCritical")
         if overhits_critical >= 30
-          htmltext = "32768-15a.html"
+          html = "32768-15a.html"
         elsif overhits_critical >= 5
-          htmltext = "32768-15b.html"
+          html = "32768-15b.html"
         else
-          htmltext = "32768-15c.html"
+          html = "32768-15c.html"
         end
         overhits = overhits_critical
         overhit_html = true
       else
-        htmltext = no_quest
+        html = no_quest
       end
     when "results3"
       if st.cond?(2)
         overhits_consecutive = st.get_int("overhitsConsecutive")
         if overhits_consecutive >= 20
-          htmltext = "32768-16a.html"
+          html = "32768-16a.html"
         elsif overhits_consecutive >= 7
-          htmltext = "32768-16b.html"
+          html = "32768-16b.html"
         else
-          htmltext = "32768-16c.html"
+          html = "32768-16c.html"
         end
         overhits = overhits_consecutive
         overhit_html = true
       else
-        htmltext = no_quest
+        html = no_quest
       end
     when "32768-17.html"
       if st.cond?(2)
@@ -115,20 +115,20 @@ class Quests::Q00458_PerfectForm < Quest
         end
         st.exit_quest(QuestType::DAILY, true)
       else
-        htmltext = no_quest
+        html = no_quest
       end
     end
 
     if overhit_html
-      htmltext = get_htm(player, htmltext)
-      htmltext = htmltext.sub("<?number?>", overhits.to_s)
+      html = get_htm(pc, html)
+      html = html.sub("<?number?>", overhits.to_s)
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
     if st && st.cond?(1)
       npc_id = npc.id
       if npc_id == KOOKABURRAS[0] || npc_id == COUGARS[0] || npc_id == BUFFALOS[0] || npc_id == GRENDELS[0]
@@ -175,37 +175,37 @@ class Quests::Q00458_PerfectForm < Quest
         log.add_npc(18893, st.get_int("18893"))
         log.add_npc(18900, st.get_int("18900"))
 
-        player.send_packet(log)
+        pc.send_packet(log)
       end
     end
 
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::COMPLETED
       unless st.now_available?
-        htmltext = "32768-18.htm"
+        html = "32768-18.htm"
       end
       st.state = State::CREATED
-      #$FALL-THROUGH$
+      html = pc.level > 81 ? "32768-01.htm" : "32768-00.htm"
     when State::CREATED
-      htmltext = player.level > 81 ? "32768-01.htm" : "32768-00.htm"
+      html = pc.level > 81 ? "32768-01.htm" : "32768-00.htm"
     when State::STARTED
       case st.cond
       when 1
         if st.get_int("18879") == 0 && st.get_int("18886") == 0 && st.get_int("18893") == 0 && st.get_int("18900") == 0
-          htmltext = "32768-11.html"
+          html = "32768-11.html"
         else
-          htmltext = "32768-12.html"
+          html = "32768-12.html"
         end
       when 2
-        htmltext = "32768-13.html"
+        html = "32768-13.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

@@ -2,7 +2,7 @@ module ActionShiftHandler::L2PcInstanceAction
   extend self
   extend ActionShiftHandler
 
-  def action(pc, target, interact)
+  def action(pc, target, interact) : Bool
     if pc.gm?
       if pc.target != target
         pc.target = target
@@ -16,7 +16,7 @@ module ActionShiftHandler::L2PcInstanceAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2PcInstance
   end
 end

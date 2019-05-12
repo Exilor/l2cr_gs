@@ -1,4 +1,4 @@
-class NpcAI::ForgeOfTheGods < AbstractNpcAI
+class Scripts::ForgeOfTheGods < AbstractNpcAI
   # NPCs
   private FOG_MOBS = {
     22634, # Scarlet Stakato Worker

@@ -1,4 +1,4 @@
-class Quests::Q00001_LettersOfLove < Quest
+class Scripts::Q00001_LettersOfLove < Quest
   # NPCs
   private DARIN = 30048
   private ROXXY = 30006
@@ -39,8 +39,9 @@ class Quests::Q00001_LettersOfLove < Quest
   end
 
   def on_talk(npc, pc)
-    return unless st = get_quest_state(pc, true)
-    html = get_no_quest_msg(pc)
+    unless st = get_quest_state(pc, true)
+      return
+    end
 
     case st.state
     when State::CREATED
@@ -116,6 +117,6 @@ class Quests::Q00001_LettersOfLove < Quest
       html = get_already_completed_msg(pc)
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

@@ -4,14 +4,14 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
   @gemstone_item_obj_id = 0
   @gemstone_count = 0i64
 
-  def read_impl
+  private def read_impl
     @target_item_obj_id = d
     @refiner_item_obj_id = d
     @gemstone_item_obj_id = d
     @gemstone_count = q
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless target_item = pc.inventory.get_item_by_l2id(@target_item_obj_id)
     return unless refiner_item = pc.inventory.get_item_by_l2id(@refiner_item_obj_id)

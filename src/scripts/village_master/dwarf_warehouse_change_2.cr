@@ -1,4 +1,4 @@
-class NpcAI::DwarfWarehouseChange2 < AbstractNpcAI
+class Scripts::DwarfWarehouseChange2 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30511, # Gesto

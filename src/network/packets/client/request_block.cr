@@ -8,14 +8,14 @@ class Packets::Incoming::RequestBlock < GameClientPacket
   @type = 0
   @name = ""
 
-  def read_impl
+  private def read_impl
     @type = d
     if @type == BLOCK || @type == UNBLOCK
       @name = s
     end
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     target_id = CharNameTable.get_id_by_name(@name)

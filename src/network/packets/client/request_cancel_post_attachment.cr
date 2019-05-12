@@ -3,11 +3,11 @@ class Packets::Incoming::RequestCancelPostAttachment < GameClientPacket
 
   @msg_id = 0
 
-  def read_impl
+  private def read_impl
     @msg_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless Config.allow_mail
     return unless Config.allow_attachments

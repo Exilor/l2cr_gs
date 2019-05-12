@@ -821,14 +821,6 @@ module Formulas
     success
   end
 
-  # def p_atk_spd(attacker, target, rate)
-  #   if rate < 2
-  #     2700
-  #   else
-  #     470000 / rate
-  #   end.to_i
-  # end
-
   def physical_skill_evasion(char : L2Character, target : L2Character, skill : Skill) : Bool
     return false if skill.magic? || skill.debuff?
 
@@ -1390,7 +1382,6 @@ module Formulas
   end
 
   def siege_regen_modifier(pc : L2PcInstance) : Float64
-    # return 0.0
     return 0.0 unless clan = pc.clan?
 
     siege = SiegeManager.get_siege(*pc.xyz)

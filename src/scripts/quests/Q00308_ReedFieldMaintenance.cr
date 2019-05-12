@@ -1,4 +1,4 @@
-class Quests::Q00308_ReedFieldMaintenance < Quest
+class Scripts::Q00308_ReedFieldMaintenance < Quest
   # NPC
   private KATENSA = 32646
   # Mobs

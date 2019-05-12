@@ -1,4 +1,4 @@
-class Quests::Q00220_TestimonyOfGlory < Quest
+class Scripts::Q00220_TestimonyOfGlory < Quest
   # NPCs
   private PREFECT_KASMAN = 30501
   private PREFECT_VOKIAN = 30514
@@ -78,162 +78,183 @@ class Quests::Q00220_TestimonyOfGlory < Quest
     super(220, self.class.simple_name, "Testimony Of Glory")
 
     add_start_npc(PREFECT_VOKIAN)
-    add_talk_id(PREFECT_VOKIAN, PREFECT_KASMAN, SEER_MANAKIA, FLAME_LORD_KAKAI, SEER_TANAPI, BREKA_CHIEF_VOLTAR, ENKU_CHIEF_KEPRA, TUREK_CHIEF_BURAI, LEUNT_CHIEF_HARAK, VUKU_CHIEF_DRIKO, GANDI_CHIEF_CHIANTA)
-    add_kill_id(TYRANT, TYRANT_KINGPIN, MARSH_STAKATO_DRONE, GUARDIAN_BASILISK, MANASHEN_GARGOYLE, TIMAK_ORC, TIMAK_ORC_ARCHER, TIMAK_ORC_SOLDIER, TIMAK_ORC_WARRIOR, TIMAK_ORC_SHAMAN, TIMAK_ORC_OVERLORD, TAMLIN_ORC, TAMLIN_ORC_ARCHER, RAGNA_ORC_OVERLORD, RAGNA_ORC_SEER, PASHIKA_SON_OF_VOLTAR, VULTUS_SON_OF_VOLTAR, ENKU_ORC_OVERLORD, MAKUM_BUGBEAR_THUG, REVENANT_OF_TANTOS_CHIEF)
+    add_talk_id(
+      PREFECT_VOKIAN, PREFECT_KASMAN, SEER_MANAKIA, FLAME_LORD_KAKAI,
+      SEER_TANAPI, BREKA_CHIEF_VOLTAR, ENKU_CHIEF_KEPRA, TUREK_CHIEF_BURAI,
+      LEUNT_CHIEF_HARAK, VUKU_CHIEF_DRIKO, GANDI_CHIEF_CHIANTA
+    )
+    add_kill_id(
+      TYRANT, TYRANT_KINGPIN, MARSH_STAKATO_DRONE, GUARDIAN_BASILISK,
+      MANASHEN_GARGOYLE, TIMAK_ORC, TIMAK_ORC_ARCHER, TIMAK_ORC_SOLDIER,
+      TIMAK_ORC_WARRIOR, TIMAK_ORC_SHAMAN, TIMAK_ORC_OVERLORD, TAMLIN_ORC,
+      TAMLIN_ORC_ARCHER, RAGNA_ORC_OVERLORD, RAGNA_ORC_SEER,
+      PASHIKA_SON_OF_VOLTAR, VULTUS_SON_OF_VOLTAR, ENKU_ORC_OVERLORD,
+      MAKUM_BUGBEAR_THUG, REVENANT_OF_TANTOS_CHIEF
+    )
     add_attack_id(RAGNA_ORC_OVERLORD, RAGNA_ORC_SEER, REVENANT_OF_TANTOS_CHIEF)
-    register_quest_items(VOKIANS_ORDER, MANASHEN_SHARD, TYRANT_TALON, GUARDIAN_BASILISK_FANG, VOKIANS_ORDER2, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER, SCEPTER_OF_BREKA, SCEPTER_OF_ENKU, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, TAMLIN_ORC_SKULL, TIMAK_ORC_HEAD, SCEPTER_BOX, PASHIKAS_HEAD, VULTUS_HEAD, GLOVE_OF_VOLTAR, ENKU_OVERLORD_HEAD, GLOVE_OF_KEPRA, MAKUM_BUGBEAR_HEAD, GLOVE_OF_BURAI, MANAKIA_1ST_LETTER, MANAKIA_2ND_LETTER, KASMANS_1ST_LETTER, KASMANS_2ND_LETTER, KASMANS_3RD_LETTER, DRIKOS_CONTRACT, STAKATO_DRONE_HUSK, TANAPIS_ORDER, SCEPTER_OF_TANTOS, RITUAL_BOX)
+    register_quest_items(
+      VOKIANS_ORDER, MANASHEN_SHARD, TYRANT_TALON, GUARDIAN_BASILISK_FANG,
+      VOKIANS_ORDER2, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER,
+      SCEPTER_OF_BREKA, SCEPTER_OF_ENKU, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK,
+      SCEPTER_OF_TUNATH, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, TAMLIN_ORC_SKULL,
+      TIMAK_ORC_HEAD, SCEPTER_BOX, PASHIKAS_HEAD, VULTUS_HEAD, GLOVE_OF_VOLTAR,
+      ENKU_OVERLORD_HEAD, GLOVE_OF_KEPRA, MAKUM_BUGBEAR_HEAD, GLOVE_OF_BURAI,
+      MANAKIA_1ST_LETTER, MANAKIA_2ND_LETTER, KASMANS_1ST_LETTER,
+      KASMANS_2ND_LETTER, KASMANS_3RD_LETTER, DRIKOS_CONTRACT,
+      STAKATO_DRONE_HUSK, TANAPIS_ORDER, SCEPTER_OF_TANTOS, RITUAL_BOX
+    )
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     raise "no npc" unless npc
-    return unless player
-    return unless qs = get_quest_state(player, false)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        give_items(player, VOKIANS_ORDER, 1)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 109)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30514-05a.htm"
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        give_items(pc, VOKIANS_ORDER, 1)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 109)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30514-05a.htm"
         else
-          htmltext = "30514-05.htm"
+          html = "30514-05.htm"
         end
       end
     when "30514-04.htm", "30514-07.html", "30571-02.html", "30615-03.html",
          "30616-03.html", "30642-02.html", "30642-06.html", "30642-08.html"
-      htmltext = event
+      html = event
     when "30501-02.html"
-      if has_quest_items?(player, SCEPTER_OF_VUKU)
-        htmltext = event
-      elsif !has_at_least_one_quest_item?(player, SCEPTER_OF_VUKU, KASMANS_1ST_LETTER)
-        give_items(player, KASMANS_1ST_LETTER, 1)
-        player.radar.add_marker(-2150, 124443, -3724)
-        htmltext = "30501-03.html"
-      elsif !has_quest_items?(player, SCEPTER_OF_VUKU) && has_at_least_one_quest_item?(player, KASMANS_1ST_LETTER, DRIKOS_CONTRACT)
-        player.radar.add_marker(-2150, 124443, -3724)
-        htmltext = "30501-04.html"
+      if has_quest_items?(pc, SCEPTER_OF_VUKU)
+        html = event
+      elsif !has_at_least_one_quest_item?(pc, SCEPTER_OF_VUKU, KASMANS_1ST_LETTER)
+        give_items(pc, KASMANS_1ST_LETTER, 1)
+        pc.radar.add_marker(-2150, 124443, -3724)
+        html = "30501-03.html"
+      elsif !has_quest_items?(pc, SCEPTER_OF_VUKU) && has_at_least_one_quest_item?(pc, KASMANS_1ST_LETTER, DRIKOS_CONTRACT)
+        pc.radar.add_marker(-2150, 124443, -3724)
+        html = "30501-04.html"
       end
     when "30501-05.html"
-      if has_quest_items?(player, SCEPTER_OF_TUREK)
-        htmltext = event
-      elsif !has_at_least_one_quest_item?(player, SCEPTER_OF_TUREK, KASMANS_2ND_LETTER)
-        give_items(player, KASMANS_2ND_LETTER, 1)
-        player.radar.add_marker(-94294, 110818, -3563)
-        htmltext = "30501-06.html"
-      elsif !has_quest_items?(player, SCEPTER_OF_TUREK) && has_quest_items?(player, KASMANS_2ND_LETTER)
-        player.radar.add_marker(-94294, 110818, -3563)
-        htmltext = "30501-07.html"
+      if has_quest_items?(pc, SCEPTER_OF_TUREK)
+        html = event
+      elsif !has_at_least_one_quest_item?(pc, SCEPTER_OF_TUREK, KASMANS_2ND_LETTER)
+        give_items(pc, KASMANS_2ND_LETTER, 1)
+        pc.radar.add_marker(-94294, 110818, -3563)
+        html = "30501-06.html"
+      elsif !has_quest_items?(pc, SCEPTER_OF_TUREK) && has_quest_items?(pc, KASMANS_2ND_LETTER)
+        pc.radar.add_marker(-94294, 110818, -3563)
+        html = "30501-07.html"
       end
     when "30501-08.html"
-      if has_quest_items?(player, SCEPTER_OF_TUNATH)
-        htmltext = event
-      elsif !has_at_least_one_quest_item?(player, SCEPTER_OF_TUNATH, KASMANS_3RD_LETTER)
-        give_items(player, KASMANS_3RD_LETTER, 1)
-        player.radar.add_marker(-55217, 200628, -3724)
-        htmltext = "30501-09.html"
-      elsif !has_quest_items?(player, SCEPTER_OF_TUNATH) && has_quest_items?(player, KASMANS_3RD_LETTER)
-        player.radar.add_marker(-55217, 200628, -3724)
-        htmltext = "30501-10.html"
+      if has_quest_items?(pc, SCEPTER_OF_TUNATH)
+        html = event
+      elsif !has_at_least_one_quest_item?(pc, SCEPTER_OF_TUNATH, KASMANS_3RD_LETTER)
+        give_items(pc, KASMANS_3RD_LETTER, 1)
+        pc.radar.add_marker(-55217, 200628, -3724)
+        html = "30501-09.html"
+      elsif !has_quest_items?(pc, SCEPTER_OF_TUNATH) && has_quest_items?(pc, KASMANS_3RD_LETTER)
+        pc.radar.add_marker(-55217, 200628, -3724)
+        html = "30501-10.html"
       end
     when "30515-04.html"
-      if !has_quest_items?(player, SCEPTER_OF_BREKA) && has_quest_items?(player, MANAKIA_1ST_LETTER)
-        player.radar.add_marker(80100, 119991, -2264)
-        htmltext = event
-      elsif has_quest_items?(player, SCEPTER_OF_BREKA)
-        htmltext = "30515-02.html"
-      elsif !has_at_least_one_quest_item?(player, SCEPTER_OF_BREKA, MANAKIA_1ST_LETTER)
-        give_items(player, MANAKIA_1ST_LETTER, 1)
-        player.radar.add_marker(80100, 119991, -2264)
-        htmltext = "30515-03.html"
+      if !has_quest_items?(pc, SCEPTER_OF_BREKA) && has_quest_items?(pc, MANAKIA_1ST_LETTER)
+        pc.radar.add_marker(80100, 119991, -2264)
+        html = event
+      elsif has_quest_items?(pc, SCEPTER_OF_BREKA)
+        html = "30515-02.html"
+      elsif !has_at_least_one_quest_item?(pc, SCEPTER_OF_BREKA, MANAKIA_1ST_LETTER)
+        give_items(pc, MANAKIA_1ST_LETTER, 1)
+        pc.radar.add_marker(80100, 119991, -2264)
+        html = "30515-03.html"
       end
     when "30515-05.html"
-      if has_quest_items?(player, SCEPTER_OF_ENKU)
-        htmltext = event
-      elsif !has_at_least_one_quest_item?(player, SCEPTER_OF_ENKU, MANAKIA_2ND_LETTER)
-        give_items(player, MANAKIA_2ND_LETTER, 1)
-        player.radar.add_marker(12805, 189249, -3616)
-        htmltext = "30515-06.html"
-      elsif !has_quest_items?(player, SCEPTER_OF_ENKU) && has_quest_items?(player, MANAKIA_2ND_LETTER)
-        player.radar.add_marker(12805, 189249, -3616)
-        htmltext = "30515-07.html"
+      if has_quest_items?(pc, SCEPTER_OF_ENKU)
+        html = event
+      elsif !has_at_least_one_quest_item?(pc, SCEPTER_OF_ENKU, MANAKIA_2ND_LETTER)
+        give_items(pc, MANAKIA_2ND_LETTER, 1)
+        pc.radar.add_marker(12805, 189249, -3616)
+        html = "30515-06.html"
+      elsif !has_quest_items?(pc, SCEPTER_OF_ENKU) && has_quest_items?(pc, MANAKIA_2ND_LETTER)
+        pc.radar.add_marker(12805, 189249, -3616)
+        html = "30515-07.html"
       end
     when "30571-03.html"
-      if has_quest_items?(player, SCEPTER_BOX)
-        take_items(player, SCEPTER_BOX, 1)
-        give_items(player, TANAPIS_ORDER, 1)
+      if has_quest_items?(pc, SCEPTER_BOX)
+        take_items(pc, SCEPTER_BOX, 1)
+        give_items(pc, TANAPIS_ORDER, 1)
         qs.set_cond(9, true)
-        htmltext = event
+        html = event
       end
     when "30615-04.html"
-      if has_quest_items?(player, MANAKIA_1ST_LETTER)
-        give_items(player, GLOVE_OF_VOLTAR, 1)
-        take_items(player, MANAKIA_1ST_LETTER, 1)
-        add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200000), player)
-        add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200000), player)
-        htmltext = event
+      if has_quest_items?(pc, MANAKIA_1ST_LETTER)
+        give_items(pc, GLOVE_OF_VOLTAR, 1)
+        take_items(pc, MANAKIA_1ST_LETTER, 1)
+        add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200000), pc)
+        html = event
       end
     when "30616-04.html"
-      if has_quest_items?(player, MANAKIA_2ND_LETTER)
-        give_items(player, GLOVE_OF_KEPRA, 1)
-        take_items(player, MANAKIA_2ND_LETTER, 1)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), player)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), player)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), player)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), player)
-        htmltext = event
+      if has_quest_items?(pc, MANAKIA_2ND_LETTER)
+        give_items(pc, GLOVE_OF_KEPRA, 1)
+        take_items(pc, MANAKIA_2ND_LETTER, 1)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
+        html = event
       end
     when "30617-03.html"
-      if has_quest_items?(player, KASMANS_2ND_LETTER)
-        give_items(player, GLOVE_OF_BURAI, 1)
-        take_items(player, KASMANS_2ND_LETTER, 1)
-        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), player)
-        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), player)
-        htmltext = event
+      if has_quest_items?(pc, KASMANS_2ND_LETTER)
+        give_items(pc, GLOVE_OF_BURAI, 1)
+        take_items(pc, KASMANS_2ND_LETTER, 1)
+        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
+        html = event
       end
     when "30618-03.html"
-      if has_quest_items?(player, KASMANS_3RD_LETTER)
-        give_items(player, SCEPTER_OF_TUNATH, 1)
-        take_items(player, KASMANS_3RD_LETTER, 1)
-        if has_quest_items?(player, SCEPTER_OF_TUREK, SCEPTER_OF_ENKU, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU)
+      if has_quest_items?(pc, KASMANS_3RD_LETTER)
+        give_items(pc, SCEPTER_OF_TUNATH, 1)
+        take_items(pc, KASMANS_3RD_LETTER, 1)
+        if has_quest_items?(pc, SCEPTER_OF_TUREK, SCEPTER_OF_ENKU, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU)
           qs.set_cond(5, true)
         end
-        htmltext = event
+        html = event
       end
     when "30619-03.html"
-      if has_quest_items?(player, KASMANS_1ST_LETTER)
-        give_items(player, DRIKOS_CONTRACT, 1)
-        take_items(player, KASMANS_1ST_LETTER, 1)
-        htmltext = event
+      if has_quest_items?(pc, KASMANS_1ST_LETTER)
+        give_items(pc, DRIKOS_CONTRACT, 1)
+        take_items(pc, KASMANS_1ST_LETTER, 1)
+        html = event
       end
     when "30642-03.html"
-      if has_quest_items?(player, VOKIANS_ORDER2)
-        take_items(player, VOKIANS_ORDER2, 1)
-        give_items(player, CHIANTA_1ST_ORDER, 1)
+      if has_quest_items?(pc, VOKIANS_ORDER2)
+        take_items(pc, VOKIANS_ORDER2, 1)
+        give_items(pc, CHIANTA_1ST_ORDER, 1)
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "30642-07.html"
-      if has_quest_items?(player, CHIANTA_1ST_ORDER, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH, SCEPTER_OF_ENKU)
-        take_items(player, CHIANTA_1ST_ORDER, 1)
-        take_items(player, SCEPTER_OF_BREKA, 1)
-        take_items(player, SCEPTER_OF_ENKU, 1)
-        take_items(player, SCEPTER_OF_VUKU, 1)
-        take_items(player, SCEPTER_OF_TUREK, 1)
-        take_items(player, SCEPTER_OF_TUNATH, 1)
-        take_items(player, MANAKIA_1ST_LETTER, 1)
-        take_items(player, MANAKIA_2ND_LETTER, 1)
-        take_items(player, KASMANS_1ST_LETTER, 1)
-        give_items(player, CHIANTA_3RD_ORDER, 1)
+      if has_quest_items?(pc, CHIANTA_1ST_ORDER, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH, SCEPTER_OF_ENKU)
+        take_items(pc, CHIANTA_1ST_ORDER, 1)
+        take_items(pc, SCEPTER_OF_BREKA, 1)
+        take_items(pc, SCEPTER_OF_ENKU, 1)
+        take_items(pc, SCEPTER_OF_VUKU, 1)
+        take_items(pc, SCEPTER_OF_TUREK, 1)
+        take_items(pc, SCEPTER_OF_TUNATH, 1)
+        take_items(pc, MANAKIA_1ST_LETTER, 1)
+        take_items(pc, MANAKIA_2ND_LETTER, 1)
+        take_items(pc, KASMANS_1ST_LETTER, 1)
+        give_items(pc, CHIANTA_3RD_ORDER, 1)
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -411,236 +432,236 @@ class Quests::Q00220_TestimonyOfGlory < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created?
       if npc.id == PREFECT_VOKIAN
-        if player.race.orc?
-          if player.level >= MIN_LEVEL && player.in_category?(CategoryType::ORC_2ND_GROUP)
-            htmltext = "30514-03.htm"
-          elsif player.level >= MIN_LEVEL
-            htmltext = "30514-01a.html"
+        if pc.race.orc?
+          if pc.level >= MIN_LEVEL && pc.in_category?(CategoryType::ORC_2ND_GROUP)
+            html = "30514-03.htm"
+          elsif pc.level >= MIN_LEVEL
+            html = "30514-01a.html"
           else
-            htmltext = "30514-02.html"
+            html = "30514-02.html"
           end
         else
-          htmltext = "30514-01.html"
+          html = "30514-01.html"
         end
       end
     elsif qs.started?
       case npc.id
       when PREFECT_VOKIAN
-        if has_quest_items?(player, VOKIANS_ORDER)
-          if get_quest_items_count(player, MANASHEN_SHARD) >= 10 && get_quest_items_count(player, TYRANT_TALON) >= 10 && get_quest_items_count(player, GUARDIAN_BASILISK_FANG) >= 10
-            take_items(player, VOKIANS_ORDER, 1)
-            take_items(player, MANASHEN_SHARD, -1)
-            take_items(player, TYRANT_TALON, -1)
-            take_items(player, GUARDIAN_BASILISK_FANG, -1)
-            give_items(player, VOKIANS_ORDER2, 1)
-            give_items(player, NECKLACE_OF_AUTHORITY, 1)
+        if has_quest_items?(pc, VOKIANS_ORDER)
+          if get_quest_items_count(pc, MANASHEN_SHARD) >= 10 && get_quest_items_count(pc, TYRANT_TALON) >= 10 && get_quest_items_count(pc, GUARDIAN_BASILISK_FANG) >= 10
+            take_items(pc, VOKIANS_ORDER, 1)
+            take_items(pc, MANASHEN_SHARD, -1)
+            take_items(pc, TYRANT_TALON, -1)
+            take_items(pc, GUARDIAN_BASILISK_FANG, -1)
+            give_items(pc, VOKIANS_ORDER2, 1)
+            give_items(pc, NECKLACE_OF_AUTHORITY, 1)
             qs.set_cond(3, true)
-            htmltext = "30514-08.html"
+            html = "30514-08.html"
           else
-            htmltext = "30514-06.html"
+            html = "30514-06.html"
           end
-        elsif has_quest_items?(player, VOKIANS_ORDER2, NECKLACE_OF_AUTHORITY)
-          htmltext = "30514-09.html"
-        elsif !has_quest_items?(player, NECKLACE_OF_AUTHORITY) && has_at_least_one_quest_item?(player, VOKIANS_ORDER2, SCEPTER_BOX)
-          htmltext = "30514-10.html"
+        elsif has_quest_items?(pc, VOKIANS_ORDER2, NECKLACE_OF_AUTHORITY)
+          html = "30514-09.html"
+        elsif !has_quest_items?(pc, NECKLACE_OF_AUTHORITY) && has_at_least_one_quest_item?(pc, VOKIANS_ORDER2, SCEPTER_BOX)
+          html = "30514-10.html"
         end
       when PREFECT_KASMAN
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          htmltext = "30501-01.html"
-        elsif has_at_least_one_quest_item?(player, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
-          htmltext = "30501-11.html"
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          html = "30501-01.html"
+        elsif has_at_least_one_quest_item?(pc, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
+          html = "30501-11.html"
         end
       when SEER_MANAKIA
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          htmltext = "30515-01.html"
-        elsif has_at_least_one_quest_item?(player, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
-          htmltext = "30515-08.html"
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          html = "30515-01.html"
+        elsif has_at_least_one_quest_item?(pc, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
+          html = "30515-08.html"
         end
       when FLAME_LORD_KAKAI
-        if !has_quest_items?(player, RITUAL_BOX) && has_at_least_one_quest_item?(player, SCEPTER_BOX, TANAPIS_ORDER)
-          htmltext = "30565-01.html"
-        elsif has_quest_items?(player, RITUAL_BOX)
-          give_adena(player, 262720, true)
-          give_items(player, MARK_OF_GLORY, 1)
-          add_exp_and_sp(player, 1448226, 96648)
+        if !has_quest_items?(pc, RITUAL_BOX) && has_at_least_one_quest_item?(pc, SCEPTER_BOX, TANAPIS_ORDER)
+          html = "30565-01.html"
+        elsif has_quest_items?(pc, RITUAL_BOX)
+          give_adena(pc, 262720, true)
+          give_items(pc, MARK_OF_GLORY, 1)
+          add_exp_and_sp(pc, 1448226, 96648)
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
-          htmltext = "30565-02.html"
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
+          html = "30565-02.html"
         end
       when SEER_TANAPI
-        if has_quest_items?(player, SCEPTER_BOX)
-          htmltext = "30571-01.html"
-        elsif has_quest_items?(player, TANAPIS_ORDER)
-          if !has_quest_items?(player, SCEPTER_OF_TANTOS)
-            htmltext = "30571-04.html"
+        if has_quest_items?(pc, SCEPTER_BOX)
+          html = "30571-01.html"
+        elsif has_quest_items?(pc, TANAPIS_ORDER)
+          if !has_quest_items?(pc, SCEPTER_OF_TANTOS)
+            html = "30571-04.html"
           else
-            take_items(player, TANAPIS_ORDER, 1)
-            take_items(player, SCEPTER_OF_TANTOS, 1)
-            give_items(player, RITUAL_BOX, 1)
+            take_items(pc, TANAPIS_ORDER, 1)
+            take_items(pc, SCEPTER_OF_TANTOS, 1)
+            give_items(pc, RITUAL_BOX, 1)
             qs.set_cond(11, true)
-            htmltext = "30571-05.html"
+            html = "30571-05.html"
           end
-        elsif has_quest_items?(player, RITUAL_BOX)
-          htmltext = "30571-06.html"
+        elsif has_quest_items?(pc, RITUAL_BOX)
+          html = "30571-06.html"
         end
       when BREKA_CHIEF_VOLTAR
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          if !has_at_least_one_quest_item?(player, SCEPTER_OF_BREKA, MANAKIA_1ST_LETTER, GLOVE_OF_VOLTAR, PASHIKAS_HEAD, VULTUS_HEAD)
-            htmltext = "30615-01.html"
-          elsif has_quest_items?(player, MANAKIA_1ST_LETTER)
-            htmltext = "30615-02.html"
-            player.radar.remove_marker(80100, 119991, -2264)
-          elsif !has_quest_items?(player, SCEPTER_OF_BREKA) && has_quest_items?(player, GLOVE_OF_VOLTAR) && ((get_quest_items_count(player, PASHIKAS_HEAD) + get_quest_items_count(player, VULTUS_HEAD)) < 2)
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          if !has_at_least_one_quest_item?(pc, SCEPTER_OF_BREKA, MANAKIA_1ST_LETTER, GLOVE_OF_VOLTAR, PASHIKAS_HEAD, VULTUS_HEAD)
+            html = "30615-01.html"
+          elsif has_quest_items?(pc, MANAKIA_1ST_LETTER)
+            html = "30615-02.html"
+            pc.radar.remove_marker(80100, 119991, -2264)
+          elsif !has_quest_items?(pc, SCEPTER_OF_BREKA) && has_quest_items?(pc, GLOVE_OF_VOLTAR) && get_quest_items_count(pc, PASHIKAS_HEAD) + get_quest_items_count(pc, VULTUS_HEAD) < 2
             if npc.summoned_npc_count < 2
-              add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200000), player)
-              add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200000), player)
+              add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200000), pc)
+              add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200000), pc)
             end
-            htmltext = "30615-05.html"
-          elsif has_quest_items?(player, PASHIKAS_HEAD, VULTUS_HEAD)
-            give_items(player, SCEPTER_OF_BREKA, 1)
-            take_items(player, PASHIKAS_HEAD, 1)
-            take_items(player, VULTUS_HEAD, 1)
-            if has_quest_items?(player, SCEPTER_OF_ENKU, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH)
+            html = "30615-05.html"
+          elsif has_quest_items?(pc, PASHIKAS_HEAD, VULTUS_HEAD)
+            give_items(pc, SCEPTER_OF_BREKA, 1)
+            take_items(pc, PASHIKAS_HEAD, 1)
+            take_items(pc, VULTUS_HEAD, 1)
+            if has_quest_items?(pc, SCEPTER_OF_ENKU, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH)
               qs.set_cond(5, true)
             end
-            htmltext = "30615-06.html"
-          elsif has_quest_items?(player, SCEPTER_OF_BREKA)
-            htmltext = "30615-07.html"
+            html = "30615-06.html"
+          elsif has_quest_items?(pc, SCEPTER_OF_BREKA)
+            html = "30615-07.html"
           end
-        elsif has_at_least_one_quest_item?(player, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
-          htmltext = "30615-08.html"
+        elsif has_at_least_one_quest_item?(pc, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
+          html = "30615-08.html"
         end
       when ENKU_CHIEF_KEPRA
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          if !has_at_least_one_quest_item?(player, SCEPTER_OF_ENKU, MANAKIA_2ND_LETTER, GLOVE_OF_KEPRA) && ((get_quest_items_count(player, ENKU_OVERLORD_HEAD)) < 4)
-            htmltext = "30616-01.html"
-          elsif has_quest_items?(player, MANAKIA_2ND_LETTER)
-            player.radar.remove_marker(12805, 189249, -3616)
-            htmltext = "30616-02.html"
-          elsif has_quest_items?(player, GLOVE_OF_KEPRA) && get_quest_items_count(player, ENKU_OVERLORD_HEAD) < 4
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          if !has_at_least_one_quest_item?(pc, SCEPTER_OF_ENKU, MANAKIA_2ND_LETTER, GLOVE_OF_KEPRA) && get_quest_items_count(pc, ENKU_OVERLORD_HEAD) < 4
+            html = "30616-01.html"
+          elsif has_quest_items?(pc, MANAKIA_2ND_LETTER)
+            pc.radar.remove_marker(12805, 189249, -3616)
+            html = "30616-02.html"
+          elsif has_quest_items?(pc, GLOVE_OF_KEPRA) && get_quest_items_count(pc, ENKU_OVERLORD_HEAD) < 4
             if npc.summoned_npc_count < 5
-              add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), player)
+              add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
             end
-            htmltext = "30616-05.html"
-          elsif get_quest_items_count(player, ENKU_OVERLORD_HEAD) >= 4
-            give_items(player, SCEPTER_OF_ENKU, 1)
-            take_items(player, ENKU_OVERLORD_HEAD, -1)
-            if has_quest_items?(player, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH)
+            html = "30616-05.html"
+          elsif get_quest_items_count(pc, ENKU_OVERLORD_HEAD) >= 4
+            give_items(pc, SCEPTER_OF_ENKU, 1)
+            take_items(pc, ENKU_OVERLORD_HEAD, -1)
+            if has_quest_items?(pc, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH)
               qs.set_cond(5, true)
             end
-            htmltext = "30616-06.html"
-          elsif has_quest_items?(player, SCEPTER_OF_ENKU)
-            htmltext = "30616-07.html"
+            html = "30616-06.html"
+          elsif has_quest_items?(pc, SCEPTER_OF_ENKU)
+            html = "30616-07.html"
           end
-        elsif has_at_least_one_quest_item?(player, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
-          htmltext = "30616-08.html"
+        elsif has_at_least_one_quest_item?(pc, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
+          html = "30616-08.html"
         end
       when TUREK_CHIEF_BURAI
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          if !has_at_least_one_quest_item?(player, SCEPTER_OF_TUREK, KASMANS_2ND_LETTER, GLOVE_OF_BURAI, MAKUM_BUGBEAR_HEAD)
-            htmltext = "30617-01.html"
-          elsif has_quest_items?(player, KASMANS_2ND_LETTER)
-            player.radar.remove_marker(-94294, 110818, -3563)
-            htmltext = "30617-02.html"
-          elsif has_quest_items?(player, GLOVE_OF_BURAI)
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          if !has_at_least_one_quest_item?(pc, SCEPTER_OF_TUREK, KASMANS_2ND_LETTER, GLOVE_OF_BURAI, MAKUM_BUGBEAR_HEAD)
+            html = "30617-01.html"
+          elsif has_quest_items?(pc, KASMANS_2ND_LETTER)
+            pc.radar.remove_marker(-94294, 110818, -3563)
+            html = "30617-02.html"
+          elsif has_quest_items?(pc, GLOVE_OF_BURAI)
             if npc.summoned_npc_count < 3
-              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), player)
-              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), player)
+              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
+              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
             end
-            htmltext = "30617-04.html"
-          elsif get_quest_items_count(player, MAKUM_BUGBEAR_HEAD) >= 2
-            give_items(player, SCEPTER_OF_TUREK, 1)
-            take_items(player, MAKUM_BUGBEAR_HEAD, -1)
-            if has_quest_items?(player, SCEPTER_OF_ENKU, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUNATH)
+            html = "30617-04.html"
+          elsif get_quest_items_count(pc, MAKUM_BUGBEAR_HEAD) >= 2
+            give_items(pc, SCEPTER_OF_TUREK, 1)
+            take_items(pc, MAKUM_BUGBEAR_HEAD, -1)
+            if has_quest_items?(pc, SCEPTER_OF_ENKU, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUNATH)
               qs.set_cond(5, true)
             end
-            htmltext = "30617-05.html"
-          elsif has_quest_items?(player, SCEPTER_OF_TUREK)
-            htmltext = "30617-06.html"
+            html = "30617-05.html"
+          elsif has_quest_items?(pc, SCEPTER_OF_TUREK)
+            html = "30617-06.html"
           end
-        elsif has_quest_items?(player, NECKLACE_OF_AUTHORITY) && has_at_least_one_quest_item?(player, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
-          htmltext = "30617-07.html"
+        elsif has_quest_items?(pc, NECKLACE_OF_AUTHORITY) && has_at_least_one_quest_item?(pc, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
+          html = "30617-07.html"
         end
       when LEUNT_CHIEF_HARAK
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          if !has_at_least_one_quest_item?(player, SCEPTER_OF_TUNATH, KASMANS_3RD_LETTER)
-            htmltext = "30618-01.html"
-          elsif !has_quest_items?(player, SCEPTER_OF_TUNATH) && has_quest_items?(player, KASMANS_3RD_LETTER)
-            player.radar.remove_marker(-55217, 200628, -3724)
-            htmltext = "30618-02.html"
-          elsif has_quest_items?(player, SCEPTER_OF_TUNATH)
-            htmltext = "30618-04.html"
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          if !has_at_least_one_quest_item?(pc, SCEPTER_OF_TUNATH, KASMANS_3RD_LETTER)
+            html = "30618-01.html"
+          elsif !has_quest_items?(pc, SCEPTER_OF_TUNATH) && has_quest_items?(pc, KASMANS_3RD_LETTER)
+            pc.radar.remove_marker(-55217, 200628, -3724)
+            html = "30618-02.html"
+          elsif has_quest_items?(pc, SCEPTER_OF_TUNATH)
+            html = "30618-04.html"
           end
-        elsif has_at_least_one_quest_item?(player, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
-          htmltext = "30618-05.html"
+        elsif has_at_least_one_quest_item?(pc, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
+          html = "30618-05.html"
         end
       when VUKU_CHIEF_DRIKO
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          if !has_at_least_one_quest_item?(player, SCEPTER_OF_VUKU, KASMANS_1ST_LETTER, DRIKOS_CONTRACT)
-            htmltext = "30619-01.html"
-          elsif !has_quest_items?(player, SCEPTER_OF_VUKU) && has_quest_items?(player, KASMANS_1ST_LETTER)
-            player.radar.remove_marker(-2150, 124443, -3724)
-            htmltext = "30619-02.html"
-          elsif !has_quest_items?(player, SCEPTER_OF_VUKU) && has_quest_items?(player, DRIKOS_CONTRACT)
-            if get_quest_items_count(player, STAKATO_DRONE_HUSK) < 30
-              htmltext = "30619-04.html"
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          if !has_at_least_one_quest_item?(pc, SCEPTER_OF_VUKU, KASMANS_1ST_LETTER, DRIKOS_CONTRACT)
+            html = "30619-01.html"
+          elsif !has_quest_items?(pc, SCEPTER_OF_VUKU) && has_quest_items?(pc, KASMANS_1ST_LETTER)
+            pc.radar.remove_marker(-2150, 124443, -3724)
+            html = "30619-02.html"
+          elsif !has_quest_items?(pc, SCEPTER_OF_VUKU) && has_quest_items?(pc, DRIKOS_CONTRACT)
+            if get_quest_items_count(pc, STAKATO_DRONE_HUSK) < 30
+              html = "30619-04.html"
             else
-              give_items(player, SCEPTER_OF_VUKU, 1)
-              take_items(player, DRIKOS_CONTRACT, 1)
-              take_items(player, STAKATO_DRONE_HUSK, -1)
-              if has_quest_items?(player, SCEPTER_OF_TUREK, SCEPTER_OF_ENKU, SCEPTER_OF_BREKA, SCEPTER_OF_TUNATH)
+              give_items(pc, SCEPTER_OF_VUKU, 1)
+              take_items(pc, DRIKOS_CONTRACT, 1)
+              take_items(pc, STAKATO_DRONE_HUSK, -1)
+              if has_quest_items?(pc, SCEPTER_OF_TUREK, SCEPTER_OF_ENKU, SCEPTER_OF_BREKA, SCEPTER_OF_TUNATH)
                 qs.set_cond(5, true)
               end
-              htmltext = "30619-05.html"
+              html = "30619-05.html"
             end
-          elsif has_quest_items?(player, SCEPTER_OF_VUKU)
-            htmltext = "30619-06.html"
+          elsif has_quest_items?(pc, SCEPTER_OF_VUKU)
+            html = "30619-06.html"
           end
-        elsif has_quest_items?(player, NECKLACE_OF_AUTHORITY) && has_at_least_one_quest_item?(player, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
-          htmltext = "30619-07.html"
+        elsif has_quest_items?(pc, NECKLACE_OF_AUTHORITY) && has_at_least_one_quest_item?(pc, CHIANTA_2ND_ORDER, CHIANTA_3RD_ORDER, SCEPTER_BOX)
+          html = "30619-07.html"
         end
       when GANDI_CHIEF_CHIANTA
-        if has_quest_items?(player, NECKLACE_OF_AUTHORITY, VOKIANS_ORDER2)
-          htmltext = "30642-01.html"
-        elsif has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          if (get_quest_items_count(player, SCEPTER_OF_BREKA) + get_quest_items_count(player, SCEPTER_OF_VUKU) + get_quest_items_count(player, SCEPTER_OF_TUREK) + get_quest_items_count(player, SCEPTER_OF_TUNATH) + get_quest_items_count(player, SCEPTER_OF_ENKU)) < 5
-            htmltext = "30642-04.html"
-          elsif has_quest_items?(player, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH, SCEPTER_OF_ENKU)
-            htmltext = "30642-05.html"
+        if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, VOKIANS_ORDER2)
+          html = "30642-01.html"
+        elsif has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
+          if get_quest_items_count(pc, SCEPTER_OF_BREKA) + get_quest_items_count(pc, SCEPTER_OF_VUKU) + get_quest_items_count(pc, SCEPTER_OF_TUREK) + get_quest_items_count(pc, SCEPTER_OF_TUNATH) + get_quest_items_count(pc, SCEPTER_OF_ENKU) < 5
+            html = "30642-04.html"
+          elsif has_quest_items?(pc, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH, SCEPTER_OF_ENKU)
+            html = "30642-05.html"
           end
-        elsif has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_2ND_ORDER)
-          give_items(player, CHIANTA_3RD_ORDER, 1)
-          take_items(player, CHIANTA_2ND_ORDER, 1)
-          htmltext = "30642-09.html"
-        elsif has_quest_items?(player, NECKLACE_OF_AUTHORITY, CHIANTA_3RD_ORDER)
-          if get_quest_items_count(player, TAMLIN_ORC_SKULL) >= 20 && get_quest_items_count(player, TIMAK_ORC_HEAD) >= 20
-            take_items(player, NECKLACE_OF_AUTHORITY, 1)
-            take_items(player, CHIANTA_3RD_ORDER, 1)
-            take_items(player, TAMLIN_ORC_SKULL, -1)
-            take_items(player, TIMAK_ORC_HEAD, -1)
-            give_items(player, SCEPTER_BOX, 1)
+        elsif has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_2ND_ORDER)
+          give_items(pc, CHIANTA_3RD_ORDER, 1)
+          take_items(pc, CHIANTA_2ND_ORDER, 1)
+          html = "30642-09.html"
+        elsif has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_3RD_ORDER)
+          if get_quest_items_count(pc, TAMLIN_ORC_SKULL) >= 20 && get_quest_items_count(pc, TIMAK_ORC_HEAD) >= 20
+            take_items(pc, NECKLACE_OF_AUTHORITY, 1)
+            take_items(pc, CHIANTA_3RD_ORDER, 1)
+            take_items(pc, TAMLIN_ORC_SKULL, -1)
+            take_items(pc, TIMAK_ORC_HEAD, -1)
+            give_items(pc, SCEPTER_BOX, 1)
             qs.set_cond(8, true)
-            htmltext = "30642-11.html"
+            html = "30642-11.html"
           else
-            htmltext = "30642-10.html"
+            html = "30642-10.html"
           end
-        elsif has_quest_items?(player, SCEPTER_BOX)
-          htmltext = "30642-12.html"
-        elsif has_at_least_one_quest_item?(player, TANAPIS_ORDER, RITUAL_BOX)
-          htmltext = "30642-13.html"
+        elsif has_quest_items?(pc, SCEPTER_BOX)
+          html = "30642-12.html"
+        elsif has_at_least_one_quest_item?(pc, TANAPIS_ORDER, RITUAL_BOX)
+          html = "30642-13.html"
         end
       end
     elsif qs.completed?
       if npc.id == PREFECT_VOKIAN
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

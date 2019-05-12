@@ -1,4 +1,4 @@
-class Quests::Q00009_IntoTheCityOfHumans < Quest
+class Scripts::Q00009_IntoTheCityOfHumans < Quest
   # NPCs
 	private PETUKAI = 30583
 	private TANAPI = 30571

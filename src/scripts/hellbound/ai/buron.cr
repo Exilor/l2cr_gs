@@ -1,4 +1,4 @@
-class NpcAI::Buron < AbstractNpcAI
+class Scripts::Buron < AbstractNpcAI
   private BURON = 32345
   private HELMET = 9669
   private TUNIC = 9670
@@ -13,37 +13,37 @@ class NpcAI::Buron < AbstractNpcAI
     add_talk_id(BURON)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
 
-    htmltext = event
+    html = event
     if event.casecmp?("Rumor")
-      htmltext = "32345-#{HellboundEngine.level}r.htm"
+      html = "32345-#{HellboundEngine.level}r.htm"
     else
       if HellboundEngine.level < 2
-        htmltext = "32345-lowlvl.htm"
+        html = "32345-lowlvl.htm"
       else
-        if get_quest_items_count(player, DARION_BADGE) >= 10
-          take_items(player, DARION_BADGE, 10)
+        if get_quest_items_count(pc, DARION_BADGE) >= 10
+          take_items(pc, DARION_BADGE, 10)
           if event.casecmp?("Tunic")
-            player.add_item("Quest", TUNIC, 1, npc, true)
+            pc.add_item("Quest", TUNIC, 1, npc, true)
           elsif event.casecmp?("Helmet")
-            player.add_item("Quest", HELMET, 1, npc, true)
+            pc.add_item("Quest", HELMET, 1, npc, true)
           elsif event.casecmp?("Pants")
-            player.add_item("Quest", PANTS, 1, npc, true)
+            pc.add_item("Quest", PANTS, 1, npc, true)
           end
-          htmltext = nil
+          html = nil
         else
-          htmltext = "32345-noitems.htm"
+          html = "32345-noitems.htm"
         end
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_first_talk(npc, player)
-    get_quest_state!(player)
+  def on_first_talk(npc, pc)
+    get_quest_state!(pc)
 
     case HellboundEngine.level
     when 1

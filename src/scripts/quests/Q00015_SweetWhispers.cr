@@ -1,4 +1,4 @@
-class Quests::Q00015_SweetWhispers < Quest
+class Scripts::Q00015_SweetWhispers < Quest
   # NPCs
   private VLADIMIR = 31302
   private HIERARCH = 31517
@@ -11,12 +11,12 @@ class Quests::Q00015_SweetWhispers < Quest
     add_talk_id(VLADIMIR, HIERARCH, M_NECROMANCER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    st = get_quest_state(pc, false)
     unless st
-      return htmltext
+      return html
     end
 
     case event
@@ -33,45 +33,43 @@ class Quests::Q00015_SweetWhispers < Quest
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state(player, true)
-    unless st
-      return htmltext
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
     end
 
     npc_id = npc.id
 
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
       if npc_id == VLADIMIR
-        htmltext = player.level >= 60 ? "31302-00.htm" : "31302-00a.html"
+        html = pc.level >= 60 ? "31302-00.htm" : "31302-00a.html"
       end
     when State::STARTED
       case npc_id
       when VLADIMIR
         if st.cond?(1)
-          htmltext = "31302-01a.html"
+          html = "31302-01a.html"
         end
       when M_NECROMANCER
         case st.cond
         when 1
-          htmltext = "31518-00.html"
+          html = "31518-00.html"
         when 2
-          htmltext = "31518-01a.html"
+          html = "31518-01a.html"
         end
       when HIERARCH
         if st.cond?(2)
-          htmltext = "31517-00.html"
+          html = "31517-00.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00294_CovertBusiness < Quest
+class Scripts::Q00294_CovertBusiness < Quest
   # NPC
   private KEEF = 30534
   # Item
@@ -22,9 +22,9 @@ class Quests::Q00294_CovertBusiness < Quest
     register_quest_items(BAT_FANG)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    qs = get_quest_state(pc, false)
     if qs && qs.created? && event == "30534-03.htm"
       qs.start_quest
       event
@@ -49,27 +49,34 @@ class Quests::Q00294_CovertBusiness < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
-    html = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     if qs.created?
-      html = talker.race.dwarf? ? talker.level >= MIN_LVL ? "30534-02.htm" : "30534-01.htm" : "30534-00.htm"
+      if pc.race.dwarf?
+        if pc.level >= MIN_LVL
+          html = "30534-02.htm"
+        else
+          html = "30534-01.htm"
+        end
+      else
+        html = "30534-00.htm"
+      end
     elsif qs.started?
       if qs.cond?(2)
-        if has_quest_items?(talker, RING_OF_RACCOON)
-          give_adena(talker, 2400, true)
+        if has_quest_items?(pc, RING_OF_RACCOON)
+          give_adena(pc, 2400, true)
           html = "30534-06.html"
         else
-          give_items(talker, RING_OF_RACCOON, 1)
+          give_items(pc, RING_OF_RACCOON, 1)
           html = "30534-05.html"
         end
-        add_exp_and_sp(talker, 0, 600)
+        add_exp_and_sp(pc, 0, 600)
         qs.exit_quest(true, true)
       else
         html = "30534-04.html"
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

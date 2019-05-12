@@ -1,4 +1,4 @@
-class NpcAI::SkillTransfer < AbstractNpcAI
+class Scripts::SkillTransfer < AbstractNpcAI
   private HOLY_POMANDER = "HOLY_POMANDER_"
   private POMANDERS = {
     ItemHolder.new(15307, 1), # Cardinal (97)

@@ -1,4 +1,4 @@
-class Quests::Q00450_GraveRobberRescue < Quest
+class Scripts::Q00450_GraveRobberRescue < Quest
   # NPCs
   private KANEMIKA = 32650
   private WARRIOR = 32651
@@ -17,9 +17,9 @@ class Quests::Q00450_GraveRobberRescue < Quest
     register_quest_items(EVIDENCE_OF_MIGRATION)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -41,8 +41,8 @@ class Quests::Q00450_GraveRobberRescue < Quest
     html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     if npc.id == KANEMIKA
       case st.state
       when State::COMPLETED
@@ -51,7 +51,7 @@ class Quests::Q00450_GraveRobberRescue < Quest
         end
         st.state = State::CREATED
       when State::CREATED
-        html = player.level >= MIN_LEVEL ? "32650-01.htm" : "32650-02.htm"
+        html = pc.level >= MIN_LEVEL ? "32650-01.htm" : "32650-02.htm"
       when State::STARTED
         if st.cond?(1)
           if st.has_quest_items?(EVIDENCE_OF_MIGRATION)
@@ -76,7 +76,7 @@ class Quests::Q00450_GraveRobberRescue < Quest
         npc.set_intention(AI::MOVE_TO, Location.new(npc.x + 100, npc.y + 100, npc.z, 0))
         npc.busy = true
 
-        start_quest_timer("despawn", 3000, npc, player)
+        start_quest_timer("despawn", 3000, npc, pc)
 
         if st.get_quest_items_count(EVIDENCE_OF_MIGRATION) == 10
           st.set_cond(2, true)
@@ -93,12 +93,12 @@ class Quests::Q00450_GraveRobberRescue < Quest
 
         mob = add_spawn(WARRIOR_MON, *npc.xyz, npc.heading, true, 600000).as(L2Attackable)
         mob.set_running
-        mob.add_damage_hate(player, 0, 999)
-        mob.set_intention(AI::ATTACK, player)
-        show_on_screen_msg(player, NpcString::THE_GRAVE_ROBBER_WARRIOR_HAS_BEEN_FILLED_WITH_DARK_ENERGY_AND_IS_ATTACKING_YOU, 5, 5000)
+        mob.add_damage_hate(pc, 0, 999)
+        mob.set_intention(AI::ATTACK, pc)
+        show_on_screen_msg(pc, NpcString::THE_GRAVE_ROBBER_WARRIOR_HAS_BEEN_FILLED_WITH_DARK_ENERGY_AND_IS_ATTACKING_YOU, 5, 5000)
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

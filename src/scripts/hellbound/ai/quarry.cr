@@ -1,4 +1,4 @@
-class NpcAI::Quarry < AbstractNpcAI
+class Scripts::Quarry < AbstractNpcAI
   # NPCs
   private SLAVE = 32299
   # Items
@@ -26,13 +26,13 @@ class NpcAI::Quarry < AbstractNpcAI
     add_enter_zone_id(ZONE)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     case event
     when "FollowMe"
-      player = player.not_nil!
+      pc = pc.not_nil!
       npc = npc.not_nil!
-      npc.set_intention(AI::FOLLOW, player)
-      npc.target = player
+      npc.set_intention(AI::FOLLOW, pc)
+      npc.target = pc
       npc.auto_attackable = true
       npc.r_hand_id = 9136
       npc.set_walking
@@ -40,7 +40,7 @@ class NpcAI::Quarry < AbstractNpcAI
       unless get_quest_timer("TIME_LIMIT", npc, nil)
         start_quest_timer("TIME_LIMIT", 900000, npc, nil) # 15 min limit for save
       end
-      htmltext = "32299-02.htm"
+      html = "32299-02.htm"
     when "TIME_LIMIT"
       npc = npc.not_nil!
       ZoneManager.get_zones(npc) do |zone|
@@ -72,7 +72,7 @@ class NpcAI::Quarry < AbstractNpcAI
       end
     end
 
-    htmltext
+    html
   end
 
   def on_spawn(npc)
@@ -84,7 +84,7 @@ class NpcAI::Quarry < AbstractNpcAI
     super
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     if HellboundEngine.level != 5
       return "32299.htm"
     end

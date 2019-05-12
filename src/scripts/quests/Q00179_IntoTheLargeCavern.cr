@@ -1,4 +1,4 @@
-class Quests::Q00179_IntoTheLargeCavern < Quest
+class Scripts::Q00179_IntoTheLargeCavern < Quest
   # NPCs
   private KEKROPUS = 32138
   private MENACING_MACHINE = 32258
@@ -13,10 +13,10 @@ class Quests::Q00179_IntoTheLargeCavern < Quest
     add_talk_id(KEKROPUS, MENACING_MACHINE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player && npc
-    htmltext = event
-    return htmltext unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc && npc
+    html = event
+    return html unless st = get_quest_state(pc, false)
 
     if npc.id == KEKROPUS
       if event.casecmp?("32138-03.html")
@@ -35,40 +35,41 @@ class Quests::Q00179_IntoTheLargeCavern < Quest
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    return htmltext unless st = get_quest_state(player, true)
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     if npc.id == KEKROPUS
       case st.state
       when State::CREATED
-        if !player.race.kamael?
-          htmltext = "32138-00b.html"
+        if !pc.race.kamael?
+          html = "32138-00b.html"
         else
-          prev = player.quest_completed?(Q00178_IconicTrinity.simple_name)
-          level = player.level
-          if prev && level >= MIN_LEVEL && level <= MAX_LEVEL && player.class_id.level == 0
-            htmltext = "32138-01.htm"
+          prev = pc.quest_completed?(Q00178_IconicTrinity.simple_name)
+          level = pc.level
+          if prev && level.between?(MIN_LEVEL, MAX_LEVEL) && pc.class_id.level == 0
+            html = "32138-01.htm"
           elsif level < MIN_LEVEL
-            htmltext = "32138-00.html"
+            html = "32138-00.html"
           else
-            htmltext = "32138-00c.html"
+            html = "32138-00c.html"
           end
         end
       when State::STARTED
         if st.cond?(1)
-          htmltext = "32138-03.htm"
+          html = "32138-03.htm"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     elsif npc.id == MENACING_MACHINE && st.state == State::STARTED
-      htmltext = "32258-01.html"
+      html = "32258-01.html"
     end
 
-    htmltext
+    html
   end
 end

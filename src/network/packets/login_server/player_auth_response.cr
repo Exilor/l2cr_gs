@@ -1,18 +1,19 @@
+require "../login_server_packet"
 require "../game_server/player_in_game"
 require "../server/char_selection_info"
 
-class Packets::Incoming::PlayerAuthResponse < MMO::IncomingPacket(LoginServerClient)
+class Packets::Incoming::PlayerAuthResponse < LoginServerPacket
   include Loggable
 
   @account = ""
   @authed = false
 
-  def read
+  private def read_impl
     @account = s
     @authed = c == 1
   end
 
-  def run
+  private def run_impl
     wc = LoginServerClient.waiting_clients.find { |c| c.account == @account }
     if wc
       if @authed

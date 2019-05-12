@@ -1,4 +1,4 @@
-class Quests::Q00412_PathOfTheDarkWizard < Quest
+class Scripts::Q00412_PathOfTheDarkWizard < Quest
   # NPCs
   private CHARKEREN = 30415
   private ANNIKA = 30418
@@ -31,62 +31,68 @@ class Quests::Q00412_PathOfTheDarkWizard < Quest
 
     add_start_npc(VARIKA)
     add_talk_id(VARIKA, CHARKEREN, ANNIKA, ARKENIA)
-    add_kill_id(MARSH_ZOMBIE, MISERY_SKELETON, SKELETON_SCOUT, SKELETON_HUNTER, SKELETON_HUNTER_ARCHER)
-    register_quest_items(SEEDS_OF_ANGER, SEEDS_OF_DESPAIR, SEEDS_OF_HORROR, SEEDS_OF_LUNACY, FAMILYS_REMAINS, KNEE_BONE, HEART_OF_LUNACY, LUCKY_KEY, CANDLE, HUB_SCENT)
+    add_kill_id(
+      MARSH_ZOMBIE, MISERY_SKELETON, SKELETON_SCOUT, SKELETON_HUNTER,
+      SKELETON_HUNTER_ARCHER
+    )
+    register_quest_items(
+      SEEDS_OF_ANGER, SEEDS_OF_DESPAIR, SEEDS_OF_HORROR, SEEDS_OF_LUNACY,
+      FAMILYS_REMAINS, KNEE_BONE, HEART_OF_LUNACY, LUCKY_KEY, CANDLE, HUB_SCENT
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if player.class_id.dark_mage?
-        if player.level >= MIN_LEVEL
-          if has_quest_items?(player, JEWEL_OF_DARKNESS)
-            htmltext = "30421-04.htm"
+      if pc.class_id.dark_mage?
+        if pc.level >= MIN_LEVEL
+          if has_quest_items?(pc, JEWEL_OF_DARKNESS)
+            html = "30421-04.htm"
           else
             qs.start_quest
-            give_items(player, SEEDS_OF_DESPAIR, 1)
-            htmltext = "30421-05.htm"
+            give_items(pc, SEEDS_OF_DESPAIR, 1)
+            html = "30421-05.htm"
           end
         else
-          htmltext = "30421-02.htm"
+          html = "30421-02.htm"
         end
-      elsif player.class_id.dark_wizard?
-        htmltext = "30421-02a.htm"
+      elsif pc.class_id.dark_wizard?
+        html = "30421-02a.htm"
       else
-        htmltext = "30421-03.htm"
+        html = "30421-03.htm"
       end
     when "30421-06.html"
-      if has_quest_items?(player, SEEDS_OF_ANGER)
-        htmltext = event
+      if has_quest_items?(pc, SEEDS_OF_ANGER)
+        html = event
       else
-        htmltext = "30421-07.html"
+        html = "30421-07.html"
       end
     when "30421-09.html"
-      if has_quest_items?(player, SEEDS_OF_HORROR)
-        htmltext = event
+      if has_quest_items?(pc, SEEDS_OF_HORROR)
+        html = event
       else
-        htmltext = "30421-10.html"
+        html = "30421-10.html"
       end
     when "30421-11.html"
-      if has_quest_items?(player, SEEDS_OF_LUNACY)
-        htmltext = event
-      elsif !has_quest_items?(player, SEEDS_OF_LUNACY) && has_quest_items?(player, SEEDS_OF_DESPAIR)
-        htmltext = "30421-12.html"
+      if has_quest_items?(pc, SEEDS_OF_LUNACY)
+        html = event
+      elsif !has_quest_items?(pc, SEEDS_OF_LUNACY) && has_quest_items?(pc, SEEDS_OF_DESPAIR)
+        html = "30421-12.html"
       end
     when "30421-08.html", "30415-02.html"
-      htmltext = event
+      html = event
     when "30415-03.html"
-      give_items(player, LUCKY_KEY, 1)
-      htmltext = event
+      give_items(pc, LUCKY_KEY, 1)
+      html = event
     when "30418-02.html"
-      give_items(player, CANDLE, 1)
-      htmltext = event
+      give_items(pc, CANDLE, 1)
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -132,91 +138,91 @@ class Quests::Q00412_PathOfTheDarkWizard < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created? || qs.completed?
       if npc.id == VARIKA
-        if !has_quest_items?(player, JEWEL_OF_DARKNESS)
-          htmltext = "30421-01.htm"
+        if !has_quest_items?(pc, JEWEL_OF_DARKNESS)
+          html = "30421-01.htm"
         else
-          htmltext = "30421-04.htm"
+          html = "30421-04.htm"
         end
       end
     elsif qs.started?
       case npc.id
       when VARIKA
-        if has_quest_items?(player, SEEDS_OF_DESPAIR, SEEDS_OF_HORROR, SEEDS_OF_LUNACY, SEEDS_OF_ANGER)
-          give_adena(player, 163800, true)
-          give_items(player, JEWEL_OF_DARKNESS, 1)
-          level = player.level
+        if has_quest_items?(pc, SEEDS_OF_DESPAIR, SEEDS_OF_HORROR, SEEDS_OF_LUNACY, SEEDS_OF_ANGER)
+          give_adena(pc, 163800, true)
+          give_items(pc, JEWEL_OF_DARKNESS, 1)
+          level = pc.level
           if level >= 20
-            add_exp_and_sp(player, 320534, 28630)
+            add_exp_and_sp(pc, 320534, 28630)
           elsif level == 19
-            add_exp_and_sp(player, 456128, 28630)
+            add_exp_and_sp(pc, 456128, 28630)
           else
-            add_exp_and_sp(player, 591724, 35328)
+            add_exp_and_sp(pc, 591724, 35328)
           end
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           qs.save_global_quest_var("1ClassQuestFinished", "1")
-          htmltext = "30421-13.html"
-        elsif has_quest_items?(player, SEEDS_OF_DESPAIR)
-          if !has_at_least_one_quest_item?(player, FAMILYS_REMAINS, LUCKY_KEY, CANDLE, HUB_SCENT, KNEE_BONE, HEART_OF_LUNACY)
-            htmltext = "30421-14.html"
-          elsif !has_quest_items?(player, SEEDS_OF_ANGER)
-            htmltext = "30421-08.html"
-          elsif !has_quest_items?(player, SEEDS_OF_HORROR)
-            htmltext = "30421-15.html"
-          elsif !has_quest_items?(player, SEEDS_OF_LUNACY)
-            htmltext = "30421-12.html"
+          html = "30421-13.html"
+        elsif has_quest_items?(pc, SEEDS_OF_DESPAIR)
+          if !has_at_least_one_quest_item?(pc, FAMILYS_REMAINS, LUCKY_KEY, CANDLE, HUB_SCENT, KNEE_BONE, HEART_OF_LUNACY)
+            html = "30421-14.html"
+          elsif !has_quest_items?(pc, SEEDS_OF_ANGER)
+            html = "30421-08.html"
+          elsif !has_quest_items?(pc, SEEDS_OF_HORROR)
+            html = "30421-15.html"
+          elsif !has_quest_items?(pc, SEEDS_OF_LUNACY)
+            html = "30421-12.html"
           end
         end
       when CHARKEREN
-        if !has_quest_items?(player, SEEDS_OF_ANGER) && has_quest_items?(player, SEEDS_OF_DESPAIR)
-          if !has_at_least_one_quest_item?(player, FAMILYS_REMAINS, LUCKY_KEY)
-            htmltext = "30415-01.html"
-          elsif has_quest_items?(player, LUCKY_KEY) && get_quest_items_count(player, FAMILYS_REMAINS) < 3
-            htmltext = "30415-04.html"
+        if !has_quest_items?(pc, SEEDS_OF_ANGER) && has_quest_items?(pc, SEEDS_OF_DESPAIR)
+          if !has_at_least_one_quest_item?(pc, FAMILYS_REMAINS, LUCKY_KEY)
+            html = "30415-01.html"
+          elsif has_quest_items?(pc, LUCKY_KEY) && get_quest_items_count(pc, FAMILYS_REMAINS) < 3
+            html = "30415-04.html"
           else
-            give_items(player, SEEDS_OF_ANGER, 1)
-            take_items(player, FAMILYS_REMAINS, -1)
-            take_items(player, LUCKY_KEY, 1)
-            htmltext = "30415-05.html"
+            give_items(pc, SEEDS_OF_ANGER, 1)
+            take_items(pc, FAMILYS_REMAINS, -1)
+            take_items(pc, LUCKY_KEY, 1)
+            html = "30415-05.html"
           end
         else
-          htmltext = "30415-06.html"
+          html = "30415-06.html"
         end
       when ANNIKA
-        unless has_quest_items?(player, SEEDS_OF_HORROR) && has_quest_items?(player, SEEDS_OF_DESPAIR)
-          if !has_at_least_one_quest_item?(player, CANDLE, KNEE_BONE)
-            htmltext = "30418-01.html"
-          elsif has_quest_items?(player, CANDLE) && get_quest_items_count(player, KNEE_BONE) < 2
-            htmltext = "30418-03.html"
+        unless has_quest_items?(pc, SEEDS_OF_HORROR) && has_quest_items?(pc, SEEDS_OF_DESPAIR)
+          if !has_at_least_one_quest_item?(pc, CANDLE, KNEE_BONE)
+            html = "30418-01.html"
+          elsif has_quest_items?(pc, CANDLE) && get_quest_items_count(pc, KNEE_BONE) < 2
+            html = "30418-03.html"
           else
-            give_items(player, SEEDS_OF_HORROR, 1)
-            take_items(player, KNEE_BONE, -1)
-            take_items(player, CANDLE, 1)
-            htmltext = "30418-04.html"
+            give_items(pc, SEEDS_OF_HORROR, 1)
+            take_items(pc, KNEE_BONE, -1)
+            take_items(pc, CANDLE, 1)
+            html = "30418-04.html"
           end
         end
       when ARKENIA
-        if !has_quest_items?(player, SEEDS_OF_LUNACY)
-          if !has_at_least_one_quest_item?(player, HUB_SCENT, HEART_OF_LUNACY)
-            give_items(player, HUB_SCENT, 1)
-            htmltext = "30419-01.html"
-          elsif has_quest_items?(player, HUB_SCENT) && get_quest_items_count(player, HEART_OF_LUNACY) < 3
-            htmltext = "30419-02.html"
+        if !has_quest_items?(pc, SEEDS_OF_LUNACY)
+          if !has_at_least_one_quest_item?(pc, HUB_SCENT, HEART_OF_LUNACY)
+            give_items(pc, HUB_SCENT, 1)
+            html = "30419-01.html"
+          elsif has_quest_items?(pc, HUB_SCENT) && get_quest_items_count(pc, HEART_OF_LUNACY) < 3
+            html = "30419-02.html"
           else
-            give_items(player, SEEDS_OF_LUNACY, 1)
-            take_items(player, HEART_OF_LUNACY, -1)
-            take_items(player, HUB_SCENT, 1)
-            htmltext = "30419-03.html"
+            give_items(pc, SEEDS_OF_LUNACY, 1)
+            take_items(pc, HEART_OF_LUNACY, -1)
+            take_items(pc, HUB_SCENT, 1)
+            html = "30419-03.html"
           end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

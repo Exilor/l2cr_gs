@@ -1,4 +1,4 @@
-class NornilsGarden < AbstractInstance
+class Scripts::NornilsGarden < AbstractInstance
   private class NornilsWorld < InstanceWorld
     property first_npc : L2Npc?
     property spawned_1 : Bool = false
@@ -349,7 +349,7 @@ class NornilsGarden < AbstractInstance
         return "32330-08.html"
       end
       if party_member.race.to_i == 5
-        checkst = party_member.get_quest_state(Quests::Q00179_IntoTheLargeCavern.simple_name)
+        checkst = party_member.get_quest_state(Q00179_IntoTheLargeCavern.simple_name)
         if checkst && checkst.state.started?
           kamael = true
         else
@@ -430,7 +430,7 @@ class NornilsGarden < AbstractInstance
 
   def on_talk(npc, player)
     if FINAL_GATES.includes?(npc.id)
-      cst = player.get_quest_state(Quests::Q00179_IntoTheLargeCavern.simple_name)
+      cst = player.get_quest_state(Scripts::Q00179_IntoTheLargeCavern.simple_name)
       if cst && cst.state.started?
         return "#{npc.id}-01.html"
       end

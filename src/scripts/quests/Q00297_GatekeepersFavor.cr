@@ -1,4 +1,4 @@
-class Quests::Q00297_GatekeepersFavor < Quest
+class Scripts::Q00297_GatekeepersFavor < Quest
   # NPC
   private WIRPHY = 30540
   # Monster
@@ -50,17 +50,17 @@ class Quests::Q00297_GatekeepersFavor < Quest
 
     case st.state
     when State::CREATED
-      htmltext = "30540-02.htm"
+      html = "30540-02.htm"
     when State::STARTED
       if st.cond?(1)
-        htmltext = "30540-04.html"
+        html = "30540-04.html"
       elsif st.cond?(2) && st.get_quest_items_count(STARSTONE) >= STARSTONE_COUNT
         st.give_items(GATEKEEPER_TOKEN, 2)
         st.exit_quest(true, true)
-        htmltext = "30540-05.html"
+        html = "30540-05.html"
       end
     end
 
-    htmltext || get_no_quest_msg(pc)
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00139_ShadowFoxPart1 < Quest
+class Scripts::Q00139_ShadowFoxPart1 < Quest
   # NPC
   private MIA = 30896
   # Monsters
@@ -25,17 +25,17 @@ class Quests::Q00139_ShadowFoxPart1 < Quest
     register_quest_items(FRAGMENT, CHEST)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30896-02.htm"
-      if player.level < MIN_LEVEL
-        htmltext = "30896-03.htm"
+      if pc.level < MIN_LEVEL
+        html = "30896-03.htm"
       end
     when "30896-04.htm"
       st.start_quest
@@ -55,21 +55,21 @@ class Quests::Q00139_ShadowFoxPart1 < Quest
       st.set("talk", "1")
     when "30896-19.html"
       st.give_adena(14050, true)
-      if player.level <= MAX_REWARD_LEVEL
+      if pc.level <= MAX_REWARD_LEVEL
         st.add_exp_and_sp(30000, 2000)
       end
       st.exit_quest(false, true)
     when "30896-06.html", "30896-07.html", "30896-08.html", "30896-09.html",
          "30896-10.html", "30896-12.html", "30896-18.html"
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 2)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 2)
       return super
     end
 
@@ -84,39 +84,39 @@ class Quests::Q00139_ShadowFoxPart1 < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      if player.quest_completed?(Q00138_TempleChampionPart2.simple_name)
-        htmltext = "30896-01.htm"
+      if pc.quest_completed?(Q00138_TempleChampionPart2.simple_name)
+        html = "30896-01.htm"
       else
-        htmltext = "30896-00.html"
+        html = "30896-00.html"
       end
     when State::STARTED
       case st.cond
       when 1
         if st.set?("talk")
-          htmltext =  "30896-11.html"
+          html =  "30896-11.html"
         else
-          htmltext =  "30896-05.html"
+          html =  "30896-05.html"
         end
       when 2
         if st.set?("talk")
-          htmltext = "30896-18.html"
+          html = "30896-18.html"
         else
           if st.get_quest_items_count(FRAGMENT) >= 10 && st.get_quest_items_count(CHEST) >= 1
-            htmltext = "30896-15.html"
+            html = "30896-15.html"
           else
-            htmltext = "30896-14.html"
+            html = "30896-14.html"
           end
         end
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

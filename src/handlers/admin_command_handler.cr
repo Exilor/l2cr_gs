@@ -16,7 +16,7 @@ module AdminCommandHandler
     handler.commands.each { |cmd| HANDLERS[cmd] = handler }
   end
 
-  def self.[](cmd) : self?
+  def self.[](cmd : String) : self?
     if idx = cmd.index(' ')
       cmd = cmd[0, idx]
     end

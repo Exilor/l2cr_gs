@@ -1,4 +1,4 @@
-class Quests::Q00156_MillenniumLove < Quest
+class Scripts::Q00156_MillenniumLove < Quest
   # NPCs
   private LILITH = 30368
   private BAENEDES = 30369
@@ -17,77 +17,74 @@ class Quests::Q00156_MillenniumLove < Quest
     register_quest_items(LILITHS_LETTER, THEONS_DIARY)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
-    htmltext = nil
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
+
     if st
       case event
       when "30368-02.html", "30368-03.html"
-        htmltext = event
+        html = event
       when "30368-05.htm"
-        if player.level >= MIN_LVL
+        if pc.level >= MIN_LVL
           st.start_quest
           st.give_items(LILITHS_LETTER, 1)
-          htmltext = event
+          html = event
         else
-          htmltext = "30368-04.htm"
+          html = "30368-04.htm"
         end
       when "30369-02.html"
         if st.cond?(1) && st.has_quest_items?(LILITHS_LETTER)
           st.take_items(LILITHS_LETTER, 1)
           st.give_items(THEONS_DIARY, 1)
           st.set_cond(2, true)
-          htmltext = event
+          html = event
         end
       when "30369-03.html"
         if st.cond?(1) && st.has_quest_items?(LILITHS_LETTER)
           st.add_exp_and_sp(3000, 0)
           st.exit_quest(false, true)
-          htmltext = event
+          html = event
         end
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state(player, true)
-    htmltext = get_no_quest_msg(player)
-
-    if st
+  def on_talk(npc, pc)
+    if st = get_quest_state(pc, true)
       case npc.id
       when LILITH
         case st.state
         when State::CREATED
-          htmltext = "30368-01.htm"
+          html = "30368-01.htm"
         when State::STARTED
           if st.cond?(1) && st.has_quest_items?(LILITHS_LETTER)
-            htmltext = "30368-06.html"
+            html = "30368-06.html"
           elsif st.cond?(2) && st.has_quest_items?(THEONS_DIARY)
             st.give_items(GREATER_COMP_SOULSHOUT_PACKAGE_NO_GRADE, 1)
             st.add_exp_and_sp(3000, 0)
             st.exit_quest(false, true)
-            htmltext = "30368-07.html"
+            html = "30368-07.html"
           end
         when State::COMPLETED
-          htmltext = get_already_completed_msg(player)
+          html = get_already_completed_msg(pc)
         end
       when BAENEDES
         case st.cond
         when 1
           if st.has_quest_items?(LILITHS_LETTER)
-            htmltext = "30369-01.html"
+            html = "30369-01.html"
           end
         when 2
           if st.has_quest_items?(THEONS_DIARY)
-            htmltext = "30369-04.html"
+            html = "30369-04.html"
           end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

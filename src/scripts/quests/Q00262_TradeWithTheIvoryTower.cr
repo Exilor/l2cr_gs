@@ -1,4 +1,4 @@
-class Quests::Q00262_TradeWithTheIvoryTower < Quest
+class Scripts::Q00262_TradeWithTheIvoryTower < Quest
   # NPCs
   private VOLLODOS = 30137
   # Items
@@ -21,17 +21,17 @@ class Quests::Q00262_TradeWithTheIvoryTower < Quest
     register_quest_items(SPORE_SAC)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event.casecmp?("30137-03.htm")
       st.start_quest
       event
     end
   end
 
-  def on_kill(npc, player, is_summon)
-    party_member = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    party_member = get_random_party_member(pc, 1)
     unless party_member
       return super
     end
@@ -50,27 +50,27 @@ class Quests::Q00262_TradeWithTheIvoryTower < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      htmltext = player.level >= MIN_LEVEL ? "30137-02.htm" : "30137-01.htm"
+      html = pc.level >= MIN_LEVEL ? "30137-02.htm" : "30137-01.htm"
     when State::STARTED
       case st.cond
       when 1
         if st.get_quest_items_count(SPORE_SAC) < REQUIRED_ITEM_COUNT
-          htmltext = "30137-04.html"
+          html = "30137-04.html"
         end
       when 2
         if st.get_quest_items_count(SPORE_SAC) >= REQUIRED_ITEM_COUNT
-          htmltext = "30137-05.html"
+          html = "30137-05.html"
           st.give_adena(3000, true)
           st.exit_quest(true, true)
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

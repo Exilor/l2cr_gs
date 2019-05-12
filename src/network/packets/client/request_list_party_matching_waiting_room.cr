@@ -4,14 +4,14 @@ class Packets::Incoming::RequestListPartyMatchingWaitingRoom < GameClientPacket
   @max_lvl = 0
   @mode = 0
 
-  def read_impl
+  private def read_impl
     @page = d
     @min_lvl = d
     @max_lvl = d
     @mode = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     # packet = ExListPartyMatchingWaitingRoom.new(pc, @page, @min_lvl, @max_lvl, @mode)
     # @page is unused

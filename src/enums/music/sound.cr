@@ -5,15 +5,15 @@ class Sound < EnumClass
 
   getter packet
 
-  def initialize(name)
+  protected def initialize(name)
     @packet = Packets::Outgoing::PlaySound.create_sound(name)
   end
 
-  def sound_name
+  def sound_name : String
     @packet.sound_name
   end
 
-  def with_object(obj : L2Object)
+  def with_object(obj : L2Object) : Packets::Outgoing::PlaySound
     Packets::Outgoing::PlaySound.create_sound(sound_name, obj)
   end
 

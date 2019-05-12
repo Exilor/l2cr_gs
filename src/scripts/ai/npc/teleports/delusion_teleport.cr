@@ -1,4 +1,4 @@
-class NpcAI::DelusionTeleport < AbstractNpcAI
+class Scripts::DelusionTeleport < AbstractNpcAI
   # NPCs
   private NPCS = {
     32484, # Pathfinder Worker

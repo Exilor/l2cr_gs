@@ -1,4 +1,4 @@
-class NpcAI::StrongholdsTeleports < AbstractNpcAI
+class Scripts::StrongholdsTeleports < AbstractNpcAI
   private NPCS = {
     32163,
     32181,

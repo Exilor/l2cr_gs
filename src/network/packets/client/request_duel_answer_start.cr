@@ -3,13 +3,13 @@ class Packets::Incoming::RequestDuelAnswerStart < GameClientPacket
   @unknown = 0
   @response = 0
 
-  def read_impl
+  private def read_impl
     @party_duel = d
     unknown = d
     @response = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless requestor = pc.active_requester

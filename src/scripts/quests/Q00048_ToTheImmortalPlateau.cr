@@ -1,6 +1,6 @@
 require "./abstract_get_scroll_to_hometown_quest"
 
-class Quests::Q00048_ToTheImmortalPlateau < Quests::AbstractGetScrollToHometownQuest
+class Scripts::Q00048_ToTheImmortalPlateau < AbstractGetScrollToHometownQuest
   def initialize
     super(48, self.class.simple_name, "To The Immortal Plateau")
   end

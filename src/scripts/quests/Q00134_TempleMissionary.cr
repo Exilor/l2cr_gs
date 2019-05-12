@@ -1,4 +1,4 @@
-class Quests::Q00134_TempleMissionary < Quest
+class Scripts::Q00134_TempleMissionary < Quest
   # NPCs
   private GLYVKA = 30067
   private ROUKE = 31418
@@ -38,13 +38,13 @@ class Quests::Q00134_TempleMissionary < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30067-05.html", "30067-09.html", "31418-07.html", "30067-03.htm"
       st.start_quest
@@ -59,19 +59,19 @@ class Quests::Q00134_TempleMissionary < Quest
     when "30067-10.html"
       st.give_items(BADGE_TEMPLE_MISSIONARY, 1)
       st.give_adena(15100, true)
-      if player.level < MAX_REWARD_LEVEL
+      if pc.level < MAX_REWARD_LEVEL
         st.add_exp_and_sp(30000, 2000)
       end
       st.exit_quest(false, true)
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 3)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 3)
       return super
     end
 
@@ -98,64 +98,64 @@ class Quests::Q00134_TempleMissionary < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when GLYVKA
       case st.state
       when State::CREATED
-        htmltext = player.level >= MIN_LEVEL ? "30067-01.htm" : "30067-02.htm"
+        html = pc.level >= MIN_LEVEL ? "30067-01.htm" : "30067-02.htm"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30067-04.html"
+          html = "30067-04.html"
         when 2..4
-          htmltext = "30067-07.html"
+          html = "30067-07.html"
         when 5
           if st.set?("talk")
-            htmltext = "30067-09.html"
+            html = "30067-09.html"
           else
             st.take_items(ROUKES_REPOT, -1)
             st.set("talk", "1")
-            htmltext = "30067-08.html"
+            html = "30067-08.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when ROUKE
       if st.started?
         case st.cond
         when 1
-          htmltext = "31418-01.html"
+          html = "31418-01.html"
         when 2
-          htmltext = "31418-02.html"
+          html = "31418-02.html"
         when 3
           if st.get_quest_items_count(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) < FRAGMENT_COUNT && st.get_quest_items_count(GIANTS_TECHNOLOGY_REPORT) < REPORT_COUNT
-            htmltext = "31418-04.html"
+            html = "31418-04.html"
           elsif st.get_quest_items_count(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) >= FRAGMENT_COUNT
             count = st.get_quest_items_count(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) / 10
             st.take_items(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, count * 10)
             st.give_items(GIANTS_EXPERIMENTAL_TOOL, count)
-            htmltext = "31418-05.html"
+            html = "31418-05.html"
           end
         when 4
           if st.set?("talk")
-            htmltext = "31418-07.html"
+            html = "31418-07.html"
           elsif st.get_quest_items_count(GIANTS_TECHNOLOGY_REPORT) >= REPORT_COUNT
             st.take_items(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, -1)
             st.take_items(GIANTS_EXPERIMENTAL_TOOL, -1)
             st.take_items(GIANTS_TECHNOLOGY_REPORT, -1)
             st.set("talk", "1")
-            htmltext = "31418-06.html"
+            html = "31418-06.html"
           end
         when 5
-          htmltext = "31418-09.html"
+          html = "31418-09.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

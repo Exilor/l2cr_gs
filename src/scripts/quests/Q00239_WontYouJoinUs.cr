@@ -1,4 +1,4 @@
-class Quests::Q00239_WontYouJoinUs < Quest
+class Scripts::Q00239_WontYouJoinUs < Quest
   # NPC
   private ATHENIA = 32643
   # Mobs
@@ -24,9 +24,9 @@ class Quests::Q00239_WontYouJoinUs < Quest
     register_quest_items(DESTROYED_MACHINE_PIECE, ENCHANTED_GOLEM_FRAGMENT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -93,14 +93,22 @@ class Quests::Q00239_WontYouJoinUs < Quest
     when State::STARTED
       case st.cond
       when 1
-        html = st.has_quest_items?(DESTROYED_MACHINE_PIECE) ? "32643-05.html" : "32643-04.html"
+        if st.has_quest_items?(DESTROYED_MACHINE_PIECE)
+          html = "32643-05.html"
+        else
+          html = "32643-04.html"
+        end
       when 2
         if st.get_quest_items_count(DESTROYED_MACHINE_PIECE) == DESTROYED_MACHINE_PIECE_NEEDED
           html = "32643-06.html"
           st.take_items(DESTROYED_MACHINE_PIECE, -1)
         end
       when 3
-        html = st.has_quest_items?(ENCHANTED_GOLEM_FRAGMENT) ? "32643-08.html" : "32643-09.html"
+        if st.has_quest_items?(ENCHANTED_GOLEM_FRAGMENT)
+          html = "32643-08.html"
+        else
+          html = "32643-09.html"
+        end
       when 4
         if st.get_quest_items_count(ENCHANTED_GOLEM_FRAGMENT) == ENCHANTED_GOLEM_FRAGMENT_NEEDED
           html = "32643-10.html"

@@ -7,7 +7,7 @@ class Packets::Incoming::MoveToLocationInAirship < GameClientPacket
   @origin_y = 0
   @origin_z = 0
 
-  def read_impl
+  private def read_impl
     @ship_id = d
     @target_x = d
     @target_y = d
@@ -17,7 +17,7 @@ class Packets::Incoming::MoveToLocationInAirship < GameClientPacket
     @origin_z = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if @target_x == @origin_x && @target_y == @origin_y

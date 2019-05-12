@@ -1,4 +1,4 @@
-class Quests::Q00240_ImTheOnlyOneYouCanTrust < Quest
+class Scripts::Q00240_ImTheOnlyOneYouCanTrust < Quest
   # NPC
   private KINTAIJIN = 32640
   # Monster
@@ -33,10 +33,10 @@ class Quests::Q00240_ImTheOnlyOneYouCanTrust < Quest
     register_quest_items(STAKATO_FANG)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     if event.casecmp?("32640-3.htm")
@@ -46,8 +46,8 @@ class Quests::Q00240_ImTheOnlyOneYouCanTrust < Quest
     event
   end
 
-  def on_kill(npc, player, is_summon)
-    unless m = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    unless m = get_random_party_member(pc, 1)
       return super
     end
 
@@ -62,15 +62,19 @@ class Quests::Q00240_ImTheOnlyOneYouCanTrust < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::CREATED
-      html = player.level >= 81 ? "32640-1.htm" : "32640-0.htm"
+      html = pc.level >= 81 ? "32640-1.htm" : "32640-0.htm"
     when State::STARTED
       case st.cond
       when 1
-        html = st.has_quest_items?(STAKATO_FANG) ? "32640-9.html" : "32640-8.html"
+        if st.has_quest_items?(STAKATO_FANG)
+          html = "32640-9.html"
+        else
+          html = "32640-8.html"
+        end
       when 2
         if st.get_quest_items_count(STAKATO_FANG) >= 25
           st.give_adena(147200, true)
@@ -84,6 +88,6 @@ class Quests::Q00240_ImTheOnlyOneYouCanTrust < Quest
       html = "32640-11.html"
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

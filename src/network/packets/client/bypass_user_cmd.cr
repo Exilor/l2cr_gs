@@ -1,11 +1,11 @@
 class Packets::Incoming::BypassUserCmd < GameClientPacket
   @cmd = 0
 
-  def read_impl
+  private def read_impl
     @cmd = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless handler = UserCommandHandler[@cmd]

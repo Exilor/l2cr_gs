@@ -15,7 +15,7 @@ class Multisell::ListContainer
     temp.includes?(npc_id)
   end
 
-  def npc_only?
+  def npc_only? : Bool
     !@npcs_allowed.nil?
   end
 end

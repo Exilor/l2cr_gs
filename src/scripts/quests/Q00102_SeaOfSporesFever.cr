@@ -1,4 +1,4 @@
-class Quests::Q00102_SeaOfSporesFever < Quest
+class Scripts::Q00102_SeaOfSporesFever < Quest
   # NPCs
   private COBENDELL = 30156
   private BERROS = 30217
@@ -45,7 +45,11 @@ class Quests::Q00102_SeaOfSporesFever < Quest
     add_start_npc(ALBERIUS)
     add_talk_id(ALBERIUS, COBENDELL, GARTRANDELL, BERROS, VELTRESS, RAYEN)
     add_kill_id(DRYAD, DRYAD_ELDER)
-    register_quest_items(ALBERIUS_LIST, ALBERIUS_LETTER, EVERGREEN_AMULET, DRYADS_TEAR, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
+    register_quest_items(
+      ALBERIUS_LIST, ALBERIUS_LETTER, EVERGREEN_AMULET, DRYADS_TEAR,
+      COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3,
+      COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5
+    )
   end
 
   def on_adv_event(event, npc, pc)
@@ -76,36 +80,43 @@ class Quests::Q00102_SeaOfSporesFever < Quest
 
   def on_talk(npc, pc)
     st = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
     if st
       case npc.id
       when ALBERIUS
         case st.state
         when State::CREATED
-          htmltext = pc.race.elf? ? pc.level >= MIN_LVL ? "30284-07.htm" : "30284-08.htm" : "30284-00.htm"
+          if pc.race.elf?
+            if pc.level >= MIN_LVL
+              html = "30284-07.htm"
+            else
+              html = "30284-08.htm"
+            end
+          else
+            html = "30284-00.htm"
+          end
         when State::STARTED
           case st.cond
           when 1
             if st.has_quest_items?(ALBERIUS_LETTER)
-              htmltext = "30284-03.html"
+              html = "30284-03.html"
             end
           when 2
             if st.has_quest_items?(EVERGREEN_AMULET)
-              htmltext = "30284-09.html"
+              html = "30284-09.html"
             end
           when 4
             if st.has_quest_items?(COBENDELLS_MEDICINE1)
               st.take_items(COBENDELLS_MEDICINE1, 1)
               st.give_items(ALBERIUS_LIST, 1)
               st.set_cond(5)
-              htmltext = "30284-04.html"
+              html = "30284-04.html"
             end
           when 5
             if has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
-              htmltext = "30284-05.html"
+              html = "30284-05.html"
             end
           when 6
-            if !has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
+            unless has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
               st.give_items(LESSER_HEALING_POTION, 100)
               st.give_items(ECHO_CRYSTAL_THEME_OF_BATTLE, 10)
               st.give_items(ECHO_CRYSTAL_THEME_OF_LOVE, 10)
@@ -122,11 +133,11 @@ class Quests::Q00102_SeaOfSporesFever < Quest
               st.add_exp_and_sp(30202, 1339)
               st.give_adena(6331, true)
               st.exit_quest(false, true)
-              htmltext = "30284-06.html"
+              html = "30284-06.html"
             end
           end
         when State::COMPLETED
-          htmltext = get_already_completed_msg(pc)
+          html = get_already_completed_msg(pc)
         end
       when COBENDELL
         case st.cond
@@ -135,11 +146,11 @@ class Quests::Q00102_SeaOfSporesFever < Quest
             st.take_items(ALBERIUS_LETTER, 1)
             st.give_items(EVERGREEN_AMULET, 1)
             st.set_cond(2, true)
-            htmltext = "30156-03.html"
+            html = "30156-03.html"
           end
         when 2
           if st.has_quest_items?(EVERGREEN_AMULET) && st.get_quest_items_count(DRYADS_TEAR) < 10
-            htmltext = "30156-04.html"
+            html = "30156-04.html"
           end
         when 3
           if st.get_quest_items_count(DRYADS_TEAR) >= 10
@@ -151,29 +162,29 @@ class Quests::Q00102_SeaOfSporesFever < Quest
             st.give_items(COBENDELLS_MEDICINE4, 1)
             st.give_items(COBENDELLS_MEDICINE5, 1)
             st.set_cond(4, true)
-            htmltext = "30156-05.html"
+            html = "30156-05.html"
           end
         when 4
           if has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
-            htmltext = "30156-06.html"
+            html = "30156-06.html"
           end
         when 5
           if has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
-            htmltext = "30156-07.html"
+            html = "30156-07.html"
           end
         end
       when GARTRANDELL, RAYEN, VELTRESS, BERROS
         if st.has_quest_items?(ALBERIUS_LIST, SENTINELS[npc.id])
           st.take_items(SENTINELS[npc.id], -1)
-          if !has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
+          unless has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
             st.set_cond(6)
           end
 
-          htmltext = "#{npc.id}-01.html"
+          html = "#{npc.id}-01.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

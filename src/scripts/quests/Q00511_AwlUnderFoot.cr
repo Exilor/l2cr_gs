@@ -1,4 +1,4 @@
-class Quests::Q00511_AwlUnderFoot < Quest
+class Scripts::Q00511_AwlUnderFoot < Quest
   private class FAUWorld < InstanceWorld
   end
 
@@ -98,33 +98,33 @@ class Quests::Q00511_AwlUnderFoot < Quest
   end
 
 
-  private def check_conditions(player)
-    unless party = player.party?
+  private def check_conditions(pc)
+    unless party = pc.party?
       return "FortressWarden-03.htm"
     end
-    if party.leader != player
-      return get_htm(player, "FortressWarden-04.htm").sub("%leader%", party.leader.name)
+    if party.leader != pc
+      return get_htm(pc, "FortressWarden-04.htm").sub("%leader%", party.leader.name)
     end
     party.members.each do |m|
       st = get_quest_state(m, false)
       if st.nil? || st.get_int("cond") < 1
-        return get_htm(player, "FortressWarden-05.htm").sub("%player%", m.name)
+        return get_htm(pc, "FortressWarden-05.htm").sub("%player%", m.name)
       end
-      unless Util.in_range?(1000, player, m, true)
-        return get_htm(player, "FortressWarden-06.htm").sub("%player%", m.name)
+      unless Util.in_range?(1000, pc, m, true)
+        return get_htm(pc, "FortressWarden-06.htm").sub("%player%", m.name)
       end
     end
 
     nil
   end
 
-  private def check_fort_condition(player, npc, is_enter)
+  private def check_fort_condition(pc, npc, is_enter)
     fort = npc.fort
     dungeon = FORT_DUNGEONS[npc.id]?
-    if player.nil? || fort.nil? || dungeon.nil?
+    if pc.nil? || fort.nil? || dungeon.nil?
       return "FortressWarden-01.htm"
     end
-    clan = player.clan?
+    clan = pc.clan?
     if clan.nil? || clan.fort_id != fort.residence_id
       return "FortressWarden-01.htm"
     elsif fort.fort_state == 0
@@ -135,12 +135,12 @@ class Quests::Q00511_AwlUnderFoot < Quest
       return "FortressWarden-07.htm"
   end
 
-    unless party = player.party?
+    unless party = pc.party?
       return "FortressWarden-03.htm"
     end
     party.members.each do |m|
       if m.clan?.nil? || m.clan.fort_id == 0 || m.clan.fort_id != fort.residence_id
-        html = get_htm(player, "FortressWarden-05.htm")
+        html = get_htm(pc, "FortressWarden-05.htm")
         return html.sub("%player%", m.name)
       end
     end
@@ -148,16 +148,14 @@ class Quests::Q00511_AwlUnderFoot < Quest
     nil
   end
 
-  private def enter_instance(player, template, coords, dungeon, ret)
-    # check for existing instances for this player
-    world = InstanceManager.get_player_world(player)
+  private def enter_instance(pc, template, coords, dungeon, ret)
     # existing instance
-    if world
+    if world = InstanceManager.get_player_world(pc)
       unless world.is_a?(FAUWorld)
-        player.send_packet(SystemMessageId::YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON)
+        pc.send_packet(SystemMessageId::YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON)
         return ""
       end
-      teleport_player(player, coords, world.instance_id)
+      teleport_player(pc, coords, world.instance_id)
       return ""
     end
     # New instance
@@ -165,47 +163,47 @@ class Quests::Q00511_AwlUnderFoot < Quest
       return ret
     end
 
-    if ret = check_conditions(player)
+    if ret = check_conditions(pc)
       return ret
     end
-    party = player.party?
+    party = pc.party?
     instance_id = InstanceManager.create_dynamic_instance(template)
     ins = InstanceManager.get_instance!(instance_id)
-    ins.exit_loc = Location.new(player)
+    ins.exit_loc = Location.new(pc)
     world = FAUWorld.new
     world.instance_id = instance_id
     world.template_id = dungeon.instance_id
     world.status = 0
     dungeon.reenter_time = Time.ms + REENTERTIME
     InstanceManager.add_world(world)
-    info { "Fortress AwlUnderFoot started #{template} Instance: #{instance_id} created by player: #{player.name}." }
+    info { "Fortress AwlUnderFoot started #{template} Instance: #{instance_id} created by player: #{pc.name}." }
     ThreadPoolManager.schedule_general(SpawnRaid.new(self, world.as(FAUWorld)), RAID_SPAWN_DELAY)
 
-    # teleport players
-    if party.nil?
-      teleport_player(player, coords, instance_id)
-      world.add_allowed(player.l2id)
-    else
+    # teleport pcs
+    if party
       party.members.each do |m|
         teleport_player(m, coords, instance_id)
         world.add_allowed(m.l2id)
         get_quest_state(m, true)
       end
+    else
+      teleport_player(pc, coords, instance_id)
+      world.add_allowed(pc.l2id)
     end
 
-    get_htm(player, "FortressWarden-08.htm").sub("%clan%", player.clan.name)
+    get_htm(pc, "FortressWarden-08.htm").sub("%clan%", pc.clan.name)
   end
 
-  def on_adv_event(event, npc, player)
-    player = player.not_nil!
+  def on_adv_event(event, npc, pc)
+    pc = pc.not_nil!
     npc = npc.not_nil!
 
     html = event
     if event.casecmp?("enter")
       tele = {53322, 246380, -6580}
-      return enter_instance(player, "fortdungeon.xml", tele, FORT_DUNGEONS[npc.id], check_fort_condition(player, npc, true))
+      return enter_instance(pc, "fortdungeon.xml", tele, FORT_DUNGEONS[npc.id], check_fort_condition(pc, npc, true))
     end
-    st = get_quest_state!(player)
+    st = get_quest_state!(pc)
 
     if event.casecmp?("FortressWarden-10.htm")
       if st.cond?(0)
@@ -218,13 +216,13 @@ class Quests::Q00511_AwlUnderFoot < Quest
     html
   end
 
-  def on_attack(npc, player, damage, is_summon)
-    attacker = is_summon ? player.summon! : player
+  def on_attack(npc, pc, damage, is_summon)
+    attacker = is_summon ? pc.summon! : pc
     if attacker.level - npc.level >= 9
       if attacker.buff_count > 0 || attacker.dance_count > 0
         npc.target = attacker
         npc.do_simultaneous_cast(RAID_CURSE)
-      elsif party = player.party?
+      elsif party = pc.party?
         party.members.each do |m|
           if m.buff_count > 0 || m.dance_count > 0
             npc.target = m
@@ -237,16 +235,16 @@ class Quests::Q00511_AwlUnderFoot < Quest
     super
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     world = InstanceManager.get_world(npc.instance_id)
     if world.is_a?(FAUWorld)
       if RAIDS3.includes?(npc.id)
-        if party = player.party?
+        if party = pc.party?
           party.members.each do |pl|
             reward_player(pl)
           end
         else
-          reward_player(player)
+          reward_player(pc)
         end
 
         instance_obj = InstanceManager.get_instance!(world.instance_id)
@@ -261,9 +259,9 @@ class Quests::Q00511_AwlUnderFoot < Quest
     nil
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    if ret = check_fort_condition(player, npc, false)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    if ret = check_fort_condition(pc, npc, false)
       return ret
     end
 
@@ -275,7 +273,7 @@ class Quests::Q00511_AwlUnderFoot < Quest
       cond = st.get_int("cond")
     end
     if FORT_DUNGEONS.has_key?(npc_id) && cond == 0
-      if player.level >= 60
+      if pc.level >= 60
         html = "FortressWarden-09.htm"
       else
         html = "FortressWarden-00.htm"
@@ -292,19 +290,19 @@ class Quests::Q00511_AwlUnderFoot < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
-  private def reward_player(player)
-    st = get_quest_state!(player, false)
+  private def reward_player(pc)
+    st = get_quest_state!(pc, false)
     if st.cond?(1)
       st.give_items(DL_MARK, 140)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end
   end
 
-  private def teleport_player(player, coords, instance_id)
-    player.instance_id = instance_id
-    player.tele_to_location(coords[0], coords[1], coords[2])
+  private def teleport_player(pc, coords, instance_id)
+    pc.instance_id = instance_id
+    pc.tele_to_location(coords[0], coords[1], coords[2])
   end
 end

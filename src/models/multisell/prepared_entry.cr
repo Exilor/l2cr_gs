@@ -1,8 +1,8 @@
 require "./entry"
 
 class Multisell::PreparedEntry < Multisell::Entry
-  getter tax_amount = 0i64
   @stackable = true
+  getter tax_amount = 0i64
 
   def initialize(template, item, apply_taxes, maintain_enchantment, tax_rate)
     @tax_amount = 0i64

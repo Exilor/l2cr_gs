@@ -319,14 +319,14 @@ abstract class AbstractScript
     send_item_get_message(pc, item, count)
   end
 
-  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, attribute_id : Int32, attribute_level : Int32)
+  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, attribute_id : Int, attribute_level : Int)
     return if count <= 0
 
     item = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
     return unless item
 
     if attribute_id >= 0 && attribute_level > 0
-      item.set_element_attr(attribute_id, attribute_level)
+      item.set_element_attr(attribute_id.to_i8, attribute_level)
       if item.equipped?
         item.update_element_attr_bonus(pc)
       end
@@ -605,15 +605,15 @@ abstract class AbstractScript
     AbstractScript.add_minion(master, minion_id)
   end
 
-  def self.give_adena(pc : L2PcInstance, count : Int64, apply_rates : Bool)
+  def self.give_adena(pc : L2PcInstance, count : Int, apply_rates : Bool)
     if apply_rates
-      reward_items(pc, Inventory::ADENA_ID, count)
+      reward_items(pc, Inventory::ADENA_ID, count.to_i64)
     else
-      give_items(pc, Inventory::ADENA_ID, count)
+      give_items(pc, Inventory::ADENA_ID, count.to_i64)
     end
   end
 
-  def give_adena(pc : L2PcInstance, count : Int64, apply_rates : Bool)
+  def give_adena(pc : L2PcInstance, count : Int, apply_rates : Bool)
     AbstractScript.give_adena(pc, count, apply_rates)
   end
 
@@ -623,6 +623,7 @@ abstract class AbstractScript
 
   def self.reward_items(pc : L2PcInstance, item_id : Int32, count : Int)
     return if count <= 0
+    count = count.to_i64
 
     return unless item = ItemTable[item_id]?
 
@@ -633,7 +634,7 @@ abstract class AbstractScript
         case item.item_type
         when EtcItemType::POTION
           count *= Config.rate_quest_reward_potion
-        when EtcItemType::SCRL_ENCHANT_WP, EtcItemType::SCRL_ENCHANT_AM, EtcItemType::SCROLL
+        when EtcItemType::SCRL_ENCHANT_WP..EtcItemType::SCROLL
           count *= Config.rate_quest_reward_scroll
         when EtcItemType::RECIPE
           count *= Config.rate_quest_reward_recipe
@@ -922,6 +923,7 @@ abstract class AbstractScript
   end
 
   def action_for_each_player(pc : L2PcInstance, npc : L2Npc, is_summon : Bool)
+    warn "no-op #action_for_each_player called."
     # no-op
   end
 

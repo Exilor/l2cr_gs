@@ -1,4 +1,4 @@
-class NpcAI::Gordon < AbstractNpcAI
+class Scripts::Gordon < AbstractNpcAI
   private GORDON = 29095
 
   def initialize

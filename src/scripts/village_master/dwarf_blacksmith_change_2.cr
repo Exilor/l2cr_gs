@@ -1,4 +1,4 @@
-class NpcAI::DwarfBlacksmithChange2 < AbstractNpcAI
+class Scripts::DwarfBlacksmithChange2 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30512, # Kusto

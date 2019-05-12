@@ -1,4 +1,4 @@
-class Quests::Q00261_CollectorsDream < Quest
+class Scripts::Q00261_CollectorsDream < Quest
   # Npc
   private ALSHUPES = 30222
   # Monsters
@@ -45,31 +45,29 @@ class Quests::Q00261_CollectorsDream < Quest
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
-    if st.nil?
-      return htmltext
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
     end
 
     case st.state
     when State::CREATED
-      htmltext = pc.level >= MIN_LVL ? "30222-02.htm" : "30222-01.htm"
+      html = pc.level >= MIN_LVL ? "30222-02.htm" : "30222-01.htm"
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30222-04.html"
+        html = "30222-04.html"
       when 2
         if st.get_quest_items_count(SPIDER_LEG) >= MAX_LEG_COUNT
           self.class.give_newbie_reward(pc)
           st.give_adena(1000, true)
           st.add_exp_and_sp(2000, 0)
           st.exit_quest(true, true)
-          htmltext = "30222-05.html"
+          html = "30222-05.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 
   def self.give_newbie_reward(pc : L2PcInstance)

@@ -1,4 +1,4 @@
-class NpcAI::Abercrombie < AbstractNpcAI
+class Scripts::Abercrombie < AbstractNpcAI
   # NPC
   private ABERCROMBIE = 31555
   # Items

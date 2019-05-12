@@ -1,6 +1,7 @@
-class NpcAI::SelMahumDrill < AbstractNpcAI
-  class Actions < EnumClass #should be private
-    getter_initializer social_action_id: Int32, alt_social_action_id: Int32,
+class Scripts::SelMahumDrill < AbstractNpcAI
+  class Actions < EnumClass
+    getter social_action_id, alt_social_action_id, repeat_count, repeat_interval
+    protected initializer social_action_id: Int32, alt_social_action_id: Int32,
       repeat_count: Int32, repeat_interval: Int32
 
     add(SCE_TRAINING_ACTION_A, 4, -1, 2, 2333)
@@ -12,7 +13,7 @@ class NpcAI::SelMahumDrill < AbstractNpcAI
   private MAHUM_CHIEFS = {
     22775, # Sel Mahum Drill Sergeant
     22776, # Sel Mahum Training Officer
-    22778, # Sel Mahum Drill Sergeant
+    22778  # Sel Mahum Drill Sergeant
   }
 
   private MAHUM_SOLDIERS = {
@@ -20,7 +21,7 @@ class NpcAI::SelMahumDrill < AbstractNpcAI
     22782, # Sel Mahum Recruit
     22783, # Sel Mahum Soldier
     22784, # Sel Mahum Recruit
-    22785, # Sel Mahum Soldier
+    22785  # Sel Mahum Soldier
   }
 
   private CHIEF_SOCIAL_ACTIONS = {

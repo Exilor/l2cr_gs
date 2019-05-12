@@ -1,4 +1,4 @@
-class NpcAI::ElrokiTeleporters < AbstractNpcAI
+class Scripts::ElrokiTeleporters < AbstractNpcAI
   # NPCs
   private ORAHOCHIN = 32111
   private GARIACHIN = 32112

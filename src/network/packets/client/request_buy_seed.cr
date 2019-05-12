@@ -4,7 +4,7 @@ class Packets::Incoming::RequestBuySeed < GameClientPacket
   @items : Slice(ItemHolder)?
   @manor_id = 0
 
-  def read_impl
+  private def read_impl
     @manor_id = d
 
     count = d
@@ -26,7 +26,7 @@ class Packets::Incoming::RequestBuySeed < GameClientPacket
     @items = items
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless _items = @items

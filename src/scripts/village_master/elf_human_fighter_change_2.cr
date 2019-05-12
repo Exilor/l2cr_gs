@@ -1,4 +1,4 @@
-class NpcAI::ElfHumanFighterChange2 < AbstractNpcAI
+class Scripts::ElfHumanFighterChange2 < AbstractNpcAI
   private NPCS = {
     30109, # Hannavalt
     30187, # Klaus

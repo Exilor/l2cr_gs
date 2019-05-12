@@ -1,4 +1,4 @@
-class Quests::Q00031_SecretBuriedInTheSwamp < Quest
+class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
   # NPCs
   private ABERCROMBIE = 31555
   private FORGOTTEN_MONUMENT_1 = 31661
@@ -27,9 +27,9 @@ class Quests::Q00031_SecretBuriedInTheSwamp < Quest
     register_quest_items(KRORINS_JOURNAL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -37,78 +37,78 @@ class Quests::Q00031_SecretBuriedInTheSwamp < Quest
     when "31555-02.html"
       if st.created?
         st.start_quest
-        htmltext = event
+        html = event
       end
     when "31665-02.html"
       if st.cond?(1)
         st.set_cond(2, true)
         st.give_items(KRORINS_JOURNAL, 1)
-        htmltext = event
+        html = event
       end
     when "31555-05.html"
       if st.cond?(2) && st.has_quest_items?(KRORINS_JOURNAL)
         st.take_items(KRORINS_JOURNAL, -1)
         st.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "31661-02.html", "31662-02.html", "31663-02.html", "31664-02.html"
       idx = MONUMENTS.index(npc.not_nil!.id)
       if idx && st.cond?(idx + 3)
         st.set_cond(st.cond + 1, true)
-        htmltext = event
+        html = event
       end
     when "31555-08.html"
       if st.cond?(7)
         st.add_exp_and_sp(490000, 45880)
         st.give_adena(120000, true)
         st.exit_quest(false, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when ABERCROMBIE
       case st.state
       when State::CREATED
-        htmltext = player.level >= MIN_LVL ? "31555-01.htm" : "31555-03.htm"
+        html = pc.level >= MIN_LVL ? "31555-01.htm" : "31555-03.htm"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "31555-02.html"
+          html = "31555-02.html"
         when 2
           if st.has_quest_items?(KRORINS_JOURNAL)
-            htmltext = "31555-04.html"
+            html = "31555-04.html"
           end
         when 3
-          htmltext = "31555-06.html"
+          html = "31555-06.html"
         when 7
-          htmltext = "31555-07.html"
+          html = "31555-07.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when CORPSE_OF_DWARF
       case st.cond
       when 1
-        htmltext = "31665-01.html"
+        html = "31665-01.html"
       when 2
-        htmltext = "31665-03.html"
+        html = "31665-03.html"
       end
     when FORGOTTEN_MONUMENT_1..FORGOTTEN_MONUMENT_4
       loc = MONUMENTS.index(npc.id).not_nil! + 3
       if st.cond?(loc)
-        htmltext = "#{npc.id}-01.html"
+        html = "#{npc.id}-01.html"
       elsif st.cond?(loc + 1)
-        htmltext = "#{npc.id}-03.html"
+        html = "#{npc.id}-03.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

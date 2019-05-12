@@ -1,4 +1,4 @@
-class NpcAI::GiantsCave < AbstractNpcAI
+class Scripts::GiantsCave < AbstractNpcAI
   # NPC
   private SCOUTS = {
     22668, # Gamlin (Scout)

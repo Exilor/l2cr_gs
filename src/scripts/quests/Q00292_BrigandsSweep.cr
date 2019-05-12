@@ -1,4 +1,4 @@
-class Quests::Q00292_BrigandsSweep < Quest
+class Scripts::Q00292_BrigandsSweep < Quest
   # NPCs
   private SPIRON = 30532
   private BALANKI = 30533
@@ -25,12 +25,15 @@ class Quests::Q00292_BrigandsSweep < Quest
     add_start_npc(SPIRON)
     add_talk_id(SPIRON, BALANKI)
     add_kill_id(MOB_ITEM_DROP.keys)
-    register_quest_items(GOBLIN_NECKLACE, GOBLIN_PENDANT, GOBLIN_LORD_PENDANT, SUSPICIOUS_MEMO, SUSPICIOUS_CONTRACT)
+    register_quest_items(
+      GOBLIN_NECKLACE, GOBLIN_PENDANT, GOBLIN_LORD_PENDANT, SUSPICIOUS_MEMO,
+      SUSPICIOUS_CONTRACT
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "30532-03.htm"
@@ -76,34 +79,45 @@ class Quests::Q00292_BrigandsSweep < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
-    html = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     case npc.id
     when SPIRON
       case qs.state
       when State::CREATED
-        html = talker.race.dwarf? ? talker.level >= MIN_LVL ? "30532-02.htm" : "30532-01.htm" : "30532-00.htm"
+        if pc.race.dwarf?
+          if pc.level >= MIN_LVL
+            html = "30532-02.htm"
+          else
+            html = "30532-01.htm"
+          end
+        else
+          html = "30532-00.htm"
+        end
       when State::STARTED
-        if !has_at_least_one_quest_item?(talker, registered_item_ids)
+        if !has_at_least_one_quest_item?(pc, registered_item_ids)
           html = "30532-04.html"
         else
-          necklaces = get_quest_items_count(talker, GOBLIN_NECKLACE)
-          pendants = get_quest_items_count(talker, GOBLIN_PENDANT)
-          lord_pendants = get_quest_items_count(talker, GOBLIN_LORD_PENDANT)
+          necklaces = get_quest_items_count(pc, GOBLIN_NECKLACE)
+          pendants = get_quest_items_count(pc, GOBLIN_PENDANT)
+          lord_pendants = get_quest_items_count(pc, GOBLIN_LORD_PENDANT)
           sum = necklaces + pendants + lord_pendants
           if sum > 0
-            give_adena(talker, (necklaces * 12) + (pendants * 36) + (lord_pendants * 33) + (sum >= 10 ? 1000 : 0), true)
-            take_items(talker, -1, {GOBLIN_NECKLACE, GOBLIN_PENDANT, GOBLIN_LORD_PENDANT})
+            adena = (necklaces * 12) + (pendants * 36) + (lord_pendants * 33)
+            if sum >= 10
+              adena += 1000
+            end
+            give_adena(pc, adena, true)
+            take_items(pc, -1, {GOBLIN_NECKLACE, GOBLIN_PENDANT, GOBLIN_LORD_PENDANT})
           end
 
-          if sum > 0 && !has_at_least_one_quest_item?(talker, SUSPICIOUS_MEMO, SUSPICIOUS_CONTRACT)
+          if sum > 0 && !has_at_least_one_quest_item?(pc, SUSPICIOUS_MEMO, SUSPICIOUS_CONTRACT)
             html = "30532-05.html"
           else
-            memos = get_quest_items_count(talker, SUSPICIOUS_MEMO)
-            if memos == 0 && has_quest_items?(talker, SUSPICIOUS_CONTRACT)
-              give_adena(talker, 1120, true)
-              take_items(talker, -1, {SUSPICIOUS_CONTRACT}) # Retail like, reward is given in 2 pieces if both conditions are meet.
+            memos = get_quest_items_count(pc, SUSPICIOUS_MEMO)
+            if memos == 0 && has_quest_items?(pc, SUSPICIOUS_CONTRACT)
+              give_adena(pc, 1120, true)
+              take_items(pc, -1, {SUSPICIOUS_CONTRACT}) # Retail like, reward is given in 2 pieces if both conditions are meet.
               html = "30532-10.html"
             else
               if memos == 1
@@ -117,9 +131,9 @@ class Quests::Q00292_BrigandsSweep < Quest
       end
     when BALANKI
       if qs.started?
-        if has_quest_items?(talker, SUSPICIOUS_CONTRACT)
-          give_adena(talker, 620, true)
-          take_items(talker, 1487, -1)
+        if has_quest_items?(pc, SUSPICIOUS_CONTRACT)
+          give_adena(pc, 620, true)
+          take_items(pc, 1487, -1)
           html = "30533-02.html"
         else
           html = "30533-01.html"
@@ -127,6 +141,6 @@ class Quests::Q00292_BrigandsSweep < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

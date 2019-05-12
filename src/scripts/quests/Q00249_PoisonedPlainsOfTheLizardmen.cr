@@ -1,4 +1,4 @@
-class Quests::Q00249_PoisonedPlainsOfTheLizardmen < Quest
+class Scripts::Q00249_PoisonedPlainsOfTheLizardmen < Quest
   # NPCs
   private MOUEN = 30196
   private JOHNNY = 32744

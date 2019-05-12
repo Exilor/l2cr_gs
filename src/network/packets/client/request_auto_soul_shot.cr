@@ -4,12 +4,12 @@ class Packets::Incoming::RequestAutoSoulShot < GameClientPacket
   @item_id = 0
   @type = 0
 
-  def read_impl
+  private def read_impl
     @item_id = d
     @type = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     return unless pc.private_store_type.none? && !pc.active_requester

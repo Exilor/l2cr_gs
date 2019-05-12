@@ -4,7 +4,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
   @list_id = 0
   @items : Slice(Int32)?
 
-  def read_impl
+  private def read_impl
     @list_id = d
     count = d
     if count <= 0 || count > Config.max_item_in_packet || count * BATCH_LENGTH != buffer.remaining
@@ -14,7 +14,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
     @items = Slice.new(count) { d }
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless flood_protectors.transaction.try_perform_action("refund")

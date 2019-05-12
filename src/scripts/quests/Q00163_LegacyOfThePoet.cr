@@ -1,4 +1,4 @@
-class Quests::Q00163_LegacyOfThePoet < Quest
+class Scripts::Q00163_LegacyOfThePoet < Quest
   # NPC
   private STARDEN = 30220
   # Monsters
@@ -20,7 +20,9 @@ class Quests::Q00163_LegacyOfThePoet < Quest
     add_start_npc(STARDEN)
     add_talk_id(STARDEN)
     add_kill_id(MONSTERS)
-    register_quest_items(RUMIELS_1ST_POEM, RUMIELS_2ND_POEM, RUMIELS_3RD_POEM, RUMIELS_4TH_POEM)
+    register_quest_items(
+      RUMIELS_1ST_POEM, RUMIELS_2ND_POEM, RUMIELS_3RD_POEM, RUMIELS_4TH_POEM
+    )
   end
 
   def on_adv_event(event, npc, pc)
@@ -29,14 +31,14 @@ class Quests::Q00163_LegacyOfThePoet < Quest
     if st = get_quest_state(pc, false)
       case event
       when "30220-03.html", "30220-04.html"
-        htmltext = event
+        html = event
       when "30220-05.htm"
         st.start_quest
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -80,26 +82,32 @@ class Quests::Q00163_LegacyOfThePoet < Quest
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
-    if st
+    if st = get_quest_state(pc, true)
       case st.state
       when State::CREATED
-        htmltext = !pc.race.dark_elf? ? pc.level >= MIN_LVL ? "30220-02.htm" : "30220-01.htm" : "30220-00.htm"
+        if !pc.race.dark_elf?
+          if pc.level >= MIN_LVL
+            html = "30220-02.htm"
+          else
+            html = "30220-01.htm"
+          end
+        else
+          html = "30220-00.htm"
+        end
       when State::STARTED
         if st.has_quest_items?(RUMIELS_1ST_POEM, RUMIELS_2ND_POEM, RUMIELS_3RD_POEM, RUMIELS_4TH_POEM)
           st.add_exp_and_sp(21643, 943)
           st.give_adena(13890, true)
           st.exit_quest(false, true)
-          htmltext = "30220-07.html"
+          html = "30220-07.html"
         else
-          htmltext = "30220-06.html"
+          html = "30220-06.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

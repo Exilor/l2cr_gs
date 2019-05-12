@@ -1,11 +1,11 @@
 class Packets::Incoming::CharacterRestore < GameClientPacket
   @slot = 0
 
-  def read_impl
+  private def read_impl
     @slot = d
   end
 
-  def run_impl
+  private def run_impl
     unless flood_protectors.character_select.try_perform_action("CharacterRestore")
       debug "Flood detected."
       return

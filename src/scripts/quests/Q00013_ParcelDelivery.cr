@@ -1,4 +1,4 @@
-class Quests::Q00013_ParcelDelivery < Quest
+class Scripts::Q00013_ParcelDelivery < Quest
   # NPCs
 	private FUNDIN = 31274
 	private VULCAN = 31539
@@ -35,27 +35,28 @@ class Quests::Q00013_ParcelDelivery < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case st.state
     when State::CREATED
       if npc.id == FUNDIN
-        htmltext = pc.level >= 74 ? "31274-00.htm" : "31274-01.html"
+        html = pc.level >= 74 ? "31274-00.htm" : "31274-01.html"
       end
     when State::STARTED
       if st.cond?(1)
         case npc.id
         when FUNDIN
-          htmltext = "31274-02.html"
+          html = "31274-02.html"
         when VULCAN
-          htmltext = "31539-00.html"
+          html = "31539-00.html"
         end
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(pc)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

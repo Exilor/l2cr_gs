@@ -1,4 +1,4 @@
-class Quests::Q00198_SevenSignsEmbryo < Quest
+class Scripts::Q00198_SevenSignsEmbryo < Quest
   # NPCs
   private SHILENS_EVIL_THOUGHTS = 27346
   private WOOD = 32593
@@ -22,7 +22,7 @@ class Quests::Q00198_SevenSignsEmbryo < Quest
     register_quest_items(SCULPTURE_OF_DOUBT)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
 
     if npc.id == SHILENS_EVIL_THOUGHTS && event == "despawn"
@@ -35,8 +35,8 @@ class Quests::Q00198_SevenSignsEmbryo < Quest
       return super
     end
 
-    return unless player
-    unless st = get_quest_state(player, false)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -54,26 +54,26 @@ class Quests::Q00198_SevenSignsEmbryo < Quest
       if st.cond?(1)
         @busy = true
         ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::S1_THAT_STRANGER_MUST_BE_DEFEATED_HERE_IS_THE_ULTIMATE_HELP)
-        ns.add_string_parameter(player.name)
+        ns.add_string_parameter(pc.name)
         npc.broadcast_packet(ns)
-        start_quest_timer("heal", 30000 - rand(20000), npc, player)
+        start_quest_timer("heal", 30000 - rand(20000), npc, pc)
         mob = add_spawn(SHILENS_EVIL_THOUGHTS, -23734, -9184, -5384, 0, false, 0, false, npc.instance_id).as(L2MonsterInstance)
         mob.broadcast_packet(NpcSay.new(mob.l2id, Say2::NPC_ALL, mob.id, NpcString::YOU_ARE_NOT_THE_OWNER_OF_THAT_ITEM))
         mob.set_running
-        mob.add_damage_hate(player, 0, 999)
-        mob.set_intention(AI::ATTACK, player)
+        mob.add_damage_hate(pc, 0, 999)
+        mob.set_intention(AI::ATTACK, pc)
         start_quest_timer("despawn", 300000, mob, nil)
       end
     when "heal"
-      if !npc.inside_radius?(player, 600, true, false)
+      if !npc.inside_radius?(pc, 600, true, false)
         ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::LOOK_HERE_S1_DONT_FALL_TOO_FAR_BEHIND)
-        ns.add_string_parameter(player.name)
+        ns.add_string_parameter(pc.name)
         npc.broadcast_packet(ns)
-      elsif player.alive?
-        npc.target = player
+      elsif pc.alive?
+        npc.target = pc
         npc.do_cast(NPC_HEAL)
       end
-      start_quest_timer("heal", 30000 - rand(20000), npc, player)
+      start_quest_timer("heal", 30000 - rand(20000), npc, pc)
     when "32597-08.html", "32597-09.html", "32597-10.html"
       if st.cond?(2) && st.has_quest_items?(SCULPTURE_OF_DOUBT)
         html = event
@@ -92,8 +92,8 @@ class Quests::Q00198_SevenSignsEmbryo < Quest
     html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 1)
       return
     end
 
@@ -115,15 +115,15 @@ class Quests::Q00198_SevenSignsEmbryo < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::COMPLETED
-      html = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
       if npc.id == WOOD
-        if player.level >= MIN_LEVEL && player.quest_completed?(Q00197_SevenSignsTheSacredBookOfSeal.simple_name)
+        if pc.level >= MIN_LEVEL && pc.quest_completed?(Q00197_SevenSignsTheSacredBookOfSeal.simple_name)
           html = "32593-01.htm"
         else
           html = "32593-03.html"
@@ -134,7 +134,7 @@ class Quests::Q00198_SevenSignsEmbryo < Quest
         if st.cond > 0 && st.cond < 3
           html = "32593-04.html"
         elsif st.cond?(3)
-          if player.level >= MIN_LEVEL
+          if pc.level >= MIN_LEVEL
             st.add_exp_and_sp(315108090, 34906059)
             st.give_items(DAWNS_BRACELET, 1)
             st.give_items(Inventory::ANCIENT_ADENA_ID, 1500000)
@@ -158,6 +158,6 @@ class Quests::Q00198_SevenSignsEmbryo < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

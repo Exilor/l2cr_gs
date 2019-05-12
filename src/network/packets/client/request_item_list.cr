@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestItemList < GameClientPacket
   no_action_request
 
-  def read_impl
+  private def read_impl
     # no-op
   end
 
-  def run_impl
+  private def run_impl
     if client = @client
       if pc = client.active_char
         unless pc.inventory_disabled?

@@ -1,4 +1,4 @@
-class Quests::Q00224_TestOfSagittarius < Quest
+class Scripts::Q00224_TestOfSagittarius < Quest
   # NPCs
   private PREFECT_VOKIAN = 30514
   private SAGITTARIUS_HAMIL = 30626
@@ -56,65 +56,80 @@ class Quests::Q00224_TestOfSagittarius < Quest
     super(224, self.class.simple_name, "Test Of Sagittarius")
 
     add_start_npc(GUILD_PRESIDENT_BERNARD)
-    add_talk_id(GUILD_PRESIDENT_BERNARD, PREFECT_VOKIAN, SAGITTARIUS_HAMIL, SIR_ARON_TANFORD, MAGISTER_GAUEN)
-    add_kill_id(ANT, ANT_CAPTAIN, ANT_OVERSEER, ANT_RECRUIT, ANT_PATROL, ANT_GUARD, NOBLE_ANT, NOBLE_ANT_LEADER, MARSH_STAKATO_WORKER, MARSH_STAKATO_SOLDIER, MARSH_SPIDER, MARSH_STAKATO_DRONE, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, ROAD_SCAVENGER, MANASHEN_GARGOYLE, LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER, LETO_LIZARDMAN_SOLDIER, LETO_LIZARDMAN_WARRIOR, LETO_LIZARDMAN_SHAMAN, LETO_LIZARDMAN_OVERLORD, SERPENT_DEMON_KADESH)
-    register_quest_items(CRESCENT_MOON_BOW, BERNARDS_INTRODUCTION, HAMILS_1ST_LETTER, HAMILS_2ND_LETTER, HAMILS_3RD_LETTER, HUNTERS_1ST_RUNE, HUNTERS_2ND_RUNE, TALISMAN_OF_KADESH, TALISMAN_OF_SNAKE, MITHRIL_CLIP, STAKATO_CHITIN, REINFORCED_BOWSTRING, MANASHENS_HORN, BLOOD_OF_LIZARDMAN)
+    add_talk_id(
+      GUILD_PRESIDENT_BERNARD, PREFECT_VOKIAN, SAGITTARIUS_HAMIL,
+      SIR_ARON_TANFORD, MAGISTER_GAUEN
+    )
+    add_kill_id(
+      ANT, ANT_CAPTAIN, ANT_OVERSEER, ANT_RECRUIT, ANT_PATROL, ANT_GUARD,
+      NOBLE_ANT, NOBLE_ANT_LEADER, MARSH_STAKATO_WORKER, MARSH_STAKATO_SOLDIER,
+      MARSH_SPIDER, MARSH_STAKATO_DRONE, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD,
+      ROAD_SCAVENGER, MANASHEN_GARGOYLE, LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER,
+      LETO_LIZARDMAN_SOLDIER, LETO_LIZARDMAN_WARRIOR, LETO_LIZARDMAN_SHAMAN,
+      LETO_LIZARDMAN_OVERLORD, SERPENT_DEMON_KADESH
+    )
+    register_quest_items(
+      CRESCENT_MOON_BOW, BERNARDS_INTRODUCTION, HAMILS_1ST_LETTER,
+      HAMILS_2ND_LETTER, HAMILS_3RD_LETTER, HUNTERS_1ST_RUNE, HUNTERS_2ND_RUNE,
+      TALISMAN_OF_KADESH, TALISMAN_OF_SNAKE, MITHRIL_CLIP, STAKATO_CHITIN,
+      REINFORCED_BOWSTRING, MANASHENS_HORN, BLOOD_OF_LIZARDMAN
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        give_items(player, BERNARDS_INTRODUCTION, 1)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 96)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30702-04a.htm"
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        give_items(pc, BERNARDS_INTRODUCTION, 1)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 96)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30702-04a.htm"
         else
-          htmltext = "30702-04.htm"
+          html = "30702-04.htm"
         end
       end
     when "30514-02.html"
-      if has_quest_items?(player, HAMILS_2ND_LETTER)
-        take_items(player, HAMILS_2ND_LETTER, 1)
+      if has_quest_items?(pc, HAMILS_2ND_LETTER)
+        take_items(pc, HAMILS_2ND_LETTER, 1)
         qs.memo_state = 6
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "30626-02.html", "30626-06.html"
-      htmltext = event
+      html = event
     when "30626-03.html"
-      if has_quest_items?(player, BERNARDS_INTRODUCTION)
-        take_items(player, BERNARDS_INTRODUCTION, 1)
-        give_items(player, HAMILS_1ST_LETTER, 1)
+      if has_quest_items?(pc, BERNARDS_INTRODUCTION)
+        take_items(pc, BERNARDS_INTRODUCTION, 1)
+        give_items(pc, HAMILS_1ST_LETTER, 1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "30626-07.html"
-      if get_quest_items_count(player, HUNTERS_1ST_RUNE) >= 10
-        give_items(player, HAMILS_2ND_LETTER, 1)
-        take_items(player, HUNTERS_1ST_RUNE, -1)
+      if get_quest_items_count(pc, HUNTERS_1ST_RUNE) >= 10
+        give_items(pc, HAMILS_2ND_LETTER, 1)
+        take_items(pc, HUNTERS_1ST_RUNE, -1)
         qs.memo_state = 5
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "30653-02.html"
-      if has_quest_items?(player, HAMILS_1ST_LETTER)
-        take_items(player, HAMILS_1ST_LETTER, 1)
+      if has_quest_items?(pc, HAMILS_1ST_LETTER)
+        take_items(pc, HAMILS_1ST_LETTER, 1)
         qs.memo_state = 3
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -189,11 +204,8 @@ class Quests::Q00224_TestOfSagittarius < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-      when LETO_LIZARDMAN,
-           LETO_LIZARDMAN_ARCHER,
-           LETO_LIZARDMAN_SOLDIER,
-           LETO_LIZARDMAN_WARRIOR,
-           LETO_LIZARDMAN_SHAMAN,
+      when LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER, LETO_LIZARDMAN_SOLDIER,
+           LETO_LIZARDMAN_WARRIOR, LETO_LIZARDMAN_SHAMAN,
            LETO_LIZARDMAN_OVERLORD
         if qs.memo_state?(13) && get_quest_items_count(killer, BLOOD_OF_LIZARDMAN) < 140
           if (get_quest_items_count(killer, BLOOD_OF_LIZARDMAN) - 10) * 5 > Rnd.rand(100)
@@ -221,130 +233,130 @@ class Quests::Q00224_TestOfSagittarius < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
-    htmltext = get_no_quest_msg(player)
+
     if qs.created?
       if npc.id == GUILD_PRESIDENT_BERNARD
-        if player.class_id.rogue? || player.class_id.elven_scout? || player.class_id.assassin?
-          if player.level >= MIN_LEVEL
-            htmltext = "30702-03.htm"
+        if pc.class_id.rogue? || pc.class_id.elven_scout? || pc.class_id.assassin?
+          if pc.level >= MIN_LEVEL
+            html = "30702-03.htm"
           else
-            htmltext = "30702-01.html"
+            html = "30702-01.html"
           end
         else
-          htmltext = "30702-02.html"
+          html = "30702-02.html"
         end
       end
     elsif qs.started?
       case npc.id
       when GUILD_PRESIDENT_BERNARD
-        if has_quest_items?(player, BERNARDS_INTRODUCTION)
-          htmltext = "30702-05.html"
+        if has_quest_items?(pc, BERNARDS_INTRODUCTION)
+          html = "30702-05.html"
         end
       when PREFECT_VOKIAN
         if memo_state == 5
-          if has_quest_items?(player, HAMILS_2ND_LETTER)
-            htmltext = "30514-01.html"
+          if has_quest_items?(pc, HAMILS_2ND_LETTER)
+            html = "30514-01.html"
           end
         elsif memo_state == 6
-          htmltext = "30514-03.html"
+          html = "30514-03.html"
         elsif memo_state == 7
-          if has_quest_items?(player, TALISMAN_OF_SNAKE)
-            take_items(player, TALISMAN_OF_SNAKE, 1)
+          if has_quest_items?(pc, TALISMAN_OF_SNAKE)
+            take_items(pc, TALISMAN_OF_SNAKE, 1)
             qs.memo_state = 8
             qs.set_cond(8, true)
-            htmltext = "30514-04.html"
+            html = "30514-04.html"
           end
         elsif memo_state == 8
-          htmltext = "30514-05.html"
+          html = "30514-05.html"
         end
       when SAGITTARIUS_HAMIL
         if memo_state == 1
-          if has_quest_items?(player, BERNARDS_INTRODUCTION)
-            htmltext = "30626-01.html"
+          if has_quest_items?(pc, BERNARDS_INTRODUCTION)
+            html = "30626-01.html"
           end
         elsif memo_state == 2
-          if has_quest_items?(player, HAMILS_1ST_LETTER)
-            htmltext = "30626-04.html"
+          if has_quest_items?(pc, HAMILS_1ST_LETTER)
+            html = "30626-04.html"
           end
         elsif memo_state == 4
-          if get_quest_items_count(player, HUNTERS_1ST_RUNE) == 10
-            htmltext = "30626-05.html"
+          if get_quest_items_count(pc, HUNTERS_1ST_RUNE) == 10
+            html = "30626-05.html"
           end
         elsif memo_state == 5
-          if has_quest_items?(player, HAMILS_2ND_LETTER)
-            htmltext = "30626-08.html"
+          if has_quest_items?(pc, HAMILS_2ND_LETTER)
+            html = "30626-08.html"
           end
         elsif memo_state == 8
-          give_items(player, HAMILS_3RD_LETTER, 1)
-          take_items(player, HUNTERS_2ND_RUNE, -1)
+          give_items(pc, HAMILS_3RD_LETTER, 1)
+          take_items(pc, HUNTERS_2ND_RUNE, -1)
           qs.memo_state = 9
           qs.set_cond(9, true)
-          htmltext = "30626-09.html"
+          html = "30626-09.html"
         elsif memo_state == 9
-          if has_quest_items?(player, HAMILS_3RD_LETTER)
-            htmltext = "30626-10.html"
+          if has_quest_items?(pc, HAMILS_3RD_LETTER)
+            html = "30626-10.html"
           end
         elsif memo_state == 12
-          if has_quest_items?(player, CRESCENT_MOON_BOW)
+          if has_quest_items?(pc, CRESCENT_MOON_BOW)
             qs.set_cond(13, true)
             qs.memo_state = 13
-            htmltext = "30626-11.html"
+            html = "30626-11.html"
           end
         elsif memo_state == 13
-          htmltext = "30626-12.html"
+          html = "30626-12.html"
         elsif memo_state == 14
-          if has_quest_items?(player, TALISMAN_OF_KADESH)
-            give_adena(player, 161806, true)
-            give_items(player, MARK_OF_SAGITTARIUS, 1)
-            add_exp_and_sp(player, 894888, 61408)
+          if has_quest_items?(pc, TALISMAN_OF_KADESH)
+            give_adena(pc, 161806, true)
+            give_items(pc, MARK_OF_SAGITTARIUS, 1)
+            add_exp_and_sp(pc, 894888, 61408)
             qs.exit_quest(false, true)
-            player.send_packet(SocialAction.new(player.l2id, 3))
-            htmltext = "30626-13.html"
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
+            html = "30626-13.html"
           end
         end
       when SIR_ARON_TANFORD
         if memo_state == 2
-          if has_quest_items?(player, HAMILS_1ST_LETTER)
-            htmltext = "30653-01.html"
+          if has_quest_items?(pc, HAMILS_1ST_LETTER)
+            html = "30653-01.html"
           end
         elsif memo_state == 3
-          htmltext = "30653-03.html"
+          html = "30653-03.html"
         end
       when MAGISTER_GAUEN
         if memo_state == 9
-          if has_quest_items?(player, HAMILS_3RD_LETTER)
-            take_items(player, HAMILS_3RD_LETTER, 1)
+          if has_quest_items?(pc, HAMILS_3RD_LETTER)
+            take_items(pc, HAMILS_3RD_LETTER, 1)
             qs.memo_state = 10
             qs.set_cond(10, true)
-            htmltext = "30717-01.html"
+            html = "30717-01.html"
           end
         elsif memo_state == 10
-          htmltext = "30717-03.html"
+          html = "30717-03.html"
         elsif memo_state == 12
-          htmltext = "30717-04.html"
+          html = "30717-04.html"
         elsif memo_state == 11
-          if has_quest_items?(player, STAKATO_CHITIN, MITHRIL_CLIP, REINFORCED_BOWSTRING, MANASHENS_HORN)
-            give_items(player, WOODEN_ARROW, 10)
-            give_items(player, CRESCENT_MOON_BOW, 1)
-            take_items(player, MITHRIL_CLIP, 1)
-            take_items(player, STAKATO_CHITIN, 1)
-            take_items(player, REINFORCED_BOWSTRING, 1)
-            take_items(player, MANASHENS_HORN, 1)
+          if has_quest_items?(pc, STAKATO_CHITIN, MITHRIL_CLIP, REINFORCED_BOWSTRING, MANASHENS_HORN)
+            give_items(pc, WOODEN_ARROW, 10)
+            give_items(pc, CRESCENT_MOON_BOW, 1)
+            take_items(pc, MITHRIL_CLIP, 1)
+            take_items(pc, STAKATO_CHITIN, 1)
+            take_items(pc, REINFORCED_BOWSTRING, 1)
+            take_items(pc, MANASHENS_HORN, 1)
             qs.memo_state = 12
             qs.set_cond(12, true)
-            htmltext = "30717-02.html"
+            html = "30717-02.html"
           end
         end
       end
     elsif qs.completed?
       if npc.id == GUILD_PRESIDENT_BERNARD
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

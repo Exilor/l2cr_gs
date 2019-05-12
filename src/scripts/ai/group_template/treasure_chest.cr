@@ -1,4 +1,4 @@
-class NpcAI::TreasureChest < AbstractNpcAI
+class Scripts::TreasureChest < AbstractNpcAI
   private TIMER_1 = "5001"
   private TIMER_2 = "5002"
   private MAX_SPAWN_TIME = 14400000 # 4 hours

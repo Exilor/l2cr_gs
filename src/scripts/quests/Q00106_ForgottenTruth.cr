@@ -1,4 +1,4 @@
-class Quests::Q00106_ForgottenTruth < Quest
+class Scripts::Q00106_ForgottenTruth < Quest
   # NPCs
   private THIFIELL = 30358
   private KARTA = 30133
@@ -19,7 +19,10 @@ class Quests::Q00106_ForgottenTruth < Quest
     add_start_npc(THIFIELL)
     add_talk_id(THIFIELL, KARTA)
     add_kill_id(TUMRAN_ORC_BRIGAND)
-    register_quest_items(KARTAS_TRANSLATION, ONYX_TALISMAN1, ONYX_TALISMAN2, ANCIENT_SCROLL, ANCIENT_CLAY_TABLET)
+    register_quest_items(
+      KARTAS_TRANSLATION, ONYX_TALISMAN1, ONYX_TALISMAN2, ANCIENT_SCROLL,
+      ANCIENT_CLAY_TABLET
+    )
   end
 
   def on_adv_event(event, npc, player)
@@ -28,16 +31,16 @@ class Quests::Q00106_ForgottenTruth < Quest
 
     case event
     when "30358-04.htm"
-      htmltext = event
+      html = event
     when "30358-05.htm"
       if st.created?
         st.start_quest
         st.give_items(ONYX_TALISMAN1, 1)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -57,33 +60,33 @@ class Quests::Q00106_ForgottenTruth < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state(talker, true)
-    htmltext = get_no_quest_msg(talker)
-    return htmltext unless st
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when THIFIELL
       case st.state
       when State::CREATED
-        if talker.race.dark_elf?
-          htmltext = talker.level >= MIN_LVL ? "30358-03.htm" : "30358-02.htm"
+        if pc.race.dark_elf?
+          html = pc.level >= MIN_LVL ? "30358-03.htm" : "30358-02.htm"
         else
-          htmltext = "30358-01.htm"
+          html = "30358-01.htm"
         end
       when State::STARTED
-        if has_at_least_one_quest_item?(talker, ONYX_TALISMAN1, ONYX_TALISMAN2) && !st.has_quest_items?(KARTAS_TRANSLATION)
-          htmltext = "30358-06.html"
+        if has_at_least_one_quest_item?(pc, ONYX_TALISMAN1, ONYX_TALISMAN2) && !st.has_quest_items?(KARTAS_TRANSLATION)
+          html = "30358-06.html"
         elsif st.cond?(4) && st.has_quest_items?(KARTAS_TRANSLATION)
-          Q00281_HeadForTheHills.give_newbie_reward(talker)
-          talker.send_packet(SocialAction.new(talker.l2id, 3))
+          Q00281_HeadForTheHills.give_newbie_reward(pc)
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           st.give_adena(10266, true)
           st.add_exp_and_sp(24195, 2074)
           st.exit_quest(false, true)
-          htmltext = "30358-07.html"
+          html = "30358-07.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(talker)
+        html = get_already_completed_msg(pc)
       end
     when KARTA
       if st.started?
@@ -93,27 +96,27 @@ class Quests::Q00106_ForgottenTruth < Quest
             st.set_cond(2, true)
             st.take_items(ONYX_TALISMAN1, -1)
             st.give_items(ONYX_TALISMAN2, 1)
-            htmltext = "30133-01.html"
+            html = "30133-01.html"
           end
         when 2
           if st.has_quest_items?(ONYX_TALISMAN2)
-            htmltext = "30133-02.html"
+            html = "30133-02.html"
           end
         when 3
           if st.has_quest_items?(ANCIENT_SCROLL, ANCIENT_CLAY_TABLET)
             st.set_cond(4, true)
-            take_items(talker, -1, {ANCIENT_SCROLL, ANCIENT_CLAY_TABLET, ONYX_TALISMAN2})
+            take_items(pc, -1, {ANCIENT_SCROLL, ANCIENT_CLAY_TABLET, ONYX_TALISMAN2})
             st.give_items(KARTAS_TRANSLATION, 1)
-            htmltext = "30133-03.html"
+            html = "30133-03.html"
           end
         when 4
           if st.has_quest_items?(KARTAS_TRANSLATION)
-            htmltext = "30133-04.html"
+            html = "30133-04.html"
           end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00278_HomeSecurity < Quest
+class Scripts::Q00278_HomeSecurity < Quest
   # NPC
   private TUNATUN = 31537
   private MONSTER = {

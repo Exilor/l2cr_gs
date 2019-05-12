@@ -1,4 +1,4 @@
-class Quests::Q00148_PathtoBecominganExaltedMercenary < Quest
+class Scripts::Q00148_PathtoBecominganExaltedMercenary < Quest
   # NPCs
   private MERC = {
     36481,
@@ -22,11 +22,11 @@ class Quests::Q00148_PathtoBecominganExaltedMercenary < Quest
     add_talk_id(MERC)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    unless st = get_quest_state(player, false)
-      return htmltext
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    unless st = get_quest_state(pc, false)
+      return html
     end
 
     if event.casecmp?("exalted-00b.htm")
@@ -35,39 +35,39 @@ class Quests::Q00148_PathtoBecominganExaltedMercenary < Quest
       st.start_quest
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      clan = player.clan?
+      clan = pc.clan?
       if clan && clan.castle_id > 0
-        htmltext = "castle.htm"
+        html = "castle.htm"
       elsif st.has_quest_items?(ELITE_CERTIFICATE)
-        htmltext = "exalted-01.htm"
+        html = "exalted-01.htm"
       else
-        if player.quest_completed?(Q00147_PathtoBecominganEliteMercenary.simple_name)
-          htmltext = "exalted-00a.htm"
+        if pc.quest_completed?(Q00147_PathtoBecominganEliteMercenary.simple_name)
+          html = "exalted-00a.htm"
         else
-          htmltext = "exalted-00.htm"
+          html = "exalted-00.htm"
         end
       end
     when State::STARTED
       if st.cond < 4
-        htmltext = "exalted-04.htm"
+        html = "exalted-04.htm"
       elsif st.cond?(4)
         st.take_items(ELITE_CERTIFICATE, -1)
         st.give_items(TOP_ELITE_CERTIFICATE, 1)
         st.exit_quest(false)
-        htmltext = "exalted-05.htm"
+        html = "exalted-05.htm"
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

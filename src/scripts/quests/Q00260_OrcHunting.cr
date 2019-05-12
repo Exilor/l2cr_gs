@@ -1,4 +1,4 @@
-class Quests::Q00260_OrcHunting < Quest
+class Scripts::Q00260_OrcHunting < Quest
   private RAYEN = 30221
   private ORC_AMULET = 1114
   private ORC_NECKLACE = 1115
@@ -48,35 +48,37 @@ class Quests::Q00260_OrcHunting < Quest
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case st.state
     when State::CREATED
       if pc.race.elf?
         if pc.level >= MIN_LVL
-          htmltext = "30221-03.htm"
+          html = "30221-03.htm"
         else
-          htmltext = "30221-02.html"
+          html = "30221-02.html"
         end
       else
-        htmltext = "30221-01.html"
+        html = "30221-01.html"
       end
     when State::STARTED
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         amulets = st.get_quest_items_count(ORC_AMULET)
         necklaces = st.get_quest_items_count(ORC_NECKLACE)
-        st.give_adena(((amulets * 12) + (necklaces * 30) + ((amulets + necklaces) >= 10 ? 1000 : 0)), true)
+        adena = (amulets * 12) + (necklaces * 30)
+        adena += ((amulets + necklaces) >= 10 ? 1000 : 0)
+        st.give_adena(adena, true)
         take_items(pc, -1, registered_item_ids)
         Q00281_HeadForTheHills.give_newbie_reward(pc)
-        htmltext = "30221-06.html"
+        html = "30221-06.html"
       else
         debug "#{pc} has no quest items."
-        htmltext = "30221-05.html"
+        html = "30221-05.html"
       end
     end
 
-    htmltext
+    html
   end
 end

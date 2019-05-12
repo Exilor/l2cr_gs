@@ -1,4 +1,4 @@
-class Quests::Q00238_SuccessFailureOfBusiness < Quest
+class Scripts::Q00238_SuccessFailureOfBusiness < Quest
   # NPCs
   private HELVETICA = 32641
   # Mobs
@@ -24,9 +24,9 @@ class Quests::Q00238_SuccessFailureOfBusiness < Quest
     register_quest_items(BROKEN_PIECE_OF_MAGIC_FORCE, GUARDIAN_SPIRIT_FRAGMENT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -78,8 +78,8 @@ class Quests::Q00238_SuccessFailureOfBusiness < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::COMPLETED
@@ -87,7 +87,7 @@ class Quests::Q00238_SuccessFailureOfBusiness < Quest
     when State::CREATED
       if st.player.quest_completed?(Q00239_WontYouJoinUs.simple_name)
         html = "32461-10.html"
-      elsif st.player.quest_completed?(Q00239_WontYouJoinUs.simple_name) && talker.level >= MIN_LEVEL && st.has_quest_items?(VICINITY_OF_FOS)
+      elsif st.player.quest_completed?(Q00239_WontYouJoinUs.simple_name) && pc.level >= MIN_LEVEL && st.has_quest_items?(VICINITY_OF_FOS)
         html = "32461-01.htm"
       else
         html = "32461-00.html"
@@ -114,6 +114,6 @@ class Quests::Q00238_SuccessFailureOfBusiness < Quest
       end
     end
 
-    html || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 end

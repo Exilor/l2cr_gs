@@ -1,4 +1,4 @@
-class Quests::Q00306_CrystalOfFireAndIce < Quest
+class Scripts::Q00306_CrystalOfFireAndIce < Quest
   # NPC
   private KATERINA = 30004
   # Items

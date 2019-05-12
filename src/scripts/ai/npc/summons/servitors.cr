@@ -1,4 +1,4 @@
-class NpcAI::Servitors < AbstractNpcAI
+class Scripts::Servitors < AbstractNpcAI
   # Quest Monster
   private PAKO_THE_CAT = 27102
   private UNICORN_RACER = 27103
@@ -104,14 +104,14 @@ class NpcAI::Servitors < AbstractNpcAI
   #   ]
   # end
 
-  @[Register(event: ON_CREATURE_KILL, register: NPC, id: NpcAI::Servitors::SUMMONS)]
+  @[Register(event: ON_CREATURE_KILL, register: NPC, id: Scripts::Servitors::SUMMONS)]
   def on_creature_kill(event : OnCreatureKill)
     attacker, target = event.attacker, event.target.as(L2Summon)
     debug "on_creature_kill: attacker: #{attacker}, target: #{target}"
     if MONSTERS.has_key?(attacker.id) && target.servitor?
       if Util.in_range?(1500, attacker, target, true)
         owner = target.owner
-        if qs = owner.get_quest_state(Quests::Q00230_TestOfTheSummoner.simple_name)
+        if qs = owner.get_quest_state(Scripts::Q00230_TestOfTheSummoner.simple_name)
           items = MONSTERS[attacker.id]
           if has_quest_items?(owner, items[1])
             give_items(owner, items[2], 1) # Crystal of Defeat

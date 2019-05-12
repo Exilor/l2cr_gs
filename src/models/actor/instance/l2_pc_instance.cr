@@ -127,6 +127,8 @@ class L2PcInstance < L2Playable
   @buy_list : TradeList?
   @loto = Slice(Int32).new(5)
   @race = Slice(Int32).new(2)
+  @forum_mail : Forum?
+  @forum_memo : Forum?
 
   getter henna_str = 0
   getter henna_dex = 0
@@ -147,7 +149,7 @@ class L2PcInstance < L2Playable
   getter mount_type = MountType::NONE
   getter mount_npc_id = 0
   getter mount_level = 0
-  getter last_location = Location.new(0, 0, 0) # L2J: _lastLoc, L2R: @last_location
+  getter last_location = Location.new(0, 0, 0) # L2J: _lastLoc
   getter last_server_position = Location.new(0, 0, 0)
   getter recom_have = 0
   getter recom_left = 0
@@ -177,13 +179,11 @@ class L2PcInstance < L2Playable
   getter premium_item_list = Hash(Int32, L2PremiumItem).new # L2J: _premiumItems
   getter event_status : PlayerEventHolder?
   getter fish_combat : L2Fishing?
-  @forum_mail : Forum?
-  @forum_memo : Forum?
-  getter(contact_list) { L2ContactList.new(self) }
   getter current_feed = 0
   getter account_name
   getter lang : String?
   getter tp_bookmarks = Hash(Int32, TeleportBookmark).new
+  getter(contact_list) { L2ContactList.new(self) }
   getter(subclasses) { Hash(Int32, Subclass).new }
   getter(radar) { L2Radar.new(self) }
   getter(inventory) { PcInventory.new(self) }
@@ -193,9 +193,9 @@ class L2PcInstance < L2Playable
   getter(block_list) { BlockList.new(self) }
   getter(shortcuts) { Shortcuts.new(self) }
   getter(macros) { MacroList.new(self) }
-  getter! ui_settings : UIKeysSettings?
+  getter! ui_settings : UIKeysSettings
   getter! clan : L2Clan
-  getter! transformation : Transform?
+  getter! transformation : Transform
   getter? online = false
   getter? in_observer_mode = false # L2J: _observerMode
   getter? noble = false
@@ -3454,11 +3454,11 @@ class L2PcInstance < L2Playable
     vehicle.boat?
   end
 
-  def airship
+  def airship : L2AirshipInstance?
     @vehicle.as?(L2AirshipInstance)
   end
 
-  def airship!
+  def airship! : L2AirshipInstance
     airship.not_nil!
   end
 
@@ -3597,7 +3597,7 @@ class L2PcInstance < L2Playable
     false
   end
 
-  def trap!
+  def trap! : L2TrapInstance
     trap.not_nil!
   end
 
@@ -3870,8 +3870,28 @@ class L2PcInstance < L2Playable
     )
   end
 
-  def check_birthday
-    # TODO
+  def check_birthday : Int32
+    now = Calendar.new
+
+    if @create_date.day == 29 && @create_date.month == 1
+      @create_date.add(:HOUR_OF_DAY, -24)
+    end
+
+    if now.month == @create_date.month && now.day == @create_date.day
+      if now.year != @create_date.year
+        return 0
+      end
+    end
+
+    1.upto(5) do |i|
+      now.add(:HOUR_OF_DAY, 24)
+      if now.month == @create_date.month && now.day == @create_date.day
+        if now.year != @create_date.year
+          return i
+        end
+      end
+    end
+
     -1
   end
 
@@ -3900,11 +3920,11 @@ class L2PcInstance < L2Playable
     @event_status = PlayerEventHolder.new(self)
   end
 
-  def event_status=(holder)
+  def event_status=(holder : PlayerEventHolder)
     @event_status = holder
   end
 
-  def collision_radius
+  def collision_radius : Float64
     if mounted? && mount_npc_id > 0
       NpcData[mount_npc_id].f_collision_radius
     elsif transformed?
@@ -3918,7 +3938,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def collision_height
+  def collision_height : Float64
     if mounted? && mount_npc_id > 0
       NpcData[mount_npc_id].f_collision_height
     elsif transformed?
@@ -3975,7 +3995,7 @@ class L2PcInstance < L2Playable
     limit + calc_stat(Stats::INV_LIM, 0).to_i
   end
 
-  def quest_inventory_limit
+  def quest_inventory_limit : Int32
     Config.inventory_maximum_quest_items
   end
 
@@ -4344,7 +4364,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def reduce_adena(process : String?, count : Int, reference, send_msg : Bool)
+  def reduce_adena(process : String?, count : Int, reference, send_msg : Bool) : Bool
     count = count.to_i64
 
     if count > adena
@@ -4377,7 +4397,7 @@ class L2PcInstance < L2Playable
     true
   end
 
-  def reduce_ancient_adena(process : String?, count : Int, reference, send_msg : Bool)
+  def reduce_ancient_adena(process : String?, count : Int, reference, send_msg : Bool) : Bool
     count = count.to_i64
 
     if count > ancient_adena
@@ -4411,7 +4431,9 @@ class L2PcInstance < L2Playable
     true
   end
 
-  def transfer_item(process, l2id, count, target, reference)
+  def transfer_item(process : String?, l2id : Int32, count : Int, target : Inventory, reference)
+    count = count.to_i64
+
     return unless old_item = check_item_manipulation(l2id, count, "transfer")
     return unless new_item = inventory.transfer_item(process, l2id, count, target, self, reference)
 
@@ -4499,32 +4521,32 @@ class L2PcInstance < L2Playable
     false
   end
 
-  def mage_class?
+  def mage_class? : Bool
     class_id.mage_class?
   end
 
-  def mounted?
+  def mounted? : Bool
     !@mount_type.none?
   end
 
-  def movement_disabled?
+  def movement_disabled? : Bool
     super || @movie_id > 0
   end
 
-  def enchant_effect
+  def enchant_effect : Int32
     if wpn = active_weapon_instance?
-      Math.min(wpn.enchant_level, 127)
-    else
-      0
+      return Math.min(wpn.enchant_level, 127)
     end
+
+    0
   end
 
   def clan_crest_large_id : Int32
     if @clan && clan.castle_id != 0 && clan.hideout_id != 0
-      clan.crest_large_id
-    else
-      0
+      return clan.crest_large_id
     end
+
+    0
   end
 
   def online_time=(@online_time : Int64)
@@ -4615,7 +4637,7 @@ class L2PcInstance < L2Playable
     @henna.any?
   end
 
-  def henna_list
+  def henna_list : Slice(L2Henna?)
     @henna
   end
 
@@ -4647,7 +4669,7 @@ class L2PcInstance < L2Playable
     @quests.delete(quest_name)
   end
 
-  def all_active_quests
+  def all_active_quests : Array(Quest)
     quests = Array(Quest).new(@quests.size)
 
     @quests.each_value do |qs|
@@ -4675,9 +4697,19 @@ class L2PcInstance < L2Playable
     notify_quest_of_death.delete(qs)
   end
 
-  def notify_quest_of_death
+  def notify_quest_of_death : Array(QuestState)
     @notify_quest_of_death || sync do
       @notify_quest_of_death ||= Array(QuestState).new
+    end
+  end
+
+  def add_notify_quest_of_death(qs : QuestState?)
+    unless qs
+      return
+    end
+
+    unless notify_quest_of_death.includes?(qs)
+      notify_quest_of_death << qs
     end
   end
 
@@ -4686,9 +4718,9 @@ class L2PcInstance < L2Playable
   end
 
   def ip_address : String
-    # if client = @client
-    #   return client.connection.address.address
-    # end
+    if client = @client
+      return client.ip
+    end
 
     "N/A"
   end
@@ -4893,7 +4925,6 @@ class L2PcInstance < L2Playable
   end
 
   def allowed_to_enchant_skills? : Bool
-    return true if gm? # CUSTOM
     return false if locked? || transformed? || in_stance?
     return false if AttackStances.includes?(self)
     return false if casting_now? || casting_simultaneously_now?
@@ -4939,9 +4970,9 @@ class L2PcInstance < L2Playable
     CharNameTable.add_name(self)
 
     if !AdminData.includes?(level)
-      warn "Tried to set unregistered access level #{level} for #{self}. Setting access level without privileges."
+      warn { "Tried to set unregistered access level #{level} for #{self}. Setting access level without privileges." }
     elsif level > 0
-      info "#{access_level.name} access level set for #{self}."
+      info { "#{access_level.name} access level set for #{self}." }
     end
   end
 

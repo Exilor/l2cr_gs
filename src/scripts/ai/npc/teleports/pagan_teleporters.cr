@@ -1,4 +1,4 @@
-class NpcAI::PaganTeleporters < AbstractNpcAI
+class Scripts::PaganTeleporters < AbstractNpcAI
   # NPCs
   private TRIOLS_MIRROR_1 = 32039
   private TRIOLS_MIRROR_2 = 32040

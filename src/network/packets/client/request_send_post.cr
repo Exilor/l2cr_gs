@@ -22,7 +22,7 @@ class Packets::Incoming::RequestSendPost < GameClientPacket
   @req_adena = 0i64
   @items : Slice(AttachmentItem)?
 
-  def read_impl
+  private def read_impl
     @receiver = s
     @is_cod = d != 0
     @subject = s
@@ -59,7 +59,7 @@ class Packets::Incoming::RequestSendPost < GameClientPacket
     @req_adena = q
   end
 
-  def run_impl
+  private def run_impl
     return unless Config.allow_mail
     return unless pc = active_char
 

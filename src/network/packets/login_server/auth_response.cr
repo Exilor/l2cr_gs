@@ -1,17 +1,18 @@
+require "../login_server_packet"
 require "../game_server/server_status"
 
-class Packets::Incoming::AuthResponse < MMO::IncomingPacket(LoginServerClient)
+class Packets::Incoming::AuthResponse < LoginServerPacket
   include Loggable
 
   @server_id = 0
   @server_name = ""
 
-  def read
+  private def read_impl
     @server_id = c
     @server_name = s
   end
 
-  def run
+  private def run_impl
     debug "server_id: #{@server_id}, server_name: #{@server_name}."
 
     ss = Outgoing::ServerStatus.new

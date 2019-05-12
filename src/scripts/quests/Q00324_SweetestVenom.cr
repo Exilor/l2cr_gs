@@ -1,4 +1,4 @@
-class Quests::Q00324_SweetestVenom < Quest
+class Scripts::Q00324_SweetestVenom < Quest
   # NPCs
   private ASTARON = 30351
   # Monsters
@@ -23,44 +23,41 @@ class Quests::Q00324_SweetestVenom < Quest
     register_quest_items(VENOM_SAC)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
 
     if st
       st.start_quest
       if event == "30351-04.htm"
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
-
-    if st
+  def on_talk(npc, pc)
+    if st = get_quest_state!(pc)
       case st.state
       when State::CREATED
-        htmltext = player.level < MIN_LVL ? "30351-02.html" : "30351-03.htm"
+        html = pc.level < MIN_LVL ? "30351-02.html" : "30351-03.htm"
       when State::STARTED
         if st.cond?(2)
           st.give_adena(ADENA_COUNT, true)
           st.exit_quest(true, true)
-          htmltext = "30351-06.html"
+          html = "30351-06.html"
         else
-          htmltext = "30351-05.html"
+          html = "30351-05.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
-  def on_kill(npc, player, is_pet)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_pet)
+    st = get_quest_state(pc, false)
     if st && st.cond?(1)
       sacs = st.get_quest_items_count(VENOM_SAC)
       if sacs < REQUIRED_COUNT

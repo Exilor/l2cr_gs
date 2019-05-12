@@ -1,4 +1,4 @@
-class Quests::Q00263_OrcSubjugation < Quest
+class Scripts::Q00263_OrcSubjugation < Quest
   # NPCs
   private KAYLEEN = 30346
   # Items
@@ -23,22 +23,22 @@ class Quests::Q00263_OrcSubjugation < Quest
     register_quest_items(ORC_AMULET, ORC_NECKLACE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "30346-04.htm"
       st.start_quest
-      htmltext = event
+      html = event
     when "30346-07.html"
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "30346-08.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -51,25 +51,34 @@ class Quests::Q00263_OrcSubjugation < Quest
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      htmltext = player.race == Race::DARK_ELF ? player.level >= MIN_LEVEL ? "30346-03.htm" : "30346-02.htm" : "30346-01.htm"
-    when State::STARTED
-      if has_at_least_one_quest_item?(player, registered_item_ids)
-         amulets = st.get_quest_items_count(ORC_AMULET)
-         necklaces = st.get_quest_items_count(ORC_NECKLACE)
-        st.give_adena(((amulets * 20) + (necklaces * 30) + ((amulets + necklaces) >= 10 ? 1100 : 0)), true)
-        take_items(player, -1, registered_item_ids)
-        htmltext = "30346-06.html"
+      if pc.race == Race::DARK_ELF
+        if pc.level >= MIN_LEVEL
+          html = "30346-03.htm"
+        else
+          html = "30346-02.htm"
+        end
       else
-        htmltext = "30346-05.html"
+        html = "30346-01.htm"
+      end
+    when State::STARTED
+      if has_at_least_one_quest_item?(pc, registered_item_ids)
+        amulets = st.get_quest_items_count(ORC_AMULET)
+        necklaces = st.get_quest_items_count(ORC_NECKLACE)
+        adena = (amulets * 20) + (necklaces * 30)
+        adena += (amulets + necklaces >= 10 ? 1100 : 0)
+        st.give_adena(adena, true)
+        take_items(pc, -1, registered_item_ids)
+        html = "30346-06.html"
+      else
+        html = "30346-05.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

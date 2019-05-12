@@ -1,4 +1,4 @@
-class Quests::Q00211_TrialOfTheChallenger < Quest
+class Scripts::Q00211_TrialOfTheChallenger < Quest
   # NPCs
   private FILAUR = 30535
   private KASH = 30644
@@ -35,176 +35,180 @@ class Quests::Q00211_TrialOfTheChallenger < Quest
     super(211, self.class.simple_name, "Trial of the Challenger")
 
     add_start_npc(KASH)
-    add_talk_id(FILAUR, KASH, MARTIAN, RALDO, CHEST_OF_SHYSLASSYS, MARKETEER_OF_MAMMON)
+    add_talk_id(
+      FILAUR, KASH, MARTIAN, RALDO, CHEST_OF_SHYSLASSYS, MARKETEER_OF_MAMMON
+    )
     add_kill_id(SHYSLASSYS, GORR, BARAHAM, QUEEN_OF_SUCCUBUS)
-    register_quest_items(LETTER_OF_KASH, WATCHERS_EYE1, WATCHERS_EYE2, SCROLL_OF_SHYSLASSYS, BROKEN_KEY)
+    register_quest_items(
+      LETTER_OF_KASH, WATCHERS_EYE1, WATCHERS_EYE2, SCROLL_OF_SHYSLASSYS,
+      BROKEN_KEY
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "30644-04.htm"
-      htmltext = event
+      html = event
     when "30645-07.html", "30645-08.html", "30646-02.html", "30646-03.html"
       if qs.started?
-        htmltext = event
+        html = event
       end
     when "30644-06.htm"
       if qs.created?
-        vars = player.variables
+        vars = pc.variables
         if vars.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMONDS)
+          give_items(pc, DIMENSIONAL_DIAMONDS)
           vars["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = event
+          html = event
         else
-          htmltext = "30644-05.htm"
+          html = "30644-05.htm"
         end
         qs.start_quest
       end
     when "30647-02.html"
-      if qs.cond?(2) && has_quest_items?(player, BROKEN_KEY)
-        take_items(player, BROKEN_KEY, -1)
+      if qs.cond?(2) && has_quest_items?(pc, BROKEN_KEY)
+        take_items(pc, BROKEN_KEY, -1)
         if Rnd.rand(10) < 2
-          play_sound(player, Sound::ITEMSOUND_QUEST_JACKPOT)
+          play_sound(pc, Sound::ITEMSOUND_QUEST_JACKPOT)
           random = Rnd.rand(100)
           if random > 90
-            reward_items(player, MITHRIL_SCALE_GAITERS_MATERIAL, 1)
-            reward_items(player, BRIGAMDINE_GAUNTLET_PATTERN, 1)
-            reward_items(player, MANTICOR_SKIN_GAITERS_PATTERN, 1)
-            reward_items(player, GAUNTLET_OF_REPOSE_PATTERN, 1)
-            reward_items(player, IRON_BOOTS_DESIGN, 1)
+            reward_items(pc, MITHRIL_SCALE_GAITERS_MATERIAL, 1)
+            reward_items(pc, BRIGAMDINE_GAUNTLET_PATTERN, 1)
+            reward_items(pc, MANTICOR_SKIN_GAITERS_PATTERN, 1)
+            reward_items(pc, GAUNTLET_OF_REPOSE_PATTERN, 1)
+            reward_items(pc, IRON_BOOTS_DESIGN, 1)
           elsif random > 70
-            reward_items(player, TOME_OF_BLOOD_PAGE, 1)
-            reward_items(player, ELVEN_NECKLACE_BEADS, 1)
+            reward_items(pc, TOME_OF_BLOOD_PAGE, 1)
+            reward_items(pc, ELVEN_NECKLACE_BEADS, 1)
           elsif random > 40
-            reward_items(player, WHITE_TUNIC_PATTERN, 1)
+            reward_items(pc, WHITE_TUNIC_PATTERN, 1)
           else
-            reward_items(player, IRON_BOOTS_DESIGN, 1)
+            reward_items(pc, IRON_BOOTS_DESIGN, 1)
           end
-          htmltext = "30647-03.html"
+          html = "30647-03.html"
         else
-          give_adena(player, Rnd.rand(1000i64) + 1, true)
-          htmltext = event
+          give_adena(pc, Rnd.rand(1000i64) + 1, true)
+          html = event
         end
       else
-        htmltext = "30647-04.html"
+        html = "30647-04.html"
       end
     when "30645-02.html"
-      if qs.cond?(3) && has_quest_items?(player, LETTER_OF_KASH)
+      if qs.cond?(3) && has_quest_items?(pc, LETTER_OF_KASH)
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "30646-04.html", "30646-05.html"
-      if qs.cond?(7) && has_quest_items?(player, WATCHERS_EYE2)
-        take_items(player, WATCHERS_EYE2, -1)
+      if qs.cond?(7) && has_quest_items?(pc, WATCHERS_EYE2)
+        take_items(pc, WATCHERS_EYE2, -1)
         qs.set_cond(8, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
-    htmltext = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when KASH
       if qs.created?
-        if !talker.in_category?(CategoryType::WARRIOR_GROUP)
-          htmltext = "30644-02.html"
-        elsif talker.level < MIN_LVL
-          htmltext = "30644-01.html"
+        if !pc.in_category?(CategoryType::WARRIOR_GROUP)
+          html = "30644-02.html"
+        elsif pc.level < MIN_LVL
+          html = "30644-01.html"
         else
-          htmltext = "30644-03.htm"
+          html = "30644-03.htm"
         end
       elsif qs.started?
           case qs.cond
           when 1
-            htmltext = "30644-07.html"
+            html = "30644-07.html"
           when 2
-            if has_quest_items?(talker, SCROLL_OF_SHYSLASSYS)
-              take_items(talker, SCROLL_OF_SHYSLASSYS, -1)
-              give_items(talker, LETTER_OF_KASH, 1)
+            if has_quest_items?(pc, SCROLL_OF_SHYSLASSYS)
+              take_items(pc, SCROLL_OF_SHYSLASSYS, -1)
+              give_items(pc, LETTER_OF_KASH, 1)
               qs.set_cond(3, true)
-              htmltext = "30644-08.html"
+              html = "30644-08.html"
             end
           when 3
-            if has_quest_items?(talker, LETTER_OF_KASH)
-              htmltext = "30644-09.html"
+            if has_quest_items?(pc, LETTER_OF_KASH)
+              html = "30644-09.html"
             end
           when 8..10
-            htmltext = "30644-10.html"
+            html = "30644-10.html"
           end
         elsif qs.completed?
-          htmltext = get_already_completed_msg(talker)
+          html = get_already_completed_msg(pc)
         end
     when MARTIAN
       case qs.cond
       when 3
-        if has_quest_items?(talker, LETTER_OF_KASH)
-          htmltext = "30645-01.html"
+        if has_quest_items?(pc, LETTER_OF_KASH)
+          html = "30645-01.html"
         end
       when 4
-        htmltext = "30645-03.html"
+        html = "30645-03.html"
       when 5
-        if has_quest_items?(talker, WATCHERS_EYE1)
-          take_items(talker, WATCHERS_EYE1, -1)
+        if has_quest_items?(pc, WATCHERS_EYE1)
+          take_items(pc, WATCHERS_EYE1, -1)
           qs.set_cond(6, true)
-          htmltext = "30645-04.html"
+          html = "30645-04.html"
         end
       when 6
-        htmltext = "30645-05.html"
+        html = "30645-05.html"
       when 7
-        htmltext = "30645-06.html"
+        html = "30645-06.html"
       when 8, 9
-        htmltext = "30645-09.html"
+        html = "30645-09.html"
       end
     when CHEST_OF_SHYSLASSYS
       if qs.started?
-        htmltext = "30647-01.html"
+        html = "30647-01.html"
       end
     when RALDO
       case qs.cond
       when 7
-        if has_quest_items?(talker, WATCHERS_EYE2)
-          htmltext = "30646-01.html"
+        if has_quest_items?(pc, WATCHERS_EYE2)
+          html = "30646-01.html"
         end
       when 8
-        htmltext = "30646-06.html"
+        html = "30646-06.html"
       when 10
-        add_exp_and_sp(talker, 1067606, 69242)
-        give_adena(talker, 194556, true)
-        give_items(talker, MARK_OF_CHALLENGER, 1)
+        add_exp_and_sp(pc, 1067606, 69242)
+        give_adena(pc, 194556, true)
+        give_items(pc, MARK_OF_CHALLENGER, 1)
 
         # redundant retail check - already rewarded at beginning of quest
-        vars = talker.variables
+        vars = pc.variables
         if vars.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(talker, DIMENSIONAL_DIAMONDS)
+          give_items(pc, DIMENSIONAL_DIAMONDS)
           vars["2ND_CLASS_DIAMOND_REWARD"] = 1
         end
 
-        talker.send_packet(SocialAction.new(talker.l2id, 3))
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
         qs.exit_quest(false, true)
-        htmltext = "30646-07.html"
+        html = "30646-07.html"
       end
     when FILAUR
       case qs.cond
       when 8
-        htmltext = "30535-01.html"
+        html = "30535-01.html"
         qs.set_cond(9, true)
       when 9
-        talker.send_packet(RadarControl.new(0, 2, 151589, -174823, -1776))
-        htmltext = "30535-02.html"
+        pc.send_packet(RadarControl.new(0, 2, 151589, -174823, -1776))
+        html = "30535-02.html"
       when 10
-        htmltext = "30535-03.html"
+        html = "30535-03.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

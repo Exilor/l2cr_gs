@@ -52,7 +52,7 @@ module ActionHandler::L2PcInstanceAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2PcInstance
   end
 end

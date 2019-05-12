@@ -1,4 +1,4 @@
-class Quests::Q00289_NoMoreSoupForYou < Quest
+class Scripts::Q00289_NoMoreSoupForYou < Quest
   # NPC
   private STAN = 30200
   # Item

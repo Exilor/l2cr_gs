@@ -1,4 +1,4 @@
-class Quests::Q00003_WillTheSealBeBroken < Quest
+class Scripts::Q00003_WillTheSealBeBroken < Quest
   # NPC
 	private TALLOTH = 30141
 	# Monsters

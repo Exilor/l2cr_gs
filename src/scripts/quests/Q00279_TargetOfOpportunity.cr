@@ -1,4 +1,4 @@
-class Quests::Q00279_TargetOfOpportunity < Quest
+class Scripts::Q00279_TargetOfOpportunity < Quest
   # NPCs
   private JERIAN = 32302
   private MONSTERS = {

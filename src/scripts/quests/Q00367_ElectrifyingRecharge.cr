@@ -1,4 +1,4 @@
-class Quests::Q00367_ElectrifyingRecharge < Quest
+class Scripts::Q00367_ElectrifyingRecharge < Quest
   # NPC
   private LORAIN = 30673
   # Monster

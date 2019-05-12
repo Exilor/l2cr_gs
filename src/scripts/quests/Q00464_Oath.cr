@@ -1,4 +1,4 @@
-class Quests::Q00464_Oath < Quest
+class Scripts::Q00464_Oath < Quest
   private NPC = {
     # NPC id, EXP, SP, Adena
     {32596,      0,     0,      0},
@@ -46,9 +46,9 @@ class Quests::Q00464_Oath < Quest
     register_quest_items(BOOK, BOOK2)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player && npc
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc && npc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -56,7 +56,7 @@ class Quests::Q00464_Oath < Quest
     case event
     when "32596-04.html"
       unless st.has_quest_items?(BOOK)
-        return get_no_quest_msg(player)
+        return get_no_quest_msg(pc)
       end
 
       cond = rand(2..9)
@@ -84,7 +84,7 @@ class Quests::Q00464_Oath < Quest
       end
     when "end_quest"
       unless st.has_quest_items?(BOOK2)
-        return get_no_quest_msg(player)
+        return get_no_quest_msg(pc)
       end
 
       i = st.cond - 1
@@ -101,8 +101,8 @@ class Quests::Q00464_Oath < Quest
     html
   end
 
-  def on_item_talk(item, player)
-    st = get_quest_state!(player)
+  def on_item_talk(item, pc)
+    st = get_quest_state!(pc)
 
     start_quest = false
     case st.state
@@ -120,7 +120,7 @@ class Quests::Q00464_Oath < Quest
     end
 
     if start_quest
-      if player.level >= MIN_LEVEL
+      if pc.level >= MIN_LEVEL
         st.start_quest
         st.take_items(STRONGBOX, 1)
         st.give_items(BOOK, 1)
@@ -130,7 +130,7 @@ class Quests::Q00464_Oath < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)
@@ -141,9 +141,8 @@ class Quests::Q00464_Oath < Quest
     super
   end
 
-  def on_talk(npc, player)
-    html = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     if st.started?
       npc_id = npc.id
       if npc_id == NPC[0][0]
@@ -172,6 +171,6 @@ class Quests::Q00464_Oath < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

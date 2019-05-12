@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestRestartPoint < GameClientPacket
   @point = 0
 
-  def read_impl
+  private def read_impl
     @point = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless pc.can_revive?
     if pc.fake_death?

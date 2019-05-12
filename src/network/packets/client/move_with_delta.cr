@@ -3,13 +3,13 @@ class Packets::Incoming::MoveWithDelta < GameClientPacket
   @dy = 0
   @dz = 0
 
-  def read_impl
+  private def read_impl
     @dx = d
     @dy = d
     @dz = d
   end
 
-  def run_impl
+  private def run_impl
     warn "Not implemented (not by L2J either)."
   end
 end

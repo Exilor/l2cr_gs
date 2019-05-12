@@ -1,4 +1,4 @@
-class Quests::Q00170_DangerousSeduction < Quest
+class Scripts::Q00170_DangerousSeduction < Quest
   # NPC
   private VELLIOR = 30305
   # Monster
@@ -49,26 +49,26 @@ class Quests::Q00170_DangerousSeduction < Quest
     when State::CREATED
       if player.race.dark_elf?
         if player.level >= MIN_LEVEL
-          htmltext = "30305-01.htm"
+          html = "30305-01.htm"
         else
-          htmltext = "30305-02.htm"
+          html = "30305-02.htm"
         end
       else
-        htmltext = "30305-03.htm"
+        html = "30305-03.htm"
       end
     when State::STARTED
       if st.cond?(1)
-        htmltext = "30305-05.html"
+        html = "30305-05.html"
       else
         st.give_adena(102680, true)
         st.add_exp_and_sp(38607, 4018)
         st.exit_quest(false, true)
-        htmltext = "30305-06.html"
+        html = "30305-06.html"
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(player)
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(player)
   end
 end

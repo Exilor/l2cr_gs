@@ -1,4 +1,4 @@
-class Quests::Q00265_BondsOfSlavery < Quest
+class Scripts::Q00265_BondsOfSlavery < Quest
   # Item
   private IMP_SHACKLES = 1368
   # NPC
@@ -20,22 +20,22 @@ class Quests::Q00265_BondsOfSlavery < Quest
     register_quest_items(IMP_SHACKLES)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "30357-04.htm"
       st.start_quest
-      htmltext = event
+      html = event
     when "30357-07.html"
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "30357-08.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -48,36 +48,34 @@ class Quests::Q00265_BondsOfSlavery < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
-    unless st
-      return htmltext
+  def on_talk(npc, pc)
+    unless st = get_quest_state!(pc)
+      return get_no_quest_msg(pc)
     end
 
     case st.state
     when State::CREATED
-      if player.race.dark_elf?
-        if player.level >= MIN_LVL
-          htmltext = "30357-03.htm"
+      if pc.race.dark_elf?
+        if pc.level >= MIN_LVL
+          html = "30357-03.htm"
         else
-          htmltext = "30357-02.html"
+          html = "30357-02.html"
         end
       else
-        htmltext = "30357-01.html"
+        html = "30357-01.html"
       end
     when State::STARTED
       if st.has_quest_items?(IMP_SHACKLES)
         shackles = st.get_quest_items_count(IMP_SHACKLES)
         st.give_adena((shackles * 12) + (shackles >= 10 ? 500 : 0), true)
         st.take_items(IMP_SHACKLES, -1)
-        Q00281_HeadForTheHills.give_newbie_reward(player)
-        htmltext = "30357-06.html"
+        Q00281_HeadForTheHills.give_newbie_reward(pc)
+        html = "30357-06.html"
       else
-        htmltext = "30357-05.html"
+        html = "30357-05.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

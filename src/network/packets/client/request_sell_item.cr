@@ -6,7 +6,7 @@ class Packets::Incoming::RequestSellItem < GameClientPacket
   @list_id = 0
   @items : Array(UniqueItemHolder)?
 
-  def read_impl
+  private def read_impl
     @list_id = d
     size = d
     if size <= 0 || size * BATCH_LENGTH != buffer.remaining
@@ -27,7 +27,7 @@ class Packets::Incoming::RequestSellItem < GameClientPacket
     @items = items
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless flood_protectors.transaction.try_perform_action("buy")

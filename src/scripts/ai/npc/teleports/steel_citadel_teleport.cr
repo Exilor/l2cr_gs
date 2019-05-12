@@ -1,4 +1,4 @@
-class NpcAI::SteelCitadelTeleport < AbstractNpcAI
+class Scripts::SteelCitadelTeleport < AbstractNpcAI
   # NPCs
   private BELETH = 29118
   private NAIA_CUBE = 32376

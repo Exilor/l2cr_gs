@@ -2,12 +2,12 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
   @l2id = 0
   @support_id = 0
 
-  def read_impl
+  private def read_impl
     @l2id  = d
     @support_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return if @l2id == 0
 

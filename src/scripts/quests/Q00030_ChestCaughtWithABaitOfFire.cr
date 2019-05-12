@@ -1,4 +1,4 @@
-class Quests::Q00030_ChestCaughtWithABaitOfFire < Quest
+class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
   # NPCs
   private LINNAEUS = 31577
   private RUKAL = 30629
@@ -15,11 +15,11 @@ class Quests::Q00030_ChestCaughtWithABaitOfFire < Quest
     register_quest_items(RUKAL_MUSICAL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    unless st = get_quest_state(player, false)
-      return htmltext
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    unless st = get_quest_state(pc, false)
+      return html
     end
 
     case event
@@ -30,32 +30,31 @@ class Quests::Q00030_ChestCaughtWithABaitOfFire < Quest
         st.give_items(RUKAL_MUSICAL, 1)
         st.take_items(RED_TREASURE_BOX, -1)
         st.set_cond(2, true)
-        htmltext = "31577-04.htm"
+        html = "31577-04.htm"
       end
     when "30629-02.htm"
       if st.cond?(2) && st.has_quest_items?(RUKAL_MUSICAL)
         st.give_items(PROTECTION_NECKLACE, 1)
         st.exit_quest(false, true)
-        htmltext = "30629-03.htm"
+        html = "30629-03.htm"
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     npc_id = npc.id
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
       if npc_id == LINNAEUS
-        if player.level >= 61 && player.quest_completed?(Q00053_LinnaeusSpecialBait.simple_name)
-          htmltext = "31577-01.htm"
+        if pc.level >= 61 && pc.quest_completed?(Q00053_LinnaeusSpecialBait.simple_name)
+          html = "31577-01.htm"
         else
-          htmltext = "31577-00.htm"
+          html = "31577-00.htm"
         end
       end
     when State::STARTED
@@ -63,20 +62,20 @@ class Quests::Q00030_ChestCaughtWithABaitOfFire < Quest
       when LINNAEUS
         case st.cond
         when 1
-          htmltext = "31577-03a.htm"
+          html = "31577-03a.htm"
           if st.has_quest_items?(RED_TREASURE_BOX)
-            htmltext = "31577-03.htm"
+            html = "31577-03.htm"
           end
         when 2
-          htmltext = "31577-05.htm"
+          html = "31577-05.htm"
         end
       when RUKAL
         if st.cond?(2)
-          htmltext = "30629-01.htm"
+          html = "30629-01.htm"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

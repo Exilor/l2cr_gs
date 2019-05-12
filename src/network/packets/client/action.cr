@@ -7,7 +7,7 @@ class Packets::Incoming::Action < GameClientPacket
   @z = 0
   @action_id = 0
 
-  def read_impl
+  private def read_impl
     @l2id = d
     @x = d
     @y = d
@@ -15,7 +15,7 @@ class Packets::Incoming::Action < GameClientPacket
     @action_id = c
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if pc.in_observer_mode?

@@ -1,4 +1,4 @@
-class Quests::Q00370_AnElderSowsSeeds < Quest
+class Scripts::Q00370_AnElderSowsSeeds < Quest
   # NPC
   private CASIAN = 30612
   # Items

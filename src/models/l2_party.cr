@@ -34,7 +34,7 @@ class L2Party < AbstractPlayerGroup
     @party_lvl = leader.level
   end
 
-  def position_packet
+  def position_packet : PartyMemberPosition
     @position_packet ||= PartyMemberPosition.new(self)
   end
 
@@ -45,7 +45,7 @@ class L2Party < AbstractPlayerGroup
     @pending_invite_timeout = ticks + timeout + tps
   end
 
-  def invitation_request_expired?
+  def invitation_request_expired? : Bool
     @pending_invite_timeout <= GameTimer.ticks
   end
 
@@ -512,11 +512,11 @@ class L2Party < AbstractPlayerGroup
     !!@dimensional_rift
   end
 
-  def request_loot_change(party_distribution_type : PartyDistributionType)
+  def request_loot_change(distribution_type : PartyDistributionType)
     sync do
       return if @change_request_distribution_type
 
-      @change_request_distribution_type = party_distribution_type
+      @change_request_distribution_type = distribution_type
       @change_distribution_type_answers = Set(Int32).new
       delay = PARTY_DISTRIBUTION_TYPE_REQUEST_TIMEOUT * 1000
       task = ->{ finish_loot_request(false) }
@@ -524,11 +524,11 @@ class L2Party < AbstractPlayerGroup
 
       broadcast_to_party_members(
         leader,
-        ExAskModifyPartyLooting.new(leader.name, party_distribution_type)
+        ExAskModifyPartyLooting.new(leader.name, distribution_type)
       )
 
       sm = SystemMessage.requesting_approval_change_party_loot_s1
-      sm.add_system_string(party_distribution_type.sys_string_id)
+      sm.add_system_string(distribution_type.sys_string_id)
       leader.send_packet(sm)
     end
   end

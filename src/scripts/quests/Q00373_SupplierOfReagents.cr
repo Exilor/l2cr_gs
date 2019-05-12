@@ -1,4 +1,4 @@
-class Quests::Q00373_SupplierOfReagents < Quest
+class Scripts::Q00373_SupplierOfReagents < Quest
   # NPCs
   private WESLEY = 30166
   private ALCHEMIST_MIXING_URN = 31149
@@ -121,103 +121,103 @@ class Quests::Q00373_SupplierOfReagents < Quest
     register_quest_items(WESLEYS_MIXING_STONE, MIXING_MANUAL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
     case event
     when "30166-03.htm", "30166-06.html", "30166-04a.html", "30166-04b.html",
          "30166-04c.html", "30166-04d.html", "31149-18.html"
-      htmltext = event
+      html = event
     when "30166-04.html"
-      if player.level >= MIN_LVL && qs.created?
-        give_items(player, WESLEYS_MIXING_STONE, 1)
-        give_items(player, MIXING_MANUAL, 1)
+      if pc.level >= MIN_LVL && qs.created?
+        give_items(pc, WESLEYS_MIXING_STONE, 1)
+        give_items(pc, MIXING_MANUAL, 1)
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30166-07.html"
       qs.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "31149-02.html"
       qs.memo_state = 0
       qs.set_memo_state_ex(1, 0)
-      htmltext = event
+      html = event
     when "31149-03.html", "31149-04.html", "31149-05.html", "31149-06.html",
          "31149-07.html", "31149-08.html", "31149-09.html", "31149-10.html",
          "31149-11.html", "31149-12.html", "31149-13.html", "31149-14.html",
          "31149-15.html", "31149-16.html", "31149-19.html", "31149-20.html",
          "31149-21.html", "31149-22.html", "31149-23.html", "31149-24.html"
       memo_state = HTML_TO_MEMO_STATE[event]
-      if has_item?(player, MEMO_STATE_TO_ITEM[memo_state])
+      if has_item?(pc, MEMO_STATE_TO_ITEM[memo_state])
         # If the player has the chosen item (ingredient or catalyst), we save it (for the catalyst or the reward)
         qs.memo_state += memo_state
-        htmltext = event
-        play_sound(player, Sound::SKILLSOUND_LIQUID_MIX)
+        html = event
+        play_sound(pc, Sound::SKILLSOUND_LIQUID_MIX)
       else
         # If the player has not the chosen catalyst, we take the ingredient previously saved (if not nil)
-        take_item(player, MEMO_STATE_TO_ITEM[qs.memo_state])
+        take_item(pc, MEMO_STATE_TO_ITEM[qs.memo_state])
         if event == "31149-19.html"
-          htmltext = "31149-25.html"
+          html = "31149-25.html"
         else
-          htmltext = "31149-17.html"
+          html = "31149-17.html"
         end
       end
     when "31149-26.html"
       if qs.memo_state?(1324)
-        htmltext = "31149-26a.html"
+        html = "31149-26a.html"
       else
-        htmltext = event
+        html = event
       end
     when "31149-27.html"
       qs.set_memo_state_ex(1, 1) # Temperature Salamander
-      htmltext = event
+      html = event
     when "31149-28a.html"
       if rand(100) < 33
         qs.set_memo_state_ex(1, 3) # Temperature Ifrit
       else
         qs.set_memo_state_ex(1, 0)
       end
-      htmltext = event
+      html = event
     when "31149-29a.html"
       if rand(100) < 20
         qs.set_memo_state_ex(1, 5) # Temperature Phoenix
       else
         qs.set_memo_state_ex(1, 0)
       end
-      htmltext = event
+      html = event
     when "mixitems"
       memo_state = qs.memo_state
       item1 = MEMO_STATE_TO_ITEM[memo_state % 100]?
       item2 = MEMO_STATE_TO_ITEM[(memo_state / 100) * 100]?
       reward = MEMO_STATE_TO_REWARD[memo_state]?
-      q235 = player.get_quest_state(Q00235_MimirsElixir.simple_name)
+      q235 = pc.get_quest_state(Q00235_MimirsElixir.simple_name)
       if reward.nil? || qs.memo_state_ex?(1, 0)
-        take_item(player, item1)
-        take_item(player, item2)
-        htmltext = reward.nil? ? "31149-44.html" : "31149-45.html"
-        play_sound(player, Sound::SKILLSOUND_LIQUID_FAIL)
-      elsif memo_state != 1324 || (memo_state == 1324 && q235 && q235.started? && !has_quest_items?(player, reward.item))
-        if item1 && item2 && has_item?(player, item1) && has_item?(player, item2)
-          take_item(player, item1)
-          take_item(player, item2)
-          give_items(player, reward.item, memo_state == 1324 ? 1 : qs.get_memo_state_ex(1))
+        take_item(pc, item1)
+        take_item(pc, item2)
+        html = reward.nil? ? "31149-44.html" : "31149-45.html"
+        play_sound(pc, Sound::SKILLSOUND_LIQUID_FAIL)
+      elsif memo_state != 1324 || (memo_state == 1324 && q235 && q235.started? && !has_quest_items?(pc, reward.item))
+        if item1 && item2 && has_item?(pc, item1) && has_item?(pc, item2)
+          take_item(pc, item1)
+          take_item(pc, item2)
+          give_items(pc, reward.item, memo_state == 1324 ? 1 : qs.get_memo_state_ex(1))
           qs.memo_state = 0
           qs.set_memo_state_ex(1, 0)
-          htmltext = reward.html
-          play_sound(player, Sound::SKILLSOUND_LIQUID_SUCCESS)
+          html = reward.html
+          play_sound(pc, Sound::SKILLSOUND_LIQUID_SUCCESS)
         else
-          htmltext = "31149-44.html"
-          play_sound(player, Sound::SKILLSOUND_LIQUID_FAIL)
+          html = "31149-44.html"
+          play_sound(pc, Sound::SKILLSOUND_LIQUID_FAIL)
         end
       else
-        htmltext = "31149-44.html"
+        html = "31149-44.html"
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -270,23 +270,23 @@ class Quests::Q00373_SupplierOfReagents < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created?
-      if talker.level < MIN_LVL
-        htmltext = "30166-01.html"
+      if pc.level < MIN_LVL
+        html = "30166-01.html"
       else
-        htmltext = "30166-02.htm"
+        html = "30166-02.htm"
       end
     elsif qs.started?
       if npc.id == WESLEY
-        htmltext = "30166-05.html"
+        html = "30166-05.html"
       else
-        htmltext = "31149-01.html"
+        html = "31149-01.html"
       end
     end
 
-    htmltext || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 end

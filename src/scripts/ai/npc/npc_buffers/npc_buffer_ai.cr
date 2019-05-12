@@ -1,4 +1,4 @@
-struct NpcAI::NpcBufferAI
+struct NpcBufferAI
   include Runnable
   include Loggable
 

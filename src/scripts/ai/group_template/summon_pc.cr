@@ -1,4 +1,4 @@
-class NpcAI::SummonPc < AbstractNpcAI
+class Scripts::SummonPc < AbstractNpcAI
   # NPCs
   private PORTA = 20213
   private PERUM = 20221

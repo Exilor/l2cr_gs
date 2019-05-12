@@ -3,23 +3,17 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
   @ctrl = false
   @shift = false
 
-  def read_impl
+  private def read_impl
     @id = d
     @ctrl = d != 0
     @shift = c != 0
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if pc.dead?
       action_failed
-      return
-    end
-
-    # custom. I don't see how Fake Death is supposed to work otherwise.
-    if @id == 60 && pc.affected_by_skill?(60)
-      pc.stop_skill_effects(true, 60)
       return
     end
 

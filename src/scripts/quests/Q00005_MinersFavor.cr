@@ -1,4 +1,4 @@
-class Quests::Q00005_MinersFavor < Quest
+class Scripts::Q00005_MinersFavor < Quest
   # NPCs
 	private BOLTER = 30554
 	private SHARI  = 30517

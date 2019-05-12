@@ -1,4 +1,4 @@
-class NpcAI::Slaves < AbstractNpcAI
+class Scripts::Slaves < AbstractNpcAI
   # NPCs
   private MASTERS = {
     22320, # Junior Watchman

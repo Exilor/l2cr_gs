@@ -36,7 +36,11 @@ abstract class L2Object < ListenersContainer
   abstract def auto_attackable?(attacker : L2Character) : Bool
   abstract def send_info(pc : L2PcInstance)
 
-  def decay_me
+  def initialize(@l2id : Int32)
+    init_known_list
+  end
+
+  def decay_me : Bool
     unless region = world_region?
       # warn "L2Object#decay_me: @world_region must not be nil here."
     end
@@ -50,10 +54,6 @@ abstract class L2Object < ListenersContainer
     L2World.remove_object(self)
 
     true
-  end
-
-  def initialize(@l2id : Int32)
-    init_known_list
   end
 
   def send_packet(gsp : GameServerPacket)
@@ -137,8 +137,8 @@ abstract class L2Object < ListenersContainer
     end
     old_i = InstanceManager.get_instance(instance_id)
 
-    if player?
-      pc = acting_player
+    me = self
+    if me.is_a?(L2PcInstance)
       if instance_id > 0 && old_i
         old_i.remove_player(l2id)
         if old_i.show_timer?
@@ -151,14 +151,15 @@ abstract class L2Object < ListenersContainer
           send_instance_update(new_i, false)
         end
       end
-      pc.summon.try &.instance_id = new_instance_id
-    elsif npc?
-      npc = unsafe_as(L2Npc)
+      if summon = me.summon
+        summon.instance_id = new_instance_id
+      end
+    elsif me.is_a?(L2Npc)
       if instance_id > 0 && old_i
-        old_i.remove_npc(npc)
+        old_i.remove_npc(me)
       end
       if new_instance_id > 0
-        new_i.add_npc(npc)
+        new_i.add_npc(me)
       end
     end
 
@@ -170,7 +171,7 @@ abstract class L2Object < ListenersContainer
     end
   end
 
-  def location
+  def location : Location
     Location.new(x, y, z, heading, instance_id)
   end
 
@@ -409,11 +410,12 @@ abstract class L2Object < ListenersContainer
 
   def world_region=(new_region : L2WorldRegion?)
     old_region = world_region?
-    if old_region && character?
+    me = self
+    if old_region && me.is_a?(L2Character)
       if new_region
-        old_region.revalidate_zones(unsafe_as(L2Character))
+        old_region.revalidate_zones(me)
       else
-        old_region.remove_from_zones(unsafe_as(L2Character))
+        old_region.remove_from_zones(me)
       end
     end
 
@@ -429,7 +431,7 @@ abstract class L2Object < ListenersContainer
     calculate_distance(*loc.xyz, z_axis, squared)
   end
 
-  def calculate_direction_to(loc : Locatable)
+  def calculate_direction_to(loc : Locatable) : Float64
     heading = Util.calculate_heading_from(self, loc) - heading()
     heading += 65_535 if heading < 0
     Util.convert_heading_to_degree(heading)

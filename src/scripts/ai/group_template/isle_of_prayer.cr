@@ -1,4 +1,4 @@
-class NpcAI::IsleOfPrayer < AbstractNpcAI
+class Scripts::IsleOfPrayer < AbstractNpcAI
   private YELLOW_SEED_OF_EVIL_SHARD = 9593
   private GREEN_SEED_OF_EVIL_SHARD  = 9594
   private BLUE_SEED_OF_EVIL_SHARD   = 9595

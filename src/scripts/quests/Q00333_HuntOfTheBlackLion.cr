@@ -1,4 +1,4 @@
-class Quests::Q00333_HuntOfTheBlackLion < Quest
+class Scripts::Q00333_HuntOfTheBlackLion < Quest
   # NPCs
   private ABYSSAL_CELEBRANT_UNDRIAS = 30130
   private BLACKSMITH_RUPIO = 30471
@@ -81,14 +81,35 @@ class Quests::Q00333_HuntOfTheBlackLion < Quest
     super(333, self.class.simple_name, "Hunt Of The Black Lion")
 
     add_start_npc(MERCENARY_CAPTAIN_SOPHYA)
-    add_talk_id(MERCENARY_CAPTAIN_SOPHYA, ABYSSAL_CELEBRANT_UNDRIAS, BLACKSMITH_RUPIO, IRON_GATES_LOCKIRIN, MERCENARY_REEDFOOT, GUILDSMAN_MORGON)
-    add_kill_id(MARSH_STAKATO, NEER_CRAWLER, SPECTER, SORROW_MAIDEN, NEER_CRAWLER_BERSERKER, STRAIN, GHOUL, OL_MAHUM_GUERILLA, OL_MAHUM_RAIDER, OL_MAHUM_MARKSMAN, OL_MAHUM_SERGEANT, OL_MAHUM_CAPTAIN, MARSH_STAKATO_WORKER, MARSH_STAKATO_SOLDIER, MARSH_STAKATO_DRONE, DELU_LIZARDMAN, DELU_LIZARDMAN_SCOUT, DELU_LIZARDMAN_WARRIOR, DELU_LIZARDMAN_HEADHUNTER, MARSH_STAKATO_MARQUESS)
-    register_quest_items(BLACK_LION_MARK, CARGO_BOX_1ST, CARGO_BOX_2ND, CARGO_BOX_3RD, CARGO_BOX_4TH, STATUE_OF_SHILEN_HEAD, STATUE_OF_SHILEN_TORSO, STATUE_OF_SHILEN_ARM, STATUE_OF_SHILEN_LEG, COMPLETE_STATUE_OF_SHILEN, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, COMPLETE_ANCIENT_TABLET, SOPHYAS_1ST_ORDER, SOPHYAS_2ND_ORDER, SOPHYAS_3RD_ORDER, SOPHYAS_4TH_ORDER, LIONS_CLAW, LIONS_EYE, GUILD_COIN, UNDEAD_ASH, BLOODY_AXE_INSIGNIA, DELU_LIZARDMAN_FANG, STAKATO_TALON)
+    add_talk_id(
+      MERCENARY_CAPTAIN_SOPHYA, ABYSSAL_CELEBRANT_UNDRIAS, BLACKSMITH_RUPIO,
+      IRON_GATES_LOCKIRIN, MERCENARY_REEDFOOT, GUILDSMAN_MORGON
+    )
+    add_kill_id(
+      MARSH_STAKATO, NEER_CRAWLER, SPECTER, SORROW_MAIDEN,
+      NEER_CRAWLER_BERSERKER, STRAIN, GHOUL, OL_MAHUM_GUERILLA, OL_MAHUM_RAIDER,
+      OL_MAHUM_MARKSMAN, OL_MAHUM_SERGEANT, OL_MAHUM_CAPTAIN,
+      MARSH_STAKATO_WORKER, MARSH_STAKATO_SOLDIER, MARSH_STAKATO_DRONE,
+      DELU_LIZARDMAN, DELU_LIZARDMAN_SCOUT, DELU_LIZARDMAN_WARRIOR,
+      DELU_LIZARDMAN_HEADHUNTER, MARSH_STAKATO_MARQUESS
+    )
+    register_quest_items(
+      BLACK_LION_MARK, CARGO_BOX_1ST, CARGO_BOX_2ND, CARGO_BOX_3RD,
+      CARGO_BOX_4TH, STATUE_OF_SHILEN_HEAD, STATUE_OF_SHILEN_TORSO,
+      STATUE_OF_SHILEN_ARM, STATUE_OF_SHILEN_LEG, COMPLETE_STATUE_OF_SHILEN,
+      FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE,
+      FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE,
+      FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE,
+      FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, COMPLETE_ANCIENT_TABLET,
+      SOPHYAS_1ST_ORDER, SOPHYAS_2ND_ORDER, SOPHYAS_3RD_ORDER,
+      SOPHYAS_4TH_ORDER, LIONS_CLAW, LIONS_EYE, GUILD_COIN, UNDEAD_ASH,
+      BLOODY_AXE_INSIGNIA, DELU_LIZARDMAN_FANG, STAKATO_TALON
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
     chance = rand(100)
@@ -98,322 +119,322 @@ class Quests::Q00333_HuntOfTheBlackLion < Quest
     when "30735-04.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30735-05.html", "30735-06.html", "30735-07.html", "30735-08.html",
          "30735-09.html", "30130-05.html", "30531-05.html", "30735-21.html",
          "30735-24a.html", "30735-25b.html", "30736-06.html", "30736-09.html",
          "30737-07.html"
-      htmltext = event
+      html = event
     when "30735-10.html"
-      unless has_quest_items?(player, SOPHYAS_1ST_ORDER)
-        give_items(player, SOPHYAS_1ST_ORDER, 1)
-        htmltext = event
+      unless has_quest_items?(pc, SOPHYAS_1ST_ORDER)
+        give_items(pc, SOPHYAS_1ST_ORDER, 1)
+        html = event
       end
     when "30735-11.html"
-      unless has_quest_items?(player, SOPHYAS_2ND_ORDER)
-        give_items(player, SOPHYAS_2ND_ORDER, 1)
-        htmltext = event
+      unless has_quest_items?(pc, SOPHYAS_2ND_ORDER)
+        give_items(pc, SOPHYAS_2ND_ORDER, 1)
+        html = event
       end
     when "30735-12.html"
-      unless has_quest_items?(player, SOPHYAS_3RD_ORDER)
-        give_items(player, SOPHYAS_3RD_ORDER, 1)
-        htmltext = event
+      unless has_quest_items?(pc, SOPHYAS_3RD_ORDER)
+        give_items(pc, SOPHYAS_3RD_ORDER, 1)
+        html = event
       end
     when "30735-13.html"
-      unless has_quest_items?(player, SOPHYAS_4TH_ORDER)
-        give_items(player, SOPHYAS_4TH_ORDER, 1)
-        htmltext = event
+      unless has_quest_items?(pc, SOPHYAS_4TH_ORDER)
+        give_items(pc, SOPHYAS_4TH_ORDER, 1)
+        html = event
       end
     when "30735-16.html"
-      if get_quest_items_count(player, LIONS_CLAW) < 10
-        htmltext = event
-      elsif get_quest_items_count(player, LIONS_CLAW) >= 10 && get_quest_items_count(player, LIONS_EYE) < 4
-        give_items(player, LIONS_EYE, 1)
+      if get_quest_items_count(pc, LIONS_CLAW) < 10
+        html = event
+      elsif get_quest_items_count(pc, LIONS_CLAW) >= 10 && get_quest_items_count(pc, LIONS_EYE) < 4
+        give_items(pc, LIONS_EYE, 1)
         if chance < 25
-          give_items(player, HEALING_POTION, 20)
+          give_items(pc, HEALING_POTION, 20)
         elsif chance < 50
-          if player.in_category?(CategoryType::FIGHTER_GROUP)
-            give_items(player, SOULSHOT_D_GRADE, 100)
-          elsif player.in_category?(CategoryType::MAGE_GROUP)
-            give_items(player, SPIRITSHOT_D_GRADE, 50)
+          if pc.in_category?(CategoryType::FIGHTER_GROUP)
+            give_items(pc, SOULSHOT_D_GRADE, 100)
+          elsif pc.in_category?(CategoryType::MAGE_GROUP)
+            give_items(pc, SPIRITSHOT_D_GRADE, 50)
           end
         elsif chance < 75
-          give_items(player, SCROLL_OF_ESCAPE, 20)
+          give_items(pc, SCROLL_OF_ESCAPE, 20)
         else
-          give_items(player, ALACRITY_POTION, 3)
+          give_items(pc, ALACRITY_POTION, 3)
         end
-        take_items(player, LIONS_CLAW, 10)
-        htmltext = "30735-17a.html"
-      elsif get_quest_items_count(player, LIONS_CLAW) >= 10 && get_quest_items_count(player, LIONS_EYE) >= 4 && get_quest_items_count(player, LIONS_EYE) <= 7
-        give_items(player, LIONS_EYE, 1)
+        take_items(pc, LIONS_CLAW, 10)
+        html = "30735-17a.html"
+      elsif get_quest_items_count(pc, LIONS_CLAW) >= 10 && get_quest_items_count(pc, LIONS_EYE) >= 4 && get_quest_items_count(pc, LIONS_EYE) <= 7
+        give_items(pc, LIONS_EYE, 1)
         if chance < 25
-          give_items(player, HEALING_POTION, 25)
+          give_items(pc, HEALING_POTION, 25)
         elsif chance < 50
-          if player.in_category?(CategoryType::FIGHTER_GROUP)
-            give_items(player, SOULSHOT_D_GRADE, 200)
-          elsif player.in_category?(CategoryType::MAGE_GROUP)
-            give_items(player, SPIRITSHOT_D_GRADE, 100)
+          if pc.in_category?(CategoryType::FIGHTER_GROUP)
+            give_items(pc, SOULSHOT_D_GRADE, 200)
+          elsif pc.in_category?(CategoryType::MAGE_GROUP)
+            give_items(pc, SPIRITSHOT_D_GRADE, 100)
           end
         elsif chance < 75
-          give_items(player, SCROLL_OF_ESCAPE, 20)
+          give_items(pc, SCROLL_OF_ESCAPE, 20)
         else
-          give_items(player, ALACRITY_POTION, 3)
+          give_items(pc, ALACRITY_POTION, 3)
         end
-        take_items(player, LIONS_CLAW, 10)
-        htmltext = "30735-18b.html"
-      elsif get_quest_items_count(player, LIONS_CLAW) >= 10 && get_quest_items_count(player, LIONS_EYE) >= 8
-        take_items(player, LIONS_EYE, 8)
+        take_items(pc, LIONS_CLAW, 10)
+        html = "30735-18b.html"
+      elsif get_quest_items_count(pc, LIONS_CLAW) >= 10 && get_quest_items_count(pc, LIONS_EYE) >= 8
+        take_items(pc, LIONS_EYE, 8)
         if chance < 25
-          give_items(player, HEALING_POTION, 50)
+          give_items(pc, HEALING_POTION, 50)
         elsif chance < 50
-          if player.in_category?(CategoryType::FIGHTER_GROUP)
-            give_items(player, SOULSHOT_D_GRADE, 400)
-          elsif player.in_category?(CategoryType::MAGE_GROUP)
-            give_items(player, SPIRITSHOT_D_GRADE, 200)
+          if pc.in_category?(CategoryType::FIGHTER_GROUP)
+            give_items(pc, SOULSHOT_D_GRADE, 400)
+          elsif pc.in_category?(CategoryType::MAGE_GROUP)
+            give_items(pc, SPIRITSHOT_D_GRADE, 200)
           end
         elsif chance < 75
-          give_items(player, SCROLL_OF_ESCAPE, 30)
+          give_items(pc, SCROLL_OF_ESCAPE, 30)
         else
-          give_items(player, ALACRITY_POTION, 4)
+          give_items(pc, ALACRITY_POTION, 4)
         end
-        take_items(player, LIONS_CLAW, 10)
-        htmltext = "30735-19b.html"
+        take_items(pc, LIONS_CLAW, 10)
+        html = "30735-19b.html"
       end
     when "30735-20.html"
-      take_items(player, SOPHYAS_1ST_ORDER, -1)
-      take_items(player, SOPHYAS_2ND_ORDER, -1)
-      take_items(player, SOPHYAS_3RD_ORDER, -1)
-      take_items(player, SOPHYAS_4TH_ORDER, -1)
-      htmltext = event
+      take_items(pc, SOPHYAS_1ST_ORDER, -1)
+      take_items(pc, SOPHYAS_2ND_ORDER, -1)
+      take_items(pc, SOPHYAS_3RD_ORDER, -1)
+      take_items(pc, SOPHYAS_4TH_ORDER, -1)
+      html = event
     when "30735-26.html"
-      if has_quest_items?(player, BLACK_LION_MARK)
-        give_adena(player, 12400, true)
+      if has_quest_items?(pc, BLACK_LION_MARK)
+        give_adena(pc, 12400, true)
         qs.exit_quest(true, true)
-        htmltext = event
+        html = event
       end
     when "30130-04.html"
-      if has_quest_items?(player, COMPLETE_STATUE_OF_SHILEN)
-        give_adena(player, 30000, true)
-        take_items(player, COMPLETE_STATUE_OF_SHILEN, 1)
-        htmltext = event
+      if has_quest_items?(pc, COMPLETE_STATUE_OF_SHILEN)
+        give_adena(pc, 30000, true)
+        take_items(pc, COMPLETE_STATUE_OF_SHILEN, 1)
+        html = event
       end
     when "30471-03.html"
-      if !has_quest_items?(player, STATUE_OF_SHILEN_HEAD, STATUE_OF_SHILEN_TORSO, STATUE_OF_SHILEN_ARM, STATUE_OF_SHILEN_LEG)
-        htmltext = event
+      if !has_quest_items?(pc, STATUE_OF_SHILEN_HEAD, STATUE_OF_SHILEN_TORSO, STATUE_OF_SHILEN_ARM, STATUE_OF_SHILEN_LEG)
+        html = event
       else
         if rand(100) < 50
-          give_items(player, COMPLETE_STATUE_OF_SHILEN, 1)
-          take_items(player, STATUE_OF_SHILEN_HEAD, 1)
-          take_items(player, STATUE_OF_SHILEN_TORSO, 1)
-          take_items(player, STATUE_OF_SHILEN_ARM, 1)
-          take_items(player, STATUE_OF_SHILEN_LEG, 1)
-          htmltext = "30471-04.html"
+          give_items(pc, COMPLETE_STATUE_OF_SHILEN, 1)
+          take_items(pc, STATUE_OF_SHILEN_HEAD, 1)
+          take_items(pc, STATUE_OF_SHILEN_TORSO, 1)
+          take_items(pc, STATUE_OF_SHILEN_ARM, 1)
+          take_items(pc, STATUE_OF_SHILEN_LEG, 1)
+          html = "30471-04.html"
         else
-          take_items(player, STATUE_OF_SHILEN_HEAD, 1)
-          take_items(player, STATUE_OF_SHILEN_TORSO, 1)
-          take_items(player, STATUE_OF_SHILEN_ARM, 1)
-          take_items(player, STATUE_OF_SHILEN_LEG, 1)
-          htmltext = "30471-05.html"
+          take_items(pc, STATUE_OF_SHILEN_HEAD, 1)
+          take_items(pc, STATUE_OF_SHILEN_TORSO, 1)
+          take_items(pc, STATUE_OF_SHILEN_ARM, 1)
+          take_items(pc, STATUE_OF_SHILEN_LEG, 1)
+          html = "30471-05.html"
         end
       end
     when "30471-06.html"
-      if !has_quest_items?(player, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE)
-        htmltext = event
+      if !has_quest_items?(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE)
+        html = event
       else
         if rand(100) < 50
-          give_items(player, COMPLETE_ANCIENT_TABLET, 1)
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, 1)
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, 1)
-          htmltext = "30471-07.html"
+          give_items(pc, COMPLETE_ANCIENT_TABLET, 1)
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, 1)
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, 1)
+          html = "30471-07.html"
         else
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, 1)
-          take_items(player, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, 1)
-          htmltext = "30471-08.html"
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, 1)
+          take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, 1)
+          html = "30471-08.html"
         end
       end
     when "30531-04.html"
-      if has_quest_items?(player, COMPLETE_ANCIENT_TABLET)
-        give_adena(player, 30000, true)
-        take_items(player, COMPLETE_ANCIENT_TABLET, 1)
-        htmltext = event
+      if has_quest_items?(pc, COMPLETE_ANCIENT_TABLET)
+        give_adena(pc, 30000, true)
+        take_items(pc, COMPLETE_ANCIENT_TABLET, 1)
+        html = event
       end
     when "30736-03.html"
-      if get_quest_items_count(player, Inventory::ADENA_ID) < 650 && get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) >= 1
-        htmltext = event
-      elsif get_quest_items_count(player, Inventory::ADENA_ID) >= 650 && get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) >= 1
-        take_items(player, Inventory::ADENA_ID, 650)
-        if has_quest_items?(player, CARGO_BOX_1ST)
-          take_items(player, CARGO_BOX_1ST, 1)
-        elsif has_quest_items?(player, CARGO_BOX_2ND)
-          take_items(player, CARGO_BOX_2ND, 1)
-        elsif has_quest_items?(player, CARGO_BOX_3RD)
-          take_items(player, CARGO_BOX_3RD, 1)
-        elsif has_quest_items?(player, CARGO_BOX_4TH)
-          take_items(player, CARGO_BOX_4TH, 1)
+      if get_quest_items_count(pc, Inventory::ADENA_ID) < 650 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+        html = event
+      elsif get_quest_items_count(pc, Inventory::ADENA_ID) >= 650 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+        take_items(pc, Inventory::ADENA_ID, 650)
+        if has_quest_items?(pc, CARGO_BOX_1ST)
+          take_items(pc, CARGO_BOX_1ST, 1)
+        elsif has_quest_items?(pc, CARGO_BOX_2ND)
+          take_items(pc, CARGO_BOX_2ND, 1)
+        elsif has_quest_items?(pc, CARGO_BOX_3RD)
+          take_items(pc, CARGO_BOX_3RD, 1)
+        elsif has_quest_items?(pc, CARGO_BOX_4TH)
+          take_items(pc, CARGO_BOX_4TH, 1)
         end
 
         if chance < 40
           if chance1 < 33
-            give_items(player, GLUDIO_APPLES, 1)
-            htmltext = "30736-04a.html"
+            give_items(pc, GLUDIO_APPLES, 1)
+            html = "30736-04a.html"
           elsif chance1 < 66
-            give_items(player, DION_CORN_MEAL, 1)
-            htmltext = "30736-04b.html"
+            give_items(pc, DION_CORN_MEAL, 1)
+            html = "30736-04b.html"
           else
-            give_items(player, DIRE_WOLF_PELTS, 1)
-            htmltext = "30736-04c.html"
+            give_items(pc, DIRE_WOLF_PELTS, 1)
+            html = "30736-04c.html"
           end
         elsif chance < 60
           if chance1 < 33
-            give_items(player, MOONSTONE, 1)
-            htmltext = "30736-04d.html"
+            give_items(pc, MOONSTONE, 1)
+            html = "30736-04d.html"
           elsif chance1 < 66
-            give_items(player, GLUDIO_WHEAT_FLOUR, 1)
-            htmltext = "30736-04e.html"
+            give_items(pc, GLUDIO_WHEAT_FLOUR, 1)
+            html = "30736-04e.html"
           else
-            give_items(player, SPIDERSILK_ROPE, 1)
-            htmltext = "30736-04f.html"
+            give_items(pc, SPIDERSILK_ROPE, 1)
+            html = "30736-04f.html"
           end
         elsif chance < 70
           if chance1 < 33
-            give_items(player, ALEXANDRITE, 1)
-            htmltext = "30736-04g.html"
+            give_items(pc, ALEXANDRITE, 1)
+            html = "30736-04g.html"
           elsif chance1 < 66
-            give_items(player, SILVER_TEA_SERVICE, 1)
-            htmltext = "30736-04h.html"
+            give_items(pc, SILVER_TEA_SERVICE, 1)
+            html = "30736-04h.html"
           else
-            give_items(player, MECHANIC_GOLEM_SPACE_PARTS, 1)
-            htmltext = "30736-04i.html"
+            give_items(pc, MECHANIC_GOLEM_SPACE_PARTS, 1)
+            html = "30736-04i.html"
           end
         elsif chance < 75
           if chance1 < 33
-            give_items(player, FIRE_EMERALD, 1)
-            htmltext = "30736-04j.html"
+            give_items(pc, FIRE_EMERALD, 1)
+            html = "30736-04j.html"
           elsif chance1 < 66
-            give_items(player, AVELLAN_SILK_FROCK, 1)
-            htmltext = "30736-04k.html"
+            give_items(pc, AVELLAN_SILK_FROCK, 1)
+            html = "30736-04k.html"
           else
-            give_items(player, FERIOTIC_PORCELAIN_URM, 1)
-            htmltext = "30736-04l.html"
+            give_items(pc, FERIOTIC_PORCELAIN_URM, 1)
+            html = "30736-04l.html"
           end
         elsif chance < 76
-          give_items(player, IMPERIAL_DIAMOND, 1)
-          htmltext = "30736-04m.html"
+          give_items(pc, IMPERIAL_DIAMOND, 1)
+          html = "30736-04m.html"
         elsif rand(100) < 50
           if chance1 < 25
-            give_items(player, STATUE_OF_SHILEN_HEAD, 1)
+            give_items(pc, STATUE_OF_SHILEN_HEAD, 1)
           elsif chance1 < 50
-            give_items(player, STATUE_OF_SHILEN_TORSO, 1)
+            give_items(pc, STATUE_OF_SHILEN_TORSO, 1)
           elsif chance1 < 75
-            give_items(player, STATUE_OF_SHILEN_ARM, 1)
+            give_items(pc, STATUE_OF_SHILEN_ARM, 1)
           else
-            give_items(player, STATUE_OF_SHILEN_LEG, 1)
+            give_items(pc, STATUE_OF_SHILEN_LEG, 1)
           end
-          htmltext = "30736-04n.html"
+          html = "30736-04n.html"
         else
           if chance1 < 25
-            give_items(player, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
+            give_items(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
           elsif chance1 < 50
-            give_items(player, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
+            give_items(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
           elsif chance1 < 75
-            give_items(player, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, 1)
+            give_items(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, 1)
           else
-            give_items(player, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, 1)
+            give_items(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE, 1)
           end
-          htmltext = "30736-04o.html"
+          html = "30736-04o.html"
         end
-      elsif get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) < 1
-        htmltext = "30736-05.html"
+      elsif get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) < 1
+        html = "30736-05.html"
       end
     when "30736-07.html"
-      if player.adena < 200 + (qs.memo_state * 200)
-        htmltext = event
+      if pc.adena < 200 + (qs.memo_state * 200)
+        html = event
       elsif qs.memo_state * 100 > 200
-        htmltext = "30736-08.html"
+        html = "30736-08.html"
       else
         if chance < 5
-          htmltext = "30736-08a.html"
+          html = "30736-08a.html"
         elsif chance < 10
-          htmltext = "30736-08b.html"
+          html = "30736-08b.html"
         elsif chance < 15
-          htmltext = "30736-08c.html"
+          html = "30736-08c.html"
         elsif chance < 20
-          htmltext = "30736-08d.html"
+          html = "30736-08d.html"
         elsif chance < 25
-          htmltext = "30736-08e.html"
+          html = "30736-08e.html"
         elsif chance < 30
-          htmltext = "30736-08f.html"
+          html = "30736-08f.html"
         elsif chance < 35
-          htmltext = "30736-08g.html"
+          html = "30736-08g.html"
         elsif chance < 40
-          htmltext = "30736-08h.html"
+          html = "30736-08h.html"
         elsif chance < 45
-          htmltext = "30736-08i.html"
+          html = "30736-08i.html"
         elsif chance < 50
-          htmltext = "30736-08j.html"
+          html = "30736-08j.html"
         elsif chance < 55
-          htmltext = "30736-08k.html"
+          html = "30736-08k.html"
         elsif chance < 60
-          htmltext = "30736-08l.html"
+          html = "30736-08l.html"
         elsif chance < 65
-          htmltext = "30736-08m.html"
+          html = "30736-08m.html"
         elsif chance < 70
-          htmltext = "30736-08n.html"
+          html = "30736-08n.html"
         elsif chance < 75
-          htmltext = "30736-08o.html"
+          html = "30736-08o.html"
         elsif chance < 80
-          htmltext = "30736-08p.html"
+          html = "30736-08p.html"
         elsif chance < 85
-          htmltext = "30736-08q.html"
+          html = "30736-08q.html"
         elsif chance < 90
-          htmltext = "30736-08r.html"
+          html = "30736-08r.html"
         elsif chance < 95
-          htmltext = "30736-08s.html"
+          html = "30736-08s.html"
         else
-          htmltext = "30736-08t.html"
+          html = "30736-08t.html"
         end
-        take_items(player, Inventory::ADENA_ID, 200 + (qs.memo_state * 200))
+        take_items(pc, Inventory::ADENA_ID, 200 + (qs.memo_state * 200))
         qs.memo_state += 1
       end
     when "30737-06.html"
-      if get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) < 1
-        htmltext = event
+      if get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) < 1
+        html = event
       else
-        if has_quest_items?(player, CARGO_BOX_1ST)
-          take_items(player, CARGO_BOX_1ST, 1)
-        elsif has_quest_items?(player, CARGO_BOX_2ND)
-          take_items(player, CARGO_BOX_2ND, 1)
-        elsif has_quest_items?(player, CARGO_BOX_3RD)
-          take_items(player, CARGO_BOX_3RD, 1)
-        elsif has_quest_items?(player, CARGO_BOX_4TH)
-          take_items(player, CARGO_BOX_4TH, 1)
+        if has_quest_items?(pc, CARGO_BOX_1ST)
+          take_items(pc, CARGO_BOX_1ST, 1)
+        elsif has_quest_items?(pc, CARGO_BOX_2ND)
+          take_items(pc, CARGO_BOX_2ND, 1)
+        elsif has_quest_items?(pc, CARGO_BOX_3RD)
+          take_items(pc, CARGO_BOX_3RD, 1)
+        elsif has_quest_items?(pc, CARGO_BOX_4TH)
+          take_items(pc, CARGO_BOX_4TH, 1)
         end
 
-        if get_quest_items_count(player, GUILD_COIN) < 80
-          give_items(player, GUILD_COIN, 1)
+        if get_quest_items_count(pc, GUILD_COIN) < 80
+          give_items(pc, GUILD_COIN, 1)
         else
-          take_items(player, GUILD_COIN, 80)
+          take_items(pc, GUILD_COIN, 80)
         end
 
-        if get_quest_items_count(player, GUILD_COIN) < 40
-          give_adena(player, 100, true)
-          htmltext = "30737-03.html"
-        elsif get_quest_items_count(player, GUILD_COIN) >= 40 && get_quest_items_count(player, GUILD_COIN) < 80
-          give_adena(player, 200, true)
-          htmltext = "30737-04.html"
+        if get_quest_items_count(pc, GUILD_COIN) < 40
+          give_adena(pc, 100, true)
+          html = "30737-03.html"
+        elsif get_quest_items_count(pc, GUILD_COIN) >= 40 && get_quest_items_count(pc, GUILD_COIN) < 80
+          give_adena(pc, 200, true)
+          html = "30737-04.html"
         else
-          give_adena(player, 300, true)
-          htmltext = "30737-05.html"
+          give_adena(pc, 300, true)
+          html = "30737-05.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -609,115 +630,115 @@ class Quests::Q00333_HuntOfTheBlackLion < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created?
       if npc.id == MERCENARY_CAPTAIN_SOPHYA
-        if player.level < MIN_LEVEL
-          htmltext = "30735-01.htm"
+        if pc.level < MIN_LEVEL
+          html = "30735-01.htm"
         else
-          if !has_quest_items?(player, BLACK_LION_MARK)
-            htmltext = "30735-02.htm"
+          if !has_quest_items?(pc, BLACK_LION_MARK)
+            html = "30735-02.htm"
           else
-            htmltext = "30735-03.htm"
+            html = "30735-03.htm"
           end
         end
       end
     elsif qs.started?
       case npc.id
       when MERCENARY_CAPTAIN_SOPHYA
-        if get_quest_items_count(player, SOPHYAS_1ST_ORDER) + get_quest_items_count(player, SOPHYAS_2ND_ORDER) + get_quest_items_count(player, SOPHYAS_3RD_ORDER) + get_quest_items_count(player, SOPHYAS_4TH_ORDER) == 0
-          htmltext = "30735-14.html"
-        elsif get_quest_items_count(player, SOPHYAS_1ST_ORDER) + get_quest_items_count(player, SOPHYAS_2ND_ORDER) + get_quest_items_count(player, SOPHYAS_3RD_ORDER) + get_quest_items_count(player, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(player, UNDEAD_ASH) + get_quest_items_count(player, BLOODY_AXE_INSIGNIA) + get_quest_items_count(player, DELU_LIZARDMAN_FANG) + get_quest_items_count(player, STAKATO_TALON) < 1 && get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) < 1
-          htmltext = "30735-15.html"
-        elsif get_quest_items_count(player, SOPHYAS_1ST_ORDER) + get_quest_items_count(player, SOPHYAS_2ND_ORDER) + get_quest_items_count(player, SOPHYAS_3RD_ORDER) + get_quest_items_count(player, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(player, UNDEAD_ASH) + get_quest_items_count(player, BLOODY_AXE_INSIGNIA) + get_quest_items_count(player, DELU_LIZARDMAN_FANG) + get_quest_items_count(player, STAKATO_TALON) < 1 && get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) >= 1
-          htmltext = "30735-15a.html"
-        elsif get_quest_items_count(player, SOPHYAS_1ST_ORDER) + get_quest_items_count(player, SOPHYAS_2ND_ORDER) + get_quest_items_count(player, SOPHYAS_3RD_ORDER) + get_quest_items_count(player, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(player, UNDEAD_ASH) + get_quest_items_count(player, BLOODY_AXE_INSIGNIA) + get_quest_items_count(player, DELU_LIZARDMAN_FANG) + get_quest_items_count(player, STAKATO_TALON) >= 1 && get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) == 0
-          itemcount = get_quest_items_count(player, UNDEAD_ASH) + get_quest_items_count(player, BLOODY_AXE_INSIGNIA) + get_quest_items_count(player, DELU_LIZARDMAN_FANG) + get_quest_items_count(player, STAKATO_TALON)
+        if get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 0
+          html = "30735-14.html"
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) < 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) < 1
+          html = "30735-15.html"
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) < 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+          html = "30735-15a.html"
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) >= 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) == 0
+          itemcount = get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON)
           if itemcount < 20
 
           elsif itemcount < 50
-            give_items(player, LIONS_CLAW, 1)
+            give_items(pc, LIONS_CLAW, 1)
           elsif itemcount < 100
-            give_items(player, LIONS_CLAW, 2)
+            give_items(pc, LIONS_CLAW, 2)
           else
-            give_items(player, LIONS_CLAW, 3)
+            give_items(pc, LIONS_CLAW, 3)
           end
-          ash = get_quest_items_count(player, UNDEAD_ASH)
-          insignia = get_quest_items_count(player, BLOODY_AXE_INSIGNIA)
-          fang = get_quest_items_count(player, DELU_LIZARDMAN_FANG)
-          talon = get_quest_items_count(player, STAKATO_TALON)
-          give_adena(player, (ash * 35) + (insignia * 35) + fang + 35 + (talon * 35), true)
-          take_items(player, UNDEAD_ASH, -1)
-          take_items(player, BLOODY_AXE_INSIGNIA, -1)
-          take_items(player, DELU_LIZARDMAN_FANG, -1)
-          take_items(player, STAKATO_TALON, -1)
+          ash = get_quest_items_count(pc, UNDEAD_ASH)
+          insignia = get_quest_items_count(pc, BLOODY_AXE_INSIGNIA)
+          fang = get_quest_items_count(pc, DELU_LIZARDMAN_FANG)
+          talon = get_quest_items_count(pc, STAKATO_TALON)
+          give_adena(pc, (ash * 35) + (insignia * 35) + fang + 35 + (talon * 35), true)
+          take_items(pc, UNDEAD_ASH, -1)
+          take_items(pc, BLOODY_AXE_INSIGNIA, -1)
+          take_items(pc, DELU_LIZARDMAN_FANG, -1)
+          take_items(pc, STAKATO_TALON, -1)
           qs.memo_state = 0
-          htmltext = "30735-22.html"
-        elsif get_quest_items_count(player, SOPHYAS_1ST_ORDER) + get_quest_items_count(player, SOPHYAS_2ND_ORDER) + get_quest_items_count(player, SOPHYAS_3RD_ORDER) + get_quest_items_count(player, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(player, UNDEAD_ASH) + get_quest_items_count(player, BLOODY_AXE_INSIGNIA) + get_quest_items_count(player, DELU_LIZARDMAN_FANG) + get_quest_items_count(player, STAKATO_TALON) >= 1 && get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) >= 1
-          itemcount = get_quest_items_count(player, UNDEAD_ASH) + get_quest_items_count(player, BLOODY_AXE_INSIGNIA) + get_quest_items_count(player, DELU_LIZARDMAN_FANG) + get_quest_items_count(player, STAKATO_TALON)
+          html = "30735-22.html"
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) >= 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+          itemcount = get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON)
           if itemcount < 20
 
           elsif itemcount < 50
-            give_items(player, LIONS_CLAW, 1)
+            give_items(pc, LIONS_CLAW, 1)
           elsif itemcount < 100
-            give_items(player, LIONS_CLAW, 2)
+            give_items(pc, LIONS_CLAW, 2)
           else
-            give_items(player, LIONS_CLAW, 3)
+            give_items(pc, LIONS_CLAW, 3)
           end
-          give_adena(player, get_quest_items_count(player, UNDEAD_ASH) * 35, true)
-          give_adena(player, get_quest_items_count(player, BLOODY_AXE_INSIGNIA) * 35, true)
-          give_adena(player, get_quest_items_count(player, DELU_LIZARDMAN_FANG) * 35, true)
-          give_adena(player, get_quest_items_count(player, STAKATO_TALON) * 35, true)
-          take_items(player, UNDEAD_ASH, -1)
-          take_items(player, BLOODY_AXE_INSIGNIA, -1)
-          take_items(player, DELU_LIZARDMAN_FANG, -1)
-          take_items(player, STAKATO_TALON, -1)
+          give_adena(pc, get_quest_items_count(pc, UNDEAD_ASH) * 35, true)
+          give_adena(pc, get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) * 35, true)
+          give_adena(pc, get_quest_items_count(pc, DELU_LIZARDMAN_FANG) * 35, true)
+          give_adena(pc, get_quest_items_count(pc, STAKATO_TALON) * 35, true)
+          take_items(pc, UNDEAD_ASH, -1)
+          take_items(pc, BLOODY_AXE_INSIGNIA, -1)
+          take_items(pc, DELU_LIZARDMAN_FANG, -1)
+          take_items(pc, STAKATO_TALON, -1)
           qs.memo_state = 0
-          htmltext = "30735-23.html"
+          html = "30735-23.html"
         end
       when ABYSSAL_CELEBRANT_UNDRIAS
-        if !has_quest_items?(player, COMPLETE_STATUE_OF_SHILEN)
-          if get_quest_items_count(player, STATUE_OF_SHILEN_HEAD) + get_quest_items_count(player, STATUE_OF_SHILEN_TORSO) + get_quest_items_count(player, STATUE_OF_SHILEN_ARM) + get_quest_items_count(player, STATUE_OF_SHILEN_LEG) >= 1
-            htmltext = "30130-02.html"
+        if !has_quest_items?(pc, COMPLETE_STATUE_OF_SHILEN)
+          if get_quest_items_count(pc, STATUE_OF_SHILEN_HEAD) + get_quest_items_count(pc, STATUE_OF_SHILEN_TORSO) + get_quest_items_count(pc, STATUE_OF_SHILEN_ARM) + get_quest_items_count(pc, STATUE_OF_SHILEN_LEG) >= 1
+            html = "30130-02.html"
           else
-            htmltext = "30130-01.html"
+            html = "30130-01.html"
           end
         else
-          htmltext = "30130-03.html"
+          html = "30130-03.html"
         end
       when BLACKSMITH_RUPIO
-        if get_quest_items_count(player, STATUE_OF_SHILEN_HEAD) + get_quest_items_count(player, STATUE_OF_SHILEN_TORSO) + get_quest_items_count(player, STATUE_OF_SHILEN_ARM) + get_quest_items_count(player, STATUE_OF_SHILEN_LEG) >= 1 || get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) + get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) + get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) + get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
-          htmltext = "30471-02.html"
+        if get_quest_items_count(pc, STATUE_OF_SHILEN_HEAD) + get_quest_items_count(pc, STATUE_OF_SHILEN_TORSO) + get_quest_items_count(pc, STATUE_OF_SHILEN_ARM) + get_quest_items_count(pc, STATUE_OF_SHILEN_LEG) >= 1 || get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
+          html = "30471-02.html"
         else
-          htmltext = "30471-01.html"
+          html = "30471-01.html"
         end
       when IRON_GATES_LOCKIRIN
-        if !has_quest_items?(player, COMPLETE_ANCIENT_TABLET)
-          if get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) + get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) + get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) + get_quest_items_count(player, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
-            htmltext = "30531-02.html"
+        if !has_quest_items?(pc, COMPLETE_ANCIENT_TABLET)
+          if get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
+            html = "30531-02.html"
           else
-            htmltext = "30531-01.html"
+            html = "30531-01.html"
           end
         else
-          htmltext = "30531-03.html"
+          html = "30531-03.html"
         end
       when MERCENARY_REEDFOOT
-        if get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) >= 1
-          htmltext = "30736-02.html"
+        if get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+          html = "30736-02.html"
         else
-          htmltext = "30736-01.html"
+          html = "30736-01.html"
         end
       when GUILDSMAN_MORGON
-        if get_quest_items_count(player, CARGO_BOX_1ST) + get_quest_items_count(player, CARGO_BOX_2ND) + get_quest_items_count(player, CARGO_BOX_3RD) + get_quest_items_count(player, CARGO_BOX_4TH) >= 1
-          htmltext = "30737-02.html"
+        if get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+          html = "30737-02.html"
         else
-          htmltext = "30737-01.html"
+          html = "30737-01.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

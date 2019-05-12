@@ -6,7 +6,7 @@ class Packets::Incoming::RequestPackageSend < GameClientPacket
   @l2id = 0
   @items : Slice(ItemHolder)?
 
-  def read_impl
+  private def read_impl
     @l2id = d
     count = d
     if count <= 0 || count > Config.max_item_in_packet
@@ -28,7 +28,7 @@ class Packets::Incoming::RequestPackageSend < GameClientPacket
     @items = items
   end
 
-  def run_impl
+  private def run_impl
     return unless _items = @items
     return unless pc = active_char
     unless pc.account_chars.has_key?(@l2id)

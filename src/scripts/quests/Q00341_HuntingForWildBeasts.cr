@@ -1,4 +1,4 @@
-class Quests::Q00341_HuntingForWildBeasts < Quest
+class Scripts::Q00341_HuntingForWildBeasts < Quest
   # NPCs
   private PANO = 30078
   # Monsters

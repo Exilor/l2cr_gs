@@ -1,4 +1,4 @@
-class NpcAI::Rafforty < AbstractNpcAI
+class Scripts::Rafforty < AbstractNpcAI
   # NPC
   private RAFFORTY = 32020
   # Items
@@ -16,16 +16,16 @@ class NpcAI::Rafforty < AbstractNpcAI
 
   def on_adv_event(event, npc, pc)
     pc = pc.not_nil!
-    htmltext = event
+    html = event
 
     case event
     when "32020-01.html"
       unless has_quest_items?(pc, NECKLACE)
-        htmltext = "32020-02.html"
+        html = "32020-02.html"
       end
     when "32020-04.html"
       unless has_quest_items?(pc, BOTTLE)
-        htmltext = "32020-05.html"
+        html = "32020-05.html"
       end
     when "32020-07.html"
       unless has_quest_items?(pc, BOTTLE, NECKLACE)
@@ -37,6 +37,6 @@ class NpcAI::Rafforty < AbstractNpcAI
       give_items(pc, BLESSED_NECKLACE, 1)
     end
 
-    htmltext
+    html
   end
 end

@@ -3,13 +3,13 @@ class Packets::Incoming::RequestDispel < GameClientPacket
   @skill_id = 0
   @skill_level = 0
 
-  def read_impl
+  private def read_impl
     @l2id = d
     @skill_id = d
     @skill_level = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     return if @skill_id <= 0 || @skill_level <= 0

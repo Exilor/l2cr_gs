@@ -1,4 +1,4 @@
-class Quests::Q00281_HeadForTheHills < Quest
+class Scripts::Q00281_HeadForTheHills < Quest
 	# Item
 	private CLAWS = 9796
 	# NPC

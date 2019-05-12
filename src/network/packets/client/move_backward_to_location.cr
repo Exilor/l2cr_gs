@@ -6,7 +6,7 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
   @from_y = 0
   @from_z = 0
 
-  def read_impl
+  private def read_impl
     @to_x, @to_y, @to_z = d, d, d
     @from_x, @from_y, @from_z = d, d, d
 
@@ -20,7 +20,7 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
     end
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if Config.player_movement_block_time > 0 && !pc.gm?

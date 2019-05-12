@@ -1,4 +1,4 @@
-class Quests::Q00011_SecretMeetingWithKetraOrcs < Quest
+class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
   # NPCs
 	private CADMON = 31296
 	private LEON = 31256

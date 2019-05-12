@@ -1,4 +1,4 @@
-class NpcAI::Kanaf < AbstractNpcAI
+class Scripts::Kanaf < AbstractNpcAI
   # NPCs
   private KANAF = 32346
 

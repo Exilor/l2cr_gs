@@ -1,4 +1,4 @@
-class Quests::Q00153_DeliverGoods < Quest
+class Scripts::Q00153_DeliverGoods < Quest
   private MIN_LVL = 2
   # NPCs
 	private JACKSON_ID = 30002
@@ -24,13 +24,8 @@ class Quests::Q00153_DeliverGoods < Quest
     add_start_npc(ARNOLD_ID)
 		add_talk_id(JACKSON_ID, SILVIA_ID, ARNOLD_ID, RANT_ID)
 		register_quest_items(
-      DELIVERY_LIST_ID,
-      HEAVY_WOOD_BOX_ID,
-      CLOTH_BUNDLE_ID,
-      CLAY_POT_ID,
-      JACKSONS_RECEIPT_ID,
-      SILVIAS_RECEIPT_ID,
-      RANTS_RECEIPT_ID
+      DELIVERY_LIST_ID, HEAVY_WOOD_BOX_ID, CLOTH_BUNDLE_ID, CLAY_POT_ID,
+      JACKSONS_RECEIPT_ID, SILVIAS_RECEIPT_ID, RANTS_RECEIPT_ID
     )
   end
 
@@ -51,16 +46,17 @@ class Quests::Q00153_DeliverGoods < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     if npc.id == ARNOLD_ID
       case st.state
       when State::CREATED
-        htmltext = pc.level >= MIN_LVL ? "30041-01.htm" : "30041-00.htm"
+        html = pc.level >= MIN_LVL ? "30041-01.htm" : "30041-00.htm"
       when State::STARTED
         if st.cond?(1)
-          htmltext = "30041-03.html"
+          html = "30041-03.html"
         elsif st.cond?(2)
           st.take_items(DELIVERY_LIST_ID, -1)
           st.take_items(JACKSONS_RECEIPT_ID, -1)
@@ -70,10 +66,10 @@ class Quests::Q00153_DeliverGoods < Quest
           st.give_items(RING_OF_KNOWLEDGE_ID, 1)
           st.add_exp_and_sp(XP_REWARD_AMOUNT, 0)
           st.exit_quest(false)
-          htmltext = "30041-04.html"
+          html = "30041-04.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     else
       case npc.id
@@ -81,26 +77,26 @@ class Quests::Q00153_DeliverGoods < Quest
         if st.has_quest_items?(HEAVY_WOOD_BOX_ID)
           st.take_items(HEAVY_WOOD_BOX_ID, -1)
 					st.give_items(JACKSONS_RECEIPT_ID, 1)
-          htmltext = "30002-01.html"
+          html = "30002-01.html"
         else
-          htmltext = "30002-02.html"
+          html = "30002-02.html"
         end
       when SILVIA_ID
         if st.has_quest_items?(CLOTH_BUNDLE_ID)
           st.take_items(CLOTH_BUNDLE_ID, -1)
 					st.give_items(SILVIAS_RECEIPT_ID, 1)
 					st.give_items(SOULSHOT_NO_GRADE_ID, 3)
-          htmltext = "30003-01.html"
+          html = "30003-01.html"
         else
-          htmltext = "30003-02.html"
+          html = "30003-02.html"
         end
       when RANT_ID
         if st.has_quest_items?(CLAY_POT_ID)
           st.take_items(CLAY_POT_ID, -1)
 					st.give_items(RANTS_RECEIPT_ID, 1)
-          htmltext = "30054-01.html"
+          html = "30054-01.html"
         else
-          htmltext = "30054-02.html"
+          html = "30054-02.html"
         end
       end
 
@@ -113,6 +109,6 @@ class Quests::Q00153_DeliverGoods < Quest
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

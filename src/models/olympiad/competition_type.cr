@@ -1,5 +1,5 @@
 class CompetitionType < EnumClass
-  initializer name: String
+  protected initializer name: String
 
   def to_s : String
     @name

@@ -1,4 +1,4 @@
-class Quests::Q00275_DarkWingedSpies < Quest
+class Scripts::Q00275_DarkWingedSpies < Quest
   # Npc
   private NERUGA_CHIEF_TANTUS = 30567
   # Items
@@ -36,7 +36,7 @@ class Quests::Q00275_DarkWingedSpies < Quest
     st = get_quest_state(killer, false)
 
     if st && st.cond?(1) && Util.in_range?(1500, npc, killer, true)
-       count = st.get_quest_items_count(DARKWING_BAT_FANG)
+      count = st.get_quest_items_count(DARKWING_BAT_FANG)
 
       case npc.id
       when DARKWING_BAT
@@ -69,27 +69,34 @@ class Quests::Q00275_DarkWingedSpies < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state!(talker)
-    htmltext = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      htmltext = talker.race.orc? ? talker.level >= MIN_LVL ? "30567-02.htm" : "30567-01.htm" : "30567-00.htm"
+      if pc.race.orc?
+        if pc.level >= MIN_LVL
+          html = "30567-02.htm"
+        else
+          html = "30567-01.htm"
+        end
+      else
+        html = "30567-00.htm"
+      end
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30567-05.html"
+        html = "30567-05.html"
       when 2
         count = st.get_quest_items_count(DARKWING_BAT_FANG)
         if count >= MAX_BAT_FANG_COUNT
           st.give_adena(count * FANG_PRICE, true)
           st.exit_quest(true, true)
-          htmltext = "30567-05.html"
+          html = "30567-05.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

@@ -10,7 +10,7 @@ class Packets::Incoming::RequestMakeMacro < GameClientPacket
   @macro = uninitialized Macro
   @commands_length = 0
 
-  def read_impl
+  private def read_impl
     id = d
     name = s
     desc = s
@@ -35,7 +35,7 @@ class Packets::Incoming::RequestMakeMacro < GameClientPacket
     @macro = Macro.new(id, icon, name, desc, acro, commands)
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if @commands_length > UInt8::MAX

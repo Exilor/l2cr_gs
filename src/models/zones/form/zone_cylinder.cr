@@ -56,15 +56,15 @@ struct ZoneCylinder < L2ZoneForm
     Math.hypot(@x - x, @y - y) - @rad
   end
 
-  def low_z
+  def low_z : Int32
     @z1
   end
 
-  def high_z
+  def high_z : Int32
     @z2
   end
 
-  def visualize_zone(z)
+  def visualize_zone(z : Int32)
     count = ((2 * Math::PI * @rad) / STEP).to_i
     angle = (2 * Math::PI) / count
 

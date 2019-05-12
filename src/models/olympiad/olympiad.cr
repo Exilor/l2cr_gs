@@ -709,7 +709,10 @@ class Olympiad < ListenersContainer
     end
 
     begin
-      GameDB.exec(sql, class_id)
+      GameDB.each(sql, class_id) do |rs|
+        name = rs.get_string(CHAR_NAME)
+        names << name
+      end
     rescue e
       error "Couldn't load olympiad leaders from DB."
       error e

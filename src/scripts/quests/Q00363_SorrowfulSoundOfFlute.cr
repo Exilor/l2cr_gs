@@ -1,4 +1,4 @@
-class Quests::Q00363_SorrowfulSoundOfFlute < Quest
+class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
   # NPCs
   private ALDO = 30057
   private HOLVAS = 30058

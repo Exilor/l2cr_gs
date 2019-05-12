@@ -1,4 +1,4 @@
-class Quests::Q00343_UnderTheShadowOfTheIvoryTower < Quest
+class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
   # NPCs
   private MAGIC_TRADER_CEMA = 30834
   private LICH_KING_ICARUS = 30835

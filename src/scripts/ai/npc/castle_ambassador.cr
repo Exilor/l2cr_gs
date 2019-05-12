@@ -1,4 +1,4 @@
-class NpcAI::CastleAmbassador < AbstractNpcAI
+class Scripts::CastleAmbassador < AbstractNpcAI
   # NPCs
   private CASTLE_AMBASSADORS = {
     36393, 36394, 36437, 36435, # Gludio

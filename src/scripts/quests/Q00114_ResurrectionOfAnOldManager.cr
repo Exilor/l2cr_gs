@@ -1,4 +1,4 @@
-class Quests::Q00114_ResurrectionOfAnOldManager < Quest
+class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
   # NPCs
   private NEWYEAR = 31961
   private YUMI = 32041
@@ -26,13 +26,13 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
     register_quest_items(STARSTONE, STARSTONE2, DETECTOR, DETECTOR2, LETTER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     # Yumi
     when "32041-04.htm"
@@ -45,11 +45,11 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
     when "32041-12.html"
       case st.cond
       when 3
-        htmltext = "32041-12.html"
+        html = "32041-12.html"
       when 4
-        htmltext = "32041-13.html"
+        html = "32041-13.html"
       when 5
-        htmltext = "32041-14.html"
+        html = "32041-14.html"
       end
     when "32041-15.html"
       st.set("talk", "1")
@@ -66,7 +66,7 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
       st.take_items(DETECTOR2, 1)
     when "32041-38.html"
       if st.get_int("choice") == 2
-        htmltext = "32041-37.html"
+        html = "32041-37.html"
       end
     when "32041-39.html"
       st.unset("talk")
@@ -92,7 +92,7 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
       end
     when "32047-05.html"
       if st.get_int("talk") == 0 || st.get_int("talk1") == 0
-        htmltext = "32047-04.html"
+        html = "32047-04.html"
       end
     when "32047-06.html"
       st.set("choice", "1")
@@ -119,16 +119,16 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
       if golem.nil? || (golem && golem.dead?)
         golem = add_spawn(GUARDIAN, 96977, -110625, -3280, 0, false, 0).as(L2Attackable)
         @golem = golem
-        golem.broadcast_packet(NpcSay.new(golem.l2id, Say2::NPC_ALL, golem.id, NpcString::YOU_S1_YOU_ATTACKED_WENDY_PREPARE_TO_DIE).add_string_parameter(player.name))
+        golem.broadcast_packet(NpcSay.new(golem.l2id, Say2::NPC_ALL, golem.id, NpcString::YOU_S1_YOU_ATTACKED_WENDY_PREPARE_TO_DIE).add_string_parameter(pc.name))
         golem.set_running
-        golem.add_damage_hate(player, 0, 999)
-        golem.set_intention(AI::ATTACK, player)
+        golem.add_damage_hate(pc, 0, 999)
+        golem.set_intention(AI::ATTACK, pc)
         st.set("spawned", "1")
-        start_quest_timer("golem_despawn", 300000, nil, player)
+        start_quest_timer("golem_despawn", 300000, nil, pc)
       elsif st.get_int("spawned") == 1
-        htmltext = "32047-17b.html"
+        html = "32047-17b.html"
       else
-        htmltext = "32047-16b.html"
+        html = "32047-16b.html"
       end
     when "32047-20a.html"
       st.set_cond(8, true)
@@ -144,13 +144,13 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
       st.take_items(STARSTONE, 1)
       st.set_cond(15, true)
     when "32047-29c.html"
-      if player.adena >= 3000
+      if pc.adena >= 3000
         st.give_items(STARSTONE2, 1)
         st.take_items(Inventory::ADENA_ID, 3000)
         st.unset("talk")
         st.set_cond(26, true)
       else
-        htmltext = "32047-29ca.html"
+        html = "32047-29ca.html"
       end
     when "32047-30c.html"
       st.set("talk", "1")
@@ -173,10 +173,10 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
     when "golem_despawn"
       st.unset("spawned")
       golem = @golem.not_nil!
-      golem.broadcast_packet(NpcSay.new(golem.l2id, Say2::NPC_ALL, golem.id, NpcString::S1_YOUR_ENEMY_WAS_DRIVEN_OUT_I_WILL_NOW_WITHDRAW_AND_AWAIT_YOUR_NEXT_COMMAND).add_string_parameter(player.name))
+      golem.broadcast_packet(NpcSay.new(golem.l2id, Say2::NPC_ALL, golem.id, NpcString::S1_YOUR_ENEMY_WAS_DRIVEN_OUT_I_WILL_NOW_WITHDRAW_AND_AWAIT_YOUR_NEXT_COMMAND).add_string_parameter(pc.name))
       golem.delete_me
       @golem = nil
-      htmltext = nil
+      html = nil
     # HTMLs
     when "32041-05.html", "32041-06.html", "32041-07.html", "32041-17.html",
          "32041-18.html", "32041-19.html", "32041-20.html", "32041-21.html",
@@ -193,14 +193,14 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
          "32047-28c.html"
       # do nothing
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
 
     if st && st.cond?(10) && st.get_int("spawned") == 1
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::THIS_ENEMY_IS_FAR_TOO_POWERFUL_FOR_ME_TO_FIGHT_I_MUST_WITHDRAW))
@@ -226,148 +226,148 @@ class Quests::Q00114_ResurrectionOfAnOldManager < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     talk = st.get_int("talk")
 
     case npc.id
     when YUMI
       case st.state
       when State::CREATED
-        if player.quest_completed?(Q00121_PavelTheGiant.simple_name)
-          htmltext = player.level >= 70 ? "32041-02.htm" : "32041-03.htm"
+        if pc.quest_completed?(Q00121_PavelTheGiant.simple_name)
+          html = pc.level >= 70 ? "32041-02.htm" : "32041-03.htm"
         else
-          htmltext = "32041-01.htm"
+          html = "32041-01.htm"
         end
       when State::STARTED
         case st.cond
         when 1
-          htmltext = talk == 1 ? "32041-08.html" : "32041-04.htm"
+          html = talk == 1 ? "32041-08.html" : "32041-04.htm"
         when 2
-          htmltext = "32041-10.html"
+          html = "32041-10.html"
         when 3..5
           case talk
           when 0
-            htmltext = "32041-11.html"
+            html = "32041-11.html"
           when 1
-            htmltext = "32041-16.html"
+            html = "32041-16.html"
           when 2
-            htmltext = "32041-24.html"
+            html = "32041-24.html"
           end
         when 6..8, 10, 11, 13..15
-          htmltext = "32041-27.html"
+          html = "32041-27.html"
         when 9, 12, 16
-          htmltext = "32041-28.html"
+          html = "32041-28.html"
         when 17, 18
-          htmltext = "32041-32.html"
+          html = "32041-32.html"
         when 19
-          htmltext = talk == 1 ? "32041-34z.html" : "32041-33.html"
+          html = talk == 1 ? "32041-34z.html" : "32041-33.html"
         when 20
-          htmltext = "32041-39z.html"
+          html = "32041-39z.html"
         when 21
-          htmltext = "32041-40z.html"
+          html = "32041-40z.html"
         when 22, 25, 26
           st.set_cond(27, true)
-          htmltext = "32041-41.html"
+          html = "32041-41.html"
         when 27
-          htmltext = "32041-42.html"
+          html = "32041-42.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when WENDY
       if st.started?
         case st.cond
         when 2
           if talk == 1 && st.get_int("talk1") == 1
-            htmltext = "32047-05.html"
+            html = "32047-05.html"
           else
-            htmltext = "32047-01.html"
+            html = "32047-01.html"
           end
         when 3
-          htmltext = "32047-06b.html"
+          html = "32047-06b.html"
         when 4
-          htmltext = "32047-08.html"
+          html = "32047-08.html"
         when 5
-          htmltext = "32047-10.html"
+          html = "32047-10.html"
         when 6
           case st.get_int("choice")
           when 1
-            htmltext = "32047-11a.html"
+            html = "32047-11a.html"
           when 2
-            htmltext = "32047-11b.html"
+            html = "32047-11b.html"
           when 3
-            htmltext = "32047-11c.html"
+            html = "32047-11c.html"
           end
         when 7
-          htmltext = "32047-11c.html"
+          html = "32047-11c.html"
         when 8
-          htmltext = "32047-17a.html"
+          html = "32047-17a.html"
         when 9, 12, 16
-          htmltext = "32047-25c.html"
+          html = "32047-25c.html"
         when 10
-          htmltext = "32047-18b.html"
+          html = "32047-18b.html"
         when 11
-          htmltext = "32047-19b.html"
+          html = "32047-19b.html"
         when 13
-          htmltext = "32047-21c.html"
+          html = "32047-21c.html"
         when 14
-          htmltext = "32047-22c.html"
+          html = "32047-22c.html"
         when 15
           st.set_cond(16, true)
-          htmltext = "32047-24c.html"
+          html = "32047-24c.html"
         when 20
           if st.get_int("choice") == 1
-            htmltext = "32047-22a.html"
+            html = "32047-22a.html"
           else
-            htmltext = talk == 1 ? "32047-31c.html" : "32047-26c.html"
+            html = talk == 1 ? "32047-31c.html" : "32047-26c.html"
           end
         when 23
-          htmltext = "32047-23z.html"
+          html = "32047-23z.html"
         when 24
           st.set_cond(25, true)
-          htmltext = "32047-24a.html"
+          html = "32047-24a.html"
         when 25
-          htmltext = "32047-24a.html"
+          html = "32047-24a.html"
         when 26
-          htmltext = "32047-32c.html"
+          html = "32047-32c.html"
         end
       end
     when NEWYEAR
       if st.started?
         case st.cond
         when 21
-          htmltext = "31961-01.html"
+          html = "31961-01.html"
         when 22
-          htmltext = "31961-03.html"
+          html = "31961-03.html"
         end
       end
     when BOX
       if st.started?
         case st.cond
         when 13
-          htmltext = talk == 1 ? "32050-02.html" : "32050-01.html"
+          html = talk == 1 ? "32050-02.html" : "32050-01.html"
         when 14
-          htmltext = "32050-04.html"
+          html = "32050-04.html"
         when 23
-          htmltext = "32050-04b.html"
+          html = "32050-04b.html"
         when 24
-          htmltext = "32050-05z.html"
+          html = "32050-05z.html"
         end
       end
     when STONES
       if st.started?
         case st.cond
         when 18
-          htmltext = "32046-02.html"
+          html = "32046-02.html"
         when 19
-          htmltext = "32046-03.html"
+          html = "32046-03.html"
         when 27
-          htmltext = "32046-04.html"
+          html = "32046-04.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

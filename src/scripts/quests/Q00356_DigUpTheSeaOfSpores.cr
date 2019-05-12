@@ -1,4 +1,4 @@
-class Quests::Q00356_DigUpTheSeaOfSpores < Quest
+class Scripts::Q00356_DigUpTheSeaOfSpores < Quest
   # NPC
   private GAUEN = 30717
   # Items
@@ -69,9 +69,11 @@ class Quests::Q00356_DigUpTheSeaOfSpores < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    qs = get_quest_state(killer, false)
+    unless qs = get_quest_state(killer, false)
+      return
+    end
 
-    if qs.nil? || !Util.in_range?(1500, npc, killer, true)
+    unless Util.in_range?(1500, npc, killer, true)
       return
     end
 

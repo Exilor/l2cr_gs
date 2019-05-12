@@ -1,4 +1,4 @@
-class NpcAI::OrcChange1 < AbstractNpcAI
+class Scripts::OrcChange1 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30500, # Osborn

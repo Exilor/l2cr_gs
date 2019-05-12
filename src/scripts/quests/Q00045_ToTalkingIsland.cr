@@ -1,6 +1,6 @@
 require "./abstract_get_scroll_to_hometown_quest"
 
-class Quests::Q00045_ToTalkingIsland < Quests::AbstractGetScrollToHometownQuest
+class Scripts::Q00045_ToTalkingIsland < AbstractGetScrollToHometownQuest
   def initialize
     super(45, self.class.simple_name, "To Talking Island")
   end

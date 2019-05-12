@@ -1,4 +1,4 @@
-class NpcAI::NoblesseTeleport < AbstractNpcAI
+class Scripts::NoblesseTeleport < AbstractNpcAI
   # Item
   private OLYMPIAD_TOKEN = 13722
   # NPCs

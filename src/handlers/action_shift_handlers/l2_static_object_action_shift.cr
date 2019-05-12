@@ -2,10 +2,13 @@ module ActionShiftHandler::L2StaticObjectInstanceAction
   extend self
   extend ActionShiftHandler
 
-  def action(pc, target, interact)
+  def action(pc, target, interact) : Bool
     if pc.access_level.gm?
       pc.target = target
-      obj = target.unsafe_as(L2StaticObjectInstance)
+      obj = target
+      unless obj.is_a?(L2StaticObjectInstance)
+        raise "Expected #{obj}:#{obj.class} to be a L2StaticObjectInstance"
+      end
 
       pc.send_packet(StaticObject.new(obj))
       str = String.build do |io|
@@ -32,7 +35,7 @@ module ActionShiftHandler::L2StaticObjectInstanceAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2StaticObjectInstance
   end
 end

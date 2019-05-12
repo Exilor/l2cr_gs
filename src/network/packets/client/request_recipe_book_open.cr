@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestRecipeBookOpen < GameClientPacket
   @dwarven = false
 
-  def read_impl
+  private def read_impl
     @dwarven = d == 0
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if pc.casting_now? || pc.casting_simultaneously_now?

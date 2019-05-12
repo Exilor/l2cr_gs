@@ -1,4 +1,4 @@
-class NpcAI::FortressArcherCaptain < AbstractNpcAI
+class Scripts::FortressArcherCaptain < AbstractNpcAI
   # NPCs
   private ARCHER_CAPTAIN = {
     35661, # Shanty Fortress

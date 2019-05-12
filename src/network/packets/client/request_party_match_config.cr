@@ -3,13 +3,13 @@ class Packets::Incoming::RequestPartyMatchConfig < GameClientPacket
   @loc = 0
   @lvl = 0
 
-  def read_impl
+  private def read_impl
     @auto = d
     @loc = d
     @lvl = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if !pc.in_party_match_room? && pc.party? && pc.party.leader != pc

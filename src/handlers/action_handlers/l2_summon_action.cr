@@ -40,7 +40,7 @@ module ActionHandler::L2SummonAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Summon
   end
 end

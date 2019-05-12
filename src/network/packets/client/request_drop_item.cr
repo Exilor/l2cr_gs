@@ -7,7 +7,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
   @y = 0
   @z = 0
 
-  def read_impl
+  private def read_impl
     @id = d
     @count = q
     @x = d
@@ -15,7 +15,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     @z = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     debug "#{pc} requests dropping item with ID #{@id} at #{@x} #{@y} #{@z}."

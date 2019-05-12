@@ -150,19 +150,13 @@ class Calendar
   end
 
   def day_of_year=(day : Int)
-    target_day = (day - day_of_year).abs
-    if target_day < day_of_year
-      self.day += target_day
-    else
-      self.day -= target_day
+    if day == 0
+      day = 1
     end
-  end
-
-  def day_of_year=(day : Int)
     self.day += day - day_of_year
   end
 
-  def ms=(ms : Int) # setTimeInMillis
+  def ms=(ms : Int)
     @time = Time.from_ms(ms)
   end
 
@@ -174,16 +168,16 @@ class Calendar
       add(value.seconds)
     when :MINUTE
       add(value.minutes)
-    when :HOUR
+    when :HOUR, :HOUR_OF_DAY
       add(value.hours)
     when :DAY
       add(value.days)
-    when :WEEK
+    when :WEEK, :WEEK_OF_YEAR
       add(value.weeks)
     when :MONTH
       add(value.months)
     else
-      raise ArgumentError.new
+      raise ArgumentError.new("Invalid unit #{unit.inspect}")
     end
   end
 

@@ -1,4 +1,4 @@
-class Quests::Q00319_ScentOfDeath < Quest
+class Scripts::Q00319_ScentOfDeath < Quest
   # NPC
   private MINALESS = 30138
   # Monsters
@@ -21,30 +21,32 @@ class Quests::Q00319_ScentOfDeath < Quest
     register_quest_items(ZOMBIES_SKIN)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
-    if player.level >= MIN_LEVEL
+    if pc.level >= MIN_LEVEL
       case event
       when "30138-04.htm"
         st.start_quest
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
-    if st && Util.in_range?(1500, npc, killer, false) && st.get_quest_items_count(ZOMBIES_SKIN) < REQUIRED_ITEM_COUNT
-      if Rnd.rand(10) > MIN_CHANCE
-        st.give_items(ZOMBIES_SKIN, 1)
-        if st.get_quest_items_count(ZOMBIES_SKIN) < REQUIRED_ITEM_COUNT
-          st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
-        else
-          st.set_cond(2, true)
+    if st && Util.in_range?(1500, npc, killer, false)
+      if st.get_quest_items_count(ZOMBIES_SKIN) < REQUIRED_ITEM_COUNT
+        if Rnd.rand(10) > MIN_CHANCE
+          st.give_items(ZOMBIES_SKIN, 1)
+          if st.get_quest_items_count(ZOMBIES_SKIN) < REQUIRED_ITEM_COUNT
+            st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
+          else
+            st.set_cond(2, true)
+          end
         end
       end
     end
@@ -52,26 +54,25 @@ class Quests::Q00319_ScentOfDeath < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
-    htmltext = get_no_quest_msg(player)
     case st.state
     when State::CREATED
-      htmltext = player.level >= MIN_LEVEL ? "30138-03.htm" : "30138-02.htm"
+      html = pc.level >= MIN_LEVEL ? "30138-03.htm" : "30138-02.htm"
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30138-05.html"
+        html = "30138-05.html"
       when 2
         st.give_adena(3350, false)
         st.give_items(LESSER_HEALING_POTION)
         st.take_items(ZOMBIES_SKIN, -1)
         st.exit_quest(true, true)
-        htmltext = "30138-06.html"
+        html = "30138-06.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

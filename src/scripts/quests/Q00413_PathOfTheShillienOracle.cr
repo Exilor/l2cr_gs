@@ -1,4 +1,4 @@
-class Quests::Q00413_PathOfTheShillienOracle < Quest
+class Scripts::Q00413_PathOfTheShillienOracle < Quest
   # NPCs
   private MAGISTER_SIDRA = 30330
   private PRIEST_ADONIUS = 30375
@@ -38,52 +38,52 @@ class Quests::Q00413_PathOfTheShillienOracle < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if player.class_id.dark_mage?
-        if player.level >= MIN_LEVEL
-          if has_quest_items?(player, ORB_OF_ABYSS)
-            htmltext = "30330-04.htm"
+      if pc.class_id.dark_mage?
+        if pc.level >= MIN_LEVEL
+          if has_quest_items?(pc, ORB_OF_ABYSS)
+            html = "30330-04.htm"
           else
-            htmltext = "30330-05.htm"
+            html = "30330-05.htm"
           end
         else
-          htmltext = "30330-02.htm"
+          html = "30330-02.htm"
         end
-      elsif player.class_id.shillien_oracle?
-        htmltext = "30330-02a.htm"
+      elsif pc.class_id.shillien_oracle?
+        html = "30330-02a.htm"
       else
-        htmltext = "30330-03.htm"
+        html = "30330-03.htm"
       end
     when "30330-06.htm"
-      if !has_quest_items?(player, SIDRAS_LETTER)
-        give_items(player, SIDRAS_LETTER, 1)
+      if !has_quest_items?(pc, SIDRAS_LETTER)
+        give_items(pc, SIDRAS_LETTER, 1)
       end
       qs.start_quest
-      htmltext = event
+      html = event
     when "30330-06a.html", "30375-02.html", "30375-03.html"
-      htmltext = event
+      html = event
     when "30375-04.html"
-      if has_quest_items?(player, PRAYER_OF_ADONIUS)
-        take_items(player, PRAYER_OF_ADONIUS, 1)
-        give_items(player, PENITENTS_MARK, 1)
+      if has_quest_items?(pc, PRAYER_OF_ADONIUS)
+        take_items(pc, PRAYER_OF_ADONIUS, 1)
+        give_items(pc, PENITENTS_MARK, 1)
         qs.set_cond(5, true)
       end
-      htmltext = event
+      html = event
     when "30377-02.html"
-      if has_quest_items?(player, SIDRAS_LETTER)
-        take_items(player, SIDRAS_LETTER, 1)
-        give_items(player, BLANK_SHEET, 5)
+      if has_quest_items?(pc, SIDRAS_LETTER)
+        take_items(pc, SIDRAS_LETTER, 1)
+        give_items(pc, BLANK_SHEET, 5)
         qs.set_cond(2, true)
       end
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -115,77 +115,77 @@ class Quests::Q00413_PathOfTheShillienOracle < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created? || qs.completed?
       if npc.id == MAGISTER_SIDRA
-        htmltext = "30330-01.htm"
+        html = "30330-01.htm"
       end
     elsif qs.started?
       case npc.id
       when MAGISTER_SIDRA
-        if has_quest_items?(player, SIDRAS_LETTER)
-          htmltext = "30330-07.html"
-        elsif has_at_least_one_quest_item?(player, BLANK_SHEET, BLOODY_RUNE)
-          htmltext = "30330-08.html"
-        elsif !has_quest_items?(player, ANDARIEL_BOOK) && has_at_least_one_quest_item?(player, PRAYER_OF_ADONIUS, GARMIELS_BOOK, PENITENTS_MARK, ASHEN_BONES)
-          htmltext = "30330-09.html"
-        elsif has_at_least_one_quest_item?(player, ANDARIEL_BOOK, GARMIELS_BOOK)
-          give_adena(player, 163800, true)
-          give_items(player, ORB_OF_ABYSS, 1)
-          level = player.level
+        if has_quest_items?(pc, SIDRAS_LETTER)
+          html = "30330-07.html"
+        elsif has_at_least_one_quest_item?(pc, BLANK_SHEET, BLOODY_RUNE)
+          html = "30330-08.html"
+        elsif !has_quest_items?(pc, ANDARIEL_BOOK) && has_at_least_one_quest_item?(pc, PRAYER_OF_ADONIUS, GARMIELS_BOOK, PENITENTS_MARK, ASHEN_BONES)
+          html = "30330-09.html"
+        elsif has_at_least_one_quest_item?(pc, ANDARIEL_BOOK, GARMIELS_BOOK)
+          give_adena(pc, 163800, true)
+          give_items(pc, ORB_OF_ABYSS, 1)
+          level = pc.level
           if level >= 20
-            add_exp_and_sp(player, 320534, 26532)
+            add_exp_and_sp(pc, 320534, 26532)
           elsif level == 19
-            add_exp_and_sp(player, 456128, 33230)
+            add_exp_and_sp(pc, 456128, 33230)
           else
-            add_exp_and_sp(player, 591724, 39928)
+            add_exp_and_sp(pc, 591724, 39928)
           end
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           qs.save_global_quest_var("1ClassQuestFinished", "1")
-          htmltext = "30330-10.html"
+          html = "30330-10.html"
         end
       when PRIEST_ADONIUS
-        if has_quest_items?(player, PRAYER_OF_ADONIUS)
-          htmltext = "30375-01.html"
-        elsif has_quest_items?(player, PENITENTS_MARK) && !has_at_least_one_quest_item?(player, ASHEN_BONES, ANDARIEL_BOOK)
-          htmltext = "30375-05.html"
-        elsif has_quest_items?(player, PENITENTS_MARK)
-          if has_quest_items?(player, ASHEN_BONES) && get_quest_items_count(player, ASHEN_BONES) < 10
-            htmltext = "30375-06.html"
+        if has_quest_items?(pc, PRAYER_OF_ADONIUS)
+          html = "30375-01.html"
+        elsif has_quest_items?(pc, PENITENTS_MARK) && !has_at_least_one_quest_item?(pc, ASHEN_BONES, ANDARIEL_BOOK)
+          html = "30375-05.html"
+        elsif has_quest_items?(pc, PENITENTS_MARK)
+          if has_quest_items?(pc, ASHEN_BONES) && get_quest_items_count(pc, ASHEN_BONES) < 10
+            html = "30375-06.html"
           else
-            take_items(player, PENITENTS_MARK, 1)
-            take_items(player, ASHEN_BONES, -1)
-            give_items(player, ANDARIEL_BOOK, 1)
+            take_items(pc, PENITENTS_MARK, 1)
+            take_items(pc, ASHEN_BONES, -1)
+            give_items(pc, ANDARIEL_BOOK, 1)
             qs.set_cond(7, true)
-            htmltext = "30375-07.html"
+            html = "30375-07.html"
           end
-        elsif has_quest_items?(player, ANDARIEL_BOOK)
-          htmltext = "30375-08.html"
+        elsif has_quest_items?(pc, ANDARIEL_BOOK)
+          html = "30375-08.html"
         end
       when MAGISTER_TALBOT
-        if has_quest_items?(player, SIDRAS_LETTER)
-          htmltext = "30377-01.html"
-        elsif !has_quest_items?(player, BLOODY_RUNE) && get_quest_items_count(player, BLANK_SHEET) == 5
-          htmltext = "30377-03.html"
-        elsif has_quest_items?(player, BLOODY_RUNE) && get_quest_items_count(player, BLOODY_RUNE) < 5
-          htmltext = "30377-04.html"
-        elsif get_quest_items_count(player, BLOODY_RUNE) >= 5
-          take_items(player, BLOODY_RUNE, -1)
-          give_items(player, GARMIELS_BOOK, 1)
-          give_items(player, PRAYER_OF_ADONIUS, 1)
+        if has_quest_items?(pc, SIDRAS_LETTER)
+          html = "30377-01.html"
+        elsif !has_quest_items?(pc, BLOODY_RUNE) && get_quest_items_count(pc, BLANK_SHEET) == 5
+          html = "30377-03.html"
+        elsif has_quest_items?(pc, BLOODY_RUNE) && get_quest_items_count(pc, BLOODY_RUNE) < 5
+          html = "30377-04.html"
+        elsif get_quest_items_count(pc, BLOODY_RUNE) >= 5
+          take_items(pc, BLOODY_RUNE, -1)
+          give_items(pc, GARMIELS_BOOK, 1)
+          give_items(pc, PRAYER_OF_ADONIUS, 1)
           qs.set_cond(4, true)
-          htmltext = "30377-05.html"
-        elsif has_at_least_one_quest_item?(player, PRAYER_OF_ADONIUS, PENITENTS_MARK, ASHEN_BONES)
-          htmltext = "30377-06.html"
-        elsif has_quest_items?(player, ANDARIEL_BOOK, GARMIELS_BOOK)
-          htmltext = "30377-07.html"
+          html = "30377-05.html"
+        elsif has_at_least_one_quest_item?(pc, PRAYER_OF_ADONIUS, PENITENTS_MARK, ASHEN_BONES)
+          html = "30377-06.html"
+        elsif has_quest_items?(pc, ANDARIEL_BOOK, GARMIELS_BOOK)
+          html = "30377-07.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

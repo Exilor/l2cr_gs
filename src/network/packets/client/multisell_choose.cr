@@ -3,13 +3,13 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
   @entry_id = 0
   @amount = 0i64
 
-  def read_impl
+  private def read_impl
     @list_id = d
     @entry_id = d
     @amount = q
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless flood_protectors.multisell.try_perform_action("multisell choose")

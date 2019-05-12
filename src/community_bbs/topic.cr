@@ -1,6 +1,6 @@
 require "./manager/topic_bbs_manager"
 
-class Topic
+struct Topic
   include Loggable
 
   NORMAL = 0
@@ -37,7 +37,7 @@ class Topic
     error e
   end
 
-  def name
+  def name : String
     @topic_name
   end
 end

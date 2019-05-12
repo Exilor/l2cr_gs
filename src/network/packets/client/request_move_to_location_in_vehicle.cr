@@ -9,7 +9,7 @@ class Packets::Incoming::RequestMoveToLocationInVehicle < GameClientPacket
   @origin_y = 0
   @origin_z = 0
 
-  def read_impl
+  private def read_impl
     @boat_id = d
 
     @target_x = d
@@ -21,7 +21,7 @@ class Packets::Incoming::RequestMoveToLocationInVehicle < GameClientPacket
     @origin_z = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     # debug "#{pc.name} is at #{[pc.x, pc.y, pc.z]} and wants to move to move from #{[@origin_x, @origin_y, @origin_z]} to #{[@target_x, @target_y, @target_z]}."

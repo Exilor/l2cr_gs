@@ -1,5 +1,6 @@
 class PartyDistributionType < EnumClass
-  getter_initializer sys_string_id: Int32
+  getter sys_string_id
+  protected initializer sys_string_id: Int32
   # use #to_i instead of #id
   add(FINDERS_KEEPERS, 487)
   add(RANDOM, 488)

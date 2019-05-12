@@ -1,4 +1,4 @@
-class NpcAI::FreyasSteward < AbstractNpcAI
+class Scripts::FreyasSteward < AbstractNpcAI
   # NPC
   private FREYAS_STEWARD = 32029
   # Location

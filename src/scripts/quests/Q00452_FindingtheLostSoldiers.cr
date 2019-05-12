@@ -1,4 +1,4 @@
-class Quests::Q00452_FindingtheLostSoldiers < Quest
+class Scripts::Q00452_FindingtheLostSoldiers < Quest
   private JAKAN = 32773
   private TAG_ID = 15513
   private SOLDIER_CORPSES = {
@@ -17,10 +17,10 @@ class Quests::Q00452_FindingtheLostSoldiers < Quest
     register_quest_items(TAG_ID)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     npc = npc.not_nil!
@@ -48,12 +48,12 @@ class Quests::Q00452_FindingtheLostSoldiers < Quest
     html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     if npc.id == JAKAN
       case st.state
       when State::CREATED
-        html = player.level < 84 ? "32773-0.html" : "32773-1.htm"
+        html = pc.level < 84 ? "32773-0.html" : "32773-1.htm"
       when State::STARTED
         if st.cond?(1)
           html = "32773-4.html"
@@ -67,7 +67,7 @@ class Quests::Q00452_FindingtheLostSoldiers < Quest
       when State::COMPLETED
         if st.now_available?
           st.state = State::CREATED
-          html = player.level < 84 ? "32773-0.html" : "32773-1.htm"
+          html = pc.level < 84 ? "32773-0.html" : "32773-1.htm"
         else
           html = "32773-6.html"
         end
@@ -78,6 +78,6 @@ class Quests::Q00452_FindingtheLostSoldiers < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

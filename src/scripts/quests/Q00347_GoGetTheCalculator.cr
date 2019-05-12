@@ -1,4 +1,4 @@
-class Quests::Q00347_GoGetTheCalculator < Quest
+class Scripts::Q00347_GoGetTheCalculator < Quest
   # NPCs
   private BRUNON = 30526
   private SILVERA = 30527
@@ -24,109 +24,109 @@ class Quests::Q00347_GoGetTheCalculator < Quest
     register_quest_items(STOLEN_CALCULATOR, GEMSTONE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "30526-03.htm", "30526-04.htm", "30526-05.htm", "30526-06.htm",
          "30526-07.htm", "30532-03.html", "30532-04.html"
-      htmltext = event
+      html = event
     when "30526-08.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30526-10.html"
       if qs.cond?(6)
-        take_items(player, STOLEN_CALCULATOR, -1)
-        reward_items(player, CALCULATOR, 1)
+        take_items(pc, STOLEN_CALCULATOR, -1)
+        reward_items(pc, CALCULATOR, 1)
         qs.exit_quest(true, true)
-        htmltext = event
+        html = event
       else
-        htmltext = "30526-09.html"
+        html = "30526-09.html"
       end
     when "30526-11.html"
       if qs.cond?(6)
-        take_items(player, STOLEN_CALCULATOR, -1)
-        give_adena(player, ADENA, true)
+        take_items(pc, STOLEN_CALCULATOR, -1)
+        give_adena(pc, ADENA, true)
         qs.exit_quest(true, true)
-        htmltext = event
+        html = event
       end
     when "30532-02.html"
       if qs.cond?(1)
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "30533-02.html"
-      if qs.cond?(2) && (player.adena > 100)
-        take_items(player, Inventory::ADENA_ID, 100)
+      if qs.cond?(2) && (pc.adena > 100)
+        take_items(pc, Inventory::ADENA_ID, 100)
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
-    htmltext = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     case qs.state
     when State::CREATED
       if npc.id == BRUNON
-        htmltext = talker.level >= MIN_LVL ? "30526-01.htm" : "30526-02.html"
+        html = pc.level >= MIN_LVL ? "30526-01.htm" : "30526-02.html"
       end
     when State::STARTED
       case npc.id
       when BRUNON
-        if has_quest_items?(talker, CALCULATOR)
+        if has_quest_items?(pc, CALCULATOR)
           qs.set_cond(6)
         end
 
         case qs.cond
         when 1, 2
-          htmltext = "30526-13.html"
+          html = "30526-13.html"
         when 3, 4
-          htmltext = "30526-14.html"
+          html = "30526-14.html"
         when 5
-          htmltext = "30526-15.html"
+          html = "30526-15.html"
         when 6
-          htmltext = "30526-09.html"
+          html = "30526-09.html"
         end
       when SPIRON
-        htmltext = qs.cond?(1) ? "30532-01.html" : "30532-05.html"
+        html = qs.cond?(1) ? "30532-01.html" : "30532-05.html"
       when BALANKI
         if qs.cond?(2)
-          htmltext = "30533-01.html"
+          html = "30533-01.html"
         elsif qs.cond > 2
-          htmltext = "30533-04.html"
+          html = "30533-04.html"
         else
-          htmltext = "30533-03.html"
+          html = "30533-03.html"
         end
       when SILVERA
         case qs.cond
         when 1, 2
-          htmltext = "30527-01.html"
+          html = "30527-01.html"
         when 3
           qs.set_cond(4, true)
-          htmltext = "30527-02.html"
+          html = "30527-02.html"
         when 4
-          htmltext = "30527-04.html"
+          html = "30527-04.html"
         when 5
-          take_items(talker, GEMSTONE, -1)
-          give_items(talker, STOLEN_CALCULATOR, 1)
+          take_items(pc, GEMSTONE, -1)
+          give_items(pc, STOLEN_CALCULATOR, 1)
           qs.set_cond(6, true)
-          htmltext = "30527-03.html"
+          html = "30527-03.html"
         when 6
-          htmltext = "30527-05.html"
+          html = "30527-05.html"
         end
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(talker)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

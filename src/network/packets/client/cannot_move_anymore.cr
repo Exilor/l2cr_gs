@@ -4,12 +4,12 @@ class Packets::Incoming::CannotMoveAnymore < GameClientPacket
   @z = 0
   @heading = 0
 
-  def read_impl
+  private def read_impl
     @x, @y, @z = d, d, d
     @heading = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if Config.debug

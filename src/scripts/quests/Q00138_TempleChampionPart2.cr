@@ -1,4 +1,4 @@
-class Quests::Q00138_TempleChampionPart2 < Quest
+class Scripts::Q00138_TempleChampionPart2 < Quest
   # NPCs
   private SYLVAIN = 30070
   private PUPINA = 30118
@@ -25,10 +25,10 @@ class Quests::Q00138_TempleChampionPart2 < Quest
     register_quest_items(TEMPLE_MANIFESTO, RELICS_OF_THE_DARK_ELF_TRAINEE, ANGUS_RECOMMENDATION, PUPINAS_RECOMMENDATION)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
@@ -37,7 +37,7 @@ class Quests::Q00138_TempleChampionPart2 < Quest
       st.give_items(TEMPLE_MANIFESTO, 1)
     when "30070-05.html"
       st.give_adena(84593, true)
-      if player.level < 42
+      if pc.level < 42
         st.add_exp_and_sp(187062, 11307)
       end
       st.exit_quest(false, true)
@@ -68,8 +68,8 @@ class Quests::Q00138_TempleChampionPart2 < Quest
     event
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
     if st && st.started? && st.cond?(4) && st.get_quest_items_count(RELICS_OF_THE_DARK_ELF_TRAINEE) < 10
       st.give_items(RELICS_OF_THE_DARK_ELF_TRAINEE, 1)
       if st.get_quest_items_count(RELICS_OF_THE_DARK_ELF_TRAINEE) >= 10
@@ -82,78 +82,78 @@ class Quests::Q00138_TempleChampionPart2 < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when SYLVAIN
       case st.cond
       when 1
-        htmltext = "30070-02.htm"
+        html = "30070-02.htm"
       when 2..6
-        htmltext = "30070-03.html"
+        html = "30070-03.html"
       when 7
-        htmltext = "30070-04.html"
+        html = "30070-04.html"
       else
         if st.completed?
-          return get_already_completed_msg(player)
+          return get_already_completed_msg(pc)
         end
-        if player.level >= 36
-          if player.quest_completed?(Q00137_TempleChampionPart1.simple_name)
-            htmltext = "30070-01.htm"
+        if pc.level >= 36
+          if pc.quest_completed?(Q00137_TempleChampionPart1.simple_name)
+            html = "30070-01.htm"
           else
-            htmltext = "30070-00a.htm"
+            html = "30070-00a.htm"
           end
         else
-          htmltext = "30070-00.htm"
+          html = "30070-00.htm"
         end
       end
     when PUPINA
       case st.cond
       when 2
-        htmltext = "30118-01.html"
+        html = "30118-01.html"
       when 3, 4
-        htmltext = "30118-07.html"
+        html = "30118-07.html"
       when 5
-        htmltext = "30118-08.html"
+        html = "30118-08.html"
         if st.has_quest_items?(ANGUS_RECOMMENDATION)
           st.take_items(ANGUS_RECOMMENDATION, -1)
         end
       when 6
-        htmltext = "30118-10.html"
+        html = "30118-10.html"
       end
     when ANGUS
       case st.cond
       when 3
-        htmltext = "30474-01.html"
+        html = "30474-01.html"
       when 4
         if st.get_quest_items_count(RELICS_OF_THE_DARK_ELF_TRAINEE) >= 10
           st.take_items(RELICS_OF_THE_DARK_ELF_TRAINEE, -1)
           st.give_items(ANGUS_RECOMMENDATION, 1)
           st.set_cond(5, true)
-          htmltext = "30474-04.html"
+          html = "30474-04.html"
         else
-          htmltext = "30474-03.html"
+          html = "30474-03.html"
         end
       when 5
-        htmltext = "30474-05.html"
+        html = "30474-05.html"
       end
     when SLA
       case st.cond
       when 6
         case st.get_int("talk")
         when 1
-          htmltext = "30666-02.html"
+          html = "30666-02.html"
         when 2
-          htmltext = "30666-03.html"
+          html = "30666-03.html"
         else
-          htmltext = "30666-01.html"
+          html = "30666-01.html"
         end
       when 7
-        htmltext = "30666-09.html"
+        html = "30666-09.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

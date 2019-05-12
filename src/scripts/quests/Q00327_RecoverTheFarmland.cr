@@ -1,4 +1,4 @@
-class Quests::Q00327_RecoverTheFarmland < Quest
+class Scripts::Q00327_RecoverTheFarmland < Quest
   # NPCs
   private IRIS = 30034
   private ASHA = 30313

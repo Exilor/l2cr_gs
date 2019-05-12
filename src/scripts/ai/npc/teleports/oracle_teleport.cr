@@ -1,4 +1,4 @@
-class NpcAI::OracleTeleport < AbstractNpcAI
+class Scripts::OracleTeleport < AbstractNpcAI
   private TOWN_DAWN = {
     31078, 31079, 31080, 31081, 31083, 31084, 31082, 31692, 31694, 31997, 31168
   }
@@ -113,7 +113,7 @@ class NpcAI::OracleTeleport < AbstractNpcAI
     return unless pc && npc
     return unless st = get_quest_state(pc, false)
 
-    htmltext = ""
+    html = ""
 
     npc_id = npc.id
     if event.casecmp?("Return")
@@ -123,7 +123,7 @@ class NpcAI::OracleTeleport < AbstractNpcAI
         st.exit_quest(true)
       elsif RIFT_POSTERS.includes?(npc_id) && st.state.started?
         pc.tele_to_location(RETURN_LOCS[st.get_int("id")])
-        htmltext = "rift_back.htm"
+        html = "rift_back.htm"
         st.exit_quest(true)
       end
     elsif event.casecmp?("Festival")
@@ -135,15 +135,15 @@ class NpcAI::OracleTeleport < AbstractNpcAI
         pc.tele_to_location(Location.new(-81261, 86531, -5157))
         pc.in_7s_dungeon = true
       else
-        htmltext = "oracle1.htm"
+        html = "oracle1.htm"
       end
     elsif event.casecmp?("Dimensional")
-      htmltext = "oracle.htm"
+      html = "oracle.htm"
       pc.tele_to_location(Location.new(-114755, -179466, -6752))
     elsif event.casecmp?("5.htm")
       id = st.get_int("id")
       if id > -1
-        htmltext = "5a.htm"
+        html = "5a.htm"
       end
       i = 0
       TELEPORTERS.each do |id1|
@@ -156,7 +156,7 @@ class NpcAI::OracleTeleport < AbstractNpcAI
       st.state = State::STARTED
       pc.tele_to_location(Location.new(-114755, -179466, -6752))
     elsif event.casecmp?("6.htm")
-      htmltext = "6.htm"
+      html = "6.htm"
       st.exit_quest(true)
     elsif event.casecmp?("zigurratDimensional")
       lvl = pc.level
@@ -183,15 +183,15 @@ class NpcAI::OracleTeleport < AbstractNpcAI
       st.set("id", i.to_s)
       st.state = State::STARTED
       play_sound(pc, Sound::ITEMSOUND_QUEST_ACCEPT)
-      htmltext = "ziggurat_rift.htm"
+      html = "ziggurat_rift.htm"
       pc.tele_to_location(Location.new(-114755, -179466, -6752))
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, pc)
-    htmltext = ""
+    html = ""
     st = get_quest_state!(pc)
 
     npc_id = npc.id
@@ -224,51 +224,51 @@ class NpcAI::OracleTeleport < AbstractNpcAI
       pc.in_7s_dungeon = true
     elsif npc_id.between?(31494, 31507)
       if pc.level < 20
-        htmltext = "1.htm"
+        html = "1.htm"
         st.exit_quest(true)
       elsif pc.all_active_quests.size > 23
-        htmltext = "1a.htm"
+        html = "1a.htm"
         st.exit_quest(true)
       elsif !has_quest_items?(pc, DIMENSIONAL_FRAGMENT)
-        htmltext = "3.htm"
+        html = "3.htm"
       else
         st.state = State::CREATED
-        htmltext = "4.htm"
+        html = "4.htm"
       end
     elsif npc_id.between?(31095, 31111) || npc_id.between?(31114, 31126)
       lvl = pc.level
       if lvl < 20
-        htmltext = "ziggurat_lowlevel.htm"
+        html = "ziggurat_lowlevel.htm"
         st.exit_quest(true)
       elsif pc.all_active_quests.size > 40
         pc.send_packet(SystemMessageId::TOO_MANY_QUESTS)
         st.exit_quest(true)
       elsif !has_quest_items?(pc, DIMENSIONAL_FRAGMENT)
-        htmltext = "ziggurat_nofrag.htm"
+        html = "ziggurat_nofrag.htm"
         st.exit_quest(true)
       elsif lvl >= 20 && lvl < 30 && pc.adena < 2000
-        htmltext = "ziggurat_noadena.htm"
+        html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       elsif lvl >= 30 && lvl < 40 && pc.adena < 4500
-        htmltext = "ziggurat_noadena.htm"
+        html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       elsif lvl >= 40 && lvl < 50 && pc.adena < 8000
-        htmltext = "ziggurat_noadena.htm"
+        html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       elsif lvl >= 50 && lvl < 60 && pc.adena < 12500
-        htmltext = "ziggurat_noadena.htm"
+        html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       elsif lvl >= 60 && lvl < 70 && pc.adena < 18000
-        htmltext = "ziggurat_noadena.htm"
+        html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       elsif lvl >= 70 && pc.adena < 24500
-        htmltext = "ziggurat_noadena.htm"
+        html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       else
-        htmltext = "ziggurat.htm"
+        html = "ziggurat.htm"
       end
     end
 
-    htmltext
+    html
   end
 end

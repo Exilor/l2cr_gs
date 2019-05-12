@@ -1,4 +1,4 @@
-class Quests::Q00027_ChestCaughtWithABaitOfWind < Quest
+class Scripts::Q00027_ChestCaughtWithABaitOfWind < Quest
   # NPCs
   private LANOSCO = 31570
   private SHALING = 31434
@@ -15,17 +15,19 @@ class Quests::Q00027_ChestCaughtWithABaitOfWind < Quest
     register_quest_items(STRANGE_BLUESPRINT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    return htmltext unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    unless st = get_quest_state(pc, false)
+      return html
+    end
 
     case event
     when "31570-03.htm"
       st.start_quest
     when "31570-05.htm"
       if st.cond?(1) && st.has_quest_items?(BLUE_TREASURE_BOX)
-        htmltext = "31570-06.htm"
+        html = "31570-06.htm"
         st.set_cond(2, true)
         st.give_items(STRANGE_BLUESPRINT, 1)
         st.take_items(BLUE_TREASURE_BOX, -1)
@@ -34,26 +36,25 @@ class Quests::Q00027_ChestCaughtWithABaitOfWind < Quest
       if st.cond?(2) && st.has_quest_items?(STRANGE_BLUESPRINT)
         st.give_items(BLACK_PEARL_RING, 1)
         st.exit_quest(false, true)
-        htmltext = "31434-01.htm"
+        html = "31434-01.htm"
       end
 
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
       if npc.id == LANOSCO
-        if player.level >= 27 && player.quest_completed?(Q00050_LanoscosSpecialBait.simple_name)
-          htmltext = "31570-01.htm"
+        if pc.level >= 27 && pc.quest_completed?(Q00050_LanoscosSpecialBait.simple_name)
+          html = "31570-01.htm"
         else
-          htmltext = "31570-02.htm"
+          html = "31570-02.htm"
         end
       end
     when State::STARTED
@@ -61,20 +62,20 @@ class Quests::Q00027_ChestCaughtWithABaitOfWind < Quest
       when LANOSCO
         if st.cond?(1)
           if st.has_quest_items?(BLUE_TREASURE_BOX)
-            htmltext = "31570-04.htm"
+            html = "31570-04.htm"
           else
-            htmltext = "31570-05.htm"
+            html = "31570-05.htm"
           end
         else
-          htmltext = "31570-07.htm"
+          html = "31570-07.htm"
         end
       when SHALING
         if st.cond?(2)
-          htmltext = "31434-00.htm"
+          html = "31434-00.htm"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

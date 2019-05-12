@@ -1,4 +1,4 @@
-class NpcAI::TeleportToFantasy < AbstractNpcAI
+class Scripts::TeleportToFantasy < AbstractNpcAI
   # NPC
   private PADDIES = 32378
   # Locations

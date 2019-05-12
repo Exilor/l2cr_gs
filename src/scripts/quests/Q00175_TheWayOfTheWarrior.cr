@@ -1,4 +1,4 @@
-class Quests::Q00175_TheWayOfTheWarrior < Quest
+class Scripts::Q00175_TheWayOfTheWarrior < Quest
   # NPCs
   private PERWAN = 32133
   private KEKROPUS = 32138
@@ -50,54 +50,55 @@ class Quests::Q00175_TheWayOfTheWarrior < Quest
     register_quest_items(WOLF_TAIL.id, MUERTOS_CLAW.id)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "32138-02.htm"
-      htmltext = event
+      html = event
     when "32138-05.htm"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        htmltext = event
+        html = event
       end
     when "32138-10.html"
       qs.memo_state = 6
       qs.set_cond(7, true)
-      htmltext = event
+      html = event
     when "32138-13.html"
-      if has_item?(player, MUERTOS_CLAW)
-        take_item(player, MUERTOS_CLAW)
-        give_adena(player, 8799, true)
-        REWARDS.each { |reward| give_items(player, reward) }
-        Q00175_TheWayOfTheWarrior.give_newbie_reward(player)
-        give_items(player, WARRIORS_SWORD, 1)
-        add_exp_and_sp(player, 20739, 1777)
+      if has_item?(pc, MUERTOS_CLAW)
+        take_item(pc, MUERTOS_CLAW)
+        give_adena(pc, 8799, true)
+        REWARDS.each { |reward| give_items(pc, reward) }
+        Q00175_TheWayOfTheWarrior.give_newbie_reward(pc)
+        give_items(pc, WARRIORS_SWORD, 1)
+        add_exp_and_sp(pc, 20739, 1777)
         qs.exit_quest(false, true)
-        player.send_packet(SocialAction.new(player.l2id, 3))
-        htmltext = event
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
+        html = event
       end
     when "32133-06.html"
       qs.memo_state = 5
       qs.set_cond(6, true)
-      npc.not_nil!.target = player
-      npc.not_nil!.do_cast(UNSEALED_ALTAR.skill)
-      htmltext = event
+      npc = npc.not_nil!
+      npc.target = pc
+      npc.do_cast(UNSEALED_ALTAR.skill)
+      html = event
     end
 
-    return htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     if npc.id == MOUNTAIN_WEREWOLF
-      qs = get_random_party_member_state(player, 2, 3, npc)
+      qs = get_random_party_member_state(pc, 2, 3, npc)
       if qs && give_item_randomly(qs.player, npc, WOLF_TAIL.id, 1, WOLF_TAIL.count, 0.5, true)
         qs.set_cond(3, true)
       end
     else
-      qs = get_random_party_member_state(player, 7, 3, npc)
+      qs = get_random_party_member_state(pc, 7, 3, npc)
       if qs && give_item_randomly(qs.player, npc, MUERTOS_CLAW.id, 1, MUERTOS_CLAW.count, 1.0, true)
         qs.set_cond(8, true)
       end
@@ -106,81 +107,81 @@ class Quests::Q00175_TheWayOfTheWarrior < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     case npc.id
     when KEKROPUS
       if qs.created?
-        if !player.race.kamael?
-          htmltext = "32138-04.htm"
-        elsif player.level >= MIN_LEVEL
-          htmltext = "32138-01.htm"
+        if !pc.race.kamael?
+          html = "32138-04.htm"
+        elsif pc.level >= MIN_LEVEL
+          html = "32138-01.htm"
         else
-          htmltext = "32138-03.htm"
+          html = "32138-03.htm"
         end
       elsif qs.started?
         case qs.cond
         when 1..3
-          htmltext = "32138-06.html"
+          html = "32138-06.html"
         when 4
           qs.memo_state = 4
           qs.set_cond(5, true)
-          htmltext = "32138-07.html"
+          html = "32138-07.html"
         when 5
-          htmltext = "32138-08.html"
+          html = "32138-08.html"
         when 6
-          htmltext = "32138-09.html"
+          html = "32138-09.html"
         when 7
-          htmltext = "32138-11.html"
+          html = "32138-11.html"
         when 8
-          if has_item?(player, MUERTOS_CLAW)
-            htmltext = "32138-12.html"
+          if has_item?(pc, MUERTOS_CLAW)
+            html = "32138-12.html"
           end
         end
       elsif qs.completed?
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when PERWAN
       case qs.cond
       when 1
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = "32133-01.html"
+        html = "32133-01.html"
       when 2
-        htmltext = "32133-02.html"
+        html = "32133-02.html"
       when 3
-        if has_item?(player, WOLF_TAIL)
-          take_item(player, WOLF_TAIL)
+        if has_item?(pc, WOLF_TAIL)
+          take_item(pc, WOLF_TAIL)
           qs.memo_state = 3
           qs.set_cond(4, true)
-          htmltext = "32133-03.html"
+          html = "32133-03.html"
         end
       when 4
-        htmltext = "32133-04.html"
+        html = "32133-04.html"
       when 5
-        htmltext = "32133-05.html"
+        html = "32133-05.html"
       when 6
-        htmltext = "32133-07.html"
+        html = "32133-07.html"
       end
     end
 
-    return htmltext
+    html || get_no_quest_msg(pc)
   end
 
-  def self.give_newbie_reward(player : L2PcInstance)
-    vars = player.variables
-    if player.level < 25 && !vars.get_bool("NEWBIE_SHOTS", false)
-      play_sound(player, Voice::TUTORIAL_VOICE_026_1000)
-      give_items(player, SOULSHOTS_NO_GRADE_FOR_ROOKIES)
+  def self.give_newbie_reward(pc : L2PcInstance)
+    vars = pc.variables
+    if pc.level < 25 && !vars.get_bool("NEWBIE_SHOTS", false)
+      play_sound(pc, Voice::TUTORIAL_VOICE_026_1000)
+      give_items(pc, SOULSHOTS_NO_GRADE_FOR_ROOKIES)
       vars["NEWBIE_SHOTS"] = true
     end
-    if vars["GUIDE_MISSION"].nil?
+    if vars["GUIDE_MISSION"]?.nil?
       vars["GUIDE_MISSION"] = 100_000
-      player.send_packet(MESSAGE)
-    elsif ((vars.get_i32("GUIDE_MISSION") % 100_0000) / 100_000) != 1
+      pc.send_packet(MESSAGE)
+    elsif (vars.get_i32("GUIDE_MISSION") % 100_0000) / 100_000 != 1
       vars["GUIDE_MISSION"] = vars.get_i32("GUIDE_MISSION") + 100_000
-      player.send_packet(MESSAGE)
+      pc.send_packet(MESSAGE)
     end
   end
 end

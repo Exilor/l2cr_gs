@@ -1,4 +1,4 @@
-class Quests::Q00379_FantasyWine < Quest
+class Scripts::Q00379_FantasyWine < Quest
   # NPC
   private HARLAN = 30074
   # Items

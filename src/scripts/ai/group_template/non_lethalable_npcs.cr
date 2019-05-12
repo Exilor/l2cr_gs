@@ -1,6 +1,6 @@
-class NpcAI::NonLethalableNpcs < AbstractNpcAI
+class Scripts::NonLethalableNpcs < AbstractNpcAI
   private NPCS = {
-    35062, # Headquarters
+    35062 # Headquarters
   }
 
   def initialize

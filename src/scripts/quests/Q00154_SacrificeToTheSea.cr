@@ -1,4 +1,4 @@
-class Quests::Q00154_SacrificeToTheSea < Quest
+class Scripts::Q00154_SacrificeToTheSea < Quest
   # NPCs
 	private ROCKSWELL = 30312
 	private CRISTEL = 30051
@@ -37,59 +37,58 @@ class Quests::Q00154_SacrificeToTheSea < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    htmltext = get_no_quest_msg(pc)
 
     case npc.id
     when ROCKSWELL
       if qs.created?
-        htmltext = pc.level >= MIN_LVL ? "30312-01.htm" : "30312-02.htm"
+        html = pc.level >= MIN_LVL ? "30312-01.htm" : "30312-02.htm"
       elsif qs.started?
         case qs.cond
         when 1
-          htmltext = "30312-04.html"
+          html = "30312-04.html"
         when 2
-          htmltext = "30312-07.html"
+          html = "30312-07.html"
         when 3
-          htmltext = "30312-05.html"
+          html = "30312-05.html"
         when 4
           take_items(pc, MAIDEN_DOLL, -1)
           reward_items(pc, MAGE_EARING, 1)
           add_exp_and_sp(pc, 0, 1000)
           qs.exit_quest(false, true)
-          htmltext = "30312-06.html"
+          html = "30312-06.html"
         end
       else
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when CRISTEL
       case qs.cond
       when 1
-        htmltext = "30051-02.html"
+        html = "30051-02.html"
       when 2
         take_items(pc, FOX_FUR, -1)
         give_items(pc, FOX_FUR_YAM, 1)
         qs.set_cond(3, true)
-        htmltext = "30051-01.html"
+        html = "30051-01.html"
       when 3
-        htmltext = "30051-03.html"
+        html = "30051-03.html"
       when 4
-        htmltext = "30051-04.html"
+        html = "30051-04.html"
       end
     when ROLLFNAN
       case qs.cond
       when 1, 2
-        htmltext = "30055-03.html"
+        html = "30055-03.html"
       when 3
         take_items(pc, FOX_FUR_YAM, -1)
         give_items(pc, MAIDEN_DOLL, 1)
         qs.set_cond(4, true)
-        htmltext = "30055-01.html"
+        html = "30055-01.html"
       when 4
-        htmltext = "30055-02.html"
+        html = "30055-02.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

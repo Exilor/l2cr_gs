@@ -1,4 +1,4 @@
-class Quests::Q00252_ItSmellsDelicious < Quest
+class Scripts::Q00252_ItSmellsDelicious < Quest
   # NPC
   private STAN = 30200
   # Items
@@ -27,9 +27,9 @@ class Quests::Q00252_ItSmellsDelicious < Quest
     register_quest_items(DIARY, COOKBOOK_PAGE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -43,8 +43,8 @@ class Quests::Q00252_ItSmellsDelicious < Quest
       end
     when "30200-08.html"
       if qs.cond?(2)
-        give_adena(player, 147656, true)
-        add_exp_and_sp(player, 716238, 78324)
+        give_adena(pc, 147656, true)
+        add_exp_and_sp(pc, 716238, 78324)
         qs.exit_quest(false, true)
         html = event
       end

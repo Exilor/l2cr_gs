@@ -1,4 +1,4 @@
-class Quests::Q00453_NotStrongEnoughAlone < Quest
+class Scripts::Q00453_NotStrongEnoughAlone < Quest
   # NPC
   private KLEMIS = 32734
   private MONSTER1 = {

@@ -1,4 +1,4 @@
-class NpcAI::CastleBlacksmith < AbstractNpcAI
+class Scripts::CastleBlacksmith < AbstractNpcAI
   # Blacksmith IDs
   private NPCS = {
     35098, # Blacksmith (Gludio)

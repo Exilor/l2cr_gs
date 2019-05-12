@@ -1,4 +1,4 @@
-class Quests::Q00344_1000YearsTheEndOfLamentation < Quest
+class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
   # NPCs
   private KAIEN = 30623
   private GARVARENTZ = 30704

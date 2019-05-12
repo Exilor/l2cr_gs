@@ -1,4 +1,4 @@
-class Quests::Q00417_PathOfTheScavenger < Quest
+class Scripts::Q00417_PathOfTheScavenger < Quest
   # NPCs
   private WAREHOUSE_KEEPER_RAUT = 30316
   private TRADER_SHARI = 30517
@@ -60,152 +60,150 @@ class Quests::Q00417_PathOfTheScavenger < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    qs = get_quest_state(player, false)
-    if qs.nil?
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
-    htmltext = nil
     case event
     when "ACCEPT"
-      if player.class_id.dwarven_fighter?
-        if player.level >= MIN_LEVEL
-          if has_quest_items?(player, RING_OF_RAVEN)
-            htmltext = "30524-04.htm"
+      if pc.class_id.dwarven_fighter?
+        if pc.level >= MIN_LEVEL
+          if has_quest_items?(pc, RING_OF_RAVEN)
+            html = "30524-04.htm"
           else
             qs.start_quest
             qs.set_memo_state_ex(1, 0)
-            give_items(player, PIPPIS_LETTER_OF_RECOMMENDATION, 1)
-            htmltext = "30524-05.htm"
+            give_items(pc, PIPPIS_LETTER_OF_RECOMMENDATION, 1)
+            html = "30524-05.htm"
           end
         else
-          htmltext = "30524-02.htm"
+          html = "30524-02.htm"
         end
-      elsif player.class_id.scavenger?
-        htmltext = "30524-02a.htm"
+      elsif pc.class_id.scavenger?
+        html = "30524-02a.htm"
       else
-        htmltext = "30524-08.htm"
+        html = "30524-08.htm"
       end
     when "30524-03.html", "30557-02.html", "30519-06.html"
-      htmltext = event
+      html = event
     when "reply_1"
-      if has_quest_items?(player, PIPPIS_LETTER_OF_RECOMMENDATION)
-        take_items(player, PIPPIS_LETTER_OF_RECOMMENDATION, 1)
+      if has_quest_items?(pc, PIPPIS_LETTER_OF_RECOMMENDATION)
+        take_items(pc, PIPPIS_LETTER_OF_RECOMMENDATION, 1)
         case Rnd.rand(3)
         when 0
-          give_items(player, ZIMENFS_POTION, 1)
-          htmltext = "30519-02.html"
+          give_items(pc, ZIMENFS_POTION, 1)
+          html = "30519-02.html"
         when 1
-          give_items(player, SHARIS_AXE, 1)
-          htmltext = "30519-03.html"
+          give_items(pc, SHARIS_AXE, 1)
+          html = "30519-03.html"
         when 2
-          give_items(player, BRONKS_INGOT, 1)
-          htmltext = "30519-04.html"
+          give_items(pc, BRONKS_INGOT, 1)
+          html = "30519-04.html"
         end
       end
     when "30519-07.html"
       qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 1)
-      htmltext = event
+      html = event
     when "reply_2"
       case Rnd.rand(2)
       when 0
-        htmltext = "30519-06.html"
+        html = "30519-06.html"
       when 1
-        htmltext = "30519-11.html"
+        html = "30519-11.html"
       end
     when "reply_3"
-      if (qs.get_memo_state_ex(1) % 10) < 2
+      if qs.get_memo_state_ex(1) % 10 < 2
         qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 1)
-        htmltext = "30519-07.html"
-      elsif ((qs.get_memo_state_ex(1) % 10) == 2) && qs.memo_state?(0)
-        htmltext = "30519-07.html"
-      elsif ((qs.get_memo_state_ex(1) % 10) == 2) && qs.memo_state?(1)
+        html = "30519-07.html"
+      elsif qs.get_memo_state_ex(1) % 10 == 2 && qs.memo_state?(0)
+        html = "30519-07.html"
+      elsif qs.get_memo_state_ex(1) % 10 == 2 && qs.memo_state?(1)
         qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 1)
-        htmltext = "30519-09.html"
-      elsif ((qs.get_memo_state_ex(1) % 10) >= 3) && qs.memo_state?(1)
-        give_items(player, MIONS_LETTER, 1)
-        take_items(player, SHARIS_AXE, 1)
-        take_items(player, ZIMENFS_POTION, 1)
-        take_items(player, BRONKS_INGOT, 1)
+        html = "30519-09.html"
+      elsif (qs.get_memo_state_ex(1) % 10) >= 3 && qs.memo_state?(1)
+        give_items(pc, MIONS_LETTER, 1)
+        take_items(pc, SHARIS_AXE, 1)
+        take_items(pc, ZIMENFS_POTION, 1)
+        take_items(pc, BRONKS_INGOT, 1)
         qs.set_cond(4, true)
-        htmltext = "30519-10.html"
+        html = "30519-10.html"
       end
     when "reply_4"
-      take_items(player, ZIMENFS_PAY, 1)
-      take_items(player, SHARIS_PAY, 1)
-      take_items(player, BRONKS_PAY, 1)
+      take_items(pc, ZIMENFS_PAY, 1)
+      take_items(pc, SHARIS_PAY, 1)
+      take_items(pc, BRONKS_PAY, 1)
       case Rnd.rand(3)
       when 0
-        give_items(player, ZIMENFS_POTION, 1)
-        htmltext = "30519-02.html"
+        give_items(pc, ZIMENFS_POTION, 1)
+        html = "30519-02.html"
       when 1
-        give_items(player, SHARIS_AXE, 1)
-        htmltext = "30519-03.html"
+        give_items(pc, SHARIS_AXE, 1)
+        html = "30519-03.html"
       when 2
-        give_items(player, BRONKS_INGOT, 1)
-        htmltext = "30519-04.html"
+        give_items(pc, BRONKS_INGOT, 1)
+        html = "30519-04.html"
       end
     when "30556-05b.html"
-      if has_quest_items?(player, TARANTULA_PICTURE) && get_quest_items_count(player, BEAD) >= 20
-        take_items(player, TARANTULA_PICTURE, 1)
-        take_items(player, BEAD, -1)
-        give_items(player, BEAD_PARCEL, 1)
+      if has_quest_items?(pc, TARANTULA_PICTURE) && get_quest_items_count(pc, BEAD) >= 20
+        take_items(pc, TARANTULA_PICTURE, 1)
+        take_items(pc, BEAD, -1)
+        give_items(pc, BEAD_PARCEL, 1)
         qs.set_cond(9, true)
-        htmltext = event
+        html = event
       end
     when "30556-06b.html"
-      if has_quest_items?(player, TARANTULA_PICTURE) && get_quest_items_count(player, BEAD) >= 20
-        take_items(player, TARANTULA_PICTURE, 1)
-        take_items(player, BEAD, -1)
-        give_items(player, BEAD_PARCEL2, 1)
+      if has_quest_items?(pc, TARANTULA_PICTURE) && get_quest_items_count(pc, BEAD) >= 20
+        take_items(pc, TARANTULA_PICTURE, 1)
+        take_items(pc, BEAD, -1)
+        give_items(pc, BEAD_PARCEL2, 1)
         qs.memo_state=(2)
         qs.set_cond(12, true)
-        htmltext = event
+        html = event
       end
     when "30316-02.html"
-      if has_quest_items?(player, BEAD_PARCEL)
-        take_items(player, BEAD_PARCEL, 1)
-        give_items(player, ROUTS_TELEPORT_SCROLL, 1)
+      if has_quest_items?(pc, BEAD_PARCEL)
+        take_items(pc, BEAD_PARCEL, 1)
+        give_items(pc, ROUTS_TELEPORT_SCROLL, 1)
         qs.set_cond(10, true)
-        htmltext = event
+        html = event
       end
     when "30316-03.html"
-      if has_quest_items?(player, BEAD_PARCEL)
-        give_items(player, ROUTS_TELEPORT_SCROLL, 1)
-        take_items(player, BEAD_PARCEL, 1)
+      if has_quest_items?(pc, BEAD_PARCEL)
+        give_items(pc, ROUTS_TELEPORT_SCROLL, 1)
+        take_items(pc, BEAD_PARCEL, 1)
         qs.set_cond(10, true)
-        htmltext = event
+        html = event
       end
     when "30557-03.html"
-      if has_quest_items?(player, ROUTS_TELEPORT_SCROLL)
-        take_items(player, ROUTS_TELEPORT_SCROLL, 1)
-        give_items(player, SUCCUBUS_UNDIES, 1)
+      if has_quest_items?(pc, ROUTS_TELEPORT_SCROLL)
+        take_items(pc, ROUTS_TELEPORT_SCROLL, 1)
+        give_items(pc, SUCCUBUS_UNDIES, 1)
         qs.set_cond(11, true)
         npc.not_nil!.delete_me
-        htmltext = event
+        html = event
       end
     when "31958-02.html"
-      if qs.memo_state?(2) && has_quest_items?(player, BEAD_PARCEL2)
-        give_adena(player, 163800, true)
-        give_items(player, RING_OF_RAVEN, 1)
-        level = player.level
+      if qs.memo_state?(2) && has_quest_items?(pc, BEAD_PARCEL2)
+        give_adena(pc, 163800, true)
+        give_items(pc, RING_OF_RAVEN, 1)
+        level = pc.level
         if level >= 20
-          add_exp_and_sp(player, 320534, 35412)
+          add_exp_and_sp(pc, 320534, 35412)
         elsif level == 19
-          add_exp_and_sp(player, 456128, 42110)
+          add_exp_and_sp(pc, 456128, 42110)
         else
-          add_exp_and_sp(player, 591724, 48808)
+          add_exp_and_sp(pc, 591724, 48808)
         end
         qs.exit_quest(false, true)
-        player.send_packet(SocialAction.new(player.l2id, 3))
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
         qs.save_global_quest_var("1ClassQuestFinished", "1")
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)
@@ -273,163 +271,162 @@ class Quests::Q00417_PathOfTheScavenger < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     if qs.created? || qs.completed?
       if npc.id == COLLECTOR_PIPI
-        htmltext = "30524-01.htm"
+        html = "30524-01.htm"
       end
     elsif qs.started?
       case npc.id
       when COLLECTOR_PIPI
-        if has_quest_items?(player, PIPPIS_LETTER_OF_RECOMMENDATION)
-          htmltext = "30524-06.html"
+        if has_quest_items?(pc, PIPPIS_LETTER_OF_RECOMMENDATION)
+          html = "30524-06.html"
         else
-          htmltext = "30524-07.html"
+          html = "30524-07.html"
         end
       when TRADER_MION
-        if has_quest_items?(player, PIPPIS_LETTER_OF_RECOMMENDATION)
+        if has_quest_items?(pc, PIPPIS_LETTER_OF_RECOMMENDATION)
           qs.set_cond(2, true)
-          htmltext = "30519-01.html"
-        elsif (get_quest_items_count(player, SHARIS_AXE) + get_quest_items_count(player, BRONKS_INGOT) + get_quest_items_count(player, ZIMENFS_POTION)) == 1
+          html = "30519-01.html"
+        elsif (get_quest_items_count(pc, SHARIS_AXE) + get_quest_items_count(pc, BRONKS_INGOT) + get_quest_items_count(pc, ZIMENFS_POTION)) == 1
           if qs.get_memo_state_ex(1) % 10 == 0
-            htmltext = "30519-05.html"
+            html = "30519-05.html"
           elsif qs.get_memo_state_ex(1) % 10 > 0
-            htmltext = "30519-08.html"
+            html = "30519-08.html"
           end
-        elsif (get_quest_items_count(player, SHARIS_PAY) + get_quest_items_count(player, BRONKS_PAY) + get_quest_items_count(player, ZIMENFS_PAY)) == 1
+        elsif (get_quest_items_count(pc, SHARIS_PAY) + get_quest_items_count(pc, BRONKS_PAY) + get_quest_items_count(pc, ZIMENFS_PAY)) == 1
           if qs.get_memo_state_ex(1) < 50
-            htmltext = "30519-12.html"
+            html = "30519-12.html"
           else
-            give_items(player, MIONS_LETTER, 1)
-            take_items(player, SHARIS_PAY, 1)
-            take_items(player, ZIMENFS_PAY, 1)
-            take_items(player, BRONKS_PAY, 1)
+            give_items(pc, MIONS_LETTER, 1)
+            take_items(pc, SHARIS_PAY, 1)
+            take_items(pc, ZIMENFS_PAY, 1)
+            take_items(pc, BRONKS_PAY, 1)
             qs.set_cond(4, true)
-            htmltext = "30519-15.html"
+            html = "30519-15.html"
           end
-        elsif has_quest_items?(player, MIONS_LETTER)
-          htmltext = "30519-13.html"
-        elsif has_at_least_one_quest_item?(player, BEAR_PICTURE, TARANTULA_PICTURE, BEAD_PARCEL, ROUTS_TELEPORT_SCROLL, SUCCUBUS_UNDIES)
-          htmltext = "30519-14.html"
+        elsif has_quest_items?(pc, MIONS_LETTER)
+          html = "30519-13.html"
+        elsif has_at_least_one_quest_item?(pc, BEAR_PICTURE, TARANTULA_PICTURE, BEAD_PARCEL, ROUTS_TELEPORT_SCROLL, SUCCUBUS_UNDIES)
+          html = "30519-14.html"
         end
       when TRADER_SHARI
-        if has_quest_items?(player, SHARIS_AXE)
+        if has_quest_items?(pc, SHARIS_AXE)
           if qs.get_memo_state_ex(1) < 20
-            take_items(player, SHARIS_AXE, 1)
-            give_items(player, SHARIS_PAY, 1)
+            take_items(pc, SHARIS_AXE, 1)
+            give_items(pc, SHARIS_PAY, 1)
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
-            htmltext = "30517-01.html"
+            html = "30517-01.html"
           else
-            take_items(player, SHARIS_AXE, 1)
-            give_items(player, SHARIS_PAY, 1)
+            take_items(pc, SHARIS_AXE, 1)
+            give_items(pc, SHARIS_PAY, 1)
             qs.memo_state=(1)
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
             qs.set_cond(3, true)
-            htmltext = "30517-02.html"
+            html = "30517-02.html"
           end
-        elsif has_quest_items?(player, SHARIS_PAY)
-          htmltext = "30517-03.html"
+        elsif has_quest_items?(pc, SHARIS_PAY)
+          html = "30517-03.html"
         end
       when HEAD_BLACKSMITH_BRONK
-        if has_quest_items?(player, BRONKS_INGOT)
+        if has_quest_items?(pc, BRONKS_INGOT)
           if qs.get_memo_state_ex(1) < 20
-            take_items(player, BRONKS_INGOT, 1)
-            give_items(player, BRONKS_PAY, 1)
+            take_items(pc, BRONKS_INGOT, 1)
+            give_items(pc, BRONKS_PAY, 1)
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
-            htmltext = "30525-01.html"
+            html = "30525-01.html"
           else
-            take_items(player, BRONKS_INGOT, 1)
-            give_items(player, BRONKS_PAY, 1)
+            take_items(pc, BRONKS_INGOT, 1)
+            give_items(pc, BRONKS_PAY, 1)
             qs.memo_state=(1)
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
             qs.set_cond(3, true)
-            htmltext = "30525-02.html"
+            html = "30525-02.html"
           end
-        elsif has_quest_items?(player, BRONKS_PAY)
-          htmltext = "30525-03.html"
+        elsif has_quest_items?(pc, BRONKS_PAY)
+          html = "30525-03.html"
         end
       when PRIEST_OF_THE_EARTH_ZIMENF
-        if has_quest_items?(player, ZIMENFS_POTION)
+        if has_quest_items?(pc, ZIMENFS_POTION)
           if qs.get_memo_state_ex(1) < 20
-            take_items(player, ZIMENFS_POTION, 1)
-            give_items(player, ZIMENFS_PAY, 1)
+            take_items(pc, ZIMENFS_POTION, 1)
+            give_items(pc, ZIMENFS_PAY, 1)
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
-            htmltext = "30538-01.html"
+            html = "30538-01.html"
           else
-            take_items(player, ZIMENFS_POTION, 1)
-            give_items(player, ZIMENFS_PAY, 1)
+            take_items(pc, ZIMENFS_POTION, 1)
+            give_items(pc, ZIMENFS_PAY, 1)
             qs.memo_state=(1)
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
             qs.set_cond(3, true)
-            htmltext = "30538-02.html"
+            html = "30538-02.html"
           end
-        elsif has_quest_items?(player, ZIMENFS_PAY)
-          htmltext = "30538-03.html"
+        elsif has_quest_items?(pc, ZIMENFS_PAY)
+          html = "30538-03.html"
         end
       when MASTER_TOMA
-        if has_quest_items?(player, MIONS_LETTER)
-          take_items(player, MIONS_LETTER, 1)
-          give_items(player, BEAR_PICTURE, 1)
+        if has_quest_items?(pc, MIONS_LETTER)
+          take_items(pc, MIONS_LETTER, 1)
+          give_items(pc, BEAR_PICTURE, 1)
           qs.set_cond(5, true)
           qs.set(FLAG, 0)
-          htmltext = "30556-01.html"
-        elsif has_quest_items?(player, BEAR_PICTURE)
-          if get_quest_items_count(player, HONEY_JAR) < 5
-            htmltext = "30556-02.html"
+          html = "30556-01.html"
+        elsif has_quest_items?(pc, BEAR_PICTURE)
+          if get_quest_items_count(pc, HONEY_JAR) < 5
+            html = "30556-02.html"
           else
-            take_items(player, BEAR_PICTURE, 1)
-            give_items(player, TARANTULA_PICTURE, 1)
-            take_items(player, HONEY_JAR, -1)
+            take_items(pc, BEAR_PICTURE, 1)
+            give_items(pc, TARANTULA_PICTURE, 1)
+            take_items(pc, HONEY_JAR, -1)
             qs.set_cond(7, true)
-            htmltext = "30556-03.html"
+            html = "30556-03.html"
           end
-        elsif has_quest_items?(player, TARANTULA_PICTURE)
-          if get_quest_items_count(player, BEAD) < 20
-            htmltext = "30556-04.html"
+        elsif has_quest_items?(pc, TARANTULA_PICTURE)
+          if get_quest_items_count(pc, BEAD) < 20
+            html = "30556-04.html"
           else
-            htmltext = "30556-05a.html"
+            html = "30556-05a.html"
           end
-        elsif has_quest_items?(player, BEAD_PARCEL) && !has_quest_items?(player, BEAD_PARCEL2)
-          htmltext = "30556-06a.html"
-        elsif has_quest_items?(player, BEAD_PARCEL2) && !has_quest_items?(player, BEAD_PARCEL) && qs.memo_state?(2)
-          htmltext = "30556-06c.html"
-        elsif has_at_least_one_quest_item?(player, ROUTS_TELEPORT_SCROLL, SUCCUBUS_UNDIES)
-          htmltext = "30556-07.html"
+        elsif has_quest_items?(pc, BEAD_PARCEL) && !has_quest_items?(pc, BEAD_PARCEL2)
+          html = "30556-06a.html"
+        elsif has_quest_items?(pc, BEAD_PARCEL2) && !has_quest_items?(pc, BEAD_PARCEL) && qs.memo_state?(2)
+          html = "30556-06c.html"
+        elsif has_at_least_one_quest_item?(pc, ROUTS_TELEPORT_SCROLL, SUCCUBUS_UNDIES)
+          html = "30556-07.html"
         end
       when WAREHOUSE_KEEPER_RAUT
-        if has_quest_items?(player, BEAD_PARCEL)
-          htmltext = "30316-01.html"
-        elsif has_quest_items?(player, ROUTS_TELEPORT_SCROLL)
-          htmltext = "30316-04.html"
-        elsif has_quest_items?(player, SUCCUBUS_UNDIES)
-          give_adena(player, 81900, true)
-          give_items(player, RING_OF_RAVEN, 1)
-          level = player.level
+        if has_quest_items?(pc, BEAD_PARCEL)
+          html = "30316-01.html"
+        elsif has_quest_items?(pc, ROUTS_TELEPORT_SCROLL)
+          html = "30316-04.html"
+        elsif has_quest_items?(pc, SUCCUBUS_UNDIES)
+          give_adena(pc, 81900, true)
+          give_items(pc, RING_OF_RAVEN, 1)
+          level = pc.level
           if level >= 20
-            add_exp_and_sp(player, 160267, 17706)
+            add_exp_and_sp(pc, 160267, 17706)
           elsif level == 19
-            add_exp_and_sp(player, 228064, 21055)
+            add_exp_and_sp(pc, 228064, 21055)
           else
-            add_exp_and_sp(player, 295862, 24404)
+            add_exp_and_sp(pc, 295862, 24404)
           end
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           qs.save_global_quest_var("1ClassQuestFinished", "1")
-          htmltext = "30316-05.html"
+          html = "30316-05.html"
         end
       when TORAI
-        if has_quest_items?(player, ROUTS_TELEPORT_SCROLL)
-          htmltext = "30557-01.html"
+        if has_quest_items?(pc, ROUTS_TELEPORT_SCROLL)
+          html = "30557-01.html"
         end
       when WAREHOUSE_CHIEF_YASENI
-        if has_quest_items?(player, BEAD_PARCEL2) && !has_quest_items?(player, BEAD_PARCEL) && qs.memo_state?(2)
-          htmltext = "31958-01.html"
+        if has_quest_items?(pc, BEAD_PARCEL2) && !has_quest_items?(pc, BEAD_PARCEL) && qs.memo_state?(2)
+          html = "31958-01.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

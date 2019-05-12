@@ -3,13 +3,13 @@ class Packets::Incoming::RequestJoinSiege < GameClientPacket
   @attacker = 0
   @joining = 0
 
-  def read_impl
+  private def read_impl
     @castle_id = d
     @attacker = d
     @joining = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless pc.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)

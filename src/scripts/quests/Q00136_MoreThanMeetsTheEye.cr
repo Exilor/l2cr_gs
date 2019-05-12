@@ -1,4 +1,4 @@
-class Quests::Q00136_MoreThanMeetsTheEye < Quest
+class Scripts::Q00136_MoreThanMeetsTheEye < Quest
   # NPCs
   private HARDIN = 30832
   private ERRICKIN = 30701
@@ -46,11 +46,11 @@ class Quests::Q00136_MoreThanMeetsTheEye < Quest
     end
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
-    htmltext = event
+    html = event
     case event
     when "30832-05.html", "30832-06.html", "30832-12.html", "30832-13.html",
       "30832-18.html", "30832-03.htm"
@@ -75,10 +75,10 @@ class Quests::Q00136_MoreThanMeetsTheEye < Quest
       st.take_items(ORDER, -1)
       st.set_cond(7, true)
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -105,92 +105,92 @@ class Quests::Q00136_MoreThanMeetsTheEye < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    html = get_no_quest_msg(pc)
 
     case npc.id
     when HARDIN
       case st.state
       when State::CREATED
-        htmltext = player.level >= MIN_LEVEL ? "30832-01.htm" : "30832-02.htm"
+        html = pc.level >= MIN_LEVEL ? "30832-01.htm" : "30832-02.htm"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30832-04.html"
+          html = "30832-04.html"
         when 2..4
-          htmltext = "30832-08.html"
+          html = "30832-08.html"
         when 5
           if st.get_int("talked") == 1
-            htmltext = "30832-10.html"
+            html = "30832-10.html"
           elsif st.get_int("talked") == 2
-            htmltext = "30832-12.html"
+            html = "30832-12.html"
           elsif st.has_quest_items?(STABILIZED_ECTOPLASM)
             st.take_items(STABILIZED_ECTOPLASM, -1)
             st.set("talked", "1")
-            htmltext = "30832-09.html"
+            html = "30832-09.html"
           else
-            htmltext = "30832-08.html"
+            html = "30832-08.html"
           end
         when 6..8
-          htmltext = "30832-15.html"
+          html = "30832-15.html"
         when 9
           if st.get_int("talked") == 1
             st.set("talked", "2")
-            htmltext = "30832-17.html"
+            html = "30832-17.html"
           elsif st.get_int("talked") == 2
-            htmltext = "30832-18.html"
+            html = "30832-18.html"
           else
             st.take_items(BOOK_OF_SEAL, -1)
             st.set("talked", "1")
-            htmltext = "30832-16.html"
+            html = "30832-16.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when ERRICKIN
       if st.started?
         case st.cond
         when 1
-          htmltext = "30701-01.html"
+          html = "30701-01.html"
         when 2
-          htmltext = "30701-02.html"
+          html = "30701-02.html"
         when 3
-          htmltext = "30701-04.html"
+          html = "30701-04.html"
         when 4
           if st.get_quest_items_count(ECTOPLASM) < ECTOPLASM_COUNT
             st.give_items(STABILIZED_ECTOPLASM, 1)
             st.set_cond(5, true)
-            htmltext = "30701-06.html"
+            html = "30701-06.html"
           else
             st.take_items(ECTOPLASM, -1)
-            htmltext = "30701-05.html"
+            html = "30701-05.html"
           end
         else
-          htmltext = "30701-07.html"
+          html = "30701-07.html"
         end
       end
     when CLAYTON
       if st.started?
         case st.cond
         when 1..5
-          htmltext = "30464-01.html"
+          html = "30464-01.html"
         when 6
-          htmltext = "30464-02.html"
+          html = "30464-02.html"
         when 7
-          htmltext = "30464-04.html"
+          html = "30464-04.html"
         when 8
           st.give_items(BOOK_OF_SEAL, 1)
           st.take_items(GLASS_JAGUAR_CRYSTAL, -1)
           st.set_cond(9, true)
-          htmltext = "30464-05.html"
+          html = "30464-05.html"
         else
-          htmltext = "30464-06.html"
+          html = "30464-06.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 end

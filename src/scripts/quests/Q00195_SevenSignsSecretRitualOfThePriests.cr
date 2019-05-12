@@ -1,4 +1,4 @@
-class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
+class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
   # NPCs
   private RAYMOND = 30289
   private IASON_HEINE = 30969
@@ -32,9 +32,9 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
     register_quest_items(IDENTITY_CARD, SHUNAIMANS_CONTRACT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -58,7 +58,7 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
       end
     when "30289-04.html"
       if st.cond?(2)
-        npc.target = player
+        npc.target = pc
         npc.do_cast(TRANSFORMATION)
         st.set_cond(3, true)
         html = event
@@ -68,25 +68,27 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         html = event
       end
     when "30289-08.html"
-      if st.cond?(3) && st.has_quest_items?(IDENTITY_CARD) && st.has_quest_items?(SHUNAIMANS_CONTRACT)
-        st.take_items(IDENTITY_CARD, -1)
-        st.set_cond(4, true)
-        html = event
-        if player.transformation_id == 113
-          # player.do_cast(TRANSFORM_DISPEL)
-          player.stop_all_effects
+      if st.cond?(3) && st.has_quest_items?(IDENTITY_CARD)
+        if st.has_quest_items?(SHUNAIMANS_CONTRACT)
+          st.take_items(IDENTITY_CARD, -1)
+          st.set_cond(4, true)
+          html = event
+          if pc.transformation_id == 113
+            # pc.do_cast(TRANSFORM_DISPEL)
+            pc.stop_all_effects
+          end
         end
       end
     when "30289-10.html"
       if st.cond?(3)
-        npc.target = player
+        npc.target = pc
         npc.do_cast(TRANSFORMATION)
         html = event
       end
     when "30289-11.html"
       if st.cond?(3)
-        # player.do_cast(TRANSFORM_DISPEL)
-        player.stop_all_effects
+        # pc.do_cast(TRANSFORM_DISPEL)
+        pc.stop_all_effects
         html = event
       end
     when "30969-02.html"
@@ -95,7 +97,7 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
       end
     when "reward"
       if st.cond?(4) && st.has_quest_items?(SHUNAIMANS_CONTRACT)
-        if player.level >= MIN_LEVEL
+        if pc.level >= MIN_LEVEL
           st.add_exp_and_sp(52518015, 5817677)
           st.exit_quest(false, true)
           html = "30969-03.html"
@@ -108,7 +110,7 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
     html
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     case npc.id
     when IDENTITY_CONFIRM_DEVICE
       "32578-01.html"
@@ -121,15 +123,15 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
     end
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::COMPLETED
-      html = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
       if npc.id == CLAUDIA_ATHEBALDT
-        if player.level >= MIN_LEVEL && player.quest_completed?(Q00194_SevenSignsMammonsContract.simple_name)
+        if pc.level >= MIN_LEVEL && pc.quest_completed?(Q00194_SevenSignsMammonsContract.simple_name)
           html = "31001-01.htm"
         else
           html = "31001-02.html"
@@ -151,12 +153,18 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
       when RAYMOND
         case st.cond
         when 2
-          if st.has_quest_items?(IDENTITY_CARD) && player.transformation_id != 113
-            html = "30289-01.html"
+          if st.has_quest_items?(IDENTITY_CARD)
+            if pc.transformation_id != 113
+              html = "30289-01.html"
+            end
           end
         when 3
           if st.has_quest_items?(IDENTITY_CARD)
-            html = st.has_quest_items?(SHUNAIMANS_CONTRACT) ? "30289-06.html" : "30289-09.html"
+            if st.has_quest_items?(SHUNAIMANS_CONTRACT)
+              html = "30289-06.html"
+            else
+              html = "30289-09.html"
+            end
           end
         when 4
           html = "30289-12.html"
@@ -170,7 +178,7 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
       when PASSWORD_ENTRY_DEVICE
         if st.cond?(3) && st.has_quest_items?(IDENTITY_CARD)
           html = "32577-02.html"
-          player.tele_to_location(-78240, 205858, -7856)
+          pc.tele_to_location(-78240, 205858, -7856)
         end
       when SHELF
         if st.cond?(3) && !st.has_quest_items?(SHUNAIMANS_CONTRACT)
@@ -188,6 +196,6 @@ class Quests::Q00195_SevenSignsSecretRitualOfThePriests < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

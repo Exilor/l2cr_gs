@@ -5,20 +5,19 @@ require "../effects/effect_tick_task"
 class BuffInfo
   include Loggable
   include Synchronizable
-  # include Packets::Outgoing
 
-  getter! effector
-  getter! effected
-  getter! skill
+  @tasks : Hash(AbstractEffect, EffectTaskInfo)?
   getter abnormal_time : Int32
   getter period_start_ticks : Int32
   getter task : Runnable::PeriodicTask?
   getter effects = [] of AbstractEffect
+  getter! effector
+  getter! effected
+  getter! skill
   property abnormal_time : Int32
   property charges : Int32 = 0
   property? removed : Bool = false
   property? in_use : Bool = true
-  @tasks : Hash(AbstractEffect, EffectTaskInfo)?
 
   def initialize(@effector : L2Character?, @effected : L2Character?, @skill : Skill?)
     @abnormal_time = Formulas.effect_abnormal_time(effector, effected, skill)

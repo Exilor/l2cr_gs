@@ -1,4 +1,4 @@
-class NpcAI::FairyTrees < AbstractNpcAI
+class Scripts::FairyTrees < AbstractNpcAI
   # NPC
   private SOUL_GUARDIAN = 27189 # Soul of Tree Guardian
 

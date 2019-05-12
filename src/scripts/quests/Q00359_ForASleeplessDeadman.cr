@@ -1,4 +1,4 @@
-class Quests::Q00359_ForASleeplessDeadman < Quest
+class Scripts::Q00359_ForASleeplessDeadman < Quest
   # NPC
   private ORVEN = 30857
   # Item

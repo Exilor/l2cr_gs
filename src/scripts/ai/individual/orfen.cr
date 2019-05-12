@@ -1,4 +1,4 @@
-class NpcAI::Orfen < AbstractNpcAI
+class Scripts::Orfen < AbstractNpcAI
   private POS = {
     Location.new(43728, 17220, -4342),
     Location.new(55024, 17368, -5412),

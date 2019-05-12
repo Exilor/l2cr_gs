@@ -1,12 +1,12 @@
 class Packets::Incoming::RequestPartyMatchDetail < GameClientPacket
   @room_id = 0
 
-  def read_impl
+  private def read_impl
     @room_id = d
     # @unk1, @unk2, @unk3 = d, d, d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless room = PartyMatchRoomList.get_room(@room_id)
 

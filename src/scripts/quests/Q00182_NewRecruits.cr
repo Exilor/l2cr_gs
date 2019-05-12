@@ -1,4 +1,4 @@
-class Quests::Q00182_NewRecruits < Quest
+class Scripts::Q00182_NewRecruits < Quest
   # NPCs
   private KEKROPUS = 32138
   private MENACING_MACHINE = 32258
@@ -24,38 +24,38 @@ class Quests::Q00182_NewRecruits < Quest
 
     case event
     when "32138-03.htm"
-      if pc.level >= MIN_LEVEL && pc.level <= MAX_LEVEL
+      if pc.level.between?(MIN_LEVEL, MAX_LEVEL)
         if pc.in_category?(CategoryType::FIRST_CLASS_GROUP)
-          htmltext = event
+          html = event
         end
       end
     when "32138-04.htm"
-      if pc.level >= MIN_LEVEL && pc.level <= MAX_LEVEL
+      if pc.level.between?(MIN_LEVEL, MAX_LEVEL)
         if pc.in_category?(CategoryType::FIRST_CLASS_GROUP)
           st.start_quest
           st.memo_state = 1
-          htmltext = event
+          html = event
         end
       end
     when "32258-02.html", "32258-03.html"
       if st.memo_state?(1)
-        htmltext = event
+        html = event
       end
     when "32258-04.html"
       if st.memo_state?(1)
         give_items(pc, RED_CRESCENT_EARRING, 2)
         st.exit_quest(false, true)
-        htmltext = event
+        html = event
       end
     when "32258-05.html"
       if st.memo_state?(1)
         give_items(pc, RING_OF_DEVOTION, 2)
         st.exit_quest(false, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, pc)
@@ -63,29 +63,29 @@ class Quests::Q00182_NewRecruits < Quest
 
     if st.completed?
       if npc.id == KEKROPUS
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     elsif st.created?
       if pc.race.kamael?
-        htmltext = "32138-01.htm"
-      elsif pc.level >= MIN_LEVEL && pc.level <= MAX_LEVEL && pc.in_category?(CategoryType::FIRST_CLASS_GROUP)
-        htmltext = "32138-02.htm"
+        html = "32138-01.htm"
+      elsif pc.level.between?(MIN_LEVEL, MAX_LEVEL) && pc.in_category?(CategoryType::FIRST_CLASS_GROUP)
+        html = "32138-02.htm"
       elsif pc.level < MIN_LEVEL || pc.level > MAX_LEVEL || !pc.in_category?(CategoryType::FIRST_CLASS_GROUP)
-        htmltext = "32138-05.htm"
+        html = "32138-05.htm"
       end
     elsif st.started?
       case npc.id
       when KEKROPUS
         if st.memo_state?(1)
-          htmltext = "32138-06.html"
+          html = "32138-06.html"
         end
       when MENACING_MACHINE
         if st.memo_state?(1)
-          htmltext = "32258-01.html"
+          html = "32258-01.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(pc)
+    html || get_no_quest_msg(pc)
   end
 end

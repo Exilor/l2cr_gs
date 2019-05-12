@@ -1,4 +1,4 @@
-class Quests::Q00368_TrespassingIntoTheHolyGround < Quest
+class Scripts::Q00368_TrespassingIntoTheHolyGround < Quest
   # NPC
   private RESTINA = 30926
   # Item

@@ -1,4 +1,4 @@
-class Quests::Q00310_OnlyWhatRemains < Quest
+class Scripts::Q00310_OnlyWhatRemains < Quest
   # NPC
   private KINTAIJIN = 32640
   # Items

@@ -1,5 +1,6 @@
 abstract struct L2ZoneForm
   include Loggable
+
   private STEP = 10
 
   abstract def inside_zone?(x : Int32, y : Int32, z : Int32) : Bool

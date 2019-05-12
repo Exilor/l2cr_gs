@@ -1,4 +1,4 @@
-class NpcAI::Amaskari < AbstractNpcAI
+class Scripts::Amaskari < AbstractNpcAI
   # NPCs
   private AMASKARI = 22449
   private AMASKARI_PRISONER = 22450

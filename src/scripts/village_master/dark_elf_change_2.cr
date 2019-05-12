@@ -1,4 +1,4 @@
-class NpcAI::DarkElfChange2 < AbstractNpcAI
+class Scripts::DarkElfChange2 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30195, # Brecson

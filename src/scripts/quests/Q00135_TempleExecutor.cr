@@ -1,4 +1,4 @@
-class Quests::Q00135_TempleExecutor < Quest
+class Scripts::Q00135_TempleExecutor < Quest
   # NPCs
   private SHEGFIELD = 30068
   private PANO = 30078
@@ -31,16 +31,19 @@ class Quests::Q00135_TempleExecutor < Quest
     add_start_npc(SHEGFIELD)
     add_talk_id(SHEGFIELD, ALEX, SONIN, PANO)
     add_kill_id(MOBS.keys)
-    register_quest_items(STOLEN_CARGO, HATE_CRYSTAL, OLD_TREASURE_MAP, SONINS_CREDENTIALS, PANOS_CREDENTIALS, ALEXS_CREDENTIALS)
+    register_quest_items(
+      STOLEN_CARGO, HATE_CRYSTAL, OLD_TREASURE_MAP, SONINS_CREDENTIALS,
+      PANOS_CREDENTIALS, ALEXS_CREDENTIALS
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30291-02a.html", "30291-04.html", "30291-05.html", "30291-06.html",
          "30068-08.html", "30068-09.html", "30068-10.html"
@@ -54,19 +57,19 @@ class Quests::Q00135_TempleExecutor < Quest
     when "30068-11.html"
       st.give_items(BADGE_TEMPLE_EXECUTOR, 1)
       st.give_adena(16924, true)
-      if player.level < MAX_REWARD_LEVEL
+      if pc.level < MAX_REWARD_LEVEL
         st.add_exp_and_sp(30000, 2000)
       end
       st.exit_quest(false, true)
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 3)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 3)
       return super
     end
 
@@ -81,126 +84,129 @@ class Quests::Q00135_TempleExecutor < Quest
         st.give_items(OLD_TREASURE_MAP, 1)
       end
 
-      if st.get_quest_items_count(STOLEN_CARGO) >= ITEM_COUNT && st.get_quest_items_count(HATE_CRYSTAL) >= ITEM_COUNT && st.get_quest_items_count(OLD_TREASURE_MAP) >= ITEM_COUNT
-        st.set_cond(4, true)
+      if st.get_quest_items_count(STOLEN_CARGO) >= ITEM_COUNT
+        if st.get_quest_items_count(HATE_CRYSTAL) >= ITEM_COUNT
+          if st.get_quest_items_count(OLD_TREASURE_MAP) >= ITEM_COUNT
+            st.set_cond(4, true)
+          end
+        end
       end
     end
 
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when SHEGFIELD
       case st.state
       when State::CREATED
-        htmltext = player.level >= MIN_LEVEL ? "30068-01.htm" : "30068-02.htm"
+        html = pc.level >= MIN_LEVEL ? "30068-01.htm" : "30068-02.htm"
       when State::STARTED
         case st.cond
         when 1
           st.set_cond(2, true)
-          htmltext = "30068-04.html"
+          html = "30068-04.html"
         when 2, 3
-          htmltext = "30068-05.html"
+          html = "30068-05.html"
         when 4
-          htmltext = "30068-06.html"
+          html = "30068-06.html"
         when 5
           if st.set?("talk")
-            htmltext = "30068-08.html"
+            html = "30068-08.html"
           elsif st.has_quest_items?(PANOS_CREDENTIALS, SONINS_CREDENTIALS, ALEXS_CREDENTIALS)
             st.take_items(SONINS_CREDENTIALS, -1)
             st.take_items(PANOS_CREDENTIALS, -1)
             st.take_items(ALEXS_CREDENTIALS, -1)
             st.set("talk", "1")
-            htmltext = "30068-07.html"
+            html = "30068-07.html"
           else
-            htmltext = "30068-06.html"
+            html = "30068-06.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when ALEX
       if st.started?
         case st.cond
         when 1
-          htmltext = "30291-01.html"
+          html = "30291-01.html"
         when 2
           if st.set?("talk")
-            htmltext = "30291-03.html"
+            html = "30291-03.html"
           else
             st.set("talk", "1")
-            htmltext = "30291-02.html"
+            html = "30291-02.html"
           end
         when 3
-          htmltext = "30291-08.html"; # 4
+          html = "30291-08.html"; # 4
         when 4
           if st.has_quest_items?(PANOS_CREDENTIALS, SONINS_CREDENTIALS)
             if st.get_quest_items_count(OLD_TREASURE_MAP) < ITEM_COUNT
-              return htmltext
+              return get_no_quest_msg(pc)
             end
             st.set_cond(5, true)
             st.take_items(OLD_TREASURE_MAP, -1)
             st.give_items(ALEXS_CREDENTIALS, 1)
-            htmltext = "30291-10.html"
+            html = "30291-10.html"
           else
-            htmltext = "30291-09.html"
+            html = "30291-09.html"
           end
         when 5
-          htmltext = "30291-11.html"
+          html = "30291-11.html"
         end
       end
       when PANO
         if st.started?
         case st.cond
         when 1
-          htmltext = "30078-01.html"
+          html = "30078-01.html"
         when 2
-          htmltext = "30078-02.html"
+          html = "30078-02.html"
         when 3
-          htmltext = "30078-03.html"
+          html = "30078-03.html"
         when 4
           unless st.set?("Pano")
             if st.get_quest_items_count(HATE_CRYSTAL) < ITEM_COUNT
-              return htmltext
+              return get_no_quest_msg(pc)
             end
             st.take_items(HATE_CRYSTAL, -1)
             st.give_items(PANOS_CREDENTIALS, 1)
             st.set("Pano", "1")
-            htmltext = "30078-04.html"
+            html = "30078-04.html"
           end
         when 5
-          htmltext = "30078-05.html"
+          html = "30078-05.html"
         end
       end
     when SONIN
       if st.started?
         case st.cond
         when 1
-          htmltext = "31773-01.html"
+          html = "31773-01.html"
         when 2
-          htmltext = "31773-02.html"
+          html = "31773-02.html"
         when 3
-          htmltext = "31773-03.html"
+          html = "31773-03.html"
         when 4
           unless st.set?("Sonin")
             if st.get_quest_items_count(STOLEN_CARGO) < ITEM_COUNT
-              return htmltext
+              return get_no_quest_msg(pc)
             end
             st.take_items(STOLEN_CARGO, -1)
             st.give_items(SONINS_CREDENTIALS, 1)
             st.set("Sonin", "1")
-            htmltext = "31773-04.html"
+            html = "31773-04.html"
           end
         when 5
-          htmltext = "31773-05.html"
+          html = "31773-05.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00062_PathOfTheTrooper < Quest
+class Scripts::Q00062_PathOfTheTrooper < Quest
   # NPCs
   private MASTER_SHUBAIN = 32194
   private MASTER_GWAIN = 32197
@@ -25,26 +25,26 @@ class Quests::Q00062_PathOfTheTrooper < Quest
     register_quest_items(FELIM_LIZARDMAN_HEAD, VENOMOUS_SPIDERS_LEG, TUMRAN_BUGBEAR_HEART, SHUBAINS_RECOMMENDATION)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        htmltext = "32197-06.htm"
+        html = "32197-06.htm"
       end
     when "32194-02.html"
       if qs.cond?(1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -82,24 +82,23 @@ class Quests::Q00062_PathOfTheTrooper < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created?
       if npc.id == MASTER_GWAIN
-        if player.race.kamael?
-          if player.class_id.male_soldier?
-            if player.level >= MIN_LEVEL
-              htmltext = "32197-01.htm"
+        if pc.race.kamael?
+          if pc.class_id.male_soldier?
+            if pc.level >= MIN_LEVEL
+              html = "32197-01.htm"
             else
-              htmltext = "32197-02.html"
+              html = "32197-02.html"
             end
           else
-            htmltext = "32197-03.html"
+            html = "32197-03.html"
           end
         else
-          htmltext = "32197-04.html"
+          html = "32197-04.html"
         end
       end
     elsif qs.started?
@@ -107,66 +106,66 @@ class Quests::Q00062_PathOfTheTrooper < Quest
       when MASTER_GWAIN
         case qs.cond
         when 1, 2, 3
-          htmltext = "32197-07.html"
+          html = "32197-07.html"
         when 4
-          take_items(player, SHUBAINS_RECOMMENDATION, 1)
+          take_items(pc, SHUBAINS_RECOMMENDATION, 1)
           qs.memo_state = 5
           qs.set_cond(5, true)
-          htmltext = "32197-08.html"
+          html = "32197-08.html"
         when 5
-          if !has_quest_items?(player, TUMRAN_BUGBEAR_HEART)
-            htmltext = "32197-09.html"
+          if !has_quest_items?(pc, TUMRAN_BUGBEAR_HEART)
+            html = "32197-09.html"
           else
-            give_adena(player, 163800, true)
-            take_items(player, TUMRAN_BUGBEAR_HEART, 1)
-            give_items(player, GWAINS_RECOMMENDATION, 1)
-            level = player.level
+            give_adena(pc, 163800, true)
+            take_items(pc, TUMRAN_BUGBEAR_HEART, 1)
+            give_items(pc, GWAINS_RECOMMENDATION, 1)
+            level = pc.level
             if level >= 20
-              add_exp_and_sp(player, 320534, 20848)
+              add_exp_and_sp(pc, 320534, 20848)
             elsif level == 19
-              add_exp_and_sp(player, 456128, 27546)
+              add_exp_and_sp(pc, 456128, 27546)
             else
-              add_exp_and_sp(player, 591724, 34244)
+              add_exp_and_sp(pc, 591724, 34244)
             end
             qs.exit_quest(false, true)
-            player.send_packet(SocialAction.new(player.l2id, 3))
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
             qs.save_global_quest_var("1ClassQuestFinished", "1")
-            htmltext = "32197-10.html"
+            html = "32197-10.html"
           end
         end
       when MASTER_SHUBAIN
         case qs.cond
         when 1
-          htmltext = "32194-01.html"
+          html = "32194-01.html"
         when 2
-          if get_quest_items_count(player, FELIM_LIZARDMAN_HEAD) < 5
-            htmltext = "32194-03.html"
+          if get_quest_items_count(pc, FELIM_LIZARDMAN_HEAD) < 5
+            html = "32194-03.html"
           else
-            take_items(player, FELIM_LIZARDMAN_HEAD, -1)
+            take_items(pc, FELIM_LIZARDMAN_HEAD, -1)
             qs.memo_state = 3
             qs.set_cond(3, true)
-            htmltext = "32194-04.html"
+            html = "32194-04.html"
           end
         when 3
-          if get_quest_items_count(player, VENOMOUS_SPIDERS_LEG) < 10
-            htmltext = "32194-05.html"
+          if get_quest_items_count(pc, VENOMOUS_SPIDERS_LEG) < 10
+            html = "32194-05.html"
           else
-            take_items(player, VENOMOUS_SPIDERS_LEG, -1)
-            give_items(player, SHUBAINS_RECOMMENDATION, 1)
+            take_items(pc, VENOMOUS_SPIDERS_LEG, -1)
+            give_items(pc, SHUBAINS_RECOMMENDATION, 1)
             qs.memo_state = 4
             qs.set_cond(4, true)
-            htmltext = "32194-06.html"
+            html = "32194-06.html"
           end
         when 4
-          htmltext = "32194-07.html"
+          html = "32194-07.html"
         end
       end
     elsif qs.completed?
       if npc.id == MASTER_GWAIN
-        htmltext = "32197-05.html"
+        html = "32197-05.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

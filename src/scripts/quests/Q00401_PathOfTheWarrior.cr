@@ -1,4 +1,4 @@
-class Quests::Q00401_PathOfTheWarrior < Quest
+class Scripts::Q00401_PathOfTheWarrior < Quest
   # NPCs
 	private MASTER_AURON = 30010
 	private TRADER_SIMPLON = 30253
@@ -143,24 +143,24 @@ class Quests::Q00401_PathOfTheWarrior < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    htmltext = get_no_quest_msg(pc)
+    html = get_no_quest_msg(pc)
 
     if qs.created? || qs.completed?
       if npc.id == MASTER_AURON
-        htmltext = "30010-01.htm"
+        html = "30010-01.htm"
       end
     elsif qs.started?
       case npc.id
       when MASTER_AURON
         if has_quest_items?(pc, AURONS_LETTER)
-          htmltext = "30010-07.html"
+          html = "30010-07.html"
         elsif has_quest_items?(pc, WARRIOR_GUILD_MARK)
-          htmltext = "30010-08.html"
+          html = "30010-08.html"
         elsif has_quest_items?(pc, SIMPLONS_LETTER, RUSTED_BRONZE_SWORD2) && !has_at_least_one_quest_item?(pc, WARRIOR_GUILD_MARK, AURONS_LETTER)
-          htmltext = "30010-09.html"
+          html = "30010-09.html"
         elsif has_quest_items?(pc, RUSTED_BRONZE_SWORD3) && !has_at_least_one_quest_item?(pc, WARRIOR_GUILD_MARK, AURONS_LETTER)
           if get_quest_items_count(pc, VENOMOUS_SPIDERS_LEG) < 20
-            htmltext = "30010-12.html"
+            html = "30010-12.html"
           else
             give_adena(pc, 163_800, true)
             give_items(pc, MEDALLION_OF_WARRIOR, 1)
@@ -174,32 +174,32 @@ class Quests::Q00401_PathOfTheWarrior < Quest
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             qs.save_global_quest_var("1ClassQuestFinished", "1")
-            htmltext = "30010-13.html"
+            html = "30010-13.html"
           end
         end
       when TRADER_SIMPLON
         if has_quest_items?(pc, AURONS_LETTER)
-          htmltext = "30253-01.html"
+          html = "30253-01.html"
         elsif has_quest_items?(pc, WARRIOR_GUILD_MARK)
           if !has_quest_items?(pc, RUSTED_BRONZE_SWORD1)
-            htmltext = "30253-03.html"
+            html = "30253-03.html"
           elsif get_quest_items_count(pc, RUSTED_BRONZE_SWORD1) < 10
-            htmltext = "30253-04.html"
+            html = "30253-04.html"
           else
             take_items(pc, WARRIOR_GUILD_MARK, 1)
             take_items(pc, RUSTED_BRONZE_SWORD1, -1)
             give_items(pc, RUSTED_BRONZE_SWORD2, 1)
             give_items(pc, SIMPLONS_LETTER, 1)
             qs.set_cond(4, true)
-            htmltext = "30253-05.html"
+            html = "30253-05.html"
           end
         elsif has_quest_items?(pc, SIMPLONS_LETTER)
-          htmltext = "30253-06.html"
+          html = "30253-06.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 
   private def check_weapon(pc)

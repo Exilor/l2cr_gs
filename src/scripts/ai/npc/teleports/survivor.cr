@@ -1,4 +1,4 @@
-class NpcAI::Survivor < AbstractNpcAI
+class Scripts::Survivor < AbstractNpcAI
   private SURVIVOR = 32632
   private MIN_LEVEL = 75
   private TELEPORT = Location.new(-149406, 255247, -80)

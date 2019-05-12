@@ -1,4 +1,4 @@
-class NpcAI::TowerOfInfinitum < AbstractNpcAI
+class Scripts::TowerOfInfinitum < AbstractNpcAI
   # NPCs
   private JERIAN = 32302
   private GK_FIRST = 32745
@@ -55,7 +55,7 @@ class NpcAI::TowerOfInfinitum < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    htmltext = event
+    html = event
     npc = npc.not_nil!
     pc = pc.not_nil!
     npc_id = npc.id
@@ -72,21 +72,21 @@ class NpcAI::TowerOfInfinitum < AbstractNpcAI
           party.members.each do |m|
             m.tele_to_location(ENTER_LOCATION, true)
           end
-          htmltext = nil
+          html = nil
         else
-          htmltext = "32302-02a.htm"
+          html = "32302-02a.htm"
         end
       else
-        htmltext = "32302-02b.htm"
+        html = "32302-02b.htm"
       end
     elsif (event.casecmp?("up") || event.casecmp?("down")) && npc_id >= GK_FIRST && npc_id <= GK_LAST
       direction = event.casecmp?("up") ? 0 : 1
       party = pc.party?
 
       if party.nil?
-        htmltext = "gk-noparty.htm"
+        html = "gk-noparty.htm"
       elsif !party.leader?(pc)
-        htmltext = "gk-noreq.htm"
+        html = "gk-noreq.htm"
       else
         party.members.each do |m|
           if !Util.in_range?(1000, m, npc, false) || (m.z - npc.z).abs > 100
@@ -100,10 +100,10 @@ class NpcAI::TowerOfInfinitum < AbstractNpcAI
             m.tele_to_location(tele, true)
           end
         end
-        htmltext = nil
+        html = nil
       end
     end
 
-    htmltext
+    html
   end
 end

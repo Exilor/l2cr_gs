@@ -1,4 +1,4 @@
-class Quests::Q00007_ATripBegins < Quest
+class Scripts::Q00007_ATripBegins < Quest
   # NPCs
 	private MIRABEL = 30146
 	private ARIEL = 30148

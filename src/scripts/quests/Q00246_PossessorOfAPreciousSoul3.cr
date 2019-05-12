@@ -1,4 +1,4 @@
-class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
+class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
   # NPCs
   private LADD = 30721
   private CARADINE = 31740
@@ -33,16 +33,18 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
     add_talk_id(LADD, CARADINE, OSSIAN)
     add_kill_id(PILGRIM_OF_SPLENDOR, JUDGE_OF_SPLENDOR, BARAKIEL)
     add_kill_id(MOBS)
-    register_quest_items(WATERBINDER, EVERGREEN, FRAGMENTS, RAIN_SONG, RELIC_BOX)
+    register_quest_items(
+      WATERBINDER, EVERGREEN, FRAGMENTS, RAIN_SONG, RELIC_BOX
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    unless player.subclass_active?
+    unless pc.subclass_active?
       return "no_sub.html"
     end
 
@@ -85,10 +87,10 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
     event
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     case npc.id
     when PILGRIM_OF_SPLENDOR
-      if m = get_random_party_member(player, "awaitsWaterbinder", "1")
+      if m = get_random_party_member(pc, "awaitsWaterbinder", "1")
         st = get_quest_state(m, false).not_nil!
         chance = rand(100)
         if st.cond?(2) && !st.has_quest_items?(WATERBINDER)
@@ -104,7 +106,7 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
         end
       end
     when JUDGE_OF_SPLENDOR
-      if m = get_random_party_member(player, "awaitsEvergreen", "1")
+      if m = get_random_party_member(pc, "awaitsEvergreen", "1")
         st = get_quest_state(m, false).not_nil!
         chance = rand(100)
         if st.cond?(2) && !st.has_quest_items?(EVERGREEN)
@@ -120,7 +122,7 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
         end
       end
     when BARAKIEL
-      if (party = player.party?) && !party.members.empty?
+      if (party = pc.party?) && !party.members.empty?
         party.members.each do |member|
           if pst = get_quest_state(member, false)
             if pst.cond?(4) && !pst.has_quest_items?(RAIN_SONG)
@@ -130,7 +132,7 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
           end
         end
       else
-        if pst = get_quest_state(player, false)
+        if pst = get_quest_state(pc, false)
           if pst.cond?(4) && !pst.has_quest_items?(RAIN_SONG)
             pst.give_items(RAIN_SONG, 1)
             pst.set_cond(5, true)
@@ -138,17 +140,19 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
         end
       end
     else
-      unless st = get_quest_state(player, false)
+      unless st = get_quest_state(pc, false)
         return super
       end
 
-      if MOBS.includes?(npc.id) && st.get_quest_items_count(FRAGMENTS) < 100 && st.cond?(4)
-        if rand(100) < CHANCE_FOR_DROP_FRAGMENTS
-          st.give_items(FRAGMENTS, 1)
-          if st.get_quest_items_count(FRAGMENTS) < 100
-            st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
-          else
-            st.set_cond(5, true)
+      if MOBS.includes?(npc.id) && st.get_quest_items_count(FRAGMENTS) < 100
+        if st.cond?(4)
+          if rand(100) < CHANCE_FOR_DROP_FRAGMENTS
+            st.give_items(FRAGMENTS, 1)
+            if st.get_quest_items_count(FRAGMENTS) < 100
+              st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
+            else
+              st.set_cond(5, true)
+            end
           end
         end
       end
@@ -157,9 +161,9 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    if st.started? && !player.subclass_active?
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    if st.started? && !pc.subclass_active?
       return "no_sub.html"
     end
 
@@ -167,7 +171,7 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
     when CARADINE
       case st.state
       when State::CREATED
-        if player.level >= 65 && player.quest_completed?(Q00242_PossessorOfAPreciousSoul2.simple_name)
+        if pc.level >= 65 && pc.quest_completed?(Q00242_PossessorOfAPreciousSoul2.simple_name)
           html = "31740-1.htm"
         else
           html = "31740-2.html"
@@ -208,10 +212,10 @@ class Quests::Q00246_PossessorOfAPreciousSoul3 < Quest
           html = "30721-1.html"
         end
       when State::COMPLETED
-        html = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

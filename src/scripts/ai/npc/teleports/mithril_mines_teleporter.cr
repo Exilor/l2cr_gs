@@ -1,4 +1,4 @@
-class NpcAI::MithrilMinesTeleporter < AbstractNpcAI
+class Scripts::MithrilMinesTeleporter < AbstractNpcAI
   # NPC
   private TELEPORT_CRYSTAL = 32652
   # Location

@@ -2,12 +2,12 @@ class Packets::Incoming::AuthLogin < GameClientPacket
   @account = ""
   @pk_2, @pk_1, @lk_1, @lk_2 = 0, 0, 0, 0
 
-  def read_impl
+  private def read_impl
     @account = s.downcase
     @pk_2, @pk_1, @lk_1, @lk_2 = d, d, d, d
   end
 
-  def run_impl
+  private def run_impl
     if @account.empty? || !client.protocol_ok?
       client.close
       return

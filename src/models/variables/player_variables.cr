@@ -10,7 +10,7 @@ class PlayerVariables < AbstractVariables
     restore_me
   end
 
-  def restore_me
+  def restore_me : Bool
     GameDB.each(SELECT_QUERY, @l2id) do |rs|
       var = rs.get_string("var")
       val = rs.get_string("val")
@@ -26,7 +26,7 @@ class PlayerVariables < AbstractVariables
     compare_and_set_changes(true, false)
   end
 
-  def store_me
+  def store_me : Bool
     return false unless has_changes?
 
     GameDB.transaction do |tr|

@@ -1,6 +1,6 @@
 require "../../../models/holders/item_chance_holder"
 
-class Quests::Q00403_PathOfTheRogue < Quest
+class Scripts::Q00403_PathOfTheRogue < Quest
   # NPCs
 	private CAPTAIN_BEZIQUE = 30379
 	private NETI = 30425
@@ -167,11 +167,10 @@ class Quests::Q00403_PathOfTheRogue < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    htmltext = get_no_quest_msg(pc)
 
     if qs.created? || qs.completed?
       if npc.id == CAPTAIN_BEZIQUE
-        htmltext = "30379-01.htm"
+        html = "30379-01.htm"
       end
     elsif qs.started?
       case npc.id
@@ -199,39 +198,39 @@ class Quests::Q00403_PathOfTheRogue < Quest
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           qs.save_global_quest_var("1ClassQuestFinished", "1")
-          htmltext = "30379-09.html"
+          html = "30379-09.html"
         elsif !has_quest_items?(pc, HORSESHOE_OF_LIGHT) && has_quest_items?(pc, BEZIQUES_LETTER)
-					htmltext = "30379-07.html"
+					html = "30379-07.html"
         elsif has_quest_items?(pc, HORSESHOE_OF_LIGHT)
 					take_items(pc, HORSESHOE_OF_LIGHT, 1)
 					give_items(pc, MOST_WANTED_LIST, 1)
 					qs.set_cond(5, true)
-					htmltext = "30379-08.html"
+					html = "30379-08.html"
         elsif has_quest_items?(pc, NETIS_BOW, NETIS_DAGGER) && !has_quest_items?(pc, MOST_WANTED_LIST)
-					htmltext = "30379-10.html"
+					html = "30379-10.html"
         elsif has_quest_items?(pc, MOST_WANTED_LIST)
-					htmltext = "30379-11.html"
+					html = "30379-11.html"
         end
       when NETI
         if has_quest_items?(pc, BEZIQUES_LETTER)
-          htmltext = "30425-01.html"
+          html = "30425-01.html"
         elsif !has_at_least_one_quest_item?(pc, HORSESHOE_OF_LIGHT, BEZIQUES_LETTER)
           if has_quest_items?(pc, MOST_WANTED_LIST)
-            htmltext = "30425-08.html"
+            html = "30425-08.html"
           elsif get_quest_items_count(pc, SPARTOIS_BONES) < REQUIRED_ITEM_COUNT
-            htmltext = "30425-06.html"
+            html = "30425-06.html"
           else
             take_items(pc, SPARTOIS_BONES, REQUIRED_ITEM_COUNT)
             give_items(pc, HORSESHOE_OF_LIGHT, 1)
             qs.set_cond(4, true)
-            htmltext = "30425-07.html"
+            html = "30425-07.html"
           end
         elsif has_quest_items?(pc, HORSESHOE_OF_LIGHT)
-          htmltext = "30425-08.html"
+          html = "30425-08.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

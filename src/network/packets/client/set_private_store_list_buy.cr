@@ -3,7 +3,7 @@ class Packets::Incoming::SetPrivateStoreListBuy < GameClientPacket
 
   @items : Array(Item)?
 
-  def read_impl
+  private def read_impl
     count = d
     if count < 1 || count > Config.max_item_in_packet || count * BATCH_LENGTH != buffer.remaining
       return
@@ -27,7 +27,7 @@ class Packets::Incoming::SetPrivateStoreListBuy < GameClientPacket
     @items = items
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless _items = @items

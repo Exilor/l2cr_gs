@@ -1,4 +1,4 @@
-class Quests::Q00338_AlligatorHunter < Quest
+class Scripts::Q00338_AlligatorHunter < Quest
   # NPC
   private ENVERUN = 30892
   # Monster

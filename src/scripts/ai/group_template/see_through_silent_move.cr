@@ -1,4 +1,4 @@
-class NpcAI::SeeThroughSilentMove < AbstractNpcAI
+class Scripts::SeeThroughSilentMove < AbstractNpcAI
   private MONSTERS = {
     18001, 18002, 22199, 22215, 22216, 22217, 22327, 22746, 22747, 22748,
     22749, 22750, 22751, 22752, 22753, 22754, 22755, 22756, 22757, 22758,

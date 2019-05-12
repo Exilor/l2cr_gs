@@ -1,4 +1,4 @@
-class NpcAI::DemonPrince < AbstractNpcAI
+class Scripts::DemonPrince < AbstractNpcAI
   # NPCs
   private DEMON_PRINCE = 25540
   private FIEND = 25541

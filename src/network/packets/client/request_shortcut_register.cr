@@ -8,7 +8,7 @@ class Packets::Incoming::RequestShortcutRegister < GameClientPacket
   @level = 0
   @character_type = 0
 
-  def read_impl
+  private def read_impl
     type_id = d.clamp(1, 6)
     @type = ShortcutType[type_id]
     slot = d
@@ -19,7 +19,7 @@ class Packets::Incoming::RequestShortcutRegister < GameClientPacket
     @character_type = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless 0 <= @page <= 10
 

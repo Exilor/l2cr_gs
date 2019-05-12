@@ -1,4 +1,4 @@
-class Quests::Q00110_ToThePrimevalIsle < Quest
+class Scripts::Q00110_ToThePrimevalIsle < Quest
   # NPCs
   private ANTON = 31338
   private MARQUEZ = 32113
@@ -13,10 +13,10 @@ class Quests::Q00110_ToThePrimevalIsle < Quest
     register_quest_items(ANCIENT_BOOK)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
@@ -32,24 +32,24 @@ class Quests::Q00110_ToThePrimevalIsle < Quest
     event
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case npc.id
     when ANTON
       case st.state
       when State::CREATED
-        htmltext = player.level < 75 ? "31338-0a.htm" : "31338-0b.htm"
+        html = pc.level < 75 ? "31338-0a.htm" : "31338-0b.htm"
       when State::STARTED
-        htmltext = "31338-1a.html"
+        html = "31338-1a.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when MARQUEZ
       if st.cond?(1)
-        htmltext = "32113-1.html"
+        html = "32113-1.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

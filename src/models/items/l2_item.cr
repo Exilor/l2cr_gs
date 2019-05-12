@@ -134,8 +134,8 @@ abstract class L2Item < ListenersContainer
     @shared_reuse_group = set.get_i32("shared_reuse_group", 0)
 
     @common = @item_id >= 11605 && @item_id <= 12361
-    @hero_item = ((@item_id >= 6611) && (@item_id <= 6621)) || ((@item_id >= 9388) && (@item_id <= 9390)) || (@item_id == 6842)
-    @pvp_item = ((@item_id >= 10667) && (@item_id <= 10835)) || ((@item_id >= 12852) && (@item_id <= 12977)) || ((@item_id >= 14363) && (@item_id <= 14525)) || (@item_id == 14528) || (@item_id == 14529) || (@item_id == 14558) || ((@item_id >= 15913) && (@item_id <= 16024)) || ((@item_id >= 16134) && (@item_id <= 16147)) || (@item_id == 16149) || (@item_id == 16151) || (@item_id == 16153) || (@item_id == 16155) || (@item_id == 16157) || (@item_id == 16159) || ((@item_id >= 16168) && (@item_id <= 16176)) || ((@item_id >= 16179) && (@item_id <= 16220))
+    @hero_item = (@item_id >= 6611 && @item_id <= 6621) || (@item_id >= 9388 && @item_id <= 9390) || @item_id == 6842
+    @pvp_item = (@item_id >= 10667 && @item_id <= 10835) || (@item_id >= 12852 && @item_id <= 12977) || (@item_id >= 14363 && @item_id <= 14525) || @item_id == 14528 || @item_id == 14529 || @item_id == 14558 || (@item_id >= 15913 && @item_id <= 16024) || (@item_id >= 16134 && @item_id <= 16147) || @item_id == 16149 || @item_id == 16151 || @item_id == 16153 || @item_id == 16155 || @item_id == 16157 || @item_id == 16159 || (@item_id >= 16168 && @item_id <= 16176) || (@item_id >= 16179 && @item_id <= 16220)
 
     skills = set.get_string("item_skill", nil)
     unless skills.nil? || skills.empty?
@@ -223,7 +223,6 @@ abstract class L2Item < ListenersContainer
     if elm = get_elemental(element.element)
       elm.value = element.value
     else
-      # debug "Adding element: #{element.inspect}."
       (@elementals ||= [] of Elementals) << element
     end
   end
@@ -380,4 +379,6 @@ abstract class L2Item < ListenersContainer
   def to_s(io : IO)
     io << {{@type.stringify + "("}} << @name << ')'
   end
+
+  abstract def item_type : ItemType
 end

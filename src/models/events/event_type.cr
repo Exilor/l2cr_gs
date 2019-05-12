@@ -5,7 +5,7 @@ require "./event_dispatcher"
 class EventType < EnumClass
   getter event_class, return_class
 
-  def initialize(@event_class : (BaseEvent.class)? = nil, @return_class : (AbstractEventReturn.class)? = nil)
+  protected def initialize(@event_class : (BaseEvent.class)? = nil, @return_class : (AbstractEventReturn.class)? = nil)
   end
 
   private macro def_event(name, event_class = nil, return_class = nil, &block)

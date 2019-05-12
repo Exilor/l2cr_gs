@@ -1,4 +1,4 @@
-class NpcAI::KamaelChange2 < AbstractNpcAI
+class Scripts::KamaelChange2 < AbstractNpcAI
   # NPCs
   private NPCS_MALE = {
     32146, # Valpor

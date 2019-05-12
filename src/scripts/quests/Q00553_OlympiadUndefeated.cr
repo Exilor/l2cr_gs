@@ -1,4 +1,4 @@
-class Quests::Q00553_OlympiadUndefeated < Quest
+class Scripts::Q00553_OlympiadUndefeated < Quest
   # NPC
   private MANAGER = 31688
   # Items

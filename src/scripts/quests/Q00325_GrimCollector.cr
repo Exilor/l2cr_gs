@@ -1,4 +1,4 @@
-class Quests::Q00325_GrimCollector < Quest
+class Scripts::Q00325_GrimCollector < Quest
   # NPCs
   private GUARD_CURTIS = 30336
   private VARSAK = 30342
@@ -18,64 +18,64 @@ class Quests::Q00325_GrimCollector < Quest
   private MIN_LEVEL = 15
   # Monsters
   private MONSTER_DROPS = {
-    20026 => [
+    20026 => {
       QuestItemHolder.new(ZOMBIE_HEAD, 30),
       QuestItemHolder.new(ZOMBIE_HEART, 50),
       QuestItemHolder.new(ZOMBIE_LIVER, 75)
-    ],
-    20029 => [
+    },
+    20029 => {
       QuestItemHolder.new(ZOMBIE_HEAD, 30),
       QuestItemHolder.new(ZOMBIE_HEART, 52),
       QuestItemHolder.new(ZOMBIE_LIVER, 75)
-    ],
-    20035 => [
+    },
+    20035 => {
       QuestItemHolder.new(SKULL, 5),
       QuestItemHolder.new(RIB_BONE, 15),
       QuestItemHolder.new(SPINE, 29),
       QuestItemHolder.new(THIGH_BONE, 79)
-    ],
-    20042 => [
+    },
+    20042 => {
       QuestItemHolder.new(SKULL, 6),
       QuestItemHolder.new(RIB_BONE, 19),
       QuestItemHolder.new(ARM_BONE, 69),
       QuestItemHolder.new(THIGH_BONE, 86)
-    ],
-    20045 => [
+    },
+    20045 => {
       QuestItemHolder.new(SKULL, 9),
       QuestItemHolder.new(SPINE, 59),
       QuestItemHolder.new(ARM_BONE, 77),
       QuestItemHolder.new(THIGH_BONE, 97)
-    ],
-    20051 => [
+    },
+    20051 => {
       QuestItemHolder.new(SKULL, 9),
       QuestItemHolder.new(RIB_BONE, 59),
       QuestItemHolder.new(SPINE, 79),
       QuestItemHolder.new(ARM_BONE, 100)
-    ],
-    20457 => [
+    },
+    20457 => {
       QuestItemHolder.new(ZOMBIE_HEAD, 40),
       QuestItemHolder.new(ZOMBIE_HEART, 60),
       QuestItemHolder.new(ZOMBIE_LIVER, 80)
-    ],
-    20458 => [
+    },
+    20458 => {
       QuestItemHolder.new(ZOMBIE_HEAD, 40),
       QuestItemHolder.new(ZOMBIE_HEART, 70),
       QuestItemHolder.new(ZOMBIE_LIVER, 100)
-    ],
-    20514 => [
+    },
+    20514 => {
       QuestItemHolder.new(SKULL, 6),
       QuestItemHolder.new(RIB_BONE, 21),
       QuestItemHolder.new(SPINE, 30),
       QuestItemHolder.new(ARM_BONE, 31),
       QuestItemHolder.new(THIGH_BONE, 64)
-    ],
-    20515 => [
+    },
+    20515 => {
       QuestItemHolder.new(SKULL, 5),
       QuestItemHolder.new(RIB_BONE, 20),
       QuestItemHolder.new(SPINE, 31),
       QuestItemHolder.new(ARM_BONE, 33),
       QuestItemHolder.new(THIGH_BONE, 69)
-    ]
+    }
   }
 
   private SKELETON_PARTS = {SPINE, ARM_BONE, SKULL, RIB_BONE, THIGH_BONE}
@@ -86,40 +86,42 @@ class Quests::Q00325_GrimCollector < Quest
     add_start_npc(GUARD_CURTIS)
     add_talk_id(GUARD_CURTIS, VARSAK, SAMED)
     add_kill_id(MONSTER_DROPS.keys)
-    register_quest_items(ANATOMY_DIAGRAM, ZOMBIE_HEAD, ZOMBIE_HEART, ZOMBIE_LIVER, SKULL, RIB_BONE, SPINE, ARM_BONE, THIGH_BONE, COMPLETE_SKELETON)
+    register_quest_items(
+      ANATOMY_DIAGRAM, ZOMBIE_HEAD, ZOMBIE_HEART, ZOMBIE_LIVER, SKULL, RIB_BONE,
+      SPINE, ARM_BONE, THIGH_BONE, COMPLETE_SKELETON
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "30336-03.htm"
       if st.created?
         st.start_quest
-        htmltext = event
+        html = event
       end
     when "assembleSkeleton"
-      if !has_quest_items?(player, SPINE, ARM_BONE, SKULL, RIB_BONE, THIGH_BONE)
-        htmltext = "30342-02.html"
+      if !has_quest_items?(pc, SPINE, ARM_BONE, SKULL, RIB_BONE, THIGH_BONE)
+        html = "30342-02.html"
       else
-        take_items(player, 1, SKELETON_PARTS)
-
+        take_items(pc, 1, SKELETON_PARTS)
         if Rnd.rand(5) < 4
-          give_items(player, COMPLETE_SKELETON, 1)
-          htmltext = "30342-03.html"
+          give_items(pc, COMPLETE_SKELETON, 1)
+          html = "30342-03.html"
         else
-          htmltext = "30342-04.html"
+          html = "30342-04.html"
         end
       end
     when "30434-02.htm"
-      htmltext = event
+      html = event
     when "30434-03.html"
       st.give_items(ANATOMY_DIAGRAM, 1)
-      htmltext = event
+      html = event
     when "30434-06.html", "30434-07.html"
-      # if has_quest_items?(player, registered_item_ids) # original L2J
-      if has_at_least_one_quest_item?(player, registered_item_ids) # custom
+      # if has_quest_items?(pc, registered_item_ids) # original L2J
+      if has_at_least_one_quest_item?(pc, registered_item_ids) # custom
         head = st.get_quest_items_count(ZOMBIE_HEAD).to_i64
         heart = st.get_quest_items_count(ZOMBIE_HEART).to_i64
         liver = st.get_quest_items_count(ZOMBIE_LIVER).to_i64
@@ -132,7 +134,8 @@ class Quests::Q00325_GrimCollector < Quest
         total_count = head + heart + liver + skull + rib + spine + arm + thigh + complete
         debug "total count: #{total_count}"
         if total_count > 0
-          sum = (head * 30) + (heart * 20) + (liver * 20) + (skull * 100) + (rib * 40) + (spine * 14) + (arm * 14) + (thigh * 14)
+          sum = (head * 30) + (heart * 20) + (liver * 20) + (skull * 100)
+          sum += (rib * 40) + (spine * 14) + (arm * 14) + (thigh * 14)
 
           if total_count >= 10
             sum += 1629
@@ -145,14 +148,14 @@ class Quests::Q00325_GrimCollector < Quest
           st.give_adena(sum, true)
         end
 
-        take_items(player, -1, registered_item_ids)
+        take_items(pc, -1, registered_item_ids)
       end
 
       if event == "30434-06.html"
         st.exit_quest(true, true)
       end
 
-      htmltext = event
+      html = event
     when "30434-09.html"
       complete = st.get_quest_items_count(COMPLETE_SKELETON)
       if complete > 0
@@ -161,7 +164,7 @@ class Quests::Q00325_GrimCollector < Quest
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -171,7 +174,11 @@ class Quests::Q00325_GrimCollector < Quest
       return super
     end
 
-    if !Util.in_range?(1500, killer, npc, true) || !qs.has_quest_items?(ANATOMY_DIAGRAM)
+    unless Util.in_range?(1500, killer, npc, true)
+      return super
+    end
+
+    unless qs.has_quest_items?(ANATOMY_DIAGRAM)
       return super
     end
 
@@ -187,37 +194,40 @@ class Quests::Q00325_GrimCollector < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
     st = get_quest_state!(pc)
 
     case npc.id
     when GUARD_CURTIS
       case st.state
       when State::CREATED
-        htmltext = pc.level >= MIN_LEVEL ? "30336-02.htm" : "30336-01.htm"
+        html = pc.level >= MIN_LEVEL ? "30336-02.htm" : "30336-01.htm"
       when State::STARTED
-        htmltext = st.has_quest_items?(ANATOMY_DIAGRAM) ? "30336-05.html" : "30336-04.html"
+        if st.has_quest_items?(ANATOMY_DIAGRAM)
+          html = "30336-05.html"
+        else
+          html = "30336-04.html"
+        end
       end
     when VARSAK
       if st.started? && st.has_quest_items?(ANATOMY_DIAGRAM)
-        htmltext = "30342-01.html"
+        html = "30342-01.html"
       end
     when SAMED
       if st.started?
         if !st.has_quest_items?(ANATOMY_DIAGRAM)
-          htmltext = "30434-01.html"
+          html = "30434-01.html"
         else
           if !has_at_least_one_quest_item?(pc, registered_item_ids)
-            htmltext = "30434-04.html"
+            html = "30434-04.html"
           elsif !st.has_quest_items?(COMPLETE_SKELETON)
-            htmltext = "30434-05.html"
+            html = "30434-05.html"
           else
-            htmltext = "30434-08.html"
+            html = "30434-08.html"
           end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

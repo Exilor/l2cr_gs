@@ -1,4 +1,4 @@
-class Quests::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
+class Scripts::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
   # NPCs
   private OFULLE = 31572
   private KIKI = 31442
@@ -15,11 +15,11 @@ class Quests::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
     register_quest_items(KIKIS_LETTER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    unless st = get_quest_state(player, false)
-      return htmltext
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    unless st = get_quest_state(pc, false)
+      return html
     end
 
     case event
@@ -30,32 +30,31 @@ class Quests::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
         st.give_items(KIKIS_LETTER, 1)
         st.take_items(YELLOW_TREASURE_BOX, -1)
         st.set_cond(2, true)
-        htmltext = "31572-07.htm"
+        html = "31572-07.htm"
       end
     when "31442-03.htm"
       if st.cond?(2) && st.has_quest_items?(KIKIS_LETTER)
         st.give_items(ELVEN_RING, 1)
         st.exit_quest(false, true)
-        htmltext = "31442-02.htm"
+        html = "31442-02.htm"
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     npc_id = npc.id
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
       if npc_id == OFULLE
-        if player.level >= 36 && player.quest_completed?(Q00051_OFullesSpecialBait.simple_name)
-          htmltext =  "31572-01.htm"
+        if pc.level >= 36 && pc.quest_completed?(Q00051_OFullesSpecialBait.simple_name)
+          html = "31572-01.htm"
         else
-          htmltext = "31572-02.htm"
+          html = "31572-02.htm"
         end
       end
     when State::STARTED
@@ -63,20 +62,20 @@ class Quests::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
       when OFULLE
         case st.cond
         when 1
-          htmltext = "31572-06.htm"
+          html = "31572-06.htm"
           if st.has_quest_items?(YELLOW_TREASURE_BOX)
-            htmltext = "31572-05.htm"
+            html = "31572-05.htm"
           end
         when 2
-          htmltext = "31572-09.htm"
+          html = "31572-09.htm"
         end
       when KIKI
         if st.cond?(2)
-          htmltext = "31442-01.htm"
+          html = "31442-01.htm"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

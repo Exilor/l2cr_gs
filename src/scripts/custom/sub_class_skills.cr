@@ -1,4 +1,4 @@
-class NpcAI::SubClassSkills < Quest
+class Scripts::SubClassSkills < Quest
   private ALL_CERT_SKILL_IDS = {
     631, 632, 633, 634, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646,
     647, 648, 650, 651, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661,

@@ -1,4 +1,4 @@
-class NpcAI::PolymorphingAngel < AbstractNpcAI
+class Scripts::PolymorphingAngel < AbstractNpcAI
   private ANGELS = {
     20830 => 20859,
     21067 => 21068,

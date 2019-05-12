@@ -1,4 +1,4 @@
-class NpcAI::SelMahumSquad < AbstractNpcAI
+class Scripts::SelMahumSquad < AbstractNpcAI
   # NPC"s
   private CHEF  = 18908
   private FIRE  = 18927

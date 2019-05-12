@@ -1,4 +1,4 @@
-class Quests::Q00038_DragonFangs < Quest
+class Scripts::Q00038_DragonFangs < Quest
   # NPCs
   private IRIS = 30034
   private MAGISTER_ROHMER = 30344
@@ -36,87 +36,87 @@ class Quests::Q00038_DragonFangs < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "30386-03.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30386-06.html"
       if qs.cond?(2)
-        if has_item?(player, FEATHER)
+        if has_item?(pc, FEATHER)
           qs.set_cond(3, true)
-          take_item(player, FEATHER)
-          give_items(player, TOTEM_TOOTH_1ST, 1)
-          htmltext = event
+          take_item(pc, FEATHER)
+          give_items(pc, TOTEM_TOOTH_1ST, 1)
+          html = event
         else
-          htmltext = "30386-07.html"
+          html = "30386-07.html"
         end
       end
 
     when "30034-02.html"
       if qs.cond?(3)
-        if has_quest_items?(player, TOTEM_TOOTH_1ST)
+        if has_quest_items?(pc, TOTEM_TOOTH_1ST)
           qs.set_cond(4, true)
-          take_items(player, TOTEM_TOOTH_1ST, 1)
-          give_items(player, LETTER_1ST, 1)
-          htmltext = event
+          take_items(pc, TOTEM_TOOTH_1ST, 1)
+          give_items(pc, LETTER_1ST, 1)
+          html = event
         else
-          htmltext = "30034-03.html"
+          html = "30034-03.html"
         end
       end
     when "30034-06.html"
       if qs.cond?(5)
-        if has_quest_items?(player, LETTER_2ND)
+        if has_quest_items?(pc, LETTER_2ND)
           qs.set_cond(6, true)
-          take_items(player, LETTER_2ND, 1)
-          htmltext = event
+          take_items(pc, LETTER_2ND, 1)
+          html = event
         else
-          htmltext = "30034-07.html"
+          html = "30034-07.html"
         end
       end
     when "30034-10.html"
       if qs.cond?(7)
-        if has_item?(player, TOTEM_TOOTH_2ND)
-          add_exp_and_sp(player, 435117, 23977)
+        if has_item?(pc, TOTEM_TOOTH_2ND)
+          add_exp_and_sp(pc, 435117, 23977)
           chance = Rnd.rand(1000)
           if chance < 250
-            reward_items(player, BONE_HELMET, 1)
-            give_adena(player, 5200, true)
+            reward_items(pc, BONE_HELMET, 1)
+            give_adena(pc, 5200, true)
           elsif chance < 500
-            reward_items(player, ASPIS, 1)
-            give_adena(player, 1500, true)
+            reward_items(pc, ASPIS, 1)
+            give_adena(pc, 1500, true)
           elsif chance < 750
-            reward_items(player, BLUE_BUCKSKIN_BOOTS, 1)
-            give_adena(player, 3200, true)
+            reward_items(pc, BLUE_BUCKSKIN_BOOTS, 1)
+            give_adena(pc, 3200, true)
           elsif chance < 1000
-            reward_items(player, LEATHER_GAUNTLET, 1)
-            give_adena(player, 3200, true)
+            reward_items(pc, LEATHER_GAUNTLET, 1)
+            give_adena(pc, 3200, true)
           end
           qs.exit_quest(false, true)
-          htmltext = event
+          html = event
         else
-          htmltext = "30034-11.html"
+          html = "30034-11.html"
         end
       end
     when "30344-02.html"
       if qs.cond?(4)
-        if has_quest_items?(player, LETTER_1ST)
+        if has_quest_items?(pc, LETTER_1ST)
           qs.set_cond(5, true)
-          take_items(player, LETTER_1ST, 1)
-          give_items(player, LETTER_2ND, 1)
-          htmltext = event
+          take_items(pc, LETTER_1ST, 1)
+          give_items(pc, LETTER_2ND, 1)
+          html = event
         else
-          htmltext = "30344-03.html"
+          html = "30344-03.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, talker)
@@ -126,45 +126,45 @@ class Quests::Q00038_DragonFangs < Quest
     when IRIS
       case qs.cond
       when 3
-        htmltext = "30034-01.html"
+        html = "30034-01.html"
       when 4
-        htmltext = "30034-04.html"
+        html = "30034-04.html"
       when 5
-        htmltext = "30034-05.html"
+        html = "30034-05.html"
 
       when 6
-        htmltext = "30034-09.html"
+        html = "30034-09.html"
       when 7
         if has_item?(talker, TOTEM_TOOTH_2ND)
-          htmltext = "30034-08.html"
+          html = "30034-08.html"
         end
       end
     when MAGISTER_ROHMER
       if qs.cond?(4)
-        htmltext = "30344-01.html"
+        html = "30344-01.html"
       elsif qs.cond?(5)
-        htmltext = "30344-04.html"
+        html = "30344-04.html"
       end
     when GUARD_LUIS
       if qs.created?
-        htmltext = talker.level >= MIN_LVL ? "30386-01.htm" : "30386-02.htm"
+        html = talker.level >= MIN_LVL ? "30386-01.htm" : "30386-02.htm"
       elsif qs.started?
         case qs.cond
         when 1
-          htmltext = "30386-05.html"
+          html = "30386-05.html"
         when 2
           if has_item?(talker, FEATHER)
-            htmltext = "30386-04.html"
+            html = "30386-04.html"
           end
         when 3
-          htmltext = "30386-08.html"
+          html = "30386-08.html"
         end
       elsif qs.completed?
-        htmltext = get_already_completed_msg(talker)
+        html = get_already_completed_msg(talker)
       end
     end
 
-    htmltext || get_no_quest_msg(talker)
+    html || get_no_quest_msg(talker)
   end
 
   def on_kill(npc, killer, is_summon)

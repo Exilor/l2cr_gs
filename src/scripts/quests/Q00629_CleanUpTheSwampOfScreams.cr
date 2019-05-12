@@ -1,4 +1,4 @@
-class Quests::Q00629_CleanUpTheSwampOfScreams < Quest
+class Scripts::Q00629_CleanUpTheSwampOfScreams < Quest
   # NPC
   private PIERCE = 31553
   # Items
@@ -30,39 +30,38 @@ class Quests::Q00629_CleanUpTheSwampOfScreams < Quest
     register_quest_items(TALON_OF_STAKATO, GOLDEN_RAM_COIN)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    qs = get_quest_state(player, false)
-    htmltext = nil
-    if qs.nil?
-      return htmltext
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
+      return
     end
 
     case event
     when "31553-03.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "31553-04.html", "31553-06.html"
       if qs.started?
-        htmltext = event
+        html = event
       end
     when "31553-07.html"
-      if qs.started? && get_quest_items_count(player, TALON_OF_STAKATO) >= REQUIRED_TALON_COUNT
-        reward_items(player, GOLDEN_RAM_COIN, 20)
-        take_items(player, TALON_OF_STAKATO, 100)
-        htmltext = event
+      if qs.started? && get_quest_items_count(pc, TALON_OF_STAKATO) >= REQUIRED_TALON_COUNT
+        reward_items(pc, GOLDEN_RAM_COIN, 20)
+        take_items(pc, TALON_OF_STAKATO, 100)
+        html = event
       else
-        htmltext = "31553-08.html"
+        html = "31553-08.html"
       end
     when "31553-09.html"
       if qs.started?
         qs.exit_quest(true, true)
-        htmltext = event
+        html = event
       end
     end
-    return htmltext
+
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -70,21 +69,25 @@ class Quests::Q00629_CleanUpTheSwampOfScreams < Quest
     if qs
       give_item_randomly(qs.player, npc, TALON_OF_STAKATO, 1, 0, MOBS_DROP_CHANCES[npc.id], true)
     end
-     return super
+
+    super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state(player, true)
-    htmltext = get_no_quest_msg(player)
-    if qs.nil?
-      return htmltext
+  def on_talk(npc, pc)
+    unless qs = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
     end
 
     if qs.created?
-      htmltext = player.level >= MIN_LVL ? "31553-01.htm" : "31553-02.htm"
+      html = pc.level >= MIN_LVL ? "31553-01.htm" : "31553-02.htm"
     elsif qs.started?
-      htmltext = ((get_quest_items_count(player, TALON_OF_STAKATO) >= REQUIRED_TALON_COUNT) ? "31553-04.html" : "31553-05.html")
+      if get_quest_items_count(pc, TALON_OF_STAKATO) >= REQUIRED_TALON_COUNT
+        html = "31553-04.html"
+      else
+        html = "31553-05.html"
+      end
     end
-    return htmltext
+
+    html || get_no_quest_msg(pc)
   end
 end

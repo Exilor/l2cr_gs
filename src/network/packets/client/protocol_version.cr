@@ -1,11 +1,11 @@
 class Packets::Incoming::ProtocolVersion < GameClientPacket
   @version = -1
 
-  def read_impl
+  private def read_impl
     @version = d
   end
 
-  def run_impl
+  private def run_impl
     if @version == -2
       if Config.debug
         debug "Ping received."

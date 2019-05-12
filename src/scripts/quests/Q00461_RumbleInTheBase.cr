@@ -1,4 +1,4 @@
-class Quests::Q00461_RumbleInTheBase < Quest
+class Scripts::Q00461_RumbleInTheBase < Quest
   # NPC
   private STAN = 30200
   # Items
@@ -24,9 +24,9 @@ class Quests::Q00461_RumbleInTheBase < Quest
     register_quest_items(SHINY_SALMON, SHOES_STRING_OF_SEL_MAHUM)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -38,13 +38,13 @@ class Quests::Q00461_RumbleInTheBase < Quest
     end
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     if rand(1000) >= MONSTERS[npc.id]
       return super
     end
 
     if npc.id == 18908
-      st = get_quest_state(player, false)
+      st = get_quest_state(pc, false)
       if st && st.cond?(1) && st.get_quest_items_count(SHINY_SALMON) < 5
         st.give_items(SHINY_SALMON, 1)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -53,7 +53,7 @@ class Quests::Q00461_RumbleInTheBase < Quest
         end
       end
     else
-      unless m = get_random_party_member(player, 1)
+      unless m = get_random_party_member(pc, 1)
         return super
       end
 
@@ -70,11 +70,11 @@ class Quests::Q00461_RumbleInTheBase < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::CREATED
-      if player.level >= 82 && player.quest_completed?(Q00252_ItSmellsDelicious.simple_name)
+      if pc.level >= 82 && pc.quest_completed?(Q00252_ItSmellsDelicious.simple_name)
         html = "30200-01.htm"
       else
         html = "30200-02.htm"
@@ -92,7 +92,7 @@ class Quests::Q00461_RumbleInTheBase < Quest
         html = "30200-03.htm"
       else
         st.state = State::CREATED
-        if player.level >= 82 && player.quest_completed?(Q00252_ItSmellsDelicious.simple_name)
+        if pc.level >= 82 && pc.quest_completed?(Q00252_ItSmellsDelicious.simple_name)
           html = "30200-01.htm"
         else
           html = "30200-02.htm"
@@ -100,6 +100,6 @@ class Quests::Q00461_RumbleInTheBase < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class NpcAI::Klemis < AbstractNpcAI
+class Scripts::Klemis < AbstractNpcAI
   # NPC
   private KLEMIS = 32734 # Klemis
   # Location

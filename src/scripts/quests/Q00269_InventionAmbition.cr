@@ -1,4 +1,4 @@
-class Quests::Q00269_InventionAmbition < Quest
+class Scripts::Q00269_InventionAmbition < Quest
   # NPC
   private INVENTOR_MARU = 32486
   # Items
@@ -26,24 +26,24 @@ class Quests::Q00269_InventionAmbition < Quest
     register_quest_items(ENERGY_ORE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "32486-03.htm"
-      htmltext = player.level >= MIN_LVL ? event : nil
+      html = pc.level >= MIN_LVL ? event : nil
     when "32486-04.htm"
       st.start_quest
-      htmltext = event
+      html = event
     when "32486-07.html"
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "32486-08.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -56,23 +56,23 @@ class Quests::Q00269_InventionAmbition < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+
     case st.state
     when State::CREATED
-      htmltext = player.level >= MIN_LVL ? "32486-01.htm" : "32486-02.html"
+      html = pc.level >= MIN_LVL ? "32486-01.htm" : "32486-02.html"
     when State::STARTED
       if st.has_quest_items?(ENERGY_ORE)
         count = st.get_quest_items_count(ENERGY_ORE)
         st.give_adena((count * 50) + (count >= 10 ? 2044 : 0), true)
         st.take_items(ENERGY_ORE, -1)
-        htmltext = "32486-06.html"
+        html = "32486-06.html"
       else
-        htmltext = "32486-05.html"
+        html = "32486-05.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

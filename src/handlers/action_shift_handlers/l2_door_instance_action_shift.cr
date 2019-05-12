@@ -2,10 +2,13 @@ module ActionShiftHandler::L2DoorInstanceAction
   extend self
   extend ActionShiftHandler
 
-  def action(pc, target, interact)
+  def action(pc, target, interact) : Bool
     if pc.access_level.gm?
       pc.target = target
-      door = target.unsafe_as(L2DoorInstance)
+      door = target
+      unless door.is_a?(L2DoorInstance)
+        raise "Expected #{door}:#{door.class} to be a L2DoorInstance"
+      end
       html = NpcHtmlMessage.new
 
       html.set_file(pc, "data/html/admin/doorinfo.htm")
@@ -35,7 +38,7 @@ module ActionShiftHandler::L2DoorInstanceAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2DoorInstance
   end
 end

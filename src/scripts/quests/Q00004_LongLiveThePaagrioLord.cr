@@ -1,4 +1,4 @@
-class Quests::Q00004_LongLiveThePaagrioLord < Quest
+class Scripts::Q00004_LongLiveThePaagrioLord < Quest
   # NPCs
 	private KUNAI = 30559
 	private USKA = 30560
@@ -24,11 +24,7 @@ class Quests::Q00004_LongLiveThePaagrioLord < Quest
 		add_start_npc(NAKUSIN)
 		add_talk_id(NAKUSIN, VARKEES, URUTU, HESTUI, KUNAI, USKA, GROOKIN)
 		register_quest_items(
-      HONEY_KHANDAR,
-      BEAR_FUR_CLOAK,
-      BLOODY_AXE,
-      ANCESTOR_SKULL,
-      SPIDER_DUST,
+      HONEY_KHANDAR, BEAR_FUR_CLOAK, BLOODY_AXE, ANCESTOR_SKULL, SPIDER_DUST,
       DEEP_SEA_ORB
     )
 	end

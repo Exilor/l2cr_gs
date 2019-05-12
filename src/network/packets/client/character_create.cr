@@ -15,7 +15,7 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
   @hair_color = 0i8
   @face = 0i8
 
-  def read_impl
+  private def read_impl
     @name = s
     @race = d
     @sex = d.to_i8
@@ -31,7 +31,7 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
     @face = d.to_i8
   end
 
-  def run_impl
+  private def run_impl
     debug "Request to create a character named #{@name.inspect}."
 
     if @name.size < 1 || @name.size > 16

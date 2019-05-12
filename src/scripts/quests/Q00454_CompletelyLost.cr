@@ -1,4 +1,4 @@
-class Quests::Q00454_CompletelyLost < Quest
+class Scripts::Q00454_CompletelyLost < Quest
   # NPCs
   private INJURED_SOLDIER = 32738
   private ERMIAN = 32736
@@ -17,7 +17,7 @@ class Quests::Q00454_CompletelyLost < Quest
     add_event_received_id(INJURED_SOLDIER)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
 
     case event
@@ -80,22 +80,22 @@ class Quests::Q00454_CompletelyLost < Quest
     end
 
     # For NPC-only timers, player is nil and no further checks or actions are required.
-    unless player
+    unless pc
       return
     end
 
-    unless qs = get_quest_state(player, false)
+    unless qs = get_quest_state(pc, false)
       return
     end
 
     html = nil
     case event
     when "32738-04.htm"
-      if qs.created? && qs.now_available? && player.level >= MIN_LEVEL
+      if qs.created? && qs.now_available? && pc.level >= MIN_LEVEL
         if npc.variables.get_i32("quest_escort", 0) == 0
-          npc.variables["leader"] = player
+          npc.variables["leader"] = pc
           npc.variables["quest_escort"] = 1
-          if party = player.party?
+          if party = pc.party?
             npc.variables["partyId"] = party.leader_l2id
           end
           qs.memo_state = 1
@@ -103,13 +103,13 @@ class Quests::Q00454_CompletelyLost < Quest
           html = event
         else
           leader = npc.variables.get_object("leader", L2PcInstance)
-          if leader.in_party? && leader.party.includes?(player)
+          if leader.in_party? && leader.party.includes?(pc)
             qs.start_quest
             qs.memo_state = 1
-            html = get_htm(player, "32738-04a.htm")
+            html = get_htm(pc, "32738-04a.htm")
             html = html.gsub("leader", leader.name)
           else
-            html = get_htm(player, "32738-01b.htm")
+            html = get_htm(pc, "32738-01b.htm")
             html = html.gsub("leader", leader.name)
           end
         end
@@ -259,8 +259,8 @@ class Quests::Q00454_CompletelyLost < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case qs.state
     when State::COMPLETED
@@ -269,7 +269,7 @@ class Quests::Q00454_CompletelyLost < Quest
       end
       qs.state = State::CREATED
     when State::CREATED
-      if player.level >= MIN_LEVEL
+      if pc.level >= MIN_LEVEL
         quest_escort = npc.variables.get_i32("quest_escort", 0)
         if quest_escort == 0
           html = "32738-01.htm"
@@ -277,12 +277,12 @@ class Quests::Q00454_CompletelyLost < Quest
           html = "32738-01c.htm"
         else
           leader = npc.variables.get_object("leader", L2PcInstance)
-          if leader.in_party? && leader.party.includes?(player)
-            html = get_htm(player, "32738-01a.htm")
+          if leader.in_party? && leader.party.includes?(pc)
+            html = get_htm(pc, "32738-01a.htm")
             html = html.gsub("leader", leader.name)
-            html = html.gsub("name", player.name)
+            html = html.gsub("name", pc.name)
           else
-            html = get_htm(player, "32738-01b.htm")
+            html = get_htm(pc, "32738-01b.htm")
             html = html.gsub("leader", leader.name)
           end
         end
@@ -310,122 +310,122 @@ class Quests::Q00454_CompletelyLost < Quest
           if group == 0
             if Rnd.bool
               if chance < 11
-                give_items(player, 15792, 1) # Recipe - Sealed Vesper Helmet (60%)
+                give_items(pc, 15792, 1) # Recipe - Sealed Vesper Helmet (60%)
               elsif chance <= 11 && chance < 22
-                give_items(player, 15798, 1) # Recipe - Sealed Vesper Gaiter (60%)
+                give_items(pc, 15798, 1) # Recipe - Sealed Vesper Gaiter (60%)
               elsif chance <= 22 && chance < 33
-                give_items(player, 15795, 1) # Recipe - Sealed Vesper Breastplate (60%)
+                give_items(pc, 15795, 1) # Recipe - Sealed Vesper Breastplate (60%)
               elsif chance <= 33 && chance < 44
-                give_items(player, 15801, 1) # Recipe - Sealed Vesper Gauntlet (60%)
+                give_items(pc, 15801, 1) # Recipe - Sealed Vesper Gauntlet (60%)
               elsif chance <= 44 && chance < 55
-                give_items(player, 15808, 1) # Recipe - Sealed Vesper Shield (60%)
+                give_items(pc, 15808, 1) # Recipe - Sealed Vesper Shield (60%)
               elsif chance <= 55 && chance < 66
-                give_items(player, 15804, 1) # Recipe - Sealed Vesper Boots (60%)
+                give_items(pc, 15804, 1) # Recipe - Sealed Vesper Boots (60%)
               elsif chance <= 66 && chance < 77
-                give_items(player, 15809, 1) # Recipe - Sealed Vesper Ring (70%)
+                give_items(pc, 15809, 1) # Recipe - Sealed Vesper Ring (70%)
               elsif chance <= 77 && chance < 88
-                give_items(player, 15810, 1) # Recipe - Sealed Vesper Earring (70%)
+                give_items(pc, 15810, 1) # Recipe - Sealed Vesper Earring (70%)
               else
-                give_items(player, 15811, 1) # Recipe - Sealed Vesper Necklace (70%)
+                give_items(pc, 15811, 1) # Recipe - Sealed Vesper Necklace (70%)
               end
             else
               if chance < 11
-                give_items(player, 15660, 3) # Sealed Vesper Helmet Piece
+                give_items(pc, 15660, 3) # Sealed Vesper Helmet Piece
               elsif chance <= 11 && chance < 22
-                give_items(player, 15666, 3) # Sealed Vesper Gaiter Piece
+                give_items(pc, 15666, 3) # Sealed Vesper Gaiter Piece
               elsif chance <= 22 && chance < 33
-                give_items(player, 15663, 3) # Sealed Vesper Breastplate Piece
+                give_items(pc, 15663, 3) # Sealed Vesper Breastplate Piece
               elsif chance <= 33 && chance < 44
-                give_items(player, 15667, 3) # Sealed Vesper Gauntlet Piece
+                give_items(pc, 15667, 3) # Sealed Vesper Gauntlet Piece
               elsif chance <= 44 && chance < 55
-                give_items(player, 15669, 3) # Sealed Vesper Verteidiger Piece
+                give_items(pc, 15669, 3) # Sealed Vesper Verteidiger Piece
               elsif chance <= 55 && chance < 66
-                give_items(player, 15668, 3) # Sealed Vesper Boots Piece
+                give_items(pc, 15668, 3) # Sealed Vesper Boots Piece
               elsif chance <= 66 && chance < 77
-                give_items(player, 15769, 3) # Sealed Vesper Ring Gem
+                give_items(pc, 15769, 3) # Sealed Vesper Ring Gem
               elsif chance <= 77 && chance < 88
-                give_items(player, 15770, 3) # Sealed Vesper Earring Gem
+                give_items(pc, 15770, 3) # Sealed Vesper Earring Gem
               else
-                give_items(player, 15771, 3) # Sealed Vesper Necklace Gem
+                give_items(pc, 15771, 3) # Sealed Vesper Necklace Gem
               end
             end
           elsif group == 1
             if Rnd.bool
               if chance < 12
-                give_items(player, 15805, 1) # Recipe - Sealed Vesper Leather Boots (60%)
+                give_items(pc, 15805, 1) # Recipe - Sealed Vesper Leather Boots (60%)
               elsif chance <= 12 && chance < 24
-                give_items(player, 15796, 1) # Recipe - Sealed Vesper Leather Breastplate (60%)
+                give_items(pc, 15796, 1) # Recipe - Sealed Vesper Leather Breastplate (60%)
               elsif chance <= 24 && chance < 36
-                give_items(player, 15793, 1) # Recipe - Sealed Vesper Leather Helmet (60%)
+                give_items(pc, 15793, 1) # Recipe - Sealed Vesper Leather Helmet (60%)
               elsif chance <= 36 && chance < 48
-                give_items(player, 15799, 1) # Recipe - Sealed Vesper Leather Legging (60%)
+                give_items(pc, 15799, 1) # Recipe - Sealed Vesper Leather Legging (60%)
               elsif chance <= 48 && chance < 60
-                give_items(player, 15802, 1) # Recipe - Sealed Vesper Leather Gloves (60%)
+                give_items(pc, 15802, 1) # Recipe - Sealed Vesper Leather Gloves (60%)
               elsif chance <= 60 && chance < 72
-                give_items(player, 15809, 1) # Recipe - Sealed Vesper Ring (70%)
+                give_items(pc, 15809, 1) # Recipe - Sealed Vesper Ring (70%)
               elsif chance <= 72 && chance < 84
-                give_items(player, 15810, 1) # Recipe - Sealed Vesper Earring (70%)
+                give_items(pc, 15810, 1) # Recipe - Sealed Vesper Earring (70%)
               else
-                give_items(player, 15811, 1) # Recipe - Sealed Vesper Necklace (70%)
+                give_items(pc, 15811, 1) # Recipe - Sealed Vesper Necklace (70%)
               end
             else
               if chance < 12
-                give_items(player, 15672, 3) # Sealed Vesper Leather Boots Piece
+                give_items(pc, 15672, 3) # Sealed Vesper Leather Boots Piece
               elsif chance <= 12 && chance < 24
-                give_items(player, 15664, 3) # Sealed Vesper Leather Breastplate Piece
+                give_items(pc, 15664, 3) # Sealed Vesper Leather Breastplate Piece
               elsif chance <= 24 && chance < 36
-                give_items(player, 15661, 3) # Sealed Vesper Leather Helmet Piece
+                give_items(pc, 15661, 3) # Sealed Vesper Leather Helmet Piece
               elsif chance <= 36 && chance < 48
-                give_items(player, 15670, 3) # Sealed Vesper Leather Legging Piece
+                give_items(pc, 15670, 3) # Sealed Vesper Leather Legging Piece
               elsif chance <= 48 && chance < 60
-                give_items(player, 15671, 3) # Sealed Vesper Leather Gloves Piece
+                give_items(pc, 15671, 3) # Sealed Vesper Leather Gloves Piece
               elsif chance <= 60 && chance < 72
-                give_items(player, 15769, 3) # Sealed Vesper Ring Gem
+                give_items(pc, 15769, 3) # Sealed Vesper Ring Gem
               elsif chance <= 72 && chance < 84
-                give_items(player, 15770, 3) # Sealed Vesper Earring Gem
+                give_items(pc, 15770, 3) # Sealed Vesper Earring Gem
               else
-                give_items(player, 15771, 3) # Sealed Vesper Necklace Gem
+                give_items(pc, 15771, 3) # Sealed Vesper Necklace Gem
               end
             end
           elsif Rnd.bool
             if chance < 11
-              give_items(player, 15800, 1)
+              give_items(pc, 15800, 1)
             elsif chance <= 11 && chance < 22 # Recipe - Sealed Vesper Stockings (60%)
-              give_items(player, 15803, 1) # Recipe - Sealed Vesper Gloves (60%)
+              give_items(pc, 15803, 1) # Recipe - Sealed Vesper Gloves (60%)
             elsif chance <= 22 && chance < 33
-              give_items(player, 15806, 1) # Recipe - Sealed Vesper Shoes (60%)
+              give_items(pc, 15806, 1) # Recipe - Sealed Vesper Shoes (60%)
             elsif chance <= 33 && chance < 44
-              give_items(player, 15807, 1) # Recipe - Sealed Vesper Sigil (60%)
+              give_items(pc, 15807, 1) # Recipe - Sealed Vesper Sigil (60%)
             elsif chance <= 44 && chance < 55
-              give_items(player, 15797, 1) # Recipe - Sealed Vesper Tunic (60%)
+              give_items(pc, 15797, 1) # Recipe - Sealed Vesper Tunic (60%)
             elsif chance <= 55 && chance < 66
-              give_items(player, 15794, 1) # Recipe - Sealed Vesper Circlet (60%)
+              give_items(pc, 15794, 1) # Recipe - Sealed Vesper Circlet (60%)
             elsif chance <= 66 && chance < 77
-              give_items(player, 15809, 1) # Recipe - Sealed Vesper Ring (70%)
+              give_items(pc, 15809, 1) # Recipe - Sealed Vesper Ring (70%)
             elsif chance <= 77 && chance < 88
-              give_items(player, 15810, 1) # Recipe - Sealed Vesper Earring (70%)
+              give_items(pc, 15810, 1) # Recipe - Sealed Vesper Earring (70%)
             else
-              give_items(player, 15811, 1) # Recipe - Sealed Vesper Necklace (70%)
+              give_items(pc, 15811, 1) # Recipe - Sealed Vesper Necklace (70%)
             end
           else
             if chance < 11
-              give_items(player, 15673, 3) # Sealed Vesper Stockings Piece
+              give_items(pc, 15673, 3) # Sealed Vesper Stockings Piece
             elsif chance <= 11 && chance < 22
-              give_items(player, 15674, 3) # Sealed Vesper Gloves Piece
+              give_items(pc, 15674, 3) # Sealed Vesper Gloves Piece
             elsif chance <= 22 && chance < 33
-              give_items(player, 15675, 3) # Sealed Vesper Shoes Piece
+              give_items(pc, 15675, 3) # Sealed Vesper Shoes Piece
             elsif chance <= 33 && chance < 44
-              give_items(player, 15691, 3) # Sealed Vesper Sigil Piece
+              give_items(pc, 15691, 3) # Sealed Vesper Sigil Piece
             elsif chance <= 44 && chance < 55
-              give_items(player, 15665, 3) # Sealed Vesper Tunic Piece
+              give_items(pc, 15665, 3) # Sealed Vesper Tunic Piece
             elsif chance <= 55 && chance < 66
-              give_items(player, 15662, 3) # Sealed Vesper Circlet Piece
+              give_items(pc, 15662, 3) # Sealed Vesper Circlet Piece
             elsif chance <= 66 && chance < 77
-              give_items(player, 15769, 3) # Sealed Vesper Ring Gem
+              give_items(pc, 15769, 3) # Sealed Vesper Ring Gem
             elsif chance <= 77 && chance < 88
-              give_items(player, 15770, 3) # Sealed Vesper Earring Gem
+              give_items(pc, 15770, 3) # Sealed Vesper Earring Gem
             else
-              give_items(player, 15771, 3) # Sealed Vesper Necklace Gem
+              give_items(pc, 15771, 3) # Sealed Vesper Necklace Gem
             end
           end
 
@@ -435,14 +435,14 @@ class Quests::Q00454_CompletelyLost < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
   private def broadcast_npc_say(npc, str_id)
     Broadcast.to_known_players(npc, NpcSay.new(npc, Say2::NPC_ALL, str_id))
   end
 
-  private def whisper(npc, player, str_id)
-    player.send_packet(NpcSay.new(npc.l2id, Say2::TELL, npc.id, str_id))
+  private def whisper(npc, pc, str_id)
+    pc.send_packet(NpcSay.new(npc.l2id, Say2::TELL, npc.id, str_id))
   end
 end

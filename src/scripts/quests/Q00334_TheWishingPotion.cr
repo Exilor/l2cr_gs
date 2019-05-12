@@ -1,4 +1,4 @@
-class Quests::Q00334_TheWishingPotion < Quest
+class Scripts::Q00334_TheWishingPotion < Quest
   # NPCs
   private TORAI = 30557
   private ALCHEMIST_MATILD = 30738
@@ -98,8 +98,8 @@ class Quests::Q00334_TheWishingPotion < Quest
     )
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when TORAI
@@ -111,7 +111,7 @@ class Quests::Q00334_TheWishingPotion < Quest
       end
     when ALCHEMIST_MATILD
       if qs.created?
-        if player.level < 30
+        if pc.level < 30
           return "30738-01.htm"
         end
         return "30738-02.html"
@@ -215,7 +215,7 @@ class Quests::Q00334_TheWishingPotion < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
   def on_spawn(npc)
@@ -249,7 +249,7 @@ class Quests::Q00334_TheWishingPotion < Quest
     super
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
 
     case npc.id
@@ -269,8 +269,8 @@ class Quests::Q00334_TheWishingPotion < Quest
       npc.say(NpcString::YOURE_A_GREAT_DEVIL_NOW)
       npc.delete_me
     when ALCHEMIST_MATILD
-      player = player.not_nil!
-      qs = get_quest_state!(player, false)
+      pc = pc.not_nil!
+      qs = get_quest_state!(pc, false)
 
       if event == "QUEST_ACCEPTED"
         qs.play_sound(Sound::ITEMSOUND_QUEST_ACCEPT)
@@ -342,7 +342,7 @@ class Quests::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 1)
             qs.set(FLAG, 1)
-            start_quest_timer("2336008", 3 * 1000, npc, player)
+            start_quest_timer("2336008", 3 * 1000, npc, pc)
             return "30738-16.html"
           end
           return "30738-20.html"
@@ -354,7 +354,7 @@ class Quests::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 2)
             qs.set(FLAG, 2)
-            start_quest_timer("2336008", 3 * 1000, npc, player)
+            start_quest_timer("2336008", 3 * 1000, npc, pc)
             return "30738-17.html"
           end
           return "30738-20.html"
@@ -366,7 +366,7 @@ class Quests::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 3)
             qs.set(FLAG, 3)
-            start_quest_timer("2336008", 3 * 1000, npc, player)
+            start_quest_timer("2336008", 3 * 1000, npc, pc)
             return "30738-18.html"
           end
           return "30738-20.html"
@@ -379,7 +379,7 @@ class Quests::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 4)
             qs.set(FLAG, 4)
-            start_quest_timer("2336008", 3 * 1000, npc, player)
+            start_quest_timer("2336008", 3 * 1000, npc, pc)
             return "30738-19.html"
           end
           return "30738-20.html"
@@ -387,10 +387,10 @@ class Quests::Q00334_TheWishingPotion < Quest
         return "30738-14.html"
       when 2336008
         npc.say(NpcString::OK_EVERYBODY_PRAY_FERVENTLY)
-        start_quest_timer("2336009", 4 * 1000, npc, player)
+        start_quest_timer("2336009", 4 * 1000, npc, pc)
       when 2336009
         npc.say(NpcString::BOTH_HANDS_TO_HEAVEN_EVERYBODY_YELL_TOGETHER)
-        start_quest_timer("2336010", 4 * 1000, npc, player)
+        start_quest_timer("2336010", 4 * 1000, npc, pc)
       when 2336010
         npc.say(NpcString::ONE_TWO_MAY_YOUR_DREAMS_COME_TRUE)
         i0 = 0
@@ -654,8 +654,8 @@ class Quests::Q00334_TheWishingPotion < Quest
     super
   end
 
-  private def get_random_player_from_party(player, npc)
-    qs = player.get_quest_state(name)
+  private def get_random_player_from_party(pc, npc)
+    qs = pc.get_quest_state(name)
     candidates = [] of QuestState
 
     if qs && qs.started?
@@ -663,8 +663,8 @@ class Quests::Q00334_TheWishingPotion < Quest
       candidates << qs
     end
 
-    if party = player.party?
-      player.party.members.each do |pm|
+    if party = pc.party?
+      pc.party.members.each do |pm|
         qss = pm.get_quest_state(name)
         if qss && qss.started? && Util.in_range?(1500, npc, pm, true)
           candidates << qss

@@ -110,7 +110,7 @@ class L2ItemInstance < L2Object
   def protected=(@is_protected : Bool)
   end
 
-  def template
+  def template : L2Item
     @item
   end
 
@@ -146,7 +146,7 @@ class L2ItemInstance < L2Object
     self.owner_id = id
 
     if Config.log_items
-      # ...
+      # TODO
     end
 
     if Config.gmaudit && pc && pc.gm?
@@ -266,39 +266,39 @@ class L2ItemInstance < L2Object
     @item_id
   end
 
-  def etc_item
+  def etc_item : L2EtcItem?
     @item.as?(L2EtcItem)
   end
 
-  def etc_item!
+  def etc_item! : L2EtcItem
     @item.as(L2EtcItem)
   end
 
-  def weapon_item
+  def weapon_item : L2Weapon?
     @item.as?(L2Weapon)
   end
 
-  def weapon_item!
+  def weapon_item! : L2Weapon
     @item.as(L2Weapon)
   end
 
-  def armor_item
+  def armor_item : L2Armor?
     @item.as?(L2Armor)
   end
 
-  def armor_item!
+  def armor_item! : L2Armor
     @item.as(L2Armor)
   end
 
-  def etc_item?
+  def etc_item? : Bool
     @item.is_a?(L2EtcItem)
   end
 
-  def weapon?
+  def weapon? : Bool
     @item.is_a?(L2Weapon)
   end
 
-  def armor?
+  def armor? : Bool
     @item.is_a?(L2Armor)
   end
 
@@ -354,15 +354,15 @@ class L2ItemInstance < L2Object
 
   def available?(pc : L2PcInstance, allow_adena : Bool, allow_non_tradeable : Bool) : Bool
     !equipped? &&
-    (@item.type_2 != ItemType2::QUEST) && # Not Quest Item
-    ((@item.type_2 != ItemType2::MONEY) || (@item.type_1 != ItemType1::SHIELD_ARMOR)) && # not money, not shield
-    (!pc.has_summon? || (@l2id != pc.summon!.control_l2id)) && # Not Control item of currently summoned pet
-    (pc.active_enchant_item_id != @l2id) && # Not currently used enchant scroll
-    (pc.active_enchant_support_item_id != @l2id) && # Not currently used enchant support item
-    (pc.active_enchant_attr_item_id != @l2id) && # Not currently used enchant attribute item
-    (allow_adena || (id != Inventory::ADENA_ID)) && # Not Adena
-  ((!pc.current_skill) || (pc.current_skill.not_nil!.skill.item_consume_id != id)) && (!pc.casting_simultaneously_now? || pc.last_simultaneous_skill_cast.nil? || (pc.last_simultaneous_skill_cast.not_nil!.item_consume_id != id)) &&
-    (allow_non_tradeable || (tradeable? && (!((@item.item_type == EtcItemType::PET_COLLAR) && pc.has_pet_items?))))
+    @item.type_2 != ItemType2::QUEST && # Not Quest Item
+    (@item.type_2 != ItemType2::MONEY || @item.type_1 != ItemType1::SHIELD_ARMOR) && # not money, not shield
+    (!pc.has_summon? || @l2id != pc.summon!.control_l2id) && # Not Control item of currently summoned pet
+    pc.active_enchant_item_id != @l2id && # Not currently used enchant scroll
+    pc.active_enchant_support_item_id != @l2id && # Not currently used enchant support item
+    pc.active_enchant_attr_item_id != @l2id && # Not currently used enchant attribute item
+    (allow_adena || id != Inventory::ADENA_ID) && # Not Adena
+    (!pc.current_skill || pc.current_skill.not_nil!.skill.item_consume_id != id) && (!pc.casting_simultaneously_now? || pc.last_simultaneous_skill_cast.nil? || pc.last_simultaneous_skill_cast.not_nil!.item_consume_id != id) &&
+    (allow_non_tradeable || (tradeable? && (!(@item.item_type == EtcItemType::PET_COLLAR && pc.has_pet_items?))))
   end
 
   def enchant_level=(lvl : Int32)

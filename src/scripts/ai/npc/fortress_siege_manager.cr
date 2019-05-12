@@ -1,4 +1,4 @@
-class NpcAI::FortressSiegeManager < AbstractNpcAI
+class Scripts::FortressSiegeManager < AbstractNpcAI
   # NPCs
   private MANAGERS = {
     35659, # Shanty Fortress
@@ -32,8 +32,8 @@ class NpcAI::FortressSiegeManager < AbstractNpcAI
     add_first_talk_id(MANAGERS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless npc && player
+  def on_adv_event(event, npc, pc)
+    return unless npc && pc
 
     case event
     when "FortressSiegeManager-11.html", "FortressSiegeManager-13.html",
@@ -41,7 +41,7 @@ class NpcAI::FortressSiegeManager < AbstractNpcAI
          "FortressSiegeManager-16.html"
       return htmltext = event
     when "register"
-      clan = player.clan?
+      clan = pc.clan?
       if clan.nil?
         htmltext = "FortressSiegeManager-02.html"
       else
@@ -50,21 +50,21 @@ class NpcAI::FortressSiegeManager < AbstractNpcAI
 
         if clan.fort_id == fortress.residence_id
           html = NpcHtmlMessage.new(npc.l2id)
-          html.html = get_htm(player, "FortressSiegeManager-12.html")
+          html.html = get_htm(pc, "FortressSiegeManager-12.html")
           html["%clanName%"] = fortress.owner_clan.name
           return html.html
-        elsif !player.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
+        elsif !pc.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
           htmltext = "FortressSiegeManager-10.html"
         elsif clan.level < FortSiegeManager.siege_clan_min_level
           htmltext = "FortressSiegeManager-04.html"
-        elsif player.clan.castle_id == castle.residence_id && fortress.fort_state == 2
+        elsif pc.clan.castle_id == castle.residence_id && fortress.fort_state == 2
           htmltext = "FortressSiegeManager-18.html"
         elsif clan.castle_id != 0 && clan.castle_id != castle.residence_id && FortSiegeManager.can_register_just_territory?
           htmltext = "FortressSiegeManager-17.html"
         elsif fortress.time_until_rebel_army > 0 && fortress.time_until_rebel_army <= 7200
           htmltext = "FortressSiegeManager-19.html"
         else
-          case npc.fort.siege.add_attacker(player, true)
+          case npc.fort.siege.add_attacker(pc, true)
           when 1
             htmltext = "FortressSiegeManager-03.html"
           when 2
@@ -74,13 +74,13 @@ class NpcAI::FortressSiegeManager < AbstractNpcAI
           when 4
             sm = SystemMessage.registered_to_s1_fortress_battle
             sm.add_string(npc.fort.name)
-            player.send_packet(sm)
+            pc.send_packet(sm)
             htmltext = "FortressSiegeManager-05.html"
           end
         end
       end
     when "cancel"
-      clan = player.clan?
+      clan = pc.clan?
       if clan.nil?
         htmltext = "FortressSiegeManager-02.html"
       else
@@ -88,10 +88,10 @@ class NpcAI::FortressSiegeManager < AbstractNpcAI
 
         if clan.fort_id == fortress.residence_id
           html = NpcHtmlMessage.new(npc.l2id)
-          html.html = get_htm(player, "FortressSiegeManager-12.html")
+          html.html = get_htm(pc, "FortressSiegeManager-12.html")
           html["%clanName%"] = fortress.owner_clan.name
           return html.html
-        elsif !player.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
+        elsif !pc.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
           htmltext = "FortressSiegeManager-10.html"
         elsif !FortSiegeManager.registered?(clan, fortress.residence_id)
           htmltext = "FortressSiegeManager-09.html"
@@ -111,7 +111,7 @@ class NpcAI::FortressSiegeManager < AbstractNpcAI
     htmltext
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     fortress = npc.fort
     owner_clan = fortress.owner_clan?
     fort_owner = owner_clan ? owner_clan.id : 0
@@ -119,7 +119,7 @@ class NpcAI::FortressSiegeManager < AbstractNpcAI
       return "FortressSiegeManager.html"
     end
     html = NpcHtmlMessage.new(npc.l2id)
-    html.html = get_htm(player, "FortressSiegeManager-01.html")
+    html.html = get_htm(pc, "FortressSiegeManager-01.html")
     html["%clanName%"] = fortress.owner_clan.name
     html["%objectId%"] = npc.l2id
 

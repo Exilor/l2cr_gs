@@ -1,4 +1,4 @@
-class Quests::Q00274_SkirmishWithTheWerewolves < Quest
+class Scripts::Q00274_SkirmishWithTheWerewolves < Quest
   # NPC
   private BRUKURSE = 30569
   # Monsters
@@ -23,9 +23,9 @@ class Quests::Q00274_SkirmishWithTheWerewolves < Quest
     register_quest_items(WEREWOLF_HEAD, WEREWOLF_TOTEM)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event.casecmp?("30569-04.htm")
       st.start_quest
       event
@@ -49,32 +49,39 @@ class Quests::Q00274_SkirmishWithTheWerewolves < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      if has_at_least_one_quest_item?(player, NECKLACE_OF_VALOR, NECKLACE_OF_COURAGE)
-        htmltext = player.race.orc? ? player.level >= MIN_LVL ? "30569-03.htm" : "30569-02.html" : "30569-01.html"
+      if has_at_least_one_quest_item?(pc, NECKLACE_OF_VALOR, NECKLACE_OF_COURAGE)
+        if pc.race.orc?
+          if pc.level >= MIN_LVL
+            html = "30569-03.htm"
+          else
+            html = "30569-02.html"
+          end
+        else
+          html = "30569-01.html"
+        end
       else
-        htmltext = "30569-08.html"
+        html = "30569-08.html"
       end
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30569-05.html"
+        html = "30569-05.html"
       when 2
         heads = st.get_quest_items_count(WEREWOLF_HEAD)
         if heads >= 40
           totems = st.get_quest_items_count(WEREWOLF_TOTEM)
           st.give_adena((heads * 30) + (totems * 600) + 2300, true)
           st.exit_quest(true, true)
-          htmltext = totems > 0 ? "30569-07.html" : "30569-06.html"
+          html = totems > 0 ? "30569-07.html" : "30569-06.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

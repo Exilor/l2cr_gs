@@ -1,4 +1,4 @@
-class Quests::Q00286_FabulousFeathers < Quest
+class Scripts::Q00286_FabulousFeathers < Quest
   # NPC
   private ERINU = 32164
   # Item

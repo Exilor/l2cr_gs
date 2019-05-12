@@ -1,4 +1,4 @@
-class NpcAI::NaiaLock < AbstractNpcAI
+class Scripts::NaiaLock < AbstractNpcAI
   private LOCK = 18491
 
   def initialize

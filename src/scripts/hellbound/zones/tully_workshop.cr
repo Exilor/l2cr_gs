@@ -1,4 +1,4 @@
-class NpcAI::TullyWorkshop < AbstractNpcAI
+class Scripts::TullyWorkshop < AbstractNpcAI
   # NPCs
   private AGENT = 32372
   private CUBE_68 = 32467
@@ -374,7 +374,7 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, player)
-    htmltext = event
+    html = event
 
     if event.casecmp?("disable_zone")
       if dmg_zone = ZoneManager.get_zone_by_id(200011)
@@ -454,10 +454,10 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
         party.members.each do |m|
           m.tele_to_location(-13400, 272827, -15300, true)
         end
-        htmltext = nil
+        html = nil
 
       else
-        htmltext = "32373-02a.htm"
+        html = "32373-02a.htm"
       end
     elsif event.casecmp?("open") && TULLY_DOORLIST.has_key?(npc_id)
       # Second instance of 18455
@@ -470,7 +470,7 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
       end
 
       start_quest_timer("close", 120000, npc, nil)
-      htmltext = nil
+      html = nil
     elsif (event.casecmp?("up") || event.casecmp?("down")) && TELE_COORDS.has_key?(npc_id)
       direction = event.casecmp?("up") ? 0 : 1
       party = player.party?
@@ -488,7 +488,7 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
           end
         end
       end
-      htmltext = nil
+      html = nil
     elsif npc_id == INGENIOUS_CONTRAPTION
       if event.casecmp?("touch_device")
         i0 = TALKED_CONTRAPTIONS.includes?(npc.l2id) ? 0 : 1
@@ -496,11 +496,11 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
 
         if rand(1000) < (i1 - i0) * 100
           TALKED_CONTRAPTIONS << npc.l2id
-          htmltext = player.class_id.maestro? ? "32371-03a.htm" : "32371-03.htm"
+          html = player.class_id.maestro? ? "32371-03a.htm" : "32371-03.htm"
         else
           BROKEN_CONTRAPTIONS << npc.l2id
           start_quest_timer("repair_device", 60000, npc, nil)
-          htmltext = "32371-04.htm"
+          html = "32371-04.htm"
         end
       elsif event.casecmp?("take_reward")
         already_has_item = REWARDS.any? do |item_id|
@@ -516,14 +516,14 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
               npc.delete_me
             end
           end
-          htmltext = nil
+          html = nil
         else
-          htmltext = "32371-05.htm"
+          html = "32371-05.htm"
         end
       end
     elsif npc_id == AGENT
       if event.casecmp?("tele_to_7th_floor") && @allow_agent_spawn == false
-        htmltext = nil
+        html = nil
         party = player.party?
         if party.nil?
           player.tele_to_location(-12501, 281397, -11936)
@@ -554,11 +554,11 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
           end
         end
       elsif event.casecmp?("buff") && !@allow_agent_spawn_7th
-        htmltext = nil
+        html = nil
         party = player.party?
         if party.nil?
           if !Util.in_range?(400, player, npc, true)
-            htmltext = "32372-01b.htm"
+            html = "32372-01b.htm"
           else
             npc.target = player
           end
@@ -607,7 +607,7 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
         end
       end
     elsif event.casecmp?("teleport") && npc_id == DWARVEN_GHOST
-      htmltext = nil
+      html = nil
       party = player.party?
       if party.nil?
         player.tele_to_location(-12176, 279696, -13596)
@@ -630,14 +630,14 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
         end
       end
     elsif npc_id == CUBE_68 && event.starts_with?("cube68_tp")
-      htmltext = nil
+      html = nil
       tp_id = event.from(10).to_i
 
       if party = player.party?
         if !party.leader?(player)
           player.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_ENTER)
         elsif !Util.in_range?(3000, player, npc, true)
-          htmltext = "32467-04.htm"
+          html = "32467-04.htm"
         else
           party.members.each do |m|
             if Util.in_range?(6000, m, npc, true)
@@ -650,7 +650,7 @@ class NpcAI::TullyWorkshop < AbstractNpcAI
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)

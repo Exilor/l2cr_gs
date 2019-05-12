@@ -1,11 +1,11 @@
 class Packets::Incoming::AllyDismiss < GameClientPacket
   @clan_name = ""
 
-  def read_impl
+  private def read_impl
     @clan_name = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless leader_clan = pc.clan?

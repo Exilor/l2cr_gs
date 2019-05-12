@@ -200,7 +200,7 @@ class L2Clan
 
   def remove_clan_member(l2id : Int32, clan_join_expiry_time : Int64)
     unless ex_member = @members.delete(l2id)
-      warn "Member with ID #{l2id} not found in the clan."
+      warn { "Member with ID #{l2id} not found in the clan." }
       return
     end
 
@@ -306,11 +306,15 @@ class L2Clan
   end
 
   def get_online_members(exclude : Int32, &block : L2PcInstance ->)
-    @members.each_value { |m| yield m.player_instance if m.online? && m.l2id != exclude }
+    @members.each_value do |m|
+      yield m.player_instance if m.online? && m.l2id != exclude
+    end
   end
 
-  def get_online_members(exclude : Int32)
-    @members.local_each_value.select { |m| m.online? && m.l2id != exclude }.map &.player_instance
+  def get_online_members(exclude : Int32) : Array(L2PcInstance)
+    @members.local_each_value
+    .select { |m| m.online? && m.l2id != exclude }
+    .map &.player_instance
   end
 
   def online_members_count : Int32
@@ -522,7 +526,7 @@ class L2Clan
     store_notice(notice, @notice_enabled)
   end
 
-  def notice
+  def notice : String
     @notice || ""
   end
 
@@ -549,8 +553,8 @@ class L2Clan
     error e
   end
 
-  def all_skills
-    @skills.local_each_value
+  def all_skills : Slice(Skill)
+    @skills.values_slice
   end
 
   def add_skill(new_skill : Skill?) : Skill?
@@ -715,28 +719,28 @@ class L2Clan
     end
   end
 
-  def broadcast_to_online_ally_members(packet : GameServerPacket)
+  def broadcast_to_online_ally_members(gsp : GameServerPacket)
     ClanTable.get_clan_allies(ally_id) do |clan|
-      clan.broadcast_to_online_members(packet)
+      clan.broadcast_to_online_members(gsp)
     end
   end
 
-  def broadcast_to_online_members(packet : GameServerPacket)
-    each_online_player &.send_packet(packet)
+  def broadcast_to_online_members(gsp : GameServerPacket)
+    each_online_player &.send_packet(gsp)
   end
 
-  def broadcast_cs_to_online_members(packet : CreatureSay, sender : L2PcInstance)
+  def broadcast_cs_to_online_members(cs : CreatureSay, sender : L2PcInstance)
     each_online_player do |pc|
       unless BlockList.blocked?(pc, sender)
-        pc.send_packet(packet)
+        pc.send_packet(cs)
       end
     end
   end
 
-  def broadcast_to_other_online_members(packet, pc : L2PcInstance)
+  def broadcast_to_other_online_members(gsp : GameServerPacket, pc : L2PcInstance)
     each_online_player do |pc2|
       unless pc == pc2
-        pc2.send_packet(packet)
+        pc2.send_packet(gsp)
       end
     end
   end
@@ -814,8 +818,8 @@ class L2Clan
       clan.subpledge_skills[skill.id] = skill
     end
 
-    def skills
-      clan.subpledge_skills.local_each_value
+    def skills : Slice(Skill)
+      clan.subpledge_skills.values_slice
     end
 
     def get_skill(id : Int32) : Skill?
@@ -859,8 +863,8 @@ class L2Clan
     @subpledges.find_value { |sp| sp.name.casecmp?(name) }
   end
 
-  def all_subpledges
-    @subpledges.local_each_value
+  def all_subpledges : Slice(Subpledge)
+    @subpledges.values_slice
   end
 
   def create_subpledge(pc : L2PcInstance, pledge_type : Int32, leader_id : Int32, name : String) : Subpledge?
@@ -934,7 +938,7 @@ class L2Clan
     pledge_type
   end
 
-  def update_subpledge_in_db(pledge_type)
+  def update_subpledge_in_db(pledge_type : Int32)
     sql = "UPDATE clan_subpledges SET leader_id=?, name=? WHERE clan_id=? AND sub_pledge_id=?"
     GameDB.exec(
       sql,
@@ -1011,8 +1015,8 @@ class L2Clan
     end
   end
 
-  def all_rank_privs
-    @privs.local_each_value || Slice(RankPrivs).empty
+  def all_rank_privs : Slice(RankPrivs)
+    @privs.values_slice || Slice(RankPrivs).empty
   end
 
   def get_leader_subpledge(leader_id : Int32) : Int32
@@ -1625,11 +1629,11 @@ class L2Clan
   end
 
   def add_siege_kill
-    @siege_kills.add(1)
+    @siege_kills.add(1) + 1
   end
 
   def add_siege_death
-    @siege_deaths.add(1)
+    @siege_deaths.add(1) + 1
   end
 
   def clear_siege_kills

@@ -1,4 +1,4 @@
-class Quests::Q00196_SevenSignsSealOfTheEmperor < Quest
+class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
   # NPCs
   private IASON_HEINE = 30969
   private MERCHANT_OF_MAMMON = 32584
@@ -20,8 +20,13 @@ class Quests::Q00196_SevenSignsSealOfTheEmperor < Quest
 
     add_first_talk_id(MERCHANT_OF_MAMMON)
     add_start_npc(IASON_HEINE)
-    add_talk_id(IASON_HEINE, MERCHANT_OF_MAMMON, SHUNAIMAN, WOOD, COURT_MAGICIAN)
-    register_quest_items(ELMOREDEN_HOLY_WATER, COURT_MAGICIANS_MAGIC_STAFF, SEAL_OF_BINDING, SACRED_SWORD_OF_EINHASAD)
+    add_talk_id(
+      IASON_HEINE, MERCHANT_OF_MAMMON, SHUNAIMAN, WOOD, COURT_MAGICIAN
+    )
+    register_quest_items(
+      ELMOREDEN_HOLY_WATER, COURT_MAGICIANS_MAGIC_STAFF, SEAL_OF_BINDING,
+      SACRED_SWORD_OF_EINHASAD
+    )
   end
 
   def on_adv_event(event, npc, pc)

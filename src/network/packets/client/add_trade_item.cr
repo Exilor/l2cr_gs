@@ -3,13 +3,13 @@ class Packets::Incoming::AddTradeItem < GameClientPacket
   @l2id = 0
   @count = 0i64
 
-  def read_impl
+  private def read_impl
     @trade_id = d
     @l2id = d
     @count = q
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless trade = pc.active_trade_list

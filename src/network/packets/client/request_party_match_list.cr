@@ -6,7 +6,7 @@ class Packets::Incoming::RequestPartyMatchList < GameClientPacket
   @loot = 0
   @room_title = ""
 
-  def read_impl
+  private def read_impl
     @room_id = d
     @max_members = d
     @min_lvl = d
@@ -15,7 +15,7 @@ class Packets::Incoming::RequestPartyMatchList < GameClientPacket
     @room_title = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if @room_id > 0

@@ -1,6 +1,6 @@
 require "../../../enums/music"
 
-class NpcAI::Core < AbstractNpcAI
+class Scripts::Core < AbstractNpcAI
   private CORE = 29006
   private DEATH_KNIGHT = 29007
   private DOOM_WRAITH = 29008

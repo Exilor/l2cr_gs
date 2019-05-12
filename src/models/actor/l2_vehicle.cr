@@ -38,7 +38,7 @@ class L2Vehicle < L2Character
     @stat = VehicleStat.new(self)
   end
 
-  def stat
+  def stat : VehicleStat
     super.as(VehicleStat)
   end
 

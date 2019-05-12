@@ -1,4 +1,4 @@
-class Quests::Q00280_TheFoodChain < Quest
+class Scripts::Q00280_TheFoodChain < Quest
   # Npc
   private BIXON = 32175
   # Items
@@ -14,12 +14,12 @@ class Quests::Q00280_TheFoodChain < Quest
     22233 => BLACK_WOLF_TOOTH
   }
   private MONSTER_CHANCE = {
-    22229 => [ItemHolder.new(1000, 1)],
-    22230 => [ItemHolder.new(500, 1), ItemHolder.new(1000, 2)],
-    22231 => [ItemHolder.new(1000, 2)],
-    22232 => [ItemHolder.new(1000, 3)],
-    20317 => [ItemHolder.new(1000, 3)], # custom (npcs are identical and they're side to side)
-    22233 => [ItemHolder.new(500, 3), ItemHolder.new(1000, 4)]
+    22229 => {ItemHolder.new(1000, 1)},
+    22230 => {ItemHolder.new(500, 1), ItemHolder.new(1000, 2)},
+    22231 => {ItemHolder.new(1000, 2)},
+    22232 => {ItemHolder.new(1000, 3)},
+    20317 => {ItemHolder.new(1000, 3)}, # custom (npcs are identical and they're side to side)
+    22233 => {ItemHolder.new(500, 3), ItemHolder.new(1000, 4)}
   }
   # Rewards
   private REWARDS = {28, 35, 41, 48, 116}
@@ -36,29 +36,29 @@ class Quests::Q00280_TheFoodChain < Quest
     register_quest_items(GREY_KELTIR_TOOTH, BLACK_WOLF_TOOTH)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "32175-03.htm"
       st.start_quest
-      htmltext = event
+      html = event
     when "32175-06.html"
-      if has_at_least_one_quest_item?(player, registered_item_ids)
+      if has_at_least_one_quest_item?(pc, registered_item_ids)
         grey_teeth = st.get_quest_items_count(GREY_KELTIR_TOOTH)
         black_teeth = st.get_quest_items_count(BLACK_WOLF_TOOTH)
         st.give_adena(2i64 * (grey_teeth + black_teeth), true)
-        take_items(player, -1, {GREY_KELTIR_TOOTH, BLACK_WOLF_TOOTH})
-        htmltext = event
+        take_items(pc, -1, {GREY_KELTIR_TOOTH, BLACK_WOLF_TOOTH})
+        html = event
       else
-        htmltext = "32175-07.html"
+        html = "32175-07.html"
       end
     when "32175-08.html"
-      htmltext = event
+      html = event
     when "32175-09.html"
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "32175-11.html"
       grey_teeth = st.get_quest_items_count(GREY_KELTIR_TOOTH)
       black_teeth = st.get_quest_items_count(BLACK_WOLF_TOOTH)
@@ -70,13 +70,13 @@ class Quests::Q00280_TheFoodChain < Quest
           st.take_items(BLACK_WOLF_TOOTH, TEETH_COUNT - grey_teeth)
         end
         st.reward_items(REWARDS[rand(5)], 1)
-        htmltext = event
+        html = event
       else
-        htmltext = "32175-10.html"
+        html = "32175-10.html"
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -94,21 +94,20 @@ class Quests::Q00280_TheFoodChain < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state!(talker)
-    htmltext = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      htmltext = talker.level >= MIN_LVL ? "32175-01.htm" : "32175-02.htm"
+      html = pc.level >= MIN_LVL ? "32175-01.htm" : "32175-02.htm"
     when State::STARTED
-      if has_at_least_one_quest_item?(talker, registered_item_ids)
-        htmltext = "32175-05.html"
+      if has_at_least_one_quest_item?(pc, registered_item_ids)
+        html = "32175-05.html"
       else
-        htmltext = "32175-04.html"
+        html = "32175-04.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

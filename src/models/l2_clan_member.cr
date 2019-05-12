@@ -30,7 +30,7 @@ class L2ClanMember
     @player_instance = pc
   end
 
-  def initialize(@clan : L2Clan, rs)
+  def initialize(@clan : L2Clan, rs : ResultSetReader)
     @name = rs.get_string("char_name")
     @level = rs.get_i32("level")
     @class_id = rs.get_i32("classid")
@@ -79,27 +79,27 @@ class L2ClanMember
     true
   end
 
-  def class_id
+  def class_id : Int32
     @player_instance.try &.class_id.to_i || @class_id
   end
 
-  def level
+  def level : Int32
     @player_instance.try &.level || @level
   end
 
-  def name
+  def name : String
     @player_instance.try &.name || @name
   end
 
-  def l2id
+  def l2id : Int32
     @player_instance.try &.l2id || @l2id
   end
 
-  def title
+  def title : String
     @player_instance.try &.title || @title
   end
 
-  def pledge_type
+  def pledge_type : Int32
     @player_instance.try &.pledge_type || @pledge_type
   end
 
@@ -120,7 +120,7 @@ class L2ClanMember
     error e
   end
 
-  def power_grade
+  def power_grade : Int32
     @player_instance.try &.power_grade || @power_grade
   end
 
@@ -143,19 +143,19 @@ class L2ClanMember
   def set_apprentice_and_sponsor(@apprentice : Int32, @sponsor : Int32)
   end
 
-  def race_ordinal
+  def race_ordinal : Int32
     @player_instance.try &.race.to_i || @race_ordinal
   end
 
-  def sex
+  def sex : Bool
     @player_instance.try &.appearance.sex || @sex
   end
 
-  def sponsor
+  def sponsor : Int32
     @player_instance.try &.sponsor || @sponsor
   end
 
-  def apprentice
+  def apprentice : Int32
     @player_instance.try &.apprentice || @apprentice
   end
 

@@ -1,4 +1,4 @@
-class NpcAI::KamaelChange1 < AbstractNpcAI
+class Scripts::KamaelChange1 < AbstractNpcAI
   # NPCs
   private NPCS = {
     32191, # Hanarin

@@ -1,4 +1,4 @@
-class Quests::Q00350_EnhanceYourWeapon < Quest
+class Scripts::Q00350_EnhanceYourWeapon < Quest
   include XMLReader
 
   class AbsorbCrystalType < EnumClass
@@ -42,10 +42,10 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
     end
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    st = get_quest_state!(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    st = get_quest_state!(pc, false)
     if event.ends_with?("-04.htm")
       st.start_quest
     elsif event.ends_with?("-09.htm")
@@ -58,7 +58,7 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
       st.exit_quest(true)
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -92,67 +92,67 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
     nil
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     if st.state == State::CREATED
       st.set("cond", "0")
     end
 
     if st.get_int("cond") == 0
-      htmltext = "#{npc.id}-01.htm"
+      html = "#{npc.id}-01.htm"
     elsif check(st)
-      htmltext = "#{npc.id}-03.htm"
+      html = "#{npc.id}-03.htm"
     elsif !st.has_quest_items?(RED_SOUL_CRYSTAL0_ID)
       unless st.has_quest_items?(GREEN_SOUL_CRYSTAL0_ID)
         unless st.has_quest_items?(BLUE_SOUL_CRYSTAL0_ID)
-          htmltext = "#{npc.id}-21.htm"
+          html = "#{npc.id}-21.htm"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
   private def check(st)
     (4629...4665).any? { |i| st.has_quest_items?(i) }
   end
 
-  private def exchange_crystal(player, mob, take_id, give_id, broke)
-    item = player.inventory.destroy_item_by_item_id("SoulCrystal", take_id, 1, player, mob)
+  private def exchange_crystal(pc, mob, take_id, give_id, broke)
+    item = pc.inventory.destroy_item_by_item_id("SoulCrystal", take_id, 1, pc, mob)
     if item
       # Prepare inventory update packet
       iu = InventoryUpdate.new
       iu.add_removed_item(item)
 
       # Add new crystal to the killer's inventory
-      item = player.inventory.add_item("SoulCrystal", give_id, 1, player, mob).not_nil!
+      item = pc.inventory.add_item("SoulCrystal", give_id, 1, pc, mob).not_nil!
       iu.add_item(item)
 
-      # Send a sound event and text message to the player
+      # Send a sound event and text message to the pc
       if broke
-        player.send_packet(SystemMessageId::SOUL_CRYSTAL_BROKE)
+        pc.send_packet(SystemMessageId::SOUL_CRYSTAL_BROKE)
       else
-        player.send_packet(SystemMessageId::SOUL_CRYSTAL_ABSORBING_SUCCEEDED)
+        pc.send_packet(SystemMessageId::SOUL_CRYSTAL_ABSORBING_SUCCEEDED)
       end
 
       # Send system message
       sms = SystemMessage.earned_item_s1
       sms.add_item_name(give_id)
-      player.send_packet(sms)
+      pc.send_packet(sms)
 
       # Send inventory update packet
-      player.send_packet(iu)
+      pc.send_packet(iu)
     end
   end
 
-  private def get_sc_for_player(player) : SoulCrystal?
-    st = player.get_quest_state(Q00350_EnhanceYourWeapon.simple_name)
+  private def get_sc_for_player(pc) : SoulCrystal?
+    st = pc.get_quest_state(Q00350_EnhanceYourWeapon.simple_name)
     if st.nil? || !st.started?
       return
     end
 
-    inv = player.inventory.items
+    inv = pc.inventory.items
     ret = nil
     inv.each do |item|
       item_id = item.id
@@ -179,7 +179,7 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
     false
   end
 
-  private def level_crystal(player, sc, mob)
+  private def level_crystal(pc, sc, mob)
     if sc.nil? || !NPC_LEVELING_INFO.has_key?(mob.id)
       return
     end
@@ -190,48 +190,40 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
 
     # If the crystal level is way too high for this mob, say that we can't increase it
     unless NPC_LEVELING_INFO[mob.id].has_key?(sc.level)
-      player.send_packet(SystemMessageId::SOUL_CRYSTAL_ABSORBING_REFUSED)
+      pc.send_packet(SystemMessageId::SOUL_CRYSTAL_ABSORBING_REFUSED)
       return
     end
 
     if rand(100) <= NPC_LEVELING_INFO[mob.id][sc.level].chance
-      exchange_crystal(player, mob, sc.item_id, sc.leveled_item_id, false)
+      exchange_crystal(pc, mob, sc.item_id, sc.leveled_item_id, false)
     else
-      player.send_packet(SystemMessageId::SOUL_CRYSTAL_ABSORBING_FAILED)
+      pc.send_packet(SystemMessageId::SOUL_CRYSTAL_ABSORBING_FAILED)
     end
   end
 
-  # /**
-  #  * Calculate the leveling chance of Soul Crystals based on the attacker that killed this L2Attackable
-  #  * @param mob
-  #  * @param killer The player that last killed this L2Attackable $ Rewrite 06.12.06 - Yesod $ Rewrite 08.01.10 - Gigiikun
-  #  */
   private def level_soul_crystal(mob, killer)
-    # Only L2PcInstance can absorb a soul
     unless killer
       mob.reset_absorb_list
       return
     end
 
-    players = {} of L2PcInstance => SoulCrystal
+    pcs = {} of L2PcInstance => SoulCrystal
     max_sc_level = 0
 
-    # TODO: what if mob support last_hit + party?
     if party_leveling_monster?(mob.id) && (party = killer.party?)
-      # firts get the list of players who has one Soul Cry and the quest
       party.members.each do |pl|
         unless sc = get_sc_for_player(pl)
           next
         end
 
-        players[pl] = sc
+        pcs[pl] = sc
         if max_sc_level < sc.level && NPC_LEVELING_INFO[mob.id].has_key?(sc.level)
           max_sc_level = sc.level
         end
       end
     else
       if sc = get_sc_for_player(killer)
-        players[killer] = sc
+        pcs[killer] = sc
         if max_sc_level < sc.level && NPC_LEVELING_INFO[mob.id].has_key?(sc.level)
           max_sc_level = sc.level
         end
@@ -275,9 +267,9 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
       # among those who have crystals, only. However, this might actually be correct (same as retail).
       if party = killer.party?
         lucky = party.members.sample
-        level_crystal(lucky, players[lucky], mob)
+        level_crystal(lucky, pcs[lucky], mob)
       else
-        level_crystal(killer, players[killer], mob)
+        level_crystal(killer, pcs[killer], mob)
       end
     when AbsorbCrystalType::PARTY_RANDOM
       if party = killer.party?
@@ -285,23 +277,23 @@ class Quests::Q00350_EnhanceYourWeapon < Quest
         while rand(100) < 33 && !lucky_party.empty?
           lucky = lucky_party.sample
           lucky_party.delete_first(lucky)
-          if players.has_key?(lucky)
-            level_crystal(lucky, players[lucky], mob)
+          if pcs.has_key?(lucky)
+            level_crystal(lucky, pcs[lucky], mob)
           end
         end
       elsif rand(100) < 33
-        level_crystal(killer, players[killer], mob)
+        level_crystal(killer, pcs[killer], mob)
       end
     when AbsorbCrystalType::FULL_PARTY
       if party = killer.party?
         killer.party.members.each do |pl|
-          level_crystal(pl, players[pl], mob)
+          level_crystal(pl, pcs[pl], mob)
         end
       else
-        level_crystal(killer, players[killer], mob)
+        level_crystal(killer, pcs[killer], mob)
       end
     when AbsorbCrystalType::LAST_HIT
-      level_crystal(killer, players[killer], mob)
+      level_crystal(killer, pcs[killer], mob)
     end
   end
 

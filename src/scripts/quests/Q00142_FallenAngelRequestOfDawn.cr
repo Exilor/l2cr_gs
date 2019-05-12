@@ -1,4 +1,4 @@
-class Quests::Q00142_FallenAngelRequestOfDawn < Quest
+class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
   # NPCs
   private RAYMOND = 30289
   private CASIAN = 30612
@@ -35,16 +35,18 @@ class Quests::Q00142_FallenAngelRequestOfDawn < Quest
     add_talk_id(NATOOLS, RAYMOND, CASIAN, ROCK)
     add_kill_id(MOBS.keys)
     add_kill_id(FALLEN_ANGEL)
-    register_quest_items(CRYPTOGRAM_OF_THE_ANGEL_SEARCH, PROPHECY_FRAGMENT, FALLEN_ANGEL_BLOOD)
+    register_quest_items(
+      CRYPTOGRAM_OF_THE_ANGEL_SEARCH, PROPHECY_FRAGMENT, FALLEN_ANGEL_BLOOD
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30894-02.html", "30289-03.html", "30289-04.html", "30612-03.html",
          "30612-04.html", "30612-06.html", "30612-07.html"
@@ -69,28 +71,28 @@ class Quests::Q00142_FallenAngelRequestOfDawn < Quest
       npc = npc.not_nil!
       add_spawn(FALLEN_ANGEL, npc.x + 100, npc.y + 100, npc.z, 0, false, 120000)
       @@angel_spawned = true
-      start_quest_timer("despawn", 120000, nil, player)
+      start_quest_timer("despawn", 120000, nil, pc)
     when "despawn"
       if @@angel_spawned
         @@angel_spawned = false
       end
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     if npc.id == FALLEN_ANGEL
-      st = get_quest_state!(player, false)
+      st = get_quest_state!(pc, false)
       if st.cond?(5)
         st.give_items(FALLEN_ANGEL_BLOOD, 1)
         st.set_cond(6, true)
         @@angel_spawned = false
       end
     else
-      if member = get_random_party_member(player, 4)
+      if member = get_random_party_member(pc, 4)
         st = get_quest_state(member, false).not_nil!
         if Rnd.rand(1000) < MOBS[npc.id]
           st.give_items(PROPHECY_FRAGMENT, 1)
@@ -107,8 +109,8 @@ class Quests::Q00142_FallenAngelRequestOfDawn < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when NATOOLS
@@ -116,68 +118,68 @@ class Quests::Q00142_FallenAngelRequestOfDawn < Quest
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30894-01.html"
+          html = "30894-01.html"
         else
-          htmltext = "30894-04.html"
+          html = "30894-04.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when RAYMOND
       if st.started?
         case st.cond
         when 1
-          htmltext = "30289-01.html"
+          html = "30289-01.html"
         when 2
           if st.set?("talk")
-            htmltext = "30289-03.html"
+            html = "30289-03.html"
           else
             st.take_items(CRYPTOGRAM_OF_THE_ANGEL_SEARCH, -1)
             st.set("talk", "1")
-            htmltext = "30289-02.html"
+            html = "30289-02.html"
           end
         when 3..5
-          htmltext = "30289-06.html"
+          html = "30289-06.html"
         when 6
           st.give_adena(92676, true)
-          if player.level <= MAX_REWARD_LEVEL
+          if pc.level <= MAX_REWARD_LEVEL
             st.add_exp_and_sp(223036, 13091)
           end
           st.exit_quest(false, true)
-          htmltext = "30289-07.html"
+          html = "30289-07.html"
         end
       end
     when CASIAN
       if st.started?
         case st.cond
         when 1, 2
-          htmltext = "30612-01.html"
+          html = "30612-01.html"
         when 3
           if st.get_int("talk") == 1
-            htmltext = "30612-03.html"
+            html = "30612-03.html"
           elsif st.get_int("talk") == 2
-            htmltext = "30612-06.html"
+            html = "30612-06.html"
           else
-            htmltext = "30612-02.html"
+            html = "30612-02.html"
             st.set("talk", "1")
           end
         when 4..6
-          htmltext = "30612-09.html"
+          html = "30612-09.html"
         end
       end
     when ROCK
       if st.started?
         case st.cond
         when 5
-          htmltext = "32368-02.html"
+          html = "32368-02.html"
         when 6
-          htmltext = "32368-05.html"
+          html = "32368-05.html"
         else
-          htmltext = "32368-01.html"
+          html = "32368-01.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

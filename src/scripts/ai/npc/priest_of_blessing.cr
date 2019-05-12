@@ -1,4 +1,4 @@
-class NpcAI::PriestOfBlessing < AbstractNpcAI
+class Scripts::PriestOfBlessing < AbstractNpcAI
   # NPC
   private PRIEST = 32783
 
@@ -66,7 +66,7 @@ class NpcAI::PriestOfBlessing < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    htmltext = event
+    html = event
     if event.casecmp?("buy_voice")
       pc = pc.not_nil!
       if pc.adena >= PRICE_VOICE
@@ -90,7 +90,7 @@ class NpcAI::PriestOfBlessing < AbstractNpcAI
 
         return
       end
-      htmltext = "32783-adena.htm"
+      html = "32783-adena.htm"
     elsif event.casecmp?("buy_hourglass")
       pc = pc.not_nil!
       _index = get_hg_index(pc.level)
@@ -119,10 +119,10 @@ class NpcAI::PriestOfBlessing < AbstractNpcAI
 
         return
       end
-      htmltext = "32783-adena.htm"
+      html = "32783-adena.htm"
     end
 
-    htmltext
+    html
   end
 
   def on_first_talk(npc, pc)

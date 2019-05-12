@@ -10,7 +10,7 @@ require "../../models/actor/l2_character"
 #   private WIT_BONUS = Slice.new(100, 0.0)
 #   private MEN_BONUS = Slice.new(100, 0.0)
 
-#   def initialize(&@block : L2Character -> Float64)
+#   protected def initialize(&@block : L2Character -> Float64)
 #   end
 
 #   def calc_bonus(char)
@@ -64,7 +64,7 @@ require "../../models/actor/l2_character"
 class BaseStats < EnumClass
   extend XMLReader
 
-  initializer stat: BaseStat
+  protected initializer stat: BaseStat
 
   delegate calc_bonus, to: @stat
 
@@ -77,7 +77,7 @@ class BaseStats < EnumClass
 
       BONUS = Slice.new(100, 0.0)
 
-      def self.calc_bonus(char)
+      def self.calc_bonus(char : L2Character) : Float64
         BONUS[char.{{stat.downcase.id}}]
       end
     end
@@ -88,7 +88,7 @@ class BaseStats < EnumClass
   private module NONEStat
     extend BaseStat
 
-    def self.calc_bonus(char)
+    def self.calc_bonus(char : L2Character) : Float64
       1.0
     end
   end

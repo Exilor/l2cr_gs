@@ -1,4 +1,4 @@
-class Quests::Q00014_WhereaboutsOfTheArchaeologist < Quest
+class Scripts::Q00014_WhereaboutsOfTheArchaeologist < Quest
   # NPCs
   private LIESEL = 31263
   private GHOST_OF_ADVENTURER = 31538
@@ -13,12 +13,11 @@ class Quests::Q00014_WhereaboutsOfTheArchaeologist < Quest
     register_quest_items(LETTER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    st = get_quest_state(player, false)
-    if st.nil?
-      return htmltext
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    unless st = get_quest_state(pc, false)
+      return html
     end
 
     case event
@@ -31,38 +30,37 @@ class Quests::Q00014_WhereaboutsOfTheArchaeologist < Quest
         st.add_exp_and_sp(325881, 32524)
         st.exit_quest(false, true)
       else
-        htmltext = "31538-02.html"
+        html = "31538-02.html"
       end
     end
-    return htmltext
+
+    html
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state(player, true)
-    if st.nil?
-      return htmltext
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
     end
 
-    npcId = npc.id
+    npc_id = npc.id
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
-      if npcId == LIESEL
-        htmltext = (player.level < 74) ? "31263-01.html" : "31263-00.htm"
+      if npc_id == LIESEL
+        html = pc.level < 74 ? "31263-01.html" : "31263-00.htm"
       end
     when State::STARTED
       if st.cond?(1)
-        case npcId
+        case npc_id
         when LIESEL
-          htmltext = "31263-02.html"
+          html = "31263-02.html"
         when GHOST_OF_ADVENTURER
-          htmltext = "31538-00.html"
+          html = "31538-00.html"
         end
       end
     end
 
-    return htmltext
+    html || get_no_quest_msg(pc)
   end
 end

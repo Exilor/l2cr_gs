@@ -1,4 +1,4 @@
-class Quests::Q00382_KailsMagicCoin < Quest
+class Scripts::Q00382_KailsMagicCoin < Quest
   # NPCs
   private VERGARA = 30687
   # Monsters
@@ -52,11 +52,11 @@ class Quests::Q00382_KailsMagicCoin < Quest
     html
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created?
-      if talker.level >= MIN_LVL && has_quest_items?(talker, ROYAL_MEMBERSHIP)
+      if pc.level >= MIN_LVL && has_quest_items?(pc, ROYAL_MEMBERSHIP)
         html = "30687-02.htm"
       else
         html = "30687-01.htm"
@@ -65,7 +65,7 @@ class Quests::Q00382_KailsMagicCoin < Quest
       html = "30687-04.htm"
     end
 
-    html || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

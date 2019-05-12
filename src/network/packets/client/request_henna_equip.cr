@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestHennaEquip < GameClientPacket
   @symbol_id = 0
 
-  def read_impl
+  private def read_impl
     @symbol_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless flood_protectors.transaction.try_perform_action("HennaEquip")

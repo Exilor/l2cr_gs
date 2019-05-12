@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestAnswerJoinAlly < GameClientPacket
   @response = 0
 
-  def read_impl
+  private def read_impl
     @response = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     unless requestor = pc.request.partner
       warn "No request partner."

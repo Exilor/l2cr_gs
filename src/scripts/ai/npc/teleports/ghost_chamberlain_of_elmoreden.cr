@@ -1,4 +1,4 @@
-class NpcAI::GhostChamberlainOfElmoreden < AbstractNpcAI
+class Scripts::GhostChamberlainOfElmoreden < AbstractNpcAI
   # NPCs
   private GHOST_CHAMBERLAIN_OF_ELMOREDEN_1 = 31919
   private GHOST_CHAMBERLAIN_OF_ELMOREDEN_2 = 31920

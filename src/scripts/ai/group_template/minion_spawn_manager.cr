@@ -1,4 +1,4 @@
-class NpcAI::MinionSpawnManager < AbstractNpcAI
+class MinionSpawnManager < AbstractNpcAI
   private NPC = [
     18344, # Ancient Egg
     18352, # Kamael Guard
@@ -391,7 +391,6 @@ class NpcAI::MinionSpawnManager < AbstractNpcAI
     if npc.is_a?(L2MonsterInstance) && !npc.teleporting?
       if Rnd.rand(1..100) <= npc.template.parameters.get_i32("SummonPrivateRate", 0)
         if npc.script_value?(0)
-          # p npc.template.parameters.get_minion_list("Privates")
           npc.template.parameters.get_minion_list("Privates").each do |is|
             add_minion(npc, is.id)
           end

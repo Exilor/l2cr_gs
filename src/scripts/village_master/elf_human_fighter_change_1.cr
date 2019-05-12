@@ -1,4 +1,4 @@
-class NpcAI::ElfHumanFighterChange1 < AbstractNpcAI
+class Scripts::ElfHumanFighterChange1 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30066, # Pabris

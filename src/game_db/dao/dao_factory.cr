@@ -14,71 +14,71 @@ module GameDB
       # info "Using #{@@factory}."
     end
 
-    def friend
+    def friend : FriendDAO
       factory.friend
     end
 
-    def henna
+    def henna : HennaDAO
       factory.henna
     end
 
-    def item
+    def item : ItemDAO
       factory.item
     end
 
-    def item_reuse
+    def item_reuse : ItemReuseDAO
       factory.item_reuse
     end
 
-    def pet
+    def pet : PetDAO
       factory.pet
     end
 
-    def pet_skill_save
+    def pet_skill_save : PetSkillSaveDAO
       factory.pet_skill_save
     end
 
-    def player
+    def player : PlayerDAO
       factory.player
     end
 
-    def player_skill_save
+    def player_skill_save : PlayerSkillSaveDAO
       factory.player_skill_save
     end
 
-    def premium_item
+    def premium_item : PremiumItemDAO
       factory.premium_item
     end
 
-    def recipe_book
+    def recipe_book : RecipeBookDAO
       factory.recipe_book
     end
 
-    def recipe_shop_list
+    def recipe_shop_list : RecipeShopListDAO
       factory.recipe_shop_list
     end
 
-    def recommendation_bonus
+    def recommendation_bonus : RecommendationBonusDAO
       factory.recommendation_bonus
     end
 
-    def servitor_skill_save
+    def servitor_skill_save : ServitorSkillSaveDAO
       factory.servitor_skill_save
     end
 
-    def shortcut
+    def shortcut : ShortcutDAO
       factory.shortcut
     end
 
-    def skill
+    def skill : SkillDAO
       factory.skill
     end
 
-    def subclass
+    def subclass : SubclassDAO
       factory.subclass
     end
 
-    def teleport_bookmark
+    def teleport_bookmark : TeleportBookmarkDAO
       factory.teleport_bookmark
     end
   end

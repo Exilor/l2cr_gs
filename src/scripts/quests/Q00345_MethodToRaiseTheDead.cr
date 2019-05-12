@@ -1,4 +1,4 @@
-class Quests::Q00345_MethodToRaiseTheDead < Quest
+class Scripts::Q00345_MethodToRaiseTheDead < Quest
   # NPCs
   private XENOVIA = 30912
   private DOROTHY = 30970

@@ -1,4 +1,4 @@
-class NpcAI::RandomSpawn < AbstractNpcAI
+class Scripts::RandomSpawn < AbstractNpcAI
   private SPAWN_POINTS = {
     22341 => [ # Keltas
       Location.new(-27136, 250938, -3523),

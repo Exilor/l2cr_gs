@@ -1,4 +1,4 @@
-class Quests::Q00173_ToTheIsleOfSouls < Quest
+class Scripts::Q00173_ToTheIsleOfSouls < Quest
   # NPCs
   private GALLADUCCI = 30097
   private GENTLER = 30094
@@ -17,14 +17,13 @@ class Quests::Q00173_ToTheIsleOfSouls < Quest
     register_quest_items(GALLADUCCIS_ORDER, MAGIC_SWORD_HILT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
-    if st.nil?
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30097-03.htm"
       st.start_quest
@@ -41,14 +40,12 @@ class Quests::Q00173_ToTheIsleOfSouls < Quest
       return
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    st = get_quest_state(pc, true)
-    unless st
-      return htmltext
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
     end
 
     case npc.id
@@ -56,20 +53,21 @@ class Quests::Q00173_ToTheIsleOfSouls < Quest
       case st.state
       when State::CREATED
         if pc.race.kamael? && pc.quest_completed?(Q00172_NewHorizons.simple_name) && st.has_quest_items?(MARK_OF_TRAVELER)
-          htmltext = "30097-01.htm"
+          html = "30097-01.htm"
         else
-          htmltext = "30097-02.htm"
+          html = "30097-02.htm"
         end
       when State::STARTED
-        htmltext = st.cond?(1) ? "30097-04.html" : "30097-05.html"
+        html = st.cond?(1) ? "30097-04.html" : "30097-05.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when GENTLER
       if st.started?
-        htmltext = st.cond?(1) ? "30094-01.html" : "30094-03.html"
+        html = st.cond?(1) ? "30094-01.html" : "30094-03.html"
       end
     end
-    return htmltext
+
+    html || get_no_quest_msg(pc)
   end
 end

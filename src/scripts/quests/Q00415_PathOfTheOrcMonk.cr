@@ -1,4 +1,4 @@
-class Quests::Q00415_PathOfTheOrcMonk < Quest
+class Scripts::Q00415_PathOfTheOrcMonk < Quest
   # NPCs
   private PREFECT_KASMAN = 30501
   private GANTAKI_ZU_URUTU = 30587
@@ -76,91 +76,91 @@ class Quests::Q00415_PathOfTheOrcMonk < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if player.class_id.orc_fighter?
-        if player.level >= MIN_LEVEL
-          if has_quest_items?(player, KHAVATARI_TOTEM)
-            htmltext = "30587-04.htm"
+      if pc.class_id.orc_fighter?
+        if pc.level >= MIN_LEVEL
+          if has_quest_items?(pc, KHAVATARI_TOTEM)
+            html = "30587-04.htm"
           else
-            htmltext = "30587-05.htm"
+            html = "30587-05.htm"
           end
         else
-          htmltext = "30587-03.htm"
+          html = "30587-03.htm"
         end
-      elsif player.class_id.orc_monk?
-        htmltext = "30587-02a.htm"
+      elsif pc.class_id.orc_monk?
+        html = "30587-02a.htm"
       else
-        htmltext = "30587-02.htm"
+        html = "30587-02.htm"
       end
     when "30587-06.htm"
       qs.start_quest
-      give_items(player, POMEGRANATE, 1)
-      htmltext = event
+      give_items(pc, POMEGRANATE, 1)
+      html = event
     when "30587-09b.html"
-      if has_quest_items?(player, FIERY_SPIRIT_SCROLL, ROSHEEKS_LETTER)
-        take_items(player, ROSHEEKS_LETTER, 1)
-        give_items(player, GANTAKIS_LETTRT_OF_RECOMMENDATION, 1)
+      if has_quest_items?(pc, FIERY_SPIRIT_SCROLL, ROSHEEKS_LETTER)
+        take_items(pc, ROSHEEKS_LETTER, 1)
+        give_items(pc, GANTAKIS_LETTRT_OF_RECOMMENDATION, 1)
         qs.set_cond(9)
-        htmltext = event
+        html = event
       end
     when "30587-09c.html"
-      if has_quest_items?(player, FIERY_SPIRIT_SCROLL, ROSHEEKS_LETTER)
-        take_items(player, ROSHEEKS_LETTER, 1)
+      if has_quest_items?(pc, FIERY_SPIRIT_SCROLL, ROSHEEKS_LETTER)
+        take_items(pc, ROSHEEKS_LETTER, 1)
         qs.memo_state = 2
         qs.set_cond(14)
-        htmltext = event
+        html = event
       end
     when "31979-02.html"
       if qs.memo_state?(5)
-        htmltext = event
+        html = event
       end
     when "31979-03.html"
       if qs.memo_state?(5)
-        give_adena(player, 81900, true)
-        give_items(player, KHAVATARI_TOTEM, 1)
-        level = player.level
+        give_adena(pc, 81900, true)
+        give_items(pc, KHAVATARI_TOTEM, 1)
+        level = pc.level
         if level >= 20
-          add_exp_and_sp(player, 160267, 12646)
+          add_exp_and_sp(pc, 160267, 12646)
         elsif level == 19
-          add_exp_and_sp(player, 228064, 15995)
+          add_exp_and_sp(pc, 228064, 15995)
         else
-          add_exp_and_sp(player, 295862, 19344)
+          add_exp_and_sp(pc, 295862, 19344)
         end
         qs.exit_quest(false, true)
-        player.send_packet(SocialAction.new(player.l2id, 3))
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
         qs.save_global_quest_var("1ClassQuestFinished", "1")
-        htmltext = event
+        html = event
       end
     when "31979-04.html"
       if qs.memo_state?(5)
         qs.set_cond(20)
-        htmltext = event
+        html = event
       end
     when "32056-02.html"
       if qs.memo_state?(2)
-        htmltext = event
+        html = event
       end
     when "32056-03.html"
       if qs.memo_state?(2)
         qs.memo_state = 3
         qs.set_cond(15)
-        htmltext = event
+        html = event
       end
     when "32056-08.html"
-      if qs.memo_state?(4) && get_quest_items_count(player, HORN_OF_BAAR_DRE_VANUL) >= 1
-        take_items(player, HORN_OF_BAAR_DRE_VANUL, -1)
+      if qs.memo_state?(4) && get_quest_items_count(pc, HORN_OF_BAAR_DRE_VANUL) >= 1
+        take_items(pc, HORN_OF_BAAR_DRE_VANUL, -1)
         qs.memo_state = 5
         qs.set_cond(19)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -318,142 +318,142 @@ class Quests::Q00415_PathOfTheOrcMonk < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
-    htmltext = get_no_quest_msg(player)
+
     if qs.created? || qs.completed?
       if npc.id == GANTAKI_ZU_URUTU
-        htmltext = "30587-01.htm"
+        html = "30587-01.htm"
       end
     elsif qs.started?
       case npc.id
       when GANTAKI_ZU_URUTU
-         letter_count = get_quest_items_count(player, LEATHER_POUCH_1ST, LEATHER_POUCH_2ND, LEATHER_POUCH_3RD, LEATHER_POUCH_1ST_FULL, LEATHER_POUCH_2ND_FULL, LEATHER_POUCH_3RD_FULL)
+         letter_count = get_quest_items_count(pc, LEATHER_POUCH_1ST, LEATHER_POUCH_2ND, LEATHER_POUCH_3RD, LEATHER_POUCH_1ST_FULL, LEATHER_POUCH_2ND_FULL, LEATHER_POUCH_3RD_FULL)
         if memo_state == 2
-          htmltext = "30587-09c.html"
-        elsif has_quest_items?(player, POMEGRANATE) && !has_at_least_one_quest_item?(player, FIERY_SPIRIT_SCROLL, GANTAKIS_LETTRT_OF_RECOMMENDATION, ROSHEEKS_LETTER) && letter_count == 0
-          htmltext = "30587-07.html"
-        elsif !has_at_least_one_quest_item?(player, FIERY_SPIRIT_SCROLL, POMEGRANATE, GANTAKIS_LETTRT_OF_RECOMMENDATION, ROSHEEKS_LETTER) && letter_count == 1
-          htmltext = "30587-08.html"
-        elsif has_quest_items?(player, FIERY_SPIRIT_SCROLL, ROSHEEKS_LETTER) && !has_at_least_one_quest_item?(player, POMEGRANATE, GANTAKIS_LETTRT_OF_RECOMMENDATION) && letter_count == 0
-          htmltext = "30587-09a.html"
+          html = "30587-09c.html"
+        elsif has_quest_items?(pc, POMEGRANATE) && !has_at_least_one_quest_item?(pc, FIERY_SPIRIT_SCROLL, GANTAKIS_LETTRT_OF_RECOMMENDATION, ROSHEEKS_LETTER) && letter_count == 0
+          html = "30587-07.html"
+        elsif !has_at_least_one_quest_item?(pc, FIERY_SPIRIT_SCROLL, POMEGRANATE, GANTAKIS_LETTRT_OF_RECOMMENDATION, ROSHEEKS_LETTER) && letter_count == 1
+          html = "30587-08.html"
+        elsif has_quest_items?(pc, FIERY_SPIRIT_SCROLL, ROSHEEKS_LETTER) && !has_at_least_one_quest_item?(pc, POMEGRANATE, GANTAKIS_LETTRT_OF_RECOMMENDATION) && letter_count == 0
+          html = "30587-09a.html"
         elsif memo_state < 2
-          if has_quest_items?(player, FIERY_SPIRIT_SCROLL, GANTAKIS_LETTRT_OF_RECOMMENDATION) && !has_at_least_one_quest_item?(player, POMEGRANATE, ROSHEEKS_LETTER) && letter_count == 0
-            htmltext = "30587-10.html"
-          elsif has_quest_items?(player, FIERY_SPIRIT_SCROLL) && !has_at_least_one_quest_item?(player, POMEGRANATE, GANTAKIS_LETTRT_OF_RECOMMENDATION, ROSHEEKS_LETTER) && letter_count == 0
-            htmltext = "30587-11.html"
+          if has_quest_items?(pc, FIERY_SPIRIT_SCROLL, GANTAKIS_LETTRT_OF_RECOMMENDATION) && !has_at_least_one_quest_item?(pc, POMEGRANATE, ROSHEEKS_LETTER) && letter_count == 0
+            html = "30587-10.html"
+          elsif has_quest_items?(pc, FIERY_SPIRIT_SCROLL) && !has_at_least_one_quest_item?(pc, POMEGRANATE, GANTAKIS_LETTRT_OF_RECOMMENDATION, ROSHEEKS_LETTER) && letter_count == 0
+            html = "30587-11.html"
           end
         end
       when PREFECT_KASMAN
-        if has_quest_items?(player, GANTAKIS_LETTRT_OF_RECOMMENDATION)
-          take_items(player, GANTAKIS_LETTRT_OF_RECOMMENDATION, 1)
-          give_items(player, FIG, 1)
+        if has_quest_items?(pc, GANTAKIS_LETTRT_OF_RECOMMENDATION)
+          take_items(pc, GANTAKIS_LETTRT_OF_RECOMMENDATION, 1)
+          give_items(pc, FIG, 1)
           qs.set_cond(10)
-          htmltext = "30501-01.html"
-        elsif has_quest_items?(player, FIG) && !has_at_least_one_quest_item?(player, LEATHER_POUCH_4TF, LEATHER_POUCH_4TF_FULL)
-          htmltext = "30501-02.html"
-        elsif !has_quest_items?(player, FIG) && has_at_least_one_quest_item?(player, LEATHER_POUCH_4TF, LEATHER_POUCH_4TF_FULL)
-          htmltext = "30501-03.html"
-        elsif has_quest_items?(player, IRON_WILL_SCROLL)
-          give_adena(player, 163800, true)
-          give_items(player, KHAVATARI_TOTEM, 1)
-          level = player.level
+          html = "30501-01.html"
+        elsif has_quest_items?(pc, FIG) && !has_at_least_one_quest_item?(pc, LEATHER_POUCH_4TF, LEATHER_POUCH_4TF_FULL)
+          html = "30501-02.html"
+        elsif !has_quest_items?(pc, FIG) && has_at_least_one_quest_item?(pc, LEATHER_POUCH_4TF, LEATHER_POUCH_4TF_FULL)
+          html = "30501-03.html"
+        elsif has_quest_items?(pc, IRON_WILL_SCROLL)
+          give_adena(pc, 163800, true)
+          give_items(pc, KHAVATARI_TOTEM, 1)
+          level = pc.level
           if level >= 20
-            add_exp_and_sp(player, 320534, 25292)
+            add_exp_and_sp(pc, 320534, 25292)
           elsif level == 19
-            add_exp_and_sp(player, 456128, 31990)
+            add_exp_and_sp(pc, 456128, 31990)
           else
-            add_exp_and_sp(player, 591724, 38688)
+            add_exp_and_sp(pc, 591724, 38688)
           end
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           qs.save_global_quest_var("1ClassQuestFinished", "1")
-          htmltext = "30501-04.html"
+          html = "30501-04.html"
         end
       when KHAVATARI_ROSHEEK
-        if has_quest_items?(player, POMEGRANATE)
-          take_items(player, POMEGRANATE, 1)
-          give_items(player, LEATHER_POUCH_1ST, 1)
+        if has_quest_items?(pc, POMEGRANATE)
+          take_items(pc, POMEGRANATE, 1)
+          give_items(pc, LEATHER_POUCH_1ST, 1)
           qs.set_cond(2)
-          htmltext = "30590-01.html"
-        elsif has_quest_items?(player, LEATHER_POUCH_1ST) && !has_quest_items?(player, LEATHER_POUCH_1ST_FULL)
-          htmltext = "30590-02.html"
-        elsif !has_quest_items?(player, LEATHER_POUCH_1ST) && has_quest_items?(player, LEATHER_POUCH_1ST_FULL)
-          give_items(player, LEATHER_POUCH_2ND, 1)
-          take_items(player, LEATHER_POUCH_1ST_FULL, 1)
+          html = "30590-01.html"
+        elsif has_quest_items?(pc, LEATHER_POUCH_1ST) && !has_quest_items?(pc, LEATHER_POUCH_1ST_FULL)
+          html = "30590-02.html"
+        elsif !has_quest_items?(pc, LEATHER_POUCH_1ST) && has_quest_items?(pc, LEATHER_POUCH_1ST_FULL)
+          give_items(pc, LEATHER_POUCH_2ND, 1)
+          take_items(pc, LEATHER_POUCH_1ST_FULL, 1)
           qs.set_cond(4)
-          htmltext = "30590-03.html"
-        elsif has_quest_items?(player, LEATHER_POUCH_2ND) && !has_quest_items?(player, LEATHER_POUCH_2ND_FULL)
-          htmltext = "30590-04.html"
-        elsif !has_quest_items?(player, LEATHER_POUCH_2ND) && has_quest_items?(player, LEATHER_POUCH_2ND_FULL)
-          give_items(player, LEATHER_POUCH_3RD, 1)
-          take_items(player, LEATHER_POUCH_2ND_FULL, 1)
+          html = "30590-03.html"
+        elsif has_quest_items?(pc, LEATHER_POUCH_2ND) && !has_quest_items?(pc, LEATHER_POUCH_2ND_FULL)
+          html = "30590-04.html"
+        elsif !has_quest_items?(pc, LEATHER_POUCH_2ND) && has_quest_items?(pc, LEATHER_POUCH_2ND_FULL)
+          give_items(pc, LEATHER_POUCH_3RD, 1)
+          take_items(pc, LEATHER_POUCH_2ND_FULL, 1)
           qs.set_cond(6)
-          htmltext = "30590-05.html"
-        elsif has_quest_items?(player, LEATHER_POUCH_3RD) && !has_quest_items?(player, LEATHER_POUCH_3RD_FULL)
-          htmltext = "30590-06.html"
-        elsif !has_quest_items?(player, LEATHER_POUCH_3RD) && has_quest_items?(player, LEATHER_POUCH_3RD_FULL)
-          take_items(player, LEATHER_POUCH_3RD_FULL, 1)
-          give_items(player, FIERY_SPIRIT_SCROLL, 1)
-          give_items(player, ROSHEEKS_LETTER, 1)
+          html = "30590-05.html"
+        elsif has_quest_items?(pc, LEATHER_POUCH_3RD) && !has_quest_items?(pc, LEATHER_POUCH_3RD_FULL)
+          html = "30590-06.html"
+        elsif !has_quest_items?(pc, LEATHER_POUCH_3RD) && has_quest_items?(pc, LEATHER_POUCH_3RD_FULL)
+          take_items(pc, LEATHER_POUCH_3RD_FULL, 1)
+          give_items(pc, FIERY_SPIRIT_SCROLL, 1)
+          give_items(pc, ROSHEEKS_LETTER, 1)
           qs.set_cond(8)
-          htmltext = "30590-07.html"
-        elsif has_quest_items?(player, ROSHEEKS_LETTER, FIERY_SPIRIT_SCROLL)
-          htmltext = "30590-08.html"
-        elsif !has_quest_items?(player, ROSHEEKS_LETTER) && has_quest_items?(player, FIERY_SPIRIT_SCROLL)
-          htmltext = "30590-09.html"
+          html = "30590-07.html"
+        elsif has_quest_items?(pc, ROSHEEKS_LETTER, FIERY_SPIRIT_SCROLL)
+          html = "30590-08.html"
+        elsif !has_quest_items?(pc, ROSHEEKS_LETTER) && has_quest_items?(pc, FIERY_SPIRIT_SCROLL)
+          html = "30590-09.html"
         end
       when KHAVATARI_TORUKU
-        if has_quest_items?(player, FIG)
-          take_items(player, FIG, 1)
-          give_items(player, LEATHER_POUCH_4TF, 1)
+        if has_quest_items?(pc, FIG)
+          take_items(pc, FIG, 1)
+          give_items(pc, LEATHER_POUCH_4TF, 1)
           qs.set_cond(11)
-          htmltext = "30591-01.html"
-        elsif has_quest_items?(player, LEATHER_POUCH_4TF) && !has_quest_items?(player, LEATHER_POUCH_4TF_FULL)
-          htmltext = "30591-02.html"
-        elsif !has_quest_items?(player, LEATHER_POUCH_4TF) && has_quest_items?(player, LEATHER_POUCH_4TF_FULL)
-          take_items(player, LEATHER_POUCH_4TF_FULL, 1)
-          give_items(player, IRON_WILL_SCROLL, 1)
-          give_items(player, TORUKUS_LETTER, 1)
+          html = "30591-01.html"
+        elsif has_quest_items?(pc, LEATHER_POUCH_4TF) && !has_quest_items?(pc, LEATHER_POUCH_4TF_FULL)
+          html = "30591-02.html"
+        elsif !has_quest_items?(pc, LEATHER_POUCH_4TF) && has_quest_items?(pc, LEATHER_POUCH_4TF_FULL)
+          take_items(pc, LEATHER_POUCH_4TF_FULL, 1)
+          give_items(pc, IRON_WILL_SCROLL, 1)
+          give_items(pc, TORUKUS_LETTER, 1)
           qs.set_cond(13)
-          htmltext = "30591-03.html"
-        elsif has_quest_items?(player, IRON_WILL_SCROLL, TORUKUS_LETTER)
-          htmltext = "30591-04.html"
+          html = "30591-03.html"
+        elsif has_quest_items?(pc, IRON_WILL_SCROLL, TORUKUS_LETTER)
+          html = "30591-04.html"
         end
       when SEER_MOIRA
         if memo_state == 5
-          htmltext = "31979-01.html"
+          html = "31979-01.html"
         end
       when KHAVATARI_AREN
         if memo_state == 2
-          htmltext = "32056-01.html"
+          html = "32056-01.html"
         elsif memo_state == 3
-          if get_quest_items_count(player, KASHA_SPIDERS_TOOTH) < 6
-            htmltext = "32056-04.html"
+          if get_quest_items_count(pc, KASHA_SPIDERS_TOOTH) < 6
+            html = "32056-04.html"
           else
-            take_items(player, KASHA_SPIDERS_TOOTH, -1)
+            take_items(pc, KASHA_SPIDERS_TOOTH, -1)
             qs.memo_state = 4
             qs.set_cond(17)
-            htmltext = "32056-05.html"
+            html = "32056-05.html"
           end
         elsif memo_state == 4
-          if !has_quest_items?(player, HORN_OF_BAAR_DRE_VANUL)
-            htmltext = "32056-06.html"
+          if !has_quest_items?(pc, HORN_OF_BAAR_DRE_VANUL)
+            html = "32056-06.html"
           else
-            htmltext = "32056-07.html"
+            html = "32056-07.html"
           end
         elsif memo_state == 5
-          htmltext = "32056-09.html"
+          html = "32056-09.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
-  private def check_weapon(player)
-    return true unless weapon = player.active_weapon_instance?
+  private def check_weapon(pc)
+    return true unless weapon = pc.active_weapon_instance?
     weapon.item_type == WeaponType::FIST ||
     weapon.item_type == WeaponType::DUALFIST
   end

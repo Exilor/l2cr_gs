@@ -1,4 +1,4 @@
-class Post
+struct Post
   class CPost
     property post_id : Int32 = 0
     property post_owner : String = ""

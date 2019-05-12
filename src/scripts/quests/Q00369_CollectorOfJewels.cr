@@ -1,4 +1,4 @@
-class Quests::Q00369_CollectorOfJewels < Quest
+class Scripts::Q00369_CollectorOfJewels < Quest
   # NPC
   private NELL = 30376
   # Items

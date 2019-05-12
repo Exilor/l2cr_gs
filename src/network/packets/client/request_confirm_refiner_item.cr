@@ -2,12 +2,12 @@ class Packets::Incoming::RequestConfirmRefinerItem < Packets::Incoming::Abstract
   @target_id = 0
   @refiner_id = 0
 
-  def read_impl
+  private def read_impl
     @target_id = d
     @refiner_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless target_item = pc.inventory.get_item_by_l2id(@target_id)
     return unless refiner_item = pc.inventory.get_item_by_l2id(@refiner_id)

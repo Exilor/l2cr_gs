@@ -1,4 +1,4 @@
-class NpcAI::TarBeetle < AbstractNpcAI
+class Scripts::TarBeetle < AbstractNpcAI
   # NPC
   private TAR_BEETLE = 18804
   # Skills

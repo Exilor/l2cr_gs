@@ -1,4 +1,4 @@
-class PailakaDevilsLegacy < AbstractInstance
+class Scripts::PailakaDevilsLegacy < AbstractInstance
   private class DIWorld < InstanceWorld
     getter followers_list = [] of L2Attackable
     property! lematan_npc : L2Attackable?
@@ -60,7 +60,7 @@ class PailakaDevilsLegacy < AbstractInstance
 
     if event == "enter"
       player = player.not_nil!
-      qs = player.get_quest_state(Quests::Q00129_PailakaDevilsLegacy.simple_name).not_nil!
+      qs = player.get_quest_state(Scripts::Q00129_PailakaDevilsLegacy.simple_name).not_nil!
       enter_instance(player, DIWorld.new, "PailakaDevilsLegacy.xml", TEMPLATE_ID)
       if qs.cond?(1)
         qs.set_cond(2, true)

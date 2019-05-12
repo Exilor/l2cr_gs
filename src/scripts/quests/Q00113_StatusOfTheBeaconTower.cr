@@ -1,4 +1,4 @@
-class Quests::Q00113_StatusOfTheBeaconTower < Quest
+class Scripts::Q00113_StatusOfTheBeaconTower < Quest
   # NPCs
   private MOIRA = 31979
   private TORRANT = 32016
@@ -14,13 +14,13 @@ class Quests::Q00113_StatusOfTheBeaconTower < Quest
     register_quest_items(FIRE_BOX, FLAME_BOX)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "31979-02.htm"
       st.start_quest
@@ -35,31 +35,31 @@ class Quests::Q00113_StatusOfTheBeaconTower < Quest
       end
       st.exit_quest(false, true)
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when MOIRA
       case st.state
       when State::CREATED
-        htmltext = player.level >= 80 ? "31979-01.htm" : "31979-00.htm"
+        html = pc.level >= 80 ? "31979-01.htm" : "31979-00.htm"
       when State::STARTED
-        htmltext = "31979-03.html"
+        html = "31979-03.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when TORRANT
       if st.started?
-        htmltext = "32016-01.html"
+        html = "32016-01.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

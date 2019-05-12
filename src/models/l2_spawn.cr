@@ -44,7 +44,7 @@ class L2Spawn
     {% end %}
   end
 
-  def self.new(id : Int)
+  def self.new(id : Int) : self
     new(NpcData[id])
   end
 
@@ -59,7 +59,7 @@ class L2Spawn
   def amount=(@maximum_count : Int32)
   end
 
-  def get_location(obj : L2Object?)
+  def get_location(obj : L2Object?) : Location
     if !@last_spawn_points || !obj || !@last_spawn_points.not_nil!.has_key?(obj.l2id)
       @location
     else
@@ -231,7 +231,6 @@ class L2Spawn
     mob.dead = false
     mob.decayed = false
 
-    # mob.set_current_hp_mp(mob.max_hp.to_f64, mob.max_mp.to_f64)
     mob.heal!
 
     if mob.has_variables?
@@ -340,7 +339,7 @@ class L2Spawn
     SPAWN_LISTENERS.each &.npc_spawned(npc)
   end
 
-  struct SpawnTask
+  private struct SpawnTask
     include Runnable
 
     initializer spawn: L2Spawn, old_npc: L2Npc

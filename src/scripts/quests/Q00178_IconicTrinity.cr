@@ -1,4 +1,4 @@
-class Quests::Q00178_IconicTrinity < Quest
+class Scripts::Q00178_IconicTrinity < Quest
   # NPCs
   private HIERARCH_KEKROPUS = 32138
   private ICON_OF_THE_PAST = 32255
@@ -14,7 +14,10 @@ class Quests::Q00178_IconicTrinity < Quest
     super(178, self.class.simple_name, "Iconic Trinity")
 
     add_start_npc(HIERARCH_KEKROPUS)
-    add_talk_id(HIERARCH_KEKROPUS, ICON_OF_THE_PAST, ICON_OF_THE_PRESENT, ICON_OF_THE_FUTURE)
+    add_talk_id(
+      HIERARCH_KEKROPUS, ICON_OF_THE_PAST, ICON_OF_THE_PRESENT,
+      ICON_OF_THE_FUTURE
+    )
   end
 
   def on_adv_event(event, npc, pc)
@@ -200,7 +203,7 @@ class Quests::Q00178_IconicTrinity < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    html = get_no_quest_msg(pc)
+
     if qs.created?
       if npc.id == HIERARCH_KEKROPUS
         if !pc.race.kamael?
@@ -277,6 +280,6 @@ class Quests::Q00178_IconicTrinity < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

@@ -3,11 +3,11 @@ class Packets::Incoming::RequestPledgeInfo < GameClientPacket
 
   @clan_id = 0
 
-  def read_impl
+  private def read_impl
     @clan_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if Config.debug

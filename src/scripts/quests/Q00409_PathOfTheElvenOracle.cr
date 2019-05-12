@@ -1,4 +1,4 @@
-class Quests::Q00409_PathOfTheElvenOracle < Quest
+class Scripts::Q00409_PathOfTheElvenOracle < Quest
   # NPCs
   private PRIEST_MANUEL = 30293
   private ALLANA = 30424
@@ -33,55 +33,55 @@ class Quests::Q00409_PathOfTheElvenOracle < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if player.class_id.elven_mage?
-        if player.level >= MIN_LEVEL
-          if has_quest_items?(player, LEAF_OF_ORACLE)
-            htmltext = "30293-04.htm"
+      if pc.class_id.elven_mage?
+        if pc.level >= MIN_LEVEL
+          if has_quest_items?(pc, LEAF_OF_ORACLE)
+            html = "30293-04.htm"
           else
             qs.start_quest
             qs.memo_state = 1
-            give_items(player, CRYSTAL_MEDALLION, 1)
-            htmltext = "30293-05.htm"
+            give_items(pc, CRYSTAL_MEDALLION, 1)
+            html = "30293-05.htm"
           end
         else
-          htmltext = "30293-03.htm"
+          html = "30293-03.htm"
         end
-      elsif player.class_id.oracle?
-        htmltext = "30293-02a.htm"
+      elsif pc.class_id.oracle?
+        html = "30293-02a.htm"
       else
-        htmltext = "30293-02.htm"
+        html = "30293-02.htm"
       end
     when "30424-08.html", "30424-09.html"
-      htmltext = event
+      html = event
     when "30424-07.html"
       if qs.memo_state?(1)
-        htmltext = event
+        html = event
       end
     when "replay_1"
       npc = npc.not_nil!
-      qs.memo_state=(2)
-      add_attack_desire(add_spawn(LIZARDMAN_WARRIOR, npc, true, 0i64, false), player)
-      add_attack_desire(add_spawn(LIZARDMAN_SCOUT, npc, true, 0i64, false), player)
-      add_attack_desire(add_spawn(LIZARDMAN_SOLDIER, npc, true, 0i64, false), player)
+      qs.memo_state = 2
+      add_attack_desire(add_spawn(LIZARDMAN_WARRIOR, npc, true, 0i64, false), pc)
+      add_attack_desire(add_spawn(LIZARDMAN_SCOUT, npc, true, 0i64, false), pc)
+      add_attack_desire(add_spawn(LIZARDMAN_SOLDIER, npc, true, 0i64, false), pc)
     when "30428-02.html", "30428-03.html"
       if qs.memo_state?(2)
-        htmltext = event
+        html = event
       end
     when "replay_2"
       if qs.memo_state?(2)
         npc = npc.not_nil!
         qs.memo_state = 3
-        add_attack_desire(add_spawn(TAMIL, npc, true, 0i64, true), player)
+        add_attack_desire(add_spawn(TAMIL, npc, true, 0i64, true), pc)
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -137,101 +137,100 @@ class Quests::Q00409_PathOfTheElvenOracle < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     if qs.created? || qs.completed?
       if npc.id == PRIEST_MANUEL
-        if !has_quest_items?(player, LEAF_OF_ORACLE)
-          htmltext = "30293-01.htm"
+        if !has_quest_items?(pc, LEAF_OF_ORACLE)
+          html = "30293-01.htm"
         else
-          htmltext = "30293-04.htm"
+          html = "30293-04.htm"
         end
       end
     elsif qs.started?
       case npc.id
       when PRIEST_MANUEL
-        if has_quest_items?(player, CRYSTAL_MEDALLION)
-          if !has_at_least_one_quest_item?(player, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
+        if has_quest_items?(pc, CRYSTAL_MEDALLION)
+          if !has_at_least_one_quest_item?(pc, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
             if qs.memo_state?(2)
-              qs.memo_state=(1)
+              qs.memo_state = 1
               qs.set_cond(8)
-              htmltext = "30293-09.html"
+              html = "30293-09.html"
             else
-              qs.memo_state=(1)
-              htmltext = "30293-06.html"
+              qs.memo_state = 1
+              html = "30293-06.html"
             end
-          elsif has_quest_items?(player, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER)
-            unless has_quest_items?(player, HALF_OF_DAIRY)
-              give_adena(player, 163800, true)
-              give_items(player, LEAF_OF_ORACLE, 1)
-              level = player.level
+          elsif has_quest_items?(pc, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER)
+            unless has_quest_items?(pc, HALF_OF_DAIRY)
+              give_adena(pc, 163800, true)
+              give_items(pc, LEAF_OF_ORACLE, 1)
+              level = pc.level
               if level >= 20
-                add_exp_and_sp(player, 320534, 20392)
+                add_exp_and_sp(pc, 320534, 20392)
               elsif level == 19
-                add_exp_and_sp(player, 456128, 27090)
+                add_exp_and_sp(pc, 456128, 27090)
               else
-                add_exp_and_sp(player, 591724, 33788)
+                add_exp_and_sp(pc, 591724, 33788)
               end
               qs.exit_quest(false, true)
-              player.send_packet(SocialAction.new(player.l2id, 3))
+              pc.send_packet(SocialAction.new(pc.l2id, 3))
               qs.save_global_quest_var("1ClassQuestFinished", "1")
-              htmltext = "30293-08.html"
+              html = "30293-08.html"
             end
           else
-            htmltext = "30293-07.html"
+            html = "30293-07.html"
           end
         end
       when ALLANA
-        if has_quest_items?(player, CRYSTAL_MEDALLION)
-          if !has_at_least_one_quest_item?(player, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
+        if has_quest_items?(pc, CRYSTAL_MEDALLION)
+          if !has_at_least_one_quest_item?(pc, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
             if qs.memo_state?(2)
-              htmltext = "30424-05.html"
+              html = "30424-05.html"
             elsif qs.memo_state?(1)
               qs.set_cond(2, true)
-              htmltext = "30424-01.html"
+              html = "30424-01.html"
             end
-          elsif !has_at_least_one_quest_item?(player, SWINDLERS_MONEY, ALLANA_OF_DAIRY, HALF_OF_DAIRY) && has_quest_items?(player, LIZARD_CAPTAIN_ORDER)
-            qs.memo_state=(2)
-            give_items(player, HALF_OF_DAIRY, 1)
+          elsif !has_at_least_one_quest_item?(pc, SWINDLERS_MONEY, ALLANA_OF_DAIRY, HALF_OF_DAIRY) && has_quest_items?(pc, LIZARD_CAPTAIN_ORDER)
+            qs.memo_state = 2
+            give_items(pc, HALF_OF_DAIRY, 1)
             qs.set_cond(4, true)
-            htmltext = "30424-02.html"
-          elsif !has_at_least_one_quest_item?(player, SWINDLERS_MONEY, ALLANA_OF_DAIRY) && has_quest_items?(player, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
-            if qs.memo_state?(3) && !has_quest_items?(player, TAMIL_NECKLACE)
+            html = "30424-02.html"
+          elsif !has_at_least_one_quest_item?(pc, SWINDLERS_MONEY, ALLANA_OF_DAIRY) && has_quest_items?(pc, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
+            if qs.memo_state?(3) && !has_quest_items?(pc, TAMIL_NECKLACE)
               qs.memo_state = 2
               qs.set_cond(4, true)
-              htmltext = "30424-06.html"
+              html = "30424-06.html"
             else
-              htmltext = "30424-03.html"
+              html = "30424-03.html"
             end
-          elsif has_quest_items?(player, SWINDLERS_MONEY, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY) && !has_quest_items?(player, ALLANA_OF_DAIRY)
-            give_items(player, ALLANA_OF_DAIRY, 1)
-            take_items(player, HALF_OF_DAIRY, 1)
+          elsif has_quest_items?(pc, SWINDLERS_MONEY, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY) && !has_quest_items?(pc, ALLANA_OF_DAIRY)
+            give_items(pc, ALLANA_OF_DAIRY, 1)
+            take_items(pc, HALF_OF_DAIRY, 1)
             qs.set_cond(9, true)
-            htmltext = "30424-04.html"
-          elsif has_quest_items?(player, SWINDLERS_MONEY, LIZARD_CAPTAIN_ORDER, ALLANA_OF_DAIRY)
+            html = "30424-04.html"
+          elsif has_quest_items?(pc, SWINDLERS_MONEY, LIZARD_CAPTAIN_ORDER, ALLANA_OF_DAIRY)
             qs.set_cond(7, true)
-            htmltext = "30424-05.html"
+            html = "30424-05.html"
           end
         end
       when PERRIN
-        if has_quest_items?(player, CRYSTAL_MEDALLION, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
-          if has_quest_items?(player, TAMIL_NECKLACE)
-            give_items(player, SWINDLERS_MONEY, 1)
-            take_items(player, TAMIL_NECKLACE, 1)
+        if has_quest_items?(pc, CRYSTAL_MEDALLION, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY)
+          if has_quest_items?(pc, TAMIL_NECKLACE)
+            give_items(pc, SWINDLERS_MONEY, 1)
+            take_items(pc, TAMIL_NECKLACE, 1)
             qs.set_cond(6, true)
-            htmltext = "30428-04.html"
-          elsif has_quest_items?(player, SWINDLERS_MONEY)
-            htmltext = "30428-05.html"
+            html = "30428-04.html"
+          elsif has_quest_items?(pc, SWINDLERS_MONEY)
+            html = "30428-05.html"
           elsif qs.memo_state?(3)
-            htmltext = "30428-06.html"
+            html = "30428-06.html"
           else
-            htmltext = "30428-01.html"
+            html = "30428-01.html"
           end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

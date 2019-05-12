@@ -34,7 +34,7 @@ class AccessLevel
     @can_gain_exp = set.get_bool("gainExp", true)
   end
 
-  def has_child_access?(other : self)
+  def has_child_access?(other : self) : Bool
     unless @childs_access_level
       return false if @child <= 0
       @childs_access_level = AdminData.get_access_level(@child)

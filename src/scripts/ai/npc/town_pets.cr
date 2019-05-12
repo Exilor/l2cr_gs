@@ -1,4 +1,4 @@
-class NpcAI::TownPets < AbstractNpcAI
+class Scripts::TownPets < AbstractNpcAI
   private PETS = {
     31202, # Maximus
     31203, # Moon Dancer

@@ -1,4 +1,4 @@
-class NpcAI::CastleTeleporter < AbstractNpcAI
+class Scripts::CastleTeleporter < AbstractNpcAI
   # Teleporter IDs
   private NPCS = {
     35095, # Mass Gatekeeper (Gludio)

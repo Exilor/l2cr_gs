@@ -1,4 +1,4 @@
-class NpcAI::CrumaTower < AbstractNpcAI
+class Scripts::CrumaTower < AbstractNpcAI
   private MOZELLA = 30483
 
   private TELEPORTS = {

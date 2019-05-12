@@ -1,4 +1,4 @@
-class Quests::Q00451_LuciensAltar < Quest
+class Scripts::Q00451_LuciensAltar < Quest
   # NPCs
   private DAICHIR = 30537
   private ALTARS = {

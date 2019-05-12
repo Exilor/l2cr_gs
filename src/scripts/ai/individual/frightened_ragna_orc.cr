@@ -1,4 +1,4 @@
-class NpcAI::FrightenedRagnaOrc < AbstractNpcAI
+class Scripts::FrightenedRagnaOrc < AbstractNpcAI
   # NPC ID
   private MOB_ID = 18807
   # Chances

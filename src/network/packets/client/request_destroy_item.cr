@@ -2,12 +2,12 @@ class Packets::Incoming::RequestDestroyItem < GameClientPacket
   @l2id = 0
   @count = 0i64
 
-  def read_impl
+  private def read_impl
     @l2id = d
     @count = q
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if @count <= 0

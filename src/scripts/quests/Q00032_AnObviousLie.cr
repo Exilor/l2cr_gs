@@ -1,4 +1,4 @@
-class Quests::Q00032_AnObviousLie < Quest
+class Scripts::Q00032_AnObviousLie < Quest
   # NPCs
   private MAXIMILIAN = 30120
   private GENTLER = 30094
@@ -29,64 +29,64 @@ class Quests::Q00032_AnObviousLie < Quest
     register_quest_items(MAP_OF_GENTLER, MEDICINAL_HERB.id)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
-    htmltext = nil
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
+    html = nil
 
     case event
     when "30120-02.html"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30094-02.html"
       if qs.cond?(1)
-        give_items(player, MAP_OF_GENTLER, 1)
+        give_items(pc, MAP_OF_GENTLER, 1)
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "31706-02.html"
-      if qs.cond?(2) && has_quest_items?(player, MAP_OF_GENTLER)
-        take_items(player, MAP_OF_GENTLER, -1)
+      if qs.cond?(2) && has_quest_items?(pc, MAP_OF_GENTLER)
+        take_items(pc, MAP_OF_GENTLER, -1)
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "30094-06.html"
-      if qs.cond?(4) && has_item?(player, MEDICINAL_HERB)
-        take_item(player, MEDICINAL_HERB)
+      if qs.cond?(4) && has_item?(pc, MEDICINAL_HERB)
+        take_item(pc, MEDICINAL_HERB)
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "30094-09.html"
-      if qs.cond?(5) && has_item?(player, SPIRIT_ORE)
-        take_item(player, SPIRIT_ORE)
+      if qs.cond?(5) && has_item?(pc, SPIRIT_ORE)
+        take_item(pc, SPIRIT_ORE)
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "30094-12.html"
       if qs.cond?(7)
         qs.set_cond(8, true)
-        htmltext = event
+        html = event
       end
     when "30094-15.html"
-      htmltext = event
+      html = event
     when "31706-05.html"
       if qs.cond?(6)
         qs.set_cond(7, true)
-        htmltext = event
+        html = event
       end
     when "cat", "raccoon", "rabbit"
-      if qs.cond?(8) && take_all_items(player, THREAD, SUEDE)
-        give_items(player, EARS[event], 1)
+      if qs.cond?(8) && take_all_items(pc, THREAD, SUEDE)
+        give_items(pc, EARS[event], 1)
         qs.exit_quest(false, true)
-        htmltext = "30094-16.html"
+        html = "30094-16.html"
       else
-        htmltext = "30094-17.html"
+        html = "30094-17.html"
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -98,56 +98,56 @@ class Quests::Q00032_AnObviousLie < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+    html = get_no_quest_msg(pc)
     case npc.id
     when MAXIMILIAN
       if qs.created?
-        htmltext = player.level >= MIN_LVL ? "30120-01.htm" : "30120-03.htm"
+        html = pc.level >= MIN_LVL ? "30120-01.htm" : "30120-03.htm"
       elsif qs.started?
         if qs.cond?(1)
-          htmltext = "30120-04.html"
+          html = "30120-04.html"
         end
       else
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when GENTLER
       case qs.cond
       when 1
-        htmltext = "30094-01.html"
+        html = "30094-01.html"
       when 2
-        htmltext = "30094-03.html"
+        html = "30094-03.html"
       when 4
-        htmltext = has_item?(player, MEDICINAL_HERB) ? "30094-04.html" : "30094-05.html"
+        html = has_item?(pc, MEDICINAL_HERB) ? "30094-04.html" : "30094-05.html"
       when 5
-        htmltext = has_item?(player, SPIRIT_ORE) ? "30094-07.html" : "30094-08.html"
+        html = has_item?(pc, SPIRIT_ORE) ? "30094-07.html" : "30094-08.html"
       when 6
-        htmltext = "30094-10.html"
+        html = "30094-10.html"
       when 7
-        htmltext = "30094-11.html"
+        html = "30094-11.html"
       when 8
-        if has_all_items?(player, true, THREAD, SUEDE)
-          htmltext = "30094-13.html"
+        if has_all_items?(pc, true, THREAD, SUEDE)
+          html = "30094-13.html"
         else
-          htmltext = "30094-14.html"
+          html = "30094-14.html"
         end
       end
     when MIKI_THE_CAT
       case qs.cond
       when 2
-        if has_quest_items?(player, MAP_OF_GENTLER)
-          htmltext = "31706-01.html"
+        if has_quest_items?(pc, MAP_OF_GENTLER)
+          html = "31706-01.html"
         end
       when 3..5
-        htmltext = "31706-03.html"
+        html = "31706-03.html"
       when 6
-        htmltext = "31706-04.html"
+        html = "31706-04.html"
       when 7
-        htmltext = "31706-06.html"
+        html = "31706-06.html"
       end
     end
 
-    htmltext
+    html
   end
 end

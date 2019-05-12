@@ -1,4 +1,4 @@
-class NpcAI::SinEater < AbstractNpcAI
+class Scripts::SinEater < AbstractNpcAI
   # NPCs
   private SIN_EATER = 12564
 

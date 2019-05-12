@@ -1,4 +1,4 @@
-class Quests::Q00620_FourGoblets < Quest
+class Scripts::Q00620_FourGoblets < Quest
   # NPCs
   private GHOST_OF_WIGOTH_1 = 31452
   private NAMELESS_SPIRIT = 31453
@@ -204,31 +204,31 @@ class Quests::Q00620_FourGoblets < Quest
     )
   end
 
-  def action_for_each_player(player, npc, is_summon)
-    st = get_quest_state(player, false)
-    if st && Util.in_range?(1500, npc, player, false)
+  def action_for_each_player(pc, npc, is_summon)
+    st = get_quest_state(pc, false)
+    if st && Util.in_range?(1500, npc, pc, false)
       case npc.id
       when HALISHA_ALECTIA
-        if !has_quest_items?(player, GOBLET_OF_ALECTIA) && !has_quest_items?(player, ANTIQUE_BROOCH)
-          give_items(player, GOBLET_OF_ALECTIA, 1)
+        if !has_quest_items?(pc, GOBLET_OF_ALECTIA) && !has_quest_items?(pc, ANTIQUE_BROOCH)
+          give_items(pc, GOBLET_OF_ALECTIA, 1)
         end
 
         st.set_memo_state_ex(1, 2)
       when HALISHA_TISHAS
-        if !has_quest_items?(player, GOBLET_OF_TISHAS) && !has_quest_items?(player, ANTIQUE_BROOCH)
-          give_items(player, GOBLET_OF_TISHAS, 1)
+        if !has_quest_items?(pc, GOBLET_OF_TISHAS) && !has_quest_items?(pc, ANTIQUE_BROOCH)
+          give_items(pc, GOBLET_OF_TISHAS, 1)
         end
 
         st.set_memo_state_ex(1, 2)
       when HALISHA_MEKARA
-        if !has_quest_items?(player, GOBLET_OF_MEKARA) && !has_quest_items?(player, ANTIQUE_BROOCH)
-          give_items(player, GOBLET_OF_MEKARA, 1)
+        if !has_quest_items?(pc, GOBLET_OF_MEKARA) && !has_quest_items?(pc, ANTIQUE_BROOCH)
+          give_items(pc, GOBLET_OF_MEKARA, 1)
         end
 
         st.set_memo_state_ex(1, 2)
       when HALISHA_MORIGUL
-        if !has_quest_items?(player, GOBLET_OF_MORIGUL) && !has_quest_items?(player, ANTIQUE_BROOCH)
-          give_items(player, GOBLET_OF_MORIGUL, 1)
+        if !has_quest_items?(pc, GOBLET_OF_MORIGUL) && !has_quest_items?(pc, ANTIQUE_BROOCH)
+          give_items(pc, GOBLET_OF_MORIGUL, 1)
         end
 
         st.set_memo_state_ex(1, 2)
@@ -236,11 +236,11 @@ class Quests::Q00620_FourGoblets < Quest
     end
   end
 
-  def on_adv_event(event, npc, player)
-    player = player.not_nil!
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    pc = pc.not_nil!
+    return unless st = get_quest_state(pc, false)
 
-    htmltext = nil
+    html = nil
     case event
     when "31453-02.htm", "31453-03.htm", "31453-04.htm", "31453-05.htm",
          "31453-06.htm", "31453-07.htm", "31453-08.htm", "31453-09.htm",
@@ -248,84 +248,89 @@ class Quests::Q00620_FourGoblets < Quest
          "31453-18.html", "31453-19.html", "31453-20.html", "31453-21.html",
          "31453-22.html", "31453-23.html", "31453-24.html", "31453-25.html",
          "31453-27.html", "31452-04.html"
-      htmltext = event
+      html = event
     when "31453-12.htm"
       st.memo_state = 0
       st.start_quest
-      if has_quest_items?(player, ANTIQUE_BROOCH)
+      if has_quest_items?(pc, ANTIQUE_BROOCH)
         st.set_cond(2)
       end
-      htmltext = event
+      html = event
     when "31453-15.html"
-      take_items(player, -1, {CHAPEL_KEY, USED_GRAVE_PASS})
+      take_items(pc, -1, {CHAPEL_KEY, USED_GRAVE_PASS})
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "31453-28.html"
-      if has_quest_items?(player, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
-        give_items(player, ANTIQUE_BROOCH, 1)
+      if has_quest_items?(pc, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
+        give_items(pc, ANTIQUE_BROOCH, 1)
         st.set_cond(2, true)
-        take_items(player, 1, {GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL})
-        htmltext = event
+        take_items(pc, 1, {GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL})
+        html = event
       end
     when "31454-02.html"
-      player.tele_to_location(ENTER_LOC, 0)
-      htmltext = event
+      pc.tele_to_location(ENTER_LOC, 0)
+      html = event
     when "31454-04.html"
       memo_state_ex = st.get_memo_state_ex(1)
-      if (memo_state_ex == 2 || memo_state_ex == 3) && get_quest_items_count(player, BROKEN_RELIC_PART) >= 1000
-        htmltext = event
+      if memo_state_ex == 2 || memo_state_ex == 3
+        if get_quest_items_count(pc, BROKEN_RELIC_PART) >= 1000
+          html = event
+        end
       end
     when "6881", "6883", "6885", "6887", "6891", "6893", "6895", "6897", "6899",
          "7580"
       memo_state_ex = st.get_memo_state_ex(1)
-      if (memo_state_ex == 2 || memo_state_ex == 3) && get_quest_items_count(player, BROKEN_RELIC_PART) >= 1000
-        give_items(player, event.to_i, 1)
-        take_items(player, BROKEN_RELIC_PART, 1000)
-        htmltext = "31454-05.html"
+      if memo_state_ex == 2 || memo_state_ex == 3
+        if get_quest_items_count(pc, BROKEN_RELIC_PART) >= 1000
+          give_items(pc, event.to_i, 1)
+          take_items(pc, BROKEN_RELIC_PART, 1000)
+          html = "31454-05.html"
+        end
       end
     when "31454-07.html"
       memo_state_ex = st.get_memo_state_ex(1)
-      if (memo_state_ex == 2 || memo_state_ex == 3) && has_quest_items?(player, SEALED_BOX)
-        if Rnd.rand(100) < 100 # TODO (Adry_85): Check random function
-          i2 = get_reward(player)
-          htmltext = i2 ? event : "31454-08.html"
-        else
-          take_items(player, SEALED_BOX, 1)
-          htmltext = "31454-09.html"
+      if memo_state_ex == 2 || memo_state_ex == 3
+        if has_quest_items?(pc, SEALED_BOX)
+          if Rnd.rand(100) < 100 # TODO (Adry_85): Check random function
+            i2 = get_reward(pc)
+            html = i2 ? event : "31454-08.html"
+          else
+            take_items(pc, SEALED_BOX, 1)
+            html = "31454-09.html"
+          end
         end
       end
     when "EXIT"
-      take_items(player, CHAPEL_KEY, -1)
-      player.tele_to_location(EXIT_LOC, 0)
+      take_items(pc, CHAPEL_KEY, -1)
+      pc.tele_to_location(EXIT_LOC, 0)
       return ""
     when "31919-02.html"
-      if has_quest_items?(player, SEALED_BOX)
+      if has_quest_items?(pc, SEALED_BOX)
         if Rnd.rand(100) < 50
-
-          i2 = get_reward(player)
-          htmltext = i2 ? event : "31919-03.html"
+          i2 = get_reward(pc)
+          html = i2 ? event : "31919-03.html"
         else
-          take_items(player, SEALED_BOX, 1)
-          htmltext = "31919-04.html"
+          take_items(pc, SEALED_BOX, 1)
+          html = "31919-04.html"
         end
       else
-        htmltext = "31919-05.html"
+        html = "31919-05.html"
       end
     when "ENTER"
       # TODO (Adry_85): Need rework
-      FourSepulchersManager.try_entry(npc.not_nil!, player)
+      FourSepulchersManager.try_entry(npc.not_nil!, pc)
       return ""
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     case npc.id
     when HALISHA_ALECTIA, HALISHA_TISHAS, HALISHA_MEKARA, HALISHA_MORIGUL
-      execute_for_each_player(player, npc, is_summon, true, false)
+      execute_for_each_player(pc, npc, is_summon, true, false)
     else
-      st = get_random_party_member_state(player, -1, 3, npc)
+      st = get_random_party_member_state(pc, -1, 3, npc)
       if st
         npc_id = npc.id
         if MOB1.has_key?(npc_id)
@@ -343,113 +348,113 @@ class Quests::Q00620_FourGoblets < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    html = get_no_quest_msg(pc)
     if st.created?
-      htmltext = player.level >= MIN_LEVEL ? "31453-01.htm" : "31453-13.html"
+      html = pc.level >= MIN_LEVEL ? "31453-01.htm" : "31453-13.html"
     elsif st.started?
       case npc.id
       when NAMELESS_SPIRIT
-        if !has_quest_items?(player, ANTIQUE_BROOCH)
-          if has_quest_items?(player, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
-            htmltext = "31453-26.html"
+        if !has_quest_items?(pc, ANTIQUE_BROOCH)
+          if has_quest_items?(pc, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
+            html = "31453-26.html"
           else
-            htmltext = "31453-14.html"
+            html = "31453-14.html"
           end
         else
-          htmltext = "31453-29.html"
+          html = "31453-29.html"
         end
       when GHOST_OF_WIGOTH_1
-        if !has_quest_items?(player, ANTIQUE_BROOCH)
-          if has_quest_items?(player, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
-            htmltext = "31452-01.html"
+        if !has_quest_items?(pc, ANTIQUE_BROOCH)
+          if has_quest_items?(pc, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
+            html = "31452-01.html"
           else
-            if get_quest_items_count(player, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL) < 3
-              htmltext = "31452-02.html"
+            if get_quest_items_count(pc, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL) < 3
+              html = "31452-02.html"
             else
-              htmltext = "31452-03.html"
+              html = "31452-03.html"
             end
           end
         else
-          htmltext = "31452-05.html"
+          html = "31452-05.html"
         end
       when GHOST_OF_WIGOTH_2
         memo_state_ex = st.get_memo_state_ex(1)
-         broken_relic_part_count = get_quest_items_count(player, BROKEN_RELIC_PART)
+         broken_relic_part_count = get_quest_items_count(pc, BROKEN_RELIC_PART)
         if memo_state_ex == 2
-          if has_quest_items?(player, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
-            if !has_quest_items?(player, SEALED_BOX)
-              htmltext = broken_relic_part_count < 1000 ? "31454-01.html" : "31454-03.html"
+          if has_quest_items?(pc, GOBLET_OF_ALECTIA, GOBLET_OF_TISHAS, GOBLET_OF_MEKARA, GOBLET_OF_MORIGUL)
+            if !has_quest_items?(pc, SEALED_BOX)
+              html = broken_relic_part_count < 1000 ? "31454-01.html" : "31454-03.html"
             else
-              htmltext = broken_relic_part_count < 1000 ? "31454-06.html" : "31454-10.html"
+              html = broken_relic_part_count < 1000 ? "31454-06.html" : "31454-10.html"
             end
 
             st.set_memo_state_ex(1, 3)
           else
-            if !has_quest_items?(player, SEALED_BOX)
-              htmltext = broken_relic_part_count < 1000 ? "31454-11.html" : "31454-12.html"
+            if !has_quest_items?(pc, SEALED_BOX)
+              html = broken_relic_part_count < 1000 ? "31454-11.html" : "31454-12.html"
             else
-              htmltext = broken_relic_part_count < 1000 ? "31454-13.html" : "31454-14.html"
+              html = broken_relic_part_count < 1000 ? "31454-13.html" : "31454-14.html"
             end
 
             st.set_memo_state_ex(1, 3)
           end
         elsif memo_state_ex == 3
-          if !has_quest_items?(player, SEALED_BOX)
-            htmltext = broken_relic_part_count < 1000 ? "31454-15.html" : "31454-12.html"
+          if !has_quest_items?(pc, SEALED_BOX)
+            html = broken_relic_part_count < 1000 ? "31454-15.html" : "31454-12.html"
           else
-            htmltext = broken_relic_part_count < 1000 ? "31454-13.html" : "31454-14.html"
+            html = broken_relic_part_count < 1000 ? "31454-13.html" : "31454-14.html"
           end
 
           st.set_memo_state_ex(1, 3)
         end
       when GHOST_CHAMBERLAIN_OF_ELMOREDEN_1
-        htmltext = "31919-01.html"
+        html = "31919-01.html"
       when CONQUERORS_SEPULCHER_MANAGER
-        htmltext = "31921-01.html"
+        html = "31921-01.html"
       when EMPERORS_SEPULCHER_MANAGER
-        htmltext = "31922-01.html"
+        html = "31922-01.html"
       when GREAT_SAGES_SEPULCHER_MANAGER
-        htmltext = "31923-01.html"
+        html = "31923-01.html"
       when JUDGES_SEPULCHER_MANAGER
-        htmltext = "31924-01.html"
+        html = "31924-01.html"
       end
     end
 
-    htmltext
+    html
   end
 
-  private def get_reward(player)
+  private def get_reward(pc)
     i2 = false
     case Rnd.rand(5)
     when 0
       i2 = true
-      give_adena(player, 10000, true)
+      give_adena(pc, 10000, true)
     when 1
       if Rnd.rand(1000) < 848
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 43
-          give_items(player, CORD)
+          give_items(pc, CORD)
         elsif i1 < 66
-          give_items(player, METALLIC_FIBER)
+          give_items(pc, METALLIC_FIBER)
         elsif i1 < 184
-          give_items(player, MITHRIL_ORE)
+          give_items(pc, MITHRIL_ORE)
         elsif i1 < 250
-          give_items(player, COARSE_BONE_POWDER)
+          give_items(pc, COARSE_BONE_POWDER)
         elsif i1 < 287
-          give_items(player, METALLIC_THREAD)
+          give_items(pc, METALLIC_THREAD)
         elsif i1 < 484
-          give_items(player, ORIHARUKON_ORE)
+          give_items(pc, ORIHARUKON_ORE)
         elsif i1 < 681
-          give_items(player, COMPOUND_BRAID)
+          give_items(pc, COMPOUND_BRAID)
         elsif i1 < 799
-          give_items(player, ADAMANTITE_NUGGET)
+          give_items(pc, ADAMANTITE_NUGGET)
         elsif i1 < 902
-          give_items(player, CRAFTED_LEATHER)
+          give_items(pc, CRAFTED_LEATHER)
         else
-          give_items(player, ASOFE)
+          give_items(pc, ASOFE)
         end
       end
 
@@ -457,19 +462,19 @@ class Quests::Q00620_FourGoblets < Quest
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 335
-          give_items(player, SYNTETHIC_COKES)
+          give_items(pc, SYNTETHIC_COKES)
         elsif i1 < 556
-          give_items(player, MOLD_LUBRICANT)
+          give_items(pc, MOLD_LUBRICANT)
         elsif i1 < 725
-          give_items(player, MITHRIL_ALLOY)
+          give_items(pc, MITHRIL_ALLOY)
         elsif i1 < 872
-          give_items(player, DURABLE_METAL_PLATE)
+          give_items(pc, DURABLE_METAL_PLATE)
         elsif i1 < 962
-          give_items(player, ORIHARUKON)
+          give_items(pc, ORIHARUKON)
         elsif i1 < 986
-          give_items(player, MAESTRO_ANVIL_LOCK)
+          give_items(pc, MAESTRO_ANVIL_LOCK)
         else
-          give_items(player, MAESTRO_MOLD)
+          give_items(pc, MAESTRO_MOLD)
         end
       end
     when 2
@@ -477,25 +482,25 @@ class Quests::Q00620_FourGoblets < Quest
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 148
-          give_items(player, BRAIDED_HEMP)
+          give_items(pc, BRAIDED_HEMP)
         elsif i1 < 175
-          give_items(player, LEATHER)
+          give_items(pc, LEATHER)
         elsif i1 < 273
-          give_items(player, COKES)
+          give_items(pc, COKES)
         elsif i1 < 322
-          give_items(player, STEEL)
+          give_items(pc, STEEL)
         elsif i1 < 357
-          give_items(player, HIGH_GRADE_SUEDE)
+          give_items(pc, HIGH_GRADE_SUEDE)
         elsif i1 < 554
-          give_items(player, STONE_OF_PURITY)
+          give_items(pc, STONE_OF_PURITY)
         elsif i1 < 685
-          give_items(player, STEEL_MOLD)
+          give_items(pc, STEEL_MOLD)
         elsif i1 < 803
-          give_items(player, METAL_HARDENER)
+          give_items(pc, METAL_HARDENER)
         elsif i1 < 901
-          give_items(player, MOLD_GLUE)
+          give_items(pc, MOLD_GLUE)
         else
-          give_items(player, THONS)
+          give_items(pc, THONS)
         end
       end
 
@@ -503,19 +508,19 @@ class Quests::Q00620_FourGoblets < Quest
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 350
-          give_items(player, VARNISH_OF_PURITY)
+          give_items(pc, VARNISH_OF_PURITY)
         elsif i1 < 587
-          give_items(player, ENRIA)
+          give_items(pc, ENRIA)
         elsif i1 < 798
-          give_items(player, SILVER_MOLD)
+          give_items(pc, SILVER_MOLD)
         elsif i1 < 922
-          give_items(player, MOLD_HARDENER)
+          give_items(pc, MOLD_HARDENER)
         elsif i1 < 966
-          give_items(player, BLACKSMITHS_FRAMES)
+          give_items(pc, BLACKSMITHS_FRAMES)
         elsif i1 < 996
-          give_items(player, ARTISANS_FRAMES)
+          give_items(pc, ARTISANS_FRAMES)
         else
-          give_items(player, CRAFTSMAN_MOLD)
+          give_items(pc, CRAFTSMAN_MOLD)
         end
       end
     when 3
@@ -523,11 +528,11 @@ class Quests::Q00620_FourGoblets < Quest
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 223
-          give_items(player, ENCHANT_ARMOR_A_GRADE)
+          give_items(pc, ENCHANT_ARMOR_A_GRADE)
         elsif i1 < 893
-          give_items(player, ENCHANT_ARMOR_B_GRADE)
+          give_items(pc, ENCHANT_ARMOR_B_GRADE)
         else
-          give_items(player, ENCHANT_ARMOR_S_GRADE)
+          give_items(pc, ENCHANT_ARMOR_S_GRADE)
         end
       end
 
@@ -535,11 +540,11 @@ class Quests::Q00620_FourGoblets < Quest
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 202
-          give_items(player, ENCHANT_WEAPON_A_GRADE)
+          give_items(pc, ENCHANT_WEAPON_A_GRADE)
         elsif i1 < 928
-          give_items(player, ENCHANT_WEAPON_B_GRADE)
+          give_items(pc, ENCHANT_WEAPON_B_GRADE)
         else
-          give_items(player, ENCHANT_WEAPON_S_GRADE)
+          give_items(pc, ENCHANT_WEAPON_S_GRADE)
         end
       end
     when 4
@@ -547,39 +552,39 @@ class Quests::Q00620_FourGoblets < Quest
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 88
-          give_items(player, SEALED_TATEOSSIAN_EARRING_PART)
+          give_items(pc, SEALED_TATEOSSIAN_EARRING_PART)
         elsif i1 < 185
-          give_items(player, SEALED_TATEOSSIAN_RING_GEM)
+          give_items(pc, SEALED_TATEOSSIAN_RING_GEM)
         elsif i1 < 238
-          give_items(player, SEALED_TATEOSSIAN_NECKLACE_CHAIN)
+          give_items(pc, SEALED_TATEOSSIAN_NECKLACE_CHAIN)
         elsif i1 < 262
-          give_items(player, SEALED_IMPERIAL_CRUSADER_BREASTPLATE_PART)
+          give_items(pc, SEALED_IMPERIAL_CRUSADER_BREASTPLATE_PART)
         elsif i1 < 292
-          give_items(player, SEALED_IMPERIAL_CRUSADER_GAITERS_PATTERN)
+          give_items(pc, SEALED_IMPERIAL_CRUSADER_GAITERS_PATTERN)
         elsif i1 < 356
-          give_items(player, SEALED_IMPERIAL_CRUSADER_GAUNTLETS_DESIGN)
+          give_items(pc, SEALED_IMPERIAL_CRUSADER_GAUNTLETS_DESIGN)
         elsif i1 < 420
-          give_items(player, SEALED_IMPERIAL_CRUSADER_BOOTS_DESIGN)
+          give_items(pc, SEALED_IMPERIAL_CRUSADER_BOOTS_DESIGN)
         elsif i1 < 482
-          give_items(player, SEALED_IMPERIAL_CRUSADER_SHIELD_PART)
+          give_items(pc, SEALED_IMPERIAL_CRUSADER_SHIELD_PART)
         elsif i1 < 554
-          give_items(player, SEALED_IMPERIAL_CRUSADER_HELMET_PATTERN)
+          give_items(pc, SEALED_IMPERIAL_CRUSADER_HELMET_PATTERN)
         elsif i1 < 576
-          give_items(player, SEALED_DRACONIC_LEATHER_ARMOR_PART)
+          give_items(pc, SEALED_DRACONIC_LEATHER_ARMOR_PART)
         elsif i1 < 640
-          give_items(player, SEALED_DRACONIC_LEATHER_GLOVES_FABRIC)
+          give_items(pc, SEALED_DRACONIC_LEATHER_GLOVES_FABRIC)
         elsif i1 < 704
-          give_items(player, SEALED_DRACONIC_LEATHER_BOOTS_DESIGN)
+          give_items(pc, SEALED_DRACONIC_LEATHER_BOOTS_DESIGN)
         elsif i1 < 777
-          give_items(player, SEALED_DRACONIC_LEATHER_HELMET_PATTERN)
+          give_items(pc, SEALED_DRACONIC_LEATHER_HELMET_PATTERN)
         elsif i1 < 799
-          give_items(player, SEALED_MAJOR_ARCANA_ROBE_PART)
+          give_items(pc, SEALED_MAJOR_ARCANA_ROBE_PART)
         elsif i1 < 863
-          give_items(player, SEALED_MAJOR_ARCANA_GLOVES_FABRIC)
+          give_items(pc, SEALED_MAJOR_ARCANA_GLOVES_FABRIC)
         elsif i1 < 927
-          give_items(player, SEALED_MAJOR_ARCANA_BOOTS_DESIGN)
+          give_items(pc, SEALED_MAJOR_ARCANA_BOOTS_DESIGN)
         else
-          give_items(player, SEALED_MAJOR_ARCANA_CIRCLET_PATTERN)
+          give_items(pc, SEALED_MAJOR_ARCANA_CIRCLET_PATTERN)
         end
       end
 
@@ -587,30 +592,30 @@ class Quests::Q00620_FourGoblets < Quest
         i2 = true
         i1 = Rnd.rand(1000)
         if i1 < 100
-          give_items(player, FORGOTTEN_BLADE_EDGE)
+          give_items(pc, FORGOTTEN_BLADE_EDGE)
         elsif i1 < 198
-          give_items(player, BASALT_BATTLEHAMMER_HEAD)
+          give_items(pc, BASALT_BATTLEHAMMER_HEAD)
         elsif i1 < 298
-          give_items(player, IMPERIAL_STAFF_HEAD)
+          give_items(pc, IMPERIAL_STAFF_HEAD)
         elsif i1 < 398
-          give_items(player, ANGEL_SLAYER_BLADE)
+          give_items(pc, ANGEL_SLAYER_BLADE)
         elsif i1 < 499
-          give_items(player, DRACONIC_BOW_SHAFT)
+          give_items(pc, DRACONIC_BOW_SHAFT)
         elsif i1 < 601
-          give_items(player, DRAGON_HUNTER_AXE_BLADE)
+          give_items(pc, DRAGON_HUNTER_AXE_BLADE)
         elsif i1 < 703
-          give_items(player, SAINT_SPEAR_BLADE)
+          give_items(pc, SAINT_SPEAR_BLADE)
         elsif i1 < 801
-          give_items(player, DEMON_SPLINTER_BLADE)
+          give_items(pc, DEMON_SPLINTER_BLADE)
         elsif i1 < 902
-          give_items(player, HEAVENS_DIVIDER_EDGE)
+          give_items(pc, HEAVENS_DIVIDER_EDGE)
         else
-          give_items(player, ARCANA_MACE_HEAD)
+          give_items(pc, ARCANA_MACE_HEAD)
         end
       end
     end
 
-    take_items(player, SEALED_BOX, 1)
+    take_items(pc, SEALED_BOX, 1)
 
     i2
   end

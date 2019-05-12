@@ -1,4 +1,4 @@
-class Quests::Q00105_SkirmishWithOrcs < Quest
+class Scripts::Q00105_SkirmishWithOrcs < Quest
   # NPC
   private KENDNELL = 30218
   # Items
@@ -44,22 +44,22 @@ class Quests::Q00105_SkirmishWithOrcs < Quest
     register_quest_items(KENDNELLS_ORDERS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "30218-04.html"
       if st.created?
         st.start_quest
         st.give_items(KENDNELLS_ORDERS[rand(0..3)], 1)
-        htmltext = event
+        html = event
       end
     when "30218-05.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -82,21 +82,21 @@ class Quests::Q00105_SkirmishWithOrcs < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state(talker, true)
-    htmltext = get_no_quest_msg(talker)
-    return htmltext unless st
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case st.state
     when State::CREATED
-      if talker.race.elf?
-        htmltext = talker.level >= MIN_LVL ? "30218-03.htm" : "30218-02.htm"
+      if pc.race.elf?
+        html = pc.level >= MIN_LVL ? "30218-03.htm" : "30218-02.htm"
       else
-        htmltext = "30218-01.htm"
+        html = "30218-01.htm"
       end
     when State::STARTED
-      if has_at_least_one_quest_item?(talker, KENDELLS_1ST_ORDER, KENDELLS_2ND_ORDER, KENDELLS_3RD_ORDER, KENDELLS_4TH_ORDER)
-        htmltext = "30218-06.html"
+      if has_at_least_one_quest_item?(pc, KENDELLS_1ST_ORDER, KENDELLS_2ND_ORDER, KENDELLS_3RD_ORDER, KENDELLS_4TH_ORDER)
+        html = "30218-06.html"
       end
       if st.cond?(2) && st.has_quest_items?(KABOO_CHIEFS_1ST_TORQUE)
         4.times do |i|
@@ -105,23 +105,23 @@ class Quests::Q00105_SkirmishWithOrcs < Quest
         st.take_items(KABOO_CHIEFS_1ST_TORQUE, 1)
         st.give_items(KENDNELLS_ORDERS[rand(4..7)], 1)
         st.set_cond(3, true)
-        htmltext = "30218-07.html"
+        html = "30218-07.html"
       end
-      if has_at_least_one_quest_item?(talker, KENDELLS_5TH_ORDER, KENDELLS_6TH_ORDER, KENDELLS_7TH_ORDER, KENDELLS_8TH_ORDER)
-        htmltext = "30218-08.html"
+      if has_at_least_one_quest_item?(pc, KENDELLS_5TH_ORDER, KENDELLS_6TH_ORDER, KENDELLS_7TH_ORDER, KENDELLS_8TH_ORDER)
+        html = "30218-08.html"
       end
       if st.cond?(4) && st.has_quest_items?(KABOO_CHIEFS_2ST_TORQUE)
-        Q00281_HeadForTheHills.give_newbie_reward(talker)
-        talker.send_packet(SocialAction.new(talker.l2id, 3))
+        Q00281_HeadForTheHills.give_newbie_reward(pc)
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
         st.give_adena(17599, true)
         st.add_exp_and_sp(41478, 3555)
         st.exit_quest(false, true)
-        htmltext = "30218-09.html"
+        html = "30218-09.html"
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(talker)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext
+    html
   end
 end

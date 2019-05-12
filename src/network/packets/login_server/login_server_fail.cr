@@ -1,4 +1,6 @@
-class Packets::Incoming::LoginServerFail < MMO::IncomingPacket(LoginServerClient)
+require "../login_server_packet"
+
+class Packets::Incoming::LoginServerFail < LoginServerPacket
   include Loggable
 
   private REASONS = {
@@ -14,11 +16,11 @@ class Packets::Incoming::LoginServerFail < MMO::IncomingPacket(LoginServerClient
 
   @reason_id = 0
 
-  def read
+  private def read_impl
     @reason_id = c
   end
 
-  def run
+  private def run_impl
     debug "Rejected by LoginServer (#{REASONS[@reason_id]?.inspect})."
   end
 end

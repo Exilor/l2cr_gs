@@ -1,4 +1,4 @@
-class NpcAI::DarkElfChange1 < AbstractNpcAI
+class Scripts::DarkElfChange1 < AbstractNpcAI
   private NPCS = {
     30290, # Xenos
     30297, # Tobias

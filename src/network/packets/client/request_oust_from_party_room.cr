@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestOustFromPartyRoom < GameClientPacket
   @char_id = 0
 
-  def read_impl
+  private def read_impl
     @char_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless member = L2World.get_player(@char_id)
     return unless room = PartyMatchRoomList.get_player_room(member)

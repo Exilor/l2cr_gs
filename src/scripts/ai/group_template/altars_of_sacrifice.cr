@@ -1,4 +1,4 @@
-class NpcAI::AltarsOfSacrifice < AbstractNpcAI
+class Scripts::AltarsOfSacrifice < AbstractNpcAI
   private class Altar
     include Loggable
 

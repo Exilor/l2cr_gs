@@ -1,4 +1,4 @@
-class Quests::Q00329_CuriosityOfADwarf < Quest
+class Scripts::Q00329_CuriosityOfADwarf < Quest
   # NPC
   private TRADER_ROLENTO = 30437
   # Items
@@ -8,8 +8,14 @@ class Quests::Q00329_CuriosityOfADwarf < Quest
   private MIN_LEVEL = 33
   # Monsters
   private MONSTER_DROPS = {
-    20083 => {ItemHolder.new(GOLEM_HEARTSTONE, 3), ItemHolder.new(BROKEN_HEARTSTONE, 54)}, # Granitic Golem
-    20085 => {ItemHolder.new(GOLEM_HEARTSTONE, 3), ItemHolder.new(BROKEN_HEARTSTONE, 58)}  # Puncher
+    20083 => { # Granitic Golem
+      ItemHolder.new(GOLEM_HEARTSTONE, 3),
+      ItemHolder.new(BROKEN_HEARTSTONE, 54)
+    },
+    20085 => { # Puncher
+      ItemHolder.new(GOLEM_HEARTSTONE, 3),
+      ItemHolder.new(BROKEN_HEARTSTONE, 58)
+    }
   }
 
   def initialize
@@ -68,7 +74,10 @@ class Quests::Q00329_CuriosityOfADwarf < Quest
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         broken = st.get_quest_items_count(BROKEN_HEARTSTONE)
         golem = st.get_quest_items_count(GOLEM_HEARTSTONE)
-        adena = (broken * 50) + (golem * 1000) + ((broken + golem) >= 10 ? 1183 : 0)
+        adena = (broken * 50) + (golem * 1000)
+        if broken + golem >= 10
+          adena += 1183
+        end
         st.give_adena(adena, true)
         take_items(pc, -1, registered_item_ids)
         html = "30437-05.html"

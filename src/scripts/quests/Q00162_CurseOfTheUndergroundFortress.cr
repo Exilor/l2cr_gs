@@ -1,4 +1,4 @@
-class Quests::Q00162_CurseOfTheUndergroundFortress < Quest
+class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
   # NPC
   private UNOREN = 30147
   # Monsters
@@ -30,21 +30,21 @@ class Quests::Q00162_CurseOfTheUndergroundFortress < Quest
     register_quest_items(BONE_FRAGMENT, ELF_SKULL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
 
     if st
       case event
       when "30147-03.htm"
-        htmltext = event
+        html = event
       when "30147-04.htm"
         st.start_quest
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -56,7 +56,7 @@ class Quests::Q00162_CurseOfTheUndergroundFortress < Quest
           if skulls < 3
             st.give_items(ELF_SKULL, 1)
             skulls += 1
-            if skulls >= 3 && (st.get_quest_items_count(BONE_FRAGMENT) >= 10)
+            if skulls >= 3 && st.get_quest_items_count(BONE_FRAGMENT) >= 10
               st.set_cond(2, true)
             else
               st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -64,46 +64,52 @@ class Quests::Q00162_CurseOfTheUndergroundFortress < Quest
           end
         end
       elsif tmp = MONSTERS_BONES[npc.id]?
-          if Rnd.rand(100) < tmp
-            bones = st.get_quest_items_count(BONE_FRAGMENT)
-            if bones < 10
-              st.give_items(BONE_FRAGMENT, 1)
-              bones += 1
-              if bones >= 10 && (st.get_quest_items_count(ELF_SKULL) >= 3)
-                st.set_cond(2, true)
-              else
-                st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
-              end
+        if Rnd.rand(100) < tmp
+          bones = st.get_quest_items_count(BONE_FRAGMENT)
+          if bones < 10
+            st.give_items(BONE_FRAGMENT, 1)
+            bones += 1
+            if bones >= 10 && st.get_quest_items_count(ELF_SKULL) >= 3
+              st.set_cond(2, true)
+            else
+              st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             end
           end
         end
       end
+    end
 
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state(player, true)
-    htmltext = get_no_quest_msg(player)
-    if st
+  def on_talk(npc, pc)
+    if st = get_quest_state(pc, true)
       case st.state
       when State::CREATED
-        htmltext = !player.race.dark_elf? ? player.level >= MIN_LVL ? "30147-02.htm" : "30147-01.htm" : "30147-00.htm"
+        if !pc.race.dark_elf?
+          if pc.level >= MIN_LVL
+            html = "30147-02.htm"
+          else
+            html = "30147-01.htm"
+          end
+        else
+          html = "30147-00.htm"
+        end
       when State::STARTED
         if st.get_quest_items_count(BONE_FRAGMENT) + st.get_quest_items_count(ELF_SKULL) >= REQUIRED_COUNT
           st.give_items(BONE_SHIELD, 1)
           st.add_exp_and_sp(22652, 1004)
           st.give_adena(24000, true)
           st.exit_quest(false, true)
-          htmltext = "30147-06.html"
+          html = "30147-06.html"
         else
-          htmltext = "30147-05.html"
+          html = "30147-05.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

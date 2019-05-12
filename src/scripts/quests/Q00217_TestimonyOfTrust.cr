@@ -1,4 +1,4 @@
-class Quests::Q00217_TestimonyOfTrust < Quest
+class Scripts::Q00217_TestimonyOfTrust < Quest
   # NPCs
   private HIGH_PRIEST_BIOTIN = 30031
   private HIERARCH_ASTERIOS = 30154
@@ -68,96 +68,114 @@ class Quests::Q00217_TestimonyOfTrust < Quest
     super(217, self.class.simple_name, "Testimony Of Trust")
 
     add_start_npc(HIGH_PRIEST_HOLLINT)
-    add_talk_id(HIGH_PRIEST_HOLLINT, HIGH_PRIEST_BIOTIN, HIERARCH_ASTERIOS, TETRARCH_THIFIELL, MAGISTER_CLAYTON, SEER_MANAKIA, IRON_GATES_LOCKIRIN, FLAME_LORD_KAKAI, MAESTRO_NIKOLA, CARDINAL_SERESIN)
-    add_kill_id(DRYAD, DRYAD_ELDER, LIREIN, LIREIN_ELDER, ANT_RECRUIT, ANT_PATROL, ANT_GUARD, ANT_SOLDIER, ANT_WARRIOR_CAPTAIN, MARSH_STAKATO, PORTA, MARSH_STAKATO_WORKER, MARSH_STAKATO_SOLDIER, MARSH_STAKATO_DRONE, GUARDIAN_BASILISK, WINDSUS, LUELL_OF_ZEPHYR_WINDS, ACTEA_OF_VERDANT_WILDS)
-    register_quest_items(LETTER_TO_ELF, LETTER_TO_DARKELF, LETTER_TO_DWARF, LETTER_TO_ORC, LETTER_TO_SERESIN, SCROLL_OF_DARKELF_TRUST, SCROLL_OF_ELF_TRUST, SCROLL_OF_DWARF_TRUST, SCROLL_OF_ORC_TRUST, RECOMMENDATION_OF_HOLLIN, ORDER_OF_ASTERIOS, BREATH_OF_WINDS, SEED_OF_VERDURE, LETTER_OF_THIFIELL, BLOOD_OF_GUARDIAN_BASILISK, GIANT_APHID, STAKATOS_FLUIDS, BASILISK_PLASMA, HONEY_DEW, STAKATO_ICHOR, ORDER_OF_CLAYTON, PARASITE_OF_LOTA, LETTER_TO_MANAKIA, LETTER_OF_MANAKIA, LETTER_TO_NICHOLA, ORDER_OF_NICHOLA, HEART_OF_PORTA)
+    add_talk_id(
+      HIGH_PRIEST_HOLLINT, HIGH_PRIEST_BIOTIN, HIERARCH_ASTERIOS,
+      TETRARCH_THIFIELL, MAGISTER_CLAYTON, SEER_MANAKIA, IRON_GATES_LOCKIRIN,
+      FLAME_LORD_KAKAI, MAESTRO_NIKOLA, CARDINAL_SERESIN
+    )
+    add_kill_id(
+      DRYAD, DRYAD_ELDER, LIREIN, LIREIN_ELDER, ANT_RECRUIT, ANT_PATROL,
+      ANT_GUARD, ANT_SOLDIER, ANT_WARRIOR_CAPTAIN, MARSH_STAKATO, PORTA,
+      MARSH_STAKATO_WORKER, MARSH_STAKATO_SOLDIER, MARSH_STAKATO_DRONE,
+      GUARDIAN_BASILISK, WINDSUS, LUELL_OF_ZEPHYR_WINDS, ACTEA_OF_VERDANT_WILDS
+    )
+    register_quest_items(
+      LETTER_TO_ELF, LETTER_TO_DARKELF, LETTER_TO_DWARF, LETTER_TO_ORC,
+      LETTER_TO_SERESIN, SCROLL_OF_DARKELF_TRUST, SCROLL_OF_ELF_TRUST,
+      SCROLL_OF_DWARF_TRUST, SCROLL_OF_ORC_TRUST, RECOMMENDATION_OF_HOLLIN,
+      ORDER_OF_ASTERIOS, BREATH_OF_WINDS, SEED_OF_VERDURE, LETTER_OF_THIFIELL,
+      BLOOD_OF_GUARDIAN_BASILISK, GIANT_APHID, STAKATOS_FLUIDS, BASILISK_PLASMA,
+      HONEY_DEW, STAKATO_ICHOR, ORDER_OF_CLAYTON, PARASITE_OF_LOTA,
+      LETTER_TO_MANAKIA, LETTER_OF_MANAKIA, LETTER_TO_NICHOLA, ORDER_OF_NICHOLA,
+      HEART_OF_PORTA
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    qs = get_quest_state(pc, false)
     if qs.nil?
       return
     end
 
-    htmltext = nil
+    html = nil
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        give_items(player, LETTER_TO_ELF, 1)
-        give_items(player, LETTER_TO_DARKELF, 1)
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 96)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30191-04a.htm"
+        give_items(pc, LETTER_TO_ELF, 1)
+        give_items(pc, LETTER_TO_DARKELF, 1)
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 96)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30191-04a.htm"
         else
-          htmltext = "30191-04.htm"
+          html = "30191-04.htm"
         end
       end
     when "30154-02.html", "30657-02.html"
-      htmltext = event
+      html = event
     when "30154-03.html"
-      if has_quest_items?(player, LETTER_TO_ELF)
-        take_items(player, LETTER_TO_ELF, 1)
-        give_items(player, ORDER_OF_ASTERIOS, 1)
+      if has_quest_items?(pc, LETTER_TO_ELF)
+        take_items(pc, LETTER_TO_ELF, 1)
+        give_items(pc, ORDER_OF_ASTERIOS, 1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "30358-02.html"
-      if has_quest_items?(player, LETTER_TO_DARKELF)
-        take_items(player, LETTER_TO_DARKELF, 1)
-        give_items(player, LETTER_OF_THIFIELL, 1)
+      if has_quest_items?(pc, LETTER_TO_DARKELF)
+        take_items(pc, LETTER_TO_DARKELF, 1)
+        give_items(pc, LETTER_OF_THIFIELL, 1)
         qs.memo_state = 5
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "30515-02.html"
-      if has_quest_items?(player, LETTER_TO_MANAKIA)
-        take_items(player, LETTER_TO_MANAKIA, 1)
+      if has_quest_items?(pc, LETTER_TO_MANAKIA)
+        take_items(pc, LETTER_TO_MANAKIA, 1)
         qs.memo_state = 11
         qs.set_cond(14, true)
-        htmltext = event
+        html = event
       end
     when "30531-02.html"
-      if has_quest_items?(player, LETTER_TO_DWARF)
-        take_items(player, LETTER_TO_DWARF, 1)
-        give_items(player, LETTER_TO_NICHOLA, 1)
+      if has_quest_items?(pc, LETTER_TO_DWARF)
+        take_items(pc, LETTER_TO_DWARF, 1)
+        give_items(pc, LETTER_TO_NICHOLA, 1)
         qs.memo_state = 15
         qs.set_cond(18, true)
-        htmltext = event
+        html = event
       end
     when "30565-02.html"
-      if has_quest_items?(player, LETTER_TO_ORC)
-        take_items(player, LETTER_TO_ORC, 1)
-        give_items(player, LETTER_TO_MANAKIA, 1)
+      if has_quest_items?(pc, LETTER_TO_ORC)
+        take_items(pc, LETTER_TO_ORC, 1)
+        give_items(pc, LETTER_TO_MANAKIA, 1)
         qs.memo_state = 10
         qs.set_cond(13, true)
-        htmltext = event
+        html = event
       end
     when "30621-02.html"
-      if has_quest_items?(player, LETTER_TO_NICHOLA)
-        take_items(player, LETTER_TO_NICHOLA, 1)
-        give_items(player, ORDER_OF_NICHOLA, 1)
+      if has_quest_items?(pc, LETTER_TO_NICHOLA)
+        take_items(pc, LETTER_TO_NICHOLA, 1)
+        give_items(pc, ORDER_OF_NICHOLA, 1)
         qs.memo_state = 16
         qs.set_cond(19, true)
-        htmltext = event
+        html = event
       end
     when "30657-03.html"
-      if qs.memo_state?(8) && has_quest_items?(player, LETTER_TO_SERESIN)
-        give_items(player, LETTER_TO_DWARF, 1)
-        give_items(player, LETTER_TO_ORC, 1)
-        take_items(player, LETTER_TO_SERESIN, 1)
+      if qs.memo_state?(8) && has_quest_items?(pc, LETTER_TO_SERESIN)
+        give_items(pc, LETTER_TO_DWARF, 1)
+        give_items(pc, LETTER_TO_ORC, 1)
+        take_items(pc, LETTER_TO_SERESIN, 1)
         qs.memo_state = 9
         qs.set_cond(12, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -181,7 +199,7 @@ class Quests::Q00217_TestimonyOfTrust < Quest
           end
         end
       when ANT_RECRUIT, ANT_GUARD
-        if qs.memo_state?(6) && (get_quest_items_count(killer, GIANT_APHID) < 5) && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, HONEY_DEW)
+        if qs.memo_state?(6) && get_quest_items_count(killer, GIANT_APHID) < 5 && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, HONEY_DEW)
           if get_quest_items_count(killer, GIANT_APHID) >= 4
             give_items(killer, HONEY_DEW, 1)
             take_items(killer, GIANT_APHID, -1)
@@ -195,7 +213,7 @@ class Quests::Q00217_TestimonyOfTrust < Quest
           end
         end
       when ANT_PATROL, ANT_SOLDIER, ANT_WARRIOR_CAPTAIN
-        if qs.memo_state?(6) && (get_quest_items_count(killer, GIANT_APHID) < 10) && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, HONEY_DEW)
+        if qs.memo_state?(6) && get_quest_items_count(killer, GIANT_APHID) < 10 && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, HONEY_DEW)
           if get_quest_items_count(killer, GIANT_APHID) >= 4
             give_items(killer, HONEY_DEW, 1)
             take_items(killer, GIANT_APHID, -1)
@@ -209,7 +227,7 @@ class Quests::Q00217_TestimonyOfTrust < Quest
           end
         end
       when MARSH_STAKATO, MARSH_STAKATO_WORKER
-        if qs.memo_state?(6) && (get_quest_items_count(killer, STAKATOS_FLUIDS) < 10) && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, STAKATO_ICHOR)
+        if qs.memo_state?(6) && get_quest_items_count(killer, STAKATOS_FLUIDS) < 10 && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, STAKATO_ICHOR)
           if get_quest_items_count(killer, STAKATOS_FLUIDS) >= 4
             give_items(killer, STAKATO_ICHOR, 1)
             take_items(killer, STAKATOS_FLUIDS, -1)
@@ -223,7 +241,7 @@ class Quests::Q00217_TestimonyOfTrust < Quest
           end
         end
       when MARSH_STAKATO_SOLDIER, MARSH_STAKATO_DRONE
-        if qs.memo_state?(6) && (get_quest_items_count(killer, STAKATOS_FLUIDS) < 5) && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, STAKATO_ICHOR)
+        if qs.memo_state?(6) && get_quest_items_count(killer, STAKATOS_FLUIDS) < 5 && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, STAKATO_ICHOR)
           if get_quest_items_count(killer, STAKATOS_FLUIDS) >= 4
             give_items(killer, STAKATO_ICHOR, 1)
             take_items(killer, STAKATOS_FLUIDS, -1)
@@ -244,7 +262,7 @@ class Quests::Q00217_TestimonyOfTrust < Quest
           end
         end
       when GUARDIAN_BASILISK
-        if qs.memo_state?(6) && (get_quest_items_count(killer, BLOOD_OF_GUARDIAN_BASILISK) < 10) && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, BASILISK_PLASMA)
+        if qs.memo_state?(6) && get_quest_items_count(killer, BLOOD_OF_GUARDIAN_BASILISK) < 10 && has_quest_items?(killer, ORDER_OF_CLAYTON) && !has_quest_items?(killer, BASILISK_PLASMA)
           if get_quest_items_count(killer, BLOOD_OF_GUARDIAN_BASILISK) >= 4
             give_items(killer, BASILISK_PLASMA, 1)
             take_items(killer, BLOOD_OF_GUARDIAN_BASILISK, -1)
@@ -258,7 +276,7 @@ class Quests::Q00217_TestimonyOfTrust < Quest
           end
         end
       when WINDSUS
-        if qs.memo_state?(11) && (get_quest_items_count(killer, PARASITE_OF_LOTA) < 10)
+        if qs.memo_state?(11) && get_quest_items_count(killer, PARASITE_OF_LOTA) < 10
           give_items(killer, PARASITE_OF_LOTA, 2)
           if get_quest_items_count(killer, PARASITE_OF_LOTA) == 10
             qs.memo_state = 12
@@ -295,205 +313,205 @@ class Quests::Q00217_TestimonyOfTrust < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
-    htmltext = get_no_quest_msg(player)
+
     if qs.created?
       if npc.id == HIGH_PRIEST_HOLLINT
-        if player.race.human? && player.level >= MIN_LEVEL && player.in_category?(CategoryType::HUMAN_2ND_GROUP)
-          htmltext = "30191-03.htm"
-        elsif player.race.human? && player.level >= MIN_LEVEL && player.in_category?(CategoryType::FIRST_CLASS_GROUP)
-          htmltext = "30191-01a.html"
-        elsif player.race.human? && player.level >= MIN_LEVEL
-          htmltext = "30191-01b.html"
-        elsif player.race.human?
-          htmltext = "30191-01.html"
+        if pc.race.human? && pc.level >= MIN_LEVEL && pc.in_category?(CategoryType::HUMAN_2ND_GROUP)
+          html = "30191-03.htm"
+        elsif pc.race.human? && pc.level >= MIN_LEVEL && pc.in_category?(CategoryType::FIRST_CLASS_GROUP)
+          html = "30191-01a.html"
+        elsif pc.race.human? && pc.level >= MIN_LEVEL
+          html = "30191-01b.html"
+        elsif pc.race.human?
+          html = "30191-01.html"
         else
-          htmltext = "30191-02.html"
+          html = "30191-02.html"
         end
       end
     elsif qs.started?
       case npc.id
       when HIGH_PRIEST_HOLLINT
         if memo_state == 7
-          if has_quest_items?(player, SCROLL_OF_ELF_TRUST, SCROLL_OF_DARKELF_TRUST)
-            give_items(player, LETTER_TO_SERESIN, 1)
-            take_items(player, SCROLL_OF_DARKELF_TRUST, 1)
-            take_items(player, SCROLL_OF_ELF_TRUST, 1)
+          if has_quest_items?(pc, SCROLL_OF_ELF_TRUST, SCROLL_OF_DARKELF_TRUST)
+            give_items(pc, LETTER_TO_SERESIN, 1)
+            take_items(pc, SCROLL_OF_DARKELF_TRUST, 1)
+            take_items(pc, SCROLL_OF_ELF_TRUST, 1)
             qs.memo_state = 8
             qs.set_cond(10, true)
-            htmltext = "30191-05.html"
+            html = "30191-05.html"
           end
         elsif memo_state == 18
-          if has_quest_items?(player, SCROLL_OF_DWARF_TRUST, SCROLL_OF_ORC_TRUST)
-            take_items(player, SCROLL_OF_DWARF_TRUST, 1)
-            take_items(player, SCROLL_OF_ORC_TRUST, 1)
-            give_items(player, RECOMMENDATION_OF_HOLLIN, 1)
+          if has_quest_items?(pc, SCROLL_OF_DWARF_TRUST, SCROLL_OF_ORC_TRUST)
+            take_items(pc, SCROLL_OF_DWARF_TRUST, 1)
+            take_items(pc, SCROLL_OF_ORC_TRUST, 1)
+            give_items(pc, RECOMMENDATION_OF_HOLLIN, 1)
             qs.memo_state = 19
             qs.set_cond(23, true)
-            htmltext = "30191-06.html"
+            html = "30191-06.html"
           end
         elsif memo_state == 19
-          htmltext = "30191-07.html"
+          html = "30191-07.html"
         elsif memo_state == 1
-          htmltext = "30191-08.html"
+          html = "30191-08.html"
         elsif memo_state == 8
-          htmltext = "30191-09.html"
+          html = "30191-09.html"
         end
       when HIGH_PRIEST_BIOTIN
         if memo_state == 19
-          if has_quest_items?(player, RECOMMENDATION_OF_HOLLIN)
-            give_adena(player, 252212, true)
-            give_items(player, MARK_OF_TRUST, 1)
-            add_exp_and_sp(player, 1390298, 92782)
+          if has_quest_items?(pc, RECOMMENDATION_OF_HOLLIN)
+            give_adena(pc, 252212, true)
+            give_items(pc, MARK_OF_TRUST, 1)
+            add_exp_and_sp(pc, 1390298, 92782)
             qs.exit_quest(false, true)
-            player.send_packet(SocialAction.new(player.l2id, 3))
-            htmltext = "30031-01.html"
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
+            html = "30031-01.html"
           end
         end
       when HIERARCH_ASTERIOS
         if memo_state == 1
-          if has_quest_items?(player, LETTER_TO_ELF)
-            htmltext = "30154-01.html"
+          if has_quest_items?(pc, LETTER_TO_ELF)
+            html = "30154-01.html"
           end
         elsif memo_state == 2
-          if has_quest_items?(player, ORDER_OF_ASTERIOS)
-            htmltext = "30154-04.html"
+          if has_quest_items?(pc, ORDER_OF_ASTERIOS)
+            html = "30154-04.html"
           end
         elsif memo_state == 3
-          if has_quest_items?(player, BREATH_OF_WINDS, SEED_OF_VERDURE)
-            give_items(player, SCROLL_OF_ELF_TRUST, 1)
-            take_items(player, ORDER_OF_ASTERIOS, 1)
-            take_items(player, BREATH_OF_WINDS, 1)
-            take_items(player, SEED_OF_VERDURE, 1)
+          if has_quest_items?(pc, BREATH_OF_WINDS, SEED_OF_VERDURE)
+            give_items(pc, SCROLL_OF_ELF_TRUST, 1)
+            take_items(pc, ORDER_OF_ASTERIOS, 1)
+            take_items(pc, BREATH_OF_WINDS, 1)
+            take_items(pc, SEED_OF_VERDURE, 1)
             qs.memo_state = 4
             qs.set_cond(4, true)
-            htmltext = "30154-05.html"
+            html = "30154-05.html"
           end
         elsif memo_state == 4
-          htmltext = "30154-06.html"
+          html = "30154-06.html"
         end
       when TETRARCH_THIFIELL
         if memo_state == 4
-          if has_quest_items?(player, LETTER_TO_DARKELF)
-            htmltext = "30358-01.html"
+          if has_quest_items?(pc, LETTER_TO_DARKELF)
+            html = "30358-01.html"
           end
         elsif memo_state == 6
-          if has_quest_items?(player, ORDER_OF_CLAYTON) && ((get_quest_items_count(player, STAKATO_ICHOR) + get_quest_items_count(player, HONEY_DEW) + get_quest_items_count(player, BASILISK_PLASMA)) == 3)
-            give_items(player, SCROLL_OF_DARKELF_TRUST, 1)
-            take_items(player, BASILISK_PLASMA, -1)
-            take_items(player, HONEY_DEW, -1)
-            take_items(player, STAKATO_ICHOR, -1)
-            take_items(player, ORDER_OF_CLAYTON, 1)
+          if has_quest_items?(pc, ORDER_OF_CLAYTON) && get_quest_items_count(pc, STAKATO_ICHOR) + get_quest_items_count(pc, HONEY_DEW) + get_quest_items_count(pc, BASILISK_PLASMA) == 3
+            give_items(pc, SCROLL_OF_DARKELF_TRUST, 1)
+            take_items(pc, BASILISK_PLASMA, -1)
+            take_items(pc, HONEY_DEW, -1)
+            take_items(pc, STAKATO_ICHOR, -1)
+            take_items(pc, ORDER_OF_CLAYTON, 1)
             qs.memo_state = 7
             qs.set_cond(9, true)
-            htmltext = "30358-03.html"
+            html = "30358-03.html"
           end
         elsif memo_state == 7
-          htmltext = "30358-04.html"
+          html = "30358-04.html"
         elsif memo_state == 5
-          htmltext = "30358-05.html"
+          html = "30358-05.html"
         end
       when MAGISTER_CLAYTON
         if memo_state == 5
-          if has_quest_items?(player, LETTER_OF_THIFIELL)
-            take_items(player, LETTER_OF_THIFIELL, 1)
-            give_items(player, ORDER_OF_CLAYTON, 1)
+          if has_quest_items?(pc, LETTER_OF_THIFIELL)
+            take_items(pc, LETTER_OF_THIFIELL, 1)
+            give_items(pc, ORDER_OF_CLAYTON, 1)
             qs.memo_state = 6
             qs.set_cond(6, true)
-            htmltext = "30464-01.html"
+            html = "30464-01.html"
           end
         elsif memo_state == 6
-          if has_quest_items?(player, ORDER_OF_CLAYTON) && ((get_quest_items_count(player, STAKATO_ICHOR) + get_quest_items_count(player, HONEY_DEW) + get_quest_items_count(player, BASILISK_PLASMA)) < 3)
-            htmltext = "30464-02.html"
+          if has_quest_items?(pc, ORDER_OF_CLAYTON) && get_quest_items_count(pc, STAKATO_ICHOR) + get_quest_items_count(pc, HONEY_DEW) + get_quest_items_count(pc, BASILISK_PLASMA) < 3
+            html = "30464-02.html"
           else
             qs.set_cond(8, true)
-            htmltext = "30464-03.html"
+            html = "30464-03.html"
           end
         end
       when SEER_MANAKIA
-        if has_quest_items?(player, LETTER_TO_MANAKIA)
-          htmltext = "30515-01.html"
+        if has_quest_items?(pc, LETTER_TO_MANAKIA)
+          html = "30515-01.html"
         elsif memo_state == 11
-          htmltext = "30515-03.html"
+          html = "30515-03.html"
         elsif memo_state == 12
-          if get_quest_items_count(player, PARASITE_OF_LOTA) == 10
-            take_items(player, PARASITE_OF_LOTA, -1)
-            give_items(player, LETTER_OF_MANAKIA, 1)
+          if get_quest_items_count(pc, PARASITE_OF_LOTA) == 10
+            take_items(pc, PARASITE_OF_LOTA, -1)
+            give_items(pc, LETTER_OF_MANAKIA, 1)
             qs.memo_state = 13
             qs.set_cond(16, true)
-            htmltext = "30515-04.html"
+            html = "30515-04.html"
           end
         elsif memo_state == 13
-          htmltext = "30515-05.html"
+          html = "30515-05.html"
         end
       when IRON_GATES_LOCKIRIN
         if memo_state == 14
-          if has_quest_items?(player, LETTER_TO_DWARF)
-            htmltext = "30531-01.html"
+          if has_quest_items?(pc, LETTER_TO_DWARF)
+            html = "30531-01.html"
           end
         elsif memo_state == 15
-          htmltext = "30531-03.html"
+          html = "30531-03.html"
         elsif memo_state == 17
-          give_items(player, SCROLL_OF_DWARF_TRUST, 1)
+          give_items(pc, SCROLL_OF_DWARF_TRUST, 1)
           qs.memo_state = 18
           qs.set_cond(22, true)
-          htmltext = "30531-04.html"
+          html = "30531-04.html"
         elsif memo_state == 18
-          htmltext = "30531-05.html"
+          html = "30531-05.html"
         end
       when FLAME_LORD_KAKAI
         if memo_state == 9
-          if has_quest_items?(player, LETTER_TO_ORC)
-            htmltext = "30565-01.html"
+          if has_quest_items?(pc, LETTER_TO_ORC)
+            html = "30565-01.html"
           end
         elsif memo_state == 10
-          htmltext = "30565-03.html"
+          html = "30565-03.html"
         elsif memo_state == 13
-          give_items(player, SCROLL_OF_ORC_TRUST, 1)
-          take_items(player, LETTER_OF_MANAKIA, 1)
+          give_items(pc, SCROLL_OF_ORC_TRUST, 1)
+          take_items(pc, LETTER_OF_MANAKIA, 1)
           qs.memo_state = 14
           qs.set_cond(17, true)
-          htmltext = "30565-04.html"
+          html = "30565-04.html"
         elsif memo_state == 14
-          htmltext = "30565-05.html"
+          html = "30565-05.html"
         end
       when MAESTRO_NIKOLA
         if memo_state == 15
-          if has_quest_items?(player, LETTER_TO_NICHOLA)
-            htmltext = "30621-01.html"
+          if has_quest_items?(pc, LETTER_TO_NICHOLA)
+            html = "30621-01.html"
           end
         elsif memo_state == 16
-          if !has_quest_items?(player, HEART_OF_PORTA)
-            htmltext = "30621-03.html"
+          if !has_quest_items?(pc, HEART_OF_PORTA)
+            html = "30621-03.html"
           else
-            take_items(player, ORDER_OF_NICHOLA, 1)
-            take_items(player, HEART_OF_PORTA, 1)
+            take_items(pc, ORDER_OF_NICHOLA, 1)
+            take_items(pc, HEART_OF_PORTA, 1)
             qs.memo_state = 17
             qs.set_cond(21, true)
-            htmltext = "30621-04.html"
+            html = "30621-04.html"
           end
         elsif memo_state == 17
-          htmltext = "30621-05.html"
+          html = "30621-05.html"
         end
       when CARDINAL_SERESIN
         if memo_state == 8
-          if has_quest_items?(player, LETTER_TO_SERESIN)
-            htmltext = "30657-01.html"
+          if has_quest_items?(pc, LETTER_TO_SERESIN)
+            html = "30657-01.html"
           end
         elsif memo_state == 9
-          htmltext = "30657-04.html"
+          html = "30657-04.html"
         elsif memo_state == 18
-          htmltext = "30657-05.html"
+          html = "30657-05.html"
         end
       end
     elsif qs.completed?
       if npc.id == HIGH_PRIEST_HOLLINT
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

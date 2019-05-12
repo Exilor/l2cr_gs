@@ -1,7 +1,7 @@
 require "../models/quests/quest"
 require "../models/quests/abstract_npc_ai"
 require "../scripts/**"
-
+# 511 quests and 176 scripts
 module QuestManager
   extend self
   extend Loggable
@@ -10,16 +10,26 @@ module QuestManager
   private SCRIPTS = Hash(String, Quest).new
 
   def load
-    {% for sub in Quest.all_subclasses.reject &.abstract? %}
-      {{sub.id}}.new
+    timer = Timer.new
+
+    # This goes first, for scripts that add spawns with minions in #initialize.
+    MinionSpawnManager.new
+
+    # Classes inside the Scripts namespace are to be instantiated in no
+    # particular order. Classes outside of it must be managed manually.
+    {% for script in Scripts.constants %}
+      Scripts::{{script.id}}.new
     {% end %}
 
-    info "Loaded #{QUESTS.size} quests and #{SCRIPTS.size} scripts."
+    # This class manages Territory War scripts.
+    TerritoryWarSuperClass.load
+
+    info { "Loaded #{QUESTS.size} quests and #{SCRIPTS.size} scripts in #{timer} s." }
   end
 
   def add_quest(quest : Quest)
     if Config.alt_dev_show_quests_load_in_logs
-      debug "Added quest #{quest.class.simple_name}."
+      debug { "Added quest #{quest.class.simple_name}." }
     end
 
     QUESTS[quest.name] = quest
@@ -27,7 +37,7 @@ module QuestManager
 
   def add_script(script : Quest)
     if Config.alt_dev_show_scripts_load_in_logs
-      info "Added script #{script.class.simple_name}."
+      debug { "Added script #{script.class.simple_name}." }
     end
 
     SCRIPTS[script.class.simple_name] = script
@@ -41,11 +51,11 @@ module QuestManager
     QUESTS.find_value { |q| q.id == quest_id }
   end
 
-  def quests
+  def quests : Hash(String, Quest)
     QUESTS
   end
 
-  def scripts
+  def scripts : Hash(String, Quest)
     SCRIPTS
   end
 

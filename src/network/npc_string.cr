@@ -1,4 +1,4 @@
-class NpcString
+struct NpcString
   private MAP = {} of Int32 => self
 
   getter id, name = "", param_count = 0

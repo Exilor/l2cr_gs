@@ -5,7 +5,7 @@ class InstanceType < EnumClass
   @mask_h : Int64
   getter parent
 
-  def initialize(@parent : self?)
+  protected def initialize(@parent : self?)
     high = to_i64 - Int64::MAX - 1
     if high < 0
       @type_l = 1i64 << to_i

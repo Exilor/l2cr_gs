@@ -1,6 +1,6 @@
 require "../../../instance_managers/airship_manager"
 
-class NpcAI::AirShipGludioGracia < AbstractNpcAI
+class Scripts::AirShipGludioGracia < AbstractNpcAI
   include Runnable
   include Loggable
 

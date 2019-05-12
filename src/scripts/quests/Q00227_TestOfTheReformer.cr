@@ -1,4 +1,4 @@
-class Quests::Q00227_TestOfTheReformer < Quest
+class Scripts::Q00227_TestOfTheReformer < Quest
   # NPCs
   private PRIESTESS_PUPINA = 30118
   private PREACHER_SLA = 30666
@@ -67,14 +67,30 @@ class Quests::Q00227_TestOfTheReformer < Quest
     super(227, self.class.simple_name, "Test Of The Reformer")
 
     add_start_npc(PRIESTESS_PUPINA)
-    add_talk_id(PRIESTESS_PUPINA, PREACHER_SLA, RAMUS, KATARI, KAKAN, NYAKURI, OL_MAHUM_PILGRIM)
+    add_talk_id(
+      PRIESTESS_PUPINA, PREACHER_SLA, RAMUS, KATARI, KAKAN, NYAKURI,
+      OL_MAHUM_PILGRIM
+    )
     add_attack_id(NAMELESS_REVENANT, CRIMSON_WEREWOLF)
-    add_kill_id(MISERY_SKELETON, SKELETON_ARCHER, SKELETON_MARKSMAN, SKELETON_LORD, SILENT_HORROR, NAMELESS_REVENANT, ARURAUNE, OL_MAHUM_INSPECTOR, OL_MAHUM_BETRAYER, CRIMSON_WEREWOLF, KRUDEL_LIZARDMAN)
-    add_spawn_id(OL_MAHUM_PILGRIM, OL_MAHUM_INSPECTOR, OL_MAHUM_BETRAYER, CRIMSON_WEREWOLF, KRUDEL_LIZARDMAN)
-    register_quest_items(BOOK_OF_REFORM, LETTER_OF_INTRODUCTION, SLAS_LETTER, GREETINGS, Ol_MAHUM_MONEY, KATARIS_LETTER, NYAKURIS_LETTER, UNDEAD_LIST, RAMUSS_LETTER, RAMUSS_LETTER, RIPPED_DIARY, HUGE_NAIL, LETTER_OF_BETRAYER, BONE_FRAGMENT4, BONE_FRAGMENT5, BONE_FRAGMENT6, BONE_FRAGMENT7, BONE_FRAGMENT8, KAKANS_LETTER, LETTER_GREETINGS1, LETTER_GREETINGS2)
+    add_kill_id(
+      MISERY_SKELETON, SKELETON_ARCHER, SKELETON_MARKSMAN, SKELETON_LORD,
+      SILENT_HORROR, NAMELESS_REVENANT, ARURAUNE, OL_MAHUM_INSPECTOR,
+      OL_MAHUM_BETRAYER, CRIMSON_WEREWOLF, KRUDEL_LIZARDMAN
+    )
+    add_spawn_id(
+      OL_MAHUM_PILGRIM, OL_MAHUM_INSPECTOR, OL_MAHUM_BETRAYER, CRIMSON_WEREWOLF,
+      KRUDEL_LIZARDMAN
+    )
+    register_quest_items(
+      BOOK_OF_REFORM, LETTER_OF_INTRODUCTION, SLAS_LETTER, GREETINGS,
+      Ol_MAHUM_MONEY, KATARIS_LETTER, NYAKURIS_LETTER, UNDEAD_LIST,
+      RAMUSS_LETTER, RAMUSS_LETTER, RIPPED_DIARY, HUGE_NAIL, LETTER_OF_BETRAYER,
+      BONE_FRAGMENT4, BONE_FRAGMENT5, BONE_FRAGMENT6, BONE_FRAGMENT7,
+      BONE_FRAGMENT8, KAKANS_LETTER, LETTER_GREETINGS1, LETTER_GREETINGS2
+    )
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     if event == "DESPAWN"
       npc = npc.not_nil!
       spawned = npc.variables.get_i32("SPAWNED", 0)
@@ -87,42 +103,42 @@ class Quests::Q00227_TestOfTheReformer < Quest
       return super
     end
 
-    return unless player
-    return unless qs = get_quest_state(player, false)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        give_items(player, BOOK_OF_REFORM, 1)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 60)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30118-04b.htm"
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        give_items(pc, BOOK_OF_REFORM, 1)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 60)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30118-04b.htm"
         else
-          htmltext = "30118-04.htm"
+          html = "30118-04.htm"
         end
       end
     when "30118-06.html"
-      if has_quest_items?(player, BOOK_OF_REFORM)
-        take_items(player, BOOK_OF_REFORM, 1)
-        give_items(player, LETTER_OF_INTRODUCTION, 1)
-        take_items(player, HUGE_NAIL, 1)
+      if has_quest_items?(pc, BOOK_OF_REFORM)
+        take_items(pc, BOOK_OF_REFORM, 1)
+        give_items(pc, LETTER_OF_INTRODUCTION, 1)
+        take_items(pc, HUGE_NAIL, 1)
         qs.memo_state = 4
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "30666-02.html", "30666-03.html", "30669-02.html", "30669-05.html",
          "30670-02.html"
-      htmltext = event
+      html = event
     when "30666-04.html"
-      take_items(player, LETTER_OF_INTRODUCTION, 1)
-      give_items(player, SLAS_LETTER, 1)
+      take_items(pc, LETTER_OF_INTRODUCTION, 1)
+      give_items(pc, SLAS_LETTER, 1)
       qs.memo_state = 5
       qs.set_cond(5, true)
-      htmltext = event
+      html = event
     when "30669-03.html"
       npc = npc.not_nil!
       qs.set_cond(12, true)
@@ -132,7 +148,7 @@ class Quests::Q00227_TestOfTheReformer < Quest
         wolf.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999)
         wolf.set_intention(AI::ATTACK, pilgrim)
       end
-      htmltext = event
+      html = event
     when "30670-03.html"
       npc = npc.not_nil!
       qs.set_cond(15, true)
@@ -142,10 +158,10 @@ class Quests::Q00227_TestOfTheReformer < Quest
         lizard.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999)
         lizard.set_intention(AI::ATTACK, pilgrim)
       end
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)
@@ -270,100 +286,100 @@ class Quests::Q00227_TestOfTheReformer < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
-    htmltext = get_no_quest_msg(player)
+
     if qs.created?
       if npc.id == PRIESTESS_PUPINA
-        if player.class_id.cleric? || player.class_id.shillien_oracle?
-          if player.level >= MIN_LEVEL
-            htmltext = "30118-03.htm"
+        if pc.class_id.cleric? || pc.class_id.shillien_oracle?
+          if pc.level >= MIN_LEVEL
+            html = "30118-03.htm"
           else
-            htmltext = "30118-01.html"
+            html = "30118-01.html"
           end
         else
-          htmltext = "30118-02.html"
+          html = "30118-02.html"
         end
       end
     elsif qs.started?
       case npc.id
       when PRIESTESS_PUPINA
         if memo_state == 3
-          if has_quest_items?(player, HUGE_NAIL)
-            htmltext = "30118-05.html"
+          if has_quest_items?(pc, HUGE_NAIL)
+            html = "30118-05.html"
           end
         elsif memo_state >= 1 && memo_state < 3
-          htmltext = "30118-04a.html"
+          html = "30118-04a.html"
         elsif memo_state >= 4
-          htmltext = "30118-07.html"
+          html = "30118-07.html"
         end
       when PREACHER_SLA
         if memo_state == 4
-          if has_quest_items?(player, LETTER_OF_INTRODUCTION)
-            htmltext = "30666-01.html"
+          if has_quest_items?(pc, LETTER_OF_INTRODUCTION)
+            html = "30666-01.html"
           end
         elsif memo_state >= 11 && memo_state < 18
-          htmltext = "30666-06b.html"
+          html = "30666-06b.html"
         elsif memo_state == 5
-          if has_quest_items?(player, SLAS_LETTER)
-            htmltext = "30666-05.html"
+          if has_quest_items?(pc, SLAS_LETTER)
+            html = "30666-05.html"
           end
         elsif memo_state == 10
-          if has_quest_items?(player, Ol_MAHUM_MONEY)
-            take_items(player, Ol_MAHUM_MONEY, 1)
-            give_items(player, GREETINGS, 1)
-            give_items(player, LETTER_GREETINGS1, 1)
-            give_items(player, LETTER_GREETINGS2, 1)
+          if has_quest_items?(pc, Ol_MAHUM_MONEY)
+            take_items(pc, Ol_MAHUM_MONEY, 1)
+            give_items(pc, GREETINGS, 1)
+            give_items(pc, LETTER_GREETINGS1, 1)
+            give_items(pc, LETTER_GREETINGS2, 1)
             qs.memo_state = 11
             qs.set_cond(11, true)
-            htmltext = "30666-06.html"
+            html = "30666-06.html"
           else
-            give_items(player, GREETINGS, 1)
-            give_items(player, LETTER_GREETINGS1, 1)
-            give_items(player, LETTER_GREETINGS2, 1)
+            give_items(pc, GREETINGS, 1)
+            give_items(pc, LETTER_GREETINGS1, 1)
+            give_items(pc, LETTER_GREETINGS2, 1)
             qs.memo_state = 11
             qs.set_cond(11, true)
-            htmltext = "30666-06a.html"
+            html = "30666-06a.html"
           end
         elsif memo_state == 18
-          if has_quest_items?(player, KATARIS_LETTER, KAKANS_LETTER, NYAKURIS_LETTER, RAMUSS_LETTER)
-            give_adena(player, 226528, true)
-            give_items(player, MARK_OF_REFORMER, 1)
-            add_exp_and_sp(player, 1252844, 85972)
+          if has_quest_items?(pc, KATARIS_LETTER, KAKANS_LETTER, NYAKURIS_LETTER, RAMUSS_LETTER)
+            give_adena(pc, 226528, true)
+            give_items(pc, MARK_OF_REFORMER, 1)
+            add_exp_and_sp(pc, 1252844, 85972)
             qs.exit_quest(false, true)
-            player.send_packet(SocialAction.new(player.l2id, 3))
-            htmltext = "30666-07.html"
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
+            html = "30666-07.html"
           end
         end
       when RAMUS
         if memo_state == 15
-          if has_quest_items?(player, LETTER_GREETINGS2) && !has_quest_items?(player, UNDEAD_LIST)
-            give_items(player, UNDEAD_LIST, 1)
-            take_items(player, LETTER_GREETINGS2, 1)
+          if has_quest_items?(pc, LETTER_GREETINGS2) && !has_quest_items?(pc, UNDEAD_LIST)
+            give_items(pc, UNDEAD_LIST, 1)
+            take_items(pc, LETTER_GREETINGS2, 1)
             qs.memo_state = 16
             qs.set_cond(18, true)
-            htmltext = "30667-01.html"
+            html = "30667-01.html"
           end
         elsif memo_state == 16
-          htmltext = "30667-02.html"
+          html = "30667-02.html"
         elsif memo_state == 17
-          if has_quest_items?(player, UNDEAD_LIST)
-            take_items(player, UNDEAD_LIST, 1)
-            give_items(player, RAMUSS_LETTER, 1)
-            take_items(player, BONE_FRAGMENT4, 1)
-            take_items(player, BONE_FRAGMENT5, 1)
-            take_items(player, BONE_FRAGMENT6, 1)
-            take_items(player, BONE_FRAGMENT7, 1)
-            take_items(player, BONE_FRAGMENT8, 1)
+          if has_quest_items?(pc, UNDEAD_LIST)
+            take_items(pc, UNDEAD_LIST, 1)
+            give_items(pc, RAMUSS_LETTER, 1)
+            take_items(pc, BONE_FRAGMENT4, 1)
+            take_items(pc, BONE_FRAGMENT5, 1)
+            take_items(pc, BONE_FRAGMENT6, 1)
+            take_items(pc, BONE_FRAGMENT7, 1)
+            take_items(pc, BONE_FRAGMENT8, 1)
             qs.memo_state = 18
             qs.set_cond(20, true)
-            htmltext = "30667-03.html"
+            html = "30667-03.html"
           end
         end
       when KATARI
         if memo_state == 5 || memo_state == 6
-          take_items(player, SLAS_LETTER, 1)
+          take_items(pc, SLAS_LETTER, 1)
           qs.memo_state = 6
           qs.set_cond(6, true)
           if npc.summoned_npc_count < 1
@@ -372,7 +388,7 @@ class Quests::Q00227_TestOfTheReformer < Quest
             inspector.as(L2Attackable).add_damage_hate(pilgrim, 99999, 99999)
             inspector.set_intention(AI::ATTACK, pilgrim)
           end
-          htmltext = "30668-01.html"
+          html = "30668-01.html"
         elsif memo_state == 7 || memo_state == 8
           if memo_state == 7
             qs.memo_state = 8
@@ -381,60 +397,60 @@ class Quests::Q00227_TestOfTheReformer < Quest
           if npc.summoned_npc_count < 3
             add_spawn(OL_MAHUM_BETRAYER, -4106, 40174, -3660, 0, false, 0)
           end
-          htmltext = "30668-02.html"
+          html = "30668-02.html"
         elsif memo_state == 9
-          if has_quest_items?(player, LETTER_OF_BETRAYER)
-            give_items(player, KATARIS_LETTER, 1)
-            take_items(player, LETTER_OF_BETRAYER, 1)
+          if has_quest_items?(pc, LETTER_OF_BETRAYER)
+            give_items(pc, KATARIS_LETTER, 1)
+            take_items(pc, LETTER_OF_BETRAYER, 1)
             qs.memo_state = 10
             qs.set_cond(10, true)
-            htmltext = "30668-03.html"
+            html = "30668-03.html"
           end
         elsif memo_state >= 10
-          htmltext = "30668-04.html"
+          html = "30668-04.html"
         end
       when KAKAN
         if memo_state == 11
-          if has_quest_items?(player, GREETINGS)
-            htmltext = "30669-01.html"
+          if has_quest_items?(pc, GREETINGS)
+            html = "30669-01.html"
           end
         elsif memo_state == 12
-          if has_quest_items?(player, GREETINGS) && !has_quest_items?(player, KAKANS_LETTER)
-            take_items(player, GREETINGS, 1)
-            give_items(player, KAKANS_LETTER, 1)
+          if has_quest_items?(pc, GREETINGS) && !has_quest_items?(pc, KAKANS_LETTER)
+            take_items(pc, GREETINGS, 1)
+            give_items(pc, KAKANS_LETTER, 1)
             qs.memo_state = 13
             qs.set_cond(14, true)
-            htmltext = "30669-04.html"
+            html = "30669-04.html"
           end
         end
       when NYAKURI
         if memo_state == 13
-          if has_quest_items?(player, LETTER_GREETINGS1)
-            htmltext = "30670-01.html"
+          if has_quest_items?(pc, LETTER_GREETINGS1)
+            html = "30670-01.html"
           end
         elsif memo_state == 14
-          if has_quest_items?(player, LETTER_GREETINGS1) && !has_quest_items?(player, NYAKURIS_LETTER)
-            give_items(player, NYAKURIS_LETTER, 1)
-            take_items(player, LETTER_GREETINGS1, 1)
+          if has_quest_items?(pc, LETTER_GREETINGS1) && !has_quest_items?(pc, NYAKURIS_LETTER)
+            give_items(pc, NYAKURIS_LETTER, 1)
+            take_items(pc, LETTER_GREETINGS1, 1)
             qs.memo_state = 15
             qs.set_cond(17, true)
-            htmltext = "30670-04.html"
+            html = "30670-04.html"
           end
         end
       when OL_MAHUM_PILGRIM
         if memo_state == 7
-          give_items(player, Ol_MAHUM_MONEY, 1)
+          give_items(pc, Ol_MAHUM_MONEY, 1)
           qs.memo_state = 8
-          htmltext = "30732-01.html"
+          html = "30732-01.html"
         end
       end
     elsif qs.completed?
       if npc.id == PRIESTESS_PUPINA
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_spawn(npc)

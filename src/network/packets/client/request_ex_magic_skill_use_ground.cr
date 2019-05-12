@@ -6,14 +6,14 @@ class Packets::Incoming::RequestExMagicSkillUseGround < GameClientPacket
   @ctrl = false
   @shift = false
 
-  def read_impl
+  private def read_impl
     @x, @y, @z = d, d, d
     @skill_id = d
     @ctrl = d != 0
     @shift = c != 0
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     level = pc.get_skill_level(@skill_id)

@@ -1,4 +1,4 @@
-class Quests::Q00172_NewHorizons < Quest
+class Scripts::Q00172_NewHorizons < Quest
   # NPCs
   private ZENYA = 32140
   private RAGARA = 32163
@@ -17,14 +17,14 @@ class Quests::Q00172_NewHorizons < Quest
     add_talk_id(ZENYA, RAGARA)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st.nil?
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "32140-04.htm"
       st.start_quest
@@ -36,30 +36,38 @@ class Quests::Q00172_NewHorizons < Quest
       return
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state(player, true)
-    return htmltext unless st
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when ZENYA
       case st.state
       when State::CREATED
-        htmltext = player.race.kamael? ? player.level >= MIN_LEVEL ? "32140-01.htm" : "32140-02.htm" : "32140-03.htm"
+        if pc.race.kamael?
+          if pc.level >= MIN_LEVEL
+            html = "32140-01.htm"
+          else
+            html = "32140-02.htm"
+          end
+        else
+          html = "32140-03.htm"
+        end
       when State::STARTED
-        htmltext = "32140-05.html"
+        html = "32140-05.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when RAGARA
       if st.started?
-        htmltext = "32163-01.html"
+        html = "32163-01.html"
       end
     end
 
-    htmltext
+    html
   end
 end

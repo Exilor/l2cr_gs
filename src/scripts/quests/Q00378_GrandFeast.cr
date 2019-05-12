@@ -1,4 +1,4 @@
-class Quests::Q00378_GrandFeast < Quest
+class Scripts::Q00378_GrandFeast < Quest
   # NPC
   private RANSPO = 30594
   # Items
@@ -28,9 +28,9 @@ class Quests::Q00378_GrandFeast < Quest
     add_talk_id(RANSPO)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -41,8 +41,8 @@ class Quests::Q00378_GrandFeast < Quest
       html = event
     when "30594-05.html"
       i0 = qs.get_memo_state_ex(1)
-      if has_quest_items?(player, OLD_WINE_15_YEAR)
-        take_items(player, OLD_WINE_15_YEAR, 1)
+      if has_quest_items?(pc, OLD_WINE_15_YEAR)
+        take_items(pc, OLD_WINE_15_YEAR, 1)
         qs.set_memo_state_ex(1, i0 + 10)
         qs.set_cond(2, true)
         html = event
@@ -51,8 +51,8 @@ class Quests::Q00378_GrandFeast < Quest
       end
     when "30594-06.html"
       i0 = qs.get_memo_state_ex(1)
-      if has_quest_items?(player, OLD_WINE_30_YEAR)
-        take_items(player, OLD_WINE_30_YEAR, 1)
+      if has_quest_items?(pc, OLD_WINE_30_YEAR)
+        take_items(pc, OLD_WINE_30_YEAR, 1)
         qs.set_memo_state_ex(1, i0 + 20)
         qs.set_cond(2, true)
         html = event
@@ -61,8 +61,8 @@ class Quests::Q00378_GrandFeast < Quest
       end
     when "30594-07.html"
       i0 = qs.get_memo_state_ex(1)
-      if has_quest_items?(player, OLD_WINE_60_YEAR)
-        take_items(player, OLD_WINE_60_YEAR, 1)
+      if has_quest_items?(pc, OLD_WINE_60_YEAR)
+        take_items(pc, OLD_WINE_60_YEAR, 1)
         qs.set_memo_state_ex(1, i0 + 30)
         qs.set_cond(2, true)
         html = event
@@ -72,8 +72,8 @@ class Quests::Q00378_GrandFeast < Quest
     when "30594-09.html", "30594-18.html"
       html = event
     when "30594-12.html"
-      if has_quest_items?(player, THEME_OF_THE_FEAST)
-        take_items(player, THEME_OF_THE_FEAST, 1)
+      if has_quest_items?(pc, THEME_OF_THE_FEAST)
+        take_items(pc, THEME_OF_THE_FEAST, 1)
         qs.set_cond(3, true)
         html = event
       else
@@ -81,8 +81,8 @@ class Quests::Q00378_GrandFeast < Quest
       end
     when "30594-14.html"
       i0 = qs.get_memo_state_ex(1)
-      if has_quest_items?(player, JONAS_SALAD_RECIPE)
-        take_items(player, JONAS_SALAD_RECIPE, 1)
+      if has_quest_items?(pc, JONAS_SALAD_RECIPE)
+        take_items(pc, JONAS_SALAD_RECIPE, 1)
         qs.set_memo_state_ex(1, i0 + 1)
         qs.set_cond(4, true)
         html = event
@@ -91,8 +91,8 @@ class Quests::Q00378_GrandFeast < Quest
       end
     when "30594-15.html"
       i0 = qs.get_memo_state_ex(1)
-      if has_quest_items?(player, JONAS_SAUCE_RECIPE)
-        take_items(player, JONAS_SAUCE_RECIPE, 1)
+      if has_quest_items?(pc, JONAS_SAUCE_RECIPE)
+        take_items(pc, JONAS_SAUCE_RECIPE, 1)
         qs.set_memo_state_ex(1, i0 + 2)
         qs.set_cond(4, true)
         html = event
@@ -101,8 +101,8 @@ class Quests::Q00378_GrandFeast < Quest
       end
     when "30594-16.html"
       i0 = qs.get_memo_state_ex(1)
-      if has_quest_items?(player, JONAS_STEAK_RECIPE)
-        take_items(player, JONAS_STEAK_RECIPE, 1)
+      if has_quest_items?(pc, JONAS_STEAK_RECIPE)
+        take_items(pc, JONAS_STEAK_RECIPE, 1)
         qs.set_memo_state_ex(1, i0 + 3)
         qs.set_cond(4, true)
         html = event
@@ -114,17 +114,17 @@ class Quests::Q00378_GrandFeast < Quest
     html
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created?
-      html = player.level >= MIN_LEVEL ? "30594-01.htm" : "30594-03.html"
+      html = pc.level >= MIN_LEVEL ? "30594-01.htm" : "30594-03.html"
     elsif qs.started?
       case qs.cond
       when 1
         html = "30594-04.html"
       when 2
-        if has_quest_items?(player, THEME_OF_THE_FEAST)
+        if has_quest_items?(pc, THEME_OF_THE_FEAST)
           html = "30594-11.html"
         else
           html = "30594-10.html"
@@ -132,8 +132,8 @@ class Quests::Q00378_GrandFeast < Quest
       when 3
         html = "30594-13.html"
       when 4
-        if has_quest_items?(player, RITRONS_DESSERT_RECIPE)
-          take_items(player, RITRONS_DESSERT_RECIPE, 1)
+        if has_quest_items?(pc, RITRONS_DESSERT_RECIPE)
+          take_items(pc, RITRONS_DESSERT_RECIPE, 1)
           item = 0
           adena = 0i64
           quantity = 0i64
@@ -174,8 +174,8 @@ class Quests::Q00378_GrandFeast < Quest
             adena = 2200i64
           end
 
-          give_items(player, item, quantity)
-          give_adena(player, adena, true)
+          give_items(pc, item, quantity)
+          give_adena(pc, adena, true)
           qs.exit_quest(true, true)
           html = "30594-20.html"
         else
@@ -184,6 +184,6 @@ class Quests::Q00378_GrandFeast < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

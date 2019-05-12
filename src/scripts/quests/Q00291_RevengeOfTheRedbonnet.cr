@@ -1,4 +1,4 @@
-class Quests::Q00291_RevengeOfTheRedbonnet < Quest
+class Scripts::Q00291_RevengeOfTheRedbonnet < Quest
   # NPC
   private MARYSE_REDBONNET = 30553
   # Item
@@ -23,9 +23,9 @@ class Quests::Q00291_RevengeOfTheRedbonnet < Quest
     register_quest_items(BLACK_WOLF_PELT.id)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    qs = get_quest_state(pc, false)
     if qs && event == "30553-03.htm"
       qs.start_quest
       event
@@ -43,24 +43,23 @@ class Quests::Q00291_RevengeOfTheRedbonnet < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    html = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     if qs.created?
-      html = player.level >= MIN_LVL ? "30553-02.htm" : "30553-01.htm"
+      html = pc.level >= MIN_LVL ? "30553-02.htm" : "30553-01.htm"
     elsif qs.started?
-      if qs.cond?(2) && has_item?(player, BLACK_WOLF_PELT)
-        take_item(player, BLACK_WOLF_PELT)
+      if qs.cond?(2) && has_item?(pc, BLACK_WOLF_PELT)
+        take_item(pc, BLACK_WOLF_PELT)
         chance = Rnd.rand(100)
         if chance <= 2
-          give_items(player, GRANDMAS_PEARL, 1)
+          give_items(pc, GRANDMAS_PEARL, 1)
         elsif chance <= 20
-          give_items(player, GRANDMAS_MIRROR, 1)
+          give_items(pc, GRANDMAS_MIRROR, 1)
         elsif chance <= 45
-          give_items(player, GRANDMAS_NECKLACE, 1)
+          give_items(pc, GRANDMAS_NECKLACE, 1)
         else
-          give_items(player, GRANDMAS_HAIRPIN, 1)
-          give_items(player, SCROLL_OF_ESCAPE, 1)
+          give_items(pc, GRANDMAS_HAIRPIN, 1)
+          give_items(pc, SCROLL_OF_ESCAPE, 1)
         end
         qs.exit_quest(true, true)
         html = "30553-05.html"
@@ -69,6 +68,6 @@ class Quests::Q00291_RevengeOfTheRedbonnet < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

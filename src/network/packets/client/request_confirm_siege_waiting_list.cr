@@ -3,13 +3,13 @@ class Packets::Incoming::RequestConfirmSiegeWaitingList < GameClientPacket
   @castle_id = 0
   @clan_id = 0
 
-  def read_impl
+  private def read_impl
     @approved = d
     @castle_id = d
     @clan_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless clan = pc.clan?
     return unless castle = CastleManager.get_castle_by_id(@castle_id)

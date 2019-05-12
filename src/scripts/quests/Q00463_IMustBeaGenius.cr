@@ -1,4 +1,4 @@
-class Quests::Q00463_IMustBeaGenius < Quest
+class Scripts::Q00463_IMustBeaGenius < Quest
   private record DropInfo, count : Int32, special_chance : Int32
 
   # NPC

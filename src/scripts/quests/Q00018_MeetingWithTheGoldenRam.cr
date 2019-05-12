@@ -1,4 +1,4 @@
-class Quests::Q00018_MeetingWithTheGoldenRam < Quest
+class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
   # NPCs
   private DONAL = 31314
   private DAISY = 31315
@@ -14,19 +14,19 @@ class Quests::Q00018_MeetingWithTheGoldenRam < Quest
     register_quest_items(BOX)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    htmltext = event
-    unless st = get_quest_state(player, false)
-      return htmltext
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    html = event
+    unless st = get_quest_state(pc, false)
+      return html
     end
 
     case event
     when "31314-03.html"
-      if player.level >= 66
+      if pc.level >= 66
         st.start_quest
       else
-        htmltext = "31314-02.html"
+        html = "31314-02.html"
       end
     when "31315-02.html"
       st.set_cond(2, true)
@@ -39,30 +39,30 @@ class Quests::Q00018_MeetingWithTheGoldenRam < Quest
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     npc_id = npc.id
 
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
       if npc_id == DONAL
-        htmltext = "31314-01.htm"
+        html = "31314-01.htm"
       end
     when State::STARTED
       if npc_id == DONAL
-        htmltext = "31314-04.html"
+        html = "31314-04.html"
       elsif npc_id == DAISY
-        htmltext = st.cond < 2 ? "31315-01.html" : "31315-03.html"
+        html = st.cond < 2 ? "31315-01.html" : "31315-03.html"
       elsif npc_id == ABERCROMBIE && st.cond?(2) && st.has_quest_items?(BOX)
-        htmltext = "31555-01.html"
+        html = "31555-01.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

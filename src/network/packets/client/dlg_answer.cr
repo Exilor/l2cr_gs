@@ -6,13 +6,13 @@ class Packets::Incoming::DlgAnswer < GameClientPacket
   @answer = 0
   @requester_id = 0
 
-  def read_impl
+  private def read_impl
     @message_id = d
     @answer = d
     @requester_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     evt = OnPlayerDlgAnswer.new(pc, @message_id, @answer, @requester_id)

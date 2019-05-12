@@ -1,4 +1,4 @@
-class Quests::Q00365_DevilsLegacy < Quest
+class Scripts::Q00365_DevilsLegacy < Quest
   # NPCs
   private COLLOB = 30092
   private RANDOLF = 30095
@@ -25,7 +25,7 @@ class Quests::Q00365_DevilsLegacy < Quest
     20836 => 0.47, # pirates_zombie
     20845 => 0.40, # pirates_zombie_captain
     21629 => 0.40, # pirates_zombie_captain_1
-    21630 => 0.40, # pirates_zombie_captain_2
+    21630 => 0.40  # pirates_zombie_captain_2
   }
 
   def initialize

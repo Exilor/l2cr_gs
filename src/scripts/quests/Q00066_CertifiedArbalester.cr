@@ -1,4 +1,4 @@
-class Quests::Q00066_CertifiedArbalester < Quest
+class Scripts::Q00066_CertifiedArbalester < Quest
   # NPCs
   private WAREHOUSE_KEEPER_HOLVAS = 30058
   private MAGISTER_GAIUS = 30171
@@ -54,187 +54,187 @@ class Quests::Q00066_CertifiedArbalester < Quest
     register_quest_items(ENMITY_CRYSTAL, ENMITY_CRYSTAL_CORE, MANUSCRIPT_PAGE, ENCODED_PAGE_ON_THE_ANCIENT_RACE, KAMAEL_INQUISITOR_TRAINEE_MARK, FRAGMENT_OF_ATTACK_ORDERS, GRANDIS_ATTACK_ORDERS, MANASHENS_TALISMAN, RESEARCH_ON_THE_GIANTS_AND_THE_ANCIENT_RACE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if player.level >= MIN_LEVEL && player.class_id.warder? && !has_quest_items?(player, KAMAEL_INQUISITOR_MARK)
+      if pc.level >= MIN_LEVEL && pc.class_id.warder? && !has_quest_items?(pc, KAMAEL_INQUISITOR_MARK)
         qs.start_quest
         qs.memo_state = 1
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 64)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "32201-07a.htm"
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 64)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "32201-07a.htm"
         else
-          htmltext = "32201-07.htm"
+          html = "32201-07.htm"
         end
       end
     when "32201-08.html"
       if qs.memo_state?(1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "30058-03.html", "30058-04.html"
       if qs.memo_state?(7)
-        htmltext = event
+        html = event
       end
     when "30058-05.html"
       if qs.memo_state?(7)
         qs.memo_state = 8
         qs.set_cond(7, true)
-        htmltext = event
+        html = event
       end
     when "30058-08.html"
       if qs.memo_state?(9)
-        give_items(player, ENCODED_PAGE_ON_THE_ANCIENT_RACE, 1)
+        give_items(pc, ENCODED_PAGE_ON_THE_ANCIENT_RACE, 1)
         qs.memo_state = 10
         qs.set_cond(9, true)
-        htmltext = event
+        html = event
       end
     when "30171-03.html"
       if qs.memo_state?(23)
-        htmltext = event
+        html = event
       end
     when "30171-05.html"
       if qs.memo_state?(23)
-        take_items(player, GRANDIS_ATTACK_ORDERS, -1)
+        take_items(pc, GRANDIS_ATTACK_ORDERS, -1)
         qs.memo_state = 24
-        htmltext = event
+        html = event
       end
     when "30171-06.html", "30171-07.html"
       if qs.memo_state?(24)
-        htmltext = event
+        html = event
       end
     when "30171-08.html"
       if qs.memo_state?(24)
         qs.memo_state = 25
       end
       qs.set_cond(14, true)
-      htmltext = event
+      html = event
     when "30458-03.html"
       if qs.memo_state?(5)
-        take_items(player, ENMITY_CRYSTAL_CORE, 1)
+        take_items(pc, ENMITY_CRYSTAL_CORE, 1)
         qs.memo_state = 6
-        htmltext = event
+        html = event
       end
     when "30458-05.html", "30458-06.html", "30458-07.html", "30458-08.html"
       if qs.memo_state?(6)
-        htmltext = event
+        html = event
       end
     when "30458-09.html"
       if qs.memo_state?(6)
         qs.memo_state = 7
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "30464-03.html", "30464-04.html", "30464-05.html"
       if qs.memo_state?(2)
-        htmltext = event
+        html = event
       end
     when "30464-06.html"
       if qs.memo_state?(2)
         qs.memo_state = 3
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "30464-09.html"
       if qs.memo_state?(4)
-        give_items(player, ENMITY_CRYSTAL_CORE, 1)
+        give_items(pc, ENMITY_CRYSTAL_CORE, 1)
         qs.memo_state = 5
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "30464-11.html"
-      htmltext = event
+      html = event
     when "30717-03.html", "30717-05.html", "30717-06.html", "30717-07.html",
          "30717-08.html"
       if qs.memo_state?(28)
-        htmltext = event
+        html = event
       end
     when "30717-09.html"
       if qs.memo_state?(28)
         qs.memo_state = 29
         qs.set_cond(17, true)
-        htmltext = event
+        html = event
       end
     when "30720-03.html"
       if qs.memo_state?(29)
-        htmltext = event
+        html = event
       end
     when "30720-04.html"
       if qs.memo_state?(29)
         qs.memo_state = 30
         qs.set_cond(18, true)
-        htmltext = event
+        html = event
       end
     when "32214-03.html"
       if qs.memo_state?(10)
-        htmltext = event
+        html = event
       end
     when "32214-04.html"
       if qs.memo_state?(10)
-        take_items(player, ENCODED_PAGE_ON_THE_ANCIENT_RACE, 1)
-        give_items(player, KAMAEL_INQUISITOR_TRAINEE_MARK, 1)
+        take_items(pc, ENCODED_PAGE_ON_THE_ANCIENT_RACE, 1)
+        give_items(pc, KAMAEL_INQUISITOR_TRAINEE_MARK, 1)
         qs.memo_state = 11
         qs.set_cond(10, true)
-        htmltext = event
+        html = event
       end
     when "32220-03.html"
       if qs.memo_state?(11)
-        take_items(player, KAMAEL_INQUISITOR_TRAINEE_MARK, -1)
+        take_items(pc, KAMAEL_INQUISITOR_TRAINEE_MARK, -1)
         qs.memo_state = 12
-        htmltext = event
+        html = event
       end
     when "32220-05.html"
       if qs.memo_state?(12)
         qs.memo_state = 13
-        htmltext = event
+        html = event
       end
     when "32220-06.html"
       if qs.memo_state?(13)
         qs.set_memo_state_ex(1, 0)
-        htmltext = event
+        html = event
       end
     when "32220-09.html", "32220-10.html"
       if qs.memo_state?(13)
-        htmltext = event
+        html = event
       end
     when "32220-11.html", "32220-12.html", "32220-13.html"
       if qs.memo_state?(13)
         qs.memo_state = 13
         qs.set_memo_state_ex(1, 1)
-        htmltext = event
+        html = event
       end
     when "32220-13a.html"
       if qs.memo_state?(13)
         qs.memo_state = 20
         qs.set_memo_state_ex(1, 0)
-        htmltext = event
+        html = event
       end
     when "32220-13b.html"
       if qs.memo_state?(20)
         qs.memo_state = 21
         qs.set_cond(11, true)
-        htmltext = event
+        html = event
       end
     when "32220-19.html", "32220-21.html", "32220-22.html", "32220-23.html",
          "32220-24.html", "32220-25.html"
       if qs.memo_state?(31)
-        htmltext = event
+        html = event
       end
     when "32220-26.html"
       if qs.memo_state?(31)
         qs.set_memo_state_ex(1, 0)
         qs.memo_state = 32
         qs.set_cond(19, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -420,20 +420,20 @@ class Quests::Q00066_CertifiedArbalester < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
-    htmltext = get_no_quest_msg(player)
+    html = get_no_quest_msg(pc)
     if qs.created?
       if npc.id == MASTER_RINDY
-        if player.class_id.warder? && !has_quest_items?(player, KAMAEL_INQUISITOR_MARK)
-          if player.level >= MIN_LEVEL
-            htmltext = "32201-01.htm"
+        if pc.class_id.warder? && !has_quest_items?(pc, KAMAEL_INQUISITOR_MARK)
+          if pc.level >= MIN_LEVEL
+            html = "32201-01.htm"
           else
-            htmltext = "32201-02.html"
+            html = "32201-02.html"
           end
         else
-          htmltext = "32201-03.html"
+          html = "32201-03.html"
         end
       end
     elsif qs.started?
@@ -442,174 +442,174 @@ class Quests::Q00066_CertifiedArbalester < Quest
         if memo_state == 1
           qs.memo_state = 2
           qs.set_cond(2, true)
-          htmltext = "32201-09.html"
+          html = "32201-09.html"
         elsif memo_state == 2
-          htmltext = "32201-10.html"
+          html = "32201-10.html"
         elsif (memo_state > 2) && (memo_state < 11)
-          htmltext = "32201-11.html"
+          html = "32201-11.html"
         elsif memo_state >= 11
-          htmltext = "32201-12.html"
+          html = "32201-12.html"
         end
       when WAREHOUSE_KEEPER_HOLVAS
         if memo_state < 7
-          htmltext = "30058-01.html"
+          html = "30058-01.html"
         elsif memo_state == 7
-          htmltext = "30058-02.html"
+          html = "30058-02.html"
         elsif memo_state == 8
-          if get_quest_items_count(player, MANUSCRIPT_PAGE) < 30
-            htmltext = "30058-06.html"
+          if get_quest_items_count(pc, MANUSCRIPT_PAGE) < 30
+            html = "30058-06.html"
           else
-            take_items(player, MANUSCRIPT_PAGE, -1)
+            take_items(pc, MANUSCRIPT_PAGE, -1)
             qs.memo_state = 9
-            htmltext = "30058-07.html"
+            html = "30058-07.html"
           end
         elsif memo_state == 9
-          give_items(player, ENCODED_PAGE_ON_THE_ANCIENT_RACE, 1)
+          give_items(pc, ENCODED_PAGE_ON_THE_ANCIENT_RACE, 1)
           qs.memo_state = 10
           qs.set_cond(9, true)
-          htmltext = "30058-09.html"
+          html = "30058-09.html"
         elsif memo_state > 9
-          htmltext = "30058-10.html"
+          html = "30058-10.html"
         end
       when MAGISTER_GAIUS
         if memo_state < 23
-          htmltext = "30171-01.html"
+          html = "30171-01.html"
         elsif memo_state == 23
-          htmltext = "30171-02.html"
+          html = "30171-02.html"
         elsif memo_state == 24
-          htmltext = "30171-06.html"
+          html = "30171-06.html"
         elsif memo_state == 25
-          htmltext = "30171-09.html"
+          html = "30171-09.html"
         elsif memo_state == 26
-          htmltext = "30171-10.html"
+          html = "30171-10.html"
         elsif memo_state == 27
-          htmltext = "30171-11.html"
+          html = "30171-11.html"
         elsif memo_state == 28
-          htmltext = "30171-12.html"
+          html = "30171-12.html"
         elsif memo_state == 29
-          htmltext = "30171-13.html"
+          html = "30171-13.html"
         end
       when BLACKSMITH_POITAN
         if memo_state < 5
-          htmltext = "30458-01.html"
+          html = "30458-01.html"
         elsif memo_state == 5
-          htmltext = "30458-02.html"
+          html = "30458-02.html"
         elsif memo_state == 6
-          htmltext = "30458-04.html"
+          html = "30458-04.html"
         elsif memo_state == 7
-          htmltext = "30458-10.html"
+          html = "30458-10.html"
         end
       when MAGISTER_CLAYTON
         if memo_state < 2
-          htmltext = "30464-01.html"
+          html = "30464-01.html"
         elsif memo_state == 2
           qs.memo_state = 2
-          htmltext = "30464-02.html"
+          html = "30464-02.html"
         elsif memo_state == 3
-          if get_quest_items_count(player, ENMITY_CRYSTAL) < 30
-            htmltext = "30464-07.html"
+          if get_quest_items_count(pc, ENMITY_CRYSTAL) < 30
+            html = "30464-07.html"
           else
-            take_items(player, ENMITY_CRYSTAL, -1)
+            take_items(pc, ENMITY_CRYSTAL, -1)
             qs.memo_state = 4
-            htmltext = "30464-08.html"
+            html = "30464-08.html"
           end
         elsif memo_state == 4
-          give_items(player, ENMITY_CRYSTAL_CORE, 1)
+          give_items(pc, ENMITY_CRYSTAL_CORE, 1)
           qs.memo_state = 5
           qs.set_cond(5, true)
-          htmltext = "30464-10.html"
+          html = "30464-10.html"
         elsif memo_state == 5
-          htmltext = "30464-12.html"
+          html = "30464-12.html"
         elsif memo_state > 5
-          htmltext = "30464-13.html"
+          html = "30464-13.html"
         end
       when MAGISTER_GAUEN
         if memo_state < 27
-          htmltext = "30717-01.html"
+          html = "30717-01.html"
         elsif memo_state == 27
-          take_items(player, MANASHENS_TALISMAN, -1)
+          take_items(pc, MANASHENS_TALISMAN, -1)
           qs.memo_state = 28
-          htmltext = "30717-02.html"
+          html = "30717-02.html"
         elsif memo_state == 28
-          htmltext = "30717-04.html"
+          html = "30717-04.html"
         elsif memo_state >= 29
-          htmltext = "30717-10.html"
+          html = "30717-10.html"
         end
       when MAGISTER_KAIENA
         if memo_state < 29
-          htmltext = "30720-01.html"
+          html = "30720-01.html"
         elsif memo_state == 29
-          htmltext = "30720-02.html"
+          html = "30720-02.html"
         end
         if memo_state >= 30
-          htmltext = "30720-05.html"
+          html = "30720-05.html"
         end
       when GRAND_MASTER_MELDINA
         if memo_state < 10
-          htmltext = "32214-01.html"
+          html = "32214-01.html"
         elsif memo_state == 10
-          htmltext = "32214-02.html"
+          html = "32214-02.html"
         end
         if memo_state == 11
-          htmltext = "32214-05.html"
+          html = "32214-05.html"
         end
         if memo_state > 11
-          htmltext = "32214-06.html"
+          html = "32214-06.html"
         end
       when MASTER_SELSIA
         if memo_state < 11
-          htmltext = "32220-01.html"
+          html = "32220-01.html"
         elsif memo_state == 11
-          htmltext = "32220-02.html"
+          html = "32220-02.html"
         elsif memo_state == 12
-          htmltext = "32220-04.html"
+          html = "32220-04.html"
         elsif memo_state == 13
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 0)
-            htmltext = "32220-07.html"
+            html = "32220-07.html"
           elsif qs.get_memo_state_ex(1) == 1
             qs.set_memo_state_ex(1, 0)
-            htmltext = "32220-08.html"
+            html = "32220-08.html"
           end
         elsif memo_state == 20
           qs.memo_state = 21
           qs.set_cond(11, true)
-          htmltext = "32220-14.html"
+          html = "32220-14.html"
         elsif memo_state == 21
-          htmltext = "32220-15.html"
+          html = "32220-15.html"
         elsif memo_state == 22
-          htmltext = "32220-16.html"
+          html = "32220-16.html"
         elsif memo_state >= 23 && memo_state < 30
-          htmltext = "32220-17.html"
+          html = "32220-17.html"
         elsif memo_state == 30
           qs.memo_state = 31
-          htmltext = "32220-18.html"
+          html = "32220-18.html"
         elsif memo_state == 31
-          htmltext = "32220-20.html"
+          html = "32220-20.html"
         elsif memo_state == 32
-          if !has_quest_items?(player, RESEARCH_ON_THE_GIANTS_AND_THE_ANCIENT_RACE)
-            htmltext = "32220-27.html"
+          if !has_quest_items?(pc, RESEARCH_ON_THE_GIANTS_AND_THE_ANCIENT_RACE)
+            html = "32220-27.html"
           else
-            give_adena(player, 77666, true)
-            give_items(player, KAMAEL_INQUISITOR_MARK, 1)
-            add_exp_and_sp(player, 429546, 29476)
+            give_adena(pc, 77666, true)
+            give_items(pc, KAMAEL_INQUISITOR_MARK, 1)
+            add_exp_and_sp(pc, 429546, 29476)
             qs.exit_quest(false, true)
-            player.send_packet(SocialAction.new(player.l2id, 3))
-            htmltext = "32220-28.html"
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
+            html = "32220-28.html"
           end
         end
       end
     end
     if qs.completed?
       if npc.id == MASTER_RINDY
-        if player.class_id.arbalester?
-          htmltext = "32201-05.html"
+        if pc.class_id.arbalester?
+          html = "32201-05.html"
         else
-          htmltext = "32201-06.html"
+          html = "32201-06.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 end

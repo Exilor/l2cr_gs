@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestFriendDel < GameClientPacket
   @name = ""
 
-  def read_impl
+  private def read_impl
     @name = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     id = CharNameTable.get_id_by_name(@name)

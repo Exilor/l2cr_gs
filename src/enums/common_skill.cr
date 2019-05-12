@@ -1,5 +1,5 @@
 class CommonSkill < EnumClass
-  def initialize(id, level)
+  protected def initialize(id, level)
     @holder = SkillHolder.new(id, level)
   end
 

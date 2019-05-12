@@ -251,11 +251,11 @@ module TerritoryWarManager
     START_TW_DATE.ms
   end
 
-  def tw_start
+  def tw_start : Calendar
     START_TW_DATE
   end
 
-  def tw_start_time_in_millis(time : Int64)
+  def tw_start_time_in_millis=(time : Int64)
     START_TW_DATE.ms = time
 
     if @@tw_in_progress
@@ -263,14 +263,14 @@ module TerritoryWarManager
         task.cancel
       end
 
-      task = ScheduleEndTWTask.new
+      task = ->schedule_end_tw_task
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(task, 1000)
     else
       if task = @@scheduled_start_tw_task
         task.cancel
       end
 
-      task = ScheduleStartTWTask.new
+      task = ->schedule_start_tw_task
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(task, 1000)
     end
   end
@@ -619,7 +619,7 @@ module TerritoryWarManager
       end
     end
 
-    if active_territory_list < 2
+    if active_territory_list.size < 2
       return
     end
 
@@ -643,7 +643,7 @@ module TerritoryWarManager
       end
 
       if fort
-        t.change_npc_spawn(1, true)
+        t.change_npcs_spawn(1, true)
         fort.reset_doors
         fort.zone.siege_instance = self
         fort.zone.active = true
@@ -653,6 +653,7 @@ module TerritoryWarManager
       end
 
       t.owned_ward.each do |ward|
+        ward = ward.not_nil!
         if ward.npc? && t.owner_clan?
           unless ward.npc.visible?
             ward.npc = ward.npc.spawn.do_spawn
@@ -677,7 +678,7 @@ module TerritoryWarManager
       end
     end
 
-    Broadcast.to_all_online_players(SystemMessageId::TERRITORY_WAR_HAS_BEGUN)
+    Broadcast.to_all_online_players(SystemMessage.territory_war_has_begun)
   end
 
   private def end_territory_war
@@ -721,7 +722,7 @@ module TerritoryWarManager
       end
 
       if fort
-        t.change_npc_spawn(1, false)
+        t.change_npcs_spawn(1, false)
         fort.zone.active = true
         fort.zone.update_zone_status_for_characters_inside
         fort.zone.siege_instance = nil
@@ -734,6 +735,7 @@ module TerritoryWarManager
       end
 
       t.owned_ward.each do |ward|
+        ward = ward.not_nil!
         if ward.npc? && t.owner_clan?
           if !ward.npc.visible? && @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS
             ward.npc = ward.npc.spawn.do_spawn
@@ -761,7 +763,7 @@ module TerritoryWarManager
       end
     end
 
-    Broadcast.to_all_online_players(SystemMessageId::TERRITORY_WAR_HAS_ENDED)
+    Broadcast.to_all_online_players(SystemMessage.territory_war_has_ended)
   end
 
   private def update_player_tw_state_flags(clear : Bool) : Bool
@@ -819,7 +821,7 @@ module TerritoryWarManager
     end
 
     TERRITORY_LIST.each_value do |terr|
-      if clan = ter.owner_clan?
+      if clan = terr.owner_clan?
         clan.each_online_player do |pc|
           if clear
             pc.siege_state = 0
@@ -859,82 +861,82 @@ module TerritoryWarManager
     end
   end
 
-  private def schedule_start_tw_task # Replaces a L2J runnable class
-    @@schedule_start_tw_task.not_nil!.cancel
+  private def schedule_start_tw_task
+    @@scheduled_start_tw_task.not_nil!.cancel
 
     time = START_TW_DATE.ms - Time.ms
     if time > 7200000
       @@registration_over = false
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 7200000)
     elsif time <= 7200000 && time > 1200000
-      sm = SystemMessageId::THE_TERRITORY_WAR_REGISTERING_PERIOD_ENDED
+      sm = SystemMessage.the_territory_war_registering_period_ended
       Broadcast.to_all_online_players(sm)
       @@registration_over = true
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 1200000) # Prepare task for 20 mins left before TW start.
     elsif time <= 1200000 && time > 600000
-      sm = SystemMessageId::TERRITORY_WAR_BEGINS_IN_20_MINUTES
+      sm = SystemMessage.territory_war_begins_in_20_minutes
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
       @@registration_over = true
       update_player_tw_state_flags(false)
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 600000) # Prepare task for 10 mins left before TW start.
     elsif time <= 600000 && time > 300000
-      sm = SystemMessageId::TERRITORY_WAR_BEGINS_IN_10_MINUTES
+      sm = SystemMessage.territory_war_begins_in_10_minutes
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
       @@registration_over = true
       update_player_tw_state_flags(false)
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 300000) # Prepare task for 5 mins left before TW start.
     elsif time <= 300000 && time > 60000
-      sm = SystemMessageId::TERRITORY_WAR_BEGINS_IN_5_MINUTES
+      sm = SystemMessage.territory_war_begins_in_5_minutes
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
       @@registration_over = true
       update_player_tw_state_flags(false)
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 60000) # Prepare task for 1 min left before TW start.
     elsif time <= 60000 && time > 0
-      sm = SystemMessageId::TERRITORY_WAR_BEGINS_IN_1_MINUTE
+      sm = SystemMessage.territory_war_begins_in_1_minute
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
       @@registration_over = true
       update_player_tw_state_flags(false)
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time) # Prepare task for TW start.
-    elsif time + WARLENGTH > 0
+    elsif time + @@WAR_LENGTH > 0
       @@tw_channel_open = true
       @@registration_over = true
       start_territory_war
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, 1000) # Prepare task for TW end.
-      @@scheduled_reward_online_task = ThreadPoolManager.schedule_general(->reward_online_participants, 60000, 60000)
+      @@scheduled_reward_online_task = ThreadPoolManager.schedule_general_at_fixed_rate(->reward_online_participants, 60000, 60000)
     end
   rescue e
     error e
   end
 
-  private def schedule_end_tw_task # Replaces a L2J runnable class
-    @@scheduled_end_tw_task.not_nil!.cancel(false)
-    time = (@@START_TW_DATE.ms + WARLENGTH) - Time.ms
+  private def schedule_end_tw_task
+    @@scheduled_end_tw_task.not_nil!.cancel
+    time = (START_TW_DATE.ms + @@WAR_LENGTH) - Time.ms
     if time > 3600000
-      sm = SystemMessageId::THE_TERRITORY_WAR_WILL_END_IN_S1_HOURS
+      sm = SystemMessage.the_territory_war_will_end_in_s1_hours
       sm.add_int(2)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 3600000) # Prepare task for 1 hr left.
     elsif time <= 3600000 && time > 600000
-      sm = SystemMessageId::THE_TERRITORY_WAR_WILL_END_IN_S1_MINUTES
+      sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
       sm.add_int((time / 60000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 600000) # Prepare task for 10 minute left.
     elsif time <= 600000 && time > 300000
-      sm = SystemMessageId::THE_TERRITORY_WAR_WILL_END_IN_S1_MINUTES
+      sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
       sm.add_int((time / 60000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 300000) # Prepare task for 5 minute left.
     elsif time <= 300000 && time > 10000
-      sm = SystemMessageId::THE_TERRITORY_WAR_WILL_END_IN_S1_MINUTES
+      sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
       sm.add_int((time / 60000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 10000) # Prepare task for 10 seconds count down
     elsif time <= 10000 && time > 0
-      sm = SystemMessageId::S1_SECONDS_TO_THE_END_OF_TERRITORY_WAR
+      sm = SystemMessage.s1_seconds_to_the_end_of_territory_war
       sm.add_int((time / 1000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time) # Prepare task for second count down
@@ -947,13 +949,13 @@ module TerritoryWarManager
     error e
   end
 
-  private def close_territory_channel_task # Replaces a L2J runnable class
+  private def close_territory_channel_task
     @@tw_channel_open = false
     DISGUISED_PLAYERS.clear
     update_player_tw_state_flags(true)
   end
 
-  def announce_to_participants(sm, exp : Int32, sp : Int32)
+  def announce_to_participants(sm : GameServerPacket, exp : Int32, sp : Int32)
     exp = exp.to_i64
     TERRITORY_LIST.each_value do |ter|
       ter.owner_clan?.try &.each_online_player do |m|
@@ -994,7 +996,7 @@ module TerritoryWarManager
   class TerritoryNPCSpawn
     # include Identifiable
 
-    getter castle_id, location, territory_id, castle_id, quest_done, type
+    getter castle_id, location, territory_id, castle_id, type
     getter! npc : L2Npc?
     setter npc_id : Int32
     property! owner_clan : L2Clan?
@@ -1017,7 +1019,7 @@ module TerritoryWarManager
     include Loggable
 
     @territory_ward_spawn_places = Slice(TerritoryNPCSpawn?).new(9, nil.as(TerritoryNPCSpawn?))
-    @quest_done = Slice(Int32).new(2)
+    getter quest_done = Slice(Int32).new(2)
     getter territory_id : Int32
     getter spawn_list = [] of TerritoryNPCSpawn
     property fort_id : Int32 = 0

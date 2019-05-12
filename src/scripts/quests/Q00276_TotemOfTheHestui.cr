@@ -1,4 +1,4 @@
-class Quests::Q00276_TotemOfTheHestui < Quest
+class Scripts::Q00276_TotemOfTheHestui < Quest
   # Npc
   private TANAPI = 30571
   # Items
@@ -29,9 +29,9 @@ class Quests::Q00276_TotemOfTheHestui < Quest
     register_quest_items(KASHA_PARASITE, KASHA_CRYSTAL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     if event == "30571-03.htm"
       st.start_quest
@@ -67,30 +67,36 @@ class Quests::Q00276_TotemOfTheHestui < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
-    unless st
-      return htmltext
+  def on_talk(npc, pc)
+    unless st = get_quest_state!(pc)
+      return get_no_quest_msg(pc)
     end
 
     case st.state
     when State::CREATED
-      htmltext = player.race.orc? ? player.level >= MIN_LVL ? "30571-02.htm" : "30571-01.htm" : "30571-00.htm"
+      if pc.race.orc?
+        if pc.level >= MIN_LVL
+          html = "30571-02.htm"
+        else
+          html = "30571-01.htm"
+        end
+      else
+        html = "30571-00.htm"
+      end
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30571-04.html"
+        html = "30571-04.html"
       when 2
         if st.has_quest_items?(KASHA_CRYSTAL)
-          Q00261_CollectorsDream.give_newbie_reward(player)
+          Q00261_CollectorsDream.give_newbie_reward(pc)
           REWARDS.each { |reward| st.reward_items(reward, 1) }
           st.exit_quest(true, true)
-          htmltext = "30571-05.html"
+          html = "30571-05.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

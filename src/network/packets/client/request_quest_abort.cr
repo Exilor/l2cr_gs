@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestQuestAbort < GameClientPacket
   @quest_id = 0
 
-  def read_impl
+  private def read_impl
     @quest_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless q = QuestManager.get_quest(@quest_id)

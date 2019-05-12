@@ -1,4 +1,4 @@
-class Quests::Q00267_WrathOfVerdure < Quest
+class Scripts::Q00267_WrathOfVerdure < Quest
   # NPC
   private TREANT_BREMEC = 31853
   # Item
@@ -26,15 +26,15 @@ class Quests::Q00267_WrathOfVerdure < Quest
     case event
     when "31853-04.htm"
       st.start_quest
-      htmltext = event
+      html = event
     when "31853-07.html"
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "31853-08.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -52,7 +52,15 @@ class Quests::Q00267_WrathOfVerdure < Quest
 
     case st.state
     when State::CREATED
-      htmltext = pc.race.elf? ? pc.level >= MIN_LVL ? "31853-03.htm" : "31853-02.htm" : "31853-01.htm"
+      if pc.race.elf?
+        if pc.level >= MIN_LVL
+          html = "31853-03.htm"
+        else
+          html = "31853-02.htm"
+        end
+      else
+        html = "31853-01.htm"
+      end
     when State::STARTED
       if st.has_quest_items?(GOBLIN_CLUB)
         count = st.get_quest_items_count(GOBLIN_CLUB)
@@ -61,12 +69,12 @@ class Quests::Q00267_WrathOfVerdure < Quest
           st.give_adena(600, true)
         end
         st.take_items(GOBLIN_CLUB, -1)
-        htmltext = "31853-06.html"
+        html = "31853-06.html"
       else
-        htmltext = "31853-05.html"
+        html = "31853-05.html"
       end
     end
 
-    htmltext || get_no_quest_msg(pc)
+    html || get_no_quest_msg(pc)
   end
 end

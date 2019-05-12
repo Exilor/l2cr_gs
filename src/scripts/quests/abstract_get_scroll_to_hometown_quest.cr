@@ -1,4 +1,4 @@
-abstract class Quests::AbstractGetScrollToHometownQuest < Quest
+abstract class AbstractGetScrollToHometownQuest < Quest
   # Npcs
 	private GALLADUCCI = 30097
 	private GENTLER = 30094

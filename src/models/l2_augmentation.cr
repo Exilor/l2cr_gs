@@ -26,7 +26,7 @@ struct L2Augmentation
     end
   end
 
-  class AugmentationStatBoni
+  private class AugmentationStatBoni
     include Loggable
 
     @options : {Options?, Options?}

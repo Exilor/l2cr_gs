@@ -1,4 +1,4 @@
-class Quests::Q00008_AnAdventureBegins < Quest
+class Scripts::Q00008_AnAdventureBegins < Quest
   # NPCs
 	private JASMINE = 30134
 	private ROSELYN = 30355

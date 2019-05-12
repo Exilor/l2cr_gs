@@ -16,13 +16,13 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
   @ctrl = false
   @shift = false
 
-  def read_impl
+  private def read_impl
     @id = d
     @ctrl = d == 1
     @shift = c == 1
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if (pc.fake_death? && @id != 0) || pc.dead? || pc.out_of_control?
@@ -61,7 +61,6 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
   end
 
   private def use_action(pc, summon, target)
-
     case @id
     when 0 # Sit/Stand
       if pc.sitting? || !pc.moving? || pc.fake_death?

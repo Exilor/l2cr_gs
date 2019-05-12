@@ -1,4 +1,4 @@
-class NpcAI::FortuneTelling < AbstractNpcAI
+class Scripts::FortuneTelling < AbstractNpcAI
   private MINE = 32616
   private COST = 1000
 

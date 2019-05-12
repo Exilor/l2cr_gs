@@ -1,4 +1,4 @@
-class Quests::Q00287_FiguringItOut < Quest
+class Scripts::Q00287_FiguringItOut < Quest
   # NPCs
   private LAKI = 32742
   private MONSTERS = {
@@ -53,9 +53,9 @@ class Quests::Q00287_FiguringItOut < Quest
     register_quest_items(VIAL_OF_TANTA_BLOOD)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -91,6 +91,7 @@ class Quests::Q00287_FiguringItOut < Quest
     when "32742-13.html"
       st.exit_quest(true, true)
     when "32742-02.htm", "32742-10.html"
+      # do nothing
     else
       html = nil
     end
@@ -98,8 +99,8 @@ class Quests::Q00287_FiguringItOut < Quest
     html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless m = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    unless m = get_random_party_member(pc, 1)
       return super
     end
 
@@ -113,12 +114,12 @@ class Quests::Q00287_FiguringItOut < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      if player.level >= MIN_LEVEL && player.quest_completed?(Q00250_WatchWhatYouEat.simple_name)
+      if pc.level >= MIN_LEVEL && pc.quest_completed?(Q00250_WatchWhatYouEat.simple_name)
         html = "32742-01.htm"
       else
         html = "32742-14.htm"
@@ -131,6 +132,6 @@ class Quests::Q00287_FiguringItOut < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

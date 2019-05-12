@@ -1,4 +1,4 @@
-class NpcAI::Falk < AbstractNpcAI
+class Scripts::Falk < AbstractNpcAI
   # NPCs
   private FALK = 32297
   # Items

@@ -1,4 +1,4 @@
-class NpcAI::Deltuva < AbstractNpcAI
+class Scripts::Deltuva < AbstractNpcAI
   # NPCs
   private DELTUVA = 32313
   # Location
@@ -15,7 +15,7 @@ class NpcAI::Deltuva < AbstractNpcAI
     return unless player
 
     if event.casecmp?("teleport")
-      q = player.get_quest_state(Quests::Q00132_MatrasCuriosity.simple_name)
+      q = player.get_quest_state(Scripts::Q00132_MatrasCuriosity.simple_name)
       if q.nil? || !q.completed?
         return "32313-02.htm"
       end

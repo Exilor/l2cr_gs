@@ -1,4 +1,4 @@
-class NpcAI::BaseTower < AbstractNpcAI
+class Scripts::BaseTower < AbstractNpcAI
   # NPCs
   private GUZEN = 22362
   private KENDAL = 32301

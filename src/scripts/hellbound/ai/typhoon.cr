@@ -1,4 +1,4 @@
-class NpcAI::Typhoon < AbstractNpcAI
+class Scripts::Typhoon < AbstractNpcAI
   # NPCs
   private TYPHOON = 25539
   # Skills

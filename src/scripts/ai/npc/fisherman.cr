@@ -1,4 +1,4 @@
-class NpcAI::Fisherman < AbstractNpcAI
+class Scripts::Fisherman < AbstractNpcAI
   # NPC
   private FISHERMAN = {
     31562, # Klufe
@@ -44,12 +44,12 @@ class NpcAI::Fisherman < AbstractNpcAI
     when "LearnFishSkill"
       Fisherman.show_fish_skill_list(pc)
     when "fishing_championship.htm"
-      htmltext = event
+      html = event
     when "BuySellRefund"
       npc.show_buy_window(pc, npc.id * 100, true)
     end
 
-    htmltext
+    html
   end
 
   def on_first_talk(npc, pc)

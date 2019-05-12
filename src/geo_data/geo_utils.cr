@@ -31,7 +31,7 @@ module GeoUtils
 		end
   end
 
-  def debug_grid(pc)
+  def debug_grid(pc : L2PcInstance)
     geo_radius = 10
 		blocks_per_packet = 49
 		i_block = blocks_per_packet

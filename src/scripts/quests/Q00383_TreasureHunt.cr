@@ -1,4 +1,4 @@
-class Quests::Q00383_TreasureHunt < Quest
+class Scripts::Q00383_TreasureHunt < Quest
   # NPCs
   private ESPEN = 30890
   private PIRATES_CHEST = 31148
@@ -43,9 +43,9 @@ class Quests::Q00383_TreasureHunt < Quest
     add_talk_id(ESPEN, PIRATES_CHEST)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -53,21 +53,21 @@ class Quests::Q00383_TreasureHunt < Quest
     when "30890-04.htm"
       html = event
     when "30890-05.htm"
-      if has_quest_items?(player, PIRATES_TREASURE_MAP)
-        give_adena(player, 1000, false)
-        take_items(player, PIRATES_TREASURE_MAP, -1)
+      if has_quest_items?(pc, PIRATES_TREASURE_MAP)
+        give_adena(pc, 1000, false)
+        take_items(pc, PIRATES_TREASURE_MAP, -1)
         html = event
       end
     when "30890-06.htm"
-      if has_quest_items?(player, PIRATES_TREASURE_MAP)
+      if has_quest_items?(pc, PIRATES_TREASURE_MAP)
         html = event
       else
         html = "30890-12.html"
       end
     when "30890-07.htm"
-      if has_quest_items?(player, PIRATES_TREASURE_MAP)
+      if has_quest_items?(pc, PIRATES_TREASURE_MAP)
         qs.start_quest
-        take_items(player, PIRATES_TREASURE_MAP, -1)
+        take_items(pc, PIRATES_TREASURE_MAP, -1)
         html = event
       end
     when "30890-08.html", "30890-09.html", "30890-10.html"
@@ -81,8 +81,8 @@ class Quests::Q00383_TreasureHunt < Quest
       end
     when "31148-02.html"
       if qs.cond?(2)
-        if has_quest_items?(player, THIEF_KEY)
-          take_items(player, THIEF_KEY, -1)
+        if has_quest_items?(pc, THIEF_KEY)
+          take_items(pc, THIEF_KEY, -1)
           qs.exit_quest(true, true)
           html = event
 
@@ -90,13 +90,13 @@ class Quests::Q00383_TreasureHunt < Quest
           random = rand(100)
 
           if random < 5
-            reward_items(player, MITHRIL_GLOVES)
+            reward_items(pc, MITHRIL_GLOVES)
           elsif random < 6
-            reward_items(player, SAGES_WORN_GLOVES)
+            reward_items(pc, SAGES_WORN_GLOVES)
           elsif random < 18
-            reward_items(player, SCROLL_ENCHANT_ARMOR_D)
+            reward_items(pc, SCROLL_ENCHANT_ARMOR_D)
           elsif random < 28
-            reward_items(player, SCROLL_ENCHANT_ARMOR_C)
+            reward_items(pc, SCROLL_ENCHANT_ARMOR_C)
           else
             bonus += 500
           end
@@ -104,29 +104,29 @@ class Quests::Q00383_TreasureHunt < Quest
           random = rand(1000)
 
           if random < 25
-            reward_items(player, DYE_S1C3_C)
+            reward_items(pc, DYE_S1C3_C)
           elsif random < 50
-            reward_items(player, DYE_S1D3_C)
+            reward_items(pc, DYE_S1D3_C)
           elsif random < 75
-            reward_items(player, DYE_C1S3_C)
+            reward_items(pc, DYE_C1S3_C)
           elsif random < 100
-            reward_items(player, DYE_C1C3_C)
+            reward_items(pc, DYE_C1C3_C)
           elsif random < 125
-            reward_items(player, DYE_D1S3_C)
+            reward_items(pc, DYE_D1S3_C)
           elsif random < 150
-            reward_items(player, DYE_D1C3_C)
+            reward_items(pc, DYE_D1C3_C)
           elsif random < 175
-            reward_items(player, DYE_I1M3_C)
+            reward_items(pc, DYE_I1M3_C)
           elsif random < 200
-            reward_items(player, DYE_I1W3_C)
+            reward_items(pc, DYE_I1W3_C)
           elsif random < 225
-            reward_items(player, DYE_M1I3_C)
+            reward_items(pc, DYE_M1I3_C)
           elsif random < 250
-            reward_items(player, DYE_M1W3_C)
+            reward_items(pc, DYE_M1W3_C)
           elsif random < 275
-            reward_items(player, DYE_W1I3_C)
+            reward_items(pc, DYE_W1I3_C)
           elsif random < 300
-            reward_items(player, DYE_W1M3_C)
+            reward_items(pc, DYE_W1M3_C)
           else
             bonus += 300
           end
@@ -134,19 +134,19 @@ class Quests::Q00383_TreasureHunt < Quest
           random = rand(100)
 
           if random < 4
-            reward_items(player, EMERALD)
+            reward_items(pc, EMERALD)
           elsif random < 8
-            reward_items(player, BLUE_ONYX)
+            reward_items(pc, BLUE_ONYX)
           elsif random < 12
-            reward_items(player, ONYX)
+            reward_items(pc, ONYX)
           elsif random < 16
-            reward_items(player, MOONSTONE)
+            reward_items(pc, MOONSTONE)
           elsif random < 20
-            reward_items(player, ALEXANDRITE)
+            reward_items(pc, ALEXANDRITE)
           elsif random < 25
-            reward_items(player, FIRE_EMERALD)
+            reward_items(pc, FIRE_EMERALD)
           elsif random < 27
-            reward_items(player, IMPERIAL_DIAMOND)
+            reward_items(pc, IMPERIAL_DIAMOND)
           else
             bonus += 500
           end
@@ -154,18 +154,18 @@ class Quests::Q00383_TreasureHunt < Quest
           random = rand(100)
 
           if random < 20
-            reward_items(player, MUSICAL_SCORE_THEME_OF_LOVE)
+            reward_items(pc, MUSICAL_SCORE_THEME_OF_LOVE)
           elsif random < 40
-            reward_items(player, MUSICAL_SCORE_THEME_OF_BATTLE)
+            reward_items(pc, MUSICAL_SCORE_THEME_OF_BATTLE)
           elsif random < 60
-            reward_items(player, MUSICAL_SCORE_THEME_OF_CELEBRATION)
+            reward_items(pc, MUSICAL_SCORE_THEME_OF_CELEBRATION)
           elsif random < 80
-            reward_items(player, MUSICAL_SCORE_THEME_OF_COMEDY)
+            reward_items(pc, MUSICAL_SCORE_THEME_OF_COMEDY)
           else
             bonus += 500
           end
 
-          give_adena(player, bonus, true)
+          give_adena(pc, bonus, true)
         else
           html = "31148-03.html"
         end
@@ -175,13 +175,13 @@ class Quests::Q00383_TreasureHunt < Quest
     html
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created?
-      if player.level < MIN_LEVEL
+      if pc.level < MIN_LEVEL
         html = "30890-01.html"
-      elsif !has_quest_items?(player, PIRATES_TREASURE_MAP)
+      elsif !has_quest_items?(pc, PIRATES_TREASURE_MAP)
         html = "30890-02.html"
       else
         html = "30890-03.htm"
@@ -200,6 +200,6 @@ class Quests::Q00383_TreasureHunt < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

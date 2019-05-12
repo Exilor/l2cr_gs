@@ -1,4 +1,4 @@
-class Quests::Q00431_WeddingMarch < Quest
+class Scripts::Q00431_WeddingMarch < Quest
   # NPC
   private KANTABILON = 31042
   # Monsters
@@ -22,9 +22,9 @@ class Quests::Q00431_WeddingMarch < Quest
     register_quest_items(SILVER_CRYSTAL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -43,8 +43,8 @@ class Quests::Q00431_WeddingMarch < Quest
     html
   end
 
-  def on_kill(npc, player, is_summon)
-    if member = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    if member = get_random_party_member(pc, 1)
       st = get_quest_state(member, false).not_nil!
       if Rnd.bool
         st.give_items(SILVER_CRYSTAL, 1)
@@ -59,15 +59,15 @@ class Quests::Q00431_WeddingMarch < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::CREATED
-      html = player.level >= MIN_LEVEL ? "31042-01.htm" : "31042-00.htm"
+      html = pc.level >= MIN_LEVEL ? "31042-01.htm" : "31042-00.htm"
     when State::STARTED
       html = st.cond?(1) ? "31042-03.html" : "31042-04.html"
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

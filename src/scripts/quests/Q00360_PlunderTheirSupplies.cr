@@ -1,4 +1,4 @@
-class Quests::Q00360_PlunderTheirSupplies < Quest
+class Scripts::Q00360_PlunderTheirSupplies < Quest
   # Npc
   private COLEMAN = 30873
   # Misc
@@ -19,7 +19,9 @@ class Quests::Q00360_PlunderTheirSupplies < Quest
     add_start_npc(COLEMAN)
     add_talk_id(COLEMAN)
     add_kill_id(MONSTER_DROP_CHANCES.keys)
-    register_quest_items(SUPPLY_ITEMS, SUSPICIOUS_DOCUMENT_PIECE, RECIPE_OF_SUPPLY)
+    register_quest_items(
+      SUPPLY_ITEMS, SUSPICIOUS_DOCUMENT_PIECE, RECIPE_OF_SUPPLY
+    )
   end
 
   def on_adv_event(event, npc, pc)
@@ -41,8 +43,11 @@ class Quests::Q00360_PlunderTheirSupplies < Quest
   end
 
   def on_kill(npc, killer, is_pet)
-    st = get_quest_state(killer, false)
-    if st.nil? || !Util.in_range?(1500, npc, killer, false)
+    unless st = get_quest_state(killer, false)
+      return super
+    end
+
+    unless Util.in_range?(1500, npc, killer, false)
       return super
     end
 

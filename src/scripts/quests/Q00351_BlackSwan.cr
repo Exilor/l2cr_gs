@@ -1,4 +1,4 @@
-class Quests::Q00351_BlackSwan < Quest
+class Scripts::Q00351_BlackSwan < Quest
   # NPCs
   private ROMAN = 30897
   private GOSTA = 30916
@@ -27,7 +27,10 @@ class Quests::Q00351_BlackSwan < Quest
 
     add_start_npc(GOSTA, ROMAN)
     add_talk_id(GOSTA, IASON_HEINE, ROMAN)
-    add_kill_id(TASABA_LIZARDMAN1, TASABA_LIZARDMAN_SHAMAN1, TASABA_LIZARDMAN2, TASABA_LIZARDMAN_SHAMAN2)
+    add_kill_id(
+      TASABA_LIZARDMAN1, TASABA_LIZARDMAN_SHAMAN1, TASABA_LIZARDMAN2,
+      TASABA_LIZARDMAN_SHAMAN2
+    )
     register_quest_items(ORDER_OF_GOSTA, LIZARD_FANG, BARREL_OF_LEAGUE)
   end
 

@@ -1,4 +1,4 @@
-class Quests::Q00035_FindGlitteringJewelry < Quest
+class Scripts::Q00035_FindGlitteringJewelry < Quest
   # NPCs
   private ELLIE = 30091
   private FELTON = 30879
@@ -26,13 +26,13 @@ class Quests::Q00035_FindGlitteringJewelry < Quest
     register_quest_items(ROUGH_JEWEL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30091-03.htm"
       st.start_quest
@@ -52,17 +52,17 @@ class Quests::Q00035_FindGlitteringJewelry < Quest
         st.give_items(JEWEL_BOX, 1)
         st.exit_quest(false, true)
       else
-        htmltext = "30091-12.html"
+        html = "30091-12.html"
       end
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    if member = get_random_party_member(player, 2)
+  def on_kill(npc, pc, is_summon)
+    if member = get_random_party_member(pc, 2)
       st = get_quest_state(member, false).not_nil!
       if Rnd.bool
         st.give_items(ROUGH_JEWEL, 1)
@@ -77,41 +77,45 @@ class Quests::Q00035_FindGlitteringJewelry < Quest
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    html = get_no_quest_msg(pc)
+    st = get_quest_state!(pc)
     case npc.id
     when ELLIE
       case st.state
       when State::CREATED
-        htmltext = player.level >= MIN_LEVEL ? "30091-01.htm" : "30091-02.html"
+        html = pc.level >= MIN_LEVEL ? "30091-01.htm" : "30091-02.html"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30091-04.html"
+          html = "30091-04.html"
         when 3
-          htmltext = st.get_quest_items_count(ROUGH_JEWEL) >= JEWEL_COUNT ? "30091-06.html" : "30091-05.html"
+          if st.get_quest_items_count(ROUGH_JEWEL) >= JEWEL_COUNT
+            html = "30091-06.html"
+          else
+            html = "30091-05.html"
+          end
         when 4
           if st.get_quest_items_count(ORIHARUKON) >= ORIHARUKON_COUNT && st.get_quest_items_count(SILVER_NUGGET) >= NUGGET_COUNT && st.get_quest_items_count(THONS) >= THONS_COUNT
-            htmltext = "30091-09.html"
+            html = "30091-09.html"
           else
-            htmltext = "30091-10.html"
+            html = "30091-10.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when FELTON
       if st.started?
         if st.cond?(1)
-          htmltext = "30879-01.html"
+          html = "30879-01.html"
         elsif st.cond?(2)
-          htmltext = "30879-03.html"
+          html = "30879-03.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 
 end

@@ -1,4 +1,4 @@
-class NpcAI::SeparatedSoul < AbstractNpcAI
+class Scripts::SeparatedSoul < AbstractNpcAI
   # NPCs
   private SEPARATED_SOULS = {
     32864,

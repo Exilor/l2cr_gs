@@ -11,7 +11,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
   @skill_type = AcquireSkillType::CLASS
   @sub_type = 0
 
-  def read_impl
+  private def read_impl
     @id, @level = d, d
     @skill_type = AcquireSkillType[d]
     if @skill_type.subpledge?
@@ -19,7 +19,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
     end
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless 1 <= @level <= 1000 && 1 <= @id <= 32000

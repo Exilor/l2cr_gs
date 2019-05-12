@@ -2,9 +2,12 @@ module ActionShiftHandler::L2ItemInstanceAction
   extend self
   extend ActionShiftHandler
 
-  def action(pc, target, interact)
+  def action(pc, target, interact) : Bool
     if pc.access_level.gm?
-      item = target.unsafe_as(L2ItemInstance)
+      item = target
+      unless item.is_a?(L2ItemInstance)
+        raise "Expected #{item}:#{item.class} to be a L2ItemInstance"
+      end
       str = String.build do |io|
         io << "<html><body><center><font color=\"LEVEL\">Item Info</font></center><br><table border=0>"
         io << "<tr><td>Object ID: </td><td>"
@@ -26,7 +29,7 @@ module ActionShiftHandler::L2ItemInstanceAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2ItemInstance
   end
 end

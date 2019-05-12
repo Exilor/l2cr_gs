@@ -1,4 +1,4 @@
-class NpcAI::Asamah < AbstractNpcAI
+class Scripts::Asamah < AbstractNpcAI
   # NPC
   private ASAMAH = 32115
 

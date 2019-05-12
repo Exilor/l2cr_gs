@@ -1,4 +1,4 @@
-class Quests::Q00051_OFullesSpecialBait < Quest
+class Scripts::Q00051_OFullesSpecialBait < Quest
   # NPCs
   private OFULLE = 31572
   private FETTERED_SOUL = 20552
@@ -15,29 +15,29 @@ class Quests::Q00051_OFullesSpecialBait < Quest
     register_quest_items(LOST_BAIT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    htmltext = event
+    html = event
     case event
     when "31572-03.htm"
       st.start_quest
     when "31572-07.html"
       if st.cond?(2) && st.get_quest_items_count(LOST_BAIT) >= 100
-        htmltext = "31572-06.htm"
+        html = "31572-06.htm"
         st.give_items(ICY_AIR_LURE, 4)
         st.exit_quest(false, true)
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 1)
       return
     end
 
@@ -57,18 +57,17 @@ class Quests::Q00051_OFullesSpecialBait < Quest
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
-      htmltext = player.level >= 36 ? "31572-01.htm" : "31572-02.html"
+      html = pc.level >= 36 ? "31572-01.htm" : "31572-02.html"
     when State::STARTED
-      htmltext = st.cond?(1) ? "31572-05.html" : "31572-04.html"
+      html = st.cond?(1) ? "31572-05.html" : "31572-04.html"
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

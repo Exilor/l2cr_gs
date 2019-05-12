@@ -1,4 +1,4 @@
-class NpcAI::NecromancerOfTheValley < AbstractNpcAI
+class Scripts::NecromancerOfTheValley < AbstractNpcAI
   # NPCs
   private EXPLODING_ORC_GHOST = 22818
   private WRATHFUL_ORC_GHOST = 22819

@@ -1,4 +1,4 @@
-class NpcAI::NewbieGuide < AbstractNpcAI
+class Scripts::NewbieGuide < AbstractNpcAI
   # Suffix
   private SUFFIX_FIGHTER_5_LEVEL = "-f05.htm"
   private SUFFIX_FIGHTER_10_LEVEL = "-f10.htm"
@@ -125,7 +125,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
   end
 
   def on_first_talk(npc, player)
-    qs = player.get_quest_state(Quests::Q00255_Tutorial.simple_name)
+    qs = player.get_quest_state(Scripts::Q00255_Tutorial.simple_name)
     if qs
       if npc.id == ADVENTURERS_GUIDE
         return "32327.htm"
@@ -451,7 +451,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
             qs.give_adena(1240, true)
             qs.add_exp_and_sp(5970, 239)
           end
-          unless qs.has_nr_memo?(talker, GUIDE_MISSION)
+          if !qs.has_nr_memo?(talker, GUIDE_MISSION)
             qs.set_nr_memo(talker, GUIDE_MISSION)
             qs.set_nr_memo_state(talker, GUIDE_MISSION, 10)
           else
@@ -484,7 +484,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           qs.set_nr_memo_state(talker, GUIDE_MISSION, 0)
         end
       elsif talker.level < 10
-        if ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) / 100) == 1 && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) / 100) == 1
+        if (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) // 100 == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) // 100 == 1
           case talker.race
           when .human?
             unless talker.mage_class?
@@ -532,7 +532,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           else
             qs.set_nr_memo_state(talker, GUIDE_MISSION, qs.get_nr_memo_state(talker, GUIDE_MISSION) + 10000)
           end
-        elsif ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) / 100) == 1 && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) / 100) != 1
+        elsif (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) // 100 == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) // 100 != 1
           case talker.race
           when .human?
             qs.add_radar(-82236, 241573, -3728)
@@ -621,9 +621,9 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           qs.set_nr_memo_state(talker, GUIDE_MISSION, 0)
         end
       elsif talker.level < 10
-        if (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000) / 10000 == 1
+        if (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000) // 10000 == 1
           return "newbie-guide-09g.htm"
-        elsif (((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) / 100) == 1) && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) / 1000) == 1 && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000) / 10000) != 1
+        elsif (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) // 100 == 1 && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) // 1000) == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000) // 10000 != 1
           case talker.race
           when .human?
             unless talker.mage_class?
@@ -671,7 +671,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           else
             qs.set_nr_memo_state(talker, GUIDE_MISSION, qs.get_nr_memo_state(talker, GUIDE_MISSION) + 10000)
           end
-        elsif ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) / 100) == 1 && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) / 1000) != 1
+        elsif (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000) // 100 == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000) // 1000 != 1
           case talker.race
           when .human?
             qs.add_radar(-82236, 241573, -3728)
@@ -704,9 +704,9 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           return "newbie-guide-08.htm"
         end
       elsif talker.level < 15
-        if ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000) / 100000) == 1 && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000000) / 1000000) == 1
+        if (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000) // 100000 == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000000) // 1000000 == 1
           return "newbie-guide-15.htm"
-        elsif ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000) / 100000) == 1 && ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000000) / 1000000) != 1
+        elsif (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000) // 100000 == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 10000000) // 1000000 != 1
           case talker.race
           when .human?
             qs.add_radar(-84057, 242832, -3729)
@@ -749,7 +749,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           else
             qs.set_nr_memo_state(talker, GUIDE_MISSION, qs.get_nr_memo_state(talker, GUIDE_MISSION) + 1000000)
           end
-        elsif ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000) / 100000) != 1
+        elsif (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000) // 100000 != 1
           case talker.race
           when .human?
             unless talker.mage_class?
@@ -784,10 +784,10 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           end
         end
       elsif talker.level < 18
-        if (((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000000) / 10000000) == 1) && (((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000000) / 100000000) == 1)
+        if (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000000) // 10000000 == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000000) // 100000000 == 1
           set_one_time_quest_flag(talker, GUIDE_MISSION, 1)
           return "newbie-guide-13.htm"
-        elsif (((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000000) / 10000000) == 1) && (((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000000) / 100000000) != 1)
+        elsif (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000000) // 10000000 == 1 && (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 1000000000) // 100000000 != 1
           if talker.level >= 17
             qs.give_adena(22996, true)
             qs.add_exp_and_sp(113712, 5518)
@@ -806,7 +806,7 @@ class NpcAI::NewbieGuide < AbstractNpcAI
           end
           set_one_time_quest_flag(talker, GUIDE_MISSION, 1)
           return "newbie-guide-12.htm"
-        elsif ((qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000000) / 10000000) != 1
+        elsif (qs.get_nr_memo_state(talker, GUIDE_MISSION) % 100000000) // 10000000 != 1
           case talker.race
           when .human?
             qs.add_radar(-84057, 242832, -3729)

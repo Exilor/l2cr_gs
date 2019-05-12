@@ -1,4 +1,4 @@
-class Quests::Q00122_OminousNews < Quest
+class Scripts::Q00122_OminousNews < Quest
   # NPCs
   private MOIRA = 31979
   private KARUDA = 32017
@@ -10,10 +10,10 @@ class Quests::Q00122_OminousNews < Quest
     add_talk_id(MOIRA, KARUDA)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
@@ -28,24 +28,24 @@ class Quests::Q00122_OminousNews < Quest
     event
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case npc.id
     when MOIRA
       case st.state
       when State::CREATED
-        htmltext = player.level >= 20 ? "31979-01.htm" : "31979-00.htm"
+        html = pc.level >= 20 ? "31979-01.htm" : "31979-00.htm"
       when State::STARTED
-        htmltext = "31979-03.html"
+        html = "31979-03.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when KARUDA
       if st.started?
-        htmltext = "32017-01.html"
+        html = "32017-01.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

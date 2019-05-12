@@ -1,6 +1,6 @@
 require "./abstract_get_scroll_to_hometown_quest"
 
-class Quests::Q00049_TheRoadHome < Quests::AbstractGetScrollToHometownQuest
+class Scripts::Q00049_TheRoadHome < AbstractGetScrollToHometownQuest
   def initialize
     super(49, self.class.simple_name, "The Road Home")
   end

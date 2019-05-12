@@ -1,4 +1,4 @@
-class Quests::Q00021_HiddenTruth < Quest
+class Scripts::Q00021_HiddenTruth < Quest
   # NPCs
   private INNOCENTIN = 31328
   private AGRIPEL = 31348
@@ -28,7 +28,11 @@ class Quests::Q00021_HiddenTruth < Quest
     super(21, self.class.simple_name, "Hidden Truth")
 
     add_start_npc(MYSTERIOUS_WIZARD)
-    add_talk_id(MYSTERIOUS_WIZARD, TOMBSTONE, GHOST_OF_VON_HELLMAN, GHOST_OF_VON_HELLMANS_PAGE, BROKEN_BOOKSHELF, AGRIPEL, BENEDICT, DOMINIC, INNOCENTIN)
+    add_talk_id(
+      MYSTERIOUS_WIZARD, TOMBSTONE, GHOST_OF_VON_HELLMAN,
+      GHOST_OF_VON_HELLMANS_PAGE, BROKEN_BOOKSHELF, AGRIPEL, BENEDICT, DOMINIC,
+      INNOCENTIN
+    )
     add_see_creature_id(GHOST_OF_VON_HELLMANS_PAGE)
     add_route_finished_id(GHOST_OF_VON_HELLMANS_PAGE)
     register_quest_items(CROSS_OF_EINHASAD)
@@ -37,7 +41,7 @@ class Quests::Q00021_HiddenTruth < Quest
   def on_adv_event(event, npc, player)
     return unless player
     return unless st = get_quest_state(player, false)
-    htmltext = nil
+    html = nil
 
     case event
     when "31328-02.html", "31328-03.html", "31328-04.html", "31522-01.htm",
@@ -45,24 +49,24 @@ class Quests::Q00021_HiddenTruth < Quest
          "31524-04.html", "31524-05.html", "31526-01.html", "31526-02.html",
          "31526-04.html", "31526-05.html", "31526-06.html", "31526-12.html",
          "31526-13.html"
-      htmltext = event
+      html = event
     when "31328-05.html"
       if st.cond?(7)
         st.give_items(CROSS_OF_EINHASAD2, 1)
         st.add_exp_and_sp(131228, 11978)
         st.exit_quest(false, true)
-        htmltext = event
+        html = event
       end
     when "31522-02.htm"
       if player.level < MIN_LVL
-        htmltext = "31522-03.htm"
+        html = "31522-03.htm"
       else
         st.start_quest
-        htmltext = event
+        html = event
       end
     when "31523-03.html"
       if @ghost_spawned
-        htmltext = "31523-04.html"
+        html = "31523-04.html"
         st.play_sound(Sound::SKILLSOUND_HORROR_2)
       else
         ghost = add_spawn(GHOST_OF_VON_HELLMAN, GHOST_LOC, false, 0)
@@ -72,7 +76,7 @@ class Quests::Q00021_HiddenTruth < Quest
         st.start_quest_timer("DESPAWN_GHOST", 300000, ghost)
         st.set_cond(2)
         st.play_sound(Sound::SKILLSOUND_HORROR_2)
-        htmltext = event
+        html = event
       end
     when "31524-06.html"
       if @page_count < 5
@@ -82,28 +86,28 @@ class Quests::Q00021_HiddenTruth < Quest
         WalkingManager.start_moving(page, PAGE_ROUTE_NAME)
         @page_count += 1
         st.set_cond(3)
-        htmltext = event
+        html = event
       else
-        htmltext = "31524-06a.html"
+        html = "31524-06a.html"
       end
     when "31526-03.html"
       st.play_sound(Sound::ITEMSOUND_ARMOR_CLOTH)
-      htmltext = event
+      html = event
     when "31526-07.html"
       st.set_cond(4)
-      htmltext = event
+      html = event
     when "31526-08.html"
       if !st.cond?(5)
         st.play_sound(Sound::AMDSOUND_ED_CHIMES)
         st.set_cond(5)
-        htmltext = event
+        html = event
       else
-        htmltext = "31526-09.html"
+        html = "31526-09.html"
       end
     when "31526-14.html"
       st.give_items(CROSS_OF_EINHASAD, 1)
       st.set_cond(6)
-      htmltext = event
+      html = event
     when "DESPAWN_GHOST"
       npc = npc.not_nil!
       @ghost_spawned = false
@@ -114,32 +118,30 @@ class Quests::Q00021_HiddenTruth < Quest
       npc.delete_me
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
-    if st
+    if st = get_quest_state(pc, true)
       case npc.id
       when MYSTERIOUS_WIZARD
         case st.state
         when State::CREATED
-          htmltext = "31522-01.htm"
+          html = "31522-01.htm"
         when State::STARTED
-          htmltext = "31522-05.html"
+          html = "31522-05.html"
         when State::COMPLETED
-          htmltext = get_already_completed_msg(pc)
+          html = get_already_completed_msg(pc)
         end
       when TOMBSTONE
-        htmltext = "31523-01.html"
+        html = "31523-01.html"
       when GHOST_OF_VON_HELLMAN
         case st.cond
         when 2
-          htmltext = "31524-01.html"
+          html = "31524-01.html"
         when 3
           if @page_spawned
-            htmltext = "31524-07b.html"
+            html = "31524-07b.html"
           else
             if @page_count < 5
               page = add_spawn(GHOST_OF_VON_HELLMANS_PAGE, PAGE_LOC, true, 0)
@@ -147,91 +149,91 @@ class Quests::Q00021_HiddenTruth < Quest
               @page_spawned = true
               page.script_value = pc.l2id
               WalkingManager.start_moving(page, PAGE_ROUTE_NAME)
-              htmltext = "31524-07.html"
+              html = "31524-07.html"
             else
-              htmltext = "31524-07a.html"
+              html = "31524-07a.html"
             end
           end
         when 4
-          htmltext = "31524-07c.html"
+          html = "31524-07c.html"
         end
       when GHOST_OF_VON_HELLMANS_PAGE
         if st.cond?(3)
           if @move_ended
-            htmltext = "31525-02.html"
+            html = "31525-02.html"
             st.start_quest_timer("DESPAWN", 3000, npc)
           else
-            htmltext = "31525-01.html"
+            html = "31525-01.html"
+          end
         end
-      end
       when BROKEN_BOOKSHELF
         case st.cond
         when 3
-          htmltext = "31526-01.html"
+          html = "31526-01.html"
         when 4
           st.set_cond(5)
           st.play_sound(Sound::AMDSOUND_ED_CHIMES)
-          htmltext = "31526-10.html"
+          html = "31526-10.html"
         when 5
-          htmltext = "31526-11.html"
+          html = "31526-11.html"
         when 6
-          htmltext = "31526-15.html"
+          html = "31526-15.html"
         end
       when AGRIPEL
         if st.has_quest_items?(CROSS_OF_EINHASAD) && st.cond?(6)
           st.set("AGRIPEL", "1")
           if st.get_int("AGRIPEL") == 1 && st.get_int("DOMINIC") == 1 && st.get_int("BENEDICT") == 1
-            htmltext = "31348-03.html"
+            html = "31348-03.html"
             st.set_cond(7)
           elsif st.get_int("DOMINIC") == 1 || st.get_int("BENEDICT") == 1
-            htmltext = "31348-02.html"
+            html = "31348-02.html"
           else
-            htmltext = "31348-01.html"
+            html = "31348-01.html"
           end
         elsif st.cond?(7)
-          htmltext = "31348-03.html"
+          html = "31348-03.html"
         end
       when BENEDICT
         if st.has_quest_items?(CROSS_OF_EINHASAD) && st.cond?(6)
           st.set("BENEDICT", "1")
           if st.get_int("AGRIPEL") == 1 && st.get_int("DOMINIC") == 1 && st.get_int("BENEDICT") == 1
-            htmltext = "31349-03.html"
+            html = "31349-03.html"
             st.set_cond(7)
           elsif st.get_int("AGRIPEL") == 1 || st.get_int("DOMINIC") == 1
-            htmltext = "31349-02.html"
+            html = "31349-02.html"
           else
-            htmltext = "31349-01.html"
+            html = "31349-01.html"
           end
         elsif st.cond?(7)
-          htmltext = "31349-03.html"
+          html = "31349-03.html"
         end
       when DOMINIC
         if st.has_quest_items?(CROSS_OF_EINHASAD) && st.cond?(6)
           st.set("DOMINIC", "1")
           if st.get_int("AGRIPEL") == 1 && st.get_int("DOMINIC") == 1 && st.get_int("BENEDICT") == 1
-            htmltext = "31350-03.html"
+            html = "31350-03.html"
             st.set_cond(7)
           elsif st.get_int("AGRIPEL") == 1 || st.get_int("BENEDICT") == 1
-            htmltext = "31350-02.html"
+            html = "31350-02.html"
           else
-            htmltext = "31350-01.html"
+            html = "31350-01.html"
           end
         elsif st.cond?(7)
-          htmltext = "31350-03.html"
+          html = "31350-03.html"
         end
       when INNOCENTIN
         if st.cond?(7) && st.has_quest_items?(CROSS_OF_EINHASAD)
-          htmltext = "31328-01.html"
+          html = "31328-01.html"
         elsif st.completed?
           st = pc.get_quest_state(Q00022_TragedyInVonHellmannForest.simple_name)
           unless st
-            htmltext = "31328-06.html"
+            html = "31328-06.html"
           end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_see_creature(npc, creature, is_summon)
@@ -243,8 +245,7 @@ class Quests::Q00021_HiddenTruth < Quest
   end
 
   def on_route_finished(npc)
-    st = L2World.get_player(npc.script_value).try &.get_quest_state(name)
-    if st
+    if st = L2World.get_player(npc.script_value).try &.get_quest_state(name)
       st.start_quest_timer("DESPAWN", 15000, npc)
       @move_ended = true
     end

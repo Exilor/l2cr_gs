@@ -1,4 +1,4 @@
-abstract class Quests::AbstractSagaQuest < Quest
+abstract class AbstractSagaQuest < Quest
   private SPAWN_LIST = {} of L2Npc => Int32
   private QUEST_CLASSES = {
     {0x7f}, {0x80,   0x81}, {0x82}, {0x05}, {0x14}, {0x15},

@@ -1,4 +1,4 @@
-class NpcAI::FrozenLabyrinth < AbstractNpcAI
+class Scripts::FrozenLabyrinth < AbstractNpcAI
   private PRONGHORN_SPIRIT = 22087
   private PRONGHORN = 22088
   private LOST_BUFFALO = 22093

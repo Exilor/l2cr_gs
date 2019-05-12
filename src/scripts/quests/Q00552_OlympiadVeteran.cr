@@ -1,4 +1,4 @@
-class Quests::Q00552_OlympiadVeteran < Quest
+class Scripts::Q00552_OlympiadVeteran < Quest
   # NPC
   private MANAGER = 31688
   # Items

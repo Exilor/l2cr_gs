@@ -16,6 +16,7 @@ require "./items_auto_destroy"
 require "./seven_signs"
 require "./instance_managers/instance_manager"
 require "./instance_managers/global_variables_manager"
+require "./instance_managers/gracia_seeds_manager"
 require "./instance_managers/items_on_ground_manager"
 require "./instance_managers/zone_manager"
 require "./instance_managers/castle_manager"
@@ -203,15 +204,13 @@ module GameServer
     Olympiad.instance
     Hero.load
 
-    AutoSpawnHandler.load # Needs to load before all Seven Signs stuff
+    AutoSpawnHandler.load
     SevenSigns.load
 
     HtmCache.load
     CrestTable.load
     TeleportLocationTable.load
     UIData.load
-    # PartyMatchWaitingList.load (not needed)
-    # PartyMatchRoomList.load (not needed)
     # PetitionManager.load
     AugmentationData.load
     CursedWeaponsManager.load
@@ -223,7 +222,7 @@ module GameServer
       BoatManager.load
     end
     AirshipManager.load
-    # GraciaSeedsManager.load
+    GraciaSeedsManager.load
 
     SpawnTable.load
     DayNightSpawnManager.trim
@@ -252,8 +251,6 @@ module GameServer
       ItemsAutoDestroy.load
     end
 
-    # MonsterRace.load (not needed)
-
     SevenSigns.spawn_seven_signs_npc
     SevenSignsFestival.load
 
@@ -272,6 +269,8 @@ module GameServer
     PunishmentManager.load
 
     at_exit { Shutdown.run }
+    # Signal::INT.trap { Config.save_on_interrupt ? exit : exit! }
+    Signal::INT.trap { exit }
 
     # TvTManager.load
     KnownListUpdater.load
@@ -292,7 +291,7 @@ module GameServer
     executor = GamePacketHandler
 
     listener = MMO::PacketManager.new(GameClient, handler, executor)
-    listener.host = host == "*" ? "127.0.0.1" : host
+    listener.host = host == "*" ? "0.0.0.0" : host
     listener.port = port
 
     @@listener = listener
@@ -314,4 +313,29 @@ module GameServer
   end
 end
 
-GameServer.start
+# {% for sub in L2Object.all_subclasses %}
+#   {% for m in sub.methods %}
+#     {% if m.body.stringify.lines.size > 1 && m.body.stringify.includes?(m.name.stringify) %}
+#       {% puts sub.stringify + "#" + m.name.stringify %}
+#     {% end %}
+#   {% end %}
+# {% end %}
+
+{% if flag?(:win32) %}
+  GameServer.start
+{% else %}
+  loop do
+    process = Process.fork { GameServer.start }
+
+    case process.wait.exit_code
+    when 0
+      puts "Game Server terminated"
+      break
+    when 2
+      puts "Game Server restarted"
+    else
+      puts "Game Server terminated abnormally"
+      break
+    end
+  end
+{% end %}

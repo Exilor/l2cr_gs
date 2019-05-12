@@ -1,4 +1,4 @@
-class NpcAI::ImprovedBabyPets < AbstractNpcAI
+class Scripts::ImprovedBabyPets < AbstractNpcAI
   # NPCs
   private IMPROVED_BABY_PETS = {
     16034, # Improved Baby Buffalo

@@ -1,4 +1,4 @@
-class NpcAI::Natives < AbstractNpcAI
+class Scripts::Natives < AbstractNpcAI
   # NPCs
   private NATIVE = 32362
   private INSURGENT = 32363
@@ -26,25 +26,25 @@ class NpcAI::Natives < AbstractNpcAI
     add_spawn_id(NATIVE)
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     level = HellboundEngine.level
 
     case npc.id
     when NATIVE
-      htmltext = level > 5 ? "32362-01.htm" : "32362.htm"
+      html = level > 5 ? "32362-01.htm" : "32362.htm"
     when INSURGENT
-      htmltext = level > 5 ? "32363-01.htm" : "32363.htm"
+      html = level > 5 ? "32363-01.htm" : "32363.htm"
     when INCASTLE
       if level < 9
-        htmltext = "32357-01a.htm"
+        html = "32357-01a.htm"
       elsif level == 9
-        htmltext = npc.busy? ? "32357-02.htm" : "32357-01.htm"
+        html = npc.busy? ? "32357-02.htm" : "32357-01.htm"
       else
-        htmltext = "32357-01b.htm"
+        html = "32357-01b.htm"
       end
     end
 
-    htmltext
+    html
   end
 
   def on_adv_event(event, npc, pc)
@@ -67,9 +67,9 @@ class NpcAI::Natives < AbstractNpcAI
           cancel_quest_timers("close_doors")
           start_quest_timer("close_doors", 1800000, npc, pc) # 30 min
         elsif has_quest_items?(pc, MARK_OF_BETRAYAL)
-          htmltext = "32364-01.htm"
+          html = "32364-01.htm"
         else
-          htmltext = "32364-02.htm"
+          html = "32364-02.htm"
         end
       elsif event.casecmp?("close_doors")
         DOORS.each do |door_id|
@@ -88,10 +88,10 @@ class NpcAI::Natives < AbstractNpcAI
           take_items(pc, BADGES, 5)
           npc.busy = true # Prevent Native from take items more, than once
           HellboundEngine.update_trust(100, true)
-          htmltext = "32357-02.htm"
+          html = "32357-02.htm"
           start_quest_timer("delete_me", 3000, npc, nil)
         else
-          htmltext = "32357-02a.htm"
+          html = "32357-02a.htm"
         end
       elsif event.casecmp?("delete_me")
         npc.busy = false # TODO: Does it really need?
@@ -100,7 +100,7 @@ class NpcAI::Natives < AbstractNpcAI
       end
     end
 
-    htmltext
+    html
   end
 
   def on_spawn(npc)

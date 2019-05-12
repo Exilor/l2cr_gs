@@ -1,6 +1,6 @@
 require "../../../../enums/affect_object"
 
-struct NpcAI::NpcBufferSkillData
+struct NpcBufferSkillData
   getter initial_delay : Int32
   getter delay : Int32
   getter affect_scope : AffectScope

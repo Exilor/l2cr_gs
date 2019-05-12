@@ -1,4 +1,4 @@
-class Quests::Q00065_CertifiedSoulBreaker < Quest
+class Scripts::Q00065_CertifiedSoulBreaker < Quest
   # NPCs
   private CAPTAIN_LUCAS = 30071
   private JACOB = 30073
@@ -43,7 +43,7 @@ class Quests::Q00065_CertifiedSoulBreaker < Quest
     register_quest_items(SEALED_DOCUMENT, WYRM_HEART, KEKROPUS_RECOMMENDATION)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     if event == "DESPAWN_5"
       npc.try &.delete_me
       return super
@@ -64,111 +64,111 @@ class Quests::Q00065_CertifiedSoulBreaker < Quest
       return super
     end
 
-    return unless player
-    return unless qs = get_quest_state(player, false)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 47)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "32213-05.htm"
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 47)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "32213-05.htm"
         else
-          htmltext = "32213-06.htm"
+          html = "32213-06.htm"
         end
       end
     when "32213-09.html"
-      htmltext = event
+      html = event
     when "32213-04.htm"
-      if player.level >= MIN_LEVEL && player.in_category?(CategoryType::KAMAEL_SECOND_CLASS_GROUP)
-        htmltext = event
+      if pc.level >= MIN_LEVEL && pc.in_category?(CategoryType::KAMAEL_SECOND_CLASS_GROUP)
+        html = event
       end
     when "30071-02.html"
       if qs.memo_state?(7)
         qs.memo_state = 8
         qs.set_cond(8, true)
-        htmltext = event
+        html = event
       end
     when "30879-02.html"
       if qs.memo_state?(11)
-        htmltext = event
+        html = event
       end
     when "30879-03.html"
       if qs.memo_state?(11)
         qs.memo_state = 12
         qs.set_cond(12, true)
-        htmltext = event
+        html = event
       end
     when "32138-02.html", "32138-03.html"
       if qs.memo_state?(1)
-        htmltext = event
+        html = event
       end
     when "32138-04.html"
       if qs.memo_state?(1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "32138-07.html"
       if qs.memo_state?(21)
         qs.memo_state = 22
         qs.set_cond(15, true)
-        htmltext = event
+        html = event
       end
     when "32138-10.html", "32138-11.html"
       if qs.memo_state?(23)
-        htmltext = event
+        html = event
       end
     when "32138-12.html"
       if qs.memo_state?(23)
-        take_items(player, WYRM_HEART, -1)
-        give_items(player, KEKROPUS_RECOMMENDATION, 1)
+        take_items(pc, WYRM_HEART, -1)
+        give_items(pc, KEKROPUS_RECOMMENDATION, 1)
         qs.memo_state = 24
         qs.set_cond(17, true)
-        htmltext = event
+        html = event
       end
     when "32139-02.html"
       if qs.memo_state?(2)
         qs.memo_state = 3
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "32139-04.html"
       if qs.memo_state?(3)
         qs.memo_state = 4
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "32139-07.html"
       if qs.memo_state?(14)
-        htmltext = event
+        html = event
       end
     when "32139-08.html"
       if qs.memo_state?(14)
-        take_items(player, SEALED_DOCUMENT, -1)
+        take_items(pc, SEALED_DOCUMENT, -1)
         qs.memo_state = 21
         qs.set_cond(14, true)
-        htmltext = event
+        html = event
       end
     when "32199-02.html"
       if qs.memo_state?(4)
         qs.memo_state = 5
         qs.set_cond(5, true)
         add_spawn(npc, SUSPICIOUS_MAN, SUSPICIOUS_SPAWN, false, 0)
-        htmltext = event
+        html = event
       end
     when "32214-02.html"
       if qs.memo_state?(10)
         qs.memo_state = 11
         qs.set_cond(11, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -209,228 +209,228 @@ class Quests::Q00065_CertifiedSoulBreaker < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
-    htmltext = get_no_quest_msg(player)
+
     if qs.created?
       if npc.id == GRAND_MASTER_VITUS
-        if player.race.kamael?
-          if player.level >= MIN_LEVEL && player.in_category?(CategoryType::KAMAEL_SECOND_CLASS_GROUP)
-            htmltext = "32213-01.htm"
+        if pc.race.kamael?
+          if pc.level >= MIN_LEVEL && pc.in_category?(CategoryType::KAMAEL_SECOND_CLASS_GROUP)
+            html = "32213-01.htm"
           else
-            htmltext = "32213-03.html"
+            html = "32213-03.html"
           end
         else
-          htmltext = "32213-02.html"
+          html = "32213-02.html"
         end
       end
     elsif qs.started?
       case npc.id
       when GRAND_MASTER_VITUS
         if memo_state == 1
-          htmltext = "32213-07.html"
+          html = "32213-07.html"
         elsif memo_state > 1 && memo_state < 24
-          htmltext = "32213-08.html"
+          html = "32213-08.html"
         elsif memo_state == 24
-          give_adena(player, 71194, true)
-          give_items(player, SOUL_BREAKER_CERTIFICATE, 1)
-          add_exp_and_sp(player, 393750, 27020)
+          give_adena(pc, 71194, true)
+          give_items(pc, SOUL_BREAKER_CERTIFICATE, 1)
+          add_exp_and_sp(pc, 393750, 27020)
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
-          htmltext = "32213-10.html"
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
+          html = "32213-10.html"
         end
       when CAPTAIN_LUCAS
         if memo_state == 7
-          htmltext = "30071-01.html"
+          html = "30071-01.html"
         elsif memo_state == 8
-          htmltext = "30071-03.html"
+          html = "30071-03.html"
         end
       when JACOB
         if memo_state == 6
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 10)
-            htmltext = "30073-01.html"
+            html = "30073-01.html"
           elsif qs.get_memo_state_ex(1) == 10
-            htmltext = "30073-01a.html"
+            html = "30073-01a.html"
           elsif qs.get_memo_state_ex(1) == 1
             qs.memo_state = 7
             qs.set_memo_state_ex(1, 0)
             qs.set_cond(7, true)
-            htmltext = "30073-02.html"
+            html = "30073-02.html"
           end
         elsif memo_state == 7
-          htmltext = "30073-03.html"
+          html = "30073-03.html"
         end
       when GUARD_HARLAN
         if memo_state == 6
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 1)
-            htmltext = "30074-01.html"
+            html = "30074-01.html"
           elsif qs.get_memo_state_ex(1) == 1
-            htmltext = "30074-01a.html"
+            html = "30074-01a.html"
           elsif qs.get_memo_state_ex(1) == 10
             qs.memo_state = 7
             qs.set_memo_state_ex(1, 0)
             qs.set_cond(7, true)
-            htmltext = "30074-02.html"
+            html = "30074-02.html"
           end
         elsif memo_state == 7
-          htmltext = "30074-03.html"
+          html = "30074-03.html"
         end
       when GUARD_XABER
         if memo_state == 8
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 1)
-            htmltext = "30075-01.html"
+            html = "30075-01.html"
           elsif qs.get_memo_state_ex(1) == 1
-            htmltext = "30075-01a.html"
+            html = "30075-01a.html"
           elsif qs.get_memo_state_ex(1) == 10
             qs.memo_state = 9
             qs.set_memo_state_ex(1, 0)
             qs.set_cond(9, true)
-            htmltext = "30075-02.html"
+            html = "30075-02.html"
           end
         elsif memo_state == 9
-          htmltext = "30075-03.html"
+          html = "30075-03.html"
         end
       when GUARD_LIAM
         if memo_state == 8
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 10)
-            htmltext = "30076-01.html"
+            html = "30076-01.html"
           elsif qs.get_memo_state_ex(1) == 10
-            htmltext = "30076-01a.html"
+            html = "30076-01a.html"
           elsif qs.get_memo_state_ex(1) == 1
             qs.memo_state = 9
             qs.set_memo_state_ex(1, 0)
             qs.set_cond(9, true)
-            htmltext = "30076-02.html"
+            html = "30076-02.html"
           end
         elsif memo_state == 9
-          htmltext = "30076-03.html"
+          html = "30076-03.html"
         end
       when GUARD_VESA
         if memo_state == 9
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 10)
-            htmltext = "30123-01.html"
+            html = "30123-01.html"
           elsif qs.get_memo_state_ex(1) == 10
-            htmltext = "30123-01.html"
+            html = "30123-01.html"
           elsif qs.get_memo_state_ex(1) == 1
             qs.memo_state = 10
             qs.set_memo_state_ex(1, 0)
             qs.set_cond(10, true)
-            htmltext = "30123-02.html"
+            html = "30123-02.html"
           end
         elsif memo_state == 10
-          htmltext = "30123-03.html"
+          html = "30123-03.html"
         end
       when GUARD_ZEROME
         if memo_state == 9
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 1)
-            htmltext = "30124-01.html"
+            html = "30124-01.html"
           elsif qs.get_memo_state_ex(1) == 1
-            htmltext = "30124-01.html"
+            html = "30124-01.html"
           elsif qs.get_memo_state_ex(1) == 10
             qs.memo_state = 10
             qs.set_memo_state_ex(1, 0)
             qs.set_cond(10, true)
-            htmltext = "30124-02.html"
+            html = "30124-02.html"
           end
         elsif memo_state == 10
-          htmltext = "30124-03.html"
+          html = "30124-03.html"
         end
       when WHARF_MANAGER_FELTON
         if memo_state == 11
-          htmltext = "30879-01.html"
+          html = "30879-01.html"
         elsif memo_state == 12
-          htmltext = "30879-04.html"
+          html = "30879-04.html"
         end
       when KEKROPUS
         if memo_state == 1
-          htmltext = get_htm(player, "32138-01.html")
-          htmltext = htmltext.gsub("%name1%", player.name)
+          html = get_htm(pc, "32138-01.html")
+          html = html.gsub("%name1%", pc.name)
         elsif memo_state == 2
-          htmltext = "32138-05.html"
+          html = "32138-05.html"
         elsif memo_state == 21
-          htmltext = "32138-06.html"
+          html = "32138-06.html"
         elsif memo_state == 22
-          htmltext = "32138-08.html"
+          html = "32138-08.html"
         elsif memo_state == 23
-          htmltext = "32138-09.html"
+          html = "32138-09.html"
         elsif memo_state == 24
-          htmltext = "32138-13.html"
+          html = "32138-13.html"
         end
       when VICE_HIERARCH_CASCA
         if memo_state == 2
-          htmltext = "32139-01.html"
+          html = "32139-01.html"
         elsif memo_state == 3
-          htmltext = "32139-03.html"
+          html = "32139-03.html"
         elsif memo_state == 4
-          htmltext = "32139-05.html"
+          html = "32139-05.html"
         elsif memo_state == 14
-          htmltext = "32139-06.html"
+          html = "32139-06.html"
         elsif memo_state == 21
-          htmltext = "32139-09.html"
+          html = "32139-09.html"
         end
       when GRAND_MASTER_HOLST
         if memo_state == 4
-          htmltext = "32199-01.html"
+          html = "32199-01.html"
         elsif memo_state == 5
           qs.memo_state = 6
           qs.set_memo_state_ex(1, 0) # L2J says there's something custom about this
           qs.set_cond(6, true)
-          htmltext = "32199-03.html"
+          html = "32199-03.html"
         elsif memo_state == 6
-          htmltext = "32199-04.html"
+          html = "32199-04.html"
         end
       when GRAND_MASTER_MELDINA
         if memo_state == 10
-          htmltext = "32214-01.html"
+          html = "32214-01.html"
         elsif memo_state == 11
-          htmltext = "32214-03.html"
+          html = "32214-03.html"
         end
       when CARGO_BOX
         if memo_state == 12
           if !npc.variables.get_bool("SPAWNED", false)
             npc.variables["SPAWNED"] = true
-            npc.variables["PLAYER_ID"] = player.l2id
+            npc.variables["PLAYER_ID"] = pc.l2id
             angel = add_spawn(GUARDIAN_ANGEL, 36110, 191921, -3712, 0, true, 0, false)
             angel.variables["npc0"] = npc
-            angel.variables["player0"] = player
-            add_attack_desire(angel, player)
-            htmltext = "32243-01.html"
-          elsif npc.variables.get_i32("PLAYER_ID") == player.l2id
-            htmltext = "32243-03.html"
+            angel.variables["player0"] = pc
+            add_attack_desire(angel, pc)
+            html = "32243-01.html"
+          elsif npc.variables.get_i32("PLAYER_ID") == pc.l2id
+            html = "32243-03.html"
           else
-            htmltext = "32243-02.html"
+            html = "32243-02.html"
           end
         elsif memo_state == 13
           if !npc.variables.get_bool("SPAWNED", false)
             npc.variables["SPAWNED"] = true
-            npc.variables["PLAYER_ID"] = player.l2id
+            npc.variables["PLAYER_ID"] = pc.l2id
             katenar = add_spawn(KATENAR, 36110, 191921, -3712, 0, false, 0)
-            katenar.variables["player0"] = player
+            katenar.variables["player0"] = pc
             katenar.variables["npc0"] = npc
-            htmltext = "32243-06.html"
-          elsif npc.variables.get_i32("PLAYER_ID") == player.l2id
-            htmltext = "32243-04.html"
+            html = "32243-06.html"
+          elsif npc.variables.get_i32("PLAYER_ID") == pc.l2id
+            html = "32243-04.html"
           else
-            htmltext = "32243-05.html"
+            html = "32243-05.html"
           end
         elsif memo_state == 14
-          htmltext = "32243-07.html"
+          html = "32243-07.html"
         end
       end
     elsif qs.completed?
       if npc.id == GRAND_MASTER_VITUS
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_spawn(npc)

@@ -1,7 +1,8 @@
+require "../login_server_packet"
 require "../game_server/blowfish_key"
 require "../game_server/auth_request"
 
-class Packets::Incoming::InitLS < MMO::IncomingPacket(LoginServerClient)
+class Packets::Incoming::InitLS < LoginServerPacket
   include Loggable
 
   private REVISION = 0x0106
@@ -9,13 +10,13 @@ class Packets::Incoming::InitLS < MMO::IncomingPacket(LoginServerClient)
   @protocol = 0
   @key = Bytes.empty
 
-  def read
+  private def read_impl
     @protocol = d
     key_size = d
     @key = b(key_size)
   end
 
-  def run
+  private def run_impl
     # debug "Protocol: #{@protocol}"
     unless @protocol == REVISION
       error "Protocol revision mistmatch (LS: #{@protocol}, GS: #{REVISION})."

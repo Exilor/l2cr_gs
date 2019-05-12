@@ -1,4 +1,4 @@
-class NornilsGardenQuest < AbstractInstance
+class Scripts::NornilsGardenQuest < AbstractInstance
   private class NornilsGardenQuestWorld < InstanceWorld
     property origin_loc : Location?
   end
@@ -20,13 +20,13 @@ class NornilsGardenQuest < AbstractInstance
   end
 
   def check_conditions(pc)
-    qs = pc.get_quest_state(Quests::Q00236_SeedsOfChaos.simple_name)
+    qs = pc.get_quest_state(Scripts::Q00236_SeedsOfChaos.simple_name)
     !!qs && qs.memo_state >= 40 && qs.memo_state <= 45
   end
 
   def on_adv_event(event, npc, player)
     player = player.not_nil!
-    q236 = player.get_quest_state(Quests::Q00236_SeedsOfChaos.simple_name).not_nil!
+    q236 = player.get_quest_state(Scripts::Q00236_SeedsOfChaos.simple_name).not_nil!
     case event
     when "enter"
       if check_conditions(player)
@@ -62,7 +62,7 @@ class NornilsGardenQuest < AbstractInstance
   end
 
   def on_first_talk(npc, player)
-    q236 = player.get_quest_state(Quests::Q00236_SeedsOfChaos.simple_name)
+    q236 = player.get_quest_state(Scripts::Q00236_SeedsOfChaos.simple_name)
     case npc.id
     when RODENPICULA
       q236 && q236.completed? ? "32237-02.html" : "32237-01.html"

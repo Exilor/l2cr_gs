@@ -1,4 +1,4 @@
-class NpcAI::FameManager < AbstractNpcAI
+class Scripts::FameManager < AbstractNpcAI
   # Npc
   private FAME_MANAGER = {
     36479, # Rapidus

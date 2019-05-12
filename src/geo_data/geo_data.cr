@@ -38,7 +38,7 @@ module GeoData
       end
     end
 
-    info "Loaded #{loaded_regions} regions in #{timer.result} s."
+    info { "Loaded #{loaded_regions} regions in #{timer.result} s." }
   end
 
   def has_geo_pos?(x : Int32, y : Int32) : Bool
@@ -307,8 +307,8 @@ module GeoData
   end
 
   private def get_los_geo_z(prev_x : Int32, prev_y : Int32, prev_z : Int32, cur_x : Int32, cur_y : Int32, nswe : Int32) : Int32
-    if (((nswe & Cell::NSWE_NORTH) != 0) && ((nswe & Cell::NSWE_SOUTH) != 0)) ||
-      (((nswe & Cell::NSWE_WEST) != 0) && ((nswe & Cell::NSWE_EAST) != 0))
+    if ((nswe & Cell::NSWE_NORTH) != 0 && (nswe & Cell::NSWE_SOUTH) != 0) ||
+      ((nswe & Cell::NSWE_WEST) != 0 && (nswe & Cell::NSWE_EAST) != 0)
 
       raise "Multiple directions"
     end

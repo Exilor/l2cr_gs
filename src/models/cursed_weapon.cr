@@ -227,7 +227,6 @@ class CursedWeapon
   end
 
   def do_transform
-    debug "on_transform"
     if @item_id == 8689
       @transformation_id = 302
     elsif @item_id == 8190
@@ -246,7 +245,6 @@ class CursedWeapon
   end
 
   def remove_skill
-    debug "remove_skill"
     player.remove_skill(@skill_id)
     player.remove_skill(CommonSkill::VOID_BURST.skill.id)
     player.remove_skill(CommonSkill::VOID_FLOW.skill.id)
@@ -269,7 +267,7 @@ class CursedWeapon
       drop_it(attackable, pc)
       @end_time = Time.ms + (@duration * 60_000)
       @remove_task = start_remove_task(@duration_lost * 12000, @duration_lost * 12000)
-      info "#{@name} has dropped!"
+      info { "#{@name} has dropped from #{attackable} killed by #{pc.name}." }
       true
     else
       false

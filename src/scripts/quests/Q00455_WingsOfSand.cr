@@ -1,4 +1,4 @@
-class Quests::Q00455_WingsOfSand < Quest
+class Scripts::Q00455_WingsOfSand < Quest
   # NPCs
   private SEPARATED_SOULS = {
     32864,

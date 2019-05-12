@@ -1,4 +1,4 @@
-class Quests::Q00117_TheOceanOfDistantStars < Quest
+class Scripts::Q00117_TheOceanOfDistantStars < Quest
   # NPCs
   private OBI = 32052
   private ABEY = 32053
@@ -30,9 +30,9 @@ class Quests::Q00117_TheOceanOfDistantStars < Quest
     register_quest_items(ENGRAVED_HAMMER, BOOK_OF_GREY_STAR)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -40,76 +40,76 @@ class Quests::Q00117_TheOceanOfDistantStars < Quest
     when "32053-02.htm"
       qs.memo_state = 1
       qs.start_quest
-      htmltext = event
+      html = event
     when "32053-06.html"
       if qs.memo_state?(3)
         qs.memo_state = 4
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "32053-09.html"
-      if qs.memo_state?(5) && has_quest_items?(player, ENGRAVED_HAMMER)
+      if qs.memo_state?(5) && has_quest_items?(pc, ENGRAVED_HAMMER)
         qs.memo_state = 6
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "32054-02.html"
       if qs.memo_state?(9)
-        htmltext = event
+        html = event
       end
     when "32054-03.html"
       if qs.memo_state?(9)
-        give_adena(player, 17647, true)
-        add_exp_and_sp(player, 107387, 7369)
+        give_adena(pc, 17647, true)
+        add_exp_and_sp(pc, 107387, 7369)
         qs.exit_quest(false, true)
-        htmltext = event
+        html = event
       end
     when "32055-02.html"
       if qs.memo_state?(1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "32055-05.html"
       if qs.memo_state?(8)
-        if has_quest_items?(player, ENGRAVED_HAMMER)
+        if has_quest_items?(pc, ENGRAVED_HAMMER)
           qs.memo_state = 9
           qs.set_cond(10, true)
-          take_items(player, ENGRAVED_HAMMER, -1)
-          htmltext = event
+          take_items(pc, ENGRAVED_HAMMER, -1)
+          html = event
         else
-          htmltext = "32055-06.html"
+          html = "32055-06.html"
         end
       end
     when "32076-02.html"
       if qs.memo_state?(4)
         qs.memo_state = 5
         qs.set_cond(5, true)
-        give_items(player, ENGRAVED_HAMMER, 1)
-        htmltext = event
+        give_items(pc, ENGRAVED_HAMMER, 1)
+        html = event
       end
     when "32052-02.html"
       if qs.memo_state?(2)
         qs.memo_state = 3
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "32052-05.html"
       if qs.memo_state?(6)
         qs.memo_state = 7
         qs.set_cond(7, true)
-        htmltext = event
+        html = event
       end
     when "32052-07.html"
-      if qs.memo_state?(7) && has_quest_items?(player, BOOK_OF_GREY_STAR)
+      if qs.memo_state?(7) && has_quest_items?(pc, BOOK_OF_GREY_STAR)
         qs.memo_state = 8
         qs.set_cond(9, true)
-        take_items(player, BOOK_OF_GREY_STAR, -1)
-        htmltext = event
+        take_items(pc, BOOK_OF_GREY_STAR, -1)
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -128,73 +128,73 @@ class Quests::Q00117_TheOceanOfDistantStars < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.completed?
       if npc.id == ABEY
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     elsif qs.created?
-      htmltext = player.level >= MIN_LEVEL ? "32053-01.htm" : "32053-03.htm"
+      html = pc.level >= MIN_LEVEL ? "32053-01.htm" : "32053-03.htm"
     elsif qs.started?
       case npc.id
       when ABEY
         case qs.memo_state
         when 1
-          htmltext = "32053-04.html"
+          html = "32053-04.html"
         when 3
-          htmltext = "32053-05.html"
+          html = "32053-05.html"
         when 4
-          htmltext = "32053-07.html"
+          html = "32053-07.html"
         when 5
-          if has_quest_items?(player, ENGRAVED_HAMMER)
-            htmltext = "32053-08.html"
+          if has_quest_items?(pc, ENGRAVED_HAMMER)
+            html = "32053-08.html"
           end
         when 6
-          htmltext = "32053-10.html"
+          html = "32053-10.html"
         end
       when GHOST_OF_A_RAILROAD_ENGINEER
         if qs.memo_state?(9)
-          htmltext = "32054-01.html"
+          html = "32054-01.html"
       end
       when GHOST_OF_AN_ANCIENT_RAILROAD_ENGINEER
         case qs.memo_state
         when 1
-          htmltext = "32055-01.html"
+          html = "32055-01.html"
         when 2
-          htmltext = "32055-03.html"
+          html = "32055-03.html"
         when 8
-          htmltext = "32055-04.html"
+          html = "32055-04.html"
         when 9
-          htmltext = "32055-07.html"
+          html = "32055-07.html"
         end
       when BOX
         if qs.memo_state?(4)
-          htmltext = "32076-01.html"
+          html = "32076-01.html"
         elsif qs.memo_state?(5)
-          htmltext = "32076-03.html"
+          html = "32076-03.html"
         end
       when OBI
         case qs.memo_state
         when 2
-          htmltext = "32052-01.html"
+          html = "32052-01.html"
         when 3
-          htmltext = "32052-03.html"
+          html = "32052-03.html"
         when 6
-          htmltext = "32052-04.html"
+          html = "32052-04.html"
         when 7
-          if has_quest_items?(player, BOOK_OF_GREY_STAR)
-            htmltext = "32052-06.html"
+          if has_quest_items?(pc, BOOK_OF_GREY_STAR)
+            html = "32052-06.html"
           else
-            htmltext = "32052-08.html"
+            html = "32052-08.html"
           end
         when 8
-          htmltext = "32052-09.html"
+          html = "32052-09.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

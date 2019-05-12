@@ -1,8 +1,8 @@
 class Packets::Incoming::RequestPetitionCancel < GameClientPacket
-  def read_impl
+  private def read_impl
   end
 
-  def run_impl
+  private def run_impl
     warn "Not implemented."
   end
 end

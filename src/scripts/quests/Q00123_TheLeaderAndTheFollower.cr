@@ -1,4 +1,4 @@
-class Quests::Q00123_TheLeaderAndTheFollower < Quest
+class Scripts::Q00123_TheLeaderAndTheFollower < Quest
   # NPC
   private HEAD_BLACKSMITH_NEWYEAR = 31961
   # Items
@@ -33,11 +33,11 @@ class Quests::Q00123_TheLeaderAndTheFollower < Quest
     register_quest_items(BRUIN_LIZARDMAN_BLOOD, PICOT_ARANEIDS_LEG)
   end
 
-  def on_adv_event(event, npc, player)
-    player = player.not_nil!
+  def on_adv_event(event, npc, pc)
+    pc = pc.not_nil!
     # Manage Sponsor's quest events.
-    if player.apprentice > 0
-      unless apprentice = L2World.get_player(player.apprentice)
+    if pc.apprentice > 0
+      unless apprentice = L2World.get_player(pc.apprentice)
         return
       end
 
@@ -45,45 +45,45 @@ class Quests::Q00123_TheLeaderAndTheFollower < Quest
       case event
       when "sponsor"
         if !Util.in_range?(1500, npc, apprentice, true)
-          htmltext = "31961-09.html"
+          html = "31961-09.html"
         else
           if q123.nil? || (!q123.memo_state?(2) && !q123.memo_state?(3))
-            htmltext = "31961-14.html"
+            html = "31961-14.html"
           elsif q123.memo_state?(2)
-            htmltext = "31961-08.html"
+            html = "31961-08.html"
           elsif q123.memo_state?(3)
-            htmltext = "31961-12.html"
+            html = "31961-12.html"
           end
         end
       when "31961-10.html"
         if Util.in_range?(1500, npc, apprentice, true) && q123 && q123.memo_state?(2)
           case q123.get_memo_state_ex(1)
           when 1
-            if get_quest_items_count(player, CRYSTAL_D) >= CRYSTAL_COUNT_1
-              take_items(player, CRYSTAL_D, CRYSTAL_COUNT_1)
+            if get_quest_items_count(pc, CRYSTAL_D) >= CRYSTAL_COUNT_1
+              take_items(pc, CRYSTAL_D, CRYSTAL_COUNT_1)
               q123.memo_state = 3
               q123.set_cond(6, true)
-              htmltext = event
+              html = event
             else
-              htmltext = "31961-11.html"
+              html = "31961-11.html"
             end
           when 2, 3
-            if get_quest_items_count(player, CRYSTAL_D) >= CRYSTAL_COUNT_2
-              take_items(player, CRYSTAL_D, CRYSTAL_COUNT_2)
+            if get_quest_items_count(pc, CRYSTAL_D) >= CRYSTAL_COUNT_2
+              take_items(pc, CRYSTAL_D, CRYSTAL_COUNT_2)
               q123.memo_state = 3
               q123.set_cond(6, true)
-              htmltext = event
+              html = event
             else
-              htmltext = "31961-11a.html"
+              html = "31961-11a.html"
             end
           end
         end
       end
 
-      return htmltext
+      return html
     end
 
-    unless qs = get_quest_state(player, false)
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -92,37 +92,37 @@ class Quests::Q00123_TheLeaderAndTheFollower < Quest
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        htmltext = event
+        html = event
       end
     when "31961-05a.html", "31961-05b.html", "31961-05c.html", "31961-05g.html"
-      htmltext = event
+      html = event
     when "31961-05d.html"
-      if qs.memo_state?(1) && get_quest_items_count(player, BRUIN_LIZARDMAN_BLOOD) >= 10
-        take_items(player, BRUIN_LIZARDMAN_BLOOD, -1)
+      if qs.memo_state?(1) && get_quest_items_count(pc, BRUIN_LIZARDMAN_BLOOD) >= 10
+        take_items(pc, BRUIN_LIZARDMAN_BLOOD, -1)
         qs.memo_state = 2
         qs.set_memo_state_ex(1, 1)
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "31961-05e.html"
-      if qs.memo_state?(1) && get_quest_items_count(player, BRUIN_LIZARDMAN_BLOOD) >= 10
-        take_items(player, BRUIN_LIZARDMAN_BLOOD, -1)
+      if qs.memo_state?(1) && get_quest_items_count(pc, BRUIN_LIZARDMAN_BLOOD) >= 10
+        take_items(pc, BRUIN_LIZARDMAN_BLOOD, -1)
         qs.memo_state = 2
         qs.set_memo_state_ex(1, 2)
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "31961-05f.html"
-      if qs.memo_state?(1) && get_quest_items_count(player, BRUIN_LIZARDMAN_BLOOD) >= 10
-        take_items(player, BRUIN_LIZARDMAN_BLOOD, -1)
+      if qs.memo_state?(1) && get_quest_items_count(pc, BRUIN_LIZARDMAN_BLOOD) >= 10
+        take_items(pc, BRUIN_LIZARDMAN_BLOOD, -1)
         qs.memo_state = 2
         qs.set_memo_state_ex(1, 3)
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -152,86 +152,86 @@ class Quests::Q00123_TheLeaderAndTheFollower < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    q118 = player.get_quest_state(Q00118_ToLeadAndBeLed.simple_name)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+    q118 = pc.get_quest_state(Q00118_ToLeadAndBeLed.simple_name)
 
     case qs.state
     when State::CREATED
       if q118 && q118.started?
-        htmltext = "31961-02b.htm"
+        html = "31961-02b.htm"
       elsif q118 && q118.completed?
-        htmltext = "31961-02a.html"
-      elsif player.level >= MIN_LEVEL && player.pledge_type == -1 && player.sponsor > 0
-        htmltext = "31961-01.htm"
+        html = "31961-02a.html"
+      elsif pc.level >= MIN_LEVEL && pc.pledge_type == -1 && pc.sponsor > 0
+        html = "31961-01.htm"
       else
-        htmltext = "31961-02.htm"
+        html = "31961-02.htm"
       end
     when State::STARTED
       if qs.memo_state?(1)
-        if get_quest_items_count(player, BRUIN_LIZARDMAN_BLOOD) < 10
-          htmltext = "31961-04.html"
+        if get_quest_items_count(pc, BRUIN_LIZARDMAN_BLOOD) < 10
+          html = "31961-04.html"
         else
-          htmltext = "31961-05.html"
+          html = "31961-05.html"
         end
       elsif qs.memo_state?(2)
-        if player.sponsor == 0
+        if pc.sponsor == 0
           if qs.get_memo_state_ex(1) == 1
-            htmltext = "31961-06a.html"
+            html = "31961-06a.html"
           elsif qs.get_memo_state_ex(1) == 2
-            htmltext = "31961-06b.html"
+            html = "31961-06b.html"
           elsif qs.get_memo_state_ex(1) == 3
-            htmltext = "31961-06c.html"
+            html = "31961-06c.html"
           end
         else
-          c0 = L2World.get_player(player.sponsor)
+          c0 = L2World.get_player(pc.sponsor)
           if c0 && Util.in_range?(1500, npc, c0, true)
-            htmltext = "31961-07.html"
+            html = "31961-07.html"
           else
             if qs.get_memo_state_ex(1) == 1
-              htmltext = "31961-06.html"
+              html = "31961-06.html"
             elsif qs.get_memo_state_ex(1) == 2
-              htmltext = "31961-06d.html"
+              html = "31961-06d.html"
             elsif qs.get_memo_state_ex(1) == 3
-              htmltext = "31961-06e.html"
+              html = "31961-06e.html"
             end
           end
         end
       elsif qs.memo_state?(3)
         qs.memo_state = 4
         qs.set_cond(7, true)
-        htmltext = "31961-15.html"
+        html = "31961-15.html"
       elsif qs.memo_state?(4)
-        if get_quest_items_count(player, PICOT_ARANEIDS_LEG) < 8
-          htmltext = "31961-16.html"
+        if get_quest_items_count(pc, PICOT_ARANEIDS_LEG) < 8
+          html = "31961-16.html"
         else
           if qs.get_memo_state_ex(1) == 1
-            give_items(player, CLAN_OATH_HELM, 1)
-            give_items(player, CLAN_OATH_ARMOR, 1)
-            give_items(player, CLAN_OATH_GAUNTLETS_HEAVY_ARMOR, 1)
-            give_items(player, CLAN_OATH_SABATON_HEAVY_ARMOR, 1)
-            take_items(player, PICOT_ARANEIDS_LEG, -1)
+            give_items(pc, CLAN_OATH_HELM, 1)
+            give_items(pc, CLAN_OATH_ARMOR, 1)
+            give_items(pc, CLAN_OATH_GAUNTLETS_HEAVY_ARMOR, 1)
+            give_items(pc, CLAN_OATH_SABATON_HEAVY_ARMOR, 1)
+            take_items(pc, PICOT_ARANEIDS_LEG, -1)
           elsif qs.get_memo_state_ex(1) == 2
-            give_items(player, CLAN_OATH_HELM, 1)
-            give_items(player, CLAN_OATH_BRIGANDINE, 1)
-            give_items(player, CLAN_OATH_LEATHER_GLOVES_LIGHT_ARMOR, 1)
-            give_items(player, CLAN_OATH_BOOTS_LIGHT_ARMOR, 1)
-            take_items(player, PICOT_ARANEIDS_LEG, -1)
+            give_items(pc, CLAN_OATH_HELM, 1)
+            give_items(pc, CLAN_OATH_BRIGANDINE, 1)
+            give_items(pc, CLAN_OATH_LEATHER_GLOVES_LIGHT_ARMOR, 1)
+            give_items(pc, CLAN_OATH_BOOTS_LIGHT_ARMOR, 1)
+            take_items(pc, PICOT_ARANEIDS_LEG, -1)
           elsif qs.get_memo_state_ex(1) == 3
-            give_items(player, CLAN_OATH_HELM, 1)
-            give_items(player, CLAN_OATH_AKETON, 1)
-            give_items(player, CLAN_OATH_PADDED_GLOVES_ROBE, 1)
-            give_items(player, CLAN_OATH_SANDALS_ROBE, 1)
-            take_items(player, PICOT_ARANEIDS_LEG, -1)
+            give_items(pc, CLAN_OATH_HELM, 1)
+            give_items(pc, CLAN_OATH_AKETON, 1)
+            give_items(pc, CLAN_OATH_PADDED_GLOVES_ROBE, 1)
+            give_items(pc, CLAN_OATH_SANDALS_ROBE, 1)
+            take_items(pc, PICOT_ARANEIDS_LEG, -1)
           end
           qs.exit_quest(false, true)
-          htmltext = "31961-17.html"
+          html = "31961-17.html"
         end
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

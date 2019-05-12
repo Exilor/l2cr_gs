@@ -1,4 +1,4 @@
-class Quests::Q00316_DestroyPlagueCarriers < Quest
+class Scripts::Q00316_DestroyPlagueCarriers < Quest
   # NPC
   private ELLENIA = 30155
   # Items
@@ -28,24 +28,24 @@ class Quests::Q00316_DestroyPlagueCarriers < Quest
     npc.id != VAROOL_FOULCLAW || !qs.has_quest_items?(VAROOL_FOULCLAW_FANG)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "30155-04.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30155-08.html"
       qs.exit_quest(true, true)
-      htmltext = event
+      html = event
     when "30155-09.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -68,32 +68,35 @@ class Quests::Q00316_DestroyPlagueCarriers < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state(player, true)
-    htmltext = get_no_quest_msg(player)
-    return htmltext unless qs
+  def on_talk(npc, pc)
+    unless qs = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     if qs.created?
-      if !player.race.elf?
-        htmltext = "30155-00.htm"
-      elsif player.level < MIN_LEVEL
-        htmltext = "30155-02.htm"
+      if !pc.race.elf?
+        html = "30155-00.htm"
+      elsif pc.level < MIN_LEVEL
+        html = "30155-02.htm"
       else
-        htmltext = "30155-03.htm"
+        html = "30155-03.htm"
       end
     elsif qs.started?
-      if has_at_least_one_quest_item?(player, registered_item_ids)
-        wererats = get_quest_items_count(player, WERERAT_FANG)
-        foulclaws = get_quest_items_count(player, VAROOL_FOULCLAW_FANG)
-        adena = (wererats * 30) + (foulclaws * 10000) + ((wererats + foulclaws) >= 10 ? 5000 : 0)
-        give_adena(player, adena, true)
-        take_items(player, -1, registered_item_ids)
-        htmltext = "30155-07.html"
+      if has_at_least_one_quest_item?(pc, registered_item_ids)
+        wererats = get_quest_items_count(pc, WERERAT_FANG)
+        foulclaws = get_quest_items_count(pc, VAROOL_FOULCLAW_FANG)
+        adena = (wererats * 30) + (foulclaws * 10000)
+        if wererats + foulclaws >= 10
+          adena += 5000
+        end
+        give_adena(pc, adena, true)
+        take_items(pc, -1, registered_item_ids)
+        html = "30155-07.html"
       else
-        htmltext = "30155-05.html"
+        html = "30155-05.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

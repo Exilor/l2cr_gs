@@ -1,4 +1,4 @@
-class Quests::Q00509_AClansFame < Quest
+class Scripts::Q00509_AClansFame < Quest
   # NPC
   private VALDIS = 31331
 

@@ -9,11 +9,13 @@ class Multisell::Entry
 
   def add_product(prod : Ingredient)
     @products << prod
-    @stackable = false unless prod.stackable?
+    unless prod.stackable?
+      @stackable = false
+    end
   end
 
-  def add_ingredient(ingr : Ingredient)
-    @ingredients << ingr
+  def add_ingredient(ing : Ingredient)
+    @ingredients << ing
   end
 
   def tax_amount : Int64

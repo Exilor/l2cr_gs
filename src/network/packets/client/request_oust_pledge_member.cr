@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestOustPledgeMember < GameClientPacket
   @target = ""
 
-  def read_impl
+  private def read_impl
     @target = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless clan = pc.clan?

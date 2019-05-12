@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestRecipeItemMakeSelf < GameClientPacket
   @id = 0
 
-  def read_impl
+  private def read_impl
     @id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless flood_protectors.manufacture.try_perform_action("RecipeMakeSelf")

@@ -1,9 +1,9 @@
 class Packets::Incoming::RequestFriendList < GameClientPacket
-  def read_impl
+  private def read_impl
     # no-op
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     pc.send_packet(SystemMessageId::FRIEND_LIST_HEADER)

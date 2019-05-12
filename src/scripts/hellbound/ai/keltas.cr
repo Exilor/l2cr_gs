@@ -1,4 +1,4 @@
-class NpcAI::Keltas < AbstractNpcAI
+class Scripts::Keltas < AbstractNpcAI
   # NPCs
   private KELTAS = 22341
   private ENFORCER = 22342

@@ -1,4 +1,4 @@
-class Quests::Q00426_QuestForFishingShot < Quest
+class Scripts::Q00426_QuestForFishingShot < Quest
   private record ChanceReward, chance : Int32, reward : Int32
 
   private NPC = {
@@ -296,9 +296,9 @@ class Quests::Q00426_QuestForFishingShot < Quest
     register_quest_items(SWEET_FLUID)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -339,19 +339,19 @@ class Quests::Q00426_QuestForFishingShot < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
       return "01.htm"
     when State::STARTED
-      unless has_quest_items?(player, SWEET_FLUID)
+      unless has_quest_items?(pc, SWEET_FLUID)
         return "04.html"
       end
       return "05.html"
     end
 
-    get_no_quest_msg(player)
+    get_no_quest_msg(pc)
   end
 end

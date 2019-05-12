@@ -1,4 +1,4 @@
-class Quests::Q00108_JumbleTumbleDiamondFuss < Quest
+class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
   # NPCs
   private COLLECTOR_GOUPH = 30523
   private TRADER_REEP = 30516
@@ -47,92 +47,99 @@ class Quests::Q00108_JumbleTumbleDiamondFuss < Quest
     super(108, self.class.simple_name, "Jumble, Tumble, Diamond Fuss")
 
     add_start_npc(COLLECTOR_GOUPH)
-    add_talk_id(COLLECTOR_GOUPH, TRADER_REEP, CARRIER_TOROCCO, MINER_MARON, BLACKSMITH_BRUNON, WAREHOUSE_KEEPER_MURDOC, WAREHOUSE_KEEPER_AIRY)
+    add_talk_id(
+      COLLECTOR_GOUPH, TRADER_REEP, CARRIER_TOROCCO, MINER_MARON,
+      BLACKSMITH_BRUNON, WAREHOUSE_KEEPER_MURDOC, WAREHOUSE_KEEPER_AIRY
+    )
     add_kill_id(GOBLIN_BRIGAND_LEADER, GOBLIN_BRIGAND_LIEUTENANT, BLADE_BAT)
-    register_quest_items(GOUPHS_CONTRACT, REEPS_CONTRACT, ELVEN_WINE, BRUNONS_DICE, BRUNONS_CONTRACT, AQUAMARINE, CHRYSOBERYL, GEM_BOX, COAL_PIECE, BRUNONS_LETTER, BERRY_TART, BAT_DIAGRAM, STAR_DIAMOND)
+    register_quest_items(
+      GOUPHS_CONTRACT, REEPS_CONTRACT, ELVEN_WINE, BRUNONS_DICE,
+      BRUNONS_CONTRACT, AQUAMARINE, CHRYSOBERYL, GEM_BOX, COAL_PIECE,
+      BRUNONS_LETTER, BERRY_TART, BAT_DIAGRAM, STAR_DIAMOND
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "30523-04.htm"
       if st.created?
         st.start_quest
         st.give_items(GOUPHS_CONTRACT, 1)
-        htmltext = event
+        html = event
       end
     when "30555-02.html"
       if st.cond?(2) && st.has_quest_items?(REEPS_CONTRACT)
         st.take_items(REEPS_CONTRACT, -1)
         st.give_items(ELVEN_WINE, 1)
         st.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "30526-02.html"
       if st.cond?(4) && st.has_quest_items?(BRUNONS_DICE)
         st.take_items(BRUNONS_DICE, -1)
         st.give_items(BRUNONS_CONTRACT, 1)
         st.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state(talker, true)
-    htmltext = get_no_quest_msg(talker)
-    return htmltext unless st
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when COLLECTOR_GOUPH
       case st.state
       when State::CREATED
-        if !talker.race.dwarf?
-          htmltext = "30523-01.htm"
-        elsif talker.level < MIN_LVL
-          htmltext = "30523-02.htm"
+        if !pc.race.dwarf?
+          html = "30523-01.htm"
+        elsif pc.level < MIN_LVL
+          html = "30523-02.htm"
         else
-          htmltext = "30523-03.htm"
+          html = "30523-03.htm"
         end
       when State::STARTED
         case st.cond
         when 1
           if st.has_quest_items?(GOUPHS_CONTRACT)
-            htmltext = "30523-05.html"
+            html = "30523-05.html"
           end
         when 2..6
-          if has_at_least_one_quest_item?(talker, REEPS_CONTRACT, ELVEN_WINE, BRUNONS_DICE, BRUNONS_CONTRACT)
-            htmltext = "30523-06.html"
+          if has_at_least_one_quest_item?(pc, REEPS_CONTRACT, ELVEN_WINE, BRUNONS_DICE, BRUNONS_CONTRACT)
+            html = "30523-06.html"
           end
         when 7
           if st.has_quest_items?(GEM_BOX)
             st.take_items(GEM_BOX, -1)
             st.give_items(COAL_PIECE, 1)
             st.set_cond(8, true)
-            htmltext = "30523-07.html"
+            html = "30523-07.html"
           end
         when 8..11
-          if has_at_least_one_quest_item?(talker, COAL_PIECE, BRUNONS_LETTER, BERRY_TART, BAT_DIAGRAM)
-            htmltext = "30523-08.html"
+          if has_at_least_one_quest_item?(pc, COAL_PIECE, BRUNONS_LETTER, BERRY_TART, BAT_DIAGRAM)
+            html = "30523-08.html"
           end
         when 12
           if st.has_quest_items?(STAR_DIAMOND)
-            Q00281_HeadForTheHills.give_newbie_reward(talker)
+            Q00281_HeadForTheHills.give_newbie_reward(pc)
             st.add_exp_and_sp(34565, 2962)
             st.give_adena(14666, true)
             REWARDS.each { |reward| st.give_items(reward) }
             st.give_items(SILVERSMITH_HAMMER, 1)
             st.exit_quest(false, true)
-            talker.send_packet(SocialAction.new(talker.l2id, 3))
-            htmltext = "30523-09.html"
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
+            html = "30523-09.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(talker)
+        html = get_already_completed_msg(pc)
       end
     when TRADER_REEP
       case st.cond
@@ -141,34 +148,34 @@ class Quests::Q00108_JumbleTumbleDiamondFuss < Quest
           st.take_items(GOUPHS_CONTRACT, -1)
           st.give_items(REEPS_CONTRACT, 1)
           st.set_cond(2, true)
-          htmltext = "30516-01.html"
+          html = "30516-01.html"
         end
       when 2
         if st.has_quest_items?(REEPS_CONTRACT)
-          htmltext = "30516-02.html"
+          html = "30516-02.html"
         end
       else
         if st.cond > 2
-          htmltext = "30516-02.html"
+          html = "30516-02.html"
         end
       end
     when CARRIER_TOROCCO
       case st.cond
       when 2
         if st.has_quest_items?(REEPS_CONTRACT)
-          htmltext = "30555-01.html"
+          html = "30555-01.html"
         end
       when 3
         if st.has_quest_items?(ELVEN_WINE)
-          htmltext = "30555-03.html"
+          html = "30555-03.html"
         end
       when 7
         if st.has_quest_items?(GEM_BOX)
-          htmltext = "30555-04.html"
+          html = "30555-04.html"
         end
       else
         if st.started?
-          htmltext = "30555-05.html"
+          html = "30555-05.html"
         end
       end
     when MINER_MARON
@@ -178,56 +185,56 @@ class Quests::Q00108_JumbleTumbleDiamondFuss < Quest
           st.take_items(ELVEN_WINE, -1)
           st.give_items(BRUNONS_DICE, 1)
           st.set_cond(4, true)
-          htmltext = "30529-01.html"
+          html = "30529-01.html"
         end
       when 4
         if st.has_quest_items?(BRUNONS_DICE)
-          htmltext = "30529-02.html"
+          html = "30529-02.html"
         end
       else
         if st.cond > 4
-          htmltext = "30529-03.html"
+          html = "30529-03.html"
         end
       end
     when BLACKSMITH_BRUNON
       case st.cond
       when 4
         if st.has_quest_items?(BRUNONS_DICE)
-          htmltext = "30526-01.html"
+          html = "30526-01.html"
         end
       when 5
         if st.has_quest_items?(BRUNONS_CONTRACT)
-          htmltext = "30526-03.html"
+          html = "30526-03.html"
         end
       when 6
         if st.has_quest_items?(BRUNONS_CONTRACT)
           if st.get_quest_items_count(AQUAMARINE) >= MAX_GEM_COUNT
             if st.get_quest_items_count(CHRYSOBERYL) >= MAX_GEM_COUNT
-              take_items(talker, -1, [BRUNONS_CONTRACT, AQUAMARINE, CHRYSOBERYL])
+              take_items(pc, -1, {BRUNONS_CONTRACT, AQUAMARINE, CHRYSOBERYL})
               st.give_items(GEM_BOX, 1)
               st.set_cond(7, true)
-              htmltext = "30526-04.html"
+              html = "30526-04.html"
             end
           end
         end
       when 7
         if st.has_quest_items?(GEM_BOX)
-          htmltext = "30526-05.html"
+          html = "30526-05.html"
         end
       when 8
         if st.has_quest_items?(COAL_PIECE)
           st.take_items(COAL_PIECE, -1)
           st.give_items(BRUNONS_LETTER, 1)
           st.set_cond(9, true)
-          htmltext = "30526-06.html"
+          html = "30526-06.html"
         end
       when 9
         if st.has_quest_items?(BRUNONS_LETTER)
-          htmltext = "30526-07.html"
+          html = "30526-07.html"
         end
       when 10, 11, 12
-        if has_at_least_one_quest_item?(talker, BERRY_TART, BAT_DIAGRAM, STAR_DIAMOND)
-          htmltext = "30526-08.html"
+        if has_at_least_one_quest_item?(pc, BERRY_TART, BAT_DIAGRAM, STAR_DIAMOND)
+          html = "30526-08.html"
         end
       end
     when WAREHOUSE_KEEPER_MURDOC
@@ -237,14 +244,14 @@ class Quests::Q00108_JumbleTumbleDiamondFuss < Quest
           st.take_items(BRUNONS_LETTER, -1)
           st.give_items(BERRY_TART, 1)
           st.set_cond(10, true)
-          htmltext = "30521-01.html"
+          html = "30521-01.html"
         end
       when 10
         if st.has_quest_items?(BERRY_TART)
-          htmltext = "30521-02.html"
+          html = "30521-02.html"
         end
       when 11, 12
-        htmltext = "30521-03.html"
+        html = "30521-03.html"
       end
     when WAREHOUSE_KEEPER_AIRY
       case st.cond
@@ -253,24 +260,24 @@ class Quests::Q00108_JumbleTumbleDiamondFuss < Quest
           st.take_items(BERRY_TART, -1)
           st.give_items(BAT_DIAGRAM, 1)
           st.set_cond(11, true)
-          htmltext = "30522-01.html"
+          html = "30522-01.html"
         end
       when 11
         if st.has_quest_items?(BAT_DIAGRAM)
-          htmltext = "30522-02.html"
+          html = "30522-02.html"
         end
       when 12
         if st.has_quest_items?(STAR_DIAMOND)
-          htmltext = "30522-03.html"
+          html = "30522-03.html"
         end
       else
         if st.started?
-          htmltext = "30522-04.html"
+          html = "30522-04.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

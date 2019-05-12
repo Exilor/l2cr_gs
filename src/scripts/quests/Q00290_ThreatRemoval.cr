@@ -1,4 +1,4 @@
-class Quests::Q00290_ThreatRemoval < Quest
+class Scripts::Q00290_ThreatRemoval < Quest
   # NPC
   private PINAPS = 30201
   # Items

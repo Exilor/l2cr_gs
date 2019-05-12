@@ -1,11 +1,11 @@
 class Packets::Incoming::EndScenePlayer < GameClientPacket
   @movie_id = 0
 
-  def read_impl
+  private def read_impl
     @movie_id = d
   end
 
-  def run_impl
+  private def run_impl
     return if @movie_id == 0
     return unless pc = active_char
 

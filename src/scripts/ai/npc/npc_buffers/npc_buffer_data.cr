@@ -1,4 +1,4 @@
-struct NpcAI::NpcBufferData
+struct NpcBufferData
   getter skills = [] of NpcBufferSkillData
   getter_initializer id: Int32
 

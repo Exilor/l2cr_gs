@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestSentPostList < GameClientPacket
   no_action_request
 
-  def read_impl
+  private def read_impl
     # no-op
   end
 
-  def run_impl
+  private def run_impl
     return unless Config.allow_mail
     return unless pc = active_char
 

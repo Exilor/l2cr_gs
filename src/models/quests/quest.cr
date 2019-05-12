@@ -1184,7 +1184,38 @@ class Quest < AbstractScript
     lucky_player if lucky_player && check_distance_to_target(lucky_player, npc)
   end
 
-  def get_random_party_member_state(pc, condition, player_chance, target)
+  def get_random_party_member_state(pc : L2PcInstance?, state : State) : L2PcInstance?
+    get_random_party_member(pc, state.to_i)
+  end
+
+  def get_random_party_member_state(pc : L2PcInstance?, state : Int) : L2PcInstance?
+    return unless pc
+
+    party = pc.party?
+    if party.nil? || party.members.empty?
+      temp = pc.get_quest_state(name)
+      if temp && temp.state == state
+        return pc
+      end
+
+      return
+    end
+
+    candidates = [] of L2PcInstance
+
+    target = pc.target || pc
+
+    party.members.each do |m|
+      temp = m.get_quest_state(name)
+      if temp && temp.state == state && m.inside_radius?(target, 1500, true, false)
+        candidates < m
+      end
+    end
+
+    candidates.sample?
+  end
+
+  def get_random_party_member_state(pc : L2PcInstance?, condition : Int, player_chance : Int, target : L2Npc) : QuestState?
     return unless pc
     return if player_chance < 1
 

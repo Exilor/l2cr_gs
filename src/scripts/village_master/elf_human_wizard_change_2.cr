@@ -1,4 +1,4 @@
-class NpcAI::ElfHumanWizardChange2 < AbstractNpcAI
+class Scripts::ElfHumanWizardChange2 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30115, # Jurek

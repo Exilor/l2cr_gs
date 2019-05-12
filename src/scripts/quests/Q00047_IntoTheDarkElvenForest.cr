@@ -1,6 +1,6 @@
 require "./abstract_get_scroll_to_hometown_quest"
 
-class Quests::Q00047_IntoTheDarkElvenForest < Quests::AbstractGetScrollToHometownQuest
+class Scripts::Q00047_IntoTheDarkElvenForest < AbstractGetScrollToHometownQuest
   def initialize
     super(47, self.class.simple_name, "Into the Dark Elven Forest")
   end

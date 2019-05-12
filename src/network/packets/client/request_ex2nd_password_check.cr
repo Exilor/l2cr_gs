@@ -1,9 +1,9 @@
 class Packets::Incoming::RequestEx2ndPasswordCheck < GameClientPacket
-  def read_impl
+  private def read_impl
     # no-op
   end
 
-  def run_impl
+  private def run_impl
     warn "Commented out."
     # if !SecondaryAuthData.enabled? || client.secondary_auth.authed?
     #   send_packet(Ex2ndPasswordCheck.new(Ex2ndPasswordCheck::PASSWORD_OK))

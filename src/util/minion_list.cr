@@ -7,7 +7,7 @@ class MinionList
 
   initializer master: L2MonsterInstance
 
-  def spawned_minions
+  def spawned_minions : Array(L2MonsterInstance)
     @minion_references
   end
 
@@ -58,7 +58,9 @@ class MinionList
   end
 
   def on_master_die(force : Bool)
-    delete_spawned_minions if @master.raid? || force
+    if @master.raid? || force
+      delete_spawned_minions
+    end
   end
 
   def on_minion_die(minion : L2MonsterInstance, respawn_time : Int32)
@@ -68,7 +70,6 @@ class MinionList
 
     time = respawn_time < 0 ? @master.raid? ? Config.raid_minion_respawn_timer.to_i : 0 : respawn_time
     if time > 0 && !@master.looks_dead?
-      # MinionRespawnTask.new(minion).start time
       task = ->{ minion_respawn_task(minion) }
       ThreadPoolManager.schedule_general(task, time)
     end
@@ -184,7 +185,7 @@ class MinionList
     minion
   end
 
-  private def count_spawned_minions_by_id(minion_id : Int)
+  private def count_spawned_minions_by_id(minion_id : Int) : Int32
     @minion_references.count { |npc| npc.id == minion_id }
   end
 

@@ -1,4 +1,4 @@
-class Quests::Q00456_DontKnowDontCare < Quest
+class Scripts::Q00456_DontKnowDontCare < Quest
   # NPCs
   private SEPARATED_SOUL = {
     32864, 32865, 32866, 32867, 32868, 32869, 32870, 32891
@@ -225,7 +225,7 @@ class Quests::Q00456_DontKnowDontCare < Quest
     super
   end
 
-  private def reward_player(player, npc)
+  private def reward_player(pc, npc)
     chance = rand(10000)
     count = 1
 
@@ -248,11 +248,11 @@ class Quests::Q00456_DontKnowDontCare < Quest
       count = 3
     end
 
-    give_items(player, reward, count)
+    give_items(pc, reward, count)
     item = ItemTable[reward]
-    packet = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::S1_RECEIVED_A_S2_ITEM_AS_A_REWARD_FROM_THE_SEPARATED_SOUL)
-    packet.add_string_parameter(player.name)
-    packet.add_string_parameter(item.name)
-    npc.broadcast_packet(packet)
+    say = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::S1_RECEIVED_A_S2_ITEM_AS_A_REWARD_FROM_THE_SEPARATED_SOUL)
+    say.add_string_parameter(pc.name)
+    say.add_string_parameter(item.name)
+    npc.broadcast_packet(say)
   end
 end

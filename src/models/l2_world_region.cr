@@ -190,7 +190,7 @@ class L2WorldRegion
     to_s(io)
   end
 
-  struct NeighborsTask
+  private struct NeighborsTask
     include Runnable
 
     initializer region: L2WorldRegion, activate: Bool

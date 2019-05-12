@@ -1,4 +1,4 @@
-class Quests::Q00625_TheFinestIngredientsPart2 < Quest
+class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
   # NPCs
   private JEREMY = 31521
   private YETIS_TABLE = 31542
@@ -31,9 +31,9 @@ class Quests::Q00625_TheFinestIngredientsPart2 < Quest
     register_quest_items(FOOD_FOR_BUMBALUMP.id, SPECIAL_YETI_MEAT.id)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -41,47 +41,47 @@ class Quests::Q00625_TheFinestIngredientsPart2 < Quest
     when "31521-04.htm"
       if qs.created?
         qs.start_quest
-        take_item(player, SOY_SOURCE_JAR)
-        give_items(player, FOOD_FOR_BUMBALUMP)
-        htmltext = event
+        take_item(pc, SOY_SOURCE_JAR)
+        give_items(pc, FOOD_FOR_BUMBALUMP)
+        html = event
       end
     when "31521-08.html"
       if qs.cond?(3)
-        if has_item?(player, SPECIAL_YETI_MEAT)
+        if has_item?(pc, SPECIAL_YETI_MEAT)
           random = rand(1000)
           if random < 167
-            reward_items(player, GREATER_DYE_OF_STR_1)
+            reward_items(pc, GREATER_DYE_OF_STR_1)
           elsif random < 334
-            reward_items(player, GREATER_DYE_OF_STR_2)
+            reward_items(pc, GREATER_DYE_OF_STR_2)
           elsif random < 501
-            reward_items(player, GREATER_DYE_OF_CON_1)
+            reward_items(pc, GREATER_DYE_OF_CON_1)
           elsif random < 668
-            reward_items(player, GREATER_DYE_OF_CON_2)
+            reward_items(pc, GREATER_DYE_OF_CON_2)
           elsif random < 835
-            reward_items(player, GREATER_DYE_OF_DEX_1)
+            reward_items(pc, GREATER_DYE_OF_DEX_1)
           elsif random < 1000
-            reward_items(player, GREATER_DYE_OF_DEX_2)
+            reward_items(pc, GREATER_DYE_OF_DEX_2)
           end
           qs.exit_quest(false, true)
-          htmltext = event
+          html = event
         else
-          htmltext = "31521-09.html"
+          html = "31521-09.html"
         end
       end
     when "31542-02.html"
       if qs.cond?(1)
-        if has_item?(player, FOOD_FOR_BUMBALUMP)
+        if has_item?(pc, FOOD_FOR_BUMBALUMP)
           if !bumbalump_spawned?
             qs.set_cond(2, true)
-            take_item(player, FOOD_FOR_BUMBALUMP)
+            take_item(pc, FOOD_FOR_BUMBALUMP)
             umpaloopa = add_spawn(ICICLE_EMPEROR_BUMBALUMP, ICICLE_EMPEROR_BUMBALUMP_LOC)
-            umpaloopa.summoner = player
-            htmltext = event
+            umpaloopa.summoner = pc
+            html = event
           else
-            htmltext = "31542-03.html"
+            html = "31542-03.html"
           end
         else
-          htmltext = "31542-04.html"
+          html = "31542-04.html"
         end
       end
     when "NPC_TALK"
@@ -91,7 +91,7 @@ class Quests::Q00625_TheFinestIngredientsPart2 < Quest
       end
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, talker)
@@ -101,42 +101,42 @@ class Quests::Q00625_TheFinestIngredientsPart2 < Quest
     when JEREMY
       if qs.created?
         if talker.level >= MIN_LVL
-          htmltext = has_item?(talker, SOY_SOURCE_JAR) ? "31521-01.htm" : "31521-02.htm"
+          html = has_item?(talker, SOY_SOURCE_JAR) ? "31521-01.htm" : "31521-02.htm"
         else
-          htmltext = "31521-03.htm"
+          html = "31521-03.htm"
         end
       elsif qs.started?
         case qs.cond
         when 1
-          htmltext = "31521-05.html"
+          html = "31521-05.html"
         when 2
-          htmltext = "31521-06.html"
+          html = "31521-06.html"
         when 3
-          htmltext = "31521-07.html"
+          html = "31521-07.html"
         end
       elsif qs.completed?
-        htmltext = get_already_completed_msg(talker)
+        html = get_already_completed_msg(talker)
       end
     when YETIS_TABLE
       case qs.cond
       when 1
         if has_item?(talker, FOOD_FOR_BUMBALUMP)
-          htmltext = "31542-01.html"
+          html = "31542-01.html"
         end
       when 2
         if !bumbalump_spawned?
           umpaloopa = add_spawn(ICICLE_EMPEROR_BUMBALUMP, ICICLE_EMPEROR_BUMBALUMP_LOC)
           umpaloopa.summoner = talker
-          htmltext = "31542-02.html"
+          html = "31542-02.html"
         else
-          htmltext = "31542-03.html"
+          html = "31542-03.html"
         end
       when 3
-        htmltext = "31542-05.html"
+        html = "31542-05.html"
       end
     end
 
-    htmltext || get_no_quest_msg(talker)
+    html || get_no_quest_msg(talker)
   end
 
   def on_spawn(npc)

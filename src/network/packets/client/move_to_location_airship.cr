@@ -7,13 +7,13 @@ class Packets::Incoming::MoveToLocationAirship < GameClientPacket
   @param1 = 0
   @param2 = 0
 
-  def read_impl
+  private def read_impl
     @command = d
     @param1 = d
     @param2 = buffer.remaining > 3 ? d : 0
   end
 
-  def run_impl
+  private def run_impl
     # warn "Commented out."
     return unless pc = active_char
     return unless ship = pc.airship

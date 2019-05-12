@@ -48,11 +48,11 @@ class L2CommandChannel < AbstractPlayerGroup
     end
   end
 
-  def size
+  def size : Int32
     @parties.sum &.size
   end
 
-  def members
+  def members : Array(L2PcInstance)
     members = Array(L2PcInstance).new(size)
     parties.each { |party| members.concat(party.members) }
     members

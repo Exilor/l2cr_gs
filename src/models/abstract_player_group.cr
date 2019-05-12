@@ -9,19 +9,19 @@ abstract class AbstractPlayerGroup
 
   delegate each, to: members
 
-  def size
+  def size : Int32
     members.size
   end
 
-  def members_l2id
+  def members_l2id : Array(Int32)
     map &.l2id
   end
 
-  def leader_l2id
+  def leader_l2id : Int32
     leader.l2id
   end
 
-  def leader?(pc)
+  def leader?(pc : L2PcInstance)
     leader_l2id == pc.l2id
   end
 

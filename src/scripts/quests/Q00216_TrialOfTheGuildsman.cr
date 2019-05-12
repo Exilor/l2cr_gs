@@ -1,4 +1,4 @@
-class Quests::Q00216_TrialOfTheGuildsman < Quest
+class Scripts::Q00216_TrialOfTheGuildsman < Quest
   private WAREHOUSE_KEEPER_VALKON = 30103
   private WAREHOUSE_KEEPER_NORMAN = 30210
   private BLACKSMITH_ALTRAN = 30283
@@ -55,105 +55,125 @@ class Quests::Q00216_TrialOfTheGuildsman < Quest
     super(216, self.class.simple_name, "Trial Of The Guildsman")
 
     add_start_npc(WAREHOUSE_KEEPER_VALKON)
-    add_talk_id(WAREHOUSE_KEEPER_VALKON, WAREHOUSE_KEEPER_NORMAN, BLACKSMITH_ALTRAN, BLACKSMITH_PINTER, BLACKSMITH_DUNING)
-    add_kill_id(ANT, ANT_CAPTAIN, ANT_OVERSEER, GRANITE_GOLEM, MANDRAGORA_SPROUT1, MANDRAGORA_SAPLONG, MANDRAGORA_BLOSSOM, SILENOS, STRAIN, GHOUL, DEAD_SEEKER, MANDRAGORA_SPROUT2, BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, BREKA_ORC_WARRIOR)
-    register_quest_items(RECIPE_JOURNEYMAN_RING, RECIPE_AMBER_BEAD, VALKONS_RECOMMENDATION, MANDRAGORA_BERRY, ALLTRANS_INSTRUCTIONS, ALLTRANS_1ST_RECOMMENDATION, ALLTRANS_2ND_RECOMMENDATION, NORMANS_INSTRUCTIONS, NORMANS_RECEIPT, DUNINGS_INSTRUCTIONS, DUNINGS_KEY, NORMANS_LIST, GRAY_BONE_POWDER, GRANITE_WHETSTONE, RED_PIGMENT, BRAIDED_YARN, JOURNEYMAN_GEM, PINTERS_INSTRUCTIONS, AMBER_BEAD, AMBER_LUMP, JOURNEYMAN_DECO_BEADS, JOURNEYMAN_RING)
+    add_talk_id(
+      WAREHOUSE_KEEPER_VALKON, WAREHOUSE_KEEPER_NORMAN, BLACKSMITH_ALTRAN,
+      BLACKSMITH_PINTER, BLACKSMITH_DUNING
+    )
+    add_kill_id(
+      ANT, ANT_CAPTAIN, ANT_OVERSEER, GRANITE_GOLEM, MANDRAGORA_SPROUT1,
+      MANDRAGORA_SAPLONG, MANDRAGORA_BLOSSOM, SILENOS, STRAIN, GHOUL,
+      DEAD_SEEKER, MANDRAGORA_SPROUT2, BREKA_ORC, BREKA_ORC_ARCHER,
+      BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, BREKA_ORC_WARRIOR
+    )
+    register_quest_items(
+      RECIPE_JOURNEYMAN_RING, RECIPE_AMBER_BEAD, VALKONS_RECOMMENDATION,
+      MANDRAGORA_BERRY, ALLTRANS_INSTRUCTIONS, ALLTRANS_1ST_RECOMMENDATION,
+      ALLTRANS_2ND_RECOMMENDATION, NORMANS_INSTRUCTIONS, NORMANS_RECEIPT,
+      DUNINGS_INSTRUCTIONS, DUNINGS_KEY, NORMANS_LIST, GRAY_BONE_POWDER,
+      GRANITE_WHETSTONE, RED_PIGMENT, BRAIDED_YARN, JOURNEYMAN_GEM,
+      PINTERS_INSTRUCTIONS, AMBER_BEAD, AMBER_LUMP, JOURNEYMAN_DECO_BEADS,
+      JOURNEYMAN_RING
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if get_quest_items_count(player, Inventory::ADENA_ID) >= 2000
+      if get_quest_items_count(pc, Inventory::ADENA_ID) >= 2000
         qs.start_quest
-        take_items(player, Inventory::ADENA_ID, 2000)
-        if !has_quest_items?(player, VALKONS_RECOMMENDATION)
-          give_items(player, VALKONS_RECOMMENDATION, 1)
+        take_items(pc, Inventory::ADENA_ID, 2000)
+        if !has_quest_items?(pc, VALKONS_RECOMMENDATION)
+          give_items(pc, VALKONS_RECOMMENDATION, 1)
         end
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 85)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30103-06d.htm"
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 85)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30103-06d.htm"
         else
-          htmltext = "30103-06.htm"
+          html = "30103-06.htm"
         end
       else
-        htmltext = "30103-05b.htm"
+        html = "30103-05b.htm"
       end
     when "30103-04.htm", "30103-05.htm", "30103-05a.html", "30103-06a.html",
          "30103-06b.html", "30103-06c.html", "30103-07a.html",
          "30103-07b.html", "30103-07c.html", "30210-02.html", "30210-03.html",
          "30210-08.html", "30210-09.html", "30210-11a.html", "30283-03a.html",
          "30283-03b.html", "30283-04.html", "30298-03.html", "30298-05a.html"
-      htmltext = event
+      html = event
     when "30103-09a.html"
-      if has_quest_items?(player, ALLTRANS_INSTRUCTIONS) && get_quest_items_count(player, JOURNEYMAN_RING) >= 7
-        give_adena(player, 187606, true)
-        give_items(player, MARK_OF_GUILDSMAN, 1)
-        add_exp_and_sp(player, 1029478, 66768)
-        qs.exit_quest(false, true)
-        player.send_packet(SocialAction.new(player.l2id, 3))
-        htmltext = event
+      if has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
+        if get_quest_items_count(pc, JOURNEYMAN_RING) >= 7
+          give_adena(pc, 187606, true)
+          give_items(pc, MARK_OF_GUILDSMAN, 1)
+          add_exp_and_sp(pc, 1029478, 66768)
+          qs.exit_quest(false, true)
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
+          html = event
+        end
       end
     when "30103-09b.html"
-      if has_quest_items?(player, ALLTRANS_INSTRUCTIONS) && get_quest_items_count(player, JOURNEYMAN_RING) >= 7
-        give_adena(player, 93803, true)
-        give_items(player, MARK_OF_GUILDSMAN, 1)
-        add_exp_and_sp(player, 514739, 33384)
-        qs.exit_quest(false, true)
-        player.send_packet(SocialAction.new(player.l2id, 3))
-        htmltext = event
+      if has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
+        if get_quest_items_count(pc, JOURNEYMAN_RING) >= 7
+          give_adena(pc, 93803, true)
+          give_items(pc, MARK_OF_GUILDSMAN, 1)
+          add_exp_and_sp(pc, 514739, 33384)
+          qs.exit_quest(false, true)
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
+          html = event
+        end
       end
     when "30210-04.html"
-      if has_quest_items?(player, ALLTRANS_1ST_RECOMMENDATION)
-        take_items(player, ALLTRANS_1ST_RECOMMENDATION, 1)
-        give_items(player, NORMANS_INSTRUCTIONS, 1)
-        give_items(player, NORMANS_RECEIPT, 1)
-        htmltext = event
+      if has_quest_items?(pc, ALLTRANS_1ST_RECOMMENDATION)
+        take_items(pc, ALLTRANS_1ST_RECOMMENDATION, 1)
+        give_items(pc, NORMANS_INSTRUCTIONS, 1)
+        give_items(pc, NORMANS_RECEIPT, 1)
+        html = event
       end
     when "30210-10.html"
-      if has_quest_items?(player, NORMANS_INSTRUCTIONS)
-        take_items(player, NORMANS_INSTRUCTIONS, 1)
-        take_items(player, DUNINGS_KEY, -1)
-        give_items(player, NORMANS_LIST, 1)
-        htmltext = event
+      if has_quest_items?(pc, NORMANS_INSTRUCTIONS)
+        take_items(pc, NORMANS_INSTRUCTIONS, 1)
+        take_items(pc, DUNINGS_KEY, -1)
+        give_items(pc, NORMANS_LIST, 1)
+        html = event
       end
     when "30283-03.html"
-      if has_quest_items?(player, VALKONS_RECOMMENDATION, MANDRAGORA_BERRY)
-        give_items(player, RECIPE_JOURNEYMAN_RING, 1)
-        take_items(player, VALKONS_RECOMMENDATION, 1)
-        take_items(player, MANDRAGORA_BERRY, 1)
-        give_items(player, ALLTRANS_INSTRUCTIONS, 1)
-        give_items(player, ALLTRANS_1ST_RECOMMENDATION, 1)
-        give_items(player, ALLTRANS_2ND_RECOMMENDATION, 1)
+      if has_quest_items?(pc, VALKONS_RECOMMENDATION, MANDRAGORA_BERRY)
+        give_items(pc, RECIPE_JOURNEYMAN_RING, 1)
+        take_items(pc, VALKONS_RECOMMENDATION, 1)
+        take_items(pc, MANDRAGORA_BERRY, 1)
+        give_items(pc, ALLTRANS_INSTRUCTIONS, 1)
+        give_items(pc, ALLTRANS_1ST_RECOMMENDATION, 1)
+        give_items(pc, ALLTRANS_2ND_RECOMMENDATION, 1)
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "30298-04.html"
-      if player.class_id.scavenger?
-        if has_quest_items?(player, ALLTRANS_2ND_RECOMMENDATION)
-          take_items(player, ALLTRANS_2ND_RECOMMENDATION, 1)
-          give_items(player, PINTERS_INSTRUCTIONS, 1)
-          htmltext = event
+      if pc.class_id.scavenger?
+        if has_quest_items?(pc, ALLTRANS_2ND_RECOMMENDATION)
+          take_items(pc, ALLTRANS_2ND_RECOMMENDATION, 1)
+          give_items(pc, PINTERS_INSTRUCTIONS, 1)
+          html = event
         end
-      elsif has_quest_items?(player, ALLTRANS_2ND_RECOMMENDATION)
-        give_items(player, RECIPE_AMBER_BEAD, 1)
-        take_items(player, ALLTRANS_2ND_RECOMMENDATION, 1)
-        give_items(player, PINTERS_INSTRUCTIONS, 1)
-        htmltext = "30298-05.html"
+      elsif has_quest_items?(pc, ALLTRANS_2ND_RECOMMENDATION)
+        give_items(pc, RECIPE_AMBER_BEAD, 1)
+        take_items(pc, ALLTRANS_2ND_RECOMMENDATION, 1)
+        give_items(pc, PINTERS_INSTRUCTIONS, 1)
+        html = "30298-05.html"
       end
     when "30688-02.html"
-      if has_quest_items?(player, NORMANS_RECEIPT)
-        take_items(player, NORMANS_RECEIPT, 1)
-        give_items(player, DUNINGS_INSTRUCTIONS, 1)
-        htmltext = event
+      if has_quest_items?(pc, NORMANS_RECEIPT)
+        take_items(pc, NORMANS_RECEIPT, 1)
+        give_items(pc, DUNINGS_INSTRUCTIONS, 1)
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -187,12 +207,15 @@ class Quests::Q00216_TrialOfTheGuildsman < Quest
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
-    when MANDRAGORA_SPROUT1, MANDRAGORA_SAPLONG, MANDRAGORA_BLOSSOM, MANDRAGORA_SPROUT2
+    when MANDRAGORA_SPROUT1, MANDRAGORA_SAPLONG, MANDRAGORA_BLOSSOM,
+         MANDRAGORA_SPROUT2
       qs = get_quest_state(killer, false)
       if qs && qs.started? && Util.in_range?(1500, npc, killer, true)
-        if has_quest_items?(killer, VALKONS_RECOMMENDATION) && !has_quest_items?(killer, MANDRAGORA_BERRY)
-          give_items(killer, MANDRAGORA_BERRY, 1)
-          qs.set_cond(4, true)
+        if has_quest_items?(killer, VALKONS_RECOMMENDATION)
+          unless has_quest_items?(killer, MANDRAGORA_BERRY)
+            give_items(killer, MANDRAGORA_BERRY, 1)
+            qs.set_cond(4, true)
+          end
         end
       end
     when SILENOS
@@ -222,7 +245,8 @@ class Quests::Q00216_TrialOfTheGuildsman < Quest
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
-    when BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, BREKA_ORC_WARRIOR
+    when BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD,
+         BREKA_ORC_WARRIOR
       if qs = get_random_party_member_state(killer, -1, 2, npc)
         if get_quest_items_count(qs.player, DUNINGS_KEY) >= 29
           give_items(qs.player, DUNINGS_KEY, 1)
@@ -238,138 +262,146 @@ class Quests::Q00216_TrialOfTheGuildsman < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created?
       if npc.id == WAREHOUSE_KEEPER_VALKON
-        if player.class_id.artisan? || player.class_id.scavenger?
-          if player.level < MIN_LVL
-            htmltext = "30103-02.html"
+        if pc.class_id.artisan? || pc.class_id.scavenger?
+          if pc.level < MIN_LVL
+            html = "30103-02.html"
           else
-            htmltext = "30103-03.htm"
+            html = "30103-03.htm"
         end
         else
-          htmltext = "30103-01.html"
+          html = "30103-01.html"
         end
       end
     elsif qs.started?
       case npc.id
       when WAREHOUSE_KEEPER_VALKON
-        if has_quest_items?(player, VALKONS_RECOMMENDATION)
+        if has_quest_items?(pc, VALKONS_RECOMMENDATION)
           qs.set_cond(3, true)
-          htmltext = "30103-07.html"
-        elsif has_quest_items?(player, ALLTRANS_INSTRUCTIONS)
-          if get_quest_items_count(player, JOURNEYMAN_RING) < 7
-            htmltext = "30103-08.html"
+          html = "30103-07.html"
+        elsif has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
+          if get_quest_items_count(pc, JOURNEYMAN_RING) < 7
+            html = "30103-08.html"
           else
-            htmltext = "30103-09.html"
+            html = "30103-09.html"
           end
         end
       when WAREHOUSE_KEEPER_NORMAN
-        if has_quest_items?(player, ALLTRANS_INSTRUCTIONS)
-          if has_quest_items?(player, ALLTRANS_1ST_RECOMMENDATION)
-            htmltext = "30210-01.html"
-          elsif has_quest_items?(player, NORMANS_INSTRUCTIONS, NORMANS_RECEIPT)
-            htmltext = "30210-05.html"
-          elsif has_quest_items?(player, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS)
-            htmltext = "30210-06.html"
-          elsif has_quest_items?(player, NORMANS_INSTRUCTIONS) && get_quest_items_count(player, DUNINGS_KEY) >= 30
-            htmltext = "30210-07.html"
-          elsif has_quest_items?(player, NORMANS_LIST)
-            if get_quest_items_count(player, GRAY_BONE_POWDER) >= 70 && get_quest_items_count(player, GRANITE_WHETSTONE) >= 70 && get_quest_items_count(player, RED_PIGMENT) >= 70 && get_quest_items_count(player, BRAIDED_YARN) >= 70
-              take_items(player, NORMANS_LIST, 1)
-              take_items(player, GRAY_BONE_POWDER, -1)
-              take_items(player, GRANITE_WHETSTONE, -1)
-              take_items(player, RED_PIGMENT, -1)
-              take_items(player, BRAIDED_YARN, -1)
-              give_items(player, JOURNEYMAN_GEM, 7)
-              if get_quest_items_count(player, JOURNEYMAN_DECO_BEADS) >= 7
+        if has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
+          if has_quest_items?(pc, ALLTRANS_1ST_RECOMMENDATION)
+            html = "30210-01.html"
+          elsif has_quest_items?(pc, NORMANS_INSTRUCTIONS, NORMANS_RECEIPT)
+            html = "30210-05.html"
+          elsif has_quest_items?(pc, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS)
+            html = "30210-06.html"
+          elsif has_quest_items?(pc, NORMANS_INSTRUCTIONS) && get_quest_items_count(pc, DUNINGS_KEY) >= 30
+            html = "30210-07.html"
+          elsif has_quest_items?(pc, NORMANS_LIST)
+            if get_quest_items_count(pc, GRAY_BONE_POWDER) >= 70 && get_quest_items_count(pc, GRANITE_WHETSTONE) >= 70 && get_quest_items_count(pc, RED_PIGMENT) >= 70 && get_quest_items_count(pc, BRAIDED_YARN) >= 70
+              take_items(pc, NORMANS_LIST, 1)
+              take_items(pc, GRAY_BONE_POWDER, -1)
+              take_items(pc, GRANITE_WHETSTONE, -1)
+              take_items(pc, RED_PIGMENT, -1)
+              take_items(pc, BRAIDED_YARN, -1)
+              give_items(pc, JOURNEYMAN_GEM, 7)
+              if get_quest_items_count(pc, JOURNEYMAN_DECO_BEADS) >= 7
                 qs.set_cond(6, true)
               end
-              htmltext = "30210-12.html"
+              html = "30210-12.html"
             else
-              htmltext = "30210-11.html"
+              html = "30210-11.html"
             end
-          elsif !has_at_least_one_quest_item?(player, NORMANS_INSTRUCTIONS, NORMANS_LIST) && has_at_least_one_quest_item?(player, JOURNEYMAN_GEM, JOURNEYMAN_RING)
-            htmltext = "30210-13.html"
+          elsif !has_at_least_one_quest_item?(pc, NORMANS_INSTRUCTIONS, NORMANS_LIST)
+            if has_at_least_one_quest_item?(pc, JOURNEYMAN_GEM, JOURNEYMAN_RING)
+              html = "30210-13.html"
+            end
           end
         end
       when BLACKSMITH_ALTRAN
-        if has_quest_items?(player, VALKONS_RECOMMENDATION)
-          if !has_quest_items?(player, MANDRAGORA_BERRY)
+        if has_quest_items?(pc, VALKONS_RECOMMENDATION)
+          if !has_quest_items?(pc, MANDRAGORA_BERRY)
             qs.set_cond(2, true)
-            htmltext = "30283-01.html"
+            html = "30283-01.html"
           else
-            htmltext = "30283-02.html"
+            html = "30283-02.html"
           end
-        elsif has_quest_items?(player, ALLTRANS_INSTRUCTIONS)
-          if get_quest_items_count(player, JOURNEYMAN_RING) < 7
-            htmltext = "30283-04.html"
+        elsif has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
+          if get_quest_items_count(pc, JOURNEYMAN_RING) < 7
+            html = "30283-04.html"
           else
-            htmltext = "30283-05.html"
+            html = "30283-05.html"
           end
         end
       when BLACKSMITH_PINTER
-        if has_quest_items?(player, ALLTRANS_INSTRUCTIONS)
-          if has_quest_items?(player, ALLTRANS_2ND_RECOMMENDATION)
-            htmltext = "30298-02.html"
-          elsif has_quest_items?(player, PINTERS_INSTRUCTIONS)
-            if get_quest_items_count(player, AMBER_BEAD) < 70
-              htmltext = "30298-06.html"
+        if has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
+          if has_quest_items?(pc, ALLTRANS_2ND_RECOMMENDATION)
+            html = "30298-02.html"
+          elsif has_quest_items?(pc, PINTERS_INSTRUCTIONS)
+            if get_quest_items_count(pc, AMBER_BEAD) < 70
+              html = "30298-06.html"
             else
-              take_items(player, RECIPE_AMBER_BEAD, 1)
-              take_items(player, PINTERS_INSTRUCTIONS, 1)
-              take_items(player, AMBER_BEAD, -1)
-              take_items(player, AMBER_LUMP, -1)
-              give_items(player, JOURNEYMAN_DECO_BEADS, 7)
-              if get_quest_items_count(player, JOURNEYMAN_GEM) >= 7
+              take_items(pc, RECIPE_AMBER_BEAD, 1)
+              take_items(pc, PINTERS_INSTRUCTIONS, 1)
+              take_items(pc, AMBER_BEAD, -1)
+              take_items(pc, AMBER_LUMP, -1)
+              give_items(pc, JOURNEYMAN_DECO_BEADS, 7)
+              if get_quest_items_count(pc, JOURNEYMAN_GEM) >= 7
                 qs.set_cond(6, true)
               end
-              htmltext = "30298-07.html"
+              html = "30298-07.html"
             end
-          elsif !has_quest_items?(player, PINTERS_INSTRUCTIONS) && has_at_least_one_quest_item?(player, JOURNEYMAN_DECO_BEADS, JOURNEYMAN_RING)
-            htmltext = "30298-08.html"
+          elsif !has_quest_items?(pc, PINTERS_INSTRUCTIONS)
+            if has_at_least_one_quest_item?(pc, JOURNEYMAN_DECO_BEADS, JOURNEYMAN_RING)
+              html = "30298-08.html"
+            end
           end
         end
       when BLACKSMITH_DUNING
-        if has_quest_items?(player, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS)
-          if has_quest_items?(player, NORMANS_RECEIPT) && !has_quest_items?(player, DUNINGS_INSTRUCTIONS)
-            htmltext = "30688-01.html"
+        if has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS)
+          if has_quest_items?(pc, NORMANS_RECEIPT) && !has_quest_items?(pc, DUNINGS_INSTRUCTIONS)
+            html = "30688-01.html"
           end
-          if has_quest_items?(player, DUNINGS_INSTRUCTIONS) && !has_quest_items?(player, NORMANS_RECEIPT) && (get_quest_items_count(player, DUNINGS_KEY) < 30)
-            htmltext = "30688-03.html"
-          elsif get_quest_items_count(player, DUNINGS_KEY) >= 30 && !has_quest_items?(player, DUNINGS_INSTRUCTIONS)
-            htmltext = "30688-04.html"
+          if has_quest_items?(pc, DUNINGS_INSTRUCTIONS) && !has_quest_items?(pc, NORMANS_RECEIPT) && (get_quest_items_count(pc, DUNINGS_KEY) < 30)
+            html = "30688-03.html"
+          elsif get_quest_items_count(pc, DUNINGS_KEY) >= 30
+            unless has_quest_items?(pc, DUNINGS_INSTRUCTIONS)
+              html = "30688-04.html"
+            end
           end
-        elsif has_quest_items?(player, ALLTRANS_INSTRUCTIONS) && !has_at_least_one_quest_item?(player, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS)
-          htmltext = "30688-05.html"
+        elsif has_quest_items?(pc, ALLTRANS_INSTRUCTIONS) &&
+          unless has_at_least_one_quest_item?(pc, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS)
+            html = "30688-05.html"
+          end
         end
       end
     elsif qs.completed?
       if npc.id == WAREHOUSE_KEEPER_VALKON
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
-  def check_party_member(player : L2PcInstance, npc : L2Npc) : Bool
+  def check_party_member(pc : L2PcInstance, npc : L2Npc) : Bool
     check = false
     case npc.id
     when ANT, ANT_CAPTAIN, ANT_OVERSEER
-      check = has_quest_items?(player, ALLTRANS_INSTRUCTIONS, PINTERS_INSTRUCTIONS) && get_quest_items_count(player, AMBER_BEAD) < 70
+      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, PINTERS_INSTRUCTIONS) && get_quest_items_count(pc, AMBER_BEAD) < 70
     when GRANITE_GOLEM
-      check = has_quest_items?(player, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(player, GRANITE_WHETSTONE) < 70
+      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, GRANITE_WHETSTONE) < 70
     when SILENOS
-      check = has_quest_items?(player, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(player, BRAIDED_YARN) < 70
+      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, BRAIDED_YARN) < 70
     when STRAIN, GHOUL
-      check = has_quest_items?(player, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(player, GRAY_BONE_POWDER) < 70
+      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, GRAY_BONE_POWDER) < 70
     when DEAD_SEEKER
-      check = has_quest_items?(player, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(player, RED_PIGMENT) < 70
+      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, RED_PIGMENT) < 70
     when BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, BREKA_ORC_WARRIOR
-      check = has_quest_items?(player, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS) && get_quest_items_count(player, DUNINGS_KEY) < 30
+      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS) && get_quest_items_count(pc, DUNINGS_KEY) < 30
     end
 
     check

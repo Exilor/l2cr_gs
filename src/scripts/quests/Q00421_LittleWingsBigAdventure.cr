@@ -1,4 +1,4 @@
-class Quests::Q00421_LittleWingsBigAdventure < Quest
+class Scripts::Q00421_LittleWingsBigAdventure < Quest
   # NPCs
   private CRONOS = 30610
   private MIMYU = 30747
@@ -32,6 +32,9 @@ class Quests::Q00421_LittleWingsBigAdventure < Quest
     TREE_OF_ABYSS => NpcData.new(NpcString::HEY_YOUVE_ALREADY_DRUNK_THE_ESSENCE_OF_THE_ABYSS, 16, 8, 270)
   }
 
+  private record NpcData, message : NpcString, memo_state_mod : Int32,
+    memo_state_value : Int32, min_hits : Int32
+
   def initialize
     super(421, self.class.simple_name, "Little Wing's Big Adventure")
 
@@ -42,7 +45,7 @@ class Quests::Q00421_LittleWingsBigAdventure < Quest
     register_quest_items(FAIRY_LEAF)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     if event == "DESPAWN_GUARDIAN"
       if npc
         npc.delete_me
@@ -51,151 +54,150 @@ class Quests::Q00421_LittleWingsBigAdventure < Quest
       return super
     end
 
-    return unless player
-    return unless qs = get_quest_state(player, false)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "30610-05.htm"
       if qs.created?
-        if get_quest_items_count(player, DRAGONFLUTE_OF_WIND, DRAGONFLUTE_OF_STAR, DRAGONFLUTE_OF_TWILIGHT) == 1
-          flute = get_flute(player)
+        if get_quest_items_count(pc, DRAGONFLUTE_OF_WIND, DRAGONFLUTE_OF_STAR, DRAGONFLUTE_OF_TWILIGHT) == 1
+          flute = get_flute(pc)
 
           if flute.enchant_level < MIN_HACHLING_LVL
-            htmltext = "30610-06.html"
+            html = "30610-06.html"
           else
             qs.start_quest
             qs.memo_state = 100
             qs.set("fluteObjectId", flute.l2id)
-            htmltext = event
+            html = event
           end
         else
-          htmltext = "30610-06.html"
+          html = "30610-06.html"
         end
       end
     when "30747-04.html"
-      summon = player.summon
+      summon = pc.summon
 
       if summon.nil?
-        htmltext = "30747-02.html"
+        html = "30747-02.html"
       elsif summon.control_l2id != qs.get_int("fluteObjectId")
-        htmltext = "30747-03.html"
+        html = "30747-03.html"
       else
-        htmltext = event
+        html = event
       end
     when "30747-05.html"
-      summon = player.summon
+      summon = pc.summon
 
       if summon.nil?
-        htmltext = "30747-06.html"
+        html = "30747-06.html"
       elsif summon.control_l2id != qs.get_int("fluteObjectId")
-        htmltext = "30747-06.html"
+        html = "30747-06.html"
       else
-        give_items(player, FAIRY_LEAF, 4)
+        give_items(pc, FAIRY_LEAF, 4)
         qs.set_cond(2, true)
         qs.memo_state = 0
-        htmltext = event
+        html = event
       end
     when "30747-07.html", "30747-08.html", "30747-09.html", "30747-10.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
-    htmltext = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when CRONOS
       case qs.state
       when State::CREATED
-        flute_count = get_quest_items_count(talker, DRAGONFLUTE_OF_WIND, DRAGONFLUTE_OF_STAR, DRAGONFLUTE_OF_TWILIGHT)
+        flute_count = get_quest_items_count(pc, DRAGONFLUTE_OF_WIND, DRAGONFLUTE_OF_STAR, DRAGONFLUTE_OF_TWILIGHT)
         if flute_count == 0
-          return htmltext # this quest does not show up if no flute in inventory
+          return get_no_quest_msg(pc) # this quest does not show up if no flute in inventory
         end
 
-        if talker.level < MIN_PLAYER_LVL
-          htmltext = "30610-01.htm"
+        if pc.level < MIN_PLAYER_LVL
+          html = "30610-01.htm"
         elsif flute_count > 1
-          htmltext = "30610-02.htm"
-        elsif get_flute(talker).enchant_level < MIN_HACHLING_LVL
-          htmltext = "30610-03.html"
+          html = "30610-02.htm"
+        elsif get_flute(pc).enchant_level < MIN_HACHLING_LVL
+          html = "30610-03.html"
         else
-          htmltext = "30610-04.htm"
+          html = "30610-04.htm"
         end
       when State::STARTED
-        htmltext = "30610-07.html"
+        html = "30610-07.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(talker)
+        html = get_already_completed_msg(pc)
       end
     when MIMYU
       case qs.memo_state
       when 100
         qs.memo_state = 200
-        htmltext = "30747-01.html"
+        html = "30747-01.html"
       when 200
-        summon = talker.summon
+        summon = pc.summon
 
         if summon.nil?
-          htmltext = "30747-02.html"
+          html = "30747-02.html"
         elsif summon.control_l2id != qs.get_int("fluteObjectId")
-          htmltext = "30747-03.html"
+          html = "30747-03.html"
         else
-          htmltext = "30747-04.html"
+          html = "30747-04.html"
         end
       when 0
-        htmltext = "30747-07.html"
+        html = "30747-07.html"
       when 1..14
-        if has_quest_items?(talker, FAIRY_LEAF)
-          htmltext = "30747-11.html"
+        if has_quest_items?(pc, FAIRY_LEAF)
+          html = "30747-11.html"
         end
       when 15
-        if !has_quest_items?(talker, FAIRY_LEAF)
-          summon = talker.summon
+        unless has_quest_items?(pc, FAIRY_LEAF)
+          summon = pc.summon
 
           if summon.nil?
-            htmltext = "30747-12.html"
+            html = "30747-12.html"
           elsif summon.control_l2id == qs.get_int("fluteObjectId")
             qs.memo_state = 16
-            htmltext = "30747-13.html"
+            html = "30747-13.html"
           else
-            htmltext = "30747-14.html"
+            html = "30747-14.html"
           end
         end
       when 16
-        if !has_quest_items?(talker, FAIRY_LEAF)
-          if talker.has_summon?
-            htmltext = "30747-15.html"
+        unless has_quest_items?(pc, FAIRY_LEAF)
+          if pc.has_summon?
+            html = "30747-15.html"
           else
-            flute_count = get_quest_items_count(talker, DRAGONFLUTE_OF_WIND, DRAGONFLUTE_OF_STAR, DRAGONFLUTE_OF_TWILIGHT)
+            flute_count = get_quest_items_count(pc, DRAGONFLUTE_OF_WIND, DRAGONFLUTE_OF_STAR, DRAGONFLUTE_OF_TWILIGHT)
 
             if flute_count > 1
-              htmltext = "30747-17.html"
+              html = "30747-17.html"
             elsif flute_count == 1
-              flute = get_flute(talker)
+              flute = get_flute(pc)
 
               if flute.l2id == qs.get_int("fluteObjectId")
                 # TODO what if the hatchling has items in his inventory?
                 # Should they be transfered to the strider or given to the player?
                 case flute.id
                 when DRAGONFLUTE_OF_WIND
-                  take_items(talker, DRAGONFLUTE_OF_WIND, -1)
-                  give_items(talker, DRAGON_BUGLE_OF_WIND, 1)
+                  take_items(pc, DRAGONFLUTE_OF_WIND, -1)
+                  give_items(pc, DRAGON_BUGLE_OF_WIND, 1)
                 when DRAGONFLUTE_OF_STAR
-                  take_items(talker, DRAGONFLUTE_OF_STAR, -1)
-                  give_items(talker, DRAGON_BUGLE_OF_STAR, 1)
+                  take_items(pc, DRAGONFLUTE_OF_STAR, -1)
+                  give_items(pc, DRAGON_BUGLE_OF_STAR, 1)
                 when DRAGONFLUTE_OF_TWILIGHT
-                  take_items(talker, DRAGONFLUTE_OF_TWILIGHT, -1)
-                  give_items(talker, DRAGON_BUGLE_OF_TWILIGHT, 1)
+                  take_items(pc, DRAGONFLUTE_OF_TWILIGHT, -1)
+                  give_items(pc, DRAGON_BUGLE_OF_TWILIGHT, 1)
                 end
 
                 qs.exit_quest(true, true)
-                htmltext = "30747-16.html"
+                html = "30747-16.html"
               else
-                npc.target = talker
+                npc.target = pc
                 npc.do_cast(CURSE_OF_MIMYU.skill)
-                htmltext = "30747-18.html"
+                html = "30747-18.html"
               end
             end
           end
@@ -203,7 +205,7 @@ class Quests::Q00421_LittleWingsBigAdventure < Quest
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -274,18 +276,15 @@ class Quests::Q00421_LittleWingsBigAdventure < Quest
     super
   end
 
-  private def get_flute(player)
-    if has_quest_items?(player, DRAGONFLUTE_OF_WIND)
+  private def get_flute(pc)
+    if has_quest_items?(pc, DRAGONFLUTE_OF_WIND)
       flute_item_id = DRAGONFLUTE_OF_WIND
-    elsif has_quest_items?(player, DRAGONFLUTE_OF_STAR)
+    elsif has_quest_items?(pc, DRAGONFLUTE_OF_STAR)
       flute_item_id = DRAGONFLUTE_OF_STAR
     else
       flute_item_id = DRAGONFLUTE_OF_TWILIGHT
     end
 
-    player.inventory.get_item_by_item_id(flute_item_id).not_nil!
+    pc.inventory.get_item_by_item_id(flute_item_id).not_nil!
   end
-
-  private record NpcData, message : NpcString, memo_state_mod : Int32,
-    memo_state_value : Int32, min_hits : Int32
 end

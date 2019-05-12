@@ -1,4 +1,4 @@
-class NpcAI::Rooney < AbstractNpcAI
+class Scripts::Rooney < AbstractNpcAI
   # NPC
   private ROONEY = 32049
   # Locations

@@ -13,12 +13,12 @@ abstract class AbstractVariables < StatsSet
     @has_changes = AtomicReference(Bool).new(false)
   end
 
-  def []=(key : String, value)
+  def []=(key : String, value : ValueType?)
     @has_changes.set(true)
     super
   end
 
-  def has_changes?
+  def has_changes? : Bool
     @has_changes.get
   end
 
@@ -29,7 +29,9 @@ abstract class AbstractVariables < StatsSet
 
   def compare_and_set_changes(expect : Bool, update : Bool) : Bool
     ret = @has_changes.get == expect
-    @has_changes.set(update) if ret
+    if ret
+      @has_changes.set(update)
+    end
     ret
   end
 end

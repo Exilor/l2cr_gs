@@ -1,4 +1,4 @@
-class Quests::Q00298_LizardmensConspiracy < Quest
+class Scripts::Q00298_LizardmensConspiracy < Quest
   # NPCs
   private GUARD_PRAGA = 30333
   private MAGISTER_ROHMER = 30344
@@ -26,9 +26,9 @@ class Quests::Q00298_LizardmensConspiracy < Quest
     register_quest_items(PATROLS_REPORT, SHINING_GEM, SHINING_RED_GEM)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -36,19 +36,19 @@ class Quests::Q00298_LizardmensConspiracy < Quest
     when "30333-03.htm"
       if qs.created?
         qs.start_quest
-        give_items(player, PATROLS_REPORT, 1)
+        give_items(pc, PATROLS_REPORT, 1)
         html = event
       end
     when "30344-04.html"
-      if qs.cond?(1) && has_quest_items?(player, PATROLS_REPORT)
-        take_items(player, PATROLS_REPORT, -1)
+      if qs.cond?(1) && has_quest_items?(pc, PATROLS_REPORT)
+        take_items(pc, PATROLS_REPORT, -1)
         qs.set_cond(2, true)
         html = event
       end
     when "30344-06.html"
       if qs.started?
         if qs.cond?(3)
-          add_exp_and_sp(player, 0, 42000)
+          add_exp_and_sp(pc, 0, 42000)
           qs.exit_quest(true, true)
           html = event
         else
@@ -75,13 +75,13 @@ class Quests::Q00298_LizardmensConspiracy < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created? && npc.id == GUARD_PRAGA
-      html = talker.level >= MIN_LVL ? "30333-01.htm" : "30333-02.htm"
+      html = pc.level >= MIN_LVL ? "30333-01.htm" : "30333-02.htm"
     elsif qs.started?
-      if npc.id == GUARD_PRAGA && has_quest_items?(talker, PATROLS_REPORT)
+      if npc.id == GUARD_PRAGA && has_quest_items?(pc, PATROLS_REPORT)
         html = "30333-04.html"
       elsif npc.id == MAGISTER_ROHMER
         case qs.cond
@@ -95,6 +95,6 @@ class Quests::Q00298_LizardmensConspiracy < Quest
       end
     end
 
-    html || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 end

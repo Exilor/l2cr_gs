@@ -5,7 +5,7 @@ class Packets::Incoming::Attack < GameClientPacket
   @origin_z = 0
   @attack_id = 0
 
-  def read_impl
+  private def read_impl
     @l2id = d
     @origin_x = d
     @origin_y = d
@@ -13,7 +13,7 @@ class Packets::Incoming::Attack < GameClientPacket
     @attack_id = c
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if pc.playable? && pc.in_boat?

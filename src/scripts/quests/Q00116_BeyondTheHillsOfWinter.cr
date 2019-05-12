@@ -1,4 +1,4 @@
-class Quests::Q00116_BeyondTheHillsOfWinter < Quest
+class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
   # NPCs
   private FILAUR = 30535
   private OBI = 32052
@@ -20,9 +20,9 @@ class Quests::Q00116_BeyondTheHillsOfWinter < Quest
     register_quest_items(SUPPLYING_GOODS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -30,64 +30,68 @@ class Quests::Q00116_BeyondTheHillsOfWinter < Quest
     when "30535-02.htm"
       st.start_quest
       st.memo_state = 1
-      htmltext = event
+      html = event
     when "30535-05.html"
       if st.memo_state?(1)
         st.memo_state = 2
         st.set_cond(2, true)
         st.give_items(SUPPLYING_GOODS, 1)
-        htmltext = event
+        html = event
       end
     when "32052-02.html"
       if st.memo_state?(2)
-        htmltext = event
+        html = event
       end
     when "MATERIAL"
       if st.memo_state?(2)
         st.reward_items(SOULSHOT_D, 1740)
         st.add_exp_and_sp(82792, 4981)
         st.exit_quest(false, true)
-        htmltext = "32052-03.html"
+        html = "32052-03.html"
       end
     when "ADENA"
       if st.memo_state?(2)
         st.give_adena(17387, true)
         st.add_exp_and_sp(82792, 4981)
         st.exit_quest(false, true)
-        htmltext = "32052-03.html"
+        html = "32052-03.html"
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::COMPLETED
       if npc.id == FILAUR
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when State::CREATED
       if npc.id == FILAUR
-        htmltext = player.level >= MIN_LEVEL ? "30535-01.htm" : "30535-03.htm"
+        html = pc.level >= MIN_LEVEL ? "30535-01.htm" : "30535-03.htm"
       end
     when State::STARTED
       case npc.id
       when FILAUR
         if st.memo_state?(1)
-          htmltext = has_all_items?(player, true, THIEF_KEY, BANDAGE, ENERGY_STONE) ? "30535-04.html" : "30535-06.html"
+          if has_all_items?(pc, true, THIEF_KEY, BANDAGE, ENERGY_STONE)
+            html = "30535-04.html"
+          else
+            html = "30535-06.html"
+          end
         elsif st.memo_state?(2)
-          htmltext = "30535-07.html"
+          html = "30535-07.html"
         end
       when OBI
         if st.memo_state?(2) && st.has_quest_items?(SUPPLYING_GOODS)
-          htmltext = "32052-01.html"
+          html = "32052-01.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

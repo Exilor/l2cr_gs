@@ -1,4 +1,4 @@
-class NpcAI::Hude < AbstractNpcAI
+class Scripts::Hude < AbstractNpcAI
   # NPCs
   private HUDE = 32298
   # Items
@@ -60,17 +60,14 @@ class NpcAI::Hude < AbstractNpcAI
   end
 
   def on_first_talk(npc, player)
-    htmltext = nil
     if !has_at_least_one_quest_item?(player, BASIC_CERT, STANDART_CERT, PREMIUM_CERT)
-      htmltext = "32298-01.htm"
+      "32298-01.htm"
     elsif has_quest_items?(player, BASIC_CERT) && !has_at_least_one_quest_item?(player, STANDART_CERT, PREMIUM_CERT)
-      htmltext = "32298-03.htm"
+      "32298-03.htm"
     elsif has_quest_items?(player, STANDART_CERT) && !has_quest_items?(player, PREMIUM_CERT)
-      htmltext = "32298-05.htm"
+      "32298-05.htm"
     elsif has_quest_items?(player, PREMIUM_CERT)
-      htmltext = "32298-07.htm"
+      "32298-07.htm"
     end
-
-    htmltext
   end
 end

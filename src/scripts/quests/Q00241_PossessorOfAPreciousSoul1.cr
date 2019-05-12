@@ -1,4 +1,4 @@
-class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
+class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
   # NPCs
   private STEDMIEL = 30692
   private GABRIELLE = 30753
@@ -33,18 +33,27 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
     super(241, self.class.simple_name, "Possessor Of A Precious Soul 1")
 
     add_start_npc(TALIEN)
-    add_talk_id(TALIEN, STEDMIEL, GABRIELLE, GILMORE, KANTABILON, RAHORAKTI, CARADINE, KASSANDRA, VIRGIL, OGMAR)
-    add_kill_id(BARAHAM, MALRUK_SUCCUBUS_1, MALRUK_SUCCUBUS_TUREN_1, MALRUK_SUCCUBUS_2, MALRUK_SUCCUBUS_TUREN_2, TAIK_ORC_SUPPLY_LEADER)
-    register_quest_items(LEGEND_OF_SEVENTEEN, MALRUK_SUCCUBUS_CLAW, ECHO_CRYSTAL, POETRY_BOOK, CRIMSON_MOSS, RAHORAKTIS_MEDICINE)
+    add_talk_id(
+      TALIEN, STEDMIEL, GABRIELLE, GILMORE, KANTABILON, RAHORAKTI, CARADINE,
+      KASSANDRA, VIRGIL, OGMAR
+    )
+    add_kill_id(
+      BARAHAM, MALRUK_SUCCUBUS_1, MALRUK_SUCCUBUS_TUREN_1, MALRUK_SUCCUBUS_2,
+      MALRUK_SUCCUBUS_TUREN_2, TAIK_ORC_SUPPLY_LEADER
+    )
+    register_quest_items(
+      LEGEND_OF_SEVENTEEN, MALRUK_SUCCUBUS_CLAW, ECHO_CRYSTAL, POETRY_BOOK,
+      CRIMSON_MOSS, RAHORAKTIS_MEDICINE
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    unless player.subclass_active?
+    unless pc.subclass_active?
       return "no_sub.html"
     end
 
@@ -69,7 +78,7 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
         st.set_cond(6, true)
       end
     when "31042-05.html"
-      if st.cond?(7) && (st.get_quest_items_count(MALRUK_SUCCUBUS_CLAW) >= 10)
+      if st.cond?(7) && st.get_quest_items_count(MALRUK_SUCCUBUS_CLAW) >= 10
         st.take_items(MALRUK_SUCCUBUS_CLAW, -1)
         st.give_items(ECHO_CRYSTAL, 1)
         st.set_cond(8, true)
@@ -127,10 +136,10 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
     event
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     case npc.id
     when BARAHAM
-      unless member = get_random_party_member(player, 3)
+      unless member = get_random_party_member(pc, 3)
         return
       end
 
@@ -139,7 +148,7 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
       st.set_cond(4, true)
     when MALRUK_SUCCUBUS_1, MALRUK_SUCCUBUS_TUREN_1, MALRUK_SUCCUBUS_2,
          MALRUK_SUCCUBUS_TUREN_2
-      member = get_random_party_member(player, 6)
+      member = get_random_party_member(pc, 6)
       if member.nil?
         return
       end
@@ -153,8 +162,7 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
         end
       end
     when TAIK_ORC_SUPPLY_LEADER
-      member = get_random_party_member(player, 14)
-      if member.nil?
+      unless member = get_random_party_member(pc, 14)
         return
       end
       st = get_quest_state(member, false).not_nil!
@@ -171,18 +179,17 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    if st.started? && !player.subclass_active?
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    if st.started? && !pc.subclass_active?
       return "no_sub.html"
     end
 
-    html = get_no_quest_msg(player)
     case npc.id
     when TALIEN
       case st.state
       when State::CREATED
-        if player.level >= 50 && player.subclass_active?
+        if pc.level >= 50 && pc.subclass_active?
           html = "31739-01.htm"
         else
           html = "31739-00.htm"
@@ -211,7 +218,7 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
           html = "31739-12.html"
         end
       when State::COMPLETED
-        html = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when GABRIELLE
       case st.cond
@@ -293,6 +300,6 @@ class Quests::Q00241_PossessorOfAPreciousSoul1 < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00230_TestOfTheSummoner < Quest
+class Scripts::Q00230_TestOfTheSummoner < Quest
   private record MonsterData, crystal_of_in_progress : Int32,
     crystal_of_victory : Int32, npc_string : NpcString
 
@@ -206,13 +206,13 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 				if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
 					give_items(pc, DIMENSIONAL_DIAMOND, 122)
 					pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-					htmltext = "30634-08a.htm"
+					html = "30634-08a.htm"
 				else
-					htmltext = "30634-08.htm"
+					html = "30634-08.htm"
 				end
 			end
     when "30634-04.htm", "30634-05.htm", "30634-06.htm", "30634-07.htm", "30634-11.html", "30634-11a.html", "30634-11b.html", "30634-11c.html", "30634-11d.html"
-			htmltext = event
+			html = event
     when "30063-02.html"
 			case Rnd.rand(5)
 			when 0
@@ -228,7 +228,7 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			end
 			qs.set_cond(2, true)
 			take_items(pc, GALATEAS_LETTER, 1)
-			htmltext = event
+			html = event
     when "30063-04.html"
 			case Rnd.rand(5)
       when 0
@@ -242,12 +242,12 @@ class Quests::Q00230_TestOfTheSummoner < Quest
       when 4
 				give_items(pc, LARAS_5TH_LIST, 1)
 			end
-			htmltext = event
+			html = event
     when "30635-03.html"
 			if has_quest_items?(pc, BEGINNERS_ARCANA)
-				htmltext = event
+				html = event
 			else
-				htmltext = "30635-02.html"
+				html = "30635-02.html"
 			end
     when "30635-04.html"
 			add_skill_cast_desire(npc.not_nil!, pc, REDUCTION_IN_RECOVERY_TIME, 1000000)
@@ -255,12 +255,12 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			give_items(pc, CRYSTAL_OF_STARTING_1ST, 1)
 			take_items(pc, CRYSTAL_OF_FOUL_1ST, 1)
 			take_items(pc, CRYSTAL_OF_DEFEAT_1ST, 1)
-			htmltext = event
+			html = event
     when "30636-03.html"
 			if has_quest_items?(pc, BEGINNERS_ARCANA)
-				htmltext = event
+				html = event
 			else
-				htmltext = "30636-02.html"
+				html = "30636-02.html"
 			end
     when "30636-04.html"
 			add_skill_cast_desire(npc.not_nil!, pc, REDUCTION_IN_RECOVERY_TIME, 1000000)
@@ -268,12 +268,12 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			give_items(pc, CRYSTAL_OF_STARTING_3RD, 1)
 			take_items(pc, CRYSTAL_OF_FOUL_3RD, 1)
 			take_items(pc, CRYSTAL_OF_DEFEAT_3RD, 1)
-			htmltext = event
+			html = event
     when "30637-03.html"
 			if has_quest_items?(pc, BEGINNERS_ARCANA)
-				htmltext = event
+				html = event
 			else
-				htmltext = "30637-02.html"
+				html = "30637-02.html"
 			end
     when "30637-04.html"
 			add_skill_cast_desire(npc.not_nil!, pc, REDUCTION_IN_RECOVERY_TIME, 1000000)
@@ -281,12 +281,12 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			give_items(pc, CRYSTAL_OF_STARTING_5TH, 1)
 			take_items(pc, CRYSTAL_OF_FOUL_5TH, 1)
 			take_items(pc, CRYSTAL_OF_DEFEAT_5TH, 1)
-			htmltext = event
+			html = event
     when "30638-03.html"
 			if has_quest_items?(pc, BEGINNERS_ARCANA)
-				htmltext = event
+				html = event
 			else
-				htmltext = "30638-02.html"
+				html = "30638-02.html"
 			end
     when "30638-04.html"
 			add_skill_cast_desire(npc.not_nil!, pc, REDUCTION_IN_RECOVERY_TIME, 1000000)
@@ -294,12 +294,12 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			give_items(pc, CRYSTAL_OF_STARTING_2ND, 1)
 			take_items(pc, CRYSTAL_OF_FOUL_2ND, 1)
 			take_items(pc, CRYSTAL_OF_DEFEAT_2ND, 1)
-			htmltext = event
+			html = event
     when "30639-03.html"
 			if has_quest_items?(pc, BEGINNERS_ARCANA)
-				htmltext = event
+				html = event
 			else
-				htmltext = "30639-02.html"
+				html = "30639-02.html"
 			end
     when "30639-04.html"
 			add_skill_cast_desire(npc.not_nil!, pc, REDUCTION_IN_RECOVERY_TIME, 1000000)
@@ -307,12 +307,12 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			give_items(pc, CRYSTAL_OF_STARTING_4TH, 1)
 			take_items(pc, CRYSTAL_OF_FOUL_4TH, 1)
 			take_items(pc, CRYSTAL_OF_DEFEAT_4TH, 1)
-			htmltext = event
+			html = event
     when "30640-03.html"
 			if has_quest_items?(pc, BEGINNERS_ARCANA)
-				htmltext = event
+				html = event
 			else
-				htmltext = "30640-02.html"
+				html = "30640-02.html"
 			end
     when "30640-04.html"
 			add_skill_cast_desire(npc.not_nil!, pc, REDUCTION_IN_RECOVERY_TIME, 1000000)
@@ -320,10 +320,10 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			give_items(pc, CRYSTAL_OF_STARTING_6TH, 1)
 			take_items(pc, CRYSTAL_OF_FOUL_6TH, 1)
 			take_items(pc, CRYSTAL_OF_DEFEAT_6TH, 1)
-			htmltext = event
+			html = event
 		end
 
-    htmltext
+    html
 	end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -349,14 +349,18 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			when 1
 				if !is_summon || npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon
 					qs = get_quest_state(attacker, false)
-					if !has_quest_items?(attacker, CRYSTAL_OF_STARTING_1ST) && has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_1ST) && qs && qs.started?
-						npc.script_value = 2
-            ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
-            Broadcast.to_known_players(npc, ns)
-						take_items(attacker, CRYSTAL_OF_INPROGRESS_1ST, -1)
-						give_items(attacker, CRYSTAL_OF_FOUL_1ST, 1)
-						take_items(attacker, CRYSTAL_OF_STARTING_1ST, -1)
-					end
+					unless has_quest_items?(attacker, CRYSTAL_OF_STARTING_1ST)
+            if has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_1ST)
+              if qs && qs.started?
+    						npc.script_value = 2
+                ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
+                Broadcast.to_known_players(npc, ns)
+    						take_items(attacker, CRYSTAL_OF_INPROGRESS_1ST, -1)
+    						give_items(attacker, CRYSTAL_OF_FOUL_1ST, 1)
+    						take_items(attacker, CRYSTAL_OF_STARTING_1ST, -1)
+              end
+  					end
+          end
 					npc.delete_me
         end
       end
@@ -378,15 +382,19 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 					end
 				end
 			when 1
-				if !is_summon || (npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon)
+				if !is_summon || npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon
 					qs = get_quest_state(attacker, false)
-					if !has_quest_items?(attacker, CRYSTAL_OF_STARTING_3RD) && has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_3RD) && qs && qs.started?
-						npc.script_value = 2
-            ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
-            Broadcast.to_known_players(npc, ns)
-						take_items(attacker, CRYSTAL_OF_INPROGRESS_3RD, -1)
-						give_items(attacker, CRYSTAL_OF_FOUL_3RD, 1)
-						take_items(attacker, CRYSTAL_OF_STARTING_3RD, -1)
+					unless has_quest_items?(attacker, CRYSTAL_OF_STARTING_3RD)
+            if has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_3RD)
+              if qs && qs.started?
+    						npc.script_value = 2
+                ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
+                Broadcast.to_known_players(npc, ns)
+    						take_items(attacker, CRYSTAL_OF_INPROGRESS_3RD, -1)
+    						give_items(attacker, CRYSTAL_OF_FOUL_3RD, 1)
+    						take_items(attacker, CRYSTAL_OF_STARTING_3RD, -1)
+              end
+            end
 					end
 					npc.delete_me
 				end
@@ -401,23 +409,29 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 					start_quest_timer("KILLED_ATTACKER", 5000, npc, nil)
 
 					qs = get_quest_state(attacker, false)
-					if has_quest_items?(attacker, CRYSTAL_OF_STARTING_5TH) && qs && qs.started?
-						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::SO_SHALL_WE_START))
-						take_items(attacker, CRYSTAL_OF_STARTING_5TH, -1)
-						give_items(attacker, CRYSTAL_OF_INPROGRESS_5TH, 1)
-						add_attack_desire(npc, attacker.summon!, 100000)
+					if has_quest_items?(attacker, CRYSTAL_OF_STARTING_5TH)
+            if qs && qs.started?
+  						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::SO_SHALL_WE_START))
+  						take_items(attacker, CRYSTAL_OF_STARTING_5TH, -1)
+  						give_items(attacker, CRYSTAL_OF_INPROGRESS_5TH, 1)
+  						add_attack_desire(npc, attacker.summon!, 100000)
+            end
 					end
 				end
 			when 1
 				if !is_summon || npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon
 					qs = get_quest_state(attacker, false)
-					if !has_quest_items?(attacker, CRYSTAL_OF_STARTING_5TH) && has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_5TH) && qs && qs.started?
-						npc.script_value = 2
-            ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
-            Broadcast.to_known_players(npc, ns)
-						take_items(attacker, CRYSTAL_OF_INPROGRESS_5TH, -1)
-						give_items(attacker, CRYSTAL_OF_FOUL_5TH, 1)
-						take_items(attacker, CRYSTAL_OF_STARTING_5TH, -1)
+					unless has_quest_items?(attacker, CRYSTAL_OF_STARTING_5TH)
+            if has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_5TH)
+              if qs && qs.started?
+    						npc.script_value = 2
+                ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
+                Broadcast.to_known_players(npc, ns)
+    						take_items(attacker, CRYSTAL_OF_INPROGRESS_5TH, -1)
+    						give_items(attacker, CRYSTAL_OF_FOUL_5TH, 1)
+    						take_items(attacker, CRYSTAL_OF_STARTING_5TH, -1)
+              end
+            end
 					end
 					npc.delete_me
 				end
@@ -442,13 +456,17 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 			when 1
 				if !is_summon || npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon
 					qs = get_quest_state(attacker, false)
-					if !has_quest_items?(attacker, CRYSTAL_OF_STARTING_2ND) && has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_2ND) && qs && qs.started?
-						npc.script_value = 2
-            ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
-            Broadcast.to_known_players(npc, ns)
-						take_items(attacker, CRYSTAL_OF_INPROGRESS_2ND, -1)
-						give_items(attacker, CRYSTAL_OF_FOUL_2ND, 1)
-						take_items(attacker, CRYSTAL_OF_STARTING_2ND, -1)
+					unless has_quest_items?(attacker, CRYSTAL_OF_STARTING_2ND)
+            if has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_2ND)
+              if qs && qs.started?
+    						npc.script_value = 2
+                ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
+                Broadcast.to_known_players(npc, ns)
+    						take_items(attacker, CRYSTAL_OF_INPROGRESS_2ND, -1)
+    						give_items(attacker, CRYSTAL_OF_FOUL_2ND, 1)
+    						take_items(attacker, CRYSTAL_OF_STARTING_2ND, -1)
+              end
+            end
 					end
 					npc.delete_me
 				end
@@ -463,23 +481,29 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 					start_quest_timer("KILLED_ATTACKER", 5000, npc, nil)
 
 					qs = get_quest_state(attacker, false)
-					if has_quest_items?(attacker, CRYSTAL_OF_STARTING_4TH) && qs && qs.started?
-						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::START_DUEL))
-						take_items(attacker, CRYSTAL_OF_STARTING_4TH, -1)
-						give_items(attacker, CRYSTAL_OF_INPROGRESS_4TH, 1)
-						add_attack_desire(npc, attacker.summon!, 100000)
+					if has_quest_items?(attacker, CRYSTAL_OF_STARTING_4TH)
+            if qs && qs.started?
+  						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::START_DUEL))
+  						take_items(attacker, CRYSTAL_OF_STARTING_4TH, -1)
+  						give_items(attacker, CRYSTAL_OF_INPROGRESS_4TH, 1)
+  						add_attack_desire(npc, attacker.summon!, 100000)
+            end
 					end
 				end
 			when 1
-				if !is_summon || (npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon)
+				if !is_summon || npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon
 					qs = get_quest_state(attacker, false)
-					if !has_quest_items?(attacker, CRYSTAL_OF_STARTING_4TH) && has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_4TH) && qs && qs.started?
-						npc.script_value = 2
-            ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
-            Broadcast.to_known_players(npc, ns)
-						take_items(attacker, CRYSTAL_OF_INPROGRESS_4TH, -1)
-						give_items(attacker, CRYSTAL_OF_FOUL_4TH, 1)
-						take_items(attacker, CRYSTAL_OF_STARTING_4TH, -1)
+					unless has_quest_items?(attacker, CRYSTAL_OF_STARTING_4TH)
+            if has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_4TH)
+              if qs && qs.started?
+    						npc.script_value = 2
+                ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
+                Broadcast.to_known_players(npc, ns)
+    						take_items(attacker, CRYSTAL_OF_INPROGRESS_4TH, -1)
+    						give_items(attacker, CRYSTAL_OF_FOUL_4TH, 1)
+    						take_items(attacker, CRYSTAL_OF_STARTING_4TH, -1)
+              end
+            end
 					end
 					npc.delete_me
 				end
@@ -494,23 +518,29 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 					start_quest_timer("KILLED_ATTACKER", 5000, npc, nil)
 
 					qs = get_quest_state(attacker, false)
-					if has_quest_items?(attacker, CRYSTAL_OF_STARTING_6TH) && qs && qs.started?
-						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::ILL_WALK_ALL_OVER_YOU))
-						take_items(attacker, CRYSTAL_OF_STARTING_6TH, -1)
-						give_items(attacker, CRYSTAL_OF_INPROGRESS_6TH, 1)
-						add_attack_desire(npc, attacker.summon!, 100000)
+					if has_quest_items?(attacker, CRYSTAL_OF_STARTING_6TH)
+            if qs && qs.started?
+  						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::ILL_WALK_ALL_OVER_YOU))
+  						take_items(attacker, CRYSTAL_OF_STARTING_6TH, -1)
+  						give_items(attacker, CRYSTAL_OF_INPROGRESS_6TH, 1)
+  						add_attack_desire(npc, attacker.summon!, 100000)
+            end
 					end
 				end
 			when 1
-				if !is_summon || (npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon)
+				if !is_summon || npc.variables.get_object("ATTACKER", L2Summon?) != attacker.summon
 					qs = get_quest_state(attacker, false)
-					if !has_quest_items?(attacker, CRYSTAL_OF_STARTING_6TH) && has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_6TH) && qs && qs.started?
-						npc.script_value = 2
-            ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
-            Broadcast.to_known_players(npc, ns)
-						take_items(attacker, CRYSTAL_OF_INPROGRESS_6TH, -1)
-						give_items(attacker, CRYSTAL_OF_FOUL_6TH, 1)
-						take_items(attacker, CRYSTAL_OF_STARTING_6TH, -1)
+					unless has_quest_items?(attacker, CRYSTAL_OF_STARTING_6TH)
+            if has_quest_items?(attacker, CRYSTAL_OF_INPROGRESS_6TH)
+              if qs && qs.started?
+    						npc.script_value = 2
+                ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::RULE_VIOLATION)
+                Broadcast.to_known_players(npc, ns)
+    						take_items(attacker, CRYSTAL_OF_INPROGRESS_6TH, -1)
+    						give_items(attacker, CRYSTAL_OF_FOUL_6TH, 1)
+    						take_items(attacker, CRYSTAL_OF_STARTING_6TH, -1)
+              end
+            end
 					end
 					npc.delete_me
 				end
@@ -526,54 +556,80 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 		if qs && qs.started? && Util.in_range?(1500, npc, killer, true)
 			case npc.id
       when NOBLE_ANT, NOBLE_ANT_LEADER
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_5TH_LIST)
-					give_item_randomly(killer, npc, WINGS_OF_DRONEANT, 2, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_5TH_LIST)
+					  give_item_randomly(killer, npc, WINGS_OF_DRONEANT, 2, 30, 1.0, true)
+          end
         end
       when WYRM
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_5TH_LIST)
-					give_item_randomly(killer, npc, FANGS_OF_WYRM, 3, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_5TH_LIST)
+					  give_item_randomly(killer, npc, FANGS_OF_WYRM, 3, 30, 1.0, true)
+          end
         end
       when TYRANT, TYRANT_KINGPIN
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_4TH_LIST)
-					give_item_randomly(killer, npc, TALONS_OF_TYRANT, 3, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_4TH_LIST)
+					  give_item_randomly(killer, npc, TALONS_OF_TYRANT, 3, 30, 1.0, true)
+          end
         end
       when BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_WARRIOR
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_3RD_LIST)
-					give_item_randomly(killer, npc, BREKA_ORC_TOTEM, 1, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_3RD_LIST)
+					  give_item_randomly(killer, npc, BREKA_ORC_TOTEM, 1, 30, 1.0, true)
+          end
         end
       when BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_3RD_LIST)
-					give_item_randomly(killer, npc, BREKA_ORC_TOTEM, 2, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_3RD_LIST)
+					  give_item_randomly(killer, npc, BREKA_ORC_TOTEM, 2, 30, 1.0, true)
+          end
         end
       when FETTERED_SOUL
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_3RD_LIST)
-					give_item_randomly(killer, npc, CRIMSON_BLOODSTONE, 6, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_3RD_LIST)
+					  give_item_randomly(killer, npc, CRIMSON_BLOODSTONE, 6, 30, 1.0, true)
+          end
         end
       when WINDSUS
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_4TH_LIST)
-					give_item_randomly(killer, npc, TUSK_OF_WINDSUS, 3, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_4TH_LIST)
+					  give_item_randomly(killer, npc, TUSK_OF_WINDSUS, 3, 30, 1.0, true)
+          end
         end
       when GIANT_FUNGUS
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_1ST_LIST)
-					give_item_randomly(killer, npc, SAC_OF_RED_SPORES, 2, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_1ST_LIST)
+					  give_item_randomly(killer, npc, SAC_OF_RED_SPORES, 2, 30, 1.0, true)
+          end
         end
       when MANASHEN_GARGOYLE
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_2ND_LIST)
-					give_item_randomly(killer, npc, SHARDS_OF_MANASHEN, 2, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_2ND_LIST)
+					  give_item_randomly(killer, npc, SHARDS_OF_MANASHEN, 2, 30, 1.0, true)
+          end
         end
-      when LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER, LETO_LIZARDMAN_SOLDIER, LETO_LIZARDMAN_WARRIOR
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_1ST_LIST)
-					give_item_randomly(killer, npc, LETO_LIZARDMAN_AMULET, 1, 30, 1.0, true)
+      when LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER, LETO_LIZARDMAN_SOLDIER,
+           LETO_LIZARDMAN_WARRIOR
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_1ST_LIST)
+					  give_item_randomly(killer, npc, LETO_LIZARDMAN_AMULET, 1, 30, 1.0, true)
+          end
         end
       when LETO_LIZARDMAN_SHAMAN, LETO_LIZARDMAN_OVERLORD
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_1ST_LIST)
-					give_item_randomly(killer, npc, LETO_LIZARDMAN_AMULET, 2, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_1ST_LIST)
+					  give_item_randomly(killer, npc, LETO_LIZARDMAN_AMULET, 2, 30, 1.0, true)
+          end
         end
       when KARUL_BUGBEAR
-				if !has_quest_items?(killer, GALATEAS_LETTER) && has_quest_items?(killer, LARAS_2ND_LIST)
-					give_item_randomly(killer, npc, KARUL_BUGBEAR_TOTEM, 2, 30, 1.0, true)
+				unless has_quest_items?(killer, GALATEAS_LETTER)
+          if has_quest_items?(killer, LARAS_2ND_LIST)
+					  give_item_randomly(killer, npc, KARUL_BUGBEAR_TOTEM, 2, 30, 1.0, true)
+          end
         end
-      when SILHOUETTE_TILFO, UNICORN_PHANTASM, MIMI_THE_CAT, SHADOW_TUREN, UNICORN_RACER, PAKO_THE_CAT
+      when SILHOUETTE_TILFO, UNICORN_PHANTASM, MIMI_THE_CAT, SHADOW_TUREN,
+           UNICORN_RACER, PAKO_THE_CAT
 				data = MONSTERS[npc.id]
 				if has_quest_items?(killer, data.crystal_of_in_progress)
 					npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, data.npc_string))
@@ -589,45 +645,44 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 
 	def on_talk(npc, pc)
 		qs = get_quest_state!(pc)
-		htmltext = get_no_quest_msg(pc)
 
 		if qs.created?
 			if npc.id == HIGH_SUMMONER_GALATEA
 				if pc.class_id.wizard? || pc.class_id.elven_wizard? || pc.class_id.dark_wizard?
 					if pc.level >= MIN_LEVEL
-						htmltext = "30634-03.htm"
+						html = "30634-03.htm"
 					else
-						htmltext = "30634-02.html"
+						html = "30634-02.html"
 					end
 				else
-					htmltext = "30634-01.html"
+					html = "30634-01.html"
 				end
 			end
     elsif qs.started?
 			case npc.id
       when HIGH_SUMMONER_GALATEA
 				if has_quest_items?(pc, GALATEAS_LETTER)
-					htmltext = "30634-09.html"
+					html = "30634-09.html"
         elsif !has_quest_items?(pc, GALATEAS_LETTER)
 					if !has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA) && !has_quest_items?(pc, BEGINNERS_ARCANA)
-						htmltext = "30634-10.html"
+						html = "30634-10.html"
           elsif !has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA) && has_quest_items?(pc, BEGINNERS_ARCANA)
-						htmltext = "30634-11.html"
+						html = "30634-11.html"
           elsif has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA)
 						give_adena(pc, 300960, true)
 						give_items(pc, MARK_OF_SUMMONER, 1)
 						add_exp_and_sp(pc, 1664494, 114220)
 						qs.exit_quest(false, true)
 						pc.send_packet(SocialAction.new(pc.l2id, 3))
-						htmltext = "30634-12.html"
+						html = "30634-12.html"
 					end
         end
       when GROCER_LARA
 				if has_quest_items?(pc, GALATEAS_LETTER)
-					htmltext = "30063-01.html"
+					html = "30063-01.html"
         elsif !has_quest_items?(pc, GALATEAS_LETTER)
 					if !has_at_least_one_quest_item?(pc, LARAS_1ST_LIST, LARAS_2ND_LIST, LARAS_3RD_LIST, LARAS_4TH_LIST, LARAS_5TH_LIST)
-						htmltext = "30063-03.html"
+						html = "30063-03.html"
           elsif has_quest_items?(pc, LARAS_1ST_LIST)
 						if get_quest_items_count(pc, LETO_LIZARDMAN_AMULET) >= 30 && get_quest_items_count(pc, SAC_OF_RED_SPORES) >= 30
 							take_items(pc, LETO_LIZARDMAN_AMULET, -1)
@@ -635,9 +690,9 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 							take_items(pc, LARAS_1ST_LIST, 1)
 							give_items(pc, BEGINNERS_ARCANA, 2)
 							qs.set_cond(3, true)
-							htmltext = "30063-06.html"
+							html = "30063-06.html"
 						else
-							htmltext = "30063-05.html"
+							html = "30063-05.html"
 						end
           elsif has_quest_items?(pc, LARAS_2ND_LIST)
 						if get_quest_items_count(pc, KARUL_BUGBEAR_TOTEM) >= 30 && get_quest_items_count(pc, SHARDS_OF_MANASHEN) >= 30
@@ -646,9 +701,9 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 							take_items(pc, LARAS_2ND_LIST, 1)
 							give_items(pc, BEGINNERS_ARCANA, 2)
 							qs.set_cond(3, true)
-							htmltext = "30063-08.html"
+							html = "30063-08.html"
 						else
-							htmltext = "30063-07.html"
+							html = "30063-07.html"
 						end
           elsif has_quest_items?(pc, LARAS_3RD_LIST)
 						if get_quest_items_count(pc, BREKA_ORC_TOTEM) >= 30 && get_quest_items_count(pc, CRIMSON_BLOODSTONE) >= 30
@@ -657,9 +712,9 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 							take_items(pc, LARAS_3RD_LIST, 1)
 							give_items(pc, BEGINNERS_ARCANA, 2)
 							qs.set_cond(3, true)
-							htmltext = "30063-10.html"
+							html = "30063-10.html"
 						else
-							htmltext = "30063-09.html"
+							html = "30063-09.html"
 						end
           elsif has_quest_items?(pc, LARAS_4TH_LIST)
 						if get_quest_items_count(pc, TALONS_OF_TYRANT) >= 30 && get_quest_items_count(pc, TUSK_OF_WINDSUS) >= 30
@@ -668,9 +723,9 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 							take_items(pc, LARAS_4TH_LIST, 1)
 							give_items(pc, BEGINNERS_ARCANA, 2)
 							qs.set_cond(3, true)
-							htmltext = "30063-12.html"
+							html = "30063-12.html"
 						else
-							htmltext = "30063-11.html"
+							html = "30063-11.html"
 						end
           elsif has_quest_items?(pc, LARAS_5TH_LIST)
 						if get_quest_items_count(pc, WINGS_OF_DRONEANT) >= 30 && get_quest_items_count(pc, FANGS_OF_WYRM) >= 30
@@ -679,157 +734,157 @@ class Quests::Q00230_TestOfTheSummoner < Quest
 							take_items(pc, LARAS_5TH_LIST, 1)
 							give_items(pc, BEGINNERS_ARCANA, 2)
 							qs.set_cond(3, true)
-							htmltext = "30063-14.html"
+							html = "30063-14.html"
 						else
-							htmltext = "30063-13.html"
+							html = "30063-13.html"
 						end
           end
 				end
       when SUMMONER_ALMORS
 				if !has_quest_items?(pc, ALMORS_ARCANA)
 					if !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_1ST, CRYSTAL_OF_INPROGRESS_1ST, CRYSTAL_OF_FOUL_1ST, CRYSTAL_OF_DEFEAT_1ST, CRYSTAL_OF_VICTORY_1ST)
-						htmltext = "30635-01.html"
+						html = "30635-01.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_1ST, CRYSTAL_OF_INPROGRESS_1ST, CRYSTAL_OF_FOUL_1ST, CRYSTAL_OF_VICTORY_1ST) && has_quest_items?(pc, CRYSTAL_OF_DEFEAT_1ST)
-						htmltext = "30635-05.html"
+						html = "30635-05.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_1ST, CRYSTAL_OF_INPROGRESS_1ST, CRYSTAL_OF_DEFEAT_1ST, CRYSTAL_OF_VICTORY_1ST) && has_quest_items?(pc, CRYSTAL_OF_FOUL_1ST)
-						htmltext = "30635-06.html"
+						html = "30635-06.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_1ST, CRYSTAL_OF_INPROGRESS_1ST, CRYSTAL_OF_FOUL_1ST, CRYSTAL_OF_DEFEAT_1ST) && has_quest_items?(pc, CRYSTAL_OF_VICTORY_1ST)
 						give_items(pc, ALMORS_ARCANA, 1)
 						take_items(pc, CRYSTAL_OF_VICTORY_1ST, 1)
-						if (has_quest_items?(pc, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA))
+						if has_quest_items?(pc, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA)
 							qs.set_cond(4, true)
 						end
-						htmltext = "30635-07.html"
+						html = "30635-07.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_INPROGRESS_1ST, CRYSTAL_OF_FOUL_1ST, CRYSTAL_OF_DEFEAT_1ST, CRYSTAL_OF_VICTORY_1ST) && has_quest_items?(pc, CRYSTAL_OF_STARTING_1ST)
-						htmltext = "30635-08.html"
+						html = "30635-08.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_1ST, CRYSTAL_OF_FOUL_1ST, CRYSTAL_OF_DEFEAT_1ST, CRYSTAL_OF_VICTORY_1ST) && has_quest_items?(pc, CRYSTAL_OF_INPROGRESS_1ST)
-						htmltext = "30635-09.html"
+						html = "30635-09.html"
           end
 				else
-					htmltext = "30635-10.html"
+					html = "30635-10.html"
         end
       when SUMMONER_CAMONIELL
 				if !has_quest_items?(pc, CAMONIELL_ARCANA)
 					if !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_3RD, CRYSTAL_OF_INPROGRESS_3RD, CRYSTAL_OF_FOUL_3RD, CRYSTAL_OF_DEFEAT_3RD, CRYSTAL_OF_VICTORY_3RD)
-						htmltext = "30636-01.html"
+						html = "30636-01.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_3RD, CRYSTAL_OF_INPROGRESS_3RD, CRYSTAL_OF_FOUL_3RD, CRYSTAL_OF_VICTORY_3RD) && has_quest_items?(pc, CRYSTAL_OF_DEFEAT_3RD)
-						htmltext = "30636-05.html"
+						html = "30636-05.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_3RD, CRYSTAL_OF_INPROGRESS_3RD, CRYSTAL_OF_DEFEAT_3RD, CRYSTAL_OF_VICTORY_3RD) && has_quest_items?(pc, CRYSTAL_OF_FOUL_3RD)
-						htmltext = "30636-06.html"
+						html = "30636-06.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_3RD, CRYSTAL_OF_INPROGRESS_3RD, CRYSTAL_OF_FOUL_3RD, CRYSTAL_OF_DEFEAT_3RD) && has_quest_items?(pc, CRYSTAL_OF_VICTORY_3RD)
 						give_items(pc, CAMONIELL_ARCANA, 1)
 						take_items(pc, CRYSTAL_OF_VICTORY_3RD, 1)
 						if has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA)
 							qs.set_cond(4, true)
 						end
-						htmltext = "30636-07.html"
+						html = "30636-07.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_INPROGRESS_3RD, CRYSTAL_OF_FOUL_3RD, CRYSTAL_OF_DEFEAT_3RD, CRYSTAL_OF_VICTORY_3RD) && has_quest_items?(pc, CRYSTAL_OF_STARTING_3RD)
-						htmltext = "30636-08.html"
+						html = "30636-08.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_3RD, CRYSTAL_OF_FOUL_3RD, CRYSTAL_OF_DEFEAT_3RD, CRYSTAL_OF_VICTORY_3RD) && has_quest_items?(pc, CRYSTAL_OF_INPROGRESS_3RD)
-						htmltext = "30636-09.html"
+						html = "30636-09.html"
           end
 				else
-					htmltext = "30636-10.html"
+					html = "30636-10.html"
         end
       when SUMMONER_BELTHUS
 				if !has_quest_items?(pc, BELTHUS_ARCANA)
 					if !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_5TH, CRYSTAL_OF_INPROGRESS_5TH, CRYSTAL_OF_FOUL_5TH, CRYSTAL_OF_DEFEAT_5TH, CRYSTAL_OF_VICTORY_5TH)
-						htmltext = "30637-01.html"
+						html = "30637-01.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_5TH, CRYSTAL_OF_INPROGRESS_5TH, CRYSTAL_OF_FOUL_5TH, CRYSTAL_OF_VICTORY_5TH) && has_quest_items?(pc, CRYSTAL_OF_DEFEAT_5TH)
-						htmltext = "30637-05.html"
+						html = "30637-05.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_5TH, CRYSTAL_OF_INPROGRESS_5TH, CRYSTAL_OF_DEFEAT_5TH, CRYSTAL_OF_VICTORY_5TH) && has_quest_items?(pc, CRYSTAL_OF_FOUL_5TH)
-						htmltext = "30637-06.html"
+						html = "30637-06.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_5TH, CRYSTAL_OF_INPROGRESS_5TH, CRYSTAL_OF_FOUL_5TH, CRYSTAL_OF_DEFEAT_5TH) && has_quest_items?(pc, CRYSTAL_OF_VICTORY_5TH)
 						give_items(pc, BELTHUS_ARCANA, 1)
 						take_items(pc, CRYSTAL_OF_VICTORY_5TH, 1)
-						if (has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BRYNTHEA_ARCANA))
+						if has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BRYNTHEA_ARCANA)
 							qs.set_cond(4, true)
 						end
-						htmltext = "30637-07.html"
+						html = "30637-07.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_INPROGRESS_5TH, CRYSTAL_OF_FOUL_5TH, CRYSTAL_OF_DEFEAT_5TH, CRYSTAL_OF_VICTORY_5TH) && has_quest_items?(pc, CRYSTAL_OF_STARTING_5TH)
-						htmltext = "30637-08.html"
+						html = "30637-08.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_5TH, CRYSTAL_OF_FOUL_5TH, CRYSTAL_OF_DEFEAT_5TH, CRYSTAL_OF_VICTORY_5TH) && has_quest_items?(pc, CRYSTAL_OF_INPROGRESS_5TH)
-						htmltext = "30637-09.html"
+						html = "30637-09.html"
           end
 				else
-					htmltext = "30637-10.html"
+					html = "30637-10.html"
         end
       when SUMMONER_BASILLA
 				if !has_quest_items?(pc, BASILLIA_ARCANA)
 					if !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_2ND, CRYSTAL_OF_INPROGRESS_2ND, CRYSTAL_OF_FOUL_2ND, CRYSTAL_OF_DEFEAT_2ND, CRYSTAL_OF_VICTORY_2ND)
-						htmltext = "30638-01.html"
+						html = "30638-01.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_2ND, CRYSTAL_OF_INPROGRESS_2ND, CRYSTAL_OF_FOUL_2ND, CRYSTAL_OF_VICTORY_2ND) && has_quest_items?(pc, CRYSTAL_OF_DEFEAT_2ND)
-						htmltext = "30638-05.html"
+						html = "30638-05.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_2ND, CRYSTAL_OF_INPROGRESS_2ND, CRYSTAL_OF_DEFEAT_2ND, CRYSTAL_OF_VICTORY_2ND) && has_quest_items?(pc, CRYSTAL_OF_FOUL_2ND)
-						htmltext = "30638-06.html"
+						html = "30638-06.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_2ND, CRYSTAL_OF_INPROGRESS_2ND, CRYSTAL_OF_FOUL_2ND, CRYSTAL_OF_DEFEAT_2ND) && has_quest_items?(pc, CRYSTAL_OF_VICTORY_2ND)
 						give_items(pc, BASILLIA_ARCANA, 1)
 						take_items(pc, CRYSTAL_OF_VICTORY_2ND, 1)
-						if (has_quest_items?(pc, ALMORS_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA))
+						if has_quest_items?(pc, ALMORS_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA)
 							qs.set_cond(4, true)
 						end
-						htmltext = "30638-07.html"
+						html = "30638-07.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_INPROGRESS_2ND, CRYSTAL_OF_FOUL_2ND, CRYSTAL_OF_DEFEAT_2ND, CRYSTAL_OF_VICTORY_2ND) && has_quest_items?(pc, CRYSTAL_OF_STARTING_2ND)
-						htmltext = "30638-08.html"
+						html = "30638-08.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_2ND, CRYSTAL_OF_FOUL_2ND, CRYSTAL_OF_DEFEAT_2ND, CRYSTAL_OF_VICTORY_2ND) && has_quest_items?(pc, CRYSTAL_OF_INPROGRESS_2ND)
-						htmltext = "30638-09.html"
+						html = "30638-09.html"
           end
 				else
-					htmltext = "30638-10.html"
+					html = "30638-10.html"
 			  end
       when SUMMONER_CELESTIEL
 				if !has_quest_items?(pc, CELESTIEL_ARCANA)
 					if !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_4TH, CRYSTAL_OF_INPROGRESS_4TH, CRYSTAL_OF_FOUL_4TH, CRYSTAL_OF_DEFEAT_4TH, CRYSTAL_OF_VICTORY_4TH)
-						htmltext = "30639-01.html"
+						html = "30639-01.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_4TH, CRYSTAL_OF_INPROGRESS_4TH, CRYSTAL_OF_FOUL_4TH, CRYSTAL_OF_VICTORY_4TH) && has_quest_items?(pc, CRYSTAL_OF_DEFEAT_4TH)
-						htmltext = "30639-05.html"
+						html = "30639-05.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_4TH, CRYSTAL_OF_INPROGRESS_4TH, CRYSTAL_OF_DEFEAT_4TH, CRYSTAL_OF_VICTORY_4TH) && has_quest_items?(pc, CRYSTAL_OF_FOUL_4TH)
-						htmltext = "30639-06.html"
+						html = "30639-06.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_4TH, CRYSTAL_OF_INPROGRESS_4TH, CRYSTAL_OF_FOUL_4TH, CRYSTAL_OF_DEFEAT_4TH) && has_quest_items?(pc, CRYSTAL_OF_VICTORY_4TH)
 						give_items(pc, CELESTIEL_ARCANA, 1)
 						take_items(pc, CRYSTAL_OF_VICTORY_4TH, 1)
 						if (has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA))
 							qs.set_cond(4, true)
 						end
-						htmltext = "30639-07.html"
+						html = "30639-07.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_INPROGRESS_4TH, CRYSTAL_OF_FOUL_4TH, CRYSTAL_OF_DEFEAT_4TH, CRYSTAL_OF_VICTORY_4TH) && has_quest_items?(pc, CRYSTAL_OF_STARTING_4TH)
-						htmltext = "30639-08.html"
+						html = "30639-08.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_4TH, CRYSTAL_OF_FOUL_4TH, CRYSTAL_OF_DEFEAT_4TH, CRYSTAL_OF_VICTORY_4TH) && has_quest_items?(pc, CRYSTAL_OF_INPROGRESS_4TH)
-						htmltext = "30639-09.html"
+						html = "30639-09.html"
           end
 				else
-					htmltext = "30639-10.html"
+					html = "30639-10.html"
         end
       when SUMMONER_BRYNTHEA
 				if !has_quest_items?(pc, BRYNTHEA_ARCANA)
 					if !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_6TH, CRYSTAL_OF_INPROGRESS_6TH, CRYSTAL_OF_FOUL_6TH, CRYSTAL_OF_DEFEAT_6TH, CRYSTAL_OF_VICTORY_6TH)
-						htmltext = "30640-01.html"
+						html = "30640-01.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_6TH, CRYSTAL_OF_INPROGRESS_6TH, CRYSTAL_OF_FOUL_6TH, CRYSTAL_OF_VICTORY_6TH) && has_quest_items?(pc, CRYSTAL_OF_DEFEAT_6TH)
-  					htmltext = "30640-05.html"
+  					html = "30640-05.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_6TH, CRYSTAL_OF_INPROGRESS_6TH, CRYSTAL_OF_DEFEAT_6TH, CRYSTAL_OF_VICTORY_6TH) && has_quest_items?(pc, CRYSTAL_OF_FOUL_6TH)
-  					htmltext = "30640-06.html"
+  					html = "30640-06.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_6TH, CRYSTAL_OF_INPROGRESS_6TH, CRYSTAL_OF_FOUL_6TH, CRYSTAL_OF_DEFEAT_6TH) && has_quest_items?(pc, CRYSTAL_OF_VICTORY_6TH)
   					give_items(pc, BRYNTHEA_ARCANA, 1)
   					take_items(pc, CRYSTAL_OF_VICTORY_6TH, 1)
-  					if (has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA))
+  					if has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA)
   						qs.set_cond(4, true)
   					end
-  					htmltext = "30640-07.html"
+  					html = "30640-07.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_INPROGRESS_6TH, CRYSTAL_OF_FOUL_6TH, CRYSTAL_OF_DEFEAT_6TH, CRYSTAL_OF_VICTORY_6TH) && has_quest_items?(pc, CRYSTAL_OF_STARTING_6TH)
-  					htmltext = "30640-08.html"
+  					html = "30640-08.html"
           elsif !has_at_least_one_quest_item?(pc, CRYSTAL_OF_STARTING_6TH, CRYSTAL_OF_FOUL_6TH, CRYSTAL_OF_DEFEAT_6TH, CRYSTAL_OF_VICTORY_6TH) && has_quest_items?(pc, CRYSTAL_OF_INPROGRESS_6TH)
-  					htmltext = "30640-09.html"
+  					html = "30640-09.html"
           end
 				else
-					htmltext = "30640-10.html"
+					html = "30640-10.html"
         end
       end
     elsif qs.completed?
 			if npc.id == HIGH_SUMMONER_GALATEA
-				htmltext = get_already_completed_msg(pc)
+				html = get_already_completed_msg(pc)
 			end
     end
 
-		htmltext
+		html || get_no_quest_msg(pc)
 	end
 end

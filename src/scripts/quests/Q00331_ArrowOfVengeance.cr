@@ -1,4 +1,4 @@
-class Quests::Q00331_ArrowOfVengeance < Quest
+class Scripts::Q00331_ArrowOfVengeance < Quest
   # NPCs
   private BELTON = 30125
   # Items
@@ -57,7 +57,13 @@ class Quests::Q00331_ArrowOfVengeance < Quest
       medusa_venoms = st.get_quest_items_count(MEDUSA_VENOM)
       wyrms_teeth = st.get_quest_items_count(WYRMS_TOOTH)
       if harpy_feathers + medusa_venoms + wyrms_teeth > 0
-        st.give_adena(((harpy_feathers * HARPY_FEATHER_ADENA) + (medusa_venoms * MEDUSA_VENOM_ADENA) + (wyrms_teeth * WYRMS_TOOTH_ADENA) + ((harpy_feathers + medusa_venoms + wyrms_teeth) >= BONUS_COUNT ? BONUS : 0)), true)
+        adena = harpy_feathers * HARPY_FEATHER_ADENA
+        adena += medusa_venoms * MEDUSA_VENOM_ADENA
+        adena += wyrms_teeth * WYRMS_TOOTH_ADENA
+        if harpy_feathers + medusa_venoms + wyrms_teeth >= BONUS_COUNT
+          adena += BONUS
+        end
+        st.give_adena(adena, true)
         take_items(pc, -1, {HARPY_FEATHER, MEDUSA_VENOM, WYRMS_TOOTH})
         html = "30125-05.html"
       else

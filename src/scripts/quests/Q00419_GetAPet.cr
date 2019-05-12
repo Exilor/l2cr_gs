@@ -1,4 +1,4 @@
-class Quests::Q00419_GetAPet < Quest
+class Scripts::Q00419_GetAPet < Quest
 	# NPCs
 	private GUARD_METTY = 30072
 	private ACCESSORY_MERCHANT_ELLIE = 30091
@@ -146,26 +146,26 @@ class Quests::Q00419_GetAPet < Quest
         case pc.race
         when Race::HUMAN
           give_items(pc, ANIMAL_SLAYERS_1ST_LIST, 1)
-          htmltext = "30731-04.htm"
+          html = "30731-04.htm"
         when Race::ELF
           give_items(pc, ANIMAL_SLAYERS_2ND_LIST, 1)
-          htmltext = "30731-05.htm"
+          html = "30731-05.htm"
         when Race::DARK_ELF
           give_items(pc, ANIMAL_SLAYERS_3RD_LIST, 1)
-          htmltext = "30731-06.htm"
+          html = "30731-06.htm"
         when Race::ORC
           give_items(pc, ANIMAL_SLAYERS_4TH_LIST, 1)
-          htmltext = "30731-07.htm"
+          html = "30731-07.htm"
         when Race::DWARF
           give_items(pc, ANIMAL_SLAYERS_5TH_LIST, 1)
-          htmltext = "30731-08.htm"
+          html = "30731-08.htm"
         when Race::KAMAEL
           give_items(pc, ANIMAL_SLAYERS_LIST, 1)
-          htmltext = "30731-08a.htm"
+          html = "30731-08a.htm"
         end
       end
     when "30731-03.htm", "30072-02.html", "30091-02.html", "30256-02.html", "30256-03.html"
-      htmltext = event
+      html = event
     when "30731-12.html"
       case pc.race
       when Race::HUMAN
@@ -182,13 +182,13 @@ class Quests::Q00419_GetAPet < Quest
         take_give_quest_items(pc, ANIMAL_SLAYERS_LIST, BLOODY_RED_CLAW)
       end
       qs.memo_state = 0
-      htmltext = event
+      html = event
     when "QUESTIONS"
       if qs.memo_state & 15 == 10 && has_quest_items?(pc, ANIMAL_LOVERS_LIST)
         take_items(pc, ANIMAL_LOVERS_LIST, -1)
         give_items(pc, WOLF_COLLAR, 1)
         qs.exit_quest(true, true)
-        htmltext = "30731-15.html"
+        html = "30731-15.html"
       else
         link_id = 0
         find_response = false
@@ -204,7 +204,7 @@ class Quests::Q00419_GetAPet < Quest
             find_response = true
             qs.memo_state = (qs.memo_state + 1) | i7
             link_id = 1110000 + (5 * (random_link_offset - 4))
-            htmltext = "30731-#{20 + (random_link_offset - 4)}.htm"
+            html = "30731-#{20 + (random_link_offset - 4)}.htm"
           end
         end
 
@@ -233,19 +233,19 @@ class Quests::Q00419_GetAPet < Quest
             i8 |= i7
           end
         end
-        htmltext = get_htm(pc, htmltext.not_nil!)
-        htmltext = htmltext.sub("<?reply1?>", LINKS[link_id + reply_offset1])
-        htmltext = htmltext.sub("<?reply2?>", LINKS[link_id + reply_offset2])
-        htmltext = htmltext.sub("<?reply3?>", LINKS[link_id + reply_offset3])
-        htmltext = htmltext.sub("<?reply4?>", LINKS[link_id + reply_offset4])
-        htmltext = htmltext.sub("<?reply5?>", LINKS[link_id + 5])
+        html = get_htm(pc, html.not_nil!)
+        html = html.sub("<?reply1?>", LINKS[link_id + reply_offset1])
+        html = html.sub("<?reply2?>", LINKS[link_id + reply_offset2])
+        html = html.sub("<?reply3?>", LINKS[link_id + reply_offset3])
+        html = html.sub("<?reply4?>", LINKS[link_id + reply_offset4])
+        html = html.sub("<?reply5?>", LINKS[link_id + 5])
       end
     when "30731-14.html"
       qs.memo_state = 0
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   private def take_give_quest_items(pc, item_list, item)
@@ -313,73 +313,73 @@ class Quests::Q00419_GetAPet < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    htmltext = get_no_quest_msg(pc)
+    html = nil
 
     if qs.created?
       if npc.id == PET_MENAGER_MARTIN
         if pc.level < MIN_LEVEL
-          htmltext = "30731-01.htm"
+          html = "30731-01.htm"
         else
-          htmltext = "30731-02.htm"
+          html = "30731-02.htm"
         end
       end
     elsif qs.started?
       case npc.id
       when PET_MENAGER_MARTIN
         if has_quest_items?(pc, ANIMAL_SLAYERS_LIST)
-          htmltext = validate_quest_items(htmltext, pc, BLOODY_RED_CLAW)
+          html = validate_quest_items(html, pc, BLOODY_RED_CLAW)
         elsif has_quest_items?(pc, ANIMAL_SLAYERS_1ST_LIST)
-          htmltext = validate_quest_items(htmltext, pc, BLOODY_FANG)
+          html = validate_quest_items(html, pc, BLOODY_FANG)
         elsif has_quest_items?(pc, ANIMAL_SLAYERS_2ND_LIST)
-          htmltext = validate_quest_items(htmltext, pc, BLOODY_CLAW)
+          html = validate_quest_items(html, pc, BLOODY_CLAW)
         elsif has_quest_items?(pc, ANIMAL_SLAYERS_3RD_LIST)
-          htmltext = validate_quest_items(htmltext, pc, BLOODY_NAIL)
+          html = validate_quest_items(html, pc, BLOODY_NAIL)
         elsif has_quest_items?(pc, ANIMAL_SLAYERS_4TH_LIST)
-          htmltext = validate_quest_items(htmltext, pc, BLOODY_KASHA_FANG)
+          html = validate_quest_items(html, pc, BLOODY_KASHA_FANG)
         elsif has_quest_items?(pc, ANIMAL_SLAYERS_5TH_LIST)
-          htmltext = validate_quest_items(htmltext, pc, BLOODY_TARANTULA_NAIL)
+          html = validate_quest_items(html, pc, BLOODY_TARANTULA_NAIL)
         elsif has_quest_items?(pc, ANIMAL_LOVERS_LIST)
           if qs.memo_state != 14 && qs.memo_state != 1879048192
-            htmltext = "30731-16.html"
+            html = "30731-16.html"
           else
             qs.memo_state = 1879048192
-            htmltext = "30731-13.html"
+            html = "30731-13.html"
           end
         end
       when GUARD_METTY
         if has_quest_items?(pc, ANIMAL_LOVERS_LIST)
           qs.memo_state |= 4
-          htmltext = "30072-01.html"
+          html = "30072-01.html"
         end
       when ACCESSORY_MERCHANT_ELLIE
         if has_quest_items?(pc, ANIMAL_LOVERS_LIST)
           qs.memo_state |= 8
-          htmltext = "30091-01.html"
+          html = "30091-01.html"
         end
       when GATEKEEPER_BELLA
         if has_quest_items?(pc, ANIMAL_LOVERS_LIST)
           qs.memo_state |= 2
-          htmltext = "30256-01.html"
+          html = "30256-01.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   private def validate_quest_items(original_text, pc, item)
-    htmltext = original_text
+    html = original_text
 
     if get_quest_items_count(pc, item) < 50
-      if !has_quest_items?(pc, item)
-        htmltext = "30731-09.html"
+      if has_quest_items?(pc, item)
+        html = "30731-10.html"
       else
-        htmltext = "30731-10.html"
+        html = "30731-09.html"
       end
     else
-      htmltext = "30731-11.html"
+      html = "30731-11.html"
     end
 
-    htmltext
+    html
   end
 end

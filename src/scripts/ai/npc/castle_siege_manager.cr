@@ -1,4 +1,4 @@
-class NpcAI::CastleSiegeManager < AbstractNpcAI
+class Scripts::CastleSiegeManager < AbstractNpcAI
   # NPCs
   private SIEGE_MANAGER = {
     35104, # Gludio Castle

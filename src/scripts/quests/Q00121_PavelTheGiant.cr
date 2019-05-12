@@ -1,4 +1,4 @@
-class Quests::Q00121_PavelTheGiant < Quest
+class Scripts::Q00121_PavelTheGiant < Quest
   # NPCs
   private NEWYEAR = 31961
   private YUMI = 32041
@@ -10,10 +10,10 @@ class Quests::Q00121_PavelTheGiant < Quest
     add_talk_id(NEWYEAR, YUMI)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
@@ -27,24 +27,24 @@ class Quests::Q00121_PavelTheGiant < Quest
     event
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case npc.id
     when NEWYEAR
       case st.state
       when State::CREATED
-        htmltext = player.level >= 70 ? "31961-01.htm" : "31961-00.htm"
+        html = pc.level >= 70 ? "31961-01.htm" : "31961-00.htm"
       when State::STARTED
-        htmltext = "31961-03.html"
+        html = "31961-03.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when YUMI
       if st.started?
-        htmltext = "32041-01.html"
+        html = "32041-01.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

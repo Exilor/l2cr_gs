@@ -1,4 +1,4 @@
-class NpcAI::Asher < AbstractNpcAI
+class Scripts::Asher < AbstractNpcAI
   # NPC
   private ASHER = 32714
   # Location

@@ -1,4 +1,4 @@
-class Quests::Q00623_TheFinestFood < Quest
+class Scripts::Q00623_TheFinestFood < Quest
   # NPCs
   private JEREMY = 31521
   # Monsters
@@ -31,9 +31,9 @@ class Quests::Q00623_TheFinestFood < Quest
     register_quest_items(LEAF_OF_FLAVA.id, BUFFALO_MEAT.id, HORN_OF_ANTELOPE.id)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -45,20 +45,20 @@ class Quests::Q00623_TheFinestFood < Quest
       end
     when "31521-06.html"
       if qs.cond?(2)
-        if has_all_items?(player, true, LEAF_OF_FLAVA, BUFFALO_MEAT, HORN_OF_ANTELOPE)
+        if has_all_items?(pc, true, LEAF_OF_FLAVA, BUFFALO_MEAT, HORN_OF_ANTELOPE)
           random = rand(1000)
           if random < 120
-            give_adena(player, 25000, true)
-            reward_items(player, RING_OF_AURAKYRA)
+            give_adena(pc, 25000, true)
+            reward_items(pc, RING_OF_AURAKYRA)
           elsif random < 240
-            give_adena(player, 65000, true)
-            reward_items(player, SEALED_SANDDRAGONS_EARING)
+            give_adena(pc, 65000, true)
+            reward_items(pc, SEALED_SANDDRAGONS_EARING)
           elsif random < 340
-            give_adena(player, 25000, true)
-            reward_items(player, DRAGON_NECKLACE)
+            give_adena(pc, 25000, true)
+            reward_items(pc, DRAGON_NECKLACE)
           elsif random < 940
-            give_adena(player, 73000, true)
-            add_exp_and_sp(player, 230000, 18200)
+            give_adena(pc, 73000, true)
+            add_exp_and_sp(pc, 230000, 18200)
           end
           qs.exit_quest(true, true)
           html = event

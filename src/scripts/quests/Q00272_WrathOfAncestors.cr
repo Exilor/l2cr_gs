@@ -1,4 +1,4 @@
-class Quests::Q00272_WrathOfAncestors < Quest
+class Scripts::Q00272_WrathOfAncestors < Quest
   # NPC
   private LIVINA = 30572
   # Items
@@ -20,9 +20,9 @@ class Quests::Q00272_WrathOfAncestors < Quest
     register_quest_items(GRAVE_ROBBERS_HEAD)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event.casecmp?("30572-04.htm")
       st.start_quest
       event
@@ -43,23 +43,31 @@ class Quests::Q00272_WrathOfAncestors < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      htmltext = player.race.orc? ? player.level >= MIN_LVL ? "30572-03.htm" : "30572-02.htm" : "30572-01.htm"
+      if pc.race.orc?
+        if pc.level >= MIN_LVL
+          html = "30572-03.htm"
+        else
+          html = "30572-02.htm"
+        end
+      else
+        html = "30572-01.htm"
+      end
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30572-05.html"
+        html = "30572-05.html"
       when 2
         st.give_adena(1500, true)
         st.exit_quest(true, true)
-        htmltext = "30572-06.html"
+        html = "30572-06.html"
       end
     end
 
-    htmltext
+    html
   end
 end

@@ -1,4 +1,4 @@
-class Quests:: Q00002_WhatWomenWant < Quest
+class Scripts:: Q00002_WhatWomenWant < Quest
   # NPCs
   private ARUJIEN = 30223
   private MIRABEL = 30146
@@ -20,10 +20,7 @@ class Quests:: Q00002_WhatWomenWant < Quest
     add_start_npc(ARUJIEN)
     add_talk_id(ARUJIEN, MIRABEL, HERBIEL, GREENIS)
     register_quest_items(
-      ARUJIENS_LETTER1,
-      ARUJIENS_LETTER2,
-      ARUJIENS_LETTER3,
-      POETRY_BOOK,
+      ARUJIENS_LETTER1, ARUJIENS_LETTER2, ARUJIENS_LETTER3, POETRY_BOOK,
       GREENIS_LETTER
     )
   end
@@ -56,7 +53,6 @@ class Quests:: Q00002_WhatWomenWant < Quest
   end
 
   def on_talk(npc, pc)
-    html = get_no_quest_msg(pc)
     return unless st = get_quest_state(pc, true)
 
     case npc.id
@@ -130,6 +126,6 @@ class Quests:: Q00002_WhatWomenWant < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

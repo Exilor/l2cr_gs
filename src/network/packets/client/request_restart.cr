@@ -1,9 +1,9 @@
 class Packets::Incoming::RequestRestart < GameClientPacket
-  def read_impl
+  private def read_impl
     # no-op
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless pc.private_store_type.none?

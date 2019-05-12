@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestFortressSiegeInfo < GameClientPacket
   no_action_request
 
-  def read_impl
+  private def read_impl
     # no-op
   end
 
-  def run_impl
+  private def run_impl
     if client = client?
       FortManager.forts.each do |fort|
         if fort.siege.in_progress?

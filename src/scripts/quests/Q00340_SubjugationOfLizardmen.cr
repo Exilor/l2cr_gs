@@ -1,4 +1,4 @@
-class Quests::Q00340_SubjugationOfLizardmen < Quest
+class Scripts::Q00340_SubjugationOfLizardmen < Quest
   # NPCs
   private HIGH_PRIESTESS_LEVIAN = 30037
   private PRIEST_ADONIUS = 30375
@@ -25,9 +25,17 @@ class Quests::Q00340_SubjugationOfLizardmen < Quest
     super(340, self.class.simple_name, "Subjugation Of Lizardmen")
 
     add_start_npc(GUARD_WEISZ)
-    add_talk_id(GUARD_WEISZ, HIGH_PRIESTESS_LEVIAN, PRIEST_ADONIUS, CHEST_OF_BIFRONS)
-    add_kill_id(FELIM_LIZARDMAN, FELIM_LIZARDMAN_SCOUT, FELIM_LIZARDMAN_WARRIOR, LANGK_LIZARDMAN_WARRIOR, LANGK_LIZARDMAN_SCOUT, LANGK_LIZARDMAN, SERPENT_DEMON_BIFRONS)
-    register_quest_items(TRADE_CARGO, AGNESS_HOLY_SYMBOL, AGNESS_ROSARY, SINISTER_TOTEM)
+    add_talk_id(
+      GUARD_WEISZ, HIGH_PRIESTESS_LEVIAN, PRIEST_ADONIUS, CHEST_OF_BIFRONS
+    )
+    add_kill_id(
+      FELIM_LIZARDMAN, FELIM_LIZARDMAN_SCOUT, FELIM_LIZARDMAN_WARRIOR,
+      LANGK_LIZARDMAN_WARRIOR, LANGK_LIZARDMAN_SCOUT, LANGK_LIZARDMAN,
+      SERPENT_DEMON_BIFRONS
+    )
+    register_quest_items(
+      TRADE_CARGO, AGNESS_HOLY_SYMBOL, AGNESS_ROSARY, SINISTER_TOTEM
+    )
   end
 
   def on_adv_event(event, npc, pc)
@@ -103,9 +111,11 @@ class Quests::Q00340_SubjugationOfLizardmen < Quest
           if !has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && rand(100) <= 19
             give_items(killer, AGNESS_HOLY_SYMBOL, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
-          elsif has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && !has_quest_items?(killer, AGNESS_ROSARY) && rand(100) <= 18
-            give_items(killer, AGNESS_ROSARY, 1)
-            play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
+          elsif has_quest_items?(killer, AGNESS_HOLY_SYMBOL)
+            if !has_quest_items?(killer, AGNESS_ROSARY) && rand(100) <= 18
+              give_items(killer, AGNESS_ROSARY, 1)
+              play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
+            end
           end
         end
       when LANGK_LIZARDMAN_SCOUT, LANGK_LIZARDMAN
@@ -113,9 +123,11 @@ class Quests::Q00340_SubjugationOfLizardmen < Quest
           if !has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && rand(100) <= 18
             give_items(killer, AGNESS_HOLY_SYMBOL, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
-          elsif has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && !has_quest_items?(killer, AGNESS_ROSARY) && rand(100) <= 18
-            give_items(killer, AGNESS_ROSARY, 1)
-            play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
+          elsif has_quest_items?(killer, AGNESS_HOLY_SYMBOL)
+            if !has_quest_items?(killer, AGNESS_ROSARY) && rand(100) <= 18
+              give_items(killer, AGNESS_ROSARY, 1)
+              play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
+            end
           end
         end
       when SERPENT_DEMON_BIFRONS

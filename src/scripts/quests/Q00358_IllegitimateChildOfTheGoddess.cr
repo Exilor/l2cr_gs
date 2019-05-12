@@ -1,4 +1,4 @@
-class Quests::Q00358_IllegitimateChildOfTheGoddess < Quest
+class Scripts::Q00358_IllegitimateChildOfTheGoddess < Quest
   # NPC
   private OLTRAN = 30862
   # Item

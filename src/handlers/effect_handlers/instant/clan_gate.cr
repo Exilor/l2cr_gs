@@ -3,7 +3,7 @@ class EffectHandler::ClanGate < AbstractEffect
     if info.effected.player?
       pc = info.effected.acting_player
       if clan = pc.clan?
-        sm = SystemMessageId::COURT_MAGICIAN_CREATED_PORTAL
+        sm = SystemMessage.court_magician_created_portal
         clan.broadcast_to_other_online_members(sm, pc)
       end
     end

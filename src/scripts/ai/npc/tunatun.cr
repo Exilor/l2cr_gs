@@ -1,4 +1,4 @@
-class NpcAI::Tunatun < AbstractNpcAI
+class Scripts::Tunatun < AbstractNpcAI
   # NPC
   private TUNATUN = 31537
   # Item

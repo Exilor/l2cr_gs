@@ -1,4 +1,4 @@
-class NpcAI::Budenka < AbstractNpcAI
+class Scripts::Budenka < AbstractNpcAI
   # NPCs
   private BUDENKA = 32294
   # Items

@@ -1,4 +1,4 @@
-class NpcAI::BlackMarketeerOfMammon < AbstractNpcAI
+class Scripts::BlackMarketeerOfMammon < AbstractNpcAI
   private BLACK_MARKETEER = 31092
   private MIN_LEVEL = 60
 
@@ -14,7 +14,7 @@ class NpcAI::BlackMarketeerOfMammon < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    htmltext = event
+    html = event
 
     if event == "exchange"
       pc = pc.not_nil!
@@ -22,27 +22,27 @@ class NpcAI::BlackMarketeerOfMammon < AbstractNpcAI
         if pc.level >= MIN_LEVEL
           qs = get_quest_state!(pc)
           if !qs.now_available?
-            htmltext = "31092-03.html"
+            html = "31092-03.html"
           else
             if pc.adena >= 2_000_000
               qs.state = State::STARTED
               take_items(pc, Inventory::ADENA_ID, 2_000_000)
               give_items(pc, Inventory::ANCIENT_ADENA_ID, 500_000)
-              htmltext = "31092-04.html"
+              html = "31092-04.html"
               qs.exit_quest(QuestType::DAILY, false)
             else
-              htmltext = "31092-05.html"
+              html = "31092-05.html"
             end
           end
         else
-          htmltext = "31092-06.html"
+          html = "31092-06.html"
         end
       else
-        htmltext = "31092-02.html"
+        html = "31092-02.html"
       end
     end
 
-    htmltext
+    html
   end
 
   private def exchange_available? : Bool

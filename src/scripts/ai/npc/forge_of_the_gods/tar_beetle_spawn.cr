@@ -1,6 +1,6 @@
 require "../../../../models/l2_territory"
 
-class NpcAI::TarBeetleSpawn
+class TarBeetleSpawn
   include XMLReader
 
   private ZONES = [] of SpawnZone

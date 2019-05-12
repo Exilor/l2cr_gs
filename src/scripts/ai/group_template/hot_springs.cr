@@ -1,4 +1,4 @@
-class NpcAI::HotSprings < AbstractNpcAI
+class Scripts::HotSprings < AbstractNpcAI
   # NPCs
   private BANDERSNATCHLING = 21314
   private FLAVA = 21316

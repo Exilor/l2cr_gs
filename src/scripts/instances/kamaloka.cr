@@ -1,4 +1,4 @@
-class Kamaloka < AbstractInstance
+class Scripts::Kamaloka < AbstractInstance
   RESET_HOUR = 6
   RESET_MIN = 30
 

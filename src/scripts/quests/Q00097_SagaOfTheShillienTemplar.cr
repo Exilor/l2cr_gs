@@ -1,6 +1,6 @@
 require "./abstract_saga_quest"
 
-class Quests::Q00097_SagaOfTheShillienTemplar < Quests::AbstractSagaQuest
+class Scripts::Q00097_SagaOfTheShillienTemplar < AbstractSagaQuest
   def initialize
     super(97, self.class.simple_name, "Saga of the Shillien Templar")
 

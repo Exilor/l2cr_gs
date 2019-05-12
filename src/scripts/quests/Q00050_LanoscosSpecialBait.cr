@@ -1,4 +1,4 @@
-class Quests::Q00050_LanoscosSpecialBait < Quest
+class Scripts::Q00050_LanoscosSpecialBait < Quest
   # NPCs
   private LANOSCO = 31570
   private SINGING_WIND = 21026
@@ -15,30 +15,30 @@ class Quests::Q00050_LanoscosSpecialBait < Quest
     register_quest_items(ESSENCE_OF_WIND)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    htmltext = event
+    html = event
 
     case event
     when "31570-03.htm"
       st.start_quest
     when "31570-07.html"
       if st.cond?(2) && st.get_quest_items_count(ESSENCE_OF_WIND) >= 100
-        htmltext = "31570-06.htm"
+        html = "31570-06.htm"
         st.give_items(WIND_FISHING_LURE, 4)
         st.exit_quest(false, true)
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 1)
       return
     end
 
@@ -59,18 +59,17 @@ class Quests::Q00050_LanoscosSpecialBait < Quest
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
-      htmltext = player.level >= 27 ? "31570-01.htm" : "31570-02.html"
+      html = pc.level >= 27 ? "31570-01.htm" : "31570-02.html"
     when State::STARTED
-      htmltext = st.cond?(1) ? "31570-05.html" : "31570-04.html"
+      html = st.cond?(1) ? "31570-05.html" : "31570-04.html"
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

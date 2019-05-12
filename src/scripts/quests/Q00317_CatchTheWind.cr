@@ -1,4 +1,4 @@
-class Quests::Q00317_CatchTheWind < Quest
+class Scripts::Q00317_CatchTheWind < Quest
   # NPC
   private RIZRAELL = 30361
   # Item
@@ -29,7 +29,7 @@ class Quests::Q00317_CatchTheWind < Quest
     when "30361-04.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30361-08.html", "30361-09.html"
       shard_count = get_quest_items_count(pc, WIND_SHARD)
@@ -43,15 +43,14 @@ class Quests::Q00317_CatchTheWind < Quest
         qs.exit_quest(true, true)
       end
 
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
-    qs = get_random_party_member_state(killer, -1, 3, npc)
-    if qs
+    if qs = get_random_party_member_state(killer, -1, 3, npc)
       give_item_randomly(qs.player, npc, WIND_SHARD, 1, 0, DROP_CHANCE, true)
     end
 
@@ -62,11 +61,15 @@ class Quests::Q00317_CatchTheWind < Quest
     qs = get_quest_state!(pc)
 
     if qs.created?
-      htmltext = pc.level >= MIN_LEVEL ? "30361-03.htm" : "30361-02.htm"
+      html = pc.level >= MIN_LEVEL ? "30361-03.htm" : "30361-02.htm"
     elsif qs.started?
-      htmltext = has_quest_items?(pc, WIND_SHARD) ? "30361-07.html" : "30361-05.html"
+      if has_quest_items?(pc, WIND_SHARD)
+        html = "30361-07.html"
+      else
+        html = "30361-05.html"
+      end
     end
 
-    htmltext || get_no_quest_msg(pc)
+    html || get_no_quest_msg(pc)
   end
 end

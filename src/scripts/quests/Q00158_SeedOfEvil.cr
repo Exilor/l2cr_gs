@@ -1,4 +1,4 @@
-class Quests::Q00158_SeedOfEvil < Quest
+class Scripts::Q00158_SeedOfEvil < Quest
   # NPC
   private BIOTIN = 30031
   # Monster
@@ -19,9 +19,9 @@ class Quests::Q00158_SeedOfEvil < Quest
     register_quest_items(CLAY_TABLET)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event.casecmp?("30031-03.htm")
       st.start_quest
       return event
@@ -49,26 +49,26 @@ class Quests::Q00158_SeedOfEvil < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      htmltext = player.level >= MIN_LEVEL ? "30031-02.htm" : "30031-01.html"
+      html = pc.level >= MIN_LEVEL ? "30031-02.htm" : "30031-01.html"
     when State::STARTED
       if st.cond?(1)
-        htmltext = "30031-04.html"
+        html = "30031-04.html"
       elsif st.cond?(2) && st.has_quest_items?(CLAY_TABLET)
         st.give_items(ENCHANT_ARMOR_D, 1)
         st.add_exp_and_sp(17818, 927)
         st.give_adena(1495, true)
         st.exit_quest(false, true)
-        htmltext = "30031-05.html"
+        html = "30031-05.html"
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

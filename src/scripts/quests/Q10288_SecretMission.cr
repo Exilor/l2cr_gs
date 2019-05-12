@@ -1,4 +1,4 @@
-class Quests::Q10288_SecretMission < Quest
+class Scripts::Q10288_SecretMission < Quest
   # NPCs
   private DOMINIC = 31350
   private AQUILANI = 32780
@@ -17,17 +17,17 @@ class Quests::Q10288_SecretMission < Quest
     register_quest_items(LETTER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
-    htmltext = event
+    html = event
 
     case event
     when "31350-03.html"
-      if player.level < 82
-        htmltext = "31350-02b.html"
+      if pc.level < 82
+        html = "31350-02b.html"
       end
     when "31350-05.htm"
       st.start_quest
@@ -44,16 +44,16 @@ class Quests::Q10288_SecretMission < Quest
       end
     when "teleport"
       if npc.not_nil!.id == AQUILANI && st.completed?
-        player.tele_to_location(TELEPORT)
+        pc.tele_to_location(TELEPORT)
         return
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_first_talk(npc, player)
-    st = get_quest_state(player, false)
+  def on_first_talk(npc, pc)
+    st = get_quest_state(pc, false)
     # dialog only changes when you talk to Aquilani after quest completion
     if st && st.completed?
       return "32780-05.html"
@@ -62,26 +62,26 @@ class Quests::Q10288_SecretMission < Quest
     "data/html/default/32780.htm"
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case npc.id
     when DOMINIC
       case st.state
       when State::CREATED
-        htmltext = "31350-01.htm"
+        html = "31350-01.htm"
       when State::STARTED
         if st.cond?(1)
-          htmltext = "31350-06.html"
+          html = "31350-06.html"
         end
       when State::COMPLETED
-        htmltext = "31350-07.html"
+        html = "31350-07.html"
       end
     when AQUILANI
       if st.started?
         if st.cond?(1) && st.has_quest_items?(LETTER)
-          htmltext = "32780-01.html"
+          html = "32780-01.html"
         elsif st.cond?(2)
-          htmltext = "32780-04.html"
+          html = "32780-04.html"
         end
       end
     when GREYMORE
@@ -90,6 +90,6 @@ class Quests::Q10288_SecretMission < Quest
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

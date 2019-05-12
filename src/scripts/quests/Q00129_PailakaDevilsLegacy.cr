@@ -1,4 +1,4 @@
-class Quests::Q00129_PailakaDevilsLegacy < Quest
+class Scripts::Q00129_PailakaDevilsLegacy < Quest
   # NPCs
   private KAMS = 18629 # Kams (Panuka)
   private ALKASO = 18631 # Alkaso (Panuka)
@@ -38,35 +38,35 @@ class Quests::Q00129_PailakaDevilsLegacy < Quest
     register_quest_items(SWORD, ENH_SWORD1, ENH_SWORD2, SCROLL_1, SCROLL_2, SHIELD, HEALING_POTION, ANTIDOTE_POTION, DIVINE_POTION, DEFENCE_POTION, PAILAKA_KEY)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
     when "32498-02.htm", "32498-03.htm", "32498-04.htm"
-      htmltext = event
+      html = event
     when "32498-05.htm"
       unless qs.started?
-        htmltext = event
+        html = event
         qs.start_quest
       end
     when "32501-02.htm", "32501-04.htm"
-      htmltext = event
+      html = event
     when "32501-03.htm"
       if qs.cond?(2)
-        give_items(player, SWORD, 1)
+        give_items(pc, SWORD, 1)
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_first_talk(npc, player)
-    qs = get_quest_state(player, false)
+  def on_first_talk(npc, pc)
+    qs = get_quest_state(pc, false)
     if npc.id != ADVENTURER2 || (qs.nil? || !qs.completed?)
       return "#{npc.id}.htm"
     end
@@ -74,101 +74,101 @@ class Quests::Q00129_PailakaDevilsLegacy < Quest
     "32511-03.htm"
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when SURVIVOR
       case qs.state
       when State::CREATED
-        if player.level < MIN_LEVEL
-          htmltext = "32498-11.htm"
-        elsif player.level > MAX_LEVEL
-          htmltext = "32498-12.htm"
+        if pc.level < MIN_LEVEL
+          html = "32498-11.htm"
+        elsif pc.level > MAX_LEVEL
+          html = "32498-12.htm"
         else
-          htmltext = "32498-01.htm"
+          html = "32498-01.htm"
         end
       when State::STARTED
         if qs.cond > 1
-          htmltext = "32498-08.htm"
+          html = "32498-08.htm"
         else
-          htmltext = "32498-06.htm"
+          html = "32498-06.htm"
         end
       when State::COMPLETED
-        htmltext = "32498-10.htm"
+        html = "32498-10.htm"
       else
-        htmltext = "32498-01.htm"
+        html = "32498-01.htm"
       end
     when SUPPORTER
       if qs.cond > 2
-        htmltext = "32501-04.htm"
+        html = "32501-04.htm"
       else
-        htmltext = "32501-01.htm"
+        html = "32501-01.htm"
       end
     when ADVENTURER1
-      if player.has_summon?
-        htmltext = "32508-07.htm"
-      elsif has_quest_items?(player, SWORD)
-        if has_quest_items?(player, SCROLL_1)
-          take_items(player, SWORD, -1)
-          take_items(player, SCROLL_1, -1)
-          give_items(player, ENH_SWORD1, 1)
-          htmltext = "32508-03.htm"
+      if pc.has_summon?
+        html = "32508-07.htm"
+      elsif has_quest_items?(pc, SWORD)
+        if has_quest_items?(pc, SCROLL_1)
+          take_items(pc, SWORD, -1)
+          take_items(pc, SCROLL_1, -1)
+          give_items(pc, ENH_SWORD1, 1)
+          html = "32508-03.htm"
         else
-          htmltext = "32508-02.htm"
+          html = "32508-02.htm"
         end
-      elsif has_quest_items?(player, ENH_SWORD1)
-        if has_quest_items?(player, SCROLL_2)
-          take_items(player, ENH_SWORD1, -1)
-          take_items(player, SCROLL_2, -1)
-          give_items(player, ENH_SWORD2, 1)
-          htmltext = "32508-05.htm"
+      elsif has_quest_items?(pc, ENH_SWORD1)
+        if has_quest_items?(pc, SCROLL_2)
+          take_items(pc, ENH_SWORD1, -1)
+          take_items(pc, SCROLL_2, -1)
+          give_items(pc, ENH_SWORD2, 1)
+          html = "32508-05.htm"
         end
-        htmltext = "32508-04.htm"
-      elsif has_quest_items?(player, ENH_SWORD2)
-        htmltext = "32508-06.htm"
+        html = "32508-04.htm"
+      elsif has_quest_items?(pc, ENH_SWORD2)
+        html = "32508-06.htm"
       else
-        htmltext = "32508-00.htm"
+        html = "32508-00.htm"
       end
     when ADVENTURER2
-      if player.has_summon?
-        htmltext = "32511-02.htm"
+      if pc.has_summon?
+        html = "32511-02.htm"
       else
         inst = InstanceManager.get_instance!(npc.instance_id)
         qs.exit_quest(false, true)
         inst.duration = EXIT_TIME * 60000
         inst.empty_destroy_time = 0
-        if inst.includes?(player.l2id)
-          npc.target = player
+        if inst.includes?(pc.l2id)
+          npc.target = pc
           npc.do_cast(VITALITY_REPLENISHING)
-          add_exp_and_sp(player, 10800000, 950000)
-          reward_items(player, BRACELET, 1)
-          reward_items(player, ESCAPE, 1)
+          add_exp_and_sp(pc, 10800000, 950000)
+          reward_items(pc, BRACELET, 1)
+          reward_items(pc, ESCAPE, 1)
         # else
           # custom: else commented out. From the contents of the html it seems
           # it has to be this way.
-          htmltext = "32511-01.htm"
+          html = "32511-01.htm"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
-  def on_kill(npc, player, is_summon)
-    qs = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    qs = get_quest_state(pc, false)
 
     if qs && qs.started?
       case npc.id
       when KAMS
-        if has_quest_items?(player, SWORD)
-          give_items(player, SCROLL_1, 1)
-          play_sound(player, Sound::ITEMSOUND_QUEST_ITEMGET)
+        if has_quest_items?(pc, SWORD)
+          give_items(pc, SCROLL_1, 1)
+          play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       when ALKASO
-        if has_quest_items?(player, ENH_SWORD1)
-          give_items(player, SCROLL_2, 1)
-          play_sound(player, Sound::ITEMSOUND_QUEST_ITEMGET)
+        if has_quest_items?(pc, ENH_SWORD1)
+          give_items(pc, SCROLL_2, 1)
+          play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       when LEMATAN
         if qs.cond?(3)

@@ -1,4 +1,4 @@
-class Quests::Q00137_TempleChampionPart1 < Quest
+class Scripts::Q00137_TempleChampionPart1 < Quest
   # NPCs
   private SYLVAIN = 30070
   private MOBS = {
@@ -23,10 +23,10 @@ class Quests::Q00137_TempleChampionPart1 < Quest
     register_quest_items(FRAGMENT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
@@ -44,7 +44,7 @@ class Quests::Q00137_TempleChampionPart1 < Quest
         st.take_items(EXECUTOR, -1)
         st.take_items(MISSIONARY, -1)
         st.give_adena(69146, true)
-        if player.level < 41
+        if pc.level < 41
           st.add_exp_and_sp(219975, 13047)
         end
         st.exit_quest(false, true)
@@ -54,8 +54,8 @@ class Quests::Q00137_TempleChampionPart1 < Quest
     event
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
     if st && st.started? && st.cond?(2) && st.get_quest_items_count(FRAGMENT) < 30
       st.give_items(FRAGMENT, 1)
       if st.get_quest_items_count(FRAGMENT) >= 30
@@ -68,40 +68,40 @@ class Quests::Q00137_TempleChampionPart1 < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     if st.completed?
-      return get_already_completed_msg(player)
+      return get_already_completed_msg(pc)
     end
 
     case st.cond
     when 1
       case st.get_int("talk")
       when 1
-        htmltext = "30070-05.html"
+        html = "30070-05.html"
       when 2
-        htmltext = "30070-06.html"
+        html = "30070-06.html"
       else
-        htmltext = "30070-03.html"
+        html = "30070-03.html"
       end
     when 2
-      htmltext = "30070-08.html"
+      html = "30070-08.html"
     when 3
       if st.get_int("talk") == 1
-        htmltext = "30070-10.html"
+        html = "30070-10.html"
       elsif st.get_quest_items_count(FRAGMENT) >= 30
         st.set("talk", "1")
-        htmltext = "30070-09.html"
+        html = "30070-09.html"
         st.take_items(FRAGMENT, -1)
       end
     else
-      if player.level >= 35 && st.has_quest_items?(EXECUTOR, MISSIONARY)
-        htmltext = "30070-01.htm"
+      if pc.level >= 35 && st.has_quest_items?(EXECUTOR, MISSIONARY)
+        html = "30070-01.htm"
       else
-        htmltext = "30070-00.html"
+        html = "30070-00.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

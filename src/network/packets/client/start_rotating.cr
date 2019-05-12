@@ -2,12 +2,12 @@ class Packets::Incoming::StartRotating < GameClientPacket
   @degree = 0
   @side = 0
 
-  def read_impl
+  private def read_impl
     @degree = d
     @side = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     # if pc.in_airship? && pc.airship.captain?(pc)

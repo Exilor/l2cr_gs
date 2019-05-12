@@ -1,4 +1,4 @@
-class Quests::Q00299_GatherIngredientsForPie < Quest
+class Scripts::Q00299_GatherIngredientsForPie < Quest
   # NPCs
   private LARS = 30063
   private BRIGHT = 30466
@@ -32,22 +32,22 @@ class Quests::Q00299_GatherIngredientsForPie < Quest
     register_quest_items(FRUIT_BASKET, HONEY_POUCH, AVELLAN_SPICE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
     case event
     when "30063-02.html"
       if qs.cond?(3)
-        give_items(player, AVELLAN_SPICE, 1)
+        give_items(pc, AVELLAN_SPICE, 1)
         qs.set_cond(4, true)
         html = event
       end
     when "30466-02.html"
       if qs.cond?(5)
-        give_items(player, FRUIT_BASKET, 1)
+        give_items(pc, FRUIT_BASKET, 1)
         qs.set_cond(6, true)
         html = event
       end
@@ -57,28 +57,28 @@ class Quests::Q00299_GatherIngredientsForPie < Quest
         html = event
       end
     when "30620-06.html"
-      if qs.cond?(2) && get_quest_items_count(player, HONEY_POUCH) >= 100
-        take_items(player, HONEY_POUCH, -1)
+      if qs.cond?(2) && get_quest_items_count(pc, HONEY_POUCH) >= 100
+        take_items(pc, HONEY_POUCH, -1)
         qs.set_cond(3, true)
         html = event
       else
         html = "30620-07.html"
       end
     when "30620-10.html"
-      if qs.cond?(4) && has_quest_items?(player, AVELLAN_SPICE)
-        take_items(player, AVELLAN_SPICE, -1)
+      if qs.cond?(4) && has_quest_items?(pc, AVELLAN_SPICE)
+        take_items(pc, AVELLAN_SPICE, -1)
         qs.set_cond(5, true)
         html = event
       else
         html = "30620-11.html"
       end
     when "30620-14.html"
-      if qs.cond?(6) && has_quest_items?(player, FRUIT_BASKET)
-        take_items(player, FRUIT_BASKET, -1)
+      if qs.cond?(6) && has_quest_items?(pc, FRUIT_BASKET)
+        take_items(pc, FRUIT_BASKET, -1)
         chance = rand(1000)
         REWARDS.each do |holder|
           if holder.chance > chance
-            reward_items(player, holder)
+            reward_items(pc, holder)
             break
           end
         end
@@ -106,8 +106,8 @@ class Quests::Q00299_GatherIngredientsForPie < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when LARS
@@ -127,31 +127,31 @@ class Quests::Q00299_GatherIngredientsForPie < Quest
     when EMILLY
       case qs.state
       when State::CREATED
-        html = talker.level >= MIN_LVL ? "30620-01.htm" : "30620-02.htm"
+        html = pc.level >= MIN_LVL ? "30620-01.htm" : "30620-02.htm"
       when State::STARTED
         case qs.cond
         when 1
           html = "30620-05.html"
         when 2
-          if get_quest_items_count(talker, HONEY_POUCH) >= 100
+          if get_quest_items_count(pc, HONEY_POUCH) >= 100
             html = "30620-04.html"
           end
         when 3
           html = "30620-08.html"
         when 4
-          if has_quest_items?(talker, AVELLAN_SPICE)
+          if has_quest_items?(pc, AVELLAN_SPICE)
             html = "30620-09.html"
           end
         when 5
           html = "30620-12.html"
         when 6
-          if has_quest_items?(talker, FRUIT_BASKET)
+          if has_quest_items?(pc, FRUIT_BASKET)
             html = "30620-13.html"
           end
         end
       end
     end
 
-    html || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 end

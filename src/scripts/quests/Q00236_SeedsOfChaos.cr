@@ -1,4 +1,4 @@
-class Quests::Q00236_SeedsOfChaos < Quest
+class Scripts::Q00236_SeedsOfChaos < Quest
   # NPCs
   private KURSTIN = 31387
   private MYSTERIOU_WIZARD = 31522
@@ -39,13 +39,22 @@ class Quests::Q00236_SeedsOfChaos < Quest
     super(236, self.class.simple_name, "Seeds Of Chaos")
 
     add_start_npc(HIERARCH_KEKROPUS)
-    add_talk_id(HIERARCH_KEKROPUS, KURSTIN, MYSTERIOU_WIZARD, VICE_HIERARCH_MAO, KATENAR, HARKILGAMED, RODENPICULA, ROCK, MOTHER_NORNIL, KATENAR_A, KATENAR_B, HARKILGAMED_A)
-    add_kill_id(NEEDLE_STAKATO_DRONE, SHOUT_OF_SPLENDOR, ALLIANCE_OF_SPLENDOR, ALLIANCE_OF_SPLENDOR_1, SIGNET_OF_SPLENDOR, CROWN_OF_SPLENDOR, FANG_OF_SPLENDOR, FANG_OF_SPLENDOR_1, WAILINGOF_SPLENDOR, WAILINGOF_SPLENDOR_1, VAMPIRE_WIZARD, VAMPIRE_WIZARD_A)
+    add_talk_id(
+      HIERARCH_KEKROPUS, KURSTIN, MYSTERIOU_WIZARD, VICE_HIERARCH_MAO, KATENAR,
+      HARKILGAMED, RODENPICULA, ROCK, MOTHER_NORNIL, KATENAR_A, KATENAR_B,
+      HARKILGAMED_A
+    )
+    add_kill_id(
+      NEEDLE_STAKATO_DRONE, SHOUT_OF_SPLENDOR, ALLIANCE_OF_SPLENDOR,
+      ALLIANCE_OF_SPLENDOR_1, SIGNET_OF_SPLENDOR, CROWN_OF_SPLENDOR,
+      FANG_OF_SPLENDOR, FANG_OF_SPLENDOR_1, WAILINGOF_SPLENDOR,
+      WAILINGOF_SPLENDOR_1, VAMPIRE_WIZARD, VAMPIRE_WIZARD_A
+    )
     add_spawn_id(KATENAR, HARKILGAMED, KATENAR_A, KATENAR_B, HARKILGAMED_A)
     register_quest_items(SHINING_MEDALLION, BLOOD_JEWEL, BLACK_ECHO_CRYSTAL)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     if event == "KATENAR_120"
       npc = npc.not_nil!
       c0 = npc.variables.get_object("player0", L2PcInstance?)
@@ -113,38 +122,38 @@ class Quests::Q00236_SeedsOfChaos < Quest
       return super
     end
 
-    return unless player
-    return unless qs = get_quest_state(player, false)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "32138-04.htm"
       if qs.created?
         qs.memo_state = 1
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "32138-03.htm"
-      if player.level >= MIN_LEVEL && player.race.kamael? && has_quest_items?(player, STAR_OF_DESTINY)
-        htmltext = event
+      if pc.level >= MIN_LEVEL && pc.race.kamael? && has_quest_items?(pc, STAR_OF_DESTINY)
+        html = event
       end
     when "32138-12.html"
       if qs.memo_state?(30)
         qs.memo_state = 40
         qs.set_cond(15, true)
-        htmltext = event
+        html = event
       end
     when "31387-03.html"
       if qs.memo_state?(11)
-        take_items(player, BLOOD_JEWEL, -1)
+        take_items(pc, BLOOD_JEWEL, -1)
         qs.memo_state = 12
-        htmltext = event
+        html = event
       end
     when "31387-05a.html"
       if qs.memo_state?(12)
-        if player.quest_completed?(Q00025_HidingBehindTheTruth.simple_name)
-          htmltext = event
+        if pc.quest_completed?(Q00025_HidingBehindTheTruth.simple_name)
+          html = event
         else
-          htmltext = "31387-05b.html"
+          html = "31387-05b.html"
         end
       end
     when "31387-10.html"
@@ -152,48 +161,48 @@ class Quests::Q00236_SeedsOfChaos < Quest
         qs.memo_state = 20
         qs.set_memo_state_ex(1, 1)
         qs.set_cond(11, true)
-        htmltext = event
+        html = event
       elsif qs.memo_state?(20) && qs.get_memo_state_ex(1) == 1
-        htmltext = event
+        html = event
       end
     when "31522-04a.html"
       if qs.memo_state?(1)
-        htmltext = event
+        html = event
       end
     when "31522-05a.html"
       if qs.memo_state?(1)
         qs.memo_state = 2
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "31522-05b.html"
       if qs.memo_state?(1)
         qs.memo_state = 3
         qs.set_memo_state_ex(1, 0)
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "31522-09a.html"
-      if qs.memo_state?(2) && has_quest_items?(player, BLACK_ECHO_CRYSTAL)
-        take_items(player, BLACK_ECHO_CRYSTAL, -1)
+      if qs.memo_state?(2) && has_quest_items?(pc, BLACK_ECHO_CRYSTAL)
+        take_items(pc, BLACK_ECHO_CRYSTAL, -1)
         qs.memo_state = 6
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "31522-12a.html"
       if qs.memo_state?(6)
         npc = npc.not_nil!
         if !npc.variables.get_bool("SPAWNED", false)
           npc.variables["SPAWNED"] = true
-          npc.variables["PLAYER_ID"] = player.l2id
-          katenar = add_spawn(KATENAR, player.x + 10, player.y + 10, player.z, +10, false, 0)
+          npc.variables["PLAYER_ID"] = pc.l2id
+          katenar = add_spawn(KATENAR, pc.x + 10, pc.y + 10, pc.z, +10, false, 0)
           katenar.variables["npc0"] = npc
-          katenar.variables["player0"] = player
-          htmltext = event
-        elsif npc.variables.get_i32("PLAYER_ID") == player.l2id
-          htmltext = "31522-13a.html"
+          katenar.variables["player0"] = pc
+          html = event
+        elsif npc.variables.get_i32("PLAYER_ID") == pc.l2id
+          html = "31522-13a.html"
         else
-          htmltext = "31522-14a.html"
+          html = "31522-14a.html"
         end
       end
     when "31522-09b.html"
@@ -201,31 +210,31 @@ class Quests::Q00236_SeedsOfChaos < Quest
         npc = npc.not_nil!
         if !npc.variables.get_bool("SPAWNED", false)
           npc.variables["SPAWNED"] = true
-          npc.variables["PLAYER_ID"] = player.l2id
-          katenar = add_spawn(KATENAR_A, player.x + 10, player.y + 10, player.z, +10, false, 0)
+          npc.variables["PLAYER_ID"] = pc.l2id
+          katenar = add_spawn(KATENAR_A, pc.x + 10, pc.y + 10, pc.z, +10, false, 0)
           katenar.variables["npc0"] = npc
-          katenar.variables["player0"] = player
-          htmltext = event
-        elsif npc.variables.get_i32("PLAYER_ID") == player.l2id
-          htmltext = "31522-10b.html"
+          katenar.variables["player0"] = pc
+          html = event
+        elsif npc.variables.get_i32("PLAYER_ID") == pc.l2id
+          html = "31522-10b.html"
         else
-          htmltext = "31522-11b.html"
+          html = "31522-11b.html"
         end
       end
     when "31522-14b.html"
-      if qs.memo_state?(7) && has_quest_items?(player, BLOOD_JEWEL)
+      if qs.memo_state?(7) && has_quest_items?(pc, BLOOD_JEWEL)
         npc = npc.not_nil!
         if !npc.variables.get_bool("SPAWNED", false)
           npc.variables["SPAWNED"] = true
-          npc.variables["PLAYER_ID"] = player.l2id
-          katenar = add_spawn(KATENAR_B, player.x + 10, player.y + 10, player.z, +10, false, 0)
+          npc.variables["PLAYER_ID"] = pc.l2id
+          katenar = add_spawn(KATENAR_B, pc.x + 10, pc.y + 10, pc.z, +10, false, 0)
           katenar.variables["npc0"] = npc
-          katenar.variables["player0"] = player
-          htmltext = event
-        elsif npc.variables.get_i32("PLAYER_ID") == player.l2id
-          htmltext = "31522-15b.html"
+          katenar.variables["player0"] = pc
+          html = event
+        elsif npc.variables.get_i32("PLAYER_ID") == pc.l2id
+          html = "31522-15b.html"
         else
-          htmltext = "31522-15bz.html"
+          html = "31522-15bz.html"
         end
       end
     when "32235-09a.html"
@@ -233,7 +242,7 @@ class Quests::Q00236_SeedsOfChaos < Quest
         qs.memo_state = 20
         qs.set_memo_state_ex(1, 0)
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "32236-07.html"
       if qs.memo_state?(20)
@@ -244,45 +253,45 @@ class Quests::Q00236_SeedsOfChaos < Quest
           qs.set_memo_state_ex(1, 0)
           qs.set_cond(12, true)
         end
-        htmltext = event
+        html = event
       end
     when "32237-10.html"
       if qs.memo_state?(40)
-        htmltext = event
+        html = event
       end
     when "32237-11.html"
       if qs.memo_state?(40)
         qs.memo_state = 42
         qs.set_cond(17, true)
-        htmltext = event
+        html = event
       end
     when "32237-13.html"
       if qs.memo_state?(43)
         qs.memo_state = 44
         qs.set_cond(19, true)
-        htmltext = event
+        html = event
       end
     when "32237-17.html"
       if qs.memo_state?(45)
-        give_items(player, SCROLL_ENCHANT_WEAPON_A_GRADE, 1)
-        take_items(player, STAR_OF_DESTINY, 1)
+        give_items(pc, SCROLL_ENCHANT_WEAPON_A_GRADE, 1)
+        take_items(pc, STAR_OF_DESTINY, 1)
         qs.exit_quest(false, true)
-        htmltext = event
+        html = event
       end
     when "32238-02.html"
       if qs.memo_state?(20)
         npc = npc.not_nil!
         if !npc.variables.get_bool("SPAWNED", false)
           npc.variables["SPAWNED"] = true
-          npc.variables["PLAYER_ID"] = player.l2id
+          npc.variables["PLAYER_ID"] = pc.l2id
           kamael = add_spawn(HARKILGAMED, 71722, -78853, -4464, 0, false, 0)
           kamael.variables["npc0"] = npc
-          kamael.variables["player0"] = player
-          htmltext = event
-        elsif npc.variables.get_i32("PLAYER_ID") == player.l2id
-          htmltext = "32238-03.html"
+          kamael.variables["player0"] = pc
+          html = event
+        elsif npc.variables.get_i32("PLAYER_ID") == pc.l2id
+          html = "32238-03.html"
         else
-          htmltext = "32238-04z.html"
+          html = "32238-04z.html"
         end
       end
     when "32238-06.html"
@@ -290,28 +299,28 @@ class Quests::Q00236_SeedsOfChaos < Quest
         npc = npc.not_nil!
         if !npc.variables.get_bool("SPAWNED", false)
           npc.variables["SPAWNED"] = true
-          npc.variables["PLAYER_ID"] = player.l2id
+          npc.variables["PLAYER_ID"] = pc.l2id
           kamael = add_spawn(HARKILGAMED_A, 71722, -78853, -4464, 0, false, 0)
           kamael.variables["npc0"] = npc
-          kamael.variables["player0"] = player
-          htmltext = event
-        elsif npc.variables.get_i32("PLAYER_ID") == player.l2id
-          htmltext = "32238-07.html"
+          kamael.variables["player0"] = pc
+          html = event
+        elsif npc.variables.get_i32("PLAYER_ID") == pc.l2id
+          html = "32238-07.html"
         else
-          htmltext = "32238-08.html"
+          html = "32238-08.html"
         end
       end
     when "32239-04.html"
       if qs.memo_state?(42)
         qs.memo_state = 43
         qs.set_cond(18, true)
-        htmltext = event
+        html = event
       end
     when "32239-08.html"
       if qs.memo_state?(44)
         qs.memo_state = 45
         qs.set_cond(20, true)
-        htmltext = event
+        html = event
       end
     when "32332-05b.html"
       if qs.memo_state?(3) && qs.get_memo_state_ex(1) == 2
@@ -322,25 +331,25 @@ class Quests::Q00236_SeedsOfChaos < Quest
           qs.set_memo_state_ex(1, 0)
           qs.set_cond(8, true)
         end
-        htmltext = event
+        html = event
       end
     when "32334-17.html"
       if qs.memo_state?(22)
         npc = npc.not_nil!
         c0 = npc.variables.get_object("player0", L2PcInstance?)
         if c0
-          take_items(player, SHINING_MEDALLION, -1)
+          take_items(pc, SHINING_MEDALLION, -1)
           qs.memo_state = 30
           qs.set_cond(14, true)
         end
-        htmltext = event
+        html = event
       end
     when "KEITNAR_DESPAWN"
       if qs.memo_state?(20) && qs.get_memo_state_ex(1) == 0
         npc = npc.not_nil!
         c0 = npc.variables.get_object("player0", L2PcInstance?)
         npc0 = npc.variables.get_object("npc0", L2Npc?)
-        if player == c0
+        if pc == c0
           if npc0
             npc0.variables["SPAWNED"] = false
           end
@@ -353,7 +362,7 @@ class Quests::Q00236_SeedsOfChaos < Quest
         npc = npc.not_nil!
         c0 = npc.variables.get_object("player0", L2PcInstance?)
         npc0 = npc.variables.get_object("npc0", L2Npc?)
-        if player == c0
+        if pc == c0
           if npc0
             npc0.variables["SPAWNED"] = false
           end
@@ -365,7 +374,7 @@ class Quests::Q00236_SeedsOfChaos < Quest
       npc = npc.not_nil!
       c0 = npc.variables.get_object("player0", L2PcInstance?)
       npc0 = npc.variables.get_object("npc0", L2Npc?)
-      if player == c0
+      if pc == c0
         if npc0
           npc0.variables["SPAWNED"] = false
         end
@@ -374,10 +383,10 @@ class Quests::Q00236_SeedsOfChaos < Quest
       end
     when "KEITNAR_B_DESPAWN"
       npc = npc.not_nil!
-      if qs.memo_state?(11) && has_quest_items?(player, BLOOD_JEWEL)
+      if qs.memo_state?(11) && has_quest_items?(pc, BLOOD_JEWEL)
         c0 = npc.variables.get_object("player0", L2PcInstance?)
         npc0 = npc.variables.get_object("npc0", L2Npc?)
-        if player == c0
+        if pc == c0
           if npc0
             npc0.variables["SPAWNED"] = false
           end
@@ -390,7 +399,7 @@ class Quests::Q00236_SeedsOfChaos < Quest
         npc = npc.not_nil!
         c0 = npc.variables.get_object("player0", L2PcInstance?)
         npc0 = npc.variables.get_object("npc0", L2Npc?)
-        if player == c0
+        if pc == c0
           if npc0
             npc0.variables["SPAWNED"] = false
           end
@@ -410,10 +419,10 @@ class Quests::Q00236_SeedsOfChaos < Quest
          "32239-07.html",  "32332-02b.html", "32332-03b.html", "32332-04b.html",
          "32334-10.html",  "32334-11.html",  "32334-12.html",  "32334-13.html",
          "32334-14.html",  "32334-15.html",  "32334-16.html"
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -452,23 +461,23 @@ class Quests::Q00236_SeedsOfChaos < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created?
       if npc.id == HIERARCH_KEKROPUS
-        if player.level >= MIN_LEVEL
-          if player.race.kamael?
-            if has_quest_items?(player, STAR_OF_DESTINY)
-              htmltext = "32138-01.htm"
+        if pc.level >= MIN_LEVEL
+          if pc.race.kamael?
+            if has_quest_items?(pc, STAR_OF_DESTINY)
+              html = "32138-01.htm"
             else
-              htmltext = "32138-01x.html"
+              html = "32138-01x.html"
             end
           else
-            htmltext = "32138-01y.html"
+            html = "32138-01y.html"
           end
         else
-          htmltext = "32138-01z.html"
+          html = "32138-01z.html"
         end
       end
     elsif qs.started?
@@ -476,62 +485,62 @@ class Quests::Q00236_SeedsOfChaos < Quest
       when HIERARCH_KEKROPUS
         case qs.memo_state
         when 1
-          htmltext = "32138-05.html"
+          html = "32138-05.html"
         when 30
-          htmltext = "32138-06.html"
+          html = "32138-06.html"
         when 40
-          htmltext = "32138-13.html"
+          html = "32138-13.html"
         end
       when KURSTIN
         case qs.memo_state
         when 11
-          htmltext = "31387-01.html"
+          html = "31387-01.html"
         when 12
-          htmltext = "31387-04.html"
+          html = "31387-04.html"
         when 20
           if qs.get_memo_state_ex(1) == 1
-            htmltext = "31387-11.html"
+            html = "31387-11.html"
           end
         end
       when MYSTERIOU_WIZARD
         case qs.memo_state
         when 1
-          htmltext = "31522-01.html"
+          html = "31522-01.html"
         when 2
-          if !has_quest_items?(player, BLACK_ECHO_CRYSTAL)
-            htmltext = "31522-06a.html"
+          if !has_quest_items?(pc, BLACK_ECHO_CRYSTAL)
+            html = "31522-06a.html"
           else
-            htmltext = "31522-07a.html"
+            html = "31522-07a.html"
           end
         when 6
-          htmltext = "31522-10a.html"
+          html = "31522-10a.html"
         when 20
           if qs.get_memo_state_ex(1) == 0
-            htmltext = "31522-15a.html"
+            html = "31522-15a.html"
           end
         when 3
           if qs.get_memo_state_ex(1) == 0
             qs.set_memo_state_ex(1, 1)
-            htmltext = "31522-06b.html"
+            html = "31522-06b.html"
           elsif qs.get_memo_state_ex(1) == 1
             qs.set_memo_state_ex(1, 2)
             qs.set_cond(7, true)
-            htmltext = "31522-07b.html"
+            html = "31522-07b.html"
           elsif qs.get_memo_state_ex(1) == 2
-            htmltext = "31522-08b.html"
+            html = "31522-08b.html"
           end
         when 7
-          if !has_quest_items?(player, BLOOD_JEWEL)
-            htmltext = "31522-12b.html"
+          if !has_quest_items?(pc, BLOOD_JEWEL)
+            html = "31522-12b.html"
           else
-            htmltext = "31522-13b.html"
+            html = "31522-13b.html"
           end
         when 11
-          htmltext = "31522-16b.html"
+          html = "31522-16b.html"
         end
       when VICE_HIERARCH_MAO
         if qs.memo_state >= 40 && qs.memo_state <= 45
-          htmltext = "32190-01.html"
+          html = "32190-01.html"
         end
       when KATENAR
         case qs.memo_state
@@ -539,14 +548,14 @@ class Quests::Q00236_SeedsOfChaos < Quest
           c0 = npc.variables.get_object("player0", L2PcInstance?)
           npc0 = npc.variables.get_object("npc0", L2Npc?).not_nil!
           npc0.variables["SPAWNED"] = false
-          if player == c0
-            htmltext = "32235-01a.html"
+          if pc == c0
+            html = "32235-01a.html"
           else
-            htmltext = "32235-01z.html"
+            html = "32235-01z.html"
           end
         when 20
           if qs.get_memo_state_ex(1) == 0
-            htmltext = "32235-09z.html"
+            html = "32235-09z.html"
           end
         end
       when HARKILGAMED
@@ -555,52 +564,52 @@ class Quests::Q00236_SeedsOfChaos < Quest
           c0 = npc.variables.get_object("player0", L2PcInstance?)
           npc0 = npc.variables.get_object("npc0", L2Npc?).not_nil!
           npc0.variables["SPAWNED"] = false
-          if player == c0
-            htmltext = "32236-01.html"
+          if pc == c0
+            html = "32236-01.html"
           else
-            htmltext = "32236-02.html"
+            html = "32236-02.html"
           end
         when 21
-          htmltext = "32236-07z.html"
+          html = "32236-07z.html"
         when 22
-          htmltext = "32236-08z.html"
+          html = "32236-08z.html"
         end
       when RODENPICULA
         case qs.memo_state
         when 40
-          htmltext = "32237-01.html"
+          html = "32237-01.html"
         when 42
-          htmltext = "32237-11a.html"
+          html = "32237-11a.html"
         when 43
-          htmltext = "32237-12.html"
+          html = "32237-12.html"
         when 44
-          htmltext = "32237-14.html"
+          html = "32237-14.html"
         when 45
-          htmltext = "32237-15.html"
+          html = "32237-15.html"
         end
       when ROCK
         case qs.memo_state
         when 20
-          htmltext = "32238-01.html"
+          html = "32238-01.html"
         when 21
-          htmltext = "32238-04.html"
+          html = "32238-04.html"
         when 22
-          htmltext = "32238-05.html"
+          html = "32238-05.html"
         when 30
-          htmltext = "32238-09.html"
+          html = "32238-09.html"
         end
       when MOTHER_NORNIL
         case qs.memo_state
         when 40
-          htmltext = "32239-01.html"
+          html = "32239-01.html"
         when 42
-          htmltext = "32239-02.html"
+          html = "32239-02.html"
         when 43
-          htmltext = "32239-05.html"
+          html = "32239-05.html"
         when 44
-          htmltext = "32239-06.html"
+          html = "32239-06.html"
         when 45
-          htmltext = "32239-09.html"
+          html = "32239-09.html"
         end
       when KATENAR_A
         case qs.memo_state
@@ -609,36 +618,36 @@ class Quests::Q00236_SeedsOfChaos < Quest
             c0 = npc.variables.get_object("player0", L2PcInstance?)
             npc0 = npc.variables.get_object("npc0", L2Npc?).not_nil!
             npc0.variables["SPAWNED"] = false
-            if player == c0
-              htmltext = "32332-01b.html"
+            if pc == c0
+              html = "32332-01b.html"
             else
-              htmltext = "32332-01z.html"
+              html = "32332-01z.html"
             end
           end
         when 7
-          if !has_quest_items?(player, BLOOD_JEWEL)
-            htmltext = "32332-05z.html"
+          if !has_quest_items?(pc, BLOOD_JEWEL)
+            html = "32332-05z.html"
           end
         end
       when KATENAR_B
         case qs.memo_state
         when 7
-          if has_quest_items?(player, BLOOD_JEWEL)
+          if has_quest_items?(pc, BLOOD_JEWEL)
             c0 = npc.variables.get_object("player0", L2PcInstance?)
             npc0 = npc.variables.get_object("npc0", L2Npc?).not_nil!
             npc0.variables["SPAWNED"] = false
-            if player == c0
+            if pc == c0
               qs.memo_state = 11
               qs.set_cond(10, true)
-              htmltext = "32333-06bz.html"
+              html = "32333-06bz.html"
             else
               qs.memo_state = 11
               qs.set_cond(10, true)
-              htmltext = "32333-06b.html"
+              html = "32333-06b.html"
             end
           end
         when 11
-          htmltext = "32333-06b.html"
+          html = "32333-06b.html"
         end
       when HARKILGAMED_A
         case qs.memo_state
@@ -646,22 +655,22 @@ class Quests::Q00236_SeedsOfChaos < Quest
           c0 = npc.variables.get_object("player0", L2PcInstance?)
           npc0 = npc.variables.get_object("npc0", L2Npc?).not_nil!
           npc0.variables["SPAWNED"] = false
-          if player == c0
-            htmltext = "32334-08.html"
+          if pc == c0
+            html = "32334-08.html"
           else
-            htmltext = "32334-09.html"
+            html = "32334-09.html"
           end
         when 30
-          htmltext = "32334-18.html"
+          html = "32334-18.html"
         end
       end
     elsif qs.completed?
       if npc.id == HIERARCH_KEKROPUS
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
   def on_spawn(npc)

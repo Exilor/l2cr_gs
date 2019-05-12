@@ -1,7 +1,7 @@
 class Packets::Incoming::CharacterSelect < GameClientPacket
   @slot = 0
 
-  def read_impl
+  private def read_impl
     @slot = d
     # @unk1 = h
     # @unk2 = d
@@ -9,7 +9,7 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
     # @unk4 = d
   end
 
-  def run_impl
+  private def run_impl
     unless flood_protectors.character_select.try_perform_action("CharacterSelect")
       debug "Flood detected."
       return
@@ -21,10 +21,12 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
       unless client.active_char
         return unless cip = client.get_char_selection(@slot)
 
-        # ban check
+        if PunishmentManager.has_punishment?(cip.l2id, PunishmentAffect::CHARACTER, PunishmentType::BAN) || PunishmentManager.has_punishment?(client.account_name, PunishmentAffect::ACCOUNT, PunishmentType::BAN) || PunishmentManager.has_punishment?(client.ip, PunishmentAffect::IP, PunishmentType::BAN)
+          client.close(ServerClose::STATIC_PACKET)
+        end
 
         if cip.access_level < 0
-          debug "Access level forbids character selection #{cip.access_level}."
+          debug { "Access level (#{cip.access_level}) forbids character selection." }
           client.close(ServerClose::STATIC_PACKET)
           return
         end
@@ -39,9 +41,8 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
           end
         end
 
-        debug "Selected slot #{@slot}."
         if pc = client.load_char_from_disk(@slot)
-          debug "#{pc} loaded from disk."
+          debug { "#{pc} loaded from disk." }
         else
           error "Char couldn't be loaded from disk."
           return
@@ -56,7 +57,8 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
 
         evt = OnPlayerSelect.new(pc, pc.l2id, pc.name, client)
         container, ret = Containers::PLAYERS, TerminateReturn
-        if term = EventDispatcher.notify(evt, container, ret)
+        term = EventDispatcher.notify(evt, container, ret)
+        if term && term.terminate
           pc.delete_me
           return
         end

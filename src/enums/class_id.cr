@@ -5,7 +5,7 @@ class ClassId < EnumClass
   getter! parent : self
   getter? mage_class, summoner
 
-  def initialize(parent : self? = nil, race = nil, mage_class = false, summoner = false)
+  protected def initialize(parent : self? = nil, race = nil, mage_class = false, summoner = false)
     @parent = parent
     @race = race || parent.try &.race || Race::NONE
     @mage_class = mage_class || !!parent && parent.mage_class?

@@ -1,4 +1,4 @@
-class Quests::Q00284_MuertosFeather < Quest
+class Scripts::Q00284_MuertosFeather < Quest
   # NPC
   private TREVOR = 32166
   # Item
@@ -24,9 +24,9 @@ class Quests::Q00284_MuertosFeather < Quest
     register_quest_items(MUERTOS_FEATHER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "32166-03.htm"
@@ -35,9 +35,9 @@ class Quests::Q00284_MuertosFeather < Quest
     when "32166-06.html"
       html = event
     when "32166-08.html"
-      if has_quest_items?(player, MUERTOS_FEATHER)
-        give_adena(player, get_quest_items_count(player, MUERTOS_FEATHER) * 45, true)
-        take_items(player, MUERTOS_FEATHER, -1)
+      if has_quest_items?(pc, MUERTOS_FEATHER)
+        give_adena(pc, get_quest_items_count(pc, MUERTOS_FEATHER) * 45, true)
+        take_items(pc, MUERTOS_FEATHER, -1)
         html = event
       else
         html = "32166-07.html"
@@ -58,14 +58,14 @@ class Quests::Q00284_MuertosFeather < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     if qs.created?
-      player.level >= MIN_LVL ? "32166-01.htm" : "32166-02.htm"
+      pc.level >= MIN_LVL ? "32166-01.htm" : "32166-02.htm"
     elsif qs.started?
-      has_quest_items?(player, MUERTOS_FEATHER) ? "32166-05.html" : "32166-04.html"
+      has_quest_items?(pc, MUERTOS_FEATHER) ? "32166-05.html" : "32166-04.html"
     else
-      get_no_quest_msg(player)
+      get_no_quest_msg(pc)
     end
   end
 end

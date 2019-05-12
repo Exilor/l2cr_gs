@@ -1,4 +1,4 @@
-class NpcAI::ClanTrader < AbstractNpcAI
+class Scripts::ClanTrader < AbstractNpcAI
   # Npc
   private CLAN_TRADER = {
     32024, # Mulia

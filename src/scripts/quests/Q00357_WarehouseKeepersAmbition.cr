@@ -1,4 +1,4 @@
-class Quests::Q00357_WarehouseKeepersAmbition < Quest
+class Scripts::Q00357_WarehouseKeepersAmbition < Quest
   # NPC
   private SILVA = 30686
   # Item
@@ -63,20 +63,20 @@ class Quests::Q00357_WarehouseKeepersAmbition < Quest
     html
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     if qs.created?
-      html = talker.level < MIN_LVL ? "30686-01.html" : "30686-02.htm"
+      html = pc.level < MIN_LVL ? "30686-01.html" : "30686-02.htm"
     elsif qs.started?
-      if has_quest_items?(talker, JADE_CRYSTAL)
+      if has_quest_items?(pc, JADE_CRYSTAL)
         html = "30686-07.html"
       else
         html = "30686-06.html"
       end
     end
 
-    html || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

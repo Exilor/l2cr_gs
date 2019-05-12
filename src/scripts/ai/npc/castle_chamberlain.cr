@@ -1,4 +1,4 @@
-class NpcAI::CastleChamberlain < AbstractNpcAI
+class Scripts::CastleChamberlain < AbstractNpcAI
   # NPCs
   private NPC = {
     35100, # Sayres
@@ -66,28 +66,28 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
     add_first_talk_id(NPC)
   end
 
-  private def get_html_packet(player, npc, html_file)
+  private def get_html_packet(pc, npc, html_file)
     packet = NpcHtmlMessage.new(npc.l2id)
-    packet.html = get_htm(player, html_file)
+    packet.html = get_htm(pc, html_file)
     packet
   end
 
-  private def func_confirm_html(player, npc, castle, func, level)
-    if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+  private def func_confirm_html(pc, npc, castle, func, level)
+    if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
       fstring = func == Castle::FUNC_TELEPORT ? "9" : "10"
       if level == 0
-        html = get_html_packet(player, npc, "castleresetdeco.html")
+        html = get_html_packet(pc, npc, "castleresetdeco.html")
         html["%AgitDecoSubmit%"] = func
       elsif (fn = castle.get_function(func)) && fn.lvl == level
-        html = get_html_packet(player, npc, "castledecoalreadyset.html")
+        html = get_html_packet(pc, npc, "castledecoalreadyset.html")
         html["%AgitDecoEffect%"] = "<fstring p1=\"#{level}\">#{fstring}</fstring>"
       else
-        html = get_html_packet(player, npc, "castledeco-0#{func}.html")
+        html = get_html_packet(pc, npc, "castledeco-0#{func}.html")
         html["%AgitDecoCost%"] = "<fstring p1=\"#{get_function_fee(func, level)}\" p2=\"#{get_function_ratio(func) / 86400000}\">6</fstring>"
         html["%AgitDecoEffect%"] = "<fstring p1=\"#{level}\">#{fstring}</fstring>"
         html["%AgitDecoSubmit%"] = "#{func} #{level}"
       end
-      player.send_packet(html)
+      pc.send_packet(html)
       return
     end
 
@@ -246,14 +246,14 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
     end
   end
 
-  private def owner?(player,  npc)
-    player.override_castle_conditions? ||
-    (!!player.clan? && player.clan_id == npc.castle.owner_id)
+  private def owner?(pc,  npc)
+    pc.override_castle_conditions? ||
+    (!!pc.clan? && pc.clan_id == npc.castle.owner_id)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
-    player = player.not_nil!
+    pc = pc.not_nil!
 
     castle = npc.castle
     st = event.split
@@ -263,7 +263,7 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
          "manor-help-03.html", "manor-help-04.html"
       htmltext = event
     when "fort_status"
-      if npc.my_lord?(player)
+      if npc.my_lord?(pc)
         sb = String.build do |io|
           forts = FORTRESS[castle.residence_id]
           forts.each do |id|
@@ -289,14 +289,14 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
             io << "</fstring></font><br>"
           end
         end
-        html = get_html_packet(player, npc, "chamberlain-28.html")
+        html = get_html_packet(pc, npc, "chamberlain-28.html")
         html["%list%"] = sb
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "siege_functions"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         elsif !domain_fortress_in_contract_status?(castle.residence_id)
@@ -310,9 +310,9 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "manage_doors"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         if !st.empty?
-          html = get_html_packet(player, npc, "chamberlain-13.html")
+          html = get_html_packet(pc, npc, "chamberlain-13.html")
           html["%type%"] = st.shift
           sb = String.build do |io|
             until st.empty?
@@ -320,7 +320,7 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
             end
           end
           html["%doors%"] = sb
-          player.send_packet(html)
+          pc.send_packet(html)
         else
           htmltext = "#{npc.id}-du.html"
         end
@@ -328,18 +328,18 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "upgrade_doors"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         type = st.shift.to_i
         level = st.shift.to_i
-        html = get_html_packet(player, npc, "chamberlain-14.html")
+        html = get_html_packet(pc, npc, "chamberlain-14.html")
         html["%gate_price%"] = get_door_upgrade_price(type, level)
         html["%event%"] = event.from("upgrade_doors".size + 1)
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "upgrade_doors_confirm"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
@@ -354,11 +354,11 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
           if door = castle.get_door(doors[0])
             current_level = door.stat.upgrade_hp_ratio
             if current_level >= level
-              html = get_html_packet(player, npc, "chamberlain-15.html")
+              html = get_html_packet(pc, npc, "chamberlain-15.html")
               html["%doorlevel%"] = current_level
-              player.send_packet(html)
-            elsif player.adena >= price
-              take_items(player, Inventory::ADENA_ID, price)
+              pc.send_packet(html)
+            elsif pc.adena >= price
+              take_items(pc, Inventory::ADENA_ID, price)
               doors.each do |door_id|
                 castle.set_door_upgrade(door_id, level, true)
               end
@@ -372,15 +372,15 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "manage_trap"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         if !st.empty?
           if castle.name.casecmp?("aden")
-            html = get_html_packet(player, npc, "chamberlain-17a.html")
+            html = get_html_packet(pc, npc, "chamberlain-17a.html")
           else
-            html = get_html_packet(player, npc, "chamberlain-17.html")
+            html = get_html_packet(pc, npc, "chamberlain-17.html")
           end
           html["%trapIndex%"] = st.shift
-          player.send_packet(html)
+          pc.send_packet(html)
         else
           htmltext = "#{npc.id}-tu.html"
         end
@@ -388,19 +388,19 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "upgrade_trap"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         trap_index = st.shift
         level = st.shift.to_i
-        html = get_html_packet(player, npc, "chamberlain-18.html")
+        html = get_html_packet(pc, npc, "chamberlain-18.html")
         html["%trapIndex%"] = trap_index
         html["%level%"] = level
         html["%dmgzone_price%"] = get_trap_upgrade_price(level)
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "upgrade_trap_confirm"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
@@ -410,11 +410,11 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
           current_level = castle.get_trap_upgrade_level(trap_index)
 
           if current_level >= level
-            html = get_html_packet(player, npc, "chamberlain-19.html")
+            html = get_html_packet(pc, npc, "chamberlain-19.html")
             html["%dmglevel%"] = current_level
-            player.send_packet(html)
-          elsif player.adena >= price
-            take_items(player, Inventory::ADENA_ID, price)
+            pc.send_packet(html)
+          elsif pc.adena >= price
+            take_items(pc, Inventory::ADENA_ID, price)
             castle.set_trap_upgrade(trap_index, level, true)
             htmltext = "chamberlain-20.html"
           else
@@ -425,12 +425,12 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "receive_report"
-      if npc.my_lord?(player)
+      if npc.my_lord?(pc)
         if castle.siege.in_progress?
           htmltext = "chamberlain-07.html"
         else
           clan = ClanTable.get_clan!(castle.owner_id)
-          html = get_html_packet(player, npc, "chamberlain-02.html")
+          html = get_html_packet(pc, npc, "chamberlain-02.html")
           html["%clanleadername%"] = clan.leader_name
           html["%clanname%"] = clan.name
           html["%castlename%"] = 1001000 + castle.residence_id
@@ -446,52 +446,52 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
           html["%ss_avarice%"] = get_seal_owner(1)
           html["%ss_gnosis%"] = get_seal_owner(2)
           html["%ss_strife%"] = get_seal_owner(3)
-          player.send_packet(html)
+          pc.send_packet(html)
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "manage_tax"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_TAXES)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_TAXES)
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
-          html = get_html_packet(player, npc, "castlesettaxrate.html")
+          html = get_html_packet(pc, npc, "castlesettaxrate.html")
           html["%tax_rate%"] = castle.tax_percent
           html["%next_tax_rate%"] = "0" # TODO: Implement me
           html["%tax_limit%"] = tax_limit
-          player.send_packet(html)
+          pc.send_packet(html)
         end
-      elsif owner?(player, npc)
-        html = get_html_packet(player, npc, "chamberlain-03.html")
+      elsif owner?(pc, npc)
+        html = get_html_packet(pc, npc, "chamberlain-03.html")
         html["%tax_rate%"] = castle.tax_percent
         html["%next_tax_rate%"] = "0" # TODO: Implement me
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "set_tax"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_TAXES)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_TAXES)
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
           tax = st.empty? ? 0 : st.shift.to_i
           tax_limit = tax_limit()
           if tax > tax_limit
-            html = get_html_packet(player, npc, "castletoohightaxrate.html")
+            html = get_html_packet(pc, npc, "castletoohightaxrate.html")
             html["%tax_limit%"] = tax_limit
           else
             castle.tax_percent = tax
-            html = get_html_packet(player, npc, "castleaftersettaxrate.html")
+            html = get_html_packet(pc, npc, "castleaftersettaxrate.html")
             html["%next_tax_rate%"] = tax
           end
-          player.send_packet(html)
+          pc.send_packet(html)
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "manage_vault"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_TAXES)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_TAXES)
         seed_income = 0i64
         if Config.allow_manor
           CastleManorManager.get_seed_production(castle.residence_id, false).each do |sp|
@@ -502,23 +502,23 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
           end
         end
 
-        html = get_html_packet(player, npc, "castlemanagevault.html")
+        html = get_html_packet(pc, npc, "castlemanagevault.html")
         html["%tax_income%"] = Util.format_adena(castle.treasury)
         html["%tax_income_reserved%"] = "0" # TODO: Implement me
         html["%seed_income%"] = Util.format_adena(seed_income)
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "deposit"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_TAXES)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_TAXES)
         amount = st.empty? ? 0i64 : st.shift.to_i64
         if amount > 0 && amount < Inventory.max_adena
-          if player.adena >= amount
-            take_items(player, Inventory::ADENA_ID, amount)
+          if pc.adena >= amount
+            take_items(pc, Inventory::ADENA_ID, amount)
             castle.add_to_treasury_no_tax(amount)
           else
-            player.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
+            pc.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
           end
         end
         htmltext = "chamberlain-01.html"
@@ -526,23 +526,23 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "withdraw"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_TAXES)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_TAXES)
         amount = st.empty? ? 0i64 : st.shift.to_i64
         if amount <= castle.treasury
           castle.add_to_treasury_no_tax(-1i64 * amount)
-          give_adena(player, amount, false)
+          give_adena(pc, amount, false)
           htmltext = "chamberlain-01.html"
         else
-          html = get_html_packet(player, npc, "castlenotenoughbalance.html")
+          html = get_html_packet(pc, npc, "castlenotenoughbalance.html")
           html["%tax_income%"] = Util.format_adena(castle.treasury)
           html["%withdraw_amount%"] = Util.format_adena(amount)
-          player.send_packet(html)
+          pc.send_packet(html)
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "manage_functions"
-      if !owner?(player, npc)
+      if !owner?(pc, npc)
         htmltext = "chamberlain-21.html"
       elsif castle.siege.in_progress?
         htmltext = "chamberlain-08.html"
@@ -550,7 +550,7 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-23.html"
       end
     when "banish_foreigner_show"
-      if !owner?(player, npc) || !player.has_clan_privilege?(ClanPrivilege::CS_DISMISS)
+      if !owner?(pc, npc) || !pc.has_clan_privilege?(ClanPrivilege::CS_DISMISS)
         htmltext = "chamberlain-21.html"
       elsif castle.siege.in_progress?
         htmltext = "chamberlain-08.html"
@@ -558,7 +558,7 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-10.html"
       end
     when "banish_foreigner"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_DISMISS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_DISMISS)
         if castle.siege.in_progress? || TerritoryWarManager.tw_in_progress?
           htmltext = "chamberlain-08.html"
         else
@@ -569,7 +569,7 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "doors"
-      if !owner?(player, npc) || !player.has_clan_privilege?(ClanPrivilege::CS_OPEN_DOOR)
+      if !owner?(pc, npc) || !pc.has_clan_privilege?(ClanPrivilege::CS_OPEN_DOOR)
         htmltext = "chamberlain-21.html"
       elsif castle.siege.in_progress?
         htmltext = "chamberlain-08.html"
@@ -577,84 +577,84 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "#{npc.id}-d.html"
       end
     when "operate_door"
-      if !owner?(player, npc) || !player.has_clan_privilege?(ClanPrivilege::CS_OPEN_DOOR)
+      if !owner?(pc, npc) || !pc.has_clan_privilege?(ClanPrivilege::CS_OPEN_DOOR)
         htmltext = "chamberlain-21.html"
       elsif castle.siege.in_progress?
         htmltext = "chamberlain-08.html"
       else
         open = st.shift.to_i == 1
         until st.empty?
-          castle.open_close_door(player, st.shift.to_i, open)
+          castle.open_close_door(pc, st.shift.to_i, open)
         end
         htmltext = open ? "chamberlain-05.html" : "chamberlain-06.html"
       end
     when "additional_functions"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         htmltext = "castletdecomanage.html"
       else
         htmltext = "chamberlain-21.html"
       end
     when "recovery"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
-        html = get_html_packet(player, npc, "castledeco-AR01.html")
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+        html = get_html_packet(pc, npc, "castledeco-AR01.html")
         func_replace(castle, html, Castle::FUNC_RESTORE_HP, "HP")
         func_replace(castle, html, Castle::FUNC_RESTORE_MP, "MP")
         func_replace(castle, html, Castle::FUNC_RESTORE_EXP, "XP")
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "other"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
-        html = get_html_packet(player, npc, "castledeco-AE01.html")
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+        html = get_html_packet(pc, npc, "castledeco-AE01.html")
         func_replace(castle, html, Castle::FUNC_TELEPORT, "TP")
         func_replace(castle, html, Castle::FUNC_SUPPORT, "BF")
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "HP"
       level = st.shift.to_i
-      htmltext = func_confirm_html(player, npc, castle, Castle::FUNC_RESTORE_HP, level)
+      htmltext = func_confirm_html(pc, npc, castle, Castle::FUNC_RESTORE_HP, level)
     when "MP"
       level = st.shift.to_i
-      htmltext = func_confirm_html(player, npc, castle, Castle::FUNC_RESTORE_MP, level)
+      htmltext = func_confirm_html(pc, npc, castle, Castle::FUNC_RESTORE_MP, level)
     when "XP"
       level = st.shift.to_i
-      htmltext = func_confirm_html(player, npc, castle, Castle::FUNC_RESTORE_EXP, level)
+      htmltext = func_confirm_html(pc, npc, castle, Castle::FUNC_RESTORE_EXP, level)
     when "TP"
       level = st.shift.to_i
-      htmltext = func_confirm_html(player, npc, castle, Castle::FUNC_TELEPORT, level)
+      htmltext = func_confirm_html(pc, npc, castle, Castle::FUNC_TELEPORT, level)
     when "BF"
       level = st.shift.to_i
-      htmltext = func_confirm_html(player, npc, castle, Castle::FUNC_SUPPORT, level)
+      htmltext = func_confirm_html(pc, npc, castle, Castle::FUNC_SUPPORT, level)
     when "set_func"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_SET_FUNCTIONS)
         func = st.shift.to_i
         level = st.shift.to_i
         if level == 0
-          castle.update_functions(player, func, level, 0, 0, false)
-        elsif !castle.update_functions(player, func, level, get_function_fee(func, level), get_function_ratio(func), castle.get_function(func).nil?)
+          castle.update_functions(pc, func, level, 0, 0, false)
+        elsif !castle.update_functions(pc, func, level, get_function_fee(func, level), get_function_ratio(func), castle.get_function(func).nil?)
           htmltext = "chamberlain-09.html"
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "functions"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
         hp = castle.get_function(Castle::FUNC_RESTORE_HP)
         mp = castle.get_function(Castle::FUNC_RESTORE_MP)
         xp = castle.get_function(Castle::FUNC_RESTORE_EXP)
-        html = get_html_packet(player, npc, "castledecofunction.html")
+        html = get_html_packet(pc, npc, "castledecofunction.html")
         html["%HPDepth%"] = hp ? hp.lvl : "0"
         html["%MPDepth%"] = mp ? mp.lvl : "0"
         html["%XPDepth%"] = xp ? xp.lvl : "0"
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "teleport"
-      if !owner?(player, npc) || !player.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
+      if !owner?(pc, npc) || !pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
         htmltext = "chamberlain-21.html"
       elsif (fn = castle.get_function(Castle::FUNC_TELEPORT)).nil?
         htmltext = "castlefuncdisabled.html"
@@ -662,30 +662,30 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "#{npc.id}-t#{fn.lvl}.html"
       end
     when "goto"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
         loc_id = st.shift.to_i
         if list = TeleportLocationTable[loc_id]?
-          if take_items(player, list.item_id, list.price)
-            player.tele_to_location(list.x, list.y, list.z)
+          if take_items(pc, list.item_id, list.price)
+            pc.tele_to_location(list.x, list.y, list.z)
           end
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "buffer"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
         if (fn = castle.get_function(Castle::FUNC_SUPPORT)).nil?
           htmltext = "castlefuncdisabled.html"
         else
-          html = get_html_packet(player, npc, "castlebuff-0#{fn.lvl}.html")
+          html = get_html_packet(pc, npc, "castlebuff-0#{fn.lvl}.html")
           html["%MPLeft%"] = npc.current_mp.to_i
-          player.send_packet(html)
+          pc.send_packet(html)
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "cast_buff"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
         if castle.get_function(Castle::FUNC_SUPPORT).nil?
           htmltext = "castlefuncdisabled.html"
         else
@@ -693,85 +693,85 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
           if BUFFS.size > index
             holder = BUFFS[index]
             if holder.skill.mp_consume2 < npc.current_mp
-              npc.target = player
+              npc.target = pc
               npc.do_cast(holder)
-              html = get_html_packet(player, npc, "castleafterbuff.html")
+              html = get_html_packet(pc, npc, "castleafterbuff.html")
             else
-              html = get_html_packet(player, npc, "castlenotenoughmp.html")
+              html = get_html_packet(pc, npc, "castlenotenoughmp.html")
             end
 
             html["%MPLeft%"] = npc.current_mp.to_i
-            player.send_packet(html)
+            pc.send_packet(html)
           end
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "list_siege_clans"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
-        castle.siege.list_register_clan(player)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
+        castle.siege.list_register_clan(pc)
       else
         htmltext = "chamberlain-21.html"
       end
     when "list_territory_clans"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
-        player.send_packet(ExShowDominionRegistry.new(castle.residence_id, player))
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
+        pc.send_packet(ExShowDominionRegistry.new(castle.residence_id, pc))
       else
         htmltext = "chamberlain-21.html"
       end
     when "manor"
       if Config.allow_manor
-        if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_MANOR_ADMIN)
+        if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_MANOR_ADMIN)
           htmltext =  "manor.html"
         else
           htmltext = "chamberlain-21.html"
         end
       else
-        player.send_message("Manor system is deactivated.")
+        pc.send_message("Manor system is deactivated.")
       end
     when "products"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
-        html = get_html_packet(player, npc, "chamberlain-22.html")
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
+        html = get_html_packet(pc, npc, "chamberlain-22.html")
         html["%npc_id%"] = npc.id
-        player.send_packet(html)
+        pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
       end
     when "buy"
-      if owner?(player, npc) && player.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
-        npc.as(L2MerchantInstance).show_buy_window(player, st.shift.to_i)
+      if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
+        npc.as(L2MerchantInstance).show_buy_window(pc, st.shift.to_i)
       else
         htmltext = "chamberlain-21.html"
       end
     when "give_crown"
       if castle.siege.in_progress?
         htmltext = "chamberlain-08.html"
-      elsif npc.my_lord?(player)
-        if has_quest_items?(player, CROWN)
+      elsif npc.my_lord?(pc)
+        if has_quest_items?(pc, CROWN)
           htmltext = "chamberlain-24.html"
         else
-          html = get_html_packet(player, npc, "chamberlain-25.html")
-          html["%owner_name%"] = player.name
+          html = get_html_packet(pc, npc, "chamberlain-25.html")
+          html["%owner_name%"] = pc.name
           html["%feud_name%"] = 1001000 + castle.residence_id
-          player.send_packet(html)
-          give_items(player, CROWN, 1)
+          pc.send_packet(html)
+          give_items(pc, CROWN, 1)
         end
       else
         htmltext = "chamberlain-21.html"
       end
     when "manors_cert"
-      if npc.my_lord?(player)
+      if npc.my_lord?(pc)
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
-          if SevenSigns.get_player_cabal(player.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.competition_period?
+          if SevenSigns.get_player_cabal(pc.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.competition_period?
             ticket_count = castle.ticket_buy_count
             if ticket_count < Config.ssq_dawn_ticket_quantity / Config.ssq_dawn_ticket_bundle
-              html = get_html_packet(player, npc, "ssq_selldawnticket.html")
+              html = get_html_packet(pc, npc, "ssq_selldawnticket.html")
               html["%DawnTicketLeft%"] = Config.ssq_dawn_ticket_quantity - (ticket_count * Config.ssq_dawn_ticket_bundle)
               html["%DawnTicketBundle%"] = Config.ssq_dawn_ticket_bundle
               html["%DawnTicketPrice%"] = Config.ssq_dawn_ticket_price * Config.ssq_dawn_ticket_bundle
-              player.send_packet(html)
+              pc.send_packet(html)
             else
               htmltext = "ssq_notenoughticket.html"
             end
@@ -783,17 +783,17 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     when "manors_cert_confirm"
-      if npc.my_lord?(player)
+      if npc.my_lord?(pc)
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
-          if SevenSigns.get_player_cabal(player.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.competition_period?
+          if SevenSigns.get_player_cabal(pc.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.competition_period?
             ticket_count = castle.ticket_buy_count
             if ticket_count < Config.ssq_dawn_ticket_quantity / Config.ssq_dawn_ticket_bundle
               total_cost = Config.ssq_dawn_ticket_price * Config.ssq_dawn_ticket_bundle
-              if player.adena >= total_cost
-                take_items(player, Inventory::ADENA_ID, total_cost)
-                give_items(player, Config.ssq_manors_agreement_id, Config.ssq_dawn_ticket_bundle)
+              if pc.adena >= total_cost
+                take_items(pc, Inventory::ADENA_ID, total_cost)
+                give_items(pc, Config.ssq_manors_agreement_id, Config.ssq_dawn_ticket_bundle)
                 castle.ticket_buy_count = ticket_count + 1
               else
                 htmltext = "chamberlain-09.html"
@@ -813,43 +813,43 @@ class NpcAI::CastleChamberlain < AbstractNpcAI
     htmltext
   end
 
-  def on_first_talk(npc, player)
-    owner?(player, npc) ? "chamberlain-01.html" : "chamberlain-04.html"
+  def on_first_talk(npc, pc)
+    owner?(pc, npc) ? "chamberlain-01.html" : "chamberlain-04.html"
   end
 
   @[Register(event: ON_NPC_MANOR_BYPASS, register: NPC, id: {35100, 35142, 35184, 35226, 35274,  35316, 35363, 35509, 35555})]
   def on_npc_manor_bypass(evt : OnNpcManorBypass)
-    player = evt.active_char
+    pc = evt.active_char
     npc = evt.target
 
-    if owner?(player, npc)
+    if owner?(pc, npc)
       if CastleManorManager.under_maintenance?
-        player.send_packet(SystemMessageId::THE_MANOR_SYSTEM_IS_CURRENTLY_UNDER_MAINTENANCE)
+        pc.send_packet(SystemMessageId::THE_MANOR_SYSTEM_IS_CURRENTLY_UNDER_MAINTENANCE)
         return
       end
 
       castle_id = evt.manor_id == -1 ? npc.castle.residence_id : evt.manor_id
       case evt.request
       when 3 # Seed info
-        player.send_packet(ExShowSeedInfo.new(castle_id, evt.next_period?, true))
+        pc.send_packet(ExShowSeedInfo.new(castle_id, evt.next_period?, true))
       when 4 # Crop info
-        player.send_packet(ExShowCropInfo.new(castle_id, evt.next_period?, true))
+        pc.send_packet(ExShowCropInfo.new(castle_id, evt.next_period?, true))
       when 5 # Basic info
-        player.send_packet(ExShowManorDefaultInfo.new(true))
+        pc.send_packet(ExShowManorDefaultInfo.new(true))
       when 7 # Seed settings
         if CastleManorManager.manor_approved?
-          player.send_packet(SystemMessageId::A_MANOR_CANNOT_BE_SET_UP_BETWEEN_4_30_AM_AND_8_PM)
+          pc.send_packet(SystemMessageId::A_MANOR_CANNOT_BE_SET_UP_BETWEEN_4_30_AM_AND_8_PM)
           return
         end
-        player.send_packet(ExShowSeedSetting.new(castle_id))
+        pc.send_packet(ExShowSeedSetting.new(castle_id))
       when 8 # Crop settings
         if CastleManorManager.manor_approved?
-          player.send_packet(SystemMessageId::A_MANOR_CANNOT_BE_SET_UP_BETWEEN_4_30_AM_AND_8_PM)
+          pc.send_packet(SystemMessageId::A_MANOR_CANNOT_BE_SET_UP_BETWEEN_4_30_AM_AND_8_PM)
           return
         end
-        player.send_packet(ExShowCropSetting.new(castle_id))
+        pc.send_packet(ExShowCropSetting.new(castle_id))
       else
-        warn { "Player #{player.name} (#{player.l2id}) sent unknown request id #{evt.request}." }
+        warn { "pc #{pc.name} (#{pc.l2id}) sent unknown request id #{evt.request}." }
       end
     end
   end

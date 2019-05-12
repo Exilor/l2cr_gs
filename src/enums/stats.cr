@@ -2,7 +2,7 @@ class Stats < EnumClass
   getter value
   getter? check_negative
 
-  def initialize(@value : String, @check_negative : Bool = false)
+  protected def initialize(@value : String, @check_negative : Bool = false)
   end
 
   def self.from_value(str : String)

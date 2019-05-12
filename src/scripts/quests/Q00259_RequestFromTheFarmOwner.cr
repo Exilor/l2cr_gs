@@ -1,4 +1,4 @@
-class Quests::Q00259_RequestFromTheFarmOwner < Quest
+class Scripts::Q00259_RequestFromTheFarmOwner < Quest
   # Npcs
   private EDMOND = 30497
   private MARIUS = 30405
@@ -31,30 +31,30 @@ class Quests::Q00259_RequestFromTheFarmOwner < Quest
     register_quest_items(SPIDER_SKIN)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "30405-03.html", "30405-05b.html", "30405-05d.html", "30497-07.html"
-      htmltext = event
+      html = event
     when "30405-04.html", "30405-05.html", "30405-05a.html", "30405-05c.html"
       if st.get_quest_items_count(SPIDER_SKIN) >= SKIN_COUNT
         st.give_items(CONSUMABLES[event])
         st.take_items(SPIDER_SKIN, SKIN_COUNT)
-        htmltext = event
+        html = event
       end
     when "30405-06.html"
-      htmltext = st.get_quest_items_count(SPIDER_SKIN) >= SKIN_COUNT ? event : "30405-07.html"
+      html = st.get_quest_items_count(SPIDER_SKIN) >= SKIN_COUNT ? event : "30405-07.html"
     when "30497-03.html"
       st.start_quest
-      htmltext = event
+      html = event
     when "30497-06.html"
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -66,29 +66,32 @@ class Quests::Q00259_RequestFromTheFarmOwner < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when EDMOND
       case st.state
       when State::CREATED
-        htmltext = player.level >= MIN_LVL ? "30497-02.htm" : "30497-01.html"
+        html = pc.level >= MIN_LVL ? "30497-02.htm" : "30497-01.html"
       when State::STARTED
         if st.has_quest_items?(SPIDER_SKIN)
           skins = st.get_quest_items_count(SPIDER_SKIN)
           st.give_adena((skins * SKIN_REWARD) + (skins >= 10 ? SKIN_BONUS : 0), true)
           st.take_items(SPIDER_SKIN, -1)
-          htmltext = "30497-05.html"
+          html = "30497-05.html"
         else
-          htmltext = "30497-04.html"
+          html = "30497-04.html"
         end
       end
     when MARIUS
-      htmltext = st.get_quest_items_count(SPIDER_SKIN) >= SKIN_COUNT ? "30405-02.html" : "30405-01.html"
+      if st.get_quest_items_count(SPIDER_SKIN) >= SKIN_COUNT
+        html = "30405-02.html"
+      else
+        html = "30405-01.html"
+      end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

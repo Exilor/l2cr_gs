@@ -6,12 +6,12 @@ class Packets::Incoming::EnterWorld < GameClientPacket
 
   @tracert = Slice(Slice(UInt8)).empty
 
-  def read_impl
+  private def read_impl
     buffer.pos += 84
     @tracert = Slice.new(5) { b 4 }
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     # LoginServerThread.send_client_tracert(pc.account_name, address)
     # client.tracert = @tracert
@@ -308,12 +308,19 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       pc.send_packet(msg)
     end
 
-    # birthday stuff
+    birthday = pc.check_birthday
+    if birthday == 0
+      pc.send_packet(SystemMessageId::YOUR_BIRTHDAY_GIFT_HAS_ARRIVED)
+    elsif birthday != -1
+      sm = SystemMessage.there_are_s1_days_until_your_characters_birthday
+      sm.add_int(birthday)
+      pc.send_packet(sm)
+    end
 
-    # premium item stuff
+    unless pc.premium_item_list.empty?
+      pc.send_packet(ExNotifyPremiumItem::STATIC_PACKET)
+    end
 
-    # custom
-    # send_packet(ClientSetTime.new(time: Time.now.to_s("%H:%M"), speed: 1))
     pc.refresh_overloaded # custom
 
     # Unstuck players that had client open when server crashed.

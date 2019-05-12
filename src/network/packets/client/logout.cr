@@ -1,8 +1,9 @@
 class Packets::Incoming::Logout < GameClientPacket
-  def read_impl
+  private def read_impl
+    # no-op
   end
 
-  def run_impl
+  private def run_impl
     unless pc = active_char
       debug "No @client.active_char."
       return

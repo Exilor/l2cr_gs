@@ -1,4 +1,4 @@
-class Quests::Q00166_MassOfDarkness < Quest
+class Scripts::Q00166_MassOfDarkness < Quest
   # NPCs
 	private UNDRIAS = 30130
 	private IRIA = 30135
@@ -42,8 +42,9 @@ class Quests::Q00166_MassOfDarkness < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when UNDRIAS
@@ -51,12 +52,12 @@ class Quests::Q00166_MassOfDarkness < Quest
       when State::CREATED
         if pc.race.dark_elf?
           if pc.level >= MIN_LVL
-            htmltext = "30130-02.htm"
+            html = "30130-02.htm"
           else
-            htmltext = "30130-01.htm"
+            html = "30130-01.htm"
           end
         else
-          htmltext = "30130-00.htm"
+          html = "30130-00.htm"
         end
       when State::STARTED
         if st.cond?(2) && st.has_quest_items?(UNDRIAS_LETTER, CEREMONIAL_DAGGER, DREVIANT_WINE, GARMIELS_SCRIPTURE)
@@ -65,12 +66,12 @@ class Quests::Q00166_MassOfDarkness < Quest
           st.add_exp_and_sp(5672, 466)
           st.give_adena(2966, true)
           st.exit_quest(false, true)
-          htmltext = "30130-05.html"
+          html = "30130-05.html"
         else
-          htmltext = "30130-04.html"
+          html = "30130-04.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when IRIA, DORANKUS, TRUDY
       if st.started?
@@ -82,13 +83,13 @@ class Quests::Q00166_MassOfDarkness < Quest
           if st.has_quest_items?(CEREMONIAL_DAGGER, DREVIANT_WINE, GARMIELS_SCRIPTURE)
             st.set_cond(2, true)
           end
-          htmltext = "#{npc_id}-01.html"
+          html = "#{npc_id}-01.html"
         else
-          htmltext = "#{npc_id}-02.html"
+          html = "#{npc_id}-02.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

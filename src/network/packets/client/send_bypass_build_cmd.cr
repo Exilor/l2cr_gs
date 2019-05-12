@@ -1,37 +1,37 @@
 class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   no_action_request
 
-  GM_MESSAGE = 9
-  ANNOUNCEMENT = 10
+  private GM_MESSAGE = 9
+  private ANNOUNCEMENT = 10
 
   @command = ""
 
-  def read_impl
+  private def read_impl
     @command = s.strip
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless run_custom_cmd(pc) == :proceed
 
-    debug command = "admin_#{@command[/^(\S)+/]}"
-    handler = AdminCommandHandler[command]
-    unless handler
+    command = "admin_#{@command[/^(\S)+/]}"
+
+    unless handler = AdminCommandHandler[command]
       if pc.gm?
-        pc.send_message "The command #{command.from(6)} does not exist."
+        pc.send_message("The command #{command.from(6)} does not exist.")
       end
       return
     end
 
     unless AdminData.has_access?(command, pc.access_level)
       pc.send_message("You don't have the access right to use this command!")
-      warn "#{pc} tried to use admin command #{command} without the proper access level."
+      warn { "#{pc} tried to use admin command #{command} without the proper access level." }
       return
     end
 
     if Config.gmaudit
       GMAudit.log(pc.name + " [#{pc.l2id}]", @command, pc.target.try &.name || "no-target")
-      debug "#{pc} used command #{command.inspect}."
+      debug { "#{pc} used command #{command.inspect}." }
     end
 
     handler.use_admin_command("admin_#{@command}", pc)
@@ -39,16 +39,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
   private def run_custom_cmd(pc)
     case @command
-    when "weapon"
-      puts "Paperdoll size: #{pc.inventory.@paperdoll.size}"
-    when "test"
-      L2Cr.test(pc)
-    when "zones"
-      debug pc.world_region?.try &.zones.map &.name
     when "gc"
       GC.collect
-    when "abort"
-      pc.abort_cast
     when "save"
       pc.store_me
     when /^add_sp\s\d+$/
@@ -122,7 +114,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when "drop_all"
       L2World.objects.each &.as?(L2Attackable).try { |m| m.do_die(pc) unless m.raid? || m.raid_minion? }
     when "reuse"
-      reuse
+      reset_skill_reuse
     when /^learn\s\d+(\s\d+)?$/
       learn_skill
     when /^ivar\s\S+$/
@@ -214,8 +206,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when /hb\s\d/
       set_hellbound_level
     when "hb"
-      pc.send_message("Level: #{HellboundEngine.level}")
-      pc.send_message("Trust: #{HellboundEngine.trust}")
+      pc.send_message("Hellbound level: #{HellboundEngine.level}")
+      pc.send_message("Hellbound trust: #{HellboundEngine.trust}")
     else
       return :proceed
     end
@@ -374,7 +366,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
   end
 
-  private def reuse
+  private def reset_skill_reuse
     pc_target.skill_reuse_time_stamps.try &.clear
     pc_target.@disabled_skills.try &.clear
     pc_target.send_packet(SkillCoolTime.new(pc_target))
@@ -484,7 +476,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       target.running = true
       target.set_intention(AI::FOLLOW, pc)
     else
-      send_message("You don't have a target")
+      pc.send_message("You don't have a target")
     end
   end
 
@@ -493,7 +485,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       target.running = false
       target.intention = AI::IDLE
     else
-      send_message("You don't have a target")
+      pc.send_message("You don't have a target")
     end
   end
 
@@ -822,6 +814,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   end
 
   private def args
-    @command.split(' ')[1..-1]
+    @command.split[1..-1]
   end
 end

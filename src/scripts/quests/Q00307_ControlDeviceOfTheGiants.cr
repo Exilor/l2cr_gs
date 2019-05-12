@@ -1,4 +1,4 @@
-class Quests::Q00307_ControlDeviceOfTheGiants < Quest
+class Scripts::Q00307_ControlDeviceOfTheGiants < Quest
   # NPC
   private DROPH = 32711
   # RB
@@ -13,6 +13,7 @@ class Quests::Q00307_ControlDeviceOfTheGiants < Quest
   private CET_3_SHEET = 14853
   # Misc
   private RESPAWN_DELAY = 3600000 # 1 hour
+
   @hekaton : L2Npc?
 
   def initialize
@@ -55,7 +56,7 @@ class Quests::Q00307_ControlDeviceOfTheGiants < Quest
         return "32711-09.html"
       end
       respawn = load_global_quest_var("Respawn")
-      remain = !respawn.empty? ? respawn.to_i64 - Time.ms : 0
+      remain = respawn.empty? ? 0 : respawn.to_i64 - Time.ms
       if remain > 0
         return "32711-09a.html"
       end

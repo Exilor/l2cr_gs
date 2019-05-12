@@ -1,4 +1,4 @@
-class Quests::Q00501_ProofOfClanAlliance < Quest
+class Scripts::Q00501_ProofOfClanAlliance < Quest
   # NPCs
   private SIR_KRISTOF_RODEMAI = 30756
   private STATUE_OF_OFFERING = 30757
@@ -67,9 +67,9 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player && npc
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc && npc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -78,7 +78,7 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
          "30758-04.html", "30759-02.html", "30759-04.html"
       html = event
     when "30756-07.html"
-      if qs.created? && player.clan_leader? && player.clan.level == CLAN_MIN_LEVEL
+      if qs.created? && pc.clan_leader? && pc.clan.level == CLAN_MIN_LEVEL
         qs.start_quest
         qs.memo_state = 1
         html = event
@@ -86,18 +86,18 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
     when "30757-04.html"
       if rand(10) > 5
         if qs.get_int("flag") != 2501
-          give_items(player, SYMBOL_OF_LOYALTY, 1)
+          give_items(pc, SYMBOL_OF_LOYALTY, 1)
           qs.set("flag", 2501)
         end
         html = event
       else
-        npc.target = player
+        npc.target = pc
         npc.do_cast(DIE_YOU_FOOL)
-        start_quest_timer("SYMBOL_OF_LOYALTY", 4000, npc, player)
+        start_quest_timer("SYMBOL_OF_LOYALTY", 4000, npc, pc)
         html = "30757-03.html"
       end
     when "30758-03.html"
-      if lqs = get_leader_quest_state(player, name)
+      if lqs = get_leader_quest_state(pc, name)
         if npc.summoned_npc_count < 4
           lqs.memo_state = 4
           lqs.set("flag", 0)
@@ -113,9 +113,9 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
         end
       end
     when "30758-07.html"
-      if player.adena >= ADENA_TO_RESTART_GAME
+      if pc.adena >= ADENA_TO_RESTART_GAME
         if npc.summoned_npc_count < 4
-          take_items(player, Inventory::ADENA_ID, ADENA_TO_RESTART_GAME)
+          take_items(pc, Inventory::ADENA_ID, ADENA_TO_RESTART_GAME)
         end
         html = event
       else
@@ -128,18 +128,18 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
         html = event
       end
     when "30759-07.html"
-      if qs.memo_state?(2) && get_quest_items_count(player, SYMBOL_OF_LOYALTY) >= 3
-        take_items(player, SYMBOL_OF_LOYALTY, -1)
-        give_items(player, ANTIDOTE_RECIPE_LIST, 1)
-        npc.target = player
+      if qs.memo_state?(2) && get_quest_items_count(pc, SYMBOL_OF_LOYALTY) >= 3
+        take_items(pc, SYMBOL_OF_LOYALTY, -1)
+        give_items(pc, ANTIDOTE_RECIPE_LIST, 1)
+        npc.target = pc
         npc.do_cast(POISON_OF_DEATH)
         qs.set_cond(3, true)
         qs.memo_state = 3
         html = event
       end
     when "SYMBOL_OF_LOYALTY"
-      if player.dead? && qs.get_int("flag") != 2501
-        give_items(player, SYMBOL_OF_LOYALTY, 1)
+      if pc.dead? && qs.get_int("flag") != 2501
+        give_items(pc, SYMBOL_OF_LOYALTY, 1)
         qs.set("flag", 2501)
       end
     end
@@ -152,21 +152,21 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
       return super
     end
 
-    player = qs.player
+    pc = qs.player
 
-    if lqs = get_leader_quest_state(player, name)
+    if lqs = get_leader_quest_state(pc, name)
       case npc.id
       when OEL_MAHUM_WITCH_DOCTOR
         if rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
-          give_item_randomly(player, npc, HERB_OF_OEL_MAHUM, 1, 0, 1.0, true)
+          give_item_randomly(pc, npc, HERB_OF_OEL_MAHUM, 1, 0, 1.0, true)
         end
       when HARIT_LIZARDMAN_SHAMAN
         if rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
-          give_item_randomly(player, npc, HERB_OF_HARIT, 1, 0, 1.0, true)
+          give_item_randomly(pc, npc, HERB_OF_HARIT, 1, 0, 1.0, true)
         end
       when VANOR_SILENOS_SHAMAN
         if rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
-          give_item_randomly(player, npc, HERB_OF_VANOR, 1, 0, 1.0, true)
+          give_item_randomly(pc, npc, HERB_OF_VANOR, 1, 0, 1.0, true)
         end
       when BOX_OF_ATHREA_1, BOX_OF_ATHREA_2, BOX_OF_ATHREA_3, BOX_OF_ATHREA_4,
            BOX_OF_ATHREA_5
@@ -199,20 +199,20 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    lqs = get_leader_quest_state(player, name)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+    lqs = get_leader_quest_state(pc, name)
 
     case npc.id
     when SIR_KRISTOF_RODEMAI
       case qs.state
       when State::CREATED
-        if player.clan_leader?
-          clan = player.clan
+        if pc.clan_leader?
+          clan = pc.clan
           if clan.level < CLAN_MIN_LEVEL
             html = "30756-01.html"
           elsif clan.level == CLAN_MIN_LEVEL
-            if has_quest_items?(player, ALLIANCE_MANIFESTO)
+            if has_quest_items?(pc, ALLIANCE_MANIFESTO)
               html = "30756-03.html"
             else
               html = "30756-04.html"
@@ -224,10 +224,10 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
           html = "30756-05.html"
         end
       when State::STARTED
-        if qs.memo_state?(6) && has_quest_items?(player, VOUCHER_OF_FAITH)
-          take_items(player, VOUCHER_OF_FAITH, -1)
-          give_items(player, ALLIANCE_MANIFESTO, 1)
-          add_exp_and_sp(player, 0, 120000)
+        if qs.memo_state?(6) && has_quest_items?(pc, VOUCHER_OF_FAITH)
+          take_items(pc, VOUCHER_OF_FAITH, -1)
+          give_items(pc, ALLIANCE_MANIFESTO, 1)
+          add_exp_and_sp(pc, 0, 120000)
           qs.exit_quest(false)
           html = "30756-09.html"
         else
@@ -236,8 +236,8 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
       end
     when STATUE_OF_OFFERING
       if lqs && lqs.memo_state?(2)
-        if !player.clan_leader?
-          if player.level >= CLAN_MEMBER_MIN_LEVEL
+        if !pc.clan_leader?
+          if pc.level >= CLAN_MEMBER_MIN_LEVEL
             html = qs.get_int("flag") != 2501 ? "30757-01.html" : "30757-01b.html"
           else
             html = "30757-02.html"
@@ -260,7 +260,7 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
           if lqs.get_int("flag") < 4
             html = "30758-05.html"
           else
-            give_items(player, BLOOD_OF_EVA, 1)
+            give_items(pc, BLOOD_OF_EVA, 1)
             lqs.memo_state = 5
             html = "30758-08.html"
           end
@@ -269,59 +269,59 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
         end
       end
     when KALIS
-      if qs.memo_state?(1) && !has_quest_items?(player, SYMBOL_OF_LOYALTY)
+      if qs.memo_state?(1) && !has_quest_items?(pc, SYMBOL_OF_LOYALTY)
         html = "30759-01.html"
-      elsif qs.memo_state?(2) && get_quest_items_count(player, SYMBOL_OF_LOYALTY) < 3
+      elsif qs.memo_state?(2) && get_quest_items_count(pc, SYMBOL_OF_LOYALTY) < 3
         html = "30759-05.html"
-      elsif get_quest_items_count(player, SYMBOL_OF_LOYALTY) >= 3 && !has_abnormal?(player)
+      elsif get_quest_items_count(pc, SYMBOL_OF_LOYALTY) >= 3 && !has_abnormal?(pc)
         html = "30759-06.html"
-      elsif qs.memo_state?(5) && has_quest_items?(player, BLOOD_OF_EVA) && has_quest_items?(player, HERB_OF_VANOR) && has_quest_items?(player, HERB_OF_HARIT) && has_quest_items?(player, HERB_OF_OEL_MAHUM) && has_abnormal?(player)
-        give_items(player, VOUCHER_OF_FAITH, 1)
-        give_items(player, POTION_OF_RECOVERY, 1)
-        take_items(player, BLOOD_OF_EVA, -1)
-        take_items(player, ANTIDOTE_RECIPE_LIST, -1)
-        take_items(player, HERB_OF_OEL_MAHUM, -1)
-        take_items(player, HERB_OF_HARIT, -1)
-        take_items(player, HERB_OF_VANOR, -1)
+      elsif qs.memo_state?(5) && has_quest_items?(pc, BLOOD_OF_EVA) && has_quest_items?(pc, HERB_OF_VANOR) && has_quest_items?(pc, HERB_OF_HARIT) && has_quest_items?(pc, HERB_OF_OEL_MAHUM) && has_abnormal?(pc)
+        give_items(pc, VOUCHER_OF_FAITH, 1)
+        give_items(pc, POTION_OF_RECOVERY, 1)
+        take_items(pc, BLOOD_OF_EVA, -1)
+        take_items(pc, ANTIDOTE_RECIPE_LIST, -1)
+        take_items(pc, HERB_OF_OEL_MAHUM, -1)
+        take_items(pc, HERB_OF_HARIT, -1)
+        take_items(pc, HERB_OF_VANOR, -1)
         qs.set_cond(4, true)
         qs.memo_state = 6
         html = "30759-08.html"
-      elsif (qs.memo_state?(3) || qs.memo_state?(4) || qs.memo_state?(5)) && !has_abnormal?(player)
-        take_items(player, ANTIDOTE_RECIPE_LIST, -1)
+      elsif (qs.memo_state?(3) || qs.memo_state?(4) || qs.memo_state?(5)) && !has_abnormal?(pc)
+        take_items(pc, ANTIDOTE_RECIPE_LIST, -1)
         qs.memo_state = 1
         html = "30759-09.html"
-      elsif qs.memo_state < 6 && get_quest_items_count(player, SYMBOL_OF_LOYALTY) >= 3 && !has_at_least_one_quest_item?(player, BLOOD_OF_EVA, HERB_OF_VANOR, HERB_OF_HARIT, HERB_OF_OEL_MAHUM) && has_abnormal?(player)
+      elsif qs.memo_state < 6 && get_quest_items_count(pc, SYMBOL_OF_LOYALTY) >= 3 && !has_at_least_one_quest_item?(pc, BLOOD_OF_EVA, HERB_OF_VANOR, HERB_OF_HARIT, HERB_OF_OEL_MAHUM) && has_abnormal?(pc)
         html = "30759-10.html"
       elsif qs.memo_state?(6)
         html = "30759-11.html"
-      elsif lqs && !player.clan_leader?
+      elsif lqs && !pc.clan_leader?
         html = "30759-12.html"
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
-  private def has_abnormal?(player)
-    !!player.effect_list.get_buff_info_by_abnormal_type(AbnormalType::FATAL_POISON)
+  private def has_abnormal?(pc)
+    !!pc.effect_list.get_buff_info_by_abnormal_type(AbnormalType::FATAL_POISON)
   end
 
-  private def get_leader_quest_state(player, quest)
-    if clan = player.clan?
+  private def get_leader_quest_state(pc, quest)
+    if clan = pc.clan?
       if leader = clan.leader.player_instance?
         leader.get_quest_state(quest)
       end
     end
   end
 
-  def get_random_party_member_state(player, condition, chance, target)
-    if player.nil? || chance < 1
+  def get_random_party_member_state(pc, condition, chance, target)
+    if pc.nil? || chance < 1
       return
     end
 
-    qs = get_quest_state(player, false)
-    unless player.in_party?
-      unless Util.in_range?(1500, player, target, true)
+    qs = get_quest_state(pc, false)
+    unless pc.in_party?
+      unless Util.in_range?(1500, pc, target, true)
         return
       end
       return qs
@@ -334,8 +334,8 @@ class Quests::Q00501_ProofOfClanAlliance < Quest
       end
     end
 
-    player.party.members.each do |m|
-      if m == player
+    pc.party.members.each do |m|
+      if m == pc
         next
       end
 

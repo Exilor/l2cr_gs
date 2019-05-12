@@ -5,7 +5,7 @@ class Packets::Incoming::RequestDeleteReceivedPost < GameClientPacket
 
   @msg_ids : Slice(Int32)?
 
-  def read_impl
+  private def read_impl
     count = d
     unless 1 <= count <= Config.max_item_in_packet
       return
@@ -17,7 +17,7 @@ class Packets::Incoming::RequestDeleteReceivedPost < GameClientPacket
     @msg_ids = Slice.new(count) { d }
   end
 
-  def run_impl
+  private def run_impl
     return unless Config.allow_mail
     return unless msg_ids = @msg_ids
     return unless pc = active_char

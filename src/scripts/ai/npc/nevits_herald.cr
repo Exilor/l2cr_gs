@@ -1,4 +1,4 @@
-class NpcAI::NevitsHerald < AbstractNpcAI
+class Scripts::NevitsHerald < AbstractNpcAI
   private NEVITS_HERALD = 4326
   private SPAWNS = [] of L2Npc
   private NEVITS_HERALD_LOC = {
@@ -42,7 +42,7 @@ class NpcAI::NevitsHerald < AbstractNpcAI
   def on_adv_event(event, npc, pc)
     return unless npc
 
-    htmltext = event
+    html = event
 
     if npc.id == NEVITS_HERALD
       return unless pc
@@ -64,7 +64,7 @@ class NpcAI::NevitsHerald < AbstractNpcAI
       despawn_heralds
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_pet)

@@ -1,4 +1,4 @@
-class NpcAI::MercenaryCaptain < AbstractNpcAI
+class Scripts::MercenaryCaptain < AbstractNpcAI
   # NPCs
   private NPCS = {
     36481 => 13757, # Mercenary Captain (Gludio)
@@ -41,10 +41,10 @@ class NpcAI::MercenaryCaptain < AbstractNpcAI
     end
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
 
-    if player
+    if pc
       st = event.split
 
       case st.shift
@@ -52,12 +52,12 @@ class NpcAI::MercenaryCaptain < AbstractNpcAI
         htmltext = event
       when "36481-03.html"
         html = NpcHtmlMessage.new(npc.l2id)
-        html.html = get_htm(player, "36481-03.html")
+        html.html = get_htm(pc, "36481-03.html")
         html["%strider%"] = TerritoryWarManager.min_tw_badge_for_striders
         html["%gstrider%"] = TerritoryWarManager.min_tw_badge_for_big_strider
-        player.send_packet(html)
+        pc.send_packet(html)
       when "territory"
-        player.send_packet(ExShowDominionRegistry.new(npc.castle.residence_id, player))
+        pc.send_packet(ExShowDominionRegistry.new(npc.castle.residence_id, pc))
       when "strider"
         type = st.shift
 
@@ -67,7 +67,7 @@ class NpcAI::MercenaryCaptain < AbstractNpcAI
           price = TerritoryWarManager.min_tw_badge_for_striders
         end
         badge_id = NPCS[npc.id]
-        if get_quest_items_count(player, badge_id) < price
+        if get_quest_items_count(pc, badge_id) < price
           return "36481-07.html"
         end
 
@@ -85,22 +85,22 @@ class NpcAI::MercenaryCaptain < AbstractNpcAI
           return
         end
 
-        take_items(player, badge_id, price)
-        give_items(player, strider_id, 1)
+        take_items(pc, badge_id, price)
+        give_items(pc, strider_id, 1)
         htmltext = "36481-09.html"
       when "elite"
-        if !has_quest_items?(player, ELITE_MERCENARY_CERTIFICATE)
+        if !has_quest_items?(pc, ELITE_MERCENARY_CERTIFICATE)
           htmltext = "36481-10.html"
         else
           list_id = 676 + npc.castle.residence_id
-          MultisellData.separate_and_send(list_id, player, npc, false)
+          MultisellData.separate_and_send(list_id, pc, npc, false)
         end
       when "top-elite"
-        if !has_quest_items?(player, TOP_ELITE_MERCENARY_CERTIFICATE)
+        if !has_quest_items?(pc, TOP_ELITE_MERCENARY_CERTIFICATE)
           htmltext = "36481-10.html"
         else
           list_id = 685 + npc.castle.residence_id
-          MultisellData.separate_and_send(list_id, player, npc, false)
+          MultisellData.separate_and_send(list_id, pc, npc, false)
         end
       end
     elsif event.casecmp?("say") && !npc.decayed?
@@ -116,10 +116,10 @@ class NpcAI::MercenaryCaptain < AbstractNpcAI
     htmltext
   end
 
-  def on_first_talk(npc, player)
-    if player.level < MIN_LEVEL || player.class_id.level < CLASS_LEVEL
+  def on_first_talk(npc, pc)
+    if pc.level < MIN_LEVEL || pc.class_id.level < CLASS_LEVEL
       "36481-08.html"
-    elsif npc.my_lord?(player)
+    elsif npc.my_lord?(pc)
       if npc.castle.siege.in_progress? || TerritoryWarManager.tw_in_progress?
         "36481-05.html"
       else

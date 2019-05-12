@@ -1,4 +1,4 @@
-class Quests::Q00151_CureForFever < Quest
+class Scripts::Q00151_CureForFever < Quest
   # NPCs
   private ELLIAS = 30050
   private YOHANES = 30032
@@ -25,9 +25,9 @@ class Quests::Q00151_CureForFever < Quest
     register_quest_items(POISON_SAC, FEVER_MEDICINE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event.casecmp?("30050-03.htm")
       st.start_quest
       event
@@ -43,29 +43,28 @@ class Quests::Q00151_CureForFever < Quest
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when ELLIAS
       case st.state
       when State::CREATED
-        htmltext = (player.level >= MIN_LEVEL) ? "30050-02.htm" : "30050-01.htm"
+        html = pc.level >= MIN_LEVEL ? "30050-02.htm" : "30050-01.htm"
       when State::STARTED
         if st.cond?(3) && st.has_quest_items?(FEVER_MEDICINE)
           st.give_items(ROUND_SHIELD, 1)
           st.add_exp_and_sp(13106, 613)
           st.exit_quest(false, true)
-          show_on_screen_msg(player, NpcString::LAST_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000) # TODO: Newbie Guide
-          htmltext = "30050-06.html"
+          show_on_screen_msg(pc, NpcString::LAST_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000) # TODO: Newbie Guide
+          html = "30050-06.html"
         elsif st.cond?(2) && st.has_quest_items?(POISON_SAC)
-          htmltext = "30050-05.html"
+          html = "30050-05.html"
         else
-          htmltext = "30050-04.html"
+          html = "30050-04.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when YOHANES
       if st.started?
@@ -73,12 +72,13 @@ class Quests::Q00151_CureForFever < Quest
           st.set_cond(3, true)
           st.take_items(POISON_SAC, -1)
           st.give_items(FEVER_MEDICINE, 1)
-          htmltext = "30032-01.html"
+          html = "30032-01.html"
         elsif st.cond?(3) && st.has_quest_items?(FEVER_MEDICINE)
-          htmltext = "30032-02.html"
+          html = "30032-02.html"
         end
       end
     end
-    htmltext
+
+    html || get_no_quest_msg(pc)
   end
 end

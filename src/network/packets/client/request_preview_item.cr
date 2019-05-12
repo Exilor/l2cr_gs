@@ -14,7 +14,7 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
   @count = 0
   @items : Slice(Int32)?
 
-  def read_impl
+  private def read_impl
     unk = d
     @list_id = d
     @count = d
@@ -26,7 +26,7 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
     @items = Slice.new(@count) { d }
   end
 
-  def run_impl
+  private def run_impl
     return unless _items = @items
     return unless pc = active_char
 

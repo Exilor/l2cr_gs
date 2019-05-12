@@ -1,4 +1,4 @@
-class Quests::Q00364_JovialAccordion < Quest
+class Scripts::Q00364_JovialAccordion < Quest
   # NPCs
   private SABRIN = 30060
   private XABER = 30075
@@ -25,15 +25,15 @@ class Quests::Q00364_JovialAccordion < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
     case event
     when "START"
-      if player.level >= MIN_LEVEL
+      if pc.level >= MIN_LEVEL
         st.start_quest
         st.memo_state = 1
         html = "30959-02.htm"
@@ -75,8 +75,8 @@ class Quests::Q00364_JovialAccordion < Quest
     html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
@@ -127,7 +127,7 @@ class Quests::Q00364_JovialAccordion < Quest
         when 1
           html = "30957-01.html"
         when 2, 3
-          if has_at_least_one_quest_item?(player, BEER_CHEST_KEY, CLOTHES_CHEST_KEY, STOLEN_BLACK_BEER, STOLEN_EVENT_CLOTHES)
+          if has_at_least_one_quest_item?(pc, BEER_CHEST_KEY, CLOTHES_CHEST_KEY, STOLEN_BLACK_BEER, STOLEN_EVENT_CLOTHES)
             html = "30957-03.html"
           elsif !st.has_quest_items?(BEER_CHEST_KEY, CLOTHES_CHEST_KEY, STOLEN_BLACK_BEER, STOLEN_EVENT_CLOTHES)
             if st.memo_state?(2)
@@ -153,6 +153,6 @@ class Quests::Q00364_JovialAccordion < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

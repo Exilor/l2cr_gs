@@ -1,4 +1,4 @@
-class Quests::Q00627_HeartInSearchOfPower < Quest
+class Scripts::Q00627_HeartInSearchOfPower < Quest
   # NPCs
   private MYSTERIOUS_NECROMANCER = 31518
   private ENFEUX = 31519

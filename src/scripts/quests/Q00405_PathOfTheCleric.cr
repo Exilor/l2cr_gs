@@ -1,4 +1,4 @@
-class Quests::Q00405_PathOfTheCleric < Quest
+class Scripts::Q00405_PathOfTheCleric < Quest
   # NPCs
   private GALLINT = 30017
   private ZIGAUNT = 30022
@@ -38,32 +38,32 @@ class Quests::Q00405_PathOfTheCleric < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if player.class_id.mage?
-        if player.level >= MIN_LEVEL
-          if has_quest_items?(player, MARK_OF_FAITH)
-            htmltext = "30022-04.htm"
+      if pc.class_id.mage?
+        if pc.level >= MIN_LEVEL
+          if has_quest_items?(pc, MARK_OF_FAITH)
+            html = "30022-04.htm"
           else
             qs.start_quest
-            give_items(player, LETTER_OF_ORDER_1ST, 1)
-            htmltext = "30022-05.htm"
+            give_items(pc, LETTER_OF_ORDER_1ST, 1)
+            html = "30022-05.htm"
           end
         else
-          htmltext = "30022-03.htm"
+          html = "30022-03.htm"
         end
-      elsif player.class_id.cleric?
-        htmltext = "30022-02a.htm"
+      elsif pc.class_id.cleric?
+        html = "30022-02a.htm"
       else
-        htmltext = "30022-02.htm"
+        html = "30022-02.htm"
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -80,126 +80,126 @@ class Quests::Q00405_PathOfTheCleric < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created? || qs.completed?
       if npc.id == ZIGAUNT
-        if !has_quest_items?(player, MARK_OF_FAITH)
-          htmltext = "30022-01.htm"
+        if !has_quest_items?(pc, MARK_OF_FAITH)
+          html = "30022-01.htm"
         else
-          htmltext = "30022-04.htm"
+          html = "30022-04.htm"
         end
       end
     elsif qs.started?
       case npc.id
       when ZIGAUNT
-        if !has_quest_items?(player, LEMONIELLS_COVENANT) && has_quest_items?(player, LETTER_OF_ORDER_2ND)
-          htmltext = "30022-07.html"
-        elsif has_quest_items?(player, LETTER_OF_ORDER_2ND, LEMONIELLS_COVENANT)
-          give_adena(player, 163800, true)
-          take_items(player, LETTER_OF_ORDER_2ND, 1)
-          take_items(player, LEMONIELLS_COVENANT, 1)
-          give_items(player, MARK_OF_FAITH, 1)
-          level = player.level
+        if !has_quest_items?(pc, LEMONIELLS_COVENANT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND)
+          html = "30022-07.html"
+        elsif has_quest_items?(pc, LETTER_OF_ORDER_2ND, LEMONIELLS_COVENANT)
+          give_adena(pc, 163800, true)
+          take_items(pc, LETTER_OF_ORDER_2ND, 1)
+          take_items(pc, LEMONIELLS_COVENANT, 1)
+          give_items(pc, MARK_OF_FAITH, 1)
+          level = pc.level
           if level >= 20
-            add_exp_and_sp(player, 320534, 23152)
+            add_exp_and_sp(pc, 320534, 23152)
           elsif level == 19
-            add_exp_and_sp(player, 456128, 28630)
+            add_exp_and_sp(pc, 456128, 28630)
           else
-            add_exp_and_sp(player, 591724, 35328)
+            add_exp_and_sp(pc, 591724, 35328)
           end
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           qs.save_global_quest_var("1ClassQuestFinished", "1")
-          htmltext = "30022-09.html"
-        elsif has_quest_items?(player, LETTER_OF_ORDER_1ST)
-          if has_quest_items?(player, BOOK_OF_VIVYAN, BOOK_OF_SIMPLON, BOOK_OF_PRAGA)
-            take_items(player, LETTER_OF_ORDER_1ST, 1)
-            give_items(player, LETTER_OF_ORDER_2ND, 1)
-            take_items(player, BOOK_OF_VIVYAN, 1)
-            take_items(player, BOOK_OF_SIMPLON, -1)
-            take_items(player, BOOK_OF_PRAGA, 1)
+          html = "30022-09.html"
+        elsif has_quest_items?(pc, LETTER_OF_ORDER_1ST)
+          if has_quest_items?(pc, BOOK_OF_VIVYAN, BOOK_OF_SIMPLON, BOOK_OF_PRAGA)
+            take_items(pc, LETTER_OF_ORDER_1ST, 1)
+            give_items(pc, LETTER_OF_ORDER_2ND, 1)
+            take_items(pc, BOOK_OF_VIVYAN, 1)
+            take_items(pc, BOOK_OF_SIMPLON, -1)
+            take_items(pc, BOOK_OF_PRAGA, 1)
             qs.set_cond(3, true)
-            htmltext = "30022-08.html"
+            html = "30022-08.html"
           else
-            htmltext = "30022-06.html"
+            html = "30022-06.html"
           end
         end
       when GALLINT
-        if !has_quest_items?(player, LEMONIELLS_COVENANT) && has_quest_items?(player, LETTER_OF_ORDER_2ND)
-          if !has_quest_items?(player, CERTIFICATE_OF_GALLINT) && has_quest_items?(player, LIONELS_BOOK)
-            take_items(player, LIONELS_BOOK, 1)
-            give_items(player, CERTIFICATE_OF_GALLINT, 1)
+        if !has_quest_items?(pc, LEMONIELLS_COVENANT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND)
+          if !has_quest_items?(pc, CERTIFICATE_OF_GALLINT) && has_quest_items?(pc, LIONELS_BOOK)
+            take_items(pc, LIONELS_BOOK, 1)
+            give_items(pc, CERTIFICATE_OF_GALLINT, 1)
             qs.set_cond(5, true)
-            htmltext = "30017-01.html"
+            html = "30017-01.html"
           else
-            htmltext = "30017-02.html"
+            html = "30017-02.html"
           end
         end
       when VIVYAN
-        if has_quest_items?(player, LETTER_OF_ORDER_1ST)
-          if !has_quest_items?(player, BOOK_OF_VIVYAN)
-            give_items(player, BOOK_OF_VIVYAN, 1)
-            if get_quest_items_count(player, BOOK_OF_SIMPLON) >= 3 && get_quest_items_count(player, BOOK_OF_VIVYAN) >= 0 && get_quest_items_count(player, BOOK_OF_PRAGA) >= 1
+        if has_quest_items?(pc, LETTER_OF_ORDER_1ST)
+          if !has_quest_items?(pc, BOOK_OF_VIVYAN)
+            give_items(pc, BOOK_OF_VIVYAN, 1)
+            if get_quest_items_count(pc, BOOK_OF_SIMPLON) >= 3 && get_quest_items_count(pc, BOOK_OF_VIVYAN) >= 0 && get_quest_items_count(pc, BOOK_OF_PRAGA) >= 1
               qs.set_cond(2, true)
             end
-            htmltext = "30030-01.html"
+            html = "30030-01.html"
           else
-            htmltext = "30030-02.html"
+            html = "30030-02.html"
           end
         end
       when TRADER_SIMPLON
-        if has_quest_items?(player, LETTER_OF_ORDER_1ST)
-          if !has_quest_items?(player, BOOK_OF_SIMPLON)
-            give_items(player, BOOK_OF_SIMPLON, 3)
-            if get_quest_items_count(player, BOOK_OF_SIMPLON) >= 0 && get_quest_items_count(player, BOOK_OF_VIVYAN) >= 1 && get_quest_items_count(player, BOOK_OF_PRAGA) >= 1
+        if has_quest_items?(pc, LETTER_OF_ORDER_1ST)
+          if !has_quest_items?(pc, BOOK_OF_SIMPLON)
+            give_items(pc, BOOK_OF_SIMPLON, 3)
+            if get_quest_items_count(pc, BOOK_OF_SIMPLON) >= 0 && get_quest_items_count(pc, BOOK_OF_VIVYAN) >= 1 && get_quest_items_count(pc, BOOK_OF_PRAGA) >= 1
               qs.set_cond(2, true)
             end
-            htmltext = "30253-01.html"
+            html = "30253-01.html"
           else
-            htmltext = "30253-02.html"
+            html = "30253-02.html"
           end
         end
       when GUARD_PRAGA
-        if has_quest_items?(player, LETTER_OF_ORDER_1ST)
-          if !has_at_least_one_quest_item?(player, BOOK_OF_PRAGA, NECKLACE_OF_MOTHER)
-            give_items(player, NECKLACE_OF_MOTHER, 1)
-            htmltext = "30333-01.html"
-          elsif !has_at_least_one_quest_item?(player, BOOK_OF_PRAGA, PENDANT_OF_MOTHER) && has_quest_items?(player, NECKLACE_OF_MOTHER)
-            htmltext = "30333-02.html"
-          elsif !has_quest_items?(player, BOOK_OF_PRAGA) && has_quest_items?(player, NECKLACE_OF_MOTHER, PENDANT_OF_MOTHER)
-            give_items(player, BOOK_OF_PRAGA, 1)
-            take_items(player, PENDANT_OF_MOTHER, 1)
-            take_items(player, NECKLACE_OF_MOTHER, 1)
-            if get_quest_items_count(player, BOOK_OF_SIMPLON) >= 3 && get_quest_items_count(player, BOOK_OF_VIVYAN) >= 1 && get_quest_items_count(player, BOOK_OF_PRAGA) >= 0
+        if has_quest_items?(pc, LETTER_OF_ORDER_1ST)
+          if !has_at_least_one_quest_item?(pc, BOOK_OF_PRAGA, NECKLACE_OF_MOTHER)
+            give_items(pc, NECKLACE_OF_MOTHER, 1)
+            html = "30333-01.html"
+          elsif !has_at_least_one_quest_item?(pc, BOOK_OF_PRAGA, PENDANT_OF_MOTHER) && has_quest_items?(pc, NECKLACE_OF_MOTHER)
+            html = "30333-02.html"
+          elsif !has_quest_items?(pc, BOOK_OF_PRAGA) && has_quest_items?(pc, NECKLACE_OF_MOTHER, PENDANT_OF_MOTHER)
+            give_items(pc, BOOK_OF_PRAGA, 1)
+            take_items(pc, PENDANT_OF_MOTHER, 1)
+            take_items(pc, NECKLACE_OF_MOTHER, 1)
+            if get_quest_items_count(pc, BOOK_OF_SIMPLON) >= 3 && get_quest_items_count(pc, BOOK_OF_VIVYAN) >= 1 && get_quest_items_count(pc, BOOK_OF_PRAGA) >= 0
               qs.set_cond(2, true)
             end
-            htmltext = "30333-03.html"
-          elsif has_quest_items?(player, BOOK_OF_PRAGA)
-            htmltext = "30333-04.html"
+            html = "30333-03.html"
+          elsif has_quest_items?(pc, BOOK_OF_PRAGA)
+            html = "30333-04.html"
           end
         end
       when LIONEL
-        if !has_quest_items?(player, LETTER_OF_ORDER_2ND)
-          htmltext = "30408-02.html"
-        elsif !has_at_least_one_quest_item?(player, LIONELS_BOOK, LEMONIELLS_COVENANT, CERTIFICATE_OF_GALLINT) && has_quest_items?(player, LETTER_OF_ORDER_2ND)
-          give_items(player, LIONELS_BOOK, 1)
+        if !has_quest_items?(pc, LETTER_OF_ORDER_2ND)
+          html = "30408-02.html"
+        elsif !has_at_least_one_quest_item?(pc, LIONELS_BOOK, LEMONIELLS_COVENANT, CERTIFICATE_OF_GALLINT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND)
+          give_items(pc, LIONELS_BOOK, 1)
           qs.set_cond(4, true)
-          htmltext = "30408-01.html"
-        elsif !has_at_least_one_quest_item?(player, LEMONIELLS_COVENANT, CERTIFICATE_OF_GALLINT) && has_quest_items?(player, LETTER_OF_ORDER_2ND, LIONELS_BOOK)
-          htmltext = "30408-03.html"
-        elsif !has_at_least_one_quest_item?(player, LIONELS_BOOK, LEMONIELLS_COVENANT) && has_quest_items?(player, LETTER_OF_ORDER_2ND, CERTIFICATE_OF_GALLINT)
-          take_items(player, CERTIFICATE_OF_GALLINT, 1)
-          give_items(player, LEMONIELLS_COVENANT, 1)
+          html = "30408-01.html"
+        elsif !has_at_least_one_quest_item?(pc, LEMONIELLS_COVENANT, CERTIFICATE_OF_GALLINT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND, LIONELS_BOOK)
+          html = "30408-03.html"
+        elsif !has_at_least_one_quest_item?(pc, LIONELS_BOOK, LEMONIELLS_COVENANT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND, CERTIFICATE_OF_GALLINT)
+          take_items(pc, CERTIFICATE_OF_GALLINT, 1)
+          give_items(pc, LEMONIELLS_COVENANT, 1)
           qs.set_cond(6, true)
-          htmltext = "30408-04.html"
-        elsif !has_at_least_one_quest_item?(player, LIONELS_BOOK, CERTIFICATE_OF_GALLINT) && has_quest_items?(player, LETTER_OF_ORDER_2ND, LEMONIELLS_COVENANT)
-          htmltext = "30408-05.html"
+          html = "30408-04.html"
+        elsif !has_at_least_one_quest_item?(pc, LIONELS_BOOK, CERTIFICATE_OF_GALLINT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND, LEMONIELLS_COVENANT)
+          html = "30408-05.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

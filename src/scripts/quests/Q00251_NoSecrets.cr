@@ -1,4 +1,4 @@
-class Quests::Q00251_NoSecrets < Quest
+class Scripts::Q00251_NoSecrets < Quest
   private PINAPS = 30201
   private DIARY = 15508
   private TABLE = 15509
@@ -27,10 +27,10 @@ class Quests::Q00251_NoSecrets < Quest
     register_quest_items(DIARY, TABLE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     if event == "30201-03.htm"
@@ -40,8 +40,8 @@ class Quests::Q00251_NoSecrets < Quest
     event
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
     if st && st.started? && st.cond?(1)
       npc_id = npc.id
 
@@ -65,24 +65,26 @@ class Quests::Q00251_NoSecrets < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::CREATED
-      html = player.level > 81 ? "30201-01.htm" : "30201-00.htm"
+      html = pc.level > 81 ? "30201-01.htm" : "30201-00.htm"
     when State::STARTED
       if st.cond?(1)
         html = "30201-05.htm"
-      elsif st.cond?(2) && st.get_quest_items_count(DIARY) >= 10 && st.get_quest_items_count(TABLE) >= 5
-        html = "30201-04.htm"
-        st.give_adena(313355, true)
-        st.add_exp_and_sp(56787, 160578)
-        st.exit_quest(false, true)
+      elsif st.cond?(2) && st.get_quest_items_count(DIARY) >= 10
+        if st.get_quest_items_count(TABLE) >= 5
+          html = "30201-04.htm"
+          st.give_adena(313355, true)
+          st.add_exp_and_sp(56787, 160578)
+          st.exit_quest(false, true)
+        end
       end
     when State::COMPLETED
       html = "30201-06.htm"
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

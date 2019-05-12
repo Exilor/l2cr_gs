@@ -1,4 +1,4 @@
-class NpcAI::SymbolMaker < AbstractNpcAI
+class Scripts::SymbolMaker < AbstractNpcAI
   private NPCS = {
     31046, # Marsden
     31047, # Kell

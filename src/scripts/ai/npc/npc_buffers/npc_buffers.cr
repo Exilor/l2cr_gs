@@ -1,4 +1,4 @@
-class NpcAI::NpcBuffers < AbstractNpcAI
+class Scripts::NpcBuffers < AbstractNpcAI
   def initialize
     super(self.class.simple_name, "ai/npc")
 

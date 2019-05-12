@@ -1,4 +1,4 @@
-class Quests::Q00192_SevenSignsSeriesOfDoubt < Quest
+class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
   # NPCs
   private HOLLINT = 30191
   private HECTOR = 30197

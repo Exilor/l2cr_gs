@@ -1,4 +1,4 @@
-class Quests::Q00155_FindSirWindawood < Quest
+class Scripts::Q00155_FindSirWindawood < Quest
   # NPCs
   private ABELLOS = 30042
   private SIR_COLLIN_WINDAWOOD = 30311
@@ -27,30 +27,28 @@ class Quests::Q00155_FindSirWindawood < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    st = get_quest_state(pc, true)
-    unless st
-      return htmltext
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
     end
 
     case npc.id
     when ABELLOS
       case st.state
       when State::CREATED
-        htmltext = pc.level >= MIN_LEVEL ? "30042-02.htm" : "30042-01.htm"
+        html = pc.level >= MIN_LEVEL ? "30042-02.htm" : "30042-01.htm"
       when State::STARTED
-        htmltext = "30042-04.html"
+        html = "30042-04.html"
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when SIR_COLLIN_WINDAWOOD
       if st.started? && st.has_quest_items?(OFFICIAL_LETTER)
         st.give_items(HASTE_POTION, 1)
         st.exit_quest(false, true)
-        htmltext = "30311-01.html"
+        html = "30311-01.html"
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

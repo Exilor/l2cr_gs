@@ -1,4 +1,4 @@
-class Quests::Q00034_InSearchOfCloth < Quest
+class Scripts::Q00034_InSearchOfCloth < Quest
   # NPCs
   private RADIA = 30088
   private RALFORD = 30165
@@ -29,13 +29,13 @@ class Quests::Q00034_InSearchOfCloth < Quest
     register_quest_items(SKEIN_OF_YARN, SPINNERET)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    htmltext = event
+    html = event
     case event
     when "30088-03.htm"
       st.start_quest
@@ -47,7 +47,7 @@ class Quests::Q00034_InSearchOfCloth < Quest
       st.set_cond(4, true)
     when "30165-05.html"
       if st.get_quest_items_count(SPINNERET) < SPINNERET_COUNT
-        return get_no_quest_msg(player)
+        return get_no_quest_msg(pc)
       end
       st.take_items(SPINNERET, SPINNERET_COUNT)
       st.give_items(SKEIN_OF_YARN, 1)
@@ -60,17 +60,17 @@ class Quests::Q00034_InSearchOfCloth < Quest
         st.give_items(MYSTERIOUS_CLOTH, 1)
         st.exit_quest(false, true)
       else
-        htmltext = "30088-11.html"
+        html = "30088-11.html"
       end
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    member = get_random_party_member(player, 4)
+  def on_kill(npc, pc, is_summon)
+    member = get_random_party_member(pc, 4)
     if member && Rnd.bool
       st = get_quest_state(member, false).not_nil!
       st.give_items(SPINNERET, 1)
@@ -84,56 +84,56 @@ class Quests::Q00034_InSearchOfCloth < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when RADIA
       case st.state
       when State::CREATED
-        htmltext = player.level >= MIN_LEVEL ? "30088-01.htm" : "30088-02.html"
+        html = pc.level >= MIN_LEVEL ? "30088-01.htm" : "30088-02.html"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30088-04.html"
+          html = "30088-04.html"
         when 2
-          htmltext = "30088-05.html"
+          html = "30088-05.html"
         when 3
-          htmltext = "30088-07.html"
+          html = "30088-07.html"
         when 6
           if st.get_quest_items_count(SUEDE) >= SUEDE_COUNT && st.get_quest_items_count(THREAD) >= THREAD_COUNT
-            htmltext = "30088-08.html"
+            html = "30088-08.html"
           else
-            htmltext = "30088-09.html"
+            html = "30088-09.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when VARAN
       if st.started?
         case st.cond
         when 1
-          htmltext = "30294-01.html"
+          html = "30294-01.html"
         when 2
-          htmltext = "30294-03.html"
+          html = "30294-03.html"
         end
       end
     when RALFORD
       if st.started?
         case st.cond
         when 3
-          htmltext = "30165-01.html"
+          html = "30165-01.html"
         when 4
-          htmltext = "30165-03.html"
+          html = "30165-03.html"
         when 5
-          htmltext = "30165-04.html"
+          html = "30165-04.html"
         when 6
-          htmltext = "30165-06.html"
+          html = "30165-06.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

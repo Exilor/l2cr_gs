@@ -1,4 +1,4 @@
-class Quests::Q00152_ShardsOfGolem < Quest
+class Scripts::Q00152_ShardsOfGolem < Quest
   # NPCs
   private HARRYS = 30035
   private ALTRAN = 30283
@@ -22,27 +22,27 @@ class Quests::Q00152_ShardsOfGolem < Quest
     register_quest_items(HARRYS_1ST_RECIEPT, HARRYS_2ND_RECIEPT, GOLEM_SHARD, TOOL_BOX)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
 
     if st
       case event
       when "30035-03.htm"
         st.start_quest
         st.give_items(HARRYS_1ST_RECIEPT, 1)
-        htmltext = event
+        html = event
       when "30283-02.html"
         if st.cond?(1) && st.has_quest_items?(HARRYS_1ST_RECIEPT)
           st.take_items(HARRYS_1ST_RECIEPT, -1)
           st.give_items(HARRYS_2ND_RECIEPT, 1)
           st.set_cond(2, true)
-          htmltext = event
+          html = event
         end
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -58,61 +58,63 @@ class Quests::Q00152_ShardsOfGolem < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state(player, true)
-    htmltext = get_no_quest_msg(player)
-    if st
+  def on_talk(npc, pc)
+    if st = get_quest_state(pc, true)
       case npc.id
       when HARRYS
         case st.state
         when State::CREATED
-          htmltext = player.level >= MIN_LVL ? "30035-02.htm" : "30035-01.htm"
+          html = pc.level >= MIN_LVL ? "30035-02.htm" : "30035-01.htm"
         when State::STARTED
           case st.cond
           when 1
             if st.has_quest_items?(HARRYS_1ST_RECIEPT)
-              htmltext = "30035-04a.html"
+              html = "30035-04a.html"
             end
           when 2, 3
             if st.has_quest_items?(HARRYS_2ND_RECIEPT)
-              htmltext = "30035-04.html"
+              html = "30035-04.html"
             end
           when 4
             if st.has_quest_items?(HARRYS_2ND_RECIEPT, TOOL_BOX)
               st.give_items(WOODEN_BREASTPLATE, 1)
               st.add_exp_and_sp(5000, 0)
               st.exit_quest(false, true)
-              htmltext = "30035-05.html"
+              html = "30035-05.html"
             end
           end
         when State::COMPLETED
-            htmltext = get_already_completed_msg(player)
+            html = get_already_completed_msg(pc)
         end
       when ALTRAN
         case st.cond
         when 1
           if st.has_quest_items?(HARRYS_1ST_RECIEPT)
-            htmltext = "30283-01.html"
+            html = "30283-01.html"
           end
         when 2
-          if st.has_quest_items?(HARRYS_2ND_RECIEPT) && st.get_quest_items_count(GOLEM_SHARD) < 5
-            htmltext = "30283-03.html"
+          if st.has_quest_items?(HARRYS_2ND_RECIEPT)
+            if st.get_quest_items_count(GOLEM_SHARD) < 5
+              html = "30283-03.html"
+            end
           end
         when 3
-          if st.has_quest_items?(HARRYS_2ND_RECIEPT) && st.get_quest_items_count(GOLEM_SHARD) >= 5
-            st.take_items(GOLEM_SHARD, -1)
-            st.give_items(TOOL_BOX, 1)
-            st.set_cond(4, true)
-            htmltext = "30283-04.html"
+          if st.has_quest_items?(HARRYS_2ND_RECIEPT)
+            if st.get_quest_items_count(GOLEM_SHARD) >= 5
+              st.take_items(GOLEM_SHARD, -1)
+              st.give_items(TOOL_BOX, 1)
+              st.set_cond(4, true)
+              html = "30283-04.html"
+            end
           end
         when 4
           if st.has_quest_items?(HARRYS_2ND_RECIEPT, TOOL_BOX)
-            htmltext = "30283-05.html"
+            html = "30283-05.html"
           end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

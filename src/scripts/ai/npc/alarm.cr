@@ -1,4 +1,4 @@
-class NpcAI::Alarm < AbstractNpcAI
+class Scripts::Alarm < AbstractNpcAI
   # NPC
   private ALARM = 32367
   # Misc

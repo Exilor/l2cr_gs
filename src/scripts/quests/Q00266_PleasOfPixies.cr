@@ -1,21 +1,21 @@
-class Quests::Q00266_PleasOfPixies < Quest
+class Scripts::Q00266_PleasOfPixies < Quest
   # NPC
   private PIXY_MURIKA = 31852
   # Items
   private PREDATORS_FANG = 1334
   # Monsters
   private MONSTERS = {
-    20537 => [ItemHolder.new(10, 2)], # Elder Red Keltir
-    20525 => [ItemHolder.new(5, 2), ItemHolder.new(10, 3)], # Gray Wolf
-    20534 => [ItemHolder.new(6, 1)],  # Red Keltir
-    20530 => [ItemHolder.new(8, 1)]   # Young Red Keltir
+    20537 => {ItemHolder.new(10, 2)}, # Elder Red Keltir
+    20525 => {ItemHolder.new(5, 2), ItemHolder.new(10, 3)}, # Gray Wolf
+    20534 => {ItemHolder.new(6, 1)},  # Red Keltir
+    20530 => {ItemHolder.new(8, 1)}   # Young Red Keltir
   }
   # Rewards
   private REWARDS = {
-    0 => [ItemHolder.new(1337, 1), ItemHolder.new(3032, 1)], # Emerald, Recipe: Spiritshot D
-    1 => [ItemHolder.new(2176, 1), ItemHolder.new(1338, 1)], # Recipe: Leather Boots, Blue Onyx
-    2 => [ItemHolder.new(1339, 1), ItemHolder.new(1061, 1)], # Onyx, Greater Healing Potion
-    3 => [ItemHolder.new(1336, 1), ItemHolder.new(1060, 1)]  # Glass Shard, Lesser Healing Potion
+    0 => {ItemHolder.new(1337, 1), ItemHolder.new(3032, 1)}, # Emerald, Recipe: Spiritshot D
+    1 => {ItemHolder.new(2176, 1), ItemHolder.new(1338, 1)}, # Recipe: Leather Boots, Blue Onyx
+    2 => {ItemHolder.new(1339, 1), ItemHolder.new(1061, 1)}, # Onyx, Greater Healing Potion
+    3 => {ItemHolder.new(1336, 1), ItemHolder.new(1060, 1)}  # Glass Shard, Lesser Healing Potion
   }
   # Misc
   private MIN_LVL = 3
@@ -29,9 +29,9 @@ class Quests::Q00266_PleasOfPixies < Quest
     register_quest_items(PREDATORS_FANG)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && "31852-04.htm" == event
       st.start_quest
       event
@@ -54,23 +54,22 @@ class Quests::Q00266_PleasOfPixies < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      if !player.race.elf?
-        htmltext = "31852-01.htm"
-      elsif player.level < MIN_LVL
-        htmltext = "31852-02.htm"
+      if !pc.race.elf?
+        html = "31852-01.htm"
+      elsif pc.level < MIN_LVL
+        html = "31852-02.htm"
       else
-        htmltext = "31852-03.htm"
+        html = "31852-03.htm"
       end
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "31852-05.html"
+        html = "31852-05.html"
       when 2
         if st.get_quest_items_count(PREDATORS_FANG) >= 100
           chance = Rnd.rand(100)
@@ -88,11 +87,11 @@ class Quests::Q00266_PleasOfPixies < Quest
             st.reward_items(item)
           end
           st.exit_quest(true, true)
-          htmltext = "31852-06.html"
+          html = "31852-06.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

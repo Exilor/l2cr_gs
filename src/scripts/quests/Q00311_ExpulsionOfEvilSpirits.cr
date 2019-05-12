@@ -1,4 +1,4 @@
-class Quests::Q00311_ExpulsionOfEvilSpirits < Quest
+class Scripts::Q00311_ExpulsionOfEvilSpirits < Quest
   # NPC
   private CHAIREN = 32655
   # Items

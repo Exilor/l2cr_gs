@@ -1,4 +1,4 @@
-class Quests::Q00283_TheFewTheProudTheBrave < Quest
+class Scripts::Q00283_TheFewTheProudTheBrave < Quest
   # NPC
   private PERWAN = 32133
   # Item
@@ -19,32 +19,32 @@ class Quests::Q00283_TheFewTheProudTheBrave < Quest
     register_quest_items(CRIMSON_SPIDER_CLAW)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, oc)
+    return unless oc
+    return unless st = get_quest_state(oc, false)
 
     case event
     when "32133-03.htm"
       st.start_quest
-      htmltext = event
+      html = event
     when "32133-06.html"
-      htmltext = event
+      html = event
     when "32133-08.html"
       if st.has_quest_items?(CRIMSON_SPIDER_CLAW)
         claws = st.get_quest_items_count(CRIMSON_SPIDER_CLAW)
         st.give_adena((claws * CLAW_PRICE) + (claws >= 10 ? BONUS : 0), true)
         st.take_items(CRIMSON_SPIDER_CLAW, -1)
-        Q00261_CollectorsDream.give_newbie_reward(player)
-        htmltext = event
+        Q00261_CollectorsDream.give_newbie_reward(oc)
+        html = event
       else
-        htmltext = "32133-07.html"
+        html = "32133-07.html"
       end
     when "32133-09.html"
       st.exit_quest(true, true)
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -55,17 +55,21 @@ class Quests::Q00283_TheFewTheProudTheBrave < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state!(talker)
-    htmltext = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    html = get_no_quest_msg(pc)
 
     case st.state
     when State::CREATED
-      htmltext = talker.level >= MIN_LVL ? "32133-01.htm" : "32133-02.htm"
+      html = pc.level >= MIN_LVL ? "32133-01.htm" : "32133-02.htm"
     when State::STARTED
-      htmltext = st.has_quest_items?(CRIMSON_SPIDER_CLAW) ? "32133-04.html" : "32133-05.html"
+      if st.has_quest_items?(CRIMSON_SPIDER_CLAW)
+        html = "32133-04.html"
+      else
+        html = "32133-05.html"
+      end
     end
 
-    htmltext
+    html
   end
 end

@@ -28,8 +28,8 @@ module PartyMatchRoomList
     ROOMS[id]?
   end
 
-  def rooms : Enumerable(PartyMatchRoom)
-    ROOMS.local_each_value
+  def rooms : Slice(PartyMatchRoom)
+    ROOMS.values_slice
   end
 
   def party_match_room_count : Int32

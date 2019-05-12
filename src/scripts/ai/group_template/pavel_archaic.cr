@@ -1,4 +1,4 @@
-class NpcAI::PavelArchaic < AbstractNpcAI
+class Scripts::PavelArchaic < AbstractNpcAI
   private SAFETY_DEVICE    = 18917 # Pavel Safety Device
   private PINCER_GOLEM     = 22801 # Cruel Pincer Golem
   private PINCER_GOLEM2    = 22802 # Cruel Pincer Golem

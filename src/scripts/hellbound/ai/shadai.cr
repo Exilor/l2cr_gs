@@ -1,4 +1,4 @@
-class NpcAI::Shadai < AbstractNpcAI
+class Scripts::Shadai < AbstractNpcAI
   # NPCs
   private SHADAI = 32347
   # Locations

@@ -3,7 +3,6 @@ module DecayTaskManager
   extend Loggable
 
   private POOL = RunnableExecutor.new
-
   private TASKS = Hash(L2Character, Runnable::DelayedTask).new
 
   def add(char : L2Character)

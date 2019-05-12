@@ -1,4 +1,4 @@
-class Quests::Q00039_RedEyedInvaders < Quest
+class Scripts::Q00039_RedEyedInvaders < Quest
   # NPCs
   private CAPTAIN_BATHIA = 30332
   private GUARD_BABENCO = 30334
@@ -28,9 +28,9 @@ class Quests::Q00039_RedEyedInvaders < Quest
     register_quest_items(LIZ_NECKLACE_A.id, LIZ_NECKLACE_B.id, LIZ_PERFUME.id, LIZ_GEM.id)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -38,69 +38,69 @@ class Quests::Q00039_RedEyedInvaders < Quest
     when "30334-03.htm"
       if qs.created?
         qs.start_quest
-        htmltext = event
+        html = event
       end
     when "30332-02.html"
       if qs.cond?(1)
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "30332-05.html"
       if qs.cond?(3)
-        if has_all_items?(player, true, LIZ_NECKLACE_A, LIZ_NECKLACE_B)
+        if has_all_items?(pc, true, LIZ_NECKLACE_A, LIZ_NECKLACE_B)
           qs.set_cond(4, true)
-          take_all_items(player, LIZ_NECKLACE_A, LIZ_NECKLACE_B)
-          htmltext = event
+          take_all_items(pc, LIZ_NECKLACE_A, LIZ_NECKLACE_B)
+          html = event
         else
-          htmltext = "30332-06.html"
+          html = "30332-06.html"
         end
       end
     when "30332-09.html"
       if qs.cond?(5)
-        if has_all_items?(player, true, LIZ_PERFUME, LIZ_GEM)
-          reward_items(player, GREEN_HIGH_LURE)
-          reward_items(player, BABYDUCK_ROD)
-          reward_items(player, FISHING_SHOT_NONE)
-          add_exp_and_sp(player, 62366, 2783)
+        if has_all_items?(pc, true, LIZ_PERFUME, LIZ_GEM)
+          reward_items(pc, GREEN_HIGH_LURE)
+          reward_items(pc, BABYDUCK_ROD)
+          reward_items(pc, FISHING_SHOT_NONE)
+          add_exp_and_sp(pc, 62366, 2783)
           qs.exit_quest(false, true)
-          htmltext = event
+          html = event
         else
-          htmltext = "30332-10.html"
+          html = "30332-10.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when CAPTAIN_BATHIA
       case qs.cond
       when 1
-        htmltext = "30332-01.html"
+        html = "30332-01.html"
       when 2
-        htmltext = "30332-03.html"
+        html = "30332-03.html"
       when 3
-        htmltext = "30332-04.html"
+        html = "30332-04.html"
       when 4
-        htmltext = "30332-07.html"
+        html = "30332-07.html"
       when 5
-        htmltext = "30332-08.html"
+        html = "30332-08.html"
       end
     when GUARD_BABENCO
       if qs.created?
-        htmltext = talker.level >= MIN_LVL ? "30334-01.htm" : "30334-02.htm"
+        html = pc.level >= MIN_LVL ? "30334-01.htm" : "30334-02.htm"
       elsif qs.started? && qs.cond?(1)
-        htmltext = "30334-04.html"
+        html = "30334-04.html"
       elsif qs.completed?
-        htmltext = get_already_completed_msg(talker)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)

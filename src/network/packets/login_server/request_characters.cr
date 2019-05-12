@@ -1,11 +1,13 @@
-class Packets::Incoming::RequestCharacters < MMO::IncomingPacket(LoginServerClient)
+require "../login_server_packet"
+
+class Packets::Incoming::RequestCharacters < LoginServerPacket
   @account = ""
 
-  def read
+  private def read_impl
     @account = s
   end
 
-  def run
+  private def run_impl
     client.get_chars_on_server(@account)
   end
 end

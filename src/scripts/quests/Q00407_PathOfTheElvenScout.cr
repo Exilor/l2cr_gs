@@ -1,4 +1,4 @@
-class Quests::Q00407_PathOfTheElvenScout < Quest
+class Scripts::Q00407_PathOfTheElvenScout < Quest
   # NPCs
   private MASTER_REORIA = 30328
   private GUARD_BABENCO = 30334
@@ -30,45 +30,49 @@ class Quests::Q00407_PathOfTheElvenScout < Quest
     add_talk_id(MASTER_REORIA, GUARD_BABENCO, GUARD_MORETTI, PRIAS)
     add_kill_id(OL_MAHUM_PATROL, OL_MAHUM_SENTRY)
     add_attack_id(OL_MAHUM_PATROL, OL_MAHUM_SENTRY)
-    register_quest_items(REISAS_LETTER, PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER, MORETTIES_HERB, MORETTIS_LETTER, PRIASS_LETTER, HONORARY_GUARD, RUSTED_KEY)
+    register_quest_items(
+      REISAS_LETTER, PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER,
+      PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER, MORETTIES_HERB,
+      MORETTIS_LETTER, PRIASS_LETTER, HONORARY_GUARD, RUSTED_KEY
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
-      if player.class_id.elven_fighter?
-        if player.level >= MIN_LEVEL
-          if has_quest_items?(player, REISAS_RECOMMENDATION)
-            htmltext = "30328-04.htm"
+      if pc.class_id.elven_fighter?
+        if pc.level >= MIN_LEVEL
+          if has_quest_items?(pc, REISAS_RECOMMENDATION)
+            html = "30328-04.htm"
           else
             qs.start_quest
             qs.unset("variable")
-            give_items(player, REISAS_LETTER, 1)
-            htmltext = "30328-05.htm"
+            give_items(pc, REISAS_LETTER, 1)
+            html = "30328-05.htm"
           end
         else
-          htmltext = "30328-03.htm"
+          html = "30328-03.htm"
         end
-      elsif player.class_id.elven_scout?
-        htmltext = "30328-02a.htm"
+      elsif pc.class_id.elven_scout?
+        html = "30328-02a.htm"
       else
-        htmltext = "30328-02.htm"
+        html = "30328-02.htm"
       end
     when "30337-02.html"
-      htmltext = event
+      html = event
     when "30337-03.html"
-      if has_quest_items?(player, REISAS_LETTER)
-        take_items(player, REISAS_LETTER, -1)
+      if has_quest_items?(pc, REISAS_LETTER)
+        take_items(pc, REISAS_LETTER, -1)
         qs.set("variable", 1)
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -112,7 +116,7 @@ class Quests::Q00407_PathOfTheElvenScout < Quest
       end
     end
 
-    return super
+    super
   end
 
   private def give_letter_and_check_state(letter_id, qs)
@@ -125,84 +129,84 @@ class Quests::Q00407_PathOfTheElvenScout < Quest
     end
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created? || qs.completed?
       if npc.id == MASTER_REORIA
-        htmltext = "30328-01.htm"
+        html = "30328-01.htm"
       end
     elsif qs.started?
       case npc.id
       when MASTER_REORIA
-        if has_quest_items?(player, REISAS_LETTER)
-          htmltext = "30328-06.html"
-        elsif qs.get_int("variable") == 1 && !has_at_least_one_quest_item?(player, REISAS_LETTER, HONORARY_GUARD)
-          htmltext = "30328-08.html"
-        elsif has_quest_items?(player, HONORARY_GUARD)
-          take_items(player, HONORARY_GUARD, -1)
-          give_items(player, REISAS_RECOMMENDATION, 1)
-          level = player.level
+        if has_quest_items?(pc, REISAS_LETTER)
+          html = "30328-06.html"
+        elsif qs.get_int("variable") == 1 && !has_at_least_one_quest_item?(pc, REISAS_LETTER, HONORARY_GUARD)
+          html = "30328-08.html"
+        elsif has_quest_items?(pc, HONORARY_GUARD)
+          take_items(pc, HONORARY_GUARD, -1)
+          give_items(pc, REISAS_RECOMMENDATION, 1)
+          level = pc.level
           if level >= 20
-            add_exp_and_sp(player, 320534, 19932)
+            add_exp_and_sp(pc, 320534, 19932)
           elsif level == 19
-            add_exp_and_sp(player, 456128, 26630)
+            add_exp_and_sp(pc, 456128, 26630)
           else
-            add_exp_and_sp(player, 591724, 33328)
+            add_exp_and_sp(pc, 591724, 33328)
           end
-          give_adena(player, 163800, true)
+          give_adena(pc, 163800, true)
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           qs.save_global_quest_var("1ClassQuestFinished", "1")
-          htmltext = "30328-07.html"
+          html = "30328-07.html"
         end
       when GUARD_BABENCO
         if qs.get_int("variable") == 1
-          htmltext = "30334-01.html"
+          html = "30334-01.html"
         end
       when GUARD_MORETTI
-        letter_count = get_quest_items_count(player, PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER)
-        if has_quest_items?(player, REISAS_LETTER) && letter_count == 0
-          htmltext = "30337-01.html"
-        elsif qs.get_int("variable") == 1 && !has_at_least_one_quest_item?(player, MORETTIS_LETTER, PRIASS_LETTER, HONORARY_GUARD)
+        letter_count = get_quest_items_count(pc, PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER)
+        if has_quest_items?(pc, REISAS_LETTER) && letter_count == 0
+          html = "30337-01.html"
+        elsif qs.get_int("variable") == 1 && !has_at_least_one_quest_item?(pc, MORETTIS_LETTER, PRIASS_LETTER, HONORARY_GUARD)
           if letter_count == 0
-            htmltext = "30337-04.html"
+            html = "30337-04.html"
           elsif letter_count < 4
-            htmltext = "30337-05.html"
+            html = "30337-05.html"
           else
-            take_items(player, -1, [PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER])
-            give_items(player, MORETTIES_HERB, 1)
-            give_items(player, MORETTIS_LETTER, 1)
+            take_items(pc, -1, [PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER])
+            give_items(pc, MORETTIES_HERB, 1)
+            give_items(pc, MORETTIS_LETTER, 1)
             qs.set_cond(4, true)
-            htmltext = "30337-06.html"
+            html = "30337-06.html"
           end
-        elsif has_quest_items?(player, PRIASS_LETTER)
-          take_items(player, PRIASS_LETTER, -1)
-          give_items(player, HONORARY_GUARD, 1)
+        elsif has_quest_items?(pc, PRIASS_LETTER)
+          take_items(pc, PRIASS_LETTER, -1)
+          give_items(pc, HONORARY_GUARD, 1)
           qs.set_cond(8, true)
-          htmltext = "30337-07.html"
-        elsif has_quest_items?(player, MORETTIES_HERB, MORETTIS_LETTER)
-          htmltext = "30337-09.html"
-        elsif has_quest_items?(player, HONORARY_GUARD)
-          htmltext = "30337-08.html"
+          html = "30337-07.html"
+        elsif has_quest_items?(pc, MORETTIES_HERB, MORETTIS_LETTER)
+          html = "30337-09.html"
+        elsif has_quest_items?(pc, HONORARY_GUARD)
+          html = "30337-08.html"
         end
       when PRIAS
-        if has_quest_items?(player, MORETTIS_LETTER, MORETTIES_HERB)
-          if !has_quest_items?(player, RUSTED_KEY)
+        if has_quest_items?(pc, MORETTIS_LETTER, MORETTIES_HERB)
+          if !has_quest_items?(pc, RUSTED_KEY)
             qs.set_cond(5, true)
-            htmltext = "30426-01.html"
+            html = "30426-01.html"
           else
-            take_items(player, -1, [RUSTED_KEY, MORETTIES_HERB, MORETTIS_LETTER])
-            give_items(player, PRIASS_LETTER, 1)
+            take_items(pc, -1, [RUSTED_KEY, MORETTIES_HERB, MORETTIS_LETTER])
+            give_items(pc, PRIASS_LETTER, 1)
             qs.set_cond(7, true)
-            htmltext = "30426-02.html"
+            html = "30426-02.html"
           end
-        elsif has_quest_items?(player, PRIASS_LETTER)
-          htmltext = "30426-04.html"
+        elsif has_quest_items?(pc, PRIASS_LETTER)
+          html = "30426-04.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00169_OffspringOfNightmares < Quest
+class Scripts::Q00169_OffspringOfNightmares < Quest
   # NPC
   private VLASTY = 30145
   # Monsters
@@ -28,7 +28,7 @@ class Quests::Q00169_OffspringOfNightmares < Quest
       case event
       when "30145-03.htm"
         st.start_quest
-        htmltext = event
+        html = event
       when "30145-07.html"
         if st.cond?(2) && st.has_quest_items?(PERFECT_SKULL)
           st.give_items(BONE_GAITERS, 1)
@@ -36,12 +36,12 @@ class Quests::Q00169_OffspringOfNightmares < Quest
           st.give_adena(17030i64 + (10 * st.get_quest_items_count(CRACKED_SKULL)), true)
           st.exit_quest(false, true)
           show_on_screen_msg(pc, NpcString::LAST_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000) # TODO: Newbie Guide
-          htmltext = event
+          html = event
         end
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -60,26 +60,31 @@ class Quests::Q00169_OffspringOfNightmares < Quest
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state!(pc)
-    htmltext = get_no_quest_msg(pc)
-
-    if st
+    if st = get_quest_state!(pc)
       case st.state
       when State::CREATED
-        htmltext = pc.race.dark_elf? ? pc.level >= MIN_LVL ? "30145-02.htm" : "30145-01.htm" : "30145-00.htm"
+        if pc.race.dark_elf?
+          if pc.level >= MIN_LVL
+            html = "30145-02.htm"
+          else
+            html = "30145-01.htm"
+          end
+        else
+          html = "30145-00.htm"
+        end
       when State::STARTED
         if st.has_quest_items?(CRACKED_SKULL) && !st.has_quest_items?(PERFECT_SKULL)
-          htmltext = "30145-05.html"
+          html = "30145-05.html"
         elsif st.cond?(2) && st.has_quest_items?(PERFECT_SKULL)
-          htmltext = "30145-06.html"
+          html = "30145-06.html"
         elsif !st.has_quest_items?(CRACKED_SKULL, PERFECT_SKULL)
-          htmltext = "30145-04.html"
+          html = "30145-04.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

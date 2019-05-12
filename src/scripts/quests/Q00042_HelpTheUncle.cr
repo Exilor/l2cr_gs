@@ -1,4 +1,4 @@
-class Quests::Q00042_HelpTheUncle < Quest
+class Scripts::Q00042_HelpTheUncle < Quest
   # NPCs
   private WATERS = 30828
   private SOPHYA = 30735
@@ -20,13 +20,13 @@ class Quests::Q00042_HelpTheUncle < Quest
     register_quest_items(MAP, MAP_PIECE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    htmltext = event
+    html = event
     case event
     when "30828-01.htm"
       st.start_quest
@@ -35,7 +35,7 @@ class Quests::Q00042_HelpTheUncle < Quest
         st.take_items(TRIDENT, 1)
         st.set_cond(2, true)
       else
-        htmltext = "30828-03a.html"
+        html = "30828-03a.html"
       end
     when "30828-06.html"
       if st.get_quest_items_count(MAP_PIECE) == 30
@@ -43,25 +43,25 @@ class Quests::Q00042_HelpTheUncle < Quest
         st.give_items(MAP, 1)
         st.set_cond(4, true)
       else
-        htmltext = "30828-06a.html"
+        html = "30828-06a.html"
       end
     when "30735-02.html"
       if st.has_quest_items?(MAP)
         st.take_items(MAP, -1)
         st.set_cond(5, true)
       else
-        htmltext = "30735-02a.html"
+        html = "30735-02a.html"
       end
     when "30828-09.html"
       st.give_items(PET_TICKET, 1)
       st.exit_quest(false, true)
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
 
     if st && st.cond?(2)
       st.give_items(MAP_PIECE, 1)
@@ -75,40 +75,44 @@ class Quests::Q00042_HelpTheUncle < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case npc.id
     when WATERS
       case st.state
       when State::CREATED
-        htmltext = player.level >= 25 ? "30828-00.htm" : "30828-00a.html"
+        html = pc.level >= 25 ? "30828-00.htm" : "30828-00a.html"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = st.has_quest_items?(TRIDENT) ? "30828-02.html" : "30828-02a.html"
+          if st.has_quest_items?(TRIDENT)
+            html = "30828-02.html"
+          else
+            html = "30828-02a.html"
+          end
         when 2
-          htmltext = "30828-04.html"
+          html = "30828-04.html"
         when 3
-          htmltext = "30828-05.html"
+          html = "30828-05.html"
         when 4
-          htmltext = "30828-07.html"
+          html = "30828-07.html"
         when 5
-          htmltext = "30828-08.html"
+          html = "30828-08.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when SOPHYA
       if st.started?
         case st.cond
         when 4
-          htmltext = "30735-01.html"
+          html = "30735-01.html"
         when 5
-          htmltext = "30735-03.html"
+          html = "30735-03.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

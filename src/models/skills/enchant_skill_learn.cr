@@ -20,15 +20,11 @@ struct EnchantSkillLearn
     ((level - 1) / 100) - 1
   end
 
-  def first_route_group
+  def first_route_group : EnchantSkillGroup?
     EnchantSkillGroupsData.get_enchant_skill_group_by_id(@enchant_routes.first.try &.last)
   end
 
-  # def all_routes
-  #   @enchant_routes.each_key
-  # end
-
-  def each_route
+  def each_route(&block : Int32 ->)
     @enchant_routes.each_key { |key| yield key }
   end
 

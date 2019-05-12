@@ -1,4 +1,4 @@
-class Quests::Q00634_InSearchOfFragmentsOfDimension < Quest
+class Scripts::Q00634_InSearchOfFragmentsOfDimension < Quest
   private DIMENSIONAL_GATE_KEEPER = {
     31494,
     31495,

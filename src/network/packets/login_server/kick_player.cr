@@ -1,13 +1,15 @@
-class Packets::Incoming::KickPlayer < MMO::IncomingPacket(LoginServerClient)
+require "../login_server_packet"
+
+class Packets::Incoming::KickPlayer < LoginServerPacket
   include Loggable
 
   @account = ""
 
-  def read
+  private def read_impl
     @account = s
   end
 
-  def run
+  private def run_impl
     client.do_kick_player(@account)
   end
 end

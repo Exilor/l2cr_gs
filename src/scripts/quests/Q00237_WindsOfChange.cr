@@ -1,4 +1,4 @@
-class Quests::Q00237_WindsOfChange < Quest
+class Scripts::Q00237_WindsOfChange < Quest
   # NPCs
   private FLAUEN = 30899
   private IASON = 30969
@@ -23,9 +23,9 @@ class Quests::Q00237_WindsOfChange < Quest
     register_quest_items(FLAUENS_LETTER, DOSKOZER_LETTER, ATHENIA_LETTER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 

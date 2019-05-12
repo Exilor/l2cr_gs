@@ -215,7 +215,7 @@ module ZoneManager
     end
   end
 
-  def check_id(id) : Bool
+  def check_id(id : Int) : Bool
     # !!CLASS_ZONES.find_value { |map| map.has_key?(id) }
     CLASS_ZONES.local_each_value.any? &.has_key?(id)
   end
@@ -244,7 +244,11 @@ module ZoneManager
   end
 
   def get_all_zones(zone_type : T.class) : Enumerable(T) forall T
-    CLASS_ZONES[zone_type].values.unsafe_as(Enumerable(T))
+    ret = CLASS_ZONES[zone_type].values_slice
+    unless ret.is_a?(Enumerable(T))
+      raise "Expected #{ret}:#{ret.class} to be an Enumerable(#{T})"
+    end
+    ret
   end
 
   def each(zone_type : T.class, &block : T ->) forall T

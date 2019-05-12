@@ -1,4 +1,4 @@
-class NpcAI::AvantGarde < AbstractNpcAI
+class Scripts::AvantGarde < AbstractNpcAI
   # NPC
   private AVANT_GARDE = 32323
 

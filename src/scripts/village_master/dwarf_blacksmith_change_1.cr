@@ -1,4 +1,4 @@
-class NpcAI::DwarfBlacksmithChange1 < AbstractNpcAI
+class Scripts::DwarfBlacksmithChange1 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30499, # Tapoy

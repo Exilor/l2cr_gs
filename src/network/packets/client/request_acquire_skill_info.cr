@@ -3,12 +3,12 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
   @level = 0
   @skill_type = uninitialized AcquireSkillType
 
-  def read_impl
+  private def read_impl
     @id, @level = d, d
     @skill_type = AcquireSkillType[d]
   end
 
-  def run_impl
+  private def run_impl
     if @id <= 0 || @level <= 0
       warn "Invalid id or level. Id: #{@id}, level: #{@level}."
       return

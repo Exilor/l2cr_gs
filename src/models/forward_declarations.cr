@@ -77,3 +77,11 @@ end
 
 class L2AttackableAI < L2CharacterAI
 end
+
+module Packets
+  module Outgoing
+  end
+
+  module Incoming
+  end
+end

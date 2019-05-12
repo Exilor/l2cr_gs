@@ -1,4 +1,4 @@
-class Quests::Q00380_BringOutTheFlavorOfIngredients < Quest
+class Scripts::Q00380_BringOutTheFlavorOfIngredients < Quest
   # NPC
   private ROLLAND = 30069
   # Items

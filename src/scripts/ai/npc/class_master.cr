@@ -1,4 +1,4 @@
-class NpcAI::ClassMaster < AbstractNpcAI
+class Scripts::ClassMaster < AbstractNpcAI
   # NPCs
   private MR_CAT = 31756
   private MISS_QUEEN = 31757
@@ -83,9 +83,6 @@ class NpcAI::ClassMaster < AbstractNpcAI
 
   def on_enter_world(player)
     show_question_mark(player)
-    # Containers.Players.addListener(new ConsumerEventListener(Containers.Players, ON_PLAYER_LEVEL_CHANGED, (OnPlayerLevelChanged event) ->
-    #   show_question_mark(event.getActiveChar)
-    # }, this))
 
     lst = ConsumerEventListener.new(Containers::PLAYERS, EventType::ON_PLAYER_LEVEL_CHANGED, self) do |evt|
       show_question_mark(evt.as(OnPlayerLevelChanged).active_char)

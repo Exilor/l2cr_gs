@@ -1,4 +1,4 @@
-class NpcAI::Warpgate < AbstractNpcAI
+class Scripts::Warpgate < AbstractNpcAI
   # NPCs
   private WARPGATES = {
     32314,
@@ -68,7 +68,7 @@ class NpcAI::Warpgate < AbstractNpcAI
       return true
     end
 
-    player.quest_completed?(Quests::Q00130_PathToHellbound.simple_name) ||
-    player.quest_completed?(Quests::Q00133_ThatsBloodyHot.simple_name)
+    player.quest_completed?(Scripts::Q00130_PathToHellbound.simple_name) ||
+    player.quest_completed?(Scripts::Q00133_ThatsBloodyHot.simple_name)
   end
 end

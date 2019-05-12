@@ -1,4 +1,4 @@
-class Quests::Q00189_ContractCompletion < Quest
+class Scripts::Q00189_ContractCompletion < Quest
   # NPCs
   private SHEGFIELD = 30068
   private HEAD_BLACKSMITH_KUSTO = 30512

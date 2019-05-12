@@ -1,4 +1,4 @@
-class NpcAI::PrisonGuards < AbstractNpcAI
+class Scripts::PrisonGuards < AbstractNpcAI
   # NPCs
   private GUARD_HEAD = 18367 # Prison Guard
   private GUARD = 18368 # Prison Guard

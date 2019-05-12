@@ -2,7 +2,7 @@ module ActionShiftHandler::L2SummonAction
   extend self
   extend ActionShiftHandler
 
-  def action(pc, target, interact)
+  def action(pc, target, interact) : Bool
     if pc.access_level.gm?
       if pc.target != target
         pc.target = target
@@ -16,7 +16,7 @@ module ActionShiftHandler::L2SummonAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Summon
   end
 end

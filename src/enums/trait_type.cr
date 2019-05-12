@@ -1,5 +1,6 @@
 class TraitType < EnumClass
-  getter_initializer type: Int32
+  getter type
+  protected initializer type: Int32
 
   add(NONE, 0)
   add(SWORD, 1)

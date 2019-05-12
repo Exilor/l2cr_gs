@@ -2,7 +2,7 @@ class Packets::Incoming::RequestExSetPledgeCrestLarge < GameClientPacket
   @size = 0
   @data : Bytes?
 
-  def read_impl
+  private def read_impl
     @size = d
     if @size > 2176
       return
@@ -10,7 +10,7 @@ class Packets::Incoming::RequestExSetPledgeCrestLarge < GameClientPacket
     @data = b(@size)
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless clan = pc.clan?
     return unless data = @data

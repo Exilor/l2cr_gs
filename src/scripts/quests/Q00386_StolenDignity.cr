@@ -1,4 +1,4 @@
-class Quests::Q00386_StolenDignity < Quest
+class Scripts::Q00386_StolenDignity < Quest
   # NPCs
   private WAREHOUSE_KEEPER_ROMP = 30843
 
@@ -359,8 +359,7 @@ class Quests::Q00386_StolenDignity < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    qs = get_random_player_from_party(killer, npc)
-    if qs
+    if qs = get_random_player_from_party(killer, npc)
       case npc.id
       when CRIMSON_DRAKE
         if rand(1000) < 20.200001

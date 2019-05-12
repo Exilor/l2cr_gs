@@ -1,4 +1,4 @@
-class NpcAI::ElfHumanClericChange2 < AbstractNpcAI
+class Scripts::ElfHumanClericChange2 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30120, # Maximilian

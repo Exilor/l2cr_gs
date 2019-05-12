@@ -1,4 +1,4 @@
-class NpcAI::CastleCourtMagician < AbstractNpcAI
+class Scripts::CastleCourtMagician < AbstractNpcAI
   # NPCs
   private COURT_MAGICIAN = {
     35648, # Gludio

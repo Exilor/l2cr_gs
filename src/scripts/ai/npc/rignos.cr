@@ -1,4 +1,4 @@
-class NpcAI::Rignos < AbstractNpcAI
+class Scripts::Rignos < AbstractNpcAI
   # NPC
   private RIGNOS = 32349 # Rignos
   # Item

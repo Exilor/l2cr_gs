@@ -1,4 +1,4 @@
-class Quests::Q00320_BonesTellTheFuture < Quest
+class Scripts::Q00320_BonesTellTheFuture < Quest
   # NPC
   private TETRACH_KAITAR = 30359
   # Item
@@ -47,23 +47,23 @@ class Quests::Q00320_BonesTellTheFuture < Quest
     when State::CREATED
       if pc.race.dark_elf?
         if pc.level >= MIN_LEVEL
-          htmltext = "30359-03.htm"
+          html = "30359-03.htm"
         else
-          htmltext = "30359-02.htm"
+          html = "30359-02.htm"
         end
       else
-        htmltext = "30359-00.htm"
+        html = "30359-00.htm"
       end
     when State::STARTED
       if st.get_quest_items_count(BONE_FRAGMENT) >= REQUIRED_BONE_COUNT
-        htmltext = "30359-06.html"
+        html = "30359-06.html"
         st.give_adena(8470, true)
         st.exit_quest(true, true)
       else
-        htmltext = "30359-05.html"
+        html = "30359-05.html"
       end
     end
 
-    htmltext || get_no_quest_msg(pc)
+    html || get_no_quest_msg(pc)
   end
 end

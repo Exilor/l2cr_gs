@@ -581,7 +581,7 @@ module Hero
 
     template = NpcData[npc_id]?
     list = HERO_DIARY[char_id]?
-    if list && data
+    if list && template
       diary_entry = StatsSet.new
       date = Time.now.to_s("%Y-%m-%d %H")
       diary_entry["date"] = date

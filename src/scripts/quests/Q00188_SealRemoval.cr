@@ -1,4 +1,4 @@
-class Quests::Q00188_SealRemoval < Quest
+class Scripts::Q00188_SealRemoval < Quest
   # NPCs
   private MAESTRO_NIKOLA = 30621
   private RESEARCHER_LORAIN = 30673

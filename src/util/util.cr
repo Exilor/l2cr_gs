@@ -241,6 +241,30 @@ module Util
     )
   end
 
+  def get_players_count_in_radius(range : Int32, npc : L2Object, playable : Bool, invisible : Bool) : Int32
+    count = 0
+
+    npc.known_list.known_objects.each_value do |obj|
+      if playable && (obj.playable? || obj.pet?)
+        if !invisible && obj.invisible?
+          next
+        end
+
+        c = obj.as(L2Character)
+
+        if (c.z < npc.z - 100 && c.z > npc.z + 100) || !GeoData.can_see_target?(*c.xyz, *npc.xyz)
+          next
+        end
+
+        if Util.in_range?(range, npc, obj, true) && c.alive?
+          count += 1
+        end
+      end
+    end
+
+    count
+  end
+
   def count_params(str : String) : Int32
     count = 0
 

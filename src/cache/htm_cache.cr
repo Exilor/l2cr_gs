@@ -36,7 +36,7 @@ module HtmCache
     info "Reloaded specified path"
   end
 
-  def memory_usage
+  def memory_usage : Float32
     @@bytes_buff_len.to_f32 / 1048576
   end
 

@@ -1,4 +1,4 @@
-class NpcAI::HealerTrainer < AbstractNpcAI
+class Scripts::HealerTrainer < AbstractNpcAI
   private HEALER_TRAINERS = {
     30022, 30030, 30032, 30036, 30067, 30068, 30116, 30117, 30118, 30119,
     30144, 30145, 30188, 30194, 30293, 30330, 30375, 30377, 30464, 30473,
@@ -23,14 +23,14 @@ class NpcAI::HealerTrainer < AbstractNpcAI
 
     case event
     when "30864.html", "30864-1.html"
-      htmltext = event
+      html = event
     when "SkillTransfer"
-      htmltext = "main.html"
+      html = "main.html"
     when "SkillTransferLearn"
       if !npc.template.can_teach?(pc.class_id)
-        htmltext = "#{npc.id}-noteach.html"
+        html = "#{npc.id}-noteach.html"
       elsif pc.level < MIN_LEVEL || pc.class_id.level < MIN_CLASS_LEVEL
-        htmltext = "learn-lowlevel.html"
+        html = "learn-lowlevel.html"
       else
         asl = AcquireSkillList.new(AcquireSkillType::TRANSFER)
         count = 0
@@ -74,7 +74,7 @@ class NpcAI::HealerTrainer < AbstractNpcAI
       end
     end
 
-    htmltext
+    html
   end
 
   private def has_transfer_skill_items?(pc)

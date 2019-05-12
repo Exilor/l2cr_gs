@@ -1,4 +1,4 @@
-class Quests::Q00270_TheOneWhoEndsSilence < Quest
+class Scripts::Q00270_TheOneWhoEndsSilence < Quest
   # NPC
   private FAKE_GREYMORE = 32757
   # Monsters
@@ -30,23 +30,22 @@ class Quests::Q00270_TheOneWhoEndsSilence < Quest
     register_quest_items(TATTERED_MONK_CLOTHES)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
-    html = nil
     rags_count = st.get_quest_items_count(TATTERED_MONK_CLOTHES)
     case event
     when "32757-02.htm"
-      qs = player.get_quest_state(Q10288_SecretMission.simple_name)
-      if player.level >= MIN_LEVEL && qs && qs.completed?
+      qs = pc.get_quest_state(Q10288_SecretMission.simple_name)
+      if pc.level >= MIN_LEVEL && qs && qs.completed?
         html = event
       end
     when "32757-04.html"
-      qs = player.get_quest_state(Q10288_SecretMission.simple_name)
-      if player.level >= MIN_LEVEL && qs && qs.completed?
+      qs = pc.get_quest_state(Q10288_SecretMission.simple_name)
+      if pc.level >= MIN_LEVEL && qs && qs.completed?
         st.start_quest
         html = event
       end
@@ -192,11 +191,11 @@ class Quests::Q00270_TheOneWhoEndsSilence < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::CREATED
-      if player.level >= MIN_LEVEL && player.quest_completed?(Q10288_SecretMission.simple_name)
+      if pc.level >= MIN_LEVEL && pc.quest_completed?(Q10288_SecretMission.simple_name)
         html = "32757-01.htm"
       else
         html = "32757-03.html"
@@ -207,14 +206,9 @@ class Quests::Q00270_TheOneWhoEndsSilence < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
-  # /**
-  #  * Wrapper for this repetitive reward.
-  #  * @param qs the player's quest state.
-  #  * @param type the type.
-  #  */
   private def reward_scroll(qs, type)
     scroll_id = 5593
     case type
@@ -256,18 +250,11 @@ class Quests::Q00270_TheOneWhoEndsSilence < Quest
     qs.give_items(scroll_id, 1)
   end
 
-  # /**
-  #  * Gives an item to one random party member with the proper condition, for the given parameters.
-  #  * @param player the random player to reward
-  #  * @param npc the killed npc
-  #  * @param chance the reward chance
-  #  * @param at_least_one if {@code true} it will reward two items if the chance is meet and one if the chance is not meet, if {@code false} if the chance is not meet doesn't reward, otherwise reward one item
-  #  */
-  private def give_item(player, npc, chance, at_least_one)
-    if player && Util.in_range?(1500, npc, player, false)
+  private def give_item(pc, npc, chance, at_least_one)
+    if pc && Util.in_range?(1500, npc, pc, false)
       count = (rand(1000) < chance ? 1 : 0) + (at_least_one ? 1 : 0)
       if count > 0
-        qs = player.get_quest_state(Q00270_TheOneWhoEndsSilence.simple_name).not_nil!
+        qs = pc.get_quest_state(Q00270_TheOneWhoEndsSilence.simple_name).not_nil!
         qs.give_items(TATTERED_MONK_CLOTHES, count)
         qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       end

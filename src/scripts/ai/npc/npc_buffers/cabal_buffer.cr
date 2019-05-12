@@ -1,4 +1,4 @@
-class NpcAI::CabalBuffer < AbstractNpcAI
+class Scripts::CabalBuffer < AbstractNpcAI
   private DISTANCE_TO_WATCH_OBJECT = 900
 
   ORATOR_MSG = {

@@ -1,4 +1,4 @@
-class Quests::Q00197_SevenSignsTheSacredBookOfSeal < Quest
+class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
   # NPCs
   private SHILENS_EVIL_THOUGHTS = 27396
   private ORVEN = 30857

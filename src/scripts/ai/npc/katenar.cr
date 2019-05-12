@@ -1,5 +1,5 @@
 # Complements the quest Q00065_CertifiedSoulBreaker.
-class NpcAI::Katenar < AbstractNpcAI
+class Scripts::Katenar < AbstractNpcAI
   # NPC
   KATENAR = 32242
   # Item
@@ -14,7 +14,7 @@ class NpcAI::Katenar < AbstractNpcAI
     add_spawn_id(KATENAR)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
     npc0 = npc.variables.get_object("npc0", L2Npc)
 
@@ -27,8 +27,8 @@ class NpcAI::Katenar < AbstractNpcAI
       end
       npc.delete_me
     when "GOOD_LUCK"
-      player = player.not_nil!
-      qs = player.get_quest_state!(Quests::Q00065_CertifiedSoulBreaker.simple_name)
+      pc = pc.not_nil!
+      qs = pc.get_quest_state!(Scripts::Q00065_CertifiedSoulBreaker.simple_name)
       if qs.memo_state?(14)
         if npc0
           unless npc.variables.get_bool("SPAWNED", false)
@@ -44,30 +44,30 @@ class NpcAI::Katenar < AbstractNpcAI
   end
 
   def on_first_talk(npc, talker)
-    qs = talker.get_quest_state!(Quests::Q00065_CertifiedSoulBreaker.simple_name)
+    qs = talker.get_quest_state!(Scripts::Q00065_CertifiedSoulBreaker.simple_name)
     memo_state = qs.memo_state
     if memo_state == 12
-      htmltext = "32242-01.html"
+      html = "32242-01.html"
     elsif memo_state == 13
-      player = npc.variables.get_object("player0", L2PcInstance)
-      if player == talker
+      pc = npc.variables.get_object("player0", L2PcInstance)
+      if pc == talker
         qs.memo_state = 14
         qs.set_cond(13, true)
-        htmltext = "32242-02.html"
+        html = "32242-02.html"
       else
         qs.memo_state = 14
         qs.set_cond(13, true)
-        htmltext = "32242-03.html"
+        html = "32242-03.html"
       end
 
-      unless has_quest_items?(player, SEALED_DOCUMENT)
-        give_items(player, SEALED_DOCUMENT, 1)
+      unless has_quest_items?(pc, SEALED_DOCUMENT)
+        give_items(pc, SEALED_DOCUMENT, 1)
       end
     elsif memo_state == 14
-      htmltext = "32242-04.html"
+      html = "32242-04.html"
     end
 
-    htmltext || get_no_quest_msg(talker)
+    html || get_no_quest_msg(talker)
   end
 
   def on_spawn(npc)

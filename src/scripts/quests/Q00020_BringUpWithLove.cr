@@ -1,4 +1,4 @@
-class Quests::Q00020_BringUpWithLove < Quest
+class Scripts::Q00020_BringUpWithLove < Quest
   # NPC
   private TUNATUN = 31537
   # Items
@@ -39,9 +39,8 @@ class Quests::Q00020_BringUpWithLove < Quest
   end
 
   def on_talk(npc, pc)
-    html = get_no_quest_msg(pc)
     unless st = get_quest_state!(pc)
-      return html
+      return get_no_quest_msg(pc)
     end
 
     case st.state
@@ -54,18 +53,24 @@ class Quests::Q00020_BringUpWithLove < Quest
       when 1
         html = "31537-14.html"
       when 2
-        html = !st.has_quest_items?(INNOCENCE_JEWEL) ? "31537-14.html" : "31537-15.html"
+        if st.has_quest_items?(INNOCENCE_JEWEL)
+          html = "31537-15.html"
+        else
+          html = "31537-14.html"
+        end
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 
   def self.check_jewel_of_innocence(pc : L2PcInstance)
     st = pc.get_quest_state(self.class.simple_name)
-    if st && st.cond?(1) && !st.has_quest_items?(INNOCENCE_JEWEL) && Rnd.rand(100) < 5
-      st.give_items(INNOCENCE_JEWEL, 1)
-      st.set_cond(2, true)
+    if st && st.cond?(1) && !st.has_quest_items?(INNOCENCE_JEWEL)
+      if Rnd.rand(100) < 5
+        st.give_items(INNOCENCE_JEWEL, 1)
+        st.set_cond(2, true)
+      end
     end
   end
 end

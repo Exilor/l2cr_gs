@@ -1,11 +1,11 @@
 class Packets::Incoming::CharacterDelete < GameClientPacket
   @slot = -1
 
-  def read_impl
+  private def read_impl
     @slot = d
   end
 
-  def run_impl
+  private def run_impl
     flood_protection = flood_protectors.character_select
     unless flood_protection.try_perform_action("CharacterDelete")
       debug "Flood detected."

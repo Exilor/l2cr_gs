@@ -2,12 +2,12 @@ class Packets::Incoming::RequestSendFriendMsg < GameClientPacket
   @message = ""
   @receiver = ""
 
-  def read_impl
+  private def read_impl
     @message = s
     @receiver = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if @message.empty? || @message.size > 300

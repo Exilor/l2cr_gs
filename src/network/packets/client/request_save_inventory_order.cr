@@ -1,18 +1,18 @@
 class Packets::Incoming::RequestSaveInventoryOrder < GameClientPacket
   no_action_request
 
-  LIMIT = 125
+  private LIMIT = 125
 
   private record InvOrder, l2id : Int32, order : Int16
 
   @orders : Slice(InvOrder)?
 
-  def read_impl
+  private def read_impl
     size = Math.min(d, LIMIT)
     @orders = Slice.new(size) { InvOrder.new(d, d.to_i16) }
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless orders = @orders
     inv = pc.inventory

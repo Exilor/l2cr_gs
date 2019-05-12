@@ -1,6 +1,6 @@
 require "./abstract_saga_quest"
 
-class Quests::Q00073_SagaOfTheDuelist < Quests::AbstractSagaQuest
+class Scripts::Q00073_SagaOfTheDuelist < AbstractSagaQuest
   private TUNATUN = 31537
   private TOP_QUALITY_MEAT = 7546
 

@@ -1,4 +1,4 @@
-class NpcAI::Jude < AbstractNpcAI
+class Scripts::Jude < AbstractNpcAI
   # NPCs
   private JUDE = 32356
   private NATIVE_TREASURE = 9684

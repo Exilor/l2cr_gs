@@ -1,4 +1,4 @@
-module NpcAI::NpcBuffersData
+module NpcBuffersData
   extend self
   extend XMLReader
 
@@ -6,7 +6,7 @@ module NpcAI::NpcBuffersData
 
   def load
     parse_datapack_file("scripts/ai/npc/NpcBuffers/NpcBuffersData.xml")
-    info "Loaded #{NPC_BUFFERS.size} buffers data."
+    info { "Loaded #{NPC_BUFFERS.size} buffers data." }
   end
 
   private def parse_document(doc, file)

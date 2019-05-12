@@ -1,4 +1,4 @@
-class Quests::Q00165_ShilensHunt < Quest
+class Scripts::Q00165_ShilensHunt < Quest
   # NPC
   private NELSYA = 30348
   # Monsters
@@ -24,9 +24,9 @@ class Quests::Q00165_ShilensHunt < Quest
     register_quest_items(DARK_BEZOAR)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event.casecmp?("30348-03.htm")
       st.start_quest
       event
@@ -47,27 +47,33 @@ class Quests::Q00165_ShilensHunt < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state(player, true)
-    htmltext = get_no_quest_msg(player)
-    if st
+  def on_talk(npc, pc)
+    if st = get_quest_state(pc, true)
       case st.state
       when State::CREATED
-        htmltext = player.race.dark_elf? ? player.level >= MIN_LVL ? "30348-02.htm" : "30348-01.htm" : "30348-00.htm"
+        if pc.race.dark_elf?
+          if pc.level >= MIN_LVL
+            html = "30348-02.htm"
+          else
+            html = "30348-01.htm"
+          end
+        else
+          html = "30348-00.htm"
+        end
       when State::STARTED
         if st.cond?(2) && st.get_quest_items_count(DARK_BEZOAR) >= REQUIRED_COUNT
           st.give_items(LESSER_HEALING_POTION, 5)
           st.add_exp_and_sp(1000, 0)
           st.exit_quest(false, true)
-          htmltext = "30348-05.html"
+          html = "30348-05.html"
         else
-          htmltext = "30348-04.html"
+          html = "30348-04.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

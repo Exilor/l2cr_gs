@@ -1,4 +1,4 @@
-class Quests::Q00171_ActsOfEvil < Quest
+class Scripts::Q00171_ActsOfEvil < Quest
   # NPCs
   private TRADER_ARODIN = 30207
   private GUARD_ALVAH = 30381
@@ -52,7 +52,7 @@ class Quests::Q00171_ActsOfEvil < Quest
     )
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     if event == "DESPAWN"
       if npc
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::YOU_SHOULD_CONSIDER_GOING_BACK))
@@ -61,47 +61,47 @@ class Quests::Q00171_ActsOfEvil < Quest
       return super
     end
 
-    return unless player
-    unless qs = get_quest_state(player, false)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
-    htmltext = nil
+    html = nil
     case event
     when "30381-03.htm"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        htmltext = event
+        html = event
       end
     when "30381-07.html"
       qs.memo_state = 5
       qs.set_cond(5, true)
-      htmltext = event
+      html = event
     when "30381-12.html"
       qs.memo_state = 7
       qs.set_cond(7, true)
-      htmltext = event
+      html = event
     when "30437-04.html"
-      take_items(player, WEAPONS_TRADE_CONTRACT, 1)
-      give_items(player, CERTIFICATE_OF_THE_SILVER_GUILD, 1)
-      give_items(player, ROLENTOS_CARGOBOX, 1)
+      take_items(pc, WEAPONS_TRADE_CONTRACT, 1)
+      give_items(pc, CERTIFICATE_OF_THE_SILVER_GUILD, 1)
+      give_items(pc, ROLENTOS_CARGOBOX, 1)
       qs.memo_state = 9
       qs.set_cond(9, true)
-      htmltext = event
+      html = event
     when "30207-01a.html", "30437-02.html", "30437-03.html", "30617-03.html",
          "30617-04.html"
-      htmltext = event
+      html = event
     when "30617-05.html"
-      take_items(player, ATTACK_DIRECTIVES, 1)
-      take_items(player, CERTIFICATE_OF_THE_SILVER_GUILD, 1)
-      take_items(player, ROLENTOS_CARGOBOX, 1)
+      take_items(pc, ATTACK_DIRECTIVES, 1)
+      take_items(pc, CERTIFICATE_OF_THE_SILVER_GUILD, 1)
+      take_items(pc, ROLENTOS_CARGOBOX, 1)
       qs.memo_state = 10
       qs.set_cond(10, true)
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -144,11 +144,11 @@ class Quests::Q00171_ActsOfEvil < Quest
       when OL_MAHUM_GENERAL
         if qs.memo_state?(6)
           if Rnd.rand(100) <= 9
-            if !has_quest_items?(killer, WEAPONS_TRADE_CONTRACT)
+            unless has_quest_items?(killer, WEAPONS_TRADE_CONTRACT)
               give_items(killer, WEAPONS_TRADE_CONTRACT, 1)
               play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
             end
-            if !has_quest_items?(killer, ATTACK_DIRECTIVES)
+            unless has_quest_items?(killer, ATTACK_DIRECTIVES)
               give_items(killer, ATTACK_DIRECTIVES, 1)
               play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
             end
@@ -236,16 +236,16 @@ class Quests::Q00171_ActsOfEvil < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
 
     if qs.created?
       if npc.id == GUARD_ALVAH
-        if player.level < MIN_LEVEL
-          htmltext = "30381-01.htm"
+        if pc.level < MIN_LEVEL
+          html = "30381-01.htm"
         else
-          htmltext = "30381-02.htm"
+          html = "30381-02.htm"
         end
       end
     elsif qs.started?
@@ -253,122 +253,122 @@ class Quests::Q00171_ActsOfEvil < Quest
       when GUARD_ALVAH
         case qs.cond
         when 1
-          htmltext = "30381-04.html"
+          html = "30381-04.html"
         when 2, 3
-          htmltext = "30381-05.html"
+          html = "30381-05.html"
         when 4
-          htmltext = "30381-06.html"
+          html = "30381-06.html"
         when 5
-          if has_quest_items?(player, RANGERS_REPORT1, RANGERS_REPORT2, RANGERS_REPORT3, RANGERS_REPORT4)
-            take_items(player, RANGERS_REPORT1, 1)
-            take_items(player, RANGERS_REPORT2, 1)
-            take_items(player, RANGERS_REPORT3, 1)
-            take_items(player, RANGERS_REPORT4, 1)
+          if has_quest_items?(pc, RANGERS_REPORT1, RANGERS_REPORT2, RANGERS_REPORT3, RANGERS_REPORT4)
+            take_items(pc, RANGERS_REPORT1, 1)
+            take_items(pc, RANGERS_REPORT2, 1)
+            take_items(pc, RANGERS_REPORT3, 1)
+            take_items(pc, RANGERS_REPORT4, 1)
             qs.memo_state = 6
             qs.set_cond(6, true)
-            htmltext = "30381-09.html"
+            html = "30381-09.html"
           else
-            htmltext = "30381-08.html"
+            html = "30381-08.html"
           end
         when 6
-          if has_quest_items?(player, WEAPONS_TRADE_CONTRACT, ATTACK_DIRECTIVES)
-            htmltext = "30381-11.html"
+          if has_quest_items?(pc, WEAPONS_TRADE_CONTRACT, ATTACK_DIRECTIVES)
+            html = "30381-11.html"
           else
-            htmltext = "30381-10.html"
+            html = "30381-10.html"
           end
         when 7
-          htmltext = "30381-13.html"
+          html = "30381-13.html"
         when 8
-          htmltext = "30381-14.html"
+          html = "30381-14.html"
         when 9
-          htmltext = "30381-15.html"
+          html = "30381-15.html"
         when 10
-          htmltext = "30381-16.html"
+          html = "30381-16.html"
         when 11
-          give_adena(player, 95000, true)
-          add_exp_and_sp(player, 159820, 9182)
-          htmltext = "30381-17.html"
+          give_adena(pc, 95000, true)
+          add_exp_and_sp(pc, 159820, 9182)
+          html = "30381-17.html"
           qs.exit_quest(false, true)
         end
       when TRADER_ARODIN
         if memo_state == 1
           qs.memo_state = 2
           qs.set_cond(2, true)
-          htmltext = "30207-01.html"
+          html = "30207-01.html"
         elsif memo_state == 2
-          if get_quest_items_count(player, BLADE_MOLD) < 20
-            htmltext = "30207-02.html"
+          if get_quest_items_count(pc, BLADE_MOLD) < 20
+            html = "30207-02.html"
           else
-            htmltext = "30207-03.html"
+            html = "30207-03.html"
           end
         elsif memo_state == 3
-          take_items(player, TYRAS_BILL, 1)
+          take_items(pc, TYRAS_BILL, 1)
           qs.memo_state = 4
           qs.set_cond(4, true)
-          htmltext = "30207-04.html"
+          html = "30207-04.html"
         elsif memo_state >= 4
-          htmltext = "30207-05.html"
+          html = "30207-05.html"
         end
       when TYRA
         if memo_state == 2
-          if get_quest_items_count(player, BLADE_MOLD) < 20
-            htmltext = "30420-01.html"
+          if get_quest_items_count(pc, BLADE_MOLD) < 20
+            html = "30420-01.html"
           else
-            take_items(player, BLADE_MOLD, -1)
-            give_items(player, TYRAS_BILL, 1)
+            take_items(pc, BLADE_MOLD, -1)
+            give_items(pc, TYRAS_BILL, 1)
             qs.memo_state = 3
             qs.set_cond(3, true)
-            htmltext = "30420-02.html"
+            html = "30420-02.html"
           end
         elsif memo_state == 3
-          htmltext = "30420-03.html"
+          html = "30420-03.html"
         elsif memo_state >= 4
-          htmltext = "30420-04.html"
+          html = "30420-04.html"
         end
       when NETI
         if memo_state == 7
           qs.memo_state = 8
           qs.set_cond(8, true)
-          htmltext = "30425-01.html"
+          html = "30425-01.html"
         elsif memo_state == 8
-          htmltext = "30425-02.html"
+          html = "30425-02.html"
         elsif memo_state >= 9
-          htmltext = "30425-03.html"
+          html = "30425-03.html"
         end
       when TRADER_ROLENTO
         if memo_state == 8
-          htmltext = "30437-02.html"
+          html = "30437-02.html"
         elsif memo_state == 9
-          htmltext = "30437-05.html"
+          html = "30437-05.html"
         elsif memo_state >= 10
-          htmltext = "30437-06.html"
+          html = "30437-06.html"
         end
       when TUREK_CHIEF_BURAI
         if memo_state < 9
-          htmltext = "30617-01.html"
+          html = "30617-01.html"
         elsif memo_state == 9
-          htmltext = "30617-02.html"
+          html = "30617-02.html"
         elsif memo_state == 10
-          if get_quest_items_count(player, OL_MAHUM_CAPTAINS_HEAD) < 30
-            htmltext = "30617-06.html"
+          if get_quest_items_count(pc, OL_MAHUM_CAPTAINS_HEAD) < 30
+            html = "30617-06.html"
           else
-            give_adena(player, 8000, true)
-            take_items(player, OL_MAHUM_CAPTAINS_HEAD, -1)
+            give_adena(pc, 8000, true)
+            take_items(pc, OL_MAHUM_CAPTAINS_HEAD, -1)
             qs.memo_state = 11
             qs.set_cond(11, true)
-            htmltext = "30617-07.html"
+            html = "30617-07.html"
           end
         elsif memo_state == 11
-          htmltext = "30617-08.html"
+          html = "30617-08.html"
         end
       end
     elsif qs.completed?
       if npc.id == GUARD_ALVAH
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
   def on_spawn(npc)

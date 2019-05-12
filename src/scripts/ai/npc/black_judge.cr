@@ -1,4 +1,4 @@
-class NpcAI::BlackJudge < AbstractNpcAI
+class Scripts::BlackJudge < AbstractNpcAI
   # NPC
   private BLACK_JUDGE = 30981
   # Misc
@@ -21,7 +21,7 @@ class NpcAI::BlackJudge < AbstractNpcAI
 
     case event
     when "remove_info"
-      htmltext = "30981-0#{level + 1}.html"
+      html = "30981-0#{level + 1}.html"
     when "remove_dp"
       if pc.death_penalty_buff_level > 0
         cost = COSTS[level]
@@ -31,13 +31,13 @@ class NpcAI::BlackJudge < AbstractNpcAI
           pc.send_packet(SystemMessageId::DEATH_PENALTY_LIFTED)
           pc.send_packet(EtcStatusUpdate.new(pc))
         else
-          htmltext = "30981-07.html"
+          html = "30981-07.html"
         end
       else
-        htmltext = "30981-08.html"
+        html = "30981-08.html"
       end
     end
 
-    htmltext
+    html
   end
 end

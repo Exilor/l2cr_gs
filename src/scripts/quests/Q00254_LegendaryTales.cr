@@ -1,10 +1,11 @@
-class Quests::Q00254_LegendaryTales < Quest
+class Scripts::Q00254_LegendaryTales < Quest
   # NPC
   private GILMORE = 30754
 
   # Monsters
   class Bosses < EnumClass
-    getter_initializer id: Int32
+    getter id
+    protected initializer id: Int32
 
     add(EMERALD_HORN, 25718)
     add(DUST_RIDER, 25719)
@@ -40,13 +41,13 @@ class Quests::Q00254_LegendaryTales < Quest
     register_quest_items(LARGE_DRAGON_SKULL)
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::CREATED
-      html = player.level < MIN_LEVEL ? "30754-00.htm" : "30754-01.htm"
+      html = pc.level < MIN_LEVEL ? "30754-00.htm" : "30754-01.htm"
     when State::STARTED
-      count = get_quest_items_count(player, LARGE_DRAGON_SKULL)
+      count = get_quest_items_count(pc, LARGE_DRAGON_SKULL)
       if st.cond?(1)
         html = count > 0 ? "30754-14.htm" : "30754-06.html"
       elsif st.cond?(2)
@@ -56,12 +57,12 @@ class Quests::Q00254_LegendaryTales < Quest
       html = "30754-29.html"
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -97,30 +98,30 @@ class Quests::Q00254_LegendaryTales < Quest
          "13460", # Vesper Sharper
          "13461", # Vesper Fighter
          "13462"  # Vesper Stormer
-      if st.cond?(2) && get_quest_items_count(player, LARGE_DRAGON_SKULL) >= 7
+      if st.cond?(2) && get_quest_items_count(pc, LARGE_DRAGON_SKULL) >= 7
         html = "30754-09.html"
-        reward_items(player, event.to_i, 1)
+        reward_items(pc, event.to_i, 1)
         st.exit_quest(false, true)
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
-  def on_kill(npc, player, is_pet)
-    if party = player.party?
+  def on_kill(npc, pc, is_pet)
+    if party = pc.party?
       party.members.each do |m|
         action_for_each_player(m, npc, false)
       end
     else
-      action_for_each_player(player, npc, false)
+      action_for_each_player(pc, npc, false)
     end
 
     super
   end
 
-  def action_for_each_player(player, npc, is_summon)
-    st = player.get_quest_state(self.class.simple_name)
+  def action_for_each_player(pc, npc, is_summon)
+    st = pc.get_quest_state(self.class.simple_name)
 
     if st && st.cond?(1)
       raids = st.get_int("raids")

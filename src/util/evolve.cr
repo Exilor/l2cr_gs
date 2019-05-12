@@ -166,7 +166,7 @@ module Evolve
     true
   end
 
-  struct EvolveFeedWait
+  private struct EvolveFeedWait
     include Runnable
     include Loggable
 
@@ -183,7 +183,7 @@ module Evolve
     end
   end
 
-  struct EvolveFinalizer
+  private struct EvolveFinalizer
     include Runnable
     include Loggable
 

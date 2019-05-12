@@ -1,4 +1,4 @@
-class NpcAI::PolymorphingOnAttack < AbstractNpcAI
+class Scripts::PolymorphingOnAttack < AbstractNpcAI
   private MOBS = {
     21258 => {21259, 100, 100, -1}, # Fallen Orc Shaman -> Sharp Talon Tiger (always polymorphs)
     21261 => {21262, 100,  20,  0}, # Ol Mahum Transcender 1st stage

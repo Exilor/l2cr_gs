@@ -1,4 +1,4 @@
-class NpcAI::AnomicFoundry < AbstractNpcAI
+class Scripts::AnomicFoundry < AbstractNpcAI
   # NPCs
   private LABORER = 22396
   private FOREMAN = 22397

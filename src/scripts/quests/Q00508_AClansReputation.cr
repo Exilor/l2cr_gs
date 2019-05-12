@@ -1,4 +1,4 @@
-class Quests::Q00508_AClansReputation < Quest
+class Scripts::Q00508_AClansReputation < Quest
   # NPC
   private SIR_ERIC_RODEMAI = 30868
 

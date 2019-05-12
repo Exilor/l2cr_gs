@@ -1,4 +1,4 @@
-class CrystalCaverns < AbstractInstance
+class Scripts::CrystalCaverns < AbstractInstance
   private class CrystalGolem
     property! food_item : L2ItemInstance?
     property? at_destination = false
@@ -7,42 +7,34 @@ class CrystalCaverns < AbstractInstance
 
   private class CCWorld < InstanceWorld
     getter npc_list1 = {} of L2Npc => Bool
-    property! tears : L2Npc?
-    property has_used_invul_skill : Bool = false
-    property dragon_scale_start : Int64 = 0i64
-    property dragon_scale_needed : Int32 = 0
-    property cleaned_rooms : Int32 = 0
-    property end_time : Int64 = 0i64
+    getter oracle_triggered = [false, false, false]
+    getter room_status = [0, 0, 0, 0] # 0: not spawned, 1: spawned, 2: cleared
     getter copies = [] of L2Npc
     getter crystal_golems = {} of L2Npc => CrystalGolem
-    property correct_golems : Int32 = 0
-    getter oracle_triggered = [
-      false,
-      false,
-      false
-    ]
-    property kechis_henchman_spawn : Int32 = 0
-    getter room_status = [
-      0,
-      0,
-      0,
-      0
-    ] # 0: not spawned, 1: spawned, 2: cleared
     getter opened_doors = {} of L2DoorInstance => L2PcInstance
     getter npc_list_2 = {} of Int32 => Hash(L2Npc, Bool)
     getter oracles = {} of L2Npc => L2Npc?
     getter key_keepers = [] of L2Npc
     getter guards = [] of L2Npc
     getter oracle = [] of L2Npc
-    # baylor variables
     getter raiders = [] of L2PcInstance
+    getter animation_mobs = [] of L2Npc
+
+    property has_used_invul_skill : Bool = false
+    property dragon_scale_start : Int64 = 0i64
+    property dragon_scale_needed : Int32 = 0
+    property cleaned_rooms : Int32 = 0
+    property end_time : Int64
+    property correct_golems : Int32 = 0
+    property kechis_henchman_spawn : Int32 = 0
     property raid_status : Int32 = 0
     property dragon_claw_start : Int64 = 0i64
     property dragon_claw_need : Int32 = 0
-    getter animation_mobs = [] of L2Npc
+
     property! camera : L2Npc?
     property! baylor : L2Npc?
     property! alarm : L2Npc?
+    property! tears : L2Npc?
 
     initializer end_time: Int64
   end
@@ -101,7 +93,7 @@ class CrystalCaverns < AbstractInstance
     60000,
     50000,
     40000
-  }; # Kechi Hencmans spawn times
+  } # Kechi Hencmans spawn times
   private MOBLIST = {
     22279,
     22280,
@@ -402,9 +394,18 @@ class CrystalCaverns < AbstractInstance
     super(self.class.simple_name)
 
     add_start_npc(ORACLE_GUIDE_1, ORACLE_GUIDE_4)
-    add_talk_id(ORACLE_GUIDE_1, ORACLE_GUIDE_3, ORACLE_GUIDE_4, 32275, 32276, 32277)
-    add_first_talk_id(ORACLE_GUIDE_1, ORACLE_GUIDE_2, ORACLE_GUIDE_4, CRYSTALLINE_GOLEM, 32274, 32275, 32276, 32277)
-    add_kill_id(TEARS, GATEKEEPER_LOHAN, GATEKEEPER_PROVO, TEROD, WEYLIN, DOLPH, DARNEL, KECHI, GUARDIAN_OF_THE_SQUARE, GUARDIAN_OF_THE_EMERALD, TOURMALINE, BAYLOR, ALARM)
+    add_talk_id(
+      ORACLE_GUIDE_1, ORACLE_GUIDE_3, ORACLE_GUIDE_4, 32275, 32276, 32277
+    )
+    add_first_talk_id(
+      ORACLE_GUIDE_1, ORACLE_GUIDE_2, ORACLE_GUIDE_4, CRYSTALLINE_GOLEM, 32274,
+      32275, 32276, 32277
+    )
+    add_kill_id(
+      TEARS, GATEKEEPER_LOHAN, GATEKEEPER_PROVO, TEROD, WEYLIN, DOLPH, DARNEL,
+      KECHI, GUARDIAN_OF_THE_SQUARE, GUARDIAN_OF_THE_EMERALD, TOURMALINE,
+      BAYLOR, ALARM
+    )
     add_skill_see_id(BAYLOR, 25534, 32275, 32276, 32277)
     add_trap_action_id(DOOR_OPENING_TRAP[0])
     add_spell_finished_id(BAYLOR)
@@ -738,7 +739,7 @@ class CrystalCaverns < AbstractInstance
         return "no.htm" # TODO: Missing HTML.
       end
     elsif npc.id == 32279
-      st = player.get_quest_state(Quests::Q00131_BirdInACage.simple_name)
+      st = player.get_quest_state(Q00131_BirdInACage.simple_name)
       return st && !st.completed? ? "32279-01.htm" : "32279.htm"
     elsif npc.id == CRYSTALLINE_GOLEM
       player.action_failed

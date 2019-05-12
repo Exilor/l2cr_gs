@@ -1,4 +1,4 @@
-class NpcAI::EchoCrystals < AbstractNpcAI
+class Scripts::EchoCrystals < AbstractNpcAI
   private record RewardInfo, crystal_id : Int32, ok_msg : String,
     no_adena_msg : String, no_score_msg : String
 
@@ -32,19 +32,19 @@ class NpcAI::EchoCrystals < AbstractNpcAI
     if tmp = SCORES[score]?
       if !has_quest_items?(pc, score)
         noscore = tmp.no_score_msg
-        htmltext = "#{npc.id}-#{noscore}.htm"
+        html = "#{npc.id}-#{noscore}.htm"
       elsif get_quest_items_count(pc, ADENA) < COST
         noadena = tmp.no_adena_msg
-        htmltext = "#{npc.id}-#{noadena}.htm"
+        html = "#{npc.id}-#{noadena}.htm"
       else
         crystal = tmp.crystal_id
         ok = tmp.ok_msg
         take_items(pc, ADENA, COST)
         give_items(pc, crystal, 1)
-        htmltext = "#{npc.id}-#{ok}.htm"
+        html = "#{npc.id}-#{ok}.htm"
       end
     end
 
-    htmltext
+    html
   end
 end

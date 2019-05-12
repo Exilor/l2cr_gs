@@ -1,4 +1,4 @@
-class Quests::Q00377_ExplorationOfTheGiantsCavePart2 < Quest
+class Scripts::Q00377_ExplorationOfTheGiantsCavePart2 < Quest
   # NPC
   private SOBLING = 31147
   # Items

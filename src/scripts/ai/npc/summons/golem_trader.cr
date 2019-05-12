@@ -1,4 +1,4 @@
-class NpcAI::GolemTrader < AbstractNpcAI
+class Scripts::GolemTrader < AbstractNpcAI
   private GOLEM_TRADER = 13128
 
   def initialize

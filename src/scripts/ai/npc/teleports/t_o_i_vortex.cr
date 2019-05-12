@@ -1,4 +1,4 @@
-class NpcAI::ToIVortex < AbstractNpcAI
+class Scripts::ToIVortex < AbstractNpcAI
   # NPCs
   private KEPLON = 30949
   private EUCLIE = 30950

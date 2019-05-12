@@ -1,4 +1,4 @@
-class DarkCloudMansion < AbstractInstance
+class Scripts::DarkCloudMansion < AbstractInstance
   private class DMCWorld < InstanceWorld
     getter rooms = {} of Symbol => DMCRoom
   end
@@ -673,12 +673,12 @@ class DarkCloudMansion < AbstractInstance
     second_room.npc_list.all? &.dead?
   end
 
-  private def removeMonoliths(world)
+  private def remove_monoliths(world)
     second_room = world.rooms[:SecondRoom]
     second_room.npc_list.each &.npc.decay_me
   end
 
-  private def chkShadowColumn(world, npc)
+  private def chk_shadow_column(world, npc)
     fourth_room = world.rooms[:FourthRoom]
 
     fourth_room.npc_list.each do |mob|
@@ -781,7 +781,7 @@ class DarkCloudMansion < AbstractInstance
         end
       end
       if world.status == 7
-        chkShadowColumn(world, npc)
+        chk_shadow_column(world, npc)
       end
       if world.status == 8
         if check_kill_progress(npc, world.rooms[:ThirdRoom2])
@@ -829,7 +829,7 @@ class DarkCloudMansion < AbstractInstance
         end
 
         if all_stones_done(world)
-          removeMonoliths(world)
+          remove_monoliths(world)
           run_hall3(world)
         end
       end

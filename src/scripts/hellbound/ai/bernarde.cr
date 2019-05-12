@@ -1,4 +1,4 @@
-class NpcAI::Bernarde < AbstractNpcAI
+class Scripts::Bernarde < AbstractNpcAI
   # NPCs
   private BERNARDE = 32300
   # Misc

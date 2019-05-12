@@ -1,4 +1,4 @@
-class Quests::Q00381_LetsBecomeARoyalMember < Quest
+class Scripts::Q00381_LetsBecomeARoyalMember < Quest
   # NPCs
   private SANDRA = 30090
   private SORINT = 30232

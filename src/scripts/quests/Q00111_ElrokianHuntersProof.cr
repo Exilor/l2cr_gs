@@ -1,4 +1,4 @@
-class Quests::Q00111_ElrokianHuntersProof < Quest
+class Scripts::Q00111_ElrokianHuntersProof < Quest
   # NPCs
   private MARQUEZ = 32113
   private MUSHIKA = 32114
@@ -48,9 +48,9 @@ class Quests::Q00111_ElrokianHuntersProof < Quest
     register_quest_items(DIARY_FRAGMENT, EXPEDITION_MEMBERS_LETTER, ORNITHOMINUS_CLAW, DEINONYCHUS_BONE, PACHYCEPHALOSAURUS_SKIN, PRACTICE_ELROKIAN_TRAP)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -60,72 +60,72 @@ class Quests::Q00111_ElrokianHuntersProof < Quest
          "32113-18.html", "32113-19.html", "32113-20.html", "32113-21.html",
          "32113-22.html", "32113-23.html", "32113-24.html", "32115-08.html",
          "32116-03.html"
-      htmltext = event
+      html = event
     when "32113-03.html"
       qs.start_quest
       qs.memo_state = 1
-      htmltext = event
+      html = event
     when "32113-15.html"
       if qs.memo_state?(3)
         qs.memo_state = 4
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "32113-25.html"
       if qs.memo_state?(5)
         qs.memo_state = 6
         qs.set_cond(6, true)
-        give_items(player, EXPEDITION_MEMBERS_LETTER, 1)
-        htmltext = event
+        give_items(pc, EXPEDITION_MEMBERS_LETTER, 1)
+        html = event
       end
     when "32115-03.html"
       if qs.memo_state?(2)
         qs.memo_state = 3
         qs.set_cond(3, true)
-        htmltext = event
+        html = event
       end
     when "32115-06.html"
       if qs.memo_state?(9)
         qs.memo_state = 10
         qs.set_cond(9)
-        play_sound(player, Sound::ETCSOUND_ELROKI_SONG_FULL)
-        htmltext = event
+        play_sound(pc, Sound::ETCSOUND_ELROKI_SONG_FULL)
+        html = event
       end
     when "32115-09.html"
       if qs.memo_state?(10)
         qs.memo_state = 11
         qs.set_cond(10, true)
-        htmltext = event
+        html = event
       end
     when "32116-04.html"
       if qs.memo_state?(7)
         qs.memo_state = 8
-        play_sound(player, Sound::ETCSOUND_ELROKI_SONG_FULL)
-        htmltext = event
+        play_sound(pc, Sound::ETCSOUND_ELROKI_SONG_FULL)
+        html = event
       end
     when "32116-07.html"
       if qs.memo_state?(8)
         qs.memo_state = 9
         qs.set_cond(8, true)
-        htmltext = event
+        html = event
       end
     when "32116-10.html"
-      if qs.memo_state?(12) && has_quest_items?(player, PRACTICE_ELROKIAN_TRAP)
-        take_items(player, PRACTICE_ELROKIAN_TRAP, -1)
-        give_items(player, ELROKIAN_TRAP, 1)
-        give_items(player, TRAP_STONE, 100)
-        give_adena(player, 1071691, true)
-        add_exp_and_sp(player, 553524, 55538)
+      if qs.memo_state?(12) && has_quest_items?(pc, PRACTICE_ELROKIAN_TRAP)
+        take_items(pc, PRACTICE_ELROKIAN_TRAP, -1)
+        give_items(pc, ELROKIAN_TRAP, 1)
+        give_items(pc, TRAP_STONE, 100)
+        give_adena(pc, 1071691, true)
+        add_exp_and_sp(pc, 553524, 55538)
         qs.exit_quest(false, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    if qs = get_random_party_member_state(player, -1, 3, npc)
+  def on_kill(npc, pc, is_summon)
+    if qs = get_random_party_member_state(pc, -1, 3, npc)
       item = MOBS_DROP_CHANCES[npc.id]
       if item.count == qs.memo_state
         if qs.cond?(4)
@@ -147,107 +147,107 @@ class Quests::Q00111_ElrokianHuntersProof < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case qs.state
     when State::COMPLETED
       if npc.id == MARQUEZ
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when State::CREATED
       if npc.id == MARQUEZ
-        htmltext = player.level >= MIN_LEVEL ? "32113-01.htm" : "32113-06.html"
+        html = pc.level >= MIN_LEVEL ? "32113-01.htm" : "32113-06.html"
       end
     when State::STARTED
       case npc.id
       when MARQUEZ
         case qs.memo_state
         when 1
-          htmltext = "32113-07.html"
+          html = "32113-07.html"
         when 2
-          htmltext = "32113-08.html"
+          html = "32113-08.html"
         when 3
-          htmltext = "32113-09.html"
+          html = "32113-09.html"
         when 4
-          if get_quest_items_count(player, DIARY_FRAGMENT) < 50
-            htmltext = "32113-16.html"
+          if get_quest_items_count(pc, DIARY_FRAGMENT) < 50
+            html = "32113-16.html"
           else
-            take_items(player, DIARY_FRAGMENT, -1)
+            take_items(pc, DIARY_FRAGMENT, -1)
             qs.memo_state = 5
-            htmltext = "32113-17.html"
+            html = "32113-17.html"
           end
         when 5
-          htmltext = "32113-26.html"
+          html = "32113-26.html"
         when 6
-          htmltext = "32113-27.html"
+          html = "32113-27.html"
         when 7, 8
-          htmltext = "32113-28.html"
+          html = "32113-28.html"
         when 9
-          htmltext = "32113-29.html"
+          html = "32113-29.html"
         when 10..12
-          htmltext = "32113-30.html"
+          html = "32113-30.html"
         end
       when MUSHIKA
         if qs.memo_state?(1)
           qs.set_cond(2, true)
           qs.memo_state = 2
-          htmltext = "32114-01.html"
+          html = "32114-01.html"
         elsif qs.memo_state > 1 && qs.memo_state < 10
-          htmltext = "32114-02.html"
+          html = "32114-02.html"
         else
-          htmltext = "32114-03.html"
+          html = "32114-03.html"
         end
       when ASAMAH
         case qs.memo_state
         when 1
-          htmltext = "32115-01.html"
+          html = "32115-01.html"
         when 2
-          htmltext = "32115-02.html"
+          html = "32115-02.html"
         when 3..8
-          htmltext = "32115-04.html"
+          html = "32115-04.html"
         when 9
-          htmltext = "32115-05.html"
+          html = "32115-05.html"
         when 10
-          htmltext = "32115-07.html"
+          html = "32115-07.html"
         when 11
-          if get_quest_items_count(player, ORNITHOMINUS_CLAW) < 10 || get_quest_items_count(player, DEINONYCHUS_BONE) < 10 || get_quest_items_count(player, PACHYCEPHALOSAURUS_SKIN) < 10
-            htmltext = "32115-10.html"
+          if get_quest_items_count(pc, ORNITHOMINUS_CLAW) < 10 || get_quest_items_count(pc, DEINONYCHUS_BONE) < 10 || get_quest_items_count(pc, PACHYCEPHALOSAURUS_SKIN) < 10
+            html = "32115-10.html"
           else
             qs.memo_state = 12
             qs.set_cond(12, true)
-            give_items(player, PRACTICE_ELROKIAN_TRAP, 1)
-            take_items(player, ORNITHOMINUS_CLAW, -1)
-            take_items(player, DEINONYCHUS_BONE, -1)
-            take_items(player, PACHYCEPHALOSAURUS_SKIN, -1)
-            htmltext = "32115-11.html"
+            give_items(pc, PRACTICE_ELROKIAN_TRAP, 1)
+            take_items(pc, ORNITHOMINUS_CLAW, -1)
+            take_items(pc, DEINONYCHUS_BONE, -1)
+            take_items(pc, PACHYCEPHALOSAURUS_SKIN, -1)
+            html = "32115-11.html"
           end
         when 12
-          htmltext = "32115-12.html"
+          html = "32115-12.html"
         end
       when KIRIKACHIN
         case qs.memo_state
         when 1..5
-          htmltext = "32116-01.html"
+          html = "32116-01.html"
         when 6
-          if has_quest_items?(player, EXPEDITION_MEMBERS_LETTER)
+          if has_quest_items?(pc, EXPEDITION_MEMBERS_LETTER)
             qs.memo_state = 7
             qs.set_cond(7, true)
-            take_items(player, EXPEDITION_MEMBERS_LETTER, -1)
-            htmltext = "32116-02.html"
+            take_items(pc, EXPEDITION_MEMBERS_LETTER, -1)
+            html = "32116-02.html"
           end
         when 7
-          htmltext = "32116-05.html"
+          html = "32116-05.html"
         when 8
-          htmltext = "32116-06.html"
+          html = "32116-06.html"
         when 9..11
-          htmltext = "32116-08.html"
+          html = "32116-08.html"
         when 12
-          htmltext = "32116-09.html"
+          html = "32116-09.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

@@ -37,15 +37,13 @@ class L2GrandBossInstance < L2MonsterInstance
         party.members.each do |m|
           RaidBossPointsManager.add_points(m, id, (level / 2) + Rnd.rand(-5..5))
           if m.noble?
-            warn "#{m} is a noble (TODO: Hero)."
-            # Hero.set_rb_killed(m.l2id, id)
+            Hero.set_rb_killed(m.l2id, id)
           end
         end
       else
         RaidBossPointsManager.add_points(pc, id, (level / 2) + Rnd.rand(-5..5))
         if pc.noble?
-          warn "#{pc} is a noble (TODO: Hero)."
-          # Hero.set_rb_killed(pc.l2id, id)
+          Hero.set_rb_killed(pc.l2id, id)
         end
       end
     end

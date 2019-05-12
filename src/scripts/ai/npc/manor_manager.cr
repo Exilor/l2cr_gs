@@ -1,4 +1,4 @@
-class NpcAI::ManorManager < AbstractNpcAI
+class Scripts::ManorManager < AbstractNpcAI
   NPC = {
     35644,
     35645,
@@ -44,7 +44,7 @@ class NpcAI::ManorManager < AbstractNpcAI
     end
   end
 
-  @[Register(event: ON_NPC_MANOR_BYPASS, register: NPC, id: NpcAI::ManorManager::NPC)]
+  @[Register(event: ON_NPC_MANOR_BYPASS, register: NPC, id: Scripts::ManorManager::NPC)]
   def on_npc_manor_bypass(evt : OnNpcManorBypass)
     pc = evt.active_char
 

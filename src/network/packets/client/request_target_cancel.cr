@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestTargetCancel < GameClientPacket
   @unselect = 0
 
-  def read_impl
+  private def read_impl
     @unselect = h
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if pc.locked_target?

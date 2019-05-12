@@ -5,11 +5,11 @@ class Music < EnumClass
 
   getter packet
 
-  def initialize(name, delay = 0)
+  protected def initialize(name, delay = 0)
     @packet = Packets::Outgoing::PlaySound.create_music(name, delay)
   end
 
-  def sound_name
+  def sound_name : String
     @packet.sound_name
   end
 

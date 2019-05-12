@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestUnEquipItem < GameClientPacket
   @slot = 0
 
-  def read_impl
+  private def read_impl
     @slot = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     inv = pc.inventory
     unless item = inv.get_paperdoll_item_by_l2_item_id(@slot)

@@ -1,4 +1,4 @@
-class Quests::Q00222_TestOfTheDuelist < Quest
+class Scripts::Q00222_TestOfTheDuelist < Quest
   # NPC
   private DUELIST_KAIEN = 30623
   # Items
@@ -50,72 +50,82 @@ class Quests::Q00222_TestOfTheDuelist < Quest
 
     add_start_npc(DUELIST_KAIEN)
     add_talk_id(DUELIST_KAIEN)
-    add_kill_id(PUNCHER, NOBLE_ANT_LEADER, DEAD_SEEKER, EXCURO, KRATOR, MARSH_STAKATO_DRONE, BREKA_ORC_OVERLORD, FETTERED_SOUL, GRANDIS, ENCHANTED_MONSTEREYE, LETO_LIZARDMAN_OVERLORD, TIMAK_ORC_OVERLORD, TAMLIN_ORC, TAMLIN_ORC_ARCHER, LAKIN)
-    register_quest_items(ORDER_GLUDIO, ORDER_DION, ORDER_GIRAN, ORDER_OREN, ORDER_ADEN, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW, FINAL_ORDER, EXCUROS_SKIN, KRATORS_SHARD, GRANDIS_SKIN, TIMAK_ORCS_BELT, LAKINS_MACE)
+    add_kill_id(
+      PUNCHER, NOBLE_ANT_LEADER, DEAD_SEEKER, EXCURO, KRATOR,
+      MARSH_STAKATO_DRONE, BREKA_ORC_OVERLORD, FETTERED_SOUL, GRANDIS,
+      ENCHANTED_MONSTEREYE, LETO_LIZARDMAN_OVERLORD, TIMAK_ORC_OVERLORD,
+      TAMLIN_ORC, TAMLIN_ORC_ARCHER, LAKIN
+    )
+    register_quest_items(
+      ORDER_GLUDIO, ORDER_DION, ORDER_GIRAN, ORDER_OREN, ORDER_ADEN,
+      PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG,
+      OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET,
+      ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW, FINAL_ORDER,
+      EXCUROS_SKIN, KRATORS_SHARD, GRANDIS_SKIN, TIMAK_ORCS_BELT, LAKINS_MACE
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
-    htmltext = nil
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        give_items(player, ORDER_GLUDIO, 1)
-        give_items(player, ORDER_DION, 1)
-        give_items(player, ORDER_GIRAN, 1)
-        give_items(player, ORDER_OREN, 1)
-        give_items(player, ORDER_ADEN, 1)
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          if player.class_id.palus_knight?
-            give_items(player, DIMENSIONAL_DIAMOND, 104)
+        give_items(pc, ORDER_GLUDIO, 1)
+        give_items(pc, ORDER_DION, 1)
+        give_items(pc, ORDER_GIRAN, 1)
+        give_items(pc, ORDER_OREN, 1)
+        give_items(pc, ORDER_ADEN, 1)
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          if pc.class_id.palus_knight?
+            give_items(pc, DIMENSIONAL_DIAMOND, 104)
           else
-            give_items(player, DIMENSIONAL_DIAMOND, 72)
+            give_items(pc, DIMENSIONAL_DIAMOND, 72)
           end
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30623-07a.htm"
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30623-07a.htm"
         else
-          htmltext = "30623-07.htm"
+          html = "30623-07.htm"
         end
       end
     when "30623-04.htm"
-      if player.race.orc?
-        htmltext = "30623-05.htm"
+      if pc.race.orc?
+        html = "30623-05.htm"
       else
-        htmltext = event
+        html = event
       end
     when "30623-06.htm", "30623-07.html", "30623-09.html", "30623-10.html", "30623-11.html", "30623-12.html", "30623-15.html"
-      htmltext = event
+      html = event
     when "30623-08.html"
       qs.set_cond(2, true)
-      htmltext = event
+      html = event
     when "30623-16.html"
-      take_items(player, PUNCHERS_SHARD, -1)
-      take_items(player, NOBLE_ANTS_FEELER, -1)
-      take_items(player, DEAD_SEEKER_FANG, -1)
-      take_items(player, DRONES_CHITIN, -1)
-      take_items(player, OVERLORD_NECKLACE, -1)
-      take_items(player, FETTERED_SOULS_CHAIN, -1)
-      take_items(player, CHIEDS_AMULET, -1)
-      take_items(player, ENCHANTED_EYE_MEAT, -1)
-      take_items(player, TAMRIN_ORCS_RING, -1)
-      take_items(player, TAMRIN_ORCS_ARROW, -1)
-      take_items(player, ORDER_GLUDIO, 1)
-      take_items(player, ORDER_DION, 1)
-      take_items(player, ORDER_GIRAN, 1)
-      take_items(player, ORDER_OREN, 1)
-      take_items(player, ORDER_ADEN, 1)
-      give_items(player, FINAL_ORDER, 1)
+      take_items(pc, PUNCHERS_SHARD, -1)
+      take_items(pc, NOBLE_ANTS_FEELER, -1)
+      take_items(pc, DEAD_SEEKER_FANG, -1)
+      take_items(pc, DRONES_CHITIN, -1)
+      take_items(pc, OVERLORD_NECKLACE, -1)
+      take_items(pc, FETTERED_SOULS_CHAIN, -1)
+      take_items(pc, CHIEDS_AMULET, -1)
+      take_items(pc, ENCHANTED_EYE_MEAT, -1)
+      take_items(pc, TAMRIN_ORCS_RING, -1)
+      take_items(pc, TAMRIN_ORCS_ARROW, -1)
+      take_items(pc, ORDER_GLUDIO, 1)
+      take_items(pc, ORDER_DION, 1)
+      take_items(pc, ORDER_GIRAN, 1)
+      take_items(pc, ORDER_OREN, 1)
+      take_items(pc, ORDER_ADEN, 1)
+      give_items(pc, FINAL_ORDER, 1)
       qs.memo_state = 2
       qs.set_cond(4, true)
-      htmltext = event
+      html = event
     end
 
-    return htmltext
+    return html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -126,7 +136,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(1) && has_quest_items?(killer, ORDER_GLUDIO)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, PUNCHERS_SHARD, 1, 10, 1.0, true) && (get_quest_items_count(killer, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90)
+          if give_item_randomly(killer, npc, PUNCHERS_SHARD, 1, 10, 1.0, true) && get_quest_items_count(killer, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90
             if i0 >= 9
               qs.set_cond(3)
             end
@@ -137,7 +147,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(1) && has_quest_items?(killer, ORDER_GLUDIO)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, NOBLE_ANTS_FEELER, 1, 10, 1.0, true) && (get_quest_items_count(killer, PUNCHERS_SHARD, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90)
+          if give_item_randomly(killer, npc, NOBLE_ANTS_FEELER, 1, 10, 1.0, true) && get_quest_items_count(killer, PUNCHERS_SHARD, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90
             if i0 >= 9
               qs.set_cond(3)
             end
@@ -148,7 +158,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(1) && has_quest_items?(killer, ORDER_DION)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, DEAD_SEEKER_FANG, 1, 10, 1.0, true) && (get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90)
+          if give_item_randomly(killer, npc, DEAD_SEEKER_FANG, 1, 10, 1.0, true) && get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90
             if i0 >= 9
               qs.set_cond(3)
             end
@@ -159,7 +169,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(2) && has_quest_items?(killer, FINAL_ORDER)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, EXCUROS_SKIN, 1, 3, 1.0, true) && (get_quest_items_count(killer, KRATORS_SHARD, LAKINS_MACE, GRANDIS_SKIN, TIMAK_ORCS_BELT) == 12)
+          if give_item_randomly(killer, npc, EXCUROS_SKIN, 1, 3, 1.0, true) && get_quest_items_count(killer, KRATORS_SHARD, LAKINS_MACE, GRANDIS_SKIN, TIMAK_ORCS_BELT) == 12
             if i0 >= 5
               qs.set_cond(5)
             end
@@ -170,7 +180,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(2) && has_quest_items?(killer, FINAL_ORDER)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, KRATORS_SHARD, 1, 3, 1.0, true) && (get_quest_items_count(killer, EXCUROS_SKIN, LAKINS_MACE, GRANDIS_SKIN, TIMAK_ORCS_BELT) == 12)
+          if give_item_randomly(killer, npc, KRATORS_SHARD, 1, 3, 1.0, true) && get_quest_items_count(killer, EXCUROS_SKIN, LAKINS_MACE, GRANDIS_SKIN, TIMAK_ORCS_BELT) == 12
             if i0 >= 5
               qs.set_cond(5)
             end
@@ -181,7 +191,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(1) && has_quest_items?(killer, ORDER_DION)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, DRONES_CHITIN, 1, 10, 1.0, true) && (get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90)
+          if give_item_randomly(killer, npc, DRONES_CHITIN, 1, 10, 1.0, true) && get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90
             if i0 >= 9
               qs.set_cond(3)
             end
@@ -192,7 +202,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(1) && has_quest_items?(killer, ORDER_GIRAN)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, OVERLORD_NECKLACE, 1, 10, 1.0, true) && (get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90)
+          if give_item_randomly(killer, npc, OVERLORD_NECKLACE, 1, 10, 1.0, true) && get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90
             if i0 >= 9
               qs.set_cond(3)
             end
@@ -203,7 +213,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(1) && has_quest_items?(killer, ORDER_GIRAN)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, FETTERED_SOULS_CHAIN, 1, 10, 1.0, true) && (get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90)
+          if give_item_randomly(killer, npc, FETTERED_SOULS_CHAIN, 1, 10, 1.0, true) && get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90
             if i0 >= 9
               qs.set_cond(3)
             end
@@ -214,7 +224,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(2) && has_quest_items?(killer, FINAL_ORDER)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, GRANDIS_SKIN, 1, 3, 1.0, true) && (get_quest_items_count(killer, EXCUROS_SKIN, KRATORS_SHARD, LAKINS_MACE, TIMAK_ORCS_BELT) == 12)
+          if give_item_randomly(killer, npc, GRANDIS_SKIN, 1, 3, 1.0, true) && get_quest_items_count(killer, EXCUROS_SKIN, KRATORS_SHARD, LAKINS_MACE, TIMAK_ORCS_BELT) == 12
             if i0 >= 5
               qs.set_cond(5)
             end
@@ -225,7 +235,7 @@ class Quests::Q00222_TestOfTheDuelist < Quest
         if qs.memo_state?(1) && has_quest_items?(killer, ORDER_OREN)
           i0 = qs.get_memo_state_ex(1)
           qs.set_memo_state_ex(1, i0 + 1)
-          if give_item_randomly(killer, npc, ENCHANTED_EYE_MEAT, 1, 10, 1.0, true) && (get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90)
+          if give_item_randomly(killer, npc, ENCHANTED_EYE_MEAT, 1, 10, 1.0, true) && get_quest_items_count(killer, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 90
             if i0 >= 9
               qs.set_cond(3)
             end
@@ -293,41 +303,42 @@ class Quests::Q00222_TestOfTheDuelist < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created?
-      if player.class_id.warrior? || player.class_id.elven_knight? || player.class_id.palus_knight? || player.class_id.orc_monk?
-        if player.level >= MIN_LEVEL
-          htmltext = "30623-03.htm"
+      if pc.class_id.warrior? || pc.class_id.elven_knight? || pc.class_id.palus_knight? || pc.class_id.orc_monk?
+        if pc.level >= MIN_LEVEL
+          html = "30623-03.htm"
         else
-          htmltext = "30623-01.html"
+          html = "30623-01.html"
         end
       else
-        htmltext = "30623-02.html"
+        html = "30623-02.html"
       end
     elsif qs.started?
-      if has_quest_items?(player, ORDER_GLUDIO, ORDER_DION, ORDER_GIRAN, ORDER_OREN, ORDER_ADEN)
-        if get_quest_items_count(player, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 100
-          htmltext = "30623-13.html"
+      if has_quest_items?(pc, ORDER_GLUDIO, ORDER_DION, ORDER_GIRAN, ORDER_OREN, ORDER_ADEN)
+        if get_quest_items_count(pc, PUNCHERS_SHARD, NOBLE_ANTS_FEELER, DRONES_CHITIN, DEAD_SEEKER_FANG, OVERLORD_NECKLACE, FETTERED_SOULS_CHAIN, CHIEDS_AMULET, ENCHANTED_EYE_MEAT, TAMRIN_ORCS_RING, TAMRIN_ORCS_ARROW) == 100
+          html = "30623-13.html"
         else
-          htmltext = "30623-14.html"
+          html = "30623-14.html"
         end
-      elsif has_quest_items?(player, FINAL_ORDER)
-        if get_quest_items_count(player, EXCUROS_SKIN, KRATORS_SHARD, LAKINS_MACE, GRANDIS_SKIN, TIMAK_ORCS_BELT) == 15
-          give_adena(player, 161806, true)
-          give_items(player, MARK_OF_DUELIST, 1)
-          add_exp_and_sp(player, 894888, 61408)
+      elsif has_quest_items?(pc, FINAL_ORDER)
+        if get_quest_items_count(pc, EXCUROS_SKIN, KRATORS_SHARD, LAKINS_MACE, GRANDIS_SKIN, TIMAK_ORCS_BELT) == 15
+          give_adena(pc, 161806, true)
+          give_items(pc, MARK_OF_DUELIST, 1)
+          add_exp_and_sp(pc, 894888, 61408)
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
-          htmltext = "30623-18.html"
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
+          html = "30623-18.html"
         else
-          htmltext = "30623-17.html"
+          html = "30623-17.html"
         end
       end
     elsif qs.completed?
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     end
-    return htmltext
+
+    html || get_no_quest_msg(pc)
   end
 end

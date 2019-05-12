@@ -2,12 +2,12 @@ class Packets::Incoming::RequestGMCommand < GameClientPacket
   @target_name = ""
   @command = 0
 
-  def read_impl
+  private def read_impl
     @target_name = s
     @command = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless pc.gm? && pc.access_level.allow_alt_g?
 

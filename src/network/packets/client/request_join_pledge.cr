@@ -1,13 +1,13 @@
 class Packets::Incoming::RequestJoinPledge < GameClientPacket
-  getter pledge_type = 0
   @target = 0
+  getter pledge_type = 0
 
-  def read_impl
+  private def read_impl
     @target = d
     @pledge_type = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless clan = pc.clan?
 

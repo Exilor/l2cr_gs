@@ -1,4 +1,4 @@
-class NpcAI::KetraOrcSupport < AbstractNpcAI
+class Scripts::KetraOrcSupport < AbstractNpcAI
   private struct BuffData
     getter cost
 

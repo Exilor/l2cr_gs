@@ -16,13 +16,13 @@ class Packets::Incoming::RequestChangeNicknameColor < GameClientPacket
   @title = ""
   @item_l2id = 0
 
-  def read_impl
+  private def read_impl
     @color_num = d
     @title = s
     @item_l2id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if @color_num < 0 || @color_num >= COLORS.size

@@ -95,20 +95,6 @@ abstract class L2Character < L2Object
     init_stat
     init_status
 
-    # if door?
-    #   @calculators = Formulas.std_door_calculators
-    # elsif npc?
-    #   @calculators = Formulas.npc_std_calculators
-    #   # template.skills.each_value { |s| add_skill(s) }
-    # else
-    #   @calculators = Slice(Calculator?).new(Stats.size, nil.as(Calculator?))
-    #   # if summon?
-    #   #   template.skills.each_value { |s| add_skill(s) }
-    #   # end
-
-    #   Formulas.add_funcs_to_new_character(self)
-    # end
-
     if door?
       @calculators = Formulas.std_door_calculators
     elsif npc?
@@ -120,7 +106,7 @@ abstract class L2Character < L2Object
     self.invul = true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Character
   end
 
@@ -164,11 +150,11 @@ abstract class L2Character < L2Object
     @hp_update_dec_check = @hp_update_inc_check - @hp_update_interval
   end
 
-  def effect_list
+  def effect_list : CharEffectList
     @effect_list ||= CharEffectList.new(self)
   end
 
-  def known_list
+  def known_list : CharKnownList
     super.as(CharKnownList)
   end
 
@@ -206,7 +192,7 @@ abstract class L2Character < L2Object
     end
   end
 
-  def need_hp_update?
+  def need_hp_update? : Bool
     current_hp = current_hp()
     max_hp = max_hp()
 
@@ -279,19 +265,19 @@ abstract class L2Character < L2Object
     end
   end
 
-  def attack_by_list
+  def attack_by_list : Set(L2Character)
     @attack_by_list || sync do
       @attack_by_list ||= Set(L2Character).new
     end
   end
 
-  def trigger_skills
+  def trigger_skills : Hash(Int32, OptionsSkillHolder)
     @trigger_skills || sync do
       @trigger_skills ||= Hash(Int32, OptionsSkillHolder).new
     end
   end
 
-  def invul_against_skills
+  def invul_against_skills : Hash(Int32, InvulSkillHolder)
     @invul_against_skills || sync do
       @invul_against_skills ||= Hash(Int32, InvulSkillHolder).new
     end
@@ -334,12 +320,7 @@ abstract class L2Character < L2Object
 
   def remove_skill(id : Int32, cancel_effect : Bool) : Skill?
     if old_skill = @skills.delete(id)
-      debug "L2Character#remove_skill: Removed #{old_skill}."
-      # begin
-      #   raise "caller of L2Character#remove_skill:"
-      # rescue e
-      #   debug e
-      # end
+      debug { "L2Character#remove_skill: Removed #{old_skill}." }
       if last_skill_cast && casting_now?
         if old_skill.id == last_skill_cast.not_nil!.id
           abort_cast
@@ -354,7 +335,7 @@ abstract class L2Character < L2Object
 
       if cancel_effect || old_skill.toggle? || old_skill.passive?
         remove_stats_owner(old_skill)
-        stop_skill_effects(false, old_skill.id) # L2J has changed true to false
+        stop_skill_effects(false, old_skill.id)
       end
     end
 
@@ -668,7 +649,7 @@ abstract class L2Character < L2Object
     # no-op
   end
 
-  def get_listeners(type : EventType) : Enumerable(AbstractEventListener)
+  def get_listeners(type : EventType) : Indexable(AbstractEventListener)
     object_listeners = super
     template_listeners = template.get_listeners(type)
 
@@ -691,7 +672,9 @@ abstract class L2Character < L2Object
     when !global_empty && object_empty && template_empty
       global_listeners
     else
-      ret = Deque(AbstractEventListener).new(object_listeners.size + template_listeners.size + global_listeners.size)
+      deq_size = object_listeners.size + template_listeners.size
+      deq_size += global_listeners.size
+      ret = Deque(AbstractEventListener).new(deq_size)
       ret.concat(object_listeners)
       ret.concat(template_listeners)
       ret.concat(global_listeners)
@@ -835,8 +818,6 @@ abstract class L2Character < L2Object
   end
 
   def remove_stat_func(function : AbstractFunction)
-    # return unless function # check if a nil ever gets here
-
     stat = function.stat.to_i
 
     sync do
@@ -861,7 +842,7 @@ abstract class L2Character < L2Object
     end
   end
 
-  def remove_stat_funcs(functions)
+  def remove_stat_funcs(functions : Enumerable(AbstractFunction))
     if !player? && known_list.known_players.empty?
       functions.each { |f| remove_stat_func(f) }
     else
@@ -874,7 +855,7 @@ abstract class L2Character < L2Object
     end
   end
 
-  def remove_stats_owner(owner)
+  def remove_stats_owner(owner : Object)
     modified_stats = nil
 
     sync do
@@ -913,8 +894,9 @@ abstract class L2Character < L2Object
   private def broadcast_modified_stats(stats : Enumerable(Stats)?)
     return unless stats && !stats.empty?
 
-    if summon? && summon!.owner?
-      unsafe_as(L2Summon).update_and_broadcast_status(1)
+    me = self
+    if me.is_a?(L2Summon) && me.owner?
+      me.update_and_broadcast_status(1)
     end
 
     broadcast_full = false
@@ -931,28 +913,30 @@ abstract class L2Character < L2Object
       end
     end
 
-    if player?
+
+    if me.is_a?(L2PcInstance)
       if broadcast_full
-        acting_player.update_and_broadcast_status(2)
+        me.update_and_broadcast_status(2)
       else
-        acting_player.update_and_broadcast_status(1)
+        me.update_and_broadcast_status(1)
         if su.has_attributes?
           broadcast_packet(su)
         end
       end
 
+      summon = summon()
+
       if summon && affected?(EffectFlag::SERVITOR_SHARE)
-        summon!.broadcast_status_update
+        summon.broadcast_status_update
       end
-    elsif npc?
+    elsif me.is_a?(L2Npc)
       if broadcast_full
-        npc = unsafe_as(L2Npc)
         known_list.known_players.each_value do |pc|
           if visible_for?(pc)
             if run_speed == 0
-              pc.send_packet(ServerObjectInfo.new(npc, pc))
+              pc.send_packet(ServerObjectInfo.new(me, pc))
             else
-              pc.send_packet(NpcInfo.new(npc, pc))
+              pc.send_packet(NpcInfo.new(me, pc))
             end
           end
         end
@@ -2457,11 +2441,10 @@ abstract class L2Character < L2Object
   end
 
   def update_effect_icons
-    effect_list.update_effect_icons(false)
+    update_effect_icons(false)
   end
 
   def update_effect_icons(party_only : Bool)
-    # effect_list.update_effect_icons(party_only)
     # no-op
   end
 
@@ -3457,33 +3440,33 @@ abstract class L2Character < L2Object
     inside_peace_zone?(attacker, self)
   end
 
-  def inside_peace_zone?(attacker : L2PcInstance, target : L2Object?) : Bool
-    !attacker.access_level.allow_peace_attack? &&
-    inside_peace_zone?(attacker.as(L2Object), target)
-  end
-
   def inside_peace_zone?(attacker : L2Object, target : L2Object?) : Bool
+    if attacker.is_a?(L2PcInstance)
+      return false unless attacker.access_level.allow_peace_attack?
+    end
     return false unless target
     return false unless target.playable? && attacker.playable?
     return false if InstanceManager.get_instance(instance_id).try &.pvp_instance?
-    if TerritoryWarManager.player_with_ward_can_be_killed_in_peace_zone? && TerritoryWarManager.tw_in_progress?
-      if target.player? && target.acting_player.combat_flag_equipped?
-        return false
-      end
-    end
-
-    if Config.alt_game_karma_player_can_be_killed_in_peacezone
-      if target.acting_player && target.acting_player.karma > 0
-        return false
-      end
-      if attacker.acting_player && attacker.acting_player.karma > 0
-        if target.acting_player && target.acting_player.pvp_flag > 0
+    if TerritoryWarManager.player_with_ward_can_be_killed_in_peace_zone?
+      if TerritoryWarManager.tw_in_progress?
+        if target.is_a?(L2PcInstance) && target.combat_flag_equipped?
           return false
         end
       end
     end
 
-    target.inside_peace_zone? || attacker.inside_peace_zone?
+    if Config.alt_game_karma_player_can_be_killed_in_peacezone
+      if target.acting_player? && target.acting_player.karma > 0
+        return false
+      end
+      if attacker.acting_player? && attacker.acting_player.karma > 0
+        if target.acting_player? && target.acting_player.pvp_flag > 0
+          return false
+        end
+      end
+    end
+
+    target.inside_zone?(ZoneId::PEACE) || attacker.inside_zone?(ZoneId::PEACE)
   end
 
   def tele_to_location(x : Int32, y : Int32, z : Int32, heading : Int32, instance_id : Int32, random_offset : Int32)
@@ -3637,7 +3620,7 @@ abstract class L2Character < L2Object
 
       if player? && 200 <= (acting_player.client_z - geo_height) <= 1500
         dz = m.z_destination - z_prev
-      elsif in_combat? && dz.abs > 200 && (dx * dx) + (dy * dy) < 40_000
+      elsif in_combat? && dz.abs > 200 && dx.abs2 + dy.abs2 < 40_000
         dz = m.z_destination - z_prev
       else
         z_prev = geo_height
@@ -3647,12 +3630,12 @@ abstract class L2Character < L2Object
     end
     dz = dz.to_f
 
-    delta = (dx * dx) + (dy * dy)
+    delta = dx.abs2 + dy.abs2
 
-    if delta < 10_000 && (dz * dz) > 2_500 && !floating
+    if delta < 10_000 && dz.abs2 > 2_500 && !floating
       delta = Math.sqrt(delta)
     else
-      delta = Math.sqrt(delta + (dz * dz))
+      delta = Math.sqrt(delta + dz.abs2)
     end
 
     dist_fraction = Float64::MAX
@@ -3788,7 +3771,7 @@ abstract class L2Character < L2Object
       gtx = (original_x - L2World::MAP_MAX_X) >> 4
       gty = (original_y - L2World::MAP_MAX_Y) >> 4
 
-      if Config.pathfinding > 0 && (!(attackable? && (unsafe_as(L2Attackable).returning_to_spawn_point?))) || (player? && !(in_vehicle && distance > 1500)) || is_a?(L2RiftInvaderInstance)
+      if Config.pathfinding > 0 && (!(attackable? && unsafe_as(L2Attackable).returning_to_spawn_point?)) || (player? && !(in_vehicle && distance > 1500)) || is_a?(L2RiftInvaderInstance)
         if @move && on_geodata_path?
           if gtx == @move.not_nil!.geo_path_gtx && gty == @move.not_nil!.geo_path_gty
             return
@@ -3993,7 +3976,7 @@ abstract class L2Character < L2Object
     end
   end
 
-  def validate_movement_heading(heading : Int32)
+  def validate_movement_heading(heading : Int32) : Bool
     return true unless m = @move
 
     result = true
@@ -4008,11 +3991,11 @@ abstract class L2Character < L2Object
     !!@debugger
   end
 
-  def send_debug_packet(gsp)
+  def send_debug_packet(gsp : GameServerPacket)
     @debugger.try &.send_packet(gsp)
   end
 
-  def send_debug_message(msg)
+  def send_debug_message(msg : String)
     @debugger.try &.send_message(msg)
   end
 
@@ -4022,22 +4005,22 @@ abstract class L2Character < L2Object
     !dead?
   end
 
-  def max_cp!
+  def max_cp! : self
     self.current_cp = max_cp.to_f64
     self
   end
 
-  def max_hp!
+  def max_hp! : self
     self.current_hp = max_hp.to_f64
     self
   end
 
-  def max_mp!
+  def max_mp! : self
     self.current_mp = max_mp.to_f64
     self
   end
 
-  def heal!
+  def heal! : self
     max_cp!.max_hp!.max_mp!
   end
 

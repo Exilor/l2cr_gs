@@ -1,4 +1,4 @@
-class Quests::Q00309_ForAGoodCause < Quest
+class Scripts::Q00309_ForAGoodCause < Quest
   # NPC
   private ATRA = 32647
   # Mobs

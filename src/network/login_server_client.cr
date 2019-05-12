@@ -21,7 +21,7 @@ module LoginServerClient
   class_getter port = 9014
   class_getter game_port = 7777
   class_getter host = "127.0.0.1"
-  class_getter game_host = "127.0.0.1"
+  class_getter game_host = "127.0.0.1"#"147.135.250.115"
   class_getter hex_id = Bytes.empty
   class_getter request_id = 1
   class_getter accept_alternate = true
@@ -60,7 +60,7 @@ module LoginServerClient
   end
 
   private def read_loop
-    info "Trying to connect to LoginServer at #{@@host}:#{@@port}"
+    info { "Trying to connect to LoginServer at #{@@host}:#{@@port}" }
     @@socket = TCPSocket.new(@@host, @@port)
     @@crypt = NewCrypt.new("_;v.]05-31!|+-%xT!^[$\00".bytes)
     until cancelled?
@@ -100,7 +100,7 @@ module LoginServerClient
         packet.read
         packet.run
       else
-        warn "Unknown opcode: 0x#{opcode.to_s(16)}, size: #{size}."
+        warn { "Unknown opcode: 0x#{opcode.to_s(16)}." }
       end
     end
   rescue IO::EOFError
@@ -115,7 +115,7 @@ module LoginServerClient
 
   def send_packet(packet : MMO::OutgoingPacket(self))
     return if cancelled?
-    # debug "Sending #{packet.class}."
+
     OUT_BUFFER.clear
     OUT_BUFFER.pos = 2
     packet.buffer = OUT_BUFFER
@@ -132,7 +132,7 @@ module LoginServerClient
     OUT_BUFFER.rewind
     remaining = OUT_BUFFER.remaining
     OUT_BUFFER.write_bytes(remaining.to_u16)
-    # debug "Writing #{remaining} bytes."
+
     socket.write(OUT_BUFFER.to_slice)
   rescue e : IO::Error
     error e
@@ -148,7 +148,7 @@ module LoginServerClient
 
   def add_game_server_login(account : String, client : GameClient)
     if ACCOUNTS.has_key?(account)
-      error "Account #{account.inspect} already present in ACCOUNTS."
+      error { "Account #{account.inspect} already present in ACCOUNTS." }
       false
     else
       ACCOUNTS[account] = client
@@ -163,7 +163,7 @@ module LoginServerClient
 
   def send_logout(account : String?)
     if account
-      debug "Sending PlayerLogout for #{account.inspect} to LoginServer."
+      debug { "Sending PlayerLogout for #{account.inspect} to LoginServer." }
       send_packet(PlayerLogout.new(account))
       ACCOUNTS.delete(account)
     end
@@ -219,7 +219,7 @@ module LoginServerClient
 
   def do_kick_player(account : String)
     if client = ACCOUNTS[account]?
-      warn "Kicked by LoginServer: #{client}."
+      warn { "#{client} kicked out by LoginServer." }
       client.additional_close_packet = SystemMessage.another_login_with_account
       client.close_now
     end

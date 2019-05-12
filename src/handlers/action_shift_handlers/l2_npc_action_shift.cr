@@ -2,7 +2,7 @@ module ActionShiftHandler::L2NpcActionShift
   extend self
   extend ActionShiftHandler
 
-  def action(pc, target, interact)
+  def action(pc, target, interact) : Bool
     if pc.gm?
       target = target.as(L2Npc)
       pc.target = target
@@ -98,9 +98,11 @@ module ActionShiftHandler::L2NpcActionShift
       debug "TODO: NpcViewMod"
       # NpcViewMod.send_npc_view(pc, target)
     end
+
+    true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Npc
   end
 end

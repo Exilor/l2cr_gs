@@ -1,4 +1,4 @@
-class Quests::Q00296_TarantulasSpiderSilk < Quest
+class Scripts::Q00296_TarantulasSpiderSilk < Quest
   # NPCs
   private TRADER_MION = 30519
   private DEFENDER_NATHAN = 30548
@@ -23,9 +23,9 @@ class Quests::Q00296_TarantulasSpiderSilk < Quest
     register_quest_items(TARANTULA_SPIDER_SILK, TARANTULA_SPINNERETTE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "30519-03.htm"
@@ -44,9 +44,11 @@ class Quests::Q00296_TarantulasSpiderSilk < Quest
       end
     when "30548-03.html"
       if qs.started?
-        if has_quest_items?(player, TARANTULA_SPINNERETTE)
-          give_items(player, TARANTULA_SPIDER_SILK, (15 + Rnd.rand(9)) * get_quest_items_count(player, TARANTULA_SPINNERETTE))
-          take_items(player, TARANTULA_SPINNERETTE, -1)
+        if has_quest_items?(pc, TARANTULA_SPINNERETTE)
+          amount = 15 + Rnd.rand(9)
+          amount *= get_quest_items_count(pc, TARANTULA_SPINNERETTE)
+          give_items(pc, TARANTULA_SPIDER_SILK, amount)
+          take_items(pc, TARANTULA_SPINNERETTE, -1)
           html = event
         else
           html = "30548-02.html"
@@ -71,18 +73,18 @@ class Quests::Q00296_TarantulasSpiderSilk < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
-    html = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created? && npc.id == TRADER_MION
-      html = talker.level >= MIN_LVL ? "30519-02.htm" : "30519-01.htm"
+      html = pc.level >= MIN_LVL ? "30519-02.htm" : "30519-01.htm"
     elsif qs.started?
       if npc.id == TRADER_MION
-        silk = get_quest_items_count(talker, TARANTULA_SPIDER_SILK)
+        silk = get_quest_items_count(pc, TARANTULA_SPIDER_SILK)
         if silk >= 1
-          give_adena(talker, (silk * 30) + (silk >= 10 ? 2000 : 0), true)
-          take_items(talker, TARANTULA_SPIDER_SILK, -1)
-          Q00281_HeadForTheHills.give_newbie_reward(talker) # TODO: It's using wrong bitmask, need to create a general bitmask for this using EnumIntBitmask class inside Quest class for handling Quest rewards.
+          give_adena(pc, (silk * 30) + (silk >= 10 ? 2000 : 0), true)
+          take_items(pc, TARANTULA_SPIDER_SILK, -1)
+          Q00281_HeadForTheHills.give_newbie_reward(pc) # TODO: It's using wrong bitmask, need to create a general bitmask for this using EnumIntBitmask class inside Quest class for handling Quest rewards.
           html = "30519-05.html"
         else
           html = "30519-04.html"
@@ -92,6 +94,6 @@ class Quests::Q00296_TarantulasSpiderSilk < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

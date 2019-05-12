@@ -20,31 +20,31 @@ enum SkillOperateType : UInt8
   # Toggle Skill.
   T
 
-  def active?
+  def active? : Bool
     A1 <= self <= DA2
   end
 
-  def channeling?
+  def channeling? : Bool
     ca1? || ca5?
   end
 
-  def continuous?
+  def continuous? : Bool
     a2? || a4? || da2?
   end
 
-  def fly_type?
+  def fly_type? : Bool
     da1? || da2?
   end
 
-  def self_continuous?
+  def self_continuous? : Bool
     a3?
   end
 
-  def passive?
+  def passive? : Bool
     p?
   end
 
-  def toggle?
+  def toggle? : Bool
     t?
   end
 end

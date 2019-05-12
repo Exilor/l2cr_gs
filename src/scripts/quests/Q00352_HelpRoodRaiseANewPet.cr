@@ -1,4 +1,4 @@
-class Quests::Q00352_HelpRoodRaiseANewPet < Quest
+class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
   private record DropInfo, first_chance : Int32, second_chance : Int32
 
   # NPC

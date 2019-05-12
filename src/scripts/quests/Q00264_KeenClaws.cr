@@ -1,22 +1,22 @@
-class Quests::Q00264_KeenClaws < Quest
+class Scripts::Q00264_KeenClaws < Quest
   # Npc
   private PAYNE = 30136
   # Item
   private WOLF_CLAW = 1367
   # Monsters
   private MONSTER_CHANCES = {
-    20003 => [ItemHolder.new(2, 25), ItemHolder.new(8, 50)],
-    20456 => [ItemHolder.new(1, 80), ItemHolder.new(2, 100)]
+    20003 => {ItemHolder.new(2, 25), ItemHolder.new(8, 50)},
+    20456 => {ItemHolder.new(1, 80), ItemHolder.new(2, 100)}
   }
   # Rewards
   private REWARDS = {
-    1 => [ItemHolder.new(4633, 1)],
-    2 => [ItemHolder.new(57, 2000)],
-    5 => [ItemHolder.new(5140, 1)],
-    8 => [ItemHolder.new(735, 1), ItemHolder.new(57, 50)],
-    11 => [ItemHolder.new(737, 1)],
-    14 => [ItemHolder.new(734, 1)],
-    17 => [ItemHolder.new(35, 1), ItemHolder.new(57, 50)]
+    1 => {ItemHolder.new(4633, 1)},
+    2 => {ItemHolder.new(57, 2000)},
+    5 => {ItemHolder.new(5140, 1)},
+    8 => {ItemHolder.new(735, 1), ItemHolder.new(57, 50)},
+    11 => {ItemHolder.new(737, 1)},
+    14 => {ItemHolder.new(734, 1)},
+    17 => {ItemHolder.new(35, 1), ItemHolder.new(57, 50)}
   }
   # Misc
   private MIN_LVL = 3
@@ -31,9 +31,9 @@ class Quests::Q00264_KeenClaws < Quest
     register_quest_items(WOLF_CLAW)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event == "30136-03.htm"
       st.start_quest
       return event
@@ -59,16 +59,16 @@ class Quests::Q00264_KeenClaws < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      htmltext = player.level >= MIN_LVL ? "30136-02.htm" : "30136-01.htm"
+      html = pc.level >= MIN_LVL ? "30136-02.htm" : "30136-01.htm"
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30136-04.html"
+        html = "30136-04.html"
       when 2
         if st.get_quest_items_count(WOLF_CLAW) >= WOLF_CLAW_COUNT
           chance = rand(17)
@@ -84,11 +84,11 @@ class Quests::Q00264_KeenClaws < Quest
             end
           end
           st.exit_quest(true, true)
-          htmltext = "30136-05.html"
+          html = "30136-05.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

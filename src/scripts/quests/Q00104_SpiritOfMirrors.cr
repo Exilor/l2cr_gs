@@ -1,4 +1,4 @@
-class Quests::Q00104_SpiritOfMirrors < Quest
+class Scripts::Q00104_SpiritOfMirrors < Quest
   # NPCs
 	private GALLINT   = 30017
 	private ARNOLD    = 30041
@@ -75,9 +75,9 @@ class Quests::Q00104_SpiritOfMirrors < Quest
   end
 
   def on_talk(npc, pc)
-    qs = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless qs
+    unless qs = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when GALLINT
@@ -85,12 +85,12 @@ class Quests::Q00104_SpiritOfMirrors < Quest
       when State::CREATED
         if pc.race.human?
           if pc.level >= MIN_LVL
-            htmltext = "30017-03.htm"
+            html = "30017-03.htm"
           else
-            htmltext = "30017-02.htm"
+            html = "30017-02.htm"
           end
         else
-          htmltext = "30017-01.htm"
+          html = "30017-01.htm"
         end
       when State::STARTED
         if qs.cond?(3) && qs.has_quest_items?(SPIRITBOUND_WAND1, SPIRITBOUND_WAND2, SPIRITBOUND_WAND3)
@@ -99,12 +99,12 @@ class Quests::Q00104_SpiritOfMirrors < Quest
           qs.add_exp_and_sp(39_750, 3407)
           qs.give_adena(16_866, true)
           qs.exit_quest(false, true)
-          htmltext = "30017-06.html"
+          html = "30017-06.html"
         else
-          htmltext = "30017-05.html"
+          html = "30017-05.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when ARNOLD, JOHNSTONE, KENYOS
       if qs.cond?(1)
@@ -116,9 +116,9 @@ class Quests::Q00104_SpiritOfMirrors < Quest
         end
       end
 
-      htmltext = "#{npc.id}-01.html"
+      html = "#{npc.id}-01.html"
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

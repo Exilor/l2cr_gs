@@ -1,4 +1,4 @@
-class Quests::Q00336_CoinsOfMagic < Quest
+class Scripts::Q00336_CoinsOfMagic < Quest
   # NPCs
   private PANO = 30078
   private COLLOB = 30092
@@ -145,10 +145,10 @@ class Quests::Q00336_CoinsOfMagic < Quest
     )
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state(player, true)
-    htmltext = get_no_quest_msg(player)
-    return htmltext unless qs
+  def on_talk(npc, pc)
+    unless qs = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when PANO, COLLOB, HEAD_BLACKSMITH_FERRIS
@@ -184,7 +184,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
       end
     when WAREHOUSE_KEEPER_SORINT
       if qs.created?
-        if player.level < 40
+        if pc.level < 40
           return "30232-01.htm"
         end
         return "30232-02.htm"
@@ -197,7 +197,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
           qs.give_items(Q_CC_MEMBERSHIP_3, 1)
           qs.take_items(Q_COIN_DIAGRAM, -1)
           qs.take_items(Q_KALDIS_GOLD_DRAGON, 1)
-          qs.memo_state=(3)
+          qs.memo_state = 3
           qs.set_cond(4)
           qs.show_question_mark(336)
           qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -215,21 +215,21 @@ class Quests::Q00336_CoinsOfMagic < Quest
       end
     end
 
-    htmltext
+    get_no_quest_msg(pc)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
-    htmltext = nil
+    html = nil
 
     if "QUEST_ACCEPTED" == event
       qs.play_sound(Sound::ITEMSOUND_QUEST_ACCEPT)
       unless qs.has_quest_items?(Q_COIN_DIAGRAM)
         qs.give_items(Q_COIN_DIAGRAM, 1)
       end
-      qs.memo_state=(1)
+      qs.memo_state = 1
       qs.start_quest
       qs.show_question_mark(336)
       qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -243,7 +243,8 @@ class Quests::Q00336_CoinsOfMagic < Quest
     event_id = event.to_i
 
     case npc_id
-    when PANO, COLLOB, RAPIN, HAGGER, STAN, RESEARCHER_LORAIN, BLACKSMITH_DUNING, MAGISTER_PAGE, HEAD_BLACKSMITH_FERRIS
+    when PANO, COLLOB, RAPIN, HAGGER, STAN, RESEARCHER_LORAIN,
+         BLACKSMITH_DUNING, MAGISTER_PAGE, HEAD_BLACKSMITH_FERRIS
       case event_id
       when 1
         qs.set(PARAM_2, 11)
@@ -485,13 +486,13 @@ class Quests::Q00336_CoinsOfMagic < Quest
       when 1
         return "30702-02.html"
       when 2
-        qs.memo_state=(2)
+        qs.memo_state = 2
         qs.set_cond(2)
         qs.show_question_mark(336)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "30702-03.html"
       when 3
-        qs.memo_state=(2)
+        qs.memo_state = 2
         qs.set_cond(2)
         qs.show_question_mark(336)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -706,14 +707,13 @@ class Quests::Q00336_CoinsOfMagic < Quest
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
     case npc.id
     when HARIT_LIZARDMAN_SHAMAN, HARIT_LIZARDM_MATRIARCH
-      qs = get_random_player_from_party_coin(killer, npc, 2)
-      if qs
+      if qs = get_random_player_from_party_coin(killer, npc, 2)
         if Rnd.rand(1000) < 63
           give_item_randomly(qs.player, npc, Q_KALDIS_GOLD_DRAGON, 1, 0, 1, true)
           qs.set_cond(3)
@@ -724,8 +724,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
       return super
     end
 
-    qs = get_random_player_from_party(killer, npc, 3)
-    if qs
+    if qs = get_random_player_from_party(killer, npc, 3)
       case npc.id
       when SHACKLE, SHACKLE_HOLD
         if Rnd.rand(1000) < 70
@@ -739,7 +738,8 @@ class Quests::Q00336_CoinsOfMagic < Quest
         if Rnd.rand(1000) < 85
           give_item_randomly(qs.player, npc, Q_GOLD_WYVERN, 1, 0, 1, true)
         end
-      when ROYAL_CAVE_SERVANT, MALRUK_SUCCUBUS_TUREN, ROYAL_CAVE_SERVANT_HOLD, KUKABURO_B, ANTELOPE, ANTELOPE_A, ANTELOPE_B, H_MALRUK_SUCCUBUS_TUREN
+      when ROYAL_CAVE_SERVANT, MALRUK_SUCCUBUS_TUREN, ROYAL_CAVE_SERVANT_HOLD,
+           KUKABURO_B, ANTELOPE, ANTELOPE_A, ANTELOPE_B, H_MALRUK_SUCCUBUS_TUREN
         if Rnd.rand(1000) < 100
           give_item_randomly(qs.player, npc, Q_GOLD_WYVERN, 1, 0, 1, true)
         end
@@ -844,7 +844,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
   private def short_first_steps(qs, npc_id, weight_point, base, item_1_1, item_1_2, item_1_mul, item_2, item_3, item_4)
     case qs.get_int(PARAM_2)
     when 42
-      if (qs.get_quest_items_count(item_1_1) >= (base * item_1_mul)) && ((item_1_2 == 0) || (qs.get_quest_items_count(item_1_2) >= base))
+      if qs.get_quest_items_count(item_1_1) >= base * item_1_mul && (item_1_2 == 0 || qs.get_quest_items_count(item_1_2) >= base)
         qs.set(FLAG, 1)
         qs.take_items(item_1_1, base * item_1_mul)
         if item_1_2 > 0
@@ -898,28 +898,28 @@ class Quests::Q00336_CoinsOfMagic < Quest
   private def short_second_step_one_item(qs, npc_id, mul, item_1, item_1_mul, reward_1, item_2, reward_2, item_3, reward_3, item_4, reward_4)
     case qs.get_int(PARAM_2)
     when 42
-      if (qs.get_quest_items_count(item_1) >= (10 * mul * item_1_mul))
+      if qs.get_quest_items_count(item_1) >= 10 * mul * item_1_mul
         qs.take_items(item_1, 10 * mul * item_1_mul)
         qs.give_items(reward_1, 1 * mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 31
-      if qs.get_quest_items_count(item_2) >= (5 * mul)
+      if qs.get_quest_items_count(item_2) >= 5 * mul
         qs.take_items(item_2, 5 * mul)
         qs.give_items(reward_2, 1 * mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 21
-      if qs.get_quest_items_count(item_3) >= (5 * mul)
+      if qs.get_quest_items_count(item_3) >= 5 * mul
         qs.take_items(item_3, 5 * mul)
         qs.give_items(reward_3, 1 * mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 11
-      if qs.get_quest_items_count(item_4) >= (5 * mul)
+      if qs.get_quest_items_count(item_4) >= 5 * mul
         qs.take_items(item_4, 5 * mul)
         qs.give_items(reward_4, 1 * mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -933,7 +933,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
   private def short_second_step_two_items(qs, npc_id, mul, item_1_1, item_1_2, reward_1, item_2_1, item_2_2, reward_2, item_3_1, item_3_2, reward_3, item_4_1, item_4_2, reward_4)
     case qs.get_int(PARAM_2)
     when 42
-      if (qs.get_quest_items_count(item_1_1) >= (10 * mul)) && (qs.get_quest_items_count(item_1_2) >= (10 * mul))
+      if qs.get_quest_items_count(item_1_1) >= 10 * mul && qs.get_quest_items_count(item_1_2) >= 10 * mul
         qs.take_items(item_1_1, 10 * mul)
         qs.take_items(item_1_2, 10 * mul)
         qs.give_items(reward_1, 1 * mul)
@@ -941,7 +941,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
         return "#{npc_id}-07.html"
       end
     when 31
-      if (qs.get_quest_items_count(item_2_1) >= (5 * mul)) && (qs.get_quest_items_count(item_2_2) >= (5 * mul))
+      if qs.get_quest_items_count(item_2_1) >= 5 * mul && qs.get_quest_items_count(item_2_2) >= 5 * mul
         qs.take_items(item_2_1, 5 * mul)
         qs.take_items(item_2_2, 5 * mul)
         qs.give_items(reward_2, 1 * mul)
@@ -949,7 +949,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
         return "#{npc_id}-07.html"
       end
     when 21
-      if (qs.get_quest_items_count(item_3_1) >= (5 * mul)) && (qs.get_quest_items_count(item_3_2) >= (5 * mul))
+      if qs.get_quest_items_count(item_3_1) >= 5 * mul && qs.get_quest_items_count(item_3_2) >= 5 * mul
         qs.take_items(item_3_1, 5 * mul)
         qs.take_items(item_3_2, 5 * mul)
         qs.give_items(reward_3, 1 * mul)
@@ -957,7 +957,7 @@ class Quests::Q00336_CoinsOfMagic < Quest
         return "#{npc_id}-07.html"
       end
     when 11
-      if (qs.get_quest_items_count(item_4_1) >= (5 * mul)) && (qs.get_quest_items_count(item_4_2) >= (5 * mul))
+      if qs.get_quest_items_count(item_4_1) >= 5 * mul && qs.get_quest_items_count(item_4_2) >= 5 * mul
         qs.take_items(item_4_1, 5 * mul)
         qs.take_items(item_4_2, 5 * mul)
         qs.give_items(reward_4, 1 * mul)
@@ -1079,19 +1079,21 @@ class Quests::Q00336_CoinsOfMagic < Quest
     end
   end
 
-  private def get_random_player_from_party(player, npc, memo_state)
-    qs = get_quest_state(player, false)
+  private def get_random_player_from_party(pc, npc, memo_state)
+    qs = get_quest_state(pc, false)
     candidates = [] of QuestState
 
     if qs && qs.started? && qs.memo_state == memo_state
       candidates.push(qs, qs)
     end
 
-    if player.in_party?
-      player.party.members.each do |pm|
+    if pc.in_party?
+      pc.party.members.each do |pm|
         qss = get_quest_state(pm, false)
-        if qss && qss.started? && qss.memo_state == memo_state && Util.in_range?(1500, npc, pm, true)
-          candidates << qss
+        if qss && qss.started? && qss.memo_state == memo_state
+          if Util.in_range?(1500, npc, pm, true)
+            candidates << qss
+          end
         end
       end
     end
@@ -1099,19 +1101,24 @@ class Quests::Q00336_CoinsOfMagic < Quest
     candidates.sample?(random: Rnd)
   end
 
-  private def get_random_player_from_party_coin(player, npc, memo_state)
-    qs = get_quest_state(player, false)
+  private def get_random_player_from_party_coin(pc, npc, memo_state)
+    qs = get_quest_state(pc, false)
     candidates = [] of QuestState
-    if qs && qs.started? && qs.memo_state == memo_state && !qs.has_quest_items?(Q_KALDIS_GOLD_DRAGON)
-      candidates.push(qs, qs)
+    if qs && qs.started? && qs.memo_state == memo_state
+      unless qs.has_quest_items?(Q_KALDIS_GOLD_DRAGON)
+        candidates.push(qs, qs)
+      end
     end
 
-    if player.in_party?
-      player.party.members.each do |pm|
-
+    if pc.in_party?
+      pc.party.members.each do |pm|
         qss = get_quest_state(pm, false)
-        if qss && qss.started? && qss.memo_state == memo_state && !qss.has_quest_items?(Q_KALDIS_GOLD_DRAGON) && Util.in_range?(1500, npc, pm, true)
-          candidates.push(qss)
+        if qss && qss.started? && qss.memo_state == memo_state
+          unless qss.has_quest_items?(Q_KALDIS_GOLD_DRAGON)
+            if Util.in_range?(1500, npc, pm, true)
+              candidates << qss
+            end
+          end
         end
       end
     end

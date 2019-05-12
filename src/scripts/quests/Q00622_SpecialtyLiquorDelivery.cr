@@ -1,4 +1,4 @@
-class Quests::Q00622_SpecialtyLiquorDelivery < Quest
+class Scripts::Q00622_SpecialtyLiquorDelivery < Quest
   # NPCs
   private JEREMY = 31521
   private PULIN = 31543

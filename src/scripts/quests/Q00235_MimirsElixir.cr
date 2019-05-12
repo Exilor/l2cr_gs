@@ -1,4 +1,4 @@
-class Quests::Q00235_MimirsElixir < Quest
+class Scripts::Q00235_MimirsElixir < Quest
   # NPCs
   private JOAN = 30718
   private LADD = 30721
@@ -29,11 +29,13 @@ class Quests::Q00235_MimirsElixir < Quest
     add_start_npc(LADD)
     add_talk_id(LADD, JOAN, ALCHEMISTS_MIXING_URN)
     add_kill_id(MOBS.keys)
-    register_quest_items(MAGISTERS_MIXING_STONE, BLOOD_FIRE, MIMIRS_ELIXIR, TRUE_GOLD, SAGES_STONE)
+    register_quest_items(
+      MAGISTERS_MIXING_STONE, BLOOD_FIRE, MIMIRS_ELIXIR, TRUE_GOLD, SAGES_STONE
+    )
   end
 
-  def check_party_member(member, npc) : Bool
-    return false unless st = get_quest_state(member, false)
+  def check_party_member(pc, npc) : Bool
+    return false unless st = get_quest_state(pc, false)
     return st.memo_state?(3) || st.memo_state?(6)
   end
 
@@ -71,14 +73,16 @@ class Quests::Q00235_MimirsElixir < Quest
         html = event
       end
     when "30721-19.html"
-      if st.memo_state?(8) && has_quest_items?(player, MAGISTERS_MIXING_STONE, MIMIRS_ELIXIR)
-        npc.target = player
-        npc.do_cast(QUEST_MIMIRS_ELIXIR)
-        take_items(player, STAR_OF_DESTINY, -1)
-        reward_items(player, ENCHANT_WEAPON_A, 1)
-        st.exit_quest(false, true)
-        player.send_packet(SocialAction.new(player.l2id, 3))
-        html = event
+      if st.memo_state?(8)
+        if has_quest_items?(player, MAGISTERS_MIXING_STONE, MIMIRS_ELIXIR)
+          npc.target = player
+          npc.do_cast(QUEST_MIMIRS_ELIXIR)
+          take_items(player, STAR_OF_DESTINY, -1)
+          reward_items(player, ENCHANT_WEAPON_A, 1)
+          st.exit_quest(false, true)
+          player.send_packet(SocialAction.new(player.l2id, 3))
+          html = event
+        end
       end
     when "30718-02.html"
       if st.memo_state?(2)
@@ -105,23 +109,37 @@ class Quests::Q00235_MimirsElixir < Quest
       end
     when "PURE_SILVER"
       if st.memo_state?(7)
-        html = has_quest_items?(player, PURE_SILVER) ? "31149-04.html" : "31149-03.html"
+        if has_quest_items?(player, PURE_SILVER)
+          html = "31149-04.html"
+        else
+          html = "31149-03.html"
+        end
       end
     when "TRUE_GOLD"
       if st.memo_state?(7)
-        html = has_quest_items?(player, TRUE_GOLD) ? "31149-06.html" : "31149-03.html"
+        if has_quest_items?(player, TRUE_GOLD)
+          html = "31149-06.html"
+        else
+          html = "31149-03.html"
+        end
       end
     when "BLOOD_FIRE"
       if st.memo_state?(7)
-        html = has_quest_items?(player, BLOOD_FIRE) ? "31149-08.html" : "31149-03.html"
+        if has_quest_items?(player, BLOOD_FIRE)
+          html = "31149-08.html"
+        else
+          html = "31149-03.html"
+        end
       end
     when "31149-11.html"
-      if st.memo_state?(7) && has_quest_items?(player, BLOOD_FIRE, PURE_SILVER, TRUE_GOLD)
-        give_items(player, MIMIRS_ELIXIR, 1)
-        take_items(player, -1, {BLOOD_FIRE, PURE_SILVER, TRUE_GOLD})
-        st.memo_state = 8
-        st.set_cond(8, true)
-        html = event
+      if st.memo_state?(7)
+        if has_quest_items?(player, BLOOD_FIRE, PURE_SILVER, TRUE_GOLD)
+          give_items(player, MIMIRS_ELIXIR, 1)
+          take_items(player, -1, {BLOOD_FIRE, PURE_SILVER, TRUE_GOLD})
+          st.memo_state = 8
+          st.set_cond(8, true)
+          html = event
+        end
       end
     end
 
@@ -153,7 +171,11 @@ class Quests::Q00235_MimirsElixir < Quest
         elsif player.level < MIN_LEVEL
           html = "30721-08.html"
         else
-          html = has_quest_items?(player, STAR_OF_DESTINY) ? "30721-01.htm" : "30721-07.html"
+          if has_quest_items?(player, STAR_OF_DESTINY)
+            html = "30721-01.htm"
+          else
+            html = "30721-07.html"
+          end
         end
       end
     elsif st.started?
@@ -161,7 +183,11 @@ class Quests::Q00235_MimirsElixir < Quest
       when LADD
         case st.memo_state
         when 1
-          html = has_quest_items?(player, PURE_SILVER) ? "30721-11.html" : "30721-10.html"
+          if has_quest_items?(player, PURE_SILVER)
+            html = "30721-11.html"
+          else
+            html = "30721-10.html"
+          end
         when 2..4
           html = "30721-13.html"
         when 5

@@ -13,7 +13,7 @@ class SeedProduction
     @amount.set(amount)
   end
 
-  def decrease_amount(val : Int64)
+  def decrease_amount(val : Int64) : Bool
     loop do
       current = @amount.get
       _next = current - val

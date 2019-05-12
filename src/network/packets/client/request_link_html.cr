@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestLinkHtml < GameClientPacket
   @link = ""
 
-  def read_impl
+  private def read_impl
     @link = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     debug @link

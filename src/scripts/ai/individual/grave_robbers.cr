@@ -1,4 +1,4 @@
-class NpcAI::GraveRobbers < AbstractNpcAI
+class Scripts::GraveRobbers < AbstractNpcAI
   private GRAVE_ROBBER_SUMMONER = 22678
   private GRAVE_ROBBER_MEGICIAN = 22679
 

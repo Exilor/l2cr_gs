@@ -1,4 +1,4 @@
-class Quests::Q00250_WatchWhatYouEat < Quest
+class Scripts::Q00250_WatchWhatYouEat < Quest
   # NPCs
   private SALLY = 32743
   # Mobs -> Items
@@ -20,10 +20,10 @@ class Quests::Q00250_WatchWhatYouEat < Quest
     register_quest_items(15493, 15494, 15495)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
     html = event
-    unless st = get_quest_state(player, false)
+    unless st = get_quest_state(pc, false)
       return html
     end
 
@@ -44,7 +44,7 @@ class Quests::Q00250_WatchWhatYouEat < Quest
     html
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     if npc.id == SALLY
       return "32743-20.html"
     end
@@ -52,8 +52,8 @@ class Quests::Q00250_WatchWhatYouEat < Quest
     nil
   end
 
-  def on_kill(npc, player, is_summon)
-    unless st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    unless st = get_quest_state(pc, false)
       return
     end
     if st.started? && st.cond?(1)
@@ -75,21 +75,19 @@ class Quests::Q00250_WatchWhatYouEat < Quest
     nil
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     if npc.id == SALLY
       case st.state
       when State::CREATED
-        html = player.level >= 82 ? "32743-01.htm" : "32743-00.htm"
+        html = pc.level >= 82 ? "32743-01.htm" : "32743-00.htm"
       when State::STARTED
         if st.cond?(1)
           html = "32743-04.htm"
         elsif st.cond?(2)
           if st.has_quest_items?(MOBS[0][1]) && st.has_quest_items?(MOBS[1][1]) && st.has_quest_items?(MOBS[2][1])
             html = "32743-05.htm"
-            MOBS.each do |items|
-              st.take_items(items[1], -1)
-            end
+            MOBS.each { |items| st.take_items(items[1], -1) }
           else
             html = "32743-06.htm"
           end
@@ -99,6 +97,6 @@ class Quests::Q00250_WatchWhatYouEat < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

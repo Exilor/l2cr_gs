@@ -1,4 +1,4 @@
-class NpcAI::RangeGuard < AbstractNpcAI
+class Scripts::RangeGuard < AbstractNpcAI
   private ULTIMATE_DEFENSE = SkillHolder.new(5044, 3) # NPC Ultimate Defense
 
   private NOT_ALLOWED_SKILLS = {

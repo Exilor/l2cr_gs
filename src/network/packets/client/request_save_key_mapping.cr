@@ -2,7 +2,7 @@ class Packets::Incoming::RequestSaveKeyMapping < GameClientPacket
   @key_map = {} of Int32 => Array(ActionKey)
   @cat_map = {} of Int32 => Array(Int32)
 
-  def read_impl
+  private def read_impl
     category = 0
 
     q # unknown
@@ -38,7 +38,7 @@ class Packets::Incoming::RequestSaveKeyMapping < GameClientPacket
     q # unknown
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if !Config.store_ui_settings || !client.state.in_game?

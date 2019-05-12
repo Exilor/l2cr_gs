@@ -1,6 +1,6 @@
 require "./abstract_saga_quest"
 
-class Quests::Q00087_SagaOfEvasSaint < Quests::AbstractSagaQuest
+class Scripts::Q00087_SagaOfEvasSaint < AbstractSagaQuest
   def initialize
     super(87, self.class.simple_name, "Saga of Eva's Saint")
 

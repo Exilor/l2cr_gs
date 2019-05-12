@@ -1,4 +1,4 @@
-class Quests::Q00328_SenseForBusiness < Quest
+class Scripts::Q00328_SenseForBusiness < Quest
   # NPCs
   private SARIEN = 30436
   private MONSTER_EYES = {
@@ -30,12 +30,14 @@ class Quests::Q00328_SenseForBusiness < Quest
     add_talk_id(SARIEN)
     add_kill_id(MONSTER_EYES.keys)
     add_kill_id(MONSTER_BASILISKS.keys)
-    register_quest_items(MONSTER_EYE_CARCASS, MONSTER_EYE_LENS, BASILISK_GIZZARD)
+    register_quest_items(
+      MONSTER_EYE_CARCASS, MONSTER_EYE_LENS, BASILISK_GIZZARD
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    if st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    if st = get_quest_state(pc, false)
       case event
       when "30436-03.htm"
         st.start_quest
@@ -49,31 +51,36 @@ class Quests::Q00328_SenseForBusiness < Quest
     html
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      html = player.level < MIN_LVL ? "30436-01.htm" : "30436-02.htm"
+      html = pc.level < MIN_LVL ? "30436-01.htm" : "30436-02.htm"
     when State::STARTED
       carcass = st.get_quest_items_count(MONSTER_EYE_CARCASS)
       lens = st.get_quest_items_count(MONSTER_EYE_LENS)
       gizzards = st.get_quest_items_count(BASILISK_GIZZARD)
       if carcass + lens + gizzards > 0
-        adena = (carcass * MONSTER_EYE_CARCASS_ADENA) + (lens * MONSTER_EYE_LENS_ADENA) + (gizzards * BASILISK_GIZZARD_ADENA) + ((carcass + lens + gizzards) >= BONUS_COUNT ? BONUS : 0)
+        adena = carcass * MONSTER_EYE_CARCASS_ADENA
+        adena += lens * MONSTER_EYE_LENS_ADENA
+        adena += gizzards * BASILISK_GIZZARD_ADENA
+        if carcass + lens + gizzards >= BONUS_COUNT
+          adena += BONUS
+        end
         st.give_adena(adena, true)
-        take_items(player, -1, {MONSTER_EYE_CARCASS, MONSTER_EYE_LENS, BASILISK_GIZZARD})
+        take_items(pc, -1, {MONSTER_EYE_CARCASS, MONSTER_EYE_LENS, BASILISK_GIZZARD})
         html = "30436-05.html"
       else
         html = "30436-04.html"
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
-  def on_kill(npc, player, is_pet)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
     if st && st.started?
       chance = rand(100)
       if tmp = MONSTER_EYES[npc.id]?

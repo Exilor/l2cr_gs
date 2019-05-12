@@ -1,4 +1,4 @@
-class Quests::Q00060_GoodWorksReward < Quest
+class Scripts::Q00060_GoodWorksReward < Quest
   # NPCs
   private GROCER_HELVETIA = 30081
   private BLACK_MARKETEER_OF_MAMMON = 31092
@@ -43,13 +43,15 @@ class Quests::Q00060_GoodWorksReward < Quest
     super(60, self.class.simple_name, "Good Work's Reward")
 
     add_start_npc(BLUEPRINT_SELLER_DAEGER)
-    add_talk_id(BLUEPRINT_SELLER_DAEGER, GROCER_HELVETIA, BLACK_MARKETEER_OF_MAMMON, MARK)
+    add_talk_id(
+      BLUEPRINT_SELLER_DAEGER, GROCER_HELVETIA, BLACK_MARKETEER_OF_MAMMON, MARK
+    )
     add_kill_id(PURSUER)
     add_spawn_id(PURSUER)
     register_quest_items(BLOODY_CLOTH_FRAGMENT, HELVETIAS_ANTIDOTE)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     if event == "DESPAWN"
       npc = npc.not_nil!
       npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::YOU_HAVE_GOOD_LUCK_I_SHALL_RETURN))
@@ -60,8 +62,8 @@ class Quests::Q00060_GoodWorksReward < Quest
       return super
     end
 
-    return unless player
-    unless qs = get_quest_state(player, false)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -70,107 +72,107 @@ class Quests::Q00060_GoodWorksReward < Quest
       if qs.created?
         qs.start_quest
         qs.memo_state = 1
-        htmltext = event
+        html = event
       end
     when "31435-02.htm"
-      htmltext = event
+      html = event
     when "31435-10.html"
       if qs.memo_state?(3)
         qs.memo_state = 4
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "31435-14.html"
       if qs.memo_state?(8)
         qs.memo_state = 9
         qs.set_cond(9, true)
-        htmltext = event
+        html = event
       end
     when "30081-02.html"
       if qs.memo_state?(4)
-        htmltext = event
+        html = event
       end
     when "30081-03.html"
       if qs.memo_state?(4)
-        take_items(player, BLOODY_CLOTH_FRAGMENT, -1)
+        take_items(pc, BLOODY_CLOTH_FRAGMENT, -1)
         qs.memo_state = 5
         qs.set_cond(5, true)
-        htmltext = event
+        html = event
       end
     when "30081-05.html"
       memo_state = qs.memo_state
       if memo_state >= 5 && memo_state <= 6
-        if get_quest_items_count(player, Inventory::ADENA_ID) >= THREE_MILLION
-          give_items(player, HELVETIAS_ANTIDOTE, 1)
-          take_items(player, Inventory::ADENA_ID, THREE_MILLION)
+        if get_quest_items_count(pc, Inventory::ADENA_ID) >= THREE_MILLION
+          give_items(pc, HELVETIAS_ANTIDOTE, 1)
+          take_items(pc, Inventory::ADENA_ID, THREE_MILLION)
           qs.memo_state = 7
           qs.set_cond(7, true)
-          htmltext = event
+          html = event
         else
           qs.memo_state = 6
           qs.set_cond(6, true)
-          htmltext = "30081-06.html"
+          html = "30081-06.html"
         end
       end
     when "30081-07.html"
       if qs.memo_state?(5)
         qs.memo_state = 6
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "REPLY_1"
       if qs.memo_state?(10)
-        if player.quest_completed?(Q00211_TrialOfTheChallenger.simple_name) || player.quest_completed?(Q00212_TrialOfDuty.simple_name) || player.quest_completed?(Q00213_TrialOfTheSeeker.simple_name) || player.quest_completed?(Q00214_TrialOfTheScholar.simple_name) || player.quest_completed?(Q00215_TrialOfThePilgrim.simple_name) || player.quest_completed?(Q00216_TrialOfTheGuildsman.simple_name)
-          if player.quest_completed?(Q00217_TestimonyOfTrust.simple_name) || player.quest_completed?(Q00218_TestimonyOfLife.simple_name) || player.quest_completed?(Q00219_TestimonyOfFate.simple_name) || player.quest_completed?(Q00220_TestimonyOfGlory.simple_name) || player.quest_completed?(Q00221_TestimonyOfProsperity.simple_name)
+        if pc.quest_completed?(Q00211_TrialOfTheChallenger.simple_name) || pc.quest_completed?(Q00212_TrialOfDuty.simple_name) || pc.quest_completed?(Q00213_TrialOfTheSeeker.simple_name) || pc.quest_completed?(Q00214_TrialOfTheScholar.simple_name) || pc.quest_completed?(Q00215_TrialOfThePilgrim.simple_name) || pc.quest_completed?(Q00216_TrialOfTheGuildsman.simple_name)
+          if pc.quest_completed?(Q00217_TestimonyOfTrust.simple_name) || pc.quest_completed?(Q00218_TestimonyOfLife.simple_name) || pc.quest_completed?(Q00219_TestimonyOfFate.simple_name) || pc.quest_completed?(Q00220_TestimonyOfGlory.simple_name) || pc.quest_completed?(Q00221_TestimonyOfProsperity.simple_name)
 
-            if player.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || player.quest_completed?(Q00223_TestOfTheChampion.simple_name) || player.quest_completed?(Q00224_TestOfSagittarius.simple_name) || player.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || player.quest_completed?(Q00226_TestOfTheHealer.simple_name) || player.quest_completed?(Q00227_TestOfTheReformer.simple_name) || player.quest_completed?(Q00228_TestOfMagus.simple_name) || player.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || player.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || player.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || player.quest_completed?(Q00232_TestOfTheLord.simple_name) || player.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
+            if pc.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || pc.quest_completed?(Q00223_TestOfTheChampion.simple_name) || pc.quest_completed?(Q00224_TestOfSagittarius.simple_name) || pc.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || pc.quest_completed?(Q00226_TestOfTheHealer.simple_name) || pc.quest_completed?(Q00227_TestOfTheReformer.simple_name) || pc.quest_completed?(Q00228_TestOfMagus.simple_name) || pc.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || pc.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || pc.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || pc.quest_completed?(Q00232_TestOfTheLord.simple_name) || pc.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
               qs.set_memo_state_ex(1, 3)
             else
               qs.set_memo_state_ex(1, 2)
             end
-          elsif player.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || player.quest_completed?(Q00223_TestOfTheChampion.simple_name) || player.quest_completed?(Q00224_TestOfSagittarius.simple_name) || player.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || player.quest_completed?(Q00226_TestOfTheHealer.simple_name) || player.quest_completed?(Q00227_TestOfTheReformer.simple_name) || player.quest_completed?(Q00228_TestOfMagus.simple_name) || player.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || player.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || player.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || player.quest_completed?(Q00232_TestOfTheLord.simple_name) || player.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
+          elsif pc.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || pc.quest_completed?(Q00223_TestOfTheChampion.simple_name) || pc.quest_completed?(Q00224_TestOfSagittarius.simple_name) || pc.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || pc.quest_completed?(Q00226_TestOfTheHealer.simple_name) || pc.quest_completed?(Q00227_TestOfTheReformer.simple_name) || pc.quest_completed?(Q00228_TestOfMagus.simple_name) || pc.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || pc.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || pc.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || pc.quest_completed?(Q00232_TestOfTheLord.simple_name) || pc.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
             qs.set_memo_state_ex(1, 2)
           else
             qs.set_memo_state_ex(1, 1)
           end
-        elsif player.quest_completed?(Q00217_TestimonyOfTrust.simple_name) || player.quest_completed?(Q00218_TestimonyOfLife.simple_name) || player.quest_completed?(Q00219_TestimonyOfFate.simple_name) || player.quest_completed?(Q00220_TestimonyOfGlory.simple_name) || player.quest_completed?(Q00221_TestimonyOfProsperity.simple_name)
-          if player.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || player.quest_completed?(Q00223_TestOfTheChampion.simple_name) || player.quest_completed?(Q00224_TestOfSagittarius.simple_name) || player.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || player.quest_completed?(Q00226_TestOfTheHealer.simple_name) || player.quest_completed?(Q00227_TestOfTheReformer.simple_name) || player.quest_completed?(Q00228_TestOfMagus.simple_name) || player.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || player.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || player.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || player.quest_completed?(Q00232_TestOfTheLord.simple_name) || player.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
+        elsif pc.quest_completed?(Q00217_TestimonyOfTrust.simple_name) || pc.quest_completed?(Q00218_TestimonyOfLife.simple_name) || pc.quest_completed?(Q00219_TestimonyOfFate.simple_name) || pc.quest_completed?(Q00220_TestimonyOfGlory.simple_name) || pc.quest_completed?(Q00221_TestimonyOfProsperity.simple_name)
+          if pc.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || pc.quest_completed?(Q00223_TestOfTheChampion.simple_name) || pc.quest_completed?(Q00224_TestOfSagittarius.simple_name) || pc.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || pc.quest_completed?(Q00226_TestOfTheHealer.simple_name) || pc.quest_completed?(Q00227_TestOfTheReformer.simple_name) || pc.quest_completed?(Q00228_TestOfMagus.simple_name) || pc.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || pc.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || pc.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || pc.quest_completed?(Q00232_TestOfTheLord.simple_name) || pc.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
             qs.set_memo_state_ex(1, 2)
           else
             qs.set_memo_state_ex(1, 1)
           end
-        elsif player.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || player.quest_completed?(Q00223_TestOfTheChampion.simple_name) || player.quest_completed?(Q00224_TestOfSagittarius.simple_name) || player.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || player.quest_completed?(Q00226_TestOfTheHealer.simple_name) || player.quest_completed?(Q00227_TestOfTheReformer.simple_name) || player.quest_completed?(Q00228_TestOfMagus.simple_name) || player.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || player.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || player.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || player.quest_completed?(Q00232_TestOfTheLord.simple_name) || player.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
+        elsif pc.quest_completed?(Q00222_TestOfTheDuelist.simple_name) || pc.quest_completed?(Q00223_TestOfTheChampion.simple_name) || pc.quest_completed?(Q00224_TestOfSagittarius.simple_name) || pc.quest_completed?(Q00225_TestOfTheSearcher.simple_name) || pc.quest_completed?(Q00226_TestOfTheHealer.simple_name) || pc.quest_completed?(Q00227_TestOfTheReformer.simple_name) || pc.quest_completed?(Q00228_TestOfMagus.simple_name) || pc.quest_completed?(Q00229_TestOfWitchcraft.simple_name) || pc.quest_completed?(Q00230_TestOfTheSummoner.simple_name) || pc.quest_completed?(Q00231_TestOfTheMaestro.simple_name) || pc.quest_completed?(Q00232_TestOfTheLord.simple_name) || pc.quest_completed?(Q00233_TestOfTheWarSpirit.simple_name)
           qs.set_memo_state_ex(1, 1)
         end
-        htmltext = "31092-02.html"
+        html = "31092-02.html"
       end
     when "REPLY_2"
       if qs.memo_state?(10)
         if qs.get_memo_state_ex(1) >= 3
-          htmltext = "31092-03b.html"
+          html = "31092-03b.html"
         elsif qs.get_memo_state_ex(1) >= 1
-          htmltext = "31092-03.html"
+          html = "31092-03.html"
         else
-          htmltext = "31092-03a.html"
+          html = "31092-03a.html"
         end
       end
     when "REPLY_3"
       if qs.memo_state?(10)
         if qs.get_memo_state_ex(1) >= 3
-          give_items(player, Inventory::ADENA_ID, THREE_MILLION)
-          htmltext = "31092-04a.html"
+          give_items(pc, Inventory::ADENA_ID, THREE_MILLION)
+          html = "31092-04a.html"
         elsif qs.get_memo_state_ex(1) == 2
-          give_items(player, Inventory::ADENA_ID, TWO_MILLION)
-          htmltext = "31092-04b.html"
+          give_items(pc, Inventory::ADENA_ID, TWO_MILLION)
+          html = "31092-04b.html"
         elsif qs.get_memo_state_ex(1) == 1
-          give_items(player, Inventory::ADENA_ID, ONE_MILLION)
-          htmltext = "31092-04b.html"
+          give_items(pc, Inventory::ADENA_ID, ONE_MILLION)
+          html = "31092-04b.html"
         end
         qs.exit_quest(false, true)
       end
     when "REPLY_4"
       if qs.memo_state?(10)
-        case player.class_id
+        case pc.class_id
         when ClassId::WARRIOR
           return "31092-05.html"
         when ClassId::KNIGHT
@@ -211,8 +213,8 @@ class Quests::Q00060_GoodWorksReward < Quest
         qs.exit_quest(false, true)
       end
     when "REPLY_5"
-      if player.in_category?(CategoryType::SECOND_CLASS_GROUP)
-        case player.class_id
+      if pc.in_category?(CategoryType::SECOND_CLASS_GROUP)
+        case pc.class_id
         when ClassId::WARRIOR
           return "31092-05a.html"
         when ClassId::KNIGHT
@@ -252,438 +254,438 @@ class Quests::Q00060_GoodWorksReward < Quest
         end
       end
     when "REPLY_6"
-      if player.class_id.warrior?
-        unless has_quest_items?(player, MARK_OF_CHALLENGER)
-          give_items(player, MARK_OF_CHALLENGER, 1)
+      if pc.class_id.warrior?
+        unless has_quest_items?(pc, MARK_OF_CHALLENGER)
+          give_items(pc, MARK_OF_CHALLENGER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_DUELIST)
-          give_items(player, MARK_OF_DUELIST, 1)
+        unless has_quest_items?(pc, MARK_OF_DUELIST)
+          give_items(pc, MARK_OF_DUELIST, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_7"
-      if player.class_id.warrior?
-        unless has_quest_items?(player, MARK_OF_CHALLENGER)
-          give_items(player, MARK_OF_CHALLENGER, 1)
+      if pc.class_id.warrior?
+        unless has_quest_items?(pc, MARK_OF_CHALLENGER)
+          give_items(pc, MARK_OF_CHALLENGER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_CHAMPION)
-          give_items(player, MARK_OF_CHAMPION, 1)
+        unless has_quest_items?(pc, MARK_OF_CHAMPION)
+          give_items(pc, MARK_OF_CHAMPION, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_8"
-      if player.class_id.knight?
-        unless has_quest_items?(player, MARK_OF_DUTY)
-          give_items(player, MARK_OF_DUTY, 1)
+      if pc.class_id.knight?
+        unless has_quest_items?(pc, MARK_OF_DUTY)
+          give_items(pc, MARK_OF_DUTY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_HEALER)
-          give_items(player, MARK_OF_HEALER, 1)
+        unless has_quest_items?(pc, MARK_OF_HEALER)
+          give_items(pc, MARK_OF_HEALER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_9"
-      if player.class_id.knight?
-        unless has_quest_items?(player, MARK_OF_DUTY)
-          give_items(player, MARK_OF_DUTY, 1)
+      if pc.class_id.knight?
+        unless has_quest_items?(pc, MARK_OF_DUTY)
+          give_items(pc, MARK_OF_DUTY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_WITCHCRAFT)
-          give_items(player, MARK_OF_WITCHCRAFT, 1)
+        unless has_quest_items?(pc, MARK_OF_WITCHCRAFT)
+          give_items(pc, MARK_OF_WITCHCRAFT, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_10"
-      if player.class_id.rogue?
-        unless has_quest_items?(player, MARK_OF_SEEKER)
-          give_items(player, MARK_OF_SEEKER, 1)
+      if pc.class_id.rogue?
+        unless has_quest_items?(pc, MARK_OF_SEEKER)
+          give_items(pc, MARK_OF_SEEKER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SEARCHER)
-          give_items(player, MARK_OF_SEARCHER, 1)
+        unless has_quest_items?(pc, MARK_OF_SEARCHER)
+          give_items(pc, MARK_OF_SEARCHER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_11"
-      if player.class_id.rogue?
-        unless has_quest_items?(player, MARK_OF_SEEKER)
-          give_items(player, MARK_OF_SEEKER, 1)
+      if pc.class_id.rogue?
+        unless has_quest_items?(pc, MARK_OF_SEEKER)
+          give_items(pc, MARK_OF_SEEKER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SAGITTARIUS)
-          give_items(player, MARK_OF_SAGITTARIUS, 1)
+        unless has_quest_items?(pc, MARK_OF_SAGITTARIUS)
+          give_items(pc, MARK_OF_SAGITTARIUS, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_12"
-      if player.class_id.wizard?
-        unless has_quest_items?(player, MARK_OF_SCHOLAR)
-          give_items(player, MARK_OF_SCHOLAR, 1)
+      if pc.class_id.wizard?
+        unless has_quest_items?(pc, MARK_OF_SCHOLAR)
+          give_items(pc, MARK_OF_SCHOLAR, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_MAGUS)
-          give_items(player, MARK_OF_MAGUS, 1)
+        unless has_quest_items?(pc, MARK_OF_MAGUS)
+          give_items(pc, MARK_OF_MAGUS, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_13"
-      if player.class_id.wizard?
-        unless has_quest_items?(player, MARK_OF_SCHOLAR)
-          give_items(player, MARK_OF_SCHOLAR, 1)
+      if pc.class_id.wizard?
+        unless has_quest_items?(pc, MARK_OF_SCHOLAR)
+          give_items(pc, MARK_OF_SCHOLAR, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_WITCHCRAFT)
-          give_items(player, MARK_OF_WITCHCRAFT, 1)
+        unless has_quest_items?(pc, MARK_OF_WITCHCRAFT)
+          give_items(pc, MARK_OF_WITCHCRAFT, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_14"
-      if player.class_id.wizard?
-        unless has_quest_items?(player, MARK_OF_SCHOLAR)
-          give_items(player, MARK_OF_SCHOLAR, 1)
+      if pc.class_id.wizard?
+        unless has_quest_items?(pc, MARK_OF_SCHOLAR)
+          give_items(pc, MARK_OF_SCHOLAR, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SUMMONER)
-          give_items(player, MARK_OF_SUMMONER, 1)
+        unless has_quest_items?(pc, MARK_OF_SUMMONER)
+          give_items(pc, MARK_OF_SUMMONER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_15"
-      if player.class_id.cleric?
-        unless has_quest_items?(player, MARK_OF_PILGRIM)
-          give_items(player, MARK_OF_PILGRIM, 1)
+      if pc.class_id.cleric?
+        unless has_quest_items?(pc, MARK_OF_PILGRIM)
+          give_items(pc, MARK_OF_PILGRIM, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_HEALER)
-          give_items(player, MARK_OF_HEALER, 1)
+        unless has_quest_items?(pc, MARK_OF_HEALER)
+          give_items(pc, MARK_OF_HEALER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_16"
-      if player.class_id.cleric?
-        unless has_quest_items?(player, MARK_OF_PILGRIM)
-          give_items(player, MARK_OF_PILGRIM, 1)
+      if pc.class_id.cleric?
+        unless has_quest_items?(pc, MARK_OF_PILGRIM)
+          give_items(pc, MARK_OF_PILGRIM, 1)
         end
-        unless has_quest_items?(player, MARK_OF_TRUST)
-          give_items(player, MARK_OF_TRUST, 1)
+        unless has_quest_items?(pc, MARK_OF_TRUST)
+          give_items(pc, MARK_OF_TRUST, 1)
         end
-        unless has_quest_items?(player, MARK_OF_REFORMER)
-          give_items(player, MARK_OF_REFORMER, 1)
+        unless has_quest_items?(pc, MARK_OF_REFORMER)
+          give_items(pc, MARK_OF_REFORMER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_17"
-      if player.class_id.elven_knight?
-        unless has_quest_items?(player, MARK_OF_DUTY)
-          give_items(player, MARK_OF_DUTY, 1)
+      if pc.class_id.elven_knight?
+        unless has_quest_items?(pc, MARK_OF_DUTY)
+          give_items(pc, MARK_OF_DUTY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LIFE)
-          give_items(player, MARK_OF_LIFE, 1)
+        unless has_quest_items?(pc, MARK_OF_LIFE)
+          give_items(pc, MARK_OF_LIFE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_HEALER)
-          give_items(player, MARK_OF_HEALER, 1)
+        unless has_quest_items?(pc, MARK_OF_HEALER)
+          give_items(pc, MARK_OF_HEALER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_18"
-      if player.class_id.elven_knight?
-        unless has_quest_items?(player, MARK_OF_CHALLENGER)
-          give_items(player, MARK_OF_CHALLENGER, 1)
+      if pc.class_id.elven_knight?
+        unless has_quest_items?(pc, MARK_OF_CHALLENGER)
+          give_items(pc, MARK_OF_CHALLENGER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LIFE)
-          give_items(player, MARK_OF_LIFE, 1)
+        unless has_quest_items?(pc, MARK_OF_LIFE)
+          give_items(pc, MARK_OF_LIFE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_DUELIST)
-          give_items(player, MARK_OF_DUELIST, 1)
+        unless has_quest_items?(pc, MARK_OF_DUELIST)
+          give_items(pc, MARK_OF_DUELIST, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_19"
-      if player.class_id.elven_scout?
-        unless has_quest_items?(player, MARK_OF_SEEKER)
-          give_items(player, MARK_OF_SEEKER, 1)
+      if pc.class_id.elven_scout?
+        unless has_quest_items?(pc, MARK_OF_SEEKER)
+          give_items(pc, MARK_OF_SEEKER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LIFE)
-          give_items(player, MARK_OF_LIFE, 1)
+        unless has_quest_items?(pc, MARK_OF_LIFE)
+          give_items(pc, MARK_OF_LIFE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SEARCHER)
-          give_items(player, MARK_OF_SEARCHER, 1)
+        unless has_quest_items?(pc, MARK_OF_SEARCHER)
+          give_items(pc, MARK_OF_SEARCHER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_20"
-      if player.class_id.elven_scout?
-        unless has_quest_items?(player, MARK_OF_SEEKER)
-          give_items(player, MARK_OF_SEEKER, 1)
+      if pc.class_id.elven_scout?
+        unless has_quest_items?(pc, MARK_OF_SEEKER)
+          give_items(pc, MARK_OF_SEEKER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LIFE)
-          give_items(player, MARK_OF_LIFE, 1)
+        unless has_quest_items?(pc, MARK_OF_LIFE)
+          give_items(pc, MARK_OF_LIFE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SAGITTARIUS)
-          give_items(player, MARK_OF_SAGITTARIUS, 1)
+        unless has_quest_items?(pc, MARK_OF_SAGITTARIUS)
+          give_items(pc, MARK_OF_SAGITTARIUS, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_21"
-      if player.class_id.elven_wizard?
-        unless has_quest_items?(player, MARK_OF_SCHOLAR)
-          give_items(player, MARK_OF_SCHOLAR, 1)
+      if pc.class_id.elven_wizard?
+        unless has_quest_items?(pc, MARK_OF_SCHOLAR)
+          give_items(pc, MARK_OF_SCHOLAR, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LIFE)
-          give_items(player, MARK_OF_LIFE, 1)
+        unless has_quest_items?(pc, MARK_OF_LIFE)
+          give_items(pc, MARK_OF_LIFE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_MAGUS)
-          give_items(player, MARK_OF_MAGUS, 1)
+        unless has_quest_items?(pc, MARK_OF_MAGUS)
+          give_items(pc, MARK_OF_MAGUS, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_22"
-      if player.class_id.elven_wizard?
-        unless has_quest_items?(player, MARK_OF_SCHOLAR)
-          give_items(player, MARK_OF_SCHOLAR, 1)
+      if pc.class_id.elven_wizard?
+        unless has_quest_items?(pc, MARK_OF_SCHOLAR)
+          give_items(pc, MARK_OF_SCHOLAR, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LIFE)
-          give_items(player, MARK_OF_LIFE, 1)
+        unless has_quest_items?(pc, MARK_OF_LIFE)
+          give_items(pc, MARK_OF_LIFE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SUMMONER)
-          give_items(player, MARK_OF_SUMMONER, 1)
+        unless has_quest_items?(pc, MARK_OF_SUMMONER)
+          give_items(pc, MARK_OF_SUMMONER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_23"
-      if player.class_id.oracle?
-        unless has_quest_items?(player, MARK_OF_PILGRIM)
-          give_items(player, MARK_OF_PILGRIM, 1)
+      if pc.class_id.oracle?
+        unless has_quest_items?(pc, MARK_OF_PILGRIM)
+          give_items(pc, MARK_OF_PILGRIM, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LIFE)
-          give_items(player, MARK_OF_LIFE, 1)
+        unless has_quest_items?(pc, MARK_OF_LIFE)
+          give_items(pc, MARK_OF_LIFE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_HEALER)
-          give_items(player, MARK_OF_HEALER, 1)
+        unless has_quest_items?(pc, MARK_OF_HEALER)
+          give_items(pc, MARK_OF_HEALER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_24"
-      if player.class_id.palus_knight?
-        unless has_quest_items?(player, MARK_OF_DUTY)
-          give_items(player, MARK_OF_DUTY, 1)
+      if pc.class_id.palus_knight?
+        unless has_quest_items?(pc, MARK_OF_DUTY)
+          give_items(pc, MARK_OF_DUTY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_FATE)
-          give_items(player, MARK_OF_FATE, 1)
+        unless has_quest_items?(pc, MARK_OF_FATE)
+          give_items(pc, MARK_OF_FATE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_WITCHCRAFT)
-          give_items(player, MARK_OF_WITCHCRAFT, 1)
+        unless has_quest_items?(pc, MARK_OF_WITCHCRAFT)
+          give_items(pc, MARK_OF_WITCHCRAFT, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_25"
-      if player.class_id.palus_knight?
-        unless has_quest_items?(player, MARK_OF_CHALLENGER)
-          give_items(player, MARK_OF_CHALLENGER, 1)
+      if pc.class_id.palus_knight?
+        unless has_quest_items?(pc, MARK_OF_CHALLENGER)
+          give_items(pc, MARK_OF_CHALLENGER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_FATE)
-          give_items(player, MARK_OF_FATE, 1)
+        unless has_quest_items?(pc, MARK_OF_FATE)
+          give_items(pc, MARK_OF_FATE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_DUELIST)
-          give_items(player, MARK_OF_DUELIST, 1)
+        unless has_quest_items?(pc, MARK_OF_DUELIST)
+          give_items(pc, MARK_OF_DUELIST, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_26"
-      if player.class_id.assassin?
-        unless has_quest_items?(player, MARK_OF_SEEKER)
-          give_items(player, MARK_OF_SEEKER, 1)
+      if pc.class_id.assassin?
+        unless has_quest_items?(pc, MARK_OF_SEEKER)
+          give_items(pc, MARK_OF_SEEKER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_FATE)
-          give_items(player, MARK_OF_FATE, 1)
+        unless has_quest_items?(pc, MARK_OF_FATE)
+          give_items(pc, MARK_OF_FATE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SEARCHER)
-          give_items(player, MARK_OF_SEARCHER, 1)
+        unless has_quest_items?(pc, MARK_OF_SEARCHER)
+          give_items(pc, MARK_OF_SEARCHER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_27"
-      if player.class_id.assassin?
-        unless has_quest_items?(player, MARK_OF_SEEKER)
-          give_items(player, MARK_OF_SEEKER, 1)
+      if pc.class_id.assassin?
+        unless has_quest_items?(pc, MARK_OF_SEEKER)
+          give_items(pc, MARK_OF_SEEKER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_FATE)
-          give_items(player, MARK_OF_FATE, 1)
+        unless has_quest_items?(pc, MARK_OF_FATE)
+          give_items(pc, MARK_OF_FATE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SAGITTARIUS)
-          give_items(player, MARK_OF_SAGITTARIUS, 1)
+        unless has_quest_items?(pc, MARK_OF_SAGITTARIUS)
+          give_items(pc, MARK_OF_SAGITTARIUS, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_28"
-      if player.class_id.dark_wizard?
-        unless has_quest_items?(player, MARK_OF_SCHOLAR)
-          give_items(player, MARK_OF_SCHOLAR, 1)
+      if pc.class_id.dark_wizard?
+        unless has_quest_items?(pc, MARK_OF_SCHOLAR)
+          give_items(pc, MARK_OF_SCHOLAR, 1)
         end
-        unless has_quest_items?(player, MARK_OF_FATE)
-          give_items(player, MARK_OF_FATE, 1)
+        unless has_quest_items?(pc, MARK_OF_FATE)
+          give_items(pc, MARK_OF_FATE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_MAGUS)
-          give_items(player, MARK_OF_MAGUS, 1)
+        unless has_quest_items?(pc, MARK_OF_MAGUS)
+          give_items(pc, MARK_OF_MAGUS, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_29"
-      if player.class_id.dark_wizard?
-        unless has_quest_items?(player, MARK_OF_SCHOLAR)
-          give_items(player, MARK_OF_SCHOLAR, 1)
+      if pc.class_id.dark_wizard?
+        unless has_quest_items?(pc, MARK_OF_SCHOLAR)
+          give_items(pc, MARK_OF_SCHOLAR, 1)
         end
-        unless has_quest_items?(player, MARK_OF_FATE)
-          give_items(player, MARK_OF_FATE, 1)
+        unless has_quest_items?(pc, MARK_OF_FATE)
+          give_items(pc, MARK_OF_FATE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SUMMONER)
-          give_items(player, MARK_OF_SUMMONER, 1)
+        unless has_quest_items?(pc, MARK_OF_SUMMONER)
+          give_items(pc, MARK_OF_SUMMONER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_30"
-      if player.class_id.shillien_oracle?
-        unless has_quest_items?(player, MARK_OF_PILGRIM)
-          give_items(player, MARK_OF_PILGRIM, 1)
+      if pc.class_id.shillien_oracle?
+        unless has_quest_items?(pc, MARK_OF_PILGRIM)
+          give_items(pc, MARK_OF_PILGRIM, 1)
         end
-        unless has_quest_items?(player, MARK_OF_FATE)
-          give_items(player, MARK_OF_FATE, 1)
+        unless has_quest_items?(pc, MARK_OF_FATE)
+          give_items(pc, MARK_OF_FATE, 1)
         end
-        unless has_quest_items?(player, MARK_OF_REFORMER)
-          give_items(player, MARK_OF_REFORMER, 1)
+        unless has_quest_items?(pc, MARK_OF_REFORMER)
+          give_items(pc, MARK_OF_REFORMER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_31"
-      if player.class_id.orc_raider?
-        unless has_quest_items?(player, MARK_OF_CHALLENGER)
-          give_items(player, MARK_OF_CHALLENGER, 1)
+      if pc.class_id.orc_raider?
+        unless has_quest_items?(pc, MARK_OF_CHALLENGER)
+          give_items(pc, MARK_OF_CHALLENGER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_GLORY)
-          give_items(player, MARK_OF_GLORY, 1)
+        unless has_quest_items?(pc, MARK_OF_GLORY)
+          give_items(pc, MARK_OF_GLORY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_CHAMPION)
-          give_items(player, MARK_OF_CHAMPION, 1)
+        unless has_quest_items?(pc, MARK_OF_CHAMPION)
+          give_items(pc, MARK_OF_CHAMPION, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_32"
-      if player.class_id.orc_monk?
-        unless has_quest_items?(player, MARK_OF_CHALLENGER)
-          give_items(player, MARK_OF_CHALLENGER, 1)
+      if pc.class_id.orc_monk?
+        unless has_quest_items?(pc, MARK_OF_CHALLENGER)
+          give_items(pc, MARK_OF_CHALLENGER, 1)
         end
-        unless has_quest_items?(player, MARK_OF_GLORY)
-          give_items(player, MARK_OF_GLORY, 1)
+        unless has_quest_items?(pc, MARK_OF_GLORY)
+          give_items(pc, MARK_OF_GLORY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_DUELIST)
-          give_items(player, MARK_OF_DUELIST, 1)
+        unless has_quest_items?(pc, MARK_OF_DUELIST)
+          give_items(pc, MARK_OF_DUELIST, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_33"
-      if player.class_id.orc_shaman?
-        unless has_quest_items?(player, MARK_OF_PILGRIM)
-          give_items(player, MARK_OF_PILGRIM, 1)
+      if pc.class_id.orc_shaman?
+        unless has_quest_items?(pc, MARK_OF_PILGRIM)
+          give_items(pc, MARK_OF_PILGRIM, 1)
         end
-        unless has_quest_items?(player, MARK_OF_GLORY)
-          give_items(player, MARK_OF_GLORY, 1)
+        unless has_quest_items?(pc, MARK_OF_GLORY)
+          give_items(pc, MARK_OF_GLORY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_LORD)
-          give_items(player, MARK_OF_LORD, 1)
+        unless has_quest_items?(pc, MARK_OF_LORD)
+          give_items(pc, MARK_OF_LORD, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_34"
-      if player.class_id.orc_shaman?
-        unless has_quest_items?(player, MARK_OF_PILGRIM)
-          give_items(player, MARK_OF_PILGRIM, 1)
+      if pc.class_id.orc_shaman?
+        unless has_quest_items?(pc, MARK_OF_PILGRIM)
+          give_items(pc, MARK_OF_PILGRIM, 1)
         end
-        unless has_quest_items?(player, MARK_OF_GLORY)
-          give_items(player, MARK_OF_GLORY, 1)
+        unless has_quest_items?(pc, MARK_OF_GLORY)
+          give_items(pc, MARK_OF_GLORY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_WARSPIRIT)
-          give_items(player, MARK_OF_WARSPIRIT, 1)
+        unless has_quest_items?(pc, MARK_OF_WARSPIRIT)
+          give_items(pc, MARK_OF_WARSPIRIT, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_35"
-      if player.class_id.scavenger?
-        unless has_quest_items?(player, MARK_OF_GUILDSMAN)
-          give_items(player, MARK_OF_GUILDSMAN, 1)
+      if pc.class_id.scavenger?
+        unless has_quest_items?(pc, MARK_OF_GUILDSMAN)
+          give_items(pc, MARK_OF_GUILDSMAN, 1)
         end
-        unless has_quest_items?(player, MARK_OF_PROSPERITY)
-          give_items(player, MARK_OF_PROSPERITY, 1)
+        unless has_quest_items?(pc, MARK_OF_PROSPERITY)
+          give_items(pc, MARK_OF_PROSPERITY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_SEARCHER)
-          give_items(player, MARK_OF_SEARCHER, 1)
+        unless has_quest_items?(pc, MARK_OF_SEARCHER)
+          give_items(pc, MARK_OF_SEARCHER, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "REPLY_36"
-      if player.class_id.artisan?
-        unless has_quest_items?(player, MARK_OF_GUILDSMAN)
-          give_items(player, MARK_OF_GUILDSMAN, 1)
+      if pc.class_id.artisan?
+        unless has_quest_items?(pc, MARK_OF_GUILDSMAN)
+          give_items(pc, MARK_OF_GUILDSMAN, 1)
         end
-        unless has_quest_items?(player, MARK_OF_PROSPERITY)
-          give_items(player, MARK_OF_PROSPERITY, 1)
+        unless has_quest_items?(pc, MARK_OF_PROSPERITY)
+          give_items(pc, MARK_OF_PROSPERITY, 1)
         end
-        unless has_quest_items?(player, MARK_OF_MAESTRO)
-          give_items(player, MARK_OF_MAESTRO, 1)
+        unless has_quest_items?(pc, MARK_OF_MAESTRO)
+          give_items(pc, MARK_OF_MAESTRO, 1)
         end
-        htmltext = "31092-25.html"
+        html = "31092-25.html"
       end
     when "32487-04.html"
       if qs.memo_state?(1)
         npc = npc.not_nil!
         if !npc.variables.get_bool("SPAWNED", false)
           npc.variables["SPAWNED"] = true
-          npc.variables["PLAYER_ID"] =  player.l2id
-          pursuer = add_spawn(PURSUER, player.x + 50, player.y + 50, player.z, 0, false, 0)
-          pursuer.variables["PLAYER_ID"] = player.l2id
+          npc.variables["PLAYER_ID"] =  pc.l2id
+          pursuer = add_spawn(PURSUER, pc.x + 50, pc.y + 50, pc.z, 0, false, 0)
+          pursuer.variables["PLAYER_ID"] = pc.l2id
           pursuer.variables["npc0"] = npc
-          pursuer.variables["player0"] = player
-          add_attack_desire(pursuer, player)
-          htmltext = event
+          pursuer.variables["pc0"] = pc
+          add_attack_desire(pursuer, pc)
+          html = event
         else
-          htmltext = "32487-05.html"
+          html = "32487-05.html"
         end
       end
     when "32487-10.html"
       npc = npc.not_nil!
       if qs.memo_state?(7)
-        take_items(player, HELVETIAS_ANTIDOTE, 1)
+        take_items(pc, HELVETIAS_ANTIDOTE, 1)
         qs.memo_state = 8
         qs.set_cond(8, true)
         if npc.variables.get_bool("SPAWNED", true)
           npc.variables["SPAWNED"] = false
         end
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -709,109 +711,109 @@ class Quests::Q00060_GoodWorksReward < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     memo_state = qs.memo_state
 
     if qs.created?
       if npc.id == BLUEPRINT_SELLER_DAEGER
-        if !player.race.kamael?
-          if player.in_category?(CategoryType::SECOND_CLASS_GROUP)
-            htmltext = player.level >= MIN_LEVEL ? "31435-01.htm" : "31435-03.htm"
+        if !pc.race.kamael?
+          if pc.in_category?(CategoryType::SECOND_CLASS_GROUP)
+            html = pc.level >= MIN_LEVEL ? "31435-01.htm" : "31435-03.htm"
           else
-            htmltext = "31435-04.htm"
+            html = "31435-04.htm"
           end
         else
-          htmltext = "31435-06.htm"
+          html = "31435-06.htm"
         end
       end
     elsif qs.started?
       case npc.id
       when BLUEPRINT_SELLER_DAEGER
         if memo_state <= 2
-          htmltext = "31435-08.html"
+          html = "31435-08.html"
         elsif memo_state == 3
-          htmltext = "31435-09.html"
+          html = "31435-09.html"
         elsif memo_state == 4
-          htmltext = "31435-11.html"
+          html = "31435-11.html"
         elsif memo_state > 4 && memo_state < 8
-          htmltext = "31435-12.html"
+          html = "31435-12.html"
         elsif memo_state == 8
-          htmltext = "31435-13.html"
+          html = "31435-13.html"
         elsif memo_state == 9
           qs.memo_state = 10
           qs.set_cond(10, true)
-          htmltext = "31435-15.html"
+          html = "31435-15.html"
         elsif memo_state == 10
-          htmltext = "31435-16.html"
+          html = "31435-16.html"
         end
       when GROCER_HELVETIA
         if memo_state == 4
-          htmltext = "30081-01.html"
+          html = "30081-01.html"
         elsif memo_state == 5
-          htmltext = "30081-04.html"
+          html = "30081-04.html"
         elsif memo_state == 6
-          htmltext = "30081-08.html"
+          html = "30081-08.html"
         elsif memo_state == 7
-          if !has_quest_items?(player, HELVETIAS_ANTIDOTE)
-            give_items(player, HELVETIAS_ANTIDOTE, 1)
-            htmltext = "30081-09.html"
+          if !has_quest_items?(pc, HELVETIAS_ANTIDOTE)
+            give_items(pc, HELVETIAS_ANTIDOTE, 1)
+            html = "30081-09.html"
           else
-            htmltext = "30081-10.html"
+            html = "30081-10.html"
           end
         end
       when BLACK_MARKETEER_OF_MAMMON
         if memo_state == 10
-          if player.in_category?(CategoryType::SECOND_CLASS_GROUP)
+          if pc.in_category?(CategoryType::SECOND_CLASS_GROUP)
             qs.set_memo_state_ex(1, 0)
-            htmltext = "31092-01.html"
+            html = "31092-01.html"
           else
-            give_items(player, Inventory::ADENA_ID, THREE_MILLION)
+            give_items(pc, Inventory::ADENA_ID, THREE_MILLION)
             qs.exit_quest(false, true)
-            htmltext = "31092-01a.html"
+            html = "31092-01a.html"
           end
         end
       when MARK
         if memo_state == 1
           if !npc.variables.get_bool("SPAWNED", false)
-            htmltext = "32487-01.html"
-          elsif npc.variables.get_bool("SPAWNED", true) && npc.variables.get_i32("PLAYER_ID", 0) == player.l2id
-            htmltext = "32487-03.html"
+            html = "32487-01.html"
+          elsif npc.variables.get_bool("SPAWNED", true) && npc.variables.get_i32("PLAYER_ID", 0) == pc.l2id
+            html = "32487-03.html"
           elsif npc.variables.get_bool("SPAWNED", true)
-            htmltext = "32487-02.html"
+            html = "32487-02.html"
           end
         elsif memo_state == 2
-          give_items(player, BLOODY_CLOTH_FRAGMENT, 1)
+          give_items(pc, BLOODY_CLOTH_FRAGMENT, 1)
           qs.memo_state = 3
           qs.set_cond(3, true)
-          htmltext = "32487-06.html"
+          html = "32487-06.html"
         elsif memo_state >= 3 && memo_state < 7
-          htmltext = "32487-07.html"
+          html = "32487-07.html"
         elsif memo_state == 7
-          htmltext = "32487-09.html"
+          html = "32487-09.html"
         end
       end
     elsif qs.completed?
       if npc.id == BLUEPRINT_SELLER_DAEGER
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       elsif npc.id == BLACK_MARKETEER_OF_MAMMON
-        if player.in_category?(CategoryType::SECOND_CLASS_GROUP)
-          htmltext = "31092-23.html"
+        if pc.in_category?(CategoryType::SECOND_CLASS_GROUP)
+          html = "31092-23.html"
         else
-          htmltext = "31092-24.html"
+          html = "31092-24.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 
   def on_spawn(npc)
     start_quest_timer("DESPAWN", 60000, npc, nil)
-    if player = npc.variables.get_object("player0", L2PcInstance?)
+    if pc = npc.variables.get_object("pc0", L2PcInstance?)
       npc_str = NpcString::S1_I_MUST_KILL_YOU_BLAME_YOUR_OWN_CURIOSITY
       say = NpcSay.new(npc, Say2::NPC_ALL, npc_str)
-      say.add_string_parameter(player.appearance.visible_name)
+      say.add_string_parameter(pc.appearance.visible_name)
       npc.broadcast_packet(say)
     end
 

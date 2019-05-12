@@ -5,12 +5,12 @@ class Packets::Incoming::UseItem < GameClientPacket
   @ctrl = false
   @item_id = 0
 
-  def read_impl
+  private def read_impl
     @l2id = d
     @ctrl = d != 0
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     # debug "#{pc} requests to use item with ID #{@l2id}."
 

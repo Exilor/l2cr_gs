@@ -8,7 +8,7 @@ class Packets::Incoming::RequestPrivateStoreBuy < GameClientPacket
   @store_player_id = 0
   @items : Set(ItemRequest)?
 
-  def read_impl
+  private def read_impl
     @store_player_id = d
     count = d
 
@@ -33,7 +33,7 @@ class Packets::Incoming::RequestPrivateStoreBuy < GameClientPacket
     @items = items
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     unless _items = @items
       action_failed

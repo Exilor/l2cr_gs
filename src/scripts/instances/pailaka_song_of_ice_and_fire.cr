@@ -1,4 +1,4 @@
-class PailakaSongOfIceAndFire < AbstractInstance
+class Scripts::PailakaSongOfIceAndFire < AbstractInstance
   private class PailakaWorld < InstanceWorld
   end
 

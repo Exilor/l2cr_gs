@@ -1,4 +1,4 @@
-class NpcAI::HellboundCore < AbstractNpcAI
+class Scripts::HellboundCore < AbstractNpcAI
   # NPCs
   private NAIA = 18484
   private HELLBOUND_CORE = 32331

@@ -1,4 +1,4 @@
-class Quests::Q00337_AudienceWithTheLandDragon < Quest
+class Scripts::Q00337_AudienceWithTheLandDragon < Quest
   # NPCs
   private WAREHOUSE_CHIEF_MOKE = 30498
   private BLACKSMITH_HELTON = 30678
@@ -108,10 +108,12 @@ class Quests::Q00337_AudienceWithTheLandDragon < Quest
       qs.set_cond(4, true)
       html = event
     when "30755-05.html"
-      if qs.memo_state?(70000) && has_quest_items?(pc, FRAGMENT_OF_ABYSS_JEWEL_3RD)
-        give_items(pc, PORTAL_STONE, 1)
-        qs.exit_quest(true, true)
-        html = event
+      if qs.memo_state?(70000)
+        if has_quest_items?(pc, FRAGMENT_OF_ABYSS_JEWEL_3RD)
+          give_items(pc, PORTAL_STONE, 1)
+          qs.exit_quest(true, true)
+          html = event
+        end
       end
     when "30498-02.html", "30678-01a.html", "30753-01a.html", "30753-03.htm",
          "30753-04.htm", "30753-06a.html"
@@ -129,16 +131,19 @@ class Quests::Q00337_AudienceWithTheLandDragon < Quest
         if qs.memo_state?(40000) || qs.memo_state?(40001)
           if npc.current_hp < npc.max_hp * 0.8 && npc.variables.get_i32("i_quest0") == 0
             20.times do |i|
-              add_attack_desire(add_spawn(JEWEL_GUARDIAN_MARA, npc, true, 180000), attacker)
+              spwn = add_spawn(JEWEL_GUARDIAN_MARA, npc, true, 180000)
+              add_attack_desire(spwn, attacker)
             end
             npc.variables["i_quest0"] = 1
             start_quest_timer("DESPAWN", 900000, npc, attacker)
           end
 
-          if npc.current_hp < npc.max_hp * 0.4 && !has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_1ST)
-            give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_1ST, 1)
-            play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
-            start_quest_timer("DESPAWN_240", 240000, npc, attacker)
+          if npc.current_hp < npc.max_hp * 0.4
+            unless has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_1ST)
+              give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_1ST, 1)
+              play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
+              start_quest_timer("DESPAWN_240", 240000, npc, attacker)
+            end
           end
         end
 
@@ -155,10 +160,12 @@ class Quests::Q00337_AudienceWithTheLandDragon < Quest
             start_quest_timer("DESPAWN", 900000, npc, attacker)
           end
 
-          if npc.current_hp < npc.max_hp * 0.4 && !has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND)
-            give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND, 1)
-            play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
-            start_quest_timer("DESPAWN_240", 240000, npc, attacker)
+          if npc.current_hp < npc.max_hp * 0.4
+            unless has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND)
+              give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND, 1)
+              play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
+              start_quest_timer("DESPAWN_240", 240000, npc, attacker)
+            end
           end
         end
 
@@ -175,9 +182,11 @@ class Quests::Q00337_AudienceWithTheLandDragon < Quest
             npc.variables["i_quest0"] = 1
           end
 
-          if npc.current_hp < npc.max_hp * 0.4 && !has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_3RD)
-            give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_3RD, 1)
-            play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
+          if npc.current_hp < npc.max_hp * 0.4
+            unless has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_3RD)
+              give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_3RD, 1)
+              play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
+            end
           end
         end
 

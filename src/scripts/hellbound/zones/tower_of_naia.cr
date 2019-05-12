@@ -1,4 +1,4 @@
-class NpcAI::TowerOfNaia < AbstractNpcAI
+class Scripts::TowerOfNaia < AbstractNpcAI
   # Challenge states
   private STATE_SPORE_CHALLENGE_IN_PROGRESS = 1
   private STATE_SPORE_CHALLENGE_SUCCESSFULL = 2
@@ -270,11 +270,11 @@ class NpcAI::TowerOfNaia < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, player)
-    htmltext = event
+    html = event
 
     # Timer. Spawns Naia Lock
     if event.casecmp?("spawn_lock")
-      htmltext = nil
+      html = nil
       @lock = add_spawn(LOCK, 16409, 244438, 11620, -1048, false, 0, false).as(L2MonsterInstance)
       @counter = 90
     # Timer. Depending of @challenge_state despans all spawned spores, or spores, reached assembly point
@@ -315,7 +315,7 @@ class NpcAI::TowerOfNaia < AbstractNpcAI
     npc_id = npc.id
 
     if event.casecmp?("despawn_spore") && npc.alive? && @challenge_state == STATE_SPORE_CHALLENGE_IN_PROGRESS
-      htmltext = nil
+      html = nil
 
       SPORE_SPAWNS.delete(npc)
       npc.delete_me
@@ -336,7 +336,7 @@ class NpcAI::TowerOfNaia < AbstractNpcAI
     elsif event.casecmp?("18492-05.htm")
       lock = @lock
       if lock.nil? || lock.current_hp > lock.max_hp / 10
-        htmltext = nil
+        html = nil
         if lock
           lock.delete_me
           @lock = nil
@@ -347,7 +347,7 @@ class NpcAI::TowerOfNaia < AbstractNpcAI
         npc.do_cast(OVERFLOW)
       end
     elsif event.casecmp?("teleport") && (lock = @lock)
-      htmltext = nil
+      html = nil
       player = player.not_nil!
       if party = player.party?
         if Util.in_range?(3000, party.leader, npc, true)
@@ -372,7 +372,7 @@ class NpcAI::TowerOfNaia < AbstractNpcAI
         start_quest_timer("spawn_lock", 1200000, nil, nil)
       end
     elsif event.casecmp?("go") && ACTIVE_ROOMS.has_key?(npc_id) && !ACTIVE_ROOMS[npc_id]
-      htmltext = nil
+      html = nil
       player = player.not_nil!
       if party = player.party?
         remove_foreigners(npc_id, party)
@@ -383,7 +383,7 @@ class NpcAI::TowerOfNaia < AbstractNpcAI
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)

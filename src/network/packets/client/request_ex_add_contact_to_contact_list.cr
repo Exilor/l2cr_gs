@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestExAddContactToContactList < GameClientPacket
   @name = ""
 
-  def read_impl
+  private def read_impl
     @name = s
   end
 
-  def run_impl
+  private def run_impl
     unless Config.allow_mail
       return
     end

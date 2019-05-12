@@ -1,4 +1,4 @@
-class Quests::Q00191_VainConclusion < Quest
+class Scripts::Q00191_VainConclusion < Quest
   # NPCs
   private SHEGFIELD = 30068
   private HEAD_BLACKSMITH_KUSTO = 30512

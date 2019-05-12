@@ -1,4 +1,4 @@
-class Quests::Q00212_TrialOfDuty < Quest
+class Scripts::Q00212_TrialOfDuty < Quest
   # NPCs
   private HANNAVALT = 30109
   private DUSTIN = 30116
@@ -46,37 +46,50 @@ class Quests::Q00212_TrialOfDuty < Quest
     super(212, self.class.simple_name, "Trial of Duty")
 
     add_start_npc(HANNAVALT)
-    add_talk_id(HANNAVALT, DUSTIN, SIR_COLLIN_WINDAWOOD, SIR_ARON_TANFORD, SIR_KIEL_NIGHTHAWK, ISAEL_SILVERSHADOW, SPIRIT_OF_SIR_TALIANUS)
-    add_kill_id(HANGMAN_TREE, SKELETON_MARAUDER, SKELETON_RAIDER, STRAIN, GHOUL, BREKA_ORC_OVERLORD, LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER, LETO_LIZARDMAN_SOLDIER, LETO_LIZARDMAN_WARRIOR, LETO_LIZARDMAN_SHAMAN, LETO_LIZARDMAN_OVERLORD, SPIRIT_OF_SIR_HEROD)
-    register_quest_items(LETTER_OF_DUSTIN, KNIGHTS_TEAR, MIRROR_OF_ORPIC, TEAR_OF_CONFESSION, REPORT_PIECE.id, TALIANUSS_REPORT, TEAR_OF_LOYALTY, MILITAS_ARTICLE.id, SAINTS_ASHES_URN, ATHEBALDTS_SKULL, ATHEBALDTS_RIBS, ATHEBALDTS_SHIN, LETTER_OF_WINDAWOOD, OLD_KNIGHTS_SWORD)
+    add_talk_id(
+      HANNAVALT, DUSTIN, SIR_COLLIN_WINDAWOOD, SIR_ARON_TANFORD,
+      SIR_KIEL_NIGHTHAWK, ISAEL_SILVERSHADOW, SPIRIT_OF_SIR_TALIANUS
+    )
+    add_kill_id(
+      HANGMAN_TREE, SKELETON_MARAUDER, SKELETON_RAIDER, STRAIN, GHOUL,
+      BREKA_ORC_OVERLORD, LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER,
+      LETO_LIZARDMAN_SOLDIER, LETO_LIZARDMAN_WARRIOR, LETO_LIZARDMAN_SHAMAN,
+      LETO_LIZARDMAN_OVERLORD, SPIRIT_OF_SIR_HEROD
+    )
+    register_quest_items(
+      LETTER_OF_DUSTIN, KNIGHTS_TEAR, MIRROR_OF_ORPIC, TEAR_OF_CONFESSION,
+      REPORT_PIECE.id, TALIANUSS_REPORT, TEAR_OF_LOYALTY, MILITAS_ARTICLE.id,
+      SAINTS_ASHES_URN, ATHEBALDTS_SKULL, ATHEBALDTS_RIBS, ATHEBALDTS_SHIN,
+      LETTER_OF_WINDAWOOD, OLD_KNIGHTS_SWORD
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
     html = nil
 
     case event
     when "quest_accept"
-      if qs.created? && player.level >= MIN_LEVEL && player.in_category?(CategoryType::KNIGHT_GROUP)
+      if qs.created? && pc.level >= MIN_LEVEL && pc.in_category?(CategoryType::KNIGHT_GROUP)
         qs.start_quest
         qs.memo_state = 1
         qs.set("flag", 0)
 
-        if reward_dimensional_diamonds(player)
+        if reward_dimensional_diamonds(pc)
           html = "30109-04a.htm"
         else
           html = "30109-04.htm"
         end
       end
     when "30116-02.html", "30116-03.html", "30116-04.html"
-      if qs.memo_state?(10) && has_quest_items?(player, TEAR_OF_LOYALTY)
+      if qs.memo_state?(10) && has_quest_items?(pc, TEAR_OF_LOYALTY)
         html = event
       end
     when "30116-05.html"
-      if qs.memo_state?(10) && has_quest_items?(player, TEAR_OF_LOYALTY)
+      if qs.memo_state?(10) && has_quest_items?(pc, TEAR_OF_LOYALTY)
         html = event
-        take_items(player, TEAR_OF_LOYALTY, -1)
+        take_items(pc, TEAR_OF_LOYALTY, -1)
         qs.memo_state = 11
         qs.set_cond(14, true)
       end
@@ -161,16 +174,15 @@ class Quests::Q00212_TrialOfDuty < Quest
     super
   end
 
-  def on_talk(npc, talker)
-    qs = get_quest_state!(talker)
-    html = get_no_quest_msg(talker)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when HANNAVALT
       if qs.created?
-        if !talker.in_category?(CategoryType::KNIGHT_GROUP)
+        if !pc.in_category?(CategoryType::KNIGHT_GROUP)
           html = "30109-02.html"
-        elsif talker.level < MIN_LEVEL
+        elsif pc.level < MIN_LEVEL
           html = "30109-01.html"
         else
           html = "30109-03.htm"
@@ -180,39 +192,39 @@ class Quests::Q00212_TrialOfDuty < Quest
         when 1
           html = "30109-04.htm"
         when 14
-          if has_quest_items?(talker, LETTER_OF_DUSTIN)
+          if has_quest_items?(pc, LETTER_OF_DUSTIN)
             html = "30109-05.html"
-            take_items(talker, LETTER_OF_DUSTIN, -1)
-            add_exp_and_sp(talker, 762576, 49458)
-            give_adena(talker, 138968, true)
-            give_items(talker, MARK_OF_DUTY, 1)
+            take_items(pc, LETTER_OF_DUSTIN, -1)
+            add_exp_and_sp(pc, 762576, 49458)
+            give_adena(pc, 138968, true)
+            give_items(pc, MARK_OF_DUTY, 1)
             qs.exit_quest(false, true)
-            talker.send_packet(SocialAction.new(talker.l2id, 3))
-            reward_dimensional_diamonds(talker)
+            pc.send_packet(SocialAction.new(pc.l2id, 3))
+            reward_dimensional_diamonds(pc)
           end
         end
       else
-        html = get_already_completed_msg(talker)
+        html = get_already_completed_msg(pc)
       end
     when SIR_ARON_TANFORD
       case qs.memo_state
       when 1
         html = "30653-01.html"
 
-        if !has_quest_items?(talker, OLD_KNIGHTS_SWORD)
-          give_items(talker, OLD_KNIGHTS_SWORD, 1)
+        unless has_quest_items?(pc, OLD_KNIGHTS_SWORD)
+          give_items(pc, OLD_KNIGHTS_SWORD, 1)
         end
 
         qs.memo_state = 2
         qs.set_cond(2, true)
       when 2
-        if has_quest_items?(talker, OLD_KNIGHTS_SWORD)
+        if has_quest_items?(pc, OLD_KNIGHTS_SWORD)
           html = "30653-02.html"
         end
       when 3
-        if has_quest_items?(talker, KNIGHTS_TEAR)
+        if has_quest_items?(pc, KNIGHTS_TEAR)
           html = "30653-03.html"
-          take_items(talker, -1, {KNIGHTS_TEAR, OLD_KNIGHTS_SWORD})
+          take_items(pc, -1, {KNIGHTS_TEAR, OLD_KNIGHTS_SWORD})
           qs.memo_state = 4
           qs.set_cond(4, true)
         end
@@ -226,22 +238,22 @@ class Quests::Q00212_TrialOfDuty < Quest
         qs.memo_state = 5
         qs.set_cond(5, true)
       when 5
-        if !has_quest_items?(talker, TALIANUSS_REPORT)
+        if !has_quest_items?(pc, TALIANUSS_REPORT)
           html = "30654-02.html"
         else
           html = "30654-03.html"
           qs.memo_state = 6
           qs.set_cond(7, true)
-          give_items(talker, MIRROR_OF_ORPIC, 1)
+          give_items(pc, MIRROR_OF_ORPIC, 1)
         end
       when 6
-        if has_quest_items?(talker, MIRROR_OF_ORPIC)
+        if has_quest_items?(pc, MIRROR_OF_ORPIC)
           html = "30654-04.html"
         end
       when 7
-        if has_quest_items?(talker, TEAR_OF_CONFESSION)
+        if has_quest_items?(pc, TEAR_OF_CONFESSION)
           html = "30654-05.html"
-          take_items(talker, TEAR_OF_CONFESSION, -1)
+          take_items(pc, TEAR_OF_CONFESSION, -1)
           qs.memo_state = 8
           qs.set_cond(10, true)
         end
@@ -249,18 +261,20 @@ class Quests::Q00212_TrialOfDuty < Quest
         html = "30654-06.html"
       end
     when SPIRIT_OF_SIR_TALIANUS
-      if qs.memo_state?(6) && has_quest_items?(talker, MIRROR_OF_ORPIC, TALIANUSS_REPORT)
-        html = "30656-01.html"
-        take_items(talker, -1, {MIRROR_OF_ORPIC, TALIANUSS_REPORT})
-        give_items(talker, TEAR_OF_CONFESSION, 1)
-        qs.memo_state = 7
-        qs.set_cond(9, true)
-        npc.delete_me
+      if qs.memo_state?(6)
+        if has_quest_items?(pc, MIRROR_OF_ORPIC, TALIANUSS_REPORT)
+          html = "30656-01.html"
+          take_items(pc, -1, {MIRROR_OF_ORPIC, TALIANUSS_REPORT})
+          give_items(pc, TEAR_OF_CONFESSION, 1)
+          qs.memo_state = 7
+          qs.set_cond(9, true)
+          npc.delete_me
+        end
       end
     when ISAEL_SILVERSHADOW
       case qs.memo_state
       when 8
-        if talker.level < MIN_LEVEL
+        if pc.level < MIN_LEVEL
           html = "30655-01.html"
         else
           html = "30655-02.html"
@@ -268,81 +282,81 @@ class Quests::Q00212_TrialOfDuty < Quest
           qs.set_cond(11, true)
         end
       when 9
-        if !has_item?(talker, MILITAS_ARTICLE)
+        if !has_item?(pc, MILITAS_ARTICLE)
           html = "30655-03.html"
         else
           html = "30655-04.html"
-          give_items(talker, TEAR_OF_LOYALTY, 1)
-          take_item(talker, MILITAS_ARTICLE)
+          give_items(pc, TEAR_OF_LOYALTY, 1)
+          take_item(pc, MILITAS_ARTICLE)
           qs.memo_state = 10
           qs.set_cond(13, true)
         end
       when 10
-        if has_quest_items?(talker, TEAR_OF_LOYALTY)
+        if has_quest_items?(pc, TEAR_OF_LOYALTY)
           html = "30655-05.html"
         end
       end
     when DUSTIN
       case qs.memo_state
       when 10
-        if has_quest_items?(talker, TEAR_OF_LOYALTY)
+        if has_quest_items?(pc, TEAR_OF_LOYALTY)
           html = "30116-01.html"
         end
       when 11
-        if !has_quest_items?(talker, ATHEBALDTS_SKULL, ATHEBALDTS_RIBS, ATHEBALDTS_SHIN)
+        if !has_quest_items?(pc, ATHEBALDTS_SKULL, ATHEBALDTS_RIBS, ATHEBALDTS_SHIN)
           html = "30116-06.html"
         else
           html = "30116-07.html"
-          take_items(talker, -1, {ATHEBALDTS_SKULL, ATHEBALDTS_RIBS, ATHEBALDTS_SHIN})
-          give_items(talker, SAINTS_ASHES_URN, 1)
+          take_items(pc, -1, {ATHEBALDTS_SKULL, ATHEBALDTS_RIBS, ATHEBALDTS_SHIN})
+          give_items(pc, SAINTS_ASHES_URN, 1)
           qs.memo_state = 12
           qs.set_cond(16, true)
         end
       when 12
-        if has_quest_items?(talker, SAINTS_ASHES_URN)
+        if has_quest_items?(pc, SAINTS_ASHES_URN)
           html = "30116-09.html"
         end
       when 13
-        if has_quest_items?(talker, LETTER_OF_WINDAWOOD)
+        if has_quest_items?(pc, LETTER_OF_WINDAWOOD)
           html = "30116-08.html"
-          take_items(talker, LETTER_OF_WINDAWOOD, -1)
-          give_items(talker, LETTER_OF_DUSTIN, 1)
+          take_items(pc, LETTER_OF_WINDAWOOD, -1)
+          give_items(pc, LETTER_OF_DUSTIN, 1)
           qs.memo_state = 14
           qs.set_cond(18, true)
         end
       when 14
-        if has_quest_items?(talker, LETTER_OF_DUSTIN)
+        if has_quest_items?(pc, LETTER_OF_DUSTIN)
           html = "30116-10.html"
         end
       end
     when SIR_COLLIN_WINDAWOOD
       case qs.memo_state
       when 12
-        if has_quest_items?(talker, SAINTS_ASHES_URN)
+        if has_quest_items?(pc, SAINTS_ASHES_URN)
           html = "30311-01.html"
-          take_items(talker, SAINTS_ASHES_URN, -1)
-          give_items(talker, LETTER_OF_WINDAWOOD, 1)
+          take_items(pc, SAINTS_ASHES_URN, -1)
+          give_items(pc, LETTER_OF_WINDAWOOD, 1)
           qs.memo_state = 13
           qs.set_cond(17, true)
         end
       when 13
-        if has_quest_items?(talker, LETTER_OF_WINDAWOOD)
+        if has_quest_items?(pc, LETTER_OF_WINDAWOOD)
           html = "30311-02.html"
         end
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 
-  private def reward_dimensional_diamonds(player)
-    vars = player.variables
+  private def reward_dimensional_diamonds(pc)
+    vars = pc.variables
 
     if vars.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-      if player.class_id.knight?
-        reward_items(player, DIMENSIONAL_DIAMOND, 45)
+      if pc.class_id.knight?
+        reward_items(pc, DIMENSIONAL_DIAMOND, 45)
       else
-        reward_items(player, DIMENSIONAL_DIAMOND, 61)
+        reward_items(pc, DIMENSIONAL_DIAMOND, 61)
       end
 
       vars["2ND_CLASS_DIAMOND_REWARD"] = 1

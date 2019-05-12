@@ -1,4 +1,4 @@
-class Quests::Q00247_PossessorOfAPreciousSoul4 < Quest
+class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
   # NPCs
   private CARADINE = 31740
   private LADY_OF_LAKE = 31745
@@ -17,13 +17,13 @@ class Quests::Q00247_PossessorOfAPreciousSoul4 < Quest
     add_talk_id(CARADINE, LADY_OF_LAKE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
 
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
-    unless player.subclass_active?
+    unless pc.subclass_active?
       return "no_sub.html"
     end
 
@@ -36,16 +36,16 @@ class Quests::Q00247_PossessorOfAPreciousSoul4 < Quest
     when "31740-5.html"
       if st.cond?(1)
         st.set_cond(2, true)
-        player.tele_to_location(CARADINE_LOC, 0)
+        pc.tele_to_location(CARADINE_LOC, 0)
       end
     when "31745-5.html"
       if st.cond?(2)
-        player.noble = true
+        pc.noble = true
         st.add_exp_and_sp(93836, 0)
         st.give_items(NOBLESS_TIARA, 1)
-        npc.target = player
+        npc.target = pc
         npc.do_cast(MIMIRS_ELIXIR)
-        player.send_packet(SocialAction.new(player.l2id, 3))
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
         st.exit_quest(false, true)
       end
     end
@@ -53,9 +53,9 @@ class Quests::Q00247_PossessorOfAPreciousSoul4 < Quest
     event
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    if st.started? && !player.subclass_active?
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    if st.started? && !pc.subclass_active?
       return "no_sub.html"
     end
 
@@ -63,22 +63,22 @@ class Quests::Q00247_PossessorOfAPreciousSoul4 < Quest
     when CARADINE
       case st.state
       when State::CREATED
-        if player.quest_completed?(Q00246_PossessorOfAPreciousSoul3.simple_name)
-          htmltext = player.level >= 75 ? "31740-1.htm" : "31740-2.html"
+        if pc.quest_completed?(Q00246_PossessorOfAPreciousSoul3.simple_name)
+          html = pc.level >= 75 ? "31740-1.htm" : "31740-2.html"
         end
       when State::STARTED
         if st.cond?(1)
-          htmltext = "31740-6.html"
+          html = "31740-6.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when LADY_OF_LAKE
       if st.cond?(2)
-        htmltext = "31745-1.html"
+        html = "31745-1.html"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

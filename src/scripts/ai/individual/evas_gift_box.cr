@@ -1,4 +1,4 @@
-class NpcAI::EvasGiftBox < AbstractNpcAI
+class Scripts::EvasGiftBox < AbstractNpcAI
   private BOX = 32342 # Eva's Gift Box
   private BUFF = 1073 # Kiss of Eva
   private CORAL = ItemHolder.new(9692, 1) # Red Coral

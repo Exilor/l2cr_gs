@@ -1,4 +1,4 @@
-class Quests::Q00229_TestOfWitchcraft < Quest
+class Scripts::Q00229_TestOfWitchcraft < Quest
   # NPCs
   private GROCER_LARA = 30063
   private TRADER_ALEXANDRIA = 30098
@@ -75,118 +75,118 @@ class Quests::Q00229_TestOfWitchcraft < Quest
     register_quest_items(SWORD_OF_BINDING, ORIMS_DIAGRAM, ALEXANDRIAS_BOOK, IKERS_LIST, DIRE_WYRM_FANG, LETO_LIZARDMAN_CHARM, ENCHANTED_STONE_GOLEM_HEARTSTONE, LARAS_MEMO, NESTLES_MEMO, LEOPOLDS_JOURNAL, AKLANTOTH_1ST_GEM, AKLANTOTH_2ND_GEM, AKLANTOTH_3RD_GEM, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM, BRIMSTONE_1ST, ORIMS_INSTRUCTIONS, ORIMS_1ST_LETTER, ORIMS_2ND_LETTER, SIR_VASPERS_LETTER, VADINS_CRUCIFIX, TAMLIN_ORC_AMULET, VADINS_SANCTIONS, IKERS_AMULET, SOULTRAP_CRYSTAL, PURGATORY_KEY, ZERUEL_BIND_CRYSTAL, BRIMSTONE_2ND)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        give_items(player, ORIMS_DIAGRAM, 1)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          if player.class_id.wizard?
-            give_items(player, DIMENSIONAL_DIAMOND, 122)
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        give_items(pc, ORIMS_DIAGRAM, 1)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          if pc.class_id.wizard?
+            give_items(pc, DIMENSIONAL_DIAMOND, 122)
           else
-            give_items(player, DIMENSIONAL_DIAMOND, 104)
+            give_items(pc, DIMENSIONAL_DIAMOND, 104)
           end
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30630-08a.htm"
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30630-08a.htm"
         else
-          htmltext = "30630-08.htm"
+          html = "30630-08.htm"
         end
       end
     when "30630-04.htm", "30630-06.htm", "30630-07.htm", "30630-12.htm",
          "30630-13.htm", "30630-20.htm", "30630-21.htm", "30098-02.htm",
          "30110-02.htm", "30417-02.htm"
-      htmltext = event
+      html = event
     when "30630-14.htm"
-      if has_quest_items?(player, ALEXANDRIAS_BOOK)
+      if has_quest_items?(pc, ALEXANDRIAS_BOOK)
         npc = npc.not_nil!
-        take_items(player, ALEXANDRIAS_BOOK, 1)
-        take_items(player, AKLANTOTH_1ST_GEM, 1)
-        take_items(player, AKLANTOTH_2ND_GEM, 1)
-        take_items(player, AKLANTOTH_3RD_GEM, 1)
-        take_items(player, AKLANTOTH_4TH_GEM, 1)
-        take_items(player, AKLANTOTH_5TH_GEM, 1)
-        take_items(player, AKLANTOTH_6TH_GEM, 1)
-        give_items(player, BRIMSTONE_1ST, 1)
+        take_items(pc, ALEXANDRIAS_BOOK, 1)
+        take_items(pc, AKLANTOTH_1ST_GEM, 1)
+        take_items(pc, AKLANTOTH_2ND_GEM, 1)
+        take_items(pc, AKLANTOTH_3RD_GEM, 1)
+        take_items(pc, AKLANTOTH_4TH_GEM, 1)
+        take_items(pc, AKLANTOTH_5TH_GEM, 1)
+        take_items(pc, AKLANTOTH_6TH_GEM, 1)
+        give_items(pc, BRIMSTONE_1ST, 1)
         qs.set_cond(4, true)
         add_spawn(DREVANUL_PRINCE_ZERUEL, npc, true, 0, false)
-        htmltext = event
+        html = event
       end
     when "30630-16.htm"
-      if has_quest_items?(player, BRIMSTONE_1ST)
-        take_items(player, BRIMSTONE_1ST, 1)
-        give_items(player, ORIMS_INSTRUCTIONS, 1)
-        give_items(player, ORIMS_1ST_LETTER, 1)
-        give_items(player, ORIMS_2ND_LETTER, 1)
+      if has_quest_items?(pc, BRIMSTONE_1ST)
+        take_items(pc, BRIMSTONE_1ST, 1)
+        give_items(pc, ORIMS_INSTRUCTIONS, 1)
+        give_items(pc, ORIMS_1ST_LETTER, 1)
+        give_items(pc, ORIMS_2ND_LETTER, 1)
         qs.set_cond(6, true)
-        htmltext = event
+        html = event
       end
     when "30630-22.htm"
-      if has_quest_items?(player, ZERUEL_BIND_CRYSTAL)
-        give_adena(player, 372154, true)
-        give_items(player, MARK_OF_WITCHCRAFT, 1)
-        add_exp_and_sp(player, 2058244, 141240)
+      if has_quest_items?(pc, ZERUEL_BIND_CRYSTAL)
+        give_adena(pc, 372154, true)
+        give_items(pc, MARK_OF_WITCHCRAFT, 1)
+        add_exp_and_sp(pc, 2058244, 141240)
         qs.exit_quest(false, true)
-        player.send_packet(SocialAction.new(player.l2id, 3))
-        htmltext = event
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
+        html = event
       end
     when "30063-02.htm"
-      give_items(player, LARAS_MEMO, 1)
-      htmltext = event
+      give_items(pc, LARAS_MEMO, 1)
+      html = event
     when "30098-03.htm"
-      if has_quest_items?(player, ORIMS_DIAGRAM)
-        take_items(player, ORIMS_DIAGRAM, 1)
-        give_items(player, ALEXANDRIAS_BOOK, 1)
+      if has_quest_items?(pc, ORIMS_DIAGRAM)
+        take_items(pc, ORIMS_DIAGRAM, 1)
+        give_items(pc, ALEXANDRIAS_BOOK, 1)
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "30110-03.htm"
-      give_items(player, IKERS_LIST, 1)
-      htmltext = event
+      give_items(pc, IKERS_LIST, 1)
+      html = event
     when "30110-08.htm"
-      take_items(player, ORIMS_2ND_LETTER, 1)
-      give_items(player, IKERS_AMULET, 1)
-      give_items(player, SOULTRAP_CRYSTAL, 1)
-      if has_quest_items?(player, SWORD_OF_BINDING)
+      take_items(pc, ORIMS_2ND_LETTER, 1)
+      give_items(pc, IKERS_AMULET, 1)
+      give_items(pc, SOULTRAP_CRYSTAL, 1)
+      if has_quest_items?(pc, SWORD_OF_BINDING)
         qs.set_cond(7, true)
       end
-      htmltext = event
+      html = event
     when "30314-02.htm"
-      give_items(player, NESTLES_MEMO, 1)
-      htmltext = event
+      give_items(pc, NESTLES_MEMO, 1)
+      html = event
     when "30417-03.htm"
-      if has_quest_items?(player, ORIMS_1ST_LETTER)
-        take_items(player, ORIMS_1ST_LETTER, 1)
-        give_items(player, SIR_VASPERS_LETTER, 1)
-        htmltext = event
+      if has_quest_items?(pc, ORIMS_1ST_LETTER)
+        take_items(pc, ORIMS_1ST_LETTER, 1)
+        give_items(pc, SIR_VASPERS_LETTER, 1)
+        html = event
       end
     when "30435-02.htm"
-      if has_quest_items?(player, NESTLES_MEMO)
-        take_items(player, NESTLES_MEMO, 1)
-        give_items(player, LEOPOLDS_JOURNAL, 1)
-        htmltext = event
+      if has_quest_items?(pc, NESTLES_MEMO)
+        take_items(pc, NESTLES_MEMO, 1)
+        give_items(pc, LEOPOLDS_JOURNAL, 1)
+        html = event
       end
     when "30476-02.htm"
-      give_items(player, AKLANTOTH_2ND_GEM, 1)
-      if has_quest_items?(player, AKLANTOTH_1ST_GEM, AKLANTOTH_3RD_GEM, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
+      give_items(pc, AKLANTOTH_2ND_GEM, 1)
+      if has_quest_items?(pc, AKLANTOTH_1ST_GEM, AKLANTOTH_3RD_GEM, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
         qs.set_cond(3, true)
       end
-      htmltext = event
+      html = event
     when "30633-02.htm"
       npc = npc.not_nil!
-      give_items(player, BRIMSTONE_2ND, 1)
+      give_items(pc, BRIMSTONE_2ND, 1)
       qs.set_cond(9, true)
       if npc.summoned_npc_count < 1
         add_spawn(npc, DREVANUL_PRINCE_ZERUEL, DREVANUL_PRINCE_ZERUEL_SPAWN, false, 0)
       end
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -246,11 +246,8 @@ class Quests::Q00229_TestOfWitchcraft < Quest
             end
           end
         end
-      when LETO_LIZARDMAN,
-           LETO_LIZARDMAN_ARCHER,
-           LETO_LIZARDMAN_SOLDIER,
-           LETO_LIZARDMAN_WARRIOR,
-           LETO_LIZARDMAN_SHAMAN,
+      when LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER, LETO_LIZARDMAN_SOLDIER,
+           LETO_LIZARDMAN_WARRIOR, LETO_LIZARDMAN_SHAMAN,
            LETO_LIZARDMAN_OVERLORD
         if has_quest_items?(killer, ALEXANDRIAS_BOOK, IKERS_LIST)
           if get_quest_items_count(killer, LETO_LIZARDMAN_CHARM) < 20
@@ -264,7 +261,7 @@ class Quests::Q00229_TestOfWitchcraft < Quest
         end
       when TAMLIN_ORC, TAMLIN_ORC_ARCHER
         if has_quest_items?(killer, VADINS_CRUCIFIX)
-          if (rand(100) < 50) && (get_quest_items_count(killer, TAMLIN_ORC_AMULET) < 20)
+          if rand(100) < 50 && get_quest_items_count(killer, TAMLIN_ORC_AMULET) < 20
             give_items(killer, TAMLIN_ORC_AMULET, 1)
             if get_quest_items_count(killer, TAMLIN_ORC_AMULET) >= 20
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -317,200 +314,200 @@ class Quests::Q00229_TestOfWitchcraft < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
+
     if qs.created?
       if npc.id == SHADOW_ORIM
-        if player.class_id.wizard? || player.class_id.knight? || player.class_id.palus_knight?
-          if player.level >= MIN_LEVEL
-            if player.class_id.wizard?
-              htmltext = "30630-03.htm"
+        if pc.class_id.wizard? || pc.class_id.knight? || pc.class_id.palus_knight?
+          if pc.level >= MIN_LEVEL
+            if pc.class_id.wizard?
+              html = "30630-03.htm"
             else
-              htmltext = "30630-05.htm"
+              html = "30630-05.htm"
             end
           else
-            htmltext = "30630-02.htm"
+            html = "30630-02.htm"
           end
         else
-          htmltext = "30630-01.htm"
+          html = "30630-01.htm"
         end
       end
     elsif qs.started?
       case npc.id
       when SHADOW_ORIM
-        if has_quest_items?(player, ORIMS_DIAGRAM)
-          htmltext = "30630-09.htm"
-        elsif has_quest_items?(player, ALEXANDRIAS_BOOK)
-          if has_quest_items?(player, AKLANTOTH_1ST_GEM, AKLANTOTH_2ND_GEM, AKLANTOTH_3RD_GEM, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
-            htmltext = "30630-11.htm"
+        if has_quest_items?(pc, ORIMS_DIAGRAM)
+          html = "30630-09.htm"
+        elsif has_quest_items?(pc, ALEXANDRIAS_BOOK)
+          if has_quest_items?(pc, AKLANTOTH_1ST_GEM, AKLANTOTH_2ND_GEM, AKLANTOTH_3RD_GEM, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
+            html = "30630-11.htm"
           else
-            htmltext = "30630-10.htm"
+            html = "30630-10.htm"
           end
-        elsif has_quest_items?(player, BRIMSTONE_1ST)
-          htmltext = "30630-15.htm"
-        elsif has_quest_items?(player, ORIMS_INSTRUCTIONS) && !has_at_least_one_quest_item?(player, SWORD_OF_BINDING, SOULTRAP_CRYSTAL)
-          htmltext = "30630-17.htm"
+        elsif has_quest_items?(pc, BRIMSTONE_1ST)
+          html = "30630-15.htm"
+        elsif has_quest_items?(pc, ORIMS_INSTRUCTIONS) && !has_at_least_one_quest_item?(pc, SWORD_OF_BINDING, SOULTRAP_CRYSTAL)
+          html = "30630-17.htm"
         end
-        if has_quest_items?(player, SWORD_OF_BINDING, SOULTRAP_CRYSTAL)
+        if has_quest_items?(pc, SWORD_OF_BINDING, SOULTRAP_CRYSTAL)
           qs.set_cond(8, true)
-          htmltext = "30630-18.htm"
-        elsif has_quest_items?(player, SWORD_OF_BINDING, ZERUEL_BIND_CRYSTAL)
-          htmltext = "30630-19.htm"
+          html = "30630-18.htm"
+        elsif has_quest_items?(pc, SWORD_OF_BINDING, ZERUEL_BIND_CRYSTAL)
+          html = "30630-19.htm"
         end
       when GROCER_LARA
-        if has_quest_items?(player, ALEXANDRIAS_BOOK)
-          if !has_at_least_one_quest_item?(player, LARAS_MEMO, AKLANTOTH_3RD_GEM)
-            htmltext = "30063-01.htm"
-          elsif !has_quest_items?(player, AKLANTOTH_3RD_GEM) && has_quest_items?(player, LARAS_MEMO)
-            htmltext = "30063-03.htm"
-          elsif !has_quest_items?(player, LARAS_MEMO) && has_quest_items?(player, AKLANTOTH_3RD_GEM)
-            htmltext = "30063-04.htm"
+        if has_quest_items?(pc, ALEXANDRIAS_BOOK)
+          if !has_at_least_one_quest_item?(pc, LARAS_MEMO, AKLANTOTH_3RD_GEM)
+            html = "30063-01.htm"
+          elsif !has_quest_items?(pc, AKLANTOTH_3RD_GEM) && has_quest_items?(pc, LARAS_MEMO)
+            html = "30063-03.htm"
+          elsif !has_quest_items?(pc, LARAS_MEMO) && has_quest_items?(pc, AKLANTOTH_3RD_GEM)
+            html = "30063-04.htm"
           end
-        elsif has_at_least_one_quest_item?(player, BRIMSTONE_1ST, ORIMS_INSTRUCTIONS)
-          htmltext = "30063-05.htm"
+        elsif has_at_least_one_quest_item?(pc, BRIMSTONE_1ST, ORIMS_INSTRUCTIONS)
+          html = "30063-05.htm"
         end
       when TRADER_ALEXANDRIA
-        if has_quest_items?(player, ORIMS_DIAGRAM)
-          htmltext = "30098-01.htm"
-        elsif has_quest_items?(player, ALEXANDRIAS_BOOK)
-          htmltext = "30098-04.htm"
-        elsif has_quest_items?(player, ORIMS_INSTRUCTIONS, BRIMSTONE_1ST)
-          htmltext = "30098-05.htm"
+        if has_quest_items?(pc, ORIMS_DIAGRAM)
+          html = "30098-01.htm"
+        elsif has_quest_items?(pc, ALEXANDRIAS_BOOK)
+          html = "30098-04.htm"
+        elsif has_quest_items?(pc, ORIMS_INSTRUCTIONS, BRIMSTONE_1ST)
+          html = "30098-05.htm"
         end
       when MAGISTER_IKER
-        if has_quest_items?(player, ALEXANDRIAS_BOOK)
-          if !has_at_least_one_quest_item?(player, IKERS_LIST, AKLANTOTH_1ST_GEM)
-            htmltext = "30110-01.htm"
-          elsif has_quest_items?(player, IKERS_LIST)
-            if (get_quest_items_count(player, DIRE_WYRM_FANG) >= 20) && (get_quest_items_count(player, LETO_LIZARDMAN_CHARM) >= 20) && (get_quest_items_count(player, ENCHANTED_STONE_GOLEM_HEARTSTONE) >= 20)
-              take_items(player, IKERS_LIST, 1)
-              take_items(player, DIRE_WYRM_FANG, -1)
-              take_items(player, LETO_LIZARDMAN_CHARM, -1)
-              take_items(player, ENCHANTED_STONE_GOLEM_HEARTSTONE, -1)
-              give_items(player, AKLANTOTH_1ST_GEM, 1)
-              if has_quest_items?(player, AKLANTOTH_2ND_GEM, AKLANTOTH_3RD_GEM, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
+        if has_quest_items?(pc, ALEXANDRIAS_BOOK)
+          if !has_at_least_one_quest_item?(pc, IKERS_LIST, AKLANTOTH_1ST_GEM)
+            html = "30110-01.htm"
+          elsif has_quest_items?(pc, IKERS_LIST)
+            if (get_quest_items_count(pc, DIRE_WYRM_FANG) >= 20) && (get_quest_items_count(pc, LETO_LIZARDMAN_CHARM) >= 20) && (get_quest_items_count(pc, ENCHANTED_STONE_GOLEM_HEARTSTONE) >= 20)
+              take_items(pc, IKERS_LIST, 1)
+              take_items(pc, DIRE_WYRM_FANG, -1)
+              take_items(pc, LETO_LIZARDMAN_CHARM, -1)
+              take_items(pc, ENCHANTED_STONE_GOLEM_HEARTSTONE, -1)
+              give_items(pc, AKLANTOTH_1ST_GEM, 1)
+              if has_quest_items?(pc, AKLANTOTH_2ND_GEM, AKLANTOTH_3RD_GEM, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
                 qs.set_cond(3, true)
               end
-              htmltext = "30110-05.htm"
+              html = "30110-05.htm"
             else
-              htmltext = "30110-04.htm"
+              html = "30110-04.htm"
             end
-          elsif !has_quest_items?(player, IKERS_LIST) && has_quest_items?(player, AKLANTOTH_1ST_GEM)
-            htmltext = "30110-06.htm"
+          elsif !has_quest_items?(pc, IKERS_LIST) && has_quest_items?(pc, AKLANTOTH_1ST_GEM)
+            html = "30110-06.htm"
           end
-        elsif has_quest_items?(player, ORIMS_INSTRUCTIONS)
-          if !has_at_least_one_quest_item?(player, SOULTRAP_CRYSTAL, ZERUEL_BIND_CRYSTAL)
-            htmltext = "30110-07.htm"
-          elsif !has_quest_items?(player, ZERUEL_BIND_CRYSTAL) && has_quest_items?(player, SOULTRAP_CRYSTAL)
-            htmltext = "30110-09.htm"
-          elsif !has_quest_items?(player, SOULTRAP_CRYSTAL) && has_quest_items?(player, ZERUEL_BIND_CRYSTAL)
-            htmltext = "30110-10.htm"
+        elsif has_quest_items?(pc, ORIMS_INSTRUCTIONS)
+          if !has_at_least_one_quest_item?(pc, SOULTRAP_CRYSTAL, ZERUEL_BIND_CRYSTAL)
+            html = "30110-07.htm"
+          elsif !has_quest_items?(pc, ZERUEL_BIND_CRYSTAL) && has_quest_items?(pc, SOULTRAP_CRYSTAL)
+            html = "30110-09.htm"
+          elsif !has_quest_items?(pc, SOULTRAP_CRYSTAL) && has_quest_items?(pc, ZERUEL_BIND_CRYSTAL)
+            html = "30110-10.htm"
           end
         end
       when PRIEST_VADIN
-        if has_quest_items?(player, ORIMS_INSTRUCTIONS, SIR_VASPERS_LETTER)
-          take_items(player, SIR_VASPERS_LETTER, 1)
-          give_items(player, VADINS_CRUCIFIX, 1)
-          htmltext = "30188-01.htm"
-        elsif has_quest_items?(player, VADINS_CRUCIFIX)
-          if get_quest_items_count(player, TAMLIN_ORC_AMULET) < 20
-            htmltext = "30188-02.htm"
+        if has_quest_items?(pc, ORIMS_INSTRUCTIONS, SIR_VASPERS_LETTER)
+          take_items(pc, SIR_VASPERS_LETTER, 1)
+          give_items(pc, VADINS_CRUCIFIX, 1)
+          html = "30188-01.htm"
+        elsif has_quest_items?(pc, VADINS_CRUCIFIX)
+          if get_quest_items_count(pc, TAMLIN_ORC_AMULET) < 20
+            html = "30188-02.htm"
           else
-            take_items(player, VADINS_CRUCIFIX, 1)
-            take_items(player, TAMLIN_ORC_AMULET, -1)
-            give_items(player, VADINS_SANCTIONS, 1)
-            htmltext = "30188-03.htm"
+            take_items(pc, VADINS_CRUCIFIX, 1)
+            take_items(pc, TAMLIN_ORC_AMULET, -1)
+            give_items(pc, VADINS_SANCTIONS, 1)
+            html = "30188-03.htm"
           end
-        elsif has_quest_items?(player, ORIMS_INSTRUCTIONS)
-          if has_quest_items?(player, VADINS_SANCTIONS)
-            htmltext = "30188-04.htm"
-          elsif has_quest_items?(player, SWORD_OF_BINDING)
-            htmltext = "30188-05.htm"
+        elsif has_quest_items?(pc, ORIMS_INSTRUCTIONS)
+          if has_quest_items?(pc, VADINS_SANCTIONS)
+            html = "30188-04.htm"
+          elsif has_quest_items?(pc, SWORD_OF_BINDING)
+            html = "30188-05.htm"
           end
         end
       when TRADER_NESTLE
-        if has_quest_items?(player, ALEXANDRIAS_BOOK)
-          if !has_at_least_one_quest_item?(player, LEOPOLDS_JOURNAL, NESTLES_MEMO, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
-            htmltext = "30314-01.htm"
-          elsif has_quest_items?(player, NESTLES_MEMO) && !has_quest_items?(player, LEOPOLDS_JOURNAL)
-            htmltext = "30314-03.htm"
-          elsif !has_quest_items?(player, NESTLES_MEMO) && has_at_least_one_quest_item?(player, LEOPOLDS_JOURNAL, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
-            htmltext = "30314-04.htm"
+        if has_quest_items?(pc, ALEXANDRIAS_BOOK)
+          if !has_at_least_one_quest_item?(pc, LEOPOLDS_JOURNAL, NESTLES_MEMO, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
+            html = "30314-01.htm"
+          elsif has_quest_items?(pc, NESTLES_MEMO) && !has_quest_items?(pc, LEOPOLDS_JOURNAL)
+            html = "30314-03.htm"
+          elsif !has_quest_items?(pc, NESTLES_MEMO) && has_at_least_one_quest_item?(pc, LEOPOLDS_JOURNAL, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
+            html = "30314-04.htm"
           end
         end
       when SIR_KLAUS_VASPER
-        if has_quest_items?(player, ORIMS_INSTRUCTIONS)
-          if has_quest_items?(player, ORIMS_1ST_LETTER)
-            htmltext = "30417-01.htm"
-          elsif has_quest_items?(player, SIR_VASPERS_LETTER)
-            htmltext = "30417-04.htm"
-          elsif has_quest_items?(player, VADINS_SANCTIONS)
-            give_items(player, SWORD_OF_BINDING, 1)
-            take_items(player, VADINS_SANCTIONS, 1)
-            if has_quest_items?(player, SOULTRAP_CRYSTAL)
+        if has_quest_items?(pc, ORIMS_INSTRUCTIONS)
+          if has_quest_items?(pc, ORIMS_1ST_LETTER)
+            html = "30417-01.htm"
+          elsif has_quest_items?(pc, SIR_VASPERS_LETTER)
+            html = "30417-04.htm"
+          elsif has_quest_items?(pc, VADINS_SANCTIONS)
+            give_items(pc, SWORD_OF_BINDING, 1)
+            take_items(pc, VADINS_SANCTIONS, 1)
+            if has_quest_items?(pc, SOULTRAP_CRYSTAL)
               qs.set_cond(7, true)
             end
-            htmltext = "30417-05.htm"
-          elsif has_quest_items?(player, SWORD_OF_BINDING)
-            htmltext = "30417-06.htm"
+            html = "30417-05.htm"
+          elsif has_quest_items?(pc, SWORD_OF_BINDING)
+            html = "30417-06.htm"
           end
         end
       when LEOPOLD
-        if has_quest_items?(player, ALEXANDRIAS_BOOK)
-          if has_quest_items?(player, NESTLES_MEMO) && !has_quest_items?(player, LEOPOLDS_JOURNAL)
-            htmltext = "30435-01.htm"
-          elsif has_quest_items?(player, LEOPOLDS_JOURNAL) && !has_quest_items?(player, NESTLES_MEMO)
-            htmltext = "30435-03.htm"
-          elsif has_quest_items?(player, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
-            htmltext = "30435-04.htm"
+        if has_quest_items?(pc, ALEXANDRIAS_BOOK)
+          if has_quest_items?(pc, NESTLES_MEMO) && !has_quest_items?(pc, LEOPOLDS_JOURNAL)
+            html = "30435-01.htm"
+          elsif has_quest_items?(pc, LEOPOLDS_JOURNAL) && !has_quest_items?(pc, NESTLES_MEMO)
+            html = "30435-03.htm"
+          elsif has_quest_items?(pc, AKLANTOTH_4TH_GEM, AKLANTOTH_5TH_GEM, AKLANTOTH_6TH_GEM)
+            html = "30435-04.htm"
           end
-        elsif has_at_least_one_quest_item?(player, BRIMSTONE_1ST, ORIMS_INSTRUCTIONS)
-          htmltext = "30435-05.htm"
+        elsif has_at_least_one_quest_item?(pc, BRIMSTONE_1ST, ORIMS_INSTRUCTIONS)
+          html = "30435-05.htm"
         end
       when MAGISTER_KAIRA
-        if has_quest_items?(player, ALEXANDRIAS_BOOK)
-          if !has_quest_items?(player, AKLANTOTH_2ND_GEM)
-            htmltext = "30476-01.htm"
+        if has_quest_items?(pc, ALEXANDRIAS_BOOK)
+          if !has_quest_items?(pc, AKLANTOTH_2ND_GEM)
+            html = "30476-01.htm"
           else
-            htmltext = "30476-03.htm"
+            html = "30476-03.htm"
           end
-        elsif has_at_least_one_quest_item?(player, BRIMSTONE_1ST, ORIMS_INSTRUCTIONS)
-          htmltext = "30476-04.htm"
+        elsif has_at_least_one_quest_item?(pc, BRIMSTONE_1ST, ORIMS_INSTRUCTIONS)
+          html = "30476-04.htm"
         end
       when WARDEN_RODERIK
-        if has_quest_items?(player, ALEXANDRIAS_BOOK) && has_at_least_one_quest_item?(player, LARAS_MEMO, AKLANTOTH_3RD_GEM)
-          htmltext = "30631-01.htm"
+        if has_quest_items?(pc, ALEXANDRIAS_BOOK) && has_at_least_one_quest_item?(pc, LARAS_MEMO, AKLANTOTH_3RD_GEM)
+          html = "30631-01.htm"
         end
       when WARDEN_ENDRIGO
-        if has_quest_items?(player, ALEXANDRIAS_BOOK) && has_at_least_one_quest_item?(player, LARAS_MEMO, AKLANTOTH_3RD_GEM)
-          htmltext = "30632-01.htm"
+        if has_quest_items?(pc, ALEXANDRIAS_BOOK) && has_at_least_one_quest_item?(pc, LARAS_MEMO, AKLANTOTH_3RD_GEM)
+          html = "30632-01.htm"
         end
       when FISHER_EVERT
-        if has_quest_items?(player, ORIMS_INSTRUCTIONS)
-          if has_quest_items?(player, SOULTRAP_CRYSTAL, SWORD_OF_BINDING) && !has_quest_items?(player, BRIMSTONE_2ND)
-            htmltext = "30633-01.htm"
-          elsif has_quest_items?(player, SOULTRAP_CRYSTAL, BRIMSTONE_2ND) && !has_quest_items?(player, ZERUEL_BIND_CRYSTAL)
+        if has_quest_items?(pc, ORIMS_INSTRUCTIONS)
+          if has_quest_items?(pc, SOULTRAP_CRYSTAL, SWORD_OF_BINDING) && !has_quest_items?(pc, BRIMSTONE_2ND)
+            html = "30633-01.htm"
+          elsif has_quest_items?(pc, SOULTRAP_CRYSTAL, BRIMSTONE_2ND) && !has_quest_items?(pc, ZERUEL_BIND_CRYSTAL)
             if npc.summoned_npc_count < 1
               add_spawn(npc, DREVANUL_PRINCE_ZERUEL, DREVANUL_PRINCE_ZERUEL_SPAWN, false, 0)
             end
-            htmltext = "30633-02.htm"
-          elsif has_quest_items?(player, ZERUEL_BIND_CRYSTAL) && !has_at_least_one_quest_item?(player, SOULTRAP_CRYSTAL, BRIMSTONE_2ND)
-            htmltext = "30633-03.htm"
+            html = "30633-02.htm"
+          elsif has_quest_items?(pc, ZERUEL_BIND_CRYSTAL) && !has_at_least_one_quest_item?(pc, SOULTRAP_CRYSTAL, BRIMSTONE_2ND)
+            html = "30633-03.htm"
           end
         end
       end
     elsif qs.completed?
       if npc.id == SHADOW_ORIM
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 
-  private def check_weapon(player)
-    weapon = player.active_weapon_instance?
+  private def check_weapon(pc)
+    weapon = pc.active_weapon_instance?
     !!weapon && weapon.id == SWORD_OF_BINDING
   end
 end

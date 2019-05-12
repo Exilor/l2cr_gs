@@ -38,7 +38,7 @@ module ActionHandler::L2StaticObjectInstanceAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2StaticObjectInstance
   end
 end

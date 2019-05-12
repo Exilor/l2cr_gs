@@ -1,4 +1,6 @@
-class NpcAI::BeastFarm < AbstractNpcAI
+class Scripts::BeastFarm < AbstractNpcAI
+  private record TamedBeast, name : String, skills : Array(SkillHolder)
+
   private GOLDEN_SPICE = 15474
   private CRYSTAL_SPICE = 15475
   private SKILL_GOLDEN_SPICE = 9049
@@ -218,7 +220,7 @@ class NpcAI::BeastFarm < AbstractNpcAI
         next_npc.add_beast_skill(SkillData[sh.skill_id, sh.skill_lvl])
       end
 
-      Quests::Q00020_BringUpWithLove.check_jewel_of_innocence(player)
+      Scripts::Q00020_BringUpWithLove.check_jewel_of_innocence(player)
     else
       # if not trained, the newly spawned mob will automatically be agro against its feeder
       # (what happened to "never bite the hand that feeds you" anyway?!)
@@ -338,6 +340,4 @@ class NpcAI::BeastFarm < AbstractNpcAI
       end
     end
   end
-
-  private record TamedBeast, name : String, skills : Array(SkillHolder)
 end

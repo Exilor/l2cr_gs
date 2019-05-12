@@ -21,7 +21,7 @@ module ActionHandler::L2ItemInstanceAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2ItemInstance
   end
 end

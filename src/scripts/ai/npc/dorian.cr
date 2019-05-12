@@ -1,4 +1,4 @@
-class NpcAI::Dorian < AbstractNpcAI
+class Scripts::Dorian < AbstractNpcAI
   # NPC
   private DORIAN = 25332
   # Items
@@ -13,7 +13,7 @@ class NpcAI::Dorian < AbstractNpcAI
   def on_see_creature(npc, creature, is_summon)
     if creature.player?
       pc = creature.acting_player
-      qs = pc.get_quest_state(Quests::Q00024_InhabitantsOfTheForestOfTheDead.simple_name)
+      qs = pc.get_quest_state(Scripts::Q00024_InhabitantsOfTheForestOfTheDead.simple_name)
       if qs && qs.cond?(3)
         take_items(pc, SILVER_CROSS, -1)
         give_items(pc, BROKEN_SILVER_CROSS, 1)

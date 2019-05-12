@@ -53,13 +53,11 @@ class Packets::Outgoing::PcInfo < Packets::Outgoing::OnScreenInfo
       io.puts "Regenerating: #{!!pc.status.@reg_task}"
       io.puts "Attacking: #{pc.attacking_now?}"
       # io.puts "Attack end time: #{pc.@attack_end_time}"
-      io.puts "Target: #{target_info}"
-      io.puts "AI: #{pc.ai.intention}"
+      # io.puts "Target: #{target_info}"
+      # io.puts "AI: #{pc.ai.intention}"
       io.puts "CP reg: #{Formulas.cp_regen(pc).round(2)}"
       io.puts "HP reg: #{Formulas.hp_regen(pc).round(2)}"
       io.puts "MP reg: #{Formulas.mp_regen(pc).round(2)}"
-
-      io.puts "Objects: #{L2World.objects.size}"
 
       # if wpn = pc.active_weapon_instance?
       #   mask = wpn.@shots_mask

@@ -1,4 +1,4 @@
-class Quests::Q00164_BloodFiend < Quest
+class Scripts::Q00164_BloodFiend < Quest
   # NPC
   private CREAMEES = 30149
   # Monster
@@ -17,9 +17,9 @@ class Quests::Q00164_BloodFiend < Quest
     register_quest_items(KIRUNAK_SKULL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event == "30149-04.htm"
       st.start_quest
       return event
@@ -39,33 +39,33 @@ class Quests::Q00164_BloodFiend < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      if !player.race.dark_elf?
-        if player.level >= MIN_LVL
-          htmltext = "30149-03.htm"
+      if !pc.race.dark_elf?
+        if pc.level >= MIN_LVL
+          html = "30149-03.htm"
         else
-          htmltext = "30149-02.htm"
+          html = "30149-02.htm"
         end
       else
-        htmltext = "30149-00.htm"
+        html = "30149-00.htm"
       end
     when State::STARTED
       if st.cond?(2) && st.has_quest_items?(KIRUNAK_SKULL)
         st.give_adena(42130, true)
         st.add_exp_and_sp(35637, 1854)
         st.exit_quest(false, true)
-        htmltext = "30149-06.html"
+        html = "30149-06.html"
       else
-        htmltext = "30149-05.html"
+        html = "30149-05.html"
       end
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

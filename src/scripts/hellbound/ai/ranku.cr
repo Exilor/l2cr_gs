@@ -1,4 +1,4 @@
-class NpcAI::Ranku < AbstractNpcAI
+class Scripts::Ranku < AbstractNpcAI
   # NPCs
   private RANKU = 25542
   private MINION = 32305

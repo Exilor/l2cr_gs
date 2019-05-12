@@ -1,4 +1,4 @@
-class Quests::Q00126_TheNameOfEvil2 < Quest
+class Scripts::Q00126_TheNameOfEvil2 < Quest
   # NPCs
   private SHILENS_STONE_STATUE = 32109
   private MUSHIKA = 32114
@@ -24,10 +24,10 @@ class Quests::Q00126_TheNameOfEvil2 < Quest
     register_quest_items(GAZKH_FRAGMENT, BONE_POWDER)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     case event
@@ -82,7 +82,7 @@ class Quests::Q00126_TheNameOfEvil2 < Quest
       end
     when "32122-2a.html"
       npc = npc.not_nil!
-      npc.broadcast_packet(MagicSkillUse.new(npc, player, 5089, 1, 1000, 0))
+      npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
     when "32122-2d.html"
       st.take_items(GAZKH_FRAGMENT, -1)
     when "32122-3.html"
@@ -190,7 +190,7 @@ class Quests::Q00126_TheNameOfEvil2 < Quest
       npc = npc.not_nil!
       st.give_items(BONE_POWDER, 1)
       st.play_sound(Sound::ETCSOUND_ELROKI_SONG_FULL)
-      npc.broadcast_packet(MagicSkillUse.new(npc, player, 5089, 1, 1000, 0))
+      npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
     when "32122-8.html"
       if st.cond?(17)
         st.set_cond(18, true)
@@ -226,158 +226,158 @@ class Quests::Q00126_TheNameOfEvil2 < Quest
     event
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when ASAMAH
       case st.state
       when State::CREATED
-        if player.level < 77
-          htmltext = "32115-0.htm"
+        if pc.level < 77
+          html = "32115-0.htm"
         else
-          if player.quest_completed?(Q00125_TheNameOfEvil1.simple_name)
-            htmltext = "32115-0a.htm"
+          if pc.quest_completed?(Q00125_TheNameOfEvil1.simple_name)
+            html = "32115-0a.htm"
           else
-            htmltext = "32115-0b.htm"
+            html = "32115-0b.htm"
           end
         end
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "32115-1d.html"
+          html = "32115-1d.html"
         when 2
-          htmltext = "32115-1c.html"
+          html = "32115-1c.html"
         when 3..19
-          htmltext = "32115-2.html"
+          html = "32115-2.html"
         when 20
-          htmltext = "32115-3.html"
+          html = "32115-3.html"
         when 21
-          htmltext = "32115-4j.html"
+          html = "32115-4j.html"
         when 22
-          htmltext = "32115-5a.html"
+          html = "32115-5a.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when ULU_KAIMU
       if st.started?
         case st.cond
         when 1
-          htmltext = "32119-1.html"
+          html = "32119-1.html"
         when 2
-          htmltext = "32119-2.html"
-          npc.broadcast_packet(MagicSkillUse.new(npc, player, 5089, 1, 1000, 0))
+          html = "32119-2.html"
+          npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
         when 3
-          htmltext = "32119-3c.html"
+          html = "32119-3c.html"
         when 4
-          htmltext = "32119-4c.html"
+          html = "32119-4c.html"
         when 5
-          htmltext = "32119-5a.html"
+          html = "32119-5a.html"
         end
       end
     when BALU_KAIMU
       if st.started?
         case st.cond
         when 1..4
-          htmltext = "32120-1.html"
+          html = "32120-1.html"
         when 5
-          htmltext = "32120-2.html"
-          npc.broadcast_packet(MagicSkillUse.new(npc, player, 5089, 1, 1000, 0))
+          html = "32120-2.html"
+          npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
         when 6
-          htmltext = "32120-3c.html"
+          html = "32120-3c.html"
         when 7
-          htmltext = "32120-4c.html"
+          html = "32120-4c.html"
         else
-          htmltext = "32120-5a.html"
+          html = "32120-5a.html"
         end
       end
     when CHUTA_KAIMU
       if st.started?
         case st.cond
         when 1..7
-          htmltext = "32121-1.html"
+          html = "32121-1.html"
         when 8
-          htmltext = "32121-2.html"
-          npc.broadcast_packet(MagicSkillUse.new(npc, player, 5089, 1, 1000, 0))
+          html = "32121-2.html"
+          npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
         when 9
-          htmltext = "32121-3e.html"
+          html = "32121-3e.html"
         when 10
-          htmltext = "32121-4e.html"
+          html = "32121-4e.html"
         else
-          htmltext = "32121-5a.html"
+          html = "32121-5a.html"
         end
       end
     when WARRIORS_GRAVE
       if st.started?
         case st.cond
         when 1..10
-          htmltext = "32122-1.html"
+          html = "32122-1.html"
         when 11
-          htmltext = "32122-2.html"
+          html = "32122-2.html"
           st.set_cond(12, true)
         when 12
-          htmltext = "32122-2l.html"
+          html = "32122-2l.html"
         when 13
-          htmltext = "32122-3b.html"
+          html = "32122-3b.html"
         when 14
-          htmltext = "32122-4.html"
+          html = "32122-4.html"
           st.unset("DO")
           st.unset("MI")
           st.unset("FA")
           st.unset("SOL")
           st.unset("FA2")
         when 15
-          htmltext = "32122-5.html"
+          html = "32122-5.html"
           st.unset("FA")
           st.unset("SOL")
           st.unset("TI")
           st.unset("SOL2")
           st.unset("FA2")
         when 16
-          htmltext = "32122-6.html"
+          html = "32122-6.html"
           st.unset("SOL")
           st.unset("FA")
           st.unset("MI")
           st.unset("FA2")
           st.unset("MI2")
         when 17
-          htmltext = st.has_quest_items?(BONE_POWDER) ? "32122-7.html" : "32122-7b.html"
+          html = st.has_quest_items?(BONE_POWDER) ? "32122-7.html" : "32122-7b.html"
         when 18
-          htmltext = "32122-8.html"
+          html = "32122-8.html"
         else
-          htmltext = "32122-9.html"
+          html = "32122-9.html"
         end
       end
     when SHILENS_STONE_STATUE
       if st.started?
         case st.cond
         when 1..17
-          htmltext = "32109-1a.html"
+          html = "32109-1a.html"
         when 18
           if st.has_quest_items?(BONE_POWDER)
-            htmltext = "32109-1.html"
+            html = "32109-1.html"
           end
         when 19
-          htmltext = "32109-2l.html"
+          html = "32109-2l.html"
         when 20
-          htmltext = "32109-5.html"
+          html = "32109-5.html"
         else
-          htmltext = "32109-4.html"
+          html = "32109-4.html"
         end
       end
     when MUSHIKA
       if st.started?
         if st.cond < 22
-          htmltext = "32114-4.html"
+          html = "32114-4.html"
         elsif st.cond?(22)
-          htmltext = "32114-1.html"
+          html = "32114-1.html"
         else
-          htmltext = "32114-2.html"
+          html = "32114-2.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

@@ -132,7 +132,8 @@ class Elementals
   end
 
   class ElementalItems < EnumClass
-    getter_initializer element: Int8, item_id: Int32, type: ElementalItemType
+    getter element, item_id, type
+    protected initializer element: Int8, item_id: Int32, type: ElementalItemType
 
     add(FIRE_STONE,      FIRE,   9546, ElementalItemType::Stone)
     add(WATER_STONE,     WATER,  9547, ElementalItemType::Stone)
@@ -175,7 +176,8 @@ class Elementals
 
 
   class ElementalItemType < EnumClass
-    getter_initializer max_level: Int32
+    getter max_level
+    protected initializer max_level: Int32
 
     add(Stone,    3)
     add(Roughore, 3)

@@ -22,7 +22,8 @@ abstract class AbstractEnchantItem
     if item?.nil?
       raise "Item with id #{@id} not found"
     elsif !ENCHANT_TYPES.includes?(item.item_type)
-      raise "Item with id #{@id} not in AbstractEnchantItem::ENCHANT_TYPES (item_type: #{item.item_type})"
+      raise "Item with id #{@id} not in AbstractEnchantItem::ENCHANT_TYPES " \
+        "(item_type: #{item.item_type})"
     end
 
     @grade = set.get_enum("targetGrade", CrystalType, CrystalType::NONE)
@@ -51,8 +52,10 @@ abstract class AbstractEnchantItem
       return false
     end
 
-    if @max_enchant_level != 0 && item_to_enchant.enchant_level > @max_enchant_level
-      return false
+    if @max_enchant_level != 0
+      if item_to_enchant.enchant_level > @max_enchant_level
+        return false
+      end
     end
 
     @grade == item_to_enchant.template.item_grade_s_plus

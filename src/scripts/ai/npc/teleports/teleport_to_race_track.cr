@@ -1,4 +1,4 @@
-class NpcAI::TeleportToRaceTrack < AbstractNpcAI
+class Scripts::TeleportToRaceTrack < AbstractNpcAI
   # Player Variables
   private MONSTER_RETURN = "MONSTER_RETURN"
   # NPC

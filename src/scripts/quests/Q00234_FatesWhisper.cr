@@ -1,4 +1,4 @@
-class Quests::Q00234_FatesWhisper < Quest
+class Scripts::Q00234_FatesWhisper < Quest
   # NPCs
   private ZENKIN = 30178
   private CLIFF = 30182
@@ -108,15 +108,32 @@ class Quests::Q00234_FatesWhisper < Quest
     super(234, self.class.simple_name, "Fate's Whisper")
 
     add_start_npc(MAESTRO_LEORIN)
-    add_talk_id(ZENKIN, CLIFF, MASTER_KASPAR, HEAD_BLACKSMITH_FERRIS, MAESTRO_LEORIN)
-    add_talk_id(COFFER_OF_THE_DEAD, CHEST_OF_KERNON, CHEST_OF_HALLATE, CHEST_OF_GOLKONDA)
+    add_talk_id(
+      ZENKIN, CLIFF, MASTER_KASPAR, HEAD_BLACKSMITH_FERRIS, MAESTRO_LEORIN
+    )
+    add_talk_id(
+      COFFER_OF_THE_DEAD, CHEST_OF_KERNON, CHEST_OF_HALLATE, CHEST_OF_GOLKONDA
+    )
 
-    add_kill_id(PLATINUM_TRIBE_GRUNT, PLATINUM_TRIBE_ARCHER, PLATINUM_TRIBE_WARRIOR, PLATINUM_TRIBE_SHAMAN, PLATINUM_TRIBE_LORD, GUARDIAN_ANGEL, SEAL_ANGEL, SEAL_ANGEL_R)
-    add_kill_id(DOMB_DEATH_CABRIO, KERNON, GOLKONDA_LONGHORN, HALLATE_THE_DEATH_LORD)
+    add_kill_id(
+      PLATINUM_TRIBE_GRUNT, PLATINUM_TRIBE_ARCHER, PLATINUM_TRIBE_WARRIOR,
+      PLATINUM_TRIBE_SHAMAN, PLATINUM_TRIBE_LORD, GUARDIAN_ANGEL, SEAL_ANGEL,
+      SEAL_ANGEL_R
+    )
+    add_kill_id(
+      DOMB_DEATH_CABRIO, KERNON, GOLKONDA_LONGHORN, HALLATE_THE_DEATH_LORD
+    )
 
-    add_spawn_id(COFFER_OF_THE_DEAD, CHEST_OF_KERNON, CHEST_OF_HALLATE, CHEST_OF_GOLKONDA)
+    add_spawn_id(
+      COFFER_OF_THE_DEAD, CHEST_OF_KERNON, CHEST_OF_HALLATE, CHEST_OF_GOLKONDA
+    )
     add_attack_id(BAIUM)
-    register_quest_items(Q_BLOODY_FABRIC_Q0234, Q_WHITE_FABRIC_Q0234, Q_PIPETTE_KNIFE, Q_REIRIAS_SOULORB, Q_INFERNIUM_SCEPTER_1, Q_INFERNIUM_SCEPTER_2, Q_INFERNIUM_SCEPTER_3, Q_MAESTRO_REORINS_HAMMER, Q_MAESTRO_REORINS_MOLD, Q_INFERNIUM_VARNISH, Q_RED_PIPETTE_KNIFE)
+    register_quest_items(
+      Q_BLOODY_FABRIC_Q0234, Q_WHITE_FABRIC_Q0234, Q_PIPETTE_KNIFE,
+      Q_REIRIAS_SOULORB, Q_INFERNIUM_SCEPTER_1, Q_INFERNIUM_SCEPTER_2,
+      Q_INFERNIUM_SCEPTER_3, Q_MAESTRO_REORINS_HAMMER, Q_MAESTRO_REORINS_MOLD,
+      Q_INFERNIUM_VARNISH, Q_RED_PIPETTE_KNIFE
+    )
   end
 
   def on_spawn(npc)
@@ -134,8 +151,8 @@ class Quests::Q00234_FatesWhisper < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when ZENKIN
@@ -165,32 +182,42 @@ class Quests::Q00234_FatesWhisper < Quest
       bloody_fabric_count = qs.get_quest_items_count(Q_BLOODY_FABRIC_Q0234)
       white_fabric_count = qs.get_quest_items_count(Q_WHITE_FABRIC_Q0234)
       white_bloody_fabric_count = bloody_fabric_count + white_fabric_count
-      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE) && white_bloody_fabric_count <= 0
-        return "30833-03.html"
+      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE)
+        if white_bloody_fabric_count <= 0
+          return "30833-03.html"
+        end
       end
-      if qs.memo_state?(8) && qs.has_quest_items?(Q_RED_PIPETTE_KNIFE) && white_bloody_fabric_count <= 0
-        qs.give_items(Q_MAESTRO_REORINS_MOLD, 1)
-        qs.take_items(Q_RED_PIPETTE_KNIFE, 1)
-        qs.memo_state = 9
-        qs.set_cond(10, true)
-        qs.show_question_mark(234)
-        return "30833-04.html"
+      if qs.memo_state?(8) && qs.has_quest_items?(Q_RED_PIPETTE_KNIFE)
+        if white_bloody_fabric_count <= 0
+          qs.give_items(Q_MAESTRO_REORINS_MOLD, 1)
+          qs.take_items(Q_RED_PIPETTE_KNIFE, 1)
+          qs.memo_state = 9
+          qs.set_cond(10, true)
+          qs.show_question_mark(234)
+          return "30833-04.html"
+        end
       end
-      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE) && bloody_fabric_count < 30 && white_bloody_fabric_count >= 30
-        return "30833-03c.html"
+      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE)
+        if bloody_fabric_count < 30 && white_bloody_fabric_count >= 30
+          return "30833-03c.html"
+        end
       end
-      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE) && bloody_fabric_count >= 30 && white_bloody_fabric_count >= 30
-        qs.give_items(Q_MAESTRO_REORINS_MOLD, 1)
-        qs.take_items(Q_BLOODY_FABRIC_Q0234, -1)
-        qs.memo_state = 9
-        qs.set_cond(10, true)
-        qs.show_question_mark(234)
-        return "30833-03d.html"
+      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE)
+        if bloody_fabric_count >= 30 && white_bloody_fabric_count >= 30
+          qs.give_items(Q_MAESTRO_REORINS_MOLD, 1)
+          qs.take_items(Q_BLOODY_FABRIC_Q0234, -1)
+          qs.memo_state = 9
+          qs.set_cond(10, true)
+          qs.show_question_mark(234)
+          return "30833-03d.html"
+        end
       end
-      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE) && white_bloody_fabric_count < 30 && white_bloody_fabric_count > 0
-        qs.give_items(Q_WHITE_FABRIC_Q0234, 30 - white_fabric_count)
-        qs.take_items(Q_BLOODY_FABRIC_Q0234, -1)
-        return "30833-03e.html"
+      if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE)
+        if white_bloody_fabric_count < 30 && white_bloody_fabric_count > 0
+          qs.give_items(Q_WHITE_FABRIC_Q0234, 30 - white_fabric_count)
+          qs.take_items(Q_BLOODY_FABRIC_Q0234, -1)
+          return "30833-03e.html"
+        end
       end
       if qs.memo_state >= 9
         return "30833-05.html"
@@ -207,14 +234,14 @@ class Quests::Q00234_FatesWhisper < Quest
         return "30847-03.html"
       end
     when MAESTRO_LEORIN
-      if qs.created? && player.level >= 75
+      if qs.created? && pc.level >= 75
         return "31002-01.htm"
       end
-      if qs.created? && player.level < 75
+      if qs.created? && pc.level < 75
         return "31002-01a.htm"
       end
       if qs.completed?
-        return get_already_completed_msg(player)
+        return get_already_completed_msg(pc)
       end
       if qs.memo_state?(1) && !qs.has_quest_items?(Q_REIRIAS_SOULORB)
         return "31002-09.html"
@@ -255,67 +282,67 @@ class Quests::Q00234_FatesWhisper < Quest
 
       case qs.memo_state
       when 11
-        if has_at_least_one_quest_item?(player, SWORD_OF_DAMASCUS, SWORD_OF_DAMASCUS_FOCUS, SWORD_OF_DAMASCUS_CRT_DAMAGE, SWORD_OF_DAMASCUS_HASTE)
+        if has_at_least_one_quest_item?(pc, SWORD_OF_DAMASCUS, SWORD_OF_DAMASCUS_FOCUS, SWORD_OF_DAMASCUS_CRT_DAMAGE, SWORD_OF_DAMASCUS_HASTE)
           return "31002-35.html"
         end
         return "31002-35a.html"
       when 12
-        if has_at_least_one_quest_item?(player, HAZARD_BOW_GUIDENCE, HAZARD_BOW_QUICKRECOVERY, HAZARD_BOW_CHEAPSHOT, HAZARD_BOW)
+        if has_at_least_one_quest_item?(pc, HAZARD_BOW_GUIDENCE, HAZARD_BOW_QUICKRECOVERY, HAZARD_BOW_CHEAPSHOT, HAZARD_BOW)
           return "31002-36.html"
         end
         return "31002-36a.html"
       when 13
-        if has_at_least_one_quest_item?(player, LANCIA_ANGER, LANCIA_CRT_STUN, LANCIA_LONGBLOW, LANCIA)
+        if has_at_least_one_quest_item?(pc, LANCIA_ANGER, LANCIA_CRT_STUN, LANCIA_LONGBLOW, LANCIA)
           return "31002-37.html"
         end
         return "31002-37a.html"
       when 14
-        if has_at_least_one_quest_item?(player, ART_OF_BATTLE_AXE_HEALTH, ART_OF_BATTLE_AXE_RSK_FOCUS, ART_OF_BATTLE_AXE_HASTE, ART_OF_BATTLE_AXE)
+        if has_at_least_one_quest_item?(pc, ART_OF_BATTLE_AXE_HEALTH, ART_OF_BATTLE_AXE_RSK_FOCUS, ART_OF_BATTLE_AXE_HASTE, ART_OF_BATTLE_AXE)
           return "31002-38.html"
         end
         return "31002-38a.html"
       when 15
-        if has_at_least_one_quest_item?(player, STAFF_OF_EVIL_SPRIT_MAGICFOCUS, STAFF_OF_EVIL_SPRIT_MAGICBLESSTHEBODY, STAFF_OF_EVIL_SPRIT_MAGICPOISON, STAFF_OF_EVIL_SPRIT)
+        if has_at_least_one_quest_item?(pc, STAFF_OF_EVIL_SPRIT_MAGICFOCUS, STAFF_OF_EVIL_SPRIT_MAGICBLESSTHEBODY, STAFF_OF_EVIL_SPRIT_MAGICPOISON, STAFF_OF_EVIL_SPRIT)
           return "31002-39.html"
         end
         return "31002-39a.html"
       when 16
-        if has_at_least_one_quest_item?(player, DEMONS_SWORD_CRT_BLEED, DEMONS_SWORD_CRT_POISON, DEMONS_SWORD_MIGHTMOTAL, DEMONS_SWORD)
+        if has_at_least_one_quest_item?(pc, DEMONS_SWORD_CRT_BLEED, DEMONS_SWORD_CRT_POISON, DEMONS_SWORD_MIGHTMOTAL, DEMONS_SWORD)
           return "31002-40.html"
         end
         return "31002-40a.html"
       when 17
-        if has_at_least_one_quest_item?(player, BELLION_CESTUS_CRT_DRAIN, BELLION_CESTUS_CRT_POISON, BELLION_CESTUS_RSK_HASTE, BELLION_CESTUS)
+        if has_at_least_one_quest_item?(pc, BELLION_CESTUS_CRT_DRAIN, BELLION_CESTUS_CRT_POISON, BELLION_CESTUS_RSK_HASTE, BELLION_CESTUS)
           return "31002-41.html"
         end
         return "31002-41a.html"
       when 18
-        if has_at_least_one_quest_item?(player, DEADMANS_GLORY_ANGER, DEADMANS_GLORY_HEALTH, DEADMANS_GLORY_HASTE, DEADMANS_GLORY)
+        if has_at_least_one_quest_item?(pc, DEADMANS_GLORY_ANGER, DEADMANS_GLORY_HEALTH, DEADMANS_GLORY_HASTE, DEADMANS_GLORY)
           return "31002-42.html"
         end
         return "31002-42a.html"
       when 19
-        if has_at_least_one_quest_item?(player, SAMURAI_LONGSWORD_SAMURAI_LONGSWORD)
+        if has_at_least_one_quest_item?(pc, SAMURAI_LONGSWORD_SAMURAI_LONGSWORD)
           return "31002-43.html"
         end
         return "31002-43a.html"
       when 41
-        if has_at_least_one_quest_item?(player, GUARDIANS_SWORD, GUARDIANS_SWORD_CRT_DRAIN, GUARDIANS_SWORD_HEALTH, GUARDIANS_SWORD_CRT_BLEED)
+        if has_at_least_one_quest_item?(pc, GUARDIANS_SWORD, GUARDIANS_SWORD_CRT_DRAIN, GUARDIANS_SWORD_HEALTH, GUARDIANS_SWORD_CRT_BLEED)
           return "31002-43b.html"
         end
         return "31002-43c.html"
       when 42
-        if has_at_least_one_quest_item?(player, TEARS_OF_WIZARD, TEARS_OF_WIZARD_ACUMEN, TEARS_OF_WIZARD_MAGICPOWER, TEARS_OF_WIZARD_UPDOWN)
+        if has_at_least_one_quest_item?(pc, TEARS_OF_WIZARD, TEARS_OF_WIZARD_ACUMEN, TEARS_OF_WIZARD_MAGICPOWER, TEARS_OF_WIZARD_UPDOWN)
           return "31002-43d.html"
         end
         return "31002-43e.html"
       when 43
-        if has_at_least_one_quest_item?(player, STAR_BUSTER, STAR_BUSTER_HEALTH, STAR_BUSTER_HASTE, STAR_BUSTER_RSK_FOCUS)
+        if has_at_least_one_quest_item?(pc, STAR_BUSTER, STAR_BUSTER_HEALTH, STAR_BUSTER_HASTE, STAR_BUSTER_RSK_FOCUS)
           return "31002-43f.html"
         end
         return "31002-43g.html"
       when 44
-        if has_at_least_one_quest_item?(player, BONE_OF_KAIM_VANUL, BONE_OF_KAIM_VANUL_MANAUP, BONE_OF_KAIM_VANUL_MAGICSILENCE, BONE_OF_KAIM_VANUL_UPDOWN)
+        if has_at_least_one_quest_item?(pc, BONE_OF_KAIM_VANUL, BONE_OF_KAIM_VANUL_MANAUP, BONE_OF_KAIM_VANUL_MAGICSILENCE, BONE_OF_KAIM_VANUL_UPDOWN)
           return "31002-43h.html"
         end
         return "31002-43i.html"
@@ -326,7 +353,7 @@ class Quests::Q00234_FatesWhisper < Quest
         qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         return "31027-01.html"
       end
-      if (qs.memo_state > 1) || qs.has_quest_items?(Q_REIRIAS_SOULORB)
+      if qs.memo_state > 1 || qs.has_quest_items?(Q_REIRIAS_SOULORB)
         return "31027-02.html"
       end
     when CHEST_OF_KERNON
@@ -358,13 +385,13 @@ class Quests::Q00234_FatesWhisper < Quest
       end
     end
 
-    get_no_quest_msg(player)
+    get_no_quest_msg(pc)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
 
-    unless player
+    unless pc
       case event
       when "23401", "23402", "23403", "23404"
         npc.decay_me
@@ -372,11 +399,11 @@ class Quests::Q00234_FatesWhisper < Quest
       return super
     end
 
-    unless qs = get_quest_state(player, false)
+    unless qs = get_quest_state(pc, false)
       return
     end
 
-    htmltext = nil
+    html = nil
 
     if event == "QUEST_ACCEPTED"
       qs.memo_state = 1
@@ -446,7 +473,7 @@ class Quests::Q00234_FatesWhisper < Quest
       when 3
         return "31002-04.html"
       when 4
-        if !qs.completed? && player.level >= 75
+        if !qs.completed? && pc.level >= 75
           return "31002-05.html"
         end
       when 5
@@ -635,94 +662,94 @@ class Quests::Q00234_FatesWhisper < Quest
           return "31002-34.html"
         end
       when 21
-        if calculate_reward(qs, player, TALLUM_BLADE)
+        if calculate_reward(qs, pc, TALLUM_BLADE)
           return "31002-44.html"
         end
       when 22
-        if calculate_reward(qs, player, CARNIUM_BOW)
+        if calculate_reward(qs, pc, CARNIUM_BOW)
           return "31002-44.html"
         end
       when 23
-        if calculate_reward(qs, player, HALBARD)
+        if calculate_reward(qs, pc, HALBARD)
           return "31002-44.html"
         end
       when 24
-        if calculate_reward(qs, player, ELEMENTAL_SWORD)
+        if calculate_reward(qs, pc, ELEMENTAL_SWORD)
           return "31002-44.html"
         end
       when 25
-        if calculate_reward(qs, player, DASPARIONS_STAFF)
+        if calculate_reward(qs, pc, DASPARIONS_STAFF)
           return "31002-44.html"
         end
       when 26
-        if calculate_reward(qs, player, BLOODY_ORCHID)
+        if calculate_reward(qs, pc, BLOODY_ORCHID)
           return "31002-44.html"
         end
       when 27
-        if calculate_reward(qs, player, BLOOD_TORNADO)
+        if calculate_reward(qs, pc, BLOOD_TORNADO)
           return "31002-44.html"
         end
       when 28
-        if calculate_reward(qs, player, METEOR_SHOWER)
+        if calculate_reward(qs, pc, METEOR_SHOWER)
           return "31002-44.html"
         end
       when 29
-        if calculate_reward(qs, player, KSHANBERK_KSHANBERK)
+        if calculate_reward(qs, pc, KSHANBERK_KSHANBERK)
           return "31002-44.html"
         end
       when 30
-        if calculate_reward(qs, player, INFERNO_MASTER)
+        if calculate_reward(qs, pc, INFERNO_MASTER)
           return "31002-44.html"
         end
       when 31
-        if calculate_reward(qs, player, EYE_OF_SOUL)
+        if calculate_reward(qs, pc, EYE_OF_SOUL)
           return "31002-44.html"
         end
       when 32
-        if calculate_reward(qs, player, HAMMER_OF_DESTROYER)
+        if calculate_reward(qs, pc, HAMMER_OF_DESTROYER)
           return "31002-44.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 
-  private def calculate_reward(qs, player, reward)
+  private def calculate_reward(qs, pc, reward) : Bool
     case qs.memo_state
     when 11
-      return get_reward(qs, player, SWORD_OF_DAMASCUS, SWORD_OF_DAMASCUS_FOCUS, SWORD_OF_DAMASCUS_CRT_DAMAGE, SWORD_OF_DAMASCUS_HASTE, reward)
+      get_reward(qs, pc, SWORD_OF_DAMASCUS, SWORD_OF_DAMASCUS_FOCUS, SWORD_OF_DAMASCUS_CRT_DAMAGE, SWORD_OF_DAMASCUS_HASTE, reward)
     when 12
-      return get_reward(qs, player, HAZARD_BOW, HAZARD_BOW_GUIDENCE, HAZARD_BOW_QUICKRECOVERY, HAZARD_BOW_CHEAPSHOT, reward)
+      get_reward(qs, pc, HAZARD_BOW, HAZARD_BOW_GUIDENCE, HAZARD_BOW_QUICKRECOVERY, HAZARD_BOW_CHEAPSHOT, reward)
     when 13
-      return get_reward(qs, player, LANCIA, LANCIA_ANGER, LANCIA_CRT_STUN, LANCIA_LONGBLOW, reward)
+      get_reward(qs, pc, LANCIA, LANCIA_ANGER, LANCIA_CRT_STUN, LANCIA_LONGBLOW, reward)
     when 14
-      return get_reward(qs, player, ART_OF_BATTLE_AXE, ART_OF_BATTLE_AXE_HEALTH, ART_OF_BATTLE_AXE_RSK_FOCUS, ART_OF_BATTLE_AXE_HASTE, reward)
+      get_reward(qs, pc, ART_OF_BATTLE_AXE, ART_OF_BATTLE_AXE_HEALTH, ART_OF_BATTLE_AXE_RSK_FOCUS, ART_OF_BATTLE_AXE_HASTE, reward)
     when 15
-      return get_reward(qs, player, STAFF_OF_EVIL_SPRIT, STAFF_OF_EVIL_SPRIT_MAGICFOCUS, STAFF_OF_EVIL_SPRIT_MAGICBLESSTHEBODY, STAFF_OF_EVIL_SPRIT_MAGICPOISON, reward)
+      get_reward(qs, pc, STAFF_OF_EVIL_SPRIT, STAFF_OF_EVIL_SPRIT_MAGICFOCUS, STAFF_OF_EVIL_SPRIT_MAGICBLESSTHEBODY, STAFF_OF_EVIL_SPRIT_MAGICPOISON, reward)
     when 16
-      return get_reward(qs, player, DEMONS_SWORD, DEMONS_SWORD_CRT_BLEED, DEMONS_SWORD_CRT_POISON, DEMONS_SWORD_MIGHTMOTAL, reward)
+      get_reward(qs, pc, DEMONS_SWORD, DEMONS_SWORD_CRT_BLEED, DEMONS_SWORD_CRT_POISON, DEMONS_SWORD_MIGHTMOTAL, reward)
     when 17
-      return get_reward(qs, player, BELLION_CESTUS, BELLION_CESTUS_CRT_DRAIN, BELLION_CESTUS_CRT_POISON, BELLION_CESTUS_RSK_HASTE, reward)
+      get_reward(qs, pc, BELLION_CESTUS, BELLION_CESTUS_CRT_DRAIN, BELLION_CESTUS_CRT_POISON, BELLION_CESTUS_RSK_HASTE, reward)
     when 18
-      return get_reward(qs, player, DEADMANS_GLORY, DEADMANS_GLORY_ANGER, DEADMANS_GLORY_HEALTH, DEADMANS_GLORY_HASTE, reward)
+      get_reward(qs, pc, DEADMANS_GLORY, DEADMANS_GLORY_ANGER, DEADMANS_GLORY_HEALTH, DEADMANS_GLORY_HASTE, reward)
     when 19
-      return get_reward(qs, player, SAMURAI_LONGSWORD_SAMURAI_LONGSWORD, 0, 0, 0, reward)
+      get_reward(qs, pc, SAMURAI_LONGSWORD_SAMURAI_LONGSWORD, 0, 0, 0, reward)
     when 41
-      return get_reward(qs, player, GUARDIANS_SWORD, GUARDIANS_SWORD_CRT_DRAIN, GUARDIANS_SWORD_HEALTH, GUARDIANS_SWORD_CRT_BLEED, reward)
+      get_reward(qs, pc, GUARDIANS_SWORD, GUARDIANS_SWORD_CRT_DRAIN, GUARDIANS_SWORD_HEALTH, GUARDIANS_SWORD_CRT_BLEED, reward)
     when 42
-      return get_reward(qs, player, TEARS_OF_WIZARD, TEARS_OF_WIZARD_ACUMEN, TEARS_OF_WIZARD_MAGICPOWER, TEARS_OF_WIZARD_UPDOWN, reward)
+      get_reward(qs, pc, TEARS_OF_WIZARD, TEARS_OF_WIZARD_ACUMEN, TEARS_OF_WIZARD_MAGICPOWER, TEARS_OF_WIZARD_UPDOWN, reward)
     when 43
-      return get_reward(qs, player, STAR_BUSTER, STAR_BUSTER_HEALTH, STAR_BUSTER_HASTE, STAR_BUSTER_RSK_FOCUS, reward)
+      get_reward(qs, pc, STAR_BUSTER, STAR_BUSTER_HEALTH, STAR_BUSTER_HASTE, STAR_BUSTER_RSK_FOCUS, reward)
     when 44
-      return get_reward(qs, player, BONE_OF_KAIM_VANUL, BONE_OF_KAIM_VANUL_MANAUP, BONE_OF_KAIM_VANUL_MAGICSILENCE, BONE_OF_KAIM_VANUL_UPDOWN, reward)
+      get_reward(qs, pc, BONE_OF_KAIM_VANUL, BONE_OF_KAIM_VANUL_MANAUP, BONE_OF_KAIM_VANUL_MAGICSILENCE, BONE_OF_KAIM_VANUL_UPDOWN, reward)
+    else
+      false
     end
-
-    false
   end
 
-  private def get_reward(qs, player, item1, item2, item3, item4, reward)
-    if has_at_least_one_quest_item?(player, item1, item2, item3, item4)
+  private def get_reward(qs, pc, item1, item2, item3, item4, reward)
+    if has_at_least_one_quest_item?(pc, item1, item2, item3, item4)
       qs.give_items(reward, 1)
       qs.give_items(Q_STAR_OF_DESTINY, 1)
       if qs.has_quest_items?(item1)
@@ -735,7 +762,7 @@ class Quests::Q00234_FatesWhisper < Quest
         qs.take_items(item4, 1)
       end
       qs.exit_quest(false, true)
-      player.broadcast_social_action(3)
+      pc.broadcast_social_action(3)
       return true
     end
 

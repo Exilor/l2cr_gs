@@ -1,4 +1,4 @@
-class NpcAI::FleeMonsters < AbstractNpcAI
+class Scripts::FleeMonsters < AbstractNpcAI
   private MOBS = {
     18150, # Victim
     18151, # Victim

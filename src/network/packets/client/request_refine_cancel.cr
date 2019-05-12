@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestRefineCancel < Packets::Incoming::AbstractRefinePacket
   @target_item_obj_id = 0
 
-  def read_impl
+  private def read_impl
     @target_item_obj_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     item = pc.inventory.get_item_by_l2id(@target_item_obj_id)

@@ -1,4 +1,4 @@
-class Quests::Q00187_NikolasHeart < Quest
+class Scripts::Q00187_NikolasHeart < Quest
   # NPCs
   private HEAD_BLACKSMITH_KUSTO = 30512
   private MAESTRO_NIKOLA = 30621

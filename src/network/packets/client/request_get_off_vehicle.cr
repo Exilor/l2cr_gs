@@ -4,14 +4,14 @@ class Packets::Incoming::RequestGetOffVehicle < GameClientPacket
   @y = 0
   @z = 0
 
-  def read_impl
+  private def read_impl
     @boat_id = d
     @x = d
     @y = d
     @z = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     if !pc.in_boat? || pc.boat!.l2id != @boat_id || pc.boat!.moving? || !pc.inside_radius?(@x, @y, @z, 1000, true, false)

@@ -3,11 +3,11 @@ class Packets::Incoming::SetPrivateStoreWholeMsg < GameClientPacket
 
   @msg = ""
 
-  def read_impl
+  private def read_impl
     @msg = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless sell_list = pc.sell_list
 

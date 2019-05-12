@@ -1,4 +1,4 @@
-class Quests::Q00024_InhabitantsOfTheForestOfTheDead < Quest
+class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
   # NPCs
   private DORIAN = 31389
   private MYSTERIOUS_WIZARD = 31522
@@ -24,15 +24,15 @@ class Quests::Q00024_InhabitantsOfTheForestOfTheDead < Quest
     register_quest_items(LIDIA_LETTER, LIDIA_HAIRPIN, SUSPICIOUS_TOTEM_DOLL, FLOWER_BOUQUET, SILVER_CROSS_OF_EINHASAD, BROKEN_SILVER_CROSS_OF_EINHASAD)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
-    htmltext = event
+    html = event
     case event
       # Dorian
     when "31389-02.htm"
-      if player.level >= 65 && player.quest_completed?(Q00023_LidiasHeart.simple_name)
+      if pc.level >= 65 && pc.quest_completed?(Q00023_LidiasHeart.simple_name)
         st.start_quest
         st.give_items(FLOWER_BOUQUET, 1)
         return "31389-03.htm"
@@ -47,7 +47,7 @@ class Quests::Q00024_InhabitantsOfTheForestOfTheDead < Quest
       st.play_sound(Sound::INTERFACESOUND_CHARSTAT_OPEN)
     when "31389-19.html"
       unless st.has_quest_items?(BROKEN_SILVER_CROSS_OF_EINHASAD)
-        return get_no_quest_msg(player)
+        return get_no_quest_msg(pc)
       end
       st.take_items(BROKEN_SILVER_CROSS_OF_EINHASAD, -1)
       st.set_cond(5, true)
@@ -59,13 +59,13 @@ class Quests::Q00024_InhabitantsOfTheForestOfTheDead < Quest
       st.set_cond(6, true)
     when "31532-07.html"
       if st.cond?(8)
-        unless has_quest_items?(player, LIDIA_HAIRPIN, LIDIA_LETTER)
-          return get_no_quest_msg(player)
+        unless has_quest_items?(pc, LIDIA_HAIRPIN, LIDIA_LETTER)
+          return get_no_quest_msg(pc)
         end
         st.take_items(LIDIA_HAIRPIN, -1)
         st.take_items(LIDIA_LETTER, -1)
         st.set("var", "1")
-        htmltext = "31532-06.html"
+        html = "31532-06.html"
       else
         if st.cond?(6)
           st.set_cond(7, true)
@@ -81,10 +81,10 @@ class Quests::Q00024_InhabitantsOfTheForestOfTheDead < Quest
     when "31532-02.html", "31532-03.html", "31532-09.html", "31532-12.html",
          "31532-13.html", "31532-15.html", "31532-16.html", "31532-17.html",
          "31532-18.html"
-    # Mysterious Wizard
+      # Mysterious Wizard
     when "31522-03.html"
       unless st.has_quest_items?(SUSPICIOUS_TOTEM_DOLL)
-        return get_no_quest_msg(player)
+        return get_no_quest_msg(pc)
       end
       st.take_items(SUSPICIOUS_TOTEM_DOLL, 1)
       st.set("var", "1")
@@ -101,22 +101,22 @@ class Quests::Q00024_InhabitantsOfTheForestOfTheDead < Quest
          "31522-10.html", "31522-11.html", "31522-12.html", "31522-13.html",
          "31522-14.html", "31522-15.html", "31522-16.html", "31522-19.html",
          "31522-20.html"
-    # Tombstone
+      # Tombstone
     when "31531-02.html"
       unless st.has_quest_items?(FLOWER_BOUQUET)
-        return get_no_quest_msg(player)
+        return get_no_quest_msg(pc)
       end
       st.take_items(FLOWER_BOUQUET, -1)
       st.set_cond(2, true)
     else
-      htmltext = nil
+      html = nil
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
 
     if st && st.cond?(9) && Rnd.rand(100) < 10
       st.give_items(SUSPICIOUS_TOTEM_DOLL, 1)
@@ -126,89 +126,86 @@ class Quests::Q00024_InhabitantsOfTheForestOfTheDead < Quest
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state(player, true)
-
-    if st.nil?
-      return htmltext
+  def on_talk(npc, pc)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
     end
 
     case npc.id
     when DORIAN
       case st.state
       when State::CREATED
-        htmltext = "31389-01.htm"
+        html = "31389-01.htm"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "31389-04.html"
+          html = "31389-04.html"
         when 2
-          htmltext = st.get_int("var") == 0 ? "31389-05.html" : "31389-09.html"
+          html = st.get_int("var") == 0 ? "31389-05.html" : "31389-09.html"
         when 3
-          htmltext = "31389-14.html"
+          html = "31389-14.html"
         when 4
-          htmltext = "31389-15.html"
+          html = "31389-15.html"
         when 5
-          htmltext = "31389-20.html"
+          html = "31389-20.html"
         when 6, 8
-          htmltext = "31389-22.html"
+          html = "31389-22.html"
         when 7
           st.give_items(LIDIA_HAIRPIN, 1)
           st.set_cond(8, true)
-          htmltext = "31389-21.html"
+          html = "31389-21.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when MYSTERIOUS_WIZARD
       if st.started?
         if st.cond?(10)
-          htmltext = st.get_int("var") == 0 ? "31522-01.html" : "31522-04.html"
+          html = st.get_int("var") == 0 ? "31522-01.html" : "31522-04.html"
         elsif st.cond?(11)
-          htmltext = st.get_int("var") == 0 ? "31522-09.html" : "31522-18.html"
+          html = st.get_int("var") == 0 ? "31522-09.html" : "31522-18.html"
         end
       elsif st.completed?
-        qs = player.get_quest_state(Q00025_HidingBehindTheTruth.simple_name)
+        qs = pc.get_quest_state(Q00025_HidingBehindTheTruth.simple_name)
         unless qs && (qs.started? || qs.completed?) # L2J has two "completed?"
-          htmltext = "31522-22.html"
+          html = "31522-22.html"
         end
       end
     when TOMBSTONE
       if st.started?
         if st.cond?(1)
           st.play_sound(Sound::AMDSOUND_WIND_LOOT)
-          htmltext = "31531-01.html"
+          html = "31531-01.html"
         elsif st.cond?(2)
-          htmltext = "31531-03.html"
+          html = "31531-03.html"
         end
       end
     when LIDIA_MAID
       if st.started?
         case st.cond
         when 5
-          htmltext = "31532-01.html"
+          html = "31532-01.html"
         when 6
-          htmltext = "31532-05.html"
+          html = "31532-05.html"
         when 7
-          htmltext = "31532-07a.html"
+          html = "31532-07a.html"
         when 8
           case st.get_int("var")
           when -1 # L2J: 0
-            htmltext = "31532-07a.html"
+            html = "31532-07a.html"
           when 1
-            htmltext = "31532-08.html"
+            html = "31532-08.html"
           when 2
-            htmltext = "31532-11.html"
+            html = "31532-11.html"
           when 3
-            htmltext = "31532-15.html"
+            html = "31532-15.html"
           end
         when 9, 10
-          htmltext = "31532-20.html"
+          html = "31532-20.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

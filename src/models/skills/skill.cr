@@ -574,8 +574,6 @@ class Skill
   end
 
   private def activate_skill(caster : L2Character, cubic : L2CubicInstance?, targets : Enumerable(L2Object))
-    # caster = caster.owner if caster.is_a?(L2CubicInstance)
-
     case @id
     when 5852, 5853
       warn "TODO: HandysBlockCheckerManager"
@@ -641,6 +639,7 @@ class Skill
       end
 
       if effector.gm? && !effector.access_level.can_give_damage?
+        return
       end
     end
 

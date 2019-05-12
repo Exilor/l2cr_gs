@@ -5,7 +5,7 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
   @heading = 0
   @data = 0
 
-  def read_impl
+  private def read_impl
     @x = d
     @y = d
     @z = d
@@ -13,7 +13,7 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
     @data = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return if pc.teleporting? || pc.in_observer_mode?
 

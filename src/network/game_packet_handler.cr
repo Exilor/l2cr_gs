@@ -5,15 +5,13 @@ module GamePacketHandler
   extend self
   extend MMO::IPacketHandler(GameClient)
   extend MMO::IPacketExecutor(GameClient)
-  include Packets::Incoming
   extend Loggable
+  include Packets::Incoming
 
-  def handle(buffer, client) : GameClientPacket?
+  def handle(buffer : ByteBuffer, client : GameClient) : GameClientPacket?
     if client.drop_packet
-      debug "Packet dropped (#{client})."
+      debug { "Packet dropped (#{client})." }
       return
-
-      warn "a packet would have been dropped"
     end
 
     opcode = buffer.read_bytes(UInt8)
@@ -38,7 +36,7 @@ module GamePacketHandler
       when 0x7b then CharacterRestore
       when 0xd0
         if buffer.remaining < 2
-          warn "#{client} sent a 0xd0 without the second opcode."
+          warn { "#{client} sent a 0xd0 without the second opcode." }
           return
         end
         case op2 = buffer.read_bytes(UInt16)
@@ -57,11 +55,13 @@ module GamePacketHandler
       when 0x11 then EnterWorld
       when 0xd0
         if buffer.remaining < 2
-          warn "#{client} sent a 0xd0 without the second opcode."
+          warn { "#{client} sent a 0xd0 without the second opcode." }
           return
         end
         case op2 = buffer.read_bytes(UInt16)
         when 0x01 then RequestManorList
+        when 0x21 then RequestKeyMapping # L2J forgot about this one
+        when 0x3d then RequestAllFortressInfo # L2J forgot about this one
         else
           print_debug_double_opcode(opcode, op2, buffer, state, client)
         end
@@ -79,11 +79,9 @@ module GamePacketHandler
       when 0x07 then RequestSurrenderPledgeWar
       when 0x08 then RequestReplySurrenderPledgeWar
       when 0x09 then RequestSetPledgeCrest
-      # when 0x0a then RequestGiveNickName
       when 0x0b then RequestGiveNickName
       when 0x0f then MoveBackwardToLocation
       when 0x10 # Say
-      # when 0x11 then EnterWorld
       when 0x12 # CharacterSelect ("Start" was spammed when AUTHED)
         debug "Ignoring duplicate CharacterSelect packet."
       when 0x14 then RequestItemList
@@ -144,7 +142,7 @@ module GamePacketHandler
       when 0x49 then Say2
       when 0x4a
         if buffer.remaining < 2
-          warn "#{client} sent a 0x4a without the second opcode."
+          warn { "#{client} sent a 0x4a without the second opcode." }
           return
         end
         case op2 = buffer.read_bytes(UInt16)
@@ -269,7 +267,7 @@ module GamePacketHandler
       when 0xcf # RequestProcureCrop -> RequestBuyProcure
       when 0xd0
         if buffer.remaining < 2
-          warn "#{client} sent a 0xd0 without the second opcode."
+          warn { "#{client} sent a 0xd0 without the second opcode." }
           return
         end
         case op2 = buffer.read_bytes(UInt16)
@@ -357,7 +355,7 @@ module GamePacketHandler
         when 0x50 then RequestResetNickname
         when 0x51
           if buffer.remaining < 2
-            warn "#{client} sent a 0xd0:0x51 without the third opcode."
+            warn { "#{client} sent a 0xd0:0x51 without the third opcode." }
             return
           end
           case op3 = buffer.read_bytes(UInt16)
@@ -431,7 +429,7 @@ module GamePacketHandler
     end
 
     if packet_type.is_a?(GameClientPacket.class)
-      packet_type.allocate
+      packet_type.new
     end
   end
 
@@ -449,11 +447,12 @@ module GamePacketHandler
     warn { "Unknown packet 0x#{op1.to_s(16)}:0x#{op2.to_s(16)} on state #{state.inspect} of client #{client}." }
   end
 
-  def accept?(socket)
+  def accept?(socket : TCPSocket) : Bool
+    # TODO
     true
   end
 
-  def execute(gcp)
+  def execute(gcp : GameClientPacket)
     gcp.client.execute(gcp)
   end
 end

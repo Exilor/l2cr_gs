@@ -1,4 +1,4 @@
-class NpcAI::CastleMercenaryManager < AbstractNpcAI
+class Scripts::CastleMercenaryManager < AbstractNpcAI
   # NPCs
   private NPCS = {
     35102, # Greenspan

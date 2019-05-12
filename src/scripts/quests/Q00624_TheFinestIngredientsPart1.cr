@@ -1,4 +1,4 @@
-class Quests::Q00624_TheFinestIngredientsPart1 < Quest
+class Scripts::Q00624_TheFinestIngredientsPart1 < Quest
   # NPC
   private JEREMY = 31521
   # Items
@@ -23,7 +23,9 @@ class Quests::Q00624_TheFinestIngredientsPart1 < Quest
     add_start_npc(JEREMY)
     add_talk_id(JEREMY)
     add_kill_id(MONSTER_DROPS.keys)
-    register_quest_items(TRUNK_OF_NEPENTHES, FOOT_OF_BANDERSNATCHLING, SECRET_SPICE)
+    register_quest_items(
+      TRUNK_OF_NEPENTHES, FOOT_OF_BANDERSNATCHLING, SECRET_SPICE
+    )
   end
 
   def on_adv_event(event, npc, pc)

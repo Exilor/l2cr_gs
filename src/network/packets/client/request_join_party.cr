@@ -2,12 +2,12 @@ class Packets::Incoming::RequestJoinParty < GameClientPacket
   @name = ""
   @item_distribution_type_id = 0
 
-  def read_impl
+  private def read_impl
     @name = s
     @item_distribution_type_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless requestor = active_char
 
     unless target = L2World.get_player(@name)

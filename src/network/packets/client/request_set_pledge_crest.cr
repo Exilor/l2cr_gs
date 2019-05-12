@@ -2,7 +2,7 @@ class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
   @length = 0
   @data : Bytes?
 
-  def read_impl
+  private def read_impl
     @length = d
 
     if @length > 256
@@ -14,7 +14,7 @@ class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
     @data = b(@length)
   end
 
-  def run_impl
+  private def run_impl
     return unless _data = @data
     return unless pc = active_char
 

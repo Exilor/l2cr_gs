@@ -1,4 +1,4 @@
-class Quests::Q00551_OlympiadStarter < Quest
+class Scripts::Q00551_OlympiadStarter < Quest
   private MANAGER = 31688
 
   private CERT_3 = 17238

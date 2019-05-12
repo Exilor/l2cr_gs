@@ -1,4 +1,4 @@
-class Quests::Q00146_TheZeroHour < Quest
+class Scripts::Q00146_TheZeroHour < Quest
   # NPCs
   private KAHMAN = 31554
   private QUEEN_SHYEED = 25671
@@ -15,10 +15,10 @@ class Quests::Q00146_TheZeroHour < Quest
     register_quest_items(FANG)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
     if event.casecmp?("31554-03.htm")
@@ -40,33 +40,33 @@ class Quests::Q00146_TheZeroHour < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      if player.level < 81
-        htmltext = "31554-02.htm"
+      if pc.level < 81
+        html = "31554-02.htm"
       else
-        if player.quest_completed?(Q00109_InSearchOfTheNest.simple_name)
-          htmltext = "31554-01a.htm"
+        if pc.quest_completed?(Q00109_InSearchOfTheNest.simple_name)
+          html = "31554-01a.htm"
         else
-          htmltet = "31554-04.html"
+          html = "31554-04.html"
         end
       end
     when State::STARTED
       if st.cond?(1)
-        htmltext = "31554-06.html"
+        html = "31554-06.html"
       else
         st.give_items(KAHMANS_SUPPLY_BOX, 1)
         st.add_exp_and_sp(154616, 12500)
         st.exit_quest(false, true)
-        htmltext = "31554-05.html"
+        html = "31554-05.html"
       end
     when State::COMPLETED
-      htmltext = "31554-01b.htm"
+      html = "31554-01b.htm"
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

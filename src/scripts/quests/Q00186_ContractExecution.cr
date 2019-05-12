@@ -1,4 +1,4 @@
-class Quests::Q00186_ContractExecution < Quest
+class Scripts::Q00186_ContractExecution < Quest
   # NPCs
   private MAESTRO_NIKOLA = 30621
   private RESEARCHER_LORAIN = 30673

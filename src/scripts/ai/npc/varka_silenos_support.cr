@@ -1,4 +1,4 @@
-class NpcAI::VarkaSilenosSupport < AbstractNpcAI
+class Scripts::VarkaSilenosSupport < AbstractNpcAI
   private struct BuffData
     getter cost
 

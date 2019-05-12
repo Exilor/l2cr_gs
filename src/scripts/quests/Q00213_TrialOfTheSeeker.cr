@@ -1,4 +1,4 @@
-class Quests::Q00213_TrialOfTheSeeker < Quest
+class Scripts::Q00213_TrialOfTheSeeker < Quest
   # NPCs
   private MASTER_TERRY = 30064
   private MASTER_DUFNER = 30106
@@ -54,104 +54,119 @@ class Quests::Q00213_TrialOfTheSeeker < Quest
     super(213, self.class.simple_name, "Trial Of The Seeker")
 
     add_start_npc(MASTER_DUFNER)
-    add_talk_id(MASTER_DUFNER, MASTER_TERRY, BLACKSMITH_BRUNON, TRADER_VIKTOR, MAGISTER_MARINA)
-    add_kill_id(ANT_CAPTAIN, ANT_WARRIOR_CAPTAIN, MEDUSA, NEER_GHOUL_BERSERKER, OL_MAHUM_CAPTAIN, MARSH_STAKATO_DRONE, TURAK_BUGBEAR_WARRIOR, BREKA_ORC_OVERLORD, TUREK_ORC_WARLORD, LETO_LIZARDMAN_WARRIOR)
-    register_quest_items(DUFNERS_LETTER, TERRYS_1ST_ORDER, TERRYS_2ND_ORDER, TERRYS_LETTER, VIKTORS_LETTER, HAWKEYES_LETTER, MYSTERIOUS_SPIRIT_ORE, OL_MAHUM_SPIRIT_ORE, TUREK_SPIRIT_ORE, ANT_SPIRIT_ORE, TURAK_BUGBEAR_SPIRIT_ORE, TERRY_BOX, VIKTORS_REQUEST, MEDUSA_SCALES, SHILENS_SPIRIT_ORE, ANALYSIS_REQUEST, MARINAS_LETTER, EXPERIMENT_TOOLS, ANALYSIS_RESULT, TERRYS_3RD_ORDER, LIST_OF_HOST, ABYSS_SPIRIT_ORE1, ABYSS_SPIRIT_ORE2, ABYSS_SPIRIT_ORE3, ABYSS_SPIRIT_ORE4, TERRYS_REPORT)
+    add_talk_id(
+      MASTER_DUFNER, MASTER_TERRY, BLACKSMITH_BRUNON, TRADER_VIKTOR,
+      MAGISTER_MARINA
+    )
+    add_kill_id(
+      ANT_CAPTAIN, ANT_WARRIOR_CAPTAIN, MEDUSA, NEER_GHOUL_BERSERKER,
+      OL_MAHUM_CAPTAIN, MARSH_STAKATO_DRONE, TURAK_BUGBEAR_WARRIOR,
+      BREKA_ORC_OVERLORD, TUREK_ORC_WARLORD, LETO_LIZARDMAN_WARRIOR
+    )
+    register_quest_items(
+      DUFNERS_LETTER, TERRYS_1ST_ORDER, TERRYS_2ND_ORDER, TERRYS_LETTER,
+      VIKTORS_LETTER, HAWKEYES_LETTER, MYSTERIOUS_SPIRIT_ORE,
+      OL_MAHUM_SPIRIT_ORE, TUREK_SPIRIT_ORE, ANT_SPIRIT_ORE,
+      TURAK_BUGBEAR_SPIRIT_ORE, TERRY_BOX, VIKTORS_REQUEST, MEDUSA_SCALES,
+      SHILENS_SPIRIT_ORE, ANALYSIS_REQUEST, MARINAS_LETTER, EXPERIMENT_TOOLS,
+      ANALYSIS_RESULT, TERRYS_3RD_ORDER, LIST_OF_HOST, ABYSS_SPIRIT_ORE1,
+      ABYSS_SPIRIT_ORE2, ABYSS_SPIRIT_ORE3, ABYSS_SPIRIT_ORE4, TERRYS_REPORT
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless qs = get_quest_state(pc, false)
 
     case event
     when "ACCEPT"
       if qs.created?
         qs.start_quest
-        unless has_quest_items?(player, DUFNERS_LETTER)
-          give_items(player, DUFNERS_LETTER, 1)
+        unless has_quest_items?(pc, DUFNERS_LETTER)
+          give_items(pc, DUFNERS_LETTER, 1)
         end
-        play_sound(player, Sound::ITEMSOUND_QUEST_MIDDLE)
-        if player.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
-          give_items(player, DIMENSIONAL_DIAMOND, 128)
-          player.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
-          htmltext = "30106-05a.htm"
+        play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+        if pc.variables.get_i32("2ND_CLASS_DIAMOND_REWARD", 0) == 0
+          give_items(pc, DIMENSIONAL_DIAMOND, 128)
+          pc.variables["2ND_CLASS_DIAMOND_REWARD"] = 1
+          html = "30106-05a.htm"
         else
-          htmltext = "30106-05.htm"
+          html = "30106-05.htm"
         end
       end
     when "30106-04.htm", "30064-02.html", "30064-07.html", "30064-16.html",
          "30064-17.html", "30064-19.html", "30684-02.html", "30684-03.html",
          "30684-04.html", "30684-06.html", "30684-07.html", "30684-08.html",
          "30684-09.html", "30684-10.html"
-      htmltext = event
+      html = event
     when "30064-03.html"
-      if has_quest_items?(player, DUFNERS_LETTER)
-        take_items(player, DUFNERS_LETTER, 1)
-        give_items(player, TERRYS_1ST_ORDER, 1)
+      if has_quest_items?(pc, DUFNERS_LETTER)
+        take_items(pc, DUFNERS_LETTER, 1)
+        give_items(pc, TERRYS_1ST_ORDER, 1)
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "30064-06.html"
-      if has_quest_items?(player, TERRYS_1ST_ORDER)
-        take_items(player, TERRYS_1ST_ORDER, 1)
-        give_items(player, TERRYS_2ND_ORDER, 1)
-        take_items(player, MYSTERIOUS_SPIRIT_ORE, 1)
+      if has_quest_items?(pc, TERRYS_1ST_ORDER)
+        take_items(pc, TERRYS_1ST_ORDER, 1)
+        give_items(pc, TERRYS_2ND_ORDER, 1)
+        take_items(pc, MYSTERIOUS_SPIRIT_ORE, 1)
         qs.set_cond(4, true)
-        htmltext = event
+        html = event
       end
     when "30064-10.html"
-      give_items(player, TERRYS_LETTER, 1)
-      take_items(player, OL_MAHUM_SPIRIT_ORE, 1)
-      take_items(player, TUREK_SPIRIT_ORE, 1)
-      take_items(player, ANT_SPIRIT_ORE, 1)
-      take_items(player, TURAK_BUGBEAR_SPIRIT_ORE, 1)
-      take_items(player, TERRYS_2ND_ORDER, 1)
-      give_items(player, TERRY_BOX, 1)
+      give_items(pc, TERRYS_LETTER, 1)
+      take_items(pc, OL_MAHUM_SPIRIT_ORE, 1)
+      take_items(pc, TUREK_SPIRIT_ORE, 1)
+      take_items(pc, ANT_SPIRIT_ORE, 1)
+      take_items(pc, TURAK_BUGBEAR_SPIRIT_ORE, 1)
+      take_items(pc, TERRYS_2ND_ORDER, 1)
+      give_items(pc, TERRY_BOX, 1)
       qs.set_cond(6, true)
-      htmltext = event
+      html = event
     when "30064-18.html"
-      if has_quest_items?(player, ANALYSIS_RESULT)
-        take_items(player, ANALYSIS_RESULT, 1)
-        give_items(player, LIST_OF_HOST, 1)
+      if has_quest_items?(pc, ANALYSIS_RESULT)
+        take_items(pc, ANALYSIS_RESULT, 1)
+        give_items(pc, LIST_OF_HOST, 1)
         qs.set_cond(15, true)
-        htmltext = event
+        html = event
       end
     when "30684-05.html"
-      if has_quest_items?(player, TERRYS_LETTER)
-        take_items(player, TERRYS_LETTER, 1)
-        give_items(player, VIKTORS_LETTER, 1)
+      if has_quest_items?(pc, TERRYS_LETTER)
+        take_items(pc, TERRYS_LETTER, 1)
+        give_items(pc, VIKTORS_LETTER, 1)
         qs.set_cond(7, true)
-        htmltext = event
+        html = event
       end
     when "30684-11.html"
-      take_items(player, TERRYS_LETTER, 1)
-      take_items(player, TERRY_BOX, 1)
-      take_items(player, HAWKEYES_LETTER, 1)
-      take_items(player, VIKTORS_LETTER, 1)
-      give_items(player, VIKTORS_REQUEST, 1)
+      take_items(pc, TERRYS_LETTER, 1)
+      take_items(pc, TERRY_BOX, 1)
+      take_items(pc, HAWKEYES_LETTER, 1)
+      take_items(pc, VIKTORS_LETTER, 1)
+      give_items(pc, VIKTORS_REQUEST, 1)
       qs.set_cond(9, true)
-      htmltext = event
+      html = event
     when "30684-15.html"
-      take_items(player, VIKTORS_REQUEST, 1)
-      take_items(player, MEDUSA_SCALES, -1)
-      give_items(player, SHILENS_SPIRIT_ORE, 1)
-      give_items(player, ANALYSIS_REQUEST, 1)
+      take_items(pc, VIKTORS_REQUEST, 1)
+      take_items(pc, MEDUSA_SCALES, -1)
+      give_items(pc, SHILENS_SPIRIT_ORE, 1)
+      give_items(pc, ANALYSIS_REQUEST, 1)
       qs.set_cond(11, true)
-      htmltext = event
+      html = event
     when "30715-02.html"
-      take_items(player, SHILENS_SPIRIT_ORE, 1)
-      take_items(player, ANALYSIS_REQUEST, 1)
-      give_items(player, MARINAS_LETTER, 1)
+      take_items(pc, SHILENS_SPIRIT_ORE, 1)
+      take_items(pc, ANALYSIS_REQUEST, 1)
+      give_items(pc, MARINAS_LETTER, 1)
       qs.set_cond(12, true)
-      htmltext = event
+      html = event
     when "30715-05.html"
-      take_items(player, EXPERIMENT_TOOLS, 1)
-      give_items(player, ANALYSIS_RESULT, 1)
+      take_items(pc, EXPERIMENT_TOOLS, 1)
+      give_items(pc, ANALYSIS_RESULT, 1)
       qs.set_cond(14, true)
-      htmltext = event
+      html = event
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -244,133 +259,132 @@ class Quests::Q00213_TrialOfTheSeeker < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
     if qs.created?
       if npc.id == MASTER_DUFNER
-        if player.class_id.rogue? || player.class_id.elven_scout? || player.class_id.assassin?
-          if player.level < MIN_LVL
-            htmltext = "30106-02.html"
+        if pc.class_id.rogue? || pc.class_id.elven_scout? || pc.class_id.assassin?
+          if pc.level < MIN_LVL
+            html = "30106-02.html"
           else
-            htmltext = "30106-03.htm"
+            html = "30106-03.htm"
           end
         else
-          htmltext = "30106-01.html"
+          html = "30106-01.html"
         end
       end
     elsif qs.started?
       case npc.id
       when MASTER_DUFNER
-        if has_quest_items?(player, DUFNERS_LETTER) && !has_quest_items?(player, TERRYS_REPORT)
-          htmltext = "30106-06.html"
-        elsif !has_at_least_one_quest_item?(player, DUFNERS_LETTER, TERRYS_REPORT)
-          htmltext = "30106-07.html"
-        elsif has_quest_items?(player, TERRYS_REPORT) && !has_quest_items?(player, DUFNERS_LETTER)
-          give_adena(player, 187606, true)
-          give_items(player, MARK_OF_SEEKER, 1)
-          add_exp_and_sp(player, 1029478, 66768)
+        if has_quest_items?(pc, DUFNERS_LETTER) && !has_quest_items?(pc, TERRYS_REPORT)
+          html = "30106-06.html"
+        elsif !has_at_least_one_quest_item?(pc, DUFNERS_LETTER, TERRYS_REPORT)
+          html = "30106-07.html"
+        elsif has_quest_items?(pc, TERRYS_REPORT) && !has_quest_items?(pc, DUFNERS_LETTER)
+          give_adena(pc, 187606, true)
+          give_items(pc, MARK_OF_SEEKER, 1)
+          add_exp_and_sp(pc, 1029478, 66768)
           qs.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
-          htmltext = "30106-08.html"
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
+          html = "30106-08.html"
         end
       when MASTER_TERRY
-        if has_quest_items?(player, DUFNERS_LETTER)
-          htmltext = "30064-01.html"
-        elsif has_quest_items?(player, TERRYS_1ST_ORDER)
-          if !has_quest_items?(player, MYSTERIOUS_SPIRIT_ORE)
-            htmltext = "30064-04.html"
+        if has_quest_items?(pc, DUFNERS_LETTER)
+          html = "30064-01.html"
+        elsif has_quest_items?(pc, TERRYS_1ST_ORDER)
+          if !has_quest_items?(pc, MYSTERIOUS_SPIRIT_ORE)
+            html = "30064-04.html"
           else
-            htmltext = "30064-05.html"
+            html = "30064-05.html"
           end
-        elsif has_quest_items?(player, TERRYS_2ND_ORDER)
-          if (get_quest_items_count(player, OL_MAHUM_SPIRIT_ORE) + get_quest_items_count(player, TUREK_SPIRIT_ORE) + get_quest_items_count(player, ANT_SPIRIT_ORE) + get_quest_items_count(player, TURAK_BUGBEAR_SPIRIT_ORE)) < 4
-            htmltext = "30064-08.html"
+        elsif has_quest_items?(pc, TERRYS_2ND_ORDER)
+          if get_quest_items_count(pc, OL_MAHUM_SPIRIT_ORE) + get_quest_items_count(pc, TUREK_SPIRIT_ORE) + get_quest_items_count(pc, ANT_SPIRIT_ORE) + get_quest_items_count(pc, TURAK_BUGBEAR_SPIRIT_ORE) < 4
+            html = "30064-08.html"
           else
-            htmltext = "30064-09.html"
+            html = "30064-09.html"
           end
-        elsif has_quest_items?(player, TERRYS_LETTER)
-          htmltext = "30064-11.html"
-        elsif has_quest_items?(player, VIKTORS_LETTER)
-          take_items(player, VIKTORS_LETTER, 1)
-          give_items(player, HAWKEYES_LETTER, 1)
+        elsif has_quest_items?(pc, TERRYS_LETTER)
+          html = "30064-11.html"
+        elsif has_quest_items?(pc, VIKTORS_LETTER)
+          take_items(pc, VIKTORS_LETTER, 1)
+          give_items(pc, HAWKEYES_LETTER, 1)
           qs.set_cond(8, true)
-          htmltext = "30064-12.html"
-        elsif has_quest_items?(player, HAWKEYES_LETTER)
-          htmltext = "30064-13.html"
-        elsif has_at_least_one_quest_item?(player, VIKTORS_REQUEST, ANALYSIS_REQUEST, MARINAS_LETTER, EXPERIMENT_TOOLS)
-          htmltext = "30064-14.html"
-        elsif has_quest_items?(player, ANALYSIS_RESULT)
-          htmltext = "30064-15.html"
-        elsif has_quest_items?(player, TERRYS_3RD_ORDER)
-          if player.level < LEVEL
-            htmltext = "30064-20.html"
+          html = "30064-12.html"
+        elsif has_quest_items?(pc, HAWKEYES_LETTER)
+          html = "30064-13.html"
+        elsif has_at_least_one_quest_item?(pc, VIKTORS_REQUEST, ANALYSIS_REQUEST, MARINAS_LETTER, EXPERIMENT_TOOLS)
+          html = "30064-14.html"
+        elsif has_quest_items?(pc, ANALYSIS_RESULT)
+          html = "30064-15.html"
+        elsif has_quest_items?(pc, TERRYS_3RD_ORDER)
+          if pc.level < LEVEL
+            html = "30064-20.html"
           else
-            take_items(player, TERRYS_3RD_ORDER, 1)
-            give_items(player, LIST_OF_HOST, 1)
+            take_items(pc, TERRYS_3RD_ORDER, 1)
+            give_items(pc, LIST_OF_HOST, 1)
             qs.set_cond(15, true)
-            htmltext = "30064-21.html"
+            html = "30064-21.html"
           end
-        elsif has_quest_items?(player, LIST_OF_HOST)
-          if (get_quest_items_count(player, ABYSS_SPIRIT_ORE1) + get_quest_items_count(player, ABYSS_SPIRIT_ORE2) + get_quest_items_count(player, ABYSS_SPIRIT_ORE3) + get_quest_items_count(player, ABYSS_SPIRIT_ORE4)) < 4
-            htmltext = "30064-22.html"
+        elsif has_quest_items?(pc, LIST_OF_HOST)
+          if get_quest_items_count(pc, ABYSS_SPIRIT_ORE1) + get_quest_items_count(pc, ABYSS_SPIRIT_ORE2) + get_quest_items_count(pc, ABYSS_SPIRIT_ORE3) + get_quest_items_count(pc, ABYSS_SPIRIT_ORE4) < 4
+            html = "30064-22.html"
           else
-            take_items(player, LIST_OF_HOST, 1)
-            take_items(player, ABYSS_SPIRIT_ORE1, 1)
-            take_items(player, ABYSS_SPIRIT_ORE2, 1)
-            take_items(player, ABYSS_SPIRIT_ORE3, 1)
-            take_items(player, ABYSS_SPIRIT_ORE4, 1)
-            give_items(player, TERRYS_REPORT, 1)
+            take_items(pc, LIST_OF_HOST, 1)
+            take_items(pc, ABYSS_SPIRIT_ORE1, 1)
+            take_items(pc, ABYSS_SPIRIT_ORE2, 1)
+            take_items(pc, ABYSS_SPIRIT_ORE3, 1)
+            take_items(pc, ABYSS_SPIRIT_ORE4, 1)
+            give_items(pc, TERRYS_REPORT, 1)
             qs.set_cond(17, true)
-            htmltext = "30064-23.html"
+            html = "30064-23.html"
           end
-        elsif has_quest_items?(player, TERRYS_REPORT)
-          htmltext = "30064-24.html"
+        elsif has_quest_items?(pc, TERRYS_REPORT)
+          html = "30064-24.html"
         end
       when BLACKSMITH_BRUNON
-        if has_quest_items?(player, MARINAS_LETTER)
-          take_items(player, MARINAS_LETTER, 1)
-          give_items(player, EXPERIMENT_TOOLS, 1)
+        if has_quest_items?(pc, MARINAS_LETTER)
+          take_items(pc, MARINAS_LETTER, 1)
+          give_items(pc, EXPERIMENT_TOOLS, 1)
           qs.set_cond(13, true)
-          htmltext = "30526-01.html"
-        elsif has_quest_items?(player, EXPERIMENT_TOOLS)
-          htmltext = "30526-02.html"
+          html = "30526-01.html"
+        elsif has_quest_items?(pc, EXPERIMENT_TOOLS)
+          html = "30526-02.html"
         end
       when TRADER_VIKTOR
-        if has_quest_items?(player, TERRYS_LETTER)
-          htmltext = "30684-01.html"
-        elsif has_quest_items?(player, HAWKEYES_LETTER)
-          htmltext = "30684-12.html"
-        elsif has_quest_items?(player, VIKTORS_REQUEST)
-          if get_quest_items_count(player, MEDUSA_SCALES) < 10
-            htmltext = "30684-13.html"
+        if has_quest_items?(pc, TERRYS_LETTER)
+          html = "30684-01.html"
+        elsif has_quest_items?(pc, HAWKEYES_LETTER)
+          html = "30684-12.html"
+        elsif has_quest_items?(pc, VIKTORS_REQUEST)
+          if get_quest_items_count(pc, MEDUSA_SCALES) < 10
+            html = "30684-13.html"
           else
-            htmltext = "30684-14.html"
+            html = "30684-14.html"
           end
-        elsif has_quest_items?(player, SHILENS_SPIRIT_ORE, ANALYSIS_REQUEST)
-          htmltext = "30684-16.html"
-        elsif has_quest_items?(player, MARINAS_LETTER, EXPERIMENT_TOOLS, ANALYSIS_REQUEST, TERRYS_REPORT)
-          htmltext = "30684-17.html"
-        elsif has_quest_items?(player, VIKTORS_LETTER)
-          htmltext = "30684-05.html"
+        elsif has_quest_items?(pc, SHILENS_SPIRIT_ORE, ANALYSIS_REQUEST)
+          html = "30684-16.html"
+        elsif has_quest_items?(pc, MARINAS_LETTER, EXPERIMENT_TOOLS, ANALYSIS_REQUEST, TERRYS_REPORT)
+          html = "30684-17.html"
+        elsif has_quest_items?(pc, VIKTORS_LETTER)
+          html = "30684-05.html"
         end
       when MAGISTER_MARINA
-        if has_quest_items?(player, SHILENS_SPIRIT_ORE, ANALYSIS_REQUEST)
-          htmltext = "30715-01.html"
-        elsif has_quest_items?(player, MARINAS_LETTER)
-          htmltext = "30715-03.html"
-        elsif has_quest_items?(player, EXPERIMENT_TOOLS)
-          htmltext = "30715-04.html"
-        elsif has_quest_items?(player, ANALYSIS_RESULT)
-          htmltext = "30715-06.html"
+        if has_quest_items?(pc, SHILENS_SPIRIT_ORE, ANALYSIS_REQUEST)
+          html = "30715-01.html"
+        elsif has_quest_items?(pc, MARINAS_LETTER)
+          html = "30715-03.html"
+        elsif has_quest_items?(pc, EXPERIMENT_TOOLS)
+          html = "30715-04.html"
+        elsif has_quest_items?(pc, ANALYSIS_RESULT)
+          html = "30715-06.html"
         end
       end
     elsif qs.completed?
       if npc.id == MASTER_DUFNER
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

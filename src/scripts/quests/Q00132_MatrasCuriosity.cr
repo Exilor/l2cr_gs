@@ -1,4 +1,4 @@
-class Quests::Q00132_MatrasCuriosity < Quest
+class Scripts::Q00132_MatrasCuriosity < Quest
   # NPCs
   private MATRAS = 32245
   private DEMON_PRINCE = 25540
@@ -22,21 +22,21 @@ class Quests::Q00132_MatrasCuriosity < Quest
     register_quest_items(BLUEPRINT_RANKU, BLUEPRINT_PRINCE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    htmltext = event
+    html = event
 
-    if event.casecmp?("32245-03.htm") && player.level >= 76 && !st.completed?
+    if event.casecmp?("32245-03.htm") && pc.level >= 76 && !st.completed?
       if st.created?
         st.start_quest
         st.set("rewarded_prince", "1")
         st.set("rewarded_ranku", "1")
       else
-        htmltext = "32245-03a.htm"
+        html = "32245-03a.htm"
       end
     elsif event.casecmp?("32245-07.htm") && st.cond?(3) && !st.completed?
       st.give_adena(65884, true)
@@ -50,13 +50,13 @@ class Quests::Q00132_MatrasCuriosity < Quest
       st.exit_quest(false, true)
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     case npc.id
     when DEMON_PRINCE
-      if pl = get_random_party_member(player, "rewarded_prince", "1")
+      if pl = get_random_party_member(pc, "rewarded_prince", "1")
         st = get_quest_state(pl, false).not_nil!
         st.give_items(BLUEPRINT_PRINCE, 1)
         st.set("rewarded_prince", "2")
@@ -68,7 +68,7 @@ class Quests::Q00132_MatrasCuriosity < Quest
         end
       end
     when RANKU
-      if pl = get_random_party_member(player, "rewarded_ranku", "1")
+      if pl = get_random_party_member(pc, "rewarded_ranku", "1")
         st = get_quest_state(pl, false).not_nil!
         st.give_items(BLUEPRINT_RANKU, 1)
         st.set("rewarded_ranku", "2")
@@ -84,13 +84,13 @@ class Quests::Q00132_MatrasCuriosity < Quest
     nil
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     if st.created?
-      htmltext = player.level >= 76 ? "32245-01.htm" : "32245-02.htm"
+      html = pc.level >= 76 ? "32245-01.htm" : "32245-02.htm"
     elsif st.completed?
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     elsif st.started?
       case st.cond
       when 1, 2
@@ -98,15 +98,15 @@ class Quests::Q00132_MatrasCuriosity < Quest
           st.take_items(BLUEPRINT_RANKU, -1)
           st.take_items(BLUEPRINT_PRINCE, -1)
           st.set_cond(3, true)
-          htmltext = "32245-05.htm"
+          html = "32245-05.htm"
         else
-          htmltext = "32245-04.htm"
+          html = "32245-04.htm"
         end
       when 3
-        htmltext = "32245-06.htm"
+        html = "32245-06.htm"
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

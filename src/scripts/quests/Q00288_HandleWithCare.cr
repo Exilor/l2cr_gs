@@ -1,4 +1,4 @@
-class Quests::Q00288_HandleWithCare < Quest
+class Scripts::Q00288_HandleWithCare < Quest
   # NPC
   private ANKUMI = 32741
   # Monster
@@ -35,7 +35,6 @@ class Quests::Q00288_HandleWithCare < Quest
       return
     end
 
-    html = nil
     case event
     when "32741-03.htm"
       if pc.level >= MIN_LEVEL

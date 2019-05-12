@@ -1,4 +1,4 @@
-class NpcAI::PlainsOfDion < AbstractNpcAI
+class Scripts::PlainsOfDion < AbstractNpcAI
   private DELU_LIZARDMEN = {
     21104, # Delu Lizardman Supplier
     21105, # Delu Lizardman Special Agent

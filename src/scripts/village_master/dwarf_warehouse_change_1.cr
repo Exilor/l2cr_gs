@@ -1,4 +1,4 @@
-class NpcAI::DwarfWarehouseChange1 < AbstractNpcAI
+class Scripts::DwarfWarehouseChange1 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30498, # Moke

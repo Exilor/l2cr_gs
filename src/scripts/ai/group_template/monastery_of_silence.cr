@@ -1,4 +1,4 @@
-class NpcAI::MonasteryOfSilence < AbstractNpcAI
+class Scripts::MonasteryOfSilence < AbstractNpcAI
   # NPCs
   private CAPTAIN   = 18910 # Solina Knight Captain
   private KNIGHT    = 18909 # Solina Knights

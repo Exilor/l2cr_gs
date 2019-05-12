@@ -4,7 +4,7 @@ module L2Cr
 
   @@on_screen_info_task : Runnable::PeriodicTask?
   @@command_line_task : Runnable::PeriodicTask?
-  class_property? retry_attacks = false
+  class_property? retry_attacks = true
 
   def enable_retry
     @@retry_attacks = true
@@ -103,6 +103,21 @@ module L2Cr
         rescue e
           GameServer.error e
         end
+      when "access"
+        if pc = L2World.players.first?
+          pp pc.@access_level
+        end
+      when /^valakas\s\w+$/
+        if q = QuestManager.get_quest("Valakas")
+          if valakas = L2World.objects.find { |o| o.id == 29028 }
+            event = cmd.split.last
+            q.on_adv_event(event, valakas.as(L2GrandBossInstance), nil)
+          else
+            puts "Valakas not found."
+          end
+        else
+          puts "Valakas quest not found."
+        end
       else
         return "unknown command #{cmd.inspect}"
       end
@@ -121,6 +136,7 @@ module L2Cr
         end
       end
     end
+    errors = "No" if errors == 0
     puts "#{errors} errors."
   end
 

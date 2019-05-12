@@ -1,4 +1,4 @@
-class NpcAI::Solomon < AbstractNpcAI
+class Scripts::Solomon < AbstractNpcAI
   # NPCs
   private SOLOMON = 32355
 

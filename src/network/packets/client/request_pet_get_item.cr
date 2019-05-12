@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestPetGetItem < GameClientPacket
   @l2id = 0
 
-  def read_impl
+  private def read_impl
     @l2id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     item = L2World.find_object(@l2id)

@@ -1,4 +1,4 @@
-class Quests::Q00258_BringWolfPelts < Quest
+class Scripts::Q00258_BringWolfPelts < Quest
   # Npc
 	private LECTOR = 30001
 	# Item
@@ -57,11 +57,11 @@ class Quests::Q00258_BringWolfPelts < Quest
 
     case st.state
     when State::CREATED
-      htmltext = pc.level >= MIN_LVL ? "30001-02.htm" : "30001-01.html"
+      html = pc.level >= MIN_LVL ? "30001-02.htm" : "30001-01.html"
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30001-04.html"
+        html = "30001-04.html"
       when 2
         if st.get_quest_items_count(WOLF_PELT) >= WOLF_PELT_COUNT
           chance = Rnd.rand(16)
@@ -74,11 +74,11 @@ class Quests::Q00258_BringWolfPelts < Quest
           end
 
           st.exit_quest(true, true)
-          htmltext = "30001-05.html"
+          html = "30001-05.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(pc)
+    html || get_no_quest_msg(pc)
   end
 end

@@ -1,4 +1,4 @@
-class Quests::Q00159_ProtectTheWaterSource < Quest
+class Scripts::Q00159_ProtectTheWaterSource < Quest
   # NPC
   private ASTERIOS = 30154
   # Monster
@@ -34,9 +34,11 @@ class Quests::Q00159_ProtectTheWaterSource < Quest
     if st
       case st.cond
       when 1
-        if Rnd.rand(100) < 40 && st.has_quest_items?(HYACINTH_CHARM) && !st.has_quest_items?(PLAGUE_DUST)
-          st.give_items(PLAGUE_DUST, 1)
-          st.set_cond(2, true)
+        if Rnd.rand(100) < 40 && st.has_quest_items?(HYACINTH_CHARM)
+          unless st.has_quest_items?(PLAGUE_DUST)
+            st.give_items(PLAGUE_DUST, 1)
+            st.set_cond(2, true)
+          end
         end
       when 3
         dust = st.get_quest_items_count(PLAGUE_DUST)
@@ -56,17 +58,25 @@ class Quests::Q00159_ProtectTheWaterSource < Quest
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state(pc, true)
-    htmltext = get_no_quest_msg(pc)
-    if st
+    if st = get_quest_state(pc, true)
       case st.state
       when State::CREATED
-        htmltext = pc.race.elf? ? pc.level >= MIN_LVL ? "30154-03.htm" : "30154-02.htm" : "30154-01.htm"
+        if pc.race.elf?
+          if pc.level >= MIN_LVL
+            html = "30154-03.htm"
+          else
+            html = "30154-02.htm"
+          end
+        else
+          html = "30154-01.htm"
+        end
       when State::STARTED
         case st.cond
         when 1
-          if st.has_quest_items?(HYACINTH_CHARM) && !st.has_quest_items?(PLAGUE_DUST)
-            htmltext = "30154-05.html"
+          if st.has_quest_items?(HYACINTH_CHARM)
+            unless st.has_quest_items?(PLAGUE_DUST)
+              html = "30154-05.html"
+            end
           end
         when 2
           if st.has_quest_items?(HYACINTH_CHARM, PLAGUE_DUST)
@@ -74,24 +84,26 @@ class Quests::Q00159_ProtectTheWaterSource < Quest
             st.take_items(PLAGUE_DUST, -1)
             st.give_items(HYACINTH_CHARM2, 1)
             st.set_cond(3, true)
-            htmltext = "30154-06.html"
+            html = "30154-06.html"
           end
         when 3
           if st.has_quest_items?(HYACINTH_CHARM2)
-            htmltext = "30154-07.html"
+            html = "30154-07.html"
           end
         when 4
-          if st.has_quest_items?(HYACINTH_CHARM2) && st.get_quest_items_count(PLAGUE_DUST) >= 5
-            st.give_adena(18250, true)
-            st.exit_quest(false, true)
-            htmltext = "30154-08.html"
+          if st.has_quest_items?(HYACINTH_CHARM2)
+            if st.get_quest_items_count(PLAGUE_DUST) >= 5
+              st.give_adena(18250, true)
+              st.exit_quest(false, true)
+              html = "30154-08.html"
+            end
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

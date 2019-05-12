@@ -1,4 +1,4 @@
-class Quests::Q00326_VanquishRemnants < Quest
+class Scripts::Q00326_VanquishRemnants < Quest
   # NPC
   private LEOPOLD = 30435
   # Items

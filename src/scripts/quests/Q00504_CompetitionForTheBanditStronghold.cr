@@ -1,4 +1,4 @@
-class Quests::Q00504_CompetitionForTheBanditStronghold < Quest
+class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
   # NPC
   private MESSENGER = 35437
   # Monsters
@@ -26,9 +26,9 @@ class Quests::Q00504_CompetitionForTheBanditStronghold < Quest
     add_kill_id(MONSTERS.keys)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    st = get_quest_state(pc, false)
     if st && event == "35437-02.htm"
       st.start_quest
       st.give_items(CONTEST_CERTIFICATE, 1)
@@ -55,17 +55,17 @@ class Quests::Q00504_CompetitionForTheBanditStronghold < Quest
     nil
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
-    clan = player.clan?
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
+    clan = pc.clan?
 
     if !@bandit_stronghold.waiting_battle?
-      html = get_htm(player, "35437-09.html")
+      html = get_htm(pc, "35437-09.html")
       format = "%Y-%m-%d %H:%M:%S"
       html = html.gsub("%nextSiege%", @bandit_stronghold.siege_date.time)
     elsif clan.nil? || clan.level < 4
       html = "35437-04.html"
-    elsif !player.clan_leader?
+    elsif !pc.clan_leader?
       html = "35437-05.html"
     elsif clan.hideout_id > 0 || clan.fort_id > 0 || clan.castle_id > 0
       html = "35437-10.html"
@@ -73,7 +73,7 @@ class Quests::Q00504_CompetitionForTheBanditStronghold < Quest
       case st.state
       when State::CREATED
         if !@bandit_stronghold.waiting_battle?
-          html = get_htm(player, "35437-03.html")
+          html = get_htm(pc, "35437-03.html")
           format = "%Y-%m-%d %H:%M:%S"
           html = html.gsub("%nextSiege%", @bandit_stronghold.siege_date.time)
         else
@@ -93,6 +93,6 @@ class Quests::Q00504_CompetitionForTheBanditStronghold < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

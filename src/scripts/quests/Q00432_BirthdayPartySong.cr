@@ -1,4 +1,4 @@
-class Quests::Q00432_BirthdayPartySong < Quest
+class Scripts::Q00432_BirthdayPartySong < Quest
   # NPC
   private OCTAVIA = 31043
   # Monster
@@ -17,9 +17,9 @@ class Quests::Q00432_BirthdayPartySong < Quest
     register_quest_items(RED_CRYSTAL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -41,8 +41,8 @@ class Quests::Q00432_BirthdayPartySong < Quest
     html
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
 
     if st && st.cond?(1) && Rnd.bool
       st.give_items(RED_CRYSTAL, 1)
@@ -56,15 +56,15 @@ class Quests::Q00432_BirthdayPartySong < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::CREATED
-      html = player.level >= 31 ? "31043-01.htm" : "31043-00.htm"
+      html = pc.level >= 31 ? "31043-01.htm" : "31043-00.htm"
     when State::STARTED
       html = st.cond?(1) ? "31043-03.html" : "31043-04.html"
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

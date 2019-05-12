@@ -1,4 +1,4 @@
-class Quests::Q00194_SevenSignsMammonsContract < Quest
+class Scripts::Q00194_SevenSignsMammonsContract < Quest
   # NPCs
   private SIR_GUSTAV_ATHEBALDT = 30760
   private CLAUDIA_ATHEBALDT = 31001
@@ -22,7 +22,9 @@ class Quests::Q00194_SevenSignsMammonsContract < Quest
     super(194, self.class.simple_name, "Seven Signs, Mammon's Contract")
 
     add_start_npc(SIR_GUSTAV_ATHEBALDT)
-    add_talk_id(SIR_GUSTAV_ATHEBALDT, COLIN, FROG, TESS, KUTA, CLAUDIA_ATHEBALDT)
+    add_talk_id(
+      SIR_GUSTAV_ATHEBALDT, COLIN, FROG, TESS, KUTA, CLAUDIA_ATHEBALDT
+    )
     register_quest_items(
       ATHEBALDTS_INTRODUCTION, NATIVES_GLOVE, FROG_KINGS_BEAD,
       GRANDA_TESS_CANDY_POUCH
@@ -236,7 +238,11 @@ class Quests::Q00194_SevenSignsMammonsContract < Quest
           end
         when 4
           unless st.has_quest_items?(FROG_KINGS_BEAD)
-            html = pc.transformation_id != 111 ? "32571-06.html" : "32571-08.html"
+            if pc.transformation_id != 111
+              html = "32571-06.html"
+            else
+              html = "32571-08.html"
+            end
           end
         when 5
           if st.has_quest_items?(FROG_KINGS_BEAD)
@@ -246,7 +252,11 @@ class Quests::Q00194_SevenSignsMammonsContract < Quest
           html = "32571-12.html"
         when 7
           unless st.has_quest_items?(GRANDA_TESS_CANDY_POUCH)
-            html = pc.transformation_id != 112 ? "32571-14.html" : "32571-16.html"
+            if pc.transformation_id != 112
+              html = "32571-14.html"
+            else
+              html = "32571-16.html"
+            end
           end
         when 8
           if st.has_quest_items?(GRANDA_TESS_CANDY_POUCH)
@@ -256,7 +266,11 @@ class Quests::Q00194_SevenSignsMammonsContract < Quest
           html = "32571-20.html"
         when 10
           unless st.has_quest_items?(NATIVES_GLOVE)
-            html = pc.transformation_id != 124 ? "32571-22.html" : "32571-24.html"
+            if pc.transformation_id != 124
+              html = "32571-22.html"
+            else
+              html = "32571-24.html"
+            end
           end
         when 11
           if st.has_quest_items?(NATIVES_GLOVE)
@@ -270,7 +284,11 @@ class Quests::Q00194_SevenSignsMammonsContract < Quest
         when 1..3
           html = "32572-01.html"
         when 4
-          html = pc.transformation_id == 111 ? "32572-02.html" : "32572-06.html"
+          if pc.transformation_id == 111
+            html = "32572-02.html"
+          else
+            html = "32572-06.html"
+          end
         when 5
           if st.has_quest_items?(FROG_KINGS_BEAD) && pc.transformation_id == 111
             html = "32572-07.html"
@@ -281,7 +299,11 @@ class Quests::Q00194_SevenSignsMammonsContract < Quest
         when 1..6
           html = "32573-01.html"
         when 7
-          html = pc.transformation_id == 112 ? "32573-02.html" : "32573-05.html"
+          if pc.transformation_id == 112
+            html = "32573-02.html"
+          else
+            html = "32573-05.html"
+          end
         when 8
           if st.has_quest_items?(GRANDA_TESS_CANDY_POUCH)
             if pc.transformation_id == 112
@@ -294,7 +316,11 @@ class Quests::Q00194_SevenSignsMammonsContract < Quest
         when 1..9
           html = "32574-01.html"
         when 10
-          html = pc.transformation_id == 124 ? "32574-02.html" : "32574-06.html"
+          if pc.transformation_id == 124
+            html = "32574-02.html"
+          else
+            html = "32574-06.html"
+          end
         when 11
           if st.has_quest_items?(NATIVES_GLOVE) && pc.transformation_id == 124
             html = "32574-07.html"

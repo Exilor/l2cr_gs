@@ -1,4 +1,4 @@
-class Quests::Q00120_PavelsLastResearch < Quest
+class Scripts::Q00120_PavelsLastResearch < Quest
   # NPCs
   private SUSPICIOUS_LOOKING_PILE_OF_STONES = 32046
   private WENDY = 32047
@@ -24,14 +24,20 @@ class Quests::Q00120_PavelsLastResearch < Quest
     super(120, self.class.simple_name, "Pavel's Last Research")
 
     add_start_npc(SUSPICIOUS_LOOKING_PILE_OF_STONES)
-    add_talk_id(SUSPICIOUS_LOOKING_PILE_OF_STONES, WENDY, YUMI, WEATHERMASTER_1, WEATHERMASTER_2, WEATHERMASTER_3, DOCTOR_CHAOS_SECRET_BOOKSHELF)
+    add_talk_id(
+      SUSPICIOUS_LOOKING_PILE_OF_STONES, WENDY, YUMI, WEATHERMASTER_1,
+      WEATHERMASTER_2, WEATHERMASTER_3, DOCTOR_CHAOS_SECRET_BOOKSHELF
+    )
     add_skill_see_id(WEATHERMASTER_1, WEATHERMASTER_2, WEATHERMASTER_3)
-    register_quest_items(FLOWER_OF_PAVEL, HEART_OF_ATLANTA, WENDYS_NECKLACE, LOCKUP_RESEARCH_REPORT, RESEARCH_REPORT, KEY_OF_ENIGMA)
+    register_quest_items(
+      FLOWER_OF_PAVEL, HEART_OF_ATLANTA, WENDYS_NECKLACE,
+      LOCKUP_RESEARCH_REPORT, RESEARCH_REPORT, KEY_OF_ENIGMA
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return super
     end
 
@@ -42,8 +48,8 @@ class Quests::Q00120_PavelsLastResearch < Quest
         html = event
       end
     when "quest_accept"
-      if qs.created? && player.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
-        if player.level >= 70
+      if qs.created? && pc.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
+        if pc.level >= 70
           qs.start_quest
           qs.memo_state = 1
           html = "32046-08.htm"
@@ -67,7 +73,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
       end
     when "32046-15.html"
       if qs.memo_state?(3)
-        give_items(player, FLOWER_OF_PAVEL, 1)
+        give_items(pc, FLOWER_OF_PAVEL, 1)
         qs.memo_state = 4
         qs.set_cond(6, true)
         html = event
@@ -110,7 +116,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
       end
     when "32046-44.html"
       if qs.memo_state?(22)
-        give_items(player, HEART_OF_ATLANTA, 1)
+        give_items(pc, HEART_OF_ATLANTA, 1)
         qs.memo_state = 23
         qs.set_cond(23, true)
         html = event
@@ -126,12 +132,12 @@ class Quests::Q00120_PavelsLastResearch < Quest
         html = event
       end
     when "32047-09.html"
-      if qs.memo_state?(4) && has_quest_items?(player, FLOWER_OF_PAVEL)
+      if qs.memo_state?(4) && has_quest_items?(pc, FLOWER_OF_PAVEL)
         html = event
       end
     when "32047-10.html"
-      if qs.memo_state?(4) && has_quest_items?(player, FLOWER_OF_PAVEL)
-        take_items(player, FLOWER_OF_PAVEL, -1)
+      if qs.memo_state?(4) && has_quest_items?(pc, FLOWER_OF_PAVEL)
+        take_items(pc, FLOWER_OF_PAVEL, -1)
         qs.memo_state = 5
         qs.set_cond(7, true)
         html = event
@@ -157,12 +163,12 @@ class Quests::Q00120_PavelsLastResearch < Quest
         html = event
       end
     when "32047-23.html", "32047-24.html", "32047-25.html", "32047-26.html"
-      if qs.memo_state?(23) && has_quest_items?(player, HEART_OF_ATLANTA)
+      if qs.memo_state?(23) && has_quest_items?(pc, HEART_OF_ATLANTA)
         html = event
       end
     when "32047-27.html"
-      if qs.memo_state?(23) && has_quest_items?(player, HEART_OF_ATLANTA)
-        take_items(player, HEART_OF_ATLANTA, -1)
+      if qs.memo_state?(23) && has_quest_items?(pc, HEART_OF_ATLANTA)
+        take_items(pc, HEART_OF_ATLANTA, -1)
         qs.memo_state = 24
         qs.set_cond(24, true)
         html = event
@@ -182,7 +188,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
       end
     when "32047-33.html"
       if qs.memo_state?(25)
-        give_items(player, WENDYS_NECKLACE, 1)
+        give_items(pc, WENDYS_NECKLACE, 1)
         qs.memo_state = 26
         qs.set_cond(25, true)
         html = event
@@ -214,50 +220,50 @@ class Quests::Q00120_PavelsLastResearch < Quest
         html = event
       end
     when "32041-16.html"
-      if qs.memo_state?(14) && has_quest_items?(player, LOCKUP_RESEARCH_REPORT)
+      if qs.memo_state?(14) && has_quest_items?(pc, LOCKUP_RESEARCH_REPORT)
         html = event
       end
     when "32041-17.html"
-      if qs.memo_state?(14) && has_quest_items?(player, LOCKUP_RESEARCH_REPORT)
-        give_items(player, KEY_OF_ENIGMA, 1)
+      if qs.memo_state?(14) && has_quest_items?(pc, LOCKUP_RESEARCH_REPORT)
+        give_items(pc, KEY_OF_ENIGMA, 1)
         qs.memo_state = 15
         qs.set_cond(16, true)
         html = event
       end
     when "32041-20.html"
-      if qs.memo_state?(15) && has_quest_items?(player, RESEARCH_REPORT, KEY_OF_ENIGMA)
+      if qs.memo_state?(15) && has_quest_items?(pc, RESEARCH_REPORT, KEY_OF_ENIGMA)
         html = event
       end
     when "pavel", "e=mc2"
-      if qs.memo_state?(15) && has_quest_items?(player, RESEARCH_REPORT, KEY_OF_ENIGMA)
+      if qs.memo_state?(15) && has_quest_items?(pc, RESEARCH_REPORT, KEY_OF_ENIGMA)
         html = "32041-21.html"
       end
     when "wdl"
-      if qs.memo_state?(15) && has_quest_items?(player, RESEARCH_REPORT, KEY_OF_ENIGMA)
+      if qs.memo_state?(15) && has_quest_items?(pc, RESEARCH_REPORT, KEY_OF_ENIGMA)
         html = "32041-22.html"
       end
     when "32041-23.html"
-      if qs.memo_state?(15) && has_quest_items?(player, RESEARCH_REPORT, KEY_OF_ENIGMA)
-        take_items(player, KEY_OF_ENIGMA, -1)
+      if qs.memo_state?(15) && has_quest_items?(pc, RESEARCH_REPORT, KEY_OF_ENIGMA)
+        take_items(pc, KEY_OF_ENIGMA, -1)
         qs.memo_state = 16
         qs.set_cond(17, true)
         html = event
       end
     when "32041-24.html", "32041-26.html"
-      if qs.memo_state?(16) && has_quest_items?(player, RESEARCH_REPORT)
+      if qs.memo_state?(16) && has_quest_items?(pc, RESEARCH_REPORT)
         html = event
       end
     when "32041-29.html", "32041-30.html", "32041-31.html", "32041-32.html",
          "32041-33.html"
-      if qs.memo_state?(26) && has_quest_items?(player, WENDYS_NECKLACE)
+      if qs.memo_state?(26) && has_quest_items?(pc, WENDYS_NECKLACE)
         html = event
       end
     when "32041-34.html"
-      if qs.memo_state?(26) && has_quest_items?(player, WENDYS_NECKLACE)
-        take_items(player, WENDYS_NECKLACE, -1)
-        reward_items(player, SEALED_PHOENIX_EARRING, 1)
-        give_adena(player, 783720, true)
-        add_exp_and_sp(player, 3447315, 272615)
+      if qs.memo_state?(26) && has_quest_items?(pc, WENDYS_NECKLACE)
+        take_items(pc, WENDYS_NECKLACE, -1)
+        reward_items(pc, SEALED_PHOENIX_EARRING, 1)
+        give_adena(pc, 783720, true)
+        add_exp_and_sp(pc, 3447315, 272615)
         qs.exit_quest(false, true)
         html = event
       end
@@ -309,7 +315,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
     when "32042-08.html"
       if qs.memo_state?(9)
         qs.memo_state = 10
-        play_sound(player, Sound::AMBSOUND_PERCUSSION_01)
+        play_sound(pc, Sound::AMBSOUND_PERCUSSION_01)
         html = event
       end
     when "wm1_return"
@@ -431,7 +437,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
         i1 = (memo_state_ex / 10000) * 10000
         i2 = (memo_state_ex % 1000) + 1000
         qs.set_memo_state_ex(0, i1 + i2)
-        play_sound(player, Sound::AMBSOUND_DRONE)
+        play_sound(pc, Sound::AMBSOUND_DRONE)
         html = event
       end
     when "32043-19.html", "32043-20.html"
@@ -505,7 +511,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
           qs.memo_state = 21
           qs.set_cond(21, true)
           qs.set_memo_state_ex(0, 0)
-          play_sound(player, Sound::AMBSOUND_PERCUSSION_02)
+          play_sound(pc, Sound::AMBSOUND_PERCUSSION_02)
           html = "32044-06.html"
         else
           html = "32044-05.html"
@@ -563,8 +569,8 @@ class Quests::Q00120_PavelsLastResearch < Quest
         qs.memo_state = 22
         qs.set_cond(22, true)
         qs.set_memo_state_ex(0, 0)
-        play_sound(player, Sound::AMBSOUND_DRONE)
-        npc.target = player
+        play_sound(pc, Sound::AMBSOUND_DRONE)
+        npc.target = pc
         npc.do_cast(QUEST_TRAP_POWER_SHOT)
         html = event
       end
@@ -575,13 +581,13 @@ class Quests::Q00120_PavelsLastResearch < Quest
     when "32045-02.html"
       if qs.memo_state?(13)
         npc = npc.not_nil!
-        give_items(player, LOCKUP_RESEARCH_REPORT, 1)
+        give_items(pc, LOCKUP_RESEARCH_REPORT, 1)
         # IMPORTANT!
         # locked report is exchanged to unlocked by using key of enigma
         # which is given by Wendy
         qs.memo_state = 14
         qs.set_cond(15, true)
-        npc.target = player
+        npc.target = pc
         npc.do_cast(QUEST_TRAP_POWER_SHOT)
         html = event
       end
@@ -591,24 +597,24 @@ class Quests::Q00120_PavelsLastResearch < Quest
     html
   end
 
-  def on_skill_see(npc, player, skill, targets, is_summon)
-    qs = get_quest_state(player, false)
+  def on_skill_see(npc, pc, skill, targets, is_summon)
+    qs = get_quest_state(pc, false)
     if qs && qs.started?
       npc_default = NPC_DEFAULT.skill
-      cast_skill(npc, player, npc_default)
-      cast_skill(npc, player, npc_default)
+      cast_skill(npc, pc, npc_default)
+      cast_skill(npc, pc, npc_default)
     end
 
     nil
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
+  def on_talk(npc, pc)
+    qs = get_quest_state!(pc)
 
     case npc.id
     when SUSPICIOUS_LOOKING_PILE_OF_STONES
       if qs.created?
-        if player.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
+        if pc.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
           html = "32046-01.htm"
         else
           html = "32046-02.htm"
@@ -622,7 +628,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
         when 3
           html = "32046-13.html"
         when 4
-          if has_quest_items?(player, FLOWER_OF_PAVEL)
+          if has_quest_items?(pc, FLOWER_OF_PAVEL)
             html = "32046-16.html"
           end
         when 7
@@ -640,13 +646,13 @@ class Quests::Q00120_PavelsLastResearch < Quest
         when 22
           html = "32046-43.html"
         when 23
-          if has_quest_items?(player, HEART_OF_ATLANTA)
+          if has_quest_items?(pc, HEART_OF_ATLANTA)
             html = "32046-45.html"
           end
         end
       else
-        if player.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
-          html = get_already_completed_msg(player)
+        if pc.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
+          html = get_already_completed_msg(pc)
         end
       end
     when WENDY
@@ -656,7 +662,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
       when 3
         html = "32047-07.html"
       when 4
-        if has_quest_items?(player, FLOWER_OF_PAVEL)
+        if has_quest_items?(pc, FLOWER_OF_PAVEL)
           html = "32047-08.html"
         end
       when 5
@@ -670,11 +676,11 @@ class Quests::Q00120_PavelsLastResearch < Quest
       when 13
         html = "32047-20.html"
       when 14
-        if has_quest_items?(player, LOCKUP_RESEARCH_REPORT)
+        if has_quest_items?(pc, LOCKUP_RESEARCH_REPORT)
           html = "32047-21.html"
         end
       when 23
-        if has_quest_items?(player, HEART_OF_ATLANTA)
+        if has_quest_items?(pc, HEART_OF_ATLANTA)
           html = "32047-22.html"
         end
       when 24
@@ -682,7 +688,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
       when 25
         html = "32047-30.html"
       when 26
-        if has_quest_items?(player, WENDYS_NECKLACE)
+        if has_quest_items?(pc, WENDYS_NECKLACE)
           html = "32047-34.html"
         end
       end
@@ -706,23 +712,23 @@ class Quests::Q00120_PavelsLastResearch < Quest
       when 6
         html = "32041-14.html"
       when 14
-        if has_quest_items?(player, LOCKUP_RESEARCH_REPORT)
+        if has_quest_items?(pc, LOCKUP_RESEARCH_REPORT)
           html = "32041-15.html"
         end
       when 15
-        if has_quest_items?(player, KEY_OF_ENIGMA)
-          if has_quest_items?(player, RESEARCH_REPORT)
+        if has_quest_items?(pc, KEY_OF_ENIGMA)
+          if has_quest_items?(pc, RESEARCH_REPORT)
             html = "32041-19.html"
-          elsif has_quest_items?(player, LOCKUP_RESEARCH_REPORT)
+          elsif has_quest_items?(pc, LOCKUP_RESEARCH_REPORT)
             html = "32041-18.html"
           end
         end
       when 16
-        if has_quest_items?(player, RESEARCH_REPORT)
+        if has_quest_items?(pc, RESEARCH_REPORT)
           html = "32041-27.html"
         end
       when 26
-        if has_quest_items?(player, WENDYS_NECKLACE)
+        if has_quest_items?(pc, WENDYS_NECKLACE)
           html = "32041-28.html"
         end
       end
@@ -730,7 +736,7 @@ class Quests::Q00120_PavelsLastResearch < Quest
       case qs.memo_state
       when 8
         html = "32042-01.html"
-        play_sound(player, Sound::AMBSOUND_CRYSTAL_LOOP)
+        play_sound(pc, Sound::AMBSOUND_CRYSTAL_LOOP)
       when 9
         html = "32042-06.html"
       when 10
@@ -771,6 +777,6 @@ class Quests::Q00120_PavelsLastResearch < Quest
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

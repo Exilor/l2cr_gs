@@ -1,4 +1,4 @@
-class Quests::Q00628_HuntGoldenRam < Quest
+class Scripts::Q00628_HuntGoldenRam < Quest
   # NPCs
   private KAHMAN = 31554
   # Items
@@ -32,47 +32,47 @@ class Quests::Q00628_HuntGoldenRam < Quest
     register_quest_items(SPLINTER_STAKATO_CHITIN, NEEDLE_STAKATO_CHITIN)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    qs = get_quest_state(player, false)
-    htmltext = nil
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    qs = get_quest_state(pc, false)
+    html = nil
     if qs.nil?
-      return htmltext
+      return html
     end
 
     case event
     when "accept"
-      if qs.created? && player.level >= MIN_LVL
+      if qs.created? && pc.level >= MIN_LVL
         qs.start_quest
-        if has_quest_items?(player, GOLDEN_RAM_BADGE_SOLDIER)
+        if has_quest_items?(pc, GOLDEN_RAM_BADGE_SOLDIER)
           qs.set_cond(3)
-          htmltext = "31554-05.htm"
-        elsif has_quest_items?(player, GOLDEN_RAM_BADGE_RECRUIT)
+          html = "31554-05.htm"
+        elsif has_quest_items?(pc, GOLDEN_RAM_BADGE_RECRUIT)
           qs.set_cond(2)
-          htmltext = "31554-04.htm"
+          html = "31554-04.htm"
         else
-          htmltext = "31554-03.htm"
+          html = "31554-03.htm"
         end
       end
     when "31554-08.html"
-      if get_quest_items_count(player, SPLINTER_STAKATO_CHITIN) >= REQUIRED_ITEM_COUNT
-        give_items(player, GOLDEN_RAM_BADGE_RECRUIT, 1)
-        take_items(player, SPLINTER_STAKATO_CHITIN, -1)
+      if get_quest_items_count(pc, SPLINTER_STAKATO_CHITIN) >= REQUIRED_ITEM_COUNT
+        give_items(pc, GOLDEN_RAM_BADGE_RECRUIT, 1)
+        take_items(pc, SPLINTER_STAKATO_CHITIN, -1)
         qs.set_cond(2, true)
-        htmltext = event
+        html = event
       end
     when "31554-12.html", "31554-13.html"
       if qs.started?
-        htmltext = event
+        html = event
       end
     when "31554-14.html"
       if qs.started?
         qs.exit_quest(true, true)
-        htmltext = event
+        html = event
       end
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -87,48 +87,54 @@ class Quests::Q00628_HuntGoldenRam < Quest
     super
   end
 
-  def on_talk(npc, player)
-    qs = get_quest_state!(player)
-    htmltext = get_no_quest_msg(player)
-    unless qs
-      return htmltext
+  def on_talk(npc, pc)
+    unless qs = get_quest_state!(pc)
+      return get_no_quest_msg(pc)
     end
 
     case qs.state
     when State::CREATED
-      htmltext = player.level >= MIN_LVL ? "31554-01.htm" : "31554-02.htm"
+      html = pc.level >= MIN_LVL ? "31554-01.htm" : "31554-02.htm"
     when State::STARTED
-      splinters = get_quest_items_count(player, SPLINTER_STAKATO_CHITIN)
-      needles = get_quest_items_count(player, NEEDLE_STAKATO_CHITIN)
+      splinters = get_quest_items_count(pc, SPLINTER_STAKATO_CHITIN)
+      needles = get_quest_items_count(pc, NEEDLE_STAKATO_CHITIN)
       case qs.cond
       when 1
-        htmltext = splinters >= REQUIRED_ITEM_COUNT ? "31554-07.html" : "31554-06.html"
+        html = splinters >= REQUIRED_ITEM_COUNT ? "31554-07.html" : "31554-06.html"
       when 2
-        if has_quest_items?(player, GOLDEN_RAM_BADGE_RECRUIT)
+        if has_quest_items?(pc, GOLDEN_RAM_BADGE_RECRUIT)
           if splinters >= REQUIRED_ITEM_COUNT && needles >= REQUIRED_ITEM_COUNT
-            take_items(player, GOLDEN_RAM_BADGE_RECRUIT, -1)
-            take_items(player, SPLINTER_STAKATO_CHITIN, -1)
-            take_items(player, NEEDLE_STAKATO_CHITIN, -1)
-            give_items(player, GOLDEN_RAM_BADGE_SOLDIER, 1)
+            take_items(pc, GOLDEN_RAM_BADGE_RECRUIT, -1)
+            take_items(pc, SPLINTER_STAKATO_CHITIN, -1)
+            take_items(pc, NEEDLE_STAKATO_CHITIN, -1)
+            give_items(pc, GOLDEN_RAM_BADGE_SOLDIER, 1)
             qs.set_cond(3, true)
-            htmltext = "31554-10.html"
+            html = "31554-10.html"
           else
-            htmltext = "31554-09.html"
+            html = "31554-09.html"
           end
         else
           qs.set_cond(1)
-          htmltext = splinters >= REQUIRED_ITEM_COUNT ? "31554-07.html" : "31554-06.html"
+          if splinters >= REQUIRED_ITEM_COUNT
+            html = "31554-07.html"
+          else
+            html = "31554-06.html"
+          end
         end
       when 3
-        if has_quest_items?(player, GOLDEN_RAM_BADGE_SOLDIER)
-          htmltext = "31554-11.html"
+        if has_quest_items?(pc, GOLDEN_RAM_BADGE_SOLDIER)
+          html = "31554-11.html"
         else
           qs.set_cond(1)
-          htmltext = splinters >= REQUIRED_ITEM_COUNT ? "31554-07.html" : "31554-06.html"
+          if splinters >= REQUIRED_ITEM_COUNT
+            html = "31554-07.html"
+          else
+            html = "31554-06.html"
+          end
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

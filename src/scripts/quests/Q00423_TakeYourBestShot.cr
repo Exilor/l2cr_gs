@@ -1,4 +1,4 @@
-class Quests::Q00423_TakeYourBestShot < Quest
+class Scripts::Q00423_TakeYourBestShot < Quest
   # NPCs
   private BATRACOS = 32740
   private JOHNNY = 32744

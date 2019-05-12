@@ -1,4 +1,4 @@
-class Quests::Q00998_FallenAngelSelect < Quest
+class Scripts::Q00998_FallenAngelSelect < Quest
   # NPCs
   private NATOOLS = 30894
   # Misc
@@ -12,9 +12,9 @@ class Quests::Q00998_FallenAngelSelect < Quest
     add_talk_id(NATOOLS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
       return
     end
 
@@ -22,30 +22,30 @@ class Quests::Q00998_FallenAngelSelect < Quest
     when "30894-01.html", "30894-02.html", "30894-03.html"
       return event
     when "dawn"
-      start_quest(Q00142_FallenAngelRequestOfDawn.simple_name, player)
+      start_quest(Q00142_FallenAngelRequestOfDawn.simple_name, pc)
     when "dusk"
-      start_quest(Q00143_FallenAngelRequestOfDusk.simple_name, player)
+      start_quest(Q00143_FallenAngelRequestOfDusk.simple_name, pc)
     end
 
     nil
   end
 
-  private def start_quest(name, player)
+  private def start_quest(name, pc)
     if q = QuestManager.get_quest(name)
-      q.new_quest_state(player)
-      q.notify_event("30894-01.html", nil, player)
-      player.get_quest_state!(name).state = State::COMPLETED
+      q.new_quest_state(pc)
+      q.notify_event("30894-01.html", nil, pc)
+      pc.get_quest_state!(name).state = State::COMPLETED
     end
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     if st.nil? || !st.started?
-      return get_no_quest_msg(player)
+      return get_no_quest_msg(pc)
     end
 
-    qs = player.get_quest_state(Q00141_ShadowFoxPart3.simple_name)
-    if player.level >= MIN_LEVEL && qs && qs.completed?
+    qs = pc.get_quest_state(Q00141_ShadowFoxPart3.simple_name)
+    if pc.level >= MIN_LEVEL && qs && qs.completed?
       "30894-01.html"
     else
       "30894-00.html"

@@ -129,7 +129,7 @@ module AutoSpawnHandler
     -1i64
   end
 
-  def get_auto_spawn_instance?(id : Int32, is_l2id : Bool)
+  def get_auto_spawn_instance?(id : Int32, is_l2id : Bool) : AutoSpawnInstance?
     if is_l2id
       if spawn_registered?(id)
         REGISTERED_SPAWNS[id]
@@ -139,7 +139,7 @@ module AutoSpawnHandler
     end
   end
 
-  def get_auto_spawn_instance(id : Int32, is_l2id : Bool)
+  def get_auto_spawn_instance(id : Int32, is_l2id : Bool) : AutoSpawnInstance
     unless inst = get_auto_spawn_instance?(id, is_l2id)
       raise "No auto spawn instance with id #{id} found"
     end
@@ -257,16 +257,16 @@ module AutoSpawnHandler
 
     @spawn_index = 0
     @broadcast_announcement = false
+    getter id
     getter location_list = [] of Location
     getter npc_instance_list = [] of L2Npc
-    property? spawn_active : Bool = false
     property l2id : Int32 = 0
     property init_delay : Int32
     property respawn_delay : Int32
     property despawn_delay : Int32
     property spawn_count : Int32 = 1
-    getter id
     property last_loc_index : Int32 = -1
+    property? spawn_active : Bool = false
     property? spawn_active : Bool = false
     property? random_spawn : Bool = false
 

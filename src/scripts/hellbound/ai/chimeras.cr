@@ -1,4 +1,4 @@
-class NpcAI::Chimeras < AbstractNpcAI
+class Scripts::Chimeras < AbstractNpcAI
   # NPCs
   private NPCS = {
     22349, # Chimera of Earth

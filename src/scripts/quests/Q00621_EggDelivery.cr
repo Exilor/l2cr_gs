@@ -1,4 +1,4 @@
-class Quests::Q00621_EggDelivery < Quest
+class Scripts::Q00621_EggDelivery < Quest
   # NPCs
   private JEREMY = 31521
   private PULIN = 31543
@@ -29,9 +29,9 @@ class Quests::Q00621_EggDelivery < Quest
     register_quest_items(BOILED_EGG, EGG_PRICE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless qs = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless qs = get_quest_state(pc, false)
       return
     end
 
@@ -39,14 +39,14 @@ class Quests::Q00621_EggDelivery < Quest
     when "31521-03.htm"
       if qs.created?
         qs.start_quest
-        give_items(player, BOILED_EGG, 5)
+        give_items(pc, BOILED_EGG, 5)
         html = event
       end
     when "31521-06.html"
       if qs.cond?(6)
-        if get_quest_items_count(player, EGG_PRICE) >= 5
+        if get_quest_items_count(pc, EGG_PRICE) >= 5
           qs.set_cond(7, true)
-          take_items(player, EGG_PRICE, -1)
+          take_items(pc, EGG_PRICE, -1)
           html = event
         else
           html = "31521-07.html"
@@ -54,10 +54,10 @@ class Quests::Q00621_EggDelivery < Quest
       end
     when "31543-02.html"
       if qs.cond?(1)
-        if has_quest_items?(player, BOILED_EGG)
+        if has_quest_items?(pc, BOILED_EGG)
           qs.set_cond(2, true)
-          take_items(player, BOILED_EGG, 1)
-          give_items(player, EGG_PRICE, 1)
+          take_items(pc, BOILED_EGG, 1)
+          give_items(pc, EGG_PRICE, 1)
           html = event
         else
           html = "31543-03.html"
@@ -67,10 +67,10 @@ class Quests::Q00621_EggDelivery < Quest
       npc = npc.not_nil!
       idx = TALKERS.index(npc.id)
       if idx && qs.cond?(idx + 2)
-        if has_quest_items?(player, BOILED_EGG)
+        if has_quest_items?(pc, BOILED_EGG)
           qs.set_cond(qs.cond + 1, true)
-          take_items(player, BOILED_EGG, 1)
-          give_items(player, EGG_PRICE, 1)
+          take_items(pc, BOILED_EGG, 1)
+          give_items(pc, EGG_PRICE, 1)
           html = event
         else
           html = "#{npc.id}-03.html"
@@ -80,14 +80,14 @@ class Quests::Q00621_EggDelivery < Quest
       if qs.cond?(7)
         rnd = rand(1000)
         if rnd < 800
-          reward_items(player, QUICK_STEP_POTION, 1)
-          give_adena(player, 18800, true)
+          reward_items(pc, QUICK_STEP_POTION, 1)
+          give_adena(pc, 18800, true)
         elsif rnd < 880
-          reward_items(player, SEALED_RING_OF_AURAKYRA, 1)
+          reward_items(pc, SEALED_RING_OF_AURAKYRA, 1)
         elsif rnd < 960
-          reward_items(player, SEALED_SANDDRAGONS_EARING, 1)
+          reward_items(pc, SEALED_SANDDRAGONS_EARING, 1)
         elsif rnd < 1000
-          reward_items(player, SEALED_DRAGON_NECKLACE, 1)
+          reward_items(pc, SEALED_DRAGON_NECKLACE, 1)
         end
         qs.exit_quest(true, true)
         html = event

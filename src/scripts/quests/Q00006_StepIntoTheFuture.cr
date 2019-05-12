@@ -1,4 +1,4 @@
-class Quests::Q00006_StepIntoTheFuture < Quest
+class Scripts::Q00006_StepIntoTheFuture < Quest
   # NPCs
 	private ROXXY = 30006
 	private BAULRO = 30033

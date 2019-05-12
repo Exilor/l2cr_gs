@@ -1,4 +1,4 @@
-class NpcAI::OrcChange2 < AbstractNpcAI
+class Scripts::OrcChange2 < AbstractNpcAI
   # NPCs
   private NPCS = {
     30513, # Penatus

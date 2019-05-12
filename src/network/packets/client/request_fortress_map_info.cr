@@ -1,11 +1,11 @@
 class Packets::Incoming::RequestFortressMapInfo < GameClientPacket
   @fort_id = 0
 
-  def read_impl
+  private def read_impl
     @fort_id = d
   end
 
-  def run_impl
+  private def run_impl
     unless fort = FortManager.get_fort_by_id(@fort_id)
       warn "Fort with id #{@fort_id} not found."
       if active_char

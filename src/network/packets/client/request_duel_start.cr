@@ -2,12 +2,12 @@ class Packets::Incoming::RequestDuelStart < GameClientPacket
   @player = ""
   @party_duel = false
 
-  def read_impl
+  private def read_impl
     @player = s
     @party_duel = d == 1
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     unless target = L2World.get_player(@player)
       warn "Player #{@player.inspect} not found in L2World."

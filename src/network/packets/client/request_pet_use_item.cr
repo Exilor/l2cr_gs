@@ -1,12 +1,12 @@
 class Packets::Incoming::RequestPetUseItem < GameClientPacket
   @l2id = 0
 
-  def read_impl
+  private def read_impl
     @l2id = d
     # L2J hasn't completed this
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless pet = pc.summon.as?(L2PetInstance)
 

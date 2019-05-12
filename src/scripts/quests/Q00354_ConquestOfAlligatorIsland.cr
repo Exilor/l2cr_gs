@@ -1,4 +1,4 @@
-class Quests::Q00354_ConquestOfAlligatorIsland < Quest
+class Scripts::Q00354_ConquestOfAlligatorIsland < Quest
   # NPC
   private KLUCK = 30895
   # Items

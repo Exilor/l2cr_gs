@@ -1,4 +1,4 @@
-class Quests::Q00053_LinnaeusSpecialBait < Quest
+class Scripts::Q00053_LinnaeusSpecialBait < Quest
   # NPCs
   private LINNAEUS = 31577
   private CRIMSON_DRAKE = 20670
@@ -15,13 +15,13 @@ class Quests::Q00053_LinnaeusSpecialBait < Quest
     register_quest_items(CRIMSON_DRAKE_HEART)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    htmltext = event
+    html = event
 
     case event
     when "31577-1.htm"
@@ -31,15 +31,15 @@ class Quests::Q00053_LinnaeusSpecialBait < Quest
         st.give_items(FLAMING_FISHING_LURE, 4)
         st.exit_quest(false, true)
       else
-        htmltext = "31577-5.html"
+        html = "31577-5.html"
       end
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    unless member = get_random_party_member(player, 1)
+  def on_kill(npc, pc, is_summon)
+    unless member = get_random_party_member(pc, 1)
       return
     end
 
@@ -60,18 +60,17 @@ class Quests::Q00053_LinnaeusSpecialBait < Quest
     super
   end
 
-  def on_talk(npc, player)
-    htmltext = get_no_quest_msg(player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
     case st.state
     when State::COMPLETED
-      htmltext = get_already_completed_msg(player)
+      html = get_already_completed_msg(pc)
     when State::CREATED
-      htmltext = player.level > 59 ? "31577-0.htm" : "31577-0a.html"
+      html = pc.level > 59 ? "31577-0.htm" : "31577-0a.html"
     when State::STARTED
-      htmltext = st.cond?(1) ? "31577-4.html" : "31577-2.html"
+      html = st.cond?(1) ? "31577-4.html" : "31577-2.html"
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

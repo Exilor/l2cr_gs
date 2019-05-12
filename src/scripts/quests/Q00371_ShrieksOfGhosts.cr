@@ -1,4 +1,4 @@
-class Quests::Q00371_ShrieksOfGhosts < Quest
+class Scripts::Q00371_ShrieksOfGhosts < Quest
   private record DropInfo, first_chance : Int32, second_chance : Int32
 
   # NPCs

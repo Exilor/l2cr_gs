@@ -1,6 +1,4 @@
-class HellboundEngine < AbstractNpcAI
-  protected class_getter! instance : self
-
+class Scripts::HellboundEngine < AbstractNpcAI
   private DOOR_LIST = {
     {19250001, 5},
     {19250002, 5},
@@ -15,6 +13,8 @@ class HellboundEngine < AbstractNpcAI
   private ANNOUNCEMENT = "Hellbound has reached level: %lvl%"
   private UPDATE_INTERVAL = 60000 # 1 minute
   private UPDATE_EVENT = "UPDATE"
+
+  protected class_getter! instance : self
 
   getter cached_level = -1
   getter max_trust = 0
@@ -253,3 +253,5 @@ class HellboundEngine < AbstractNpcAI
     instance.locked?
   end
 end
+
+alias HellboundEngine = Scripts::HellboundEngine

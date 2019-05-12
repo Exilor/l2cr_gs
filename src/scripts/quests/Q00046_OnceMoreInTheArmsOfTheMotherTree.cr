@@ -1,6 +1,6 @@
 require "./abstract_get_scroll_to_hometown_quest"
 
-class Quests::Q00046_OnceMoreInTheArmsOfTheMotherTree < Quests::AbstractGetScrollToHometownQuest
+class Scripts::Q00046_OnceMoreInTheArmsOfTheMotherTree < AbstractGetScrollToHometownQuest
   def initialize
     super(46, self.class.simple_name, "Once More In the Arms of the Mother Tree")
   end

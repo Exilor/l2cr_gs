@@ -1,4 +1,4 @@
-class NpcAI::RaidBossCancel < AbstractNpcAI
+class Scripts::RaidBossCancel < AbstractNpcAI
   RAID_BOSSES = {
     25019, # Pan Dryad
     25050, # Verfa

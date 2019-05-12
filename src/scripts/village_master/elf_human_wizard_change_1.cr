@@ -1,4 +1,4 @@
-class NpcAI::ElfHumanWizardChange1 < AbstractNpcAI
+class Scripts::ElfHumanWizardChange1 < AbstractNpcAI
   private NPCS = {
     30037, # Levian
     30070, # Sylvain

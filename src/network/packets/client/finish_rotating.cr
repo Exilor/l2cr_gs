@@ -1,12 +1,12 @@
 class Packets::Incoming::FinishRotating < GameClientPacket
   @degree = 0
 
-  def read_impl
+  private def read_impl
     @degree = d
     # @unknown = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     airship = pc.airship
     if airship && airship.captain?(pc)

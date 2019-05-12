@@ -1,4 +1,4 @@
-class NpcAI::TeleportWithCharm < AbstractNpcAI
+class Scripts::TeleportWithCharm < AbstractNpcAI
   # NPCs
   private WHIRPY = 30540
   private TAMIL = 30576

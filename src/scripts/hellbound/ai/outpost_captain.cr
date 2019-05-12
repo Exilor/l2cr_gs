@@ -1,4 +1,4 @@
-class NpcAI::OutpostCaptain < AbstractNpcAI
+class Scripts::OutpostCaptain < AbstractNpcAI
   # NPCs
   private CAPTAIN = 18466
   private DEFENDERS = {

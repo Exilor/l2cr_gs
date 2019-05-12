@@ -1,4 +1,4 @@
-class Quests::Q00300_HuntingLetoLizardman < Quest
+class Scripts::Q00300_HuntingLetoLizardman < Quest
   # NPCs
   private RATH = 30126
   # Items

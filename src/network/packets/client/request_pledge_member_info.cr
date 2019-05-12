@@ -1,12 +1,12 @@
 class Packets::Incoming::RequestPledgeMemberInfo < GameClientPacket
   @player = ""
 
-  def read_impl
+  private def read_impl
     unk = d
     @player = s
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
     return unless clan = pc.clan?
     unless member = clan.get_clan_member(@player)

@@ -1,4 +1,4 @@
-class Quests::Q00242_PossessorOfAPreciousSoul2 < Quest
+class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
   # NPCs
   private VIRGIL = 31742
   private KASSANDRA = 31743

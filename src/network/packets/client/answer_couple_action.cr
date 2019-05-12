@@ -3,13 +3,13 @@ class Packets::Incoming::AnswerCoupleAction < GameClientPacket
   @answer = 0
   @char_id = 0
 
-  def read_impl
+  private def read_impl
     @action_id = d
     @answer = d
     @char_id = d
   end
 
-  def run_impl
+  private def run_impl
     return unless pc = active_char
 
     unless target = L2World.get_player(@char_id)

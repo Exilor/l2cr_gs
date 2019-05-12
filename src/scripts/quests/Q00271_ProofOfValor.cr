@@ -1,4 +1,4 @@
-class Quests::Q00271_ProofOfValor < Quest
+class Scripts::Q00271_ProofOfValor < Quest
   # NPC
   private RUKAIN = 30577
   # Items
@@ -21,13 +21,13 @@ class Quests::Q00271_ProofOfValor < Quest
     register_quest_items(KASHA_WOLF_FANG)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    return unless st = get_quest_state(pc, false)
 
     if event.casecmp?("30577-04.htm")
       st.start_quest
-      if has_at_least_one_quest_item?(player, NECKLACE_OF_VALOR, NECKLACE_OF_COURAGE)
+      if has_at_least_one_quest_item?(pc, NECKLACE_OF_VALOR, NECKLACE_OF_COURAGE)
         "30577-08.html"
       else
         event
@@ -51,28 +51,28 @@ class Quests::Q00271_ProofOfValor < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
-      if player.race.orc?
-        if player.level >= MIN_LVL
-          if has_at_least_one_quest_item?(player, NECKLACE_OF_VALOR, NECKLACE_OF_COURAGE)
-            htmltext = "30577-07.htm"
+      if pc.race.orc?
+        if pc.level >= MIN_LVL
+          if has_at_least_one_quest_item?(pc, NECKLACE_OF_VALOR, NECKLACE_OF_COURAGE)
+            html = "30577-07.htm"
           else
-            htmltext = "30577-03.htm"
+            html = "30577-03.htm"
           end
         else
-          htmltext = "30577-02.htm"
+          html = "30577-02.htm"
         end
       else
-        htmltext = "30577-01.htm"
+        html = "30577-01.htm"
       end
     when State::STARTED
       case st.cond
       when 1
-        htmltext = "30577-05.html"
+        html = "30577-05.html"
       when 2
         if st.get_quest_items_count(KASHA_WOLF_FANG) >= 50
           if Rnd.rand(100) <= 13
@@ -83,11 +83,11 @@ class Quests::Q00271_ProofOfValor < Quest
           end
           st.take_items(KASHA_WOLF_FANG, -1)
           st.exit_quest(true, true)
-          htmltext = "30577-06.html"
+          html = "30577-06.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 end

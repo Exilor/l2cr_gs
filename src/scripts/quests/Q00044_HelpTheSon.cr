@@ -1,4 +1,4 @@
-class Quests::Q00044_HelpTheSon < Quest
+class Scripts::Q00044_HelpTheSon < Quest
   # NPCs
   private LUNDY = 30827
   private DRIKUS = 30505
@@ -21,13 +21,13 @@ class Quests::Q00044_HelpTheSon < Quest
     register_quest_items(GEMSTONE, GEMSTONE_FRAGMENT)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return get_no_quest_msg(player)
+  def on_adv_event(event, npc, pc)
+    return unless pc
+    unless st = get_quest_state(pc, false)
+      return get_no_quest_msg(pc)
     end
 
-    htmltext = event
+    html = event
     case event
     when "30827-01.htm"
       st.start_quest
@@ -36,7 +36,7 @@ class Quests::Q00044_HelpTheSon < Quest
         st.take_items(WORK_HAMMER, 1)
         st.set_cond(2, true)
       else
-        htmltext = "30827-03a.html"
+        html = "30827-03a.html"
       end
     when "30827-06.html"
       if st.get_quest_items_count(GEMSTONE_FRAGMENT) == 30
@@ -44,25 +44,25 @@ class Quests::Q00044_HelpTheSon < Quest
         st.give_items(GEMSTONE, 1)
         st.set_cond(4, true)
       else
-        htmltext = "30827-06a.html"
+        html = "30827-06a.html"
       end
     when "30505-02.html"
       if st.has_quest_items?(GEMSTONE)
         st.take_items(GEMSTONE, -1)
         st.set_cond(5, true)
       else
-        htmltext = "30505-02a.html"
+        html = "30505-02a.html"
       end
     when "30827-09.html"
       st.give_items(PET_TICKET, 1)
       st.exit_quest(false, true)
     end
 
-    htmltext
+    html
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
     if st && st.cond?(2)
       st.give_items(GEMSTONE_FRAGMENT, 1)
       if st.get_quest_items_count(GEMSTONE_FRAGMENT) == 30
@@ -75,41 +75,45 @@ class Quests::Q00044_HelpTheSon < Quest
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when LUNDY
       case st.state
       when State::CREATED
-        htmltext = player.level >= 24 ? "30827-00.htm" : "30827-00a.html"
+        html = pc.level >= 24 ? "30827-00.htm" : "30827-00a.html"
       when State::STARTED
         case st.cond
         when 1
-          htmltext = st.has_quest_items?(WORK_HAMMER) ? "30827-02.html" : "30827-02a.html"
+          if st.has_quest_items?(WORK_HAMMER)
+            html = "30827-02.html"
+          else
+            html = "30827-02a.html"
+          end
         when 2
-          htmltext = "30827-04.html"
+          html = "30827-04.html"
         when 3
-          htmltext = "30827-05.html"
+          html = "30827-05.html"
         when 4
-          htmltext = "30827-07.html"
+          html = "30827-07.html"
         when 5
-          htmltext = "30827-08.html"
+          html = "30827-08.html"
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     when DRIKUS
       if st.started?
         case st.cond
         when 4
-          htmltext = "30505-01.html"
+          html = "30505-01.html"
         when 5
-          htmltext = "30505-03.html"
+          html = "30505-03.html"
         end
       end
     end
 
-    htmltext || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

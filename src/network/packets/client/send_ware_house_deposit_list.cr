@@ -3,7 +3,7 @@ class Packets::Incoming::SendWareHouseDepositList < GameClientPacket
 
   @items : Array(ItemHolder)?
 
-  def read_impl
+  private def read_impl
     size = d
 
     if size <= 0 || size > Config.max_item_in_packet
@@ -27,7 +27,7 @@ class Packets::Incoming::SendWareHouseDepositList < GameClientPacket
     @items = items
   end
 
-  def run_impl
+  private def run_impl
     return unless _items = @items
     return unless pc = active_char
 

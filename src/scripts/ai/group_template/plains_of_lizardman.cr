@@ -1,4 +1,4 @@
-class NpcAI::PlainsOfLizardman < AbstractNpcAI
+class Scripts::PlainsOfLizardman < AbstractNpcAI
   # NPCs
   private INVISIBLE_NPC = 18919
   private TANTA_GUARD = 18862

@@ -1,4 +1,4 @@
-class Quests::Q00402_PathOfTheHumanKnight < Quest
+class Scripts::Q00402_PathOfTheHumanKnight < Quest
   # NPCs
 	private HIGH_PRIEST_BIOTIN = 30031
 	private LEVIAN = 30037
@@ -197,11 +197,10 @@ class Quests::Q00402_PathOfTheHumanKnight < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    htmltext = get_no_quest_msg(pc)
 
     if qs.created? || qs.completed?
       if npc.id == SIR_KLAUS_VASPER
-        htmltext = "30417-01.htm"
+        html = "30417-01.htm"
       end
     elsif qs.started?
       case npc.id
@@ -209,11 +208,11 @@ class Quests::Q00402_PathOfTheHumanKnight < Quest
         coin_count = get_quest_items_count(pc, COIN_OF_LORDS1, COIN_OF_LORDS2, COIN_OF_LORDS3, COIN_OF_LORDS4, COIN_OF_LORDS5, COIN_OF_LORDS6)
         if has_quest_items?(pc, SQUIRES_MARK)
           if coin_count < 3
-            htmltext = "30417-09.html"
+            html = "30417-09.html"
           elsif coin_count == 3
-            htmltext = "30417-10.html"
+            html = "30417-10.html"
           elsif 4 <= coin_count <= 5
-            htmltext = "30417-11.html"
+            html = "30417-11.html"
           else
             give_adena(pc, 163_800, true)
             give_items(pc, SWORD_OF_RITUAL, 1)
@@ -231,106 +230,106 @@ class Quests::Q00402_PathOfTheHumanKnight < Quest
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             qs.save_global_quest_var("1ClassQuestFinished", "1")
-            htmltext = "30417-12.html"
+            html = "30417-12.html"
           end
         end
       when HIGH_PRIEST_BIOTIN
         if has_quest_items?(pc, SQUIRES_MARK) && !has_at_least_one_quest_item?(pc, EINHASADS_3RD_TEMPLE_BADGE, COIN_OF_LORDS6)
-          htmltext = "30031-01.html"
+          html = "30031-01.html"
         elsif has_quest_items?(pc, EINHASADS_3RD_TEMPLE_BADGE)
           if get_quest_items_count(pc, SKULL_OF_SILENT_HORROR) < 10
-            htmltext = "30031-03.html"
+            html = "30031-03.html"
           else
             give_items(pc, COIN_OF_LORDS6, 1)
             take_items(pc, EINHASADS_3RD_TEMPLE_BADGE, 1)
             take_items(pc, SKULL_OF_SILENT_HORROR, -1)
-            htmltext = "30031-04.html"
+            html = "30031-04.html"
           end
         elsif has_quest_items?(pc, COIN_OF_LORDS6)
-          htmltext = "30031-05.html"
+          html = "30031-05.html"
         end
       when LEVIAN
         if has_quest_items?(pc, SQUIRES_MARK) && !has_at_least_one_quest_item?(pc, EINHASADS_2ND_TEMPLE_BADGE, COIN_OF_LORDS4)
-          htmltext = "30037-01.html"
+          html = "30037-01.html"
         elsif has_quest_items?(pc, EINHASADS_2ND_TEMPLE_BADGE)
           if get_quest_items_count(pc, LIZARDMANS_TOTEM) < 20
-            htmltext = "30037-03.html"
+            html = "30037-03.html"
           else
             give_items(pc, COIN_OF_LORDS4, 1)
             take_items(pc, EINHASADS_2ND_TEMPLE_BADGE, 1)
             take_items(pc, LIZARDMANS_TOTEM, -1)
-            htmltext = "30037-04.html"
+            html = "30037-04.html"
           end
         elsif has_quest_items?(pc, COIN_OF_LORDS4)
-          htmltext = "30037-05.html"
+          html = "30037-05.html"
         end
       when HIGH_PRIEST_RAYMOND
         if has_quest_items?(pc, SQUIRES_MARK) && !has_at_least_one_quest_item?(pc, EINHASADS_1ST_TEMPLE_BADGE, COIN_OF_LORDS2)
-          htmltext = "30289-01.html"
+          html = "30289-01.html"
         elsif has_quest_items?(pc, EINHASADS_1ST_TEMPLE_BADGE)
           if get_quest_items_count(pc, EINHASAD_CRUCIFIX) < 12
-            htmltext = "30289-04.html"
+            html = "30289-04.html"
           else
             give_items(pc, COIN_OF_LORDS2, 1)
             take_items(pc, EINHASADS_1ST_TEMPLE_BADGE, 1)
             take_items(pc, EINHASAD_CRUCIFIX, -1)
-            htmltext = "30289-05.html"
+            html = "30289-05.html"
           end
         elsif has_quest_items?(pc, COIN_OF_LORDS2)
-          htmltext = "30289-06.html"
+          html = "30289-06.html"
         end
       when CAPTAIN_GILBERT
         if has_quest_items?(pc, SQUIRES_MARK) && !has_at_least_one_quest_item?(pc, GLUDIO_GUARDS_3RD_BADGE, COIN_OF_LORDS5)
-          htmltext = "30039-01.html"
+          html = "30039-01.html"
         elsif has_quest_items?(pc, GLUDIO_GUARDS_3RD_BADGE)
           if get_quest_items_count(pc, GIANT_SPIDERS_HUSK) < 20
-            htmltext = "30039-03.html"
+            html = "30039-03.html"
           else
             give_items(pc, COIN_OF_LORDS5, 1)
             take_items(pc, GLUDIO_GUARDS_3RD_BADGE, 1)
             take_items(pc, GIANT_SPIDERS_HUSK, -1)
-            htmltext = "30039-04.html"
+            html = "30039-04.html"
           end
         elsif has_quest_items?(pc, COIN_OF_LORDS5)
-          htmltext = "30039-05.html"
+          html = "30039-05.html"
         end
       when CAPTAIN_BEZIQUE
         if has_quest_items?(pc, SQUIRES_MARK) && !has_at_least_one_quest_item?(pc, GLUDIO_GUARDS_2ND_BADGE, COIN_OF_LORDS3)
-          htmltext = "30379-01.html"
+          html = "30379-01.html"
         elsif has_quest_items?(pc, GLUDIO_GUARDS_2ND_BADGE)
           if get_quest_items_count(pc, VENOMOUS_SPIDERS_LEG) < 20
-            htmltext = "30379-03.html"
+            html = "30379-03.html"
           else
             give_items(pc, COIN_OF_LORDS3, 1)
             take_items(pc, GLUDIO_GUARDS_2ND_BADGE, 1)
             take_items(pc, VENOMOUS_SPIDERS_LEG, -1)
-            htmltext = "30379-04.html"
+            html = "30379-04.html"
           end
         elsif has_quest_items?(pc, COIN_OF_LORDS3)
-          htmltext = "30379-05.html"
+          html = "30379-05.html"
         end
       when CAPTAIN_BATHIS
         if has_quest_items?(pc, SQUIRES_MARK) && !has_at_least_one_quest_item?(pc, GLUDIO_GUARDS_1ST_BADGE, COIN_OF_LORDS1)
-          htmltext = "30332-01.html"
+          html = "30332-01.html"
         elsif has_quest_items?(pc, GLUDIO_GUARDS_1ST_BADGE)
           if get_quest_items_count(pc, BUGBEAR_NECKLACE) < 10
-            htmltext = "30332-03.html"
+            html = "30332-03.html"
           else
             give_items(pc, COIN_OF_LORDS1, 1)
             take_items(pc, GLUDIO_GUARDS_1ST_BADGE, 1)
             take_items(pc, BUGBEAR_NECKLACE, -1)
-            htmltext = "30332-04.html"
+            html = "30332-04.html"
           end
         elsif has_quest_items?(pc, COIN_OF_LORDS1)
-          htmltext = "30332-05.html"
+          html = "30332-05.html"
         end
       when SIR_ARON_TANFORD
         if has_quest_items?(pc, SQUIRES_MARK)
-          htmltext = "30653-01.html"
+          html = "30653-01.html"
         end
       end
     end
 
-    htmltext
+    html || get_no_quest_msg(pc)
   end
 end

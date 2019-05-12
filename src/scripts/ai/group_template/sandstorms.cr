@@ -1,4 +1,4 @@
-class NpcAI::Sandstorms < AbstractNpcAI
+class Scripts::Sandstorms < AbstractNpcAI
   # NPCs
   private SANDSTORM = 32350
   # Skills

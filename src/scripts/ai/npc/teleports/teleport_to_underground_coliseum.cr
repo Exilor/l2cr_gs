@@ -1,4 +1,4 @@
-class NpcAI::TeleportToUndergroundColiseum < AbstractNpcAI
+class Scripts::TeleportToUndergroundColiseum < AbstractNpcAI
   # NPCs
   private COLISEUM_HELPER = 32491
   private PADDIES = 32378

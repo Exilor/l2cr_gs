@@ -1,4 +1,4 @@
-class Quests::Q00372_LegacyOfInsolence < Quest
+class Scripts::Q00372_LegacyOfInsolence < Quest
   # NPCs
   private TRADER_HOLLY = 30839
   private WAREHOUSE_KEEPER_WALDERAL = 30844
@@ -70,7 +70,7 @@ class Quests::Q00372_LegacyOfInsolence < Quest
   private MONSTER_REWARDS = {
     20817 => QuestItemHolder.new(ANCIENT_RED_PAPYRUS, 302, 1),
     20821 => QuestItemHolder.new(ANCIENT_RED_PAPYRUS, 410, 1),
-    HALLATES_INSPECTOR => QuestItemHolder.new(ANCIENT_RED_PAPYRUS, 1, 447),
+    HALLATES_INSPECTOR => QuestItemHolder.new(ANCIENT_RED_PAPYRUS, 447, 1),
     20829 => QuestItemHolder.new(ANCIENT_BLUE_PAPYRUS, 451, 1),
     21062 => QuestItemHolder.new(ANCIENT_WHITE_PAPYRUS, 290, 1),
     21069 => QuestItemHolder.new(ANCIENT_BLACK_PAPYRUS, 280, 1)

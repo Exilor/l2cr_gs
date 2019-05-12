@@ -33,7 +33,7 @@ module ActionHandler::L2NpcAction
         else
           pc.send_packet(MoveToPawn.new(pc, npc, 100))
           if npc.has_random_animation?
-            npc.on_random_animation(Rnd.rand(8))
+            npc.on_random_animation(rand(8))
           end
 
           if npc.event_mob?
@@ -61,7 +61,7 @@ module ActionHandler::L2NpcAction
     true
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Npc
   end
 end

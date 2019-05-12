@@ -1,6 +1,6 @@
 require "../../../models/holders/quest_item_holder"
 
-class NpcAI::Alexandria < AbstractNpcAI
+class Scripts::Alexandria < AbstractNpcAI
   private class AdditionalQuestItemHolder < QuestItemHolder
     getter additional_id
 

@@ -1,4 +1,4 @@
-class Quests::Q00312_TakeAdvantageOfTheCrisis < Quest
+class Scripts::Q00312_TakeAdvantageOfTheCrisis < Quest
   # NPC
   private FILAUR = 30535
   # Monsters

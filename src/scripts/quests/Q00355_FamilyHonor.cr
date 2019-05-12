@@ -1,4 +1,4 @@
-class Quests::Q00355_FamilyHonor < Quest
+class Scripts::Q00355_FamilyHonor < Quest
   private record DropInfo, first_chance : Int32, second_chance : Int32
 
   # NPCs

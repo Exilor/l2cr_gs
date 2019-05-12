@@ -1,4 +1,4 @@
-class NpcAI::FirstClassTransferTalk < AbstractNpcAI
+class Scripts::FirstClassTransferTalk < AbstractNpcAI
   MASTERS = {
     30026 => Race::HUMAN,    # Blitz, TI Fighter Guild Head Master
     30031 => Race::HUMAN,    # Biotin, TI Einhasad Temple High Priest
