@@ -80,14 +80,14 @@ In order for the game server to work it needs the following:
     - [x] Core
     - [x] Orfen
     - [ ] Antharas
-    - [ ] Valakas
+    - [x] Valakas
     - [ ] Beleth
     - [ ] Frintezza
     - [ ] Freya
     - [ ] Zaken
-    - [ ] Queen Ant
+    - [x] Queen Ant
   - [ ] Treasure chests
-  - [ ] Feedable monsters
+  - [x] Feedable monsters
 - [x] Walking and talking NPCs
 - [x] Parties
   - [x] Rewards distribution
@@ -99,7 +99,7 @@ In order for the game server to work it needs the following:
   - [x] Inviting new members
   - [x] Assigning titles
   - [x] Crests
-  - [ ] Increasing clan level (only upto level 4)
+  - [x] Increasing clan level
   - [ ] Clan skills
   - [ ] Clan wars
   - [ ] Alliances
@@ -126,12 +126,12 @@ In order for the game server to work it needs the following:
   - [x] Third class change
   - [x] Low level quests
   - [x] Transformation quest
-  - [ ] All other quests
+  - [x] All other quests
 - [x] Boats
 - [x] Airship Gludio-Gracia
 - [x] Friend list
   - [x] Friend chat
-- [ ] Block list (needs testing)
+- [x] Block list (needs testing)
 - [x] Seven signs
   - [x] Registration
   - [x] Contributing seal stones
@@ -172,7 +172,7 @@ In order for the game server to work it needs the following:
 - [ ] Territory War (preliminary support, untested)
 - [x] Instances
   - [x] The system itself
-  - [x] Pailaka (the first two)
+  - [x] Pailaka
   - [x] Kamaloka (needs more testing)
   - [x] Nornil's Garden
   - [ ] All the others
