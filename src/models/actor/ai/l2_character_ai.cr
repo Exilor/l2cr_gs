@@ -21,7 +21,7 @@ class L2CharacterAI < AI
     end
   end
 
-  def next_intention
+  def next_intention : IntentionCommand?
     # return nil
   end
 
@@ -154,7 +154,7 @@ class L2CharacterAI < AI
 
     if object.is_a?(L2ItemInstance)
       unless object.item_location.void?
-        debug "#{object}'s item_location is not VOID (#{object.item_location})."
+        debug { "#{object}'s item_location is not VOID (#{object.item_location})." }
         return
       end
     end

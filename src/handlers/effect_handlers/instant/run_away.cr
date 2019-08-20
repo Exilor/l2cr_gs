@@ -20,7 +20,7 @@ class EffectHandler::RunAway < AbstractEffect
     if target.casting_now? && target.can_abort_cast?
       target.abort_cast
     end
-    target.ai.fear_time = @time
+    target.ai.as(L2AttackableAI).fear_time = @time
     target.notify_event(AI::AFRAID, info.effector, true)
   end
 end

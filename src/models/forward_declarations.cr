@@ -49,6 +49,9 @@ end
 class L2FestivalGuideInstance < L2Npc
 end
 
+class L2ControllableMobInstance < L2MonsterInstance
+end
+
 abstract class L2Decoy < L2Character
 end
 
@@ -65,6 +68,12 @@ class L2AirshipInstance < L2Vehicle
 end
 
 class L2DoorInstance < L2Character
+end
+
+class L2Spawn
+end
+
+class L2GroupSpawn < L2Spawn
 end
 
 #

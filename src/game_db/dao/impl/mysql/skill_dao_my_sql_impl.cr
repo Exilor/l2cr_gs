@@ -15,7 +15,7 @@ module GameDB
         id = rs.get_i32("skill_id")
         level = rs.get_i32("skill_level")
         unless skill = SkillData[id, level]?
-          warn "Skill with ID #{id} and lv. #{level} not found."
+          warn { "Skill with ID #{id} and lv. #{level} not found." }
           next
         end
 

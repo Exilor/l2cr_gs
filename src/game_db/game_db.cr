@@ -20,7 +20,7 @@ module GameDB
 
   def transaction
     db.transaction do |tr|
-      yield db
+      yield tr.connection
    end
   end
 

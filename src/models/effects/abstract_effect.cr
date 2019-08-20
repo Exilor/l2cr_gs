@@ -1,6 +1,7 @@
 require "../../handlers/effect_handler"
 
 abstract class AbstractEffect
+  include EventListenerOwner
   include Loggable
   include Packets::Outgoing
 

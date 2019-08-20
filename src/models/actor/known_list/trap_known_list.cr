@@ -13,7 +13,7 @@ class TrapKnownList < NpcKnownList
     1500
   end
 
-  def active_char
+  def active_char : L2TrapInstance
     super.as(L2TrapInstance)
   end
 end

@@ -248,7 +248,7 @@ class L2TrapInstance < L2Npc
 
     @players_who_detected_me << detector.l2id
 
-    OnTrapAction.new(self, detector, TrapAction::TRAP_DETECTED).async(self)
+    OnTrapAction.new(self, detector, TrapAction::DETECTED).async(self)
 
     if detector.playable?
       send_info(detector.acting_player)
@@ -269,7 +269,7 @@ class L2TrapInstance < L2Npc
     broadcast_packet(TrapInfo.new(self, nil))
     self.target = target
 
-    OnTrapAction.new(self, target, TrapAction::TRAP_TRIGGERED).async(self)
+    OnTrapAction.new(self, target, TrapAction::TRIGGERED).async(self)
 
     task = TrapTriggerTask.new(self)
     ThreadPoolManager.schedule_general(task, 500)

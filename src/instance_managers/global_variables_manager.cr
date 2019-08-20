@@ -51,7 +51,7 @@ module GlobalVariablesManager
 
   def load
     restore_me
-    info "Loaded #{size} variables."
+    info { "Loaded #{size} variables." }
   end
 
   {% for m in GlobalVariables.methods + AbstractVariables.methods + StatsSet.methods %}

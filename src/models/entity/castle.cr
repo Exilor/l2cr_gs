@@ -39,10 +39,6 @@ class Castle < AbstractResidence
     end
   end
 
-  def residence_zone
-    @zone.as?(L2SiegeZone)
-  end
-
   def get_function(type : Int32) : CastleFunction?
     @functions[type]?
   end

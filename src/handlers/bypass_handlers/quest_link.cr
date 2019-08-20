@@ -102,7 +102,7 @@ module BypassHandler::QuestLink
     states = [] of QuestState
 
     unless template = NpcData[npc_id]?
-      warn "#{pc} requested quests for talk on non existing npc #{npc_id}."
+      warn { "#{pc} requested quests for talk on non existing npc #{npc_id}." }
       return states
     end
 
@@ -123,9 +123,8 @@ module BypassHandler::QuestLink
     states
   end
 
-  private def show_quest_window(pc, npc, quest_id = nil) # quest_id: String
+  private def show_quest_window(pc : L2PcInstance, npc : L2Npc, quest_id : String)
     debug "#show_quest_window #{pc}, #{npc}, #{quest_id}"
-    return show_quest_window_2(pc, npc) unless quest_id
 
     q = QuestManager.get_quest(quest_id)
     qs = pc.get_quest_state(quest_id)
@@ -150,6 +149,7 @@ module BypassHandler::QuestLink
 
       q.notify_talk(npc, pc)
     else
+      debug "Quest with id #{quest_id.inspect} not found."
       content = Quest.get_no_quest_msg(pc)
     end
 
@@ -160,16 +160,15 @@ module BypassHandler::QuestLink
     pc.action_failed
   end
 
-  private def show_quest_window_2(pc, npc)
-    debug "#show_quest_window_2 #{pc}, #{npc}"
+  private def show_quest_window(pc : L2PcInstance, npc : L2Npc)
+    debug "#show_quest_window #{pc}, #{npc}"
     condition_meet = false
     options = Set(Quest).new
     quests = get_quests_for_talk(pc, npc.id)
     debug "Checking the quest conditions for #{npc.name} (#{quests.size} quests)."
     quests.each do |state|
-      quest = state.quest
-      if !quest
-        warn "#{pc} requested incorrect quest state for non existing quest #{state.quest_name}."
+      unless quest = state.quest
+        warn { "#{pc} requested incorrect quest state for non existing quest #{state.quest_name}." }
         next
       end
 

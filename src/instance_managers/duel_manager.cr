@@ -5,23 +5,21 @@ module DuelManager
   extend Loggable
   include Packets::Outgoing
 
-  private DUELS = Hash(Int32, Duel).new
+  private DUELS = {} of Int32 => Duel
   @@current_duel_id = Atomic(Int32).new(0)
 
   def get_duel(duel_id : Int) : Duel?
     if duel = DUELS[duel_id]?
-      duel
-    else
-      warn "Duel with ID #{duel_id} not found. Existing duel IDs: #{DUELS.keys}."
-      nil
+      return duel
     end
+
+    warn { "Duel with ID #{duel_id} not found. Existing duel IDs: #{DUELS.keys}." }
+    nil
   end
 
   def add_duel(pc1 : L2PcInstance, pc2 : L2PcInstance, party_duel : Bool)
-    return unless pc1 && pc2
-
     duel_id = @@current_duel_id.add(1) + 1
-    debug "Created new duel with ID #{duel_id}."
+    debug { "Created new duel with ID #{duel_id}." }
     DUELS[duel_id] = Duel.new(pc1, pc2, party_duel, duel_id)
   end
 
@@ -30,23 +28,23 @@ module DuelManager
   end
 
   def do_surrender(pc : L2PcInstance)
-    return unless pc && pc.in_duel?
+    return unless pc.in_duel?
     unless duel = get_duel(pc.duel_id)
-      warn "Duel with ID #{pc.duel_id} not found."
+      warn { "Duel with ID #{pc.duel_id} not found." }
       return
     end
     duel.do_surrender(pc)
   end
 
   def on_player_defeat(pc : L2PcInstance)
-    return unless pc && pc.in_duel?
+    return unless pc.in_duel?
     if duel = get_duel(pc.duel_id)
       duel.on_player_defeat(pc)
     end
   end
 
   def broadcast_to_opposite_team(pc : L2PcInstance, packet : GameServerPacket)
-    return unless pc && pc.in_duel?
+    return unless pc.in_duel?
     return unless duel = get_duel(pc.duel_id)
 
     if duel.team_a.includes?(pc)
@@ -84,9 +82,9 @@ module DuelManager
     if reason
       reason.add_string(target.name)
       pc.send_packet(reason)
-      false
-    else
-      true
+      return false
     end
+
+    true
   end
 end

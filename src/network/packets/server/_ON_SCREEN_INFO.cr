@@ -269,13 +269,6 @@ class Packets::Outgoing::TargetInfo < Packets::Outgoing::OnScreenInfo
         io.puts "SPS chance: #{target.spiritshot_chance}"
         io.puts "SPS amount: #{target.@spiritshot_amount}/#{target.template.spiritshot}"
       end
-      if target.is_a?(L2Npc)
-        EventType.each do |et|
-          if target.has_listener?(et)
-            io.puts et
-          end
-        end
-      end
     end
   end
 

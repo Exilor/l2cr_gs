@@ -1,6 +1,6 @@
 class AbnormalVisualEffect < EnumClass
-  getter mask, type
-  protected initializer mask: Int64, type: Int32
+  getter mask
+  protected initializer mask: Int64, type: UInt8
 
   add(NONE, 0x0000000,  0)
   add(DOT_BLEEDING, 0x00000001, 0)

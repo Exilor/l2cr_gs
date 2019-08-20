@@ -1,4 +1,4 @@
-require "../../../enums/music/voice"
+require "../../enums/music/voice"
 
 class Scripts::Q00255_Tutorial < Quest
   # Npc

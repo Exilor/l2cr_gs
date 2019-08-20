@@ -8,7 +8,7 @@ module EnchantItemHPBonusData
   def load
     ARMOR_HP_BONUSES.clear
     parse_datapack_file("stats/enchantHPBonus.xml")
-    info "Loaded #{ARMOR_HP_BONUSES.size} enchant HP bonuses."
+    info { "Loaded #{ARMOR_HP_BONUSES.size} enchant HP bonuses." }
   end
 
   private def parse_document(doc, file)

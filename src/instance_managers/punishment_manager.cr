@@ -37,7 +37,7 @@ module PunishmentManager
       end
     end
 
-    info "Loaded #{initiated} active and #{expired} expired punishments."
+    info { "Loaded #{initiated} active and #{expired} expired punishments." }
   end
 
   def start_punishment(task : PunishmentTask)

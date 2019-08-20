@@ -3,15 +3,15 @@ require "../ai/l2_controllable_mob_ai"
 class L2ControllableMobInstance < L2MonsterInstance
   property? invul : Bool = false
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2ControllableMobInstance
   end
 
-  def aggro_range
+  def aggro_range : Int32
     500
   end
 
-  def init_ai
+  def init_ai : L2CharacterAI
     L2ControllableMobAI.new(self)
   end
 
@@ -27,6 +27,4 @@ class L2ControllableMobInstance < L2MonsterInstance
   def detach_ai
     # no-op
   end
-
-  # TODO
 end

@@ -53,7 +53,7 @@ class SiegableHall < ClanHall
       if door.dead?
         door.do_revive
         if weak
-          door.current_hp = door.max_hp / 2
+          door.current_hp = door.max_hp.fdiv(2)
         else
           door.max_hp!
         end
@@ -143,22 +143,22 @@ class SiegableHall < ClanHall
   end
 
   def update_siege_zone(active : Bool)
-    siege_status.active = active
+    siege_zone.active = active
   end
 
   def show_siege_info(pc : L2PcInstance)
     pc.send_packet(SiegeInfo.new(self))
   end
 
-  def siegable_hall?
+  def siegable_hall? : Bool
     true
   end
 
-  def zone?
+  def zone? : L2SiegableHallZone?
     super.as(L2SiegableHallZone?)
   end
 
-  def zone
+  def zone : L2SiegableHallZone
     super.as(L2SiegableHallZone)
   end
 end

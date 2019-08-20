@@ -5,13 +5,13 @@ module PlayerTemplateData
   extend XMLReader
 
   private TEMPLATES = EnumMap(ClassId, L2PcTemplate).new
-  @@new_character_templates : Array(L2PcTemplate)?
+  @@new_character_templates : Slice(L2PcTemplate)?
 
   def load
     TEMPLATES.clear
     timer = Timer.new
     parse_datapack_directory("stats/chars/baseStats")
-    info "Loaded #{TEMPLATES.size} templates in #{timer.result} s."
+    info { "Loaded #{TEMPLATES.size} templates in #{timer.result} s." }
   end
 
   private def parse_document(doc, file)
@@ -93,8 +93,8 @@ module PlayerTemplateData
     TEMPLATES[id]
   end
 
-  def new_character_templates : Array(L2PcTemplate)
-    @@new_character_templates ||= [
+  def new_character_templates : Slice(L2PcTemplate)
+    @@new_character_templates ||= Slice[
       TEMPLATES[ClassId::FIGHTER],
       TEMPLATES[ClassId::MAGE],
       TEMPLATES[ClassId::ELVEN_FIGHTER],

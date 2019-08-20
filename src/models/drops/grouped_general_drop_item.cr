@@ -23,7 +23,16 @@ struct GroupedGeneralDropItem
 
   def extract_me : Array(GeneralDropItem)
     @items.map do |item|
-      GeneralDropItem.new(item.item_id, item.min, item.max, (item.chance * @chance) / 100, item.amount_strategy, @precise_strategy, @killer_chance_modifier_strategy, item.drop_calculation_strategy)
+      GeneralDropItem.new(
+        item.item_id,
+        item.min,
+        item.max,
+        (item.chance * @chance) / 100,
+        item.amount_strategy,
+        @precise_strategy,
+        @killer_chance_modifier_strategy,
+        item.drop_calculation_strategy
+      )
     end
   end
 
@@ -34,7 +43,17 @@ struct GroupedGeneralDropItem
 
     group = GroupedGeneralDropItem.new(sum_chance, @drop_calculation_strategy, KillerChanceModifierStrategy::NO_RULES, @precise_strategy)
     group.items = @items.map do |item|
-      GeneralDropItem.new(item.item_id, item.min, item.max, (item.chance * @chance) / sum_chance, item.amount_strategy, item.chance_strategy, item.precise_strategy, item.killer_chance_modifier_strategy, item.drop_calculation_strategy)
+      GeneralDropItem.new(
+        item.item_id,
+        item.min,
+        item.max,
+        (item.chance * @chance) / sum_chance,
+        item.amount_strategy,
+        item.chance_strategy,
+        item.precise_strategy,
+        item.killer_chance_modifier_strategy,
+        item.drop_calculation_strategy
+      )
     end
     group
   end
@@ -66,7 +85,17 @@ struct GroupedGeneralDropItem
 
     group = GroupedGeneralDropItem.new(sum_chance, @drop_calculation_strategy, KillerChanceModifierStrategy::NO_RULES, @precise_strategy)
     items = @items.map do |item|
-      GeneralDropItem.new(item.item_id, item.get_min(victim), item.get_max(victim), (item.get_chance(victim) * @chance * chance_modifier) / sum_chance, AmountMultiplierStrategy::STATIC, ChanceMultiplierStrategy::STATIC, @precise_strategy, KillerChanceModifierStrategy::NO_RULES, item.drop_calculation_strategy)
+      GeneralDropItem.new(
+        item.item_id,
+        item.get_min(victim),
+        item.get_max(victim),
+        (item.get_chance(victim) * @chance * chance_modifier) / sum_chance,
+        AmountMultiplierStrategy::STATIC,
+        ChanceMultiplierStrategy::STATIC,
+        @precise_strategy,
+        KillerChanceModifierStrategy::NO_RULES,
+        item.drop_calculation_strategy
+      )
     end
     group.items = items
     group

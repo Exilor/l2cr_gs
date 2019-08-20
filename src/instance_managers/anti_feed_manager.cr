@@ -98,8 +98,6 @@ module AntiFeedManager
 
     addr_hash = client.ip.hash.to_i32
 
-    connection_count = event.fetch(addr_hash, 0)
-
     if temp = event[addr_hash]?
       if temp > 0
         event[addr_hash] = temp - 1

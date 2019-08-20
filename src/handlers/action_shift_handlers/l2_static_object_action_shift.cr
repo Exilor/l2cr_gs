@@ -1,4 +1,4 @@
-module ActionShiftHandler::L2StaticObjectInstanceAction
+module ActionShiftHandler::L2StaticObjectInstanceActionShift
   extend self
   extend ActionShiftHandler
 

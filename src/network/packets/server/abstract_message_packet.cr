@@ -155,8 +155,8 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
     end
 
     if @params.size < param_count
-      raise "Too few parameters for #{@system_message_id}: " \
-        "given #{@params.size} but #{param_count} are required"
+      raise "Too few parameters for #{@system_message_id} " \
+        "(given #{@params.size} but #{param_count} required)"
     end
 
     d param_count

@@ -74,8 +74,8 @@ class L2SummonAI < L2PlayableAI
     @actor.do_attack(attack_target)
   end
 
-  private def think_cast # doesn't handle Soulless' Parasite Burst well
-    if check_target_lost_or_dead(cast_target)
+  private def think_cast
+    if check_target_lost(cast_target)
       return self.cast_target = nil
     end
 

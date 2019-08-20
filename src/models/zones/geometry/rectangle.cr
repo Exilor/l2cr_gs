@@ -1,6 +1,6 @@
 require "./rectangle_2d"
 
-class Rectangle < Rectangle2D
+struct Rectangle < Rectangle2D
   @x = 0
   @y = 0
 
@@ -8,15 +8,17 @@ class Rectangle < Rectangle2D
   getter_initializer width: Int32, height: Int32
 
 
-  def bounds
-    Rectangle.new(x, y, width, height)
+  def bounds : Rectangle
+    # Rectangle.new(x, y, width, height)
+    self
   end
 
-  def bounds_2d
-    Rectangle.new(x, y, width, height)
+  def bounds_2d : Rectangle
+    # Rectangle.new(x, y, width, height)
+    self
   end
 
-  def z
+  def z : Int32
     raise "shouldn't call Rectangle#z"
   end
 end

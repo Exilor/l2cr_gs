@@ -50,7 +50,7 @@ class L2SepulcherNpcInstance < L2Npc
     super
   end
 
-  def get_html_path(npc_id, val)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "#{HTML_FILE_PATH}#{npc_id}.htm"
     else
@@ -131,7 +131,7 @@ class L2SepulcherNpcInstance < L2Npc
     pc.action_failed
   end
 
-  def show_chat_window(pc, val)
+  def show_chat_window(pc : L2PcInstance, val : Int32)
     filename = get_html_path(id, val)
     html = NpcHtmlMessage.new(l2id)
     html.set_file(pc, filename)

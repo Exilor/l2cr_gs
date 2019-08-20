@@ -5,7 +5,7 @@ class Stats < EnumClass
   protected def initialize(@value : String, @check_negative : Bool = false)
   end
 
-  def self.from_value(str : String)
+  def self.from_value(str : String) : self
     find { |stat| stat.value == str } ||
     raise("No member with value #{str.inspect} found")
   end
@@ -14,7 +14,7 @@ class Stats < EnumClass
   add(MAX_HP, "maxHp", true)
   add(MAX_MP, "maxMp", true)
   add(MAX_CP, "maxCp", true)
-  add(MAX_RECOVERABLE_HP, "maxRecoverableHp") # The maximum HP that is able to be recovered trough heals)
+  add(MAX_RECOVERABLE_HP, "maxRecoverableHp") # The maximum HP that is able to be recovered through heals
   add(MAX_RECOVERABLE_MP, "maxRecoverableMp")
   add(MAX_RECOVERABLE_CP, "maxRecoverableCp")
   add(REGENERATE_HP_RATE, "regHp")
@@ -30,11 +30,11 @@ class Stats < EnumClass
   add(MAGIC_ATTACK, "mAtk", true)
   add(PHYSICAL_SKILL_POWER, "physicalSkillPower")
   add(POWER_ATTACK_SPEED, "pAtkSpd", true)
-  add(MAGIC_ATTACK_SPEED, "mAtkSpd", true) # Magic Skill Casting Time Rate)
-  add(ATK_REUSE, "atkReuse") # Bows Hits Reuse Rate)
-  add(P_REUSE, "pReuse") # Physical Skill Reuse Rate)
-  add(MAGIC_REUSE_RATE, "mReuse") # Magic Skill Reuse Rate)
-  add(DANCE_REUSE, "dReuse") # Dance Skill Reuse Rate)
+  add(MAGIC_ATTACK_SPEED, "mAtkSpd", true) # Magic Skill Casting Time Rate
+  add(ATK_REUSE, "atkReuse") # Bows Hits Reuse Rate
+  add(P_REUSE, "pReuse") # Physical Skill Reuse Rate
+  add(MAGIC_REUSE_RATE, "mReuse") # Magic Skill Reuse Rate
+  add(DANCE_REUSE, "dReuse") # Dance Skill Reuse Rate
   add(SHIELD_DEFENCE, "sDef", true)
 
   add(CRITICAL_DAMAGE, "critDmg")
@@ -99,7 +99,7 @@ class Stats < EnumClass
   # VULNERABILITIES
   add(DAMAGE_ZONE_VULN, "damageZoneVuln")
   add(MOVEMENT_VULN, "movementVuln")
-  add(CANCEL_VULN, "cancelVuln") # Resistance for cancel type skills)
+  add(CANCEL_VULN, "cancelVuln") # Resistance for cancel type skills
   add(DEBUFF_VULN, "debuffVuln")
   add(BUFF_VULN, "buffVuln")
 

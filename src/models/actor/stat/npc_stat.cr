@@ -5,7 +5,7 @@ class NpcStat < CharStat
     active_char.template.level.to_i32
   end
 
-  def active_char
+  def active_char : L2Npc
     super.as(L2Npc)
   end
 end

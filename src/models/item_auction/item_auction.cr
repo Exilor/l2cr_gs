@@ -12,8 +12,7 @@ class ItemAuction
   @last_bid_player_l2id = 0
   getter highest_bid : ItemAuctionBid?
   getter auction_ending_extend_state = ItemAuctionExtendState::INITIAL
-  getter auction_id, instance_id, starting_time, ending_time, auction_state,
-    item_info
+  getter auction_id, instance_id, starting_time, ending_time, item_info
   property scheduled_auction_ending_extend_state : ItemAuctionExtendState = ItemAuctionExtendState::INITIAL
 
   # SQL

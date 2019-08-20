@@ -46,7 +46,7 @@ module DimensionalRiftManager
     type_size = ROOMS.size
     room_size = ROOMS.each_key.reduce(0) { |m, k| m + ROOMS[k].size }
 
-    info "Loaded #{type_size} room types with #{room_size} rooms."
+    info { "Loaded #{type_size} room types with #{room_size} rooms." }
   rescue e
     error e
   end
@@ -72,9 +72,9 @@ module DimensionalRiftManager
             count = sp["count"].to_i
 
             # if !ROOMS.has_key?(type)
-            #   warn "Type #{type} not found."
+            #   warn { "Type #{type} not found." }
             # elsif ROOMS[type].has_key?(room_id)
-            #   warn "Room #{room_id} in type #{type} not found."
+            #   warn { "Room #{room_id} in type #{type} not found." }
             # end
 
             count.times do |i|
@@ -103,7 +103,7 @@ module DimensionalRiftManager
       end
     end
 
-    info "Loaded #{count_good} dimensional rift spawns (#{count_bad} errors)."
+    info { "Loaded #{count_good} dimensional rift spawns (#{count_bad} errors)." }
   rescue e
     error e
   end
@@ -265,7 +265,7 @@ module DimensionalRiftManager
   def handle_cheat(pc : L2PcInstance, npc : L2Npc)
     show_html_file(pc, "data/html/seven_signs/rift/Cheater.htm", npc)
     unless pc.gm?
-      warn "Player #{pc.name} (#{pc.l2id}) was cheating in dimensional rift area."
+      warn { "Player #{pc.name} (#{pc.l2id}) was cheating in dimensional rift area." }
       Util.punish(pc, "tried to cheat in dimensional rift.")
     end
   end

@@ -45,6 +45,7 @@ require "./instance_managers/punishment_manager"
 require "./instance_managers/four_sepulchers_manager"
 require "./instance_managers/auction_manager"
 require "./instance_managers/item_auction_manager"
+require "./instance_managers/petition_manager"
 require "./task_managers/task_manager"
 require "./task_managers/known_list_updater"
 require "./task_managers/attack_stances"
@@ -100,6 +101,7 @@ require "./data_tables/spawn_table"
 require "./data_tables/augmentation_data"
 require "./data_tables/merchant_price_config_table"
 require "./data_tables/bot_report_table"
+require "./data_tables/event_droplist"
 require "./cache/htm_cache"
 require "./cache/warehouse_cache"
 require "./shutdown"
@@ -198,7 +200,6 @@ module GameServer
     CastleManager.load_instances
     NpcBufferTable.load
     GrandBossManager.load
-    # EventDroplist.load
     ItemAuctionManager.load
 
     Olympiad.instance
@@ -211,7 +212,6 @@ module GameServer
     CrestTable.load
     TeleportLocationTable.load
     UIData.load
-    # PetitionManager.load
     AugmentationData.load
     CursedWeaponsManager.load
     TransformData.load
@@ -269,7 +269,6 @@ module GameServer
     PunishmentManager.load
 
     at_exit { Shutdown.run }
-    # Signal::INT.trap { Config.save_on_interrupt ? exit : exit! }
     Signal::INT.trap { exit }
 
     # TvTManager.load
@@ -290,7 +289,14 @@ module GameServer
     handler = GamePacketHandler
     executor = GamePacketHandler
 
-    listener = MMO::PacketManager.new(GameClient, handler, executor)
+    sc = SelectorConfig.new
+    sc.max_read_per_pass   = Config.mmo_max_read_per_pass
+    sc.max_send_per_pass   = Config.mmo_max_send_per_pass
+    sc.select_sleep_time   = Config.mmo_selector_sleep_time
+    sc.helper_buffer_count = Config.mmo_helper_buffer_count
+    sc.tcp_no_delay        = Config.mmo_tcp_nodelay
+
+    listener = MMO::PacketManager.new(sc, GameClient, handler, executor)
     listener.host = host == "*" ? "0.0.0.0" : host
     listener.port = port
 
@@ -312,14 +318,6 @@ module GameServer
     listener.run
   end
 end
-
-# {% for sub in L2Object.all_subclasses %}
-#   {% for m in sub.methods %}
-#     {% if m.body.stringify.lines.size > 1 && m.body.stringify.includes?(m.name.stringify) %}
-#       {% puts sub.stringify + "#" + m.name.stringify %}
-#     {% end %}
-#   {% end %}
-# {% end %}
 
 {% if flag?(:win32) %}
   GameServer.start

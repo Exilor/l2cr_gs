@@ -82,9 +82,6 @@ module AdminCommandHandler::AdminEnchant
       item_instance.enchant_level = ench
       player.inventory.equip_item(item_instance)
 
-      # iu = InventoryUpdate.new
-      # iu.add_modified_item(item_instance)
-      # player.send_packet(iu)
       player.send_packet(Packets::Outgoing::InventoryUpdate.modified(item_instance))
       player.broadcast_packet(Packets::Outgoing::CharInfo.new(player))
       player.send_packet(Packets::Outgoing::UserInfo.new(player))
@@ -96,7 +93,7 @@ module AdminCommandHandler::AdminEnchant
   end
 
   private def show_main_page(pc)
-    AdminCommandHandler::AdminHtml.show_admin_html(pc, "enchant.htm")
+    AdminHtml.show_admin_html(pc, "enchant.htm")
   end
 
   def commands

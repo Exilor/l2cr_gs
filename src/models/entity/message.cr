@@ -17,6 +17,8 @@ class Message
     PLAYER, NEWS, NONE, ALEGRIA
   end
 
+  @attachments : Mail?
+
   getter sender_id : Int32
   getter receiver_id : Int32
   getter subject : String
@@ -31,8 +33,6 @@ class Message
   getter? has_attachments : Bool
 
   property? returned : Bool = false
-
-  @attachments : Mail?
 
   def initialize(rs : ResultSetReader)
     @message_id = rs.get_i32("messageId")

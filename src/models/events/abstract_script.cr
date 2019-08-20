@@ -3,6 +3,7 @@ require "./listeners/*"
 
 abstract class AbstractScript
   include Synchronizable
+  include EventListenerOwner
   include Packets::Outgoing
   include Loggable
   extend Loggable
@@ -701,6 +702,18 @@ abstract class AbstractScript
     AbstractScript.add_skill_cast_desire(*args)
   end
 
+  def self.special_camera(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, range : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32)
+    pc.send_packet(SpecialCamera.new(creature, force, angle1, angle2, time, range, duration, rel_yaw, rel_pitch, wide, rel_angle))
+  end
+
+  def self.special_camera_ex(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32)
+    pc.send_packet(SpecialCamera.new(creature, pc, force, angle1, angle2, time, duration, rel_yaw, rel_pitch, wide, rel_angle))
+  end
+
+  def self.special_camera_3(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, range : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32, unk : Int32)
+    pc.send_packet(SpecialCamera.new(creature, force, angle1, angle2, time, range, duration, rel_yaw, rel_pitch, wide, rel_angle, unk))
+  end
+
   def self.cast_skill(npc : L2Npc, target : L2Playable, sh : SkillHolder)
     npc.target = target
     npc.do_cast(sh.skill)
@@ -845,13 +858,13 @@ abstract class AbstractScript
       y += offset
     end
 
-    spawn = L2Spawn.new(npc_id)
-    spawn.instance_id = instance_id
-    spawn.heading = heading
-    spawn.x, spawn.y, spawn.z = x, y, z
-    spawn.stop_respawn
+    sp = L2Spawn.new(npc_id)
+    sp.instance_id = instance_id
+    sp.heading = heading
+    sp.x, sp.y, sp.z = x, y, z
+    sp.stop_respawn
 
-    unless npc = spawn.spawn_one(is_summon_spawn)
+    unless npc = sp.spawn_one(is_summon_spawn)
       raise "Npc wasn't spawned"
     end
 
@@ -933,7 +946,7 @@ abstract class AbstractScript
         door.open_me
       end
     else
-      warn "No door with id #{door_id} at instance id #{instance_id}."
+      warn { "No door with id #{door_id} at instance id #{instance_id}." }
     end
   end
 
@@ -943,7 +956,7 @@ abstract class AbstractScript
         door.close_me
       end
     else
-      warn "No door with id #{door_id} at instance id #{instance_id}."
+      warn { "No door with id #{door_id} at instance id #{instance_id}." }
     end
   end
 

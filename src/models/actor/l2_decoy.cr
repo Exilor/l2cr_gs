@@ -56,7 +56,7 @@ abstract class L2Decoy < L2Character
     known_list.known_players.each_value &.send_packet(ci)
   end
 
-  def template
+  def template : L2NpcTemplate
     super.as(L2NpcTemplate)
   end
 

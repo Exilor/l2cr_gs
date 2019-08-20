@@ -440,7 +440,7 @@ class L2Party < AbstractPlayerGroup
 
     if Config.party_xp_cutoff_method.casecmp?("level")
       members.each do |m|
-        if top_lvl < m.level <= Config.party_xp_cutoff_level
+        if top_lvl - m.level <= Config.party_xp_cutoff_level
           valid_members << m
         end
       end

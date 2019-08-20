@@ -13,7 +13,7 @@ module ItemHandler::SoulShots
     skills = item.template.skills
 
     if skills.nil? || skills.empty?
-      warn "#{item.template} has no skills."
+      warn { "#{item.template} has no skills." }
       return false
     end
 
@@ -45,7 +45,7 @@ module ItemHandler::SoulShots
 
       unless pc.destroy_item_without_trace("Consume", item.l2id, ss_count.to_i64, nil, false)
         unless pc.disable_auto_shot(item_id)
-          pc.send_packet(SystemMessageId::NOT_ENOUGH_SPIRITSHOTS)
+          pc.send_packet(SystemMessageId::NOT_ENOUGH_SOULSHOTS)
         end
 
         return false

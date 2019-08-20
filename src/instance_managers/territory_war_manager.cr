@@ -78,7 +78,7 @@ module TerritoryWarManager
           TERRITORY_LIST[castle_id].add_ward_spawn_place(loc)
         else
           id = rs.get_i32("id")
-          warn "Unknown npc type for #{id}."
+          warn { "Unknown npc type for #{id}." }
         end
       end
     rescue e
@@ -388,7 +388,7 @@ module TerritoryWarManager
         end
       end
     else
-      warn "Missing territory for new ward owner: #{new_owner_id}; #{territory_id}."
+      warn { "Missing territory for new ward owner: #{new_owner_id}; #{territory_id}." }
     end
 
     ret
@@ -615,7 +615,7 @@ module TerritoryWarManager
           active_territory_list << t
         end
       else
-        warn "Castle with id #{t.castle_id} is missing from CastleManager."
+        warn { "Castle with id #{t.castle_id} is missing from CastleManager." }
       end
     end
 
@@ -692,7 +692,7 @@ module TerritoryWarManager
           active_territory_list << t
         end
       else
-        warn "Castle with id #{t.castle_id} is missing from CastleManager."
+        warn { "Castle with id #{t.castle_id} is missing from CastleManager." }
       end
     end
 
@@ -996,7 +996,7 @@ module TerritoryWarManager
   class TerritoryNPCSpawn
     # include Identifiable
 
-    getter castle_id, location, territory_id, castle_id, type
+    getter castle_id, location, territory_id, type
     getter! npc : L2Npc?
     setter npc_id : Int32
     property! owner_clan : L2Clan?
@@ -1045,15 +1045,15 @@ module TerritoryWarManager
         end
       end
 
-      warn "No free ward spawn found for territory #{@territory_id}."
+      warn { "No free ward spawn found for territory #{@territory_id}." }
 
       @territory_ward_spawn_places.each_with_index do |temp, i|
         if temp.nil?
-          warn "Territory ward spawn place #{i} is nil."
+          warn { "Territory ward spawn place #{i} is nil." }
         elsif temp.npc?
-          warn "Territory ward spawn place #{i} has npc name: #{temp.npc.name}."
+          warn { "Territory ward spawn place #{i} has npc name: #{temp.npc.name}." }
         else
-          warn "Territory ward spawn place #{i} is empty."
+          warn { "Territory ward spawn place #{i} is empty." }
         end
       end
 
@@ -1062,7 +1062,7 @@ module TerritoryWarManager
 
     protected def change_npcs_spawn(type : Int32, is_spawn : Bool)
       if type < 0 || type > 3
-        warn "Wrong type #{type} for NPCs spawn change."
+        warn { "Wrong type #{type} for NPCs spawn change." }
         return
       end
 
@@ -1093,7 +1093,7 @@ module TerritoryWarManager
             ward_spawn.npc_id = 0
           end
         else
-          warn "Expected ward at #{i} to not be nil."
+          warn { "Expected ward at #{i} to not be nil." }
         end
       end
     end
@@ -1115,7 +1115,7 @@ module TerritoryWarManager
     end
   end
 
-  def player_with_ward_can_be_killed_in_peace_zone?
+  def player_with_ward_can_be_killed_in_peace_zone? : Bool
     @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE
   end
 

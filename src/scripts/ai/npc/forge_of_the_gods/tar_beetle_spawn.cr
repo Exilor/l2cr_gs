@@ -14,7 +14,7 @@ class TarBeetleSpawn
 
   def load
     parse_datapack_file("spawnZones/tar_beetle.xml")
-    info "Loaded #{ZONES.size} spawn zones."
+    info { "Loaded #{ZONES.size} spawn zones." }
     unless ZONES.empty?
       @spawn_task = ThreadPoolManager.schedule_general_at_fixed_rate(RefreshSpawnTask.new, 1000, 60_000)
       @shot_task = ThreadPoolManager.schedule_general_at_fixed_rate(RefreshShotsTask.new, 300_000, 300_000)

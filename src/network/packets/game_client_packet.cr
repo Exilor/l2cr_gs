@@ -4,12 +4,12 @@ abstract class GameClientPacket < MMO::IncomingPacket(GameClient)
   include Packets::Outgoing
   include Loggable
 
-  def triggers_on_action_request? : Bool
+  private def triggers_on_action_request? : Bool
     true
   end
 
-  private macro no_action_request
-    def triggers_on_action_request? : Bool
+  macro no_action_request
+    private def triggers_on_action_request? : Bool
       false
     end
   end

@@ -91,7 +91,7 @@ module SevenSigns
   def load
     restore_seven_signs_data
 
-    info "Currently in the #{current_period_name} period."
+    info { "Currently in the #{current_period_name} period." }
 
     initialize_seals
 
@@ -99,12 +99,12 @@ module SevenSigns
       if cabal_highest_score == CABAL_NULL
         info "The competition ended with a tie last week."
       else
-        info "The #{get_cabal_name(cabal_highest_score)} were victorious last week."
+        info { "The #{get_cabal_name(cabal_highest_score)} were victorious last week." }
       end
     elsif cabal_highest_score == CABAL_NULL
       info "The competition, if the current trend continues, will end in a tie this week."
     else
-      info "The #{get_cabal_name(cabal_highest_score)} are in the lead this week."
+      info { "The #{get_cabal_name(cabal_highest_score)} are in the lead this week." }
     end
 
     milli_to_change = 0
@@ -126,14 +126,14 @@ module SevenSigns
     num_hours  = (count_down % 24).floor.to_i
     num_days   = ((count_down - num_hours) / 24).floor.to_i
 
-    info "Next period begins in #{num_days} days, #{num_hours} hours and #{num_mins} mins."
+    info { "Next period begins in #{num_days} days, #{num_hours} hours and #{num_mins} mins." }
   end
 
-  def current_period
+  def current_period : Int32
     @@active_period
   end
 
-  private def next_period_change_in_past?
+  private def next_period_change_in_past? : Bool
     last_period_change = Calendar.new
     case current_period
     when PERIOD_SEAL_VALIDATION, PERIOD_COMPETITION
@@ -350,12 +350,10 @@ module SevenSigns
       @@next_period_change.add(PERIOD_MINOR_LENGTH.milliseconds) # 15 mins
     end
 
-    # debug "active period: #{@@active_period}"
-
-    info "Next period change set to #{@@next_period_change.time}."
+    info { "Next period change set to #{@@next_period_change.time}." }
   end
 
-  def current_period_name : String? # i think the last when should be an else
+  def current_period_name : String?
     case @@active_period
     when PERIOD_COMP_RECRUITING; "Quest Event Initialization"
     when PERIOD_COMPETITION; "Competition (Quest Event)"
@@ -746,12 +744,12 @@ module SevenSigns
     SIGNS_SEAL_OWNERS.each do |key, value|
       if value != CABAL_NULL
         if seal_validation_period?
-          info "The #{get_cabal_name(value)} have won the #{get_seal_name(key, false)}."
+          info { "The #{get_cabal_name(value)} have won the #{get_seal_name(key, false)}." }
         else
-          info "The #{get_seal_name(key, false)} is currently owned by #{get_cabal_name(value)}."
+          info { "The #{get_seal_name(key, false)} is currently owned by #{get_cabal_name(value)}." }
         end
       else
-        info "The #{get_seal_name(key, false)} remains unclaimed."
+        info { "The #{get_seal_name(key, false)} remains unclaimed." }
       end
     end
   end
@@ -973,7 +971,7 @@ module SevenSigns
       initialize_seals
       give_cp_mult(get_seal_owner(SEAL_STRIFE))
       send_message_to_all(SystemMessageId::SEAL_VALIDATION_PERIOD_BEGUN)
-      info "The #{get_cabal_name(@@previous_winner)} have won the competition with #{get_current_score(@@previous_winner)} points."
+      info { "The #{get_cabal_name(@@previous_winner)} have won the competition with #{get_current_score(@@previous_winner)} points." }
     when PERIOD_SEAL_VALIDATION
       @@active_period = PERIOD_COMP_RECRUITING
       send_message_to_all(SystemMessageId::SEAL_VALIDATION_PERIOD_ENDED)
@@ -998,7 +996,7 @@ module SevenSigns
 
     spawn_seven_signs_npc
 
-    info "The #{current_period_name} has begun."
+    info { "The #{current_period_name} has begun." }
 
     set_calendar_for_next_period_change
 

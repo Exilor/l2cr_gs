@@ -30,30 +30,6 @@ class PetStat < SummonStat
     true
   end
 
-  # def add_level(value : Int32) : Bool
-  #   return false if level + value > max_level - 1
-
-  #   pet = active_char
-
-  #   level_increased = super
-
-  #   su = StatusUpdate.new(pet)
-  #   su.add_level(level)
-  #   su.add_max_hp(max_hp)
-  #   su.add_max_mp(max_mp)
-  #   pet.broadcast_packet(su)
-
-  #   if level_increased
-  #     pet.broadcast_packet(SocialAction.level_up(pet.l2id))
-  #   end
-
-  #   pet.update_and_broadcast_status(1)
-
-  #   pet.control_item.try &.enchant_level = level
-
-  #   level_increased
-  # end
-
   def get_exp_for_level(level : Int32) : Int64
     data = PetDataTable.get_pet_level_data(@active_char.id, level)
 
@@ -128,7 +104,7 @@ class PetStat < SummonStat
     Config.max_pet_level + 1
   end
 
-  def active_char
+  def active_char : L2PetInstance
     super.as(L2PetInstance)
   end
 end

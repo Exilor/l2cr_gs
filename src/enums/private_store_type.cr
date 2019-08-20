@@ -7,7 +7,7 @@ enum PrivateStoreType : UInt8
   MANUFACTURE
   PACKAGE_SELL = 8
 
-  def id
+  def id : Int32
     to_i
   end
 end

@@ -1,4 +1,4 @@
-require "../../../models/l2_territory"
+require "../../models/l2_territory"
 
 module TerritoryTable
   extend self
@@ -25,7 +25,7 @@ module TerritoryTable
       )
     end
 
-    info "Loaded #{TERRITORIES.size} territories."
+    info { "Loaded #{TERRITORIES.size} territories." }
 
     if TERRITORIES.empty?
       warn "No territories were loaded."

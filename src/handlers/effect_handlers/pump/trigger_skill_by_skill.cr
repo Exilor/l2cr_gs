@@ -20,7 +20,7 @@ class EffectHandler::TriggerSkillBySkill < AbstractEffect
     return if Rnd.rand(100) > @chance
 
     unless handler = TargetHandler[@target_type]
-      warn "Handler for #{@target_type} does not exist."
+      warn { "Handler for #{@target_type} does not exist." }
       return
     end
 

@@ -17,7 +17,7 @@ class NpcStatus < CharStatus
     super
   end
 
-  def active_char
+  def active_char : L2Npc
     super.as(L2Npc)
   end
 end

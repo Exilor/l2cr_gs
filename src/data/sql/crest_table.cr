@@ -55,10 +55,10 @@ module CrestTable
 
     info { "Loaded #{CRESTS.size} crests." }
 
-    ClanTable.each_clan do |clan|
+    ClanTable.clans.each do |clan|
       if clan.crest_id != 0
         unless get_crest(clan.crest_id)
-          info "Removing non-existent crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.crest_id}."
+          info { "Removing non-existent crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.crest_id}." }
           clan.crest_id = 0
           clan.change_clan_crest(0)
         end
@@ -66,7 +66,7 @@ module CrestTable
 
       if clan.crest_large_id != 0
         unless get_crest(clan.crest_large_id)
-          info "Removing non-existent large crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.crest_large_id}."
+          info { "Removing non-existent large crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.crest_large_id}." }
           clan.crest_large_id = 0
           clan.change_large_crest(0)
         end
@@ -74,7 +74,7 @@ module CrestTable
 
       if clan.ally_crest_id != 0
         unless get_crest(clan.ally_crest_id)
-          info "Removing non-existent ally crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.ally_crest_id}."
+          info { "Removing non-existent ally crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.ally_crest_id}." }
           clan.ally_crest_id = 0
           clan.change_ally_crest(0, true)
         end
@@ -89,15 +89,15 @@ module CrestTable
     return unless Dir.exists?(dir)
 
     Dir.glob("#{dir}/*.bmp") do |path|
-      size = File.info(path).size
+      size = File.size(path)
       data = Bytes.new(size)
-      File.open(path, "r") { |f| f.read_fully(data) }
+      File.open(path, "r", &.read_fully(data))
       file_name = File.basename(path, ".bmp")
       if file_name.starts_with?("Crest_Large_")
         crest_id = file_name.from(12).to_i
         if crests_in_use.includes?(crest_id)
           if crest = create_crest(data, L2Crest::CrestType::PLEDGE_LARGE)
-            ClanTable.each_clan do |clan|
+            ClanTable.clans.each do |clan|
               if clan.crest_large_id == crest_id
                 clan.crest_large_id = 0
                 clan.change_large_crest(crest.id)
@@ -109,7 +109,7 @@ module CrestTable
         crest_id = file_name.from(6).to_i
         if crests_in_use.includes?(crest_id)
           if crest = create_crest(data, L2Crest::CrestType::PLEDGE)
-            ClanTable.each_clan do |clan|
+            ClanTable.clans.each do |clan|
               if clan.crest_id == crest_id
                 clan.crest_id = 0
                 clan.change_clan_crest(crest.id)
@@ -121,7 +121,7 @@ module CrestTable
         crest_id = file_name.from(10).to_i
         if crests_in_use.includes?(crest_id)
           if crest = create_crest(data, L2Crest::CrestType::ALLY)
-            ClanTable.each_clan do |clan|
+            ClanTable.clans.each do |clan|
               if clan.ally_crest_id == crest_id
                 clan.ally_crest_id = 0
                 clan.change_ally_crest(crest.id, false)

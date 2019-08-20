@@ -283,7 +283,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   protected def sit_cast_and_follow(skill : Skill, target : L2Character)
     stop_move(nil)
     broadcast_packet(StopMove.new(self))
-    intention = AI::IDLE
+    self.intention = AI::IDLE
 
     self.target = target
     do_cast(skill)

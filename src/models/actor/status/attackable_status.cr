@@ -26,7 +26,7 @@ class AttackableStatus < NpcStatus
     end
   end
 
-  def active_char
+  def active_char : L2Attackable
     super.as(L2Attackable)
   end
 end

@@ -34,7 +34,7 @@ module EnchantItemOptionsData
       end
     end
 
-    info "Loaded #{DATA.size} items and #{counter} options."
+    info { "Loaded #{DATA.size} items and #{counter} options." }
   end
 
   def get_options(item_id : Int32, enchant_level : Int32) : EnchantOptions?

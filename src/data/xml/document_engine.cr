@@ -33,7 +33,6 @@ module DocumentEngine
 
   private def hash_files(dir_name, array)
     Dir.glob("#{Config.datapack_root}/#{dir_name}/*.xml") do |path|
-      file_name = File.basename(path)
       array << File.open(path)
     end
   end
@@ -49,13 +48,14 @@ module DocumentEngine
     SKILL_FILES.each_with_index do |file, i|
       STDOUT.flush
       print "\r #{file.path} (#{i + 1}/#{SKILL_FILES.size})"
+
       skills = load_skill_file(file)
       skills.each { |s| hash[s.hash] = s }
       count += skills.size
     end
     puts
     STDOUT.flush
-    info "Loaded #{count} skill templates."
+    info { "Loaded #{count} skill templates." }
   end
 
   def load_items : Array(L2Item)
@@ -68,7 +68,7 @@ module DocumentEngine
         doc.parse
         list.concat(doc.item_list)
       rescue e
-        error "#{e.class} while parsing #{file}:"
+        error { "#{e.class} while parsing #{file}:" }
         error e
       end
     end

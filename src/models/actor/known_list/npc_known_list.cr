@@ -39,11 +39,11 @@ class NpcKnownList < CharKnownList
     end
   end
 
-  def active_char
+  def active_char : L2Npc
     super.as(L2Npc)
   end
 
-  class TrackingTask
+  struct TrackingTask
     include Runnable
 
     initializer npc: L2Npc
@@ -53,18 +53,19 @@ class NpcKnownList < CharKnownList
       return unless npc.is_a?(L2Attackable)
       return unless npc.intention.move_to?
       npc.known_list.known_players.each_value do |pl|
-        if pl.alive? && !pl.invul? &&
-          pl.inside_radius?(npc, npc.aggro_range, true, false) &&
-          (npc.monster? || (npc.is_a?(L2GuardInstance) && pl.karma > 0))
+        if pl.alive? && !pl.invul?
+          if pl.inside_radius?(npc, npc.aggro_range, true, false)
+            if npc.monster? || (npc.is_a?(L2GuardInstance) && pl.karma > 0)
+              if npc.get_hating(pl) == 0
+                npc.add_damage_hate(pl, 0, 0)
+              end
 
-          if npc.get_hating(pl) == 0
-            npc.add_damage_hate(pl, 0, 0)
-          end
-
-          if !npc.intention.attack? && !npc.core_ai_disabled?
-            WalkingManager.stop_moving(npc, false, true)
-            npc.add_damage_hate(pl, 0, 100)
-            npc.set_intention(AI::ATTACK, pl)
+              if !npc.intention.attack? && !npc.core_ai_disabled?
+                WalkingManager.stop_moving(npc, false, true)
+                npc.add_damage_hate(pl, 0, 100)
+                npc.set_intention(AI::ATTACK, pl)
+              end
+            end
           end
         end
       end

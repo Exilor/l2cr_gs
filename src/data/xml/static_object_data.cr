@@ -7,7 +7,7 @@ module StaticObjectData
   def load
     STATIC_OBJECTS.clear
     parse_datapack_file("staticObjects.xml")
-    info "Loaded #{STATIC_OBJECTS.size} static object templates."
+    info { "Loaded #{STATIC_OBJECTS.size} static object templates." }
   end
 
   private def parse_document(doc, file)

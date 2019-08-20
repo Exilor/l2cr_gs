@@ -11,7 +11,7 @@ module GameDB
       #   raise "#{Config.database_engine} not supported"
       # end
       @@factory = MySQLDAOFactory
-      # info "Using #{@@factory}."
+      # info { "Using #{@@factory}." }
     end
 
     def friend : FriendDAO

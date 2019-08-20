@@ -5,7 +5,6 @@ class FloodProtectors
     global_chat, subclass, drop_item, server_bypass, multisell, transaction,
     send_mail, manufacture, character_select, item_auction
 
-
   def initialize(client : GameClient)
     @use_item = FloodProtectorAction.new(client, Config.flood_protector_use_item)
     @roll_dice = FloodProtectorAction.new(client, Config.flood_protector_roll_dice)

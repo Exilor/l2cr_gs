@@ -54,7 +54,7 @@ class CharEffectList
     end
   end
 
-  private def blocked_buff_slots : EnumSet(AbnormalType)
+  def blocked_buff_slots : EnumSet(AbnormalType)
     @blocked_buff_slots || sync do
       @blocked_buff_slots ||= EnumSet(AbnormalType).new
     end

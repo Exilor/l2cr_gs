@@ -18,10 +18,10 @@ class Siege
   @siege_end_date = Calendar.new
   @scheduled_start_siege_task : Runnable::DelayedTask?
   @first_owner_clan_id = -1
+  @attacker_clans = [] of L2SiegeClan
+  @defender_clans = [] of L2SiegeClan
   getter control_tower_count = 0
   getter siege_guard_manager
-  getter attacker_clans = [] of L2SiegeClan
-  getter defender_clans = [] of L2SiegeClan
   getter defender_waiting_clans = [] of L2SiegeClan
   getter! castle
   getter? in_progress = false
@@ -56,8 +56,7 @@ class Siege
         clan.members.each do |m|
           pc = m.player_instance?
           if pc && pc.noble?
-            warn "TODO: #{pc.name} is a hero."
-            # Hero.set_castle_taken(pc.l2id, castle.residence_id)
+            Hero.set_castle_taken(pc.l2id, castle.residence_id)
           end
         end
       end
@@ -107,13 +106,13 @@ class Siege
 
   private def remove_defender(sc : L2SiegeClan?)
     if sc
-      defender_clans.delete(sc)
+      defender_clans.delete_first(sc)
     end
   end
 
   private def remove_attacker(sc : L2SiegeClan?)
     if sc
-      attacker_clans.delete(sc)
+      attacker_clans.delete_first(sc)
     end
   end
 
@@ -145,9 +144,9 @@ class Siege
     end
 
     if defender_clans.empty? && attacker_clans.size == 1
-      sc_newowner = get_attacker_clan(castle.owner_id)
-      remove_attacker(sc_newowner)
-      add_defender(sc_newowner, SiegeClanType::OWNER)
+      sc_new_owner = get_attacker_clan(castle.owner_id)
+      remove_attacker(sc_new_owner)
+      add_defender(sc_new_owner, SiegeClanType::OWNER)
       end_siege
       return
     end
@@ -165,18 +164,18 @@ class Siege
           end
 
           if in_same_ally
-            sc_newowner = get_attacker_clan(castle.owner_id)
-            remove_attacker(sc_newowner)
-            add_defender(sc_newowner, SiegeClanType::OWNER)
+            sc_new_owner = get_attacker_clan(castle.owner_id)
+            remove_attacker(sc_new_owner)
+            add_defender(sc_new_owner, SiegeClanType::OWNER)
             end_siege
             return
           end
         end
       end
 
-      sc_newowner = get_attacker_clan(castle.owner_id)
-      remove_attacker(sc_newowner)
-      add_defender(sc_newowner, SiegeClanType::OWNER)
+      sc_new_owner = get_attacker_clan(castle.owner_id)
+      remove_attacker(sc_new_owner)
+      add_defender(sc_new_owner, SiegeClanType::OWNER)
 
       ClanTable.get_clan_allies(ally_id).each do |clan|
         if sc = get_attacker_clan?(clan.id)
@@ -540,7 +539,7 @@ class Siege
   def start_auto_task
     correct_siege_date_time
 
-    info "Siege of #{castle.name}: #{castle.siege_date.time}."
+    info { "Siege of #{castle.name}: #{castle.siege_date.time}." }
 
     load_siege_clan
 

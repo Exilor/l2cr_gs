@@ -1,4 +1,4 @@
-module ActionShiftHandler::L2SummonAction
+module ActionShiftHandler::L2SummonActionShift
   extend self
   extend ActionShiftHandler
 

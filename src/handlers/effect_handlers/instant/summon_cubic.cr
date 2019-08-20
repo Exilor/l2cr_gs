@@ -26,7 +26,7 @@ class EffectHandler::SummonCubic < AbstractEffect
     return if pc.in_observer_mode? || pc.mounted? || pc.dead?
 
     if @cubic_id < 0
-      warn "Invalid cubic ID #{@cubic_id}."
+      warn { "Invalid cubic ID #{@cubic_id}." }
       return
     end
 

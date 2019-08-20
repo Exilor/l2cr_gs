@@ -25,7 +25,7 @@ module EnchantSkillGroupsData
       routes += group.enchant_group_details.size
     end
 
-    info "Loaded #{ENCHANT_SKILL_GROUPS.size} groups and #{routes} routes in #{timer.result} s."
+    info { "Loaded #{ENCHANT_SKILL_GROUPS.size} groups and #{routes} routes in #{timer} s." }
   end
 
   private def parse_document(doc, file)
@@ -50,7 +50,7 @@ module EnchantSkillGroupsData
       enchantable_skill.add_new_enchant_route(route, group)
       tmp.enchant_group_details.size
     else
-      error "Error while loading enchant skill ID: #{skill_id} route: #{route} missing group: #{group}."
+      error { "Error while loading enchant skill ID: #{skill_id} route: #{route} missing group: #{group}." }
       0
     end
   end

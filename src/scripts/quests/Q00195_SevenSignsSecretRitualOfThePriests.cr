@@ -33,6 +33,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
   end
 
   def on_adv_event(event, npc, pc)
+    debug "#on_adv_event(#{event}, #{npc}, #{pc})"
     return unless pc
     unless st = get_quest_state(pc, false)
       return
@@ -124,6 +125,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
   end
 
   def on_talk(npc, pc)
+    debug "#on_talk(#{npc}, #{pc})"
     st = get_quest_state!(pc)
 
     case st.state

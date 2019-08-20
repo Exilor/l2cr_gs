@@ -58,7 +58,7 @@ module AuctionManager
       AUCTIONS << Auction.new(rs.get_i32("id"))
     end
 
-    info "Loaded #{AUCTIONS.size} auctions."
+    info { "Loaded #{AUCTIONS.size} auctions." }
   rescue e
     error e
   end
@@ -101,14 +101,14 @@ module AuctionManager
     end
 
     if i >= ITEM_INIT_DATA_ID.size || ITEM_INIT_DATA_ID[i] != id
-      warn "Clan Hall auctionnot found for id #{id}."
+      warn { "Clan Hall auction not found for id #{id}." }
       return
     end
 
     begin
       GameDB.exec("INSERT INTO `auction` VALUES #{ITEM_INIT_DATA[i]}")
       AUCTIONS << Auction.new(id)
-      info "Created auction for Clan Hall #{id}."
+      info { "Created auction for Clan Hall #{id}." }
     rescue e
       error e
     end

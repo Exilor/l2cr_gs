@@ -14,7 +14,7 @@ module TransformData
     DATA.clear
     timer = Timer.new
     parse_datapack_directory("stats/transformations")
-    info "Loaded #{DATA.size} transformations in #{timer} s."
+    info { "Loaded #{DATA.size} transformations in #{timer} s." }
   end
 
   private def parse_document(doc, file)
@@ -128,7 +128,7 @@ module TransformData
     transform = DATA[id]?
     pc.transform(transform) if transform
     unless transform
-      warn "Transformation with ID #{id} not found."
+      warn { "Transformation with ID #{id} not found." }
     end
     transform
   end

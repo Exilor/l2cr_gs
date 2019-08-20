@@ -30,7 +30,7 @@ class AttackableKnownList < NpcKnownList
     Math.max(300, Math.max(att.aggro_range, att.template.clan_help_range))
   end
 
-  def active_char
+  def active_char : L2Attackable
     super.as(L2Attackable)
   end
 end

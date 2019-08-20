@@ -58,12 +58,25 @@ module ActionShiftHandler::L2NpcActionShift
 			html["%ele_ddark%"] = target.get_defense_element_value(Elementals::DARK)
 
       if sp = target.spawn?
-        html["%territory%"] = "<font color=FF0000>NOT DONE</font>"
-				html["%spawntype%"] = "<font color=FF0000>NOT DONE</font>"
-				html["%spawn%"] = "<font color=FF0000>null</font>"
-				html["%loc2d%"] = "<font color=FF0000>NOT DONE</font>"
-				html["%loc3d%"] = "<font color=FF0000>NOT DONE</font>"
-				html["%resp%"] = "<font color=FF0000>NOT DONE</font>"
+        html["%territory%"] = sp.spawn_territory.try &.name || "None"
+        if sp.territory_based?
+          html["%spawntype%"] = "Random"
+          loc = sp.get_location(target)
+          html["%spawn%"] = "#{loc.x} #{loc.y} #{loc.z}"
+        else
+          html["%spawntype%"] = "Fixed"
+          html["%spawn%"] = "#{sp.x} #{sp.y} #{sp.z}"
+        end
+
+        html["%loc2d%"] = target.calculate_distance(sp.get_location(target), false, false).to_i
+        html["%loc3d%"] = target.calculate_distance(sp.get_location(target), true, false).to_i
+        if sp.respawn_min_delay == 0
+          html["%resp%"] = "None"
+        elsif sp.respawn_random?
+          html["%resp%"] = "#{sp.respawn_min_delay // 1000}-#{sp.respawn_max_delay // 1000} sec"
+        else
+          html["%resp%"] = "#{sp.respawn_min_delay // 1000} sec"
+        end
       else
         html["%territory%"] = "<font color=FF0000>--</font>"
 				html["%spawntype%"] = "<font color=FF0000>--</font>"
@@ -82,7 +95,7 @@ module ActionShiftHandler::L2NpcActionShift
 				html["%ai%"] = "<tr><td><table width=270 border=0><tr><td width=100><font color=FFAA00>AI</font></td><td align=right width=170>#{target.ai.class}</td></tr></table></td></tr>"
 				html["%ai_type%"] = "<tr><td><table width=270 border=0 bgcolor=131210><tr><td width=100><font color=FFAA00>AIType</font></td><td align=right width=170>#{target.ai_type}</td></tr></table></td></tr>"
 				html["%ai_clan%"] = "<tr><td><table width=270 border=0><tr><td width=100><font color=FFAA00>Clan & Range:</font></td><td align=right width=170>#{clans_string} #{target.template.clan_help_range}</td></tr></table></td></tr>"
-				html["%ai_enemy_clan%"] = "<tr><td><table width=270 border=0 bgcolor=131210><tr><td width=100><font color=FFAA00>Ignore & Range:</font></td><td align=right width=170>#{ignore_clan_npc_ids} #{target.template.aggro_range}</td></tr></table></td></tr>"
+				html["%ai_enemy_clan%"] = "<tr><td><table width=270 border=0 bgcolor=131210><tr><td width=100><font color=FFAA00>Ignore & Range:</font></td><td align=right width=170>#{ignore_clan_npc_ids_string} #{target.template.aggro_range}</td></tr></table></td></tr>"
       else
         html["%ai_intention%"] = ""
 				html["%ai%"] = ""
@@ -95,8 +108,12 @@ module ActionShiftHandler::L2NpcActionShift
     elsif Config.alt_game_viewnpc
       return false unless target.npc?
       pc.target = target
-      debug "TODO: NpcViewMod"
-      # NpcViewMod.send_npc_view(pc, target)
+      handler_class = BypassHandler["NpcViewMod"].class
+      if handler_class.responds_to?(:send_npc_view)
+        handler_class.send_npc_view(pc, target)
+      else
+        warn "No handler found for NpcViewMod."
+      end
     end
 
     true

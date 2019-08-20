@@ -37,7 +37,7 @@ class L2DoorInstance < L2Character
 
     clan_hall_id = template.clan_hall_id
     if clan_hall_id > 0
-      if hall = ClanHallManager.clan_halls[clan_hall_id]?
+      if hall = ClanHallManager.all_clan_halls[clan_hall_id]?
         self.clan_hall = hall
         hall.doors << self
       end

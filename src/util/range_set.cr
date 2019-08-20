@@ -11,9 +11,13 @@ struct RangeSet(T)
     @ranges = ranges.to_a
   end
 
-  def each(&block)
+  def initialize(*values : T)
+    @ranges = [] of Range(T, T)
+    values.each { |v| self << v }
+  end
+
+  def each(&block : T ->) : Nil
     @ranges.each { |r| r.each { |n| yield n } }
-    self
   end
 
   def <<(value : T) : self
@@ -38,6 +42,7 @@ struct RangeSet(T)
     r = @ranges[i]
     return self if r.includes?(value)
     next_range = @ranges[i + 1]?
+    return self if next_range && next_range.includes?(value)
     extend_this_range = r.end + 1 == value
     extend_next_range = next_range && next_range.begin - 1 == value
 
@@ -66,7 +71,7 @@ struct RangeSet(T)
     size > old
   end
 
-  def includes?(value : T)
+  def includes?(value : T) : Bool
     !!@ranges.bsearch do |r|
       a = value <=> r.begin
       if a == 1
@@ -78,15 +83,15 @@ struct RangeSet(T)
     end
   end
 
-  def first
+  def first : T
     @ranges[0]?.try &.begin || raise EmptyError.new
   end
 
-  def last
+  def last : T
     @ranges[-1]?.try &.end || raise EmptyError.new
   end
 
-  def clear
+  def clear : self
     @ranges.clear
     self
   end
@@ -95,7 +100,7 @@ struct RangeSet(T)
     (first = @ranges[0]?) ? first.begin > 0 ? 0 : first.end + 1 : T.zero
   end
 
-  def size
+  def size : Int32
     @ranges.sum &.size
   end
 
@@ -110,7 +115,7 @@ struct RangeSet(T)
     holes
   end
 
-  def delete(value)
+  def delete(value) : T?
     i = @ranges.bsearch_index { |r| r.begin >= value || r.end >= value }
     return unless i
     range = @ranges[i]
@@ -131,11 +136,11 @@ struct RangeSet(T)
     value
   end
 
-  def empty?
+  def empty? : Bool
     @ranges.empty?
   end
 
-  def inspect
-    "RangeSet {#{@ranges.map { |r| r.size > 1 ? r : r.end }.join ", "}}"
+  def inspect : Nil
+    "RangeSet {#{@ranges.map { |r| r.size > 1 ? r : r.end }.join(", ")}}"
   end
 end

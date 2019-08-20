@@ -285,7 +285,7 @@ class PcStat < PlayableStat
     end
   end
 
-  def active_char
+  def active_char : L2PcInstance
     super.as(L2PcInstance)
   end
 end

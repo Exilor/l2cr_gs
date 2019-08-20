@@ -8,7 +8,7 @@ class EventAnnouncement
     @id = IdFactory.next
   end
 
-  def type
+  def type : AnnouncementType
     AnnouncementType::EVENT
   end
 
@@ -16,7 +16,7 @@ class EventAnnouncement
     raise "type= not supported by EventAnnouncement"
   end
 
-  def author
+  def author : String
     "N/A"
   end
 
@@ -25,11 +25,10 @@ class EventAnnouncement
   end
 
   def valid? : Bool
-    # TODO
-    true
+    Time.now.between?(@range.begin, @range.end)
   end
 
-  def delete_me
+  def delete_me : Bool
     IdFactory.release(@id)
     true
   end
@@ -38,7 +37,7 @@ class EventAnnouncement
     true
   end
 
-  def update_me
+  def update_me : Bool
     raise "update_me not supported by EventAnnouncement"
   end
 end

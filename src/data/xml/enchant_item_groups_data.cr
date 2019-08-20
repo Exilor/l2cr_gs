@@ -13,8 +13,8 @@ module EnchantItemGroupsData
     ITEM_GROUPS.clear
     SCROLL_GROUPS.clear
     parse_datapack_file("enchantItemGroups.xml")
-    info "Loaded #{ITEM_GROUPS.size} item group templates."
-    info "Loaded #{SCROLL_GROUPS.size} scroll group templates."
+    info { "Loaded #{ITEM_GROUPS.size} item group templates." }
+    info { "Loaded #{SCROLL_GROUPS.size} scroll group templates." }
   end
 
   def get_item_group(item : L2Item, scroll_group : Int) : EnchantItemGroup?

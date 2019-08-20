@@ -3,10 +3,10 @@ module TargetHandler::AreaFriendly
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    player = char.acting_player
+    pc = char.acting_player
 
-    if !check_target(player, target) && skill.cast_range >= 0
-      player.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
+    if !check_target(pc, target) && skill.cast_range >= 0
+      pc.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
       return EMPTY_TARGET_LIST
     end
 
@@ -14,7 +14,7 @@ module TargetHandler::AreaFriendly
 
     return [target] of L2Object if only_first
 
-    return [player] of L2Object if player.acting_player.in_olympiad_mode?
+    return [pc] of L2Object if pc.in_olympiad_mode?
 
     target_list = [] of L2Object
     if target
@@ -25,7 +25,7 @@ module TargetHandler::AreaFriendly
           break
         end
 
-        if !check_target(player, obj) || obj == char
+        if !check_target(pc, obj) || obj == char
           next
         end
 
@@ -44,7 +44,11 @@ module TargetHandler::AreaFriendly
     return false unless target
     return false unless GeoData.can_see_target?(char, target)
 
-    if target.looks_dead? || target.door? || target.is_a?(L2SiegeFlagInstance) || target.monster?
+    if target.looks_dead? || target.door? || target.is_a?(L2SiegeFlagInstance)
+      return false
+    end
+
+    if target.monster?
       return false
     end
 
@@ -79,10 +83,6 @@ module TargetHandler::AreaFriendly
 
     true
   end
-
-  # private def compare(char1, char2)
-  #   (char1.current_hp / char1.max_hp) <=> (char2.current_hp / char2.max_hp)
-  # end
 
   def target_type
     L2TargetType::AREA_FRIENDLY

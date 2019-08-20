@@ -737,7 +737,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     end
 
     ""
- end
+  end
 
   def on_kill(npc, player, is_summon)
     world = InstanceManager.get_world(npc.instance_id)

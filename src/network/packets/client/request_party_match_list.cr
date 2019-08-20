@@ -35,7 +35,7 @@ class Packets::Incoming::RequestPartyMatchList < GameClientPacket
     else
       max_id = PartyMatchRoomList.max_id
       room = PartyMatchRoom.new(max_id, @room_title, @loot, @min_lvl, @max_lvl, @max_members, pc)
-      info = "PartyMatchRoom ##{max_id} created by #{pc.name}."
+      info { "PartyMatchRoom ##{max_id} created by #{pc.name}." }
       PartyMatchWaitingList.remove_player(pc)
       PartyMatchRoomList.add_party_match_room(max_id, room)
 

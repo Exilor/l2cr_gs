@@ -2,7 +2,6 @@ require "json"
 
 module ExperienceData
   extend self
-  extend Loggable
 
   private EXP_TABLE = {} of Int32 => Int64
 

@@ -16,9 +16,11 @@ module GeoData
 
   def load
     info "Loading geodata files..."
+
     @@driver = GeoDriver.new
-    loaded_regions = 0
+
     timer = Timer.new
+    loaded_regions = 0
     geo_path = Config.geodata_path + "/"
     L2World::TILE_X_MIN.upto(L2World::TILE_X_MAX) do |region_x|
       L2World::TILE_Y_MIN.upto(L2World::TILE_Y_MAX) do |region_y|
@@ -26,19 +28,19 @@ module GeoData
         load_file = Config.geodata_regions["#{region_x}_#{region_y}"]?
         if !load_file.nil?
           if load_file
-            debug { "Loading #{File.basename(file_path)}" }
+            # debug { "Loading #{File.basename(file_path)}" }
             driver.load_region(file_path, region_x, region_y)
             loaded_regions += 1
           end
         elsif Config.try_load_unspecified_regions && File.exists?(file_path)
-          debug { "Loading #{File.basename(file_path)}" }
+          # debug { "Loading #{File.basename(file_path)}" }
           driver.load_region(file_path, region_x, region_y)
           loaded_regions += 1
         end
       end
     end
 
-    info { "Loaded #{loaded_regions} regions in #{timer.result} s." }
+    info { "Loaded #{loaded_regions} regions in #{timer} s." }
   end
 
   def has_geo_pos?(x : Int32, y : Int32) : Bool
@@ -52,24 +54,24 @@ module GeoData
   def check_nearest_nswe_anti_corner_cut(x : Int32, y : Int32, z : Int32, nswe : Int32) : Bool
     can = true
 
-    if nswe & Cell::NSWE_NORTH_EAST == Cell::NSWE_NORTH_EAST
-      can = check_nearest_nswe(x, y - 1, z, Cell::NSWE_EAST) &&
-        check_nearest_nswe(x + 1, y, z, Cell::NSWE_NORTH)
+    if nswe & NSWE::NORTH_EAST == NSWE::NORTH_EAST
+      can = check_nearest_nswe(x, y - 1, z, NSWE::EAST) &&
+        check_nearest_nswe(x + 1, y, z, NSWE::NORTH)
     end
 
-    if can && nswe & Cell::NSWE_NORTH_WEST == Cell::NSWE_NORTH_WEST
-      can = check_nearest_nswe(x, y - 1, z, Cell::NSWE_WEST) &&
-        check_nearest_nswe(x, y - 1, z, Cell::NSWE_NORTH)
+    if can && nswe & NSWE::NORTH_WEST == NSWE::NORTH_WEST
+      can = check_nearest_nswe(x, y - 1, z, NSWE::WEST) &&
+        check_nearest_nswe(x, y - 1, z, NSWE::NORTH)
     end
 
-    if can && nswe & Cell::NSWE_SOUTH_EAST == Cell::NSWE_SOUTH_EAST
-      can = check_nearest_nswe(x, y + 1, z, Cell::NSWE_EAST) &&
-        check_nearest_nswe(x + 1, y, z, Cell::NSWE_SOUTH)
+    if can && nswe & NSWE::SOUTH_EAST == NSWE::SOUTH_EAST
+      can = check_nearest_nswe(x, y + 1, z, NSWE::EAST) &&
+        check_nearest_nswe(x + 1, y, z, NSWE::SOUTH)
     end
 
-    if can && nswe & Cell::NSWE_SOUTH_WEST == Cell::NSWE_SOUTH_WEST
-      can = check_nearest_nswe(x, y + 1, z, Cell::NSWE_WEST) &&
-        check_nearest_nswe(x - 1, y, z, Cell::NSWE_SOUTH)
+    if can && nswe & NSWE::SOUTH_WEST == NSWE::SOUTH_WEST
+      can = check_nearest_nswe(x, y + 1, z, NSWE::WEST) &&
+        check_nearest_nswe(x - 1, y, z, NSWE::SOUTH)
     end
 
     can && check_nearest_nswe(x, y, z, nswe)
@@ -220,21 +222,21 @@ module GeoData
         can_see_through = false
 
         if cur_geo_z <= max_height
-          if nswe & Cell::NSWE_NORTH_EAST == Cell::NSWE_NORTH_EAST
-            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, Cell::NSWE_EAST)
-            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, Cell::NSWE_NORTH)
+          if nswe & NSWE::NORTH_EAST == NSWE::NORTH_EAST
+            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, NSWE::EAST)
+            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, NSWE::NORTH)
             can_see_through = north_geo_z <= max_height && east_geo_z <= max_height && north_geo_z <= get_nearest_z(prev_x, prev_y - 1, bee_cur_z) && east_geo_z <= get_nearest_z(prev_x + 1, prev_y, bee_cur_z)
-          elsif nswe & Cell::NSWE_NORTH_WEST == Cell::NSWE_NORTH_WEST
-            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, Cell::NSWE_WEST)
-            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, Cell::NSWE_NORTH)
+          elsif nswe & NSWE::NORTH_WEST == NSWE::NORTH_WEST
+            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, NSWE::WEST)
+            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, NSWE::NORTH)
             can_see_through = north_geo_z <= max_height && west_geo_z <= max_height && north_geo_z <= get_nearest_z(prev_x, prev_y - 1, bee_cur_z) && west_geo_z <= get_nearest_z(prev_x - 1, prev_y, bee_cur_z)
-          elsif nswe & Cell::NSWE_SOUTH_EAST == Cell::NSWE_SOUTH_EAST
-            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, Cell::NSWE_EAST)
-            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, Cell::NSWE_SOUTH)
+          elsif nswe & NSWE::SOUTH_EAST == NSWE::SOUTH_EAST
+            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, NSWE::EAST)
+            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, NSWE::SOUTH)
             can_see_through = south_geo_z <= max_height && east_geo_z <= max_height && south_geo_z <= get_nearest_z(prev_x, prev_y + 1, bee_cur_z) && east_geo_z <= get_nearest_z(prev_x + 1, prev_y, bee_cur_z)
-          elsif nswe & Cell::NSWE_SOUTH_WEST == Cell::NSWE_SOUTH_WEST
-            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, Cell::NSWE_WEST)
-            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, Cell::NSWE_SOUTH)
+          elsif nswe & NSWE::SOUTH_WEST == NSWE::SOUTH_WEST
+            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, NSWE::WEST)
+            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, NSWE::SOUTH)
             can_see_through = south_geo_z <= max_height && west_geo_z <= max_height && south_geo_z <= get_nearest_z(prev_x, prev_y + 1, bee_cur_z) && west_geo_z <= get_nearest_z(prev_x - 1, prev_y, bee_cur_z)
           else
             can_see_through = true
@@ -307,8 +309,8 @@ module GeoData
   end
 
   private def get_los_geo_z(prev_x : Int32, prev_y : Int32, prev_z : Int32, cur_x : Int32, cur_y : Int32, nswe : Int32) : Int32
-    if ((nswe & Cell::NSWE_NORTH) != 0 && (nswe & Cell::NSWE_SOUTH) != 0) ||
-      ((nswe & Cell::NSWE_WEST) != 0 && (nswe & Cell::NSWE_EAST) != 0)
+    if ((nswe & NSWE::NORTH) != 0 && (nswe & NSWE::SOUTH) != 0) ||
+      ((nswe & NSWE::WEST) != 0 && (nswe & NSWE::EAST) != 0)
 
       raise "Multiple directions"
     end

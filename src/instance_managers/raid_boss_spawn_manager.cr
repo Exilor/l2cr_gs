@@ -34,8 +34,8 @@ module RaidBossSpawnManager
       add_new_spawn(dat, respawn_time, current_hp, current_mp, false)
     end
 
-    info "Loaded #{BOSSES.size} raid bosses."
-    info "Scheduled #{SCHEDULES.size} tasks."
+    info { "Loaded #{BOSSES.size} raid bosses." }
+    info { "Scheduled #{SCHEDULES.size} tasks." }
   end
 
   def add_new_spawn(sp : L2Spawn, respawn_time : Int64, current_hp : Float64, current_mp : Float64, store_in_db : Bool)
@@ -105,7 +105,7 @@ module RaidBossSpawnManager
     }
     raid.raid_status = Status::ALIVE
     STORED_INFO[raid.id] = info
-    info "Spawning night raid boss #{raid.name}."
+    info { "Spawning night raid boss #{raid.name}." }
     BOSSES[raid.id] = raid
   end
 
@@ -183,7 +183,7 @@ module RaidBossSpawnManager
 
       if !SCHEDULES.has_key?(boss.id) && (min_delay > 0 || max_delay > 0)
         time = Time.from_ms(respawn_time)
-        info "Updated #{boss.name} respawn time to #{time}."
+        info { "Updated #{boss.name} respawn time to #{time}." }
         task = ThreadPoolManager.schedule_general(SpawnSchedule.new(boss.id), delay)
         SCHEDULES[boss.id] = task
         update_db
@@ -250,7 +250,7 @@ module RaidBossSpawnManager
         }
         raid.raid_status = Status::ALIVE
         STORED_INFO[raid.id] = info
-        info "Spawning raid boss #{raid.name}."
+        info { "Spawning raid boss #{raid.name}." }
         BOSSES[raid.id] = raid
       end
     end

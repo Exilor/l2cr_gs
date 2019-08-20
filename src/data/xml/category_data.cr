@@ -10,7 +10,7 @@ module CategoryData
     timer = Timer.new
     CATEGORIES.clear
     parse_datapack_file("categoryData.xml")
-    info "Loaded #{CATEGORIES.size} categories in #{timer.result} s."
+    info { "Loaded #{CATEGORIES.size} categories in #{timer.result} s." }
   end
 
   private def parse_document(doc, file)
@@ -35,7 +35,7 @@ module CategoryData
       return category.includes?(id)
     end
 
-    warn "Can't find category data for #{type.inspect}."
+    warn { "Can't find category data for #{type.inspect}." }
     false
   end
 

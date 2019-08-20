@@ -16,7 +16,7 @@ module AirshipManager
   private TEMPLATE = L2CharTemplate.new StatsSet {
     "npcId" => 9,
     "level" => 0,
-    "jClass" => "boat",
+    # "jClass" => "boat",
     "baseSTR" => 0,
     "baseCON" => 0,
     "baseDEX" => 0,
@@ -121,7 +121,7 @@ module AirshipManager
 
   def register_airship_teleport_list(dock_id : Int32, location_id : Int32, tp : Slice(Slice(VehiclePathPoint)), fuel_consumption : Slice(Int32))
     if tp.size != fuel_consumption.size
-      warn "tp.size (#{tp.size}) != fuel_consumption.size (#{fuel_consumption.size})"
+      warn { "tp.size (#{tp.size}) != fuel_consumption.size (#{fuel_consumption.size})" }
       return
     end
 
@@ -165,7 +165,7 @@ module AirshipManager
       AIRSHIPS_INFO[rs.get_i32("owner_id")] = info
     end
 
-    info "Loaded #{AIRSHIPS_INFO.size} private airships."
+    info { "Loaded #{AIRSHIPS_INFO.size} private airships." }
   rescue e
     error e
   end

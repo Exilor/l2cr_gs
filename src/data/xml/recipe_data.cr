@@ -12,7 +12,7 @@ module RecipeData
   def load
     RECIPES.clear
     parse_datapack_file("recipes.xml")
-    info "Loaded #{RECIPES.size} recipes."
+    info { "Loaded #{RECIPES.size} recipes." }
   end
 
   private def parse_document(doc, file)

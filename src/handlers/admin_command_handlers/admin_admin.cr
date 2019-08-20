@@ -11,11 +11,11 @@ module AdminCommandHandler::AdminAdmin
     when command.starts_with?("admin_gmliston")
 			AdminData.show_gm(pc)
 			pc.send_message("Registered into gm list")
-			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
+			AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_gmlistoff")
 			AdminData.hide_gm(pc)
 			pc.send_message("Removed from gm list")
-			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
+			AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_silence")
 			if pc.silence_mode?
 				pc.silence_mode = false
@@ -25,7 +25,7 @@ module AdminCommandHandler::AdminAdmin
 				pc.send_packet(SystemMessageId::MESSAGE_REFUSAL_MODE)
       end
 
-			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
+			AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_saveolymp")
 			Olympiad.instance.save_olympiad_status
 			pc.send_message("olympiad system saved.")
@@ -68,7 +68,7 @@ module AdminCommandHandler::AdminAdmin
       pc.diet_mode = command.ends_with?("on")
       pc.send_message(pc.diet_mode? ? "Diet mode on" : "Diet mode off")
 			pc.refresh_overloaded
-			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
+			AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_tradeoff")
       pc.trade_refusal = command.ends_with?("on")
       if pc.trade_refusal?
@@ -76,7 +76,7 @@ module AdminCommandHandler::AdminAdmin
       else
         pc.send_message("Trade refusal disabled")
       end
-			AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
+			AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_setconfig")
 			st = command.split
 			st.shift?
@@ -113,7 +113,7 @@ module AdminCommandHandler::AdminAdmin
 			ensure
 				if cmd.size == 3
 					if cmd[2].casecmp?("mod")
-						AdminCommandHandler::AdminHtml.show_admin_html(pc, "mods_menu.htm")
+						AdminHtml.show_admin_html(pc, "mods_menu.htm")
           end
         end
       end
@@ -138,7 +138,7 @@ module AdminCommandHandler::AdminAdmin
     else "main_menu.htm"
     end
 
-    AdminCommandHandler::AdminHtml.show_admin_html(pc, file_name)
+    AdminHtml.show_admin_html(pc, file_name)
   end
 
   private def show_config_page(pc)

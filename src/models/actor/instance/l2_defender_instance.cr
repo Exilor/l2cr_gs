@@ -1,4 +1,7 @@
 require "../known_list/defender_known_list"
+require "../ai/l2_fort_siege_guard_ai"
+require "../ai/l2_siege_guard_ai"
+require "../ai/l2_special_siege_guard_ai"
 
 class L2DefenderInstance < L2Attackable
   @castle : Castle?
@@ -17,7 +20,15 @@ class L2DefenderInstance < L2Attackable
     false
   end
 
-  # TODO: L2FortSiegeGuardAI, L2SiegeGuardAI, L2SpecialSiegeGuardAI
+  def init_ai
+    if conquerable_hall?.nil? && get_castle(10000).nil?
+      L2FortSiegeGuardAI.new(self)
+    elsif get_castle(10000)
+      L2SiegeGuardAI.new(self)
+    else
+      L2SpecialSiegeGuardAI.new(self)
+    end
+  end
 
   def auto_attackable?(attacker : L2Character) : Bool
     unless attacker.is_a?(L2Playable)
@@ -54,7 +65,7 @@ class L2DefenderInstance < L2Attackable
 
     unless inside_radius?(sp, 40, false, false)
       if Config.debug
-        debug "#{l2id} moving home."
+        debug "Moving home."
       end
 
       self.returning_to_spawn_point = true
@@ -63,6 +74,17 @@ class L2DefenderInstance < L2Attackable
       if ai?
         set_intention(AI::MOVE_TO, sp.location)
       end
+    end
+  end
+
+  def on_spawn
+    super
+
+    @fort = FortManager.get_fort(*xyz)
+    @castle = CastleManager.get_castle(*xyz)
+    @hall = conquerable_hall?
+    unless @fort || @castle || @hall
+      warn { "Spawned outside of fortress, castle or siegable hall (at #{x} #{y} #{z})." }
     end
   end
 

@@ -61,6 +61,7 @@ module Evolve
     pet_summon.heal!
     pet_summon.current_feed = pet_summon.max_fed
     pet_summon.title = pc.name
+    pet_summon.name = old_name
     pet_summon.set_running
     pet_summon.store_me
 

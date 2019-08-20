@@ -3,12 +3,12 @@ class EffectHandler::RestorationRandom < AbstractEffect
     return unless info.effector.player? && info.effected.player?
 
     unless ex_skill = info.skill.extractable_skill
-      debug "No extractable_skill for #{info.skill}."
+      debug { "No extractable_skill for #{info.skill}." }
       return
     end
 
     if ex_skill.product_items.empty?
-      warn "Extractable skill with an empty skill list: #{info.skill}."
+      warn { "Extractable skill with an empty skill list: #{info.skill}." }
       return
     end
 

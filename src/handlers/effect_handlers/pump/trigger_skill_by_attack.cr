@@ -30,9 +30,8 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
 
   def on_attack_event(event)
     event = event.as(OnCreatureDamageDealt)
-    # debug "on_damage_received_event"
+
     if event.skill || event.damage_over_time? || event.reflect? || @chance == 0 || @skill.skill_id == 0 || @skill.skill_lvl == 0
-      # warn "#{event.damage_over_time?} || #{@chance == 0} || #{@skill.skill_lvl == 0}"
       return
     end
 
@@ -40,7 +39,7 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
 
     handler = TargetHandler[@target_type]
     unless handler
-      warn "No handler for target type #{@target_type}"
+      warn { "No handler for target type #{@target_type}" }
       return
     end
 
@@ -49,7 +48,6 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
     return if event.attacker.level > @max_attacker_level
 
     if event.damage < @min_damage || Rnd.rand(100) > @chance || !event.attacker.instance_type?(@attacker_type)
-      # debug "#{event.damage < @min_damage} || #{@chance}% || #{!event.attacker.is_a?(@attacker_type)}"
       return
     end
 
@@ -61,13 +59,11 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
     unless trigger_skill = @skill.skill?
       return
     end
-    # debug "Trigger skill: #{trigger_skill}"
+
     targets = handler.get_target_list(trigger_skill, event.attacker, false, event.target)
-    # debug "Targets: #{targets}"
     targets.each do |t|
       next unless t.is_a?(L2Character)
       unless t.invul?
-        # debug "Calling make_trigger_cast to #{t}"
         event.attacker.make_trigger_cast(trigger_skill, t)
       end
     end

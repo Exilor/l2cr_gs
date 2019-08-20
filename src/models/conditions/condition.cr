@@ -2,18 +2,17 @@ require "./condition_listener"
 
 abstract class Condition
   include ConditionListener
+  include Packets::Outgoing
   include Loggable
 
   private alias SystemMessage = Packets::Outgoing::SystemMessage
 
-  property message : String?
-  property message_id = 0
-
-  getter? add_name = false
-
   @result = false
 
   getter listener : ConditionListener?
+  getter? add_name = false
+  property message : String?
+  property message_id : Int32 = 0
 
   def add_name
     @add_name = true

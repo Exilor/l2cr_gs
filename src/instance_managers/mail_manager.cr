@@ -25,7 +25,7 @@ module MailManager
       end
     end
 
-    info "Loaded #{count} messages in #{timer} s."
+    info { "Loaded #{count} messages in #{timer} s." }
   rescue e
     error e
   end

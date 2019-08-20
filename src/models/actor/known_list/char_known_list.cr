@@ -1,19 +1,19 @@
 require "./object_known_list"
 
 class CharKnownList < ObjectKnownList
-  def known_players
+  def known_players : Hash(Int32, L2PcInstance)
     @known_players || sync do
       @known_players ||= Hash(Int32, L2PcInstance).new
     end
   end
 
-  def known_summons
+  def known_summons : Hash(Int32, L2Summon)
     @known_summons || sync do
       @known_summons ||= Hash(Int32, L2Summon).new
     end
   end
 
-  def known_relations
+  def known_relations : Hash(Int32, Int32)
     @known_relations || sync do
       @known_relations ||= Hash(Int32, Int32).new
     end
@@ -45,7 +45,9 @@ class CharKnownList < ObjectKnownList
 
     char = active_char
     char.target = nil
-    char.ai = nil if char.ai?
+    if char.ai?
+      char.ai = nil
+    end
   end
 
   def remove_known_object(object : L2Object?, forget : Bool) : Bool
@@ -117,11 +119,10 @@ class CharKnownList < ObjectKnownList
 
   def each_character(radius : Int32, &block : L2Character ->) : Nil
     char = active_char
-    @known_objects.try &.each_value do |object|
-      if object.is_a?(L2Character)
-        if Util.in_range?(radius, char, object, true)
-          yield object
-        end
+
+    each_character do |object|
+      if Util.in_range?(radius, char, object, true)
+        yield object
       end
     end
   end
@@ -135,7 +136,7 @@ class CharKnownList < ObjectKnownList
     end
   end
 
-  def active_char
-    super.as(L2Character)
+  def active_char : L2Character
+    active_object.as(L2Character)
   end
 end

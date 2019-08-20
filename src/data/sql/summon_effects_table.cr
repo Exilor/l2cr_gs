@@ -14,80 +14,77 @@ module SummonEffectsTable
   end
 
   private PET_EFFECTS = Hash(Int32, Hash(Int32, SummonEffect)).new do |h, k|
-    h[k] = Hash(Int32, SummonEffect).new # Integer => SummonEffect
+    h[k] = Hash(Int32, SummonEffect).new
   end
 
-  private def get_servitor_effects(pc) : Hash(Int32, Hash(Int32, SummonEffect))?
-    if servitor_map = SERVITOR_EFFECTS[pc.l2id]?
-      servitor_map[pc.class_index]?
-    end
-    # SERVITOR_EFFECTS.dig?(pc.l2id, pc.class_index)
+  private def get_servitor_effects(pc : L2PcInstance) : Hash(Int32, Hash(Int32, SummonEffect))?
+    SERVITOR_EFFECTS.dig?(pc.l2id, pc.class_index)
   end
 
-  private def get_servitor_effects(pc, reference_skill : Int32) : Hash(Int32, SummonEffect)?
+  private def get_servitor_effects(pc : L2PcInstance, reference_skill : Int32) : Hash(Int32, SummonEffect)?
     if map = get_servitor_effects(pc)
       map[reference_skill]?
     end
   end
 
-  private def contain_owner?(pc)
+  private def contain_owner?(pc : L2PcInstance) : Bool
     return false unless temp = SERVITOR_EFFECTS[pc.l2id]?
     temp.has_key?(pc.class_index)
   end
 
-  private def remove_effects(map : Hash(Int32, SummonEffect)?, skill_id)
+  private def remove_effects(map : Hash(Int32, SummonEffect)?, skill_id : Int32)
     map.try &.delete(skill_id)
   end
 
-  private def apply_effects(summon, map : Hash(Int32, SummonEffect)?)
+  private def apply_effects(summon : L2Summon, map : Hash(Int32, SummonEffect)?)
     map.try &.each_value do |se|
       se.skill.apply_effects(summon, summon, false, se.effect_time)
     end
   end
 
-  def contains_skill?(pc, reference_skill)
+  def contains_skill?(pc : L2PcInstance, reference_skill : Int32) : Bool
     if temp = get_servitor_effects(pc)
-      temp.has_key?(reference_skill)
-    else
-      false
+      return temp.has_key?(reference_skill)
     end
+
+    false
   end
 
-  def clear_servitor_effects(pc, reference_skill)
+  def clear_servitor_effects(pc : L2PcInstance, reference_skill : Int32)
     get_servitor_effects(pc).try &.clear
   end
 
-  def add_servitor_effect(pc, reference_skill, skill, effect_time)
+  def add_servitor_effect(pc : L2PcInstance, reference_skill : Int32, skill : Skill, effect_time : Int32)
     se = SummonEffect.new(skill, effect_time)
     SERVITOR_EFFECTS[pc.l2id][pc.class_index][reference_skill][skill.id] = se
   end
 
-  def remove_servitor_effects(pc, reference_skill, skill_id)
+  def remove_servitor_effects(pc : L2PcInstance, reference_skill : Int32, skill_id : Int32)
     remove_effects(get_servitor_effects(pc, reference_skill), skill_id)
   end
 
-  def apply_servitor_effects(servitor, pc, reference_skill)
+  def apply_servitor_effects(servitor : L2ServitorInstance, pc : L2PcInstance, reference_skill : Int32)
     apply_effects(servitor, get_servitor_effects(pc, reference_skill))
   end
 
-  def add_pet_effect(control_l2id, skill, effect_time)
+  def add_pet_effect(control_l2id : Int32, skill : Skill, effect_time : Int32)
     se = SummonEffect.new(skill, effect_time)
     PET_EFFECTS[control_l2id][skill.id] = se
   end
 
-  def contains_pet_id?(control_l2id)
+  def contains_pet_id?(control_l2id : Int32) : Bool
     PET_EFFECTS.has_key?(control_l2id)
   end
 
-  def apply_pet_effects(pet, control_l2id)
+  def apply_pet_effects(pet : L2PetInstance, control_l2id : Int32)
     apply_effects(pet, PET_EFFECTS[control_l2id])
   end
 
-  def clear_pet_effects(control_l2id)
+  def clear_pet_effects(control_l2id : Int32)
     PET_EFFECTS[control_l2id]?.try &.clear
   end
 
-  def remove_pet_effects(control_l2id, skill_id)
+  def remove_pet_effects(control_l2id : Int32, skill_id : Int32)
     remove_effects(PET_EFFECTS[control_l2id], skill_id)
   end
 end

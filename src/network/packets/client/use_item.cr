@@ -126,6 +126,21 @@ class Packets::Incoming::UseItem < GameClientPacket
 
         if !item.equipped? && item.weapon?
           wpn = item.template.as(L2Weapon)
+
+          case pc.race
+          when Race::KAMAEL
+            case wpn.item_type
+            when WeaponType::NONE
+              pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
+              return
+            end
+          when Race::HUMAN, Race::DWARF, Race::ELF, Race::DARK_ELF, Race::ORC
+            case wpn.item_type
+            when WeaponType::RAPIER, WeaponType::CROSSBOW, WeaponType::ANCIENTSWORD
+              pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
+              return
+            end
+          end
         end
       when L2Item::SLOT_CHEST, L2Item::SLOT_BACK, L2Item::SLOT_GLOVES, L2Item::SLOT_FEET, L2Item::SLOT_HEAD, L2Item::SLOT_FULL_ARMOR, L2Item::SLOT_LEGS
         if pc.race.kamael? && item.template.item_type == ArmorType::HEAVY

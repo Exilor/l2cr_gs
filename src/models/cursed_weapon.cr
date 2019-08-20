@@ -18,7 +18,6 @@ class CursedWeapon
   property name : String
   property skill_id : Int32
   property item_id : Int32
-  property player_id : Int32
   property! item : L2ItemInstance?
   property! player : L2PcInstance?
   property? activated : Bool = false
@@ -34,7 +33,7 @@ class CursedWeapon
   def end_of_life
     if @activated
       if player? && player.online?
-        info "#{@name} being removed online."
+        info { "#{@name} being removed online." }
 
         player.abort_attack
 
@@ -63,7 +62,7 @@ class CursedWeapon
 
         player.broadcast_user_info
       else
-        info "#{@name} being removed offline."
+        info { "#{@name} being removed offline." }
 
         begin
           del = "DELETE FROM items WHERE owner_id=? AND item_id=?"
@@ -98,7 +97,7 @@ class CursedWeapon
       elsif @item
         item.decay_me
         L2World.remove_object(item)
-        info "#{@name} item has been removed from L2World."
+        info { "#{@name} item has been removed from L2World." }
       end
     end
 

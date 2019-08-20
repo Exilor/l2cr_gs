@@ -6,10 +6,10 @@ class ClassId < EnumClass
   getter? mage_class, summoner
 
   protected def initialize(parent : self? = nil, race = nil, mage_class = false, summoner = false)
-    @parent = parent
-    @race = race || parent.try &.race || Race::NONE
+    @parent     = parent
+    @race       = race       || parent.try &.race || Race::NONE
     @mage_class = mage_class || !!parent && parent.mage_class?
-    @summoner = summoner || !!parent && parent.summoner?
+    @summoner   = summoner   || !!parent && parent.summoner?
   end
 
   def level : Int32

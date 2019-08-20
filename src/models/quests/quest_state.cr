@@ -227,10 +227,6 @@ class QuestState
     self
   end
 
-  def memo_state_ex?(slot : Int, mse : Int) : Bool
-    get_memo_state_ex(slot) == mse
-  end
-
   def add_notify_of_death(char : L2Character)
     if char.is_a?(L2PcInstance)
       char.add_notify_quest_of_death(self)
@@ -291,10 +287,6 @@ class QuestState
 
   def clear_radar
     @player.radar.remove_all_markers
-  end
-
-  def get_quest_items_count(item_id : Int32)
-    AbstractScript.get_quest_items_count(@player, item_id)
   end
 
   def take_items(item_id : Int, count : Int)
@@ -451,7 +443,7 @@ class QuestState
   end
 
   def add_spawn(npc_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, random_offset : Bool, despawn_delay : Int32, summon_spawn : Bool) : L2Npc
-    add_spawn(npc_id, x, y, z, heading, random_offset, despawn_delay, summon_spawn)
+    AbstractScript.add_spawn(npc_id, x, y, z, heading, random_offset, despawn_delay, summon_spawn)
   end
 
   def set_restart_time

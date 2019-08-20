@@ -39,7 +39,7 @@ class GuardKnownList < AttackableKnownList
     true
   end
 
-  def active_char
+  def active_char : L2GuardInstance
     super.as(L2GuardInstance)
   end
 end

@@ -7,7 +7,7 @@ module HellboundPointData
   def load
     POINTS_INFO.clear
     parse_datapack_file("scripts/hellbound/hellboundTrustPoints.xml")
-    info "Loaded #{POINTS_INFO.size} trust point reward data."
+    info { "Loaded #{POINTS_INFO.size} trust point reward data." }
   end
 
   private def parse_document(doc, file)

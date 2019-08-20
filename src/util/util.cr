@@ -5,7 +5,7 @@ module Util
   extend Loggable
   include Packets::Outgoing
 
-  def in_range?(range : Int32, obj1 : L2Object?, obj2 : L2Object?, include_z_axis : Bool) : Bool
+  def in_range?(range : Int32, obj1 : L2Object?, obj2 : L2Object?, z_axis : Bool) : Bool
     return false unless obj1 && obj2
     return false unless obj1.instance_id == obj2.instance_id
     return true if range == -1
@@ -19,26 +19,23 @@ module Util
     end
 
     d = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y)
-    if include_z_axis
+    if z_axis
       d = Math.hypot(d, obj1.z - obj2.z)
     end
 
     d - (rad / 2) <= range
   end
 
-  def in_short_radius?(radius : Int32, obj1 : L2Object?, obj2 : L2Object?, include_z_axis : Bool) : Bool
+  def in_short_radius?(radius : Int32, obj1 : L2Object?, obj2 : L2Object?, z_axis : Bool) : Bool
     return false unless obj1 && obj2
     return true if radius == -1
 
-    dx = obj1.x - obj2.x
-    dy = obj1.y - obj2.y
-
-    if include_z_axis
-      dz = obj1.z - obj2.z
-      dx.abs2 + dy.abs2 + (dz * dz) <= radius.abs2
-    else
-      dx.abs2 + dy.abs2 <= radius.abs2
+    d = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y)
+    if z_axis
+      return Math.hypot(d, obj1.z - obj2.z) <= radius
     end
+
+    d <= radius
   end
 
   def calculate_distance(loc1 : Locatable, loc2 : Locatable, z_axis : Bool, squared : Bool) : Float64
@@ -65,16 +62,15 @@ module Util
   def calculate_heading_from(from_x : Int32, from_y : Int32, to_x : Int32, to_y : Int32) : Int32
     angle_target = Math.to_degrees(Math.atan2(to_y - from_y, to_x - from_x))
     if angle_target < 0
-      angle_target = 360 + angle_target
+      angle_target = 360.0 + angle_target
     end
     (angle_target * 182.044444444).to_i
   end
 
   def calculate_heading_from(dx : Float64, dy : Float64) : Int32
-    angle_target : Float64
     angle_target = Math.to_degrees(Math.atan2(dy, dx))
     if angle_target < 0
-      angle_target = 360 + angle_target
+      angle_target = 360.0 + angle_target
     end
     (angle_target * 182.044444444).to_i
   end
@@ -304,26 +300,10 @@ module Util
   end
 
   def min(val1, val2, *args)
-    min = Math.min(val1, val2)
-
-    args.each do |value|
-      if min > value
-        min = value
-      end
-    end
-
-    min
+    args.empty? ? {val1, val2}.min : {val1, val2, args.min}.min
   end
 
   def max(val1, val2, *args)
-    max = Math.max(val1, val2)
-
-    args.each do |value|
-      if max > value
-        max = value
-      end
-    end
-
-    max
+    args.empty? ? {val1, val2}.max : {val1, val2, args.max}.max
   end
 end

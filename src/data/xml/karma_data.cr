@@ -7,7 +7,7 @@ module KarmaData
   def load
     KARMA_TABLE.clear
     parse_datapack_file("stats/chars/pcKarmaIncrease.xml")
-    info "Loaded #{KARMA_TABLE.size} karma modifiers."
+    info { "Loaded #{KARMA_TABLE.size} karma modifiers." }
   end
 
   private def parse_document(doc, file)

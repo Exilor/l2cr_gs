@@ -1,7 +1,7 @@
 class Product
   include Loggable
 
-  getter buy_list_id, item, price, restock_delay, max_count
+  getter buy_list_id, item, restock_delay, max_count
 
   @restock_task : Runnable::DelayedTask?
 
@@ -34,8 +34,8 @@ class Product
     end
   end
 
-  def price
-    @price < 0 ? @item.reference_price : @price
+  def price : Int64
+    @price < 0 ? @item.reference_price.to_i64 : @price
   end
 
   def decrease_count(val : Int64) : Bool

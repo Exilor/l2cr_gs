@@ -11,7 +11,7 @@ module UIData
     KEYS.clear
     CATEGORIES.clear
     parse_datapack_file("ui/ui_en.xml")
-    info "Loaded #{KEYS.size} keys and #{CATEGORIES.size} categories."
+    info { "Loaded #{KEYS.size} keys and #{CATEGORIES.size} categories." }
   end
 
   def categories

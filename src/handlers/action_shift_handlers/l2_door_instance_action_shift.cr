@@ -1,4 +1,4 @@
-module ActionShiftHandler::L2DoorInstanceAction
+module ActionShiftHandler::L2DoorInstanceActionShift
   extend self
   extend ActionShiftHandler
 

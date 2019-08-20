@@ -5,7 +5,7 @@ module AdminCommandHandler::AdminCreateItem
   def use_admin_command(command, pc)
     case command
     when "admin_itemcreate"
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "itemcreation.htm")
+      AdminHtml.show_admin_html(pc, "itemcreation.htm")
     when /\Aadmin_create_item.*/
       begin
         st = command.from(17).split
@@ -20,7 +20,7 @@ module AdminCommandHandler::AdminCreateItem
       rescue
         pc.send_message("Usage: //create_item <itemId> [amount]")
       end
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "itemcreation.htm")
+      AdminHtml.show_admin_html(pc, "itemcreation.htm")
     when /\Aadmin_create_coin.*/
       begin
         st = command.from(17).split
@@ -39,7 +39,7 @@ module AdminCommandHandler::AdminCreateItem
       rescue
         pc.send_message("Usage: //create_coin <name> [amount]")
       end
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "itemcreation.htm")
+      AdminHtml.show_admin_html(pc, "itemcreation.htm")
     when /admin_give_item_target.*/
       begin
         unless target = pc.target.as?(L2PcInstance)
@@ -59,7 +59,7 @@ module AdminCommandHandler::AdminCreateItem
       rescue
         pc.send_message("Usage: //give_item_target <itemId> [amount]")
       end
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "itemcreation.htm")
+      AdminHtml.show_admin_html(pc, "itemcreation.htm")
     when /\Aadmin_give_item_to_all.*/
       st = command.from(22).split
       id = 0

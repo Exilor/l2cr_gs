@@ -5,7 +5,7 @@ class EffectHandler::ResistSkill < AbstractEffect
     super
 
     i = 1
-    while true
+    loop do
       skill_id = params.get_i32("skillId#{i}", 0)
       break if skill_id == 0
       skill_lvl = params.get_i32("skillLevel#{i}", 0)

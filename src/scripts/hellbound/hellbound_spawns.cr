@@ -9,7 +9,7 @@ module HellboundSpawns
     SPAWNS.clear
     SPAWN_LEVELS.clear
     parse_datapack_file("scripts/hellbound/hellboundSpawns.xml")
-    info "Loaded #{SPAWNS.size} Hellbound spawns."
+    info { "Loaded #{SPAWNS.size} Hellbound spawns." }
   end
 
   private def parse_document(doc, file)

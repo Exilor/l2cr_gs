@@ -237,7 +237,7 @@ class PcStatus < PlayableStatus
     pc.broadcast_status_update
   end
 
-  def active_char
+  def active_char : L2PcInstance
     super.as(L2PcInstance)
   end
 end

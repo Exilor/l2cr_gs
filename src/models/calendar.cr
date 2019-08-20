@@ -24,9 +24,33 @@ class Calendar
   FRIDAY = 6
   SATURDAY = 7
 
+  enum Month : UInt8
+    JANUARY
+    FEBRUARY
+    MARCH
+    APRIL
+    MAY
+    JUNE
+    JULY
+    AUGUST
+    SEPTEMBER
+    OCTOBER
+    NOVEMBER
+  end
+
+  {% for const in Month.constants %}
+    {{const}} = Month::{{const}}
+    {{const}}
+  {% end %}
+
   property time : Time = Time.now
   def_equals_and_hash @time
-  forward_missing_to @time
+  delegate day, ms, millisecond, second, minute, hour, day_of_year, year,
+    to: @time
+
+  def to_s(format : String)
+    @time.to_s(format)
+  end
 
   def <=>(other : Time)
     @time <=> other
@@ -57,21 +81,9 @@ class Calendar
     self
   end
 
-  def millisecond
-    @time.millisecond
-  end
-
-  def second
-    @time.second
-  end
-
   def second=(second)
     @time = Time.from_s(@time.s - @time.second + second).to_local
     self
-  end
-
-  def minute
-    @time.minute
   end
 
   def minute=(min) # the minute of the current hour
@@ -83,9 +95,9 @@ class Calendar
     self
   end
 
-  def hour # the hour of the day e.g. 15 at 15:38
-    @time.hour
-  end
+  # def hour # the hour of the day e.g. 15 at 15:38
+  #   @time.hour
+  # end
 
   def hour=(hour) # the hour of the day
     hour *= HOUR
@@ -145,10 +157,6 @@ class Calendar
     end
   end
 
-  def day_of_year : Int32
-    @time.day_of_year
-  end
-
   def day_of_year=(day : Int)
     if day == 0
       day = 1
@@ -158,6 +166,28 @@ class Calendar
 
   def ms=(ms : Int)
     @time = Time.from_ms(ms)
+  end
+
+  def month : Int32
+    @time.month - 1
+  end
+
+  def month=(month)
+    difference = (month - month()).abs
+    if month > month()
+      @time += difference.months
+    else
+      @time -= difference.months
+    end
+  end
+
+  def year=(year)
+    difference = (year - @time.year).abs
+    if year > @time.year
+      @time += difference.years
+    else
+      @time -= difference.years
+    end
   end
 
   def add(unit : Symbol, value : Number)

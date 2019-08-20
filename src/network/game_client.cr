@@ -39,14 +39,12 @@ class GameClient
 
   def send_packet(gsp : GameServerPacket)
     if detached?
-      debug "detached"
       return
     end
 
     if gsp.invisible?
       if pc = @active_char
         unless pc.override_see_all_players?
-          debug "invisible"
           return
         end
       end
@@ -56,6 +54,11 @@ class GameClient
 
     gsp.client = self
     gsp.run_impl
+  end
+
+  def trace
+    # TODO
+    Slice.new(5) { Slice.new(4, 0) }
   end
 
   def state=(new_state : State)
@@ -78,7 +81,7 @@ class GameClient
       return cip.l2id
     end
 
-    warn "#get_l2id_for_slot(#{slot}) failed."
+    warn { "#get_l2id_for_slot(#{slot}) failed." }
     -1
   end
 
@@ -87,7 +90,7 @@ class GameClient
     return if l2id < 0
 
     if pc = L2World.get_player(l2id)
-      debug "#{pc} attempted a double login."
+      debug { "#{pc} attempted a double login." }
       if client = pc.client
         client.close_now
       else
@@ -105,7 +108,7 @@ class GameClient
         pc.refresh_expertise_penalty
         pc.set_online_status(true, false)
       else
-        error "Could not restore char in slot #{slot}."
+        error { "Could not restore char in slot #{slot}." }
       end
     rescue e
       error "Error while trying to restore a character:"
@@ -134,7 +137,7 @@ class GameClient
               answer = 1
             end
           else
-            warn "#mark_to_delete_char No clan with ID #{clan_id} found."
+            warn { "#mark_to_delete_char No clan with ID #{clan_id} found." }
           end
         end
       end
@@ -144,11 +147,11 @@ class GameClient
 
 
     if answer == 0
-      if true#Config.delete_days == 0
+      if Config.delete_days == 0
         GameClient.delete_char_by_l2id(id)
       else
-        # TODO
-        GameClient.delete_char_by_l2id(id)
+        sql = "UPDATE characters SET deletetime=? WHERE charId=?"
+        GameDB.exec(sql, Time.ms + (Config.delete_days * 86400000), id)
       end
     end
 
@@ -314,6 +317,19 @@ class GameClient
     end
   end
 
+  def handle_cheat(punishment : String)
+    if pc = @active_char
+      Util.punish(pc, punishment)
+      return true
+    end
+
+    warn { "Kicked for cheating: #{punishment}." }
+
+    close_now
+
+    false
+  end
+
   def drop_packet : Bool
     if @detached
       debug "#drop_packet: returning true because @detached."
@@ -350,7 +366,7 @@ class GameClient
               pc.offline_start_time = Time.ms
             end
 
-            info "#{pc.name} entering offline mode."
+            info { "#{pc.name} entering offline mode." }
             # log accounting
 
             return

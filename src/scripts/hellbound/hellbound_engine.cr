@@ -92,11 +92,11 @@ class Scripts::HellboundEngine < AbstractNpcAI
     end
 
     if added > 0
-      info "Spawned #{added} NPCs."
+      info { "Spawned #{added} NPCs." }
     end
 
     if deleted > 0
-      info "Removed #{deleted} NPCs."
+      info { "Removed #{deleted} NPCs." }
     end
   end
 
@@ -251,6 +251,14 @@ class Scripts::HellboundEngine < AbstractNpcAI
 
   def self.locked?
     instance.locked?
+  end
+
+  def self.max_trust
+    instance.max_trust
+  end
+
+  def self.min_trust
+    instance.min_trust
   end
 end
 

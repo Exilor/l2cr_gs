@@ -239,8 +239,6 @@ class Scripts::CastleChamberlain < AbstractNpcAI
   end
 
   private def domain_fortress_in_contract_status?(castle_id)
-    num_fort = castle_id == 1 || castle_id == 5 ? 2 : 1
-
     FORTRESS[castle_id].any? do |fort_id|
       FortManager.get_fort_by_id!(fort_id).fort_state == 2
     end

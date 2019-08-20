@@ -9,7 +9,7 @@ module SiegeScheduleData
   def load
     SCHEDULE_DATA.clear
     parse_datapack_file("../config/SiegeSchedule.xml")
-    info "Loaded #{SCHEDULE_DATA.size} siege schedules."
+    info { "Loaded #{SCHEDULE_DATA.size} siege schedules." }
     if SCHEDULE_DATA.empty?
       SCHEDULE_DATA << SiegeScheduleDate.new(StatsSet::EMPTY)
     end

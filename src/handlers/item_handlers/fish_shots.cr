@@ -25,7 +25,7 @@ module ItemHandler::FishShots
     skills = item.template.skills
 
     if skills.nil?
-      warn "#{item.name} is missing skills."
+      warn { "#{item.name} is missing skills." }
       return false
     end
 

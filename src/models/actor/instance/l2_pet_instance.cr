@@ -46,7 +46,7 @@ class L2PetInstance < L2Summon
     @inventory
   end
 
-  def template
+  def template : L2NpcTemplate
     super.as(L2NpcTemplate)
   end
 
@@ -54,7 +54,7 @@ class L2PetInstance < L2Summon
     @stat = PetStat.new(self)
   end
 
-  def stat
+  def stat : PetStat
     super.as(PetStat)
   end
 

@@ -66,7 +66,7 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
     st = get_quest_state(killer, false)
     if st && Util.in_range?(1500, npc, killer, true)
       case npc.id
-      when 27059, 27060, 27061, 27062
+      when 27059..27062
         if st.cond?(1) && st.has_quest_items?(MONSTER_DROP[npc.id])
           st.give_items(KABOO_CHIEFS_1ST_TORQUE, 1)
           st.set_cond(2, true)

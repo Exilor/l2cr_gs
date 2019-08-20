@@ -358,6 +358,7 @@ class Fort < AbstractResidence
     true
   rescue e
     error e
+    false
   end
 
   def activate_instance
@@ -495,12 +496,12 @@ class Fort < AbstractResidence
     (((time + (Config.fs_max_own_time * 3600000)) - Time.ms) / 1000).to_i32
   end
 
-  def time_until_next_fort_upgrade : Int64
+  def time_until_next_fort_update : Int64
     unless temp = @fort_updater[0]
       return 0i64
     end
 
-    (temp.delay / 1000).to_i32
+    (temp.delay / 1000).to_i64
   end
 
   def update_clans_reputation(owner : L2Clan?, remove_points : Bool)

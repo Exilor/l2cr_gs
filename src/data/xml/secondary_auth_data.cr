@@ -12,7 +12,7 @@ module SecondaryAuthData
   def load
     FORBIDDEN_PASSWORDS.clear
     parse_datapack_file("../config/SecondaryAuth.xml")
-    info "Loaded #{FORBIDDEN_PASSWORDS.size} forbidden passwords."
+    info { "Loaded #{FORBIDDEN_PASSWORDS.size} forbidden passwords." }
   end
 
   private def parse_document(doc, file)

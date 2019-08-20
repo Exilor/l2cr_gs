@@ -4,9 +4,9 @@ module HtmCache
 
   private CACHE = {} of String => String
 
-  class_getter loaded_files = 0
-  @@bytes_buff_len = 0u64
   @@root = ""
+  @@bytes_buff_len = 0u64
+  class_getter loaded_files = 0
 
   def load
     @@root = Config.datapack_root.chomp("/data")
@@ -22,7 +22,7 @@ module HtmCache
       info "Html cache start..."
       timer = Timer.new
       parse_dir(f)
-      info "#{memory_usage.round(2)} mb from #{@@loaded_files} files loaded in #{timer.result} s."
+      info { "#{memory_usage.round(2)} mb from #{@@loaded_files} files loaded in #{timer.result} s." }
     else
       CACHE.clear
       @@loaded_files = 0
@@ -37,20 +37,20 @@ module HtmCache
   end
 
   def memory_usage : Float32
-    @@bytes_buff_len.to_f32 / 1048576
+    @@bytes_buff_len.to_f32 / 1_048_576
   end
 
   private def parse_dir(dir : String)
-    Dir.glob("#{dir}/*") do |path|
-      if !File.directory?(path)
-        File.open(path, "r") { |file| load_file(file) }
-      else
+    Dir.glob(dir + "/*") do |path|
+      if File.directory?(path)
         parse_dir(path)
+      else
+        File.open(path, "r") { |file| load_file(file) }
       end
     end
   end
 
-  def load_file(file : File)
+  def load_file(file : File) : String?
     path = file.path
     unless path.ends_with?(".htm", ".html")
       return
@@ -80,26 +80,26 @@ module HtmCache
     File.exists?("#{@@root}/#{path}")
   end
 
-  def get_htm(pc : L2PcInstance, path : String)
+  def get_htm(pc : L2PcInstance, path : String) : String?
     get_htm(pc.html_prefix, path)
   end
 
-  def get_htm_force(pc : L2PcInstance, path : String)
+  def get_htm_force(pc : L2PcInstance, path : String) : String
     get_htm_force(pc.html_prefix, path)
   end
 
-  def get_htm_force(path : String)
+  def get_htm_force(path : String) : String
     get_htm_force(nil, path)
   end
 
-  def get_htm(path : String)
+  def get_htm(path : String) : String?
     get_htm(nil, path)
   end
 
   def get_htm_force(prefix : String?, path : String) : String
     unless content = get_htm(prefix, path)
       content = "<html><body>My text is missing:<br>#{path}</body></html>"
-      warn "Missing HTML page: \"#{path}\"."
+      warn { "Missing HTML page: \"#{path}\"." }
     end
 
     content

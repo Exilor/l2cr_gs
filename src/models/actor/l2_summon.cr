@@ -14,9 +14,11 @@ abstract class L2Summon < L2Playable
 
   @shots_mask = 0
   @previous_follow_status = true
+
   getter follow_status = true # L2R: @follow
   getter attack_range = 36
   getter? restore_summon = true
+  property original_hp_mp : {Float64, Float64}?
   property! owner : L2PcInstance
 
   def initialize(template : L2NpcTemplate, @owner : L2PcInstance)
@@ -56,7 +58,7 @@ abstract class L2Summon < L2Playable
     @status = SummonStatus.new(self)
   end
 
-  def init_ai
+  def init_ai : L2SummonAI
     L2SummonAI.new(self)
   end
 
@@ -80,12 +82,12 @@ abstract class L2Summon < L2Playable
     owner.pvp_flag
   end
 
-  def send_packet(gsp : GameServerPacket)
-    owner?.try &.send_packet(gsp)
+  def send_packet(arg : GameServerPacket | SystemMessageId)
+    owner?.try &.send_packet(arg)
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    if owner?
+    if owner = owner?
       gsp.invisible = owner.invisible?
     end
 
@@ -93,7 +95,7 @@ abstract class L2Summon < L2Playable
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Number)
-    if owner?
+    if owner = owner?
       gsp.invisible = owner.invisible?
     end
 
@@ -114,6 +116,11 @@ abstract class L2Summon < L2Playable
 
     if Config.summon_store_skill_cooltime && !teleporting?
       restore_effects
+    end
+
+    if tmp = @original_hp_mp
+      self.current_hp, self.current_mp = tmp
+      @original_hp_mp = nil
     end
 
     self.follow_status = true
@@ -171,7 +178,7 @@ abstract class L2Summon < L2Playable
   end
 
   def update_and_broadcast_status(val : Int32)
-    return unless owner?
+    return unless owner = owner?
     send_packet(PetInfo.new(self, val))
     send_packet(PetStatusUpdate.new(self))
     broadcast_npc_info(val) if visible?
@@ -262,20 +269,21 @@ abstract class L2Summon < L2Playable
   end
 
   def auto_attackable?(attacker : L2Character) : Bool
-    !!owner? && owner.auto_attackable?(attacker)
+    return false unless owner = owner?
+    owner.auto_attackable?(attacker)
   end
 
   def mountable? : Bool
     false
   end
 
-  def exp_for_this_level
-    return 0 if level >= Config.max_pet_level + 1
+  def exp_for_this_level : Int64
+    return 0i64 if level >= Config.max_pet_level + 1
     ExperienceData.get_exp_for_level(level)
   end
 
-  def exp_for_next_level
-    return 0 if level >= Config.max_pet_level
+  def exp_for_next_level : Int64
+    return 0i64 if level >= Config.max_pet_level
     ExperienceData.get_exp_for_level(level + 1)
   end
 
@@ -434,8 +442,14 @@ abstract class L2Summon < L2Playable
           return false
         end
 
-        if !target.auto_attackable?(self) && !force && !target.npc? && !skill.target_type.aura? && !skill.target_type.front_aura? && !skill.target_type.behind_aura? && !skill.target_type.clan? && !skill.target_type.party? && !skill.target_type.self?
-          return false
+        if !target.auto_attackable?(self) && !force && !target.npc?
+          if !skill.target_type.aura? && !skill.target_type.front_aura?
+            if !skill.target_type.behind_aura? && !skill.target_type.clan?
+              if !skill.target_type.party? && !skill.target_type.self?
+                return false
+              end
+            end
+          end
         end
       end
     end

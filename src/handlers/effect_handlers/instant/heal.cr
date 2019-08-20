@@ -23,7 +23,7 @@ module EffectHandler
       sps = skill.use_spiritshot? && char.charged_shot?(ShotType::SPIRITSHOTS)
       bss = skill.use_spiritshot? && char.charged_shot?(ShotType::BLESSED_SPIRITSHOTS)
 
-      if ((sps || bss) && (char.player? && char.acting_player.mage_class?)) || char.summon?
+      if ((sps || bss) && (char.is_a?(L2PcInstance) && char.mage_class?)) || char.summon?
         static_shot_bonus = skill.mp_consume2
         m_atk_mul = bss ? 4 : 2
         static_shot_bonus *= 2.4 if bss
@@ -38,10 +38,13 @@ module EffectHandler
       end
 
       unless skill.static?
-        amount += static_shot_bonus + Math.sqrt(m_atk_mul * char.get_m_atk(char, nil))
+        amount += static_shot_bonus
+        amount += Math.sqrt(m_atk_mul * char.get_m_atk(char, nil))
         amount = char.calc_stat(Stats::HEAL_EFFECT, amount)
-        if skill.magic? && Formulas.m_crit(char.get_m_critical_hit(target, skill).to_f)
-          amount *= 3
+        if skill.magic?
+          if Formulas.m_crit(char.get_m_critical_hit(target, skill).to_f)
+            amount *= 3
+          end
         end
       end
 

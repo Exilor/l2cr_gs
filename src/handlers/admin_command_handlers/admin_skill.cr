@@ -11,10 +11,10 @@ module AdminCommandHandler::AdminSkill
       val = command.from(20)
       remove_skills_page(pc, val.to_i)
     elsif command.starts_with?("admin_skill_list")
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "skills.htm")
+      AdminHtml.show_admin_html(pc, "skills.htm")
     elsif command.starts_with?("admin_skill_index")
       val = command.from(18)
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "skills/#{val}.htm")
+      AdminHtml.show_admin_html(pc, "skills/#{val}.htm")
     elsif command.starts_with?("admin_add_skill")
       val = command.from(15)
       admin_add_skill(pc, val)
@@ -42,7 +42,7 @@ module AdminCommandHandler::AdminSkill
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         return false
       end
-      target.skills.each_value { |sk| target.remove_skill(sk) }
+      target.all_skills.each { |sk| target.remove_skill(sk) }
       pc.send_message("You have removed all skills from #{target.name}.")
       pc.send_message("Admin removed all skills from you.")
       pc.send_skill_list
@@ -111,7 +111,8 @@ module AdminCommandHandler::AdminSkill
     end
 
     admin_reply = Packets::Outgoing::NpcHtmlMessage.new
-    msg = String.build(500 + (max_pages * 50) + (((skills_end - skills_start) + 1) * 50)) do |io|
+    msg_size = 500 + (max_pages * 50) + (((skills_end - skills_start) + 1) * 50)
+    msg = String.build(msg_size) do |io|
       io << "<html><body><table width=260><tr><td width=40><button value"
       io << "=\"Main\" action=\"bypass -h admin_admin\" width=40 height=15"
       io << " back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
@@ -119,15 +120,22 @@ module AdminCommandHandler::AdminSkill
       io << " width=40><button value=\"Back\" action=\"bypass -h"
       io << " admin_show_skills\" width=40 height=15 back=\"L2UI_ct1.button_"
       io << "df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><br><center"
-      io << ">Editing <font color=\"LEVEL\">#{pc.name}</font></center><br>"
-      io << "<table width=270><tr><td>Lv: #{pc.level} "
-      io << "#{ClassListData.get_class!(pc.class_id).client_code}</td></tr></table><br>"
+      io << ">Editing <font color=\"LEVEL\">"
+      io << pc.name
+      io << "</font></center><br>"
+      io << "<table width=270><tr><td>Lv: "
+      io << pc.level
+      io << " "
+      ClassListData.get_class!(pc.class_id).client_code(io)
+      io << "</td></tr></table><br>"
       io << "<table width=270><tr><td>Note: Dont forget that modifying players "
       io << "skills can</td></tr><tr><td>ruin the game...</td></tr></table><br>"
       io << "<center>Click on the skill you wish to remove:</center><br><center>"
       io << "<table width=270><tr>"
       max_pages.times do |x|
-        io << "<td><a action=\"bypass -h admin_remove_skills #{x}\">Page "
+        io << "<td><a action=\"bypass -h admin_remove_skills "
+        io << x
+        io << "\">Page "
         io << x + 1
         io << "</a></td>"
       end
@@ -135,8 +143,14 @@ module AdminCommandHandler::AdminSkill
       io << "</td><td width=60>Level:</td><td width=40>Id:</td></tr>"
       (skills_start...skills_end).each do |i|
         io << "<tr><td width=80><a action=\"bypass -h admin_remove_skill "
-        io << "#{skills[i].id}\">#{skills[i].name}</a></td><td width=60>"
-        io << "#{skills[i].level}</td><td width=40>#{skills[i].id}</td></tr>"
+        io << skills[i].id
+        io << "\">"
+        io << skills[i].name
+        io << "</a></td><td width=60>"
+        io << skills[i].level
+        io << "</td><td width=40>"
+        io << skills[i].id
+        io << "</td></tr>"
       end
       io << "</table><br><center><table>Remove skill by ID :<tr><td>Id: </td>"
       io << "<td><edit var=\"id_to_remove\" width=110></td></tr></table>"
@@ -144,8 +158,8 @@ module AdminCommandHandler::AdminSkill
       io << " admin_remove_skill $id_to_remove\" width=110 height=15 back=\"L2U"
       io << "I_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></center><br><center>"
       io << "<button value=\"Back\" action=\"bypass -h admin_current_player\" "
-      io << "width=40 height=15 back=\"L2UI_ct1.button_df\"fore=\"L2UI_ct1.butto"
-      io << "n_df\"></center>"
+      io << "width=40 height=15 back=\"L2UI_ct1.button_df\"fore=\"L2UI_ct1.butt"
+      io << "on_df\"></center>"
       io << "</body></html>"
     end
     admin_reply.html = msg
@@ -173,7 +187,7 @@ module AdminCommandHandler::AdminSkill
       return
     end
 
-    if pc == name
+    if pc == player
       pc.send_packet(SystemMessageId::CANNOT_USE_ON_YOURSELF)
     else
       skills = pc.all_skills
@@ -239,7 +253,7 @@ module AdminCommandHandler::AdminSkill
       begin
         id = st.shift.to_i
         level = st.shift.to_i
-        skill = SkillData[id, level]
+        skill = SkillData[id, level]?
       rescue e
         error e
       end

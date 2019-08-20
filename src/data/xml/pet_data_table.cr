@@ -10,7 +10,7 @@ module PetDataTable
     timer = Timer.new
     PETS.clear
     parse_datapack_directory("stats/pets")
-    info "Loaded #{PETS.size} pet data in #{timer.result}."
+    info { "Loaded #{PETS.size} pet data in #{timer.result}." }
   end
 
   private def parse_document(doc, file)

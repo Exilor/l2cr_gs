@@ -12,9 +12,9 @@ module InitialShortcutData
 
     parse_datapack_file("stats/initialShortcuts.xml")
 
-    info "Loaded #{INITIAL_GLOBAL_SHORTCUT_LIST.size} global initial shortcuts."
-    info "Loaded #{INITIAL_SHORTCUT_DATA.size} initial shortcuts"
-    info "Loaded #{MACRO_PRESETS.size} macro presets."
+    info { "Loaded #{INITIAL_GLOBAL_SHORTCUT_LIST.size} global initial shortcuts." }
+    info { "Loaded #{INITIAL_SHORTCUT_DATA.size} initial shortcuts" }
+    info { "Loaded #{MACRO_PRESETS.size} macro presets." }
   end
 
   private def parse_document(doc, file)

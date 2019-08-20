@@ -21,7 +21,7 @@ module AdminCommandHandler::AdminSummon
       sub_command = "admin_create_item"
       unless AdminData.has_access?(sub_command, pc.access_level)
         pc.send_message("You don't have the access right to use this command.")
-        warn "Player #{pc.name} tried to use admin command #{sub_command.inspect} without enough access level."
+        warn { "Player #{pc.name} tried to use admin command #{sub_command.inspect} without enough access level." }
         return false
       end
       if ach = AdminCommandHandler[sub_command]
@@ -31,7 +31,7 @@ module AdminCommandHandler::AdminSummon
       sub_command = "admin_spawn_once"
       unless AdminData.has_access?(sub_command, pc.access_level)
         pc.send_message("You don't have the access right to use this command.")
-        warn "Player #{pc.name} tried to use admin command #{sub_command.inspect} without enough access level."
+        warn { "Player #{pc.name} tried to use admin command #{sub_command.inspect} without enough access level." }
         return false
       end
 

@@ -11,7 +11,7 @@ module AdminCommandHandler::AdminShop
         pc.send_message("Please specify buy list.")
       end
     when "admin_gmshop"
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "gmshops.htm")
+      AdminHtml.show_admin_html(pc, "gmshops.htm")
     end
 
     true
@@ -24,7 +24,7 @@ module AdminCommandHandler::AdminShop
       pc.send_packet(Packets::Outgoing::BuyList.new(buy_list, pc.adena, 0))
       pc.send_packet(Packets::Outgoing::ExBuySellList.new(pc, false))
     else
-      warn "No buy list with id #{val}."
+      warn { "No buy list with id #{val}." }
     end
   end
 

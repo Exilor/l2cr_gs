@@ -9,7 +9,7 @@ module ArmorSetsData
   def load
     SETS.clear
     parse_datapack_directory("stats/armorsets")
-    info "Loaded #{SETS.size} armor set data."
+    info { "Loaded #{SETS.size} armor set data." }
   end
 
   def [](id : Int32) : ArmorSet

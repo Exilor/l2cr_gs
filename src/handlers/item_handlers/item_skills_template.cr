@@ -26,26 +26,25 @@ module ItemHandler::ItemSkillsTemplate
     skills = tpl.skills
 
     if skills.nil? || skills.empty?
-      warn "#{tpl} has no skills."
+      warn { "#{tpl} has no skills." }
       return false
     end
 
     has_consume_skill = false
 
     skills.each do |sh|
-      debug sh.skill
       if skill = sh.skill
         if skill.item_consume_id > 0
           has_consume_skill = true
         end
 
         unless skill.check_condition(playable, playable.target, false)
-          debug "Failed condition for #{skill}."
+          debug { "Failed condition for #{skill}." }
           return false
         end
 
         if playable.skill_disabled?(skill)
-          debug "#{skill} is disabled."
+          debug { "#{skill} is disabled." }
           return false
         end
 
@@ -55,8 +54,6 @@ module ItemHandler::ItemSkillsTemplate
         end
 
         if !item.potion? && !item.elixir? && !item.scroll? && playable.casting_now?
-          debug "!item.potion? && !item.elixir? && !item.scroll? && playable.casting_now?"
-          debug "#{!item.potion?} && #{!item.elixir?} && #{!item.scroll?} && #{playable.casting_now?}"
           return false
         end
 

@@ -155,7 +155,7 @@ module SpawnTable
         spwn.y,
         spwn.z,
         spwn.heading,
-        spwn.respawn_delay / 1000,
+        spwn.respawn_delay // 1000,
         spwn.respawn_max_delay - spwn.respawn_min_delay,
         spwn.location_id
       )

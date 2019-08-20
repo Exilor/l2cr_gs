@@ -130,7 +130,7 @@ abstract class Inventory < ItemContainer
     extend PaperdollListener
 
     def notify_equipped(slot, item, inv)
-      return unless pc = inv.owner.acting_player?
+      return unless pc = inv.owner.as?(L2PcInstance)
 
       it = item.template
       update = false
@@ -181,7 +181,7 @@ abstract class Inventory < ItemContainer
     end
 
     def notify_unequipped(slot, item, inv)
-      return unless pc = inv.owner.acting_player?
+      return unless pc = inv.owner.as?(L2PcInstance)
 
       it = item.template
       update = false
@@ -256,7 +256,7 @@ abstract class Inventory < ItemContainer
     extend PaperdollListener
 
     def notify_equipped(slot, item, inv)
-      return unless player = inv.owner.acting_player?
+      return unless pc = inv.owner.as?(L2PcInstance)
       return unless chest_item = inv.chest_slot?
 
       return unless armor_set = ArmorSetsData[chest_item.id]?
@@ -265,16 +265,16 @@ abstract class Inventory < ItemContainer
       update_time_stamp = false
 
       if armor_set.contains_item?(slot, item.id)
-        if armor_set.contains_all?(player)
+        if armor_set.contains_all?(pc)
           armor_set.skills.each do |sh|
             if item_skill = sh.skill?
-              player.add_skill(item_skill, false)
+              pc.add_skill(item_skill, false)
               if item_skill.active?
-                unless player.has_skill_reuse?(item_skill.id)
+                unless pc.has_skill_reuse?(item_skill.hash)
                   equip_delay = item.equip_reuse_delay
                   if equip_delay > 0
-                    player.add_time_stamp(item_skill, equip_delay.to_i64)
-                    player.disable_skill(item_skill, equip_delay.to_i64)
+                    pc.add_time_stamp(item_skill, equip_delay.to_i64)
+                    pc.disable_skill(item_skill, equip_delay.to_i64)
                   end
                 end
                 update_time_stamp = true
@@ -283,19 +283,19 @@ abstract class Inventory < ItemContainer
             end
           end
 
-          if armor_set.contains_shield?(player)
+          if armor_set.contains_shield?(pc)
             armor_set.shield_skills.each do |sh|
               if skill = sh.skill?
-                player.add_skill(skill, false)
+                pc.add_skill(skill, false)
                 update = true
               end
             end
           end
 
-          if armor_set.enchanted_6?(player)
+          if armor_set.enchanted_6?(pc)
             armor_set.enchant_6_skill_id.each do |sh|
               if skill = sh.skill?
-                player.add_skill(skill, false)
+                pc.add_skill(skill, false)
                 update = true
               end
             end
@@ -304,30 +304,26 @@ abstract class Inventory < ItemContainer
       elsif armor_set.contains_shield?(item.id)
         armor_set.shield_skills.each do |sh|
           if skill = sh.skill?
-            player.add_skill(skill, false)
+            pc.add_skill(skill, false)
             update = true
           end
         end
       end
 
       if update
-        player.send_skill_list
+        pc.send_skill_list
 
         if update_time_stamp
-          player.send_packet(Packets::Outgoing::SkillCoolTime.new(player))
+          pc.send_packet(Packets::Outgoing::SkillCoolTime.new(pc))
         end
       end
     end
 
     def notify_unequipped(slot, item, inv)
-      return unless player = inv.owner.acting_player
+      return unless pc = inv.owner.as?(L2PcInstance)
       return unless chest_item = inv.chest_slot?
 
       remove = false
-      item_skill = nil
-      skill = nil
-      shield_skill = nil
-      skill_id_6 = nil
 
       if slot == CHEST
         return unless armor_set = ArmorSetsData[item.id]?
@@ -352,24 +348,24 @@ abstract class Inventory < ItemContainer
       if remove
         skills.try &.each do |sh|
           if item_skill = sh.skill?
-            player.remove_skill(item_skill, false, item_skill.passive?)
+            pc.remove_skill(item_skill, false, item_skill.passive?)
           end
         end
 
         shield_skill.try &.each do |sh|
           if item_skill = sh.skill?
-            player.remove_skill(item_skill, false, item_skill.passive?)
+            pc.remove_skill(item_skill, false, item_skill.passive?)
           end
         end
 
         skill_id_6.try &.each do |sh|
           if item_skill = sh.skill?
-            player.remove_skill(item_skill, false, item_skill.passive?)
+            pc.remove_skill(item_skill, false, item_skill.passive?)
           end
         end
 
-        player.check_item_restriction
-        player.send_skill_list
+        pc.check_item_restriction
+        pc.send_skill_list
       end
     end
   end

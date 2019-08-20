@@ -291,18 +291,6 @@ abstract class ItemContainer
   end
 
   def restore
-    # DB::Item.where(character_id: owner_id, loc: base_location.to_s).each do |itm|
-    #   item = L2ItemInstance.restore_from_db(owner_id, itm)
-    #   next unless item
-    #   L2World.store_object(item)
-    #   owner = owner?.try &.acting_player?
-    #   if item.stackable? && get_item_by_item_id(item.id)
-    #     add_item("Restore", item, owner, nil)
-    #   else
-    #     add_item(item)
-    #   end
-    # end
-
     sql = "SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time FROM items WHERE owner_id=? AND (loc=?)"
     GameDB.each(sql, owner_id, base_location.to_s) do |rs|
       unless item = L2ItemInstance.restore_from_db(owner_id, rs)

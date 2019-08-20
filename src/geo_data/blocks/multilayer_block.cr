@@ -7,7 +7,7 @@ struct MultilayerBlock
     BLOCK_CELLS.times do
       n_layers = io.read_bytes(UInt8)
 
-      unless 1 <= n_layers <= 125
+      unless n_layers.between?(1, 125)
         raise "Corrupted geo file (invalid layers count)"
       end
 
@@ -58,15 +58,13 @@ struct MultilayerBlock
   private def get_cell_data_offset(x : Int32, y : Int32) : Int32
     local_offset = ((x % BLOCK_CELLS_X) * BLOCK_CELLS_Y) + (y % BLOCK_CELLS_Y)
     data_offset = 0
-    local_offset.times do
-      data_offset += 1 + (@data[data_offset] * 2)
-    end
+    local_offset.times { data_offset += 1 + (@data[data_offset] * 2) }
     data_offset
   end
 
   private def extract_layer_data(data_offset : Int32) : Int16
     # IO::ByteFormat::LittleEndian.decode(Int16, @data + data_offset)
-    slice = Slice.new(@data + data_offset, 2)
+    slice = (@data + data_offset).to_slice(2)
     IO::ByteFormat::LittleEndian.decode(Int16, slice)
   end
 

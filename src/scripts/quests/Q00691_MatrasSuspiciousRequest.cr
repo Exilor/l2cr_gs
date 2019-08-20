@@ -80,7 +80,7 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
 
     st = get_quest_state!(pl, false)
     chance = (Config.rate_quest_drop * REWARD_CHANCES[npc.id]).to_i32
-    num_items = Math.max((chance / 1000).to_i, 1)
+    num_items = Math.max((chance // 1000).to_i, 1)
     chance = chance % 1000
     if rand(1000) <= chance
       st.give_items(RED_GEM, num_items)

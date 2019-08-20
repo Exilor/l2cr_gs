@@ -45,7 +45,7 @@ module CommunityBoardHandler
     end
 
     unless cb = self[command]
-      warn "No handler found for command #{command.inspect}"
+      warn { "No handler found for command #{command.inspect}" }
       return
     end
 
@@ -78,7 +78,7 @@ module CommunityBoardHandler
     end
 
     unless cb.responds_to?(:write_community_board_command)
-      warn "#{cb} doesn't implement #write_community_board_command"
+      warn { "#{cb} doesn't implement #write_community_board_command" }
       return
     end
 

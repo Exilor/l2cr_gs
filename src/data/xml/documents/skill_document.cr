@@ -32,7 +32,7 @@ class SkillDocument < AbstractDocument
     end
   end
 
-  @skills_in_file = [] of Skill
+  getter skills = [] of Skill
 
   private getter! current_skill : SkillInfo?
 
@@ -43,12 +43,12 @@ class SkillDocument < AbstractDocument
         n.find_element("skill") do |d|
           @current_skill = SkillInfo.new
           parse_skill(d)
-          @skills_in_file.concat(current_skill.skills)
+          @skills.concat(current_skill.skills)
         end
       when "skill"
         @current_skill = SkillInfo.new
         parse_skill(n)
-        @skills_in_file.concat(current_skill.skills)
+        @skills.concat(current_skill.skills)
       end
     end
   end
@@ -66,10 +66,6 @@ class SkillDocument < AbstractDocument
         current_skill.current_skills << Skill.new(set)
       end
     {% end %}
-  end
-
-  def skills
-    @skills_in_file
   end
 
   def get_table_value(name : String)

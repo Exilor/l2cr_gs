@@ -1,4 +1,4 @@
-require "../../../models/holders/item_chance_holder"
+require "../../models/holders/item_chance_holder"
 
 class Scripts::Q00403_PathOfTheRogue < Quest
   # NPCs

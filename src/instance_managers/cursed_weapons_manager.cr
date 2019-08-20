@@ -14,7 +14,15 @@ module CursedWeaponsManager
     parse_datapack_file("cursedWeapons.xml")
     restore
     control_players
-    info "Loaded #{CURSED_WEAPONS.size} cursed weapons."
+    info { "Loaded #{CURSED_WEAPONS.size} cursed weapons." }
+  end
+
+  def reload
+    CURSED_WEAPONS.clear
+    return unless Config.allow_cursed_weapons
+    restore
+    control_players
+    info { "Loaded #{CURSED_WEAPONS.size} cursed weapons." }
   end
 
   private def parse_document(doc, file)
@@ -70,7 +78,7 @@ module CursedWeaponsManager
       sql = "SELECT owner_id FROM items WHERE item_id=?"
       GameDB.each(sql, item_id) do |rs|
         player_id = rs.get_i32("owner_id")
-        warn "Player #{player_id} owns the cursed weapon #{item_id} but he shouldn't."
+        warn { "Player #{player_id} owns the cursed weapon #{item_id} but he shouldn't." }
         begin
           sql = "DELETE FROM items WHERE owner_id=? AND item_id=?"
           GameDB.exec(sql, player_id, item_id)

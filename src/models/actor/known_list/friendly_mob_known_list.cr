@@ -32,7 +32,7 @@ class FriendlyMobKnownList < AttackableKnownList
     true
   end
 
-  def active_char
+  def active_char : L2FriendlyMobInstance
     super.as(L2FriendlyMobInstance)
   end
 end

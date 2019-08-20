@@ -22,7 +22,7 @@ module TaskManager
     init
     start_all_tasks
 
-    info "Loaded #{TASKS.size} tasks in #{timer.result} s."
+    info { "Loaded #{TASKS.size} tasks in #{timer.result} s." }
   end
 
   private def init

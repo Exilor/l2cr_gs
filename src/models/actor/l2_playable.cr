@@ -22,19 +22,19 @@ abstract class L2Playable < L2Character
     InstanceType::L2Playable
   end
 
-  def known_list
+  def known_list : PlayableKnownList
     super.as(PlayableKnownList)
   end
 
-  def stat
+  def stat : PlayableStat
     super.as(PlayableStat)
   end
 
-  def status
+  def status : PlayableStatus
     super.as(PlayableStatus)
   end
 
-  def init_ai
+  def init_ai : L2PlayableAI
     L2PlayableAI.new(self)
   end
 

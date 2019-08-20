@@ -15,11 +15,11 @@ abstract class ClanHallSiegeEngine < Quest
   BEAST_FARM = 63
   FORTRESS_OF_DEAD = 64
 
-  getter attackers = {} of Int32 => L2SiegeClan
   @guards = [] of L2Spawn
   @hall : SiegableHall
   @siege_task : Runnable::DelayedTask?
   @mission_accomplished = false
+  getter attackers = {} of Int32 => L2SiegeClan
 
   def initialize(name : String, descr : String, hall_id : Int32)
     super(-1, name, descr)
@@ -27,7 +27,7 @@ abstract class ClanHallSiegeEngine < Quest
     @hall = ClanHallSiegeManager.get_siegable_hall!(hall_id)
     delay = @hall.next_siege_time - Time.ms - 3600000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
-    info "Siege scheduled for #{siege_date.time}."
+    info { "Siege scheduled for #{siege_date.time}." }
     load_attackers
   end
 
@@ -74,7 +74,7 @@ abstract class ClanHallSiegeEngine < Quest
   end
 
   def unspawn_siege_guards
-    @guards.ecah do |guard|
+    @guards.each do |guard|
       guard.stop_respawn
       if ls = guard.last_spawn
         ls.delete_me
@@ -170,9 +170,9 @@ abstract class ClanHallSiegeEngine < Quest
     spawn_siege_guards
     @hall.update_siege_zone(true)
 
-    state = 1
+    state = 1i8
     @attackers.each_value do |s_clan|
-      unless clan = ClanTable.get_clan(s_clan.id)
+      unless clan = ClanTable.get_clan(s_clan.clan_id)
         next
       end
 
@@ -214,9 +214,9 @@ abstract class ClanHallSiegeEngine < Quest
     @hall.spawn_door(false)
     @hall.banish_foreigners
 
-    state = 0
+    state = 0i8
     @attackers.each_value do |s_clan|
-      unless clan = ClanTable.get_clan(s_clan.id)
+      unless clan = ClanTable.get_clan(s_clan.clan_id)
         next
       end
 
@@ -240,7 +240,7 @@ abstract class ClanHallSiegeEngine < Quest
     delay = @hall.next_siege_time - Time.ms - 3600000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
 
-    info "Siege of #{@hall.name} scheduled for #{@hall.siege_date.time}."
+    info { "Siege of #{@hall.name} scheduled for #{@hall.siege_date.time}." }
 
     @hall.update_siege_status(SiegeStatus::REGISTERING)
     unspawn_siege_guards
@@ -250,7 +250,7 @@ abstract class ClanHallSiegeEngine < Quest
     cancel_siege_task
     delay = @hall.next_siege_time - 3600000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
-    info "Siege of #{@hall.name} scheduled for #{@hall.siege_date.time}."
+    info { "Siege of #{@hall.name} scheduled for #{@hall.siege_date.time}." }
   end
 
   def cancel_siege_task

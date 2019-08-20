@@ -25,7 +25,7 @@ module PlayerXpPercentLostData
   def [](level : Int) : Float64
     DATA.fetch(level) do
       max = Config.max_player_level + 1
-      warn "Asked for too high a level (level: #{level}, max level: #{max})."
+      warn { "Asked for too high a level (level: #{level}, max level: #{max})." }
       DATA[-1]
     end
   end

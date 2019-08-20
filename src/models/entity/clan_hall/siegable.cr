@@ -41,6 +41,14 @@ module Siegable
     clan
   end
 
+  def defender_clans : Array(L2SiegeClan)
+    unless ret = defender_clans?
+      raise "No defender clans for this siegable"
+    end
+
+    ret
+  end
+
   def get_flag(clan : L2Clan?) : Array(L2Npc)
     unless flag = get_flag?(clan)
       raise "No flag array found (clan: #{clan})"

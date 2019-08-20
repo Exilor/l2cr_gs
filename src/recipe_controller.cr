@@ -157,7 +157,7 @@ module RecipeController
       end
 
       if @pc != @target
-        if item = @pc.manufacture_items[@recipe_list.id]
+        if item = @pc.manufacture_items[@recipe_list.id]?
           @price = item.cost
           if @target.adena < @price
             @target.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)

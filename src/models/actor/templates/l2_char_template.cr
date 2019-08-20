@@ -1,7 +1,6 @@
 require "../../../enums/move_type"
 
 class L2CharTemplate < ListenersContainer
-
   @move_type = Pointer(Float64).null
   getter base_str = 0
   getter base_dex = 0

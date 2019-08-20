@@ -267,7 +267,6 @@ module AutoSpawnHandler
     property spawn_count : Int32 = 1
     property last_loc_index : Int32 = -1
     property? spawn_active : Bool = false
-    property? spawn_active : Bool = false
     property? random_spawn : Bool = false
 
     initializer id: Int32, init_delay: Int32, respawn_delay: Int32,

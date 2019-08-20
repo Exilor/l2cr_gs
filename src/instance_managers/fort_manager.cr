@@ -94,7 +94,7 @@ module FortManager
       forts << Fort.new(rs.get_i32("id"))
     end
 
-    info "Loaded #{FORTS.size} fortresses."
+    info { "Loaded #{FORTS.size} fortresses." }
 
     FORTS.each &.siege.siege_guard_manager.load_siege_guard
   rescue e

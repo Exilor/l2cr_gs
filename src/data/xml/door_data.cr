@@ -14,7 +14,7 @@ module DoorData
     GROUPS.clear
     REGIONS.clear
     parse_datapack_file("doors.xml")
-    info "Loaded #{DOORS.size} door templates for #{REGIONS.size} regions."
+    info { "Loaded #{DOORS.size} door templates for #{REGIONS.size} regions." }
   end
 
   private def parse_document(doc, file)

@@ -23,7 +23,7 @@ module WalkingManager
 
   def load
     parse_datapack_file("Routes.xml")
-    info "Loaded #{ROUTES.size} walking NPC routes."
+    info { "Loaded #{ROUTES.size} walking NPC routes." }
   end
 
   def on_walk?(npc : L2Npc)

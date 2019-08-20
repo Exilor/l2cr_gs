@@ -18,21 +18,53 @@ module ZoneManager
     CLASS_ZONES.clear
     SPAWN_TERRITORIES.clear
     parse_datapack_directory("zones", false)
-    info "Loaded #{CLASS_ZONES.size} zone classes and #{size} zones in #{timer.result} s."
+    info { "Loaded #{CLASS_ZONES.size} zone classes and #{size} zones in #{timer.result} s." }
     timer.start
     parse_datapack_directory("zones/npcSpawnTerritories")
-    info "Loaded #{SPAWN_TERRITORIES.size} NPC spawn territories in #{timer.result} s."
+    info { "Loaded #{SPAWN_TERRITORIES.size} NPC spawn territories in #{timer.result} s." }
+  end
+
+  def reload
+    count = 0
+    CLASS_ZONES.each_value do |hash|
+      hash.each_value do |zone|
+        if tmp = zone.settings
+          SETTINGS[zone.name.not_nil!] = tmp
+        end
+      end
+    end
+
+    L2World.world_regions.each do |reg|
+      reg.each do |r|
+        r.zones.clear
+        count += 1
+      end
+    end
+
+    GrandBossManager.zones.clear
+
+    info { "Removed zones in #{count} regions." }
+
+    load
+
+    L2World.objects.each do |obj|
+      if obj.is_a?(L2Character)
+        obj.revalidate_zone(true)
+      end
+    end
+
+    SETTINGS.clear
   end
 
   private def parse_document(doc, file)
     rs = [] of {Int32, Int32}
 
     doc.find_element("list") do |n|
-      next if n["enabled"] && !Bool.new(n["enabled"])
+      next if n["enabled"]? && !Bool.new(n["enabled"])
 
       n.find_element("zone") do |d|
         unless zone_type = d["type"]
-          warn "Missing type for zone in file #{file}."
+          warn { "Missing type for zone in file #{file}." }
           next
         end
 
@@ -51,10 +83,10 @@ module ZoneManager
 
         if zone_type.casecmp?("NpcSpawnTerritory")
           if zone_name.nil?
-            warn "Missing name for NpcSpawnTerritory in file #{file}."
+            warn { "Missing name for NpcSpawnTerritory in file #{file}." }
             next
           elsif SPAWN_TERRITORIES.has_key?(zone_name)
-            warn "Name #{zone_name.inspect} already used for another zone, check file #{file}."
+            warn { "Name #{zone_name.inspect} already used for another zone, check file #{file}." }
             next
           end
         end
@@ -77,7 +109,7 @@ module ZoneManager
           if coords.size == 2
             zone_form = ZoneCuboid.new(coords[0][0], coords[1][0], coords[0][1], coords[1][1], min_z, max_z)
           else
-            warn "Missing cuboid vertex for zone #{zone_id} in file #{file}."
+            warn { "Missing cuboid vertex for zone #{zone_id} in file #{file}." }
             next
           end
         when "NPoly"
@@ -89,7 +121,7 @@ module ZoneManager
             end
             zone_form = ZoneNPoly.new(ax, ay, min_z, max_z)
           else
-            warn "Bad data for ZoneNPoly zone #{zone_id} in file #{file}."
+            warn { "Bad data for ZoneNPoly zone #{zone_id} in file #{file}." }
             next
           end
         when "Cylinder"
@@ -97,11 +129,11 @@ module ZoneManager
           if coords.size == 1 && zone_rad > 0
             zone_form = ZoneCylinder.new(*coords[0], min_z, max_z, zone_rad)
           else
-            warn "Bad data for ZoneCylinder zone #{zone_id} in file #{file}."
+            warn { "Bad data for ZoneCylinder zone #{zone_id} in file #{file}." }
             next
           end
         else
-          warn "Unknown shape #{zone_shape.inspect} for zone in file #{file}."
+          warn { "Unknown shape #{zone_shape.inspect} for zone in file #{file}." }
           next
         end
 
@@ -168,7 +200,7 @@ module ZoneManager
           temp = constructor.new(zone_id)
           temp.zone = zone_form
         else
-          warn "No zone type with name #{constructor_name}."
+          warn { "No zone type with name #{constructor_name}." }
           next
         end
 
@@ -190,7 +222,7 @@ module ZoneManager
         end
 
         if check_id(zone_id)
-          warn "Zone with id #{zone_id} overrides previous definition."
+          warn { "Zone with id #{zone_id} overrides previous definition." }
         end
 
         if zone_name && !zone_name.empty?
@@ -266,7 +298,7 @@ module ZoneManager
   end
 
   def get_zone_by_id(id : Int, zone_type : T.class) : T? forall T
-    CLASS_ZONES[zone_type][id]?
+    CLASS_ZONES[zone_type][id]?.as(T?)
   end
 
   def get_zone_by_id!(*args)

@@ -13,7 +13,7 @@ class DefenderKnownList < AttackableKnownList
     if (fort && fort.zone.active?) || (castle && castle.zone.active?) || (hall && hall.siege_zone.active?)
       pc = nil
       if obj.playable?
-        pc = obj.acting_player
+        pc = obj.acting_player?
       end
 
       siege_id = fort.try &.residence_id
@@ -30,7 +30,7 @@ class DefenderKnownList < AttackableKnownList
     true
   end
 
-  def active_char
+  def active_char : L2DefenderInstance
     super.as(L2DefenderInstance)
   end
 end

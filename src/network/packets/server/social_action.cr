@@ -1,4 +1,6 @@
 class Packets::Outgoing::SocialAction < GameServerPacket
+  LEVEL_UP = 2122
+
   initializer l2id: Int32, action_id: Int32
 
   def write_impl

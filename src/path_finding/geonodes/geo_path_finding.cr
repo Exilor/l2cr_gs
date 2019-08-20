@@ -11,7 +11,7 @@ module GeoPathFinding
     info "Loading path nodes..."
     timer = Timer.new
 
-    Dir.glob("#{Config.pathnode_dir}/*.pn") do |path|
+    Dir.glob(Config.pathnode_dir + "/*.pn") do |path|
       base_name = File.basename(path, ".pn")
       parts = base_name.split('_')
       unless parts.size == 2 && parts.all? &.num?
@@ -21,15 +21,15 @@ module GeoPathFinding
       load_path_node_file(rx, ry)
     end
 
-    debug "Path nodes loaded in #{timer} s."
+    debug { "Path nodes loaded in #{timer} s." }
   end
 
   private def load_path_node_file(rx, ry)
-    unless L2World::TILE_X_MIN <= rx <= L2World::TILE_X_MAX
+    unless rx.between?(L2World::TILE_X_MIN, L2World::TILE_X_MAX)
       error "Pathnode file x outside world bounds (#{rx})"
       return
     end
-    unless L2World::TILE_Y_MIN <= ry <= L2World::TILE_Y_MAX
+    unless ry.between?(L2World::TILE_Y_MIN, L2World::TILE_Y_MAX)
       error "Pathnode file y outside world bounds (#{ry})"
       return
     end
@@ -38,13 +38,13 @@ module GeoPathFinding
 
     path = "#{Config.pathnode_dir}/#{rx}_#{ry}.pn"
     unless File.exists?(path)
-      raise "file #{path} not found"
+      raise "File #{path} not found"
     end
 
     index = 0
 
     size = File.info(path).size
-    slice = Bytes.new(size)
+    slice = GC.malloc_atomic(size.to_u32).as(UInt8*).to_slice(size)
     File.open(path, &.read_fully(slice))
     indexes = Slice(Int32).new(65536)
 
@@ -62,7 +62,7 @@ module GeoPathFinding
     PATH_NODES_INDEX.has_key?(region_offset)
   end
 
-  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool)
+  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Array(AbstractNodeLoc)?
     gx = (x - L2World::MAP_MIN_X) >> 4
 		gy = (y - L2World::MAP_MIN_Y) >> 4
 		gz = z.to_i16
@@ -79,11 +79,13 @@ module GeoPathFinding
     end
 
     if (start.loc.z - z).abs > 55
+      # wrong layer
       debug "!(start.loc.z - z).abs > 55 (#{(start.loc.z - z).abs})"
       return
     end
 
     if (stop.loc.z - tz).abs > 55
+      # wrong layer
       debug "!(stop.loc.z - tz).abs > 55 (#{(stop.loc.z - tz).abs})"
       return
     end
@@ -177,7 +179,7 @@ module GeoPathFinding
   end
 
   private def read_neighbors(n : GeoNode) : Array(GeoNode)?
-    return unless loc = n.loc
+    return unless loc = n.loc?
 
     idx = n.neighbors_idx
     node_x = loc.node_x
@@ -187,7 +189,7 @@ module GeoPathFinding
     pn = PATH_NODES[reg_offset]
 
     neighbors = Array(AbstractNode(GeoNodeLoc)).new(8)
-    neighbor = pn[idx].to_i8
+    neighbor = pn[idx].to_i8 # N
     idx += 1
 
     new_node_x : Int16
@@ -202,7 +204,7 @@ module GeoPathFinding
       end
     end
 
-    neighbor = pn[idx].to_i8
+    neighbor = pn[idx].to_i8 # NE
     idx += 1
 
     if neighbor > 0
@@ -214,7 +216,7 @@ module GeoPathFinding
       end
     end
 
-    neighbor = pn[idx].to_i8
+    neighbor = pn[idx].to_i8 # E
     idx += 1
 
     if neighbor > 0
@@ -226,7 +228,7 @@ module GeoPathFinding
       end
     end
 
-    neighbor = pn[idx].to_i8
+    neighbor = pn[idx].to_i8 # SE
     idx += 1
 
     if neighbor > 0
@@ -238,8 +240,9 @@ module GeoPathFinding
 			end
 		end
 
-		neighbor = pn[idx].to_i8
+		neighbor = pn[idx].to_i8 # S
     idx += 1
+
 		if neighbor > 0
 			neighbor -= 1
 			new_node_x = (node_x).to_i16
@@ -249,8 +252,9 @@ module GeoPathFinding
 			end
 		end
 
-		neighbor = pn[idx].to_i8
+		neighbor = pn[idx].to_i8 # SW
     idx += 1
+
 		if neighbor > 0
 			neighbor -= 1
 			new_node_x = (node_x - 1).to_i16
@@ -260,8 +264,9 @@ module GeoPathFinding
 			end
 		end
 
-		neighbor = pn[idx].to_i8
+		neighbor = pn[idx].to_i8 # W
     idx += 1
+
 		if neighbor > 0
 			neighbor -= 1
 			new_node_x = (node_x - 1).to_i16
@@ -271,8 +276,9 @@ module GeoPathFinding
 			end
 		end
 
-		neighbor = pn[idx].to_i8
+		neighbor = pn[idx].to_i8 # SW
     idx += 1
+
 		if neighbor > 0
 			neighbor -= 1
 			new_node_x = (node_x - 1).to_i16
@@ -311,7 +317,9 @@ module GeoPathFinding
   private def read_node(gx : Int32, gy : Int32, z : Int16) : GeoNode?
     node_x = get_node_pos(gx)
     node_y = get_node_pos(gy)
-    reg_offset = get_region_offset(get_region_x(node_x.to_i32), get_region_y(node_y.to_i32))
+    reg_x = get_region_x(node_x.to_i32)
+    reg_y = get_region_y(node_y.to_i32)
+    reg_offset = get_region_offset(reg_x, reg_y)
 
     unless path_nodes_exist?(reg_offset)
       debug "Path nodes do not exist for reg_offset #{reg_offset}"

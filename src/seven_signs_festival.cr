@@ -651,15 +651,15 @@ module SevenSignsFestival
 
   @@manager_instance : FestivalManager?
   @@manager_scheduled_task : Runnable::PeriodicTask?
+  @@next_festival_cycle_start = 0i64
+  @@dawn_chat_guide : L2Npc?
+  @@dusk_chat_guide : L2Npc?
   class_property signs_cycle : Int32 = 0
   class_property festival_cycle : Int32 = 0
-  @@next_festival_cycle_start = 0i64
   class_property next_festival_start : Int64 = 0i64
   class_property? festival_initialized : Bool = false
   class_property? festival_in_progress : Bool = false
   class_property? no_party_register : Bool = false
-  @@dawn_chat_guide : L2Npc?
-  @@dusk_chat_guide : L2Npc?
 
   def load
     restore_festival_data
@@ -731,7 +731,7 @@ module SevenSignsFestival
     @@manager_instance = FestivalManager.new
     set_next_festival_start(Config.alt_festival_manager_start + SevenSignsFestival.festival_signup_time)
     @@manager_scheduled_task = ThreadPoolManager.schedule_general_at_fixed_rate(@@manager_instance.not_nil!, Config.alt_festival_manager_start, Config.alt_festival_cycle_length)
-    info "The first Festival of Darkness cycle begins in #{Time.ms_to_mins(Config.alt_festival_manager_start)} minutes."
+    info { "The first Festival of Darkness cycle begins in #{Time.ms_to_mins(Config.alt_festival_manager_start)} minutes." }
   end
 
   def restore_festival_data

@@ -252,9 +252,11 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
       if lqs
         case lqs.memo_state
         when 3
-          if has_quest_items?(lqs.player, ANTIDOTE_RECIPE_LIST) && !has_quest_items?(lqs.player, BLOOD_OF_EVA)
-            lqs.set("flag", 0)
-            html = "30758-01.html"
+          if has_quest_items?(lqs.player, ANTIDOTE_RECIPE_LIST)
+            unless has_quest_items?(lqs.player, BLOOD_OF_EVA)
+              lqs.set("flag", 0)
+              html = "30758-01.html"
+            end
           end
         when 4
           if lqs.get_int("flag") < 4

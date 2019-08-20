@@ -91,12 +91,12 @@ class L2Clan
     @members.local_each_value
   end
 
-  def each(&block : L2ClanMember ->) : Nil
-    @members.each_value { |m| yield m }
-  end
-
   def each_player(&block : L2PcInstance ->) : Nil
-    @members.each_value { |m| yield m.player_instance if m.player_instance? }
+    @members.each_value do |m|
+      if pc = m.player_instance?
+        yield pc
+      end
+    end
   end
 
   def each_online_player(&block : L2PcInstance ->) : Nil
@@ -132,8 +132,12 @@ class L2Clan
       ex_leader.clan_privileges.clear
       ex_leader.broadcast_user_info
     else
-      sql = "UPDATE characters SET clan_privs = ? WHERE charId = ?"
-      GameDB.exec(sql, 0, leader_id)
+      begin
+        sql = "UPDATE characters SET clan_privs = ? WHERE charId = ?"
+        GameDB.exec(sql, 0, leader_id)
+      rescue e
+        error e
+      end
     end
 
     self.leader = member
@@ -148,9 +152,24 @@ class L2Clan
       ex_leader.pledge_class = L2ClanMember.calculate_pledge_class(ex_leader)
       ex_leader.broadcast_user_info
       ex_leader.check_item_restriction
+    end
+
+    if new_leader
+      new_leader.pledge_class = L2ClanMember.calculate_pledge_class(new_leader)
+      new_leader.clan_privileges.set_all
+
+      if level >= SiegeManager.siege_clan_min_level
+        SiegeManager.add_siege_skills(new_leader)
+      end
+
+      new_leader.broadcast_user_info
     else
-      sql = "UPDATE characters SET clan_privs = ? WHERE charId = ?"
-      GameDB.exec(sql, ClanPrivilege.mask, leader_id)
+      begin
+        sql = "UPDATE characters SET clan_privs = ? WHERE charId = ?"
+        GameDB.exec(sql, ClanPrivilege.mask, leader_id)
+      rescue e
+        error e
+      end
     end
 
     broadcast_clan_status
@@ -158,6 +177,8 @@ class L2Clan
     sm = SystemMessage.clan_leader_privileges_have_been_transferred_to_c1
     sm.add_string(member.name)
     broadcast_to_online_members(sm)
+
+    info { "Clan leader changed from #{ex_member.name} to #{member.name}." }
   end
 
   def leader_name : String
@@ -195,7 +216,7 @@ class L2Clan
   end
 
   def get_clan_member(name : String) : L2ClanMember?
-    @members.find_value { |m| m.name == name}
+    @members.find_value { |m| m.name == name }
   end
 
   def remove_clan_member(l2id : Int32, clan_join_expiry_time : Int64)
@@ -507,7 +528,7 @@ class L2Clan
     if notice.nil?
       notice = ""
     elsif notice.size > MAX_NOTICE_LENGTH
-      notice = notice.to(MAX_NOTICE_LENGTH)
+      notice = notice.to(MAX_NOTICE_LENGTH - 1)
     end
 
     sql = "INSERT INTO clan_notices (clan_id,notice,enabled) values (?,?,?) ON DUPLICATE KEY UPDATE notice=?,enabled=?"
@@ -802,7 +823,7 @@ class L2Clan
   end
 
   def broadcast_clan_status
-    get_online_members(0) do |pc|
+    each_online_player do |pc|
       pc.send_packet(PledgeShowMemberListDeleteAll::STATIC_PACKET)
       pc.send_packet(PledgeShowMemberListAll.new(self, pc))
     end
@@ -990,7 +1011,7 @@ class L2Clan
         error e
       end
 
-      each do |cm|
+      members.each do |cm|
         if cm.online? && cm.power_grade == rank && cm.player_instance?
           cm.player_instance.clan_privileges.bitmask = privs
           cm.player_instance.send_packet(UserInfo.new(cm.player_instance))
@@ -1500,7 +1521,7 @@ class L2Clan
     rescue e
       error e
     end
-    get_online_members(0, &.broadcast_user_info)
+    each_online_player &.broadcast_user_info
   end
 
   def change_ally_crest(crest_id : Int32, only_this_clan : Bool)
@@ -1522,11 +1543,11 @@ class L2Clan
 
     if only_this_clan
       self.ally_crest_id = crest_id
-      get_online_members(0, &.broadcast_user_info)
+      each_online_player &.broadcast_user_info
     else
       ClanTable.get_clan_allies(ally_id()).each do |clan|
         clan.ally_crest_id = crest_id
-        clan.get_online_members(0, &.broadcast_user_info)
+        clan.each_online_player &.broadcast_user_info
       end
     end
   end

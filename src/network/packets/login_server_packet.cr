@@ -1,4 +1,4 @@
-require "../../login_server_client"
+require "../login_server_client"
 
 abstract class LoginServerPacket < MMO::IncomingPacket(LoginServerClient)
   include Loggable

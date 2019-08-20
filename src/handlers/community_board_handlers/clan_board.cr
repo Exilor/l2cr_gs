@@ -138,7 +138,6 @@ module CommunityBoardHandler::ClanBoard
         io << "\" back=\"l2ui_ch3.prev1_down\" fore=\"l2ui_ch3.prev1\" width=16 height=16 ></td>"
       end
 
-      i = 0
       nbp = ClanTable.clan_count / 8
       if nbp * 8 != ClanTable.clan_count
         nbp += 1

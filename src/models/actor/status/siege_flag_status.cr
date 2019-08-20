@@ -1,6 +1,5 @@
 require "./char_status"
 
-
 class SiegeFlagStatus < CharStatus
   def reduce_hp(value : Float64, attacker : L2Character?)
     reduce_hp(value, attacker, true, false, false)
@@ -14,7 +13,7 @@ class SiegeFlagStatus < CharStatus
     super(value, attacker, awake, dot, hp_consume)
   end
 
-  def active_char
+  def active_char : L2SiegeFlagInstance
     super.as(L2SiegeFlagInstance)
   end
 end

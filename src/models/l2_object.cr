@@ -18,6 +18,7 @@ abstract class L2Object < ListenersContainer
   # include Decayable
   # include Identifiable
   include Positionable
+  include EventListenerOwner
   include Packets::Outgoing
   include Loggable
 
@@ -351,7 +352,7 @@ abstract class L2Object < ListenersContainer
     !invisible? || pc.override_see_all_players?
   end
 
-  def bad_coords
+  private def bad_coords
     warn "L2Object#bad_coords."
 
     if character?
@@ -440,11 +441,10 @@ abstract class L2Object < ListenersContainer
   def send_instance_update(instance : Instance, hide : Bool)
     start_time = ((Time.ms - instance.instance_start_time) / 1000).to_i32
     end_time = ((instance.instance_end_time - instance.instance_start_time) / 1000).to_i32
-    text = instance.timer_text || "no timer text!"
     if instance.timer_increase?
-      ui = ExSendUIEvent.new(acting_player, hide, true, start_time, end_time, text)
+      ui = ExSendUIEvent.new(acting_player, hide, true, start_time, end_time, instance.timer_text)
     else
-      ui = ExSendUIEvent.new(acting_player, hide, false, end_time - start_time, 0, text)
+      ui = ExSendUIEvent.new(acting_player, hide, false, end_time - start_time, 0, instance.timer_text)
     end
     send_packet(ui)
   end

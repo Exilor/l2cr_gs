@@ -15,9 +15,9 @@ module AdminCommandHandler::AdminTeleport
     when "admin_teleto end"
       pc.tele_mode = 0
     when "admin_show_moves"
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "teleports.htm")
+      AdminHtml.show_admin_html(pc, "teleports.htm")
     when "admin_show_moves_other"
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "tele/other.htm")
+      AdminHtml.show_admin_html(pc, "tele/other.htm")
     when "admin_show_teleport"
       show_teleport_chat_window(pc)
     when "admin_recall_npc"
@@ -32,7 +32,7 @@ module AdminCommandHandler::AdminTeleport
         z = val.shift.to_i
         pc.set_intention(AI::MOVE_TO, Location.new(x, y, z, 0))
       else
-        warn "Wrong coordinates: #{val}."
+        warn { "Wrong coordinates: #{val}." }
       end
     when /\Aadmin_move_to.*/
       begin
@@ -40,7 +40,7 @@ module AdminCommandHandler::AdminTeleport
         teleport_to(pc, val)
       rescue
         pc.send_message("Usage: //move_to <x> <y> <z>")
-        AdminCommandHandler::AdminHtml.show_admin_html(pc, "teleports.htm")
+        AdminHtml.show_admin_html(pc, "teleports.htm")
       end
     when /\Aadmin_teleport_character.*/
       begin
@@ -155,7 +155,7 @@ module AdminCommandHandler::AdminTeleport
   end
 
   private def show_teleport_window(pc)
-    AdminCommandHandler::AdminHtml.show_admin_html(pc, "move.htm")
+    AdminHtml.show_admin_html(pc, "move.htm")
   end
 
   private def show_teleport_chat_window(pc)
@@ -242,7 +242,7 @@ module AdminCommandHandler::AdminTeleport
       target = obj.as(L2Npc)
       unless sp = target.spawn?
         pc.send_message("Incorrect monster spawn.")
-        warn "NPC #{target.l2id} has no spawn."
+        warn { "NPC #{target.l2id} has no spawn." }
         return
       end
 
@@ -273,8 +273,8 @@ module AdminCommandHandler::AdminTeleport
         pc.send_message("Created #{target.template.name} on #{target.l2id}.")
 
         if Config.debug
-          info "Spawn at #{target.xyz}."
-          warn "GM #{pc.name} (#{pc.l2id}) moved NPC #{target.l2id}."
+          info { "Spawn at #{target.xyz}." }
+          warn { "GM #{pc.name} (#{pc.l2id}) moved NPC #{target.l2id}." }
         end
       rescue e
         warn e
@@ -283,7 +283,7 @@ module AdminCommandHandler::AdminTeleport
     elsif target = obj.as?(L2RaidBossInstance)
       unless sp = target.spawn?
         pc.send_message("Incorrect raid spawn.")
-        warn "NPC ID #{target.id} has no spawn."
+        warn { "NPC ID #{target.id} has no spawn." }
         return
       end
       cur_hp = target.current_hp

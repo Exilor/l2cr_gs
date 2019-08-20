@@ -12,25 +12,25 @@ class Shutdown
 
   @@counter_instance : self?
 
-  def initialize(seconds = nil, restart = nil)
-    if seconds
-      @seconds_shut = Math.max(seconds, 0)
-      @shutdown_mode = restart ? GM_RESTART : GM_SHUTDOWN
-    else
-      @seconds_shut = -1
-      @shutdown_mode = SIGTERM
-    end
+  def initialize
+    @seconds_shut = -1
+    @shutdown_mode = SIGTERM
+  end
+
+  def initialize(seconds : Int32, restart : Bool)
+    @seconds_shut = Math.max(seconds, 0)
+    @shutdown_mode = restart ? GM_RESTART : GM_SHUTDOWN
   end
 
   def send_server_quit(seconds)
     sm = SystemMessage.the_server_will_be_coming_down_in_s1_seconds
     sm.add_int(seconds)
-    debug "#{MODE_TEXT[@shutdown_mode].capitalize} in #{seconds} s."
+    debug { "#{MODE_TEXT[@shutdown_mode].capitalize} in #{seconds} s." }
     Broadcast.to_all_online_players(sm)
   end
 
   def start_telnet_shutdown(ip, seconds, restart)
-    warn "IP #{ip} issued shutdown command. #{MODE_TEXT[@shutdown_mode]} in #{seconds} s."
+    warn { "IP #{ip} issued shutdown command. #{MODE_TEXT[@shutdown_mode]} in #{seconds} s." }
 
     @shutdown_mode = restart ? GM_RESTART : GM_SHUTDOWN
 
@@ -52,7 +52,7 @@ class Shutdown
   end
 
   def telnet_abort(ip)
-    warn "IP #{ip} issued shutdown ABORT. #{MODE_TEXT[@shutdown_mode]} has been stopped."
+    warn { "IP #{ip} issued shutdown ABORT. #{MODE_TEXT[@shutdown_mode]} has been stopped." }
 
     if @@counter_instance
       @@counter_instance.try &.abort
@@ -69,13 +69,15 @@ class Shutdown
       # UPnPService.info { "All port mappings deleted (#{tc1})." }
       tc1.start
 
-      if (Config.offline_trade_enable || Config.offline_craft_enable) && Config.restore_offliners
-        begin
-          OfflineTradersTable.store_offliners
-          info { "Offline traders stored in #{tc1}." }
-          tc1.start
-        rescue e
-          error e
+      if Config.offline_trade_enable || Config.offline_craft_enable
+        if Config.restore_offliners
+          begin
+            OfflineTradersTable.store_offliners
+            info { "Offline traders stored in #{tc1}." }
+            tc1.start
+          rescue e
+            error e
+          end
         end
       end
 
@@ -94,8 +96,6 @@ class Shutdown
       rescue e
         error e
       end
-
-
 
       begin
         LoginServerClient.terminate
@@ -125,9 +125,9 @@ class Shutdown
       rescue e
         error e
       end
-        tc1.start
+      tc1.start
 
-      info { "The server has been successfully shut down in #{tc2} seconds." }
+      info { "The server has been shut down in #{tc2} seconds." }
 
       if Shutdown.instance.shutdown_mode == GM_RESTART
         exit(2)
@@ -136,7 +136,7 @@ class Shutdown
       end
     else
       countdown
-      warn "GM shutdown countdown is over. #{MODE_TEXT[@shutdown_mode]}."
+      warn { "GM shutdown countdown is over. #{MODE_TEXT[@shutdown_mode]}." }
       case @shutdown_mode
       when GM_SHUTDOWN
         Shutdown.instance.mode = GM_SHUTDOWN
@@ -145,7 +145,7 @@ class Shutdown
         Shutdown.instance.mode = GM_RESTART
         exit(2)
       when ABORT
-        LoginServerClient.status = ServerStatus::STATUS_AUTO
+        LoginServerClient.server_status = ServerStatus::STATUS_AUTO
       end
     end
   end
@@ -153,7 +153,7 @@ class Shutdown
   def start_shutdown(pc, seconds, restart)
     @shutdown_mode = restart ? GM_RESTART : GM_SHUTDOWN
 
-    warn "GM #{pc.try &.name} issued #{MODE_TEXT[@shutdown_mode]} in #{seconds} seconds."
+    warn { "GM #{pc.try &.name} issued #{MODE_TEXT[@shutdown_mode]} in #{seconds} seconds." }
 
     if @shutdown_mode > 0
       case seconds
@@ -170,7 +170,7 @@ class Shutdown
 
   def abort(pc = nil)
     if pc
-      warn "GM #{pc.name} aborted the #{MODE_TEXT[@shutdown_mode]}."
+      warn { "GM #{pc.name} aborted the #{MODE_TEXT[@shutdown_mode]}." }
       if inst = @@counter_instance
         inst.abort
         msg = "Server aborts #{MODE_TEXT[@shutdown_mode]}."
@@ -191,8 +191,7 @@ class Shutdown
       when 1..5, 10, 30, 120, 180, 240, 300, 420, 480, 540
         send_server_quit(@seconds_shut)
       when 60
-        # prevent new logins
-        LoginServerClient.status = ServerStatus::STATUS_DOWN
+        LoginServerClient.server_status = ServerStatus::STATUS_DOWN
         send_server_quit(60)
       end
 
@@ -202,18 +201,18 @@ class Shutdown
 
       break if @shutdown_mode == ABORT
     end
-  rescue
-    # L2J is pretty sure this will never happen
+  rescue e
+    warn e
   end
 
   protected def save_data
     case @shutdown_mode
     when SIGTERM
-      info { "SIGTERM received. Shutting down now." }
+      info "SIGTERM received. Shutting down now."
     when GM_SHUTDOWN
-      info { "GM shutdown received. Shutting down now." }
+      info "GM shutdown received. Shutting down now."
     when GM_RESTART
-      info { "GM restart received. Restarting now." }
+      info "GM restart received. Restarting now."
     end
 
     tc = Timer.new
@@ -237,7 +236,7 @@ class Shutdown
     tc.start
 
     GrandBossManager.clean_up
-    GrandBossManager.info { "Grand boss info saved in #{tc} seconds." }
+    info { "Grand boss info saved in #{tc} seconds." }
     tc.start
 
     ItemAuctionManager.shutdown
@@ -280,10 +279,10 @@ class Shutdown
 
     if Config.save_dropped_item
       ItemsOnGroundManager.save_in_db
-      ItemsOnGroundManager.info { "Items saved in #{tc} seconds." }
+      info { "Dropped items saved in #{tc} seconds." }
       tc.start
       ItemsOnGroundManager.clean_up
-      ItemsOnGroundManager.info { "Cleaned up in #{tc} seconds." }
+      info { "Dropped items cleaned up in #{tc} seconds." }
       tc.start
     end
 
@@ -292,8 +291,6 @@ class Shutdown
       info { "Bot reports saved in #{tc} seconds." }
       tc.start
     end
-
-    # sleep(5) rescue nil
   end
 
   protected def disconnect_all_characters
@@ -307,8 +304,8 @@ class Shutdown
         end
         pc.delete_me
       rescue e
-        warn "Error disconnecting #{pc.name}."
-        warn e
+        error "Error disconnecting #{pc.name}."
+        error e
       end
     end
   end
@@ -323,5 +320,9 @@ class Shutdown
 
   def self.start_shutdown(*args)
     instance.start_shutdown(*args)
+  end
+
+  def self.abort(pc = nil)
+    instance.abort(pc) if @@instance
   end
 end

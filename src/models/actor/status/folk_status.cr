@@ -15,7 +15,7 @@ class FolkStatus < NpcStatus
     end
   end
 
-  def active_char
+  def active_char : L2NpcInstance
     super.as(L2NpcInstance)
   end
 end

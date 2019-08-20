@@ -14,7 +14,7 @@ class EffectHandler::Restoration < AbstractEffect
 
     if @item_id <= 0 || @item_count <= 0
       info.effected.send_packet(SystemMessageId::NOTHING_INSIDE_THAT)
-      warn "Effect with wrong item id or count (id: #{@item_id}, count: #{@item_count})."
+      warn { "Effect with wrong item id or count (id: #{@item_id}, count: #{@item_count})." }
       return
     end
 

@@ -21,7 +21,7 @@ module MultisellData
     timer = Timer.new
     parse_datapack_directory("multisell")
 
-    info "Loaded #{ENTRIES.size} multisell lists in #{timer.result} s."
+    info { "Loaded #{ENTRIES.size} multisell lists in #{timer.result} s." }
   end
 
   private def parse_document(doc, file_name)
@@ -87,14 +87,13 @@ module MultisellData
   end
 
   def separate_and_send(list_id : Int32, pc : L2PcInstance, npc : L2Npc?, inventory_only : Bool, product_multiplier : Float64, ingredient_multiplier : Float64)
-    debug "#separate_and_send list_id: #{list_id}, npc: #{npc}."
     unless template = ENTRIES[list_id]?
-      warn "Cannot find list with ID #{list_id} requested by #{pc} from #{npc}."
+      warn { "Cannot find list with ID #{list_id} requested by #{pc} from #{npc}." }
       return
     end
 
     if (npc && !template.npc_allowed?(npc.id)) || (!npc && template.npc_only?)
-      warn "#{pc} tried to open multisell from '#{npc}' which isn't allowed."
+      warn { "#{pc} tried to open multisell from '#{npc}' which isn't allowed." }
       return
     end
 
@@ -114,8 +113,7 @@ module MultisellData
 
     index = 0
 
-    while true
-      # debug "Sending a MultisellList (list: #{list.inspect}, index: #{index})."
+    loop do
       pc.send_packet(MultisellList.new(list, index))
       index += PAGE_SIZE
       break unless index < list.entries.size
@@ -183,12 +181,12 @@ module MultisellData
       list.entries.each do |ent|
         ent.ingredients.each do |ing|
           unless verify_ingredient(ing)
-            warn "Cannot find ingredient with item ID: #{ing.item_id} in list #{list.list_id}."
+            warn { "Cannot find ingredient with item ID: #{ing.item_id} in list #{list.list_id}." }
           end
         end
         ent.products.each do |ing|
           unless verify_ingredient(ing)
-            warn "Cannot find product with item ID: #{ing.item_id} in list #{list.list_id}."
+            warn { "Cannot find product with item ID: #{ing.item_id} in list #{list.list_id}." }
           end
         end
       end

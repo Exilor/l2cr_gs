@@ -2,6 +2,7 @@ require "../tasks/cubic/*"
 
 class L2CubicInstance
   # include Identifiable
+  include Synchronizable
   include Packets::Outgoing
   include Loggable
 
@@ -96,17 +97,18 @@ class L2CubicInstance
   end
 
   def do_action
-    # debug "do_action interval : #{@cubic_delay}"
-    return if @active
-    @active = true
+    sync do
+      return if @active
+      @active = true
 
-    case @cubic_id
-    when LIFE_CUBIC
-      task = CubicHeal.new(self)
-      @action_task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, 0, @cubic_delay)
-    else
-      task = CubicAction.new(self, @cubic_skill_chance)
-      @action_task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, 0, @cubic_delay)
+      case @cubic_id
+      when LIFE_CUBIC
+        task = CubicHeal.new(self)
+        @action_task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, 0, @cubic_delay)
+      else
+        task = CubicAction.new(self, @cubic_skill_chance)
+        @action_task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, 0, @cubic_delay)
+      end
     end
   end
 

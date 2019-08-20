@@ -1,7 +1,7 @@
 require "./npc_known_list"
 
 class RaceManagerKnownList < NpcKnownList
-  def remove_known_object(object : L2Object?, forget : Bool)
+  def remove_known_object(object : L2Object?, forget : Bool) : Bool
     return false unless super
 
     if object.player?
@@ -12,5 +12,9 @@ class RaceManagerKnownList < NpcKnownList
     end
 
     true
+  end
+
+  def active_char : L2RaceManagerInstance
+    super.as(L2RaceManagerInstance)
   end
 end

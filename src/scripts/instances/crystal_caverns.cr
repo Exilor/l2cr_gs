@@ -1463,7 +1463,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     world = InstanceManager.get_world(trap.instance_id)
     if world.is_a?(CCWorld)
       case action
-      when TrapAction::TRAP_DISARMED
+      when TrapAction::DISARMED
         if trap.id == DOOR_OPENING_TRAP[0]
           open_door(24220001, world.instance_id)
           run_emerald_rooms(world, ROOM1_SPAWNS, 1)

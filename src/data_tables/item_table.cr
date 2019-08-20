@@ -74,10 +74,12 @@ module ItemTable
     end
     TEMPLATES.trim
 
-    info "Loaded #{a = ETC_ITEMS.size} etc item templates."
-    info "Loaded #{b = ARMORS.size} armor item templates."
-    info "Loaded #{c = WEAPONS.size} weapon item templates."
-    info "Loaded #{a + b + c} item templates in #{timer.result} s."
+    info do
+      "Loaded #{a = ETC_ITEMS.size} etc item templates.\n" \
+      "Loaded #{b = ARMORS.size} armor item templates.\n" \
+      "Loaded #{c = WEAPONS.size} weapon item templates.\n" \
+      "Loaded #{a + b + c} item templates in #{timer} s."
+    end
   end
 
   def [](id : Int) : L2Item
@@ -92,11 +94,37 @@ module ItemTable
     TEMPLATES[index]
   end
 
+  private struct ResetOwner
+    include Runnable
+
+    initializer item: L2ItemInstance
+
+    def run
+      @item.owner_id = 0
+      @item.item_loot_schedule = nil
+    end
+  end
+
   def create_item(process : String?, item_id : Int32, count : Int64, actor : L2PcInstance?, reference = nil) : L2ItemInstance
     item = L2ItemInstance.new(IdFactory.next, item_id)
 
     if process && process.casecmp?("loot")
-      # TODO: command channel and other stuff
+      if reference.is_a?(L2Attackable) && reference.raid?
+        first_attacked = reference.first_command_channel_attacked?
+        if first_attacked && !Config.auto_loot_raids
+          item.owner_id = first_attacked.leader_l2id
+          task = ThreadPoolManager.schedule_general(ResetOwner.new(item), Config.loot_raids_privilege_interval)
+          item.item_loot_schedule = task
+        end
+      elsif !Config.auto_loot || (reference.is_a?(L2EventMonsterInstance) && reference.event_drop_on_ground?)
+        unless actor
+          error "Expected an actor to be provided."
+          return item
+        end
+        item.owner_id = actor.l2id
+        task = ThreadPoolManager.schedule_general(ResetOwner.new(item), 15000)
+        item.item_loot_schedule = task
+      end
     end
 
     # if Config::DEBUG

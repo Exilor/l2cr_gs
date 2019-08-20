@@ -42,7 +42,7 @@ class EnumBitmask(T)
     enum_members.none? { |m| @bitmask & m.mask == 0 }
   end
 
-  def clone
+  def clone : self
     EnumBitmask(T).new(@bitmask)
   end
 end

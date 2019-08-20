@@ -1,4 +1,4 @@
-require "../../models/actor/instance/l2_boat_instance"
+require "../models/actor/instance/l2_boat_instance"
 
 module BoatManager
   extend self

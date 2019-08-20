@@ -41,34 +41,32 @@ module ClanHallManager
 
       FREE_CLAN_HALLS[id] = ch
 
-      if lease > 0
-        # if auc = AuctionManager.get_auction(id)
-        #   AuctionManager.init_npc(id)
-        # end
+      if lease > 0 && AuctionManager.get_auction(id)
+        AuctionManager.init_npc(id)
       end
     end
 
-    info "Loaded #{clan_halls.size} clan halls."
-    info "Loaded #{free_clan_halls.size} free clan halls."
+    info { "Loaded #{clan_halls.size} clan halls." }
+    info { "Loaded #{free_clan_halls.size} free clan halls." }
 
     @@loaded = true
   rescue e
     error e
   end
 
-  def clan_halls
+  def all_clan_halls : Hash(Int32, ClanHall)
     ALL_CLAN_HALLS
   end
 
-  def free_clan_halls
+  def free_clan_halls : Hash(Int32, AuctionableHall)
     FREE_CLAN_HALLS
   end
 
-  def clan_halls
+  def clan_halls : Hash(Int32, AuctionableHall)
     CLAN_HALLS
   end
 
-  def auctionable_clan_halls
+  def auctionable_clan_halls : Hash(Int32, AuctionableHall)
     ALL_AUCTIONABLE_CLAN_HALLS
   end
 
@@ -106,6 +104,14 @@ module ClanHallManager
 
   def get_clan_hall_by_id(id : Int32) : ClanHall?
     ALL_CLAN_HALLS[id]?
+  end
+
+  def get_clan_hall_by_id!(id : Int32) : ClanHall
+    unless ch = get_clan_hall_by_id(id)
+      raise "Clan hall with id #{id} not found"
+    end
+
+    ch
   end
 
   def get_auctionable_hall_by_id(id : Int32) : AuctionableHall?

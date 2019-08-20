@@ -200,15 +200,15 @@ class Olympiad < ListenersContainer
         ms = millis_to_validation_end
       end
 
-      info "#{ms / 60000} minutes until period ends."
+      info { "#{ms // 60000} minutes until period ends." }
 
       if @period == 0
         ms = millis_to_week_change
-        info "Next weekly change is in #{ms / 60000} minutes."
+        info { "Next weekly change is in #{ms // 60000} minutes." }
       end
     end
 
-    info "Loaded #{NOBLES.size} nobles."
+    info { "Loaded #{NOBLES.size} nobles." }
   end
 
   def load_nobles_rank
@@ -433,7 +433,7 @@ class Olympiad < ListenersContainer
     cal.second = 0
     @olympiad_end = Time.ms
 
-    next_change = Time.ms + @WEEKLY_PERIOD
+    @next_weekly_change = Time.ms + @WEEKLY_PERIOD
     schedule_weekly_change
   end
 
@@ -499,7 +499,7 @@ class Olympiad < ListenersContainer
 
       NOBLES.each_value do |info|
         points = info.get_i32(POINTS)
-        points + @WEEKLY_POINTS
+        points += @WEEKLY_POINTS
         info[POINTS] = points
       end
     end

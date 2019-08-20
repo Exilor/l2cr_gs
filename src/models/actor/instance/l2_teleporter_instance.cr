@@ -46,8 +46,12 @@ class L2TeleporterInstance < L2Npc
         return
       elsif condition == COND_OWNER
         min_privilege_level = 0
-        if !tokens.empty?
+        unless tokens.empty?
           min_privilege_level = tokens.shift.to_i
+        end
+
+        if min_privilege_level <= 10
+          do_teleport(pc, where_to)
         else
           pc.send_message("You don't have the sufficient access level to teleport there.")
         end
@@ -137,6 +141,7 @@ class L2TeleporterInstance < L2Npc
     elsif list.for_noble? && !pc.noble?
       file_name = "data/html/teleporter/nobleteleporter-no.htm"
       html = NpcHtmlMessage.new(l2id)
+      html.set_file(pc, file_name)
       html["%objectId%"] = l2id
       html["%npcname%"] = name
       pc.send_packet(html)

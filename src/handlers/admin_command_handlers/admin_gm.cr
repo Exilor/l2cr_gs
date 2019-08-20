@@ -7,7 +7,7 @@ module AdminCommandHandler::AdminGm
       AdminData.delete_gm(pc)
       pc.access_level = 0
       pc.send_message("You no longer have GM status.")
-      info "#{pc} turned his GM status off."
+      info { "#{pc} turned his GM status off." }
     end
 
     true

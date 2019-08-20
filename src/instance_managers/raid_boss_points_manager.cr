@@ -14,7 +14,7 @@ module RaidBossPointsManager
       values[boss_id] = points
     end
 
-    info "Loaded #{LIST.size} character raid points."
+    info { "Loaded #{LIST.size} character raid points." }
   rescue e
     error e
   end

@@ -69,7 +69,7 @@ module AnnouncementsTable
     DATA[id]?
   end
 
-  def all_announcements
+  def all_announcements : Enumerable(IAnnouncement)
     DATA.local_each_value
   end
 end

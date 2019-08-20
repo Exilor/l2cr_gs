@@ -22,7 +22,6 @@ class Scripts::FleeMonsters < AbstractNpcAI
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)
-    debug "on_attack(#{npc}, #{attacker}, #{damage}, #{is_summon})"
     npc.disable_core_ai(true)
     npc.set_running
 

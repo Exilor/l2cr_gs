@@ -1,4 +1,4 @@
-require "../../../models/buy_list/l2_buy_list"
+require "../../models/buy_list/l2_buy_list"
 
 module BuyListData
   extend self
@@ -17,7 +17,7 @@ module BuyListData
 
     load_from_db
 
-    info "Loaded #{BUY_LISTS.size} buy lists in #{timer.result} s."
+    info { "Loaded #{BUY_LISTS.size} buy lists in #{timer.result} s." }
   end
 
   private def load_from_db
@@ -28,11 +28,11 @@ module BuyListData
       count = rs.get_i64("count")
       next_restock_time = rs.get_i64("next_restock_time")
       unless buy_list = get_buy_list(list_id)
-        warn "BuyList with id #{list_id} found in database but not loaded from xml."
+        warn { "BuyList with id #{list_id} found in database but not loaded from xml." }
         next
       end
       unless product = buy_list.get_product_by_item_id(item_id)
-        warn "Item id #{item_id} found in database but not loaded from xml."
+        warn { "Item id #{item_id} found in database but not loaded from xml." }
         next
       end
 
@@ -65,7 +65,7 @@ module BuyListData
             pr = Product.new(buy_list.list_id, item, price, restock_delay, count)
             buy_list.add_product(pr)
           else
-            warn "Item with ID #{item_id} not found."
+            warn { "Item with ID #{item_id} not found." }
           end
         when "npcs"
           list_node.each_element do |npcs_node|

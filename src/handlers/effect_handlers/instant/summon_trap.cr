@@ -21,7 +21,7 @@ class EffectHandler::SummonTrap < AbstractEffect
     return if pc.in_observer_mode?
 
     if @npc_id <= 0
-      warn "Invalid NPC ID: #{@npc_id} in skill ID: #{info.skill.id}."
+      warn { "Invalid NPC ID: #{@npc_id} in skill ID: #{info.skill.id}." }
       return
     end
 
@@ -32,7 +32,7 @@ class EffectHandler::SummonTrap < AbstractEffect
     pc.trap.try &.unsummon
 
     unless templ = NpcData[@npc_id]?
-      warn "Invalid NPC ID: #{@npc_id} in skill ID: #{info.skill.id}."
+      warn { "Invalid NPC ID: #{@npc_id} in skill ID: #{info.skill.id}." }
       return
     end
 

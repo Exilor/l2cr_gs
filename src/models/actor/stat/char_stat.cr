@@ -21,8 +21,7 @@ class CharStat
 
   def calc_stat(stat : Stats, value : Number = 1.0, target : L2Character? = nil, skill : Skill? = nil) : Float64
     value = value.to_f64
-    id = stat.to_i
-    c = @active_char.calculators[id]
+    c = @active_char.calculators[stat.to_i]
     if c.nil? || c.size == 0
       return value
     end
@@ -35,12 +34,11 @@ class CharStat
     end
 
     value = c.calc(@active_char, target, skill, value)
-
     value <= 0 && stat.check_negative? ? 1.0 : value
   end
 
   def accuracy : Int32
-    calc_stat(ACCURACY_COMBAT, 0.0).round.to_i
+    calc_stat(ACCURACY_COMBAT, 0).round.to_i
   end
 
   def attack_speed_multiplier : Float32
@@ -418,7 +416,7 @@ class CharStat
     @defence_traits[type.to_i]
   end
 
-  def has_defence_trait?(type : TraitType)
+  def has_defence_trait?(type : TraitType) : Bool
     @defence_traits_count[type.to_i] > 0
   end
 

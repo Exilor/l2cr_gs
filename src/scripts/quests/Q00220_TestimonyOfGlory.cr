@@ -281,7 +281,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
             npc.script_value = 1
           end
         when 1
-          if !has_quest_items?(attacker, SCEPTER_OF_TANTOS) && npc.current_hp < (npc.max_hp / 3)
+          if !has_quest_items?(attacker, SCEPTER_OF_TANTOS) && npc.current_hp < npc.max_hp / 3
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::INDIGNANT_AND_UNFAIR_DEATH))
             npc.script_value = 2
           end

@@ -61,8 +61,8 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
 
     if !@bandit_stronghold.waiting_battle?
       html = get_htm(pc, "35437-09.html")
-      format = "%Y-%m-%d %H:%M:%S"
-      html = html.gsub("%nextSiege%", @bandit_stronghold.siege_date.time)
+      format = "%Y-%m-%d %H:%m:%S"
+      html = html.gsub("%nextSiege%", @bandit_stronghold.siege_date.time.to_s(format))
     elsif clan.nil? || clan.level < 4
       html = "35437-04.html"
     elsif !pc.clan_leader?

@@ -22,7 +22,7 @@ module ForumsBBSManager
 
   def init_root
     TABLE.each &.vload
-    info "Loaded #{TABLE.size} forums. Last forum id used: #{@@last_id}."
+    info { "Loaded #{TABLE.size} forums. Last forum id used: #{@@last_id}." }
   end
 
   def add_forum(f : Forum)

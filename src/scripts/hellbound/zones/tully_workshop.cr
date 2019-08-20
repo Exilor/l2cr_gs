@@ -671,8 +671,8 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           if actor.current_hp - transf_hp > 1
             actor.current_hp = actor.current_hp - transf_hp
             victim1.current_hp = victim1.current_hp + transf_hp
+          end
         end
-      end
 
         if rand(10000) > 3000 && victim2 && victim2.alive?
           if actor.current_hp - transf_hp > 1

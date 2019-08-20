@@ -1,5 +1,5 @@
 class L2FortDoormenInstance < L2DoormenInstance
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2FortDoormenInstance
   end
 

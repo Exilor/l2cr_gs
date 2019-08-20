@@ -288,7 +288,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 1, 1)
         else
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 1, 0)
-      end
+        end
       else
         # if not tamed, there is a small chance that have "mad cow" disease.
         # that is a stronger-than-normal animal that attacks its feeder

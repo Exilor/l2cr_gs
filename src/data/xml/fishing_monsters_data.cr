@@ -9,7 +9,7 @@ module FishingMonstersData
   def load
     DATA.clear
     parse_datapack_file("stats/fishing/fishingMonsters.xml")
-    info "Loaded #{DATA.size} fishing monsters."
+    info { "Loaded #{DATA.size} fishing monsters." }
   end
 
   private def parse_document(doc, file)

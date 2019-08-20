@@ -1,6 +1,7 @@
 module AdminCommandHandler::AdminEffects
   extend self
   extend AdminCommandHandler
+  include Packets::Outgoing
 
   def use_admin_command(command, pc)
     st = command.split
@@ -40,13 +41,36 @@ module AdminCommandHandler::AdminEffects
         target.broadcast_user_info
       end
     elsif command.starts_with?("admin_earthquake")
-      pc.send_message("admin_earthquake not implemented yet.")
+      begin
+        val1 = st.shift
+        intensity = val1.to_i
+        val2 = st.shift
+        duration = val2.to_i
+        eq = Earthquake.new(*pc.xyz, intensity, duration)
+        pc.broadcast_packet(eq)
+      rescue e
+        warn e
+        pc.send_message("Usage: //earthquake <intensity> <duration>")
+      end
     elsif command.starts_with?("admin_atmosphere")
-      pc.send_message("admin_atmosphere not implemented yet.")
+      begin
+        type = st.shift
+        state = st.shift
+        duration = st.shift.to_i
+        admin_atmosphere(type, state, duration, pc)
+      rescue e
+        warn e
+        pc.send_message("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>")
+      end
     elsif command == "admin_play_sounds"
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "songs/songs#{command.from(18)}.htm")
+      AdminHtml.show_admin_html(pc, "songs/songs#{command.from(18)}.htm")
     elsif command.starts_with?("admin_play_sound")
-      pc.send_message("admin_play_sound* is not implemented yet.")
+      begin
+        play_admin_sound(pc, command.from(17))
+      rescue e
+        pc.send_message("Usage: //play_sound <soundname>")
+        warn e
+      end
     elsif command == "admin_para_all"
       pc.known_list.each_character do |p|
         unless p.gm?
@@ -92,37 +116,191 @@ module AdminCommandHandler::AdminEffects
         player.stop_abnormal_visual_effect(true, AbnormalVisualEffect::BIG_HEAD)
       end
     elsif command.starts_with?("admin_gmspeed")
-      val = st.shift.to_i
-      send_message = pc.affected_by_skill?(7029)
-      pc.stop_skill_effects(val == 0 && send_message, 7029)
-      if val >= 1 && val <= 4
-        skill = SkillData[7029, val]
-        pc.do_simultaneous_cast(skill)
+      begin
+        val = st.shift.to_i
+        send_message = pc.affected_by_skill?(7029)
+        pc.stop_skill_effects(val == 0 && send_message, 7029)
+        if val >= 1 && val <= 4
+          skill = SkillData[7029, val]
+          pc.do_simultaneous_cast(skill)
+        end
+      rescue e
+        warn e
+        pc.send_message("Usage: //gmspeed <value> (0=off...4=max)")
       end
 
       if command.includes?("_menu")
         command = ""
-        AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
+        AdminHtml.show_admin_html(pc, "gm_menu.htm")
+      end
+    elsif command.starts_with?("admin_polyself")
+      begin
+        id = st.shift
+        pc.poly.set_poly_info("npc", id)
+        pc.tele_to_location(pc.location)
+        info1 = CharInfo.new(pc)
+        pc.broadcast_packet(info1)
+        info2 = UserInfo.new(pc)
+        pc.send_packet(info2)
+        pc.broadcast_packet(ExBrExtraUserInfo.new(pc))
+      rescue e
+        warn e
+        pc.send_message("Usage: //polyself <npcId>")
+      end
+    elsif command.starts_with?("admin_unpolyself")
+      pc.poly.set_poly_info(nil, "1")
+      pc.decay_me
+      pc.spawn_me(*pc.xyz)
+      info1 = CharInfo.new(pc)
+      pc.broadcast_packet(info1)
+      info2 = UserInfo.new(pc)
+      pc.send_packet(info2)
+      pc.broadcast_packet(ExBrExtraUserInfo.new(pc))
+    elsif command == "admin_clearteams"
+      begin
+        pc.known_list.known_players.each_value do |pl|
+          pl.team = Team::NONE
+          pl.broadcast_user_info
+        end
+      rescue e
+        warn e
+      end
+    elsif command.starts_with?("admin_setteam_close")
+      begin
+        val = st.shift
+        radius = 400
+        unless st.empty?
+          radius = st.shift.to_i
+        end
+        team = Team.parse(val)
+        pc.known_list.each_character(radius) do |char|
+          char.team = team
+        end
+      rescue e
+        warn e
+        pc.send_message("Usage: //setteam_close <none|blue|red> [radius]")
+      end
+    elsif command.starts_with?("admin_setteam")
+      begin
+        unless target = pc.target.as?(L2Character)
+          return false
+        end
+        team = Team.parse(st.shift)
+        target.team = team
+      rescue e
+        warn e
+        pc.send_message("Usage: //setteam <none|blue|red>")
+      end
+    elsif command.starts_with?("admin_social")
+      begin
+        obj = pc.target
+
+        if st.size == 2
+          social = st.shift.to_i
+          if target = st.shift?
+            if player = L2World.get_player(target)
+              if perform_social(social, player, pc)
+                pc.send_message("#{player.name} was affected by your command.")
+              end
+            else
+              begin
+                radius = target.to_i
+                pc.known_list.known_objects.each_value do |object|
+                  if pc.inside_radius?(object, radius, false, false)
+                    perform_social(social, object, pc)
+                  end
+                end
+                pc.send_message("#{radius} units radius affected by your command.")
+              rescue e
+                warn e
+                pc.send_message("Incorrect parameter.")
+              end
+            end
+          end
+        elsif st.size == 1
+          social = st.shift.to_i
+          obj ||= pc
+
+          if perform_social(social, obj, pc)
+            pc.send_message("#{obj.name} was affected by your command.")
+          end
+        elsif !command.includes?("menu")
+          pc.send_message("Usage: //social <social_id> [player_name|radius]")
+        end
+      rescue e
+        warn e
+      end
+    elsif command.starts_with?("admin_ave_abnormal", "admin_ave_special", "admin_ave_event")
+      if st.empty?
+        tmp = command.sub("admin_", "")
+        pc.send_message("Usage: //#{tmp} <AbnormalVisualEffect> [radius]")
+      else
+        param1 = st.shift
+        unless ave = AbnormalVisualEffect.parse?(param1)
+          return false
+        end
+        radius = 0
+        if st.size == 1
+          param2 = st.shift
+          if param2.num?
+            radius = param2.to_i
+          end
+        end
+
+        if radius > 0
+          pc.known_list.known_objects.each_value do |object|
+            if pc.inside_radius?(object, radius, false, false)
+              perform_abnormal_visual_effect(ave, object)
+            end
+          end
+
+          pc.send_message("Affected all characters in radius #{param2} by #{param1} abnormal visual effect.")
+        else
+          obj = pc.target || pc
+          if perform_abnormal_visual_effect(ave, obj)
+            pc.send_message("#{obj.name} affected by #{param1} abnormal visual effect.")
+          else
+            pc.send_packet(SystemMessageId::NOTHING_HAPPENED)
+          end
+        end
+      end
+    elsif command.starts_with?("admin_effect")
+      begin
+        obj = pc.target
+        level = hit_time = 1
+        skill = st.shift.to_i
+        unless st.empty?
+          level = st.shift.to_i
+        end
+        unless st.empty?
+          hit_time = st.shift.to_i
+        end
+        obj ||= pc
+        if obj.is_a?(L2Character)
+          msu = MagicSkillUse.new(obj, pc, skill, level, hit_time, 0)
+          obj.broadcast_packet(msu)
+          pc.send_message("#{obj.name} performed skill animation (id: #{skill}, level: #{level}) by your command")
+        else
+          pc.send_packet(SystemMessageId::INCORRECT_TARGET)
+        end
+      rescue e
+        warn e
+        pc.send_message("Usage: //effect skill [level | level hittime]")
+      end
+    elsif command.starts_with?("admin_set_displayeffect")
+      unless npc = pc.target.as?(L2Npc)
+        pc.send_packet(SystemMessageId::NOTHING_HAPPENED)
+        return false
       end
 
-    elsif command.starts_with?("admin_polyself")
-      warn %q(TODO: command.starts_with?("admin_polyself"))
-    elsif command.starts_with?("admin_unpolyself")
-      warn %q(TODO: command.starts_with?("admin_unpolyself"))
-    elsif command == "admin_clearteams"
-      warn %q(TODO: command == "admin_clearteams")
-    elsif command.starts_with?("admin_setteam_close")
-      warn %q(TODO: command.starts_with?("admin_setteam_close"))
-    elsif command.starts_with?("admin_setteam")
-      warn %q(TODO: command.starts_with?("admin_setteam"))
-    elsif command.starts_with?("admin_social")
-      warn %q(TODO: command.starts_with?("admin_social"))
-    elsif command.starts_with?("admin_ave_abnormal", "admin_ave_special", "admin_ave_event")
-      warn %q(TODO: command.starts_with?("admin_ave_abnormal", "admin_ave_special", "admin_ave_event"))
-    elsif command.starts_with?("admin_effect")
-      warn %q(TODO: command.starts_with?("admin_effect"))
-    elsif command.starts_with?("admin_set_displayeffect")
-      warn %q(TODO: command.starts_with?("admin_set_displayeffect"))
+      begin
+        type = st.shift
+        effect = type.to_i
+        npc.display_effect = effect
+      rescue e
+        warn e
+        pc.send_message("Usage: //set_displayeffect <id>")
+      end
     end
 
     if command.includes?("menu") || command.includes?("ave_")
@@ -130,6 +308,81 @@ module AdminCommandHandler::AdminEffects
     end
 
     true
+  end
+
+  private def perform_abnormal_visual_effect(ave, target)
+    if target.is_a?(L2Character)
+      if target.has_abnormal_visual_effect?(ave)
+        target.stop_abnormal_visual_effect(true, ave)
+      else
+        target.start_abnormal_visual_effect(true, ave)
+      end
+
+      return true
+    end
+
+    false
+  end
+
+  private def perform_social(action, target, pc)
+    begin
+      if target.is_a?(L2Character)
+        if target.is_a?(L2ChestInstance)
+          pc.send_packet(SystemMessageId::NOTHING_HAPPENED)
+          return false
+        end
+
+        if target.is_a?(L2Npc) && (action < 1 || action > 3)
+          pc.send_packet(SystemMessageId::NOTHING_HAPPENED)
+          return false
+        end
+
+        if target.is_a?(L2PcInstance) && (action < 2 || (action > 18 && action != SocialAction::LEVEL_UP))
+          pc.send_packet(SystemMessageId::NOTHING_HAPPENED)
+          return false
+        end
+
+        sa = SocialAction.new(target.l2id, action)
+        target.broadcast_packet(sa)
+      else
+        return false
+      end
+    rescue e
+      warn e
+    end
+
+    true
+  end
+
+  private def admin_atmosphere(type, state, duration, pc)
+    case type
+    when "signsky"
+      case state
+      when "dawn"
+        packet = SSQInfo.new(2)
+      when "dusk"
+        packet = SSQInfo.new(1)
+      end
+    when "sky"
+      case state
+      when "night"
+        packet = SunSet::STATIC_PACKET
+      when "day"
+        packet = SunRise::STATIC_PACKET
+      when "red"
+        if duration != 0
+          packet = ExRedSky.new(duration)
+        else
+          packet = ExRedSky.new(10)
+        end
+      end
+    else
+      pc.send_message("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>")
+    end
+
+    if packet
+      Broadcast.to_all_online_players(packet)
+    end
   end
 
   private def play_admin_sound(pc, sound)

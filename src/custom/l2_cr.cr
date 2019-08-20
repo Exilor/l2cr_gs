@@ -118,6 +118,20 @@ module L2Cr
         else
           puts "Valakas quest not found."
         end
+      when /gm\s\w+/
+        name = cmd.split.last
+
+        if pc = L2World.get_player(name)
+          if pc.gm?
+            pc.access_level = 0
+          else
+            pc.access_level = 8
+          end
+        else
+          puts "Player #{name.inspect} not found in game."
+          # sql = "UPDATE characters SET accesslevel=? WHERE char_name=?"
+          # GameDB.exec(sql, 8, name)
+        end
       else
         return "unknown command #{cmd.inspect}"
       end

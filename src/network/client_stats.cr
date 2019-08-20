@@ -29,7 +29,6 @@ class ClientStats
   getter packet_count_start_tick = 0i64
   getter packets_in_second
 
-
   def initialize
     @buffer_size = Config.client_packet_queue_measure_interval
     @packets_in_second = Slice(Int32).new(@buffer_size)
@@ -63,11 +62,11 @@ class ClientStats
     end
 
     if count < Config.client_packet_queue_max_burst_size
-      false
-    else
-      @total_bursts += 1
-      true
+      return false
     end
+
+    @total_bursts += 1
+    true
   end
 
   def count_queue_overflow : Bool
@@ -85,7 +84,7 @@ class ClientStats
     @overflows_in_min > Config.client_packet_queue_max_overflows_per_min
   end
 
-  def count_underflow_exception
+  def count_underflow_exception : Bool
     @total_underflow_exceptions += 1
 
     tick = Time.ms
@@ -99,11 +98,11 @@ class ClientStats
     @underflow_reads_in_min > Config.client_packet_queue_max_underflows_per_min
   end
 
-  def count_floods
+  def count_floods : Bool
     @floods_in_min > Config.client_packet_queue_max_floods_per_min
   end
 
-  def long_flood_detected
+  def long_flood_detected : Bool
     @total_count / @buffer_size > Config.client_packet_queue_max_average_packets_per_second
   end
 
@@ -118,7 +117,7 @@ class ClientStats
     end
   end
 
-  def count_packet
+  def count_packet : Bool
     sync do
       @total_count += 1
       tick = Time.ms

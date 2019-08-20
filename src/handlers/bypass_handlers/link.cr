@@ -6,12 +6,12 @@ module BypassHandler::Link
     html_path = command.from(4).strip
 
     if html_path.empty?
-      warn "#{pc} sent an empty html link bypass request."
+      warn { "#{pc} sent an empty html link bypass request." }
       return false
     end
 
     if html_path.includes?("..")
-      warn "#{pc} sent an invalid html link bypass request."
+      warn { "#{pc} sent an invalid html link bypass request." }
       return false
     end
 

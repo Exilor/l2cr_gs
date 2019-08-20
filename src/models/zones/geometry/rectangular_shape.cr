@@ -1,4 +1,4 @@
-abstract class RectangularShape
+abstract struct RectangularShape
   abstract def x : Int32
   abstract def y : Int32
   abstract def z : Int32
@@ -7,31 +7,32 @@ abstract class RectangularShape
   abstract def empty? : Bool
   # abstract def set_frame :
 
-  def min_x
+  def min_x : Int32
     x
   end
 
-  def min_y
+  def min_y : Int32
     y
   end
 
-  def max_x
+  def max_x : Int32
     x + width
   end
 
-  def max_y
+  def max_y : Int32
     y + height
   end
 
-  def center_x
+  def center_x : Float64
     (x + width) / 2.0
   end
 
-  def center_y
+  def center_y : Float64
     (y + height) / 2.0
   end
 
-  def frame
+  # Unused. Would prevent this hierarchy from being a struct.
+  def frame : Rectangle2D
     Rectangle2D.new(x, y, width, height)
   end
 end

@@ -245,7 +245,8 @@ class L2AttackableAI < L2CharacterAI
   # protected so that the FearTask can call it.
   protected def on_event_afraid(effector : L2Character, start : Bool)
     if @fear_time > 0 && @fear_task.nil?
-      @fear_task = ThreadPoolManager.schedule_ai_at_fixed_rate(FearTask.new(self, effector, start), 0, FEAR_TICKS * 1000)
+      task = FearTask.new(self, effector, start)
+      @fear_task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 0, FEAR_TICKS * 1000)
       @actor.start_abnormal_visual_effect(true, {AbnormalVisualEffect::TURN_FLEE})
     else
       super

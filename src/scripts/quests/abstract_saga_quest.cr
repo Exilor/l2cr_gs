@@ -76,7 +76,7 @@ abstract class AbstractSagaQuest < Quest
         archon.add_damage_hate(st2.player, 0, 99999)
         archon.set_intention(AI::ATTACK, st2.player, nil)
       else
-        st2.give_items(@items[3], Rnd.rand(1, 4))
+        st2.give_items(@items[3], Rnd.rand(1..4))
       end
     end
   end
@@ -84,7 +84,7 @@ abstract class AbstractSagaQuest < Quest
   def on_adv_event(event, npc, pc)
     pc = pc.not_nil!
     npc = npc.not_nil!
-    htmltext = nil
+    html = nil
 
     unless st = get_quest_state(pc, false)
       return
@@ -92,25 +92,25 @@ abstract class AbstractSagaQuest < Quest
 
     case event
     when "0-011.htm", "0-012.htm", "0-013.htm", "0-014.htm", "0-015.htm"
-      htmltext = event
+      html = event
     when "accept"
       st.start_quest
       give_items(pc, @items[10], 1)
-      htmltext = "0-03.htm"
+      html = "0-03.htm"
     when "0-1"
       if pc.level < 76
-        htmltext = "0-02.htm"
+        html = "0-02.htm"
         if st.created?
           st.exit_quest(true)
         end
       else
-        htmltext = "0-05.htm"
+        html = "0-05.htm"
       end
     when "0-2"
       if pc.level < 76
         take_items(pc, @items[10], -1)
         st.set_cond(20, true)
-        htmltext = "0-08.htm"
+        html = "0-08.htm"
       else
         take_items(pc, @items[10], -1)
         add_exp_and_sp(pc, 2299404, 0)
@@ -125,11 +125,11 @@ abstract class AbstractSagaQuest < Quest
         pc.broadcast_user_info
         cast(npc, pc, 4339, 1)
         st.exit_quest(false)
-        htmltext = "0-07.htm"
+        html = "0-07.htm"
       end
     when "1-3"
       st.set_cond(3)
-      htmltext = "1-05.htm"
+      html = "1-05.htm"
     when "1-4"
       st.set_cond(4)
       take_items(pc, @items[0], 1)
@@ -137,34 +137,34 @@ abstract class AbstractSagaQuest < Quest
         take_items(pc, @items[11], 1)
       end
       give_items(pc, @items[1], 1)
-      htmltext = "1-06.htm"
+      html = "1-06.htm"
     when "2-1"
       st.set_cond(2)
-      htmltext = "2-05.htm"
+      html = "2-05.htm"
     when "2-2"
       st.set_cond(5)
       take_items(pc, @items[1], 1)
       give_items(pc, @items[4], 1)
-      htmltext = "2-06.htm"
+      html = "2-06.htm"
     when "3-5"
-      htmltext = "3-07.htm"
+      html = "3-07.htm"
     when "3-6"
       st.set_cond(11)
-      htmltext = "3-02.htm"
+      html = "3-02.htm"
     when "3-7"
       st.set_cond(12)
-      htmltext = "3-03.htm"
+      html = "3-03.htm"
     when "3-8"
       st.set_cond(13)
       take_items(pc, @items[2], 1)
       give_items(pc, @items[7], 1)
-      htmltext = "3-08.htm"
+      html = "3-08.htm"
     when "4-1"
-      htmltext = "4-010.htm"
+      html = "4-010.htm"
     when "4-2"
       give_items(pc, @items[9], 1)
       st.set_cond(18, true)
-      htmltext = "4-011.htm"
+      html = "4-011.htm"
     when "4-3"
       give_items(pc, @items[9], 1)
       st.set_cond(18, true)
@@ -177,43 +177,43 @@ abstract class AbstractSagaQuest < Quest
       st.set_cond(6, true)
       take_items(pc, @items[4], 1)
       cast(npc, pc, 4546, 1)
-      htmltext = "5-02.htm"
+      html = "5-02.htm"
     when "6-1"
       st.set_cond(8, true)
       st.set("spawned", "0")
       take_items(pc, @items[5], 1)
       cast(npc, pc, 4546, 1)
-      htmltext = "6-03.htm"
+      html = "6-03.htm"
     when "7-1"
       if st.get_int("spawned") == 1
-        htmltext = "7-03.htm"
+        html = "7-03.htm"
       elsif st.get_int("spawned") == 0
         mob1 = add_spawn(@mob[0], @npc_spawn_locations[0], false, 0)
         st.set("spawned", "1")
         st.start_quest_timer("Mob_1 Timer 1", 500, mob1)
         st.start_quest_timer("Mob_1 has despawned", 300000, mob1)
         add_spawn(st, mob1)
-        htmltext = "7-02.htm"
+        html = "7-02.htm"
       else
-        htmltext = "7-04.htm"
+        html = "7-04.htm"
       end
     when "7-2"
       st.set_cond(10, true)
       take_items(pc, @items[6], 1)
       cast(npc, pc, 4546, 1)
-      htmltext = "7-06.htm"
+      html = "7-06.htm"
     when "8-1"
       st.set_cond(14, true)
       take_items(pc, @items[7], 1)
       cast(npc, pc, 4546, 1)
-      htmltext = "8-02.htm"
+      html = "8-02.htm"
     when "9-1"
       st.set_cond(17, true)
       st.set("Quest0", "0")
       st.set("Tab", "0")
       take_items(pc, @items[8], 1)
       cast(npc, pc, 4546, 1)
-      htmltext = "9-03.htm"
+      html = "9-03.htm"
     when "10-1"
       if st.get_int("Quest0") == 0
         mob3 = add_spawn(@mob[2], @npc_spawn_locations[1], false, 0)
@@ -227,20 +227,20 @@ abstract class AbstractSagaQuest < Quest
         st.start_quest_timer("Mob_3 has despawned", 59000, mob3)
         st.start_quest_timer("Mob_2 Timer 1", 500, mob2)
         st.start_quest_timer("Mob_2 has despawned", 60000, mob2)
-        htmltext = "10-02.htm"
+        html = "10-02.htm"
       elsif st.get_int("Quest1") == 45
-        htmltext = "10-03.htm"
+        html = "10-03.htm"
       else
-        htmltext = "10-04.htm"
+        html = "10-04.htm"
       end
     when "10-2"
       st.set_cond(19, true)
       take_items(pc, @items[9], 1)
       cast(npc, pc, 4546, 1)
-      htmltext = "10-06.htm"
+      html = "10-06.htm"
     when "11-9"
       st.set_cond(15)
-      htmltext = "11-03.htm"
+      html = "11-03.htm"
     when "Mob_1 Timer 1"
       auto_chat(npc, @text[0].sub("PLAYERNAME", pc.name))
       return
@@ -308,7 +308,7 @@ abstract class AbstractSagaQuest < Quest
       return
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, pc, damage, is_summon)
@@ -345,7 +345,7 @@ abstract class AbstractSagaQuest < Quest
   end
 
   def on_first_talk(npc, pc)
-    htmltext = ""
+    html = ""
     st = get_quest_state(pc, false)
     npc_id = npc.id
     if st
@@ -359,35 +359,36 @@ abstract class AbstractSagaQuest < Quest
             if st == st2
               if tab == 1
                 if quest0 == 0
-                  htmltext = "4-04.htm"
+                  html = "4-04.htm"
                 elsif quest0 == 1
-                  htmltext = "4-06.htm"
+                  html = "4-06.htm"
                 end
               elsif quest0 == 0
-                htmltext = "4-01.htm"
+                html = "4-01.htm"
               elsif quest0 == 1
-                htmltext = "4-03.htm"
+                html = "4-03.htm"
               end
             elsif tab == 1
               if quest0 == 0
-                htmltext = "4-05.htm"
+                html = "4-05.htm"
               elsif quest0 == 1
-                htmltext = "4-07.htm"
+                html = "4-07.htm"
               end
             elsif quest0 == 0
-              htmltext = "4-02.htm"
+              html = "4-02.htm"
             end
           end
         elsif cond == 18
-          htmltext = "4-08.htm"
+          html = "4-08.htm"
         end
       end
     end
-    if htmltext == ""
+
+    if html.empty?
       npc.show_chat_window(pc)
     end
 
-    htmltext
+    html
   end
 
   def on_kill(npc, pc, is_summon)
@@ -532,125 +533,125 @@ abstract class AbstractSagaQuest < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
+    html = get_no_quest_msg(pc)
     st = get_quest_state!(pc)
     npc_id = npc.id
     if npc_id == @npc[0] && st.completed?
-      htmltext = get_already_completed_msg(pc)
+      html = get_already_completed_msg(pc)
     elsif pc.class_id.to_i == get_prev_class(pc)
       case st.cond
       when 0 # check it's not really -1!
         if npc_id == @npc[0]
-          htmltext = "0-01.htm"
+          html = "0-01.htm"
         end
       when 1
         if npc_id == @npc[0]
-          htmltext = "0-04.htm"
+          html = "0-04.htm"
         elsif npc_id == @npc[2]
-          htmltext = "2-01.htm"
+          html = "2-01.htm"
         end
       when 2
         if npc_id == @npc[2]
-          htmltext = "2-02.htm"
+          html = "2-02.htm"
         elsif npc_id == @npc[1]
-          htmltext = "1-01.htm"
+          html = "1-01.htm"
         end
       when 3
         if npc_id == @npc[1] && has_quest_items?(pc, @items[0])
           if @items[11] == 0 || has_quest_items?(pc, @items[11])
-            htmltext = "1-03.htm"
+            html = "1-03.htm"
           else
-            htmltext = "1-02.htm"
+            html = "1-02.htm"
           end
         end
       when 4
         if npc_id == @npc[1]
-          htmltext = "1-04.htm"
+          html = "1-04.htm"
         elsif npc_id == @npc[2]
-          htmltext = "2-03.htm"
+          html = "2-03.htm"
         end
       when 5
         if npc_id == @npc[2]
-          htmltext = "2-04.htm"
+          html = "2-04.htm"
         elsif npc_id == @npc[5]
-          htmltext = "5-01.htm"
+          html = "5-01.htm"
         end
       when 6
         if npc_id == @npc[5]
-          htmltext = "5-03.htm"
+          html = "5-03.htm"
         elsif npc_id == @npc[6]
-          htmltext = "6-01.htm"
+          html = "6-01.htm"
         end
       when 7
         if npc_id == @npc[6]
-          htmltext = "6-02.htm"
+          html = "6-02.htm"
         end
       when 8
         if npc_id == @npc[6]
-          htmltext = "6-04.htm"
+          html = "6-04.htm"
         elsif npc_id == @npc[7]
-          htmltext = "7-01.htm"
+          html = "7-01.htm"
         end
       when 9
         if npc_id == @npc[7]
-          htmltext = "7-05.htm"
+          html = "7-05.htm"
         end
       when 10
         if npc_id == @npc[7]
-          htmltext = "7-07.htm"
+          html = "7-07.htm"
         elsif npc_id == @npc[3]
-          htmltext = "3-01.htm"
+          html = "3-01.htm"
         end
       when 11, 12
         if npc_id == @npc[3]
           if has_quest_items?(pc, @items[2])
-            htmltext = "3-05.htm"
+            html = "3-05.htm"
           else
-            htmltext = "3-04.htm"
+            html = "3-04.htm"
           end
         end
       when 13
         if npc_id == @npc[3]
-          htmltext = "3-06.htm"
+          html = "3-06.htm"
         elsif npc_id == @npc[8]
-          htmltext = "8-01.htm"
+          html = "8-01.htm"
         end
       when 14
         if npc_id == @npc[8]
-          htmltext = "8-03.htm"
+          html = "8-03.htm"
         elsif npc_id == @npc[11]
-          htmltext = "11-01.htm"
+          html = "11-01.htm"
         end
       when 15
         if npc_id == @npc[11]
-          htmltext = "11-02.htm"
+          html = "11-02.htm"
         elsif npc_id == @npc[9]
-          htmltext = "9-01.htm"
+          html = "9-01.htm"
         end
       when 16
         if npc_id == @npc[9]
-          htmltext = "9-02.htm"
+          html = "9-02.htm"
         end
       when 17
         if npc_id == @npc[9]
-          htmltext = "9-04.htm"
+          html = "9-04.htm"
         elsif npc_id == @npc[10]
-          htmltext = "10-01.htm"
+          html = "10-01.htm"
         end
       when 18
         if npc_id == @npc[10]
-          htmltext = "10-05.htm"
+          html = "10-05.htm"
         end
       when 19
         if npc_id == @npc[10]
-          htmltext = "10-07.htm"
+          html = "10-07.htm"
         elsif npc_id == @npc[0]
-          htmltext = "0-06.htm"
+          html = "0-06.htm"
         end
       when 20
         if npc_id == @npc[0]
           if pc.level >= 76
-            htmltext = "0-09.htm"
+            html = "0-09.htm"
             if get_class_id(pc) < 131 || get_class_id(pc) > 135 # in Kamael quests, npc wants to chat for a bit before changing class
               st.exit_quest(false)
               add_exp_and_sp(pc, 2299404, 0)
@@ -666,13 +667,13 @@ abstract class AbstractSagaQuest < Quest
               cast(npc, pc, 4339, 1)
             end
           else
-            htmltext = "0-010.htm"
+            html = "0-010.htm"
           end
         end
       end
     end
 
-    htmltext
+    html
   end
 
   def register_npcs

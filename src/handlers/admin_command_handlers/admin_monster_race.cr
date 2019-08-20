@@ -1,4 +1,4 @@
-require "../../../monster_race"
+require "../../monster_race"
 
 module AdminCommandHandler::AdminMonsterRace
   extend self
@@ -44,20 +44,16 @@ module AdminCommandHandler::AdminMonsterRace
       MonsterRace.new_race
       MonsterRace.new_speeds
       spk = Packets::Outgoing::MonRaceInfo.new(codes[@@state][0], codes[@@state][1], MonsterRace.monsters, MonsterRace.speeds)
-      pc.send_packet(spk) # redundant?
       pc.broadcast_packet(spk)
     when 0
       @@state += 1
       sm = SystemMessageId::MONSRACE_RACE_START
       pc.send_packet(sm)
       srace = Music::S_RACE.packet
-      pc.send_packet(srace)
       pc.broadcast_packet(srace)
       srace2 = Sound::ITEMSOUND2_RACE_START.packet
-      pc.send_packet(srace2)
       pc.broadcast_packet(srace2)
       spk = Packets::Outgoing::MonRaceInfo.new(codes[@@state][0], codes[@@state][1], MonsterRace.monsters, MonsterRace.speeds)
-      pc.send_packet(spk)
       pc.broadcast_packet(spk)
 
       ThreadPoolManager.schedule_general(RunRace.new(codes, pc), 5000)
@@ -70,7 +66,6 @@ module AdminCommandHandler::AdminMonsterRace
     initializer codes: Array(Array(Int32)), pc: L2PcInstance
 
     def run
-      state = AdminMonsterRace.state
       spk = Packets::Outgoing::MonRaceInfo.new(@codes[2][0], @codes[2][1], MonsterRace.monsters, MonsterRace.speeds)
       @pc.send_packet(spk)
       @pc.broadcast_packet(spk)

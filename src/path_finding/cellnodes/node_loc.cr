@@ -1,9 +1,9 @@
 class NodeLoc < AbstractNodeLoc
   def initialize(@x : Int32, @y : Int32, z : Int32)
-    @go_north = GeoData.check_nearest_nswe(x, y, z, Cell::NSWE_NORTH)
-    @go_east  = GeoData.check_nearest_nswe(x, y, z, Cell::NSWE_EAST)
-    @go_south = GeoData.check_nearest_nswe(x, y, z, Cell::NSWE_SOUTH)
-    @go_west  = GeoData.check_nearest_nswe(x, y, z, Cell::NSWE_WEST)
+    @go_north = GeoData.check_nearest_nswe(x, y, z, NSWE::NORTH)
+    @go_east  = GeoData.check_nearest_nswe(x, y, z, NSWE::EAST)
+    @go_south = GeoData.check_nearest_nswe(x, y, z, NSWE::SOUTH)
+    @go_west  = GeoData.check_nearest_nswe(x, y, z, NSWE::WEST)
     @geo_height = GeoData.get_nearest_z(x, y, z)
   end
 

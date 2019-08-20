@@ -16,8 +16,8 @@ require "../../enums/teleport_where_type"
 require "../stats/calculator"
 require "../stats/formulas"
 require "../char_effect_list"
-require "../../skills/skill_channelized"
-require "../../skills/skill_channelizer"
+require "../skills/skill_channelized"
+require "../skills/skill_channelizer"
 require "./instance/l2_raid_boss_instance"
 
 abstract class L2Character < L2Object
@@ -45,6 +45,7 @@ abstract class L2Character < L2Object
   @move : L2Character::MoveData?
   @skill_cast_2 : Runnable::DelayedTask?
   @attack_by_list : Set(L2Character)?
+
   getter title : String = ""
   getter cast_interrupt_time = 0i64
   getter skills = Hash(Int32, Skill).new
@@ -493,10 +494,10 @@ abstract class L2Character < L2Object
 
     if stamp < Time.ms
       temp.delete(hash)
-      false
-    else
-      true
+      return false
     end
+
+    true
   end
 
   def disable_all_skills
@@ -3995,8 +3996,14 @@ abstract class L2Character < L2Object
     @debugger.try &.send_packet(gsp)
   end
 
+  def send_debug_message(&block : -> String)
+    if tmp = @debugger
+      tmp.send_message(yield)
+    end
+  end
+
   def send_debug_message(msg : String)
-    @debugger.try &.send_message(msg)
+    send_debug_message { msg }
   end
 
   # custom methods

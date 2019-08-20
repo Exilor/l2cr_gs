@@ -1,4 +1,4 @@
-require "./cell"
+require "./nswe"
 
 module GeoUtils
   extend self
@@ -6,25 +6,25 @@ module GeoUtils
   def compute_nswe(last_x : Int32, last_y : Int32, x : Int32, y : Int32) : Int32
     if x > last_x
 			if y > last_y
-				Cell::NSWE_SOUTH_EAST
+				NSWE::SOUTH_EAST
       elsif y < last_y
-				Cell::NSWE_NORTH_EAST
+				NSWE::NORTH_EAST
 			else
-				Cell::NSWE_EAST
+				NSWE::EAST
 			end
     elsif x < last_x
 			if y > last_y
-				Cell::NSWE_SOUTH_WEST
+				NSWE::SOUTH_WEST
       elsif y < last_y
-				Cell::NSWE_NORTH_WEST
+				NSWE::NORTH_WEST
 			else
-				Cell::NSWE_WEST
+				NSWE::WEST
 			end
 		else
 			if y > last_y
-				Cell::NSWE_SOUTH
+				NSWE::SOUTH
       elsif y < last_y
-				Cell::NSWE_NORTH
+				NSWE::NORTH
 			else
 				raise "something wrong with GeoUtils.compute_nswe"
 			end
@@ -61,27 +61,27 @@ module GeoUtils
 
         exsp = exsp.not_nil!
 				# north arrow
-				col = get_direction_color(gx, gy, z, Cell::NSWE_NORTH)
+				col = get_direction_color(gx, gy, z, NSWE::NORTH)
 				exsp.add_line(col, x - 1, y - 7, z, x + 1, y - 7, z)
 				exsp.add_line(col, x - 2, y - 6, z, x + 2, y - 6, z)
 				exsp.add_line(col, x - 3, y - 5, z, x + 3, y - 5, z)
 				exsp.add_line(col, x - 4, y - 4, z, x + 4, y - 4, z)
 
 				# east arrow
-				col = get_direction_color(gx, gy, z, Cell::NSWE_EAST)
+				col = get_direction_color(gx, gy, z, NSWE::EAST)
 				exsp.add_line(col, x + 7, y - 1, z, x + 7, y + 1, z)
 				exsp.add_line(col, x + 6, y - 2, z, x + 6, y + 2, z)
 				exsp.add_line(col, x + 5, y - 3, z, x + 5, y + 3, z)
 				exsp.add_line(col, x + 4, y - 4, z, x + 4, y + 4, z)
 
 				# south arrow
-				col = get_direction_color(gx, gy, z, Cell::NSWE_SOUTH)
+				col = get_direction_color(gx, gy, z, NSWE::SOUTH)
 				exsp.add_line(col, x - 1, y + 7, z, x + 1, y + 7, z)
 				exsp.add_line(col, x - 2, y + 6, z, x + 2, y + 6, z)
 				exsp.add_line(col, x - 3, y + 5, z, x + 3, y + 5, z)
 				exsp.add_line(col, x - 4, y + 4, z, x + 4, y + 4, z)
 
-				col = get_direction_color(gx, gy, z, Cell::NSWE_WEST)
+				col = get_direction_color(gx, gy, z, NSWE::WEST)
 				exsp.add_line(col, x - 7, y - 1, z, x - 7, y + 1, z)
 				exsp.add_line(col, x - 6, y - 2, z, x - 6, y + 2, z)
 				exsp.add_line(col, x - 5, y - 3, z, x - 5, y + 3, z)

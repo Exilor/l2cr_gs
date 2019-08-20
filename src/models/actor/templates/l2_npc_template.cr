@@ -144,7 +144,7 @@ class L2NpcTemplate < L2CharTemplate
     @teach_info.includes?(class_id.level == 3 ? class_id.parent : class_id)
   end
 
-  def clans
+  def clans : Enumerable(Int32)
     @clans || Slice(Int32).empty
   end
 

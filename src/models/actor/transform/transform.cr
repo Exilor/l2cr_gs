@@ -129,7 +129,7 @@ class Transform
     end
 
     template.skills.each do |holder|
-      if skill = holder.skill
+      if skill = holder.skill?
         unless SkillTreesData.skill_allowed?(pc, skill)
           pc.remove_skill(skill, false, skill.passive?)
         end
@@ -137,9 +137,11 @@ class Transform
     end
 
     template.additional_skills.each do |holder|
-      if skill = holder.skill
-        if pc.level >= holder.min_level && !SkillTreesData.skill_allowed?(pc, skill)
-          pc.remove_skill(skill, false, skill.passive?)
+      if skill = holder.skill?
+        if pc.level >= holder.min_level
+          unless SkillTreesData.skill_allowed?(pc, skill)
+            pc.remove_skill(skill, false, skill.passive?)
+          end
         end
       end
     end

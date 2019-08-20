@@ -1,9 +1,6 @@
 struct EnchantSkillGroup
   struct EnchantSkillHolder
-    getter level : Int32
-    getter sp_cost : Int32
-    getter exp_cost : Int32
-    getter adena_cost : Int32
+    getter level : Int32, sp_cost : Int32, exp_cost : Int32, adena_cost : Int32
 
     def initialize(set : StatsSet)
       @level = set.get_i32("level")
@@ -18,7 +15,7 @@ struct EnchantSkillGroup
     end
   end
 
-  getter enchant_group_details = Array(EnchantSkillHolder).new
+  getter enchant_group_details = [] of EnchantSkillHolder
 
   getter_initializer id: Int32
 

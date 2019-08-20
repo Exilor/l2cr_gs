@@ -593,7 +593,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
           end
 
           tie = true
-      end
+        end
 
         @team_one_size.downto(0) do |i|
           par = @team_one[i]

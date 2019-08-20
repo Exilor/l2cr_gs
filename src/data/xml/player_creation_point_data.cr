@@ -1,4 +1,4 @@
-require "../../../enums/class_id"
+require "../../enums/class_id"
 
 module PlayerCreationPointData
   extend self
@@ -9,7 +9,7 @@ module PlayerCreationPointData
   def load
     DATA.clear
     parse_datapack_file("stats/chars/pcCreationPoints.xml")
-    info "Loaded #{DATA.size} character creation locations."
+    info { "Loaded #{DATA.size} character creation locations." }
   end
 
   def get_creation_point(class_id : ClassId) : Location

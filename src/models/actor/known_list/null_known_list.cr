@@ -21,5 +21,13 @@ class NullKnownList < ObjectKnownList
     false
   end
 
-  INSTANCE = allocate # what will hapen with the uninitialized @active_char?
+  def known_objects : Hash(Int32, L2Object)
+    raise "#known_objects not supported for NullKnownList"
+  end
+
+  def active_object : L2Object
+    raise "#active_object not supported for NullKnownList"
+  end
+
+  INSTANCE = allocate
 end

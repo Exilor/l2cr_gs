@@ -1,6 +1,5 @@
 module ThreadPoolManager
   extend self
-  extend Loggable
 
   def schedule_effect(task, delay) : Runnable::DelayedTask
     schedule_delayed(task, delay)
@@ -35,54 +34,28 @@ module ThreadPoolManager
   end
 
   def execute_packet(task)
-    execute_task(task)
+    schedule(task)
   end
 
   def execute_io_packet(task)
-    execute_task(task)
+    schedule(task)
   end
 
   def execute_general(task)
-    execute_task(task)
+    schedule(task)
   end
 
   def execute_ai(task)
-    execute_task(task)
+    schedule(task)
   end
 
   def execute_event(task)
-    execute_task(task)
+    schedule(task)
   end
 
-  #
+  private POOL = RunnableExecutor.new
 
-  # private def execute_task(task : Proc)
-  #   execute_task(Runnable::RunnableProc.new(&task))
-  # end
-
-  # private def execute_task(task : Runnable)
-  #   task.start
-  # end
-
-  # private def schedule_delayed(task : Proc, delay)
-  #   schedule_delayed(Runnable::RunnableProc.new(&task), delay)
-  # end
-
-  # private def schedule_delayed(task : Runnable, delay)
-  #   task.mstart(delay)
-  # end
-
-  # private def schedule_periodic(task : Proc, delay, interval)
-  #   schedule_periodic(Runnable::RunnableProc.new(&task), delay, interval)
-  # end
-
-  # private def schedule_periodic(task : Runnable, delay, interval)
-  #   task.mstart(delay, interval)
-  # end
-
-  POOL = RunnableExecutor.new
-
-  private def execute_task(task)
+  private def schedule(task)
     POOL.schedule(task)
   end
 

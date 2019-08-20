@@ -2,8 +2,6 @@ require "./l2_char_template"
 require "../../location"
 
 class L2PcTemplate < L2CharTemplate
-  getter class_id : ClassId
-
   @base_hp : Slice(Float32)
   @base_mp : Slice(Float32)
   @base_cp : Slice(Float32)
@@ -16,6 +14,7 @@ class L2PcTemplate < L2CharTemplate
 
   @base_slot_def : Hash(Int32, Int32)
 
+  getter class_id : ClassId
   getter f_collision_radius_female : Float64
   getter f_collision_height_female : Float64
 

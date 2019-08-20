@@ -27,7 +27,7 @@ module ItemHandler::BeastSpiritShot
     skills = item.template.skills
 
     if skills.nil? || skills.empty?
-      warn "#{item.template} has no skills."
+      warn { "#{item.template} has no skills." }
       return false
     end
 

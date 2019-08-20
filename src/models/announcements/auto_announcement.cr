@@ -6,11 +6,11 @@ class AutoAnnouncement < Announcement
   private INSERT_QUERY = "INSERT INTO announcements (`type`, `content`, `author`, `initial`, `delay`, `repeat`) VALUES (?, ?, ?, ?, ?, ?)"
   private UPDATE_QUERY = "UPDATE announcements SET `type` = ?, `content` = ?, `author` = ?, `initial` = ?, `delay` = ?, `repeat` = ? WHERE id = ?"
 
+  @task : Runnable::DelayedTask?
+  @current_state = 0
   property initial : Int64
   property delay : Int64
   property repeat : Int32 = -1
-  @task : Runnable::DelayedTask?
-  @current_state = 0
 
   def initialize(@type : AnnouncementType, @content : String, @author : String, @initial : Int64, @delay : Int64, @repeat : Int32)
     super(type, content, author)
@@ -49,6 +49,7 @@ class AutoAnnouncement < Announcement
 
   def update_me : Bool
     GameDB.exec(
+      UPDATE_QUERY,
       type.to_i,
       content,
       author,
@@ -65,7 +66,12 @@ class AutoAnnouncement < Announcement
   end
 
   def delete_me
-    cancel
+    if task = @task
+      unless task.cancelled?
+        task.cancel
+      end
+    end
+
     super
   end
 

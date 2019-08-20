@@ -5,8 +5,6 @@ module AdminCommandHandler::AdminHtml
   def use_admin_command(command, pc)
     tokens = command.split
 
-    # debug tokens
-
     case tokens.shift?
     when "admin_html"
       if tokens.empty?

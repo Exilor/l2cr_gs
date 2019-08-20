@@ -35,6 +35,8 @@ class Packets::Incoming::AuthResponse < LoginServerPacket
       ss.add(Outgoing::ServerStatus::SERVER_AGE, Outgoing::ServerStatus::SERVER_AGE_ALL)
     end
 
+    LoginServerClient.server_name = @server_name
+
     client.send_packet(ss)
 
     info "Attached with LoginServer."

@@ -82,7 +82,7 @@ module ItemsOnGroundManager
       end
     end
 
-    info "Loaded #{total} dropped items in #{timer.result} s."
+    info { "Loaded #{total} dropped items in #{timer} s." }
 
     if Config.empty_dropped_item_table_after_load
       empty_table
@@ -121,7 +121,6 @@ module ItemsOnGroundManager
       end
 
       timer = Timer.new
-      Broadcast.to_all_online_players_on_screen("Saving dropped items...")
       debug "Saving..."
 
       sql = "INSERT INTO itemsonground(object_id,item_id,count,enchant_level,x,y,z,drop_time,equipable) VALUES(?,?,?,?,?,?,?,?,?)"
@@ -147,8 +146,6 @@ module ItemsOnGroundManager
       rescue e
         error e
       end
-
-      Broadcast.to_all_online_players_on_screen("Dropped items saved in #{timer.result} s.")
 
       debug "Saved #{ITEMS.size} items in #{timer.result} s."
     end

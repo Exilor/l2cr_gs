@@ -8,12 +8,12 @@ class TransformTemplate
   getter additional_skills = [] of AdditionalSkillHolder
   getter additional_items = [] of AdditionalItemHolder
 
-  property basic_action_list : Packets::Outgoing::ExBasicActionList?
-
   @base_defense = {} of Int32 => Int32
   @base_stats = {} of Int32 => Float64
   @base_speed = {} of Int32 => Float64
   @data = {} of Int32 => TransformLevelData
+
+  property basic_action_list : Packets::Outgoing::ExBasicActionList?
 
   def initialize(set : StatsSet)
     @collision_radius   = set.get_f64("radius", 0)

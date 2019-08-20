@@ -145,7 +145,7 @@ class Scripts::Q00458_PerfectForm < Quest
           st.set("overhitsTotal", (st.get_int("overhitsTotal") + 1).to_s) # memo_stateEx 1
           max_hp = mob.max_hp
           # L2Attackable#calculateOverhitExp way of calculating overhit % seems illogical
-          overhit_percentage = (max_hp + mob.overhit_damage) / max_hp
+          overhit_percentage = (max_hp + mob.overhit_damage) // max_hp
           if overhit_percentage >= 1.2
             st.set("overhitsCritical", (st.get_int("overhitsCritical") + 1).to_s) # memo_stateEx 2
           end

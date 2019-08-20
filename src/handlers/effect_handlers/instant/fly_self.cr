@@ -21,10 +21,9 @@ class EffectHandler::FlySelf < AbstractEffect
     dy = effected.y.to_f - cury
     dz = effected.z.to_f - curz
 
-    # distance = Math.sqrt((dx * dx) + (dy * dy))
     distance = Math.hypot(dx, dy)
     if distance > 2000
-      warn "Charge distance is too large: #{distance}."
+      warn { "Charge distance is too large: #{distance}." }
       return
     end
 

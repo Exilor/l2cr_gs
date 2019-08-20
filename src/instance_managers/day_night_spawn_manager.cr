@@ -23,7 +23,7 @@ module DayNightSpawnManager
   end
 
   private def spawn_creatures(unspawn : Array(L2Spawn), do_spawn : Array(L2Spawn), unspawn_info : String, spawn_info : String)
-    if !unspawn.empty?
+    unless unspawn.empty?
       i = 0
       unspawn.each do |s|
         s.stop_respawn
@@ -33,7 +33,7 @@ module DayNightSpawnManager
         end
       end
 
-      info "Removed #{i} #{unspawn_info} creatures."
+      info { "Removed #{i} #{unspawn_info} creatures." }
     end
 
     i = 0
@@ -42,13 +42,13 @@ module DayNightSpawnManager
       s.do_spawn
       i += 1
     end
-    info "Spawned #{i} #{spawn_info} creatures."
+    info { "Spawned #{i} #{spawn_info} creatures." }
   rescue e
     error e
   end
 
   # custom: should be private but i want to call it from SendBypassBuildCmd
-  def change_mode(mode : Int32)
+  def change_mode(mode : Int32) # just use a bool?
     return if NIGHT_CREATURES.empty? && DAY_CREATURES.empty? && BOSSES.empty?
 
     case mode
@@ -59,7 +59,7 @@ module DayNightSpawnManager
       spawn_night_creatures
       special_night_boss(1)
     else
-      error "Wrong mode #{mode.inspect}."
+      error { "Wrong mode #{mode}." }
     end
   end
 

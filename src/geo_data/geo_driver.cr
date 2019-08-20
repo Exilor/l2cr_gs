@@ -35,13 +35,13 @@ struct GeoDriver
 
   private def check_geo_x(x : Int32)
     if x < 0 || x >= GEO_CELLS_X
-      raise ArgumentError.new("Invalid geo x #{x}")
+      raise IndexError.new("Invalid geo x #{x}")
     end
   end
 
   private def check_geo_y(y : Int32)
     if y < 0 || y >= GEO_CELLS_Y
-      raise ArgumentError.new("Invalid geo y #{y}")
+      raise IndexError.new("Invalid geo y #{y}")
     end
   end
 
@@ -49,7 +49,7 @@ struct GeoDriver
     check_geo_x(x)
     check_geo_y(y)
 
-    @regions[(((x / IRegion::REGION_CELLS_X) * GEO_REGIONS_Y) + (y / IRegion::REGION_CELLS_Y))]
+    @regions[((x // IRegion::REGION_CELLS_X) * GEO_REGIONS_Y) + (y // IRegion::REGION_CELLS_Y)]
   end
 
   # Using the file IO to create the region is much slower.
@@ -57,7 +57,7 @@ struct GeoDriver
     if File.exists?(path)
       offset = (x * GEO_REGIONS_Y) + y
       File.open(path) do |f|
-        size = File.info(path).size.to_u32
+        size = f.size
         slice = GC.malloc_atomic(size).as(UInt8*).to_slice(size)
         f.read_fully(slice)
         io = IO::Memory.new(slice)
@@ -68,7 +68,7 @@ struct GeoDriver
 
   def unload_region(x : Int32, y : Int32)
     offset = (x * GEO_REGIONS_Y) + y
-    @regions[offset] = NullRegion.as(IRegion)
+    @regions[offset] = NullRegion
   end
 
   def has_geo_pos?(x : Int32, y : Int32) : Bool
@@ -92,19 +92,19 @@ struct GeoDriver
   end
 
   def get_geo_x(x : Int32) : Int32
-    unless WORLD_MIN_X <= x <= WORLD_MAX_X
+    unless x.between?(WORLD_MIN_X, WORLD_MAX_X)
       raise ArgumentError.new("x coord #{x} outside of world bounds")
     end
 
-    (x - WORLD_MIN_X) / 16
+    (x - WORLD_MIN_X) // 16
   end
 
   def get_geo_y(y : Int32) : Int32
-    unless WORLD_MIN_Y <= y <= WORLD_MAX_Y
+    unless y.between?(WORLD_MIN_Y, WORLD_MAX_Y)
       raise ArgumentError.new("y coord #{y} outside of world bounds")
     end
 
-    (y - WORLD_MIN_Y) / 16
+    (y - WORLD_MIN_Y) // 16
   end
 
   def get_world_x(x : Int32) : Int32

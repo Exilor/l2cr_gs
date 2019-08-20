@@ -1,4 +1,4 @@
-require "../../../instance_managers/airship_manager"
+require "../../instance_managers/airship_manager"
 
 class Scripts::AirShipGludioGracia < AbstractNpcAI
   include Runnable

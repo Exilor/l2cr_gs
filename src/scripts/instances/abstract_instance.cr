@@ -154,7 +154,7 @@ abstract class AbstractInstance < AbstractNpcAI
   end
 
   private def spawn_group(group_name : String, instance_id : Int32) : Array(L2Npc)
-    InstanceManager.get_instance(instance_id).spawn_group(group_name)
+    InstanceManager.get_instance!(instance_id).spawn_group(group_name).not_nil!
   end
 
   private def set_reenter_time(world : InstanceWorld, time : Int64)

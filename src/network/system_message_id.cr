@@ -6,7 +6,7 @@ class SystemMessageId
   property static_system_message : Packets::Outgoing::SystemMessage?
 
   private def initialize(@id : Int32)
-    MAP[id] = self # cache messages created at runtime or not?
+    MAP[id] = self
   end
 
   private def initialize(@name : String, @id : Int32)
@@ -14,7 +14,6 @@ class SystemMessageId
     MAP[id] = self
   end
 
-  # Only SystemMessage and ConfirmDlg call this method.
   def self.get_system_message_id(id : Int32) : self
     MAP.fetch(id) { new(id) }
   end
@@ -994,7 +993,7 @@ class SystemMessageId
   HUNGRY_STRIDER_NOT_MOUNT = new("HUNGRY_STRIDER_NOT_MOUNT", 1008)
   STRIDER_CANT_BE_RIDDEN_WHILE_DEAD = new("STRIDER_CANT_BE_RIDDEN_WHILE_DEAD", 1009)
   DEAD_STRIDER_CANT_BE_RIDDEN = new("DEAD_STRIDER_CANT_BE_RIDDEN", 1010)
-  STRIDER_IN_BATLLE_CANT_BE_RIDDEN = new("STRIDER_IN_BATLLE_CANT_BE_RIDDEN", 1011)
+  STRIDER_IN_BATTLE_CANT_BE_RIDDEN = new("STRIDER_IN_BATTLE_CANT_BE_RIDDEN", 1011)
   STRIDER_CANT_BE_RIDDEN_WHILE_IN_BATTLE = new("STRIDER_CANT_BE_RIDDEN_WHILE_IN_BATTLE", 1012)
   STRIDER_CAN_BE_RIDDEN_ONLY_WHILE_STANDING = new("STRIDER_CAN_BE_RIDDEN_ONLY_WHILE_STANDING", 1013)
   PET_EARNED_S1_EXP = new("PET_EARNED_S1_EXP", 1014)

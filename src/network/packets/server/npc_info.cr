@@ -112,7 +112,6 @@ class Packets::Outgoing::NpcInfo < Packets::Outgoing::AbstractNpcInfo
 
     ave = @npc.abnormal_visual_effects
     ave |= AbnormalVisualEffect::STEALTH.mask if @npc.invisible?
-    # d ave > Integer::I32_MAX ? -1 : ave
     d ave
 
     d @clan_id

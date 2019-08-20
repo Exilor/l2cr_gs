@@ -9,7 +9,6 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
   # Misc
   private MIN_LEVEL = 81
   # Variables
-  @kill_count = 0
   private I_QUEST1 = "I_QUEST1"
   # Monster
   private CREATURE_OF_THE_DUSK1 = 27422
@@ -112,8 +111,14 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
           st.set_cond(4, true)
         end
       else
-        @kill_count += 1
-        if @kill_count == 2
+        kill_count = st.get_int("kill_count")
+        if kill_count < 0
+          kill_count = 1
+        else
+          kill_count += 1
+        end
+        st.set("kill_count", kill_count.to_s)
+        if kill_count == 2
           st.memo_state = 6
           st.set_cond(6)
         end

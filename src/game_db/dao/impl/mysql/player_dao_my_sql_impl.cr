@@ -61,9 +61,13 @@ module GameDB
         pc.fists_weapon_item = pc.find_fists_weapon_item(active_class_id)
         pc.uptime = time
 
-        pc.current_cp = rs.get_f64("curCp")
-        pc.current_hp = rs.get_f64("curHp")
-        pc.current_mp = rs.get_f64("curMp")
+        current_cp = rs.get_f64("curCp")
+        current_hp = rs.get_f64("curHp")
+        current_mp = rs.get_f64("curMp")
+        pc.current_cp = current_cp
+        pc.current_hp = current_hp
+        pc.current_mp = current_mp
+        pc.original_cp_hp_mp = {current_cp, current_hp, current_mp}
         pc.class_index = 0
         pc.base_class = rs.get_u8("base_class").to_i32
 
@@ -174,7 +178,7 @@ module GameDB
         pc.newbie,
         pc.noble? ? 1 : 0,
         0, # power grade, long
-        Time.from_ms(pc.create_date.ms)# new Timestamp(pc.getCreateDate.getTimeInMillis))
+        pc.create_date.time
       )
 
       true
@@ -242,7 +246,7 @@ module GameDB
         pc.lang,
         pc.l2id
       )
-      info "#{pc.name}'s basic data saved."
+      info { "#{pc.name}'s basic data saved." }
     rescue e
       error e
     end

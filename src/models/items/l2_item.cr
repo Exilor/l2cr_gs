@@ -52,6 +52,8 @@ abstract class L2Item < ListenersContainer
   @item_id : Int32
   @pre_conditions : Array(Condition)?
   @func_templates : Array(FuncTemplate)?
+  @unequip_skill : SkillHolder?
+  @skill_holder : Array(SkillHolder)?
   getter display_id : Int32
   getter name : String
   getter icon : String?
@@ -91,8 +93,6 @@ abstract class L2Item < ListenersContainer
   getter? has_immediate_effect : Bool
   getter? has_ex_immediate_effect : Bool
   getter? oly_restricted_item : Bool
-  setter skill_holder : Array(SkillHolder)?
-  property unequip_skill : SkillHolder?
 
   def initialize(set)
     @item_id = set.get_i32("item_id")
@@ -147,7 +147,7 @@ abstract class L2Item < ListenersContainer
         level = skill_split[1].to_i
         skill_holder << SkillHolder.new(id, level)
       end
-      @skill_holder = skill_holder
+      @skill_holder = skill_holder.trim
     end
 
     skills = set.get_string("unequip_skill", nil)

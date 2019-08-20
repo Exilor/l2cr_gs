@@ -3,7 +3,7 @@ class L2SignsPriestInstance < L2Npc
     InstanceType::L2SignsPriestInstance
   end
 
-  def on_bypass_feedback(pc, command)
+  def on_bypass_feedback(pc : L2PcInstance, command : String)
     last_npc = pc.last_folk_npc
     if last_npc.nil? || last_npc.l2id != l2id
       return

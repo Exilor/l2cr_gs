@@ -5,7 +5,7 @@ class EffectHandler::DefenceTrait < AbstractEffect
     super
 
     if params.empty?
-      warn "Params of #{self.class} must not be empty"
+      warn { "Params of #{self.class} must not be empty" }
       return
     end
 

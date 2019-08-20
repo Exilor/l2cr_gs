@@ -121,14 +121,12 @@ class Skill
     end
 
     @abnormal_time = abnormal_time
-
     @abnormal_instant = set.get_bool("abnormalInstant", false)
 
     parse_abnormal_visual_effect(set.get_string("abnormalVisualEffect", nil))
 
     @stay_after_death = set.get_bool("stayAfterDeath", false)
     @stay_on_subclass_change = set.get_bool("stayOnSubclassChange", true)
-
     @hit_time = set.get_i32("hitTime", 0)
     @cool_time = set.get_i32("coolTime", 0)
     @debuff = set.get_bool("isDebuff", false)
@@ -150,16 +148,15 @@ class Skill
       @ride_state = ride_state
     end
 
-    tmp = set.get_string("affectLimit", nil)
-    if tmp.nil?
-      @affect_limit = {0, 0}
-    else
+    if tmp = set.get_string("affectLimit", nil)
       begin
         v1, v2 = tmp.split('-')
       rescue e
         raise "Invalid affectLimit value #{tmp.inspect} for skill id #{@id}"
       end
       @affect_limit = {v1.to_i, v2.to_i}
+    else
+      @affect_limit = {0, 0}
     end
 
     @target_type = set.get_enum("targetType", L2TargetType, L2TargetType::SELF)
@@ -169,32 +166,22 @@ class Skill
     @activate_rate = set.get_i32("activateRate", -1)
     @min_chance = set.get_i32("minChance", Config.min_abnormal_state_success_rate)
     @max_chance = set.get_i32("maxChance", Config.max_abnormal_state_success_rate)
-
     @next_action_is_attack = set.get_bool("nextActionAttack", false)
-
     @blocked_in_olympiad = set.get_bool("blockedInOlympiad", false)
-
     @attribute_type = set.get_enum("attributeType", AttributeType, AttributeType::NONE)
     @attribute_power = set.get_i32("attributePower", 0)
-
     @basic_property = set.get_enum("basicProperty", BaseStats, BaseStats::NONE)
-
     @overhit = set.get_bool("overHit", false)
     @suicide_attack = set.get_bool("isSuicideAttack", false)
-
     @min_pledge_class = set.get_i32("minPledgeClass", 0)
     @charge_consume = set.get_i32("chargeConsume", 0)
-
     @max_soul_consume_count = set.get_i32("soulMaxConsumeCount", 0)
-
     @direct_hp_dmg = set.get_bool("dmgDirectlyToHp", false)
     @effect_point = set.get_i32("effectPoint", 0)
     @irreplaceable_buff = set.get_bool("irreplaceableBuff", false)
     @excluded_from_check = set.get_bool("excludedFromCheck", false)
     @simultaneous_cast = set.get_bool("simultaneousCast", false)
-
     @icon = set.get_string("icon", "icon.skill0000")
-
     @channeling_skill_id = set.get_i32("channelingSkillId", 0)
     @channeling_tick_interval = set.get_i32("channelingTickInterval", 2) * 1000
     @channeling_tick_initial_delay = set.get_i32("channelingTickInitialDelay", @channeling_tick_interval / 1000) * 1000
@@ -202,9 +189,8 @@ class Skill
     if tmp = set.get_string("capsuled_items_skill", nil)
       if tmp.empty?
         raise "Empty capsuled items."
-      else
-        @extractable_items = parse_extractable_skill(@id, @level, tmp)
       end
+      @extractable_items = parse_extractable_skill(@id, @level, tmp)
     end
   end
 
@@ -654,6 +640,7 @@ class Skill
     end
 
     if effected.invul_against?(id, level)
+      effected.send_debug_message { "Skill #{to_s} has been ignored (invul against)" }
       return
     end
 

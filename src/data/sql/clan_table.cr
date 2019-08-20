@@ -40,10 +40,6 @@ module ClanTable
     CLANS.size
   end
 
-  def each_clan(&block : L2Clan ->)
-    CLANS.each_value { |clan| yield clan }
-  end
-
   def create_clan(pc : L2PcInstance, clan_name : String)
     return unless pc
 
@@ -127,9 +123,9 @@ module ClanTable
         ClanHallSiegeManager.conquerable_halls.each_value &.remove_attacker(clan)
       end
 
-      # if auction = AuctionManager.get_auction(clan.auction_bidded_at)
-      #   auction.cancel_bid(clan_id)
-      # end
+      if auction = AuctionManager.get_auction(clan.auction_bidded_at)
+        auction.cancel_bid(clan_id)
+      end
 
       if leader_member = clan.leader?
         clan.warehouse.destroy_all_items("ClanRemove", clan.leader.player_instance, nil)
@@ -246,7 +242,7 @@ module ClanTable
     end
   end
 
-  def get_clan_allies(ally_id : Int32) : Enumerable(L2Clan)
+  def get_clan_allies(ally_id : Int32) : Array(L2Clan)
     ret = [] of L2Clan
 
     get_clan_allies(ally_id) do |clan|
@@ -254,8 +250,6 @@ module ClanTable
     end
 
     ret
-
-    # CLANS.local_each_value.select { |clan| clan.ally_id == ally_id }.to_slice
   end
 
   def store_clan_score
@@ -264,13 +258,13 @@ module ClanTable
 
   def check_surrender(clan1 : L2Clan, clan2 : L2Clan)
     count = 0
-    clan.members.each do |pc|
-      if pc.player_instance.wants_peace == 1
+    clan.each_online_member do |pc|
+      if pc.wants_peace == 1
         count += 1
       end
     end
 
-    if count == clan1.members.size - 1
+    if count == clan1.members_count - 1
       clan1.delete_enemy_clan(clan2)
       clan2.delete_enemy_clan(clan1)
       delete_clans_wars(clan1.id, clan2.id)

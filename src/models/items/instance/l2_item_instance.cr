@@ -128,9 +128,7 @@ class L2ItemInstance < L2Object
       self.world_region = nil
     end
 
-    item_id = id()
-
-    if MercTicketManager.get_ticket_castle_id(item_id) > 0
+    if MercTicketManager.get_ticket_castle_id(id) > 0
       MercTicketManager.remove_ticket(self)
       ItemsOnGroundManager.remove_object(self)
     end

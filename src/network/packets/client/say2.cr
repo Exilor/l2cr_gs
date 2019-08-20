@@ -102,17 +102,17 @@ class Packets::Incoming::Say2 < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    debug "[#{CHAT_NAMES[@type]}] #{pc.name}: #{@text}"
+    debug { "[#{CHAT_NAMES[@type]}] #{pc.name}: #{@text}" }
 
     if @type < 0 || @type >= CHAT_NAMES.size
-      warn "Invalid pc type #{@type} from #{pc.name.inspect}."
+      warn { "Invalid pc type #{@type} from #{pc.name.inspect}." }
       pc.action_failed
       pc.logout
       return
     end
 
     if @text.empty?
-      warn "#{pc.name.inspect} sent an empty chat message."
+      warn { "#{pc.name.inspect} sent an empty chat message." }
       pc.action_failed
       pc.logout
       return
@@ -126,14 +126,30 @@ class Packets::Incoming::Say2 < GameClientPacket
       end
     end
 
-    # bot check
+    if Config.l2walker_protection && @type == TELL && check_bot(@text)
+      Util.punish(pc, "using L2Walker")
+      return
+    end
 
     if pc.cursed_weapon_equipped? && (@type == TRADE || @type == SHOUT)
       pc.send_packet(SystemMessageId::SHOUT_AND_TRADE_CHAT_CANNOT_BE_USED_WHILE_POSSESSING_CURSED_WEAPON)
       return
     end
 
-    # chat ban
+    if pc.chat_banned? && @text[0] != '.'
+      if pc.effect_list.get_first_effect(L2EffectType::CHAT_BLOCK)
+        pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REPORTED_SO_CHATTING_NOT_ALLOWED)
+      else
+        Config.ban_chat_channels.each do |chat_id|
+          if @type == chat_id
+            pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)
+            break
+          end
+        end
+      end
+
+      return
+    end
 
     if pc.jailed? && Config.jail_disable_chat
       if @type == TELL || @type == SHOUT || @type == TRADE || @type == HERO_VOICE
@@ -169,12 +185,12 @@ class Packets::Incoming::Say2 < GameClientPacket
     if handler = ChatHandler[@type]
       handler.handle_chat(@type, pc, @target, @text)
     else
-      warn "No handler registered for chat type #{@type} (player: #{pc.name})."
+      warn { "No handler registered for chat type #{@type} (player: #{pc.name})." }
     end
   end
 
   private def check_bot(text)
-    WALKER_COMMAND_LIST.any? { |cmd| text.start_with?(cmd) }
+    WALKER_COMMAND_LIST.any? { |cmd| text.starts_with?(cmd) }
   end
 
   private def check_text
@@ -202,18 +218,18 @@ class Packets::Incoming::Say2 < GameClientPacket
 
       if item.is_a?(L2ItemInstance)
         unless pc.inventory.get_item_by_l2id(id)
-          warn "#{pc.name} tried to publish an item he doesn't own (ID: #{id})."
+          warn { "#{pc.name} tried to publish an item he doesn't own (ID: #{id})." }
           return false
         end
 
         item.publish
       else
-        warn "#{pc.name} tried to publish an object that is not an item: #{item}:#{item.class}."
+        warn { "#{pc.name} tried to publish an object that is not an item: #{item}:#{item.class}." }
         return false
       end
 
       unless pos1 = @text.index("\b", pos)
-        warn "#{pc.name} sent an invalid publish item message (ID: #{id})."
+        warn { "#{pc.name} sent an invalid publish item message (ID: #{id})." }
         return false
       end
       pos1 += 1

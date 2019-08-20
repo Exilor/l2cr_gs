@@ -84,8 +84,7 @@ class AuctionableHall < ClanHall
 
       if time > @paid_until + @ch_rate
         if ClanHallManager.loaded?
-          warn "TODO: AuctionManager."
-          # AuctionManager.init_npc(id)
+          AuctionManager.init_npc(id)
           ClanHallManager.set_free(id)
           clan.broadcast_to_online_members(SystemMessage.the_clan_hall_fee_is_one_week_overdue_therefore_the_clan_hall_ownership_has_been_revoked)
         else

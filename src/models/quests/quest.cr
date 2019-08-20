@@ -5,13 +5,13 @@ require "./state"
 class Quest < AbstractScript
   # include Identifiable
 
-  private DEFAULT_NO_QUEST_MSG = "<html><body>You are either not on a quest that involves this NPC, or you don't meet this NPC's minimum quest requirements.</body></html>"
+  private DEFAULT_NO_QUEST_MSG          = "<html><body>You are either not on a quest that involves this NPC, or you don't meet this NPC's minimum quest requirements.</body></html>"
   private DEFAULT_ALREADY_COMPLETED_MSG = "<html><body>This quest has already been completed.</body></html>"
 
-  private QUEST_DELETE_FROM_CHAR_QUERY = "DELETE FROM character_quests WHERE charId=? AND name=?"
+  private QUEST_DELETE_FROM_CHAR_QUERY                      = "DELETE FROM character_quests WHERE charId=? AND name=?"
   private QUEST_DELETE_FROM_CHAR_QUERY_NON_REPEATABLE_QUERY = "DELETE FROM character_quests WHERE charId=? AND name=? AND var!=?"
 
-  private RESET_HOUR = 6
+  private RESET_HOUR    =  6
   private RESET_MINUTES = 30
 
   @rw_lock = Mutex.new # should be a "reentrant read write lock"
@@ -128,7 +128,7 @@ class Quest < AbstractScript
 
   def notify_attack(npc, attacker, damage, is_summon, skill)
     res = on_attack(npc, attacker, damage, is_summon, skill) ||
-    on_attack(npc, attacker, damage, is_summon)
+          on_attack(npc, attacker, damage, is_summon)
   rescue e
     show_error(attacker, e)
   else
@@ -607,42 +607,44 @@ class Quest < AbstractScript
   end
 
   def self.player_enter(pc : L2PcInstance)
-    invalid_quest_data = "DELETE FROM character_quests WHERE charId = ? AND name = ?"
-    invalid_quest_data_var = "DELETE FROM character_quests WHERE charId = ? AND name = ? AND var = ?"
-    ps1 = "SELECT name, value FROM character_quests WHERE charId = ? AND var = ?"
-
     begin
-      GameDB.each(ps1, pc.l2id, "<state>") do |rs|
-        quest_id = rs.get_string("name")
+      sql = "SELECT name, value FROM character_quests WHERE charId = ? AND var = ?"
+      GameDB.each(sql, pc.l2id, "<state>") do |rs|
+        id = rs.get_string("name")
         state_name = rs.get_string("value")
-        q = QuestManager.get_quest(quest_id)
-        unless q
-          warn "Missing quest #{quest_id.inspect} for player #{pc.name}."
+
+        unless q = QuestManager.get_quest(id)
+          warn { "Missing quest #{id.inspect} for player #{pc.name}." }
           if Config.autodelete_invalid_quest_data
-            warn "Deleting invalid quest data for #{quest_id.inspect}."
-            GameDB.exec(invalid_quest_data, pc.l2id, quest_id)
+            warn "Deleting invalid quest data for #{id.inspect}."
+            sql = "DELETE FROM character_quests WHERE charId = ? AND name = ?"
+            GameDB.exec(sql, pc.l2id, id)
           end
+
           next
         end
+
         QuestState.new(q, pc, State[state_name])
       end
     rescue e
       error e
     end
 
-    ps2 = "SELECT name, var, value FROM character_quests WHERE charId = ? AND var <> ?"
     begin
-      GameDB.each(ps2, pc.l2id, "<state>") do |rs|
-        quest_id = rs.get_string("name")
+      sql = "SELECT name, var, value FROM character_quests WHERE charId = ? AND var <> ?"
+      GameDB.each(sql, pc.l2id, "<state>") do |rs|
+        id = rs.get_string("name")
         var = rs.get_string("var")
         value = rs.get_string("value")
-        qs = pc.get_quest_state(quest_id)
-        unless qs
-          warn "Missing variable #{var.inspect} in quest #{quest_id.inspect} for player #{pc.name}."
+
+        unless qs = pc.get_quest_state(id)
+          warn { "Missing variable #{var.inspect} in quest #{id.inspect} for player #{pc.name}." }
           if Config.autodelete_invalid_quest_data
-            warn "Deleting invalid quest var #{var.inspect} for quest #{quest_id.inspect}."
-            GameDB.exec(invalid_quest_data_var, pc.l2id, quest_id, var)
+            warn { "Deleting invalid variable #{var.inspect} for quest #{id.inspect}." }
+            sql = "DELETE FROM character_quests WHERE charId = ? AND name = ? AND var = ?"
+            GameDB.exec(sql, pc.l2id, id, var)
           end
+
           next
         end
         qs.set_internal(var, value)
@@ -693,8 +695,6 @@ class Quest < AbstractScript
   end
 
   def self.create_quest_var_in_db(qs : QuestState, var : String, value : String)
-    # debug "#create_quest_var_in_db #{qs}, #{var}, #{value}"
-
     sql = "INSERT INTO character_quests (charId,name,var,value) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE value=?"
     GameDB.exec(sql, qs.player.l2id, qs.quest_name, var, value, value)
   rescue e
@@ -702,8 +702,6 @@ class Quest < AbstractScript
   end
 
   def self.update_quest_var_in_db(qs : QuestState, var : String, value : String)
-    # debug "#update_quest_var_in_db #{qs}, #{var}, #{value}"
-
     sql = "UPDATE character_quests SET value=? WHERE charId=? AND name=? AND var = ?"
     GameDB.exec(sql, value, qs.player.l2id, qs.quest_name, var)
   rescue e
@@ -711,8 +709,6 @@ class Quest < AbstractScript
   end
 
   def self.delete_quest_var_in_db(qs : QuestState, var : String)
-    # debug "#delete_quest_var_in_db #{qs}, #{var}"
-
     sql = "DELETE FROM character_quests WHERE charId=? AND name=? AND var=?"
     GameDB.exec(sql, qs.player.l2id, qs.quest_name, var)
   rescue e
@@ -720,8 +716,6 @@ class Quest < AbstractScript
   end
 
   def self.delete_quest_in_db(qs : QuestState, repeatable : Bool)
-    # debug "#delete_quest_in_db #{qs}, #{repeatable}"
-
     if repeatable
       sql = QUEST_DELETE_FROM_CHAR_QUERY
       GameDB.exec(sql, qs.player.l2id, qs.quest_name)
@@ -1036,7 +1030,7 @@ class Quest < AbstractScript
       set_player_login_id { |e| notify_enter_world(e.active_char) }
     else
       listeners.safe_each do |l|
-        if l.type.on_player_login?
+        if l.type == EventType::ON_PLAYER_LOGIN#.on_player_login?
           l.unregister_me
         end
       end
@@ -1051,10 +1045,12 @@ class Quest < AbstractScript
 
   def can_start_quest?(pc : L2PcInstance) : Bool
     return true unless conds = @start_condition
-    conds.each_key do |cond|
-      return false unless cond.call(pc)
-    end
-    true
+    # conds.each_key do |cond|
+    #   return false unless cond.call(pc)
+    # end
+    # true
+
+    conds.local_each_key.all? &.call(pc)
   end
 
   def get_start_condition_html(pc : L2PcInstance)
@@ -1147,15 +1143,14 @@ class Quest < AbstractScript
       return
     end
 
-    candidates = [] of L2PcInstance
     target = pc.target || pc
 
     party.members.select do |m|
       temp = m.get_quest_state(name)
       temp &&
-      temp.get(var) &&
-      temp.get(var).not_nil!.casecmp?(value) &&
-      m.inside_radius?(target, 1500, true, false)
+        temp.get(var) &&
+        temp.get(var).not_nil!.casecmp?(value) &&
+        m.inside_radius?(target, 1500, true, false)
     end
     .sample(random: Rnd)
   end
@@ -1207,8 +1202,10 @@ class Quest < AbstractScript
 
     party.members.each do |m|
       temp = m.get_quest_state(name)
-      if temp && temp.state == state && m.inside_radius?(target, 1500, true, false)
-        candidates < m
+      if temp && temp.state == state
+        if m.inside_radius?(target, 1500, true, false)
+          candidates << m
+        end
       end
     end
 

@@ -14,22 +14,31 @@ class Packets::Incoming::TradeRequest < GameClientPacket
       return
     end
 
-    # check bot penalty buff
+    info = pc.effect_list.get_buff_info_by_abnormal_type(AbnormalType::BOT_PENALTY)
+    if info
+      info.effects.each do |effect|
+        unless effect.check_condition(BotReportTable::TRADE_ACTION_BLOCK_ID)
+          pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED)
+          pc.action_failed
+          return
+        end
+      end
+    end
 
     unless target = L2World.find_object(@id)
-      info "L2Object with ID #{@id} not found in L2World."
+      debug { "L2Object with ID #{@id} not found in L2World." }
       return
     end
 
     partner = target.acting_player
 
     unless pc.known_list.knows_object?(target)
-      "#{target.name} isn't known by #{pc.name}."
+      debug { "#{target.name} isn't known by #{pc.name}." }
       return
     end
 
     if target.instance_id != pc.instance_id && pc.instance_id != -1
-      "#{target.name} is not in the same instance as #{pc.name}."
+      debug { "#{target.name} is not in the same instance as #{pc.name}." }
       return
     end
 
@@ -50,14 +59,14 @@ class Packets::Incoming::TradeRequest < GameClientPacket
 
     info = pc.effect_list.get_buff_info_by_abnormal_type(AbnormalType::BOT_PENALTY)
     if info
-      warn "TODO: BotReportTable"
-      # info.effects.each do |effect|
-      #   unless effect.check_condition(BotReportTable::TRADE_ACTION_BLOCK_ID)
-      #     pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED)
-      #     action_failed
-      #     return
-      #   end
-      # end
+      info.effects.each do |effect|
+        unless effect.check_condition(BotReportTable::TRADE_ACTION_BLOCK_ID)
+          sm = SystemMessage.c1_reported_and_is_being_investigated
+          sm.add_char_name(partner)
+          pc.send_packet(sm)
+          pc.action_failed
+        end
+      end
     end
 
     if !Config.alt_game_karma_player_can_trade && partner.karma > 0

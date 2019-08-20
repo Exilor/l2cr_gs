@@ -12,7 +12,7 @@ class TaskBirthday < Task
 
   def on_time_elapsed(task : ExecutedTask)
     gift_count = give_birthday_gifts(task.last_activation)
-    info "#{gift_count} gifts sent."
+    info { "#{gift_count} gifts sent." }
   end
 
   private def give_birthday_gifts(last_activation : Int64) : Int32

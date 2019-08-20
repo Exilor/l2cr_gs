@@ -82,9 +82,6 @@ module AdminCommandHandler::AdminElement
         current = "None"
       end
 
-      # iu = InventoryUpdate.new
-      # iu.add_modified_item item_instance
-      # player.send_packet iu
       iu = Packets::Outgoing::InventoryUpdate.modified(item_instance)
       player.send_packet(iu)
 

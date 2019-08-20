@@ -2,9 +2,9 @@ class ObjectKnownList
   include Synchronizable
   include Loggable
 
-  initializer active_object: L2Object
+  getter_initializer active_object: L2Object
 
-  def known_objects
+  def known_objects : Hash(Int32, L2Object)
     @known_objects || sync do
       @known_objects ||= Hash(Int32, L2Object).new
     end
@@ -91,9 +91,5 @@ class ObjectKnownList
 
   def get_distance_to_watch_object(object : L2Object) : Int32
     0
-  end
-
-  def active_char
-    @active_object
   end
 end

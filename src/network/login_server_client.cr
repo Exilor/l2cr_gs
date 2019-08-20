@@ -28,6 +28,7 @@ module LoginServerClient
   class_getter max_players = 9999
   class_getter status = 0
   class_getter reserve_host = false
+  class_property server_name : String = ""
   private class_getter! crypt : NewCrypt
   private class_getter! socket : TCPSocket
 
@@ -173,10 +174,11 @@ module LoginServerClient
     send_server_status(ServerStatus::MAX_PLAYERS, max_players)
   end
 
-  def status=(@@status)
+  def server_status=(status)
     case status
     when ServerStatus::STATUS_AUTO..ServerStatus::STATUS_GM_ONLY
-      send_server_status(ServerStatus::SERVER_LIST_STATUS, @@status)
+      send_server_status(ServerStatus::SERVER_LIST_STATUS, status)
+      @@status = status
     else
       raise ArgumentError.new("Wrong status #{status}")
     end
@@ -189,6 +191,41 @@ module LoginServerClient
       send_packet(ss)
     rescue e
       error e
+    end
+  end
+
+  def send_server_type
+    ss = ServerStatus.new
+    ss.add(ServerStatus::SERVER_TYPE, Config.server_list_type)
+    begin
+      send_packet(ss)
+    rescue e
+      error e
+    end
+  end
+
+  def server_status=(status : Int32)
+    case status
+    when ServerStatus::STATUS_AUTO
+      send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_AUTO)
+      @@status = status
+    when ServerStatus::STATUS_DOWN
+      send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_DOWN)
+      @@status = status
+    when ServerStatus::STATUS_FULL
+      send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_FULL)
+      @@status = status
+    when ServerStatus::STATUS_GM_ONLY
+      send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_GM_ONLY)
+      @@status = status
+    when ServerStatus::STATUS_GOOD
+      send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_GOOD)
+      @@status = status
+    when ServerStatus::STATUS_NORMAL
+      send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_NORMAL)
+      @@status = status
+    else
+      raise ArgumentError.new("Server status #{status} does not exist")
     end
   end
 
@@ -223,6 +260,10 @@ module LoginServerClient
       client.additional_close_packet = SystemMessage.another_login_with_account
       client.close_now
     end
+  end
+
+  def status_string : String
+    ServerStatus::STATUS_STRING[@@status]
   end
 end
 

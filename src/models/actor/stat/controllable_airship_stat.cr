@@ -5,7 +5,7 @@ class ControllableAirshipStat < VehicleStat
     (active_char.in_dock? || active_char.fuel > 0 ? super : super * 0.05).to_f64
   end
 
-  def active_char
+  def active_char : L2ControllableAirshipInstance
     super.as(L2ControllableAirshipInstance)
   end
 end

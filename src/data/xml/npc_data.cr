@@ -18,12 +18,12 @@ module NpcData
       timer = Timer.new
       @@minion_data = MinionData.new
       parse_datapack_directory("stats/npcs")
-      info "Loaded #{NPCS.size} NPC templates in #{timer} s."
+      info { "Loaded #{NPCS.size} NPC templates in #{timer} s." }
       if Config.custom_npc_data
         timer.start
         count = NPCS.size
         parse_datapack_directory("stats/npcs/custom", true)
-        info "Loaded #{NPCS.size - count} custom NPC templates in #{timer} s."
+        info { "Loaded #{NPCS.size - count} custom NPC templates in #{timer} s." }
       end
       @@minion_data = nil
       load_npcs_skill_learn
@@ -199,7 +199,7 @@ module NpcData
                 if skill = SkillData[id, level]?
                   skills[id] = skill
                 else
-                  warn "No skill found with ID #{id} and level #{level}."
+                  warn { "No skill found with ID #{id} and level #{level}." }
                 end
               end
             end
@@ -366,7 +366,7 @@ module NpcData
           if item.is_a?(GeneralDropItem)
             items << item
           else
-            warn "Grouped general drop item supports only general drop item (#{item.class})"
+            warn { "Grouped general drop item supports only general drop item (#{item.class})" }
           end
         end
         drop_item.items = items
@@ -450,7 +450,7 @@ module NpcData
     def initialize
       @minions = {} of Int32 => Array(MinionHolder)
       parse_datapack_file("minionData.xml")
-      info "Loaded #{@minions.size} minion data."
+      info { "Loaded #{@minions.size} minion data." }
     end
 
     private def parse_document(doc, file)

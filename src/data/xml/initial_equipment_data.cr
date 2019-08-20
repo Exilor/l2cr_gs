@@ -1,5 +1,5 @@
-require "../../../models/items/pc_item_template"
-require "../../../enums/class_id"
+require "../../models/items/pc_item_template"
+require "../../enums/class_id"
 
 module InitialEquipmentData
   extend self
@@ -14,7 +14,7 @@ module InitialEquipmentData
     else
       parse_datapack_file("stats/initialEquipment.xml")
     end
-    info "Loaded #{DATA.size} initial equipment data."
+    info { "Loaded #{DATA.size} initial equipment data." }
   end
 
   private def parse_document(doc, file)

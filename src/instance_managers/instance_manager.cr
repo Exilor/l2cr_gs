@@ -23,7 +23,7 @@ module InstanceManager
     info "Universe instance created."
     INSTANCE_ID_NAMES.clear
     parse_datapack_file("instancenames.xml")
-    info "Loaded #{INSTANCE_ID_NAMES.size} instance names."
+    info { "Loaded #{INSTANCE_ID_NAMES.size} instance names." }
   end
 
   def get_instance_time(pc_l2id : Int32, id : Int32) : Int64

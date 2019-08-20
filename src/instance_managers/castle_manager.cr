@@ -176,7 +176,7 @@ module CastleManager
       CASTLES << Castle.new(id)
     end
 
-    info "Loaded #{CASTLES.size} castles."
+    info { "Loaded #{CASTLES.size} castles." }
   rescue e
     error e
   end

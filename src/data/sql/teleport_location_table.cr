@@ -11,12 +11,12 @@ module TeleportLocationTable
 
     timer = Timer.new
     count = load("teleport")
-    info "Loaded #{count} teleport locations in #{timer} s."
+    info { "Loaded #{count} teleport locations in #{timer} s." }
 
     if Config.custom_teleport_table
       timer.start
       count = load("custom_teleport")
-      info "Loaded #{count} custom teleport locations in #{timer} s."
+      info { "Loaded #{count} custom teleport locations in #{timer} s." }
     end
   end
 

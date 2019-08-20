@@ -8,15 +8,16 @@ module AdminData
   private ACCESS_LEVELS = {} of Int32 => AccessLevel
   private ADMIN_COMMAND_ACCESS_RIGHTS = {} of String => AdminCommandAccessRight
   private GM_LIST = {} of L2PcInstance => Bool # concurrent
+
   @@highest_level = 0
 
   def load
     ACCESS_LEVELS.clear
     ADMIN_COMMAND_ACCESS_RIGHTS.clear
     parse_datapack_file("../config/accessLevels.xml")
-    info "Loaded #{ACCESS_LEVELS.size} access levels."
+    info { "Loaded #{ACCESS_LEVELS.size} access levels." }
     parse_datapack_file("../config/adminCommands.xml")
-    info "Loaded #{ADMIN_COMMAND_ACCESS_RIGHTS.size} access commands."
+    info { "Loaded #{ADMIN_COMMAND_ACCESS_RIGHTS.size} access commands." }
   end
 
   private def parse_document(doc, file)
@@ -53,27 +54,27 @@ module AdminData
   end
 
   def has_access?(command : String, level : AccessLevel) : Bool
-    unless acar = ADMIN_COMMAND_ACCESS_RIGHTS[command]
+    unless tmp = ADMIN_COMMAND_ACCESS_RIGHTS[command]?
       if level.level > 0 && level.level == @@highest_level
-        acar = AdminCommandAccessRight.new(command, true, level.level)
-        ADMIN_COMMAND_ACCESS_RIGHTS[command] = acar
-        info "No rights defined for admin command #{command.inspect}. Auto setting access level #{level.level}."
+        tmp = AdminCommandAccessRight.new(command, true, level.level)
+        ADMIN_COMMAND_ACCESS_RIGHTS[command] = tmp
+        info { "No rights defined for admin command #{command.inspect}. Auto setting access level #{level.level}." }
       else
-        info "No rights defined for admin command #{command.inspect}."
+        info { "No rights defined for admin command #{command.inspect}." }
         return false
       end
     end
 
-    acar.has_access?(level)
+    tmp.has_access?(level)
   end
 
   def require_confirm?(command : String)
-    unless acar = ADMIN_COMMAND_ACCESS_RIGHTS[command]
-      info "No rights defined for admin command #{command.inspect}."
+    unless tmp = ADMIN_COMMAND_ACCESS_RIGHTS[command]
+      info { "No rights defined for admin command #{command.inspect}." }
       return false
     end
 
-    acar.require_confirm?
+    tmp.require_confirm?
   end
 
   def get_all_gms(include_hidden : Bool)

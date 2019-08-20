@@ -3,6 +3,7 @@ require "./class_type"
 require "./class_level"
 
 class PlayerClass < EnumClass
+
   getter race, type, level
   protected initializer race: Race, type: ClassType, level: ClassLevel
 

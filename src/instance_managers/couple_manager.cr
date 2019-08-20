@@ -4,14 +4,14 @@ module CoupleManager
   extend self
   extend Loggable
 
-  private COUPLES = Array(Couple).new
+  private COUPLES = [] of Couple
 
   def load
     sql = "SELECT id FROM mods_wedding ORDER BY id"
     GameDB.each(sql) do |rs|
       couples << Couple.new(rs.get_i32("id"))
     end
-    info "Loaded #{couples.size} couples."
+    info { "Loaded #{couples.size} couples." }
   rescue e
     error e
   end

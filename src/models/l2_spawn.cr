@@ -1,6 +1,6 @@
 require "./interfaces/spawn_listener"
 
-require "../../data_tables/npc_personal_ai_data"
+require "../data_tables/npc_personal_ai_data"
 require "./actor/instance/*"
 
 class L2Spawn

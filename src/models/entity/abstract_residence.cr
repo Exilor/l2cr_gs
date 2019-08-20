@@ -23,13 +23,6 @@ abstract class AbstractResidence < ListenersContainer
     end
   end
 
-  # def residence_zone
-  #   @zone.as?(L2ResidenceZone)
-  # end
-
-  # def residence_zone=(@zone : L2ResidenceZone)
-  # end
-
   def give_residential_skills(pc)
     @residential_skills.each do |sh|
       pc.add_skill(sh.skill, false)

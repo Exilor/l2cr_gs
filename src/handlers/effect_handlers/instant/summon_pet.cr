@@ -16,14 +16,14 @@ class EffectHandler::SummonPet < AbstractEffect
     end
 
     unless holder = pc.remove_script(PetItemHolder)
-      warn "#{pc} attempted to summon a pet without a PetItemHolder"
+      warn { "#{pc} attempted to summon a pet without a PetItemHolder" }
       return
     end
 
     item = holder.item
 
     if pc.inventory.get_item_by_l2id(item.l2id) != item
-      warn "#{pc} tried to summon a pet he doesn't own."
+      warn { "#{pc} tried to summon a pet he doesn't own." }
       return
     end
 

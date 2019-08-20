@@ -68,7 +68,6 @@ class PlayableStat < CharStat
   end
 
   def sync_exp_level(exp_increased : Bool)
-    # debug "#sync_exp_level(#{exp_increased})"
     minimum_level = active_char.min_level
     current_exp = exp
     max_level = max_level()
@@ -222,7 +221,7 @@ class PlayableStat < CharStat
     Config.max_player_level
   end
 
-  def active_char
+  def active_char : L2Playable
     super.as(L2Playable)
   end
 end

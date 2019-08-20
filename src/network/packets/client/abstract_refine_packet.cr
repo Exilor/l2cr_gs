@@ -136,16 +136,16 @@ abstract class Packets::Incoming::AbstractRefinePacket < GameClientPacket
       return false unless gem_stones.owner_id == pc.l2id
       return false unless gem_stones.item_location.inventory?
       grade = item.template.item_grade
-      ls = LIFE_STONES[refiner_item.id]
       return false unless get_gemstone_id(grade) == gem_stones.id
+      ls = LIFE_STONES[refiner_item.id]
       return false if get_gemstone_count(grade, ls.grade) > gem_stones.count
       true
     when refiner_item
       return false unless valid?(pc, item)
-      item = item.not_nil!
       return false unless refiner_item.owner_id == pc.l2id
       return false unless refiner_item.item_location.inventory?
       return false unless ls = LIFE_STONES[refiner_item.id]?
+      item = item.not_nil!
       return false if item.template.is_a?(L2Weapon) && ls.grade == GRADE_ACC
       return false if item.template.is_a?(L2Armor) && ls.grade != GRADE_ACC
       return false if pc.level < ls.player_level

@@ -7,7 +7,7 @@ module SkillLearnData
   def load
     SKILL_LEARN.clear
     parse_datapack_file("skillLearn.xml")
-    info "Loaded #{SKILL_LEARN.size} Skill learn data."
+    info { "Loaded #{SKILL_LEARN.size} Skill learn data." }
   end
 
   private def parse_document(doc, file)

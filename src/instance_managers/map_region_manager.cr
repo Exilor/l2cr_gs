@@ -10,7 +10,7 @@ module MapRegionManager
   def load
     REGIONS.clear
     parse_datapack_directory("mapregion")
-    info "Loaded #{REGIONS.size} regions."
+    info { "Loaded #{REGIONS.size} regions." }
   end
 
   private def parse_document(doc, file)

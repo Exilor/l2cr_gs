@@ -88,7 +88,7 @@ module MercTicketManager
       end
     end
 
-    info "Loaded #{DROPPED_TICKETS.size} Mercenary Tickets in #{timer} s."
+    info { "Loaded #{DROPPED_TICKETS.size} Mercenary Tickets in #{timer} s." }
   rescue e
     error e
   end

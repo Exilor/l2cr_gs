@@ -69,7 +69,7 @@ module L2World
       end
     end
 
-    info "#{REGIONS_X}x#{REGIONS_Y} region grid initialized."
+    info { "#{REGIONS_X}x#{REGIONS_Y} region grid initialized." }
   end
 
   def world_regions : Slice(Array(L2WorldRegion))
@@ -161,6 +161,10 @@ module L2World
 
   def visible_objects_count : Int32
     OBJECTS.size
+  end
+
+  def all_players_count : Int32
+    PLAYERS.size
   end
 
   def all_gms : Array(L2PcInstance)

@@ -131,8 +131,6 @@ abstract class AbstractDocument
   end
 
   private def parse_logic_not(n, template)
-    cond = Condition::LogicOr.new
-
     n.each_element do |n|
       if n.type.element_node?
         if c = parse_condition(n, template)
@@ -448,7 +446,7 @@ abstract class AbstractDocument
           end
 
           if old == mask
-            warn "parse_using_condition=\"slot\"] Unknown item slot name: #{item}"
+            warn { "parse_using_condition=\"slot\"] Unknown item slot name: #{item}" }
           end
         end
 
@@ -554,12 +552,7 @@ abstract class AbstractDocument
     end
 
     apply_cond = parse_condition(n.first_element_child, template)
-    # unless attach_cond && apply_cond
-    #   # error "a condition could not be parsed. attach_cond: #{attach_cond}, apply_cond: #{apply_cond}"
-    #   return
-    # end
     ft = FuncTemplate.new(attach_cond, apply_cond, func_name, order, stat, value)
-    # p ft
 
     if template.is_a?(L2Item) || template.is_a?(AbstractEffect)
       template.attach(ft)

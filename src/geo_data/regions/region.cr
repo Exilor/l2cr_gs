@@ -16,8 +16,8 @@ struct Region
       when IBlock::TYPE_MULTILAYER
         MultilayerBlock.new(io)
       else
-        raise "invalid block type #{block_type.inspect}"
-      end.as(IBlock)
+        raise "invalid block type: #{block_type.inspect}"
+      end#.as(IBlock)
     end
   end
 

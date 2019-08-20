@@ -51,14 +51,22 @@ class Packets::Incoming::Action < GameClientPacket
           warn "Its region is nil."
         end
       end
-      if L2World.objects.includes?(@l2id)
-        warn "But L2World.objects knows that ID."
-        # L2World::OBJECTS[@l2id].as?(L2Character).try &.say "I exist!"
-      else
-        warn "Not present in L2World::OBJECTS."
+
+      L2World.world_regions.each &.each do |reg|
+        reg.objects.each do |l2id, o|
+          if o.l2id == @l2id
+            warn "Found object (#{o}) missing from L2World in region #{reg}."
+            L2World.store_object(o)
+            obj = o
+            break
+          end
+        end
       end
-      action_failed
-      return
+
+      unless obj
+        action_failed
+        return
+      end
     end
 
     if obj.playable? && obj.acting_player.duel_state.dead?

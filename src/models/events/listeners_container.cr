@@ -6,7 +6,7 @@ class ListenersContainer
 
   @listeners : Hash(EventType, Array(AbstractEventListener))?
 
-  private def listeners
+  private def listeners : Hash(EventType, Array(AbstractEventListener))
     @listeners ||= sync do
       @listeners ||= begin
         Hash(EventType, Array(AbstractEventListener)).new

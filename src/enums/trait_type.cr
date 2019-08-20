@@ -1,6 +1,6 @@
 class TraitType < EnumClass
   getter type
-  protected initializer type: Int32
+  protected initializer type: UInt8
 
   add(NONE, 0)
   add(SWORD, 1)

@@ -1,11 +1,11 @@
 require "./l2_npc"
-require "../../aggro_info"
-require "../../absorber_info"
-require "../../l2_command_channel"
+require "../aggro_info"
+require "../absorber_info"
+require "../l2_command_channel"
 require "./ai/l2_attackable_ai"
 require "./known_list/attackable_known_list"
 require "./status/attackable_status"
-require "../../damage_done_info"
+require "../damage_done_info"
 require "./tasks/attackable/*"
 
 class L2Attackable < L2Npc
@@ -39,23 +39,19 @@ class L2Attackable < L2Npc
     self.invul = false
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2Attackable
   end
 
-  def init_ai
+  def init_ai : L2AttackableAI
     L2AttackableAI.new(self)
-  end
-
-  def ai
-    super.as(L2AttackableAI)
   end
 
   def init_status
     @status = AttackableStatus.new(self)
   end
 
-  def status
+  def status : AttackableStatus
     super.as(AttackableStatus)
   end
 
@@ -63,7 +59,7 @@ class L2Attackable < L2Npc
     @known_list = AttackableKnownList.new(self)
   end
 
-  def known_list
+  def known_list : AttackableKnownList
     super.as(AttackableKnownList)
   end
 
@@ -350,8 +346,6 @@ class L2Attackable < L2Npc
   end
 
   def add_damage(attacker : L2Character, damage : Int32, skill : Skill?)
-    # return unless attacker
-
     unless dead?
       if walker? && !core_ai_disabled? && WalkingManager.on_walk?(self)
         WalkingManager.stop_moving(self, false, true)
@@ -406,16 +400,16 @@ class L2Attackable < L2Npc
 
   def reduce_hate(target : L2Character?, amount : Int)
     amount = amount.to_i64
-    # if ai.is_a?(L2SiegeGuardAI) || ai.is_a?(L2FortSiegeGuardAI)
-    #   stop_hating(target)
-    #   self.target = nil
-    #   set_intention(AI::IDLE)
-    #   return
-    # end
+    if ai.is_a?(L2SiegeGuardAI) || ai.is_a?(L2FortSiegeGuardAI)
+      stop_hating(target)
+      self.target = nil
+      set_intention(AI::IDLE)
+      return
+    end
 
     unless target
       unless most_hated = most_hated()
-        ai.global_aggro = -25
+        ai.as(L2AttackableAI).global_aggro = -25
         return
       end
 
@@ -424,7 +418,7 @@ class L2Attackable < L2Npc
       amount = get_hating(most_hated)
 
       if amount >= 0
-        ai.global_aggro = -25
+        ai.as(L2AttackableAI).global_aggro = -25
         clear_aggro_list
         set_intention(AI::ACTIVE)
         set_walking
@@ -441,7 +435,7 @@ class L2Attackable < L2Npc
     info.add_hate(amount)
 
     if info.hate >= 0 && !most_hated()
-      ai.global_aggro = -25
+      ai.as(L2AttackableAI).global_aggro = -25
       clear_aggro_list
       set_intention(AI::ACTIVE)
       set_walking
@@ -490,7 +484,7 @@ class L2Attackable < L2Npc
     end
   end
 
-  def hate_list?
+  def hate_list? : Bool
     !@aggro_list.empty? && !looks_dead?
   end
 
@@ -608,7 +602,7 @@ class L2Attackable < L2Npc
     !!@sweep_items.get
   end
 
-  def spoil_loot_items
+  def spoil_loot_items : Array(L2Item) | Slice(L2Item)
     if value = @sweep_items.get
       value.map { |it| ItemTable[it.id] }
     else
@@ -616,11 +610,11 @@ class L2Attackable < L2Npc
     end
   end
 
-  def take_sweep
+  def take_sweep : Array(ItemHolder)?
     @sweep_items.swap(nil)
   end
 
-  def take_harvest
+  def take_harvest : ItemHolder?
     @harvest_item.swap(nil)
   end
 
@@ -630,10 +624,10 @@ class L2Attackable < L2Npc
         attacker.send_packet(SystemMessageId::CORPSE_TOO_OLD_SKILL_NOT_USED)
       end
 
-      true
-    else
-      false
+      return true
     end
+
+    false
   end
 
   def check_spoil_owner(sweeper : L2PcInstance, send_msg : Bool) : Bool
@@ -642,10 +636,10 @@ class L2Attackable < L2Npc
         sweeper.send_packet(SystemMessageId::SWEEP_NOT_ALLOWED)
       end
 
-      false
-    else
-      true
+      return false
     end
+
+    true
   end
 
   def set_overhit_values(attacker : L2Character?, damage : Float64)
@@ -746,12 +740,8 @@ class L2Attackable < L2Npc
     end
   end
 
-  def spoiled?
+  def spoiled? : Bool
     @spoiler_l2id != 0
-  end
-
-  def seeded=(seeder)
-    set_seeded(seeder)
   end
 
   def set_seeded(seeder : L2PcInstance)
@@ -825,19 +815,19 @@ class L2Attackable < L2Npc
     @raid_minion = val
   end
 
-  def leader?
+  def leader? : L2Attackable?
     # return nil
   end
 
-  def leader
+  def leader : L2Attackable
     leader?.not_nil!
   end
 
-  def minion?
-    !leader?.nil?
+  def minion? : Bool
+    !!leader?
   end
 
-  def must_reward_exp_sp?
+  def must_reward_exp_sp? : Bool
     sync { @must_give_exp_sp }
   end
 
@@ -845,7 +835,7 @@ class L2Attackable < L2Npc
     sync { @must_give_exp_sp = val }
   end
 
-  def attackable?
+  def attackable? : Bool
     true
   end
 end

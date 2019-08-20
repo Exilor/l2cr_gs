@@ -15,8 +15,8 @@ module EnchantItemData
 
     parse_datapack_file("enchantItemData.xml")
 
-    info "Loaded #{SCROLLS.size} enchant scrolls."
-    info "Loaded #{SUPPORTS.size} support items."
+    info { "Loaded #{SCROLLS.size} enchant scrolls." }
+    info { "Loaded #{SUPPORTS.size} support items." }
   end
 
   private def parse_document(doc, file)

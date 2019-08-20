@@ -65,9 +65,9 @@ abstract class AI
   @client_moving = false
   @client_auto_attacking = false
   getter intention = IDLE
-  getter! follow_target : L2Character
+  protected getter! follow_target : L2Character
   property next_action : NextAction?
-  property target : L2Object?
+  private property target : L2Object?
   property follow_task : Runnable::PeriodicTask?
   property! cast_target : L2Character?
   property! attack_target : L2Character?
@@ -245,10 +245,8 @@ abstract class AI
       end
     end
 
-    if ni = @next_action
-      if ni.event?(event)
-        ni.do_action
-      end
+    if (ni = @next_action) && ni.event?(event)
+      ni.do_action
     end
   end
 
@@ -289,7 +287,7 @@ abstract class AI
     end
   end
 
-  protected def move_to_pawn(object : L2Object, offset : Int32)
+  protected def move_to_pawn(pawn : L2Object, offset : Int32)
     if @actor.movement_disabled?
       client_action_failed
       return
@@ -300,7 +298,7 @@ abstract class AI
     send_packet = true
     ticks = GameTimer.ticks
 
-    if @client_moving && @target == object
+    if @client_moving && @target == pawn
       if @client_moving_to_pawn_offset == offset
         if ticks < @move_to_pawn_timeout
           return
@@ -315,34 +313,34 @@ abstract class AI
 
     @client_moving = true
     @client_moving_to_pawn_offset = offset
-    @target = object
-    @move_to_pawn_timeout = ticks + (1000 / GameTimer::MILLIS_IN_TICK)
+    @target = pawn
+    @move_to_pawn_timeout = ticks + (1000 // GameTimer::MILLIS_IN_TICK)
 
-    unless object
-      warn "AI#move_to_pawn: object to follow is nil."
+    unless pawn
+      warn "AI#move_to_pawn: char to follow is nil."
       return
     end
 
-    @actor.move_to_location(*object.xyz, offset)
+    @actor.move_to_location(*pawn.xyz, offset)
 
     unless @actor.moving?
       client_action_failed
       return
     end
 
-    if object.is_a?(L2Character)
+    if pawn.is_a?(L2Character)
       if @actor.on_geodata_path?
         @actor.broadcast_packet(MoveToLocation.new(@actor))
         @client_moving_to_pawn_offset = 0
       elsif send_packet
-        @actor.broadcast_packet(MoveToPawn.new(@actor, object, offset))
+        @actor.broadcast_packet(MoveToPawn.new(@actor, pawn, offset))
       end
     else
       @actor.broadcast_packet(MoveToLocation.new(@actor))
     end
   end
 
-  def move_to(x : Int32, y : Int32, z : Int32)
+  private def move_to(x : Int32, y : Int32, z : Int32)
     if @actor.movement_disabled?
       client_action_failed
       return
@@ -355,11 +353,11 @@ abstract class AI
   end
 
   # custom
-  def client_stop_moving
+  private def client_stop_moving
     client_stop_moving(nil)
   end
 
-  def client_stop_moving(loc : Location?)
+  private def client_stop_moving(loc : Location?)
     if @actor.moving?
       @actor.stop_move(loc)
     end
@@ -375,7 +373,7 @@ abstract class AI
     end
   end
 
-  def client_stopped_moving
+  private def client_stopped_moving
     if @client_moving_to_pawn_offset > 0
       @client_moving_to_pawn_offset = 0
       @actor.broadcast_packet(StopMove.new(@actor))
@@ -445,7 +443,7 @@ abstract class AI
     end
   end
 
-  def client_notify_dead
+  private def client_notify_dead
     @actor.broadcast_packet(Die.new(@actor))
 
     @intention = IDLE
@@ -456,7 +454,7 @@ abstract class AI
     stop_follow
   end
 
-  def describe_state_to_player(pc)
+  def describe_state_to_player(pc : L2PcInstance)
     if actor.visible_for?(pc) && @client_moving
       if @client_moving_to_pawn_offset != 0 && (target = @follow_target)
         mtp = MoveToPawn.new(@actor, target, @client_moving_to_pawn_offset)
@@ -467,7 +465,7 @@ abstract class AI
     end
   end
 
-  def start_follow(target, range = nil)
+  def start_follow(target : L2Character)
     sync do
       if task = @follow_task
         task.cancel
@@ -476,13 +474,22 @@ abstract class AI
 
       @follow_target = target
 
-      if range
-        task = FollowTask.new(@actor, range)
-        @follow_task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 5, ATTACK_FOLLOW_INTERVAL)
-      else
-        task = FollowTask.new(@actor)
-        @follow_task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 5, FOLLOW_INTERVAL)
+      task = FollowTask.new(@actor)
+      @follow_task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 5, FOLLOW_INTERVAL)
+    end
+  end
+
+  def start_follow(target : L2Character, range : Int32)
+    sync do
+      if task = @follow_task
+        task.cancel
+        @follow_task = nil
       end
+
+      @follow_target = target
+
+      task = FollowTask.new(@actor, range)
+      @follow_task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 5, ATTACK_FOLLOW_INTERVAL)
     end
   end
 

@@ -40,7 +40,7 @@ require "../../holders/skill_use_holder"
 require "../../holders/player_event_holder"
 require "../../calendar"
 require "../../l2_request"
-require "../../../interfaces/event_listener"
+require "../../interfaces/event_listener"
 require "../../../util/enum_bitmask"
 require "../../../instance_managers/duel_manager"
 require "../../l2_party"
@@ -53,7 +53,7 @@ require "../../quests/quest_state"
 
 class L2PcInstance < L2Playable
   extend Loggable
-
+  property original_cp_hp_mp : {Float64, Float64, Float64}?
   ID_NONE = -1
   REQUEST_TIMEOUT = 15
   private FALLING_VALIDATION_DELAY = 10_000
@@ -206,6 +206,7 @@ class L2PcInstance < L2Playable
   setter uptime : Int64 = 0i64
   setter can_revive : Bool = true
   setter active_requester : L2PcInstance?
+  setter learning_class : ClassId?
   property base_class : Int32 = 0
   property create_date : Calendar = Calendar.new
   property delete_timer : Int64 = 0i64
@@ -265,7 +266,6 @@ class L2PcInstance < L2Playable
   property multisell : Multisell::PreparedListContainer? # L2R: @current_multisell
   property clan_privileges : EnumBitmask(ClanPrivilege) = EnumBitmask(ClanPrivilege).new
   property control_item_id : Int32 = 0
-  property(learning_class : ClassId) { class_id }
   property! fists_weapon_item : L2Weapon?
   property! client : GameClient?
   property! party : L2Party?
@@ -4222,7 +4222,8 @@ class L2PcInstance < L2Playable
     !CursedWeaponsManager.cursed?(item.id)
   end
 
-  def destroy_item_by_item_id(process : String?, item_id : Int32, count : Int64, reference, send_msg : Bool) : Bool
+  def destroy_item_by_item_id(process : String?, item_id : Int32, count : Int, reference, send_msg : Bool) : Bool
+    count = count.to_i64
     if item_id == Inventory::ADENA_ID
       return reduce_adena(process, count, reference, send_msg)
     end
@@ -5805,7 +5806,7 @@ class L2PcInstance < L2Playable
         return false
       when pet.in_combat? || pet.rooted?
         action_failed
-        send_packet(SystemMessageId::STRIDER_IN_BATLLE_CANT_BE_RIDDEN)
+        send_packet(SystemMessageId::STRIDER_IN_BATTLE_CANT_BE_RIDDEN)
         return false
       when in_combat?
         action_failed

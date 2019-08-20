@@ -29,7 +29,7 @@ module ActionHandler
     end
 
     unless handler
-      warn "No action handler found for #{temp.inspect}."
+      warn { "No action handler found for #{temp.inspect}." }
     end
 
     handler

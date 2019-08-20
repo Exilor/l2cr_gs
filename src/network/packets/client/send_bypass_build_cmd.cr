@@ -30,7 +30,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
 
     if Config.gmaudit
-      GMAudit.log(pc.name + " [#{pc.l2id}]", @command, pc.target.try &.name || "no-target")
+      GMAudit.log("#{pc.name} [#{pc.l2id}]", @command, pc.target.try &.name || "no-target")
       debug { "#{pc} used command #{command.inspect}." }
     end
 
@@ -56,6 +56,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       set_cp
     when "warp"
       warp
+    when "dash"
+      dash
     when "skills"
       send_skill_info
     when "weight"
@@ -91,18 +93,14 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       aspir(999999)
     when /^clan_level\s\d$/
       pc.clan?.try &.level = args.first.to_i
-    when /^shutdown\s\d+/
-      Shutdown.start_shutdown(pc, args[0].to_i, false)
-    when "shutdown"
-      Shutdown.start_shutdown(pc, 0, false)
-    when /^restart\s\d+/
-      Shutdown.start_shutdown(pc, args[0].to_i, true)
-    when "restart"
-      Shutdown.start_shutdown(pc, 0, true)
-    when /^level\s\d+/
-      set_level
-    when /^class\s.*/
-      set_class
+    # when /^shutdown\s\d+/
+    #   Shutdown.start_shutdown(pc, args[0].to_i, false)
+    # when "shutdown"
+    #   Shutdown.start_shutdown(pc, 0, false)
+    # when /^restart\s\d+/
+    #   Shutdown.start_shutdown(pc, args[0].to_i, true)
+    # when "restart"
+    #   Shutdown.start_shutdown(pc, 0, true)
     when /^uplift\s.*/
       uplift_target
     when "cancel"
@@ -123,13 +121,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       spawn_npc
     when /^spawn\s(\w\s?)+$/
       spawn_npc_by_name
-    when /^goto\s\S+$/
-      name = @command[/(\S)+\z/]
-      if player = L2World.get_player(name)
-        pc.tele_to_location(player)
-      else
-        pc.send_message("Player #{name.inspect} not found.")
-      end
     when /^goto_npc\s.+$/
       goto_npc
     when "interrupt"
@@ -137,45 +128,35 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         target.abort_cast
         target.abort_attack
       end
-    when /^recall\s\S+/
-      recall_by_name
-
-
     when "recall_bots"
       L2World.players.each do |player|
-        if player != pc
+        if player.name.starts_with?("bot") && player != pc
           player.tele_to_location(pc, true)
         end
       end
     when "bots_follow"
-      pc.known_list.known_players.values.each do |player|
+      pc.known_list.known_players.values_slice.each do |player|
         player.set_intention(AI::FOLLOW, pc)
       end
     when "bots_stop"
-      pc.known_list.known_players.values.each do |player|
+      pc.known_list.known_players.values_slice.each do |player|
         player.stop_move
         player.intention = AI::IDLE
       end
     when "bots_attack"
-      pc.known_list.known_players.values.each do |player|
+      pc.known_list.known_players.values_slice.each do |player|
         if target = pc.target.as?(L2Character)
           player.set_intention(AI::ATTACK, target)
         end
       end
     when "bots_come"
-      pc.known_list.known_players.values.each do |player|
+      pc.known_list.known_players.values_slice.each do |player|
         if target = pc.target.as?(L2Character)
           player.set_intention(AI::MOVE_TO, pc)
         end
       end
-    when "players"
-      pc.send_message("#{L2World.players.size} online players.")
-
-
     when "champion"
       toggle_champ_target
-    when "delete"
-      pc.target.as?(L2Npc).try { |n| n.delete_me; n.spawn?.try &.stop_respawn }
     when "follow_me"
       follow_me
     when "stop"
@@ -192,32 +173,20 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       attack_my_target
     when "recall_party"
       pc.party?.try &.each { |m| m.tele_to_location(pc, true) if m != pc }
-    when "invul"
-      if pc.invul?
-        pc.send_message("Invulnerability disabled.")
+    when /start_quest\s\d+/
+      id = args[0].to_i
+      if q = QuestManager.get_quest(id)
+        state = q.new_quest_state(pc)
+        state.start_quest
+        pc.send_message("Started quest #{q.descr.inspect}.")
       else
-        pc.send_message("Invulnerability enabled.")
+        pc.send_message("Quest with ID #{id} not found.")
       end
-      pc.invul = !pc.invul?
-    when "open"
-      pc.target.as?(L2DoorInstance).try &.open_me
-    when "close"
-      pc.target.as?(L2DoorInstance).try &.close_me
-    when /hb\s\d/
-      set_hellbound_level
-    when "hb"
-      pc.send_message("Hellbound level: #{HellboundEngine.level}")
-      pc.send_message("Hellbound trust: #{HellboundEngine.trust}")
     else
       return :proceed
     end
 
     nil
-  end
-
-  private def set_hellbound_level
-    level = args.first.to_i
-    HellboundEngine.level = level
   end
 
   private def set_hp
@@ -230,10 +199,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
   private def set_cp
     char_target.current_cp = args[0].to_f64
-  end
-
-  private def res_target
-    char_target.do_revive(100.0)
   end
 
   private def warp
@@ -257,8 +222,32 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
   end
 
+  private def dash
+    if pc.moving?
+      dst = Location.new(pc.x_destination, pc.y_destination, pc.z_destination)
+      pc.broadcast_packet(FlyToLocation.new(pc, dst, FlyType::CHARGE))
+      pc.set_xyz(pc.x_destination, pc.y_destination, pc.z_destination)
+      pc.stop_move
+      # msu = MagicSkillUse.new(pc, pc, 628, 1, 1, 1)
+      # pc.broadcast_packet(msu)
+
+
+      if summon = pc.summon
+        summon.broadcast_packet(FlyToLocation.new(summon, dst, FlyType::CHARGE))
+        summon.set_xyz(dst)
+        summon.follow_owner
+      end
+    else
+      pc.send_message("You need to be moving in order to dash.")
+    end
+  end
+
   private def milk_target
-    return unless target = pc.target.as?(L2Attackable)
+    pc = pc()
+    unless target = pc.target.as?(L2Attackable)
+      pc.send_packet(SystemMessageId::INCORRECT_TARGET)
+      return
+    end
     pc.target = nil
     times = args.first.to_i
     target.reduce_current_hp(target.max_hp - 1f64, pc, nil)
@@ -266,6 +255,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when .dwarven_fighter?, .scavenger?, .bounty_hunter?, .fortune_seeker?
       is_spoiler = true
     end
+
     timer = Timer.new
 
     times.times do
@@ -301,7 +291,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         if item.template.has_ex_immediate_effect? && item.etc_item?
           next
         end
-        # debug "Util.in_range?(#{radius}, #{item}, #{pc}, #{true}) #{Util.in_range?(radius, item, pc, true)}"
+
         next unless Util.in_range?(radius, item, pc, true)
         old_region = item.world_region?
         item.visible = false
@@ -309,7 +299,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         L2World.remove_visible_object(item, old_region)
 
         if item.id == Inventory::ADENA_ID && pc.inventory.adena_instance?
-          # debug "Adding #{item.count} adena"
           if party
             party.distribute_item(pc, item)
           else
@@ -330,16 +319,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         error e
       end
     end
-  end
-
-  private def set_level
-    target = pc_target#(char_target.as?(L2Playable) || pc_target)
-    level = args[0].to_i
-    old_level = target.level
-    target.level = level
-    target.exp = ExperienceData.get_exp_for_level(Math.min(level, target.max_exp_level))
-    target.on_level_change(level > old_level)
-    target.broadcast_info
   end
 
   private def set_class
@@ -463,14 +442,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
   end
 
-  private def recall_by_name
-    if target = L2World.get_player(args.first)
-      target.tele_to_location(pc)
-    else
-      pc.send_message("#{args.first} not found.")
-    end
-  end
-
   private def follow_me
     if target = pc.target.as?(L2Character)
       target.running = true
@@ -499,8 +470,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
   private def all_go_back
     pc.known_list.each_character do |obj|
-      if obj.is_a?(L2Npc)
-        obj.set_intention(AI::MOVE_TO, obj.spawn.location)
+      if obj.is_a?(L2Npc) && (sp = obj.spawn?)
+        obj.set_intention(AI::MOVE_TO, sp.location)
       end
     end
   end

@@ -49,13 +49,13 @@ module CastleManorManager
     end
 
     if Config.debug
-      info "Current mode: #{@@mode}."
+      info { "Current mode: #{@@mode}." }
     end
   end
 
   def load_xml
     parse_datapack_file("seeds.xml")
-    info "Loaded #{SEEDS.size} seeds."
+    info { "Loaded #{SEEDS.size} seeds." }
   end
 
   private def parse_document(doc, file)
@@ -94,7 +94,7 @@ module CastleManorManager
             pcurrent << sp
           end
         else
-          warn "Unknown seed id #{seed_id}."
+          warn { "Unknown seed id #{seed_id}." }
         end
       end
 
@@ -120,7 +120,7 @@ module CastleManorManager
             pcurrent << cp
           end
         else
-          warn "Unknown crop id #{crop_id}."
+          warn { "Unknown crop id #{crop_id}." }
         end
       end
 
@@ -509,7 +509,7 @@ module CastleManorManager
   end
 
   def next_mode_change : String
-    Time.now.to_s("%d/%M &H:&m:&s")
+    @@next_mode_change.to_s("%d/%m %H:%m:%S")
   end
 
   def crops : Array(L2Seed)

@@ -19,7 +19,7 @@ module BypassHandler::Wear
 
   private def show_wear_window(pc, val)
     unless buy_list = BuyListData.get_buy_list(val)
-      warn "Buy list with id #{val} not found."
+      warn { "Buy list with id #{val} not found." }
       pc.action_failed
       return
     end

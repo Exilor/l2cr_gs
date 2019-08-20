@@ -12,7 +12,7 @@ module OptionData
     OPTION_DATA.clear
     timer = Timer.new
     parse_datapack_directory("stats/options")
-    info "Loaded #{OPTION_DATA.size} options in #{timer} s."
+    info { "Loaded #{OPTION_DATA.size} options in #{timer} s." }
   end
 
   private def parse_document(doc, file)

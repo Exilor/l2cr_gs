@@ -76,7 +76,7 @@ class Scripts::SkillTransfer < AbstractNpcAI
             if count < 0
               class_name = ClassListData.get_class!(pc.class_id).class_name
               Util.punish(pc, "has too many transferred skills or items (id: #{sk.id}, level: #{sk.level}, class: #{class_name}).", IllegalActionPunishmentType::BROADCAST)
-              warn "Illegal count #{count} from #{pc}."
+              warn { "Illegal count #{count} from #{pc}." }
               if Config.skill_check_remove
                 pc.remove_skill(sk)
               end

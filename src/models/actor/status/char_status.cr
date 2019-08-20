@@ -107,7 +107,7 @@ class CharStatus
     set_current_hp(new_hp)
   end
 
-  def set_current_hp(new_hp : Float64)
+  def set_current_hp(new_hp : Float64) : Bool
     set_current_hp(new_hp, true)
   end
 
@@ -150,7 +150,7 @@ class CharStatus
     set_current_mp(new_mp)
   end
 
-  def set_current_mp(new_mp : Float64)
+  def set_current_mp(new_mp : Float64) : Bool
     set_current_mp(new_mp, true)
   end
 

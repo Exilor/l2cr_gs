@@ -1,12 +1,6 @@
 require "./l2_residence_teleport_zone"
 
 class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
-  # def initialize(id)
-  #   super
-
-  #   @tele_task = nil # Runnable
-  # end
-
   @tele_task : Runnable::DelayedTask?
 
   def set_parameter(name, value)
@@ -35,7 +29,6 @@ class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
     initializer zone: L2ResidenceHallTeleportZone
 
     def run
-      index = 0
       loc = @zone.spawns.not_nil!.sample
       @zone.players_inside { |pc| pc.tele_to_location(loc, false) }
     end

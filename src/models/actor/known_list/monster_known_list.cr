@@ -21,16 +21,14 @@ class MonsterKnownList < AttackableKnownList
       mob.notify_event(AI::FORGET_OBJECT, object)
     end
 
-    if mob.visible?
-      if @known_players.try &.empty? && @known_summons.try &.empty?
-        mob.clear_aggro_list
-      end
+    if mob.visible? && known_players.empty? && known_summons.empty?
+      mob.clear_aggro_list
     end
 
     true
   end
 
-  def active_char
+  def active_char : L2MonsterInstance
     super.as(L2MonsterInstance)
   end
 end

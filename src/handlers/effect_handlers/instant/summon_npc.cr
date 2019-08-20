@@ -28,12 +28,12 @@
 #     return if pc.looks_dead? || pc.mounted?
 
 #     if @npc_id <= 0 || @npc_count <= 0
-#       warn "Invalid NPC ID or count for skill #{info.skill}."
+#       warn { "Invalid NPC ID or count for skill #{info.skill}." }
 #       return
 #     end
 
 #     unless template = NpcData[@npc_id]?
-#       warn "Template for NPC ID #{@npc_id} not found."
+#       warn { "Template for NPC ID #{@npc_id} not found." }
 #       return
 #     end
 
@@ -122,12 +122,12 @@ class EffectHandler::SummonNpc < AbstractEffect
     return if pc.looks_dead? || pc.mounted?
 
     if @npc_id <= 0 || @npc_count <= 0
-      warn "Invalid NPC ID or count for skill #{info.skill}."
+      warn { "Invalid NPC ID or count for skill #{info.skill}." }
       return
     end
 
     unless template = NpcData[@npc_id]?
-      warn "Template for NPC ID #{@npc_id} not found."
+      warn { "Template for NPC ID #{@npc_id} not found." }
       return
     end
 

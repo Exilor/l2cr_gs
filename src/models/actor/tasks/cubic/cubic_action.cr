@@ -1,4 +1,4 @@
-struct CubicAction
+class CubicAction
   include Runnable
   include Loggable
 
@@ -15,9 +15,9 @@ struct CubicAction
       return
     end
 
-    if !AttackStances.includes?(@cubic.owner)
+    unless AttackStances.includes?(@cubic.owner)
       if @cubic.owner.has_summon?
-        if !AttackStances.includes?(@cubic.owner.summon)
+        unless AttackStances.includes?(@cubic.owner.summon)
           debug "returning because summon doesn't have an attack stance"
           @cubic.stop_action
           return
@@ -37,7 +37,7 @@ struct CubicAction
 
     use_cubic_cure = false
 
-    if @cubic.id >= L2CubicInstance::SMART_CUBIC_EVATEMPLAR && @cubic.id >= L2CubicInstance::SMART_CUBIC_SPECTRALMASTER
+    if @cubic.id.between?(L2CubicInstance::SMART_CUBIC_EVATEMPLAR, L2CubicInstance::SMART_CUBIC_SPECTRALMASTER)
       @cubic.owner.effect_list.debuffs.each do |info|
         unless info.skill.irreplaceable_buff?
           use_cubic_cure = true
@@ -50,7 +50,7 @@ struct CubicAction
       msu = Packets::Outgoing::MagicSkillUse.new(@cubic.owner, @cubic.owner, L2CubicInstance::SKILL_CUBIC_CURE, 1, 0, 0)
       @cubic.owner.broadcast_packet(msu)
       @current_count.add(1)
-    elsif Rnd.rand(100) < @chance
+    elsif Rnd.rand(1..100) < @chance
       # debug "Choosing a skill among #{@cubic.skills}."
       return unless skill = @cubic.skills.sample?(random: Rnd)
       debug "Skill: #{skill}."
@@ -68,8 +68,8 @@ struct CubicAction
       target = @cubic.target
       debug "Cubic target: #{target}."
       if target && target.alive?
-        msu = Packets::Outgoing::MagicSkillUse.new(@cubic.owner,target, skill.id, skill.level, 0, 0)
-        @cubic.owner.broadcast_packet msu
+        msu = Packets::Outgoing::MagicSkillUse.new(@cubic.owner, target, skill.id, skill.level, 0, 0)
+        @cubic.owner.broadcast_packet(msu)
         targets = [target]
 
         if skill.continuous?
@@ -78,15 +78,15 @@ struct CubicAction
           skill.activate_skill(@cubic, targets)
         end
 
-        if skill.has_effect_type? L2EffectType::MAGICAL_ATTACK
+        if skill.has_effect_type?(L2EffectType::MAGICAL_ATTACK)
           @cubic.use_cubic_m_dam(skill, targets)
-        elsif skill.has_effect_type? L2EffectType::HP_DRAIN
+        elsif skill.has_effect_type?(L2EffectType::HP_DRAIN)
           @cubic.use_cubic_drain(skill, targets)
         elsif skill.has_effect_type?(L2EffectType::STUN, L2EffectType::ROOT, L2EffectType::PARALYZE)
           @cubic.use_cubic_disabler(skill, targets)
         elsif skill.has_effect_type?(L2EffectType::DMG_OVER_TIME)
           @cubic.use_cubic_continuous(skill, targets)
-        elsif skill.has_effect_type? L2EffectType::AGGRESSION
+        elsif skill.has_effect_type?(L2EffectType::AGGRESSION)
           @cubic.use_cubic_disabler(skill, targets)
         end
 

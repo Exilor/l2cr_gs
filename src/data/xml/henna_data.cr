@@ -7,7 +7,7 @@ module HennaData
   def load
     HENNA_LIST.clear
     parse_datapack_file("stats/hennaList.xml")
-    info "Loaded #{HENNA_LIST.size} henna data."
+    info { "Loaded #{HENNA_LIST.size} henna data." }
   end
 
   private def parse_document(doc, file)

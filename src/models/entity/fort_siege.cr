@@ -72,7 +72,7 @@ class FortSiege
       fort.visible_flag = true
     end
 
-    info "Siege of #{fort.name} fort finished."
+    info { "Siege of #{fort.name} fort finished." }
 
     OnFortSiegeFinish.new(self).async(fort)
   end
@@ -116,7 +116,7 @@ class FortSiege
     announce_to_player(sm)
     save_fort_siege
 
-    info "Siege of #{fort.name} fort started."
+    info { "Siege of #{fort.name} fort started." }
 
     OnFortSiegeStart.new(self).async(fort)
   end
@@ -326,7 +326,7 @@ class FortSiege
         fort.siege.announce_to_player(SystemMessageId::SEIZED_BARRACKS)
       end
     else
-      warn "#killed_commander: killed commander, but commander with id #{instance.id} is not registered for fort with id #{fort.residence_id}."
+      warn { "#killed_commander: killed commander, but commander with id #{instance.id} is not registered for fort with id #{fort.residence_id}." }
     end
   end
 
@@ -383,12 +383,12 @@ class FortSiege
     end
 
     if clan.fort_id == fort.residence_id
-      debug "#{clan}'s fort is this fort."
+      debug { "#{clan}'s fort is this fort." }
       return
     end
 
     unless FortSiegeManager.registered?(clan, fort.residence_id)
-      debug "#{clan} is not registered."
+      debug { "#{clan} is not registered." }
       return
     end
 
@@ -458,7 +458,7 @@ class FortSiege
           @siege_start_task = ThreadPoolManager.schedule_general(task, 0)
         end
 
-        info "Siege of #{fort.name} fort: #{fort.siege_date.time}."
+        info { "Siege of #{fort.name} fort: #{fort.siege_date.time}." }
       end
     end
   end
@@ -752,7 +752,7 @@ class FortSiege
     when 0
       @fort.siege.start_siege
     else
-      warn "#schedule_start_siege_task: Unknown siege time #{time}."
+      warn { "#schedule_start_siege_task: Unknown siege time #{time}." }
     end
   rescue e
     error e

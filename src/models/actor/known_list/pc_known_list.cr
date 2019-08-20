@@ -25,15 +25,15 @@ class PcKnownList < PlayableKnownList
 
     if object.is_a?(L2AirshipInstance)
       if object.captain_id != 0 && object.captain_id != @active_object.l2id
-        @active_object.send_packet(DeleteObject.new(object.captain_id))
+        active_char.send_packet(DeleteObject.new(object.captain_id))
       end
 
       if object.helm_l2id != 0
-        @active_object.send_packet(DeleteObject.new(object.helm_l2id))
+        active_char.send_packet(DeleteObject.new(object.helm_l2id))
       end
     end
 
-    @active_object.send_packet(DeleteObject.new(object))
+    active_char.send_packet(DeleteObject.new(object))
 
     if Config.check_known && object.npc? && active_char.gm?
       active_char.send_message("Removed NPC: #{object.name}")
@@ -64,7 +64,7 @@ class PcKnownList < PlayableKnownList
     end
   end
 
-  def active_char
+  def active_char : L2PcInstance
     super.as(L2PcInstance)
   end
 end

@@ -5,7 +5,7 @@ class StaticObjectStat < CharStat
     active_char.level.to_i32
   end
 
-  def active_char
+  def active_char : L2StaticObjectInstance
     super.as(L2StaticObjectInstance)
   end
 end

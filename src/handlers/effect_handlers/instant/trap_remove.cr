@@ -31,7 +31,7 @@ class EffectHandler::TrapRemove < AbstractEffect
 
     return if trap.level > @power
 
-    OnTrapAction.new(trap, effector, TrapAction::TRAP_DISARMED).async(trap)
+    OnTrapAction.new(trap, effector, TrapAction::DISARMED).async(trap)
 
     trap.unsummon
 

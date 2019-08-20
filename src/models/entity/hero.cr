@@ -71,8 +71,8 @@ module Hero
       COMPLETE_HEROS[char_id] = hero
     end
 
-    info "Loaded #{HEROES.size} heroes."
-    info "Loaded #{COMPLETE_HEROS.size} historical heroes."
+    info { "Loaded #{HEROES.size} heroes." }
+    info { "Loaded #{COMPLETE_HEROS.size} historical heroes." }
   rescue e
     error e
   end
@@ -150,7 +150,7 @@ module Hero
     HERO_DIARY[char_id] = diary
 
     char_name = CharNameTable.get_name_by_id(char_id)
-    info "Loaded #{diary_entries} diary entries for hero #{char_name}."
+    info { "Loaded #{diary_entries} diary entries for hero #{char_name}." }
   rescue e
     error e
   end
@@ -434,7 +434,7 @@ module Hero
 
     fight_reply["%win%"] = win
     fight_reply["%draw%"] = draw
-    fight_reply["%loos%"] = loss # <----------------------------- CHECK!!!!
+    fight_reply["%loos%"] = loss
 
     pc.send_packet(fight_reply)
   end

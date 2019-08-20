@@ -12,7 +12,7 @@ module MonsterRace
     8.times do |i|
       id = 31003
       random = Rnd.rand(24)
-      while true
+      loop do
         (i - 1).downto(0) do |j|
           if MONSTERS[j].template.id == id + random
             random = Rnd.rand(24)
@@ -73,19 +73,19 @@ module MonsterRace
     end
   end
 
-  def first_place
+  def first_place : Int32
     FIRST.first
   end
 
-  def second_place
+  def second_place : Int32
     SECOND.first
   end
 
-  def monsters
+  def monsters : Array(L2Npc)
     MONSTERS
   end
 
-  def speeds
+  def speeds : Slice(Slice(Int32))
     SPEEDS
   end
 end

@@ -56,7 +56,7 @@ module Formulas
     end
   end
 
-  def get_regenerate_period(char : L2Character)
+  def get_regenerate_period(char : L2Character) : Int32
     char.door? ? HP_REGENERATE_PERIOD * 100 : HP_REGENERATE_PERIOD
   end
 
@@ -1140,7 +1140,6 @@ module Formulas
     end
 
     pvp = attacker.playable? && target.playable?
-    pve = attacker.playable? && target.attackable?
     damage = 0.0
     proximity_bonus = attacker.behind_target? ? 1.2 : attacker.in_front_of_target? ? 1.0 : 1.1
     ss_boost = ss ? 1.458 : 1.0
@@ -1305,7 +1304,6 @@ module Formulas
     end
 
     pvp = attacker.playable? && target.playable?
-    pve = attacker.playable? && target.attackable?
     damage = 0.0
     proximity_bonus = attacker.behind_target? ? 1.2 : attacker.in_front_of_target? ? 1.0 : 1.1
     ss_boost = ss ? 1.458 : 1.0

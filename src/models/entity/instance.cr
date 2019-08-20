@@ -9,12 +9,18 @@ class Instance
 
   private alias Say2 = Packets::Incoming::Say2
 
+  @check_time_up_task : Runnable::DelayedTask?
+  @eject_dead_tasks = {} of Int32 => Runnable::DelayedTask?
+  @allow_random_walk = true
+  @doors = {} of Int32 => L2DoorInstance
+  @manual_spawn = {} of String => Array(L2Spawn)
+  @last_left = -1i64
   getter id
   getter players = [] of Int32
   getter npcs = [] of L2Npc
   getter instance_start_time = Time.ms
   getter instance_end_time = -1i64
-  getter timer_text : String?
+  getter timer_text = ""
   getter enter_locations = [] of Location
   getter? show_timer = false
   getter? timer_increase = true
@@ -28,12 +34,6 @@ class Instance
   getter reenter_data = [] of InstanceReenterTimeHolder # L2J: _resetData
   getter remove_buff_type = InstanceRemoveBuffType::NONE
   getter buff_exception_list = [] of Int32 # L2J: _exceptionList
-  @check_time_up_task : Runnable::DelayedTask?
-  @eject_dead_tasks = {} of Int32 => Runnable::DelayedTask?
-  @allow_random_walk = true
-  @doors = {} of Int32 => L2DoorInstance
-  @manual_spawn = {} of String => Array(L2Spawn)
-  @last_left = -1i64
 
   def initialize(@id : Int32)
     @eject_time = Config.eject_dead_player_time.to_i64
@@ -64,7 +64,7 @@ class Instance
   end
 
   def remove_player(l2id : Int32)
-    @players.delete(l2id)
+    @players.delete_first(l2id)
     if @players.empty? && @empty_destroy_time >= 0
       @last_left = time = Time.ms
       self.duration = @instance_end_time - time - 500
@@ -77,12 +77,12 @@ class Instance
 
   def remove_npc(npc : L2Npc)
     npc.spawn?.try &.stop_respawn
-    @npcs.delete(npc)
+    @npcs.delete_first(npc)
   end
 
   def add_door(door_id : Int32, set : StatsSet)
     if @doors.has_key?(door_id)
-      warn "Door with ID #{door_id} already exists."
+      warn { "Door with ID #{door_id} already exists." }
       return
     end
 
@@ -145,11 +145,11 @@ class Instance
 
   def spawn_group(group_name : String) : Array(L2Npc)?
     if temp = @manual_spawn[group_name]?
-      temp.map &.do_spawn
-    else
-      warn "Cannot spawn NPCs, wrong group name #{group_name.inspect}."
-      nil
+      return temp.map &.do_spawn
     end
+
+    warn { "Cannot spawn NPCs, wrong group name #{group_name.inspect}." }
+    nil
   end
 
   def load_instance_template(file_name : String)

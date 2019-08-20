@@ -11,7 +11,7 @@ module ItemHandler::Harvester
     end
 
     unless skills = item.template.skills
-      warn "#{item.name} is missing skills."
+      warn { "#{item.name} is missing skills." }
       return false
     end
 

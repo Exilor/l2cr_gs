@@ -161,7 +161,7 @@ module FourSepulchersManager
   def clean
     (31921...31925).each do |i|
       unless loc = START_HALL_SPAWNS[i]?
-        warn "#{i} is not inside START_HALL_SPAWNS (#{START_HALL_SPAWNS})."
+        warn { "#{i} is not inside START_HALL_SPAWNS (#{START_HALL_SPAWNS})." }
         next
       end
 
@@ -213,7 +213,7 @@ module FourSepulchersManager
         SpawnTable.add_new_spawn(sp, false)
         sp.do_spawn
         sp.start_respawn
-        info "Spawned #{sp.template.name}."
+        info { "Spawned #{sp.template.name}." }
       rescue e
         error "Error while spawning managers:"
         error e
@@ -336,7 +336,7 @@ module FourSepulchersManager
       error e
     end
 
-    info "Loaded #{MYSTERIOUS_BOX_SPAWNS.size} Mysterious - Box spawns."
+    info { "Loaded #{MYSTERIOUS_BOX_SPAWNS.size} Mysterious - Box spawns." }
   end
 
   private def init_key_box_spawns
@@ -354,82 +354,6 @@ module FourSepulchersManager
       end
     end
   end
-
-  # private def load_physical_monsters
-  #   PHYSICAL_MONSTERS.clear
-
-  #   loaded = 0
-
-  #   sql = "SELECT Distinct key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY key_npc_id"
-  #   GameDB.each(sql, 1) do |rs1|
-  #     key_npc_id = rs1.get_i32("key_npc_id")
-  #     if key_npc_id < 0
-  #       raise "got an unintended negative i32 from DB at #{__LINE__}"
-  #     end
-  #     physical_spawns = [] of L2Spawn
-  #     sql = "SELECT id, count, npc_templateid, locx, locy, locz, heading, respawn_delay, key_npc_id FROM four_sepulchers_spawnlist Where key_npc_id = ? and spawntype = ? ORDER BY id"
-  #     GameDB.each(sql, key_npc_id, 1) do |rs2|
-  #       template_id = rs2.get_i32("npc_templateid")
-  #       if template_id < 0
-  #         raise "got an unintended negative i32 from DB at #{__LINE__}"
-  #       end
-
-  #       sp = L2Spawn.new(template_id)
-  #       sp.amount = rs2.get_i32("count")
-  #       sp.x = rs2.get_i32("x")
-  #       sp.y = rs2.get_i32("y")
-  #       sp.z = rs2.get_i32("z")
-  #       sp.heading = rs2.get_i32("heading")
-  #       sp.respawn_delay = rs2.get_i32("respawn_delay")
-  #       SpawnTable.add_new_spawn(sp, false)
-  #       physical_spawns << sp
-  #       loaded += 1
-  #     end
-  #     PHYSICAL_MONSTERS[key_npc_id] = physical_spawns
-  #   end
-
-  #   info "Loaded #{loaded} physical type monster spawns."
-  # rescue e
-  #   error e
-  # end
-
-  # private def load_magical_monsters
-  #   MAGICAL_MONSTERS.clear
-
-  #   loaded = 0
-
-  #   sql = "SELECT Distinct key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY key_npc_id"
-  #   GameDB.each(sql, 2) do |rs1|
-  #     key_npc_id = rs1.get_i32("key_npc_id")
-  #     if key_npc_id < 0
-  #       raise "got an unintended negative i32 from DB at #{__LINE__}"
-  #     end
-  #     magical_spawns = [] of L2Spawn
-  #     sql = "SELECT id, count, npc_templateid, locx, locy, locz, heading, respawn_delay, key_npc_id FROM four_sepulchers_spawnlist Where key_npc_id = ? and spawntype = ? ORDER BY id"
-  #     GameDB.each(sql, key_npc_id, 2) do |rs2|
-  #       template_id = rs2.get_i32("npc_templateid")
-  #       if template_id < 0
-  #         raise "got an unintended negative i32 from DB at #{__LINE__}"
-  #       end
-
-  #       sp = L2Spawn.new(template_id)
-  #       sp.amount = rs2.get_i32("count")
-  #       sp.x = rs2.get_i32("x")
-  #       sp.y = rs2.get_i32("y")
-  #       sp.z = rs2.get_i32("z")
-  #       sp.heading = rs2.get_i32("heading")
-  #       sp.respawn_delay = rs2.get_i32("respawn_delay")
-  #       SpawnTable.add_new_spawn(sp, false)
-  #       magical_spawns << sp
-  #       loaded += 1
-  #     end
-  #     MAGICAL_MONSTERS[key_npc_id] = magical_spawns
-  #   end
-
-  #   info "Loaded #{loaded} magical type monster spawns."
-  # rescue e
-  #   error e
-  # end
 
   private def load_physical_monsters
     load_any_monsters(PHYSICAL_MONSTERS, 1, "physical monster type")
@@ -531,7 +455,7 @@ module FourSepulchersManager
   def try_entry(npc : L2Npc, pc : L2PcInstance)
     sync do
       unless host_quest = QuestManager.get_quest(QUEST_ID)
-        warn "Couldn't find quest #{QUEST_ID}."
+        warn { "Couldn't find quest #{QUEST_ID}." }
         return
       end
 
@@ -540,7 +464,7 @@ module FourSepulchersManager
         # ID ok
       else
         unless pc.gm?
-          warn "Player #{pc.name} (#{pc.l2id}) tried to cheat in four sepulchers."
+          warn { "Player #{pc.name} (#{pc.l2id}) tried to cheat in four sepulchers." }
           Util.punish(pc, "tried to enter four sepulchers with an invalid npc id (#{npc_id}).")
         end
         return
@@ -934,7 +858,7 @@ module FourSepulchersManager
         if door = DoorData.get_door(door_id)
           door.close_me
         else
-          warn "Door with id #{door_id} not found."
+          warn { "Door with id #{door_id} not found." }
         end
       rescue e
         error e
@@ -989,7 +913,7 @@ module FourSepulchersManager
 
       MANAGERS.each do |temp|
         unless last = temp.last_spawn.as?(L2SepulcherNpcInstance)
-          warn "#{temp.last_spawn} is not a L2SepulcherNpcInstance."
+          warn { "#{temp.last_spawn} is not a L2SepulcherNpcInstance." }
           next
         end
 
@@ -1005,7 +929,7 @@ module FourSepulchersManager
 
       MANAGERS.each do |temp|
         unless last = temp.last_spawn.as?(L2SepulcherNpcInstance)
-          warn "#{temp.last_spawn} is not a L2SepulcherNpcInstance."
+          warn { "#{temp.last_spawn} is not a L2SepulcherNpcInstance." }
           next
         end
 

@@ -9,7 +9,7 @@ module FishingRodsData
   def load
     FISHING_RODS.clear
     parse_datapack_file("stats/fishing/fishingRods.xml")
-    info "Loaded #{FISHING_RODS.size} fishing rods."
+    info { "Loaded #{FISHING_RODS.size} fishing rods." }
   end
 
   def get_fishing_rod(item_id : Int32) : L2FishingRod

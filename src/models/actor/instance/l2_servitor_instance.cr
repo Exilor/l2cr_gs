@@ -3,6 +3,9 @@ require "../../../data/sql/summon_effects_table"
 class L2ServitorInstance < L2Summon
   include Runnable
 
+  @consume_item_interval_remaining = 0
+  @life_task : Runnable::PeriodicTask?
+
   getter life_time = 0
   getter consume_item_interval = 0
   setter restore_summon : Bool
@@ -10,8 +13,6 @@ class L2ServitorInstance < L2Summon
   property life_time_remaining : Int32 = 0
   property reference_skill : Int32 = 0
   property! item_consume : ItemHolder?
-  @consume_item_interval_remaining = 0
-  @life_task : Runnable::PeriodicTask?
 
   def initialize(template : L2NpcTemplate, owner : L2PcInstance)
     super

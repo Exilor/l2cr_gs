@@ -91,7 +91,7 @@ class L2Npc < L2Character
     template.can_move?
   end
 
-  def ai_type
+  def ai_type : AIType
     template.ai_type
   end
 
@@ -113,7 +113,7 @@ class L2Npc < L2Character
     @known_list = NpcKnownList.new(self)
   end
 
-  def known_list
+  def known_list : NpcKnownList
     super.as(NpcKnownList)
   end
 
@@ -259,7 +259,7 @@ class L2Npc < L2Character
     fort
   end
 
-  def get_fort(max_dst : Int64)
+  def get_fort(max_dst : Int64) : Fort?
     idx = FortManager.find_nearest_fort_index(self, max_dst)
     if idx < 0
       return
@@ -542,11 +542,14 @@ class L2Npc < L2Character
 
   def on_spawn
     super
-    # this would fix it
-    # @soulshot_amount = template.parameters.get_i32("SoulShot", 0)
-    # @spiritshot_amount = template.parameters.get_i32("SpiritShot", 0)
-    @soulshot_amount = template.soulshot
-    @spiritshot_amount = template.spiritshot
+
+    # works:
+    @soulshot_amount = template.parameters.get_i32("SoulShot", 0)
+    @spiritshot_amount = template.parameters.get_i32("SpiritShot", 0)
+    # doesn't work:
+    # @soulshot_amount = template.soulshot
+    # @spiritshot_amount = template.spiritshot
+
     @killing_blow_weapon = 0
 
     if teleporting?
@@ -577,7 +580,7 @@ class L2Npc < L2Character
     end
   end
 
-  def delete_me
+  def delete_me : Bool
     begin
       on_decay
     rescue e
@@ -781,7 +784,7 @@ class L2Npc < L2Character
     super
   end
 
-  def summoned_npcs # L2Npc[]
+  def summoned_npcs : Enumerable(L2Npc)
     @summoned_npcs.try &.local_each_value || Slice(L2Npc).empty
   end
 
@@ -940,21 +943,21 @@ class L2Npc < L2Character
     end
 
     no_teach_msg = NpcHtmlMessage.new(l2id)
-    if !html
-      no_teach_msg.html = "<html><body>I cannot teach you any skills.<br>You must find your current class teachers.</body></html>"
-    else
+    if html
       no_teach_msg.html = html
       no_teach_msg["%objectId%"] = l2id
+    else
+      no_teach_msg.html = "<html><body>I cannot teach you any skills.<br>You must find your current class teachers.</body></html>"
     end
 
     pc.send_packet(no_teach_msg)
   end
 
-  def long_range_skills # => Skill[]
+  def long_range_skills : Indexable(Skill)
     template.get_ai_skills(AISkillScope::LONG_RANGE)
   end
 
-  def short_range_skills # => Skill[]
+  def short_range_skills : Indexable(Skill)
     template.get_ai_skills(AISkillScope::SHORT_RANGE)
   end
 

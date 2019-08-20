@@ -454,8 +454,8 @@ module Config
   class_property html_action_cache_debug : Bool = false
   class_property packet_handler_debug : Bool = false
   class_property developer : Bool = false
-  class_property no_handlers : Bool = false
-  class_property no_quests : Bool = false
+  class_property alt_dev_no_handlers : Bool = false
+  class_property alt_dev_no_quests : Bool = false
   class_property alt_dev_no_spawns : Bool = false
   class_property alt_dev_show_quests_load_in_logs : Bool = false
   class_property alt_dev_show_scripts_load_in_logs : Bool = false
@@ -947,7 +947,7 @@ module Config
   # --------------------------------------------------
   # MMO Settings
   # --------------------------------------------------
-  class_property mmo_selector_sleep_time : Int32 = 0
+  class_property mmo_selector_sleep_time : Time::Span = 0.milliseconds
   class_property mmo_max_send_per_pass : Int32 = 0
   class_property mmo_max_read_per_pass : Int32 = 0
   class_property mmo_helper_buffer_count : Int32 = 0
@@ -1133,7 +1133,7 @@ module Config
     config.punishment_time = cfg.get_i32("FloodProtector#{str}PunishmentTime") * 60000
   end
 
-  private def get_server_type_id(array : Array(String))
+  def get_server_type_id(array : Array(String))
     array.reduce(0) do |ret, t|
       case t.strip.downcase
       when "normal"     then ret | 0x01
@@ -1503,7 +1503,7 @@ module Config
     @@alt_blacksmith_use_recipes = cfg.get_bool("AltBlacksmithUseRecipes", true)
     @@alt_clan_leader_date_change = cfg.get_i32("AltClanLeaderDateChange", 3)
     if @@alt_clan_leader_date_change < 1 || @@alt_clan_leader_date_change > 7
-      warn "wrong value for ALT_CLAN_LEADER_DATE_CHANGE"
+      warn { "wrong value for ALT_CLAN_LEADER_DATE_CHANGE: #{@@alt_clan_leader_date_change}" }
       @@alt_clan_leader_date_change = 3
     end
 
@@ -1583,7 +1583,7 @@ module Config
 
     # MMO
     cfg.parse(Dir.current + MMO_CONFIG_FILE)
-    @@mmo_selector_sleep_time = cfg.get_i32("SleepTime", 20)
+    @@mmo_selector_sleep_time = cfg.get_i32("SleepTime", 20).milliseconds
     @@mmo_max_send_per_pass = cfg.get_i32("MaxSendPerPass", 12)
     @@mmo_max_read_per_pass = cfg.get_i32("MaxReadPerPass", 12)
     @@mmo_helper_buffer_count = cfg.get_i32("HelperBufferCount", 20)
@@ -1632,8 +1632,8 @@ module Config
     @@html_action_cache_debug = cfg.get_bool("HtmlActionCacheDebug")
     @@packet_handler_debug = cfg.get_bool("PacketHandlerDebug")
     @@developer = cfg.get_bool("Developer")
-    @@no_handlers = cfg.get_bool("nohandlers", false)
-    @@no_quests = cfg.get_bool("noquests", false)
+    @@alt_dev_no_handlers = cfg.get_bool("nohandlers", false)
+    @@alt_dev_no_quests = cfg.get_bool("noquests", false)
     @@alt_dev_no_spawns = cfg.get_bool("AltDevNoSpawns")
     # const_set(:ALT_DEV_NO_SPAWNS, true) if ARGV.include?("nospawns")
     @@alt_dev_show_quests_load_in_logs = cfg.get_bool("AltDevShowQuestsLoadInLogs")
@@ -2168,7 +2168,7 @@ module Config
       @@coord_synchronize = 2
     end
 
-    info "Config files read in #{timer} s."
+    info { "Config files read in #{timer} s." }
   end
 
   def set_parameter_value(name : String, value : String) : Bool

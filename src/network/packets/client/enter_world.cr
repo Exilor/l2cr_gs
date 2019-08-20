@@ -199,7 +199,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     end
 
     if pc.cursed_weapon_equipped?
-      info "#{pc.name} has a cursed weapon."
+      info { "#{pc.name} has a cursed weapon." }
       CursedWeaponsManager.get_cursed_weapon(pc.cursed_weapon_equipped_id)
       .not_nil!.cursed_on_login
     end
@@ -220,10 +220,10 @@ class Packets::Incoming::EnterWorld < GameClientPacket
 
     pc.send_packet(SystemMessageId::WELCOME_TO_LINEAGE)
 
-    pc.send_message(get_text("VGhpcyBzZXJ2ZXIgdXNlcyBMMkosIGEgcHJvamVjdCBmb3VuZGVkIGJ5IEwyQ2hlZg=="))
-    pc.send_message(get_text("YW5kIGRldmVsb3BlZCBieSBMMkogVGVhbSBhdCB3d3cubDJqc2VydmVyLmNvbQ=="))
-    pc.send_message(get_text("Q29weXJpZ2h0IDIwMDQtMjAxOQ=="))
-    pc.send_message(get_text("VGhhbmsgeW91IGZvciAxNSB5ZWFycyE="))
+    # pc.send_message(get_text("VGhpcyBzZXJ2ZXIgdXNlcyBMMkosIGEgcHJvamVjdCBmb3VuZGVkIGJ5IEwyQ2hlZg=="))
+    # pc.send_message(get_text("YW5kIGRldmVsb3BlZCBieSBMMkogVGVhbSBhdCB3d3cubDJqc2VydmVyLmNvbQ=="))
+    # pc.send_message(get_text("Q29weXJpZ2h0IDIwMDQtMjAxOQ=="))
+    # pc.send_message(get_text("VGhhbmsgeW91IGZvciAxNSB5ZWFycyE="))
 
     SevenSigns.send_current_period_msg(pc)
     AnnouncementsTable.show_announcements(pc)
@@ -240,7 +240,9 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       send_packet(NpcHtmlMessage.new(html))
     end
 
-    # petition stuff
+    if Config.petitioning_allowed
+      PetitionManager.check_petition_messages(pc)
+    end
 
     if pc.looks_dead?
       send_packet(Die.new(pc))
@@ -321,7 +323,11 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       pc.send_packet(ExNotifyPremiumItem::STATIC_PACKET)
     end
 
-    pc.refresh_overloaded # custom
+    pc.refresh_overloaded
+    if tmp = pc.original_cp_hp_mp
+      pc.current_cp, pc.current_hp, pc.current_mp = tmp
+      pc.original_cp_hp_mp = nil
+    end
 
     # Unstuck players that had client open when server crashed.
     action_failed

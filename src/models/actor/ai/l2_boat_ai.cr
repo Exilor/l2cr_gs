@@ -1,7 +1,7 @@
 require "./l2_vehicle_ai"
 
 class L2BoatAI < L2VehicleAI
-  def move_to(x : Int32, y : Int32, z : Int32)
+  private def move_to(x : Int32, y : Int32, z : Int32)
     unless @actor.movement_disabled?
       unless @client_moving
         @actor.broadcast_packet(VehicleStarted.new(actor, 1))
@@ -13,7 +13,7 @@ class L2BoatAI < L2VehicleAI
     end
   end
 
-  def client_stop_moving(loc : Location?)
+  private def client_stop_moving(loc : Location?)
     if @actor.moving?
       @actor.stop_move(loc)
     end
@@ -31,7 +31,7 @@ class L2BoatAI < L2VehicleAI
     end
   end
 
-  def actor
+  def actor : L2BoatInstance
     @actor.as(L2BoatInstance)
   end
 end

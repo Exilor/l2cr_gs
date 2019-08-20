@@ -19,7 +19,7 @@ module SummonTable
         SERVITORS[owner_id] = skill_id
       end
 
-      info "Restored #{SERVITORS.size} servitors."
+      info { "Restored #{SERVITORS.size} servitors." }
     else
       info "Restoration of servitors is disabled."
     end
@@ -31,7 +31,7 @@ module SummonTable
         PETS[owner_id] = item_id
       end
 
-      info "Restored #{PETS.size} pets."
+      info { "Restored #{PETS.size} pets." }
     else
       info "Restoration of pets is disabled."
     end
@@ -47,22 +47,22 @@ module SummonTable
   def restore_pet(pc : L2PcInstance)
     obj_id = PETS[pc.l2id]
     unless item = pc.inventory.get_item_by_l2id(obj_id)
-      warn "No pet summoning item found with l2id #{obj_id.inspect}."
+      warn { "No pet summoning item found with l2id #{obj_id.inspect}." }
       return
     end
 
     unless data = PetDataTable.get_pet_data_by_item_id(item.id)
-      warn "No pet data found for item #{item}."
+      warn { "No pet data found for item #{item}." }
       return
     end
 
     unless template = NpcData[data.npc_id]?
-      warn "No NPC template found with ID #{data.npc_id}."
+      warn { "No NPC template found with ID #{data.npc_id}." }
       return
     end
 
     unless pet = L2PetInstance.spawn_pet(template, pc, item)
-      warn "Pet couldn't be restored (template: #{template}, pc: #{pc}, item: #{item})."
+      warn { "Pet couldn't be restored (template: #{template}, pc: #{pc}, item: #{item})." }
       return
     end
 
@@ -105,7 +105,9 @@ module SummonTable
       skill.apply_effects(pc, pc)
       if pc.has_servitor?
         summon = pc.summon.as(L2ServitorInstance)
-        summon.heal!
+        summon.current_hp = cur_hp.to_f
+        summon.current_mp = cur_mp.to_f
+        summon.original_hp_mp = {cur_hp.to_f, cur_mp.to_f}
         summon.life_time_remaining = time
       end
     end
@@ -125,7 +127,7 @@ module SummonTable
       summon.life_time_remaining
     )
 
-    debug "Saved #{summon}."
+    debug { "Saved #{summon}." }
   end
 
   def pets

@@ -49,7 +49,7 @@ module SkillData
 
     if max_lvl > 0 && level > max_lvl
       skill = SKILLS[(id * 1021) + max_lvl]
-      warn "Nonexistent skill-level #{id}-#{level} (#{skill})."
+      warn { "Nonexistent skill-level #{id}-#{level} (#{skill})." }
       return skill
     end
 

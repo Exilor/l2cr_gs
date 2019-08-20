@@ -80,7 +80,7 @@ module CellPathFinding
 
     pass = 0
 
-    while true
+    loop do
       pass += 1
       @@post_filter_passes += 1
       remove = false

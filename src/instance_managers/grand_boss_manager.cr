@@ -32,20 +32,20 @@ module GrandBossManager
       BOSS_STATUS[boss_id] = status
       STORED_INFO[boss_id] = info
       if status == 0
-        info "#{NpcData[boss_id].name} (#{boss_id}) is alive."
+        info { "#{NpcData[boss_id].name} (#{boss_id}) is alive." }
       else
-        info "#{NpcData[boss_id].name} (#{boss_id}) is dead."
+        info { "#{NpcData[boss_id].name} (#{boss_id}) is dead." }
       end
       if status > 0
         time = Time.from_ms(rs.get_i64("respawn_time"))
-        info "Next spawn date of #{NpcData[boss_id].name} is #{time}."
+        info { "Next spawn date of #{NpcData[boss_id].name} is #{time}." }
       end
     end
 
-    info "Loaded #{STORED_INFO.size} bosses."
+    info { "Loaded #{STORED_INFO.size} bosses." }
 
     if STORED_INFO.empty?
-      warn "No grand boss were loaded"
+      warn "No bosses were loaded"
     end
 
     ThreadPoolManager.schedule_general_at_fixed_rate(self, 5 * 60 * 1000, 5 * 60 * 1000)
@@ -67,7 +67,7 @@ module GrandBossManager
       zone_id = rs.get_i32("zone")
       zones[zone_id] << id
     end
-    info "Initialized #{ZONES.size} Grand Boss zones."
+    info { "Initialized #{ZONES.size} Grand Boss zones." }
     ZONES.each do |id, zone|
       zone.allowed_players = zones[id]
     end
@@ -117,7 +117,7 @@ module GrandBossManager
 
   def set_boss_status(boss_id : Int32, status : Int32)
     BOSS_STATUS[boss_id] = status
-    info "Updated: #{NpcData[boss_id].name} (#{boss_id}) status to #{status}."
+    info { "Updated: #{NpcData[boss_id].name} (#{boss_id}) status to #{status}." }
     update_db(boss_id, true)
   end
 
@@ -196,11 +196,6 @@ module GrandBossManager
     else
       boss = boss.not_nil!
       info = info.not_nil!
-      if boss.dead?
-        hp, mp = boss.max_hp, boss.max_mp
-      else
-        hp, mp = boss.current_hp, boss.current_mp
-      end
 
       GameDB.exec(
         UPDATE_GRAND_BOSS_DATA,
