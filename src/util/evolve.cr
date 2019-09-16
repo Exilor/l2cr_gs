@@ -168,12 +168,11 @@ module Evolve
   end
 
   private struct EvolveFeedWait
-    include Runnable
     include Loggable
 
     initializer pc: L2PcInstance, pet: L2PetInstance
 
-    def run
+    def call
       if @pet.current_feed <= 0
         @pet.unsummon(@pc)
       else
@@ -185,12 +184,11 @@ module Evolve
   end
 
   private struct EvolveFinalizer
-    include Runnable
     include Loggable
 
     initializer pc: L2PcInstance, pet: L2PetInstance
 
-    def run
+    def call
       @pc.send_packet(MagicSkillLaunched.new(@pc, 2046, 1))
       @pet.follow_status = true
       @pet.show_summon_animation = false

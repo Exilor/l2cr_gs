@@ -1,5 +1,4 @@
 class PunishmentTask
-  include Runnable
   include Loggable
 
   private INSERT_QUERY = "INSERT INTO punishments (`key`, `affect`, `type`, `expiration`, `reason`, `punishedBy`) VALUES (?, ?, ?, ?, ?, ?)"
@@ -93,7 +92,7 @@ class PunishmentTask
     end
   end
 
-  def run
+  def call
     PunishmentManager.stop_punishment(@key, @affect, @type)
   end
 end

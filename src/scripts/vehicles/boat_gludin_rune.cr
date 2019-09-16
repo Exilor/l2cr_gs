@@ -1,4 +1,6 @@
-class BoatGludinRune < BoatEngine
+class BoatGludinRune
+  include BoatEngine
+  
   private GLUDIN_TO_RUNE = [
     VehiclePathPoint.new(-95686, 155514, -3610, 150, 800),
 		VehiclePathPoint.new(-98112, 159040, -3610, 150, 800),
@@ -82,7 +84,7 @@ class BoatGludinRune < BoatEngine
 
   private GLUDIN_DOCK = [VehiclePathPoint.new(-95686, 150514, -3610, 150, 800)]
 
-  def run
+  def call
     case @cycle
     when 0
       # debug "Leaving for Rune in 5 minutes."

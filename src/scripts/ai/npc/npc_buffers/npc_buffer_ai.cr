@@ -1,10 +1,9 @@
 struct NpcBufferAI
-  include Runnable
   include Loggable
 
   initializer npc: L2Npc, skill_data: NpcBufferSkillData
 
-  def run
+  def call
     # unless @npc
     #   warn "No NPC."
     #   return

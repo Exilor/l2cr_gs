@@ -258,7 +258,7 @@ module ClanTable
 
   def check_surrender(clan1 : L2Clan, clan2 : L2Clan)
     count = 0
-    clan.each_online_member do |pc|
+    clan.each_player do |pc|
       if pc.wants_peace == 1
         count += 1
       end

@@ -31,8 +31,8 @@ class L2CubicInstance
   SKILL_CUBIC_CURE = 5579
 
   @cubic_delay : Int32
-  @action_task : Runnable::PeriodicTask?
-  @disappear_task : Runnable::DelayedTask?
+  @action_task : Concurrent::PeriodicTask?
+  @disappear_task : Concurrent::DelayedTask?
   @active = false
   getter skills = [] of Skill
   getter owner, cubic_power, cubic_max_count

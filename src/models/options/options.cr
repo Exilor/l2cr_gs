@@ -3,7 +3,6 @@ class Options
 
   @funcs = [] of FuncTemplate
   @activation_skills = [] of OptionsSkillHolder
-
   property active_skill : SkillHolder?
   property passive_skill : SkillHolder?
 
@@ -14,7 +13,9 @@ class Options
   end
 
   def get_stat_funcs(item : L2ItemInstance?, pc : L2Character)
-    return Slice(AbstractFunction).empty if @funcs.empty?
+    if @funcs.empty?
+      return Slice(AbstractFunction).empty
+    end
 
     funcs = [] of AbstractFunction
     @funcs.each do |temp|

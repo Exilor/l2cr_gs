@@ -31,7 +31,8 @@ struct GeoDriver
   # Cells in the world in the y axis
   GEO_CELLS_Y = GEO_BLOCKS_Y * IBlock::BLOCK_CELLS_Y
 
-  @regions = Pointer(IRegion).malloc(GEO_REGIONS, NullRegion.as(IRegion))
+  # @regions = Pointer(IRegion).malloc(GEO_REGIONS, NullRegion.as(IRegion))
+  @regions = Pointer(IRegion).malloc(GEO_REGIONS, NullRegion)
 
   private def check_geo_x(x : Int32)
     if x < 0 || x >= GEO_CELLS_X

@@ -286,9 +286,6 @@ module GameServer
     host = Config.gameserver_hostname
     port = Config.port_game
 
-    handler = GamePacketHandler
-    executor = GamePacketHandler
-
     sc = SelectorConfig.new
     sc.max_read_per_pass   = Config.mmo_max_read_per_pass
     sc.max_send_per_pass   = Config.mmo_max_send_per_pass
@@ -296,7 +293,13 @@ module GameServer
     sc.helper_buffer_count = Config.mmo_helper_buffer_count
     sc.tcp_no_delay        = Config.mmo_tcp_nodelay
 
-    listener = MMO::PacketManager.new(sc, GameClient, handler, executor)
+    listener = MMO::PacketManager.new(
+      sc,
+      accept_filter: IPv4Filter.new,
+      client_factory: GamePacketHandler,
+      packet_handler: GamePacketHandler,
+      packet_executor: GamePacketHandler
+    )
     listener.host = host == "*" ? "0.0.0.0" : host
     listener.port = port
 

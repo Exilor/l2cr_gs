@@ -9,7 +9,7 @@ struct EnchantSkillLearn
   end
 
   def get_enchant_route(level : Int32) : Int32
-    level / 100
+    level // 100
   end
 
   def get_enchant_index(level : Int32) : Int32
@@ -17,7 +17,7 @@ struct EnchantSkillLearn
   end
 
   def get_enchant_type(level : Int32) : Int32
-    ((level - 1) / 100) - 1
+    ((level - 1) // 100) - 1
   end
 
   def first_route_group : EnchantSkillGroup?

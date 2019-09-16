@@ -9,27 +9,22 @@ class Packets::Incoming::AuthLogin < GameClientPacket
 
   private def run_impl
     if @account.empty? || !client.protocol_ok?
-      client.close
+      client.close(nil)
       return
     end
 
     key = SessionKey.new(@lk_1, @lk_2, @pk_1, @pk_2)
 
-    if Config.debug
-      debug "User: #{@account.inspect}."
-      debug "SessionKey: #{key.inspect}."
-    end
+    debug { "User: #{@account.inspect}." }
+    debug { "SessionKey: #{key.inspect}." }
 
-    if client.account_name?
-      client.close
-      return
-    end
-
-    if LoginServerClient.add_game_server_login(@account, client)
-      client.account_name = @account
-      LoginServerClient.add_waiting_client_and_send_request(@account, client, key)
-    else
-      client.close
+    unless client.account_name?
+      if LoginServerClient.add_game_server_login(@account, client)
+        client.account_name = @account
+        LoginServerClient.add_waiting_client_and_send_request(@account, client, key)
+      else
+        client.close(nil)
+      end
     end
   end
 end

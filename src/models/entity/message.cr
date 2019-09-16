@@ -3,10 +3,9 @@ require "../item_containers/mail"
 class Message
   include Synchronizable
 
-  EXPIRATION = 360 # 15 days
-  COD_EXPIRATION = 12 # 12 hours
-
-  UNLOAD_ATTACHMENTS_INTERVAL = 900000 # 15-30 mins
+  private EXPIRATION = 360 # 15 days
+  private COD_EXPIRATION = 12 # 12 hours
+  private UNLOAD_ATTACHMENTS_INTERVAL = 900000 # 15-30 mins
 
   # post state
   DELETED = 0
@@ -18,7 +17,6 @@ class Message
   end
 
   @attachments : Mail?
-
   getter sender_id : Int32
   getter receiver_id : Int32
   getter subject : String
@@ -26,12 +24,10 @@ class Message
   getter expiration : Int64
   getter send_by_system = 0
   getter req_adena : Int64
-
   getter? unread : Bool
   getter? deleted_by_sender : Bool
   getter? deleted_by_receiver : Bool
   getter? has_attachments : Bool
-
   property? returned : Bool = false
 
   def initialize(rs : ResultSetReader)
@@ -205,12 +201,10 @@ class Message
     end
   end
 
-  class AttachmentsUnloadTask
-    include Runnable
-
+  private class AttachmentsUnloadTask
     initializer msg: Message
 
-    def run
+    def call
       if msg = @msg
         msg.unload_attachments
         @msg = nil

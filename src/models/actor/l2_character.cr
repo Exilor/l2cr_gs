@@ -1,5 +1,4 @@
 require "../l2_object"
-require "../interfaces/deletable"
 require "../interfaces/skills_holder"
 require "./stat/char_stat"
 require "./status/char_status"
@@ -21,7 +20,6 @@ require "../skills/skill_channelizer"
 require "./instance/l2_raid_boss_instance"
 
 abstract class L2Character < L2Object
-  # include Deletable
   include SkillsHolder
 
   MAX_HP_BAR_PX = 352.0
@@ -33,7 +31,6 @@ abstract class L2Character < L2Object
   @zones_mutex = Mutex.new
   @zone_validate_counter = 4i8
   @teleport_lock = Mutex.new
-  @attack_lock = Mutex.new # ?
   @invul_against_skills : Hash(Int32, InvulSkillHolder)?
   @reuse_time_stamp_items : Hash(Int32, TimeStamp)?
   @reuse_time_stamp_skills : Hash(Int32, TimeStamp)?
@@ -42,10 +39,9 @@ abstract class L2Character < L2Object
   @all_skills_disabled : Bool = false
   @ai : L2CharacterAI?
   @exceptions = 0i64
-  @move : L2Character::MoveData?
-  @skill_cast_2 : Runnable::DelayedTask?
+  @move : MoveData?
+  @skill_cast_2 : Concurrent::DelayedTask?
   @attack_by_list : Set(L2Character)?
-
   getter title : String = ""
   getter cast_interrupt_time = 0i64
   getter skills = Hash(Int32, Skill).new
@@ -61,7 +57,7 @@ abstract class L2Character < L2Object
   getter? core_ai_disabled = false
   setter paralyzed : Bool = false
   setter pending_revive : Bool = false
-  setter skill_cast : Runnable::DelayedTask?
+  setter skill_cast : Concurrent::DelayedTask?
   setter invul : Bool = false
   property attack_end_time : Int64 = 0i64
   property bow_attack_end_time : Int32 = 0
@@ -250,7 +246,7 @@ abstract class L2Character < L2Object
     end
   end
 
-  def delete_me
+  def delete_me : Bool
     self.debugger = nil
 
     if ai?
@@ -2082,11 +2078,11 @@ abstract class L2Character < L2Object
     dead?
   end
 
-  def current_load
+  def current_load : Int32
     0
   end
 
-  def bonus_weight_penalty
+  def bonus_weight_penalty : Int32
     0
   end
 
@@ -2494,23 +2490,7 @@ abstract class L2Character < L2Object
   end
 
   def do_attack(target : L2Character?)
-    # time stamp lock
-
-    return unless target
-
-    if attacking_disabled?
-      if playable? && attacking_now?
-        warn "Already attacking."
-        if L2Cr.retry_attacks?
-          task = ->{ notify_event(AI::READY_TO_ACT) unless attacking_disabled? }
-          ThreadPoolManager.schedule_ai(task, 100)
-        end
-        return
-        # warn "Will be able to attack again in #{@attack_end_time - Time.ns} ns."
-      else
-        return
-      end
-    end
+    return if target.nil? || attacking_disabled?
 
     term = OnCreatureAttack.new(self, target).notify(self)
     if term && term.terminate
@@ -2675,8 +2655,6 @@ abstract class L2Character < L2Object
 
     task = NotifyAITask.new(self, AI::READY_TO_ACT)
     ThreadPoolManager.schedule_ai(task, time_atk + reuse)
-  # ensure
-    # @attack_lock.unlock
   end
 
   def attack_type : WeaponType
@@ -3559,7 +3537,7 @@ abstract class L2Character < L2Object
     ai? && (!!ai.attack_target? || ai.auto_attacking?)
   end
 
-  class MoveData
+  private class MoveData
     property move_start_time : Int32 = 0
     property move_time_stamp : Int32 = 0
     property x_destination : Int32 = 0

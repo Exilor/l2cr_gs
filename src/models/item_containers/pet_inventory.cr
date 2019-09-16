@@ -9,11 +9,11 @@ class PetInventory < Inventory
     owner?.not_nil!
   end
 
-  def owner?
+  def owner? : L2PetInstance
     @owner
   end
 
-  def owner_id
+  def owner_id : Int32
     owner.owner.l2id
   end
 
@@ -49,11 +49,11 @@ class PetInventory < Inventory
     @total_weight + weight <= owner.max_load
   end
 
-  def base_location
+  def base_location : ItemLocation
     ItemLocation::PET
   end
 
-  def equip_location
+  def equip_location : ItemLocation
     ItemLocation::PET_EQUIP
   end
 
@@ -69,7 +69,7 @@ class PetInventory < Inventory
   end
 
   def transfer_items_to_owner
-    @items.each do |item|
+    @items.safe_each do |item|
       owner.transfer_item(
         "return",
         item.l2id,

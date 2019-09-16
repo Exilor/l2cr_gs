@@ -54,7 +54,7 @@ class L2RaceManagerInstance < L2Npc
     @@managers << self
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2RaceManagerInstance
   end
 
@@ -62,7 +62,7 @@ class L2RaceManagerInstance < L2Npc
     @known_list = RaceManagerKnownList.new(self)
   end
 
-  def known_list
+  def known_list : RaceManagerKnownList
     super.as(RaceManagerKnownList)
   end
 
@@ -70,31 +70,31 @@ class L2RaceManagerInstance < L2Npc
     sm = SystemMessage[type]
 
     case sm.id
-    when 816, # SystemMessageId::MONSRACE_TICKETS_AVAILABLE_FOR_S1_RACE
-         817  # SystemMessageId::MONSRACE_TICKETS_NOW_AVAILABLE_FOR_S1_RACE
+    when 816, # MONSRACE_TICKETS_AVAILABLE_FOR_S1_RACE
+         817  # MONSRACE_TICKETS_NOW_AVAILABLE_FOR_S1_RACE
       if @@state != ACCEPTING_BETS
         @@state = ACCEPTING_BETS
         start_race
       end
       sm.add_int(@@race_number)
-    when 818, # SystemMessageId::MONSRACE_TICKETS_STOP_IN_S1_MINUTES
-         820, # SystemMessageId::MONSRACE_S2_BEGINS_IN_S1_MINUTES
-         823  # SystemMessageId::MONSRACE_BEGINS_IN_S1_SECONDS
+    when 818, # MONSRACE_TICKETS_STOP_IN_S1_MINUTES
+         820, # MONSRACE_S2_BEGINS_IN_S1_MINUTES
+         823  # MONSRACE_BEGINS_IN_S1_SECONDS
       sm.add_int(@@minutes)
       if sm.id == 820
         sm.add_int(@@race_number)
       end
       @@minutes -= 1
-    when 819 # SystemMessageId::MONSRACE_S1_TICKET_SALES_CLOSED
+    when 819 # MONSRACE_S1_TICKET_SALES_CLOSED
       sm.add_int(@@race_number)
       @@state = WAITING
       @@minutes = 2
-    when 821, # SystemMessageId::MONSRACE_S1_BEGINS_IN_30_SECONDS
-         822, # SystemMessageId::MONSRACE_S1_COUNTDOWN_IN_FIVE_SECONDS
-         825  # SystemMessageId::MONSRACE_S1_RACE_END
+    when 821, # MONSRACE_S1_BEGINS_IN_30_SECONDS
+         822, # MONSRACE_S1_COUNTDOWN_IN_FIVE_SECONDS
+         825  # MONSRACE_S1_RACE_END
       sm.add_int(@@race_number)
       @@minutes = 5
-    when 826 # SystemMessageId::MONSRACE_FIRST_PLACE_S1_SECOND_S2
+    when 826 # MONSRACE_FIRST_PLACE_S1_SECOND_S2
       @@state = RACE_END
       sm.add_int(MonsterRace.first_place)
       sm.add_int(MonsterRace.second_place)
@@ -154,7 +154,7 @@ class L2RaceManagerInstance < L2Npc
         pc.set_race(1, 0)
       end
 
-      if ((val == 10) && (pc.get_race(0) == 0)) || ((val == 20) && (pc.get_race(0) == 0) && (pc.get_race(1) == 0))
+      if (val == 10 && pc.get_race(0) == 0) || (val == 20 && pc.get_race(0) == 0 && pc.get_race(1) == 0)
         val = 0
       end
 
@@ -289,11 +289,9 @@ class L2RaceManagerInstance < L2Npc
   end
 
   private struct Announcement
-    include Runnable
-
     initializer announcer: L2RaceManagerInstance, sm_id: SystemMessageId
 
-    def run
+    def call
       @announcer.make_announcement(@sm_id)
     end
   end
@@ -306,18 +304,13 @@ class L2RaceManagerInstance < L2Npc
     end
   end
 
-  private struct Info
-    getter_initializer id: Int32, place: Int32, odds: Int32, payout: Int32
-  end
+  private record Info, id : Int32, place : Int32, odds : Int32, payout : Int32
 
   private struct RunRace
-    include Runnable
-
     initializer manager: L2RaceManagerInstance
 
-    def run
-      L2RaceManagerInstance.packet =
-      Packets::Outgoing::MonRaceInfo.new(
+    def call
+      L2RaceManagerInstance.packet = Packets::Outgoing::MonRaceInfo.new(
         CODES[2][0], CODES[2][1], MonsterRace.monsters, MonsterRace.speeds
       )
       @manager.send_monster_info
@@ -326,11 +319,9 @@ class L2RaceManagerInstance < L2Npc
   end
 
   private struct RunEnd
-    include Runnable
-
     initializer manager: L2RaceManagerInstance
 
-    def run
+    def call
       @manager.make_announcement(SystemMessageId::MONSRACE_FIRST_PLACE_S1_SECOND_S2)
       @manager.make_announcement(SystemMessageId::MONSRACE_S1_RACE_END)
       L2RaceManagerInstance.race_number += 1

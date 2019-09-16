@@ -91,7 +91,6 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
       sql = "SELECT * FROM characters WHERE account_name=? ORDER BY createDate"
       GameDB.each(sql, account) do |rs|
         if package = restore_char(rs)
-          # p package
           char_list << package
         end
       end
@@ -109,7 +108,13 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
 
     delete_time = rs.get_i64("deletetime")
     if delete_time > 0
-      debug "TODO: delete #{name}."
+      if Time.ms > delete_time
+        if clan = ClanTable.get_clan(rs.get_i32("clanid"))
+          clan.remove_clan_member(l2id, 0)
+        end
+        GameClient.delete_char_by_l2id(l2id)
+        return
+      end
     end
 
     cip = CharSelectInfoPackage.new(l2id, name)

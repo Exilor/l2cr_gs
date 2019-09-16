@@ -44,7 +44,7 @@ class AuctionDateGenerator
 
   private def calc_dest_time(time : Int64, date : Int64, add : Int64) : Int64
     if time < date
-      time += ((date - time) / add) * add
+      time += ((date - time) // add) * add
       if time < date
         time += add
       end

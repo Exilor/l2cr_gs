@@ -12,7 +12,7 @@ class L2FlyTerrainObjectInstance < L2Npc
     pc.gm? ? super : pc.action_failed
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2FlyTerrainObjectInstance
   end
 end

@@ -6,7 +6,6 @@ require "./olympiad_game_non_classed"
 
 module OlympiadGameManager
   extend self
-  extend Runnable
   extend Loggable
 
   private TASKS = [] of OlympiadGameTask
@@ -33,7 +32,7 @@ module OlympiadGameManager
     @@battle_started = true
   end
 
-  def run
+  def call
     if Olympiad.instance.olympiad_end?
       return
     end
@@ -87,7 +86,7 @@ module OlympiadGameManager
       if all_tasks_finished?
         OlympiadManager.clear_registered
         @@battle_started = false
-        info { "All current games finished." }
+        info "All current games finished."
       end
     end
   end

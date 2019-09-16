@@ -1,4 +1,8 @@
 class TransformTemplate
+  @data = {} of Int32 => TransformLevelData
+  @base_stats = {} of Int32 => Float64
+  @base_speed = {} of Int32 => Float64
+  @base_defense = {} of Int32 => Int32
   getter collision_radius : Float64
   getter collision_height : Float64
   getter base_attack_type : WeaponType
@@ -7,12 +11,6 @@ class TransformTemplate
   getter base_random_damage : Float64
   getter additional_skills = [] of AdditionalSkillHolder
   getter additional_items = [] of AdditionalItemHolder
-
-  @base_defense = {} of Int32 => Int32
-  @base_stats = {} of Int32 => Float64
-  @base_speed = {} of Int32 => Float64
-  @data = {} of Int32 => TransformLevelData
-
   property basic_action_list : Packets::Outgoing::ExBasicActionList?
 
   def initialize(set : StatsSet)

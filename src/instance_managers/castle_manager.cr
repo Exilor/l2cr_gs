@@ -1,10 +1,8 @@
-require "../models/interfaces/instance_list_manager"
 require "../models/entity/castle"
 
 module CastleManager
   extend self
   extend Loggable
-  # extend InstanceListManager
 
   private CASTLES = [] of Castle
   private CASTLE_SIEGE_DATES = Hash(Int32, Int64).new

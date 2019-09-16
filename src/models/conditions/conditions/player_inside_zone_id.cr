@@ -4,7 +4,14 @@ class Condition
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       return false unless effector.acting_player?
-      ZoneManager.get_zones(effector).any? { |zone| @zones.includes?(zone.id) }
+
+      ZoneManager.get_zones(effector) do |zone|
+        if @zones.includes?(zone.id)
+          return true
+        end
+      end
+
+      false
     end
   end
 end

@@ -30,9 +30,6 @@ module ItemHandler
       else
         debug "No handler for #{handler_name.inspect}."
       end
-    else
-      debug item
-      debug item.handler_name.inspect
     end
 
     nil

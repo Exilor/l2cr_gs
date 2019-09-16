@@ -1,6 +1,5 @@
 module AttackStances
   extend self
-  extend Runnable
 
   TASKS = Hash(L2Character, Int64).new
 
@@ -38,7 +37,7 @@ module AttackStances
     TASKS.has_key?(char)
   end
 
-  def run
+  def call
     current = Time.ms
 
     TASKS.each do |char, time|

@@ -2,8 +2,7 @@ module DecayTaskManager
   extend self
   extend Loggable
 
-  private POOL = RunnableExecutor.new
-  private TASKS = Hash(L2Character, Runnable::DelayedTask).new
+  private TASKS = Hash(L2Character, Concurrent::DelayedTask).new
 
   def add(char : L2Character)
     if template = char.template.as?(L2NpcTemplate)
@@ -21,9 +20,9 @@ module DecayTaskManager
 
   def add(char : L2Character, delay)
     task = DecayTask.new(char)
-    runnable = POOL.schedule_delayed(task, delay * 1000)
+    scheduled = Concurrent.schedule_delayed(task, delay * 1000)
     TASKS[char]?.try &.cancel
-    TASKS[char] = runnable
+    TASKS[char] = scheduled
   end
 
   def cancel(char : L2Character)
@@ -35,11 +34,9 @@ module DecayTaskManager
   end
 
   private struct DecayTask
-    include Runnable
-
     initializer char: L2Character
 
-    def run
+    def call
       TASKS.delete(@char)
       @char.on_decay
     end

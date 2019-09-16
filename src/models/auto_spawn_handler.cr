@@ -7,7 +7,7 @@ module AutoSpawnHandler
   private DEFAULT_DESPAWN = 3600000 # 1 hour
 
   private REGISTERED_SPAWNS = Hash(Int32, AutoSpawnInstance).new
-  private RUNNING_SPAWNS = Hash(Int32, Runnable::RunnableTask).new
+  private RUNNING_SPAWNS = Hash(Int32, Concurrent::ScheduledTask).new
 
   @@active_state = true
 
@@ -160,17 +160,15 @@ module AutoSpawnHandler
   end
 
   private struct AutoSpawner
-    include Runnable
     include Loggable
 
     initializer l2id: Int32
 
-    def run
+    def call
       sp = REGISTERED_SPAWNS[@l2id]
       return unless sp.spawn_active?
       location_list = sp.location_list
       if location_list.empty?
-        # warn "No location co-ords specified for spawn instance #{@l2id}."
         return
       end
       location_count = location_list.size
@@ -232,12 +230,11 @@ module AutoSpawnHandler
   end
 
   private struct AutoDespawner
-    include Runnable
     include Loggable
 
     initializer l2id: Int32
 
-    def run
+    def call
       unless sp = REGISTERED_SPAWNS[@l2id]?
         warn "No spawn registered for l2id #{@l2id}."
         return

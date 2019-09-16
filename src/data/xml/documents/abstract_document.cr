@@ -457,7 +457,7 @@ abstract class AbstractDocument
         st = text.split(';')
         id = st[0].strip.to_i
         slot = st[1].strip.to_i
-        enchant = st[3].strip.to_i # it's ok if it's nil.to_i
+        enchant = st[3].strip.to_i
 
         cond = join_and(cond, Condition::SlotItemId.new(slot, id, enchant))
       when "weaponchange"

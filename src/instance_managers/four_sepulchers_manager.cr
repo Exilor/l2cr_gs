@@ -76,10 +76,10 @@ module FourSepulchersManager
 
   class_getter cycle_min = 55i8
 
-  class_property change_cool_down_time_task : Runnable::DelayedTask?
-  class_property change_entry_time_task     : Runnable::DelayedTask?
-  class_property change_warm_up_time_task   : Runnable::DelayedTask?
-  class_property change_attack_time_task    : Runnable::DelayedTask?
+  class_property change_cool_down_time_task : Concurrent::DelayedTask?
+  class_property change_entry_time_task     : Concurrent::DelayedTask?
+  class_property change_warm_up_time_task   : Concurrent::DelayedTask?
+  class_property change_attack_time_task    : Concurrent::DelayedTask?
 
   class_property attack_time_end    : Int64 = 0i64
   class_property cool_down_time_end : Int64 = 0i64

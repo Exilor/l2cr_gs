@@ -28,7 +28,7 @@ module GameDB
       GameDB.each(SELECT, control.l2id) do |rs|
         pet = L2PetInstance.new(template, owner, control, rs.get_i32("level"))
         pet.respawned = true
-        # pet.name = rs.get_string?("name")
+
         if name = rs.get_string?("name")
           pet.name = name
         else
@@ -56,7 +56,7 @@ module GameDB
         return pet
       end
 
-      L2PetInstance.new(template, owner, control) #
+      L2PetInstance.new(template, owner, control)
     rescue e
       error e
       nil

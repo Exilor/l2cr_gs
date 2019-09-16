@@ -127,11 +127,9 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   class KickPlayer
-    include Runnable
-
     initializer pc: L2PcInstance?
 
-    def run
+    def call
       if pc = @pc
         if summon = pc.summon
           summon.unsummon(@pc)

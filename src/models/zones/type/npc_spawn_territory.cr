@@ -1,4 +1,4 @@
-class NpcSpawnTerritory
+struct NpcSpawnTerritory
   getter name
   initializer name: String, territory: L2ZoneForm
 

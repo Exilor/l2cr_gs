@@ -1,12 +1,9 @@
 class L2DamageZone < L2ZoneType
   @hp_damage_per_second = 200
   @mp_damage_per_second = 0
-
   @start_task = 10
   @reuse_task = 5000
-
   @castle_id = 0
-
   @castle : Castle?
 
   def initialize(id)
@@ -20,7 +17,7 @@ class L2DamageZone < L2ZoneType
     super.as(TaskZoneSettings)
   end
 
-  def castle
+  def castle : Castle?
     if @castle_id > 0 && @castle.nil?
       @castle = CastleManager.get_castle_by_id!(@castle_id)
     end
@@ -69,7 +66,7 @@ class L2DamageZone < L2ZoneType
     return unless enabled?
     siege = false
 
-    if castle = @castle
+    if castle = castle()
       siege = castle.siege.in_progress?
       unless siege
         settings.clear

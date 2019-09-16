@@ -178,11 +178,9 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct CheckTask
-    include Runnable
-
     initializer airship: L2ControllableAirshipInstance
 
-    def run
+    def call
       if @airship.visible? && @airship.empty? && !@airship.in_dock?
         ThreadPoolManager.execute_general(DecayTask.new(@airship))
       end
@@ -190,11 +188,9 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct ConsumeFuelTask
-    include Runnable
-
     initializer airship: L2ControllableAirshipInstance
 
-    def run
+    def call
       fuel = @airship.fuel
       if fuel > 0
         fuel -= 10
@@ -209,11 +205,9 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct DecayTask
-    include Runnable
-
     initializer airship: L2ControllableAirshipInstance
 
-    def run
+    def call
       @airship.delete_me
     end
   end

@@ -2,9 +2,9 @@ class L2SepulcherNpcInstance < L2Npc
   private HTML_FILE_PATH = "data/html/SepulcherNpc/"
   private HALLS_KEY = 7260
 
-  @close_task : Runnable::DelayedTask?
-  @spawn_next_mysterious_box_task : Runnable::DelayedTask?
-  @spawn_monster_task : Runnable::DelayedTask?
+  @close_task : Concurrent::DelayedTask?
+  @spawn_next_mysterious_box_task : Concurrent::DelayedTask?
+  @spawn_monster_task : Concurrent::DelayedTask?
 
   def initialize(template : L2NpcTemplate)
     super
@@ -214,12 +214,11 @@ class L2SepulcherNpcInstance < L2Npc
   end
 
   private struct CloseNextDoor
-    include Runnable
     include Loggable
 
     initializer door_id: Int32
 
-    def run
+    def call
       DoorData.get_door!(@door_id).close_me
     rescue e
       error e
@@ -227,21 +226,17 @@ class L2SepulcherNpcInstance < L2Npc
   end
 
   private struct SpawnNextMysteriousBoxTask
-    include Runnable
-
     initializer npc_id: Int32
 
-    def run
+    def call
       FourSepulchersManager.spawn_mysterious_box(@npc_id)
     end
   end
 
   private struct SpawnMonster
-    include Runnable
-
     initializer npc_id: Int32
 
-    def run
+    def call
       FourSepulchersManager.spawn_monster(@npc_id)
     end
   end

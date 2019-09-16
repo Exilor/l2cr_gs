@@ -1,8 +1,6 @@
 require "../../../../enums/illegal_action_punishment_type"
 
 class IllegalPlayerActionTask
-  include Runnable
-
   def initialize(@pc : L2PcInstance, @msg : String, @punishment : IllegalActionPunishmentType)
     case @punishment
     when .kick?
@@ -20,8 +18,8 @@ class IllegalPlayerActionTask
     end
   end
 
-  def run
-    # log record
+  def call
+    # TODO: log record
 
     AdminData.broadcast_message_to_gms(@msg)
 

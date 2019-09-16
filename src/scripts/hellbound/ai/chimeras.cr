@@ -68,11 +68,9 @@ class Scripts::Chimeras < AbstractNpcAI
   end
 
   private struct Teleport
-    include Runnable
-
     initializer npc: L2Npc, loc: Location
 
-    def run
+    def call
       @npc.tele_to_location(@loc, false)
     end
   end

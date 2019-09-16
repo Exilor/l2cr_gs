@@ -1,10 +1,8 @@
 class Packets::Incoming::RequestPreviewItem < GameClientPacket
   private struct RemoveWearItemsTask
-    include Runnable
-
     initializer pc: L2PcInstance
 
-    def run
+    def call
       @pc.send_packet(SystemMessageId::NO_LONGER_TRYING_ON)
       @pc.send_packet(Packets::Outgoing::UserInfo.new(@pc))
     end

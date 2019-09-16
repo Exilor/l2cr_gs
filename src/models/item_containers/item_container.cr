@@ -11,7 +11,7 @@ abstract class ItemContainer
   abstract def owner? : L2Character?
   abstract def base_location : ItemLocation
 
-  def name
+  def name : String
     "ItemContainer"
   end
 

@@ -1,12 +1,10 @@
 require "./crossings"
 
 class Polygon
-  # MIN_LENGTH = 4
-
+  @bounds : Rectangle?
   getter x_points : Slice(Int32)
   getter y_points : Slice(Int32)
   getter n_points : Int32
-  @bounds : Rectangle?
 
   def initialize(@x_points, @y_points, @n_points = x_points.size)
   end

@@ -9,22 +9,22 @@ class Castle < AbstractResidence
   FUNC_RESTORE_EXP = 4
   FUNC_SUPPORT = 5
 
+  @zone : L2SiegeZone?
+  @siege : Siege?
+  @tele_zone : L2ResidenceTeleportZone?
+  @functions = {} of Int32 => CastleFunction
+  @former_owner : L2Clan?
+  @siege_time_registration_end_date : Calendar?
   getter doors = [] of L2DoorInstance
   getter owner_id = 0
   getter siege_date = Calendar.new
-  @siege : Siege?
-  property? time_registration_over : Bool = true
-  @siege_time_registration_end_date : Calendar?
   getter tax_percent = 0
   getter tax_rate = 0.0
   getter treasury = 0i64
-  getter? show_npc_crest = false
-  @tele_zone : L2ResidenceTeleportZone?
-  @former_owner : L2Clan?
   getter artefacts = Array(L2ArtefactInstance).new(1)
-  @functions = {} of Int32 => CastleFunction
   getter ticket_buy_count = 0
-  @zone : L2SiegeZone?
+  getter? show_npc_crest = false
+  property? time_registration_over : Bool = true
 
   def initialize(castle_id : Int32)
     super
@@ -126,7 +126,7 @@ class Castle < AbstractResidence
 
   def zone : L2SiegeZone
     unless @zone
-      ZoneManager.each(L2SiegeZone) do |zone|
+      ZoneManager.get_all_zones(L2SiegeZone) do |zone|
         if zone.siege_l2id == residence_id
           @zone = zone
           break
@@ -144,7 +144,7 @@ class Castle < AbstractResidence
 
   def tele_zone : L2ResidenceTeleportZone
     unless @tele_zone
-      ZoneManager.each(L2ResidenceTeleportZone) do |zone|
+      ZoneManager.get_all_zones(L2ResidenceTeleportZone) do |zone|
         if zone.residence_id == residence_id
           @tele_zone = zone
           break
@@ -605,13 +605,7 @@ class Castle < AbstractResidence
   end
 
   private def init_residence_zone
-    # ZoneManager.get_all_zones(L2CastleZone).each do |zone|
-    #   if zone.residence_id == residence_id
-    #     self.residence_zone = zone
-    #   end
-    # end
-
-    ZoneManager.each(L2CastleZone) do |zone|
+    ZoneManager.get_all_zones(L2CastleZone) do |zone|
       if zone.residence_id == residence_id
         self.residence_zone = zone
       end
@@ -628,14 +622,14 @@ class Castle < AbstractResidence
       initialize_task(cwh)
     end
 
-    def lease
+    def lease : Int32
       @fee
     end
 
     def lease=(@fee : Int32)
     end
 
-    def end_time
+    def end_time : Int64
       @end_date
     end
 

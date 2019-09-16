@@ -17,7 +17,7 @@ abstract class ClanHallSiegeEngine < Quest
 
   @guards = [] of L2Spawn
   @hall : SiegableHall
-  @siege_task : Runnable::DelayedTask?
+  @siege_task : Concurrent::DelayedTask?
   @mission_accomplished = false
   getter attackers = {} of Int32 => L2SiegeClan
 

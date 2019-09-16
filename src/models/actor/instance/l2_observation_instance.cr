@@ -1,5 +1,5 @@
 class L2ObservationInstance < L2Npc
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2ObservationInstance
   end
 

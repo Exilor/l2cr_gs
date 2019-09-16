@@ -6,12 +6,12 @@ struct NpcRoutesHolder
   end
 
   def get_route_name(npc)
-    if spawn = npc.spawn?
-      key = get_unique_key(spawn.location)
-      @correspondences.fetch(key, "")
-    else
-      ""
+    if sp = npc.spawn?
+      key = get_unique_key(sp.location)
+      return @correspondences.fetch(key, "")
     end
+
+    ""
   end
 
   private def get_unique_key(loc)

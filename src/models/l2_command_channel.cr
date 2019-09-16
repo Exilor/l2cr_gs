@@ -43,9 +43,7 @@ class L2CommandChannel < AbstractPlayerGroup
   end
 
   def disband_channel
-    @parties.reverse_each do |party|
-      remove_party(party)
-    end
+    @parties.safe_each { |party| remove_party(party) }
   end
 
   def size : Int32
@@ -74,10 +72,10 @@ class L2CommandChannel < AbstractPlayerGroup
   end
 
   def includes?(pc : L2PcInstance) : Bool
-    @parties.any? { |party| party.includes?(pc) }
+    @parties.any? &.includes?(pc)
   end
 
   def each(&block : L2PcInstance ->)
-    @parties.each { |party| party.each { |pc| yield pc } }
+    @parties.each &.each { |pc| yield pc }
   end
 end

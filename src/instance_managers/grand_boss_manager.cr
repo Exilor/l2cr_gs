@@ -1,9 +1,5 @@
-require "../models/interfaces/storable"
-
 module GrandBossManager
   extend self
-  extend Runnable
-  # extend Storable
   extend Loggable
 
   private DELETE_GRAND_BOSS_LIST = "DELETE FROM grandboss_list"
@@ -53,7 +49,7 @@ module GrandBossManager
     init_zones
   end
 
-  def run
+  def call
     store_me
   end
 

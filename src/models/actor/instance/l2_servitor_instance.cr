@@ -1,10 +1,8 @@
 require "../../../data/sql/summon_effects_table"
 
 class L2ServitorInstance < L2Summon
-  include Runnable
-
   @consume_item_interval_remaining = 0
-  @life_task : Runnable::PeriodicTask?
+  @life_task : Concurrent::PeriodicTask?
 
   getter life_time = 0
   getter consume_item_interval = 0
@@ -174,7 +172,7 @@ class L2ServitorInstance < L2Summon
     calc_stat(Stats::MAX_RECOVERABLE_MP, max_mp).to_i
   end
 
-  def run
+  def call
     used_time = 5000 # should be more if in combat?
     @life_time_remaining -= used_time
     if dead? || !visible?

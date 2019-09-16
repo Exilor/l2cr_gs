@@ -18,12 +18,12 @@ class ArmorSet
   property men : Int32 = 0
 
   def contains_all?(pc : L2PcInstance) : Bool
-    inv = pc.inventory
-    chest = inv.chest_slot?.try &.id || 0
-    legs = inv.legs_slot?.try &.id || 0
-    head = inv.head_slot?.try &.id || 0
+    inv    = pc.inventory
+    chest  = inv.chest_slot? .try &.id || 0
+    legs   = inv.legs_slot?  .try &.id || 0
+    head   = inv.head_slot?  .try &.id || 0
     gloves = inv.gloves_slot?.try &.id || 0
-    feet = inv.feet_slot?.try &.id || 0
+    feet   = inv.feet_slot?  .try &.id || 0
 
     contains_all?(chest, legs, head, gloves, feet)
   end

@@ -9,8 +9,8 @@ class Instance
 
   private alias Say2 = Packets::Incoming::Say2
 
-  @check_time_up_task : Runnable::DelayedTask?
-  @eject_dead_tasks = {} of Int32 => Runnable::DelayedTask?
+  @check_time_up_task : Concurrent::DelayedTask?
+  @eject_dead_tasks = {} of Int32 => Concurrent::DelayedTask?
   @allow_random_walk = true
   @doors = {} of Int32 => L2DoorInstance
   @manual_spawn = {} of String => Array(L2Spawn)
@@ -22,18 +22,18 @@ class Instance
   getter instance_end_time = -1i64
   getter timer_text = ""
   getter enter_locations = [] of Location
-  getter? show_timer = false
-  getter? timer_increase = true
   setter allow_summon : Bool = true
   setter empty_destroy_time : Int64 = -1i64
+  getter reenter_data = [] of InstanceReenterTimeHolder # L2J: _resetData
+  getter remove_buff_type = InstanceRemoveBuffType::NONE
+  getter buff_exception_list = [] of Int32 # L2J: _exceptionList
+  getter? show_timer = false
+  getter? timer_increase = true
   property name : String = ""
   property eject_time : Int64
   property exit_loc : Location?
   property? pvp_instance : Bool = false
   property reenter_type = InstanceReenterType::NONE # L2J: _type
-  getter reenter_data = [] of InstanceReenterTimeHolder # L2J: _resetData
-  getter remove_buff_type = InstanceRemoveBuffType::NONE
-  getter buff_exception_list = [] of Int32 # L2J: _exceptionList
 
   def initialize(@id : Int32)
     @eject_time = Config.eject_dead_player_time.to_i64
@@ -48,7 +48,6 @@ class Instance
   end
 
   def duration=(val : Int)
-    # debug "duration=: #{val}."
     @check_time_up_task.try &.cancel
     task = CheckTimeUp.new(self, val.to_i32)
     @check_time_up_task = ThreadPoolManager.schedule_general(task, 500)
@@ -183,7 +182,6 @@ class Instance
         if temp = n["val"]?
           delay = 15000
           ctu = CheckTimeUp.new(self, temp.to_i * 60000)
-          # debug "parse_instance: next check in #{delay} ms."
           @check_time_up_task = ThreadPoolManager.schedule_general(ctu, delay)
           @instance_end_time = Time.ms + (temp.to_i * 60000) + 15000
         end
@@ -360,7 +358,6 @@ class Instance
   end
 
   protected def do_check_time_up(remaining : Int32)
-    # debug "do_check_time_up remaining: #{remaining}."
     cs = nil
 
     if @players.empty? && @empty_destroy_time == 0
@@ -428,7 +425,6 @@ class Instance
       task = TimeUp.new(self)
     end
 
-    # debug "do_check_time_up: next check in #{interval} ms."
     @check_time_up_task = ThreadPoolManager.schedule_general(task, interval)
   end
 
@@ -464,22 +460,18 @@ class Instance
     !remove_buff_type.none?
   end
 
-  struct CheckTimeUp
-    include Runnable
-
+  private struct CheckTimeUp
     initializer instance: Instance, remaining: Int32
 
-    def run
+    def call
       @instance.do_check_time_up(@remaining)
     end
   end
 
-  struct TimeUp
-    include Runnable
-
+  private struct TimeUp
     initializer instance: Instance
 
-    def run
+    def call
       InstanceManager.destroy_instance(@instance.id)
     end
   end

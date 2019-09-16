@@ -721,18 +721,20 @@ module SkillTreesData
       end
     end
 
-    info { "Loaded #{class_skill_tree_count} Class Skills for #{CLASS_SKILL_TREES.size} Class Skill Trees." }
-    info { "Loaded #{SUBCLASS_SKILL_TREE.size} Subclass Skills." }
-    info { "Loaded #{transfer_skill_tree_count} Transfer Skills for #{TRANSFER_SKILL_TREES.size} Transfer Skill Trees." }
-    info { "Loaded #{FISHING_SKILL_TREE.size} Fishing Skills, #{dw_fish_skill_tree_count} Dwarven only Fishing Skills." }
-    info { "Loaded #{COLLECT_SKILL_TREE.size} Collect Skills." }
-    info { "Loaded #{PLEDGE_SKILL_TREE.size} Pledge Skills, #{PLEDGE_SKILL_TREE.size - res_skill_count} for Pledge and #{res_skill_count} Residential." }
-    info { "Loaded #{SUBPLEDGE_SKILL_TREE.size} Subpledge Skills." }
-    info { "Loaded #{TRANSFORM_SKILL_TREE.size} Transform Skills." }
-    info { "Loaded #{NOBLE_SKILL_TREE.size} Noble Skills." }
-    info { "Loaded #{HERO_SKILL_TREE.size} Hero Skills." }
-    info { "Loaded #{GM_SKILL_TREE.size} GM Skills." }
-    info { "Loaded #{GM_AURA_SKILL_TREE.size} GM Aura Skills." }
-    info { "Loaded #{COMMON_SKILL_TREE.size} Common Skills to all classes." }
+    info do
+      "Loaded #{class_skill_tree_count} Class Skills for #{CLASS_SKILL_TREES.size} Class Skill Trees.\n" \
+      "Loaded #{SUBCLASS_SKILL_TREE.size} Subclass Skills.\n" \
+      "Loaded #{transfer_skill_tree_count} Transfer Skills for #{TRANSFER_SKILL_TREES.size} Transfer Skill Trees.\n" \
+      "Loaded #{FISHING_SKILL_TREE.size} Fishing Skills, #{dw_fish_skill_tree_count} Dwarven only Fishing Skills.\n" \
+      "Loaded #{COLLECT_SKILL_TREE.size} Collect Skills.\n" \
+      "Loaded #{PLEDGE_SKILL_TREE.size} Pledge Skills, #{PLEDGE_SKILL_TREE.size - res_skill_count} for Pledge and #{res_skill_count} Residential.\n" \
+      "Loaded #{SUBPLEDGE_SKILL_TREE.size} Subpledge Skills.\n" \
+      "Loaded #{TRANSFORM_SKILL_TREE.size} Transform Skills.\n" \
+      "Loaded #{NOBLE_SKILL_TREE.size} Noble Skills.\n" \
+      "Loaded #{HERO_SKILL_TREE.size} Hero Skills.\n" \
+      "Loaded #{GM_SKILL_TREE.size} GM Skills.\n" \
+      "Loaded #{GM_AURA_SKILL_TREE.size} GM Aura Skills.\n" \
+      "Loaded #{COMMON_SKILL_TREE.size} Common Skills to all classes."
+    end
   end
 end

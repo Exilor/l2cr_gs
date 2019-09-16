@@ -1,5 +1,5 @@
 abstract class AbstractFunction
-  include Loggable
+  # include Loggable
 
   alias OwnerType = L2Object | AbstractEffect | Skill | Elementals::ElementalStatBoni | Options
 

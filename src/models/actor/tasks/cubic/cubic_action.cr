@@ -1,12 +1,11 @@
 class CubicAction
-  include Runnable
   include Loggable
 
   @current_count = Atomic(Int32).new(0)
 
   initializer cubic: L2CubicInstance, chance: Int32
 
-  def run
+  def call
     if @cubic.owner.dead? || !@cubic.owner.online?
       @cubic.stop_action
       @cubic.owner.cubics.delete(@cubic.id)

@@ -59,9 +59,9 @@ struct ZoneNPoly < L2ZoneForm
       vx = x[next_index] - x[i]
       vy = y[next_index] - y[i]
       length = Math.sqrt((vx * vx) + (vy * vy)).to_f
-      length /= STEP
+      length //= STEP
       1.upto(length - 1) do |o|
-        k = o / length
+        k = o // length
         drop_debug_item(Inventory::ADENA_ID, 1, (x[i] + (k * vx)), (y[i] + (k * vy)), z)
       end
     end

@@ -73,11 +73,9 @@ class L2DoorAI < L2CharacterAI
   end
 
   struct OnEventAttackedDoorTask
-    include Runnable
-
     initializer door: L2DoorInstance, attacker: L2Character
 
-    def run
+    def call
       @door.known_defenders do |guard|
         if @door.inside_radius?(guard, guard.template.clan_help_range, false, true)
           if (@attacker.z - guard.z).abs < 200

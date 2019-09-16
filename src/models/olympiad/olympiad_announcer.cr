@@ -1,8 +1,6 @@
 require "./competition_type"
 
 class OlympiadAnnouncer
-  include Runnable
-
   private alias NpcSay = Packets::Outgoing::NpcSay
 
   private OLY_MANAGER = 31688
@@ -14,7 +12,7 @@ class OlympiadAnnouncer
     @managers = SpawnTable.get_spawns(OLY_MANAGER)
   end
 
-  def run
+  def call
     OlympiadGameManager.number_of_stadiums.downto(0) do |i|
       if @current_stadium > OlympiadGameManager.number_of_stadiums
         @current_stadium = 0

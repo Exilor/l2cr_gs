@@ -309,9 +309,11 @@ module GeoData
   end
 
   private def get_los_geo_z(prev_x : Int32, prev_y : Int32, prev_z : Int32, cur_x : Int32, cur_y : Int32, nswe : Int32) : Int32
-    if ((nswe & NSWE::NORTH) != 0 && (nswe & NSWE::SOUTH) != 0) ||
-      ((nswe & NSWE::WEST) != 0 && (nswe & NSWE::EAST) != 0)
+    if nswe & NSWE::NORTH != 0 && nswe & NSWE::SOUTH != 0
+      raise "Multiple directions"
+    end
 
+    if nswe & NSWE::WEST != 0 && nswe & NSWE::EAST != 0
       raise "Multiple directions"
     end
 

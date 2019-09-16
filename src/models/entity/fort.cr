@@ -18,7 +18,7 @@ class Fort < AbstractResidence
   @state = 0
   @castle_id = 0
   @functions = {} of Int32 => FortFunction
-  @fort_updater = Slice(Runnable::RunnableTask?).new(2, nil.as(Runnable::RunnableTask?))
+  @fort_updater = Slice(Concurrent::ScheduledTask?).new(2, nil.as(Concurrent::ScheduledTask?))
   @suspicious_merchant_spawned = false
   @siege_npcs = [] of L2Spawn
   @npc_commanders = [] of L2Spawn
@@ -69,7 +69,7 @@ class Fort < AbstractResidence
 
   def zone : L2SiegeZone
     unless @zone
-      ZoneManager.each(L2SiegeZone) do |zone|
+      ZoneManager.get_all_zones(L2SiegeZone) do |zone|
         if zone.siege_l2id == residence_id
           @zone = zone
           break
@@ -671,7 +671,7 @@ class Fort < AbstractResidence
   end
 
   private def init_residence_zone
-    ZoneManager.each(L2FortZone) do |zone|
+    ZoneManager.get_all_zones(L2FortZone) do |zone|
       if zone.residence_id == residence_id
         self.residence_zone = zone
         break
@@ -680,12 +680,11 @@ class Fort < AbstractResidence
   end
 
   private struct EndFortressSiege
-    include Runnable
     include Loggable
 
     initializer fort: Fort, clan: L2Clan
 
-    def run
+    def call
       @fort.set_owner(@clan, true)
     rescue e
       error e
@@ -703,14 +702,14 @@ class Fort < AbstractResidence
       initialize_task(cwh)
     end
 
-    def lease
+    def lease : Int32
       @fee
     end
 
     def lease=(@fee : Int32)
     end
 
-    def end_time
+    def end_time : Int64
       @end_date
     end
 

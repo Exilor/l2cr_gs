@@ -21,7 +21,7 @@ class L2ItemInstance < L2Object
   @shots_mask = 0
   @enchant_options = [] of Options
   @wear = false
-  @life_time_task : Runnable::DelayedTask?
+  @life_time_task : Concurrent::DelayedTask?
   getter owner_id = 0
   getter count : Int64 = 0i64
   getter enchant_level = 0
@@ -37,7 +37,7 @@ class L2ItemInstance < L2Object
   property drop_time : Int64 = 0i64
   property last_change : Int32 = 2
   property dropper_l2id : Int32 = 0
-  property item_loot_schedule : Runnable::DelayedTask?
+  property item_loot_schedule : Concurrent::DelayedTask?
   property? exists_in_db : Bool = false
   property? stored_in_db : Bool = false
 
@@ -636,12 +636,11 @@ class L2ItemInstance < L2Object
   end
 
   class ItemDropTask
-    include Runnable
     include Loggable
 
     initializer item: L2ItemInstance, dropper: L2Character?, x: Int32, y: Int32, z: Int32
 
-    def run
+    def call
       if @item.world_region?
         warn "@world_region for #{@item} should be nil"
       end
@@ -1138,12 +1137,11 @@ class L2ItemInstance < L2Object
   end
 
   struct ScheduleLifeTimeTask
-    include Runnable
     include Loggable
 
     initializer item: L2ItemInstance
 
-    def run
+    def call
       @item.end_of_life
     rescue e
       error e
@@ -1151,12 +1149,11 @@ class L2ItemInstance < L2Object
   end
 
   struct ScheduleConsumeManaTask
-    include Runnable
     include Loggable
 
     initializer item: L2ItemInstance
 
-    def run
+    def call
       @item.decrease_mana(true)
     rescue e
       error e

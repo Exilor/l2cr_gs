@@ -1,4 +1,6 @@
-class BoatRunePrimeval < BoatEngine
+class BoatRunePrimeval
+  include BoatEngine
+  
   private RUNE_TO_PRIMEVAL = [
     VehiclePathPoint.new(32750, -39300, -3610, 180, 800),
 		VehiclePathPoint.new(27440, -39328, -3610, 250, 1000),
@@ -37,7 +39,7 @@ class BoatRunePrimeval < BoatEngine
   private LEAVING_PRIMEVAL      = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::FERRY_LEAVING_PRIMEVAL_FOR_RUNE_NOW)
   private BUSY_RUNE             = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::FERRY_FROM_PRIMEVAL_TO_RUNE_DELAYED)
 
-  def run
+  def call
     case @cycle
     when 0
       # debug "Leaving for Primeval Isle."

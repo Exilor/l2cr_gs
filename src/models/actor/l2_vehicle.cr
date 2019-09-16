@@ -5,10 +5,9 @@ require "./ai/l2_vehicle_ai"
 require "../vehicle_path_point"
 
 class L2Vehicle < L2Character
-  @engine : Runnable?
+  @engine : BoatEngine?
   @current_path : Array(VehiclePathPoint)? | Slice(VehiclePathPoint)?
   @run_state = 0
-
   getter passengers = Array(L2PcInstance).new
   setter oust_loc : Location?
   property dock_id : Int32 = 0
@@ -87,8 +86,8 @@ class L2Vehicle < L2Character
     @engine.nil?
   end
 
-  def register_engine(runnable : Runnable)
-    @engine = runnable
+  def register_engine(engine : BoatEngine)
+    @engine = engine
   end
 
   def run_engine(delay : Int32)
@@ -216,7 +215,6 @@ class L2Vehicle < L2Character
     stop_move if moving?
     self.teleporting = true
     set_intention(AI::ACTIVE)
-    # debug "Teleporting #{@passengers.map &:name} to #{loc.inspect}."
     @passengers.each &.tele_to_location(loc, false)
     decay_me
     set_xyz(*loc.xyz)

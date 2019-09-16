@@ -1,7 +1,5 @@
 struct FourSepulchersChangeCoolDownTimeTask
-  include Runnable
-
-  def run
+  def call
     manager = FourSepulchersManager
     manager.entry_time = false
     manager.warm_up_time = false

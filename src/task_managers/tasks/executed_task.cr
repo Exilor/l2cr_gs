@@ -1,12 +1,11 @@
 class ExecutedTask
-  include Runnable
   include Loggable
 
   getter task, type
   getter id : Int32
   getter params : {String, String, String}
   getter last_activation : Int64
-  property scheduled : Runnable::RunnableTask?
+  property scheduled : Concurrent::ScheduledTask?
 
   def_equals_and_hash @id
 
@@ -20,7 +19,7 @@ class ExecutedTask
     }
   end
 
-  def run
+  def call
     task.on_time_elapsed(self)
     @last_activation = Time.ms
 

@@ -1,4 +1,6 @@
-class BoatTalkingGludin < BoatEngine
+class BoatTalkingGludin
+  include BoatEngine
+  
   private TALKING_TO_GLUDIN = [
     VehiclePathPoint.new(-121385, 261660, -3610, 180, 800),
     VehiclePathPoint.new(-127694, 253312, -3610, 200, 800),
@@ -50,7 +52,7 @@ class BoatTalkingGludin < BoatEngine
   private ARRIVAL_TALKING5     = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::FERRY_FROM_GLUDIN_ARRIVE_AT_TALKING_5_MINUTES)
   private ARRIVAL_TALKING1     = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::FERRY_FROM_GLUDIN_ARRIVE_AT_TALKING_1_MINUTE)
 
-  def run
+  def call
     case @cycle
     when 0
       # debug "Leaving for Gludin in 5 minutes."

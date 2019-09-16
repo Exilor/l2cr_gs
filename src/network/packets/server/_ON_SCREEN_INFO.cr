@@ -214,11 +214,7 @@ end
 class Packets::Outgoing::TargetInfo < Packets::Outgoing::OnScreenInfo
   getter text = ""
 
-  def initialize(pc : L2PcInstance)
-    unless target = pc.target
-      return
-    end
-
+  def initialize(pc : L2PcInstance, target : L2Object)
     @text = String.build do |io|
       if target.is_a?(L2Object)
         loc = target.location

@@ -8,7 +8,7 @@ abstract class L2Decoy < L2Character
     self.invul = false
   end
 
-  def acting_player?
+  def acting_player? : L2PcInstance?
     @owner
   end
 

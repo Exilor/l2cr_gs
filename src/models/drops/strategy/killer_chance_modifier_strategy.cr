@@ -16,7 +16,8 @@ struct KillerChanceModifierStrategy
         level_diff,
         -Config.drop_item_max_level_difference,
         -Config.drop_item_min_level_difference,
-        Config.drop_item_min_level_gap_chance, 100.0
+        Config.drop_item_min_level_gap_chance,
+        100.0
       ) / 100
     end
 
@@ -24,7 +25,7 @@ struct KillerChanceModifierStrategy
   end
 
   DEFAULT_NONGROUP_STRATEGY = new do |item, victim, killer|
-    if (((!(victim.raid?)) && Config.deepblue_drop_rules) || ((victim.raid?) && Config.deepblue_drop_rules_raid))
+    if (!victim.raid? && Config.deepblue_drop_rules) || (victim.raid? && Config.deepblue_drop_rules_raid)
       level_diff = victim.level - killer.level
       if item.as(GeneralDropItem).item_id == Inventory::ADENA_ID
         next Util.map(level_diff, -Config.drop_adena_max_level_difference, -Config.drop_adena_min_level_difference, Config.drop_adena_min_level_gap_chance, 100.0) / 100

@@ -7,7 +7,7 @@ module BypassHandler::QuestLink
   private THE_LEADER_AND_THE_FOLLOWER = 123
 
   def use_bypass(command, pc, target)
-    debug "#use_bypass \"#{command}\", #{pc}, #{target}"
+    debug { "#use_bypass command: \"#{command}\", pc: #{pc}, target: #{target}" }
     quest = command.from(5).strip
     if quest.empty?
       unless target.is_a?(L2Npc)
@@ -130,7 +130,7 @@ module BypassHandler::QuestLink
     qs = pc.get_quest_state(quest_id)
 
     if q
-      if (q.id >= 1 && q.id < 20000) && ((pc.weight_penalty >= 3) || !pc.inventory_under_90?(true))
+      if (q.id >= 1 && q.id < 20000) && (pc.weight_penalty >= 3 || !pc.inventory_under_90?(true))
         pc.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
         return
       end
@@ -172,7 +172,7 @@ module BypassHandler::QuestLink
         next
       end
 
-      if 0 <= quest.id <= 20_000
+      if quest.id.between?(0, 20000)
         options << quest
         if quest.can_start_quest?(pc)
           condition_meet = true
@@ -188,7 +188,7 @@ module BypassHandler::QuestLink
 
       if quest = listener.owner.as?(Quest)
         if quest.visible_in_quest_window?
-          if 0 <= quest.id <= 20_000
+          if quest.id.between?(0, 20000)
             options << quest
             if quest.can_start_quest?(pc)
               condition_meet = true

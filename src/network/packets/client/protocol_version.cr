@@ -10,7 +10,7 @@ class Packets::Incoming::ProtocolVersion < GameClientPacket
       if Config.debug
         debug "Ping received."
       end
-      client.close
+      client.close(nil)
     elsif Config.protocol_list.includes?(@version)
       debug "Compatible protocol: #{@version}."
       client.protocol_ok = true

@@ -2,7 +2,6 @@ require "./abstract_olympiad_game"
 require "./game_state"
 
 class OlympiadGameTask
-  include Runnable
   include Loggable
   include Synchronizable
 
@@ -100,16 +99,16 @@ class OlympiadGameTask
     end
 
     @game = game
-    @state = GameState::BEGIN
+    @state = GameState::START
     @needs_announce = false
     ThreadPoolManager.execute_general(self)
   end
 
-  def run
+  def call
     delay = 1 # schedule next call after 1s
     case @state
     # Game created
-    when GameState::BEGIN
+    when GameState::START
       @state = GameState::TELEPORT_TO_ARENA
       @countdown = Config.alt_oly_wait_time
     # Teleport to arena countdown

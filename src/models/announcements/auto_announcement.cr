@@ -1,12 +1,10 @@
 require "./announcement"
 
 class AutoAnnouncement < Announcement
-  include Runnable
-
   private INSERT_QUERY = "INSERT INTO announcements (`type`, `content`, `author`, `initial`, `delay`, `repeat`) VALUES (?, ?, ?, ?, ?, ?)"
   private UPDATE_QUERY = "UPDATE announcements SET `type` = ?, `content` = ?, `author` = ?, `initial` = ?, `delay` = ?, `repeat` = ? WHERE id = ?"
 
-  @task : Runnable::DelayedTask?
+  @task : Concurrent::DelayedTask?
   @current_state = 0
   property initial : Int64
   property delay : Int64
@@ -86,7 +84,7 @@ class AutoAnnouncement < Announcement
     @task = ThreadPoolManager.schedule_general(self, @initial)
   end
 
-  def run
+  def call
     if @current_state == -1 || @current_state > 0
       content.split(Config::EOL).each do |content|
         Broadcast.to_all_online_players(content, type.auto_critical?)

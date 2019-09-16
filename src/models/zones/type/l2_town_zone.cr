@@ -1,6 +1,5 @@
 class L2TownZone < L2ZoneType
-  getter town_id = 0
-  getter tax_by_id = 0
+  getter town_id = 0, tax_by_id = 0
 
   def set_parameter(name, value)
     case name

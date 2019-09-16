@@ -1,9 +1,7 @@
 struct StandUpTask
-  include Runnable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     @pc.sitting = false
     @pc.intention = AI::IDLE
   end

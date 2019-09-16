@@ -115,15 +115,13 @@ class ItemAuction
     error e
   end
 
-  def register_bid(player, new_bid)
-    player = player.not_nil!
-
+  def register_bid(player : L2PcInstance, new_bid : Int64)
     if new_bid < auction_init_bid
       player.send_packet(SystemMessageId::BID_PRICE_MUST_BE_HIGHER)
       return
     end
 
-    if new_bid > 100000000000
+    if new_bid > 100_000_000_000
       player.send_packet(SystemMessageId::BID_CANT_EXCEED_100_BILLION)
       return
     end
@@ -178,7 +176,7 @@ class ItemAuction
     end
   end
 
-  private def on_player_bid(player, bid : ItemAuctionBid)
+  private def on_player_bid(player : L2PcInstance, bid : ItemAuctionBid)
     if @highest_bid.nil?
       @highest_bid = bid
     elsif @highest_bid.not_nil!.last_bid < bid.last_bid
@@ -239,9 +237,7 @@ class ItemAuction
     end
   end
 
-  def cancel_bid(player)
-    player = player.not_nil!
-
+  def cancel_bid(player : L2PcInstance)
     case auction_state
     when ItemAuctionState::CREATED
       return false
@@ -318,7 +314,7 @@ class ItemAuction
     player.add_adena("ItemAuction", count, player, true)
   end
 
-  def get_last_bid(player)
+  def get_last_bid(player : L2PcInstance) : Int64
     bid = get_bid_for(player.l2id)
     bid ? bid.last_bid : -1i64
   end

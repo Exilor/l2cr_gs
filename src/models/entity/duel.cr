@@ -401,12 +401,11 @@ class Duel
   end
 
   struct DuelPreparationTask
-    include Runnable
     include Loggable
 
     initializer duel: Duel
 
-    def run
+    def call
       if @duel.countdown > 0
         ThreadPoolManager.schedule_general(self, 1000)
       else
@@ -418,12 +417,11 @@ class Duel
   end
 
   struct DuelClockTask
-    include Runnable
     include Loggable
 
     initializer duel: Duel
 
-    def run
+    def call
       case @duel.check_end_duel_condition
       when DuelResult::CONTINUE
         ThreadPoolManager.schedule_general(self, 1000)

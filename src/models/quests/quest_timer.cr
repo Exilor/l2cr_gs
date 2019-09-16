@@ -1,9 +1,6 @@
 class QuestTimer
-  include Runnable
-  include Loggable
-
-  @task : Runnable::RunnableTask?
-
+  @task : Concurrent::ScheduledTask?
+  @time : Int64
   getter name, npc, player, quest
   getter? active = true
 
@@ -16,7 +13,7 @@ class QuestTimer
   end
 
   def initialize(@quest : Quest, @name : String, time : Number, @npc : L2Npc?, @player : L2PcInstance?, @repeating : Bool)
-    @time = Int64.new(time)
+    @time = time.to_i64
 
     if repeating
       @task = ThreadPoolManager.schedule_general_at_fixed_rate(self, @time, @time)
@@ -25,7 +22,7 @@ class QuestTimer
     end
   end
 
-  def run
+  def call
     return unless @active
     cancel_and_remove unless @repeating
     @quest.notify_event(@name, @npc, @player)

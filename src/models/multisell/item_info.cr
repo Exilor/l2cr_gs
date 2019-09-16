@@ -1,6 +1,5 @@
 struct Multisell::ItemInfo
-  getter enchant_level, augment_id, element_power, elementals
-  getter element_id : Int8
+  getter enchant_level, augment_id, element_power, elementals, element_id
 
   def initialize(item : L2ItemInstance)
     @enchant_level = item.enchant_level

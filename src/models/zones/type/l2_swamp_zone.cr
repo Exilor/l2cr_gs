@@ -1,9 +1,6 @@
 class L2SwampZone < L2ZoneType
-  # attr_reader :move_bonus
-
-  getter move_bonus = 0.0
   @castle_id = 0
-  # @castle = nil # Castle
+  getter move_bonus = 0.0
 
   def set_parameter(name, value)
     case name

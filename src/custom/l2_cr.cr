@@ -2,17 +2,8 @@ module L2Cr
   extend self
   include Packets::Outgoing
 
-  @@on_screen_info_task : Runnable::PeriodicTask?
-  @@command_line_task : Runnable::PeriodicTask?
-  class_property? retry_attacks = true
-
-  def enable_retry
-    @@retry_attacks = true
-  end
-
-  def disable_retry
-    @@retry_attacks = false
-  end
+  @@on_screen_info_task : Concurrent::PeriodicTask?
+  @@command_line_task : Concurrent::PeriodicTask?
 
   def on_screen_info_task
     if task = @@on_screen_info_task
@@ -25,9 +16,8 @@ module L2Cr
 
   private module OnScreenInfoTask
     extend self
-    extend Runnable
 
-    def run
+    def call
       L2World.players.each do |pc|
         if pc.online? && !pc.teleporting?
           op = Packets::Outgoing::PcInfo.new(pc)
@@ -35,8 +25,8 @@ module L2Cr
           pc.send_packet(op)
           op = Packets::Outgoing::ZoneInfo.new(pc)
           pc.send_packet(op)
-          if pc.target
-            pc.send_packet(Packets::Outgoing::TargetInfo.new(pc))
+          if target = pc.target
+            pc.send_packet(Packets::Outgoing::TargetInfo.new(pc, target))
           end
         end
       end
@@ -54,9 +44,8 @@ module L2Cr
 
   private module CommandLineTask
     extend self
-    extend Runnable
 
-    def run
+    def call
       if cmd = STDIN.gets
         print "=> "
         response = handle_cmd(cmd)
@@ -78,14 +67,6 @@ module L2Cr
         Shutdown.start_shutdown(nil, 0, true)
       when "ids"
         p "#{IdFactory::IDS.@ranges} (#{IdFactory::IDS.@ranges.size})"
-      when "retry_attacks"
-        if L2Cr.retry_attacks?
-          L2Cr.retry_attacks = false
-          puts "Attack retrying disabled."
-        else
-          L2Cr.retry_attacks = true
-          puts "Attack retrying enabled."
-        end
       when "heal_raids"
         L2World.objects.each do |o|
           if o.is_a?(L2RaidBossInstance)

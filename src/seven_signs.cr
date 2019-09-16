@@ -119,12 +119,12 @@ module SevenSigns
     sspc = ->seven_signs_period_change
     ThreadPoolManager.schedule_general(sspc, milli_to_change)
 
-    num_secs   = (milli_to_change / 1000) % 60
-    count_down = ((milli_to_change / 1000.0) - num_secs) / 60
+    num_secs   = (milli_to_change // 1000) % 60
+    count_down = ((milli_to_change // 1000.0) - num_secs) // 60
     num_mins   = (count_down % 60).floor.to_i
-    count_down = (count_down - num_mins) / 60
+    count_down = (count_down - num_mins) // 60
     num_hours  = (count_down % 24).floor.to_i
-    num_days   = ((count_down - num_hours) / 24).floor.to_i
+    num_days   = ((count_down - num_hours) // 24).floor.to_i
 
     info { "Next period begins in #{num_days} days, #{num_hours} hours and #{num_mins} mins." }
   end
@@ -412,12 +412,12 @@ module SevenSigns
     total = @@dawn_stone_score.to_f64 + @@dusk_stone_score
     case cabal
     when CABAL_DAWN
-      ((@@dawn_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dawn_festival_score
+      return (((@@dawn_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dawn_festival_score).to_i32
     when CABAL_DUSK
-      ((@@dusk_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dusk_festival_score
-    else 0
+      return (((@@dusk_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dusk_festival_score).to_i32
     end
-    .to_i32
+
+    0
   end
 
   def get_current_stone_score(cabal : Int) : Float64

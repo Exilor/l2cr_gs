@@ -4,9 +4,7 @@ require "../data_tables/npc_personal_ai_data"
 require "./actor/instance/*"
 
 class L2Spawn
-  # include Identifiable
   include Positionable
-  # include Namable
   include Loggable
 
   private SPAWN_LISTENERS = [] of SpawnListener
@@ -133,9 +131,7 @@ class L2Spawn
     return if @current_count <= 0
 
     @current_count -= 1
-    # debug "#decrease_count 1: about to delete #{old}"
     @spawned_npcs.delete_first(old)
-    # debug "#decrease_count 2: about to delete #{old.l2id}"
     @last_spawn_points.try &.delete(old.l2id)
 
     if @do_respawn && @scheduled_count + @current_count < @maximum_count
@@ -340,11 +336,9 @@ class L2Spawn
   end
 
   private struct SpawnTask
-    include Runnable
-
     initializer spawn: L2Spawn, old_npc: L2Npc
 
-    def run
+    def call
       @spawn.respawn_npc(@old_npc)
       @spawn.scheduled_count -= 1
     end

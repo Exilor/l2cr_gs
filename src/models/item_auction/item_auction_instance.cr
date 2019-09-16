@@ -21,7 +21,7 @@ class ItemAuctionInstance
   @auctions = {} of Int32 => ItemAuction
   @auctions_lock = Mutex.new
   @items = [] of AuctionItem
-  @state_task : Runnable::DelayedTask?
+  @state_task : Concurrent::DelayedTask?
   getter current_auction : ItemAuction?
   getter next_auction : ItemAuction?
 
@@ -210,12 +210,11 @@ class ItemAuctionInstance
   end
 
   private struct ScheduleAuctionTask
-    include Runnable
     include Loggable
 
     initializer instance: ItemAuctionInstance, auction: ItemAuction
 
-    def run
+    def call
       run_impl
     rescue e
       error e
@@ -297,7 +296,7 @@ class ItemAuctionInstance
     end
   end
 
-  def state_task=(new_task : Runnable::DelayedTask)
+  def state_task=(new_task : Concurrent::DelayedTask)
     if state_task = @state_task
       state_task.cancel
     end

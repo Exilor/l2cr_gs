@@ -405,11 +405,9 @@ module OlympiadManager
   end
 
   private struct AnnounceUnregToTeam
-    include Runnable
-
     initializer team: Array(Int32)
 
-    def run
+    def call
       sm = SystemMessage.you_have_been_deleted_from_the_waiting_list_of_a_game
       @team.each do |l2id|
         if pc = L2World.get_player(l2id)

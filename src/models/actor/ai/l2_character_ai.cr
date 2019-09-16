@@ -9,11 +9,9 @@ class L2CharacterAI < AI
     arg_1 : AIArg
 
   private struct CastTask
-    include Runnable
-
     initializer char: L2Character, skill: Skill, target: L2Object?
 
-    def run
+    def call
       if @char.attacking_now?
         @char.abort_attack
       end
@@ -58,7 +56,6 @@ class L2CharacterAI < AI
   end
 
   private def on_intention_attack(target)
-    # debug "L2CharacterAI#on_intention_attack(#{target})" if @actor.summon?
     unless target
       client_action_failed
       return

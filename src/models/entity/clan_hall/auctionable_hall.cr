@@ -2,7 +2,6 @@ require "../clan_hall"
 
 class AuctionableHall < ClanHall
   @ch_rate = 604800000
-
   getter lease : Int32
   getter paid_until : Int64
   getter grade : Int32

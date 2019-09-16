@@ -38,7 +38,7 @@ class L2WaterZone < L2ZoneType
     end
   end
 
-  def water_z
+  def water_z : Int32
     zone.high_z
   end
 end

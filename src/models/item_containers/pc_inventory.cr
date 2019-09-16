@@ -3,12 +3,12 @@ require "./inventory"
 class PcInventory < Inventory
   include Packets::Outgoing
 
-  getter owner
-  getter block_mode = -1
-  getter block_items : Array(Int32)? | Slice(Int32)?
   @quest_slots = 0
   @adena : L2ItemInstance?
   @ancient_adena : L2ItemInstance?
+  getter owner
+  getter block_mode = -1
+  getter block_items : Array(Int32)? | Slice(Int32)?
 
   def initialize(@owner : L2PcInstance)
     super()
@@ -30,7 +30,7 @@ class PcInventory < Inventory
     @adena
   end
 
-  def adena_instance
+  def adena_instance : L2ItemInstance
     @adena.not_nil!
   end
 
@@ -102,19 +102,19 @@ class PcInventory < Inventory
     list
   end
 
-  def get_all_items_by_item_id(item_id : Int)
+  def get_all_items_by_item_id(item_id : Int) : Array(L2ItemInstance)
     get_all_items_by_item_id(item_id, true)
   end
 
-  def get_all_items_by_item_id(item_id : Int, include_equipped : Bool)
+  def get_all_items_by_item_id(item_id : Int, include_equipped : Bool) : Array(L2ItemInstance)
     @items.select { |i| i.id == item_id && (include_equipped || !i.equipped?) }
   end
 
-  def get_all_items_by_item_id(item_id : Int, enchant : Int)
+  def get_all_items_by_item_id(item_id : Int, enchant : Int) : Array(L2ItemInstance)
     get_all_items_by_item_id(item_id, enchant, true)
   end
 
-  def get_all_items_by_item_id(item_id : Int, enchant : Int, include_equipped : Bool)
+  def get_all_items_by_item_id(item_id : Int, enchant : Int, include_equipped : Bool) : Array(L2ItemInstance)
     @items.select do |item|
       item.id == item_id &&
       item.enchant_level == enchant &&
@@ -122,7 +122,7 @@ class PcInventory < Inventory
     end
   end
 
-  def get_available_items(trade_list : TradeList)
+  def get_available_items(trade_list : TradeList) : Array(TradeItem)
     list = [] of TradeItem
     @items.each do |item|
       if item.available?(@owner, false, false)
@@ -134,7 +134,7 @@ class PcInventory < Inventory
     list
   end
 
-  def get_available_items(adena : Bool, allow_non_tradeable : Bool, freightable : Bool)
+  def get_available_items(adena : Bool, allow_non_tradeable : Bool, freightable : Bool) : Array(L2ItemInstance)
     list = [] of L2ItemInstance
 
     @items.each do |item|
@@ -152,7 +152,7 @@ class PcInventory < Inventory
     list
   end
 
-  def augmented_items
+  def augmented_items : Array(L2ItemInstance)
     @items.select &.augmented?
   end
 
@@ -164,7 +164,7 @@ class PcInventory < Inventory
     end
   end
 
-  def element_items
+  def element_items : Array(L2ItemInstance)
     @items.select &.elementals
   end
 
@@ -203,10 +203,10 @@ class PcInventory < Inventory
 
   def reduce_adena(process : String?, count : Int64, actor : L2PcInstance, ref) : Bool
     if count > 0
-      !!destroy_item_by_item_id(process, ADENA_ID, count, actor, ref)
-    else
-      false
+      return !!destroy_item_by_item_id(process, ADENA_ID, count, actor, ref)
     end
+
+    false
   end
 
   def add_ancient_adena(process : String?, count : Int64, actor : L2PcInstance, reference)
@@ -217,10 +217,9 @@ class PcInventory < Inventory
 
   def reduce_ancient_adena(process : String?, count : Int64, actor : L2PcInstance, reference) : Bool
     if count > 0
-      !!destroy_item_by_item_id(process, ANCIENT_ADENA_ID, count, actor, reference)
-    else
-      false
+      return !!destroy_item_by_item_id(process, ANCIENT_ADENA_ID, count, actor, reference)
     end
+    false
   end
 
   def add_item(item : L2ItemInstance)
@@ -260,7 +259,7 @@ class PcInventory < Inventory
       @ancient_adena = item
     end
 
-    if actor# && item # && item is custom
+    if actor
       if Config.force_inventory_update
         actor.send_packet(ItemList.new(actor, false))
       else
@@ -278,11 +277,13 @@ class PcInventory < Inventory
   def transfer_item(process : String?, id : Int32, count : Int64, target : ItemContainer?, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
 
-    if @adena && (@adena.not_nil!.count <= 0 || @adena.not_nil!.owner_id != owner_id)
+    a = @adena
+    if a && (a.count <= 0 || a.owner_id != owner_id)
       @adena = nil
     end
 
-    if @ancient_adena && (@ancient_adena.not_nil!.count <= 0 || @ancient_adena.not_nil!.owner_id != owner_id)
+    aa = @ancient_adena
+    if aa && (aa.count <= 0 || aa.owner_id != owner_id)
       @ancient_adena = nil
     end
 
@@ -328,7 +329,7 @@ class PcInventory < Inventory
     destroy_item(process, item, count, actor, reference)
   end
 
-  def drop_item(process : String?, item : L2ItemInstance, actor : L2PcInstance, reference)
+  def drop_item(process : String?, item : L2ItemInstance, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
     adena = @adena
 
@@ -348,7 +349,7 @@ class PcInventory < Inventory
     item
   end
 
-  def drop_item(process : String?, id : Int, count : Int, actor : L2PcInstance, reference)
+  def drop_item(process : String?, id : Int, count : Int, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
     adena = @adena
 
@@ -368,7 +369,7 @@ class PcInventory < Inventory
     item
   end
 
-  def remove_item(item : L2ItemInstance)
+  def remove_item(item : L2ItemInstance) : Bool
     owner.remove_item_from_shortcut(item.l2id)
 
     if item.l2id == owner.active_enchant_item_id
@@ -396,7 +397,6 @@ class PcInventory < Inventory
 
   def refresh_weight
     super
-
     owner.refresh_overloaded
   end
 

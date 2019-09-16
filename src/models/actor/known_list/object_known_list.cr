@@ -1,6 +1,5 @@
 class ObjectKnownList
   include Synchronizable
-  include Loggable
 
   getter_initializer active_object: L2Object
 

@@ -5,7 +5,6 @@ class CharEffectList
   include Packets::Outgoing
   include Synchronizable
   include Enumerable(BuffInfo)
-  include Loggable
 
   @effect_flags = 0
   @has_buffs_removed_on_action = false
@@ -60,25 +59,31 @@ class CharEffectList
     end
   end
 
-  private def each_with_list(&block : BuffInfo ->) : Nil
-    if buffs = @buffs
-      buffs.safe_each { |info| yield info, buffs }
-    end
+  # private def each_with_list(&block : BuffInfo, Deque(BuffInfo) ->) : Nil
+  #   if buffs = @buffs
+  #     buffs.safe_each { |info| yield info, buffs }
+  #   end
 
-    if triggered = @triggered
-      triggered.safe_each { |info| yield info, triggered }
-    end
+  #   if triggered = @triggered
+  #     triggered.safe_each { |info| yield info, triggered }
+  #   end
 
-    if dances = @dances
-      dances.safe_each { |info| yield info, dances }
-    end
+  #   if dances = @dances
+  #     dances.safe_each { |info| yield info, dances }
+  #   end
 
-    if toggles = @toggles
-      toggles.safe_each { |info| yield info, toggles }
-    end
+  #   if toggles = @toggles
+  #     toggles.safe_each { |info| yield info, toggles }
+  #   end
 
-    if debuffs = @debuffs
-      debuffs.safe_each { |info| yield info, debuffs }
+  #   if debuffs = @debuffs
+  #     debuffs.safe_each { |info| yield info, debuffs }
+  #   end
+  # end
+
+  private def each_with_list(&block : BuffInfo, Deque(BuffInfo) ->) : Nil
+    {@buffs, @triggered, @dances, @toggles, @debuffs}.each do |list|
+      list.try { |list| list.safe_each { |info| yield info, list } }
     end
   end
 
@@ -92,42 +97,32 @@ class CharEffectList
 
   def for_each(dances : Bool, &block : BuffInfo -> Bool) : Nil
     update = false
-    @buffs.try &.each { |info| update |= yield(info) }
+    @buffs.try     &.each { |info| update |= yield(info) }
     @triggered.try &.each { |info| update |= yield(info) }
-    if dances
-      @dances.try &.each { |info| update |= yield(info) }
-    end
-    @toggles.try &.each { |info| update |= yield(info) }
-    @debuffs.try &.each { |info| update |= yield(info) }
+    @dances.try    &.each { |info| update |= yield(info) } if dances
+    @toggles.try   &.each { |info| update |= yield(info) }
+    @debuffs.try   &.each { |info| update |= yield(info) }
     update_effect_list(update)
   end
 
   def effects : Indexable(BuffInfo)
     return Slice(BuffInfo).empty if empty?
 
-    ret = [] of BuffInfo
-
-    if buffs = @buffs
-      ret.concat(buffs)
-    end
-
-    if triggered = @triggered
-      ret.concat(triggered)
-    end
-
-    if dances = @dances
-      ret.concat(dances)
-    end
-
-    if toggles = @toggles
-      ret.concat(toggles)
-    end
-
-    if debuffs = @debuffs
-      ret.concat(debuffs)
-    end
-
+    ret = Array(BuffInfo).new(size)
+    ret.concat(buffs)     if has_buffs?
+    ret.concat(triggered) if has_triggered?
+    ret.concat(dances)    if has_dances?
+    ret.concat(toggles)   if has_toggles?
+    ret.concat(debuffs)   if has_debuffs?
     ret
+  end
+
+  private def size
+    (@buffs.try     &.size || 0) +
+    (@triggered.try &.size || 0) +
+    (@dances.try    &.size || 0) +
+    (@toggles.try   &.size || 0) +
+    (@debuffs.try   &.size || 0)
   end
 
   def get_effect_list(skill : Skill) : Deque(BuffInfo)
@@ -219,8 +214,8 @@ class CharEffectList
 
     if !info.in_use?
       @hidden_buffs.sub(1)
-    elsif stacked_effects = @stacked_effects
-      stacked_effects.delete(info.skill.abnormal_type)
+    elsif temp = @stacked_effects
+      temp.delete(info.skill.abnormal_type)
     end
 
     if info.skill.abnormal_instant? && has_buffs?
@@ -456,7 +451,7 @@ class CharEffectList
 
     if skill.passive?
       unless skill.abnormal_type.none?
-        warn "Passive skill #{skill} with AbnormalType #{skill.abnormal_type}."
+        raise "Passive skill #{skill} with AbnormalType #{skill.abnormal_type}."
       end
 
       return unless skill.check_condition(info.effector, info.effected, false)

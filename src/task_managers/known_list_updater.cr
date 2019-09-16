@@ -1,6 +1,5 @@
 module KnownListUpdater
   extend self
-  extend Runnable
   extend Loggable
 
   private FULL_UPDATE_TIMER = 100
@@ -14,7 +13,7 @@ module KnownListUpdater
     ThreadPoolManager.schedule_ai_at_fixed_rate(self, 1000, interval)
   end
 
-  def run
+  def call
     # debug "[#{@@timer}] Updating - update pass: #{@@update_pass}, full update: #{@@timer == FULL_UPDATE_TIMER}."
     # full_update_pass = !@@update_pass && @@timer == FULL_UPDATE_TIMER
     # if full_update_pass

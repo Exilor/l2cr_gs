@@ -1,10 +1,6 @@
-require "../interfaces/storable"
-require "../interfaces/restorable"
 require "../interfaces/script_type"
 
 abstract class AbstractVariables < StatsSet
-  # include Restorable
-  # include Storable
   include Loggable
   include ScriptType
 

@@ -1,6 +1,6 @@
 class AggroInfo
-  getter hate : Int64 = 0i64
-  getter damage : Int32 = 0
+  getter hate = 0i64
+  getter damage = 0
 
   getter_initializer attacker: L2Character
 

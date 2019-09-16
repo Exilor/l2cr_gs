@@ -1,7 +1,7 @@
 require "./char_known_list"
 
 class NpcKnownList < CharKnownList
-  @tracking_task : Runnable::PeriodicTask?
+  @tracking_task : Concurrent::PeriodicTask?
 
   def add_known_object(object : L2Object) : Bool
     return false unless super
@@ -44,11 +44,9 @@ class NpcKnownList < CharKnownList
   end
 
   struct TrackingTask
-    include Runnable
-
     initializer npc: L2Npc
 
-    def run
+    def call
       npc = @npc
       return unless npc.is_a?(L2Attackable)
       return unless npc.intention.move_to?

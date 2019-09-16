@@ -1,9 +1,7 @@
 require "./four_sepulchers_manager_say_task"
 
 struct FourSepulchersChangeAttackTimeTask
-  include Runnable
-
-  def run
+  def call
     manager = FourSepulchersManager
     manager.entry_time = false
     manager.warm_up_time = false

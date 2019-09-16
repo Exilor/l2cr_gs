@@ -1,10 +1,9 @@
 struct TrapTriggerTask
-  include Runnable
   include Loggable
 
   initializer trap: L2TrapInstance
 
-  def run
+  def call
     @trap.do_cast(@trap.skill)
     task = TrapUnsummonTask.new(@trap)
     ThreadPoolManager.schedule_general(task, @trap.skill.hit_time + 300)

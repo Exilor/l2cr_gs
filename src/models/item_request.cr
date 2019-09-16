@@ -1,6 +1,5 @@
 class ItemRequest
-  getter l2id, price
-  getter item_id = 0
+  getter l2id, price, item_id = 0
   property count : Int64
 
   def_equals_and_hash @l2id

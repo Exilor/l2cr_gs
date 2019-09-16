@@ -1,6 +1,5 @@
 module ItemsOnGroundManager
   extend self
-  extend Runnable
   extend Synchronizable
   extend Loggable
 
@@ -107,7 +106,7 @@ module ItemsOnGroundManager
     end
   end
 
-  def run
+  def call
     sync do
       unless Config.save_dropped_item
         return
@@ -152,7 +151,7 @@ module ItemsOnGroundManager
   end
 
   def save_in_db
-    run
+    call
   end
 
   def clean_up

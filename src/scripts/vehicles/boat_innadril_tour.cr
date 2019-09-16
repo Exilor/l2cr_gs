@@ -1,4 +1,6 @@
-class BoatInnadrilTour < BoatEngine
+class BoatInnadrilTour
+  include BoatEngine
+  
   private TOUR = [
     VehiclePathPoint.new(105129, 226240, -3610, 150, 800),
 		VehiclePathPoint.new(90604, 238797, -3610, 150, 800),
@@ -47,7 +49,7 @@ class BoatInnadrilTour < BoatEngine
   private ARRIVAL5 = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::INNADRIL_BOAT_ARRIVE_5_MINUTES)
   private ARRIVAL1 = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::INNADRIL_BOAT_ARRIVE_1_MINUTE)
 
-  def run
+  def call
     case @cycle
     when 0
       # debug "The tour around Innadril will start in 5 minutes."

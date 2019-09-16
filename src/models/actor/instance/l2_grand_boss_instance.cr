@@ -1,5 +1,5 @@
 class L2GrandBossInstance < L2MonsterInstance
-  BOSS_MAINTENANCE_INTERVAL = 10000
+  private BOSS_MAINTENANCE_INTERVAL = 10000
   property? give_raid_curse : Bool = true
 
   def initialize(template : L2NpcTemplate)
@@ -9,11 +9,11 @@ class L2GrandBossInstance < L2MonsterInstance
     self.lethalable = false
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2GrandBossInstance
   end
 
-  def maintenance_interval
+  def maintenance_interval : Int32
     BOSS_MAINTENANCE_INTERVAL
   end
 

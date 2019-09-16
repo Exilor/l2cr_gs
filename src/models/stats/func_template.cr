@@ -38,6 +38,7 @@ struct FuncTemplate
       return
     end
 
+    # Using ::new directly conflicts with subclasses with a 0-arity #initialize
     func = @constructor.allocate
     func.public_initialize(@stat, @order, owner, @value, @apply_cond)
     func

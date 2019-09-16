@@ -1,10 +1,9 @@
 class DropProtection
-  include Runnable
   include Synchronizable
 
   private PROTECTED_MILLIS_TIME = 15000
 
-  @task : Runnable::DelayedTask?
+  @task : Concurrent::DelayedTask?
   getter owner : L2PcInstance?
   getter? "protected"
 
@@ -14,7 +13,7 @@ class DropProtection
     @task = nil
   end
 
-  def run
+  def call
     sync { initialize }
   end
 

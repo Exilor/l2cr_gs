@@ -1,8 +1,8 @@
 class InstanceWorld
+  @status = Atomic(Int32).new(0)
   getter allowed = [] of Int32
   property instance_id : Int32 = 0
   property template_id : Int32 = -1
-  @status = Atomic(Int32).new(0)
 
   def remove_allowed(id : Int32)
     @allowed.delete_first(id)
@@ -37,7 +37,7 @@ class InstanceWorld
     return unless instance = InstanceManager.get_instance(@instance_id)
     pc = victim.acting_player
     sm = Packets::Outgoing::SystemMessage.you_will_be_expelled_in_s1
-    sm.add_int(instance.eject_time / 60 / 1000)
+    sm.add_int(instance.eject_time // 60 // 1000)
     pc.send_packet(sm)
     instance.add_eject_dead_task(pc)
   end

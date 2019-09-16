@@ -7,9 +7,8 @@ class BuffInfo
   include Synchronizable
 
   @tasks : Hash(AbstractEffect, EffectTaskInfo)?
-  getter abnormal_time : Int32
   getter period_start_ticks : Int32
-  getter task : Runnable::PeriodicTask?
+  getter task : Concurrent::PeriodicTask?
   getter effects = [] of AbstractEffect
   getter! effector
   getter! effected
@@ -39,8 +38,9 @@ class BuffInfo
     end
   end
 
-  def time
-    @abnormal_time - ((GameTimer.ticks - @period_start_ticks) / GameTimer::TICKS_PER_SECOND)
+  def time : Int32
+    @abnormal_time -
+    ((GameTimer.ticks - @period_start_ticks) // GameTimer::TICKS_PER_SECOND)
   end
 
   def stop_all_effects(@removed : Bool)
@@ -58,19 +58,19 @@ class BuffInfo
       effected.send_packet(sm)
     end
 
-    @effects.each do |eff|
-      next if eff.instant? || (effected.dead? && !skill.passive?)
+    @effects.each do |e|
+      next if e.instant? || (effected.dead? && !skill.passive?)
 
-      eff.on_start(self)
+      e.on_start(self)
 
-      if eff.ticks > 0
-        effect_task = EffectTickTask.new(self, eff)
-        time = eff.ticks * Config.effect_tick_ratio
+      if e.ticks > 0
+        effect_task = EffectTickTask.new(self, e)
+        time = e.ticks * Config.effect_tick_ratio
         scheduled_future = ThreadPoolManager.schedule_effect_at_fixed_rate(effect_task, time, time)
-        add_task(eff, EffectTaskInfo.new(effect_task, scheduled_future))
+        add_task(e, EffectTaskInfo.new(effect_task, scheduled_future))
       end
 
-      fncs = eff.get_stat_funcs(effector, effected, skill)
+      fncs = e.get_stat_funcs(effector, effected, skill)
       effected.add_stat_funcs(fncs)
     end
 
@@ -105,7 +105,7 @@ class BuffInfo
     remove_stats
 
     @effects.each do |e|
-      if !e.instant?
+      unless e.instant?
         # warn "About to call on_exit on #{e}"
         e.on_exit(self)
       end
@@ -177,7 +177,8 @@ class BuffInfo
     effected.remove_stats_owner(skill)
   end
 
-  def get_tick_count(effect : AbstractEffect)
+  # Only called in AdminCommandHandler::AdminBuffs
+  def get_tick_count(effect : AbstractEffect) : Int32
     if tasks = @tasks
       if effect_task_info = tasks[effect]?
         return effect_task_info.effect_task.tick_count

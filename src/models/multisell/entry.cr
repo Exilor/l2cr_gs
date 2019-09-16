@@ -1,6 +1,5 @@
 class Multisell::Entry
   @entry_id = 0
-
   getter products = [] of Ingredient
   getter ingredients = [] of Ingredient
   getter? stackable = true

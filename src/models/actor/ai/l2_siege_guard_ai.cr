@@ -1,8 +1,7 @@
 class L2SiegeGuardAI < L2CharacterAI
-  include Runnable
   private MAX_ATTACK_TIMEOUT = 300 # 30 seconds
 
-  @ai_task : Runnable::PeriodicTask?
+  @ai_task : Concurrent::PeriodicTask?
   @attack_range : Int32
   @thinking = false
 
@@ -16,7 +15,7 @@ class L2SiegeGuardAI < L2CharacterAI
     @attack_range = @actor.physical_attack_range
   end
 
-  def run
+  def call
     on_event_think
   end
 
@@ -241,7 +240,7 @@ class L2SiegeGuardAI < L2CharacterAI
         next
       end
 
-      if npc.ai # TODO: possibly check not needed
+      if npc.@ai # TODO: possibly check not needed
         if npc.alive? && (target.z - npc.z).abs < 600
           if npc.ai.intention.idle? || npc.ai.intention.active?
             if target.inside_radius?(npc, 1500, true, false)

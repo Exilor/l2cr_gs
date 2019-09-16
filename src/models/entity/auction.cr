@@ -305,12 +305,11 @@ class Auction
   end
 
   struct AutoEndTask
-    include Runnable
     include Loggable
 
     initializer auction: Auction
 
-    def run
+    def call
       @auction.end_auction
     rescue e
       error e

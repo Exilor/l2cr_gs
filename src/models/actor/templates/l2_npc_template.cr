@@ -211,18 +211,10 @@ class L2NpcTemplate < L2CharTemplate
 
       case drops
       when ItemHolder
-        if result
-          result << drops
-        else
-          result = [drops]
-        end
+        result ? (result << drops) : (result = [drops])
       when Array
         unless drops.empty?
-          if result
-            result.concat(drops)
-          else
-            result = drops
-          end
+          result ? result.concat(drops) : (result = drops)
         end
       end
     end

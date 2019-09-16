@@ -1,8 +1,6 @@
 require "../enums/player_class"
 
 class Subclass
-  include Loggable
-
   @class : PlayerClass = PlayerClass::HumanFighter
   getter stat
   property class_index : Int32 = 1

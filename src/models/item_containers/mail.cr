@@ -3,25 +3,25 @@ require "./item_container"
 class Mail < ItemContainer
   getter_initializer owner_id: Int32, message_id: Int32
 
-  def name
+  def name : String
     "Mail"
   end
 
-  def owner?
+  def owner? : L2PcInstance?
     # return nil
   end
 
-  def base_location
+  def base_location : ItemLocation
     ItemLocation::MAIL
   end
 
-  def message_id=(id)
+  def message_id=(id : Int32)
     @message_id = id
     @items.each { |it| it.set_item_location(base_location, id) }
     update_database
   end
 
-  def return_to_wh(wh)
+  def return_to_wh(wh : ItemContainer?)
     @items.safe_each do |item|
       if wh
         transfer_item("Expire", item.l2id, item.count, wh, nil, nil)
@@ -37,7 +37,7 @@ class Mail < ItemContainer
   end
 
   def update_database
-    @items.each { |item| item.update_database(true) }
+    @items.each &.update_database(true)
   end
 
   def restore

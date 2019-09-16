@@ -1,10 +1,7 @@
 struct CubicHeal
-  include Runnable
-  include Loggable
-
   initializer cubic: L2CubicInstance
 
-  def run
+  def call
     if @cubic.owner.dead? || !@cubic.owner.online?
       @cubic.stop_action
       @cubic.owner.cubics.delete(@cubic.id)
@@ -17,7 +14,6 @@ struct CubicHeal
     return unless skill
 
     @cubic.cubic_target_for_heal
-    # debug "Target: #{@cubic.target || nil.inspect}."
     return unless target = @cubic.target
 
     if target.alive?

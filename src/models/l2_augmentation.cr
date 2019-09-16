@@ -19,40 +19,31 @@ struct L2Augmentation
 
   # Custom, only used in use_item.cr to force an augmentation with a skill.
   def has_skill?
-    @boni.@options.any? do |op|
-      op.try &.has_active_skill? ||
-      op.try &.has_passive_skill? ||
-      op.try &.has_activation_skills?
+    @boni.@options.any? do |o|
+      o.has_active_skill? || o.has_passive_skill? || o.has_activation_skills?
     end
   end
 
   private class AugmentationStatBoni
-    include Loggable
-
-    @options : {Options?, Options?}
+    @active = false
+    @options : {Options, Options}
 
     def initialize(id)
       @options = {0x0000FFFF & id, id >> 16}.map do |stat|
-        if op = OptionData[stat]?
-          op
-        else
-          warn "no Option found for stat with ID #{stat}."
-          nil
-        end
+        OptionData[stat]? ||
+        raise "no Option found for stat with ID #{stat}."
       end
-
-      @active = false
     end
 
     def apply_bonus(pc : L2PcInstance)
       return if @active
-      @options.each &.try &.apply(pc)
+      @options.each &.apply(pc)
       @active = true
     end
 
     def remove_bonus(pc : L2PcInstance)
       return unless @active
-      @options.each &.try &.remove(pc)
+      @options.each &.remove(pc)
       @active = false
     end
   end

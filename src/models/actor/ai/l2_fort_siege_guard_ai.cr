@@ -1,11 +1,9 @@
 require "./self_analysis"
 
 class L2FortSiegeGuardAI < L2CharacterAI
-  include Runnable
-
   private MAX_ATTACK_TIMEOUT = 300 # int ticks, i.e. 30 seconds
 
-  @ai_task : Runnable::PeriodicTask?
+  @ai_task : Concurrent::PeriodicTask?
   @attack_range : Int32
   @thinking = false
 
@@ -19,7 +17,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     @attack_range = @actor.physical_attack_range
   end
 
-  def run
+  def call
     on_event_think
   end
 

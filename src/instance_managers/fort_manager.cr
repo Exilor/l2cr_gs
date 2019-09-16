@@ -1,10 +1,8 @@
-require "../models/interfaces/instance_list_manager"
 require "../models/entity/fort"
 
 module FortManager
   extend self
   extend Loggable
-  # extend InstanceListManager
 
   private FORTS = [] of Fort
 

@@ -9,7 +9,7 @@ class L2TerritoryWardInstance < L2Attackable
       return false
     end
 
-    if castle? || !castle.zone.active?
+    if !castle? || !castle.zone.active?
       return false
     end
 
@@ -73,7 +73,7 @@ class L2TerritoryWardInstance < L2Attackable
   end
 
   def reduce_current_hp_by_dot(hp : Float64, attacker : L2Character?, skill : Skill)
-    # wards can't be damagedby DOTs.
+    # no-op
   end
 
   def do_die(killer : L2Character?) : Bool

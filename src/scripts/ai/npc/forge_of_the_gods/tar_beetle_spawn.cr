@@ -5,8 +5,8 @@ class TarBeetleSpawn
 
   private ZONES = [] of SpawnZone
 
-  @spawn_task : Runnable::PeriodicTask?
-  @shot_task : Runnable::PeriodicTask?
+  @spawn_task : Concurrent::PeriodicTask?
+  @shot_task : Concurrent::PeriodicTask?
 
   def initialize
     load
@@ -22,17 +22,13 @@ class TarBeetleSpawn
   end
 
   private struct RefreshSpawnTask
-    include Runnable
-
-    def run
+    def call
       ZONES.each &.refresh_spawn
     end
   end
 
   private struct RefreshShotsTask
-    include Runnable
-
-    def run
+    def call
       ZONES.each &.refresh_shots
     end
   end

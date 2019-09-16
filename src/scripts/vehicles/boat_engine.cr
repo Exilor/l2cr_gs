@@ -1,5 +1,4 @@
-abstract class BoatEngine
-  include Runnable
+module BoatEngine
   include Loggable
 
   private alias CreatureSay = Packets::Outgoing::CreatureSay
@@ -9,4 +8,5 @@ abstract class BoatEngine
   @shout_count = 0
 
   initializer boat: L2BoatInstance
+  # initializer boat: L2Vehicle
 end

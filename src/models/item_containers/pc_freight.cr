@@ -12,11 +12,11 @@ class PcFreight < ItemContainer
     restore
   end
 
-  def base_location
+  def base_location : ItemLocation
     ItemLocation::FREIGHT
   end
 
-  def name
+  def name : String
     "Freight"
   end
 

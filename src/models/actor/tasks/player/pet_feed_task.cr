@@ -1,10 +1,7 @@
 struct PetFeedTask
-  include Runnable
-  include Loggable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     if @pc.mounted? || @pc.mount_npc_id == 0 || PetDataTable.get_pet_data(@pc.mount_npc_id).nil?
       @pc.stop_feed
       return

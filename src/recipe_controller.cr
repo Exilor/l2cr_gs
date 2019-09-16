@@ -34,7 +34,7 @@ module RecipeController
     common_recipes = manufacturer.common_recipe_book
     if !dwarf_recipes.includes?(recipe_list) && !common_recipes.includes?(recipe_list)
       Util.punish(pc, "sent an invalid recipe id.")
-      warn "#{pc.name} sent a false recipe ID."
+      warn { "#{pc.name} sent a false recipe ID." }
       return
     end
 
@@ -49,7 +49,7 @@ module RecipeController
         ACTIVE_MAKERS[manufacturer.l2id] = maker
         ThreadPoolManager.schedule_general(maker, 100)
       else
-        maker.run
+        maker.call
       end
     end
   end
@@ -67,7 +67,7 @@ module RecipeController
     common_recipes = pc.common_recipe_book
     if !dwarf_recipes.includes?(recipe_list) && !common_recipes.includes?(recipe_list)
       Util.punish(pc, "sent an invalid recipe id.")
-      warn "#{pc.name} sent a false recipe ID."
+      warn { "#{pc.name} sent a false recipe ID." }
       return
     end
 
@@ -85,13 +85,12 @@ module RecipeController
         ACTIVE_MAKERS[pc.l2id] = maker
         ThreadPoolManager.schedule_general(maker, 100)
       else
-        maker.run
+        maker.call
       end
     end
   end
 
   private class RecipeItemMaker
-    include Runnable
     include Loggable
     include Packets::Outgoing
 
@@ -193,18 +192,12 @@ module RecipeController
       @valid = true
     end
 
-    def run
+    def call
       unless Config.is_crafting_enabled
         @target.send_message("Item creation is currently disabled.")
         abort
         return
       end
-
-      # unless @pc && @target
-      #   warn "Player or target are nil."
-      #   abort
-      #   return
-      # end
 
       unless @pc.online? && @target.online?
         warn "Player or target not online."
@@ -443,6 +436,7 @@ module RecipeController
           end
         end
       end
+
       materials
     end
 
@@ -511,7 +505,7 @@ module RecipeController
         recipe_level = @recipe_list.level
         if @exp < 0
           @exp = template.reference_price * item_count
-          @exp /= recipe_level
+          @exp //= recipe_level
         end
         if @sp < 0
           @sp = @exp / 10
@@ -528,8 +522,8 @@ module RecipeController
         end
 
         @skill_level.downto(recipe_level - 1) do |i|
-          @exp /= 4
-          @sp /= 4
+          @exp //= 4
+          @sp //= 4
         end
         @pc.add_exp_and_sp(
           @pc.calc_stat(

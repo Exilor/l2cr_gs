@@ -7,7 +7,7 @@ class ItemAuctionState < EnumClass
     to_i8
   end
 
-  def self.state_for_state_id(state_id) : self?
+  def self.state_for_state_id(state_id : Int) : self?
     find { |m| m.to_i == state_id }
   end
 end

@@ -1,9 +1,7 @@
 struct PvPFlagTask
-  include Runnable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     time = Time.ms
     if time > @pc.pvp_flag_lasts
       @pc.stop_pvp_flag

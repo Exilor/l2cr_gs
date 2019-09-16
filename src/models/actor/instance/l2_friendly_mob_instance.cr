@@ -1,7 +1,7 @@
 require "../known_list/friendly_mob_known_list"
 
 class L2FriendlyMobInstance < L2Attackable
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2FriendlyMobInstance
   end
 
@@ -9,7 +9,7 @@ class L2FriendlyMobInstance < L2Attackable
     @known_list = FriendlyMobKnownList.new(self)
   end
 
-  def known_list
+  def known_list : FriendlyMobKnownList
     super.as(FriendlyMobKnownList)
   end
 
@@ -21,7 +21,7 @@ class L2FriendlyMobInstance < L2Attackable
     false
   end
 
-  def aggressive?
+  def aggressive? : Bool
     true
   end
 end

@@ -1,9 +1,7 @@
 struct SitDownTask
-  include Runnable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     @pc.paralyzed = false
   end
 end

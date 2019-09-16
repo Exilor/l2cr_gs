@@ -905,11 +905,9 @@ class L2Npc < L2Character
   end
 
   private struct RandomAnimationTask
-    include Runnable
-
     initializer npc: L2Npc
 
-    def run
+    def call
       if @npc.mob?
         return unless @npc.intention.active?
       else

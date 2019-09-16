@@ -1,8 +1,6 @@
 require "./shortcut"
-require "./interfaces/restorable"
 
 struct Shortcuts
-  # include Restorable
   include Synchronizable
   include Loggable
 

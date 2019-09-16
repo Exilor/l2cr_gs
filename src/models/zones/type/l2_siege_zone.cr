@@ -108,7 +108,7 @@ class L2SiegeZone < L2ZoneType
     end
   end
 
-  def settings
+  def settings : Settings
     super.as(Settings)
   end
 
@@ -176,8 +176,6 @@ class L2SiegeZone < L2ZoneType
   end
 
   def announce_to_players(msg : String)
-    players_inside do |pc|
-      pc.send_message(msg)
-    end
+    players_inside &.send_message(msg)
   end
 end

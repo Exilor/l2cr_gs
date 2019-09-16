@@ -61,11 +61,9 @@ module AdminCommandHandler::AdminMonsterRace
   end
 
   private struct RunRace
-    include Runnable
-
     initializer codes: Array(Array(Int32)), pc: L2PcInstance
 
-    def run
+    def call
       spk = Packets::Outgoing::MonRaceInfo.new(@codes[2][0], @codes[2][1], MonsterRace.monsters, MonsterRace.speeds)
       @pc.send_packet(spk)
       @pc.broadcast_packet(spk)
@@ -74,11 +72,9 @@ module AdminCommandHandler::AdminMonsterRace
   end
 
   private struct RunEnd
-    include Runnable
-
     initializer pc: L2PcInstance
 
-    def run
+    def call
       8.times do |i|
         dl = Packets::Outgoing::DeleteObject.new(MonsterRace.monsters[i])
         @pc.send_packet(dl)

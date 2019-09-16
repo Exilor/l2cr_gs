@@ -56,8 +56,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       set_cp
     when "warp"
       warp
-    when "dash"
-      dash
+    when "rush"
+      rush
     when "skills"
       send_skill_info
     when "weight"
@@ -222,7 +222,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
   end
 
-  private def dash
+  private def rush
     if pc.moving?
       dst = Location.new(pc.x_destination, pc.y_destination, pc.z_destination)
       pc.broadcast_packet(FlyToLocation.new(pc, dst, FlyType::CHARGE))
@@ -238,7 +238,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         summon.follow_owner
       end
     else
-      pc.send_message("You need to be moving in order to dash.")
+      pc.send_message("You need to be moving in order to rush.")
     end
   end
 

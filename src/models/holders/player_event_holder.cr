@@ -1,5 +1,5 @@
 class PlayerEventHolder
-  getter kills
+  # getter kills = [] of L2PcInstance # unused
   property? sit_forced
 
   @name : String

@@ -3,11 +3,11 @@ class FuncMAtkCritical < AbstractFunction
     super(Stats::MCRITICAL_RATE)
   end
 
-  def calc(effector, effected, skill, init_val)
+  def calc(effector, effected, skill, value)
     if !effector.player? || effector.active_weapon_instance?
-      init_val * BaseStats::WIT.calc_bonus(effector) * 10
+      value * BaseStats::WIT.calc_bonus(effector) * 10
     else
-      init_val
+      value
     end
   end
 

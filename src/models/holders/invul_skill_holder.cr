@@ -11,15 +11,15 @@ class InvulSkillHolder < SkillHolder
     super(holder.skill)
   end
 
-  def instances
+  def instances : Int32
     @instances.get
   end
 
-  def increase_instances
+  def increase_instances : Int32
     @instances.add(1) + 1
   end
 
-  def decrease_instances
+  def decrease_instances : Int32
     @instances.sub(1) - 1
   end
 end

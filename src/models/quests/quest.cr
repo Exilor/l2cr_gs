@@ -3,8 +3,6 @@ require "./quest_timer"
 require "./state"
 
 class Quest < AbstractScript
-  # include Identifiable
-
   private DEFAULT_NO_QUEST_MSG          = "<html><body>You are either not on a quest that involves this NPC, or you don't meet this NPC's minimum quest requirements.</body></html>"
   private DEFAULT_ALREADY_COMPLETED_MSG = "<html><body>This quest has already been completed.</body></html>"
 
@@ -184,9 +182,6 @@ class Quest < AbstractScript
   end
 
   def notify_event(event, npc, pc)
-    # unless event == 'move' || event == 'WATCHING'
-    #   debug "Quest##{__method__}: calling #on_adv_event(event: #{event.inspect}, npc: #{npc}, pc: #{pc})"
-    # end
     res = on_adv_event(event, npc, pc)
   rescue e
     show_error(pc, e)
@@ -195,7 +190,6 @@ class Quest < AbstractScript
   end
 
   def notify_enter_world(pc)
-    # debug "Quest#notify_enter_world: calling #on_enter_world(pc: #{pc})"
     res = on_enter_world(pc)
   rescue e
     show_error(pc, e)
@@ -204,21 +198,18 @@ class Quest < AbstractScript
   end
 
   def notify_tutorial_event(pc, command)
-    # debug "Quest#notify_tutorial_event: calling #on_tutorial_event(pc: #{pc}, command: #{command})"
     on_tutorial_event(pc, command)
   rescue e
     show_error(pc, e)
   end
 
   def notify_tutorial_client_event(pc, event)
-    # debug "Quest#notify_tutorial_client_event: calling #on_tutorial_client_event(pc: #{pc}, event: #{event})"
     on_tutorial_client_event(pc, event)
   rescue e
     show_error(pc, e)
   end
 
   def notify_tutorial_question_mark(pc, number)
-    # debug "Quest#notify_tutorial_question_mark: calling #on_tutorial_question_mark(pc: #{pc}, number: #{number})"
     res = on_tutorial_question_mark(pc, number)
   rescue e
     show_error(pc, e)
@@ -227,7 +218,6 @@ class Quest < AbstractScript
   end
 
   def notify_tutorial_cmd(pc, command)
-    # debug "Quest#notify_tutorial_cmd: calling #on_tutorial_cmd(pc: #{pc}, command: #{command})"
     res = on_tutorial_cmd(pc, command)
   rescue e
     show_error(pc, e)
@@ -236,7 +226,6 @@ class Quest < AbstractScript
   end
 
   def notify_kill(npc, killer, is_summon)
-    # debug "Quest#notify_kill: calling #on_kill(npc: #{npc}, killer: #{killer}, is_summon: #{is_summon})"
     res = on_kill(npc, killer, is_summon)
   rescue e
     show_error(killer, e)
@@ -245,12 +234,10 @@ class Quest < AbstractScript
   end
 
   def notify_talk(npc, pc)
-    # debug "Quest#notify_talk: npc: #{npc}, pc: #{pc}"
     start_condition_html = get_start_condition_html(pc)
     if !pc.has_quest_state?(@name) && start_condition_html
       res = start_condition_html
     else
-      # debug "Quest##{__method__}: calling #on_talk(npc: #{npc}, pc: #{pc})"
       res = on_talk(npc, pc)
     end
   rescue e
@@ -261,7 +248,6 @@ class Quest < AbstractScript
   end
 
   def notify_first_talk(npc, pc)
-    # debug "Quest#notify_first_talk: calling #on_first_talk(npc: #{npc}, pc: #{pc})"
     res = on_first_talk(npc, pc)
   rescue e
     show_error(pc, e)
@@ -270,7 +256,6 @@ class Quest < AbstractScript
   end
 
   def notify_acquire_skill(npc, pc, skill, type)
-    # debug "Quest#notify_acquire_skill: calling #on_acquire_skill(npc: #{npc}, pc: #{pc}, skill: #{skill}, type: #{type})"
     res = on_acquire_skill(npc, pc, skill, type)
   rescue e
     show_error(pc, e)
@@ -279,7 +264,6 @@ class Quest < AbstractScript
   end
 
   def notify_item_talk(item, pc)
-    # debug "Quest#notify_item_talk: calling #on_item_talk(item: #{item}, pc: #{pc})"
     res = on_item_talk(item, pc)
   rescue e
     show_error(pc, e)
@@ -292,7 +276,6 @@ class Quest < AbstractScript
   end
 
   def notify_item_event(item, pc, event)
-    # debug "Quest#notify_item_event: calling #on_item_event(item: #{item}, pc: #{pc}, event: #{event})"
     if res = on_item_event(item, pc, event)
       if res.casecmp?("true") || res.casecmp?("false")
         return
@@ -305,7 +288,6 @@ class Quest < AbstractScript
   end
 
   def notify_skill_see(npc, caster, skill, targets, is_summon)
-    # debug "Quest#notify_skill_see: calling #on_skill_see(npc: #{npc}, caster: #{caster}, skill: #{skill}, targets: #{targets}, is_summon: #{is_summon})"
     res = on_skill_see(npc, caster, skill, targets, is_summon)
   rescue e
     show_error(caster, e)
@@ -314,7 +296,6 @@ class Quest < AbstractScript
   end
 
   def notify_faction_call(npc, caller, attacker, is_summon)
-    # debug "Quest#notify_faction_call: calling #on_faction_call(npc: #{npc}, caller: #{caller}, attacker: #{attacker}, is_summon: #{is_summon})"
     res = on_faction_call(npc, caller, attacker, is_summon)
   rescue e
     show_error(attacker, e)
@@ -323,7 +304,6 @@ class Quest < AbstractScript
   end
 
   def notify_aggro_range_enter(npc, pc, is_summon)
-    # debug "Quest#notify_aggro_range_enter: calling #on_aggro_range_enter(npc: #{npc}, pc: #{pc}, is_summon: #{is_summon})"
     res = on_aggro_range_enter(npc, pc, is_summon)
   rescue e
     show_error(pc, e)
@@ -335,7 +315,6 @@ class Quest < AbstractScript
     if is_summon || creature.player?
       player = creature.acting_player
     end
-    # debug "Quest#notify_see_creature: calling #on_see_creature(npc: #{npc}, creature: #{creature}, is_summon: #{is_summon})"
     res = on_see_creature(npc, creature, is_summon)
   rescue e
     if player
@@ -348,7 +327,6 @@ class Quest < AbstractScript
   end
 
   def notify_event_received(event_name, sender, receiver, reference)
-    # debug "Quest#notify_event_received: calling #on_event_received(event_name: #{event_name}, sender: #{sender}, receiver: #{receiver}, reference: #{reference})"
     on_event_received(event_name, sender, receiver, reference)
   rescue e
     warn e
@@ -588,9 +566,7 @@ class Quest < AbstractScript
   end
 
   def show_result(pc : L2PcInstance?, res : String?, npc : L2Npc?) : Bool
-    return true unless pc
-    return true unless res
-    return true if res.empty?
+    return true unless pc && res && !res.empty?
 
     if res.ends_with?(".htm") || res.ends_with?(".html")
       show_html_file(pc, res, npc)
@@ -982,12 +958,16 @@ class Quest < AbstractScript
     content
   end
 
-  def get_htm(player : L2PcInstance, file_name : String) : String
-    get_htm(nil, file_name) # TODO
+  def get_htm(pc : L2PcInstance, file_name : String) : String
+    get_htm(pc.html_prefix, file_name)
   end
 
   def get_htm(prefix : String?, file_name : String) : String
-    path = file_name.starts_with?("data/") ? file_name : "data/scripts/#{descr.downcase}/#{name}/#{file_name}"
+    if file_name.starts_with?("data/")
+      path = file_name
+    else
+      path = "data/scripts/#{descr.downcase}/#{name}/#{file_name}"
+    end
     # debug "First try: #{path.inspect}."
     content = HtmCache.get_htm(path)
     unless content

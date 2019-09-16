@@ -1,5 +1,4 @@
 class CharStatus
-  include Loggable
   include Synchronizable
 
   private REGEN_FLAG_CP = 4i8
@@ -7,8 +6,7 @@ class CharStatus
   private REGEN_FLAG_MP = 2i8
 
   @flags_regen_active = 0i8
-  @reg_task : Runnable::PeriodicTask?
-
+  @reg_task : Concurrent::PeriodicTask?
   getter current_hp = 0f64
   getter current_mp = 0f64
   getter(status_listener) { Set(L2Character).new }
@@ -210,11 +208,9 @@ class CharStatus
   end
 
   struct RegenTask
-    include Runnable
-
     initializer status: CharStatus
 
-    def run
+    def call
       @status.do_regeneration
     end
   end

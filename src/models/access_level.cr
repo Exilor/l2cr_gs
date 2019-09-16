@@ -1,4 +1,6 @@
 class AccessLevel
+  @childs_access_level : self?
+  @child = 0
   getter level = 0
   getter name = "User"
   getter name_color = 16777215
@@ -11,9 +13,6 @@ class AccessLevel
   getter? can_give_damage = true
   getter? can_take_aggro = true
   getter? can_gain_exp = true
-
-  @childs_access_level : self?
-  @child = 0
 
   def initialize
   end

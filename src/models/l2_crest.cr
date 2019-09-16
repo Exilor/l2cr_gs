@@ -1,6 +1,4 @@
 struct L2Crest
-  # include Identifiable
-
   enum CrestType : UInt8
     PLEDGE, PLEDGE_LARGE, ALLY
 
@@ -12,7 +10,7 @@ struct L2Crest
       end
     end
 
-    def id
+    def id : Int32
       to_i + 1
     end
   end

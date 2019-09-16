@@ -36,7 +36,7 @@ module GameTimer
 
       sync do
         begin
-          MOVING_OBJECTS.reject! &.update_position
+          MOVING_OBJECTS.delete_if &.update_position
         rescue e
           error "Error updating the position of moving objects."
           error e

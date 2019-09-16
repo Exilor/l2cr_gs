@@ -353,9 +353,7 @@ module BotReportTable
   private record PunishmentHolder, punish : Skill, system_message_id : Int32
 
   struct ResetPointTask
-    include Runnable
-
-    def run
+    def call
       BotReportTable.reset_points_and_schedule
     end
   end

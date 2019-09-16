@@ -108,7 +108,7 @@ struct RangeSet(T)
   def holes
     holes = 0
     @ranges.each_with_index do |r1, i|
-      if r2 = @ranges[i + 1]
+      if r2 = @ranges[i + 1]?
         holes += r2.begin - r1.end - 1
       end
     end

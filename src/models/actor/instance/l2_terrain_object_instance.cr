@@ -8,10 +8,6 @@ class L2TerrainObjectInstance < L2Npc
   end
 
   def on_action_shift(pc : L2PcInstance, interact : Bool)
-    if pc.gm?
-      super
-    else
-      pc.action_failed
-    end
+    pc.gm? ? super : pc.action_failed
   end
 end

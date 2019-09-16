@@ -8,12 +8,11 @@ class Scripts::Q00511_AwlUnderFoot < Quest
   end
 
   private class SpawnRaid
-    include Runnable
     include Loggable
 
     initializer owner: Q00511_AwlUnderFoot, world: FAUWorld
 
-    def run
+    def call
       if @world.status == 0
         spawn_id = RAIDS1.sample
       elsif @world.status == 1

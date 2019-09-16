@@ -1,9 +1,4 @@
 require "./events/listeners_container"
-require "./interfaces/namable"
-require "./interfaces/spawnable"
-require "./interfaces/unique_id"
-require "./interfaces/decayable"
-require "./interfaces/identifiable"
 require "./interfaces/positionable"
 require "../network/packets/server/*"
 require "./actor/known_list/object_known_list"
@@ -12,11 +7,6 @@ require "../enums/zone_id"
 require "../util"
 
 abstract class L2Object < ListenersContainer
-  # include Namable
-  # include Spawnable
-  # include UniqueId
-  # include Decayable
-  # include Identifiable
   include Positionable
   include EventListenerOwner
   include Packets::Outgoing
@@ -138,8 +128,8 @@ abstract class L2Object < ListenersContainer
     end
     old_i = InstanceManager.get_instance(instance_id)
 
-    me = self
-    if me.is_a?(L2PcInstance)
+    case me = self
+    when L2PcInstance
       if instance_id > 0 && old_i
         old_i.remove_player(l2id)
         if old_i.show_timer?
@@ -155,7 +145,7 @@ abstract class L2Object < ListenersContainer
       if summon = me.summon
         summon.instance_id = new_instance_id
       end
-    elsif me.is_a?(L2Npc)
+    when L2Npc
       if instance_id > 0 && old_i
         old_i.remove_npc(me)
       end

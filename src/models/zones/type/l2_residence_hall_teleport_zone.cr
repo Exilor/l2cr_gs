@@ -1,7 +1,7 @@
 require "./l2_residence_teleport_zone"
 
 class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
-  @tele_task : Runnable::DelayedTask?
+  @tele_task : Concurrent::DelayedTask?
 
   def set_parameter(name, value)
     if name == "residenceZoneId"
@@ -24,13 +24,11 @@ class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
   end
 
   struct TeleportTask
-    include Runnable
-
     initializer zone: L2ResidenceHallTeleportZone
 
-    def run
+    def call
       loc = @zone.spawns.not_nil!.sample
-      @zone.players_inside { |pc| pc.tele_to_location(loc, false) }
+      @zone.players_inside &.tele_to_location(loc, false)
     end
   end
 end

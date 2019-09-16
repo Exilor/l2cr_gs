@@ -11,9 +11,7 @@ class ActionKey
     toggle_key1: Int32, toggle_key2: Int32, show_status: Int32
 
   def get_sql_save_string(pc_id : Int, order : Int, io : IO)
-    {
-      pc_id, @category, order, @command_id, @key_id, @toggle_key1, @toggle_key2,
-      @show_status
-    }.join(", ", io)
+    {pc_id, @category, order, @command_id, @key_id, @toggle_key1, @toggle_key2,
+      @show_status}.join(", ", io)
   end
 end

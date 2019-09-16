@@ -1,7 +1,6 @@
 require "./updater_type"
 
 class FortUpdater
-  include Runnable
   include Loggable
 
   getter run_count
@@ -9,7 +8,7 @@ class FortUpdater
   initializer fort: Fort, clan: L2Clan, run_count: Int32,
     updater_type: UpdaterType
 
-  def run
+  def call
     case @updater_type
     when .periodic_update?
       @run_count += 1

@@ -8,7 +8,7 @@ class L2BuyList
 
   delegate size, to: @products
 
-  def products : Enumerable(Product)
+  def products : Indexable(Product)
     @products.values_slice
   end
 

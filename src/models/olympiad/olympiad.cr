@@ -69,25 +69,26 @@ class Olympiad < ListenersContainer
   COMP_DONE_WEEK_NON_CLASSED = "competitions_done_week_non_classed"
   COMP_DONE_WEEK_TEAM = "competitions_done_week_team"
 
+  class_getter(default_points) { Config.alt_oly_start_points }
+  class_getter(weekly_points) { Config.alt_oly_weekly_points }
+
   @olympiad_end = 0i64
   @validation_end = 0i64
   @next_weekly_change = 0i64
   @comp_end = 0i64
   @comp_start = Calendar.new
   @comp_started = false
-  @scheduled_comp_start : Runnable::DelayedTask?
-  @scheduled_comp_end : Runnable::DelayedTask?
-  @scheduled_olympiad_end : Runnable::DelayedTask?
-  @scheduled_weekly_task : Runnable::PeriodicTask?
-  @scheduled_validation_task : Runnable::DelayedTask?
-  @game_manager : Runnable::PeriodicTask?
-  @game_announcer : Runnable::PeriodicTask?
+  @scheduled_comp_start : Concurrent::DelayedTask?
+  @scheduled_comp_end : Concurrent::DelayedTask?
+  @scheduled_olympiad_end : Concurrent::DelayedTask?
+  @scheduled_weekly_task : Concurrent::PeriodicTask?
+  @scheduled_validation_task : Concurrent::DelayedTask?
+  @game_manager : Concurrent::PeriodicTask?
+  @game_announcer : Concurrent::PeriodicTask?
   getter current_cycle = 0
   getter period = 0
-  protected setter period : Int32
   getter? in_comp_period = false
-  class_getter(default_points) { Config.alt_oly_start_points }
-  class_getter(weekly_points) { Config.alt_oly_weekly_points }
+  protected setter period : Int32
 
   private def initialize
     @OLYMPIAD_GET_HEROS = "SELECT olympiad_nobles.charId, characters.char_name FROM olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} AND olympiad_nobles.competitions_won > 0 ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC"

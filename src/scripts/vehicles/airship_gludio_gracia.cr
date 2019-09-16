@@ -1,7 +1,7 @@
 require "../../instance_managers/airship_manager"
+require "./boat_engine"
 
 class Scripts::AirShipGludioGracia < AbstractNpcAI
-  include Runnable
   include Loggable
 
   private CONTROLLERS = {32607, 32609}
@@ -71,12 +71,24 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
     @ship = AirshipManager.get_new_airship(-149378, 252552, 198, 33837)
     @ship.oust_loc = OUST_GLUDIO
     @ship.dock_id = GLUDIO_DOCK_ID
-    @ship.register_engine(self)
+    @ship.register_engine(BoatEngineDelegator.new(self))
     @ship.run_engine(60_000)
 
     add_start_npc(CONTROLLERS)
     add_first_talk_id(CONTROLLERS)
     add_talk_id(CONTROLLERS)
+  end
+
+  private struct BoatEngineDelegator
+    include BoatEngine
+
+    @boat = uninitialized L2BoatInstance
+
+    # def initialize(@airship : AirShipGludioGracia, @boat : L2Vehicle)
+    # end
+    initializer airship: AirShipGludioGracia
+
+    delegate call, to: @airship
   end
 
   private def broadcast_in_gludio(npc_string)
@@ -170,7 +182,7 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
     "#{npc.id}.htm"
   end
 
-  def run
+  def call
     case @cycle
     when 0
       # debug "Leaving the Gludio dock."

@@ -7,7 +7,7 @@ class L2MonsterInstance < L2Attackable
 
   @master : L2MonsterInstance?
   @minion_list : MinionList?
-  @maintenance_task : Runnable::PeriodicTask?
+  @maintenance_task : Concurrent::PeriodicTask?
   setter enable_minions : Bool = true
 
   def initialize(template : L2NpcTemplate)

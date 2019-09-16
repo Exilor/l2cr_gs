@@ -4,15 +4,12 @@ require "../util/flood_protectors"
 
 class GameClient
   include MMO::Client(GameClient)
-  extend MMO::IClientFactory(GameClient)
   include Synchronizable
-  include Runnable
-  include Loggable
 
   @crypt = GameCrypt.new
   @char_slot_mapping = [] of CharSelectInfoPackage
-  @auto_save_task : Runnable::PeriodicTask?
-  @cleanup_task : Runnable::DelayedTask?
+  @auto_save_task : Concurrent::PeriodicTask?
+  @cleanup_task : Concurrent::DelayedTask?
   getter state = State::CONNECTED
   getter stats = ClientStats.new
   getter start_time = Time.ms
@@ -20,13 +17,14 @@ class GameClient
   getter(flood_protectors) { FloodProtectors.new(self) }
   property active_char : L2PcInstance?
   property additional_close_packet : GameServerPacket?
+  property trace : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
   property! account_name : String
   property! session_id : SessionKey
   property? protocol_ok : Bool = false
   property? game_guard_ok : Bool = false
   property? detached : Bool = false
 
-  def initialize(socket : TCPSocket?)
+  def initialize(con : MMO::Connection(self)?)
     super
 
     @packet_queue = Channel::Buffered(GameClientPacket).new(Config.client_packet_queue_size)
@@ -50,15 +48,10 @@ class GameClient
       end
     end
 
-    super
+    connection.send_packet(gsp)
 
     gsp.client = self
     gsp.run_impl
-  end
-
-  def trace
-    # TODO
-    Slice.new(5) { Slice.new(4, 0) }
   end
 
   def state=(new_state : State)
@@ -223,12 +216,14 @@ class GameClient
   end
 
   def close(gsp : GameServerPacket?)
-    # L2J checks connection for offline shops, but we don't have connections.
+    unless con = @connection
+      return
+    end
 
     if tmp = @additional_close_packet
-      super({tmp, gsp})
+      con.close({tmp, gsp})
     else
-      super(gsp)
+      con.close(gsp)
     end
   end
 
@@ -295,7 +290,7 @@ class GameClient
     end
   end
 
-  def run
+  def call
     count = 0
 
     until @packet_queue.empty?
@@ -519,10 +514,6 @@ class GameClient
       end
     end
     io << ')'
-  end
-
-  def self.create(socket : TCPSocket) : GameClient
-    new(socket)
   end
 
   enum State : UInt8

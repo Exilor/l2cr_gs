@@ -1,5 +1,4 @@
 class TerritoryWard
-  include Loggable
   include Synchronizable
   include Packets::Outgoing
 

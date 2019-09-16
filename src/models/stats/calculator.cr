@@ -2,11 +2,12 @@
 #   include Synchronizable
 
 #   protected getter functions
-#   delegate size, empty?, to: @functions
 
 #   def initialize
 #     @functions = [] of AbstractFunction
 #   end
+
+#   delegate size, empty?, to: @functions
 
 #   def initialize(c : Calculator)
 #     @functions = c.functions.dup
@@ -55,12 +56,12 @@
 class Calculator
   include Synchronizable
 
-  def_equals @functions
-  delegate size, empty?, to: @functions
-
   def initialize
     @functions = Slice(AbstractFunction).empty
   end
+
+  def_equals @functions
+  delegate size, empty?, to: @functions
 
   def initialize(c : Calculator)
     @functions = c.@functions.dup

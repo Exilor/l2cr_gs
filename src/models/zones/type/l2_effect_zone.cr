@@ -45,7 +45,7 @@ class L2EffectZone < L2ZoneType
     end
   end
 
-  def settings
+  def settings : TaskZoneSettings
     super.as(TaskZoneSettings)
   end
 

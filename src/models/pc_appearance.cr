@@ -8,8 +8,7 @@ class PcAppearance
   property! owner : L2PcInstance
   property? ghost : Bool = false
 
-  property_initializer face: Int8, hair_color: Int8, hair_style: Int8,
-    sex: Bool
+  property_initializer face: Int8, hair_color: Int8, hair_style: Int8, sex: Bool
 
   def visible_name : String
     @visible_name || owner.name

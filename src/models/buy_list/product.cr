@@ -3,7 +3,7 @@ class Product
 
   getter buy_list_id, item, restock_delay, max_count
 
-  @restock_task : Runnable::DelayedTask?
+  @restock_task : Concurrent::DelayedTask?
 
   def initialize(@buy_list_id : Int32, @item : L2Item, @price : Int64, @restock_delay : Int64, @max_count : Int64)
     @restock_delay = restock_delay * 60_000
@@ -84,11 +84,9 @@ class Product
   end
 
   private struct RestockTask
-    include Runnable
-
     initializer product: Product
 
-    def run
+    def call
       @product.restock
     end
   end

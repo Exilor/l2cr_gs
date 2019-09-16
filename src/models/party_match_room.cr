@@ -1,5 +1,4 @@
 class PartyMatchRoom
-  # include Identifiable
   include Packets::Outgoing
 
   getter party_members, id

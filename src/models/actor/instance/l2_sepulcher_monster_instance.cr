@@ -1,10 +1,10 @@
 class L2SepulcherMonsterInstance < L2MonsterInstance
   private FAKE_PETRIFICATION = SkillHolder.new(4616, 1)
 
-  @victim_spawn_key_box_task : Runnable::DelayedTask?
-  @victim_shout : Runnable::DelayedTask?
-  @change_immortal_task : Runnable::DelayedTask?
-  @on_dead_event_task : Runnable::DelayedTask?
+  @victim_spawn_key_box_task : Concurrent::DelayedTask?
+  @victim_shout : Concurrent::DelayedTask?
+  @change_immortal_task : Concurrent::DelayedTask?
+  @on_dead_event_task : Concurrent::DelayedTask?
   property mysterious_box_id : Int32 = 0
 
   def initialize(template : L2NpcTemplate)
@@ -118,11 +118,9 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct VictimShout
-    include Runnable
-
     initializer mob: L2SepulcherMonsterInstance
 
-    def run
+    def call
       if @mob.dead?
         return
       end
@@ -136,11 +134,9 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct VictimSpawnKeyBox
-    include Runnable
-
     initializer mob: L2SepulcherMonsterInstance
 
-    def run
+    def call
       if @mob.dead?
         return
       end
@@ -159,11 +155,9 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct OnDeadEvent
-    include Runnable
-
     initializer mob: L2SepulcherMonsterInstance
 
-    def run
+    def call
       case @mob.id
       when 18120..18131, 18149, 18158..18165, 18183, 18184, 18212..18219
         FourSepulchersManager.spawn_key_box(@mob)
@@ -180,11 +174,9 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct ChangeImmortal
-    include Runnable
-
     initializer mob: L2SepulcherMonsterInstance
 
-    def run
+    def call
       FAKE_PETRIFICATION.skill.apply_effects(@mob, @mob)
     end
   end

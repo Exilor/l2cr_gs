@@ -198,7 +198,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   @allow_agent_spawn = true
   @allow_agent_spawn_7th = true
   @has_7th_floor_attack_began = false
-  @countdown : Runnable::PeriodicTask?
+  @countdown : Concurrent::PeriodicTask?
   @spawned_agent : L2Npc?
   @pillar_spawn : L2Spawn?
 
@@ -1028,13 +1028,11 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   end
 
   private struct DoorTask
-    include Runnable
-
     alias IDS_TYPE = {Int32} | {Int32, Int32} | {Int32, Int32, Int32, Int32}
 
     initializer door_ids: IDS_TYPE, state: Int32
 
-    def run
+    def call
       @door_ids.each do |door_id|
         if door = DoorData.get_door(door_id)
           case @state

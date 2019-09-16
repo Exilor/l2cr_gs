@@ -1,5 +1,4 @@
 class SkillChannelizer
-  include Runnable
   include Loggable
 
   getter! channelized : Array(L2Character)
@@ -50,7 +49,7 @@ class SkillChannelizer
     !!@task
   end
 
-  def run
+  def call
     return unless channeling?
     return unless _skill = @skill
     if _skill.mp_per_channeling > 0

@@ -1,7 +1,5 @@
 struct FourSepulchersManagerSayTask
-  include Runnable
-
-  def run
+  def call
     if FourSepulchersManager.attack_time?
       tmp = Calendar.new
       tmp.ms -= FourSepulchersManager.warm_up_time_end

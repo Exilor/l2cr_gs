@@ -18,7 +18,7 @@ class L2DoorInstance < L2Character
   property? attackable_door : Bool
   @castle_index = -2
   @fort_index = -2
-  @auto_close_task : Runnable::DelayedTask?
+  @auto_close_task : Concurrent::DelayedTask?
 
   def initialize(template : L2DoorTemplate)
     super
@@ -244,7 +244,7 @@ class L2DoorInstance < L2Character
     known_players.each_value do |pc|
       next unless visible_for?(pc)
 
-      if pc.gm? || ((castle && (castle.residence_id > 0)) || (fort && (fort.residence_id > 0)))
+      if pc.gm? || ((castle && castle.residence_id > 0) || (fort && fort.residence_id > 0))
         pc.send_packet(tsu)
       else
         pc.send_packet(su)
@@ -497,21 +497,17 @@ class L2DoorInstance < L2Character
   end
 
   struct AutoClose
-    include Runnable
-
     initializer door: L2DoorInstance
 
-    def run
+    def call
       @door.close_me if @door.open?
     end
   end
 
   struct TimerOpen
-    include Runnable
-
     initializer door: L2DoorInstance
 
-    def run
+    def call
       open = @door.open?
       open ? @door.close_me : @door.open_me
       delay = open ? @door.template.close_time : @door.template.open_time

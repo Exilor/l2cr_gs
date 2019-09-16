@@ -4,7 +4,7 @@ module RaidBossSpawnManager
 
   private BOSSES      = Hash(Int32, L2RaidBossInstance).new
   private SPAWNS      = Hash(Int32, L2Spawn).new
-  private SCHEDULES   = Hash(Int32, Runnable::DelayedTask).new
+  private SCHEDULES   = Hash(Int32, Concurrent::DelayedTask).new
   private STORED_INFO = Hash(Int32, StatsSet).new
 
   enum Status : UInt8
@@ -229,12 +229,11 @@ module RaidBossSpawnManager
   end
 
   private struct SpawnSchedule
-    include Runnable
     include Loggable
 
     initializer boss_id: Int32
 
-    def run
+    def call
       if @boss_id == 25328
         raid = DayNightSpawnManager.handle_boss(SPAWNS[@boss_id])
       else

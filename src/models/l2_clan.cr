@@ -3,10 +3,7 @@ require "./l2_clan_member"
 require "../community_bbs/forum"
 
 class L2Clan
-  # include Identifiable
-  # include Namable
   include Synchronizable
-  # include Enumerable
   include Loggable
   include Packets::Outgoing
 
@@ -87,7 +84,7 @@ class L2Clan
     initialize_privs
   end
 
-  def members
+  def members : Enumerable(L2ClanMember)
     @members.local_each_value
   end
 
@@ -566,7 +563,7 @@ class L2Clan
         if subunit = @subpledges[sub_type]?
           subunit.add_new_skill(skill)
         else
-          warn "Missing subpledge #{sub_type}."
+          warn { "Missing subpledge #{sub_type}." }
         end
       end
     end
@@ -1649,11 +1646,11 @@ class L2Clan
     @siege_deaths.get
   end
 
-  def add_siege_kill
+  def add_siege_kill: Int32
     @siege_kills.add(1) + 1
   end
 
-  def add_siege_death
+  def add_siege_death: Int32
     @siege_deaths.add(1) + 1
   end
 

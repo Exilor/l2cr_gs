@@ -1,6 +1,8 @@
 require "./char_stat"
 
 class PlayableStat < CharStat
+  include Loggable
+
   @exp = Atomic(Int64).new(0i64)
   @sp = Atomic(Int32).new(0)
 

@@ -1,14 +1,12 @@
 require "./l2_playable_ai"
 
 class L2SummonAI < L2PlayableAI
-  include Runnable
-
   private AVOID_RADIUS = 70
 
   @thinking = false
   @start_avoid = false
   @start_follow : Bool
-  @avoid_task : Runnable::PeriodicTask?
+  @avoid_task : Concurrent::PeriodicTask?
   @last_attack : L2Character?
 
   def initialize(summon : L2Summon)
@@ -156,7 +154,7 @@ class L2SummonAI < L2PlayableAI
     end
   end
 
-  def run
+  def call
     if @start_avoid
       @start_avoid = false
 

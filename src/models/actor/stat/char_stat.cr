@@ -3,7 +3,6 @@ require "../../../enums/stats"
 
 class CharStat
   include Synchronizable
-  include Loggable
 
   {% for const in Stats.constants %}
     private {{const}} = Stats::{{const}}

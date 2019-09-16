@@ -1,6 +1,6 @@
 require "../game_client"
 
-abstract class GameServerPacket < MMO::OutgoingPacket(MMO::Client(GameClient))
+abstract class GameServerPacket < MMO::OutgoingPacket(GameClient)
   include Loggable
 
   property? invisible : Bool = false

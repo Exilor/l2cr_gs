@@ -59,14 +59,6 @@ abstract class AbstractEffect
     EffectFlag::NONE.mask
   end
 
-  def decrease_force
-    # no-op
-  end
-
-  def increase_effect
-    # no-op
-  end
-
   def check_condition(object) : Bool
     true
   end

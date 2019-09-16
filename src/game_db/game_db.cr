@@ -19,9 +19,7 @@ module GameDB
   end
 
   def transaction
-    db.transaction do |tr|
-      yield tr.connection
-   end
+    db.transaction { |tr| yield tr.connection }
   end
 
   def query_each(*args)

@@ -18,8 +18,6 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
 
   getter system_message_id
 
-  delegate id, to: @system_message_id
-
   def initialize(@system_message_id : SystemMessageId)
     if param_count > 0
       ptr = Pointer(SMParam).malloc(param_count)
@@ -29,6 +27,8 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
 
     @params = Pointer::Appender(SMParam).new(ptr)
   end
+
+  delegate id, to: @system_message_id
 
   private def param_count
     @system_message_id.param_count
@@ -177,7 +177,9 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
         d x
         d y
         d z
-      else # ITEM_NAME, CASTLE_NAME, INT_NUMBER, NPC_NAME, ELEMENT_NAME, SYSTEM_STRING, INSTANCE_NAME, DOOR_NAME
+      else
+      # ITEM_NAME, CASTLE_NAME, INT_NUMBER, NPC_NAME, ELEMENT_NAME,
+      # SYSTEM_STRING, INSTANCE_NAME, DOOR_NAME
         d param.value.as(Int32)
       end
     end

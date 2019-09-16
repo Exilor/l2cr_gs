@@ -1,9 +1,7 @@
 struct WaterTask
-  include Runnable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     hp = Math.max(@pc.max_hp / 100.0, 1.0)
     @pc.reduce_current_hp(hp, @pc, false, false, nil)
     sm = Packets::Outgoing::SystemMessage.drown_damage_s1

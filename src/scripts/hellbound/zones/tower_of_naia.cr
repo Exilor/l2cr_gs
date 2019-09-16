@@ -663,11 +663,9 @@ class Scripts::TowerOfNaia < AbstractNpcAI
   end
 
   private struct StopRoomTask
-    include Runnable
-
     initializer owner: TowerOfNaia, manager_id: Int32
 
-    def run
+    def call
       @owner.init_room(@manager_id)
     end
   end

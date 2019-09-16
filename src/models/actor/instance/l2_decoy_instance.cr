@@ -42,12 +42,11 @@ class L2DecoyInstance < L2Decoy
   end
 
   private struct DecoyLifetime
-    include Runnable
     include Loggable
 
     initializer pc: L2PcInstance, decoy: L2DecoyInstance
 
-    def run
+    def call
       @decoy.dec_time_temaining(1000)
       if @decoy.time_remaining < 0
         @decoy.unsummon(@pc)
@@ -58,12 +57,11 @@ class L2DecoyInstance < L2Decoy
   end
 
   private struct HateSpam
-    include Runnable
     include Loggable
 
     initializer decoy: L2DecoyInstance, skill: Skill
 
-    def run
+    def call
       @decoy.target = @decoy
       @decoy.do_cast(@skill)
     rescue e

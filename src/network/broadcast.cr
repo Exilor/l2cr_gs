@@ -1,29 +1,21 @@
 module Broadcast
   extend self
-
-  # unused
-  def to_players_targetting_myself(char : L2Character, gsp : GameServerPacket)
-    char.known_list.known_players.each_value do |pc|
-      if pc.target == char
-        pc.send_packet(gsp)
-      end
-    end
-  end
+  include Packets::Outgoing
 
   def to_known_players(char : L2Character, gsp : GameServerPacket)
     char.known_list.known_players.each_value do |pc|
       pc.send_packet(gsp)
 
-      if gsp.is_a?(Packets::Outgoing::CharInfo) && char.is_a?(L2PcInstance)
+      if gsp.is_a?(CharInfo) && char.is_a?(L2PcInstance)
         relation = char.get_relation(pc)
         old_relation = char.known_list.known_relations[pc.l2id]
 
         if old_relation && old_relation != relation
-          rc = Packets::Outgoing::RelationChanged.new(char, relation, char.auto_attackable?(pc))
+          rc = RelationChanged.new(char, relation, char.auto_attackable?(pc))
           pc.send_packet(rc)
 
           if s = char.summon
-            rc = Packets::Outgoing::RelationChanged.new(s, relation, char.auto_attackable?(pc))
+            rc = RelationChanged.new(s, relation, char.auto_attackable?(pc))
             pc.send_packet(rc)
           end
         end
@@ -67,7 +59,7 @@ module Broadcast
     else
       say = Packets::Incoming::Say2::ANNOUNCEMENT
     end
-    gsp = Packets::Outgoing::CreatureSay.new(0, say, "", text)
+    gsp = CreatureSay.new(0, say, "", text)
 
     to_all_online_players(gsp)
   end
@@ -77,7 +69,7 @@ module Broadcast
   end
 
   def to_all_online_players_on_screen(text : String)
-    to_all_online_players(Packets::Outgoing::ExShowScreenMessage.new(text, 10000))
+    to_all_online_players(ExShowScreenMessage.new(text, 10000))
   end
 
   def to_players_in_instance(gsp : GameServerPacket, instance_id : Int32)

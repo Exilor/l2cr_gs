@@ -1,9 +1,7 @@
 struct RecoGiveTask
-  include Runnable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     reco_to_give = 1
     unless @pc.reco_two_hours_given?
       reco_to_give = 10

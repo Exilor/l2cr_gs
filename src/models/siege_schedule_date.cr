@@ -1,7 +1,5 @@
 struct SiegeScheduleDate
-  getter day : Int32
-  getter hour : Int32
-  getter max_concurrent : Int32
+  getter day : Int32, hour : Int32, max_concurrent : Int32
 
   def initialize(set : StatsSet)
     @day = set.get_i32("day", Calendar::SUNDAY)

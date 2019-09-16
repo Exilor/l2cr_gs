@@ -95,11 +95,9 @@ module ItemTable
   end
 
   private struct ResetOwner
-    include Runnable
-
     initializer item: L2ItemInstance
 
-    def run
+    def call
       @item.owner_id = 0
       @item.item_loot_schedule = nil
     end

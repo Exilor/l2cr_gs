@@ -53,14 +53,14 @@ require "../../quests/quest_state"
 
 class L2PcInstance < L2Playable
   extend Loggable
-  property original_cp_hp_mp : {Float64, Float64, Float64}?
+
   ID_NONE = -1
   REQUEST_TIMEOUT = 15
   private FALLING_VALIDATION_DELAY = 10_000
   private COND_OVERRIDE_KEY = "cond_override"
 
-  @reco_bonus_task : Runnable::DelayedTask?
-  @reco_give_task : Runnable::PeriodicTask?
+  @reco_bonus_task : Concurrent::DelayedTask?
+  @reco_give_task : Concurrent::PeriodicTask?
   @subclass_lock = Mutex.new
   @cur_weight_penalty = 0
   @last_compass_zone = 0
@@ -97,14 +97,14 @@ class L2PcInstance < L2Playable
   @engage_request = false
   @revive_pet = false
   @quests = Hash(String, QuestState).new
-  @water_task : Runnable::PeriodicTask?
+  @water_task : Concurrent::PeriodicTask?
   @transform_skills : Hash(Int32, Skill)?
-  @vitality_task : Runnable::PeriodicTask?
-  @teleport_watchdog : Runnable::DelayedTask?
-  @soul_task : Runnable::DelayedTask?
-  @charge_task : Runnable::DelayedTask?
-  @task_warn_user_take_break : Runnable::PeriodicTask?
-  @pvp_reg_task : Runnable::PeriodicTask?
+  @vitality_task : Concurrent::PeriodicTask?
+  @teleport_watchdog : Concurrent::DelayedTask?
+  @soul_task : Concurrent::DelayedTask?
+  @charge_task : Concurrent::DelayedTask?
+  @task_warn_user_take_break : Concurrent::PeriodicTask?
+  @pvp_reg_task : Concurrent::PeriodicTask?
   @notify_quest_of_death : Array(QuestState)?
   @dwarven_recipe_book = Hash(Int32, L2RecipeList).new
   @common_recipe_book = Hash(Int32, L2RecipeList).new
@@ -113,13 +113,13 @@ class L2PcInstance < L2Playable
   @snoop_listener = Set(L2PcInstance).new(1)
   @snooped_player = Set(L2PcInstance).new(1)
   @fish : L2Fish?
-  @task_for_fish : Runnable::PeriodicTask?
+  @task_for_fish : Concurrent::PeriodicTask?
   @friends : Set(Int32)?
   @level_data : L2PetLevelData?
-  @mount_feed_task : Runnable::PeriodicTask?
-  @dismount_task : Runnable::DelayedTask?
-  @rent_pet_task : Runnable::PeriodicTask?
-  @fame_task : Runnable::PeriodicTask?
+  @mount_feed_task : Concurrent::PeriodicTask?
+  @dismount_task : Concurrent::DelayedTask?
+  @rent_pet_task : Concurrent::PeriodicTask?
+  @fame_task : Concurrent::PeriodicTask?
   @manufacture_items : Hash(Int32, L2ManufactureItem)?
   @access_level : AccessLevel?
   @html_prefix : String?
@@ -207,6 +207,7 @@ class L2PcInstance < L2Playable
   setter can_revive : Bool = true
   setter active_requester : L2PcInstance?
   setter learning_class : ClassId?
+  property original_cp_hp_mp : {Float64, Float64, Float64}?
   property base_class : Int32 = 0
   property create_date : Calendar = Calendar.new
   property delete_timer : Int64 = 0i64
@@ -406,7 +407,7 @@ class L2PcInstance < L2Playable
       OnPlayerLogout.new(self).async(self)
 
       begin
-        ZoneManager.get_zones(self).each do |zone|
+        ZoneManager.get_zones(self) do |zone|
           zone.on_player_logout_inside(self)
         end
       rescue e
@@ -3836,6 +3837,19 @@ class L2PcInstance < L2Playable
     Math.max(get_skill_level(239), 0)
   end
 
+  def tele_to_location(loc : Locatable, random_offset : Bool)
+    vehicle = vehicle()
+    if vehicle && !vehicle.teleporting?
+      self.vehicle = nil
+    end
+
+    if flying_mounted? && loc.z < -1005
+      super(loc.x, loc.y, -1005, loc.heading, loc.instance_id)
+    end
+
+    super
+  end
+
   def weight_penalty : Int32
     @diet_mode ? 0 : @cur_weight_penalty
   end
@@ -4736,7 +4750,7 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if client.closed?
+    if client.connection.closed?
       return
     end
 
@@ -5165,7 +5179,7 @@ class L2PcInstance < L2Playable
     end
 
     begin
-      ZoneManager.get_zones(self).each do |zone|
+      ZoneManager.get_zones(self) do |zone|
         zone.on_player_login_inside(self)
       end
     rescue e

@@ -3,19 +3,19 @@ require "./warehouse"
 class PcWarehouse < Warehouse
   getter_initializer owner: L2PcInstance
 
-  def owner?
+  def owner? : L2PcInstance?
     owner
   end
 
-  def name
+  def name : String
     "Warehouse"
   end
 
-  def base_location
+  def base_location : ItemLocation
     ItemLocation::WAREHOUSE
   end
 
-  def validate_capacity(slots)
+  def validate_capacity(slots : Int) : Bool
     @items.size + slots <= @owner.warehouse_limit
   end
 end

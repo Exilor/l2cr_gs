@@ -11,8 +11,8 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   @home_x = 0
   @home_y = 0
   @home_z = 0
-  @buff_task : Runnable::PeriodicTask?
-  @duration_check_task : Runnable::PeriodicTask?
+  @buff_task : Concurrent::PeriodicTask?
+  @duration_check_task : Concurrent::PeriodicTask?
   @beast_skills : Array(Skill)?
   getter food_type = 0
   getter! owner : L2PcInstance
@@ -144,11 +144,9 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   end
 
   private struct BuffCast
-    include Runnable
-
     initializer beast: L2TamedBeastInstance, skill: Skill?
 
-    def run
+    def call
       if skill = @skill
         @beast.sit_cast_and_follow(skill, @beast.owner)
       else
@@ -291,11 +289,9 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   end
 
   private struct CheckDuration
-    include Runnable
-
     initializer beast: L2TamedBeastInstance
 
-    def run
+    def call
       food_type_skill_id = @beast.food_type
       owner = @beast.owner
 
@@ -348,11 +344,9 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   end
 
   private struct CheckOwnerBuffs
-    include Runnable
-
     initializer beast: L2TamedBeastInstance, num_buffs: Int32
 
-    def run
+    def call
       owner = @beast.owner?
 
       # check if the owner is no longer around...if so, despawn

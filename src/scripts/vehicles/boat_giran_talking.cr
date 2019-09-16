@@ -1,4 +1,6 @@
-class BoatGiranTalking < BoatEngine
+class BoatGiranTalking
+  include BoatEngine
+  
   private GIRAN_TO_TALKING = [
     VehiclePathPoint.new(51914, 189023, -3610, 150, 800),
 		VehiclePathPoint.new(60567, 189789, -3610, 150, 800),
@@ -70,7 +72,7 @@ class BoatGiranTalking < BoatEngine
   private ARRIVAL_GIRAN5 = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::FERRY_FROM_TALKING_ARRIVE_AT_GIRAN_5_MINUTES)
   private ARRIVAL_GIRAN1 = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::FERRY_FROM_TALKING_ARRIVE_AT_GIRAN_1_MINUTE)
 
-  def run
+  def call
     case @cycle
     when 0
       # debug "Leaving for Talking Island in 5 minutes."

@@ -8,7 +8,6 @@ abstract class Condition
   private alias SystemMessage = Packets::Outgoing::SystemMessage
 
   @result = false
-
   getter listener : ConditionListener?
   getter? add_name = false
   property message : String?

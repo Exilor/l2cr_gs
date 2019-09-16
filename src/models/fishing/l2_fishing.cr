@@ -1,10 +1,9 @@
 class L2Fishing
-  include Runnable
   include Loggable
   include Synchronizable
   include Packets::Outgoing
 
-  @task : Runnable::PeriodicTask?
+  @task : Concurrent::PeriodicTask?
   @fish_max_hp : Int32
   @fish_cur_hp : Int32
   @regen_hp : Float64
@@ -18,7 +17,6 @@ class L2Fishing
 
 
   def initialize(@pc : L2PcInstance, fish : L2Fish, noob : Bool, @upper_grade : Bool)
-    # debug "#{pc.name} began fishing."
     @fish_max_hp = fish.fish_hp
     @fish_cur_hp = @fish_max_hp
     @regen_hp = fish.hp_regen
@@ -40,9 +38,9 @@ class L2Fishing
     @task ||= ThreadPoolManager.schedule_effect_at_fixed_rate(self, 1000, 1000)
   end
 
-  def run
+  def call
     return unless pc = @pc
-    # debug __method__
+
     if @fish_cur_hp >= @fish_max_hp * 2
       pc.send_packet(SystemMessageId::BAIT_STOLEN_BY_FISH)
       do_die(false)

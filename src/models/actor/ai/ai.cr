@@ -67,8 +67,8 @@ abstract class AI
   getter intention = IDLE
   protected getter! follow_target : L2Character
   property next_action : NextAction?
+  property follow_task : Concurrent::PeriodicTask?
   private property target : L2Object?
-  property follow_task : Runnable::PeriodicTask?
   property! cast_target : L2Character?
   property! attack_target : L2Character?
 
@@ -508,13 +508,12 @@ abstract class AI
   end
 
   struct FollowTask
-    include Runnable
     include Loggable
 
     def initialize(@char : L2Character, @range : Int32 = 70)
     end
 
-    def run
+    def call
       return unless @char.ai.follow_task
 
       unless target = @char.ai.follow_target

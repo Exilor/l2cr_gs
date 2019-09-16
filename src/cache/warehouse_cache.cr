@@ -1,6 +1,5 @@
 module WarehouseCache
   extend self
-  extend Runnable
 
   private CACHE = Hash(L2PcInstance, Int64).new
   @@CACHE_TIME = 0
@@ -18,7 +17,7 @@ module WarehouseCache
     CACHE.delete(pc)
   end
 
-  def run
+  def call
     CACHE.each do |pc, time|
       if Time.ms - time > @@CACHE_TIME
         pc.clear_warehouse

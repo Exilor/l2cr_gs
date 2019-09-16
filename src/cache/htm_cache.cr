@@ -18,16 +18,16 @@ module HtmCache
   end
 
   def reload(f : String)
-    if !Config.lazy_cache
-      info "Html cache start..."
-      timer = Timer.new
-      parse_dir(f)
-      info { "#{memory_usage.round(2)} mb from #{@@loaded_files} files loaded in #{timer.result} s." }
-    else
+    if Config.lazy_cache
       CACHE.clear
       @@loaded_files = 0
       @@bytes_buff_len = 0u64
       info "Running lazy cache."
+    else
+      info "Html cache start..."
+      timer = Timer.new
+      parse_dir(f)
+      info { "#{memory_usage.round(2)} mb from #{@@loaded_files} files loaded in #{timer.result} s." }
     end
   end
 

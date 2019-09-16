@@ -16,6 +16,6 @@ class Multisell::ListContainer
   end
 
   def npc_only? : Bool
-    !@npcs_allowed.nil?
+    !!@npcs_allowed
   end
 end

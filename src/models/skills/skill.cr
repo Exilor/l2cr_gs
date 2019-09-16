@@ -1,4 +1,3 @@
-require "../interfaces/identifiable"
 require "../l2_extractable_product_item"
 require "../l2_extractable_skill"
 require "../../enums/skill_operate_type"
@@ -14,7 +13,6 @@ require "../../data/xml/skill_trees_data"
 require "../../network/packets/server/system_message"
 
 class Skill
-  # include Identifiable
   include Loggable
   extend Loggable
 

@@ -35,7 +35,7 @@ module TownManager
   end
 
   def get_town(town_id : Int32) : L2TownZone?
-    ZoneManager.each(L2TownZone) do |zone|
+    ZoneManager.get_all_zones(L2TownZone) do |zone|
       if zone.town_id == town_id
         return zone
       end
@@ -45,7 +45,7 @@ module TownManager
   end
 
   def get_town(x : Int32, y : Int32, z : Int32) : L2TownZone?
-    ZoneManager.get_zones(x, y, z).each do |zone|
+    ZoneManager.get_zones(x, y, z) do |zone|
       if zone.is_a?(L2TownZone)
         return zone
       end

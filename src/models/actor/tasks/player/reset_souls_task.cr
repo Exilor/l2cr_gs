@@ -1,9 +1,7 @@
 struct ResetSoulsTask
-  include Runnable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     @pc.clear_souls
   end
 end

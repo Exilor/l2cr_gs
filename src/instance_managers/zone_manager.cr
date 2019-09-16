@@ -86,7 +86,7 @@ module ZoneManager
             warn { "Missing name for NpcSpawnTerritory in file #{file}." }
             next
           elsif SPAWN_TERRITORIES.has_key?(zone_name)
-            warn { "Name #{zone_name.inspect} already used for another zone, check file #{file}." }
+            warn { "Name \"#{zone_name}\" already used for another zone, check file #{file}." }
             next
           end
         end
@@ -133,7 +133,7 @@ module ZoneManager
             next
           end
         else
-          warn { "Unknown shape #{zone_shape.inspect} for zone in file #{file}." }
+          warn { "Unknown shape \"#{zone_shape}\" for zone in file #{file}." }
           next
         end
 
@@ -248,7 +248,6 @@ module ZoneManager
   end
 
   def check_id(id : Int) : Bool
-    # !!CLASS_ZONES.find_value { |map| map.has_key?(id) }
     CLASS_ZONES.local_each_value.any? &.has_key?(id)
   end
 
@@ -261,29 +260,25 @@ module ZoneManager
   end
 
   def size : Int32
-    # size = 0
-    # CLASS_ZONES.each_value do |map|
-    #   size += map.size
-    # end
-    # size
     CLASS_ZONES.local_each_value.sum &.size
   end
 
-  def all_zones : Array(L2ZoneType)
-    zones = [] of L2ZoneType
-    CLASS_ZONES.each_value { |map| map.each_value { |v| zones << v } }
-    zones
-  end
+  # deprecated
+  # def all_zones : Array(L2ZoneType)
+  #   zones = [] of L2ZoneType
+  #   CLASS_ZONES.each_value { |map| map.each_value { |v| zones << v } }
+  #   zones
+  # end
 
-  def get_all_zones(zone_type : T.class) : Enumerable(T) forall T
+  def get_all_zones(zone_type : T.class) : Indexable(T) forall T
     ret = CLASS_ZONES[zone_type].values_slice
-    unless ret.is_a?(Enumerable(T))
-      raise "Expected #{ret}:#{ret.class} to be an Enumerable(#{T})"
+    unless ret.is_a?(Indexable(T))
+      raise "Expected #{ret}:#{ret.class} to be an Indexable(#{T})"
     end
     ret
   end
 
-  def each(zone_type : T.class, &block : T ->) forall T
+  def get_all_zones(zone_type : T.class, &block : T ->) forall T
     CLASS_ZONES[zone_type].each_value { |zone| yield zone.as(T) }
   end
 
@@ -310,8 +305,7 @@ module ZoneManager
   end
 
   def get_zone(obj : L2Object?, type : T.class) : T? forall T
-    return unless obj
-    get_zone(*obj.xyz, type)
+    get_zone(*obj.xyz, type) if obj
   end
 
   def get_zone(x : Int32, y : Int32, z : Int32, type : T.class) : T? forall T
@@ -320,21 +314,12 @@ module ZoneManager
     end.as(T?)
   end
 
-  def get_zones(obj : L2Object) : Array(L2ZoneType)
-    get_zones(*obj.xyz)
-  end
-
-  def get_zones(x : Int32, y : Int32) : Array(L2ZoneType)
-    L2World.get_region(x, y).zones.select do |zone|
-      zone.inside_zone?(x, y)
-    end
-  end
-
-  def get_zones(x : Int32, y : Int32, z : Int32) : Array(L2ZoneType)
-    L2World.get_region(x, y).zones.select do |zone|
-      zone.inside_zone?(x, y, z)
-    end
-  end
+  # get_zones returning an Array is deprecated. Use the block versions.
+  # def get_zones(*args) : Array(L2ZoneType)
+  #   ret = [] of L2ZoneType
+  #   get_zones(*args) { |z| ret << z }
+  #   ret
+  # end
 
   def get_zones(obj : L2Object, &block : L2ZoneType ->) : Nil
     get_zones(*obj.xyz) { |zone| yield zone }

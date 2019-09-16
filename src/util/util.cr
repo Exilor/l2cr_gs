@@ -171,6 +171,7 @@ module Util
     (((input - input_min) * (output_max - output_min)) / (input_max - input_min)) + output_min
   end
 
+  # unused
   # def send_html(pc, html)
   #   npc_html = NpcHtmlMessage.new
   #   npc_html.html = html

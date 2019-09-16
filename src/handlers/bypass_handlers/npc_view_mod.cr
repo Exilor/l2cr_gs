@@ -59,7 +59,7 @@ module BypassHandler::NpcViewMod
     true
   end
 
-  def self.send_npc_view(pc, npc)
+  def send_npc_view(pc, npc)
     html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/mods/NpcView/Info.htm")
     html["%name%"] = npc.name
@@ -113,7 +113,7 @@ module BypassHandler::NpcViewMod
     pc.send_packet(html)
   end
 
-  def self.get_drop_list_buttons(npc) : String
+  def get_drop_list_buttons(npc) : String
     String.build do |io|
       lists = npc.template.drop_lists
       if lists && !lists.empty? && (lists.has_key?(DropListScope::DEATH) || lists.has_key?(DropListScope::CORPSE))
@@ -143,7 +143,7 @@ module BypassHandler::NpcViewMod
     end
   end
 
-  def self.send_npc_drop_list(pc, npc, scope, page)
+  def send_npc_drop_list(pc, npc, scope, page)
     drop_list = npc.template.get_drop_list(scope)
     if drop_list.nil? || drop_list.empty?
       return
@@ -313,7 +313,7 @@ module BypassHandler::NpcViewMod
 
   private record MinMax, min : Int64, max : Int64
 
-  private def self.get_precise_min_max(chance, min, max, is_precise)
+  private def get_precise_min_max(chance, min, max, is_precise)
     if !is_precise || chance <= 100
       return MinMax.new(min, max)
     end

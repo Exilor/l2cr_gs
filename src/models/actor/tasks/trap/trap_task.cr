@@ -1,12 +1,11 @@
 struct TrapTask
-  include Runnable
   include Loggable
 
   private TICK = 1000
 
   initializer trap: L2TrapInstance
 
-  def run
+  def call
     return if @trap.triggered?
 
     if @trap.has_life_time?

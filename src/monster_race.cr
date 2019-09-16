@@ -35,13 +35,8 @@ module MonsterRace
           {% end %}
           else
             raise "No constructor for #{template.type.inspect} found."
-            # L2Npc
-          end#.as(L2Npc.class)
+          end
         {% end %}
-
-        unless constructor
-          raise "No constructor found"
-        end
 
         MONSTERS << constructor.new(template)
       rescue e

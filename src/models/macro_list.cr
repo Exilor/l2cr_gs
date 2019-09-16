@@ -1,8 +1,6 @@
 require "./macro"
-require "./interfaces/restorable"
 
 class MacroList
-  # include Restorable
   include Synchronizable
   include Loggable
 
@@ -10,9 +8,9 @@ class MacroList
   @macros = Hash(Int32, Macro).new
   getter revision = 1
 
-  delegate size, to: @macros
-
   initializer owner: L2PcInstance
+
+  delegate size, to: @macros
 
   def register_macro(mcr : Macro)
     if mcr.id == 0
@@ -52,7 +50,6 @@ class MacroList
     @revision += 1
 
     size = @macros.size
-    # debug "Sending #{size} macros to #{@owner}."
     if size == 0
       ml = Packets::Outgoing::SendMacroList.new(@revision, 0, nil)
       @owner.send_packet(ml)

@@ -1,11 +1,6 @@
-require "../interfaces/updatable"
 require "./announcement_type"
 
 module IAnnouncement
-  # include Storable
-  # include Updatable
-  # include Deletable
-
   abstract def id : Int32
   abstract def type : AnnouncementType
   abstract def type=(type : AnnouncementType)

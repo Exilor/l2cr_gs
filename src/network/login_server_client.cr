@@ -13,15 +13,13 @@ module LoginServerClient
 
   private IN_BUFFER = ByteBuffer.new
   private OUT_BUFFER = ByteBuffer.new
-  private STR_BUFFER = ByteBuffer.new
   IN_BUFFER.set_encoding("UTF-16LE")
   OUT_BUFFER.set_encoding("UTF-16LE")
-  STR_BUFFER.set_encoding("UTF-16LE")
 
   class_getter port = 9014
   class_getter game_port = 7777
   class_getter host = "127.0.0.1"
-  class_getter game_host = "127.0.0.1"#"147.135.250.115"
+  class_getter game_host = "127.0.0.1"
   class_getter hex_id = Bytes.empty
   class_getter request_id = 1
   class_getter accept_alternate = true
@@ -50,7 +48,7 @@ module LoginServerClient
     spawn do
       until cancelled?
         read_loop
-        sleep 2
+        sleep(2)
       end
     end
   end
@@ -66,7 +64,6 @@ module LoginServerClient
     @@crypt = NewCrypt.new("_;v.]05-31!|+-%xT!^[$\00".bytes)
     until cancelled?
       IN_BUFFER.clear
-      STR_BUFFER.clear
 
       size = socket.read_bytes(UInt16).to_i32 - 2
       unless IO.copy(socket, IN_BUFFER, size) == size
@@ -94,10 +91,8 @@ module LoginServerClient
       end
 
       if packet
-        # debug "Received #{packet.class}."
         packet.client = self
         packet.buffer = IN_BUFFER
-        packet.string_buffer = STR_BUFFER
         packet.read
         packet.run
       else
@@ -112,6 +107,8 @@ module LoginServerClient
     unless cancelled?
       error e
     end
+  ensure
+    @@socket.try &.close
   end
 
   def send_packet(packet : MMO::OutgoingPacket(self))
@@ -139,15 +136,15 @@ module LoginServerClient
     error e
   end
 
-  def waiting_clients
+  def waiting_clients : Array(WaitingClient)
     WAITING
   end
 
-  def accounts
+  def accounts : Hash(String, GameClient)
     ACCOUNTS
   end
 
-  def add_game_server_login(account : String, client : GameClient)
+  def add_game_server_login(account : String, client : GameClient) : Bool
     if ACCOUNTS.has_key?(account)
       error { "Account #{account.inspect} already present in ACCOUNTS." }
       false

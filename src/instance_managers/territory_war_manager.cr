@@ -38,9 +38,9 @@ module TerritoryWarManager
   class_getter? registration_over = true
   class_getter? tw_channel_open = false
   class_getter? tw_in_progress = false
-  @@scheduled_start_tw_task : Runnable::RunnableTask?
-  @@scheduled_end_tw_task : Runnable::RunnableTask?
-  @@scheduled_reward_online_task : Runnable::RunnableTask?
+  @@scheduled_start_tw_task : Concurrent::DelayedTask?
+  @@scheduled_end_tw_task : Concurrent::DelayedTask?
+  @@scheduled_reward_online_task : Concurrent::PeriodicTask?
 
   def load
     cfg = StatsSet.new

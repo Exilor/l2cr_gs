@@ -70,7 +70,7 @@ class EffectHandler::Fishing < AbstractEffect
     fishing_zone = nil
     water_zone = nil
 
-    ZoneManager.get_zones(bait_x, bait_y).each do |zone|
+    ZoneManager.get_zones(bait_x, bait_y) do |zone|
       if zone.is_a?(L2FishingZone)
         fishing_zone = zone
       elsif zone.is_a?(L2WaterZone)
@@ -89,7 +89,7 @@ class EffectHandler::Fishing < AbstractEffect
         fishing_zone = nil
         water_zone = nil
 
-        ZoneManager.get_zones(bait_x, bait_y).each do |zone|
+        ZoneManager.get_zones(bait_x, bait_y) do |zone|
           if zone.is_a?(L2FishingZone)
             fishing_zone = zone
           elsif zone.is_a?(L2WaterZone)

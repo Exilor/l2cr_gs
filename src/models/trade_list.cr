@@ -53,47 +53,47 @@ class TradeList
   def add_item(id : Int32, count : Int64, price : Int64 = 0i64) : TradeItem?
     sync do
       if locked?
-        warn "#{@owner} attempted to modify a locked TradeList."
+        warn { "#{@owner} attempted to modify a locked TradeList." }
         return
       end
 
       obj = L2World.find_object(id)
 
       unless obj.is_a?(L2ItemInstance)
-        warn "#{@owner} attempted to add a #{obj.class}."
+        warn { "#{@owner} attempted to add a #{obj.class}." }
         return
       end
 
       item = obj # as L2ItemInstance
 
       if !item.tradeable? || !(item.tradeable? || @owner.gm? && Config.gm_trade_restricted_items) || item.quest_item?
-        warn "#{@owner} attempted to add a restricted item: #{item}."
+        warn { "#{@owner} attempted to add a restricted item: #{item}." }
         return
       end
 
       unless @owner.inventory.can_manipulate_with_item_id?(item.id)
-        warn "#{@owner} attempted to add an item that he can't manipulate: #{item}."
+        warn { "#{@owner} attempted to add an item that he can't manipulate: #{item}." }
         return
       end
 
       if count <= 0 || count > item.count
-        warn "#{@owner} attempted to add an item with invalid count: #{count}"
+        warn { "#{@owner} attempted to add an item with invalid count: #{count}" }
         return
       end
 
       if !item.stackable? && count > 1
-        warn "#{@owner} attempted to add multiple non-stackable items at once: #{item} x#{count}."
+        warn { "#{@owner} attempted to add multiple non-stackable items at once: #{item} x#{count}." }
         return
       end
 
       if Inventory.max_adena / count < price
-        warn "#{@owner} attempted to overflow adena."
+        warn { "#{@owner} attempted to overflow adena." }
         return
       end
 
       @items.each do |it|
         if it.l2id == id
-          debug "#{@owner} attempted to add an item already listed: #{it}."
+          debug { "#{@owner} attempted to add an item already listed: #{it}." }
           return
         end
       end
@@ -108,26 +108,26 @@ class TradeList
   def add_item_by_item_id(id : Int32, count : Int64, price : Int64) : TradeItem?
     sync do
       if locked?
-        warn "#{@owner} attempted to modify a locked TradeList."
+        warn { "#{@owner} attempted to modify a locked TradeList." }
         return
       end
 
       item = ItemTable[id]
 
       unless item
-        warn "#{@owner} attempted to add an item with unknown ID #{id}."
+        warn { "#{@owner} attempted to add an item with unknown ID #{id}." }
         return
       end
 
       return if !item.tradeable? || item.quest_item?
 
       if !item.stackable? && count > 1
-        warn "#{@owner} attempted to add multiple non-stackable items at once: #{item} x#{count}."
+        warn { "#{@owner} attempted to add multiple non-stackable items at once: #{item} x#{count}." }
         return
       end
 
       if Inventory.max_adena / count < price
-        warn "#{@owner} attempted to overflow adena."
+        warn { "#{@owner} attempted to overflow adena." }
         return
       end
 
@@ -141,7 +141,7 @@ class TradeList
   def remove_item(l2id : Int32, item_id : Int32, count : Int64) : TradeItem?
     sync do
       if locked?
-        warn "#{@owner} attempted to modify a locked TradeList."
+        warn { "#{@owner} attempted to modify a locked TradeList." }
         return
       end
 
@@ -149,7 +149,7 @@ class TradeList
         if item.l2id == l2id || item.item.id == item_id
           if partner = @partner
             unless partner_list = partner.active_trade_list
-              warn "#{partner} has no active trade list."
+              warn { "#{partner} has no active trade list." }
               return
             end
             partner_list.invalidate_confirmation
@@ -198,7 +198,7 @@ class TradeList
 
     if partner = @partner
       unless partner_list = partner.active_trade_list
-        warn "#{partner} has no active trade list."
+        warn { "#{partner} has no active trade list." }
         return false
       end
 
@@ -242,7 +242,7 @@ class TradeList
     @items.each do |it|
       item = @owner.check_item_manipulation(it.l2id, it.count, "transfer")
       if !item || item.count < 1
-        warn "Invalid item in TradeList: #{it}."
+        warn { "Invalid item in TradeList: #{it}." }
         return false
       end
     end

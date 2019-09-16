@@ -1,9 +1,8 @@
 class CursedWeapon
-  # include Namable
   include Loggable
   include Packets::Outgoing
 
-  @remove_task : Runnable::PeriodicTask?
+  @remove_task : Concurrent::PeriodicTask?
   @transformation_id = 0
   property disappear_chance : Int32 = 0
   property drop_rate : Int32 = 0
@@ -267,10 +266,10 @@ class CursedWeapon
       @end_time = Time.ms + (@duration * 60_000)
       @remove_task = start_remove_task(@duration_lost * 12000, @duration_lost * 12000)
       info { "#{@name} has dropped from #{attackable} killed by #{pc.name}." }
-      true
-    else
-      false
+      return true
     end
+
+    false
   end
 
   def activate(pc : L2PcInstance, item : L2ItemInstance)
@@ -398,8 +397,6 @@ class CursedWeapon
   end
 
   def go_to(pc : L2PcInstance)
-    return unless pc
-
     if @activated && @player
       pc.tele_to_location(player.location, true)
     elsif @dropped && @item

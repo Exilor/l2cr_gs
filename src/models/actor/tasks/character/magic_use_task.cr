@@ -1,6 +1,4 @@
 class MagicUseTask
-  include Runnable
-
   property skill : Skill
   property targets : Array(L2Object)?
   property skill_time : Int32
@@ -11,7 +9,7 @@ class MagicUseTask
   initializer character: L2Character, targets: Array(L2Object)?, skill: Skill,
     skill_time: Int32, simultaneous: Bool
 
-  def run
+  def call
     return unless @character
 
     case @phase

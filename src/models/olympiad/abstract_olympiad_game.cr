@@ -38,7 +38,7 @@ abstract class AbstractOlympiadGame
     broadcast_packet(sm)
   end
 
-  def check_defaulted(pc) : SystemMessageId?
+  def check_defaulted(pc : L2PcInstance?) : SystemMessageId?
     if pc.nil? || !pc.online?
       return SystemMessageId::THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME
     end
@@ -110,11 +110,8 @@ abstract class AbstractOlympiadGame
     true
   end
 
-  def removals(pc, remove_party : Bool)
-    unless pc
-      return
-    end
-
+  def removals(pc : L2PcInstance?, remove_party : Bool)
+    return unless pc
     pc.stop_all_effects_except_those_that_last_through_death
 
     if clan = pc.clan?
@@ -177,7 +174,7 @@ abstract class AbstractOlympiadGame
     error e
   end
 
-  def clean_effects(pc)
+  def clean_effects(pc : L2PcInstance)
     pc.olympiad_start = false
     pc.target = nil
     pc.abort_attack
@@ -209,7 +206,7 @@ abstract class AbstractOlympiadGame
     error e
   end
 
-  def player_status_back(pc)
+  def player_status_back(pc : L2PcInstance)
     if pc.transformed?
       pc.untransform
     end
@@ -246,10 +243,7 @@ abstract class AbstractOlympiadGame
     error e
   end
 
-  def port_player_back(pc)
-    unless pc
-      return
-    end
+  def port_player_back(pc : L2PcInstance)
     loc = pc.last_location
     if loc.x == 0 && loc.y == 0
       return
@@ -260,8 +254,8 @@ abstract class AbstractOlympiadGame
     pc.unset_last_location
   end
 
-  def reward_participant(pc, reward : Slice(Slice(Int32)))
-    if pc.nil? || !pc.online? || reward.nil?
+  def reward_participant(pc : L2PcInstance, reward : Slice(Slice(Int32)))
+    if !pc.online? || reward.nil?
       return
     end
 

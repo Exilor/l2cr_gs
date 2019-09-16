@@ -5,10 +5,10 @@ class Petition
   include Packets::Outgoing
 
   getter submit_time, content, id, type
-  property state : PetitionState = PetitionState::PENDING
   getter log_messages = [] of CreatureSay # concurrent
   getter! petitioner : L2PcInstance
   getter! responder : L2PcInstance
+  property state : PetitionState = PetitionState::PENDING
 
   def initialize(petitioner : L2PcInstance, content : String, type : Int32)
     @id = IdFactory.next

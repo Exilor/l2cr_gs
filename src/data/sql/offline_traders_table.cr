@@ -156,7 +156,7 @@ module OfflineTradersTable
           when .sell?, .package_sell?
             GameDB.each(LOAD_OFFLINE_ITEMS, pc.l2id) do |items|
               arg1, arg2, arg3 = items.get_i32(2), items.get_i64(3), items.get_i64(4)
-              unless pc.sell_list.add_item_by_item_id(arg1, arg2, arg3)
+              unless pc.sell_list.add_item(arg1, arg2, arg3)
                 raise "add_item_by_item_id(#{arg1}, #{arg2}, #{arg3}) returned nil."
               end
             end

@@ -1,9 +1,7 @@
 struct FameTask
-  include Runnable
-
   initializer pc: L2PcInstance, value: Int32
 
-  def run
+  def call
     if @pc.dead? && !Config.fame_for_dead_players
       return
     end

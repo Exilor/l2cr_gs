@@ -202,6 +202,7 @@ module CellPathFinding
     property overflows : Int32 = 0
     property playable_overflows : Int32 = 0
     property elapsed : Int64 = 0i64
+
     getter_initializer map_size: Int32, count: Int32
   end
 end

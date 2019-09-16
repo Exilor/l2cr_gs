@@ -2687,61 +2687,8 @@ module Config
     when "tradechat"
       @@default_trade_chat = value
     else
-      warn "TODO: find a way to dynamically set an instance variable, if at all possible."
+      warn "TODO: find a way to dynamically set a class variable, if at all possible."
       return false
-      # begin
-      #   if (!pName.startsWith("Interval_") && !pName.startsWith("Random_"))
-      #   {
-      #     pName = pName.toUpperCase();
-      #   }
-      #   Field clazField = Config.class.getField(pName);
-      #   int modifiers = clazField.getModifiers();
-      #   // just in case :)
-      #   if (!Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers) || Modifier.isFinal(modifiers))
-      #   {
-      #     throw new SecurityException("Cannot modify non public, non static or final config!");
-      #   }
-
-      #   if (clazField.getType() == int.class)
-      #   {
-      #     clazField.setInt(clazField, Integer.parseInt(pValue));
-      #   }
-      #   elsif clazField.getType() == short.class
-      #   {
-      #     clazField.setShort(clazField, Short.parseShort(pValue));
-      #   }
-      #   elsif clazField.getType() == byte.class
-      #   {
-      #     clazField.setByte(clazField, Byte.parseByte(pValue));
-      #   }
-      #   elsif clazField.getType() == long.class
-      #   {
-      #     clazField.setLong(clazField, Long.parseLong(pValue));
-      #   }
-      #   elsif clazField.getType() == float.class
-      #   {
-      #     clazField.setFloat(clazField, Float.parseFloat(pValue));
-      #   }
-      #   elsif clazField.getType() == double.class
-      #   {
-      #     clazField.setDouble(clazField, Double.parseDouble(pValue));
-      #   }
-      #   elsif clazField.getType() == boolean.class
-      #   {
-      #     clazField.setBoolean(clazField, Boolean.parseBoolean(pValue));
-      #   }
-      #   elsif clazField.getType() == String.class
-      #   {
-      #     clazField.set(clazField, pValue);
-      #   }
-      #   else
-      #   {
-      #     return false
-      #   end
-      # rescue e
-      #   LOG.warn("Unable to set parameter value!", e);
-      #   return false;
-      # end
     end
 
     true

@@ -3,6 +3,8 @@ require "./transform_type"
 class Transform
   # include Identifiable
 
+  @male_template : TransformTemplate?
+  @female_template : TransformTemplate?
   getter id : Int32
   getter display_id : Int32
   getter type : TransformType
@@ -11,8 +13,6 @@ class Transform
   getter title : String?
   getter? can_swim : Bool
   getter? can_attack : Bool
-  @male_template : TransformTemplate?
-  @female_template : TransformTemplate?
 
   def initialize(set : StatsSet)
     @id = set.get_i32("id")
@@ -181,10 +181,10 @@ class Transform
 
   def get_base_def_by_slot(pc : L2PcInstance, slot : Int32)
     if template = get_template(pc)
-      template.get_defense(slot)
-    else
-      pc.template.get_base_def_by_slot(slot)
+      return template.get_defense(slot)
     end
+
+    pc.template.get_base_def_by_slot(slot)
   end
 
   def get_level_mod(pc : L2PcInstance) : Float64

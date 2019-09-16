@@ -2,7 +2,7 @@ class L2WorldRegion
   include Loggable
   include Synchronizable
 
-  @neighbors_task : Runnable::DelayedTask?
+  @neighbors_task : Concurrent::DelayedTask?
   getter sorrounding_regions = Array(self).new
   getter zones = Array(L2ZoneType).new
   getter playables = Hash(Int32, L2Playable).new
@@ -138,7 +138,7 @@ class L2WorldRegion
 
   def add_visible_object(object : L2Object)
     unless object.world_region? == self
-      warn "Expected #{object}'s region to be this region."
+      warn { "Expected #{object}'s region to be this region." }
     end
 
     @objects[object.l2id] = object
@@ -152,7 +152,7 @@ class L2WorldRegion
 
   def remove_visible_object(object : L2Object)
     unless object.world_region?.nil? || object.world_region == self
-      warn "Expected #{object}'s region to be this region or nil."
+      warn { "Expected #{object}'s region to be this region or nil." }
     end
 
     @objects.delete(object.l2id)
@@ -191,11 +191,9 @@ class L2WorldRegion
   end
 
   private struct NeighborsTask
-    include Runnable
-
     initializer region: L2WorldRegion, activate: Bool
 
-    def run
+    def call
       if @activate
         @region.sorrounding_regions.each &.active = true
       else

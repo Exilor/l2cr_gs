@@ -73,7 +73,7 @@ module TaskManager
 
     case type
     when TaskType::STARTUP
-      task.run
+      task.call
     when TaskType::SCHEDULED
       delay = task.params[0].to_i64
       task.scheduled = ThreadPoolManager.schedule_general(task, delay)

@@ -1,14 +1,10 @@
 require "./l2_character_ai"
 
 class L2AttackableAI < L2CharacterAI
-  include Runnable
-
   class FearTask
-    include Runnable
-
     initializer ai: L2AttackableAI, effector: L2Character, start: Bool
 
-    def run
+    def call
       @ai.fear_time -= FEAR_TICKS
       @ai.on_event_afraid(@effector, @start)
       @start = false
@@ -24,12 +20,12 @@ class L2AttackableAI < L2CharacterAI
   @chaos_time = 0
   @last_buff_tick = 0
   @thinking = false
-  @ai_task : Runnable::PeriodicTask?
-  @fear_task : Runnable::PeriodicTask?
+  @ai_task : Concurrent::PeriodicTask?
+  @fear_task : Concurrent::PeriodicTask?
   property fear_time : Int32 = 0
   property global_aggro : Int32 = -10
 
-  def run
+  def call
     on_event_think
   end
 

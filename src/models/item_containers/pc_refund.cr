@@ -3,15 +3,15 @@ require "./item_container"
 class PcRefund < ItemContainer
   getter_initializer owner: L2PcInstance
 
-  def owner?
+  def owner? : L2PcInstance?
     owner
   end
 
-  def name
+  def name : String
     "Refund"
   end
 
-  def base_location
+  def base_location : ItemLocation
     ItemLocation::REFUND
   end
 

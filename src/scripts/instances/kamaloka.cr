@@ -1187,34 +1187,35 @@ class Scripts::Kamaloka < AbstractInstance
   # Removing all buffs from player and pet except BUFFS_WHITELIST
   # @param ch player
   private def remove_buffs(ch)
-    # final Function<BuffInfo, Boolean> remove_buffs = info ->
-    #   if (info.not_nil?) && !info.getSkill.isStayAfterDeath && (Arrays.binarySearch(BUFFS_WHITELIST, info.getSkill.id) < 0)
-    #     info.getEffected.getEffectList.stopSkillEffects(true, info.getSkill)
-    #     return true
-    #   end
-    #     return false
-    # }
-    #
-    # ch.getEffectList.forEach(remove_buffs, false)
-    # ch.effect_list.
-    #
-    # if ch.hasSummon
-    #   ch.getSummon.getEffectList.forEach(removeBuffs, false)
-    # end
+    remove_buffs_impl(ch)
+    if s = ch.summon
+      remove_buffs_impl(s)
+    end
+  end
+
+  private def remove_buffs_impl(ch)
+    ch.effect_list.for_each(false) do |info|
+      if !info.skill.stay_after_death? && BUFFS_WHITELIST.bincludes?(info.skill.id)
+        info.effected.effect_list.stop_skill_effects(true, info.skill)
+        true
+      else
+        false
+      end
+    end
   end
 
   # Handling enter of the players into kamaloka
   # @param player party leader
   # @param index (0-18) kamaloka index in arrays
   private def enter_instance(player, index)
-    templateId = TEMPLATE_IDS[index]
+    template_id = TEMPLATE_IDS[index]
 
     # check for existing instances for this player
     world = InstanceManager.get_player_world(player)
     # player already in the instance
     if world
       # but not in kamaloka
-      if !world.is_a?(KamaWorld) || world.template_id != templateId
+      if !world.is_a?(KamaWorld) || world.template_id != template_id
         player.send_packet(SystemMessageId::YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON)
         return
       end
@@ -1239,10 +1240,10 @@ class Scripts::Kamaloka < AbstractInstance
     end
 
     # Creating dynamic instance without template
-    instanceId = InstanceManager.create_dynamic_instance(nil)
-    inst = InstanceManager.get_instance!(instanceId)
+    instance_id = InstanceManager.create_dynamic_instance(nil)
+    inst = InstanceManager.get_instance!(instance_id)
     # set name for the kamaloka
-    inst.name = InstanceManager.get_instance_id_name(templateId)
+    inst.name = InstanceManager.get_instance_id_name(template_id)
     # set return location
     inst.exit_loc = Location.new(player)
     # disable summon friend into instance
@@ -1251,10 +1252,10 @@ class Scripts::Kamaloka < AbstractInstance
     inst.duration = DURATION[index] * 60000
     inst.empty_destroy_time = EMPTY_DESTROY_TIME.to_i64 * 60000
 
-    # Creating new instanceWorld, using our instanceId and templateId
+    # Creating new instanceWorld, using our instance_id and template_id
     world = KamaWorld.new
-    world.instance_id = instanceId
-    world.template_id = templateId
+    world.instance_id = instance_id
+    world.template_id = template_id
     # set index for easy access to the arrays
     world.index = index
     InstanceManager.add_world(world)
@@ -1267,7 +1268,7 @@ class Scripts::Kamaloka < AbstractInstance
     party.members.each do |m|
       world.add_allowed(m.l2id)
       remove_buffs(m)
-      teleport_player(m, TELEPORTS[index], instanceId)
+      teleport_player(m, TELEPORTS[index], instance_id)
     end
     return
   end
@@ -1322,11 +1323,11 @@ class Scripts::Kamaloka < AbstractInstance
           world.shaman = npc.l2id
         else
           npc = add_spawn(npcs[1], spawns[i][0], spawns[i][1], spawns[i][2], 0, false, 0, false, world.instance_id)
-          spawn = npc.spawn
-          spawn.respawn_delay = FIRST_ROOM_RESPAWN_DELAY
-          spawn.amount = 1
-          spawn.start_respawn
-          world.first_room.push(spawn) # store mobs spawns
+          sp = npc.spawn
+          sp.respawn_delay = FIRST_ROOM_RESPAWN_DELAY
+          sp.amount = 1
+          sp.start_respawn
+          world.first_room.push(sp) # store mobs spawns
         end
         npc.no_rnd_walk = true
       end
@@ -1338,8 +1339,8 @@ class Scripts::Kamaloka < AbstractInstance
     if npcs && spawns
       world.second_room = Array(Int32).new(spawns.size)
 
-      spawns.each do |spawn|
-        npc = add_spawn(npcs[0], spawn[0], spawn[1], spawn[2], 0, false, 0, false, world.instance_id)
+      spawns.each do |sp|
+        npc = add_spawn(npcs[0], sp[0], sp[1], sp[2], 0, false, 0, false, world.instance_id)
         npc.no_rnd_walk = true
         world.second_room.push(npc.l2id)
       end
@@ -1423,9 +1424,7 @@ class Scripts::Kamaloka < AbstractInstance
       if world.shaman != 0 && world.shaman == l2id
         world.shaman = 0
         # stop respawn of the minions
-        world.first_room.each do |spawn|
-          spawn.try &.stop_respawn
-        end
+        world.first_room.each &.try &.stop_respawn
         world.first_room.clear
         world.first_room = nil
 

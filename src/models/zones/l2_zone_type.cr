@@ -63,7 +63,7 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def affected?(char : L2Character) : Bool
-    return false unless @min_lvl <= char.level <= @max_lvl
+    return false unless char.level.between?(@min_lvl, @max_lvl)
     return false unless char.instance_type?(@target)
 
     if char.is_a?(L2PcInstance)
@@ -181,7 +181,7 @@ abstract class L2ZoneType < ListenersContainer
     # no-op
   end
 
-  def characters
+  def characters : Hash(Int32, L2Character)
     @character_list
   end
 
@@ -189,11 +189,11 @@ abstract class L2ZoneType < ListenersContainer
     @character_list.each_value { |char| yield char }
   end
 
-  def characters_inside
+  def characters_inside : Enumerable(L2Character)
     @character_list.local_each_value
   end
 
-  def players_inside
+  def players_inside : Array(L2PcInstance)
     ret = [] of L2PcInstance
     @character_list.each_value do |char|
       if char.is_a?(L2PcInstance)

@@ -9,12 +9,12 @@ class QuestState
   getter state, player
   getter quest_name : String
 
-  delegate created?, started?, completed?, to: @state
-
   def initialize(quest : Quest, @player : L2PcInstance, @state : State)
     @quest_name = quest.name
     player.quest_state = self
   end
+
+  delegate created?, started?, completed?, to: @state
 
   def quest
     QuestManager.get_quest(@quest_name).not_nil!
@@ -233,7 +233,7 @@ class QuestState
     end
   end
 
-  def play_sound(audio : IAudio) # Audio
+  def play_sound(audio : IAudio)
     AbstractScript.play_sound(@player, audio)
   end
 
@@ -269,8 +269,8 @@ class QuestState
     TerritoryWarManager.tw_in_progress? ? 5 : 0
   end
 
-  def enable_tutorial_event(talker : L2PcInstance, state : Int32)
-    talker.send_packet(TutorialEnableClientEvent.new(state))
+  def enable_tutorial_event(pc : L2PcInstance, state : Int32)
+    pc.send_packet(TutorialEnableClientEvent.new(state))
   end
 
   def close_tutorial_html(pc : L2PcInstance)

@@ -6,7 +6,6 @@ class GuardKnownList < AttackableKnownList
 
     if object.player?
       if object.acting_player.karma > 0
-        warn "PK #{object.name} entered scan range."
         if guard.intention.idle?
           guard.intention = AI::ACTIVE
         end
@@ -14,7 +13,6 @@ class GuardKnownList < AttackableKnownList
     elsif Config.guard_attack_aggro_mob
       if guard.in_active_region? && object.is_a?(L2MonsterInstance)
         if object.aggressive?
-          # debug "Aggressive mob #{object.name} entered scan range."
           if guard.intention.idle?
             guard.intention = AI::ACTIVE
           end

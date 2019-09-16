@@ -38,11 +38,9 @@ class Scripts::CabalBuffer < AbstractNpcAI
   end
 
   private struct Talk
-    include Runnable
-
     initializer owner: CabalBuffer, npc: L2Npc
 
-    def run
+    def call
       if @npc.decayed?
         return
       end
@@ -59,11 +57,9 @@ class Scripts::CabalBuffer < AbstractNpcAI
   end
 
   private struct CabalAI
-    include Runnable
-
     initializer owner: CabalBuffer, npc: L2Npc
 
-    def run
+    def call
       unless @npc.visible?
         return
       end

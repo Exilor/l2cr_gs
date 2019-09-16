@@ -1,9 +1,7 @@
 struct WarnUserTakeBreakTask
-  include Runnable
-
   initializer pc: L2PcInstance
 
-  def run
+  def call
     if @pc.online?
       @pc.send_packet(SystemMessageId::PLAYING_FOR_LONG_TIME)
     else

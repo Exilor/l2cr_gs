@@ -3,7 +3,7 @@ require "../l2_tower"
 class L2ControlTowerInstance < L2Tower
   @guards : Array(L2Spawn)?
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2ControlTowerInstance
   end
 

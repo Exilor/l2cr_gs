@@ -1,9 +1,7 @@
 struct TrapUnsummonTask
-  include Runnable
-
   initializer trap: L2TrapInstance
 
-  def run
+  def call
     @trap.unsummon
   end
 end

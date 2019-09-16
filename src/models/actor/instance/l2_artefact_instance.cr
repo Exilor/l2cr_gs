@@ -4,7 +4,7 @@ class L2ArtefactInstance < L2Npc
     castle.register_artefact(self)
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2ArtefactInstance
   end
 

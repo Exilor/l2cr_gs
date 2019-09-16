@@ -650,7 +650,7 @@ module SevenSignsFestival
   private FESTIVAL_DATA = {} of Int32 => Hash(Int32, StatsSet)
 
   @@manager_instance : FestivalManager?
-  @@manager_scheduled_task : Runnable::PeriodicTask?
+  @@manager_scheduled_task : Concurrent::PeriodicTask?
   @@next_festival_cycle_start = 0i64
   @@dawn_chat_guide : L2Npc?
   @@dusk_chat_guide : L2Npc?
@@ -721,7 +721,7 @@ module SevenSignsFestival
     !(18109 <= npc_id <= 18118)
   end
 
-  def festival_manager_schedule : Runnable::PeriodicTask
+  def festival_manager_schedule : Concurrent::PeriodicTask
     @@manager_scheduled_task || start_festival_manager
     @@manager_scheduled_task.not_nil!
   end
@@ -861,7 +861,7 @@ module SevenSignsFestival
             sm.add_int(Config.festival_win_points)
             clan.broadcast_to_online_members(sm)
           else
-            warn "No clan found with name #{name.inspect}."
+            warn { "No clan found with name #{name.inspect}." }
           end
         else
           warn "clan_name column is nil."
@@ -944,18 +944,18 @@ module SevenSignsFestival
 
   def mins_to_next_cycle : Int64
     if SevenSigns.seal_validation_period?
-      -1i64
-    else
-      (@@next_festival_cycle_start - Time.ms) / 60000
+      return -1i64
     end
+
+    (@@next_festival_cycle_start - Time.ms) // 60000
   end
 
   def mins_to_next_festival : Int32
     if SevenSigns.seal_validation_period?
-      -1
-    else
-      (((@@next_festival_start - Time.ms) / 60000) + 1).to_i32
+      return -1
     end
+
+    (((@@next_festival_start - Time.ms) // 60000) + 1).to_i32
   end
 
   def time_to_next_festival_str : String
@@ -1193,7 +1193,7 @@ module SevenSignsFestival
           num_party_members = data.get_string("members").split(',').size
           total_accum_bonus = ACCUMULATED_BONUSES[festival_id]
 
-          bonus = total_accum_bonus / num_party_members
+          bonus = total_accum_bonus // num_party_members
           ACCUMULATED_BONUSES[festival_id] = total_accum_bonus - bonus
           break
         end
@@ -1204,9 +1204,10 @@ module SevenSignsFestival
   end
 
   def send_message_to_all(name : String, string : NpcString)
-    return unless @@dawn_chat_guide && @@dusk_chat_guide
-    send_message_to_all(name, string, @@dawn_chat_guide.not_nil!)
-    send_message_to_all(name, string, @@dusk_chat_guide.not_nil!)
+    return unless dawn_guide = @@dawn_chat_guide
+    return unless dusk_guide = @@dusk_chat_guide
+    send_message_to_all(name, string, dawn_guide)
+    send_message_to_all(name, string, dusk_guide)
   end
 
   def send_message_to_all(name : String, string : NpcString, npc : L2Npc)
@@ -1233,8 +1234,7 @@ module SevenSignsFestival
     end
   end
 
-  private class FestivalManager
-    include Runnable
+  private struct FestivalManager
     include Loggable
 
     @festival_instances = {} of Int32 => L2DarknessFestival
@@ -1247,7 +1247,7 @@ module SevenSignsFestival
       )
     end
 
-    def run
+    def call
       return if SevenSigns.seal_validation_period?
 
       if SevenSigns.milli_to_period_change < Config.alt_festival_cycle_length
@@ -1321,8 +1321,8 @@ module SevenSignsFestival
       wait(Config.alt_festival_second_spawn - Config.alt_festival_first_swarm)
 
       @festival_instances.each_value do |inst|
-        inst.spawn_festival_monsters(FESTIVAL_DEFAULT_RESPAWN / 2, 2)
-        _end = (Config.alt_festival_length - Config.alt_festival_second_spawn) / 60000
+        inst.spawn_festival_monsters(FESTIVAL_DEFAULT_RESPAWN // 2, 2)
+        _end = (Config.alt_festival_length - Config.alt_festival_second_spawn) // 60000
         if _end == 2
           inst.send_message_to_participants(NpcString::THE_FESTIVAL_OF_DARKNESS_WILL_END_IN_TWO_MINUTES)
         else
@@ -1375,15 +1375,12 @@ module SevenSignsFestival
   end
 
   private class L2DarknessFestival
-    getter witch_instance : L2Npc?
-    getter npc_instances = [] of L2FestivalMonsterInstance
-    getter participants = [] of Int32
-    getter cabal
-    getter original_locations = {} of Int32 => FestivalSpawn
-    getter level_range
-    getter witch_spawn
-    getter start_location
     @challenge_increased = false
+    getter cabal, level_range, witch_spawn, start_location
+    getter witch_instance : L2Npc?
+    getter participants : Array(Int32)
+    getter npc_instances = [] of L2FestivalMonsterInstance
+    getter original_locations = {} of Int32 => FestivalSpawn
 
     def initialize(@cabal : Int32, @level_range : Int32)
       if cabal == SevenSigns::CABAL_DAWN
@@ -1422,16 +1419,16 @@ module SevenSignsFestival
         end
       end
 
-      spawn = L2Spawn.new(@witch_spawn.npc_id)
-      spawn.x = @witch_spawn.x
-      spawn.y = @witch_spawn.y
-      spawn.z = @witch_spawn.z
-      spawn.heading = @witch_spawn.heading
-      spawn.amount = 1
-      spawn.respawn_delay = 1
-      spawn.stop_respawn
-      SpawnTable.add_new_spawn(spawn, false)
-      @witch_instance = spawn.do_spawn
+      sp = L2Spawn.new(@witch_spawn.npc_id)
+      sp.x = @witch_spawn.x
+      sp.y = @witch_spawn.y
+      sp.z = @witch_spawn.z
+      sp.heading = @witch_spawn.heading
+      sp.amount = 1
+      sp.respawn_delay = 1
+      sp.stop_respawn
+      SpawnTable.add_new_spawn(sp, false)
+      @witch_instance = sp.do_spawn
       witch = @witch_instance.not_nil!
 
       msu = Packets::Outgoing::MagicSkillUse.new(witch, witch, 2003, 1, 1, 0)
@@ -1556,8 +1553,6 @@ module SevenSignsFestival
         end
       end
 
-      # @participants = nil
-
       unspawn_mobs
     end
 
@@ -1588,11 +1583,8 @@ module SevenSignsFestival
   end
 
   private struct FestivalSpawn
-    getter x : Int32
-    getter y : Int32
-    getter z : Int32
+    getter x, y, z, npc_id
     getter heading : Int32
-    getter npc_id : Int32
 
     def initialize(@x : Int32, @y : Int32, @z : Int32, heading : Int32)
       @heading = heading < 0 ? Rnd.u16.to_i32 : heading
