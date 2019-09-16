@@ -19,7 +19,7 @@ In order for the game server to work it needs the following:
 - [x] Database
   - [x] Working
   - [x] Compatible with L2J's database
-  - [ ] Use transactions
+  - [x] Use transactions
   - [ ] Use batch
 - [x] Character creation
   - [x] Valid name checking
@@ -27,7 +27,7 @@ In order for the game server to work it needs the following:
   - [x] Starting equipment
   - [x] Starting shortcuts
 - [x] Character deletion
-  - [ ] Delayed character deletion (with countdown)
+  - [x] Delayed character deletion (with countdown)
 - [x] Character progression
   - [x] Exp/sp/level gain
   - [x] Vitality
@@ -177,16 +177,16 @@ In order for the game server to work it needs the following:
   - [x] Nornil's Garden
   - [ ] All the others
 - [x] Subclasses
-  - [ ] Subclass quest
+  - [x] Subclass quests
   - [x] Subclass skills (skills learned on main class depending on subclass)
   - [ ] Buffs restored on subclass change
   - [x] Kamael bonus subclass Judicator
 - [x] Fishing
   - [x] Monsters that appear while fishing
   - [x] Skills learnt with fishing rewards
-  - [ ] Fishing shots quest
-- [ ] Admin commands (only some of them are implemented)
-- [ ] User commands (only some of them are implemented)
+  - [x] Fishing shots quest
+- [x] Admin commands
+- [x] User commands
 - [ ] Four Sepulchers (needs testing)
 - [x] Duels
   - [ ] Party duels (not tested)
@@ -196,7 +196,7 @@ In order for the game server to work it needs the following:
 - [x] Cursed weapons
 - [x] Olympiad (untested)
 - [x] Day/night monsters in Forest of the Dead
-- [ ] Community Board (preliminary support)
+- [x] Community Board
   - [x] Clan notice on login
 - [ ] Fantasy Island
 - [x] Server shutdown/restart
