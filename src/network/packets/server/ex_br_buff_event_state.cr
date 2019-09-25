@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExBrBuffEventState < GameServerPacket
-  initializer type: Int32, value: Int32, state: Int32, end_time: Int32
+  initializer type : Int32, value : Int32, state : Int32, end_time : Int32
 
   def write_impl
     c 0xfe

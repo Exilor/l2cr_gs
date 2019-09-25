@@ -135,7 +135,7 @@ module BypassHandler::NpcViewMod
   end
 
   struct DecimalFormat
-    initializer pattern: String
+    initializer pattern : String
 
     # TODO
     def format(n)
@@ -201,7 +201,7 @@ module BypassHandler::NpcViewMod
         ggdi = drop_item
         if ggdi.items.size == 1
           gdi = ggdi.items[0]
-          add_general_drop_item(pc, npc, amount_format, chance_format, sb, GeneralDropItem.new(gdi.item_id, gdi.min, gdi.max, (gdi.chance * ggdi.chance) / 100, gdi.amount_strategy, gdi.chance_strategy, ggdi.precise_strategy, ggdi.killer_chance_modifier_strategy, gdi.drop_calculation_strategy))
+          add_general_drop_item(pc, npc, amount_format, chance_format, sb, GeneralDropItem.new(gdi.item_id, gdi.min, gdi.max, (gdi.chance * ggdi.chance) // 100, gdi.amount_strategy, gdi.chance_strategy, ggdi.precise_strategy, ggdi.killer_chance_modifier_strategy, gdi.drop_calculation_strategy))
         else
           normalized = ggdi.normalize_me(npc, pc)
           sb << "<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">"
@@ -318,8 +318,8 @@ module BypassHandler::NpcViewMod
       return MinMax.new(min, max)
     end
 
-    mult = (chance / 100).to_i64
-    return MinMax.new(mult * min, (chance % 100) > 0 ? (mult + 1) * max : mult * max)
+    mult = (chance // 100).to_i64
+    MinMax.new(mult * min, chance % 100 > 0 ? (mult + 1) * max : mult * max)
   end
 
   def commands

@@ -55,7 +55,7 @@ abstract class ClanHallSiegeEngine < Quest
 
   def load_guards
     GameDB.each(SQL_LOAD_GUARDS, @hall.id) do |rs|
-      npc_id = rs.get_i32("npcId").to_u16.to_i32
+      npc_id = rs.get_i32("npcId").to_u16!.to_i32
       sp = L2Spawn.new(npc_id)
       sp.x = rs.get_i32("x")
       sp.y = rs.get_i32("y")
@@ -96,15 +96,15 @@ abstract class ClanHallSiegeEngine < Quest
     false
   end
 
-  def get_attacker_clan?(clan_id : Int32)
+  def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
     @attackers[clan_id]?
   end
 
-  def get_attacker_clan?(clan : L2Clan)
+  def get_attacker_clan?(clan : L2Clan) : L2SiegeClan?
     get_attacker_clan(clan.id)
   end
 
-  def attacker_clans?
+  def attacker_clans? : Array(L2SiegeClan)?
     @attackers.values
   end
 
@@ -124,15 +124,15 @@ abstract class ClanHallSiegeEngine < Quest
     end
   end
 
-  def get_defender_clan?(clan_id : Int32)
+  def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
     # return nil
   end
 
-  def get_defender_clan?(clan : L2Clan)
+  def get_defender_clan?(clan : L2Clan) : L2SiegeClan?
     # return nil
   end
 
-  def defender_clans?
+  def defender_clans? : Array(L2SiegeClan)?
     # return nil
   end
 

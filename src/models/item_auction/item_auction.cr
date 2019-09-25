@@ -4,6 +4,7 @@ require "./item_auction_state"
 
 class ItemAuction
   include Loggable
+
   private ENDING_TIME_EXTEND_5 = Time.mins_to_ms(5)
   private ENDING_TIME_EXTEND_3 = Time.mins_to_ms(3)
 

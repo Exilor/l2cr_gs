@@ -68,7 +68,7 @@ class Scripts::Chimeras < AbstractNpcAI
   end
 
   private struct Teleport
-    initializer npc: L2Npc, loc: Location
+    initializer npc : L2Npc, loc : Location
 
     def call
       @npc.tele_to_location(@loc, false)

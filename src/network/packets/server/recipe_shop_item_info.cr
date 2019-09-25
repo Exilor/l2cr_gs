@@ -1,5 +1,5 @@
 class Packets::Outgoing::RecipeShopItemInfo < GameServerPacket
-  initializer pc: L2PcInstance, recipe_id: Int32
+  initializer pc : L2PcInstance, recipe_id : Int32
 
   def write_impl
     c 0xe0

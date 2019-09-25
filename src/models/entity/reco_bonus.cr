@@ -17,8 +17,8 @@ module RecoBonus
     if pc && pc.online?
       if pc.recom_have != 0
         if pc.recom_bonus_time > 0
-          lvl = pc.level / 10
-          exp = (Math.min(pc.recom_have, 100) - 1) / 10
+          lvl = pc.level // 10
+          exp = (Math.min(pc.recom_have, 100) - 1) // 10
           return RECO_BONUS[lvl][exp]
         end
       end
@@ -29,6 +29,6 @@ module RecoBonus
 
   def get_reco_multiplier(pc : L2PcInstance) : Float64
     bonus = get_reco_bonus(pc)
-    bonus > 0 ? 1.0 + (bonus / 100) : 1.0
+    bonus > 0 ? 1.0 + (bonus // 100) : 1.0
   end
 end

@@ -1,5 +1,5 @@
 class Packets::Outgoing::TradeDone < GameServerPacket
-  private initializer num: Int8
+  private initializer num : Int8
 
   def write_impl
     c 0x1c

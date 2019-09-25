@@ -10,7 +10,7 @@ module PetDataTable
     timer = Timer.new
     PETS.clear
     parse_datapack_directory("stats/pets")
-    info { "Loaded #{PETS.size} pet data in #{timer.result}." }
+    info { "Loaded #{PETS.size} pet data in #{timer}." }
   end
 
   private def parse_document(doc, file)
@@ -24,7 +24,7 @@ module PetDataTable
         when "set"
           case p["name"]
           when "food"
-            p["val"].split(';').each do |food_id|
+            p["val"].split(';') do |food_id|
               data.add_food(food_id.to_i)
             end
           when "hungry_limit"
@@ -81,9 +81,7 @@ module PetDataTable
   end
 
   def get_pet_data(pet_id : Int) : L2PetData
-    data = PETS[pet_id]?
-
-    unless data
+    data = PETS.fetch(pet_id) do
       raise "Missing pet data for NPC id #{pet_id}."
     end
 
@@ -91,11 +89,19 @@ module PetDataTable
   end
 
   def get_pet_min_level(pet_id : Int) : Int32
-    PETS[pet_id].min_level.to_i32
+    tmp = PETS.fetch(pet_id) do
+      raise "No L2PetData for pet id #{pet_id}"
+    end
+
+    tmp.min_level.to_i32
   end
 
   def get_pet_items_by_npc(npc_id : Int) : Int32
-    PETS[npc_id].item_id
+    tmp = PETS.fetch(npc_id) do
+      raise "No L2PetData for npc id #{npc_id}"
+    end
+
+    tmp.item_id
   end
 
   def mountable?(npc_id : Int32) : Bool

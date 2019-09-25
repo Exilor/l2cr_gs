@@ -12,7 +12,7 @@ module DecayTaskManager
     end
 
     if char.is_a?(L2Attackable) && (char.spoiled? || char.seeded?)
-      delay += Config.spoiled_corpse_extend_time
+      delay &+= Config.spoiled_corpse_extend_time
     end
 
     add(char, delay)
@@ -20,7 +20,7 @@ module DecayTaskManager
 
   def add(char : L2Character, delay)
     task = DecayTask.new(char)
-    scheduled = Concurrent.schedule_delayed(task, delay * 1000)
+    scheduled = Concurrent.schedule_delayed(task, delay.to_f64 * 1000)
     TASKS[char]?.try &.cancel
     TASKS[char] = scheduled
   end
@@ -30,11 +30,11 @@ module DecayTaskManager
   end
 
   def get_remaining_time(char : L2Character) : Int64
-    TASKS[char]?.try &.delay.to_i64 || Int64::MAX
+    TASKS.fetch(char) { return Int64::MAX }.delay
   end
 
   private struct DecayTask
-    initializer char: L2Character
+    initializer char : L2Character
 
     def call
       TASKS.delete(@char)

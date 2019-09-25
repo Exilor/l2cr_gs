@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExMPCCShowPartyMemberInfo < GameServerPacket
-  initializer party: L2Party
+  initializer party : L2Party
 
   def write_impl
     c 0xfe

@@ -2,7 +2,7 @@ class Scripts::KetraOrcSupport < AbstractNpcAI
   private struct BuffData
     getter cost
 
-    initializer skill_id: Int32, cost: Int32
+    initializer skill_id : Int32, cost : Int32
 
     def skill
       SkillData[@skill_id, 1]

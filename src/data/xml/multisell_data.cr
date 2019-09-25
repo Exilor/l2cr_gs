@@ -21,7 +21,7 @@ module MultisellData
     timer = Timer.new
     parse_datapack_directory("multisell")
 
-    info { "Loaded #{ENTRIES.size} multisell lists in #{timer.result} s." }
+    info { "Loaded #{ENTRIES.size} multisell lists in #{timer} s." }
   end
 
   private def parse_document(doc, file_name)

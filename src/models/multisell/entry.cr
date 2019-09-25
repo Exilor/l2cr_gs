@@ -4,7 +4,7 @@ class Multisell::Entry
   getter ingredients = [] of Ingredient
   getter? stackable = true
 
-  property_initializer entry_id: Int32
+  property_initializer entry_id : Int32
 
   def add_product(prod : Ingredient)
     @products << prod

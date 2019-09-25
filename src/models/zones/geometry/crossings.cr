@@ -2,7 +2,7 @@ class Crossings
   @yranges = Slice(Float64).new(10)
   @limit = 0
 
-  getter_initializer xlo: Float64, ylo: Float64, xhi: Float64, yhi: Float64
+  getter_initializer xlo : Float64, ylo : Float64, xhi : Float64, yhi : Float64
 
   def empty? : Bool
     @limit == 0

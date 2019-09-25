@@ -46,13 +46,15 @@ module AugmentationData
   private ALL_SKILLS = {} of Int32 => SkillHolder
 
   struct AugmentationChance
-    getter_initializer weapon_type: String, stone_id: Int32, variation_id: Int32,
-      category_chance: Int32, augment_id: Int32, augment_chance: Float32
+    getter_initializer weapon_type : String, stone_id : Int32,
+      variation_id : Int32, category_chance : Int32, augment_id : Int32,
+      augment_chance : Float32
   end
 
   struct AugmentationChanceAcc
-    getter_initializer weapon_type: String, stone_id: Int32, variation_id: Int32,
-      category_chance: Int32, augment_id: Int32, augment_chance: Float32
+    getter_initializer weapon_type : String, stone_id : Int32,
+      variation_id : Int32, category_chance : Int32, augment_id : Int32,
+      augment_chance : Float32
   end
 
   def load
@@ -149,7 +151,7 @@ module AugmentationData
           next
         end
 
-        k = (augmentation_id - BLUE_START) / SKILLS_BLOCKSIZE
+        k = (augmentation_id - BLUE_START) // SKILLS_BLOCKSIZE
 
         if type.casecmp?("blue")
           BLUE_SKILLS[k] << augmentation_id
@@ -389,7 +391,7 @@ module AugmentationData
       if !generate_glow
         offset = (ls_level * STAT_SUBBLOCKSIZE) + (Rnd.rand(0..1) * STAT_BLOCKSIZE) + 1
       else
-        offset = (ls_level * STAT_SUBBLOCKSIZE) + (Rnd.rand(0..1) * STAT_BLOCKSIZE) + (((ls_grade + result_color) / 2) * (10 * STAT_SUBBLOCKSIZE)) + 1
+        offset = (ls_level * STAT_SUBBLOCKSIZE) + (Rnd.rand(0..1) * STAT_BLOCKSIZE) + (((ls_grade + result_color) // 2) * (10 * STAT_SUBBLOCKSIZE)) + 1
       end
     end
 
@@ -420,7 +422,7 @@ module AugmentationData
       s = 10000
       selected_chances_12.each do |ac|
         if s > r
-          s -= (ac.augment_chance * 100)
+          s -= ac.augment_chance * 100
           stat12 = ac.augment_id
         end
       end

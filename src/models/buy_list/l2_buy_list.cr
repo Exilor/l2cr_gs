@@ -4,7 +4,7 @@ class L2BuyList
   @products = {} of Int32 => Product
   @allowed_npcs : Set(Int32)?
 
-  getter_initializer list_id: Int32
+  getter_initializer list_id : Int32
 
   delegate size, to: @products
 

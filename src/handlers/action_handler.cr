@@ -28,15 +28,11 @@ module ActionHandler
       type = type.parent
     end
 
-    unless handler
-      warn { "No action handler found for #{temp.inspect}." }
-    end
-
     handler
   end
 
-  abstract def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
-  abstract def instance_type : InstanceType
+  # abstract def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
+  # abstract def instance_type : InstanceType
 end
 
 require "./action_handlers/*"

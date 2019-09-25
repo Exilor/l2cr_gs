@@ -21,7 +21,7 @@ class EffectHandler::HpPerMax < AbstractEffect
     power = @power
     full = power == 100
 
-    amount = full ? target.max_hp : (target.max_hp * power) / 100
+    amount = full ? target.max_hp : (target.max_hp * power) // 100
     amount = Math.max(Math.min(amount, target.max_recoverable_hp - target.current_hp), 0)
 
     if amount != 0

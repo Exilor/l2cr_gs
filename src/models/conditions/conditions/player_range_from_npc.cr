@@ -1,6 +1,6 @@
 class Condition
   class PlayerRangeFromNpc < Condition
-    initializer npc_ids: Array(Int32), radius: Int32, val: Bool
+    initializer npc_ids : Array(Int32), radius : Int32, val : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       exist = false

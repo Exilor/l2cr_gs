@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExCubeGameChangeTimeToStart < GameServerPacket
-  initializer seconds: Int32
+  initializer seconds : Int32
 
   def write_impl
     c 0xfe

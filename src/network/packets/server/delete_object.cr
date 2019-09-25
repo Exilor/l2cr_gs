@@ -1,5 +1,5 @@
 class Packets::Outgoing::DeleteObject < GameServerPacket
-  initializer l2id: Int32
+  initializer l2id : Int32
 
   def initialize(obj : L2Object)
     @l2id = obj.l2id

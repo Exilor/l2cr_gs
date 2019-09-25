@@ -847,7 +847,7 @@ class Siege
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans?
+  def attacker_clans? : Array(L2SiegeClan)?
     @normal_side ? @attacker_clans : @defender_clans
   end
 
@@ -863,7 +863,7 @@ class Siege
     defender_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def defender_clans?
+  def defender_clans? : Array(L2SiegeClan)?
     @normal_side ? @defender_clans : @attacker_clans
   end
 
@@ -905,12 +905,12 @@ class Siege
     end
   end
 
-  def give_fame?
+  def give_fame? : Bool
     true
   end
 
-  def fame_frequency
-    Config.castle_zone_fame_task_frequency
+  def fame_frequency : Int32
+    Config.castle_zone_fame_task_frequency.to_i32
   end
 
   def fame_amount : Int32

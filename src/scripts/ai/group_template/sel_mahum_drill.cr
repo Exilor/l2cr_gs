@@ -1,8 +1,9 @@
 class Scripts::SelMahumDrill < AbstractNpcAI
   class Actions < EnumClass
     getter social_action_id, alt_social_action_id, repeat_count, repeat_interval
-    protected initializer social_action_id: Int32, alt_social_action_id: Int32,
-      repeat_count: Int32, repeat_interval: Int32
+    protected initializer social_action_id : Int32,
+      alt_social_action_id : Int32, repeat_count : Int32,
+      repeat_interval : Int32
 
     add(SCE_TRAINING_ACTION_A, 4, -1, 2, 2333)
     add(SCE_TRAINING_ACTION_B, 1, -1, 2, 4333)

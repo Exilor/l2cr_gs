@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExRpItemLink < GameServerPacket
-  initializer item: L2ItemInstance
+  initializer item : L2ItemInstance
 
   def write_impl
     c 0xfe

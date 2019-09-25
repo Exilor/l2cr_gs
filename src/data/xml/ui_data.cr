@@ -14,11 +14,11 @@ module UIData
     info { "Loaded #{KEYS.size} keys and #{CATEGORIES.size} categories." }
   end
 
-  def categories
+  def categories : Hash(Int32, Array(Int32))
     CATEGORIES
   end
 
-  def keys
+  def keys : Hash(Int32, Array(ActionKey))
     KEYS
   end
 

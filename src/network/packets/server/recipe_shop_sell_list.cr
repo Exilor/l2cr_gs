@@ -1,5 +1,5 @@
 class Packets::Outgoing::RecipeShopSellList < GameServerPacket
-  initializer buyer: L2PcInstance, crafter: L2PcInstance
+  initializer buyer : L2PcInstance, crafter : L2PcInstance
 
   def write_impl
     c 0xdf

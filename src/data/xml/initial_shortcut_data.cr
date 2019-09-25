@@ -98,7 +98,8 @@ module InitialShortcutData
   end
 
   def get_shortcut_list(id : Int32) : Array(Shortcut)?
-    get_shortcut_list(ClassId[id])
+    class_id = ClassId.fetch(id) { raise "No ClassId with id #{id}" }
+    get_shortcut_list(class_id)
   end
 
   def get_shortcut_list(class_id : ClassId) : Array(Shortcut)?

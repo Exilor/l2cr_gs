@@ -43,8 +43,8 @@ abstract class AbstractGetScrollToHometownQuest < Quest
     )
   end
 
-  abstract def scroll_item_id : Int32
-  abstract def parent_quest_name : String
+  abstract def scroll_item_id# : Int32
+  abstract def parent_quest_name# : String
 
   def on_adv_event(event, npc, pc)
     return unless pc

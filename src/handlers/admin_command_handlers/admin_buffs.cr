@@ -140,7 +140,7 @@ module AdminCommandHandler::AdminBuffs
       effects.concat(target.effect_list.passives)
     end
 
-    if page > (effects.size / PAGE_LIMIT) + 1 || page < 1
+    if page > (effects.size // PAGE_LIMIT) + 1 || page < 1
       return
     end
 

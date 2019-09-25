@@ -12,7 +12,7 @@ abstract class Packets::Incoming::AbstractRefinePacket < GameClientPacket
   private struct LifeStone
     private LEVELS = {46, 49, 52, 55, 58, 61, 64, 67, 70, 76, 80, 82, 84, 85}
 
-    getter_initializer grade: Int32, level: Int32
+    getter_initializer grade : Int32, level : Int32
 
     def player_level : Int32
       LEVELS[@level]

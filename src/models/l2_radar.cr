@@ -1,7 +1,7 @@
 struct L2Radar
   @markers = [] of RadarMarker
 
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def add_marker(x : Int32, y : Int32, z : Int32)
     marker = RadarMarker.new(x, y, z)
@@ -38,8 +38,8 @@ struct L2Radar
   struct RadarMarker
     @type = 1
 
-    getter_initializer x: Int32, y: Int32, z: Int32
-    initializer type: Int32, x: Int32, y: Int32, z: Int32
+    getter_initializer x : Int32, y : Int32, z : Int32
+    initializer type : Int32, x : Int32, y : Int32, z : Int32
 
     def hash
       prime = 31

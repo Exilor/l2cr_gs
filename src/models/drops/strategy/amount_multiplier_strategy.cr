@@ -6,7 +6,7 @@ struct AmountMultiplierStrategy
     @proc.call(item, victim)
   end
 
-  # Needs to be a proc because Config will not have loaded by the time constants
+  # Needs to be a proc because Config will not have loaded by the time variables
   # in this file are initialized.
   private def self.default_strategy(&default_multiplier : -> Float32) : self
     new do |item, victim|

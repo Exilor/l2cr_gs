@@ -1,5 +1,5 @@
 struct WarnUserTakeBreakTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     if @pc.online?

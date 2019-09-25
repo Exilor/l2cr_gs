@@ -1,5 +1,5 @@
 struct CommandChannelTimer
-  initializer attackable: L2Attackable
+  initializer attackable : L2Attackable
 
   def call
     if Time.ms - @attackable.command_channel_last_attack > Config.loot_raids_privilege_interval

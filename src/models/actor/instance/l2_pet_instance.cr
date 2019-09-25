@@ -130,7 +130,6 @@ class L2PetInstance < L2Summon
       data = PetDataTable.get_pet_data(template.id)
 
       if pet = GameDB.pet.load(control, template, owner)
-        # pet.name ||= template.name
         pet.title = owner.name
         if data.sync_level? && pet.level != owner.level
           pet.stat.level = owner.level
@@ -243,7 +242,6 @@ class L2PetInstance < L2Summon
     broadcast_packet(StopMove.new(self))
 
     unless target.is_a?(L2ItemInstance)
-      warn "Tried to pickup a non-item object: #{target.inspect}:#{target.class}."
       action_failed
       return
     end
@@ -312,7 +310,7 @@ class L2PetInstance < L2Summon
       if handler = ItemHandler[target.etc_item]
         handler.use_item(self, target, false)
       else
-        warn "No item handler registered for item ID #{target.id}."
+        warn { "No item handler registered for item ID #{target.id}." }
       end
 
       ItemTable.destroy_item("Consume", target, owner, nil)
@@ -365,6 +363,7 @@ class L2PetInstance < L2Summon
     stop_feed
     send_packet(SystemMessageId::MAKE_SURE_YOU_RESSURECT_YOUR_PET_WITHIN_24_HOURS)
     DecayTaskManager.add(self)
+
     true
   end
 
@@ -429,7 +428,7 @@ class L2PetInstance < L2Summon
       end
 
       if removed_item.nil?
-        warn "Couldn't destroy pet control item (owner: #{owner}, evolve: #{evolve.inspect})."
+        warn { "Couldn't destroy pet control item (owner: #{owner}, evolve: #{evolve.inspect})." }
       else
         owner.send_packet(InventoryUpdate.removed(removed_item))
         owner.send_packet(StatusUpdate.current_load(owner))
@@ -453,7 +452,7 @@ class L2PetInstance < L2Summon
       if protect
         dropit.drop_protection.protect(@owner)
       end
-      debug "Item id to drop: #{dropit.id}, amount: #{dropit.count}."
+
       dropit.drop_me(self, x, y, z + 100)
     end
   end
@@ -641,10 +640,14 @@ class L2PetInstance < L2Summon
       new_weight_penalty = case
       when weight_proc < 500 || owner.diet_mode?
         0
-      when weight_proc < 666 then 1
-      when weight_proc < 800 then 2
-      when weight_proc < 1000 then 3
-      else 4
+      when weight_proc < 666
+        1
+      when weight_proc < 800
+        2
+      when weight_proc < 1000
+        3
+      else
+        4
       end
 
       if @cur_weight_penalty != new_weight_penalty
@@ -694,8 +697,6 @@ class L2PetInstance < L2Summon
   end
 
   def name=(name : String?)
-    debug "L2PetInstance#name=(#{name.inspect})"
-
     if control_item = control_item()
       if control_item.custom_type_2 == (name ? 1 : 0)
         control_item.custom_type_2 = (name ? 1 : 0)

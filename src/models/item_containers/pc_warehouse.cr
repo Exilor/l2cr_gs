@@ -1,7 +1,7 @@
 require "./warehouse"
 
 class PcWarehouse < Warehouse
-  getter_initializer owner: L2PcInstance
+  getter_initializer owner : L2PcInstance
 
   def owner? : L2PcInstance?
     owner

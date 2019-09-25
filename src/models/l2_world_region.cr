@@ -191,7 +191,7 @@ class L2WorldRegion
   end
 
   private struct NeighborsTask
-    initializer region: L2WorldRegion, activate: Bool
+    initializer region : L2WorldRegion, activate : Bool
 
     def call
       if @activate

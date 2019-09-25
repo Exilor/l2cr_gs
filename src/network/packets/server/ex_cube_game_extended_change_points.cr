@@ -1,6 +1,6 @@
 class Packets::Outgoing::ExCubeGameExtendedChangePoints < GameServerPacket
-  initializer time_left: Int32, blue_points: Int32, red_points: Int32,
-    red_team: Bool, pc: L2PcInstance, player_points: Int32
+  initializer time_left : Int32, blue_points : Int32, red_points : Int32,
+    red_team : Bool, pc : L2PcInstance, player_points : Int32
 
   def write_impl
     c 0xfe

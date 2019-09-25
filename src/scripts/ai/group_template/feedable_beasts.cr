@@ -87,7 +87,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
   private struct GrowthCapableMob
     @spice_to_mob = {} of Int32 => Array(Array(Int32))
 
-    getter_initializer growth_level: Int32, chance: Int32
+    getter_initializer growth_level : Int32, chance : Int32
 
     def add_mobs(spice, mobs)
       @spice_to_mob[spice] = mobs

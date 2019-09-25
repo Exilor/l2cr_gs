@@ -6,7 +6,7 @@ class ObjectPoly
   property poly_id : Int32 = 0
   property poly_type : String?
 
-  getter_initializer active_object: L2Object
+  getter_initializer active_object : L2Object
 
   def set_poly_info(poly_type : String?, poly_id : String)
     self.poly_type = poly_type

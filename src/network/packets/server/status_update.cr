@@ -37,7 +37,7 @@ class Packets::Outgoing::StatusUpdate < GameServerPacket
 
   @attributes = [] of Attribute
 
-  initializer l2id: Int32
+  initializer l2id : Int32
 
   def initialize(obj : L2Object)
     @l2id = obj.l2id
@@ -75,7 +75,7 @@ class Packets::Outgoing::StatusUpdate < GameServerPacket
   end
 
   private class HPUpdate < StatusUpdate
-    initializer l2id: Int32, max_hp: Int32, current_hp: Int32
+    initializer l2id : Int32, max_hp : Int32, current_hp : Int32
 
     def write
       c 0x18
@@ -94,7 +94,7 @@ class Packets::Outgoing::StatusUpdate < GameServerPacket
   end
 
   private class MPUpdate < StatusUpdate
-    initializer l2id: Int32, current_mp: Int32
+    initializer l2id : Int32, current_mp : Int32
 
     def write
       c 0x18
@@ -112,7 +112,7 @@ class Packets::Outgoing::StatusUpdate < GameServerPacket
   end
 
   private class CpHpMpUpdate < StatusUpdate
-    initializer l2id: Int32, cp: Int32, hp: Int32, mp: Int32
+    initializer l2id : Int32, cp : Int32, hp : Int32, mp : Int32
 
     def write
       c 0x18
@@ -133,7 +133,7 @@ class Packets::Outgoing::StatusUpdate < GameServerPacket
   end
 
   private class CurrentLoadUpdate < StatusUpdate
-    initializer l2id: Int32, load: Int32
+    initializer l2id : Int32, load : Int32
 
     def write
       c 0x18
@@ -150,7 +150,7 @@ class Packets::Outgoing::StatusUpdate < GameServerPacket
   end
 
   private class SPUpdate < StatusUpdate
-    initializer l2id: Int32, sp: Int32
+    initializer l2id : Int32, sp : Int32
 
     def write
       c 0x18
@@ -167,7 +167,7 @@ class Packets::Outgoing::StatusUpdate < GameServerPacket
   end
 
   private class KarmaUpdate < StatusUpdate
-    initializer l2id: Int32, karma: Int32
+    initializer l2id : Int32, karma : Int32
 
     def write
       c 0x18

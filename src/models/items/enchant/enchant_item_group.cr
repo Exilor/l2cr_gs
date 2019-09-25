@@ -5,7 +5,7 @@ struct EnchantItemGroup
 
   @chances = [] of RangeChanceHolder
 
-  getter_initializer name: String
+  getter_initializer name : String
 
   def add_chance(holder : RangeChanceHolder)
     @chances << holder

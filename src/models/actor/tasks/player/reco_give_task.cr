@@ -1,5 +1,5 @@
 struct RecoGiveTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     reco_to_give = 1

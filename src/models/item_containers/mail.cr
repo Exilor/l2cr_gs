@@ -1,7 +1,7 @@
 require "./item_container"
 
 class Mail < ItemContainer
-  getter_initializer owner_id: Int32, message_id: Int32
+  getter_initializer owner_id : Int32, message_id : Int32
 
   def name : String
     "Mail"

@@ -26,9 +26,9 @@ module EventDroplist
     DROPS.select { |d| d.includes?(time) }
   end
 
-  class EventDrop
-    getter_initializer item_id_list: Slice(Int32), min_count: Int64,
-      max_count: Int64, drop_chance: Int32
+  struct EventDrop
+    getter_initializer item_id_list : Slice(Int32), min_count : Int64,
+      max_count : Int64, drop_chance : Int32
 
     def initialize(item_id : Int32, min : Int64, max : Int64, drop_chance : Int32)
       @item_id_list = Slice.new(1, item_id)

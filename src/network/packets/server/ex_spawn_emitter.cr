@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExSpawnEmitter < GameServerPacket
-  initializer pc_id: Int32, npc_id: Int32
+  initializer pc_id : Int32, npc_id : Int32
 
   def initialize(pc : L2PcInstance, npc : L2Npc)
     initialize(pc.l2id, npc.l2id)

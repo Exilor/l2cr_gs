@@ -1,7 +1,7 @@
 struct NpcBufferAI
   include Loggable
 
-  initializer npc: L2Npc, skill_data: NpcBufferSkillData
+  initializer npc : L2Npc, skill_data : NpcBufferSkillData
 
   def call
     # unless @npc

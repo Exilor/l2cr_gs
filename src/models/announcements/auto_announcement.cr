@@ -86,7 +86,7 @@ class AutoAnnouncement < Announcement
 
   def call
     if @current_state == -1 || @current_state > 0
-      content.split(Config::EOL).each do |content|
+      content.split(Config::EOL) do |content|
         Broadcast.to_all_online_players(content, type.auto_critical?)
       end
 

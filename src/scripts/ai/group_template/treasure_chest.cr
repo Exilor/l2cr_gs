@@ -822,7 +822,7 @@ class Scripts::TreasureChest < AbstractNpcAI
         start_quest_timer(TIMER_1, ATTACK_SPAWN_TIME, npc, nil)
 
         if npc.level - npc.variables.get_i32("MAX_LEVEL_DIFFERENCE") > attacker.level
-          add_skill_cast_desire(npc, attacker, TREASURE_BOMBS[npc.level / 10], 1_000_000)
+          add_skill_cast_desire(npc, attacker, TREASURE_BOMBS[npc.level // 10], 1_000_000)
         else
           if Rnd.rand(100) < 10
             npc.do_die(nil)
@@ -834,7 +834,7 @@ class Scripts::TreasureChest < AbstractNpcAI
               warn "Treasure Chest ID #{npc.id} doesn't have a drop list."
             end
           else
-            add_skill_cast_desire(npc, attacker, TREASURE_BOMBS[npc.level / 10], 1_000_000)
+            add_skill_cast_desire(npc, attacker, TREASURE_BOMBS[npc.level // 10], 1_000_000)
           end
         end
       elsif Rnd.rand(100) < 30

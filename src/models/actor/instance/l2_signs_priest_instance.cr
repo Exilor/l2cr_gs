@@ -196,17 +196,17 @@ class L2SignsPriestInstance < L2Npc
 
         case contrib_stone_id
         when SevenSigns::SEAL_STONE_BLUE_ID
-          blue_contrib = (Config.alt_maximum_player_contrib - score) / SevenSigns::BLUE_CONTRIB_POINTS
+          blue_contrib = (Config.alt_maximum_player_contrib - score) // SevenSigns::BLUE_CONTRIB_POINTS
           if blue_contrib > contrib_blue_stone_count
             blue_contrib = contribution_count
           end
         when SevenSigns::SEAL_STONE_GREEN_ID
-          green_contrib = (Config.alt_maximum_player_contrib - score) / SevenSigns::GREEN_CONTRIB_POINTS
+          green_contrib = (Config.alt_maximum_player_contrib - score) // SevenSigns::GREEN_CONTRIB_POINTS
           if green_contrib > contrib_green_stone_count
             green_contrib = contribution_count
           end
         when SevenSigns::SEAL_STONE_RED_ID
-          red_contrib = (Config.alt_maximum_player_contrib - score) / SevenSigns::RED_CONTRIB_POINTS
+          red_contrib = (Config.alt_maximum_player_contrib - score) // SevenSigns::RED_CONTRIB_POINTS
           if red_contrib > contrib_red_stone_count
             red_contrib = contribution_count
           end
@@ -304,19 +304,19 @@ class L2SignsPriestInstance < L2Npc
           stone_count_contr = red_stone_count
         when 4
           temp_contrib_count = contrib_score
-          red_contrib_count = (Config.alt_maximum_player_contrib - temp_contrib_count) / SevenSigns::RED_CONTRIB_POINTS
+          red_contrib_count = (Config.alt_maximum_player_contrib - temp_contrib_count) // SevenSigns::RED_CONTRIB_POINTS
           if red_contrib_count > red_stone_count
             red_contrib_count = red_stone_count
           end
 
           temp_contrib_count += red_contrib_count * SevenSigns::RED_CONTRIB_POINTS
-          green_contrib_count = (Config.alt_maximum_player_contrib - temp_contrib_count) / SevenSigns::GREEN_CONTRIB_POINTS
+          green_contrib_count = (Config.alt_maximum_player_contrib - temp_contrib_count) // SevenSigns::GREEN_CONTRIB_POINTS
           if green_contrib_count > green_stone_count
             green_contrib_count = green_stone_count
           end
 
           temp_contrib_count += green_contrib_count * SevenSigns::GREEN_CONTRIB_POINTS
-          blue_contrib_count = (Config.alt_maximum_player_contrib - temp_contrib_count) / SevenSigns::BLUE_CONTRIB_POINTS
+          blue_contrib_count = (Config.alt_maximum_player_contrib - temp_contrib_count) // SevenSigns::BLUE_CONTRIB_POINTS
           if blue_contrib_count > blue_stone_count
             blue_contrib_count = blue_stone_count
           end

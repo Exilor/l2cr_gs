@@ -9,8 +9,6 @@ require "../damage_done_info"
 require "./tasks/attackable/*"
 
 class L2Attackable < L2Npc
-
-  @must_give_exp_sp = true
   @harvest_item = AtomicReference(ItemHolder?).new(nil.as(ItemHolder?))
   @sweep_items = Atomic(Array(ItemHolder)?).new(nil.as(Array(ItemHolder)?))
   getter aggro_list = Hash(L2Character, AggroInfo).new
@@ -30,6 +28,7 @@ class L2Attackable < L2Npc
   property? overhit : Bool = false
   property? champion : Bool = false
   property? raid : Bool = false
+  property? must_reward_exp_sp : Bool = true
   property? can_return_to_spawn_point : Bool = true
   property? returning_to_spawn_point : Bool = false
   property? can_see_through_silent_move : Bool = false
@@ -353,7 +352,7 @@ class L2Attackable < L2Npc
 
       notify_event(AI::ATTACKED, attacker)
 
-      add_damage_hate(attacker, damage, (damage.to_i64 * 100) / (level + 7))
+      add_damage_hate(attacker, damage, (damage.to_i64 * 100) // (level + 7))
 
       if pc = attacker.acting_player?
         evt = OnAttackableAttack.new(pc, self, damage.to_i, skill, attacker.summon?)
@@ -825,14 +824,6 @@ class L2Attackable < L2Npc
 
   def minion? : Bool
     !!leader?
-  end
-
-  def must_reward_exp_sp? : Bool
-    sync { @must_give_exp_sp }
-  end
-
-  def must_reward_exp_sp=(val : Bool)
-    sync { @must_give_exp_sp = val }
   end
 
   def attackable? : Bool

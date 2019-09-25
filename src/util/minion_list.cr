@@ -5,7 +5,7 @@ class MinionList
   @minion_references = [] of L2MonsterInstance
   @reused_minion_references : Array(L2MonsterInstance)?
 
-  initializer master: L2MonsterInstance
+  initializer master : L2MonsterInstance
 
   def spawned_minions : Array(L2MonsterInstance)
     @minion_references

@@ -13,7 +13,8 @@ module PlayerCreationPointData
   end
 
   def get_creation_point(class_id : ClassId) : Location
-    DATA[class_id].sample(random: Rnd)
+    DATA.fetch(class_id) { raise "No coordiantes for ClassId #{class_id}" }
+    .sample(random: Rnd)
   end
 
   private def parse_document(doc, file)

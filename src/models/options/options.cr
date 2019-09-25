@@ -6,7 +6,7 @@ class Options
   property active_skill : SkillHolder?
   property passive_skill : SkillHolder?
 
-  getter_initializer id: Int32
+  getter_initializer id : Int32
 
   def has_funcs? : Bool
     !@funcs.empty?

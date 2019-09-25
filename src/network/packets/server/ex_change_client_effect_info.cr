@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExChangeClientEffectInfo < GameServerPacket
-  initializer type: Int32, key: Int32, value: Int32
+  initializer type : Int32, key : Int32, value : Int32
 
   def write_impl
     c 0xfe

@@ -12,7 +12,7 @@ class Packets::Incoming::RequestReceivedPost < GameClientPacket
     return unless pc = active_char
 
     unless msg = MailManager.get_message(@msg_id)
-      warn "Message with ID #{@msg_id} not found."
+      warn { "Message with ID #{@msg_id} not found." }
       return
     end
 
@@ -23,12 +23,11 @@ class Packets::Incoming::RequestReceivedPost < GameClientPacket
 
     if msg.receiver_id != pc.l2id
       Util.punish(pc, "tried to receive a message sent to somebody else.")
-      warn "#{pc.name} tried to receive a message not addressed to him."
       return
     end
 
     if msg.deleted_by_receiver?
-      debug "Message with ID #{@msg_id} was deleted by receiver."
+      debug { "Message with ID #{@msg_id} was deleted by receiver." }
       return
     end
 

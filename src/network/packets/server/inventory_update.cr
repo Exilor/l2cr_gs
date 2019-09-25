@@ -1,22 +1,26 @@
 class Packets::Outgoing::InventoryUpdate < Packets::Outgoing::AbstractInventoryUpdate
-  def self.added(item : L2ItemInstance)
-    new.tap &.add_new_item(item)
-  end
-
-  def self.modified(item : L2ItemInstance)
-    new.tap &.add_modified_item(item)
-  end
-
-  def self.removed(item : L2ItemInstance)
-    new.tap &.add_removed_item(item)
-  end
-
   def write_impl
     c 0x21
     super
   end
 
-  class SingleItem < Packets::Outgoing::AbstractItemPacket
+  def self.added(item : L2ItemInstance) : SingleAddedItem
+    SingleAddedItem.new(item)
+  end
+
+  def self.modified(item : L2ItemInstance) : SingleModifiedItem
+    SingleModifiedItem.new(item)
+  end
+
+  def self.removed(item : L2ItemInstance) : SingleRemovedItem
+    SingleRemovedItem.new(item)
+  end
+
+  def self.single(item : L2ItemInstance) : SingleItem
+    SingleItem.new(item)
+  end
+
+  private class SingleItem < Packets::Outgoing::AbstractItemPacket
     def initialize(item : L2ItemInstance)
       @item = ItemInfo.new(item)
     end
@@ -34,19 +38,19 @@ class Packets::Outgoing::InventoryUpdate < Packets::Outgoing::AbstractInventoryU
     end
   end
 
-  class SingleAddedItem < SingleItem
+  private class SingleAddedItem < SingleItem
     def item_change
       1
     end
   end
 
-  class SingleModifiedItem < SingleItem
+  private class SingleModifiedItem < SingleItem
     def item_change
       2
     end
   end
 
-  class SingleRemovedItem < SingleItem
+  private class SingleRemovedItem < SingleItem
     def item_change
       3
     end

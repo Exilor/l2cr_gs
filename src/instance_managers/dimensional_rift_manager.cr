@@ -16,7 +16,8 @@ module DimensionalRiftManager
   end
 
   def get_room(type, room) : DimensionalRiftRoom
-    ROOMS[type]?.try &.[room]? || raise("Room with type #{type} and room #{room} not found")
+    ROOMS[type]?.try &.[room]? ||
+    raise("Room with type #{type} and room #{room} not found")
   end
 
   private def load_rooms
@@ -70,12 +71,6 @@ module DimensionalRiftManager
             mob_id = sp["mobId"].to_i
             delay = sp["delay"].to_i
             count = sp["count"].to_i
-
-            # if !ROOMS.has_key?(type)
-            #   warn { "Type #{type} not found." }
-            # elsif ROOMS[type].has_key?(room_id)
-            #   warn { "Room #{room_id} in type #{type} not found." }
-            # end
 
             count.times do |i|
               rift_room = ROOMS[type][room_id]

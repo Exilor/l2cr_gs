@@ -1,8 +1,8 @@
 require "html"
 
 struct ClassInfo
-  getter_initializer class_id: ClassId, class_name: String,
-    parent_class_id: ClassId?
+  getter_initializer class_id : ClassId, class_name : String,
+    parent_class_id : ClassId?
 
   def client_code : String
     "&$#{class_client_id};"

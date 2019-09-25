@@ -4,7 +4,7 @@ class Multisell::ListContainer
   property? apply_taxes : Bool = false
   property? maintain_enchantment : Bool = false
 
-  getter_initializer list_id: Int32
+  getter_initializer list_id : Int32
 
   def allow_npc(npc_id : Int32)
     (@npcs_allowed ||= Set(Int32).new) << npc_id

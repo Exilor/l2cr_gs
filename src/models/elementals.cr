@@ -95,7 +95,7 @@ class Elementals
   class ElementalStatBoni
     @active = false
 
-    initializer elemental_type: Int8, elemental_value: Int32
+    initializer elemental_type : Int8, elemental_value : Int32
 
     def apply_bonus(pc : L2PcInstance, is_armor : Bool)
       return if @active
@@ -133,7 +133,8 @@ class Elementals
 
   class ElementalItems < EnumClass
     getter element, item_id, type
-    protected initializer element: Int8, item_id: Int32, type: ElementalItemType
+    protected initializer element : Int8, item_id : Int32,
+      type : ElementalItemType
 
     add(FIRE_STONE,      FIRE,   9546, ElementalItemType::Stone)
     add(WATER_STONE,     WATER,  9547, ElementalItemType::Stone)
@@ -177,7 +178,7 @@ class Elementals
 
   class ElementalItemType < EnumClass
     getter max_level
-    protected initializer max_level: Int32
+    protected initializer max_level : Int32
 
     add(Stone,    3)
     add(Roughore, 3)

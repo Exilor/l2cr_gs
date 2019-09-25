@@ -1,5 +1,5 @@
 class Packets::Outgoing::HennaItemDrawInfo < GameServerPacket
-  initializer henna: L2Henna, pc: L2PcInstance
+  initializer henna : L2Henna, pc : L2PcInstance
 
   def write_impl
     c 0xe4

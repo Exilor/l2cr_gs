@@ -24,7 +24,7 @@
 struct BuffTimeTask
   @start_time = Time.s
 
-  initializer info: BuffInfo
+  initializer info : BuffInfo
 
   def call
     if Time.s >= @start_time + @info.abnormal_time

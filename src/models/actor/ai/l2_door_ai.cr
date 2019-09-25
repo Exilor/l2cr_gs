@@ -73,7 +73,7 @@ class L2DoorAI < L2CharacterAI
   end
 
   struct OnEventAttackedDoorTask
-    initializer door: L2DoorInstance, attacker: L2Character
+    initializer door : L2DoorInstance, attacker : L2Character
 
     def call
       @door.known_defenders do |guard|

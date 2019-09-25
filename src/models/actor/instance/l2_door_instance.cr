@@ -497,7 +497,7 @@ class L2DoorInstance < L2Character
   end
 
   struct AutoClose
-    initializer door: L2DoorInstance
+    initializer door : L2DoorInstance
 
     def call
       @door.close_me if @door.open?
@@ -505,7 +505,7 @@ class L2DoorInstance < L2Character
   end
 
   struct TimerOpen
-    initializer door: L2DoorInstance
+    initializer door : L2DoorInstance
 
     def call
       open = @door.open?

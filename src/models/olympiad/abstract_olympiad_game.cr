@@ -15,7 +15,7 @@ abstract class AbstractOlympiadGame
   @start_time = 0i64
   getter? aborted = false
 
-  getter_initializer stadium_id: Int32
+  getter_initializer stadium_id : Int32
 
   def make_competition_start : Bool
     @start_time = Time.ms
@@ -284,7 +284,7 @@ abstract class AbstractOlympiadGame
   end
 
   abstract def type : CompetitionType
-  abstract def player_names : Array(String)
+  abstract def player_names : Indexable(String)
   abstract def contains_participant?(player_id : Int32) : Bool
   abstract def send_olympiad_info(char : L2Character)
   abstract def broadcast_olympiad_info(stadium : L2OlympiadStadiumZone)

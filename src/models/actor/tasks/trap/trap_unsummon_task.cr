@@ -1,5 +1,5 @@
 struct TrapUnsummonTask
-  initializer trap: L2TrapInstance
+  initializer trap : L2TrapInstance
 
   def call
     @trap.unsummon

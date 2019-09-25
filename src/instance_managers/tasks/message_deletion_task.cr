@@ -1,7 +1,7 @@
 class MessageDeletionTask
   include Loggable
 
-  initializer msg_id: Int32
+  initializer msg_id : Int32
 
   def call
     unless msg = MailManager.get_message(@msg_id)

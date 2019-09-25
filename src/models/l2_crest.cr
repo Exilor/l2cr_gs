@@ -15,7 +15,7 @@ struct L2Crest
     end
   end
 
-  getter_initializer id: Int32, data: Bytes, type: CrestType
+  getter_initializer id : Int32, data : Bytes, type : CrestType
 
   def get_client_path(pc : L2PcInstance) : String
     case @type

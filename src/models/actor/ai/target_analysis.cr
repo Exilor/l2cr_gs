@@ -8,7 +8,7 @@ class TargetAnalysis
   getter? slower = false
   getter? magic_resistant = false
 
-  initializer actor: L2Character
+  initializer actor : L2Character
 
   def update(target : L2Character?)
     # update status once in 4 seconds

@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExPutItemResultForVariationMake < GameServerPacket
-  initializer l2id: Int32, item_id: Int32
+  initializer l2id : Int32, item_id : Int32
 
   def write_impl
     c 0xfe

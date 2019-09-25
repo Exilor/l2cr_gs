@@ -5,7 +5,7 @@ class Scripts::AltarsOfSacrifice < AbstractNpcAI
     @spawned_boss : L2Npc?
     @boss_npc_ids : Indexable(Int32) = Slice(Int32).empty
 
-    initializer middle_point: Locatable
+    initializer middle_point : Locatable
 
     def initialize(@middle_point : Locatable, *@boss_npc_ids : Int32)
     end

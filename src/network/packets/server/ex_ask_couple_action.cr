@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExAskCoupleAction < GameServerPacket
-  initializer char_id: Int32, action_id: Int32
+  initializer char_id : Int32, action_id : Int32
 
   def write_impl
     c 0xfe

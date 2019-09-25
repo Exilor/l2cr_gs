@@ -2,7 +2,7 @@ class Packets::Outgoing::ExServerPrimitive < GameServerPacket
   @points = [] of Point
   @lines = [] of Line
 
-  initializer name: String, x: Int32, y: Int32, z: Int32
+  initializer name : String, x : Int32, y : Int32, z : Int32
 
   def initialize(name : String, loc : Locatable)
     initialize(name, *loc.xyz)
@@ -167,8 +167,8 @@ class Packets::Outgoing::ExServerPrimitive < GameServerPacket
     getter name, color, x, y, z
     getter? name_colored
 
-    initializer name: String, color: Int32, name_colored: Bool, x: Int32,
-      y: Int32, z: Int32
+    initializer name : String, color : Int32, name_colored : Bool, x : Int32,
+      y : Int32, z : Int32
   end
 
   private class Line < Point

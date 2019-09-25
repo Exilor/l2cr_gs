@@ -1,7 +1,7 @@
 class CrystalType < EnumClass
   getter crystal_id, crystal_enchant_bonus_armor, crystal_enchant_bonus_weapon
-  protected initializer crystal_id: Int32, crystal_enchant_bonus_armor: Int32,
-    crystal_enchant_bonus_weapon: Int32
+  protected initializer crystal_id : Int32, crystal_enchant_bonus_armor : Int32,
+    crystal_enchant_bonus_weapon : Int32
 
   add(NONE,    0,  0,   0)
   add(D,    1458, 11,  90)

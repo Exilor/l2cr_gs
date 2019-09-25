@@ -1,5 +1,5 @@
 struct CubicDisappear
-  initializer cubic: L2CubicInstance
+  initializer cubic : L2CubicInstance
 
   def call
     @cubic.stop_action

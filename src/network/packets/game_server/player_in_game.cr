@@ -1,5 +1,5 @@
 class Packets::Outgoing::PlayerInGame < MMO::OutgoingPacket(LoginServerClient)
-  initializer account: String
+  initializer account : String
 
   def write
     c 0x02

@@ -1,5 +1,5 @@
 struct TeleportTask
-  initializer pc: L2PcInstance, loc: Location
+  initializer pc : L2PcInstance, loc : Location
 
   def call
     if @pc.online?

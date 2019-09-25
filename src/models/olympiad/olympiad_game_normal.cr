@@ -75,7 +75,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
 
     begin
       result &= port_player_to_arena(@player_one, spawns[0], @stadium_id)
-      result &= port_player_to_arena(@player_two, spawns[spawns.size / 2], @stadium_id)
+      result &= port_player_to_arena(@player_two, spawns[spawns.size // 2], @stadium_id)
     rescue e
       error e
       return false
@@ -218,7 +218,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
 
     p1_points = @player_one.stats.get_i32(POINTS)
     p2_points = @player_two.stats.get_i32(POINTS)
-    point_diff = Math.min(p1_points, p2_points) / divider
+    point_diff = Math.min(p1_points, p2_points) // divider
     if point_diff <= 0
       point_diff = 1
     elsif point_diff > Config.alt_oly_max_points
@@ -230,7 +230,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
       begin
         if @player_one.defaulted?
           begin
-            points = Math.min(p1_points / 3, Config.alt_oly_max_points)
+            points = Math.min(p1_points // 3, Config.alt_oly_max_points)
             remove_points_from_participant(@player_one, points)
             list1 << OlympiadInfo.new(@player_one.name, @player_one.clan_name, @player_one.clan_id, @player_one.base_class, @damage_p1, p1_points - points, -points)
 
@@ -258,7 +258,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
 
         if @player_two.defaulted?
           begin
-            points = Math.min(p2_points / 3, Config.alt_oly_max_points)
+            points = Math.min(p2_points // 3, Config.alt_oly_max_points)
             remove_points_from_participant(@player_two, points)
             list2 << OlympiadInfo.new(@player_two.name, @player_two.clan_name, @player_two.clan_id, @player_two.base_class, @damage_p2, p2_points - points, -points)
 
@@ -510,12 +510,12 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
         sm = SystemMessage.the_game_ended_in_a_tie
         stadium.broadcast_packet(sm)
 
-        value = Math.min(p1_points / divider, Config.alt_oly_max_points)
+        value = Math.min(p1_points // divider, Config.alt_oly_max_points)
 
         remove_points_from_participant(@player_one, value)
         list1 << OlympiadInfo.new(@player_one.name, @player_one.clan_name, @player_one.clan_id, @player_one.base_class, @damage_p1, p1_points - value, -value)
 
-        value = Math.min(p2_points / divider, Config.alt_oly_max_points)
+        value = Math.min(p2_points // divider, Config.alt_oly_max_points)
         remove_points_from_participant(@player_two, value)
         list2 << OlympiadInfo.new(@player_two.name, @player_two.clan_name, @player_two.clan_id, @player_two.base_class, @damage_p2, p2_points - value, -value)
 
@@ -568,7 +568,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
     end
   end
 
-  def player_names
+  def player_names : Indexable(String)
     {@player_one.name, @player_two.name}
   end
 

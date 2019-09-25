@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExVariationResult < GameServerPacket
-  initializer stat12: Int32, stat34: Int32, unk3: Int32
+  initializer stat12 : Int32, stat34 : Int32, unk3 : Int32
 
   def write_impl
     c 0xfe

@@ -5,22 +5,17 @@ class Packets::Incoming::Logout < GameClientPacket
 
   private def run_impl
     unless pc = active_char
-      debug "No @client.active_char."
       return
     end
 
     if pc.active_enchant_item_id != L2PcInstance::ID_NONE || pc.active_enchant_attr_item_id != L2PcInstance::ID_NONE
-
-      if Config.debug
-        debug "#{pc} tried to log out while enchanting."
-      end
-
+      warn { "#{pc} tried to log out while enchanting." }
       action_failed
       return
     end
 
     if pc.locked?
-      warn "#{pc} tried to log out during class change."
+      warn { "#{pc} tried to log out during class change." }
       action_failed
       return
     end
@@ -30,20 +25,16 @@ class Packets::Incoming::Logout < GameClientPacket
         return
       end
 
-      if Config.debug
-        debug "#{pc} tried to log out in combat."
-      end
-
       pc.send_packet(SystemMessageId::CANT_LOGOUT_WHILE_FIGHTING)
       action_failed
       return
     end
 
-    # if L2Event.participant?(pc)
-    #   pc.send_message("A superior power doesn't allow you to leave the event.")
-    #   action_failed
-    #   return
-    # end
+    if L2Event.participant?(pc)
+      pc.send_message("A superior power doesn't allow you to leave the event.")
+      action_failed
+      return
+    end
 
     if pc.festival_participant?
       if SevenSignsFestival.festival_initialized?
@@ -52,9 +43,10 @@ class Packets::Incoming::Logout < GameClientPacket
         return
       end
 
-      if pc.in_party?
-        sm = SystemMessage.from_string("#{pc.name} has been removed from the upcoming Festival.")
-        pc.party.broadcast_packet(sm)
+      if party = pc.party?
+        msg = "#{pc.name} has been removed from the upcoming Festival."
+        sm = SystemMessage.from_string(msg)
+        party.broadcast_packet(sm)
       end
     end
 

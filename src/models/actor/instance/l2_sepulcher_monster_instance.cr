@@ -118,7 +118,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct VictimShout
-    initializer mob: L2SepulcherMonsterInstance
+    initializer mob : L2SepulcherMonsterInstance
 
     def call
       if @mob.dead?
@@ -134,7 +134,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct VictimSpawnKeyBox
-    initializer mob: L2SepulcherMonsterInstance
+    initializer mob : L2SepulcherMonsterInstance
 
     def call
       if @mob.dead?
@@ -155,7 +155,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct OnDeadEvent
-    initializer mob: L2SepulcherMonsterInstance
+    initializer mob : L2SepulcherMonsterInstance
 
     def call
       case @mob.id
@@ -174,7 +174,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   end
 
   private struct ChangeImmortal
-    initializer mob: L2SepulcherMonsterInstance
+    initializer mob : L2SepulcherMonsterInstance
 
     def call
       FAKE_PETRIFICATION.skill.apply_effects(@mob, @mob)

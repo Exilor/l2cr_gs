@@ -27,7 +27,7 @@ module HtmCache
       info "Html cache start..."
       timer = Timer.new
       parse_dir(f)
-      info { "#{memory_usage.round(2)} mb from #{@@loaded_files} files loaded in #{timer.result} s." }
+      info { "#{memory_usage.round(2)} mb from #{@@loaded_files} files loaded in #{timer} s." }
     end
   end
 

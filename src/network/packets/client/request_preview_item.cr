@@ -1,6 +1,6 @@
 class Packets::Incoming::RequestPreviewItem < GameClientPacket
   private struct RemoveWearItemsTask
-    initializer pc: L2PcInstance
+    initializer pc : L2PcInstance
 
     def call
       @pc.send_packet(SystemMessageId::NO_LONGER_TRYING_ON)
@@ -49,13 +49,13 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
     end
 
     unless merchant = target.as?(L2MerchantInstance)
-      warn "Target (#{target}) is not a L2MerchantInstance."
+      warn { "Target (#{target}) is not a L2MerchantInstance." }
       return
     end
 
     unless buy_list = BuyListData.get_buy_list(@list_id)
       Util.punish(pc, "sent an invalid BuyList list_id #{@list_id}.")
-      warn "Buy list with id #{@list_id} not found."
+      warn { "Buy list with id #{@list_id} not found." }
       return
     end
 
@@ -66,7 +66,6 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
       item_id = _items[i]
       unless product = buy_list.get_product_by_item_id(item_id)
         Util.punish(pc, "sent an invalid BuyList list_id #{@list_id}, item_id #{item_id}.")
-        warn "No product with id #{item_id}."
         return
       end
 
@@ -77,7 +76,7 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
 
       slot = Inventory.get_paperdoll_index(template.body_part)
       if slot < 0
-        warn "Wrong paperdoll slot #{slot}. Body part: #{template.body_part}."
+        warn { "Wrong paperdoll slot #{slot}. Body part: #{template.body_part}." }
         next
       end
 

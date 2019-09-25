@@ -38,7 +38,7 @@ class Scripts::CabalBuffer < AbstractNpcAI
   end
 
   private struct Talk
-    initializer owner: CabalBuffer, npc: L2Npc
+    initializer owner : CabalBuffer, npc : L2Npc
 
     def call
       if @npc.decayed?
@@ -57,7 +57,7 @@ class Scripts::CabalBuffer < AbstractNpcAI
   end
 
   private struct CabalAI
-    initializer owner: CabalBuffer, npc: L2Npc
+    initializer owner : CabalBuffer, npc : L2Npc
 
     def call
       unless @npc.visible?

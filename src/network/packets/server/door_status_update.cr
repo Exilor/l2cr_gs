@@ -1,5 +1,5 @@
 class Packets::Outgoing::DoorStatusUpdate < GameServerPacket
-  initializer door: L2DoorInstance
+  initializer door : L2DoorInstance
 
   def write_impl
     c 0x4d

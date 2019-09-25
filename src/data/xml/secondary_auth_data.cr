@@ -38,7 +38,7 @@ module SecondaryAuthData
     error e
   end
 
-  def forbidden_passwords
+  def forbidden_passwords : Set(String)
     FORBIDDEN_PASSWORDS
   end
 

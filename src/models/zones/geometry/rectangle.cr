@@ -4,8 +4,8 @@ struct Rectangle < Rectangle2D
   @x = 0
   @y = 0
 
-  getter_initializer x: Int32, y: Int32, width: Int32, height: Int32
-  getter_initializer width: Int32, height: Int32
+  getter_initializer x : Int32, y : Int32, width : Int32, height : Int32
+  getter_initializer width : Int32, height : Int32
 
 
   def bounds : Rectangle

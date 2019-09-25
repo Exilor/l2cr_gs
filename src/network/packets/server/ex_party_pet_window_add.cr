@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExPartyPetWindowAdd < GameServerPacket
-  initializer summon: L2Summon
+  initializer summon : L2Summon
 
   def write_impl
     c 0xfe

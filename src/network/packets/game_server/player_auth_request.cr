@@ -1,5 +1,5 @@
 class Packets::Outgoing::PlayerAuthRequest < MMO::OutgoingPacket(LoginServerClient)
-  initializer account: String, session_key: SessionKey
+  initializer account : String, session_key : SessionKey
 
   def write
     c 0x05

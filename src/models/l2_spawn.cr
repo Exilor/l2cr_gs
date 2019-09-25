@@ -250,7 +250,7 @@ class L2Spawn
     if Config.champion_enable && Config.champion_frequency > 0
       if mob.is_a?(L2MonsterInstance)
         if !@template.undying? && !mob.raid? && !mob.raid_minion?
-          if Config.champ_min_lvl <= mob.level <= Config.champ_max_lvl
+          if mob.level.between?(Config.champ_min_lvl, Config.champ_max_lvl)
             if Config.champion_enable_in_instances || instance_id() == 0
               if Rnd.rand(100) < Config.champion_frequency
                 mob.champion = true
@@ -300,7 +300,7 @@ class L2Spawn
   end
 
   def respawn_delay : Int32
-    (@respawn_min_delay + @respawn_max_delay) / 2
+    (@respawn_min_delay + @respawn_max_delay) // 2
   end
 
   def respawn_random? : Bool
@@ -336,7 +336,7 @@ class L2Spawn
   end
 
   private struct SpawnTask
-    initializer spawn: L2Spawn, old_npc: L2Npc
+    initializer spawn : L2Spawn, old_npc : L2Npc
 
     def call
       @spawn.respawn_npc(@old_npc)

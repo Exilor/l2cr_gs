@@ -1,5 +1,5 @@
 class Packets::Outgoing::ObservationReturn < GameServerPacket
-  initializer loc: Location
+  initializer loc : Location
 
   def write_impl
     c 0xec

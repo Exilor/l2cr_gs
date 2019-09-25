@@ -1,5 +1,5 @@
 struct RentPetTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     @pc.stop_rent_pet

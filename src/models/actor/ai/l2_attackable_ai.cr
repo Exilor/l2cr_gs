@@ -2,7 +2,7 @@ require "./l2_character_ai"
 
 class L2AttackableAI < L2CharacterAI
   class FearTask
-    initializer ai: L2AttackableAI, effector: L2Character, start: Bool
+    initializer ai : L2AttackableAI, effector : L2Character, start : Bool
 
     def call
       @ai.fear_time -= FEAR_TICKS
@@ -456,8 +456,8 @@ class L2AttackableAI < L2CharacterAI
         if distance2 > (range + range) * (range + range)
           npc.returning_to_spawn_point = true
           delay = Math.sqrt(distance2).to_f32 / range
-          x1 = npc.x + ((x1 - npc.x) / delay).to_i32
-          y1 = npc.y + ((y1 - npc.y) / delay).to_i32
+          x1 = npc.x + ((x1 - npc.x) // delay).to_i32
+          y1 = npc.y + ((y1 - npc.y) // delay).to_i32
         end
 
         # If NPC with random fixed coord, don't move (unless needs to return to spawnpoint)

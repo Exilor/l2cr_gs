@@ -1,6 +1,6 @@
 class DamageDoneInfo
   getter damage = 0
-  getter_initializer attacker: L2PcInstance
+  getter_initializer attacker : L2PcInstance
 
   def_equals_and_hash attacker
 

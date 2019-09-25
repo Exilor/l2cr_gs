@@ -141,8 +141,7 @@ class Skill
     tmp = set.get_string("rideState", nil)
     if tmp && !tmp.empty?
       ride_state = EnumSet(MountType).new
-      states = tmp.split(';')
-      states.each { |s| ride_state << MountType.parse(s) }
+      tmp.split(';') { |s| ride_state << MountType.parse(s) }
       @ride_state = ride_state
     end
 
@@ -193,10 +192,9 @@ class Skill
   end
 
   private def parse_extractable_skill(skill_id, skill_lvl, values)
-    lists = values.split(';')
     products = [] of L2ExtractableProductItem
 
-    lists.each do |prod_list|
+    values.split(';') do |prod_list|
       prod_data = prod_list.split(',')
       if prod_data.size < 3
         warn "Wrong size for extractable skill info: #{prod_data.size}."
@@ -225,7 +223,7 @@ class Skill
       warn "Empty extractable skill."
     end
 
-    L2ExtractableSkill.new(@hash, products)
+    L2ExtractableSkill.new(products)
   end
 
   # used in L2PcInstance#check_pvp_skill
@@ -248,8 +246,8 @@ class Skill
 
   def can_be_stolen? : Bool
     !passive? && !toggle? && !debuff? && !hero_skill? && !gm_skill? &&
-    !(static? && (id != CommonSkill::CARAVANS_SECRET_MEDICINE.id)) &&
-    irreplaceable_buff? && (id != CommonSkill::SERVITOR_SHARE.id)
+    !(static? && id != CommonSkill::CARAVANS_SECRET_MEDICINE.id) &&
+    irreplaceable_buff? && id != CommonSkill::SERVITOR_SHARE.id
   end
 
   def has_abnormal_visual_effects? : Bool
@@ -726,12 +724,11 @@ class Skill
   private def parse_abnormal_visual_effect(string)
     return if string.nil? || string.empty?
 
-    data = string.split(';')
     aves_event = nil
     aves_special = nil
     aves = nil
 
-    data.each do |ave2|
+    string.split(';') do |ave2|
       ave = AbnormalVisualEffect.parse(ave2)
       if ave.event?
         (aves_event ||= [] of AbnormalVisualEffect) << ave

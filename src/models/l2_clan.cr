@@ -827,7 +827,7 @@ class L2Clan
   end
 
   class Subpledge
-    getter_initializer id: Int32, name: String, leader_id: Int32
+    getter_initializer id : Int32, name : String, leader_id : Int32
     property name : String
     property leader_id : Int32
     property! clan : L2Clan # necessary because no inner classes
@@ -849,7 +849,8 @@ class L2Clan
     getter rank, party
     getter privs : EnumBitmask(ClanPrivilege)
 
-    getter_initializer rank: Int32, party: Int32, privs: EnumBitmask(ClanPrivilege)
+    getter_initializer rank : Int32, party : Int32,
+      privs : EnumBitmask(ClanPrivilege)
 
     def initialize(@rank : Int32, @party : Int32, privs : Int32)
       @privs = EnumBitmask(ClanPrivilege).new(privs)

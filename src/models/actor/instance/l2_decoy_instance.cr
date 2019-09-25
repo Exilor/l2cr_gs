@@ -18,7 +18,7 @@ class L2DecoyInstance < L2Decoy
     @hate_task = ThreadPoolManager.schedule_general_at_fixed_rate(task2, 2000, 5000)
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2DecoyInstance
   end
 
@@ -44,7 +44,7 @@ class L2DecoyInstance < L2Decoy
   private struct DecoyLifetime
     include Loggable
 
-    initializer pc: L2PcInstance, decoy: L2DecoyInstance
+    initializer pc : L2PcInstance, decoy : L2DecoyInstance
 
     def call
       @decoy.dec_time_temaining(1000)
@@ -59,7 +59,7 @@ class L2DecoyInstance < L2Decoy
   private struct HateSpam
     include Loggable
 
-    initializer decoy: L2DecoyInstance, skill: Skill
+    initializer decoy : L2DecoyInstance, skill : Skill
 
     def call
       @decoy.target = @decoy

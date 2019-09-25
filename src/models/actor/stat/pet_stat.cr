@@ -93,7 +93,7 @@ class PetStat < SummonStat
   end
 
   def m_atk_spd : Int32
-    active_char.hungry? ? super / 2 : super
+    active_char.hungry? ? super // 2 : super
   end
 
   def max_level : Int32

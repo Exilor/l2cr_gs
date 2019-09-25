@@ -23,23 +23,22 @@ class Packets::Incoming::RequestGetItemFromPet < GameClientPacket
     end
 
     unless pc.active_enchant_item_id == L2PcInstance::ID_NONE
-      debug "#{pc.name} is enchanting an item."
+      debug { "#{pc.name} is enchanting an item." }
       return
     end
 
     unless item = pet.inventory.get_item_by_l2id(@l2id)
-      debug "Item with l2id #{@l2id} not found in #{pc.name}'s pet."
+      debug { "Item with l2id #{@l2id} not found in #{pc.name}'s pet." }
       return
     end
 
     if @amount > item.count
       Util.punish(pc, "tried to get item with object id #{@l2id} from pet but the count is invalid (#{@amount}/#{item.count}).")
-      warn "#{@amount} > #{item.count}"
       return
     end
 
     unless pet.transfer_item("Transfer", @l2id, @amount, pc.inventory, pc, pet)
-      warn "Invalid item transfer request from #{pet} to #{pc}."
+      warn { "Invalid item transfer request from #{pet} to #{pc}." }
     end
 
     pc.send_packet(ItemList.new(pc, false)) # custom

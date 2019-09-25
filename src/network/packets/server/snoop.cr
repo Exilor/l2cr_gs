@@ -1,6 +1,6 @@
 class Packets::Outgoing::Snoop < GameServerPacket
-  initializer convo_id: Int32, name: String, type: Int32, speaker: String,
-    msg: String
+  initializer convo_id : Int32, name : String, type : Int32, speaker : String,
+    msg : String
 
   def write_impl
     c 0xdb

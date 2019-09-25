@@ -6,7 +6,7 @@ class Packets::Outgoing::AcquireSkillList < GameServerPacket
 
   @skills = [] of SkInfo
 
-  initializer skill_type: AcquireSkillType
+  initializer skill_type : AcquireSkillType
 
   def add_skill(id : Int32, next_level : Int32, max_level : Int32, sp_cost : Int32, requirements : Int32)
     @skills << SkInfo.new(id, next_level, max_level, sp_cost, requirements)

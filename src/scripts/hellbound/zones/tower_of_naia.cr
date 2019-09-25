@@ -663,7 +663,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
   end
 
   private struct StopRoomTask
-    initializer owner: TowerOfNaia, manager_id: Int32
+    initializer owner : TowerOfNaia, manager_id : Int32
 
     def call
       @owner.init_room(@manager_id)

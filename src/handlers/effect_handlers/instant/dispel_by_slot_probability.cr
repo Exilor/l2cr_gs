@@ -10,7 +10,7 @@ class EffectHandler::DispelBySlotProbability < AbstractEffect
 
     if dispel && !dispel.empty?
       abnormals = EnumMap(AbnormalType, Int16).new
-      dispel.split(';').each do |temp|
+      dispel.split(';') do |temp|
         ngt = temp.split(',')
         type = AbnormalType.parse(ngt[0])
         abnormals[type] = ngt.size > 1 ? ngt[1].to_i16 : Int16::MAX

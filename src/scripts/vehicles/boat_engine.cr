@@ -7,6 +7,5 @@ module BoatEngine
   @cycle = 0
   @shout_count = 0
 
-  initializer boat: L2BoatInstance
-  # initializer boat: L2Vehicle
+  initializer boat : L2BoatInstance
 end

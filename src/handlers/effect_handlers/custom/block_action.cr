@@ -4,7 +4,7 @@ class EffectHandler::BlockAction < AbstractEffect
   def initialize(attach_cond, apply_cond, set, params)
     super
 
-    params.get_string("blockedActions").split(',').each do |action|
+    params.get_string("blockedActions").split(',') do |action|
       @blocked_actions << action.to_i
     end
   end

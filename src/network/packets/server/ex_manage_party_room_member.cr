@@ -1,7 +1,7 @@
 require "../../../models/party_match_room"
 
 class Packets::Outgoing::ExManagePartyRoomMember < GameServerPacket
-  initializer pc: L2PcInstance, room: PartyMatchRoom, mode: Int32
+  initializer pc : L2PcInstance, room : PartyMatchRoom, mode : Int32
 
   def write_impl
     c 0xfe

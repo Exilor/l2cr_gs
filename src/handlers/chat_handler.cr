@@ -24,8 +24,8 @@ module ChatHandler
     HANDLERS[chat_type]?
   end
 
-  abstract def handle_chat(type : Int32, pc : L2PcInstance, target : String, text : String)
-  abstract def chat_type_list : Enumerable(Int32)
+  # abstract def handle_chat(type : Int32, pc : L2PcInstance, target : String, text : String)
+  # abstract def chat_type_list : Enumerable(Int32)
 end
 
 require "./chat_handlers/*"

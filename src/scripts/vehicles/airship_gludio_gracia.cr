@@ -86,7 +86,7 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
 
     # def initialize(@airship : AirShipGludioGracia, @boat : L2Vehicle)
     # end
-    initializer airship: AirShipGludioGracia
+    initializer airship : AirShipGludioGracia
 
     delegate call, to: @airship
   end

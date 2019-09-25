@@ -16,7 +16,7 @@ module ExperienceData
   end
 
   def get_exp_for_level(level : Int32) : Int64
-    EXP_TABLE.fetch(level) { raise "Invalid level #{level}" }
+    EXP_TABLE.fetch(level) { raise "No experience data for level #{level}" }
   end
 
   def get_percent_from_current_level(exp : Int64, level : Int32) : Float64

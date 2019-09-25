@@ -1,5 +1,5 @@
 struct WaterTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     hp = Math.max(@pc.max_hp / 100.0, 1.0)

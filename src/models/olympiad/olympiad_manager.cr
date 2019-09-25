@@ -405,7 +405,7 @@ module OlympiadManager
   end
 
   private struct AnnounceUnregToTeam
-    initializer team: Array(Int32)
+    initializer team : Array(Int32)
 
     def call
       sm = SystemMessage.you_have_been_deleted_from_the_waiting_list_of_a_game

@@ -37,11 +37,16 @@ module InitialEquipmentData
   end
 
   def [](id : Int32) : Array(PcItemTemplate)
-    DATA[ClassId[id]]
+    class_id = ClassId.fetch(id) { raise "No ClassId with id #{id}" }
+    DATA.fetch(class_id) do
+      raise "No initial equipment data for ClassId #{class_id}"
+    end
   end
 
   def [](id : ClassId) : Array(PcItemTemplate)
-    DATA[id]
+    DATA.fetch(id) do
+      raise "No initial equipment data for ClassId #{id}"
+    end
   end
 
   def []?(id : Int32) : Array(PcItemTemplate)?

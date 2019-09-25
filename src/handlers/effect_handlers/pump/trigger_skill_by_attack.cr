@@ -22,7 +22,7 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
     @attacker_type = params.get_enum("attackerType", InstanceType, InstanceType::L2Character)
     @critical = params.get_bool("isCritical", false)
     @allow_weapons = 0
-    params.get_string("allowWeapons").split(',').each do |str|
+    params.get_string("allowWeapons").split(',') do |str|
       break if str.casecmp?("ALL")
       @allow_weapons |= WeaponType.parse(str).mask
     end

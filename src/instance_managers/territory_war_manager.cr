@@ -62,7 +62,7 @@ module TerritoryWarManager
       sql = "SELECT * FROM territory_spawnlist"
       GameDB.each(sql) do |rs|
         castle_id = rs.get_i32("castleId")
-        npc_id = rs.get_i32("npcId").to_u16.to_i32
+        npc_id = rs.get_i32("npcId").to_u16!.to_i32
         x = rs.get_i32("x")
         y = rs.get_i32("y")
         z = rs.get_i32("z")
@@ -101,7 +101,7 @@ module TerritoryWarManager
           end
 
           unless owned_ward_ids.empty?
-            owned_ward_ids.split(';').each do |str_id|
+            owned_ward_ids.split(';') do |str_id|
               if str_id.empty?
                 next
               end
@@ -550,7 +550,7 @@ module TerritoryWarManager
       if temp[1] < 50
         reward[1] += (temp[1] * 0.1).to_i
       elsif temp[1] < 120
-        reward[1] += 5 + ((temp[1] - 50) / 14)
+        reward[1] += 5 + ((temp[1] - 50) // 14)
       else
         reward[1] += 10
       end
@@ -922,22 +922,22 @@ module TerritoryWarManager
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 3600000) # Prepare task for 1 hr left.
     elsif time <= 3600000 && time > 600000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
-      sm.add_int((time / 60000).to_i)
+      sm.add_int((time // 60000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 600000) # Prepare task for 10 minute left.
     elsif time <= 600000 && time > 300000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
-      sm.add_int((time / 60000).to_i)
+      sm.add_int((time // 60000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 300000) # Prepare task for 5 minute left.
     elsif time <= 300000 && time > 10000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
-      sm.add_int((time / 60000).to_i)
+      sm.add_int((time // 60000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 10000) # Prepare task for 10 seconds count down
     elsif time <= 10000 && time > 0
       sm = SystemMessage.s1_seconds_to_the_end_of_territory_war
-      sm.add_int((time / 1000).to_i)
+      sm.add_int((time // 1000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time) # Prepare task for second count down
     else
@@ -1002,8 +1002,8 @@ module TerritoryWarManager
     property! owner_clan : L2Clan?
     property? in_progress : Bool = false
 
-    initializer castle_id: Int32, location: Location, npc_id: Int32,
-      type: Int32, npc: L2Npc?
+    initializer castle_id : Int32, location : Location, npc_id : Int32,
+      type : Int32, npc : L2Npc?
 
     def id
       @npc_id
@@ -1127,59 +1127,59 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def get_attacker_clan?(clan_id : Int32)
+  def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
     raise "not supported"
   end
 
-  def get_attacker_clan?(clan : L2Clan?)
+  def get_attacker_clan?(clan : L2Clan?) : L2SiegeClan?
     raise "not supported"
   end
 
-  def attacker_clans?
+  def attacker_clans? : Array(L2SiegeClan)?
     raise "not supported"
   end
 
-  def attackers_in_zone
+  def attackers_in_zone : Array(L2PcInstance)
     raise "not supported"
   end
 
-  def attacker?(clan : L2Clan?)
+  def attacker?(clan : L2Clan?) : Bool
     raise "not supported"
   end
 
-  def get_defender_clan?(clan_id : Int32)
+  def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
     raise "not supported"
   end
 
-  def get_defender_clan?(clan : L2Clan?)
+  def get_defender_clan?(clan : L2Clan?) : L2SiegeClan?
     raise "not supported"
   end
 
-  def defender_clans?
+  def defender_clans? : Array(L2SiegeClan)?
     raise "not supported"
   end
 
-  def defender?(clan : L2Clan?)
+  def defender?(clan : L2Clan?) : Bool
     raise "not supported"
   end
 
-  def get_flag?(clan : L2Clan?)
+  def get_flag?(clan : L2Clan?) : Array(L2Npc)?
     raise "not supported"
   end
 
-  def siege_date
+  def siege_date : Calendar
     raise "not supported"
   end
 
-  def give_fame?
+  def give_fame? : Bool
     true
   end
 
-  def fame_frequency
-    Config.castle_zone_fame_task_frequency
+  def fame_frequency : Int32
+    Config.castle_zone_fame_task_frequency.to_i32
   end
 
-  def fame_amount
+  def fame_amount : Int32
     Config.castle_zone_fame_aquire_points
   end
 

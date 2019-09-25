@@ -3,7 +3,7 @@ class EnchantRateItem
   setter item_id : Int32 = 0
   setter magic_weapon : Bool?
 
-  getter_initializer name: String
+  getter_initializer name : String
 
   def add_slot(slot : Int)
     @slot |= slot

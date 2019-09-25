@@ -22,7 +22,7 @@ struct Region
   end
 
   private def get_block(x : Int32, y : Int32) : IBlock
-    @blocks[(((x / IBlock::BLOCK_CELLS_X) % IRegion::REGION_BLOCKS_X) * IRegion::REGION_BLOCKS_Y) + ((y / IBlock::BLOCK_CELLS_Y) % IRegion::REGION_BLOCKS_Y)]
+    @blocks[(((x // IBlock::BLOCK_CELLS_X) % IRegion::REGION_BLOCKS_X) * IRegion::REGION_BLOCKS_Y) + ((y // IBlock::BLOCK_CELLS_Y) % IRegion::REGION_BLOCKS_Y)]
   end
 
   def check_nearest_nswe(x : Int32, y : Int32, z : Int32, nswe : Int32) : Bool

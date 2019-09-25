@@ -1,5 +1,5 @@
 class Packets::Outgoing::SSQStatus < GameServerPacket
-  initializer l2id: Int32, page: Int32
+  initializer l2id : Int32, page : Int32
 
   def write_impl
     winning_cabal = SevenSigns.cabal_highest_score

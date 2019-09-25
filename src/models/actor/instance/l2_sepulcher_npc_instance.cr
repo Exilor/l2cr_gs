@@ -216,7 +216,7 @@ class L2SepulcherNpcInstance < L2Npc
   private struct CloseNextDoor
     include Loggable
 
-    initializer door_id: Int32
+    initializer door_id : Int32
 
     def call
       DoorData.get_door!(@door_id).close_me
@@ -226,7 +226,7 @@ class L2SepulcherNpcInstance < L2Npc
   end
 
   private struct SpawnNextMysteriousBoxTask
-    initializer npc_id: Int32
+    initializer npc_id : Int32
 
     def call
       FourSepulchersManager.spawn_mysterious_box(@npc_id)
@@ -234,7 +234,7 @@ class L2SepulcherNpcInstance < L2Npc
   end
 
   private struct SpawnMonster
-    initializer npc_id: Int32
+    initializer npc_id : Int32
 
     def call
       FourSepulchersManager.spawn_monster(@npc_id)

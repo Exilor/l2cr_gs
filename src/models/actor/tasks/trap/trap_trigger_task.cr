@@ -1,7 +1,7 @@
 struct TrapTriggerTask
   include Loggable
 
-  initializer trap: L2TrapInstance
+  initializer trap : L2TrapInstance
 
   def call
     @trap.do_cast(@trap.skill)

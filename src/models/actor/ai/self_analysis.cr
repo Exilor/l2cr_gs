@@ -22,7 +22,7 @@ class SelfAnalysis
   property? fighter : Bool = false
   property? cannot_move_on_land : Bool = false
 
-  initializer actor: L2Character
+  initializer actor : L2Character
 
   def init
     case @actor.template.as(L2NpcTemplate).ai_type

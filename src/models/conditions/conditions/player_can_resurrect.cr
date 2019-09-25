@@ -1,6 +1,6 @@
 class Condition
   class PlayerCanResurrect < Condition
-    initializer val: Bool
+    initializer val : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       skill = skill.not_nil!
@@ -35,6 +35,7 @@ class Condition
         player = summon.owner
 
         if summon.alive?
+          can_res = false
           sm = SystemMessage.s1_cannot_be_used
           sm.add_skill_name(skill)
           effector.send_packet(sm)

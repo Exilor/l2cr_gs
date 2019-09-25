@@ -1,5 +1,5 @@
 class Packets::Outgoing::PledgePowerGradeList < GameServerPacket
-  initializer privs: Slice(L2Clan::RankPrivs)
+  initializer privs : Slice(L2Clan::RankPrivs)
 
   def write_impl
     c 0xfe

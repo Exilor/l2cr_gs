@@ -2,7 +2,7 @@ class Packets::Outgoing::Ex2ndPasswordAck < GameServerPacket
   SUCCESS = 0x00
   WRONG_PATTERN = 0x01
 
-  initializer response: Int32
+  initializer response : Int32
 
   def write_impl
     c 0xfe

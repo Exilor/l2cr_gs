@@ -40,7 +40,7 @@ class Packets::Outgoing::NpcHtmlMessage < Packets::Outgoing::AbstractHtmlPacket
     @item_id = item_id
   end
 
-  def scope
+  def scope : HtmlActionScope
     @item_id == 0 ? HtmlActionScope::NPC_HTML : HtmlActionScope::NPC_ITEM_HTML
   end
 

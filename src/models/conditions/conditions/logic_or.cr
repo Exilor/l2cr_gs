@@ -10,7 +10,7 @@ class Condition
       @conditions = @conditions.add(cond)
     end
 
-    def listener=(listener)
+    def listener=(listener : ConditionListener)
       if listener
         @conditions.each &.listener = self
       else

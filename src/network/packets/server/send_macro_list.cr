@@ -1,5 +1,5 @@
 class Packets::Outgoing::SendMacroList < GameServerPacket
-  initializer revision: Int32, count: Int32, mcr: Macro?
+  initializer revision : Int32, count : Int32, mcr : Macro?
 
   def write_impl
     c 0xe8

@@ -130,11 +130,11 @@ module SummonTable
     debug { "Saved #{summon}." }
   end
 
-  def pets
+  def pets : Hash(Int32, Int32)
     PETS
   end
 
-  def servitors
+  def servitors : Hash(Int32, Int32)
     SERVITORS
   end
 end

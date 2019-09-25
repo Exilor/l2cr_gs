@@ -92,7 +92,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
       count = item.count
       weight += count * template.weight
-      adena += (count * template.reference_price) / 2
+      adena += (count * template.reference_price) // 2
 
       if !template.stackable?
         slots += count

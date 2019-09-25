@@ -30,10 +30,10 @@ abstract class Packets::Outgoing::AbstractItemPacket < GameServerPacket
   end
 
   def write_inventory_block(inv : PcInventory)
-    if temp = inv.block_items
-      h temp.size
+    if blocked = inv.block_items
+      h blocked.size
       c inv.block_mode
-      temp.each { |i| d i }
+      blocked.each { |i| d i }
     else
       h 0x00
     end

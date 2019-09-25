@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExDuelReady < GameServerPacket
-  private initializer party_duel: Bool
+  private initializer party_duel : Bool
 
   def write_impl
     c 0xfe

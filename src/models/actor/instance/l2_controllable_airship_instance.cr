@@ -178,7 +178,7 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct CheckTask
-    initializer airship: L2ControllableAirshipInstance
+    initializer airship : L2ControllableAirshipInstance
 
     def call
       if @airship.visible? && @airship.empty? && !@airship.in_dock?
@@ -188,7 +188,7 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct ConsumeFuelTask
-    initializer airship: L2ControllableAirshipInstance
+    initializer airship : L2ControllableAirshipInstance
 
     def call
       fuel = @airship.fuel
@@ -205,7 +205,7 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct DecayTask
-    initializer airship: L2ControllableAirshipInstance
+    initializer airship : L2ControllableAirshipInstance
 
     def call
       @airship.delete_me

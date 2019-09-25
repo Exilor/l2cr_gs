@@ -1,6 +1,6 @@
 class Packets::Outgoing::PledgeSkillList < GameServerPacket
   struct SubpledgeSkill
-    getter_initializer sub_type: Int32, skill_id: Int32, skill_lvl: Int32
+    getter_initializer sub_type : Int32, skill_id : Int32, skill_lvl : Int32
   end
 
   @skills : Enumerable(Skill)

@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExCursedWeaponLocation < GameServerPacket
-  initializer infos: Array(Incoming::RequestCursedWeaponLocation::CursedWeaponInfo)
+  initializer infos : Array(Incoming::RequestCursedWeaponLocation::CursedWeaponInfo)
 
   def write_impl
     c 0xfe

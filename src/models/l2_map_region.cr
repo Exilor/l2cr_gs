@@ -6,8 +6,8 @@ class L2MapRegion
   getter! maps : Array({Int32, Int32})?
   getter! spawns : Array(Location)?
 
-  getter_initializer name: String, town: String, loc_id: Int32, castle: Int32,
-    bbs: Int32
+  getter_initializer name : String, town : String, loc_id : Int32,
+    castle : Int32, bbs : Int32
 
   def add_map(x : Int32, y : Int32)
     (@maps ||= [] of {Int32, Int32}) << {x, y}

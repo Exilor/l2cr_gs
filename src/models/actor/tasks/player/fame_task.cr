@@ -1,5 +1,5 @@
 struct FameTask
-  initializer pc: L2PcInstance, value: Int32
+  initializer pc : L2PcInstance, value : Int32
 
   def call
     if @pc.dead? && !Config.fame_for_dead_players

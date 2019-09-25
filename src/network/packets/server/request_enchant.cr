@@ -1,5 +1,5 @@
 class Packets::Outgoing::RequestEnchant < GameServerPacket
-  initializer unk: Int32
+  initializer unk : Int32
 
   def write_impl
     c 0xfe

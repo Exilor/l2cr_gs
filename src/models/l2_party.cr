@@ -18,7 +18,7 @@ class L2Party < AbstractPlayerGroup
   @disbanding = false
   @change_request_distribution_type : PartyDistributionType?
   @party_lvl : Int32
-  getter members
+  getter members : Array(L2PcInstance)
   getter? pending_invitation = false
   property distribution_type : PartyDistributionType
   property! command_channel : L2CommandChannel?
@@ -401,7 +401,7 @@ class L2Party < AbstractPlayerGroup
 
       if valid_members.includes?(m)
         penalty = m.has_servitor? ? m.summon.as(L2ServitorInstance).exp_multiplier : 1.0
-        sq_level = m.level ** 2.0
+        sq_level = Math.pow(m.level, 2)
         pre_calc = (sq_level / sq_level_sum) * penalty
         add_exp = m.calc_stat(Stats::EXPSP_RATE, xp_reward * pre_calc).round.to_i64
         add_sp = m.calc_stat(Stats::EXPSP_RATE, sp_reward * pre_calc).to_i32
@@ -422,8 +422,8 @@ class L2Party < AbstractPlayerGroup
       lvl_diff = top_lvl - pc.level
       Config.party_xp_cutoff_gaps.each_with_index do |gap, i|
         if gap[0] <= lvl_diff <= gap[1]
-          xp = (add_exp * Config.party_xp_cutoff_gap_percents[i]).to_i64 / 100
-          sp = (add_sp * Config.party_xp_cutoff_gap_percents[i]) / 100
+          xp = (add_exp * Config.party_xp_cutoff_gap_percents[i]).to_i64 // 100
+          sp = (add_sp * Config.party_xp_cutoff_gap_percents[i]) // 100
           pc.add_exp_and_sp(xp, sp, vit)
           break
         end
@@ -445,15 +445,15 @@ class L2Party < AbstractPlayerGroup
         end
       end
     elsif Config.party_xp_cutoff_method.casecmp?("percentage")
-      sq_level_sum = members.reduce(0) { |c, m| c + (m.level ** 2) }
+      sq_level_sum = members.reduce(0) { |c, m| c + Math.pow(m.level, 2) }
       members.each do |m|
-        sq_level = m.level ** 2
+        sq_level = Math.pow(m.level, 2)
         if sq_level * 100 >= sq_level_sum * Config.party_xp_cutoff_percent
           valid_members << m
         end
       end
     elsif Config.party_xp_cutoff_method.casecmp?("auto")
-      sq_level_sum = members.reduce(0) { |c, m| c + (m.level ** 2) }
+      sq_level_sum = members.reduce(0) { |c, m| c + Math.pow(m.level, 2) }
 
       i = members.size - 1
       return members if i < 1
@@ -462,8 +462,8 @@ class L2Party < AbstractPlayerGroup
       end
 
       members.each do |m|
-        sq_level = m.level ** 2
-        if sq_level >= (sq_level_sum / (members.size ** 2))
+        sq_level = Math.pow(m.level, 2)
+        if sq_level >= sq_level_sum / Math.pow(members.size, 2)
           valid_members << m
         end
       end

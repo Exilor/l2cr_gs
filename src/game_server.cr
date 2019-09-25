@@ -128,7 +128,7 @@ module GameServer
     Dir.mkdir_p(Dir.current + "/log")
     time = start_time.to_s("%Y-%m-%d %H-%M-%S")
     f = File.open(Dir.current + "/log/#{time}.txt", "w")
-    Loggable::LOGGABLE_IOS << f
+    Loggable.ios << f
     L2World.load
     GameDB.load
     IdFactory.load
@@ -322,21 +322,21 @@ module GameServer
   end
 end
 
-{% if flag?(:win32) %}
+# {% if flag?(:win32) %}
   GameServer.start
-{% else %}
-  loop do
-    process = Process.fork { GameServer.start }
+# {% else %}
+#   loop do
+#     process = Process.fork { GameServer.start }
 
-    case process.wait.exit_code
-    when 0
-      puts "Game Server terminated"
-      break
-    when 2
-      puts "Game Server restarted"
-    else
-      puts "Game Server terminated abnormally"
-      break
-    end
-  end
-{% end %}
+#     case process.wait.exit_code
+#     when 0
+#       puts "Game Server terminated"
+#       break
+#     when 2
+#       puts "Game Server restarted"
+#     else
+#       puts "Game Server terminated abnormally"
+#       break
+#     end
+#   end
+# {% end %}

@@ -24,7 +24,7 @@ class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
   end
 
   struct TeleportTask
-    initializer zone: L2ResidenceHallTeleportZone
+    initializer zone : L2ResidenceHallTeleportZone
 
     def call
       loc = @zone.spawns.not_nil!.sample

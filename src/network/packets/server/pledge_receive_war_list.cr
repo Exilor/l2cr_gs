@@ -1,5 +1,5 @@
 class Packets::Outgoing::PledgeReceiveWarList < GameServerPacket
-  initializer clan: L2Clan, tab: Int32
+  initializer clan : L2Clan, tab : Int32
 
   def write_impl
     c 0xfe

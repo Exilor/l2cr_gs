@@ -32,7 +32,7 @@ module SkillData
       end
     end
 
-    info { "Loaded #{SKILLS.size} skills (#{ENCHANTABLE.size} enchantables) in #{timer.result} s." }
+    info { "Loaded #{SKILLS.size} skills (#{ENCHANTABLE.size} enchantables) in #{timer} s." }
   end
 
   def reload

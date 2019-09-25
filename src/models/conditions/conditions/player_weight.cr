@@ -1,6 +1,6 @@
 class Condition
   class PlayerWeight < Condition
-    initializer weight: Int32
+    initializer weight : Int32
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       pc = effector.acting_player?

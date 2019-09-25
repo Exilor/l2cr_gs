@@ -1,5 +1,5 @@
 class Packets::Outgoing::ChangeAccessLevel < MMO::OutgoingPacket(LoginServerClient)
-  initializer player_name: String, access: Int32
+  initializer player_name : String, access : Int32
 
   def write
     c 0x04

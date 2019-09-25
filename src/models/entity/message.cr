@@ -202,7 +202,7 @@ class Message
   end
 
   private class AttachmentsUnloadTask
-    initializer msg: Message
+    initializer msg : Message
 
     def call
       if msg = @msg

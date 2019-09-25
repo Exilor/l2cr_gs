@@ -12,8 +12,8 @@ abstract class Packets::Outgoing::OnScreenInfo < GameServerPacket
     BOTTOM_RIGHT = 0x08
   end
 
-  abstract def text : String
-  abstract def pos : Position
+  abstract def text
+  abstract def pos
 
   def write_impl
     c 0xfe

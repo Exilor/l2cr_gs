@@ -3,10 +3,10 @@ struct GroupedGeneralDropItem
 
   getter items = [] of GeneralDropItem
 
-  getter_initializer chance: Float64,
-    drop_calculation_strategy: GroupedItemDropCalculationStrategy,
-    killer_chance_modifier_strategy: KillerChanceModifierStrategy,
-    precise_strategy: PreciseDeterminationStrategy
+  getter_initializer chance : Float64,
+    drop_calculation_strategy : GroupedItemDropCalculationStrategy,
+    killer_chance_modifier_strategy : KillerChanceModifierStrategy,
+    precise_strategy : PreciseDeterminationStrategy
 
   def initialize(chance : Float64)
     initialize(

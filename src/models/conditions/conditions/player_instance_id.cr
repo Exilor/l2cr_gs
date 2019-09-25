@@ -1,6 +1,6 @@
 class Condition
   class PlayerInstanceId < Condition
-    initializer ids: Array(Int32)
+    initializer ids : Array(Int32)
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       return false unless effector.acting_player?

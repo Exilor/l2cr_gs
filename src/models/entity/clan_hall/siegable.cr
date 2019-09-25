@@ -1,10 +1,10 @@
 module Siegable
-  abstract def start_siege : Nil
-  abstract def end_siege : Nil
+  abstract def start_siege
+  abstract def end_siege
   abstract def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
   abstract def get_attacker_clan?(clan : L2Clan?) : L2SiegeClan?
   abstract def attacker_clans? : Array(L2SiegeClan)?
-  abstract def attackers_in_zone : Array(L2SiegeClan)
+  abstract def attackers_in_zone : Array(L2PcInstance)
   abstract def attacker?(clan : L2Clan?) : Bool
   abstract def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
   abstract def get_defender_clan?(clan : L2Clan?) : L2SiegeClan?
@@ -15,7 +15,7 @@ module Siegable
   abstract def give_fame? : Bool
   abstract def fame_frequency : Int32
   abstract def fame_amount : Int32
-  abstract def update_siege : Nil
+  abstract def update_siege
 
   def get_attacker_clan(*args) : L2SiegeClan
     unless clan = get_attacker_clan?(*args)

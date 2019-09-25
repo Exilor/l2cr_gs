@@ -1,5 +1,5 @@
 struct ArrivedTask
-  initializer npc: L2Npc, walk: WalkInfo
+  initializer npc : L2Npc, walk : WalkInfo
 
   def call
     @walk.blocked = false

@@ -3,7 +3,7 @@ class FortSiegeGuardManager
 
   @siege_guards = {} of Int32 => Array(L2Spawn)
 
-  getter_initializer fort: Fort
+  getter_initializer fort : Fort
 
   def spawn_siege_guard
     if monster_list = @siege_guards[fort.residence_id]?
@@ -40,7 +40,7 @@ class FortSiegeGuardManager
     sql = "SELECT npcId, x, y, z, heading, respawnDelay FROM fort_siege_guards WHERE fortId = ?"
     GameDB.each(sql, fort.residence_id) do |rs|
 
-      npc_id = rs.get_i32("npcId").to_u16.to_i32
+      npc_id = rs.get_i32("npcId").to_u16!.to_i32
       sp = L2Spawn.new(npc_id)
       sp.amount = 1
       sp.x = rs.get_i32("x")

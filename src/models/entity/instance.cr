@@ -461,7 +461,7 @@ class Instance
   end
 
   private struct CheckTimeUp
-    initializer instance: Instance, remaining: Int32
+    initializer instance : Instance, remaining : Int32
 
     def call
       @instance.do_check_time_up(@remaining)
@@ -469,7 +469,7 @@ class Instance
   end
 
   private struct TimeUp
-    initializer instance: Instance
+    initializer instance : Instance
 
     def call
       InstanceManager.destroy_instance(@instance.id)

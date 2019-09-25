@@ -9,7 +9,7 @@ class L2PetData
   property hungry_limit : Int32 = 1
   property? sync_level : Bool = false
 
-  getter_initializer npc_id: Int32, item_id: Int32
+  getter_initializer npc_id : Int32, item_id : Int32
 
   def add_new_stat(level : Int, data : L2PetLevelData)
     if @min_level > level
@@ -38,12 +38,12 @@ class L2PetData
       next if sk.skill_id != skill_id
       if sk.skill_lvl == 0
         if pet_lvl < 70
-          lvl = pet_lvl / 10
+          lvl = pet_lvl // 10
           if lvl <= 0
             lvl = 1
           end
         else
-          lvl = 7 + ((pet_lvl - 70) / 5)
+          lvl = 7 + ((pet_lvl - 70) // 5)
         end
 
         max_lvl = SkillData.get_max_level(sk.skill_id)

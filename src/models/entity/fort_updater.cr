@@ -5,8 +5,8 @@ class FortUpdater
 
   getter run_count
 
-  initializer fort: Fort, clan: L2Clan, run_count: Int32,
-    updater_type: UpdaterType
+  initializer fort : Fort, clan : L2Clan, run_count : Int32,
+    updater_type : UpdaterType
 
   def call
     case @updater_type

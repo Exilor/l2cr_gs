@@ -328,13 +328,13 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       end
     when "32042-10.html"
       if qs.memo_state?(10)
-        qs.set_memo_state_ex(0, ((qs.get_memo_state_ex(0) / 10) * 10) + 1)
+        qs.set_memo_state_ex(0, ((qs.get_memo_state_ex(0) // 10) * 10) + 1)
         html = event
       end
     when "32042-11.html"
       if qs.memo_state?(10)
         memo_state_ex = qs.get_memo_state_ex(0)
-        i1 = (memo_state_ex / 1000) * 1000
+        i1 = (memo_state_ex // 1000) * 1000
         i2 = (memo_state_ex % 100) + 100
         qs.set_memo_state_ex(0, i1 + i2)
         html = event
@@ -412,7 +412,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       end
     when "32043-13.html"
       if qs.memo_state?(18)
-        qs.set_memo_state_ex(0, ((qs.get_memo_state_ex(0) / 10) * 10) + 1)
+        qs.set_memo_state_ex(0, ((qs.get_memo_state_ex(0) // 10) * 10) + 1)
         html = event
       end
     when "32043-14.html"
@@ -434,7 +434,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
     when "32043-17.html"
       if qs.memo_state?(18)
         memo_state_ex = qs.get_memo_state_ex(0)
-        i1 = (memo_state_ex / 10000) * 10000
+        i1 = (memo_state_ex // 10000) * 10000
         i2 = (memo_state_ex % 1000) + 1000
         qs.set_memo_state_ex(0, i1 + i2)
         play_sound(pc, Sound::AMBSOUND_DRONE)
@@ -447,7 +447,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
     when "32043-21.html"
       if qs.memo_state?(18)
         memo_state_ex = qs.get_memo_state_ex(0)
-        i1 = (memo_state_ex / 100) * 100
+        i1 = (memo_state_ex // 100) * 100
         i2 = (memo_state_ex % 10) + 10
         qs.set_memo_state_ex(0, i1 + i2)
         html = event
@@ -466,7 +466,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
     when "32043-26.html"
       if qs.memo_state?(18)
         memo_state_ex = qs.get_memo_state_ex(0)
-        i1 = (memo_state_ex / 1000) * 1000
+        i1 = (memo_state_ex // 1000) * 1000
         i2 = (memo_state_ex % 100) + 100
         qs.set_memo_state_ex(0, i1 + i2)
         html = event
@@ -532,30 +532,30 @@ class Scripts::Q00120_PavelsLastResearch < Quest
     when "32044-11.html"
       if qs.memo_state?(21)
         memo_state_ex = qs.get_memo_state_ex(0)
-        i1 = (memo_state_ex / 100) * 100
+        i1 = (memo_state_ex // 100) * 100
         i2 = (memo_state_ex % 10) + 10
         qs.set_memo_state_ex(0, i1 + i2)
         html = event
       end
     when "wm3_fire_of_paagrio"
       if qs.memo_state?(21)
-        if qs.get_memo_state_ex(0) / 100 == 1
+        if qs.get_memo_state_ex(0) // 100 == 1
           html = "32044-13.html"
         else
-          qs.set_memo_state_ex(0, ((qs.get_memo_state_ex(0) / 10) * 10) + 1)
+          qs.set_memo_state_ex(0, ((qs.get_memo_state_ex(0) // 10) * 10) + 1)
           html = "32044-12.html"
         end
       end
     when "wm3_control"
       if qs.memo_state?(21)
-        if qs.get_memo_state_ex(0) / 100 == 1
+        if qs.get_memo_state_ex(0) // 100 == 1
           html = "32044-15.html"
         else
           html = "32044-14.html"
         end
       end
     when "32044-16.html"
-      if qs.memo_state?(21) && qs.get_memo_state_ex(0) / 100 != 1
+      if qs.memo_state?(21) && qs.get_memo_state_ex(0) // 100 != 1
         qs.set_memo_state_ex(0, (qs.get_memo_state_ex(0) % 100) + 100)
         html = event
       end
@@ -564,7 +564,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         html = event
       end
     when "32044-20.html"
-      if qs.memo_state?(21) && qs.get_memo_state_ex(0) / 100 == 1
+      if qs.memo_state?(21) && qs.get_memo_state_ex(0) // 100 == 1
         npc = npc.not_nil!
         qs.memo_state = 22
         qs.set_cond(22, true)

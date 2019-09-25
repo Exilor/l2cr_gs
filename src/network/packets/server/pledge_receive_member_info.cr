@@ -1,5 +1,5 @@
 class Packets::Outgoing::PledgeReceiveMemberInfo < GameServerPacket
-  initializer member: L2ClanMember
+  initializer member : L2ClanMember
 
   def write_impl
     c 0xfe

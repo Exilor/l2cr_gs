@@ -15,8 +15,7 @@ module CellPathFinding
   @@post_filter_elapsed = 0i64
 
   def load
-    array = Config.pathfind_buffers.split(';')
-    array.each do |buf|
+    Config.pathfind_buffers.split(';') do |buf|
       args = buf.split('x')
       if args.size != 2
         raise "invalid buffer definition: #{buf}"
@@ -203,6 +202,6 @@ module CellPathFinding
     property playable_overflows : Int32 = 0
     property elapsed : Int64 = 0i64
 
-    getter_initializer map_size: Int32, count: Int32
+    getter_initializer map_size : Int32, count : Int32
   end
 end

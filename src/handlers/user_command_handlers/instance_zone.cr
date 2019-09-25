@@ -17,15 +17,15 @@ module UserCommandHandler::InstanceZone
     if instance_times = InstanceManager.get_all_instance_times(pc.l2id)
       current_time = ::Time.ms
       instance_times.each do |instance_id, time|
-        remaining_time = ((time - current_time) / 1000).to_i64
+        remaining_time = ((time - current_time) // 1000).to_i64
         if remaining_time > 60
           if first_message
             first_message = false
             pc.send_packet(SystemMessageId::INSTANCE_ZONE_TIME_LIMIT)
           end
 
-          hours = (remaining_time / 3600).to_i
-          minutes = ((remaining_time % 3600) / 60).to_i
+          hours = (remaining_time // 3600).to_i
+          minutes = ((remaining_time % 3600) // 60).to_i
           sm = Packets::Outgoing::SystemMessage.available_after_s1_s2_hours_s3_minutes
           sm.add_instance_name(instance_id)
           sm.add_int(hours)

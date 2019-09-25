@@ -1,7 +1,7 @@
 struct PlayerSkillHolder
   include SkillsHolder
 
-  getter skills = {} of Int32 => Skill
+  getter skills : Hash(Int32, Skill) = {} of Int32 => Skill
 
   def initialize(pc : L2PcInstance)
     pc.skills.each do |id, skill|
@@ -11,7 +11,7 @@ struct PlayerSkillHolder
     end
   end
 
-  def add_skill(skill : Skill)
+  def add_skill(skill : Skill) : Skill?
     @skills[skill.id] = skill
   end
 

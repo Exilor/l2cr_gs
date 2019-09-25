@@ -1,5 +1,5 @@
 class Packets::Outgoing::PartySmallWindowUpdate < GameServerPacket
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def write_impl
     c 0x52

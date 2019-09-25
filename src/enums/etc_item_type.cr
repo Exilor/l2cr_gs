@@ -39,7 +39,7 @@ class EtcItemType < EnumClass
   # L2J CUSTOM, BACKWARD COMPATIBILITY
   add(SHOT)
 
-  def mask : Int32
+  def mask : UInt32
     0u32
   end
 end

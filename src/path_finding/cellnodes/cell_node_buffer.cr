@@ -28,8 +28,8 @@ class CellNodeBuffer
 
   def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32) : CellNode?
     @time_stamp = Time.ms
-    @base_x = x + ((tx - x - @map_size) / 2)
-    @base_y = y + ((ty - y - @map_size) / 2)
+    @base_x = x + ((tx - x - @map_size) // 2)
+    @base_y = y + ((ty - y - @map_size) // 2)
     @target_x = tx
     @target_y = ty
     @target_z = tz

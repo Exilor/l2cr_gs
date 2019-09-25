@@ -156,12 +156,11 @@ class L2TeleporterInstance < L2Npc
     elsif !list.for_noble?
       time = Time.now
       if time.hour >= 20 && time.hour <= 23 && time.day_of_week == 1 || time.day_of_week == 7
-        price /= 2
+        price //= 2
       end
     end
 
-    if Config.alt_game_free_teleport ||
-        pc.destroy_item_by_item_id("Teleport#{" nobless" if list.for_noble?}", list.item_id, price, self, true)
+    if Config.alt_game_free_teleport || pc.destroy_item_by_item_id("Teleport#{" nobless" if list.for_noble?}", list.item_id, price, self, true)
 
       pc.tele_to_location(list.x, list.y, list.z, pc.heading, -1)
     end

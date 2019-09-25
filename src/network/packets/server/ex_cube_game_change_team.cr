@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExCubeGameChangeTeam < GameServerPacket
-  initializer pc: L2PcInstance, from_red: Bool
+  initializer pc : L2PcInstance, from_red : Bool
 
   def write_impl
     c 0xfe

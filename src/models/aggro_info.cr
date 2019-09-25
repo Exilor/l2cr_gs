@@ -2,7 +2,7 @@ class AggroInfo
   getter hate = 0i64
   getter damage = 0
 
-  getter_initializer attacker: L2Character
+  getter_initializer attacker : L2Character
 
   def_equals_and_hash @attacker
 

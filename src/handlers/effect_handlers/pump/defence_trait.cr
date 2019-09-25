@@ -15,7 +15,7 @@ class EffectHandler::DefenceTrait < AbstractEffect
       value = v.to_s.to_f32
       next if value == 0
 
-      traits[trait_type] = (value + 100) / 100
+      traits[trait_type] = (value + 100) // 100
     end
 
     @traits = traits

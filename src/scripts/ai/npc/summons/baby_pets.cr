@@ -77,7 +77,7 @@ class Scripts::BabyPets < AbstractNpcAI
 
   private def get_heal_level(summon)
     lvl = summon.level
-    ret = lvl < 70 ? (lvl / 10) : (7 + ((lvl - 70) / 5))
+    ret = lvl < 70 ? (lvl // 10) : (7 + ((lvl - 70) // 5))
     ret.clamp(1, 12)
   end
 end

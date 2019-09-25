@@ -10,7 +10,7 @@ class Condition
     COND_TW_CHANNEL   = 0x0080
     COND_TW_PROGRESS  = 0x0100
 
-    initializer value: Int32, this: Bool
+    initializer value : Int32, this : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       target = @this ? effector : effected
@@ -29,13 +29,13 @@ class Condition
       end
 
       if castle
-        return SiegeZone.ok?(target, castle, @value)
+        return ok?(target, castle, @value)
       end
 
-      SiegeZone.ok?(target, fort, @value)
+      ok?(target, fort, @value)
     end
 
-    def self.ok?(pc : L2Character?, castle : Castle?, value : Int32) : Bool
+    private def ok?(pc : L2Character?, castle : Castle?, value : Int32) : Bool
       unless pc.is_a?(L2PcInstance)
         return false
       end
@@ -59,7 +59,7 @@ class Condition
       false
     end
 
-    def self.ok?(pc : L2Character?, fort : Fort?, value : Int32) : Bool
+    private def ok?(pc : L2Character?, fort : Fort?, value : Int32) : Bool
       unless pc.is_a?(L2PcInstance)
         return false
       end

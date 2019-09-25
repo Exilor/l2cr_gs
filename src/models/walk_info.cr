@@ -12,7 +12,7 @@ class WalkInfo
   property? suspended : Bool = false
   property? stopped_by_attack : Bool = false
 
-  initializer route_name: String
+  initializer route_name : String
 
   def route? : L2WalkRoute?
     WalkingManager.get_route(@route_name)

@@ -1,5 +1,5 @@
 class Packets::Outgoing::TradeOtherAdd < Packets::Outgoing::AbstractItemPacket
-  initializer item: TradeItem
+  initializer item : TradeItem
 
   def write_impl
     c 0x1b

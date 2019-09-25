@@ -1,5 +1,5 @@
 class Packets::Outgoing::JoinPledge < GameServerPacket
-  initializer pledge_id: Int32
+  initializer pledge_id : Int32
 
   def write_impl
     c 0x2d

@@ -1,5 +1,5 @@
 struct DismountTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     @pc.dismount

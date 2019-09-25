@@ -3,7 +3,7 @@ struct TrapTask
 
   private TICK = 1000
 
-  initializer trap: L2TrapInstance
+  initializer trap : L2TrapInstance
 
   def call
     return if @trap.triggered?

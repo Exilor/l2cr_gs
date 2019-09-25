@@ -1,5 +1,5 @@
 class Packets::Outgoing::GMHide < GameServerPacket
-  initializer mode: Int32
+  initializer mode : Int32
 
   def write_impl
     c 0x93

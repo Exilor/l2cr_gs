@@ -31,7 +31,7 @@ module AutoSpawnHandler
     sql1 = "SELECT * FROM random_spawn ORDER BY groupId ASC"
     sql2 = "SELECT * FROM random_spawn_loc WHERE groupId=?"
     GameDB.each(sql1) do |rs|
-      npc_id = rs.get_i32("npcId").to_u16.to_i32
+      npc_id = rs.get_i32("npcId").to_u16!.to_i32
       initial_delay = rs.get_i32("initialDelay")
       respawn_delay = rs.get_i32("respawnDelay")
       despawn_delay = rs.get_i32("despawnDelay")
@@ -162,7 +162,7 @@ module AutoSpawnHandler
   private struct AutoSpawner
     include Loggable
 
-    initializer l2id: Int32
+    initializer l2id : Int32
 
     def call
       sp = REGISTERED_SPAWNS[@l2id]
@@ -232,7 +232,7 @@ module AutoSpawnHandler
   private struct AutoDespawner
     include Loggable
 
-    initializer l2id: Int32
+    initializer l2id : Int32
 
     def call
       unless sp = REGISTERED_SPAWNS[@l2id]?
@@ -266,8 +266,8 @@ module AutoSpawnHandler
     property? spawn_active : Bool = false
     property? random_spawn : Bool = false
 
-    initializer id: Int32, init_delay: Int32, respawn_delay: Int32,
-      despawn_delay: Int32
+    initializer id : Int32, init_delay : Int32, respawn_delay : Int32,
+      despawn_delay : Int32
 
     def add_npc_instance(npc : L2Npc)
       @npc_instance_list << npc

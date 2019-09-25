@@ -403,7 +403,7 @@ class Duel
   struct DuelPreparationTask
     include Loggable
 
-    initializer duel: Duel
+    initializer duel : Duel
 
     def call
       if @duel.countdown > 0
@@ -419,7 +419,7 @@ class Duel
   struct DuelClockTask
     include Loggable
 
-    initializer duel: Duel
+    initializer duel : Duel
 
     def call
       case @duel.check_end_duel_condition

@@ -1,5 +1,5 @@
 class Packets::Outgoing::PledgeSkillListAdd < GameServerPacket
-  initializer id: Int32, lvl: Int32
+  initializer id : Int32, lvl : Int32
 
   def write_impl
     c 0xfe

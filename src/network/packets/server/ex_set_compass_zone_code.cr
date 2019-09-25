@@ -7,7 +7,7 @@ class Packets::Outgoing::ExSetCompassZoneCode < GameServerPacket
   PVPZONE = 0x0Eu8
   GENERALZONE = 0x0Fu8
 
-  initializer zone_type: UInt8
+  initializer zone_type : UInt8
 
   def write_impl
     c 0xfe

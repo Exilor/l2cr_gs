@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExPutEnchantSupportItemResult < GameServerPacket
-  initializer result: Int32
+  initializer result : Int32
 
   def write_impl
     c 0xfe

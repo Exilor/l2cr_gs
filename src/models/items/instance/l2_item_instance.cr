@@ -9,7 +9,7 @@ class L2ItemInstance < L2Object
   REMOVED = 3
   MODIFIED = 2
 
-  DEFAULT_ENCHANT_OPTIONS = Int32.slice(0, 0, 0)
+  DEFAULT_ENCHANT_OPTIONS = Slice(Int32).new(3, 0, read_only: true)
   private MANA_CONSUMPTION_RATE = 60_000
 
   @init_count = 0i64
@@ -638,7 +638,8 @@ class L2ItemInstance < L2Object
   class ItemDropTask
     include Loggable
 
-    initializer item: L2ItemInstance, dropper: L2Character?, x: Int32, y: Int32, z: Int32
+    initializer item : L2ItemInstance, dropper : L2Character?, x : Int32,
+      y : Int32, z : Int32
 
     def call
       if @item.world_region?
@@ -1139,7 +1140,7 @@ class L2ItemInstance < L2Object
   struct ScheduleLifeTimeTask
     include Loggable
 
-    initializer item: L2ItemInstance
+    initializer item : L2ItemInstance
 
     def call
       @item.end_of_life
@@ -1151,7 +1152,7 @@ class L2ItemInstance < L2Object
   struct ScheduleConsumeManaTask
     include Loggable
 
-    initializer item: L2ItemInstance
+    initializer item : L2ItemInstance
 
     def call
       @item.decrease_mana(true)

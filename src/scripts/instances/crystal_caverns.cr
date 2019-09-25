@@ -36,7 +36,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     property! alarm : L2Npc?
     property! tears : L2Npc?
 
-    initializer end_time: Int64
+    initializer end_time : Int64
   end
 
   # Items

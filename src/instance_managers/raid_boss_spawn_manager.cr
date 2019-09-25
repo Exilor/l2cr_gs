@@ -231,7 +231,7 @@ module RaidBossSpawnManager
   private struct SpawnSchedule
     include Loggable
 
-    initializer boss_id: Int32
+    initializer boss_id : Int32
 
     def call
       if @boss_id == 25328

@@ -8,7 +8,7 @@ struct Shortcuts
 
   @shortcuts = {} of Int32 => Shortcut
 
-  initializer owner: L2PcInstance
+  initializer owner : L2PcInstance
 
   delegate size, to: @shortcuts
 

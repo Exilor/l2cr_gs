@@ -190,9 +190,9 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     end
     pc.spawn_me(*pc.xyz)
     pc.inventory.apply_item_skills
-    # if L2Event.participant?(pc)
-    #   L2Event.restore_player_event_status(pc)
-    # end
+    if L2Event.participant?(pc)
+      L2Event.restore_player_event_status(pc)
+    end
     if Config.allow_wedding
       engage(pc)
       notify_partner(pc, pc.partner_id)

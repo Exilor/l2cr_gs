@@ -152,8 +152,8 @@ class Scripts::Q00308_ReedFieldMaintenance < Quest
     mucrokian = st.get_quest_items_count(MUCROKIAN_HIDE)
     awakened = st.get_quest_items_count(AWAKENED_MUCROKIAN_HIDE)
     if awakened > 0
-      if awakened >= quanty / 2
-        st.take_items(AWAKENED_MUCROKIAN_HIDE, quanty / 2)
+      if awakened >= quanty // 2
+        st.take_items(AWAKENED_MUCROKIAN_HIDE, quanty // 2)
         return true
       elsif mucrokian >= quanty - (awakened * 2)
         st.take_items(AWAKENED_MUCROKIAN_HIDE, awakened)

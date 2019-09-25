@@ -294,7 +294,7 @@ class StatsSet
     end
     value = default.to_s if value.nil? || value.empty?
     hash = {} of Int32 => Int32
-    value.split(';').each do |pair|
+    value.split(';') do |pair|
       pair = pair.split(',').map &.to_i
       raise IndexError.new("malformed int hash") unless pair.size == 2
       hash[pair[0]] = pair[1]
@@ -323,7 +323,7 @@ class StatsSet
     value = default.to_s unless value.is_a?(String) && !value.empty?
     # value.split(';').map { |pair| [pair.split(',')[0].to_i, pair.split(',')[1].to_f] }.to_h
     ret = {} of Int32 => Float64
-    value.split(';').each do |pair|
+    value.split(';') do |pair|
       temp = pair.split(',')
       ret[temp[0].to_i32] = temp[1].to_f64
     end

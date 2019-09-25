@@ -44,7 +44,7 @@ abstract class L2Character < L2Object
   @attack_by_list : Set(L2Character)?
   getter title : String = ""
   getter cast_interrupt_time = 0i64
-  getter skills = Hash(Int32, Skill).new
+  getter skills : Hash(Int32, Skill) = Hash(Int32, Skill).new
   getter abnormal_visual_effects = 0
   getter abnormal_visual_effects_special = 0
   getter abnormal_visual_effects_event = 0
@@ -555,11 +555,7 @@ abstract class L2Character < L2Object
     end
 
     if pc.in_olympiad_mode? && pc.target.try &.playable?
-      target = nil
-      object = pc.target
-      if object.is_a?(L2PcInstance)
-        target = object.acting_player
-      end
+      target = pc.target.as?(L2PcInstance)
 
       if target.nil? || (target.in_olympiad_mode? && (!pc.olympiad_start? || pc.olympiad_game_id != target.olympiad_game_id))
         pc.action_failed
@@ -2584,7 +2580,7 @@ abstract class L2Character < L2Object
 
     was_ss_charged = charged_shot?(ShotType::SOULSHOTS)
     time_atk = calculate_time_between_attacks
-    time_to_hit = time_atk / 2
+    time_to_hit = time_atk // 2
 
     ss_grade = weapon_item.try &.item_grade_s_plus.to_i || 0
     attack = Attack.new(self, target, was_ss_charged, ss_grade)
@@ -2598,13 +2594,13 @@ abstract class L2Character < L2Object
       unless can_use_range_weapon?
         return
       end
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_to_hit + (reuse / 2))
+      @attack_end_time = Time.ns + Time.ms_to_ns(time_to_hit + (reuse // 2))
       hitted = do_attack_hit_by_bow(attack, target, time_atk, reuse)
     when WeaponType::CROSSBOW
       unless can_use_range_weapon?
         return
       end
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_to_hit + (reuse / 2))
+      @attack_end_time = Time.ns + Time.ms_to_ns(time_to_hit + (reuse // 2))
       hitted = do_attack_hit_by_crossbow(attack, target, time_atk, reuse)
     when WeaponType::POLE
       @attack_end_time = Time.ns + Time.ms_to_ns(time_atk)
@@ -2689,7 +2685,7 @@ abstract class L2Character < L2Object
 
     task = HitTask.new(self, target, damage, crit, miss, attack.has_soulshot?, shld)
     ThreadPoolManager.schedule_ai(task, s_atk)
-    @bow_attack_end_time = ((s_atk + reuse) / GameTimer::MILLIS_IN_TICK) + GameTimer.ticks
+    @bow_attack_end_time = ((s_atk + reuse) // GameTimer::MILLIS_IN_TICK) + GameTimer.ticks
     attack.add_hit(target, damage, miss, crit, shld)
     !miss
   end
@@ -2717,7 +2713,7 @@ abstract class L2Character < L2Object
 
     task = HitTask.new(self, target, damage, crit, miss, attack.has_soulshot?, shld)
     ThreadPoolManager.schedule_ai(task, s_atk)
-    @bow_attack_end_time = ((s_atk + reuse) / GameTimer::MILLIS_IN_TICK) + GameTimer.ticks
+    @bow_attack_end_time = ((s_atk + reuse) // GameTimer::MILLIS_IN_TICK) + GameTimer.ticks
     attack.add_hit(target, damage, miss, crit, shld)
 
     !miss
@@ -2737,14 +2733,14 @@ abstract class L2Character < L2Object
       shld1 = Formulas.shld_use(self, target)
       crit1 = Formulas.crit(self, target)
       damage1 = Formulas.phys_dam(self, target, shld1, crit1, ss).to_i
-      damage1 /= 2
+      damage1 //= 2
     end
 
     unless miss2
       shld2 = Formulas.shld_use(self, target)
       crit2 = Formulas.crit(self, target)
       damage2 = Formulas.phys_dam(self, target, shld2, crit2, ss).to_i
-      damage2 /= 2
+      damage2 //= 2
     end
 
     hit1 = HitTask.new(self, target, damage1, crit1, miss1, ss, shld1)
@@ -3330,7 +3326,7 @@ abstract class L2Character < L2Object
   end
 
   abstract def level : Int32
-  abstract def update_abnormal_effect : Nil
+  abstract def update_abnormal_effect
   abstract def active_weapon_instance? : L2ItemInstance?
   abstract def active_weapon_item? : L2Weapon?
   abstract def secondary_weapon_instance? : L2ItemInstance?

@@ -1,5 +1,5 @@
 class Packets::Outgoing::EnchantResult < GameServerPacket
-  initializer result: Int32, crystal: Int32, count: Int32
+  initializer result : Int32, crystal : Int32, count : Int32
 
   def write_impl
     c 0x87

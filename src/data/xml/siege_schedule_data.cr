@@ -4,19 +4,19 @@ module SiegeScheduleData
   extend self
   extend XMLReader
 
-  private SCHEDULE_DATA = [] of SiegeScheduleDate
+  private DATES = [] of SiegeScheduleDate
 
   def load
-    SCHEDULE_DATA.clear
+    DATES.clear
     parse_datapack_file("../config/SiegeSchedule.xml")
-    info { "Loaded #{SCHEDULE_DATA.size} siege schedules." }
-    if SCHEDULE_DATA.empty?
-      SCHEDULE_DATA << SiegeScheduleDate.new(StatsSet::EMPTY)
+    info { "Loaded #{DATES.size} siege schedules." }
+    if DATES.empty?
+      DATES << SiegeScheduleDate.new(StatsSet::EMPTY)
     end
   end
 
-  def schedule_dates
-    SCHEDULE_DATA
+  def schedule_dates : Array(SiegeScheduleDate)
+    DATES
   end
 
   private def parse_document(doc, file)
@@ -30,12 +30,13 @@ module SiegeScheduleData
           end
           set[key] = val
         end
-        SCHEDULE_DATA << SiegeScheduleDate.new(set)
+
+        DATES << SiegeScheduleDate.new(set)
       end
     end
   end
 
-  private def get_value_for_field(field : String)
+  private def get_value_for_field(field : String) : Int32
     case field.casecmp
     when "SUNDAY" then 1
     when "MONDAY" then 2

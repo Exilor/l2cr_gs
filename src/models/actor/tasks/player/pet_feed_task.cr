@@ -1,5 +1,5 @@
 struct PetFeedTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     if @pc.mounted? || @pc.mount_npc_id == 0 || PetDataTable.get_pet_data(@pc.mount_npc_id).nil?

@@ -233,7 +233,7 @@ class FortSiege
     fort.siege_date.ms = 0
   end
 
-  def attackers_in_zone
+  def attackers_in_zone : Array(L2PcInstance)
     players = [] of L2PcInstance
 
     attacker_clans.each do |siege_clan|
@@ -624,17 +624,17 @@ class FortSiege
     siege_guard_manager.spawn_siege_guard
   end
 
-  def get_attacker_clan?(clan : L2Clan?)
+  def get_attacker_clan?(clan : L2Clan?) : L2SiegeClan?
     if clan
       get_attacker_clan?(clan.id)
     end
   end
 
-  def get_attacker_clan?(clan_id : Int32)
+  def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans?
+  def attacker_clans? : Array(L2SiegeClan)?
     @attacker_clans
   end
 
@@ -642,7 +642,7 @@ class FortSiege
     fort.siege_date
   end
 
-  def get_flag?(clan : L2Clan?)
+  def get_flag?(clan : L2Clan?) : Array(L2Npc)?
     if clan
       if sc = get_attacker_clan?(clan)
         sc.flag
@@ -660,24 +660,24 @@ class FortSiege
     fort.reset_doors
   end
 
-  def get_defender_clan?(clan_id : Int32)
+  def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
     # return nil
   end
 
-  def get_defender_clan?(clan : L2Clan?)
+  def get_defender_clan?(clan : L2Clan?) : L2SiegeClan?
     # return nil
   end
 
-  def defender_clans?
+  def defender_clans? : Array(L2SiegeClan)?
     # return nil
   end
 
-  def give_fame?
+  def give_fame? : Bool
     true
   end
 
-  def fame_frequency
-    Config.fortress_zone_fame_task_frequency
+  def fame_frequency : Int32
+    Config.fortress_zone_fame_task_frequency.to_i32
   end
 
   def fame_amount : Int32

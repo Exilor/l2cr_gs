@@ -13,7 +13,7 @@ class Packets::Incoming::RequestShortcutRegister < GameClientPacket
     @type = ShortcutType[type_id]
     slot = d
     @slot = slot % 12
-    @page = slot / 12
+    @page = slot // 12
     @id = d
     @level = d
     @character_type = d

@@ -127,7 +127,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   class KickPlayer
-    initializer pc: L2PcInstance?
+    initializer pc : L2PcInstance?
 
     def call
       if pc = @pc

@@ -162,7 +162,7 @@ module CursedWeaponsManager
 
         sm = SystemMessage.s2_minute_of_usage_time_are_left_for_s1
         sm.add_string(cw.name)
-        time = (cw.end_time - Time.ms) / 60_000
+        time = (cw.end_time - Time.ms) // 60_000
         sm.add_int(time)
         pc.send_packet(sm)
       end

@@ -3,7 +3,7 @@ class CubicAction
 
   @current_count = Atomic(Int32).new(0)
 
-  initializer cubic: L2CubicInstance, chance: Int32
+  initializer cubic : L2CubicInstance, chance : Int32
 
   def call
     if @cubic.owner.dead? || !@cubic.owner.online?
@@ -28,10 +28,12 @@ class CubicAction
       end
     end
 
-    if @cubic.cubic_max_count > -1 && @current_count.get >= @cubic.cubic_max_count
-      warn "Cubic has reached its max count."
-      @cubic.stop_action
-      return
+    if @cubic.cubic_max_count > -1
+      if @current_count.get >= @cubic.cubic_max_count
+        warn "Cubic has reached its max count."
+        @cubic.stop_action
+        return
+      end
     end
 
     use_cubic_cure = false

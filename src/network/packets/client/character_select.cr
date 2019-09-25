@@ -21,7 +21,7 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
       unless client.active_char
         return unless cip = client.get_char_selection(@slot)
 
-        if PunishmentManager.has_punishment?(cip.l2id, PunishmentAffect::CHARACTER, PunishmentType::BAN) || PunishmentManager.has_punishment?(client.account_name, PunishmentAffect::ACCOUNT, PunishmentType::BAN) || PunishmentManager.has_punishment?(client.ip, PunishmentAffect::IP, PunishmentType::BAN)
+        if PunishmentManager.has_punishment?(cip.l2id, PunishmentAffect::CHARACTER, PunishmentType::BAN) || PunishmentManager.has_punishment?(client.account_name, PunishmentAffect::ACCOUNT, PunishmentType::BAN) || PunishmentManager.has_punishment?(client.connection.ip, PunishmentAffect::IP, PunishmentType::BAN)
           client.close(ServerClose::STATIC_PACKET)
         end
 

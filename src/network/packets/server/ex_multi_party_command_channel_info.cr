@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExMultiPartyCommandChannelInfo < GameServerPacket
-  initializer channel: L2CommandChannel?
+  initializer channel : L2CommandChannel?
 
   def write_impl
     unless channel = @channel

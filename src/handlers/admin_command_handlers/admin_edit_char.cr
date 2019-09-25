@@ -438,7 +438,7 @@ module AdminCommandHandler::AdminEditChar
         val = command.from(19)
         l2id = val.to_i
         target = L2World.get_pet(l2id)
-      rescue e
+      rescue
         target = pc.target
       end
 
@@ -454,8 +454,7 @@ module AdminCommandHandler::AdminEditChar
         unless target = L2World.get_player(val)
           target = pc.target
         end
-      rescue e
-        warn e
+      rescue
         target = pc.target
       end
 
@@ -493,7 +492,6 @@ module AdminCommandHandler::AdminEditChar
         end
         target.current_hp = data[1].to_f
       rescue e
-        warn e
         pc.send_message("Usage: //set_hp 1000")
       end
     elsif command.starts_with?("admin_set_mp")
@@ -519,7 +517,6 @@ module AdminCommandHandler::AdminEditChar
         end
         target.current_cp = data[1].to_f
       rescue e
-        warn e
         pc.send_message("Usage: //set_cp 1000")
       end
     elsif command.starts_with?("admin_set_pvp_flag")
@@ -532,7 +529,6 @@ module AdminCommandHandler::AdminEditChar
         playable = target
         playable.update_pvp_flag((playable.pvp_flag.to_i32 - 1).abs)
       rescue e
-        warn e
         pc.send_message("Usage: //set_pvp_flag")
       end
     end
@@ -606,7 +602,7 @@ module AdminCommandHandler::AdminEditChar
     elsif client.detached?
       pc.send_message("Client is detached.")
     else
-      ip = client.ip
+      ip = client.connection.ip
     end
 
     repl = NpcHtmlMessage.new
@@ -777,7 +773,7 @@ module AdminCommandHandler::AdminEditChar
           next
         end
 
-        ip = client.ip
+        ip = client.connection.ip
         if ip != ip_address
           next
         end
@@ -848,7 +844,7 @@ module AdminCommandHandler::AdminEditChar
         next
       end
 
-      ip = client.ip
+      ip = client.connection.ip
       if ip_map[ip]?.nil?
         ip_map[ip] = [] of L2PcInstance
       end
@@ -898,7 +894,7 @@ module AdminCommandHandler::AdminEditChar
         next
       end
 
-      pack = IpPack.new(client.ip, client.trace)
+      pack = IpPack.new(client.connection.ip, client.trace)
       (ip_map[pack] ||= [] of L2PcInstance) << player
 
       if ip_map[pack].size >= multibox
@@ -1001,7 +997,7 @@ module AdminCommandHandler::AdminEditChar
   end
 
   private struct IpPack
-    getter_initializer ip: String, tracert: Slice(Slice(Int32))
+    getter_initializer ip : String, tracert : Slice(Slice(Int32))
   end
 
   def commands

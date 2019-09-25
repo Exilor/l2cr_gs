@@ -32,7 +32,7 @@ class EffectHandler::SummonCubic < AbstractEffect
 
     cubic_skill_level = info.skill.level
     if cubic_skill_level > 100
-      cubic_skill_level = (((info.skill.level) - 100) / 7) + 8
+      cubic_skill_level = (((info.skill.level) - 100) // 7) + 8
     end
 
     if cubic = pc.get_cubic_by_id(@cubic_id)

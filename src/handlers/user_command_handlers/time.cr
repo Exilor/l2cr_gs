@@ -9,7 +9,7 @@ module UserCommandHandler::Time
 
     t = GameTimer.time
 
-    h = ((t / 60) % 24).to_s
+    h = ((t // 60) % 24).to_s
     if (t % 60) < 10
       m = "0#{t % 60}"
     else
@@ -27,9 +27,9 @@ module UserCommandHandler::Time
 
     pc.send_packet(sm)
 
-    # if Config.display_server_time
+    if Config.display_server_time
       pc.send_message("Server time is #{::Time.now}")
-    # end
+    end
 
     true
   end

@@ -2,7 +2,7 @@ class L2SiegeClan
   getter flag = [] of L2Npc
   setter type : SiegeClanType
 
-  getter_initializer clan_id: Int32, type: SiegeClanType
+  getter_initializer clan_id : Int32, type : SiegeClanType
 
   def add_flag(flag : L2Npc)
     @flag << flag

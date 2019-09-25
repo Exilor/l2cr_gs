@@ -6,7 +6,7 @@ class FloodProtectorAction
   @logged = false
   @punishment_in_progress = false
 
-  initializer client: GameClient, config: Config::FloodProtectorConfig
+  initializer client : GameClient, config : Config::FloodProtectorConfig
 
   def try_perform_action(command : String) : Bool
     if @client.active_char.try &.override_flood_conditions?
@@ -59,7 +59,8 @@ class FloodProtectorAction
   end
 
   private def ban_account
-    warn "Account #{@client.account_name} would be banned for flooding."
+    punishment = PunishmentTask.new(@client.account_name, PunishmentAffect::ACCOUNT, PunishmentType::BAN, Time.ms + @config.punishment_time, "", self.class.simple_name)
+    PunishmentManager.start_punishment(punishment)
   end
 
   private def jail_char

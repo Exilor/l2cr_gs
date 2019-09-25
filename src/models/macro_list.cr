@@ -8,7 +8,7 @@ class MacroList
   @macros = Hash(Int32, Macro).new
   getter revision = 1
 
-  initializer owner: L2PcInstance
+  initializer owner : L2PcInstance
 
   delegate size, to: @macros
 

@@ -9,7 +9,7 @@ class L2CharacterAI < AI
     arg_1 : AIArg
 
   private struct CastTask
-    initializer char: L2Character, skill: Skill, target: L2Object?
+    initializer char : L2Character, skill : Skill, target : L2Object?
 
     def call
       if @char.attacking_now?
@@ -451,8 +451,8 @@ class L2CharacterAI < AI
     end
 
     if target.is_a?(L2DoorInstance)
-      x_point = target.template.node_x.sum / 4
-      y_point = target.template.node_y.sum / 4
+      x_point = target.template.node_x.sum // 4
+      y_point = target.template.node_y.sum // 4
       need_to_move = !@actor.inside_radius?(
         x_point, y_point, target.template.node_z, offset, false, false
       )

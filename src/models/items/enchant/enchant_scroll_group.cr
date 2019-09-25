@@ -1,7 +1,7 @@
 class EnchantScrollGroup
   @rate_groups : Array(EnchantRateItem)?
 
-  getter_initializer id: Int32
+  getter_initializer id : Int32
 
   def add_rate_group(group : EnchantRateItem)
     (@rate_groups ||= [] of EnchantRateItem) << group

@@ -1,5 +1,5 @@
 struct CubicHeal
-  initializer cubic: L2CubicInstance
+  initializer cubic : L2CubicInstance
 
   def call
     if @cubic.owner.dead? || !@cubic.owner.online?

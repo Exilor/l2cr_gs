@@ -1,7 +1,7 @@
 class ObjectKnownList
   include Synchronizable
 
-  getter_initializer active_object: L2Object
+  getter_initializer active_object : L2Object
 
   def known_objects : Hash(Int32, L2Object)
     @known_objects || sync do
@@ -10,9 +10,8 @@ class ObjectKnownList
   end
 
   def add_known_object(object : L2Object) : Bool
-    active_object = @active_object
-    if active_object.instance_id != -1
-      if object.instance_id != active_object.instance_id
+    if @active_object.instance_id != -1
+      if object.instance_id != @active_object.instance_id
         return false
       end
     end
@@ -24,7 +23,7 @@ class ObjectKnownList
     return false if knows_object?(object)
 
     radius = get_distance_to_watch_object(object)
-    unless Util.in_short_radius?(radius, active_object, object, true)
+    unless Util.in_short_radius?(radius, @active_object, object, true)
       return false
     end
 
@@ -34,7 +33,8 @@ class ObjectKnownList
   end
 
   def knows_object?(object : L2Object) : Bool
-    @active_object == object || known_objects.has_key?(object.l2id)
+    @active_object == object ||
+    (!!@known_objects && known_objects.has_key?(object.l2id))
   end
 
   def remove_all_known_objects

@@ -33,10 +33,12 @@ module TerritoryTable
   end
 
   def get_random_point(terr : Int) : Location?
-    TERRITORIES[terr].random_point
+    TERRITORIES.fetch(terr) { raise "No territory for #{terr}" }
+    .random_point
   end
 
   def get_proc_max(terr : Int) : Int32
-    TERRITORIES[terr].proc_max
+    TERRITORIES.fetch(terr) { raise "No territory for #{terr}" }
+    .proc_max
   end
 end

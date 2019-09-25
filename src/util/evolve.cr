@@ -170,7 +170,7 @@ module Evolve
   private struct EvolveFeedWait
     include Loggable
 
-    initializer pc: L2PcInstance, pet: L2PetInstance
+    initializer pc : L2PcInstance, pet : L2PetInstance
 
     def call
       if @pet.current_feed <= 0
@@ -186,7 +186,7 @@ module Evolve
   private struct EvolveFinalizer
     include Loggable
 
-    initializer pc: L2PcInstance, pet: L2PetInstance
+    initializer pc : L2PcInstance, pet : L2PetInstance
 
     def call
       @pc.send_packet(MagicSkillLaunched.new(@pc, 2046, 1))

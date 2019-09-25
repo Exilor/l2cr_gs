@@ -5,8 +5,8 @@ class Location
 
   def_equals @x, @y, @z, @heading, @instance_id
 
-  property_initializer x: Int32, y: Int32, z: Int32, heading: Int32,
-    instance_id: Int32
+  property_initializer x : Int32, y : Int32, z : Int32, heading : Int32,
+    instance_id : Int32
 
   def initialize
     @x = @y = @z = @heading = 0

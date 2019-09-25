@@ -74,8 +74,8 @@ module AdminCommandHandler::AdminInstanceZone
         minutes = 0
         remaining_time = (time - Time.ms) // 1000
         if remaining_time > 0
-          hours = (remaining_time / 3600).to_i
-          minutes = ((remaining_time % 3600) / 60).to_i
+          hours = (remaining_time // 3600).to_i
+          minutes = ((remaining_time % 3600) // 60).to_i
         end
 
         io << "<tr><td>"

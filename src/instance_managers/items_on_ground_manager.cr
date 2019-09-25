@@ -146,7 +146,7 @@ module ItemsOnGroundManager
         error e
       end
 
-      debug "Saved #{ITEMS.size} items in #{timer.result} s."
+      debug { "Saved #{ITEMS.size} items in #{timer} s." }
     end
   end
 

@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExFishingEnd < GameServerPacket
-  initializer win: Bool, pc: L2PcInstance
+  initializer win : Bool, pc : L2PcInstance
 
   def write_impl
     c 0xfe

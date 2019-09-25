@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExConfirmAddingContact < GameServerPacket
-  initializer char_name: String, added: Bool
+  initializer char_name : String, added : Bool
 
   def write_impl
     c 0xfe

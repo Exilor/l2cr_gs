@@ -232,7 +232,7 @@ module ClanTable
     clan
   end
 
-  def get_clan_allies(ally_id : Int32, &block : L2Clan ->)
+  def get_clan_allies(ally_id : Int32, & : L2Clan ->)
     if ally_id != 0
       CLANS.each_value do |clan|
         if clan.ally_id == ally_id

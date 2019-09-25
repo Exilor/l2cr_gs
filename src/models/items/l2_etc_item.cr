@@ -33,7 +33,7 @@ class L2EtcItem < L2Item
 
     if capsuled_items = set.get_string("capsuled_items", nil)
       extractable_items = nil
-      capsuled_items.split(';').each do |part|
+      capsuled_items.split(';') do |part|
         part = part.strip
         next if part.empty?
 

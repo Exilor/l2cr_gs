@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExPartyRoomMember < GameServerPacket
-  initializer room: PartyMatchRoom, mode: Int32
+  initializer room : PartyMatchRoom, mode : Int32
 
   def write_impl
     c 0xfe

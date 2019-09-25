@@ -905,7 +905,7 @@ class L2Npc < L2Character
   end
 
   private struct RandomAnimationTask
-    initializer npc: L2Npc
+    initializer npc : L2Npc
 
     def call
       if @npc.mob?

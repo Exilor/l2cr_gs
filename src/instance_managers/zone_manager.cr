@@ -18,10 +18,10 @@ module ZoneManager
     CLASS_ZONES.clear
     SPAWN_TERRITORIES.clear
     parse_datapack_directory("zones", false)
-    info { "Loaded #{CLASS_ZONES.size} zone classes and #{size} zones in #{timer.result} s." }
+    info { "Loaded #{CLASS_ZONES.size} zone classes and #{size} zones in #{timer} s." }
     timer.start
     parse_datapack_directory("zones/npcSpawnTerritories")
-    info { "Loaded #{SPAWN_TERRITORIES.size} NPC spawn territories in #{timer.result} s." }
+    info { "Loaded #{SPAWN_TERRITORIES.size} NPC spawn territories in #{timer} s." }
   end
 
   def reload
@@ -37,7 +37,7 @@ module ZoneManager
     L2World.world_regions.each do |reg|
       reg.each do |r|
         r.zones.clear
-        count += 1
+        count &+= 1
       end
     end
 

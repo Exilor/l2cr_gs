@@ -284,8 +284,8 @@ class L2FortSiegeGuardAI < L2CharacterAI
         # heal friends
         if @self_analysis.has_heal_or_resurrect? && !@actor.attacking_disabled?
           if npc.current_hp < npc.max_hp * 0.6
-            if @actor.current_hp > @actor.max_hp / 2
-              if @actor.current_mp > @actor.max_mp / 2 && npc.in_combat?
+            if @actor.current_hp > @actor.max_hp // 2
+              if @actor.current_mp > @actor.max_mp // 2 && npc.in_combat?
                 @self_analysis.heal_skills.each do |sk|
                   if @actor.current_mp < sk.mp_consume2
                     next

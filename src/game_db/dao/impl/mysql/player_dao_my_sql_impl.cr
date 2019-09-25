@@ -190,7 +190,7 @@ module GameDB
     def store_char_base(pc : L2PcInstance)
       total_online_time = pc.online_time
       if pc.online_begin_time > 0
-        total_online_time += (Time.ms - pc.online_begin_time) / 1000
+        total_online_time += (Time.ms - pc.online_begin_time) // 1000
       end
 
       GameDB.exec(

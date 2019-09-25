@@ -5,7 +5,7 @@ class Scripts::Q00254_LegendaryTales < Quest
   # Monsters
   class Bosses < EnumClass
     getter id
-    protected initializer id: Int32
+    protected initializer id : Int32
 
     add(EMERALD_HORN, 25718)
     add(DUST_RIDER, 25719)

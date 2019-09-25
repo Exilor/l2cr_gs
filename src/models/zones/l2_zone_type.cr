@@ -23,7 +23,7 @@ abstract class L2ZoneType < ListenersContainer
   property instance_id : Int32 = -1
   property? enabled : Bool = true
 
-  getter_initializer id: Int32
+  getter_initializer id : Int32
 
   def settings=(settings : AbstractZoneSettings)
     @settings.try &.clear

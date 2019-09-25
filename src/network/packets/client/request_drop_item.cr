@@ -17,35 +17,31 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-
-    debug "#{pc} requests dropping item with ID #{@id} at #{@x} #{@y} #{@z}."
     return if pc.dead?
 
     unless flood_protectors.drop_item.try_perform_action("drop_item")
       return
     end
 
-    item = pc.inventory.get_item_by_l2id(@id)
-
-    if !item
-      debug "Item with object id #{@id} not found in #{pc}'s inventory."
+    unless item = pc.inventory.get_item_by_l2id(@id)
+      debug { "Item with object id #{@id} not found in #{pc}'s inventory." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_THIS_ITEM)
       return
     end
 
     if @count == 0 || !pc.validate_item_manipulation(@id, "drop") || (!Config.allow_discarditem && !pc.override_drop_all_items?) || (!item.droppable? && !(pc.override_drop_all_items? && Config.gm_trade_restricted_items)) || ((item.item_type == EtcItemType::PET_COLLAR) && pc.has_pet_items?) || pc.inside_no_item_drop_zone?
-      debug "Item with count #{@count} didn't pass validation."
+      debug { "Item with count #{@count} didn't pass validation." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_THIS_ITEM)
       return
     end
 
     if item.quest_item? && !(pc.override_drop_all_items? && Config.gm_trade_restricted_items)
-      debug "Quest items can't be dropped."
+      debug { "Quest items can't be dropped." }
       return
     end
 
     if @count > item.count
-      debug "Can't drop #{@count}/#{item.count} items."
+      debug { "Can't drop #{@count}/#{item.count} items." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_THIS_ITEM)
       return
     end
@@ -57,13 +53,13 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
     if @count < 0
       Util.punish(pc, "tried to drop item with object id #{@id} with count < 0.")
-      warn "#{pc} attempted to drop #{item} x#{@count}."
+      warn { "#{pc} attempted to drop #{item} x#{@count}." }
       return
     end
 
     if !item.stackable? && @count > 1
       Util.punish(pc, "tried to drop non_stackable item with object id #{@id} with count > 1.")
-      warn "#{pc} attempted to drop multiple non-stackable #{item}."
+      warn { "#{pc} attempted to drop multiple non-stackable #{item}." }
       return
     end
 
@@ -101,7 +97,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
     if item.template.type_2 == ItemType2::QUEST && !pc.override_drop_all_items?
       if Config.debug
-        debug "#{pc} tried to drop a quest item."
+        debug { "#{pc} tried to drop a quest item." }
       end
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_EXCHANGE_ITEM)
       return
@@ -109,7 +105,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
     if !pc.inside_radius?(@x, @y, 0, 150, false, false) || (@z - pc.z).abs > 50
       if Config.debug
-        debug "#{pc} tried to drop an item too far away."
+        debug { "#{pc} tried to drop an item too far away." }
       end
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_DISTANCE_TOO_FAR)
       return
@@ -138,7 +134,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     drop = pc.drop_item("Drop", @id, @count, @x, @y, @z, nil, false, false)
 
     if Config.debug
-      debug "Dropping #{drop} at #{@x} #{@y} #{@z}."
+      debug { "Dropping #{drop} at #{@x} #{@y} #{@z}." }
     end
 
     if pc.gm?

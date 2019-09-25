@@ -4,13 +4,13 @@ class Scripts::Q00511_AwlUnderFoot < Quest
 
   private class FortDungeon
     property reenter_time : Int64 = 0i64
-    getter_initializer instance_id: Int32
+    getter_initializer instance_id : Int32
   end
 
   private class SpawnRaid
     include Loggable
 
-    initializer owner: Q00511_AwlUnderFoot, world: FAUWorld
+    initializer owner : Q00511_AwlUnderFoot, world : FAUWorld
 
     def call
       if @world.status == 0

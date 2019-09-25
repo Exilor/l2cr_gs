@@ -13,9 +13,10 @@ class Packets::Outgoing::ExBrBroadcastEventState < GameServerPacket
   @param5 : String?
   @param6 : String?
 
-  initializer event_id: Int32, event_state: Int32
-  initializer event_id: Int32, event_state: Int32, param0: Int32, param1: Int32,
-    param2: Int32, param3: Int32, param4: Int32, param5: String, param6: String
+  initializer event_id : Int32, event_state : Int32
+  initializer event_id : Int32, event_state : Int32, param0 : Int32,
+    param1 : Int32, param2 : Int32, param3 : Int32, param4 : Int32,
+    param5 : String, param6 : String
 
   def write_impl
     c 0xfe

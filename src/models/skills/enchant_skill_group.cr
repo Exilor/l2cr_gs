@@ -17,7 +17,7 @@ struct EnchantSkillGroup
 
   getter enchant_group_details = [] of EnchantSkillHolder
 
-  getter_initializer id: Int32
+  getter_initializer id : Int32
 
   def add_enchant_detail(holder : EnchantSkillHolder)
     @enchant_group_details << holder

@@ -1,5 +1,5 @@
 class Packets::Outgoing::BuyList < GameServerPacket
-  initializer list: L2BuyList, money: Int64, tax_rate: Float64
+  initializer list : L2BuyList, money : Int64, tax_rate : Float64
 
   def write_impl
     c 0xfe

@@ -24,7 +24,7 @@ module AdminCommandHandler
     HANDLERS[cmd]?
   end
 
-  abstract def commands : Enumerable(String)
+  # abstract def commands : Enumerable(String)
 end
 
 require "./admin_command_handlers/*"

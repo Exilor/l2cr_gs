@@ -9,7 +9,7 @@ class EffectHandler::DispelBySlot < AbstractEffect
     unless dispel.empty?
       dispel_abnormals = EnumMap(AbnormalType, Int16).new
 
-      dispel.split(';').each do |temp|
+      dispel.split(';') do |temp|
         ngt = temp.split(',')
         type = AbnormalType.parse(ngt[0])
 

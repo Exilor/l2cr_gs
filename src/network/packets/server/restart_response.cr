@@ -1,5 +1,5 @@
 class Packets::Outgoing::RestartResponse < GameServerPacket
-  private initializer response: Bool
+  private initializer response : Bool
 
   def write_impl
     c 0x71

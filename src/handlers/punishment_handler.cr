@@ -21,9 +21,9 @@ module PunishmentHandler
     HANDLERS[val]?
   end
 
-  abstract def on_start(task : PunishmentTask)
-  abstract def on_end(task : PunishmentTask)
-  abstract def type : PunishmentType
+  # abstract def on_start(task : PunishmentTask)
+  # abstract def on_end(task : PunishmentTask)
+  # abstract def type : PunishmentType
 end
 
 require "./punishment_handlers/*"

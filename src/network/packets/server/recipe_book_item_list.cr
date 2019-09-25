@@ -1,7 +1,7 @@
 class Packets::Outgoing::RecipeBookItemList < GameServerPacket
   @recipes : Enumerable(L2RecipeList)?
 
-  initializer dwarven_craft: Bool, max_mp: Int32
+  initializer dwarven_craft : Bool, max_mp : Int32
 
   def add_recipes(@recipes : Enumerable(L2RecipeList))
   end

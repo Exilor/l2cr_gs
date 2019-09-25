@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExNeedToChangeName < GameServerPacket
-  initializer type: Int32, subtype: Int32, name: String
+  initializer type : Int32, subtype : Int32, name : String
 
   def write_impl
     c 0xfe

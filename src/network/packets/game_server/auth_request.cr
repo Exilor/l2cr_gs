@@ -1,5 +1,5 @@
 class Packets::Outgoing::AuthRequest < MMO::OutgoingPacket(LoginServerClient)
-  initializer client: LoginServerClient
+  initializer client : LoginServerClient
 
   def write
     c 0x01

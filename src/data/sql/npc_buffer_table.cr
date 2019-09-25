@@ -13,18 +13,18 @@ module NpcBufferTable
     info { "Loaded #{BUFFERS.size} buffers and #{count} skills." }
   end
 
-  private def load_from(table, count = 0) : Int32
+  private def load_from(table) : Int32
     count = 0
     begin
       last_npc_id = 0
       skills = nil
 
-      sql = "SELECT `npc_id`,`skill_id`,`skill_level`,`skill_fee_id`,`skill_fee_amount`,`buff_group` FROM `npc_buffer` ORDER BY `npc_id` ASC"
+      sql = table
       GameDB.each(sql) do |rs|
         npc_id = rs.get_i32("npc_id")
         if npc_id < 0
           error "npc_id #{npc_id} is negative."
-          npc_id = npc_id.to_u16.to_i32
+          npc_id = npc_id.to_u16!.to_i32
         end
         skill_id = rs.get_i32("skill_id")
         skill_level = rs.get_i32("skill_level")
@@ -75,7 +75,7 @@ module NpcBufferTable
   private struct NpcBufferSkills
     @skills = {} of Int32 => NpcBufferData
 
-    getter_initializer npc_id: Int32
+    getter_initializer npc_id : Int32
 
     def add_skill(skill_id : Int32, skill_level : Int32, fee_id : Int32, fee_amount : Int32, group : Int32)
       @skills[group] = NpcBufferData.new(skill_id, skill_level, fee_id, fee_amount)

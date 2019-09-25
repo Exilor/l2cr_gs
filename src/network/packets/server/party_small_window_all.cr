@@ -1,5 +1,5 @@
 class Packets::Outgoing::PartySmallWindowAll < GameServerPacket
-  initializer newcomer: L2PcInstance, party: L2Party
+  initializer newcomer : L2PcInstance, party : L2Party
 
   def write_impl
     c 0x4e

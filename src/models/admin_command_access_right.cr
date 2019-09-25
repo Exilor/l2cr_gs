@@ -2,7 +2,8 @@ struct AdminCommandAccessRight
   getter admin_command, access_level
   getter? require_confirm
 
-  initializer admin_command: String, require_confirm: Bool, access_level: Int32
+  initializer admin_command : String, require_confirm : Bool,
+    access_level : Int32
 
   def initialize(set : StatsSet)
     @admin_command = set.get_string("command")

@@ -7,7 +7,7 @@ class Packets::Outgoing::ExEnchantSkillList < GameServerPacket
 
   @skills = [] of Skill
 
-  initializer type: EnchantSkillType
+  initializer type : EnchantSkillType
 
   def write_impl
     c 0xfe

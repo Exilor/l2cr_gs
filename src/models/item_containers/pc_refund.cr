@@ -1,7 +1,7 @@
 require "./item_container"
 
 class PcRefund < ItemContainer
-  getter_initializer owner: L2PcInstance
+  getter_initializer owner : L2PcInstance
 
   def owner? : L2PcInstance?
     owner

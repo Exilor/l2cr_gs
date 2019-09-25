@@ -8,7 +8,7 @@ module AntiFeedManager
   L2EVENT_ID = 3
 
   private LAST_DEATH_TIMES = Hash(Int32, Int64).new
-  private EVENT_IPS = Hash(Int32, Hash(Int32, Int32)).new
+  private EVENT_IPS = Hash(Int32, Hash(UInt64, Int32)).new
 
   def set_last_death_time(l2id : Int32)
     LAST_DEATH_TIMES[l2id] = Time.ms
@@ -44,7 +44,7 @@ module AntiFeedManager
         return !Config.antifeed_disconnected_as_dualbox
       end
 
-      return target_client.ip != attacker_client.ip
+      return target_client.connection.ip != attacker_client.connection.ip
     end
 
     true
@@ -55,7 +55,7 @@ module AntiFeedManager
   end
 
   def register_event(event_id : Int32)
-    EVENT_IPS[event_id] ||= {} of Int32 => Int32
+    EVENT_IPS[event_id] ||= {} of UInt64 => Int32
   end
 
   def try_add_player(event_id : Int32, pc : L2PcInstance, max : Int32) : Bool
@@ -71,7 +71,7 @@ module AntiFeedManager
       return false
     end
 
-    addr_hash = client.ip.hash.to_i32
+    addr_hash = client.connection.ip.hash
 
     connection_count = event.fetch(addr_hash, 0)
     white_list_count = Config.dualbox_check_whitelist.fetch(addr_hash, 0)
@@ -96,7 +96,7 @@ module AntiFeedManager
       return false
     end
 
-    addr_hash = client.ip.hash.to_i32
+    addr_hash = client.connection.ip.hash
 
     if temp = event[addr_hash]?
       if temp > 0
@@ -130,7 +130,7 @@ module AntiFeedManager
       return max
     end
 
-    addr_hash = client.ip.hash.to_i32
+    addr_hash = client.connection.ip.hash.to_i32
 
     limit = max
 

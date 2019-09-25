@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExShowFortressMapInfo < GameServerPacket
-  initializer fort: Fort
+  initializer fort : Fort
 
   def write_impl
     c 0xfe

@@ -10,7 +10,7 @@ module CategoryData
     timer = Timer.new
     CATEGORIES.clear
     parse_datapack_file("categoryData.xml")
-    info { "Loaded #{CATEGORIES.size} categories in #{timer.result} s." }
+    info { "Loaded #{CATEGORIES.size} categories in #{timer} s." }
   end
 
   private def parse_document(doc, file)

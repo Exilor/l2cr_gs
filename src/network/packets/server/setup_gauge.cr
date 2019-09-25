@@ -5,7 +5,7 @@ class Packets::Outgoing::SetupGauge < GameServerPacket
 
   @char_id = 0
 
-  initializer color: UInt8, cur_time: Int32, max_time: Int32
+  initializer color : UInt8, cur_time : Int32, max_time : Int32
 
   def initialize(@color : UInt8, time : Int32)
     @max_time = @cur_time = time

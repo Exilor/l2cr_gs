@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExVariationCancelResult < GameServerPacket
-  private initializer result: Int32
+  private initializer result : Int32
 
   def write_impl
     c 0xfe

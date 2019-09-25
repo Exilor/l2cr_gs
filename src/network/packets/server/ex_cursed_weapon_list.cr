@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExCursedWeaponList < GameServerPacket
-  initializer cursed_weapon_ids: Array(Int32)
+  initializer cursed_weapon_ids : Array(Int32)
 
   def write_impl
     c 0xfe

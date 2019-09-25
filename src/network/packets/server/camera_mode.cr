@@ -1,5 +1,5 @@
 class Packets::Outgoing::CameraMode < GameServerPacket
-  initializer mode: Bool
+  initializer mode : Bool
 
   def write_impl
     c 0xf7

@@ -10,7 +10,7 @@ class TradeList
   property? packaged = false
   property? confirmed = false
 
-  getter_initializer owner: L2PcInstance
+  getter_initializer owner : L2PcInstance
 
   def get_available_items(inv : PcInventory) : Array(TradeItem)
     @items.map do |item|

@@ -21,7 +21,7 @@ class CharEffectList
   @hidden_buffs = Atomic(Int32).new(0)
   property short_buff : BuffInfo?
 
-  initializer owner: L2Character
+  initializer owner : L2Character
 
   def buffs : Deque(BuffInfo)
     @buffs || sync { @buffs ||= Deque(BuffInfo).new }

@@ -4,12 +4,13 @@ require "./strategy/*"
 struct GeneralDropItem
   include IDropItem
 
-  getter_initializer item_id: Int32, min: Int64, max: Int64, chance: Float64,
-    amount_strategy: AmountMultiplierStrategy,
-    chance_strategy: ChanceMultiplierStrategy,
-    precise_strategy: PreciseDeterminationStrategy,
-    killer_strategy: KillerChanceModifierStrategy,
-    drop_calculation_strategy: DropCalculationStrategy
+  getter_initializer item_id : Int32, min : Int64, max : Int64,
+    chance : Float64,
+    amount_strategy : AmountMultiplierStrategy,
+    chance_strategy : ChanceMultiplierStrategy,
+    precise_strategy : PreciseDeterminationStrategy,
+    killer_strategy : KillerChanceModifierStrategy,
+    drop_calculation_strategy : DropCalculationStrategy
 
   def initialize(item_id : Int32, min : Int64, max : Int64, chance : Float64)
     initialize(item_id, min, max, chance, 1, 1)

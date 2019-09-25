@@ -72,7 +72,7 @@ abstract class AI
   property! cast_target : L2Character?
   property! attack_target : L2Character?
 
-  getter_initializer actor: L2Character
+  getter_initializer actor : L2Character
 
   def change_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
     sync do

@@ -17,7 +17,7 @@ module BuyListData
 
     load_from_db
 
-    info { "Loaded #{BUY_LISTS.size} buy lists in #{timer.result} s." }
+    info { "Loaded #{BUY_LISTS.size} buy lists in #{timer} s." }
   end
 
   private def load_from_db

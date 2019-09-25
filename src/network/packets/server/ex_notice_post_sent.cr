@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExNoticePostSent < GameServerPacket
   protected setter show_animation
 
-  initializer show_animation: Bool
+  initializer show_animation : Bool
 
   def self.new(value : Bool) : ExNoticePostArrived
     value ? TRUE : FALSE

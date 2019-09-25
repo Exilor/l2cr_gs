@@ -114,12 +114,12 @@ module Util
     bypass_start = html_lower.index("=\"bypass ", bypass_end) || -1
     # debug "build_html_bypass_cache"
     while bypass_start != -1
-      bypass_start_end = bypass_start + 9
+      bypass_start_end = bypass_start &+ 9
       bypass_end = html_lower.index("\"", bypass_start_end) || -1
       break if bypass_end == -1
       h_param_pos = html_lower.index("-h ", bypass_start_end) || -1
       if h_param_pos != -1 && h_param_pos < bypass_end
-        bypass = html[h_param_pos + 3...bypass_end].strip
+        bypass = html[h_param_pos &+ 3...bypass_end].strip
       else
         bypass = html[bypass_start_end...bypass_end].strip
       end
@@ -140,7 +140,7 @@ module Util
     link_start = html_lower.index("=\"link ", link_end) || -1
     # debug "build_html_link_cache"
     while link_start != -1
-      link_start_end = link_start + 7
+      link_start_end = link_start &+ 7
       link_end = html_lower.index("\"", link_start_end) || -1
       break if link_end == -1
       html_link = html[link_start_end...link_end].strip
@@ -163,7 +163,6 @@ module Util
     pc.set_html_action_origin_l2id scope, npc_l2id
     build_html_bypass_cache(pc, scope, html)
     build_html_link_cache(pc, scope, html)
-    # debug pc.@html_action_caches
   end
 
   def map(input, input_min, input_max, output_min, output_max)
@@ -265,10 +264,10 @@ module Util
   def count_params(str : String) : Int32
     count = 0
 
-    0.upto(str.size - 2) do |i|
+    0.upto(str.size &- 2) do |i|
       c1 = str[i]
       if c1 == 'C' || c1 == 'S'
-        c2 = str[i + 1]
+        c2 = str[i &+ 1]
         if c2.number?
           count = Math.max(count, c2.to_i)
         end
@@ -301,10 +300,10 @@ module Util
   end
 
   def min(val1, val2, *args)
-    args.empty? ? {val1, val2}.min : {val1, val2, args.min}.min
+    args.empty? ? Math.min(val1, val2) : {val1, val2, args.min}.min
   end
 
   def max(val1, val2, *args)
-    args.empty? ? {val1, val2}.max : {val1, val2, args.max}.max
+    args.empty? ? Math.max(val1, val2) : {val1, val2, args.max}.max
   end
 end

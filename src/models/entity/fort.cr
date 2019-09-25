@@ -268,7 +268,7 @@ class Fort < AbstractResidence
       clan = ClanTable.get_clan!(owner_id)
       clan.fort_id = residence_id
       self.owner_clan = clan
-      run_count = owned_time / (Config.fs_update_frq * 60)
+      run_count = owned_time // (Config.fs_update_frq * 60)
       initial = Time.ms - @last_owned_time.ms
       while initial > (Config.fs_update_frq * 60000)
         initial -= (Config.fs_update_frq * 60000)
@@ -601,7 +601,7 @@ class Fort < AbstractResidence
   private def init_npcs
     sql = "SELECT * FROM fort_spawnlist WHERE fortId = ? AND spawnType = ?"
     GameDB.each(sql, residence_id, 0) do |rs|
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16.to_i32)
+      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
       sp.amount = 1
       sp.x = rs.get_i32("x")
       sp.y = rs.get_i32("y")
@@ -620,7 +620,7 @@ class Fort < AbstractResidence
     @siege_npcs.clear
     sql = "SELECT id, npcId, x, y, z, heading FROM fort_spawnlist WHERE fortId = ? AND spawnType = ? ORDER BY id"
     GameDB.each(sql, residence_id, 2) do |rs|
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16.to_i32)
+      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
       sp.amount = 1
       sp.x = rs.get_i32("x")
       sp.y = rs.get_i32("y")
@@ -637,7 +637,7 @@ class Fort < AbstractResidence
     @npc_commanders.clear
     sql = "SELECT id, npcId, x, y, z, heading FROM fort_spawnlist WHERE fortId = ? AND spawnType = ? ORDER BY id"
     GameDB.each(sql, residence_id, 1) do |rs|
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16.to_i32)
+      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
       sp.amount = 1
       sp.x = rs.get_i32("x")
       sp.y = rs.get_i32("y")
@@ -657,7 +657,7 @@ class Fort < AbstractResidence
     sql = "SELECT id, npcId, x, y, z, heading, castleId FROM fort_spawnlist WHERE fortId = ? AND spawnType = ? ORDER BY id"
     GameDB.each(sql, residence_id, 3) do |rs|
       castle_id = rs.get_i32("castleId")
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16.to_i32)
+      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
       sp.amount = 1
       sp.x = rs.get_i32("x")
       sp.y = rs.get_i32("y")
@@ -682,7 +682,7 @@ class Fort < AbstractResidence
   private struct EndFortressSiege
     include Loggable
 
-    initializer fort: Fort, clan: L2Clan
+    initializer fort : Fort, clan : L2Clan
 
     def call
       @fort.set_owner(@clan, true)

@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExEnchantSkillResult < GameServerPacket
-  private initializer success: Bool
+  private initializer success : Bool
 
   def write_impl
     c 0xfe

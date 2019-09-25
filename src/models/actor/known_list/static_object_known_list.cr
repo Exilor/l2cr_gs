@@ -3,10 +3,10 @@ require "./char_known_list"
 class StaticObjectKnownList < CharKnownList
   def get_distance_to_forget_object(object : L2Object) : Int32
     case object
-    when L2DefenderInstance
-      return 800
     when L2PcInstance
       return 4000
+    when L2DefenderInstance
+      return 800
     end
 
     0
@@ -14,10 +14,10 @@ class StaticObjectKnownList < CharKnownList
 
   def get_distance_to_watch_object(object : L2Object) : Int32
     case object
-    when L2DefenderInstance
-      return 600
     when L2PcInstance
       return 2000
+    when L2DefenderInstance
+      return 600
     end
 
     0

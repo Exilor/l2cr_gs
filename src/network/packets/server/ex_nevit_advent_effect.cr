@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExNevitAdventEffect < GameServerPacket
-  initializer time_left: Int32
+  initializer time_left : Int32
 
   def write_impl
     c 0xfe

@@ -43,7 +43,11 @@ class Calendar
     {{const}}
   {% end %}
 
-  property time : Time = Time.now
+  property time : Time
+
+  def initialize(@time : Time = Time.now)
+  end
+
   def_equals_and_hash @time
   delegate day, ms, millisecond, second, minute, hour, day_of_year, year,
     to: @time
@@ -87,6 +91,7 @@ class Calendar
   end
 
   def minute=(min) # the minute of the current hour
+    min = min.to_i64
     min *= MINUTE
     seconds = @time.minute * MINUTE
 

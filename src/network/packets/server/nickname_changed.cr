@@ -1,5 +1,5 @@
 class Packets::Outgoing::NicknameChanged < GameServerPacket
-  initializer char: L2Character
+  initializer char : L2Character
 
   def write_impl
     c 0xcc

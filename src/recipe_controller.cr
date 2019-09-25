@@ -2,8 +2,8 @@ require "./models/temp_item"
 
 module RecipeController
   extend self
-  include Packets::Outgoing
   extend Loggable
+  include Packets::Outgoing
 
   private ACTIVE_MAKERS = {} of Int32 => RecipeItemMaker
 
@@ -34,7 +34,6 @@ module RecipeController
     common_recipes = manufacturer.common_recipe_book
     if !dwarf_recipes.includes?(recipe_list) && !common_recipes.includes?(recipe_list)
       Util.punish(pc, "sent an invalid recipe id.")
-      warn { "#{pc.name} sent a false recipe ID." }
       return
     end
 
@@ -67,7 +66,6 @@ module RecipeController
     common_recipes = pc.common_recipe_book
     if !dwarf_recipes.includes?(recipe_list) && !common_recipes.includes?(recipe_list)
       Util.punish(pc, "sent an invalid recipe id.")
-      warn { "#{pc.name} sent a false recipe ID." }
       return
     end
 
@@ -352,7 +350,7 @@ module RecipeController
           @item_grab *= asc.value
         end
       end
-      @creation_passes = (@total_items / @item_grab)
+      @creation_passes = (@total_items // @item_grab)
       if @total_items % @item_grab != 0
         @creation_passes += 1
       end
@@ -508,7 +506,7 @@ module RecipeController
           @exp //= recipe_level
         end
         if @sp < 0
-          @sp = @exp / 10
+          @sp = @exp // 10
         end
         if item_id == rare_prod_id
           @exp = (@exp * Config.alt_game_creation_rare_xpsp_rate).to_i32

@@ -59,7 +59,7 @@ module SkillTreesData
     report
 
     @@loading = false
-    info { "Skill trees loaded in #{timer.result} s." }
+    info { "Skill trees loaded in #{timer} s." }
   end
 
   private def parse_document(doc, file)

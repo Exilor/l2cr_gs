@@ -812,31 +812,31 @@ module SevenSignsFestival
 
   def reward_highest_ranked
     if data = get_overall_highest_score_data(FESTIVAL_LEVEL_MAX_31)
-      data.get_string("members").split(',').each do |name|
+      data.get_string("members").split(',') do |name|
         add_reputation_points_for_party_member_clan(name)
       end
     end
 
     if data = get_overall_highest_score_data(FESTIVAL_LEVEL_MAX_42)
-      data.get_string("members").split(',').each do |name|
+      data.get_string("members").split(',') do |name|
         add_reputation_points_for_party_member_clan(name)
       end
     end
 
     if data = get_overall_highest_score_data(FESTIVAL_LEVEL_MAX_53)
-      data.get_string("members").split(',').each do |name|
+      data.get_string("members").split(',') do |name|
         add_reputation_points_for_party_member_clan(name)
       end
     end
 
     if data = get_overall_highest_score_data(FESTIVAL_LEVEL_MAX_64)
-      data.get_string("members").split(',').each do |name|
+      data.get_string("members").split(',') do |name|
         add_reputation_points_for_party_member_clan(name)
       end
     end
 
     if data = get_overall_highest_score_data(FESTIVAL_LEVEL_MAX_NONE)
-      data.get_string("members").split(',').each do |name|
+      data.get_string("members").split(',') do |name|
         add_reputation_points_for_party_member_clan(name)
       end
     end

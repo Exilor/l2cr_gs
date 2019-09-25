@@ -27,7 +27,7 @@ class GameClient
   def initialize(con : MMO::Connection(self)?)
     super
 
-    @packet_queue = Channel::Buffered(GameClientPacket).new(Config.client_packet_queue_size)
+    @packet_queue = Channel(GameClientPacket).new(Config.client_packet_queue_size)
 
     interval = Config.char_store_interval * 60000
     if interval > 0
@@ -57,7 +57,7 @@ class GameClient
   def state=(new_state : State)
     if @state != new_state
       @state = new_state
-      @packet_queue.@queue.clear
+      @packet_queue.@queue.try &.clear
     end
   end
 
@@ -275,9 +275,9 @@ class GameClient
     begin
       if @state.connected?
         if stats.processed_packets > 3
-          # if Config.packet_handler_debug
+          if Config.packet_handler_debug
             warn "Client disconnected (too many packets in non-authed state)."
-          # end
+          end
           close_now
           return
         end
@@ -294,7 +294,7 @@ class GameClient
     count = 0
 
     until @packet_queue.empty?
-      unless packet = @packet_queue.receive?
+      unless packet = (@packet_queue.receive rescue nil)#?
         return
       end
       if @detached
@@ -331,7 +331,7 @@ class GameClient
       return true
     end
 
-    if stats.count_packet(@packet_queue.@queue.size)
+    if stats.count_packet(@packet_queue.@queue.not_nil!.size)
       debug "#drop_packet: @stats.count_packet(@packet_queue.size) returned true."
       send_packet(Packets::Outgoing::ActionFailed::STATIC_PACKET)
       return true
@@ -506,12 +506,14 @@ class GameClient
     io << "GameClient("
     if pc = @active_char
       io << pc.name
-    else
+    elsif con = @connection
       begin
-        io << ip
+        io << con.ip
       rescue
         io << "socket closed"
       end
+    else
+      io << "disconnected"
     end
     io << ')'
   end

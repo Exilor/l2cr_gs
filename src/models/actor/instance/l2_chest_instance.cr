@@ -25,20 +25,20 @@ class L2ChestInstance < L2MonsterInstance
     id = template().id
 
     unless @special_drop
-      case
-      when id >= 18265 && id <= 18286
+      case id
+      when 18265..18286
         id += 3536
-      when id == 18287 || id == 18288
+      when 18287, 18288
         id = 21671
-      when id == 18289 || id == 18290
+      when 18289, 18290
         id = 21694
-      when id == 18291 || id == 18292
+      when 18291, 18292
         id = 21717
-      when id == 18293 || id == 18294
+      when 18293, 18294
         id = 21740
-      when id == 18295 || id == 18296
+      when 18295, 18296
         id = 21763
-      when id == 18297 || id == 18298
+      when 18297, 18298
         id = 21786
       end
     end

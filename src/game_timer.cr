@@ -14,17 +14,10 @@ module GameTimer
   TICKS_SUN_STATE_CHANGE = TICKS_PER_IG_DAY // 4
 
   private MOVING_OBJECTS = Set(L2Character).new
-  private REFERENCE_TIME = begin
-    c = Calendar.new
-    c.hour = 0
-    c.minute = 0
-    c.second = 0
-    c.millisecond = 0
-    c.ms
-  end
+  private REFERENCE_TIME = Time.now.at_beginning_of_day.ms
 
   def load
-    spawn { run }
+    spawn run
   end
 
   private def run
@@ -32,18 +25,18 @@ module GameTimer
     change_mode = ->DayNightSpawnManager.notify_change_mode
 
     until cancelled?
-      next_tick = ((Time.ms // MILLIS_IN_TICK) * MILLIS_IN_TICK) + 100
+      next_tick = Time.ms &+ 100
 
       sync do
         begin
-          MOVING_OBJECTS.delete_if &.update_position
+          MOVING_OBJECTS.reject! &.update_position
         rescue e
           error "Error updating the position of moving objects."
           error e
         end
       end
 
-      sleep_time = next_tick - Time.ms
+      sleep_time = next_tick &- Time.ms
       if sleep_time > 0
         sleep(sleep_time.milliseconds)
       end
@@ -60,7 +53,7 @@ module GameTimer
   end
 
   def ticks : Int32
-    ((Time.ms - REFERENCE_TIME) / MILLIS_IN_TICK).to_i32
+    ((Time.ms - REFERENCE_TIME) // MILLIS_IN_TICK).to_i32
   end
 
   def time : Int32

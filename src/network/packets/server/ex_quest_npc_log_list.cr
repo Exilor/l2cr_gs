@@ -3,7 +3,7 @@ class Packets::Outgoing::ExQuestNpcLogList < GameServerPacket
 
   @npcs = [] of NpcHolder
 
-  initializer quest_id: Int32
+  initializer quest_id : Int32
 
   def add_npc(npc_id : Int32, count : Int32)
     @npcs << NpcHolder.new(npc_id, 0, count)

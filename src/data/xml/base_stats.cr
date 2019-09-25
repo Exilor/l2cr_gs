@@ -64,7 +64,7 @@ require "../../models/actor/l2_character"
 class BaseStats < EnumClass
   extend XMLReader
 
-  protected initializer stat: BaseStat
+  protected initializer stat : BaseStat
 
   delegate calc_bonus, to: @stat
 

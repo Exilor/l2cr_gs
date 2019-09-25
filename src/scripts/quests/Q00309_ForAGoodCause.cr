@@ -136,8 +136,8 @@ class Scripts::Q00309_ForAGoodCause < Quest
     mucrokian = st.get_quest_items_count(MUCROKIAN_HIDE)
     fallen = st.get_quest_items_count(FALLEN_MUCROKIAN_HIDE)
     if fallen > 0
-      if fallen >= quanty / 2
-        st.take_items(FALLEN_MUCROKIAN_HIDE, quanty / 2)
+      if fallen >= quanty // 2
+        st.take_items(FALLEN_MUCROKIAN_HIDE, quanty // 2)
         return true
       elsif mucrokian >= quanty - (fallen * 2)
         st.take_items(FALLEN_MUCROKIAN_HIDE, fallen)

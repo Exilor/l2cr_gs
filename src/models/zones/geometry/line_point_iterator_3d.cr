@@ -19,11 +19,11 @@ struct LinePointIterator3D
 		@sz = z < dst_z ? 1i64 : -1i64
 
 		if @dx >= @dy && @dx >= @dz
-			@error = @error2 = @dx / 2
+			@error = @error2 = @dx // 2
 		elsif @dy >= @dx && @dy >= @dz
-			@error = @error2 = @dy / 2
+			@error = @error2 = @dy // 2
 		else
-			@error = @error2 = @dz / 2
+			@error = @error2 = @dz // 2
 		end
 
 		@first = true

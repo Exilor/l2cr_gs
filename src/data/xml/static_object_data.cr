@@ -33,7 +33,7 @@ module StaticObjectData
     STATIC_OBJECTS[obj.l2id] = obj
   end
 
-  def static_objects
+  def static_objects : Enumerable(L2StaticObjectInstance)
     STATIC_OBJECTS.local_each_value
   end
 end

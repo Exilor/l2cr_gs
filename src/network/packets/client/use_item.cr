@@ -194,7 +194,7 @@ class Packets::Incoming::UseItem < GameClientPacket
   end
 
   private struct ScheduleEquip
-    initializer pc: L2PcInstance, item: L2ItemInstance
+    initializer pc : L2PcInstance, item : L2ItemInstance
 
     def call
       @pc.use_equippable_item(@item, false)

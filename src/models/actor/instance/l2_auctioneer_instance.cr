@@ -106,7 +106,7 @@ class L2AuctioneerInstance < L2Npc
             html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).lease
             html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).location
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
-            html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) / 3600000} hours #{((a.end_date - Time.ms) / 60000) % 60} minutes"
+            html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) // 3600000} hours #{((a.end_date - Time.ms) // 60000) % 60} minutes"
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_COUNT%"] = a.bidders.size
             html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).desc
@@ -304,7 +304,7 @@ class L2AuctioneerInstance < L2Npc
             html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).lease
             html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).location
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
-            html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) / 3600000} hours #{((a.end_date - Time.ms) / 60000) % 60} minutes"
+            html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) // 3600000} hours #{((a.end_date - Time.ms) // 60000) % 60} minutes"
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_MYBID%"] = a.bidders[pc.clan_id].bid
             html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).desc
@@ -330,7 +330,7 @@ class L2AuctioneerInstance < L2Npc
             html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).lease
             html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).location
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
-            html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) / 3600000} hours #{((a.end_date - Time.ms) / 60000) % 60} minutes"
+            html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) // 3600000} hours #{((a.end_date - Time.ms) // 60000) % 60} minutes"
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_BIDCOUNT%"] = a.bidders.size
             html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).desc

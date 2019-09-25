@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExRequestChangeNicknameColor < GameServerPacket
-  initializer item_l2id: Int32
+  initializer item_l2id : Int32
 
   def write_impl
     c 0xfe

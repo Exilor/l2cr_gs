@@ -40,7 +40,7 @@ module Config
         @allowed_class_change[job] = true
         required_items = [] of ItemHolder
         unless st.empty?
-          st2 = st.shift.split(/\[([^\]]*)\]/).reject &.empty?
+          st2 = st.shift.split(/\[([^\]]*)\]/).reject! &.empty?
           until st2.empty?
             st3 = st2.shift.split(/\(\)/)
             item_id = st3.shift.to_i
@@ -53,7 +53,7 @@ module Config
 
         reward_items = [] of ItemHolder
         unless st.empty?
-          st2 = st.shift.split(/\[([^\]]*)\]/).reject &.empty?
+          st2 = st.shift.split(/\[([^\]]*)\]/).reject! &.empty?
           until st2.empty?
             st3 = st2.shift.split(/\(\)/)
             item_id = st3.shift.to_i

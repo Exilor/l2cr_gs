@@ -1,5 +1,5 @@
 struct VitalityTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     return unless @pc.inside_peace_zone?

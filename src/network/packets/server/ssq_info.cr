@@ -1,7 +1,7 @@
 class Packets::Outgoing::SSQInfo < GameServerPacket
   @state = 0
 
-  initializer state: Int32
+  initializer state : Int32
 
   def initialize
     if SevenSigns.seal_validation_period?

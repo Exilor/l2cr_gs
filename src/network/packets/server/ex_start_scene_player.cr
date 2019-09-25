@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExStartScenePlayer < GameServerPacket
-  initializer movie_id: Int32
+  initializer movie_id : Int32
 
   def write_impl
     c 0xfe

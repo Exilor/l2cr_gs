@@ -5,7 +5,7 @@ class DropListScope < EnumClass
   private alias DropProc = Int32, Int64, Int64, Float64 -> IDropItem
   private alias GroupedDropProc = Float64 -> GroupedGeneralDropItem
 
-  protected initializer proc: DropProc, group_proc: GroupedDropProc
+  protected initializer proc : DropProc, group_proc : GroupedDropProc
 
   add(
     DEATH,

@@ -14,7 +14,7 @@ class L2FortManagerInstance < L2MerchantInstance
   end
 
   private struct SimpleDateFormat
-    initializer format: String
+    initializer format : String
 
     def format(n)
       sprintf(@format, n)
@@ -78,13 +78,13 @@ class L2FortManagerInstance < L2MerchantInstance
           html.set_file(pc, "data/html/fortress/foreman-report.htm")
           html["%objectId%"] = l2id
           if Config.fs_max_own_time > 0
-            hour = (fort.time_until_rebel_army / 3600).to_i
-            minutes = ((fort.time_until_rebel_army - (hour * 3600)) / 60).to_i
+            hour = (fort.time_until_rebel_army // 3600).to_i
+            minutes = ((fort.time_until_rebel_army - (hour * 3600)) // 60).to_i
             html["%hr%"] = hour
             html["%min%"] = minutes
           else
-            hour = (fort.owned_time / 3600).to_i
-            minutes = ((fort.owned_time - (hour * 3600)) / 60).to_i
+            hour = (fort.owned_time // 3600).to_i
+            minutes = ((fort.owned_time - (hour * 3600)) // 60).to_i
             html["%hr%"] = hour
             html["%min%"] = minutes
           end
@@ -94,18 +94,18 @@ class L2FortManagerInstance < L2MerchantInstance
           html.set_file(pc, "data/html/fortress/foreman-castlereport.htm")
           html["%objectId%"] = l2id
           if Config.fs_max_own_time > 0
-            hour = (fort.time_until_rebel_army / 3600).to_i
-            minutes = ((fort.time_until_rebel_army - (hour * 3600)) / 60).to_i
+            hour = (fort.time_until_rebel_army // 3600).to_i
+            minutes = ((fort.time_until_rebel_army - (hour * 3600)) // 60).to_i
             html["%hr%"] = hour
             html["%min%"] = minutes
           else
-            hour = (fort.owned_time / 3600).to_i
-            minutes = ((fort.owned_time - (hour * 3600)) / 60).to_i
+            hour = (fort.owned_time // 3600).to_i
+            minutes = ((fort.owned_time - (hour * 3600)) // 60).to_i
             html["%hr%"] = hour
             html["%min%"] = minutes
           end
-          hour = (fort.time_until_next_fort_update / 3600).to_i
-          minutes = ((fort.time_until_next_fort_update - (hour * 3600)) / 60).to_i
+          hour = (fort.time_until_next_fort_update // 3600).to_i
+          minutes = ((fort.time_until_next_fort_update - (hour * 3600)) // 60).to_i
           html["%castle%"] = fort.contracted_castle.name
           html["%hr2%"] = hour
           html["%min2%"] = minutes

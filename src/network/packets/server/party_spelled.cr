@@ -1,7 +1,7 @@
 class Packets::Outgoing::PartySpelled < GameServerPacket
   @effects = [] of BuffInfo
 
-  initializer char: L2Character
+  initializer char : L2Character
 
   def add_skill(info : BuffInfo)
     @effects << info

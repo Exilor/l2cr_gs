@@ -1,5 +1,5 @@
 class Packets::Outgoing::VehicleCheckLocation < GameServerPacket
-  initializer boat: L2Character
+  initializer boat : L2Character
 
   def write_impl
     c 0x6d

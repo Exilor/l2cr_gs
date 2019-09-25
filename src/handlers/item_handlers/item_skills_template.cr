@@ -111,9 +111,9 @@ module ItemHandler::ItemSkillsTemplate
     available = remaining_time <= 0
 
     if playable.player? && !available
-      hours = remaining_time / 3_600_000
-      minutes = (remaining_time % 3_600_000) / 60_000
-      seconds = (remaining_time / 1000) % 60
+      hours = remaining_time // 3_600_000
+      minutes = (remaining_time % 3_600_000) // 60_000
+      seconds = (remaining_time // 1000) % 60
 
       if hours > 0
         sm = SystemMessage.s2_hours_s3_minutes_s4_seconds_remaining_for_reuse_s1

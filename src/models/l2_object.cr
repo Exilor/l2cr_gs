@@ -24,12 +24,14 @@ abstract class L2Object < ListenersContainer
   getter? invisible = false
   property name : String = ""
 
-  abstract def auto_attackable?(attacker : L2Character) : Bool
-  abstract def send_info(pc : L2PcInstance)
-
   def initialize(@l2id : Int32)
     init_known_list
   end
+
+  def_equals_and_hash @l2id
+
+  abstract def auto_attackable?(attacker : L2Character) : Bool
+  abstract def send_info(pc : L2PcInstance)
 
   def decay_me : Bool
     unless region = world_region?
@@ -414,8 +416,11 @@ abstract class L2Object < ListenersContainer
   end
 
   def calculate_distance(x : Int32, y : Int32, z : Int32, z_axis : Bool, squared : Bool) : Float64
-    distance = ((x - x()) ** 2) + ((y - y()) ** 2) + (z_axis ? ((z - z()) ** 2) : 0)
-    (squared ? distance : Math.sqrt(distance)).to_f
+    distance = Math.pow(x - x(), 2) + Math.pow(y - y(), 2)
+    if z_axis
+      distance += Math.pow(z - z(), 2)
+    end
+    squared ? distance : Math.sqrt(distance)
   end
 
   def calculate_distance(loc : Locatable, z_axis : Bool, squared : Bool) : Float64

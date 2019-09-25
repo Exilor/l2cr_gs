@@ -1,5 +1,5 @@
 class Packets::Outgoing::PledgeReceiveSubPledgeCreated < GameServerPacket
-  initializer subpledge: L2Clan::Subpledge, clan: L2Clan
+  initializer subpledge : L2Clan::Subpledge, clan : L2Clan
 
   def write_impl
     c 0xfe

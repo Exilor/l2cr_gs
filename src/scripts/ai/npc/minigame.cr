@@ -234,7 +234,7 @@ class Scripts::Minigame < AbstractNpcAI
     property! participant : L2PcInstance?
     property? started : Bool = false
 
-    getter_initializer burners: Array(L2Npc), manager: L2Npc
+    getter_initializer burners : Array(L2Npc), manager : L2Npc
 
     def get_burner_pos(npc)
       @burners.index { |burner| npc == burner } || 0

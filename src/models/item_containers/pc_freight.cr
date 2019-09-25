@@ -1,7 +1,7 @@
 require "./item_container"
 
 class PcFreight < ItemContainer
-  getter! owner : L2PcInstance
+  @owner : L2PcInstance?
   getter owner_id : Int32
 
   def initialize(@owner_id : Int32)
@@ -10,6 +10,10 @@ class PcFreight < ItemContainer
   def initialize(@owner : L2PcInstance)
     @owner_id = owner.l2id
     restore
+  end
+
+  def owner? : L2PcInstance?
+    @owner
   end
 
   def base_location : ItemLocation

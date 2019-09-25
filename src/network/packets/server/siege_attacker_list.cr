@@ -2,8 +2,8 @@ class Packets::Outgoing::SiegeAttackerList < GameServerPacket
   @castle : Castle?
   @hall : SiegableHall?
 
-  initializer castle: Castle
-  initializer hall: SiegableHall
+  initializer castle : Castle
+  initializer hall : SiegableHall
 
   def write_impl
     c 0xca

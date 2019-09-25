@@ -213,10 +213,12 @@ module AdminCommandHandler::AdminTeleport
         player.instance_id = pc.instance_id
         pc.send_message("You have recalled #{player.name}.")
       else
-        player.send_message("Admin is teleporting you.")
-        player.intention = AI::IDLE
-        player.tele_to_location(loc, true)
+        player.instance_id = 0
       end
+
+      player.send_message("Admin is teleporting you.")
+      player.intention = AI::IDLE
+      player.tele_to_location(loc, true)
     end
   end
 
@@ -246,7 +248,7 @@ module AdminCommandHandler::AdminTeleport
         return
       end
 
-      respawn_time = sp.respawn_delay / 1000
+      respawn_time = sp.respawn_delay // 1000
 
       target.delete_me
       sp.stop_respawn

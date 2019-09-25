@@ -311,7 +311,7 @@ class Scripts::BeastFarm < AbstractNpcAI
     @skill_success_npc_id_list = {} of Int32 => Int32
     getter growth_level
 
-    initializer chance: Int32, growth_level: Int32, tame_npc_id: Int32
+    initializer chance : Int32, growth_level : Int32, tame_npc_id : Int32
 
     def add_npc_id_for_skill_id(skill_id, npc_id)
       @skill_success_npc_id_list[skill_id] = npc_id

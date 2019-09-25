@@ -207,7 +207,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
         ret &= port_player_to_arena(@team_one[i], spawns[i], @stadium_id)
       end
 
-      offset = spawns.size / 2
+      offset = spawns.size // 2
       @team_two_size.times do |i|
         ret &= port_player_to_arena(@team_two[i], spawns[i + offset], @stadium_id)
       end
@@ -410,8 +410,8 @@ class OlympiadGameTeams < AbstractOlympiadGame
         if @team_one_defaulted
           @team_one_size.downto(0) do |i|
             par = @team_one[i]
-            points = par.stats.get_i32(POINTS) / divider
-            val = Math.min(par.stats.get_i32(POINTS) / 3, Config.alt_oly_max_points)
+            points = par.stats.get_i32(POINTS) // divider
+            val = Math.min(par.stats.get_i32(POINTS) // 3, Config.alt_oly_max_points)
             remove_points_from_participant(par, val)
             list1 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t1, points - val, -val)
           end
@@ -420,8 +420,8 @@ class OlympiadGameTeams < AbstractOlympiadGame
         if @team_two_defaulted
           @team_two_size.downto(0) do |i|
             par = @team_two[i]
-            points = par.stats.get_i32(POINTS) / divider
-            val = Math.min(par.stats.get_i32(POINTS) / 3, Config.alt_oly_max_points)
+            points = par.stats.get_i32(POINTS) // divider
+            val = Math.min(par.stats.get_i32(POINTS) // 3, Config.alt_oly_max_points)
             remove_points_from_participant(par, val)
             list2 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t2, points - val, -val)
           end
@@ -452,7 +452,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     totalpoints_t1 = 0
     totalpoints_t2 = 0
     @team_one_size.times do |i|
-      points = @team_one[i].stats.get_i32(POINTS) / divider
+      points = @team_one[i].stats.get_i32(POINTS) // divider
       if points <= 0
         points = 1
       elsif points > Config.alt_oly_max_points
@@ -465,7 +465,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     end
 
     @team_two_size.downto(0) do |i|
-      points = @team_two[i].stats.get_i32(POINTS) / divider
+      points = @team_two[i].stats.get_i32(POINTS) // divider
       if points <= 0
         points = 1
       elsif points > Config.alt_oly_max_points
@@ -481,7 +481,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     min = Math.min(totalpoints_t1, totalpoints_t2).to_i
 
     # make sure all team members got same number of the points: round down to 3x
-    min = (min / MAX_TEAM_SIZE) * MAX_TEAM_SIZE
+    min = (min // MAX_TEAM_SIZE) * MAX_TEAM_SIZE
 
     # calculating coefficients and trying to correct total number of points for each team
     # due to rounding errors total points after correction will always be lower or equal
@@ -491,13 +491,13 @@ class OlympiadGameTeams < AbstractOlympiadGame
     totalpoints_t1 = min
     totalpoints_t2 = min
     @team_one_size.times do |i|
-      points = Math.max((points_t1[i] / divider_1).to_i, 1)
+      points = Math.max((points_t1[i] // divider_1).to_i, 1)
       points_t1[i] = points
       totalpoints_t1 -= points
     end
 
     @team_two_size.downto(0) do |i|
-      points = Math.max((points_t2[i] / divider_2).to_i, 1)
+      points = Math.max((points_t2[i] // divider_2).to_i, 1)
       points_t2[i] = points
       totalpoints_t2 -= points
     end
@@ -536,7 +536,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
             list2 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t2, par.stats.get_i32(POINTS) - points, -points)
           end
 
-          points = min / MAX_TEAM_SIZE
+          points = min // MAX_TEAM_SIZE
           @team_one_size.times do |i|
             par = @team_one[i]
             par.update_stat(COMP_WON, 1)
@@ -562,7 +562,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
             list1 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t1, par.stats.get_i32(POINTS) - points, -points)
           end
 
-          points = min / MAX_TEAM_SIZE
+          points = min // MAX_TEAM_SIZE
           @team_two_size.times do |i|
             par = @team_two[i]
             par.update_stat(COMP_WON, 1)
@@ -660,7 +660,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
           list2 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t2, par.stats.get_i32(POINTS) - points, -points)
         end
 
-        points = min / MAX_TEAM_SIZE
+        points = min // MAX_TEAM_SIZE
         @team_one_size.times do |i|
           par = @team_one[i]
           par.update_stat(COMP_WON, 1)
@@ -686,7 +686,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
           list1 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t1, par.stats.get_i32(POINTS) - points, -points)
         end
 
-        points = min / MAX_TEAM_SIZE
+        points = min // MAX_TEAM_SIZE
         @team_two_size.times do |i|
           par = @team_two[i]
           par.update_stat(COMP_WON, 1)
@@ -705,7 +705,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
         @team_one_size.times do |i|
           par = @team_one[i]
           par.update_stat(COMP_DRAWN, 1)
-          points = Math.min(par.stats.get_i32(POINTS) / divider, Config.alt_oly_max_points)
+          points = Math.min(par.stats.get_i32(POINTS) // divider, Config.alt_oly_max_points)
           remove_points_from_participant(par, points)
           list1 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t1, par.stats.get_i32(POINTS) - points, -points)
         end
@@ -713,7 +713,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
         @team_two_size.times do |i|
           par = @team_two[i]
           par.update_stat(COMP_DRAWN, 1)
-          points = Math.min(par.stats.get_i32(POINTS) / divider, Config.alt_oly_max_points)
+          points = Math.min(par.stats.get_i32(POINTS) // divider, Config.alt_oly_max_points)
           remove_points_from_participant(par, points)
           list2 << OlympiadInfo.new(par.name, par.clan_name, par.clan_id, par.base_class, @damage_t2, par.stats.get_i32(POINTS) - points, -points)
         end
@@ -771,7 +771,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     end
   end
 
-  def player_names
+  def player_names : Indexable(String)
     {@team_one[0].name, @team_two[0].name}
   end
 

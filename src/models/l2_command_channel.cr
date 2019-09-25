@@ -2,7 +2,7 @@ require "./abstract_player_group"
 
 class L2CommandChannel < AbstractPlayerGroup
   @party : L2Party
-  getter leader
+  getter leader : L2PcInstance
   getter level : Int32
   getter parties : Array(L2Party)
 

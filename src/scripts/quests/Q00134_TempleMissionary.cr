@@ -135,7 +135,7 @@ class Scripts::Q00134_TempleMissionary < Quest
           if st.get_quest_items_count(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) < FRAGMENT_COUNT && st.get_quest_items_count(GIANTS_TECHNOLOGY_REPORT) < REPORT_COUNT
             html = "31418-04.html"
           elsif st.get_quest_items_count(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) >= FRAGMENT_COUNT
-            count = st.get_quest_items_count(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) / 10
+            count = st.get_quest_items_count(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) // 10
             st.take_items(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, count * 10)
             st.give_items(GIANTS_EXPERIMENTAL_TOOL, count)
             html = "31418-05.html"

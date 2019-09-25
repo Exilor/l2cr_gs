@@ -1,5 +1,5 @@
 class Packets::Outgoing::GMViewPledgeInfo < GameServerPacket
-  initializer clan: L2Clan, pc: L2PcInstance
+  initializer clan : L2Clan, pc : L2PcInstance
 
   def write_impl
     c 0x96

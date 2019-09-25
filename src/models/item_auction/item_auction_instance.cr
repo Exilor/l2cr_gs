@@ -212,7 +212,7 @@ class ItemAuctionInstance
   private struct ScheduleAuctionTask
     include Loggable
 
-    initializer instance: ItemAuctionInstance, auction: ItemAuction
+    initializer instance : ItemAuctionInstance, auction : ItemAuction
 
     def call
       run_impl

@@ -25,7 +25,7 @@ module SkillLearnData
   end
 
   def [](id : Int) : Array(ClassId)
-    SKILL_LEARN[id]
+    SKILL_LEARN.fetch(id) { raise "No skill learn data for id #{id}" }
   end
 
   def []?(id : Int) : Array(ClassId)?

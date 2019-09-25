@@ -31,7 +31,11 @@ class PcInventory < Inventory
   end
 
   def adena_instance : L2ItemInstance
-    @adena.not_nil!
+    unless adena = @adena
+      raise "Player #{name}'s @adena failed nil assertion"
+    end
+
+    adena
   end
 
   def adena : Int64
@@ -43,7 +47,11 @@ class PcInventory < Inventory
   end
 
   def ancient_adena_instance : L2ItemInstance
-    @ancient_adena.not_nil!
+    unless ancient_adena = @ancient_adena
+      raise "Player #{name}'s @ancient_adena failed nil assertion"
+    end
+
+    ancient_adena
   end
 
   def ancient_adena : Int64
@@ -219,6 +227,7 @@ class PcInventory < Inventory
     if count > 0
       return !!destroy_item_by_item_id(process, ANCIENT_ADENA_ID, count, actor, reference)
     end
+
     false
   end
 
@@ -263,7 +272,7 @@ class PcInventory < Inventory
       if Config.force_inventory_update
         actor.send_packet(ItemList.new(actor, false))
       else
-        actor.send_packet(InventoryUpdate::SingleItem.new(item))
+        actor.send_packet(InventoryUpdate.single(item))
       end
 
       actor.send_packet(StatusUpdate.current_load(actor))

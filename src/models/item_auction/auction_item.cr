@@ -1,9 +1,9 @@
 struct AuctionItem
   getter auction_item_id, auction_length, auction_init_bid, item_id, item_count
 
-  initializer auction_item_id: Int32, auction_length: Int32,
-    auction_init_bid: Int64, item_id: Int32, item_count: Int64,
-    item_extra: StatsSet
+  initializer auction_item_id : Int32, auction_length : Int32,
+    auction_init_bid : Int64, item_id : Int32, item_count : Int64,
+    item_extra : StatsSet
 
   def check_item_exists : Bool
     !!ItemTable[@item_id]?

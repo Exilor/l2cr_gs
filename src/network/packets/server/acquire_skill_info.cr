@@ -1,6 +1,6 @@
 class Packets::Outgoing::AcquireSkillInfo < GameServerPacket
   private struct Req
-    getter_initializer type: Int32, item_id: Int32, count: Int64, unk: Int32
+    getter_initializer type : Int32, item_id : Int32, count : Int64, unk : Int32
   end
 
   @id : Int32

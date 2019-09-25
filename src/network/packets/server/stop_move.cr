@@ -1,5 +1,5 @@
 class Packets::Outgoing::StopMove < GameServerPacket
-  initializer l2id: Int32, x: Int32, y: Int32, z: Int32, heading: Int32
+  initializer l2id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32
 
   def initialize(char : L2Character)
     @l2id = char.l2id

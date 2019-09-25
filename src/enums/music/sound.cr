@@ -3,7 +3,7 @@ require "./i_audio"
 class Sound < EnumClass
   include IAudio
 
-  getter packet
+  getter packet : Packets::Outgoing::PlaySound
 
   protected def initialize(name)
     @packet = Packets::Outgoing::PlaySound.create_sound(name)

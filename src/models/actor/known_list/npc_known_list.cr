@@ -44,7 +44,7 @@ class NpcKnownList < CharKnownList
   end
 
   struct TrackingTask
-    initializer npc: L2Npc
+    initializer npc : L2Npc
 
     def call
       npc = @npc

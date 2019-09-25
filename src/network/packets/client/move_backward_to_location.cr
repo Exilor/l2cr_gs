@@ -12,7 +12,7 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
 
     unless buffer.remaining >= 4
       if Config.l2walker_protection
-        warn "Player #{client.active_char} is trying to use L2Walker."
+        warn { "Player #{client.active_char} is trying to use L2Walker." }
         if pc = client.active_char
           Util.punish(pc, "tried to use L2Walker and got kicked.")
         end
@@ -46,7 +46,6 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
     end
 
     if pc.out_of_control?
-      debug "#{pc.name} is out of control."
       action_failed
       return
     end
@@ -55,7 +54,7 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
     dy = @to_y.to_f - pc.y
 
     if (dx * dx) + (dy * dy) > 98_010_000
-      debug "#{pc.name}: distance is too large."
+      debug { "#{pc.name}: distance is too large." }
       action_failed
       return
     end

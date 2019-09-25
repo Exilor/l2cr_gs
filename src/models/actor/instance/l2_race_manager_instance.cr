@@ -272,7 +272,7 @@ class L2RaceManagerInstance < L2Npc
       item.count = 1
       item.enchant_level = @@race_number
       item.custom_type_1 = ticket
-      item.custom_type_2 = COST[price_id - 1] / 100
+      item.custom_type_2 = COST[price_id - 1] // 100
       pc.inventory.add_item("Race", item, pc, self)
       iu = InventoryUpdate.new
       iu.add_item(item)
@@ -289,7 +289,7 @@ class L2RaceManagerInstance < L2Npc
   end
 
   private struct Announcement
-    initializer announcer: L2RaceManagerInstance, sm_id: SystemMessageId
+    initializer announcer : L2RaceManagerInstance, sm_id : SystemMessageId
 
     def call
       @announcer.make_announcement(@sm_id)
@@ -297,7 +297,7 @@ class L2RaceManagerInstance < L2Npc
   end
 
   private struct Race
-    initializer info: Array(Info)
+    initializer info : Array(Info)
 
     def get_lane_info(lane : Int)
       @info[lane]
@@ -307,7 +307,7 @@ class L2RaceManagerInstance < L2Npc
   private record Info, id : Int32, place : Int32, odds : Int32, payout : Int32
 
   private struct RunRace
-    initializer manager: L2RaceManagerInstance
+    initializer manager : L2RaceManagerInstance
 
     def call
       L2RaceManagerInstance.packet = Packets::Outgoing::MonRaceInfo.new(
@@ -319,7 +319,7 @@ class L2RaceManagerInstance < L2Npc
   end
 
   private struct RunEnd
-    initializer manager: L2RaceManagerInstance
+    initializer manager : L2RaceManagerInstance
 
     def call
       @manager.make_announcement(SystemMessageId::MONSRACE_FIRST_PLACE_S1_SECOND_S2)

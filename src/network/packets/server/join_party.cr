@@ -1,5 +1,5 @@
 class Packets::Outgoing::JoinParty < GameServerPacket
-  initializer response: Int32
+  initializer response : Int32
 
   def write_impl
     c 0x3a

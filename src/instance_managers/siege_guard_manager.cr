@@ -5,7 +5,7 @@ struct SiegeGuardManager
 
   getter siege_guard_spawn = [] of L2Spawn
 
-  getter_initializer castle: Castle
+  getter_initializer castle : Castle
 
   def add_siege_guard(pc : L2PcInstance, npc_id : Int32)
     add_siege_guard(*pc.xyz, pc.heading, npc_id)
@@ -78,7 +78,7 @@ struct SiegeGuardManager
     end
 
     GameDB.each(sql, arg) do |rs|
-      npc_id = rs.get_i32("npcId").to_u16.to_i32
+      npc_id = rs.get_i32("npcId").to_u16!.to_i32
       sp = L2Spawn.new(npc_id)
       sp.amount = 1
       sp.x = rs.get_i32("x")

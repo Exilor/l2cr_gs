@@ -14,9 +14,9 @@ struct LinePointIterator
 		@sy = y < dst_y ? 1i64 : -1i64
 
 		if @dx >= @dy
-			@error = @dx / 2
+			@error = @dx // 2
 		else
-			@error = @dy / 2
+			@error = @dy // 2
 		end
 
 		@first = true

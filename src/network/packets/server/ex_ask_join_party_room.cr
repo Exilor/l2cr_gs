@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExAskJoinPartyRoom < GameServerPacket
-  initializer name: String
+  initializer name : String
 
   def write_impl
     c 0xfe

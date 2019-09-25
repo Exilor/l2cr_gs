@@ -20,17 +20,17 @@ module SpawnTable
         warn "No spawns were loaded from the database."
       end
 
-      info { "Loaded #{spawn_count} NPC spawns in #{timer.result} s." }
+      info { "Loaded #{spawn_count} NPC spawns in #{timer} s." }
       timer.start
 
       if Config.custom_spawnlist_table
         fill_spawn_table(true)
-        info { "Loaded #{SPAWN_TABLE.size - spawn_count} custom NPC spawns in #{timer.result} s." }
+        info { "Loaded #{SPAWN_TABLE.size - spawn_count} custom NPC spawns in #{timer} s." }
         timer.start
       end
 
       parse_datapack_directory("spawnlist")
-      info { "Loaded #{@@xml_spawn_count} NPC spawns from XML files in #{timer.result} s." }
+      info { "Loaded #{@@xml_spawn_count} NPC spawns from XML files in #{timer} s." }
     end
   end
 
@@ -41,7 +41,7 @@ module SpawnTable
 
     sql = is_custom ? SELECT_CUSTOM_SPAWNS : SELECT_SPAWNS
     GameDB.each(sql) do |rs|
-      npc_id = rs.get_i32("npc_templateid").to_u16.to_i32 # OverflowError - what's the on-purpose overflow method
+      npc_id = rs.get_i32("npc_templateid").to_u16!.to_i32
       unless check_template(npc_id)
         next
       end
@@ -248,16 +248,16 @@ module SpawnTable
             end
 
             if val = npctag["respawnDelay"]?.try &.to_i
-              spawn_info["respawn_delay"] = val
+              spawn_info["respawnDelay"] = val
             end
 
             if val = npctag["spawnRandom"]?.try &.to_i
-              spawn_info["spawn_random"] = val
+              spawn_info["respawnRandom"] = val
             end
 
             if val = npctag["periodOfDay"]?
               if val.casecmp?("day") || val.casecmp?("night")
-                spawn_info["period"] = val.casecmp?("day") ? 1 : 2
+                spawn_info["periodOfDay"] = val.casecmp?("day") ? 1 : 2
               end
             end
 

@@ -2,7 +2,7 @@ struct EnchantSkillLearn
   include Loggable
 
   @enchant_routes = {} of Int32 => Int32
-  getter_initializer id: Int32, base_level: Int32
+  getter_initializer id : Int32, base_level : Int32
 
   def add_new_enchant_route(route : Int32, group : Int32)
     @enchant_routes[route] = group

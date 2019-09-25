@@ -144,7 +144,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   end
 
   private struct BuffCast
-    initializer beast: L2TamedBeastInstance, skill: Skill?
+    initializer beast : L2TamedBeastInstance, skill : Skill?
 
     def call
       if skill = @skill
@@ -289,7 +289,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   end
 
   private struct CheckDuration
-    initializer beast: L2TamedBeastInstance
+    initializer beast : L2TamedBeastInstance
 
     def call
       food_type_skill_id = @beast.food_type
@@ -344,7 +344,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   end
 
   private struct CheckOwnerBuffs
-    initializer beast: L2TamedBeastInstance, num_buffs: Int32
+    initializer beast : L2TamedBeastInstance, num_buffs : Int32
 
     def call
       owner = @beast.owner?
@@ -387,7 +387,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
         end
       end
       # if the owner has less than 60% of this beast's available buff, cast a random buff
-      if (@num_buffs * 2) / 3 > total_buffs_on_owner
+      if (@num_buffs * 2) // 3 > total_buffs_on_owner
         @beast.sit_cast_and_follow(buffs_to_give.not_nil!, owner)
       end
       @beast.set_intention(AI::FOLLOW, @beast.owner)

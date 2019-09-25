@@ -1,5 +1,5 @@
 class Packets::Outgoing::ReplyCharacters < MMO::OutgoingPacket(LoginServerClient)
-  initializer account: String, chars: Int32, to_delete: Indexable(Int64)
+  initializer account : String, chars : Int32, to_delete : Indexable(Int64)
 
   def write
     c 0x08

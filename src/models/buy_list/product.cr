@@ -84,7 +84,7 @@ class Product
   end
 
   private struct RestockTask
-    initializer product: Product
+    initializer product : Product
 
     def call
       @product.restock

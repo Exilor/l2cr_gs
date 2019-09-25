@@ -11,7 +11,7 @@ struct ZoneNPoly < L2ZoneForm
   end
 
   def inside_zone?(x : Int32, y : Int32, z : Int32) : Bool
-    @p.contains?(x, y) && @z1 <= z <= @z2
+    @p.contains?(x, y) && z.between?(@z1, @z2)
   end
 
   def intersects_rectangle?(ax1 : Int32, ax2 : Int32, ay1 : Int32, ay2 : Int32) : Bool
@@ -26,11 +26,11 @@ struct ZoneNPoly < L2ZoneForm
   def get_distance_to_zone(x : Int32, y : Int32) : Float64
     _x, _y = @p.x_points, @p.y_points
 
-    shortest_dist = ((_x[0] - x) ** 2) + ((_y[0] - y) ** 2)
+    shortest_dist = Math.pow(_x[0] - x, 2) + Math.pow(_y[0] - y, 2)
     test = 0.0
 
     1.upto(@p.n_points - 1) do |i|
-      test = ((_x[i] - x) ** 2) + ((_y[i] - y) ** 2)
+      test = Math.pow(_x[i] - x, 2) + Math.pow(_y[i] - y, 2)
       if test < shortest_dist
         shortest_dist = test
       end

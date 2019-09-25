@@ -4,7 +4,7 @@ class SkillChannelizer
   getter! channelized : Array(L2Character)
   getter! skill : Skill
 
-  getter_initializer channelizer: L2Character
+  getter_initializer channelizer : L2Character
 
   def has_channelized? : Bool
     !!@channelized

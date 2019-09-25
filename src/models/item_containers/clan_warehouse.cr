@@ -1,7 +1,7 @@
 require "./warehouse"
 
 class ClanWarehouse < Warehouse
-  initializer clan: L2Clan
+  initializer clan : L2Clan
 
   def name : String
     "ClanWarehouse"

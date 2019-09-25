@@ -29,10 +29,11 @@ module EventListenerOwner
 end
 
 abstract class AbstractEventListener
-  getter_initializer container: ListenersContainer, type: EventType,
-    owner: EventListenerOwner?
+  getter_initializer container : ListenersContainer, type : EventType,
+    owner : EventListenerOwner?
 
-  abstract def execute_event(event : BaseEvent, return_class : T.class | Nil.class) : T? forall T
+  # abstract def execute_event(event : BaseEvent, return_class : T.class | Nil.class) : T? forall T
+  abstract def execute_event(event, return_class)
 
   def unregister_me
     container.remove_listener(self)

@@ -61,7 +61,7 @@ module AdminCommandHandler::AdminMonsterRace
   end
 
   private struct RunRace
-    initializer codes: Array(Array(Int32)), pc: L2PcInstance
+    initializer codes : Array(Array(Int32)), pc : L2PcInstance
 
     def call
       spk = Packets::Outgoing::MonRaceInfo.new(@codes[2][0], @codes[2][1], MonsterRace.monsters, MonsterRace.speeds)
@@ -72,7 +72,7 @@ module AdminCommandHandler::AdminMonsterRace
   end
 
   private struct RunEnd
-    initializer pc: L2PcInstance
+    initializer pc : L2PcInstance
 
     def call
       8.times do |i|

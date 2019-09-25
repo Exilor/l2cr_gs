@@ -170,7 +170,7 @@ module BotReportTable
         reuse = Time.ms - rcd_rep.last_report_time
         if reuse < Config.botreport_report_delay
           sm = SystemMessage.you_can_report_in_s1_mins_you_have_s2_points_left
-          sm.add_int(reuse / 60000)
+          sm.add_int(reuse // 60000)
           sm.add_int(rcd_rep.points)
           reporter.send_packet(sm)
           return false
@@ -266,9 +266,7 @@ module BotReportTable
   end
 
   private def hash_ip(pc) : Int32
-    warn "TODO: Getting a player's IP address."
-    # con = pc.cient.connection.address.address
-    con = "0.0.0.0"
+    con = pc.client.connection.ip
     bytes = con.split('.')
     ip = bytes.map &.to_i
 

@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExRotation < GameServerPacket
-  initializer char_id: Int32, heading: Int32
+  initializer char_id : Int32, heading : Int32
 
   def write_impl
     c 0xfe

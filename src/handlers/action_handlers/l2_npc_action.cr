@@ -37,8 +37,7 @@ module ActionHandler::L2NpcAction
           end
 
           if npc.event_mob?
-            warn "TODO: L2Event.show_event_html(pc, npc.l2id.to_s)"
-            # L2Event.show_event_html(pc, npc.l2id.to_s)
+            L2Event.show_event_html(pc, npc.l2id.to_s)
           else
             if npc.has_listener?(EventType::ON_NPC_QUEST_START)
               pc.last_quest_npc_l2id = npc.l2id

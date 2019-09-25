@@ -25,7 +25,7 @@ module UserCommandHandler::Unstuck
 
     unstuck_timer = pc.gm? ? 1000 : Config.unstuck_interval * 1000
 
-    pc.force_is_casting(GameTimer.ticks + (unstuck_timer / GameTimer::MILLIS_IN_TICK))
+    pc.force_is_casting(GameTimer.ticks + (unstuck_timer // GameTimer::MILLIS_IN_TICK))
 
     escape = SkillData[2099, 1]?
     gm_escape = SkillData[2100, 1]?
@@ -41,9 +41,9 @@ module UserCommandHandler::Unstuck
       return true
     else
       if Config.unstuck_interval > 100
-        pc.send_message("You use Escape: #{unstuck_timer / 60000} seconds.")
+        pc.send_message("You use Escape: #{unstuck_timer // 60000} seconds.")
       else
-        pc.send_message("You use Escape: #{unstuck_timer / 1000} seconds.")
+        pc.send_message("You use Escape: #{unstuck_timer // 1000} seconds.")
       end
     end
 

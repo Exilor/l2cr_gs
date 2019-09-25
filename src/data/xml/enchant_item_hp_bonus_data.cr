@@ -51,9 +51,9 @@ module EnchantItemHPBonusData
     bonus = values[Math.min(item.oly_enchant_level, values.size) - 1]
 
     if item.template.body_part == L2Item::SLOT_FULL_ARMOR
-      (bonus * FULL_ARMOR_MODIFIER).to_i
-    else
-      bonus
+      return (bonus * FULL_ARMOR_MODIFIER).to_i
     end
+
+    bonus
   end
 end

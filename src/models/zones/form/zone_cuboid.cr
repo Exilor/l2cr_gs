@@ -15,7 +15,7 @@ struct ZoneCuboid < L2ZoneForm
   end
 
   def inside_zone?(x : Int32, y : Int32, z : Int32) : Bool
-    @r.contains?(x.to_f64, y.to_f64) && @z1 <= z <= @z2
+    @r.contains?(x.to_f64, y.to_f64) && z.between?(@z1, @z2)
   end
 
   def intersects_rectangle?(ax1 : Int32, ax2 : Int32, ay1 : Int32, ay2 : Int32) : Bool
@@ -32,19 +32,19 @@ struct ZoneCuboid < L2ZoneForm
 		_x2 = @r.x + @r.width
 		_y1 = @r.y
 		_y2 = @r.y + @r.height
-    shortest_dist = ((_x1 - x) ** 2) + ((_y1 - y) ** 2)
+    shortest_dist = Math.pow(_x1 - x, 2) + Math.pow(_y1 - y, 2)
 
-    test = ((_x1 - x) ** 2) + ((_y2 - y) ** 2)
+    test = Math.pow(_x1 - x, 2) + Math.pow(_y2 - y, 2)
     if test < shortest_dist
       shortest_dist = test
     end
 
-    test = ((_x2 - x) ** 2) + ((_y1 - y) ** 2)
+    test = Math.pow(_x2 - x, 2) + Math.pow(_y1 - y, 2)
     if test < shortest_dist
       shortest_dist = test
     end
 
-    test = ((_x2 - x) ** 2) + ((_y2 - y) ** 2)
+    test = Math.pow(_x2 - x, 2) + Math.pow(_y2 - y, 2)
     if test < shortest_dist
       shortest_dist = test
     end

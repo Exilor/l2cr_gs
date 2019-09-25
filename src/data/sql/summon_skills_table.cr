@@ -36,10 +36,10 @@ module SummonSkillsTable
       next if sk.id != id
       if sk.level == 0
         if s.level < 70
-          lvl = s.level / 10
+          lvl = s.level // 10
           lvl = 1 if lvl <= 10
         else
-          lvl = (7 + ((s.level - 70) / 5))
+          lvl = 7 + ((s.level - 70) // 5)
         end
 
         max_lvl = SkillData.get_max_level(sk.id)

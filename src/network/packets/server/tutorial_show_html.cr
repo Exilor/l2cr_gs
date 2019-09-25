@@ -12,7 +12,7 @@ class Packets::Outgoing::TutorialShowHtml < Packets::Outgoing::AbstractHtmlPacke
     s @html
   end
 
-  def scope
+  def scope : HtmlActionScope
     HtmlActionScope::TUTORIAL_HTML
   end
 end

@@ -91,26 +91,26 @@ module MerchantPriceConfigTable
   class MerchantPriceConfig
     getter! castle : Castle
 
-    getter_initializer id: Int32, name: String, base_tax: Int32,
-      castle_id: Int32, zone_id: Int32
+    getter_initializer id : Int32, name : String, base_tax : Int32,
+      castle_id : Int32, zone_id : Int32
 
     def base_tax_rate
       @base_tax.fdiv(100)
     end
 
-    def has_castle?
+    def has_castle? : Bool
       !!@castle
     end
 
-    def castle_tax_rate
+    def castle_tax_rate : Float64
       has_castle? ? castle.tax_rate : 0.0
     end
 
-    def total_tax
+    def total_tax : Int32
       has_castle? ? castle.tax_percent + base_tax : base_tax
     end
 
-    def total_tax_rate
+    def total_tax_rate : Float64
       total_tax / 100.0
     end
 

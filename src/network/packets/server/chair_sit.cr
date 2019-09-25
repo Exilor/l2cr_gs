@@ -1,5 +1,5 @@
 class Packets::Outgoing::ChairSit < GameServerPacket
-  initializer pc: L2PcInstance, static_l2id: Int32
+  initializer pc : L2PcInstance, static_l2id : Int32
 
   def write_impl
     c 0xed

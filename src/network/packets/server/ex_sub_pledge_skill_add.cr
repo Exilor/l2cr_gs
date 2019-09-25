@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExSubPledgeSkillAdd < GameServerPacket
-  initializer type: Int32, id: Int32, lvl: Int32
+  initializer type : Int32, id : Int32, lvl : Int32
 
   def write_impl
     c 0xfe

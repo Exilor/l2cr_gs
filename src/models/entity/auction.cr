@@ -307,7 +307,7 @@ class Auction
   struct AutoEndTask
     include Loggable
 
-    initializer auction: Auction
+    initializer auction : Auction
 
     def call
       @auction.end_auction

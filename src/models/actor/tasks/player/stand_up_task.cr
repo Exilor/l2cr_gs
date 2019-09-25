@@ -1,5 +1,5 @@
 struct StandUpTask
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def call
     @pc.sitting = false

@@ -278,7 +278,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       target.do_revive
     end
 
-    pc.send_message("Target milked #{times} times in #{timer.result} s.")
+    pc.send_message("Target milked #{times} times in #{timer} s.")
   end
 
   private def aspir(radius)

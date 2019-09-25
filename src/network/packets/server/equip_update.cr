@@ -1,5 +1,5 @@
 class Packets::Outgoing::EquipUpdate < GameServerPacket
-  initializer item: L2ItemInstance, change: Int32
+  initializer item : L2ItemInstance, change : Int32
 
   def write_impl
     c 0x4b

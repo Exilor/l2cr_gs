@@ -13,7 +13,6 @@ class Packets::Incoming::RequestDestroyItem < GameClientPacket
     if @count <= 0
       if @count < 0
         Util.punish(pc, "tried to destroy #{@count} items.")
-        warn "#{pc} requested to destroy #{@count} items."
       end
       return
     end

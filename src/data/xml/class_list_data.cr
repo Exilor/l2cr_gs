@@ -11,7 +11,7 @@ module ClassListData
     timer = Timer.new
     CLASS_DATA.clear
     parse_datapack_file("stats/chars/classList.xml")
-    info { "Loaded #{CLASS_DATA.size} class data in #{timer.result} s." }
+    info { "Loaded #{CLASS_DATA.size} class data in #{timer} s." }
   end
 
   private def parse_document(doc, file)
@@ -37,6 +37,10 @@ module ClassListData
   end
 
   def get_class!(arg) : ClassInfo
-    get_class(arg).not_nil!
+    unless info = get_class(arg)
+      raise "No ClassInfo for #{arg.inspect}"
+    end
+
+    info
   end
 end

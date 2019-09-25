@@ -12,7 +12,7 @@ class Packets::Outgoing::NpcQuestHtmlMessage < Packets::Outgoing::AbstractHtmlPa
     d @quest_id
   end
 
-  def scope
+  def scope : HtmlActionScope
     HtmlActionScope::NPC_QUEST_HTML
   end
 end

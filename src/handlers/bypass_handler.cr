@@ -27,8 +27,8 @@ module BypassHandler
     HANDLERS[cmd.downcase]?
   end
 
-  abstract def use_bypass(cmd : String, pc : L2PcInstance, target : L2Character) : Bool
-  abstract def commands : Enumerable(String)
+  # abstract def use_bypass(cmd : String, pc : L2PcInstance, target : L2Character) : Bool
+  # abstract def commands : Enumerable(String)
 end
 
 require "./bypass_handlers/*"

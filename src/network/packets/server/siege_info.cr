@@ -2,8 +2,8 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
   @castle : Castle?
   @hall : ClanHall?
 
-  initializer castle: Castle
-  initializer hall: ClanHall
+  initializer castle : Castle
+  initializer hall : ClanHall
 
   def write_impl
     unless pc = client.active_char

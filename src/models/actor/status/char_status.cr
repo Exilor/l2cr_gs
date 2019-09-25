@@ -11,7 +11,7 @@ class CharStatus
   getter current_mp = 0f64
   getter(status_listener) { Set(L2Character).new }
 
-  getter_initializer active_char: L2Character
+  getter_initializer active_char : L2Character
 
   def add_status_listener(char : L2Character)
     unless char == @active_char
@@ -208,7 +208,7 @@ class CharStatus
   end
 
   struct RegenTask
-    initializer status: CharStatus
+    initializer status : CharStatus
 
     def call
       @status.do_regeneration

@@ -6,8 +6,8 @@ class MagicUseTask
   property phase : UInt8 = 1u8
   property? simultaneous : Bool
 
-  initializer character: L2Character, targets: Array(L2Object)?, skill: Skill,
-    skill_time: Int32, simultaneous: Bool
+  initializer character : L2Character, targets : Array(L2Object)?,
+    skill : Skill, skill_time : Int32, simultaneous : Bool
 
   def call
     return unless @character

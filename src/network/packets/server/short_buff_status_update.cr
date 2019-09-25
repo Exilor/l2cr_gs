@@ -1,5 +1,5 @@
 class Packets::Outgoing::ShortBuffStatusUpdate < GameServerPacket
-  initializer skill_id: Int32, skill_lvl: Int32, duration: Int32
+  initializer skill_id : Int32, skill_lvl : Int32, duration : Int32
 
   def write_impl
     c 0xfa

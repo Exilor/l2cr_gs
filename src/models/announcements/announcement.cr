@@ -2,7 +2,7 @@ class Announcement
   include Loggable
   include IAnnouncement
 
-  getter id = 0
+  getter id : Int32 = 0
   property type : AnnouncementType = AnnouncementType::NORMAL
   property content : String = ""
   property author : String = ""
@@ -11,7 +11,7 @@ class Announcement
   private UPDATE_QUERY = "UPDATE announcements SET type = ?, content = ?, author = ? WHERE id = ?"
   private DELETE_QUERY = "DELETE FROM announcements WHERE id = ?"
 
-  getter_initializer type: AnnouncementType, content: String, author: String
+  getter_initializer type : AnnouncementType, content : String, author : String
 
   def initialize(rs : ResultSetReader)
     @id = rs.get_i32("id")

@@ -1,5 +1,5 @@
 class Packets::Outgoing::SiegeDefenderList < GameServerPacket
-  initializer castle: Castle
+  initializer castle : Castle
 
   def write_impl
     c 0xcb

@@ -33,7 +33,8 @@ module TargetHandler::AreaFriendly
       end
 
       target_list.sort_by! do |t|
-        t.as(L2Character).current_hp / t.as(L2Character).max_hp
+        t = t.as(L2Character)
+        t.current_hp / t.max_hp
       end
     end
 

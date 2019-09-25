@@ -16,7 +16,7 @@ class CharStat
 
   property level : Int32 = 1
 
-  getter_initializer active_char: L2Character
+  getter_initializer active_char : L2Character
 
   def calc_stat(stat : Stats, value : Number = 1.0, target : L2Character? = nil, skill : Skill? = nil) : Float64
     value = value.to_f64

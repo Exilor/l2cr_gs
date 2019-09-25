@@ -1,7 +1,7 @@
 require "../game_server_packet"
 
 class Packets::Outgoing::KeyPacket < GameServerPacket
-  initializer key: Slice(UInt8), response: Bool
+  initializer key : Bytes, response : Bool
 
   def write_impl
     c 0x2e

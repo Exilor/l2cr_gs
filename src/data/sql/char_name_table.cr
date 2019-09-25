@@ -22,7 +22,7 @@ module CharNameTable
       ACCESS_LEVELS[id] = lvl
       count += 1
     end
-    info { "Loaded #{count} names in #{timer.result(4)} s." }
+    info { "Loaded #{count} names in #{timer} s." }
   end
 
   def add_name(pc : L2PcInstance?)

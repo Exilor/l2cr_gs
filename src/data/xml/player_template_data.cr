@@ -11,7 +11,7 @@ module PlayerTemplateData
     TEMPLATES.clear
     timer = Timer.new
     parse_datapack_directory("stats/chars/baseStats")
-    info { "Loaded #{TEMPLATES.size} templates in #{timer.result} s." }
+    info { "Loaded #{TEMPLATES.size} templates in #{timer} s." }
   end
 
   private def parse_document(doc, file)
@@ -86,11 +86,12 @@ module PlayerTemplateData
   end
 
   def [](id : Int) : L2PcTemplate
-    TEMPLATES[ClassId[id]]
+    class_id = ClassId.fetch(id) { raise "No ClassId with id #{id}" }
+    self[class_id]
   end
 
   def [](id : ClassId) : L2PcTemplate
-    TEMPLATES[id]
+    TEMPLATES.fetch(id) { raise "No player template for ClassId #{id}" }
   end
 
   def new_character_templates : Slice(L2PcTemplate)

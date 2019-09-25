@@ -7,7 +7,7 @@ class FuncMAtkMod < AbstractFunction
     effector = effector.acting_player if effector.player?
     lvl_mod = BaseStats::INT.calc_bonus(effector)
     int_mod = effector.level_mod
-    value * (lvl_mod ** 2) * (int_mod ** 2)
+    value * Math.pow(lvl_mod, 2) * Math.pow(int_mod, 2)
   end
 
   INSTANCE = new

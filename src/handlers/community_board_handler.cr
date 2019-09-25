@@ -100,8 +100,8 @@ module CommunityBoardHandler
   module IParseBoardHandler
     include Loggable
 
-    abstract def parse_command(cmd : String, pc : L2PcInstance) : Bool
-    abstract def commands : Enumerable(String)
+    # abstract def parse_command(cmd : String, pc : L2PcInstance) : Bool
+    # abstract def commands : Enumerable(String)
   end
 end
 

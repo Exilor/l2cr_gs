@@ -133,7 +133,7 @@ module CrestTable
     end
   end
 
-  def get_crest(crest_id : Int)
+  def get_crest(crest_id : Int) : L2Crest?
     CRESTS[crest_id]?
   end
 

@@ -95,7 +95,7 @@ module ItemTable
   end
 
   private struct ResetOwner
-    initializer item: L2ItemInstance
+    initializer item : L2ItemInstance
 
     def call
       @item.owner_id = 0

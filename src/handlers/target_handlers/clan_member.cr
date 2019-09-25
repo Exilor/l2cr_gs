@@ -10,7 +10,7 @@ module TargetHandler::ClanMember
         return [npc] of L2Object
       end
 
-      npc.known_list.known_objects.each do |obj|
+      npc.known_list.known_objects.each_value do |obj|
         if obj.is_a?(L2Npc) && npc.in_my_clan?(obj)
           unless Util.in_range?(skill.cast_range, char, obj, true)
             next

@@ -1,5 +1,5 @@
 class Packets::Outgoing::EtcStatusUpdate < GameServerPacket
-  initializer pc: L2PcInstance
+  initializer pc : L2PcInstance
 
   def write_impl
     c 0xf9

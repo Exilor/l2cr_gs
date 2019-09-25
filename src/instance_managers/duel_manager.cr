@@ -61,7 +61,7 @@ module DuelManager
       SystemMessage.c1_cannot_duel_because_c1_is_currently_engaged_in_battle
     when target.transformed?
       SystemMessage.c1_cannot_duel_while_polymorphed
-    when target.dead? || target.current_hp < target.max_hp / 2
+    when target.dead? || target.current_hp < target.max_hp // 2
       SystemMessage.c1_cannot_duel_because_c1_hp_or_mp_is_below_50_percent
     when target.in_duel?
       SystemMessage.c1_cannot_duel_because_c1_is_already_engaged_in_a_duel

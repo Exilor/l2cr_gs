@@ -93,7 +93,7 @@ module AdminCommandHandler::AdminSkill
 
     skills = pc.all_skills.to_a
     max_skills_per_page = 10
-    max_pages = skills.size / max_skills_per_page
+    max_pages = skills.size // max_skills_per_page
 
     if skills.size > max_skills_per_page * max_pages
       max_pages += 1

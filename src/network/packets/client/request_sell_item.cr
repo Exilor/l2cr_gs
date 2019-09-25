@@ -75,10 +75,10 @@ class Packets::Incoming::RequestSellItem < GameClientPacket
 
       next unless item.sellable?
 
-      price = item.reference_price / 2
+      price = item.reference_price // 2
       total_price += price * i.count
 
-      if Inventory.max_adena / i.count < price || total_price > Inventory.max_adena
+      if Inventory.max_adena // i.count < price || total_price > Inventory.max_adena
         Util.punish(pc, "tried to buy over #{Inventory.max_adena} adena worth of items.")
         return
       end

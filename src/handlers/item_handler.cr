@@ -35,7 +35,7 @@ module ItemHandler
     nil
   end
 
-  abstract def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
+  # abstract def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
 end
 
 require "./item_handlers/*"

@@ -125,11 +125,10 @@ module TransformData
   end
 
   def transform_player(id : Int, pc : L2PcInstance) : Transform?
-    transform = DATA[id]?
-    pc.transform(transform) if transform
-    unless transform
+    unless transform = DATA[id]?
       warn { "Transformation with ID #{id} not found." }
     end
+    pc.transform(transform) if transform
     transform
   end
 end

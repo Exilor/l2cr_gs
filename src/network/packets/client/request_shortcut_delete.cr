@@ -7,7 +7,7 @@ class Packets::Incoming::RequestShortcutDelete < GameClientPacket
   private def read_impl
     id = d
     @slot = id % 12
-    @page = id / 12
+    @page = id // 12
   end
 
   private def run_impl

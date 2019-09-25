@@ -1,5 +1,5 @@
 class Packets::Outgoing::AgitDecoInfo < GameServerPacket
-  initializer ch: AuctionableHall
+  initializer ch : AuctionableHall
 
   def write_impl
     c 0xfd

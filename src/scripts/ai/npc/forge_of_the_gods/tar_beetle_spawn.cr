@@ -104,7 +104,7 @@ class TarBeetleSpawn
     @zones = [] of Zone
     @spawn = [] of L2Npc
 
-    initializer max_npc_count: Int32, index: Int32
+    initializer max_npc_count : Int32, index : Int32
 
     def add_zone(zone)
       @zones << zone

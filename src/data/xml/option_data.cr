@@ -65,7 +65,7 @@ module OptionData
   end
 
   def [](id : Int32) : Options
-    OPTION_DATA[id]
+    OPTION_DATA.fetch(id) { raise "No Options for id #{id}" }
   end
 
   def []?(id : Int32) : Options?

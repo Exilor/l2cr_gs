@@ -207,7 +207,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                   cost = Config.ch_hpreg13_fee
                 end
 
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_hpreg_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_hpreg_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "Provides additional HP recovery for clan members in the clan hall.<font color=\"00FFFF\">#{percent}%</font>"
                 html["%apply%"] = "recovery hp #{percent}"
                 send_html_message(pc, html)
@@ -230,7 +230,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 else
                   cost = Config.ch_mpreg5_fee
                 end
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_mpreg_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_mpreg_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "Provides additional MP recovery for clan members in the clan hall.<font color=\"00FFFF\">#{percent}%</font>"
                 html["%apply%"] = "recovery mp #{percent}"
                 send_html_message(pc, html)
@@ -257,7 +257,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 else
                   cost = Config.ch_expreg7_fee
                 end
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_expreg_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_expreg_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "Restores the Exp of any clan member who is resurrected in the clan hall.<font color=\"00FFFF\">#{percent}%</font>"
                 html["%apply%"] = "recovery exp #{percent}"
                 send_html_message(pc, html)
@@ -422,7 +422,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
             mp_grade2 = "[<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 5\">5%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 15\">15%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 30\">30%</a>]"
             mp_grade3 = "[<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 5\">5%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 15\">15%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 30\">30%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 40\">40%</a>]"
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_HP)
-              html["%hp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_hpreg_fee_ratio / 1000 / 60 / 60 / 24} Day)"
+              html["%hp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_hpreg_fee_ratio // 1000 // 60 // 60 // 24} Day)"
               html["%hp_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               grade = clan_hall.grade
               case grade
@@ -451,7 +451,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               end
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_EXP)
-              html["%exp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_expreg_fee_ratio / 1000 / 60 / 60 / 24} Day)"
+              html["%exp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_expreg_fee_ratio // 1000 // 60 // 60 // 24} Day)"
               html["%exp_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               grade = clan_hall.grade
               case grade
@@ -480,7 +480,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               end
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_MP)
-              html["%mp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_mpreg_fee_ratio / 1000 / 60 / 60 / 24} Day)"
+              html["%mp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_mpreg_fee_ratio // 1000 // 60 // 60 // 24} Day)"
               html["%mp_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               grade = clan_hall.grade
               case grade
@@ -548,7 +548,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 else
                   cost = Config.ch_item3_fee
                 end
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_item_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_item_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "Allow the purchase of special items at fixed intervals."
                 html["%apply%"] = "other item #{stage}"
                 send_html_message(pc, html)
@@ -577,7 +577,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 else
                   cost = Config.ch_support8_fee
                 end
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_support_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_support_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "Enables the use of supplementary magic."
                 html["%apply%"] = "other support #{stage}"
                 send_html_message(pc, html)
@@ -594,7 +594,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 else
                   cost = Config.ch_tele2_fee
                 end
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_tele_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_tele_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "Teleports clan members in a clan hall to the target <font color=\"00FFFF\">Stage #{stage}</font> staging area"
                 html["%apply%"] = "other tele #{stage}"
                 send_html_message(pc, html)
@@ -733,7 +733,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
             support_grade3 = "[<a action=\"bypass -h npc_%objectId%_manage other edit_support 3\">Level 3</a>][<a action=\"bypass -h npc_%objectId%_manage other edit_support 5\">Level 5</a>][<a action=\"bypass -h npc_%objectId%_manage other edit_support 7\">Level 7</a>][<a action=\"bypass -h npc_%objectId%_manage other edit_support 8\">Level 8</a>]"
             item = "[<a action=\"bypass -h npc_%objectId%_manage other edit_item 1\">Level 1</a>][<a action=\"bypass -h npc_%objectId%_manage other edit_item 2\">Level 2</a>][<a action=\"bypass -h npc_%objectId%_manage other edit_item 3\">Level 3</a>]"
             if fn = clan_hall.get_function(ClanHall::FUNC_TELEPORT)
-              html["%tele%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_tele_fee_ratio / 1000 / 60 / 60 / 24} Day)"
+              html["%tele%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_tele_fee_ratio // 1000 // 60 // 60 // 24} Day)"
               html["%tele_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               html["%change_tele%"] = "[<a action=\"bypass -h npc_%objectId%_manage other tele_cancel\">Deactivate</a>]#{tele}"
             else
@@ -742,7 +742,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               html["%change_tele%"] = tele
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_SUPPORT)
-              html["%support%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_support_fee_ratio / 1000 / 60 / 60 / 24} Day"
+              html["%support%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_support_fee_ratio // 1000 // 60 // 60 // 24} Day"
               html["%support_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               grade = clan_hall.grade
               case grade
@@ -771,7 +771,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               end
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_ITEM_CREATE)
-              html["%item%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_item_fee_ratio / 1000 / 60 / 60 / 24} Day)"
+              html["%item%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_item_fee_ratio // 1000 // 60 // 60 // 24} Day)"
               html["%item_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               html["%change_item%"] = "[<a action=\"bypass -h npc_%objectId%_manage other item_cancel\">Deactivate</a>]#{item}"
             else
@@ -811,7 +811,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 else
                   cost = Config.ch_curtain2_fee
                 end
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_curtain_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_curtain_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "These curtains can be used to decorate the clan hall."
                 html["%apply%"] = "deco curtains #{stage}"
                 send_html_message(pc, html)
@@ -828,7 +828,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 else
                   cost = Config.ch_front2_fee
                 end
-                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_front_fee_ratio / 1000 / 60 / 60 / 24} Day</font>)"
+                html["%cost%"] = "#{cost}</font>Adena /#{Config.ch_front_fee_ratio // 1000 // 60 // 60 // 24} Day</font>)"
                 html["%use%"] = "Used to decorate the clan hall."
                 html["%apply%"] = "deco fixtures #{stage}"
                 send_html_message(pc, html)
@@ -910,7 +910,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
             curtains = "[<a action=\"bypass -h npc_%objectId%_manage deco edit_curtains 1\">Level 1</a>][<a action=\"bypass -h npc_%objectId%_manage deco edit_curtains 2\">Level 2</a>]"
             fixtures = "[<a action=\"bypass -h npc_%objectId%_manage deco edit_fixtures 1\">Level 1</a>][<a action=\"bypass -h npc_%objectId%_manage deco edit_fixtures 2\">Level 2</a>]"
             if fn = clan_hall.get_function(ClanHall::FUNC_DECO_CURTAINS)
-              html["%curtain%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_curtain_fee_ratio / 1000 / 60 / 60 / 24} Day)"
+              html["%curtain%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_curtain_fee_ratio // 1000 // 60 // 60 // 24} Day)"
               html["%curtain_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               html["%change_curtain%"] = "[<a action=\"bypass -h npc_%objectId%_manage deco curtains_cancel\">Deactivate</a>]#{curtains}"
             else
@@ -919,7 +919,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               html["%change_curtain%"] = curtains
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_DECO_FRONTPLATEFORM)
-              html["%fixture%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_front_fee_ratio / 1000 / 60 / 60 / 24} Day)"
+              html["%fixture%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_front_fee_ratio // 1000 // 60 // 60 // 24} Day)"
               html["%fixture_period%"] = "Withdraw the fee for the next time at #{Time.from_ms(fn.end_time).to_s(format)}"
               html["%change_fixture%"] = "[<a action=\"bypass -h npc_%objectId%_manage deco fixtures_cancel\">Deactivate</a>]#{fixtures}"
             else

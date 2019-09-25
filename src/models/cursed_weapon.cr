@@ -207,7 +207,7 @@ class CursedWeapon
     if @stage_kills == 0
       level = 1
     else
-      level = 1 + (@nb_kills / @stage_kills)
+      level = 1 + (@nb_kills // @stage_kills)
     end
 
     if level > @skill_max_level
@@ -312,7 +312,7 @@ class CursedWeapon
     player.heal!
 
     if !Config.force_inventory_update
-      player.send_packet(InventoryUpdate::SingleItem.new(item))
+      player.send_packet(InventoryUpdate.single(item))
     else
       player.send_packet(ItemList.new(player, false))
     end
@@ -382,14 +382,14 @@ class CursedWeapon
 
   def level : Int32
     if @nb_kills > (@stage_kills * @skill_max_level)
-      @skill_max_level
-    else
-      if @stage_kills == 0
-        0
-      else
-        @nb_kills / @stage_kills
-      end
+      return @skill_max_level
     end
+
+    if @stage_kills == 0
+      return 0
+    end
+
+    @nb_kills // @stage_kills
   end
 
   def time_left : Int64

@@ -29,13 +29,12 @@ class Packets::Incoming::RequestDeleteSentPost < GameClientPacket
 
     msg_ids.each do |msg_id|
       unless msg = MailManager.get_message(msg_id)
-        warn "Message with ID #{msg_id} not found."
+        warn { "Message with ID #{msg_id} not found." }
         next
       end
 
       if msg.sender_id != pc.l2id
         Util.punish(pc, "tried to delete a sent message he didn't send.")
-        warn "#{pc.name} tried to delete a sent message he didn't send."
         return
       end
 

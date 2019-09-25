@@ -1,5 +1,5 @@
 class Packets::Outgoing::TutorialShowQuestionMark < GameServerPacket
-  initializer mark: Int32
+  initializer mark : Int32
 
   def write_impl
     c 0xa7

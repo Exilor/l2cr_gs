@@ -1030,7 +1030,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   private struct DoorTask
     alias IDS_TYPE = {Int32} | {Int32, Int32} | {Int32, Int32, Int32, Int32}
 
-    initializer door_ids: IDS_TYPE, state: Int32
+    initializer door_ids : IDS_TYPE, state : Int32
 
     def call
       @door_ids.each do |door_id|
