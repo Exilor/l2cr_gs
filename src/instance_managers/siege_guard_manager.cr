@@ -77,7 +77,7 @@ struct SiegeGuardManager
       arg = 0
     end
 
-    GameDB.each(sql, arg) do |rs|
+    GameDB.each(sql, castle.residence_id, arg) do |rs|
       npc_id = rs.get_i32("npcId").to_u16!.to_i32
       sp = L2Spawn.new(npc_id)
       sp.amount = 1

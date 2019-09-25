@@ -50,6 +50,7 @@ class Calendar
 
   def_equals_and_hash @time
   delegate day, ms, millisecond, second, minute, hour, day_of_year, year,
+    monday?, tuesday?, wednesday?, thursday?, friday?, saturday?, sunday?,
     to: @time
 
   def to_s(format : String)

@@ -56,6 +56,10 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
 
   def []=(pattern : String, val)
     if html = @html
+      unless html.includes?(pattern)
+        warn "#{pattern.inspect} not found in this html:"
+        warn html
+      end
       @html = html.gsub(pattern, val.to_s)
     end
   end

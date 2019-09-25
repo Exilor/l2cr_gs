@@ -23,7 +23,7 @@ class L2FortManagerInstance < L2MerchantInstance
 
   private def send_html_message(pc, html)
     html["%objectId%"] = l2id
-    html["%npc_id%"] = id
+    html["%npcId%"] = id
     pc.send_packet(html)
   end
 

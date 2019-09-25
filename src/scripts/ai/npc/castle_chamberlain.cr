@@ -730,7 +730,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
     when "products"
       if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
         html = get_html_packet(pc, npc, "chamberlain-22.html")
-        html["%npc_id%"] = npc.id
+        html["%npcId%"] = npc.id
         pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
