@@ -7,7 +7,7 @@ A Lineage 2 (High Five) server emulator ported from [L2J](http://www.l2jserver.c
 In order for the game server to work it needs the following:
   - The Ruby login server
   - The Crystal source code that is shared with the login server
-  - L2J's datapack and configuration (.cfg files) folders
+  - L2J's datapack and configuration (.properties files) folders
   - A properly set up MySQL database (as if to be used with L2J)
   - The geodata files (optional)
 
