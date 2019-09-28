@@ -431,7 +431,7 @@ module NpcData
 
   def get_all_npc_starting_with(text : String) : Array(L2NpcTemplate)
     get_templates do |npc|
-      template.type?("L2Npc") && template.name.start_with?(text)
+      npc.type?("L2Npc") && npc.name.starts_with?(text)
     end
   end
 

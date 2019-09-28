@@ -196,21 +196,46 @@ class Calendar
     end
   end
 
-  def add(unit : Symbol, value : Number)
+  # def add(unit : Symbol, value : Number)
+  #   case unit
+  #   when :MILLISECOND
+  #     add(value.milliseconds)
+  #   when :SECOND
+  #     add(value.seconds)
+  #   when :MINUTE
+  #     add(value.minutes)
+  #   when :HOUR
+  #     add(value.hours)
+  #   when :DAY
+  #     add(value.days)
+  #   when :WEEK
+  #     add(value.weeks)
+  #   when :MONTH
+  #     add(value.months)
+  #   else
+  #     raise ArgumentError.new("Invalid unit #{unit.inspect}")
+  #   end
+  # end
+
+  enum Unit : UInt8
+    MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH
+  end
+
+  def add(unit : Unit, value : Number)
     case unit
-    when :MILLISECOND
+    when Unit::MILLISECOND
       add(value.milliseconds)
-    when :SECOND
+    when Unit::SECOND
       add(value.seconds)
-    when :MINUTE
+    when Unit::MINUTE
       add(value.minutes)
-    when :HOUR, :HOUR_OF_DAY
+    when Unit::HOUR
       add(value.hours)
-    when :DAY
+    when Unit::DAY
       add(value.days)
-    when :WEEK, :WEEK_OF_YEAR
+    when Unit::WEEK
       add(value.weeks)
-    when :MONTH
+    when Unit::MONTH
       add(value.months)
     else
       raise ArgumentError.new("Invalid unit #{unit.inspect}")

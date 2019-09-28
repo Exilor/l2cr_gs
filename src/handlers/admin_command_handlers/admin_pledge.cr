@@ -32,7 +32,7 @@ module AdminCommandHandler::AdminPledge
           pc.send_message("There was a problem while creating the clan.")
         end
       elsif !player.clan_leader?
-        sm = Packets::Outgoing::SystemMessage.s1_is_not_a_clan_leader
+        sm = SystemMessage.s1_is_not_a_clan_leader
         sm.add_string(name)
         pc.send_packet(sm)
         show_main_page(pc)
@@ -46,7 +46,7 @@ module AdminCommandHandler::AdminPledge
           pc.send_message("There was a problem while destroying the clan.")
         end
       elsif action == "info"
-        pc.send_packet(Packets::Outgoing::GMViewPledgeInfo.new(player.clan, player))
+        pc.send_packet(GMViewPledgeInfo.new(player.clan, player))
       elsif parameter.nil?
         pc.send_message("Usage: #pledge <setlevel|rep> <number>")
       elsif action == "setlevel"

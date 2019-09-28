@@ -65,7 +65,7 @@ module AdminCommandHandler::AdminLogin
           age = mode.to_i
           if Config.server_list_age != age
             Config.server_list_type = age
-            LoginServerClient.send_server_status(Packets::Outgoing::ServerStatus::SERVER_AGE, age)
+            LoginServerClient.send_server_status(ServerStatus::SERVER_AGE, age)
             pc.send_message("Server Age changed to #{age}")
             show_main_page(pc)
           else
@@ -87,7 +87,7 @@ module AdminCommandHandler::AdminLogin
   end
 
   private def show_main_page(pc)
-    html = Packets::Outgoing::NpcHtmlMessage.new
+    html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/login.htm")
     html["%server_name%"] = LoginServerClient.server_name
     html["%status%"] = LoginServerClient.status_string
@@ -131,12 +131,12 @@ module AdminCommandHandler::AdminLogin
   end
 
   private def allow_to_all
-    LoginServerClient.server_status = Packets::Outgoing::ServerStatus::STATUS_AUTO
+    LoginServerClient.server_status = ServerStatus::STATUS_AUTO
     Config.server_gmonly = false
   end
 
   private def gm_only
-    LoginServerClient.server_status = Packets::Outgoing::ServerStatus::STATUS_GM_ONLY
+    LoginServerClient.server_status = ServerStatus::STATUS_GM_ONLY
     Config.server_gmonly = true
   end
 

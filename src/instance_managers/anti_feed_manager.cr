@@ -23,9 +23,11 @@ module AntiFeedManager
       return false
     end
 
-    if Config.antifeed_interval > 0 && LAST_DEATH_TIMES.has_key?(target_player.l2id)
-      if Time.ms - LAST_DEATH_TIMES[target_player.l2id] < Config.antifeed_interval
-        return false
+    if Config.antifeed_interval > 0
+      if tmp = LAST_DEATH_TIMES[target_player.l2id]?
+        if Time.ms - tmp < Config.antifeed_interval
+          return false
+        end
       end
     end
 

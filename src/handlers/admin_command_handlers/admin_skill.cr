@@ -110,7 +110,7 @@ module AdminCommandHandler::AdminSkill
       skills_end = skills_start + max_skills_per_page
     end
 
-    admin_reply = Packets::Outgoing::NpcHtmlMessage.new
+    admin_reply = NpcHtmlMessage.new
     msg_size = 500 + (max_pages * 50) + (((skills_end - skills_start) + 1) * 50)
     msg = String.build(msg_size) do |io|
       io << "<html><body><table width=260><tr><td width=40><button value"
@@ -173,7 +173,7 @@ module AdminCommandHandler::AdminSkill
       return
     end
 
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/charskills.htm")
     reply["%name%"] = target.name
     reply["%level%"] = target.level
@@ -301,7 +301,7 @@ module AdminCommandHandler::AdminSkill
     end
 
     unless player.clan_leader?
-      sm = Packets::Outgoing::SystemMessage.s1_is_not_a_clan_leader
+      sm = SystemMessage.s1_is_not_a_clan_leader
       sm.add_string(player.name)
       pc.send_packet(sm)
       show_main_page(pc)
@@ -319,7 +319,7 @@ module AdminCommandHandler::AdminSkill
     end
 
     name = skill.name
-    sm = Packets::Outgoing::SystemMessage.clan_skill_s1_added
+    sm = SystemMessage.clan_skill_s1_added
     sm.add_skill_name(skill)
     player.send_packet(sm)
     clan = player.clan
@@ -327,7 +327,7 @@ module AdminCommandHandler::AdminSkill
     clan.add_new_skill(skill)
     pc.send_message("You gave the Clan Skill: #{name} to the clan #{clan.name}.")
 
-    clan.broadcast_to_online_members(Packets::Outgoing::PledgeSkillList.new(clan))
+    clan.broadcast_to_online_members(PledgeSkillList.new(clan))
     clan.each_online_player do |m|
       m.send_skill_list
     end

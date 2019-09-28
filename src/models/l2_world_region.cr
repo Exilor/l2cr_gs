@@ -178,6 +178,21 @@ class L2WorldRegion
     @sorrounding_regions.none? { |n| n.active? && !n.playables.empty? }
   end
 
+  def delete_visible_npc_spawns
+    @objects.each_value do |obj|
+      if obj.is_a?(L2Npc)
+        obj.delete_me
+        if sp = obj.spawn?
+          sp.stop_respawn
+          SpawnTable.delete_spawn(sp, false)
+        end
+        # debug "Removed #{obj}."
+      end
+    end
+
+    # info "All visible NPCs have been removed."
+  end
+
   def to_s(io : IO)
     io << '(' << @tile_x << ", " << @tile_y << ')'
   end

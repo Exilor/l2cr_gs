@@ -82,10 +82,10 @@ module AdminCommandHandler::AdminEnchant
       item_instance.enchant_level = ench
       player.inventory.equip_item(item_instance)
 
-      player.send_packet(Packets::Outgoing::InventoryUpdate.modified(item_instance))
-      player.broadcast_packet(Packets::Outgoing::CharInfo.new(player))
-      player.send_packet(Packets::Outgoing::UserInfo.new(player))
-      player.broadcast_packet(Packets::Outgoing::ExBrExtraUserInfo.new(player))
+      player.send_packet(InventoryUpdate.modified(item_instance))
+      player.broadcast_packet(CharInfo.new(player))
+      player.send_packet(UserInfo.new(player))
+      player.broadcast_packet(ExBrExtraUserInfo.new(player))
 
       pc.send_message("Changed enchantment of #{pc.name}'s #{item_instance.template.name} from #{cur_enchant} to #{ench}.")
       player.send_message("Admin has changed the enchantment of your #{item_instance.template.name} from #{cur_enchant} to #{ench}.")

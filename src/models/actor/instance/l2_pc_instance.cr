@@ -1767,9 +1767,8 @@ class L2PcInstance < L2Playable
     nil
   end
 
-  # the force parameter is custom and is used in SendBypassBuildCMD
-  def reward_skills(force = false)
-    if Config.auto_learn_skills || force
+  def reward_skills
+    if Config.auto_learn_skills
       give_available_skills(Config.auto_learn_fs_skills, true)
     else
       give_available_auto_get_skills
@@ -2937,6 +2936,10 @@ class L2PcInstance < L2Playable
     stat.vitality_points
   end
 
+  def vitality_level : Int32
+    stat.vitality_level.to_i32
+  end
+
   def set_vitality_points(points : Int32, quiet : Bool)
     stat.set_vitality_points(points, quiet)
   end
@@ -3887,7 +3890,7 @@ class L2PcInstance < L2Playable
     now = Calendar.new
 
     if @create_date.day == 29 && @create_date.month == 1
-      @create_date.add(:HOUR_OF_DAY, -24)
+      @create_date.add(:HOUR, -24)
     end
 
     if now.month == @create_date.month && now.day == @create_date.day
@@ -3897,7 +3900,7 @@ class L2PcInstance < L2Playable
     end
 
     1.upto(5) do |i|
-      now.add(:HOUR_OF_DAY, 24)
+      now.add(:HOUR, 24)
       if now.month == @create_date.month && now.day == @create_date.day
         if now.year != @create_date.year
           return i

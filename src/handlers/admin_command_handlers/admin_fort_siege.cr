@@ -25,11 +25,11 @@ module AdminCommandHandler::AdminFortSiege
           pc.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
         else
           if fort.siege.add_attacker(player, false) == 4
-            sm = Packets::Outgoing::SystemMessage.registered_to_s1_fortress_battle
+            sm = SystemMessage.registered_to_s1_fortress_battle
             sm.add_castle_id(fort.residence_id)
             player.send_packet(sm)
           else
-            player.send_message("During registering error occurred!")
+            player.send_message("Error occurred during registration")
           end
         end
       elsif command.casecmp?("admin_clear_fortsiege_list")
@@ -37,7 +37,7 @@ module AdminCommandHandler::AdminFortSiege
       elsif command.casecmp?("admin_endfortsiege")
         fort.siege.end_siege
       elsif command.casecmp?("admin_list_fortsiege_clans")
-        pc.send_message("Not implemented yet.")
+        pc.send_message("Not implemented yet")
       elsif command.casecmp?("admin_setfort")
         if player.nil? || player.clan?.nil?
           pc.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
@@ -64,7 +64,7 @@ module AdminCommandHandler::AdminFortSiege
 
   private def show_fort_select_page(pc)
     i = 0
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/forts.htm")
     forts = FortManager.forts
     list = String.build(forts.size * 100) do |io|
@@ -90,7 +90,7 @@ module AdminCommandHandler::AdminFortSiege
   end
 
   private def show_fort_siege_page(pc, fort)
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/fort.htm")
     reply["%fortName%"]= fort.name
     reply["%fortId%"]= fort.residence_id

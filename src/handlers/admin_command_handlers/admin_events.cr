@@ -72,7 +72,7 @@ module AdminCommandHandler::AdminEvents
   end
 
   private def show_menu(pc)
-    html = Packets::Outgoing::NpcHtmlMessage.new
+    html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/gm_events.htm")
     list = String.build(500) do |io|
       QuestManager.scripts.each_value do |event|

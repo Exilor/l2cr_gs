@@ -100,7 +100,7 @@ module AdminCommandHandler::AdminBuffs
       creature.reset_time_stamps
       creature.reset_disabled_skills
       if creature.is_a?(L2PcInstance)
-        creature.send_packet(Packets::Outgoing::SkillCoolTime.new(creature))
+        creature.send_packet(SkillCoolTime.new(creature))
       end
       pc.send_message("Skill reuse was removed from #{creature.name}.")
       return true
@@ -252,7 +252,7 @@ module AdminCommandHandler::AdminBuffs
     end
     html << "</html>"
     # Send the packet
-    pc.send_packet(Packets::Outgoing::NpcHtmlMessage.new(html.join))
+    pc.send_packet(NpcHtmlMessage.new(html.join))
 
     if Config.gmaudit
       GMAudit.log("#{pc.name} [#{pc.l2id}]", "getbuffs", "#{target.name} (#{target.l2id})", "")

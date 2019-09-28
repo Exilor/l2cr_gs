@@ -35,7 +35,7 @@ module AdminCommandHandler::AdminShutdown
   end
 
   private def send_html_form(pc)
-    html = Packets::Outgoing::NpcHtmlMessage.new
+    html = NpcHtmlMessage.new
     h, m = GameTimer.time.divmod(60)
 
     cal = Calendar.new

@@ -39,19 +39,23 @@ abstract class ItemContainer
     @items.find { |item| item.l2id == id }
   end
 
-  def get_inventory_item_count(item_id : Int32, enchant_level : Int32) : Int32
+  def get_inventory_item_count(item_id : Int32, enchant_level : Int32) : Int64
     get_inventory_item_count(item_id, enchant_level, true)
   end
 
-  def get_inventory_item_count(item_id : Int32, enchant_level : Int32, include_equipped : Bool) : Int32
-    count = 0
+  def get_inventory_item_count(item_id : Int32, enchant_level : Int32, include_equipped : Bool) : Int64
+    count = 0i64
 
     @items.each do |item|
-      if item.id == item_id && (item.enchant_level == enchant_level || enchant_level < 0) && (include_equipped || !item.equipped?)
-        if item.stackable?
-          count += item.count
-        else
-          count += 1
+      if item.id == item_id
+        if item.enchant_level == enchant_level || enchant_level < 0
+          if include_equipped || !item.equipped?
+            if item.stackable?
+              count += item.count
+            else
+              count += 1
+            end
+          end
         end
       end
     end
@@ -123,17 +127,20 @@ abstract class ItemContainer
       end
     else
       count.times do |i|
-        template = ItemTable[item_id]?
-
-        unless template
+        unless template = ItemTable[item_id]?
           raise "ItemContainer#add_item: invalid item ID #{item_id}"
         end
 
-        item = ItemTable.create_item(process, item_id, template.stackable? ? count : 1i64, actor, reference)
+        actual_count = template.stackable? ? count : 1i64
+        item = ItemTable.create_item(process, item_id, actual_count, actor, reference)
         item.owner_id = owner_id
         item.item_location = base_location
         item.last_change = L2ItemInstance::ADDED
-        item.enchant_level = enchant_level > -1 ? enchant_level : template.default_enchant_level
+        if enchant_level > -1
+          item.enchant_level = enchant_level
+        else
+          item.enchant_level = template.default_enchant_level
+        end
 
         add_item(item)
 
@@ -302,9 +309,7 @@ abstract class ItemContainer
       owner = owner?.try &.acting_player?
 
       if item.stackable? && get_item_by_item_id(item.id)
-        if owner # check this
-          add_item("Restore", item, owner, nil)
-        end
+        add_item("Restore", item, owner, nil)
       else
         add_item(item)
       end
@@ -330,7 +335,7 @@ abstract class ItemContainer
 
   def validate_weight_by_item_id(id : Int, count : Int) : Bool
     t = ItemTable[id]?
-    t.nil? || (validate_weight(t.weight * count))
+    t.nil? || validate_weight(t.weight * count)
   end
 
   def has_item_for_self_resurrection? : Bool

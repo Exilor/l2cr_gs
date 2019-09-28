@@ -51,7 +51,7 @@ module AdminCommandHandler::AdminFightCalculator
       npc2 = NpcData[mid2]?
     end
 
-    admin_reply = Packets::Outgoing::NpcHtmlMessage.new
+    admin_reply = NpcHtmlMessage.new
 
     if npc1 && npc2
       reply_msg = String.build do |io|
@@ -265,7 +265,7 @@ module AdminCommandHandler::AdminFightCalculator
     maxhp2 = npc2.max_hp
     hp2 = ((Formulas.hp_regen(npc2) * 100000) / Formulas.get_regenerate_period(npc2)).to_i
 
-    admin_reply = Packets::Outgoing::NpcHtmlMessage.new
+    admin_reply = NpcHtmlMessage.new
 
     reply_msg = String.build(1000) do |io|
       io << "<html><title>Selected mobs to fight</title>"

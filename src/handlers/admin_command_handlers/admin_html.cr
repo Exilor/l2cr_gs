@@ -37,7 +37,7 @@ module AdminCommandHandler::AdminHtml
 
     debug path
 
-    html = Packets::Outgoing::NpcHtmlMessage.new
+    html = NpcHtmlMessage.new
     if content
       html.html = content
     else

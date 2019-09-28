@@ -21,8 +21,8 @@ module AdminCommandHandler::AdminShop
     val = command.num? ? command.to_i : -1
 
     if buy_list = BuyListData.get_buy_list(val)
-      pc.send_packet(Packets::Outgoing::BuyList.new(buy_list, pc.adena, 0))
-      pc.send_packet(Packets::Outgoing::ExBuySellList.new(pc, false))
+      pc.send_packet(BuyList.new(buy_list, pc.adena, 0))
+      pc.send_packet(ExBuySellList.new(pc, false))
     else
       warn { "No buy list with id #{val}." }
     end

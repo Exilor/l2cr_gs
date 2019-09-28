@@ -344,15 +344,21 @@ module SkillTreesData
     end
 
     skills.each_value do |skill|
-      # config skip divine inspiration
+      if skill.skill_id == CommonSkill::DIVINE_INSPIRATION.id
+        if !Config.auto_learn_divine_inspiration && auto && !pc.gm?
+          next
+        end
+      end
 
-      if pc.level >= skill.get_level#((auto && skill.auto_get?) || skill.learned_by_npc? || (fs && skill.learned_by_fs?)) && (pc.level >= skill.get_level)
-        if old_skill = holder.get_known_skill(skill.skill_id)
-          if old_skill.level == skill.skill_level - 1
+      if (auto && skill.auto_get?) || skill.learned_by_npc? || (fs && skill.learned_by_fs?)
+        if pc.level >= skill.get_level
+          if old_skill = holder.get_known_skill(skill.skill_id)
+            if old_skill.level == skill.skill_level - 1
+              result << skill
+            end
+          elsif skill.skill_level == 1
             result << skill
           end
-        elsif skill.skill_level == 1
-          result << skill
         end
       end
     end
@@ -364,7 +370,7 @@ module SkillTreesData
     holder = PlayerSkillHolder.new(pc)
     learnable = get_available_skills(pc, id, fs, auto, holder)
 
-    while learnable.size > 0
+    until learnable.empty?
       learnable.each do |s|
         sk = SkillData[s.skill_id, s.skill_level]?
         holder.add_skill(sk) if sk
@@ -538,13 +544,19 @@ module SkillTreesData
       if pc.level >= skill.get_level
         pc.subclasses.each_value do |subclass|
           subclass_conds = skill.subclass_conditions
-          if !subclass_conds.empty? && subclass.class_index <= subclass_conds.size && subclass.class_index == subclass_conds[subclass.class_index - 1].slot && subclass_conds[subclass.class_index - 1].lvl <= subclass.level
-            if old_skill = pc.skills[skill.skill_id]?
-              if old_skill.level == skill.skill_level - 1
-                result << skill
+          unless subclass_conds.empty?
+            if subclass.class_index <= subclass_conds.size
+              if subclass.class_index == subclass_conds[subclass.class_index - 1].slot
+                if subclass_conds[subclass.class_index - 1].lvl <= subclass.level
+                  if old_skill = pc.skills[skill.skill_id]?
+                    if old_skill.level == skill.skill_level - 1
+                      result << skill
+                    end
+                  elsif skill.skill_level == 1
+                    result << skill
+                  end
+                end
               end
-            elsif skill.skill_level == 1
-              result << skill
             end
           end
         end
@@ -637,12 +649,11 @@ module SkillTreesData
     if lvl <= 0
       GM_SKILL_TREE.each_value { |s| return true if s.skill_id == id }
       GM_AURA_SKILL_TREE.each_value { |s| return true if s.skill_id == id }
-
-      false
-    else
-      hash = SkillData.get_skill_hash(id, lvl)
-      GM_SKILL_TREE.has_key?(hash) || GM_AURA_SKILL_TREE.has_key?(hash)
+      return false
     end
+
+    hash = SkillData.get_skill_hash(id, lvl)
+    GM_SKILL_TREE.has_key?(hash) || GM_AURA_SKILL_TREE.has_key?(hash)
   end
 
   def clan_skill?(id : Int32, lvl : Int32) : Bool

@@ -480,7 +480,7 @@ module AdminCommandHandler::AdminEditChar
         if player.l2id != pc.l2id
           pc.send_message("You've changed nobless status of: #{player.name}")
         end
-        player.send_message("GM changed your nobless status!")
+        player.send_message("GM changed your nobless status")
       end
     elsif command.starts_with?("admin_set_hp")
       data = command.split

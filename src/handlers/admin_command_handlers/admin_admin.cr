@@ -86,7 +86,7 @@ module AdminCommandHandler::AdminAdmin
 				if Config.set_parameter_value(p_name, p_value)
 					pc.send_message("Config parameter #{p_name} set to #{p_value}")
 				else
-					pc.send_message("Invalid parameter!")
+					pc.send_message("Invalid parameter")
         end
 			rescue e
 				pc.send_message "Usage: //setconfig <parameter> <value>"
@@ -103,7 +103,7 @@ module AdminCommandHandler::AdminAdmin
 				if Config.set_parameter_value(p_name, p_value)
 					pc.send_message("parameter #{p_name} succesfully set to #{p_value}")
 				else
-					pc.send_message("Invalid parameter!")
+					pc.send_message("Invalid parameter")
         end
 			rescue e
         warn e
@@ -142,7 +142,7 @@ module AdminCommandHandler::AdminAdmin
   end
 
   private def show_config_page(pc)
-    admin_reply = Packets::Outgoing::NpcHtmlMessage.new
+    admin_reply = NpcHtmlMessage.new
     msg = <<-HTML
       <html><title>L2J :: Config</title><body>
       <center><table width=270><tr><td width=60><button value=\"Main\" action=\"bypass -h admin_admin\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=150>Config Server Panel</td><td width=60><button value=\"Back\" action=\"bypass -h admin_admin4\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table></center><br>

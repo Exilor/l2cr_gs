@@ -176,7 +176,7 @@ module AdminCommandHandler::AdminTeleport
       </body></html>
     TEXT
 
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.html = msg
     pc.send_packet(reply)
   end

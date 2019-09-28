@@ -47,7 +47,7 @@ module AdminCommandHandler::AdminGmChat
     end
 
     text = cmd.from(offset)
-    cs = Packets::Outgoing::CreatureSay.new(0, Packets::Incoming::Say2::ALLIANCE, pc.name, text)
+    cs = CreatureSay.new(0, Packets::Incoming::Say2::ALLIANCE, pc.name, text)
     AdminData.broadcast_to_gms(cs)
   rescue e
     warn e

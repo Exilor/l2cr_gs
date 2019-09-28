@@ -3,7 +3,7 @@ module AdminCommandHandler::AdminManor
   extend AdminCommandHandler
 
   def use_admin_command(command, pc)
-    msg = Packets::Outgoing::NpcHtmlMessage.new
+    msg = NpcHtmlMessage.new
     msg.set_file(pc, "data/html/admin/manor.htm")
     msg["%status%"] = CastleManorManager.current_mode_name
     msg["%change%"] = CastleManorManager.next_mode_change

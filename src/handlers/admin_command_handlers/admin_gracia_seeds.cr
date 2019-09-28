@@ -23,7 +23,7 @@ module AdminCommandHandler::AdminGraciaSeeds
   end
 
   private def show_menu(pc)
-    html = Packets::Outgoing::NpcHtmlMessage.new
+    html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/graciaseeds.htm")
     html["%sodstate%"] = GraciaSeedsManager.sod_state
     html["%sodtiatkill%"] = GraciaSeedsManager.sod_tiat_killed

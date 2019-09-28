@@ -82,7 +82,7 @@ module AdminCommandHandler::AdminElement
         current = "None"
       end
 
-      iu = Packets::Outgoing::InventoryUpdate.modified(item_instance)
+      iu = InventoryUpdate.modified(item_instance)
       player.send_packet(iu)
 
       pc.send_message("Changed the elemental power of #{player.name}'s #{item_instance.template.name} from #{old} to #{current}.")

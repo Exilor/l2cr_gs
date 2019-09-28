@@ -73,25 +73,24 @@ module DimensionalRiftManager
             count = sp["count"].to_i
 
             count.times do |i|
-              rift_room = ROOMS[type][room_id]
+              unless rift_room = ROOMS.dig?(type, room_id)
+                count_bad += 1
+                next
+              end
               x = rift_room.random_x
               y = rift_room.random_y
               z = rift_room.teleport_coordinates.z
 
-              if ROOMS.has_key?(type) && ROOMS[type].has_key?(room_id)
-                sp = L2Spawn.new(mob_id)
-                sp.amount = 1
-                sp.x = x
-                sp.y = y
-                sp.z = z
-                sp.heading = -1
-                sp.respawn_delay = delay
-                SpawnTable.add_new_spawn(sp, false)
-                ROOMS[type][room_id].spawns << sp
-                count_good += 1
-              else
-                count_bad += 1
-              end
+              sp = L2Spawn.new(mob_id)
+              sp.amount = 1
+              sp.x = x
+              sp.y = y
+              sp.z = z
+              sp.heading = -1
+              sp.respawn_delay = delay
+              SpawnTable.add_new_spawn(sp, false)
+              rift_room.spawns << sp
+              count_good += 1
             end
           end
         end

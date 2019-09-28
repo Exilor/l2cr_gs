@@ -12,6 +12,11 @@ class PcInventory < Inventory
 
   def initialize(@owner : L2PcInstance)
     super()
+
+    add_paperdoll_listener(ArmorSetListener)
+    add_paperdoll_listener(BowCrossRodListener)
+    add_paperdoll_listener(ItemSkillsListener)
+    add_paperdoll_listener(BraceletListener)
   end
 
   def owner? : L2PcInstance
@@ -473,18 +478,18 @@ class PcInventory < Inventory
 
   def validate_capacity(slots : Int, quest_item : Bool = false) : Bool
     if quest_item
-      @quest_slots + slots <= owner.quest_inventory_limit
-    else
-      @items.size - @quest_slots <= owner.quest_inventory_limit
+      return @quest_slots + slots <= owner.quest_inventory_limit
     end
+
+    @items.size - @quest_slots <= owner.quest_inventory_limit
   end
 
   def validate_weight(weight : Int) : Bool
     if owner.gm? && owner.diet_mode? && owner.access_level.allow_transaction?
-      true
-    else
-      @total_weight + weight <= owner.max_load
+      return true
     end
+
+    @total_weight + weight <= owner.max_load
   end
 
   def set_inventory_block(@block_items : Array(Int32), @block_mode : Int32)

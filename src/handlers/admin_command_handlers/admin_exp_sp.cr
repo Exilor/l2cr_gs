@@ -35,7 +35,7 @@ module AdminCommandHandler::AdminExpSp
       pc.send_packet(SystemMessageId::INCORRECT_TARGET)
       return
     end
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/expsp.htm")
     reply["%name%"] = player.name
     reply["%level%"] = player.level
@@ -125,9 +125,9 @@ module AdminCommandHandler::AdminExpSp
 
   def commands
     {
-      "admin_fight_calculator",
-      "admin_fight_calculator_show",
-      "admin_fcs"
+      "admin_add_exp_sp_to_character",
+      "admin_add_exp_sp",
+      "admin_remove_exp_sp"
     }
   end
 end

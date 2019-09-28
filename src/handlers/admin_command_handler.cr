@@ -1,5 +1,6 @@
 module AdminCommandHandler
   include Loggable
+  include Packets::Outgoing
 
   private HANDLERS = {} of String => self
 

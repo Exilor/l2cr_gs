@@ -123,10 +123,10 @@ class CharStat
 
   def get_magical_attack_range(skill : Skill?) : Int32
     if skill
-      calc_stat(MAGIC_ATTACK_RANGE, skill.cast_range, nil, skill).to_i
-    else
-      @active_char.template.base_attack_range
+      return calc_stat(MAGIC_ATTACK_RANGE, skill.cast_range, nil, skill).to_i
     end
+
+    @active_char.template.base_attack_range
   end
 
   def get_m_atk(target : L2Character?, skill : Skill?) : Float64
@@ -237,10 +237,10 @@ class CharStat
 
   def move_speed : Float64
     if @active_char.inside_water_zone?
-      @active_char.running? ? swim_run_speed : swim_walk_speed
-    else
-      @active_char.running? ? run_speed : walk_speed
+      return @active_char.running? ? swim_run_speed : swim_walk_speed
     end
+
+    @active_char.running? ? run_speed : walk_speed
   end
 
   def get_m_reuse_rate(skill : Skill) : Float64

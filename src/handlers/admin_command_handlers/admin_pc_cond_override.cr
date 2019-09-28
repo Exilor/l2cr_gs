@@ -7,7 +7,7 @@ module AdminCommandHandler::AdminPcCondOverride
     unless st.empty?
       case st.shift
       when "admin_exceptions"
-        msg = Packets::Outgoing::NpcHtmlMessage.new(0, 1)
+        msg = NpcHtmlMessage.new(0, 1)
         msg.set_file(pc, "data/html/admin/cond_override.htm")
         sb = String.build do |io|
           PcCondOverride.each do |ex|

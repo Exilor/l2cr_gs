@@ -41,13 +41,6 @@ abstract class Inventory < ItemContainer
   getter mask = 0
 
   def initialize
-    if is_a?(PcInventory)
-      add_paperdoll_listener(ArmorSetListener)
-      add_paperdoll_listener(BowCrossRodListener)
-      add_paperdoll_listener(ItemSkillsListener)
-      add_paperdoll_listener(BraceletListener)
-    end
-
     add_paperdoll_listener(StatsListener)
   end
 
@@ -321,7 +314,6 @@ abstract class Inventory < ItemContainer
 
     def notify_unequipped(slot, item, inv)
       return unless pc = inv.owner.as?(L2PcInstance)
-      return unless chest_item = inv.chest_slot?
 
       remove = false
 
@@ -437,8 +429,8 @@ abstract class Inventory < ItemContainer
   end
 
   def remove_item(item : L2ItemInstance) : Bool
-    @paperdoll.each_with_index do |item2, i|
-      unequip_item_in_slot(i) if item == item2
+    if slot = @paperdoll.index(item)
+      unequip_item_in_slot(slot)
     end
 
     super
@@ -446,12 +438,12 @@ abstract class Inventory < ItemContainer
 
   # L2J: getPaperdollItem
   def [](slot : Int) : L2ItemInstance?
-    @paperdoll[slot]
+    @paperdoll.fetch(slot) { raise "Slot #{slot} outside of inventory bounds" }
   end
 
   # L2J: isPaperdollSlotEmpty
   def slot_empty?(slot : Int) : Bool
-    @paperdoll[slot].nil?
+    self[slot].nil?
   end
 
   def self.get_paperdoll_index(slot : Int) : Int32
@@ -503,29 +495,29 @@ abstract class Inventory < ItemContainer
 
   def get_paperdoll_item_by_l2_item_id(slot : Int) : L2ItemInstance?
     index = Inventory.get_paperdoll_index(slot)
-    @paperdoll[index] unless index == -1
+    self[index] unless index == -1
   end
 
   def get_paperdoll_item_id(slot : Int) : Int32
-    @paperdoll[slot].try &.id || 0
+    self[slot].try &.id || 0
   end
 
   def get_paperdoll_item_display_id(slot : Int) : Int32
-    @paperdoll[slot].try &.display_id || 0
+    self[slot].try &.display_id || 0
   end
 
   def get_paperdoll_augmentation_id(slot : Int) : Int32
-    @paperdoll[slot].try &.augmentation?.try &.augmentation_id || 0
+    self[slot].try &.augmentation?.try &.augmentation_id || 0
   end
 
   def get_paperdoll_l2id(slot : Int) : Int32
-    @paperdoll[slot].try &.l2id || 0
+    self[slot].try &.l2id || 0
   end
 
   def add_paperdoll_listener(listener : PaperdollListener)
     sync do
       if @paperdoll_listeners.includes?(listener)
-        fatal "@paperdoll_listeners should not already include #{listener}."
+        fatal { "@paperdoll_listeners should not already include #{listener}." }
       end
       @paperdoll_listeners << listener
     end
@@ -536,9 +528,9 @@ abstract class Inventory < ItemContainer
   end
 
   # L2J: setPaperdollItem
-  def []=(slot : Int, item : L2ItemInstance?)
+  def []=(slot : Int, item : L2ItemInstance?) : L2ItemInstance?
     sync do
-      old = @paperdoll[slot]
+      old = self[slot]
 
       if old != item
         if old
@@ -572,10 +564,6 @@ abstract class Inventory < ItemContainer
 
       old
     end
-  end
-
-  private def set_paperdoll_item(slot : Int, item : L2ItemInstance?) : L2ItemInstance?
-    self[slot] = item
   end
 
   def get_slot_from_item(item : L2ItemInstance) : Int32
@@ -617,7 +605,7 @@ abstract class Inventory < ItemContainer
   end
 
   def unequip_item_in_slot(slot : Int)
-    set_paperdoll_item(slot, nil)
+    self[slot] = nil
   end
 
   def unequip_item_in_slot_and_record(slot : Int)
@@ -651,7 +639,7 @@ abstract class Inventory < ItemContainer
     when L2Item::SLOT_HAIR2
       HAIR2
     when L2Item::SLOT_HAIRALL
-      set_paperdoll_item(HAIR, nil)
+      self[HAIR] = nil
       HAIR
     when L2Item::SLOT_HEAD
       HEAD
@@ -680,12 +668,12 @@ abstract class Inventory < ItemContainer
     when L2Item::SLOT_BELT
       BELT
     else
-      warn "Inventory#unequip_item_in_body_slot: unhandled slot type #{slot}."
+      warn { "Inventory#unequip_item_in_body_slot: unhandled slot type #{slot}." }
       -1
     end
 
     if paperdoll_slot >= 0
-      if old = set_paperdoll_item(paperdoll_slot, nil)
+      if old = self[paperdoll_slot] = nil
         owner.refresh_expertise_penalty if owner.player?
       end
 
@@ -708,7 +696,7 @@ abstract class Inventory < ItemContainer
   end
 
   def equip_item(item : L2ItemInstance)
-    owner = owner()
+    owner = owner?
     if owner.is_a?(L2PcInstance)
       return unless owner.private_store_type.none?
       if !owner.override_item_conditions? && !owner.hero? && item.hero_item?
@@ -732,94 +720,94 @@ abstract class Inventory < ItemContainer
 
     case target_slot
     when L2Item::SLOT_LR_HAND
-      set_paperdoll_item(LHAND, nil)
-      set_paperdoll_item(RHAND, item)
+      self[LHAND] = nil
+      self[RHAND] = item
     when L2Item::SLOT_L_HAND
       rh = rhand_slot?
       if rh && rh.body_part == L2Item::SLOT_LR_HAND && !(((rh.item_type == WeaponType::BOW) && (item.item_type == EtcItemType::ARROW)) || ((rh.item_type == WeaponType::CROSSBOW) && (item.item_type == EtcItemType::BOLT)) || ((rh.item_type == WeaponType::FISHINGROD) && (item.item_type == EtcItemType::LURE)))
-        set_paperdoll_item(RHAND, nil)
+        self[RHAND] = nil
       end
-      set_paperdoll_item(LHAND, item)
+      self[LHAND] = item
     when L2Item::SLOT_R_HAND
-      set_paperdoll_item(RHAND, item)
+      self[RHAND] = item
     when L2Item::SLOT_L_EAR, L2Item::SLOT_R_EAR, L2Item::SLOT_LR_EAR
       if @paperdoll[LEAR].nil?
-        set_paperdoll_item(LEAR, item)
+        self[LEAR] = item
       elsif @paperdoll[REAR].nil?
-        set_paperdoll_item(REAR, item)
+        self[REAR] = item
       else
-        set_paperdoll_item(LEAR, item)
+        self[LEAR] = item
       end
     when L2Item::SLOT_L_FINGER, L2Item::SLOT_R_FINGER, L2Item::SLOT_LR_FINGER
       if @paperdoll[LFINGER].nil?
-        set_paperdoll_item(LFINGER, item)
+        self[LFINGER] = item
       elsif @paperdoll[RFINGER].nil?
-        set_paperdoll_item(RFINGER, item)
+        self[RFINGER] = item
       else
-        set_paperdoll_item(LFINGER, item)
+        self[LFINGER] = item
       end
     when L2Item::SLOT_NECK
-      set_paperdoll_item(NECK, item)
+      self[NECK] = item
     when L2Item::SLOT_FULL_ARMOR
-      set_paperdoll_item(LEGS, nil)
-      set_paperdoll_item(CHEST, item)
+      self[LEGS] = nil
+      self[CHEST] = item
     when L2Item::SLOT_CHEST
-      set_paperdoll_item(CHEST, item)
+      self[CHEST] = item
     when L2Item::SLOT_LEGS
       chest = chest_slot?
       if chest && chest.body_part == L2Item::SLOT_FULL_ARMOR
-        set_paperdoll_item(CHEST, nil)
+        self[CHEST] = nil
       end
-      set_paperdoll_item(LEGS, item)
+      self[LEGS] = item
     when L2Item::SLOT_FEET
-      set_paperdoll_item(FEET, item)
+      self[FEET] = item
     when L2Item::SLOT_GLOVES
-      set_paperdoll_item(GLOVES, item)
+      self[GLOVES] = item
     when L2Item::SLOT_HEAD
-      set_paperdoll_item(HEAD, item)
+      self[HEAD] = item
     when L2Item::SLOT_HAIR
       hair = hair_slot?
       if hair && hair.body_part == L2Item::SLOT_HAIRALL
-        set_paperdoll_item(HAIR2, nil)
+        self[HAIR2] = nil
       else
-        set_paperdoll_item(HAIR, nil)
+        self[HAIR] = nil
       end
-      set_paperdoll_item(HAIR, item)
+      self[HAIR] = item
     when L2Item::SLOT_HAIR2
       hair2 = hair_slot?
       if hair2 && hair2.body_part == L2Item::SLOT_HAIRALL
-        set_paperdoll_item(HAIR, nil)
+        self[HAIR] = nil
       else
-        set_paperdoll_item(HAIR2, nil)
+        self[HAIR2] = nil
       end
-      set_paperdoll_item(HAIR2, item)
+      self[HAIR2] = item
     when L2Item::SLOT_HAIRALL
-      set_paperdoll_item(HAIR2, nil)
-      set_paperdoll_item(HAIR, item)
+      self[HAIR2] = nil
+      self[HAIR] = item
     when L2Item::SLOT_UNDERWEAR
-      set_paperdoll_item(UNDER, item)
+      self[UNDER] = item
     when L2Item::SLOT_BACK
-      set_paperdoll_item(CLOAK, item)
+      self[CLOAK] = item
     when L2Item::SLOT_L_BRACELET
-      set_paperdoll_item(LBRACELET, item)
+      self[LBRACELET] = item
     when L2Item::SLOT_R_BRACELET
-      set_paperdoll_item(RBRACELET, item)
+      self[RBRACELET] = item
     when L2Item::SLOT_DECO
       equip_talisman(item)
     when L2Item::SLOT_BELT
-      set_paperdoll_item(BELT, item)
+      self[BELT] = item
     when L2Item::SLOT_ALLDRESS # formal dress
-      set_paperdoll_item(LEGS, nil)
-      set_paperdoll_item(LHAND, nil)
-      set_paperdoll_item(RHAND, nil)
-      set_paperdoll_item(RHAND, nil)
-      set_paperdoll_item(LHAND, nil)
-      set_paperdoll_item(HEAD, nil)
-      set_paperdoll_item(FEET, nil)
-      set_paperdoll_item(GLOVES, nil)
-      set_paperdoll_item(CHEST, item)
+      self[LEGS] = nil
+      self[LHAND] = nil
+      self[RHAND] = nil
+      self[RHAND] = nil
+      self[LHAND] = nil
+      self[HEAD] = nil
+      self[FEET] = nil
+      self[GLOVES] = nil
+      self[CHEST] = item
     else
-      warn "Unknown body slot #{target_slot} for item ID #{item.id}."
+      warn { "Unknown body slot #{target_slot} for item ID #{item.id}." }
     end
   end
 
@@ -847,8 +835,6 @@ abstract class Inventory < ItemContainer
   end
 
   def restore
-    debug "Restoring the inventory of #{owner}."
-
     sql = "SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time FROM items WHERE owner_id=? AND (loc=? OR loc=?) ORDER BY loc_data"
     GameDB.each(sql, owner_id, base_location.to_s, equip_location.to_s) do |rs|
       unless item = L2ItemInstance.restore_from_db(owner_id, rs)
@@ -883,22 +869,22 @@ abstract class Inventory < ItemContainer
     return if talisman_slots.zero?
 
     (DECO1...DECO1 + talisman_slots).each do |i|
-      if @paperdoll[i]
+      if self[i]
         if get_paperdoll_item_id(i) == item.id
-          set_paperdoll_item(i, item)
+          self[i] = item
           return
         end
       end
     end
 
     (DECO1...DECO1 + talisman_slots).each do |i|
-      unless @paperdoll[i]
-        set_paperdoll_item(i, item)
+      unless self[i]
+        self[i] = item
         return
       end
     end
 
-    set_paperdoll_item(DECO1, item)
+    self[DECO1] = item
   end
 
   def can_equip_cloak? : Bool
@@ -907,7 +893,6 @@ abstract class Inventory < ItemContainer
 
   def reload_equipped_items
     @paperdoll.each do |item|
-      next unless item
       slot = item.location_slot
 
       @paperdoll_listeners.each do |listener|

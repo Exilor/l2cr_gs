@@ -94,7 +94,7 @@ module AdminCommandHandler::AdminInstanceZone
       io << "</table></html>"
     end
 
-    ms = Packets::Outgoing::NpcHtmlMessage.new
+    ms = NpcHtmlMessage.new
     ms.html = html
 
     pc.send_packet(ms)

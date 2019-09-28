@@ -40,7 +40,7 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
     @html = html
   end
 
-  def set_file(pc, path : String)
+  def set_file(pc, path : String) : Bool
     unless content = HtmCache.get_htm(pc, path)
       self.html = "<html><body>My Text is missing:<br>#{path}</body></html>"
       return false
@@ -56,10 +56,6 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
 
   def []=(pattern : String, val)
     if html = @html
-      unless html.includes?(pattern)
-        warn "#{pattern.inspect} not found in this html:"
-        warn html
-      end
       @html = html.gsub(pattern, val.to_s)
     end
   end

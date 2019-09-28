@@ -62,10 +62,10 @@ class L2AuctioneerInstance < L2Npc
             html["%objectId%"] = l2id
             pc.send_packet(html)
           rescue e
-            pc.send_message("Invalid bid!")
+            pc.send_message("Invalid bid")
           end
         rescue e
-          pc.send_message("Invalid auction duration!")
+          pc.send_message("Invalid auction duration")
         end
         return
       elsif actual_cmd.casecmp?("confirmAuction")
@@ -119,7 +119,7 @@ class L2AuctioneerInstance < L2Npc
 
           pc.send_packet(html)
         rescue e
-          pc.send_message("Invalid auction!")
+          pc.send_message("Invalid auction")
         end
         return
       elsif actual_cmd.casecmp?("bid")
@@ -137,10 +137,10 @@ class L2AuctioneerInstance < L2Npc
 
             AuctionManager.get_auction!(auction_id).set_bid(pc, bid)
           rescue e
-            pc.send_message("Invalid bid!")
+            pc.send_message("Invalid bid")
           end
         rescue e
-          pc.send_message("Invalid auction!")
+          pc.send_message("Invalid auction")
         end
         return
       elsif actual_cmd.casecmp?("bid1")
@@ -175,7 +175,7 @@ class L2AuctioneerInstance < L2Npc
           pc.send_packet(html)
           return
         rescue e
-          pc.send_message("Invalid auction!")
+          pc.send_message("Invalid auction")
         end
         return
       elsif actual_cmd.casecmp?("list")
@@ -464,7 +464,7 @@ class L2AuctioneerInstance < L2Npc
 
           pc.send_packet(html)
         rescue e
-          pc.send_message("Invalid auction!")
+          pc.send_message("Invalid auction")
         end
         return
       elsif actual_cmd.casecmp?("location")

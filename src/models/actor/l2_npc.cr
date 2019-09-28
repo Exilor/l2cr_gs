@@ -351,7 +351,6 @@ class L2Npc < L2Character
 
     npc_id = template.id
 
-
     file_name = SevenSigns::SEVEN_SIGNS_HTML_PATH
     seal_avarice_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_AVARICE)
     seal_gnosis_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_GNOSIS)

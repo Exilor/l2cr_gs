@@ -80,9 +80,9 @@ module AdminCommandHandler::AdminPolymorph
       obj.poly.set_poly_info(type, id)
       # animation
       if obj.is_a?(L2Character)
-        msu = Packets::Outgoing::MagicSkillUse.new(obj, 1008, 1, 4000, 0)
+        msu = MagicSkillUse.new(obj, 1008, 1, 4000, 0)
         obj.broadcast_packet(msu)
-        sg = Packets::Outgoing::SetupGauge.new(0, 4000)
+        sg = SetupGauge.new(0, 4000)
         obj.send_packet(sg)
       end
       # end of animation

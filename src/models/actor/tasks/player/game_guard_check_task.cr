@@ -7,7 +7,7 @@ struct GameGuardCheckTask
     end
 
     if !client.game_guard_ok? && @pc.online?
-      msg = "Client #{client} failed to reply GameGuard query and is being kicked!"
+      msg = "Client #{client} failed to reply GameGuard query and is being kicked"
       AdminData.broadcast_message_to_gms(msg)
       client.close(Packets::Outgoing::LeaveWorld::STATIC_PACKET)
     end

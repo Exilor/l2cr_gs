@@ -31,7 +31,7 @@ module AdminCommandHandler::AdminSiege
     command = st.shift
 
     # Get castle
-    if !st.empty?
+    if st.any?
       player = pc.target.as?(L2PcInstance)
       val = st.shift
 
@@ -46,34 +46,26 @@ module AdminCommandHandler::AdminSiege
             end
 
             if clanhall.owner_id > 0
-              pc.send_message("This Clan Hall is not free!")
+              pc.send_message("This Clan Hall is not free")
               return false
             end
 
             if clan.hideout_id > 0
-              pc.send_message("You have already a Clan Hall!")
+              pc.send_message("You have already a Clan Hall")
               return false
             end
 
-            if !clanhall.siegable_hall?
+            if clanhall.siegable_hall?
+              clanhall.owner = clan
+              clan.hideout_id = clanhall.id
+            else
               ClanHallManager.set_owner(clanhall.id, clan)
               if auction = AuctionManager.get_auction(clanhall.id)
                 auction.delete_auction_from_db
               end
-            else
-              clanhall.owner = clan
-              clan.hideout_id = clanhall.id
             end
           when "admin_clanhalldel"
-
-            if !clanhall.siegable_hall?
-              if ClanHallManager.free?(clanhall.id)
-                pc.send_message("This Clan Hall is already free!")
-              else
-                ClanHallManager.set_free(clanhall.id)
-                AuctionManager.init_npc(clanhall.id)
-              end
-            else
+            if clanhall.siegable_hall?
               old_owner = clanhall.owner_id
               if old_owner > 0
                 clanhall.free
@@ -82,6 +74,13 @@ module AdminCommandHandler::AdminSiege
                   clan.hideout_id = 0
                   clan.broadcast_clan_status
                 end
+              end
+            else
+              if ClanHallManager.free?(clanhall.id)
+                pc.send_message("This Clan Hall is already free")
+              else
+                ClanHallManager.set_free(clanhall.id)
+                AuctionManager.init_npc(clanhall.id)
               end
             end
           when "admin_clanhallopendoors"
@@ -152,28 +151,28 @@ module AdminCommandHandler::AdminSiege
             if val == "month"
               month = cal.month + st.shift.to_i
               if 1 > month || 12 < month
-                pc.send_message("Unable to change Siege Date - Incorrect month value only #{1}-#{12} is accepted!")
+                pc.send_message("Unable to change Siege Date - Incorrect month value only #{1}-#{12} is accepted")
                 return false
               end
               cal.month = month
             elsif val == "day"
               day = st.shift.to_i
               if 1 > day || 31 < day
-                pc.send_message("Unable to change Siege Date - Incorrect day value only #{1}-#{31} is accepted!")
+                pc.send_message("Unable to change Siege Date - Incorrect day value only #{1}-#{31} is accepted")
                 return false
               end
               cal.day = day
             elsif val == "hour"
               hour = st.shift.to_i
               if 0 > hour || 23 < hour
-                pc.send_message("Unable to change Siege Date - Incorrect hour value only #{0}-#{23} is accepted!")
+                pc.send_message("Unable to change Siege Date - Incorrect hour value only #{0}-#{23} is accepted")
                 return false
               end
               cal.hour = hour
             elsif val == "min"
               min = st.shift.to_i
               if 0 > min || 59 < min
-                pc.send_message("Unable to change Siege Date - Incorrect minute value only #{0}-#{59} is accepted!")
+                pc.send_message("Unable to change Siege Date - Incorrect minute value only #{0}-#{59} is accepted")
                 return false
               end
               cal.minute = min
@@ -205,7 +204,7 @@ module AdminCommandHandler::AdminSiege
 
   private def show_castle_select_page(pc)
     i = 0
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/castles.htm")
     list = [] of String | Int32
     CastleManager.castles.each do |castle|
@@ -270,15 +269,15 @@ module AdminCommandHandler::AdminSiege
     pc.send_packet(reply)
   end
 
-  private def show_siege_page(pc, castle_Name)
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+  private def show_siege_page(pc, castle_name)
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/castle.htm")
-    reply["%castleName%"] = castle_Name
+    reply["%castleName%"] = castle_name
     pc.send_packet(reply)
   end
 
   private def show_siege_time_page(pc, castle)
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/castlesiegetime.htm")
     reply["%castleName%"] = castle.name
     reply["%time%"] = castle.siege_date.time.to_s
@@ -311,7 +310,7 @@ module AdminCommandHandler::AdminSiege
   end
 
   private def show_clan_hall_page(pc, clanhall)
-    reply = Packets::Outgoing::NpcHtmlMessage.new
+    reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/clanhall.htm")
     reply["%clanhallName%"] = clanhall.name
     reply["%clanhallId%"] = clanhall.id
@@ -321,7 +320,7 @@ module AdminCommandHandler::AdminSiege
   end
 
   private def show_siegable_hall_page(pc, hall)
-    msg = Packets::Outgoing::NpcHtmlMessage.new
+    msg = NpcHtmlMessage.new
     msg.set_file(nil, "data/html/admin/siegablehall.htm")
     msg["%clanhallId%"] = hall.id
     msg["%clanhallName%"] = hall.name

@@ -156,7 +156,7 @@ module AdminCommandHandler::AdminCHSiege
         hall.siege.attackers.clear
       end
     elsif split[0] == commands[7]
-      pc.send_packet(Packets::Outgoing::SiegeInfo.new(hall))
+      pc.send_packet(SiegeInfo.new(hall))
     elsif split[0] == commands[8]
       siegable = hall.siege
       siegable.cancel_siege_task
@@ -190,7 +190,7 @@ module AdminCommandHandler::AdminCHSiege
   end
 
   private def send_siegable_hall_page(pc, hall_id, hall)
-    msg = Packets::Outgoing::NpcHtmlMessage.new
+    msg = NpcHtmlMessage.new
     msg.set_file(nil, "data/html/admin/siegablehall.htm")
     msg["%clanhallId%"] = hall_id
     msg["%clanhallName%"] = hall.name

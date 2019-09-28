@@ -1267,7 +1267,7 @@ abstract class L2Character < L2Object
 
     if playable?
       if skill.item_consume_id > 0
-        unless destroy_item_by_item_id("Consume", skill.item_consume_id, skill.item_consume_count.to_i64, nil, false)
+        unless destroy_item_by_item_id("Consume", skill.item_consume_id, skill.item_consume_count.to_i64, nil, true)
           acting_player.send_packet(SystemMessageId::NOT_ENOUGH_ITEMS)
           abort_cast
           return
@@ -2033,7 +2033,7 @@ abstract class L2Character < L2Object
     end
   end
 
-  def invul_against?(skill_id : Int32, skill_lvl : Int32)
+  def invul_against?(skill_id : Int32, skill_lvl : Int32) : Bool
     if temp = @invul_against_skills
       if holder = temp[skill_id]?
         if holder.skill_lvl < 1 || holder.skill_lvl == skill_lvl

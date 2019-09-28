@@ -3,13 +3,14 @@ module ActionHandler::L2SummonAction
   extend ActionHandler
 
   def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
+    return false unless target = target.as?(L2Summon)
+
     locked_target = pc.locked_target?
     if locked_target && locked_target != target
       pc.send_packet(SystemMessageId::FAILED_CHANGE_TARGET)
       return false
     end
 
-    target = target.as(L2Summon)
 
     if pc == target.owner && pc.target == target
       pc.send_packet(PetStatusShow.new(target))

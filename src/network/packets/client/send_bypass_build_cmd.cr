@@ -20,11 +20,12 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       if pc.gm?
         pc.send_message("The command #{command.from(6)} does not exist.")
       end
+
       return
     end
 
     unless AdminData.has_access?(command, pc.access_level)
-      pc.send_message("You don't have the access right to use this command!")
+      pc.send_message("You don't have the access right to use this command")
       warn { "#{pc} tried to use admin command #{command} without the proper access level." }
       return
     end
@@ -39,8 +40,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
   private def run_custom_cmd(pc)
     case @command
-    when "gc"
-      GC.collect
     when "save"
       pc.store_me
     when /^add_sp\s\d+$/
@@ -54,28 +53,16 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       set_mp
     when /^cp\s\d+/
       set_cp
-    when "warp"
-      warp
     when "rush"
       rush
     when "skills"
       send_skill_info
-    when "weight"
-      pc.refresh_overloaded
     when /^day_mobs$/
       DayNightSpawnManager.change_mode(0)
     when /^night_mobs$/
       DayNightSpawnManager.change_mode(1)
-    when "vit"
-      vit = Math.min(Config.starting_vitality_points, PcStat::MAX_VITALITY_POINTS)
-      pc.set_vitality_points(vit, true)
-    when "learn_all"
-      pc_target.reward_skills(true)
     when /^get_ch\s\d+$/
       ClanHallManager.set_owner(args[0].to_i, pc.clan) if pc.clan?
-    when "forget_all"
-      pc_target.all_skills.each { |skill| pc_target.remove_skill(skill) }
-      pc.send_skill_list
     when "destroy_items"
       pc.target.as?(L2PcInstance).try &.inventory.destroy_all_items("GM", pc, nil)
       pc.send_packet(ItemList.new(pc, false)) if pc == pc.target
@@ -93,33 +80,19 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       aspir(999999)
     when /^clan_level\s\d$/
       pc.clan?.try &.level = args.first.to_i
-    # when /^shutdown\s\d+/
-    #   Shutdown.start_shutdown(pc, args[0].to_i, false)
-    # when "shutdown"
-    #   Shutdown.start_shutdown(pc, 0, false)
-    # when /^restart\s\d+/
-    #   Shutdown.start_shutdown(pc, args[0].to_i, true)
-    # when "restart"
-    #   Shutdown.start_shutdown(pc, 0, true)
     when /^uplift\s.*/
       uplift_target
     when "cancel"
       char_target.stop_all_effects
     when "cleanse"
       char_target.effect_list.stop_all_debuffs
-    when "kill_all"
-      L2World.objects.each &.as?(L2Attackable).try { |m| m.do_die(pc) unless m.raid? || m.raid_minion? }
-    when "drop_all"
-      L2World.objects.each &.as?(L2Attackable).try { |m| m.do_die(pc) unless m.raid? || m.raid_minion? }
     when "reuse"
       reset_skill_reuse
-    when /^learn\s\d+(\s\d+)?$/
-      learn_skill
     when /^ivar\s\S+$/
       print_ivar
-    when /^spawn\s\d+$/
+    when /^spawn2\s\d+$/
       spawn_npc
-    when /^spawn\s(\w\s?)+$/
+    when /^spawn2\s(\w\s?)+$/
       spawn_npc_by_name
     when /^goto_npc\s.+$/
       goto_npc
@@ -201,36 +174,12 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     char_target.current_cp = args[0].to_f64
   end
 
-  private def warp
-    unless pc.moving?
-      pc.send_message("You need to be moving in order to warp.")
-      return
-    end
-
-    pc.set_xyz(pc.x_destination, pc.y_destination, pc.z_destination)
-    pc.stop_move
-    pc.broadcast_packet(ValidateLocation.new(pc))
-    msu = MagicSkillUse.new(pc, pc, 628, 1, 1, 1)
-    pc.broadcast_packet(msu)
-
-
-    if summon = pc.summon
-      msu = MagicSkillUse.new(summon, summon, 628, 1, 1, 1)
-      summon.broadcast_packet(msu)
-      summon.tele_to_location(*pc.xyz)
-      summon.follow_owner
-    end
-  end
-
   private def rush
     if pc.moving?
       dst = Location.new(pc.x_destination, pc.y_destination, pc.z_destination)
       pc.broadcast_packet(FlyToLocation.new(pc, dst, FlyType::CHARGE))
       pc.set_xyz(pc.x_destination, pc.y_destination, pc.z_destination)
       pc.stop_move
-      # msu = MagicSkillUse.new(pc, pc, 628, 1, 1, 1)
-      # pc.broadcast_packet(msu)
-
 
       if summon = pc.summon
         summon.broadcast_packet(FlyToLocation.new(summon, dst, FlyType::CHARGE))
@@ -282,7 +231,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   end
 
   private def aspir(radius)
-    return unless pc = active_char
+    pc = pc()
     radius = 1000 if radius == 0
     party = pc.party?
     pc.known_list.known_objects.values.each do |item|
@@ -566,7 +515,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
     # learn all skills
     pc.all_skills.each { |skill| pc.remove_skill(skill) }
-    pc.reward_skills(true)
+    pc.give_available_skills(true, true)
 
     # top level equipment
     items = [

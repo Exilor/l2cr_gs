@@ -472,8 +472,7 @@ class L2CubicInstance
     when SMART_CUBIC_ELEMENTALMASTER then "Smart Cubic EM"
     when SMART_CUBIC_SPECTRALMASTER then "Smart Cubic SM"
     when SMART_CUBIC_EVATEMPLAR then "Smart Cubic ET"
-    when SMART_CUBIC_SHILLIENTEMPLAR then "Smart Cubic ST"
-    else "unknown cubic!"
+    else "Smart Cubic ST"
     end
 
     io << @owner << "'s " << name

@@ -32,7 +32,7 @@ module AdminCommandHandler::AdminCursedWeapons
         end
       else
         msg = [] of String | Int::Primitive
-        admin_reply = Packets::Outgoing::NpcHtmlMessage.new
+        admin_reply = NpcHtmlMessage.new
         admin_reply.set_file(pc, "data/html/admin/cwinfo.htm")
         cwm.cursed_weapons.each do |cw|
           item_id = cw.item_id

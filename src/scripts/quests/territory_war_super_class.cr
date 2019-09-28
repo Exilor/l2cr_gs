@@ -37,7 +37,7 @@ class TerritoryWarSuperClass < Quest
         cal.minute = 0
         cal.second = 0
         if cal.before?(Time.now)
-          cal.add(:WEEK_OF_YEAR, 2)
+          cal.add(:WEEK, 2)
         end
         GlobalVariablesManager[TerritoryWarManager::GLOBAL_VARIABLE] = cal.ms
       end

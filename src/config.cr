@@ -1997,7 +1997,7 @@ module Config
     @@display_server_time = cfg.get_bool("DisplayServerTime")
 
     @@welcome_message_enabled = cfg.get_bool("ScreenWelcomeMessageEnable")
-    @@welcome_message_text = cfg.get_string("ScreenWelcomeMessageText", "Welcome to L2J server!")
+    @@welcome_message_text = cfg.get_string("ScreenWelcomeMessageText", "Welcome!")
     @@welcome_message_time = cfg.get_i32("ScreenWelcomeMessageTime", 10) * 1000
 
     @@antifeed_enable = cfg.get_bool("AntiFeedEnable")

@@ -29,7 +29,7 @@ module AdminCommandHandler::AdminHellbound
   end
 
   private def show_menu(pc)
-    html = Packets::Outgoing::NpcHtmlMessage.new
+    html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/hellbound.htm")
     html["%hbstage%"] = HellboundEngine.level
     html["%trust%"] = HellboundEngine.trust

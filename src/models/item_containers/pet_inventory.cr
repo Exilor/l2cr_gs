@@ -45,7 +45,7 @@ class PetInventory < Inventory
     validate_weight(weight)
   end
 
-  def validate_weight(weight : Int64) : Bool
+  def validate_weight(weight : Int) : Bool
     @total_weight + weight <= owner.max_load
   end
 

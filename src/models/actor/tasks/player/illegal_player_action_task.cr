@@ -13,7 +13,7 @@ class IllegalPlayerActionTask
 
       pc.send_message("You are banned for illegal action, GM informed.")
     when .jail?
-      pc.send_message("Illegal action performed!")
+      pc.send_message("Illegal action performed")
       pc.send_message("You will be teleported to GM Consultation Service area and jailed.")
     end
   end

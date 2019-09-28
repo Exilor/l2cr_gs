@@ -3,6 +3,10 @@ module ActionHandler::L2StaticObjectInstanceAction
   extend ActionHandler
 
   def action(pc, target, interact) : Bool
+    unless target.is_a?(L2StaticObjectInstance)
+      return false
+    end
+
     obj = target.as(L2StaticObjectInstance)
 
     if obj.type < 0

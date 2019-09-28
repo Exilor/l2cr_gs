@@ -16,7 +16,7 @@ module AdminCommandHandler::AdminClan
         return false
       end
 
-      html = Packets::Outgoing::NpcHtmlMessage.new(0, 1)
+      html = NpcHtmlMessage.new(0, 1)
       html.html = HtmCache.get_htm(pc, "data/html/admin/claninfo.htm").not_nil!
       html["%clan_name%"] = clan.name
       html["%clan_leader%"] = clan.leader_name
@@ -65,7 +65,7 @@ module AdminCommandHandler::AdminClan
         end
       end
     when "admin_clan_show_pending"
-      html = Packets::Outgoing::NpcHtmlMessage.new(0, 1)
+      html = NpcHtmlMessage.new(0, 1)
       html.html = HtmCache.get_htm(pc, "data/html/admin/clanchanges.htm").not_nil!
       sb = String.build do |io|
         ClanTable.clans.each do |clan|

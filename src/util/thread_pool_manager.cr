@@ -52,4 +52,8 @@ module ThreadPoolManager
   def execute_event(task)
     Concurrent.schedule(task)
   end
+
+  def stats : String
+    "Current implementation of ThreadPoolManager doesn't have stats to report"
+  end
 end

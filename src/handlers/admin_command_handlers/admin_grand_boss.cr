@@ -20,7 +20,7 @@ module AdminCommandHandler::AdminGrandBoss
         boss_id = st.shift.to_i
         manage_html(pc, boss_id)
       else
-        html = Packets::Outgoing::NpcHtmlMessage.new(0, 1)
+        html = NpcHtmlMessage.new(0, 1)
         html.html = HtmCache.get_htm(pc, "data/html/admin/grandboss.htm").not_nil!
         pc.send_packet(html)
       end
@@ -32,7 +32,7 @@ module AdminCommandHandler::AdminGrandBoss
           antharas_ai.notify_event("SKIP_WAITING", nil, pc)
           manage_html(pc, boss_id)
         else
-          pc.send_message("Wrong ID!")
+          pc.send_message("Wrong ID")
         end
       else
         pc.send_message("Usage: #grandboss_skip Id")
@@ -49,7 +49,7 @@ module AdminCommandHandler::AdminGrandBoss
           baium_ai.notify_event("RESPAWN_BAIUM", nil, pc)
           manage_html(pc, boss_id)
         else
-          pc.send_message("Wrong ID!")
+          pc.send_message("Wrong ID")
         end
       else
         pc.send_message("Usage: #grandboss_respawn Id")
@@ -64,7 +64,7 @@ module AdminCommandHandler::AdminGrandBoss
         when BAIUM
           baium_ai.notify_event("DESPAWN_MINIONS", nil, pc)
         else
-          pc.send_message("Wrong ID!")
+          pc.send_message("Wrong ID")
         end
       else
         pc.send_message("Usage: #grandboss_minions Id")
@@ -81,7 +81,7 @@ module AdminCommandHandler::AdminGrandBoss
           baium_ai.notify_event("ABORT_FIGHT", nil, pc)
           manage_html(pc, boss_id)
         else
-          pc.send_message("Wrong ID!")
+          pc.send_message("Wrong ID")
         end
       else
         pc.send_message("Usage: #grandboss_abort Id")
@@ -141,7 +141,7 @@ module AdminCommandHandler::AdminGrandBoss
         end
       end
 
-      html = Packets::Outgoing::NpcHtmlMessage.new(0, 1)
+      html = NpcHtmlMessage.new(0, 1)
       html.html = HtmCache.get_htm(pc, html_path.not_nil!).not_nil!
       html["%bossStatus%"] = text
       html["%bossColor%"] = text_color
@@ -153,18 +153,18 @@ module AdminCommandHandler::AdminGrandBoss
 
         html["%respawnTime%"] = boss_respawn
       else
-        html["%respawnTime%"] = "Already respawned!"
+        html["%respawnTime%"] = "Already respawned"
       end
 
       if boss_zone
         html["%playersInside%"] = boss_zone.players_inside.size
       else
-        html["%playersInside%"] = "Zone not found!"
+        html["%playersInside%"] = "Zone not found"
       end
 
       pc.send_packet(html)
     else
-      pc.send_message("Wrong ID!")
+      pc.send_message("Wrong ID")
     end
   end
 

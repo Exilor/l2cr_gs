@@ -6,7 +6,7 @@ module AdminCommandHandler::AdminMessages
     if command.starts_with?("admin_msg ")
       begin
         sm_id = command.from(10).strip.to_i
-        sm = Packets::Outgoing::SystemMessage[sm_id]
+        sm = SystemMessage[sm_id]
         pc.send_packet(sm)
         return true
       rescue e
@@ -20,7 +20,7 @@ module AdminCommandHandler::AdminMessages
         return false
       end
 
-      sm = Packets::Outgoing::SystemMessage[tokens[1].to_i]
+      sm = SystemMessage[tokens[1].to_i]
       last_pos = 0
       tokens.each do |val|
         begin
