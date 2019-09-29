@@ -42,7 +42,7 @@ class ListenersContainer
     Slice(AbstractEventListener).empty
   end
 
-  def remove_listener_if(type : EventType, &block : AbstractEventListener -> Bool)
+  def remove_listener_if(type : EventType, & : AbstractEventListener -> Bool)
     get_listeners(type).safe_each do |listener|
       if yield listener
         listener.unregister_me
@@ -50,7 +50,7 @@ class ListenersContainer
     end
   end
 
-  def remove_listener_if(&block : AbstractEventListener -> Bool)
+  def remove_listener_if(& : AbstractEventListener -> Bool)
     unless tmp = @listeners
       return
     end

@@ -11,9 +11,9 @@ class FortSiege
   private DELETE_FORT_SIEGECLANS = "DELETE FROM fortsiege_clans WHERE fort_id = ?"
 
   @siege_guard_manager : FortSiegeGuardManager?
-  @siege_end : Concurrent::DelayedTask?
-  @siege_restore : Concurrent::DelayedTask?
-  @siege_start_task : Concurrent::DelayedTask?
+  @siege_end : Scheduler::DelayedTask?
+  @siege_restore : Scheduler::DelayedTask?
+  @siege_start_task : Scheduler::DelayedTask?
   @attacker_clans = [] of L2SiegeClan
   getter commanders = [] of L2Spawn
   getter fort

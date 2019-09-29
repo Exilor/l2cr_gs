@@ -1,7 +1,7 @@
 require "./abstract_zone_settings"
 
 class TaskZoneSettings < AbstractZoneSettings
-  property task : Concurrent::ScheduledTask?
+  property task : Scheduler::Task?
 
   def clear
     if task = @task

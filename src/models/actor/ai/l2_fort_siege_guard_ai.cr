@@ -3,7 +3,7 @@ require "./self_analysis"
 class L2FortSiegeGuardAI < L2CharacterAI
   private MAX_ATTACK_TIMEOUT = 300 # int ticks, i.e. 30 seconds
 
-  @ai_task : Concurrent::PeriodicTask?
+  @ai_task : Scheduler::PeriodicTask?
   @attack_range : Int32
   @thinking = false
 

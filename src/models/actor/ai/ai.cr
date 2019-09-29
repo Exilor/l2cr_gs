@@ -67,7 +67,7 @@ abstract class AI
   getter intention = IDLE
   protected getter! follow_target : L2Character
   property next_action : NextAction?
-  property follow_task : Concurrent::PeriodicTask?
+  property follow_task : Scheduler::PeriodicTask?
   private property target : L2Object?
   property! cast_target : L2Character?
   property! attack_target : L2Character?

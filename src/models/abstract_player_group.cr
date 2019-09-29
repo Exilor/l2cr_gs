@@ -49,7 +49,7 @@ abstract class AbstractPlayerGroup
     members.sample(random: Rnd)
   end
 
-  def each_with_summon(&block : L2PcInstance | L2Summon ->) : Nil
+  def each_with_summon(& : L2PcInstance | L2Summon ->) : Nil
     each do |m|
       yield m
 

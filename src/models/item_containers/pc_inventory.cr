@@ -169,7 +169,7 @@ class PcInventory < Inventory
     @items.select &.augmented?
   end
 
-  def augmented_items(&block : L2ItemInstance ->)
+  def augmented_items(& : L2ItemInstance ->)
     @items.each do |item|
       if item.augmented?
         yield item

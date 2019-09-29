@@ -21,7 +21,7 @@ class L2ItemInstance < L2Object
   @shots_mask = 0
   @enchant_options = [] of Options
   @wear = false
-  @life_time_task : Concurrent::DelayedTask?
+  @life_time_task : Scheduler::DelayedTask?
   getter owner_id = 0
   getter count : Int64 = 0i64
   getter enchant_level = 0
@@ -37,7 +37,7 @@ class L2ItemInstance < L2Object
   property drop_time : Int64 = 0i64
   property last_change : Int32 = 2
   property dropper_l2id : Int32 = 0
-  property item_loot_schedule : Concurrent::DelayedTask?
+  property item_loot_schedule : Scheduler::DelayedTask?
   property? exists_in_db : Bool = false
   property? stored_in_db : Bool = false
 

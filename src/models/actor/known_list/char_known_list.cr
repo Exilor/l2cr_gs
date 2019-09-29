@@ -109,7 +109,7 @@ class CharKnownList < ObjectKnownList
     end
   end
 
-  def each_character(&block : L2Character ->) : Nil
+  def each_character(& : L2Character ->) : Nil
     @known_objects.try &.each_value do |object|
       if object.is_a?(L2Character)
         yield object
@@ -117,7 +117,7 @@ class CharKnownList < ObjectKnownList
     end
   end
 
-  def each_character(radius : Int32, &block : L2Character ->) : Nil
+  def each_character(radius : Int32, & : L2Character ->) : Nil
     char = active_char
 
     each_character do |object|
@@ -127,7 +127,7 @@ class CharKnownList < ObjectKnownList
     end
   end
 
-  def each_player(radius : Int32, &block : L2PcInstance ->) : Nil
+  def each_player(radius : Int32, & : L2PcInstance ->) : Nil
     char = active_char
     @known_players.try &.each_value do |pc|
       if Util.in_range?(radius, char, pc, true)

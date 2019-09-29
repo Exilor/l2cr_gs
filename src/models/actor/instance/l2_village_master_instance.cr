@@ -443,7 +443,7 @@ class L2VillageMasterInstance < L2NpcInstance
     end
   end
 
-  private def each_subclass(pc : L2PcInstance, &block : Subclass ->)
+  private def each_subclass(pc : L2PcInstance, & : Subclass ->)
     pc.subclasses.each_value { |sub| yield sub }
   end
 

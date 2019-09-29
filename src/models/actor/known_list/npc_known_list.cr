@@ -1,7 +1,7 @@
 require "./char_known_list"
 
 class NpcKnownList < CharKnownList
-  @tracking_task : Concurrent::PeriodicTask?
+  @tracking_task : Scheduler::PeriodicTask?
 
   def add_known_object(object : L2Object) : Bool
     return false unless super

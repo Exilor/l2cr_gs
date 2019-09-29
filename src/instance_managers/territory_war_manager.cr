@@ -30,7 +30,7 @@ module TerritoryWarManager
   class_getter min_tw_badge_for_nobless = 0
   class_getter min_tw_badge_for_striders = 0
   class_getter min_tw_badge_for_big_strider = 0
-  @@WAR_LENGTH = 0i64
+  class_getter war_length = 0i64
   @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE = false
   @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS = false
   @@RETURN_WARDS_WHEN_TW_STARTS = false
@@ -38,9 +38,9 @@ module TerritoryWarManager
   class_getter? registration_over = true
   class_getter? tw_channel_open = false
   class_getter? tw_in_progress = false
-  @@scheduled_start_tw_task : Concurrent::DelayedTask?
-  @@scheduled_end_tw_task : Concurrent::DelayedTask?
-  @@scheduled_reward_online_task : Concurrent::PeriodicTask?
+  @@scheduled_start_tw_task : Scheduler::DelayedTask?
+  @@scheduled_end_tw_task : Scheduler::DelayedTask?
+  @@scheduled_reward_online_task : Scheduler::PeriodicTask?
 
   def load
     cfg = StatsSet.new
@@ -50,7 +50,7 @@ module TerritoryWarManager
     @@DEFENDER_MAX_PLAYERS = cfg.get_i32("DefenderMaxPlayers", 500)
     @@CLAN_MIN_LEVEL = cfg.get_i32("ClanMinLevel", 0)
     @@PLAYER_MIN_LEVEL = cfg.get_i32("PlayerMinLevel", 40)
-    @@WAR_LENGTH = cfg.get_i64("WarLength", 120) * 60000
+    @@war_length = cfg.get_i64("WarLength", 120) * 60000
     @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE = cfg.get_bool("PlayerWithWardCanBeKilledInPeaceZone", false)
     @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS = cfg.get_bool("SpawnWardsWhenTWIsNotInProgress", false)
     @@RETURN_WARDS_WHEN_TW_STARTS = cfg.get_bool("ReturnWardsWhenTWStarts", false)
@@ -426,7 +426,7 @@ module TerritoryWarManager
     CLAN_FLAGS.delete(clan)
   end
 
-  def territory_wards
+  def territory_wards : Array(TerritoryWard)
     TERRITORY_WARDS
   end
 
@@ -901,7 +901,7 @@ module TerritoryWarManager
       @@registration_over = true
       update_player_tw_state_flags(false)
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time) # Prepare task for TW start.
-    elsif time + @@WAR_LENGTH > 0
+    elsif time + @@war_length > 0
       @@tw_channel_open = true
       @@registration_over = true
       start_territory_war
@@ -914,7 +914,7 @@ module TerritoryWarManager
 
   private def schedule_end_tw_task
     @@scheduled_end_tw_task.not_nil!.cancel
-    time = (START_TW_DATE.ms + @@WAR_LENGTH) - Time.ms
+    time = (START_TW_DATE.ms + @@war_length) - Time.ms
     if time > 3600000
       sm = SystemMessage.the_territory_war_will_end_in_s1_hours
       sm.add_int(2)

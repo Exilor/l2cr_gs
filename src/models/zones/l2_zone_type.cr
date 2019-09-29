@@ -185,7 +185,7 @@ abstract class L2ZoneType < ListenersContainer
     @character_list
   end
 
-  def characters_inside(&block : L2Character ->)
+  def characters_inside(& : L2Character ->)
     @character_list.each_value { |char| yield char }
   end
 
@@ -203,7 +203,7 @@ abstract class L2ZoneType < ListenersContainer
     ret
   end
 
-  def players_inside(&block : L2PcInstance ->)
+  def players_inside(& : L2PcInstance ->)
     @character_list.each_value do |char|
       if char.is_a?(L2PcInstance)
         yield char

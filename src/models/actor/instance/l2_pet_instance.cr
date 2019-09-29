@@ -7,7 +7,7 @@ class L2PetInstance < L2Summon
 
   @exp_before_death = 0i64
   @cur_weight_penalty = 0
-  @feed_task : Concurrent::PeriodicTask?
+  @feed_task : Scheduler::PeriodicTask?
   @mountable : Bool
   @data : L2PetData?
   @level_data : L2PetLevelData?

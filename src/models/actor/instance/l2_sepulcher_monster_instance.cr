@@ -1,10 +1,10 @@
 class L2SepulcherMonsterInstance < L2MonsterInstance
   private FAKE_PETRIFICATION = SkillHolder.new(4616, 1)
 
-  @victim_spawn_key_box_task : Concurrent::DelayedTask?
-  @victim_shout : Concurrent::DelayedTask?
-  @change_immortal_task : Concurrent::DelayedTask?
-  @on_dead_event_task : Concurrent::DelayedTask?
+  @victim_spawn_key_box_task : Scheduler::DelayedTask?
+  @victim_shout : Scheduler::DelayedTask?
+  @change_immortal_task : Scheduler::DelayedTask?
+  @on_dead_event_task : Scheduler::DelayedTask?
   property mysterious_box_id : Int32 = 0
 
   def initialize(template : L2NpcTemplate)

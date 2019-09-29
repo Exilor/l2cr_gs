@@ -16,9 +16,7 @@ module ActionHandler::L2StaticObjectInstanceAction
     if pc.target != obj
       pc.target = obj
     elsif interact
-      if !pc.inside_radius?(obj, L2Npc::INTERACTION_DISTANCE, false, false)
-        pc.set_intention(AI::INTERACT, obj)
-      else
+      if pc.inside_radius?(obj, L2Npc::INTERACTION_DISTANCE, false, false)
         if obj.type == 2
           if obj.id == 24230101
             file_name = "data/html/signboards/tomb_of_crystalgolem.htm"
@@ -36,6 +34,8 @@ module ActionHandler::L2StaticObjectInstanceAction
         elsif obj.type == 0
           pc.send_packet(obj.map)
         end
+      else
+        pc.set_intention(AI::INTERACT, obj)
       end
     end
 

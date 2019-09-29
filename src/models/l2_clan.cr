@@ -88,7 +88,7 @@ class L2Clan
     @members.local_each_value
   end
 
-  def each_player(&block : L2PcInstance ->) : Nil
+  def each_player(& : L2PcInstance ->) : Nil
     @members.each_value do |m|
       if pc = m.player_instance?
         yield pc
@@ -96,7 +96,7 @@ class L2Clan
     end
   end
 
-  def each_online_player(&block : L2PcInstance ->) : Nil
+  def each_online_player(& : L2PcInstance ->) : Nil
     each_player { |pc| yield pc if pc.online? }
   end
 
@@ -323,7 +323,7 @@ class L2Clan
     end
   end
 
-  def get_online_members(exclude : Int32, &block : L2PcInstance ->)
+  def get_online_members(exclude : Int32, & : L2PcInstance ->)
     @members.each_value do |m|
       yield m.player_instance if m.online? && m.l2id != exclude
     end

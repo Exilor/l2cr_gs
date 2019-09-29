@@ -9,7 +9,7 @@ class L2TrapInstance < L2Npc
 
   @players_who_detected_me = [] of Int32
   @owner : L2PcInstance?
-  @trap_task : Concurrent::PeriodicTask?
+  @trap_task : Scheduler::PeriodicTask?
   @skill : SkillHolder?
   @in_arena = false
   getter life_time : Int32 = 0

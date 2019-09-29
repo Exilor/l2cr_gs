@@ -8,7 +8,7 @@ class BuffInfo
 
   @tasks : Hash(AbstractEffect, EffectTaskInfo)?
   getter period_start_ticks : Int32
-  getter task : Concurrent::PeriodicTask?
+  getter task : Scheduler::PeriodicTask?
   getter effects = [] of AbstractEffect
   getter! effector
   getter! effected

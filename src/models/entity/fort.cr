@@ -18,7 +18,7 @@ class Fort < AbstractResidence
   @state = 0
   @castle_id = 0
   @functions = {} of Int32 => FortFunction
-  @fort_updater = Slice(Concurrent::ScheduledTask?).new(2, nil.as(Concurrent::ScheduledTask?))
+  @fort_updater = Slice(Scheduler::Task?).new(2, nil.as(Scheduler::Task?))
   @suspicious_merchant_spawned = false
   @siege_npcs = [] of L2Spawn
   @npc_commanders = [] of L2Spawn

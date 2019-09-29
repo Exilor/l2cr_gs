@@ -6,10 +6,7 @@ module AdminCommandHandler::AdminGraciaSeeds
     st = command.split
     actual_cmd = st.shift
 
-    val = ""
-    if st.size >= 1
-      val = st.shift
-    end
+    val = st.shift { "" }
 
     if actual_cmd.casecmp?("admin_kill_tiat")
       GraciaSeedsManager.increase_sod_tiat_killed

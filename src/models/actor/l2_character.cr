@@ -40,7 +40,7 @@ abstract class L2Character < L2Object
   @ai : L2CharacterAI?
   @exceptions = 0i64
   @move : MoveData?
-  @skill_cast_2 : Concurrent::DelayedTask?
+  @skill_cast_2 : Scheduler::DelayedTask?
   @attack_by_list : Set(L2Character)?
   getter title : String = ""
   getter cast_interrupt_time = 0i64
@@ -57,7 +57,7 @@ abstract class L2Character < L2Object
   getter? core_ai_disabled = false
   setter paralyzed : Bool = false
   setter pending_revive : Bool = false
-  setter skill_cast : Concurrent::DelayedTask?
+  setter skill_cast : Scheduler::DelayedTask?
   setter invul : Bool = false
   property attack_end_time : Int64 = 0i64
   property bow_attack_end_time : Int32 = 0
@@ -3970,7 +3970,7 @@ abstract class L2Character < L2Object
     @debugger.try &.send_packet(gsp)
   end
 
-  def send_debug_message(&block : -> String)
+  def send_debug_message(& : -> String)
     if tmp = @debugger
       tmp.send_message(yield)
     end

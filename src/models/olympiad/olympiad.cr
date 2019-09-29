@@ -78,13 +78,13 @@ class Olympiad < ListenersContainer
   @comp_end = 0i64
   @comp_start = Calendar.new
   @comp_started = false
-  @scheduled_comp_start : Concurrent::DelayedTask?
-  @scheduled_comp_end : Concurrent::DelayedTask?
-  @scheduled_olympiad_end : Concurrent::DelayedTask?
-  @scheduled_weekly_task : Concurrent::PeriodicTask?
-  @scheduled_validation_task : Concurrent::DelayedTask?
-  @game_manager : Concurrent::PeriodicTask?
-  @game_announcer : Concurrent::PeriodicTask?
+  @scheduled_comp_start : Scheduler::DelayedTask?
+  @scheduled_comp_end : Scheduler::DelayedTask?
+  @scheduled_olympiad_end : Scheduler::DelayedTask?
+  @scheduled_weekly_task : Scheduler::PeriodicTask?
+  @scheduled_validation_task : Scheduler::DelayedTask?
+  @game_manager : Scheduler::PeriodicTask?
+  @game_announcer : Scheduler::PeriodicTask?
   getter current_cycle = 0
   getter period = 0
   getter? in_comp_period = false

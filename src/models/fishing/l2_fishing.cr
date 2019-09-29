@@ -3,7 +3,7 @@ class L2Fishing
   include Synchronizable
   include Packets::Outgoing
 
-  @task : Concurrent::PeriodicTask?
+  @task : Scheduler::PeriodicTask?
   @fish_max_hp : Int32
   @fish_cur_hp : Int32
   @regen_hp : Float64

@@ -1,5 +1,5 @@
 class QuestTimer
-  @task : Concurrent::ScheduledTask?
+  @task : Scheduler::Task?
   @time : Int64
   getter name, npc, player, quest
   getter? active = true

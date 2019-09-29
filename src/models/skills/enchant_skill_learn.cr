@@ -24,7 +24,7 @@ struct EnchantSkillLearn
     EnchantSkillGroupsData.get_enchant_skill_group_by_id(@enchant_routes.first.try &.last)
   end
 
-  def each_route(&block : Int32 ->)
+  def each_route(& : Int32 ->)
     @enchant_routes.each_key { |key| yield key }
   end
 

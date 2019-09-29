@@ -16,7 +16,7 @@ struct RangeSet(T)
     values.each { |v| self << v }
   end
 
-  def each(&block : T ->) : Nil
+  def each(& : T ->) : Nil
     @ranges.each { |r| r.each { |n| yield n } }
   end
 

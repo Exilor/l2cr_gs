@@ -7,7 +7,7 @@ module AutoSpawnHandler
   private DEFAULT_DESPAWN = 3600000 # 1 hour
 
   private REGISTERED_SPAWNS = Hash(Int32, AutoSpawnInstance).new
-  private RUNNING_SPAWNS = Hash(Int32, Concurrent::ScheduledTask).new
+  private RUNNING_SPAWNS = Hash(Int32, Scheduler::Task).new
 
   @@active_state = true
 

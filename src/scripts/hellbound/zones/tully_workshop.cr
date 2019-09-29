@@ -198,7 +198,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   @allow_agent_spawn = true
   @allow_agent_spawn_7th = true
   @has_7th_floor_attack_began = false
-  @countdown : Concurrent::PeriodicTask?
+  @countdown : Scheduler::PeriodicTask?
   @spawned_agent : L2Npc?
   @pillar_spawn : L2Spawn?
 

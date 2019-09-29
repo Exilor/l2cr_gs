@@ -726,7 +726,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     partner.send_packet(ExAskCoupleAction.new(requester.l2id, id))
   end
 
-  private def validate_summon(summon : L2Summon?, check_pet : Bool, &block : L2Summon ->) : Bool
+  private def validate_summon(summon : L2Summon?, check_pet : Bool, & : L2Summon ->) : Bool
     if summon && ((check_pet && summon.pet?) || summon.servitor?)
       if summon.is_a?(L2PetInstance) && summon.uncontrollable?
         send_packet(SystemMessageId::WHEN_YOUR_PETS_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET)

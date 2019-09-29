@@ -16,7 +16,7 @@ class Siege
   @flame_towers = [] of L2FlameTowerInstance
   @normal_side = true
   @siege_end_date = Calendar.new
-  @scheduled_start_siege_task : Concurrent::DelayedTask?
+  @scheduled_start_siege_task : Scheduler::DelayedTask?
   @first_owner_clan_id = -1
   @attacker_clans = [] of L2SiegeClan
   @defender_clans = [] of L2SiegeClan

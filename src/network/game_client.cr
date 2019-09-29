@@ -8,8 +8,8 @@ class GameClient
 
   @crypt = GameCrypt.new
   @char_slot_mapping = [] of CharSelectInfoPackage
-  @auto_save_task : Concurrent::PeriodicTask?
-  @cleanup_task : Concurrent::DelayedTask?
+  @auto_save_task : Scheduler::PeriodicTask?
+  @cleanup_task : Scheduler::DelayedTask?
   getter state = State::CONNECTED
   getter stats = ClientStats.new
   getter start_time = Time.ms

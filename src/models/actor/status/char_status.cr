@@ -6,7 +6,7 @@ class CharStatus
   private REGEN_FLAG_MP = 2i8
 
   @flags_regen_active = 0i8
-  @reg_task : Concurrent::PeriodicTask?
+  @reg_task : Scheduler::PeriodicTask?
   getter current_hp = 0f64
   getter current_mp = 0f64
   getter(status_listener) { Set(L2Character).new }

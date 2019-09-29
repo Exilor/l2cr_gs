@@ -136,7 +136,7 @@ module L2World
     PETS.delete(l2id)
   end
 
-  def get_visible_objects(object : L2Object, radius : Number, &block : L2Object ->) : Nil
+  def get_visible_objects(object : L2Object, radius : Number, & : L2Object ->) : Nil
     radius *= radius
     object.world_region?.try &.sorrounding_regions.each do |regi|
       regi.objects.each_value do |obj|
@@ -149,7 +149,7 @@ module L2World
     end
   end
 
-  def get_visible_objects(object : L2Object, &block : L2Object ->) : Nil
+  def get_visible_objects(object : L2Object, & : L2Object ->) : Nil
     object.world_region?.try &.sorrounding_regions.each do |regi|
       regi.objects.each_value do |obj|
         if obj != object && obj.visible?
@@ -171,7 +171,7 @@ module L2World
     AdminData.get_all_gms(true)
   end
 
-  def each_playable(object : L2Object, &block : L2Object ->)
+  def each_playable(object : L2Object, & : L2Object ->)
     object.world_region?.try &.sorrounding_regions.each do |regi|
       regi.playables.each_value do |obj|
         if obj != object && obj.visible?

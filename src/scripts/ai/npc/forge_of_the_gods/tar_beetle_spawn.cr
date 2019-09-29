@@ -5,8 +5,8 @@ class TarBeetleSpawn
 
   private ZONES = [] of SpawnZone
 
-  @spawn_task : Concurrent::PeriodicTask?
-  @shot_task : Concurrent::PeriodicTask?
+  @spawn_task : Scheduler::PeriodicTask?
+  @shot_task : Scheduler::PeriodicTask?
 
   def initialize
     load

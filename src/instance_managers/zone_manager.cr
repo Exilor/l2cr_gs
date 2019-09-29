@@ -278,7 +278,7 @@ module ZoneManager
     ret
   end
 
-  def get_all_zones(zone_type : T.class, &block : T ->) forall T
+  def get_all_zones(zone_type : T.class, & : T ->) forall T
     CLASS_ZONES[zone_type].each_value { |zone| yield zone.as(T) }
   end
 
@@ -321,11 +321,11 @@ module ZoneManager
   #   ret
   # end
 
-  def get_zones(obj : L2Object, &block : L2ZoneType ->) : Nil
+  def get_zones(obj : L2Object, & : L2ZoneType ->) : Nil
     get_zones(*obj.xyz) { |zone| yield zone }
   end
 
-  def get_zones(x : Int32, y : Int32, &block : L2ZoneType ->) : Nil
+  def get_zones(x : Int32, y : Int32, & : L2ZoneType ->) : Nil
     L2World.get_region(x, y).zones.each do |zone|
       if zone.inside_zone?(x, y)
         yield zone
@@ -333,7 +333,7 @@ module ZoneManager
     end
   end
 
-  def get_zones(x : Int32, y : Int32, z : Int32, &block : L2ZoneType ->) : Nil
+  def get_zones(x : Int32, y : Int32, z : Int32, & : L2ZoneType ->) : Nil
     L2World.get_region(x, y).zones.each do |zone|
       if zone.inside_zone?(x, y, z)
         yield zone
@@ -355,7 +355,7 @@ module ZoneManager
     ret
   end
 
-  def get_spawn_territories(object : L2Object, &block : NpcSpawnTerritory ->) : Nil
+  def get_spawn_territories(object : L2Object, & : NpcSpawnTerritory ->) : Nil
     SPAWN_TERRITORIES.each_value do |territory|
       if territory.inside_zone?(*object.xyz)
         yield territory

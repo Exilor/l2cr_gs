@@ -60,8 +60,8 @@ class L2PcInstance < L2Playable
   private FALLING_VALIDATION_DELAY = 10_000
   private COND_OVERRIDE_KEY = "cond_override"
 
-  @reco_bonus_task : Concurrent::DelayedTask?
-  @reco_give_task : Concurrent::PeriodicTask?
+  @reco_bonus_task : Scheduler::DelayedTask?
+  @reco_give_task : Scheduler::PeriodicTask?
   @subclass_lock = Mutex.new
   @cur_weight_penalty = 0
   @last_compass_zone = 0
@@ -98,14 +98,14 @@ class L2PcInstance < L2Playable
   @engage_request = false
   @revive_pet = false
   @quests = Hash(String, QuestState).new
-  @water_task : Concurrent::PeriodicTask?
+  @water_task : Scheduler::PeriodicTask?
   @transform_skills : Hash(Int32, Skill)?
-  @vitality_task : Concurrent::PeriodicTask?
-  @teleport_watchdog : Concurrent::DelayedTask?
-  @soul_task : Concurrent::DelayedTask?
-  @charge_task : Concurrent::DelayedTask?
-  @task_warn_user_take_break : Concurrent::PeriodicTask?
-  @pvp_reg_task : Concurrent::PeriodicTask?
+  @vitality_task : Scheduler::PeriodicTask?
+  @teleport_watchdog : Scheduler::DelayedTask?
+  @soul_task : Scheduler::DelayedTask?
+  @charge_task : Scheduler::DelayedTask?
+  @task_warn_user_take_break : Scheduler::PeriodicTask?
+  @pvp_reg_task : Scheduler::PeriodicTask?
   @notify_quest_of_death : Array(QuestState)?
   @dwarven_recipe_book = Hash(Int32, L2RecipeList).new
   @common_recipe_book = Hash(Int32, L2RecipeList).new
@@ -114,13 +114,13 @@ class L2PcInstance < L2Playable
   @snoop_listener = Set(L2PcInstance).new(1)
   @snooped_player = Set(L2PcInstance).new(1)
   @fish : L2Fish?
-  @task_for_fish : Concurrent::PeriodicTask?
+  @task_for_fish : Scheduler::PeriodicTask?
   @friends : Set(Int32)?
   @level_data : L2PetLevelData?
-  @mount_feed_task : Concurrent::PeriodicTask?
-  @dismount_task : Concurrent::DelayedTask?
-  @rent_pet_task : Concurrent::PeriodicTask?
-  @fame_task : Concurrent::PeriodicTask?
+  @mount_feed_task : Scheduler::PeriodicTask?
+  @dismount_task : Scheduler::DelayedTask?
+  @rent_pet_task : Scheduler::PeriodicTask?
+  @fame_task : Scheduler::PeriodicTask?
   @manufacture_items : Hash(Int32, L2ManufactureItem)?
   @access_level : AccessLevel?
   @html_prefix : String?

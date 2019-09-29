@@ -88,7 +88,7 @@
 #   delegate l2id, template, count, custom_type_1, custom_type_2, enchant_options,
 #     get_element_def_attr, attack_element_type, attack_element_power, to: @item
 
-#   private def switch(&block : L2ItemInstance?, TradeItem? ->)
+#   private def switch(& : L2ItemInstance?, TradeItem? ->)
 #     yield @item.as?(L2ItemInstance), @item.as?(TradeItem)
 #   end
 

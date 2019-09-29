@@ -413,7 +413,7 @@ module NpcData
     NPCS.local_each_value
   end
 
-  def get_templates(&block : L2NpcTemplate ->) : Array(L2NpcTemplate)
+  def get_templates(& : L2NpcTemplate ->) : Array(L2NpcTemplate)
     ret = [] of L2NpcTemplate
     NPCS.each_value { |npc| ret << npc if yield npc }
     ret
@@ -424,21 +424,15 @@ module NpcData
   end
 
   def get_all_monsters_of_level(*lvls : Int32) : Array(L2NpcTemplate)
-    get_templates do |npc|
-      lvls.includes?(npc.level) && npc.type?("L2Monster")
-    end
+    get_templates { |npc| lvls.includes?(npc.level) && npc.type?("L2Monster") }
   end
 
   def get_all_npc_starting_with(text : String) : Array(L2NpcTemplate)
-    get_templates do |npc|
-      npc.type?("L2Npc") && npc.name.starts_with?(text)
-    end
+    get_templates { |npc| npc.type?("L2Npc") && npc.name.starts_with?(text) }
   end
 
   def get_all_npc_of_class_type(*types) : Array(L2NpcTemplate)
-    get_templates do |npc|
-      types.any? &.casecmp?(npc.type)
-    end
+    get_templates { |npc| types.any? &.casecmp?(npc.type) }
   end
 
   private class MinionData

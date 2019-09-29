@@ -66,27 +66,21 @@ module AdminCommandHandler::AdminScan
     sb = String.build do |io|
       pc.known_list.each_character(radius) do |c|
         next unless c.is_a?(L2Npc)
-        io << "<tr>"
-        io << "<td width=\"54\">"
+        io << "<tr><td width=\"54\">"
         io << c.id
-        io << "</td>"
-        io << "<td width=\"54\">"
+        io << "</td><td width=\"54\">"
         io << c.name
-        io << "</td>"
-        io << "<td width=\"54\">"
+        io << "</td><td width=\"54\">"
         io << pc.calculate_distance(c, false, false).round.to_i
-        io << "</td>"
-        io << "<td width=\"54\"><a action=\"bypass -h admin_deleteNpcByObjectId "
+        io << "</td><td width=\"54\"><a action=\"bypass -h admin_deleteNpcByObjectId "
         io << c.l2id
-        io << "\"><font color=\"LEVEL\">Delete</font></a></td>"
-        io << "<td width=\"54\"><a action=\"bypass -h admin_move_to "
+        io << "\"><font color=\"LEVEL\">Delete</font></a></td><td width=\"54\"><a action=\"bypass -h admin_move_to "
         io << c.x
         io << " "
         io << c.y
         io << " "
         io << c.z
-        io << "\"><font color=\"LEVEL\">Go to</font></a></td>"
-        io << "</tr>"
+        io << "\"><font color=\"LEVEL\">Go to</font></a></td></tr>"
       end
     end
     html["%data%"] = sb

@@ -2,7 +2,7 @@ module DecayTaskManager
   extend self
   extend Loggable
 
-  private TASKS = Hash(L2Character, Concurrent::DelayedTask).new
+  private TASKS = Hash(L2Character, Scheduler::DelayedTask).new
 
   def add(char : L2Character)
     if template = char.template.as?(L2NpcTemplate)
@@ -20,7 +20,7 @@ module DecayTaskManager
 
   def add(char : L2Character, delay)
     task = DecayTask.new(char)
-    scheduled = Concurrent.schedule_delayed(task, delay.to_f64 * 1000)
+    scheduled = Scheduler.schedule_delayed(task, delay.to_f64 * 1000)
     TASKS[char]?.try &.cancel
     TASKS[char] = scheduled
   end

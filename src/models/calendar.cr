@@ -258,4 +258,28 @@ class Calendar
     else SATURDAY
     end
   end
+
+  def get_minimum(unit : Unit) : Int
+    case unit
+    when Unit::HOUR, Unit::MINUTE, Unit::DAY, Unit::MONTH
+      0
+    else
+      raise ArgumentError.new("#{unit} not handled in Calendar#get_minimum")
+    end
+  end
+
+  def get_maximum(unit : Unit) : Int
+    case unit
+    when Unit::HOUR
+      23
+    when Unit::MINUTE
+      59
+    when Unit::DAY
+      Time::DAYS_MONTH[month + 1]
+    when Unit::MONTH
+      11
+    else
+      raise ArgumentError.new("#{unit} not handled in Calendar#get_maximum")
+    end
+  end
 end

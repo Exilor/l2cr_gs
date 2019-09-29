@@ -5,7 +5,7 @@ class ExecutedTask
   getter id : Int32
   getter params : {String, String, String}
   getter last_activation : Int64
-  property scheduled : Concurrent::ScheduledTask?
+  property scheduled : Scheduler::Task?
 
   def_equals_and_hash @id
 

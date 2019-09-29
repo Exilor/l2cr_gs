@@ -59,7 +59,7 @@ class CharEffectList
     end
   end
 
-  # private def each_with_list(&block : BuffInfo, Deque(BuffInfo) ->) : Nil
+  # private def each_with_list(& : BuffInfo, Deque(BuffInfo) ->) : Nil
   #   if buffs = @buffs
   #     buffs.safe_each { |info| yield info, buffs }
   #   end
@@ -81,13 +81,13 @@ class CharEffectList
   #   end
   # end
 
-  private def each_with_list(&block : BuffInfo, Deque(BuffInfo) ->) : Nil
+  private def each_with_list(& : BuffInfo, Deque(BuffInfo) ->) : Nil
     {@buffs, @triggered, @dances, @toggles, @debuffs}.each do |list|
       list.try { |list| list.safe_each { |info| yield info, list } }
     end
   end
 
-  def each(dances : Bool = true, &block : BuffInfo ->) : Nil
+  def each(dances : Bool = true, & : BuffInfo ->) : Nil
     @buffs.try     &.each { |info| yield info }
     @triggered.try &.each { |info| yield info }
     @dances.try    &.each { |info| yield info } if dances
@@ -95,7 +95,7 @@ class CharEffectList
     @debuffs.try   &.each { |info| yield info }
   end
 
-  def for_each(dances : Bool, &block : BuffInfo -> Bool) : Nil
+  def for_each(dances : Bool, & : BuffInfo -> Bool) : Nil
     update = false
     @buffs.try     &.each { |info| update |= yield(info) }
     @triggered.try &.each { |info| update |= yield(info) }

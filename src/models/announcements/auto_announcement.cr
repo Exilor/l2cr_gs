@@ -4,7 +4,7 @@ class AutoAnnouncement < Announcement
   private INSERT_QUERY = "INSERT INTO announcements (`type`, `content`, `author`, `initial`, `delay`, `repeat`) VALUES (?, ?, ?, ?, ?, ?)"
   private UPDATE_QUERY = "UPDATE announcements SET `type` = ?, `content` = ?, `author` = ?, `initial` = ?, `delay` = ?, `repeat` = ? WHERE id = ?"
 
-  @task : Concurrent::DelayedTask?
+  @task : Scheduler::DelayedTask?
   @current_state = 0
   property initial : Int64
   property delay : Int64

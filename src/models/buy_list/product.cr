@@ -3,7 +3,7 @@ class Product
 
   getter buy_list_id, item, restock_delay, max_count
 
-  @restock_task : Concurrent::DelayedTask?
+  @restock_task : Scheduler::DelayedTask?
 
   def initialize(@buy_list_id : Int32, @item : L2Item, @price : Int64, @restock_delay : Int64, @max_count : Int64)
     @restock_delay = restock_delay * 60_000

@@ -4,7 +4,7 @@ module RaidBossSpawnManager
 
   private BOSSES      = Hash(Int32, L2RaidBossInstance).new
   private SPAWNS      = Hash(Int32, L2Spawn).new
-  private SCHEDULES   = Hash(Int32, Concurrent::DelayedTask).new
+  private SCHEDULES   = Hash(Int32, Scheduler::DelayedTask).new
   private STORED_INFO = Hash(Int32, StatsSet).new
 
   enum Status : UInt8

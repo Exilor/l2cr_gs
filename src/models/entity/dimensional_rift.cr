@@ -5,16 +5,16 @@ class DimensionalRift
 
   @completed_rooms = [] of Int8
   @jumps_current = 0i8
-  @earthquake_task : Concurrent::DelayedTask?
+  @earthquake_task : Scheduler::DelayedTask?
   @boss_room = false
   @has_jumped = false
   @dead_players = [] of L2PcInstance
   @revived_in_waiting_room = [] of L2PcInstance
   getter type, current_room
   property teleport_timer : TaskGroup?
-  property teleport_timer_task : Concurrent::DelayedTask?
+  property teleport_timer_task : Scheduler::DelayedTask?
   property spawn_timer : TaskGroup?
-  property spawn_timer_task : Concurrent::DelayedTask?
+  property spawn_timer_task : Scheduler::DelayedTask?
 
   def initialize(@party : L2Party, @type : Int8, room : Int8)
     @current_room = room
@@ -296,7 +296,7 @@ class DimensionalRift
   end
 
   private struct TaskGroup # L2J: java.util.Timer
-    @tasks = [] of Concurrent::ScheduledTask
+    @tasks = [] of Scheduler::Task
 
     def schedule(job, delay)
       task = ThreadPoolManager.schedule_general(job, delay)

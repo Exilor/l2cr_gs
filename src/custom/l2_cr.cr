@@ -2,8 +2,8 @@ module L2Cr
   extend self
   include Packets::Outgoing
 
-  @@on_screen_info_task : Concurrent::PeriodicTask?
-  @@command_line_task : Concurrent::PeriodicTask?
+  @@on_screen_info_task : Scheduler::PeriodicTask?
+  @@command_line_task : Scheduler::PeriodicTask?
 
   def on_screen_info_task
     if task = @@on_screen_info_task

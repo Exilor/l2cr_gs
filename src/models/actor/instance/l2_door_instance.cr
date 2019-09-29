@@ -18,7 +18,7 @@ class L2DoorInstance < L2Character
   property? attackable_door : Bool
   @castle_index = -2
   @fort_index = -2
-  @auto_close_task : Concurrent::DelayedTask?
+  @auto_close_task : Scheduler::DelayedTask?
 
   def initialize(template : L2DoorTemplate)
     super
@@ -340,7 +340,7 @@ class L2DoorInstance < L2Character
     ret
   end
 
-  def known_defenders(&block : L2DefenderInstance ->)
+  def known_defenders(& : L2DefenderInstance ->)
     known_list.known_objects.each_value do |o|
       if o.is_a?(L2DefenderInstance)
         yield o

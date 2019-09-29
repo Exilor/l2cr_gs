@@ -893,6 +893,7 @@ abstract class Inventory < ItemContainer
 
   def reload_equipped_items
     @paperdoll.each do |item|
+      next unless item
       slot = item.location_slot
 
       @paperdoll_listeners.each do |listener|

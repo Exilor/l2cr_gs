@@ -9,8 +9,8 @@ class Instance
 
   private alias Say2 = Packets::Incoming::Say2
 
-  @check_time_up_task : Concurrent::DelayedTask?
-  @eject_dead_tasks = {} of Int32 => Concurrent::DelayedTask?
+  @check_time_up_task : Scheduler::DelayedTask?
+  @eject_dead_tasks = {} of Int32 => Scheduler::DelayedTask?
   @allow_random_walk = true
   @doors = {} of Int32 => L2DoorInstance
   @manual_spawn = {} of String => Array(L2Spawn)

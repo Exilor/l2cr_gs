@@ -322,7 +322,6 @@ module SkillTreesData
   end
 
   private def get_skill_tree(from)
-    # from = {} # of Int32 => Skill
     from.each do |key, value|
       from[key] = SkillData[value.skill_id, value.skill_level]
     end
@@ -339,7 +338,7 @@ module SkillTreesData
     skills = get_complete_class_skill_tree(id)
 
     if skills.empty?
-      warn { "Skill tree for class #{id} is not defined." }
+      warn { "Skill tree for ClassId #{id} is not defined." }
       return result
     end
 
@@ -372,8 +371,9 @@ module SkillTreesData
 
     until learnable.empty?
       learnable.each do |s|
-        sk = SkillData[s.skill_id, s.skill_level]?
-        holder.add_skill(sk) if sk
+        if sk = SkillData[s.skill_id, s.skill_level]?
+          holder.add_skill(sk)
+        end
       end
       learnable = get_available_skills(pc, id, fs, auto, holder)
     end
