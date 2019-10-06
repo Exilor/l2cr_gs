@@ -14,13 +14,13 @@ module TerritoryWarManager
     81 => 13757, 82 => 13758, 83 => 13759, 84 => 13760, 85 => 13761,
     86 => 13762, 87 => 13763, 88 => 13764, 89 => 13765
   }
-  private REGISTERED_CLANS = Hash(Int32, Array(L2Clan)).new
-  private REGISTERED_MERCENARIES = Hash(Int32, Array(Int32)).new
-  private TERRITORY_LIST = Hash(Int32, Territory).new
-  private DISGUISED_PLAYERS = Array(Int32).new
-  private TERRITORY_WARDS = Array(TerritoryWard).new
-  private CLAN_FLAGS = Hash(L2Clan, L2SiegeFlagInstance).new
-  private PARTICIPANT_POINTS = Hash(Int32, Slice(Int32)).new
+  private REGISTERED_CLANS = Concurrent::Map(Int32, Array(L2Clan)).new
+  private REGISTERED_MERCENARIES = Concurrent::Map(Int32, Array(Int32)).new
+  private TERRITORY_LIST = Concurrent::Map(Int32, Territory).new
+  private DISGUISED_PLAYERS = Concurrent::Array(Int32).new
+  private TERRITORY_WARDS = Concurrent::Array(TerritoryWard).new
+  private CLAN_FLAGS = Concurrent::Map(L2Clan, L2SiegeFlagInstance).new
+  private PARTICIPANT_POINTS = Concurrent::Map(Int32, Slice(Int32)).new
   private START_TW_DATE = Calendar.new
 
   @@DEFENDER_MAX_CLANS = 0
@@ -426,7 +426,7 @@ module TerritoryWarManager
     CLAN_FLAGS.delete(clan)
   end
 
-  def territory_wards : Array(TerritoryWard)
+  def territory_wards : IArray(TerritoryWard)
     TERRITORY_WARDS
   end
 
@@ -1135,7 +1135,7 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def attacker_clans? : Array(L2SiegeClan)?
+  def attacker_clans? : IArray(L2SiegeClan)?
     raise "not supported"
   end
 
@@ -1155,7 +1155,7 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def defender_clans? : Array(L2SiegeClan)?
+  def defender_clans? : IArray(L2SiegeClan)?
     raise "not supported"
   end
 
@@ -1163,7 +1163,7 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def get_flag?(clan : L2Clan?) : Array(L2Npc)?
+  def get_flag?(clan : L2Clan?) : IArray(L2Npc)?
     raise "not supported"
   end
 

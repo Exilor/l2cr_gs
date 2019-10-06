@@ -1,7 +1,7 @@
 require "../l2_tower"
 
 class L2ControlTowerInstance < L2Tower
-  @guards : Array(L2Spawn)?
+  @guards : IArray(L2Spawn)?
 
   def instance_type : InstanceType
     InstanceType::L2ControlTowerInstance
@@ -29,7 +29,7 @@ class L2ControlTowerInstance < L2Tower
     guards << guard
   end
 
-  private def guards : Array(L2Spawn)
-    @guards || sync { @guards ||= Array(L2Spawn).new }
+  private def guards : IArray(L2Spawn)
+    @guards || sync { @guards ||= Concurrent::Array(L2Spawn).new }
   end
 end

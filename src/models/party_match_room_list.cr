@@ -2,7 +2,7 @@ module PartyMatchRoomList
   extend self
   extend Synchronizable
 
-  private ROOMS = Hash(Int32, PartyMatchRoom).new
+  private ROOMS = Concurrent::Map(Int32, PartyMatchRoom).new
 
   class_getter max_id = 1
 

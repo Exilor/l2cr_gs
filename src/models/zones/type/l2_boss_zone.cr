@@ -3,9 +3,9 @@ class L2BossZone < L2ZoneType
   getter time_invade = 0
 
   class Settings < AbstractZoneSettings
-    getter player_allowed_reentry_times = Hash(Int32, Int64).new
-    getter players_allowed = Array(Int32).new
-    getter raid_list = Array(L2Character).new
+    getter player_allowed_reentry_times = Concurrent::Map(Int32, Int64).new
+    getter players_allowed = Concurrent::Array(Int32).new
+    getter raid_list = Concurrent::Array(L2Character).new
 
     def clear
       @player_allowed_reentry_times.clear

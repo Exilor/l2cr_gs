@@ -12,7 +12,7 @@ class Castle < AbstractResidence
   @zone : L2SiegeZone?
   @siege : Siege?
   @tele_zone : L2ResidenceTeleportZone?
-  @functions = {} of Int32 => CastleFunction
+  @functions = Concurrent::Map(Int32, CastleFunction).new
   @former_owner : L2Clan?
   @siege_time_registration_end_date : Calendar?
   getter doors = [] of L2DoorInstance

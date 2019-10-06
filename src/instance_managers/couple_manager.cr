@@ -4,7 +4,7 @@ module CoupleManager
   extend self
   extend Loggable
 
-  private COUPLES = [] of Couple
+  private COUPLES = Concurrent::Array(Couple).new
 
   def load
     sql = "SELECT id FROM mods_wedding ORDER BY id"

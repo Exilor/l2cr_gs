@@ -71,10 +71,10 @@ module SevenSigns
     "avarice_owner=?, gnosis_owner=?, strife_owner=?, avarice_dawn_score=?, gnosis_dawn_score=?, strife_dawn_score=?, avarice_dusk_score=?, gnosis_dusk_score=?, strife_dusk_score=?, festival_cycle=?, accumulated_bonus0=?, accumulated_bonus1=?, accumulated_bonus2=?," \
     "accumulated_bonus3=?, accumulated_bonus4=?, date=? WHERE id=0"
 
-  private SIGNS_PLAYER_DATA = {} of Int32 => StatsSet
-  private SIGNS_SEAL_OWNERS = {} of Int32 => Int32
-  private SIGNS_DUSK_SEAL_TOTALS = {} of Int32 => Int32
-  private SIGNS_DAWN_SEAL_TOTALS = {} of Int32 => Int32
+  private SIGNS_PLAYER_DATA = Concurrent::Map(Int32, StatsSet).new
+  private SIGNS_SEAL_OWNERS = Concurrent::Map(Int32, Int32).new
+  private SIGNS_DUSK_SEAL_TOTALS = Concurrent::Map(Int32, Int32).new
+  private SIGNS_DAWN_SEAL_TOTALS = Concurrent::Map(Int32, Int32).new
 
   @@last_save = Calendar.new
   @@next_period_change = Calendar.new

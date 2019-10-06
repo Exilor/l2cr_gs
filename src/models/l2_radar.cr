@@ -1,5 +1,5 @@
 struct L2Radar
-  @markers = [] of RadarMarker
+  @markers = Concurrent::Array(RadarMarker).new
 
   initializer pc : L2PcInstance
 

@@ -19,7 +19,7 @@ class L2MonsterInstance < L2Attackable
     InstanceType::L2MonsterInstance
   end
 
-  def init_known_list : MonsterKnownList
+  private def init_known_list : MonsterKnownList
     @known_list = MonsterKnownList.new(self)
   end
 

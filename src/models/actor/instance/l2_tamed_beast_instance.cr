@@ -13,7 +13,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   @home_z = 0
   @buff_task : Scheduler::PeriodicTask?
   @duration_check_task : Scheduler::PeriodicTask?
-  @beast_skills : Array(Skill)?
+  @beast_skills : IArray(Skill)?
   getter food_type = 0
   getter! owner : L2PcInstance
   getter? freya_beast = false
@@ -123,7 +123,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   end
 
   def add_beast_skill(skill : Skill)
-    (@beast_skills ||= [] of Skill) << skill
+    (@beast_skills ||= Concurrent::Array(Skill).new) << skill
   end
 
   def cast_beast_skills

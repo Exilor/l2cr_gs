@@ -28,7 +28,7 @@ class Scripts::QueenAnt < AbstractNpcAI
   private HEAL1 = SkillHolder.new(4020, 1)
   private HEAL2 = SkillHolder.new(4024, 1)
 
-  private NURSES = [] of L2MonsterInstance
+  private NURSES = Concurrent::Array(L2MonsterInstance).new
 
   @zone : L2BossZone?
   @queen : L2MonsterInstance?

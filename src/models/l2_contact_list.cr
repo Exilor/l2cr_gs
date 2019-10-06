@@ -5,7 +5,7 @@ struct L2ContactList
   private QUERY_REMOVE = "DELETE FROM character_contacts WHERE charId = ? and contactId = ?"
   private QUERY_LOAD = "SELECT contactId FROM character_contacts WHERE charId = ?"
 
-  getter contacts = [] of String
+  getter contacts = Concurrent::Array(String).new
 
   def initialize(@pc : L2PcInstance)
     restore

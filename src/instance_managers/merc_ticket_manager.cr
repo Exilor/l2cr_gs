@@ -2,7 +2,7 @@ module MercTicketManager
   extend self
   extend Loggable
 
-  private DROPPED_TICKETS = Array(L2ItemInstance).new
+  private DROPPED_TICKETS = Concurrent::Array(L2ItemInstance).new
 
   private MAX_MERC_PER_TYPE = Int32.slice(
     10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, # Gludio

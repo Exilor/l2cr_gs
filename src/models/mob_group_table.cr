@@ -4,7 +4,7 @@ module MobGroupTable
   FOLLOW_RANGE = 300
   RANDOM_RANGE = 300
 
-  private GROUP_MAP = {} of Int32 => MobGroup # concurrent
+  private GROUP_MAP = Concurrent::Map(Int32, MobGroup).new
 
   def add_group(key : Int32, group : MobGroup)
     GROUP_MAP[key] = group

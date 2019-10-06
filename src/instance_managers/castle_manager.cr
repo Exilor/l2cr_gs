@@ -5,7 +5,7 @@ module CastleManager
   extend Loggable
 
   private CASTLES = [] of Castle
-  private CASTLE_SIEGE_DATES = Hash(Int32, Int64).new
+  private CASTLE_SIEGE_DATES = Concurrent::Map(Int32, Int64).new
   private CASTLE_CIRCLETS = {
     0,
     6838,

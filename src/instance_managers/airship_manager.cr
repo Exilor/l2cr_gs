@@ -179,8 +179,8 @@ module AirshipManager
       return
     end
 
-    # all.routes[index + 1]
-    all.routes.unsafe_fetch(index + 1)
+    all.routes[index + 1]
+    # all.routes.unsafe_fetch(index + 1)
   end
 
   private def store_in_db(owner_id)

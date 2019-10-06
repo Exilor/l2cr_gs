@@ -4,7 +4,7 @@ module CrestTable
   extend self
   extend Loggable
 
-  private CRESTS = {} of Int32 => L2Crest
+  private CRESTS = Concurrent::Map(Int32, L2Crest).new
   @@next_id = Atomic(Int32).new(1)
 
   def load

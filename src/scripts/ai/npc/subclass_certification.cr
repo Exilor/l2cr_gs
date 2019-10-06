@@ -48,41 +48,41 @@ class Scripts::SubclassCertification < AbstractNpcAI
     "Main.html"
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player && npc
-    unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc && npc
+    unless st = get_quest_state(pc, false)
       return
     end
 
     case event
     when "GetCertified"
-      if !player.subclass_active?
+      if !pc.subclass_active?
         html = "NotSubclass.html"
-      elsif player.level < MIN_LVL
+      elsif pc.level < MIN_LVL
         html = "NotMinLevel.html"
-      elsif npc.as(L2VillageMasterInstance).check_village_master(player.active_class)
+      elsif npc.is_a?(L2VillageMasterInstance) && npc.check_village_master(pc.active_class)
         html = "CertificationList.html"
       else
         html = "WrongVillageMaster.html"
       end
     when "Obtain65"
-      html = replace_html(player, "EmergentAbility.html", true, nil).sub("%level%", "65").sub("%skilltype%", "common skill").sub("%event%", "lvl65Emergent")
+      html = replace_html(pc, "EmergentAbility.html", true, nil).sub("%level%", "65").sub("%skilltype%", "common skill").sub("%event%", "lvl65Emergent")
     when "Obtain70"
-      html = replace_html(player, "EmergentAbility.html", true, nil).sub("%level%", "70").sub("%skilltype%", "common skill").sub("%event%", "lvl70Emergent")
+      html = replace_html(pc, "EmergentAbility.html", true, nil).sub("%level%", "70").sub("%skilltype%", "common skill").sub("%event%", "lvl70Emergent")
     when "Obtain75"
-      html = replace_html(player, "ClassAbility.html", true, nil)
+      html = replace_html(pc, "ClassAbility.html", true, nil)
     when "Obtain80"
-      html = replace_html(player, "EmergentAbility.html", true, nil).sub("%level%", "80").sub("%skilltype%", "transformation skill").sub("%event%", "lvl80Class")
+      html = replace_html(pc, "EmergentAbility.html", true, nil).sub("%level%", "80").sub("%skilltype%", "transformation skill").sub("%event%", "lvl80Class")
     when "lvl65Emergent"
-      html = do_certification(player, st, "EmergentAbility", CERTIFICATE_EMERGENT_ABILITY, 65)
+      html = do_certification(pc, st, "EmergentAbility", CERTIFICATE_EMERGENT_ABILITY, 65)
     when "lvl70Emergent"
-      html = do_certification(player, st, "EmergentAbility", CERTIFICATE_EMERGENT_ABILITY, 70)
+      html = do_certification(pc, st, "EmergentAbility", CERTIFICATE_EMERGENT_ABILITY, 70)
     when "lvl75Master"
-      html = do_certification(player, st, "ClassAbility", CERTIFICATE_MASTER_ABILITY, 75)
+      html = do_certification(pc, st, "ClassAbility", CERTIFICATE_MASTER_ABILITY, 75)
     when "lvl75Class"
-      html = do_certification(player, st, "ClassAbility", ABILITY_CERTIFICATES[get_class_index(player)]?, 75)
+      html = do_certification(pc, st, "ClassAbility", ABILITY_CERTIFICATES[get_class_index(pc)]?, 75)
     when "lvl80Class"
-      html = do_certification(player, st, "ClassAbility", TRANSFORMATION_SEALBOOKS[get_class_index(player)]?, 80)
+      html = do_certification(pc, st, "ClassAbility", TRANSFORMATION_SEALBOOKS[get_class_index(pc)]?, 80)
     when "Main.html", "Explanation.html", "NotObtain.html"
       html = event
     end
@@ -90,11 +90,11 @@ class Scripts::SubclassCertification < AbstractNpcAI
     html
   end
 
-  private def replace_html(player, html_file, replace_class, lvl_to_replace)
-    html = get_htm(player, html_file)
+  private def replace_html(pc, html_file, replace_class, lvl_to_replace)
+    html = get_htm(pc, html_file)
 
     if replace_class
-      html = html.sub("%class%", ClassListData.get_class!(player.active_class).client_code)
+      html = html.sub("%class%", ClassListData.get_class!(pc.active_class).client_code)
     end
 
     if lvl_to_replace

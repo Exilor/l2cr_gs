@@ -51,35 +51,35 @@ class L2DoorInstance < L2Character
     !open?
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2DoorInstance
   end
 
-  def template
+  def template : L2DoorTemplate
     super.as(L2DoorTemplate)
   end
 
-  def init_ai
+  private def init_ai : L2CharacterAI
     L2DoorAI.new(self)
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = DoorKnownList.new(self)
   end
 
-  def init_stat
+  private def init_char_stat
     @stat = DoorStat.new(self)
   end
 
-  def stat
+  def stat : DoorStat
     super.as(DoorStat)
   end
 
-  def init_status
+  private def init_char_status
     @status = DoorStatus.new(self)
   end
 
-  def status
+  def status : DoorStatus
     super.as(DoorStatus)
   end
 

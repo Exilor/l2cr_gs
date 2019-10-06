@@ -4,7 +4,7 @@ module PostBBSManager
   extend self
   extend BaseBBSManager
 
-  private POST_BY_TOPIC = {} of Topic => Post
+  private POST_BY_TOPIC = Concurrent::Map(Topic, Post).new
 
   def get_g_post_by_topic(t : Topic) : Post
     unless post = POST_BY_TOPIC[t]?

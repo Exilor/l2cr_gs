@@ -1380,7 +1380,7 @@ module SevenSignsFestival
     getter witch_instance : L2Npc?
     getter participants : Array(Int32)
     getter npc_instances = [] of L2FestivalMonsterInstance
-    getter original_locations = {} of Int32 => FestivalSpawn
+    getter original_locations = Concurrent::Map(Int32, FestivalSpawn).new
 
     def initialize(@cabal : Int32, @level_range : Int32)
       if cabal == SevenSigns::CABAL_DAWN

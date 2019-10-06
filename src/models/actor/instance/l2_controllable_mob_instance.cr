@@ -11,7 +11,7 @@ class L2ControllableMobInstance < L2MonsterInstance
     500
   end
 
-  def init_ai : L2CharacterAI
+  private def init_ai : L2CharacterAI
     L2ControllableMobAI.new(self)
   end
 

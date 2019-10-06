@@ -207,8 +207,8 @@ class Scripts::TowerOfNaia < AbstractNpcAI
 
   private INDEX_COUNT = Slice.new(2, 0)
   private ACTIVE_ROOMS = {} of Int32 => Bool
-  private NPC_SPAWNS = {} of Int32 => Array(L2Npc)
-  private SPORE_SPAWNS = Set(L2Npc).new
+  private NPC_SPAWNS = Concurrent::Map(Int32, IArray(L2Npc)).new
+  private SPORE_SPAWNS = Concurrent::Set(L2Npc).new
 
   @counter = 90
   @despawned_spores_count = Atomic(Int32).new(0)
@@ -620,7 +620,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     end
 
     if spawn_list = SPAWNS[manager_id]?
-      spawned = [] of L2Npc
+      spawned = Concurrent::Array(L2Npc).new
       spawn_list.each do |sp|
         spawned_npc = add_spawn(sp[0], sp[1], sp[2], sp[3], sp[4], false, 0, false)
         spawned << spawned_npc

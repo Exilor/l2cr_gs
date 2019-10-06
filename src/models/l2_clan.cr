@@ -37,11 +37,11 @@ class L2Clan
 
   MAX_NOTICE_LENGTH = 8192
 
-  @members = Hash(Int32, L2ClanMember).new
-  @at_war_with = Set(Int32).new
-  @at_war_attackers = Set(Int32).new
-  @privs = Hash(Int32, RankPrivs).new
-  @subpledges = Hash(Int32, Subpledge).new
+  @members = Concurrent::Map(Int32, L2ClanMember).new
+  @at_war_with = Concurrent::Set(Int32).new
+  @at_war_attackers = Concurrent::Set(Int32).new
+  @privs = Concurrent::Map(Int32, RankPrivs).new
+  @subpledges = Concurrent::Map(Int32, Subpledge).new
   @notice : String?
   @siege_kills = Atomic(Int32).new(0)
   @siege_deaths = Atomic(Int32).new(0)
@@ -49,8 +49,8 @@ class L2Clan
   getter level = 0
   getter blood_alliance_count = 0
   getter blood_oath_count = 0
-  getter skills = Hash(Int32, Skill).new
-  getter subpledge_skills = Hash(Int32, Skill).new
+  getter skills = Concurrent::Map(Int32, Skill).new
+  getter subpledge_skills = Concurrent::Map(Int32, Skill).new
   getter(warehouse) { ClanWarehouse.new(self) }
   getter hired_guards = 0
   getter reputation_score = 0
@@ -811,11 +811,11 @@ class L2Clan
     !@at_war_with.empty?
   end
 
-  def war_list : Set(Int32)
+  def war_list : ISet(Int32)
     @at_war_with
   end
 
-  def attacker_list : Set(Int32)
+  def attacker_list : ISet(Int32)
     @at_war_attackers
   end
 

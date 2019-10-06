@@ -2,10 +2,10 @@ module RaidBossSpawnManager
   extend self
   extend Loggable
 
-  private BOSSES      = Hash(Int32, L2RaidBossInstance).new
-  private SPAWNS      = Hash(Int32, L2Spawn).new
-  private SCHEDULES   = Hash(Int32, Scheduler::DelayedTask).new
-  private STORED_INFO = Hash(Int32, StatsSet).new
+  private BOSSES      = Concurrent::Map(Int32, L2RaidBossInstance).new
+  private SPAWNS      = Concurrent::Map(Int32, L2Spawn).new
+  private SCHEDULES   = Concurrent::Map(Int32, Scheduler::DelayedTask).new
+  private STORED_INFO = Concurrent::Map(Int32, StatsSet).new
 
   enum Status : UInt8
     ALIVE, DEAD, UNDEFINED
@@ -113,15 +113,15 @@ module RaidBossSpawnManager
     SPAWNS.has_key?(boss_id)
   end
 
-  def bosses : Hash(Int32, L2RaidBossInstance)
+  def bosses : IHash(Int32, L2RaidBossInstance)
     BOSSES
   end
 
-  def spawns : Hash(Int32, L2Spawn)
+  def spawns : IHash(Int32, L2Spawn)
     SPAWNS
   end
 
-  def stored_info : Hash(Int32, StatsSet)
+  def stored_info : IHash(Int32, StatsSet)
     STORED_INFO
   end
 

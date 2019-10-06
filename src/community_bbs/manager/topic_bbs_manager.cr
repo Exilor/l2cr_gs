@@ -5,7 +5,7 @@ module TopicBBSManager
   extend BaseBBSManager
   extend Loggable
 
-  private TABLE = [] of Topic
+  private TABLE = Concurrent::Array(Topic).new
   private MAX_ID = {} of Forum => Int32
 
   def add_topic(t : Topic)

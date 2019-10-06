@@ -5,7 +5,7 @@ module MailManager
   extend self
   extend Loggable
 
-  private MESSAGES = Hash(Int32, Message).new
+  private MESSAGES = Concurrent::Map(Int32, Message).new
 
   def load
     timer = Timer.new

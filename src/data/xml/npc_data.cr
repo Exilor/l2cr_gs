@@ -7,8 +7,8 @@ module NpcData
   extend XMLReader
   extend Synchronizable
 
-  private NPCS = Hash(Int32, L2NpcTemplate).new
-  private CLANS = Hash(String, Int32).new
+  private NPCS = Concurrent::Map(Int32, L2NpcTemplate).new
+  private CLANS = Concurrent::Map(String, Int32).new
 
   private class_getter! minion_data : MinionData
 
@@ -249,7 +249,7 @@ module NpcData
               drop_lists ||= EnumMap(DropListScope, Slice(IDropItem)).new
               drop_list = [] of IDropItem
               parse_drop_list(dn, drop_list_scope, drop_list)
-              drop_lists[drop_list_scope] = drop_list.to_slice!
+              drop_lists[drop_list_scope] = drop_list.to_slice
             end
           when "collision"
             npc.each_element do |col|

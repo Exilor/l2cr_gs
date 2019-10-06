@@ -5,7 +5,7 @@ class L2GuardInstance < L2Attackable
     InstanceType::L2GuardInstance
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = GuardKnownList.new(self)
   end
 

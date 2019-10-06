@@ -3,10 +3,10 @@ class L2WorldRegion
   include Synchronizable
 
   @neighbors_task : Scheduler::DelayedTask?
-  getter sorrounding_regions = Array(self).new
-  getter zones = Array(L2ZoneType).new
-  getter playables = Hash(Int32, L2Playable).new
-  getter objects = Hash(Int32, L2Object).new
+  getter sorrounding_regions = Concurrent::LinkedList(self).new
+  getter zones = Concurrent::Array(L2ZoneType).new
+  getter playables = Concurrent::Map(Int32, L2Playable).new
+  getter objects = Concurrent::Map(Int32, L2Object).new
   getter? active : Bool
 
   def initialize(@tile_x : Int32, @tile_y : Int32)

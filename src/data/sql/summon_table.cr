@@ -2,8 +2,8 @@ module SummonTable
   extend self
   extend Loggable
 
-  private PETS = Hash(Int32, Int32).new
-  private SERVITORS = Hash(Int32, Int32).new
+  private PETS = Concurrent::Map(Int32, Int32).new
+  private SERVITORS = Concurrent::Map(Int32, Int32).new
 
   private INIT_PET = "SELECT ownerId, item_obj_id FROM pets WHERE restore = 'true'"
   private INIT_SUMMONS = "SELECT ownerId, summonSkillId FROM character_summons"
@@ -130,11 +130,11 @@ module SummonTable
     debug { "Saved #{summon}." }
   end
 
-  def pets : Hash(Int32, Int32)
+  def pets : IHash(Int32, Int32)
     PETS
   end
 
-  def servitors : Hash(Int32, Int32)
+  def servitors : IHash(Int32, Int32)
     SERVITORS
   end
 end

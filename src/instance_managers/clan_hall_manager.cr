@@ -6,8 +6,8 @@ module ClanHallManager
   extend Loggable
   extend Synchronizable
 
-  private CLAN_HALLS = Hash(Int32, AuctionableHall).new
-  private FREE_CLAN_HALLS = Hash(Int32, AuctionableHall).new
+  private CLAN_HALLS = Concurrent::Map(Int32, AuctionableHall).new
+  private FREE_CLAN_HALLS = Concurrent::Map(Int32, AuctionableHall).new
   private ALL_AUCTIONABLE_CLAN_HALLS = {} of Int32 => AuctionableHall
   private ALL_CLAN_HALLS = {} of Int32 => ClanHall
 
@@ -54,19 +54,19 @@ module ClanHallManager
     error e
   end
 
-  def all_clan_halls : Hash(Int32, ClanHall)
+  def all_clan_halls : IHash(Int32, ClanHall)
     ALL_CLAN_HALLS
   end
 
-  def free_clan_halls : Hash(Int32, AuctionableHall)
+  def free_clan_halls : IHash(Int32, AuctionableHall)
     FREE_CLAN_HALLS
   end
 
-  def clan_halls : Hash(Int32, AuctionableHall)
+  def clan_halls : IHash(Int32, AuctionableHall)
     CLAN_HALLS
   end
 
-  def auctionable_clan_halls : Hash(Int32, AuctionableHall)
+  def auctionable_clan_halls : IHash(Int32, AuctionableHall)
     ALL_AUCTIONABLE_CLAN_HALLS
   end
 

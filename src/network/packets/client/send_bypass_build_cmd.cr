@@ -255,7 +255,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
             ItemTable.destroy_item("Pickup", item, pc, nil)
           end
         else
-          # debug "Adding #{item}"
           if party
             party.distribute_item(pc, item)
           else
@@ -267,30 +266,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       rescue e
         error e
       end
-    end
-  end
-
-  private def set_class
-    pc = active_char.not_nil!
-    id = args.last {""}.upcase
-    class_id = ClassId.parse?(id) || (ClassId[id.to_i]? if id.num?)
-    if class_id && !class_id.to_s.includes?("DUMMY")
-      target = pc_target
-      target.class_template = class_id.to_i
-      target.base_class = class_id.to_i
-      target.broadcast_user_info
-      target.send_message("You class is now #{class_id}.")
-    else
-      pc.send_message("No class found for #{id.inspect}")
-      html = String.build do |io|
-        io.puts "<html><title>Class names</title><body>"
-        ClassId.each do |id|
-          io.puts "#{id}<br1>" unless id.to_s.includes?("DUMMY")
-        end
-        io.puts "</body></html>"
-      end
-      msg = NpcHtmlMessage.new(html)
-      pc.send_packet(msg)
     end
   end
 

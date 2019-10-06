@@ -5,7 +5,7 @@ class MobGroup
   include Loggable
 
   getter group_id, max_mob_count
-  getter(mobs) { [] of L2ControllableMobInstance } # concurrent
+  getter(mobs) { Concurrent::Array(L2ControllableMobInstance).new }
 
   def initialize(group_id : Int32, npc_template : L2NpcTemplate, max_mob_count : Int32)
     @group_id = group_id

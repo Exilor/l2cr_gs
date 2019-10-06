@@ -5,7 +5,7 @@ module RecipeController
   extend Loggable
   include Packets::Outgoing
 
-  private ACTIVE_MAKERS = {} of Int32 => RecipeItemMaker
+  private ACTIVE_MAKERS = Concurrent::Map(Int32, RecipeItemMaker).new
 
   def request_book_open(pc : L2PcInstance, dwarven : Bool)
     if ACTIVE_MAKERS.has_key?(pc.l2id)

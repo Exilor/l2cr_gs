@@ -7,10 +7,10 @@ module GrandBossManager
   private UPDATE_GRAND_BOSS_DATA = "UPDATE grandboss_data set loc_x = ?, loc_y = ?, loc_z = ?, heading = ?, respawn_time = ?, currentHP = ?, currentMP = ?, status = ? where boss_id = ?"
   private UPDATE_GRAND_BOSS_DATA2 = "UPDATE grandboss_data set status = ? where boss_id = ?"
 
-  private BOSSES = Hash(Int32, L2GrandBossInstance).new
+  private BOSSES = Concurrent::Map(Int32, L2GrandBossInstance).new
   private STORED_INFO = {} of Int32 => StatsSet
-  private BOSS_STATUS = Hash(Int32, Int32).new
-  private ZONES = Hash(Int32, L2BossZone).new
+  private BOSS_STATUS = Concurrent::Map(Int32, Int32).new
+  private ZONES = Concurrent::Map(Int32, L2BossZone).new
 
   def load
     sql = "SELECT * from grandboss_data ORDER BY boss_id"

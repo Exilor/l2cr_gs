@@ -58,7 +58,7 @@ class L2RaceManagerInstance < L2Npc
     InstanceType::L2RaceManagerInstance
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = RaceManagerKnownList.new(self)
   end
 

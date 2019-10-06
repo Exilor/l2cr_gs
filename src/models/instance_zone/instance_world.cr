@@ -1,6 +1,6 @@
 class InstanceWorld
   @status = Atomic(Int32).new(0)
-  getter allowed = [] of Int32
+  getter allowed = Concurrent::Array(Int32).new
   property instance_id : Int32 = 0
   property template_id : Int32 = -1
 

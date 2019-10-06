@@ -4,12 +4,12 @@ class ListenersContainer
   include Synchronizable
   include Loggable
 
-  @listeners : Hash(EventType, Array(AbstractEventListener))?
+  @listeners : IHash(EventType, Array(AbstractEventListener))?
 
-  private def listeners : Hash(EventType, Array(AbstractEventListener))
+  private def listeners : IHash(EventType, Array(AbstractEventListener))
     @listeners ||= sync do
       @listeners ||= begin
-        Hash(EventType, Array(AbstractEventListener)).new
+        Concurrent::Map(EventType, Array(AbstractEventListener)).new
       end
     end
   end

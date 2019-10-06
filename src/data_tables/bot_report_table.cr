@@ -21,8 +21,8 @@ module BotReportTable
   private IP_REGISTRY = {} of Int32 => Int64
   private CHAR_REGISTRY = {} of Int32 => ReporterCharData
   private CHAR_REGISTRY_LOCK = Mutex.new
-  private REPORTS = {} of Int32 => ReportedCharData
-  private PUNISHMENTS = {} of Int32 => PunishmentHolder
+  private REPORTS = Concurrent::Map(Int32, ReportedCharData).new
+  private PUNISHMENTS = Concurrent::Map(Int32, PunishmentHolder).new
 
   def load
     if Config.botreport_enable

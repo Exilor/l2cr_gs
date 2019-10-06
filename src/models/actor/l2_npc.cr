@@ -11,8 +11,8 @@ require "./instance/l2_clan_hall_manager_instance"
 require "./instance/l2_doormen_instance"
 
 class L2Npc < L2Character
-  INTERACTION_DISTANCE    = 150
-  RANDOM_ITEM_DROP_LIMIT  = 70
+  INTERACTION_DISTANCE = 150
+  RANDOM_ITEM_DROP_LIMIT = 70
   private MINIMUM_SOCIAL_INTERVAL = 6000
 
   @in_town = false
@@ -32,7 +32,7 @@ class L2Npc < L2Character
   setter auto_attackable : Bool = false
   property busy_message : String = ""
   property killing_blow_weapon : Int32 = 0
-  property! summoned_npcs : Hash(Int32, L2Npc)?
+  property! summoned_npcs : IHash(Int32, L2Npc)?
   property! spawn : L2Spawn?
   property? busy : Bool = false
   property? random_animation_enabled : Bool = true
@@ -117,11 +117,11 @@ class L2Npc < L2Character
     super.as(NpcKnownList)
   end
 
-  private def init_stat
+  private def init_char_stat
     @stat = NpcStat.new(self)
   end
 
-  private def init_status
+  private def init_char_status
     @status = NpcStatus.new(self)
   end
 
@@ -789,7 +789,7 @@ class L2Npc < L2Character
 
   def add_summoned_npc(npc : L2Npc)
     temp = @summoned_npcs || sync do
-      @summoned_npcs ||= Hash(Int32, L2Npc).new
+      @summoned_npcs ||= Concurrent::Map(Int32, L2Npc).new
     end
     temp[npc.l2id] = npc
     npc.summoner = self
@@ -879,9 +879,9 @@ class L2Npc < L2Character
   end
 
   def has_ai_value?(param_name : String) : Bool
-    !!@spawn &&
-    !!spawn.name &&
-    NpcPersonalAIData.has_ai_value?(spawn.name.not_nil!, param_name)
+    return false unless sp = @spawn
+    return false unless sp_name = sp.name
+    NpcPersonalAIData.has_ai_value?(sp_name, param_name)
   end
 
   def in_my_spawn_group?(npc : L2Npc) : Bool

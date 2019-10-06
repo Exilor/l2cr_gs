@@ -2,7 +2,7 @@ require "../general_drop_item"
 require "../grouped_general_drop_item"
 
 struct GroupedItemDropCalculationStrategy
-  private SINGLE_ITEM_CACHE = Hash(GroupedGeneralDropItem, GeneralDropItem).new
+  private SINGLE_ITEM_CACHE = Concurrent::Map(GroupedGeneralDropItem, GeneralDropItem).new
 
   private def initialize(&@proc : GroupedGeneralDropItem, L2Character, L2Character -> ItemHolder | Array(ItemHolder) | Nil)
   end

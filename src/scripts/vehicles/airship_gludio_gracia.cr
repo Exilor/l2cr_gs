@@ -82,10 +82,8 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
   private struct BoatEngineDelegator
     include BoatEngine
 
-    @boat = uninitialized L2BoatInstance
+    @boat : L2Vehicle?
 
-    # def initialize(@airship : AirShipGludioGracia, @boat : L2Vehicle)
-    # end
     initializer airship : AirShipGludioGracia
 
     delegate call, to: @airship

@@ -4,7 +4,7 @@ module DayNightSpawnManager
 
   private DAY_CREATURES = [] of L2Spawn
   private NIGHT_CREATURES = [] of L2Spawn
-  private BOSSES = Hash(L2Spawn, L2RaidBossInstance).new
+  private BOSSES = Concurrent::Map(L2Spawn, L2RaidBossInstance).new
 
   def add_day_creature(spawn_dat : L2Spawn)
     DAY_CREATURES << spawn_dat

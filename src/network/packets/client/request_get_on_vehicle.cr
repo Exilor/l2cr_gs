@@ -1,6 +1,6 @@
 class Packets::Incoming::RequestGetOnVehicle < GameClientPacket
   @boat_id = 0
-  @pos = uninitialized Location
+  @pos : Location?
 
   private def read_impl
     @boat_id = d
@@ -9,6 +9,7 @@ class Packets::Incoming::RequestGetOnVehicle < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
+    return unless pos = @pos
 
     if pc.in_boat?
       boat = pc.boat!
@@ -34,9 +35,9 @@ class Packets::Incoming::RequestGetOnVehicle < GameClientPacket
       end
     end
 
-    pc.in_vehicle_position = @pos
+    pc.in_vehicle_position = pos
     pc.vehicle = boat
-    pc.broadcast_packet(GetOnVehicle.new(pc.l2id, boat.l2id, @pos))
+    pc.broadcast_packet(GetOnVehicle.new(pc.l2id, boat.l2id, pos))
     pc.set_xyz(*boat.xyz)
     pc.inside_peace_zone = true
     pc.revalidate_zone(true)

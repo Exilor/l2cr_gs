@@ -37,7 +37,7 @@ class L2DecoyInstance < L2Decoy
     true
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = DecoyKnownList.new(self)
   end
 

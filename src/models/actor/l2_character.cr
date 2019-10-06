@@ -31,20 +31,20 @@ abstract class L2Character < L2Object
   @zones_mutex = Mutex.new
   @zone_validate_counter = 4i8
   @teleport_lock = Mutex.new
-  @invul_against_skills : Hash(Int32, InvulSkillHolder)?
-  @reuse_time_stamp_items : Hash(Int32, TimeStamp)?
-  @reuse_time_stamp_skills : Hash(Int32, TimeStamp)?
-  @disabled_skills : Hash(Int32, Int64)?
-  @trigger_skills : Hash(Int32, OptionsSkillHolder)?
+  @invul_against_skills : IHash(Int32, InvulSkillHolder)?
+  @reuse_time_stamp_items : IHash(Int32, TimeStamp)?
+  @reuse_time_stamp_skills : IHash(Int32, TimeStamp)?
+  @disabled_skills : IHash(Int32, Int64)?
+  @trigger_skills : IHash(Int32, OptionsSkillHolder)?
   @all_skills_disabled : Bool = false
   @ai : L2CharacterAI?
   @exceptions = 0i64
   @move : MoveData?
   @skill_cast_2 : Scheduler::DelayedTask?
-  @attack_by_list : Set(L2Character)?
+  @attack_by_list : ISet(L2Character)?
   getter title : String = ""
   getter cast_interrupt_time = 0i64
-  getter skills : Hash(Int32, Skill) = Hash(Int32, Skill).new
+  getter skills : IHash(Int32, Skill) = Concurrent::Map(Int32, Skill).new
   getter abnormal_visual_effects = 0
   getter abnormal_visual_effects_special = 0
   getter abnormal_visual_effects_event = 0
@@ -89,8 +89,8 @@ abstract class L2Character < L2Object
   def initialize(l2id : Int32, @template : L2CharTemplate)
     super(l2id)
 
-    init_stat
-    init_status
+    init_char_stat
+    init_char_status
 
     if door?
       @calculators = Formulas.std_door_calculators
@@ -107,7 +107,7 @@ abstract class L2Character < L2Object
     InstanceType::L2Character
   end
 
-  private def init_ai
+  private def init_ai : L2CharacterAI
     L2CharacterAI.new(self)
   end
 
@@ -133,15 +133,15 @@ abstract class L2Character < L2Object
     @known_list = CharKnownList.new(self)
   end
 
-  private def init_stat
+  private def init_char_stat
     @stat = CharStat.new(self)
   end
 
-  private def init_status
+  private def init_char_status
     @status = CharStatus.new(self)
   end
 
-  def init_char_status_update_values
+  private def init_char_status_update_values
     @hp_update_inc_check = max_hp.to_f
     @hp_update_interval = @hp_update_inc_check / MAX_HP_BAR_PX
     @hp_update_dec_check = @hp_update_inc_check - @hp_update_interval
@@ -262,21 +262,21 @@ abstract class L2Character < L2Object
     end
   end
 
-  def attack_by_list : Set(L2Character)
+  def attack_by_list : ISet(L2Character)
     @attack_by_list || sync do
-      @attack_by_list ||= Set(L2Character).new
+      @attack_by_list ||= Concurrent::Set(L2Character).new
     end
   end
 
-  def trigger_skills : Hash(Int32, OptionsSkillHolder)
+  def trigger_skills : IHash(Int32, OptionsSkillHolder)
     @trigger_skills || sync do
-      @trigger_skills ||= Hash(Int32, OptionsSkillHolder).new
+      @trigger_skills ||= Concurrent::Map(Int32, OptionsSkillHolder).new
     end
   end
 
-  def invul_against_skills : Hash(Int32, InvulSkillHolder)
+  def invul_against_skills : IHash(Int32, InvulSkillHolder)
     @invul_against_skills || sync do
-      @invul_against_skills ||= Hash(Int32, InvulSkillHolder).new
+      @invul_against_skills ||= Concurrent::Map(Int32, InvulSkillHolder).new
     end
   end
 
@@ -362,7 +362,7 @@ abstract class L2Character < L2Object
   def add_time_stamp_item(item : L2ItemInstance, reuse : Int64, time : Int64)
     unless temp = @reuse_time_stamp_items
       temp = sync do
-        @reuse_time_stamp_items ||= Hash(Int32, TimeStamp).new
+        @reuse_time_stamp_items ||= Concurrent::Map(Int32, TimeStamp).new
       end
     end
 
@@ -397,7 +397,7 @@ abstract class L2Character < L2Object
     -1i64
   end
 
-  def item_reuse_time_stamps : Hash(Int32, TimeStamp)?
+  def item_reuse_time_stamps : IHash(Int32, TimeStamp)?
     @reuse_time_stamp_items
   end
 
@@ -408,14 +408,14 @@ abstract class L2Character < L2Object
   def add_time_stamp(skill : Skill, reuse : Int64, time : Int64)
     unless temp = @reuse_time_stamp_skills
       sync do
-        temp = @reuse_time_stamp_skills ||= Hash(Int32, TimeStamp).new
+        temp = @reuse_time_stamp_skills ||= Concurrent::Map(Int32, TimeStamp).new
       end
     end
 
     temp.not_nil![skill.hash] = TimeStamp.new(skill, reuse, time)
   end
 
-  def skill_reuse_time_stamps : Hash(Int32, TimeStamp)?
+  def skill_reuse_time_stamps : IHash(Int32, TimeStamp)?
     @reuse_time_stamp_skills
   end
 
@@ -450,7 +450,7 @@ abstract class L2Character < L2Object
     return unless skill
 
     unless @disabled_skills
-      sync { @disabled_skills ||= Hash(Int32, Int64).new }
+      sync { @disabled_skills ||= Concurrent::Map(Int32, Int64).new }
     end
 
     delay = delay > 0 ? Time.ms + delay : Int64::MAX
@@ -853,16 +853,15 @@ abstract class L2Character < L2Object
 
     sync do
       @calculators.each_with_index do |calc, i|
-        if calc
-          if modified_stats
-            modified_stats.concat(calc.remove_owner(owner))
-          else
-            modified_stats = calc.remove_owner(owner)
-          end
+        next unless calc
+        if modified_stats
+          modified_stats.concat(calc.remove_owner(owner))
+        else
+          modified_stats = calc.remove_owner(owner)
+        end
 
-          if calc.empty?
-            @calculators[i] = nil
-          end
+        if calc.empty?
+          @calculators[i] = nil
         end
       end
 

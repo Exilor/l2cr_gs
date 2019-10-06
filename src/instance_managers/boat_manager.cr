@@ -4,7 +4,7 @@ module BoatManager
   extend self
   extend Loggable
 
-  private BOATS = Hash(Int32, L2BoatInstance).new
+  private BOATS = Concurrent::Map(Int32, L2BoatInstance).new
   private BUSY_DOCKS = Slice.new(3, false)
 
   TALKING_ISLAND = 0

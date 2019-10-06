@@ -289,7 +289,8 @@ module GeoPathFinding
 		end
 
     # neighbors
-    Array(GeoNode).new(neighbors.to_unsafe.as(GeoNode*), neighbors.size)
+    # Array(GeoNode).new(neighbors.to_unsafe.as(GeoNode*), neighbors.size)
+    neighbors.unsafe_as(Array(GeoNode))
   end
 
   private def read_node(node_x : Int16, node_y : Int16, layer : Int8) : GeoNode?

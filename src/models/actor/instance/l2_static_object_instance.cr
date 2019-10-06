@@ -35,15 +35,15 @@ class L2StaticObjectInstance < L2Character
     @static_l2id
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = StaticObjectKnownList.new(self)
   end
 
-  def init_stat
+  private def init_char_stat
     @stat = StaticObjectStat.new(self)
   end
 
-  def init_status
+  private def init_char_status
     @status = StaticObjectStatus.new(self)
   end
 

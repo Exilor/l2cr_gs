@@ -6,8 +6,8 @@ module AutoSpawnHandler
   private DEFAULT_RESPAWN = 3600000 # 1 hour
   private DEFAULT_DESPAWN = 3600000 # 1 hour
 
-  private REGISTERED_SPAWNS = Hash(Int32, AutoSpawnInstance).new
-  private RUNNING_SPAWNS = Hash(Int32, Scheduler::Task).new
+  private REGISTERED_SPAWNS = Concurrent::Map(Int32, AutoSpawnInstance).new
+  private RUNNING_SPAWNS = Concurrent::Map(Int32, Scheduler::Task).new
 
   @@active_state = true
 
@@ -236,9 +236,10 @@ module AutoSpawnHandler
 
     def call
       unless sp = REGISTERED_SPAWNS[@l2id]?
-        warn "No spawn registered for l2id #{@l2id}."
+        warn { "No spawn registered for l2id #{@l2id}." }
         return
       end
+
       sp.npc_instance_list.each do |npc_inst|
         npc_inst.delete_me
         SpawnTable.delete_spawn(npc_inst.spawn, false)
@@ -250,13 +251,11 @@ module AutoSpawnHandler
   end
 
   class AutoSpawnInstance
-    # include Identifiable
-
     @spawn_index = 0
     @broadcast_announcement = false
     getter id
-    getter location_list = [] of Location
-    getter npc_instance_list = [] of L2Npc
+    getter location_list = Concurrent::Array(Location).new
+    getter npc_instance_list = Concurrent::LinkedList(L2Npc).new
     property l2id : Int32 = 0
     property init_delay : Int32
     property respawn_delay : Int32

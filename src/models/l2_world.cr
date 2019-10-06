@@ -43,9 +43,9 @@ module L2World
     Array(L2WorldRegion).new(REGIONS_Y + 1)
   end
 
-  private OBJECTS = Hash(Int32, L2Object).new
-  private PLAYERS = Hash(Int32, L2PcInstance).new
-  private PETS    = Hash(Int32, L2PetInstance).new
+  private OBJECTS = Concurrent::Map(Int32, L2Object).new
+  private PLAYERS = Concurrent::Map(Int32, L2PcInstance).new
+  private PETS    = Concurrent::Map(Int32, L2PetInstance).new
 
   def load
     0.upto(REGIONS_X) do |x|

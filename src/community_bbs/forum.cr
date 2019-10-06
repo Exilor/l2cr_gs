@@ -15,7 +15,7 @@ class Forum
   OWNERONLY = 3
 
   @children = [] of Forum
-  @topic = {} of Int32 => Topic
+  @topic = Concurrent::Map(Int32, Topic).new
   @loaded = false
   @forum_post = 0
   @forum_name = ""

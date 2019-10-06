@@ -10,14 +10,14 @@ class Instance
   private alias Say2 = Packets::Incoming::Say2
 
   @check_time_up_task : Scheduler::DelayedTask?
-  @eject_dead_tasks = {} of Int32 => Scheduler::DelayedTask?
+  @eject_dead_tasks = Concurrent::Map(Int32, Scheduler::DelayedTask?).new
   @allow_random_walk = true
-  @doors = {} of Int32 => L2DoorInstance
+  @doors = Concurrent::Map(Int32, L2DoorInstance).new
   @manual_spawn = {} of String => Array(L2Spawn)
   @last_left = -1i64
   getter id
-  getter players = [] of Int32
-  getter npcs = [] of L2Npc
+  getter players = Concurrent::Array(Int32).new
+  getter npcs = Concurrent::Array(L2Npc).new
   getter instance_start_time = Time.ms
   getter instance_end_time = -1i64
   getter timer_text = ""

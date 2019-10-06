@@ -100,7 +100,7 @@ module OlympiadGameManager
       return
     end
 
-    TASKS.unsafe_fetch(id)
+    TASKS[id]
   end
 
   def get_olympiad_task!(id : Int32) : OlympiadGameTask
@@ -121,7 +121,7 @@ module OlympiadGameManager
       return
     end
 
-    if game = TASKS.unsafe_fetch(id).game # AbstractOlympiadGame
+    if game = TASKS[id].game # AbstractOlympiadGame
       game.add_damage(pc, damage)
     end
   end

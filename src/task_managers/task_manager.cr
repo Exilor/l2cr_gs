@@ -13,8 +13,8 @@ module TaskManager
     "INSERT INTO global_tasks (task,type,last_activation,param1,param2,param3) VALUES(?,?,?,?,?,?)"
   }
 
-  private TASKS = {} of String => Task
-  CURRENT_TASKS = [] of ExecutedTask
+  private TASKS = Concurrent::Map(String, Task).new
+  CURRENT_TASKS = Concurrent::Array(ExecutedTask).new
 
   def load
     timer = Timer.new

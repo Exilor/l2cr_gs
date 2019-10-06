@@ -12,7 +12,7 @@ class L2DefenderInstance < L2Attackable
     InstanceType::L2DefenderInstance
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = DefenderKnownList.new(self)
   end
 
@@ -20,7 +20,7 @@ class L2DefenderInstance < L2Attackable
     false
   end
 
-  def init_ai
+  private def init_ai
     if conquerable_hall?.nil? && get_castle(10000).nil?
       L2FortSiegeGuardAI.new(self)
     elsif get_castle(10000)

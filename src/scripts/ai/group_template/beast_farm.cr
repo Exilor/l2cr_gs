@@ -57,7 +57,7 @@ class Scripts::BeastFarm < AbstractNpcAI
     18900
   }
 
-  private FEED_INFO = {} of Int32 => Int32
+  private FEED_INFO = Concurrent::Map(Int32, Int32).new
   private GROWTH_CAPABLE_MONSTERS = {} of Int32 => GrowthCapableMob
   private TAMED_BEAST_DATA = [] of TamedBeast
 

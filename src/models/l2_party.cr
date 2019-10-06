@@ -18,7 +18,7 @@ class L2Party < AbstractPlayerGroup
   @disbanding = false
   @change_request_distribution_type : PartyDistributionType?
   @party_lvl : Int32
-  getter members : Array(L2PcInstance)
+  getter members : IArray(L2PcInstance)
   getter? pending_invitation = false
   property distribution_type : PartyDistributionType
   property! command_channel : L2CommandChannel?
@@ -30,7 +30,7 @@ class L2Party < AbstractPlayerGroup
 
   def initialize(leader : L2PcInstance, @distribution_type : PartyDistributionType)
     @distribution_type = distribution_type
-    @members = [leader]
+    @members = Concurrent::Array { leader }
     @party_lvl = leader.level
   end
 

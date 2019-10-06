@@ -11,8 +11,8 @@ abstract class AbstractScript
   private alias Say2 = Packets::Incoming::Say2
 
   property? active : Bool = false
-  getter listeners = [] of AbstractEventListener
-  @registered_ids = EnumMap(ListenerRegisterType, Set(Int32)).new
+  getter listeners = Concurrent::Array(AbstractEventListener).new
+  @registered_ids = Concurrent::Map(ListenerRegisterType, ISet(Int32)).new
 
   def initialize
     initialize_annotation_listeners
@@ -256,7 +256,7 @@ abstract class AbstractScript
           warn "Unhandled register type #{register_type}."
         end
 
-        set = @registered_ids[register_type] ||= Set(Int32).new
+        set = @registered_ids[register_type] ||= Concurrent::Set(Int32).new
         set << id
       end
     else

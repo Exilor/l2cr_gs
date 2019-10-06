@@ -3,14 +3,14 @@ module Siegable
   abstract def end_siege
   abstract def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
   abstract def get_attacker_clan?(clan : L2Clan?) : L2SiegeClan?
-  abstract def attacker_clans? : Array(L2SiegeClan)?
-  abstract def attackers_in_zone : Array(L2PcInstance)
+  abstract def attacker_clans? : IArray(L2SiegeClan)?
+  abstract def attackers_in_zone : IArray(L2PcInstance)
   abstract def attacker?(clan : L2Clan?) : Bool
   abstract def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
   abstract def get_defender_clan?(clan : L2Clan?) : L2SiegeClan?
-  abstract def defender_clans? : Array(L2SiegeClan)?
+  abstract def defender_clans? : IArray(L2SiegeClan)?
   abstract def defender?(clan : L2Clan?) : Bool
-  abstract def get_flag?(clan : L2Clan?) : Array(L2Npc)?
+  abstract def get_flag?(clan : L2Clan?) : IArray(L2Npc)?
   abstract def siege_date : Calendar
   abstract def give_fame? : Bool
   abstract def fame_frequency : Int32
@@ -25,7 +25,7 @@ module Siegable
     clan
   end
 
-  def attacker_clans : Array(L2SiegeClan)
+  def attacker_clans : IArray(L2SiegeClan)
     unless ret = attacker_clans?
       raise "No attacker clans for this siegable"
     end
@@ -41,7 +41,7 @@ module Siegable
     clan
   end
 
-  def defender_clans : Array(L2SiegeClan)
+  def defender_clans : IArray(L2SiegeClan)
     unless ret = defender_clans?
       raise "No defender clans for this siegable"
     end
@@ -49,7 +49,7 @@ module Siegable
     ret
   end
 
-  def get_flag(clan : L2Clan?) : Array(L2Npc)
+  def get_flag(clan : L2Clan?) : IArray(L2Npc)
     unless flag = get_flag?(clan)
       raise "No flag array found (clan: #{clan})"
     end

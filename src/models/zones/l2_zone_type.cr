@@ -11,7 +11,7 @@ abstract class L2ZoneType < ListenersContainer
   @min_lvl = 0
   @max_lvl = 0xff
   @class_type = 0
-  @character_list = {} of Int32 => L2Character
+  @character_list = Concurrent::Map(Int32, L2Character).new
   @race : Array(Int32)?
   @class : Array(Int32)?
   @target = InstanceType::L2Character

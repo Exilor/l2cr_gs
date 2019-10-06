@@ -88,7 +88,7 @@ class L2PcInstance < L2Playable
   @mp_update_interval  = 0.0
   @falling_timestamp = 0i64
   @last_item_auction_info_request = 0i64
-  @custom_skills : Hash(Int32, Skill)?
+  @custom_skills : IHash(Int32, Skill)?
   @action_mask = 0
   @can_feed = false
   @offline_shop_start = 0
@@ -97,31 +97,31 @@ class L2PcInstance < L2Playable
   @exchange_refusal = false
   @engage_request = false
   @revive_pet = false
-  @quests = Hash(String, QuestState).new
+  @quests = Concurrent::Map(String, QuestState).new
   @water_task : Scheduler::PeriodicTask?
-  @transform_skills : Hash(Int32, Skill)?
+  @transform_skills : IHash(Int32, Skill)?
   @vitality_task : Scheduler::PeriodicTask?
   @teleport_watchdog : Scheduler::DelayedTask?
   @soul_task : Scheduler::DelayedTask?
   @charge_task : Scheduler::DelayedTask?
   @task_warn_user_take_break : Scheduler::PeriodicTask?
   @pvp_reg_task : Scheduler::PeriodicTask?
-  @notify_quest_of_death : Array(QuestState)?
-  @dwarven_recipe_book = Hash(Int32, L2RecipeList).new
-  @common_recipe_book = Hash(Int32, L2RecipeList).new
-  @tamed_beasts : Set(L2TamedBeastInstance)?
+  @notify_quest_of_death : ISet(QuestState)?
+  @dwarven_recipe_book = Concurrent::Map(Int32, L2RecipeList).new
+  @common_recipe_book = Concurrent::Map(Int32, L2RecipeList).new
+  @tamed_beasts : ISet(L2TamedBeastInstance)?
   @warehouse : PcWarehouse?
-  @snoop_listener = Set(L2PcInstance).new(1)
-  @snooped_player = Set(L2PcInstance).new(1)
+  @snoop_listener = Concurrent::Set(L2PcInstance).new(1)
+  @snooped_player = Concurrent::Set(L2PcInstance).new(1)
   @fish : L2Fish?
   @task_for_fish : Scheduler::PeriodicTask?
-  @friends : Set(Int32)?
+  @friends : ISet(Int32)?
   @level_data : L2PetLevelData?
   @mount_feed_task : Scheduler::PeriodicTask?
   @dismount_task : Scheduler::DelayedTask?
   @rent_pet_task : Scheduler::PeriodicTask?
   @fame_task : Scheduler::PeriodicTask?
-  @manufacture_items : Hash(Int32, L2ManufactureItem)?
+  @manufacture_items : IHash(Int32, L2ManufactureItem)?
   @access_level : AccessLevel?
   @html_prefix : String?
   @sell_list : TradeList?
@@ -138,7 +138,7 @@ class L2PcInstance < L2Playable
   getter henna_wit = 0
   getter henna_men = 0
   getter appearance : PcAppearance
-  getter event_listeners = Deque(EventListener).new
+  getter event_listeners = Concurrent::Deque(EventListener).new
   getter online_time = 0i64
   getter online_begin_time = 0i64
   getter karma : Int32 = 0
@@ -165,7 +165,7 @@ class L2PcInstance < L2Playable
   # L2J wants to fix @cubics so it keeps insert order. If code changes, keep
   # in mind that Ruby's Hash already keeps it.
   getter cubics = Hash(Int32, L2CubicInstance).new
-  getter active_shots = Set(Int32).new(1)
+  getter active_shots = Concurrent::Set(Int32).new(1)
   getter soulshot_lock = Mutex.new
   getter fish_x = 0
   getter fish_y = 0
@@ -177,15 +177,15 @@ class L2PcInstance < L2Playable
   getter vehicle : L2Vehicle?
   getter current_skill : SkillUseHolder?
   getter current_pet_skill : SkillUseHolder?
-  getter premium_item_list = Hash(Int32, L2PremiumItem).new # L2J: _premiumItems
+  getter premium_item_list = Concurrent::Map(Int32, L2PremiumItem).new # L2J: _premiumItems
   getter event_status : PlayerEventHolder?
   getter fish_combat : L2Fishing?
   getter current_feed = 0
   getter account_name
   getter lang : String?
-  getter tp_bookmarks = Hash(Int32, TeleportBookmark).new
+  getter tp_bookmarks = Concurrent::Map(Int32, TeleportBookmark).new
   getter(contact_list) { L2ContactList.new(self) }
-  getter(subclasses) { Hash(Int32, Subclass).new }
+  getter(subclasses) { Concurrent::Map(Int32, Subclass).new }
   getter(radar) { L2Radar.new(self) }
   getter(inventory) { PcInventory.new(self) }
   getter(freight) { PcFreight.new(self) }
@@ -374,8 +374,8 @@ class L2PcInstance < L2Playable
       pc.stop_hp_mp_regeneration
     end
     pc.pet = L2World.get_pet(pc.l2id)
-    if pc.has_summon?
-      pc.summon!.owner = pc
+    if smn = pc.summon
+      smn.owner = pc
     end
     pc.refresh_overloaded
     pc.refresh_expertise_penalty
@@ -712,7 +712,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def acting_player? : L2PcInstance
+  def acting_player? : L2PcInstance?
     self
   end
 
@@ -720,7 +720,7 @@ class L2PcInstance < L2Playable
     self
   end
 
-  def init_pc_status_update_values
+  private def init_pc_status_update_values
     max_cp = max_cp().to_f
     max_mp = max_mp().to_f
     @cp_update_interval  = max_cp / 352.0
@@ -731,11 +731,11 @@ class L2PcInstance < L2Playable
     @mp_update_dec_check = max_mp - @mp_update_interval
   end
 
-  def init_ai
+  private def init_ai : L2CharacterAI
     L2PlayerAI.new(self)
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = PcKnownList.new(self)
   end
 
@@ -743,7 +743,7 @@ class L2PcInstance < L2Playable
     super.as(PcKnownList)
   end
 
-  def init_stat
+  private def init_char_stat
     @stat = PcStat.new(self)
   end
 
@@ -751,7 +751,7 @@ class L2PcInstance < L2Playable
     super.as(PcStat)
   end
 
-  def init_status
+  private def init_char_status
     @status = PcStatus.new(self)
   end
 
@@ -777,16 +777,16 @@ class L2PcInstance < L2Playable
 
   def manufacture_items
     @manufacture_items || sync do
-      @manufacture_items ||= Hash(Int32, L2ManufactureItem).new
+      @manufacture_items ||= Concurrent::Map(Int32, L2ManufactureItem).new
     end
   end
 
   def race : Race
     if subclass_active?
-      PlayerTemplateData[@base_class].race
-    else
-      template.race
+      return PlayerTemplateData[@base_class].race
     end
+
+    template.race
   end
 
   def class_id : ClassId
@@ -1267,7 +1267,7 @@ class L2PcInstance < L2Playable
 
   def add_custom_skill(skill : Skill?)
     if skill && skill.display_id != skill.id
-      temp = @custom_skills ||= Hash(Int32, Skill).new
+      temp = @custom_skills ||= Concurrent::Map(Int32, Skill).new
       temp[skill.display_id] = skill
     end
   end
@@ -1731,7 +1731,7 @@ class L2PcInstance < L2Playable
 
   def add_transform_skill(sk : Skill)
     unless @transform_skills
-      sync { @transform_skills ||= Hash(Int32, Skill).new }
+      sync { @transform_skills ||= Concurrent::Map(Int32, Skill).new }
     end
 
     @transform_skills.not_nil![sk.id] = sk
@@ -4717,9 +4717,9 @@ class L2PcInstance < L2Playable
     notify_quest_of_death.delete(qs)
   end
 
-  def notify_quest_of_death : Array(QuestState)
+  def notify_quest_of_death : ISet(QuestState)
     @notify_quest_of_death || sync do
-      @notify_quest_of_death ||= Array(QuestState).new
+      @notify_quest_of_death ||= Concurrent::Set(QuestState).new
     end
   end
 
@@ -6069,8 +6069,10 @@ class L2PcInstance < L2Playable
     stop_reco_give_task
   end
 
-  def tamed_beasts : Set(L2TamedBeastInstance)
-    @tamed_beasts || sync { @tamed_beasts ||= Set(L2TamedBeastInstance).new }
+  def tamed_beasts : ISet(L2TamedBeastInstance)
+    @tamed_beasts || sync do
+      @tamed_beasts ||= Concurrent::Set(L2TamedBeastInstance).new
+    end
   end
 
   def has_tamed_beasts? : Bool
@@ -7465,8 +7467,8 @@ class L2PcInstance < L2Playable
     stop_looking_for_fish_task
   end
 
-  def friends : Set(Int32)
-    @friends || sync { @friends ||= Set(Int32).new }
+  def friends : ISet(Int32)
+    @friends || sync { @friends ||= Concurrent::Set(Int32).new }
   end
 
   def has_friends? : Bool

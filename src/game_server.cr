@@ -224,7 +224,7 @@ module GameServer
     AirshipManager.load
     GraciaSeedsManager.load
 
-    SpawnTable.load
+    SpawnTable.load unless ARGV.includes?("nospawns")
     DayNightSpawnManager.trim
     DayNightSpawnManager.notify_change_mode
     FourSepulchersManager.init

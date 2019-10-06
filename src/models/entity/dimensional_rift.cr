@@ -8,8 +8,8 @@ class DimensionalRift
   @earthquake_task : Scheduler::DelayedTask?
   @boss_room = false
   @has_jumped = false
-  @dead_players = [] of L2PcInstance
-  @revived_in_waiting_room = [] of L2PcInstance
+  @dead_players = Concurrent::Array(L2PcInstance).new
+  @revived_in_waiting_room = Concurrent::Array(L2PcInstance).new
   getter type, current_room
   property teleport_timer : TaskGroup?
   property teleport_timer_task : Scheduler::DelayedTask?
@@ -271,11 +271,11 @@ class DimensionalRift
     end
   end
 
-  def dead_member_list : Array(L2PcInstance)
+  def dead_member_list : IArray(L2PcInstance)
     @dead_players
   end
 
-  def revived_at_waiting_room : Array(L2PcInstance)
+  def revived_at_waiting_room : IArray(L2PcInstance)
     @revived_in_waiting_room
   end
 

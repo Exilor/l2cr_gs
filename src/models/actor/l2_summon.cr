@@ -46,19 +46,19 @@ abstract class L2Summon < L2Playable
     owner
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = SummonKnownList.new(self)
   end
 
-  def init_stat
+  private def init_char_stat
     @stat = SummonStat.new(self)
   end
 
-  def init_status
+  private def init_char_status
     @status = SummonStatus.new(self)
   end
 
-  def init_ai : L2SummonAI
+  private def init_ai : L2CharacterAI
     L2SummonAI.new(self)
   end
 

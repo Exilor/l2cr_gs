@@ -1,21 +1,21 @@
 require "./object_known_list"
 
 class CharKnownList < ObjectKnownList
-  def known_players : Hash(Int32, L2PcInstance)
+  def known_players : IHash(Int32, L2PcInstance)
     @known_players || sync do
-      @known_players ||= Hash(Int32, L2PcInstance).new
+      @known_players ||= Concurrent::Map(Int32, L2PcInstance).new
     end
   end
 
-  def known_summons : Hash(Int32, L2Summon)
+  def known_summons : IHash(Int32, L2Summon)
     @known_summons || sync do
-      @known_summons ||= Hash(Int32, L2Summon).new
+      @known_summons ||= Concurrent::Map(Int32, L2Summon).new
     end
   end
 
-  def known_relations : Hash(Int32, Int32)
+  def known_relations : IHash(Int32, Int32)
     @known_relations || sync do
-      @known_relations ||= Hash(Int32, Int32).new
+      @known_relations ||= Concurrent::Map(Int32, Int32).new
     end
   end
 

@@ -13,7 +13,7 @@ class L2NpcInstance < L2Npc
     InstanceType::L2NpcInstance
   end
 
-  def init_status
+  private def init_char_status
     @status = FolkStatus.new(self)
   end
 

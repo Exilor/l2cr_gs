@@ -62,7 +62,7 @@ class L2EtcItem < L2Item
       end
 
       if extractable_items && !extractable_items.empty?
-        @extractable_items = extractable_items.to_slice!
+        @extractable_items = extractable_items.to_slice
       end
     end
   end

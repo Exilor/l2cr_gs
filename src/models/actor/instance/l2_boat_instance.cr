@@ -11,7 +11,7 @@ class L2BoatInstance < L2Vehicle
     InstanceType::L2BoatInstance
   end
 
-  def init_ai
+  private def init_ai
     L2BoatAI.new(self)
   end
 

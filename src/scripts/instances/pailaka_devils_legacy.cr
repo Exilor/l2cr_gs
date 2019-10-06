@@ -1,6 +1,6 @@
 class Scripts::PailakaDevilsLegacy < AbstractInstance
   private class DIWorld < InstanceWorld
-    getter followers_list = [] of L2Attackable
+    getter followers_list = Concurrent::Array(L2Attackable).new
     property! lematan_npc : L2Attackable?
   end
 

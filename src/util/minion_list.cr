@@ -2,12 +2,12 @@ class MinionList
   include Loggable
   extend Loggable
 
-  @minion_references = [] of L2MonsterInstance
-  @reused_minion_references : Array(L2MonsterInstance)?
+  @minion_references = Concurrent::Array(L2MonsterInstance).new
+  @reused_minion_references : IArray(L2MonsterInstance)?
 
   initializer master : L2MonsterInstance
 
-  def spawned_minions : Array(L2MonsterInstance)
+  def spawned_minions : IArray(L2MonsterInstance)
     @minion_references
   end
 
@@ -49,7 +49,7 @@ class MinionList
        !@master.template.parameters.get_minion_list("Privates").empty? &&
        @master.spawn? && @master.spawn.respawn_enabled?
 
-      @reused_minion_references = [] of L2MonsterInstance
+      @reused_minion_references = Concurrent::Array(L2MonsterInstance).new
     end
   end
 

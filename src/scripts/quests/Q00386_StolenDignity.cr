@@ -340,7 +340,7 @@ class Scripts::Q00386_StolenDignity < Quest
     end
     result = selected[0]
     1.upto(selected.size - 1) do |i|
-      result = "#{result} #{selected.unsafe_fetch(i)}"
+      result = "#{result} #{selected[i]}"
     end
     qs.set("selected", result)
   end

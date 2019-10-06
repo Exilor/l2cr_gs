@@ -1,5 +1,6 @@
 require "../network/**"
 require "./skills/buff_info"
+require "../util/linked_list"
 
 class CharEffectList
   include Packets::Outgoing
@@ -11,45 +12,45 @@ class CharEffectList
   @has_buffs_removed_on_damage = false
   @has_debuffs_removed_on_damage = false
   @party_only = false
-  @buffs : Deque(BuffInfo)?
-  @debuffs : Deque(BuffInfo)?
-  @dances : Deque(BuffInfo)?
-  @passives : Deque(BuffInfo)?
-  @toggles : Deque(BuffInfo)?
-  @triggered : Deque(BuffInfo)?
+  @buffs : IList(BuffInfo)?
+  @debuffs : IList(BuffInfo)?
+  @dances : IList(BuffInfo)?
+  @passives : IList(BuffInfo)?
+  @toggles : IList(BuffInfo)?
+  @triggered : IList(BuffInfo)?
   @blocked_buff_slots : EnumSet(AbnormalType)?
   @hidden_buffs = Atomic(Int32).new(0)
   property short_buff : BuffInfo?
 
   initializer owner : L2Character
 
-  def buffs : Deque(BuffInfo)
-    @buffs || sync { @buffs ||= Deque(BuffInfo).new }
+  def buffs : IList(BuffInfo)
+    @buffs || sync { @buffs ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def debuffs : Deque(BuffInfo)
-    @debuffs || sync { @debuffs ||= Deque(BuffInfo).new }
+  def debuffs : IList(BuffInfo)
+    @debuffs || sync { @debuffs ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def dances : Deque(BuffInfo)
-    @dances || sync { @dances ||= Deque(BuffInfo).new }
+  def dances : IList(BuffInfo)
+    @dances || sync { @dances ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def passives : Deque(BuffInfo)
-    @passives || sync { @passives ||= Deque(BuffInfo).new }
+  def passives : IList(BuffInfo)
+    @passives || sync { @passives ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def toggles : Deque(BuffInfo)
-    @toggles || sync { @toggles ||= Deque(BuffInfo).new }
+  def toggles : IList(BuffInfo)
+    @toggles || sync { @toggles ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def triggered : Deque(BuffInfo)
-    @triggered || sync { @triggered ||= Deque(BuffInfo).new }
+  def triggered : IList(BuffInfo)
+    @triggered || sync { @triggered ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  private def stacked_effects : Hash(AbnormalType, BuffInfo)
+  private def stacked_effects : IHash(AbnormalType, BuffInfo)
     @stacked_effects || sync do
-      @stacked_effects ||= Hash(AbnormalType, BuffInfo).new
+      @stacked_effects ||= Concurrent::Map(AbnormalType, BuffInfo).new
     end
   end
 
@@ -59,29 +60,7 @@ class CharEffectList
     end
   end
 
-  # private def each_with_list(& : BuffInfo, Deque(BuffInfo) ->) : Nil
-  #   if buffs = @buffs
-  #     buffs.safe_each { |info| yield info, buffs }
-  #   end
-
-  #   if triggered = @triggered
-  #     triggered.safe_each { |info| yield info, triggered }
-  #   end
-
-  #   if dances = @dances
-  #     dances.safe_each { |info| yield info, dances }
-  #   end
-
-  #   if toggles = @toggles
-  #     toggles.safe_each { |info| yield info, toggles }
-  #   end
-
-  #   if debuffs = @debuffs
-  #     debuffs.safe_each { |info| yield info, debuffs }
-  #   end
-  # end
-
-  private def each_with_list(& : BuffInfo, Deque(BuffInfo) ->) : Nil
+  private def each_with_list(& : BuffInfo, IList(BuffInfo) ->) : Nil
     {@buffs, @triggered, @dances, @toggles, @debuffs}.each do |list|
       list.try { |list| list.safe_each { |info| yield info, list } }
     end
@@ -125,7 +104,7 @@ class CharEffectList
     (@debuffs.try   &.size || 0)
   end
 
-  def get_effect_list(skill : Skill) : Deque(BuffInfo)
+  def get_effect_list(skill : Skill) : IList(BuffInfo)
     return passives  if skill.passive?
     return debuffs   if skill.debuff?
     return triggered if skill.trigger?

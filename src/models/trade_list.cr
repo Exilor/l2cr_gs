@@ -3,7 +3,7 @@ class TradeList
   include Synchronizable
   include Packets::Outgoing
 
-  getter items = Array(TradeItem).new
+  getter items = Concurrent::Array(TradeItem).new
   property title : String = ""
   property! partner : L2PcInstance?
   property? locked = false

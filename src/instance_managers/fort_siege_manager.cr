@@ -5,8 +5,8 @@ module FortSiegeManager
   extend self
   extend Loggable
 
-  private COMMANDER_SPAWN_LIST = Hash(Int32, Array(FortSiegeSpawn)).new
-  private FLAG_LIST = Hash(Int32, Array(CombatFlag)).new
+  private COMMANDER_SPAWN_LIST = Concurrent::Map(Int32, Array(FortSiegeSpawn)).new
+  private FLAG_LIST = Concurrent::Map(Int32, Array(CombatFlag)).new
   private SIEGES = [] of FortSiege
 
   class_getter attacker_max_clans = 500

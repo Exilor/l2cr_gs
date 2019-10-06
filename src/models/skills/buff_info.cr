@@ -6,7 +6,7 @@ class BuffInfo
   include Loggable
   include Synchronizable
 
-  @tasks : Hash(AbstractEffect, EffectTaskInfo)?
+  @tasks : IHash(AbstractEffect, EffectTaskInfo)?
   getter period_start_ticks : Int32
   getter task : Scheduler::PeriodicTask?
   getter effects = [] of AbstractEffect
@@ -28,7 +28,9 @@ class BuffInfo
   end
 
   def add_task(effect : AbstractEffect, task : EffectTaskInfo)
-    tasks = @tasks || sync { @tasks ||= {} of AbstractEffect => EffectTaskInfo }
+    tasks = @tasks || sync do
+      @tasks ||= Concurrent::Map(AbstractEffect, EffectTaskInfo).new
+    end
     tasks[effect] = task
   end
 

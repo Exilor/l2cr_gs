@@ -17,11 +17,11 @@ class L2ControllableAirshipInstance < L2AirshipInstance
     InstanceType::L2ControllableAirShipInstance
   end
 
-  def stat
+  def stat : ControllableAirshipStat
     super.as(ControllableAirshipStat)
   end
 
-  def init_char_stat
+  private def init_char_stat
     @stat = ControllableAirshipStat.new(self)
   end
 

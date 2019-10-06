@@ -7,7 +7,7 @@ module AdminData
 
   private ACCESS_LEVELS = {} of Int32 => AccessLevel
   private ADMIN_COMMAND_ACCESS_RIGHTS = {} of String => AdminCommandAccessRight
-  private GM_LIST = {} of L2PcInstance => Bool # concurrent
+  private GM_LIST = Concurrent::Map(L2PcInstance, Bool).new
 
   @@highest_level = 0
 

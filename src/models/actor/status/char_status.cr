@@ -9,7 +9,7 @@ class CharStatus
   @reg_task : Scheduler::PeriodicTask?
   getter current_hp = 0f64
   getter current_mp = 0f64
-  getter(status_listener) { Set(L2Character).new }
+  getter(status_listener) { Concurrent::Set(L2Character).new }
 
   getter_initializer active_char : L2Character
 

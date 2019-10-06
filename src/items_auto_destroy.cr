@@ -2,7 +2,7 @@ module ItemsAutoDestroy
   extend self
   extend Synchronizable
 
-  private ITEMS = {} of Int32 => L2ItemInstance
+  private ITEMS = Concurrent::Map(Int32, L2ItemInstance).new
 
   def load
     ThreadPoolManager.schedule_general_at_fixed_rate(->remove_items, 5000, 5000)

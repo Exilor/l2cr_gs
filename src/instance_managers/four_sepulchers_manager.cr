@@ -49,9 +49,9 @@ module FourSepulchersManager
     },
   }
 
-  private ARCHON_SPAWNED        = Hash(Int32, Bool).new
-  private HALL_IN_USE           = Hash(Int32, Bool).new
-  private CHALLENGERS           = Hash(Int32, L2PcInstance).new
+  private ARCHON_SPAWNED        = Concurrent::Map(Int32, Bool).new
+  private HALL_IN_USE           = Concurrent::Map(Int32, Bool).new
+  private CHALLENGERS           = Concurrent::Map(Int32, L2PcInstance).new
   private START_HALL_SPAWNS     = {} of Int32 => Slice(Int32)
   private HALL_GATEKEEPERS      = {} of Int32 => Int32
   private KEY_BOX_NPC           = {} of Int32 => Int32
@@ -69,10 +69,10 @@ module FourSepulchersManager
 
   private PHYSICAL_SPAWNS       = [] of L2Spawn
   private MAGICAL_SPAWNS        = [] of L2Spawn
-  private MANAGERS              = Array(L2Spawn).new
+  private MANAGERS              = Concurrent::Array(L2Spawn).new
   private DUKE_FINAL_SPAWNS     = [] of L2Spawn
   private EMPERORS_GRAVE_SPAWNS = [] of L2Spawn
-  private ALL_MOBS              = Array(L2Npc).new
+  private ALL_MOBS              = Concurrent::Array(L2Npc).new
 
   class_getter cycle_min = 55i8
 

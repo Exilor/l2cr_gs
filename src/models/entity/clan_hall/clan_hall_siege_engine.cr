@@ -82,8 +82,8 @@ abstract class ClanHallSiegeEngine < Quest
     end
   end
 
-  def get_flag(clan : L2Clan) : Array(L2Npc)?
-    if temp = get_attacker_clan(clan)
+  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
+    if temp = get_attacker_clan?(clan)
       temp.flag # nilable?
     end
   end
@@ -104,7 +104,7 @@ abstract class ClanHallSiegeEngine < Quest
     get_attacker_clan(clan.id)
   end
 
-  def attacker_clans? : Array(L2SiegeClan)?
+  def attacker_clans? : IArray(L2SiegeClan)?
     @attackers.values
   end
 
@@ -132,7 +132,7 @@ abstract class ClanHallSiegeEngine < Quest
     # return nil
   end
 
-  def defender_clans? : Array(L2SiegeClan)?
+  def defender_clans? : IArray(L2SiegeClan)?
     # return nil
   end
 

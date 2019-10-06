@@ -3,8 +3,8 @@ module CharNameTable
   extend Synchronizable
   extend Loggable
 
-  private CHARS = {} of Int32 => String
-  private ACCESS_LEVELS = {} of Int32 => Int32
+  private CHARS = Concurrent::Map(Int32, String).new
+  private ACCESS_LEVELS = Concurrent::Map(Int32, Int32).new
 
   def load
     unless Config.cache_char_names

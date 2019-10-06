@@ -4,7 +4,7 @@ module SpawnTable
 
   private SELECT_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM spawnlist"
   private SELECT_CUSTOM_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM custom_spawnlist"
-  private SPAWN_TABLE = Hash(Int32, Set(L2Spawn)).new
+  private SPAWN_TABLE = Concurrent::Map(Int32, ISet(L2Spawn)).new
 
   @@xml_spawn_count = 0
 
@@ -65,7 +65,7 @@ module SpawnTable
   end
 
   private def add_spawn(sp : L2Spawn)
-    (SPAWN_TABLE[sp.id] ||= Set(L2Spawn).new) << sp
+    (SPAWN_TABLE[sp.id] ||= Concurrent::Set(L2Spawn).new) << sp
   end
 
   private def add_spawn(data : StatsSet) : Int32
@@ -125,8 +125,8 @@ module SpawnTable
     end
   end
 
-  def get_spawns(npc_id : Int32) : Enumerable(L2Spawn)
-    SPAWN_TABLE.fetch(npc_id, Slice(L2Spawn).empty)
+  def get_spawns(npc_id : Int32) : ISet(L2Spawn)
+    SPAWN_TABLE.fetch(npc_id, ISet.empty(L2Spawn))
   end
 
   def get_spawn_count(npc_id : Int32) : Int32

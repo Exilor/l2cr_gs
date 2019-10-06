@@ -8,7 +8,7 @@ class L2Vehicle < L2Character
   @engine : BoatEngine?
   @current_path : Array(VehiclePathPoint)? | Slice(VehiclePathPoint)?
   @run_state = 0
-  getter passengers = Array(L2PcInstance).new
+  getter passengers = Concurrent::Array(L2PcInstance).new
   setter oust_loc : Location?
   property dock_id : Int32 = 0
 
@@ -29,11 +29,11 @@ class L2Vehicle < L2Character
     false
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = VehicleKnownList.new(self)
   end
 
-  def init_stat
+  private def init_char_stat
     @stat = VehicleStat.new(self)
   end
 

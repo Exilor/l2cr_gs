@@ -34,19 +34,19 @@ abstract class L2Playable < L2Character
     super.as(PlayableStatus)
   end
 
-  def init_ai : L2PlayableAI
+  private def init_ai : L2CharacterAI
     L2PlayableAI.new(self)
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = PlayableKnownList.new(self)
   end
 
-  def init_stat
+  private def init_char_stat
     @stat = PlayableStat.new(self)
   end
 
-  def init_status
+  private def init_char_status
     @status = PlayableStatus.new(self)
   end
 

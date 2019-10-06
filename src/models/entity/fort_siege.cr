@@ -14,8 +14,8 @@ class FortSiege
   @siege_end : Scheduler::DelayedTask?
   @siege_restore : Scheduler::DelayedTask?
   @siege_start_task : Scheduler::DelayedTask?
-  @attacker_clans = [] of L2SiegeClan
-  getter commanders = [] of L2Spawn
+  @attacker_clans = Concurrent::Array(L2SiegeClan).new
+  getter commanders = Concurrent::Array(L2Spawn).new
   getter fort
   getter? in_progress = false
 
@@ -634,7 +634,7 @@ class FortSiege
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans? : Array(L2SiegeClan)?
+  def attacker_clans? : IArray(L2SiegeClan)?
     @attacker_clans
   end
 
@@ -642,7 +642,7 @@ class FortSiege
     fort.siege_date
   end
 
-  def get_flag?(clan : L2Clan?) : Array(L2Npc)?
+  def get_flag?(clan : L2Clan?) : IArray(L2Npc)?
     if clan
       if sc = get_attacker_clan?(clan)
         sc.flag
@@ -668,7 +668,7 @@ class FortSiege
     # return nil
   end
 
-  def defender_clans? : Array(L2SiegeClan)?
+  def defender_clans? : IArray(L2SiegeClan)?
     # return nil
   end
 

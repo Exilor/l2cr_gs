@@ -4,14 +4,14 @@ class L2CommandChannel < AbstractPlayerGroup
   @party : L2Party
   getter leader : L2PcInstance
   getter level : Int32
-  getter parties : Array(L2Party)
+  getter parties : IArray(L2Party)
 
   def_equals leader_l2id
 
   def initialize(leader : L2PcInstance)
     @leader = leader
     @party = leader.party
-    @parties = [@party]
+    @parties = Concurrent::Array { @party }
     @level = @party.level
     @party.command_channel = self
     @party.broadcast_message(SystemMessageId::COMMAND_CHANNEL_FORMED)

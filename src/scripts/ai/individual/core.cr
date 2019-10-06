@@ -14,7 +14,7 @@ class Scripts::Core < AbstractNpcAI
   private ALIVE = 0 # Core is spawned.
   private DEAD = 1 # Core has been killed.
 
-  private MINIONS = [] of L2Attackable
+  private MINIONS = Concurrent::Array(L2Attackable).new
 
   @first_attacked = false
 

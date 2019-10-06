@@ -9,7 +9,7 @@ module AnnouncementsTable
   private alias CreatureSay = Packets::Outgoing::CreatureSay
   private alias Say2 = Packets::Incoming::Say2
 
-  private DATA = Hash(Int32, IAnnouncement).new
+  private DATA = Concurrent::Map(Int32, IAnnouncement).new
 
   def load
     DATA.clear

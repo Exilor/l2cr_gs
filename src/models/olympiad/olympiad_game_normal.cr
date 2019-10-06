@@ -17,7 +17,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
     @player_two.player.olympiad_game_id = id
   end
 
-  def self.create_list_of_participants(list : Array(Int32))
+  def self.create_list_of_participants(list : IArray(Int32))
     if list.nil? || list.size < 2
       return
     end

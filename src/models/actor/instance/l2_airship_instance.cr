@@ -10,7 +10,7 @@ class L2AirshipInstance < L2Vehicle
     InstanceType::L2AirShipInstance
   end
 
-  def init_ai
+  private def init_ai : L2CharacterAI
     L2AirshipAI.new(self)
   end
 

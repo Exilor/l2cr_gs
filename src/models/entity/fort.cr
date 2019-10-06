@@ -20,9 +20,9 @@ class Fort < AbstractResidence
   @functions = {} of Int32 => FortFunction
   @fort_updater = Slice(Scheduler::Task?).new(2, nil.as(Scheduler::Task?))
   @suspicious_merchant_spawned = false
-  @siege_npcs = [] of L2Spawn
-  @npc_commanders = [] of L2Spawn
-  @special_envoys = [] of L2Spawn
+  @siege_npcs = Concurrent::Array(L2Spawn).new
+  @npc_commanders = Concurrent::Array(L2Spawn).new
+  @special_envoys = Concurrent::Array(L2Spawn).new
   @envoy_castles = Hash(Int32, Int32).new(initial_capacity: 2)
   @available_castles = Set(Int32).new(1)
   getter doors = [] of L2DoorInstance

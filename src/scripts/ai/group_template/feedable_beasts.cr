@@ -80,7 +80,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     NpcString::ANIMALS_NEED_LOVE_TOO
   }
 
-  private FEED_INFO = {} of Int32 => Int32
+  private FEED_INFO = Concurrent::Map(Int32, Int32).new
   private GROWTH_CAPABLE_MONSTERS = {} of Int32 => GrowthCapableMob
 
   # all mobs that grow by eating

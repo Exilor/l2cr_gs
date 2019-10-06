@@ -1,7 +1,7 @@
 module WarehouseCache
   extend self
 
-  private CACHE = Hash(L2PcInstance, Int64).new
+  private CACHE = Concurrent::Map(L2PcInstance, Int64).new
   @@CACHE_TIME = 0
 
   def load

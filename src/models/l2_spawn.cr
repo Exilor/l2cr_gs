@@ -7,15 +7,15 @@ class L2Spawn
   include Positionable
   include Loggable
 
-  private SPAWN_LISTENERS = [] of SpawnListener
+  private SPAWN_LISTENERS = Concurrent::Array(SpawnListener).new
 
   @maximum_count = 0
   @current_count = 0
   @do_respawn = false
-  @last_spawn_points : Hash(Int32, Location)?
+  @last_spawn_points : IHash(Int32, Location)?
   @constructor : L2Npc.class = L2Npc
   getter template
-  getter spawned_npcs = [] of L2Npc
+  getter spawned_npcs = Concurrent::LinkedList(L2Npc).new
   getter spawn_territory : NpcSpawnTerritory?
   property name : String?
   property location : Location = Location.new(0, 0, 0, 0, 0)
@@ -320,7 +320,7 @@ class L2Spawn
 
   def spawn_territory=(territory : NpcSpawnTerritory?)
     @spawn_territory = territory
-    @last_spawn_points = Hash(Int32, Location).new
+    @last_spawn_points = Concurrent::Map(Int32, Location).new
   end
 
   def self.add_spawn_listener(listener : SpawnListener)

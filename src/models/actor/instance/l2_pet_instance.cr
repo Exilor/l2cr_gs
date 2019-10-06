@@ -50,7 +50,7 @@ class L2PetInstance < L2Summon
     super.as(L2NpcTemplate)
   end
 
-  def init_stat
+  private def init_char_stat
     @stat = PetStat.new(self)
   end
 

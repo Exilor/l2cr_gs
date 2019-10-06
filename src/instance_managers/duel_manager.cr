@@ -5,7 +5,7 @@ module DuelManager
   extend Loggable
   include Packets::Outgoing
 
-  private DUELS = {} of Int32 => Duel
+  private DUELS = Concurrent::Map(Int32, Duel).new
   @@current_duel_id = Atomic(Int32).new(0)
 
   def get_duel(duel_id : Int) : Duel?

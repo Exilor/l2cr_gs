@@ -95,7 +95,7 @@ class L2ItemInstance < L2Object
   def custom_type_2=(@type_2 : Int32)
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = NullKnownList::INSTANCE
   end
 

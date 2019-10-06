@@ -1,7 +1,7 @@
 module AttackStances
   extend self
 
-  TASKS = Hash(L2Character, Int64).new
+  private TASKS = Concurrent::Map(L2Character, Int64).new
 
   def load
     ThreadPoolManager.schedule_ai_at_fixed_rate(self, 0, 1000)

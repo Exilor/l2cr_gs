@@ -102,7 +102,7 @@ class TarBeetleSpawn
     include Loggable
 
     @zones = [] of Zone
-    @spawn = [] of L2Npc
+    @spawn = Concurrent::Array(L2Npc).new
 
     initializer max_npc_count : Int32, index : Int32
 

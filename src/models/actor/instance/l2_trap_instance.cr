@@ -184,7 +184,7 @@ class L2TrapInstance < L2Npc
     @skill.not_nil!.skill
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = TrapKnownList.new(self)
   end
 

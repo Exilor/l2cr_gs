@@ -52,7 +52,7 @@ class Packets::Incoming::Logout < GameClientPacket
 
     pc.remove_from_boss_zone
 
-    # log record
+    # TODO: log record
 
     pc.logout
   end

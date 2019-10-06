@@ -11,7 +11,7 @@ class Duel
   private DUEL_PREPARE_TIME = 5
 
   @countdown = 0
-  @player_conditions = Hash(Int32, PlayerCondition).new
+  @player_conditions = Concurrent::Map(Int32, PlayerCondition).new
   @surrender_request = 0
   @duel_end_time : Int64
   getter duel_instance_id = 0
@@ -21,8 +21,12 @@ class Duel
 
   def initialize(@leader_a : L2PcInstance, @leader_b : L2PcInstance, @party_duel : Bool, @duel_id : Int32)
     if party_duel
-      @team_a = leader_a.party.members.dup
-      @team_b = leader_b.party.members.dup
+      # @team_a = leader_a.party.members.to_a.dup
+      # @team_b = leader_b.party.members.to_a.dup
+      @team_a = [] of L2PcInstance
+      leader_a.party.members.each { |m| @team_a << m }
+      @team_b = [] of L2PcInstance
+      leader_b.party.members.each { |m| @team_b << m }
     else
       @team_a = [@leader_a]
       @team_b = [@leader_b]

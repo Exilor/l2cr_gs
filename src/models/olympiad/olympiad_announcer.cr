@@ -6,7 +6,7 @@ class OlympiadAnnouncer
   private OLY_MANAGER = 31688
 
   @current_stadium = 0
-  @managers : Set(L2Spawn) | Slice(L2Spawn)
+  @managers : ISet(L2Spawn)
 
   def initialize
     @managers = SpawnTable.get_spawns(OLY_MANAGER)

@@ -5,7 +5,7 @@ class Packets::Outgoing::WareHouseWithdrawalList < Packets::Outgoing::AbstractIt
   FREIGHT = 1
 
   @adena = 0i64
-  @items : Array(L2ItemInstance)?
+  @items : IArray(L2ItemInstance)?
 
   def initialize(pc : L2PcInstance, @type : Int32)
     unless wh = pc.active_warehouse

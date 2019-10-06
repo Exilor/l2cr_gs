@@ -5,7 +5,7 @@ class Petition
   include Packets::Outgoing
 
   getter submit_time, content, id, type
-  getter log_messages = [] of CreatureSay # concurrent
+  getter log_messages = Concurrent::Array(CreatureSay).new
   getter! petitioner : L2PcInstance
   getter! responder : L2PcInstance
   property state : PetitionState = PetitionState::PENDING

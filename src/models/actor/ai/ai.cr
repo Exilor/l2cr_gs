@@ -87,7 +87,7 @@ abstract class AI
   end
 
   def set_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
-    unless intention.follow? || intention.attack?
+    if !intention.follow? && !intention.attack?
       stop_follow
     end
 
@@ -282,8 +282,8 @@ abstract class AI
   abstract def on_event_afraid(effector, start : Bool)
 
   private def client_action_failed
-    if @actor.player?
-      @actor.action_failed
+    if pc = @actor.as?(L2PcInstance)
+      pc.action_failed
     end
   end
 

@@ -3,7 +3,7 @@ module ItemsOnGroundManager
   extend Synchronizable
   extend Loggable
 
-  private ITEMS = Array(L2ItemInstance).new
+  private ITEMS = Concurrent::Array(L2ItemInstance).new
 
   def load
     time = Config.save_dropped_item_interval

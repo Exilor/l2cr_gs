@@ -1,5 +1,5 @@
 class L2SiegeClan
-  getter flag = [] of L2Npc
+  getter flag = Concurrent::Array(L2Npc).new
   setter type : SiegeClanType
 
   getter_initializer clan_id : Int32, type : SiegeClanType

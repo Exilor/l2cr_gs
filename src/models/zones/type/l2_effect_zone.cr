@@ -1,5 +1,5 @@
 class L2EffectZone < L2ZoneType
-  @skills = Hash(Int32, Int32).new
+  @skills = Concurrent::Map(Int32, Int32).new
   @initial_delay = 0
   @reuse = 30_000
   @bypass_conditions = false

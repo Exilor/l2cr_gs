@@ -8,8 +8,8 @@ module LoginServerClient
   private record WaitingClient, account : String, client : GameClient,
     session_key : SessionKey
 
-  private WAITING = [] of WaitingClient
-  private ACCOUNTS = {} of String => GameClient
+  private WAITING = Concurrent::Array(WaitingClient).new
+  private ACCOUNTS = Concurrent::Map(String, GameClient).new
 
   private IN_BUFFER = ByteBuffer.new
   private OUT_BUFFER = ByteBuffer.new
@@ -136,22 +136,22 @@ module LoginServerClient
     error e
   end
 
-  def waiting_clients : Array(WaitingClient)
+  def waiting_clients : IArray(WaitingClient)
     WAITING
   end
 
-  def accounts : Hash(String, GameClient)
+  def accounts : IHash(String, GameClient)
     ACCOUNTS
   end
 
   def add_game_server_login(account : String, client : GameClient) : Bool
     if ACCOUNTS.has_key?(account)
       error { "Account #{account.inspect} already present in ACCOUNTS." }
-      false
-    else
-      ACCOUNTS[account] = client
-      true
+      return false
     end
+
+    ACCOUNTS[account] = client
+    true
   end
 
   def add_waiting_client_and_send_request(account : String, client : GameClient, key : SessionKey)
@@ -162,8 +162,13 @@ module LoginServerClient
   def send_logout(account : String?)
     if account
       debug { "Sending PlayerLogout for #{account.inspect} to LoginServer." }
-      send_packet(PlayerLogout.new(account))
-      ACCOUNTS.delete(account)
+      begin
+        send_packet(PlayerLogout.new(account))
+      rescue e
+        error e
+      ensure
+        ACCOUNTS.delete(account)
+      end
     end
   end
 

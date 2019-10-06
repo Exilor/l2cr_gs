@@ -4,7 +4,7 @@ abstract class ItemContainer
   include Synchronizable
   include Loggable
 
-  getter items = Array(L2ItemInstance).new
+  getter items = Concurrent::Array(L2ItemInstance).new
 
   delegate size, to: @items
 

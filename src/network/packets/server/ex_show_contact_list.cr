@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExShowContactList < GameServerPacket
-  @contacts : Array(String)
+  @contacts : IArray(String)
 
   def initialize(pc : L2PcInstance)
     @contacts = pc.contact_list.contacts

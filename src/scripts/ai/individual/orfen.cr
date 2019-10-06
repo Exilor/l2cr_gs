@@ -19,7 +19,7 @@ class Scripts::Orfen < AbstractNpcAI
   # private RIBA = 29017
   private RIBA_IREN = 29018
 
-  private MINIONS = [] of L2Attackable
+  private MINIONS = Concurrent::Array(L2Attackable).new
   private ALIVE = 0
   private DEAD = 1
 

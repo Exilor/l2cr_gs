@@ -7,7 +7,7 @@ class Packets::Incoming::RequestMakeMacro < GameClientPacket
   @acronym = ""
   @icon = 0
   @count = 0
-  @macro = uninitialized Macro
+  @macro : Macro?
   @commands_length = 0
 
   private def read_impl
@@ -37,6 +37,7 @@ class Packets::Incoming::RequestMakeMacro < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
+    return unless m = @macro
 
     if @commands_length > UInt8::MAX
       pc.send_packet(SystemMessageId::INVALID_MACRO)
@@ -48,16 +49,16 @@ class Packets::Incoming::RequestMakeMacro < GameClientPacket
       return
     end
 
-    if @macro.name.empty?
+    if m.name.empty?
       pc.send_packet(SystemMessageId::ENTER_THE_MACRO_NAME)
       return
     end
 
-    if @macro.description.size > 32
+    if m.description.size > 32
       pc.send_packet(SystemMessageId::MACRO_DESCRIPTION_MAX_32_CHARS)
       return
     end
 
-    pc.register_macro(@macro)
+    pc.register_macro(m)
   end
 end

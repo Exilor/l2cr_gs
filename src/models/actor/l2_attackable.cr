@@ -11,10 +11,10 @@ require "./tasks/attackable/*"
 class L2Attackable < L2Npc
   @harvest_item = AtomicReference(ItemHolder?).new(nil.as(ItemHolder?))
   @sweep_items = Atomic(Array(ItemHolder)?).new(nil.as(Array(ItemHolder)?))
-  getter aggro_list = Hash(L2Character, AggroInfo).new
+  getter aggro_list = Concurrent::Map(L2Character, AggroInfo).new
   getter overhit_attacker : L2Character?
   getter overhit_damage = 0.0
-  getter absorbers_list = Hash(Int32, AbsorberInfo).new
+  getter absorbers_list = Concurrent::Map(Int32, AbsorberInfo).new
   getter? seeded = false
   getter? raid_minion = false
   getter? absorbed = false
@@ -42,11 +42,11 @@ class L2Attackable < L2Npc
     InstanceType::L2Attackable
   end
 
-  def init_ai : L2AttackableAI
+  private def init_ai : L2CharacterAI
     L2AttackableAI.new(self)
   end
 
-  def init_status
+  private def init_char_status
     @status = AttackableStatus.new(self)
   end
 
@@ -54,7 +54,7 @@ class L2Attackable < L2Npc
     super.as(AttackableStatus)
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = AttackableKnownList.new(self)
   end
 

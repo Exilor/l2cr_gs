@@ -17,7 +17,7 @@ class OlympiadGameClassed < OlympiadGameNormal
     COMP_DONE_WEEK_CLASSED
   end
 
-  def self.create_game(id : Int32, class_list : Array(Array(Int32))) : self?
+  def self.create_game(id : Int32, class_list : IArray(IArray(Int32))) : self?
     until class_list.empty?
       list = class_list.sample
       if list.size < 2

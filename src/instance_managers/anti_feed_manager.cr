@@ -7,8 +7,8 @@ module AntiFeedManager
   TVT_ID = 2
   L2EVENT_ID = 3
 
-  private LAST_DEATH_TIMES = Hash(Int32, Int64).new
-  private EVENT_IPS = Hash(Int32, Hash(UInt64, Int32)).new
+  private LAST_DEATH_TIMES = Concurrent::Map(Int32, Int64).new
+  private EVENT_IPS = Concurrent::Map(Int32, IHash(UInt64, Int32)).new
 
   def set_last_death_time(l2id : Int32)
     LAST_DEATH_TIMES[l2id] = Time.ms
@@ -57,7 +57,7 @@ module AntiFeedManager
   end
 
   def register_event(event_id : Int32)
-    EVENT_IPS[event_id] ||= {} of UInt64 => Int32
+    EVENT_IPS[event_id] ||= Concurrent::Map(UInt64, Int32).new
   end
 
   def try_add_player(event_id : Int32, pc : L2PcInstance, max : Int32) : Bool

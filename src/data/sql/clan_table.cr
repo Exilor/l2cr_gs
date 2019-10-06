@@ -7,7 +7,7 @@ module ClanTable
   extend Loggable
   include Packets::Outgoing
 
-  private CLANS = Hash(Int32, L2Clan).new
+  private CLANS = Concurrent::Map(Int32, L2Clan).new
 
   def load
     if Config.enable_community_board

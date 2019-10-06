@@ -9,7 +9,7 @@ module GamePacketHandler
   extend Loggable
   include Packets::Incoming
 
-  def self.handle(buffer : ByteBuffer, client : GameClient) : MMO::IncomingPacket(GameClient)?
+  def handle(buffer : ByteBuffer, client : GameClient) : MMO::IncomingPacket(GameClient)?
     if client.drop_packet
       debug { "Packet dropped (#{client})." }
       return
@@ -449,11 +449,11 @@ module GamePacketHandler
     warn { "Unknown packet 0x#{op1.to_s(16)}:0x#{op2.to_s(16)} on state #{state} of client #{client}." }
   end
 
-  def self.execute(gcp : MMO::IncomingPacket(GameClient))
+  def execute(gcp : MMO::IncomingPacket(GameClient))
     gcp.client.execute(gcp)
   end
 
-  def self.create(con : MMO::Connection(GameClient)) : GameClient
+  def create(con : MMO::Connection(GameClient)) : GameClient
     GameClient.new(con)
   end
 end

@@ -19,7 +19,7 @@ class Auction
   getter seller_name = ""
   getter current_bid = 0i64
   getter starting_bid = 0i64
-  getter bidders = Hash(Int32, Bidder).new
+  getter bidders = Concurrent::Map(Int32, Bidder).new
 
   def initialize(@id : Int32)
     load

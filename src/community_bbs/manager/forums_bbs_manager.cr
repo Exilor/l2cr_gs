@@ -5,7 +5,7 @@ module ForumsBBSManager
   extend BaseBBSManager
   extend Loggable
 
-  private TABLE = [] of Forum
+  private TABLE = Concurrent::Array(Forum).new
 
   @@last_id = 1
 

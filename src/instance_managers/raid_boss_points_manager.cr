@@ -2,7 +2,7 @@ module RaidBossPointsManager
   extend self
   extend Loggable
 
-  private LIST = Hash(Int32, Hash(Int32, Int32)).new
+  private LIST = Concurrent::Map(Int32, Hash(Int32, Int32)).new
 
   def load
     sql = "SELECT `charId`,`boss_id`,`points` FROM `character_raid_points`"

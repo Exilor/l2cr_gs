@@ -473,7 +473,7 @@ abstract class L2Object < ListenersContainer
 
   def add_script(script : T) : T forall T
     temp = @scripts || sync do
-      @scripts ||= Hash(String, ScriptType).new
+      @scripts ||= Concurrent::Map(String, ScriptType).new
     end
     temp[script.class.name] = script
   end

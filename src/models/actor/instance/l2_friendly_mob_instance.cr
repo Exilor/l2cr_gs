@@ -5,7 +5,7 @@ class L2FriendlyMobInstance < L2Attackable
     InstanceType::L2FriendlyMobInstance
   end
 
-  def init_known_list
+  private def init_known_list
     @known_list = FriendlyMobKnownList.new(self)
   end
 

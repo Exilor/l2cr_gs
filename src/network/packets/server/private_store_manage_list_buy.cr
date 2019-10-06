@@ -2,7 +2,7 @@ class Packets::Outgoing::PrivateStoreManageListBuy < Packets::Outgoing::Abstract
   @l2id : Int32
   @adena : Int64
   @item_list : Array(L2ItemInstance)
-  @buy_list : Array(TradeItem)
+  @buy_list : IArray(TradeItem)
 
   def initialize(pc : L2PcInstance)
     @l2id = pc.l2id

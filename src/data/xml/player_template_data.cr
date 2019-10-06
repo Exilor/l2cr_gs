@@ -5,7 +5,7 @@ module PlayerTemplateData
   extend XMLReader
 
   private TEMPLATES = EnumMap(ClassId, L2PcTemplate).new
-  @@new_character_templates : Slice(L2PcTemplate)?
+  @@new_character_templates : Array(L2PcTemplate)?
 
   def load
     TEMPLATES.clear
@@ -94,8 +94,8 @@ module PlayerTemplateData
     TEMPLATES.fetch(id) { raise "No player template for ClassId #{id}" }
   end
 
-  def new_character_templates : Slice(L2PcTemplate)
-    @@new_character_templates ||= Slice[
+  def new_character_templates : Array(L2PcTemplate)
+    @@new_character_templates ||= [
       TEMPLATES[ClassId::FIGHTER],
       TEMPLATES[ClassId::MAGE],
       TEMPLATES[ClassId::ELVEN_FIGHTER],

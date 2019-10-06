@@ -9,10 +9,10 @@ module InstanceManager
   private RESTORE_INSTANCE_TIMES = "SELECT instanceId,time FROM character_instance_time WHERE charId=?"
   private DELETE_INSTANCE_TIME = "DELETE FROM character_instance_time WHERE charId=? AND instanceId=?"
 
-  private INSTANCES = Hash(Int32, Instance).new
-  private INSTANCE_WORLDS = Hash(Int32, InstanceWorld).new
+  private INSTANCES = Concurrent::Map(Int32, Instance).new
+  private INSTANCE_WORLDS = Concurrent::Map(Int32, InstanceWorld).new
   private INSTANCE_ID_NAMES = {} of Int32 => String
-  private PLAYER_INSTANCE_TIMES = Hash(Int32, Hash(Int32, Int64)).new
+  private PLAYER_INSTANCE_TIMES = Concurrent::Map(Int32, Hash(Int32, Int64)).new
 
   @@dynamic = 300_000
 
