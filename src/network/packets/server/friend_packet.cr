@@ -6,7 +6,7 @@ class Packets::Outgoing::FriendPacket < GameServerPacket
     @online = !!L2World.get_player(obj_id)
   end
 
-  def write_impl
+  private def write_impl
     c 0x76
 
     d @action ? 1 : 3

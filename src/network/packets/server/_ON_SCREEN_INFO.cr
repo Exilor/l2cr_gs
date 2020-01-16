@@ -15,7 +15,7 @@ abstract class Packets::Outgoing::OnScreenInfo < GameServerPacket
   abstract def text
   abstract def pos
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x39
 
@@ -49,7 +49,9 @@ class Packets::Outgoing::PcInfo < Packets::Outgoing::OnScreenInfo
       io.puts "At: #{pc.x} #{pc.y} #{pc.z}"
       io.puts "To: #{pc.x_destination} #{pc.y_destination} #{pc.z_destination}"
       io.puts "Heading: #{pc.heading}"
-      io.puts "Instance: #{pc.instance_id}"
+      if pc.instance_id != 0
+        io.puts "Instance: #{pc.instance_id}"
+      end
       io.puts "Regenerating: #{!!pc.status.@reg_task}"
       io.puts "Attacking: #{pc.attacking_now?}"
       # io.puts "Attack end time: #{pc.@attack_end_time}"
@@ -59,7 +61,7 @@ class Packets::Outgoing::PcInfo < Packets::Outgoing::OnScreenInfo
       io.puts "HP reg: #{Formulas.hp_regen(pc).round(2)}"
       io.puts "MP reg: #{Formulas.mp_regen(pc).round(2)}"
 
-      # if wpn = pc.active_weapon_instance?
+      # if wpn = pc.active_weapon_instance
       #   mask = wpn.@shots_mask
       #   io.puts "Shots mask: #{mask}"
       # end
@@ -87,7 +89,7 @@ class Packets::Outgoing::PcInfo < Packets::Outgoing::OnScreenInfo
         end
       end
 
-      if weapon = pc.active_weapon_item?
+      if weapon = pc.active_weapon_item
         weapon_delay = pc.calculate_reuse_time(weapon)
         if weapon_delay > 0
           io.puts "Weapon delay: #{weapon_delay}"
@@ -124,7 +126,7 @@ class Packets::Outgoing::PcInfo < Packets::Outgoing::OnScreenInfo
         io.puts "Heal: #{inc_heal.round(2)}%"
       end
 
-      if shld = pc.secondary_weapon_instance?
+      if shld = pc.secondary_weapon_instance
         if shld.template.type_1 == ItemType1::SHIELD_ARMOR
           shld = pc.calc_stat(Stats::SHIELD_DEFENCE)
           if shld > 1
@@ -138,7 +140,7 @@ class Packets::Outgoing::PcInfo < Packets::Outgoing::OnScreenInfo
         end
       end
 
-      if wep = pc.active_weapon_instance?
+      if wep = pc.active_weapon_instance
         if wep.item_type == WeaponType::POLE
           if pc.affected?(EffectFlag::SINGLE_TARGET)
             targets = 1
@@ -280,7 +282,7 @@ class Packets::Outgoing::ServerInfo < Packets::Outgoing::OnScreenInfo
 
   def initialize
     @text = String.build do |io|
-      io.puts "IO Buffers: #{GameServer.listener.@writer.@buffers.size}"
+      # io.puts "IO Buffers: #{GameServer.listener.@writer.@buffers.size}"
       io.puts "ID ranges: #{IdFactory::IDS.ranges.size}"
     end
   end

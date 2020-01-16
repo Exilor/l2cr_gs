@@ -28,7 +28,7 @@ module BypassHandler::Festival
         return true
       end
 
-      unless party = pc.party?
+      unless party = pc.party
         npc.show_chat_window(pc, 2, "b", false)
         return true
       end
@@ -66,7 +66,7 @@ module BypassHandler::Festival
         return false
       end
 
-      SevenSignsFestival.set_participants(npc.festival_oracle, npc.festival_type, pc.party?)
+      SevenSignsFestival.set_participants(npc.festival_oracle, npc.festival_type, pc.party)
       SevenSignsFestival.add_accumulated_bonus(npc.festival_type, stone_type, stone_count)
 
       npc.show_chat_window(pc, 2, "e", false)
@@ -141,7 +141,7 @@ module BypassHandler::Festival
           io << "Dawn: "
           calculate_date(dawn_data.get_string("date"), io)
           io << ". Score"
-          dawn_score.to_s(io)
+          io << dawn_score
           io << "<br>"
           io << dawn_data.get_string("members")
           io << "<br>"
@@ -151,9 +151,9 @@ module BypassHandler::Festival
 
         if dusk_score > 0
           io << "Dusk: "
-          io << calculate_date(dusk_data.get_string("date"), io)
+          calculate_date(dusk_data.get_string("date"), io)
           io << ". Score"
-          dusk_score.to_s(io)
+          io << dusk_score
           io << "<br>"
           io << dusk_data.get_string("members")
           io << "<br>"
@@ -171,7 +171,7 @@ module BypassHandler::Festival
           io << "Consecutive top scores: "
           calculate_date(overall_data.get_string("date"), io)
           io << ". Score "
-          overall_score.to_s(io)
+          io << overall_score
           io << "<br>Affilated side: "
           io << cabal_str
           io << "<br>"
@@ -182,7 +182,7 @@ module BypassHandler::Festival
         end
 
         io << "<a action=\"bypass -h npc_"
-        npc.l2id.to_s(io)
+        io << npc.l2id
         io << "_Chat 0\">Go back.</a></body></html>"
       end
 
@@ -190,7 +190,7 @@ module BypassHandler::Festival
       html.html = str
       pc.send_packet(html)
     when 8 # Increase challenge
-      unless party = pc.party?
+      unless party = pc.party
         return true
       end
 
@@ -209,7 +209,7 @@ module BypassHandler::Festival
         npc.show_chat_window(pc, 8, "c", false)
       end
     when 9 # Leave
-      unless party = pc.party?
+      unless party = pc.party
         return true
       end
 
@@ -243,11 +243,11 @@ module BypassHandler::Festival
     false
   end
 
-  private def calculate_date(ms_from_epoch, io) : String
-    debug "TODO: calculate_date (ms_from_epoch: #{ms_from_epoch.inspect})."
-    "TODO: Festival#calculate_date"
-    # time = Time.epoch_ms(ms_from_epoch)
-    # time.to_s(io)
+  private def calculate_date(ms_from_epoch, io)
+    ms = ms_from_epoch.to_i64
+    cal = Calendar.new
+    cal.ms = ms
+    io << cal.year << '/' << cal.month << '/' << cal.day
   end
 
   def commands

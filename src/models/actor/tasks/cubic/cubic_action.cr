@@ -79,15 +79,15 @@ class CubicAction
           skill.activate_skill(@cubic, targets)
         end
 
-        if skill.has_effect_type?(L2EffectType::MAGICAL_ATTACK)
+        if skill.has_effect_type?(EffectType::MAGICAL_ATTACK)
           @cubic.use_cubic_m_dam(skill, targets)
-        elsif skill.has_effect_type?(L2EffectType::HP_DRAIN)
+        elsif skill.has_effect_type?(EffectType::HP_DRAIN)
           @cubic.use_cubic_drain(skill, targets)
-        elsif skill.has_effect_type?(L2EffectType::STUN, L2EffectType::ROOT, L2EffectType::PARALYZE)
+        elsif skill.has_effect_type?(EffectType::STUN, EffectType::ROOT, EffectType::PARALYZE)
           @cubic.use_cubic_disabler(skill, targets)
-        elsif skill.has_effect_type?(L2EffectType::DMG_OVER_TIME)
+        elsif skill.has_effect_type?(EffectType::DMG_OVER_TIME)
           @cubic.use_cubic_continuous(skill, targets)
-        elsif skill.has_effect_type?(L2EffectType::AGGRESSION)
+        elsif skill.has_effect_type?(EffectType::AGGRESSION)
           @cubic.use_cubic_disabler(skill, targets)
         end
 

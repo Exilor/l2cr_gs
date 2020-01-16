@@ -40,7 +40,7 @@ abstract class Packets::Outgoing::AbstractInventoryUpdate < Packets::Outgoing::A
     items.each { |item| @items << ItemInfo.new(item) }
   end
 
-  def write_impl
+  private def write_impl
     h @items.size
     @items.each do |item|
       h item.change

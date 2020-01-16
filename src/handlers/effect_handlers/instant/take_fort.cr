@@ -1,13 +1,13 @@
 class EffectHandler::TakeFort < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    return unless info.effector.player?
+    return unless pc = info.effector.as?(L2PcInstance)
 
-    if fort = FortManager.get_fort(info.effector.acting_player)
-      fort.end_of_siege(info.effector.acting_player.clan)
+    if (clan = pc.clan) && (fort = FortManager.get_fort(pc))
+      fort.end_of_siege(clan)
     end
   end
 end

@@ -177,11 +177,11 @@ class Scripts::DarkCloudMansion < AbstractInstance
 
   private def check_conditions(player)
     if player.override_instance_conditions?
-      debug "#{player} overrides instance conditions."
+      debug { "#{player} overrides instance conditions." }
       return true
     end
 
-    unless party = player.party?
+    unless party = player.party
       player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return false
     end
@@ -214,7 +214,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
   def on_enter_instance(player, world, first_entrance)
     if first_entrance
       run_start_room(world.as(DMCWorld))
-      if party = player.party?
+      if party = player.party
         party.members.each do |m|
           get_quest_state(m, true)
           world.add_allowed(m.l2id)
@@ -487,7 +487,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
   private def run_fourth_room(world)
     fourth_room = DMCRoom.new
     fourth_room.counter = 0
-    templist = Slice.new(7) { COLUMN_ROWS.sample.to_slice }
+    templist = Slice.new(7) { COLUMN_ROWS.sample(random: Rnd).to_slice }
     xx = 0
 
 
@@ -547,7 +547,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
       elsif temp[idx] != 1 && Rnd.rand(100) < 67
         this_npc.npc.broadcast_packet(NpcSay.new(this_npc.npc.l2id, 0, this_npc.npc.id, SPAWN_CHAT.sample))
       end
-      x +=65
+      x += 65
       idx += 1
     end
 
@@ -573,11 +573,11 @@ class Scripts::DarkCloudMansion < AbstractInstance
       return
     end
 
-    # i = rand(GOLEM_SPAWN.size)
+    # i = Rnd.rand(GOLEM_SPAWN.size)
     # mob_id = GOLEM_SPAWN[i][0]
     # x = GOLEM_SPAWN[i][1]
     # y = GOLEM_SPAWN[i][2]
-    mob_id, x, y = GOLEM_SPAWN.sample
+    mob_id, x, y = GOLEM_SPAWN.sample(random: Rnd)
 
     npc.golem = add_spawn(mob_id, x, y, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
@@ -804,7 +804,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
         fourth_room.npc_list.each do |mob|
           if mob.npc? == npc
             if mob.npc.invul? && Rnd.rand(100) < 12
-              add_spawn(BM.sample, *attacker.xyz, 0, false, 0, false, world.instance_id)
+              add_spawn(BM.sample(random: Rnd), *attacker.xyz, 0, false, 0, false, world.instance_id)
             end
           end
         end
@@ -862,7 +862,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
         end
         teleport_player(player, Location.new(139968, 150367, -3111), 0)
         instance_id = npc.instance_id
-        instance = InstanceManager.get_instance!(instance_id)
+        instance = InstanceManager.get_instance(instance_id).not_nil!
         if instance.players.empty?
           InstanceManager.destroy_instance(instance_id)
         end

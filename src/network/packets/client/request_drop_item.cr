@@ -96,17 +96,13 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     end
 
     if item.template.type_2 == ItemType2::QUEST && !pc.override_drop_all_items?
-      if Config.debug
-        debug { "#{pc} tried to drop a quest item." }
-      end
+      debug { "#{pc} tried to drop a quest item." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_EXCHANGE_ITEM)
       return
     end
 
     if !pc.inside_radius?(@x, @y, 0, 150, false, false) || (@z - pc.z).abs > 50
-      if Config.debug
-        debug { "#{pc} tried to drop an item too far away." }
-      end
+      debug { "#{pc} tried to drop an item too far away." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_DISTANCE_TOO_FAR)
       return
     end
@@ -133,9 +129,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
     drop = pc.drop_item("Drop", @id, @count, @x, @y, @z, nil, false, false)
 
-    if Config.debug
-      debug { "Dropping #{drop} at #{@x} #{@y} #{@z}." }
-    end
+    debug { "Dropping #{drop} at #{@x} #{@y} #{@z}." }
 
     if pc.gm?
       target = pc.target.try &.name

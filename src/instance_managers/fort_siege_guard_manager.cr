@@ -39,7 +39,6 @@ class FortSiegeGuardManager
     siege_guard_spawns = [] of L2Spawn
     sql = "SELECT npcId, x, y, z, heading, respawnDelay FROM fort_siege_guards WHERE fortId = ?"
     GameDB.each(sql, fort.residence_id) do |rs|
-
       npc_id = rs.get_i32("npcId").to_u16!.to_i32
       sp = L2Spawn.new(npc_id)
       sp.amount = 1
@@ -58,7 +57,7 @@ class FortSiegeGuardManager
     error e
   end
 
-  def siege_guard_spawn
+  def siege_guard_spawn : Hash(Int32, Array(L2Spawn))
     @siege_guards
   end
 end

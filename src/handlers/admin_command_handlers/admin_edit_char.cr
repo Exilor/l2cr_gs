@@ -180,7 +180,7 @@ module AdminCommandHandler::AdminEditChar
           unless player.subclass_active?
             player.base_class = class_id_val
           end
-          new_class = ClassListData.get_class!(player.class_id).class_name
+          new_class = ClassListData.get_class(player.class_id).class_name
           player.store_me
           player.send_message("A GM changed your class to #{new_class}.")
           player.untransform
@@ -198,10 +198,7 @@ module AdminCommandHandler::AdminEditChar
     elsif command.starts_with?("admin_settitle")
       begin
         val = command.from(15)
-        target = pc.target
-        if target.is_a?(L2PcInstance)
-          player = target
-        else
+        unless player = pc.target.as?(L2PcInstance)
           return false
         end
         player.title = val
@@ -230,17 +227,17 @@ module AdminCommandHandler::AdminEditChar
         player.send_message("Your name has been changed by a GM.")
         player.broadcast_user_info
 
-        if player.in_party?
+        if party = player.party
           # Delete party window for other party members
-          player.party.broadcast_to_party_members(player, PartySmallWindowDeleteAll::STATIC_PACKET)
-          player.party.members.each do |member|
+          party.broadcast_to_party_members(player, PartySmallWindowDeleteAll::STATIC_PACKET)
+          party.members.each do |member|
             # And re-add
             if member != player
-              member.send_packet(PartySmallWindowAll.new(member, player.party))
+              member.send_packet(PartySmallWindowAll.new(member, party))
             end
           end
         end
-        if clan = player.clan?
+        if clan = player.clan
           clan.broadcast_clan_status
         end
       rescue e
@@ -253,7 +250,7 @@ module AdminCommandHandler::AdminEditChar
       else
         return false
       end
-      player.appearance.sex = player.appearance.sex ? false : true
+      player.appearance.sex = !player.appearance.sex
       player.send_message("Your gender has been changed by a GM")
       player.broadcast_user_info
     elsif command.starts_with?("admin_setcolor")
@@ -287,9 +284,12 @@ module AdminCommandHandler::AdminEditChar
         pc.send_message("You need to specify a valid new color.")
       end
     elsif command.starts_with?("admin_fullfood")
-      target = pc.target
-      if target.is_a?(L2PetInstance)
+      case target = pc.target
+      when L2PetInstance
         target.current_feed = target.max_fed
+        target.broadcast_status_update
+      when L2ServitorInstance
+        target.life_time_remaining = target.life_time
         target.broadcast_status_update
       else
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
@@ -376,7 +376,7 @@ module AdminCommandHandler::AdminEditChar
         return false
       end
 
-      client = pl.client?
+      client = pl.client
       unless client
         pc.send_message("Client is null.")
         return false
@@ -554,7 +554,7 @@ module AdminCommandHandler::AdminEditChar
         io << player.name
         io << "</a></td>"
         io << "<td width=110>"
-        io << ClassListData.get_class!(player.class_id).client_code
+        ClassListData.get_class(player.class_id).client_code(io)
         io << "</td><td width=40>"
         io << player.level
         io << "</td>"
@@ -570,7 +570,7 @@ module AdminCommandHandler::AdminEditChar
       html["%pages%"] = ""
     end
 
-    html["%players%"] = result.body_template.join
+    html["%players%"] = result.body_template
     pc.send_packet(html)
   end
 
@@ -596,7 +596,7 @@ module AdminCommandHandler::AdminEditChar
       return
     end
 
-    client = player.client?
+    client = player.client
     if client.nil?
       pc.send_message("Client is null.")
     elsif client.detached?
@@ -609,17 +609,17 @@ module AdminCommandHandler::AdminEditChar
     repl.set_file(pc, "data/html/admin/#{filename}")
     repl["%name%"] = player.name
     repl["%level%"] = player.level
-    if clan = player.clan?
-    repl["%clan%"] = "<a action=\"bypass -h admin_clan_info #{player.l2id}\">#{player.clan.name}</a>"
-  else
-    repl["%clan%"] = ""
-  end
+    if clan = player.clan
+      repl["%clan%"] = "<a action=\"bypass -h admin_clan_info #{player.l2id}\">#{player.clan.not_nil!.name}</a>"
+    else
+      repl["%clan%"] = ""
+    end
     repl["%xp%"] = player.exp
     repl["%sp%"] = player.sp
-    repl["%class%"] = ClassListData.get_class!(player.class_id).client_code
+    repl["%class%"] = ClassListData.get_class(player.class_id).client_code
     repl["%ordinal%"] = player.class_id.to_i
     repl["%classid%"] = player.class_id
-    repl["%baseclass%"] = ClassListData.get_class!(player.base_class).client_code
+    repl["%baseclass%"] = ClassListData.get_class(player.base_class).client_code
     repl["%x%"] = player.x
     repl["%y%"] = player.y
     repl["%z%"] = player.z
@@ -675,15 +675,11 @@ module AdminCommandHandler::AdminEditChar
       player.send_packet(sm)
       # Admin information
       pc.send_message("Successfully Changed karma for #{player.name} from #{old_karma} to #{new_karma}.")
-      if Config.debug
-        debug { "[SET KARMA] [GM] #{pc.name} Changed karma for #{player.name} from #{old_karma} to #{new_karma}." }
-      end
+      debug { "[SET KARMA] [GM] #{pc.name} Changed karma for #{player.name} from #{old_karma} to #{new_karma}." }
     else
       # tell admin of mistake
       pc.send_message("You must enter a value for karma greater than or equal to 0.")
-      if Config.debug
-        debug { "[SET KARMA] ERROR: [GM] #{pc.name} entered an incorrect value for new karma: #{new_karma} for #{player.name}." }
-      end
+      debug { "[SET KARMA] ERROR: [GM] #{pc.name} entered an incorrect value for new karma: #{new_karma} for #{player.name}." }
     end
   end
 
@@ -705,7 +701,7 @@ module AdminCommandHandler::AdminEditChar
     repl = NpcHtmlMessage.new
     repl.set_file(pc, "data/html/admin/charfind.htm")
 
-    rep_msg = [] of String | Int32
+    rep_msg = String::Builder.new
 
     compared_players.each do |player|
       name = player.name
@@ -716,7 +712,7 @@ module AdminCommandHandler::AdminEditChar
         rep_msg << "\">"
         rep_msg << name
         rep_msg << "</a></td><td width=110>"
-        rep_msg << ClassListData.get_class!(player.class_id).client_code
+        rep_msg << ClassListData.get_class(player.class_id).client_code
         rep_msg << "</td><td width=40>"
         rep_msg << player.level
         rep_msg << "</td></tr>"
@@ -725,7 +721,7 @@ module AdminCommandHandler::AdminEditChar
         break
       end
     end
-    repl["%results%"] = rep_msg.join
+    repl["%results%"] = rep_msg
 
     if chars_found == 0
       rep_msg2 = "s. Please try again."
@@ -756,11 +752,11 @@ module AdminCommandHandler::AdminEditChar
 
     chars_found = 0
     ip = "0.0.0.0"
-    rep_msg = [] of String | Int32
+    rep_msg = String::Builder.new
     repl = NpcHtmlMessage.new
     repl.set_file(pc, "data/html/admin/ipfind.htm")
     compared_players.each do |player|
-      unless client = player.client?
+      unless client = player.client
         next
       end
 
@@ -786,7 +782,7 @@ module AdminCommandHandler::AdminEditChar
       rep_msg << "\">"
       rep_msg << name
       rep_msg << "</a></td><td width=110>"
-      rep_msg << ClassListData.get_class!(player.class_id).client_code
+      rep_msg << ClassListData.get_class(player.class_id).client_code
       rep_msg << "</td><td width=40>"
       rep_msg << player.level
       rep_msg << "</td></tr>"
@@ -795,7 +791,7 @@ module AdminCommandHandler::AdminEditChar
         break
       end
     end
-    repl["%results%"] = rep_msg.join
+    repl["%results%"] = rep_msg
 
     if chars_found == 0
       rep_msg2 = "s. Maybe they got d/c? :)"
@@ -839,7 +835,7 @@ module AdminCommandHandler::AdminEditChar
     dualbox_ips = {} of String => Int32
 
     compared_players.each do |player|
-      client = player.client?
+      client = player.client
       if client.nil? || client.detached?
         next
       end
@@ -889,7 +885,7 @@ module AdminCommandHandler::AdminEditChar
     dualbox_ips = {} of IpPack => Int32
 
     compared_players.each do |player|
-      client = player.client?
+      client = player.client
       if client.nil? || client.detached?
         next
       end
@@ -967,7 +963,7 @@ module AdminCommandHandler::AdminEditChar
     html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/partyinfo.htm")
     text = String.build(400) do |io|
-      target.party.members.each do |member|
+      target.party.not_nil!.members.each do |member|
         if color
           io << "<tr><td><table width=270 border=0 bgcolor=131210 cellpadding=2><tr><td width=30 align=right>"
         else

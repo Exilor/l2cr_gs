@@ -22,7 +22,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    unless 1 <= @level <= 1000 && 1 <= @id <= 32000
+    unless @level.between?(1, 1000) && @id.between?(1, 32000)
       warn { "Wrong level and id #{@level} #{@id}" }
       Util.punish(pc, "wrong packet data in RequestAcquireSkill.")
       return
@@ -77,8 +77,8 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
         give_skill(pc, trainer, skill)
       end
     when AcquireSkillType::PLEDGE
+      return unless clan = pc.clan
       return unless pc.clan_leader?
-      clan = pc.clan
       rep_cost = s.level_up_sp
       if clan.reputation_score >= rep_cost
         if Config.life_crystal_needed
@@ -113,7 +113,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
         L2VillageMasterInstance.show_pledge_skill_list(pc)
       end
     when AcquireSkillType::SUBPLEDGE
-      clan = pc.clan
+      return unless clan = pc.clan
       rep_cost = s.level_up_sp
       if clan.reputation_score < rep_cost
         send_packet(SystemMessageId::ACQUIRE_SKILL_FAILED_BAD_CLAN_REP_SCORE)
@@ -153,7 +153,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
         if q = QuestManager.get_quest("SubClassSkills")
           st = q.new_quest_state(pc)
         else
-          warn { "Quest \"SubClassSkills\" does not exist." }
+          warn "Quest \"SubClassSkills\" does not exist."
           return
         end
       end
@@ -201,7 +201,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
     prev_skill_level = pc.get_skill_level(@id)
     case @skill_type
     when .subpledge?
-      unless clan = pc.clan?
+      unless clan = pc.clan
         return false
       end
 
@@ -312,7 +312,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
     pc.update_shortcuts(@id, @level)
     show_skill_list(trainer, pc)
 
-    if 1368 <= @id <= 1372
+    if @id.between?(1368, 1372)
       OnPlayerSkillLearn.new(trainer, pc, skill, @skill_type).async(trainer)
     end
   end
@@ -337,7 +337,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
   end
 
   def self.show_sub_unit_skill_list(pc : L2PcInstance)
-    skills = SkillTreesData.get_available_subpledge_skills(pc.clan)
+    skills = SkillTreesData.get_available_subpledge_skills(pc.clan.not_nil!)
     asl = nil
     skills.each do |s|
       if SkillData[s.skill_id, s.skill_level]?

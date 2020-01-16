@@ -7,6 +7,7 @@ module ClanTable
   extend Loggable
   include Packets::Outgoing
 
+  CLAN_NAME_MAX_LENGTH = 16
   private CLANS = Concurrent::Map(Int32, L2Clan).new
 
   def load
@@ -19,7 +20,7 @@ module ClanTable
     GameDB.each("SELECT clan_id FROM clan_data") do |rs|
       clan_id = rs.get_i32("clan_id")
       CLANS[clan_id] = L2Clan.new(clan_id)
-      clan = get_clan!(clan_id)
+      clan = get_clan(clan_id).not_nil!
       if clan.dissolving_expiry_time != 0
         schedule_remove_clan(clan.id)
       end
@@ -216,20 +217,8 @@ module ClanTable
     CLANS[clan_id]?
   end
 
-  def get_clan!(clan_id : Int) : L2Clan
-    CLANS.fetch(clan_id) { raise "Clan with id #{clan_id} not found." }
-  end
-
   def get_clan_by_name(name : String) : L2Clan?
     CLANS.find_value &.name.casecmp?(name)
-  end
-
-  def get_clan_by_name!(name : String) : L2Clan
-    unless clan = get_clan_by_name(name)
-      raise "No clan found with name #{name.inspect}"
-    end
-
-    clan
   end
 
   def get_clan_allies(ally_id : Int32, & : L2Clan ->)
@@ -267,13 +256,13 @@ module ClanTable
     if count == clan1.members_count - 1
       clan1.delete_enemy_clan(clan2)
       clan2.delete_enemy_clan(clan1)
-      delete_clans_wars(clan1.id, clan2.id)
+      delete_clan_war(clan1.id, clan2.id)
     end
   end
 
-  def delete_clans_wars(clan_id1 : Int32, clan_id2 : Int32)
-    clan1 = get_clan!(clan_id1)
-    clan2 = get_clan!(clan_id2)
+  def delete_clan_war(clan_id1 : Int32, clan_id2 : Int32)
+    clan1 = get_clan(clan_id1).not_nil!
+    clan2 = get_clan(clan_id2).not_nil!
 
     OnClanWarFinish.new(clan1, clan2)
 
@@ -297,9 +286,9 @@ module ClanTable
     clan2.broadcast_to_online_members(sm)
   end
 
-  def store_clans_wars(clan_id1 : Int32, clan_id2 : Int32)
-    clan1 = get_clan!(clan_id1)
-    clan2 = get_clan!(clan_id2)
+  def store_clan_war(clan_id1 : Int32, clan_id2 : Int32)
+    clan1 = get_clan(clan_id1).not_nil!
+    clan2 = get_clan(clan_id2).not_nil!
 
     OnClanWarStart.new(clan1, clan2)
 
@@ -335,7 +324,7 @@ module ClanTable
       end
     end
 
-    delay = Math.max(get_clan!(clan_id).dissolving_expiry_time - Time.ms, 300000)
+    delay = Math.max(get_clan(clan_id).not_nil!.dissolving_expiry_time - Time.ms, 300000)
 
     ThreadPoolManager.schedule_general(task, delay)
   end

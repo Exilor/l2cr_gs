@@ -98,7 +98,7 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
     var = load_global_quest_var("SeedNextStatusChange")
 
     if var.empty? || var.to_i64 < Time.ms
-      buffs_now = rand(ZONE_BUFFS_LIST.size)
+      buffs_now = Rnd.rand(ZONE_BUFFS_LIST.size)
       save_global_quest_var("SeedBuffsList", buffs_now.to_s)
       @seeds_next_status_change = get_next_seeds_status_change_time
       save_global_quest_var("SeedNextStatusChange", @seeds_next_status_change.to_s)
@@ -135,7 +135,7 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
         sp.display_effect = REGION_DATA[i].active_buff
       end
 
-      zone = ZoneManager.get_zone_by_id!(REGION_DATA[i].buff_zone, L2EffectZone)
+      zone = ZoneManager.get_zone_by_id(REGION_DATA[i].buff_zone, L2EffectZone).not_nil!
       zone.add_skill(ZONE_BUFFS[REGION_DATA[i].active_buff], 1)
     end
 
@@ -149,7 +149,7 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
   def on_spawn(npc)
     REGION_DATA.each do |element|
       if element.elite_mob_ids.includes?(npc.id)
-        spawn_group_of_minions(npc.as(L2MonsterInstance), element.minion_lists.sample)
+        spawn_group_of_minions(npc.as(L2MonsterInstance), element.minion_lists.sample(random: Rnd))
       end
     end
 
@@ -172,7 +172,7 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
           af.display_effect = REGION_DATA[i].active_buff
         end
 
-        zone = ZoneManager.get_zone_by_id!(REGION_DATA[i].buff_zone, L2EffectZone)
+        zone = ZoneManager.get_zone_by_id(REGION_DATA[i].buff_zone, L2EffectZone).not_nil!
         zone.clear_skills
         zone.add_skill(ZONE_BUFFS[REGION_DATA[i].active_buff], 1)
       end
@@ -192,9 +192,9 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
     nil
   end
 
-  def on_enter_zone(character, zone)
+  def on_enter_zone(char, zone)
     if tmp = TELEPORT_ZONES[zone.id]?
-      character.tele_to_location(tmp, false)
+      char.tele_to_location(tmp, false)
     end
 
     super

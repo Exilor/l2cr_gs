@@ -6,6 +6,7 @@ class QuestState
   include Loggable
 
   @vars : Hash(String, String)?
+
   getter state, player
   getter quest_name : String
 
@@ -375,7 +376,11 @@ class QuestState
   end
 
   def give_adena(count : Int, apply_rates : Bool)
-    give_items(Inventory::ADENA_ID, count.to_i64, apply_rates ? 0 : 1)
+    if apply_rates
+      count *= Config.rate_quest_reward_adena
+    end
+
+    give_items(Inventory::ADENA_ID, count.to_i64)
   end
 
   def get_item_equipped(slot : Int32) : Int32

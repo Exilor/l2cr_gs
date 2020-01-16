@@ -27,12 +27,12 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
 
     if pc.in_boat?
       if Config.coord_synchronize == 2
-        dx = @x - pc.in_vehicle_position.x
-        dy = @y - pc.in_vehicle_position.y
+        dx = @x - pc.in_vehicle_position.not_nil!.x
+        dy = @y - pc.in_vehicle_position.not_nil!.y
 
         diff_sq = (dx * dx) + (dy * dy)
         if diff_sq > 250_000
-          pos = pc.in_vehicle_position
+          pos = pc.in_vehicle_position.not_nil!
           send_packet(GetOnVehicle.new(pc.l2id, @data, pos))
         end
       end
@@ -45,14 +45,14 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
     end
 
     if pc.falling?(@z)
-      debug "#{pc.name} is falling."
+      debug { "#{pc.name} is falling." }
       return
     end
 
     dx = @x - real_x
     dy = @y - real_y
     dz = @z - real_z
-    diff_sq = (dx * dx) + (dy * dy)
+    diff_sq = Math.pow(dx, 2) + Math.pow(dy, 2)
 
     if pc.flying_mounted? && @x > L2World::GRACIA_MAX_X
       pc.untransform
@@ -87,7 +87,7 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
 
       if diff_sq > 250_000 || dz.abs > 200
         # debug "diff_sq > 250_000 || dz.abs > 200"
-        if 200 <= dz.abs <= 1500 && (@z - pc.client_z).abs < 800
+        if dz.abs.between?(200, 1500) && (@z - pc.client_z).abs < 800
           # debug "dz.abs.between?(201, 1499) && (@z - pc.client_z).abs < 800"
           # debug "Setting xyz of #{pc} at #{real_x} #{real_y} #{@z}."
           pc.set_xyz(real_x, real_y, @z) # this was wrong, using real_z instead of real_y.

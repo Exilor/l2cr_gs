@@ -8,8 +8,7 @@ end
 class EventType
   getter event_class, return_class
 
-  protected def initialize(@event_class : (BaseEvent.class)? = nil, @return_class : AbstractEventReturn.class | Nil.class = Nil.class)
-  end
+  initializer event_class : (BaseEvent.class)? = nil, return_class : AbstractEventReturn.class | Nil.class = Nil.class
 
   private macro def_event(name, event_class = nil, return_class = Nil, &block)
     {% if event_class %}
@@ -20,7 +19,7 @@ class EventType
           EventType::{{name.id}}
         end
 
-        def notify(container  : ListenersContainer? = nil) {{(" : #{return_class}?".id) if return_class}}
+        def notify(container : ListenersContainer? = nil) {{(" : #{return_class}?".id) if return_class}}
           EventDispatcher.notify(self, container, {{return_class.id}})
         end
 
@@ -48,8 +47,7 @@ class EventType
     initializer npc : L2Npc, active_char : L2PcInstance, summon : Bool
   end
   def_event(ON_ATTACKABLE_ATTACK, OnAttackableAttack) do
-    getter target, damage, skill
-    getter attacker
+    getter target, damage, skill, attacker
     getter? summon
     initializer attacker : L2PcInstance, target : L2Attackable, damage : Int32,
       skill : Skill?, summon : Bool
@@ -61,8 +59,7 @@ class EventType
       summon : Bool
   end
   def_event(ON_ATTACKABLE_KILL, OnAttackableKill) do
-    getter target
-    getter attacker
+    getter target, attacker
     getter? summon
     initializer attacker : L2PcInstance, target : L2Attackable, summon : Bool
   end

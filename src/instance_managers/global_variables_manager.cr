@@ -28,13 +28,9 @@ module GlobalVariablesManager
       return false unless has_changes?
 
       begin
-        GameDB.exec(DELETE_QUERY)
-        each do |key, value|
-          GameDB.exec(
-            INSERT_QUERY,
-            key,
-            value.to_s
-          )
+        GameDB.transaction do |tr|
+          tr.exec(DELETE_QUERY)
+          each { |key, value| tr.exec(INSERT_QUERY, key, value.to_s) }
         end
       rescue e
         error e

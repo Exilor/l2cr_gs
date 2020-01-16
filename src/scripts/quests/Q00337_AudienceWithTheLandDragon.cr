@@ -214,7 +214,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
         end
       when CAVE_MAIDEN, CAVE_KEEPER, CAVE_KEEPER_HOLD, CAVE_MAIDEN_HOLD
         if qs.memo_state?(70000) && !has_quest_items?(killer, FRAGMENT_OF_ABYSS_JEWEL_3RD)
-          if rand(5) == 0
+          if Rnd.rand(5) == 0
             add_spawn(ABYSSAL_JEWEL_3, npc, true, 180000)
           end
         end
@@ -231,7 +231,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
         case qs.memo_state
         when 21110, 21100, 21010, 21000, 20110, 20100, 20010, 20000
           unless has_quest_items?(killer, TOTEM_OF_LAND_DRAGON)
-            if rand(5) == 0
+            if Rnd.rand(5) == 0
               add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
               add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
               add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)

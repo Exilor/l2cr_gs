@@ -25,17 +25,17 @@ class Scripts::Warpgate < AbstractNpcAI
     add_enter_zone_id(ZONE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
 
     if event == "enter"
-      if can_enter?(player)
-        player.tele_to_location(ENTER_LOC, true)
+      if can_enter?(pc)
+        pc.tele_to_location(ENTER_LOC, true)
       else
         return "Warpgate-03.html"
       end
     elsif event == "TELEPORT"
-      player.tele_to_location(REMOVE_LOC, true)
+      pc.tele_to_location(REMOVE_LOC, true)
     end
 
     super
@@ -45,10 +45,8 @@ class Scripts::Warpgate < AbstractNpcAI
     HellboundEngine.locked? ? "Warpgate-01.html" : "Warpgate-02.html"
   end
 
-  def on_enter_zone(character, zone)
-    if character.player?
-      pc = character.acting_player
-
+  def on_enter_zone(char, zone)
+    if pc = char.as?(L2PcInstance)
       if !can_enter?(pc) && !pc.override_zone_conditions? && !pc.on_event?
         start_quest_timer("TELEPORT", 1000, nil, pc)
       elsif !pc.minimap_allowed? && has_at_least_one_quest_item?(pc, MAP)
@@ -59,8 +57,8 @@ class Scripts::Warpgate < AbstractNpcAI
     super
   end
 
-  private def can_enter?(player)
-    if player.flying?
+  private def can_enter?(pc)
+    if pc.flying?
       return false
     end
 
@@ -68,7 +66,7 @@ class Scripts::Warpgate < AbstractNpcAI
       return true
     end
 
-    player.quest_completed?(Scripts::Q00130_PathToHellbound.simple_name) ||
-    player.quest_completed?(Scripts::Q00133_ThatsBloodyHot.simple_name)
+    pc.quest_completed?(Scripts::Q00130_PathToHellbound.simple_name) ||
+    pc.quest_completed?(Scripts::Q00133_ThatsBloodyHot.simple_name)
   end
 end

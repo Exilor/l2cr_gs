@@ -86,7 +86,7 @@ module SiegeManager
   end
 
   def add_siege_skills(pc : L2PcInstance)
-    SkillData.get_siege_skills(pc.noble?, pc.clan.castle_id > 0).each do |sk|
+    SkillData.get_siege_skills(pc.noble?, pc.clan.not_nil!.castle_id > 0).each do |sk|
       pc.add_skill(sk, false)
     end
   end
@@ -116,7 +116,7 @@ module SiegeManager
   end
 
   def remove_siege_skills(pc : L2PcInstance)
-    SkillData.get_siege_skills(pc.noble?, pc.clan.castle_id > 0).each do |sk|
+    SkillData.get_siege_skills(pc.noble?, pc.clan.not_nil!.castle_id > 0).each do |sk|
       pc.remove_skill(sk)
     end
   end
@@ -144,12 +144,7 @@ module SiegeManager
   end
 
   def sieges : Array(Siege)
-    ret = Array(Siege).new(CastleManager.castles.size)
-    CastleManager.castles.each do |castle|
-      ret << castle.siege
-    end
-    ret
-    # CastleManager.castles.map &.siege # compiler can't infer block body
+    CastleManager.castles.map &.siege
   end
 
   private def load_trap_upgrade(castle_id : Int32)

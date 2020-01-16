@@ -23,7 +23,7 @@ class EffectHandler::TeleportToTarget < AbstractEffect
     char.broadcast_packet(ValidateLocation.new(char))
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

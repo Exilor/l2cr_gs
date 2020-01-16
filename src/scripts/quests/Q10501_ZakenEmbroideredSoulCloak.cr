@@ -23,7 +23,7 @@ class Scripts::Q10501_ZakenEmbroideredSoulCloak < Quest
     st = get_quest_state(pc, false)
     if st && st.cond?(1) && Util.in_range?(1500, npc, pc, false)
       current_count = get_quest_items_count(pc, ZAKENS_SOUL_FRAGMENT)
-      count = rand(1..3)
+      count = Rnd.rand(1..3)
       if count >= FRAGMENT_COUNT - current_count
         give_items(pc, ZAKENS_SOUL_FRAGMENT, FRAGMENT_COUNT - current_count)
         st.set_cond(2, true)

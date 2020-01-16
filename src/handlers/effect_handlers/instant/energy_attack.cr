@@ -16,8 +16,8 @@ class EffectHandler::EnergyAttack < AbstractEffect
     !Formulas.physical_skill_evasion(info.effector, info.effected, info.skill)
   end
 
-  def effect_type
-    L2EffectType::PHYSICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::PHYSICAL_ATTACK
   end
 
   def on_start(info)
@@ -46,7 +46,7 @@ class EffectHandler::EnergyAttack < AbstractEffect
       damage_multiplier = Formulas.weapon_trait_bonus(attacker, target) * Formulas.attribute_bonus(attacker, target, skill) * Formulas.general_trait_bonus(attacker, target, skill.trait_type, true)
       ss = info.skill.use_soulshot? && attacker.charged_shot?(ShotType::SOULSHOTS)
       ss_boost = ss ? 2.0 : 1.0
-      weapon = attacker.active_weapon_item?
+      weapon = attacker.active_weapon_item
       if weapon && (weapon.item_type.bow? || weapon.item_type.crossbow?)
         weapon_type_boost = 70.0
       else
@@ -82,7 +82,7 @@ class EffectHandler::EnergyAttack < AbstractEffect
     end
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

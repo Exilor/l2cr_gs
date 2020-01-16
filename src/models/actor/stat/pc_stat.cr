@@ -13,6 +13,7 @@ class PcStat < PlayableStat
   @vitality_points = 1f32
   @talisman_slots = Atomic(Int32).new(0)
   @cloak_slot = false
+
   getter vitality_level = 0i8
   getter starting_exp = 0i64
   property max_cubic_count = 1
@@ -95,7 +96,7 @@ class PcStat < PlayableStat
     pc = active_char
 
     if pc.transformed?
-      if template = pc.transformation.get_template(pc)
+      if template = pc.transformation.try &.get_template(pc)
         return template.get_base_move_speed(type)
       end
     elsif pc.mounted?

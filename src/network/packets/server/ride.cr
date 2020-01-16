@@ -12,7 +12,7 @@ class Packets::Outgoing::Ride < GameServerPacket
     @loc = pc.location
   end
 
-  def write_impl
+  private def write_impl
     c 0x8c
 
     d @l2id

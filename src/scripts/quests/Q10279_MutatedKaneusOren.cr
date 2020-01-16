@@ -40,7 +40,7 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
     end
 
     npc_id = npc.id
-    if party = killer.party?
+    if party = killer.party
       party_members = [] of QuestState
       party.members.each do |member|
         st = get_quest_state(member, false)
@@ -52,7 +52,7 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
       end
 
       unless party_members.empty?
-        reward_item(npc_id, party_members.sample)
+        reward_item(npc_id, party_members.sample(random: Rnd))
       end
     elsif st.started?
       reward_item(npc_id, st)

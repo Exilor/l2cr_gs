@@ -7,7 +7,7 @@ class L2StaticObjectInstance < L2Character
   INTERACTION_DISTANCE = 150
 
   getter mesh_index = 0
-  getter! map : ShowTownMap?
+  getter map : ShowTownMap?
   property type : Int32 = -1
 
   def initialize(template : L2CharTemplate, @static_l2id : Int32)
@@ -51,19 +51,19 @@ class L2StaticObjectInstance < L2Character
     @map = ShowTownMap.new("town_map.#{texture}", x, y)
   end
 
-  def active_weapon_instance? : L2ItemInstance?
+  def active_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def active_weapon_item? : L2Weapon?
+  def active_weapon_item : L2Weapon?
     # return nil
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
+  def secondary_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_item? : L2Weapon?
+  def secondary_weapon_item : L2Weapon?
     # return nil
   end
 

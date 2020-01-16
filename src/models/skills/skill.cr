@@ -2,8 +2,8 @@ require "../l2_extractable_product_item"
 require "../l2_extractable_skill"
 require "../../enums/skill_operate_type"
 require "../../enums/abnormal_visual_effect"
-require "../../enums/l2_target_type"
-require "../../enums/l2_effect_type"
+require "../../enums/target_type"
+require "../../enums/effect_type"
 require "../../enums/attribute_type"
 require "../../enums/fly_type"
 require "../../enums/mount_type"
@@ -16,14 +16,23 @@ class Skill
   include Loggable
   extend Loggable
 
+  enum SkillType : UInt8
+    PHYSICAL
+    MAGIC
+    STATIC
+    DANCE
+    TRIGGER
+  end
+
   @effect_lists = EnumMap(EffectScope, Array(AbstractEffect)).new
   @extractable_items : L2ExtractableSkill?
   @operate_type : SkillOperateType
-  @magic : Int32
+  @skill_type : SkillType
   @pre_condition : Array(Condition)?
   @item_pre_condition : Array(Condition)?
   @func_templates : Array(FuncTemplate)?
-  @effect_types : EnumSet(L2EffectType)?
+  @effect_types : EnumSet(EffectType)?
+
   getter id : Int32
   getter level : Int32
   getter display_id : Int32
@@ -51,7 +60,7 @@ class Skill
   getter reuse_delay : Int32
   getter lvl_bonus_rate : Int32
   getter icon : String
-  getter target_type : L2TargetType
+  getter target_type : TargetType
   getter magic_level : Int32
   getter activate_rate : Int32
   getter min_chance : Int32
@@ -74,7 +83,7 @@ class Skill
   getter? recovery_herb : Bool
   getter? next_action_is_attack : Bool
   getter? blocked_in_olympiad : Bool
-  getter? direct_hp_dmg : Bool
+  getter? dmg_directly_to_hp : Bool
   getter? overhit : Bool
   getter? debuff : Bool
   getter? abnormal_instant : Bool
@@ -92,7 +101,7 @@ class Skill
     @display_level = set.get_i32("displayLevel", @level)
     @name = set.get_string("name", "")
     @operate_type = set.get_enum("operateType", SkillOperateType)
-    @magic = set.get_i32("isMagic", 0)
+    @skill_type = SkillType[set.get_i32("isMagic", 0)]
     @trait_type = set.get_enum("trait", TraitType, TraitType::NONE)
     @reuse_delay_locked = set.get_bool("reuseDelayLocked", false)
     @mp_consume1 = set.get_i32("mpConsume1", 0)
@@ -156,7 +165,7 @@ class Skill
       @affect_limit = {0, 0}
     end
 
-    @target_type = set.get_enum("targetType", L2TargetType, L2TargetType::SELF)
+    @target_type = set.get_enum("targetType", TargetType, TargetType::SELF)
     @affect_scope = set.get_enum("affectScope", AffectScope, AffectScope::NONE)
     @magic_level = set.get_i32("magicLvl", 0)
     @lvl_bonus_rate = set.get_i32("lvlBonusRate", 0)
@@ -173,7 +182,7 @@ class Skill
     @min_pledge_class = set.get_i32("minPledgeClass", 0)
     @charge_consume = set.get_i32("chargeConsume", 0)
     @max_soul_consume_count = set.get_i32("soulMaxConsumeCount", 0)
-    @direct_hp_dmg = set.get_bool("dmgDirectlyToHp", false)
+    @dmg_directly_to_hp = set.get_bool("dmgDirectlyToHp", false)
     @effect_point = set.get_i32("effectPoint", 0)
     @irreplaceable_buff = set.get_bool("irreplaceableBuff", false)
     @excluded_from_check = set.get_bool("excludedFromCheck", false)
@@ -226,6 +235,10 @@ class Skill
     L2ExtractableSkill.new(products)
   end
 
+  delegate physical?, magic?, static?, dance?, trigger?, to: @skill_type
+  delegate fly_type?, active?, passive?, toggle?, self_continuous?, channeling?,
+    to: @operate_type
+
   # used in L2PcInstance#check_pvp_skill
   def aoe? : Bool
     @target_type.area? ||
@@ -238,9 +251,9 @@ class Skill
 
   def damage? : Bool
     has_effect_type?(
-     L2EffectType::MAGICAL_ATTACK,
-     L2EffectType::HP_DRAIN,
-     L2EffectType::PHYSICAL_ATTACK
+      EffectType::MAGICAL_ATTACK,
+      EffectType::HP_DRAIN,
+      EffectType::PHYSICAL_ATTACK
     )
   end
 
@@ -262,26 +275,6 @@ class Skill
     !@abnormal_visual_effects_event.empty?
   end
 
-  def physical? : Bool
-    @magic == 0
-  end
-
-  def magic? : Bool
-    @magic == 1
-  end
-
-  def static? : Bool
-    @magic == 2
-  end
-
-  def dance? : Bool
-    @magic == 3
-  end
-
-  def trigger? : Bool
-    @magic == 4
-  end
-
   def affect_limit : Int32
     lim1 = @affect_limit[1]
     if lim1 == 0
@@ -290,28 +283,8 @@ class Skill
     @affect_limit[0] + Rnd.rand(lim1)
   end
 
-  def active? : Bool
-    @operate_type.active?
-  end
-
-  def passive? : Bool
-    @operate_type.passive?
-  end
-
-  def toggle? : Bool
-    @operate_type.toggle?
-  end
-
   def continuous? : Bool
-    @operate_type.continuous? || @operate_type.self_continuous?
-  end
-
-  def self_continuous? : Bool
-    @operate_type.self_continuous?
-  end
-
-  def channeling? : Bool
-    @operate_type.channeling?
+    @operate_type.continuous? || self_continuous?
   end
 
   def transformation? : Bool
@@ -319,23 +292,19 @@ class Skill
   end
 
   def use_soulshot? : Bool
-    has_effect_type?(L2EffectType::PHYSICAL_ATTACK)
+    has_effect_type?(EffectType::PHYSICAL_ATTACK)
   end
 
   def use_spiritshot? : Bool
-    @magic == 1
+    magic?
   end
 
   def use_fish_shot? : Bool
-    has_effect_type?(L2EffectType::FISHING)
+    has_effect_type?(EffectType::FISHING)
   end
 
   def healing_potion_skill? : Bool
     @abnormal_type.hp_recover?
-  end
-
-  def dmg_directly_to_hp? : Bool
-    @direct_hp_dmg
   end
 
   def bad? : Bool
@@ -347,7 +316,7 @@ class Skill
       return true
     end
 
-    if char.player? && !can_be_used_while_riding?(char.acting_player)
+    if char.is_a?(L2PcInstance) && !can_be_used_while_riding?(char)
       sm = Packets::Outgoing::SystemMessage.s1_cannot_be_used
       sm.add_skill_name(@id)
       char.send_packet(sm)
@@ -408,7 +377,6 @@ class Skill
         error e
       end
     else
-      warn "No target handler found for #{target_type.inspect}."
       char.send_message("Target type of skill is not currently handled.")
     end
 
@@ -423,11 +391,11 @@ class Skill
     get_target_list(char, true).first?
   end
 
-  def self.check_for_area_offensive_skills(caster : L2Character, target : L2Character, skill : Skill, source_in_arena : Bool) : Bool
+  def offensive_aoe_check(caster : L2Character, target : L2Character, source_in_arena : Bool) : Bool
     return false if target.dead? || target == caster
 
-    player = caster.acting_player?
-    target_player = target.acting_player?
+    player = caster.acting_player
+    target_player = target.acting_player
 
     if player
       if target_player
@@ -437,37 +405,46 @@ class Skill
 
         return false if target_player.in_observer_mode?
 
-        if skill.bad? && player.siege_state > 0 && player.inside_siege_zone? && player.siege_state == target_player.siege_state && player.siege_side == target_player.siege_side
+        if bad? && player.siege_state > 0 && player.inside_siege_zone?
+          if player.siege_state == target_player.siege_state
+            if player.siege_side == target_player.siege_side
+              return false
+            end
+          end
+        end
+        if bad? && target.inside_peace_zone?
           return false
         end
-        if skill.bad? && target.inside_peace_zone?
-          return false
-        end
-        if player.in_party? && target_player.in_party?
-          if player.party.leader_l2id == target_player.party.leader_l2id
+
+        if (party1 = player.party) && (party2 = target_player.party)
+          if party1 == party2
             return false
           end
 
-          if player.party.in_command_channel? && target_player.party.in_command_channel? && player.party.command_channel == target_player.party.command_channel
-            return false
+          if (cc1 = party1.command_channel) && (cc2 = party2.command_channel)
+            if cc1 == cc2
+              return false
+            end
           end
         end
 
-        # unless TvTEvent.check_for_tvt_skill(player, target_player, skill)
+        # unless TvTEvent.check_for_tvt_skill(player, target_player, self)
         #   return false
         # end
 
-        if !source_in_arena && !target_player.inside_pvp_zone? && !target_player.inside_siege_zone?
-          if player.ally_id != 0 && player.ally_id == target_player.ally_id
-            return false
-          end
+        if !source_in_arena && !target_player.inside_pvp_zone?
+          unless target_player.inside_siege_zone?
+            if player.ally_id != 0 && player.ally_id == target_player.ally_id
+              return false
+            end
 
-          if player.clan_id != 0 && player.clan_id == target_player.clan_id
-            return false
-          end
+            if player.clan_id != 0 && player.clan_id == target_player.clan_id
+              return false
+            end
 
-          unless player.check_pvp_skill(target_player, skill)
-            return false
+            unless player.check_pvp_skill(target_player, self)
+              return false
+            end
           end
         end
       end
@@ -480,14 +457,12 @@ class Skill
     end
 
     unless GeoData.can_see_target?(caster, target)
-      debug "check_for_area_offensive_skills: GeoData says that #{caster} can't see #{target}."
       return false
     end
 
     true
   end
 
-  # Everything relating to @func_templates looks deprecated.
   def get_stat_funcs(effect : AbstractEffect?, player : L2Character) : Indexable(AbstractFunction)
     unless templates = @func_templates
       return Slice(AbstractFunction).empty
@@ -510,16 +485,10 @@ class Skill
     ary
   end
 
-  def has_effect_type?(*types : L2EffectType) : Bool
+  def has_effect_type?(*types : EffectType) : Bool
     return false unless temp = @effect_types
     types.any? { |t| temp.includes?(t) }
   end
-
-  # # Deprecated?
-  # def attach(f)
-  #   @func_templates ||= []
-  #   @func_templates << f.as(FuncTemplate)
-  # end
 
   def attach(cond : Condition?, item_or_weapon : Bool)
     return unless cond
@@ -533,7 +502,7 @@ class Skill
 
   def add_effect(scope : EffectScope, effect : AbstractEffect)
     unless effect.effect_type.none?
-      (@effect_types ||= EnumSet(L2EffectType).new) << effect.effect_type
+      (@effect_types ||= EnumSet(EffectType).new) << effect.effect_type
     end
 
     (@effect_lists[scope] ||= [] of AbstractEffect) << effect
@@ -645,8 +614,8 @@ class Skill
     if !this && !passive
       info = BuffInfo.new(effector, effected, self)
 
-      if effector.player? && max_soul_consume_count > 0
-        info.charges = effector.acting_player.decrease_souls(max_soul_consume_count)
+      if (pc = effector.as?(L2PcInstance)) && max_soul_consume_count > 0
+        info.charges = pc.decrease_souls(max_soul_consume_count)
       end
 
       if add_continuous_effects && abnormal_time > 0
@@ -669,9 +638,11 @@ class Skill
         effected.effect_list.add(info)
       end
 
-      if effected.player? && effected.has_servitor? && !transformation? && !abnormal_type.summon_condition?
-        if (add_continuous_effects && continuous? && !debuff?) || recovery_herb?
-          apply_effects(effector, effected.summon!, recovery_herb?, 0)
+      if effected.player? && (smn = effected.summon.as?(L2ServitorInstance))
+        if !transformation? && !abnormal_type.summon_condition?
+          if (add_continuous_effects && continuous? && !debuff?) || recovery_herb?
+            apply_effects(effector, smn, recovery_herb?, 0)
+          end
         end
       end
     end
@@ -685,12 +656,16 @@ class Skill
 
       apply_effect_scope(EffectScope::SELF, info, instant, add_continuous_effects)
 
-      if add_continuous_effects && has_effect_type?(L2EffectType::BUFF)
+      if add_continuous_effects && has_effect_type?(EffectType::BUFF)
         info.effector.effect_list.add(info)
       end
 
-      if add_continuous_effects && info.effected.player? && info.effected.has_servitor? && continuous? && !debuff? && id != CommonSkill::SERVITOR_SHARE.id
-        apply_effects(effector, info.effected.summon!, false, 0)
+      if add_continuous_effects && info.effected.player? && !debuff?
+        if id != CommonSkill::SERVITOR_SHARE.id && continuous?
+          if smn = info.effected.summon.as?(L2ServitorInstance)
+            apply_effects(effector, smn, false, 0)
+          end
+        end
       end
     end
 
@@ -702,8 +677,9 @@ class Skill
   end
 
   def apply_effect_scope(scope : EffectScope?, info : BuffInfo, apply_instant_effects : Bool, add_continuous_effects : Bool)
-    return unless scope
-    @effect_lists[scope]?.try &.each do |effect|
+    return unless scope && (effects = @effect_lists[scope]?)
+
+    effects.each do |effect|
       if effect.instant?
         if apply_instant_effects && effect.calc_success(info)
           effect.on_start(info)
@@ -767,10 +743,6 @@ class Skill
     @abnormal_type.hide?
   end
 
-  def fly_type? : Bool
-    @operate_type.fly_type?
-  end
-
   def hero_skill? : Bool
     SkillTreesData.hero_skill?(@id, @level)
   end
@@ -784,20 +756,7 @@ class Skill
   end
 
   def seven_signs? : Bool
-    1366 <= @id <= 4361
-  end
-
-  def self.add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : Bool
-    return false unless summon = owner.summon
-    add_character(caster, summon, radius, dead)
-  end
-
-  def self.add_character(caster : L2Character, target : L2Character, radius : Int32, dead : Bool) : Bool
-    return false if dead != target.dead?
-    if radius > 0 && !Util.in_range?(radius, caster, target, true)
-      return false
-    end
-    true
+    @id.between?(4361, 4366)
   end
 
   def to_s(io : IO)

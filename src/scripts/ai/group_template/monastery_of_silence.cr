@@ -118,12 +118,12 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
   end
 
   def on_npc_hate(mob, player, is_summon)
-    !!player.active_weapon_instance?
+    !!player.active_weapon_instance
   end
 
   def on_aggro_range_enter(npc, pc, is_summon)
     debug { "#on_aggro_range_enter: #{npc}, #{pc}, #{is_summon}" }
-    if pc.active_weapon_instance?
+    if pc.active_weapon_instance
       skill = nil
       case npc.id
       when GUIDE
@@ -167,7 +167,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
     debug { "#on_skill_see: #{npc}, #{caster}, #{skill}, #{targets}, #{is_summon}" }
-    if skill.has_effect_type?(L2EffectType::AGGRESSION) && targets.size != 0
+    if skill.has_effect_type?(EffectType::AGGRESSION) && targets.size != 0
       targets.each do |obj|
         if obj == npc
           broadcast_npc_say(npc, Say2::NPC_ALL, DIVINITY_MSG.sample, caster.name)

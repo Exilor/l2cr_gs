@@ -4,8 +4,8 @@ class GuardKnownList < AttackableKnownList
 
     guard = active_char
 
-    if object.player?
-      if object.acting_player.karma > 0
+    if object.is_a?(L2PcInstance)
+      if object.karma > 0
         if guard.intention.idle?
           guard.intention = AI::ACTIVE
         end

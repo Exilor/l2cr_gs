@@ -10,7 +10,7 @@ module TargetHandler::BehindAura
     char.known_list.each_character(skill.affect_range) do |obj|
       next unless obj.attackable? || obj.playable?
       next unless obj.behind?(char)
-      if !Skill.check_for_area_offensive_skills(char, obj, skill, src_in_arena)
+      unless skill.offensive_aoe_check(char, obj, src_in_arena)
         next
       end
 
@@ -28,6 +28,6 @@ module TargetHandler::BehindAura
   end
 
   def target_type
-    L2TargetType::BEHIND_AURA
+    TargetType::BEHIND_AURA
   end
 end

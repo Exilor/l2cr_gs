@@ -19,11 +19,11 @@ class ArmorSet
 
   def contains_all?(pc : L2PcInstance) : Bool
     inv    = pc.inventory
-    chest  = inv.chest_slot? .try &.id || 0
-    legs   = inv.legs_slot?  .try &.id || 0
-    head   = inv.head_slot?  .try &.id || 0
-    gloves = inv.gloves_slot?.try &.id || 0
-    feet   = inv.feet_slot?  .try &.id || 0
+    chest  = inv.chest_slot .try &.id || 0
+    legs   = inv.legs_slot  .try &.id || 0
+    head   = inv.head_slot  .try &.id || 0
+    gloves = inv.gloves_slot.try &.id || 0
+    feet   = inv.feet_slot  .try &.id || 0
 
     contains_all?(chest, legs, head, gloves, feet)
   end
@@ -59,7 +59,7 @@ class ArmorSet
   end
 
   def contains_shield?(pc : L2PcInstance) : Bool
-    return false unless shield_item = pc.inventory.lhand_slot?
+    return false unless shield_item = pc.inventory.lhand_slot
     @shield.includes?(shield_item.id)
   end
 
@@ -76,27 +76,27 @@ class ArmorSet
 
     inv = pc.inventory
 
-    chest_item = inv.chest_slot?
+    chest_item = inv.chest_slot
     if chest_item.nil? || chest_item.enchant_level < 6
       return false
     end
 
-    legs_item = inv.legs_slot?
+    legs_item = inv.legs_slot
     if !@legs.empty? && (legs_item.nil? || legs_item.enchant_level < 6)
       return false
     end
 
-    gloves_item = inv.gloves_slot?
+    gloves_item = inv.gloves_slot
     if !@gloves.empty? && (gloves_item.nil? || gloves_item.enchant_level < 6)
       return false
     end
 
-    head_item = inv.head_slot?
+    head_item = inv.head_slot
     if !@head.empty? && (head_item.nil? || head_item.enchant_level < 6)
       return false
     end
 
-    feet_item = inv.feet_slot?
+    feet_item = inv.feet_slot
     if !@feet.empty? && (feet_item.nil? || feet_item.enchant_level < 6)
       return false
     end

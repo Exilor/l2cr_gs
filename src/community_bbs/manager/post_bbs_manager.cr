@@ -143,7 +143,7 @@ module PostBBSManager
       io << topic.owner_name
       io << "</font></td><td></td><td><font color=\"AAAAAA\">&$418; :</font>" \
       "</td><td><font color=\"AAAAAA\">"
-      Time.from_ms(p.get_c_post(0).post_date).to_s(io)
+      io << Time.from_ms(p.get_c_post(0).post_date)
       io << "</font></td></tr><tr><td height=10></td></tr></table><br><table" \
       " border=0 cellspacing=0 cellpadding=0><tr><td fixwidth=5></td><td FIX" \
       "WIDTH=600 align=left>", mes, "</td><td fixqqwidth=5></td></tr></table" \

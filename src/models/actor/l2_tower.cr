@@ -13,7 +13,7 @@ class L2Tower < L2Npc
     return false unless attacker.is_a?(L2PcInstance)
     return false unless castle = castle?
     return false unless castle.residence_id > 0 && castle.siege.in_progress?
-    castle.siege.attacker?(attacker.clan?)
+    castle.siege.attacker?(attacker.clan)
   end
 
   def on_action(pc : L2PcInstance, interact : Bool)

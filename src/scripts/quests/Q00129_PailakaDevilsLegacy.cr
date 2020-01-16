@@ -134,7 +134,7 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
       if pc.has_summon?
         html = "32511-02.htm"
       else
-        inst = InstanceManager.get_instance!(npc.instance_id)
+        inst = InstanceManager.get_instance(npc.instance_id).not_nil!
         qs.exit_quest(false, true)
         inst.duration = EXIT_TIME * 60000
         inst.empty_destroy_time = 0

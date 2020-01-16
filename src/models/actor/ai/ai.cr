@@ -55,15 +55,17 @@ abstract class AI
   private ATTACK_FOLLOW_INTERVAL = 500
 
   # Use Object instead if/when Crystal supports it.
-  private alias AIArg = L2Object | Skill | Location | Nil
+  private alias IntentionArgType = L2Object | Skill | Location?
+  private alias EventArgType = L2Object | Location | Number::Primitive | Bool?
 
   @move_to_pawn_timeout = 0
   @client_moving_to_pawn_offset = 0
-  @intention_arg_0 : AIArg
-  @intention_arg_1 : AIArg
+  @intention_arg_0 : IntentionArgType
+  @intention_arg_1 : IntentionArgType
   @skill : Skill?
   @client_moving = false
   @client_auto_attacking = false
+
   getter intention = IDLE
   protected getter! follow_target : L2Character
   property next_action : NextAction?
@@ -74,7 +76,7 @@ abstract class AI
 
   getter_initializer actor : L2Character
 
-  def change_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
+  def change_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
     sync do
       @intention = intention
       @intention_arg_0 = arg0
@@ -86,7 +88,7 @@ abstract class AI
     set_intention(intention)
   end
 
-  def set_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
+  def set_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
     if !intention.follow? && !intention.attack?
       stop_follow
     end
@@ -99,41 +101,41 @@ abstract class AI
     when REST
       on_intention_rest
     when ATTACK
-      if arg0.is_a?(L2Character)
-        on_intention_attack(arg0)
-      else
-        error "Wrong types for on_intention_attack: arg0: #{arg0}, arg1: #{arg1}"
+      unless arg0.is_a?(L2Character)
+        raise "Wrong types for on_intention_attack: arg0: #{arg0}, arg1: #{arg1}"
       end
+
+      on_intention_attack(arg0)
     when CAST
-      if arg0.is_a?(Skill) && arg1.is_a?(L2Object?)
-        on_intention_cast(arg0, arg1)
-      else
-        error "Wrong types for on_intention_cast: arg0: #{arg0}, arg1: #{arg1}"
+      unless arg0.is_a?(Skill) && arg1.is_a?(L2Object?)
+        raise "Wrong types for on_intention_cast: arg0: #{arg0}, arg1: #{arg1}"
       end
+
+      on_intention_cast(arg0, arg1)
     when MOVE_TO
-      if arg0.is_a?(Location)
-        on_intention_move_to(arg0)
-      else
-        error "Wrong types for on_intention_move_to: arg0: #{arg0}, arg1: #{arg1}"
+      unless arg0.is_a?(Location)
+        raise "Wrong types for on_intention_move_to: arg0: #{arg0}, arg1: #{arg1}"
       end
+
+      on_intention_move_to(arg0)
     when FOLLOW
-      if arg0.is_a?(L2Character)
-        on_intention_follow(arg0)
-      else
-        error "Wrong types for on_intention_follow: arg0: #{arg0}, arg1: #{arg1}"
+      unless arg0.is_a?(L2Character)
+        raise "Wrong types for on_intention_follow: arg0: #{arg0}, arg1: #{arg1}"
       end
+
+      on_intention_follow(arg0)
     when PICK_UP
-      if arg0.is_a?(L2Object)
-        on_intention_pick_up(arg0)
-      else
-        error "Wrong types for on_intention_pick_up: arg0: #{arg0}, arg1: #{arg1}"
+      unless arg0.is_a?(L2Object)
+        raise "Wrong types for on_intention_pick_up: arg0: #{arg0}, arg1: #{arg1}"
       end
+
+      on_intention_pick_up(arg0)
     when INTERACT
-      if arg0.is_a?(L2Object)
-        on_intention_interact(arg0)
-      else
-        error "Wrong types for on_intention_interact: arg0: #{arg0}, arg1: #{arg1}"
+      unless arg0.is_a?(L2Object)
+        raise "Wrong types for on_intention_interact: arg0: #{arg0}, arg1: #{arg1}"
       end
+
+      on_intention_interact(arg0)
     end
 
     if @next_action.try &.intention?(intention)
@@ -141,7 +143,7 @@ abstract class AI
     end
   end
 
-  def notify_event(event : Event, arg0 = nil, arg1 = nil)
+  def notify_event(event : Event, arg0 : EventArgType = nil, arg1 : EventArgType = nil)
     if (!@actor.visible? && !@actor.teleporting?) || !@actor.ai?
       return
     end
@@ -150,59 +152,59 @@ abstract class AI
     when THINK
       on_event_think
     when ATTACKED
-      if arg0.is_a?(L2Character?)
-        on_event_attacked(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_attacked: #{arg0.class}"
       end
+
+      on_event_attacked(arg0)
     when AGGRESSION
-      if arg0.is_a?(L2Character?) && arg1.is_a?(Number)
-        on_event_aggression(arg0, arg1)
-      else
+      unless arg0.is_a?(L2Character?) && arg1.is_a?(Number)
         raise "Wrong type for on_event_aggression: #{arg0.class}, #{arg1.class}"
       end
+
+      on_event_aggression(arg0, arg1)
     when STUNNED
-      if arg0.is_a?(L2Character?)
-        on_event_stunned(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_stunned: #{arg0.class}"
       end
+
+      on_event_stunned(arg0)
     when PARALYZED
-      if arg0.is_a?(L2Character?)
-        on_event_paralyzed(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_paralyzed: #{arg0.class}"
       end
+
+      on_event_paralyzed(arg0)
     when SLEEPING
-      if arg0.is_a?(L2Character?)
-        on_event_sleeping(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_sleeping: #{arg0.class}"
       end
+
+      on_event_sleeping(arg0)
     when ROOTED
-      if arg0.is_a?(L2Character?)
-        on_event_rooted(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_rooted: #{arg0.class}"
       end
+
+      on_event_rooted(arg0)
     when CONFUSED
-      if arg0.is_a?(L2Character?)
-        on_event_confused(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_confused: #{arg0.class}"
       end
+
+      on_event_confused(arg0)
     when MUTED
-      if arg0.is_a?(L2Character?)
-        on_event_muted(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_muted: #{arg0.class}"
       end
+
+      on_event_muted(arg0)
     when EVADED
-      if arg0.is_a?(L2Character?)
-        on_event_evaded(arg0)
-      else
+      unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_evaded: #{arg0.class}"
       end
+
+      on_event_evaded(arg0)
     when READY_TO_ACT
       if !@actor.casting_now? && !@actor.casting_simultaneously_now?
         on_event_ready_to_act
@@ -218,17 +220,17 @@ abstract class AI
         on_event_arrived_revalidate
       end
     when ARRIVED_BLOCKED
-      if arg0.is_a?(Location?)
-        on_event_arrived_blocked(arg0)
-      else
+      unless arg0.is_a?(Location?)
         raise "Wrong type for on_event_arrived_blocked: #{arg0.class}"
       end
+
+      on_event_arrived_blocked(arg0)
     when FORGET_OBJECT
-      if arg0.is_a?(L2Object?)
-        on_event_forget_object(arg0)
-      else
+      unless arg0.is_a?(L2Object?)
         raise "Wrong type for on_event_forget_object: #{arg0.class}"
       end
+
+      on_event_forget_object(arg0)
     when CANCEL
       on_event_cancel
     when DEAD
@@ -238,11 +240,11 @@ abstract class AI
     when FINISH_CASTING
       on_event_finish_casting
     when AFRAID
-      if arg0.is_a?(L2Character?) && arg1.is_a?(Bool)
-        on_event_afraid(arg0, arg1)
-      else
+      unless arg0.is_a?(L2Character?) && arg1.is_a?(Bool)
         raise "Wrong types for on_event_afraid: #{arg0.class}, #{arg1.class}"
       end
+
+      on_event_afraid(arg0, arg1)
     end
 
     if (ni = @next_action) && ni.event?(event)
@@ -317,7 +319,6 @@ abstract class AI
     @move_to_pawn_timeout = ticks + (1000 // GameTimer::MILLIS_IN_TICK)
 
     unless pawn
-      warn "AI#move_to_pawn: char to follow is nil."
       return
     end
 
@@ -352,11 +353,6 @@ abstract class AI
     @actor.broadcast_packet(MoveToLocation.new(@actor))
   end
 
-  # custom
-  private def client_stop_moving
-    client_stop_moving(nil)
-  end
-
   private def client_stop_moving(loc : Location?)
     if @actor.moving?
       @actor.stop_move(loc)
@@ -389,10 +385,7 @@ abstract class AI
   def auto_attacking=(val : Bool)
     me = @actor
     if me.is_a?(L2Summon)
-      if owner = me.owner?
-        owner.ai.auto_attacking = val
-      end
-
+      me.owner.ai.auto_attacking = val
       return
     end
 
@@ -402,10 +395,7 @@ abstract class AI
   def client_start_auto_attack
     me = @actor
     if me.is_a?(L2Summon)
-      if owner = me.owner?
-        owner.ai.client_start_auto_attack
-      end
-
+      me.owner.ai.client_start_auto_attack
       return
     end
 
@@ -426,10 +416,7 @@ abstract class AI
   def client_stop_auto_attack
     me = @actor
     if me.is_a?(L2Summon)
-      if owner = me.owner?
-        owner.ai.client_stop_auto_attack
-      end
-
+      me.owner.ai.client_stop_auto_attack
       return
     end
 
@@ -507,7 +494,7 @@ abstract class AI
     stop_follow
   end
 
-  struct FollowTask
+  private struct FollowTask
     include Loggable
 
     def initialize(@char : L2Character, @range : Int32 = 70)
@@ -517,8 +504,8 @@ abstract class AI
       return unless @char.ai.follow_task
 
       unless target = @char.ai.follow_target
-        if @char.summon?
-          @char.as(L2Summon).follow_status = false
+        if smn = @char.as?(L2Summon)
+          smn.follow_status = false
           @char.intention = AI::IDLE
         end
 
@@ -527,8 +514,8 @@ abstract class AI
 
       unless @char.inside_radius?(target, @range, true, false)
         unless @char.inside_radius?(target, 3000, true, false)
-          if @char.summon?
-            @char.as(L2Summon).follow_status = false
+          if smn = @char.as?(L2Summon)
+            smn.follow_status = false
           end
           @char.intention = AI::IDLE
           return
@@ -542,8 +529,6 @@ abstract class AI
 
   def to_s(io : IO)
     super
-    io << '('
-    actor.to_s(io)
-    io << ')'
+    io << '(' << actor << ')'
   end
 end

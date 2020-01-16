@@ -1,5 +1,5 @@
 class Packets::Outgoing::InventoryUpdate < Packets::Outgoing::AbstractInventoryUpdate
-  def write_impl
+  private def write_impl
     c 0x21
     super
   end
@@ -29,7 +29,7 @@ class Packets::Outgoing::InventoryUpdate < Packets::Outgoing::AbstractInventoryU
       @item.change
     end
 
-    def write_impl
+    private def write_impl
       c 0x21
 
       h 1

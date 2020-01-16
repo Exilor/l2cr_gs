@@ -5,7 +5,7 @@ class Packets::Outgoing::ExShowContactList < GameServerPacket
     @contacts = pc.contact_list.contacts
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xd3
 

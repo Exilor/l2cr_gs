@@ -5,7 +5,7 @@ class NpcStatus < CharStatus
     return if @active_char.dead?
 
     if attacker
-      if pc = attacker.acting_player?
+      if pc = attacker.acting_player
         if pc.in_duel?
           pc.duel_state = DuelState::INTERRUPTED
         end

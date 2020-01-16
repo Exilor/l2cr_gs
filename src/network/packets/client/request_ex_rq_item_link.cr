@@ -13,9 +13,7 @@ class Packets::Incoming::RequestExRqItemLink < GameClientPacket
       if item.published? # published in Say2
         client.send_packet(ExRpItemLink.new(item))
       else
-        if Config.debug
-          debug "#{@client} requested item link for item #{@l2id} which isn't published."
-        end
+        debug { "#{@client} requested item link for item #{@l2id} which isn't published." }
       end
     end
   end

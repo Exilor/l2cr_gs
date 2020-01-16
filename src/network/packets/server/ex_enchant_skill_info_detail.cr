@@ -61,12 +61,14 @@ class Packets::Outgoing::ExEnchantSkillInfoDetail < GameServerPacket
 
     if @type != TYPE_SAFE_ENCHANT && !Config.es_sp_book_needed
       @req_count = 0
+    elsif @type == TYPE_SAFE_ENCHANT && !Config.safe_es_sp_book_needed
+      @req_count = 0
     end
 
     # debug "Cost multiplier: #{@multi}."
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x5e
 

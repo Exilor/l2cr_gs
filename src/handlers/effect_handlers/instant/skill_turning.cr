@@ -10,7 +10,7 @@ class EffectHandler::SkillTurning < AbstractEffect
     Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

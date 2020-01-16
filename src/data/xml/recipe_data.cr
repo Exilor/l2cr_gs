@@ -77,10 +77,6 @@ module RecipeData
     RECIPES.find_value { |rcp| rcp.recipe_id == item_id }
   end
 
-  def all_item_ids : Array(Int32)
-    RECIPES.local_each_value.map &.recipe_id
-  end
-
   def get_valid_recipe_list(pc : L2PcInstance?, id : Int32) : L2RecipeList?
     list = RECIPES[id]?
     if list.nil? || list.recipes.empty?

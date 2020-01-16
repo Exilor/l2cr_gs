@@ -134,10 +134,10 @@ module AdminCommandHandler::AdminBuffs
 
   def show_buffs(pc, target, page, passive)
     effects = [] of BuffInfo
-    if !passive
-      effects.concat(target.effect_list.effects)
-    else
+    if passive
       effects.concat(target.effect_list.passives)
+    else
+      effects.concat(target.effect_list.effects)
     end
 
     if page > (effects.size // PAGE_LIMIT) + 1 || page < 1
@@ -149,11 +149,11 @@ module AdminCommandHandler::AdminBuffs
       max += 1
     end
 
-    html = [
-      "<html><table width=\"100%\"><tr><td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=180><center><font color=\"LEVEL\">Effects of ",
-      target.name,
-      "</font></td><td width=45><button value=\"Back\" action=\"bypass -h admin_current_player\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><table width=\"100%\"><tr><td width=200>Skill</td><td width=30>Rem. Time</td><td width=70>Action</td></tr>"
-    ] of String | Int32
+    html = String::Builder.new
+    html << "<html><table width=\"100%\"><tr><td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=180><center><font color=\"LEVEL\">Effects of "
+    html << target.name
+    html << "</font></td><td width=45><button value=\"Back\" action=\"bypass -h admin_current_player\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><table width=\"100%\"><tr><td width=200>Skill</td><td width=30>Rem. Time</td><td width=70>Action</td></tr>"
+
     start = (page - 1) * PAGE_LIMIT
     _end = Math.min(((page - 1) * PAGE_LIMIT) + PAGE_LIMIT, effects.size)
     count = 0
@@ -252,7 +252,7 @@ module AdminCommandHandler::AdminBuffs
     end
     html << "</html>"
     # Send the packet
-    pc.send_packet(NpcHtmlMessage.new(html.join))
+    pc.send_packet(NpcHtmlMessage.new(html.to_s))
 
     if Config.gmaudit
       GMAudit.log("#{pc.name} [#{pc.l2id}]", "getbuffs", "#{target.name} (#{target.l2id})", "")

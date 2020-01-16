@@ -1,11 +1,11 @@
 class EffectHandler::OpenChest < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
     return unless chest = info.effector.as?(L2ChestInstance)
-    pc = info.effector.acting_player
+    return unless pc = info.effector.acting_player
     return if chest.dead? || pc.instance_id != chest.instance_id
 
     if pc.level <= 77 && (chest.level - pc.level).abs <= 6 || pc.level >= 78 && (chest.level - pc.level).abs <= 5

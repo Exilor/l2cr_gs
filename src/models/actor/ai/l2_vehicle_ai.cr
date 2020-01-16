@@ -1,19 +1,19 @@
 require "./l2_character_ai"
 
 class L2VehicleAI < L2CharacterAI
-  def on_intention_attack(arg)
+  private def on_intention_attack(arg)
   end
 
-  def on_intention_cast(arg1, arg2)
+  private def on_intention_cast(arg1, arg2)
   end
 
-  def on_intention_follow(arg)
+  private def on_intention_follow(arg)
   end
 
-  def on_intention_pick_up(arg)
+  private def on_intention_pick_up(arg)
   end
 
-  def on_intention_interact(arg)
+  private def on_intention_interact(arg)
   end
 
   def on_evt_attacked(arg)

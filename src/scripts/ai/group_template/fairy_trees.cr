@@ -26,7 +26,7 @@ class Scripts::FairyTrees < AbstractNpcAI
     if npc.calculate_distance(killer, true, false) <= MIN_DISTANCE
       20.times do |i|
         guardian = add_spawn(SOUL_GUARDIAN, npc, false, 30000)
-        attacker = is_summon ? killer.summon! : killer
+        attacker = is_summon ? (killer.summon || killer) : killer
         add_attack_desire(guardian, attacker)
         if Rnd.bool
           guardian.target = attacker

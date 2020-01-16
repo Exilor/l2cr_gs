@@ -1,28 +1,4 @@
 class Packets::Outgoing::CharInfo < GameServerPacket
-  private PAPERDOLL_ORDER = {
-    Inventory::UNDER,
-    Inventory::HEAD,
-    Inventory::RHAND,
-    Inventory::LHAND,
-    Inventory::GLOVES,
-    Inventory::CHEST,
-    Inventory::LEGS,
-    Inventory::FEET,
-    Inventory::CLOAK,
-    Inventory::RHAND,
-    Inventory::HAIR,
-    Inventory::HAIR2,
-    Inventory::RBRACELET,
-    Inventory::LBRACELET,
-    Inventory::DECO1,
-    Inventory::DECO2,
-    Inventory::DECO3,
-    Inventory::DECO4,
-    Inventory::DECO5,
-    Inventory::DECO6,
-    Inventory::BELT
-  }
-
   @l2id : Int32
   @x : Int32
   @y : Int32
@@ -42,9 +18,9 @@ class Packets::Outgoing::CharInfo < GameServerPacket
 
   def initialize(@pc : L2PcInstance)
     @l2id = pc.l2id
-    if pc.vehicle && (pos = pc.in_vehicle_position?)
+    if (vehicle = pc.vehicle) && (pos = pc.in_vehicle_position)
       @x, @y, @z = pos.xyz
-      @vehicle_id = pc.vehicle!.l2id
+      @vehicle_id = vehicle.l2id
     else
       @x, @y, @z = pc.xyz
       @vehicle_id = 0
@@ -79,7 +55,7 @@ class Packets::Outgoing::CharInfo < GameServerPacket
     ci
   end
 
-  def write_impl
+  private def write_impl
     gm_see_invis = false
 
     if invisible?
@@ -169,10 +145,10 @@ class Packets::Outgoing::CharInfo < GameServerPacket
       d @pc.race.to_i
       d @pc.appearance.sex ? 1 : 0
       d @pc.base_class
-      PAPERDOLL_ORDER.each do |slot|
+      paperdoll_order do |slot|
         d @pc.inventory.get_paperdoll_item_display_id(slot)
       end
-      PAPERDOLL_ORDER.each do |slot|
+      paperdoll_order do |slot|
         d @pc.inventory.get_paperdoll_augmentation_id(slot)
       end
       d @pc.inventory.talisman_slots
@@ -261,11 +237,35 @@ class Packets::Outgoing::CharInfo < GameServerPacket
       else
         d 0
       end
-      d @pc.clan_id > 0 ? @pc.clan.reputation_score : 0
+      d @pc.clan_id > 0 ? @pc.clan.not_nil!.reputation_score : 0
       d @pc.transformation_display_id
       d @pc.agathion_id
       d 0x01
       d @pc.abnormal_visual_effects_special
     end
+  end
+
+  private def paperdoll_order
+    yield Inventory::UNDER
+    yield Inventory::HEAD
+    yield Inventory::RHAND
+    yield Inventory::LHAND
+    yield Inventory::GLOVES
+    yield Inventory::CHEST
+    yield Inventory::LEGS
+    yield Inventory::FEET
+    yield Inventory::CLOAK
+    yield Inventory::RHAND
+    yield Inventory::HAIR
+    yield Inventory::HAIR2
+    yield Inventory::RBRACELET
+    yield Inventory::LBRACELET
+    yield Inventory::DECO1
+    yield Inventory::DECO2
+    yield Inventory::DECO3
+    yield Inventory::DECO4
+    yield Inventory::DECO5
+    yield Inventory::DECO6
+    yield Inventory::BELT
   end
 end

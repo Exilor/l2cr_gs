@@ -9,7 +9,7 @@ class EffectHandler::RunAway < AbstractEffect
     @time = params.get_i32("time", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

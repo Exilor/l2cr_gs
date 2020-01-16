@@ -12,7 +12,7 @@ module ItemHandler::Disguise
 
     reg_id = TerritoryWarManager.get_registered_territory_id(pc)
     if reg_id > 0 && reg_id == item.id - 13596
-      clan = pc.clan?
+      clan = pc.clan
       if clan && clan.castle_id > 0
         pc.send_packet(SystemMessageId::TERRITORY_OWNING_CLAN_CANNOT_USE_DISGUISE_SCROLL)
         return false

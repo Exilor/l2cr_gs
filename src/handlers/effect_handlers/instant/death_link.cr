@@ -6,11 +6,11 @@ class EffectHandler::DeathLink < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def effect_type
-    L2EffectType::MAGICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::MAGICAL_ATTACK
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -26,7 +26,7 @@ class EffectHandler::DeathLink < AbstractEffect
 
     power = @power * (-((char.current_hp * 2) / char.max_hp) + 2)
 
-    if target.player? && target.acting_player.fake_death?
+    if target.is_a?(L2PcInstance) && target.fake_death?
       target.stop_fake_death(true)
     end
 

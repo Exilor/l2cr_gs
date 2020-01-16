@@ -64,7 +64,7 @@ class Scripts::Q00606_BattleAgainstVarkaSilenos < Quest
 
   def on_kill(npc, killer, is_summon)
     member = get_random_party_member(killer, 1)
-    if member && rand(1000) < MOBS[npc.id]
+    if member && Rnd.rand(1000) < MOBS[npc.id]
       st = get_quest_state!(member, false)
       st.give_items(MANE, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

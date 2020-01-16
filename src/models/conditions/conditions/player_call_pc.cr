@@ -4,7 +4,7 @@ class Condition
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       can_call_player = false
-      pc = effector.acting_player?
+      pc = effector.acting_player
 
       case
       when pc.nil?

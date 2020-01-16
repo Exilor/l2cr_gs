@@ -3,11 +3,11 @@ class Condition
     initializer fort : Int32
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
-      unless pc = effector.acting_player?
+      unless pc = effector.acting_player
         return false
       end
 
-      unless clan = pc.clan?
+      unless clan = pc.clan
         return @fort == 0
       end
 

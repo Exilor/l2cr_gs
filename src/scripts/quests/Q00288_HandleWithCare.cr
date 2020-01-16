@@ -49,7 +49,7 @@ class Scripts::Q00288_HandleWithCare < Quest
       if st.cond?(2) || st.cond?(3)
         if st.has_quest_items?(MIDDLE_GRADE_LIZARD_SCALE)
           st.take_items(MIDDLE_GRADE_LIZARD_SCALE, 1)
-          rnd = rand(10)
+          rnd = Rnd.rand(10)
           if rnd == 0
             reward = REWARDS[0]
           elsif rnd < 4
@@ -65,7 +65,7 @@ class Scripts::Q00288_HandleWithCare < Quest
           end
         elsif st.has_quest_items?(HIGH_GRADE_LIZARD_SCALE)
           st.take_items(HIGH_GRADE_LIZARD_SCALE, 1)
-          rnd = rand(10)
+          rnd = Rnd.rand(10)
           if rnd == 0
             reward = REWARDS[0]
           elsif rnd < 5

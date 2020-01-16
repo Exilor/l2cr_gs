@@ -64,8 +64,8 @@ class Packets::Incoming::RequestBuySeed < GameClientPacket
     end
 
     if manager.template.parameters.get_i32("manor_id", -1) != @manor_id
-      debug "#{manager}'s parameters don't match the requested manor id."
-      debug "Manager parameters: #{manager.template.parameters}, manor id: #{@manor_id}."
+      warn { "#{manager}'s parameters don't match the requested manor id." }
+      warn { "Manager parameters: #{manager.template.parameters}, manor id: #{@manor_id}." }
       action_failed
       return
     end

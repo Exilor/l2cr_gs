@@ -22,8 +22,10 @@ class PcStatus < PlayableStatus
     pc = active_char
     return if pc.dead?
 
-    if Config.offline_mode_no_damage && pc.client? && pc.client.detached? && ((Config.offline_trade_enable && (pc.private_store_type.sell? || pc.private_store_type.buy?)) || (Config.offline_craft_enable && (pc.in_craft_mode? || pc.private_store_type.manufacture?)))
-      return
+    if Config.offline_mode_no_damage && (client = pc.client)
+      if client.detached? && ((Config.offline_trade_enable && (pc.private_store_type.sell? || pc.private_store_type.buy?)) || (Config.offline_craft_enable && (pc.in_craft_mode? || pc.private_store_type.manufacture?)))
+        return
+      end
     end
 
     return if (pc.invul? || pc.hp_blocked?) && !(dot || hp_consume)
@@ -49,7 +51,7 @@ class PcStatus < PlayableStatus
     t_dmg = mp_dam = 0
 
     if attacker && attacker != pc
-      attacker_player = attacker.acting_player?
+      attacker_player = attacker.acting_player
       if attacker.is_a?(L2PcInstance)
         return if attacker.gm? && !attacker.access_level.can_give_damage?
         if pc.in_duel?
@@ -90,7 +92,7 @@ class PcStatus < PlayableStatus
         end
       end
 
-      if (caster = pc.transferring_damage_to) && (party = pc.party?)
+      if (caster = pc.transferring_damage_to) && (party = pc.party)
         if Util.in_range?(1000, pc, caster, true) && caster.alive?
           if pc != caster && party.members.includes?(caster)
             t_dmg = value.to_i * pc.calc_stat(Stats::TRANSFER_DAMAGE_TO_PLAYER, 0).to_i

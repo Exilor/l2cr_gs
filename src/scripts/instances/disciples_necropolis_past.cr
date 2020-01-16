@@ -129,7 +129,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
   end
 
   private def make_cast(npc, targets)
-    npc.target = targets.sample
+    npc.target = targets.sample(random: Rnd)
     if skill = SKILLS[npc.id]?
       npc.do_cast(skill)
     end
@@ -160,8 +160,8 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
                 pc.send_packet(NpcSay.new(caster.l2id, Say2::TELL, caster.id, NpcString::MY_POWERS_WEAKENING_HURRY_AND_TURN_ON_THE_SEALING_DEVICE))
               end
               caster.script_value = 1
-            elsif rand(100) < 10
-              case rand(3)
+            elsif Rnd.rand(100) < 10
+              case Rnd.rand(3)
               when 0
                 caster.broadcast_packet(NpcSay.new(caster.l2id, Say2::NPC_SHOUT, caster.id, NpcString::DEAR_SHILLIENS_OFFSPRINGS_YOU_ARE_NOT_CAPABLE_OF_CONFRONTING_US))
                 if Util.in_range?(2000, caster, pc, true)
@@ -189,7 +189,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
             if caster.script_value?(0)
               caster.broadcast_packet(NpcSay.new(caster.l2id, Say2::NPC_SHOUT, caster.id, NpcString::YOU_SUCH_A_FOOL_THE_VICTORY_OVER_THIS_WAR_BELONGS_TO_SHILIEN))
               caster.script_value = 1
-            elsif rand(100) < 10
+            elsif Rnd.rand(100) < 10
               caster.broadcast_packet(NpcSay.new(caster.l2id, Say2::NPC_SHOUT, caster.id, LILITH_SHOUT.sample))
             end
           end
@@ -241,7 +241,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
           cancel_quest_timer("FIGHT", npc, pc)
         end
       end
-      if rand(100) < 50
+      if Rnd.rand(100) < 50
         npc.do_cast(SEAL_ISOLATION)
       end
     end

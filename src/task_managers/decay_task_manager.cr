@@ -1,6 +1,5 @@
 module DecayTaskManager
   extend self
-  extend Loggable
 
   private TASKS = Concurrent::Map(L2Character, Scheduler::DelayedTask).new
 
@@ -12,7 +11,7 @@ module DecayTaskManager
     end
 
     if char.is_a?(L2Attackable) && (char.spoiled? || char.seeded?)
-      delay &+= Config.spoiled_corpse_extend_time
+      delay += Config.spoiled_corpse_extend_time
     end
 
     add(char, delay)

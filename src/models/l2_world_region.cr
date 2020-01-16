@@ -3,6 +3,7 @@ class L2WorldRegion
   include Synchronizable
 
   @neighbors_task : Scheduler::DelayedTask?
+
   getter sorrounding_regions = Concurrent::LinkedList(self).new
   getter zones = Concurrent::Array(L2ZoneType).new
   getter playables = Concurrent::Map(Int32, L2Playable).new
@@ -22,7 +23,7 @@ class L2WorldRegion
   end
 
   def remove_zone(zone : L2ZoneType)
-    @zones.delete(zone)
+    @zones.delete_first(zone)
   end
 
   def revalidate_zones(char : L2Character)
@@ -116,7 +117,7 @@ class L2WorldRegion
         if o.is_a?(L2Attackable)
           c += 1
           o.target = nil
-          o.stop_move
+          o.stop_move(nil)
           o.stop_all_effects
           o.clear_aggro_list
           o.attack_by_list.clear
@@ -137,7 +138,7 @@ class L2WorldRegion
   end
 
   def add_visible_object(object : L2Object)
-    unless object.world_region? == self
+    unless object.world_region == self
       warn { "Expected #{object}'s region to be this region." }
     end
 
@@ -151,7 +152,7 @@ class L2WorldRegion
   end
 
   def remove_visible_object(object : L2Object)
-    unless object.world_region?.nil? || object.world_region == self
+    unless object.world_region.nil? || object.world_region == self
       warn { "Expected #{object}'s region to be this region or nil." }
     end
 

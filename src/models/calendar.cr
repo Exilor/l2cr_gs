@@ -43,10 +43,7 @@ class Calendar
     {{const}}
   {% end %}
 
-  property time : Time
-
-  def initialize(@time : Time = Time.now)
-  end
+  property_initializer time : Time = Time.now
 
   def_equals_and_hash @time
   delegate day, ms, millisecond, second, minute, hour, day_of_year, year,
@@ -281,5 +278,13 @@ class Calendar
     else
       raise ArgumentError.new("#{unit} not handled in Calendar#get_maximum")
     end
+  end
+
+  def to_s(io : IO)
+    io << "Calendar(" << @time << ')'
+  end
+
+  def inspect(io)
+    to_s(io)
   end
 end

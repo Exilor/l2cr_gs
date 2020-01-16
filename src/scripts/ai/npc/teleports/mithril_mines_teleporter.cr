@@ -19,16 +19,16 @@ class Scripts::MithrilMinesTeleporter < AbstractNpcAI
     add_talk_id(TELEPORT_CRYSTAL)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     index = event.to_i - 1
     if loc = LOCS[index]?
-      player.not_nil!.tele_to_location(loc, false)
+      pc.not_nil!.tele_to_location(loc, false)
     end
 
     super
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     if npc.inside_radius?(173147, -173762, 0, L2Npc::INTERACTION_DISTANCE, false, true)
       return "32652-01.htm"
     end

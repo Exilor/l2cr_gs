@@ -64,7 +64,7 @@ class Scripts::RaidBossCancel < AbstractNpcAI
     29040, # Wings of Flame, Ixion
     29060, # Captain of the Ice Queen's Royal Guard
     29065, # Sailren
-    29095, # Gordon
+    29095  # Gordon
   }
 
   def initialize

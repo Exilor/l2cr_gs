@@ -1,10 +1,10 @@
 class EffectHandler::OpenCommonRecipeBook < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    return unless pc = info.effector.acting_player?
+    return unless pc = info.effector.acting_player
     unless pc.private_store_type.none?
       pc.send_packet(SystemMessageId::CANNOT_CREATED_WHILE_ENGAGED_IN_TRADING)
       return

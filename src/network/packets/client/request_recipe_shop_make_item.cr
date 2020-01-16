@@ -17,7 +17,7 @@ class Packets::Incoming::RequestRecipeShopMakeItem < GameClientPacket
     end
 
     unless crafter = L2World.get_player(@id)
-      warn "Player with ID #{@id} not found."
+      warn { "Player with ID #{@id} not found." }
       return
     end
 

@@ -74,7 +74,7 @@ class Scripts::Q00626_ADarkTwilight < Quest
     if member = get_random_party_member(killer, 1)
       st = get_quest_state!(member, false)
       chance = MONSTERS[npc.id] * Config.rate_quest_drop
-      if rand(1000) < chance
+      if Rnd.rand(1000) < chance
         st.give_items(BLOOD_OF_SAINT, 1)
         if st.get_quest_items_count(BLOOD_OF_SAINT) < ITEMS_COUNT_REQUIRED
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

@@ -53,7 +53,7 @@ class Scripts::Q00509_AClansFame < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    unless clan = pc.clan?
+    unless clan = pc.clan
       return
     end
 
@@ -61,7 +61,7 @@ class Scripts::Q00509_AClansFame < Quest
     if pc.clan_leader?
       st = pc.get_quest_state(name)
     else
-      pleader = clan.leader.player_instance?
+      pleader = clan.leader.player_instance
       if pleader && pc.inside_radius?(pleader, 1500, true, false)
         st = pleader.get_quest_state(name)
       end
@@ -82,7 +82,7 @@ class Scripts::Q00509_AClansFame < Quest
 
   def on_talk(npc, pc)
     st = get_quest_state!(pc)
-    clan = pc.clan?
+    clan = pc.clan
 
     case st.state
     when State::CREATED

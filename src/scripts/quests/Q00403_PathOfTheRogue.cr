@@ -161,7 +161,7 @@ class Scripts::Q00403_PathOfTheRogue < Quest
   end
 
   private def check_weapon(pc)
-    return false unless weapon = pc.active_weapon_instance?
+    return false unless weapon = pc.active_weapon_instance
     weapon.id == NETIS_BOW || weapon.id == NETIS_DAGGER
   end
 

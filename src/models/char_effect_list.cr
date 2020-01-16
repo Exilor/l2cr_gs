@@ -20,32 +20,33 @@ class CharEffectList
   @triggered : IList(BuffInfo)?
   @blocked_buff_slots : EnumSet(AbnormalType)?
   @hidden_buffs = Atomic(Int32).new(0)
+
   property short_buff : BuffInfo?
 
   initializer owner : L2Character
 
   def buffs : IList(BuffInfo)
-    @buffs || sync { @buffs ||= Concurrent::LinkedList(BuffInfo).new }
+    @buffs || sync { @buffs ||= Deque(BuffInfo).new }
   end
 
   def debuffs : IList(BuffInfo)
-    @debuffs || sync { @debuffs ||= Concurrent::LinkedList(BuffInfo).new }
+    @debuffs || sync { @debuffs ||= Deque(BuffInfo).new }
   end
 
   def dances : IList(BuffInfo)
-    @dances || sync { @dances ||= Concurrent::LinkedList(BuffInfo).new }
+    @dances || sync { @dances ||= Deque(BuffInfo).new }
   end
 
   def passives : IList(BuffInfo)
-    @passives || sync { @passives ||= Concurrent::LinkedList(BuffInfo).new }
+    @passives || sync { @passives ||= Deque(BuffInfo).new }
   end
 
   def toggles : IList(BuffInfo)
-    @toggles || sync { @toggles ||= Concurrent::LinkedList(BuffInfo).new }
+    @toggles || sync { @toggles ||= Deque(BuffInfo).new }
   end
 
   def triggered : IList(BuffInfo)
-    @triggered || sync { @triggered ||= Concurrent::LinkedList(BuffInfo).new }
+    @triggered || sync { @triggered ||= Deque(BuffInfo).new }
   end
 
   private def stacked_effects : IHash(AbnormalType, BuffInfo)
@@ -87,21 +88,13 @@ class CharEffectList
   def effects : Indexable(BuffInfo)
     return Slice(BuffInfo).empty if empty?
 
-    ret = Array(BuffInfo).new(size)
+    ret = [] of BuffInfo
     ret.concat(buffs)     if has_buffs?
     ret.concat(triggered) if has_triggered?
     ret.concat(dances)    if has_dances?
     ret.concat(toggles)   if has_toggles?
     ret.concat(debuffs)   if has_debuffs?
     ret
-  end
-
-  private def size
-    (@buffs.try     &.size || 0) +
-    (@triggered.try &.size || 0) +
-    (@dances.try    &.size || 0) +
-    (@toggles.try   &.size || 0) +
-    (@debuffs.try   &.size || 0)
   end
 
   def get_effect_list(skill : Skill) : IList(BuffInfo)
@@ -113,7 +106,7 @@ class CharEffectList
     buffs
   end
 
-  def get_first_effect(type : L2EffectType) : BuffInfo?
+  def get_first_effect(type : EffectType) : BuffInfo?
     find { |info| info.effects.any? { |effect| effect.effect_type == type } }
   end
 
@@ -148,7 +141,7 @@ class CharEffectList
         time = info.time
         @owner.send_packet(ShortBuffStatusUpdate.new(id, level, time))
       else
-        @owner.send_packet(ShortBuffStatusUpdate::STATIC_PACKET)
+        @owner.send_packet(ShortBuffStatusUpdate::CLEAR)
       end
     end
   end
@@ -161,8 +154,7 @@ class CharEffectList
 
   def buff_count : Int32
     return 0 unless buffs = @buffs
-    buffs_size = buffs.size
-    buffs_size - @hidden_buffs.get - (@short_buff ? 1 : 0)
+    buffs.size - @hidden_buffs.get - (@short_buff ? 1 : 0)
   end
 
   def dance_count : Int32
@@ -287,7 +279,7 @@ class CharEffectList
     end
   end
 
-  def stop_effects(type : L2EffectType)
+  def stop_effects(type : EffectType)
     update = false
 
     each_with_list do |info, list|
@@ -383,38 +375,31 @@ class CharEffectList
   end
 
   def empty? : Bool
-    !has_buffs? && !has_triggered? && !has_dances? && !has_debuffs? &&
-    !has_toggles?
+    none?
   end
 
   def has_buffs? : Bool
-    return false unless buffs = @buffs
-    !buffs.empty?
+    !!(@buffs.try &.any?)
   end
 
   def has_debuffs? : Bool
-    return false unless debuffs = @debuffs
-    !debuffs.empty?
+    !!(@debuffs.try &.any?)
   end
 
   def has_triggered? : Bool
-    return false unless triggered = @triggered
-    !triggered.empty?
+    !!(@triggered.try &.any?)
   end
 
   def has_dances? : Bool
-    return false unless dances = @dances
-    !dances.empty?
+    !!(@dances.try &.any?)
   end
 
   def has_toggles? : Bool
-    return false unless toggles = @toggles
-    !toggles.empty?
+    !!(@toggles.try &.any?)
   end
 
   def has_passives? : Bool
-    return false unless passives = @passives
-    !passives.empty?
+    !!(@passives.try &.any?)
   end
 
   def remove(removed : Bool, info : BuffInfo?)
@@ -544,26 +529,27 @@ class CharEffectList
 
     is_summon = false
 
-    if @owner.player?
+    case owner = @owner
+    when L2PcInstance
       if @party_only
         @party_only = false
       else
         asu = AbnormalStatusUpdate.new
       end
 
-      if @owner.in_party?
-        ps = PartySpelled.new(@owner)
+      if owner.in_party?
+        ps = PartySpelled.new(owner)
       end
 
-      if @owner.acting_player.in_olympiad_mode?
-        if @owner.acting_player.olympiad_start?
-          os = ExOlympiadSpelledInfo.new(@owner.acting_player)
+      if owner.in_olympiad_mode?
+        if owner.olympiad_start?
+          os = ExOlympiadSpelledInfo.new(owner)
         end
       end
-    elsif @owner.summon?
+    when L2Summon
       is_summon = true
-      ps = PartySpelled.new(@owner)
-      pss = PartySpelled.new(@owner)
+      ps = PartySpelled.new(owner)
+      pss = PartySpelled.new(owner)
     end
 
     @buffs.try &.each do |info|
@@ -582,20 +568,22 @@ class CharEffectList
     @owner.send_packet(asu) if asu
 
     if ps
-      if @owner.summon?
-        if owner = @owner.as(L2Summon).owner?
-          if pss
-            owner.party?.try &.broadcast_to_party_members(owner, pss)
-          end
-          owner.send_packet(ps)
+      case owner
+      when L2Summon
+        summon_owner = owner.owner
+        if pss && (party = summon_owner.party)
+          party.broadcast_to_party_members(summon_owner, pss)
         end
-      elsif @owner.player?
-        @owner.party?.try &.broadcast_packet(ps)
+        summon_owner.send_packet(ps)
+      when L2PcInstance
+        if party = owner.party
+          party.broadcast_packet(ps)
+        end
       end
     end
 
     if os
-      game_id = @owner.acting_player.olympiad_game_id
+      game_id = owner.acting_player.not_nil!.olympiad_game_id
       game = OlympiadGameManager.get_olympiad_task(game_id)
       if game && game.battle_started?
         game.zone.broadcast_packet_to_observers(os)

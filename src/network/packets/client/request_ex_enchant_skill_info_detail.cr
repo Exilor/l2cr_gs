@@ -28,7 +28,7 @@ class Packets::Incoming::RequestExEnchantSkillInfoDetail < GameClientPacket
     player_skill_lvl = pc.get_skill_level(@skill_id)
 
     if player_skill_lvl == -1
-      warn "#{pc} doesn't know skill with ID #{@skill_id}."
+      warn { "#{pc} doesn't know skill with ID #{@skill_id}." }
       return
     end
 
@@ -36,12 +36,12 @@ class Packets::Incoming::RequestExEnchantSkillInfoDetail < GameClientPacket
       esl = EnchantSkillGroupsData.get_skill_enchantment_by_skill_id(@skill_id)
       if esl
         if player_skill_lvl != esl.base_level
-          warn "#{pc}'s skill level of #{player_skill_lvl} doesn't match the base level of #{esl}."
+          warn { "#{pc}'s skill level of #{player_skill_lvl} doesn't match the base level of #{esl}." }
           debug esl.inspect
           return
         end
       else
-        warn "No enchant data found for skill with ID #{@skill_id}."
+        warn { "No enchant data found for skill with ID #{@skill_id}." }
         return
       end
     elsif player_skill_lvl != req_skill_lvl

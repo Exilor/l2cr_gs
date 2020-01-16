@@ -4,6 +4,7 @@ class DropProtection
   private PROTECTED_MILLIS_TIME = 15000
 
   @task : Scheduler::DelayedTask?
+
   getter owner : L2PcInstance?
   getter? "protected"
 
@@ -33,7 +34,7 @@ class DropProtection
 
       owner = @owner.not_nil!
 
-      !!owner.party? && owner.party == pc.party?
+      !!owner.party && owner.party == pc.party
     end
   end
 

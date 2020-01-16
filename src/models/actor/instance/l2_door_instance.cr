@@ -11,14 +11,15 @@ class L2DoorInstance < L2Character
   OPEN_BY_SKILL = 8
   OPEN_BY_CYCLE = 16
 
+  @castle_index = -2
+  @fort_index = -2
+  @auto_close_task : Scheduler::DelayedTask?
+
   getter? open : Bool
   getter? targetable : Bool
   property mesh_index : Int32 = 1
   property! clan_hall : ClanHall?
   property? attackable_door : Bool
-  @castle_index = -2
-  @fort_index = -2
-  @auto_close_task : Scheduler::DelayedTask?
 
   def initialize(template : L2DoorTemplate)
     super
@@ -27,8 +28,8 @@ class L2DoorInstance < L2Character
     @attackable_door = template.attackable?
     @targetable = template.targetable?
 
-    if group_name = group_name()
-      DoorData.add_door_group(group_name, id)
+    if name = group_name
+      DoorData.add_door_group(name, id)
     end
 
     if openable_by_time?
@@ -116,7 +117,7 @@ class L2DoorInstance < L2Character
       if sibling = get_sibling_door(child_id)
         sibling.notify_child_event(@open)
       else
-        warn "Cannot find child id #{child_id}."
+        warn { "Cannot find sibling door with id #{child_id}." }
       end
     end
   end
@@ -179,7 +180,7 @@ class L2DoorInstance < L2Character
   end
 
   def auto_attackable?(attacker : L2Character) : Bool
-    unless attacker.is_a?(L2Playable)
+    unless pc = attacker.acting_player
       return false
     end
 
@@ -191,14 +192,12 @@ class L2DoorInstance < L2Character
       return false
     end
 
-    pc = attacker.acting_player
-
     if hall = clan_hall?.as?(SiegableHall)
       unless hall.siegable_hall?
         return false
       end
 
-      return hall.in_siege? && hall.siege.door_is_auto_attackable? && hall.siege.attacker?(pc.clan?)
+      return hall.in_siege? && hall.siege.door_is_auto_attackable? && hall.siege.attacker?(pc.clan)
     end
 
     castle = castle?
@@ -210,15 +209,15 @@ class L2DoorInstance < L2Character
 
     if TerritoryWarManager.tw_in_progress?
       return !TerritoryWarManager.ally_field?(pc, active_siege_id)
-    elsif is_fort
-      if clan = pc.clan?
-        if clan == fort().owner_clan?
+    elsif fort && is_fort
+      if clan = pc.clan
+        if clan == fort.owner_clan?
           return false
         end
       end
-    elsif is_castle
-      if clan = pc.clan?
-        if clan.id == castle().owner_id
+    elsif castle && is_castle
+      if clan = pc.clan
+        if clan.id == castle.owner_id
           return false
         end
       end
@@ -369,12 +368,10 @@ class L2DoorInstance < L2Character
   def do_die(killer : L2Character?) : Bool
     return false unless super
 
-    fort, castle, hall = fort?, castle?, clan_hall?
-    is_fort = fort && fort.residence_id > 0 && fort.siege.in_progress?
-    is_castle = castle && castle.residence_id > 0 && castle.siege.in_progress?
-    is_hall = hall && hall.siegable_hall? && hall.as(SiegableHall).in_siege?
+    if ((fort = fort?) && fort.residence_id > 0 && fort.siege.in_progress?) ||
+      ((castle = castle?) && castle.residence_id > 0 && castle.siege.in_progress?) ||
+      ((hall = clan_hall?) && hall.siegable_hall? && hall.as(SiegableHall).in_siege?)
 
-    if is_fort || is_castle || is_hall
       broadcast_packet(SystemMessage.castle_gate_broken_down)
     end
 
@@ -480,23 +477,23 @@ class L2DoorInstance < L2Character
     # no-op
   end
 
-  def active_weapon_instance? : L2ItemInstance?
+  def active_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def active_weapon_item? : L2Weapon?
+  def active_weapon_item : L2Weapon?
     # return nil
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
+  def secondary_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_item? : L2Weapon?
+  def secondary_weapon_item : L2Weapon?
     # return nil
   end
 
-  struct AutoClose
+  private struct AutoClose
     initializer door : L2DoorInstance
 
     def call
@@ -504,7 +501,7 @@ class L2DoorInstance < L2Character
     end
   end
 
-  struct TimerOpen
+  private struct TimerOpen
     initializer door : L2DoorInstance
 
     def call

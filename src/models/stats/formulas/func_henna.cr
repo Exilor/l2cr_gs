@@ -1,6 +1,6 @@
 class FuncHenna < AbstractFunction
   def calc(effector, effected, skill, value)
-    return value unless pc = effector.acting_player?
+    return value unless pc = effector.acting_player
 
     case @stat
     when .stat_str? then pc.henna_str

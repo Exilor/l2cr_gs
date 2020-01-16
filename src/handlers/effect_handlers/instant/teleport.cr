@@ -1,6 +1,4 @@
 class EffectHandler::Teleport < AbstractEffect
-  @loc : Location
-
   def initialize(attach_cond, apply_cond, set, params)
     super
 
@@ -10,11 +8,11 @@ class EffectHandler::Teleport < AbstractEffect
     @loc = Location.new(x, y, z)
   end
 
-  def effect_type
-    L2EffectType::TELEPORT
+  def effect_type : EffectType
+    EffectType::TELEPORT
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

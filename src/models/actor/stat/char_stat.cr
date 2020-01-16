@@ -25,10 +25,12 @@ class CharStat
       return value
     end
 
-    if @active_char.player? && @active_char.transformed?
-      val = active_char.transformation.get_stat(@active_char.acting_player, stat)
-      if val > 0
-        value = val
+    if (pc = @active_char.acting_player) && pc.transformed?
+      if transform = pc.transformation
+        val = transform.get_stat(pc, stat)
+        if val > 0
+          value = val
+        end
       end
     end
 
@@ -44,6 +46,7 @@ class CharStat
     ((1.1 * p_atk_spd) / @active_char.template.base_p_atk_spd).to_f32
   end
 
+  # unused
   def get_critical_dmg(target : L2Character, value : Float64) : Float64
     calc_stat(CRITICAL_DAMAGE, value, target)
   end
@@ -286,10 +289,10 @@ class CharStat
   end
 
   def physical_attack_range : Int32
-    if @active_char.transformed? && @active_char.player?
-      pc = @active_char.acting_player
-      val = pc.transformation.get_base_attack_range(pc)
-    elsif weapon = @active_char.active_weapon_item?
+    pc = @active_char.as?(L2PcInstance)
+    if @active_char.transformed? && pc && (transform = pc.transformation)
+      val = transform.get_base_attack_range(pc)
+    elsif weapon = @active_char.active_weapon_item
       val = weapon.base_attack_range
     else
       val = @active_char.template.base_attack_range
@@ -299,7 +302,7 @@ class CharStat
   end
 
   def physical_attack_angle : Int32
-    @active_char.active_weapon_item?.try &.base_attack_angle || 120
+    @active_char.active_weapon_item.try &.base_attack_angle || 120
   end
 
   def get_weapon_reuse_modifier(target : L2Character?) : Float64
@@ -337,7 +340,7 @@ class CharStat
   end
 
   def attack_element : Int8
-    if weapon = @active_char.active_weapon_instance?
+    if weapon = @active_char.active_weapon_instance
       element = weapon.attack_element_type
       return element.to_i8 if element >= 0
     end

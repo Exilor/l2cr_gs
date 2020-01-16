@@ -6,19 +6,16 @@ class EffectHandler::ChangeHairStyle < AbstractEffect
     @value = params.get_i8("value", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
     effector, effected = info.effector, info.effected
-    return unless effector && effected
-    return unless effector.player? && effected.player?
+    return unless effector.is_a?(L2PcInstance) && effected.is_a?(L2PcInstance)
     return if effected.looks_dead?
 
-    pc = effected.acting_player
-
-    pc.appearance.hair_style = @value
-    pc.broadcast_user_info
+    effected.appearance.hair_style = @value
+    effected.broadcast_user_info
   end
 end

@@ -7,8 +7,8 @@ class EffectHandler::Betray < AbstractEffect
     EffectFlag::BETRAYED.mask
   end
 
-  def effect_type
-    L2EffectType::DEBUFF
+  def effect_type : EffectType
+    EffectType::DEBUFF
   end
 
   def on_start(info)

@@ -39,7 +39,7 @@ class Scripts::Q00461_RumbleInTheBase < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    if rand(1000) >= MONSTERS[npc.id]
+    if Rnd.rand(1000) >= MONSTERS[npc.id]
       return super
     end
 

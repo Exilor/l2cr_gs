@@ -1,7 +1,7 @@
 class Packets::Outgoing::ManagePledgePower < GameServerPacket
   initializer clan : L2Clan, action : Int32, rank : Int32
 
-  def write_impl
+  private def write_impl
     if @action == 1
       c 0x2a
 

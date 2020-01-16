@@ -9,7 +9,7 @@ class Packets::Outgoing::TargetUnselected < GameServerPacket
     @x, @y, @z = char.xyz
   end
 
-  def write_impl
+  private def write_impl
     c 0x24
 
     d @id

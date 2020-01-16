@@ -51,7 +51,7 @@ class Scripts::Orfen < AbstractNpcAI
         start_quest_timer("orfen_unlock", temp, nil, nil)
       else
         # the time has already expired while the server was offline. Immediately spawn Orfen.
-        i = rand(10)
+        i = Rnd.rand(10)
         if i < 4
           loc = POS[1]
         elsif i < 7
@@ -108,7 +108,7 @@ class Scripts::Orfen < AbstractNpcAI
 
   def on_adv_event(event, npc, player)
     if event.casecmp?("orfen_unlock")
-      i = rand(10)
+      i = Rnd.rand(10)
       if i < 4
         loc = POS[1]
       elsif i < 7
@@ -122,7 +122,7 @@ class Scripts::Orfen < AbstractNpcAI
     elsif event.casecmp?("check_orfen_pos")
       npc = npc.not_nil!
       if (@teleported && npc.current_hp > npc.max_hp * 0.95) || (!@zone.inside_zone?(npc) && !@teleported)
-        set_spawn_point(npc, rand(3) + 1)
+        set_spawn_point(npc, Rnd.rand(3) + 1)
         @teleported = false
       elsif @teleported && !@zone.inside_zone?(npc)
         set_spawn_point(npc, 0)
@@ -151,8 +151,8 @@ class Scripts::Orfen < AbstractNpcAI
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
     if npc.id == ORFEN
-      original_caster = is_summon ? caster.summon! : caster
-      if skill.effect_point > 0 && rand(5) == 0 && npc.inside_radius?(original_caster, 1000, false, false)
+      original_caster = is_summon ? (caster.summon || caster) : caster
+      if skill.effect_point > 0 && Rnd.rand(5) == 0 && npc.inside_radius?(original_caster, 1000, false, false)
         say = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, TEXT.sample)
         say.add_string_parameter(caster.name)
         npc.broadcast_packet(say)
@@ -171,7 +171,7 @@ class Scripts::Orfen < AbstractNpcAI
     end
     npc_id = npc.id
     caller_id = caller.id
-    if npc_id == RAIKEL_LEOS && rand(20) == 0
+    if npc_id == RAIKEL_LEOS && Rnd.rand(20) == 0
       npc.target = attacker
       npc.do_cast(NPC_MORTAL_BLOW)
     elsif npc_id == RIBA_IREN
@@ -180,7 +180,7 @@ class Scripts::Orfen < AbstractNpcAI
         chance = 9
       end
       if caller_id != RIBA_IREN && caller.current_hp < caller.max_hp / 2.0
-        if rand(10) < chance
+        if Rnd.rand(10) < chance
           npc.intention = AI::IDLE
           npc.target = caller
           npc.do_cast(ORFEN_HEAL)
@@ -198,7 +198,7 @@ class Scripts::Orfen < AbstractNpcAI
         @teleported = true
         set_spawn_point(npc, 0)
       elsif npc.inside_radius?(attacker, 1000, false, false)
-        if !npc.inside_radius?(attacker, 300, false, false) && rand(10) == 0
+        if !npc.inside_radius?(attacker, 300, false, false) && Rnd.rand(10) == 0
           say = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc_id, TEXT.sample)
           say.add_string_parameter(attacker.name)
           npc.broadcast_packet(say)
@@ -222,7 +222,7 @@ class Scripts::Orfen < AbstractNpcAI
       npc.broadcast_packet(Music::BS02_D_7000.packet)
       GrandBossManager.set_boss_status(ORFEN, DEAD)
       # Calculate Min and Max respawn times randomly.
-      respawn_time = Config.orfen_spawn_interval + rand(-Config.orfen_spawn_random..Config.orfen_spawn_random)
+      respawn_time = Config.orfen_spawn_interval + Rnd.rand(-Config.orfen_spawn_random..Config.orfen_spawn_random)
       respawn_time *= 3600000
       start_quest_timer("orfen_unlock", respawn_time, nil, nil)
       # also save the respawn time so that the info is maintained past reboots

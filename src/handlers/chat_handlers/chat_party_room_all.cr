@@ -3,8 +3,8 @@ module ChatHandler::ChatPartyRoomAll
   extend ChatHandler
 
   def handle_chat(type, pc, params, text)
-    return unless party = pc.party?
-    return unless cc = party.command_channel?
+    return unless party = pc.party
+    return unless cc = party.command_channel
 
     if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
       pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)

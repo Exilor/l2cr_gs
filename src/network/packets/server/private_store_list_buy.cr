@@ -10,7 +10,7 @@ class Packets::Outgoing::PrivateStoreListBuy < Packets::Outgoing::AbstractItemPa
     @items = store_pc.buy_list.get_available_items(pc.inventory)
   end
 
-  def write_impl
+  private def write_impl
     c 0xbe
 
     d @l2id

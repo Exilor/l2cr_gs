@@ -13,6 +13,7 @@ class GeoNode < AbstractNode(GeoNodeLoc)
     @cost = cost.to_i16
   end
 
-  def attach_neighbors(@neighbors : Array(GeoNode)?)
+  def attach_neighbors(neighbors : Array(GeoNode)?)
+    @neighbors = neighbors
   end
 end

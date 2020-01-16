@@ -2,24 +2,25 @@ module HtmCache
   extend self
   extend Loggable
 
-  private CACHE = {} of String => String
-
   @@root = ""
   @@bytes_buff_len = 0u64
+
   class_getter loaded_files = 0
+  private class_getter! cache : IHash(String, String)
 
   def load
     @@root = Config.datapack_root.chomp("/data")
+    if Config.lazy_cache
+      @@cache = Concurrent::Map(String, String).new
+    else
+      @@cache = {} of String => String
+    end
     reload
   end
 
-  def reload
-    reload(@@root)
-  end
-
-  def reload(f : String)
+  def reload(f : String = @@root)
     if Config.lazy_cache
-      CACHE.clear
+      cache.clear
       @@loaded_files = 0
       @@bytes_buff_len = 0u64
       info "Running lazy cache."
@@ -41,12 +42,8 @@ module HtmCache
   end
 
   private def parse_dir(dir : String)
-    Dir.glob(dir + "/*") do |path|
-      if File.directory?(path)
-        parse_dir(path)
-      else
-        File.open(path, "r") { |file| load_file(file) }
-      end
+    Dir.glob(dir + "/**/*.{htm,html}") do |path|
+      File.open(path) { |file| load_file(file) }
     end
   end
 
@@ -57,27 +54,27 @@ module HtmCache
     end
 
     rel_path = path.from(@@root.size + 1)
-    content = file.gets_to_end.gsub(/(?:\s?)<!--.*?-->/, "")
+    content = file.gets_to_end.scrub
+    content = content.gsub(/(?:\s?)<!--.*?-->/, "")
 
-    if old = CACHE[rel_path]?
-      @@bytes_buff_len = (@@bytes_buff_len - old.bytesize) + content.bytesize
+    if old = cache[rel_path]?
+      @@bytes_buff_len = @@bytes_buff_len - old.bytesize + content.bytesize
     else
       @@bytes_buff_len += content.bytesize
       @@loaded_files += 1
     end
 
-    CACHE[rel_path] = content
+    cache[rel_path] = content
 
     content
   end
 
   def includes?(path : String) : Bool
-    CACHE.has_key?(path)
+    cache.has_key?(path)
   end
 
   def loadable?(path : String) : Bool
-    return false unless path.ends_with?(".html", ".htm")
-    File.exists?("#{@@root}/#{path}")
+    path.ends_with?(".html", ".htm") && File.exists?("#{@@root}/#{path}")
   end
 
   def get_htm(pc : L2PcInstance, path : String) : String?
@@ -117,7 +114,7 @@ module HtmCache
 
     content = internal_get_htm(path)
     if content && new_path
-      CACHE[new_path] = content
+      cache[new_path] = content
     end
 
     content
@@ -128,7 +125,7 @@ module HtmCache
       return ""
     end
 
-    content = CACHE[path]?
+    content = cache[path]?
     if Config.lazy_cache && content.nil?
       path2 = "#{@@root}/#{path}"
       if File.exists?(path2)

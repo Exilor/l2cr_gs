@@ -10,15 +10,15 @@ class EffectHandler::SetSkill < AbstractEffect
   end
 
   def on_start(info)
-    return unless info.effected.player?
+    return unless pc = info.effected.as?(L2PcInstance)
 
     if skill = SkillData[@skill_id, @skill_lvl]?
-      info.effected.acting_player.add_skill(skill, true)
-      info.effected.acting_player.send_skill_list
+      pc.add_skill(skill, true)
+      pc.send_skill_list
     end
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

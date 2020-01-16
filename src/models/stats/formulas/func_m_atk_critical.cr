@@ -4,7 +4,7 @@ class FuncMAtkCritical < AbstractFunction
   end
 
   def calc(effector, effected, skill, value)
-    if !effector.player? || effector.active_weapon_instance?
+    if !effector.player? || effector.active_weapon_instance
       value * BaseStats::WIT.calc_bonus(effector) * 10
     else
       value

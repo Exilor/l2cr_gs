@@ -6,11 +6,11 @@ class EffectHandler::HpPerMax < AbstractEffect
     @power = params.get_i32("power", 0)
   end
 
-  def effect_type
-    L2EffectType::HP
+  def effect_type : EffectType
+    EffectType::HP
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -28,7 +28,7 @@ class EffectHandler::HpPerMax < AbstractEffect
       target.current_hp += amount
     end
 
-    return unless target.acting_player? # custom
+    return unless target.acting_player # custom
 
     if info.effector != target
       sm = SystemMessage.s2_hp_has_been_restored_by_c1

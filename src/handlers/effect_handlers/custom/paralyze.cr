@@ -3,8 +3,8 @@ class EffectHandler::Paralyze < AbstractEffect
     EffectFlag::PARALYZED.mask
   end
 
-  def effect_type
-    L2EffectType::PARALYZE
+  def effect_type : EffectType
+    EffectType::PARALYZE
   end
 
   def on_exit(info)
@@ -14,7 +14,6 @@ class EffectHandler::Paralyze < AbstractEffect
   end
 
   def on_start(info)
-    # AI#on_intention_idle doesn't take an arg but L2J wrote it that way.
     info.effected.intention = AI::IDLE
     info.effected.start_paralyze
   end

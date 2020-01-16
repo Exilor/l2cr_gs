@@ -1,6 +1,5 @@
 module MerchantPriceConfigTable
   extend self
-  # extend InstanceListManager
   extend XMLReader
 
   private MPCS_FILE = "MerchantPriceConfig.xml"
@@ -16,13 +15,9 @@ module MerchantPriceConfigTable
     MPCS[id]?
   end
 
-  def get_merchant_price_config!(id : Int32) : MerchantPriceConfig
-    MPCS.fetch(id) { raise "No merchant price config with id #{id}" }
-  end
-
   def get_merchant_price_config(npc : L2MerchantInstance) : MerchantPriceConfig
     MPCS.each_value do |mpc|
-      if npc.world_region? && npc.world_region.contains_zone?(mpc.zone_id)
+      if (reg = npc.world_region) && reg.contains_zone?(mpc.zone_id)
         return mpc
       end
     end
@@ -116,7 +111,7 @@ module MerchantPriceConfigTable
 
     def update_references
       if @castle_id > 0
-        @castle = CastleManager.get_castle_by_id!(@castle_id)
+        @castle = CastleManager.get_castle_by_id(@castle_id).not_nil!
       end
     end
   end

@@ -91,7 +91,7 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
   def on_adv_event(event, npc, player)
     return unless player && npc
 
-    unless player.clan? && player.clan_id == npc.castle.owner_id
+    unless player.clan && player.clan_id == npc.castle.owner_id
       return "courtmagician-01.html"
     end
 
@@ -104,9 +104,9 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
         html = "courtmagician-06.html"
       end
 
-      chance = rand(100)
+      chance = Rnd.rand(100)
       if chance <= 5
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance <= 25
           item_id = RED_MEDITATION
         elsif chance <= 50
@@ -117,7 +117,7 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
           item_id = BLUE_M_EXPLOSION
         end
       elsif chance <= 15
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance <= 20
           item_id = RED_MIN_CLARITY
         elsif chance <= 40
@@ -130,7 +130,7 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
           item_id = BLUE_INVIS
         end
       elsif chance <= 30
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance <= 12
           item_id = BLUE_DEFENSE
         elsif chance <= 25
@@ -149,7 +149,7 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
           item_id = BLUE_GREAT_HEAL
         end
       else
-        chance = rand(46)
+        chance = Rnd.rand(46)
         if chance <= 42
           item_id = COMMON_TALISMANS[chance]
         else
@@ -167,7 +167,7 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
       end
     when "clanTeleport"
       if player.clan_id == npc.castle.owner_id
-        leader = player.clan.leader.player_instance?
+        leader = player.clan.not_nil!.leader.player_instance
 
         if leader && leader.affected_by_skill?(CLAN_GATE)
           if leader.can_summon_target?(player) # TODO: Custom one, retail dont check it but for sure lets check same conditions like when summon player by skill.
@@ -184,8 +184,8 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
     html
   end
 
-  def on_first_talk(npc, player)
-    if player.clan? && player.clan_id == npc.castle.owner_id
+  def on_first_talk(npc, pc)
+    if pc.clan && pc.clan_id == npc.castle.owner_id
       return "courtmagician.html"
     end
 

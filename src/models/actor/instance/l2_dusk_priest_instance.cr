@@ -1,5 +1,5 @@
 class L2DuskPriestInstance < L2SignsPriestInstance
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2DuskPriestInstance
   end
 

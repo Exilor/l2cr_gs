@@ -90,7 +90,7 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
         npc.variables["SPAWNED"] = true
         npc.variables["PLAYER_ID"] = pc.l2id
         alarm = add_spawn(ALARM_OF_GIANT, pc.x + 80, pc.y + 60, pc.z, 16384, false, 0)
-        alarm.variables["pc0"] = pc
+        alarm.variables["player0"] = pc
         alarm.variables["npc0"] = npc
       end
     when "32366-06.html"

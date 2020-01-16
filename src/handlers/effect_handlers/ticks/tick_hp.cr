@@ -10,8 +10,8 @@ class EffectHandler::TickHp < AbstractEffect
     @ticks = params.get_i32("ticks")
   end
 
-  def effect_type
-    L2EffectType::DMG_OVER_TIME
+  def effect_type : EffectType
+    EffectType::DMG_OVER_TIME
   end
 
   def on_start(info)

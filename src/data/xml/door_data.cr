@@ -95,8 +95,8 @@ module DoorData
   end
 
   def check_if_doors_between(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, double_face_check : Bool) : Bool
-    if instance_id > 0 && (instance = InstanceManager.get_instance(instance_id))
-      all_doors = instance.doors
+    if instance_id > 0 && (inst = InstanceManager.get_instance(instance_id))
+      all_doors = inst.doors
     else
       all_doors = REGIONS[MapRegionManager.get_map_region_loc_id(x, y)]?
     end
@@ -116,7 +116,7 @@ module DoorData
 
         multiplier1 = (((door.get_x(j) - door.get_x(i)) * (y - door.get_y(i))) - ((door.get_y(j) - door.get_y(i)) * (x - door.get_x(i)))).fdiv(denominator)
         multiplier2 = (((tx - x) * (y - door.get_y(i))) - ((ty - y) * (x - door.get_x(i)))).fdiv(denominator)
-        if 0 <= multiplier1 <= 1 && 0 <= multiplier2 <= 1
+        if multiplier1.between?(0, 1) && multiplier2.between?(0, 1)
           intersect_z = (z + (multiplier1 * (tz - z))).round
           if intersect_z > door.z_min && intersect_z < door.z_max
             if !double_face_check || intersect_face

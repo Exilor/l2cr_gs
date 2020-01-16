@@ -6,12 +6,12 @@ class Packets::Outgoing::ExMoveToLocationInAirship < GameServerPacket
 
   def initialize(pc : L2PcInstance)
     @pc_id = pc.l2id
-    @ship_id = pc.airship!.l2id
+    @ship_id = pc.airship.not_nil!.l2id
     @destination = pc.in_vehicle_position.not_nil!
     @heading = pc.heading
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x6d
 

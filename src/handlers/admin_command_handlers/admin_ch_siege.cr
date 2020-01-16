@@ -99,7 +99,7 @@ module AdminCommandHandler::AdminCHSiege
           pc.send_message("You must target a clan member of the attacker")
         elsif !raw_target.is_a?(L2PcInstance)
           pc.send_message("You must target a player with clan")
-        elsif (target = raw_target).clan?.nil?
+        elsif (target = raw_target).clan.nil?
           pc.send_message("Your target does not have any clan")
         elsif hall.siege.attacker?(target.clan)
           pc.send_message("Your target's clan is alredy participating")
@@ -132,12 +132,12 @@ module AdminCommandHandler::AdminCHSiege
           pc.send_message("You must target a clan member of the attacker")
         elsif !raw_target.is_a?(L2PcInstance)
           pc.send_message("You must target a player with clan")
-        elsif (target = raw_target).clan?.nil?
+        elsif (target = raw_target).clan.nil?
           pc.send_message("Your target does not have any clan")
         elsif !hall.siege.attacker?(target.clan)
           pc.send_message("Your target's clan is not participating")
         else
-          hall.remove_attacker(target.clan)
+          hall.remove_attacker(target.clan.not_nil!)
         end
       else
         raw_clan = ClanTable.get_clan_by_name(split[2])

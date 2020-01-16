@@ -45,11 +45,13 @@ class Multisell::Ingredient
     @item_info.try &.enchant_level || 0
   end
 
-  def inspect(io : IO)
-    io << "Ingredient(#{ItemTable[@item_id] || @item_id} x#{@item_count})"
+  def to_s(io : IO)
+    io << "Ingredient("
+    io << (ItemTable[@item_id]? || @item_id)
+    io << " x" << @item_count << ')'
   end
 
-  def to_s(io : IO)
-    inspect(io)
+  def inspect(io : IO)
+    to_s(io)
   end
 end

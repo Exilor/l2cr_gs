@@ -28,7 +28,7 @@ class Packets::Incoming::RequestExEnchantSkillUntrain < GameClientPacket
 
     s = EnchantSkillGroupsData.get_skill_enchantment_by_skill_id(@skill_id)
     unless s
-      debug "No skill enchantment found for skill #{@skill_id}."
+      debug { "No skill enchantment found for skill #{@skill_id}." }
       return
     end
 
@@ -37,7 +37,7 @@ class Packets::Incoming::RequestExEnchantSkillUntrain < GameClientPacket
     end
 
     unless skill = SkillData[@skill_id, @skill_lvl]?
-      debug "No skill found for skill with ID #{@skill_id} and level #{@skill_lvl}."
+      debug { "No skill found for skill with ID #{@skill_id} and level #{@skill_lvl}." }
       return
     end
 
@@ -53,7 +53,7 @@ class Packets::Incoming::RequestExEnchantSkillUntrain < GameClientPacket
     end
 
     unless esd = s.get_enchant_skill_holder(old_lvl)
-      warn "Can't find enchant skill holder for #{s} at #{old_lvl}."
+      warn { "Can't find enchant skill holder for #{s} at #{old_lvl}." }
       return
     end
 
@@ -94,9 +94,7 @@ class Packets::Incoming::RequestExEnchantSkillUntrain < GameClientPacket
     pc.add_skill(skill, true)
     pc.send_packet(ExEnchantSkillResult::TRUE)
 
-    if Config.debug
-      debug "Untrained #{skill}."
-    end
+    debug { "Untrained #{skill}." }
 
     pc.send_packet(UserInfo.new(pc))
     pc.send_packet(ExBrExtraUserInfo.new(pc))

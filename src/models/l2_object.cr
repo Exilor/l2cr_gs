@@ -8,9 +8,8 @@ require "../util"
 
 abstract class L2Object < ListenersContainer
   include Positionable
-  include EventListenerOwner
+  include AbstractEventListener::Owner
   include Packets::Outgoing
-  include Loggable
 
   @visible = false
   @x = Atomic(Int32).new(0)
@@ -18,8 +17,9 @@ abstract class L2Object < ListenersContainer
   @z = Atomic(Int32).new(0)
   @heading = Atomic(Int32).new(0)
   @instance_id = Atomic(Int32).new(0)
+
   getter l2id
-  getter! world_region : L2WorldRegion
+  getter world_region : L2WorldRegion?
   getter! known_list : ObjectKnownList
   getter? invisible = false
   property name : String = ""
@@ -34,7 +34,7 @@ abstract class L2Object < ListenersContainer
   abstract def send_info(pc : L2PcInstance)
 
   def decay_me : Bool
-    unless region = world_region?
+    unless region = world_region
       # warn "L2Object#decay_me: @world_region must not be nil here."
     end
 
@@ -50,7 +50,6 @@ abstract class L2Object < ListenersContainer
   end
 
   def send_packet(gsp : GameServerPacket)
-    warn "Sent #{gsp} to non-player."
     # no-op
   end
 
@@ -144,8 +143,8 @@ abstract class L2Object < ListenersContainer
           send_instance_update(new_i, false)
         end
       end
-      if summon = me.summon
-        summon.instance_id = new_instance_id
+      if smn = me.summon
+        smn.instance_id = new_instance_id
       end
     when L2Npc
       if instance_id > 0 && old_i
@@ -184,12 +183,8 @@ abstract class L2Object < ListenersContainer
     instance_type.types?(*types)
   end
 
-  def acting_player? : L2PcInstance?
+  def acting_player : L2PcInstance?
     # return nil
-  end
-
-  def acting_player : L2PcInstance
-    acting_player?.not_nil!
   end
 
   def attackable? : Bool
@@ -287,10 +282,10 @@ abstract class L2Object < ListenersContainer
       @visible = true
       self.world_region = L2World.get_region(location)
       L2World.store_object(self)
-      world_region.add_visible_object(self)
+      world_region.not_nil!.add_visible_object(self)
     end
 
-    L2World.add_visible_object(self, world_region)
+    L2World.add_visible_object(self, world_region.not_nil!)
     on_spawn
 
     true
@@ -312,8 +307,8 @@ abstract class L2Object < ListenersContainer
     end
 
     L2World.store_object(self)
-    world_region.add_visible_object(self)
-    L2World.add_visible_object(self, world_region)
+    world_region.not_nil!.add_visible_object(self)
+    L2World.add_visible_object(self, world_region.not_nil!)
     on_spawn
   end
 
@@ -326,7 +321,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def visible? : Bool
-    !!world_region?
+    !!world_region
   end
 
   def visible=(bool : Bool)
@@ -347,11 +342,12 @@ abstract class L2Object < ListenersContainer
   private def bad_coords
     warn "L2Object#bad_coords."
 
-    if character?
+    case me = self
+    when L2Character
       decay_me
-    elsif player?
-      acting_player.tele_to_location(Location.new(0, 0, 0), false)
-      acting_player.send_message("Error with your coordinates.")
+    when L2PcInstance
+      me.tele_to_location(Location.new(0, 0, 0), false)
+      me.send_message("Error with your coordinates.")
     end
   end
 
@@ -373,7 +369,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def set_xyz_invisible(x : Int32, y : Int32, z : Int32)
-    if world_region?
+    if world_region
       warn "L2Object#set_xyz_invisible: @world_region should be nil."
     end
 
@@ -390,7 +386,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def update_world_region
-    return unless old_region = world_region?
+    return unless old_region = world_region
 
     new_region = L2World.get_region(location)
 
@@ -402,7 +398,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def world_region=(new_region : L2WorldRegion?)
-    old_region = world_region?
+    old_region = world_region
     me = self
     if old_region && me.is_a?(L2Character)
       if new_region
@@ -436,10 +432,11 @@ abstract class L2Object < ListenersContainer
   def send_instance_update(instance : Instance, hide : Bool)
     start_time = ((Time.ms - instance.instance_start_time) / 1000).to_i32
     end_time = ((instance.instance_end_time - instance.instance_start_time) / 1000).to_i32
+    pc = acting_player.not_nil!
     if instance.timer_increase?
-      ui = ExSendUIEvent.new(acting_player, hide, true, start_time, end_time, instance.timer_text)
+      ui = ExSendUIEvent.new(pc, hide, true, start_time, end_time, instance.timer_text)
     else
-      ui = ExSendUIEvent.new(acting_player, hide, false, end_time - start_time, 0, instance.timer_text)
+      ui = ExSendUIEvent.new(pc, hide, false, end_time - start_time, 0, instance.timer_text)
     end
     send_packet(ui)
   end
@@ -491,7 +488,12 @@ abstract class L2Object < ListenersContainer
   end
 
   def to_s(io : IO)
-    io << "#{self.class}(#{name || l2id})"
+    io << self.class
+    io << '('
+    name.inspect(io)
+    io << ": "
+    io << l2id
+    io << ')'
   end
 
   def inspect(io : IO)

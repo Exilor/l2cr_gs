@@ -8,6 +8,6 @@ class EffectHandler::Disarm < AbstractEffect
   end
 
   def on_start(info)
-    info.effected.acting_player.disarm_weapons
+    info.effected.acting_player.not_nil!.disarm_weapons
   end
 end

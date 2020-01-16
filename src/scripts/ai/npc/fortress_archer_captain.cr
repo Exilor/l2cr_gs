@@ -34,7 +34,7 @@ class Scripts::FortressArcherCaptain < AbstractNpcAI
   def on_first_talk(npc, player)
     owner_clan = npc.fort.owner_clan?
     owner_id = owner_clan ? owner_clan.id : 0
-    if player.clan? && player.clan_id == owner_id
+    if player.clan && player.clan_id == owner_id
       return "FortressArcherCaptain.html"
     end
 

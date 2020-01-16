@@ -9,19 +9,15 @@ class L2ItemInstance < L2Object
   REMOVED = 3
   MODIFIED = 2
 
-  DEFAULT_ENCHANT_OPTIONS = Slice(Int32).new(3, 0, read_only: true)
+  DEFAULT_ENCHANT_OPTIONS = Slice.new(3, 0, read_only: true)
   private MANA_CONSUMPTION_RATE = 60_000
 
-  @init_count = 0i64
   @consuming_mana = false
-  @type_1 : Int32 = 0
-  @type_2 : Int32 = 0
-  @is_protected = false
-  @db_lock = Mutex.new
+  @db_lock = Mutex.new(:Reentrant)
   @shots_mask = 0
   @enchant_options = [] of Options
-  @wear = false
   @life_time_task : Scheduler::DelayedTask?
+
   getter owner_id = 0
   getter count : Int64 = 0i64
   getter enchant_level = 0
@@ -32,15 +28,17 @@ class L2ItemInstance < L2Object
   getter! elementals : Array(Elementals)
   getter! augmentation : L2Augmentation
   getter? published = false
+  property custom_type_1 : Int32 = 0
+  property custom_type_2 : Int32 = 0
   property loc : ItemLocation = ItemLocation::VOID
   property loc_data : Int32 = 0
   property drop_time : Int64 = 0i64
   property last_change : Int32 = 2
   property dropper_l2id : Int32 = 0
   property item_loot_schedule : Scheduler::DelayedTask?
+  property? protected : Bool = false
   property? exists_in_db : Bool = false
   property? stored_in_db : Bool = false
-
 
   def initialize(l2id : Int32, @item_id : Int32)
     super(l2id)
@@ -81,20 +79,6 @@ class L2ItemInstance < L2Object
     InstanceType::L2ItemInstance
   end
 
-  def custom_type_1 : Int32
-    @type_1
-  end
-
-  def custom_type_1=(@type_1 : Int32)
-  end
-
-  def custom_type_2 : Int32
-    @type_2
-  end
-
-  def custom_type_2=(@type_2 : Int32)
-  end
-
   private def init_known_list
     @known_list = NullKnownList::INSTANCE
   end
@@ -103,23 +87,21 @@ class L2ItemInstance < L2Object
     @published = true
   end
 
-  def protected? : Bool
-    @is_protected
-  end
-
-  def protected=(@is_protected : Bool)
-  end
-
   def template : L2Item
     @item
   end
 
+  delegate equip_reuse_delay, display_id, reference_price, reuse_delay,
+    shared_reuse_group, stackable?, destroyable?, potion?, elixir?, scroll?,
+    hero_item?, oly_restricted_item?, freightable?, quest_item?, pet_item?,
+    body_part, mask, use_skill_dis_time, default_enchant_level, to: @item
+
   def pickup_me(pc : L2Character)
-    unless @world_region
+    unless world_region
       warn "#pickup_me: @world_region should not be nil"
     end
 
-    old_region = @world_region
+    old_region = world_region
 
     pc.broadcast_packet(GetItem.new(self, pc.l2id))
 
@@ -301,7 +283,7 @@ class L2ItemInstance < L2Object
   end
 
   def night_lure? : Bool
-    8505 <= @item_id <= 8513 || @item_id == 8485
+    @item_id.between?(8505, 8513) || @item_id == 8485
   end
 
   def auto_attackable?(attacker : L2Character) : Bool
@@ -354,7 +336,7 @@ class L2ItemInstance < L2Object
     !equipped? &&
     @item.type_2 != ItemType2::QUEST && # Not Quest Item
     (@item.type_2 != ItemType2::MONEY || @item.type_1 != ItemType1::SHIELD_ARMOR) && # not money, not shield
-    (!pc.has_summon? || @l2id != pc.summon!.control_l2id) && # Not Control item of currently summoned pet
+    (!pc.has_summon? || @l2id != pc.summon.not_nil!.control_l2id) && # Not Control item of currently summoned pet
     pc.active_enchant_item_id != @l2id && # Not currently used enchant scroll
     pc.active_enchant_support_item_id != @l2id && # Not currently used enchant support item
     pc.active_enchant_attr_item_id != @l2id && # Not currently used enchant attribute item
@@ -441,7 +423,7 @@ class L2ItemInstance < L2Object
   end
 
   def clear_enchant_stats
-    unless pc = acting_player?
+    unless pc = acting_player
       @enchant_options.clear
       return
     end
@@ -451,22 +433,20 @@ class L2ItemInstance < L2Object
   end
 
   def update_database(force : Bool = false)
-    @db_lock.lock
-
-    if @exists_in_db
-      if @owner_id == 0 || @loc.void? || @loc.refund? || (@count == 0 && !@loc.lease?)
-        remove_from_db
-      elsif !Config.lazy_items_update || force
-        update_in_db
+    @db_lock.synchronize do
+      if @exists_in_db
+        if @owner_id == 0 || @loc.void? || @loc.refund? || (@count == 0 && !@loc.lease?)
+          remove_from_db
+        elsif !Config.lazy_items_update || force
+          update_in_db
+        end
+      else
+        if @owner_id == 0 || @loc.void? || @loc.refund? || (@count == 0 && !@loc.lease?)
+          return
+        end
+        insert_into_db
       end
-    else
-      if @owner_id == 0 || @loc.void? || @loc.refund? || (@count == 0 && !@loc.lease?)
-        return
-      end
-      insert_into_db
     end
-  ensure
-    @db_lock.unlock
   end
 
   def update_in_db
@@ -474,10 +454,10 @@ class L2ItemInstance < L2Object
       error "#update_in_db: @exists_in_db should be true."
     end
 
-    return if @wear || @stored_in_db
+    return if @stored_in_db
 
     begin
-      sql = "UPDATE items SET owner_id=?,count=?,loc=?,loc_data=?,enchant_level=?,custom_type1=?,custom_type2=?,mana_left=?,time=? " + "WHERE object_id = ?"
+      sql = "UPDATE items SET owner_id=?,count=?,loc=?,loc_data=?,enchant_level=?,custom_type1=?,custom_type2=?,mana_left=?,time=? WHERE object_id = ?"
       GameDB.exec(
         sql,
         @owner_id,
@@ -504,33 +484,35 @@ class L2ItemInstance < L2Object
       error "#insert_into_db: expectation failed"
     end
 
-    return if @wear
+    begin
+      sql = "INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time) VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+      GameDB.exec(
+        sql,
+        @owner_id,
+        @item_id,
+        count,
+        @loc.to_s,
+        @loc_data,
+        enchant_level,
+        l2id,
+        @custom_type_1,
+        @custom_type_2,
+        mana,
+        time
+      )
 
-    sql = "INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time) " + "VALUES (?,?,?,?,?,?,?,?,?,?,?)"
-    GameDB.exec(
-      sql,
-      @owner_id,
-      @item_id,
-      count,
-      @loc.to_s,
-      @loc_data,
-      enchant_level,
-      l2id,
-      @type_1,
-      @type_2,
-      mana,
-      time
-    )
+      @exists_in_db = true
+      @stored_in_db = true
 
-    @exists_in_db = true
-    @stored_in_db = true
+      if @augmentation
+        update_item_attributes
+      end
 
-    if @augmentation
-      update_item_attributes
-    end
-
-    if @elementals
-      update_item_elements
+      if @elementals
+        update_item_elements
+      end
+    rescue e
+      error e
     end
   end
 
@@ -538,8 +520,6 @@ class L2ItemInstance < L2Object
     unless @exists_in_db
       error "#remove_from_db: @exists_in_db should be true"
     end
-
-    return if @wear
 
     @exists_in_db = false
     @stored_in_db = false
@@ -642,16 +622,17 @@ class L2ItemInstance < L2Object
       y : Int32, z : Int32
 
     def call
-      if @item.world_region?
-        warn "@world_region for #{@item} should be nil"
+      if @item.world_region
+        warn { "@world_region for #{@item} should be nil" }
       end
 
       if dropper = @dropper
-        dst = GeoData.move_check(*dropper.xyz, @x, @y, @z, dropper.instance_id)
-        @x, @y, @z = dst.xyz
+        loc = GeoData.move_check(*dropper.xyz, @x, @y, @z, dropper.instance_id)
+        @x, @y, @z = loc.xyz
+        @item.instance_id = dropper.instance_id
+      else
+        @item.instance_id = 0
       end
-
-      @item.instance_id = @dropper.try &.instance_id || 0
 
       @item.sync do
         @item.visible = true
@@ -659,11 +640,11 @@ class L2ItemInstance < L2Object
         @item.world_region = L2World.get_region(@item.location)
       end
 
-      @item.world_region.add_visible_object(@item)
+      @item.world_region.not_nil!.add_visible_object(@item)
       @item.drop_time = Time.ms
       @item.dropper_l2id = @dropper.try &.l2id || 0
 
-      L2World.add_visible_object(@item, @item.world_region)
+      L2World.add_visible_object(@item, @item.world_region.not_nil!)
 
       if Config.save_dropped_item
         ItemsOnGroundManager.save(@item)
@@ -681,7 +662,7 @@ class L2ItemInstance < L2Object
     end
   end
 
-  def acting_player? : L2PcInstance?
+  def acting_player : L2PcInstance?
     L2World.get_player(owner_id)
   end
 
@@ -732,11 +713,11 @@ class L2ItemInstance < L2Object
   def give_skills_to_owner
     return unless has_passive_skills?
 
-    if player = acting_player?
+    if pc = acting_player
       @item.skills.try &.each do |sh|
         skill = sh.skill?
         if skill && skill.passive?
-          player.add_skill(skill, false)
+          pc.add_skill(skill, false)
         end
       end
     end
@@ -745,7 +726,7 @@ class L2ItemInstance < L2Object
   def remove_skills_from_owner
     return unless has_passive_skills?
 
-    if pc = acting_player?
+    if pc = acting_player
       @item.skills.try &.each do |sh|
         skill = sh.skill?
         if skill && skill.passive?
@@ -773,7 +754,9 @@ class L2ItemInstance < L2Object
 
     update_item_attributes
 
-    OnPlayerAugment.new(acting_player, self, aug, true).async(@item)
+    if pc = acting_player
+      OnPlayerAugment.new(pc, self, aug, true).async(@item)
+    end
 
     true
   end
@@ -792,7 +775,9 @@ class L2ItemInstance < L2Object
     sql = "DELETE FROM item_attributes WHERE itemId = ?"
     GameDB.exec(sql, l2id)
 
-    OnPlayerAugment.new(acting_player, self, augment, false).async(@item)
+    if pc = acting_player
+      OnPlayerAugment.new(pc, self, augment, false).async(@item)
+    end
   end
 
   def restore_attributes
@@ -871,12 +856,7 @@ class L2ItemInstance < L2Object
     begin
       sql = "INSERT INTO item_elementals VALUES(?,?,?)"
       @elementals.try &.each do |elm|
-        GameDB.exec(
-          sql,
-          l2id,
-          elm.element,
-          elm.value
-        )
+        GameDB.exec(sql, l2id, elm.element, elm.value)
       end
     rescue e
       error e
@@ -884,18 +864,18 @@ class L2ItemInstance < L2Object
   end
 
   def apply_enchant_stats
-    return unless pc = acting_player?
+    return unless pc = acting_player
 
     if !equipped? || enchant_options == DEFAULT_ENCHANT_OPTIONS
       return
     end
 
     enchant_options.each do |id|
-      if options = OptionData[id]?
+      if options = OptionData[id]
         options.apply(pc)
         @enchant_options << options
       elsif id != 0
-        warn "#apply_enchant_stats: Option with ID #{id} not found."
+        warn { "#apply_enchant_stats: Option with id #{id} not found." }
       end
     end
   end
@@ -908,85 +888,13 @@ class L2ItemInstance < L2Object
     @elementals.try &.each &.remove_bonus(pc)
   end
 
-  def equip_reuse_delay : Int32
-    @item.equip_reuse_delay
-  end
-
   def item_type : ItemType
     @item.item_type.as(ItemType)
   end
 
-  def display_id : Int32
-    @item.display_id
-  end
-
-  def reference_price : Int32
-    @item.reference_price
-  end
-
-  def reuse_delay : Int32
-    @item.reuse_delay
-  end
-
-  def shared_reuse_group : Int32
-    @item.shared_reuse_group
-  end
-
-  def stackable? : Bool
-    @item.stackable?
-  end
-
-  def destroyable? : Bool
-    @item.destroyable?
-  end
-
-  def potion? : Bool
-    @item.potion?
-  end
-
-  def elixir? : Bool
-    @item.elixir?
-  end
-
-  def scroll? : Bool
-    @item.scroll?
-  end
-
-  def hero_item? : Bool
-    @item.hero_item?
-  end
-
-  def oly_restricted_item? : Bool
-    @item.oly_restricted_item?
-  end
-
-  def freightable? : Bool
-    @item.freightable?
-  end
-
-  def quest_item? : Bool
-    @item.quest_item?
-  end
-
-  def pet_item? : Bool
-    @item.pet_item?
-  end
-
-  def body_part : Int32
-    @item.body_part
-  end
-
-  def mask : UInt32
-    @item.mask
-  end
-
-  def use_skill_dis_time : Int32
-    @item.use_skill_dis_time
-  end
-
   def oly_enchant_level : Int32
     enchant = enchant_level
-    return enchant unless pc = acting_player?
+    return enchant unless pc = acting_player
 
     if pc.in_olympiad_mode? && Config.alt_oly_enchant_limit >= 0
       if enchant > Config.alt_oly_enchant_limit
@@ -995,10 +903,6 @@ class L2ItemInstance < L2Object
     end
 
     enchant
-  end
-
-  def default_enchant_level : Int32
-    @item.default_enchant_level
   end
 
   def elementable? : Bool
@@ -1021,8 +925,8 @@ class L2ItemInstance < L2Object
 
   def end_of_life
     debug "#{self.class}#end_of_life"
-    unless pc = acting_player?
-      warn "#{self.class}#end_of_life returning early because there's no acting player."
+    unless pc = acting_player
+      warn { "#{self.class}#end_of_life returning early because there's no acting player." }
       return
     end
 
@@ -1063,7 +967,7 @@ class L2ItemInstance < L2Object
     @stored_in_db = false if @stored_in_db
     @consuming_mana = false if reset_consuming_mana
 
-    return unless pc = acting_player?
+    return unless pc = acting_player
 
     case @mana
     when 10
@@ -1137,7 +1041,7 @@ class L2ItemInstance < L2Object
     end
   end
 
-  struct ScheduleLifeTimeTask
+  private struct ScheduleLifeTimeTask
     include Loggable
 
     initializer item : L2ItemInstance
@@ -1149,7 +1053,7 @@ class L2ItemInstance < L2Object
     end
   end
 
-  struct ScheduleConsumeManaTask
+  private struct ScheduleConsumeManaTask
     include Loggable
 
     initializer item : L2ItemInstance

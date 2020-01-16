@@ -11,10 +11,11 @@ class L2PetInstance < L2Summon
   @mountable : Bool
   @data : L2PetData?
   @level_data : L2PetLevelData?
+
   getter control_l2id : Int32
   getter current_feed = 0
   getter(inventory) { PetInventory.new(self) }
-  getter! name
+  getter name = ""
   getter? mountable : Bool
   getter? in_support_mode = true # L2J: _bufferMode
   property? respawned : Bool = false
@@ -160,15 +161,15 @@ class L2PetInstance < L2Summon
     @current_feed = num > max_fed ? max_fed : num.to_i
   end
 
-  def active_weapon_instance? : L2ItemInstance?
+  def active_weapon_instance : L2ItemInstance?
     inventory.items.find do |item|
       item.item_location.pet_equip? &&
       item.template.body_part == L2Item::SLOT_R_HAND
     end
   end
 
-  def active_weapon_item? : L2Weapon?
-    active_weapon_instance?.try &.template.as(L2Weapon)
+  def active_weapon_item : L2Weapon?
+    active_weapon_instance.try &.template.as(L2Weapon)
   end
 
   def destroy_item(process : String?, l2id : Int32, count : Int64, reference : L2Object?, send_msg : Bool) : Bool
@@ -271,7 +272,9 @@ class L2PetInstance < L2Summon
         return
       end
 
-      if ((in_party? && party.distribution_type.finders_keepers?) || !in_party?) && !inventory.validate_capacity(target)
+      party = party()
+
+      if ((party && party.distribution_type.finders_keepers?) || !party) && !inventory.validate_capacity(target)
         action_failed
         send_packet(SystemMessageId::YOUR_PET_CANNOT_CARRY_ANY_MORE_ITEMS)
         return
@@ -295,8 +298,10 @@ class L2PetInstance < L2Summon
         return
       end
 
-      if target.item_loot_schedule && ((target.owner_id == owner.l2id) || owner.in_looter_party?(target.owner_id))
-        target.reset_owner_timer
+      if target.item_loot_schedule
+        if target.owner_id == owner.l2id || owner.in_looter_party?(target.owner_id)
+          target.reset_owner_timer
+        end
       end
 
       target.pickup_me(self)
@@ -309,8 +314,6 @@ class L2PetInstance < L2Summon
     if target.template.has_ex_immediate_effect?
       if handler = ItemHandler[target.etc_item]
         handler.use_item(self, target, false)
-      else
-        warn { "No item handler registered for item ID #{target.id}." }
       end
 
       ItemTable.destroy_item("Consume", target, owner, nil)
@@ -333,8 +336,8 @@ class L2PetInstance < L2Summon
       end
       send_packet(sm)
 
-      if owner.in_party? && !owner.party.distribution_type.finders_keepers?
-        owner.party.distribute_item(owner, target)
+      if (party = owner.party) && !party.distribution_type.finders_keepers?
+        party.distribute_item(owner, target)
       else
         item = inventory.add_item("Pickup", target, owner, self)
         send_packet(PetInventoryUpdate.new(item))
@@ -343,7 +346,9 @@ class L2PetInstance < L2Summon
 
     set_intention(AI::IDLE)
 
-    follow_owner if follow
+    if follow
+      follow_owner
+    end
   end
 
   def delete_me(owner : L2PcInstance)
@@ -379,7 +384,9 @@ class L2PetInstance < L2Summon
 
     DecayTaskManager.cancel(self)
     start_feed
-    set_running unless hungry?
+    unless hungry?
+      set_running
+    end
     set_intention(AI::ACTIVE)
   end
 
@@ -398,14 +405,8 @@ class L2PetInstance < L2Summon
     send_packet(iu)
 
     if !new_item.stackable?
-      # iu = InventoryUpdate.new
-      # iu.add_new_item(new_item)
-      # send_packet(iu)
       send_packet(InventoryUpdate.added(new_item))
     elsif player_old_item && new_item.stackable?
-      # iu = InventoryUpdate.new
-      # iu.add_modified_item(new_item)
-      # send_packet(iu)
       send_packet(InventoryUpdate.modified(new_item))
     end
 
@@ -476,7 +477,7 @@ class L2PetInstance < L2Summon
 
     self.respawned = true
 
-    if @restore_summon
+    if restore_summon?
       SummonTable.pets[owner.l2id] = control_l2id
     else
       SummonTable.pets.delete(owner.l2id)
@@ -520,10 +521,7 @@ class L2PetInstance < L2Summon
       super
 
       if alive?
-        if @inventory
-          inventory.delete_me
-        end
-
+        @inventory.try &.delete_me
         L2World.remove_pet(owner.l2id)
       end
     end
@@ -531,8 +529,8 @@ class L2PetInstance < L2Summon
 
   def restore_exp(percent : Float64)
     if @exp_before_death > 0
-      exp = ((@exp_before_death - stat.exp) * percent) / 100
-      stat.add_exp(exp.round.to_i64)
+      exp = (((@exp_before_death - stat.exp) * percent) / 100).round.to_i64
+      stat.add_exp(exp)
       @exp_before_death = 0i64
     end
   end
@@ -596,26 +594,22 @@ class L2PetInstance < L2Summon
     end
 
     level_increased = stat.add_level(value)
-
     on_level_change(level_increased)
-
     level_increased
   end
 
   def on_level_change(level_increased : Bool)
-    su = StatusUpdate.new(stat.active_char)
-    su.add_level(level)
-    su.add_max_hp(max_hp)
-    su.add_max_mp(max_mp)
-    stat.active_char.broadcast_packet(su)
+    pet = stat.active_char
+    su = StatusUpdate.level_max_hp_mp(pet, level, max_hp, max_mp)
+    pet.broadcast_packet(su)
 
     if level_increased
-      stat.active_char.broadcast_packet(SocialAction.level_up(l2id))
+      pet.broadcast_packet(SocialAction.level_up(l2id))
     end
 
-    stat.active_char.update_and_broadcast_status(1)
+    pet.update_and_broadcast_status(1)
 
-    stat.active_char.control_item.try &.enchant_level = level
+    pet.control_item.try &.enchant_level = level
   end
 
   def max_fed : Int32
@@ -677,15 +671,15 @@ class L2PetInstance < L2Summon
   end
 
   def weapon : Int32
-    inventory.rhand_slot?.try &.id || 0
+    inventory.rhand_slot.try &.id || 0
   end
 
   def armor : Int32
-    inventory.chest_slot?.try &.id || 0
+    inventory.chest_slot.try &.id || 0
   end
 
   def jewel : Int32
-    inventory.neck_slot?.try &.id || 0
+    inventory.neck_slot.try &.id || 0
   end
 
   def soulshots_per_hit : Int16

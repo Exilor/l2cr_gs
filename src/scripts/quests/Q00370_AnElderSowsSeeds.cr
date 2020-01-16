@@ -69,7 +69,7 @@ class Scripts::Q00370_AnElderSowsSeeds < Quest
   def on_kill(npc, pc, is_summon)
     npc_id = npc.id
     if tmp = MOBS1[npc_id]?
-      if rand(100) < tmp
+      if Rnd.rand(100) < tmp
         if winner = get_random_party_member(pc, npc)
           give_item_randomly(winner, npc, SPELLBOOK_PAGE, 1, 0, 1.0, true)
         end

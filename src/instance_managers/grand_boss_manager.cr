@@ -63,10 +63,11 @@ module GrandBossManager
       zone_id = rs.get_i32("zone")
       zones[zone_id] << id
     end
+
     info { "Initialized #{ZONES.size} Grand Boss zones." }
-    ZONES.each do |id, zone|
-      zone.allowed_players = zones[id]
-    end
+
+    ZONES.each { |id, zone| zone.allowed_players = zones[id] }
+
     zones.clear
   end
 
@@ -90,14 +91,6 @@ module GrandBossManager
     ZONES.find_value &.inside_zone?(x, y, z)
   end
 
-  def get_zone!(*args) : L2BossZone
-    unless zone = get_zone(*args)
-      raise "No L2BossZone found with args #{args}"
-    end
-
-    zone
-  end
-
   def in_zone?(zone_type : String, obj : L2Object) : Bool
     return false unless temp = get_zone(*obj.xyz)
     temp.name.casecmp?(zone_type)
@@ -113,7 +106,9 @@ module GrandBossManager
 
   def set_boss_status(boss_id : Int32, status : Int32)
     BOSS_STATUS[boss_id] = status
+
     info { "Updated: #{NpcData[boss_id].name} (#{boss_id}) status to #{status}." }
+
     update_db(boss_id, true)
   end
 
@@ -141,22 +136,12 @@ module GrandBossManager
     ZONES.each do |key, value|
       list = value.allowed_players # Int32[]
       next if list.empty?
-      list.each do |player|
-        GameDB.exec(
-          INSERT_GRAND_BOSS_LIST,
-          player,
-          key
-        )
-      end
+      list.each { |pc| GameDB.exec(INSERT_GRAND_BOSS_LIST, pc, key) }
     end
     STORED_INFO.each do |key, info|
       boss = BOSSES[key]?
       if boss.nil?
-        GameDB.exec(
-          UPDATE_GRAND_BOSS_DATA2,
-          BOSS_STATUS[key],
-          key
-        )
+        GameDB.exec(UPDATE_GRAND_BOSS_DATA2, BOSS_STATUS[key], key)
       else
         GameDB.exec(
           UPDATE_GRAND_BOSS_DATA,
@@ -184,11 +169,7 @@ module GrandBossManager
     info = STORED_INFO[boss_id]?
 
     if status_only || boss.nil? || info.nil?
-      GameDB.exec(
-        UPDATE_GRAND_BOSS_DATA2,
-        BOSS_STATUS[boss_id],
-        boss_id
-      )
+      GameDB.exec(UPDATE_GRAND_BOSS_DATA2, BOSS_STATUS[boss_id], boss_id)
     else
       boss = boss.not_nil!
       info = info.not_nil!
@@ -218,7 +199,7 @@ module GrandBossManager
     ZONES.clear
   end
 
-  def zones
+  def zones : IHash(Int32, L2BossZone)
     ZONES
   end
 end

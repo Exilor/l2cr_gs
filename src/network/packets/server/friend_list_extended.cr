@@ -43,7 +43,7 @@ class Packets::Outgoing::FriendListExtended < GameServerPacket
     @friends = friends
   end
 
-  def write_impl
+  private def write_impl
     c 0x58
 
     if friends = @friends

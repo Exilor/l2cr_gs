@@ -1,7 +1,7 @@
 class Packets::Outgoing::HennaItemDrawInfo < GameServerPacket
   initializer henna : L2Henna, pc : L2PcInstance
 
-  def write_impl
+  private def write_impl
     c 0xe4
 
     d @henna.dye_id

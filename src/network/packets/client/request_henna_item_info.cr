@@ -12,7 +12,7 @@ class Packets::Incoming::RequestHennaItemInfo < GameClientPacket
 
     unless henna
       if @symbol_id != 0
-        warn "Invalid henna ID #{@symbol_id} from player #{pc}."
+        warn { "Invalid henna ID #{@symbol_id} from player #{pc}." }
       end
 
       action_failed

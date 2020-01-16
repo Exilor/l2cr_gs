@@ -8,25 +8,20 @@ module GameDB
     private SELECT_COMMON = "SELECT id, type, classIndex FROM character_recipebook WHERE charId=?"
     private SELECT = "SELECT id FROM character_recipebook WHERE charId=? AND classIndex=? AND type = 1"
 
-    def insert(pc : L2PcInstance, recipe_id : Int32, dwarf : Bool)
+    def insert(pc : L2PcInstance, recipe_id : Int32, dwarven : Bool)
       GameDB.exec(
         INSERT,
         pc.l2id,
         recipe_id,
-        dwarf ? pc.class_index : 0,
-        dwarf ? 1 : 0
+        dwarven ? pc.class_index : 0,
+        dwarven ? 1 : 0
       )
     rescue e
       error e
     end
 
-    def delete(pc : L2PcInstance, recipe_id : Int32, dwarf : Bool)
-      GameDB.exec(
-        DELETE,
-        pc.l2id,
-        recipe_id,
-        dwarf ? pc.class_index : 0
-      )
+    def delete(pc : L2PcInstance, recipe_id : Int32, dwarven : Bool)
+      GameDB.exec(DELETE, pc.l2id, recipe_id, dwarven ? pc.class_index : 0)
     rescue e
       error e
     end

@@ -26,7 +26,7 @@ class Packets::Incoming::RequestGMCommand < GameClientPacket
       end
     when 2 # Player clan
       if player
-        if clan = player.clan?
+        if clan = player.clan
           send_packet(GMViewPledgeInfo.new(clan, player))
         end
       end

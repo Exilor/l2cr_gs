@@ -7,7 +7,7 @@ module EffectHandler
       @power = params.get_f64("power", 0)
     end
 
-    def instant?
+    def instant? : Bool
       true
     end
 
@@ -18,7 +18,7 @@ module EffectHandler
         return
       end
 
-      if target.player? && target.acting_player.fake_death?
+      if target.is_a?(L2PcInstance) && target.fake_death?
         target.stop_fake_death(true)
       end
 
@@ -45,8 +45,8 @@ module EffectHandler
       end
     end
 
-    def effect_type
-      L2EffectType::MAGICAL_ATTACK
+    def effect_type : EffectType
+      EffectType::MAGICAL_ATTACK
     end
   end
 end

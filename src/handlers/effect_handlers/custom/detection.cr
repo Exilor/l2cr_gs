@@ -1,13 +1,11 @@
 class EffectHandler::Detection < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    return if !info.effector.player? || !info.effected.player?
-
-    player = info.effector.acting_player
-    target = info.effected.acting_player
+    return unless player = info.effector.as?(L2PcInstance)
+    return unless target = info.effected.as?(L2PcInstance)
 
     if target.invisible?
       return if player.in_party_with?(target)

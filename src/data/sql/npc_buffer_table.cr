@@ -58,12 +58,10 @@ module NpcBufferTable
   end
 
   def get_skill_info(npc_id : Int32, group : Int32) : NpcBufferData?
-    if skills = BUFFERS[npc_id]?
-      skills.get_skill_group_info(group)
-    end
+    BUFFERS[npc_id]?.try &.get_skill_group_info(group)
   end
 
-  struct NpcBufferData
+  private struct NpcBufferData
     getter skill, fee
 
     def initialize(skill_id : Int32, skill_level : Int32, fee_id : Int32, fee_amount : Int32)

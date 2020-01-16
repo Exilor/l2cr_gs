@@ -1,11 +1,10 @@
 class Condition
   class PlayerState < Condition
-    def initialize(@state : ::PlayerState, @required : Bool)
-    end
+    initializer state : ::PlayerState, required : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       char = effector
-      pc = effector.acting_player?
+      pc = effector.acting_player
 
       case @state
       when .resting?

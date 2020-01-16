@@ -9,7 +9,7 @@ class Packets::Outgoing::HennaInfo < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0xe5
 
     c @pc.henna_int

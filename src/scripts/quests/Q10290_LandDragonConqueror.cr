@@ -36,13 +36,13 @@ class Scripts::Q10290_LandDragonConqueror < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    unless pc.in_party?
+    unless party = pc.party
       return super
     end
 
     # rewards go only to command channel, not to a single party or player (retail Freya AI)
-    if pc.party.in_command_channel?
-      pc.party.command_channel.each do |p|
+    if cc = party.command_channel
+      cc.each do |p|
         if Util.in_range?(8000, npc, p, false)
           st = get_quest_state(p, false)
 
@@ -54,7 +54,7 @@ class Scripts::Q10290_LandDragonConqueror < Quest
         end
       end
     else
-      pc.party.each do |p|
+      party.each do |p|
         if Util.in_range?(8000, npc, p, false)
           st = get_quest_state(p, false)
 

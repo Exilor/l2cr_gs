@@ -85,7 +85,7 @@ class L2DoormenInstance < L2NpcInstance
         pc.tele_to_location(list.x, list.y, list.z, false)
       end
     else
-      warn "No teleport destination with id #{where}."
+      warn { "No teleport destination with id #{where}." }
     end
 
     pc.action_failed

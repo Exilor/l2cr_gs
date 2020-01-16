@@ -147,8 +147,7 @@
 # end
 
 struct ItemInfo
-  def initialize(@item : L2ItemInstance | TradeItem, @change : Int32? = nil)
-  end
+  initializer item : L2ItemInstance | TradeItem, change : Int32? = nil
 
   delegate l2id, template, count, custom_type_1, custom_type_2, enchant_options,
     get_element_def_attr, attack_element_type, attack_element_power, to: @item

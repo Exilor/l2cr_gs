@@ -82,7 +82,7 @@ class Scripts::Q00328_SenseForBusiness < Quest
   def on_kill(npc, pc, is_summon)
     st = get_quest_state(pc, false)
     if st && st.started?
-      chance = rand(100)
+      chance = Rnd.rand(100)
       if tmp = MONSTER_EYES[npc.id]?
         if chance < tmp[0]
           st.give_items(MONSTER_EYE_CARCASS, 1)

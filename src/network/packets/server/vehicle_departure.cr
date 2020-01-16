@@ -15,7 +15,7 @@ class Packets::Outgoing::VehicleDeparture < GameServerPacket
     @rotation_speed = boat.stat.rotation_speed.to_i
   end
 
-  def write_impl
+  private def write_impl
     c 0x6c
 
     d @l2id

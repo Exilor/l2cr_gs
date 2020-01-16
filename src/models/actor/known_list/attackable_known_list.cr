@@ -4,12 +4,14 @@ class AttackableKnownList < NpcKnownList
   def remove_known_object(object : L2Object, forget : Bool) : Bool
     return false unless super
 
+    me = active_char
+
     if object.character?
-      active_char.aggro_list.delete(object)
+      me.aggro_list.delete(object)
     end
 
-    if active_char.ai? && known_players.empty? && !active_char.walker?
-      active_char.intention = AI::IDLE
+    if me.ai? && known_players.empty? && !me.walker?
+      me.intention = AI::IDLE
     end
 
     true
@@ -22,12 +24,13 @@ class AttackableKnownList < NpcKnownList
   def get_distance_to_watch_object(object : L2Object) : Int32
     return 0 unless object.character?
 
+    me = active_char
+
     if object.playable?
-      return object.known_list.get_distance_to_watch_object(active_char)
+      return object.known_list.get_distance_to_watch_object(me)
     end
 
-    att = active_char
-    Math.max(300, Math.max(att.aggro_range, att.template.clan_help_range))
+    Math.max(300, Math.max(me.aggro_range, me.template.clan_help_range))
   end
 
   def active_char : L2Attackable

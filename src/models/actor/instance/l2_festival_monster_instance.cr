@@ -1,7 +1,7 @@
 class L2FestivalMonsterInstance < L2MonsterInstance
   property offering_bonus : Int32 = 1 # L2J: _bonusMultiplier
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2FestivalMonsterInstance
   end
 
@@ -22,22 +22,24 @@ class L2FestivalMonsterInstance < L2MonsterInstance
       return
     end
 
-    unless party = killing_char.party?
+    unless party = killing_char.party
       return
     end
 
     party_leader = party.leader
-    added_offerings = party_leader.inventory.add_item("Sign", SevenSignsFestival::FESTIVAL_OFFERING_ID, @offering_bonus.to_i64, party_leader, self)
-    unless added_offerings
-      error "Couldn't reward #{party_leader} with offerings."
+    offerings = party_leader.inventory.add_item("Sign", SevenSignsFestival::FESTIVAL_OFFERING_ID, @offering_bonus.to_i64, party_leader, self)
+    unless offerings
+      error { "Couldn't reward #{party_leader} with offerings." }
       return super
     end
-    if added_offerings.count != @offering_bonus
-      iu = InventoryUpdate.modified(added_offerings)
+
+    if offerings.count != @offering_bonus
+      iu = InventoryUpdate.modified(offerings)
     else
-      iu = InventoryUpdate.added(added_offerings)
+      iu = InventoryUpdate.added(offerings)
     end
     party_leader.send_packet(iu)
+
     super
   end
 end

@@ -2,7 +2,7 @@ class Packets::Outgoing::ExCubeGameTeamList < GameServerPacket
   initializer red_players : Array(L2PcInstance),
     blue_players : Array(L2PcInstance), room_number : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x97
 

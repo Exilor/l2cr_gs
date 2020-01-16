@@ -30,24 +30,8 @@ module FortManager
     FORTS.find { |fort| fort.residence_id == id }
   end
 
-  def get_fort_by_id!(id : Int32) : Fort
-    unless fort = get_fort_by_id(id)
-      raise "Fort with id #{id} not found"
-    end
-
-    fort
-  end
-
   def get_fort_by_owner(clan : L2Clan) : Fort?
     FORTS.find { |fort| fort.owner_clan? == clan }
-  end
-
-  def get_fort_by_owner!(clan : L2Clan) : Fort
-    unless fort = get_fort_by_owner(clan)
-      raise "No fort found for clan #{clan}"
-    end
-
-    fort
   end
 
   def get_fort(name : String) : Fort?
@@ -63,14 +47,6 @@ module FortManager
     get_fort(*obj.xyz)
   end
 
-  def get_fort!(*args) : Fort
-    unless fort = get_fort(*args)
-      raise "No fort found with args #{args}"
-    end
-
-    fort
-  end
-
   def get_fort_index(id : Int32) : Int32
     FORTS.index { |fort| fort.residence_id == id } || -1
   end
@@ -80,10 +56,10 @@ module FortManager
   end
 
   def get_fort_index(x : Int32, y : Int32, z : Int32) : Int32
-    FORTS.index { |fort| fort.in_zone?(x, y, z) } || -1
+    FORTS.index &.in_zone?(x, y, z) || -1
   end
 
-  def forts
+  def forts : Array(Fort)
     FORTS
   end
 

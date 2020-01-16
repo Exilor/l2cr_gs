@@ -10,7 +10,7 @@ module BypassHandler::SupportBlessing
       return true
     end
     target.target = pc
-    target.do_cast(CommonSkill::BLESSING_OF_PROTECTION.skill) # <-
+    target.do_cast(CommonSkill::BLESSING_OF_PROTECTION.skill)
     false
   end
 

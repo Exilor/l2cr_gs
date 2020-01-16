@@ -3,12 +3,12 @@ class EffectHandler::Root < AbstractEffect
     EffectFlag::ROOTED.mask
   end
 
-  def effect_type
-    L2EffectType::ROOT
+  def effect_type : EffectType
+    EffectType::ROOT
   end
 
   def on_start(info)
-    info.effected.stop_move
+    info.effected.stop_move(nil)
     info.effected.notify_event(AI::ROOTED)
   end
 

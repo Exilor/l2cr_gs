@@ -2,7 +2,7 @@ class Packets::Outgoing::AskJoinPledge < GameServerPacket
   initializer requestor_id : Int32, subpledge_name : String?,
     pledge_type : Int32, pledge_name : String
 
-  def write_impl
+  private def write_impl
     c 0x2c
 
     d @requestor_id

@@ -8,10 +8,9 @@ class Packets::Outgoing::Die < GameServerPacket
   @static_res = false
 
   def initialize(@char : L2Character)
-    if char.player?
-      pc = char.acting_player
+    if pc = char.as?(L2PcInstance)
       @access = pc.access_level
-      @clan = pc.clan?
+      @clan = pc.clan
       @jailed = pc.jailed?
     end
 
@@ -19,15 +18,15 @@ class Packets::Outgoing::Die < GameServerPacket
     @can_teleport = @char.can_revive? && !@char.pending_revive?
   end
 
-  def write_impl
+  private def write_impl
     c 0x00
 
     d @char.l2id
     d @can_teleport ? 1 : 0
 
-    if @char.player?
-      if !OlympiadManager.registered?(@char.acting_player) && !@char.on_event?
-        @static_res = @char.inventory.has_item_for_self_resurrection?
+    if pc = @char.as?(L2PcInstance)
+      if !OlympiadManager.registered?(pc) && !pc.on_event?
+        @static_res = pc.inventory.has_item_for_self_resurrection?
       end
 
       if @access.try &.allow_fixed_res?

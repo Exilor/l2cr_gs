@@ -1,5 +1,5 @@
 class EffecyHandler::Sweeper < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -13,7 +13,7 @@ class EffecyHandler::Sweeper < AbstractEffect
     end
 
     mob.take_sweep.try &.each do |item|
-      if party = pc.party?
+      if party = pc.party
         party.distribute_item(pc, item, true, mob)
       else
         pc.add_item("Sweeper", item, mob, true)

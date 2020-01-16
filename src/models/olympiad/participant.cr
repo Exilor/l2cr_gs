@@ -17,7 +17,7 @@ class Participant
     @side = olympiad_side
     @base_class = pc.base_class
     @stats = Olympiad.get_noble_stats(@l2id)
-    clan = pc.clan?
+    clan = pc.clan
     @clan_name = clan ? clan.name : ""
     @clan_id = pc.clan_id
   end

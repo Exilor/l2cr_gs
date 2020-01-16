@@ -19,7 +19,7 @@ class OlympiadGameClassed < OlympiadGameNormal
 
   def self.create_game(id : Int32, class_list : IArray(IArray(Int32))) : self?
     until class_list.empty?
-      list = class_list.sample
+      list = class_list.sample(random: Rnd)
       if list.size < 2
         class_list.delete_first(list)
         next

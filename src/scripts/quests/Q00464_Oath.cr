@@ -59,7 +59,7 @@ class Scripts::Q00464_Oath < Quest
         return get_no_quest_msg(pc)
       end
 
-      cond = rand(2..9)
+      cond = Rnd.rand(2..9)
       st.set("npc", NPC[cond - 1][0].to_s)
       st.set_cond(cond, true)
       st.take_items(BOOK, 1)
@@ -134,7 +134,7 @@ class Scripts::Q00464_Oath < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    if rand(1000) < MOBS[npc.id]
+    if Rnd.rand(1000) < MOBS[npc.id]
       npc.drop_item(killer, STRONGBOX, 1)
     end
 

@@ -33,7 +33,7 @@ class Scripts::Q00452_FindingtheLostSoldiers < Quest
       end
     else
       if st.cond?(1)
-        if rand(10) < 5
+        if Rnd.rand(10) < 5
           st.give_items(TAG_ID, 1)
         else
           html = "corpse-3.html"

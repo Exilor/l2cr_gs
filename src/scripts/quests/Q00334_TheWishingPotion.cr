@@ -134,12 +134,12 @@ class Scripts::Q00334_TheWishingPotion < Quest
     when FAIRY_RUPINA
       if qs.get_int(FLAG) == 1
         html = nil
-        if rand(4) < 4
+        if Rnd.rand(4) < 4
           qs.give_items(NECKLACE_OF_GRACE, 1)
           qs.set(FLAG, 0)
           html = "30742-01.html"
         else
-          case rand(4)
+          case Rnd.rand(4)
           when 0
             qs.give_items(DEMONS_TUNIC_FABRIC, 1)
           when 1
@@ -159,13 +159,13 @@ class Scripts::Q00334_TheWishingPotion < Quest
       end
     when WISDOM_CHEST
       if qs.get_int(FLAG) == 4
-        random = rand(100)
+        random = Rnd.rand(100)
         html = nil
         if random < 10
           qs.give_items(Q_FOBBIDEN_LOVE_SCROLL, 1)
           html = "30743-02.html"
         elsif random >= 10 && random < 50
-          case rand(4)
+          case Rnd.rand(4)
           when 0
             qs.give_items(DEMONS_TUNIC_FABRIC, 1)
           when 1
@@ -178,7 +178,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
 
           html = "30743-03.html"
         elsif random >= 50 && random < 100
-          case rand(2)
+          case Rnd.rand(2)
           when 0
             qs.give_items(Q_MUSICNOTE_LOVE, 1)
           when 1
@@ -187,7 +187,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
 
           html = "30743-04.html"
         elsif random >= 85 && random < 95
-          case rand(4)
+          case Rnd.rand(4)
           when 0
             qs.give_items(DEMONS_TUNIC, 1)
           when 1
@@ -200,7 +200,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
 
           html = "30743-05.html"
         elsif random >= 95
-          case rand(2)
+          case Rnd.rand(2)
           when 0
             qs.give_items(Q_GOLD_CIRCLET, 1)
           when 1
@@ -396,9 +396,9 @@ class Scripts::Q00334_TheWishingPotion < Quest
         i0 = 0
         case qs.get_int(I_QUEST0)
         when 1
-          i0 = rand(2)
+          i0 = Rnd.rand(2)
         when 2..4
-          i0 = rand(3)
+          i0 = Rnd.rand(3)
         end
         case i0
         when 0
@@ -461,7 +461,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
       case npc.id
       when WHISPERING_WIND
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_WIND_SOULSTONE)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_WIND_SOULSTONE, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_AMBER_SCALE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_SILENOS_HORN, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -474,7 +474,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when ANT_SOLDIER, ANT_WARRIOR_CAPTAIN
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_ANT_SOLDIER_APHID)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_ANT_SOLDIER_APHID, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_AMBER_SCALE, Q_WIND_SOULSTONE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_SILENOS_HORN, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -487,7 +487,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when SILENOS
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_SILENOS_HORN)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_SILENOS_HORN, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_AMBER_SCALE, Q_WIND_SOULSTONE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -500,7 +500,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when TYRANT, TYRANT_KINGPIN
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_TYRANTS_CHITIN)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_TYRANTS_CHITIN, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_AMBER_SCALE, Q_WIND_SOULSTONE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_SILENOS_HORN, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -513,7 +513,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when AMBER_BASILISK
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_AMBER_SCALE)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_AMBER_SCALE, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_WIND_SOULSTONE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_SILENOS_HORN, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -526,7 +526,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when MIST_HORROR_RIPPER
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_HORROR_ECTOPLASM)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_HORROR_ECTOPLASM, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_AMBER_SCALE, Q_WIND_SOULSTONE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_SILENOS_HORN, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -539,7 +539,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when TURAK_BUGBEAR, TURAK_BUGBEAR_WARRIOR
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_BUGBEAR_BLOOD)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_BUGBEAR_BLOOD, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_AMBER_SCALE, Q_WIND_SOULSTONE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_SILENOS_HORN, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -552,7 +552,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when GLASS_JAGUAR
         if qs.has_quest_items?(Q_POTION_RECIPE_1, Q_POTION_RECIPE_2) && !qs.has_quest_items?(Q_GLASS_EYE)
-          if rand(10) == 0
+          if Rnd.rand(10) == 0
             qs.give_items(Q_GLASS_EYE, 1)
             qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             if qs.has_quest_items?(Q_AMBER_SCALE, Q_WIND_SOULSTONE, Q_GLASS_EYE, Q_HORROR_ECTOPLASM, Q_SILENOS_HORN, Q_ANT_SOLDIER_APHID, Q_TYRANTS_CHITIN, Q_BUGBEAR_BLOOD)
@@ -565,8 +565,8 @@ class Scripts::Q00334_TheWishingPotion < Quest
         end
       when GRIMA
         if qs.memo_state?(2) && qs.get_int(FLAG) == 2
-          if rand(1000) < 33
-            if rand(1000) == 0
+          if Rnd.rand(1000) < 33
+            if Rnd.rand(1000) == 0
               qs.give_adena(100_000_000, true)
             else
               qs.give_adena(900_000, true)
@@ -576,7 +576,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
           end
         end
       when SUCCUBUS_OF_SEDUCTION
-        if qs.memo_state?(2) && !qs.has_quest_items?(Q_FOBBIDEN_LOVE_SCROLL) && qs.get_int(FLAG) == 1 && rand(1000) < 28
+        if qs.memo_state?(2) && !qs.has_quest_items?(Q_FOBBIDEN_LOVE_SCROLL) && qs.get_int(FLAG) == 1 && Rnd.rand(1000) < 28
           qs.give_items(Q_FOBBIDEN_LOVE_SCROLL, 1)
           qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
           qs.set(FLAG, 0)
@@ -597,10 +597,10 @@ class Scripts::Q00334_TheWishingPotion < Quest
       when DLORD_ALEXANDROSANCHES
         if qs.memo_state?(2) && qs.get_int(FLAG) == 3
           npc.say(NpcString::BONAPARTERIUS_ABYSS_KING_WILL_PUNISH_YOU)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             add_spawn(ABYSSKING_BONAPARTERIUS, npc, true, 0, false)
           else
-            case rand(4)
+            case Rnd.rand(4)
             when 0
               qs.give_items(DEMONS_TUNIC_FABRIC, 1)
             when 1
@@ -615,10 +615,10 @@ class Scripts::Q00334_TheWishingPotion < Quest
       when ABYSSKING_BONAPARTERIUS
         if qs.memo_state?(2) && qs.get_int(FLAG) == 3
           npc.say(NpcString::REVENGE_IS_OVERLORD_RAMSEBALIUS_OF_THE_EVIL_WORLD)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             add_spawn(EVILOVERLORD_RAMSEBALIUS, npc, true, 0, false)
           else
-            case rand(4)
+            case Rnd.rand(4)
             when 0
               qs.give_items(DEMONS_TUNIC_FABRIC, 1)
             when 1
@@ -633,10 +633,10 @@ class Scripts::Q00334_TheWishingPotion < Quest
       when EVILOVERLORD_RAMSEBALIUS
         if qs.memo_state?(2) && qs.get_int(FLAG) == 3
           npc.say(NpcString::OH_GREAT_DEMON_KING)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             add_spawn(GREAT_DEMON_KING, npc, true, 0, false)
           else
-            case rand(4)
+            case Rnd.rand(4)
             when 0
               qs.give_items(DEMONS_TUNIC_FABRIC, 1)
             when 1
@@ -656,15 +656,15 @@ class Scripts::Q00334_TheWishingPotion < Quest
 
   private def get_random_player_from_party(pc, npc)
     qs = pc.get_quest_state(name)
-    candidates = [] of QuestState
 
     if qs && qs.started?
-      candidates << qs
-      candidates << qs
+      candidates = [qs, qs]
+    else
+      candidates = [] of QuestState
     end
 
-    if party = pc.party?
-      pc.party.members.each do |pm|
+    if party = pc.party
+      party.members.each do |pm|
         qss = pm.get_quest_state(name)
         if qss && qss.started? && Util.in_range?(1500, npc, pm, true)
           candidates << qss
@@ -672,6 +672,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
       end
     end
 
-    candidates.sample?
+    candidates.sample?(random: Rnd)
   end
 end

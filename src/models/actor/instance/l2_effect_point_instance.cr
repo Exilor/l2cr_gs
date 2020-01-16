@@ -1,13 +1,11 @@
 class L2EffectPointInstance < L2Npc
   @owner : L2PcInstance?
 
-  def initialize(template : L2NpcTemplate, owner : L2Character?)
+  def initialize(template : L2NpcTemplate, @owner : L2PcInstance)
     super(template)
 
     self.invul = false
-    if @owner = owner.try &.acting_player?
-      self.instance_id = acting_player.instance_id
-    end
+    self.instance_id = owner.instance_id
   end
 
   def initialize(template : L2NpcTemplate)
@@ -15,11 +13,11 @@ class L2EffectPointInstance < L2Npc
     raise "This constructor must not be called"
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2EffectPointInstance
   end
 
-  def acting_player?
+  def acting_player : L2PcInstance?
     @owner
   end
 

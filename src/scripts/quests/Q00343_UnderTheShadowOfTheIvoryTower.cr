@@ -73,16 +73,16 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
       if !has_quest_items?(pc, ECTOPLASM_LIQUEUR)
         html = event
       else
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
 
         if chance <= 119
           give_items(pc, SCROLL_ENCHANT_WEAPON_D_GRADE, 1)
         elsif chance <= 169
           give_items(pc, SCROLL_ENCHANT_WEAPON_C_GRADE, 1)
         elsif chance <= 329
-          give_items(pc, SPIRITSHOT_C_GRADE, rand(200) + 401)
+          give_items(pc, SPIRITSHOT_C_GRADE, Rnd.rand(200) + 401)
         elsif chance <= 559
-          give_items(pc, SPIRITSHOT_D_GRADE, rand(200) + 401)
+          give_items(pc, SPIRITSHOT_D_GRADE, Rnd.rand(200) + 401)
         elsif chance <= 561
           give_items(pc, SAGES_BLOOD, 1)
         elsif chance <= 578
@@ -116,8 +116,8 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
       end
     when "30934-08a.html"
       if qs.memo_state?(2)
-        i0 = rand(100)
-        i1 = rand(3)
+        i0 = Rnd.rand(100)
+        i1 = Rnd.rand(3)
 
         if i0 < 20 && i1 == 0
           qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 4)
@@ -130,28 +130,28 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
           qs.set("param1", 2)
           html = "30934-08c.html"
         elsif i0 >= 20 && i0 < 50 && i1 == 0
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             qs.set("param1", 0)
           else
             qs.set("param1", 1)
           end
           html = "30934-09a.html"
         elsif i0 >= 20 && i0 < 50 && i1 == 1
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             qs.set("param1", 1)
           else
             qs.set("param1", 2)
           end
           html = "30934-09b.html"
         elsif i0 >= 20 && i0 < 50 && i1 == 2
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             qs.set("param1", 2)
           else
             qs.set("param1", 0)
           end
           html = "30934-09c.html"
         else
-          qs.set("param1", rand(3))
+          qs.set("param1", Rnd.rand(3))
           html = "30934-10.html"
         end
       end
@@ -204,7 +204,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
       if get_quest_items_count(pc, NEBULITE_ORB) < 10
         html = event
       else
-        qs.set("param2", rand(2))
+        qs.set("param2", Rnd.rand(2))
         html = "30935-04.html"
       end
     when "30935-05.html"
@@ -308,35 +308,35 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
     if qs && qs.started? && Util.in_range?(1500, npc, killer, true)
       case npc.id
       when MANASHEN_GARGOYLE, ENCHANTED_MONSTEREYE
-        if rand(100) < 63
+        if Rnd.rand(100) < 63
           give_items(killer, NEBULITE_ORB, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
 
         if qs.get_memo_state_ex(1) > 1
-          if rand(100) <= 12
+          if Rnd.rand(100) <= 12
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) - 1)
           end
         end
       when ENCHANTED_STONE_GOLEM
-        if rand(100) < 65
+        if Rnd.rand(100) < 65
           give_items(killer, NEBULITE_ORB, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
 
         if qs.get_memo_state_ex(1) > 1
-          if rand(100) <= 12
+          if Rnd.rand(100) <= 12
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) - 1)
           end
         end
       when ENCHANTED_IRON_GOLEM
-        if rand(100) < 68
+        if Rnd.rand(100) < 68
           give_items(killer, NEBULITE_ORB, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
 
         if qs.get_memo_state_ex(1) > 1
-          if rand(100) <= 13
+          if Rnd.rand(100) <= 13
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) - 1)
           end
         end

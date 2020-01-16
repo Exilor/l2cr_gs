@@ -94,7 +94,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       else
         trade_items(pc, 100, count1, count2, count3)
 
-        if rand(99) > 50
+        if Rnd.rand(99) > 50
           give_items(pc, SCROLL_ENCHANT_ARMOR_D_GRADE, 1)
           give_adena(pc, ADENA_REWARD_1, true)
           html = event
@@ -113,8 +113,8 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       else
         trade_items(pc, 200, count1, count2, count3)
 
-        if rand(100) >= 50
-          if rand(2) == 0
+        if Rnd.rand(100) >= 50
+          if Rnd.rand(2) == 0
             give_items(pc, SCROLL_ENCHANT_ARMOR_D_GRADE, 1)
             give_adena(pc, ADENA_REWARD_3, true)
           else
@@ -136,7 +136,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       else
         trade_items(pc, 500, count1, count2, count3)
 
-        if rand(100) >= 50
+        if Rnd.rand(100) >= 50
           give_items(pc, SCROLL_ENCHANT_ARMOR_D_GRADE, 1)
           give_adena(pc, ADENA_REWARD_5, true)
           html = event
@@ -168,7 +168,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       if item = MONSTERS[npc.id]?
         give_item_randomly(pc, npc, item.id, item.count, 0, item.chance, true)
       else
-        if rand(100) < DELU_LIZARDMAN_COMMANDER_DOUBLE_ITEM_CHANCE
+        if Rnd.rand(100) < DELU_LIZARDMAN_COMMANDER_DOUBLE_ITEM_CHANCE
           give_items(pc, DELU_LIZARDMANS_SCALE, 2)
         else
           give_items(pc, DELU_LIZARDMANS_SCALE, 1)

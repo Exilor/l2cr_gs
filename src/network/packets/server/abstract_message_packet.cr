@@ -146,7 +146,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
     add_param(SMParam.new(DOOR_NAME, id))
   end
 
-  def write_impl
+  private def write_impl
     d id
 
     if param_count == 0
@@ -163,24 +163,20 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
     param_count.times do |i|
       param = @params.@start[i]
       d param.type
-      case param.type
-      when TEXT, PLAYER_NAME
-        s param.value.as(String)
-      when LONG_NUMBER
-        q param.value.as(Int64)
-      when SKILL_NAME
-        skill_id, lvl = param.value.as({Int32, Int32})
-        d skill_id
-        d lvl
-      when ZONE_NAME
-        x, y, z = param.value.as({Int32, Int32, Int32})
-        d x
-        d y
-        d z
-      else
-      # ITEM_NAME, CASTLE_NAME, INT_NUMBER, NPC_NAME, ELEMENT_NAME,
-      # SYSTEM_STRING, INSTANCE_NAME, DOOR_NAME
-        d param.value.as(Int32)
+      case value = param.value
+      when String
+        s value
+      when Int64
+        q value
+      when Tuple(Int32, Int32)
+        d value[0] # skill_id
+        d value[1] # lvl
+      when Tuple(Int32, Int32, Int32)
+        d value[0] # x
+        d value[1] # y
+        d value[2] # z
+      else # Int32
+        d value
       end
     end
   end

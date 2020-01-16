@@ -100,7 +100,7 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
     return unless npc && pc
 
     fort_owner = npc.fort.owner_clan?.try &.id || 0
-    if pc.clan?.nil? || pc.clan_id != fort_owner
+    if pc.clan.nil? || pc.clan_id != fort_owner
       return "unitcaptain-04.html"
     end
 
@@ -113,9 +113,9 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
         html = "unitcaptain-05.html"
       end
 
-      category_chance = rand(100)
+      category_chance = Rnd.rand(100)
       if category_chance <= 5
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance <= 25
           item_id = RED_MEDITATION
         elsif chance <= 50
@@ -126,7 +126,7 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
           item_id = BLUE_M_EXPLOSION
         end
       elsif category_chance <= 15
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance <= 20
           item_id = RED_MIN_CLARITY
         elsif chance <= 40
@@ -139,7 +139,7 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
           item_id = BLUE_INVIS
         end
       elsif category_chance <= 30
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance <= 12
           item_id = BLUE_DEFENSE
         elsif chance <= 25
@@ -158,7 +158,7 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
           item_id = BLUE_GREAT_HEALING
         end
       else
-        chance = rand(46)
+        chance = Rnd.rand(46)
         if chance <= 41
           item_id = COMMON_TALISMANS[chance]
         else
@@ -182,7 +182,7 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
   def on_first_talk(npc, pc)
     fort_owner = npc.fort.owner_clan?.try &.id || 0
 
-    if pc.clan? && pc.clan_id == fort_owner
+    if pc.clan && pc.clan_id == fort_owner
       "unitcaptain.html"
     else
       "unitcaptain-04.html"

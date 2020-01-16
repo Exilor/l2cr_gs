@@ -18,11 +18,11 @@ class Packets::Incoming::AnswerJoinPartyRoom < GameClientPacket
 
     if @answer == 1 && !partner.request_expired?
       unless room = PartyMatchRoomList.get_room(partner.party_room)
-        debug "No party match room found with ID #{partner.party_room}."
+        debug { "No party match room found with ID #{partner.party_room}." }
         return
       end
 
-      if room.min_lvl <= pc.level <= room.max_lvl
+      if pc.level.between?(room.min_lvl, room.max_lvl)
         PartyMatchWaitingList.remove_player(pc)
         pc.party_room = partner.party_room
         pc.send_packet(PartyMatchDetail.new(room))

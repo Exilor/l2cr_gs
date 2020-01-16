@@ -59,7 +59,7 @@ class Scripts::Quarry < AbstractNpcAI
       if npc && npc.alive?
         if pc = npc.target.as?(L2PcInstance)
           DROP_LIST.each do |item|
-            if rand(10000) < item.chance
+            if Rnd.rand(10000) < item.chance
               npc.drop_item(pc, item.id, (item.count * Config.rate_quest_drop).to_i64)
               break
             end

@@ -28,7 +28,7 @@ class Packets::Incoming::RequestExMagicSkillUseGround < GameClientPacket
       pc.use_magic(skill, @ctrl, @shift)
     else
       action_failed
-      warn "No skill found with ID #{@skill_id} and level #{level}."
+      warn { "No skill found with ID #{@skill_id} and level #{level}." }
     end
   end
 end

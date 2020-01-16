@@ -1,5 +1,6 @@
 class EnchantRateItem
   @slot = 0
+
   setter item_id : Int32 = 0
   setter magic_weapon : Bool?
 

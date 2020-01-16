@@ -13,7 +13,7 @@ class Packets::Incoming::AddTradeItem < GameClientPacket
     return unless pc = active_char
 
     unless trade = pc.active_trade_list
-      warn "Character #{pc} requested item #{@l2id} add without active TradeList."
+      warn { "Character #{pc} requested item #{@l2id} add without active TradeList." }
       return
     end
 
@@ -21,7 +21,7 @@ class Packets::Incoming::AddTradeItem < GameClientPacket
 
     if partner.nil? || !L2World.get_player(partner.l2id) || partner.active_trade_list.nil?
       if partner
-        warn "Character #{pc} requested invalid trade object: #{@l2id}."
+        warn { "Character #{pc} requested invalid trade object: #{@l2id}." }
       end
       pc.send_packet(SystemMessageId::TARGET_IS_NOT_FOUND_IN_THE_GAME)
       pc.cancel_active_trade

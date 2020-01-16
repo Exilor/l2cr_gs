@@ -29,13 +29,7 @@ module GameDB
 
     def insert(pc : L2PcInstance)
       pc.manufacture_items.local_each_value.with_index do |item, i|
-        GameDB.exec(
-          INSERT,
-          pc.l2id,
-          item.recipe_id,
-          item.cost,
-          i + 1
-        )
+        GameDB.exec(INSERT, pc.l2id, item.recipe_id, item.cost, i + 1)
       end
     rescue e
       error e

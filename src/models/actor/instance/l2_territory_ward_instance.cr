@@ -9,11 +9,13 @@ class L2TerritoryWardInstance < L2Attackable
       return false
     end
 
-    if !castle? || !castle.zone.active?
+    castle = castle?
+
+    if castle.nil? || !castle.zone.active?
       return false
     end
 
-    unless pc = attacker.acting_player?
+    unless pc = attacker.acting_player
       return false
     end
 
@@ -36,7 +38,7 @@ class L2TerritoryWardInstance < L2Attackable
     super
 
     unless castle?
-      warn "#{self.class} spawned outside a castle zone."
+      warn { "#{self.class} spawned outside a castle zone." }
     end
   end
 
@@ -49,7 +51,7 @@ class L2TerritoryWardInstance < L2Attackable
       return
     end
 
-    unless pc = attacker.acting_player?
+    unless pc = attacker.acting_player
       return
     end
 
@@ -85,7 +87,7 @@ class L2TerritoryWardInstance < L2Attackable
       if killer.siege_side > 0 && !killer.combat_flag_equipped?
         killer.add_item("Pickup", id - 23012, 1, nil, false)
       else
-        TerritoryWarManager.get_territory_ward!(id - 23012).spawn_me
+        TerritoryWarManager.get_territory_ward(id - 23012).not_nil!.spawn_me
       end
 
       sm = SystemMessage.the_s1_ward_has_been_destroyed_c2_has_the_ward
@@ -93,7 +95,7 @@ class L2TerritoryWardInstance < L2Attackable
       sm.add_pc_name(killer)
       TerritoryWarManager.announce_to_participants(sm, 0, 0)
     else
-      TerritoryWarManager.get_territory_ward!(id - 36491).spawn_me
+      TerritoryWarManager.get_territory_ward(id - 36491).not_nil!.spawn_me
     end
 
     decay_me

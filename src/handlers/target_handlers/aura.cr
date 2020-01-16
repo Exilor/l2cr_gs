@@ -16,7 +16,7 @@ module TargetHandler::Aura
         next
       end
 
-      if !Skill.check_for_area_offensive_skills(char, obj, skill, src_in_arena)
+      unless skill.offensive_aoe_check(char, obj, src_in_arena)
         next
       end
 
@@ -32,6 +32,6 @@ module TargetHandler::Aura
   end
 
   def target_type
-    L2TargetType::AURA
+    TargetType::AURA
   end
 end

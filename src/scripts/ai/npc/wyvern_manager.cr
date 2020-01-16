@@ -90,13 +90,12 @@ class Scripts::WyvernManager < AbstractNpcAI
       end
       return false
     when ManagerType::CLAN_HALL
-      if hall = npc.conquerable_hall?
+      if hall = npc.conquerable_hall
         return pc.clan_id == hall.owner_id
       end
       return false
     when ManagerType::FORT
-      fort = npc.fort?
-      if fort && (clan = fort.owner_clan?)
+      if (fort = npc.fort?) && (clan = fort.owner_clan?)
         return pc.clan_id == clan.id
       end
       return false
@@ -110,7 +109,7 @@ class Scripts::WyvernManager < AbstractNpcAI
     when ManagerType::CASTLE
       npc.castle.zone.active?
     when ManagerType::CLAN_HALL
-      hall = npc.conquerable_hall?
+      hall = npc.conquerable_hall
       hall ? hall.in_siege? : npc.castle.siege.in_progress?
     when ManagerType::FORT
       npc.fort.zone.active?
@@ -124,7 +123,7 @@ class Scripts::WyvernManager < AbstractNpcAI
     when ManagerType::CASTLE
       npc.castle.name
     when ManagerType::CLAN_HALL
-      npc.conquerable_hall.name
+      npc.conquerable_hall.not_nil!.name
     when ManagerType::FORT
       npc.fort.name
     end

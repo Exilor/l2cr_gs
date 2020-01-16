@@ -19,7 +19,6 @@ class L2VillageMasterKamaelInstance < L2VillageMasterInstance
   end
 
   private def check_village_master_race(pclass : PlayerClass?) : Bool
-    return false unless pclass
-    pclass.of_race?(Race::KAMAEL)
+    !!pclass && pclass.of_race?(Race::KAMAEL)
   end
 end

@@ -13,18 +13,14 @@ class Scripts::Budenka < AbstractNpcAI
     add_talk_id(BUDENKA)
   end
 
-  def on_adv_event(event, npc, player)
-    case event
-    # when "Budenka-02.html", "Budenka-03.html", "Budenka-04.html", "Budenka-05.html"
-    when /\ABudenka-0(?:[2345])\.html\z/
-      event
-    end
+  def on_adv_event(event, npc, pc)
+    event if event.match?(/\ABudenka-0[2-5]\.html\z/)
   end
 
-  def on_first_talk(npc, player)
-    if has_quest_items?(player, STANDART_CERT, PREMIUM_CERT)
+  def on_first_talk(npc, pc)
+    if has_quest_items?(pc, STANDART_CERT, PREMIUM_CERT)
       "Budenka-07.html"
-    elsif has_quest_items?(player, STANDART_CERT)
+    elsif has_quest_items?(pc, STANDART_CERT)
       "Budenka-06.html"
     else
       "Budenka-01.html"

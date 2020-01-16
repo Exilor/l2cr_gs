@@ -17,7 +17,7 @@ class Packets::Outgoing::MoveToPawn < GameServerPacket
     @target_z = target.z
   end
 
-  def write_impl
+  private def write_impl
     c 0x72
 
     d @char_id

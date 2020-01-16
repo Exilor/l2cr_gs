@@ -6,8 +6,8 @@ module QuestManager
   extend self
   extend Loggable
 
-  private QUESTS = Hash(String, Quest).new
-  private SCRIPTS = Hash(String, Quest).new
+  private QUESTS = {} of String => Quest
+  private SCRIPTS = {} of String => Quest
 
   def load
     timer = Timer.new

@@ -11,37 +11,6 @@ struct GroupedItemDropCalculationStrategy
     @proc.call(item, victim, killer)
   end
 
-  private def self.default_strategy : self
-    new do |item, victim, killer|
-      if item.items.size == 1
-        next get_single_item(item).calculate_drops(victim, killer)
-      end
-
-      value = nil
-      normalized = item.normalize_me(victim, killer)
-      total_chance = 0.0
-      random = Rnd.rand * 100
-      if normalized.chance > Rnd.rand * 100
-        normalized.items.each do |item2|
-          total_chance += item2.chance
-          if total_chance > random
-            amount_multiply = 1
-            if item.precise_calculated? && normalized.chance >= 100
-              amount_multiply = (normalized.chance / 100).to_i
-              if normalized.chance % 100 > Rnd.rand * 100
-                amount_multiply += 1
-              end
-            end
-            value = ItemHolder.new(item2.item_id, Rnd.rand(item2.get_min(victim)..item2.get_max(victim)) * amount_multiply)
-            break
-          end
-        end
-      end
-
-      value
-    end
-  end
-
   private def self.get_single_item(i : GroupedGeneralDropItem) : GeneralDropItem
     item1 = i.items.first
     SINGLE_ITEM_CACHE.put_if_absent(i) do
@@ -59,7 +28,34 @@ struct GroupedItemDropCalculationStrategy
     end
   end
 
-  DEFAULT_STRATEGY = default_strategy
+  DEFAULT_STRATEGY = new do |item, victim, killer|
+    if item.items.size == 1
+      next get_single_item(item).calculate_drops(victim, killer)
+    end
+
+    value = nil
+    normalized = item.normalize_me(victim, killer)
+    total_chance = 0.0
+    random = Rnd.rand * 100
+    if normalized.chance > Rnd.rand * 100
+      normalized.items.each do |item2|
+        total_chance += item2.chance
+        if total_chance > random
+          amount_multiply = 1
+          if item.precise_calculated? && normalized.chance >= 100
+            amount_multiply = (normalized.chance / 100).to_i
+            if normalized.chance % 100 > Rnd.rand * 100
+              amount_multiply += 1
+            end
+          end
+          value = ItemHolder.new(item2.item_id, Rnd.rand(item2.get_min(victim)..item2.get_max(victim)) * amount_multiply)
+          break
+        end
+      end
+    end
+
+    value
+  end
 
   DISBAND_GROUP = new do |item, victim, killer|
     dropped = [] of ItemHolder
@@ -86,18 +82,5 @@ struct GroupedItemDropCalculationStrategy
       dropped.concat(normalized.calculate_drops(victim, killer))
     end
     dropped unless dropped.empty?
-  end
-
-  def self.parse(name : String) : self
-    case name.casecmp
-    when "default_strategy"
-      DEFAULT_STRATEGY
-    when "disband_group"
-      DISBAND_GROUP
-    when "precise_multiple_group_rolls"
-      PRECISE_MULTIPLE_GROUP_ROLLS
-    else
-      raise "Unknown #{self} #{name.inspect}"
-    end
   end
 end

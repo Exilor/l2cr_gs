@@ -202,7 +202,7 @@ class Scripts::NornilsGarden < AbstractInstance
     end
 
     instance_id = InstanceManager.create_dynamic_instance("NornilsGarden.xml")
-    inst = InstanceManager.get_instance!(instance_id)
+    inst = InstanceManager.get_instance(instance_id).not_nil!
 
     inst.name = InstanceManager.get_instance_id_name(TEMPLATE_ID)
     inst.exit_loc = Location.new(player)
@@ -218,7 +218,7 @@ class Scripts::NornilsGarden < AbstractInstance
     prepare_instance(world)
 
     # and finally teleport party into instance
-    if party = player.party?
+    if party = player.party
       party.members.each do |party_member|
         world.add_allowed(party_member.l2id)
         teleport_player(party_member, SPAWN_PPL, instance_id)
@@ -309,7 +309,7 @@ class Scripts::NornilsGarden < AbstractInstance
 
 
     # player must be in party
-    unless party = player.party?
+    unless party = player.party
       player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return "32330-05.html"
     end
@@ -369,17 +369,19 @@ class Scripts::NornilsGarden < AbstractInstance
   end
 
   def on_enter_zone(character, zone)
-    if character.is_a?(L2PcInstance) && character.alive? && !character.teleporting? && character.online?
-      tmpworld = InstanceManager.get_world(character.instance_id)
-      if tmpworld.is_a?(NornilsWorld)
-        AUTO_GATES.each do |auto|
-          if zone.id == auto[0]
-            open_door(auto[1], tmpworld.instance_id)
-          end
-          if zone.id == 20111
-            spawn3(character)
-          elsif zone.id == 20112
-            spawn4(character)
+    if character.is_a?(L2PcInstance) && character.alive?
+      if !character.teleporting? && character.online?
+        world = InstanceManager.get_world(character.instance_id)
+        if world.is_a?(NornilsWorld)
+          AUTO_GATES.each do |auto|
+            if zone.id == auto[0]
+              open_door(auto[1], world.instance_id)
+            end
+            if zone.id == 20111
+              spawn3(character)
+            elsif zone.id == 20112
+              spawn4(character)
+            end
           end
         end
       end
@@ -391,12 +393,12 @@ class Scripts::NornilsGarden < AbstractInstance
   def on_adv_event(event, npc, player)
     player = player.not_nil!
     npc = npc.not_nil!
-    htmltext = event
+    html = event
     st = get_quest_state(player, false)
     return get_no_quest_msg(player) unless st
 
     if npc.id == GARDEN_GUARD && event.casecmp?("enter_instance")
-      htmltext = enter_instance(npc, player)
+      html = enter_instance(npc, player)
     elsif npc.id == 32258 && event.casecmp?("exit")
       begin
         exit_instance(player)
@@ -404,13 +406,12 @@ class Scripts::NornilsGarden < AbstractInstance
         error e
       end
     elsif FINAL_GATES.includes?(npc.id)
-      if event.casecmp?("32260-02.html") || event.casecmp?("32261-02.html") || event.casecmp?("32262-02.html")
+      if event.match?(/\A3226[012]-02.html\z/i)
         st.unset("correct")
       elsif event.num?
-        correct = st.get_int("correct")
-        correct += 1
+        correct = st.get_int("correct") + 1
         st.set("correct", correct.to_s)
-        htmltext = "#{npc.id}-0#{correct + 2}.html"
+        html = "#{npc.id}-0#{correct + 2}.html"
       elsif event.casecmp?("check")
         correct = st.get_int("correct")
         if npc.id == 32260 && correct == 3
@@ -425,7 +426,7 @@ class Scripts::NornilsGarden < AbstractInstance
       end
     end
 
-    htmltext
+    html
   end
 
   def on_talk(npc, player)
@@ -434,7 +435,8 @@ class Scripts::NornilsGarden < AbstractInstance
       if cst && cst.state.started?
         return "#{npc.id}-01.html"
       end
-      return get_no_quest_msg(player)
+
+      get_no_quest_msg(player)
     end
   end
 

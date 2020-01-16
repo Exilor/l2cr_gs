@@ -11,11 +11,11 @@ class EffectHandler::StealAbnormal < AbstractEffect
     @max  = params.get_i32("max", 0)
   end
 
-  def effect_type
-    L2EffectType::STEAL_ABNORMAL
+  def effect_type : EffectType
+    EffectType::STEAL_ABNORMAL
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

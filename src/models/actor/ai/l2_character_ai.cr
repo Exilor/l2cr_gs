@@ -5,8 +5,8 @@ require "../instance/l2_door_instance"
 class L2CharacterAI < AI
   private FEAR_RANGE = 500
 
-  private record IntentionCommand, intention : Intention, arg_0 : AIArg,
-    arg_1 : AIArg
+  private record IntentionCommand, intention : Intention,
+    arg_0 : IntentionArgType, arg_1 : IntentionArgType
 
   private struct CastTask
     initializer char : L2Character, skill : Skill, target : L2Object?
@@ -33,7 +33,7 @@ class L2CharacterAI < AI
     change_intention(IDLE)
     self.cast_target = nil
     self.attack_target = nil
-    client_stop_moving
+    client_stop_moving(nil)
     client_stop_auto_attack
   end
 
@@ -45,7 +45,7 @@ class L2CharacterAI < AI
     change_intention(ACTIVE)
     self.cast_target = nil
     self.attack_target = nil
-    client_stop_moving
+    client_stop_moving(nil)
     client_stop_auto_attack
     @actor.as?(L2Attackable).try &.start_random_animation_timer
     on_event_think
@@ -198,7 +198,7 @@ class L2CharacterAI < AI
     end
 
     self.auto_attacking = false
-    client_stop_moving
+    client_stop_moving(nil)
     on_event_attacked(attacker)
   end
 
@@ -210,7 +210,7 @@ class L2CharacterAI < AI
     end
 
     self.auto_attacking = false
-    client_stop_moving
+    client_stop_moving(nil)
     on_event_attacked(attacker)
   end
 
@@ -222,16 +222,16 @@ class L2CharacterAI < AI
     end
 
     self.auto_attacking = false
-    client_stop_moving
+    client_stop_moving(nil)
   end
 
   private def on_event_rooted(attacker)
-    client_stop_moving
+    client_stop_moving(nil)
     on_event_attacked(attacker)
   end
 
   private def on_event_confused(attacker)
-    client_stop_moving
+    client_stop_moving(nil)
     on_event_attacked(attacker)
   end
 
@@ -307,7 +307,7 @@ class L2CharacterAI < AI
     end
 
     if follow_target? == object
-      client_stop_moving
+      client_stop_moving(nil)
       stop_follow
       set_intention(ACTIVE)
     end
@@ -317,7 +317,7 @@ class L2CharacterAI < AI
       self.cast_target = nil
       self.attack_target = nil
       stop_follow
-      client_stop_moving
+      client_stop_moving(nil)
       change_intention(IDLE)
     end
   end
@@ -344,7 +344,7 @@ class L2CharacterAI < AI
 
   private def on_event_fake_death
     stop_follow
-    client_stop_moving
+    client_stop_moving(nil)
     @intention = IDLE
     self.target = nil
     self.cast_target = nil
@@ -479,10 +479,12 @@ class L2CharacterAI < AI
       end
 
       if intention.cast? && @actor.player? && @actor.transformed?
-        unless @actor.transformation.combat?
-          @actor.send_packet(SystemMessageId::DIST_TOO_FAR_CASTING_STOPPED)
-          @actor.action_failed
-          return true
+        if transform = @actor.transformation
+          unless transform.combat?
+            @actor.send_packet(SystemMessageId::DIST_TOO_FAR_CASTING_STOPPED)
+            @actor.action_failed
+            return true
+          end
         end
       end
 
@@ -549,9 +551,10 @@ class L2CharacterAI < AI
 
   def can_aura?(sk)
     tt = sk.target_type
+    attack_target = attack_target?
     if tt.aura? || tt.behind_aura? || tt.front_aura? || tt.aura_corpse_mob? || tt.aura_undead_enemy?
       @actor.known_list.each_character(sk.affect_range) do |target|
-        return true if target == attack_target?
+        return true if target == attack_target
       end
     end
 
@@ -560,7 +563,7 @@ class L2CharacterAI < AI
 
   def can_aoe?(sk)
     tt = sk.target_type
-    if sk.has_effect_type?(L2EffectType::DISPEL)
+    if sk.has_effect_type?(EffectType::DISPEL)
       if tt.aura? || tt.behind_aura? || tt.front_aura? || tt.aura_corpse_mob? || tt.aura_undead_enemy?
         can_cast = true
         @actor.known_list.each_character(sk.affect_range) do |target|
@@ -628,10 +631,8 @@ class L2CharacterAI < AI
       @actor.known_list.each_character(sk.affect_range) do |target|
         next unless target.is_a?(L2Attackable)
         next unless GeoData.can_see_target?(@actor, target)
-        targets = target.as(L2Npc)
-        actors = @actor.as(L2Npc)
 
-        if targets.in_my_clan?(actors)
+        if target.in_my_clan?(@actor.as(L2Npc))
           count += 1
           if target.affected_by_skill?(sk.id)
             count2 += 1

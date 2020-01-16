@@ -61,7 +61,7 @@ class Packets::Outgoing::ExShowScreenMessage < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x39
 

@@ -1,7 +1,7 @@
 class Packets::Outgoing::CharCreateFail < GameServerPacket
   private initializer error : UInt8
 
-  def write_impl
+  private def write_impl
     c 0x10
     d @error
   end

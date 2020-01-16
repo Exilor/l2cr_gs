@@ -3,7 +3,6 @@ require "./base_bbs_manager"
 module TopicBBSManager
   extend self
   extend BaseBBSManager
-  extend Loggable
 
   private TABLE = Concurrent::Array(Topic).new
   private MAX_ID = {} of Forum => Int32
@@ -197,7 +196,7 @@ module TopicBBSManager
             io << "\">"
             io << t.name
             io << "</a></td><td FIXWIDTH=120 align=center></td><td FIXWIDTH=70 align=center>"
-            Time.now.to_s(io)
+            io << Time.now
             io << "</td></tr></table><img src=\"L2UI.Squaregray\" width=\"610\" height=\"1\">"
           end
           i += 1

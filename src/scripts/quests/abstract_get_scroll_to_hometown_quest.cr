@@ -88,46 +88,46 @@ abstract class AbstractGetScrollToHometownQuest < Quest
   end
 
   def on_talk(npc, pc)
-    htmltext = get_no_quest_msg(pc)
-    return htmltext unless st = get_quest_state(pc, true)
+    html = get_no_quest_msg(pc)
+    return html unless st = get_quest_state(pc, true)
 
     case npc.id
     when GALLADUCCI
       case st.state
       when State::CREATED
         if pc.level < MIN_LVL
-          htmltext = "30097-03.html"
+          html = "30097-03.html"
         else
           requirement = pc.quest_completed?(parent_quest_name)
           if requirement && st.has_quest_items?(MARK_OF_TRAVELER)
-            htmltext = "30097-01.htm"
+            html = "30097-01.htm"
           else
-            htmltext = "30097-02.html"
+            html = "30097-02.html"
           end
         end
       when State::STARTED
         case st.cond
         when 1
-          htmltext = "30097-05.html"
+          html = "30097-05.html"
         when 2
           if st.has_quest_items?(MAGIC_SWORD_HILT)
-            htmltext = "30097-06.html"
+            html = "30097-06.html"
           end
         when 3
-          htmltext = "30097-09.html"
+          html = "30097-09.html"
         when 4
           if st.has_quest_items?(GEMSTONE_POWDER)
-            htmltext = "30097-10.html"
+            html = "30097-10.html"
           end
         when 5
-          htmltext = "30097-13.html"
+          html = "30097-13.html"
         when 6
           if st.has_quest_items?(PURIFIED_MAGIC_NECKLACE)
-            htmltext = "30097-14.html"
+            html = "30097-14.html"
           end
         end
       when State::COMPLETED
-        htmltext = get_already_completed_msg(pc)
+        html = get_already_completed_msg(pc)
       end
     when GENTLER, SANDRA, DUSTIN
       if st.started?
@@ -136,14 +136,14 @@ abstract class AbstractGetScrollToHometownQuest < Quest
         if st.cond?(cond)
           item_id = i.count.to_i
           if st.has_quest_items?(item_id)
-            htmltext = "#{npc.id}-01.html"
+            html = "#{npc.id}-01.html"
           end
         elsif st.cond?(cond + 1)
-          htmltext = "#{npc.id}-04.html"
+          html = "#{npc.id}-04.html"
         end
       end
     end
 
-    htmltext
+    html
   end
 end

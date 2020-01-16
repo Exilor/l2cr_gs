@@ -5,7 +5,7 @@ class Packets::Outgoing::ShortcutInit < GameServerPacket
     @shortcuts = pc.shortcuts
   end
 
-  def write_impl
+  private def write_impl
     c 0x45
 
     d @shortcuts.size

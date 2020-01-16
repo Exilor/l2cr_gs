@@ -47,7 +47,7 @@ class Scripts::SummonPc < AbstractNpcAI
         # This is my own implementation. It's less visually disruptive for the
         # player and it doesn't mess with aggro lists.
         pc.set_xyz(*npc.xyz)
-        pc.stop_move
+        pc.stop_move(nil)
         pc.broadcast_packet(ValidateLocation.new(pc))
         npc.variables["attacked"] = false
       end

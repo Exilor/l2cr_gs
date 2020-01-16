@@ -96,7 +96,9 @@ class L2AirshipInstance < L2Vehicle
     pc.known_list.remove_all_known_objects
     pc.set_xyz(*xyz)
     pc.revalidate_zone(true)
-    pc.stop_move
+    # Without this the character attempts to go back to where he boarded the
+    # airship before he was teleported to it. It also happens in L2J.
+    pc.stop_move(nil)
 
     true
   end
@@ -110,7 +112,7 @@ class L2AirshipInstance < L2Vehicle
       pc.broadcast_packet(ExGetOffAirship.new(pc, self, *loc.xyz))
       pc.known_list.remove_all_known_objects
       pc.set_xyz(loc)
-      pc.revalidate_zone true
+      pc.revalidate_zone(true)
     else
       pc.set_xyz_invisible(*loc.xyz)
     end

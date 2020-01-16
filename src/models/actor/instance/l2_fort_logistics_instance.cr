@@ -24,8 +24,11 @@ class L2FortLogisticsInstance < L2MerchantInstance
   }
 
   def get_html_path(npc_id, val)
-    pom = val == 0 ? "logistics" : "logistics-#{val}"
-    "data/html/fortress/#{pom}.htm"
+    if val == 0
+      "data/html/fortress/logistics.htm"
+    else
+      "data/html/fortress/logistics-#{val}.htm"
+    end
   end
 
   def instance_type

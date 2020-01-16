@@ -7,7 +7,7 @@ class Condition
     initializer stat : BaseStat, value : Int32
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
-      return false unless pc = effector.acting_player?
+      return false unless pc = effector.acting_player
 
       return pc.str >= @value if @stat.str?
       return pc.dex >= @value if @stat.dex?

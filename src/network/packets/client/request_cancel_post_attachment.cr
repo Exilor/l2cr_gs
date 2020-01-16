@@ -17,7 +17,7 @@ class Packets::Incoming::RequestCancelPostAttachment < GameClientPacket
     end
 
     unless msg = MailManager.get_message(@msg_id)
-      warn "Message with id #{@msg_id} not found."
+      warn { "Message with id #{@msg_id} not found." }
       return
     end
 
@@ -105,7 +105,7 @@ class Packets::Incoming::RequestCancelPostAttachment < GameClientPacket
 
       new_item = attachments.transfer_item(attachments.name, item.l2id, count, pc.inventory, pc, nil)
       unless new_item
-        warn "Failed to transfer item to #{pc.name}'s inventory."
+        warn { "Failed to transfer item to #{pc.name}'s inventory." }
         return
       end
 

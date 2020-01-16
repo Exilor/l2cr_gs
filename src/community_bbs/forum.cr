@@ -23,8 +23,7 @@ class Forum
   @forum_perm = 0
   @owner_id = 0
 
-  def initialize(@forum_id : Int32, @parent : Forum)
-  end
+  initializer forum_id : Int32, parent : Forum
 
   def initialize(@forum_name : String, @parent : Forum, @forum_type : Int32, @forum_perm : Int32, @owner_id : Int32)
     @forum_id = ForumsBBSManager.get_new_id

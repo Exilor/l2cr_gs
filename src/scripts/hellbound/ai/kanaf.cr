@@ -10,11 +10,7 @@ class Scripts::Kanaf < AbstractNpcAI
     add_first_talk_id(KANAF)
   end
 
-  def on_adv_event(event, npc, player)
-    if event == "info"
-      return "32346-0#{rand(1..3)}.htm"
-    end
-
-    super
+  def on_adv_event(event, npc, pc)
+    event == "info" ? "32346-0#{Rnd.rand(1..3)}.htm" : super
   end
 end

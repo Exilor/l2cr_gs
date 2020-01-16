@@ -35,9 +35,7 @@ abstract class GameClientPacket < MMO::IncomingPacket(GameClient)
       if pc = active_char
         if pc.spawn_protected? || pc.invul?
           pc.on_action_request
-          if Config.debug
-            debug { "Spawn protection for #{pc.name} removed." }
-          end
+          debug { "Spawn protection for #{pc.name} removed." }
         end
       end
     end
@@ -49,19 +47,19 @@ abstract class GameClientPacket < MMO::IncomingPacket(GameClient)
   abstract def run_impl
 
   def send_packet(gsp : GameServerPacket)
-    client.send_packet(gsp)
+    client?.try &.send_packet(gsp)
   end
 
   def send_packet(id : SystemMessageId)
-    send_packet(SystemMessage[id])
+    client?.try &.send_packet(SystemMessage[id])
   end
 
   def active_char : L2PcInstance?
-    client.active_char
+    client?.try &.active_char
   end
 
   def action_failed
-    client.try &.send_packet(ActionFailed::STATIC_PACKET)
+    client?.try &.send_packet(ActionFailed::STATIC_PACKET)
   end
 
   def flood_protectors : FloodProtectors

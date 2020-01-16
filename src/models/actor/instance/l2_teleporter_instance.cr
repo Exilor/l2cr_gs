@@ -11,8 +11,11 @@ class L2TeleporterInstance < L2Npc
   end
 
   def get_html_path(npc_id : Int32, val : Int32)
-    pom = val == 0 ? npc_id : "#{npc_id}-#{val}"
-    "data/html/teleporter/#{pom}.htm"
+    if val == 0
+      "data/html/teleporter/#{npc_id}.htm"
+    else
+      "data/html/teleporter/#{npc_id}-#{val}.htm"
+    end
   end
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
@@ -64,9 +67,11 @@ class L2TeleporterInstance < L2Npc
       if val == 1 && pc.level < 41
         show_newbie_html(pc)
         return
-      elsif val == 1 && time.hour >= 20 && time.hour <= 23 && (time.day_of_week == 1 || time.day_of_week == 7)
-        show_half_price_html(pc)
-        return
+      elsif val == 1 && time.hour.between?(20, 23)
+        if time.saturday? || time.sunday?
+          show_half_price_html(pc)
+          return
+        end
       end
       show_chat_window(pc, val)
     end
@@ -121,8 +126,8 @@ class L2TeleporterInstance < L2Npc
   end
 
   def do_teleport(pc : L2PcInstance, val : Int)
-    unless list = TeleportLocationTable[val]
-      warn "No teleport destination with ID #{val.inspect}."
+    unless list = TeleportLocationTable[val]?
+      warn { "No teleport destination with ID #{val.inspect}." }
       return
     end
 
@@ -155,14 +160,20 @@ class L2TeleporterInstance < L2Npc
       price = 0i64
     elsif !list.for_noble?
       time = Time.now
-      if time.hour >= 20 && time.hour <= 23 && time.day_of_week == 1 || time.day_of_week == 7
-        price //= 2
+      if time.hour.between?(20, 23)
+        if time.saturday? || time.sunday?
+          price //= 2
+        end
       end
     end
 
-    if Config.alt_game_free_teleport || pc.destroy_item_by_item_id("Teleport#{" nobless" if list.for_noble?}", list.item_id, price, self, true)
-
+    if Config.alt_game_free_teleport
       pc.tele_to_location(list.x, list.y, list.z, pc.heading, -1)
+    else
+      process = list.for_noble? ? "Teleport nobless" : "Teleport"
+      if pc.destroy_item_by_item_id(process, list.item_id, price, self, true)
+        pc.tele_to_location(list.x, list.y, list.z, pc.heading, -1)
+      end
     end
 
     pc.action_failed
@@ -174,10 +185,8 @@ class L2TeleporterInstance < L2Npc
       return COND_REGULAR
     when castle.siege.in_progress?
       return COND_BUSY_BECAUSE_OF_SIEGE
-    when pc.clan?
-      if castle.owner_id == pc.clan_id
-        return COND_OWNER
-      end
+    when pc.clan && castle.owner_id == pc.clan_id
+      return COND_OWNER
     end
 
     COND_ALL_FALSE

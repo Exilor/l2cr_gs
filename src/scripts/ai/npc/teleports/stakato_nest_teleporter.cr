@@ -22,7 +22,7 @@ class Scripts::StakatoNestTeleporter < AbstractNpcAI
 
     if LOCS.size > index
       loc = LOCS[index]
-      if party = pc.party?
+      if party = pc.party
         party.members.each do |m|
           if m.inside_radius?(pc, 1000, true, true)
             m.tele_to_location(loc, true)

@@ -5,7 +5,7 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
   initializer castle : Castle
   initializer hall : ClanHall
 
-  def write_impl
+  private def write_impl
     unless pc = client.active_char
       return
     end
@@ -23,7 +23,7 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
           d owner.ally_id
           s owner.ally_name
         else
-          warn "Nil owner for castle #{castle.name}."
+          warn { "Nil owner for castle #{castle.name}." }
         end
       else
         s ""
@@ -61,7 +61,7 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
           d owner.ally_id
           s owner.ally_name
         else
-          warn "Nil owner for siegable hall #{hall.name}."
+          warn { "Nil owner for siegable hall #{hall.name}." }
         end
       else
         s ""
@@ -71,7 +71,7 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
       end
 
       d Time.ms / 1000
-      d ClanHallSiegeManager.get_siegable_hall!(hall.id).next_siege_time / 1000
+      d ClanHallSiegeManager.get_siegable_hall(hall.id).not_nil!.next_siege_time / 1000
       d 0
     else
       error "No castle and no hall."

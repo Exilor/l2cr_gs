@@ -14,7 +14,7 @@ class Packets::Incoming::TradeDone < GameClientPacket
     end
 
     unless trade = pc.active_trade_list
-      warn "#{pc} doesn't have an active TradeList."
+      warn { "#{pc} doesn't have an active TradeList." }
       return
     end
 

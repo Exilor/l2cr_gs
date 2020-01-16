@@ -34,7 +34,7 @@ class Scripts::ManorManager < AbstractNpcAI
   def on_first_talk(npc, pc)
     if Config.allow_manor
       castle_id = npc.template.parameters.get_i32("manor_id", -1)
-      if !pc.override_castle_conditions? && pc.clan_leader? && castle_id == pc.clan.castle_id
+      if !pc.override_castle_conditions? && pc.clan_leader? && castle_id == pc.clan.not_nil!.castle_id
         "manager-lord.htm"
       else
         "manager.htm"

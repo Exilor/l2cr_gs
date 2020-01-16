@@ -8,13 +8,13 @@ class EffectHandler::ConsumeChameleonRest < AbstractEffect
     @ticks = params.get_i32("ticks")
   end
 
-  def effect_type
-    L2EffectType::RELAXING
+  def effect_type : EffectType
+    EffectType::RELAXING
   end
 
   def on_start(info)
-    if info.effected.player?
-      info.effected.acting_player.sit_down(false)
+    if pc = info.effected.as?(L2PcInstance)
+      pc.sit_down(false)
     else
       info.effected.set_intention(AI::REST)
     end
@@ -24,8 +24,8 @@ class EffectHandler::ConsumeChameleonRest < AbstractEffect
     target = info.effected
     return false if target.dead?
 
-    if target.player?
-      return false unless target.acting_player.sitting?
+    if target.is_a?(L2PcInstance)
+      return false unless target.sitting?
     end
 
     mana_dam = @power * ticks_multiplier

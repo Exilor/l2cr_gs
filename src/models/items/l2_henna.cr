@@ -1,5 +1,6 @@
 class L2Henna
   @wear_class = [] of ClassId
+
   getter str : Int32
   getter con : Int32
   getter dex : Int32

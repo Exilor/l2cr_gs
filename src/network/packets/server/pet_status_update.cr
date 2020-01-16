@@ -12,7 +12,7 @@ class Packets::Outgoing::PetStatusUpdate < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0xb6
 
     d @summon.summon_type

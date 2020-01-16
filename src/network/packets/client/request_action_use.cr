@@ -218,14 +218,12 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
         pc.send_message("This feature is disabled.")
       end
     when 67 # Airship Steer
-      if pc.in_airship?
-        if pc.airship!.set_captain(pc)
-          pc.broadcast_user_info
-        end
+      if (airship = pc.airship) && airship.set_captain(pc)
+        pc.broadcast_user_info
       end
     when 68 # Airship Cancel Control
-      if pc.in_airship? && pc.airship!.captain?(pc)
-        if pc.airship!.set_captain(nil)
+      if (airship = pc.airship) && airship.captain?(pc)
+        if airship.set_captain(nil)
           pc.broadcast_user_info
         end
       end
@@ -499,7 +497,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     end
 
     if pc.fake_death?
-      pc.stop_effects(L2EffectType::FAKE_DEATH)
+      pc.stop_effects(EffectType::FAKE_DEATH)
     elsif pc.sitting?
       pc.stand_up
     else
@@ -608,7 +606,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       return
     end
 
-    partner = target.acting_player
+    partner = target.acting_player.not_nil!
 
     if partner.in_store_mode? || partner.in_craft_mode?
       sm = SystemMessage.c1_is_in_private_shop_mode_or_in_a_battle_and_cannot_be_requested_for_a_couple_action
@@ -726,23 +724,23 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     partner.send_packet(ExAskCoupleAction.new(requester.l2id, id))
   end
 
-  private def validate_summon(summon : L2Summon?, check_pet : Bool, & : L2Summon ->) : Bool
+  private def validate_summon(summon : L2Summon?, check_pet : Bool, & : L2Summon ->) : L2Summon?
     if summon && ((check_pet && summon.pet?) || summon.servitor?)
       if summon.is_a?(L2PetInstance) && summon.uncontrollable?
         send_packet(SystemMessageId::WHEN_YOUR_PETS_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET)
-        return false
+        return nil
       end
 
       if summon.betrayed?
         send_packet(SystemMessageId::PET_REFUSING_ORDER)
-        return false
+        return nil
       end
 
       if summon.is_a?(L2Summon)
         yield summon
       end
 
-      return true
+      return summon
     end
 
     if check_pet
@@ -751,14 +749,13 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       send_packet(SystemMessageId::DONT_HAVE_SERVITOR)
     end
 
-    false
+    nil
   end
 
   private def use_skill(skill_id : Int32, target : L2Object?, pet : Bool)
     return unless pc = active_char
 
-    return unless validate_summon(pc.summon, pet) {}
-    summon = pc.summon!
+    return unless summon = validate_summon(pc.summon, pet) {}
     return unless can_control?(summon)
 
     lvl = 0
@@ -782,8 +779,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
   private def use_skill(skill_name : String, target : L2Object?, pet : Bool)
     return unless pc = active_char
 
-    return unless validate_summon(pc.summon, pet) {}
-    summon = pc.summon!
+    return unless summon = validate_summon(pc.summon, pet) {}
     return unless can_control?(summon)
 
     if summon.is_a?(L2PetInstance)

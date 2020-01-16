@@ -240,13 +240,13 @@ class Scripts::CastleChamberlain < AbstractNpcAI
 
   private def domain_fortress_in_contract_status?(castle_id)
     FORTRESS[castle_id].any? do |fort_id|
-      FortManager.get_fort_by_id!(fort_id).fort_state == 2
+      FortManager.get_fort_by_id(fort_id).not_nil!.fort_state == 2
     end
   end
 
   private def owner?(pc,  npc)
     pc.override_castle_conditions? ||
-    (!!pc.clan? && pc.clan_id == npc.castle.owner_id)
+    (!!pc.clan && pc.clan_id == npc.castle.owner_id)
   end
 
   def on_adv_event(event, npc, pc)
@@ -265,7 +265,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         sb = String.build do |io|
           forts = FORTRESS[castle.residence_id]
           forts.each do |id|
-            fortress = FortManager.get_fort_by_id!(id)
+            fortress = FortManager.get_fort_by_id(id).not_nil!
             fort_id = fortress.residence_id
             fort_type = fort_id < 112 ? "1300133" : "1300134"
             case fortress.fort_state
@@ -427,7 +427,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         if castle.siege.in_progress?
           htmltext = "chamberlain-07.html"
         else
-          clan = ClanTable.get_clan!(castle.owner_id)
+          clan = ClanTable.get_clan(castle.owner_id).not_nil!
           html = get_html_packet(pc, npc, "chamberlain-02.html")
           html["%clanleadername%"] = clan.leader_name
           html["%clanname%"] = clan.name

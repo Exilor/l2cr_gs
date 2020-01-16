@@ -1,7 +1,7 @@
 class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
   @id = 0
   @level = 0
-  @skill_type = uninitialized AcquireSkillType
+  @skill_type = AcquireSkillType::CLASS
 
   private def read_impl
     @id, @level = d, d
@@ -10,7 +10,7 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
 
   private def run_impl
     if @id <= 0 || @level <= 0
-      warn "Invalid id or level. Id: #{@id}, level: #{@level}."
+      warn { "Invalid id or level. Id: #{@id}, level: #{@level}." }
       return
     end
 
@@ -19,34 +19,33 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
     trainer = pc.last_folk_npc
 
     unless trainer.is_a?(L2NpcInstance)
-      warn "#{pc}'s @last_folk_npc (#{trainer}) is not a trainer."
+      warn { "#{pc}'s @last_folk_npc (#{trainer}) is not a trainer." }
       return
     end
 
     if !trainer.can_interact?(pc) && !pc.gm?
-      debug "#{trainer} can't interact with #{pc}."
+      debug { "#{trainer} can't interact with #{pc}." }
       return
     end
 
     unless skill = SkillData[@id, @level]?
-      warn "Skill with id #{@id} and level #{@level} doesn't exist."
+      warn { "Skill with id #{@id} and level #{@level} doesn't exist." }
       return
     end
 
     prev_skill_level = pc.get_skill_level(@id)
     if prev_skill_level > 0 && !(@skill_type.transfer? || @skill_type.subpledge?)
       if prev_skill_level == @level
-        warn "#{pc} requested info for a skill he already knows."
+        warn { "#{pc} requested info for a skill he already knows." }
         return
       elsif prev_skill_level != @level - 1
-        warn "#{pc} doesn't know the previous level of skill with id #{@id} and level #{@level}."
+        warn { "#{pc} doesn't know the previous level of skill with id #{@id} and level #{@level}." }
         return
       end
     end
 
-    s = SkillTreesData.get_skill_learn(@skill_type, @id, @level, pc)
-    unless s
-      debug "No skill learn data for skill with ID #{@id} and level #{@level}."
+    unless s = SkillTreesData.get_skill_learn(@skill_type, @id, @level, pc)
+      debug { "No skill learn data for skill with ID #{@id} and level #{@level}." }
       return
     end
 

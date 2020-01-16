@@ -26,7 +26,7 @@ module OptionData
           when "for"
             cd.each_element do |fd|
               case fd.name
-              when "add","sub","mul","div","set","share","enchant","enchanthp"
+              when /\A(?:add|sub|mul|div|set|share|enchant|enchanthp)\z/
                 parse_funcs(fd, fd.name, op)
               end
             end
@@ -64,11 +64,7 @@ module OptionData
     op.add_func(FuncTemplate.new(nil, nil, func_name, order, stat, val))
   end
 
-  def [](id : Int32) : Options
-    OPTION_DATA.fetch(id) { raise "No Options for id #{id}" }
-  end
-
-  def []?(id : Int32) : Options?
+  def [](id : Int32) : Options?
     OPTION_DATA[id]?
   end
 end

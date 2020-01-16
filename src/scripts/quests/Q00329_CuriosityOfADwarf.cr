@@ -52,7 +52,7 @@ class Scripts::Q00329_CuriosityOfADwarf < Quest
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
     if st && Util.in_range?(1500, npc, killer, true)
-      rnd = rand(100)
+      rnd = Rnd.rand(100)
       MONSTER_DROPS[npc.id].each do |drop|
         if rnd < drop.count
           st.give_item_randomly(npc, drop.id, 1, 0, 1.0, true)

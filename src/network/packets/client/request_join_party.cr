@@ -76,7 +76,7 @@ class Packets::Incoming::RequestJoinParty < GameClientPacket
     if !requestor.in_party?
       create_new_party(target, requestor)
     else
-      if requestor.party.in_dimensional_rift?
+      if requestor.party.not_nil!.in_dimensional_rift?
         requestor.send_message("You cannot invite a player when you are in the Dimensional Rift.")
       else
         add_target_to_party(target, requestor)

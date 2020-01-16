@@ -17,9 +17,9 @@ abstract class L2Summon < L2Playable
 
   getter follow_status = true # L2R: @follow
   getter attack_range = 36
-  getter? restore_summon = true
   property original_hp_mp : {Float64, Float64}?
-  property! owner : L2PcInstance
+  property owner : L2PcInstance
+  property? restore_summon : Bool = true
 
   def initialize(template : L2NpcTemplate, @owner : L2PcInstance)
     super(template)
@@ -36,10 +36,6 @@ abstract class L2Summon < L2Playable
     end
 
     Formulas.add_funcs_to_new_summon(self)
-  end
-
-  def acting_player? : L2PcInstance?
-    owner?
   end
 
   def acting_player : L2PcInstance
@@ -75,19 +71,19 @@ abstract class L2Summon < L2Playable
   end
 
   def karma : Int32
-    owner.karma
+    owner.try &.karma || 0
   end
 
   def pvp_flag : Int8
-    owner.pvp_flag
+    owner.try &.pvp_flag || 0i8
   end
 
   def send_packet(arg : GameServerPacket | SystemMessageId)
-    owner?.try &.send_packet(arg)
+    owner.try &.send_packet(arg)
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    if owner = owner?
+    if owner = owner()
       gsp.invisible = owner.invisible?
     end
 
@@ -95,19 +91,19 @@ abstract class L2Summon < L2Playable
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Number)
-    if owner = owner?
+    if owner = owner()
       gsp.invisible = owner.invisible?
     end
 
     super
   end
 
-  def party? : L2Party?
-    owner?.try &.party?
+  def party : L2Party?
+    owner.party
   end
 
   def in_party? : Bool
-    return false unless owner = owner?
+    return false unless owner = owner()
     owner.in_party?
   end
 
@@ -132,7 +128,7 @@ abstract class L2Summon < L2Playable
       rc = RelationChanged.new(self, relation, auto_attackable?(pc))
       pc.send_packet(rc)
     end
-    if party = owner.party?
+    if party = owner.party
       party.broadcast_to_party_members(owner, ExPartyPetWindowAdd.new(self))
     end
     self.show_summon_animation = false
@@ -178,11 +174,11 @@ abstract class L2Summon < L2Playable
   end
 
   def update_and_broadcast_status(val : Int32)
-    return unless owner = owner?
+    return unless owner = owner()
     send_packet(PetInfo.new(self, val))
     send_packet(PetStatusUpdate.new(self))
     broadcast_npc_info(val) if visible?
-    if party = owner.party?
+    if party = owner.party
       party.broadcast_to_party_members(owner, ExPartyPetWindowUpdate.new(self))
     end
     update_effect_icons(true)
@@ -199,7 +195,7 @@ abstract class L2Summon < L2Playable
   def delete_me(owner : L2PcInstance?)
     if owner
       owner.send_packet(PetDelete.new(summon_type, l2id))
-      if party = owner.party?
+      if party = owner.party
         party.broadcast_to_party_members(owner, ExPartyPetWindowDelete.new(self))
       end
       owner.active_shots.each do |item_id|
@@ -213,7 +209,7 @@ abstract class L2Summon < L2Playable
     inventory?.try &.destroy_all_items("pet deleted", owner, self)
     decay_me
     known_list.remove_all_known_objects
-    owner?.try &.pet = nil
+    owner().try &.pet = nil
 
     super()
   end
@@ -224,7 +220,7 @@ abstract class L2Summon < L2Playable
 
       if owner
         owner.send_packet(PetDelete.new(summon_type, l2id))
-        if party = owner.party?
+        if party = owner.party
           party.broadcast_to_party_members(owner, ExPartyPetWindowDelete.new(self))
         end
         if inventory? && inventory.size > 0
@@ -242,7 +238,7 @@ abstract class L2Summon < L2Playable
       owner.try &.pet = nil
       ai.stop_ai_task if ai?
       stop_all_effects
-      old_region = world_region?
+      old_region = world_region
       decay_me
       old_region.try &.remove_from_zones(self)
       known_list.remove_all_known_objects
@@ -269,7 +265,7 @@ abstract class L2Summon < L2Playable
   end
 
   def auto_attackable?(attacker : L2Character) : Bool
-    return false unless owner = owner?
+    return false unless owner = owner()
     owner.auto_attackable?(attacker)
   end
 
@@ -288,12 +284,12 @@ abstract class L2Summon < L2Playable
   end
 
   def team : Team
-    owner?.try &.team || Team::NONE
+    owner.try &.team || Team::NONE
   end
 
   def do_die(killer : L2Character?) : Bool
     if noblesse_blessing_affected?
-      stop_effects(L2EffectType::NOBLESSE_BLESSING)
+      stop_effects(EffectType::NOBLESSE_BLESSING)
       store_effect(true)
     else
       store_effect(false)
@@ -301,7 +297,7 @@ abstract class L2Summon < L2Playable
 
     return false unless super(killer)
 
-    if owner = owner?
+    if owner = owner()
       known_list.each_character do |mob|
         if mob.is_a?(L2Attackable) && mob.alive?
           if info = mob.aggro_list[self]?
@@ -329,7 +325,7 @@ abstract class L2Summon < L2Playable
     DecayTaskManager.cancel(self)
   end
 
-  def active_weapon_item? : L2Weapon?
+  def active_weapon_item : L2Weapon?
     # return nil
   end
 
@@ -337,20 +333,16 @@ abstract class L2Summon < L2Playable
     # return nil
   end
 
-  def active_weapon_instance? : L2ItemInstance?
+  def active_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
+  def secondary_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_item? : L2Weapon?
+  def secondary_weapon_item : L2Weapon?
     # return nil
-  end
-
-  def restore_summon=(val : Bool)
-    # no-op
   end
 
   def invul? : Bool
@@ -360,7 +352,7 @@ abstract class L2Summon < L2Playable
   def use_magic(skill : Skill?, force : Bool, dont_move : Bool) : Bool
     return false unless skill
     return false if dead?
-    return false unless owner?
+    return false unless owner()
     return false if skill.passive?
     return false if casting_now?
 
@@ -416,10 +408,11 @@ abstract class L2Summon < L2Playable
         return false
       end
 
-      if target.acting_player? && owner.siege_state > 0 && owner.inside_siege_zone?
-        if target.acting_player.siege_state == owner.siege_state
-          if target.acting_player != owner
-            if target.acting_player.siege_side == owner.siege_side
+      pc_target = target.acting_player
+      if pc_target && owner.siege_state > 0 && owner.inside_siege_zone?
+        if pc_target.siege_state == owner.siege_state
+          if pc_target != owner
+            if pc_target.siege_side == owner.siege_side
               if TerritoryWarManager.tw_in_progress?
                 send_packet(SystemMessageId::YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY)
               else
@@ -494,7 +487,7 @@ abstract class L2Summon < L2Playable
   def reduce_current_hp(damage : Float64, attacker : L2Character?, skill : Skill?)
     super
 
-    if owner? && attacker
+    if owner && attacker
       sm = SystemMessage.c1_received_damage_of_s3_from_c2
       sm.add_npc_name(self)
       sm.add_char_name(attacker)
@@ -578,14 +571,14 @@ abstract class L2Summon < L2Playable
 
   def do_attack
     # debug "L2Summon#do_attack"
-    if target = owner?.try &.target
+    if target = owner.try &.target
       self.target = target
       set_intention(AI::ATTACK, target)
     end
   end
 
   def can_attack?(ctrl : Bool) : Bool
-    return false unless target = owner?.try &.target
+    return false unless target = owner.try &.target
     return false if self == target || owner == target
 
     npc_id = id
@@ -617,8 +610,9 @@ abstract class L2Summon < L2Playable
       return false
     end
 
-    if target.acting_player? && owner.siege_state > 0 && owner.inside_siege_zone?
-      if target.acting_player.siege_side == owner.siege_side
+    pc_target = target.acting_player
+    if pc_target && owner.siege_state > 0 && owner.inside_siege_zone?
+      if pc_target.siege_side == owner.siege_side
         if TerritoryWarManager.tw_in_progress?
           send_packet(SystemMessageId::YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY)
         else
@@ -695,11 +689,11 @@ abstract class L2Summon < L2Playable
   end
 
   def clan_id : Int32
-    owner?.try &.clan_id || 0
+    owner.try &.clan_id || 0
   end
 
   def ally_id : Int32
-    owner?.try &.ally_id || 0
+    owner.try &.ally_id || 0
   end
 
   def form_id : Int32
@@ -733,7 +727,7 @@ abstract class L2Summon < L2Playable
   end
 
   def to_s(io : IO)
-    if @owner && @name
+    if owner = @owner
       io << "#{owner.name}'s #{name.inspect}"
     else
       super

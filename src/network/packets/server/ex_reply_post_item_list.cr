@@ -5,7 +5,7 @@ class Packets::Outgoing::ExReplyPostItemList < Packets::Outgoing::AbstractItemPa
     @item_list = pc.inventory.get_available_items(true, false, false)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xb2
 

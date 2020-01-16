@@ -6,13 +6,15 @@ class PcKnownList < PlayableKnownList
   def add_known_object(object : L2Object) : Bool
     return false unless super
 
+    me = active_char
+
     if object.poly.morphed? && object.poly.poly_type == "item"
-      active_char.send_packet(SpawnItem.new(object))
+      me.send_packet(SpawnItem.new(object))
     else
-      if object.visible_for?(active_char)
-        object.send_info(active_char)
+      if object.visible_for?(me)
+        object.send_info(me)
         if object.is_a?(L2Character) && object.ai?
-          object.ai.describe_state_to_player(active_char)
+          object.ai.describe_state_to_player(me)
         end
       end
     end
@@ -23,20 +25,22 @@ class PcKnownList < PlayableKnownList
   def remove_known_object(object : L2Object?, forget : Bool)
     return false unless super
 
+    me = active_char
+
     if object.is_a?(L2AirshipInstance)
       if object.captain_id != 0 && object.captain_id != @active_object.l2id
-        active_char.send_packet(DeleteObject.new(object.captain_id))
+        me.send_packet(DeleteObject.new(object.captain_id))
       end
 
       if object.helm_l2id != 0
-        active_char.send_packet(DeleteObject.new(object.helm_l2id))
+        me.send_packet(DeleteObject.new(object.helm_l2id))
       end
     end
 
-    active_char.send_packet(DeleteObject.new(object))
+    me.send_packet(DeleteObject.new(object))
 
-    if Config.check_known && object.npc? && active_char.gm?
-      active_char.send_message("Removed NPC: #{object.name}")
+    if Config.check_known && object.npc? && me.gm?
+      me.send_message("Removed NPC: #{object.name}")
     end
 
     true

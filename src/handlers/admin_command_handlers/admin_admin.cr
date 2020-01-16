@@ -44,7 +44,7 @@ module AdminCommandHandler::AdminAdmin
 				return false
       end
 
-			target = target.player? ? target.acting_player : pc
+      target = target.as?(L2PcInstance) || pc
 			target.hero = !target.hero?
 			target.broadcast_user_info
     when command.starts_with?("admin_givehero")
@@ -59,7 +59,7 @@ module AdminCommandHandler::AdminAdmin
 				return false
       end
 
-			if !Hero.unclaimed_hero?(target.l2id)
+			unless Hero.unclaimed_hero?(target.l2id)
 				pc.send_message("This player cannot claim the hero status.")
 				return false
       end

@@ -4,7 +4,7 @@ class EffectHandler::TargetMe < AbstractEffect
     return unless effected.is_a?(L2Playable)
 
     if effected.target != info.effector
-      effector = effector.acting_player?
+      effector = effector.acting_player
       if effector && effector.check_pvp_skill(effected, info.skill)
         effected.target = effector
       end

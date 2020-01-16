@@ -3,7 +3,7 @@ require "./l2_npc_instance"
 class L2MerchantInstance < L2NpcInstance
   getter! mpc : MerchantPriceConfigTable::MerchantPriceConfig
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2MerchantInstance
   end
 
@@ -13,11 +13,14 @@ class L2MerchantInstance < L2NpcInstance
   end
 
   def get_html_path(npc_id, val)
-    pom = val == 0 ? npc_id : "#{npc_id}-#{val}"
-    "data/html/merchant/#{pom}.htm"
+    if val == 0
+      "data/html/merchant/#{npc_id}.htm"
+    else
+      "data/html/merchant/#{npc_id}-#{val}.htm"
+    end
   end
 
-  def show_buy_window(pc, val, apply_tax : Bool = true)
+  def show_buy_window(pc : L2PcInstance, val : Int32, apply_tax : Bool = true)
     unless buy_list = BuyListData.get_buy_list(val)
       warn "BuyList not found."
       pc.action_failed
@@ -25,7 +28,7 @@ class L2MerchantInstance < L2NpcInstance
     end
 
     unless buy_list.npc_allowed?(id)
-      warn "Npc not allowed in BuyList. BuyList ID: #{val}, Npc ID: #{id()}."
+      warn { "Npc not allowed in BuyList. BuyList ID: #{val}, Npc ID: #{id}." }
       pc.action_failed
       return
     end

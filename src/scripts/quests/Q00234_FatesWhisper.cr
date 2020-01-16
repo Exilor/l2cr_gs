@@ -808,7 +808,7 @@ class Scripts::Q00234_FatesWhisper < Quest
   def on_attack(npc, attacker, damage, is_summon)
     qs = get_quest_state(attacker, false)
     if qs && npc.id == BAIUM
-      weapon = attacker.active_weapon_item?
+      weapon = attacker.active_weapon_item
       if weapon && weapon.id == Q_PIPETTE_KNIFE
         qs.take_items(Q_PIPETTE_KNIFE, 1)
         qs.give_items(Q_RED_PIPETTE_KNIFE, 1)

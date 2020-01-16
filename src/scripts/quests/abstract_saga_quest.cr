@@ -396,7 +396,7 @@ abstract class AbstractSagaQuest < Quest
     st = get_quest_state(pc, false)
     (21646...21652).each do |archon_minion|
       if npc_id == archon_minion
-        if party = pc.party?
+        if party = pc.party
           party_quest_members = [] of QuestState
           party.members.each do |pc1|
             st1 = find_quest(pc1)
@@ -407,7 +407,7 @@ abstract class AbstractSagaQuest < Quest
             end
           end
           unless party_quest_members.empty?
-            st2 = party_quest_members.sample
+            st2 = party_quest_members.sample(random: Rnd)
             give_halisha_mark(st2)
           end
         else

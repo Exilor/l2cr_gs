@@ -25,6 +25,7 @@ class Fort < AbstractResidence
   @special_envoys = Concurrent::Array(L2Spawn).new
   @envoy_castles = Hash(Int32, Int32).new(initial_capacity: 2)
   @available_castles = Set(Int32).new(1)
+
   getter doors = [] of L2DoorInstance
   getter fort_type = 0
   getter supply_lvl = 0
@@ -98,7 +99,7 @@ class Fort < AbstractResidence
   end
 
   def open_close_door(pc : L2PcInstance, door_id : Int32, open : Bool)
-    if pc.clan? != owner_clan?
+    if pc.clan != owner_clan?
       return
     end
 
@@ -126,7 +127,7 @@ class Fort < AbstractResidence
     if old_owner && clan != old_owner
       update_clans_reputation(old_owner, true)
       begin
-        if old_leader = old_owner.leader.player_instance?
+        if old_leader = old_owner.leader.player_instance
           if old_leader.mount_type.wyvern?
             old_leader.dismount
           end
@@ -151,7 +152,7 @@ class Fort < AbstractResidence
     spawn_special_envoys
 
     if clan.fort_id > 0
-      FortManager.get_fort_by_owner!(clan).remove_owner(true)
+      FortManager.get_fort_by_owner(clan).not_nil!.remove_owner(true)
     end
 
     self.supply_lvl = 0
@@ -205,11 +206,8 @@ class Fort < AbstractResidence
   end
 
   def save_fort_variables
-    GameDB.exec(
-      "UPDATE fort SET supplyLvL=? WHERE id = ?",
-      @supply_lvl,
-      residence_id
-    )
+    sql = "UPDATE fort SET supplyLvL=? WHERE id = ?"
+    GameDB.exec(sql, @supply_lvl, residence_id)
   rescue e
     error e
   end
@@ -265,7 +263,7 @@ class Fort < AbstractResidence
     end
 
     if owner_id > 0
-      clan = ClanTable.get_clan!(owner_id)
+      clan = ClanTable.get_clan(owner_id).not_nil!
       clan.fort_id = residence_id
       self.owner_clan = clan
       run_count = owned_time // (Config.fs_update_frq * 60)
@@ -722,7 +720,7 @@ class Fort < AbstractResidence
       end
 
       time = Time.ms
-      task = ->{ function_task(cwh) }
+      task = -> { function_task(cwh) }
 
       if @end_date > time
         ThreadPoolManager.schedule_general(task, @end_date - time)
@@ -747,7 +745,7 @@ class Fort < AbstractResidence
         if cwh
           ware.destroy_item_by_item_id("CS_function_fee", Inventory::ADENA_ID, fee.to_i64, nil, nil)
         end
-        ThreadPoolManager.schedule_general(->{ function_task(true) }, rate)
+        ThreadPoolManager.schedule_general(-> { function_task(true) }, rate)
       else
         @fort.remove_function(type)
       end
@@ -757,15 +755,7 @@ class Fort < AbstractResidence
 
     def db_save
       sql = "REPLACE INTO fort_functions (fort_id, type, lvl, lease, rate, endTime) VALUES (?,?,?,?,?,?)"
-      GameDB.exec(
-        sql,
-        @fort.residence_id,
-        type,
-        lvl,
-        lease,
-        rate,
-        end_time
-      )
+      GameDB.exec(sql, @fort.residence_id, type, lvl, lease, rate, end_time)
     rescue e
       error e
     end

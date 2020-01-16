@@ -23,7 +23,7 @@ class Scripts::Lekon < AbstractNpcAI
     when "licence"
       pc = pc.not_nil!
 
-      clan = pc.clan?
+      clan = pc.clan
       if clan.nil? || (!pc.clan_leader? || clan.level < MIN_CLAN_LV)
         html = "32557-02.html"
       elsif has_at_least_one_quest_item?(pc, LICENCE)

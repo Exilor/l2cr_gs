@@ -91,7 +91,7 @@ class Scripts::Q00307_ControlDeviceOfTheGiants < Quest
       st.give_items(CET_3_SHEET, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     when HEKATON_PRIME
-      if party = pc.party?
+      if party = pc.party
         party.members.each do |pl|
           qs = get_quest_state(pl, false)
           if qs && qs.cond?(1)

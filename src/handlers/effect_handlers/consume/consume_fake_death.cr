@@ -8,8 +8,8 @@ class EffectHandler::ConsumeFakeDeath < AbstractEffect
     @ticks = params.get_i32("ticks")
   end
 
-  def effect_type
-    L2EffectType::FAKE_DEATH
+  def effect_type : EffectType
+    EffectType::FAKE_DEATH
   end
 
   def on_start(info)

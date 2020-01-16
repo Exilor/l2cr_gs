@@ -4,7 +4,7 @@ class EffectHandler::EnableCloak < AbstractEffect
   end
 
   def on_start(info)
-    info.effected.acting_player.stat.cloak_slot_status = true
+    info.effected.acting_player.not_nil!.stat.cloak_slot_status = true
   end
 
   def on_action_time(info)
@@ -12,6 +12,6 @@ class EffectHandler::EnableCloak < AbstractEffect
   end
 
   def on_exit(info)
-    info.effected.acting_player.stat.cloak_slot_status = false
+    info.effected.acting_player.not_nil!.stat.cloak_slot_status = false
   end
 end

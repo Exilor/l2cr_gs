@@ -18,7 +18,7 @@ class L2ResidenceTeleportZone < L2ZoneRespawn
   end
 
   def oust_all_players
-    players_inside do |pc|
+    players_inside.each do |pc|
       if pc.online?
         pc.tele_to_location(spawn_loc, 200)
       end

@@ -353,8 +353,8 @@ module AdminCommandHandler::AdminAnnouncements
           end
         end
         result = HtmlUtil.create_page(AnnouncementsTable.all_announcements, page, 8, pager_function, body_function)
-        content = content.gsub("%pages%", result.pager_template.join)
-        content = content.gsub("%announcements%", result.body_template.join)
+        content = content.gsub("%pages%", result.pager_template.to_s)
+        content = content.gsub("%announcements%", result.body_template.to_s)
         Util.send_cb_html(pc, content)
       end
     end

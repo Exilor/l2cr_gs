@@ -106,14 +106,14 @@ class Auction
   def set_bid(bidder : L2PcInstance, bid : Int64)
     sync do
       required_adena = bid
-      if highest_bidder_name == bidder.clan.leader_name
+      if highest_bidder_name == bidder.clan.not_nil!.leader_name
         required_adena = bid - highest_bidder_max_bid
       end
 
       if (highest_bidder_id > 0 && bid > highest_bidder_max_bid) || (highest_bidder_id == 0 && bid >= starting_bid)
         if take_item(bidder, required_adena)
           update_in_db(bidder, bid)
-          bidder.clan.set_auction_bidded_at(@id, true)
+          bidder.clan.not_nil!.set_auction_bidded_at(@id, true)
           return
         end
       end
@@ -130,7 +130,7 @@ class Auction
     end
 
     unless clan = ClanTable.get_clan_by_name(clan_name)
-      warn "Clan #{clan_name.inspect} not found."
+      warn { "Clan #{clan_name.inspect} not found." }
       return
     end
 
@@ -142,8 +142,9 @@ class Auction
   end
 
   private def take_item(bidder : L2PcInstance, quantity : Int64) : Bool
-    if bidder.clan? && bidder.clan.warehouse.adena >= quantity
-      bidder.clan.warehouse.destroy_item_by_item_id("Buy", Inventory::ADENA_ID, quantity, bidder, bidder)
+    clan = bidder.clan
+    if clan && clan.warehouse.adena >= quantity
+      clan.warehouse.destroy_item_by_item_id("Buy", Inventory::ADENA_ID, quantity, bidder, bidder)
       return true
     end
 
@@ -155,10 +156,10 @@ class Auction
     begin
       if @bidders.has_key?(bidder.clan_id)
         sql = "UPDATE auction_bid SET bidderId=?, bidderName=?, maxBid=?, time_bid=? WHERE auctionId=? AND bidderId=?"
-        GameDB.exec(sql, bidder.clan_id, bidder.clan.leader_name, bid, Time.ms, id, bidder.clan_id)
+        GameDB.exec(sql, bidder.clan_id, bidder.clan.not_nil!.leader_name, bid, Time.ms, id, bidder.clan_id)
       else
         sql = "INSERT INTO auction_bid (id, auctionId, bidderId, bidderName, maxBid, clan_name, time_bid) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        GameDB.exec(sql, IdFactory.next, id, bidder.clan_id, bidder.name, bid, bidder.clan.name, Time.ms)
+        GameDB.exec(sql, IdFactory.next, id, bidder.clan_id, bidder.name, bid, bidder.clan.not_nil!.name, Time.ms)
       end
     rescue e
       error e
@@ -171,13 +172,13 @@ class Auction
 
     @highest_bidder_id = bidder.clan_id
     @highest_bidder_max_bid = bid
-    @highest_bidder_name = bidder.clan.leader_name
+    @highest_bidder_name = bidder.clan.not_nil!.leader_name
 
     if tmp = @bidders[@highest_bidder_id]?
       tmp.bid = bid
       tmp.time_bid = Time.ms
     else
-      tmp = Bidder.new(@highest_bidder_name, bidder.clan.name, bid, Time.ms)
+      tmp = Bidder.new(@highest_bidder_name, bidder.clan.not_nil!.name, bid, Time.ms)
       @bidders[@highest_bidder_id] = tmp
     end
 
@@ -193,7 +194,7 @@ class Auction
     end
 
     @bidders.each_value do |b|
-      if ClanTable.get_clan_by_name!(b.clan_name).hideout_id == 0
+      if ClanTable.get_clan_by_name(b.clan_name).not_nil!.hideout_id == 0
         return_item(b.clan_name, b.bid, true)
       else
         if pc = L2World.get_player(b.name)
@@ -201,7 +202,7 @@ class Auction
         end
       end
 
-      ClanTable.get_clan_by_name!(b.clan_name).set_auction_bidded_at(0, true)
+      ClanTable.get_clan_by_name(b.clan_name).not_nil!.set_auction_bidded_at(0, true)
     end
 
     @bidders.clear
@@ -230,12 +231,12 @@ class Auction
 
       if @seller_id > 0
         return_item(@seller_clan_name, @highest_bidder_max_bid, true)
-        hall = ClanHallManager.get_auctionable_hall_by_id!(@item_id)
+        hall = ClanHallManager.get_auctionable_hall_by_id(@item_id).not_nil!
         return_item(@seller_clan_name, hall.lease.to_i64, false)
       end
 
       delete_auction_from_db
-      clan = ClanTable.get_clan_by_name!(@bidders[@highest_bidder_id].clan_name)
+      clan = ClanTable.get_clan_by_name(@bidders[@highest_bidder_id].clan_name).not_nil!
       @bidders.delete(@highest_bidder_id)
       clan.set_auction_bidded_at(0, true)
       remove_bids
@@ -256,7 +257,7 @@ class Auction
 
       bidder = @bidders[bidder]
       return_item(bidder.clan_name, bidder.bid, true)
-      ClanTable.get_clan_by_name!(bidder.clan_name).set_auction_bidded_at(0, true)
+      ClanTable.get_clan_by_name(bidder.clan_name).not_nil!.set_auction_bidded_at(0, true)
       @bidders.clear
       load_bid
     end
@@ -290,7 +291,7 @@ class Auction
     error e
   end
 
-  class Bidder
+  private class Bidder
     getter name, clan_name, time_bid
     property bid : Int64
 
@@ -304,7 +305,7 @@ class Auction
     end
   end
 
-  struct AutoEndTask
+  private struct AutoEndTask
     include Loggable
 
     initializer auction : Auction

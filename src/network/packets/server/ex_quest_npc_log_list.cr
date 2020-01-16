@@ -13,7 +13,7 @@ class Packets::Outgoing::ExQuestNpcLogList < GameServerPacket
     @npcs << NpcHolder.new(npc_id, unknown, count)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xc5
 

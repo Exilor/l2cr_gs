@@ -11,6 +11,6 @@ class Packets::Incoming::RequestExChangeName < GameClientPacket
 
   private def run_impl
     # L2J TODO
-    warn "Recieved #{@type} name: #{@new_name} type: #{@type} CharSlot: #{@char_slot}."
+    warn { "Recieved #{@type} name: #{@new_name} type: #{@type} CharSlot: #{@char_slot}." }
   end
 end

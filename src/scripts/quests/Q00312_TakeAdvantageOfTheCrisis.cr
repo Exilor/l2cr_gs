@@ -54,7 +54,7 @@ class Scripts::Q00312_TakeAdvantageOfTheCrisis < Quest
 
   def on_kill(npc, pc, is_summon)
     member = get_random_party_member(pc, 1)
-    if member && rand(1000) < MOBS[npc.id]
+    if member && Rnd.rand(1000) < MOBS[npc.id]
       st = get_quest_state!(member, false)
       st.give_items(MINERAL_FRAGMENT, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

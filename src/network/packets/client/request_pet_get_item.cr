@@ -7,14 +7,13 @@ class Packets::Incoming::RequestPetGetItem < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
+    return unless pet = pc.summon.as?(L2PetInstance)
 
     item = L2World.find_object(@l2id)
     if !item || !pc.has_pet?
       action_failed
       return
     end
-
-    pet = pc.summon!.as(L2PetInstance)
 
     castle_id = MercTicketManager.get_ticket_castle_id(item.id)
     if castle_id > 0

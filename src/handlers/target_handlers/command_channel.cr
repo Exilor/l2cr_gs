@@ -3,18 +3,17 @@ module TargetHandler::CommandChannel
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    unless pc = char.acting_player?
+    unless pc = char.acting_player
       return EMPTY_TARGET_LIST
     end
 
     target_list = [pc] of L2Object
 
     radius = skill.affect_range
-    party = pc.party?
-    has_channel = !!party && party.in_command_channel?
+    party = pc.party
 
-    if Skill.add_summon(char, pc, radius, false)
-      target_list << pc.summon!
+    if smn = add_summon(char, pc, radius, false)
+      target_list << smn
     end
 
     unless party
@@ -22,14 +21,14 @@ module TargetHandler::CommandChannel
     end
 
     max_targets = skill.affect_limit
-    members = has_channel ? party.command_channel.members : party.members
+    members = party.command_channel.try &.members || party.members
 
     members.each do |m|
       if pc == m
         next
       end
 
-      if Skill.add_character(char, m, radius, false)
+      if add_character(char, m, radius, false)
         target_list << m
         if target_list.size >= max_targets
           break
@@ -41,6 +40,6 @@ module TargetHandler::CommandChannel
   end
 
   def target_type
-    L2TargetType::COMMAND_CHANNEL
+    TargetType::COMMAND_CHANNEL
   end
 end

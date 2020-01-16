@@ -6,7 +6,7 @@ class Packets::Outgoing::OnEventTrigger < GameServerPacket
     @enabled = is_enabled ? 1 : 0
   end
 
-  def write_impl
+  private def write_impl
     c 0xcf
 
     d @emitter_id

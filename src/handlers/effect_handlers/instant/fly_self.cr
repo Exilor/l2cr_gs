@@ -6,7 +6,7 @@ class EffectHandler::FlySelf < AbstractEffect
     @fly_radius = params.get_i32("flyRadius", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

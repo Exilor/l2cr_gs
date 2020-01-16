@@ -10,7 +10,7 @@ class EffectHandler::TransferHate < AbstractEffect
     Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -18,7 +18,6 @@ class EffectHandler::TransferHate < AbstractEffect
     skill, effector, effected = info.skill, info.effector, info.effected
 
     unless Util.in_range?(skill.effect_range, effector, effected, true)
-      debug "#{effector.name} not in affect range (#{skill.effect_range}) of #{effected.name}."
       return
     end
 

@@ -10,7 +10,7 @@ class Packets::Outgoing::ExShowDominionRegistry < GameServerPacket
   def initialize(@castle_id : Int32, pc : L2PcInstance)
     if clans = TerritoryWarManager.get_registered_clans(castle_id)
       @clan_req = clans.size
-      if clan = pc.clan?
+      if clan = pc.clan
         @clan_registered = clans.includes?(clan) ? 1 : 0
       end
     end
@@ -23,7 +23,7 @@ class Packets::Outgoing::ExShowDominionRegistry < GameServerPacket
     @war_time = Time.s
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x90
 

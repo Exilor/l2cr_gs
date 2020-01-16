@@ -9,9 +9,7 @@ class Condition
 
       can_res = true
 
-      if effected.player?
-        player = effected.acting_player
-
+      if player = effected.as?(L2PcInstance)
         if player.alive?
           can_res = false
           if effector.player?

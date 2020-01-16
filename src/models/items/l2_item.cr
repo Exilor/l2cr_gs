@@ -52,6 +52,7 @@ abstract class L2Item < ListenersContainer
   @func_templates : Array(FuncTemplate)?
   @unequip_skill : SkillHolder?
   @skill_holder : Array(SkillHolder)?
+
   getter display_id : Int32
   getter name : String
   getter icon : String?
@@ -133,7 +134,7 @@ abstract class L2Item < ListenersContainer
 
     @common = @item_id.between?(11605, 12361)
     @hero_item = @item_id.between?(6611, 6621) || @item_id.between?(9388, 9390) || @item_id == 6842
-    @pvp_item = @item_id.between?(10667, 10835) || @item_id.between?(12852, 12977) || @item_id.between?(14363, 14525) || @item_id == 14528 || @item_id == 14529 || @item_id == 14558 || @item_id.between?(16024, 15913) || @item_id.between?(16134, 16147) || @item_id == 16149 || @item_id == 16151 || @item_id == 16153 || @item_id == 16155 || @item_id == 16157 || @item_id == 16159 || @item_id.between?(16168, 16176) || @item_id.between?(16179, 16220)
+    @pvp_item = @item_id.between?(10667, 10835) || @item_id.between?(12852, 12977) || @item_id.between?(14363, 14525) || @item_id == 14528 || @item_id == 14529 || @item_id == 14558 || @item_id.between?(15913, 16024) || @item_id.between?(16134, 16147) || @item_id == 16149 || @item_id == 16151 || @item_id == 16153 || @item_id == 16155 || @item_id == 16157 || @item_id == 16159 || @item_id.between?(16168, 16176) || @item_id.between?(16179, 16220)
 
     skills = set.get_string("item_skill", nil)
     unless skills.nil? || skills.empty?
@@ -312,14 +313,16 @@ abstract class L2Item < ListenersContainer
       return true
     end
 
-    if (oly_restricted_item? || hero_item?) && (char.player? && char.acting_player.in_olympiad_mode?)
-      if equippable?
-        char.send_packet(SystemMessageId::THIS_ITEM_CANT_BE_EQUIPPED_FOR_THE_OLYMPIAD_EVENT)
-      else
-        char.send_packet(SystemMessageId::THIS_ITEM_IS_NOT_AVAILABLE_FOR_THE_OLYMPIAD_EVENT)
-      end
+    if oly_restricted_item? || hero_item?
+      if char.is_a?(L2PcInstance) && char.in_olympiad_mode?
+        if equippable?
+          char.send_packet(SystemMessageId::THIS_ITEM_CANT_BE_EQUIPPED_FOR_THE_OLYMPIAD_EVENT)
+        else
+          char.send_packet(SystemMessageId::THIS_ITEM_IS_NOT_AVAILABLE_FOR_THE_OLYMPIAD_EVENT)
+        end
 
-      return false
+        return false
+      end
     end
 
     return true unless condition_attached?

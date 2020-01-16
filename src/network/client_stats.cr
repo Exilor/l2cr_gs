@@ -4,6 +4,7 @@ class ClientStats
 
   @flood_detected = false
   @queue_overflow_detected = false
+
   getter processed_packets = 0
   getter dropped_packets = 0
   getter unknown_packets = 0
@@ -38,7 +39,6 @@ class ClientStats
   def drop_packet : Bool
     result = @flood_detected || @queue_overflow_detected
     if result
-      debug "#drop_packet: @flood_detected: #{@flood_detected}, @queue_overflow_detected: #{@queue_overflow_detected}."
       @dropped_packets += 1
     end
     result
@@ -137,7 +137,7 @@ class ClientStats
       end
 
       count = @packets_in_second[@head] += 1
-      if !@flood_detected
+      unless @flood_detected
         if count > Config.client_packet_queue_max_packets_per_second
           @short_floods += 1
         elsif long_flood_detected

@@ -9,7 +9,7 @@ class EffectHandler::Lethal < AbstractEffect
     @half_lethal = params.get_f64("halfLethal", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

@@ -14,6 +14,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   @buff_task : Scheduler::PeriodicTask?
   @duration_check_task : Scheduler::PeriodicTask?
   @beast_skills : IArray(Skill)?
+
   getter food_type = 0
   getter! owner : L2PcInstance
   getter? freya_beast = false
@@ -248,8 +249,10 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
     if hp_ratio >= 0.8
       template.skills.each_value do |skill|
         # if the skill is a debuff, check if the attacker has it already [ attacker.getEffect(L2Skill skill) ]
-        if skill.debuff? && rand(3) < 1 && attacker && attacker.affected_by_skill?(skill.id)
-          sit_cast_and_follow(skill, attacker)
+        if skill.debuff? && Rnd.rand(3) < 1 && attacker
+          if attacker.affected_by_skill?(skill.id)
+            sit_cast_and_follow(skill, attacker)
+          end
         end
       end
     # for HP levels between 80% and 50%, do not react to attack events (so that MP can regenerate a bit)
@@ -263,8 +266,10 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
       # if the owner has a lot of HP, then debuff the enemy with a random debuff among the available skills
       template.skills.each_value do |skill|
         # if the skill is a buff, check if the owner has it already [ owner.getEffect(L2Skill skill) ]
-        if rand(5) < chance && skill.has_effect_type?(L2EffectType::CP, L2EffectType::HP, L2EffectType::MANAHEAL_BY_LEVEL, L2EffectType::MANAHEAL_PERCENT)
-          sit_cast_and_follow(skill, owner)
+        if Rnd.rand(5) < chance
+          if skill.has_effect_type?(EffectType::CP, EffectType::HP, EffectType::MANAHEAL_BY_LEVEL, EffectType::MANAHEAL_PERCENT)
+            sit_cast_and_follow(skill, owner)
+          end
         end
       end
     end
@@ -370,7 +375,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
 
       total_buffs_on_owner = 0
       i = 0
-      rnd = rand(@num_buffs)
+      rnd = Rnd.rand(@num_buffs)
       buffs_to_give = nil
 
       # get this npc's skills: getSkills

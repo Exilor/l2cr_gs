@@ -11,7 +11,7 @@ class EffectHandler::FoodForPet < AbstractEffect
     @wyvern = params.get_i32("wyvern", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -19,7 +19,7 @@ class EffectHandler::FoodForPet < AbstractEffect
     char = info.effector
 
     if char.is_a?(L2PetInstance)
-      char.current_feed += (@normal * Config.pet_food_rate)
+      char.current_feed += @normal * Config.pet_food_rate
     elsif char.is_a?(L2PcInstance)
       if char.mount_type.wyvern?
         char.current_feed += @wyvern

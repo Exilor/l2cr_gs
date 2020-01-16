@@ -7,6 +7,6 @@ class Packets::Incoming::RequestShowMiniMap < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    pc.send_packet(ShowMiniMap.new(1665))
+    pc.send_packet(ShowMiniMap::DEFAULT)
   end
 end

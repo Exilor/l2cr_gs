@@ -8,6 +8,7 @@ class L2Vehicle < L2Character
   @engine : BoatEngine?
   @current_path : Array(VehiclePathPoint)? | Slice(VehiclePathPoint)?
   @run_state = 0
+
   getter passengers = Concurrent::Array(L2PcInstance).new
   setter oust_loc : Location?
   property dock_id : Int32 = 0
@@ -71,7 +72,7 @@ class L2Vehicle < L2Character
   end
 
   def remove_passenger(pc : L2PcInstance)
-    @passengers.delete(pc)
+    @passengers.delete_first(pc)
   end
 
   def empty? : Bool
@@ -122,9 +123,8 @@ class L2Vehicle < L2Character
     if path = @current_path
       @run_state += 1
       if @run_state < path.size
-        point = path[@run_state]
-
         unless movement_disabled?
+          point = path[@run_state]
           if point.move_speed == 0
             point.heading = point.rotation_speed
             tele_to_location(point, false)
@@ -168,13 +168,9 @@ class L2Vehicle < L2Character
   end
 
   def pay_for_ride(item_id : Int32, count : Int64, oust_x : Int32, oust_y : Int32, oust_z : Int32)
-    # temp = @known_list.each_player(1000).count
-    # debug "Checking #{temp} players for their tickets."
-
     known_list.each_player(1000) do |pc|
       if pc.in_boat? && pc.boat == self
         if item_id > 0
-          # debug "Taking #{ItemTable[item_id].name} from #{pc.name}."
           ticket = pc.inventory.get_item_by_item_id(item_id)
 
           if !ticket || !pc.inventory.destroy_item("Boat", ticket, count, pc, self)
@@ -200,7 +196,7 @@ class L2Vehicle < L2Character
   def update_position : Bool
     result = super
 
-    @passengers.each do |pc|
+    @passengers.reverse_each do |pc|
       if pc.vehicle == self
         # debug "#update_position updating the position of #{pc.name}."
         pc.set_xyz(*xyz)
@@ -212,7 +208,7 @@ class L2Vehicle < L2Character
   end
 
   def tele_to_location(loc : Locatable, allow_offset : Bool)
-    stop_move if moving?
+    stop_move(nil, false) if moving?
     self.teleporting = true
     set_intention(AI::ACTIVE)
     @passengers.each &.tele_to_location(loc, false)
@@ -242,7 +238,7 @@ class L2Vehicle < L2Character
   def delete_me
     @engine = nil
     begin
-      stop_move if moving?
+      stop_move(nil) if moving?
     rescue e
       error e
     end
@@ -253,7 +249,7 @@ class L2Vehicle < L2Character
       error e
     end
 
-    old_region = world_region?
+    old_region = world_region
     begin
       decay_me
     rescue e
@@ -280,19 +276,19 @@ class L2Vehicle < L2Character
     # no-op
   end
 
-  def active_weapon_instance? : L2ItemInstance?
+  def active_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def active_weapon_item? : L2Weapon?
+  def active_weapon_item : L2Weapon?
     # return nil
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
+  def secondary_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_item? : L2Item?
+  def secondary_weapon_item : L2Item?
     # return nil
   end
 

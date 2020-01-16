@@ -1,5 +1,6 @@
 class L2SwampZone < L2ZoneType
   @castle_id = 0
+
   getter move_bonus = 0.0
 
   def set_parameter(name, value)
@@ -13,7 +14,7 @@ class L2SwampZone < L2ZoneType
     end
   end
 
-  def castle
+  def castle : Castle?
     if @castle_id > 0 && @castle.nil?
       @castle = CastleManager.get_castle_by_id(@castle_id)
     end
@@ -35,8 +36,8 @@ class L2SwampZone < L2ZoneType
 
       char.inside_swamp_zone = true
 
-      if char.player?
-        pc.not_nil!.broadcast_user_info
+      if char.player? && pc
+        pc.broadcast_user_info
       end
     end
   end
@@ -45,8 +46,8 @@ class L2SwampZone < L2ZoneType
     if char.inside_swamp_zone?
       char.inside_swamp_zone = false
 
-      if char.player?
-        char.acting_player.broadcast_user_info
+      if char.is_a?(L2PcInstance)
+        char.broadcast_user_info
       end
     end
   end

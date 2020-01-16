@@ -12,7 +12,7 @@ class Packets::Outgoing::MultisellList < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0xd0
 
     d @list.list_id

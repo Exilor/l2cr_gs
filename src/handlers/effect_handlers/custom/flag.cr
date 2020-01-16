@@ -4,7 +4,7 @@ class EffectHandler::Flag < AbstractEffect
   end
 
   def on_exit(info)
-    info.effected.acting_player.update_pvp_flag(0)
+    info.effected.update_pvp_flag(0)
   end
 
   def on_start(info)

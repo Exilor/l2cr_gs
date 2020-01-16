@@ -22,13 +22,13 @@ class Packets::Incoming::RequestRejectPostAttachment < GameClientPacket
     end
 
     unless msg = MailManager.get_message(@msg_id)
-      warn "Message with ID #{@msg_id} not found."
+      warn { "Message with ID #{@msg_id} not found." }
       return
     end
 
     if msg.receiver_id != pc.l2id
       Util.punish(pc, "tried to reject a mail attachment owned by another player.")
-      warn "#{pc.name} tried to reject a message meant to another player."
+      warn { "#{pc.name} tried to reject a message meant to another player." }
       return
     end
 

@@ -12,8 +12,8 @@ class EffectHandler::ConsumeRest < AbstractEffect
     EffectFlag::RELAXING.mask
   end
 
-  def effect_type
-    L2EffectType::RELAXING
+  def effect_type : EffectType
+    EffectType::RELAXING
   end
 
   def on_action_time(info)
@@ -42,8 +42,8 @@ class EffectHandler::ConsumeRest < AbstractEffect
   end
 
   def on_start(info)
-    if info.effected.player?
-      info.effected.acting_player.sit_down(false)
+    if pc = info.effected.as?(L2PcInstance)
+      pc.sit_down(false)
     else
       info.effected.intention = AI::REST
     end

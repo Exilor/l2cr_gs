@@ -1,6 +1,7 @@
 class AccessLevel
   @childs_access_level : self?
   @child = 0
+
   getter level = 0
   getter name = "User"
   getter name_color = 16777215

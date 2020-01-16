@@ -40,7 +40,7 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
       if st.get_quest_items_count(DINOSAUR_FANG_NECKLACE) < 100
         html = "32105-07.html"
       else
-        if rand(1000) < 500
+        if Rnd.rand(1000) < 500
           st.give_adena(450000, true)
           html = "32105-08.html"
         else
@@ -69,7 +69,7 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
     st = get_quest_state!(member, false)
 
     chance = DROP_RATE * Config.rate_quest_drop
-    if rand(1000) < chance
+    if Rnd.rand(1000) < chance
       st.reward_items(DINOSAUR_FANG_NECKLACE, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end

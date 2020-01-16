@@ -3,6 +3,7 @@ struct L2Seed
   @reward2 : Int32
   @limit_crops : Int32
   @limit_seeds : Int32
+
   getter castle_id : Int32
   getter seed_id : Int32
   getter crop_id : Int32

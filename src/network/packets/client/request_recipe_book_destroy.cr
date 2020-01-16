@@ -14,7 +14,7 @@ class Packets::Incoming::RequestRecipeBookDestroy < GameClientPacket
     end
 
     unless rp = RecipeData.get_recipe_list(@id)
-      warn "Recipe with ID #{@id} not found."
+      warn { "Recipe with ID #{@id} not found." }
       return
     end
 

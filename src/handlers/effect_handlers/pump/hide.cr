@@ -1,6 +1,6 @@
 class EffectHandler::Hide < AbstractEffect
   def on_start(info)
-    return unless pc = info.effected.acting_player?
+    return unless pc = info.effected.as?(L2PcInstance)
 
     pc.invisible = true
 
@@ -19,10 +19,8 @@ class EffectHandler::Hide < AbstractEffect
   end
 
   def on_exit(info)
-    return unless info.effected.player?
-    pc = info.effected.acting_player
-    unless pc.in_observer_mode?
-      pc.invisible = false
-    end
+    return unless pc = info.effected.as?(L2PcInstance)
+    return if pc.in_observer_mode?
+    pc.invisible = false
   end
 end

@@ -25,7 +25,7 @@ class EffectHandler::RestorationRandom < AbstractEffect
       chance_from += chance
     end
 
-    pc = info.effected.acting_player
+    pc = info.effected.acting_player.not_nil!
 
     if creation_list.empty?
       pc.send_packet(SystemMessageId::NOTHING_INSIDE_THAT)
@@ -39,7 +39,7 @@ class EffectHandler::RestorationRandom < AbstractEffect
     end
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

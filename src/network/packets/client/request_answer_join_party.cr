@@ -11,7 +11,7 @@ class Packets::Incoming::RequestAnswerJoinParty < GameClientPacket
     return unless pc = active_char
 
     unless requestor = pc.active_requester
-      debug "#{pc} has no active requester."
+      warn { "#{pc} has no active requester." }
       return
     end
 
@@ -25,7 +25,7 @@ class Packets::Incoming::RequestAnswerJoinParty < GameClientPacket
     when 0 # party cancel
       # nothing
     when 1 # party accept
-      if party = requestor.party?
+      if party = requestor.party
         if party.size >= 9
           sm = SystemMessageId::PARTY_FULL
           pc.send_packet(sm)
@@ -55,7 +55,7 @@ class Packets::Incoming::RequestAnswerJoinParty < GameClientPacket
       end
     end
 
-    requestor.party?.try &.pending_invitation = false
+    requestor.party.try &.pending_invitation = false
 
     pc.active_requester = nil
     requestor.on_transaction_response

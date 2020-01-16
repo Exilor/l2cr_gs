@@ -51,7 +51,7 @@ class Packets::Incoming::RequestBlock < GameClientPacket
       pc.send_packet(SystemMessageId::MESSAGE_ACCEPTANCE_MODE)
       BlockList.set_block_all(pc, false)
     else
-      warn "Unknown block type #{@type}."
+      warn { "Unknown block type #{@type}." }
     end
   end
 end

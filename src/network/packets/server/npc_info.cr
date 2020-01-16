@@ -52,9 +52,9 @@ class Packets::Outgoing::NpcInfo < Packets::Outgoing::AbstractNpcInfo
     end
 
     if npc.is_a?(L2NpcInstance) && npc.inside_town_zone? && (Config.show_crest_without_quest || (npc.castle? && npc.castle.show_npc_crest?)) && npc.castle.owner_id != 0
-      town_id = TownManager.get_town!(@x, @y, @z).town_id
+      town_id = TownManager.get_town(@x, @y, @z).not_nil!.town_id
       if town_id != 33 && town_id != 22
-        clan = ClanTable.get_clan!(npc.castle.owner_id)
+        clan = ClanTable.get_clan(npc.castle.owner_id).not_nil!
         @clan_crest = clan.crest_id
         @clan_id = clan.id
         @ally_crest = clan.ally_crest_id
@@ -65,7 +65,7 @@ class Packets::Outgoing::NpcInfo < Packets::Outgoing::AbstractNpcInfo
     @display_effect = npc.display_effect
   end
 
-  def write_impl
+  private def write_impl
     c 0x0c
 
     d @npc.l2id

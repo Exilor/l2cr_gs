@@ -35,7 +35,7 @@ module TeleportLocationTable
       id = rs.get_i32("id")
       x, y, z = rs.get_i32("loc_x"), rs.get_i32("loc_y"), rs.get_i32("loc_z")
       price = rs.get_i32("price")
-      for_noble = rs.get_i8("fornoble") == 1
+      for_noble = rs.get_bool("fornoble")
       item_id = rs.get_i32("itemId")
 
       tp = L2TeleportLocation.new(id, x, y, z, price, item_id, for_noble)

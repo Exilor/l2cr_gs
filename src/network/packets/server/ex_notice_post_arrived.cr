@@ -3,11 +3,11 @@ class Packets::Outgoing::ExNoticePostArrived < GameServerPacket
 
   initializer show_animation : Bool
 
-  def self.new(value : Bool) : ExNoticePostArrived
+  def self.new(value : Bool) : self
     value ? TRUE : FALSE
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xa9
 

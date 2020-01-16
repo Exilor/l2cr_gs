@@ -10,7 +10,7 @@ class Packets::Outgoing::AbnormalStatusUpdate < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0x85
 
     h @effects.size

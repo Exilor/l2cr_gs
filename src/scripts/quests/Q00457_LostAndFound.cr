@@ -111,7 +111,7 @@ class Scripts::Q00457_LostAndFound < Quest
   def on_kill(npc, pc, is_summon)
     st = get_quest_state!(pc)
 
-    if rand(100) < CHANCE_SPAWN && st.now_available? && pc.level >= MIN_LVL
+    if Rnd.rand(100) < CHANCE_SPAWN && st.now_available? && pc.level >= MIN_LVL
       add_spawn(GUMIEL, npc)
     end
 

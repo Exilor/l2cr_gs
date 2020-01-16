@@ -13,6 +13,7 @@ abstract class AbstractOlympiadGame
   private COMP_DONE_WEEK_TEAM = "competitions_done_week_team"
 
   @start_time = 0i64
+
   getter? aborted = false
 
   getter_initializer stadium_id : Int32
@@ -42,7 +43,7 @@ abstract class AbstractOlympiadGame
     if pc.nil? || !pc.online?
       return SystemMessageId::THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME
     end
-    client = pc.client?
+    client = pc.client
     if client.nil? || client.detached?
       return SystemMessageId::THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME
     end
@@ -99,7 +100,7 @@ abstract class AbstractOlympiadGame
       pc.olympiad_start = false
       pc.olympiad_side = par.side
       pc.olympiad_buff_count = Config.alt_oly_max_buffs
-      loc.instance_id = OlympiadGameManager.get_olympiad_task!(id).zone.instance_id
+      loc.instance_id = OlympiadGameManager.get_olympiad_task(id).not_nil!.zone.instance_id
       pc.tele_to_location(loc, false)
       pc.send_packet(ExOlympiadMode.new(2))
     rescue e
@@ -114,13 +115,13 @@ abstract class AbstractOlympiadGame
     return unless pc
     pc.stop_all_effects_except_those_that_last_through_death
 
-    if clan = pc.clan?
+    if clan = pc.clan
       clan.remove_skill_effects(pc)
       if clan.castle_id > 0
-        CastleManager.get_castle_by_owner!(clan).remove_residential_skills(pc)
+        CastleManager.get_castle_by_owner(clan).not_nil!.remove_residential_skills(pc)
       end
       if clan.fort_id > 0
-        FortManager.get_fort_by_owner!(clan).remove_residential_skills(pc)
+        FortManager.get_fort_by_owner(clan).not_nil!.remove_residential_skills(pc)
       end
     end
 
@@ -144,7 +145,7 @@ abstract class AbstractOlympiadGame
     pc.stop_cubics_by_others
 
     if remove_party
-      if party = pc.party?
+      if party = pc.party
         party.remove_party_member(pc, L2Party::MessageType::Expelled)
       end
     end
@@ -158,7 +159,7 @@ abstract class AbstractOlympiadGame
 
     pc.disable_all_shots
 
-    if item = pc.active_weapon_instance?
+    if item = pc.active_weapon_instance
       item.uncharge_all_shots
     end
 
@@ -221,13 +222,13 @@ abstract class AbstractOlympiadGame
     pc.olympiad_game_id = -1
 
     # Add Clan Skills
-    if clan = pc.clan?
+    if clan = pc.clan
       clan.add_skill_effects(pc)
       if clan.castle_id > 0
-        CastleManager.get_castle_by_owner!(clan).give_residential_skills(pc)
+        CastleManager.get_castle_by_owner(clan).not_nil!.give_residential_skills(pc)
       end
       if clan.fort_id > 0
-        FortManager.get_fort_by_owner!(clan).give_residential_skills(pc)
+        FortManager.get_fort_by_owner(clan).not_nil!.give_residential_skills(pc)
       end
       pc.send_skill_list
     end

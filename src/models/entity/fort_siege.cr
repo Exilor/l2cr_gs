@@ -15,6 +15,7 @@ class FortSiege
   @siege_restore : Scheduler::DelayedTask?
   @siege_start_task : Scheduler::DelayedTask?
   @attacker_clans = Concurrent::Array(L2SiegeClan).new
+
   getter commanders = Concurrent::Array(L2Spawn).new
   getter fort
   getter? in_progress = false
@@ -123,14 +124,14 @@ class FortSiege
 
   def announce_to_player(sm)
     attacker_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |pc|
         pc.send_packet(sm)
       end
     end
 
     if owner = fort.owner_clan?
-      clan = ClanTable.get_clan!(fort.owner_clan.id)
+      clan = ClanTable.get_clan(fort.owner_clan.id).not_nil!
       clan.each_online_player do |pc|
         pc.send_packet(sm)
       end
@@ -144,7 +145,7 @@ class FortSiege
 
   def update_player_siege_state_flags(clear : Bool)
     attacker_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |pc|
         if clear
           pc.siege_state = 0
@@ -167,7 +168,7 @@ class FortSiege
     end
 
     if owner = fort.owner_clan?
-      clan = ClanTable.get_clan!(fort.owner_clan.id)
+      clan = ClanTable.get_clan(fort.owner_clan.id).not_nil!
       clan.each_online_player do |pc|
         if clear
           pc.siege_state = 0
@@ -199,7 +200,7 @@ class FortSiege
   end
 
   def attacker?(clan : L2Clan?) : Bool
-    !!clan && !!get_attacker_clan?(clan)
+    !!clan && !!get_attacker_clan(clan)
   end
 
   def defender?(clan : L2Clan?) : Bool
@@ -237,7 +238,7 @@ class FortSiege
     players = [] of L2PcInstance
 
     attacker_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |pc|
         if pc.in_siege?
           players << pc
@@ -256,7 +257,7 @@ class FortSiege
     players = [] of L2PcInstance
 
     if owner_clan = fort.owner_clan?
-      clan = ClanTable.get_clan!(owner_clan.id)
+      clan = ClanTable.get_clan(owner_clan.id).not_nil!
       if clan != fort.owner_clan?
         return players
       end
@@ -339,7 +340,7 @@ class FortSiege
   end
 
   def add_attacker(pc : L2PcInstance, check_conditions : Bool) : Int32
-    unless clan = pc.clan?
+    unless clan = pc.clan
       return 0
     end
 
@@ -353,13 +354,16 @@ class FortSiege
         return 2
       end
 
-      FortManager.forts.each do |fort|
-        if fort.siege.attacker_clans[pc.clan_id]?
+      FortManager.forts.each do |f|
+        siege = f.siege
+        if siege.attacker_clans[pc.clan_id]?
           return 3
         end
 
-        if fort.owner_clan? == pc.clan && (fort.siege.in_progress? || fort.siege.@siege_start_task)
-          return 3
+        if f.owner_clan? == clan
+          if siege.in_progress? || siege.@siege_start_task
+            return 3
+          end
         end
       end
     end
@@ -441,20 +445,20 @@ class FortSiege
       else
         if delay > 3600000
           ThreadPoolManager.execute_general(->schedule_suspicious_merchant_spawn)
-          task = ->{ schedule_start_siege_task(3600) }
+          task = -> { schedule_start_siege_task(3600) }
           @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 3600000)
         elsif delay > 600000
           ThreadPoolManager.execute_general(->schedule_suspicious_merchant_spawn)
-          task = ->{ schedule_start_siege_task(600) }
+          task = -> { schedule_start_siege_task(600) }
           @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 600000)
         elsif delay > 300000
-          task = ->{ schedule_start_siege_task(300) }
+          task = -> { schedule_start_siege_task(300) }
           @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 300000)
         elsif delay > 60000
-          task = ->{ schedule_start_siege_task(60) }
+          task = -> { schedule_start_siege_task(60) }
           @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 60000)
         else
-          task = ->{ schedule_start_siege_task(60) }
+          task = -> { schedule_start_siege_task(60) }
           @siege_start_task = ThreadPoolManager.schedule_general(task, 0)
         end
 
@@ -476,7 +480,7 @@ class FortSiege
       owner.broadcast_to_online_members(SystemMessage.a_fortress_is_under_attack)
     end
 
-    task = ->{ schedule_start_siege_task(3600) }
+    task = -> { schedule_start_siege_task(3600) }
     @siege_start_task = ThreadPoolManager.schedule_general(task, 0)
   end
 
@@ -591,7 +595,7 @@ class FortSiege
   private def spawn_commanders
     @commanders.clear
 
-    FortSiegeManager.get_commander_spawn_list!(fort.residence_id).each do |sp|
+    FortSiegeManager.get_commander_spawn_list(fort.residence_id).not_nil!.each do |sp|
       dat = L2Spawn.new(sp.id)
       dat.amount = 1
       dat.x = sp.location.x
@@ -609,7 +613,7 @@ class FortSiege
   end
 
   private def spawn_flag(id : Int32)
-    FortSiegeManager.get_flag_list!(id).each &.spawn_me
+    FortSiegeManager.get_flag_list(id).not_nil!.each &.spawn_me
   end
 
   private def unspawn_flags
@@ -624,17 +628,17 @@ class FortSiege
     siege_guard_manager.spawn_siege_guard
   end
 
-  def get_attacker_clan?(clan : L2Clan?) : L2SiegeClan?
+  def get_attacker_clan(clan : L2Clan?) : L2SiegeClan?
     if clan
-      get_attacker_clan?(clan.id)
+      get_attacker_clan(clan.id)
     end
   end
 
-  def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_attacker_clan(clan_id : Int32) : L2SiegeClan?
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans? : IArray(L2SiegeClan)?
+  def attacker_clans : IArray(L2SiegeClan)?
     @attacker_clans
   end
 
@@ -642,9 +646,9 @@ class FortSiege
     fort.siege_date
   end
 
-  def get_flag?(clan : L2Clan?) : IArray(L2Npc)?
+  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
     if clan
-      if sc = get_attacker_clan?(clan)
+      if sc = get_attacker_clan(clan)
         sc.flag
       end
     end
@@ -660,15 +664,15 @@ class FortSiege
     fort.reset_doors
   end
 
-  def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_defender_clan(clan_id : Int32) : L2SiegeClan?
     # return nil
   end
 
-  def get_defender_clan?(clan : L2Clan?) : L2SiegeClan?
+  def get_defender_clan(clan : L2Clan?) : L2SiegeClan?
     # return nil
   end
 
-  def defender_clans? : IArray(L2SiegeClan)?
+  def defender_clans : IArray(L2SiegeClan)?
     # return nil
   end
 
@@ -704,50 +708,50 @@ class FortSiege
   private def schedule_start_siege_task(time : Int32)
     case time
     when 3600
-      task = ->{ schedule_start_siege_task(600) }
+      task = -> { schedule_start_siege_task(600) }
       ThreadPoolManager.schedule_general(task, 3000000)
     when 600
       fort.despawn_suspicious_merchant
       sm = SystemMessage.s1_minutes_until_the_fortress_battle_starts
       sm.add_int(10)
       announce_to_player(sm)
-      task = ->{ schedule_start_siege_task(300) }
+      task = -> { schedule_start_siege_task(300) }
       ThreadPoolManager.schedule_general(task, 300000)
     when 300
       sm = SystemMessage.s1_minutes_until_the_fortress_battle_starts
       sm.add_int(5)
       announce_to_player(sm)
-      task = ->{ schedule_start_siege_task(60) }
+      task = -> { schedule_start_siege_task(60) }
       ThreadPoolManager.schedule_general(task, 240000)
     when 60
       sm = SystemMessage.s1_minutes_until_the_fortress_battle_starts
       sm.add_int(1)
       announce_to_player(sm)
-      task = ->{ schedule_start_siege_task(30) }
+      task = -> { schedule_start_siege_task(30) }
       ThreadPoolManager.schedule_general(task, 30000)
     when 30
       sm = SystemMessage.s1_seconds_until_the_fortress_battle_starts
       sm.add_int(30)
       announce_to_player(sm)
-      task = ->{ schedule_start_siege_task(10) }
+      task = -> { schedule_start_siege_task(10) }
       ThreadPoolManager.schedule_general(task, 20000)
     when 10
       sm = SystemMessage.s1_seconds_until_the_fortress_battle_starts
       sm.add_int(10)
       announce_to_player(sm)
-      task = ->{ schedule_start_siege_task(5) }
+      task = -> { schedule_start_siege_task(5) }
       ThreadPoolManager.schedule_general(task, 5000)
     when 5
       sm = SystemMessage.s1_seconds_until_the_fortress_battle_starts
       sm.add_int(5)
       announce_to_player(sm)
-      task = ->{ schedule_start_siege_task(1) }
+      task = -> { schedule_start_siege_task(1) }
       ThreadPoolManager.schedule_general(task, 4000)
     when 1
       sm = SystemMessage.s1_seconds_until_the_fortress_battle_starts
       sm.add_int(1)
       announce_to_player(sm)
-      task = ->{ schedule_start_siege_task(0) }
+      task = -> { schedule_start_siege_task(0) }
       ThreadPoolManager.schedule_general(task, 1000)
     when 0
       @fort.siege.start_siege

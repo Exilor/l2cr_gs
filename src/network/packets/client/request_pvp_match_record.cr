@@ -1,8 +1,9 @@
 class Packets::Incoming::RequestPVPMatchRecord < GameClientPacket
   private def read_impl
+    # no-op
   end
 
   private def run_impl
-    warn "Not implemented."
+    # do nothing
   end
 end

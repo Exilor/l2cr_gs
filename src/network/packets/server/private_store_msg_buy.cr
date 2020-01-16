@@ -9,7 +9,7 @@ class Packets::Outgoing::PrivateStoreMsgBuy < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0xbf
 
     d @l2id

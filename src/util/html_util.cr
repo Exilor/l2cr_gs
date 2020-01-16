@@ -47,20 +47,18 @@ module HtmlUtil
       io << width
       io << " cellpadding=0 cellspacing=0><tr><td background=\""
       io << background_image
-      io << "\">"
-      io << "<img src=\""
+      io << "\"><img src=\""
       io << image
       io << "\" width="
       io << ((current / max) * width).to_i64
       io << " height="
       io << image_height
-      io << ">"
-      io << "</td></tr><tr><td align=center><table cellpadding=0 cellspacing="
+      io << "></td></tr><tr><td align=center><table cellpadding=0 cellspacing="
       io << top
       io << "><tr><td>"
       if display_as_percentage
         io << "<table cellpadding=0 cellspacing=2><tr><td>"
-        io << sprintf("%.2f", (current / max) * 100)
+        io.printf("%.2f", (current / max) * 100)
         io << "</td></tr></table>"
       else
         td_width = (width - 10) // 2
@@ -68,8 +66,7 @@ module HtmlUtil
         io << td_width
         io << " align=right>"
         io << current
-        io << "</td>"
-        io << "<td width=10 align=center>/</td><td width="
+        io << "</td><td width=10 align=center>/</td><td width="
         io << td_width
         io << ">"
         io << max
@@ -89,7 +86,7 @@ module HtmlUtil
       pages += 1
     end
 
-    pager_template = [] of String
+    pager_template = String::Builder.new
 
     if pages > 1
       break_it = 0
@@ -112,7 +109,7 @@ module HtmlUtil
       start = elements_per_page * page
     end
 
-    sb = [] of String
+    sb = String::Builder.new
     elements.each_with_index do |element, i|
       if i < start
         next

@@ -11,12 +11,12 @@ class EffectHandler::Reeling < AbstractEffect
     @power = params.get_f64("power")
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
-  def effect_type
-    L2EffectType::FISHING
+  def effect_type : EffectType
+    EffectType::FISHING
   end
 
   def on_start(info)
@@ -28,8 +28,8 @@ class EffectHandler::Reeling < AbstractEffect
       return
     end
 
-    return unless wep_item = pc.active_weapon_item?
-    return unless wep_inst = pc.active_weapon_instance?
+    return unless wep_item = pc.active_weapon_item
+    return unless wep_inst = pc.active_weapon_instance
 
     pen = 0
 

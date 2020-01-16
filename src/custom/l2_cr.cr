@@ -66,7 +66,7 @@ module L2Cr
       when "restart"
         Shutdown.start_shutdown(nil, 0, true)
       when "ids"
-        p "#{IdFactory::IDS.@ranges} (#{IdFactory::IDS.@ranges.size})"
+        puts "#{IdFactory::IDS.@ranges} (#{IdFactory::IDS.@ranges.size})"
       when "heal_raids"
         L2World.objects.each do |o|
           if o.is_a?(L2RaidBossInstance)
@@ -78,16 +78,6 @@ module L2Cr
         end
       when "check_ids"
         L2Cr.check_ids
-      when "raise"
-        begin
-          raise "an error"
-        rescue e
-          GameServer.error e
-        end
-      when "access"
-        if pc = L2World.players.first?
-          pp pc.@access_level
-        end
       when /^valakas\s\w+$/
         if q = QuestManager.get_quest("Valakas")
           if valakas = L2World.objects.find { |o| o.id == 29028 }
@@ -113,6 +103,8 @@ module L2Cr
           # sql = "UPDATE characters SET accesslevel=? WHERE char_name=?"
           # GameDB.exec(sql, 8, name)
         end
+      when "uptime"
+        puts Time.local - GameServer.start_time
       else
         return "unknown command #{cmd.inspect}"
       end

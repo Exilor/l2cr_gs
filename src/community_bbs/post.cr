@@ -74,7 +74,6 @@ struct Post
 
   def update_txt(i : Int32)
     cp = get_cp_post(i).not_nil!
-
     sql = "UPDATE posts SET post_txt=? WHERE post_id=? AND post_topic_id=? AND post_forum_id=?"
     GameDB.exec(sql, cp.post_txt, cp.post_id, cp.post_topic_id, cp.post_forum_id)
   rescue e

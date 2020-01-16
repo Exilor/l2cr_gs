@@ -15,11 +15,11 @@ class EffectHandler::PhysicalAttack < AbstractEffect
     !Formulas.physical_skill_evasion(info.effector, info.effected, info.skill)
   end
 
-  def effect_type
-    L2EffectType::PHYSICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::PHYSICAL_ATTACK
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -27,7 +27,7 @@ class EffectHandler::PhysicalAttack < AbstractEffect
     target, char, skill = info.effected, info.effector, info.skill
     return if char.looks_dead?
 
-    if target.player? && target.acting_player.fake_death?
+    if target.is_a?(L2PcInstance) && target.fake_death?
       target.stop_fake_death(true)
     end
 

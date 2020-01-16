@@ -30,12 +30,12 @@ module AdminCommandHandler::AdminMenu
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
           return true
         end
-        unless player.in_party?
+        unless party = player.party
           pc.send_message("#{player.name} is not in a party.")
           teleport_character(player, pc.location, pc, "A GM teleported you.")
           return true
         end
-        player.party.members.each do |pm|
+        party.members.each do |pm|
           teleport_character(pm, pc.location, pc, "Your party is being teleported by a GM.")
         end
       rescue e
@@ -48,7 +48,7 @@ module AdminCommandHandler::AdminMenu
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
           return true
         end
-        unless clan = player.clan?
+        unless clan = player.clan
           pc.send_message("#{player.name} is not in a clan.")
           teleport_character(player, pc.location, pc, "A GM teleported you.")
           return true

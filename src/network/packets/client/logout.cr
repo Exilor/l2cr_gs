@@ -21,13 +21,11 @@ class Packets::Incoming::Logout < GameClientPacket
     end
 
     if AttackStances.includes?(pc)
-      if pc.gm? && Config.gm_restart_fighting
+      unless pc.gm? && Config.gm_restart_fighting
+        pc.send_packet(SystemMessageId::CANT_LOGOUT_WHILE_FIGHTING)
+        action_failed
         return
       end
-
-      pc.send_packet(SystemMessageId::CANT_LOGOUT_WHILE_FIGHTING)
-      action_failed
-      return
     end
 
     if L2Event.participant?(pc)
@@ -43,7 +41,7 @@ class Packets::Incoming::Logout < GameClientPacket
         return
       end
 
-      if party = pc.party?
+      if party = pc.party
         msg = "#{pc.name} has been removed from the upcoming Festival."
         sm = SystemMessage.from_string(msg)
         party.broadcast_packet(sm)

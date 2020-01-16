@@ -147,7 +147,7 @@ class Scripts::Q00235_MimirsElixir < Quest
   end
 
   def on_kill(npc, player, is_summon)
-    if rand(5) == 0
+    if Rnd.rand(5) == 0
       if winner = get_random_party_member(player, npc)
         item = MOBS[npc.id]
         if give_item_randomly(winner, npc, item.id, item.count, item.count, 1.0, true)

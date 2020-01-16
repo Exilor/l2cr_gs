@@ -71,7 +71,7 @@ class Packets::Incoming::SendWareHouseDepositList < GameClientPacket
     _items.each do |i|
       item = pc.check_item_manipulation(i.id, i.count, "deposit")
       unless item
-        warn "Error depositing a warehouse object for char #{pc.name} (validity check)."
+        warn { "Error depositing a warehouse object for char #{pc.name} (validity check)." }
         return
       end
 
@@ -106,7 +106,7 @@ class Packets::Incoming::SendWareHouseDepositList < GameClientPacket
 
       old_item = pc.check_item_manipulation(i.id, i.count, "deposit")
       unless old_item
-        warn "Error depositing a warehouse object for char #{pc.name} (validity check)."
+        warn { "Error depositing a warehouse object for char #{pc.name} (validity check)." }
         return
       end
 
@@ -117,7 +117,7 @@ class Packets::Incoming::SendWareHouseDepositList < GameClientPacket
       new_item = pc.inventory.transfer_item(warehouse.name, i.id, i.count, warehouse, pc, manager)
 
       unless new_item
-        warn "Error depositing a warehouse object for char #{pc.name} (newitem == null)."
+        warn { "Error depositing a warehouse object for char #{pc.name} (newitem == null)." }
         next
       end
 

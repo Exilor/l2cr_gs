@@ -3,10 +3,14 @@ module TargetHandler::Summon
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    char.has_summon? ? [char.summon!] of L2Object : EMPTY_TARGET_LIST
+    if smn = char.summon
+      return [smn] of L2Object
+    end
+
+    EMPTY_TARGET_LIST
   end
 
   def target_type
-    L2TargetType::SUMMON
+    TargetType::SUMMON
   end
 end

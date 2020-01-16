@@ -43,8 +43,8 @@ class Scripts::ElfHumanFighterChange2 < AbstractNpcAI
     add_talk_id(NPCS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
 
     case event
     when "30109-02.htm", # master_lv3_hef003
@@ -83,224 +83,218 @@ class Scripts::ElfHumanFighterChange2 < AbstractNpcAI
          "30109-35.htm", # master_lv3_hef007s
          "30109-36.htm"  # master_lv3_hef007sb
 
-      htmltext = event
+      event
     when "2", "3", "5", "6", "8", "9", "20", "21", "23", "24"
-      htmltext = class_change_requested(player, event.to_i)
+      class_change_requested(pc, event.to_i)
     end
-
-    htmltext
   end
 
-  private def class_change_requested(player, class_id)
-    htmltext = nil
-    if player.in_category?(CategoryType::THIRD_CLASS_GROUP)
-      htmltext = "30109-39.htm" # fnYouAreThirdClass
-    elsif class_id == GLADIATOR && player.class_id.warrior?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_DUELIST)
-          htmltext = "30109-40.htm" # fnLowLevel11
+  private def class_change_requested(pc, class_id)
+    if pc.in_category?(CategoryType::THIRD_CLASS_GROUP)
+      "30109-39.htm" # fnYouAreThirdClass
+    elsif class_id == GLADIATOR && pc.class_id.warrior?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_DUELIST)
+          "30109-40.htm" # fnLowLevel11
         else
-          htmltext = "30109-41.htm" # fnLowLevelNoProof11
+          "30109-41.htm" # fnLowLevelNoProof11
         end
-      elsif has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_DUELIST)
-        take_items(player, -1, {MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_DUELIST})
-        player.class_id = GLADIATOR
-        player.base_class = GLADIATOR
+      elsif has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_DUELIST)
+        take_items(pc, -1, {MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_DUELIST})
+        pc.class_id = GLADIATOR
+        pc.base_class = GLADIATOR
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-42.htm" # fnAfterClassChange11
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-42.htm" # fnAfterClassChange11
       else
-        htmltext = "30109-43.htm" # fnNoProof11
+        "30109-43.htm" # fnNoProof11
       end
-    elsif class_id == WARLORD && player.class_id.warrior?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_CHAMPION)
-          htmltext = "30109-44.htm" # fnLowLevel12
+    elsif class_id == WARLORD && pc.class_id.warrior?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_CHAMPION)
+          "30109-44.htm" # fnLowLevel12
         else
-          htmltext = "30109-45.htm" # fnLowLevelNoProof12
+          "30109-45.htm" # fnLowLevelNoProof12
         end
-      elsif has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_CHAMPION)
-        take_items(player, -1, {MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_CHAMPION})
-        player.class_id = WARLORD
-        player.base_class = WARLORD
+      elsif has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_CHAMPION)
+        take_items(pc, -1, {MARK_OF_CHALLENGER, MARK_OF_TRUST, MARK_OF_CHAMPION})
+        pc.class_id = WARLORD
+        pc.base_class = WARLORD
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-46.htm" # fnAfterClassChange12
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-46.htm" # fnAfterClassChange12
       else
-        htmltext = "30109-47.htm" # fnNoProof12
+        "30109-47.htm" # fnNoProof12
       end
-    elsif class_id == PALADIN && player.class_id.knight?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_HEALER)
-          htmltext = "30109-48.htm" # fnLowLevel21
+    elsif class_id == PALADIN && pc.class_id.knight?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_HEALER)
+          "30109-48.htm" # fnLowLevel21
         else
-          htmltext = "30109-49.htm" # fnLowLevelNoProof21
+          "30109-49.htm" # fnLowLevelNoProof21
         end
-      elsif has_quest_items?(player, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_HEALER)
-        take_items(player, -1, {MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_HEALER})
-        player.class_id = PALADIN
-        player.base_class = PALADIN
+      elsif has_quest_items?(pc, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_HEALER)
+        take_items(pc, -1, {MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_HEALER})
+        pc.class_id = PALADIN
+        pc.base_class = PALADIN
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-50.htm" # fnAfterClassChange21
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-50.htm" # fnAfterClassChange21
       else
-        htmltext = "30109-51.htm" # fnNoProof21
+        "30109-51.htm" # fnNoProof21
       end
-    elsif class_id == DARK_AVENGER && player.class_id.knight?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_WITCHCRAFT)
-          htmltext = "30109-52.htm" # fnLowLevel22
+    elsif class_id == DARK_AVENGER && pc.class_id.knight?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_WITCHCRAFT)
+          "30109-52.htm" # fnLowLevel22
         else
-          htmltext = "30109-53.htm" # fnLowLevelNoProof22
+          "30109-53.htm" # fnLowLevelNoProof22
         end
-      elsif has_quest_items?(player, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_WITCHCRAFT)
-        take_items(player, -1, {MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_WITCHCRAFT})
-        player.class_id = DARK_AVENGER
-        player.base_class = DARK_AVENGER
+      elsif has_quest_items?(pc, MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_WITCHCRAFT)
+        take_items(pc, -1, {MARK_OF_DUTY, MARK_OF_TRUST, MARK_OF_WITCHCRAFT})
+        pc.class_id = DARK_AVENGER
+        pc.base_class = DARK_AVENGER
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-54.htm" # fnAfterClassChange22
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-54.htm" # fnAfterClassChange22
       else
-        htmltext = "30109-55.htm" # fnNoProof22
+        "30109-55.htm" # fnNoProof22
       end
-    elsif class_id == TREASURE_HUNTER && player.class_id.rogue?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SEARCHER)
-          htmltext = "30109-56.htm" # fnLowLevel31
+    elsif class_id == TREASURE_HUNTER && pc.class_id.rogue?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SEARCHER)
+          "30109-56.htm" # fnLowLevel31
         else
-          htmltext = "30109-57.htm" # fnLowLevelNoProof31
+          "30109-57.htm" # fnLowLevelNoProof31
         end
-      elsif has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SEARCHER)
-        take_items(player, -1, {MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SEARCHER})
-        player.class_id = TREASURE_HUNTER
-        player.base_class = TREASURE_HUNTER
+      elsif has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SEARCHER)
+        take_items(pc, -1, {MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SEARCHER})
+        pc.class_id = TREASURE_HUNTER
+        pc.base_class = TREASURE_HUNTER
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-58.htm" # fnAfterClassChange31
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-58.htm" # fnAfterClassChange31
       else
-        htmltext = "30109-59.htm" # fnNoProof31
+        "30109-59.htm" # fnNoProof31
       end
-    elsif class_id == HAWKEYE && player.class_id.rogue?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SAGITTARIUS)
-          htmltext = "30109-60.htm" # fnLowLevel32
+    elsif class_id == HAWKEYE && pc.class_id.rogue?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SAGITTARIUS)
+          "30109-60.htm" # fnLowLevel32
         else
-          htmltext = "30109-61.htm" # fnLowLevelNoProof32
+          "30109-61.htm" # fnLowLevelNoProof32
         end
-      elsif has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SAGITTARIUS)
-        take_items(player, -1, {MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SAGITTARIUS})
-        player.class_id = HAWKEYE
-        player.base_class = HAWKEYE
+      elsif has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SAGITTARIUS)
+        take_items(pc, -1, {MARK_OF_SEEKER, MARK_OF_TRUST, MARK_OF_SAGITTARIUS})
+        pc.class_id = HAWKEYE
+        pc.base_class = HAWKEYE
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-62.htm" # fnAfterClassChange32
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-62.htm" # fnAfterClassChange32
       else
-        htmltext = "30109-63.htm" # fnNoProof32
+        "30109-63.htm" # fnNoProof32
       end
-    elsif class_id == TEMPLE_KNIGHT && player.class_id.elven_knight?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_DUTY, MARK_OF_LIFE, MARK_OF_HEALER)
-          htmltext = "30109-64.htm" # fnLowLevel41
+    elsif class_id == TEMPLE_KNIGHT && pc.class_id.elven_knight?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_DUTY, MARK_OF_LIFE, MARK_OF_HEALER)
+          "30109-64.htm" # fnLowLevel41
         else
-          htmltext = "30109-65.htm" # fnLowLevelNoProof41
+          "30109-65.htm" # fnLowLevelNoProof41
         end
-      elsif has_quest_items?(player, MARK_OF_DUTY, MARK_OF_LIFE, MARK_OF_HEALER)
-        take_items(player, -1, {MARK_OF_DUTY, MARK_OF_LIFE, MARK_OF_HEALER})
-        player.class_id = TEMPLE_KNIGHT
-        player.base_class = TEMPLE_KNIGHT
+      elsif has_quest_items?(pc, MARK_OF_DUTY, MARK_OF_LIFE, MARK_OF_HEALER)
+        take_items(pc, -1, {MARK_OF_DUTY, MARK_OF_LIFE, MARK_OF_HEALER})
+        pc.class_id = TEMPLE_KNIGHT
+        pc.base_class = TEMPLE_KNIGHT
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-66.htm" # fnAfterClassChange41
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-66.htm" # fnAfterClassChange41
       else
-        htmltext = "30109-67.htm" # fnNoProof41
+        "30109-67.htm" # fnNoProof41
       end
-    elsif class_id == SWORDSINGER && player.class_id.elven_knight?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_LIFE, MARK_OF_DUELIST)
-          htmltext = "30109-68.htm" # fnLowLevel42
+    elsif class_id == SWORDSINGER && pc.class_id.elven_knight?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_LIFE, MARK_OF_DUELIST)
+          "30109-68.htm" # fnLowLevel42
         else
-          htmltext = "30109-69.htm" # fnLowLevelNoProof42
+          "30109-69.htm" # fnLowLevelNoProof42
         end
-      elsif has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_LIFE, MARK_OF_DUELIST)
-        take_items(player, -1, {MARK_OF_CHALLENGER, MARK_OF_LIFE, MARK_OF_DUELIST})
-        player.class_id = SWORDSINGER
-        player.base_class = SWORDSINGER
+      elsif has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_LIFE, MARK_OF_DUELIST)
+        take_items(pc, -1, {MARK_OF_CHALLENGER, MARK_OF_LIFE, MARK_OF_DUELIST})
+        pc.class_id = SWORDSINGER
+        pc.base_class = SWORDSINGER
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-70.htm" # fnAfterClassChange42
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-70.htm" # fnAfterClassChange42
       else
-        htmltext = "30109-71.htm" # fnNoProof42
+        "30109-71.htm" # fnNoProof42
       end
-    elsif class_id == PLAINS_WALKER && player.class_id.elven_scout?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SEARCHER)
-          htmltext = "30109-72.htm" # fnLowLevel51
+    elsif class_id == PLAINS_WALKER && pc.class_id.elven_scout?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SEARCHER)
+          "30109-72.htm" # fnLowLevel51
         else
-          htmltext = "30109-73.htm" # fnLowLevelNoProof51
+          "30109-73.htm" # fnLowLevelNoProof51
         end
-      elsif has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SEARCHER)
-        take_items(player, -1, {MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SEARCHER})
-        player.class_id = PLAINS_WALKER
-        player.base_class = PLAINS_WALKER
+      elsif has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SEARCHER)
+        take_items(pc, -1, {MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SEARCHER})
+        pc.class_id = PLAINS_WALKER
+        pc.base_class = PLAINS_WALKER
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-74.htm" # fnAfterClassChange51
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-74.htm" # fnAfterClassChange51
       else
-        htmltext = "30109-75.htm" # fnNoProof51
+        "30109-75.htm" # fnNoProof51
       end
-    elsif class_id == SILVER_RANGER && player.class_id.elven_scout?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SAGITTARIUS)
-          htmltext = "30109-76.htm" # fnLowLevel52
+    elsif class_id == SILVER_RANGER && pc.class_id.elven_scout?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SAGITTARIUS)
+          "30109-76.htm" # fnLowLevel52
         else
-          htmltext = "30109-77.htm" # fnLowLevelNoProof52
+          "30109-77.htm" # fnLowLevelNoProof52
         end
-      elsif has_quest_items?(player, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SAGITTARIUS)
-        take_items(player, -1, {MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SAGITTARIUS})
-        player.class_id = SILVER_RANGER
-        player.base_class = SILVER_RANGER
+      elsif has_quest_items?(pc, MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SAGITTARIUS)
+        take_items(pc, -1, {MARK_OF_SEEKER, MARK_OF_LIFE, MARK_OF_SAGITTARIUS})
+        pc.class_id = SILVER_RANGER
+        pc.base_class = SILVER_RANGER
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30109-78.htm" # fnAfterClassChange52
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30109-78.htm" # fnAfterClassChange52
       else
-        htmltext = "30109-79.htm" # fnNoProof52
+        "30109-79.htm" # fnNoProof52
       end
     end
-
-    htmltext
   end
 
-  def on_talk(npc, player)
-    if player.in_category?(CategoryType::FIGHTER_GROUP) && player.in_category?(CategoryType::FOURTH_CLASS_GROUP) && (player.in_category?(CategoryType::HUMAN_FALL_CLASS) || player.in_category?(CategoryType::ELF_FALL_CLASS))
-      htmltext = "30109-01.htm" # fnYouAreFourthClass
-    elsif player.in_category?(CategoryType::FIGHTER_GROUP) && (player.in_category?(CategoryType::HUMAN_FALL_CLASS) || player.in_category?(CategoryType::ELF_FALL_CLASS))
-      class_id = player.class_id
+  def on_talk(npc, pc)
+    if pc.in_category?(CategoryType::FIGHTER_GROUP) && pc.in_category?(CategoryType::FOURTH_CLASS_GROUP) && (pc.in_category?(CategoryType::HUMAN_FALL_CLASS) || pc.in_category?(CategoryType::ELF_FALL_CLASS))
+      "30109-01.htm" # fnYouAreFourthClass
+    elsif pc.in_category?(CategoryType::FIGHTER_GROUP) && (pc.in_category?(CategoryType::HUMAN_FALL_CLASS) || pc.in_category?(CategoryType::ELF_FALL_CLASS))
+      class_id = pc.class_id
       if class_id.warrior? || class_id.gladiator? || class_id.warlord?
-        htmltext = "30109-02.htm" # fnClassList1
+        "30109-02.htm" # fnClassList1
       elsif class_id.knight? || class_id.paladin? || class_id.dark_avenger?
-        htmltext = "30109-09.htm" # fnClassList2
+        "30109-09.htm" # fnClassList2
       elsif class_id.rogue? || class_id.treasure_hunter? || class_id.hawkeye?
-        htmltext = "30109-16.htm" # fnClassList3
+        "30109-16.htm" # fnClassList3
       elsif class_id.elven_knight? || class_id.temple_knight? || class_id.sword_singer?
-        htmltext = "30109-23.htm" # fnClassList4
+        "30109-23.htm" # fnClassList4
       elsif class_id.elven_scout? || class_id.plains_walker? || class_id.silver_ranger?
-        htmltext = "30109-30.htm" # fnClassList5
+        "30109-30.htm" # fnClassList5
       else
-        htmltext = "30109-37.htm" # fnYouAreFirstClass
+        "30109-37.htm" # fnYouAreFirstClass
       end
     else
-      htmltext = "30109-38.htm" # fnClassMismatch
+      "30109-38.htm" # fnClassMismatch
     end
-    htmltext
   end
 end

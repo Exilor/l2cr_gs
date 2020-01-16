@@ -1,45 +1,44 @@
 class EffectHandler::AttackTrait < AbstractEffect
-  @attack_traits : EnumMap(TraitType, Float32)?
+  @attack_traits = Slice({UInt8, Float32}).empty
 
   def initialize(attach_cond, apply_cond, set, params)
     super
 
     if params.empty?
-      warn "This effect must have parameters."
-      return
+      raise "params of #{self.class} must not be empty"
     end
 
-    attack_traits = EnumMap(TraitType, Float32).new
+    attack_traits = [] of {UInt8, Float32}
 
     params.each do |key, val|
-      trait = TraitType.parse(key)
+      trait_type = TraitType.parse(key)
       value = (val.to_s.to_f32 + 100) / 100
-      attack_traits[trait] = value
+      attack_traits << {trait_type.to_u8, value}
     end
 
-    @attack_traits = attack_traits
+    @attack_traits = attack_traits.to_slice
   end
 
   def on_start(info)
-    return unless traits = @attack_traits
+    return if @attack_traits.empty?
 
     stat = info.effected.stat
     stat.sync do
-      traits.each do |trait, value|
-        stat.attack_traits[trait.to_i] *= value
-        stat.attack_traits_count[trait.to_i] += 1
+      @attack_traits.each do |trait_id, value|
+        stat.attack_traits[trait_id] *= value
+        stat.attack_traits_count[trait_id] += 1
       end
     end
   end
 
   def on_exit(info)
-    return unless traits = @attack_traits
+    return if @attack_traits.empty?
 
     stat = info.effected.stat
     stat.sync do
-      traits.each do |trait, value|
-        stat.attack_traits[trait.to_i] /= value
-        stat.attack_traits_count[trait.to_i] -= 1
+      @attack_traits.each do |trait_id, value|
+        stat.attack_traits[trait_id] /= value
+        stat.attack_traits_count[trait_id] -= 1
       end
     end
   end

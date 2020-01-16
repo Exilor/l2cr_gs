@@ -4,7 +4,7 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
   @min_damage : Int32
   @chance : Int32
   @skill : SkillHolder
-  @target_type : L2TargetType
+  @target_type : TargetType
   @attacker_type : InstanceType
   @critical : Bool
 
@@ -18,7 +18,7 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
     id = params.get_i32("skillId")
     level = params.get_i32("skillLevel", 1)
     @skill = SkillHolder.new(id, level)
-    @target_type = params.get_enum("targetType", L2TargetType, L2TargetType::SELF)
+    @target_type = params.get_enum("targetType", TargetType, TargetType::SELF)
     @attacker_type = params.get_enum("attackerType", InstanceType, InstanceType::L2Character)
     @critical = params.get_bool("isCritical", false)
     @allow_weapons = 0
@@ -29,16 +29,13 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
   end
 
   def on_attack_event(event)
-    event = event.as(OnCreatureDamageDealt)
-
     if event.skill || event.damage_over_time? || event.reflect? || @chance == 0 || @skill.skill_id == 0 || @skill.skill_lvl == 0
       return
     end
 
     return if @critical != event.critical?
 
-    handler = TargetHandler[@target_type]
-    unless handler
+    unless handler = TargetHandler[@target_type]
       warn { "No handler for target type #{@target_type}" }
       return
     end
@@ -52,7 +49,7 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
     end
 
     if @allow_weapons > 0
-      return unless weapon = event.attacker.active_weapon_item?
+      return unless weapon = event.attacker.active_weapon_item
       return unless weapon.item_type.mask & @allow_weapons == 0
     end
 
@@ -79,7 +76,7 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
     char = info.effected
     type = EventType::ON_CREATURE_DAMAGE_DEALT
     listener = ConsumerEventListener.new(char, type, self) do |event|
-      on_attack_event(event)
+      on_attack_event(event.as(OnCreatureDamageDealt))
     end
     char.add_listener(listener)
   end

@@ -78,13 +78,13 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
          "30758-04.html", "30759-02.html", "30759-04.html"
       html = event
     when "30756-07.html"
-      if qs.created? && pc.clan_leader? && pc.clan.level == CLAN_MIN_LEVEL
+      if qs.created? && pc.clan_leader? && pc.clan.not_nil!.level == CLAN_MIN_LEVEL
         qs.start_quest
         qs.memo_state = 1
         html = event
       end
     when "30757-04.html"
-      if rand(10) > 5
+      if Rnd.rand(10) > 5
         if qs.get_int("flag") != 2501
           give_items(pc, SYMBOL_OF_LOYALTY, 1)
           qs.set("flag", 2501)
@@ -103,7 +103,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           lqs.set("flag", 0)
           npc.script_value = 0
           LOCS.each do |loc|
-            box = add_spawn(npc, rand(BOX_OF_ATHREA_1..BOX_OF_ATHREA_5), loc, false, 300000)
+            box = add_spawn(npc, Rnd.rand(BOX_OF_ATHREA_1..BOX_OF_ATHREA_5), loc, false, 300000)
             box.disable_core_ai(true)
             box.no_rnd_walk = true
           end
@@ -157,15 +157,15 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
     if lqs = get_leader_quest_state(pc, name)
       case npc.id
       when OEL_MAHUM_WITCH_DOCTOR
-        if rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
+        if Rnd.rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
           give_item_randomly(pc, npc, HERB_OF_OEL_MAHUM, 1, 0, 1.0, true)
         end
       when HARIT_LIZARDMAN_SHAMAN
-        if rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
+        if Rnd.rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
           give_item_randomly(pc, npc, HERB_OF_HARIT, 1, 0, 1.0, true)
         end
       when VANOR_SILENOS_SHAMAN
-        if rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
+        if Rnd.rand(10) == 1 && lqs.memo_state >= 3 && lqs.memo_state < 6
           give_item_randomly(pc, npc, HERB_OF_VANOR, 1, 0, 1.0, true)
         end
       when BOX_OF_ATHREA_1, BOX_OF_ATHREA_2, BOX_OF_ATHREA_3, BOX_OF_ATHREA_4,
@@ -186,7 +186,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
             lqs.set("flag", lqs.get_int("flag") + 1)
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::BINGO))
           elsif lqs.get_int("flag") < 4
-            if rand(4) == 0
+            if Rnd.rand(4) == 0
               lqs.set("flag", lqs.get_int("flag") + 1)
               npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::BINGO))
             end
@@ -207,8 +207,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
     when SIR_KRISTOF_RODEMAI
       case qs.state
       when State::CREATED
-        if pc.clan_leader?
-          clan = pc.clan
+        if pc.clan_leader? && (clan = pc.clan)
           if clan.level < CLAN_MIN_LEVEL
             html = "30756-01.html"
           elsif clan.level == CLAN_MIN_LEVEL
@@ -309,8 +308,8 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
   end
 
   private def get_leader_quest_state(pc, quest)
-    if clan = pc.clan?
-      if leader = clan.leader.player_instance?
+    if clan = pc.clan
+      if leader = clan.leader.player_instance
         leader.get_quest_state(quest)
       end
     end
@@ -322,7 +321,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
     end
 
     qs = get_quest_state(pc, false)
-    unless pc.in_party?
+    unless party = pc.party
       unless Util.in_range?(1500, pc, target, true)
         return
       end
@@ -336,7 +335,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
       end
     end
 
-    pc.party.members.each do |m|
+    party.members.each do |m|
       if m == pc
         next
       end
@@ -347,7 +346,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
       end
     end
 
-    unless qs = candidates.sample?
+    unless qs = candidates.sample?(random: Rnd)
       return
     end
 

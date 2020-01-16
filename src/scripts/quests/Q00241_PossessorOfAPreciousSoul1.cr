@@ -153,7 +153,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
         return
       end
       st = get_quest_state(member, false).not_nil!
-      if MALRUK_SUCCUBUS_CLAW_CHANCE >= rand(100) && st.get_quest_items_count(MALRUK_SUCCUBUS_CLAW) < 10
+      if MALRUK_SUCCUBUS_CLAW_CHANCE >= Rnd.rand(100) && st.get_quest_items_count(MALRUK_SUCCUBUS_CLAW) < 10
         st.give_items(MALRUK_SUCCUBUS_CLAW, 1)
         if st.get_quest_items_count(MALRUK_SUCCUBUS_CLAW) == 10
           st.set_cond(7, true)
@@ -166,7 +166,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
         return
       end
       st = get_quest_state(member, false).not_nil!
-      if CRIMSON_MOSS_CHANCE >= rand(100) && st.get_quest_items_count(CRIMSON_MOSS) < 5
+      if CRIMSON_MOSS_CHANCE >= Rnd.rand(100) && st.get_quest_items_count(CRIMSON_MOSS) < 5
         st.give_items(CRIMSON_MOSS, 1)
         if st.get_quest_items_count(CRIMSON_MOSS) == 5
           st.set_cond(15, true)

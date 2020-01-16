@@ -63,7 +63,7 @@ class Scripts::Q00279_TargetOfOpportunity < Quest
     end
 
     st = get_quest_state!(pl, false)
-    if rand(1000) < 311 * Config.rate_quest_drop
+    if Rnd.rand(1000) < 311 * Config.rate_quest_drop
       unless st.has_quest_items?(SEAL_COMPONENTS[idx])
         st.give_items(SEAL_COMPONENTS[idx], 1)
         if has_all_except_this?(st, idx)

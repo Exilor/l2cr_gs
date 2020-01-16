@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExListPartyMatchingWaitingRoom < GameServerPacket
   initializer pc : L2PcInstance, min_lvl : Int32, max_lvl : Int32, mode : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x36
 

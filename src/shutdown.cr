@@ -296,7 +296,7 @@ class Shutdown
   protected def disconnect_all_characters
     L2World.players.each do |pc|
       begin
-        client = pc.client?
+        client = pc.client
         if client && !client.detached?
           client.close(ServerClose::STATIC_PACKET)
           client.active_char = nil

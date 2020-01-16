@@ -17,12 +17,12 @@ class EffectHandler::SummonCubic < AbstractEffect
     @cubic_skill_chance = params.get_i32("cubicSkillChance", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    return unless pc = info.effected.acting_player?
+    return unless pc = info.effected.as?(L2PcInstance)
     return if pc.in_observer_mode? || pc.mounted? || pc.dead?
 
     if @cubic_id < 0
@@ -32,7 +32,7 @@ class EffectHandler::SummonCubic < AbstractEffect
 
     cubic_skill_level = info.skill.level
     if cubic_skill_level > 100
-      cubic_skill_level = (((info.skill.level) - 100) // 7) + 8
+      cubic_skill_level = ((info.skill.level - 100) // 7) + 8
     end
 
     if cubic = pc.get_cubic_by_id(@cubic_id)
@@ -40,18 +40,17 @@ class EffectHandler::SummonCubic < AbstractEffect
       cubic.cancel_disappear
       pc.cubics.delete(@cubic_id)
     else
-      allowed_count = info.effected.acting_player.stat.max_cubic_count
+      allowed_count = pc.stat.max_cubic_count
       current_count = pc.cubics.size
       if current_count >= allowed_count
-        id = pc.cubics.keys_slice.sample(random: Rnd)
-        cubic = pc.get_cubic_by_id(id).not_nil!
+        cubic = pc.cubics.values_slice.sample(random: Rnd)
         cubic.stop_action
         cubic.cancel_disappear
         pc.cubics.delete(cubic.id)
       end
     end
 
-    pc.add_cubic(@cubic_id, cubic_skill_level, @cubic_power, @cubic_delay, @cubic_skill_chance, @cubic_max_count, @cubic_duration, info.effected != info.effector)
+    pc.add_cubic(@cubic_id, cubic_skill_level, @cubic_power, @cubic_delay, @cubic_skill_chance, @cubic_max_count, @cubic_duration, pc != info.effector)
     pc.broadcast_user_info
   end
 end

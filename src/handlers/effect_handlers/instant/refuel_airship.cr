@@ -6,17 +6,17 @@ class EffectHandler::RefuelAirship < AbstractEffect
     @value = params.get_i32("value", 0)
   end
 
-  def effect_type
-    L2EffectType::REFUEL_AIRSHIP
+  def effect_type : EffectType
+    EffectType::REFUEL_AIRSHIP
   end
 
   def on_start(info)
-    ship = info.effector.acting_player.airship!
+    return unless ship = info.effector.acting_player.try &.airship
     ship.fuel += @value
     ship.update_abnormal_effect
   end
 
-  def instant?
+  def instant? : Bool
     false
   end
 end

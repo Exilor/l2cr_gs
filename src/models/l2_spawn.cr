@@ -14,6 +14,7 @@ class L2Spawn
   @do_respawn = false
   @last_spawn_points : IHash(Int32, Location)?
   @constructor : L2Npc.class = L2Npc
+
   getter template
   getter spawned_npcs = Concurrent::LinkedList(L2Npc).new
   getter spawn_territory : NpcSpawnTerritory?
@@ -37,7 +38,7 @@ class L2Spawn
           {{sub}}
       {% end %}
       else
-        raise "No constructor for #{template.type.inspect} found."
+        raise "No constructor for #{template.type.inspect} found"
       end
     {% end %}
   end
@@ -59,10 +60,10 @@ class L2Spawn
 
   def get_location(obj : L2Object?) : Location
     if !@last_spawn_points || !obj || !@last_spawn_points.not_nil!.has_key?(obj.l2id)
-      @location
-    else
-      @last_spawn_points.not_nil![obj.l2id]
+      return @location
     end
+
+    @last_spawn_points.not_nil![obj.l2id]
   end
 
   def x : Int32
@@ -251,7 +252,7 @@ class L2Spawn
       if mob.is_a?(L2MonsterInstance)
         if !@template.undying? && !mob.raid? && !mob.raid_minion?
           if mob.level.between?(Config.champ_min_lvl, Config.champ_max_lvl)
-            if Config.champion_enable_in_instances || instance_id() == 0
+            if Config.champion_enable_in_instances || instance_id == 0
               if Rnd.rand(100) < Config.champion_frequency
                 mob.champion = true
               end

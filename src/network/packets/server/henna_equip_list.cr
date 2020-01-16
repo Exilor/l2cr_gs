@@ -3,7 +3,7 @@ class Packets::Outgoing::HennaEquipList < GameServerPacket
     @henna_equip_list = HennaData.get_henna_list(pc.class_id)
   end
 
-  def write_impl
+  private def write_impl
     c 0xee
 
     q @pc.adena

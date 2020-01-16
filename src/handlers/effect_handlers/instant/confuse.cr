@@ -14,7 +14,7 @@ class EffectHandler::Confuse < AbstractEffect
     EffectFlag::CONFUSED.mask
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -23,7 +23,7 @@ class EffectHandler::Confuse < AbstractEffect
       info.effected.notify_event(AI::THINK)
     end
   end
-
+  # L2AttackableAI expects this to set @attack_target to the new target
   def on_start(info)
     target = info.effected
     target.notify_event(AI::CONFUSED)
@@ -38,14 +38,9 @@ class EffectHandler::Confuse < AbstractEffect
       end
     end
 
-    if target_list.empty?
-      debug "No available targets for #{target} are available."
-    end
-
     unless target_list.empty?
       new_target = target_list.sample(random: Rnd)
       target.target = new_target
-      debug "#{target} should attack #{new_target}."
       target.set_intention(AI::ATTACK, new_target)
     end
   end

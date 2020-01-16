@@ -9,15 +9,15 @@ class SummonStatus < PlayableStatus
     sum = active_char
     return unless attacker && sum.alive?
 
-    pc = attacker.acting_player?
+    pc = attacker.acting_player
 
-    if pc && (sum.owner?.nil? || sum.owner.duel_id != pc.duel_id)
+    if pc && sum.owner.duel_id != pc.duel_id
       pc.duel_state = DuelState::INTERRUPTED
     end
 
     caster = sum.transferring_damage_to
 
-    if party = sum.owner.party?
+    if party = sum.owner.party
       if caster && Util.in_range?(1000, sum, caster, true) && caster.alive?
         if party.members.includes?(caster)
           t_dmg = sum.calc_stat(Stats::TRANSFER_DAMAGE_TO_PLAYER, 0).to_i

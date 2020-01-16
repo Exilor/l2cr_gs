@@ -45,14 +45,14 @@ class Scripts::Q00251_NoSecrets < Quest
     if st && st.started? && st.cond?(1)
       npc_id = npc.id
 
-      if MOBS.includes?(npc_id) && rand(100) < 10 && st.get_quest_items_count(DIARY) < 10
+      if MOBS.includes?(npc_id) && Rnd.rand(100) < 10 && st.get_quest_items_count(DIARY) < 10
         st.give_items(DIARY, 1)
         if st.get_quest_items_count(DIARY) >= 10 && st.get_quest_items_count(TABLE) >= 5
           st.set_cond(2, true)
         else
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
-      elsif MOBS2.includes?(npc_id) && rand(100) < 5 && st.get_quest_items_count(TABLE) < 5
+      elsif MOBS2.includes?(npc_id) && Rnd.rand(100) < 5 && st.get_quest_items_count(TABLE) < 5
         st.give_items(TABLE, 1)
         if st.get_quest_items_count(DIARY) >= 10 && st.get_quest_items_count(TABLE) >= 5
           st.set_cond(2, true)

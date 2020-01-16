@@ -66,7 +66,7 @@ class Scripts::Q00649_ALooterAndARailroadMan < Quest
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
     if st && st.cond?(1) && Util.in_range?(1500, npc, killer, false)
-      if rand(1000) < MONSTERS[npc.id]
+      if Rnd.rand(1000) < MONSTERS[npc.id]
         st.give_items(THIEF_GUILD_MARK, 1)
         if st.get_quest_items_count(THIEF_GUILD_MARK) == 200
           st.set_cond(2, true)

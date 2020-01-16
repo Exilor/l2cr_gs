@@ -9,6 +9,7 @@ class SiegableHall < ClanHall
 
   @status = SiegeStatus::REGISTERING
   @next_siege = Calendar.new
+
   getter siege_length = 0i64
   getter! siege : ClanHallSiegeEngine
   property! siege_zone : L2SiegeZone

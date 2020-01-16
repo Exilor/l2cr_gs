@@ -33,7 +33,9 @@ class CharKnownList < ObjectKnownList
   end
 
   def knows_player?(pc : L2PcInstance) : Bool
-    @active_object == pc || known_players.has_key?(pc.l2id)
+    return true if @active_object == pc
+    known_players = @known_players
+    !!known_players && known_players.has_key?(pc.l2id)
   end
 
   def remove_all_known_objects
@@ -55,10 +57,10 @@ class CharKnownList < ObjectKnownList
 
     unless forget
       if object.player?
-        known_players.delete(object.l2id)
-        known_relations.delete(object.l2id)
+        @known_players.try &.delete(object.l2id)
+        @known_relations.try &.delete(object.l2id)
       elsif object.summon?
-        known_summons.delete(object.l2id)
+        @known_summons.try &.delete(object.l2id)
       end
     end
 
@@ -71,39 +73,40 @@ class CharKnownList < ObjectKnownList
 
   def forget_objects(full_check : Bool)
     unless full_check
-      known_players.each do |id, pc|
+      @known_players.try &.each do |id, pc|
         dst = get_distance_to_forget_object(pc)
         if !pc.visible? || !Util.in_short_radius?(dst, @active_object, pc, true)
-          known_players.delete(id)
+          @known_players.try &.delete(id)
           remove_known_object(pc, true)
-          known_relations.delete(id)
-          known_objects.delete(id)
+          @known_relations.try &.delete(id)
+          @known_objects.try &.delete(id)
         end
       end
 
-      known_summons.each do |id, s|
+      @known_summons.try &.each do |id, s|
         next if @active_object.player? && s.owner == @active_object
         dst = get_distance_to_forget_object(s)
         if !s.visible? || !Util.in_short_radius?(dst, @active_object, s, true)
-          known_summons.delete(id)
+          @known_summons.try &.delete(id)
           remove_known_object(s, true)
-          known_objects.delete(id)
+          @known_objects.try &.delete(id)
         end
       end
 
       return
     end
 
-    known_objects.each do |id, o|
+    me = @active_object
+    @known_objects.try &.each do |id, o|
       dst = get_distance_to_forget_object(o)
-      if !o.visible? || !Util.in_short_radius?(dst, @active_object, o, true)
-        known_objects.delete(id)
+      if !o.visible? || !Util.in_short_radius?(dst, me, o, true)
+        @known_objects.try &.delete(id)
         remove_known_object(o, true)
         if o.player?
-          known_players.delete(id)
-          known_relations.delete(id)
+          @known_players.try &.delete(id)
+          @known_relations.try &.delete(id)
         elsif o.summon?
-          known_summons.delete(id)
+          @known_summons.try &.delete(id)
         end
       end
     end
@@ -119,7 +122,6 @@ class CharKnownList < ObjectKnownList
 
   def each_character(radius : Int32, & : L2Character ->) : Nil
     char = active_char
-
     each_character do |object|
       if Util.in_range?(radius, char, object, true)
         yield object

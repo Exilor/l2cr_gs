@@ -1,7 +1,7 @@
 require "./abstract_document"
 
 class SkillDocument < AbstractDocument
-  class SkillInfo
+  private class SkillInfo
     property id = 0
     property name = ""
     property sets = [] of StatsSet
@@ -105,11 +105,10 @@ class SkillDocument < AbstractDocument
     end
 
     if current_skill.sets.size != last_level
-      raise "number of levels mismatch for skill with ID \#{skill_id}"
+      raise "Number of levels mismatch for skill with ID #{skill_id}"
     end
 
     first = n.first_element_child
-
 
     n.find_element("table") { |t| parse_table(t) }
 

@@ -1,11 +1,11 @@
 struct LinePointIterator
-  getter x, y
-
   @dx : Int64
   @dy : Int64
   @sx : Int64
   @sy : Int64
   @error : Int64
+
+  getter x, y
 
   def initialize(@x : Int32, @y : Int32, @dst_x : Int32, @dst_y : Int32)
 		@dx = (dst_x - x).abs.to_i64

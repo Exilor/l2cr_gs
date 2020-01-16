@@ -125,10 +125,12 @@ module MultisellData
   def has_special_ingredient?(id : Int32, amount : Int64, pc : L2PcInstance) : Bool
     case id
     when CLAN_REPUTATION
-      if pc.clan?.nil?
+      clan = pc.clan
+      if clan.nil?
+        pc.send_packet(SystemMessageId::YOU_ARE_NOT_A_CLAN_MEMBER)
       elsif !pc.clan_leader?
         pc.send_packet(SystemMessageId::YOU_ARE_NOT_A_CLAN_MEMBER)
-      elsif pc.clan.reputation_score < amount
+      elsif clan.reputation_score < amount
         pc.send_packet(SystemMessageId::ONLY_THE_CLAN_LEADER_IS_ENABLED)
       else
         pc.send_packet(SystemMessageId::THE_CLAN_REPUTATION_SCORE_IS_TOO_LOW)
@@ -146,17 +148,15 @@ module MultisellData
   end
 
   def take_special_ingredient(id : Int32, amount : Int64, pc : L2PcInstance) : Bool
-    amount = amount.to_i
-
     case id
     when CLAN_REPUTATION
-      pc.clan.take_reputation_score(amount, true)
+      pc.clan.not_nil!.take_reputation_score(amount.to_i, true)
       sm = SystemMessage.s1_deducted_from_clan_rep
       sm.add_long(amount)
       pc.send_packet(sm)
       return true
     when FAME
-      pc.fame -= amount
+      pc.fame -= amount.to_i
       pc.send_packet(UserInfo.new(pc))
       pc.send_packet(ExBrExtraUserInfo.new(pc))
       return true
@@ -168,7 +168,7 @@ module MultisellData
   def give_special_product(id : Int32, amount : Int64, pc : L2PcInstance)
     case id
     when CLAN_REPUTATION
-      pc.clan.add_reputation_score(amount.to_i, true)
+      pc.clan.not_nil!.add_reputation_score(amount.to_i, true)
     when FAME
       pc.fame += amount.to_i
       pc.send_packet(UserInfo.new(pc))

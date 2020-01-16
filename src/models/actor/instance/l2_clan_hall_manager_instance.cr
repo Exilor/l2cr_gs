@@ -6,7 +6,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
   private COND_BUSY_BECAUSE_OF_SIEGE = 2
   private COND_OWNER = 3
 
-  @clan_hall_id =-1
+  @clan_hall_id = -1
 
   def instance_type : InstanceType
     InstanceType::L2ClanHallManagerInstance
@@ -112,7 +112,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
           val_buy = st.shift.to_i + (fn.lvl * 100000)
           show_buy_window(pc, val_buy)
         elsif val.casecmp?("support")
-
           html = NpcHtmlMessage.new(l2id)
           fn = clan_hall.get_function(ClanHall::FUNC_SUPPORT)
           if fn.nil?
@@ -264,9 +263,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("hp")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Mp editing invoked"
-                  end
+                  debug "Mp editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -321,9 +318,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("mp")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Mp editing invoked"
-                  end
+                  debug "Mp editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -362,9 +357,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("exp")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Exp editing invoked"
-                  end
+                  debug "Exp editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -516,25 +509,26 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 return
               end
               val = st.shift
-              if val.casecmp?("item_cancel")
+              case val.casecmp
+              when "item_cancel"
                 html = NpcHtmlMessage.new(l2id)
                 html.set_file(pc, "data/html/clanHallManager/functions-cancel.htm")
                 html["%apply%"] = "other item 0"
                 send_html_message(pc, html)
                 return
-              elsif val.casecmp?("tele_cancel")
+              when "tele_cancel"
                 html = NpcHtmlMessage.new(l2id)
                 html.set_file(pc, "data/html/clanHallManager/functions-cancel.htm")
                 html["%apply%"] = "other tele 0"
                 send_html_message(pc, html)
                 return
-              elsif val.casecmp?("support_cancel")
+              when "support_cancel"
                 html = NpcHtmlMessage.new(l2id)
                 html.set_file(pc, "data/html/clanHallManager/functions-cancel.htm")
                 html["%apply%"] = "other support 0"
                 send_html_message(pc, html)
                 return
-              elsif val.casecmp?("edit_item")
+              when "edit_item"
                 val = st.shift
                 html = NpcHtmlMessage.new(l2id)
                 html.set_file(pc, "data/html/clanHallManager/functions-apply.htm")
@@ -553,7 +547,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%apply%"] = "other item #{stage}"
                 send_html_message(pc, html)
                 return
-              elsif val.casecmp?("edit_support")
+              when "edit_support"
                 val = st.shift
                 html = NpcHtmlMessage.new(l2id)
                 html.set_file(pc, "data/html/clanHallManager/functions-apply.htm")
@@ -582,7 +576,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%apply%"] = "other support #{stage}"
                 send_html_message(pc, html)
                 return
-              elsif val.casecmp?("edit_tele")
+              when "edit_tele"
                 val = st.shift
                 html = NpcHtmlMessage.new(l2id)
                 html.set_file(pc, "data/html/clanHallManager/functions-apply.htm")
@@ -599,15 +593,13 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%apply%"] = "other tele #{stage}"
                 send_html_message(pc, html)
                 return
-              elsif val.casecmp?("item")
+              when "item"
                 if st.size >= 1
                   if clan_hall.owner_id == 0
                     pc.send_message("This clan hall has no owner, you cannot change the configuration.")
                     return
                   end
-                  if Config.debug
-                    debug "Item editing invoked"
-                  end
+                  debug "Item editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -640,11 +632,9 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                   send_html_message(pc, html)
                 end
                 return
-              elsif val.casecmp?("tele")
+              when "tele"
                 if st.size >= 1
-                  if Config.debug
-                    debug "Tele editing invoked"
-                  end
+                  debug "Tele editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -675,11 +665,9 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                   send_html_message(pc, html)
                 end
                 return
-              elsif val.casecmp?("support")
+              when "support"
                 if st.size >= 1
-                  if Config.debug
-                    debug "Support editing invoked"
-                  end
+                  debug "Support editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -835,9 +823,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("curtains")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Deco curtains editing invoked"
-                  end
+                  debug "Deco curtains editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -870,9 +856,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("fixtures")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Deco fixtures editing invoked"
-                  end
+                  debug "Deco fixtures editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/clanHallManager/functions-apply_confirmed.htm")
@@ -965,7 +949,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               skill_lvl = st.shift.to_i
             end
             skill = SkillData[skill_id, skill_lvl]
-            if skill.has_effect_type?(L2EffectType::SUMMON)
+            if skill.has_effect_type?(EffectType::SUMMON)
               pc.do_simultaneous_cast(skill)
             else
               mp_cost = skill.mp_consume1 + skill.mp_consume2
@@ -1030,7 +1014,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
       end
     end
 
-
     super
   end
 
@@ -1070,7 +1053,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
       return COND_OWNER
     end
 
-    if pc.clan?
+    if pc.clan
       if clan_hall.owner_id == pc.clan_id
         return COND_OWNER
       end
@@ -1108,28 +1091,25 @@ class L2ClanHallManagerInstance < L2MerchantInstance
   end
 
   private def do_teleport(pc : L2PcInstance, val : Int32)
-    if Config.debug
-      debug "L2ClanHallManagerInstance#do_teleport(#{pc}, #{val})"
-    end
+    debug { "L2ClanHallManagerInstance#do_teleport(#{pc}, #{val})" }
 
     if list = TeleportLocationTable[val]?
       if pc.combat_flag_equipped?
         pc.send_packet(SystemMessageId::YOU_CANNOT_TELEPORT_WHILE_IN_POSSESSION_OF_A_WARD)
         return
       elsif pc.destroy_item_by_item_id("Teleport", list.item_id, list.price.to_i64, self, true)
-        if Config.debug
-          debug "Teleporting player #{pc.name} from CH to #{list.x}, #{list.y}, #{list.z}."
-        end
+        debug { "Teleporting player #{pc.name} from CH to #{list.x}, #{list.y}, #{list.z}." }
       end
     else
-      warn "No teleport destination with id #{val}."
+      warn { "No teleport destination with id #{val}." }
     end
 
     pc.action_failed
   end
 
   private def revalidate_deco(pc : L2PcInstance)
-    unless ch = ClanHallManager.get_clan_hall_by_owner(pc.clan)
+    return unless clan = pc.clan
+    unless ch = ClanHallManager.get_clan_hall_by_owner(clan)
       return
     end
 

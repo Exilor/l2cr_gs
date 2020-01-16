@@ -5,6 +5,7 @@ require "../../../enums/ai_skill_scope"
 
 class L2NpcTemplate < L2CharTemplate
   @clans : Set(Int32)?
+
   getter ignore_clan_npc_ids : Set(Int32)?
   getter id = 0
   getter display_id = 0

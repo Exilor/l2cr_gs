@@ -5,9 +5,7 @@ class EffectHandler::ServitorShare < AbstractEffect
     super
 
     params.each_key do |k|
-      if k
-        @stats[Stats.from_value(k)] = params.get_f64(k, 1)
-      end
+      @stats[Stats.from_value(k)] = params.get_f64(k, 1)
     end
   end
 
@@ -15,28 +13,31 @@ class EffectHandler::ServitorShare < AbstractEffect
     EffectFlag::SERVITOR_SHARE.mask
   end
 
-  def effect_type
-    L2EffectType::BUFF
+  def effect_type : EffectType
+    EffectType::BUFF
   end
 
   def on_start(info)
     super
 
-    info.effected.acting_player.servitor_share = @stats
+    pc = info.effected.acting_player.not_nil!
 
-    if summon = info.effected.acting_player.summon
-      summon.broadcast_info
-      summon.status.start_hp_mp_regeneration
+    pc.servitor_share = @stats
+
+    if smn = pc.summon
+      smn.broadcast_info
+      smn.status.start_hp_mp_regeneration
     end
   end
 
   def on_exit(info)
-    info.effected.acting_player.servitor_share = nil
+    pc = info.effected.acting_player.not_nil!
+    pc.servitor_share = nil
 
-    if summon = info.effected.acting_player.summon
-      summon.max_hp! if summon.current_hp > summon.max_hp
-      summon.max_mp! if summon.current_mp > summon.max_mp
-      summon.broadcast_info
+    if smn = pc.summon
+      smn.max_hp! if smn.current_hp > smn.max_hp
+      smn.max_mp! if smn.current_mp > smn.max_mp
+      smn.broadcast_info
     end
   end
 end

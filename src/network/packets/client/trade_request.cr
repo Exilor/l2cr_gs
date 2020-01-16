@@ -30,7 +30,10 @@ class Packets::Incoming::TradeRequest < GameClientPacket
       return
     end
 
-    partner = target.acting_player
+    unless partner = target.acting_player
+      debug { "#{target} has no acting_player." }
+      return
+    end
 
     unless pc.known_list.knows_object?(target)
       debug { "#{target.name} isn't known by #{pc.name}." }

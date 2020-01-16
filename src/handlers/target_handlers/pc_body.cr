@@ -13,7 +13,7 @@ module TargetHandler::PcBody
 
     if player && (target_player || target_pet)
       good_cond = true
-      if skill.has_effect_type?(L2EffectType::RESURRECTION)
+      if skill.has_effect_type?(EffectType::RESURRECTION)
         if target_player
           if target_player.inside_siege_zone? && !target_player.in_siege?
             good_cond = false
@@ -36,6 +36,6 @@ module TargetHandler::PcBody
   end
 
   def target_type
-    L2TargetType::PC_BODY
+    TargetType::PC_BODY
   end
 end

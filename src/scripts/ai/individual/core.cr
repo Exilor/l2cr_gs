@@ -155,7 +155,7 @@ class Scripts::Core < AbstractNpcAI
       start_quest_timer("despawn_minions", 20000i64, nil, nil)
       cancel_quest_timers("spawn_minion")
     elsif GrandBossManager.get_boss_status(CORE) == ALIVE && MINIONS.includes?(npc)
-      MINIONS.delete(npc)
+      MINIONS.delete_first(npc)
       start_quest_timer("spawn_minion", 60000i64, npc, nil)
     end
 

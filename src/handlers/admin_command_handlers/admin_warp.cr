@@ -17,7 +17,7 @@ module AdminCommandHandler::AdminWarp
     end
 
     pc.set_xyz(pc.x_destination, pc.y_destination, pc.z_destination)
-    pc.stop_move
+    pc.stop_move(nil)
     pc.broadcast_packet(ValidateLocation.new(pc))
     msu = MagicSkillUse.new(pc, pc, 628, 1, 1, 1)
     pc.broadcast_packet(msu)

@@ -7,10 +7,9 @@ module UserCommandHandler::ChannelInfo
       return false
     end
 
-    return false unless party = pc.party?
-    return false unless channel = party.command_channel?
+    return false unless (party = pc.party) && (cc = party.command_channel)
 
-    ex = Packets::Outgoing::ExMultiPartyCommandChannelInfo.new(channel)
+    ex = Packets::Outgoing::ExMultiPartyCommandChannelInfo.new(cc)
     pc.send_packet(ex)
 
     true

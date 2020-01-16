@@ -23,12 +23,12 @@ class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
     end
   end
 
-  struct TeleportTask
+  private struct TeleportTask
     initializer zone : L2ResidenceHallTeleportZone
 
     def call
-      loc = @zone.spawns.not_nil!.sample
-      @zone.players_inside &.tele_to_location(loc, false)
+      loc = @zone.spawns.not_nil!.sample(random: Rnd)
+      @zone.players_inside.each &.tele_to_location(loc, false)
     end
   end
 end

@@ -1,11 +1,11 @@
 class EffectHandler::Recovery < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    if info.effected.player?
-      info.effected.acting_player.reduce_death_penalty_buff_level
+    if pc = info.effected.as?(L2PcInstance)
+      pc.reduce_death_penalty_buff_level
     end
   end
 end

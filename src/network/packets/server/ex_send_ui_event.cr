@@ -13,7 +13,7 @@ class Packets::Outgoing::ExSendUIEvent < GameServerPacket
     @l2id = pc.l2id
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x8e
 

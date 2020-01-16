@@ -15,6 +15,7 @@ class Castle < AbstractResidence
   @functions = Concurrent::Map(Int32, CastleFunction).new
   @former_owner : L2Clan?
   @siege_time_registration_end_date : Calendar?
+
   getter doors = [] of L2DoorInstance
   getter owner_id = 0
   getter siege_date = Calendar.new
@@ -104,11 +105,8 @@ class Castle < AbstractResidence
     end
 
     begin
-      GameDB.exec(
-        "UPDATE castle SET treasury = ? WHERE id = ?",
-        treasury,
-        residence_id
-      )
+      sql = "UPDATE castle SET treasury = ? WHERE id = ?"
+      GameDB.exec(sql, treasury, residence_id)
     rescue e
       error e
     end
@@ -200,7 +198,7 @@ class Castle < AbstractResidence
         end
 
         begin
-          if old_leader = old_owner.leader.player_instance?
+          if old_leader = old_owner.leader.player_instance
             if old_leader.mount_type.wyvern?
               old_leader.dismount
             end
@@ -220,14 +218,14 @@ class Castle < AbstractResidence
     self.show_npc_crest = false
 
     if clan && clan.fort_id > 0
-      FortManager.get_fort_by_owner!(clan).remove_owner(true)
+      FortManager.get_fort_by_owner(clan).not_nil!.remove_owner(true)
     end
 
     if siege.in_progress?
       siege.mid_victory
     end
 
-    TerritoryWarManager.get_territory!(residence_id).owner_clan = clan
+    TerritoryWarManager.get_territory(residence_id).not_nil!.owner_clan = clan
 
     if clan
       clan.each_online_player do |m|
@@ -264,11 +262,8 @@ class Castle < AbstractResidence
   def tax_percent=(@tax_percent : Int32)
     @tax_rate = @tax_percent / 100.0
 
-    GameDB.exec(
-      "UPDATE castle SET taxPercent = ? WHERE id = ?",
-      tax_percent,
-      residence_id
-    )
+    sql = "UPDATE castle SET taxPercent = ? WHERE id = ?"
+    GameDB.exec(sql, tax_percent, residence_id)
   rescue e
     error e
   end
@@ -426,12 +421,7 @@ class Castle < AbstractResidence
     if save
       begin
         sql = "REPLACE INTO castle_doorupgrade (doorId, ratio, castleId) values (?,?,?)"
-        GameDB.exec(
-          sql,
-          door_id,
-          ratio,
-          residence_id
-        )
+        GameDB.exec(sql, door_id, ratio, residence_id)
       rescue e
         error e
       end
@@ -502,7 +492,7 @@ class Castle < AbstractResidence
     former_owner = @former_owner
 
     if former_owner
-      if former_owner != ClanTable.get_clan!(owner_id)
+      if former_owner != ClanTable.get_clan(owner_id).not_nil!
         max_reward = Math.max(0, former_owner.reputation_score)
         former_owner.take_reputation_score(Config.lose_castle_points, true)
         if owner = ClanTable.get_clan(owner_id)
@@ -533,7 +523,7 @@ class Castle < AbstractResidence
           if sk = SkillData[s.skill_id, s.skill_level]?
             pc.add_skill(sk, false)
           else
-            warn "No skill for Territory Ward id: #{ward_id}, skill id: #{s.skill_id}, level: #{s.skill_level}."
+            warn { "No skill for Territory Ward id: #{ward_id}, skill id: #{s.skill_id}, level: #{s.skill_level}." }
           end
         end
       end
@@ -550,7 +540,7 @@ class Castle < AbstractResidence
           if sk = SkillData[s.skill_id, s.skill_level]?
             pc.remove_skill(sk, true)
           else
-            warn "No skill for Territory Ward id: #{ward_id}, skill id: #{s.skill_id}, level: #{s.skill_level}."
+            warn { "No skill for Territory Ward id: #{ward_id}, skill id: #{s.skill_id}, level: #{s.skill_level}." }
           end
         end
       end
@@ -642,7 +632,7 @@ class Castle < AbstractResidence
       end
 
       time = Time.ms
-      task = ->{ function_task(cwh) }
+      task = -> { function_task(cwh) }
 
       if @end_date > time
         ThreadPoolManager.schedule_general(task, @end_date - time)
@@ -656,7 +646,7 @@ class Castle < AbstractResidence
         return
       end
 
-      clan = ClanTable.get_clan!(@castle.owner_id)
+      clan = ClanTable.get_clan(@castle.owner_id).not_nil!
       ware = clan.warehouse
 
       if ware.adena >= @fee || !cwh
@@ -668,7 +658,7 @@ class Castle < AbstractResidence
         if cwh
           ware.destroy_item_by_item_id("CS_function_fee", Inventory::ADENA_ID, fee.to_i64, nil, nil)
         end
-        ThreadPoolManager.schedule_general(->{ function_task(true) }, rate)
+        ThreadPoolManager.schedule_general(-> { function_task(true) }, rate)
       else
         @castle.remove_function(type)
       end
@@ -678,15 +668,7 @@ class Castle < AbstractResidence
 
     def db_save
       sql = "REPLACE INTO castle_functions (castle_id, type, lvl, lease, rate, endTime) VALUES (?,?,?,?,?,?)"
-      GameDB.exec(
-        sql,
-        @castle.residence_id,
-        type,
-        lvl,
-        lease,
-        rate,
-        end_time
-      )
+      GameDB.exec(sql, @castle.residence_id, type, lvl, lease, rate, end_time)
     rescue e
       error e
     end

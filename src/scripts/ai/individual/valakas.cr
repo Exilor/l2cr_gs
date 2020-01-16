@@ -70,7 +70,7 @@ class Scripts::Valakas < AbstractNpcAI
 
     register_mobs(VALAKAS)
 
-    @zone = GrandBossManager.get_zone!(212852, -114842, -1632)
+    @zone = GrandBossManager.get_zone(212852, -114842, -1632).not_nil!
     info = GrandBossManager.get_stats_set(VALAKAS).not_nil!
     status = GrandBossManager.get_boss_status(VALAKAS)
 
@@ -308,7 +308,7 @@ class Scripts::Valakas < AbstractNpcAI
     # Calculate Min and Max respawn times randomly.
     min = -Config.valakas_spawn_random
     max = Config.valakas_spawn_random
-    respawn_time = Config.valakas_spawn_interval + rand(min..max)
+    respawn_time = Config.valakas_spawn_interval + Rnd.rand(min..max)
     respawn_time *= 3600000
 
     start_quest_timer("valakas_unlock", respawn_time, nil, nil)
@@ -331,19 +331,19 @@ class Scripts::Valakas < AbstractNpcAI
 
     # Pickup a target if no or dead victim. 10% luck he decides to reconsiders his target.
     t = @valakas_target
-    if t.nil? || (t.dead? || !npc.known_list.knows_object?(t) || rand(10) == 0)
+    if t.nil? || (t.dead? || !npc.known_list.knows_object?(t) || Rnd.rand(10) == 0)
       @valakas_target = get_rand_target(npc)
     end
 
     # If result is still nil, Valakas will roam. Don't go deeper in skill AI.
     if @valakas_target.nil?
-      if rand(10) == 0
+      if Rnd.rand(10) == 0
         x = npc.x
         y = npc.y
         z = npc.z
 
-        pos_x = x + rand(-1400..1400)
-        pos_y = y + rand(-1400..1400)
+        pos_x = x + Rnd.rand(-1400..1400)
+        pos_y = y + Rnd.rand(-1400..1400)
 
         if GeoData.can_move?(x, y, z, pos_x, pos_y, z, npc.instance_id)
           npc.set_intention(AI::MOVE_TO, Location.new(pos_x, pos_y, z, 0))
@@ -375,7 +375,7 @@ class Scripts::Valakas < AbstractNpcAI
     hp_ratio = ((npc.current_hp / npc.max_hp) * 100).to_i
 
     # Valakas Lava Skin has priority.
-    if hp_ratio < 75 && rand(150) == 0
+    if hp_ratio < 75 && Rnd.rand(150) == 0
       unless npc.affected_by_skill?(VALAKAS_LAVA_SKIN.skill_id)
         return VALAKAS_LAVA_SKIN
       end
@@ -383,14 +383,14 @@ class Scripts::Valakas < AbstractNpcAI
 
     # Valakas will use AOE spells if he feels surrounded.
     if Util.get_players_count_in_radius(1200, npc, false, false) >= 20
-      return VALAKAS_AOE_SKILLS.sample
+      return VALAKAS_AOE_SKILLS.sample(random: Rnd)
     end
 
     if hp_ratio > 50
-      return VALAKAS_REGULAR_SKILLS.sample
+      return VALAKAS_REGULAR_SKILLS.sample(random: Rnd)
     end
 
-    VALAKAS_LOWHP_SKILLS.sample
+    VALAKAS_LOWHP_SKILLS.sample(random: Rnd)
   end
 
   private def get_rand_target(npc)
@@ -404,6 +404,6 @@ class Scripts::Valakas < AbstractNpcAI
       end
     end
 
-    result.sample?
+    result.sample?(random: Rnd)
   end
 end

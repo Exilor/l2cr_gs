@@ -12,7 +12,7 @@ class Packets::Incoming::RequestShortcutDelete < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    if 0 <= @page <= 10
+    if @page.between?(0, 10)
       pc.delete_shortcut(@slot, @page)
     end
   end

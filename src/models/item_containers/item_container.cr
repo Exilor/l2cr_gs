@@ -50,11 +50,7 @@ abstract class ItemContainer
       if item.id == item_id
         if item.enchant_level == enchant_level || enchant_level < 0
           if include_equipped || !item.equipped?
-            if item.stackable?
-              count += item.count
-            else
-              count += 1
-            end
+            count += (item.stackable? ? item.count : 1)
           end
         end
       end
@@ -79,8 +75,7 @@ abstract class ItemContainer
       item.update_database
       item = old_item
 
-      adena_rate = Config.rate_drop_amount_multiplier.fetch(Inventory::ADENA_ID, 1.0)
-      if item.id == Inventory::ADENA_ID && count < 10_000 * adena_rate
+      if item.id == Inventory::ADENA_ID && count < 10_000 * Config.rate_drop_amount_multiplier.fetch(Inventory::ADENA_ID, 1.0)
         if GameTimer.ticks % 5 == 0
           item.update_database
         end
@@ -117,8 +112,7 @@ abstract class ItemContainer
       item.change_count(process, count, actor, reference)
       item.last_change = L2ItemInstance::MODIFIED
 
-      adena_rate = Config.rate_drop_amount_multiplier.fetch(Inventory::ADENA_ID, 1.0)
-      if item_id == Inventory::ADENA_ID && count < 10_000 * adena_rate
+      if item_id == Inventory::ADENA_ID && count < 10_000 * Config.rate_drop_amount_multiplier.fetch(Inventory::ADENA_ID, 1.0)
         if GameTimer.ticks % 5 == 0
           item.update_database
         end
@@ -161,7 +155,7 @@ abstract class ItemContainer
       return
     end
     unless source_item = get_item_by_l2id(l2id)
-      debug "Item with id #{l2id} not found."
+      debug { "Item with id #{l2id} not found." }
       return
     end
 
@@ -171,7 +165,7 @@ abstract class ItemContainer
 
     source_item.sync do
       if get_item_by_l2id(l2id) != source_item
-        debug "get_item_by_l2id(#{l2id}) != #{source_item}"
+        debug { "get_item_by_l2id(#{l2id}) != #{source_item}" }
         return
       end
 
@@ -220,7 +214,6 @@ abstract class ItemContainer
   def destroy_item(process : String?, item : L2ItemInstance, count : Int64, actor : L2PcInstance?, reference) : L2ItemInstance?
     item.sync do
       if item.count > count
-        # debug "ItemContainer#destroy_item: item.count > count"
         item.change_count(process, -count, actor, reference)
         item.last_change = L2ItemInstance::MODIFIED
 
@@ -230,7 +223,6 @@ abstract class ItemContainer
 
         refresh_weight
       else
-        # debug "ItemContainer#destroy_item: !(item.count > count)"
         return if item.count < count
 
         return unless remove_item(item)
@@ -266,7 +258,11 @@ abstract class ItemContainer
   end
 
   def adena : Int64
-    @items.find { |item| item.id == Inventory::ADENA_ID }.try &.count || 0i64
+    if adena = @items.find { |item| item.id == Inventory::ADENA_ID }
+      return adena.count
+    end
+
+    0i64
   end
 
   def remove_item(item : L2ItemInstance) : Bool
@@ -278,15 +274,13 @@ abstract class ItemContainer
   end
 
   def delete_me
-    # DB.transaction do
-      if owner?
-        @items.each do |item|
-          item.update_database(true)
-          item.delete_me
-          L2World.remove_object(item)
-        end
+    if owner?
+      @items.each do |item|
+        item.update_database(true)
+        item.delete_me
+        L2World.remove_object(item)
       end
-    # end
+    end
 
     @items.clear
   end
@@ -306,7 +300,7 @@ abstract class ItemContainer
 
       L2World.store_object(item)
 
-      owner = owner?.try &.acting_player?
+      owner = owner?.try &.acting_player
 
       if item.stackable? && get_item_by_item_id(item.id)
         add_item("Restore", item, owner, nil)

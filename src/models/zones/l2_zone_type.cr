@@ -14,7 +14,8 @@ abstract class L2ZoneType < ListenersContainer
   @character_list = Concurrent::Map(Int32, L2Character).new
   @race : Array(Int32)?
   @class : Array(Int32)?
-  @target = InstanceType::L2Character
+
+  getter target_type = InstanceType::L2Character
   getter instance_template = ""
   getter settings : AbstractZoneSettings?
   getter! zone : L2ZoneForm
@@ -24,6 +25,8 @@ abstract class L2ZoneType < ListenersContainer
   property? enabled : Bool = true
 
   getter_initializer id : Int32
+
+  delegate visualize_zone, to: zone
 
   def settings=(settings : AbstractZoneSettings)
     @settings.try &.clear
@@ -52,19 +55,19 @@ abstract class L2ZoneType < ListenersContainer
     when "affectedClassType"
       @class_type = value == "Fighter" ? 1 : 2
     when "targetClass"
-      @target = InstanceType.parse(value)
+      @target_type = InstanceType.parse(value)
     when "allowStore"
       @allow_store = Bool.new(value)
     when "default_enabled"
       @enabled = Bool.new(value)
     else
-      warn "Unknown parameter #{name.inspect} in zone #{@id}."
+      warn { "Unknown parameter #{name.inspect} in zone #{@id}." }
     end
   end
 
   def affected?(char : L2Character) : Bool
     return false unless char.level.between?(@min_lvl, @max_lvl)
-    return false unless char.instance_type?(@target)
+    return false unless char.instance_type?(@target_type)
 
     if char.is_a?(L2PcInstance)
       if @class_type != 0
@@ -181,56 +184,21 @@ abstract class L2ZoneType < ListenersContainer
     # no-op
   end
 
-  def characters : Hash(Int32, L2Character)
-    @character_list
-  end
-
-  def characters_inside(& : L2Character ->)
-    @character_list.each_value { |char| yield char }
-  end
-
   def characters_inside : Enumerable(L2Character)
     @character_list.local_each_value
   end
 
-  def players_inside : Array(L2PcInstance)
-    ret = [] of L2PcInstance
-    @character_list.each_value do |char|
-      if char.is_a?(L2PcInstance)
-        ret << char
-      end
-    end
-    ret
-  end
-
-  def players_inside(& : L2PcInstance ->)
-    @character_list.each_value do |char|
-      if char.is_a?(L2PcInstance)
-        yield char
-      end
-    end
+  def players_inside : Enumerable(L2PcInstance)
+    characters_inside.select(L2PcInstance)
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    return if @character_list.empty?
-    @character_list.each_value do |pc|
-      if pc.player?
-        pc.send_packet(gsp)
-      end
-    end
-  end
-
-  def target_type : InstanceType
-    @target
+    players_inside.each &.broadcast_packet(gsp)
   end
 
   def target_type=(type : InstanceType)
-    @target = type
+    @target_type = type
     @check_affected = true
-  end
-
-  def visualize_zone(z : Int32)
-    zone.visualize_zone(z)
   end
 
   def to_log(io : IO)

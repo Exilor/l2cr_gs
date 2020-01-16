@@ -1,8 +1,8 @@
 abstract class AbstractResidence < ListenersContainer
   include Packets::Outgoing
-  # include Namable
 
   @residential_skills = [] of SkillHolder
+
   getter residence_id : Int32
   property name : String = ""
   # L2J: _zone (Castle has its own @zone but of another type)

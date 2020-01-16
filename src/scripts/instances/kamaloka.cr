@@ -1126,7 +1126,7 @@ class Scripts::Kamaloka < AbstractInstance
   # @return true if party allowed to enter
   private def check_party_conditions(player, index)
     # player must be in party
-    unless party = player.party?
+    unless party = player.party
       player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return false
     end
@@ -1167,7 +1167,7 @@ class Scripts::Kamaloka < AbstractInstance
       if instance_times
         instance_times.each_key do |id|
           # find instance with same name (kamaloka or labyrinth)
-          # TODO: Zoey76: Don"t use instance name, use other system.
+          # TODO: Don"t use instance name, use other system.
           unless instance_name == InstanceManager.get_instance_id_name(id)
             next
           end
@@ -1220,15 +1220,14 @@ class Scripts::Kamaloka < AbstractInstance
         return
       end
       # check for level difference again on reenter
-      if (player.level - LEVEL[(world.index) || -1]).abs > MAX_LEVEL_DIFFERENCE
+      if (player.level - LEVEL[world.index]).abs > MAX_LEVEL_DIFFERENCE
         sm = SystemMessage.c1_s_level_requirement_is_not_sufficient_and_cannot_be_entered
         sm.add_pc_name(player)
         player.send_packet(sm)
         return
       end
       # check what instance still exist
-      inst = InstanceManager.get_instance(world.instance_id)
-      if inst
+      if inst = InstanceManager.get_instance(world.instance_id)
         remove_buffs(player)
         teleport_player(player, TELEPORTS[index], world.instance_id)
       end
@@ -1241,7 +1240,7 @@ class Scripts::Kamaloka < AbstractInstance
 
     # Creating dynamic instance without template
     instance_id = InstanceManager.create_dynamic_instance(nil)
-    inst = InstanceManager.get_instance!(instance_id)
+    inst = InstanceManager.get_instance(instance_id).not_nil!
     # set name for the kamaloka
     inst.name = InstanceManager.get_instance_id_name(template_id)
     # set return location
@@ -1264,8 +1263,7 @@ class Scripts::Kamaloka < AbstractInstance
     spawn_kama(world)
 
     # and finally teleport party into instance
-    party = player.party
-    party.members.each do |m|
+    player.party.not_nil!.members.each do |m|
       world.add_allowed(m.l2id)
       remove_buffs(m)
       teleport_player(m, TELEPORTS[index], instance_id)
@@ -1298,7 +1296,7 @@ class Scripts::Kamaloka < AbstractInstance
       end
 
       # destroy instance after EXIT_TIME
-      inst = InstanceManager.get_instance!(world.instance_id)
+      inst = InstanceManager.get_instance(world.instance_id).not_nil!
       inst.duration = EXIT_TIME * 60000
       inst.empty_destroy_time = 0
     end
@@ -1327,7 +1325,7 @@ class Scripts::Kamaloka < AbstractInstance
           sp.respawn_delay = FIRST_ROOM_RESPAWN_DELAY
           sp.amount = 1
           sp.start_respawn
-          world.first_room.push(sp) # store mobs spawns
+          world.first_room << sp # store mobs spawns
         end
         npc.no_rnd_walk = true
       end
@@ -1342,20 +1340,20 @@ class Scripts::Kamaloka < AbstractInstance
       spawns.each do |sp|
         npc = add_spawn(npcs[0], sp[0], sp[1], sp[2], 0, false, 0, false, world.instance_id)
         npc.no_rnd_walk = true
-        world.second_room.push(npc.l2id)
+        world.second_room << npc.l2id
       end
     end
 
     # miniboss
-    if temp = MINIBOSS[index]?
-      npc = add_spawn(temp[0], temp[1], temp[2], temp[3], 0, false, 0, false, world.instance_id)
+    if tmp = MINIBOSS[index]?
+      npc = add_spawn(tmp[0], tmp[1], tmp[2], tmp[3], 0, false, 0, false, world.instance_id)
       npc.no_rnd_walk = true
       world.mini_boss = npc.l2id
     end
 
     # escape teleporter
-    if temp = TELEPORTERS[index]?
-      add_spawn(TELEPORTER, temp[0], temp[1], temp[2], 0, false, 0, false, world.instance_id)
+    if tmp = TELEPORTERS[index]?
+      add_spawn(TELEPORTER, tmp[0], tmp[1], tmp[2], 0, false, 0, false, world.instance_id)
     end
 
     # boss
@@ -1374,17 +1372,15 @@ class Scripts::Kamaloka < AbstractInstance
   end
 
   def on_talk(npc, player)
-    npcId = npc.id
-
-    if npcId == TELEPORTER
-      party = player.party?
+    if npc.id == TELEPORTER
+      party = player.party
       # only party leader can talk with escape teleporter
       if party && party.leader?(player)
         world = InstanceManager.get_world(npc.instance_id)
         if world.is_a?(KamaWorld)
           # party members must be in the instance
           if world.allowed?(player.l2id)
-            inst = InstanceManager.get_instance!(world.instance_id)
+            inst = InstanceManager.get_instance(world.instance_id).not_nil!
 
             # teleports entire party away
             party.members.each do |m|
@@ -1396,7 +1392,7 @@ class Scripts::Kamaloka < AbstractInstance
         end
       end
     else
-      return npcId.to_s + ".htm"
+      return "#{npc.id}.htm"
     end
 
     ""
@@ -1404,7 +1400,7 @@ class Scripts::Kamaloka < AbstractInstance
 
   def on_first_talk(npc, player)
     if npc.id == TELEPORTER
-      if player.in_party? && player.party.leader?(player)
+      if (party = player.party) && party.leader?(player)
         return "32496.htm"
       end
 
@@ -1448,9 +1444,10 @@ class Scripts::Kamaloka < AbstractInstance
       # check for all mobs in the second room
       world.second_room.size.times do |i|
         # found killed now mob
-        if world.second_room[i] == l2id
-          world.second_room[i] = 0
-        elsif world.second_room[i] != 0
+        tmp = world.second_room[i]
+        if tmp == l2id
+          tmp = 0
+        elsif tmp != 0
           all = false
         end
       end
@@ -1460,11 +1457,10 @@ class Scripts::Kamaloka < AbstractInstance
         world.second_room = nil
 
         if boss = world.boss
-          skillId = SECOND_ROOM[world.index].not_nil![1]
-          skillLvl = SECOND_ROOM[world.index].not_nil![2]
-          if skillId != 0 && skillLvl != 0
-            skill = SkillData[skillId, skillLvl]?
-            if skill
+          skill_id = SECOND_ROOM[world.index].not_nil![1]
+          skill_lvl = SECOND_ROOM[world.index].not_nil![2]
+          if skill_id != 0 && skill_lvl != 0
+            if skill = SkillData[skill_id, skill_lvl]?
               skill.apply_effects(boss, boss)
             end
           end
@@ -1479,11 +1475,10 @@ class Scripts::Kamaloka < AbstractInstance
       world.mini_boss = 0
 
       if boss = world.boss
-        skillId = MINIBOSS[world.index].not_nil![4]
-        skillLvl = MINIBOSS[world.index].not_nil![5]
-        if skillId != 0 && skillLvl != 0
-          skill = SkillData[skillId, skillLvl]?
-          if skill
+        skill_id = MINIBOSS[world.index].not_nil![4]
+        skill_lvl = MINIBOSS[world.index].not_nil![5]
+        if skill_id != 0 && skill_lvl != 0
+          if skill = SkillData[skill_id, skill_lvl]?
             skill.apply_effects(boss, boss)
           end
         end

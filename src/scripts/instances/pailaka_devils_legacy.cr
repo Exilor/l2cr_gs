@@ -53,20 +53,20 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
     add_move_finished_id(LEMATAN)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
 
     world = InstanceManager.get_world(npc.instance_id)
 
     if event == "enter"
-      player = player.not_nil!
-      qs = player.get_quest_state(Scripts::Q00129_PailakaDevilsLegacy.simple_name).not_nil!
-      enter_instance(player, DIWorld.new, "PailakaDevilsLegacy.xml", TEMPLATE_ID)
+      pc = pc.not_nil!
+      qs = pc.get_quest_state(Scripts::Q00129_PailakaDevilsLegacy.simple_name).not_nil!
+      enter_instance(pc, DIWorld.new, "PailakaDevilsLegacy.xml", TEMPLATE_ID)
       if qs.cond?(1)
         qs.set_cond(2, true)
-        htmltext = "32498-01.htm"
+        html = "32498-01.htm"
       else
-        htmltext = "32498-02.htm"
+        html = "32498-02.htm"
       end
     elsif world.is_a?(DIWorld)
       case event
@@ -92,14 +92,14 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
         end
         start_quest_timer("FOLLOWER_CAST", 4000, world.lematan_npc?, nil)
       when "TELEPORT"
-        player = player.not_nil!
-        player.tele_to_location(TELEPORT)
+        pc = pc.not_nil!
+        pc.tele_to_location(TELEPORT)
       when "DELETE"
         npc.delete_me
       end
     end
 
-    htmltext
+    html
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -113,7 +113,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
             if monster.is_a?(L2Attackable) && monster.monster?
               monster.add_damage_hate(npc, 0, 999)
               monster.set_intention(AI::ATTACK, npc)
-              monster.reduce_current_hp(500.0 + rand(0..200), npc, BOOM.skill)
+              monster.reduce_current_hp(500.0 + Rnd.rand(0..200), npc, BOOM.skill)
             end
           end
           npc.do_cast(BOOM)
@@ -129,19 +129,19 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
         end
       when TREASURE_BOX
         if npc.script_value?(0)
-          case rand(7)
+          case Rnd.rand(7)
           when 0, 1
-            npc.drop_item(attacker, ANTIDOTE_POTION, rand(1i64..10i64))
+            npc.drop_item(attacker, ANTIDOTE_POTION, Rnd.rand(1i64..10i64))
           when 2
-            npc.drop_item(attacker, DIVINE_POTION, rand(1i64..5i64))
+            npc.drop_item(attacker, DIVINE_POTION, Rnd.rand(1i64..5i64))
           when 3
-            npc.drop_item(attacker, PAILAKA_KEY, rand(1i64..2i64))
+            npc.drop_item(attacker, PAILAKA_KEY, Rnd.rand(1i64..2i64))
           when 4
-            npc.drop_item(attacker, DEFENCE_POTION, rand(1i64..7i64))
+            npc.drop_item(attacker, DEFENCE_POTION, Rnd.rand(1i64..7i64))
           when 5
-            npc.drop_item(attacker, SHIELD, rand(1i64..10i64))
+            npc.drop_item(attacker, SHIELD, Rnd.rand(1i64..10i64))
           when 6
-            npc.drop_item(attacker, HEALING_POTION, rand(1i64..10i64))
+            npc.drop_item(attacker, HEALING_POTION, Rnd.rand(1i64..10i64))
           end
 
           npc.script_value = 1

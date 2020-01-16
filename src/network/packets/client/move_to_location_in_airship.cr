@@ -27,7 +27,7 @@ class Packets::Incoming::MoveToLocationInAirship < GameClientPacket
       end
     end
 
-    if pc.attacking_now? && pc.active_weapon_item?.try &.bow?
+    if pc.attacking_now? && pc.active_weapon_item.try &.bow?
       action_failed
       return
     end

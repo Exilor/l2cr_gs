@@ -72,7 +72,14 @@ class Scripts::Q00382_KailsMagicCoin < Quest
     qs = get_quest_state(killer, false)
     if qs && has_quest_items?(killer, ROYAL_MEMBERSHIP) && Util.in_range?(1500, npc, killer, true)
       if npc.id == FALLEN_ORC_CAPTAIN
-        give_item_randomly(killer, KAILS_SILVER_BASILISK + rand(3), 1, 0, ORC_CAPTAIN_DROP_CHANCE, true)
+        give_item_randomly(
+          killer,
+          KAILS_SILVER_BASILISK + Rnd.rand(3),
+          1,
+          0,
+          ORC_CAPTAIN_DROP_CHANCE,
+          true
+        )
       else
         ih = MONSTER_DROPS[npc.id]
         give_item_randomly(killer, ih.id, 1, 0, ih.chance, true)

@@ -51,12 +51,12 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
       return super
     end
 
-    if rand(100) < MONSTER_DROP_CHANCES[npc.id]
+    if Rnd.rand(100) < MONSTER_DROP_CHANCES[npc.id]
       st.give_items(SUPPLY_ITEMS, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end
 
-    if rand(100) < 10
+    if Rnd.rand(100) < 10
       if st.get_quest_items_count(SUSPICIOUS_DOCUMENT_PIECE) < 4
         st.give_items(SUSPICIOUS_DOCUMENT_PIECE, 1)
       else

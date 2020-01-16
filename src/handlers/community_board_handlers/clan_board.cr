@@ -5,8 +5,8 @@ module CommunityBoardHandler::ClanBoard
   def parse_command(command, pc)
     if command == "_bbsclan"
       CommunityBoardHandler.add_bypass(pc, "Clan", command)
-
-      if pc.clan?.nil? || pc.clan.level < 2
+      clan = pc.clan
+      if clan.nil? || clan.level < 2
         clan_list(pc, 1)
       else
         clan_home(pc)
@@ -29,7 +29,7 @@ module CommunityBoardHandler::ClanBoard
 
       if command == "_bbsclan_clanhome"
         clan_home(pc)
-      elsif
+      elsif command.starts_with?("_bbsclan_clanhome;")
         begin
           clan_home(pc, command.split(';')[1].to_i)
         rescue e
@@ -43,14 +43,14 @@ module CommunityBoardHandler::ClanBoard
     elsif command.starts_with?("_bbsclan_clannotice_enable")
       CommunityBoardHandler.add_bypass(pc, "Clan Notice Enable", command)
 
-      if clan = pc.clan?
+      if clan = pc.clan
         clan.notice_enabled = true
       end
       clan_notice(pc, pc.clan_id)
     elsif command.starts_with?("_bbsclan_clannotice_disable")
       CommunityBoardHandler.add_bypass(pc, "Clan Notice Disable", command)
 
-      if clan = pc.clan?
+      if clan = pc.clan
         clan.notice_enabled = false
       end
       clan_notice(pc, pc.clan_id)
@@ -74,9 +74,9 @@ module CommunityBoardHandler::ClanBoard
       parts << "<html><body><br><br><table border=0 width=610><tr><td width=10></td><td width=600 align=left><a action=\"bypass _bbshome\">HOME</a> &gt; <a action=\"bypass _bbsclan_clanlist\"> CLAN COMMUNITY </a>  &gt; <a action=\"bypass _bbsclan_clanhome;"
       parts << clan_id << "\"> &amp;$802; </a></td></tr></table>"
 
-      if pc.clan_leader?
+      if pc.clan_leader? && (clan = pc.clan)
         parts << "<br><br><center><table width=610 border=0 cellspacing=0 cellpadding=0><tr><td fixwidth=610><font color=\"AAAAAA\">The Clan Notice function allows the clan leader to send messages through a pop-up window to clan members at login.</font> </td></tr><tr><td height=20></td></tr>"
-        if pc.clan.notice_enabled?
+        if clan.notice_enabled?
           parts << "<tr><td fixwidth=610> Clan Notice Function:&nbsp;&nbsp;&nbsp;on&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;<a action=\"bypass _bbsclan_clannotice_disable\">off</a>"
         else
           parts << "<tr><td fixwidth=610> Clan Notice Function:&nbsp;&nbsp;&nbsp;<a action=\"bypass _bbsclan_clannotice_enable\">on</a>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;off"
@@ -84,12 +84,12 @@ module CommunityBoardHandler::ClanBoard
 
         parts << "</td></tr></table><img src=\"L2UI.Squaregray\" width=\"610\" height=\"1\"><br> <br><table width=610 border=0 cellspacing=2 cellpadding=0><tr><td>Edit Notice: </td></tr><tr><td height=5></td></tr><tr><td><MultiEdit var =\"Content\" width=610 height=100></td></tr></table><br><table width=610 border=0 cellspacing=0 cellpadding=0><tr><td height=5></td></tr><tr><td align=center FIXWIDTH=65><button value=\"&$140;\" action=\"Write Notice Set _ Content Content Content\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td><td align=center FIXWIDTH=45></td><td align=center FIXWIDTH=500></td></tr></table></center></body></html>"
 
-        Util.send_cb_html(pc, parts.join, pc.clan.notice)
+        Util.send_cb_html(pc, parts.join, clan.notice)
       else
         parts << "<img src=\"L2UI.squareblank\" width=\"1\" height=\"10\"><center><table border=0 cellspacing=0 cellpadding=0><tr><td>You are not your clan's leader, and therefore cannot change the clan notice</td></tr></table>"
-        if pc.clan.notice_enabled?
+        if (clan = pc.clan.not_nil!).notice_enabled?
           parts << "<table border=0 cellspacing=0 cellpadding=0><tr><td>The current clan notice:</td></tr><tr><td fixwidth=5></td><td FIXWIDTH=600 align=left>"
-          parts << pc.clan.notice
+          parts << clan.notice
           parts << "</td><td fixqqwidth=5></td></tr></table>"
         end
         parts << "</center></body></html>"
@@ -105,7 +105,7 @@ module CommunityBoardHandler::ClanBoard
 
     html = String.build(2000) do |io|
       io << "<html><body><br><br><center><br1><br1><table border=0 cellspacing=0 cellpadding=0><tr><td FIXWIDTH=15>&nbsp;</td><td width=610 height=30 align=left><a action=\"bypass _bbsclan_clanlist\"> CLAN COMMUNITY </a></td></tr></table><table border=0 cellspacing=0 cellpadding=0 width=610 bgcolor=434343><tr><td height=10></td></tr><tr><td fixWIDTH=5></td><td fixWIDTH=600><a action=\"bypass _bbsclan_clanhome;"
-      io << (pc.clan?.try &.id || 0)
+      io << (pc.clan.try &.id || 0)
       io << "\">[GO TO MY CLAN]</a>&nbsp;&nbsp;</td><td fixWIDTH=5></td></tr><tr><td height=10></td></tr></table><br><table border=0 cellspacing=0 cellpadding=2 bgcolor=5A5A5A width=610><tr><td FIXWIDTH=5></td><td FIXWIDTH=200 align=center>CLAN NAME</td><td FIXWIDTH=200 align=center>CLAN LEADER</td><td FIXWIDTH=100 align=center>CLAN LEVEL</td><td FIXWIDTH=100 align=center>CLAN MEMBERS</td><td FIXWIDTH=5></td></tr></table><img src=\"L2UI.Squareblank\" width=\"1\" height=\"5\">"
 
       ClanTable.clans.each_with_index do |clan, i|
@@ -171,7 +171,7 @@ module CommunityBoardHandler::ClanBoard
   end
 
   private def clan_home(pc : L2PcInstance)
-    clan_home(pc, pc.clan.id)
+    clan_home(pc, pc.clan.not_nil!.id)
   end
 
   private def clan_home(pc : L2PcInstance, clan_id : Int32)
@@ -212,7 +212,7 @@ module CommunityBoardHandler::ClanBoard
   end
 
   def write_community_board_command(pc : L2PcInstance, arg1 : String, arg2 : String, arg3 : String, arg4 : String, arg5 : String) : Bool
-    clan = pc.clan?
+    clan = pc.clan
 
     if clan && pc.clan_leader?
       clan.notice = arg3

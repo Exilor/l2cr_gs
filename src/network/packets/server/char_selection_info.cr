@@ -9,7 +9,7 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
     @char_info = CharSelectionInfo.load_character_select_info(account)
   end
 
-  def write_impl
+  private def write_impl
     c 0x09
 
     d @char_info.size
@@ -57,7 +57,7 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
 
       7.times { d 0x00 }
 
-      PAPERDOLL_ORDER.each do |slot|
+      paperdoll_order do |slot|
         d cip.get_paperdoll_item_id(slot)
       end
 
@@ -139,8 +139,8 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
 
     cip.race = rs.get_i32("race")
 
-    base_class_id = rs.get_u8("base_class").to_i32 # <-
-    active_class_id = rs.get_u8("classid").to_i32 # <-
+    base_class_id = rs.get_u8("base_class").to_i32
+    active_class_id = rs.get_u8("classid").to_i32
 
     cip.x = rs.get_i32("x")
     cip.y = rs.get_i32("y")

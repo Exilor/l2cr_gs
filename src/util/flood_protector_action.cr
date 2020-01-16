@@ -17,20 +17,22 @@ class FloodProtectorAction
 
     if cur_tick < @next_game_tick || @punishment_in_progress
       if @config.log_flooding? && !@logged
-        warn "Called command #{command} #{((@config.flood_protection_interval - (@next_game_tick - cur_tick)) * GameTimer::MILLIS_IN_TICK)} ms after previous command."
+        warn { "Called command #{command} #{((@config.flood_protection_interval - (@next_game_tick - cur_tick)) * GameTimer::MILLIS_IN_TICK)} ms after previous command." }
         @logged = true
       end
 
       @count.add(1)
 
-      if !@punishment_in_progress && @config.punishment_limit > 0 && @count.get >= @config.punishment_limit && @config.punishment_type
-        @punishment_in_progress = true
-        case @config.punishment_type
-        when "kick" then kick_player
-        when "ban"  then ban_account
-        when "jail" then jail_char
+      if !@punishment_in_progress && @config.punishment_limit > 0
+        if @count.get >= @config.punishment_limit && @config.punishment_type
+          @punishment_in_progress = true
+          case @config.punishment_type
+          when "kick" then kick_player
+          when "ban"  then ban_account
+          when "jail" then jail_char
+          end
+          @punishment_in_progress = false
         end
-        @punishment_in_progress = false
       end
 
       return false
@@ -38,7 +40,7 @@ class FloodProtectorAction
 
     if @count.get > 0
       if @config.log_flooding?
-        warn "Issued #{@count.get} extra requests within #{@config.flood_protection_interval * GameTimer::MILLIS_IN_TICK} ms."
+        warn { "Issued #{@count.get} extra requests within #{@config.flood_protection_interval * GameTimer::MILLIS_IN_TICK} ms." }
       end
     end
 
@@ -70,7 +72,7 @@ class FloodProtectorAction
         task = PunishmentTask.new(char_id, PunishmentAffect::CHARACTER, PunishmentType::JAIL, Time.ms + @config.punishment_time, "", self.class.simple_name)
         PunishmentManager.start_punishment(task)
       end
-      warn "#{pc.name} jailed for flooding."
+      warn { "#{pc.name} jailed for flooding." }
     end
   end
 

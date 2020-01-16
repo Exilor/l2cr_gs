@@ -38,7 +38,7 @@ module FortSiegeManager
       flag_spawns = [] of CombatFlag
 
       (1...5).each do |i|
-        key = fort.name.gsub(" ", "") + "Commander#{i}"
+        key = fort.name.delete(' ') + "Commander#{i}"
         params = cfg.get_string(key, "")
         if params.empty?
           break
@@ -63,7 +63,7 @@ module FortSiegeManager
       COMMANDER_SPAWN_LIST[fort.residence_id] = commander_spawns
 
       (1...4).each do |i|
-        key = fort.name.gsub(" ", "") + "Flag#{i}"
+        key =  "#{fort.name.delete(' ')}Flag#{i}"
         params = cfg.get_string(key, "")
         if params.empty?
           break
@@ -122,14 +122,6 @@ module FortSiegeManager
     COMMANDER_SPAWN_LIST[fort_id]?
   end
 
-  def get_commander_spawn_list!(fort_id : Int32) : Array(FortSiegeSpawn)
-    unless list = COMMANDER_SPAWN_LIST[fort_id]?
-      raise "No commander spawn list for for with id #{fort_id}"
-    end
-
-    list
-  end
-
   def get_flag_list(fort_id : Int32) : Array(CombatFlag)?
     FLAG_LIST[fort_id]?
   end
@@ -148,15 +140,7 @@ module FortSiegeManager
     nil
   end
 
-  def get_siege!(*args) : FortSiege
-    unless siege = get_siege(*args)
-      raise "No siege found (args: #{args})"
-    end
-
-    siege
-  end
-
-  def sieges
+  def sieges : Array(FortSiege)
     SIEGES
   end
 
@@ -173,7 +157,7 @@ module FortSiegeManager
       return false
     end
 
-    fort = FortManager.get_fort!(pc)
+    fort = FortManager.get_fort(pc).not_nil!
     list = FLAG_LIST[fort.residence_id]
     list.each do |cf|
       if cf.combat_flag_instance == item
@@ -201,7 +185,7 @@ module FortSiegeManager
     elsif !fort.siege.in_progress?
       pc.send_packet(sm)
       return false
-    elsif fort.siege.get_attacker_clan(pc.clan?).nil?
+    elsif fort.siege.get_attacker_clan(pc.clan).nil?
       pc.send_packet(sm)
       return false
     end
@@ -210,7 +194,7 @@ module FortSiegeManager
   end
 
   def drop_combat_flag(pc : L2PcInstance, fort_id : Int32)
-    fort = FortManager.get_fort_by_id!(fort_id)
+    fort = FortManager.get_fort_by_id(fort_id).not_nil!
     list = FLAG_LIST[fort.residence_id]
     list.each do |cf|
       if cf.player_l2id == pc.l2id

@@ -69,9 +69,6 @@ class Olympiad < ListenersContainer
   COMP_DONE_WEEK_NON_CLASSED = "competitions_done_week_non_classed"
   COMP_DONE_WEEK_TEAM = "competitions_done_week_team"
 
-  class_getter(default_points) { Config.alt_oly_start_points }
-  class_getter(weekly_points) { Config.alt_oly_weekly_points }
-
   @olympiad_end = 0i64
   @validation_end = 0i64
   @next_weekly_change = 0i64
@@ -85,10 +82,14 @@ class Olympiad < ListenersContainer
   @scheduled_validation_task : Scheduler::DelayedTask?
   @game_manager : Scheduler::PeriodicTask?
   @game_announcer : Scheduler::PeriodicTask?
+
   getter current_cycle = 0
   getter period = 0
   getter? in_comp_period = false
   protected setter period : Int32
+
+  class_getter(default_points) { Config.alt_oly_start_points }
+  class_getter(weekly_points) { Config.alt_oly_weekly_points }
 
   private def initialize
     @OLYMPIAD_GET_HEROS = "SELECT olympiad_nobles.charId, characters.char_name FROM olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} AND olympiad_nobles.competitions_won > 0 ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC"
@@ -188,7 +189,7 @@ class Olympiad < ListenersContainer
     end
 
     sync do
-      info "Loading Olympiad system..."
+      debug "Loading Olympiad system..."
       if @period == 0
         info "Currently in Olympiad period."
       else

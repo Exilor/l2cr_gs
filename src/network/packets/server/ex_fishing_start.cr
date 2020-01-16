@@ -2,7 +2,7 @@ class Packets::Outgoing::ExFishingStart < GameServerPacket
   initializer pc : L2PcInstance, type : Int32, x : Int32, y : Int32, z : Int32,
     night_lure : Bool
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x1e
 

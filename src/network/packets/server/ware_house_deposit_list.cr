@@ -14,7 +14,7 @@ class Packets::Outgoing::WareHouseDepositList < Packets::Outgoing::AbstractItemP
     @items.select! &.depositable?(is_private)
   end
 
-  def write_impl
+  private def write_impl
     c 0x41
 
     h @type

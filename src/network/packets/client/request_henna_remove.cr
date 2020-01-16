@@ -32,7 +32,7 @@ class Packets::Incoming::RequestHennaRemove < GameClientPacket
     end
 
     unless found
-      warn "Player #{pc} requested to remove a dye that he doesn't have."
+      warn { "Player #{pc} requested to remove a dye that he doesn't have." }
       action_failed
     end
   end

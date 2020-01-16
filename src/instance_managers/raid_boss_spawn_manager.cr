@@ -55,10 +55,14 @@ module RaidBossSpawnManager
 
       if raid_boss
         raid_boss.current_hp = current_hp
-        raid_boss.current_mp = current_hp
+        raid_boss.current_mp = current_mp
         raid_boss.raid_status = Status::ALIVE
         BOSSES[boss_id] = raid_boss
-        info = StatsSet {"hp" => current_hp, "mp" => current_mp, "time" => 0}
+        info = StatsSet {
+          "currentHP" => current_hp,
+          "currentMP" => current_mp,
+          "respawnTime" => 0i64
+        }
         STORED_INFO[boss_id] = info
       end
     else
@@ -208,14 +212,8 @@ module RaidBossSpawnManager
 
     SpawnTable.delete_spawn(dat, false)
     SPAWNS.delete(boss_id)
-
     BOSSES.delete(boss_id)
-
-    if tmp = SCHEDULES[boss_id]?
-      tmp.cancel
-      SCHEDULES.delete(boss_id)
-    end
-
+    SCHEDULES.delete(boss_id).try &.cancel
     STORED_INFO.delete(boss_id)
 
     if update_db

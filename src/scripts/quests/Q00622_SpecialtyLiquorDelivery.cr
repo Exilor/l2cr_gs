@@ -78,7 +78,7 @@ class Scripts::Q00622_SpecialtyLiquorDelivery < Quest
       end
     when "31267-02.html"
       if qs.cond?(7)
-        rnd = rand(1000)
+        rnd = Rnd.rand(1000)
         if rnd < 800
           reward_items(pc, QUICK_STEP_POTION, 1)
           give_adena(pc, 18800, true)

@@ -226,7 +226,7 @@ class Scripts::Q00386_StolenDignity < Quest
   end
 
   private def reward(pc, qs, count)
-    case rand(33)
+    case Rnd.rand(33)
     when 0
       qs.give_items(DRAGON_SLAYER_EDGE, count)
     when 1
@@ -362,99 +362,99 @@ class Scripts::Q00386_StolenDignity < Quest
     if qs = get_random_player_from_party(killer, npc)
       case npc.id
       when CRIMSON_DRAKE
-        if rand(1000) < 20.200001
+        if Rnd.rand(1000) < 20.200001
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when KADIOS
-        if rand(1000) < 211
+        if Rnd.rand(1000) < 211
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when HUNGRY_CORPSE
-        if rand(1000) < 184
+        if Rnd.rand(1000) < 184
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when PAST_KNIGHT
-        if rand(1000) < 216
+        if Rnd.rand(1000) < 216
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when BLADE_DEATH
-        if rand(100) < 17
+        if Rnd.rand(100) < 17
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when DARK_GUARD
-        if rand(1000) < 273
+        if Rnd.rand(1000) < 273
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when BLOODY_GHOST
-        if rand(1000) < 149
+        if Rnd.rand(1000) < 149
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when BLOODY_LORD
-        if rand(1000) < 199
+        if Rnd.rand(1000) < 199
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when PAST_CREATURE
-        if rand(1000) < 257
+        if Rnd.rand(1000) < 257
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when GIANT_SHADOW
-        if rand(1000) < 205
+        if Rnd.rand(1000) < 205
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when ANCIENTS_SOLDIER
-        if rand(1000) < 208
+        if Rnd.rand(1000) < 208
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when ANCIENTS_WARRIOR
-        if rand(1000) < 299
+        if Rnd.rand(1000) < 299
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when SPITE_SOUL_LEADER
-        if rand(100) < 44
+        if Rnd.rand(100) < 44
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when SPITE_SOUL_WIZARD
-        if rand(100) < 39
+        if Rnd.rand(100) < 39
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when WRECKED_ARCHER
-        if rand(1000) < 214
+        if Rnd.rand(1000) < 214
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when FLOAT_OF_GRAVE
-        if rand(1000) < 173
+        if Rnd.rand(1000) < 173
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when GRAVE_PREDATOR
-        if rand(1000) < 211
+        if Rnd.rand(1000) < 211
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when FALLEN_ORC_SHAMAN
-        if rand(1000) < 478
+        if Rnd.rand(1000) < 478
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when SHARP_TALON_TIGER
-        if rand(1000) < 234
+        if Rnd.rand(1000) < 234
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when GLOW_WISP
-        if rand(1000) < 245
+        if Rnd.rand(1000) < 245
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when MARSH_PREDATOR
-        if rand(100) < 26
+        if Rnd.rand(100) < 26
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when HAMES_ORC_SNIPER
-        if rand(100) < 37
+        if Rnd.rand(100) < 37
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when CURSED_GUARDIAN
-        if rand(1000) < 352
+        if Rnd.rand(1000) < 352
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       when HAMES_ORC_CHIEFTAIN, FALLEN_ORC_SHAMAN_TRANS, SHARP_TALON_TIGER_TRANS
-        if rand(1000) < 487
+        if Rnd.rand(1000) < 487
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       end
@@ -472,7 +472,7 @@ class Scripts::Q00386_StolenDignity < Quest
       candidates << qs
     end
 
-    if party = pc.party?
+    if party = pc.party
       party.members.each do |m|
         if qss = get_quest_state(m, false)
           if qss.started? && Util.in_range?(1500, npc, m, true)
@@ -482,6 +482,6 @@ class Scripts::Q00386_StolenDignity < Quest
       end
     end
 
-    candidates.sample?
+    candidates.sample?(random: Rnd)
   end
 end

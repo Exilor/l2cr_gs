@@ -213,13 +213,13 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
   end
 
   def on_see_creature(npc, creature, is_summon)
-    if creature.player?
-      st = get_quest_state(creature.acting_player, false)
+    if creature.is_a?(L2PcInstance)
+      st = get_quest_state(creature, false)
       if st && st.cond?(17)
         st.take_items(DETECTOR, 1)
         st.give_items(DETECTOR2, 1)
         st.set_cond(18, true)
-        show_on_screen_msg(creature.acting_player, NpcString::THE_RADIO_SIGNAL_DETECTOR_IS_RESPONDING_A_SUSPICIOUS_PILE_OF_STONES_CATCHES_YOUR_EYE, 2, 4500)
+        show_on_screen_msg(creature, NpcString::THE_RADIO_SIGNAL_DETECTOR_IS_RESPONDING_A_SUSPICIOUS_PILE_OF_STONES_CATCHES_YOUR_EYE, 2, 4500)
       end
     end
 

@@ -6,7 +6,7 @@ class GameCrypt
   end
 
   @enabled = false
-  @in_key  = GC.malloc_atomic(32u32).as(UInt8*)
+  @in_key  = GC.malloc_atomic(32).as(UInt8*)
   @out_key : UInt8*
 
   def initialize
@@ -18,38 +18,29 @@ class GameCrypt
     @out_key.copy_from(key.to_unsafe, key.size)
   end
 
-  def encrypt(raw : Bytes, offset : Int32, size : Int32)
-    return @enabled = true unless @enabled
-
-    if size >= raw.size + offset
-      raise IndexError.new
+  def encrypt(raw : UInt8*, offset : Int32, size : Int32)
+    unless @enabled
+      @enabled = true
+      return
     end
-
-    ptr = raw.to_unsafe
 
     temp = 0
     size.times do |i|
-      temp2 = ptr[offset + i]
+      temp2 = raw[offset + i]
       temp = temp2 ^ @out_key[i & 15] ^ temp
-      ptr[offset + i] = temp
+      raw[offset + i] = temp
     end
 
     @out_key.as(Int32*)[2] += size
   end
 
-  def decrypt(raw : Bytes, offset : Int32, size : Int32)
+  def decrypt(raw : UInt8*, offset : Int32, size : Int32)
     return unless @enabled
-
-    if size >= raw.size + offset
-      raise IndexError.new
-    end
-
-    ptr = raw.to_unsafe
 
     temp = 0
     size.times do |i|
-      temp2 = ptr[offset + i]
-      ptr[offset + i] = temp2 ^ @in_key[i & 15] ^ temp
+      temp2 = raw[offset + i]
+      raw[offset + i] = temp2 ^ @in_key[i & 15] ^ temp
       temp = temp2
     end
 

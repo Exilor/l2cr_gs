@@ -43,45 +43,21 @@ module CastleManager
     CASTLES.find { |castle| castle.residence_id == id }
   end
 
-  def get_castle_by_id!(id : Int32) : Castle
-    unless castle = get_castle_by_id(id)
-      raise "Castle with id #{id} not found"
-    end
-
-    castle
-  end
-
   def get_castle_by_owner(clan : L2Clan) : Castle?
     CASTLES.find { |castle| castle.owner_id == clan.id }
   end
 
-  def get_castle_by_owner!(clan : L2Clan) : Castle
-    unless castle = get_castle_by_owner(clan)
-      raise "#{clan} has no castle"
-    end
-
-    castle
-  end
-
   def get_castle(name : String) : Castle?
     name = name.strip
-    CASTLES.find { |castle| castle.name.casecmp?(name) }
+    CASTLES.find &.name.casecmp?(name)
   end
 
   def get_castle(x : Int32, y : Int32, z : Int32) : Castle?
-    CASTLES.find { |castle| castle.in_zone?(x, y, z) }
+    CASTLES.find &.in_zone?(x, y, z)
   end
 
   def get_castle(obj : L2Object) : Castle?
     get_castle(*obj.xyz)
-  end
-
-  def get_castle!(*args) : Castle
-    unless castle = get_castle(*args)
-      raise "No castle found for args #{args}"
-    end
-
-    castle
   end
 
   def get_castle_index(id : Int32) : Int32
@@ -96,7 +72,7 @@ module CastleManager
     CASTLES.index { |castle| castle.in_zone?(x, y, z) } || -1
   end
 
-  def castles
+  def castles : Array(Castle)
     CASTLES
   end
 
@@ -126,11 +102,7 @@ module CastleManager
   end
 
   def get_circlet_by_castle_id(id : Int32) : Int32
-    if id > 0 && id < 10
-      return CASTLE_CIRCLETS[id]
-    end
-
-    0
+    id.between?(1, 9) ? CASTLE_CIRCLETS[id] : 0
   end
 
   def remove_circlet(clan : L2Clan, castle_id : Int32)
@@ -143,7 +115,7 @@ module CastleManager
       return
     end
 
-    unless pc = member.player_instance?
+    unless pc = member.player_instance
       return
     end
 
@@ -192,14 +164,6 @@ module CastleManager
   end
 
   def get_siege_dates(siege_date : Int64) : Int32
-    # count = 0
-    # CASTLE_SIEGE_DATES.each_value do |date|
-    #   if (date - siege_date) < 1000
-    #     count += 1
-    #   end
-    # end
-    # count
-
-    CASTLE_SIEGE_DATES.local_each_value.count { |d| d - siege_date < 1000}
+    CASTLE_SIEGE_DATES.count { |_, d| d - siege_date < 1000 }
   end
 end

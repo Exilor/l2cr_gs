@@ -2,11 +2,12 @@ require "./abstract_enchant_item"
 require "./enchant_result_type"
 
 class EnchantScroll < AbstractEnchantItem
+  @items : Set(Int32)?
+
   getter scroll_group_id : Int32
   getter? weapon : Bool
   getter? blessed : Bool
   getter? safe : Bool
-  @items : Set(Int32)?
 
   def initialize(set : StatsSet)
     super
@@ -37,13 +38,13 @@ class EnchantScroll < AbstractEnchantItem
 
   def get_chance(pc : L2PcInstance, enchant_item : L2ItemInstance) : Float64
     unless EnchantItemGroupsData.get_scroll_group(@scroll_group_id)
-      warn "Enchant scroll group #{id} does not exist."
+      warn { "Enchant scroll group #{id} does not exist." }
       return -1f64
     end
 
     group = EnchantItemGroupsData.get_item_group(enchant_item.template, @scroll_group_id)
     unless group
-      warn "Enchant item group for scroll #{id} does not exist."
+      warn { "Enchant item group for scroll #{id} does not exist." }
       return -1f64
     end
 

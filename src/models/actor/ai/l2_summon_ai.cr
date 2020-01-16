@@ -68,7 +68,7 @@ class L2SummonAI < L2PlayableAI
       return
     end
 
-    client_stop_moving
+    client_stop_moving(nil)
     @actor.do_attack(attack_target)
   end
 
@@ -83,7 +83,7 @@ class L2SummonAI < L2PlayableAI
       return
     end
 
-    client_stop_moving
+    client_stop_moving(nil)
     @actor.as(L2Summon).follow_status = false
     set_intention(IDLE)
     @start_follow = val
@@ -146,8 +146,8 @@ class L2SummonAI < L2PlayableAI
   end
 
   private def avoid_attack(attacker)
-    owner = @actor.as(L2Summon).owner?
-    if owner && owner != attacker
+    owner = @actor.as(L2Summon).owner
+    if owner != attacker
       if owner.inside_radius?(@actor, AVOID_RADIUS * 2, true, false)
         @start_avoid = true
       end
@@ -166,7 +166,8 @@ class L2SummonAI < L2PlayableAI
           return
         end
 
-        owner_x, owner_y = @actor.as(L2Summon).owner.x, @actor.as(L2Summon).owner.y
+        owner_x = @actor.as(L2Summon).owner.x
+        owner_y = @actor.as(L2Summon).owner.y
 
         angle = Math.to_radians(rand(-90..90))
         angle += Math.atan2(owner_y - @actor.y, owner_x - @actor.x)

@@ -11,7 +11,7 @@ class Packets::Outgoing::ExPutItemResultForVariationCancel < GameServerPacket
     @item_aug_2 = item.augmentation.augmentation_id >> 16
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x57
 

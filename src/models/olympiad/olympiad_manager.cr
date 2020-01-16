@@ -178,7 +178,7 @@ module OlympiadManager
       NON_CLASS_BASED_REGISTERS << char_id
       pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_NO_CLASS_GAMES)
     when CompetitionType::TEAMS
-      party = pc.party?
+      party = pc.party
       if party.nil? || party.size != 3
         pc.send_packet(SystemMessageId::PARTY_REQUIREMENTS_NOT_MET)
         return false
@@ -258,7 +258,7 @@ module OlympiadManager
 
     l2id = noble.l2id
 
-    if NON_CLASS_BASED_REGISTERS.delete(l2id)
+    if NON_CLASS_BASED_REGISTERS.delete_first(l2id)
       if Config.dualbox_check_max_olympiad_participants_per_ip > 0
         AntiFeedManager.remove_player(AntiFeedManager::OLYMPIAD_ID, noble)
       end
@@ -268,7 +268,7 @@ module OlympiadManager
     end
 
     classed = CLASS_BASED_REGISTERS[noble.base_class]?
-    if classed && classed.delete(l2id)
+    if classed && classed.delete_first(l2id)
       CLASS_BASED_REGISTERS[noble.base_class] = classed
       if Config.dualbox_check_max_olympiad_participants_per_ip > 0
         AntiFeedManager.remove_player(AntiFeedManager::OLYMPIAD_ID, noble)
@@ -280,7 +280,7 @@ module OlympiadManager
 
     TEAMS_BASED_REGISTERS.each do |team|
       if team.includes?(l2id)
-        TEAMS_BASED_REGISTERS.delete(team)
+        TEAMS_BASED_REGISTERS.delete_first(team)
         ThreadPoolManager.execute_general(AnnounceUnregToTeam.new(team))
         return true
       end
@@ -297,18 +297,18 @@ module OlympiadManager
 
     l2id = pc.l2id
 
-    if NON_CLASS_BASED_REGISTERS.delete(l2id)
+    if NON_CLASS_BASED_REGISTERS.delete_first(l2id)
       return
     end
 
     classed = CLASS_BASED_REGISTERS[pc.base_class]?
-    if classed && classed.delete(l2id)
+    if classed && classed.delete_first(l2id)
       return
     end
 
     TEAMS_BASED_REGISTERS.each do |team|
       if team.includes?(l2id)
-        TEAMS_BASED_REGISTERS.delete(team)
+        TEAMS_BASED_REGISTERS.delete_first(team)
         ThreadPoolManager.execute_general(AnnounceUnregToTeam.new(team))
         return
       end

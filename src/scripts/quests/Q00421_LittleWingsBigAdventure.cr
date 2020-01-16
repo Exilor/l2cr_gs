@@ -214,7 +214,8 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
       if is_summon
         data = NPC_DATA[npc.id]
         if qs.memo_state % data.memo_state_mod < data.memo_state_value
-          if attacker.summon!.control_l2id == qs.get_int("fluteObjectId")
+          smn = attacker.summon
+          if smn && smn.control_l2id == qs.get_int("fluteObjectId")
             hits = qs.get_int("hits") + 1
             qs.set("hits", hits)
 

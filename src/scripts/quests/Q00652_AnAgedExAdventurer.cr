@@ -50,7 +50,7 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
       end
     when SARA
       if st.started?
-        if rand(10) <= 4
+        if Rnd.rand(10) <= 4
           st.give_items(ENCHANT_ARMOR_D, 1)
           st.give_adena(5026, true)
           html = "30180-01.html"

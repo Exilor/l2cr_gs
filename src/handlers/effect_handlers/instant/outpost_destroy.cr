@@ -1,25 +1,23 @@
 class EffectHandler::OutpostDestroy < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    pc = info.effector.acting_player
-
-    unless pc.clan_leader?
-      return
-    end
+    return unless pc = info.effector.acting_player
+    return unless clan = pc.clan
+    return unless pc.clan_leader?
 
     unless TerritoryWarManager.tw_in_progress?
       return
     end
 
-    if flag = TerritoryWarManager.get_hq_for_clan(pc.clan)
+    if flag = TerritoryWarManager.get_hq_for_clan(clan)
       flag.delete_me
     else
-      warn { "Flag for clan #{pc.clan} not found." }
+      warn { "Flag for clan #{clan} not found." }
     end
 
-    TerritoryWarManager.set_hq_for_clan(pc.clan, nil)
+    TerritoryWarManager.set_hq_for_clan(clan, nil)
   end
 end

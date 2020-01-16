@@ -1,5 +1,5 @@
 class EffectHandler::FocusMaxEnergy < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 

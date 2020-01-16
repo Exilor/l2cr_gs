@@ -5,21 +5,20 @@ class EffectHandler::HeadquarterCreate < AbstractEffect
 
   def initialize(attach_cond, apply_cond, set, params)
     super
-    @advanced = params.get_bool("isAdanced", false)
+    @advanced = params.get_bool("isAdvanced", false)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    pc = info.effector.acting_player
-    unless pc.clan_leader?
-      return
-    end
+    return unless pc = info.effector.acting_player
+    return unless clan = pc.clan
+    return unless pc.clan_leader?
 
     flag = L2SiegeFlagInstance.new(pc, NpcData[HQ_NPC_ID], @advanced, false)
-    flag.title = pc.clan.name
+    flag.title = clan.name
     flag.heal!
     flag.heading = pc.heading
     flag.spawn_me(pc.x, pc.y, pc.z + 50)
@@ -29,7 +28,7 @@ class EffectHandler::HeadquarterCreate < AbstractEffect
     elsif fort = FortManager.get_fort(pc)
       fort.siege.get_flag(pc.clan).not_nil! << flag
     else
-      ClanHallSiegeManager.get_nearby_clan_hall!(pc).siege.get_flag(pc.clan).not_nil! << flag
+      ClanHallSiegeManager.get_nearby_clan_hall(pc).not_nil!.siege.get_flag(pc.clan).not_nil! << flag
     end
   end
 end

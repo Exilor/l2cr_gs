@@ -3,7 +3,7 @@ module TargetHandler::OwnerPet
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    if char.is_a?(L2Summon) && char.owner?.try &.alive?
+    if char.is_a?(L2Summon) && char.owner.alive?
       return [char.owner] of L2Object
     end
 
@@ -11,6 +11,6 @@ module TargetHandler::OwnerPet
   end
 
   def target_type
-    L2TargetType::OWNER_PET
+    TargetType::OWNER_PET
   end
 end

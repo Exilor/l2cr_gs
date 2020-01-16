@@ -26,7 +26,7 @@ module BypassHandler::OlympiadManagerLink
 
     begin
       if command.downcase.starts_with?("olympiaddesc")
-        val = command[13...14].to_i
+        val = command[13].to_i
         suffix = command.from(14)
         target.show_chat_window(pc, val, suffix)
       elsif command.downcase.starts_with?("olympiadnoble")
@@ -195,7 +195,7 @@ module BypassHandler::OlympiadManagerLink
           target.decay_me
         end
       elsif command.downcase.starts_with?("olympiad")
-        val = command[9...10].to_i
+        val = command[9].to_i
 
         reply = NpcHtmlMessage.new(target.l2id)
 

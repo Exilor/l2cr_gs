@@ -3,7 +3,7 @@ class Condition
     initializer val : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
-      return false unless pc = effected.try &.acting_player?
+      return false unless pc = effected.try &.acting_player
 
       can_summon = true
 

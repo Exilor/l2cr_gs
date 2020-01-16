@@ -1,7 +1,7 @@
 class Packets::Outgoing::GmViewQuestInfo < GameServerPacket
   initializer pc : L2PcInstance
 
-  def write_impl
+  private def write_impl
     c 0x99
 
     s @pc.name

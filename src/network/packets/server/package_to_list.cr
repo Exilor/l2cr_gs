@@ -1,7 +1,7 @@
 class Packets::Outgoing::PackageToList < GameServerPacket
   initializer players : Hash(Int32, String)
 
-  def write_impl
+  private def write_impl
     c 0xc8
 
     d @players.size

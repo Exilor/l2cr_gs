@@ -52,9 +52,7 @@ module WalkingManager
   end
 
   def start_moving(npc, route_name)
-    # npc.say "#start_moving: #{route_name.inspect}"
     unless ROUTES.has_key?(route_name)
-      # npc.say "#{route_name.inspect} not in ROUTES."
     end
 
     return unless npc && npc.alive? && ROUTES.has_key?(route_name)
@@ -72,7 +70,6 @@ module WalkingManager
           # debug msg
         end
         unless npc.inside_radius?(node, 3000, true, false)
-          # npc.say "Too far away from node."
           # debug msg
           return
         end
@@ -84,7 +81,6 @@ module WalkingManager
         npc.known_list.start_tracking_task
         ACTIVE_ROUTES[npc.l2id] = walk
       else
-        # npc.say "Failed to start moving along route #{route_name}. Scheduling."
         task = StartMovingTask.new(npc, route_name)
         ThreadPoolManager.schedule_general(task, 60000)
       end
@@ -92,7 +88,6 @@ module WalkingManager
       if ACTIVE_ROUTES.has_key?(npc.l2id) && (npc.intention.active? || npc.intention.idle?)
         return unless walk = ACTIVE_ROUTES[npc.l2id]?
         if walk.blocked? || walk.suspended?
-          # npc.say "Failed to continue moving along route #{route_name} (blocked)."
           return
         end
 
@@ -102,28 +97,22 @@ module WalkingManager
         npc.set_intention(AI::MOVE_TO, node)
         walk.blocked = false
         walk.stopped_by_attack = false
-      else
-        # npc.say "Failed to continue moving along route #{route_name} (wrong AI state - #{npc.intention})."
       end
     end
   end
 
   def cancel_moving(npc)
-    # npc.say '#cancel_moving'
     sync do
       if walk = ACTIVE_ROUTES[npc.l2id]?
-        # npc.say '#cancel_moving: walk found'
         walk.suspended = false
         walk.stopped_by_attack = false
         start_moving(npc, walk.route.name)
       else
-        # npc.say "#cancel_moving: walk not found"
       end
     end
   end
 
   def stop_moving(npc, suspend, stopped_by_attack)
-    # npc.say '#stop_moving'
     if npc.monster?
       monster = npc.leader? || npc
     end
@@ -137,17 +126,17 @@ module WalkingManager
     walk.stopped_by_attack = stopped_by_attack
 
     if monster
-      monster.stop_move
+      monster.stop_move(nil)
       monster.intention = AI::ACTIVE
     else
-      npc.stop_move
+      npc.stop_move(nil)
       npc.intention = AI::ACTIVE
     end
   end
 
   def on_arrived(npc)
     return unless walk = ACTIVE_ROUTES[npc.l2id]?
-    # npc.say '#on_arrived'
+
     OnNpcMoveNodeArrived.new(npc).async(npc)
 
     if walk.current_node_id >= 0 && walk.current_node_id < walk.route.nodes_count
@@ -191,13 +180,19 @@ module WalkingManager
         route_name = d["name"]
         repeat = d["repeat"].casecmp?("true")
         repeat_style = d["repeatStyle"]
-        repeat_type = case repeat_style.casecmp
-          when "back"     then REPEAT_GO_BACK
-          when "cycle"    then REPEAT_GO_FIRST
-          when "conveyor" then REPEAT_TELE_FIRST
-          when "random"   then REPEAT_RANDOM
-          else NO_REPEAT
-          end
+        repeat_type =
+        case repeat_style.casecmp
+        when "back"
+          REPEAT_GO_BACK
+        when "cycle"
+          REPEAT_GO_FIRST
+        when "conveyor"
+          REPEAT_TELE_FIRST
+        when "random"
+          REPEAT_RANDOM
+        else
+          NO_REPEAT
+        end
 
         list = [] of L2NpcWalkerNode
         d.each_element do |r|
@@ -211,14 +206,14 @@ module WalkingManager
               chat_string = node
             else
               if node = r["npcString"]?
-                unless npc_string = NpcString.parse(node)
-                  warn "Unknown NpcString #{node.inspect} for route #{route_name}."
+                unless npc_string = NpcString.parse?(node)
+                  warn { "Unknown NpcString #{node.inspect} for route #{route_name}." }
                   next
                 end
               else
                 if node = r["npcStringId"]?
-                  unless npc_string = NpcString[node.to_i]
-                    warn "Unknown NpcString #{node.inspect} for route #{route_name}."
+                  unless npc_string = NpcString.get?(node.to_i)
+                    warn { "Unknown NpcString #{node.inspect} for route #{route_name}." }
                     next
                   end
                 end

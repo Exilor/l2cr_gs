@@ -3,7 +3,7 @@ module TargetHandler::AuraFriendly
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    player = char.acting_player
+    player = char.acting_player.not_nil!
 
     if !check_target(player, target) && skill.cast_range >= 0
       player.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
@@ -17,7 +17,7 @@ module TargetHandler::AuraFriendly
 
     return [target] of L2Object if only_first
 
-    return [player] of L2Object if player.acting_player.in_olympiad_mode?
+    return [player] of L2Object if player.acting_player.try &.in_olympiad_mode?
 
     target_list = nil
     if target
@@ -51,7 +51,7 @@ module TargetHandler::AuraFriendly
     return false if target.invisible?
 
     if target.playable?
-      target_player = target.acting_player
+      return false unless target_player = target.acting_player
 
       return true if char == target_player
 
@@ -81,6 +81,6 @@ module TargetHandler::AuraFriendly
   end
 
   def target_type
-    L2TargetType::AURA_FRIENDLY
+    TargetType::AURA_FRIENDLY
   end
 end

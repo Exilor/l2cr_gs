@@ -112,8 +112,8 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
     unless qs = get_quest_state(pc, false)
       return
     end
-    chance = rand(100)
-    chance1 = rand(100)
+    chance = Rnd.rand(100)
+    chance1 = Rnd.rand(100)
 
     case event
     when "30735-04.htm"
@@ -223,7 +223,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
       if !has_quest_items?(pc, STATUE_OF_SHILEN_HEAD, STATUE_OF_SHILEN_TORSO, STATUE_OF_SHILEN_ARM, STATUE_OF_SHILEN_LEG)
         html = event
       else
-        if rand(100) < 50
+        if Rnd.rand(100) < 50
           give_items(pc, COMPLETE_STATUE_OF_SHILEN, 1)
           take_items(pc, STATUE_OF_SHILEN_HEAD, 1)
           take_items(pc, STATUE_OF_SHILEN_TORSO, 1)
@@ -242,7 +242,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
       if !has_quest_items?(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE)
         html = event
       else
-        if rand(100) < 50
+        if Rnd.rand(100) < 50
           give_items(pc, COMPLETE_ANCIENT_TABLET, 1)
           take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
           take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
@@ -325,7 +325,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         elsif chance < 76
           give_items(pc, IMPERIAL_DIAMOND, 1)
           html = "30736-04m.html"
-        elsif rand(100) < 50
+        elsif Rnd.rand(100) < 50
           if chance1 < 25
             give_items(pc, STATUE_OF_SHILEN_HEAD, 1)
           elsif chance1 < 50
@@ -443,174 +443,174 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
       case npc.id
       when MARSH_STAKATO
         if has_quest_items?(killer, SOPHYAS_4TH_ORDER)
-          if rand(100) < 55
+          if Rnd.rand(100) < 55
             give_items(killer, STAKATO_TALON, 1)
           end
-          if rand(100) < 12
+          if Rnd.rand(100) < 12
             give_items(killer, CARGO_BOX_4TH, 1)
           end
-          if rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
+          if Rnd.rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
             add_spawn(MARSH_STAKATO_MARQUESS, npc, true, 0, false)
           end
         end
       when NEER_CRAWLER
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, UNDEAD_ASH, 1)
           end
-          if rand(100) < 11
+          if Rnd.rand(100) < 11
             give_items(killer, CARGO_BOX_1ST, 1)
           end
         end
       when SPECTER
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if rand(100) < 60
+          if Rnd.rand(100) < 60
             give_items(killer, UNDEAD_ASH, 1)
           end
-          if rand(100) < 8
+          if Rnd.rand(100) < 8
             give_items(killer, CARGO_BOX_1ST, 1)
           end
         end
       when SORROW_MAIDEN
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if rand(100) < 60
+          if Rnd.rand(100) < 60
             give_items(killer, UNDEAD_ASH, 1)
           end
-          if rand(100) < 9
+          if Rnd.rand(100) < 9
             give_items(killer, CARGO_BOX_1ST, 1)
           end
         end
       when NEER_CRAWLER_BERSERKER
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, UNDEAD_ASH, 1)
           end
-          if rand(100) < 12
+          if Rnd.rand(100) < 12
             give_items(killer, CARGO_BOX_1ST, 1)
           end
         end
       when STRAIN
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, UNDEAD_ASH, 1)
           end
-          if rand(100) < 13
+          if Rnd.rand(100) < 13
             give_items(killer, CARGO_BOX_1ST, 1)
           end
         end
       when GHOUL
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, UNDEAD_ASH, 1)
           end
-          if rand(100) < 15
+          if Rnd.rand(100) < 15
             give_items(killer, CARGO_BOX_1ST, 1)
           end
         end
       when OL_MAHUM_GUERILLA
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
-          if rand(100) < 9
+          if Rnd.rand(100) < 9
             give_items(killer, CARGO_BOX_2ND, 1)
           end
         end
       when OL_MAHUM_RAIDER
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
-          if rand(100) < 10
+          if Rnd.rand(100) < 10
             give_items(killer, CARGO_BOX_2ND, 1)
           end
         end
       when OL_MAHUM_MARKSMAN
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
-          if rand(100) < 11
+          if Rnd.rand(100) < 11
             give_items(killer, CARGO_BOX_2ND, 1)
           end
         end
       when OL_MAHUM_SERGEANT
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
-          if rand(100) < 12
+          if Rnd.rand(100) < 12
             give_items(killer, CARGO_BOX_2ND, 1)
           end
         end
       when OL_MAHUM_CAPTAIN
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
-          if rand(100) < 13
+          if Rnd.rand(100) < 13
             give_items(killer, CARGO_BOX_2ND, 1)
           end
         end
       when MARSH_STAKATO_WORKER
         if has_quest_items?(killer, SOPHYAS_4TH_ORDER)
-          if rand(100) < 60
+          if Rnd.rand(100) < 60
             give_items(killer, STAKATO_TALON, 1)
           end
-          if rand(100) < 13
+          if Rnd.rand(100) < 13
             give_items(killer, CARGO_BOX_4TH, 1)
           end
-          if rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
+          if Rnd.rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
             add_spawn(MARSH_STAKATO_MARQUESS, npc, true, 0, false)
           end
         end
       when MARSH_STAKATO_SOLDIER
         if has_quest_items?(killer, SOPHYAS_4TH_ORDER)
-          if rand(100) < 56
+          if Rnd.rand(100) < 56
             give_items(killer, STAKATO_TALON, 1)
           end
-          if rand(100) < 14
+          if Rnd.rand(100) < 14
             give_items(killer, CARGO_BOX_4TH, 1)
           end
-          if rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
+          if Rnd.rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
             add_spawn(MARSH_STAKATO_MARQUESS, npc, true, 0, false)
           end
         end
       when MARSH_STAKATO_DRONE
         if has_quest_items?(killer, SOPHYAS_4TH_ORDER)
-          if rand(100) < 60
+          if Rnd.rand(100) < 60
             give_items(killer, STAKATO_TALON, 1)
           end
-          if rand(100) < 15
+          if Rnd.rand(100) < 15
             give_items(killer, CARGO_BOX_4TH, 1)
           end
-          if rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
+          if Rnd.rand(100) < 2 && has_quest_items?(killer, SOPHYAS_4TH_ORDER)
             add_spawn(MARSH_STAKATO_MARQUESS, npc, true, 0, false)
           end
         end
       when DELU_LIZARDMAN, DELU_LIZARDMAN_SCOUT
         if has_quest_items?(killer, SOPHYAS_3RD_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, DELU_LIZARDMAN_FANG, 1)
           end
-          if rand(100) < 14
+          if Rnd.rand(100) < 14
             give_items(killer, CARGO_BOX_3RD, 1)
           end
         end
-        if rand(100) < 3 && has_quest_items?(killer, SOPHYAS_3RD_ORDER)
+        if Rnd.rand(100) < 3 && has_quest_items?(killer, SOPHYAS_3RD_ORDER)
           add_spawn(DELU_LIZARDMAN_HEADHUNTER, npc, true, 0, false)
           add_spawn(DELU_LIZARDMAN_HEADHUNTER, npc, true, 0, false)
         end
       when DELU_LIZARDMAN_WARRIOR
         if has_quest_items?(killer, SOPHYAS_3RD_ORDER)
-          if rand(2) == 0
+          if Rnd.rand(2) == 0
             give_items(killer, DELU_LIZARDMAN_FANG, 1)
           end
-          if rand(100) < 15
+          if Rnd.rand(100) < 15
             give_items(killer, CARGO_BOX_3RD, 1)
           end
         end
-        if rand(100) < 3 && has_quest_items?(killer, SOPHYAS_3RD_ORDER)
+        if Rnd.rand(100) < 3 && has_quest_items?(killer, SOPHYAS_3RD_ORDER)
           add_spawn(DELU_LIZARDMAN_HEADHUNTER, npc, true, 0, false)
           add_spawn(DELU_LIZARDMAN_HEADHUNTER, npc, true, 0, false)
         end

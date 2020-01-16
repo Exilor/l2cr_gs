@@ -9,7 +9,7 @@ class Packets::Outgoing::ExPrivateStoreSetWholeMsg < GameServerPacket
     initialize(pc, pc.sell_list.title)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x80
 

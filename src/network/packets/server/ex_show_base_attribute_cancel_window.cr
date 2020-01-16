@@ -6,7 +6,7 @@ class Packets::Outgoing::ExShowBaseAttributeCancelWindow < GameServerPacket
     @items = pc.inventory.element_items
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x74
 

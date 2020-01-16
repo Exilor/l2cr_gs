@@ -3,7 +3,6 @@ require "./abstract_olympiad_game"
 abstract class OlympiadGameNormal < AbstractOlympiadGame
   @damage_p1 = 0
   @damage_p2 = 0
-
   @player_one : Participant
   @player_two : Participant
 
@@ -23,31 +22,26 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
     end
 
     until list.empty?
-      p1_l2id = list.delete_first(list.sample).not_nil!
+      p1_l2id = list.delete_first(list.sample(random: Rnd)).not_nil!
       p1 = L2World.get_player(p1_l2id)
       if p1.nil? || !p1.online?
         next
       end
 
-      p2 = L2World.get_player(list.delete_first(list.sample))
+      p2 = L2World.get_player(list.delete_first(list.sample(random: Rnd)))
       if p2.nil? || !p2.online?
         list << p1_l2id
         next
       end
 
-      result = {
-        Participant.new(p1, 1),
-        Participant.new(p2, 2)
-      }
-
-      return result
+      return {Participant.new(p1, 1), Participant.new(p2, 2)}
     end
 
     nil
   end
 
   def contains_participant?(pc_id : Int32) : Bool
-    ((@player_one != nil) && (@player_one.l2id == pc_id)) || ((@player_two != nil) && (@player_two.l2id == pc_id))
+    (!!@player_one && @player_one.l2id == pc_id) || (!!@player_two && @player_two.l2id == pc_id)
   end
 
   def send_olympiad_info(pc : L2Character) # really? any l2character?
@@ -115,31 +109,52 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
   end
 
   def clean_effects
-    if @player_one.player? && !@player_one.defaulted? && !@player_one.disconnected? && @player_one.player.olympiad_game_id == @stadium_id
-      clean_effects(@player_one.player)
+    if @player_one.player && !@player_one.defaulted?
+      if !@player_one.disconnected?
+        if @player_one.player.olympiad_game_id == @stadium_id
+          clean_effects(@player_one.player)
+        end
+      end
     end
 
-    if @player_two.player? && !@player_two.defaulted? && !@player_two.disconnected? && @player_two.player.olympiad_game_id == @stadium_id
-      clean_effects(@player_two.player)
+    if @player_two.player && !@player_two.defaulted?
+      if !@player_two.disconnected?
+        if @player_two.player.olympiad_game_id == @stadium_id
+          clean_effects(@player_two.player)
+        end
+      end
     end
   end
 
   def port_players_back
-    if @player_one.player? && !@player_one.defaulted? && !@player_one.disconnected?
-      port_player_back(@player_one.player)
+    if @player_one.player && !@player_one.defaulted?
+      unless @player_one.disconnected?
+        port_player_back(@player_one.player)
+      end
     end
-    if @player_two.player? && !@player_two.defaulted? && !@player_two.disconnected?
-      port_player_back(@player_two.player)
+
+    if @player_two.player && !@player_two.defaulted?
+      unless @player_two.disconnected?
+        port_player_back(@player_two.player)
+      end
     end
   end
 
   def players_status_back
-    if @player_one.player? && !@player_one.defaulted? && !@player_one.disconnected? && @player_one.player.olympiad_game_id == @stadium_id
-      player_status_back(@player_one.player)
+    if @player_one.player && !@player_one.defaulted?
+      if !@player_one.disconnected?
+        if @player_one.player.olympiad_game_id == @stadium_id
+          player_status_back(@player_one.player)
+        end
+      end
     end
 
-    if @player_two.player? && !@player_two.defaulted? && !@player_two.disconnected? && @player_two.player.olympiad_game_id == @stadium_id
-      player_status_back(@player_two.player)
+    if @player_two.player && !@player_two.defaulted?
+      if !@player_two.disconnected?
+        if @player_two.player.olympiad_game_id == @stadium_id
+          player_status_back(@player_two.player)
+        end
+      end
     end
   end
 

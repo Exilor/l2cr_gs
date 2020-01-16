@@ -7,7 +7,7 @@ class Packets::Outgoing::ExNoticePostSent < GameServerPacket
     value ? TRUE : FALSE
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xb4
 

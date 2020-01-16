@@ -30,8 +30,8 @@ class Packets::Incoming::RequestDispel < GameClientPacket
 
     if pc.l2id == @l2id
       pc.stop_skill_effects(true, @skill_id)
-    elsif pc.has_summon? && pc.summon!.l2id == @l2id
-      pc.summon!.stop_skill_effects(true, @skill_id)
+    elsif (smn = pc.summon) && smn.l2id == @l2id
+      smn.stop_skill_effects(true, @skill_id)
     end
   end
 end

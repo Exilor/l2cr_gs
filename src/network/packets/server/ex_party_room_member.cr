@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExPartyRoomMember < GameServerPacket
   initializer room : PartyMatchRoom, mode : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x08
 
@@ -17,7 +17,7 @@ class Packets::Outgoing::ExPartyRoomMember < GameServerPacket
         d 0x01
       else
         owner = @room.owner
-        if owner.in_party? && m.in_party? && owner.party.leader_l2id == m.party.leader_l2id
+        if owner.party && owner.party == m.party
           d 0x02
         else
           d 0x00

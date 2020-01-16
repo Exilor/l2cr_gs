@@ -29,7 +29,9 @@ module ChatHandler::ChatTell
         return
       end
 
-      if receiver.client.nil? || receiver.client.detached?
+      client = receiver.client
+
+      if client.nil? || client.detached?
         pc.send_message("#{receiver.name} is in offline mode.")
         return
       end
@@ -42,7 +44,7 @@ module ChatHandler::ChatTell
         end
 
         receiver.send_packet(cs)
-        msg = "->#{receiver.name}"
+        msg = "->" + receiver.name
         cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, msg, text)
         pc.send_packet(cs)
       end

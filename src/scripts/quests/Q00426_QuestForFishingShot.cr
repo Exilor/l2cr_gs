@@ -321,7 +321,7 @@ class Scripts::Q00426_QuestForFishingShot < Quest
   def on_kill(npc, killer, is_summon)
     if qs = get_random_party_member_state(killer, -1, 2, npc)
       if tmp = MOBS_SPECIAL[npc.id]?
-        if rand(1000) <= tmp.chance
+        if Rnd.rand(1000) <= tmp.chance
           reward_items(qs.player, SWEET_FLUID, tmp.reward + 1)
         else
           reward_items(qs.player, SWEET_FLUID, tmp.reward)
@@ -329,7 +329,7 @@ class Scripts::Q00426_QuestForFishingShot < Quest
         play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
       else
         tmp = MOBS[npc.id]
-        if rand(1000) <= tmp.chance
+        if Rnd.rand(1000) <= tmp.chance
           reward_items(qs.player, SWEET_FLUID, tmp.reward)
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
         end

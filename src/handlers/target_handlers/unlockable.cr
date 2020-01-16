@@ -2,7 +2,7 @@ module TargetHandler::Unlockable
   extend self
   extend TargetHandler
 
-  TARGET_TYPE = L2TargetType::UNLOCKABLE
+  TARGET_TYPE = TargetType::UNLOCKABLE
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
     if target.is_a?(L2DoorInstance) || target.is_a?(L2ChestInstance)
@@ -13,6 +13,6 @@ module TargetHandler::Unlockable
   end
 
   def target_type
-    L2TargetType::UNLOCKABLE
+    TargetType::UNLOCKABLE
   end
 end

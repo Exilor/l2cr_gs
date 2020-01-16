@@ -76,7 +76,7 @@ struct L2ContactList
       return
     end
 
-    @contacts.delete(name)
+    @contacts.delete_first(name)
 
     begin
       GameDB.exec(QUERY_REMOVE, @pc.l2id, id)

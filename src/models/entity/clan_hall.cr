@@ -14,6 +14,7 @@ abstract class ClanHall
 
   @functions = Hash(Int32, ClanHallFunction).new
   @clan_hall_id = 0
+
   getter doors = [] of L2DoorInstance
   getter name = ""
   getter owner_id = 0
@@ -111,7 +112,7 @@ abstract class ClanHall
     if zone = @zone
       zone.banish_foreigners(owner_id)
     else
-      warn "Zone is nil for clan hall #{id} #{name}."
+      warn { "Zone is nil for clan hall #{id} #{name}." }
     end
   end
 
@@ -208,7 +209,7 @@ abstract class ClanHall
       time = Time.ms
 
       # task = FunctionTask.new(self, cwh)
-      task = ->{ function_task(cwh) }
+      task = -> { function_task(cwh) }
       if @end_date > time
         ThreadPoolManager.schedule_general(task, @end_date - time)
       else
@@ -218,7 +219,7 @@ abstract class ClanHall
 
     private def function_task(cwh : Bool)
       return if @ch.@free
-      warehouse = ClanTable.get_clan!(@ch.owner_id).warehouse
+      warehouse = ClanTable.get_clan(@ch.owner_id).not_nil!.warehouse
       if warehouse.adena >= @fee || !@cwh
         fee = @fee
         if end_time == -1
@@ -229,7 +230,7 @@ abstract class ClanHall
         if @cwh
           warehouse.destroy_item_by_item_id("CH_function_fee", Inventory::ADENA_ID, fee.to_i64, nil, nil)
         end
-        task = ->{ function_task(true) }
+        task = -> { function_task(true) }
         ThreadPoolManager.schedule_general(task, rate)
       else
         @ch.remove_function(type)

@@ -67,7 +67,7 @@ class Scripts::Q00355_FamilyHonor < Quest
       qs.exit_quest(true, true)
       html = event
     when "30929-03.html"
-      random = rand(100)
+      random = Rnd.rand(100)
 
       if has_quest_items?(pc, SCULPTOR_BERONA)
         if random < 2
@@ -103,7 +103,7 @@ class Scripts::Q00355_FamilyHonor < Quest
     end
 
     info = MOBS[npc.id]
-    random = rand(1000)
+    random = Rnd.rand(1000)
 
     if random < info.first_chance
       qs.give_item_randomly(npc, GALFREDO_ROMERS_BUST, 1, 0, 1.0, true)

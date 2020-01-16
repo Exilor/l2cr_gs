@@ -4,7 +4,7 @@ class Condition
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       can = true
-      can = false unless pc = effector.acting_player?
+      can = false unless pc = effector.acting_player
 
       if pc
         if pc.looks_dead? || pc.cursed_weapon_equipped?

@@ -6,7 +6,7 @@ class Packets::Outgoing::PledgeShowMemberListAll < GameServerPacket
     @members = clan.members
   end
 
-  def write_impl
+  private def write_impl
     @pledge_type = 0
     write_pledge(0)
     @clan.all_subpledges.each do |subpledge|
@@ -55,7 +55,7 @@ class Packets::Outgoing::PledgeShowMemberListAll < GameServerPacket
       d m.class_id
 
       # this is useless, the clan window doesn't show this
-      if pc = m.player_instance?
+      if pc = m.player_instance
         d pc.appearance.sex ? 1 : 0
         d pc.race.to_i
       else

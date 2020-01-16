@@ -16,14 +16,7 @@ class Packets::Incoming::RequestPetitionFeedback < GameClientPacket
     return unless @rate.between?(0, 4)
 
     begin
-      GameDB.exec(
-        INSERT_FEEDBACK,
-        pc.name,
-        gm_name,
-        @rate,
-        @message,
-        Time.ms
-      )
+      GameDB.exec(INSERT_FEEDBACK, pc.name, gm_name, @rate, @message, Time.ms)
     rescue e
       error e
     end

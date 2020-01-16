@@ -12,29 +12,36 @@ class Scripts::GhostChamberlainOfElmoreden < AbstractNpcAI
   def initialize
     super(self.class.simple_name, "ai/npc/Teleports")
 
-    add_start_npc(GHOST_CHAMBERLAIN_OF_ELMOREDEN_1, GHOST_CHAMBERLAIN_OF_ELMOREDEN_2)
-    add_talk_id(GHOST_CHAMBERLAIN_OF_ELMOREDEN_1, GHOST_CHAMBERLAIN_OF_ELMOREDEN_2)
-    add_first_talk_id(GHOST_CHAMBERLAIN_OF_ELMOREDEN_1, GHOST_CHAMBERLAIN_OF_ELMOREDEN_2)
+    add_start_npc(
+      GHOST_CHAMBERLAIN_OF_ELMOREDEN_1, GHOST_CHAMBERLAIN_OF_ELMOREDEN_2
+    )
+    add_talk_id(
+      GHOST_CHAMBERLAIN_OF_ELMOREDEN_1, GHOST_CHAMBERLAIN_OF_ELMOREDEN_2
+    )
+    add_first_talk_id(
+      GHOST_CHAMBERLAIN_OF_ELMOREDEN_1, GHOST_CHAMBERLAIN_OF_ELMOREDEN_2
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player && npc
+  def on_adv_event(event, npc, pc)
+    return unless pc && npc
 
-    if event == "FOUR_SEPULCHERS"
-      if has_quest_items?(player, USED_GRAVE_PASS)
-        take_items(player, USED_GRAVE_PASS, 1)
-        player.tele_to_location(FOUR_SEPULCHERS_LOC)
-      elsif has_quest_items?(player, ANTIQUE_BROOCH)
-        player.tele_to_location(FOUR_SEPULCHERS_LOC)
+    case event
+    when "FOUR_SEPULCHERS"
+      if has_quest_items?(pc, USED_GRAVE_PASS)
+        take_items(pc, USED_GRAVE_PASS, 1)
+        pc.tele_to_location(FOUR_SEPULCHERS_LOC)
+      elsif has_quest_items?(pc, ANTIQUE_BROOCH)
+        pc.tele_to_location(FOUR_SEPULCHERS_LOC)
       else
         return "#{npc.id}-01.html"
       end
-    elsif event == "IMPERIAL_TOMB"
-      if has_quest_items?(player, USED_GRAVE_PASS)
-        take_items(player, USED_GRAVE_PASS, 1)
-        player.tele_to_location(IMPERIAL_TOMB_LOC)
-      elsif has_quest_items?(player, ANTIQUE_BROOCH)
-        player.tele_to_location(IMPERIAL_TOMB_LOC)
+    when "IMPERIAL_TOMB"
+      if has_quest_items?(pc, USED_GRAVE_PASS)
+        take_items(pc, USED_GRAVE_PASS, 1)
+        pc.tele_to_location(IMPERIAL_TOMB_LOC)
+      elsif has_quest_items?(pc, ANTIQUE_BROOCH)
+        pc.tele_to_location(IMPERIAL_TOMB_LOC)
       else
         return "#{npc.id}-01.html"
       end

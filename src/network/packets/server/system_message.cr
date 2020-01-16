@@ -10,7 +10,7 @@ class Packets::Outgoing::SystemMessage < Packets::Outgoing::AbstractMessagePacke
 
   # getSystemMessage(int id)
   def self.[](id : Int32) : self
-    sm_id = SystemMessageId.get_system_message_id(id)
+    sm_id = SystemMessageId.get(id)
     self[sm_id]
   end
 
@@ -33,7 +33,7 @@ class Packets::Outgoing::SystemMessage < Packets::Outgoing::AbstractMessagePacke
     s1.add_string(text)
   end
 
-  def write_impl
+  private def write_impl
     c 0x62
     super
   end

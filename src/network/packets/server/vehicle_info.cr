@@ -11,7 +11,7 @@ class Packets::Outgoing::VehicleInfo < GameServerPacket
     @heading = boat.heading
   end
 
-  def write_impl
+  private def write_impl
     c 0x60
 
     d @l2id

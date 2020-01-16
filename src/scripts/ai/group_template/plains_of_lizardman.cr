@@ -16,7 +16,7 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
     22771, # Tanta Lizardman Berserker
     22772, # Tanta Lizardman Archer
     22773, # Tanta Lizardman Magician
-    22774, # Tanta Lizardman Summoner
+    22774  # Tanta Lizardman Summoner
   }
   # Skills
   private STUN_EFFECT = SkillHolder.new(6622)
@@ -42,7 +42,7 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
     SkillHolder.new(6638, 1), # Aura of Mystery
     SkillHolder.new(6639, 1), # Bane of Auras - Damage
     SkillHolder.new(6640, 1), # Energizing Aura
-    SkillHolder.new(6674, 1), # Energy of Range Increment
+    SkillHolder.new(6674, 1)  # Energy of Range Increment
   }
   # Misc
   private BUFF_LIST = {6, 7, 8, 11, 13}
@@ -128,7 +128,7 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
     end
 
     if random <= 25
-      buffer.do_cast(BUFFS[BUFF_LIST.sample])
+      buffer.do_cast(BUFFS[BUFF_LIST.sample(random: Rnd)])
     end
 
     if random <= 10

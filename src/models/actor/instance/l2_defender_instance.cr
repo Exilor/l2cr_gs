@@ -21,7 +21,7 @@ class L2DefenderInstance < L2Attackable
   end
 
   private def init_ai
-    if conquerable_hall?.nil? && get_castle(10000).nil?
+    if conquerable_hall.nil? && get_castle(10000).nil?
       L2FortSiegeGuardAI.new(self)
     elsif get_castle(10000)
       L2SiegeGuardAI.new(self)
@@ -64,9 +64,7 @@ class L2DefenderInstance < L2Attackable
     end
 
     unless inside_radius?(sp, 40, false, false)
-      if Config.debug
-        debug "Moving home."
-      end
+      debug "Moving home."
 
       self.returning_to_spawn_point = true
       clear_aggro_list
@@ -82,7 +80,7 @@ class L2DefenderInstance < L2Attackable
 
     @fort = FortManager.get_fort(*xyz)
     @castle = CastleManager.get_castle(*xyz)
-    @hall = conquerable_hall?
+    @hall = conquerable_hall
     unless @fort || @castle || @hall
       warn { "Spawned outside of fortress, castle or siegable hall (at #{x} #{y} #{z})." }
     end
@@ -95,10 +93,7 @@ class L2DefenderInstance < L2Attackable
     end
 
     if self != pc.target
-      if Config.debug
-        debug "New target selected: #{l2id}."
-      end
-
+      debug { "New target selected: #{l2id}." }
       pc.target = self
     elsif interact
       if auto_attackable?(pc) && !looks_dead?
@@ -107,10 +102,8 @@ class L2DefenderInstance < L2Attackable
         end
       end
 
-      unless auto_attackable?(pc)
-        unless can_interact?(pc)
-          pc.set_intention(AI::INTERACT, self)
-        end
+      if !auto_attackable?(pc) && !can_interact?(pc)
+        pc.set_intention(AI::INTERACT, self)
       end
     end
 
@@ -124,14 +117,14 @@ class L2DefenderInstance < L2Attackable
       if damage == 0 && aggro <= 1 && attacker.is_a?(L2Playable)
         fort, castle, hall = @fort, @castle, @hall
 
-        pc = attacker.acting_player?
+        pc = attacker.acting_player
 
         siege_id = fort.try &.residence_id
         siege_id ||= castle.try &.residence_id
         siege_id ||= hall.try &.id || 0
 
         if pc && ((pc.siege_state == 2 && !pc.registered_on_this_siege_field?(siege_id)) || (pc.siege_state == 1 && !TerritoryWarManager.ally_field?(pc, siege_id)) || pc.siege_state == 0)
-          return true
+          return
         end
       end
 

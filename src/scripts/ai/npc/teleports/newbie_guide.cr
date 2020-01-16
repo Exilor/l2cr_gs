@@ -125,8 +125,7 @@ class Scripts::NewbieGuide < AbstractNpcAI
   end
 
   def on_first_talk(npc, player)
-    qs = player.get_quest_state(Scripts::Q00255_Tutorial.simple_name)
-    if qs
+    if qs = player.get_quest_state(Scripts::Q00255_Tutorial.simple_name)
       if npc.id == ADVENTURERS_GUIDE
         return "32327.htm"
       end
@@ -143,7 +142,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
     end
 
     if event.starts_with?("teleport")
-
       talker = talker.not_nil!
       npc = npc.not_nil!
 
@@ -230,13 +228,13 @@ class Scripts::NewbieGuide < AbstractNpcAI
             npc.do_cast(BLESS_THE_BODY_FOR_BEGINNERS)
             npc.do_cast(VAMPIRIC_RAGE_FOR_BEGINNERS)
             npc.do_cast(REGENERATION_FOR_BEGINNERS)
-            if 6 <= talker.level <= 39
+            if talker.level.between?(6, 39)
               npc.do_cast(HASTE_FOR_BEGINNERS)
             end
-            if 40 <= talker.level <= 75
+            if talker.level.between?(40, 75)
               npc.do_cast(ADVENTURERS_HASTE)
             end
-            if 16 <= talker.level <= 34
+            if talker.level.between?(16, 34)
               npc.do_cast(LIFE_CUBIC_FOR_BEGINNERS)
             end
           elsif talker.mage_class? && talker.class_id.level < 3
@@ -248,7 +246,7 @@ class Scripts::NewbieGuide < AbstractNpcAI
             npc.do_cast(ACUMEN_FOR_BEGINNERS)
             npc.do_cast(CONCENTRATION_FOR_BEGINNERS)
             npc.do_cast(EMPOWER_FOR_BEGINNERS)
-            if 16 <= talker.level <= 34
+            if talker.level.between?(16, 34)
               npc.do_cast(LIFE_CUBIC_FOR_BEGINNERS)
             end
           end
@@ -265,7 +263,7 @@ class Scripts::NewbieGuide < AbstractNpcAI
       when 4
         summon = talker.summon
         if summon && !summon.pet?
-          if talker.level < 6 || talker.level > 75
+          if !talker.level.between?(6, 75)
             show_page(talker, "buffs-big-level.htm")
           else
             npc.target = talker
@@ -279,10 +277,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
             npc.do_cast(ACUMEN_FOR_BEGINNERS)
             npc.do_cast(CONCENTRATION_FOR_BEGINNERS)
             npc.do_cast(EMPOWER_FOR_BEGINNERS)
-            if 6 <= talker.level <= 39
+            if talker.level.between?(6, 39)
               npc.do_cast(HASTE_FOR_BEGINNERS)
             end
-            if 40 <= talker.level <= 75
+            if talker.level.between?(40, 75)
               npc.do_cast(ADVENTURERS_HASTE)
             end
           end

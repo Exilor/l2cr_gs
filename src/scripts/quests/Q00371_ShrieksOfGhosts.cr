@@ -63,7 +63,7 @@ class Scripts::Q00371_ShrieksOfGhosts < Quest
       if !has_quest_items?(pc, ANCIENT_PORCELAIN)
         html = event
       else
-        random = rand(100)
+        random = Rnd.rand(100)
 
         if random < 2
           give_items(pc, ANCIENT_PORCELAIN_EXCELLENT, 1)
@@ -97,7 +97,7 @@ class Scripts::Q00371_ShrieksOfGhosts < Quest
     end
 
     info = MOBS[npc.id]
-    random = rand(1000)
+    random = Rnd.rand(1000)
 
     if random < info.first_chance
       qs.give_item_randomly(npc, ANCIENT_ASH_URN, 1, 0, 1.0, true)

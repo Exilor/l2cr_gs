@@ -1,11 +1,10 @@
 require "./l2_char_template"
 
 class L2DoorTemplate < L2CharTemplate
-  # include Identifiable
-
   @pos_x : Int32
   @pos_y : Int32
   @pos_z : Int32
+
   getter id : Int32
   getter node_x : Slice(Int32)
   getter node_y : Slice(Int32)

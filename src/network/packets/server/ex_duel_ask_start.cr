@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExDuelAskStart < GameServerPacket
   initializer requestor_name : String, party_duel : Bool
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x4c
 

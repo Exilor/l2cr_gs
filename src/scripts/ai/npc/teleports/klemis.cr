@@ -14,10 +14,10 @@ class Scripts::Klemis < AbstractNpcAI
     add_first_talk_id(KLEMIS)
   end
 
-  def on_adv_event(event, npc, player)
-    if player && event == "portInside"
-      if player.level >= MIN_LVL
-        player.tele_to_location(LOCATION)
+  def on_adv_event(event, npc, pc)
+    if pc && event == "portInside"
+      if pc.level >= MIN_LVL
+        pc.tele_to_location(LOCATION)
       else
         return "32734-01.html"
       end

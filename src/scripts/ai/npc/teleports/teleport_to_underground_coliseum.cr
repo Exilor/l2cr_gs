@@ -59,32 +59,32 @@ class Scripts::TeleportToUndergroundColiseum < AbstractNpcAI
     add_talk_id(COLISEUM_HELPER, PADDIES)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
 
     if event.ends_with?(".htm")
       return event
     elsif event == "return"
-      player.tele_to_location(RETURN_LOCS.sample(random: Rnd), false)
+      pc.tele_to_location(RETURN_LOCS.sample(random: Rnd), false)
     elsif event.num?
       val = event.to_i - 1
-      player.tele_to_location(MANAGERS_LOCS[val].sample(random: Rnd), false)
+      pc.tele_to_location(MANAGERS_LOCS[val].sample(random: Rnd), false)
     end
 
     nil
   end
 
-  def on_talk(npc, player)
+  def on_talk(npc, pc)
     if MANAGERS.includes?(npc.id)
-      player.tele_to_location(RETURN_LOCS.sample(random: Rnd), false)
+      pc.tele_to_location(RETURN_LOCS.sample(random: Rnd), false)
     else
-      player.tele_to_location(COLISEUM_LOCS.sample(random: Rnd), false)
+      pc.tele_to_location(COLISEUM_LOCS.sample(random: Rnd), false)
     end
 
     nil
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     "32491.htm"
   end
 end

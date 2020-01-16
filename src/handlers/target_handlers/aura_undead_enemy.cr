@@ -25,6 +25,6 @@ module TargetHandler::AuraUndeadEnemy
   end
 
   def target_type
-    L2TargetType::AURA_UNDEAD_ENEMY
+    TargetType::AURA_UNDEAD_ENEMY
   end
 end

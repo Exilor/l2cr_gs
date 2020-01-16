@@ -4,7 +4,7 @@ module TargetHandler::Clan
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
     if char.playable?
-      unless pc = char.acting_player?
+      unless pc = char.acting_player
         return EMPTY_TARGET_LIST
       end
 
@@ -19,15 +19,15 @@ module TargetHandler::Clan
       target_list = [pc] of L2Object
 
       radius = skill.affect_range
-      clan = pc.clan?
+      clan = pc.clan
 
-      if Skill.add_summon(char, pc, radius, false)
-        target_list << pc.summon!
+      if smn = add_summon(char, pc, radius, false)
+        target_list << smn
       end
 
       if clan
         clan.members.each do |m|
-          obj = m.player_instance?
+          obj = m.player_instance
 
           next if obj.nil? || obj == pc
 
@@ -36,10 +36,8 @@ module TargetHandler::Clan
               next
             end
 
-            if pc.in_party? && obj.in_party?
-              if pc.party.leader_l2id != obj.party.leader_l2id
-                next
-              end
+            if pc.party && obj.party && pc.party != obj.party
+              next
             end
           end
 
@@ -51,11 +49,11 @@ module TargetHandler::Clan
           #   next
           # end
 
-          if !only_first && Skill.add_summon(char, obj, radius, false)
-            target_list << obj.summon!
+          if !only_first && (smn = add_summon(char, obj, radius, false))
+            target_list << smn
           end
 
-          unless Skill.add_character(char, obj, radius, false)
+          unless add_character(char, obj, radius, false)
             next
           end
 
@@ -95,6 +93,6 @@ module TargetHandler::Clan
   end
 
   def target_type
-    L2TargetType::CLAN
+    TargetType::CLAN
   end
 end

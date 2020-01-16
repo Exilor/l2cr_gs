@@ -13,8 +13,7 @@ abstract class AbstractDocument
 
   @tables = {} of String => Array(String)
 
-  def initialize(@file : File)
-  end
+  initializer file : File
 
   abstract def parse_document(doc, file)
 
@@ -545,7 +544,7 @@ abstract class AbstractDocument
       raise "Missing 'val' on item func"
     end
 
-    if value_string.starts_with?("#")
+    if value_string.starts_with?('#')
       value = get_table_value(value_string).to_f
     else
       value = value_string.to_f

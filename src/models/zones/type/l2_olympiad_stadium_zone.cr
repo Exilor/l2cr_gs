@@ -11,7 +11,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   def open_doors
-    InstanceManager.get_instance!(instance_id).doors.each do |door|
+    InstanceManager.get_instance(instance_id).not_nil!.doors.each do |door|
       if door.closed?
         door.open_me
       end
@@ -19,7 +19,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   def close_doors
-    InstanceManager.get_instance!(instance_id).doors.each do |door|
+    InstanceManager.get_instance(instance_id).not_nil!.doors.each do |door|
       if door.open?
         door.close_me
       end
@@ -27,7 +27,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   def spawn_buffers
-    InstanceManager.get_instance!(instance_id).npcs.each do |buffer|
+    InstanceManager.get_instance(instance_id).not_nil!.npcs.each do |buffer|
       if buffer.is_a?(L2OlympiadManagerInstance) && !buffer.visible?
         buffer.spawn_me
       end
@@ -35,7 +35,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   def delete_buffers
-    InstanceManager.get_instance!(instance_id).npcs.each do |buffer|
+    InstanceManager.get_instance(instance_id).not_nil!.npcs.each do |buffer|
       if buffer.is_a?(L2OlympiadManagerInstance) && buffer.visible?
         buffer.decay_me
       end
@@ -44,7 +44,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
 
   def broadcast_status_update(pc)
     packet = ExOlympiadUserInfo.new(pc)
-    players_inside do |target|
+    players_inside.each do |target|
       if target.in_observer_mode? || target.olympiad_side != pc.olympiad_side
         target.send_packet(packet)
       end
@@ -52,7 +52,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   def broadcast_packet_to_observers(gsp)
-    players_inside do |pc|
+    players_inside.each do |pc|
       if pc.in_observer_mode?
         pc.send_packet(gsp)
       end
@@ -73,8 +73,8 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
         if !pc.override_zone_conditions? && !pc.in_olympiad_mode? && !pc.in_observer_mode?
           ThreadPoolManager.execute_general(KickPlayer.new(pc))
         else
-          if pc.has_pet?
-            pc.summon!.unsummon(pc)
+          if pet = pc.summon.as?(L2PetInstance)
+            pet.unsummon(pc)
           end
         end
       end
@@ -102,7 +102,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
       sm = SystemMessageId::LEFT_COMBAT_ZONE
     end
 
-    characters_inside do |char|
+    characters_inside.each do |char|
       if battle_started
         char.inside_pvp_zone = true
         if char.player?

@@ -5,6 +5,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
   @victim_shout : Scheduler::DelayedTask?
   @change_immortal_task : Scheduler::DelayedTask?
   @on_dead_event_task : Scheduler::DelayedTask?
+
   property mysterious_box_id : Int32 = 0
 
   def initialize(template : L2NpcTemplate)

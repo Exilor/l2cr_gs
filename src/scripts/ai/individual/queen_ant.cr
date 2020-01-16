@@ -42,7 +42,7 @@ class Scripts::QueenAnt < AbstractNpcAI
     add_aggro_range_enter_id(MOBS)
     add_faction_call_id(NURSE)
 
-    @zone = GrandBossManager.get_zone!(QUEEN_X, QUEEN_Y, QUEEN_Z)
+    @zone = GrandBossManager.get_zone(QUEEN_X, QUEEN_Y, QUEEN_Z).not_nil!
     info = GrandBossManager.get_stats_set(QUEEN).not_nil!
     status = GrandBossManager.get_boss_status(QUEEN)
     if status == DEAD
@@ -74,9 +74,9 @@ class Scripts::QueenAnt < AbstractNpcAI
 
   private def spawn_boss(npc : L2GrandBossInstance)
     GrandBossManager.add_boss(npc)
-    if rand(100) < 33
+    if Rnd.rand(100) < 33
       @zone.not_nil!.move_players_to(OUST_LOC_1)
-    elsif rand(100) < 50
+    elsif Rnd.rand(100) < 50
       @zone.not_nil!.move_players_to(OUST_LOC_2)
     else
       @zone.not_nil!.move_players_to(OUST_LOC_3)
@@ -86,7 +86,7 @@ class Scripts::QueenAnt < AbstractNpcAI
     start_quest_timer("heal", 1000, nil, nil, true)
     npc.broadcast_packet(Music::BS01_A_10000.packet)
     @queen = npc
-    @larva = add_spawn(LARVA, -21600, 179482, -5846, rand(360), false, 0).as(L2MonsterInstance)
+    @larva = add_spawn(LARVA, -21600, 179482, -5846, Rnd.rand(360), false, 0).as(L2MonsterInstance)
   end
 
   def on_adv_event(event, npc, pc)
@@ -126,8 +126,8 @@ class Scripts::QueenAnt < AbstractNpcAI
         end
       end
     elsif event.casecmp?("action") && npc
-      if rand(3) == 0
-        if rand(2) == 0
+      if Rnd.rand(3) == 0
+        if Rnd.rand(2) == 0
           npc.broadcast_social_action(3)
         else
           npc.broadcast_social_action(4)
@@ -195,11 +195,11 @@ class Scripts::QueenAnt < AbstractNpcAI
     if !Config.raid_disable_curse && character.level - npc.level > 8
       curse = nil
       if is_mage
-        if !character.muted? && rand(4) == 0
+        if !character.muted? && Rnd.rand(4) == 0
           curse = CommonSkill::RAID_CURSE.skill
         end
       else
-        if !character.paralyzed? && rand(4) == 0
+        if !character.paralyzed? && Rnd.rand(4) == 0
           curse = CommonSkill::RAID_CURSE2.skill
         end
       end
@@ -223,7 +223,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       GrandBossManager.set_boss_status(QUEEN, DEAD)
       min = -Config.queen_ant_spawn_random
       max = Config.queen_ant_spawn_random
-      respawn_time = Config.queen_ant_spawn_interval + rand(min..max)
+      respawn_time = Config.queen_ant_spawn_interval + Rnd.rand(min..max)
       respawn_time *= 3600000
       start_quest_timer("queen_unlock", respawn_time, nil, nil)
       cancel_quest_timer("action", npc, nil)
@@ -240,7 +240,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       if npc_id == ROYAL
         mob = npc.as(L2MonsterInstance)
         if leader = mob.leader?
-          leader.minion_list.on_minion_die(mob, (280 + rand(40)) * 1000)
+          leader.minion_list.on_minion_die(mob, (280 + Rnd.rand(40)) * 1000)
         end
       elsif npc_id == NURSE
         mob = npc.as(L2MonsterInstance)

@@ -18,10 +18,6 @@ class Packets::Incoming::RequestTargetCancel < GameClientPacket
         pc.abort_cast
       elsif pc.target
         pc.target = nil
-      # elsif pc.moving? # custom
-      #   pc.stop_move # custom
-      #   pc.abort_cast # custom
-      #   pc.abort_attack # custom
       end
     elsif pc.target
       pc.target = nil

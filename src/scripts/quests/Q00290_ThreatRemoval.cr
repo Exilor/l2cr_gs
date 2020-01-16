@@ -44,7 +44,7 @@ class Scripts::Q00290_ThreatRemoval < Quest
     when "30201-06.html"
       if st.cond?(1)
         st.take_items(SEL_MAHUM_ID_TAG, 400)
-        case rand(10)
+        case Rnd.rand(10)
         when 0
           st.reward_items(ENCHANT_WEAPON_S, 1)
         when 1..3
@@ -92,7 +92,7 @@ class Scripts::Q00290_ThreatRemoval < Quest
     st = get_quest_state!(m, false)
     npc_id = npc.id
     chance = MOBS_TAG[npc_id] * Config.rate_quest_drop
-    if rand(1000) < chance
+    if Rnd.rand(1000) < chance
       st.reward_items(SEL_MAHUM_ID_TAG, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end

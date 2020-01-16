@@ -1,5 +1,6 @@
 class StatFunction < EnumClass
   getter name, order
+
   protected initializer name : String, order : Int32
 
   add(ADD, "Add", 30)

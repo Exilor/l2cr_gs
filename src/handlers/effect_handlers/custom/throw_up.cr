@@ -10,7 +10,7 @@ class EffectHandler::ThrowUp < AbstractEffect
     EffectFlag::STUNNED.mask
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

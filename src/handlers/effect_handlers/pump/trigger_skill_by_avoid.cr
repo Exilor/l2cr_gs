@@ -1,6 +1,6 @@
 class EffectHandler::TriggerSkillByAvoid < AbstractEffect
   @chance : Int32
-  @target_type : L2TargetType
+  @target_type : TargetType
 
   def initialize(attach_cond, apply_cond, set, params)
     super
@@ -8,11 +8,10 @@ class EffectHandler::TriggerSkillByAvoid < AbstractEffect
     @chance = params.get_i32("chance", 100)
     id, level = params.get_i32("skillId", 0), params.get_i32("skillLevel", 0)
     @skill = SkillHolder.new(id, level)
-    @target_type = params.get_enum("targetType", L2TargetType, L2TargetType::ONE)
+    @target_type = params.get_enum("targetType", TargetType, TargetType::ONE)
   end
 
   def on_avoid_event(evt)
-    evt = evt.as(OnCreatureAttackAvoid)
     return if evt.damage_over_time? || @chance == 0
     return if @skill.skill_id == 0 || @skill.skill_lvl == 0
     return if Rnd.rand(100) > @chance
@@ -41,7 +40,7 @@ class EffectHandler::TriggerSkillByAvoid < AbstractEffect
     char = info.effected
     type = EventType::ON_CREATURE_ATTACK_AVOID
     listener = ConsumerEventListener.new(char, type, self) do |event|
-      on_avoid_event(event)
+      on_avoid_event(event.as(OnCreatureAttackAvoid))
     end
     char.add_listener(listener)
   end

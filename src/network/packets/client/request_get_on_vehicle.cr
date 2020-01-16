@@ -18,7 +18,7 @@ class Packets::Incoming::RequestGetOnVehicle < GameClientPacket
         return
       end
     else
-      boat = BoatManager[@boat_id]?
+      boat = BoatManager.get_boat(@boat_id)
       unless boat
         action_failed
         return

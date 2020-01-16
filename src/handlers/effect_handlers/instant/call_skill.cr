@@ -7,7 +7,7 @@ class EffectHandler::CallSkill < AbstractEffect
     @skill = SkillHolder.new(id, level)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

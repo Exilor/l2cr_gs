@@ -95,7 +95,7 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
     unless qs = get_quest_state(pc, false)
       return super
     end
-    chance = rand(100)
+    chance = Rnd.rand(100)
 
     case event
     when "30844-04.htm"
@@ -290,7 +290,7 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
   def on_kill(npc, killer, is_summon)
     item = MONSTER_REWARDS[npc.id]
     if npc.id == HALLATES_INSPECTOR
-      if rand(1000) < item.chance
+      if Rnd.rand(1000) < item.chance
         if qs = get_random_party_member_state(killer, -1, 3, npc)
           give_items(qs.player, item.id, item.count)
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -300,19 +300,20 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
       return super
     end
 
-    if Util.in_range?(1500, npc, killer, true) && rand(1000) < item.chance
+    if Util.in_range?(1500, npc, killer, true) && Rnd.rand(1000) < item.chance
       winner = nil
-      if !killer.in_party?
+      party = killer.party
+      if party.nil?
         qs = get_quest_state(killer, false)
         if qs && qs.started?
           winner = killer
         end
       else
         chance = 0
-        killer.party.members.each do |m|
+        party.members.each do |m|
           m_qs = get_quest_state(m, false)
           if m_qs && m_qs.started?
-            chance2 = rand(1000)
+            chance2 = Rnd.rand(1000)
             if chance < chance2
               chance = chance2
               winner = m
@@ -332,7 +333,7 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    chance = rand(100)
+    chance = Rnd.rand(100)
 
     if qs.created?
       if npc.id == WAREHOUSE_KEEPER_WALDERAL

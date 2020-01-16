@@ -9,7 +9,7 @@ class Packets::Incoming::RequestJoinPledge < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    return unless clan = pc.clan?
+    return unless clan = pc.clan
 
     unless target = L2World.get_player(@target)
       send_packet(SystemMessageId::YOU_HAVE_INVITED_THE_WRONG_TARGET)

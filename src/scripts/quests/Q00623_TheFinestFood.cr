@@ -46,7 +46,7 @@ class Scripts::Q00623_TheFinestFood < Quest
     when "31521-06.html"
       if qs.cond?(2)
         if has_all_items?(pc, true, LEAF_OF_FLAVA, BUFFALO_MEAT, HORN_OF_ANTELOPE)
-          random = rand(1000)
+          random = Rnd.rand(1000)
           if random < 120
             give_adena(pc, 25000, true)
             reward_items(pc, RING_OF_AURAKYRA)

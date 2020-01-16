@@ -13,15 +13,11 @@ module RecoBonus
     {5,  10, 15, 20, 25, 30, 35, 40, 45, 50}
   }
 
-  def get_reco_bonus(pc : L2PcInstance?) : Int32
-    if pc && pc.online?
-      if pc.recom_have != 0
-        if pc.recom_bonus_time > 0
-          lvl = pc.level // 10
-          exp = (Math.min(pc.recom_have, 100) - 1) // 10
-          return RECO_BONUS[lvl][exp]
-        end
-      end
+  def get_reco_bonus(pc : L2PcInstance) : Int32
+    if pc.online? && pc.recom_have != 0 && pc.recom_bonus_time > 0
+      lvl = pc.level // 10
+      exp = (Math.min(pc.recom_have, 100) - 1) // 10
+      return RECO_BONUS.dig(lvl, exp)
     end
 
     0

@@ -7,6 +7,7 @@ class CharStatus
 
   @flags_regen_active = 0i8
   @reg_task : Scheduler::PeriodicTask?
+
   getter current_hp = 0f64
   getter current_mp = 0f64
   getter(status_listener) { Concurrent::Set(L2Character).new }
@@ -44,7 +45,7 @@ class CharStatus
       return
     end
 
-    pc_attacker = attacker.try &.acting_player?
+    pc_attacker = attacker.try &.acting_player
     if pc_attacker && pc_attacker.gm?
       unless pc_attacker.access_level.can_give_damage?
         return
@@ -207,7 +208,7 @@ class CharStatus
     end
   end
 
-  struct RegenTask
+  private struct RegenTask
     initializer status : CharStatus
 
     def call

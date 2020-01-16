@@ -170,7 +170,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    if party = pc.party?
+    if party = pc.party
       party.members.each do |m|
         increase_kill(m, npc)
       end
@@ -202,7 +202,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
       when 4
         html = "32734-13.html"
       when 5
-        st.give_items(REWARD.sample.sample, 1)
+        st.give_items(REWARD.sample(random: Rnd).sample(random: Rnd), 1)
         st.exit_quest(QuestType::DAILY, true)
         html = "32734-14.html"
       end

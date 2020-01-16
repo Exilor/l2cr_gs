@@ -34,8 +34,8 @@ class Scripts::OrcChange2 < AbstractNpcAI
     add_talk_id(NPCS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless npc && player
+  def on_adv_event(event, npc, pc)
+    return unless npc && pc
 
     case event
     when "30513-03.htm", # master_lv3_orc006r
@@ -51,108 +51,102 @@ class Scripts::OrcChange2 < AbstractNpcAI
          "30513-14.htm", # master_lv3_orc006s
          "30513-15.htm", # master_lv3_orc007s
          "30513-16.htm" # master_lv3_orc007sb
-      htmltext = event
+      event
     when "46", "48", "51", "52"
-      htmltext = class_change_requested(player, event.to_i)
+      class_change_requested(pc, event.to_i)
     end
-
-    return htmltext
   end
 
-  private def class_change_requested(player, class_id)
-    if player.in_category?(CategoryType::THIRD_CLASS_GROUP)
-      htmltext = "30513-19.htm" # fnYouAreThirdClass
-    elsif class_id == DESTROYER && player.class_id.orc_raider?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_CHAMPION)
-          htmltext = "30513-20.htm" # fnLowLevel11
+  private def class_change_requested(pc, class_id)
+    if pc.in_category?(CategoryType::THIRD_CLASS_GROUP)
+      "30513-19.htm" # fnYouAreThirdClass
+    elsif class_id == DESTROYER && pc.class_id.orc_raider?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_CHAMPION)
+          "30513-20.htm" # fnLowLevel11
         else
-          htmltext = "30513-21.htm" # fnLowLevelNoProof11
+          "30513-21.htm" # fnLowLevelNoProof11
         end
-      elsif has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_CHAMPION)
-        take_items(player, -1, {MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_CHAMPION})
-        player.class_id = DESTROYER
-        player.base_class = DESTROYER
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30513-22.htm" # fnAfterClassChange11
+      elsif has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_CHAMPION)
+        take_items(pc, -1, {MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_CHAMPION})
+        pc.class_id = DESTROYER
+        pc.base_class = DESTROYER
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30513-22.htm" # fnAfterClassChange11
       else
-        htmltext = "30513-23.htm" # fnNoProof11
+        "30513-23.htm" # fnNoProof11
       end
-    elsif class_id == TYRANT && player.class_id.orc_monk?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_DUELIST)
-          htmltext = "30513-24.htm" # fnLowLevel21
+    elsif class_id == TYRANT && pc.class_id.orc_monk?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_DUELIST)
+          "30513-24.htm" # fnLowLevel21
         else
-          htmltext = "30513-25.htm" # fnLowLevelNoProof21
+          "30513-25.htm" # fnLowLevelNoProof21
         end
-      elsif has_quest_items?(player, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_DUELIST)
-        take_items(player, -1, {MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_DUELIST})
-        player.class_id = TYRANT
-        player.base_class = TYRANT
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30513-26.htm" # fnAfterClassChange21
+      elsif has_quest_items?(pc, MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_DUELIST)
+        take_items(pc, -1, {MARK_OF_CHALLENGER, MARK_OF_GLORY, MARK_OF_DUELIST})
+        pc.class_id = TYRANT
+        pc.base_class = TYRANT
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30513-26.htm" # fnAfterClassChange21
       else
-        htmltext = "30513-27.htm" # fnNoProof21
+        "30513-27.htm" # fnNoProof21
       end
-    elsif class_id == OVERLORD && player.class_id.orc_shaman?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_LORD)
-          htmltext = "30513-28.htm" # fnLowLevel31
+    elsif class_id == OVERLORD && pc.class_id.orc_shaman?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_LORD)
+          "30513-28.htm" # fnLowLevel31
         else
-          htmltext = "30513-29.htm" # fnLowLevelNoProof31
+          "30513-29.htm" # fnLowLevelNoProof31
         end
-      elsif has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_LORD)
-        take_items(player, -1, {MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_LORD})
-        player.class_id = OVERLORD
-        player.base_class = OVERLORD
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30513-30.htm" # fnAfterClassChange31
+      elsif has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_LORD)
+        take_items(pc, -1, {MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_LORD})
+        pc.class_id = OVERLORD
+        pc.base_class = OVERLORD
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30513-30.htm" # fnAfterClassChange31
       else
-        htmltext = "30513-31.htm" # fnNoProof31
+        "30513-31.htm" # fnNoProof31
       end
-    elsif class_id == WARCRYER && player.class_id.orc_shaman?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_WARSPIRIT)
-          htmltext = "30513-32.htm" # fnLowLevel32
+    elsif class_id == WARCRYER && pc.class_id.orc_shaman?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_WARSPIRIT)
+          "30513-32.htm" # fnLowLevel32
         else
-          htmltext = "30513-33.htm" # fnLowLevelNoProof32
+          "30513-33.htm" # fnLowLevelNoProof32
         end
-      elsif has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_WARSPIRIT)
-        take_items(player, -1, {MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_WARSPIRIT})
-        player.class_id = WARCRYER
-        player.base_class = WARCRYER
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30513-34.htm" # fnAfterClassChange32
+      elsif has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_WARSPIRIT)
+        take_items(pc, -1, {MARK_OF_PILGRIM, MARK_OF_GLORY, MARK_OF_WARSPIRIT})
+        pc.class_id = WARCRYER
+        pc.base_class = WARCRYER
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30513-34.htm" # fnAfterClassChange32
       else
-        htmltext = "30513-35.htm" # fnNoProof32
+        "30513-35.htm" # fnNoProof32
       end
     end
-
-    htmltext
   end
 
-  def on_talk(npc, player)
-    if player.in_category?(CategoryType::FOURTH_CLASS_GROUP) && (player.in_category?(CategoryType::ORC_MALL_CLASS) || player.in_category?(CategoryType::ORC_FALL_CLASS))
-      htmltext = "30513-01.htm" # fnYouAreFourthClass
-    elsif player.in_category?(CategoryType::ORC_MALL_CLASS) || player.in_category?(CategoryType::ORC_FALL_CLASS)
-      class_id = player.class_id
+  def on_talk(npc, pc)
+    if pc.in_category?(CategoryType::FOURTH_CLASS_GROUP) && (pc.in_category?(CategoryType::ORC_MALL_CLASS) || pc.in_category?(CategoryType::ORC_FALL_CLASS))
+      "30513-01.htm" # fnYouAreFourthClass
+    elsif pc.in_category?(CategoryType::ORC_MALL_CLASS) || pc.in_category?(CategoryType::ORC_FALL_CLASS)
+      class_id = pc.class_id
       if class_id.orc_raider? || class_id.destroyer?
-        htmltext = "30513-02.htm" # fnClassList1
+        "30513-02.htm" # fnClassList1
       elsif class_id.orc_monk? || class_id.tyrant?
-        htmltext = "30513-06.htm" # fnClassList2
+        "30513-06.htm" # fnClassList2
       elsif class_id.orc_shaman? || class_id.overlord? || class_id.warcryer?
-        htmltext = "30513-10.htm" # fnClassList3
+        "30513-10.htm" # fnClassList3
       else
-        htmltext = "30513-17.htm" # fnYouAreFirstClass
+        "30513-17.htm" # fnYouAreFirstClass
       end
     else
-      htmltext = "30513-18.htm" # fnClassMismatch
+      "30513-18.htm" # fnClassMismatch
     end
-
-    htmltext
   end
 end

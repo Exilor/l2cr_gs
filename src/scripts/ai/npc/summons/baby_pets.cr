@@ -3,7 +3,7 @@ class Scripts::BabyPets < AbstractNpcAI
   private BABY_PETS = {
     12780, # Baby Buffalo
     12781, # Baby Kookaburra
-    12782, # Baby Cougar
+    12782  # Baby Cougar
   }
 
   # Skills
@@ -55,7 +55,7 @@ class Scripts::BabyPets < AbstractNpcAI
         if summon.check_do_cast_conditions(skill.skill)
           prev_follow_status = summon.follow_status
 
-          if !prev_follow_status
+          unless prev_follow_status
             unless summon.inside_radius?(owner, skill.skill.cast_range, true, true)
               return
             end
@@ -77,7 +77,6 @@ class Scripts::BabyPets < AbstractNpcAI
 
   private def get_heal_level(summon)
     lvl = summon.level
-    ret = lvl < 70 ? (lvl // 10) : (7 + ((lvl - 70) // 5))
-    ret.clamp(1, 12)
+    (lvl < 70 ? (lvl // 10) : (7 + ((lvl - 70) // 5))).clamp(1, 12)
   end
 end

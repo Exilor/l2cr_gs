@@ -46,7 +46,7 @@ class Packets::Incoming::RequestPrivateStoreSell < GameClientPacket
     end
 
     unless store_player = L2World.get_player(@store_player_id)
-      warn "Player with ID #{@store_player_id} not found."
+      warn { "Player with ID #{@store_player_id} not found." }
       return
     end
 
@@ -76,7 +76,7 @@ class Packets::Incoming::RequestPrivateStoreSell < GameClientPacket
 
     unless store_list.private_store_sell(pc, _items)
       action_failed
-      warn "Private store sell has failed due to invalid list or request. Player: #{pc.name}, store owner: #{store_player.name}."
+      warn { "Private store sell has failed due to invalid list or request. Player: #{pc.name}, store owner: #{store_player.name}." }
       return
     end
 

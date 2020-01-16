@@ -70,9 +70,6 @@ class Packets::Incoming::RequestRefineCancel < Packets::Incoming::AbstractRefine
 
     pc.send_packet(ExVariationCancelResult::SUCCESS)
 
-    # iu = InventoryUpdate.new
-    # iu.add_modified_item item
-    # pc.send_packet(iu)
     pc.send_packet(InventoryUpdate.modified(item))
   end
 end

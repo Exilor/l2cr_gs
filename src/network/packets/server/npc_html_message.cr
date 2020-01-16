@@ -44,7 +44,7 @@ class Packets::Outgoing::NpcHtmlMessage < Packets::Outgoing::AbstractHtmlPacket
     @item_id == 0 ? HtmlActionScope::NPC_HTML : HtmlActionScope::NPC_ITEM_HTML
   end
 
-  def write_impl
+  private def write_impl
     c 0x19
 
     d @npc_l2id

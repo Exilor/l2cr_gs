@@ -10,7 +10,7 @@ class Packets::Outgoing::ExCaptureOrc < GameServerPacket
     0x00, 0x95, 0xB0, 0x1D, 0x87, 0xED, 0x9C, 0x8A
   ].map(&.to_u8).to_slice
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x45
 

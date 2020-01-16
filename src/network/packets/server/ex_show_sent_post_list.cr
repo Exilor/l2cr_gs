@@ -3,7 +3,7 @@ class Packets::Outgoing::ExShowSentPostList < GameServerPacket
     @outbox = MailManager.get_outbox(pc_id)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xac
 

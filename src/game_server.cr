@@ -114,21 +114,27 @@ module GameServer
   extend self
   extend Loggable
 
+  @@listener : MMO::PacketManager(GameClient)?
+
   class_getter start_time = Time.now
-  class_getter! listener : MMO::PacketManager(GameClient)
 
   def start
-    info "Starting..."
     timer = Timer.new
 
     Config.load
+
     if Config.debug
       Loggable.severity = :DEBUG
     end
     Dir.mkdir_p(Dir.current + "/log")
     time = start_time.to_s("%Y-%m-%d %H-%M-%S")
-    f = File.open(Dir.current + "/log/#{time}.txt", "w")
-    Loggable.ios << f
+    f = File.open("#{Dir.current}/log/#{time}.log", "w")
+    Loggable.add_io(STDOUT)
+    Loggable.add_io(f)
+
+
+    info "Starting..."
+
     L2World.load
     GameDB.load
     IdFactory.load
@@ -223,8 +229,7 @@ module GameServer
     end
     AirshipManager.load
     GraciaSeedsManager.load
-
-    SpawnTable.load unless ARGV.includes?("nospawns")
+    SpawnTable.load
     DayNightSpawnManager.trim
     DayNightSpawnManager.notify_change_mode
     FourSepulchersManager.init

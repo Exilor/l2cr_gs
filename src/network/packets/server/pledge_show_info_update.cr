@@ -1,7 +1,7 @@
 class Packets::Outgoing::PledgeShowInfoUpdate < GameServerPacket
   initializer clan : L2Clan
 
-  def write_impl
+  private def write_impl
     c 0x8e
 
     d @clan.id

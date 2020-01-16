@@ -11,6 +11,6 @@ module TargetHandler::Holy
   end
 
   def target_type
-    L2TargetType::HOLY
+    TargetType::HOLY
   end
 end

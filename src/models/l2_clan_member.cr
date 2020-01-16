@@ -10,8 +10,9 @@ class L2ClanMember
   @pledge_type : Int32
   @sex : Bool
   @race_ordinal : Int32
+
   getter clan
-  getter! player_instance : L2PcInstance?
+  getter player_instance : L2PcInstance?
 
   def initialize(@clan : L2Clan, pc : L2PcInstance)
     @clan = clan
@@ -183,7 +184,7 @@ class L2ClanMember
   def self.calculate_pledge_class(pc : L2PcInstance?) : Int32
     return 0 unless pc
     pledge_class = 0
-    if clan = pc.clan?
+    if clan = pc.clan
       case clan.level
       when 4
         pledge_class = 3 if pc.clan_leader?
@@ -340,12 +341,8 @@ class L2ClanMember
   end
 
   def save_apprentice_and_sponsor(apprentice : Int32, sponsor : Int32)
-    GameDB.exec(
-      "UPDATE characters SET apprentice=?,sponsor=? WHERE charId=?",
-      apprentice,
-      sponsor,
-      l2id
-    )
+    sql = "UPDATE characters SET apprentice=?,sponsor=? WHERE charId=?"
+    GameDB.exec(sql, apprentice, sponsor, l2id)
   rescue e
     error e
   end

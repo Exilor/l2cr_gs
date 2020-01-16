@@ -8,6 +8,7 @@ abstract class AbstractPlayerGroup
   abstract def level : Int32
 
   delegate each, to: members
+  def_equals leader_l2id
 
   def size : Int32
     members.size
@@ -57,5 +58,13 @@ abstract class AbstractPlayerGroup
         yield s
       end
     end
+  end
+
+  def to_s(io : IO)
+    io << self.class << "(leader: " << leader.name << ')'
+  end
+
+  def to_log(io : IO)
+    to_s(io)
   end
 end

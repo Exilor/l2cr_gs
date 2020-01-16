@@ -15,13 +15,11 @@ class Scripts::FirstClassTransferTalk < AbstractNpcAI
     32147 => Race::ELF,      # Rivian, Elf Guild Grand Master
     32150 => Race::ORC,      # Took, Orc Guild High Prefect
     32153 => Race::HUMAN,    # Prana, Human Guild High Priest
-    32154 => Race::HUMAN,    # Aldenia, Human Guild Grand Master
+    32154 => Race::HUMAN     # Aldenia, Human Guild Grand Master
   }
 
   def initialize
     super(self.class.simple_name, "ai/npc/VillageMasters")
-
-
 
     add_start_npc(MASTERS.keys)
     add_talk_id(MASTERS.keys)
@@ -33,7 +31,7 @@ class Scripts::FirstClassTransferTalk < AbstractNpcAI
 
   def on_talk(npc, pc)
     if MASTERS[npc.id] == pc.race
-      htmltext = "#{npc.id}_"
+      html = "#{npc.id}_"
     else
       return "#{npc.id}_no.html"
     end
@@ -44,44 +42,44 @@ class Scripts::FirstClassTransferTalk < AbstractNpcAI
       when 0
         if pc.mage_class?
           if npc.is_a?(L2VillageMasterPriestInstance)
-            htmltext += "mystic.html"
+            html += "mystic.html"
           else # custom: maybe it"s an error on L2J's part that this is missing
-            htmltext += "no.html"
+            html += "no.html"
           end
         else
           if npc.is_a?(L2VillageMasterFighterInstance)
-            htmltext += "fighter.html"
+            html += "fighter.html"
           else # custom: maybe it"s an error on L2J's part that this is missing
-            htmltext += "no.html"
+            html += "no.html"
           end
         end
       when 1
-        htmltext += "transfer_1.html"
+        html += "transfer_1.html"
       else
-        htmltext += "transfer_2.html"
+        html += "transfer_2.html"
       end
     when Race::ELF, Race::DARK_ELF, Race::ORC
       case pc.class_id.level
       when 0
-        htmltext += (pc.mage_class? ? "mystic.html" : "fighter.html")
+        html += (pc.mage_class? ? "mystic.html" : "fighter.html")
       when 1
-        htmltext += "transfer_1.html"
+        html += "transfer_1.html"
       else
-        htmltext += "transfer_2.html"
+        html += "transfer_2.html"
       end
     when Race::DWARF
       case pc.class_id.level
       when 0
-        htmltext += "fighter.html"
+        html += "fighter.html"
       when 1
-        htmltext += "transfer_1.html"
+        html += "transfer_1.html"
       else
-        htmltext += "transfer_2.html"
+        html += "transfer_2.html"
       end
     else
-      htmltext += "no.html"
+      html += "no.html"
     end
 
-    htmltext
+    html
   end
 end

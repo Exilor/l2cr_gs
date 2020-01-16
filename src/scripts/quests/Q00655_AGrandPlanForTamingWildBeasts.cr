@@ -25,7 +25,7 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
     end
 
     html = nil
-    clan = pc.clan?
+    clan = pc.clan
     minutes_to_siege = minutes_to_siege()
     case event
     when "35627-06.html"
@@ -59,7 +59,7 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
     minutes_to_siege = minutes_to_siege()
 
     if qs.created?
-      unless clan = pc.clan?
+      unless clan = pc.clan
         return html
       end
 
@@ -128,8 +128,8 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
   end
 
   def self.reward(pc, npc)
-    clan = pc.clan?
-    leader = clan ? clan.leader.player_instance? : nil
+    clan = pc.clan
+    leader = clan ? clan.leader.player_instance : nil
     if leader
       if qs655 = leader.get_quest_state(self.class.simple_name)
         if get_quest_items_count(leader, CRYSTAL_OF_PURITY) < REQUIRED_CRYSTAL_COUNT

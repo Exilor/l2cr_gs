@@ -12,11 +12,11 @@ module EffectHandler
       @mode = params.get_enum("mode", EffectCalculationType, EffectCalculationType::DIFF)
     end
 
-    def effect_type
-      L2EffectType::HP
+    def effect_type : EffectType
+      EffectType::HP
     end
 
-    def instant?
+    def instant? : Bool
       true
     end
 

@@ -8,7 +8,7 @@ class Packets::Outgoing::ShopPreviewList < GameServerPacket
     @list = lst.products
   end
 
-  def write_impl
+  private def write_impl
     c 0xf5
     c 0xc0
     c 0x13

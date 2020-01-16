@@ -1,5 +1,6 @@
 class StatsSet
-  private alias ValueType = Number::Primitive | String | Bool | Array(String) | Array(Bool) | SkillHolder | Array(MinionHolder) | L2Object
+  private alias ValueType = Number::Primitive | String | Bool | Array(String) |
+    Array(Bool) | SkillHolder | Array(MinionHolder) | L2Object
 
   def initialize
     @hash = {} of String => ValueType
@@ -73,20 +74,6 @@ class StatsSet
     @hash.each_key { |k| yield k }
   end
 
-  # def get_u8(key : String)
-  #   value = @hash[key]
-  #
-  #   if value.responds_to?(:to_u8)
-  #     value.to_u8
-  #   else
-  #     raise "Invalid value for get_u8: #{value}:#{value.class}"
-  #   end
-  # end
-  #
-  # def get_u8(key : String, default)
-  #   value = @hash.fetch(key) { return default.to_u8 }
-  # end
-
   def add(node, name, internal = name)
     if val = node[internal]?
       self[name] = val
@@ -98,10 +85,10 @@ class StatsSet
     {% type = "#{prefix}#{name[1..-1].id}".id %}
 
     def get_{{name.id}}(key : String) : {{type}}
-      value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key.inspect}") }
+      value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
 
       if value.nil?
-        raise KeyError.new("Nil value for key #{key.inspect}")
+        raise KeyError.new("Nil value for key #{key}")
       end
 
       if value.responds_to?(:to_{{name.id}})
@@ -111,7 +98,7 @@ class StatsSet
           value.to_{{name.id}}
         end
       else
-        raise "Invalid value for get_{{name.id}}: #{value.inspect}:#{value.class}"
+        raise "Invalid value for get_{{name.id}}: #{value}:#{value.class}"
       end
     end
 
@@ -124,16 +111,16 @@ class StatsSet
           value.to_{{name.id}}
         end
       else
-        raise "Invalid value for get_{{name.id}}: #{value.inspect}:#{value.class}"
+        raise "Invalid value for get_{{name.id}}: #{value}:#{value.class}"
       end
     end
   {% end %}
 
   def get_bool(key : String)
-    value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key.inspect}") }
+    value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key.inspect}")
+      raise KeyError.new("Nil value for key #{key}")
     end
 
     if value.is_a?(Bool)
@@ -144,10 +131,10 @@ class StatsSet
       elsif value.compare("false", true) == 0
         false
       else
-        raise "Invalid value for get_bool: #{value.inspect}"
+        raise "Invalid value for get_bool: #{value}"
       end
     else
-      raise "Invalid value for get_bool: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_bool: #{value}:#{value.class}"
     end
   end
 
@@ -155,28 +142,29 @@ class StatsSet
     value = @hash.fetch(key) { return default }
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key.inspect}")
+      raise KeyError.new("Nil value for key #{key}")
     end
 
-    if value.is_a?(Bool)
+    case value
+    when Bool
       value
-    elsif value.is_a?(String)
+    when String
       if value.compare("true", true) == 0
         true
       elsif value.compare("false", true) == 0
         false
       else
-        raise "Invalid value for get_bool: #{value.inspect}"
+        raise "Invalid value for get_bool: #{value}"
       end
     else
-      raise "Invalid value for get_bool: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_bool: #{value}:#{value.class}"
     end
   end
 
   def get_string(key : String) : String
     value = @hash[key]
     unless value.is_a?(String)
-      raise "Invalid value for get_string: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_string: #{value}:#{value.class}"
     end
     value
   end
@@ -188,7 +176,7 @@ class StatsSet
     elsif value.nil?
       default
     else
-      raise "Invalid value for get_string: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_string: #{value}:#{value.class}"
     end
   end
 
@@ -200,7 +188,7 @@ class StatsSet
     when String
       /#{value}/
     else
-      raise "Invalid value for get_regex: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_regex: #{value}:#{value.class}"
     end
     value
   end
@@ -215,41 +203,39 @@ class StatsSet
     when nil
       default
     else
-      raise "Invalid value for get_regex: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_regex: #{value}:#{value.class}"
     end
   end
 
-
-
-  def get_enum(key : String, enum_class : T.class) forall T
-    value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key.inspect}") }
+  def get_enum(key : String, enum_class : T.class) : T forall T
+    value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key.inspect}")
+      raise KeyError.new("Nil value for key #{key}")
     end
 
     if value.is_a?(String)
       enum_class.parse(value)
     else
-      raise "Invalid value for get_enum: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_enum: #{value}:#{value.class}"
     end
   end
 
-  def get_enum(key : String, enum_class : T.class, default : T?) forall T
+  def get_enum(key : String, enum_class : T.class, default : T?) : T? forall T
     value = @hash.fetch(key) { return default }
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key.inspect}")
+      raise KeyError.new("Nil value for key #{key}")
     end
 
     if value.is_a?(String)
       enum_class.parse(value)
     else
-      raise "Invalid value for get_enum: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_enum: #{value}:#{value.class}"
     end
   end
 
-  def get_enum(key : String, enum_class : T.class, default : String) forall T
+  def get_enum(key : String, enum_class : T.class, default : String) : T forall T
     get_enum(key, enum_class) || enum_class.parse(default)
   end
 
@@ -265,13 +251,13 @@ class StatsSet
     if value = @hash[key]
       return value if value.is_a?(Array(String))
       unless value.is_a?(String)
-        raise "Invalid value for get_string_array: #{value.inspect}:#{value.class}"
+        raise "Invalid value for get_string_array: #{value}:#{value.class}"
       end
       return default.map &.to_s if value.empty?
-      value.split(value.includes?(';') ? ';' : ',')
+      value.split(/;|,/) # (value.includes?(';') ? ';' : ',')
     else
       if default.is_a?(String)
-        default.split(default.includes?(';') ? ';' : ',')
+        default.split(/;|,/) # (default.includes?(';') ? ';' : ',')
       else
         if default.is_a?(Array(String))
           default
@@ -290,7 +276,7 @@ class StatsSet
     value = @hash[key]
     return value if value.is_a?(Hash)
     unless value.nil? || value.is_a?(String)
-      raise "Invalid value for get_string_array: #{value.inspect}:#{value.class}"
+      raise "Invalid value for get_string_array: #{value}:#{value.class}"
     end
     value = default.to_s if value.nil? || value.empty?
     hash = {} of Int32 => Int32
@@ -321,7 +307,6 @@ class StatsSet
     value = @hash[key]
     return value if value.is_a?(Hash)
     value = default.to_s unless value.is_a?(String) && !value.empty?
-    # value.split(';').map { |pair| [pair.split(',')[0].to_i, pair.split(',')[1].to_f] }.to_h
     ret = {} of Int32 => Float64
     value.split(';') do |pair|
       temp = pair.split(',')
@@ -330,7 +315,7 @@ class StatsSet
     ret
   end
 
-  def get_minion_list(key : String)
+  def get_minion_list(key : String) : Indexable(MinionHolder)?
     @hash[key]?.as?(Array(MinionHolder)) || Slice(MinionHolder).empty
   end
 

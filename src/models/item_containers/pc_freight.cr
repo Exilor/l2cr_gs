@@ -2,6 +2,7 @@ require "./item_container"
 
 class PcFreight < ItemContainer
   @owner : L2PcInstance?
+
   getter owner_id : Int32
 
   def initialize(@owner_id : Int32)

@@ -2,7 +2,7 @@ struct GameGuardCheckTask
   initializer pc : L2PcInstance
 
   def call
-    unless client = @pc.client?
+    unless client = @pc.client
       return
     end
 

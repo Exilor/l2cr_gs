@@ -2,7 +2,7 @@ class Packets::Outgoing::ListPartyWating < GameServerPacket
   def initialize(@pc : L2PcInstance, auto, @loc : Int32, @lim : Int32) # what about 'auto'?
   end
 
-  def write_impl
+  private def write_impl
     rooms = [] of PartyMatchRoom
 
     PartyMatchRoomList.rooms.each do |room|

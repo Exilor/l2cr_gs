@@ -1,17 +1,16 @@
 class Packets::Outgoing::PledgeReceiveWarList < GameServerPacket
   initializer clan : L2Clan, tab : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x3f
 
-    d @tab
-    d 0
+    d @tab # 0: declared, 1: under attack
+    d 0 # page
     list = @tab == 0 ? @clan.war_list : @clan.attacker_list
     d list.size
     list.each do |i|
       unless clan = ClanTable.get_clan(i)
-        warn "Clan with ID #{i} not found."
         next
       end
 

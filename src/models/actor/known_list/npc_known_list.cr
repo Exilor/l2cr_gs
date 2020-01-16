@@ -43,7 +43,7 @@ class NpcKnownList < CharKnownList
     super.as(L2Npc)
   end
 
-  struct TrackingTask
+  private struct TrackingTask
     initializer npc : L2Npc
 
     def call

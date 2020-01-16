@@ -39,12 +39,11 @@ class L2GroupSpawn < L2Spawn
     mob.spawn_me(new_loc_x, new_loc_y, new_loc_z)
     mob.on_spawn
 
-    if Config.debug
-      debug { "Spawned mob id #{@template.id} at #{mob.xyz}." }
-    end
+    debug { "Spawned mob id #{@template.id} at #{mob.xyz}." }
 
     mob
   rescue e
     error e
+    nil
   end
 end

@@ -5,35 +5,6 @@ abstract class GameServerPacket < MMO::OutgoingPacket(GameClient)
 
   property? invisible : Bool = false
 
-  private PAPERDOLL_ORDER = {
-    Inventory::UNDER,
-    Inventory::REAR,
-    Inventory::LEAR,
-    Inventory::NECK,
-    Inventory::RFINGER,
-    Inventory::LFINGER,
-    Inventory::HEAD,
-    Inventory::RHAND,
-    Inventory::LHAND,
-    Inventory::GLOVES,
-    Inventory::CHEST,
-    Inventory::LEGS,
-    Inventory::FEET,
-    Inventory::CLOAK,
-    Inventory::RHAND,
-    Inventory::HAIR,
-    Inventory::HAIR2,
-    Inventory::RBRACELET,
-    Inventory::LBRACELET,
-    Inventory::DECO1,
-    Inventory::DECO2,
-    Inventory::DECO3,
-    Inventory::DECO4,
-    Inventory::DECO5,
-    Inventory::DECO6,
-    Inventory::BELT
-  }
-
   def l(loc)
     d loc.x
     d loc.y
@@ -49,11 +20,40 @@ abstract class GameServerPacket < MMO::OutgoingPacket(GameClient)
   abstract def write_impl
 
   def active_char : L2PcInstance?
-    client.active_char
+    client?.try &.active_char
   end
 
   def run_impl
     # no-op
+  end
+
+  private def paperdoll_order
+    yield Inventory::UNDER
+    yield Inventory::REAR
+    yield Inventory::LEAR
+    yield Inventory::NECK
+    yield Inventory::RFINGER
+    yield Inventory::LFINGER
+    yield Inventory::HEAD
+    yield Inventory::RHAND
+    yield Inventory::LHAND
+    yield Inventory::GLOVES
+    yield Inventory::CHEST
+    yield Inventory::LEGS
+    yield Inventory::FEET
+    yield Inventory::CLOAK
+    yield Inventory::RHAND
+    yield Inventory::HAIR
+    yield Inventory::HAIR2
+    yield Inventory::RBRACELET
+    yield Inventory::LBRACELET
+    yield Inventory::DECO1
+    yield Inventory::DECO2
+    yield Inventory::DECO3
+    yield Inventory::DECO4
+    yield Inventory::DECO5
+    yield Inventory::DECO6
+    yield Inventory::BELT
   end
 
   private macro static_packet

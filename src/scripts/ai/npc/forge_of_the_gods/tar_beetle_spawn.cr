@@ -4,6 +4,8 @@ class TarBeetleSpawn
   include XMLReader
 
   private ZONES = [] of SpawnZone
+  private REFRESH_SPAWN_TASK = -> { ZONES.each &.refresh_spawn }
+  private REFRESH_SHOTS_TASK = -> { ZONES.each &.refresh_shots }
 
   @spawn_task : Scheduler::PeriodicTask?
   @shot_task : Scheduler::PeriodicTask?
@@ -16,20 +18,8 @@ class TarBeetleSpawn
     parse_datapack_file("spawnZones/tar_beetle.xml")
     info { "Loaded #{ZONES.size} spawn zones." }
     unless ZONES.empty?
-      @spawn_task = ThreadPoolManager.schedule_general_at_fixed_rate(RefreshSpawnTask.new, 1000, 60_000)
-      @shot_task = ThreadPoolManager.schedule_general_at_fixed_rate(RefreshShotsTask.new, 300_000, 300_000)
-    end
-  end
-
-  private struct RefreshSpawnTask
-    def call
-      ZONES.each &.refresh_spawn
-    end
-  end
-
-  private struct RefreshShotsTask
-    def call
-      ZONES.each &.refresh_shots
+      @spawn_task = ThreadPoolManager.schedule_general_at_fixed_rate(REFRESH_SPAWN_TASK, 1000, 60_000)
+      @shot_task = ThreadPoolManager.schedule_general_at_fixed_rate(REFRESH_SHOTS_TASK, 300_000, 300_000)
     end
   end
 
@@ -80,9 +70,7 @@ class TarBeetleSpawn
 
     def random_point
       loc = super
-      loopcnt = 0
       while loc && inside_banned_zone?(loc)
-        loopcnt += 1; raise "Too many iterations" if loopcnt > 200
         loc = super
       end
       loc
@@ -116,7 +104,7 @@ class TarBeetleSpawn
 
     def refresh_spawn
       while @spawn.size < @max_npc_count
-        if loc = @zones.sample.random_point
+        if loc = @zones.sample(random: Rnd).random_point
           sp = L2Spawn.new(18804)
           sp.heading = rand(65535)
           sp.x = loc.x

@@ -6,9 +6,7 @@ struct AmountMultiplierStrategy
     @proc.call(item, victim)
   end
 
-  # Needs to be a proc because Config will not have loaded by the time variables
-  # in this file are initialized.
-  private def self.default_strategy(&default_multiplier : -> Float32) : self
+  private def self.default_strategy(default_multiplier : -> Float32) : self
     new do |item, victim|
       multiplier = 1.0
       if victim.champion?
@@ -33,20 +31,7 @@ struct AmountMultiplierStrategy
     end
   end
 
-  DROP   = default_strategy { Config.rate_death_drop_amount_multiplier }
-  SPOIL  = default_strategy { Config.rate_corpse_drop_amount_multiplier }
+  DROP   = default_strategy(->Config.rate_death_drop_amount_multiplier)
+  SPOIL  = default_strategy(->Config.rate_corpse_drop_amount_multiplier)
   STATIC = new { |item, victim| 1.0 }
-
-  def self.parse(name : String) : self
-    case name.casecmp
-    when "drop"
-      DROP
-    when "spoil"
-      SPOIL
-    when "static"
-      STATIC
-    else
-      raise "unknown #{name}"
-    end
-  end
 end

@@ -60,7 +60,7 @@ class Packets::Incoming::RequestSellItem < GameClientPacket
     end
 
     unless buy_list.npc_allowed?(merchant.id)
-      debug "Merchant #{merchant.id} is not allowed in buylist #{@list_id}."
+      debug { "Merchant #{merchant.id} is not allowed in buylist #{@list_id}." }
       action_failed
       return
     end
@@ -79,7 +79,7 @@ class Packets::Incoming::RequestSellItem < GameClientPacket
       total_price += price * i.count
 
       if Inventory.max_adena // i.count < price || total_price > Inventory.max_adena
-        Util.punish(pc, "tried to buy over #{Inventory.max_adena} adena worth of items.")
+        Util.punish(pc, "tried to sell over #{Inventory.max_adena} adena worth of items.")
         return
       end
 

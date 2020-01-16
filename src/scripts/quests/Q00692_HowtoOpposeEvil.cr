@@ -121,7 +121,7 @@ class Scripts::Q00692_HowtoOpposeEvil < Quest
       chance = (QUEST_MOBS[npc_id].count * Config.rate_quest_drop).to_i
       num_items = chance // 1000
       chance = chance % 1000
-      if rand(1000) < chance
+      if Rnd.rand(1000) < chance
         num_items += 1
       end
       if num_items > 0

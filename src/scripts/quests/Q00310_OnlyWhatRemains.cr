@@ -63,7 +63,7 @@ class Scripts::Q00310_OnlyWhatRemains < Quest
 
     st = get_quest_state!(m, false)
 
-    if rand(1000) < MOBS[npc.id]
+    if Rnd.rand(1000) < MOBS[npc.id]
       st.give_items(DIRTY_BEAD, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end

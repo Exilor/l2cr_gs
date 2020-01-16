@@ -26,7 +26,7 @@ class EffectHandler::Bluff < AbstractEffect
     effected.heading = effector.heading
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

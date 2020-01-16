@@ -186,12 +186,9 @@ class Scripts::Q00456_DontKnowDontCare < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    if !killer.in_party? || !killer.party.in_command_channel?
-      # only the killing cc gets the quest
+    unless (party = killer.party) && (cc = party.command_channel)
       return super
     end
-
-    cc = killer.party.command_channel
 
     if cc.size < MIN_PLAYERS
       return super
@@ -204,12 +201,10 @@ class Scripts::Q00456_DontKnowDontCare < Quest
         next
       end
 
-      if party = attacker.party?
-        if party.in_command_channel? #
-          if party.command_channel == cc # only players from the same cc are allowed
-            if Util.in_range?(1500, npc, attacker, true)
-              allowed_players << attacker.l2id
-            end
+      if party2 = attacker.party
+        if party2.in_command_channel?  && party2.command_channel == cc # only players from the same cc are allowed
+          if Util.in_range?(1500, npc, attacker, true)
+            allowed_players << attacker.l2id
           end
         end
       end
@@ -226,21 +221,21 @@ class Scripts::Q00456_DontKnowDontCare < Quest
   end
 
   private def reward_player(pc, npc)
-    chance = rand(10000)
+    chance = Rnd.rand(10000)
     count = 1
 
     if chance < 170
-      reward = ARMOR.sample
+      reward = ARMOR.sample(random: Rnd)
     elsif chance < 200
-      reward = ACCESSORIES.sample
+      reward = ACCESSORIES.sample(random: Rnd)
     elsif chance < 270
-      reward = WEAPONS.sample
+      reward = WEAPONS.sample(random: Rnd)
     elsif chance < 325
       reward = BLESSED_SCROLL_ENCHANT_WEAPON_S
     elsif chance < 425
       reward = BLESSED_SCROLL_ENCHANT_ARMOR_S
     elsif chance < 925
-      reward = ATTRIBUTE_CRYSTALS.sample
+      reward = ATTRIBUTE_CRYSTALS.sample(random: Rnd)
     elsif chance < 1100
       reward = SCROLL_ENCHANT_WEAPON_S
     else

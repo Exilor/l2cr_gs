@@ -10,11 +10,11 @@ class EffectHandler::PhysicalAttackHpLink < AbstractEffect
     !Formulas.physical_skill_evasion(info.effector, info.effected, info.skill)
   end
 
-  def effect_type
-    L2EffectType::PHYSICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::PHYSICAL_ATTACK
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

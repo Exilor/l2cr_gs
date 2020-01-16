@@ -11,7 +11,7 @@ class Condition
 
       castle = CastleManager.get_castle(pc)
 
-      if castle.nil? || (castle.residence_id <= 0 || !castle.siege.in_progress? || castle.siege.get_attacker_clan?(pc.clan).nil?)
+      if castle.nil? || (castle.residence_id <= 0 || !castle.siege.in_progress? || castle.siege.get_attacker_clan(pc.clan).nil?)
         sm = SystemMessage.s1_cannot_be_used
         sm.add_skill_name(skill)
         pc.send_packet(sm)

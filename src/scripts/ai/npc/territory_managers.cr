@@ -119,12 +119,12 @@ class Scripts::TerritoryManagers < AbstractNpcAI
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-0a.html")
       elsif reward[0] != territory_id
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-0b.html")
-        html["%castle%"] = CastleManager.get_castle_by_id!(reward[0] - 80).name
+        html["%castle%"] = CastleManager.get_castle_by_id(reward[0] - 80).not_nil!.name
       elsif reward[1] == 0
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-0a.html")
       else
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-1.html")
-        html["%castle%"] = CastleManager.get_castle_by_id!(reward[0] - 80).name
+        html["%castle%"] = CastleManager.get_castle_by_id(reward[0] - 80).not_nil!.name
         html["%badge%"] = reward[1]
         html["%adena%"] = reward[1] * 5000
       end
@@ -140,7 +140,7 @@ class Scripts::TerritoryManagers < AbstractNpcAI
         html.set_file(pc, "data/scripts/ai/npc/TerritoryManagers/reward-0a.html")
       elsif reward[0] != territory_id
         html.set_file(pc, "data/scripts/ai/npc/TerritoryManagers/reward-0b.html")
-        html["%castle%"] = CastleManager.get_castle_by_id!(reward[0] - 80).name
+        html["%castle%"] = CastleManager.get_castle_by_id(reward[0] - 80).not_nil!.name
       elsif reward[1] == 0
         html.set_file(pc, "data/scripts/ai/npc/TerritoryManagers/reward-0a.html")
       else

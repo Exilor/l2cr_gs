@@ -11,7 +11,7 @@ class Packets::Outgoing::PrivateStoreManageListBuy < Packets::Outgoing::Abstract
     @buy_list = pc.buy_list.items
   end
 
-  def write_impl
+  private def write_impl
     c 0xbd
 
     d @l2id

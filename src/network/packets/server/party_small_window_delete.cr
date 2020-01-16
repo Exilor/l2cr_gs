@@ -1,7 +1,7 @@
 class Packets::Outgoing::PartySmallWindowDelete < GameServerPacket
   initializer pc : L2PcInstance
 
-  def write_impl
+  private def write_impl
     c 0x51
 
     d @pc.l2id

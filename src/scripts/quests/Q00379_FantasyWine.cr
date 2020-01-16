@@ -36,7 +36,7 @@ class Scripts::Q00379_FantasyWine < Quest
       html = event
     when "30074-11.html"
       if has_all_items?(pc, true, LEAF_OF_EUCALYPTUS, STONE_OF_CHILL)
-        random = rand(10)
+        random = Rnd.rand(10)
 
         if random < 3
           item = OLD_WINE_15_YEAR

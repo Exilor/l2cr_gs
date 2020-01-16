@@ -4,6 +4,7 @@ require "./l2_pet_level_data"
 class L2PetData
   @level_stats = {} of Int32 => L2PetLevelData
   @skills = [] of L2PetSkillLearn
+
   getter min_level = Int8::MAX
   getter food = [] of Int32
   property hungry_limit : Int32 = 1

@@ -193,7 +193,7 @@ module PetitionManager
     pending_petitions.each_value do |cur_pt|
       if cur_pt.petitioner? && cur_pt.petitioner.l2id == player.l2id
         cs = CreatureSay.new(player.l2id, Say2::PETITION_PLAYER, player.name, text)
-        cur_pt.addLogMessage(cs)
+        cur_pt.add_log_message(cs)
 
         cur_pt.send_responder_packet(cs)
         cur_pt.send_petitioner_packet(cs)
@@ -202,7 +202,7 @@ module PetitionManager
 
       if cur_pt.responder? && cur_pt.responder.l2id == player.l2id
         cs = CreatureSay.new(player.l2id, Say2::PETITION_GM, player.name, text)
-        cur_pt.addLogMessage(cs)
+        cur_pt.add_log_message(cs)
 
         cur_pt.send_responder_packet(cs)
         cur_pt.send_petitioner_packet(cs)
@@ -215,13 +215,13 @@ module PetitionManager
 
   def send_pending_petition_list(pc : L2PcInstance)
     content = String.build(600 + (pending_petition_count * 300)) do |io|
-      io << "<html><body><center><table width=270><tr>"
-      io << "<td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-      io << "<td width=180><center>Petition Menu</center></td>"
-      io << "<td width=45><button value=\"Back\" action=\"bypass -h admin_admin7\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br>"
-      io << "<table width=\"270\">"
-      io << "<tr><td><table width=\"270\"><tr><td><button value=\"Reset\" action=\"bypass -h admin_reset_petitions\" width=\"80\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-      io << "<td align=right><button value=\"Refresh\" action=\"bypass -h admin_view_petitions\" width=\"80\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br></td></tr>"
+      io << "<html><body><center><table width=270><tr>" \
+        "<td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
+        "<td width=180><center>Petition Menu</center></td>" \
+        "<td width=45><button value=\"Back\" action=\"bypass -h admin_admin7\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br>" \
+        "<table width=\"270\">" \
+        "<tr><td><table width=\"270\"><tr><td><button value=\"Reset\" action=\"bypass -h admin_reset_petitions\" width=\"80\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
+        "<td align=right><button value=\"Refresh\" action=\"bypass -h admin_view_petitions\" width=\"80\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br></td></tr>"
 
       date_format = "%Y-%m-%d %H:%m"
 
@@ -242,8 +242,7 @@ module PetitionManager
         io << (cur_pt.petitioner.online? ? "00FF00" : "999999")
         io << "\">"
         io << cur_pt.petitioner.name
-        io << "</font></td></tr>"
-        io << "<tr><td width=\"130\">"
+        io << "</font></td></tr><tr><td width=\"130\">"
         if cur_pt.state.in_process?
           io << "<font color=\""
           io << (cur_pt.responder.online? ? "00FF00" : "999999")
@@ -251,11 +250,9 @@ module PetitionManager
           io << cur_pt.responder.name
           io << "</font>"
         else
-          io << "<table width=\"130\" cellpadding=\"2\"><tr>"
-          io << "<td><button value=\"View\" action=\"bypass -h admin_view_petition "
+          io << "<table width=\"130\" cellpadding=\"2\"><tr><td><button value=\"View\" action=\"bypass -h admin_view_petition "
           io << cur_pt.id
-          io << "\" width=\"50\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-          io << "<td><button value=\"Reject\" action=\"bypass -h admin_reject_petition "
+          io << "\" width=\"50\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td><button value=\"Reject\" action=\"bypass -h admin_reject_petition "
           io << cur_pt.id
           io << "\" width=\"50\" height=\"21\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table>"
         end

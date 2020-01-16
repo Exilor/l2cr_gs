@@ -11,7 +11,7 @@ module UserCommandHandler::ClanWarsList
       return false
     end
 
-    unless clan = pc.clan?
+    unless clan = pc.clan
       pc.send_packet(SystemMessageId::NOT_JOINED_IN_ANY_CLAN)
       return false
     end

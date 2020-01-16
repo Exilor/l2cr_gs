@@ -40,30 +40,30 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
       st.set_cond(7, true)
     when "32325-03.html"
       st.set_cond(3, true)
-      st.give_items(YINSWORD, 1, AttributeType::FIRE.to_i, 10)
+      st.give_items(YINSWORD, 1, AttributeType::FIRE.id.to_i32, 10)
     when "32326-03.html"
       st.set_cond(8, true)
-      st.give_items(YANGSWORD, 1, AttributeType::EARTH.to_i, 10)
+      st.give_items(YANGSWORD, 1, AttributeType::EARTH.id.to_i32, 10)
     when "32325-06.html"
       if st.has_quest_items?(YINSWORD)
         st.take_items(YINSWORD, 1)
         html = "32325-07.html"
       end
-      st.give_items(YINSWORD, 1, AttributeType::FIRE.to_i, 10)
+      st.give_items(YINSWORD, 1, AttributeType::FIRE.id.to_i32, 10)
     when "32326-06.html"
       if st.has_quest_items?(YANGSWORD)
         st.take_items(YANGSWORD, 1)
         html = "32326-07.html"
       end
-      st.give_items(YANGSWORD, 1, AttributeType::EARTH.to_i, 10)
+      st.give_items(YANGSWORD, 1, AttributeType::EARTH.id.to_i32, 10)
     when "32325-09.html"
       st.set_cond(5, true)
       BLESSING_OF_FIRE.skill.apply_effects(pc, pc)
-      st.give_items(YINSWORD, 1, AttributeType::FIRE.to_i, 10)
+      st.give_items(YINSWORD, 1, AttributeType::FIRE.id.to_i32, 10)
     when "32326-09.html"
       st.set_cond(10, true)
       BLESSING_OF_EARTH.skill.apply_effects(pc, pc)
-      st.give_items(YANGSWORD, 1, AttributeType::EARTH.to_i, 10)
+      st.give_items(YANGSWORD, 1, AttributeType::EARTH.id.to_i32, 10)
     end
 
     if event.num?
@@ -85,7 +85,7 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
     when AIR
       if st.cond?(8) || st.cond?(10)
         if st.get_item_equipped(Inventory::RHAND) == YANGSWORD
-          if st.get_quest_items_count(SOULPIECE_AIR) < 6 && rand(100) < 30
+          if st.get_quest_items_count(SOULPIECE_AIR) < 6 && Rnd.rand(100) < 30
             st.give_items(SOULPIECE_AIR, 1)
             if st.get_quest_items_count(SOULPIECE_AIR) >= 6
               st.set_cond(st.cond + 1, true)
@@ -98,7 +98,7 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
     when WATER
       if st.cond >= 3 || st.cond <= 5
         if st.get_item_equipped(Inventory::RHAND) == YINSWORD
-          if st.get_quest_items_count(SOULPIECE_WATER) < 6 && rand(100) < 30
+          if st.get_quest_items_count(SOULPIECE_WATER) < 6 && Rnd.rand(100) < 30
             st.give_items(SOULPIECE_WATER, 1)
             if st.get_quest_items_count(SOULPIECE_WATER) >= 6
               st.set_cond(st.cond + 1, true)

@@ -20,6 +20,7 @@ class Siege
   @first_owner_clan_id = -1
   @attacker_clans = Concurrent::Array(L2SiegeClan).new
   @defender_clans = Concurrent::Array(L2SiegeClan).new
+
   getter control_tower_count = 0
   getter siege_guard_manager
   getter defender_waiting_clans = Concurrent::Array(L2SiegeClan).new
@@ -42,7 +43,7 @@ class Siege
     Broadcast.to_all_online_players(sm)
 
     if castle.owner_id > 0
-      clan = ClanTable.get_clan!(castle.owner_id)
+      clan = ClanTable.get_clan(castle.owner_id).not_nil!
       sm = SystemMessage.clan_s1_victorious_over_s2_s_siege
       sm.add_string(clan.name)
       sm.add_castle_id(castle.residence_id)
@@ -54,7 +55,7 @@ class Siege
         castle.ticket_buy_count = 0
 
         clan.members.each do |m|
-          pc = m.player_instance?
+          pc = m.player_instance
           if pc && pc.noble?
             Hero.set_castle_taken(pc.l2id, castle.residence_id)
           end
@@ -152,12 +153,12 @@ class Siege
     end
 
     if castle.owner_id > 0
-      ally_id = ClanTable.get_clan!(castle.owner_id).ally_id
+      ally_id = ClanTable.get_clan(castle.owner_id).not_nil!.ally_id
       if defender_clans.empty?
         if ally_id != 0
           in_same_ally = true
           attacker_clans.each do |sc|
-            if ClanTable.get_clan!(sc.clan_id).ally_id != ally_id
+            if ClanTable.get_clan(sc.clan_id).not_nil!.ally_id != ally_id
               in_same_ally = false
               break
             end
@@ -178,7 +179,7 @@ class Siege
       add_defender(sc_new_owner, SiegeClanType::OWNER)
 
       ClanTable.get_clan_allies(ally_id).each do |clan|
-        if sc = get_attacker_clan?(clan.id)
+        if sc = get_attacker_clan(clan.id)
           remove_attacker(sc)
           add_defender(sc, SiegeClanType::DEFENDER)
         end
@@ -212,7 +213,7 @@ class Siege
         sm = SystemMessage.siege_of_s1_has_been_canceled_due_to_lack_of_interest
       else
         sm = SystemMessage.s1_siege_was_canceled_because_no_clans_participated
-        owner_clan = ClanTable.get_clan!(@first_owner_clan_id)
+        owner_clan = ClanTable.get_clan(@first_owner_clan_id).not_nil!
         owner_clan.increase_blood_alliance_count
       end
 
@@ -251,7 +252,7 @@ class Siege
 
   def announce_to_player(sm, both_sides : Bool)
     defender_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |pc|
         pc.send_packet(sm)
       end
@@ -262,7 +263,7 @@ class Siege
     end
 
     attacker_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |pc|
         pc.send_packet(sm)
       end
@@ -271,7 +272,7 @@ class Siege
 
   def update_player_siege_state_flags(clear : Bool)
     attacker_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |m|
         if clear
           m.siege_state = 0
@@ -301,7 +302,7 @@ class Siege
     end
 
     defender_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |m|
         if clear
           m.siege_state = 0
@@ -336,7 +337,7 @@ class Siege
       return
     end
 
-    save_siege_clan(ClanTable.get_clan!(clan_id), DEFENDER, true)
+    save_siege_clan(ClanTable.get_clan(clan_id).not_nil!, DEFENDER, true)
     load_siege_clan
   end
 
@@ -349,11 +350,11 @@ class Siege
   end
 
   def attacker?(clan : L2Clan?) : Bool
-    !!clan && !!get_attacker_clan?(clan)
+    !!clan && !!get_attacker_clan(clan)
   end
 
   def defender?(clan : L2Clan?) : Bool
-    !!clan && !!get_defender_clan?(clan)
+    !!clan && !!get_defender_clan(clan)
   end
 
   def defender_waiting?(clan : L2Clan?) : Bool
@@ -387,7 +388,7 @@ class Siege
     players = [] of L2PcInstance
 
     attacker_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |pc|
         if pc.in_siege?
           players << pc
@@ -399,14 +400,14 @@ class Siege
   end
 
   def players_in_zone : Array(L2PcInstance)
-    castle.zone.players_inside
+    castle.zone.players_inside.to_a
   end
 
   def owners_in_zone : Array(L2PcInstance)
     players = [] of L2PcInstance
 
     defender_clans.each do |siege_clan|
-      clan = ClanTable.get_clan!(siege_clan.clan_id)
+      clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
       clan.each_online_player do |pc|
         if clan.id != castle.owner_id
           next
@@ -422,7 +423,7 @@ class Siege
   end
 
   def spectators_in_zone : Array(L2PcInstance)
-    castle.zone.players_inside.reject &.in_siege?
+    castle.zone.players_inside.reject(&.in_siege?).to_a
   end
 
   def killed_ct(ct : L2Npc)
@@ -447,13 +448,13 @@ class Siege
   end
 
   def register_attacker(pc : L2PcInstance, force : Bool)
-    unless clan = pc.clan?
+    unless clan = pc.clan
       return
     end
 
     ally_id = 0
     if castle.owner_id != 0
-      ally_id = ClanTable.get_clan!(castle.owner_id).ally_id
+      ally_id = ClanTable.get_clan(castle.owner_id).not_nil!.ally_id
     end
 
     if ally_id != 0
@@ -492,14 +493,14 @@ class Siege
       if SiegeManager.registered?(pc.clan, castle.residence_id)
         pc.send_packet(SystemMessageId::ALREADY_REQUESTED_SIEGE_BATTLE)
       else
-        save_siege_clan(pc.clan, DEFENDER_NOT_APPROVED, false)
+        save_siege_clan(pc.clan.not_nil!, DEFENDER_NOT_APPROVED, false)
       end
 
       return
     end
 
     if can_register?(pc, DEFENDER_NOT_APPROVED)
-      save_siege_clan(pc.clan, DEFENDER_NOT_APPROVED, false)
+      save_siege_clan(pc.clan.not_nil!, DEFENDER_NOT_APPROVED, false)
     end
   end
 
@@ -533,7 +534,7 @@ class Siege
   end
 
   def remove_siege_clan(pc : L2PcInstance)
-    remove_siege_clan(pc.clan?)
+    remove_siege_clan(pc.clan)
   end
 
   def start_auto_task
@@ -600,15 +601,15 @@ class Siege
       pc.send_packet(sm)
     when in_progress?
       pc.send_packet(SystemMessageId::NOT_SIEGE_REGISTRATION_TIME2)
-    when pc.clan?.nil? || pc.clan.level < SiegeManager.siege_clan_min_level
+    when pc.clan.nil? || pc.clan.not_nil!.level < SiegeManager.siege_clan_min_level
       pc.send_packet(SystemMessageId::ONLY_CLAN_LEVEL_5_ABOVE_MAY_SIEGE)
-    when pc.clan.id == castle.owner_id
+    when pc.clan.not_nil!.id == castle.owner_id
       pc.send_packet(SystemMessageId::CLAN_THAT_OWNS_CASTLE_IS_AUTOMATICALLY_REGISTERED_DEFENDING)
-    when pc.clan.castle_id > 0
+    when pc.clan.not_nil!.castle_id > 0
       pc.send_packet(SystemMessageId::CLAN_THAT_OWNS_CASTLE_CANNOT_PARTICIPATE_OTHER_SIEGE)
     when SiegeManager.registered?(pc.clan, castle.residence_id)
       pc.send_packet(SystemMessageId::ALREADY_REQUESTED_SIEGE_BATTLE)
-    when already_registered_for_same_day?(pc.clan)
+    when already_registered_for_same_day?(pc.clan.not_nil!)
       pc.send_packet(SystemMessageId::APPLICATION_DENIED_BECAUSE_ALREADY_SUBMITTED_A_REQUEST_FOR_ANOTHER_SIEGE_BATTLE)
     when type_id == ATTACKER && attacker_clans.size >= SiegeManager.attacker_max_clans
       pc.send_packet(SystemMessageId::ATTACKER_SIDE_FULL)
@@ -839,15 +840,15 @@ class Siege
     end
   end
 
-  def get_attacker_clan?(clan : L2Clan?) : L2SiegeClan?
-    get_attacker_clan?(clan.id) if clan
+  def get_attacker_clan(clan : L2Clan?) : L2SiegeClan?
+    get_attacker_clan(clan.id) if clan
   end
 
-  def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_attacker_clan(clan_id : Int32) : L2SiegeClan?
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans? : IArray(L2SiegeClan)?
+  def attacker_clans : IArray(L2SiegeClan)?
     @normal_side ? @attacker_clans : @defender_clans
   end
 
@@ -855,15 +856,15 @@ class Siege
     SiegeManager.attacker_respawn_delay
   end
 
-  def get_defender_clan?(clan : L2Clan?) : L2SiegeClan?
-    get_defender_clan?(clan.id) if clan
+  def get_defender_clan(clan : L2Clan?) : L2SiegeClan?
+    get_defender_clan(clan.id) if clan
   end
 
-  def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_defender_clan(clan_id : Int32) : L2SiegeClan?
     defender_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def defender_clans? : IArray(L2SiegeClan)?
+  def defender_clans : IArray(L2SiegeClan)?
     @normal_side ? @defender_clans : @attacker_clans
   end
 
@@ -895,12 +896,12 @@ class Siege
     end
   end
 
-  def get_flag?(clan : L2Clan?) : IArray(L2Npc)?
+  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
     unless clan
       return
     end
 
-    if sc = get_attacker_clan?(clan)
+    if sc = get_attacker_clan(clan)
       sc.flag
     end
   end

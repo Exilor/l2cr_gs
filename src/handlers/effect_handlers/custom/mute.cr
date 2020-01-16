@@ -3,8 +3,8 @@ class EffectHandler::Mute < AbstractEffect
     EffectFlag::MUTED.mask
   end
 
-  def effect_type
-    L2EffectType::MUTE
+  def effect_type : EffectType
+    EffectType::MUTE
   end
 
   def on_start(info)

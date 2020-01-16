@@ -3,6 +3,7 @@ class DimensionalRiftRoom
   @x_max : Int32
   @y_min : Int32
   @y_max : Int32
+
   getter type, room, teleport_coordinates
   getter spawns = [] of L2Spawn
   getter? boss_room
@@ -38,7 +39,7 @@ class DimensionalRiftRoom
   end
 
   def in_zone?(x : Int32, y : Int32, z : Int32) : Bool
-    @s.contains?(x, y) && z >= @z_min && z <= @z_max
+    @s.contains?(x, y) && z.between?(@z_min, @z_max)
   end
 
   def spawn

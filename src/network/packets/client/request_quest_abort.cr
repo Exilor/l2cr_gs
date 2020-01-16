@@ -9,7 +9,7 @@ class Packets::Incoming::RequestQuestAbort < GameClientPacket
     return unless pc = active_char
 
     unless q = QuestManager.get_quest(@quest_id)
-      warn "No quest with ID #{@quest_id} found."
+      warn { "No quest with ID #{@quest_id} found." }
       return
     end
 
@@ -17,7 +17,7 @@ class Packets::Incoming::RequestQuestAbort < GameClientPacket
       qs.exit_quest(true)
       send_packet(QuestList.new)
     else
-      warn "No QuestState for quest #{q.name} and player #{pc.name}."
+      warn { "No QuestState for quest #{q.name} and player #{pc.name}." }
     end
   end
 end

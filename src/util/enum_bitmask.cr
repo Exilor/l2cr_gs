@@ -1,12 +1,5 @@
 class EnumBitmask(T)
-  property bitmask : Int32
-
-  def initialize
-    @bitmask = 0
-  end
-
-  def initialize(@bitmask : Int32)
-  end
+  property_initializer bitmask : Int32 = 0
 
   def initialize(set : Bool)
     @bitmask = set ? T.mask.to_i32 : 0

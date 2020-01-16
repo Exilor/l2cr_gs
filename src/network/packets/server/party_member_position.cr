@@ -13,7 +13,7 @@ class Packets::Outgoing::PartyMemberPosition < GameServerPacket
     self
   end
 
-  def write_impl
+  private def write_impl
     c 0xba
     d @locations.size
     # directly iterating the hash has raised a "can't add a new key into hash

@@ -3,8 +3,8 @@ class EffectHandler::Stun < AbstractEffect
     EffectFlag::STUNNED.mask
   end
 
-  def effect_type
-    L2EffectType::STUN
+  def effect_type : EffectType
+    EffectType::STUN
   end
 
   def on_exit(info)

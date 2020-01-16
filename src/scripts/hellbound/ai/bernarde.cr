@@ -47,19 +47,21 @@ class Scripts::Bernarde < AbstractNpcAI
   def on_first_talk(npc, pc)
     case HellboundEngine.level
     when 0, 1
-      return transformed?(pc) ? "32300-01a.htm" : "32300-01.htm"
+      transformed?(pc) ? "32300-01a.htm" : "32300-01.htm"
     when 2
-      return transformed?(pc) ? "32300-02.htm" : "32300-03.htm"
+      transformed?(pc) ? "32300-02.htm" : "32300-03.htm"
     when 3
-      return transformed?(pc) ? "32300-01c.htm" : "32300-03.htm"
+      transformed?(pc) ? "32300-01c.htm" : "32300-03.htm"
     when 4
-      return transformed?(pc) ? "32300-01d.htm" : "32300-03.htm"
+      transformed?(pc) ? "32300-01d.htm" : "32300-03.htm"
     else
-      return transformed?(pc) ? "32300-01f.htm" : "32300-03.htm"
+      transformed?(pc) ? "32300-01f.htm" : "32300-03.htm"
     end
   end
 
   private def transformed?(pc)
-    pc.transformed? && pc.transformation.id == NATIVE_TRANSFORM
+    return false unless pc.transformed?
+    return false unless transform = pc.transformation
+    transform.id == NATIVE_TRANSFORM
   end
 end

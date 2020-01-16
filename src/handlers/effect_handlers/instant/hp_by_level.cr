@@ -6,11 +6,11 @@ class EffectHandler::HpByLevel < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def effect_type
-    L2EffectType::BUFF
+  def effect_type : EffectType
+    EffectType::BUFF
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

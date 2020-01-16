@@ -1,7 +1,7 @@
 class Packets::Outgoing::GameGuardQuery < GameServerPacket
   static_packet
 
-  def write_impl
+  private def write_impl
     c 0x74
 
     d 0x27533DD9

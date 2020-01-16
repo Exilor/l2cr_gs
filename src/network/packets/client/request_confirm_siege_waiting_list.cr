@@ -11,7 +11,7 @@ class Packets::Incoming::RequestConfirmSiegeWaitingList < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    return unless clan = pc.clan?
+    return unless clan = pc.clan
     return unless castle = CastleManager.get_castle_by_id(@castle_id)
 
     if castle.owner_id != pc.clan_id || !pc.clan_leader?

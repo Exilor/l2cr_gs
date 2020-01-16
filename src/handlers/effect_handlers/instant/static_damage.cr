@@ -19,7 +19,7 @@ class EffectHandler::StaticDamage < AbstractEffect
     end
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

@@ -15,7 +15,7 @@ class Packets::Outgoing::ExShowSeedSetting < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x26
 

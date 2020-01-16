@@ -2,7 +2,7 @@ class Packets::Outgoing::RecipeItemMakeInfo < GameServerPacket
   def initialize(@id : Int32, @pc : L2PcInstance, @success : Bool = true)
   end
 
-  def write_impl
+  private def write_impl
     if recipe = RecipeData.get_recipe_list(@id)
       c 0xdd
 

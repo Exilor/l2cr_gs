@@ -42,7 +42,7 @@ class Scripts::Q00300_HuntingLetoLizardman < Quest
     when "30126-06.html"
       if st.get_quest_items_count(BRACELET_OF_LIZARDMAN) >= REQUIRED_BRACELET_COUNT
         st.take_items(BRACELET_OF_LIZARDMAN, -1)
-        rand = rand(1000)
+        rand = Rnd.rand(1000)
         if rand < 500
           give_items(pc, REWARD_ADENA)
         elsif rand < 750
@@ -63,7 +63,7 @@ class Scripts::Q00300_HuntingLetoLizardman < Quest
   def on_kill(npc, pc, is_summon)
     if m = get_random_party_member(pc, 1)
       st = get_quest_state!(m, false)
-      if st.cond?(1) && rand(1000) < MOBS_SAC[npc.id]
+      if st.cond?(1) && Rnd.rand(1000) < MOBS_SAC[npc.id]
         st.give_items(BRACELET_OF_LIZARDMAN, 1)
         if st.get_quest_items_count(BRACELET_OF_LIZARDMAN) == REQUIRED_BRACELET_COUNT
           st.set_cond(2, true)

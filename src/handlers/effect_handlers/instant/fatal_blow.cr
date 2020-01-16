@@ -17,11 +17,11 @@ class EffectHandler::FatalBlow < AbstractEffect
     !a && b
   end
 
-  def effect_type
-    L2EffectType::PHYSICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::PHYSICAL_ATTACK
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -50,8 +50,7 @@ class EffectHandler::FatalBlow < AbstractEffect
       target.break_cast
     end
 
-    if char.player?
-      pc = char.acting_player
+    if pc = char.as?(L2PcInstance)
       pc.send_damage_message(char, damage.to_i, false, crit, false)
     end
 

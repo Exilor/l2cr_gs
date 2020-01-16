@@ -7,7 +7,7 @@ class EffectHandler::NoblesseBless < AbstractEffect
     EffectFlag::NOBLESS_BLESSING.mask
   end
 
-  def effect_type
-    L2EffectType::NOBLESSE_BLESSING
+  def effect_type : EffectType
+    EffectType::NOBLESSE_BLESSING
   end
 end

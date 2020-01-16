@@ -3,7 +3,7 @@ module ChatHandler::ChatClan
   extend ChatHandler
 
   def handle_chat(type, pc, params, text)
-    if clan = pc.clan?
+    if clan = pc.clan
       if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
         pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)
         return

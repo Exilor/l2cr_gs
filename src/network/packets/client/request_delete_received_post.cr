@@ -7,7 +7,7 @@ class Packets::Incoming::RequestDeleteReceivedPost < GameClientPacket
 
   private def read_impl
     count = d
-    unless 1 <= count <= Config.max_item_in_packet
+    unless count.between?(1, Config.max_item_in_packet)
       return
     end
     if count * BATCH_LENGTH != buffer.remaining

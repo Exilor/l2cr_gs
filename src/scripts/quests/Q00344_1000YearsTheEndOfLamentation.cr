@@ -72,12 +72,12 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
           html = "30754-07.html"
         else
           take_items(pc, ARTICLES, -1)
-          if rand(1000) >= count
+          if Rnd.rand(1000) >= count
             give_adena(pc, count * 60, true)
             html = event
           else
             qs.set_cond(2, true)
-            case rand(4)
+            case Rnd.rand(4)
             when 0
               qs.memo_state = 1
               give_items(pc, OLD_HILT)
@@ -140,7 +140,7 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
       if qs.memo_state == 1
         if has_item?(pc, OLD_HILT)
           take_items(pc, OLD_HILT.id, -1)
-          rnd = rand(100)
+          rnd = Rnd.rand(100)
           if rnd <= 52
             reward_items(pc, ORIHARUKON_ORE)
           elsif rnd <= 76
@@ -160,7 +160,7 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
       if qs.memo_state == 2
         if has_item?(pc, OLD_KEY)
           take_items(pc, OLD_KEY.id, -1)
-          rnd = rand(100)
+          rnd = Rnd.rand(100)
           if rnd <= 39
             reward_items(pc, COKES)
           elsif rnd <= 89
@@ -178,7 +178,7 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
       if qs.memo_state == 3
         if has_item?(pc, TOTEM_NECKLACE)
           take_items(pc, TOTEM_NECKLACE.id, -1)
-          rnd = rand(100)
+          rnd = Rnd.rand(100)
           if rnd <= 47
             reward_items(pc, LEATHER)
           elsif rnd <= 97
@@ -196,7 +196,7 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
       if qs.memo_state == 4
         if has_item?(pc, CRUCIFIX)
           take_items(pc, CRUCIFIX.id, -1)
-          rnd = rand(100)
+          rnd = Rnd.rand(100)
           if rnd <= 49
             reward_items(pc, STONE_OF_PURITY)
           elsif rnd <= 69

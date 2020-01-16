@@ -3,8 +3,8 @@ require "./class_type"
 require "./class_level"
 
 class PlayerClass < EnumClass
-
   getter race, type, level
+
   protected initializer race : Race, type : ClassType, level : ClassLevel
 
   add(HumanFighter,   Race::HUMAN, ClassType::Fighter, ClassLevel::First)
@@ -153,16 +153,10 @@ class PlayerClass < EnumClass
     set
   end
 
-  NEVER_SUBCLASSED = EnumSet.new({Overlord, Warsmith})
-  MAIN_SUBCLASS_SET = get_set(nil, ClassLevel::Third) - NEVER_SUBCLASSED
+  private NEVER_SUBCLASSED = EnumSet.new({Overlord, Warsmith})
+  private MAIN_SUBCLASS_SET = get_set(nil, ClassLevel::Third) - NEVER_SUBCLASSED
 
-  # set_1 = EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight})
-  # set_2 = EnumSet.new({TreasureHunter, AbyssWalker, Plainswalker})
-  # set_3 = EnumSet.new({Hawkeye, SilverRanger, PhantomRanger})
-  # set_4 = EnumSet.new({Warlock, ElementalSummoner, PhantomSummoner})
-  # set_5 = EnumSet.new({Sorceror, Spellsinger, Spellhowler})
-
-  SUBCLASS_SET_MAP = {
+  private SUBCLASS_SET_MAP = {
     DarkAvenger => EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
     Paladin => EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
     TempleKnight => EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
@@ -185,9 +179,7 @@ class PlayerClass < EnumClass
     Spellhowler => EnumSet.new({Sorceror, Spellsinger, Spellhowler})
   }
 
-  def get_set(race, level)
-    PlayerClass.get_set(race, level)
-  end
+  private delegate get_set, to: self.class
 
   def get_available_subclasses(pc : L2PcInstance) : EnumSet(PlayerClass)?
     subclasses = nil

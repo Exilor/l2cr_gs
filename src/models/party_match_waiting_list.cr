@@ -1,6 +1,5 @@
 module PartyMatchWaitingList
   extend self
-  extend Synchronizable
 
   private PLAYERS = Concurrent::Set(L2PcInstance).new
 

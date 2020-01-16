@@ -12,15 +12,15 @@ class Quest < AbstractScript
   private RESET_HOUR    =  6
   private RESET_MINUTES = 30
 
-  @rw_lock = Mutex.new # should be a "reentrant read write lock"
+  @rw_lock = Mutex.new(:Reentrant) # should be a "reentrant read write lock"
   @on_enter_world = false
   @quest_item_ids = [] of Int32
   @quest_timers : IHash(String, Array(QuestTimer))?
   @start_condition : Hash(Proc(L2PcInstance, Bool), String)?
-  getter initial_state = State::CREATED
-  property? custom : Bool = false
 
   getter name, descr
+  getter initial_state = State::CREATED
+  property? custom : Bool = false
 
   def initialize(@quest_id : Int32, @name : String, @descr : String)
     super()
@@ -73,7 +73,7 @@ class Quest < AbstractScript
     get_quest_state(pc, true).not_nil!
   end
 
-  def quest_timers
+  def quest_timers : IHash(String, Array(QuestTimer))
     @quest_timers || sync do
       @quest_timers ||= Concurrent::Map(String, Array(QuestTimer)).new
     end
@@ -127,7 +127,7 @@ class Quest < AbstractScript
   end
 
   def notify_attack(npc, attacker, damage, is_summon, skill)
-    res = on_attack(npc, attacker, damage, is_summon, skill) ||
+    res : String? = on_attack(npc, attacker, damage, is_summon, skill) ||
           on_attack(npc, attacker, damage, is_summon)
   rescue e
     show_error(attacker, e)
@@ -136,7 +136,7 @@ class Quest < AbstractScript
   end
 
   def notify_death(killer, victim, quest_state)
-    res = on_death(killer, victim, quest_state)
+    res : String? = on_death(killer, victim, quest_state)
   rescue e
     show_error(quest_state.player, e)
   else
@@ -144,7 +144,7 @@ class Quest < AbstractScript
   end
 
   def notify_item_use(item, pc)
-    res = on_item_use(item, pc)
+    res : String? = on_item_use(item, pc)
   rescue e
     show_error(pc, e)
   else
@@ -152,7 +152,7 @@ class Quest < AbstractScript
   end
 
   def notify_spell_finished(npc, pc, skill)
-    res = on_spell_finished(npc, pc, skill)
+    res : String? = on_spell_finished(npc, pc, skill)
   rescue e
     show_error(pc, e)
   else
@@ -160,7 +160,7 @@ class Quest < AbstractScript
   end
 
   def notify_trap_action(trap, trigger, action)
-    res = on_trap_action(trap, trigger, action)
+    res : String? = on_trap_action(trap, trigger, action)
   rescue e
     if pc = trigger.acting_player
       show_error(pc, e)
@@ -184,7 +184,7 @@ class Quest < AbstractScript
   end
 
   def notify_event(event, npc, pc)
-    res = on_adv_event(event, npc, pc)
+    res : String? = on_adv_event(event, npc, pc)
   rescue e
     show_error(pc, e)
   else
@@ -192,7 +192,7 @@ class Quest < AbstractScript
   end
 
   def notify_enter_world(pc)
-    res = on_enter_world(pc)
+    res : String? = on_enter_world(pc)
   rescue e
     show_error(pc, e)
   else
@@ -212,7 +212,7 @@ class Quest < AbstractScript
   end
 
   def notify_tutorial_question_mark(pc, number)
-    res = on_tutorial_question_mark(pc, number)
+    res : String? = on_tutorial_question_mark(pc, number)
   rescue e
     show_error(pc, e)
   else
@@ -220,7 +220,7 @@ class Quest < AbstractScript
   end
 
   def notify_tutorial_cmd(pc, command)
-    res = on_tutorial_cmd(pc, command)
+    res : String? = on_tutorial_cmd(pc, command)
   rescue e
     show_error(pc, e)
   else
@@ -228,7 +228,7 @@ class Quest < AbstractScript
   end
 
   def notify_kill(npc, killer, is_summon)
-    res = on_kill(npc, killer, is_summon)
+    res : String? = on_kill(npc, killer, is_summon)
   rescue e
     show_error(killer, e)
   else
@@ -237,6 +237,7 @@ class Quest < AbstractScript
 
   def notify_talk(npc, pc)
     start_condition_html = get_start_condition_html(pc)
+    res : String?
     if !pc.has_quest_state?(@name) && start_condition_html
       res = start_condition_html
     else
@@ -250,7 +251,7 @@ class Quest < AbstractScript
   end
 
   def notify_first_talk(npc, pc)
-    res = on_first_talk(npc, pc)
+    res : String? = on_first_talk(npc, pc)
   rescue e
     show_error(pc, e)
   else
@@ -258,7 +259,7 @@ class Quest < AbstractScript
   end
 
   def notify_acquire_skill(npc, pc, skill, type)
-    res = on_acquire_skill(npc, pc, skill, type)
+    res : String? = on_acquire_skill(npc, pc, skill, type)
   rescue e
     show_error(pc, e)
   else
@@ -266,7 +267,7 @@ class Quest < AbstractScript
   end
 
   def notify_item_talk(item, pc)
-    res = on_item_talk(item, pc)
+    res : String? = on_item_talk(item, pc)
   rescue e
     show_error(pc, e)
   else
@@ -278,7 +279,7 @@ class Quest < AbstractScript
   end
 
   def notify_item_event(item, pc, event)
-    if res = on_item_event(item, pc, event)
+    if res : String? = on_item_event(item, pc, event)
       if res.casecmp?("true") || res.casecmp?("false")
         return
       end
@@ -290,7 +291,7 @@ class Quest < AbstractScript
   end
 
   def notify_skill_see(npc, caster, skill, targets, is_summon)
-    res = on_skill_see(npc, caster, skill, targets, is_summon)
+    res : String? = on_skill_see(npc, caster, skill, targets, is_summon)
   rescue e
     show_error(caster, e)
   else
@@ -298,7 +299,7 @@ class Quest < AbstractScript
   end
 
   def notify_faction_call(npc, caller, attacker, is_summon)
-    res = on_faction_call(npc, caller, attacker, is_summon)
+    res : String? = on_faction_call(npc, caller, attacker, is_summon)
   rescue e
     show_error(attacker, e)
   else
@@ -306,7 +307,7 @@ class Quest < AbstractScript
   end
 
   def notify_aggro_range_enter(npc, pc, is_summon)
-    res = on_aggro_range_enter(npc, pc, is_summon)
+    res : String? = on_aggro_range_enter(npc, pc, is_summon)
   rescue e
     show_error(pc, e)
   else
@@ -317,7 +318,7 @@ class Quest < AbstractScript
     if is_summon || creature.player?
       player = creature.acting_player
     end
-    res = on_see_creature(npc, creature, is_summon)
+    res : String? = on_see_creature(npc, creature, is_summon)
   rescue e
     if player
       show_error(player, e)
@@ -336,7 +337,7 @@ class Quest < AbstractScript
 
   def notify_enter_zone(char, zone)
     pc = char.acting_player
-    res = on_enter_zone(char, zone)
+    res : String? = on_enter_zone(char, zone)
   rescue e
     if pc
       show_error(pc, e)
@@ -349,7 +350,7 @@ class Quest < AbstractScript
 
   def notify_exit_zone(char, zone)
     pc = char.acting_player
-    res = on_exit_zone(char, zone)
+    res : String? = on_exit_zone(char, zone)
   rescue e
     if pc
       show_error(pc, e)
@@ -405,11 +406,9 @@ class Quest < AbstractScript
     on_adv_event("", killer.as?(L2Npc), qs.player)
   end
 
-  def on_adv_event(event, npc, pc)
-    if pc
-      if qs = pc.get_quest_state(name)
-        return on_event(event, qs)
-      end
+  def on_adv_event(event, npc, pc) : String?
+    if pc && (qs = pc.get_quest_state(name))
+      return on_event(event, qs)
     end
 
     nil
@@ -556,7 +555,7 @@ class Quest < AbstractScript
 
     if pc && pc.gm?
       trace = e.backtrace.join("<br>")
-      res = "<html><body><title>Script error</title>#{trace}</body></html>"
+      res : String? = "<html><body><title>Script error</title>#{trace}</body></html>"
       return show_result(pc, res)
     end
 
@@ -570,7 +569,7 @@ class Quest < AbstractScript
   def show_result(pc : L2PcInstance?, res : String?, npc : L2Npc?) : Bool
     return true unless pc && res && !res.empty?
 
-    if res.ends_with?(".htm") || res.ends_with?(".html")
+    if res.ends_with?(".htm", ".html")
       show_html_file(pc, res, npc)
     elsif res.starts_with?("<html")
       reply = NpcHtmlMessage.new(npc ? npc.l2id : 0, res)
@@ -709,16 +708,8 @@ class Quest < AbstractScript
     create_quest_var_in_db(qs, "<state>", State[qs.state])
   end
 
-  def create_quest_in_db(qs)
-    Quest.create_quest_in_db(qs)
-  end
-
   def self.update_quest_in_db(qs)
     update_quest_var_in_db(qs, "<state>", State[qs.state])
-  end
-
-  def update_quest_in_db(qs)
-    Quest.update_quest_in_db(qs)
   end
 
   def self.get_no_quest_msg(pc : L2PcInstance) : String
@@ -730,9 +721,7 @@ class Quest < AbstractScript
     DEFAULT_NO_QUEST_MSG
   end
 
-  def get_no_quest_msg(pc)
-    Quest.get_no_quest_msg(pc)
-  end
+  delegate get_no_quest_msg, to: Quest
 
   def add_start_npc(*id)
     set_npc_quest_start_id(*id)
@@ -854,8 +843,8 @@ class Quest < AbstractScript
 
   def add_npc_hate_id(*id)
     add_npc_hate_id(*id) do |e|
-      res = !on_npc_hate(e.npc, e.active_char, e.summon?)
-      TerminateReturn.new(res, false, false)
+      ret = !on_npc_hate(e.npc, e.active_char, e.summon?)
+      TerminateReturn.new(ret, false, false)
     end
   end
 
@@ -869,8 +858,8 @@ class Quest < AbstractScript
 
   def add_can_see_me_id(*id)
     add_npc_hate_id(*id) do |e|
-      res = !notify_on_can_see_me(e.npc, e.active_char)
-      TerminateReturn.new(res, false, false)
+      ret = !notify_on_can_see_me(e.npc, e.active_char)
+      TerminateReturn.new(ret, false, false)
     end
   end
 
@@ -890,6 +879,7 @@ class Quest < AbstractScript
 
   def check_party_member_conditions(qs, cond, npc)
     return false unless qs
+
     if cond == -1
       qs.started?
     else
@@ -905,12 +895,12 @@ class Quest < AbstractScript
     if content = get_htm(pc, file_name)
       npc = pc.last_folk_npc
       if has_quest && npc
-        content = content.gsub("%objectId%", npc.l2id.to_s)
+        content = content.gsub("%objectId%") { npc.l2id }
       end
       reply = NpcHtmlMessage.new(npc.try &.l2id || 0, content)
       pc.send_packet(reply)
     else
-      warn "Quest#show_page: Missing content for #{file_name.inspect}."
+      warn { "Quest#show_page: Missing content for #{file_name.inspect}." }
     end
   end
 
@@ -921,7 +911,7 @@ class Quest < AbstractScript
       reply.html = content
       pc.send_packet(reply)
     else
-      warn "Quest#show_quest_page: Missing content for #{file_name.inspect}."
+      warn { "Quest#show_quest_page: Missing content for #{file_name.inspect}." }
     end
   end
 
@@ -940,7 +930,7 @@ class Quest < AbstractScript
 
     if content
       if npc
-        content = content.gsub("%objectId%", npc.l2id.to_s)
+        content = content.gsub("%objectId%") { npc.l2id }
       end
 
       if quest_window && quest_id > 0 && quest_id < 20000 && quest_id != 999
@@ -1003,7 +993,7 @@ class Quest < AbstractScript
     take_items(pc, -1, @quest_item_ids)
   end
 
-  def active=(status)
+  def active=(status : Bool)
     # L2J TODO
   end
 
@@ -1012,27 +1002,22 @@ class Quest < AbstractScript
       set_player_login_id { |e| notify_enter_world(e.active_char) }
     else
       listeners.safe_each do |l|
-        if l.type == EventType::ON_PLAYER_LOGIN#.on_player_login?
+        if l.type == EventType::ON_PLAYER_LOGIN
           l.unregister_me
         end
       end
     end
   end
 
-  def start_conditions
+  def start_conditions : String?
     @start_condition || sync do
-      @start_condition ||= {} of Proc(L2PcInstance, Bool) => String
+      @start_condition ||= {} of L2PcInstance -> Bool => String
     end
   end
 
   def can_start_quest?(pc : L2PcInstance) : Bool
-    return true unless conds = @start_condition
-    # conds.each_key do |cond|
-    #   return false unless cond.call(pc)
-    # end
-    # true
-
-    conds.local_each_key.all? &.call(pc)
+    conds = @start_condition
+    conds.nil? || conds.local_each_key.all? &.call(pc)
   end
 
   def get_start_condition_html(pc : L2PcInstance)
@@ -1048,7 +1033,7 @@ class Quest < AbstractScript
   end
 
   def add_cond_level(min : Int32, max : Int32, html)
-    add_cond_start(html) { |pc| pc.level >= min && pc.level <= max }
+    add_cond_start(html) { |pc| pc.level.between?(min, max) }
   end
 
   def add_cond_min_level(min : Int32, html : String)
@@ -1090,7 +1075,7 @@ class Quest < AbstractScript
   end
 
   def add_cond_in_category(type : CategoryType, html : String)
-    add_cond_start(html) { |pc| pc.in_category?(type) }
+    add_cond_start(html, &.in_category?(type))
   end
 
   def get_already_completed_msg(pc : L2PcInstance) : String
@@ -1100,7 +1085,7 @@ class Quest < AbstractScript
 
   def get_random_party_member(pc : L2PcInstance?) : L2PcInstance?
     return unless pc
-    return pc unless party = pc.party?
+    return pc unless party = pc.party
     return pc if party.members.empty?
     party.members.sample(random: Rnd)
   end
@@ -1115,7 +1100,7 @@ class Quest < AbstractScript
       return get_random_party_member(pc)
     end
 
-    party = pc.party?
+    party = pc.party
 
     if party.nil? || party.members.empty?
       temp = pc.get_quest_state(name)
@@ -1130,22 +1115,22 @@ class Quest < AbstractScript
     party.members.select do |m|
       temp = m.get_quest_state(name)
       temp &&
-        temp.get(var) &&
-        temp.get(var).not_nil!.casecmp?(value) &&
-        m.inside_radius?(target, 1500, true, false)
+      (qs = temp.get(var)) &&
+      qs.casecmp?(value) &&
+      m.inside_radius?(target, 1500, true, false)
     end
-    .sample(random: Rnd)
+    .sample?(random: Rnd)
   end
 
   def get_random_party_member(pc : L2PcInstance?, npc : L2Npc?) : L2PcInstance?
     return unless pc && check_distance_to_target(pc, npc)
     npc = npc.not_nil!
 
-    party = pc.party?
+    party = pc.party
 
     if party.nil?
       if check_party_member(pc, npc)
-        lucky_player = pc
+        winner = pc
       end
     else
       highest_roll = 0
@@ -1153,12 +1138,14 @@ class Quest < AbstractScript
         rnd = Rnd.rand(1000)
         if rnd > highest_roll && check_party_member(m, npc)
           highest_roll = rnd
-          lucky_player = m
+          winner = m
         end
       end
     end
 
-    lucky_player if lucky_player && check_distance_to_target(lucky_player, npc)
+    if winner && check_distance_to_target(winner, npc)
+      winner
+    end
   end
 
   def get_random_party_member_state(pc : L2PcInstance?, state : State) : L2PcInstance?
@@ -1168,7 +1155,7 @@ class Quest < AbstractScript
   def get_random_party_member_state(pc : L2PcInstance?, state : Int) : L2PcInstance?
     return unless pc
 
-    party = pc.party?
+    party = pc.party
     if party.nil? || party.members.empty?
       temp = pc.get_quest_state(name)
       if temp && temp.state == state
@@ -1191,16 +1178,16 @@ class Quest < AbstractScript
       end
     end
 
-    candidates.sample?
+    candidates.sample?(random: Rnd)
   end
 
-  def get_random_party_member_state(pc : L2PcInstance?, condition : Int, player_chance : Int, target : L2Npc) : QuestState?
+  def get_random_party_member_state(pc : L2PcInstance?, condition : Int, chance : Int, target : L2Npc) : QuestState?
     return unless pc
-    return if player_chance < 1
+    return if chance < 1
 
     return unless qs = pc.get_quest_state(name)
 
-    unless pc.in_party?
+    unless party = pc.party
       unless check_party_member_conditions(qs, condition, target)
         return
       end
@@ -1213,16 +1200,16 @@ class Quest < AbstractScript
     end
 
     candidates = [] of QuestState
-    if check_party_member_conditions(qs, condition, target) && player_chance > 0
-      player_chance.times { candidates << qs }
+    if check_party_member_conditions(qs, condition, target) && chance > 0
+      chance.times { candidates << qs }
     end
 
-    pc.party.members.each do |m|
+    party.members.each do |m|
       next if m == pc
 
       qs = m.get_quest_state(name)
-      if check_party_member_conditions(qs, condition, target)
-        candidates << qs.not_nil!
+      if qs && check_party_member_conditions(qs, condition, target)
+        candidates << qs
       end
     end
 
@@ -1266,11 +1253,7 @@ class Quest < AbstractScript
 
   def get_one_time_quest_flag(talker, quest_id)
     quest = QuestManager.get_quest(quest_id)
-    if quest && quest.get_quest_state!(talker).completed?
-      return 1
-    end
-
-    0
+    (quest && quest.get_quest_state!(talker).completed?) ? 1 : 0
   end
 
   def self.play_sound(pc : L2PcInstance, sound : IAudio)
@@ -1289,7 +1272,7 @@ class Quest < AbstractScript
     if content = get_htm(pc, file_name)
       pc.send_packet(TutorialShowHtml.new(content))
     else
-      warn "Quest#show_tutorial_html: #{file_name.inspect} not found."
+      warn { "Quest#show_tutorial_html: #{file_name.inspect} not found." }
     end
   end
 

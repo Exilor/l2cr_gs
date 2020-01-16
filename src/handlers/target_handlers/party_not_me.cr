@@ -3,7 +3,7 @@ module TargetHandler::PartyNotMe
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    unless party = char.party?
+    unless party = char.party
       return EMPTY_TARGET_LIST
     end
 
@@ -29,6 +29,6 @@ module TargetHandler::PartyNotMe
   end
 
   def target_type
-    L2TargetType::PARTY_NOTME
+    TargetType::PARTY_NOTME
   end
 end

@@ -25,7 +25,7 @@ module GameDB
           unless SkillTreesData.skill_allowed?(pc, skill)
             Util.punish(
               pc,
-              "has invalid skill #{skill.name} (#{skill.id}/#{skill.level}), class: #{ClassListData.get_class!(pc.class_id).class_name}",
+              "has invalid skill #{skill.name} (#{skill.id}/#{skill.level}), class: #{ClassListData.get_class(pc.class_id).class_name}",
               IllegalActionPunishmentType::BROADCAST
             )
             if Config.skill_check_remove
@@ -39,49 +39,42 @@ module GameDB
     end
 
     def insert(pc : L2PcInstance, class_index : Int32, skill : Skill)
-      GameDB.exec(
-        INSERT,
-        pc.l2id,
-        skill.id,
-        skill.level,
-        class_index
-      )
+      GameDB.exec(INSERT, pc.l2id, skill.id, skill.level, class_index)
     rescue e
       error e
     end
 
     def insert(pc : L2PcInstance, new_class_index : Int32, new_skills : Array(Skill))
-      return if new_skills.empty?
+      # return if new_skills.empty?
 
-      class_index = new_class_index > -1 ? new_class_index : pc.class_index
+      # class_index = new_class_index > -1 ? new_class_index : pc.class_index
 
-      new_skills.each do |skill|
-        GameDB.exec(
-          REPLACE,
-          pc.l2id,
-          skill.id,
-          skill.level,
-          class_index
-        )
-      end
+      # new_skills.each do |skill|
+      #   GameDB.exec(REPLACE, pc.l2id, skill.id, skill.level, class_index)
+      # end
+
+
 
       # ps = GameDB.prepare
       # temp = new_skills.map do |skill|
       #   [pc.l2id, skill.id, skill.level, class_index] of DB::Any
       # end
       # ps.exec(REPLACE, temp)
+
+
+
+      return if new_skills.empty?
+      class_index = new_class_index > -1 ? new_class_index : pc.class_index
+      ps = GameDB.prepare(REPLACE)
+      new_skills.each do |skill|
+        ps.exec(pc.l2id, skill.id, skill.level, class_index)
+      end
     rescue e
       error e
     end
 
     def update(pc : L2PcInstance, class_index : Int32, new_skill : Skill, old_skill : Skill)
-      GameDB.exec(
-        UPDATE,
-        new_skill.level,
-        old_skill.id,
-        pc.l2id,
-        class_index
-      )
+      GameDB.exec(UPDATE, new_skill.level, old_skill.id, pc.l2id, class_index)
     rescue e
       error e
     end
@@ -97,6 +90,5 @@ module GameDB
     rescue e
       error e
     end
-
   end
 end

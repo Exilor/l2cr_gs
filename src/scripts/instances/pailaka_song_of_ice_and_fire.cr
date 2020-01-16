@@ -39,18 +39,18 @@ class Scripts::PailakaSongOfIceAndFire < AbstractInstance
     teleport_player(pc, TELEPORT, world.instance_id)
   end
 
-  def on_adv_event(event, npc, player)
-    # debug "on_adv_event(event: #{event.inspect}, npc: #{npc}, player: #{player})."
+  def on_adv_event(event, npc, pc)
+    # debug "on_adv_event(event: #{event.inspect}, npc: #{npc}, pc: #{pc})."
     case event
     when "enter"
-      player = player.not_nil!
-      enter_instance(player, PailakaWorld.new, "PailakaSongOfIceAndFire.xml", TEMPLATE_ID)
+      pc = pc.not_nil!
+      enter_instance(pc, PailakaWorld.new, "PailakaSongOfIceAndFire.xml", TEMPLATE_ID)
     when "GARGOS_LAUGH"
       npc = npc.not_nil!
       broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::OHHOHOH)
     when "TELEPORT"
-      player = player.not_nil!
-      teleport_player(player, TELEPORT, player.instance_id)
+      pc = pc.not_nil!
+      teleport_player(pc, TELEPORT, pc.instance_id)
     when "DELETE"
       if npc
         npc.delete_me
@@ -67,21 +67,21 @@ class Scripts::PailakaSongOfIceAndFire < AbstractInstance
     super
   end
 
-  def on_attack(npc, player, damage, is_summon)
+  def on_attack(npc, pc, damage, is_summon)
     if damage > 0 && npc.script_value?(0)
       case Rnd.rand(6)
       when 0
         if npc.id == BOTTLE
-          npc.drop_item(player, WATER_ENHANCER, Rnd.rand(1i64..6i64))
+          npc.drop_item(pc, WATER_ENHANCER, Rnd.rand(1i64..6i64))
         end
       when 1
         if npc.id == BRAZIER
-          npc.drop_item(player, FIRE_ENHANCER, Rnd.rand(1i64..6i64))
+          npc.drop_item(pc, FIRE_ENHANCER, Rnd.rand(1i64..6i64))
         end
       when 2, 3
-        npc.drop_item(player, SHIELD_POTION, Rnd.rand(1i64..10i64))
+        npc.drop_item(pc, SHIELD_POTION, Rnd.rand(1i64..10i64))
       when 4, 5
-        npc.drop_item(player, HEAL_POTION, Rnd.rand(1i64..10i64))
+        npc.drop_item(pc, HEAL_POTION, Rnd.rand(1i64..10i64))
       end
 
       npc.script_value = 1
@@ -91,8 +91,8 @@ class Scripts::PailakaSongOfIceAndFire < AbstractInstance
     super
   end
 
-  def on_kill(npc, player, is_summon)
-    npc.drop_item(player, Rnd.bool ? SHIELD_POTION : HEAL_POTION, Rnd.rand(1i64..7i64))
+  def on_kill(npc, pc, is_summon)
+    npc.drop_item(pc, Rnd.bool ? SHIELD_POTION : HEAL_POTION, Rnd.rand(1i64..7i64))
     super
   end
 

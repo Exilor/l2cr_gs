@@ -56,7 +56,7 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
         ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::S1_THAT_STRANGER_MUST_BE_DEFEATED_HERE_IS_THE_ULTIMATE_HELP)
         ns.add_string_parameter(pc.name)
         npc.broadcast_packet(ns)
-        start_quest_timer("heal", 30000 - rand(20000), npc, pc)
+        start_quest_timer("heal", 30000 - Rnd.rand(20000), npc, pc)
         mob = add_spawn(SHILENS_EVIL_THOUGHTS, -23734, -9184, -5384, 0, false, 0, false, npc.instance_id).as(L2MonsterInstance)
         mob.broadcast_packet(NpcSay.new(mob.l2id, Say2::NPC_ALL, mob.id, NpcString::YOU_ARE_NOT_THE_OWNER_OF_THAT_ITEM))
         mob.set_running
@@ -73,7 +73,7 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
         npc.target = pc
         npc.do_cast(NPC_HEAL)
       end
-      start_quest_timer("heal", 30000 - rand(20000), npc, pc)
+      start_quest_timer("heal", 30000 - Rnd.rand(20000), npc, pc)
     when "32597-08.html", "32597-09.html", "32597-10.html"
       if st.cond?(2) && st.has_quest_items?(SCULPTURE_OF_DOUBT)
         html = event

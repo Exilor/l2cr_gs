@@ -62,7 +62,7 @@ class Scripts::TowerOfInfinitum < AbstractNpcAI
 
     if event.casecmp?("enter") && npc_id == JERIAN
       if HellboundEngine.level >= 11
-        party = pc.party?
+        party = pc.party
         if party && party.leader_l2id == pc.l2id
           party.members.each do |m|
             if !Util.in_range?(300, m, npc, true) || !m.affected_by_skill?(PASS_SKILL)
@@ -79,28 +79,30 @@ class Scripts::TowerOfInfinitum < AbstractNpcAI
       else
         html = "32302-02b.htm"
       end
-    elsif (event.casecmp?("up") || event.casecmp?("down")) && npc_id >= GK_FIRST && npc_id <= GK_LAST
-      direction = event.casecmp?("up") ? 0 : 1
-      party = pc.party?
+    elsif event.casecmp?("up") || event.casecmp?("down")
+      if npc_id.between?(GK_FIRST, GK_LAST)
+        direction = event.casecmp?("up") ? 0 : 1
+        party = pc.party
 
-      if party.nil?
-        html = "gk-noparty.htm"
-      elsif !party.leader?(pc)
-        html = "gk-noreq.htm"
-      else
-        party.members.each do |m|
-          if !Util.in_range?(1000, m, npc, false) || (m.z - npc.z).abs > 100
-            return "gk-noreq.htm"
-          end
-        end
-
-
-        if tele = TELE_COORDS.dig?(npc_id, direction)
+        if party.nil?
+          html = "gk-noparty.htm"
+        elsif !party.leader?(pc)
+          html = "gk-noreq.htm"
+        else
           party.members.each do |m|
-            m.tele_to_location(tele, true)
+            if !Util.in_range?(1000, m, npc, false) || (m.z - npc.z).abs > 100
+              return "gk-noreq.htm"
+            end
           end
+
+
+          if tele = TELE_COORDS.dig?(npc_id, direction)
+            party.members.each do |m|
+              m.tele_to_location(tele, true)
+            end
+          end
+          html = nil
         end
-        html = nil
       end
     end
 

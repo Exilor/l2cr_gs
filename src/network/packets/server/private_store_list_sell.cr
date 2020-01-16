@@ -11,7 +11,7 @@ class Packets::Outgoing::PrivateStoreListSell < Packets::Outgoing::AbstractItemP
     @package_sale = store_pc.sell_list.packaged?
   end
 
-  def write_impl
+  private def write_impl
     c 0xa1
 
     d @l2id

@@ -11,7 +11,7 @@ class EffectHandler::CubicMastery < AbstractEffect
   end
 
   def on_start(info)
-    info.effected.acting_player.stat.max_cubic_count = @cubic_count
+    info.effected.acting_player.not_nil!.stat.max_cubic_count = @cubic_count
   end
 
   def on_action_time(info)
@@ -19,6 +19,6 @@ class EffectHandler::CubicMastery < AbstractEffect
   end
 
   def on_exit(info)
-    info.effected.acting_player.stat.max_cubic_count = 1
+    info.effected.acting_player.not_nil!.stat.max_cubic_count = 1
   end
 end

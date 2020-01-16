@@ -10,7 +10,7 @@ class Packets::Outgoing::ChangeMoveType < GameServerPacket
     @running = char.running?
   end
 
-  def write_impl
+  private def write_impl
     c 0x28
 
     d @char_id

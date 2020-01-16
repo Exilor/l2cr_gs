@@ -3,8 +3,8 @@ class EffectHandler::Sleep < AbstractEffect
     EffectFlag::SLEEP.mask
   end
 
-  def effect_type
-    L2EffectType::SLEEP
+  def effect_type : EffectType
+    EffectType::SLEEP
   end
 
   def on_exit(info)
@@ -16,7 +16,7 @@ class EffectHandler::Sleep < AbstractEffect
   def on_start(info)
     info.effected.abort_attack
     info.effected.abort_cast
-    info.effected.stop_move
+    info.effected.stop_move(nil)
     info.effected.notify_event(AI::SLEEPING)
   end
 end

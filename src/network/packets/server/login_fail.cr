@@ -1,7 +1,7 @@
 class Packets::Outgoing::LoginFail < GameServerPacket
   private initializer reason : Int32
 
-  def write_impl
+  private def write_impl
     c 0x0a
     d @reason
   end

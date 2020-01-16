@@ -66,14 +66,14 @@ class SelfAnalysis
         next
       end
 
-      if sk.has_effect_type?(L2EffectType::DISPEL)
+      if sk.has_effect_type?(EffectType::DISPEL)
         @cancel_skills << sk
-      elsif sk.has_effect_type?(L2EffectType::HP)
+      elsif sk.has_effect_type?(EffectType::HP)
         @heal_skills << sk
         @has_heal_or_resurrect = true
-      elsif sk.has_effect_type?(L2EffectType::SLEEP)
+      elsif sk.has_effect_type?(EffectType::SLEEP)
         @sleep_skills << sk
-      elsif sk.has_effect_type?(L2EffectType::STUN, L2EffectType::PARALYZE)
+      elsif sk.has_effect_type?(EffectType::STUN, EffectType::PARALYZE)
         # hardcoding petrification until improvements are made to
         # EffectTemplate... petrification is totally different for
         # AI than paralyze
@@ -83,13 +83,13 @@ class SelfAnalysis
         else
           @general_disablers << sk
         end
-      elsif sk.has_effect_type?(L2EffectType::ROOT)
+      elsif sk.has_effect_type?(EffectType::ROOT)
         @root_skills << sk
-      elsif sk.has_effect_type?(L2EffectType::FEAR)
+      elsif sk.has_effect_type?(EffectType::FEAR)
         @debuff_skills << sk
-      elsif sk.has_effect_type?(L2EffectType::MUTE)
+      elsif sk.has_effect_type?(EffectType::MUTE)
         @mute_skills << sk
-      elsif sk.has_effect_type?(L2EffectType::RESURRECTION)
+      elsif sk.has_effect_type?(EffectType::RESURRECTION)
         @resurrect_skills << sk
         @has_heal_or_resurrect = true
       else

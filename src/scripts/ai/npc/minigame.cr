@@ -225,7 +225,7 @@ class Scripts::Minigame < AbstractNpcAI
   end
 
   private class MinigameRoom
-    include EventListenerOwner
+    include AbstractEventListener::Owner
 
     getter order = Slice(Int32).new(9, 0)
     setter listener : ConsumerEventListener?

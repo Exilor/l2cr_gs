@@ -15,11 +15,11 @@ class Packets::Outgoing::ConfirmDlg < Packets::Outgoing::AbstractMessagePacket
   end
 
   def self.new(id : Int32) : self
-    sm_id = SystemMessageId.get_system_message_id(id)
+    sm_id = SystemMessageId.get(id)
     new(sm_id)
   end
 
-  def write_impl
+  private def write_impl
     c 0xf3
 
     super

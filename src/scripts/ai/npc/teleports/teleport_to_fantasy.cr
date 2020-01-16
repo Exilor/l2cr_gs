@@ -60,7 +60,7 @@ class Scripts::TeleportToFantasy < AbstractNpcAI
         pc.tele_to_location(RUNE_TOWNSHIP)
       end
     else
-      pc.tele_to_location(ISLE_LOCATIONS.sample)
+      pc.tele_to_location(ISLE_LOCATIONS.sample(random: Rnd))
       pc.variables[FANTASY_RETURN] = TELEPORTERS[npc.id]
     end
 

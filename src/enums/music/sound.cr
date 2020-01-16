@@ -3,18 +3,18 @@ require "./i_audio"
 class Sound < EnumClass
   include IAudio
 
-  getter packet : Packets::Outgoing::PlaySound
+  getter packet : PlaySound
 
   protected def initialize(name)
-    @packet = Packets::Outgoing::PlaySound.create_sound(name)
+    @packet = PlaySound.create_sound(name)
   end
 
   def sound_name : String
     @packet.sound_name
   end
 
-  def with_object(obj : L2Object) : Packets::Outgoing::PlaySound
-    Packets::Outgoing::PlaySound.create_sound(sound_name, obj)
+  def with_object(obj : L2Object) : PlaySound
+    PlaySound.create_sound(sound_name, obj)
   end
 
   add(ITEMSOUND_QUEST_ACCEPT, "ItemSound.quest_accept")

@@ -81,7 +81,7 @@ module ClanHallManager
   def set_free(id : Int32)
     sync do
       FREE_CLAN_HALLS[id] = CLAN_HALLS[id]
-      ClanTable.get_clan!(FREE_CLAN_HALLS[id].owner_id).hideout_id = 0
+      ClanTable.get_clan(FREE_CLAN_HALLS[id].owner_id).not_nil!.hideout_id = 0
       FREE_CLAN_HALLS[id].free
       CLAN_HALLS.delete(id)
     end
@@ -97,7 +97,7 @@ module ClanHallManager
         tmp.free
       end
 
-      ClanTable.get_clan!(clan.id).hideout_id = id
+      ClanTable.get_clan(clan.id).not_nil!.hideout_id = id
       tmp.owner = clan
     end
   end
@@ -106,20 +106,8 @@ module ClanHallManager
     ALL_CLAN_HALLS[id]?
   end
 
-  def get_clan_hall_by_id!(id : Int32) : ClanHall
-    unless ch = get_clan_hall_by_id(id)
-      raise "Clan hall with id #{id} not found"
-    end
-
-    ch
-  end
-
   def get_auctionable_hall_by_id(id : Int32) : AuctionableHall?
     ALL_AUCTIONABLE_CLAN_HALLS[id]?
-  end
-
-  def get_auctionable_hall_by_id!(id : Int32) : AuctionableHall?
-    ALL_AUCTIONABLE_CLAN_HALLS[id]
   end
 
   def get_clan_hall(x : Int32, y : Int32, z : Int32) : ClanHall?
@@ -159,14 +147,6 @@ module ClanHallManager
 
   def get_clan_hall_by_owner(clan : L2Clan) : AuctionableHall?
     CLAN_HALLS.find_value { |ch| clan.id == ch.owner_id }
-  end
-
-  def get_clan_hall_by_owner!(clan : L2Clan) : AuctionableHall
-    unless ch = get_clan_hall_by_owner(clan)
-      raise "No Clan Hall found for clan #{clan.name}"
-    end
-
-    ch
   end
 
   def get_abstract_hall_by_owner(clan : L2Clan) : ClanHall?

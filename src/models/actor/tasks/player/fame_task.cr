@@ -6,7 +6,7 @@ struct FameTask
       return
     end
 
-    client = @pc.client?
+    client = @pc.client
 
     if client.nil? || (client.detached? && !Config.offline_fame)
       return

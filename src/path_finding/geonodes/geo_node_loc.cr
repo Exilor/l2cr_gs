@@ -1,7 +1,7 @@
 class GeoNodeLoc < AbstractNodeLoc
-  def_equals @x, @y, @z
-
   initializer x : Int16, y : Int16, z : Int16
+
+  def_equals_and_hash @x, @y, @z
 
   def x : Int32
     L2World::MAP_MIN_X + (@x.to_i32 * 128) + 48

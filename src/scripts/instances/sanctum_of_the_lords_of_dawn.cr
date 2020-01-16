@@ -142,7 +142,7 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
       return "32579-01.html"
     when SHELF
       world = InstanceManager.get_world(npc.instance_id).not_nil!
-      InstanceManager.get_instance!(world.instance_id).duration = 300000
+      InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300000
       pc.tele_to_location(-75925, 213399, -7128)
       return "32580-01.html"
     end

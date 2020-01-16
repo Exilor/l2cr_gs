@@ -11,7 +11,7 @@ module BypassHandler::ClanWarehouse
       return false
     end
 
-    unless clan = pc.clan?
+    unless clan = pc.clan
       pc.send_packet(SystemMessageId::YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_CLAN_WAREHOUSE)
       return false
     end
@@ -37,7 +37,7 @@ module BypassHandler::ClanWarehouse
         warn "TODO: sorted withdrawal."
       elsif command.starts_with?(commands[2]) # DespositC
         pc.action_failed
-        pc.active_warehouse = pc.clan.warehouse
+        pc.active_warehouse = clan.warehouse
         pc.inventory_blocking_status = true
         wdl = WareHouseDepositList.new(pc, WareHouseDepositList::CLAN)
         pc.send_packet(wdl)
@@ -58,7 +58,7 @@ module BypassHandler::ClanWarehouse
       return
     end
 
-    wh = pc.clan.warehouse
+    wh = pc.clan.not_nil!.warehouse
 
     pc.active_warehouse = wh
 

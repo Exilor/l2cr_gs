@@ -61,7 +61,7 @@ class Scripts::Q00239_WontYouJoinUs < Quest
       end
     else
       m = get_random_party_member(killer, 3)
-      if m && rand(100) < CHANCE_FOR_FRAGMENT
+      if m && Rnd.rand(100) < CHANCE_FOR_FRAGMENT
         st = get_quest_state(m, false).not_nil!
         if st.get_quest_items_count(ENCHANTED_GOLEM_FRAGMENT) < ENCHANTED_GOLEM_FRAGMENT_NEEDED
           st.give_items(ENCHANTED_GOLEM_FRAGMENT, 1)

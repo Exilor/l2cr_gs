@@ -9,7 +9,7 @@ class Packets::Outgoing::GMViewItemList < Packets::Outgoing::AbstractItemPacket
     @items = char.inventory.items.to_slice
   end
 
-  def write_impl
+  private def write_impl
     c 0x9a
 
     s @player_name

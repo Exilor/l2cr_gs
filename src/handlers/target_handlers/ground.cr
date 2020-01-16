@@ -7,10 +7,13 @@ module TargetHandler::Ground
     max_targets = skill.affect_limit
     src_in_arena = char.inside_pvp_zone? && !char.inside_siege_zone?
 
-    pos = char.acting_player.current_skill_world_position.not_nil!
+    unless pos = char.acting_player.try &.current_skill_world_position
+      return EMPTY_TARGET_LIST
+    end
+
     char.known_list.each_character do |obj|
       if obj.inside_radius?(pos, skill.affect_range, false, false)
-        if !Skill.check_for_area_offensive_skills(char, obj, skill, src_in_arena)
+        unless skill.offensive_aoe_check(char, obj, src_in_arena)
           next
         end
 
@@ -22,7 +25,7 @@ module TargetHandler::Ground
       end
     end
 
-    if target_list.empty? && skill.has_effect_type?(L2EffectType::SUMMON_NPC)
+    if target_list.empty? && skill.has_effect_type?(EffectType::SUMMON_NPC)
       target_list << char
     end
 
@@ -30,6 +33,6 @@ module TargetHandler::Ground
   end
 
   def target_type
-    L2TargetType::GROUND
+    TargetType::GROUND
   end
 end

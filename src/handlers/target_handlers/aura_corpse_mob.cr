@@ -26,6 +26,6 @@ module TargetHandler::AuraCorpseMob
   end
 
   def target_type
-    L2TargetType::AURA_CORPSE_MOB
+    TargetType::AURA_CORPSE_MOB
   end
 end

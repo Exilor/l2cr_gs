@@ -48,20 +48,20 @@ class Scripts::Q00699_GuardianOfTheSkies < Quest
     if st = get_quest_state(killer, false)
       if npc.id == VALDSTONE
         amount = 0
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         if chance < 215
-          amount = rand(10) + 90
+          amount = Rnd.rand(10) + 90
         elsif chance < 446
-          amount = rand(10) + 80
+          amount = Rnd.rand(10) + 80
         elsif chance < 715
-          amount = rand(10) + 70
+          amount = Rnd.rand(10) + 70
         else
-          amount = rand(10) + 60
+          amount = Rnd.rand(10) + 60
         end
         st.give_items(VULTURES_GOLDEN_FEATHER, amount)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       else
-        if rand(1000) < MONSTERS[npc.id]
+        if Rnd.rand(1000) < MONSTERS[npc.id]
           st.give_items(VULTURES_GOLDEN_FEATHER, 1)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end

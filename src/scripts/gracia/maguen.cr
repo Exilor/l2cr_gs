@@ -47,7 +47,7 @@ class Scripts::Maguen < AbstractNpcAI
 
     case event
     when "SPAWN_MAGUEN"
-       maguen = add_spawn(MAGUEN, npc.location, true, 60000, true)
+      maguen = add_spawn(MAGUEN, npc.location, true, 60000, true)
       maguen.variables["SUMMON_PLAYER"] = pc
       maguen.title = pc.name
       maguen.running = true
@@ -64,30 +64,30 @@ class Scripts::Maguen < AbstractNpcAI
       end
     when "FIRST_TIMER"
       npc.ai.stop_follow
-      random_effect = rand(1..3)
+      random_effect = Rnd.rand(1..3)
       npc.display_effect = random_effect
       npc.variables["NPC_EFFECT"] = random_effect
-      start_quest_timer("SECOND_TIMER", 5000 + rand(300), npc, pc)
-      npc.broadcast_social_action(rand(1..3))
+      start_quest_timer("SECOND_TIMER", 5000 + Rnd.rand(300), npc, pc)
+      npc.broadcast_social_action(Rnd.rand(1..3))
     when "SECOND_TIMER"
-      random_effect = rand(1..3)
+      random_effect = Rnd.rand(1..3)
       npc.display_effect = 4
       npc.display_effect = random_effect
       npc.variables["NPC_EFFECT"] = random_effect
-      start_quest_timer("THIRD_TIMER", 4600 + rand(600), npc, pc)
-      npc.broadcast_social_action(rand(1..3))
+      start_quest_timer("THIRD_TIMER", 4600 + Rnd.rand(600), npc, pc)
+      npc.broadcast_social_action(Rnd.rand(1..3))
     when "THIRD_TIMER"
-      random_effect = rand(1..3)
+      random_effect = Rnd.rand(1..3)
       npc.display_effect = 4
       npc.display_effect = random_effect
       npc.variables["NPC_EFFECT"] = random_effect
-      start_quest_timer("FORTH_TIMER", 4200 + rand(900), npc, pc)
-      npc.broadcast_social_action(rand(1..3))
+      start_quest_timer("FORTH_TIMER", 4200 + Rnd.rand(900), npc, pc)
+      npc.broadcast_social_action(Rnd.rand(1..3))
     when "FORTH_TIMER"
       npc.variables["NPC_EFFECT"] = 0
       npc.display_effect = 4
       start_quest_timer("END_TIMER", 500, npc, pc)
-      npc.broadcast_social_action(rand(1..3))
+      npc.broadcast_social_action(Rnd.rand(1..3))
     when "END_TIMER"
       if npc.variables.get_i32("TEST_MAGUEN") == 1
         pc.effect_list.stop_skill_effects(true, B_PLASMA1.skill.abnormal_type)
@@ -115,21 +115,21 @@ class Scripts::Maguen < AbstractNpcAI
       show_on_screen_msg(pc, NpcString::ENOUGH_MAGUEN_PLASMA_BISTAKON_HAVE_GATHERED, 2, 4000)
       elist.stop_skill_effects(true, B_PLASMA1.skill.abnormal_type)
       npc.target = pc
-      npc.do_cast(rand(100) < 70 ? B_BUFF_1 : B_BUFF_2)
+      npc.do_cast(Rnd.rand(100) < 70 ? B_BUFF_1 : B_BUFF_2)
       maguen_pet_chance(pc)
       start_quest_timer("END_TIMER", 3000, npc, pc)
     elsif b == 0 && c == 3 && r == 0
       show_on_screen_msg(pc, NpcString::ENOUGH_MAGUEN_PLASMA_COKRAKON_HAVE_GATHERED, 2, 4000)
       elist.stop_skill_effects(true, C_PLASMA1.skill.abnormal_type)
       npc.target = pc
-      npc.do_cast(rand(100) < 70 ? C_BUFF_1 : C_BUFF_2)
+      npc.do_cast(Rnd.rand(100) < 70 ? C_BUFF_1 : C_BUFF_2)
       maguen_pet_chance(pc)
       start_quest_timer("END_TIMER", 3000, npc, pc)
     elsif b == 0 && c == 0 && r == 3
       show_on_screen_msg(pc, NpcString::ENOUGH_MAGUEN_PLASMA_LEPTILIKON_HAVE_GATHERED, 2, 4000)
       elist.stop_skill_effects(true, R_PLASMA1.skill.abnormal_type)
       npc.target = pc
-      npc.do_cast(rand(100) < 70 ? R_BUFF_1 : R_BUFF_2)
+      npc.do_cast(Rnd.rand(100) < 70 ? R_BUFF_1 : R_BUFF_2)
       maguen_pet_chance(pc)
       start_quest_timer("END_TIMER", 3000, npc, pc)
     elsif b + c + r == 3
@@ -139,13 +139,13 @@ class Scripts::Maguen < AbstractNpcAI
         elist.stop_skill_effects(true, R_PLASMA1.skill.abnormal_type)
         show_on_screen_msg(pc, NpcString::THE_PLASMAS_HAVE_FILLED_THE_AEROSCOPE_AND_ARE_HARMONIZED, 2, 4000)
 
-        case rand(3)
+        case Rnd.rand(3)
         when 0
-          skill_to_cast = rand(100) < 70 ? B_BUFF_1 : B_BUFF_2
+          skill_to_cast = Rnd.rand(100) < 70 ? B_BUFF_1 : B_BUFF_2
         when 1
-          skill_to_cast = rand(100) < 70 ? C_BUFF_1 : C_BUFF_2
+          skill_to_cast = Rnd.rand(100) < 70 ? C_BUFF_1 : C_BUFF_2
         when 2
-          skill_to_cast = rand(100) < 70 ? R_BUFF_1 : R_BUFF_2
+          skill_to_cast = Rnd.rand(100) < 70 ? R_BUFF_1 : R_BUFF_2
         end
 
         if skill_to_cast
@@ -229,11 +229,11 @@ class Scripts::Maguen < AbstractNpcAI
   end
 
   def on_kill(npc, killer, is_summon)
-    if killer.in_party?
+    if party = killer.party
       party_member = get_random_party_member(killer).not_nil!
-      i0 = 10 + (10 * killer.party.size)
+      i0 = 10 + (10 * party.size)
 
-      if rand(1000) < i0 && npc.calculate_distance(killer, true, false) < 2000
+      if Rnd.rand(1000) < i0 && npc.calculate_distance(killer, true, false) < 2000
         if npc.calculate_distance(party_member, true, false) < 2000
           notify_event("SPAWN_MAGUEN", npc, party_member)
         end
@@ -244,8 +244,8 @@ class Scripts::Maguen < AbstractNpcAI
   end
 
   private def maguen_pet_chance(pc)
-    chance1 = rand(10000)
-    chance2 = rand(20)
+    chance1 = Rnd.rand(10000)
+    chance2 = Rnd.rand(20)
     if chance1 == 0 && chance2 != 0
       give_items(pc, MAGUEN_PET, 1)
     elsif chance1 == 0 && chance2 == 0

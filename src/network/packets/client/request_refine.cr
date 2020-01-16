@@ -30,7 +30,7 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
     ls_grade = ls.grade
 
     if @gemstone_count != get_gemstone_count(target_item.template.item_grade, ls_grade)
-      debug "Incorrect gemstone count: #{@gemstone_count}/#{get_gemstone_count(target_item.template.item_grade, ls_grade)}."
+      debug { "Incorrect gemstone count: #{@gemstone_count}/#{get_gemstone_count(target_item.template.item_grade, ls_grade)}." }
       pc.send_packet(ExVariationResult::STATIC_PACKET)
       pc.send_packet(SystemMessageId::AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS)
       return
@@ -65,9 +65,6 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
     stat34 = aug.augmentation_id >> 16
     pc.send_packet(ExVariationResult.new(stat12, stat34, 1))
 
-    # iu = InventoryUpdate.new
-    # iu.add_modified_item target_item
-    # pc.send_packet(iu)
     pc.send_packet(InventoryUpdate.modified(target_item))
 
     pc.send_packet(StatusUpdate.current_load(pc))

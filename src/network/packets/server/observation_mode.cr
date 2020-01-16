@@ -1,7 +1,7 @@
 class Packets::Outgoing::ObservationMode < GameServerPacket
   initializer loc : Location
 
-  def write_impl
+  private def write_impl
     c 0xeb
 
     l @loc

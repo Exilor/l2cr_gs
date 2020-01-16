@@ -39,7 +39,7 @@ class Scripts::DelusionTeleport < AbstractNpcAI
       town = TownManager.get_town(*npc.xyz)
       town_id = town ? town.town_id : 0
       pc.variables[DELUSION_RETURN] = town_id
-      pc.tele_to_location(HALL_LOCATIONS.sample, false)
+      pc.tele_to_location(HALL_LOCATIONS.sample(random: Rnd), false)
     else
       town_id = pc.variables.get_i32(DELUSION_RETURN, 0)
       pc.tele_to_location(RETURN_LOCATIONS[town_id], true)

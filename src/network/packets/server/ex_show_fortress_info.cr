@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExShowFortressInfo < GameServerPacket
   static_packet
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x15
 

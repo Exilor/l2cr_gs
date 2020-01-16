@@ -5,9 +5,10 @@ class Packets::Incoming::RequestWithdrawalParty < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    return unless party = pc.party?
+    return unless party = pc.party
+    rift = party.dimensional_rift
 
-    if party.in_dimensional_rift? && !party.dimensional_rift.revived_at_waiting_room.includes?(pc)
+    if rift && !rift.revived_at_waiting_room.includes?(pc)
       pc.send_message("You can't exit the party when you are in Dimensional Rift.")
     else
       party.remove_party_member(pc, L2Party::MessageType::Left)

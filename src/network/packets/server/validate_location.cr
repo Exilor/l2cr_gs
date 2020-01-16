@@ -7,7 +7,7 @@ class Packets::Outgoing::ValidateLocation < GameServerPacket
     @loc = obj.location
   end
 
-  def write_impl
+  private def write_impl
     c 0x79
 
     d @id

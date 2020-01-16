@@ -3,8 +3,8 @@ module TargetHandler::Area
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    if !target || (((target == char) || target.looks_dead?) && (skill.cast_range >= 0)) || (!(target.is_a?(L2Attackable) || target.is_a?(L2Playable)))
-      if char.acting_player?
+    if !target || ((target == char || target.looks_dead?) && skill.cast_range >= 0) || (!(target.is_a?(L2Attackable) || target.is_a?(L2Playable)))
+      if char.acting_player
         char.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
       end
       return EMPTY_TARGET_LIST
@@ -14,7 +14,7 @@ module TargetHandler::Area
 
     src_in_arena = char.inside_pvp_zone? && !char.inside_siege_zone?
     if skill.cast_range >= 0
-      if !Skill.check_for_area_offensive_skills(char, target, skill, src_in_arena)
+      unless skill.offensive_aoe_check(char, target, src_in_arena)
         return EMPTY_TARGET_LIST
       end
 
@@ -37,7 +37,7 @@ module TargetHandler::Area
       next if obj == origin
 
       if Util.in_range?(skill.affect_range, origin, obj, true)
-        if !Skill.check_for_area_offensive_skills(char, obj, skill, src_in_arena)
+        unless skill.offensive_aoe_check(char, obj, src_in_arena)
           next
         end
 
@@ -51,6 +51,6 @@ module TargetHandler::Area
   end
 
   def target_type
-    L2TargetType::AREA
+    TargetType::AREA
   end
 end

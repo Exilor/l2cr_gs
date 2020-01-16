@@ -10,11 +10,11 @@ class EffectHandler::DeleteHate < AbstractEffect
     Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
   end
 
-  def effect_type
-    L2EffectType::HATE
+  def effect_type : EffectType
+    EffectType::HATE
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

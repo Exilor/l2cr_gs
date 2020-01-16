@@ -42,7 +42,7 @@ class Scripts::Q00455_WingsOfSand < Quest
 
   def action_for_each_player(pc, npc, is_summon)
     st = get_quest_state(pc, false)
-    if st && Util.in_range?(1500, npc, pc, false) && rand(1000) < CHANCE
+    if st && Util.in_range?(1500, npc, pc, false) && Rnd.rand(1000) < CHANCE
       st.give_items(LARGE_BABY_DRAGON, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       if st.get_quest_items_count(LARGE_BABY_DRAGON) == 1
@@ -112,22 +112,22 @@ class Scripts::Q00455_WingsOfSand < Quest
 
   private def give_items(st)
     1.upto(st.cond - 1) do |i|
-      chance = rand(1000)
-      parts = rand(1..2)
+      chance = Rnd.rand(1000)
+      parts = Rnd.rand(1..2)
       if chance < 50
-        st.give_items(rand(15815..15825), 1) # Weapon Recipes
+        st.give_items(Rnd.rand(15815..15825), 1) # Weapon Recipes
       elsif chance < 100
-        st.give_items(rand(15792..15808), parts) # Armor Recipes
+        st.give_items(Rnd.rand(15792..15808), parts) # Armor Recipes
       elsif chance < 150
-        st.give_items(rand(15809..15811), parts) # Jewelry Recipes
+        st.give_items(Rnd.rand(15809..15811), parts) # Jewelry Recipes
       elsif chance < 250
-        st.give_items(ARMOR_PARTS.sample, parts) # Armor Parts
+        st.give_items(ARMOR_PARTS.sample(random: Rnd), parts) # Armor Parts
       elsif chance < 500
-        st.give_items(rand(15634..15644), parts) # Weapon Parts
+        st.give_items(Rnd.rand(15634..15644), parts) # Weapon Parts
       elsif chance < 750
-        st.give_items(rand(15769..15771), parts) # Jewelry Parts
+        st.give_items(Rnd.rand(15769..15771), parts) # Jewelry Parts
       elsif chance < 900
-        st.give_items(rand(9552..9557), 1) # Crystals
+        st.give_items(Rnd.rand(9552..9557), 1) # Crystals
       elsif chance < 970
         st.give_items(6578, 1) # Blessed Scroll: Enchant Armor (S-Grade)
       else

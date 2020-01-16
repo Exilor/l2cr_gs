@@ -53,7 +53,7 @@ class Scripts::Q00645_GhostsOfBatur < Quest
   def on_kill(npc, killer, is_summon)
     pc = get_random_party_member(killer, 1)
     if pc && Util.in_range?(1500, npc, pc, false)
-      if rand(1000) < CHANCES[npc.id - CONTAMINATED_MOREK_WARRIOR]
+      if Rnd.rand(1000) < CHANCES[npc.id - CONTAMINATED_MOREK_WARRIOR]
         st = get_quest_state!(pc, false)
         st.give_items(CURSED_BURIAL_ITEMS, 1)
         if st.cond?(1) && st.get_quest_items_count(CURSED_BURIAL_ITEMS) >= 500

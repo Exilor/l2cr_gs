@@ -1,6 +1,6 @@
 class EffectHandler::Buff < AbstractEffect
-  def effect_type
-    L2EffectType::BUFF
+  def effect_type : EffectType
+    EffectType::BUFF
   end
 
   def on_action_time(info)

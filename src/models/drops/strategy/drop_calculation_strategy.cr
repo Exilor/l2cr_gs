@@ -22,12 +22,4 @@ struct DropCalculationStrategy
       ItemHolder.new(item.item_id, Rnd.rand(min..max) * amount_multiply)
     end
   end
-
-  def self.parse(name : String) : self
-    if name.casecmp?("DEFAULT_STRATEGY")
-      return DEFAULT_STRATEGY
-    end
-
-    raise "unknown #{self} #{name.inspect}"
-  end
 end

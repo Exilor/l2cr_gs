@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExShowQuestMark < GameServerPacket
   initializer quest_id : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x21
 

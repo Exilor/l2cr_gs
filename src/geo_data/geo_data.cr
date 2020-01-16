@@ -15,7 +15,7 @@ module GeoData
   private class_getter! driver : GeoDriver
 
   def load
-    info "Loading geodata files..."
+    debug "Loading geodata files..."
 
     @@driver = GeoDriver.new
 
@@ -28,12 +28,12 @@ module GeoData
         load_file = Config.geodata_regions["#{region_x}_#{region_y}"]?
         if !load_file.nil?
           if load_file
-            # debug { "Loading #{File.basename(file_path)}" }
+            debug { "Loading #{File.basename(file_path)}" }
             driver.load_region(file_path, region_x, region_y)
             loaded_regions += 1
           end
         elsif Config.try_load_unspecified_regions && File.exists?(file_path)
-          # debug { "Loading #{File.basename(file_path)}" }
+          debug { "Loading #{File.basename(file_path)}" }
           driver.load_region(file_path, region_x, region_y)
           loaded_regions += 1
         end

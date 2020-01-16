@@ -73,16 +73,16 @@ class Scripts::ClassMaster < AbstractNpcAI
     end
   end
 
-  def on_tutorial_event(player, command)
+  def on_tutorial_event(pc, command)
     if command.starts_with?("CO")
-      on_tutorial_link(player, command)
+      on_tutorial_link(pc, command)
     end
 
     super
   end
 
-  def on_enter_world(player)
-    show_question_mark(player)
+  def on_enter_world(pc)
+    show_question_mark(pc)
 
     lst = ConsumerEventListener.new(Containers::PLAYERS, EventType::ON_PLAYER_LEVEL_CHANGED, self) do |evt|
       show_question_mark(evt.as(OnPlayerLevelChanged).active_char)
@@ -92,88 +92,88 @@ class Scripts::ClassMaster < AbstractNpcAI
     super
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player && npc
+  def on_adv_event(event, npc, pc)
+    return unless pc && npc
     if event.ends_with?(".htm")
       return event
     end
 
     if event.starts_with?("1stClass")
-      show_html_menu(player, npc.l2id, 1)
+      show_html_menu(pc, npc.l2id, 1)
     elsif event.starts_with?("2ndClass")
-      show_html_menu(player, npc.l2id, 2)
+      show_html_menu(pc, npc.l2id, 2)
     elsif event.starts_with?("3rdClass")
-      show_html_menu(player, npc.l2id, 3)
+      show_html_menu(pc, npc.l2id, 3)
     elsif event.starts_with?("change_class")
       val = event.from(13).to_i
-      if check_and_change_class(player, val)
-        msg = get_htm(player, "ok.htm").sub("%name%", ClassListData.get_class!(val).client_code)
-        show_result(player, msg)
+      if check_and_change_class(pc, val)
+        msg = get_htm(pc, "ok.htm").sub("%name%", ClassListData.get_class(val).client_code)
+        show_result(pc, msg)
         return ""
       end
     elsif event.starts_with?("become_noble")
-      unless player.noble?
-        player.noble = true
-        player.send_packet(UserInfo.new(player))
-        player.send_packet(ExBrExtraUserInfo.new(player))
+      unless pc.noble?
+        pc.noble = true
+        pc.send_packet(UserInfo.new(pc))
+        pc.send_packet(ExBrExtraUserInfo.new(pc))
         return "nobleok.htm"
       end
     elsif event.starts_with?("learn_skills")
-      player.give_available_skills(Config.auto_learn_fs_skills, true)
+      pc.give_available_skills(Config.auto_learn_fs_skills, true)
     elsif event.starts_with?("increase_clan_level")
-      unless player.clan_leader?
+      unless pc.clan_leader? && (clan = pc.clan)
         return "noclanleader.htm"
       end
-      if player.clan.level >= 5
+      if clan.level >= 5
         return "noclanlevel.htm"
       end
-      player.clan.change_level(5)
+      clan.change_level(5)
     else
-      warn { "Player #{player} send invalid request [#{event}]" }
+      warn { "Player #{pc} sent invalid request [#{event}]" }
     end
 
     ""
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     "#{npc.id}.htm"
   end
 
-  private def on_tutorial_link(player, request)
+  private def on_tutorial_link(pc, request)
     if !Config.alternate_class_master || request.nil? || !request.starts_with?("CO")
       return
     end
 
-    unless player.flood_protectors.server_bypass.try_perform_action("changeclass")
+    unless pc.flood_protectors.server_bypass.try_perform_action("changeclass")
       debug "Flood detected"
       return
     end
 
     begin
       val = request.from(2).to_i
-      check_and_change_class(player, val)
+      check_and_change_class(pc, val)
     rescue e
-      warn { "Player #{player} send invalid class change request [#{request}]." }
+      warn { "Player #{pc} send invalid class change request [#{request}]." }
     end
-    player.send_packet(TutorialCloseHtml::STATIC_PACKET)
+    pc.send_packet(TutorialCloseHtml::STATIC_PACKET)
   end
 
-  def on_tutorial_question_mark(player, number)
+  def on_tutorial_question_mark(pc, number)
     if !Config.alternate_class_master || number != CUSTOM_EVENT_ID
       return ""
     end
 
-    show_tutorial_html(player)
+    show_tutorial_html(pc)
     ""
   end
 
-  private def show_question_mark(player)
+  private def show_question_mark(pc)
     unless Config.alternate_class_master
       return
     end
 
-    class_id = player.class_id
-    if get_min_lvl(class_id.level) > player.level
+    class_id = pc.class_id
+    if get_min_lvl(class_id.level) > pc.level
       return
     end
 
@@ -181,19 +181,19 @@ class Scripts::ClassMaster < AbstractNpcAI
       return
     end
 
-    player.send_packet(TutorialShowQuestionMark.new(CUSTOM_EVENT_ID))
+    pc.send_packet(TutorialShowQuestionMark.new(CUSTOM_EVENT_ID))
   end
 
-  private def show_html_menu(player, l2id, level)
+  private def show_html_menu(pc, l2id, level)
     unless Config.allow_class_masters
-      msg = get_htm(player, "disabled.htm")
-      show_result(player, msg)
+      msg = get_htm(pc, "disabled.htm")
+      show_result(pc, msg)
       return
     end
 
     unless Config.class_master_settings.allowed?(level)
       html = NpcHtmlMessage.new(l2id)
-      job_lvl = player.class_id.level
+      job_lvl = pc.class_id.level
       sb = String.build(100) do |io|
         io << "<html><body>"
         case job_lvl
@@ -228,75 +228,75 @@ class Scripts::ClassMaster < AbstractNpcAI
       end
       html.html = sb
       html["%req_items%"] = get_required_items(level)
-      player.send_packet(html)
+      pc.send_packet(html)
       return
     end
 
-    current_class_id = player.class_id
+    current_class_id = pc.class_id
     if current_class_id.level >= level
-      msg = get_htm(player, "nomore.htm")
-      show_result(player, msg)
+      msg = get_htm(pc, "nomore.htm")
+      show_result(pc, msg)
       return
     end
 
     min_lvl = get_min_lvl(current_class_id.level)
-    if player.level >= min_lvl || Config.allow_entire_tree
+    if pc.level >= min_lvl || Config.allow_entire_tree
       menu = String.build(100) do |io|
         ClassId.each do |cid|
-          if cid.inspector? && player.total_subclasses < 2
+          if cid.inspector? && pc.total_subclasses < 2
             next
           end
           if validate_class_id(current_class_id, cid) && cid.level == level
             io << "<a action=\"bypass -h Quest ClassMaster change_class "
             io << cid.to_i
             io << "\">"
-            io << ClassListData.get_class!(cid).client_code
+            ClassListData.get_class(cid).client_code(io)
             io << "</a><br>"
           end
         end
       end
 
       if menu.size > 0
-        msg = get_htm(player, "template.htm")
-        msg = msg.sub("%name%", ClassListData.get_class!(current_class_id).client_code)
+        msg = get_htm(pc, "template.htm")
+        msg = msg.sub("%name%", ClassListData.get_class(current_class_id).client_code)
         msg = msg.sub("%menu%", menu)
-        show_result(player, msg)
+        show_result(pc, msg)
         return
 
       end
-      msg = get_htm(player, "comebacklater.htm")
+      msg = get_htm(pc, "comebacklater.htm")
       msg = msg.sub("%level%", get_min_lvl(level - 1).to_s)
-      show_result(player, msg)
+      show_result(pc, msg)
       return
     end
 
     if min_lvl < Int32::MAX
-      msg = get_htm(player, "comebacklater.htm")
+      msg = get_htm(pc, "comebacklater.htm")
       msg = msg.sub("%level%", min_lvl.to_s)
-      show_result(player, msg)
+      show_result(pc, msg)
       return
     end
 
-    show_result(player, get_htm(player, "nomore.htm"))
+    show_result(pc, get_htm(pc, "nomore.htm"))
   end
 
-  private def show_tutorial_html(player)
-    current_class_id = player.class_id
-    if get_min_lvl(current_class_id.level) > player.level && !Config.allow_entire_tree
+  private def show_tutorial_html(pc)
+    current_class_id = pc.class_id
+    if get_min_lvl(current_class_id.level) > pc.level && !Config.allow_entire_tree
       return
     end
 
-    msg = get_htm(player, "tutorialtemplate.htm")
-    msg = msg.gsub("%name%", ClassListData.get_class!(current_class_id).escaped_client_code)
+    msg = get_htm(pc, "tutorialtemplate.htm")
+    msg = msg.gsub("%name%", ClassListData.get_class(current_class_id).escaped_client_code)
 
     menu = String.build(100) do |io|
       ClassId.each do |cid|
-        if cid.inspector? && player.total_subclasses < 2
+        if cid.inspector? && pc.total_subclasses < 2
           next
         end
         if validate_class_id(current_class_id, cid)
           io << "<a action=\"link CO" << cid.to_i << "\">"
-          io << ClassListData.get_class!(cid).escaped_client_code
+          io << ClassListData.get_class(cid).escaped_client_code
           io << "</a><br>"
         end
       end
@@ -304,12 +304,12 @@ class Scripts::ClassMaster < AbstractNpcAI
 
     msg = msg.gsub("%menu%", menu)
     msg = msg.sub("%req_items%", get_required_items(current_class_id.level + 1))
-    player.send_packet(TutorialShowHtml.new(msg))
+    pc.send_packet(TutorialShowHtml.new(msg))
   end
 
-  private def check_and_change_class(player, val)
-    current_class_id = player.class_id
-    if get_min_lvl(current_class_id.level) > player.level && !Config.allow_entire_tree
+  private def check_and_change_class(pc, val)
+    current_class_id = pc.class_id
+    if get_min_lvl(current_class_id.level) > pc.level && !Config.allow_entire_tree
       return false
     end
 
@@ -320,43 +320,47 @@ class Scripts::ClassMaster < AbstractNpcAI
     new_job_lvl = current_class_id.level + 1
 
     # Weight/Inventory check
-    if !Config.class_master_settings.get_reward_items(new_job_lvl).empty? && !player.inventory_under_90?(false)
-      player.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
+    if !Config.class_master_settings.get_reward_items(new_job_lvl).empty? && !pc.inventory_under_90?(false)
+      pc.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
       return false
     end
 
-    # check if player have all required items for class transfer
+    # check if pc have all required items for class transfer
     Config.class_master_settings.get_require_items(new_job_lvl).each do |holder|
-      if player.inventory.get_inventory_item_count(holder.id, -1) < holder.count
-        player.send_packet(SystemMessageId::NOT_ENOUGH_ITEMS)
+      if pc.inventory.get_inventory_item_count(holder.id, -1) < holder.count
+        pc.send_packet(SystemMessageId::NOT_ENOUGH_ITEMS)
         return false
       end
     end
 
     # get all required items for class transfer
     Config.class_master_settings.get_require_items(new_job_lvl).each do |holder|
-      unless player.destroy_item_by_item_id("ClassMaster", holder.id, holder.count, player, true)
+      unless pc.destroy_item_by_item_id("ClassMaster", holder.id, holder.count, pc, true)
         return false
       end
     end
 
-    # reward player with items
+    # reward pc with items
     Config.class_master_settings.get_reward_items(new_job_lvl).each do |holder|
-      player.add_item("ClassMaster", holder.id, holder.count, player, true)
+      pc.add_item("ClassMaster", holder.id, holder.count, pc, true)
     end
 
-    player.class_id = val
+    pc.class_id = val
 
-    if player.subclass_active?
-      player.subclasses[player.class_index].class_id = player.active_class
+    if pc.subclass_active?
+      pc.subclasses[pc.class_index].class_id = pc.active_class
     else
-      player.base_class = player.active_class
+      pc.base_class = pc.active_class
     end
 
-    player.broadcast_user_info
+    pc.broadcast_user_info
 
-    if Config.class_master_settings.allowed?(player.class_id.level + 1) && Config.alternate_class_master && ((player.class_id.level == 1 && player.level >= 40) || (player.class_id.level == 2 && player.level >= 76))
-      show_question_mark(player)
+    if Config.class_master_settings.allowed?(pc.class_id.level + 1)
+      if Config.alternate_class_master
+        if (pc.class_id.level == 1 && pc.level >= 40) || (pc.class_id.level == 2 && pc.level >= 76)
+          show_question_mark(pc)
+        end
+      end
     end
 
     true

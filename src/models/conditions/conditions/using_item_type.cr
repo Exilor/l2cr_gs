@@ -18,12 +18,12 @@ class Condition
       inv = effector.inventory
 
       if @armor
-        return false unless chest = inv.chest_slot?
+        return false unless chest = inv.chest_slot
         chest_mask = chest.mask
         return false if @mask & chest_mask == 0
         chest_body_part = chest.body_part
         return true if chest_body_part == L2Item::SLOT_FULL_ARMOR
-        return false unless legs = inv.legs_slot?
+        return false unless legs = inv.legs_slot
         return @mask & legs.mask != 0
       end
 

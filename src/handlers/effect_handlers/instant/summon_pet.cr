@@ -7,8 +7,7 @@ class EffectHandler::SummonPet < AbstractEffect
     return unless info.effector.player?
     return unless info.effected.player?
     return if info.effected.looks_dead?
-
-    pc = info.effector.acting_player
+    return unless pc = info.effector.acting_player
 
     if pc.has_summon? || pc.mounted?
       pc.send_packet(SystemMessageId::YOU_ALREADY_HAVE_A_PET)
@@ -59,7 +58,7 @@ class EffectHandler::SummonPet < AbstractEffect
     pet.broadcast_status_update
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

@@ -62,7 +62,7 @@ class Scripts::Q00238_SuccessFailureOfBusiness < Quest
       end
     else
       m = get_random_party_member(killer, 3)
-      if m && rand(100) < CHANCE_FOR_FRAGMENT
+      if m && Rnd.rand(100) < CHANCE_FOR_FRAGMENT
         st = get_quest_state(m, false).not_nil!
         if st.get_quest_items_count(GUARDIAN_SPIRIT_FRAGMENT) < GUARDIAN_SPIRIT_FRAGMENT_NEEDED
           st.give_items(GUARDIAN_SPIRIT_FRAGMENT, 1)

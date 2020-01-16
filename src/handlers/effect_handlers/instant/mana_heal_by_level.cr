@@ -6,11 +6,11 @@ class EffectHandler::ManaHealByLevel < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def effect_type
-    L2EffectType::MANAHEAL_BY_LEVEL
+  def effect_type : EffectType
+    EffectType::MANAHEAL_BY_LEVEL
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -53,7 +53,7 @@ class EffectHandler::ManaHealByLevel < AbstractEffect
       target.current_mp += amount
     end
 
-    if target.acting_player? # custom
+    if target.acting_player # custom
       if info.effector != target
         sm = SystemMessage.s2_mp_has_been_restored_by_c1
         sm.add_char_name(info.effector)

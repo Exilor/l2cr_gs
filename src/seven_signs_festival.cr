@@ -654,6 +654,7 @@ module SevenSignsFestival
   @@next_festival_cycle_start = 0i64
   @@dawn_chat_guide : L2Npc?
   @@dusk_chat_guide : L2Npc?
+
   class_property signs_cycle : Int32 = 0
   class_property festival_cycle : Int32 = 0
   class_property next_festival_start : Int64 = 0i64
@@ -711,14 +712,13 @@ module SevenSignsFestival
   end
 
   def festival_archer?(npc_id : Int) : Bool
-    return false unless 18009 <= npc_id <= 18108
+    return false unless npc_id.between?(18009, 18108)
     identifier = npc_id % 10
     identifier == 4 || identifier == 9
   end
 
   def festival_chest?(npc_id : Int) : Bool
-    npc_id < 18109 || npc_id > 18118
-    !(18109 <= npc_id <= 18118)
+    !npc_id.between?(18109, 18118)
   end
 
   def festival_manager_schedule : Scheduler::PeriodicTask
@@ -844,7 +844,7 @@ module SevenSignsFestival
 
   private def add_reputation_points_for_party_member_clan(name : String)
     if pc = L2World.get_player(name)
-      if clan = pc.clan?
+      if clan = pc.clan
         clan.add_reputation_score(Config.festival_win_points, true)
         sm = Packets::Outgoing::SystemMessage.clan_member_c1_was_in_highest_ranked_party_in_festival_of_darkness_and_gained_s2_reputation
         sm.add_string(name)

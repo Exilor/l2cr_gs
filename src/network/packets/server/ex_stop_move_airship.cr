@@ -11,7 +11,7 @@ class Packets::Outgoing::ExStopMoveAirship < GameServerPacket
     @heading = ship.heading
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x66
 

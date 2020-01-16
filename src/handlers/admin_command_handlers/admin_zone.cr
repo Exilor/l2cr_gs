@@ -35,7 +35,7 @@ module AdminCommandHandler::AdminZone
         show_html(pc)
       else
         zone_id = _next.to_i
-        ZoneManager.get_zone_by_id!(zone_id).visualize_zone(pc.z)
+        ZoneManager.get_zone_by_id(zone_id).not_nil!.visualize_zone(pc.z)
       end
     elsif actual_command.casecmp?("admin_zone_visual_clear")
       ZoneManager.clear_debug_items

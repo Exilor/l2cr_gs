@@ -10,7 +10,7 @@ class Packets::Incoming::RequestHennaItemRemoveInfo < GameClientPacket
     return if @symbol_id == 0
 
     unless henna = HennaData.get_henna(@symbol_id)
-      warn "Invalid henna ID #{@symbol_id} from player #{pc}."
+      warn { "Invalid henna ID #{@symbol_id} from player #{pc}." }
       action_failed
       return
     end

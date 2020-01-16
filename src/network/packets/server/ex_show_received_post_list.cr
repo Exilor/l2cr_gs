@@ -5,7 +5,7 @@ class Packets::Outgoing::ExShowReceivedPostList < GameServerPacket
     @inbox = MailManager.get_inbox(pc_id)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xaa
 

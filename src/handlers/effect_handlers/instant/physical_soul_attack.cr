@@ -15,11 +15,11 @@ class EffectHandler::PhysicalSoulAttack < AbstractEffect
     !Formulas.physical_skill_evasion(info.effector, info.effected, info.skill)
   end
 
-  def effect_type
-    L2EffectType::PHYSICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::PHYSICAL_ATTACK
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -27,14 +27,14 @@ class EffectHandler::PhysicalSoulAttack < AbstractEffect
     target, char, skill = info.effected, info.effector, info.skill
     return if char.looks_dead?
 
-    if target.player? && target.acting_player.fake_death?
+    if target.is_a?(L2PcInstance) && target.fake_death?
       target.stop_fake_death(true)
     end
 
     ss = skill.physical? && char.charged_shot?(ShotType::SOULSHOTS)
     shld = 0i8
     unless @ignore_shield_defence
-      shld = Formulas.shld_use(char, target, skill)
+      shld = Formulas.shld_use(char, target, skill, true)
     end
     crit = false
     if @critical_chance > 0
@@ -45,7 +45,6 @@ class EffectHandler::PhysicalSoulAttack < AbstractEffect
     if skill.max_soul_consume_count > 0 && char.player?
       charged_souls = info.charges
       debug "Boosting damage by using #{charged_souls} souls. Original: #{damage}, boosted: #{damage *= 1 + (charged_souls * 0.04)}."
-      # damage *= 1 + (charged_souls * 0.04) # +4% damage per soul
     end
     damage *= 2 if crit
 

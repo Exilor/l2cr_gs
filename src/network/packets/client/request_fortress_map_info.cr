@@ -7,7 +7,7 @@ class Packets::Incoming::RequestFortressMapInfo < GameClientPacket
 
   private def run_impl
     unless fort = FortManager.get_fort_by_id(@fort_id)
-      warn "Fort with id #{@fort_id} not found."
+      warn { "Fort with id #{@fort_id} not found." }
       if active_char
         action_failed
       end

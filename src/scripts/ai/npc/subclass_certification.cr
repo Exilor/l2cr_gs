@@ -94,7 +94,7 @@ class Scripts::SubclassCertification < AbstractNpcAI
     html = get_htm(pc, html_file)
 
     if replace_class
-      html = html.sub("%class%", ClassListData.get_class!(pc.active_class).client_code)
+      html = html.sub("%class%", ClassListData.get_class(pc.active_class).client_code)
     end
 
     if lvl_to_replace

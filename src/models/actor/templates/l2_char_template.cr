@@ -1,8 +1,8 @@
 require "../../../enums/move_type"
 
 class L2CharTemplate < ListenersContainer
-  # @move_type = Pointer(Float64).null
-  @move_type = Slice(Float64).empty
+  @move_type = Pointer(Float64).malloc(MoveType.size, 1.0)
+
   getter base_str = 0
   getter base_dex = 0
   getter base_con = 0
@@ -99,8 +99,6 @@ class L2CharTemplate < ListenersContainer
     @f_collision_radius = set.get_f64("collisionRadius", 0)
     @collision_radius = @f_collision_radius.to_i
     @collision_height = @f_collision_height.to_i
-
-    @move_type = Slice(Float64).new(MoveType.size, 1.0)
 
     # Speed
     set_base_move_speed(MoveType::RUN, set.get_f64("baseRunSpd", 120))

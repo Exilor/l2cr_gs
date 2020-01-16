@@ -175,14 +175,14 @@ class Scripts::Q00373_SupplierOfReagents < Quest
       qs.set_memo_state_ex(1, 1) # Temperature Salamander
       html = event
     when "31149-28a.html"
-      if rand(100) < 33
+      if Rnd.rand(100) < 33
         qs.set_memo_state_ex(1, 3) # Temperature Ifrit
       else
         qs.set_memo_state_ex(1, 0)
       end
       html = event
     when "31149-29a.html"
-      if rand(100) < 20
+      if Rnd.rand(100) < 20
         qs.set_memo_state_ex(1, 5) # Temperature Phoenix
       else
         qs.set_memo_state_ex(1, 0)
@@ -224,42 +224,42 @@ class Scripts::Q00373_SupplierOfReagents < Quest
     if qs = get_random_party_member_state(killer, -1, 3, npc)
       case npc.id
       when HALLATE_GUARDIAN
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         if chance < 766
           give_item_randomly(qs.player, npc, DEMONS_BLOOD, 3, 0, 1, true)
         elsif chance < 876
           give_item_randomly(qs.player, npc, MOONSTONE_SHARD, 1, 0, 1, true)
         end
       when HALLATE_MAID
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance < 45
           give_item_randomly(qs.player, npc, REAGENT_POUNCH1, 1, 0, 1, true)
         elsif chance < 65
           give_item_randomly(qs.player, npc, VOLCANIC_ASH, 1, 0, 1, true)
         end
       when HAMES_ORC_SHAMAN
-        if rand(1000) < 616
+        if Rnd.rand(1000) < 616
           give_item_randomly(qs.player, npc, REAGENT_POUNCH3, 1, 0, 1, true)
         end
       when LAVA_WYRM
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         if chance < 666
           give_item_randomly(qs.player, npc, WYRM_BLOOD, 1, 0, 1, true)
         elsif chance < 989
           give_item_randomly(qs.player, npc, LAVA_STONE, 1, 0, 1, true)
         end
       when CRENDION
-        if rand(1000) < 618
+        if Rnd.rand(1000) < 618
           give_item_randomly(qs.player, npc, ROTTEN_BONE, 1, 0, 1, true)
         else
           give_item_randomly(qs.player, npc, QUICKSILVER, 1, 0, 1, true)
         end
       when PLATINUM_GUARDIAN_SHAMAN
-        if rand(1000) < 444
+        if Rnd.rand(1000) < 444
           give_item_randomly(qs.player, npc, REAGENT_BOX, 1, 0, 1, true)
         end
       when PLATINUM_TRIBE_SHAMAN
-        if rand(1000) < 658
+        if Rnd.rand(1000) < 658
           give_item_randomly(qs.player, npc, REAGENT_POUNCH2, 1, 0, 1, true)
         else
           give_item_randomly(qs.player, npc, QUICKSILVER, 2, 0, 1, true)

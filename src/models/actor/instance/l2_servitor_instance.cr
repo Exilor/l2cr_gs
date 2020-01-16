@@ -6,7 +6,6 @@ class L2ServitorInstance < L2Summon
 
   getter life_time = 0
   getter consume_item_interval = 0
-  setter restore_summon : Bool
   property exp_multiplier : Float32 = 0f32
   property life_time_remaining : Int32 = 0
   property reference_skill : Int32 = 0
@@ -104,15 +103,15 @@ class L2ServitorInstance < L2Summon
   end
 
   def attack_element : Int8
-    owner?.try &.attack_element || super
+    owner.try &.attack_element || super
   end
 
   def get_attack_element_value(attr_id : Int) : Int32
-    owner?.try &.get_attack_element_value(attr_id) || super
+    owner.try &.get_attack_element_value(attr_id) || super
   end
 
   def get_defense_element_value(attr_id : Int) : Int32
-    owner?.try &.get_defense_element_value(attr_id) || super
+    owner.try &.get_defense_element_value(attr_id) || super
   end
 
   def servitor? : Bool
@@ -120,47 +119,47 @@ class L2ServitorInstance < L2Summon
   end
 
   def get_m_atk(target : L2Character?, skill : Skill?) : Float64
-    pc = acting_player
+    return super unless pc = acting_player
     super + (pc.get_m_atk(target, skill) * (pc.get_servitor_share_bonus(Stats::MAGIC_ATTACK) - 1.0))
   end
 
   def get_m_def(target : L2Character?, skill : Skill?) : Float64
-    pc = acting_player
+    return super unless pc = acting_player
     super + (pc.get_m_def(target, skill) * (pc.get_servitor_share_bonus(Stats::MAGIC_DEFENCE) - 1.0))
   end
 
   def get_p_atk(target : L2Character?) : Float64
-    pc = acting_player
+    return super unless pc = acting_player
     super + (pc.get_p_atk(target) * (pc.get_servitor_share_bonus(Stats::POWER_ATTACK) - 1.0))
   end
 
   def get_p_def(target : L2Character?) : Float64
-    pc = acting_player
+    return super unless pc = acting_player
     super + (pc.get_p_def(target) * (pc.get_servitor_share_bonus(Stats::POWER_DEFENCE) - 1.0))
   end
 
   def m_atk_spd : Int32
-    pc = acting_player
+    return super unless pc = acting_player
     (super + (pc.m_atk_spd * (pc.get_servitor_share_bonus(Stats::MAGIC_ATTACK_SPEED) - 1.0))).to_i
   end
 
   def max_hp : Int32
-    pc = acting_player
+    return super unless pc = acting_player
     (super + (pc.max_hp * (pc.get_servitor_share_bonus(Stats::MAX_HP) - 1.0))).to_i
   end
 
   def max_mp : Int32
-    pc = acting_player
+    return super unless pc = acting_player
     (super + (pc.max_mp * (pc.get_servitor_share_bonus(Stats::MAX_MP) - 1.0))).to_i
   end
 
   def get_critical_hit(target : L2Character?, skill : Skill?) : Int32
-    pc = acting_player
+    return super unless pc = acting_player
     super + (pc.get_critical_hit(target, skill) * (pc.get_servitor_share_bonus(Stats::CRITICAL_RATE) - 1.0)).to_i
   end
 
   def p_atk_spd : Float64
-    pc = acting_player
+    return super unless pc = acting_player
     super + (pc.p_atk_spd * (pc.get_servitor_share_bonus(Stats::POWER_ATTACK_SPEED) - 1.0))
   end
 

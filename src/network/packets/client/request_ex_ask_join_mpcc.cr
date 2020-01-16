@@ -16,12 +16,12 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
       return
     end
 
-    if pc.in_party?
-      active_party = pc.party
-      if active_party.leader == pc
-        if active_party.in_command_channel? && active_party.command_channel.leader == pc
-          if player.in_party?
-            if player.party.in_command_channel?
+    if pc_party = pc.party
+      if pc_party.leader == pc
+        cc = pc_party.command_channel
+        if cc && cc.leader == pc
+          if other_party = player.party
+            if other_party.in_command_channel?
               sm = SystemMessage.c1_already_member_of_command_channel
               sm.add_string(player.name)
               pc.send_packet(sm)
@@ -29,14 +29,14 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
               ask_join_mpcc(pc, player)
             end
           else
-            msg ="#{player.name} doesn't have party and cannot be invited to Command Channel."
+            msg = "#{player.name} doesn't have party and cannot be invited to Command Channel."
             pc.send_message(msg)
           end
-        elsif active_party.in_command_channel? && active_party.command_channel.leader != pc
+        elsif cc && cc.leader != pc
           pc.send_packet(SystemMessageId::CANNOT_INVITE_TO_COMMAND_CHANNEL)
         else
-          if player.in_party?
-            if player.party.in_command_channel?
+          if other_party = player.party
+            if other_party.in_command_channel?
               sm = SystemMessage.c1_already_member_of_command_channel
               sm.add_string(player.name)
               pc.send_packet(sm)
@@ -55,7 +55,7 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
   end
 
   private def ask_join_mpcc(requestor, target)
-    if requestor.clan_leader? && requestor.clan.level >= 5
+    if requestor.clan_leader? && requestor.clan.not_nil!.level >= 5
       can = true
     elsif requestor.inventory.get_item_by_item_id(8871) # Strategy Guide
       can = true
@@ -70,7 +70,7 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
       return
     end
 
-    target_leader = target.party.leader
+    target_leader = target.party.not_nil!.leader
 
     if target_leader.processing_request?
       sm = SystemMessage.c1_is_busy_try_later

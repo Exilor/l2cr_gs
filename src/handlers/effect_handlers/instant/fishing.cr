@@ -2,12 +2,12 @@ class EffectHandler::Fishing < AbstractEffect
   MIN_BAIT_DISTANCE = 90
 	MAX_BAIT_DISTANCE = 250
 
-  def instant?
+  def instant? : Bool
     true
   end
 
-  def effect_type
-    L2EffectType::FISHING_START
+  def effect_type : EffectType
+    EffectType::FISHING_START
   end
 
   def on_start(info)
@@ -30,13 +30,13 @@ class EffectHandler::Fishing < AbstractEffect
       return
     end
 
-    wep = pc.active_weapon_item?
+    wep = pc.active_weapon_item
     if wep.nil? || wep.item_type != WeaponType::FISHINGROD
       pc.send_packet(SystemMessageId::FISHING_POLE_NOT_EQUIPPED)
       return
     end
 
-    wep2 = pc.inventory.lhand_slot?
+    wep2 = pc.inventory.lhand_slot
     if wep2.nil? || wep2.item_type != EtcItemType::LURE
       pc.send_packet(SystemMessageId::BAIT_ON_HOOK_BEFORE_FISHING)
       return

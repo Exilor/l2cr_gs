@@ -87,7 +87,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
         if st.memo_state?(2) && st.get_int("ex") % 100 < 10
           ex = st.get_int("ex")
           st.set("ex", ex + 11)
-          case rand(3)
+          case Rnd.rand(3)
           when 0
             html = "30458-01.html"
           when 1
@@ -104,7 +104,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
         if st.memo_state?(2) && st.get_int("ex") % 10000 < 1000
           ex = st.get_int("ex")
           st.set("ex", ex + 1001)
-          case rand(3)
+          case Rnd.rand(3)
           when 0
             html = "30594-01.html"
           when 1
@@ -121,7 +121,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
         if st.memo_state?(2) && st.get_int("ex") % 100000 < 10000
           ex = st.get_int("ex")
           st.set("ex", ex + 10001)
-          case rand(3)
+          case Rnd.rand(3)
           when 0
             html = "30057-01.html"
           when 1
@@ -138,7 +138,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
         if st.memo_state?(2) && st.get_int("ex") % 1000 < 100
           ex = st.get_int("ex")
           st.set("ex", ex + 101)
-          case rand(3)
+          case Rnd.rand(3)
           when 0
             html = "30058-01.html"
           when 1
@@ -155,7 +155,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
         if st.memo_state?(2) && st.get_int("ex") < 100000
           ex = st.get_int("ex")
           st.set("ex", ex + 100001)
-          case rand(3)
+          case Rnd.rand(3)
           when 0
             html = "30595-01.html"
           when 1
@@ -171,7 +171,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
       when BARBADO
         if st.memo_state?(4)
           ex = (st.get_int("ex") % 10) * 20
-          if rand(100) < ex
+          if Rnd.rand(100) < ex
             if st.has_quest_items?(EVENT_CLOTHES)
               st.take_items(EVENT_CLOTHES, -1)
             elsif st.has_quest_items?(NANARINS_FLUTE)

@@ -29,6 +29,7 @@ class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
     return unless st = get_quest_state(pc, false)
 
     html = event
+
     case event
       # Dorian
     when "31389-02.htm"
@@ -141,7 +142,7 @@ class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
         when 1
           html = "31389-04.html"
         when 2
-          html = st.get_int("var") == 0 ? "31389-05.html" : "31389-09.html"
+          html = st.get_int("var") == -1 ? "31389-05.html" : "31389-09.html"
         when 3
           html = "31389-14.html"
         when 4
@@ -161,9 +162,9 @@ class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
     when MYSTERIOUS_WIZARD
       if st.started?
         if st.cond?(10)
-          html = st.get_int("var") == 0 ? "31522-01.html" : "31522-04.html"
+          html = st.get_int("var") == -1 ? "31522-01.html" : "31522-04.html"
         elsif st.cond?(11)
-          html = st.get_int("var") == 0 ? "31522-09.html" : "31522-18.html"
+          html = st.get_int("var") == -1 ? "31522-09.html" : "31522-18.html"
         end
       elsif st.completed?
         qs = pc.get_quest_state(Q00025_HidingBehindTheTruth.simple_name)

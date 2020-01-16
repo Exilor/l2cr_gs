@@ -37,7 +37,7 @@ class Scripts::DragonVortex < AbstractNpcAI
       if has_quest_items?(pc, LARGE_DRAGON_BONE)
         if !npc.variables.get_bool(I_QUEST0, false)
           take_items(pc, LARGE_DRAGON_BONE, 1)
-          random = rand(100)
+          random = Rnd.rand(100)
 
           if random < 3
             raid = MUSCLE_BOMBER

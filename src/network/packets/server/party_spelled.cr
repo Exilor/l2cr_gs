@@ -7,7 +7,7 @@ class Packets::Outgoing::PartySpelled < GameServerPacket
     @effects << info
   end
 
-  def write_impl
+  private def write_impl
     c 0xf4
 
     d @char.servitor? ? 2 : @char.pet? ? 1 : 0

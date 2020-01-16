@@ -32,8 +32,8 @@ module ItemHandler::RollingDice
     pc.send_packet(sm)
     if pc.inside_peace_zone?
       Broadcast.to_known_players(pc, sm)
-    elsif pc.in_party?
-      pc.party.broadcast_to_party_members(pc, sm)
+    elsif party = pc.party
+      party.broadcast_to_party_members(pc, sm)
     end
 
     true

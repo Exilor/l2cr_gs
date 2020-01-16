@@ -17,7 +17,6 @@ class Packets::Incoming::RequestRecipeShopMessageSet < GameClientPacket
       return
     end
 
-    debug "if the shop name doesn't show up check this"
     if pc.has_manufacture_shop?
       pc.store_name = @msg
     end

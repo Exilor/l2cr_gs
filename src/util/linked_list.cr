@@ -1,4 +1,4 @@
-class Concurrent::LinkedList(E)
+struct Concurrent::LinkedList(E)
   include IList(E)
 
   private class Node(E)

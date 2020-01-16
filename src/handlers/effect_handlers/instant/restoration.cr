@@ -14,19 +14,19 @@ class EffectHandler::Restoration < AbstractEffect
 
     if @item_id <= 0 || @item_count <= 0
       info.effected.send_packet(SystemMessageId::NOTHING_INSIDE_THAT)
-      warn { "Effect with wrong item id or count (id: #{@item_id}, count: #{@item_count})." }
       return
     end
 
-    if info.effected.player?
-      info.effected.acting_player.add_item("Skill", @item_id, @item_count, info.effector, true)
-    elsif info.effected.pet?
-      info.effected.inventory.add_item("Skill", @item_id, @item_count, info.effected.acting_player, info.effector)
-      info.effected.acting_player.send_packet(PetItemList.new(info.effected.inventory.items))
+    if pc = info.effected.as?(L2PcInstance)
+      pc.add_item("Skill", @item_id, @item_count, info.effector, true)
+    elsif pet = info.effected.as?(L2PetInstance)
+      owner = pet.acting_player
+      pet.inventory.add_item("Skill", @item_id, @item_count, owner, info.effector)
+      owner.send_packet(PetItemList.new(pet.inventory.items))
     end
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

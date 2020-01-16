@@ -9,9 +9,6 @@ class Scripts::SkillTransfer < AbstractNpcAI
   def initialize
     super(self.class.simple_name, "features")
 
-    # set_player_profession_change_id(->on_profession_change(EventType))
-    # set_player_profession_cancel_id(->on_profession_cancel(EventType))
-
     set_player_profession_change_id { |evt| on_profession_change(evt) }
     set_player_profession_cancel_id { |evt| on_profession_cancel(evt) }
 
@@ -74,7 +71,7 @@ class Scripts::SkillTransfer < AbstractNpcAI
             count -= 1
 
             if count < 0
-              class_name = ClassListData.get_class!(pc.class_id).class_name
+              class_name = ClassListData.get_class(pc.class_id).class_name
               Util.punish(pc, "has too many transferred skills or items (id: #{sk.id}, level: #{sk.level}, class: #{class_name}).", IllegalActionPunishmentType::BROADCAST)
               warn { "Illegal count #{count} from #{pc}." }
               if Config.skill_check_remove

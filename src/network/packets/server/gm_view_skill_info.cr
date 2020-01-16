@@ -5,12 +5,13 @@ class Packets::Outgoing::GMViewSkillInfo < GameServerPacket
     @skills = @pc.all_skills
   end
 
-  def write_impl
+  private def write_impl
     c 0x97
 
     s @pc.name
     d @skills.size
-    disabled = @pc.clan? ? @pc.clan.reputation_score < 0 : false
+    clan = @pc.clan
+    disabled = clan && clan.reputation_score < 0
     @skills.each do |skill|
       d skill.passive? ? 1 : 0
       d skill.display_level

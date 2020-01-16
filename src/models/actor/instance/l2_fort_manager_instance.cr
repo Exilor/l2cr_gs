@@ -45,6 +45,7 @@ class L2FortManagerInstance < L2MerchantInstance
       if st.size >= 1
         val = st.shift
       end
+
       if actual_command.casecmp?("expel")
         if pc.has_clan_privilege?(ClanPrivilege::CS_DISMISS)
           html = NpcHtmlMessage.new(l2id)
@@ -305,9 +306,7 @@ class L2FortManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("hp")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Mp editing invoked"
-                  end
+                  debug "Mp editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/fortress/functions-apply_confirmed.htm")
@@ -338,9 +337,7 @@ class L2FortManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("mp")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Mp editing invoked"
-                  end
+                  debug "Mp editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/fortress/functions-apply_confirmed.htm")
@@ -371,9 +368,7 @@ class L2FortManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("exp")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Exp editing invoked"
-                  end
+                  debug "Exp editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/fortress/functions-apply_confirmed.htm")
@@ -492,9 +487,7 @@ class L2FortManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("tele")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Tele editing invoked"
-                  end
+                  debug "Tele editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/fortress/functions-apply_confirmed.htm")
@@ -525,9 +518,7 @@ class L2FortManagerInstance < L2MerchantInstance
                 return
               elsif val.casecmp?("support")
                 if st.size >= 1
-                  if Config.debug
-                    debug "Support editing invoked"
-                  end
+                  debug "Support editing invoked"
                   val = st.shift
                   html = NpcHtmlMessage.new(l2id)
                   html.set_file(pc, "data/html/fortress/functions-apply_confirmed.htm")
@@ -616,7 +607,7 @@ class L2FortManagerInstance < L2MerchantInstance
               skill_lvl = st.shift.to_i
             end
             skill = SkillData[skill_id, skill_lvl]
-            if skill.has_effect_type?(L2EffectType::SUMMON)
+            if skill.has_effect_type?(EffectType::SUMMON)
               pc.do_cast(skill)
             else
               if !(skill.mp_consume1 + skill.mp_consume2 > current_mp)
@@ -680,14 +671,10 @@ class L2FortManagerInstance < L2MerchantInstance
   end
 
   private def do_teleport(pc, val)
-    if Config.debug
-      debug "do_teleport(pc, val) called"
-    end
+    debug "do_teleport(pc, val) called"
     if list = TeleportLocationTable[val]?
       if pc.destroy_item_by_item_id("Teleport", list.item_id, list.price, self, true)
-        if Config.debug
-          debug { "Teleporting player #{pc.name} for Fortress to new location: #{list.x} #{list.y} #{list.z}" }
-        end
+        debug { "Teleporting player #{pc.name} for Fortress to new location: #{list.x} #{list.y} #{list.z}" }
         pc.tele_to_location(list.x, list.y, list.z)
       end
     else
@@ -699,8 +686,7 @@ class L2FortManagerInstance < L2MerchantInstance
   private def validate_condition(pc : L2PcInstance) : Int32
     fort = fort?
     if fort && fort.residence_id > 0
-      clan = pc.clan?
-      if clan
+      if clan = pc.clan
         if fort.zone.active?
           return COND_BUSY_BECAUSE_OF_SIEGE # Busy because of siege
         elsif fort.owner_clan? && fort.owner_clan.id == pc.clan_id
@@ -714,14 +700,14 @@ class L2FortManagerInstance < L2MerchantInstance
 
   private def show_vault_window_deposit(pc)
     pc.action_failed
-    pc.active_warehouse = pc.clan.warehouse
+    pc.active_warehouse = pc.clan.not_nil!.warehouse
     pc.send_packet(WareHouseDepositList.new(pc, WareHouseDepositList::CLAN))
   end
 
   private def show_vault_window_withdraw(pc, item_type, sort_order)
     if pc.clan_leader? || pc.has_clan_privilege?(ClanPrivilege::CL_VIEW_WAREHOUSE)
       pc.action_failed
-      pc.active_warehouse = pc.clan.warehouse
+      pc.active_warehouse = pc.clan.not_nil!.warehouse
       if item_type
         pc.send_packet(SortedWareHouseWithdrawalList.new(pc, WareHouseWithdrawalList::CLAN, item_type, sort_order))
       else

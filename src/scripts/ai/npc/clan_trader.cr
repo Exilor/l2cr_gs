@@ -23,7 +23,7 @@ class Scripts::ClanTrader < AbstractNpcAI
   private def give_reputation(npc, pc, count, item_id, item_count)
     if get_quest_items_count(pc, item_id) >= item_count
       take_items(pc, item_id, item_count)
-      pc.clan.add_reputation_score(count, true)
+      pc.clan.not_nil!.add_reputation_score(count, true)
 
       sm = SystemMessage.clan_added_s1s_points_to_reputation_score
       sm.add_int(count)
@@ -42,7 +42,7 @@ class Scripts::ClanTrader < AbstractNpcAI
     when "32024.html", "32024-02.html", "32025.html", "32025-02.html"
       event
     when "repinfo"
-      pc.clan.level > 4 ? "#{npc.id}-02.html" : "#{npc.id}-05.html"
+      pc.clan.not_nil!.level > 4 ? "#{npc.id}-02.html" : "#{npc.id}-05.html"
     when "exchange-ba"
       give_reputation(npc, pc, Config.bloodalliance_points, BLOOD_ALLIANCE, BLOOD_ALLIANCE_COUNT)
     when "exchange-bo"

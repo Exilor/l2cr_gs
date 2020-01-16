@@ -343,7 +343,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
 						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::WHHIISSHH))
 						take_items(attacker, CRYSTAL_OF_STARTING_1ST, -1)
 						give_items(attacker, CRYSTAL_OF_INPROGRESS_1ST, 1)
-						add_attack_desire(npc, attacker.summon!, 100000)
+						add_attack_desire(npc, attacker.summon.not_nil!, 100000)
 					end
 				end
 			when 1
@@ -378,7 +378,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
 						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::START_DUEL))
 						take_items(attacker, CRYSTAL_OF_STARTING_3RD, -1)
 						give_items(attacker, CRYSTAL_OF_INPROGRESS_3RD, 1)
-						add_attack_desire(npc, attacker.summon!, 100000)
+						add_attack_desire(npc, attacker.summon.not_nil!, 100000)
 					end
 				end
 			when 1
@@ -414,7 +414,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
   						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::SO_SHALL_WE_START))
   						take_items(attacker, CRYSTAL_OF_STARTING_5TH, -1)
   						give_items(attacker, CRYSTAL_OF_INPROGRESS_5TH, 1)
-  						add_attack_desire(npc, attacker.summon!, 100000)
+  						add_attack_desire(npc, attacker.summon.not_nil!, 100000)
             end
 					end
 				end
@@ -450,7 +450,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
 						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::WHISH_FIGHT))
 						take_items(attacker, CRYSTAL_OF_STARTING_2ND, -1)
 						give_items(attacker, CRYSTAL_OF_INPROGRESS_2ND, 1)
-						add_attack_desire(npc, attacker.summon!, 100000)
+						add_attack_desire(npc, attacker.summon.not_nil!, 100000)
 					end
 				end
 			when 1
@@ -486,7 +486,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
   						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::START_DUEL))
   						take_items(attacker, CRYSTAL_OF_STARTING_4TH, -1)
   						give_items(attacker, CRYSTAL_OF_INPROGRESS_4TH, 1)
-  						add_attack_desire(npc, attacker.summon!, 100000)
+  						add_attack_desire(npc, attacker.summon.not_nil!, 100000)
             end
 					end
 				end
@@ -523,7 +523,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
   						Broadcast.to_known_players(npc, NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::ILL_WALK_ALL_OVER_YOU))
   						take_items(attacker, CRYSTAL_OF_STARTING_6TH, -1)
   						give_items(attacker, CRYSTAL_OF_INPROGRESS_6TH, 1)
-  						add_attack_desire(npc, attacker.summon!, 100000)
+  						add_attack_desire(npc, attacker.summon.not_nil!, 100000)
             end
 					end
 				end

@@ -2,7 +2,7 @@ class Packets::Outgoing::ExFishingStartCombat < GameServerPacket
   initializer pc : L2Character, time : Int32, hp : Int32, mode : Int32,
     lure : Int32, deceptive : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x27
 

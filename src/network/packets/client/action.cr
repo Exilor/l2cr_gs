@@ -36,8 +36,8 @@ class Packets::Incoming::Action < GameClientPacket
 
     if pc.target_id == @l2id
       obj = pc.target
-    elsif pc.in_airship? && pc.airship!.helm_l2id == @l2id
-      obj = pc.airship
+    elsif (airship = pc.airship) && airship.helm_l2id == @l2id
+      obj = airship
     else
       obj = L2World.find_object(@l2id)
     end
@@ -47,7 +47,7 @@ class Packets::Incoming::Action < GameClientPacket
       summon = pc.summon
       if summon && summon.l2id == @l2id
         warn "It's #{pc.name} summon."
-        if summon.world_region?.nil?
+        if summon.world_region.nil?
           warn "Its region is nil."
         end
       end
@@ -69,7 +69,7 @@ class Packets::Incoming::Action < GameClientPacket
       end
     end
 
-    if obj.playable? && obj.acting_player.duel_state.dead?
+    if obj.playable? && obj.acting_player.not_nil!.duel_state.dead?
       pc.send_packet(SystemMessageId::OTHER_PARTY_IS_FROZEN)
       action_failed
       return
@@ -77,19 +77,19 @@ class Packets::Incoming::Action < GameClientPacket
       action_failed
       return
     elsif obj.instance_id != pc.instance_id && pc.instance_id != -1
-      warn "#{pc} and #{obj} are not in the same instance_id (pc: #{pc.instance_id}, obj: #{obj.instance_id})."
+      warn { "#{pc} and #{obj} are not in the same instance_id (pc: #{pc.instance_id}, obj: #{obj.instance_id})." }
       action_failed
       return
     end
 
     unless obj.visible_for?(pc)
-      warn "#{obj} is not visible for #{pc}."
+      warn { "#{obj} is not visible for #{pc}." }
       action_failed
       return
     end
 
     if pc.active_requester
-      debug "#{pc} has an active requester (#{pc.active_requester})."
+      debug { "#{pc} has an active requester (#{pc.active_requester})." }
       action_failed
       return
     end
@@ -100,7 +100,7 @@ class Packets::Incoming::Action < GameClientPacket
     when 1 # Shift click
       obj.on_action_shift(pc)
     else
-      warn "#{pc} requested invalid action #{@action_id}."
+      warn { "#{pc} requested invalid action #{@action_id}." }
       action_failed
     end
   end

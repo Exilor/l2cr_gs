@@ -1,5 +1,6 @@
 class L2NoRestartZone < L2ZoneType
   @enabled = true
+
   property restart_allowed_time : Int32 = 0
   property restart_time : Int32 = 0
 

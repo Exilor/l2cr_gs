@@ -19,9 +19,10 @@ class ItemAuctionInstance
   private SELECT_PLAYERS_ID_BY_AUCTION_ID = "SELECT playerObjId, playerBid FROM item_auction_bid WHERE auctionId = ?"
 
   @auctions = {} of Int32 => ItemAuction
-  @auctions_lock = Mutex.new
+  @auctions_lock = Mutex.new(:Reentrant)
   @items = [] of AuctionItem
   @state_task : Scheduler::DelayedTask?
+
   getter current_auction : ItemAuction?
   getter next_auction : ItemAuction?
 
@@ -305,7 +306,7 @@ class ItemAuctionInstance
   end
 
   private def create_auction(after) : ItemAuction
-    auction_item = @items.sample
+    auction_item = @items.sample(random: Rnd)
     starting_time = @date_generator.next_date(after)
     ending_time = starting_time + Time.mins_to_ms(auction_item.auction_length)
     auction = ItemAuction.new(@auction_ids.add(1) + 1, @instance_id, starting_time, ending_time, auction_item)

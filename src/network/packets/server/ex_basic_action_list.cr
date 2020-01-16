@@ -1,7 +1,7 @@
 # class Packets::Outgoing::ExBasicActionList < GameServerPacket
 #   initializer actions: Slice(Int32)
 
-#   def write_impl
+#   private def write_impl
 #     c 0xfe
 #     h 0x5f
 
@@ -64,7 +64,7 @@
 class Packets::Outgoing::ExBasicActionList < GameServerPacket
   initializer actions : Array(Int32) | Slice(Int32)
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x5f
 

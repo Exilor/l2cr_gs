@@ -34,13 +34,14 @@ class Scripts::Q10291_FireDragonDestroyer < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    unless pc.in_party?
+    unless party = pc.party
       return super
     end
 
     # Rewards go only to command channel, not to a single party or player.
-    if pc.party.in_command_channel?
-      pc.party.command_channel.each do |p|
+
+    if cc = party.command_channel
+      cc.each do |p|
         if Util.in_range?(8000, npc, p, false)
           st = get_quest_state(p, false)
 
@@ -52,7 +53,7 @@ class Scripts::Q10291_FireDragonDestroyer < Quest
         end
       end
     else
-      pc.party.each do |p|
+      party.each do |p|
         if Util.in_range?(8000, npc, p, false)
           st = get_quest_state(p, false)
 

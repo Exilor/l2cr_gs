@@ -7,7 +7,7 @@ class Packets::Outgoing::TutorialShowHtml < Packets::Outgoing::AbstractHtmlPacke
     super
   end
 
-  def write_impl
+  private def write_impl
     c 0xa6
     s @html
   end

@@ -3,7 +3,7 @@ module TargetHandler::AreaFriendly
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    pc = char.acting_player
+    pc = char.acting_player.not_nil!
 
     if !check_target(pc, target) && skill.cast_range >= 0
       pc.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
@@ -55,9 +55,7 @@ module TargetHandler::AreaFriendly
 
     return false if target.invisible?
 
-    if target.playable?
-      target_player = target.acting_player
-
+    if target.playable? && (target_player = target.acting_player)
       return true if char == target_player
 
       if target_player.in_observer_mode? || target_player.in_olympiad_mode?
@@ -86,6 +84,6 @@ module TargetHandler::AreaFriendly
   end
 
   def target_type
-    L2TargetType::AREA_FRIENDLY
+    TargetType::AREA_FRIENDLY
   end
 end

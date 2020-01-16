@@ -62,7 +62,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when /^night_mobs$/
       DayNightSpawnManager.change_mode(1)
     when /^get_ch\s\d+$/
-      ClanHallManager.set_owner(args[0].to_i, pc.clan) if pc.clan?
+      ClanHallManager.set_owner(args[0].to_i, pc.clan.not_nil!) if pc.clan
     when "destroy_items"
       pc.target.as?(L2PcInstance).try &.inventory.destroy_all_items("GM", pc, nil)
       pc.send_packet(ItemList.new(pc, false)) if pc == pc.target
@@ -79,7 +79,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when "aspir"
       aspir(999999)
     when /^clan_level\s\d$/
-      pc.clan?.try &.level = args.first.to_i
+      pc.clan.try &.level = args.first.to_i
     when /^uplift\s.*/
       uplift_target
     when "cancel"
@@ -113,7 +113,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       end
     when "bots_stop"
       pc.known_list.known_players.values_slice.each do |player|
-        player.stop_move
+        player.stop_move(nil)
         player.intention = AI::IDLE
       end
     when "bots_attack"
@@ -145,7 +145,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when "attack"
       attack_my_target
     when "recall_party"
-      pc.party?.try &.each { |m| m.tele_to_location(pc, true) if m != pc }
+      pc.party.try &.each { |m| m.tele_to_location(pc, true) if m != pc }
     when /start_quest\s\d+/
       id = args[0].to_i
       if q = QuestManager.get_quest(id)
@@ -179,7 +179,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       dst = Location.new(pc.x_destination, pc.y_destination, pc.z_destination)
       pc.broadcast_packet(FlyToLocation.new(pc, dst, FlyType::CHARGE))
       pc.set_xyz(pc.x_destination, pc.y_destination, pc.z_destination)
-      pc.stop_move
+      pc.stop_move(nil)
 
       if summon = pc.summon
         summon.broadcast_packet(FlyToLocation.new(summon, dst, FlyType::CHARGE))
@@ -204,6 +204,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when .dwarven_fighter?, .scavenger?, .bounty_hunter?, .fortune_seeker?
       is_spoiler = true
     end
+    party = pc.party
 
     timer = Timer.new
 
@@ -216,8 +217,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
       if is_spoiler
         target.take_sweep.try &.each do |item|
-          if pc.in_party?
-            pc.party.distribute_item(pc, item, true, target)
+          if party
+            party.distribute_item(pc, item, true, target)
           else
             pc.add_item("Admin milk", item, target, true)
           end
@@ -233,7 +234,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   private def aspir(radius)
     pc = pc()
     radius = 1000 if radius == 0
-    party = pc.party?
+    party = pc.party
     pc.known_list.known_objects.values.each do |item|
       begin
         next unless item.is_a?(L2ItemInstance)
@@ -242,7 +243,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         end
 
         next unless Util.in_range?(radius, item, pc, true)
-        old_region = item.world_region?
+        old_region = item.world_region
         item.visible = false
         item.world_region = nil
         L2World.remove_visible_object(item, old_region)

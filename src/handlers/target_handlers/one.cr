@@ -17,6 +17,6 @@ module TargetHandler::One
   end
 
   def target_type
-    L2TargetType::ONE
+    TargetType::ONE
   end
 end

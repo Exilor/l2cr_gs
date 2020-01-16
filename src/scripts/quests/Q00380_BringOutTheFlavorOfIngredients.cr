@@ -78,7 +78,7 @@ class Scripts::Q00380_BringOutTheFlavorOfIngredients < Quest
         html = "30069-11.html"
       when 8
         reward_items(pc, RITRON_DESSERT, 1)
-        if rand(100) < 56
+        if Rnd.rand(100) < 56
           html = "30069-15.html"
           qs.exit_quest(true, true)
         else

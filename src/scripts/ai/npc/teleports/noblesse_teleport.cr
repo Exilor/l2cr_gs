@@ -31,12 +31,12 @@ class Scripts::NoblesseTeleport < AbstractNpcAI
     add_talk_id(NPCs)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless npc && player
+  def on_adv_event(event, npc, pc)
+    return unless npc && pc
 
     if event == "teleportWithToken"
-      if has_quest_items?(player, OLYMPIAD_TOKEN)
-        npc.show_chat_window(player, 3)
+      if has_quest_items?(pc, OLYMPIAD_TOKEN)
+        npc.show_chat_window(pc, 3)
       else
         return "noble-nopass.htm"
       end
@@ -45,7 +45,7 @@ class Scripts::NoblesseTeleport < AbstractNpcAI
     super
   end
 
-  def on_talk(npc, player)
-    player.noble? ? "nobleteleporter.htm" : "nobleteleporter-no.htm"
+  def on_talk(npc, pc)
+    pc.noble? ? "nobleteleporter.htm" : "nobleteleporter-no.htm"
   end
 end

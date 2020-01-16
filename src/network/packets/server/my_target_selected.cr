@@ -11,7 +11,7 @@ class Packets::Outgoing::MyTargetSelected < GameServerPacket
     @color = target.auto_attackable?(pc) ? pc.level - target.level : 0
   end
 
-  def write_impl
+  private def write_impl
     c 0xb9
 
     d @target_id

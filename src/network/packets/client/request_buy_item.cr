@@ -33,26 +33,22 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
     end
 
     if @items.empty?
-      debug "#{pc} hasn't selected any item."
       action_failed
       return
     end
 
     if !Config.alt_game_karma_player_can_shop && pc.karma > 0
-      debug "Can't shop with karma."
       action_failed
       return
     end
 
     unless pc.gm?
       unless target = pc.target
-        debug "No target selected."
         action_failed
         return
       end
 
       if !pc.inside_radius?(target, L2Npc::INTERACTION_DISTANCE, true, false) || pc.instance_id != target.instance_id
-        debug "Too far from merchant or in another instance."
         action_failed
         return
       end
@@ -72,7 +68,6 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
 
     if merchant
       unless buy_list.npc_allowed?(merchant.id)
-        debug "#{merchant} is not allowed for BuyList #{buy_list}."
         action_failed
         return
       end
@@ -103,7 +98,7 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
       price = product.price
       debug { "Buying #{product.item.name} which costs #{product.price} adena." }
 
-      if 3960 <= product.item_id <= 4026
+      if product.item_id.between?(3960, 4026)
         price *= Config.rate_siege_guards_price
       end
 
@@ -146,13 +141,13 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
       end
     end
 
-    if !pc.gm? && weight > Int32::MAX || weight < 0 || !pc.inventory.validate_weight(weight)
+    if !pc.gm? && (weight > Int32::MAX || weight < 0 || !pc.inventory.validate_weight(weight))
       pc.send_packet(SystemMessageId::WEIGHT_LIMIT_EXCEEDED)
       action_failed
       return
     end
 
-    if !pc.gm? && slots > Int32::MAX || slots < 0 || !pc.inventory.validate_capacity(slots)
+    if !pc.gm? && (slots > Int32::MAX || slots < 0 || !pc.inventory.validate_capacity(slots))
       pc.send_packet(SystemMessageId::SLOTS_FULL)
       action_failed
       return

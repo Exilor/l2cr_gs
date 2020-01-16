@@ -33,8 +33,9 @@ class ObjectKnownList
   end
 
   def knows_object?(object : L2Object) : Bool
-    @active_object == object ||
-    (!!@known_objects && known_objects.has_key?(object.l2id))
+    return true if @active_object == object
+    return false unless known_objects = @known_objects
+    known_objects.has_key?(object.l2id)
   end
 
   def remove_all_known_objects
@@ -48,24 +49,25 @@ class ObjectKnownList
   def remove_known_object(object : L2Object?, forget : Bool) : Bool
     return false unless object
     return true if forget
-
+    return false unless known_objects = @known_objects
     !!known_objects.delete(object.l2id)
   end
 
   def find_objects
-    return unless world_region = @active_object.world_region?
+    me = @active_object
+    return unless region = me.world_region
 
-    if @active_object.playable?
-      world_region.objects.each_value do |object|
-        if object != @active_object
-          object.known_list.add_known_object(@active_object)
+    if me.playable?
+      region.objects.each_value do |object|
+        if object != me
+          object.known_list.add_known_object(me)
         end
       end
-    elsif @active_object.character?
-      world_region.sorrounding_regions.each do |region|
+    elsif me.character?
+      region.sorrounding_regions.each do |region|
         if region.active?
           region.playables.each_value do |object|
-            if object != @active_object
+            if object != me
               add_known_object(object)
             end
           end
@@ -75,11 +77,14 @@ class ObjectKnownList
   end
 
   def forget_objects(full_check : Bool)
-    @known_objects.try &.each do |id, object|
-      next if !full_check && !object.playable?
-      if !object.visible? || !Util.in_short_radius?(get_distance_to_watch_object(object), @active_object, object, true)
-        known_objects.delete(id)
-        remove_known_object(object, true)
+    if known_objects = @known_objects
+      me = @active_object
+      known_objects.each do |id, object|
+        next if !full_check && !object.playable?
+        if !object.visible? || !Util.in_short_radius?(get_distance_to_watch_object(object), me, object, true)
+          known_objects.delete(id)
+          remove_known_object(object, true)
+        end
       end
     end
   end

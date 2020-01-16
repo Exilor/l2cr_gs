@@ -422,7 +422,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       return true
     end
 
-    unless party = player.party?
+    unless party = player.party
       player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return false
     end
@@ -465,7 +465,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       return true
     end
 
-    unless party = player.party?
+    unless party = player.party
       player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return false
     end
@@ -496,7 +496,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       return true
     end
 
-    unless party = player.party?
+    unless party = player.party
       player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return false
     end
@@ -572,11 +572,11 @@ class Scripts::CrystalCaverns < AbstractInstance
 
   def on_enter_instance(player, world, first_entrance)
     if first_entrance
-      if player.party?.nil?
+      if player.party.nil?
         teleport_player(player, START_LOC, world.instance_id)
         world.add_allowed(player.l2id)
       else
-        player.party.members.each do |m|
+        player.party.not_nil!.members.each do |m|
           teleport_player(m, START_LOC, world.instance_id)
           world.add_allowed(m.l2id)
         end
@@ -627,7 +627,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     world.status = 2
 
     HALL_SPAWNS.each do |sp|
-      mob = add_spawn(CGMOBS.sample, sp[0], sp[1], sp[2], sp[3], false, 0, false, world.instance_id)
+      mob = add_spawn(CGMOBS.sample(random: Rnd), sp[0], sp[1], sp[2], sp[3], false, 0, false, world.instance_id)
       world.npc_list1[mob] = false
     end
   end
@@ -762,7 +762,7 @@ class Scripts::CrystalCaverns < AbstractInstance
 
     if npc.id >= 32275 && npc.id <= 32277 && skill.id != 2360 && skill.id != 2369
       world = InstanceManager.get_world(npc.instance_id)
-      if world.is_a?(CCWorld) && rand(100) < 15
+      if world.is_a?(CCWorld) && Rnd.rand(100) < 15
         world.oracles.each_key do |oracle|
           if oracle != npc
             oracle.decay_me
@@ -771,14 +771,14 @@ class Scripts::CrystalCaverns < AbstractInstance
         world.oracle_triggered[npc.id - 32275] = true
       end
     elsif npc.invul? && npc.id == BAYLOR && skill.id == 2360 && caster
-      unless caster.party?
+      unless caster.party
         return super
       end
       world = InstanceManager.get_world(npc.instance_id)
       if world.is_a?(CCWorld)
         if world.dragon_claw_start + DRAGONCLAWTIME <= Time.ms || world.dragon_claw_need <= 0
           world.dragon_claw_start = Time.ms
-          world.dragon_claw_need = caster.party.size - 1
+          world.dragon_claw_need = caster.party.not_nil!.size - 1
         else
           world.dragon_claw_need -= 1
         end
@@ -793,15 +793,15 @@ class Scripts::CrystalCaverns < AbstractInstance
     elsif npc.invul? && npc.id == TEARS && skill.id == 2369 && caster
       world = InstanceManager.get_world(npc.instance_id)
       if world.is_a?(CCWorld)
-        if caster.party?.nil?
+        if caster.party.nil?
           return super
         elsif world.dragon_scale_start + DRAGONSCALETIME <= Time.ms || world.dragon_scale_needed <= 0
           world.dragon_scale_start = Time.ms
-          world.dragon_scale_needed = caster.party.size - 1
+          world.dragon_scale_needed = caster.party.not_nil!.size - 1
         else
           world.dragon_scale_needed -= 1
         end
-        if world.dragon_scale_needed == 0 && rand(100) < 80
+        if world.dragon_scale_needed == 0 && Rnd.rand(100) < 80
           npc.invul = false
         end
       end
@@ -836,10 +836,10 @@ class Scripts::CrystalCaverns < AbstractInstance
 
         max_hp = npc.max_hp
         now_hp = npc.status.current_hp
-        rand = rand(1000)
+        rand = Rnd.rand(1000)
 
         if now_hp < max_hp * 0.4 && rand < 5
-          party = attacker.party?
+          party = attacker.party
           if party
             party.members.each do |m|
               stop_attack(m)
@@ -882,26 +882,24 @@ class Scripts::CrystalCaverns < AbstractInstance
   def on_adv_event(event, npc, player)
     npc = npc.not_nil!
 
-    unless player
-      fake_player = uninitialized L2PcInstance
-      player = fake_player
-    end
-
     world = InstanceManager.get_world(npc.instance_id)
     if world.is_a?(CCWorld)
       if event.casecmp?("TeleportOut")
+        player = player.not_nil!
         teleport_player(player, Location.new(149413, 173078, -5014), 0)
       elsif event.casecmp?("TeleportParme")
+        player = player.not_nil!
         teleport_player(player, Location.new(153689, 142226, -9750), world.instance_id)
-      elsif event.casecmp?("Timer2") || event.casecmp?("Timer3") || event.casecmp?("Timer4") || event.casecmp?("Timer5")
+      elsif event.match?(/\ATimer[2-5]\z/i)
+        player = player.not_nil!
         if player.instance_id == world.instance_id
           teleport_player(player, Location.new(144653, 152606, -12126), world.instance_id)
           player.stop_skill_effects(true, 5239)
           EVENT_TIMER_1.skill.apply_effects(player, player)
           start_quest_timer("Timer2", 300000, npc, player)
         end
-      elsif event.casecmp?("Timer21") || event.casecmp?("Timer31") || event.casecmp?("Timer41") || event.casecmp?("Timer51")
-        InstanceManager.get_instance!(world.instance_id).remove_npcs
+      elsif event.match?(/\ATimer[2-5]1\z/i)
+        InstanceManager.get_instance(world.instance_id).not_nil!.remove_npcs
         world.npc_list_2.clear
         run_steam_rooms(world, STEAM1_SPAWNS, 22)
         start_quest_timer("Timer21", 300000, npc, nil)
@@ -938,7 +936,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         world.oracle.each &.decay_me
       elsif event.casecmp?("spawn_oracle")
         add_spawn(32271, 153572, 142075, -9728, 10800, false, 0, false, world.instance_id)
-        add_spawn((rand(10) < 5 ? 29116 : 29117), *npc.xyz, npc.heading, false, 0, false, world.instance_id) # Baylor's Chest
+        add_spawn((Rnd.rand(10) < 5 ? 29116 : 29117), *npc.xyz, npc.heading, false, 0, false, world.instance_id) # Baylor's Chest
         add_spawn(ORACLE_GUIDE_4, 153572, 142075, -12738, 10800, false, 0, false, world.instance_id)
         cancel_quest_timer("baylor_despawn", npc, nil)
         cancel_quest_timers("baylor_skill")
@@ -996,7 +994,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         end
       elsif event.casecmp?("baylor_alarm")
         if world.alarm?.nil?
-          spawn_loc = ALARM_SPAWN.sample
+          spawn_loc = ALARM_SPAWN.sample(random: Rnd)
           npc.add_skill(PHYSICAL_UP.skill)
           npc.add_skill(MAGICAL_UP.skill)
           world.alarm = add_spawn(ALARM, spawn_loc[0], spawn_loc[1], spawn_loc[2], 10800, false, 0, false, world.instance_id)
@@ -1010,7 +1008,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         else
           max_hp = npc.max_hp
           now_hp = npc.status.current_hp
-          rand = rand(100)
+          rand = Rnd.rand(100)
 
           if now_hp < max_hp * 0.2 && world.raid_status < 3 && !npc.affected_by_skill?(5224) && !npc.affected_by_skill?(5225)
             if now_hp < max_hp * 0.15 && world.raid_status == 2
@@ -1024,7 +1022,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           elsif now_hp < max_hp * 0.3 && rand > 50 && !npc.affected_by_skill?(5225) && !npc.affected_by_skill?(5224)
             npc.do_cast(BERSERK)
           elsif rand < 33
-            npc.target = world.raiders.sample
+            npc.target = world.raiders.sample(random: Rnd)
             npc.do_cast(STRONG_PUNCH)
           end
         end
@@ -1063,7 +1061,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         if min_dist != 300000
           start_quest_timer("getFood", 2000, npc, nil)
         else
-          if rand(100) < 5
+          if Rnd.rand(100) < 5
             npc.broadcast_packet(CreatureSay.new(npc.l2id, 1, npc.name, NpcString::AH_IM_HUNGRY))
           end
           start_quest_timer("autoFood", 2000, npc, nil)
@@ -1086,7 +1084,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           start_quest_timer("backFood", 2000, npc, nil, true)
           return ""
         elsif npc.intention == AI::ACTIVE
-          L2World.remove_visible_object(cry_golem.food_item, cry_golem.food_item.world_region?)
+          L2World.remove_visible_object(cry_golem.food_item, cry_golem.food_item.world_region)
           L2World.remove_object(cry_golem.food_item)
           npc.set_intention(AI::IDLE, nil)
           cry_golem.food_item = nil
@@ -1126,7 +1124,7 @@ class Scripts::CrystalCaverns < AbstractInstance
   private def give_rewards(player, instance_id, boss_cry, is_baylor)
     num = Math.max(Config.rate_death_drop_chance_multiplier, 1).to_i
 
-    party = player.party?
+    party = player.party
     if party
       party.members.each do |m|
         if m.instance_id == instance_id
@@ -1134,7 +1132,7 @@ class Scripts::CrystalCaverns < AbstractInstance
             take_items(m, CONTAMINATED_CRYSTAL, 1)
             give_items(m, boss_cry, 1)
           end
-          if rand(10) < 5
+          if Rnd.rand(10) < 5
             give_items(m, WHITE_SEED_OF_EVIL_SHARD, num)
           else
             give_items(m, BLACK_SEED_OF_EVIL_SHARD, num)
@@ -1146,7 +1144,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         take_items(player, CONTAMINATED_CRYSTAL, 1)
         give_items(player, boss_cry, 1)
       end
-      if rand(10) < 5
+      if Rnd.rand(10) < 5
         give_items(player, WHITE_SEED_OF_EVIL_SHARD, num)
       else
         give_items(player, BLACK_SEED_OF_EVIL_SHARD, num)
@@ -1174,7 +1172,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           start_quest_timer("autoFood", 2000, cry_golem, nil)
         end
       elsif world.status == 4 && npc.id == TEARS
-        InstanceManager.get_instance!(world.instance_id).duration = 300000
+        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300000
         add_spawn(32280, 144312, 154420, -11855, 0, false, 0, false, world.instance_id)
         give_rewards(player, npc.instance_id, CLEAR_CRYSTAL, false)
       elsif world.status == 2 && world.key_keepers.includes?(npc)
@@ -1184,7 +1182,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         elsif npc.id == GATEKEEPER_PROVO
           npc.drop_item(player, 9699, 1)
           run_steam_rooms(world, STEAM1_SPAWNS, 22)
-          if party = player.party?
+          if party = player.party
             party.members.each do |m|
               if m.instance_id == world.instance_id
                 EVENT_TIMER_1.skill.apply_effects(m, m)
@@ -1263,7 +1261,7 @@ class Scripts::CrystalCaverns < AbstractInstance
             oracle_order = ORDER_ORACLE3
           when 25
             world.status = 26
-            if party = player.party?
+            if party = player.party
               party.members.each do |m|
                 m.stop_skill_effects(true, 5239)
               end
@@ -1282,7 +1280,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           run_steam_oracles(world, oracle_order)
         end
       elsif (world.status == 9 && npc.id == DARNEL) || (world.status == 26 && npc.id == KECHI)
-        InstanceManager.get_instance!(world.instance_id).duration = 300000
+        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300000
         if npc.id == KECHI
           boss_cry = RED_CRYSTAL
           cancel_quest_timers("spawnGuards")
@@ -1306,7 +1304,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       elsif npc.id == BAYLOR
         world.status = 31
         world.baylor = nil
-        baylor_instance = InstanceManager.get_instance!(npc.instance_id)
+        baylor_instance = InstanceManager.get_instance(npc.instance_id).not_nil!
         baylor_instance.duration = 300000
         start_quest_timer("spawn_oracle", 1000, npc, nil)
         give_rewards(player, npc.instance_id, -1, true)
@@ -1332,7 +1330,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         # there's nothing here
       elsif npc.id >= 32275 && npc.id <= 32277 && world.oracle_triggered[npc.id - 32275]
         do_teleport = false
-        party = player.party?
+        party = player.party
         do_teleport = true
 
         case npc.id
@@ -1418,11 +1416,11 @@ class Scripts::CrystalCaverns < AbstractInstance
       elsif npc.id == ORACLE_GUIDE_3
         if world.status < 30 && check_baylor_conditions(player)
           world.raiders.clear
-          unless party = player.party?
+          unless party = player.party
             world.raiders << player
           else
             party.members.each do |m|
-              # rnd = rand(100)
+              # rnd = Rnd.rand(100)
               # m.destroy_item_by_item_id("Quest", (rnd < 33 ? BOSS_CRYSTAL_1:(rnd < 67 ? BOSS_CRYSTAL_2:BOSS_CRYSTAL_3)), 1, m, true); Crystals are no longer beign cunsumed while entering to Baylor Lair.
               world.raiders << m
             end
@@ -1432,7 +1430,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         end
         world.status = 30
         time = world.end_time - Time.ms
-        baylor_instance = InstanceManager.get_instance!(world.instance_id)
+        baylor_instance = InstanceManager.get_instance(world.instance_id).not_nil!
         baylor_instance.duration = time.to_i
 
         radius = 150
@@ -1492,7 +1490,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           else
             return super
           end
-          InstanceManager.get_instance!(world.instance_id).doors.each do |door|
+          InstanceManager.get_instance(world.instance_id).not_nil!.doors.each do |door|
             if door.id == room + 24220000
               if door.open?
                 return ""
@@ -1533,7 +1531,7 @@ class Scripts::CrystalCaverns < AbstractInstance
             return super
           end
         end
-        InstanceManager.get_instance!(world.instance_id).doors.each do |door|
+        InstanceManager.get_instance(world.instance_id).not_nil!.doors.each do |door|
           if door.id == door_id
             if door.open? && world.opened_doors[door] == character
               door.close_me

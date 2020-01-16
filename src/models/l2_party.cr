@@ -18,11 +18,12 @@ class L2Party < AbstractPlayerGroup
   @disbanding = false
   @change_request_distribution_type : PartyDistributionType?
   @party_lvl : Int32
+
   getter members : IArray(L2PcInstance)
   getter? pending_invitation = false
   property distribution_type : PartyDistributionType
-  property! command_channel : L2CommandChannel?
-  property! dimensional_rift : DimensionalRift?
+  property command_channel : L2CommandChannel?
+  property dimensional_rift : DimensionalRift?
 
   enum MessageType : UInt8
     Expelled, Left, None, Disconnected
@@ -125,16 +126,14 @@ class L2Party < AbstractPlayerGroup
       m.summon.try &.update_effect_icons
     end
 
-    if in_dimensional_rift?
-      dimensional_rift.party_member_invited
-    end
+    dimensional_rift.try &.party_member_invited
 
     if in_command_channel?
       pc.send_packet(ExOpenMPCC::STATIC_PACKET)
     end
 
     @position_broadcast_task ||= begin
-      task = ->{ broadcast_packet(position_packet.reuse(self)) }
+      task = -> { broadcast_packet(position_packet.reuse(self)) }
       time = (PARTY_POSITION_BROADCAST_INTERVAL * 1000) / 2
       ThreadPoolManager.schedule_general_at_fixed_rate(task, time, time)
     end
@@ -189,8 +188,8 @@ class L2Party < AbstractPlayerGroup
         broadcast_packet(ExPartyPetWindowDelete.new(summon))
       end
 
-      if in_dimensional_rift?
-        dimensional_rift.party_member_exited(pc)
+      if rift = dimensional_rift
+        rift.party_member_exited(pc)
       end
 
       if in_command_channel?
@@ -203,11 +202,11 @@ class L2Party < AbstractPlayerGroup
         broadcast_packet(sm)
         broadcast_to_party_members_new_leader
       elsif @members.size == 1
-        if in_command_channel?
-          if command_channel.leader.l2id == leader.l2id
-            command_channel.disband_channel
+        if cc = command_channel
+          if cc.leader.l2id == leader.l2id
+            cc.disband_channel
           else
-            command_channel.remove_party(self)
+            cc.remove_party(self)
           end
         end
 
@@ -250,11 +249,11 @@ class L2Party < AbstractPlayerGroup
           sm.add_string(leader().name)
           broadcast_packet(sm)
           broadcast_to_party_members_new_leader
-          if in_command_channel? && command_channel.leader?(temp)
-            command_channel.leader = leader()
+          if (cc = command_channel) && cc.leader?(temp)
+            cc.leader = leader()
             sm = SystemMessage.command_channel_leader_now_c1
-            sm.add_string(command_channel.leader.name)
-            command_channel.broadcast_packet(sm)
+            sm.add_string(cc.leader.name)
+            cc.broadcast_packet(sm)
           end
           if pc.in_party_match_room?
             room = PartyMatchRoomList.get_player_room(pc).not_nil!
@@ -421,7 +420,7 @@ class L2Party < AbstractPlayerGroup
     if Config.party_xp_cutoff_method.casecmp?("highfive")
       lvl_diff = top_lvl - pc.level
       Config.party_xp_cutoff_gaps.each_with_index do |gap, i|
-        if gap[0] <= lvl_diff <= gap[1]
+        if lvl_diff.between?(gap[0], gap[1])
           xp = (add_exp * Config.party_xp_cutoff_gap_percents[i]).to_i64 // 100
           sp = (add_sp * Config.party_xp_cutoff_gap_percents[i]) // 100
           pc.add_exp_and_sp(xp, sp, vit)
@@ -519,7 +518,7 @@ class L2Party < AbstractPlayerGroup
       @change_request_distribution_type = distribution_type
       @change_distribution_type_answers = Set(Int32).new
       delay = PARTY_DISTRIBUTION_TYPE_REQUEST_TIMEOUT * 1000
-      task = ->{ finish_loot_request(false) }
+      task = -> { finish_loot_request(false) }
       @change_distribution_type_request_task = ThreadPoolManager.schedule_general(task, delay)
 
       broadcast_to_party_members(
@@ -600,9 +599,5 @@ class L2Party < AbstractPlayerGroup
     end
 
     looter || pc
-  end
-
-  def to_s(io : IO)
-    io << "L2Party(#{@members.join(", ")})"
   end
 end

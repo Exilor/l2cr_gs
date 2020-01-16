@@ -10,19 +10,14 @@ module OfflineTradersTable
   private LOAD_OFFLINE_ITEMS = "SELECT * FROM character_offline_trade_items WHERE charId = ?"
 
   def store_offliners
-    stm1 = CLEAR_OFFLINE_TABLE
-    stm2 = CLEAR_OFFLINE_TABLE_ITEMS
-    stm3 = SAVE_OFFLINE_STATUS
-    stm_items = SAVE_ITEMS
-
     begin
-      GameDB.exec(stm1)
+      GameDB.exec(CLEAR_OFFLINE_TABLE)
     rescue e
       error e
     end
 
     begin
-      GameDB.exec(stm2)
+      GameDB.exec(CLEAR_OFFLINE_TABLE_ITEMS)
     rescue e
       error e
     end
@@ -39,13 +34,7 @@ module OfflineTradersTable
             title = pc.buy_list.title
 
             pc.buy_list.items.each do |i|
-              GameDB.exec(
-                stm_items,
-                pc.l2id,
-                i.item.id,
-                i.count,
-                i.price
-              )
+              GameDB.exec(SAVE_ITEMS, pc.l2id, i.item.id, i.count, i.price)
             end
           when .sell?, .package_sell?
             unless Config.offline_trade_enable
@@ -55,13 +44,7 @@ module OfflineTradersTable
             title = pc.sell_list.title
 
             pc.sell_list.items.each do |i|
-              GameDB.exec(
-                stm_items,
-                pc.l2id,
-                i.l2id,
-                i.count,
-                i.price
-              )
+              GameDB.exec(SAVE_ITEMS, pc.l2id, i.l2id, i.count, i.price)
             end
           when .manufacture?
             unless Config.offline_craft_enable
@@ -71,18 +54,12 @@ module OfflineTradersTable
             title = pc.store_name
 
             pc.manufacture_items.each_value do |i|
-              GameDB.exec(
-                stm_items,
-                pc.l2id,
-                i.recipe_id,
-                0,
-                i.cost
-              )
+              GameDB.exec(SAVE_ITEMS, pc.l2id, i.recipe_id, 0, i.cost)
             end
           end
 
           GameDB.exec(
-            stm3,
+            SAVE_OFFLINE_STATUS,
             pc.l2id,
             pc.offline_start_time,
             pc.private_store_type.id,
@@ -98,7 +75,7 @@ module OfflineTradersTable
   end
 
   def restore_offline_traders
-    info "Loading offline traders..."
+    debug "Loading offline traders..."
 
     n_traders = 0
 

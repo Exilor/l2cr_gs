@@ -20,11 +20,7 @@ struct MultilayerBlock
     # @data = Slice(UInt8).new(size)
     # io.read(@data)
 
-    # data = Slice(UInt8).new(size)
-    # io.read(data)
-    # @data = Pointer(UInt8).new(data.to_unsafe.address)
-
-    @data = GC.malloc_atomic(size.to_u32).as(UInt8*)
+    @data = GC.malloc_atomic(size).as(UInt8*)
     io.read_fully(@data.to_slice(size))
   end
 

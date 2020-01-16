@@ -91,8 +91,7 @@ class Scripts::SilentValley < AbstractNpcAI
   end
 
   def on_see_creature(npc, creature, is_summon)
-    if creature.playable?
-      pc = creature.acting_player
+    if creature.playable? && (pc = creature.acting_player)
       if npc.id == GUARD1 || npc.id == GUARD2
         npc.target = pc
         npc.do_cast(BLAZE)

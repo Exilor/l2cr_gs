@@ -3,6 +3,7 @@ class InstanceType < EnumClass
   @type_h : Int64
   @mask_l : Int64
   @mask_h : Int64
+
   getter parent
 
   protected def initialize(@parent : self?)

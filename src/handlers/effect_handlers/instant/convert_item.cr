@@ -1,24 +1,16 @@
 class EffectHandler::ConvertItem < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
     return unless info.effected.player?
-    return if info.effected.looks_dead?
-
-    pc = info.effected.acting_player
-
-    return if pc.enchanting?
-
-    return unless weapon_item = pc.active_weapon_item?
-
-    return unless wpn = pc.inventory.rhand_slot? || pc.inventory.lhand_slot?
-
+    return unless pc = info.effected.acting_player
+    return if pc.looks_dead? || pc.enchanting?
+    return unless weapon_item = pc.active_weapon_item
+    return unless wpn = (pc.inventory.rhand_slot || pc.inventory.lhand_slot)
     return if wpn.augmented? || weapon_item.change_weapon_id == 0
-
     new_item_id = weapon_item.change_weapon_id
-
     return if new_item_id == -1
 
     enchant_level = wpn.enchant_level

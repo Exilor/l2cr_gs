@@ -13,7 +13,7 @@ class Packets::Incoming::RequestJoinAlly < GameClientPacket
       return
     end
 
-    unless clan = pc.clan?
+    unless clan = pc.clan
       pc.send_packet(SystemMessageId::YOU_ARE_NOT_A_CLAN_MEMBER)
       return
     end

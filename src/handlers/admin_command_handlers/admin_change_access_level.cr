@@ -33,9 +33,7 @@ module AdminCommandHandler::AdminChangeAccessLevel
           end
         rescue e
           pc.send_message("Database error while changing access level")
-          # if Config.debug
-            error e
-          # end
+          debug e
         end
       end
     end

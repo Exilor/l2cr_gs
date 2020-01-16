@@ -1,7 +1,7 @@
 class Packets::Outgoing::HennaItemRemoveInfo < GameServerPacket
   initializer henna : L2Henna, pc : L2PcInstance
 
-  def write_impl
+  private def write_impl
     c 0xe7
 
     d @henna.dye_id

@@ -30,8 +30,8 @@ class Scripts::Chimeras < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    if HellboundEngine.level == 7 # Have random spawn points only in 7 lvl
-      loc = LOCATIONS.sample
+    if HellboundEngine.level == 7
+      loc = LOCATIONS.sample(random: Rnd)
       unless npc.inside_radius?(loc, 200, false, false)
         npc.spawn.location = loc
         ThreadPoolManager.schedule_general(Teleport.new(npc, loc), 100)
@@ -53,9 +53,9 @@ class Scripts::Chimeras < AbstractNpcAI
           if npc.id == CELTUS
             npc.drop_item(caster, CONTAINED_LIFE_FORCE, 1)
           else
-            if rand(100) < 80
+            if Rnd.rand(100) < 80
               npc.drop_item(caster, DIM_LIFE_FORCE, 1)
-            elsif rand(100) < 80
+            elsif Rnd.rand(100) < 80
               npc.drop_item(caster, LIFE_FORCE, 1)
             end
           end

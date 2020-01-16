@@ -43,7 +43,7 @@ class Scripts::Q00148_PathtoBecominganExaltedMercenary < Quest
 
     case st.state
     when State::CREATED
-      clan = pc.clan?
+      clan = pc.clan
       if clan && clan.castle_id > 0
         html = "castle.htm"
       elsif st.has_quest_items?(ELITE_CERTIFICATE)

@@ -31,7 +31,7 @@ module AdminCommandHandler::AdminCursedWeapons
           pc.send_packet(SystemMessageId::FRIEND_LIST_FOOTER)
         end
       else
-        msg = [] of String | Int::Primitive
+        msg = String::Builder.new
         admin_reply = NpcHtmlMessage.new
         admin_reply.set_file(pc, "data/html/admin/cwinfo.htm")
         cwm.cursed_weapons.each do |cw|
@@ -86,7 +86,7 @@ module AdminCommandHandler::AdminCursedWeapons
 
           msg << "</table><br>"
         end
-        admin_reply["%cwinfo%"] = msg.join
+        admin_reply["%cwinfo%"] = msg
         pc.send_packet(admin_reply)
       end
     elsif command.starts_with?("admin_cw_reload")

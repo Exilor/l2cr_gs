@@ -15,8 +15,36 @@ class Packets::Outgoing::SSQInfo < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0x73
     h 256 + @state
+  end
+
+  private NULL = new(SevenSigns::CABAL_NULL)
+  private DUSK = new(SevenSigns::CABAL_DUSK)
+  private DAWN = new(SevenSigns::CABAL_DAWN)
+
+  def self.new(state = nil)
+    case state
+    when SevenSigns::CABAL_DAWN
+      DAWN
+    when SevenSigns::CABAL_DUSK
+      DUSK
+    when SevenSigns::CABAL_NULL
+      NULL
+    else
+      if SevenSigns.seal_validation_period?
+        case SevenSigns.cabal_highest_score
+        when SevenSigns::CABAL_DAWN
+          DAWN
+        when SevenSigns::CABAL_DUSK
+          DUSK
+        else
+          NULL
+        end
+      else
+        NULL
+      end
+    end
   end
 end

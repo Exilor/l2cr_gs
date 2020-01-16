@@ -95,7 +95,7 @@ class Scripts::Q00454_CompletelyLost < Quest
         if npc.variables.get_i32("quest_escort", 0) == 0
           npc.variables["leader"] = pc
           npc.variables["quest_escort"] = 1
-          if party = pc.party?
+          if party = pc.party
             npc.variables["partyId"] = party.leader_l2id
           end
           qs.memo_state = 1
@@ -103,7 +103,7 @@ class Scripts::Q00454_CompletelyLost < Quest
           html = event
         else
           leader = npc.variables.get_object("leader", L2PcInstance)
-          if leader.in_party? && leader.party.includes?(pc)
+          if (party = leader.party) && party.includes?(pc)
             qs.start_quest
             qs.memo_state = 1
             html = get_htm(pc, "32738-04a.htm")
@@ -132,11 +132,11 @@ class Scripts::Q00454_CompletelyLost < Quest
         npc.send_script_event("SCE_A_SEED_ESCORT_QUEST_START", npc, nil)
         leader = npc.variables.get_object("leader", L2PcInstance?)
         if leader
-          if party = leader.party?
+          if party = leader.party
             party.members.each do |m|
               qs_m = get_quest_state(m, false)
               if qs_m && qs_m.memo_state?(1)
-                if npc.variables.get_i32("partyId", 0) == leader.party.leader_l2id
+                if npc.variables.get_i32("partyId", 0) == party.leader_l2id
                   qs_m.memo_state = 2
                 end
               end
@@ -188,7 +188,7 @@ class Scripts::Q00454_CompletelyLost < Quest
     when "SCE_A_SEED_ESCORT_QUEST_SUCCESS"
       leader = receiver.variables.get_object("leader", L2PcInstance?)
       if leader
-        if party = leader.party?
+        if party = leader.party
           party.members.each do |m|
             qs = get_quest_state(m, false)
             if qs && qs.memo_state?(2)
@@ -212,7 +212,7 @@ class Scripts::Q00454_CompletelyLost < Quest
     when "SCE_A_SEED_ESCORT_QUEST_FAILURE"
       leader = receiver.variables.get_object("leader", L2PcInstance?)
       if leader
-        if party = leader.party?
+        if party = leader.party
           party.members.each do |m|
             qs = get_quest_state(m, false)
             if qs && qs.memo_state?(2)
@@ -247,8 +247,8 @@ class Scripts::Q00454_CompletelyLost < Quest
   end
 
   def on_see_creature(npc, creature, is_summon)
-    if creature.player? && npc.variables.get_i32("state", 0) == 0
-      add_attack_desire(npc, creature.acting_player, 10)
+    if creature.is_a?(L2PcInstance) && npc.variables.get_i32("state", 0) == 0
+      add_attack_desire(npc, creature, 10)
     end
 
     super
@@ -277,7 +277,7 @@ class Scripts::Q00454_CompletelyLost < Quest
           html = "32738-01c.htm"
         else
           leader = npc.variables.get_object("leader", L2PcInstance)
-          if leader.in_party? && leader.party.includes?(pc)
+          if (party = leader.party) && party.includes?(pc)
             html = get_htm(pc, "32738-01a.htm")
             html = html.gsub("leader", leader.name)
             html = html.gsub("name", pc.name)
@@ -305,8 +305,8 @@ class Scripts::Q00454_CompletelyLost < Quest
           qs.exit_quest(QuestType::DAILY, true)
           html = "32736-02.html"
         when 4
-          group = rand(3)
-          chance = rand(100)
+          group = Rnd.rand(3)
+          chance = Rnd.rand(100)
           if group == 0
             if Rnd.bool
               if chance < 11

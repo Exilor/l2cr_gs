@@ -2,7 +2,7 @@ class L2QuestGuardInstance < L2GuardInstance
   setter auto_attackable : Bool = true
   property? passive : Bool = false
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2QuestGuardInstance
   end
 

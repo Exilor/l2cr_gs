@@ -21,8 +21,8 @@ class Scripts::SteelCitadelTeleport < AbstractNpcAI
       return "32376-03.htm"
     end
 
-    channel = player.party?.try &.command_channel?
-    if channel.nil? || (channel.leader.l2id != player.l2id || channel.size < Config.beleth_min_players)
+    cc = player.party.try &.command_channel
+    if cc.nil? || (cc.leader.l2id != player.l2id || cc.size < Config.beleth_min_players)
       return "32376-02a.htm"
     end
 
@@ -30,7 +30,7 @@ class Scripts::SteelCitadelTeleport < AbstractNpcAI
     if zone.is_a?(L2BossZone)
       GrandBossManager.set_boss_status(BELETH, 1)
 
-      channel.each do |pl|
+      cc.each do |pl|
         if pl.inside_radius?(*npc.xyz, 3000, true, false)
           zone.allow_player_entry(pl, 30)
           pl.tele_to_location(TELEPORT_CITADEL, true)

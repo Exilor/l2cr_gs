@@ -1,24 +1,11 @@
 require "../../../util/evolve"
 
 class L2ClanHallDoormenInstance < L2DoormenInstance
+  private CH_WITH_EVOLVE = {36, 37, 38, 39, 40, 41, 51, 52, 53, 54, 55, 56, 57}
+
   @init = false
   @has_evolve = false
   @clan_hall : ClanHall?
-  private CH_WITH_EVOLVE = {
-    36,
-    37,
-    38,
-    39,
-    40,
-    41,
-    51,
-    52,
-    53,
-    54,
-    55,
-    56,
-    57
-  }
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
     if @has_evolve && command.starts_with?("evolve")
@@ -32,7 +19,7 @@ class L2ClanHallDoormenInstance < L2DoormenInstance
 
         ok = false
 
-        case st.shift
+        case st.shift.to_i
         when 1
           ok = Evolve.do_evolve(pc, self, 9882, 10307, 55)
         when 2
@@ -110,7 +97,7 @@ class L2ClanHallDoormenInstance < L2DoormenInstance
     pc.send_packet(html)
   end
 
-  private def clan_hall?
+  private def clan_hall? : ClanHall?
     unless @init
       sync do
         if ch = ClanHallManager.get_nearby_clan_hall(x, y, 500)
@@ -124,7 +111,7 @@ class L2ClanHallDoormenInstance < L2DoormenInstance
     @clan_hall
   end
 
-  private def clan_hall
+  private def clan_hall : ClanHall
     unless ch = clan_hall?
       raise "No clan hall found"
     end
@@ -133,8 +120,8 @@ class L2ClanHallDoormenInstance < L2DoormenInstance
   end
 
   private def owner_clan?(pc : L2PcInstance) : Bool
-    if pc.clan? && clan_hall?
-      if pc.clan_id == clan_hall.owner_id
+    if pc.clan && (ch = clan_hall?)
+      if pc.clan_id == ch.owner_id
         return true
       end
     end

@@ -21,7 +21,7 @@ class Packets::Incoming::RequestShortcutRegister < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    return unless 0 <= @page <= 10
+    return unless @page.between?(0, 10)
 
     sc = Shortcut.new(@slot, @page, @type, @id, @level, @character_type)
     pc.register_shortcut(sc)

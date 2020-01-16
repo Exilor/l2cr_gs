@@ -80,7 +80,7 @@ struct BlockList
     return unless list_owner
 
     unless char_name = CharNameTable.get_name_by_id(target_id)
-      warn "#{char_name.inspect} not found in CharNameTable."
+      warn { "#{char_name.inspect} not found in CharNameTable." }
       return
     end
 
@@ -113,7 +113,7 @@ struct BlockList
     return unless list_owner
 
     unless char_name = CharNameTable.get_name_by_id(target_id)
-      warn "No name found for player with id #{target_id}."
+      warn { "No name found for player with id #{target_id}." }
       char_name = "??"
     end
 

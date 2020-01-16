@@ -5,7 +5,7 @@ class Packets::Outgoing::ExNevitAdventTimeChange < GameServerPacket
     @time = Math.max(time, 240_000)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xe1
 

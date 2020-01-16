@@ -10,7 +10,7 @@ class L2SiegableHallZone < L2ClanHallZone
   end
 
   def banish_non_siege_participants
-    players_inside do |pc|
+    players_inside.each do |pc|
       if pc.in_hideout_siege?
         pc.tele_to_location(banish_spawn_loc, true)
       end

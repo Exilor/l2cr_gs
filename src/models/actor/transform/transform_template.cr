@@ -3,6 +3,7 @@ class TransformTemplate
   @base_stats = {} of Int32 => Float64
   @base_speed = {} of Int32 => Float64
   @base_defense = {} of Int32 => Int32
+
   getter collision_radius : Float64
   getter collision_height : Float64
   getter base_attack_type : WeaponType

@@ -5,7 +5,7 @@ class Packets::Outgoing::ExQuestItemList < Packets::Outgoing::AbstractItemPacket
     @items = pc.inventory.items.select &.quest_item?
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xc6
 

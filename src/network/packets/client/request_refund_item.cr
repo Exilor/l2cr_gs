@@ -28,7 +28,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
     end
 
     unless pc.has_refund?
-      debug "#{pc.name} doesn't have a refund."
+      debug { "#{pc.name} doesn't have a refund." }
       action_failed
       return
     end
@@ -45,12 +45,12 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
     unless buy_list = BuyListData.get_buy_list(@list_id)
       Util.punish(pc, "sent an invalid BuyList list_id #{@list_id}.")
-      warn "No buy list with ID #{@list_id}."
+      warn { "No buy list with ID #{@list_id}." }
       return
     end
 
     unless buy_list.npc_allowed?(merchant.id)
-      warn "#{merchant} is not allowed to use buy list with id #{@list_id}."
+      warn { "#{merchant} is not allowed to use buy list with id #{@list_id}." }
       action_failed
       return
     end
@@ -65,14 +65,14 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
     items.each_with_index do |idx, i|
       if idx < 0 || idx >= refund.size
-        warn "Refund index error #{idx}/#{refund.size}."
+        warn { "Refund index error #{idx}/#{refund.size}." }
         Util.punish(pc, "sent an invalid refund index.")
         return
       end
 
       (i + 1...items.size).each do |j|
         if idx == items[j]
-          warn "Duplicated refund index #{idx}, #{items[j]}."
+          warn { "Duplicated refund index #{idx}, #{items[j]}." }
           Util.punish(pc, "sent a duplicate refund index.")
           return
         end
@@ -84,7 +84,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
       i.times do |j|
         if l2ids[i] == l2ids[j]
-          warn "Duplicated refund object ID #{l2ids[i]}, #{l2ids[j]}."
+          warn { "Duplicated refund l2id #{l2ids[i]}, #{l2ids[j]}." }
           Util.punish(pc, "sent a duplicate refund index.")
           return
         end
@@ -130,7 +130,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
       )
 
       unless item
-        warn "Error refunding item for player #{pc.name} (new item is nil)."
+        warn { "Error refunding item for player #{pc.name} (new item is nil)." }
         next
       end
     end

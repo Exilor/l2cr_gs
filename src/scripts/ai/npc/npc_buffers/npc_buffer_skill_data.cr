@@ -14,7 +14,7 @@ struct NpcBufferSkillData
     @affect_object = set.get_enum("affectObject", AffectObject)
   end
 
-  def skill
+  def skill : Skill
     @skill.skill
   end
 end

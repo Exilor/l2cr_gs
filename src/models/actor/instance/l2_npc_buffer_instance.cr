@@ -44,7 +44,7 @@ class L2NpcBufferInstance < L2Npc
       PAGE_VAL[pc.l2id] = val
 
       show_chat_window(pc, val)
-    elsif cmd.starts_with?("Buff") || cmd.starts_with?("PetBuff")
+    elsif cmd.starts_with?("Buff", "PetBuff")
       buff_group_ary = cmd.from(cmd.index("Buff").not_nil! + 5).split
 
       buff_group_ary.each do |buff_group_list|
@@ -82,7 +82,7 @@ class L2NpcBufferInstance < L2Npc
       end
 
       show_chat_window(pc, PAGE_VAL[pc.l2id])
-    elsif cmd.starts_with?("Heal") || cmd.starts_with?("PetHeal")
+    elsif cmd.starts_with?("Heal", "PetHeal")
       if !target.in_combat? && !AttackStances.includes?(target)
         heal_ary = cmd.from(cmd.index("Heal").not_nil! + 5).split
 
@@ -97,7 +97,7 @@ class L2NpcBufferInstance < L2Npc
         end
       end
       show_chat_window(pc, PAGE_VAL[pc.l2id])
-    elsif cmd.starts_with?("RemoveBuffs") || cmd.starts_with?("PetRemoveBuffs")
+    elsif cmd.starts_with?("RemoveBuffs", "PetRemoveBuffs")
       target.stop_all_effects_except_those_that_last_through_death
       show_chat_window(pc, PAGE_VAL[pc.l2id])
     else

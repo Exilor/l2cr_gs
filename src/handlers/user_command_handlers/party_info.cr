@@ -7,7 +7,7 @@ module UserCommandHandler::PartyInfo
 
     pc.send_packet(SystemMessageId::PARTY_INFORMATION)
 
-    if party = pc.party?
+    if party = pc.party
       case party.distribution_type
       when .finders_keepers?
         pc.send_packet(SystemMessageId::LOOTING_FINDERS_KEEPERS)

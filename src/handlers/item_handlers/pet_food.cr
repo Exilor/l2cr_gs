@@ -29,8 +29,7 @@ module ItemHandler::PetFood
         end
         return true
       end
-    elsif char.player?
-      pc = char.acting_player
+    elsif pc = char.as?(L2PcInstance)
       if pc.mounted?
         food_ids = PetDataTable.get_pet_data(pc.mount_npc_id).not_nil!.food
         if food_ids.includes?(item.id)

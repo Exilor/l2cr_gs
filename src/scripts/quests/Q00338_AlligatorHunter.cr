@@ -50,7 +50,7 @@ class Scripts::Q00338_AlligatorHunter < Quest
   def on_kill(npc, pc, is_summon)
     if st = get_quest_state(pc, false)
       st.give_items(ALLIGATOR_LEATHER, 1)
-      if rand(100) < SECOND_CHANCE
+      if Rnd.rand(100) < SECOND_CHANCE
         st.give_items(ALLIGATOR_LEATHER, 1)
       end
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

@@ -95,7 +95,7 @@ class L2FestivalGuideInstance < L2Npc
       io << SevenSigns::SEVEN_SIGNS_HTML_PATH
       io << "festival/"
       io << (is_description ? "desc_" : "festival_")
-      val.to_s(io)
+      io << val
       io << suffix if suffix
       io << ".htm"
     end
@@ -144,9 +144,9 @@ class L2FestivalGuideInstance < L2Npc
         io << "<tr><td width=\"100\" align=\"center\">"
         io << festival_name
         io << "</td><td align=\"center\" width=\"35\">"
-        dusk_score.to_s(io)
+        io << dusk_score
         io << "</td><td align=\"center\" width=\"35\">"
-        dawn_score.to_s(io)
+        io << dawn_score
         io << "</td><td align=\"center\" width=\"130\">"
         io << winning_cabal
         io << "</td></tr>"
@@ -162,13 +162,13 @@ class L2FestivalGuideInstance < L2Npc
         io << "<tr><td align=\"center\" width=\"150\">"
         io << festival_name
         io << "</td><td align=\"center\" width=\"150\">"
-        acc_score.to_s(io)
+        io << acc_score
         io << "</td></tr>"
       end
     end
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2FestivalGuideInstance
   end
 end

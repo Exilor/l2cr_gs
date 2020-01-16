@@ -46,7 +46,7 @@ class Scripts::Q00147_PathtoBecominganEliteMercenary < Quest
 
     case st.state
     when State::CREATED
-      clan = pc.clan?
+      clan = pc.clan
       if clan && clan.castle_id > 0
         html = "castle.htm"
       else

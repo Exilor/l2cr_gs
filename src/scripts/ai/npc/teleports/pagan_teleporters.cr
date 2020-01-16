@@ -23,7 +23,7 @@ class Scripts::PaganTeleporters < AbstractNpcAI
     add_first_talk_id(TRIOLS_MIRROR_1, TRIOLS_MIRROR_2)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     case event
     when "Close_Door1"
       close_door(19160001, 0)
@@ -35,18 +35,18 @@ class Scripts::PaganTeleporters < AbstractNpcAI
     ""
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     if tmp = TRIOLS_LOCS[npc.id]?
-      player.tele_to_location(tmp)
+      pc.tele_to_location(tmp)
     end
 
     ""
   end
 
-  def on_talk(npc, player)
+  def on_talk(npc, pc)
     case npc.id
     when 32034
-      unless has_at_least_one_quest_item?(player, VISITORS_MARK, FADED_VISITORS_MARK, PAGANS_MARK)
+      unless has_at_least_one_quest_item?(pc, VISITORS_MARK, FADED_VISITORS_MARK, PAGANS_MARK)
         return "noItem.htm"
       end
       open_door(19160001, 0)
@@ -57,7 +57,7 @@ class Scripts::PaganTeleporters < AbstractNpcAI
       start_quest_timer("Close_Door1", 10000, nil, nil)
       return "FadedMark.htm"
     when 32036
-      unless has_quest_items?(player, PAGANS_MARK)
+      unless has_quest_items?(pc, PAGANS_MARK)
         return "noMark.htm"
       end
       start_quest_timer("Close_Door2", 10000, nil, nil)

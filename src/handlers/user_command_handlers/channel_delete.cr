@@ -7,9 +7,9 @@ module UserCommandHandler::ChannelDelete
       return false
     end
 
-    if party = pc.party?
+    if party = pc.party
       if party.leader?(pc)
-        if channel = party.command_channel?
+        if channel = party.command_channel
           sm = Packets::Outgoing::SystemMessage.command_channel_disbanded
           channel.broadcast_packet(sm)
           channel.disband_channel

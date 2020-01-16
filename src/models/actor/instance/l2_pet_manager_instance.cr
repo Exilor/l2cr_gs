@@ -1,11 +1,14 @@
 class L2PetManagerInstance < L2MerchantInstance
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2PetManagerInstance
   end
 
   def get_html_path(npc_id, val)
-    pom = val == 0 ? npc_id : "#{npc_id}-#{val}"
-    "data/html/petmanager/#{pom}.htm"
+    if val == 0
+      "data/html/petmanager/#{npc_id}.htm"
+    else
+      "data/html/petmanager/#{npc_id}-#{val}.htm"
+    end
   end
 
   def show_chat_window(pc : L2PcInstance)

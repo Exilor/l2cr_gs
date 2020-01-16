@@ -9,12 +9,12 @@ class EffectHandler::HpDrain < AbstractEffect
     @drain = params.get_f64("drain", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
-  def effect_type
-    L2EffectType::HP_DRAIN
+  def effect_type : EffectType
+    EffectType::HP_DRAIN
   end
 
   def on_start(info)

@@ -9,14 +9,14 @@ class EffectHandler::SummonTrap < AbstractEffect
     @npc_id = params.get_i32("npcId", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
     effected = info.effected
     return unless effected.player?
-    pc = effected.acting_player
+    return unless pc = effected.acting_player
     return if pc.looks_dead?
     return if pc.in_observer_mode?
 

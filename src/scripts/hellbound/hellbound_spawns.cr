@@ -63,7 +63,7 @@ module HellboundSpawns
     if loc
       sp.location = loc
     else
-      warn "Hellbound spawn location is nil for NPC with id #{npc_id}."
+      warn { "Hellbound spawn location is nil for NPC with id #{npc_id}." }
     end
     sp.set_respawn_delay(delay, random_interval)
 

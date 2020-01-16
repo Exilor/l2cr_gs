@@ -10,14 +10,14 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
 
   @list_id = 0
   @count = 0
-  @items : Slice(Int32)?
+  @items = Slice(Int32).empty
 
   private def read_impl
     unk = d
     @list_id = d
     @count = d
 
-    unless 0 <= @count <= 100
+    unless @count.between?(0, 100)
       return
     end
 
@@ -25,8 +25,8 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
   end
 
   private def run_impl
-    return unless _items = @items
     return unless pc = active_char
+    return if @items.empty?
 
     unless flood_protectors.transaction.try_perform_action("buy")
       pc.send_message("You are buying too fast.")
@@ -63,14 +63,14 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
     item_list = {} of Int32 => Int32
 
     @count.times do |i|
-      item_id = _items[i]
+      item_id = @items[i]
       unless product = buy_list.get_product_by_item_id(item_id)
         Util.punish(pc, "sent an invalid BuyList list_id #{@list_id}, item_id #{item_id}.")
         return
       end
 
       unless template = product.item
-        warn "Missing template for product #{product}."
+        warn { "Missing template for product #{product}." }
         next
       end
 
@@ -86,7 +86,7 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
           type = template.item_type
           if type.none?
             next
-          elsif type.rapier? || type.crossbow? || type.ancientsword? # you sure?
+          elsif type.rapier? || type.crossbow? || type.ancientsword?
             next
           end
         end

@@ -93,9 +93,9 @@ module TerritoryWarManager
         owned_ward_ids = rs.get_string("ownedWardIds")
         if t = TERRITORY_LIST[castle_id]?
           t.fort_id = fort_id
-          castle = CastleManager.get_castle_by_id!(castle_id)
+          castle = CastleManager.get_castle_by_id(castle_id).not_nil!
           if castle.owner_id > 0
-            clan = ClanTable.get_clan!(castle.owner_id)
+            clan = ClanTable.get_clan(castle.owner_id).not_nil!
             t.owner_clan = clan
             t.change_npcs_spawn(0, true)
           end
@@ -140,7 +140,7 @@ module TerritoryWarManager
       return 0
     end
 
-    if clan = pc.clan?
+    if clan = pc.clan
       if clan.castle_id > 0
         return clan.castle_id + 80
       end
@@ -185,13 +185,7 @@ module TerritoryWarManager
     end
 
     if castle_id == -1
-      REGISTERED_CLANS.each do |id, array|
-        if array.includes?(clan)
-          return true
-        end
-      end
-
-      return false
+      return REGISTERED_CLANS.any? { |_, array| array.includes?(clan) }
     end
 
     REGISTERED_CLANS[castle_id].includes?(clan)
@@ -199,13 +193,7 @@ module TerritoryWarManager
 
   def registered?(castle_id : Int32, l2id : Int32) : Bool
     if castle_id == -1
-      REGISTERED_MERCENARIES.each do |id, array|
-        if array.includes?(l2id)
-          return true
-        end
-      end
-
-      return false
+      return REGISTERED_MERCENARIES.any? { |_, array| array.includes?(l2id) }
     end
 
     REGISTERED_MERCENARIES[castle_id].includes?(l2id)
@@ -215,24 +203,12 @@ module TerritoryWarManager
     TERRITORY_LIST[castle_id]?
   end
 
-  def get_territory!(castle_id : Int32) : Territory
-    unless territory = get_territory(castle_id)
-      raise "No territory for castle id #{castle_id}"
-    end
-
-    territory
-  end
-
   def territories : Array(Territory)
     TERRITORY_LIST.local_each_value.select(&.owner_clan?).to_a
   end
 
   def get_registered_clans(castle_id : Int32) : Array(L2Clan)?
     REGISTERED_CLANS[castle_id]?
-  end
-
-  def get_registered_clans!(castle_id : Int32) : Array(L2Clan)
-    REGISTERED_CLANS[castle_id]
   end
 
   def add_disguised_player(l2id : Int32)
@@ -320,9 +296,7 @@ module TerritoryWarManager
       temp.change_npcs_spawn(2, false)
     end
 
-    CastleManager.get_castle_by_id!(castle_id).doors.each do |door|
-      door.open_me
-    end
+    CastleManager.get_castle_by_id(castle_id).not_nil!.doors.each &.open_me
   end
 
   def add_territory_ward(territory_id : Int32, new_owner_id : Int32, old_owner_id : Int32, broadcast_msg : Bool) : L2Npc?
@@ -396,12 +370,12 @@ module TerritoryWarManager
 
   def get_hq_for_clan(clan : L2Clan) : L2SiegeFlagInstance?
     if clan.castle_id > 0
-      TERRITORY_LIST[clan.castle_id].hq
+      TERRITORY_LIST[clan.castle_id].hq?
     end
   end
 
   def get_hq_for_territory(territory_id : Int32) : L2SiegeFlagInstance?
-    TERRITORY_LIST[territory_id - 80].hq
+    TERRITORY_LIST[territory_id - 80].hq?
   end
 
   def set_hq_for_clan(clan : L2Clan, hq : L2SiegeFlagInstance?)
@@ -440,14 +414,6 @@ module TerritoryWarManager
 
   def get_territory_ward(pc : L2PcInstance)
     TERRITORY_WARDS.find { |ward| ward.player_id == pc.l2id }
-  end
-
-  def get_territory_ward!(*args) : TerritoryWard
-    unless ward = get_territory_ward(*args)
-      raise "No TerritoryWard found with args #{args}"
-    end
-
-    ward
   end
 
   def drop_combat_flag(pc : L2PcInstance, killed : Bool, spawn_back : Bool)
@@ -501,11 +467,15 @@ module TerritoryWarManager
       return
     end
 
-    if killer.party? && type < 5
-      killer.party.members.each do |pc|
-        if pc.siege_side == victim_side || pc.siege_side == 0 || !Util.in_range?(2000, killer, pc, false)
+    if (party = killer.party) && type < 5
+      party.members.each do |pc|
+        if pc.siege_side == victim_side || pc.siege_side == 0
           next
         end
+        unless Util.in_range?(2000, killer, pc, false)
+          next
+        end
+
         PARTICIPANT_POINTS[pc.l2id] ||= Int32.slice(
           pc.siege_side,
           0,
@@ -523,13 +493,7 @@ module TerritoryWarManager
       end
 
       PARTICIPANT_POINTS[killer.l2id] ||= Int32.slice(
-        killer.siege_side,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        killer.siege_side, 0, 0, 0, 0, 0, 0
       )
       PARTICIPANT_POINTS[killer.l2id][type] += 1
     end
@@ -639,7 +603,7 @@ module TerritoryWarManager
         castle.zone.active = true
         castle.zone.update_zone_status_for_characters_inside
       else
-        "Castle with id #{t.castle_id} is missing from CastleManager."
+        warn { "Castle with id #{t.castle_id} is missing from CastleManager." }
       end
 
       if fort
@@ -649,7 +613,7 @@ module TerritoryWarManager
         fort.zone.active = true
         fort.zone.update_zone_status_for_characters_inside
       else
-        "Fort with id #{t.fort_id} is missing from CastleManager."
+        warn { "Fort with id #{t.fort_id} is missing from CastleManager." }
       end
 
       t.owned_ward.each do |ward|
@@ -718,7 +682,7 @@ module TerritoryWarManager
         castle.zone.update_zone_status_for_characters_inside
         castle.zone.siege_instance = nil
       else
-        "Castle with id #{t.castle_id} is missing from CastleManager."
+        warn { "Castle with id #{t.castle_id} is missing from CastleManager." }
       end
 
       if fort
@@ -727,7 +691,7 @@ module TerritoryWarManager
         fort.zone.update_zone_status_for_characters_inside
         fort.zone.siege_instance = nil
       else
-        "Fort with id #{t.fort_id} is missing from CastleManager."
+        warn { "Fort with id #{t.fort_id} is missing from CastleManager." }
       end
 
       if hq = t.hq?
@@ -980,7 +944,7 @@ module TerritoryWarManager
     REGISTERED_MERCENARIES.each_value do |list|
       list.each do |l2id|
         if pc = L2World.get_player(l2id)
-          if clan = pc.clan?
+          if clan = pc.clan
             if registered?(-1, clan) # not sure about the conditional
               pc.send_packet(sm)
               if exp > 0 || sp > 0
@@ -994,8 +958,6 @@ module TerritoryWarManager
   end
 
   class TerritoryNPCSpawn
-    # include Identifiable
-
     getter castle_id, location, territory_id, type
     getter! npc : L2Npc?
     setter npc_id : Int32
@@ -1005,7 +967,7 @@ module TerritoryWarManager
     initializer castle_id : Int32, location : Location, npc_id : Int32,
       type : Int32, npc : L2Npc?
 
-    def id
+    def id : Int32
       @npc_id
     end
 
@@ -1019,6 +981,7 @@ module TerritoryWarManager
     include Loggable
 
     @territory_ward_spawn_places = Slice(TerritoryNPCSpawn?).new(9, nil.as(TerritoryNPCSpawn?))
+
     getter quest_done = Slice(Int32).new(2)
     getter territory_id : Int32
     getter spawn_list = [] of TerritoryNPCSpawn
@@ -1098,7 +1061,7 @@ module TerritoryWarManager
       end
     end
 
-    def owned_ward
+    def owned_ward : Slice(TerritoryNPCSpawn?)
       @territory_ward_spawn_places
     end
 
@@ -1127,15 +1090,15 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_attacker_clan(clan_id : Int32) : L2SiegeClan?
     raise "not supported"
   end
 
-  def get_attacker_clan?(clan : L2Clan?) : L2SiegeClan?
+  def get_attacker_clan(clan : L2Clan?) : L2SiegeClan?
     raise "not supported"
   end
 
-  def attacker_clans? : IArray(L2SiegeClan)?
+  def attacker_clans : IArray(L2SiegeClan)?
     raise "not supported"
   end
 
@@ -1147,15 +1110,15 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_defender_clan(clan_id : Int32) : L2SiegeClan?
     raise "not supported"
   end
 
-  def get_defender_clan?(clan : L2Clan?) : L2SiegeClan?
+  def get_defender_clan(clan : L2Clan?) : L2SiegeClan?
     raise "not supported"
   end
 
-  def defender_clans? : IArray(L2SiegeClan)?
+  def defender_clans : IArray(L2SiegeClan)?
     raise "not supported"
   end
 
@@ -1163,7 +1126,7 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def get_flag?(clan : L2Clan?) : IArray(L2Npc)?
+  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
     raise "not supported"
   end
 

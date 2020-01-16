@@ -19,12 +19,13 @@ abstract class ClanHallSiegeEngine < Quest
   @hall : SiegableHall
   @siege_task : Scheduler::DelayedTask?
   @mission_accomplished = false
+
   getter attackers = {} of Int32 => L2SiegeClan
 
   def initialize(name : String, descr : String, hall_id : Int32)
     super(-1, name, descr)
 
-    @hall = ClanHallSiegeManager.get_siegable_hall!(hall_id)
+    @hall = ClanHallSiegeManager.get_siegable_hall(hall_id).not_nil!
     delay = @hall.next_siege_time - Time.ms - 3600000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
     info { "Siege scheduled for #{siege_date.time}." }
@@ -83,35 +84,38 @@ abstract class ClanHallSiegeEngine < Quest
   end
 
   def get_flag(clan : L2Clan?) : IArray(L2Npc)?
-    if temp = get_attacker_clan?(clan)
+    if temp = get_attacker_clan(clan)
       temp.flag # nilable?
     end
   end
 
-  def attacker?(clan : L2Clan) : Bool
+  def attacker?(clan : L2Clan?) : Bool
+    return false unless clan
     @attackers.has_key?(clan.id)
   end
 
-  def defender?(clan : L2Clan) : Bool
+  def defender?(clan : L2Clan?) : Bool
     false
   end
 
-  def get_attacker_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_attacker_clan(clan_id : Int32) : L2SiegeClan?
     @attackers[clan_id]?
   end
 
-  def get_attacker_clan?(clan : L2Clan) : L2SiegeClan?
-    get_attacker_clan(clan.id)
+  def get_attacker_clan(clan : L2Clan?) : L2SiegeClan?
+    if clan
+      get_attacker_clan(clan.id)
+    end
   end
 
-  def attacker_clans? : IArray(L2SiegeClan)?
+  def attacker_clans : IArray(L2SiegeClan)?
     @attackers.values
   end
 
   def attackers_in_zone : Array(L2PcInstance)
     # attackers = [] of L2PcInstance
     # @hall.siege_zone.players_inside.each do |pc|
-    #   clan = pc.clan?
+    #   clan = pc.clan
     #   if clan && @attackers.has_key?(clan.id)
     #     attackers << pc
     #   end
@@ -119,20 +123,20 @@ abstract class ClanHallSiegeEngine < Quest
     # attackers
 
     @hall.siege_zone.players_inside.select do |pc|
-      clan = pc.clan?
+      clan = pc.clan
       clan && @attackers.has_key?(clan.id)
     end
   end
 
-  def get_defender_clan?(clan_id : Int32) : L2SiegeClan?
+  def get_defender_clan(clan_id : Int32) : L2SiegeClan?
     # return nil
   end
 
-  def get_defender_clan?(clan : L2Clan) : L2SiegeClan?
+  def get_defender_clan(clan : L2Clan) : L2SiegeClan?
     # return nil
   end
 
-  def defender_clans? : IArray(L2SiegeClan)?
+  def defender_clans : IArray(L2SiegeClan)?
     # return nil
   end
 
@@ -227,11 +231,7 @@ abstract class ClanHallSiegeEngine < Quest
       end
     end
 
-    @hall.siege_zone.characters_inside.each do |char|
-      if char.player?
-        char.acting_player.start_pvp_flag
-      end
-    end
+    @hall.siege_zone.players_inside.each &.start_pvp_flag
 
     @attackers.clear
 

@@ -2,15 +2,14 @@ require "./abstract_player_group"
 
 class L2CommandChannel < AbstractPlayerGroup
   @party : L2Party
+
   getter leader : L2PcInstance
   getter level : Int32
   getter parties : IArray(L2Party)
 
-  def_equals leader_l2id
-
   def initialize(leader : L2PcInstance)
     @leader = leader
-    @party = leader.party
+    @party = leader.party.not_nil!
     @parties = Concurrent::Array { @party }
     @level = @party.level
     @party.command_channel = self

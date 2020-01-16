@@ -87,7 +87,7 @@ module Hero
       ally_crest = 0
 
       if clan_id > 0
-        clan = ClanTable.get_clan!(clan_id)
+        clan = ClanTable.get_clan(clan_id).not_nil!
         clan_name = clan.name
         clan_crest = clan.crest_id
         if ally_id > 0
@@ -131,13 +131,14 @@ module Hero
       date = Time.from_ms(time).to_s("%Y-%m-%d %H")
       diary_entry["date"] = date
 
-      if action == ACTION_RAID_KILLED
+      case action
+      when ACTION_RAID_KILLED
         if template = NpcData[param]?
           diary_entry["action"] = template.name + " was defeated"
         end
-      elsif action == ACTION_HERO_GAINED
+      when ACTION_HERO_GAINED
         diary_entry["action"] = "Gained Hero status"
-      elsif action == ACTION_CASTLE_TAKEN
+      when ACTION_CASTLE_TAKEN
         if castle = CastleManager.get_castle_by_id(param)
           diary_entry["action"] = castle.name + " Castle was successful taken"
         end
@@ -184,7 +185,7 @@ module Hero
 
       if char_id == char_one_id
         if name = CharNameTable.get_name_by_id(char_two_id)
-          cls = ClassListData.get_class!(char_two_class).client_code
+          cls = ClassListData.get_class(char_two_class).client_code
 
           fight = StatsSet.new
           fight["opponent"] = name
@@ -213,7 +214,7 @@ module Hero
         end
       elsif char_id == char_two_id
         if name = CharNameTable.get_name_by_id(char_one_id)
-          cls = ClassListData.get_class!(char_one_class).client_code
+          cls = ClassListData.get_class(char_one_class).client_code
 
           fight = StatsSet.new
           fight["opponent"] = name
@@ -548,7 +549,7 @@ module Hero
             clan_name = ally_name = ""
             clan_crest = ally_crest = 0
             if clan_id > 0
-              clan = ClanTable.get_clan!(clan_id)
+              clan = ClanTable.get_clan(clan_id).not_nil!
               clan_name = clan.name
               clan_crest = clan.crest_id
               if ally_id > 0
@@ -654,7 +655,7 @@ module Hero
 
     hero[CLAIMED] = true
 
-    clan = pc.clan?
+    clan = pc.clan
 
     if clan && clan.level >= 5
       clan.add_reputation_score(Config.hero_points, true)

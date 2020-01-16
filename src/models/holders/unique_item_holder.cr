@@ -1,8 +1,6 @@
 require "./item_holder"
 
 class UniqueItemHolder < ItemHolder
-  # include UniqueId
-
   getter l2id
 
   def initialize(id : Int32, @l2id : Int32, count : Int64 = 1i64)

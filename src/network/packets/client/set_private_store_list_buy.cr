@@ -91,7 +91,7 @@ class Packets::Incoming::SetPrivateStoreListBuy < GameClientPacket
     pc.broadcast_packet(PrivateStoreMsgBuy.new(pc))
   end
 
-  struct Item
+  private struct Item
     initializer item_id : Int32, count : Int64, price : Int64
 
     def add_to_trade_list(list : TradeList)

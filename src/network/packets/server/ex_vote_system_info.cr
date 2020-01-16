@@ -14,7 +14,7 @@ class Packets::Outgoing::ExVoteSystemInfo < GameServerPacket
     @bonus_val  = RecoBonus.get_reco_bonus(pc)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xc9
 

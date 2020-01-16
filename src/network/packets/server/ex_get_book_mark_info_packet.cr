@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExGetBookMarkInfoPacket < GameServerPacket
   initializer pc : L2PcInstance
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x84
 

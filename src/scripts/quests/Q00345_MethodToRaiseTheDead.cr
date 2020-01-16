@@ -117,7 +117,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
       return
     end
 
-    random = rand(100)
+    random = Rnd.rand(100)
     if random <= 5
       if !has_quest_items?(qs.player, VICTIMS_ARM_BONE)
         give_items(qs.player, VICTIMS_ARM_BONE, 1)
@@ -198,7 +198,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
             give_adena(pc, 5390i64 + (70 * useless_bone_pieces_count), true)
             html = "30970-11.html"
           elsif memo_state_ex == 3
-            if rand(100) <= 92
+            if Rnd.rand(100) <= 92
               give_items(pc, BILL_OF_IASON_HEINE, 5)
             else
               give_items(pc, IMPERIAL_DIAMOND, 1)
@@ -220,7 +220,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           take_items(pc, -1, {POWDER_TO_SUMMON_DEAD_SOULS, VICTIMS_ARM_BONE, VICTIMS_THIGH_BONE, VICTIMS_SKULL, VICTIMS_RIB_BONE, VICTIMS_SPINE})
           qs.memo_state = 7
 
-          random = rand(100)
+          random = Rnd.rand(100)
 
           if random <= 39
             qs.set_memo_state_ex(1, 1)

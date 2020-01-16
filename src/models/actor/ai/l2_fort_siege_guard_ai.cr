@@ -25,12 +25,14 @@ class L2FortSiegeGuardAI < L2CharacterAI
     # Check if the target isn't another guard, folk or a door
     if target.nil? || target.is_a?(L2DefenderInstance) || target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance) || target.looks_dead? || target.is_a?(L2FortCommanderInstance) || target.is_a?(L2Playable)
       if target.is_a?(L2PcInstance)
-        player = target
+        pc = target
       elsif target.is_a?(L2Summon)
-        player = target.owner
+        pc = target.owner
       end
 
-      if player.nil? || (player.clan? && player.clan.fort_id == @actor.as(L2Npc).fort.residence_id)
+      return false unless pc
+
+      if (clan = pc.clan) && clan.fort_id == @actor.as(L2Npc).fort.residence_id
         return false
       end
     end
@@ -67,7 +69,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     @actor.auto_attackable?(target) && GeoData.can_see_target?(@actor, target)
   end
 
-  def change_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
+  def change_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
     sync do
       if intention.idle? # || intention.active? # active becomes idle if only a summon is present
         # Check if actor is not dead
@@ -217,8 +219,9 @@ class L2FortSiegeGuardAI < L2CharacterAI
 
   private def faction_notify_and_support
     target = attack_target?
+    me = @actor.as(L2Npc)
     # Call all L2Object of its Faction inside the Faction Range
-    if @actor.as(L2Npc).template.clans.empty? || target.nil?
+    if me.template.clans.empty? || target.nil?
       return
     end
 
@@ -228,35 +231,34 @@ class L2FortSiegeGuardAI < L2CharacterAI
 
     # Go through all L2Character that belong to its faction
     # for (L2Character cha : @actor.known_list.each_character(((L2NpcInstance) @actor).getFactionRange+@actor.template.collisionRadius))
-    @actor.known_list.each_character(1000) do |cha|
+    me.known_list.each_character(1000) do |cha|
       unless cha.is_a?(L2Npc)
-        if @self_analysis.has_heal_or_resurrect? && cha.is_a?(L2PcInstance) && @actor.as(L2Npc).fort.siege.defender?(cha.as(L2PcInstance).clan?)
+        if @self_analysis.has_heal_or_resurrect? && cha.is_a?(L2PcInstance) && me.fort.siege.defender?(cha.clan)
           # heal friends
-          if !@actor.attacking_disabled? && cha.current_hp < cha.max_hp * 0.6 && @actor.current_hp > @actor.max_hp / 2 && @actor.current_mp > @actor.max_mp / 2 && cha.in_combat?
+          if !me.attacking_disabled? && cha.current_hp < cha.max_hp * 0.6 && me.current_hp > me.max_hp / 2 && me.current_mp > me.max_mp / 2 && cha.in_combat?
             @self_analysis.heal_skills.each do |sk|
-              if @actor.current_mp < sk.mp_consume2
+              if me.current_mp < sk.mp_consume2
                 next
               end
-              if @actor.skill_disabled?(sk)
+              if me.skill_disabled?(sk)
                 next
               end
-              unless Util.in_range?(sk.cast_range, @actor, cha, true)
+              unless Util.in_range?(sk.cast_range, me, cha, true)
                 next
               end
 
-              chance = 5
-              if chance >= rand(100)
+              if 5 >= Rnd.rand(100)
                 next
               end
-              unless GeoData.can_see_target?(@actor, cha)
+              unless GeoData.can_see_target?(me, cha)
                 break
               end
 
-              old_target = @actor.target
-              @actor.target = cha
+              old_target = me.target
+              me.target = cha
               client_stop_moving(nil)
-              @actor.do_cast(sk)
-              @actor.target = old_target
+              me.do_cast(sk)
+              me.target = old_target
               return
             end
           end
@@ -298,7 +300,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
                   end
 
                   chance = 4
-                  if chance >= rand(100)
+                  if chance >= Rnd.rand(100)
                     next
                   end
                   unless GeoData.can_see_target?(@actor, npc)
@@ -352,7 +354,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     end
 
     # never attack defenders
-    if att_tgt.is_a?(L2PcInstance) && s_guard.fort.siege.defender?(att_tgt.clan?)
+    if att_tgt.is_a?(L2PcInstance) && s_guard.fort.siege.defender?(att_tgt.clan)
       # Cancel the target
       s_guard.stop_hating(att_tgt)
       @actor.target = nil
@@ -377,9 +379,9 @@ class L2FortSiegeGuardAI < L2CharacterAI
 
         if dist_2 <= cast_range.abs2 && cast_range > 70 && !@actor.skill_disabled?(sk) && @actor.current_mp >= @actor.stat.get_mp_consume2(sk) && !sk.passive?
           old_target = @actor.target
-          if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(L2EffectType::HP)
+          if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(EffectType::HP)
             use_skill_self = true
-            if sk.has_effect_type?(L2EffectType::HP)
+            if sk.has_effect_type?(EffectType::HP)
               if @actor.current_hp > @actor.max_hp / 1.5
                 use_skill_self = false
                 break
@@ -487,9 +489,9 @@ class L2FortSiegeGuardAI < L2CharacterAI
 
           if cast_range.abs2 >= dist_2 && !sk.passive? && @actor.current_mp >= @actor.stat.get_mp_consume2(sk) && !@actor.skill_disabled?(sk)
             old_target = @actor.target
-            if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(L2EffectType::HP)
+            if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(EffectType::HP)
               use_skill_self = true
-              if sk.has_effect_type?(L2EffectType::HP) && @actor.current_hp > @actor.max_hp / 1.5
+              if sk.has_effect_type?(EffectType::HP) && @actor.current_hp > @actor.max_hp / 1.5
                 use_skill_self = false
                 break
               end

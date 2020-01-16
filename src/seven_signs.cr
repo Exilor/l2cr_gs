@@ -67,9 +67,7 @@ module SevenSigns
   private LOAD_STATUS = "SELECT * FROM seven_signs_status WHERE id=0"
   private INSERT_PLAYER = "INSERT INTO seven_signs (charId, cabal, seal) VALUES (?,?,?)"
   private UPDATE_PLAYER = "UPDATE seven_signs SET cabal=?, seal=?, red_stones=?, green_stones=?, blue_stones=?, ancient_adena_amount=?, contribution_score=? WHERE charId=?"
-  private UPDATE_STATUS = "UPDATE seven_signs_status SET current_cycle=?, active_period=?, previous_winner=?, dawn_stone_score=?, dawn_festival_score=?, dusk_stone_score=?, dusk_festival_score=?, " \
-    "avarice_owner=?, gnosis_owner=?, strife_owner=?, avarice_dawn_score=?, gnosis_dawn_score=?, strife_dawn_score=?, avarice_dusk_score=?, gnosis_dusk_score=?, strife_dusk_score=?, festival_cycle=?, accumulated_bonus0=?, accumulated_bonus1=?, accumulated_bonus2=?," \
-    "accumulated_bonus3=?, accumulated_bonus4=?, date=? WHERE id=0"
+  private UPDATE_STATUS = "UPDATE seven_signs_status SET current_cycle=?, active_period=?, previous_winner=?, dawn_stone_score=?, dawn_festival_score=?, dusk_stone_score=?, dusk_festival_score=?, avarice_owner=?, gnosis_owner=?, strife_owner=?, avarice_dawn_score=?, gnosis_dawn_score=?, strife_dawn_score=?, avarice_dusk_score=?, gnosis_dusk_score=?, strife_dusk_score=?, festival_cycle=?, accumulated_bonus0=?, accumulated_bonus1=?, accumulated_bonus2=?,accumulated_bonus3=?, accumulated_bonus4=?, date=? WHERE id=0"
 
   private SIGNS_PLAYER_DATA = Concurrent::Map(Int32, StatsSet).new
   private SIGNS_SEAL_OWNERS = Concurrent::Map(Int32, Int32).new
@@ -199,7 +197,7 @@ module SevenSigns
         end
       end
 
-      if (get_seal_owner(SEAL_AVARICE) == cabal_highest_score) && (get_seal_owner(SEAL_AVARICE) != CABAL_NULL)
+      if get_seal_owner(SEAL_AVARICE) == cabal_highest_score && get_seal_owner(SEAL_AVARICE) != CABAL_NULL
         unless Config.announce_mammon_spawn
           merchant_spawn.broadcast = false
         end
@@ -208,7 +206,7 @@ module SevenSigns
           AutoSpawnHandler.set_spawn_active(merchant_spawn, true)
         end
 
-        case (cabal_highest_score)
+        case cabal_highest_score
         when CABAL_DAWN
           unless AutoSpawnHandler.get_auto_spawn_instance(lilith_spawn.l2id, true).spawn_active?
             AutoSpawnHandler.set_spawn_active(lilith_spawn, true)
@@ -280,39 +278,49 @@ module SevenSigns
   end
 
   def calc_contribution_score(blue : Int64, green : Int64, red : Int64) : Int64
-    ret =  blue  * BLUE_CONTRIB_POINTS
-    ret += green * GREEN_CONTRIB_POINTS
-    ret + (red   * RED_CONTRIB_POINTS)
+    (blue * BLUE_CONTRIB_POINTS) +
+    (green * GREEN_CONTRIB_POINTS) +
+    (red * RED_CONTRIB_POINTS)
   end
 
   def calc_ancient_adena_reward(blue : Int64, green : Int64, red : Int64) : Int64
-    ret =  blue  * SEAL_STONE_BLUE_VALUE
-    ret += green * SEAL_STONE_GREEN_VALUE
-    ret + (red   * SEAL_STONE_RED_VALUE)
+    (blue  * SEAL_STONE_BLUE_VALUE) +
+    (green * SEAL_STONE_GREEN_VALUE) +
+    (red   * SEAL_STONE_RED_VALUE)
   end
 
   def get_cabal_short_name(num : Int) : String
     case num
-    when CABAL_DAWN; "dawn"
-    when CABAL_DUSK; "dusk"
-    else "No Cabal"
+    when CABAL_DAWN
+      "dawn"
+    when CABAL_DUSK
+      "dusk"
+    else
+      "No Cabal"
     end
   end
 
   def get_cabal_name(num : Int) : String
     case num
-    when CABAL_DAWN; "Lords of Dawn"
-    when CABAL_DUSK; "Revolutionaries of Dusk"
-    else "No Cabal"
+    when CABAL_DAWN
+      "Lords of Dawn"
+    when CABAL_DUSK
+      "Revolutionaries of Dusk"
+    else
+      "No Cabal"
     end
   end
 
   def get_seal_name(seal : Int, shorten : Bool) : String
     case seal
-    when SEAL_AVARICE; shorten ? "Avarice" : "Seal of Avarice"
-    when SEAL_GNOSIS;  shorten ? "Gnosis"  : "Seal of Gnosis"
-    when SEAL_STRIFE;  shorten ? "Strife"  : "Seal of Strife"
-    else shorten ? "" : "Seal of"
+    when SEAL_AVARICE
+      shorten ? "Avarice" : "Seal of Avarice"
+    when SEAL_GNOSIS
+      shorten ? "Gnosis"  : "Seal of Gnosis"
+    when SEAL_STRIFE
+      shorten ? "Strife"  : "Seal of Strife"
+    else
+      shorten ? "" : "Seal of"
     end
   end
 
@@ -355,10 +363,14 @@ module SevenSigns
 
   def current_period_name : String?
     case @@active_period
-    when PERIOD_COMP_RECRUITING; "Quest Event Initialization"
-    when PERIOD_COMPETITION; "Competition (Quest Event)"
-    when PERIOD_COMP_RESULTS; "Quest Event Results"
-    when PERIOD_SEAL_VALIDATION; "Seal Validation"
+    when PERIOD_COMP_RECRUITING
+      "Quest Event Initialization"
+    when PERIOD_COMPETITION
+      "Competition (Quest Event)"
+    when PERIOD_COMP_RESULTS
+      "Quest Event Results"
+    when PERIOD_SEAL_VALIDATION
+      "Seal Validation"
     end
   end
 
@@ -458,9 +470,12 @@ module SevenSigns
 
   def get_seal_proportion(seal : Int, cabal : Int) : Int32
     case cabal
-    when CABAL_NULL; 0
-    when CABAL_DUSK; SIGNS_DUSK_SEAL_TOTALS[seal]
-    else SIGNS_DAWN_SEAL_TOTALS[seal]
+    when CABAL_NULL
+      0
+    when CABAL_DUSK
+      SIGNS_DUSK_SEAL_TOTALS[seal]
+    else
+      SIGNS_DAWN_SEAL_TOTALS[seal]
     end
   end
 
@@ -496,7 +511,9 @@ module SevenSigns
   end
 
   def get_player_cabal(l2id : Int) : Int32
-    return CABAL_NULL unless data = SIGNS_PLAYER_DATA[l2id]?
+    unless data = SIGNS_PLAYER_DATA[l2id]?
+      return CABAL_NULL
+    end
 
     cabal = data.get_string("cabal")
     if cabal.casecmp?("dawn")
@@ -639,12 +656,7 @@ module SevenSigns
       SIGNS_PLAYER_DATA[id] = data
 
       begin
-        GameDB.exec(
-          INSERT_PLAYER,
-          id,
-          get_cabal_short_name(cabal),
-          seal
-        )
+        GameDB.exec(INSERT_PLAYER, id, get_cabal_short_name(cabal), seal)
       rescue e
         error e
       end
@@ -895,10 +907,8 @@ module SevenSigns
   end
 
   def check_is_rookie_posting_ticket(item_id : Int) : Bool
-    (item_id > 6174) && (item_id < 6295) ||
-    (item_id > 6811) && (item_id < 6832) ||
-    (item_id > 7950) && (item_id < 7971) ||
-    (item_id > 8007) && (item_id < 8028)
+    (item_id > 6174 && item_id < 6295) || (item_id > 6811 && item_id < 6832) ||
+    (item_id > 7950 && item_id < 7971) || (item_id > 8007 && item_id < 8028)
   end
 
   def give_cp_mult(strife_owner : Int)

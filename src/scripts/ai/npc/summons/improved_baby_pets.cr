@@ -3,7 +3,7 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
   private IMPROVED_BABY_PETS = {
     16034, # Improved Baby Buffalo
     16035, # Improved Baby Kookaburra
-    16036, # Improved Baby Cougar
+    16036  # Improved Baby Cougar
   }
 
   # Skill
@@ -88,8 +88,10 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
 
         prev_follow_status = summon.follow_status
 
-        if !prev_follow_status && !summon.inside_radius?(owner, skill.skill.cast_range, true, true)
-          return false
+        unless prev_follow_status
+          unless summon.inside_radius?(owner, skill.skill.cast_range, true, true)
+            return false
+          end
         end
 
         if target_type >= 0 && target_type <= 2
@@ -112,22 +114,22 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
   end
 
   private def cast_heal_skill(summon, step_n, heal_num)
-    owner = summon.owner?
+    owner = summon.owner
     parameters = summon.template.parameters
     skill = parameters.get_object("step#{step_n}_heal0#{heal_num}", SkillHolder?)
     target_type = parameters.get_i32("step #{step_n}_heal_target0#{heal_num}", 0)
 
-    if skill && owner && owner.alive? && summon.check_do_cast_conditions(skill.skill)
+    if skill && owner.alive? && summon.check_do_cast_conditions(skill.skill)
       prev_follow_status = summon.follow_status
 
-      if !prev_follow_status
-        if !summon.inside_radius?(owner, skill.skill.cast_range, true, true)
+      unless prev_follow_status
+        unless summon.inside_radius?(owner, skill.skill.cast_range, true, true)
           return
         end
       end
 
       unless has_abnormal?(owner, skill.skill.abnormal_type)
-        if target_type >= 0 && target_type <= 2
+        if target_type.between?(0, 2)
           summon.target = target_type == 1 ? summon : owner
           summon.do_cast(skill.skill)
           sm = SystemMessage.pet_uses_s1

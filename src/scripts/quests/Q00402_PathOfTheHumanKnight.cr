@@ -98,8 +98,8 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
       event
     when "30289-02.html", "30417-06.html", "30417-07.htm", "30417-15.html"
       event
-    when "30417-13.html", "30417-14.html"
-      if has_quest_items?(pc, SQUIRES_MARK) && 3 <= coin_count <= 5
+    when "30417-13.html"
+      if has_quest_items?(pc, SQUIRES_MARK) && coin_count == 3
         give_adena(pc, 81_900, true)
         give_items(pc, SWORD_OF_RITUAL, 1)
         level = pc.level
@@ -115,24 +115,23 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
         qs.save_global_quest_var("1ClassQuestFinished", "1")
         event
       end
-    # handled above
-    # when "30417-14.html"
-      # if has_quest_items?(pc, SQUIRES_MARK) && 4 <= coun_count <= 5
-      #   give_adena pc, 81_900, true
-      #   give_items pc, SWORD_OF_RITUAL, 1
-      #   level = pc.level
-      #   if level >= 20
-      #     add_exp_and_sp pc, 160267, 11576
-      #   elsif level == 19
-      #     add_exp_and_sp pc, 228064, 14925
-      #   else
-      #     add_exp_and_sp pc, 295862, 18274
-      #   end
-      #   qs.exit_quest false, true
-      #   pc.send_packet SocialAction.new(pc.l2id, 3)
-      #   qs.save_global_quest_var "1ClassQuestFinished", "1"
-      #   event
-      # end
+    when "30417-14.html"
+      if has_quest_items?(pc, SQUIRES_MARK) && coin_count.between?(4, 5)
+        give_adena(pc, 81_900, true)
+        give_items(pc, SWORD_OF_RITUAL, 1)
+        level = pc.level
+        if level >= 20
+          add_exp_and_sp(pc, 160267, 11576)
+        elsif level == 19
+          add_exp_and_sp(pc, 228064, 14925)
+        else
+          add_exp_and_sp(pc, 295862, 18274)
+        end
+        qs.exit_quest(false, true)
+        pc.send_packet(SocialAction.new(pc.l2id, 3))
+        qs.save_global_quest_var("1ClassQuestFinished", "1")
+        event
+      end
     when "30031-02.html"
       give_items(pc, EINHASADS_3RD_TEMPLE_BADGE, 1)
       event

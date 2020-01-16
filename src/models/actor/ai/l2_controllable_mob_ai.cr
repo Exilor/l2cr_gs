@@ -278,17 +278,14 @@ class L2ControllableMobAI < L2AttackableAI
       return false
     end
 
-    # TODO(Zoey76)[#112]: This check must change if summon fall in L2Npc hierarchy.
     if target.npc?
       return false
     end
 
-    # Check if the target isn't invulnerable
     if target.invul? || target.looks_dead?
       return false
     end
 
-    # Spawn protection (only against mobs)
     if target.is_a?(L2PcInstance) && target.spawn_protected?
       return false
     end
@@ -298,7 +295,6 @@ class L2ControllableMobAI < L2AttackableAI
       return false
     end
 
-    # Check if the target is a L2Playable
     if target.is_a?(L2Playable) && target.silent_move_affected?
       return false
     end

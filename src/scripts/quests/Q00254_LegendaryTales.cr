@@ -109,7 +109,7 @@ class Scripts::Q00254_LegendaryTales < Quest
   end
 
   def on_kill(npc, pc, is_pet)
-    if party = pc.party?
+    if party = pc.party
       party.members.each do |m|
         action_for_each_player(m, npc, false)
       end

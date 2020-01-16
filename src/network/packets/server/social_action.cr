@@ -3,7 +3,7 @@ class Packets::Outgoing::SocialAction < GameServerPacket
 
   initializer l2id : Int32, action_id : Int32
 
-  def write_impl
+  private def write_impl
     c 0x27
 
     d @l2id

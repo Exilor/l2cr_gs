@@ -13,18 +13,23 @@ module TargetHandler::CorpseMob
       return EMPTY_TARGET_LIST
     end
 
-    if skill.has_effect_type?(L2EffectType::SUMMON) && target.servitor? && target.acting_player? && target.acting_player.l2id == char.l2id
-      return EMPTY_TARGET_LIST
+    if skill.has_effect_type?(EffectType::SUMMON) && target.servitor?
+      if (pc = target.acting_player) && pc.l2id == char.l2id
+        return EMPTY_TARGET_LIST
+      end
     end
 
-    if skill.has_effect_type?(L2EffectType::HP_DRAIN) && target.old_corpse?(char.acting_player, Config.corpse_consume_skill_allowed_time_before_decay, true)
-      return EMPTY_TARGET_LIST
+    if skill.has_effect_type?(EffectType::HP_DRAIN)
+      time = Config.corpse_consume_skill_allowed_time_before_decay
+      if target.old_corpse?(char.acting_player, time, true)
+        return EMPTY_TARGET_LIST
+      end
     end
 
     [target] of L2Object
   end
 
   def target_type
-    L2TargetType::CORPSE_MOB
+    TargetType::CORPSE_MOB
   end
 end

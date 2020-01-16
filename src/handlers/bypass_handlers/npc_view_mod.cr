@@ -134,7 +134,7 @@ module BypassHandler::NpcViewMod
     end
   end
 
-  struct DecimalFormat
+  private struct DecimalFormat
     initializer pattern : String
 
     # TODO
@@ -159,12 +159,12 @@ module BypassHandler::NpcViewMod
         io << "<table><tr>"
         pages.times do |i|
           io << "<td align=center><button value=\""
-          io << (i + 1)
+          io << i.succ
           io << "\" width=20 height=20 action=\"bypass NpcViewMod dropList "
           io << scope
-          io << " "
+          io << ' '
           io << npc.l2id
-          io << " "
+          io << ' '
           io << i
           io << "\" back=\"L2UI_CT1.Button_DF_Calculator_Down\" fore=\"L2UI_CT1.Button_DF_Calculator\"></td>"
         end
@@ -188,10 +188,10 @@ module BypassHandler::NpcViewMod
 
     left_height = 0
     right_height = 0
-    left_sb = [] of String
-    right_sb = [] of String
+    left_sb = String::Builder.new
+    right_sb = String::Builder.new
     _end.times do |i|
-      sb = [] of String
+      sb = String::Builder.new
 
       height = 64
       drop_item = drop_list[i]?
@@ -204,29 +204,21 @@ module BypassHandler::NpcViewMod
           add_general_drop_item(pc, npc, amount_format, chance_format, sb, GeneralDropItem.new(gdi.item_id, gdi.min, gdi.max, (gdi.chance * ggdi.chance) // 100, gdi.amount_strategy, gdi.chance_strategy, ggdi.precise_strategy, ggdi.killer_chance_modifier_strategy, gdi.drop_calculation_strategy))
         else
           normalized = ggdi.normalize_me(npc, pc)
-          sb << "<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">"
-          sb << "<tr><td width=32 valign=top><img src=\"L2UI_CT1.ICON_DF_premiumItem\" width=32 height=32></td>"
-          sb << "<td fixwidth=300 align=center><font name=\"ScreenMessageSmall\" color=\"CD9000\">One from group</font>"
-          sb << "</td></tr><tr><td width=32></td><td width=300><table width=295 cellpadding=0 cellspacing=0><tr>"
-          sb << "<td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td>"
-          sb << "<td width=247 align=center>"
+          sb << "<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\"><tr><td width=32 valign=top><img src=\"L2UI_CT1.ICON_DF_premiumItem\" width=32 height=32></td><td fixwidth=300 align=center><font name=\"ScreenMessageSmall\" color=\"CD9000\">One from group</font></td></tr><tr><td width=32></td><td width=300><table width=295 cellpadding=0 cellspacing=0><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td><td width=247 align=center>"
           sb << chance_format.format(Math.min(normalized.chance, 100))
           sb << "%</td></tr></table><br>"
 
           normalized.items.each do |gdi|
             item = ItemTable[gdi.item_id]
-            sb << "<table width=291 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">"
-            sb << "<tr><td width=32 valign=top>"
+            sb << "<table width=291 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\"><tr><td width=32 valign=top>"
             unless icon = item.icon # or if it's empty?
               icon = "icon.etc_question_mark_i00"
             end
             sb << "<img src=\""
             sb << icon
-            sb << "\" width=32 height=32>"
-            sb << "</td><td fixwidth=259 align=center><font name=\"hs9\" color=\"CD9000\">"
+            sb << "\" width=32 height=32></td><td fixwidth=259 align=center><font name=\"hs9\" color=\"CD9000\">"
             sb << item.name
-            sb << "</font></td></tr><tr><td width=32></td><td width=259><table width=253 cellpadding=0 cellspacing=0>"
-            sb << "<tr><td width=48 align=right valign=top><font color=\"LEVEL\">Amount:</font></td><td width=205 align=center>"
+            sb << "</font></td></tr><tr><td width=32></td><td width=259><table width=253 cellpadding=0 cellspacing=0><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Amount:</font></td><td width=205 align=center>"
             minmax = get_precise_min_max(normalized.chance, gdi.get_min(npc), gdi.get_max(npc), gdi.precise_calculated?)
             min = minmax.min
             max = minmax.max
@@ -238,8 +230,7 @@ module BypassHandler::NpcViewMod
               sb << amount_format.format(max)
             end
 
-            sb << "</td></tr><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td>"
-            sb << "<td width=205 align=center>"
+            sb << "</td></tr><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td><td width=205 align=center>"
             sb << chance_format.format(Math.min(gdi.chance, 100))
             sb << "%</td></tr></table></td></tr><tr><td width=32></td><td width=259>&nbsp;</td></tr></table>"
 
@@ -251,22 +242,20 @@ module BypassHandler::NpcViewMod
       end
 
       if left_height >= right_height + height
-        right_sb << sb.join
+        right_sb << sb
         right_height += height
       else
-        left_sb << sb.join
+        left_sb << sb
         left_height += height
       end
     end
 
-    body_sb = [] of String
-    body_sb << "<table><tr>"
-    body_sb << "<td>"
-    body_sb << left_sb.join
+    body_sb = String::Builder.new
+    body_sb << "<table><tr><td>"
+    body_sb << left_sb
     body_sb << "</td><td>"
-    body_sb << right_sb.join
-    body_sb << "</td>"
-    body_sb << "</tr></table>"
+    body_sb << right_sb
+    body_sb << "</td></tr></table>"
 
     unless html = HtmCache.get_htm(pc, "data/html/mods/NpcView/DropList.htm")
       warn "The file data/html/mods/NpcView/DropList.htm could not be found."
@@ -275,24 +264,19 @@ module BypassHandler::NpcViewMod
     html = html.gsub("%name%", npc.name)
     html = html.gsub("%dropListButtons%", get_drop_list_buttons(npc))
     html = html.gsub("%pages%", pages_str)
-    html = html.gsub("%items%", body_sb.join)
+    html = html.gsub("%items%", body_sb)
     Util.send_cb_html(pc, html)
   end
 
   private def add_general_drop_item(pc, npc, amount_format, chance_format, sb, drop_item)
     item = ItemTable[drop_item.item_id]
-    sb << "<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">"
-    sb << "<tr><td width=32 valign=top>"
-    sb << "<img src=\""
+    sb << "<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\"><tr><td width=32 valign=top><img src=\""
     if icon = item.icon
       sb << icon
     end
-    sb << "\" width=32 height=32>"
-    sb << "</td><td fixwidth=300 align=center><font name=\"hs9\" color=\"CD9000\">"
+    sb << "\" width=32 height=32></td><td fixwidth=300 align=center><font name=\"hs9\" color=\"CD9000\">"
     sb << item.name
-    sb << "</font></td></tr><tr><td width=32></td><td width=300><table width=295 cellpadding=0 cellspacing=0>"
-    sb << "<tr><td width=48 align=right valign=top><font color=\"LEVEL\">Amount:</font></td>"
-    sb << "<td width=247 align=center>"
+    sb << "</font></td></tr><tr><td width=32></td><td width=300><table width=295 cellpadding=0 cellspacing=0><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Amount:</font></td><td width=247 align=center>"
     min_max = get_precise_min_max(drop_item.get_chance(npc, pc), drop_item.get_min(npc), drop_item.get_max(npc), drop_item.precise_calculated?)
 
     min = min_max.min
@@ -305,8 +289,7 @@ module BypassHandler::NpcViewMod
       sb << amount_format.format(max)
     end
 
-    sb << "</td></tr><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td>"
-    sb << "<td width=247 align=center>"
+    sb << "</td></tr><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td><td width=247 align=center>"
     sb << chance_format.format(Math.min(drop_item.get_chance(npc, pc), 100))
     sb << "%</td></tr></table></td></tr><tr><td width=32></td><td width=300>&nbsp;</td></tr></table>"
   end

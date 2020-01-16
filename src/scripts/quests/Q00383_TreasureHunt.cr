@@ -87,7 +87,7 @@ class Scripts::Q00383_TreasureHunt < Quest
           html = event
 
           bonus = 0i64
-          random = rand(100)
+          random = Rnd.rand(100)
 
           if random < 5
             reward_items(pc, MITHRIL_GLOVES)
@@ -101,7 +101,7 @@ class Scripts::Q00383_TreasureHunt < Quest
             bonus += 500
           end
 
-          random = rand(1000)
+          random = Rnd.rand(1000)
 
           if random < 25
             reward_items(pc, DYE_S1C3_C)
@@ -131,7 +131,7 @@ class Scripts::Q00383_TreasureHunt < Quest
             bonus += 300
           end
 
-          random = rand(100)
+          random = Rnd.rand(100)
 
           if random < 4
             reward_items(pc, EMERALD)
@@ -151,7 +151,7 @@ class Scripts::Q00383_TreasureHunt < Quest
             bonus += 500
           end
 
-          random = rand(100)
+          random = Rnd.rand(100)
 
           if random < 20
             reward_items(pc, MUSICAL_SCORE_THEME_OF_LOVE)

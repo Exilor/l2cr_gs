@@ -56,7 +56,7 @@ class Scripts::Q00601_WatchingEyes < Quest
         return "31683-06.html"
       end
 
-      i = rand(4)
+      i = Rnd.rand(4)
       if i < 3
         st.give_items(REWARD[i][0], 5)
         st.add_exp_and_sp(120000, 10000)
@@ -73,7 +73,7 @@ class Scripts::Q00601_WatchingEyes < Quest
   def on_kill(npc, pc, is_summon)
     st = get_quest_state(pc, false)
 
-    if st && st.cond?(1) && rand(1000) < MOBS[npc.id]
+    if st && st.cond?(1) && Rnd.rand(1000) < MOBS[npc.id]
       st.give_items(PROOF_OF_AVENGER, 1)
       if st.get_quest_items_count(PROOF_OF_AVENGER) == 100
         st.set_cond(2, true)

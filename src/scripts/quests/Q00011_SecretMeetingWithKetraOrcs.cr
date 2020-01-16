@@ -4,64 +4,71 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
 	private LEON = 31256
 	private WAHKAN = 31371
 	# Item
-	private BOX = 7231
+	private MUNITIONS_BOX = 7231
+
+  private MIN_LEVEL = 74
 
   def initialize
     super(11, self.class.simple_name, "Secret Meeting With Ketra Orcs")
 
     add_start_npc(CADMON)
     add_talk_id(CADMON, LEON, WAHKAN)
-    register_quest_items(BOX)
+    register_quest_items(MUNITIONS_BOX)
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return event unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
-    when "31296-03.html"
+    when "31296-03.htm"
       st.start_quest
+      st.memo_state = 11
+      event
     when "31256-02.html"
-      if st.cond?(1)
-        st.set_cond(2, true)
-        st.give_items(BOX, 1)
-      end
+      give_items(pc, MUNITIONS_BOX, 1)
+      st.memo_state = 21
+      st.set_cond(2, true)
+      event
     when "31371-02.html"
-      if st.cond?(2) && st.has_quest_items?(BOX)
-        st.add_exp_and_sp(233125, 18142)
+      if has_quest_items?(pc, MUNITIONS_BOX)
+        add_exp_and_sp(pc, 233125, 18142)
         st.exit_quest(false, true)
+        event
       else
-        return "31371-03.html"
+        "31371-03.html"
       end
     end
-
-    event
   end
 
   def on_talk(npc, pc)
-    unless st = get_quest_state(pc, true)
-      return get_no_quest_msg(pc)
-    end
+    st = get_quest_state!(pc)
 
     case st.state
     when State::CREATED
       if npc.id == CADMON
-        html = pc.level >= 74 ? "31296-01.htm" : "31296-02.html"
+        html = pc.level >= MIN_LEVEL ? "31296-01.htm" : "31296-02.html"
       end
     when State::STARTED
-      if npc.id == CADMON && st.cond?(1)
-        html = "31296-04.html"
-      elsif npc.id == LEON
-        if st.cond?(1)
+      case npc.id
+      when CADMON
+        if st.memo_state?(11)
+          html = "31296-04.html"
+        end
+      when LEON
+        if st.memo_state?(11)
           html = "31256-01.html"
-        elsif st.cond?(2)
+        elsif st.memo_state?(21)
           html = "31256-03.html"
         end
-      elsif npc.id == WAHKAN && st.cond?(2)
-        html = "31371-01.html"
+      when WAHKAN
+        if st.memo_state?(21) && has_quest_items?(pc, MUNITIONS_BOX)
+          html = "31371-01.html"
+        end
       end
     when State::COMPLETED
-      html = get_already_completed_msg(pc)
+      if npc.id == CADMON
+        html = get_already_completed_msg(pc)
+      end
     end
 
     html || get_no_quest_msg(pc)

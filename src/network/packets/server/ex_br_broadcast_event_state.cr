@@ -18,7 +18,7 @@ class Packets::Outgoing::ExBrBroadcastEventState < GameServerPacket
     param1 : Int32, param2 : Int32, param3 : Int32, param4 : Int32,
     param5 : String, param6 : String
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xbc
 

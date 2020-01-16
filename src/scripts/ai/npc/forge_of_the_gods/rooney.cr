@@ -16,7 +16,7 @@ class Scripts::Rooney < AbstractNpcAI
     super(self.class.simple_name, "ai/npc")
 
     add_see_creature_id(ROONEY)
-    add_spawn(ROONEY, LOCATIONS.sample, false, 0)
+    add_spawn(ROONEY, LOCATIONS.sample(random: Rnd), false, 0)
   end
 
   def on_adv_event(event, npc, player)

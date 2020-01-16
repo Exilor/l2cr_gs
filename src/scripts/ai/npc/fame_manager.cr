@@ -41,7 +41,7 @@ class Scripts::FameManager < AbstractNpcAI
         html = "#{npc.id}-05.html"
       end
     when "clanRep"
-      if (clan = pc.clan?) && clan.level >= MIN_CLAN_LVL
+      if (clan = pc.clan) && clan.level >= MIN_CLAN_LVL
         if pc.fame >= REPUTATION_COST && pc.level >= MIN_LVL && pc.class_id.level >= CLASS_LVL
           pc.fame = pc.fame - REPUTATION_COST
           clan.add_reputation_score(50, true)

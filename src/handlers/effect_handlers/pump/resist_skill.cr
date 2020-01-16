@@ -1,26 +1,28 @@
 class EffectHandler::ResistSkill < AbstractEffect
-  @skills = []  of SkillHolder
+  @skills : Slice(SkillHolder)
 
   def initialize(attach_cond, apply_cond, set, params)
     super
 
+    skills = [] of SkillHolder
     i = 1
     loop do
       skill_id = params.get_i32("skillId#{i}", 0)
       break if skill_id == 0
       skill_lvl = params.get_i32("skillLevel#{i}", 0)
 
-      @skills << SkillHolder.new(skill_id, skill_lvl)
+      skills << SkillHolder.new(skill_id, skill_lvl)
       i += 1
     end
+    @skills = skills.to_slice
 
     if @skills.empty?
       raise "ResistSkill with no parameters"
     end
   end
 
-  def effect_type
-    L2EffectType::BUFF
+  def effect_type : EffectType
+    EffectType::BUFF
   end
 
   def on_start(info)

@@ -1,7 +1,7 @@
 class Packets::Outgoing::DropItem < GameServerPacket
   initializer item : L2ItemInstance, char_id : Int32
 
-  def write_impl
+  private def write_impl
     c 0x16
 
     d @char_id

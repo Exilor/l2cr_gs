@@ -18,7 +18,7 @@ class CellNodeBuffer
     @target_z = 0
     @time_stamp = 0i64
     @last_elapsed_time = 0i64
-    @lock = Mutex.new
+    @lock = Mutex.new(:Reentrant)
   end
 
   def lock
@@ -45,13 +45,12 @@ class CellNodeBuffer
 
       find_neighbors
 
-      current = @current.not_nil!
-
       unless current.next?
         return
       end
 
-      @current = current.next
+      current = current.next
+      @current = current
     end
 
     nil
@@ -69,27 +68,27 @@ class CellNodeBuffer
   end
 
   private def find_neighbors
-    if _current.loc.can_go_none?
+    if current!.loc.can_go_none?
       return
     end
 
-    x = _current.loc.node_x
-    y = _current.loc.node_y
-    z = _current.loc.z
+    x = current!.loc.node_x
+    y = current!.loc.node_y
+    z = current!.loc.z
 
-    if _current.loc.can_go_east?
+    if current!.loc.can_go_east?
       node_e = add_node(x + 1, y, z, false)
     end
 
-    if _current.loc.can_go_south?
+    if current!.loc.can_go_south?
       node_s = add_node(x, y + 1, z, false)
     end
 
-    if _current.loc.can_go_west?
+    if current!.loc.can_go_west?
       node_w = add_node(x - 1, y, z, false)
     end
 
-    if _current.loc.can_go_north?
+    if current!.loc.can_go_north?
       node_n = add_node(x, y - 1, z, false)
     end
 
@@ -148,7 +147,7 @@ class CellNodeBuffer
     result
   end
 
-  def _current
+  private def current!
     @current.not_nil!
   end
 
@@ -160,7 +159,7 @@ class CellNodeBuffer
     end
 
     geo_z = new_node.loc.z
-    step_z = (geo_z - _current.loc.z).abs
+    step_z = (geo_z - current!.loc.z).abs
     weight = diagonal ? Config.diagonal_weight : Config.low_weight
 
     if !new_node.loc.can_go_all? || step_z > 16
@@ -177,10 +176,10 @@ class CellNodeBuffer
       end
     end
 
-    new_node.parent = _current
+    new_node.parent = current!
     new_node.cost = get_cost(x, y, geo_z, weight)
 
-    node = _current
+    node = current!
     count = 0
     limit = MAX_ITERATIONS * 4
 

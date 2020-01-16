@@ -14,7 +14,7 @@ module NpcData
 
   def load
     sync do
-      info "Loading NPC data..."
+      debug "Loading NPC data..."
       timer = Timer.new
       @@minion_data = MinionData.new
       parse_datapack_directory("stats/npcs")
@@ -305,24 +305,24 @@ module NpcData
                   ai_skill_scopes << range_scope
                 end
               else
-                if skill.has_effect_type?(L2EffectType::DISPEL)
+                if skill.has_effect_type?(EffectType::DISPEL)
                   ai_skill_scopes << AISkillScope::NEGATIVE << range_scope
-                elsif skill.has_effect_type?(L2EffectType::HP)
+                elsif skill.has_effect_type?(EffectType::HP)
                   ai_skill_scopes << AISkillScope::HEAL
-                elsif skill.has_effect_type?(L2EffectType::PHYSICAL_ATTACK, L2EffectType::MAGICAL_ATTACK, L2EffectType::HP_DRAIN)
+                elsif skill.has_effect_type?(EffectType::PHYSICAL_ATTACK, EffectType::MAGICAL_ATTACK, EffectType::HP_DRAIN)
                   ai_skill_scopes << AISkillScope::ATTACK << AISkillScope::UNIVERSAL
                   ai_skill_scopes << range_scope
-                elsif skill.has_effect_type?(L2EffectType::SLEEP)
+                elsif skill.has_effect_type?(EffectType::SLEEP)
                   ai_skill_scopes << AISkillScope::IMMOBILIZE
-                elsif skill.has_effect_type?(L2EffectType::STUN, L2EffectType::ROOT)
+                elsif skill.has_effect_type?(EffectType::STUN, EffectType::ROOT)
                   ai_skill_scopes << AISkillScope::IMMOBILIZE << range_scope
-                elsif skill.has_effect_type?(L2EffectType::MUTE, L2EffectType::FEAR)
+                elsif skill.has_effect_type?(EffectType::MUTE, EffectType::FEAR)
                   ai_skill_scopes << AISkillScope::COT << range_scope
-                elsif skill.has_effect_type?(L2EffectType::PARALYZE)
+                elsif skill.has_effect_type?(EffectType::PARALYZE)
                   ai_skill_scopes << AISkillScope::IMMOBILIZE << range_scope
-                elsif skill.has_effect_type?(L2EffectType::DMG_OVER_TIME)
+                elsif skill.has_effect_type?(EffectType::DMG_OVER_TIME)
                   ai_skill_scopes << range_scope
-                elsif skill.has_effect_type?(L2EffectType::RESURRECTION)
+                elsif skill.has_effect_type?(EffectType::RESURRECTION)
                   ai_skill_scopes << AISkillScope::RES
                 else
                   ai_skill_scopes << AISkillScope::UNIVERSAL
@@ -361,7 +361,7 @@ module NpcData
         dn.each_element do |gn|
           parse_drop_list_item(gn, drop_list_scope, grouped_drop_list)
         end
-        items = [] of GeneralDropItem
+        items = Array(GeneralDropItem).new(grouped_drop_list.size)
         grouped_drop_list.each do |item|
           if item.is_a?(GeneralDropItem)
             items << item
@@ -415,24 +415,28 @@ module NpcData
 
   def get_templates(& : L2NpcTemplate ->) : Array(L2NpcTemplate)
     ret = [] of L2NpcTemplate
-    NPCS.each_value { |npc| ret << npc if yield npc }
+    templates.each { |template| ret << template if yield template }
     ret
   end
 
   def get_all_of_level(*lvls : Int32) : Array(L2NpcTemplate)
-    get_templates { |npc| lvls.includes?(npc.level) }
+    get_templates { |template| lvls.includes?(template.level) }
   end
 
   def get_all_monsters_of_level(*lvls : Int32) : Array(L2NpcTemplate)
-    get_templates { |npc| lvls.includes?(npc.level) && npc.type?("L2Monster") }
+    get_templates do |template|
+      lvls.includes?(template.level) && template.type?("L2Monster")
+    end
   end
 
   def get_all_npc_starting_with(text : String) : Array(L2NpcTemplate)
-    get_templates { |npc| npc.type?("L2Npc") && npc.name.starts_with?(text) }
+    get_templates do |template|
+      template.type?("L2Npc") && template.name.starts_with?(text)
+    end
   end
 
   def get_all_npc_of_class_type(*types) : Array(L2NpcTemplate)
-    get_templates { |npc| types.any? &.casecmp?(npc.type) }
+    get_templates { |template| types.any? &.casecmp?(template.type) }
   end
 
   private class MinionData

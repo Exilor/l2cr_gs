@@ -1,9 +1,9 @@
 class EffectHandler::DispelAll < AbstractEffect
-  def effect_type
-    L2EffectType::DISPEL
+  def effect_type : EffectType
+    EffectType::DISPEL
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

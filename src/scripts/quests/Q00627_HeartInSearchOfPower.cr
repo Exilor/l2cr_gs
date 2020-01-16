@@ -101,7 +101,7 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
     if m = get_random_party_member(killer, 1)
       st = get_quest_state!(m, false)
       chance = MONSTERS[npc.id] * Config.rate_quest_drop
-      if rand(1000) < chance
+      if Rnd.rand(1000) < chance
         st.give_items(BEAD_OF_OBEDIENCE, 1)
         if st.get_quest_items_count(BEAD_OF_OBEDIENCE) < BEAD_OF_OBEDIENCE_COUNT_REQUIRED
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

@@ -7,11 +7,8 @@ class MobGroup
   getter group_id, max_mob_count
   getter(mobs) { Concurrent::Array(L2ControllableMobInstance).new }
 
-  def initialize(group_id : Int32, npc_template : L2NpcTemplate, max_mob_count : Int32)
-    @group_id = group_id
-    @npc_template = npc_template
-    @max_mob_count = max_mob_count
-  end
+  initializer group_id : Int32, npc_template : L2NpcTemplate,
+    max_mob_count : Int32
 
   def active_mob_count : Int32
     mobs.size

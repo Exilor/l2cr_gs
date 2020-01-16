@@ -1,4 +1,4 @@
-enum L2EffectType : UInt8
+enum EffectType : UInt8
   AGGRESSION
   BUFF
   CHAT_BLOCK

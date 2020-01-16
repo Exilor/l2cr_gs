@@ -8,12 +8,12 @@ struct KillerChanceModifierStrategy
 
   DEFAULT_STRATEGY = new do |item, victim, killer|
     if victim.raid? && Config.deepblue_drop_rules_raid
-      level_diff = victim.level - killer.level
-      next Math.max(0.0, Math.min(1.0, (level_diff * 0.15) + 1))
+      lvl_diff = victim.level - killer.level
+      next ((lvl_diff * 0.15) + 1).clamp(0.0, 1.0)
     elsif Config.deepblue_drop_rules
-      level_diff = victim.level - killer.level
+      lvl_diff = victim.level - killer.level
       next Util.map(
-        level_diff,
+        lvl_diff,
         -Config.drop_item_max_level_difference,
         -Config.drop_item_min_level_difference,
         Config.drop_item_min_level_gap_chance,
@@ -26,28 +26,15 @@ struct KillerChanceModifierStrategy
 
   DEFAULT_NONGROUP_STRATEGY = new do |item, victim, killer|
     if (!victim.raid? && Config.deepblue_drop_rules) || (victim.raid? && Config.deepblue_drop_rules_raid)
-      level_diff = victim.level - killer.level
+      lvl_diff = victim.level - killer.level
       if item.as(GeneralDropItem).item_id == Inventory::ADENA_ID
-        next Util.map(level_diff, -Config.drop_adena_max_level_difference, -Config.drop_adena_min_level_difference, Config.drop_adena_min_level_gap_chance, 100.0) / 100
+        next Util.map(lvl_diff, -Config.drop_adena_max_level_difference, -Config.drop_adena_min_level_difference, Config.drop_adena_min_level_gap_chance, 100.0) / 100
       end
-      next Util.map(level_diff, -Config.drop_item_max_level_difference, -Config.drop_item_min_level_difference, Config.drop_item_min_level_gap_chance, 100.0) / 100
+      next Util.map(lvl_diff, -Config.drop_item_max_level_difference, -Config.drop_item_min_level_difference, Config.drop_item_min_level_gap_chance, 100.0) / 100
     end
 
     1.0
   end
 
   NO_RULES = new { |item, victim, killer| 1.0 }
-
-  def self.parse(name : String) : self
-    case name.casecmp
-    when "default_strategy"
-      DEFAULT_STRATEGY
-    when "default_nongroup_strategy"
-      DEFAULT_NONGROUP_STRATEGY
-    when "no_rules"
-      NO_RULES
-    else
-      raise "unknown #{self} #{name.inspect}"
-    end
-  end
 end

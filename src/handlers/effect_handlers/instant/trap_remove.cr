@@ -11,7 +11,7 @@ class EffectHandler::TrapRemove < AbstractEffect
     @power = params.get_i32("power")
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

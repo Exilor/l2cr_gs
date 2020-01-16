@@ -77,7 +77,7 @@ class Scripts::Q00309_ForAGoodCause < Quest
         html = "32647-09.html"
       end
     when "100", "120"
-      html = on_item_exchange_request(st, MOIRAI_PIECES.sample, event.to_i)
+      html = on_item_exchange_request(st, MOIRAI_PIECES.sample(random: Rnd), event.to_i)
     when "192", "230"
       html = on_item_exchange_request(st, REC_DYNASTY_EARRINGS_70, event.to_i)
     when "256", "308"
@@ -87,7 +87,7 @@ class Scripts::Q00309_ForAGoodCause < Quest
     when "206", "246"
       html = on_item_exchange_request(st, REC_DYNASTY_SIGIL_60, event.to_i)
     when "180", "216"
-      html = on_item_exchange_request(st, MOIRAI_RECIPES.sample, event.to_i)
+      html = on_item_exchange_request(st, MOIRAI_RECIPES.sample(random: Rnd), event.to_i)
     when "32647-14.html", "32647-07.html"
       st.exit_quest(true, true)
       html = event
@@ -100,7 +100,7 @@ class Scripts::Q00309_ForAGoodCause < Quest
     if m = get_random_party_member(killer, 1)
       st = get_quest_state!(m, false)
       chance = MUCROKIANS[npc.id] * Config.rate_quest_drop
-      if rand(1000) < chance
+      if Rnd.rand(1000) < chance
         if npc.id == CORRUPTED_MUCROKIAN
           st.give_items(FALLEN_MUCROKIAN_HIDE, 1)
           st.reward_items(FALLEN_MUCROKIAN_HIDE, 1)
@@ -155,7 +155,7 @@ class Scripts::Q00309_ForAGoodCause < Quest
   private def on_item_exchange_request(st, item, quanty)
     if can_give_item?(st, quanty)
       if MOIRAI_PIECES.includes?(item)
-        st.give_items(item, rand(1..4))
+        st.give_items(item, Rnd.rand(1..4))
       else
         st.give_items(item, 1)
       end

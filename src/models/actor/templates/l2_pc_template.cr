@@ -5,13 +5,10 @@ class L2PcTemplate < L2CharTemplate
   @base_hp : Slice(Float32)
   @base_mp : Slice(Float32)
   @base_cp : Slice(Float32)
-
   @_base_hp_reg : Slice(Float64) # @base_*_reg already exist in super as Float32
   @_base_mp_reg : Slice(Float64) # @base_*_reg already exist in super as Float32
   @base_cp_reg : Slice(Float64)
-
   @base_safe_fall_height : Int32
-
   @base_slot_def : Hash(Int32, Int32)
 
   getter class_id : ClassId

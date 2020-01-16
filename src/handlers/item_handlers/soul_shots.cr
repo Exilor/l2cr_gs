@@ -8,7 +8,7 @@ module ItemHandler::SoulShots
       return false
     end
 
-    weapon_inst = pc.active_weapon_instance?
+    weapon_inst = pc.active_weapon_instance
     item_id = item.id
     skills = item.template.skills
 
@@ -17,12 +17,14 @@ module ItemHandler::SoulShots
       return false
     end
 
-    if weapon_inst.nil? || pc.active_weapon_item.soulshot_count == 0
+    if weapon_inst.nil? || pc.active_weapon_item.not_nil!.soulshot_count == 0
       unless pc.active_shots.includes?(item_id)
         pc.send_packet(SystemMessageId::CANNOT_USE_SOULSHOTS)
       end
       return false
     end
+
+    wep = pc.active_weapon_item.not_nil!
 
     unless item.etc_item? && item.template.default_action.soulshot? && weapon_inst.template.item_grade_s_plus == item.template.item_grade_s_plus
       unless pc.active_shots.includes?(item_id)
@@ -38,9 +40,9 @@ module ItemHandler::SoulShots
         return false
       end
 
-      ss_count = pc.active_weapon_item.soulshot_count
-      if pc.active_weapon_item.reduced_soulshot > 0 && Rnd.rand(100) < pc.active_weapon_item.reduced_soulshot_chance
-        ss_count = pc.active_weapon_item.reduced_soulshot
+      ss_count = wep.soulshot_count
+      if wep.reduced_soulshot > 0 && Rnd.rand(100) < wep.reduced_soulshot_chance
+        ss_count = wep.reduced_soulshot
       end
 
       unless pc.destroy_item_without_trace("Consume", item.l2id, ss_count.to_i64, nil, false)

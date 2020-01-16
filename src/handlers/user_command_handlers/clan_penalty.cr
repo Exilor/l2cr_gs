@@ -27,7 +27,7 @@ module UserCommandHandler::ClanPenalty
         penalty = true
       end
 
-      clan = pc.clan?
+      clan = pc.clan
       if clan && clan.char_penalty_expiry_time > time
         io << "<td width=170>Unable to invite a clan member.</td><td width=100 align=center>"
         ::Time.from_ms(clan.char_penalty_expiry_time).to_s(format, io)

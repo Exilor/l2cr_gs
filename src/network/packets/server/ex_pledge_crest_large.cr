@@ -7,7 +7,7 @@ class Packets::Outgoing::ExPledgeCrestLarge < GameServerPacket
     @data = CrestTable.get_crest(crest_id).try &.data
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x1b
 

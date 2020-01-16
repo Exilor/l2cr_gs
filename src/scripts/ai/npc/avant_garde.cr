@@ -84,7 +84,7 @@ class Scripts::AvantGarde < AbstractNpcAI
         QUEST_VAR_NAMES.each do |var_name|
           1.upto(Config.max_subclass) do |i|
             qvar = st.get_global_quest_var("#{var_name}#{i}")
-            if !qvar.empty? && (qvar.ends_with?(";") || qvar != "0")
+            if !qvar.empty? && (qvar.ends_with?(';') || qvar != "0")
               active_certifications += 1
             end
           end
@@ -97,8 +97,8 @@ class Scripts::AvantGarde < AbstractNpcAI
             1.upto(Config.max_subclass) do |i|
               qvar_name = "#{var_name}#{i}"
               qvar = st.get_global_quest_var(qvar_name)
-              if qvar.ends_with?(";")
-                skill_id_var = qvar.sub(";", "")
+              if qvar.ends_with?(';')
+                skill_id_var = qvar.sub(';', "")
                 if skill_id_var.num?
                   skill_id = skill_id_var.to_i
                   if sk = SkillData[skill_id, 1]?

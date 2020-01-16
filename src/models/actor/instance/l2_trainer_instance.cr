@@ -4,7 +4,10 @@ class L2TrainerInstance < L2NpcInstance
   end
 
   def get_html_path(npc_id, val)
-    pom = val == 0 ? npc_id : "#{npc_id}-#{val}"
-    "data/html/trainer/#{pom}.htm"
+    if val == 0
+      "data/html/trainer/#{npc_id}.htm"
+    else
+      "data/html/trainer/#{npc_id}-#{val}.htm"
+    end
   end
 end

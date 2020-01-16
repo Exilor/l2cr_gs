@@ -26,6 +26,7 @@ module GamePacketHandler
       when 0x2b then AuthLogin
       else
         print_debug(opcode, buffer, state, client)
+        return
       end
     when .authed?
       case opcode
@@ -47,9 +48,11 @@ module GamePacketHandler
         when 0x95 then RequestEx2ndPasswordReq
         else
           print_debug_double_opcode(opcode, op2, buffer, state, client)
+          return
         end
       else
         print_debug(opcode, buffer, state, client)
+        return
       end
     when .joining?
       case opcode
@@ -66,9 +69,11 @@ module GamePacketHandler
         when 0x3d then RequestAllFortressInfo # L2J forgot about this one
         else
           print_debug_double_opcode(opcode, op2, buffer, state, client)
+          return
         end
       else
         print_debug(opcode, buffer, state, client)
+        return
       end
     when .in_game?
       case opcode
@@ -86,10 +91,12 @@ module GamePacketHandler
       when 0x10 # Say
       when 0x12 # CharacterSelect ("Start" was spammed when AUTHED)
         debug "Ignoring duplicate CharacterSelect packet."
+        return
       when 0x14 then RequestItemList
       when 0x15 # RequestEquipItem
-        warn "Received obsolete RequestEquipItem packet."
+        warn { "Received obsolete RequestEquipItem packet from #{client}." }
         client.handle_cheat("used obsolete RequestEquipItem packet")
+        return
       when 0x16 then RequestUnEquipItem
       when 0x17 then RequestDropItem
       when 0x19 then UseItem
@@ -113,14 +120,17 @@ module GamePacketHandler
       when 0x32 then AttackRequest
       when 0x33 # RequestTeleportPacket
       when 0x34 # RequestSocialAction
-        warn "Received obsolete RequestSocialAction packet."
+        warn { "Received obsolete RequestSocialAction packet from #{client}." }
         client.handle_cheat("used obsolete RequestSocialAction packet")
+        return
       when 0x35 # ChangeMoveType2
-        warn "Received obsolete ChangeMoveType packet."
+        warn { "Received obsolete ChangeMoveType packet from #{client}." }
         client.handle_cheat("used obsolete ChangeMoveType packet")
+        return
       when 0x36 # ChangeWaitType2
-        warn "Received obsolete ChangeWaitType packet."
+        warn { "Received obsolete ChangeWaitType packet from #{client}." }
         client.handle_cheat("used obsolete ChangeWaitType packet")
+        return
       when 0x37 then RequestSellItem
       when 0x38 # RequestMagicSkillList
       when 0x39 then RequestMagicSkillUse
@@ -154,6 +164,7 @@ module GamePacketHandler
         when 0x03 # SendL2ParamSetting
         else
           print_debug_double_opcode(opcode, op2, buffer, state, client)
+          return
         end
       when 0x4d then RequestPledgeMemberList
       when 0x4f # RequestMagicList
@@ -259,7 +270,7 @@ module GamePacketHandler
       when 0xc4 then RequestHennaItemInfo
       when 0xc5 then RequestBuySeed
       when 0xc6 then DlgAnswer          # ConfirmDlg
-      when 0xc7 then RequestPreviewItem # RequestPreviewItem
+      when 0xc7 then RequestPreviewItem
       when 0xc8 then RequestSSQStatus
       when 0xc9 then RequestPetitionFeedback
       when 0xcb then GameGuardReply
@@ -369,6 +380,7 @@ module GamePacketHandler
           when 0x05 # RequestChangeBookMarkSlot
           else
             print_debug_double_opcode(opcode, op3, buffer, state, client)
+            return
           end
         when 0x52 then RequestWithDrawPremiumItem
         when 0x53 # RequestJump
@@ -424,13 +436,18 @@ module GamePacketHandler
         when 0x92 # RequestUseGoodsInventoryItem
         else
           print_debug_double_opcode(opcode, op2, buffer, state, client)
+          return
         end
       else
         print_debug(opcode, buffer, state, client)
+        return
       end
     end
 
-    if packet_type.is_a?(GameClientPacket.class)
+    # if packet_type.is_a?(GameClientPacket.class)
+    #   packet_type.new
+    # end
+    if packet_type
       packet_type.new
     end
   end

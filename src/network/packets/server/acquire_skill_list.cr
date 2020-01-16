@@ -12,7 +12,7 @@ class Packets::Outgoing::AcquireSkillList < GameServerPacket
     @skills << SkInfo.new(id, next_level, max_level, sp_cost, requirements)
   end
 
-  def write_impl
+  private def write_impl
     return if @skills.empty?
 
     c 0x90

@@ -58,11 +58,12 @@ class L2ControllableAirshipInstance < L2AirshipInstance
       @captain = nil
     else
       if @captain.nil? && pc.airship == self
-        x = pc.in_vehicle_position.not_nil!.x - 0x16e
-        y = pc.in_vehicle_position.not_nil!.y
-        z = pc.in_vehicle_position.not_nil!.z - 0x6b
+        pos = pc.in_vehicle_position.not_nil!
+        x = pos.x - 0x16e
+        y = pos.y
+        z = pos.z - 0x6b
 
-        if (x * x) + (y * y) + (z * z) > 2500
+        if x.abs2 + y.abs2 + z.abs2 > 2500
           pc.send_packet(SystemMessageId::CANT_CONTROL_TOO_FAR)
           return false
         elsif pc.in_combat?

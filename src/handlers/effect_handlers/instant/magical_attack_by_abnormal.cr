@@ -6,22 +6,22 @@ class EffectHandler::MagicalAttackByAbnormal < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
-  def effect_type
-    L2EffectType::MAGICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::MAGICAL_ATTACK
   end
 
   def on_start(info)
     target, char, skill = info.effected, info.effector, info.skill
 
-    if char.player? && char.acting_player.fake_death?
+    if char.is_a?(L2PcInstance) && char.fake_death?
       return
     end
 
-    if target.player? && target.acting_player.fake_death?
+    if target.is_a?(L2PcInstance) && target.fake_death?
       target.stop_fake_death(true)
     end
 

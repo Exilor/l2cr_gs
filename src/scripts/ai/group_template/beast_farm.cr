@@ -200,7 +200,7 @@ class Scripts::BeastFarm < AbstractNpcAI
     if TAMED_BEASTS.includes?(next_npc_id)
       next_npc = L2TamedBeastInstance.new(next_npc_id, player, food, npc.x, npc.y, npc.z, true)
 
-      beast = TAMED_BEAST_DATA.sample
+      beast = TAMED_BEAST_DATA.sample(random: Rnd)
       name = beast.name
       case next_npc_id
       when 18869
@@ -309,6 +309,7 @@ class Scripts::BeastFarm < AbstractNpcAI
   # all mobs that grow by eating
   private class GrowthCapableMob
     @skill_success_npc_id_list = {} of Int32 => Int32
+
     getter growth_level
 
     initializer chance : Int32, growth_level : Int32, tame_npc_id : Int32
@@ -321,8 +322,8 @@ class Scripts::BeastFarm < AbstractNpcAI
       if !@skill_success_npc_id_list.has_key?(skill_id)
         return -1
       elsif skill_id == SKILL_BLESSED_GOLDEN_SPICE || skill_id == SKILL_BLESSED_CRYSTAL_SPICE || skill_id == SKILL_SGRADE_GOLDEN_SPICE || skill_id == SKILL_SGRADE_CRYSTAL_SPICE
-        if rand(100) < SPECIAL_SPICE_CHANCES[0]
-          if rand(100) < SPECIAL_SPICE_CHANCES[1]
+        if Rnd.rand(100) < SPECIAL_SPICE_CHANCES[0]
+          if Rnd.rand(100) < SPECIAL_SPICE_CHANCES[1]
             return @skill_success_npc_id_list[skill_id]
           elsif skill_id == SKILL_BLESSED_GOLDEN_SPICE || skill_id == SKILL_SGRADE_GOLDEN_SPICE
             return @skill_success_npc_id_list[SKILL_GOLDEN_SPICE]
@@ -331,9 +332,9 @@ class Scripts::BeastFarm < AbstractNpcAI
           end
         end
         return -1
-      elsif @growth_level == 2 && rand(100) < TAME_CHANCE
+      elsif @growth_level == 2 && Rnd.rand(100) < TAME_CHANCE
         return @tame_npc_id
-      elsif rand(100) < @chance
+      elsif Rnd.rand(100) < @chance
         return @skill_success_npc_id_list[skill_id]
       else
         return -1

@@ -2,7 +2,7 @@ class Packets::Outgoing::ExFishingHpRegen < GameServerPacket
   initializer pc : L2Character, time : Int32, hp : Int32, hp_mode : Int32,
     good_use : Int32, anim : Int32, penalty : Int32, color : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x28
 

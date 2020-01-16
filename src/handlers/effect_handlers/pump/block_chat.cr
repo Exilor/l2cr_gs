@@ -4,8 +4,8 @@ class EffectHandler::BlockChat < AbstractEffect
     !!effected && effected.player?
   end
 
-  def effect_type
-    L2EffectType::CHAT_BLOCK
+  def effect_type : EffectType
+    EffectType::CHAT_BLOCK
   end
 
   def on_exit(info)

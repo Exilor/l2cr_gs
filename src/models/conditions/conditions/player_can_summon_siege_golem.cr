@@ -9,7 +9,7 @@ class Condition
 
       can = true
 
-      if pc.looks_dead? || pc.cursed_weapon_equipped? || pc.clan?.nil?
+      if pc.looks_dead? || pc.cursed_weapon_equipped? || pc.clan.nil?
         can = false
       end
 
@@ -26,7 +26,7 @@ class Condition
       elsif (castle && !castle.siege.in_progress?) || (fort && !fort.siege.in_progress?)
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         can = false
-      elsif (pc.clan_id != 0) && ((castle && (castle.siege.get_attacker_clan?(pc.clan_id).nil?)) || (fort && (fort.siege.get_attacker_clan?(pc.clan_id).nil?)))
+      elsif pc.clan_id != 0 && ((castle && (castle.siege.get_attacker_clan(pc.clan_id).nil?)) || (fort && (fort.siege.get_attacker_clan(pc.clan_id).nil?)))
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         can = false
       elsif SevenSigns.check_summon_conditions(pc)

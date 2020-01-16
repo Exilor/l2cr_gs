@@ -17,18 +17,18 @@ class L2SignsPriestInstance < L2Npc
       stone_type = 0
       ancient_adena_amount = pc.ancient_adena
 
-      val = command[11...12].strip.to_i
+      val = command[11].to_i
 
       if command.size > 12
-        val = command[11...13].strip.to_i
+        val = command[11..12].strip.to_i
       end
 
       if command.size > 13
         begin
-          cabal = command[14...15].strip.to_i
+          cabal = command[14].to_i
         rescue
           begin
-            cabal = command[13...14].strip.to_i
+            cabal = command[13].to_i
           rescue
             begin
               st = command.strip.split
@@ -36,7 +36,7 @@ class L2SignsPriestInstance < L2Npc
               cabal = st.shift.to_i
             rescue e
               error e
-              warn "Failed to retrieve cabal from bypass command. Npc ID: #{id}, command: #{command.inspect}."
+              warn { "Failed to retrieve cabal from bypass command. Npc ID: #{id}, command: #{command.inspect}." }
             end
           end
         end
@@ -75,12 +75,14 @@ class L2SignsPriestInstance < L2Npc
 
           return
         elsif cabal == SevenSigns::CABAL_DUSK && Config.alt_game_castle_dusk
-          if pc.clan? && pc.clan.castle_id > 0
+          clan = pc.clan
+          if clan && clan.castle_id > 0
             show_chat_window(pc, SevenSigns::SEVEN_SIGNS_HTML_PATH + "signs_33_dusk_no.htm")
             return # L2J uses break but there's no more code after when expr.
           end
         elsif cabal == SevenSigns::CABAL_DAWN && Config.alt_game_castle_dawn
-          if !pc.clan? || pc.clan.castle_id == 0
+          clan = pc.clan
+          if clan.nil? || clan.castle_id == 0
             show_chat_window(pc, SevenSigns::SEVEN_SIGNS_HTML_PATH + "signs_33_dawn_fee.htm")
             return # L2J uses break but there's no more code after when expr.
           end
@@ -104,7 +106,8 @@ class L2SignsPriestInstance < L2Npc
 
         if pc.class_id.level >= 1
           if cabal == SevenSigns::CABAL_DUSK && Config.alt_game_castle_dusk
-            if pc.clan? && pc.clan.castle_id > 0
+            clan = pc.clan
+            if clan && clan.castle_id > 0
               show_chat_window(pc, SevenSigns::SEVEN_SIGNS_HTML_PATH + "signs_33_dusk_no.htm")
               return
             end
@@ -113,7 +116,7 @@ class L2SignsPriestInstance < L2Npc
           if Config.alt_game_castle_dawn && cabal == SevenSigns::CABAL_DAWN
             allow_join_dawn = false
 
-            if pc.clan? && pc.clan.castle_id > 0
+            if (clan = pc.clan) && clan.castle_id > 0
               allow_join_dawn = true
             elsif pc.destroy_item_by_item_id("SevenSigns", Config.ssq_manors_agreement_id, 1, self, true)
               allow_join_dawn = true
@@ -390,7 +393,7 @@ class L2SignsPriestInstance < L2Npc
           html.html = text
           pc.send_packet(html)
         else
-          warn "Problem with HTML text #{path.inspect}."
+          warn { "Problem with HTML text #{path.inspect}." }
         end
       when 7 # exchange ancient adena for adena
         ancient_adena = 0i64
@@ -551,7 +554,7 @@ class L2SignsPriestInstance < L2Npc
           html.html = content
           pc.send_packet(html)
         else
-          warn "Problem with HTML text #{SevenSigns::SEVEN_SIGNS_HTML_PATH} signs_17.htm: #{path}."
+          warn { "Problem with HTML text #{SevenSigns::SEVEN_SIGNS_HTML_PATH} signs_17.htm: #{path}." }
         end
       when 18 # exchange seal stones for ancient adena
         convert_stone_id = command[14...18].to_i

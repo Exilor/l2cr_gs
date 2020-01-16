@@ -10,7 +10,7 @@ module AttackStances
   def <<(char : L2Character?) : self
     return self unless char
 
-    char = char.acting_player if char.playable?
+    char = char.acting_player.not_nil! if char.playable?
 
     if char.is_a?(L2PcInstance)
       char.cubics.each_value do |cubic|
@@ -27,13 +27,13 @@ module AttackStances
 
   def delete(char : L2Character?)
     return unless char
-    char = char.acting_player if char.summon?
+    char = char.acting_player.not_nil! if char.summon?
     TASKS.delete(char)
   end
 
   def includes?(char : L2Character?) : Bool
     return false unless char
-    char = char.acting_player if char.summon?
+    char = char.acting_player.not_nil! if char.summon?
     TASKS.has_key?(char)
   end
 

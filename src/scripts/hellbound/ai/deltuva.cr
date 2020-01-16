@@ -11,15 +11,15 @@ class Scripts::Deltuva < AbstractNpcAI
     add_talk_id(DELTUVA)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
 
     if event.casecmp?("teleport")
-      q = player.get_quest_state(Scripts::Q00132_MatrasCuriosity.simple_name)
+      q = pc.get_quest_state(Scripts::Q00132_MatrasCuriosity.simple_name)
       if q.nil? || !q.completed?
         return "32313-02.htm"
       end
-      player.tele_to_location(TELEPORT)
+      pc.tele_to_location(TELEPORT)
     end
 
     super

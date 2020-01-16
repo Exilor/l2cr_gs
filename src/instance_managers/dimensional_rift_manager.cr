@@ -127,22 +127,22 @@ module DimensionalRiftManager
 
   def start(pc : L2PcInstance, type : Int8, npc : L2Npc) : Nil
     sync do
-      unless pc.in_party?
+      unless party = pc.party
         show_html_file(pc, "data/html/seven_signs/rift/NoParty.htm", npc)
         return
       end
 
-      if pc.party.leader_l2id != pc.l2id
+      if party.leader_l2id != pc.l2id
         show_html_file(pc, "data/html/seven_signs/rift/NotPartyLeader.htm", npc)
         return
       end
 
-      if pc.party.in_dimensional_rift?
+      if party.in_dimensional_rift?
         handle_cheat(pc, npc)
         return
       end
 
-      if pc.party.size < Config.rift_min_party_size
+      if party.size < Config.rift_min_party_size
         html = NpcHtmlMessage.new(npc.l2id)
         html.set_file(pc, "data/html/seven_signs/rift/SmallParty.htm")
         html["%npc_name%"] = npc.name
@@ -156,7 +156,7 @@ module DimensionalRiftManager
         return
       end
 
-      can_pass = pc.party.members.all? { |m| in_peace_zone?(*m.xyz) }
+      can_pass = party.members.all? { |m| in_peace_zone?(*m.xyz) }
 
       unless can_pass
         show_html_file(pc, "data/html/seven_signs/rift/NotInWaitingRoom.htm", npc)
@@ -165,15 +165,15 @@ module DimensionalRiftManager
 
       count = get_needed_items(type).to_i64
 
-      pc.party.members.each do |m|
-        i = m.inventory.get_item_by_item_id(DIMENSIONAL_FRAGMENT_ITEM_ID)
-        unless i
+      party.members.each do |m|
+        item = m.inventory.get_item_by_item_id(DIMENSIONAL_FRAGMENT_ITEM_ID)
+        unless item
           can_pass = false
           break
         end
 
-        if i.count > 0
-          if i.count < count
+        if item.count > 0
+          if item.count < count
             can_pass = false
             break
           end
@@ -194,7 +194,7 @@ module DimensionalRiftManager
         return
       end
 
-      pc.party.members.each do |m|
+      party.members.each do |m|
         next if pc.gm? # custom
         i = m.inventory.get_item_by_item_id(DIMENSIONAL_FRAGMENT_ITEM_ID)
         unless m.destroy_item("RiftEntrance", i.not_nil!, count, nil, false)
@@ -210,7 +210,7 @@ module DimensionalRiftManager
       empty_rooms = get_free_rooms(type)
       room = empty_rooms.sample(random: Rnd)
 
-      DimensionalRift.new(pc.party, type, room)
+      DimensionalRift.new(party, type, room)
     end
   end
 
@@ -238,12 +238,18 @@ module DimensionalRiftManager
 
   private def get_needed_items(type : Int8) : Int32
     case type
-    when 1 then Config.rift_enter_cost_recruit
-    when 2 then Config.rift_enter_cost_soldier
-    when 3 then Config.rift_enter_cost_officer
-    when 4 then Config.rift_enter_cost_captain
-    when 5 then Config.rift_enter_cost_commander
-    when 6 then Config.rift_enter_cost_hero
+    when 1
+      Config.rift_enter_cost_recruit
+    when 2
+      Config.rift_enter_cost_soldier
+    when 3
+      Config.rift_enter_cost_officer
+    when 4
+      Config.rift_enter_cost_captain
+    when 5
+      Config.rift_enter_cost_commander
+    when 6
+      Config.rift_enter_cost_hero
     else
       raise "No needed items found for type #{type} (valid: 1..6)"
     end

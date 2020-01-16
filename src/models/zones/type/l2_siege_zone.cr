@@ -36,8 +36,7 @@ class L2SiegeZone < L2ZoneType
       char.inside_pvp_zone = true
       char.inside_siege_zone = true
       char.inside_no_summon_friend_zone = true
-      if char.player?
-        pc = char.acting_player
+      if pc = char.as?(L2PcInstance)
         if pc.registered_on_this_siege_field?(settings.siegable_id)
           pc.in_siege = true
           siege = settings.siege
@@ -60,8 +59,7 @@ class L2SiegeZone < L2ZoneType
     char.inside_siege_zone = false
     char.inside_no_summon_friend_zone = false
     if settings.active_siege?
-      if char.player?
-        pc = char.acting_player
+      if pc = char.as?(L2PcInstance)
         pc.send_packet(SystemMessageId::LEFT_COMBAT_ZONE)
         if pc.mount_type.wyvern?
           pc.exited_no_landing
@@ -73,8 +71,7 @@ class L2SiegeZone < L2ZoneType
       end
     end
 
-    if char.player?
-      pc = char.acting_player
+    if pc = char.as?(L2PcInstance)
       pc.stop_fame_task
       pc.in_siege = false
 
@@ -95,8 +92,8 @@ class L2SiegeZone < L2ZoneType
   end
 
   def on_die_inside(char)
-    if settings.active_siege?
-      if char.player? && char.acting_player.registered_on_this_siege_field?(settings.siegable_id)
+    if settings.active_siege? && char.is_a?(L2PcInstance)
+      if char.registered_on_this_siege_field?(settings.siegable_id)
         lvl = 1
         if info = char.effect_list.get_buff_info_by_skill_id(5660)
           lvl = Math.min(lvl + info.skill.level, 5)
@@ -128,7 +125,7 @@ class L2SiegeZone < L2ZoneType
     end
   end
 
-  def siege_l2id
+  def siege_l2id : Int32
     settings.siegable_id
   end
 
@@ -136,7 +133,7 @@ class L2SiegeZone < L2ZoneType
     settings.siege = siege
   end
 
-  def active?
+  def active? : Bool
     settings.active_siege?
   end
 
@@ -145,7 +142,7 @@ class L2SiegeZone < L2ZoneType
   end
 
   def banish_foreigners(owner_clan_id : Int32)
-    players_inside do |pc|
+    players_inside.each do |pc|
       if pc.clan_id != owner_clan_id
         pc.tele_to_location(TeleportWhereType::TOWN)
       end
@@ -163,8 +160,7 @@ class L2SiegeZone < L2ZoneType
         char.inside_siege_zone = false
         char.inside_no_summon_friend_zone = false
 
-        if char.player?
-          pc = char.acting_player
+        if pc = char.as?(L2PcInstance)
           pc.send_packet(SystemMessageId::LEFT_COMBAT_ZONE)
           pc.stop_fame_task
           if pc.mount_type.wyvern?
@@ -176,6 +172,6 @@ class L2SiegeZone < L2ZoneType
   end
 
   def announce_to_players(msg : String)
-    players_inside &.send_message(msg)
+    players_inside.each &.send_message(msg)
   end
 end

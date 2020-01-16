@@ -45,13 +45,13 @@ module AugmentationData
 
   private ALL_SKILLS = {} of Int32 => SkillHolder
 
-  struct AugmentationChance
+  private struct AugmentationChance
     getter_initializer weapon_type : String, stone_id : Int32,
       variation_id : Int32, category_chance : Int32, augment_id : Int32,
       augment_chance : Float32
   end
 
-  struct AugmentationChanceAcc
+  private struct AugmentationChanceAcc
     getter_initializer weapon_type : String, stone_id : Int32,
       variation_id : Int32, category_chance : Int32, augment_id : Int32,
       augment_chance : Float32
@@ -356,7 +356,7 @@ module AugmentationData
         result_color = 0
       end
     else
-      if result_color <= ((10 * ls_grade) + 5) || stat34 != 0
+      if result_color <= (10 * ls_grade) + 5 || stat34 != 0
         result_color = 3
       elsif result_color <= (10 * ls_grade) + 10
         result_color = 1
@@ -477,7 +477,7 @@ module AugmentationData
     stat12 = Rnd.rand(ACC_STAT_SUBBLOCKSIZE)
     if Rnd.rand(1..100) <= Config.augmentation_acc_skill_chance
       stat34 = base + Rnd.rand(skills_length)
-      op = OptionData[stat34]?
+      op = OptionData[stat34]
     end
 
     if !op || (!op.has_active_skill? && !op.has_passive_skill? && !op.has_activation_skills?)

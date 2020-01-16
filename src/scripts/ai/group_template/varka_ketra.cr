@@ -24,7 +24,7 @@ class Scripts::VarkaKetra < AbstractNpcAI
     25299, # Ketra's Hero Hekaton (Raid Boss)
     25302, # Ketra's Commander Tayr (Raid Boss)
     25305, # Ketra's Chief Brakki (Raid Boss)
-    25306, # Soul of Fire Nastron (Raid Boss)
+    25306  # Soul of Fire Nastron (Raid Boss)
   }
 
   private VARKA = {
@@ -52,7 +52,7 @@ class Scripts::VarkaKetra < AbstractNpcAI
     25309, # Varka's Hero Shadith (Raid Boss)
     25312, # Varka's Commander Mos (Raid Boss)
     25315, # Varka's Chief Horus (Raid Boss)
-    25316, # Soul of Water Ashutar (Raid Boss)
+    25316  # Soul of Water Ashutar (Raid Boss)
   }
 
   private KETRA_MARKS = {
@@ -60,7 +60,7 @@ class Scripts::VarkaKetra < AbstractNpcAI
     7212, # Mark of Ketra's Alliance - Level 2
     7213, # Mark of Ketra's Alliance - Level 3
     7214, # Mark of Ketra's Alliance - Level 4
-    7215, # Mark of Ketra's Alliance - Level 5
+    7215  # Mark of Ketra's Alliance - Level 5
   }
 
   private VARKA_MARKS = {
@@ -68,7 +68,7 @@ class Scripts::VarkaKetra < AbstractNpcAI
     7222, # Mark of Varka's Alliance - Level 2
     7223, # Mark of Varka's Alliance - Level 3
     7224, # Mark of Varka's Alliance - Level 4
-    7225, # Mark of Varka's Alliance - Level 5
+    7225  # Mark of Varka's Alliance - Level 5
   }
 
   private KETRA_QUESTS = {

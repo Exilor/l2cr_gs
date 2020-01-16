@@ -11,7 +11,7 @@ module SpawnTable
   def load
     unless Config.alt_dev_no_spawns
       timer = Timer.new
-      info "Loading NPC spawns..."
+      debug "Loading NPC spawns..."
 
       fill_spawn_table(false)
       spawn_count = SPAWN_TABLE.size
@@ -172,14 +172,7 @@ module SpawnTable
         sql = "DELETE FROM spawnlist WHERE locx=? AND locy=? AND locz=? AND npc_templateid=? AND heading=?"
       end
       begin
-        GameDB.exec(
-          sql,
-          sp.x,
-          sp.y,
-          sp.z,
-          sp.id,
-          sp.heading
-        )
+        GameDB.exec(sql, sp.x, sp.y, sp.z, sp.id, sp.heading)
       rescue e
         error e
       end
@@ -197,6 +190,14 @@ module SpawnTable
     end
 
     false
+  end
+
+  def each_spawn(& : L2Spawn -> Bool) : Bool
+    SPAWN_TABLE.each_value do |set|
+      set.each { |sp| return false unless yield sp }
+    end
+
+    true
   end
 
   private def parse_document(doc, file)

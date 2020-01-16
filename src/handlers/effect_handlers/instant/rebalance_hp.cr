@@ -1,9 +1,9 @@
 class EffectHandler::RebalanceHP < AbstractEffect
-  def effect_type
-    L2EffectType::REBALANCE_HP
+  def effect_type : EffectType
+    EffectType::REBALANCE_HP
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -14,7 +14,7 @@ class EffectHandler::RebalanceHP < AbstractEffect
     full_hp = 0.0
     current_hps = 0.0
 
-    unless party = info.effector.party?
+    unless party = info.effector.party
       return unless summon = pc.summon
       return unless summon.alive?
       return unless Util.in_range?(skill.affect_range, pc, summon, true)

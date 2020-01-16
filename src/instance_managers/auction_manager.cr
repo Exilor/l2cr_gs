@@ -75,14 +75,6 @@ module AuctionManager
     end
   end
 
-  def get_auction!(auction_id : Int32) : Auction
-    unless auction = get_auction(auction_id)
-      raise "No action found with id #{auction_id}"
-    end
-
-    auction
-  end
-
   def get_auction_index(auction_id : Int32) : Int32
     AUCTIONS.index { |a| a.id == auction_id } || -1
   end

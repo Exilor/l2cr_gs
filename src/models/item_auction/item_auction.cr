@@ -7,18 +7,17 @@ class ItemAuction
 
   private ENDING_TIME_EXTEND_5 = Time.mins_to_ms(5)
   private ENDING_TIME_EXTEND_3 = Time.mins_to_ms(3)
+  private DELETE_ITEM_AUCTION_BID = "DELETE FROM item_auction_bid WHERE auctionId = ? AND playerObjId = ?"
+  private INSERT_ITEM_AUCTION_BID = "INSERT INTO item_auction_bid (auctionId, playerObjId, playerBid) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE playerBid = ?"
 
-  @auction_bids_lock = Mutex.new
-  @auction_state_lock = Mutex.new
+  @auction_bids_lock = Mutex.new(:Reentrant)
+  @auction_state_lock = Mutex.new(:Reentrant)
   @last_bid_player_l2id = 0
+
   getter highest_bid : ItemAuctionBid?
   getter auction_ending_extend_state = ItemAuctionExtendState::INITIAL
   getter auction_id, instance_id, starting_time, ending_time, item_info
   property scheduled_auction_ending_extend_state : ItemAuctionExtendState = ItemAuctionExtendState::INITIAL
-
-  # SQL
-  private DELETE_ITEM_AUCTION_BID = "DELETE FROM item_auction_bid WHERE auctionId = ? AND playerObjId = ?"
-  private INSERT_ITEM_AUCTION_BID = "INSERT INTO item_auction_bid (auctionId, playerObjId, playerBid) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE playerBid = ?"
 
   def initialize(auction_id : Int32, instance_id : Int32, starting_time : Int64, ending_time : Int64, auction_item : AuctionItem)
     initialize(auction_id, instance_id, starting_time, ending_time, auction_item, ([] of ItemAuctionBid), ItemAuctionState::CREATED)
@@ -100,7 +99,7 @@ class ItemAuction
     last_bid
   end
 
-  private def update_player_bid(bid : ItemAuctionBid, delete : Bool)
+  def update_player_bid(bid : ItemAuctionBid, delete : Bool)
     update_player_bid_internal(bid, delete)
   end
 
@@ -170,7 +169,7 @@ class ItemAuction
       on_player_bid(player, bid)
       update_player_bid(bid, false)
 
-      sm = SystemMessage.submitted_a_bid_of_s1
+      sm = Packets::Outgoing::SystemMessage.submitted_a_bid_of_s1
       sm.add_long(new_bid)
       player.send_packet(sm)
       return
@@ -193,12 +192,12 @@ class ItemAuction
       when ItemAuctionExtendState::INITIAL
         @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_5_MIN
         @ending_time += ENDING_TIME_EXTEND_5
-        broadcast_to_all_bidders(SystemMessage.bidder_exists_auction_time_extended_by_5_minutes)
+        broadcast_to_all_bidders(Packets::Outgoing::SystemMessage.bidder_exists_auction_time_extended_by_5_minutes)
       when ItemAuctionExtendState::EXTEND_BY_5_MIN
         if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
           @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_3_MIN
           @ending_time += ENDING_TIME_EXTEND_3
-          broadcast_to_all_bidders(SystemMessage.bidder_exists_auction_time_extended_by_3_minutes)
+          broadcast_to_all_bidders(Packets::Outgoing::SystemMessage.bidder_exists_auction_time_extended_by_3_minutes)
         end
       when ItemAuctionExtendState::EXTEND_BY_3_MIN
         if Config.alt_item_auction_time_extends_on_bid > 0
@@ -226,7 +225,7 @@ class ItemAuction
   end
 
   def broadcast_to_all_bidders(gsp : GameServerPacket)
-    task = ->{ broadcast_to_all_bidders_internal(gsp) }
+    task = -> { broadcast_to_all_bidders_internal(gsp) }
     ThreadPoolManager.execute_general(task)
   end
 

@@ -40,8 +40,6 @@ module SummonTable
   def remove_servitor(pc : L2PcInstance)
     SERVITORS.delete(pc.l2id)
     GameDB.exec(REMOVE_SUMMON, pc.l2id)
-
-    debug "Removed #{pc}'s servitor."
   end
 
   def restore_pet(pc : L2PcInstance)

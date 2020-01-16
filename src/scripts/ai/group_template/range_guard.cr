@@ -35,7 +35,7 @@ class Scripts::RangeGuard < AbstractNpcAI
     1483, 1484, # Thin Skin / Enervation
     1485, 1486, # Spite / Mental Impoverish
     1511, 1524, # Curse of Life Flow / Surrender to the Divine
-    1529, # Soul Web
+    1529  # Soul Web
   }
 
   private MIN_DISTANCE = 150
@@ -51,7 +51,7 @@ class Scripts::RangeGuard < AbstractNpcAI
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)
-    playable = is_summon ? attacker.summon! : attacker
+    playable = is_summon ? (attacker.summon || attacker) : attacker
     dst = Util.calculate_distance(npc, playable, true, false)
     skill_id = ULTIMATE_DEFENSE.skill_id
 

@@ -4,6 +4,7 @@ class L2EffectZone < L2ZoneType
   @reuse = 30_000
   @bypass_conditions = false
   @show_danger_icon = true
+
   getter chance = 100
 
   def initialize(id)

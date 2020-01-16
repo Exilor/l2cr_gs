@@ -1,7 +1,6 @@
 class L2PeaceZone < L2ZoneType
   def on_enter(char)
-    if char.player?
-      pc = char.acting_player
+    if pc = char.as?(L2PcInstance)
       if pc.combat_flag_equipped? && TerritoryWarManager.tw_in_progress?
         TerritoryWarManager.drop_combat_flag(pc, false, true)
       end

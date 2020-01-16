@@ -1,5 +1,5 @@
 class EffectHandler::Sow < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -11,7 +11,7 @@ class EffectHandler::Sow < AbstractEffect
       return
     end
 
-    seed = mob.seed
+    return unless seed = mob.seed
 
     unless pc.destroy_item_by_item_id("Consume", seed.seed_id, 1, mob, false)
       return
@@ -25,7 +25,7 @@ class EffectHandler::Sow < AbstractEffect
       sm = SystemMessage.the_seed_was_not_sown
     end
 
-    if party = pc.party?
+    if party = pc.party
       party.broadcast_packet(sm)
     else
       pc.send_packet(sm)

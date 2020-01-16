@@ -11,7 +11,7 @@ class EffectHandler::Transformation < AbstractEffect
   end
 
   def on_start(info)
-    TransformData.transform_player(@id, info.effected.acting_player)
+    TransformData.transform_player(@id, info.effected.acting_player.not_nil!)
   end
 
   def on_exit(info)

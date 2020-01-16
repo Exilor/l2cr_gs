@@ -6,7 +6,7 @@ struct ChanceMultiplierStrategy
     @proc.call(item, victim)
   end
 
-  private def self.default_strategy(&default_multiplier : -> Float32) : self
+  private def self.default_strategy(default_multiplier : -> Float32) : self
     new do |item, victim|
       multiplier = 1.0
       item_id = item.item_id
@@ -33,8 +33,8 @@ struct ChanceMultiplierStrategy
     end
   end
 
-  DROP   = default_strategy { Config.rate_death_drop_chance_multiplier }
-  SPOIL  = default_strategy { Config.rate_corpse_drop_chance_multiplier }
+  DROP   = default_strategy(->Config.rate_death_drop_chance_multiplier)
+  SPOIL  = default_strategy(->Config.rate_corpse_drop_chance_multiplier)
   STATIC = new { |item, victim| 1.0 }
   QUEST  = new do |item, victim|
     if Config.champion_enable && victim.champion?
@@ -49,20 +49,5 @@ struct ChanceMultiplierStrategy
     else
       Config.rate_quest_drop
     end.to_f64
-  end
-
-  def self.parse(name : String) : self
-    case name.casecmp
-    when "drop"
-      DROP
-    when "spoil"
-      SPOIL
-    when "static"
-      STATIC
-    when "quest"
-      QUEST
-    else
-      raise "unknown #{self} #{name.inspect}"
-    end
   end
 end

@@ -28,9 +28,7 @@ module ItemAuctionManager
   end
 
   def shutdown
-    MANAGER_INSTANCES.each_value do |instance|
-      instance.shutdown
-    end
+    MANAGER_INSTANCES.each_value &.shutdown
   end
 
   def get_manager_instance(instance_id : Int32) : ItemAuctionInstance?

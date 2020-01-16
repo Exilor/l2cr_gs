@@ -26,59 +26,53 @@ class Scripts::DwarfWarehouseChange2 < AbstractNpcAI
     add_talk_id(NPCS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless npc && player
+  def on_adv_event(event, npc, pc)
+    return unless npc && pc
 
     case event
     when "30511-03.htm", "30511-04.htm", "30511-05.htm" # master_lv3_ware007fa
-      htmltext = event
+      event
     when "55"
-      htmltext = class_change_requested(player, event.to_i)
+      class_change_requested(pc, event.to_i)
     end
-
-    return htmltext
   end
 
-  private def class_change_requested(player, class_id)
-    if player.in_category?(CategoryType::THIRD_CLASS_GROUP)
-      htmltext = "30511-08.htm" # fnYouAreThirdClass
-    elsif class_id == BOUNTY_HUNTER && player.class_id.scavenger?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_SEARCHER)
-          htmltext = "30511-09.htm" # fnLowLevel11
+  private def class_change_requested(pc, class_id)
+    if pc.in_category?(CategoryType::THIRD_CLASS_GROUP)
+      "30511-08.htm" # fnYouAreThirdClass
+    elsif class_id == BOUNTY_HUNTER && pc.class_id.scavenger?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_SEARCHER)
+          "30511-09.htm" # fnLowLevel11
         else
-          htmltext = "30511-10.htm" # fnLowLevelNoProof11
+          "30511-10.htm" # fnLowLevelNoProof11
         end
-      elsif has_quest_items?(player, MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_SEARCHER)
-        take_items(player, -1, {MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_SEARCHER})
-        player.class_id = BOUNTY_HUNTER
-        player.base_class = BOUNTY_HUNTER
+      elsif has_quest_items?(pc, MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_SEARCHER)
+        take_items(pc, -1, {MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_SEARCHER})
+        pc.class_id = BOUNTY_HUNTER
+        pc.base_class = BOUNTY_HUNTER
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30511-11.htm" # fnAfterClassChange11
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30511-11.htm" # fnAfterClassChange11
       else
-        htmltext = "30511-12.htm" # fnNoProof11
+        "30511-12.htm" # fnNoProof11
       end
     end
-
-    htmltext
   end
 
-  def on_talk(npc, player)
-    if player.in_category?(CategoryType::FOURTH_CLASS_GROUP) && player.in_category?(CategoryType::BOUNTY_HUNTER_GROUP)
-      htmltext = "30511-01.htm" # fnYouAreFourthClass
-    elsif player.in_category?(CategoryType::BOUNTY_HUNTER_GROUP)
-      class_id = player.class_id
+  def on_talk(npc, pc)
+    if pc.in_category?(CategoryType::FOURTH_CLASS_GROUP) && pc.in_category?(CategoryType::BOUNTY_HUNTER_GROUP)
+      "30511-01.htm" # fnYouAreFourthClass
+    elsif pc.in_category?(CategoryType::BOUNTY_HUNTER_GROUP)
+      class_id = pc.class_id
       if class_id.scavenger? || class_id.bounty_hunter?
-        htmltext = "30511-02.htm" # fnClassList1
+        "30511-02.htm" # fnClassList1
       else
-        htmltext = "30511-06.htm" # fnYouAreFirstClass
+        "30511-06.htm" # fnYouAreFirstClass
       end
     else
-      htmltext = "30511-07.htm" # fnClassMismatch
+      "30511-07.htm" # fnClassMismatch
     end
-
-    htmltext
   end
 end

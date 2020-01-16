@@ -1,7 +1,7 @@
 class Packets::Outgoing::TradeOtherAdd < Packets::Outgoing::AbstractItemPacket
   initializer item : TradeItem
 
-  def write_impl
+  private def write_impl
     c 0x1b
 
     h 1

@@ -5,15 +5,17 @@ require "../util/flood_protectors"
 class GameClient
   include MMO::Client(GameClient)
   include Synchronizable
+  include Loggable
 
   @crypt = GameCrypt.new
   @char_slot_mapping = [] of CharSelectInfoPackage
   @auto_save_task : Scheduler::PeriodicTask?
   @cleanup_task : Scheduler::DelayedTask?
+
   getter state = State::CONNECTED
   getter stats = ClientStats.new
   getter start_time = Time.ms
-  getter active_char_lock = Mutex.new
+  getter active_char_lock = Mutex.new(:Reentrant)
   getter(flood_protectors) { FloodProtectors.new(self) }
   property active_char : L2PcInstance?
   property additional_close_packet : GameServerPacket?
@@ -241,19 +243,19 @@ class GameClient
   end
 
   def encrypt(buf : ByteBuffer, size : Int32) : Bool
-    @crypt.encrypt(buf.slice, buf.pos, size)
+    @crypt.encrypt(buf.to_unsafe, buf.pos, size)
     buf.pos += size
     true
   end
 
   def decrypt(buf : ByteBuffer, size : Int32) : Bool
-    @crypt.decrypt(buf.slice, buf.pos, size)
+    @crypt.decrypt(buf.to_unsafe, buf.pos, size)
     true
   end
 
   def execute(gcp : GameClientPacket)
     if stats.count_floods
-      warn "Client disconnected (too many floods: #{stats.long_floods} long and #{stats.short_floods} short)."
+      debug { "Client disconnected (too many floods: #{stats.long_floods} long and #{stats.short_floods} short)." }
       close_now
       return
     end
@@ -297,17 +299,14 @@ class GameClient
       unless packet = (@packet_queue.receive rescue nil)#?
         return
       end
+
       if @detached
         @packet_queue.close
         return
       end
 
-      begin
-        packet.run
-      rescue e
-        error "Error while running #{packet.class}."
-        error e
-      end
+      packet.run
+
       count += 1
     end
   end
@@ -416,7 +415,7 @@ class GameClient
 
     if pc = @active_char
       if pc.locked?
-        warn "cleanup_task: #{pc.name} is locked."
+        debug { "cleanup_task: #{pc.name} is locked."}
       end
 
       pc.client = nil

@@ -11,7 +11,7 @@ class EffectHandler::SummonAgathion < AbstractEffect
     @npc_id = params.get_i32("npcId", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExRegenMax < GameServerPacket
   initializer time : Int32, tick_interval : Int32, amount_per_tick : Float64
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x01
 

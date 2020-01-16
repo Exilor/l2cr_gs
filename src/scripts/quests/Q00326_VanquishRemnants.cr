@@ -52,7 +52,7 @@ class Scripts::Q00326_VanquishRemnants < Quest
 
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
-    if st && st.started? && rand(100) < MONSTERS[npc.id][0]
+    if st && st.started? && Rnd.rand(100) < MONSTERS[npc.id][0]
       st.give_items(MONSTERS[npc.id][1], 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end

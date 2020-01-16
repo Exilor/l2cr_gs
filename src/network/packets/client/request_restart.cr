@@ -23,7 +23,7 @@ class Packets::Incoming::RequestRestart < GameClientPacket
     end
 
     if pc.locked?
-      warn "Player #{pc.name} tried to restart during class change."
+      warn { "Player #{pc.name} tried to restart during class change." }
       send_packet(RestartResponse::NO)
       return
     end
@@ -47,7 +47,7 @@ class Packets::Incoming::RequestRestart < GameClientPacket
         return
       end
 
-      if party = pc.party?
+      if party = pc.party
         party.broadcast_string("#{pc.name} has been removed from the upcoming festival.")
       end
     end

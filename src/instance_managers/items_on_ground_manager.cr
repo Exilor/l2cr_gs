@@ -10,10 +10,10 @@ module ItemsOnGroundManager
     if time > 0
       ThreadPoolManager.schedule_general_at_fixed_rate(self, time, time)
     end
-    load_impl
+    load_from_db
   end
 
-  private def load_impl
+  private def load_from_db
     if !Config.save_dropped_item && Config.clear_dropped_item_table
       empty_table
     end
@@ -63,11 +63,11 @@ module ItemsOnGroundManager
 
       item.set_xyz(x, y, z)
       item.world_region = L2World.get_region(item.location)
-      item.world_region.add_visible_object(item)
+      item.world_region.not_nil!.add_visible_object(item)
       item.drop_time = drop_time
       item.protected = drop_time == -1
       item.visible = true
-      L2World.add_visible_object(item, item.world_region)
+      L2World.add_visible_object(item, item.world_region.not_nil!)
       ITEMS << item
       total += 1
       unless Config.list_protected_items.includes?(item.id)

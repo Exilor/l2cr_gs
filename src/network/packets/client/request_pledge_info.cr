@@ -10,15 +10,8 @@ class Packets::Incoming::RequestPledgeInfo < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    if Config.debug
-      debug "#{pc.name} requests info for clan #{@clan_id}."
-    end
-
     unless clan = ClanTable.get_clan(@clan_id)
-      if Config.debug
-        warn "No clan with ID #{@clan_id} was found (requested by #{pc.name})."
-      end
-
+      debug { "No clan with ID #{@clan_id} was found (requested by #{pc.name})." }
       return
     end
 

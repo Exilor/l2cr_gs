@@ -6,11 +6,11 @@ class EffectHandler::Escape < AbstractEffect
     @escape_type = params.get_enum("escapeType", TeleportWhereType, nil)
   end
 
-  def effect_type
-    L2EffectType::TELEPORT
+  def effect_type : EffectType
+    EffectType::TELEPORT
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -19,7 +19,7 @@ class EffectHandler::Escape < AbstractEffect
     char = info.effected
     loc = MapRegionManager.get_tele_to_location(char, escape_type)
     char.tele_to_location(loc, true)
-    char.acting_player.in_7s_dungeon = false
+    char.acting_player.not_nil!.in_7s_dungeon = false
     char.instance_id = 0
   end
 end

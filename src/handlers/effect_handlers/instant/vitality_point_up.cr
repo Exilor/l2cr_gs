@@ -6,7 +6,7 @@ class EffectHandler::VitalityPointUp < AbstractEffect
     @value = params.get_f32("value", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

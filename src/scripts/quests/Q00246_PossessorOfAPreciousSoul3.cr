@@ -92,7 +92,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
     when PILGRIM_OF_SPLENDOR
       if m = get_random_party_member(pc, "awaitsWaterbinder", "1")
         st = get_quest_state(m, false).not_nil!
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if st.cond?(2) && !st.has_quest_items?(WATERBINDER)
           if chance < CHANCE_FOR_DROP
             st.give_items(WATERBINDER, 1)
@@ -108,7 +108,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
     when JUDGE_OF_SPLENDOR
       if m = get_random_party_member(pc, "awaitsEvergreen", "1")
         st = get_quest_state(m, false).not_nil!
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if st.cond?(2) && !st.has_quest_items?(EVERGREEN)
           if chance < CHANCE_FOR_DROP
             st.give_items(EVERGREEN, 1)
@@ -122,7 +122,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
         end
       end
     when BARAKIEL
-      if (party = pc.party?) && !party.members.empty?
+      if (party = pc.party) && !party.members.empty?
         party.members.each do |member|
           if pst = get_quest_state(member, false)
             if pst.cond?(4) && !pst.has_quest_items?(RAIN_SONG)
@@ -146,7 +146,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
 
       if MOBS.includes?(npc.id) && st.get_quest_items_count(FRAGMENTS) < 100
         if st.cond?(4)
-          if rand(100) < CHANCE_FOR_DROP_FRAGMENTS
+          if Rnd.rand(100) < CHANCE_FOR_DROP_FRAGMENTS
             st.give_items(FRAGMENTS, 1)
             if st.get_quest_items_count(FRAGMENTS) < 100
               st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

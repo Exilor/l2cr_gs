@@ -9,7 +9,7 @@ class Scripts::CastleAmbassador < AbstractNpcAI
     36400, 36450, # Innadril
     36401, 36447, 36453, # Goddard
     36433, 36452, 36454, # Rune
-    36434, 36455, # Schuttgart
+    36434, 36455 # Schuttgart
   }
 
   def initialize

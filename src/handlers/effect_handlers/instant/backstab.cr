@@ -18,8 +18,8 @@ class EffectHandler::Backstab < AbstractEffect
     Formulas.blow_success(effector, effected, skill, @blow_chance)
   end
 
-  def effect_type
-    L2EffectType::PHYSICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::PHYSICAL_ATTACK
   end
 
   def on_start(info)
@@ -50,7 +50,7 @@ class EffectHandler::Backstab < AbstractEffect
     Formulas.damage_reflected(char, target, skill, true)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

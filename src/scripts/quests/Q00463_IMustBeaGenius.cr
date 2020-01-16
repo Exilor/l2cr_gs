@@ -57,15 +57,15 @@ class Scripts::Q00463_IMustBeaGenius < Quest
     case event
     when "32069-03.htm"
       st.start_quest
-      number = rand(51) + 550
+      number = Rnd.rand(51) + 550
       st.set("number", number.to_s)
-      st.set("chance", rand(4).to_s)
+      st.set("chance", Rnd.rand(4).to_s)
       html = get_htm(pc, event).sub("%num%", number)
     when "32069-05.htm"
       html = get_htm(pc, event).sub("%num%", st.get("number"))
     when "reward"
       if st.cond?(2)
-        rnd = rand(REWARD.size)
+        rnd = Rnd.rand(REWARD.size)
         str = REWARD[rnd][2] < 10 ? "0#{REWARD[rnd][2]}" : REWARD[rnd][2].to_s
         st.add_exp_and_sp(REWARD[rnd][0], REWARD[rnd][1])
         st.exit_quest(QuestType::DAILY, true)
@@ -90,7 +90,7 @@ class Scripts::Q00463_IMustBeaGenius < Quest
       number = MOBS[npc.id].count
 
       if MOBS[npc.id].special_chance == st.get_int("chance")
-        number = rand(100) + 1
+        number = Rnd.rand(100) + 1
       end
 
       if number > 0

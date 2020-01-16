@@ -9,22 +9,23 @@ require "../damage_done_info"
 require "./tasks/attackable/*"
 
 class L2Attackable < L2Npc
-  @harvest_item = AtomicReference(ItemHolder?).new(nil.as(ItemHolder?))
+  @harvest_item = Atomic(ItemHolder?).new(nil.as(ItemHolder?))
   @sweep_items = Atomic(Array(ItemHolder)?).new(nil.as(Array(ItemHolder)?))
+
   getter aggro_list = Concurrent::Map(L2Character, AggroInfo).new
   getter overhit_attacker : L2Character?
   getter overhit_damage = 0.0
   getter absorbers_list = Concurrent::Map(Int32, AbsorberInfo).new
+  getter seed : L2Seed?
   getter? seeded = false
   getter? raid_minion = false
   getter? absorbed = false
-  getter! seed : L2Seed?
   property seeder_id : Int32 = 0
   property spoiler_l2id : Int32 = 0
   property command_channel_last_attack : Int64 = 0
   property on_kill_delay : Int32 = 5000
   property command_channel_timer : CommandChannelTimer?
-  property! first_command_channel_attacked : L2CommandChannel?
+  property first_command_channel_attacked : L2CommandChannel?
   property? overhit : Bool = false
   property? champion : Bool = false
   property? raid : Bool = false
@@ -99,22 +100,24 @@ class L2Attackable < L2Npc
   end
 
   def reduce_current_hp(damage : Float64, attacker : L2Character?, awake : Bool, dot : Bool, skill : Skill?)
-    if raid? && !minion? && attacker && attacker.party? && attacker.party.in_command_channel? && attacker.party.command_channel.meets_raid_war_condition?(self)
+    cc = attacker.try &.party.try &.command_channel
+
+    if raid? && !minion? && cc && cc.meets_raid_war_condition?(self)
       if @first_command_channel_attacked.nil?
         sync do
           unless @first_command_channel_attacked
-            if first_command_channel_attacked = attacker.party.command_channel?
+            if cc = attacker.try &.party.try &.command_channel
               timer = CommandChannelTimer.new(self)
               @command_channel_timer = timer
               @command_channel_last_attack = Time.ms
               ThreadPoolManager.schedule_general(timer, 10000)
               cs = CreatureSay.new(0, Packets::Incoming::Say2::PARTYROOM_ALL, "", "You have looting rights!") # L2J TODO: retail message
-              first_command_channel_attacked.broadcast_packet(cs)
-              @first_command_channel_attacked = first_command_channel_attacked
+              cc.broadcast_packet(cs)
+              @first_command_channel_attacked = cc
             end
           end
         end
-      elsif attacker.party.command_channel == @first_command_channel_attacked
+      elsif cc == @first_command_channel_attacked
         @command_channel_last_attack = Time.ms
       end
     end
@@ -135,8 +138,8 @@ class L2Attackable < L2Npc
       if master.has_minions?
         master.minion_list.on_assist(self, attacker)
       end
-      master = master.leader?
-      if master && master.has_minions?
+
+      if (master = master.leader?) && master.has_minions?
         master.minion_list.on_assist(self, attacker)
       end
     end
@@ -147,8 +150,8 @@ class L2Attackable < L2Npc
   def do_die(killer : L2Character?) : Bool
     return false unless super
 
-    if killer.is_a?(L2Playable)
-      evt = OnAttackableKill.new(killer.acting_player, self, killer.summon?)
+    if killer && (pc = killer.acting_player)
+      evt = OnAttackableKill.new(pc, self, killer.summon?)
       evt.delayed(self, @on_kill_delay.to_i64)
     end
 
@@ -178,11 +181,10 @@ class L2Attackable < L2Npc
     total_damage = 0i64
 
     @aggro_list.each_value do |info|
-      if attacker = info.attacker.acting_player?
+      if attacker = info.attacker.acting_player
         damage = info.damage
         if damage > 1
           unless Util.in_range?(Config.alt_party_range, self, attacker, true)
-            # debug "L2Attackable#calculate_rewards: #{info.attacker} is too far to receive exp."
             next
           end
 
@@ -206,25 +208,27 @@ class L2Attackable < L2Npc
     else
       do_item_drop(last_attacker)
     end
-    # do_event_drop(last_attacker)
+
+    do_event_drop(last_attacker)
+
     return unless must_reward_exp_sp?
 
     unless rewards.empty?
       rewards.each_value do |reward|
         attacker = reward.attacker
         damage = reward.damage
-        attacker_party = attacker.party?
-        if attacker.has_servitor?
-          penalty = attacker.summon.as(L2ServitorInstance).exp_multiplier
+        attacker_party = attacker.party
+        if smn = attacker.summon.as?(L2ServitorInstance)
+          penalty = smn.exp_multiplier
         else
           penalty = 1.0
         end
 
         if attacker_party.nil?
           if attacker.known_list.knows_object?(self)
-            level_diff = attacker.level - level()
+            lvl_diff = attacker.level - level
 
-            exp, sp = calculate_exp_and_sp(level_diff, damage, total_damage)
+            exp, sp = calculate_exp_and_sp(lvl_diff, damage, total_damage)
 
             if Config.champion_enable && champion?
               exp *= Config.champion_rewards_exp_sp
@@ -232,13 +236,14 @@ class L2Attackable < L2Npc
             end
             exp *= penalty
 
-            overhit_attacker = @overhit_attacker
 
-            if overhit? && overhit_attacker && overhit_attacker.acting_player?
-              if attacker == overhit_attacker.acting_player
-                attacker.send_packet(SystemMessageId::OVER_HIT)
-                # debug "Normal exp: #{exp}, overhit exp: #{calculate_overhit_exp exp}"
-                exp += calculate_overhit_exp(exp.to_i64)
+
+            if overhit? &&
+              if overhit_attacker = @overhit_attacker.try &.acting_player
+                if attacker == overhit_attacker
+                  attacker.send_packet(SystemMessageId::OVER_HIT)
+                  exp += calculate_overhit_exp(exp.to_i64)
+                end
               end
             end
 
@@ -254,14 +259,13 @@ class L2Attackable < L2Npc
             end
           end
         else
-
           party_dmg = 0
           party_mul = 1.0
           party_lvl = 0
 
           rewarded_members = [] of L2PcInstance
-          if attacker_party.in_command_channel?
-            group_members = attacker_party.command_channel.members
+          if cc = attacker_party.command_channel
+            group_members = cc.members
           else
             group_members = attacker_party.members
           end
@@ -274,8 +278,8 @@ class L2Attackable < L2Npc
                 party_dmg += reward2.damage
                 rewarded_members << party_player
                 if party_player.level > party_lvl
-                  if attacker_party.in_command_channel?
-                    party_lvl = attacker_party.command_channel.level
+                  if cc = attacker_party.command_channel
+                    party_lvl = cc.level
                   else
                     party_lvl = party_player.level
                   end
@@ -286,8 +290,8 @@ class L2Attackable < L2Npc
               if Util.in_range?(Config.alt_party_range, self, party_player, true)
                 rewarded_members << party_player
                 if party_player.level > party_lvl
-                  if attacker_party.in_command_channel?
-                    party_lvl = attacker_party.command_channel.level
+                  if cc = attacker_party.command_channel
+                    party_lvl = cc.level
                   else
                     party_lvl = party_player.level
                   end
@@ -300,9 +304,9 @@ class L2Attackable < L2Npc
             party_mul = party_dmg.fdiv(total_damage)
           end
 
-          level_diff = party_lvl - level
+          lvl_diff = party_lvl - level
 
-          exp, sp = calculate_exp_and_sp(level_diff, party_dmg, total_damage)
+          exp, sp = calculate_exp_and_sp(lvl_diff, party_dmg, total_damage)
 
           if Config.champion_enable && champion?
             exp *= Config.champion_rewards_exp_sp
@@ -314,10 +318,12 @@ class L2Attackable < L2Npc
 
           if overhit?
             overhit_attacker = overhit_attacker()
-            if overhit_attacker && overhit_attacker.acting_player?
-              if attacker == overhit_attacker.acting_player
-                attacker.send_packet(SystemMessageId::OVER_HIT)
-                exp += calculate_overhit_exp(exp.to_i64)
+            if overhit_attacker
+              if overhit_pc = overhit_attacker.acting_player
+                if attacker == overhit_pc
+                  attacker.send_packet(SystemMessageId::OVER_HIT)
+                  exp += calculate_overhit_exp(exp.to_i64)
+                end
               end
             end
           end
@@ -332,7 +338,6 @@ class L2Attackable < L2Npc
               self
             )
           end
-
         end
       end
     end
@@ -340,24 +345,24 @@ class L2Attackable < L2Npc
 
   def add_attacker_to_attack_by_list(player : L2Character?)
     return unless player
-    return if player == self || attack_by_list.includes?(player)
+    return if player == self
     attack_by_list << player
   end
 
   def add_damage(attacker : L2Character, damage : Int32, skill : Skill?)
-    unless dead?
-      if walker? && !core_ai_disabled? && WalkingManager.on_walk?(self)
-        WalkingManager.stop_moving(self, false, true)
-      end
+    return if dead?
 
-      notify_event(AI::ATTACKED, attacker)
+    if walker? && !core_ai_disabled? && WalkingManager.on_walk?(self)
+      WalkingManager.stop_moving(self, false, true)
+    end
 
-      add_damage_hate(attacker, damage, (damage.to_i64 * 100) // (level + 7))
+    notify_event(AI::ATTACKED, attacker)
 
-      if pc = attacker.acting_player?
-        evt = OnAttackableAttack.new(pc, self, damage.to_i, skill, attacker.summon?)
-        evt.async(self)
-      end
+    add_damage_hate(attacker, damage, (damage.to_i64 * 100) // (level + 7))
+
+    if pc = attacker.acting_player
+      evt = OnAttackableAttack.new(pc, self, damage.to_i, skill, attacker.summon?)
+      evt.async(self)
     end
   rescue e
     error e
@@ -372,9 +377,21 @@ class L2Attackable < L2Npc
     info = @aggro_list[attacker] ||= AggroInfo.new(attacker)
     info.add_damage(damage)
 
-    target_player = attacker.acting_player?
+    target_player = attacker.acting_player
 
-    if target_player.nil? || (target_player.trap.nil? || !target_player.trap!.triggered?)
+    # if target_player.nil? || (target_player.trap.nil? || !target_player.trap!.triggered?)
+    #   info.add_hate(aggro)
+    # end
+
+    if target_player
+      if trap = target_player.trap
+        unless trap.triggered?
+          info.add_hate(aggro)
+        end
+      else
+        info.add_hate(aggro)
+      end
+    else
       info.add_hate(aggro)
     end
 
@@ -427,7 +444,7 @@ class L2Attackable < L2Npc
     end
 
     unless info = @aggro_list[target]?
-      debug "Target #{target} not present in aggro list of #{self}"
+      debug { "Target #{target} not present in aggro list of #{self}" }
       return
     end
 
@@ -483,13 +500,9 @@ class L2Attackable < L2Npc
     end
   end
 
-  def hate_list? : Bool
-    !@aggro_list.empty? && !looks_dead?
-  end
-
   def hate_list
     if @aggro_list.empty? || looks_dead?
-      raise "L2Attackable#hate_list shouldn't have been called in this state"
+      return
     end
 
     ret = Array(L2Character).new(@aggro_list.size)
@@ -503,24 +516,23 @@ class L2Attackable < L2Npc
   end
 
   def get_hating(target : L2Character?) : Int64
-    return 0i64 unless target
-    return 0i64 if @aggro_list.empty?
-
+    return 0i64 if target.nil? || @aggro_list.empty?
     return 0i64 unless info = @aggro_list[target]?
+    attacker = info.attacker
 
-    if act = info.attacker.as?(L2PcInstance)
-      if act.invisible? || act.invul? || act.spawn_protected?
+    if pc = attacker.as?(L2PcInstance)
+      if pc.invisible? || pc.invul? || pc.spawn_protected?
         @aggro_list.delete(target)
         return 0i64
       end
     end
 
-    if !info.attacker.visible? || info.attacker.invisible?
+    if !attacker.visible? || attacker.invisible?
       @aggro_list.delete(target)
       return 0i64
     end
 
-    if info.attacker.looks_dead?
+    if attacker.looks_dead?
       info.stop_hate
       return 0i64
     end
@@ -534,7 +546,7 @@ class L2Attackable < L2Npc
 
   def do_item_drop(template : L2NpcTemplate, main_dd : L2Character?)
     return unless main_dd
-    return unless pc = main_dd.acting_player?
+    return unless pc = main_dd.acting_player
 
     CursedWeaponsManager.check_drop(self, pc)
 
@@ -542,27 +554,29 @@ class L2Attackable < L2Npc
       @sweep_items.set(template.calculate_drops(DropListScope::CORPSE, self, pc))
     end
 
-    template.calculate_drops(DropListScope::DEATH, self, pc).try &.each do |drop|
-      next unless item = ItemTable[drop.id]?
+    if drops = template.calculate_drops(DropListScope::DEATH, self, pc)
+      drops.each do |drop|
+        next unless item = ItemTable[drop.id]?
 
-      if flying? || (!item.has_ex_immediate_effect? && ((!raid? && Config.auto_loot) || (raid? && Config.auto_loot_raids)))
-        pc.do_auto_loot(self, drop)
-      else
-        drop_item(pc, drop)
-      end
+        if flying? || (!item.has_ex_immediate_effect? && ((!raid? && Config.auto_loot) || (raid? && Config.auto_loot_raids)))
+          pc.do_auto_loot(self, drop)
+        else
+          drop_item(pc, drop)
+        end
 
-      if raid? && !raid_minion? && drop.count > 0
-        sm = SystemMessage.c1_died_dropped_s3_s2
-        sm.add_char_name(self)
-        sm.add_item_name(item)
-        sm.add_long(drop.count)
-        broadcast_packet(sm)
+        if raid? && !raid_minion? && drop.count > 0
+          sm = SystemMessage.c1_died_dropped_s3_s2
+          sm.add_char_name(self)
+          sm.add_item_name(item)
+          sm.add_long(drop.count)
+          broadcast_packet(sm)
+        end
       end
     end
 
-    if Config.champion_enable && champion? && ((Config.champion_reward_lower_lvl_item_chance > 0) || (Config.champion_reward_higher_lvl_item_chance > 0))
+    if Config.champion_enable && champion? && (Config.champion_reward_lower_lvl_item_chance > 0 || Config.champion_reward_higher_lvl_item_chance > 0)
       champqty = Rnd.rand(Config.champion_reward_qty).to_i64
-      item = ItemHolder.new(Config.champion_reward_id, champqty += 1)
+      item = ItemHolder.new(Config.champion_reward_id, champqty + 1)
 
       if pc.level <= level && Rnd.rand(100) < Config.champion_reward_lower_lvl_item_chance
         if Config.auto_loot || flying?
@@ -582,8 +596,8 @@ class L2Attackable < L2Npc
 
   def do_event_drop(last_attacker : L2Character?)
     return unless last_attacker
-    return unless pc = last_attacker.acting_player?
-    warn "TODO: L2Attackable#do_event_drop."
+    return unless pc = last_attacker.acting_player
+    # TODO
   end
 
   def in_aggro_list?(char : L2Character) : Bool
@@ -603,10 +617,10 @@ class L2Attackable < L2Npc
 
   def spoil_loot_items : Array(L2Item) | Slice(L2Item)
     if value = @sweep_items.get
-      value.map { |it| ItemTable[it.id] }
-    else
-      Slice(L2Item).empty
+      return value.map { |it| ItemTable[it.id] }
     end
+
+    Slice(L2Item).empty
   end
 
   def take_sweep : Array(ItemHolder)?
@@ -617,7 +631,7 @@ class L2Attackable < L2Npc
     @harvest_item.swap(nil)
   end
 
-  def old_corpse?(attacker : L2PcInstance, time : Int32, send_msg : Bool) : Bool
+  def old_corpse?(attacker : L2PcInstance?, time : Int32, send_msg : Bool) : Bool
     if dead? && DecayTaskManager.get_remaining_time(self) < time
       if send_msg && attacker
         attacker.send_packet(SystemMessageId::CORPSE_TOO_OLD_SKILL_NOT_USED)
@@ -646,7 +660,7 @@ class L2Attackable < L2Npc
 
     overhit_dmg = -(current_hp - damage)
 
-    if overhit_damage < 0
+    if overhit_dmg < 0
       self.overhit = false
       @overhit_damage = 0
       @overhit_attacker = nil
@@ -663,10 +677,7 @@ class L2Attackable < L2Npc
   end
 
   def add_absorber(attacker : L2PcInstance)
-    debug { "L2Attackable#add_absorber(#{attacker})" }
-    info = @absorbers_list[attacker.l2id]?
-
-    if info
+    if info = @absorbers_list[attacker.l2id]?
       info.absorbed_hp = current_hp
     else
       @absorbers_list[attacker.l2id] = AbsorberInfo.new(attacker.l2id, current_hp)
@@ -744,7 +755,7 @@ class L2Attackable < L2Npc
   end
 
   def set_seeded(seeder : L2PcInstance)
-    if @seed && @seeder_id == seeder.l2id
+    if (seed = @seed) && @seeder_id == seeder.l2id
       @seeded = true
 
       count = 1i64

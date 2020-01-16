@@ -41,7 +41,7 @@ class Packets::Incoming::RequestExEnchantSkillSafe < GameClientPacket
     end
 
     unless esd = esl.get_enchant_skill_holder(@skill_lvl)
-      warn "Enchant skill holder for skill with id #{@skill_id} and level #{@skill_lvl} not found."
+      warn { "Enchant skill holder for skill with id #{@skill_id} and level #{@skill_lvl} not found." }
       return
     end
     before_enchant_skill_level = pc.get_skill_level(@skill_id)
@@ -54,9 +54,11 @@ class Packets::Incoming::RequestExEnchantSkillSafe < GameClientPacket
     rate = esd.get_rate(pc)
 
     if pc.sp >= required_sp
-      unless spb = pc.inventory.get_item_by_item_id(req_item_id)
-        pc.send_packet(SystemMessageId::YOU_DONT_HAVE_ALL_OF_THE_ITEMS_NEEDED_TO_ENCHANT_THAT_SKILL)
-        return
+      if Config.safe_es_sp_book_needed
+        unless spb = pc.inventory.get_item_by_item_id(req_item_id)
+          pc.send_packet(SystemMessageId::YOU_DONT_HAVE_ALL_OF_THE_ITEMS_NEEDED_TO_ENCHANT_THAT_SKILL)
+          return
+        end
       end
 
       if pc.inventory.adena < required_adena
@@ -65,7 +67,9 @@ class Packets::Incoming::RequestExEnchantSkillSafe < GameClientPacket
       end
 
       check = pc.remove_sp(required_sp)
-      check &= pc.destroy_item("Consume", spb.l2id, 1, pc, true)
+      if spb
+        check &= pc.destroy_item("Consume", spb.l2id, 1, pc, true)
+      end
       check &= pc.destroy_item_by_item_id("Consume", Inventory::ADENA_ID, required_adena, pc, true)
 
       unless check
@@ -76,9 +80,7 @@ class Packets::Incoming::RequestExEnchantSkillSafe < GameClientPacket
       if Rnd.rand(100) <= rate
         # logging
         pc.add_skill(skill, true)
-        if Config.debug
-          debug "Learned skill ID: #{@skill_id} Level: #{@skill_lvl} for #{required_sp} SP, #{required_adena} Adena."
-        end
+        debug { "Learned skill ID: #{@skill_id} Level: #{@skill_lvl} for #{required_sp} SP, #{required_adena} Adena." }
         pc.send_packet(ExEnchantSkillResult::TRUE)
         sm = SystemMessage.you_have_succeeded_in_enchanting_the_skill_s1
         sm.add_skill_name(@skill_id)

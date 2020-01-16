@@ -7,7 +7,7 @@ class Packets::Incoming::AnswerPartyLootModification < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    return unless party = pc.party?
+    return unless party = pc.party
     party.answer_loot_change_request(pc, @answer == 1)
   end
 end

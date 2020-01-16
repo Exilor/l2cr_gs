@@ -7,7 +7,6 @@ class L2VillageMasterFighterInstance < L2VillageMasterInstance
   end
 
   private def check_village_master_teach_type(pclass : PlayerClass?) : Bool
-    return false unless pclass
-    pclass.of_type?(ClassType::Fighter)
+    !!pclass && pclass.of_type?(ClassType::Fighter)
   end
 end

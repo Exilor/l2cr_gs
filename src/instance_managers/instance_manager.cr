@@ -47,13 +47,7 @@ module InstanceManager
     end
 
     begin
-      GameDB.exec(
-        ADD_INSTANCE_TIME,
-        pc_l2id,
-        id,
-        time,
-        time
-      )
+      GameDB.exec(ADD_INSTANCE_TIME, pc_l2id, id, time, time)
       PLAYER_INSTANCE_TIMES[pc_l2id][id] = time
     rescue e
       error "Could not insert character instance data."
@@ -62,12 +56,7 @@ module InstanceManager
   end
 
   def delete_instance_time(pc_l2id : Int32, id : Int32)
-    GameDB.exec(
-      DELETE_INSTANCE_TIME,
-      pc_l2id,
-      id
-    )
-
+    GameDB.exec(DELETE_INSTANCE_TIME, pc_l2id, id)
     PLAYER_INSTANCE_TIMES[id]?.try &.delete(id)
   rescue e
     error "Could not delete character instance data."
@@ -134,10 +123,6 @@ module InstanceManager
     INSTANCES[id]?
   end
 
-  def get_instance!(id : Int32) : Instance
-    INSTANCES[id]
-  end
-
   def get_player_instance(l2id : Int32) : Int32
     INSTANCES.find_value { |v| v.includes?(l2id) }.try &.id || 0
   end
@@ -160,7 +145,7 @@ module InstanceManager
     while get_instance(@@dynamic)
       @@dynamic += 1
       if @@dynamic == Int32::MAX
-        warn "More than #{Int32::MAX - 300_000} instances have been created."
+        warn { "More than #{Int32::MAX - 300_000} instances have been created." }
         @@dynamic = 300_000
       end
     end
@@ -172,7 +157,7 @@ module InstanceManager
     @@dynamic
   end
 
-  def instances
+  def instances : IHash(Int32, Instance)
     INSTANCES
   end
 end

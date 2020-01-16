@@ -5,7 +5,7 @@ class Packets::Outgoing::TradeStart < Packets::Outgoing::AbstractItemPacket
     @item_list = @pc.inventory.get_available_items(true, true, false)
   end
 
-  def write_impl
+  private def write_impl
     return unless trade_list = @pc.active_trade_list
     return unless partner = trade_list.partner
 

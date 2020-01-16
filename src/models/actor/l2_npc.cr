@@ -22,12 +22,12 @@ class L2Npc < L2Character
   @soulshot_amount = 0
   @spiritshot_amount = 0
   @shots_mask = 0
-  @random_animation_task : RandomAnimationTask?
   @current_l_hand_id : Int32
   @current_r_hand_id : Int32
   @current_enchant : Int32
   @current_collision_height : Float64
   @current_collision_radius : Float64
+
   getter display_effect = 0
   setter auto_attackable : Bool = false
   property busy_message : String = ""
@@ -269,20 +269,16 @@ class L2Npc < L2Character
   end
 
   def my_lord?(pc : L2PcInstance) : Bool
-    if pc.clan_leader?
+    if (clan = pc.clan) && pc.clan_leader?
       castle_id = castle?.try &.residence_id || -1
       fort_id = fort?.try &.residence_id || -1
-      return pc.clan.castle_id == castle_id || pc.clan.fort_id == fort_id
+      return clan.castle_id == castle_id || clan.fort_id == fort_id
     end
 
     false
   end
 
-  def conquerable_hall : SiegableHall
-    ClanHallSiegeManager.get_nearby_clan_hall!(x, y, 10000)
-  end
-
-  def conquerable_hall? : SiegableHall?
+  def conquerable_hall : SiegableHall?
     ClanHallSiegeManager.get_nearby_clan_hall(x, y, 10000)
   end
 
@@ -457,7 +453,8 @@ class L2Npc < L2Character
 
     if is_a?(L2MerchantInstance)
       if Config.list_pet_rent_npc.includes?(npc_id)
-        html["_Quest"] = "_RentPet\">Rent Pet</a><br><a action=\"bypass -h npc_%objectId%_Quest"
+        html["_Quest"] = "_RentPet\">Rent Pet</a><br><a action=\"bypass -h " \
+          "npc_%objectId%_Quest"
       end
     end
 
@@ -475,13 +472,13 @@ class L2Npc < L2Character
       pc.action_failed
       true
     else
-      warn "L2Npc#show_pk_deny_chat_window: #{type}/#{id}-pk not found."
+      warn { "L2Npc#show_pk_deny_chat_window: #{type}/#{id}-pk not found." }
       false
     end
   end
 
   def insert_l2id_and_show_chat_window(pc : L2PcInstance, content : String)
-    content = content.gsub("%objectId%", l2id.to_s)
+    content = content.gsub("%objectId%") { l2id }
     pc.send_packet(NpcHtmlMessage.new(l2id, content))
   end
 
@@ -496,13 +493,13 @@ class L2Npc < L2Character
       if HtmCache.includes?(temp)
         return temp
       else
-        warn "L2Npc#get_html_path(#{npc_id}, #{val}) HtmCache can't find #{temp.inspect}."
+        warn { "L2Npc#get_html_path(#{npc_id}, #{val}) HtmCache can't find #{temp.inspect}." }
       end
     else
       if HtmCache.loadable?(temp)
         return temp
       else
-        "L2Npc#get_html_path(#{npc_id}, #{val}) is not loadable."
+        warn { "L2Npc#get_html_path(#{npc_id}, #{val}) is not loadable." }
       end
     end
 
@@ -526,7 +523,7 @@ class L2Npc < L2Character
     @current_collision_height = template.f_collision_height
     @current_collision_radius = template.f_collision_radius
 
-    @killing_blow_weapon = killer.try &.active_weapon_item?.try &.id || 0
+    @killing_blow_weapon = killer.try &.active_weapon_item.try &.id || 0
     DecayTaskManager.add(self)
 
     true
@@ -572,7 +569,7 @@ class L2Npc < L2Character
 
     WalkingManager.on_death(self)
 
-    summoner = summoner?
+    summoner = summoner()
 
     if summoner.is_a?(L2Npc)
       summoner.remove_summoned_npc(l2id)
@@ -590,7 +587,7 @@ class L2Npc < L2Character
       skill_channelized.abort_channelization
     end
 
-    if old_region = world_region?
+    if old_region = world_region
       old_region.remove_from_zones(self)
     end
 
@@ -636,7 +633,7 @@ class L2Npc < L2Character
   end
 
   def schedule_despawn(delay : Int64)
-    task = ->{ delete_me unless decayed? }
+    task = -> { delete_me unless decayed? }
     ThreadPoolManager.schedule_general(task, delay)
     self
   end
@@ -647,8 +644,8 @@ class L2Npc < L2Character
   end
 
   def notify_quest_event_skill_finished(skill : Skill, target : L2Object?)
-    if target.is_a?(L2Playable)
-      OnNpcSkillFinished.new(self, target.acting_player, skill).async(self)
+    if target.is_a?(L2Playable) && (pc = target.acting_player)
+      OnNpcSkillFinished.new(self, pc, skill).async(self)
     end
   end
 
@@ -715,7 +712,7 @@ class L2Npc < L2Character
 
   def get_point_in_range(min : Int32, max : Int32) : Location
     if max == 0 || max < min
-      return Location.new(x(), y(), z())
+      return Location.new(x(), y(), z)
     end
 
     radius = Rnd.rand(min..max)
@@ -724,7 +721,7 @@ class L2Npc < L2Character
 
     x = x() + (radius * Math.cos(angle))
     y = y() + (radius * Math.sin(angle))
-    Location.new(x.to_i32, y.to_i32, z())
+    Location.new(x.to_i32, y.to_i32, z)
   end
 
   def drop_item(pc : L2PcInstance, item : ItemHolder) : L2ItemInstance?
@@ -735,12 +732,12 @@ class L2Npc < L2Character
     item = nil
 
     count.times do |i|
-      new_x = x() + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
-      new_y = y() + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
-      new_z = z() + 20
+      new_x = x + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
+      new_y = y + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
+      new_z = z + 20
 
-      unless ItemTable[item_id]
-        warn "Item #{item_id} doesn't exist."
+      unless ItemTable[item_id]?
+        warn { "Item #{item_id} doesn't exist." }
         return
       end
 
@@ -828,7 +825,6 @@ class L2Npc < L2Character
     delay = Rnd.rand(min..max) * 1000
 
     task = RandomAnimationTask.new(self)
-    @random_animation_task = task
     ThreadPoolManager.schedule_general(task, delay)
   end
 
@@ -851,13 +847,13 @@ class L2Npc < L2Character
   end
 
   def update_abnormal_effect
-    known_list.known_players.each_value do |player|
-      next unless visible_for?(player)
+    known_list.known_players.each_value do |pc|
+      next unless visible_for?(pc)
 
       if run_speed == 0
-        player.send_packet(ServerObjectInfo.new(self, player))
+        pc.send_packet(ServerObjectInfo.new(self, pc))
       else
-        player.send_packet(NpcInfo.new(self, player))
+        pc.send_packet(NpcInfo.new(self, pc))
       end
     end
   end
@@ -991,28 +987,25 @@ class L2Npc < L2Character
     variables.get_i32("SCRIPT_VAL") == val
   end
 
-  def active_weapon_instance? : L2ItemInstance?
+  def active_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def active_weapon_item? : L2Weapon?
+  def active_weapon_item : L2Weapon?
     weapon_id = template.r_hand_id
     return if weapon_id < 1
 
     ItemTable[weapon_id].as?(L2Weapon)
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
+  def secondary_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_item? : L2Weapon?
+  def secondary_weapon_item : L2Weapon?
     weapon_id = template.l_hand_id
     return if weapon_id < 1
 
     ItemTable[weapon_id].as?(L2Weapon)
   end
 end
-
-require "./instance/l2_teleporter_instance"
-require "./instance/l2_warehouse_instance"

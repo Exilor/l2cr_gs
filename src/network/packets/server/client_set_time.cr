@@ -16,7 +16,7 @@ class Packets::Outgoing::ClientSetTime < GameServerPacket
     @time = (hh * 60) + mm
   end
 
-  def write_impl
+  private def write_impl
     c 0xf2
 
     d @time

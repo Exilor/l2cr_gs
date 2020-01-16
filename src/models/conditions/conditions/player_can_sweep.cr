@@ -5,7 +5,7 @@ class Condition
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       can_sweep = false
 
-      if pc = effector.acting_player?
+      if pc = effector.acting_player
         skill.try &.get_target_list(pc).each do |target|
           if target.is_a?(L2Attackable) && target.dead?
             if target.spoiled?

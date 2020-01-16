@@ -10,9 +10,9 @@ class Packets::Incoming::ExGetOnAirship < GameClientPacket
   end
 
   private def run_impl
-    debug "[T1:ExGetOnAirship] x: #{@x}."
-    debug "[T1:ExGetOnAirship] y: #{@y}."
-    debug "[T1:ExGetOnAirship] z: #{@z}."
-    debug "[T1:ExGetOnAirship] ship ID: #{@ship_id}."
+    debug { "[T1:ExGetOnAirship] x: #{@x}." }
+    debug { "[T1:ExGetOnAirship] y: #{@y}." }
+    debug { "[T1:ExGetOnAirship] z: #{@z}." }
+    debug { "[T1:ExGetOnAirship] ship ID: #{@ship_id}." }
   end
 end

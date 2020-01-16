@@ -5,6 +5,7 @@ class L2Territory
     proc : Int32
 
   @points = [] of Point
+
   getter proc_max = 0
 
   def initialize(@terr : Int32) # Integer

@@ -70,7 +70,7 @@ class Scripts::Q00450_GraveRobberRescue < Quest
         return
       end
 
-      if rand(100) < 66
+      if Rnd.rand(100) < 66
         st.give_items(EVIDENCE_OF_MIGRATION, 1)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         npc.set_intention(AI::MOVE_TO, Location.new(npc.x + 100, npc.y + 100, npc.z, 0))
@@ -83,7 +83,7 @@ class Scripts::Q00450_GraveRobberRescue < Quest
         end
         html = "32651-01.html"
       else
-        if rand(100) < 50
+        if Rnd.rand(100) < 50
           npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::GRUNT_OH))
         else
           npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::GRUNT_WHATS_WRONG_WITH_ME))

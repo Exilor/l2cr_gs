@@ -5,6 +5,7 @@ class WalkInfo
   include Synchronizable
 
   @forward = true
+
   getter current_node_id = 0
   property last_action : Int64 = 0i64
   property walk_check_task : Scheduler::PeriodicTask?

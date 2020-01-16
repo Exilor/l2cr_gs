@@ -226,14 +226,14 @@ module MercTicketManager
       SiegeGuardManager.new(castle).remove_merc(npc_id, *item.xyz)
     end
 
-    DROPPED_TICKETS.delete(item)
+    DROPPED_TICKETS.delete_first(item)
   end
 
-  def item_ids
+  def item_ids : Slice(Int32)
     ITEM_IDS
   end
 
-  def dropped_tickets
+  def dropped_tickets : Slice(Int32)
     DROPPED_TICKETS
   end
 end

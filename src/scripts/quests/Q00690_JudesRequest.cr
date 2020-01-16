@@ -48,7 +48,7 @@ class Scripts::Q00690_JudesRequest < Quest
       st.start_quest
     elsif event.casecmp?("32356-07.htm")
       if st.get_quest_items_count(EVIL_WEAPON) >= 200
-        st.give_items(REWARDS[0].sample, 1)
+        st.give_items(REWARDS[0].sample(random: Rnd), 1)
         st.take_items(EVIL_WEAPON, 200)
         st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         html = "32356-07.htm"
@@ -60,7 +60,7 @@ class Scripts::Q00690_JudesRequest < Quest
       st.exit_quest(true, true)
     elsif event.casecmp?("32356-09.htm")
       if st.get_quest_items_count(EVIL_WEAPON) >= 5
-        st.give_items(REWARDS[1].sample, 1)
+        st.give_items(REWARDS[1].sample(random: Rnd), 1)
         st.take_items(EVIL_WEAPON, 5)
         st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         html = "32356-09.htm"
@@ -88,7 +88,7 @@ class Scripts::Q00690_JudesRequest < Quest
     chance *= Config.rate_quest_drop
     chance %= 1000
 
-    if rand(1000) <= chance
+    if Rnd.rand(1000) <= chance
       st.give_items(EVIL_WEAPON, Math.max((chance / 1000).to_i, 1))
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end

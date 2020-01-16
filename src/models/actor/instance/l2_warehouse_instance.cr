@@ -6,8 +6,11 @@ class L2WarehouseInstance < L2NpcInstance
   end
 
   def get_html_path(npc_id, val) : String
-    pom = val == 0 ? npc_id : "#{npc_id}-#{val}"
-    "data/html/warehouse/#{pom}.htm"
+    if val == 0
+      "data/html/warehouse/#{npc_id}.htm"
+    else
+      "data/html/warehouse/#{npc_id}-#{val}.htm"
+    end
   end
 
   def warehouse? : Bool

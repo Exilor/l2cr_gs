@@ -7,6 +7,6 @@ module TargetHandler::Self
   end
 
   def target_type
-    L2TargetType::SELF
+    TargetType::SELF
   end
 end

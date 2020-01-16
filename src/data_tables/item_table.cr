@@ -51,7 +51,7 @@ module ItemTable
     ETC_ITEMS.clear
     WEAPONS.clear
 
-    info "Loading items..."
+    debug "Loading items..."
     timer = Timer.new
     highest = 0
     DocumentEngine.load_items.each do |item|
@@ -83,11 +83,7 @@ module ItemTable
   end
 
   def [](id : Int) : L2Item
-    unless item = self[id]?
-      raise "No item template with id #{id}"
-    end
-
-    item
+    self[id]? || raise "No item template with id #{id}"
   end
 
   def []?(index : Int) : L2Item?
@@ -108,7 +104,7 @@ module ItemTable
 
     if process && process.casecmp?("loot")
       if reference.is_a?(L2Attackable) && reference.raid?
-        first_attacked = reference.first_command_channel_attacked?
+        first_attacked = reference.first_command_channel_attacked
         if first_attacked && !Config.auto_loot_raids
           item.owner_id = first_attacked.leader_l2id
           task = ThreadPoolManager.schedule_general(ResetOwner.new(item), Config.loot_raids_privilege_interval)
@@ -158,7 +154,7 @@ module ItemTable
     item.sync do
       item.count = 0
       item.owner_id = 0
-      item.item_location = :VOID
+      item.item_location = ItemLocation::VOID
       item.last_change = L2ItemInstance::REMOVED
 
       L2World.remove_object(item)

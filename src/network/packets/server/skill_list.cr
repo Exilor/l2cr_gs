@@ -8,7 +8,7 @@ class Packets::Outgoing::SkillList < GameServerPacket
     @skills << SkillInfo.new(id, level, passive, disabled, enchantable)
   end
 
-  def write_impl
+  private def write_impl
     c 0x5f
 
     d @skills.size

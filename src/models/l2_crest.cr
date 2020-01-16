@@ -1,5 +1,5 @@
 struct L2Crest
-  enum CrestType : UInt8
+  enum Type : UInt8
     PLEDGE, PLEDGE_LARGE, ALLY
 
     def self.get_by_id(id : Int) : self?
@@ -15,19 +15,9 @@ struct L2Crest
     end
   end
 
-  getter_initializer id : Int32, data : Bytes, type : CrestType
+  PLEDGE = Type::PLEDGE
+  PLEDGE_LARGE = Type::PLEDGE_LARGE
+  ALLY = Type::ALLY
 
-  def get_client_path(pc : L2PcInstance) : String
-    case @type
-    when .pledge?
-      pc.send_packet(Packets::Outgoing::PledgeCrest.new(@id, @data))
-      "Crest.crest_#{Config.server_id}_#{@id}"
-    when .pledge_large?
-      pc.send_packet(Packets::Outgoing::ExPledgeCrestLarge.new(@id, @data))
-      "Crest.crest_#{Config.server_id}_#{@id}_l"
-    else # .ally?
-      pc.send_packet(Packets::Outgoing::AllyCrest.new(@id, @data))
-      "Crest.crest_#{Config.server_id}_#{@id}"
-    end
-  end
+  getter_initializer id : Int32, data : Bytes, type : Type
 end

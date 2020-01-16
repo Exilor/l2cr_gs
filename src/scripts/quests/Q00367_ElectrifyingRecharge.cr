@@ -77,7 +77,7 @@ class Scripts::Q00367_ElectrifyingRecharge < Quest
     qs = get_quest_state(winner, false)
 
     if qs && qs.started? && !has_quest_items?(winner, TITAN_LAMP5)
-      random = rand(37)
+      random = Rnd.rand(37)
       if random == 0
         if has_quest_items?(winner, TITAN_LAMP1)
           give_items(winner, TITAN_LAMP2, 1)
@@ -119,7 +119,7 @@ class Scripts::Q00367_ElectrifyingRecharge < Quest
         take_items(pc, BROKEN_TITAN_LAMP, -1)
         html = "30673-07.html"
       elsif has_quest_items?(pc, TITAN_LAMP5)
-        case rand(14)
+        case Rnd.rand(14)
         when 0
           item_id = 4553 # Greater Dye of STR <Str+1 Con-1>
         when 1

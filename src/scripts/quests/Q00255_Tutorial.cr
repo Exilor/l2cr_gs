@@ -202,7 +202,7 @@ class Scripts::Q00255_Tutorial < Quest
       unless pc.has_listener?(EventType::ON_CREATURE_ATTACKED)
         listener = ConsumerEventListener.new(pc, EventType::ON_CREATURE_ATTACKED, pc) do |event|
           event = event.as(OnCreatureAttacked)
-          pp = event.target.acting_player?
+          pp = event.target.acting_player
           if pp && pp.current_hp <= pp.max_hp * 0.3
             tutorial_event(pp, 256)
           end

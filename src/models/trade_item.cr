@@ -34,7 +34,7 @@
 #   end
 
 #   def initialize(item : L2ItemInstance)
-#     @store_count = 0_i64
+#     @store_count = 0i64
 #     @l2id = item.l2id
 #     @item = item.template
 #     @location_slot = item.location_slot

@@ -88,7 +88,7 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
         ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::S1_THAT_STRANGER_MUST_BE_DEFEATED_HERE_IS_THE_ULTIMATE_HELP)
         ns.add_string_parameter(pc.name)
         npc.broadcast_packet(ns)
-        start_quest_timer("heal", 30000 - rand(20000), npc, pc)
+        start_quest_timer("heal", 30000 - Rnd.rand(20000), npc, pc)
         monster = add_spawn(SHILENS_EVIL_THOUGHTS, 82425, 47232, -3216, 0, false, 0, false).as(L2MonsterInstance)
         monster.broadcast_packet(NpcSay.new(monster.l2id, Say2::NPC_ALL, monster.id, NpcString::YOU_ARE_NOT_THE_OWNER_OF_THAT_ITEM))
         monster.set_running
@@ -105,7 +105,7 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
         npc.target = pc
         npc.do_cast(NPC_HEAL)
       end
-      start_quest_timer("heal", 30000 - rand(20000), npc, pc)
+      start_quest_timer("heal", 30000 - Rnd.rand(20000), npc, pc)
     when "reward"
       if st.cond?(6)
         if pc.level >= MIN_LEVEL

@@ -7,6 +7,7 @@ class L2Weapon < L2Item
   @skills_on_crit : SkillHolder?
   @skills_on_crit_condition : Condition?
   @enchant_4_skill : SkillHolder?
+
   getter random_damage : Int32
   getter soulshot_count : Int32
   getter spiritshot_count : Int32

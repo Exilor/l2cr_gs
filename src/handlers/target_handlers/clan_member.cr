@@ -35,6 +35,6 @@ module TargetHandler::ClanMember
   end
 
   def target_type
-    L2TargetType::CLAN_MEMBER
+    TargetType::CLAN_MEMBER
   end
 end

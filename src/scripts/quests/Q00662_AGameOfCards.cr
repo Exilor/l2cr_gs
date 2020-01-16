@@ -93,11 +93,11 @@ class Scripts::Q00662_AGameOfCards < Quest
         i5 = 0
 
         while i1 == i2 || i1 == i3 || i1 == i4 || i1 == i5 || i2 == i3 || i2 == i4 || i2 == i5 || i3 == i4 || i3 == i5 || i4 == i5
-          i1 = rand(70) + 1
-          i2 = rand(70) + 1
-          i3 = rand(70) + 1
-          i4 = rand(70) + 1
-          i5 = rand(70) + 1
+          i1 = Rnd.rand(70) + 1
+          i2 = Rnd.rand(70) + 1
+          i3 = Rnd.rand(70) + 1
+          i4 = Rnd.rand(70) + 1
+          i5 = Rnd.rand(70) + 1
         end
 
         if i1 >= 57
@@ -207,8 +207,7 @@ class Scripts::Q00662_AGameOfCards < Quest
       elsif i9 % 32 == 31
         i6 = 0
         i8 = 0
-        if i1.between?(1, 14) && i2.between?(1, 14) && i3.between?(1, 14) && i4.between?(1, 14) && i5.between?(1, 14)
-        # if i1 >= 1 && i1 <= 14 && i2 >= 1 && i2 <= 14 && i3 >= 1 && i3 <= 14 && i4 >= 1 && i4 <= 14 && i5 >= 1 && i5 <= 14
+        if {i1, i2, i3, i4, i5}.all? &.between?(1, 14)
           if i1 == i2
             i6 = i6 + 10
             i8 = i8 + 8
@@ -482,7 +481,7 @@ class Scripts::Q00662_AGameOfCards < Quest
   def on_kill(npc, killer, is_summon)
     pcs = [killer, killer]
 
-    if party = killer.party?
+    if party = killer.party
       party.members.each do |m|
         if get_quest_state(m, false)
           pcs << m
@@ -490,12 +489,10 @@ class Scripts::Q00662_AGameOfCards < Quest
       end
     end
 
-    pc = pcs.sample
-    if Util.in_range?(1500, npc, pc, false)
-      if MONSTERS[npc.id] < rand(1000)
-        if st = get_quest_state(pc, false)
-          give_item_randomly(st.player, npc, RED_GEM, 1, 0, MONSTERS[npc.id].to_f, true)
-        end
+    pc = pcs.sample(random: Rnd)
+    if Util.in_range?(1500, npc, pc, false) && MONSTERS[npc.id] < Rnd.rand(1000)
+      if st = get_quest_state(pc, false)
+        give_item_randomly(st.player, npc, RED_GEM, 1, 0, MONSTERS[npc.id].to_f, true)
       end
     end
 

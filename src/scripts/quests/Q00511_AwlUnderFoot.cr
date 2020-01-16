@@ -14,11 +14,11 @@ class Scripts::Q00511_AwlUnderFoot < Quest
 
     def call
       if @world.status == 0
-        spawn_id = RAIDS1.sample
+        spawn_id = RAIDS1.sample(random: Rnd)
       elsif @world.status == 1
-        spawn_id = RAIDS2.sample
+        spawn_id = RAIDS2.sample(random: Rnd)
       else
-        spawn_id = RAIDS3.sample
+        spawn_id = RAIDS3.sample(random: Rnd)
       end
       raid = @owner.add_spawn(spawn_id, 53319, 245814, -6576, 0, false, 0, false, @world.instance_id)
       if raid.is_a?(L2RaidBossInstance)
@@ -98,7 +98,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
 
 
   private def check_conditions(pc)
-    unless party = pc.party?
+    unless party = pc.party
       return "FortressWarden-03.htm"
     end
     if party.leader != pc
@@ -123,7 +123,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
     if pc.nil? || fort.nil? || dungeon.nil?
       return "FortressWarden-01.htm"
     end
-    clan = pc.clan?
+    clan = pc.clan
     if clan.nil? || clan.fort_id != fort.residence_id
       return "FortressWarden-01.htm"
     elsif fort.fort_state == 0
@@ -134,11 +134,12 @@ class Scripts::Q00511_AwlUnderFoot < Quest
       return "FortressWarden-07.htm"
   end
 
-    unless party = pc.party?
+    unless party = pc.party
       return "FortressWarden-03.htm"
     end
     party.members.each do |m|
-      if m.clan?.nil? || m.clan.fort_id == 0 || m.clan.fort_id != fort.residence_id
+      clan = m.clan
+      if clan.nil? || (clan.fort_id == 0 || clan.fort_id != fort.residence_id)
         html = get_htm(pc, "FortressWarden-05.htm")
         return html.sub("%player%", m.name)
       end
@@ -165,9 +166,9 @@ class Scripts::Q00511_AwlUnderFoot < Quest
     if ret = check_conditions(pc)
       return ret
     end
-    party = pc.party?
+    party = pc.party
     instance_id = InstanceManager.create_dynamic_instance(template)
-    ins = InstanceManager.get_instance!(instance_id)
+    ins = InstanceManager.get_instance(instance_id).not_nil!
     ins.exit_loc = Location.new(pc)
     world = FAUWorld.new
     world.instance_id = instance_id
@@ -190,7 +191,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
       world.add_allowed(pc.l2id)
     end
 
-    get_htm(pc, "FortressWarden-08.htm").sub("%clan%", pc.clan.name)
+    get_htm(pc, "FortressWarden-08.htm").sub("%clan%", pc.clan.not_nil!.name)
   end
 
   def on_adv_event(event, npc, pc)
@@ -216,12 +217,12 @@ class Scripts::Q00511_AwlUnderFoot < Quest
   end
 
   def on_attack(npc, pc, damage, is_summon)
-    attacker = is_summon ? pc.summon! : pc
+    attacker = is_summon ? (pc.summon || pc) : pc
     if attacker.level - npc.level >= 9
       if attacker.buff_count > 0 || attacker.dance_count > 0
         npc.target = attacker
         npc.do_simultaneous_cast(RAID_CURSE)
-      elsif party = pc.party?
+      elsif party = pc.party
         party.members.each do |m|
           if m.buff_count > 0 || m.dance_count > 0
             npc.target = m
@@ -238,15 +239,13 @@ class Scripts::Q00511_AwlUnderFoot < Quest
     world = InstanceManager.get_world(npc.instance_id)
     if world.is_a?(FAUWorld)
       if RAIDS3.includes?(npc.id)
-        if party = pc.party?
-          party.members.each do |pl|
-            reward_player(pl)
-          end
+        if party = pc.party
+          party.members.each { |pl| reward_player(pl) }
         else
           reward_player(pc)
         end
 
-        instance_obj = InstanceManager.get_instance!(world.instance_id)
+        instance_obj = InstanceManager.get_instance(world.instance_id).not_nil!
         instance_obj.duration = 360000
         instance_obj.remove_npcs
       else

@@ -8,7 +8,7 @@ abstract class L2Decoy < L2Character
     self.invul = false
   end
 
-  def acting_player? : L2PcInstance?
+  def acting_player : L2PcInstance
     @owner
   end
 
@@ -64,19 +64,19 @@ abstract class L2Decoy < L2Character
     @owner.auto_attackable?(attacker)
   end
 
-  def active_weapon_instance? : L2ItemInstance?
+  def active_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def active_weapon_item? : L2Weapon?
+  def active_weapon_item : L2Weapon?
     # return nil
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
+  def secondary_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_item? : L2Weapon?
+  def secondary_weapon_item : L2Weapon?
     # return nil
   end
 end

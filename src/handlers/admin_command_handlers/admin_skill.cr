@@ -126,7 +126,7 @@ module AdminCommandHandler::AdminSkill
       io << "<table width=270><tr><td>Lv: "
       io << pc.level
       io << " "
-      ClassListData.get_class!(pc.class_id).client_code(io)
+      ClassListData.get_class(pc.class_id).client_code(io)
       io << "</td></tr></table><br>"
       io << "<table width=270><tr><td>Note: Dont forget that modifying players "
       io << "skills can</td></tr><tr><td>ruin the game...</td></tr></table><br>"
@@ -177,7 +177,7 @@ module AdminCommandHandler::AdminSkill
     reply.set_file(pc, "data/html/admin/charskills.htm")
     reply["%name%"] = target.name
     reply["%level%"] = target.level
-    reply["%class%"] = ClassListData.get_class!(target.class_id).client_code
+    reply["%class%"] = ClassListData.get_class(target.class_id).client_code
     pc.send_packet(reply)
   end
 
@@ -300,7 +300,7 @@ module AdminCommandHandler::AdminSkill
       return
     end
 
-    unless player.clan_leader?
+    unless (clan = player.clan) && player.clan_leader?
       sm = SystemMessage.s1_is_not_a_clan_leader
       sm.add_string(player.name)
       pc.send_packet(sm)
@@ -322,15 +322,12 @@ module AdminCommandHandler::AdminSkill
     sm = SystemMessage.clan_skill_s1_added
     sm.add_skill_name(skill)
     player.send_packet(sm)
-    clan = player.clan
     clan.broadcast_to_online_members(sm)
     clan.add_new_skill(skill)
     pc.send_message("You gave the Clan Skill: #{name} to the clan #{clan.name}.")
 
     clan.broadcast_to_online_members(PledgeSkillList.new(clan))
-    clan.each_online_player do |m|
-      m.send_skill_list
-    end
+    clan.each_online_player &.send_skill_list
 
     show_main_page(pc)
   end

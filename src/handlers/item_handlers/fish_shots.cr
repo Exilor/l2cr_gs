@@ -9,8 +9,8 @@ module ItemHandler::FishShots
     end
 
     pc = playable.acting_player
-    return false unless weapon_inst = pc.active_weapon_instance?
-    return false unless weapon_item = pc.active_weapon_item?
+    return false unless weapon_inst = pc.active_weapon_instance
+    return false unless weapon_item = pc.active_weapon_item
 
     unless weapon_item.item_type.fishingrod?
       return false

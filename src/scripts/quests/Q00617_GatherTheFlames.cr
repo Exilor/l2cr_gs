@@ -64,7 +64,7 @@ class Scripts::Q00617_GatherTheFlames < Quest
       if st.get_quest_items_count(TORCH) < 1000 || !st.started?
         return get_no_quest_msg(pc)
       end
-      st.give_items(REWARD.sample, 1)
+      st.give_items(REWARD.sample(random: Rnd), 1)
       st.take_items(TORCH, 1000)
     when "31539-08.html"
       st.exit_quest(true, true)
@@ -96,7 +96,7 @@ class Scripts::Q00617_GatherTheFlames < Quest
 
     st = get_quest_state!(member, false)
 
-    if rand(1000) < MOBS[npc.id]
+    if Rnd.rand(1000) < MOBS[npc.id]
       st.give_items(TORCH, 2)
     else
       st.give_items(TORCH, 1)

@@ -92,20 +92,20 @@ class Scripts::Q00351_BlackSwan < Quest
       return
    end
 
-    random = rand(20)
+    random = Rnd.rand(20)
     if random < 10
       give_item_randomly(qs.player, npc, LIZARD_FANG, 1, 0, 1.0, true)
 
-      if rand(20) == 0
+      if Rnd.rand(20) == 0
         give_item_randomly(qs.player, npc, BARREL_OF_LEAGUE, 1, 0, 1.0, false)
       end
     elsif random < 15
       give_item_randomly(qs.player, npc, LIZARD_FANG, 2, 0, 1.0, true)
 
-      if rand(20) == 0
+      if Rnd.rand(20) == 0
         give_item_randomly(qs.player, npc, BARREL_OF_LEAGUE, 1, 0, 1.0, false)
       end
-    elsif rand(100) < MONSTER_DROP_CHANCES[npc.id]
+    elsif Rnd.rand(100) < MONSTER_DROP_CHANCES[npc.id]
       give_item_randomly(qs.player, npc, BARREL_OF_LEAGUE, 1, 0, 1.0, true)
     end
 

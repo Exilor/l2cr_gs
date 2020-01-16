@@ -19,8 +19,7 @@ module Config
     property punishment_type = ""
     property? log_flooding = false
 
-    def initialize(@flood_protector_type : String)
-    end
+    property_initializer flood_protector_type : String
   end
 
   class ClassMasterSettings
@@ -104,6 +103,7 @@ module Config
   EMAIL_CONFIG_FILE = "/config/Email.properties"
   CH_SIEGE_FILE = "/config/ConquerableHallSiege.properties"
   GEODATA_FILE = "/config/GeoData.properties"
+  L2CR_CONFIG_FILE = "/config/l2cr.properties"
   # --------------------------------------------------
   # L2J Variable Definitions
   # --------------------------------------------------
@@ -145,6 +145,7 @@ module Config
   class_property alternate_class_master : Bool = false
   class_property life_crystal_needed : Bool = false
   class_property es_sp_book_needed : Bool = false
+  class_property safe_es_sp_book_needed : Bool = false
   class_property divine_sp_book_needed : Bool = false
   class_property alt_game_skill_learn : Bool = false
   class_property alt_game_subclass_without_quests : Bool = false
@@ -935,7 +936,7 @@ module Config
   class_property pet_name_template : Regex = /.*/
   class_property clan_name_template : Regex = /.*/
   class_property max_characters_number_per_account : Int32 = 0
-  class_property datapack_root : String = "?" # L2R: String, L2J: File
+  class_property datapack_root : String = "." # L2J: File
   class_property accept_alternate_id : Bool = false
   class_property database_engine : String = ""
   class_property request_id : Int32 = 0
@@ -1090,7 +1091,7 @@ module Config
 
   # GeoData Settings
   class_property pathfinding : Int32 = 0
-  class_property pathnode_dir : String = "" # L2R: String, L2J: File
+  class_property pathnode_dir : String = "" # L2J: File
   class_property pathfind_buffers : String = ""
   class_property low_weight : Float32 = 0f32
   class_property medium_weight : Float32 = 0f32
@@ -1101,7 +1102,7 @@ module Config
   class_property debug_path : Bool = false
   class_property force_geodata : Bool = false
   class_property coord_synchronize : Int32 = 0
-  class_property geodata_path : String = "" # L2R: String, L2J: Path
+  class_property geodata_path : String = "" # L2J: Path
   class_property try_load_unspecified_regions : Bool = false
   class_property geodata_regions : Hash(String, Bool) = {} of String => Bool
 
@@ -1153,6 +1154,14 @@ module Config
 
     cfg = StatsSet.new
 
+    # Custom
+    begin
+      cfg.parse(Dir.current + L2CR_CONFIG_FILE)
+      @@safe_es_sp_book_needed = cfg.get_bool("SafeEnchantSkillSpBookNeeded", true)
+    rescue e
+      warn e
+    end
+
     # Server
     cfg.parse(Dir.current + CONFIGURATION_FILE)
     @@enable_upnp = cfg.get_bool("EnableUPnP", true)
@@ -1170,13 +1179,17 @@ module Config
     @@database_connection_pool = cfg.get_string("ConnectionPool", "C3P0")
     @@database_max_connections = cfg.get_i32("MaximumDbConnections", 10)
     @@database_max_idle_time = cfg.get_i32("MaximumDbIdleTime")
-    datapack_root = cfg.get_string("DatapackRoot", ".")
-    # if Dir.exists?(datapack_root)
-    #   DATAPACK_ROOT = Dir.open datapack_root
-    # else
-    #   DATAPACK_ROOT = Dir.current
-    # end
-    @@datapack_root = Dir.current + "/data"
+    datapack_root = cfg.get_string("DatapackRoot", ".") + "/data"
+    unless Dir.exists?(datapack_root)
+      datapack_root = "#{Dir.current}/#{datapack_root}/data"
+    end
+    unless Dir.exists?(datapack_root)
+      datapack_root = Dir.current + "/data"
+    end
+    unless Dir.exists?(datapack_root)
+      raise "Datapack not found in \"#{datapack_root}\""
+    end
+    @@datapack_root = datapack_root
     @@player_name_template = cfg.get_regex("PlayerNameTemplate", /.*/)
     @@pet_name_template = cfg.get_regex("PetNameTemplate", /.*/)
     @@clan_name_template = cfg.get_regex("ClanNameTemplate", /.*/)
@@ -2687,7 +2700,53 @@ module Config
     when "tradechat"
       @@default_trade_chat = value
     else
-      warn "TODO: find a way to dynamically set a class variable, if at all possible."
+      {% for var in @type.class_vars %}
+        if name.casecmp?({{var.stringify}})
+          {% if var.type == Int8 %}
+            @@{{var.id}} = value.to_i8
+            return true
+          {% end %}
+
+          {% if var.type == Int16 %}
+            @@{{var.id}} = value.to_i16
+            return true
+          {% end %}
+
+          {% if var.type == Int32 %}
+            @@{{var.id}} = value.to_i32
+            return true
+          {% end %}
+
+          {% if var.type == Int64 %}
+            @@{{var.id}} = value.to_i64
+            return true
+          {% end %}
+
+          {% if var.type == Float32 %}
+            @@{{var.id}} = value.to_f32
+            return true
+          {% end %}
+
+          {% if var.type == Float64 %}
+            @@{{var.id}} = value.to_f64
+            return true
+          {% end %}
+
+          {% if var.type == Bool %}
+            @@{{var.id}} = Bool.new(value)
+            return true
+          {% end %}
+
+          {% if var.type == String %}
+            @@{{var.id}} = value
+            return true
+          {% end %}
+
+          warn { "Don't know how to set config property of type {{var.type}}." }
+          return false
+        end
+      {% end %}
+
       return false
     end
 

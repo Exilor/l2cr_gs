@@ -4,6 +4,7 @@ class Packets::Outgoing::SpawnItem < GameServerPacket
   @y : Int32
   @z : Int32
   @item_id : Int32
+  @stackable : Bool
 
   def initialize(obj : L2Object)
       @l2id = obj.l2id
@@ -11,16 +12,16 @@ class Packets::Outgoing::SpawnItem < GameServerPacket
 
       if obj.is_a?(L2ItemInstance)
         @item_id = obj.display_id
-        @stackable = obj.stackable? ? 1 : 0
+        @stackable = obj.stackable?
         @count = obj.count
       else
         @item_id = obj.poly.poly_id
-        @stackable = 0
+        @stackable = false
         @count = 1i64
       end
     end
 
-  def write_impl
+  private def write_impl
     c 0x05
 
     d @l2id
@@ -28,7 +29,7 @@ class Packets::Outgoing::SpawnItem < GameServerPacket
     d @x
     d @y
     d @z
-    d @stackable
+    d @stackable ? 1 : 0
     q @count
     # d 0x00
     # d 0x00

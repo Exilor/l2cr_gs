@@ -3,7 +3,7 @@ class Packets::Outgoing::ExHeroList < GameServerPacket
     @hero_list = Hero.heroes # Int32 => StatsSet
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x79
 

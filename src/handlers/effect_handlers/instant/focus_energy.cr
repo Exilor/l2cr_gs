@@ -7,12 +7,12 @@ class EffectHandler::FocusEnergy < AbstractEffect
   end
 
   def on_start(info)
-    if info.effected.player?
-      info.effected.acting_player.increase_charges(1, @charge)
+    if pc = info.effected.as?(L2PcInstance)
+      pc.increase_charges(1, @charge)
     end
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

@@ -17,18 +17,7 @@ class Packets::Incoming::RequestFriendDel < GameClientPacket
       return
     end
 
-    begin
-      sql = "DELETE FROM character_friends WHERE (charId=? AND friendId=?) OR (charId=? AND friendId=?)"
-      GameDB.exec(
-        sql,
-        pc.l2id,
-        id,
-        id,
-        pc.l2id
-      )
-    rescue e
-      error e
-    end
+    GameDB.friend.delete(pc, id)
 
     sm = SystemMessage.s1_has_been_deleted_from_your_friends_list
     sm.add_string(@name)

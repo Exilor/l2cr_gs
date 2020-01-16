@@ -1,7 +1,7 @@
 class Packets::Outgoing::PledgeStatusChanged < GameServerPacket
   initializer clan : L2Clan
 
-  def write_impl
+  private def write_impl
     c 0xcd
 
     d @clan.leader_id

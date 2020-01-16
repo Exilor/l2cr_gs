@@ -1,7 +1,7 @@
 class Packets::Outgoing::AskJoinParty < GameServerPacket
   initializer name : String, party_distribution_type : PartyDistributionType
 
-  def write_impl
+  private def write_impl
     c 0x39
 
     s @name

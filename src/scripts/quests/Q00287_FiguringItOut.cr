@@ -65,7 +65,7 @@ class Scripts::Q00287_FiguringItOut < Quest
       st.start_quest
     when "Icarus"
       if st.get_quest_items_count(VIAL_OF_TANTA_BLOOD) >= 500
-        holder = ICARUS.sample
+        holder = ICARUS.sample(random: Rnd)
         st.give_items(holder)
         st.take_items(VIAL_OF_TANTA_BLOOD, 500)
         st.play_sound(Sound::ITEMSOUND_QUEST_FINISH)
@@ -75,7 +75,7 @@ class Scripts::Q00287_FiguringItOut < Quest
       end
     when "Moirai"
       if st.get_quest_items_count(VIAL_OF_TANTA_BLOOD) >= 100
-        holder = MOIRAI.sample
+        holder = MOIRAI.sample(random: Rnd)
         st.give_items(holder)
         st.take_items(VIAL_OF_TANTA_BLOOD, 100)
         st.play_sound(Sound::ITEMSOUND_QUEST_FINISH)
@@ -106,7 +106,7 @@ class Scripts::Q00287_FiguringItOut < Quest
 
     st = get_quest_state!(m, false)
 
-    if rand(1000) < MONSTERS[npc.id]
+    if Rnd.rand(1000) < MONSTERS[npc.id]
       st.give_items(VIAL_OF_TANTA_BLOOD, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end

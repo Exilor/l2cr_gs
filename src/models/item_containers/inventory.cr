@@ -17,12 +17,8 @@ abstract class Inventory < ItemContainer
     {{slot.id}} = {{i}}
 
     {% if slot != "TOTALSLOTS" %}
-      def {{slot.downcase.id}}_slot? : L2ItemInstance?
+      def {{slot.downcase.id}}_slot : L2ItemInstance?
         @paperdoll[{{i}}]
-      end
-
-      def {{slot.downcase.id}}_slot : L2ItemInstance
-        @paperdoll[{{i}}].not_nil!
       end
 
       def {{slot.downcase.id}}_slot=(item : L2ItemInstance?)
@@ -37,6 +33,7 @@ abstract class Inventory < ItemContainer
 
   @paperdoll = Slice(L2ItemInstance?).new(TOTALSLOTS, nil.as(L2ItemInstance?))
   @paperdoll_listeners = [] of PaperdollListener
+
   getter total_weight = 0
   getter mask = 0
 
@@ -98,7 +95,7 @@ abstract class Inventory < ItemContainer
 
       case item.item_type
       when WeaponType::BOW, WeaponType::CROSSBOW, WeaponType::FISHINGROD
-        if inv.lhand_slot?
+        if inv.lhand_slot
           inv.lhand_slot = nil
         end
       end
@@ -250,7 +247,7 @@ abstract class Inventory < ItemContainer
 
     def notify_equipped(slot, item, inv)
       return unless pc = inv.owner.as?(L2PcInstance)
-      return unless chest_item = inv.chest_slot?
+      return unless chest_item = inv.chest_slot
 
       return unless armor_set = ArmorSetsData[chest_item.id]?
 
@@ -324,7 +321,7 @@ abstract class Inventory < ItemContainer
         shield_skill = armor_set.shield_skills
         skill_id_6 = armor_set.enchant_6_skill
       else
-        return unless chest_item = inv.chest_slot?
+        return unless chest_item = inv.chest_slot
         return unless armor_set = ArmorSetsData[chest_item.id]?
         if armor_set.contains_item?(slot, item.id)
           remove = true
@@ -668,7 +665,7 @@ abstract class Inventory < ItemContainer
     when L2Item::SLOT_BELT
       BELT
     else
-      warn { "Inventory#unequip_item_in_body_slot: unhandled slot type #{slot}." }
+      warn { "Inventory#unequip_item_in_body_slot: unhandled slot #{slot}." }
       -1
     end
 
@@ -706,7 +703,7 @@ abstract class Inventory < ItemContainer
 
     target_slot = item.body_part
 
-    formal = chest_slot?
+    formal = chest_slot
     if item.id != 21163 && formal
       if formal.template.body_part == L2Item::SLOT_ALLDRESS
         case target_slot
@@ -723,7 +720,7 @@ abstract class Inventory < ItemContainer
       self[LHAND] = nil
       self[RHAND] = item
     when L2Item::SLOT_L_HAND
-      rh = rhand_slot?
+      rh = rhand_slot
       if rh && rh.body_part == L2Item::SLOT_LR_HAND && !(((rh.item_type == WeaponType::BOW) && (item.item_type == EtcItemType::ARROW)) || ((rh.item_type == WeaponType::CROSSBOW) && (item.item_type == EtcItemType::BOLT)) || ((rh.item_type == WeaponType::FISHINGROD) && (item.item_type == EtcItemType::LURE)))
         self[RHAND] = nil
       end
@@ -754,7 +751,7 @@ abstract class Inventory < ItemContainer
     when L2Item::SLOT_CHEST
       self[CHEST] = item
     when L2Item::SLOT_LEGS
-      chest = chest_slot?
+      chest = chest_slot
       if chest && chest.body_part == L2Item::SLOT_FULL_ARMOR
         self[CHEST] = nil
       end
@@ -766,7 +763,7 @@ abstract class Inventory < ItemContainer
     when L2Item::SLOT_HEAD
       self[HEAD] = item
     when L2Item::SLOT_HAIR
-      hair = hair_slot?
+      hair = hair_slot
       if hair && hair.body_part == L2Item::SLOT_HAIRALL
         self[HAIR2] = nil
       else
@@ -774,7 +771,7 @@ abstract class Inventory < ItemContainer
       end
       self[HAIR] = item
     when L2Item::SLOT_HAIR2
-      hair2 = hair_slot?
+      hair2 = hair_slot
       if hair2 && hair2.body_part == L2Item::SLOT_HAIRALL
         self[HAIR] = nil
       else
@@ -843,7 +840,7 @@ abstract class Inventory < ItemContainer
 
       if pc = owner?.as?(L2PcInstance)
         if !pc.override_item_conditions? && !pc.hero? && item.hero_item?
-          item.item_location = :INVENTORY
+          item.item_location = ItemLocation::INVENTORY
         end
       end
 
@@ -862,7 +859,7 @@ abstract class Inventory < ItemContainer
   end
 
   def talisman_slots : Int32
-    owner.acting_player.stat.talisman_slots
+    owner.acting_player.not_nil!.stat.talisman_slots
   end
 
   def equip_talisman(item : L2ItemInstance)
@@ -888,7 +885,7 @@ abstract class Inventory < ItemContainer
   end
 
   def can_equip_cloak? : Bool
-    owner.acting_player.stat.can_equip_cloak?
+    owner.acting_player.not_nil!.stat.can_equip_cloak?
   end
 
   def reload_equipped_items

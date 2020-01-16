@@ -45,7 +45,7 @@ class Scripts::Q00264_KeenClaws < Quest
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
     if st && st.cond?(1)
-      random = rand(100)
+      random = Rnd.rand(100)
       MONSTER_CHANCES[npc.id].each do |drop|
         if random < drop.count
           if st.give_item_randomly(WOLF_CLAW, drop.id, WOLF_CLAW_COUNT, 1, true)
@@ -71,7 +71,7 @@ class Scripts::Q00264_KeenClaws < Quest
         html = "30136-04.html"
       when 2
         if st.get_quest_items_count(WOLF_CLAW) >= WOLF_CLAW_COUNT
-          chance = rand(17)
+          chance = Rnd.rand(17)
           REWARDS.each do |key, value|
             if chance < key
               value.each do |item|

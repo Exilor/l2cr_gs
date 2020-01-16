@@ -6,6 +6,7 @@ class PcInventory < Inventory
   @quest_slots = 0
   @adena : L2ItemInstance?
   @ancient_adena : L2ItemInstance?
+
   getter owner
   getter block_mode = -1
   getter block_items : Array(Int32)? | Slice(Int32)?
@@ -60,18 +61,7 @@ class PcInventory < Inventory
   end
 
   def ancient_adena : Int64
-    @ancient_adena.try &.count || 0_i64
-  end
-
-  def get_unique_items(adena : Bool, a_adena : Bool, avail : Bool = true) : Array(L2ItemInstance)
-    @items.each do |item|
-      next if !adena && item.id == ADENA_ID
-      next if !a_adena && item.id == ANCIENT_ADENA_ID
-      duplicate = list.any? { |it| it.id == item.id }
-      if !duplicate && (!avail || (item.sellable? && item.available?(@owner, false, false)))
-        yield item
-      end
-    end
+    @ancient_adena.try &.count || 0i64
   end
 
   def get_unique_items(adena : Bool, a_adena : Bool, avail : Bool = true) : Array(L2ItemInstance)
@@ -90,20 +80,9 @@ class PcInventory < Inventory
   end
 
   def get_unique_items_by_enchant_level(adena : Bool, a_adena : Bool, avail : Bool = true) : Array(L2ItemInstance)
-    @items.each do |item|
-      next if !adena && item.id == ADENA_ID
-      next if !a_adena && item.id == ANCIENT_ADENA_ID
-      duplicate = list.any? { |it| it.id == item.id && it.enchant_level == item.enchant_level }
-      if !duplicate && (!avail || (item.sellable? && item.available?(@owner, false, false)))
-        yield item
-      end
-    end
-  end
-
-  def get_unique_items_by_enchant_level(adena : Bool, a_adena : Bool, avail : Bool = true) : Array(L2ItemInstance)
     list = [] of L2ItemInstance
 
-    @items.each do |item|
+    @items.select do |item|
       next if !adena && item.id == ADENA_ID
       next if !a_adena && item.id == ANCIENT_ADENA_ID
       duplicate = list.any? { |it| it.id == item.id && it.enchant_level == item.enchant_level }
@@ -147,22 +126,37 @@ class PcInventory < Inventory
     list
   end
 
-  def get_available_items(adena : Bool, allow_non_tradeable : Bool, freightable : Bool) : Array(L2ItemInstance)
-    list = [] of L2ItemInstance
+  # def get_available_items(adena : Bool, allow_non_tradeable : Bool, freightable : Bool) : Array(L2ItemInstance)
+  #   list = [] of L2ItemInstance
 
-    @items.each do |item|
-      if !item.available?(@owner, adena, allow_non_tradeable) || !can_manipulate_with_item_id?(item.id)
-        next
-      elsif freightable
-        if item.item_location.inventory? && item.freightable?
-          list << item
-        end
+  #   @items.each do |item|
+  #     if !item.available?(@owner, adena, allow_non_tradeable) || !can_manipulate_with_item_id?(item.id)
+  #       next
+  #     elsif freightable
+  #       if item.item_location.inventory? && item.freightable?
+  #         list << item
+  #       end
+  #     else
+  #       list << item
+  #     end
+  #   end
+
+  #   list
+  # end
+
+  def get_available_items(adena : Bool, allow_non_tradeable : Bool, freightable : Bool) : Array(L2ItemInstance)
+    @items.select do |item|
+      case
+      when !item.available?(@owner, adena, allow_non_tradeable)
+        false
+      when !can_manipulate_with_item_id?(item.id)
+        false
+      when freightable
+        item.item_location.inventory? && item.freightable?
       else
-        list << item
+        true
       end
     end
-
-    list
   end
 
   def augmented_items : Array(L2ItemInstance)
@@ -170,11 +164,7 @@ class PcInventory < Inventory
   end
 
   def augmented_items(& : L2ItemInstance ->)
-    @items.each do |item|
-      if item.augmented?
-        yield item
-      end
-    end
+    @items.each { |item| yield item if item.augmented? }
   end
 
   def element_items : Array(L2ItemInstance)
@@ -247,12 +237,12 @@ class PcInventory < Inventory
   def add_item(process : String?, item : L2ItemInstance, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
 
-    if item && item.id == ADENA_ID && item != @adena
-      @adena = item
-    end
-
-    if item && item.id == ANCIENT_ADENA_ID && item != @ancient_adena
-      @ancient_adena = item
+    if item
+      if item.id == ADENA_ID && item != @adena
+        @adena = item
+      elsif item.id == ANCIENT_ADENA_ID && item != @ancient_adena
+        @ancient_adena = item
+      end
     end
 
     if item
@@ -267,9 +257,7 @@ class PcInventory < Inventory
 
     if item.id == ADENA_ID && item != @adena
       @adena = item
-    end
-
-    if item.id == ANCIENT_ADENA_ID && item != @ancient_adena
+    elsif item.id == ANCIENT_ADENA_ID && item != @ancient_adena
       @ancient_adena = item
     end
 
@@ -291,13 +279,11 @@ class PcInventory < Inventory
   def transfer_item(process : String?, id : Int32, count : Int64, target : ItemContainer?, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
 
-    a = @adena
-    if a && (a.count <= 0 || a.owner_id != owner_id)
+    if (a = @adena) && (a.count <= 0 || a.owner_id != owner_id)
       @adena = nil
     end
 
-    aa = @ancient_adena
-    if aa && (aa.count <= 0 || aa.owner_id != owner_id)
+    if (aa = @ancient_adena) && (aa.count <= 0 || aa.owner_id != owner_id)
       @ancient_adena = nil
     end
 
@@ -323,11 +309,12 @@ class PcInventory < Inventory
   def destroy_item(process : String?, item : L2ItemInstance, count : Int64, actor : L2PcInstance?, reference) : L2ItemInstance?
     item = super
 
-    if @adena.try &.count.<= 0
+
+    if (a = @adena) && a.count <= 0
       @adena = nil
     end
 
-    if @ancient_adena.try &.count.<= 0
+    if (aa = @ancient_adena) && aa.count <= 0
       @ancient_adena = nil
     end
 
@@ -345,14 +332,12 @@ class PcInventory < Inventory
 
   def drop_item(process : String?, item : L2ItemInstance, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
-    adena = @adena
 
-    if adena && (adena.count <= 0 || adena.owner_id != owner_id)
+    if (a = @adena) && (a.count <= 0 || a.owner_id != owner_id)
       @adena = nil
     end
 
-    ancient_adena = @ancient_adena
-    if ancient_adena && (ancient_adena.count <= 0 || ancient_adena.owner_id != owner_id)
+    if (aa = @ancient_adena) && (aa.count <= 0 || aa.owner_id != owner_id)
       @ancient_adena = nil
     end
 
@@ -365,14 +350,12 @@ class PcInventory < Inventory
 
   def drop_item(process : String?, id : Int, count : Int, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
-    adena = @adena
 
-    if adena && (adena.count <= 0 || adena.owner_id != owner_id)
+    if (a = @adena) && (a.count <= 0 || a.owner_id != owner_id)
       @adena = nil
     end
 
-    ancient_adena = @ancient_adena
-    if ancient_adena && (ancient_adena.count <= 0 || ancient_adena.owner_id != owner_id)
+    if (aa = @ancient_adena) && (aa.count <= 0 || aa.owner_id != owner_id)
       @ancient_adena = nil
     end
 
@@ -436,7 +419,8 @@ class PcInventory < Inventory
   end
 
   def check_inventory_slots_and_weight(item_list : Enumerable(L2Item), send_msg : Bool, send_skill_msg : Bool) : Bool
-    loot_weight = required_slots = 0
+    loot_weight = 0
+    required_slots = 0
 
     if item_list
       item_list.each do |item|
@@ -459,29 +443,32 @@ class PcInventory < Inventory
   end
 
   def validate_capacity(item : L2ItemInstance) : Bool
-    slots = 0
-    if !item.stackable? || get_inventory_item_count(item.id, -1) <= 0 || !item.template.has_ex_immediate_effect?
-      slots += 1
+    if item.template.has_ex_immediate_effect?
+      return true
     end
 
-    validate_capacity(slots, item.quest_item?)
+    if item.stackable? && get_inventory_item_count(item.id, -1) > 0
+      return true
+    end
+
+    validate_capacity(1, item.quest_item?)
   end
 
   def validate_capacity_by_item_id(id : Int32) : Bool
-    slots = 0
     item = get_item_by_item_id(id)
-    if item.nil? || !item.stackable?
-      slots += 1
+    if item.nil? || !(item.stackable? && get_inventory_item_count(id, -1) > 0)
+      return validate_capacity(1, ItemTable[id].quest_item?)
     end
-    validate_capacity(slots, ItemTable[id].quest_item?)
+
+    true
   end
 
   def validate_capacity(slots : Int, quest_item : Bool = false) : Bool
-    if quest_item
-      return @quest_slots + slots <= owner.quest_inventory_limit
+    unless quest_item
+      return @items.size - @quest_slots + slots <= owner.inventory_limit
     end
 
-    @items.size - @quest_slots <= owner.quest_inventory_limit
+    @quest_slots + slots <= owner.quest_inventory_limit
   end
 
   def validate_weight(weight : Int) : Bool

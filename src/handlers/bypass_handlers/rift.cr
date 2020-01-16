@@ -18,17 +18,15 @@ module BypassHandler::Rift
         error e
       end
     else
-      in_rift = pc.in_party? && pc.party.in_dimensional_rift?
-
       if command.starts_with?(commands[1]) # change room
-        if in_rift
-          pc.party.dimensional_rift.manual_teleport(pc, target)
+        if rift = pc.party.try &.dimensional_rift
+          rift.manual_teleport(pc, target)
         else
           DimensionalRiftManager.handle_cheat(pc, target)
         end
       elsif command.starts_with?(commands[2]) # exit rift
-        if in_rift
-          pc.party.dimensional_rift.manual_exit_rift(pc, target)
+        if rift = pc.party.try &.dimensional_rift
+          rift.manual_exit_rift(pc, target)
         else
           DimensionalRiftManager.handle_cheat(pc, target)
         end

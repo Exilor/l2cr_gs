@@ -61,7 +61,7 @@ class Scripts::Q00602_ShadowOfLight < Quest
         return "31683-06.html"
       end
 
-      i = rand(4)
+      i = Rnd.rand(4)
       if i < 3
         st.give_items(REWARD[i][0], 3)
       end
@@ -82,7 +82,7 @@ class Scripts::Q00602_ShadowOfLight < Quest
 
     chance = npc.id == MOBS[0] ? 560 : 800
 
-    if st.cond?(1) && rand(1000) < chance
+    if st.cond?(1) && Rnd.rand(1000) < chance
       st.give_items(EYE_OF_DARKNESS, 1)
       if st.get_quest_items_count(EYE_OF_DARKNESS) == 100
         st.set_cond(2, true)

@@ -27,7 +27,7 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
   private MAX_REWARD_LEVEL = 43
   private FRAGMENT_COUNT = 30
 
-  @@angel_spawned = false
+  @angel_spawned = false
 
   def initialize
     super(142, self.class.simple_name, "Fallen Angel - Request of Dawn")
@@ -65,16 +65,16 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
       st.unset("talk")
       st.set_cond(4, true)
     when "32368-04.html"
-      if @@angel_spawned
+      if @angel_spawned
         return "32368-03.html"
       end
       npc = npc.not_nil!
       add_spawn(FALLEN_ANGEL, npc.x + 100, npc.y + 100, npc.z, 0, false, 120000)
-      @@angel_spawned = true
+      @angel_spawned = true
       start_quest_timer("despawn", 120000, nil, pc)
     when "despawn"
-      if @@angel_spawned
-        @@angel_spawned = false
+      if @angel_spawned
+        @angel_spawned = false
       end
     else
       html = nil
@@ -89,7 +89,7 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
       if st.cond?(5)
         st.give_items(FALLEN_ANGEL_BLOOD, 1)
         st.set_cond(6, true)
-        @@angel_spawned = false
+        @angel_spawned = false
       end
     else
       if member = get_random_party_member(pc, 4)

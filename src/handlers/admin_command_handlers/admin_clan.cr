@@ -11,7 +11,7 @@ module AdminCommandHandler::AdminClan
         return true
       end
 
-      unless clan = player.clan?
+      unless clan = player.clan
         pc.send_packet(SystemMessageId::TARGET_MUST_BE_IN_CLAN)
         return false
       end
@@ -22,19 +22,19 @@ module AdminCommandHandler::AdminClan
       html["%clan_leader%"] = clan.leader_name
       html["%clan_level%"] = clan.level
       if clan.castle_id > 0
-        html["%clan_has_castle%"] = CastleManager.get_castle_by_id!(clan.castle_id).name
+        html["%clan_has_castle%"] = CastleManager.get_castle_by_id(clan.castle_id).not_nil!.name
       else
         html["%clan_has_castle%"] = "No"
       end
 
       if clan.hideout_id > 0
-        html["%clan_has_clanhall%"] = ClanHallManager.get_clan_hall_by_id!(clan.hideout_id).name
+        html["%clan_has_clanhall%"] = ClanHallManager.get_clan_hall_by_id(clan.hideout_id).not_nil!.name
       else
         html["%clan_has_clanhall%"] = "No"
       end
 
       if clan.fort_id > 0
-        html["%clan_has_fortress%"] = FortManager.get_fort_by_id!(clan.fort_id).name
+        html["%clan_has_fortress%"] = FortManager.get_fort_by_id(clan.fort_id).not_nil!.name
       else
         html["%clan_has_fortress%"] = "No"
       end
@@ -52,7 +52,7 @@ module AdminCommandHandler::AdminClan
       end
 
 
-      unless clan = player.clan?
+      unless clan = player.clan
         pc.send_packet(SystemMessageId::TARGET_MUST_BE_IN_CLAN)
         return false
       end

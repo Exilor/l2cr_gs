@@ -26,7 +26,7 @@ class Packets::Outgoing::CreatureSay < GameServerPacket
     params << text
   end
 
-  def write_impl
+  private def write_impl
     c 0x4a
 
     d @l2id

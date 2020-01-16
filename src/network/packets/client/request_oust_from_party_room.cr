@@ -11,11 +11,9 @@ class Packets::Incoming::RequestOustFromPartyRoom < GameClientPacket
     return unless room = PartyMatchRoomList.get_player_room(member)
     return unless room.owner == pc
 
-    if pc.in_party? && member.in_party?
-      if pc.party.leader_l2id == member.party.leader_l2id
-        pc.send_packet(SystemMessageId::CANNOT_DISMISS_PARTY_MEMBER)
-        return
-      end
+    if pc.party && member.party && pc.party == member.party
+      pc.send_packet(SystemMessageId::CANNOT_DISMISS_PARTY_MEMBER)
+      return
     end
 
     room.delete_member(member)
@@ -25,7 +23,7 @@ class Packets::Incoming::RequestOustFromPartyRoom < GameClientPacket
 
     PartyMatchWaitingList.add_player(member)
 
-    loc = 0
+    loc = 0 # L2J TODO: closest town
     member.send_packet(ListPartyWating.new(member, 0, loc, member.level))
 
     member.broadcast_user_info

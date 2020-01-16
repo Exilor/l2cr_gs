@@ -102,7 +102,7 @@ class Scripts::PriestOfBlessing < AbstractNpcAI
 
         if Time.ms > _reuse_time
           _hg = HOURGLASSES[_index]
-          _nevit_hourglass = _hg.sample
+          _nevit_hourglass = _hg.sample(random: Rnd)
           take_items(pc, Inventory::ADENA_ID, _price_hourglass)
           give_items(pc, _nevit_hourglass, 1)
           save_global_quest_var("#{pc.account_name}_hg_#{_index}", (Time.ms + (20 * 3600000)).to_s)

@@ -61,7 +61,7 @@ module L2World
           -1.upto(1) do |b|
             xa = x + a
             yb = y + b
-            if xa >= 0 && xa <= REGIONS_X && yb >= 0 && yb <= REGIONS_Y
+            if xa.between?(0, REGIONS_X) && yb.between?(0, REGIONS_Y)
               WORLD_REGIONS[xa][yb].add_sorrounding_region(WORLD_REGIONS[x][y])
             end
           end
@@ -96,7 +96,7 @@ module L2World
 
   def store_object(obj : L2Object)
     if OBJECTS.has_key?(obj.l2id)
-      warn "#{obj} already stored with ID #{obj.l2id}."
+      warn { "#{obj} already stored with ID #{obj.l2id}." }
     else
       OBJECTS[obj.l2id] = obj
     end
@@ -138,7 +138,7 @@ module L2World
 
   def get_visible_objects(object : L2Object, radius : Number, & : L2Object ->) : Nil
     radius *= radius
-    object.world_region?.try &.sorrounding_regions.each do |regi|
+    object.world_region.try &.sorrounding_regions.each do |regi|
       regi.objects.each_value do |obj|
         if obj != object
           if radius > object.calculate_distance(obj, false, true)
@@ -150,7 +150,7 @@ module L2World
   end
 
   def get_visible_objects(object : L2Object, & : L2Object ->) : Nil
-    object.world_region?.try &.sorrounding_regions.each do |regi|
+    object.world_region.try &.sorrounding_regions.each do |regi|
       regi.objects.each_value do |obj|
         if obj != object && obj.visible?
           yield obj
@@ -167,12 +167,8 @@ module L2World
     PLAYERS.size
   end
 
-  def all_gms : Array(L2PcInstance)
-    AdminData.get_all_gms(true)
-  end
-
   def each_playable(object : L2Object, & : L2Object ->)
-    object.world_region?.try &.sorrounding_regions.each do |regi|
+    object.world_region.try &.sorrounding_regions.each do |regi|
       regi.playables.each_value do |obj|
         if obj != object && obj.visible?
           yield obj

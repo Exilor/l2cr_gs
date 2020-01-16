@@ -45,7 +45,7 @@ class Scripts::Q00366_SilverHairedShaman < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    if rand(100) < MOBS[npc.id]
+    if Rnd.rand(100) < MOBS[npc.id]
       winner = get_random_party_member(pc, npc)
       if winner
         give_item_randomly(winner, npc, SAIRONS_SILVER_HAIR, 1, 0, 1.0, true)

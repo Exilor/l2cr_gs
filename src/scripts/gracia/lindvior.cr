@@ -32,9 +32,9 @@ class Scripts::Lindvior < AbstractNpcAI
       broadcast_npc_say(npc.not_nil!, Say2::NPC_SHOUT, NpcString::BE_CAREFUL_SOMETHINGS_COMING)
     when "lindvior_scene"
       if npc
-        npc.known_list.each_player(4000) do |pl|
-          if pl.z.between?(1100, 3100)
-            pl.show_quest_movie(LINDVIOR_SCENE_ID)
+        npc.known_list.each_player(4000) do |pc|
+          if pc.z.between?(1100, 3100)
+            pc.show_quest_movie(LINDVIOR_SCENE_ID)
           end
         end
       end

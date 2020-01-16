@@ -7,7 +7,7 @@ class Scripts::WarriorFishingBlock < AbstractNpcAI
     18323, # Caught Sea Horse Soldier
     18324, # Caught Homunculus
     18325, # Caught Flava
-    18326, # Caught Gigantic Eye
+    18326  # Caught Gigantic Eye
   }
 
   private CHANCE_TO_SHOUT_ON_ATTACK = 33
@@ -44,11 +44,10 @@ class Scripts::WarriorFishingBlock < AbstractNpcAI
 
     case event
     when "SPAWN"
-      obj = npc.target
-      if obj.nil? || !obj.player?
+      target = npc.target.as?(L2PcInstance)
+      if target.nil?
         npc.decay_me
       else
-        target = obj.acting_player
         broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRINGS_ON_SPAWN.sample, target.name)
         npc.add_damage_hate(target, 0, 2000)
         npc.notify_event(AI::ATTACKED, target)

@@ -6,7 +6,7 @@ class Packets::Incoming::AllyLeave < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    unless clan = pc.clan?
+    unless clan = pc.clan
       pc.send_packet(SystemMessageId::YOU_ARE_NOT_A_CLAN_MEMBER)
       return
     end

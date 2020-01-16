@@ -34,7 +34,7 @@ module MailManager
     MESSAGES[msg_id]?
   end
 
-  def messages
+  def messages : Enumerable(Message)
     MESSAGES.local_each_value
   end
 
@@ -66,7 +66,7 @@ module MailManager
     end.to_a
   end
 
-  def send_message(msg)
+  def send_message(msg : Message)
     MESSAGES[msg.id] = msg
 
     begin
@@ -88,7 +88,7 @@ module MailManager
         msg.@returned.to_s
       )
     rescue e
-      error "Error saving message #{msg}."
+      error { "Error saving message #{msg}." }
       error e
     end
 

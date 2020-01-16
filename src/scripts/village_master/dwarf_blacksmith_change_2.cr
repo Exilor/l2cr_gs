@@ -30,24 +30,22 @@ class Scripts::DwarfBlacksmithChange2 < AbstractNpcAI
     return unless npc && pc
 
     case event
-    when "30512-03.htm", "30512-04.htm", "30512-05.htm"
-      htmltext = event
+    when /\A30512-0[3-5].htm\z/
+      event
     when "57"
-      htmltext = class_change_requested(pc, event.to_i)
+      class_change_requested(pc, event.to_i)
     end
-
-    htmltext
   end
 
   private def class_change_requested(pc, class_id)
     if pc.in_category?(CategoryType::THIRD_CLASS_GROUP)
-      htmltext = "30512-08.htm" # fnYouAreThirdClass
+      "30512-08.htm" # fnYouAreThirdClass
     elsif class_id == WARSMITH && pc.class_id.artisan?
       if pc.level < 40
         if has_quest_items?(pc, MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_MAESTRO)
-          htmltext = "30512-09.htm" # fnLowLevel11
+          "30512-09.htm" # fnLowLevel11
         else
-          htmltext = "30512-10.htm" # fnLowLevelNoProof11
+          "30512-10.htm" # fnLowLevelNoProof11
         end
       elsif has_quest_items?(pc, MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_MAESTRO)
         take_items(pc, -1, {MARK_OF_GUILDSMAN, MARK_OF_PROSPERITY, MARK_OF_MAESTRO})
@@ -55,30 +53,25 @@ class Scripts::DwarfBlacksmithChange2 < AbstractNpcAI
         pc.base_class = WARSMITH
         pc.broadcast_user_info
         give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30512-11.htm" # fnAfterClassChange11
+        "30512-11.htm" # fnAfterClassChange11
       else
-        htmltext = "30512-12.htm" # fnNoProof11
+        "30512-12.htm" # fnNoProof11
       end
     end
-
-    htmltext
   end
 
   def on_talk(npc, pc)
-    htmltext = nil
     if pc.in_category?(CategoryType::FOURTH_CLASS_GROUP)
-      htmltext = "30512-01.htm" # fnYouAreFourthClass
+      "30512-01.htm" # fnYouAreFourthClass
     elsif pc.in_category?(CategoryType::WARSMITH_GROUP)
       class_id = pc.class_id
       if class_id.artisan? || class_id.warsmith?
-        htmltext = "30512-02.htm" # fnClassList1
+        "30512-02.htm" # fnClassList1
       else
-        htmltext = "30512-06.htm" # fnYouAreFirstClass
+        "30512-06.htm" # fnYouAreFirstClass
       end
     else
-      htmltext = "30512-07.htm" # fnClassMismatch
+      "30512-07.htm" # fnClassMismatch
     end
-
-    htmltext
   end
 end

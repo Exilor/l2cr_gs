@@ -7,7 +7,7 @@ class Packets::Outgoing::MoveToLocationInVehicle < GameServerPacket
     @boat_id = pc.boat!.l2id
   end
 
-  def write_impl
+  private def write_impl
     c 0x7e
 
     d @pc_id

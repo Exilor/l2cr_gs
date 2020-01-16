@@ -104,11 +104,11 @@ class Scripts::Q00458_PerfectForm < Quest
       if st.cond?(2)
         overhits_consecutive = st.get_int("overhitsConsecutive")
         if overhits_consecutive >= 20
-          st.reward_items(ICARUS_WEAPON_RECIPES.sample, 1)
+          st.reward_items(ICARUS_WEAPON_RECIPES.sample(random: Rnd), 1)
         elsif overhits_consecutive >= 7
-          st.reward_items(ICARUS_WEAPON_PIECES.sample, 5)
+          st.reward_items(ICARUS_WEAPON_PIECES.sample(random: Rnd), 5)
         else
-          st.reward_items(ICARUS_WEAPON_PIECES.sample, 2)
+          st.reward_items(ICARUS_WEAPON_PIECES.sample(random: Rnd), 2)
           # not sure if this should use rewardItems
           st.give_items(15482, 10) # Golden Spice Crate
           st.give_items(15483, 10) # Crystal Spice Crate

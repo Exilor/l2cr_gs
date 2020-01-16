@@ -15,7 +15,7 @@ class Scripts::TreasureChest < AbstractNpcAI
     SkillHolder.new(4143, 7),
     SkillHolder.new(4143, 8),
     SkillHolder.new(4143, 9),
-    SkillHolder.new(4143, 10),
+    SkillHolder.new(4143, 10)
   }
 
   private DROPS = { # Integer => ItemChanceHolder[]

@@ -106,7 +106,7 @@ class Scripts::MercenaryCaptain < AbstractNpcAI
     elsif event.casecmp?("say") && !npc.decayed?
       if TerritoryWarManager.tw_in_progress?
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::CHARGE_CHARGE_CHARGE)
-      elsif rand(2) == 0
+      elsif Rnd.rand(2) == 0
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::COURAGE_AMBITION_PASSION_MERCENARIES_WHO_WANT_TO_REALIZE_THEIR_DREAM_OF_FIGHTING_IN_THE_TERRITORY_WAR_COME_TO_ME_FORTUNE_AND_GLORY_ARE_WAITING_FOR_YOU)
       else
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::DO_YOU_WISH_TO_FIGHT_ARE_YOU_AFRAID_NO_MATTER_HOW_HARD_YOU_TRY_YOU_HAVE_NOWHERE_TO_RUN_BUT_IF_YOU_FACE_IT_HEAD_ON_OUR_MERCENARY_TROOP_WILL_HELP_YOU_OUT)

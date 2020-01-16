@@ -22,14 +22,14 @@ abstract class Packets::Outgoing::AbstractItemPacket < GameServerPacket
     write_item_elemental_and_enchant(item)
   end
 
-  def write_item_elemental_and_enchant(item : ItemInfo)
+  private def write_item_elemental_and_enchant(item : ItemInfo)
     h item.attack_element_type
     h item.attack_element_power
     6.times { |i| h item.get_element_def_attr(i) }
     item.enchant_options.each { |op| h op }
   end
 
-  def write_inventory_block(inv : PcInventory)
+  private def write_inventory_block(inv : PcInventory)
     if blocked = inv.block_items
       h blocked.size
       c inv.block_mode

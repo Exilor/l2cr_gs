@@ -3,10 +3,10 @@ require "./i_audio"
 class Voice < EnumClass
   include IAudio
 
-  getter packet : Packets::Outgoing::PlaySound
+  getter packet : PlaySound
 
   protected def initialize(name, delay = 0)
-    @packet = Packets::Outgoing::PlaySound.create_voice(name, delay)
+    @packet = PlaySound.create_voice(name, delay)
   end
 
   def sound_name : String

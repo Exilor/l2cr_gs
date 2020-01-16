@@ -29,8 +29,8 @@ class Scripts::ElfHumanClericChange2 < AbstractNpcAI
     add_talk_id(NPCS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless npc && player
+  def on_adv_event(event, npc, pc)
+    return unless npc && pc
 
     case event
     when "30120-02.htm", # master_lv3_hec003
@@ -43,92 +43,86 @@ class Scripts::ElfHumanClericChange2 < AbstractNpcAI
          "30120-10.htm", # master_lv3_hec006e
          "30120-11.htm", # master_lv3_hec007e
          "30120-12.htm"  # master_lv3_hec007ea
-      htmltext = event
+      event
     when "16", "17", "30"
-      htmltext = class_change_requested(player, event.to_i)
+      class_change_requested(pc, event.to_i)
     end
-
-    htmltext
   end
 
-  private def class_change_requested(player, classId)
-    if player.in_category?(CategoryType::THIRD_CLASS_GROUP)
-      htmltext = "30120-15.htm" # fnYouAreThirdClass
-    elsif classId == BISHOP && player.class_id.cleric?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_HEALER)
-          htmltext = "30120-16.htm" # fnLowLevel11
+  private def class_change_requested(pc, class_id)
+    if pc.in_category?(CategoryType::THIRD_CLASS_GROUP)
+      "30120-15.htm" # fnYouAreThirdClass
+    elsif class_id == BISHOP && pc.class_id.cleric?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_HEALER)
+          "30120-16.htm" # fnLowLevel11
         else
-          htmltext = "30120-17.htm" # fnLowLevelNoProof11
+          "30120-17.htm" # fnLowLevelNoProof11
         end
-      elsif has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_HEALER)
-        take_items(player, -1, {MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_HEALER})
-        player.class_id = BISHOP
-        player.base_class = BISHOP
+      elsif has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_HEALER)
+        take_items(pc, -1, {MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_HEALER})
+        pc.class_id = BISHOP
+        pc.base_class = BISHOP
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30120-18.htm" # fnAfterClassChange11
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30120-18.htm" # fnAfterClassChange11
       else
-        htmltext = "30120-19.htm" # fnNoProof11
+        "30120-19.htm" # fnNoProof11
       end
-    elsif classId == PROPHET && player.class_id.cleric?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_REFORMER)
-          htmltext = "30120-20.htm" # fnLowLevel12
+    elsif class_id == PROPHET && pc.class_id.cleric?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_REFORMER)
+          "30120-20.htm" # fnLowLevel12
         else
-          htmltext = "30120-21.htm" # fnLowLevelNoProof12
+          "30120-21.htm" # fnLowLevelNoProof12
         end
-      elsif has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_REFORMER)
-        take_items(player, -1, {MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_REFORMER})
-        player.class_id = PROPHET
-        player.base_class = PROPHET
+      elsif has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_REFORMER)
+        take_items(pc, -1, {MARK_OF_PILGRIM, MARK_OF_TRUST, MARK_OF_REFORMER})
+        pc.class_id = PROPHET
+        pc.base_class = PROPHET
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30120-22.htm" # fnAfterClassChange12
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30120-22.htm" # fnAfterClassChange12
       else
-        htmltext = "30120-23.htm" # fnNoProof12
+        "30120-23.htm" # fnNoProof12
       end
-    elsif classId == ELDER && player.class_id.oracle?
-      if player.level < 40
-        if has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_LIFE, MARK_OF_HEALER)
-          htmltext = "30120-24.htm" # fnLowLevel21
+    elsif class_id == ELDER && pc.class_id.oracle?
+      if pc.level < 40
+        if has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_LIFE, MARK_OF_HEALER)
+          "30120-24.htm" # fnLowLevel21
         else
-          htmltext = "30120-25.htm" # fnLowLevelNoProof21
+          "30120-25.htm" # fnLowLevelNoProof21
         end
-      elsif has_quest_items?(player, MARK_OF_PILGRIM, MARK_OF_LIFE, MARK_OF_HEALER)
-        take_items(player, -1, {MARK_OF_PILGRIM, MARK_OF_LIFE, MARK_OF_HEALER})
-        player.class_id = ELDER
-        player.base_class = ELDER
+      elsif has_quest_items?(pc, MARK_OF_PILGRIM, MARK_OF_LIFE, MARK_OF_HEALER)
+        take_items(pc, -1, {MARK_OF_PILGRIM, MARK_OF_LIFE, MARK_OF_HEALER})
+        pc.class_id = ELDER
+        pc.base_class = ELDER
         # SystemMessage and cast skill is done by class_id=
-        player.broadcast_user_info
-        give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-        htmltext = "30120-26.htm" # fnAfterClassChange21
+        pc.broadcast_user_info
+        give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+        "30120-26.htm" # fnAfterClassChange21
       else
-        htmltext = "30120-27.htm" # fnNoProof21
+        "30120-27.htm" # fnNoProof21
       end
     end
-
-    htmltext
   end
 
-  def on_talk(npc, player)
-    if player.in_category?(CategoryType::CLERIC_GROUP) && player.in_category?(CategoryType::FOURTH_CLASS_GROUP) && (player.in_category?(CategoryType::HUMAN_CALL_CLASS) || player.in_category?(CategoryType::ELF_CALL_CLASS))
-      htmltext = "30120-01.htm" # fnYouAreFourthClass
-    elsif player.in_category?(CategoryType::CLERIC_GROUP) && (player.in_category?(CategoryType::HUMAN_CALL_CLASS) || player.in_category?(CategoryType::ELF_CALL_CLASS))
-      classId = player.class_id
-      if classId.cleric? || classId.bishop? || classId.prophet?
-        htmltext = "30120-02.htm" # fnClassList1
-      elsif classId.oracle? || classId.elder?
-        htmltext = "30120-09.htm" # fnClassList2
+  def on_talk(npc, pc)
+    if pc.in_category?(CategoryType::CLERIC_GROUP) && pc.in_category?(CategoryType::FOURTH_CLASS_GROUP) && (pc.in_category?(CategoryType::HUMAN_CALL_CLASS) || pc.in_category?(CategoryType::ELF_CALL_CLASS))
+      "30120-01.htm" # fnYouAreFourthClass
+    elsif pc.in_category?(CategoryType::CLERIC_GROUP) && (pc.in_category?(CategoryType::HUMAN_CALL_CLASS) || pc.in_category?(CategoryType::ELF_CALL_CLASS))
+      class_id = pc.class_id
+      if class_id.cleric? || class_id.bishop? || class_id.prophet?
+        "30120-02.htm" # fnClassList1
+      elsif class_id.oracle? || class_id.elder?
+        "30120-09.htm" # fnClassList2
       else
-        htmltext = "30120-13.htm" # fnYouAreFirstClass
+        "30120-13.htm" # fnYouAreFirstClass
       end
     else
-      htmltext = "30120-14.htm" # fnClassMismatch
+      "30120-14.htm" # fnClassMismatch
     end
-
-    htmltext
   end
 end

@@ -9,7 +9,7 @@ class Packets::Outgoing::AllianceInfo < GameServerPacket
   getter allies = [] of ClanInfo
 
   def initialize(alliance_id : Int32)
-    leader_clan = ClanTable.get_clan!(alliance_id)
+    leader_clan = ClanTable.get_clan(alliance_id).not_nil!
     @name = leader_clan.ally_name || ""
     @leader_c = leader_clan.name
     @leader_p = leader_clan.leader_name
@@ -25,7 +25,7 @@ class Packets::Outgoing::AllianceInfo < GameServerPacket
     @online = online
   end
 
-  def write_impl
+  private def write_impl
     c 0xb5
 
     s @name

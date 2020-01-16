@@ -12,7 +12,7 @@ class Packets::Outgoing::PrivateStoreManageListSell < Packets::Outgoing::Abstrac
     @sell_list = pc.sell_list.items
   end
 
-  def write_impl
+  private def write_impl
     c 0xa0
 
     d @l2id

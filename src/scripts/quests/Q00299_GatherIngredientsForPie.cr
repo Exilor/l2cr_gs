@@ -75,7 +75,7 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
     when "30620-14.html"
       if qs.cond?(6) && has_quest_items?(pc, FRUIT_BASKET)
         take_items(pc, FRUIT_BASKET, -1)
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         REWARDS.each do |holder|
           if holder.chance > chance
             reward_items(pc, holder)
@@ -94,7 +94,7 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
 
   def on_kill(npc, killer, is_summon)
     if qs = get_random_party_member_state(killer, 1, 3, npc)
-      if rand(1000) < MONSTERS_CHANCES[npc.id]
+      if Rnd.rand(1000) < MONSTERS_CHANCES[npc.id]
         if get_quest_items_count(killer, HONEY_POUCH) < 100
           if give_item_randomly(killer, npc, HONEY_POUCH, 1, 2, 100, 1, true)
             qs.set_cond(2)

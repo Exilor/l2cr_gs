@@ -19,7 +19,7 @@ class L2DamageZone < L2ZoneType
 
   def castle : Castle?
     if @castle_id > 0 && @castle.nil?
-      @castle = CastleManager.get_castle_by_id!(@castle_id)
+      @castle = CastleManager.get_castle_by_id(@castle_id).not_nil!
     end
     @castle
   end
@@ -77,7 +77,7 @@ class L2DamageZone < L2ZoneType
     characters_inside.each do |char|
       if char.alive?
         if siege
-          pc = char.acting_player?
+          pc = char.acting_player
           if pc && pc.in_siege? && pc.siege_state == 2
             next
           end

@@ -1,6 +1,7 @@
 class L2MotherTreeZone < L2ZoneType
   @enter_msg = 0
   @leave_msg = 0
+
   getter mp_regen_bonus = 0
   getter hp_regen_bonus = 0
 

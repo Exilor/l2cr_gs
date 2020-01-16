@@ -5,7 +5,7 @@ class Packets::Outgoing::Ex2ndPasswordVerify < GameServerPacket
 
   initializer mode : Int32, wrong_tentatives : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
 
     h 0xe6

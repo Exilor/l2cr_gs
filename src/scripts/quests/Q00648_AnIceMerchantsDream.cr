@@ -99,7 +99,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
     when "32023-04.html"
       if st.cond >= 1 && has_quest_items?(pc, SILVER_ICE_CRYSTAL)
         if st.get_int("ex") == 0
-          st.set("ex", (rand(4) + 1) * 10)
+          st.set("ex", (Rnd.rand(4) + 1) * 10)
           html = event
         end
       end

@@ -2,6 +2,7 @@ require "./location"
 
 class L2NpcWalkerNode < Location
   @chat_string : String
+
   getter delay, npc_string
   getter? run_to_location
 

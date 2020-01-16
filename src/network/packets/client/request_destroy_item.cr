@@ -70,8 +70,8 @@ class Packets::Incoming::RequestDestroyItem < GameClientPacket
     count = Math.min(@count, item.count)
 
     if item.template.pet_item?
-      if pc.has_summon? && pc.summon!.control_l2id == @l2id
-        pc.summon!.unsummon(pc)
+      if (smn = pc.summon) && smn.control_l2id == @l2id
+        smn.unsummon(pc)
       end
 
       sql = "DELETE FROM pets WHERE item_obj_id=?"

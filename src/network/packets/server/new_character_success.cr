@@ -1,7 +1,7 @@
 class Packets::Outgoing::NewCharacterSuccess < GameServerPacket
   static_packet
 
-  def write_impl
+  private def write_impl
     c 0x0d
 
     templates = PlayerTemplateData.new_character_templates

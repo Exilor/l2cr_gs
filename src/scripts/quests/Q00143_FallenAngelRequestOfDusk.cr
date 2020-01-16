@@ -14,7 +14,7 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
   # Misc
   private MAX_REWARD_LEVEL = 43
 
-  @@angel_spawned = false
+  @angel_spawned = false
 
   def initialize
     super(143, self.class.simple_name, "Fallen Angel - Request of Dusk")
@@ -56,13 +56,13 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
       st.set_cond(4, true)
       st.give_items(ANGEL_MEDICINE, 1)
     when "32368-04.html"
-      if @@angel_spawned
+      if @angel_spawned
         return "32368-03.html"
       end
       npc = npc.not_nil!
       add_spawn(ANGEL, npc.x + 100, npc.y + 100, npc.z, 0, false, 120000)
       start_quest_timer("despawn", 120000, nil, pc)
-      @@angel_spawned = true
+      @angel_spawned = true
     when "32369-03.html"
       st.take_items(ANGEL_MEDICINE, -1)
       st.set("talk", "1")
@@ -75,10 +75,10 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
       st.give_items(ANGELS_MESSAGE, 1)
       st.set_cond(5, true)
       npc.delete_me
-      @@angel_spawned = false
+      @angel_spawned = false
     when "despawn"
-      if @@angel_spawned
-        @@angel_spawned = false
+      if @angel_spawned
+        @angel_spawned = false
       end
     else
       html = nil

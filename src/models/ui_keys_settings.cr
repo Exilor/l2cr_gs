@@ -57,7 +57,7 @@ class UIKeysSettings
       io << "REPLACE INTO character_ui_actions (`charId`, `cat`, `order`, `cmd`, `key`, `tgKey1`, `tgKey2`, `show`) VALUES"
       @keys.each_value do |key_list|
         key_list.each_with_index do |key, order|
-          io << key.get_sql_save_string(@pc_id, order, io)
+          key.get_sql_save_string(@pc_id, order, io)
           if order + 1 != key_list.size
             io << ','
           end

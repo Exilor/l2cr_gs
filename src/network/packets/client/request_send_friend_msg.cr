@@ -11,7 +11,7 @@ class Packets::Incoming::RequestSendFriendMsg < GameClientPacket
     return unless pc = active_char
 
     if @message.empty? || @message.size > 300
-      debug "Invalid message size: #{@message.size}"
+      debug { "Invalid message size: #{@message.size}" }
       return
     end
 

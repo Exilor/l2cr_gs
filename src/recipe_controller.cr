@@ -72,7 +72,7 @@ module RecipeController
     if Config.alt_game_creation && ACTIVE_MAKERS.has_key?(pc.l2id)
       sm = SystemMessage.s2_s1
       sm.add_item_name(recipe_list.item_id)
-      sm.add_string("You are busy creating.")
+      sm.add_string("You are busy crafting")
       pc.send_packet(sm)
       return
     end
@@ -102,6 +102,7 @@ module RecipeController
     @skill_id : Int32
     @skill : Skill
     @price : Int64 = 0i64
+
     getter? valid = false
     private getter! items : Array(TempItem)
 
@@ -169,9 +170,7 @@ module RecipeController
         return
       end
 
-      items.each do |it|
-        @total_items += it.quantity
-      end
+      @total_items += items.sum &.quantity
 
       unless calculate_stat_use(false, false)
         abort
@@ -226,10 +225,10 @@ module RecipeController
           @delay = (Config.alt_game_creation_speed * @pc.get_m_reuse_rate(@skill) * GameTimer::TICKS_PER_SECOND * GameTimer::MILLIS_IN_TICK).to_i
           msu = MagicSkillUse.new(@pc, @skill_id, @skill_level, @delay, 0)
           @pc.broadcast_packet(msu)
-          @pc.send_packet(SetupGauge.new(0, @delay))
+          @pc.send_packet(SetupGauge.blue(@delay))
           ThreadPoolManager.schedule_general(self, 100 + @delay)
         else
-          @pc.send_packet(SetupGauge.new(0, @delay))
+          @pc.send_packet(SetupGauge.blue(@delay))
           begin
             sleep(@delay / 1000)
           rescue e
@@ -350,7 +349,7 @@ module RecipeController
           @item_grab *= asc.value
         end
       end
-      @creation_passes = (@total_items // @item_grab)
+      @creation_passes = @total_items // @item_grab
       if @total_items % @item_grab != 0
         @creation_passes += 1
       end
@@ -366,7 +365,7 @@ module RecipeController
         if su.type.hp?
           if @pc.current_hp <= mod_val
             if Config.alt_game_creation && is_wait
-              @pc.send_packet(SetupGauge.new(0, @delay))
+              @pc.send_packet(SetupGauge.blue(@delay))
               ThreadPoolManager.schedule_general(self, 100 + @delay)
             else
               @target.send_packet(SystemMessageId::NOT_ENOUGH_HP)
@@ -379,7 +378,7 @@ module RecipeController
         elsif su.type.mp?
           if @pc.current_mp < mod_val
             if Config.alt_game_creation && is_wait
-              @pc.send_packet(SetupGauge.new(0, @delay))
+              @pc.send_packet(SetupGauge.blue(@delay))
               ThreadPoolManager.schedule_general(self, 100 + @delay)
             else
               @target.send_packet(SystemMessageId::NOT_ENOUGH_MP)
@@ -502,8 +501,7 @@ module RecipeController
       if Config.alt_game_creation
         recipe_level = @recipe_list.level
         if @exp < 0
-          @exp = template.reference_price * item_count
-          @exp //= recipe_level
+          @exp = (template.reference_price * item_count) // recipe_level
         end
         if @sp < 0
           @sp = @exp // 10

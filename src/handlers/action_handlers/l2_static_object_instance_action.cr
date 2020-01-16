@@ -7,23 +7,21 @@ module ActionHandler::L2StaticObjectInstanceAction
       return false
     end
 
-    obj = target.as(L2StaticObjectInstance)
-
-    if obj.type < 0
-      warn { "StaticObject with invalid type #{obj.type}." }
+    if target.type < 0
+      warn { "StaticObject with invalid type #{target.type}." }
     end
 
-    if pc.target != obj
-      pc.target = obj
+    if pc.target != target
+      pc.target = target
     elsif interact
-      if pc.inside_radius?(obj, L2Npc::INTERACTION_DISTANCE, false, false)
-        if obj.type == 2
-          if obj.id == 24230101
+      if pc.inside_radius?(target, L2Npc::INTERACTION_DISTANCE, false, false)
+        if target.type == 2
+          if target.id == 24230101
             file_name = "data/html/signboards/tomb_of_crystalgolem.htm"
           else
             file_name = "data/html/signboards/pvp_signboard.htm"
           end
-          html = NpcHtmlMessage.new(obj.l2id)
+          html = NpcHtmlMessage.new(target.l2id)
           if content = HtmCache.get_htm(pc, file_name)
             html.html = content
           else
@@ -31,11 +29,11 @@ module ActionHandler::L2StaticObjectInstanceAction
           end
 
           pc.send_packet(html)
-        elsif obj.type == 0
-          pc.send_packet(obj.map)
+        elsif target.type == 0
+          pc.send_packet(target.map.not_nil!)
         end
       else
-        pc.set_intention(AI::INTERACT, obj)
+        pc.set_intention(AI::INTERACT, target)
       end
     end
 

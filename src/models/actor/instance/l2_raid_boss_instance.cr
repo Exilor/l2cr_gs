@@ -1,8 +1,6 @@
 class L2RaidBossInstance < L2MonsterInstance
   private RAIDBOSS_MAINTENANCE_INTERVAL = 30_000
 
-  # @raid = true
-  # @lethalable = false
   property raid_status : RaidBossSpawnManager::Status = RaidBossSpawnManager::Status::UNDEFINED
   property? give_raid_curse : Bool = true
 
@@ -39,10 +37,10 @@ class L2RaidBossInstance < L2MonsterInstance
       return false
     end
 
-    if pc = killer.try &.acting_player?
+    if pc = killer.try &.acting_player
       broadcast_packet(SystemMessage.raid_was_successful)
 
-      if party = pc.party?
+      if party = pc.party
         party.members.each do |m|
           RaidBossPointsManager.add_points(m, id, (level // 2) + Rnd.rand(-5..5))
           if m.noble?

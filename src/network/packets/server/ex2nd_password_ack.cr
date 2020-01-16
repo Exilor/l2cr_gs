@@ -4,7 +4,7 @@ class Packets::Outgoing::Ex2ndPasswordAck < GameServerPacket
 
   initializer response : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
 
     h 0xe7

@@ -10,7 +10,7 @@ class Packets::Outgoing::ExChooseInventoryAttributeItem < GameServerPacket
     @level = Elementals.get_max_element_level(@item_id)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x62
 

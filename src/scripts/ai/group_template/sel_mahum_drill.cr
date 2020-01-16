@@ -110,7 +110,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
   end
 
   def on_attack(npc, attacker, damage, is_summon)
-    if rand(10) < 1
+    if Rnd.rand(10) < 1
       npc.broadcast_event("ATTACKED", 1000, nil)
     end
 
@@ -128,7 +128,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
         end
       when "CHIEF_DIED"
         if MAHUM_SOLDIERS.includes?(receiver.id)
-          if rand(4) < 1
+          if Rnd.rand(4) < 1
             broadcast_npc_say(receiver, Say2::NPC_ALL, SOLDIER_FSTRINGS.sample)
           end
           if receiver.can_be_attacked?
@@ -138,8 +138,8 @@ class Scripts::SelMahumDrill < AbstractNpcAI
           receiver.variables["BUSY_STATE"] = 1
           receiver.running = true
           dst = Location.new(
-            receiver.x + rand(-800..800),
-            receiver.y + rand(-800..800),
+            receiver.x + Rnd.rand(-800..800),
+            receiver.y + Rnd.rand(-800..800),
             receiver.z,
             receiver.heading
           )

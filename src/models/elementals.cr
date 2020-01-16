@@ -1,4 +1,4 @@
-class Elementals
+struct Elementals
   private TABLE = {} of Int32 => ElementalItems
 
   NONE  = -1i8
@@ -89,7 +89,7 @@ class Elementals
   end
 
   def self.get_opposite_element(element : Int8) : Int8
-    element % 2 == 0 ? element + 1 : element - 1
+    element.even? ? element + 1 : element - 1
   end
 
   class ElementalStatBoni
@@ -101,14 +101,20 @@ class Elementals
       return if @active
 
       stat =
-        case @elemental_type
-        when FIRE  then is_armor ? Stats::FIRE_RES  : Stats::FIRE_POWER
-        when WATER then is_armor ? Stats::WATER_RES : Stats::WATER_POWER
-        when WIND  then is_armor ? Stats::WIND_RES  : Stats::WIND_POWER
-        when EARTH then is_armor ? Stats::EARTH_RES : Stats::EARTH_POWER
-        when DARK  then is_armor ? Stats::DARK_RES  : Stats::DARK_POWER
-        else            is_armor ? Stats::HOLY_RES  : Stats::HOLY_POWER
-        end
+      case @elemental_type
+      when FIRE
+        is_armor ? Stats::FIRE_RES  : Stats::FIRE_POWER
+      when WATER
+        is_armor ? Stats::WATER_RES : Stats::WATER_POWER
+      when WIND
+        is_armor ? Stats::WIND_RES  : Stats::WIND_POWER
+      when EARTH
+        is_armor ? Stats::EARTH_RES : Stats::EARTH_POWER
+      when DARK
+        is_armor ? Stats::DARK_RES  : Stats::DARK_POWER
+      else
+        is_armor ? Stats::HOLY_RES  : Stats::HOLY_POWER
+      end
 
       pc.add_stat_func(FuncAdd.new(stat, 0x40, self, @elemental_value.to_f64))
 

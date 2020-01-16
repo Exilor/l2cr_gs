@@ -2,8 +2,6 @@ require "../l2_npc"
 require "../status/folk_status"
 
 class L2NpcInstance < L2Npc
-  extend Loggable
-
   def initialize(template : L2NpcTemplate)
     super
     self.invul = false

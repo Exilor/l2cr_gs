@@ -27,7 +27,7 @@ class Packets::Incoming::RequestAnswerJoinPledge < GameClientPacket
         return
       end
 
-      clan = requestor.clan
+      clan = requestor.clan.not_nil!
 
       if clan.check_clan_join_condition(requestor, pc, request_packet.pledge_type)
         pc.send_packet(JoinPledge.new(requestor.clan_id))
@@ -40,19 +40,20 @@ class Packets::Incoming::RequestAnswerJoinPledge < GameClientPacket
         end
 
         clan.add_clan_member(pc)
-        pc.clan_privileges = pc.clan.get_rank_privs(pc.power_grade)
+        pc_clan = pc.clan.not_nil!
+        pc.clan_privileges = pc_clan.get_rank_privs(pc.power_grade)
         pc.send_packet(SystemMessageId::ENTERED_THE_CLAN)
 
         sm = SystemMessage.s1_has_joined_clan
         sm.add_string(pc.name)
         clan.broadcast_to_online_members(sm)
 
-        if pc.clan.castle_id > 0
-          CastleManager.get_castle_by_owner!(pc.clan).give_residential_skills(pc)
+        if pc_clan.castle_id > 0
+          CastleManager.get_castle_by_owner(pc_clan).not_nil!.give_residential_skills(pc)
         end
 
-        if pc.clan.fort_id > 0
-          FortManager.get_fort_by_owner!(pc.clan).give_residential_skills(pc)
+        if pc_clan.fort_id > 0
+          FortManager.get_fort_by_owner(pc_clan).not_nil!.give_residential_skills(pc)
         end
 
         pc.send_skill_list

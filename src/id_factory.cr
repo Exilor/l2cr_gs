@@ -5,10 +5,6 @@ module IdFactory
   extend Synchronizable
   extend Loggable
 
-  FIRST_OID = 0x10000000
-  LAST_OID = 0x7FFFFFFF
-  FREE_OBJECT_ID_SIZE = LAST_OID - FIRST_OID
-
   private ID_EXTRACTS = {
     {"characters","charId"},
     {"items","object_id"},
@@ -50,7 +46,10 @@ module IdFactory
     "DELETE FROM character_skills_save WHERE restore_type = 1 AND systime <= ?"
   }
 
-  IDS = RangeSet.new(0..FIRST_OID - 1)
+  private FIRST_OID = 0x10000000
+
+  # Ids start from FIRST_OID for no other reason than compatibility with L2J.
+  IDS = RangeSet.new(0..FIRST_OID)
 
   def load
     set_all_characters_offline
@@ -66,7 +65,6 @@ module IdFactory
     end
 
     clean_up_timestamps
-
 
     timer = Timer.new
     temp = [] of Int32

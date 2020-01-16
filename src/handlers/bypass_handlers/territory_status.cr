@@ -9,7 +9,7 @@ module BypassHandler::TerritoryStatus
 
     if npc.castle.owner_id > 0
       html.set_file(pc, "data/html/territorystatus.htm")
-      clan = ClanTable.get_clan!(npc.castle.owner_id)
+      clan = ClanTable.get_clan(npc.castle.owner_id).not_nil!
       html["%clanname%"] = clan.name
       html["%clanleadername%"] = clan.leader_name
     else

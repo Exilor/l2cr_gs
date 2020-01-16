@@ -23,7 +23,7 @@ class Scripts::Alliance < AbstractNpcAI
 
   def on_adv_event(event, npc, pc)
     return unless pc
-    event != "9001-01.htm" && pc.clan?.nil? ? "9001-04.htm" : event
+    (event != "9001-01.htm" && pc.clan.nil?) ? "9001-04.htm" : event
   end
 
   def on_talk(npc, pc)

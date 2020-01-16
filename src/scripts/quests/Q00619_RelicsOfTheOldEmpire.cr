@@ -172,7 +172,7 @@ class Scripts::Q00619_RelicsOfTheOldEmpire < Quest
       html = event
     when "31538-06.html"
       if st.get_quest_items_count(BROKEN_RELIC_PART) >= REQUIRED_RELIC_COUNT
-        st.reward_items(RECIPES.sample, 1)
+        st.reward_items(RECIPES.sample(random: Rnd), 1)
         st.take_items(BROKEN_RELIC_PART, REQUIRED_RELIC_COUNT)
         html = event
       end
@@ -188,13 +188,13 @@ class Scripts::Q00619_RelicsOfTheOldEmpire < Quest
     if st = get_random_party_member_state(pc, -1, 3, npc)
       npc_id = npc.id
       if ARCHON_OF_HALISHA.includes?(npc_id)
-        item_count = rand(100) < 79 ? 4 : 3
+        item_count = Rnd.rand(100) < 79 ? 4 : 3
         st.give_item_randomly(npc, BROKEN_RELIC_PART, item_count, 0, 1.0, true)
       else
         info = MOBS[npc_id]
 
         if info.double_item_chance > 0
-          item_count = rand(100) < info.double_item_chance ? 2 : 1
+          item_count = Rnd.rand(100) < info.double_item_chance ? 2 : 1
         else
           item_count = 1
         end

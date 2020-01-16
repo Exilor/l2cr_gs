@@ -227,22 +227,6 @@ module SkillTreesData
     end
 
     skill_tree
-    # skill_tree = {} of Int32 => L2SkillLearn
-    # skill_tree.merge! COMMON_SKILL_TREE
-    # class_sequence = [] of ClassID
-    # while class_id
-    #   class_sequence.unshift class_id
-    #   class_id = PARENT_CLASS_MAP[class_id]
-    # end
-
-    # class_sequence.each do |cid|
-    #   class_skill_tree = CLASS_SKILL_TREES[cid]
-    #   if class_skill_tree
-    #     skill_tree.merge! class_skill_tree
-    #   end
-    # end
-
-    # skill_tree
   end
 
   def get_transfer_skill_tree(class_id : ClassId) : Hash(Int32, L2SkillLearn)
@@ -253,80 +237,52 @@ module SkillTreesData
     end
   end
 
-  def common_skill_tree
+  def common_skill_tree : Hash(Int32, L2SkillLearn)
     COMMON_SKILL_TREE
   end
 
-  def collect_skill_tree
+  def collect_skill_tree : Hash(Int32, L2SkillLearn)
     COLLECT_SKILL_TREE
   end
 
-  def fishing_skill_tree
+  def fishing_skill_tree : Hash(Int32, L2SkillLearn)
     FISHING_SKILL_TREE
   end
 
-  def pledge_skill_tree
+  def pledge_skill_tree : Hash(Int32, L2SkillLearn)
     PLEDGE_SKILL_TREE
   end
 
-  def subclass_skill_tree
+  def subclass_skill_tree : Hash(Int32, L2SkillLearn)
     SUBCLASS_SKILL_TREE
   end
 
-  def subpledge_skill_tree
+  def subpledge_skill_tree : Hash(Int32, L2SkillLearn)
     SUBPLEDGE_SKILL_TREE
   end
 
-  def transform_skill_tree
+  def transform_skill_tree : Hash(Int32, L2SkillLearn)
     TRANSFORM_SKILL_TREE
   end
 
   def noble_skill_tree : Hash(Int32, Skill)
-    tree = {} of Int32 => Skill
-
-    NOBLE_SKILL_TREE.each do |key, val|
-      tree[key] = SkillData[val.skill_id, val.skill_level]
-    end
-
-    tree
+    get_skill_tree(NOBLE_SKILL_TREE)
   end
 
   def hero_skill_tree : Hash(Int32, Skill)
-    tree = {} of Int32 => Skill
-
-    HERO_SKILL_TREE.each do |key, val|
-      tree[key] = SkillData[val.skill_id, val.skill_level]
-    end
-
-    tree
+    get_skill_tree(HERO_SKILL_TREE)
   end
 
   def gm_skill_tree : Hash(Int32, Skill)
-    tree = {} of Int32 => Skill
-
-    GM_SKILL_TREE.each do |key, val|
-      tree[key] = SkillData[val.skill_id, val.skill_level]
-    end
-
-    tree
+    get_skill_tree(GM_SKILL_TREE)
   end
 
   def gm_aura_skill_tree : Hash(Int32, Skill)
-    tree = {} of Int32 => Skill
-
-    GM_AURA_SKILL_TREE.each do |key, val|
-      tree[key] = SkillData[val.skill_id, val.skill_level]
-    end
-
-    tree
+    get_skill_tree(GM_AURA_SKILL_TREE)
   end
 
   private def get_skill_tree(from)
-    from.each do |key, value|
-      from[key] = SkillData[value.skill_id, value.skill_level]
-    end
-
-    from
+    from.transform_values { |v| SkillData[v.skill_id, v.skill_level] }
   end
 
   def get_available_skills(pc : L2PcInstance, id : ClassId, fs : Bool, auto : Bool)
@@ -587,15 +543,11 @@ module SkillTreesData
     end
   end
 
-  def get_transform_skill(id : Int32, lvl : Int32) : L2SkillLearn?
-    TRANSFORM_SKILL_TREE[SkillData.get_skill_hash(id, lvl)]?
-  end
-
   def get_class_skill(id : Int32, lvl : Int32, class_id : ClassId) : L2SkillLearn?
     get_complete_class_skill_tree(class_id)[SkillData.get_skill_hash(id, lvl)]?
   end
 
-  {% for acq in %w(fishing pledge subpledge subclass common collect) %}
+  {% for acq in %w(fishing pledge subpledge subclass common collect transform) %}
     def get_{{acq.id}}_skill(id : Int32, lvl : Int32) : L2SkillLearn?
       {{acq.upcase.id}}_SKILL_TREE[SkillData.get_skill_hash(id, lvl)]?
     end
@@ -609,15 +561,11 @@ module SkillTreesData
     end
   end
 
-  def get_fishing_skill(id : Int32, lvl : Int32) : L2SkillLearn?
-    FISHING_SKILL_TREE[SkillData.get_skill_hash(id, lvl)]?
-  end
-
   def get_min_level_for_new_skill(pc : L2PcInstance, tree : Hash(Int32, L2SkillLearn)) : Int32
     min = 0
 
     if tree.empty?
-      warn { "Skill tree not defined for get_min_level_for_new_skill" }
+      warn "Skill tree not defined for get_min_level_for_new_skill"
     else
       tree.each_value do |s|
         if s.learned_by_npc? && pc.level < s.get_level
@@ -636,13 +584,7 @@ module SkillTreesData
       return true
     end
 
-    HERO_SKILL_TREE.each_value do |skill|
-      if skill.skill_id == id && lvl == -1
-        return true
-      end
-    end
-
-    false
+    HERO_SKILL_TREE.any? { |_, s| s.skill_id == id && lvl == -1 }
   end
 
   def gm_skill?(id : Int32, lvl : Int32) : Bool

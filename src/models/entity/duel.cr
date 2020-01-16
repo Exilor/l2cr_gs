@@ -14,6 +14,7 @@ class Duel
   @player_conditions = Concurrent::Map(Int32, PlayerCondition).new
   @surrender_request = 0
   @duel_end_time : Int64
+
   getter duel_instance_id = 0
   getter team_a
   getter team_b
@@ -21,12 +22,11 @@ class Duel
 
   def initialize(@leader_a : L2PcInstance, @leader_b : L2PcInstance, @party_duel : Bool, @duel_id : Int32)
     if party_duel
-      # @team_a = leader_a.party.members.to_a.dup
-      # @team_b = leader_b.party.members.to_a.dup
-      @team_a = [] of L2PcInstance
-      leader_a.party.members.each { |m| @team_a << m }
-      @team_b = [] of L2PcInstance
-      leader_b.party.members.each { |m| @team_b << m }
+      party_a, party_b = leader_a.party.not_nil!, leader_b.party.not_nil!
+      @team_a = Array(L2PcInstance).new(party_a.size)
+      party_a.members.each { |m| @team_a << m }
+      @team_b = Array(L2PcInstance).new(party_b.size)
+      party_b.members.each { |m| @team_b << m }
     else
       @team_a = [@leader_a]
       @team_b = [@leader_b]
@@ -82,7 +82,7 @@ class Duel
           end
         end
       else
-        warn "Instance with ID #{duel_instance_id} not found."
+        warn { "Instance with id #{duel_instance_id} not found." }
       end
     end
 
@@ -123,7 +123,7 @@ class Duel
 
   def restore_player_conditions
     delay = @party_duel ? PARTY_DUEL_TELEPORT_BACK_TIME : 1000
-    task = ->{ @player_conditions.each_value &.restore_condition }
+    task = -> { @player_conditions.each_value &.restore_condition }
     ThreadPoolManager.schedule_general(task, delay)
     ThreadPoolManager.schedule_general(->clear, delay)
   end
@@ -179,11 +179,11 @@ class Duel
     end
   end
 
-  def broadcast_to_team_1(msg)
+  def broadcast_to_team_1(msg : GameServerPacket | SystemMessageId)
     @team_a.each &.send_packet(msg)
   end
 
-  def broadcast_to_team_2(msg)
+  def broadcast_to_team_2(msg : GameServerPacket | SystemMessageId)
     @team_b.each &.send_packet(msg)
   end
 
@@ -253,8 +253,10 @@ class Duel
       sm = SystemMessageId::THE_DUEL_HAS_ENDED_IN_A_TIE
     end
 
-    broadcast_to_team_1(sm) if sm
-    broadcast_to_team_2(sm) if sm
+    if sm
+      broadcast_to_team_1(sm)
+      broadcast_to_team_2(sm)
+    end
   end
 
   def check_end_duel_condition : DuelResult
@@ -319,19 +321,19 @@ class Duel
       team_defeated = true
       is_in_team_a = true
       if @team_a.includes?(pc)
-        team_defeated = @team_a.none? { |pl| pl.duel_state.duelling? }
+        team_defeated = @team_a.none? &.duel_state.duelling?
       elsif @team_b.includes?(pc)
         is_in_team_a = false
-        team_defeated = @team_b.none? { |pl| pl.duel_state.duelling? }
+        team_defeated = @team_b.none? &.duel_state.duelling?
       end
 
       if team_defeated
         winners = is_in_team_a ? @team_b : @team_a
-        winners.each { |pl| pl.duel_state = DuelState::WINNER }
+        winners.each &.duel_state = DuelState::WINNER
       end
     else
       if pc != @leader_a && pc != @leader_b
-        warn "#{pc} is not part of this 1 vs 1 duel."
+        warn { "#{pc} is not part of this 1 vs 1 duel." }
       end
 
       if @leader_a == pc
@@ -342,7 +344,8 @@ class Duel
     end
   end
 
-  struct PlayerCondition
+  # Perhaps make it restore a summon's HP/MP as well?
+  private struct PlayerCondition
     @hp : Float64
     @mp : Float64
     @cp : Float64
@@ -361,16 +364,13 @@ class Duel
         @loc = player.location
       end
 
-      if player.has_summon?
-        @summon = player.summon
-        @pet_effects = player.summon!.effect_list.effects
+      if smn = player.summon
+        @summon = smn
+        @pet_effects = smn.effect_list.effects
       end
     end
 
     def restore_condition
-      @player.current_hp = @hp
-      @player.current_mp = @mp
-      @player.current_cp = @cp
       @player.in_duel = 0
       @player.team = Team::NONE
       @player.broadcast_user_info
@@ -384,10 +384,9 @@ class Duel
         end
       end
 
-      if @player.has_summon?
-        @player.summon!.effect_list.stop_all_effects
-        summon = @summon
-        if summon && summon == @player.summon
+      if player_summon = @player.summon
+        player_summon.effect_list.stop_all_effects
+        if (summon = @summon) && summon == player_summon
           @pet_effects.try &.each do |info|
             if info.time > 0
               info.skill.apply_effects(summon, summon, true, info.time)
@@ -395,6 +394,10 @@ class Duel
           end
         end
       end
+
+      @player.current_hp = @hp
+      @player.current_mp = @mp
+      @player.current_cp = @cp
     end
 
     def teleport_back
@@ -404,7 +407,7 @@ class Duel
     end
   end
 
-  struct DuelPreparationTask
+  private struct DuelPreparationTask
     include Loggable
 
     initializer duel : Duel
@@ -420,7 +423,7 @@ class Duel
     end
   end
 
-  struct DuelClockTask
+  private struct DuelClockTask
     include Loggable
 
     initializer duel : Duel

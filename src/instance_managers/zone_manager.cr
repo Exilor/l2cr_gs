@@ -11,6 +11,7 @@ module ZoneManager
   private SPAWN_TERRITORIES = {} of String => NpcSpawnTerritory
 
   @@last_dynamic_id = 300_000
+
   class_getter(debug_items) { [] of L2ItemInstance }
 
   def load
@@ -37,7 +38,7 @@ module ZoneManager
     L2World.world_regions.each do |reg|
       reg.each do |r|
         r.zones.clear
-        count &+= 1
+        count += 1
       end
     end
 
@@ -142,8 +143,6 @@ module ZoneManager
           next
         end
 
-
-
         # constructor =
         # case constructor_name
         # when "L2ArenaZone" then L2ArenaZone
@@ -247,7 +246,7 @@ module ZoneManager
     end
   end
 
-  def check_id(id : Int) : Bool
+  private def check_id(id : Int) : Bool
     CLASS_ZONES.local_each_value.any? &.has_key?(id)
   end
 
@@ -262,13 +261,6 @@ module ZoneManager
   def size : Int32
     CLASS_ZONES.local_each_value.sum &.size
   end
-
-  # deprecated
-  # def all_zones : Array(L2ZoneType)
-  #   zones = [] of L2ZoneType
-  #   CLASS_ZONES.each_value { |map| map.each_value { |v| zones << v } }
-  #   zones
-  # end
 
   def get_all_zones(zone_type : T.class) : Indexable(T) forall T
     ret = CLASS_ZONES[zone_type].values_slice
@@ -296,14 +288,6 @@ module ZoneManager
     CLASS_ZONES[zone_type][id]?.as(T?)
   end
 
-  def get_zone_by_id!(*args)
-    unless zone = get_zone_by_id(*args)
-      raise "No zone found for args #{args}"
-    end
-
-    zone
-  end
-
   def get_zone(obj : L2Object?, type : T.class) : T? forall T
     get_zone(*obj.xyz, type) if obj
   end
@@ -313,13 +297,6 @@ module ZoneManager
       zone.inside_zone?(x, y, z) && zone.class <= type
     end.as(T?)
   end
-
-  # get_zones returning an Array is deprecated. Use the block versions.
-  # def get_zones(*args) : Array(L2ZoneType)
-  #   ret = [] of L2ZoneType
-  #   get_zones(*args) { |z| ret << z }
-  #   ret
-  # end
 
   def get_zones(obj : L2Object, & : L2ZoneType ->) : Nil
     get_zones(*obj.xyz) { |zone| yield zone }

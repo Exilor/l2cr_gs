@@ -38,8 +38,8 @@ class Scripts::KamaelChange2 < AbstractNpcAI
     add_talk_id(NPCS_FEMALE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless npc && player
+  def on_adv_event(event, npc, pc)
+    return unless npc && pc
 
     case event
     when "32145-05.htm", # master_all_kamael003
@@ -52,192 +52,183 @@ class Scripts::KamaelChange2 < AbstractNpcAI
          "32145-13.htm", # master_all_kamael007w
          "32145-14.htm", # master_all_kamael006fs
          "32145-15.htm"  # master_all_kamael007fs
-      htmltext = event
+      event
     when "127", "128", "129", "130"
-      htmltext = class_change_requested(player, npc, event.to_i)
+      class_change_requested(pc, npc, event.to_i)
     end
-
-    htmltext
   end
 
-  private def class_change_requested(player, npc, class_id)
-    htmltext = nil
+  private def class_change_requested(pc, npc, class_id)
     if CategoryData.in_category?(CategoryType::KAMAEL_THIRD_CLASS_GROUP, class_id)
-      if player.in_category?(CategoryType::KAMAEL_FIRST_CLASS_GROUP)
+      if pc.in_category?(CategoryType::KAMAEL_FIRST_CLASS_GROUP)
         if NPCS_MALE.includes?(npc.id)
-          htmltext = "32145-02.htm" # master_all_kamael012b
+          "32145-02.htm" # master_all_kamael012b
         else
-          htmltext = "32145-03.htm" # master_all_kamael012c
+          "32145-03.htm" # master_all_kamael012c
         end
-      elsif player.in_category?(CategoryType::KAMAEL_THIRD_CLASS_GROUP)
+      elsif pc.in_category?(CategoryType::KAMAEL_THIRD_CLASS_GROUP)
         if NPCS_MALE.includes?(npc.id)
-          htmltext = "32145-16.htm" # master_all_kamael005b
+          "32145-16.htm" # master_all_kamael005b
         else
-          htmltext = "32145-17.htm" # master_all_kamael005c
+          "32145-17.htm" # master_all_kamael005c
         end
-      elsif player.in_category?(CategoryType::KAMAEL_FOURTH_CLASS_GROUP)
+      elsif pc.in_category?(CategoryType::KAMAEL_FOURTH_CLASS_GROUP)
         if NPCS_MALE.includes?(npc.id)
-          htmltext = "32145-18.htm" # master_all_kamael100b
+          "32145-18.htm" # master_all_kamael100b
         else
-          htmltext = "32145-19.htm" # master_all_kamael100c
+          "32145-19.htm" # master_all_kamael100c
         end
-      elsif player.class_id.trooper?
+      elsif pc.class_id.trooper?
         if NPCS_MALE.includes?(npc.id)
           if class_id == 127
-            qs = player.get_quest_state("Q00064_CertifiedBerserker")
-            if player.level < 40
+            qs = pc.get_quest_state("Q00064_CertifiedBerserker")
+            if pc.level < 40
               if qs && qs.completed?
-                htmltext = "32145-20.htm" # master_all_kamael008ta
+                "32145-20.htm" # master_all_kamael008ta
               else
-                htmltext = "32145-21.htm" # master_all_kamael009ta
+                "32145-21.htm" # master_all_kamael009ta
               end
-            elsif (qs.nil?) || !qs.completed?
-              htmltext = "32145-22.htm" # master_all_kamael010ta
+            elsif qs.nil? || !qs.completed?
+              "32145-22.htm" # master_all_kamael010ta
             else
-              take_items(player, ORKURUS_RECOMMENDATION, -1)
-              player.class_id = 127
-              player.base_class = 127
+              take_items(pc, ORKURUS_RECOMMENDATION, -1)
+              pc.class_id = 127
+              pc.base_class = 127
               # SystemMessage and cast skill is done by class_id=
-              player.broadcast_user_info
-              give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-              htmltext = "32145-23.htm" # master_all_kamael011ta
+              pc.broadcast_user_info
+              give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+              "32145-23.htm" # master_all_kamael011ta
             end
           elsif class_id == 128
-            qs = player.get_quest_state("Q00065_CertifiedSoulBreaker")
-            if player.level < 40
+            qs = pc.get_quest_state("Q00065_CertifiedSoulBreaker")
+            if pc.level < 40
               if qs && qs.completed?
-                htmltext = "32145-24.htm" # master_all_kamael008msa
+                "32145-24.htm" # master_all_kamael008msa
               else
-                htmltext = "32145-25.htm" # master_all_kamael009msa
+                "32145-25.htm" # master_all_kamael009msa
               end
-            elsif (qs.nil?) || !qs.completed?
-              htmltext = "32145-26.htm" # master_all_kamael010msa
+            elsif qs.nil? || !qs.completed?
+              "32145-26.htm" # master_all_kamael010msa
             else
-              take_items(player, SOUL_BREAKER_CERTIFICATE, -1)
-              player.class_id = 128
-              player.base_class = 128
+              take_items(pc, SOUL_BREAKER_CERTIFICATE, -1)
+              pc.class_id = 128
+              pc.base_class = 128
               # SystemMessage and cast skill is done by class_id=
-              player.broadcast_user_info
-              give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-              htmltext = "32145-27.htm" # master_all_kamael011msa
+              pc.broadcast_user_info
+              give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+              "32145-27.htm" # master_all_kamael011msa
             end
           end
         else
-          htmltext = "32145-10.htm" # master_all_kamael002c
+          "32145-10.htm" # master_all_kamael002c
         end
-      elsif player.class_id.warder?
+      elsif pc.class_id.warder?
         if NPCS_MALE.includes?(npc.id)
-          htmltext = "32145-04.htm" # master_all_kamael002b
+          "32145-04.htm" # master_all_kamael002b
         else
           if class_id == 129
-            qs = player.get_quest_state("Q00065_CertifiedSoulBreaker")
-            if player.level < 40
+            qs = pc.get_quest_state("Q00065_CertifiedSoulBreaker")
+            if pc.level < 40
               if qs && qs.completed?
-                htmltext = "32145-28.htm" # master_all_kamael008fsa
+                "32145-28.htm" # master_all_kamael008fsa
               else
-                htmltext = "32145-29.htm" # master_all_kamael009fsa
+                "32145-29.htm" # master_all_kamael009fsa
               end
-            elsif (qs.nil?) || !qs.completed?
-              htmltext = "32145-30.htm" # master_all_kamael010fsa
+            elsif qs.nil? || !qs.completed?
+              "32145-30.htm" # master_all_kamael010fsa
             else
-              take_items(player, SOUL_BREAKER_CERTIFICATE, -1)
-              player.class_id = 129
-              player.base_class = 129
+              take_items(pc, SOUL_BREAKER_CERTIFICATE, -1)
+              pc.class_id = 129
+              pc.base_class = 129
               # SystemMessage and cast skill is done by class_id=
-              player.broadcast_user_info
-              give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-              htmltext = "32145-31.htm" # master_all_kamael011fsa
+              pc.broadcast_user_info
+              give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+              "32145-31.htm" # master_all_kamael011fsa
             end
           elsif class_id == 130
-            qs = player.get_quest_state("Q00066_CertifiedArbalester")
-            if player.level < 40
+            qs = pc.get_quest_state("Q00066_CertifiedArbalester")
+            if pc.level < 40
               if qs && qs.completed?
-                htmltext = "32145-32.htm" # master_all_kamael008wa
+                "32145-32.htm" # master_all_kamael008wa
               else
-                htmltext = "32145-33.htm" # master_all_kamael009wa
+                "32145-33.htm" # master_all_kamael009wa
               end
-            elsif (qs.nil?) || !qs.completed?
-              htmltext = "32145-34.htm" # master_all_kamael010wa
+            elsif qs.nil? || !qs.completed?
+              "32145-34.htm" # master_all_kamael010wa
             else
-              take_items(player, KAMAEL_INQUISITOR_MARK, -1)
-              player.class_id = 130
-              player.base_class = 130
+              take_items(pc, KAMAEL_INQUISITOR_MARK, -1)
+              pc.class_id = 130
+              pc.base_class = 130
               # SystemMessage and cast skill is done by class_id=
-              player.broadcast_user_info
-              give_items(player, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
-              htmltext = "32145-35.htm" # master_all_kamael011wa
+              pc.broadcast_user_info
+              give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_C_GRADE, 15)
+              "32145-35.htm" # master_all_kamael011wa
             end
           end
         end
       end
     end
-
-    htmltext
   end
 
-  def on_talk(npc, player)
-    if !player.race.kamael?
-      htmltext = "32145-01.htm" # master_all_kamael002a
-    elsif player.in_category?(CategoryType::KAMAEL_FIRST_CLASS_GROUP)
-      if player.class_id.male_soldier?
-        htmltext = "32145-02.htm" # master_all_kamael012b
-      elsif player.class_id.female_soldier?
-        htmltext = "32145-03.htm" # master_all_kamael012c
+  def on_talk(npc, pc)
+    if !pc.race.kamael?
+      "32145-01.htm" # master_all_kamael002a
+    elsif pc.in_category?(CategoryType::KAMAEL_FIRST_CLASS_GROUP)
+      if pc.class_id.male_soldier?
+        "32145-02.htm" # master_all_kamael012b
+      elsif pc.class_id.female_soldier?
+        "32145-03.htm" # master_all_kamael012c
       end
-    elsif player.in_category?(CategoryType::KAMAEL_SECOND_CLASS_GROUP)
+    elsif pc.in_category?(CategoryType::KAMAEL_SECOND_CLASS_GROUP)
       if NPCS_MALE.includes?(npc.id)
-        if player.in_category?(CategoryType::KAMAEL_FEMALE_MAIN_OCCUPATION)
-          htmltext = "32145-04.htm" # master_all_kamael002b
-          return htmltext
+        if pc.in_category?(CategoryType::KAMAEL_FEMALE_MAIN_OCCUPATION)
+          return "32145-04.htm" # master_all_kamael002b
         end
 
-        if player.class_id.trooper?
-          htmltext = "32145-05.htm" # master_all_kamael003t
-        elsif player.class_id.warder?
-          htmltext = "32145-02.htm" # master_all_kamael012b
+        if pc.class_id.trooper?
+          "32145-05.htm" # master_all_kamael003t
+        elsif pc.class_id.warder?
+          "32145-02.htm" # master_all_kamael012b
         end
       else
-        if player.in_category?(CategoryType::KAMAEL_MALE_MAIN_OCCUPATION)
-          htmltext = "32145-10.htm" # master_all_kamael002c
-          return htmltext
+        if pc.in_category?(CategoryType::KAMAEL_MALE_MAIN_OCCUPATION)
+          return "32145-10.htm" # master_all_kamael002c
         end
 
-        if player.class_id.trooper?
-          htmltext = "32145-03.htm" # master_all_kamael012c
-        elsif player.class_id.warder?
-          htmltext = "32145-11.htm" # master_all_kamael003w
+        if pc.class_id.trooper?
+          "32145-03.htm" # master_all_kamael012c
+        elsif pc.class_id.warder?
+          "32145-11.htm" # master_all_kamael003w
         end
       end
-    elsif player.in_category?(CategoryType::KAMAEL_THIRD_CLASS_GROUP)
+    elsif pc.in_category?(CategoryType::KAMAEL_THIRD_CLASS_GROUP)
       if NPCS_MALE.includes?(npc.id)
-        if player.in_category?(CategoryType::KAMAEL_MALE_MAIN_OCCUPATION)
-          htmltext = "32145-16.htm" # master_all_kamael005b
+        if pc.in_category?(CategoryType::KAMAEL_MALE_MAIN_OCCUPATION)
+          "32145-16.htm" # master_all_kamael005b
         else
-          htmltext = "32145-04.htm" # master_all_kamael002b
+          "32145-04.htm" # master_all_kamael002b
         end
       else
-        if player.in_category?(CategoryType::KAMAEL_FEMALE_MAIN_OCCUPATION)
-          htmltext = "32145-17.htm" # master_all_kamael005c
+        if pc.in_category?(CategoryType::KAMAEL_FEMALE_MAIN_OCCUPATION)
+          "32145-17.htm" # master_all_kamael005c
         else
-          htmltext = "32145-10.htm" # master_all_kamael002c
+          "32145-10.htm" # master_all_kamael002c
         end
       end
-    elsif player.in_category?(CategoryType::KAMAEL_FOURTH_CLASS_GROUP)
+    elsif pc.in_category?(CategoryType::KAMAEL_FOURTH_CLASS_GROUP)
       if NPCS_MALE.includes?(npc.id)
-        if player.in_category?(CategoryType::KAMAEL_MALE_MAIN_OCCUPATION)
-          htmltext = "32145-18.htm" # master_all_kamael100b
+        if pc.in_category?(CategoryType::KAMAEL_MALE_MAIN_OCCUPATION)
+          "32145-18.htm" # master_all_kamael100b
         else
-          htmltext = "32145-04.htm" # master_all_kamael002b
+          "32145-04.htm" # master_all_kamael002b
         end
       else
-        if player.in_category?(CategoryType::KAMAEL_FEMALE_MAIN_OCCUPATION)
-          htmltext = "32145-19.htm" # master_all_kamael100c
+        if pc.in_category?(CategoryType::KAMAEL_FEMALE_MAIN_OCCUPATION)
+          "32145-19.htm" # master_all_kamael100c
         else
-          htmltext = "32145-10.htm" # master_all_kamael002c
+          "32145-10.htm" # master_all_kamael002c
         end
       end
     end
-
-    htmltext
   end
 end

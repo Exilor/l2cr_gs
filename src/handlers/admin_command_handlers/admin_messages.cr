@@ -31,9 +31,9 @@ module AdminCommandHandler::AdminMessages
           elsif val.starts_with?("npc:")
             sm.add_npc_name(val.from(4).to_i)
           elsif val.starts_with?("zone:")
-            x = val[5...val.index(",").not_nil!].to_i
-            y = val[val.index(",").not_nil! + 1...val.rindex(",").not_nil!].to_i
-            z = val[val.rindex(",").not_nil! + 1...val.size].to_i
+            x = val[5...val.index(',').not_nil!].to_i
+            y = val[val.index(',').not_nil! + 1...val.rindex(',').not_nil!].to_i
+            z = val[val.rindex(',').not_nil! + 1...val.size].to_i
             sm.add_zone_name(x, y, z)
           elsif val.starts_with?("castle:")
             sm.add_castle_id(val.from(7).to_i)

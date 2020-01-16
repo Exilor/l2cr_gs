@@ -47,7 +47,7 @@ class Scripts::NevitsHerald < AbstractNpcAI
     if npc.id == NEVITS_HERALD
       return unless pc
       if event.casecmp?("buff")
-        if pc.effect_list.get_first_effect(L2EffectType::NEVIT_HOURGLASS)
+        if pc.effect_list.get_first_effect(EffectType::NEVIT_HOURGLASS)
           return "4326-1.html"
         end
         npc.target = pc

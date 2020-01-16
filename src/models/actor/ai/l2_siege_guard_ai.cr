@@ -57,7 +57,7 @@ class L2SiegeGuardAI < L2CharacterAI
     @actor.auto_attackable?(target) && GeoData.can_see_target?(@actor, target)
   end
 
-  def change_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
+  def change_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
     sync do
       if intention.idle? # || intention.active? # active becomes idle if only a summon is present
         unless @actor.looks_dead?
@@ -196,7 +196,7 @@ class L2SiegeGuardAI < L2CharacterAI
     # for (L2Character cha : @actor.known_list.each_character(((L2NpcInstance) @actor).getFactionRange+@actor.template.collisionRadius))
     @actor.known_list.each_character(1000) do |cha|
       unless cha.is_a?(L2Npc)
-        if @self_analysis.has_heal_or_resurrect? && cha.is_a?(L2PcInstance) && @actor.as(L2Npc).castle.siege.defender?(cha.clan?)
+        if @self_analysis.has_heal_or_resurrect? && cha.is_a?(L2PcInstance) && @actor.as(L2Npc).castle.siege.defender?(cha.clan)
           # heal friends
           if !@actor.attacking_disabled? && cha.current_hp < cha.max_hp * 0.6
             if @actor.current_hp > @actor.max_hp / 2
@@ -213,7 +213,7 @@ class L2SiegeGuardAI < L2CharacterAI
                   end
 
                   chance = 5
-                  if chance >= rand(100)
+                  if chance >= Rnd.rand(100)
                     next
                   end
                   unless GeoData.can_see_target?(@actor, cha)
@@ -268,7 +268,7 @@ class L2SiegeGuardAI < L2CharacterAI
                   end
 
                   chance = 4
-                  if chance >= rand(100)
+                  if chance >= Rnd.rand(100)
                     next
                   end
                   unless GeoData.can_see_target?(@actor, npc)
@@ -317,8 +317,8 @@ class L2SiegeGuardAI < L2CharacterAI
 
     # never attack defenders
     if att_tgt.is_a?(L2PcInstance)
-      if s_guard.conquerable_hall?.nil?
-        if s_guard.castle.siege.defender?(att_tgt.clan?)
+      if s_guard.conquerable_hall.nil?
+        if s_guard.castle.siege.defender?(att_tgt.clan)
           # Cancel the target
           s_guard.stop_hating(att_tgt)
           @actor.target = nil
@@ -348,9 +348,9 @@ class L2SiegeGuardAI < L2CharacterAI
             if @actor.current_mp >= @actor.stat.get_mp_consume2(sk)
               unless sk.passive?
                 old_target = @actor.target
-                if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(L2EffectType::HP)
+                if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(EffectType::HP)
                   use_skill_self = true
-                  if sk.has_effect_type?(L2EffectType::HP) && @actor.current_hp > @actor.max_hp / 1.5
+                  if sk.has_effect_type?(EffectType::HP) && @actor.current_hp > @actor.max_hp / 1.5
                     use_skill_self = false
                     break
                   end
@@ -458,9 +458,9 @@ class L2SiegeGuardAI < L2CharacterAI
             if @actor.current_mp >= @actor.stat.get_mp_consume2(sk)
               unless @actor.skill_disabled?(sk)
                 old_target = @actor.target
-                if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(L2EffectType::HP)
+                if (sk.continuous? && !sk.debuff?) || sk.has_effect_type?(EffectType::HP)
                   use_skill_self = true
-                  if sk.has_effect_type?(L2EffectType::HP)
+                  if sk.has_effect_type?(EffectType::HP)
                     if @actor.current_hp > @actor.max_hp / 1.5
                       use_skill_self = false
                       break

@@ -5,7 +5,6 @@ require "./cellnodes/cell_path_finding"
 
 module PathFinding
   extend self
-  extend Loggable
 
   private class_getter! engine : GeoPathFinding | CellPathFinding
 

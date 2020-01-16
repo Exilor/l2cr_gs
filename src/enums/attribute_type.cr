@@ -6,4 +6,8 @@ enum AttributeType : Int8
   EARTH
   HOLY
   DARK
+
+  def id : Int8
+    to_i8
+  end
 end

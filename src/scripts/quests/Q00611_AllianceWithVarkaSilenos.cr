@@ -178,7 +178,7 @@ class Scripts::Q00611_AllianceWithVarkaSilenos < Quest
       st = get_quest_state!(member, false)
       info = MOBS[npc.id]
       if st.cond >= info.min_cond && st.cond < 6
-        if can_get_item?(st, info.item_id) && rand(1000) < info.chance
+        if can_get_item?(st, info.item_id) && Rnd.rand(1000) < info.chance
           st.give_items(info.item_id, 1)
         end
       end

@@ -25,11 +25,12 @@ class Scripts::Buron < AbstractNpcAI
       else
         if get_quest_items_count(pc, DARION_BADGE) >= 10
           take_items(pc, DARION_BADGE, 10)
-          if event.casecmp?("Tunic")
+          case event.casecmp
+          when "Tunic"
             pc.add_item("Quest", TUNIC, 1, npc, true)
-          elsif event.casecmp?("Helmet")
+          when "Helmet"
             pc.add_item("Quest", HELMET, 1, npc, true)
-          elsif event.casecmp?("Pants")
+          when "Pants"
             pc.add_item("Quest", PANTS, 1, npc, true)
           end
           html = nil

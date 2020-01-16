@@ -25,15 +25,15 @@ module NpcBuffersData
     end
   end
 
-  def get_npc_buffer(npc_id : Int)
+  def get_npc_buffer(npc_id : Int) : NpcBufferData
     NPC_BUFFERS[npc_id]
   end
 
-  def npc_buffers
+  def npc_buffers : Enumerable(NpcBufferData)
     NPC_BUFFERS.local_each_value
   end
 
-  def npc_buffer_ids
-    NPC_BUFFERS.each_key
+  def npc_buffer_ids : Enumerable(Int32)
+    NPC_BUFFERS.local_each_key
   end
 end

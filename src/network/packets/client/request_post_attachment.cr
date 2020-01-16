@@ -42,7 +42,7 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     end
 
     unless msg = MailManager.get_message(@msg_id)
-      warn "Message with ID #{@msg_id} not found."
+      warn { "Message with ID #{@msg_id} not found." }
       return
     end
 
@@ -51,12 +51,12 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     end
 
     unless msg.has_attachments?
-      warn "Message with ID #{@msg_id} has no attachments."
+      warn { "Message with ID #{@msg_id} has no attachments." }
       return
     end
 
     unless attachments = msg.attachments
-      warn "Message with ID #{@msg_id} has attachments but its item container couldn't be found."
+      warn { "Message with ID #{@msg_id} has attachments but its item container couldn't be found." }
       return
     end
 
@@ -67,19 +67,19 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     attachments.items.each do |item|
       if item.owner_id != msg.sender_id
         Util.punish(pc, "tried to get items intended to someone else.")
-        warn "#{pc.name} tried to receive a mailed item not owned by its sender (1)."
+        warn { "#{pc.name} tried to receive a mailed item not owned by its sender (1)." }
         return
       end
 
       unless item.item_location.mail?
         Util.punish(pc, "tried to get an item from mail which was not in the mail.")
-        warn "#{item} should be in ItemLocation::MAIL but it's in #{item.item_location.inspect}."
+        warn { "#{item} should be in ItemLocation::MAIL but it's in #{item.item_location.inspect}." }
         return
       end
 
       if item.location_slot != msg.id
         Util.punish(pc, "tried to get items from another mail attachment.")
-        "#{pc.name} tried to receive a mailed item from a different attachment."
+        warn { "#{pc.name} tried to receive a mailed item from a different attachment." }
         return
       end
 
@@ -117,14 +117,14 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
       debug "Transferring #{item}."
       if item.owner_id != msg.sender_id
         Util.punish(pc, "tried to get items from a mail sent to somebody else.")
-        warn "#{pc.name} tried to receive an item not owned by its sender (2)."
+        warn { "#{pc.name} tried to receive an item not owned by its sender (2)." }
         return
       end
 
       count = item.count
       new_item = attachments.transfer_item(attachments.name, item.l2id, item.count, pc.inventory, pc, nil)
       unless new_item
-        warn "Item transfer of #{item} failed."
+        warn { "Item transfer of #{item} failed." }
         return
       end
 

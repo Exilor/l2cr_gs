@@ -8,7 +8,7 @@ module ItemHandler::SpiritShot
       return false
     end
 
-    weapon_inst = pc.active_weapon_instance?
+    weapon_inst = pc.active_weapon_instance
     item_id = item.id
     skills = item.template.skills
 
@@ -17,7 +17,7 @@ module ItemHandler::SpiritShot
       return false
     end
 
-    if weapon_inst.nil? || pc.active_weapon_item.spiritshot_count == 0
+    if weapon_inst.nil? || pc.active_weapon_item.not_nil!.spiritshot_count == 0
       unless pc.active_shots.includes?(item_id)
         pc.send_packet(SystemMessageId::CANNOT_USE_SPIRITSHOTS)
       end
@@ -35,7 +35,7 @@ module ItemHandler::SpiritShot
       return false
     end
 
-    unless pc.destroy_item_without_trace("Consume", item.l2id, pc.active_weapon_item.spiritshot_count.to_i64, nil, false)
+    unless pc.destroy_item_without_trace("Consume", item.l2id, pc.active_weapon_item.not_nil!.spiritshot_count.to_i64, nil, false)
       unless pc.disable_auto_shot(item_id)
         pc.send_packet(SystemMessageId::NOT_ENOUGH_SPIRITSHOTS)
       end

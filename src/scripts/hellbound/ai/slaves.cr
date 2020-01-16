@@ -35,7 +35,7 @@ class Scripts::Slaves < AbstractNpcAI
       slave.abort_cast
       broadcast_npc_say(slave, Say2::NPC_ALL, NpcString::THANK_YOU_FOR_SAVING_ME_FROM_THE_CLUTCHES_OF_EVIL)
 
-      if HellboundEngine.level >= 1 && HellboundEngine.level <= 2
+      if HellboundEngine.level.between?(1, 2)
         HellboundEngine.update_trust(TRUST_REWARD, false)
       end
       slave.set_intention(AI::MOVE_TO, MOVE_TO)

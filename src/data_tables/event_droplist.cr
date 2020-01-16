@@ -23,10 +23,10 @@ module EventDroplist
 
   def all_drops
     time = Time.now
-    DROPS.select { |d| d.includes?(time) }
+    DROPS.select &.includes?(time)
   end
 
-  struct EventDrop
+  private struct EventDrop
     getter_initializer item_id_list : Slice(Int32), min_count : Int64,
       max_count : Int64, drop_chance : Int32
 

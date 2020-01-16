@@ -18,8 +18,7 @@ class EffectHandler::SoulEating < AbstractEffect
   end
 
   def on_experience_received(pc, exp)
-    pc = pc.acting_player
-    if pc.player? && exp >= @exp_needed
+    if pc.is_a?(L2PcInstance) && exp >= @exp_needed
       if pc.charged_souls >= pc.calc_stat(Stats::MAX_SOULS, 0)
         pc.send_packet(SystemMessageId::SOUL_CANNOT_BE_ABSORBED_ANYMORE)
         return

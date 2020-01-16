@@ -73,7 +73,7 @@ class Scripts::Q00311_ExpulsionOfEvilSpirits < Quest
   def on_kill(npc, killer, is_summon)
     if qs = get_random_party_member_state(killer, 1, 2, npc)
       count = qs.get_memo_state_ex(1) + 1
-      if count >= RAGNA_ORCS_KILLS_COUNT && rand(20) < (count % 100) + 1
+      if count >= RAGNA_ORCS_KILLS_COUNT && Rnd.rand(20) < (count % 100) + 1
         qs.set_memo_state_ex(1, 0)
         qs.give_items(SOUL_CORE_CONTAINING_EVIL_SPIRIT, 1)
         qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

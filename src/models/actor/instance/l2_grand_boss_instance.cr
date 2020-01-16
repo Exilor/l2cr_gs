@@ -1,5 +1,6 @@
 class L2GrandBossInstance < L2MonsterInstance
   private BOSS_MAINTENANCE_INTERVAL = 10000
+
   property? give_raid_curse : Bool = true
 
   def initialize(template : L2NpcTemplate)
@@ -28,12 +29,12 @@ class L2GrandBossInstance < L2MonsterInstance
     if killer.is_a?(L2PcInstance)
       pc = killer
     elsif killer.is_a?(L2Summon)
-      pc = killer.owner?
+      pc = killer.owner
     end
 
     if pc
       broadcast_packet(SystemMessage.raid_was_successful)
-      if party = pc.party?
+      if party = pc.party
         party.members.each do |m|
           RaidBossPointsManager.add_points(m, id, (level // 2) + Rnd.rand(-5..5))
           if m.noble?

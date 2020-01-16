@@ -1,7 +1,7 @@
 class Packets::Outgoing::PartyMatchDetail < GameServerPacket
   initializer room : PartyMatchRoom
 
-  def write_impl
+  private def write_impl
     c 0x9d
 
     d @room.id

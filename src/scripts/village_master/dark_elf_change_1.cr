@@ -101,30 +101,28 @@ class Scripts::DarkElfChange1 < AbstractNpcAI
 
   private def class_change_requested(pc, npc, class_id)
     if pc.in_category?(CategoryType::SECOND_CLASS_GROUP)
-      htmltext = "#{npc.id}-15.htm"
+      "#{npc.id}-15.htm"
     elsif pc.in_category?(CategoryType::THIRD_CLASS_GROUP)
-      htmltext = "#{npc.id}-16.htm"
+      "#{npc.id}-16.htm"
     elsif pc.in_category?(CategoryType::FOURTH_CLASS_GROUP)
-      htmltext = "30290-34.htm"
+      "30290-34.htm"
     elsif class_id == PALUS_KNIGHT && pc.class_id.dark_fighter?
-      htmltext = try_change(pc, npc, class_id, GAZE_OF_ABYSS, 17)
+      try_change(pc, npc, class_id, GAZE_OF_ABYSS, 17)
     elsif class_id == ASSASSIN && pc.class_id.dark_fighter?
-      htmltext = try_change(pc, npc, class_id, IRON_HEART, 21)
+      try_change(pc, npc, class_id, IRON_HEART, 21)
     elsif class_id == DARK_WIZARD && pc.class_id.dark_mage?
-      htmltext = try_change(pc, npc, class_id, DARK_JEWEL, 25)
+      try_change(pc, npc, class_id, DARK_JEWEL, 25)
     elsif class_id == SHILLIEN_ORACLE && pc.class_id.dark_mage?
-      htmltext = try_change(pc, npc, class_id, ORB_OF_ABYSS, 29)
+      try_change(pc, npc, class_id, ORB_OF_ABYSS, 29)
     end
-
-    htmltext
   end
 
   private def try_change(pc, npc, class_id, item_id, offset)
     if pc.level < MIN_LEVEL
       if has_quest_items?(pc, item_id)
-        htmltext = "#{npc.id}-#{offset}.htm"
+        "#{npc.id}-#{offset}.htm"
       else
-        htmltext = "#{npc.id}-#{offset + 1}.htm"
+        "#{npc.id}-#{offset + 1}.htm"
       end
     elsif has_quest_items?(pc, item_id)
       take_items(pc, item_id, -1)
@@ -132,12 +130,10 @@ class Scripts::DarkElfChange1 < AbstractNpcAI
       pc.base_class = class_id
       pc.broadcast_user_info
       give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_D_GRADE, 15)
-      htmltext = "#{npc.id}-#{offset + 2}.htm"
+      "#{npc.id}-#{offset + 2}.htm"
     else
-      htmltext = "#{npc.id}-#{offset + 3}.htm"
+      "#{npc.id}-#{offset + 3}.htm"
     end
-
-    htmltext
   end
 
   def on_talk(npc, pc)

@@ -1,5 +1,6 @@
 struct TransformLevelData
-  @stats = Hash(Int32, Float64).new
+  @stats = {} of Int32 => Float64
+
   getter level : Int32
   getter level_mod : Float64
 

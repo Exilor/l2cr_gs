@@ -77,7 +77,7 @@ class Scripts::Q00354_ConquestOfAlligatorIsland < Quest
       if MOB1.has_key?(npc_id)
         st.give_item_randomly(npc, ALLIGATOR_TOOTH, 1, 0, MOB1[npc_id], true)
       else
-        item_count = rand(100) < MOB2[npc_id] ? 2 : 1
+        item_count = Rnd.rand(100) < MOB2[npc_id] ? 2 : 1
         st.give_item_randomly(npc, ALLIGATOR_TOOTH, item_count, 0, 1.0, true)
       end
 

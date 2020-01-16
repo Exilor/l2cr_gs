@@ -92,66 +92,66 @@ class Scripts::Q00702_ATrapForRevenge < Quest
         html = "32555-10.html"
       end
     elsif event.casecmp?("32555-15.html")
-      i0 = rand(1000)
-      i1 = rand(1000)
+      i0 = Rnd.rand(1000)
+      i1 = Rnd.rand(1000)
 
       if i0 >= 500 && i1 >= 600
-        st.give_adena(rand(49917) + 125000, false)
+        st.give_adena(Rnd.rand(49917) + 125000, false)
         if i1 < 720
-          st.give_items(9628, rand(3) + 1)
-          st.give_items(9629, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
         elsif i1 < 840
-          st.give_items(9629, rand(3) + 1)
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         elsif i1 < 960
-          st.give_items(9628, rand(3) + 1)
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         elsif i1 < 1000
-          st.give_items(9628, rand(3) + 1)
-          st.give_items(9629, rand(3) + 1)
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         end
 
         html = "32555-15.html"
       elsif i0 >= 500 && i1 < 600
-        st.give_adena(rand(49917) + 125000, false)
+        st.give_adena(Rnd.rand(49917) + 125000, false)
         if i1 < 210
         elsif i1 < 340
-          st.give_items(9628, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
         elsif i1 < 470
-          st.give_items(9629, rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
         elsif i1 < 600
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         end
 
         html = "32555-16.html"
       elsif i0 < 500 && i1 >= 600
-        st.give_adena(rand(49917) + 25000, false)
+        st.give_adena(Rnd.rand(49917) + 25000, false)
         if i1 < 720
-          st.give_items(9628, rand(3) + 1)
-          st.give_items(9629, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
         elsif i1 < 840
-          st.give_items(9629, rand(3) + 1)
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         elsif i1 < 960
-          st.give_items(9628, rand(3) + 1)
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         elsif i1 < 1000
-          st.give_items(9628, rand(3) + 1)
-          st.give_items(9629, rand(3) + 1)
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         end
         html = "32555-17.html"
       elsif i0 < 500 && i1 < 600
-        st.give_adena(rand(49917) + 25000, false)
+        st.give_adena(Rnd.rand(49917) + 25000, false)
         if i1 < 210
           # do nothing
         elsif i1 < 340
-          st.give_items(9628, rand(3) + 1)
+          st.give_items(9628, Rnd.rand(3) + 1)
         elsif i1 < 470
-          st.give_items(9629, rand(3) + 1)
+          st.give_items(9629, Rnd.rand(3) + 1)
         elsif i1 < 600
-          st.give_items(9630, rand(3) + 1)
+          st.give_items(9630, Rnd.rand(3) + 1)
         end
 
         html = "32555-18.html"
@@ -167,7 +167,7 @@ class Scripts::Q00702_ATrapForRevenge < Quest
       return
     end
     st = get_quest_state!(member, false)
-    chance = rand(1000)
+    chance = Rnd.rand(1000)
     case npc.id
     when 22612
       if chance < 413
@@ -206,15 +206,15 @@ class Scripts::Q00702_ATrapForRevenge < Quest
     when 25626
       count = 0
       if chance < 708
-        count = rand(2) + 1
+        count = Rnd.rand(2) + 1
       elsif chance < 978
-        count = rand(3) + 3
+        count = Rnd.rand(3) + 3
       elsif chance < 994
-        count = rand(4) + 6
+        count = Rnd.rand(4) + 6
       elsif chance < 998
-        count = rand(4) + 10
+        count = Rnd.rand(4) + 10
       elsif chance < 1000
-        count = rand(5) + 14
+        count = Rnd.rand(5) + 14
       end
       st.give_items(VARIANT_DRAKE_WING_HORNS, count)
     end

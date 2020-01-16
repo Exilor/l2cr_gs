@@ -1,4 +1,4 @@
-enum L2TargetType : UInt8
+enum TargetType : UInt8
   AREA
   AREA_CORPSE_MOB
   AREA_FRIENDLY

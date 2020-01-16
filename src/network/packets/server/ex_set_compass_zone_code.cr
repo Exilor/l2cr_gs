@@ -9,7 +9,7 @@ class Packets::Outgoing::ExSetCompassZoneCode < GameServerPacket
 
   initializer zone_type : UInt8
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x33
 

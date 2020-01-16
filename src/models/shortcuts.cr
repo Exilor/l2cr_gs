@@ -95,7 +95,7 @@ struct Shortcuts
       page  = rs.get_i32("page")
       type  = rs.get_i32("type")
       id    = rs.get_i32("shortcut_id")
-      level = rs.get_string("level").to_i32 # it's stored as VARCHAR for some reason
+      level = rs.get_i32("level")
 
       shortcut = Shortcut.new(slot, page, ShortcutType[type], id, level, 1)
       @shortcuts[slot + (page * MAX_SHORTCUTS_PER_BAR)] = shortcut

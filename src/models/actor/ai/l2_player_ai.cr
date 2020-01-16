@@ -2,13 +2,14 @@ require "./l2_playable_ai"
 
 class L2PlayerAI < L2PlayableAI
   @thinking = false
+
   getter next_intention : IntentionCommand?
 
-  def save_next_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
+  def save_next_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
     @next_intention = IntentionCommand.new(intention, arg0, arg1)
   end
 
-  private def change_intention(intention : Intention, arg0 : AIArg = nil, arg1 : AIArg = nil)
+  private def change_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
     sync do
       if !intention.cast? || (arg0.is_a?(Skill) && !arg0.toggle?)
         @next_intention = nil
@@ -61,7 +62,7 @@ class L2PlayerAI < L2PlayableAI
       if attack_target?
         self.attack_target = nil
       end
-      client_stop_moving
+      client_stop_moving(nil)
     end
   end
 
@@ -78,7 +79,7 @@ class L2PlayerAI < L2PlayableAI
 
     pc = @actor
 
-    if pc.acting_player.duel_state.dead?
+    if pc.acting_player.not_nil!.duel_state.dead?
       client_action_failed
       pc.send_packet(SystemMessageId::CANNOT_MOVE_FROZEN)
       return
@@ -117,7 +118,7 @@ class L2PlayerAI < L2PlayableAI
       return
     end
 
-    client_stop_moving
+    client_stop_moving(nil)
     @actor.do_attack(target)
   end
 
@@ -131,7 +132,7 @@ class L2PlayerAI < L2PlayableAI
     pc = @actor
 
     if skill.target_type.ground?
-      pos = pc.acting_player.current_skill_world_position
+      pos = pc.acting_player.not_nil!.current_skill_world_position
       range = pc.get_magical_attack_range(skill)
 
       if maybe_move_to_position(pos, range)
@@ -157,7 +158,7 @@ class L2PlayerAI < L2PlayableAI
     end
 
     if skill.hit_time > 50 && !skill.simultaneous_cast?
-      client_stop_moving
+      client_stop_moving(nil)
     end
 
     pc.do_cast(skill)
@@ -170,7 +171,7 @@ class L2PlayerAI < L2PlayableAI
     return if maybe_move_to_pawn(target, 36)
 
     set_intention(IDLE)
-    @actor.acting_player.do_pickup_item(target.as(L2ItemInstance))
+    @actor.acting_player.not_nil!.do_pickup_item(target.as(L2ItemInstance))
   end
 
   private def think_interact
@@ -189,7 +190,7 @@ class L2PlayerAI < L2PlayableAI
     end
 
     unless target.is_a?(L2StaticObjectInstance)
-      @actor.acting_player.do_interact(target.as(L2Character))
+      @actor.acting_player.not_nil!.do_interact(target.as(L2Character))
     end
 
     set_intention(IDLE)

@@ -8,7 +8,7 @@ class ClanWarehouse < Warehouse
   end
 
   def owner? : L2PcInstance?
-    @clan.leader.player_instance?
+    @clan.leader.player_instance
   end
 
   def owner_id : Int32

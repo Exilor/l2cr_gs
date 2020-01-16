@@ -7,7 +7,7 @@ module UserCommandHandler::ChannelLeave
       return false
     end
 
-    unless party = pc.party?
+    unless party = pc.party
       pc.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_LEAVE_CHANNEL)
       return false
     end
@@ -17,14 +17,14 @@ module UserCommandHandler::ChannelLeave
       return false
     end
 
-    return false unless channel = party.command_channel?
+    return false unless cc = party.command_channel
 
-    channel.remove_party(party)
+    cc.remove_party(party)
     party.leader.send_packet(SystemMessageId::LEFT_COMMAND_CHANNEL)
 
     sm = Packets::Outgoing::SystemMessage.c1_party_left_command_channel
     sm.add_pc_name(party.leader)
-    channel.broadcast_packet(sm)
+    cc.broadcast_packet(sm)
 
     true
   end

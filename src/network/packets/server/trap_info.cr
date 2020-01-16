@@ -18,10 +18,10 @@ class Packets::Outgoing::TrapInfo < Packets::Outgoing::AbstractNpcInfo
     if trap.template.using_server_side_name?
       @name = trap.name
     end
-    @title = trap.owner?.try &.name || ""
+    @title = trap.owner.try &.name || ""
   end
 
-  def write_impl
+  private def write_impl
     c 0x0c
 
     d @trap.l2id

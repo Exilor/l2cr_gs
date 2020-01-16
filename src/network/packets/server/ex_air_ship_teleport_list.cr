@@ -2,7 +2,7 @@ class Packets::Outgoing::ExAirShipTeleportList < GameServerPacket
   initializer dock_id : Int32, teleports : Slice(Slice(VehiclePathPoint))?,
     fuel : Slice(Int32)
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x9a
 

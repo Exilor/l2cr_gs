@@ -53,12 +53,4 @@ module TownManager
 
     nil
   end
-
-  def get_town!(x : Int32, y : Int32, z : Int32) : L2TownZone
-    unless town = get_town(x, y, z)
-      raise "Town with coords #{x}, #{y}, #{z} not found"
-    end
-
-    town
-  end
 end

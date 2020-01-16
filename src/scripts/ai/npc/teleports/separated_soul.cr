@@ -37,26 +37,26 @@ class Scripts::SeparatedSoul < AbstractNpcAI
     add_first_talk_id(SEPARATED_SOULS)
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     "#{npc.id}.htm"
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
+  def on_adv_event(event, npc, pc)
+    return unless pc
 
     ask = event.to_i
     case ask
     when 1..8
-      if player.level >= MIN_LEVEL
-        player.tele_to_location(LOCATIONS[ask], false)
+      if pc.level >= MIN_LEVEL
+        pc.tele_to_location(LOCATIONS[ask], false)
       else
         return "no-level.htm"
       end
     when 23241
-      if has_quest_items?(player, WILL_OF_ANTHARAS, SEALED_BLOOD_CRYSTAL)
-        take_items(player, WILL_OF_ANTHARAS, 1)
-        take_items(player, SEALED_BLOOD_CRYSTAL, 1)
-        give_items(player, ANTHARAS_BLOOD_CRYSTAL, 1)
+      if has_quest_items?(pc, WILL_OF_ANTHARAS, SEALED_BLOOD_CRYSTAL)
+        take_items(pc, WILL_OF_ANTHARAS, 1)
+        take_items(pc, SEALED_BLOOD_CRYSTAL, 1)
+        give_items(pc, ANTHARAS_BLOOD_CRYSTAL, 1)
       else
         return "no-items.htm"
       end

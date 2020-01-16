@@ -118,7 +118,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         html = "30313-02.html"
       else
         take_items(pc, CLAY_URN_FRAGMENT, 5)
-        if rand(6) < 5
+        if Rnd.rand(6) < 5
           give_items(pc, ANCIENT_CLAY_URN, 1)
           html = event
         else
@@ -130,7 +130,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         html = "30313-04.html"
       else
         take_items(pc, BRASS_TRINKET_PIECE, 5)
-        if rand(7) < 6
+        if Rnd.rand(7) < 6
           give_items(pc, ANCIENT_BRASS_TIARA, 1)
           html = event
         else
@@ -142,7 +142,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         html = "30313-06.html"
       else
         take_items(pc, BRONZE_MIRROR_PIECE, 5)
-        if rand(7) < 6
+        if Rnd.rand(7) < 6
           give_items(pc, ANCIENT_BRONZE_MIRROR, 1)
           html = event
         else
@@ -154,7 +154,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         html = "30313-08.html"
       else
         take_items(pc, JADE_NECKLACE_BEAD, 5)
-        if rand(8) < 7
+        if Rnd.rand(8) < 7
           give_items(pc, ANCIENT_JADE_NECKLACE, 1)
           html = event
         else
@@ -165,7 +165,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       if !has_quest_items?(pc, ANCIENT_CLAY_URN)
         html = "30314-07.html"
       else
-        reward_items(pc, SOULSHOT_D, rand(70..110))
+        reward_items(pc, SOULSHOT_D, Rnd.rand(70..110))
         take_items(pc, ANCIENT_CLAY_URN, 1)
         html = event
       end
@@ -173,7 +173,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       if !has_quest_items?(pc, ANCIENT_BRASS_TIARA)
         html = "30314-07.html"
       else
-        rnd = rand(100)
+        rnd = Rnd.rand(100)
         if rnd < 40
           reward_items(pc, HEALING_POTION, 1)
         elsif rnd < 84
@@ -188,7 +188,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       if !has_quest_items?(pc, ANCIENT_BRONZE_MIRROR)
         html = "30314-07.html"
       else
-        reward_items(pc, rand(100) < 59 ? SCROLL_OF_ESCAPE : SCROLL_OF_RESURRECTION, 1)
+        reward_items(pc, Rnd.rand(100) < 59 ? SCROLL_OF_ESCAPE : SCROLL_OF_RESURRECTION, 1)
         take_items(pc, ANCIENT_BRONZE_MIRROR, 1)
         html = event
       end
@@ -196,7 +196,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       if !has_quest_items?(pc, ANCIENT_JADE_NECKLACE)
         html = "30314-07.html"
       else
-        reward_items(pc, SPIRITSHOT_D, rand(50..90))
+        reward_items(pc, SPIRITSHOT_D, Rnd.rand(50..90))
         take_items(pc, ANCIENT_JADE_NECKLACE, 1)
         html = event
       end
@@ -213,8 +213,8 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         give_items(killer, TUREK_DOG_TAG, 1)
       end
 
-      if rand(100) < FRAGMENTS_DROP_PROB[npc.id]
-        give_items(killer, rand(CLAY_URN_FRAGMENT..JADE_NECKLACE_BEAD), 1)
+      if Rnd.rand(100) < FRAGMENTS_DROP_PROB[npc.id]
+        give_items(killer, Rnd.rand(CLAY_URN_FRAGMENT..JADE_NECKLACE_BEAD), 1)
       end
     end
 

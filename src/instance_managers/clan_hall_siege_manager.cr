@@ -30,20 +30,12 @@ module ClanHallSiegeManager
     error e
   end
 
-  def conquerable_halls
+  def conquerable_halls : Hash(Int32, SiegableHall)
     SIEGABLE_HALLS
   end
 
   def get_siegable_hall(id : Int32) : SiegableHall?
     conquerable_halls[id]?
-  end
-
-  def get_siegable_hall!(id : Int32) : SiegableHall
-    unless hall = get_siegable_hall(id)
-      raise "No siegable hall with id #{id} found"
-    end
-
-    hall
   end
 
   def get_nearby_clan_hall(char : L2Character) : SiegableHall?
@@ -54,14 +46,6 @@ module ClanHallSiegeManager
     SIEGABLE_HALLS.find_value do |ch|
       ch.zone.get_distance_to_zone(x, y) < max_dist
     end
-  end
-
-  def get_nearby_clan_hall!(*args) : SiegableHall
-    unless hall = get_nearby_clan_hall(*args)
-      raise "No clan hall found with args #{args}"
-    end
-
-    hall
   end
 
   def get_siege(char : L2Character) : ClanHallSiegeEngine?
@@ -102,17 +86,21 @@ module ClanHallSiegeManager
 
   def clan_participating?(clan : L2Clan) : Bool
     conquerable_halls.local_each_value.any? do |hall|
-      hall.siege? && hall.siege.attacker?(clan)
+      (siege = hall.siege?) && siege.attacker?(clan)
     end
   end
 
   def on_server_shutdown
     conquerable_halls.each_value do |hall|
-      if hall.id == 62 || hall.siege?.nil?
+      if hall.id == 62
         next
       end
 
-      hall.siege.save_attackers
+      unless siege = hall.siege?
+        next
+      end
+
+      siege.save_attackers
     end
   end
 end

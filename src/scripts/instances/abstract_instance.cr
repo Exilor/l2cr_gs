@@ -11,7 +11,7 @@ abstract class AbstractInstance < AbstractNpcAI
     if world = InstanceManager.get_player_world(pc)
       if world.template_id == template_id
         on_enter_instance(pc, world, false)
-        inst = InstanceManager.get_instance!(world.instance_id)
+        inst = InstanceManager.get_instance(world.instance_id).not_nil!
         if inst.remove_buff_enabled?
           handle_remove_buffs(pc, world)
         end
@@ -27,7 +27,7 @@ abstract class AbstractInstance < AbstractNpcAI
       instance.status = 0
       InstanceManager.add_world(instance)
       on_enter_instance(pc, instance, true)
-      inst = InstanceManager.get_instance!(instance.instance_id)
+      inst = InstanceManager.get_instance(instance.instance_id).not_nil!
       if inst.reenter_type.on_instance_enter?
         handle_reenter_time(instance)
       end
@@ -61,7 +61,7 @@ abstract class AbstractInstance < AbstractNpcAI
   end
 
   def handle_reenter_time(world : InstanceWorld)
-    inst = InstanceManager.get_instance!(world.instance_id)
+    inst = InstanceManager.get_instance(world.instance_id).not_nil!
     reenter_data = inst.reenter_data
 
     time = -1i64
@@ -106,7 +106,7 @@ abstract class AbstractInstance < AbstractNpcAI
   end
 
   private def handle_remove_buffs(pc : L2PcInstance, world : InstanceWorld)
-    inst = InstanceManager.get_instance!(world.instance_id)
+    inst = InstanceManager.get_instance(world.instance_id).not_nil!
     case inst.remove_buff_type
     when InstanceRemoveBuffType::ALL
       pc.stop_all_effects_except_those_that_last_through_death
@@ -154,7 +154,7 @@ abstract class AbstractInstance < AbstractNpcAI
   end
 
   private def spawn_group(group_name : String, instance_id : Int32) : Array(L2Npc)
-    InstanceManager.get_instance!(instance_id).spawn_group(group_name).not_nil!
+    InstanceManager.get_instance(instance_id).not_nil!.spawn_group(group_name).not_nil!
   end
 
   private def set_reenter_time(world : InstanceWorld, time : Int64)
@@ -163,7 +163,7 @@ abstract class AbstractInstance < AbstractNpcAI
       pc = L2World.get_player(l2id)
       if pc && pc.online?
         sm = SystemMessage.instant_zone_from_here_s1_s_entry_has_been_restricted
-        inst = InstanceManager.get_instance!(world.instance_id)
+        inst = InstanceManager.get_instance(world.instance_id).not_nil!
         sm.add_string(inst.name)
         pc.send_packet(sm)
       end

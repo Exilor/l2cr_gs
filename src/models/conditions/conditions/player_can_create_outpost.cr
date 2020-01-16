@@ -3,16 +3,17 @@ class Condition
     initializer val : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
-      unless effector && effector.player?
+      unless effector && effector.player? && (pc = effector.acting_player)
         return !@val
       end
 
-      pc = effector.acting_player
       can = true
 
-      if pc.looks_dead? || pc.cursed_weapon_equipped? || pc.clan?.nil?
+      if pc.looks_dead? || pc.cursed_weapon_equipped? || pc.clan.nil?
         can = false
       end
+
+      clan = pc.clan.not_nil!
 
       castle = CastleManager.get_castle(pc)
       fort = FortManager.get_fort(pc)
@@ -30,10 +31,10 @@ class Condition
       elsif !pc.clan_leader?
         pc.send_message("You must be a clan leader to construct an outpost or flag.")
         can = false
-      elsif TerritoryWarManager.get_hq_for_clan(pc.clan)
+      elsif TerritoryWarManager.get_hq_for_clan(clan)
         pc.send_packet(SystemMessageId::NOT_ANOTHER_HEADQUARTERS)
         can = false
-      elsif TerritoryWarManager.get_flag_for_clan(pc.clan)
+      elsif TerritoryWarManager.get_flag_for_clan(clan)
         pc.send_packet(SystemMessageId::A_FLAG_IS_ALREADY_BEING_DISPLAYED_ANOTHER_FLAG_CANNOT_BE_DISPLAYED)
         can = false
       elsif !pc.inside_hq_zone?

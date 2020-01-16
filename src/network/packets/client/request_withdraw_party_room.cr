@@ -10,16 +10,13 @@ class Packets::Incoming::RequestWithdrawPartyRoom < GameClientPacket
     return unless pc = active_char
 
     unless room = PartyMatchRoomList.get_room(@room_id)
-      debug "Room #{@room_id} not found."
+      debug { "Room #{@room_id} not found." }
       return
     end
 
-    if pc.in_party? && room.owner.in_party?
-      if pc.party.leader_l2id == room.owner.party.leader_l2id
-        pc.broadcast_user_info
-
-        return
-      end
+    if pc.party && room.owner.party && pc.party == room.owner.party
+      pc.broadcast_user_info
+      return
     end
 
     room.delete_member(pc)

@@ -1,7 +1,7 @@
 class Packets::Outgoing::ShowCalculator < GameServerPacket
   initializer calculator_id : Int32
 
-  def write_impl
+  private def write_impl
     c 0xe2
     d @calculator_id
   end

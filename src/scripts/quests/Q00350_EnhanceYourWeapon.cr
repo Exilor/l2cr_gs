@@ -194,7 +194,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
       return
     end
 
-    if rand(100) <= NPC_LEVELING_INFO[mob.id][sc.level].chance
+    if Rnd.rand(100) <= NPC_LEVELING_INFO[mob.id][sc.level].chance
       exchange_crystal(pc, mob, sc.item_id, sc.leveled_item_id, false)
     else
       pc.send_packet(SystemMessageId::SOUL_CRYSTAL_ABSORBING_FAILED)
@@ -210,7 +210,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
     pcs = {} of L2PcInstance => SoulCrystal
     max_sc_level = 0
 
-    if party_leveling_monster?(mob.id) && (party = killer.party?)
+    if party_leveling_monster?(mob.id) && (party = killer.party)
       party.members.each do |pl|
         unless sc = get_sc_for_player(pl)
           next
@@ -265,28 +265,28 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
       # This is a naive method for selecting a random member. It gets any random party member and
       # then checks if the member has a valid crystal. It does not select the random party member
       # among those who have crystals, only. However, this might actually be correct (same as retail).
-      if party = killer.party?
-        lucky = party.members.sample
+      if party = killer.party
+        lucky = party.members.sample(random: Rnd)
         level_crystal(lucky, pcs[lucky], mob)
       else
         level_crystal(killer, pcs[killer], mob)
       end
     when AbsorbCrystalType::PARTY_RANDOM
-      if party = killer.party?
+      if party = killer.party
         lucky_party = party.members.dup
-        while rand(100) < 33 && !lucky_party.empty?
-          lucky = lucky_party.sample
+        while Rnd.rand(100) < 33 && !lucky_party.empty?
+          lucky = lucky_party.sample(random: Rnd)
           lucky_party.delete_first(lucky)
           if pcs.has_key?(lucky)
             level_crystal(lucky, pcs[lucky], mob)
           end
         end
-      elsif rand(100) < 33
+      elsif Rnd.rand(100) < 33
         level_crystal(killer, pcs[killer], mob)
       end
     when AbsorbCrystalType::FULL_PARTY
-      if party = killer.party?
-        killer.party.members.each do |pl|
+      if party = killer.party
+        party.members.each do |pl|
           level_crystal(pl, pcs[pl], mob)
         end
       else

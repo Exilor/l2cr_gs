@@ -2,8 +2,9 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
   VAR_PARAM_START_CHAR = '$'
 
   @disable_validation = false
+  @npc_l2id = 0
+
   getter html : String?
-  getter npc_l2id = 0
 
   def initialize(npc_l2id : Int32)
     if npc_l2id < 0
@@ -55,9 +56,10 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
   end
 
   def []=(pattern : String, val)
-    if html = @html
-      @html = html.gsub(pattern, val.to_s)
-    end
+    # if html = @html
+    #   @html = html.gsub(pattern, val.to_s)
+    # end
+    @html = @html.not_nil!.gsub(pattern, val.to_s)
   end
 
   def run_impl

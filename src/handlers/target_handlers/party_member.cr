@@ -12,10 +12,10 @@ module TargetHandler::PartyMember
     end
 
     if target.alive?
-      if (target == char) || (char.in_party? && target.in_party? &&
-        (char.party.leader_l2id == target.party.leader_l2id)) ||
-        (char.player? && target.summon? && (char.summon == target)) ||
-        (char.summon? && target.player? && (char == target.summon))
+      if target == char || ((p1 = char.party) && (p2 = target.party) &&
+        p1 == p2) ||
+        (char.player? && target.summon? && char.summon == target) ||
+        (char.summon? && target.player? && char == target.summon)
 
         return [target] of L2Object
       end
@@ -25,6 +25,6 @@ module TargetHandler::PartyMember
   end
 
   def target_type
-    L2TargetType::PARTY_MEMBER
+    TargetType::PARTY_MEMBER
   end
 end

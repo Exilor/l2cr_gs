@@ -132,21 +132,18 @@ module CursedWeaponsManager
   end
 
   def drop(item_id : Int, killer : L2Character?)
-    cw = CURSED_WEAPONS[item_id]
-    cw.drop_it(killer)
+    CURSED_WEAPONS[item_id].drop_it(killer)
   end
 
   def increase_kills(item_id : Int)
-    cw = CURSED_WEAPONS[item_id]
-    cw.increase_kills
+    CURSED_WEAPONS[item_id].increase_kills
   end
 
-  def get_level(item_id : Int)
-    cw = CURSED_WEAPONS[item_id]
-    cw.level
+  def get_level(item_id : Int) : Int32
+    CURSED_WEAPONS[item_id].level
   end
 
-  def announce(sm)
+  def announce(sm : SystemMessage)
     Broadcast.to_all_online_players(sm)
   end
 
@@ -169,7 +166,7 @@ module CursedWeaponsManager
     end
   end
 
-  def check_owns_weapon_id(owner_id)
+  def check_owns_weapon_id(owner_id : Int32) : Int32
     CURSED_WEAPONS.each_value do |cw|
       if cw.activated? && owner_id == cw.player_id
         return cw.item_id
@@ -189,19 +186,19 @@ module CursedWeaponsManager
     CURSED_WEAPONS.each_value &.save_data
   end
 
-  def cursed?(item_id : Int)
+  def cursed?(item_id : Int) : Bool
     CURSED_WEAPONS.has_key?(item_id)
   end
 
-  def cursed_weapons
+  def cursed_weapons : Enumerable(CursedWeapon)
     CURSED_WEAPONS.local_each_value
   end
 
-  def cursed_weapons_ids
-    CURSED_WEAPONS.keys
+  def cursed_weapons_ids : Indexable(Int32)
+    CURSED_WEAPONS.keys_slice
   end
 
-  def get_cursed_weapon(item_id : Int)
+  def get_cursed_weapon(item_id : Int) : CursedWeapon?
     CURSED_WEAPONS[item_id]?
   end
 

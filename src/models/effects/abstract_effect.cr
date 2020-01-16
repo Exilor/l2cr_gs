@@ -1,7 +1,7 @@
 require "../../handlers/effect_handler"
 
 abstract class AbstractEffect
-  include EventListenerOwner
+  include AbstractEventListener::Owner
   include Loggable
   include Packets::Outgoing
 
@@ -35,8 +35,8 @@ abstract class AbstractEffect
     true
   end
 
-  def effect_type : L2EffectType
-    L2EffectType::NONE
+  def effect_type : EffectType
+    EffectType::NONE
   end
 
   def can_start?(info : BuffInfo) : Bool

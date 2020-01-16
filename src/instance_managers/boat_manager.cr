@@ -88,11 +88,7 @@ module BoatManager
     BOATS[boat.l2id] = boat
   end
 
-  def [](id : Int) : L2BoatInstance
-    BOATS[id]
-  end
-
-  def []?(id : Int) : L2BoatInstance?
+  def get_boat(id : Int) : L2BoatInstance?
     BOATS[id]?
   end
 
@@ -114,7 +110,7 @@ module BoatManager
     end
   end
 
-  def broadcast_packets(point1 : VehiclePathPoint, point2 : VehiclePathPoint, *packets)
+  def broadcast_packets(point1 : VehiclePathPoint, point2 : VehiclePathPoint, *packets : GameServerPacket)
     L2World.players.each do |pc|
       dx = pc.x - point1.x
       dy = pc.y - point1.y

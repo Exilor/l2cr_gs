@@ -78,7 +78,7 @@ class Scripts::Q10272_LightFragment < Quest
         chance = (Config.rate_quest_drop * DROP_CHANCE).to_i
         num_items = chance // 100
         chance = chance % 100
-        if rand(100) < chance
+        if Rnd.rand(100) < chance
           num_items += 1
         end
         if num_items > 0

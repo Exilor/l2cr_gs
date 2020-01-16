@@ -22,7 +22,7 @@ class Scripts::DemonPrince < AbstractNpcAI
 
   def on_adv_event(event, npc, player)
     if event.casecmp?("cast") && npc && npc.id == FIEND && npc.alive?
-      npc.do_cast(AOE.sample)
+      npc.do_cast(AOE.sample(random: Rnd))
     end
 
     super
@@ -42,7 +42,7 @@ class Scripts::DemonPrince < AbstractNpcAI
         end
       end
 
-      if rand(1000) < 10
+      if Rnd.rand(1000) < 10
         spawn_minions(npc)
       end
     end
@@ -67,8 +67,8 @@ class Scripts::DemonPrince < AbstractNpcAI
     if master && master.alive?
       instance_id = master.instance_id
       x, y, z = master.xyz
-      add_spawn(FIEND, x + 200, y, z, 0, false, 0, false, instance_id)
-      add_spawn(FIEND, x - 200, y, z, 0, false, 0, false, instance_id)
+      add_spawn(FIEND, x + 200,       y, z, 0, false, 0, false, instance_id)
+      add_spawn(FIEND, x - 200,       y, z, 0, false, 0, false, instance_id)
       add_spawn(FIEND, x - 100, y - 140, z, 0, false, 0, false, instance_id)
       add_spawn(FIEND, x - 100, y + 140, z, 0, false, 0, false, instance_id)
       add_spawn(FIEND, x + 100, y - 140, z, 0, false, 0, false, instance_id)

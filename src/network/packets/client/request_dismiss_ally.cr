@@ -11,6 +11,6 @@ class Packets::Incoming::RequestDismissAlly < GameClientPacket
       return
     end
 
-    pc.clan.dissolve_ally(pc)
+    pc.clan.not_nil!.dissolve_ally(pc)
   end
 end

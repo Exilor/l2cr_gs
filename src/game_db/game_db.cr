@@ -38,6 +38,10 @@ module GameDB
     db.scalar(*args)
   end
 
+  def prepare(sql : String)
+    db.prepared(sql)
+  end
+
   # DAO
 
   def friend : FriendDAO

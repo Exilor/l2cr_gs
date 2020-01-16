@@ -4,6 +4,7 @@ require "../../enums/stat_function"
 struct FuncTemplate
   @order : Int32
   @constructor : AbstractFunction.class
+
   getter stat, order, value
 
   def initialize(@attach_cond : Condition?, @apply_cond : Condition?, function_name : String, order : Int32, @stat : Stats, @value : Float64)

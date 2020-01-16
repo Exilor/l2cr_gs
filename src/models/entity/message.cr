@@ -17,6 +17,7 @@ class Message
   end
 
   @attachments : Mail?
+
   getter sender_id : Int32
   getter receiver_id : Int32
   getter subject : String
@@ -153,8 +154,9 @@ class Message
     sync do
       return unless @has_attachments
       unless @attachments
-        @attachments = Mail.new(@sender_id, @message_id)
-        @attachments.not_nil!.restore
+        attachments = Mail.new(@sender_id, @message_id)
+        attachments.restore
+        @attachments = attachments
         task = AttachmentsUnloadTask.new(self)
         @unload_task = ThreadPoolManager.schedule_general(
           task,

@@ -9,7 +9,7 @@ class EffectHandler::OpenDoor < AbstractEffect
     @is_item = params.get_bool("isItem", false)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

@@ -7,8 +7,9 @@ class BuffInfo
   include Synchronizable
 
   @tasks : IHash(AbstractEffect, EffectTaskInfo)?
+
   getter period_start_ticks : Int32
-  getter task : Scheduler::PeriodicTask?
+  getter task : Scheduler::DelayedTask?
   getter effects = [] of AbstractEffect
   getter! effector
   getter! effected
@@ -80,7 +81,9 @@ class BuffInfo
 
     if @abnormal_time > 0
       task = BuffTimeTask.new(self)
-      @task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, 0, 1000)
+      # @task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, 0, 1000)
+      delay = Time.s_to_ms(@abnormal_time)
+      @task = ThreadPoolManager.schedule_effect(task, delay)
     end
   end
 
@@ -115,7 +118,7 @@ class BuffInfo
 
     remove_abnormal_visual_effects
     # monster check is custom
-    if effected.acting_player? && !effected.summon? # unless effected.monster? || (effected.summon? && !effected.as(L2Summon).owner.has_summon?)
+    if effected.acting_player && !effected.summon? # unless effected.monster? || (effected.summon? && !effected.as(L2Summon).owner.has_summon?)
       if skill.toggle?
         sm = Packets::Outgoing::SystemMessage.s1_has_been_aborted
       elsif removed?
@@ -136,35 +139,49 @@ class BuffInfo
   end
 
   def add_abnormal_visual_effects
+    updated = false
+
     if skill.has_abnormal_visual_effects?
       effected.start_abnormal_visual_effect(false, skill.abnormal_visual_effects)
+      updated = true
     end
 
     if effected.player? && skill.has_abnormal_visual_effects_event?
       effected.start_abnormal_visual_effect(false, skill.abnormal_visual_effects_event)
+      updated = true
     end
 
     if skill.has_abnormal_visual_effects_special?
       effected.start_abnormal_visual_effect(false, skill.abnormal_visual_effects_special)
+      updated = true
     end
 
-    effected.update_abnormal_effect
+    if updated
+      effected.update_abnormal_effect
+    end
   end
 
   def remove_abnormal_visual_effects
+    updated = false
+
     if skill.has_abnormal_visual_effects?
       effected.stop_abnormal_visual_effect(false, skill.abnormal_visual_effects)
+      updated = true
     end
 
     if effected.player? && skill.has_abnormal_visual_effects_event?
       effected.stop_abnormal_visual_effect(false, skill.abnormal_visual_effects_event)
+      updated = true
     end
 
     if skill.has_abnormal_visual_effects_special?
       effected.stop_abnormal_visual_effect(false, skill.abnormal_visual_effects_special)
+      updated = true
     end
 
-    effected.update_abnormal_effect
+    if updated
+      effected.update_abnormal_effect
+    end
   end
 
   def add_stats

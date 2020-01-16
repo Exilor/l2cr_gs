@@ -22,7 +22,7 @@ end
 class L2PetInstance < L2Summon
 end
 
-abstract class L2Npc < L2Character
+class L2Npc < L2Character
 end
 
 abstract class L2Attackable < L2Npc

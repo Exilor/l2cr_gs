@@ -51,7 +51,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
     debug "#on_adv_event(event: #{event}, npc: #{npc}, player: #{pc})"
     return unless pc
     return unless qs = get_quest_state(pc, false)
-    html = nil
 
     case event
     when "31529-02.html", "31529-04.html", "31529-05.html", "31529-06.html",
@@ -89,7 +88,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       end
     when "31334-13.html"
       cond = qs.cond
-      if 5 <= cond <= 7 && has_quest_items?(pc, CROSS_OF_EINHASAD)
+      if cond.between?(5, 7) && has_quest_items?(pc, CROSS_OF_EINHASAD)
         if @tifaren_owner == 0
           @tifaren_owner = pc.l2id
           ghost2 = add_spawn(GHOST_OF_PRIEST, PRIEST_LOC, true, 0)
@@ -217,9 +216,11 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
         @soul_well = nil
       else
         qs = get_quest_state(killer, false)
-        if qs && qs.cond?(4) && has_quest_items?(killer, CROSS_OF_EINHASAD) && !has_quest_items?(killer, LOST_SKULL_OF_ELF) && (rand(100) < 10)
-          give_items(killer, LOST_SKULL_OF_ELF, 1)
-          qs.set_cond(5, true)
+        if qs && qs.cond?(4) && has_quest_items?(killer, CROSS_OF_EINHASAD)
+          if !has_quest_items?(killer, LOST_SKULL_OF_ELF) && Rnd.rand(100) < 10
+            give_items(killer, LOST_SKULL_OF_ELF, 1)
+            qs.set_cond(5, true)
+          end
         end
       end
     end

@@ -13,7 +13,7 @@ class Packets::Outgoing::SpecialCamera < GameServerPacket
     @id = char.l2id
   end
 
-  def write_impl
+  private def write_impl
     c 0xd6
 
     d @id

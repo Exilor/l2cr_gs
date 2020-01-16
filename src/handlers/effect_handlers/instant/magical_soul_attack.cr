@@ -6,12 +6,12 @@ class EffectHandler::MagicalSoulAttack < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
-  def effect_type
-    L2EffectType::MAGICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::MAGICAL_ATTACK
   end
 
   def on_start(info)
@@ -21,7 +21,7 @@ class EffectHandler::MagicalSoulAttack < AbstractEffect
       return
     end
 
-    if target.player? && target.acting_player.fake_death?
+    if target.is_a?(L2PcInstance) && target.fake_death?
       target.stop_fake_death(true)
     end
 
@@ -36,7 +36,6 @@ class EffectHandler::MagicalSoulAttack < AbstractEffect
       original_damage = damage
       damage *= 1 + (charged_souls * 0.04)
       debug "Boosting damage by using #{charged_souls} souls. Original: #{original_damage}, boosted: #{damage}."
-      # damage *= 1 + (charged_souls * 0.04) # +4% damage per soul # uncomment if commenting debug msg
     end
 
     if damage > 0

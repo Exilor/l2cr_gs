@@ -2,13 +2,13 @@ module HitConditionBonusData
   extend self
   extend XMLReader
 
-  @@FRONT_BONUS = 0
-  @@SIDE_BONUS  = 0
-  @@BACK_BONUS  = 0
-  @@HIGH_BONUS  = 0
-  @@LOW_BONUS   = 0
-  @@DARK_BONUS  = 0
-  @@RAIN_BONUS  = 0
+  @@front_bonus = 0
+  @@side_bonus  = 0
+  @@back_bonus  = 0
+  @@high_bonus  = 0
+  @@low_bonus   = 0
+  @@dark_bonus  = 0
+  @@rain_bonus  = 0
 
   def load
     parse_datapack_file("stats/hitConditionBonus.xml")
@@ -20,19 +20,19 @@ module HitConditionBonusData
       d.each_element do |d|
         case d.name.casecmp
         when "front"
-          @@FRONT_BONUS = d["val"].to_i
+          @@front_bonus = d["val"].to_i
         when "side"
-          @@SIDE_BONUS  = d["val"].to_i
+          @@side_bonus  = d["val"].to_i
         when "back"
-          @@BACK_BONUS  = d["val"].to_i
+          @@back_bonus  = d["val"].to_i
         when "high"
-          @@HIGH_BONUS  = d["val"].to_i
+          @@high_bonus  = d["val"].to_i
         when "low"
-          @@LOW_BONUS   = d["val"].to_i
+          @@low_bonus   = d["val"].to_i
         when "dark"
-          @@DARK_BONUS  = d["val"].to_i
+          @@dark_bonus  = d["val"].to_i
         when "rain"
-          @@RAIN_BONUS  = d["val"].to_i
+          @@rain_bonus  = d["val"].to_i
         end
       end
     end
@@ -42,23 +42,23 @@ module HitConditionBonusData
     mod = 100.0
 
     if attacker.z - target.z > 50
-      mod += @@HIGH_BONUS
+      mod += @@high_bonus
     elsif attacker.z - target.z < -50
-      mod += @@LOW_BONUS
+      mod += @@low_bonus
     end
 
     if GameTimer.night?
-      mod += @@DARK_BONUS
+      mod += @@dark_bonus
     end
 
     # not done by L2J: rain bonus
 
     if attacker.behind_target?
-      mod += @@BACK_BONUS
+      mod += @@back_bonus
     elsif attacker.in_front_of_target?
-      mod += @@FRONT_BONUS
+      mod += @@front_bonus
     else
-      mod += @@SIDE_BONUS
+      mod += @@side_bonus
     end
 
     Math.max(mod / 100, 0.0)

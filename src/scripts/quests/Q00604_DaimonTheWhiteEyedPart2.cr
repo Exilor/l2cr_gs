@@ -72,7 +72,7 @@ class Scripts::Q00604_DaimonTheWhiteEyedPart2 < Quest
       html = event
     when "31683-07.html"
       if has_quest_items?(pc, ESSENCE_OF_DAIMON)
-        random = rand(1000)
+        random = Rnd.rand(1000)
         take_items(pc, ESSENCE_OF_DAIMON, 1)
         if random < 167
           reward = DYE_I2M2_C

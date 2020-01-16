@@ -44,22 +44,26 @@ class Scripts::SubClassSkills < Quest
     self.on_enter_world = true
   end
 
-  def on_enter_world(player)
+  def on_enter_world(pc)
     unless Config.skill_check_enable
       return
     end
 
-    if player.override_skill_conditions? && !Config.skill_check_gm
+    if pc.override_skill_conditions? && !Config.skill_check_gm
       return
     end
 
-    cert_skills = get_cert_skills(player)
-    if player.subclass_active?
+    cert_skills = get_cert_skills(pc)
+    if pc.subclass_active?
       cert_skills.each do |s|
-        Util.handle_illegal_player_action(player, "Player #{player.name} has cert skill on subclass :#{s.name}(#{s.id}/#{s.level}), class: #{ClassListData.get_class!(player.class_id).class_name}", IllegalActionPunishmentType::NONE)
+        Util.handle_illegal_player_action(
+          pc,
+          "Player #{pc.name} has cert skill on subclass :#{s.name}(#{s.id}/#{s.level}), class: #{ClassListData.get_class(pc.class_id).class_name}",
+          IllegalActionPunishmentType::NONE
+        )
 
         if Config.skill_check_remove
-          player.remove_skill(s)
+          pc.remove_skill(s)
         end
       end
 
@@ -68,13 +72,12 @@ class Scripts::SubClassSkills < Quest
 
     c_skills = cert_skills.map { |s| [s.id, s.level] }
 
-    cert_items = get_cert_items(player)
+    cert_items = get_cert_items(pc)
     c_items = cert_items.map do |it|
       [it.l2id, Math.min(it.count, Int32::MAX).to_i]
     end
 
-    st = get_quest_state(player, false)
-    st ||= new_quest_state(player)
+    st = get_quest_state(pc, false) || new_quest_state(pc)
 
     VARS.size.downto(0) do |i|
       Config.max_subclass.downto(1) do |j|
@@ -84,9 +87,9 @@ class Scripts::SubClassSkills < Quest
           next
         end
 
-        if q_value.ends_with?(";") # found skill
+        if q_value.ends_with?(';') # found skill
           begin
-            id = q_value.sub(";", "").to_i
+            id = q_value.sub(';', "").to_i
 
             skill = nil
             if cert_skills
@@ -103,16 +106,16 @@ class Scripts::SubClassSkills < Quest
               if skill
                 unless CERT_SKILLS_BY_LEVEL[i].includes?(id)
                   # should remove this skill ?
-                  Util.handle_illegal_player_action(player, "Invalid cert variable WITH skill:#{q_name}=#{q_value} - skill does not match certificate level", IllegalActionPunishmentType::NONE)
+                  Util.handle_illegal_player_action(pc, "Invalid cert variable WITH skill:#{q_name}=#{q_value} - skill does not match certificate level", IllegalActionPunishmentType::NONE)
                 end
               else
-                Util.handle_illegal_player_action(player, "Invalid cert variable:#{q_name}=#{q_value} - skill not found", IllegalActionPunishmentType::NONE)
+                Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - skill not found", IllegalActionPunishmentType::NONE)
               end
             else
-              Util.handle_illegal_player_action(player, "Invalid cert variable:#{q_name}=#{q_value} - no certified skills found", IllegalActionPunishmentType::NONE)
+              Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - no certified skills found", IllegalActionPunishmentType::NONE)
             end
           rescue e
-            Util.handle_illegal_player_action(player, "Invalid cert variable:#{q_name}=#{q_value} - not a number", IllegalActionPunishmentType::NONE)
+            Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - not a number", IllegalActionPunishmentType::NONE)
           end
         else
         # found item
@@ -136,16 +139,16 @@ class Scripts::SubClassSkills < Quest
               end
               if item
                 unless CERT_ITEMS_BY_LEVEL[i].includes?(item.id)
-                  Util.handle_illegal_player_action(player, "Invalid cert variable:#{q_name}=#{q_value} - item found but does not match certificate level", IllegalActionPunishmentType::NONE)
+                  Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - item found but does not match certificate level", IllegalActionPunishmentType::NONE)
                 end
               else
-                Util.handle_illegal_player_action(player, "Invalid cert variable:#{q_name}=#{q_value} - item not found", IllegalActionPunishmentType::NONE)
+                Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - item not found", IllegalActionPunishmentType::NONE)
               end
             else
-              Util.handle_illegal_player_action(player, "Invalid cert variable:#{q_name}=#{q_value} - no cert item found in inventory", IllegalActionPunishmentType::NONE)
+              Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - no cert item found in inventory", IllegalActionPunishmentType::NONE)
             end
           rescue e
-            Util.handle_illegal_player_action(player, "Invalid cert variable:#{q_name}=#{q_value} - not a number", IllegalActionPunishmentType::NONE)
+            Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - not a number", IllegalActionPunishmentType::NONE)
           end
         end
       end
@@ -160,16 +163,16 @@ class Scripts::SubClassSkills < Quest
         skill = cert_skills[i]
         if c_skills[i][1] > 0
           if c_skills[i][1] == skill.level
-            Util.handle_illegal_player_action(player, "Player #{player.name} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level})", IllegalActionPunishmentType::NONE)
+            Util.handle_illegal_player_action(pc, "Player #{pc.name} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level})", IllegalActionPunishmentType::NONE)
           else
-            Util.handle_illegal_player_action(player, "Player #{player.name} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level}), level too high", IllegalActionPunishmentType::NONE)
+            Util.handle_illegal_player_action(pc, "Player #{pc.name} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level}), level too high", IllegalActionPunishmentType::NONE)
           end
 
           if Config.skill_check_remove
-            player.remove_skill(skill)
+            pc.remove_skill(skill)
           end
         else
-          Util.handle_illegal_player_action(player, "Invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level}), level too low", IllegalActionPunishmentType::NONE)
+          Util.handle_illegal_player_action(pc, "Invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level}), level too low", IllegalActionPunishmentType::NONE)
         end
       end
     end
@@ -181,16 +184,16 @@ class Scripts::SubClassSkills < Quest
         end
 
         item = cert_items[i]
-        Util.handle_illegal_player_action(player, "Invalid cert item without variable or with wrong count: #{item.l2id}", IllegalActionPunishmentType::NONE)
+        Util.handle_illegal_player_action(pc, "Invalid cert item without variable or with wrong count: #{item.l2id}", IllegalActionPunishmentType::NONE)
       end
     end
 
     return
   end
 
-  private def get_cert_skills(player)
+  private def get_cert_skills(pc)
     tmp = [] of Skill
-    player.all_skills.each do |s|
+    pc.all_skills.each do |s|
       if s && ALL_CERT_SKILL_IDS.bsearch(s.id) >= 0
         tmp << s
       end
@@ -199,14 +202,7 @@ class Scripts::SubClassSkills < Quest
     tmp
   end
 
-  private def get_cert_items(player)
-    tmp = [] of L2ItemInstance
-    player.inventory.items.each do |i|
-      if i && ALL_CERT_ITEM_IDS.bsearch(i.id) >= 0
-        tmp << i
-      end
-    end
-
-    tmp
+  private def get_cert_items(pc)
+    pc.inventory.items.select { |i| ALL_CERT_ITEM_IDS.bincludes?(i.id) }
   end
 end

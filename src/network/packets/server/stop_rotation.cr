@@ -1,7 +1,7 @@
 class Packets::Outgoing::StopRotation < GameServerPacket
   initializer id : Int32, degree : Int32, speed : Int32
 
-  def write_impl
+  private def write_impl
     c 0x61
 
     d @id

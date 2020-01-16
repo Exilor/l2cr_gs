@@ -9,7 +9,7 @@ class Packets::Outgoing::ExGetOnAirship < GameServerPacket
     @pos = pc.in_vehicle_position.not_nil!
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x63
 

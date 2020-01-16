@@ -47,7 +47,7 @@ class MinionList
     if !@reused_minion_references &&
        !@master.template.parameters["SummonPrivateRate"]? &&
        !@master.template.parameters.get_minion_list("Privates").empty? &&
-       @master.spawn? && @master.spawn.respawn_enabled?
+       ((sp = @master.spawn?) && sp.respawn_enabled?)
 
       @reused_minion_references = Concurrent::Array(L2MonsterInstance).new
     end
@@ -65,12 +65,12 @@ class MinionList
 
   def on_minion_die(minion : L2MonsterInstance, respawn_time : Int32)
     minion.leader = nil
-    @minion_references.delete(minion)
+    @minion_references.delete_first(minion)
     @reused_minion_references.try &.push(minion)
 
     time = respawn_time < 0 ? @master.raid? ? Config.raid_minion_respawn_timer.to_i : 0 : respawn_time
     if time > 0 && !@master.looks_dead?
-      task = ->{ minion_respawn_task(minion) }
+      task = -> { minion_respawn_task(minion) }
       ThreadPoolManager.schedule_general(task, time)
     end
   end
@@ -122,7 +122,7 @@ class MinionList
 
     if temp = @reused_minion_references
       if minion = temp.find { |m| m.id == minion_id }
-        temp.delete(minion)
+        temp.delete_first(minion)
         minion.refresh_id
         MinionList.initialize_npc_instance(@master, minion)
         return
@@ -140,7 +140,7 @@ class MinionList
   private def minion_respawn_task(minion : L2MonsterInstance)
     if !@master.looks_dead? && @master.visible?
       unless minion.visible?
-        @reused_minion_references.try &.delete(minion)
+        @reused_minion_references.try &.delete_first(minion)
         minion.refresh_id
         MinionList.initialize_npc_instance(@master, minion)
       end
@@ -177,10 +177,6 @@ class MinionList
     end
 
     minion.spawn_me(new_x.to_i, new_y.to_i, master.z)
-
-    if Config.debug
-      # debug "Spawned minion template #{minion.id} with object ID #{minion.l2id} to master with object ID #{master.l2id} at #{minion.x} #{minion.y} #{minion.z}."
-    end
 
     minion
   end

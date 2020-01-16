@@ -3,7 +3,7 @@ class EffectHandler::TriggerSkillByDamage < AbstractEffect
   @max_attacker_level : Int32
   @min_damage : Int32
   @chance : Int32
-  @target_type : L2TargetType
+  @target_type : TargetType
   @attacker_type : InstanceType
 
   def initialize(attach_cond, apply_cond, set, params)
@@ -15,14 +15,14 @@ class EffectHandler::TriggerSkillByDamage < AbstractEffect
     @chance = params.get_i32("chance", 100)
     id, lvl = params.get_i32("skillId"), params.get_i32("skillLevel", 1)
     @skill = SkillHolder.new(id, lvl)
-    @target_type = params.get_enum("targetType", L2TargetType, L2TargetType::SELF)
+    @target_type = params.get_enum("targetType", TargetType, TargetType::SELF)
     @attacker_type = params.get_enum("attackerType", InstanceType, InstanceType::L2Character)
   end
 
   def on_start(info)
     char = info.effected
     listener = ConsumerEventListener.new(char, EventType::ON_CREATURE_DAMAGE_RECEIVED, self) do |event|
-      on_damage_received(event)
+      on_damage_received(event.as(OnCreatureDamageReceived))
     end
     char.add_listener(listener)
   end
@@ -35,7 +35,6 @@ class EffectHandler::TriggerSkillByDamage < AbstractEffect
   end
 
   def on_damage_received(event)
-    event = event.as(OnCreatureDamageReceived)
     if @target_type.self? && @skill.skill.cast_range > 0 && Util.calculate_distance(event.attacker, event.target, true, false) > @skill.skill.cast_range
       return
     end

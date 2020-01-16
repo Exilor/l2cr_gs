@@ -39,17 +39,16 @@ module AdminData
     end
   end
 
-  def get_access_level(level : Int)
+  def get_access_level(level : Int) : AccessLevel
     return ACCESS_LEVELS[-1] if level < 0
-
     ACCESS_LEVELS[level] ||= AccessLevel.new
   end
 
-  def max
+  def max : AccessLevel
     ACCESS_LEVELS[@@highest_level]
   end
 
-  def includes?(level : Int)
+  def includes?(level : Int) : Bool
     ACCESS_LEVELS.has_key?(level)
   end
 
@@ -68,7 +67,7 @@ module AdminData
     tmp.has_access?(level)
   end
 
-  def require_confirm?(command : String)
+  def require_confirm?(command : String) : Bool
     unless tmp = ADMIN_COMMAND_ACCESS_RIGHTS[command]
       info { "No rights defined for admin command #{command.inspect}." }
       return false
@@ -77,18 +76,14 @@ module AdminData
     tmp.require_confirm?
   end
 
-  def get_all_gms(include_hidden : Bool)
+  def get_all_gms(include_hidden : Bool) : Array(L2PcInstance)
     list = [] of L2PcInstance
     GM_LIST.each { |k, v| list << k if include_hidden || !v }
     list
   end
 
-  def get_all_gm_names(include_hidden : Bool)
-    list = [] of String
-    GM_LIST.each do |k, v|
-      list << (v ? "#{k.name} (invis)" : k.name)
-    end
-    list
+  def get_all_gm_names(include_hidden : Bool) : Array(String)
+    GM_LIST.map { |k, v| v ? k.name + " (Invis)" : k.name }
   end
 
   def show_gm(pc : L2PcInstance)
@@ -117,14 +112,14 @@ module AdminData
 
   def send_list_to_player(pc : L2PcInstance)
     if gm_online?(pc.gm?)
-      pc.send_packet(Packets::Outgoing::SystemMessage.gm_list)
+      pc.send_packet(SystemMessageId::GM_LIST)
       get_all_gm_names(pc.gm?).each do |name|
         sm = Packets::Outgoing::SystemMessage.gm_c1
         sm.add_string(name)
         pc.send_packet(sm)
       end
     else
-      pc.send_packet(Packets::Outgoing::SystemMessage.no_gm_providing_service_now)
+      pc.send_packet(SystemMessageId::NO_GM_PROVIDING_SERVICE_NOW)
     end
   end
 

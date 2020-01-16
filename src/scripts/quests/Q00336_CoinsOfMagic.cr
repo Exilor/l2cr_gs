@@ -852,8 +852,8 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         end
         qs.set(WEIGHT_POINT, weight_point)
         param1 = Rnd.rand(3) + 1
-        param1 += (rand(3) + 1) * 4
-        param1 += (rand(3) + 1) * 16
+        param1 += (Rnd.rand(3) + 1) * 4
+        param1 += (Rnd.rand(3) + 1) * 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -863,8 +863,8 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.take_items(item_2, base)
         qs.set(WEIGHT_POINT, weight_point)
         param1 = Rnd.rand(3) + 1
-        param1 += (rand(3) + 1) * 4
-        param1 += (rand(3) + 1) * 16
+        param1 += (Rnd.rand(3) + 1) * 4
+        param1 += (Rnd.rand(3) + 1) * 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -874,8 +874,8 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.take_items(item_3, base)
         qs.set(WEIGHT_POINT, weight_point)
         param1 = Rnd.rand(3) + 1
-        param1 += (rand(3) + 1) * 4
-        param1 += (rand(3) + 1) * 16
+        param1 += (Rnd.rand(3) + 1) * 4
+        param1 += (Rnd.rand(3) + 1) * 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -885,8 +885,8 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.take_items(item_4, base)
         qs.set(WEIGHT_POINT, weight_point)
         param1 = Rnd.rand(3) + 1
-        param1 += (rand(3) + 1) * 4
-        param1 += (rand(3) + 1) * 16
+        param1 += (Rnd.rand(3) + 1) * 4
+        param1 += (Rnd.rand(3) + 1) * 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -1087,8 +1087,8 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       candidates.push(qs, qs)
     end
 
-    if pc.in_party?
-      pc.party.members.each do |pm|
+    if party = pc.party
+      party.members.each do |pm|
         qss = get_quest_state(pm, false)
         if qss && qss.started? && qss.memo_state == memo_state
           if Util.in_range?(1500, npc, pm, true)
@@ -1110,8 +1110,8 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       end
     end
 
-    if pc.in_party?
-      pc.party.members.each do |pm|
+    if party = pc.party
+      party.members.each do |pm|
         qss = get_quest_state(pm, false)
         if qss && qss.started? && qss.memo_state == memo_state
           unless qss.has_quest_items?(Q_KALDIS_GOLD_DRAGON)

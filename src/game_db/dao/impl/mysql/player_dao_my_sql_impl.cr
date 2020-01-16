@@ -14,62 +14,61 @@ module GameDB
       pc = nil
 
       GameDB.each(SELECT, l2id) do |rs|
-        active_class_id = rs.get_u8("classid").to_i32
-        female = rs.get_i32("sex") != Sex::MALE.to_i
+        active_class_id = rs.get_u8(:"classid").to_i32
+        female = rs.get_i32(:"sex") != Sex::MALE.to_i
         face = rs.get_i8("face")
         hair_color = rs.get_i8("hairColor")
         hair_style = rs.get_i8("hairStyle")
         app = PcAppearance.new(face, hair_color, hair_style, female)
-        account = rs.get_string("account_name")
+        account = rs.get_string(:"account_name")
 
         pc = L2PcInstance.new(l2id, active_class_id, account, app)
-        pc.name = rs.get_string("char_name")
-        pc.last_access = rs.get_i64("lastAccess")
-        pc.exp = rs.get_i64("exp")
-        pc.exp_before_death = rs.get_i64("expBeforeDeath")
-        pc.level = rs.get_i32("level")
-        pc.sp = rs.get_i32("sp")
-        pc.wants_peace = rs.get_i32("wantspeace")
-        pc.heading = rs.get_i32("heading")
-        pc.karma = rs.get_i32("karma")
-        pc.fame = rs.get_i32("fame")
-        pc.pvp_kills = rs.get_i32("pvpkills")
-        pc.pk_kills = rs.get_i32("pkkills")
-        pc.online_time = rs.get_i64("onlinetime")
-        pc.newbie = rs.get_i32("newbie")
-        pc.noble = rs.get_i32("nobless") == 1
+        pc.name = rs.get_string(:"char_name")
+        pc.last_access = rs.get_i64(:"lastAccess")
+        pc.exp = rs.get_i64(:"exp")
+        pc.exp_before_death = rs.get_i64(:"expBeforeDeath")
+        pc.level = rs.get_i32(:"level")
+        pc.sp = rs.get_i32(:"sp")
+        pc.wants_peace = rs.get_i32(:"wantspeace")
+        pc.heading = rs.get_i32(:"heading")
+        pc.karma = rs.get_i32(:"karma")
+        pc.fame = rs.get_i32(:"fame")
+        pc.pvp_kills = rs.get_i32(:"pvpkills")
+        pc.pk_kills = rs.get_i32(:"pkkills")
+        pc.online_time = rs.get_i64(:"onlinetime")
+        pc.newbie = rs.get_i32(:"newbie")
+        pc.noble = rs.get_i32(:"nobless") == 1
 
         time = Time.ms
 
-        pc.clan_join_expiry_time = rs.get_i64("clan_join_expiry_time")
+        pc.clan_join_expiry_time = rs.get_i64(:"clan_join_expiry_time")
         if pc.clan_join_expiry_time < time
           pc.clan_join_expiry_time = 0
         end
-        pc.clan_create_expiry_time = rs.get_i64("clan_create_expiry_time")
+        pc.clan_create_expiry_time = rs.get_i64(:"clan_create_expiry_time")
         if pc.clan_create_expiry_time < time
           pc.clan_create_expiry_time = 0
         end
 
-        pc.power_grade = rs.get_i32("power_grade")
-        pc.pledge_type = rs.get_i32("subpledge")
-        # pc.apprentice = rs.get_i32("apprentice") # commented out in L2J
+        pc.power_grade = rs.get_i32(:"power_grade")
+        pc.pledge_type = rs.get_i32(:"subpledge")
 
-        pc.delete_timer = rs.get_i64("deletetime")
-        pc.title = rs.get_string("title")
-        pc.access_level = rs.get_i32("accesslevel")
-        pc.appearance.title_color = rs.get_i32("title_color")
+        pc.delete_timer = rs.get_i64(:"deletetime")
+        pc.title = rs.get_string(:"title")
+        pc.access_level = rs.get_i32(:"accesslevel")
+        pc.appearance.title_color = rs.get_i32(:"title_color")
         pc.fists_weapon_item = pc.find_fists_weapon_item(active_class_id)
         pc.uptime = time
 
-        current_cp = rs.get_f64("curCp")
-        current_hp = rs.get_f64("curHp")
-        current_mp = rs.get_f64("curMp")
+        current_cp = rs.get_f64(:"curCp")
+        current_hp = rs.get_f64(:"curHp")
+        current_mp = rs.get_f64(:"curMp")
         pc.current_cp = current_cp
         pc.current_hp = current_hp
         pc.current_mp = current_mp
         pc.original_cp_hp_mp = {current_cp, current_hp, current_mp}
         pc.class_index = 0
-        pc.base_class = rs.get_u8("base_class").to_i32
+        pc.base_class = rs.get_u8(:"base_class").to_i32
 
         GameDB.subclass.load(pc)
 
@@ -88,28 +87,29 @@ module GameDB
           pc.active_class = active_class_id
         end
 
-        pc.apprentice = rs.get_i32("apprentice")
-        pc.sponsor = rs.get_i32("sponsor")
-        pc.lvl_joined_academy = rs.get_i32("lvl_joined_academy")
-        pc.in_7s_dungeon = rs.get_i32("isin7sdungeon") == 1
+        pc.apprentice = rs.get_i32(:"apprentice")
+        pc.sponsor = rs.get_i32(:"sponsor")
+        pc.lvl_joined_academy = rs.get_i32(:"lvl_joined_academy")
+        pc.in_7s_dungeon = rs.get_i32(:"isin7sdungeon") == 1
 
         CursedWeaponsManager.check_player(pc)
 
-        pc.death_penalty_buff_level = rs.get_i32("death_penalty_level")
-        pc.set_vitality_points(rs.get_i32("vitality_points"), true)
+        pc.death_penalty_buff_level = rs.get_i32(:"death_penalty_level")
+        pc.set_vitality_points(rs.get_i32(:"vitality_points"), true)
 
         pc.create_date.time = rs.get_time("createDate")
 
-        x, y, z = rs.get_i32("x"), rs.get_i32("y"), rs.get_i32("z")
+        x, y, z = rs.get_i32(:"x"), rs.get_i32(:"y"), rs.get_i32(:"z")
         pc.set_xyz_invisible(x, y, z)
 
-        pc.clan = ClanTable.get_clan(rs.get_i32("clanid"))
-        if pc.clan?
-          if pc.clan.leader_id != pc.l2id
+        clan = ClanTable.get_clan(rs.get_i32(:"clanid"))
+        pc.clan = clan
+        if clan
+          if clan.leader_id != pc.l2id
             if pc.power_grade == 0
               pc.power_grade = 5
             end
-            pc.clan_privileges = pc.clan.get_rank_privs(pc.power_grade)
+            pc.clan_privileges = clan.get_rank_privs(pc.power_grade)
           else
             pc.clan_privileges.set_all
             pc.power_grade = 1
@@ -131,8 +131,8 @@ module GameDB
 
     def load_characters(pc : L2PcInstance)
       GameDB.each(SELECT_CHARACTERS, pc.account_name, pc.l2id) do |rs|
-        id = rs.get_i32("charId")
-        name = rs.get_string("char_name")
+        id = rs.get_i32(:"charId")
+        name = rs.get_string(:"char_name")
         pc.account_chars[id] = name
       end
     rescue e
@@ -246,18 +246,12 @@ module GameDB
         pc.lang,
         pc.l2id
       )
-      info { "#{pc.name}'s basic data saved." }
     rescue e
       error e
     end
 
     def update_online_status(pc : L2PcInstance)
-      GameDB.exec(
-        UPDATE_ONLINE,
-        pc.online_int,
-        Time.ms,
-        pc.l2id
-      )
+      GameDB.exec(UPDATE_ONLINE, pc.online_int, Time.ms, pc.l2id)
     rescue e
       error e
     end

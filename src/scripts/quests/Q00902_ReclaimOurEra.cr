@@ -85,7 +85,7 @@ class Scripts::Q00902_ReclaimOurEra < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    if party = killer.party?
+    if party = killer.party
       party.members.each do |m|
         give_item(npc, m)
       end

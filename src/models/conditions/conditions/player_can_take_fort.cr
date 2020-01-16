@@ -14,7 +14,7 @@ class Condition
       end
 
       fort = FortManager.get_fort(pc)
-      if fort.nil? || (fort.residence_id <= 0 || !fort.siege.in_progress? || fort.siege.get_attacker_clan?(pc.clan).nil?)
+      if fort.nil? || (fort.residence_id <= 0 || !fort.siege.in_progress? || fort.siege.get_attacker_clan(pc.clan).nil?)
         sm = SystemMessage.s1_cannot_be_used
         sm.add_skill_name(skill.not_nil!)
         pc.send_packet(sm)

@@ -1,5 +1,5 @@
 class EffectHandler::Harvesting < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -34,7 +34,7 @@ class EffectHandler::Harvesting < AbstractEffect
 
       pc.send_packet(sm)
 
-      if party = pc.party?
+      if party = pc.party
         if item.count == 1
           sm = SystemMessage.c1_harvested_s2s
           sm.add_string(pc.name)

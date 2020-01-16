@@ -9,11 +9,11 @@ class Packets::Incoming::RequestPartyLootModification < GameClientPacket
     return unless pc = active_char
 
     unless type = PartyDistributionType[@id]?
-      warn "No PartyDistributionType found with ID #{@id}."
+      warn { "No PartyDistributionType found with id #{@id}." }
       return
     end
 
-    return unless party = pc.party?
+    return unless party = pc.party
 
     if !party.leader?(pc) || type == party.distribution_type
       return

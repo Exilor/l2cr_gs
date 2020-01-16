@@ -14,14 +14,14 @@ class EffectHandler::Unsummon < AbstractEffect
       chance = @chance.to_f
       chance *= Formulas.attribute_bonus(effector, effected, skill)
       chance *= Formulas.general_trait_bonus(effector, effected, skill.trait_type, false)
-      debug "Chance: #{chance.round(4)}"
+
       return chance > Rnd.rand * 100
     end
 
     false
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

@@ -9,17 +9,4 @@ struct PreciseDeterminationStrategy
   ALWAYS  = new { |drop_item| true }
   DEFAULT = new { |drop_item| Config.precise_drop_calculation }
   NEVER   = new { |drop_item| false }
-
-  def self.parse(name : String) : self
-    case name.casecmp
-    when "always"
-      ALWAYS
-    when "default"
-      DEFAULT
-    when "never"
-      NEVER
-    else
-      raise "unknown #{self} #{name.inspect}"
-    end
-  end
 end

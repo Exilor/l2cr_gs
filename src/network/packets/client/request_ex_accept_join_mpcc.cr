@@ -10,13 +10,13 @@ class Packets::Incoming::RequestExAcceptJoinMPCC < GameClientPacket
     return unless requestor = pc.active_requester
 
     if @response == 1
-      unless requestor.party.in_command_channel?
+      unless requestor.party.not_nil!.in_command_channel?
         L2CommandChannel.new(requestor)
         requestor.send_packet(SystemMessageId::COMMAND_CHANNEL_FORMED)
         new_cc = true
       end
 
-      requestor.party.command_channel.add_party(pc.party)
+      requestor.party.not_nil!.command_channel.not_nil!.add_party(pc.party.not_nil!)
 
       unless new_cc
         pc.send_packet(SystemMessageId::JOINED_COMMAND_CHANNEL)

@@ -142,7 +142,7 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
 
     case npc.id
     when MARSH_ZOMBIE
-      if has_quest_items?(killer, PRESERVE_OIL) && rand(10) < 5
+      if has_quest_items?(killer, PRESERVE_OIL) && Rnd.rand(10) < 5
         if Util.in_range?(1500, npc, killer, true)
           give_items(killer, ZOMBIE_HEAD, 1)
           take_items(killer, PRESERVE_OIL, -1)

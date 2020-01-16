@@ -22,14 +22,14 @@ class EffectHandler::Summon < AbstractEffect
     @life_time = params.get_i32("lifeTime", 3600) * 1000
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
     return if !info.effected.player? || info.effected.has_summon?
+    return unless pc = info.effected.acting_player
 
-    pc = info.effected.acting_player
     template = NpcData[@npc_id]
     summon = L2ServitorInstance.new(template, pc)
     consume_item_interval =

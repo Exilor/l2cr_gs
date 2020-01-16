@@ -60,7 +60,7 @@ class TerritoryWarSuperClass < Quest
         st.state = State::STARTED
         st.set_cond(1)
         st.set("kill", "1")
-        max = rand(@random_min..@random_max)
+        max = Rnd.rand(@random_min..@random_max)
         st.set("max", max.to_s)
       else
         kill = st.get_int("kill") + 1
@@ -84,7 +84,7 @@ class TerritoryWarSuperClass < Quest
       st.state = State::STARTED
       st.set_cond(1)
       st.set("kill", "1")
-      max = rand(@random_min..@random_max)
+      max = Rnd.rand(@random_min..@random_max)
       st.set("max", max.to_s)
 
       message = ExShowScreenMessage.new(@npc_string[0], 2, 10000)
@@ -96,7 +96,7 @@ class TerritoryWarSuperClass < Quest
       st.state = State::STARTED
       st.set_cond(1)
       st.set("kill", "1")
-      max = rand(@random_min..@random_max)
+      max = Rnd.rand(@random_min..@random_max)
       st.set("max", max.to_s)
 
       message = ExShowScreenMessage.new(@npc_string[0], 2, 10000)
@@ -130,9 +130,9 @@ class TerritoryWarSuperClass < Quest
     if killer == victim || victim.is_a?(L2PcInstance) || victim.level < 61
       return ""
     end
-    acting_pc = killer.acting_player?
+    acting_pc = killer.acting_player
     if acting_pc && qs.player
-      if party = acting_pc.party?
+      if party = acting_pc.party
         party.members.each do |pl|
           if pl.siege_side == qs.player.siege_side || pl.siege_side == 0 || !Util.in_range?(2000, killer, pl, false)
             next
@@ -191,7 +191,7 @@ class TerritoryWarSuperClass < Quest
     end
 
     if killer.siege_side != @territory_id && TerritoryWarManager.get_territory(killer.siege_side - 80)
-      manager.get_territory!(killer.siege_side - 80).quest_done[0] += 1
+      manager.get_territory(killer.siege_side - 80).not_nil!.quest_done[0] += 1
     end
 
     super
@@ -200,11 +200,11 @@ class TerritoryWarSuperClass < Quest
   def on_skill_see(npc : L2Npc, caster : L2PcInstance, skill : Skill, targets : Array(L2Object), is_summon : Bool) : String?
     if targets.includes?(npc)
       if skill.id == 845
-        if TerritoryWarManager.get_hq_for_clan(caster.clan) != npc
+        if TerritoryWarManager.get_hq_for_clan(caster.clan.not_nil!) != npc
           return super
         end
         npc.delete_me
-        TerritoryWarManager.set_hq_for_clan(caster.clan, nil)
+        TerritoryWarManager.set_hq_for_clan(caster.clan.not_nil!, nil)
       elsif skill.id == 847
         if TerritoryWarManager.get_hq_for_territory(caster.siege_side) != npc
           return super
@@ -213,7 +213,7 @@ class TerritoryWarSuperClass < Quest
           return super
         end
         if caster.siege_side - 80 == ward.owner_castle_id
-          TerritoryWarManager.get_territory!(ward.owner_castle_id).owned_ward.each do |ward_spawn|
+          TerritoryWarManager.get_territory(ward.owner_castle_id).not_nil!.owned_ward.each do |ward_spawn|
             ward_spawn = ward_spawn.not_nil!
             if ward_spawn.id == ward.territory_id
               ward_spawn.npc = ward_spawn.npc.spawn.do_spawn
@@ -225,7 +225,7 @@ class TerritoryWarSuperClass < Quest
           ward.unspawn_me
           ward.npc = TerritoryWarManager.add_territory_ward(ward.territory_id, caster.siege_side - 80, ward.owner_castle_id, true)
           ward.owner_castle_id = caster.siege_side - 80
-          TerritoryWarManager.get_territory!(caster.siege_side - 80).quest_done[1] += 1
+          TerritoryWarManager.get_territory(caster.siege_side - 80).not_nil!.quest_done[1] += 1
         end
       end
     end

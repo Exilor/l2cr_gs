@@ -9,8 +9,7 @@ class EffectHandler::MaxCp < AbstractEffect
     super
 
     @type = params.get_enum("type", EffectCalculationType, EffectCalculationType::DIFF)
-    case @type
-    when EffectCalculationType::DIFF
+    if @type.diff?
       @power = params.get_f64("power", 0)
     else
       @power = 1.0 + (params.get_f64("power", 0) / 100)
@@ -19,7 +18,7 @@ class EffectHandler::MaxCp < AbstractEffect
     @heal = params.get_bool("heal", false)
 
     if params.empty?
-      warn "@params must not be empty."
+      raise "@params must not be empty."
     end
   end
 
@@ -28,14 +27,13 @@ class EffectHandler::MaxCp < AbstractEffect
     char_stat = effected.stat
     amount = @power
 
-    case @type
-    when EffectCalculationType::DIFF
+    if @type.diff?
       func = FuncAdd.new(Stats::MAX_CP, 1, self, @power)
       char_stat.active_char.add_stat_func(func)
       if @heal
         effected.current_cp += @power
       end
-    when EffectCalculationType::PER
+    else
       max_cp = effected.max_cp.to_f
       func = FuncMul.new(Stats::MAX_CP, 1, self, @power)
       char_stat.active_char.add_stat_func(func)
@@ -53,7 +51,6 @@ class EffectHandler::MaxCp < AbstractEffect
   end
 
   def on_exit(info)
-    char_stat = info.effected.stat
-    char_stat.active_char.remove_stats_owner(self)
+    info.effected.stat.active_char.remove_stats_owner(self)
   end
 end

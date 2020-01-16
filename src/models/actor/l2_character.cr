@@ -28,9 +28,9 @@ abstract class L2Character < L2Object
   @hp_update_dec_check = 0.0
   @hp_update_interval  = 0.0
   @zones = Bytes.new(ZoneId.size)
-  @zones_mutex = Mutex.new
+  @zones_mutex = Mutex.new(:Reentrant)
   @zone_validate_counter = 4i8
-  @teleport_lock = Mutex.new
+  @teleport_lock = Mutex.new(:Reentrant)
   @invul_against_skills : IHash(Int32, InvulSkillHolder)?
   @reuse_time_stamp_items : IHash(Int32, TimeStamp)?
   @reuse_time_stamp_skills : IHash(Int32, TimeStamp)?
@@ -42,6 +42,7 @@ abstract class L2Character < L2Object
   @move : MoveData?
   @skill_cast_2 : Scheduler::DelayedTask?
   @attack_by_list : ISet(L2Character)?
+
   getter title : String = ""
   getter cast_interrupt_time = 0i64
   getter skills : IHash(Int32, Skill) = Concurrent::Map(Int32, Skill).new
@@ -66,7 +67,7 @@ abstract class L2Character < L2Object
   property last_skill_cast : Skill?
   property last_simultaneous_skill_cast : Skill?
   property team : Team = Team::NONE
-  property! summoner : L2Character?
+  property summoner : L2Character?
   property! template : L2CharTemplate
   property! stat : CharStat
   property! status : CharStatus
@@ -159,20 +160,18 @@ abstract class L2Character < L2Object
     # return nil
   end
 
-  def summon! : L2Summon
-    summon.not_nil!
-  end
-
   def has_summon? : Bool
     !!summon
   end
 
   def has_pet? : Bool
-    has_summon? && summon!.pet?
+    smn = summon()
+    !!smn && smn.pet?
   end
 
   def has_servitor? : Bool
-    has_summon? && summon!.servitor?
+    smn = summon()
+    !!smn && smn.servitor?
   end
 
   def broadcast_packet(gsp : GameServerPacket)
@@ -203,7 +202,7 @@ abstract class L2Character < L2Object
         double_multi = current_hp / @hp_update_interval
 
         if double_multi.infinite?
-          debug "L2Character#need_hp_update? double_multi is infinite. current_hp: #{current_hp}, @hp_update_interval: #{@hp_update_interval}."
+          warn { "L2Character#need_hp_update? double_multi is infinite. current_hp: #{current_hp}, @hp_update_interval: #{@hp_update_interval}." }
           return current_hp < max_hp # custom crappy fix
         end
 
@@ -224,12 +223,12 @@ abstract class L2Character < L2Object
   end
 
   def action_failed
-    acting_player?.try &.send_packet(ActionFailed::STATIC_PACKET)
+    acting_player.try &.send_packet(ActionFailed::STATIC_PACKET)
   end
 
   def on_decay
     decay_me
-    world_region?.try &.remove_from_zones(self)
+    world_region.try &.remove_from_zones(self)
   end
 
   def on_spawn
@@ -541,7 +540,7 @@ abstract class L2Character < L2Object
 
       broadcast_packet(Revive.new(self))
 
-      world_region?.try &.on_revive(self)
+      world_region.try &.on_revive(self)
     else
       self.pending_revive = true
     end
@@ -609,7 +608,7 @@ abstract class L2Character < L2Object
 
     self.target = nil
 
-    stop_move
+    stop_move(nil)
 
     stop_hp_mp_regeneration
 
@@ -623,7 +622,7 @@ abstract class L2Character < L2Object
       notify_event(AI::DEAD)
     end
 
-    world_region?.try &.on_death(self)
+    world_region.try &.on_death(self)
 
     attack_by_list.try &.clear
 
@@ -879,15 +878,21 @@ abstract class L2Character < L2Object
         end
       end
 
-      broadcast_modified_stats(modified_stats)
+      if modified_stats
+        broadcast_modified_stats(modified_stats)
+      end
     end
   end
 
-  private def broadcast_modified_stats(stats : Enumerable(Stats)?)
-    return unless stats && !stats.empty?
+  private def broadcast_modified_stats(stat : Stats)
+    broadcast_modified_stats({stat})
+  end
+
+  private def broadcast_modified_stats(stats : Indexable(Stats))
+    return if stats.empty?
 
     me = self
-    if me.is_a?(L2Summon) && me.owner?
+    if me.is_a?(L2Summon) && me.owner
       me.update_and_broadcast_status(1)
     end
 
@@ -1003,18 +1008,18 @@ abstract class L2Character < L2Object
       broadcast_packet(ChangeMoveType.new(self))
     end
 
-    if player?
-      acting_player.broadcast_user_info
-    elsif summon?
-      broadcast_status_update
-    elsif npc?
-      npc = unsafe_as(L2Npc)
+    case me = self
+    when L2PcInstance
+      me.broadcast_user_info
+    when L2Summon
+      me.broadcast_status_update
+    when L2Npc
       known_list.known_players.each_value do |pc|
         if visible_for?(pc)
           if run_speed == 0
-            op = ServerObjectInfo.new(npc, pc)
+            op = ServerObjectInfo.new(me, pc)
           else
-            op = NpcInfo.new(npc, pc)
+            op = NpcInfo.new(me, pc)
           end
 
           pc.send_packet(op)
@@ -1079,7 +1084,6 @@ abstract class L2Character < L2Object
   end
 
   private def begin_cast(skill : Skill, simultaneously : Bool)
-    # debug "begin_cast 1"
     unless check_do_cast_conditions(skill)
       if simultaneously
         self.casting_simultaneously_now = false
@@ -1093,7 +1097,6 @@ abstract class L2Character < L2Object
 
       return
     end
-    # debug "begin_cast 2"
     if skill.simultaneous_cast? && !simultaneously
       simultaneously = true
     end
@@ -1102,7 +1105,6 @@ abstract class L2Character < L2Object
 
     target = nil
     targets = skill.get_target_list(self)
-    # debug "begin_cast 3"
     do_it = false
     do_default = false
 
@@ -1117,7 +1119,6 @@ abstract class L2Character < L2Object
     else
       do_default = true
     end
-    # debug "begin_cast 4"
     if do_default
       if targets.empty?
         if simultaneously
@@ -1134,7 +1135,7 @@ abstract class L2Character < L2Object
         return
       end
 
-      if (skill.continuous? && !skill.debuff?) || skill.has_effect_type?(L2EffectType::CP, L2EffectType::HP)
+      if (skill.continuous? && !skill.debuff?) || skill.has_effect_type?(EffectType::CP, EffectType::HP)
         do_it = true
       end
 
@@ -1144,7 +1145,6 @@ abstract class L2Character < L2Object
         target = target()
       end
     end
-    # debug "begin_cast 5"
 
     begin_cast(skill, simultaneously, target.as(L2Character?), targets)
   end
@@ -1183,7 +1183,7 @@ abstract class L2Character < L2Object
     end
 
     # L2J wants to unhardcode this and use event listeners
-    if skill.has_effect_type?(L2EffectType::RESURRECTION)
+    if skill.has_effect_type?(EffectType::RESURRECTION)
       if resurrection_blocked? || target.resurrection_blocked?
         send_packet(SystemMessageId::REJECT_RESURRECTION)
         target.send_packet(SystemMessageId::REJECT_RESURRECTION)
@@ -1209,7 +1209,7 @@ abstract class L2Character < L2Object
 
     if casting_simultaneously_now? && simultaneously
       skill2, simultaneously2, target2, targets2 = skill, simultaneously, target, targets
-      task = ->{ begin_cast(skill2, simultaneously2, target2, targets2) }
+      task = -> { begin_cast(skill2, simultaneously2, target2, targets2) }
       ThreadPoolManager.schedule_ai(task, 100)
 
       return
@@ -1245,7 +1245,7 @@ abstract class L2Character < L2Object
     init_mp_cons = stat.get_mp_consume1(skill)
     if init_mp_cons > 0
       status.reduce_mp(init_mp_cons.to_f64)
-      if acting_player? # custom check to not create a new packet for npcs
+      if acting_player # custom check to not create a new packet for npcs
         send_packet(StatusUpdate.current_mp(self))
       end
     end
@@ -1253,7 +1253,7 @@ abstract class L2Character < L2Object
     if reuse_delay > 10
       if skill_mastery
         reuse_delay = 100
-        acting_player?.try &.send_packet(SystemMessageId::SKILL_READY_TO_USE_AGAIN)
+        acting_player.try &.send_packet(SystemMessageId::SKILL_READY_TO_USE_AGAIN)
       end
 
       disable_skill(skill, reuse_delay.to_i64)
@@ -1267,7 +1267,7 @@ abstract class L2Character < L2Object
     if playable?
       if skill.item_consume_id > 0
         unless destroy_item_by_item_id("Consume", skill.item_consume_id, skill.item_consume_count.to_i64, nil, true)
-          acting_player.send_packet(SystemMessageId::NOT_ENOUGH_ITEMS)
+          acting_player.not_nil!.send_packet(SystemMessageId::NOT_ENOUGH_ITEMS)
           abort_cast
           return
         end
@@ -1351,8 +1351,8 @@ abstract class L2Character < L2Object
       end
 
       # custom (so that physical attack skills complete their animations)
-      if skill.physical? && skill.bad?
-        skill_anim_time += 200
+      if skill.cool_time > 0
+        skill_anim_time += skill.cool_time.fdiv(p_atk_spd) * 333 # 200
       end
 
       if simultaneously
@@ -1385,7 +1385,8 @@ abstract class L2Character < L2Object
 
     if targets.empty?
       case skill.target_type
-      when .aura?, .front_aura?, .behind_aura?, .aura_corpse_mob?, .aura_friendly?, .aura_undead_enemy?
+      when .aura?, .front_aura?, .behind_aura?, .aura_corpse_mob?,
+           .aura_friendly?, .aura_undead_enemy?
         # do nothing
       else
         abort_cast
@@ -1415,14 +1416,16 @@ abstract class L2Character < L2Object
             next
           end
           # i think other party type and clan targets should be ignored too
-          if (!skill.target_type.party? || !skill.has_effect_type?(L2EffectType::HP)) && !GeoData.can_see_target?(self, target)
-            skip_los += 1
-            next
+          if (!skill.target_type.party? || !skill.has_effect_type?(EffectType::HP))
+            if !GeoData.can_see_target?(self, target)
+              skip_los += 1
+              next
+            end
           end
 
           if skill.bad?
             if player?
-              if target.inside_peace_zone?(acting_player)
+              if target.inside_peace_zone?(acting_player.not_nil!)
                 skip_peace_zone += 1
                 next
               end
@@ -1542,10 +1545,9 @@ abstract class L2Character < L2Object
       send_packet(su)
     end
 
-    if player?
-      if skill.charge_consume > 0
-        acting_player.decrease_charges(skill.charge_consume)
-      end
+    me = self
+    if me.is_a?(L2PcInstance) && skill.charge_consume > 0
+      me.decrease_charges(skill.charge_consume)
     end
 
     call_skill(mut.skill, mut.targets)
@@ -1608,8 +1610,7 @@ abstract class L2Character < L2Object
 
     notify_quest_event_skill_finished(skill, target)
 
-    if player?
-      pc = acting_player
+    if player? && (pc = acting_player)
       qs = pc.queued_skill
 
       pc.set_current_skill(nil, false, false)
@@ -1622,7 +1623,6 @@ abstract class L2Character < L2Object
     end
 
     if channeling?
-      debug "At line #{__LINE__}: stop channeling."
       skill_channelizer.stop_channeling
     end
   end
@@ -1632,10 +1632,9 @@ abstract class L2Character < L2Object
       raise "Nil targets given to L2Character#call_skill"
     end
 
-    active_weapon = active_weapon_item?
+    active_weapon = active_weapon_item
 
     if skill.toggle? && affected_by_skill?(skill.id)
-      warn "#{skill} is toggle and #{self} is under its effects."
       return
     end
 
@@ -1647,18 +1646,21 @@ abstract class L2Character < L2Object
         targets_cast_target = target.ai.cast_target?
       end
 
-      if !Config.raid_disable_curse && ((target.is_a?(L2RaidBossInstance) && target.give_raid_curse? && (level > (target.level + 8))) ||
+      if !Config.raid_disable_curse && ((target.is_a?(L2RaidBossInstance) && target.give_raid_curse? && level > target.level + 8) ||
         (!skill.bad? && targets_attack_target.is_a?(L2RaidBossInstance) && targets_attack_target.give_raid_curse? && targets_attack_target.attack_by_list.includes?(target) && (level > (targets_attack_target.level + 8))) ||
         (!skill.bad? && targets_cast_target.is_a?(L2RaidBossInstance) && targets_cast_target.give_raid_curse? && targets_cast_target.attack_by_list.includes?(target) && (level > (targets_cast_target.level + 8))))
 
-        curse = skill.magic? ? CommonSkill::RAID_CURSE : CommonSkill::RAID_CURSE2
-        if curse_skill = curse.skill
+        if skill.magic?
+          curse = CommonSkill::RAID_CURSE
+        else
+          curse = CommonSkill::RAID_CURSE2
+        end
+
+        if curse_skill = curse.skill?
           abort_attack
           abort_cast
           set_intention(AI::IDLE)
           curse_skill.apply_effects(target, self)
-        else
-          warn "Skill ID #{curse.id} level #{curse.level} is missing from datapack."
         end
 
         return
@@ -1685,7 +1687,7 @@ abstract class L2Character < L2Object
 
     skill.activate_skill(self, targets)
 
-    if player = acting_player?
+    if player = acting_player
       targets.each do |target|
         next unless target.is_a?(L2Character)
 
@@ -1710,7 +1712,7 @@ abstract class L2Character < L2Object
             end
           end
 
-          if target.ai? && !skill.has_effect_type?(L2EffectType::HATE)
+          if target.ai? && !skill.has_effect_type?(EffectType::HATE)
             target.notify_event(AI::ATTACKED, self)
           end
         else
@@ -1755,7 +1757,7 @@ abstract class L2Character < L2Object
       end
     end
 
-    if skill.bad? && !skill.has_effect_type?(L2EffectType::HATE)
+    if skill.bad? && !skill.has_effect_type?(EffectType::HATE)
       targets.each do |target|
         if target.is_a?(L2Character) && target.ai?
           target.notify_event(AI::ATTACKED, self)
@@ -1791,9 +1793,9 @@ abstract class L2Character < L2Object
       end
     end
 
-    if Config.alt_validate_trigger_skills && playable?
+    if Config.alt_validate_trigger_skills && playable? && (pc = acting_player)
       if target.is_a?(L2Playable)
-        unless acting_player.check_pvp_skill(target, skill)
+        unless pc.check_pvp_skill(target, skill)
           return
         end
       end
@@ -1867,10 +1869,11 @@ abstract class L2Character < L2Object
     end
 
     if skill.channeling? && skill.channeling_skill_id > 0
-      return false unless region = world_region?
+      return false unless region = world_region
       can_cast = true
-      if skill.target_type.ground? && player?
-        wp = acting_player.current_skill_world_position.not_nil!
+      me = self
+      if skill.target_type.ground? && me.is_a?(L2PcInstance)
+        wp = me.current_skill_world_position.not_nil!
         unless region.check_effect_range_inside_peace_zone(skill, *wp.xyz)
           can_cast = false
         end
@@ -1886,10 +1889,10 @@ abstract class L2Character < L2Object
       end
     end
 
-    if wep = active_weapon_item?
+    if wep = active_weapon_item
       if wep.use_weapon_skills_only? && !gm? && wep.has_skills?
         unless wep.skills.try &.any? { |sh| sh.skill_id == skill.id }
-          acting_player?.try &.send_packet(SystemMessageId::WEAPON_CAN_USE_ONLY_WEAPON_SKILL)
+          acting_player.try &.send_packet(SystemMessageId::WEAPON_CAN_USE_ONLY_WEAPON_SKILL)
         end
 
         return false
@@ -1900,7 +1903,7 @@ abstract class L2Character < L2Object
       req_items = inventory.get_item_by_item_id(skill.item_consume_id)
 
       if req_items.nil? || req_items.count < skill.item_consume_count
-        if skill.has_effect_type?(L2EffectType::SUMMON)
+        if skill.has_effect_type?(EffectType::SUMMON)
           sm = SystemMessage.summoning_servitor_costs_s2_s1
           sm.add_item_name(skill.item_consume_id)
           sm.add_int(skill.item_consume_count)
@@ -1933,7 +1936,6 @@ abstract class L2Character < L2Object
       end
 
       if channeling?
-        debug "At #{__FILE__}##{__LINE__}: stop channeling."
         skill_channelizer.stop_channeling
       end
 
@@ -2001,15 +2003,15 @@ abstract class L2Character < L2Object
     @invul || @teleporting
   end
 
-  def access_level
+  def access_level : AccessLevel
     raise "L2Character doesn't have access level."
   end
 
-  def inventory
-    raise "L2Character#inventory must never be called. Check with #inventory? first"
+  def inventory : Inventory
+    raise "L2Character doesn't have an inventory."
   end
 
-  def inventory?
+  def inventory? : Inventory?
     # return nil
   end
 
@@ -2416,7 +2418,7 @@ abstract class L2Character < L2Object
     effect_list.stop_all_effects
   end
 
-  def stop_effects(effect_type : L2EffectType)
+  def stop_effects(effect_type : EffectType)
     effect_list.stop_effects(effect_type)
   end
 
@@ -2441,11 +2443,12 @@ abstract class L2Character < L2Object
   end
 
   def start_fake_death
-    return unless player?
-    acting_player.fake_death = true
+    me = self
+    return unless me.is_a?(L2PcInstance)
+    me.fake_death = true
     abort_attack
     abort_cast
-    stop_move
+    stop_move(nil)
     notify_event(AI::FAKE_DEATH)
     broadcast_packet(ChangeWaitType.new(self, ChangeWaitType::START_FAKE_DEATH))
   end
@@ -2453,7 +2456,7 @@ abstract class L2Character < L2Object
   def start_stunning
     abort_attack
     abort_cast
-    stop_move
+    stop_move(nil)
     notify_event(AI::STUNNED)
     unless summon?
       set_intention(AI::IDLE)
@@ -2464,13 +2467,13 @@ abstract class L2Character < L2Object
   def start_paralyze
     abort_attack
     abort_cast
-    stop_move
+    stop_move(nil)
     notify_event(AI::PARALYZED)
   end
 
   def stop_stunning(remove_effects : Bool)
     if remove_effects
-      stop_effects(L2EffectType::STUN)
+      stop_effects(EffectType::STUN)
     end
 
     unless player?
@@ -2506,22 +2509,21 @@ abstract class L2Character < L2Object
         set_intention(AI::ACTIVE)
         action_failed
         return
-      elsif player?
+      elsif actor = acting_player
         if target.dead?
           set_intention(AI::ACTIVE)
           action_failed
           return
         end
 
-        actor = acting_player
-        if actor.transformed? && !actor.transformation.can_attack?
+        if actor.transformed? && (tf = actor.transformation) && !tf.can_attack?
           action_failed
           return
         end
       end
     end
 
-    if wpn = active_weapon_item?
+    if wpn = active_weapon_item
       if !wpn.attack_weapon? && !gm?
         if wpn.item_type == WeaponType::FISHINGROD
           send_packet(SystemMessageId::CANNOT_ATTACK_WITH_FISHING_POLE)
@@ -2534,16 +2536,16 @@ abstract class L2Character < L2Object
       end
     end
 
-    if acting_player = acting_player?
-      if acting_player.in_observer_mode?
+    if actor = acting_player
+      if actor.in_observer_mode?
         send_packet(SystemMessageId::OBSERVERS_CANNOT_PARTICIPATE)
         action_failed
         return
-      elsif target.acting_player? && acting_player.siege_state > 0 &&
+      elsif (target_actor = target.acting_player) && actor.siege_state > 0 &&
         inside_siege_zone? &&
-        target.acting_player.siege_state == acting_player.siege_state &&
-        target.acting_player != self &&
-        target.acting_player.siege_side == acting_player.siege_side
+        target_actor.siege_state == actor.siege_state &&
+        target_actor != self &&
+        target_actor.siege_side == actor.siege_side
 
         if TerritoryWarManager.tw_in_progress?
           send_packet(SystemMessageId::YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY)
@@ -2553,13 +2555,12 @@ abstract class L2Character < L2Object
 
         action_failed
         return
-      elsif target.inside_peace_zone?(acting_player)
+      elsif target.inside_peace_zone?(actor)
         set_intention(AI::ACTIVE)
         action_failed
         return
       end
     elsif inside_peace_zone?(self, target)
-      debug "L2Character#do_attack: inside peace zone."
       set_intention(AI::ACTIVE)
       action_failed
       return
@@ -2575,7 +2576,7 @@ abstract class L2Character < L2Object
     end
 
     target.known_list.add_known_object(self)
-    weapon_item = active_weapon_item?
+    weapon_item = active_weapon_item
 
     was_ss_charged = charged_shot?(ShotType::SOULSHOTS)
     time_atk = calculate_time_between_attacks
@@ -2619,7 +2620,7 @@ abstract class L2Character < L2Object
       hitted = do_attack_hit_simple(attack, target, time_to_hit)
     end
 
-    if pc = acting_player?
+    if pc = acting_player
       AttackStances << pc
       if pc.summon != target
         pc.update_pvp_status(target)
@@ -2631,7 +2632,7 @@ abstract class L2Character < L2Object
     else
       set_charged_shot(ShotType::SOULSHOTS, false)
 
-      if pc
+      if pc = acting_player
         if pc.cursed_weapon_equipped?
           unless target.invul?
             target.current_cp = 0
@@ -2653,13 +2654,7 @@ abstract class L2Character < L2Object
   end
 
   def attack_type : WeaponType
-    if transformed?
-      if template = transformation.get_template(acting_player)
-        return template.base_attack_type
-      end
-    end
-
-    active_weapon_item?.try &.item_type || template().base_attack_type
+    active_weapon_item.try &.item_type || template.base_attack_type
   end
 
   def do_attack_hit_by_bow(attack : Attack, target : L2Character, s_atk : Int32, reuse : Int32) : Bool
@@ -2766,16 +2761,17 @@ abstract class L2Character < L2Object
     attack_percent = 85.0
     attack_count = 0
     z = z()
+    me = self
 
     known_list.known_objects.each_value do |obj|
       next unless obj.is_a?(L2Character)
       next if obj == target
-      next if pet? && unsafe_as(L2PetInstance).owner == self
+      next if me.is_a?(L2PetInstance) && me.owner == self
       next unless Util.in_range?(max_radius, self, obj, false)
       next if (obj.z - z).abs > 650
       next unless facing?(obj, max_angle_diff)
       next if attackable? && obj.player? && obj.attackable?
-      next if attackable? && obj.attackable? && !unsafe_as(L2Attackable).chaos?
+      next if me.is_a?(L2Attackable) && obj.attackable? && !me.chaos?
 
       unless obj.looks_dead?
         if obj == ai.attack_target? || obj.auto_attackable?(self)
@@ -2786,7 +2782,7 @@ abstract class L2Character < L2Object
         end
       end
     end
-    # debug "#do_attack_hit_by_pole: #{attack_count} enemies were hit."
+
     hitted
   end
 
@@ -2818,7 +2814,8 @@ abstract class L2Character < L2Object
   end
 
   def on_hit_timer(target : L2Character?, damage : Int32, crit : Bool, miss : Bool, soulshot : Bool, shld : Int8)
-    if !target || looks_dead? || (npc? && unsafe_as(L2Npc).event_mob?)
+    me = self
+    if !target || looks_dead? || (me.is_a?(L2Npc) && me.event_mob?)
       notify_event(AI::CANCEL)
       return
     end
@@ -2847,20 +2844,18 @@ abstract class L2Character < L2Object
           abort_cast
           set_intention(AI::IDLE)
           skill.apply_effects(target, self)
-        else
-          warn "Skill 4515 at level 1 (Raid curse) is missing."
         end
 
         damage = 0
       end
     end
 
-    if target.player?
-      target.acting_player.ai.client_start_auto_attack
+    if target.is_a?(L2PcInstance)
+      target.ai.client_start_auto_attack
     end
 
     if !miss && damage > 0
-      weapon = active_weapon_item?
+      weapon = active_weapon_item
       is_bow = false
       reflected_damage = 0
       if weapon
@@ -2869,10 +2864,11 @@ abstract class L2Character < L2Object
       end
 
       if !is_bow && !target.invul?
-        if !target.raid? || !acting_player? || acting_player.level <= target.level + 8
+        acting_player = acting_player()
+        if !target.raid? || (acting_player.nil? || acting_player.level <= target.level + 8)
           reflect_percent = target.calc_stat(Stats::REFLECT_DAMAGE_PERCENT, 0)
           if reflect_percent > 0
-            reflected_damage = (reflect_percent.fdiv(100) * damage).to_i32
+            reflected_damage = (reflect_percent / 100 * damage).to_i32
             if reflected_damage > target.max_hp
               reflected_damage = target.max_hp
             end
@@ -2897,7 +2893,7 @@ abstract class L2Character < L2Object
           sm.add_char_name(self)
           sm.add_char_name(target)
           sm.add_int(reflected_damage)
-          acting_player.send_packet(sm)
+          send_packet(sm)
         end
 
         reduce_current_hp(reflected_damage.to_f64, target, true, false, nil)
@@ -2945,9 +2941,6 @@ abstract class L2Character < L2Object
       if !target.raid? && Formulas.atk_break(target, damage.to_f)
         target.break_attack
         target.break_cast
-
-        # msu = MagicSkillUse.new(target, target, 5456, 1, 1, 1) # custom
-        # target.broadcast_packet msu # custom
       end
 
       @trigger_skills.try &.each_value do |sh|
@@ -2968,7 +2961,7 @@ abstract class L2Character < L2Object
 
   def can_use_range_weapon? : Bool
     return true if transformed?
-    return false unless weapon = active_weapon_item?
+    return false unless weapon = active_weapon_item
     return false unless weapon.ranged?
 
     if player?
@@ -3127,12 +3120,13 @@ abstract class L2Character < L2Object
 
   def stop_fake_death(remove_effects : Bool)
     if remove_effects
-      stop_effects(L2EffectType::FAKE_DEATH)
+      stop_effects(EffectType::FAKE_DEATH)
     end
 
-    if player?
-      acting_player.fake_death = false
-      acting_player.recent_fake_death = true
+    case me = self
+    when L2PcInstance
+      me.fake_death = false
+      me.recent_fake_death = true
     end
 
     broadcast_packet(ChangeWaitType.new(self, ChangeWaitType::STOP_FAKE_DEATH))
@@ -3219,13 +3213,13 @@ abstract class L2Character < L2Object
   end
 
   def random_damage_multiplier : Float64
-    if wp = active_weapon_item?
+    if wp = active_weapon_item
       random = wp.random_damage.to_f64
     else
       random = 5 + Math.sqrt(level)
     end
 
-    1.0 + (rand(0.0 - random..random) / 100)
+    1.0 + (Rnd.rand(0.0 - random..random) / 100)
   end
 
   def break_attack
@@ -3257,9 +3251,9 @@ abstract class L2Character < L2Object
   end
 
   def send_damage_message(target, damage, mcrit, pcrit, miss)
-    if miss && target.player?
+    if miss && target.is_a?(L2PcInstance)
       sm = SystemMessage.c1_evaded_c2_attack
-      sm.add_pc_name(target.acting_player)
+      sm.add_pc_name(target)
       sm.add_char_name(self)
       target.send_packet(sm)
     end
@@ -3280,16 +3274,12 @@ abstract class L2Character < L2Object
     false
   end
 
-  def party? : L2Party?
+  def party : L2Party?
     # return nil
   end
 
-  def party : L2Party
-    party?.not_nil!
-  end
-
   def in_active_region? : Bool
-    reg = world_region?
+    reg = world_region
     !!reg && reg.active?
   end
 
@@ -3326,26 +3316,10 @@ abstract class L2Character < L2Object
 
   abstract def level : Int32
   abstract def update_abnormal_effect
-  abstract def active_weapon_instance? : L2ItemInstance?
-  abstract def active_weapon_item? : L2Weapon?
-  abstract def secondary_weapon_instance? : L2ItemInstance?
-  abstract def secondary_weapon_item? : L2Item? # weapons, arrows...
-
-  def active_weapon_instance : L2ItemInstance
-    active_weapon_instance?.not_nil!
-  end
-
-  def active_weapon_item : L2Weapon
-    active_weapon_item?.not_nil!
-  end
-
-  def secondary_weapon_instance : L2ItemInstance
-    secondary_weapon_instance?.not_nil!
-  end
-
-  def secondary_weapon_item : L2Item
-    secondary_weapon_item?.not_nil!
-  end
+  abstract def active_weapon_instance : L2ItemInstance?
+  abstract def active_weapon_item : L2Weapon?
+  abstract def secondary_weapon_instance : L2ItemInstance?
+  abstract def secondary_weapon_item : L2Item? # weapons, arrows...
 
   def inside_radius?(loc : Locatable, radius : Int32, check_z_axis : Bool, strict : Bool) : Bool
     inside_radius?(*loc.xyz, radius, check_z_axis, strict)
@@ -3357,7 +3331,7 @@ abstract class L2Character < L2Object
   end
 
   def revalidate_zone(force : Bool)
-    return unless reg = world_region?
+    return unless reg = world_region
 
     if force
       @zone_validate_counter = 4i8
@@ -3430,11 +3404,13 @@ abstract class L2Character < L2Object
     end
 
     if Config.alt_game_karma_player_can_be_killed_in_peacezone
-      if target.acting_player? && target.acting_player.karma > 0
+      pc_target = target.acting_player
+      if pc_target && pc_target.karma > 0
         return false
       end
-      if attacker.acting_player? && attacker.acting_player.karma > 0
-        if target.acting_player? && target.acting_player.pvp_flag > 0
+      pc_attacker = attacker.acting_player
+      if pc_attacker && pc_attacker.karma > 0
+        if pc_target && pc_target.pvp_flag > 0
           return false
         end
       end
@@ -3450,7 +3426,7 @@ abstract class L2Character < L2Object
       do_revive
     end
 
-    stop_move(nil)
+    stop_move(nil, false)
     abort_attack
     abort_cast
 
@@ -3476,7 +3452,8 @@ abstract class L2Character < L2Object
       self.heading = heading
     end
 
-    if !player? || (acting_player.client?.try &.detached?)
+    me = self
+    if !me.is_a?(L2PcInstance) || (me.client.try &.detached?)
       on_teleported
     end
 
@@ -3591,8 +3568,8 @@ abstract class L2Character < L2Object
     if Config.coord_synchronize == 2 && !floating && !m.disregarding_geodata? && ticks % 10 == 0 && GeoData.has_geo?(x_prev, y_prev)
       geo_height = GeoData.get_spawn_height(x_prev, y_prev, z_prev)
       dz = m.z_destination - geo_height
-
-      if player? && 200 <= (acting_player.client_z - geo_height) <= 1500
+      me = self
+      if me.is_a?(L2PcInstance) && (me.client_z - geo_height).between?(200, 1500)
         dz = m.z_destination - z_prev
       elsif in_combat? && dz.abs > 200 && dx.abs2 + dy.abs2 < 40_000
         dz = m.z_destination - z_prev
@@ -3732,7 +3709,8 @@ abstract class L2Character < L2Object
     m.disregarding_geodata = false
 
     if !flying? && (!inside_water_zone? || inside_siege_zone?)
-      in_vehicle = player? && !!acting_player.vehicle
+      me = self
+      in_vehicle = me.is_a?(L2PcInstance) && !!me.vehicle
 
       if in_vehicle
         m.disregarding_geodata = true
@@ -3745,21 +3723,21 @@ abstract class L2Character < L2Object
       gtx = (original_x - L2World::MAP_MAX_X) >> 4
       gty = (original_y - L2World::MAP_MAX_Y) >> 4
 
-      if Config.pathfinding > 0 && (!(attackable? && unsafe_as(L2Attackable).returning_to_spawn_point?)) || (player? && !(in_vehicle && distance > 1500)) || is_a?(L2RiftInvaderInstance)
-        if @move && on_geodata_path?
-          if gtx == @move.not_nil!.geo_path_gtx && gty == @move.not_nil!.geo_path_gty
+      if Config.pathfinding > 0 && (!(me.is_a?(L2Attackable) && me.returning_to_spawn_point?)) || (player? && !(in_vehicle && distance > 1500)) || is_a?(L2RiftInvaderInstance)
+        if (m2 = @move) && on_geodata_path?
+          if gtx == m2.geo_path_gtx && gty == m2.geo_path_gty
             return
           end
 
-          @move.not_nil!.on_geodata_path_index = -1
+          m2.on_geodata_path_index = -1
         end
 
-        unless L2World::MAP_MIN_X <= cur_x <= L2World::MAP_MAX_X
-          unless L2World::MAP_MIN_Y <= cur_y <= L2World::MAP_MAX_Y
-            warn "Outside of world area at #{cur_x} #{cur_y}."
+        unless cur_x.between?(L2World::MAP_MIN_X, L2World::MAP_MAX_X)
+          unless cur_y.between?(L2World::MAP_MIN_Y, L2World::MAP_MAX_Y)
+            warn { "Outside of world area at #{cur_x} #{cur_y}." }
             set_intention(AI::IDLE)
-            if player?
-              acting_player.logout
+            if me.is_a?(L2PcInstance)
+              me.logout
             elsif summon?
               return
             else
@@ -3775,15 +3753,15 @@ abstract class L2Character < L2Object
         dx = (x - cur_x).to_f
         dy = (y - cur_y).to_f
         dz = (z - cur_z).to_f
-        distance = vertical_movement_only ? dz.abs2 : Math.hypot(dx, dy)
+        distance = vertical_movement_only ? Math.pow(dz, 2) : Math.hypot(dx, dy)
       end
 
       if Config.pathfinding > 0 && original_distance - distance > 30 && distance < 2000
         if (playable? && !in_vehicle) || minion? || in_combat? ||         (npc? && walker?) || is_a?(L2Decoy) # custom, force
           m.geo_path = PathFinding.find_path(cur_x, cur_y, cur_z, original_x, original_y, original_z, instance_id, playable?)
           if !m.geo_path? || m.geo_path.size < 0
-            debug "path not found." unless npc?
-            if player? || (!playable? && !minion? && ((z - cur_z).abs > 140)) || (summon? && !unsafe_as(L2Summon).follow_status)
+            # debug "path not found." if !npc? || !known_list.known_players.empty?
+            if player? || (!playable? && !minion? && (z - cur_z).abs > 140) || (me.is_a?(L2Summon) && !me.follow_status)
               set_intention(AI::IDLE)
               return
             end
@@ -3827,8 +3805,8 @@ abstract class L2Character < L2Object
       end
 
       if distance < 1 && (Config.pathfinding > 0 || playable? || is_a?(L2RiftInvaderInstance) || afraid?)
-        if summon?
-          unsafe_as(L2Summon).follow_status = false
+        if me.is_a?(L2Summon)
+          me.follow_status = false
         end
 
         set_intention(AI::IDLE)
@@ -3849,7 +3827,7 @@ abstract class L2Character < L2Object
     m.heading = 0
 
     unless vertical_movement_only
-      self.heading = Util.calculate_heading_from(cos.to_f, sin.to_f)
+      self.heading = Util.calculate_heading_from(cos, sin)
     end
 
     m.move_start_time = GameTimer.ticks
@@ -3890,18 +3868,20 @@ abstract class L2Character < L2Object
     m.geo_path_accurate_tx = md.geo_path_accurate_tx
     m.geo_path_accurate_ty = md.geo_path_accurate_ty
 
+    route_point = md.geo_path[m.on_geodata_path_index]
+
     if md.on_geodata_path_index == md.geo_path.size - 2
       m.x_destination = md.geo_path_accurate_tx
       m.y_destination = md.geo_path_accurate_ty
     else
-      m.x_destination = md.geo_path[m.on_geodata_path_index].x
-      m.y_destination = md.geo_path[m.on_geodata_path_index].y
+      m.x_destination = route_point.x
+      m.y_destination = route_point.y
     end
-    m.z_destination = md.geo_path[m.on_geodata_path_index].z
+    m.z_destination = route_point.z
 
-    dx = (m.x_destination - x).to_f
-    dy = (m.y_destination - y).to_f
-    distance = Math.hypot(dx, dy)
+    x, y = x(), y()
+
+    distance = Math.hypot(m.x_destination - x, m.y_destination - y)
 
     if distance != 0
       self.heading = Util.calculate_heading_from(x, y, m.x_destination, m.y_destination)
@@ -3924,10 +3904,6 @@ abstract class L2Character < L2Object
     broadcast_packet(MoveToLocation.new(self))
 
     true
-  end
-
-  def stop_move # custom
-    stop_move(nil)
   end
 
   def stop_move(loc : Location?)
@@ -3970,13 +3946,31 @@ abstract class L2Character < L2Object
   end
 
   def send_debug_message(& : -> String)
-    if tmp = @debugger
-      tmp.send_message(yield)
-    end
+    @debugger.try &.send_message(yield)
   end
 
   def send_debug_message(msg : String)
     send_debug_message { msg }
+  end
+
+  def say(msg : NpcString | String)
+    if player?
+      cs = CreatureSay.new(l2id, Packets::Incoming::Say2::ALL, name, msg)
+    else
+      cs = CreatureSay.new(l2id, Packets::Incoming::Say2::NPC_ALL, name, msg)
+    end
+
+    broadcast_packet(cs)
+  end
+
+  def shout(msg : NpcString | String)
+    if player?
+      cs = CreatureSay.new(l2id, Packets::Incoming::Say2::SHOUT, name, msg)
+    else
+      cs = CreatureSay.new(l2id, Packets::Incoming::Say2::NPC_SHOUT, name, msg)
+    end
+
+    broadcast_packet(cs)
   end
 
   # custom methods
@@ -4002,15 +3996,5 @@ abstract class L2Character < L2Object
 
   def heal! : self
     max_cp!.max_hp!.max_mp!
-  end
-
-  def say(msg : NpcString | String)
-    say = player? ? Packets::Incoming::Say2::ALL : Packets::Incoming::Say2::NPC_ALL
-    broadcast_packet(CreatureSay.new(l2id, say, name || "??", msg))
-  end
-
-  def shout(msg : NpcString | String)
-    say = player? ? Packets::Incoming::Say2::SHOUT : Packets::Incoming::Say2::NPC_SHOUT
-    broadcast_packet(CreatureSay.new(l2id, say, name || "??", msg))
   end
 end

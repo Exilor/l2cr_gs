@@ -72,7 +72,7 @@ class Scripts::Q00618_IntoTheFlame < Quest
     if member = get_random_party_member(pc, 2)
       qs = get_quest_state!(member, false)
       if qs.get_quest_items_count(VACUALITE_ORE) < REQUIRED_COUNT
-        if rand(1000) < MONSTERS[npc.id]
+        if Rnd.rand(1000) < MONSTERS[npc.id]
           qs.give_items(VACUALITE_ORE, 1)
           if qs.get_quest_items_count(VACUALITE_ORE) >= REQUIRED_COUNT
             qs.set_cond(3, true)

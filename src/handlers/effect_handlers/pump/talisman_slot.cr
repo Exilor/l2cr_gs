@@ -11,7 +11,7 @@ class EffectHandler::TalismanSlot < AbstractEffect
   end
 
   def on_start(info)
-    info.effected.acting_player.stat.add_talisman_slots(@slots)
+    info.effected.acting_player.not_nil!.stat.add_talisman_slots(@slots)
   end
 
   def on_action_time(info)
@@ -19,6 +19,6 @@ class EffectHandler::TalismanSlot < AbstractEffect
   end
 
   def on_exit(info)
-    info.effected.acting_player.stat.add_talisman_slots(-@slots)
+    info.effected.acting_player.not_nil!.stat.add_talisman_slots(-@slots)
   end
 end

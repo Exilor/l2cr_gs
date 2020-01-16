@@ -56,7 +56,7 @@ module AdminCommandHandler::AdminMobGroup
   private def return_to_char(command, pc)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Incorrect command arguments.")
       return
     end
@@ -70,7 +70,7 @@ module AdminCommandHandler::AdminMobGroup
   private def idle(command, pc)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Incorrect command arguments.")
       return
     end
@@ -84,7 +84,7 @@ module AdminCommandHandler::AdminMobGroup
   private def set_normal(command, pc)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Incorrect command arguments.")
       return
     end
@@ -98,7 +98,7 @@ module AdminCommandHandler::AdminMobGroup
   private def attack(command, pc, target)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Incorrect command arguments.")
       return
     end
@@ -112,7 +112,7 @@ module AdminCommandHandler::AdminMobGroup
   private def follow(command, pc, target)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Incorrect command arguments.")
       return
     end
@@ -130,7 +130,7 @@ module AdminCommandHandler::AdminMobGroup
       group_id = cmd_params[1].to_i
       template_id = cmd_params[2].to_i
       mob_count = cmd_params[3].to_i
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_create <group> <npcid> <count>")
       return
     end
@@ -154,7 +154,7 @@ module AdminCommandHandler::AdminMobGroup
   private def remove_group(command, pc)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_remove <group_id>")
       return
     end
@@ -187,12 +187,10 @@ module AdminCommandHandler::AdminMobGroup
         posy = cmd_params[3].to_i
         posz = cmd_params[4].to_i
         topos = true
-      rescue e
-        warn e
+      rescue
         # no position given
       end
-    rescue e
-      warn e
+    rescue
       pc.send_message("Usage: #mobgroup_spawn <group> [ x y z ]")
       return
     end
@@ -216,7 +214,7 @@ module AdminCommandHandler::AdminMobGroup
   private def unspawn_group(command, pc)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_unspawn <group_id>")
       return
     end
@@ -235,7 +233,7 @@ module AdminCommandHandler::AdminMobGroup
   private def kill_group(command, pc)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_kill <group_id>")
       return
     end
@@ -252,7 +250,7 @@ module AdminCommandHandler::AdminMobGroup
   private def set_casting(command, pc)
     begin
       group_id = command.split[1].to_i
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_casting <group_id>")
       return
     end
@@ -269,7 +267,7 @@ module AdminCommandHandler::AdminMobGroup
     begin
       group_id = command.split[1].to_i
       enabled = command.split[2]
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_nomove <group_id> <on|off>")
       return
     end
@@ -291,14 +289,14 @@ module AdminCommandHandler::AdminMobGroup
   private def do_animation(pc)
     msu = MagicSkillUse.new(pc, 1008, 1, 4000, 0)
     Broadcast.to_self_and_known_players_in_radius(pc, msu, 1500)
-    pc.send_packet(SetupGauge.new(0, 4000))
+    pc.send_packet(SetupGauge.blue(4000))
   end
 
   private def attack_group(command, pc)
     begin
       group_id = command.split[1].to_i
       other_group_id = command.split[2].to_i
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_attackgrp <group_id> <target_group_id>")
       return
     end
@@ -320,7 +318,7 @@ module AdminCommandHandler::AdminMobGroup
     begin
       group_id = command.split[1].to_i
       enabled = command.split[2]
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_invul <group_id> <on|off>")
       return
     end
@@ -349,7 +347,7 @@ module AdminCommandHandler::AdminMobGroup
       end
 
       target_player ||= pc
-    rescue e
+    rescue
       pc.send_message("Usage: #mobgroup_teleport <group_id> [playerName]")
       return
     end
@@ -390,7 +388,8 @@ module AdminCommandHandler::AdminMobGroup
       "admin_mobgroup_casting",
       "admin_mobgroup_nomove",
       "admin_mobgroup_attackgrp",
-      "admin_mobgroup_invul"
+      "admin_mobgroup_invul",
+      "admin_mobgroup_teleport"
     }
   end
 end

@@ -15,6 +15,7 @@ class Instance
   @doors = Concurrent::Map(Int32, L2DoorInstance).new
   @manual_spawn = {} of String => Array(L2Spawn)
   @last_left = -1i64
+
   getter id
   getter players = Concurrent::Array(Int32).new
   getter npcs = Concurrent::Array(L2Npc).new
@@ -132,7 +133,7 @@ class Instance
 
   def remove_doors
     @doors.each_value do |door|
-      region = door.world_region?
+      region = door.world_region
       door.decay_me
       region.try &.remove_visible_object door
       door.known_list.remove_all_known_objects
@@ -451,8 +452,8 @@ class Instance
   end
 
   def notify_death(killer : L2Character?, victim : L2Character)
-    if instance = InstanceManager.get_player_world(victim.acting_player)
-      instance.on_death(killer, victim)
+    if inst = InstanceManager.get_player_world(victim.acting_player.not_nil!)
+      inst.on_death(killer, victim)
     end
   end
 

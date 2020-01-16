@@ -41,7 +41,7 @@ module CrestTable
 
         data = rs.get_bytes("data")
         type = rs.get_i32("type")
-        if crest_type = L2Crest::CrestType.get_by_id(type)
+        if crest_type = L2Crest::Type.get_by_id(type)
           CRESTS[id] = L2Crest.new(id, data, crest_type)
         else
           warn { "Unknown crest type found in database: #{type}." }
@@ -84,7 +84,7 @@ module CrestTable
 
   private def move_old_crests_to_db(crests_in_use)
     # TODO: delete each crest file
-    dir = "#{Config.datapack_root}/crests"
+    dir = Config.datapack_root + "/crests"
 
     return unless Dir.exists?(dir)
 
@@ -96,7 +96,7 @@ module CrestTable
       if file_name.starts_with?("Crest_Large_")
         crest_id = file_name.from(12).to_i
         if crests_in_use.includes?(crest_id)
-          if crest = create_crest(data, L2Crest::CrestType::PLEDGE_LARGE)
+          if crest = create_crest(data, L2Crest::PLEDGE_LARGE)
             ClanTable.clans.each do |clan|
               if clan.crest_large_id == crest_id
                 clan.crest_large_id = 0
@@ -108,7 +108,7 @@ module CrestTable
       elsif file_name.starts_with?("Crest_")
         crest_id = file_name.from(6).to_i
         if crests_in_use.includes?(crest_id)
-          if crest = create_crest(data, L2Crest::CrestType::PLEDGE)
+          if crest = create_crest(data, L2Crest::PLEDGE)
             ClanTable.clans.each do |clan|
               if clan.crest_id == crest_id
                 clan.crest_id = 0
@@ -120,7 +120,7 @@ module CrestTable
       elsif file_name.starts_with?("AllyCrest_")
         crest_id = file_name.from(10).to_i
         if crests_in_use.includes?(crest_id)
-          if crest = create_crest(data, L2Crest::CrestType::ALLY)
+          if crest = create_crest(data, L2Crest::ALLY)
             ClanTable.clans.each do |clan|
               if clan.ally_crest_id == crest_id
                 clan.ally_crest_id = 0
@@ -137,15 +137,10 @@ module CrestTable
     CRESTS[crest_id]?
   end
 
-  def create_crest(data : Bytes, crest_type : L2Crest::CrestType) : L2Crest?
+  def create_crest(data : Bytes, crest_type : L2Crest::Type) : L2Crest?
     crest = L2Crest.new(next_id, data, crest_type)
     sql = "INSERT INTO `crests`(`crest_id`, `data`, `type`) VALUES(?, ?, ?)"
-    GameDB.exec(
-      sql,
-      crest.id,
-      crest.data,
-      crest.type.id,
-    )
+    GameDB.exec(sql, crest.id, crest.data, crest.type.id)
     CRESTS[crest.id] = crest
     crest
   rescue e
@@ -160,9 +155,11 @@ module CrestTable
       return
     end
 
-    GameDB.exec("DELETE FROM `crests` WHERE `crest_id` = ?", crest_id)
-  rescue e
-    error e
+    begin
+      GameDB.exec("DELETE FROM `crests` WHERE `crest_id` = ?", crest_id)
+    rescue e
+      error e
+    end
   end
 
   def next_id : Int32

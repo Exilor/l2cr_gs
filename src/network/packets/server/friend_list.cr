@@ -15,7 +15,7 @@ class Packets::Outgoing::FriendList < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0x75
 
     if info = @info

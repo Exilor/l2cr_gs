@@ -1,7 +1,7 @@
 class EffectHandler::TriggerSkillBySkill < AbstractEffect
   @cast_skill_id : Int32
   @chance : Int32
-  @target_type : L2TargetType
+  @target_type : TargetType
 
   def initialize(attach_cond, apply_cond, set, params)
     super
@@ -10,11 +10,10 @@ class EffectHandler::TriggerSkillBySkill < AbstractEffect
     @chance = params.get_i32("chance", 100)
     id, level = params.get_i32("skillId", 0), params.get_i32("skillLevel", 0)
     @skill = SkillHolder.new(id, level)
-    @target_type = params.get_enum("targetType", L2TargetType, L2TargetType::ONE)
+    @target_type = params.get_enum("targetType", TargetType, TargetType::ONE)
   end
 
   def on_skill_use_event(evt)
-    evt = evt.as(OnCreatureSkillUse)
     return if @chance == 0 || @skill.skill_id == 0 || @skill.skill_lvl == 0
     return if @cast_skill_id != evt.skill.id
     return if Rnd.rand(100) > @chance
@@ -44,7 +43,7 @@ class EffectHandler::TriggerSkillBySkill < AbstractEffect
     char = info.effected
     type = EventType::ON_CREATURE_SKILL_USE
     listener = ConsumerEventListener.new(char, type, self) do |event|
-      on_skill_use_event(event)
+      on_skill_use_event(event.as(OnCreatureSkillUse))
     end
     char.add_listener(listener)
   end

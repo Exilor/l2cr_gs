@@ -62,7 +62,7 @@ class L2PcInstance < L2Playable
 
   @reco_bonus_task : Scheduler::DelayedTask?
   @reco_give_task : Scheduler::PeriodicTask?
-  @subclass_lock = Mutex.new
+  @subclass_lock = Mutex.new(:Reentrant)
   @cur_weight_penalty = 0
   @last_compass_zone = 0
   @charges = Atomic(Int32).new(0)
@@ -93,7 +93,6 @@ class L2PcInstance < L2Playable
   @can_feed = false
   @offline_shop_start = 0
   @in_duel = false
-  @wait_type_sitting = false
   @exchange_refusal = false
   @engage_request = false
   @revive_pet = false
@@ -162,11 +161,9 @@ class L2PcInstance < L2Playable
   getter expertise_armor_penalty  = 0
   getter expertise_weapon_penalty = 0
   getter active_enchant_item_id = ID_NONE
-  # L2J wants to fix @cubics so it keeps insert order. If code changes, keep
-  # in mind that Ruby's Hash already keeps it.
-  getter cubics = Hash(Int32, L2CubicInstance).new
+  getter cubics = Concurrent::Map(Int32, L2CubicInstance).new
   getter active_shots = Concurrent::Set(Int32).new(1)
-  getter soulshot_lock = Mutex.new
+  getter soulshot_lock = Mutex.new(:Reentrant)
   getter fish_x = 0
   getter fish_y = 0
   getter fish_z = 0
@@ -194,9 +191,9 @@ class L2PcInstance < L2Playable
   getter(block_list) { BlockList.new(self) }
   getter(shortcuts) { Shortcuts.new(self) }
   getter(macros) { MacroList.new(self) }
+  getter clan : L2Clan?
+  getter transformation : Transform?
   getter! ui_settings : UIKeysSettings
-  getter! clan : L2Clan
-  getter! transformation : Transform
   getter? online = false
   getter? in_observer_mode = false # L2J: _observerMode
   getter? noble = false
@@ -229,7 +226,7 @@ class L2PcInstance < L2Playable
   property offline_start_time : Int64 = 0i64 # L2J: _offlineShopStart
   property last_folk_npc : L2Npc?
   property last_quest_npc_l2id : Int32 = 0 # L2J: _questNpcObject
-  property henna : Slice(L2Henna?) = Slice(L2Henna?).new(3, nil.as(L2Henna?)) # L2Henna[3]
+  property henna : Slice(L2Henna?) = Slice(L2Henna?).new(3, nil.as(L2Henna?))
   property agathion_id : Int32 = 0
   property party_room : Int32 = 0
   property apprentice : Int32 = 0
@@ -246,7 +243,7 @@ class L2PcInstance < L2Playable
   property active_enchant_support_item_id : Int32 = ID_NONE
   property active_enchant_attr_item_id : Int32 = ID_NONE
   property active_enchant_timestamp : Int64 = 0i64
-  property block_checker_arena : Int8 = -1i8 # L2R: @handys_block_checker_event_arena
+  property block_checker_arena : Int8 = -1i8
   property cursed_weapon_equipped_id : Int32 = 0
   property client_x : Int32 = 0
   property client_y : Int32 = 0
@@ -265,15 +262,16 @@ class L2PcInstance < L2Playable
   property active_trade_list : TradeList?
   property admin_confirm_cmd : String?
   property active_warehouse : ItemContainer?
-  property multisell : Multisell::PreparedListContainer? # L2R: @current_multisell
+  property multisell : Multisell::PreparedListContainer?
   property clan_privileges : EnumBitmask(ClanPrivilege) = EnumBitmask(ClanPrivilege).new
   property control_item_id : Int32 = 0
-  property! fists_weapon_item : L2Weapon?
-  property! client : GameClient?
-  property! party : L2Party?
-  property! in_vehicle_position : Location?
-  property! servitor_share : EnumMap(Stats, Float64)?
-  property! lure : L2ItemInstance
+  property fists_weapon_item : L2Weapon?
+  property client : GameClient?
+  property party : L2Party?
+  property in_vehicle_position : Location?
+  property servitor_share : EnumMap(Stats, Float64)?
+  property lure : L2ItemInstance?
+  property? sitting : Bool = false
   property? reco_two_hours_given : Bool = false
   property? enchanting : Bool = false
   property? in_crystallize : Bool = false
@@ -324,13 +322,14 @@ class L2PcInstance < L2Playable
   end
 
   def flying_mounted? : Bool
-    transformed? && transformation.flying?
+    return false unless transformed?
+    return false unless transformation = transformation()
+    transformation.flying?
   end
 
   def self.create(class_id : Int32, account : String, name : String, app : PcAppearance) : L2PcInstance?
     pc = new(class_id, account, app)
     pc.name = name
-    # pc.create_date = Calendar.new # already done on initialization
     pc.base_class = pc.class_id
     pc.newbie = 1
     pc.recom_left = 20
@@ -430,7 +429,7 @@ class L2PcInstance < L2Playable
         @online = false
         abort_attack
         abort_cast
-        stop_move
+        stop_move(nil)
         self.debugger = nil
       rescue e
         error e
@@ -505,7 +504,7 @@ class L2PcInstance < L2Playable
 
       effect_list.stop_all_toggles
 
-      world_region?.try &.remove_from_zones(self)
+      world_region.try &.remove_from_zones(self)
 
       begin
         decay_me
@@ -536,7 +535,7 @@ class L2PcInstance < L2Playable
         end
       end
 
-      if clan?
+      if clan = clan()
         begin
           if mem = clan.get_clan_member(l2id)
             mem.player_instance = nil
@@ -578,9 +577,9 @@ class L2PcInstance < L2Playable
               x = loc.x + Rnd.rand(-30..30)
               y = loc.y + Rnd.rand(-30..30)
               set_xyz_invisible(x, y, loc.z)
-              if has_summon?
-                summon!.tele_to_location(loc, true)
-                summon!.instance_id = 0
+              if smn = summon
+                smn.tele_to_location(loc, true)
+                smn.instance_id = 0
               end
             end
           end
@@ -637,7 +636,7 @@ class L2PcInstance < L2Playable
         error e
       end
 
-      if clan_id > 0
+      if clan_id > 0 && (clan = clan())
         lu = PledgeShowMemberListUpdate.new(self)
         clan.broadcast_to_other_online_members(lu, self)
       end
@@ -710,10 +709,6 @@ class L2PcInstance < L2Playable
         tmp.save_in_db
       end
     end
-  end
-
-  def acting_player? : L2PcInstance?
-    self
   end
 
   def acting_player : L2PcInstance
@@ -804,6 +799,7 @@ class L2PcInstance < L2Playable
 
     begin
       if lvl_joined_academy != 0 && @clan && PlayerClass[id].level.third?
+        clan = clan().not_nil!
         if lvl_joined_academy <= 16
           clan.add_reputation_score(Config.join_academy_max_rep_score, true)
         elsif lvl_joined_academy >= 39
@@ -829,10 +825,10 @@ class L2PcInstance < L2Playable
       else
         send_packet(SystemMessageId::CLASS_TRANSFER)
       end
-      if in_party?
+      if party = party()
         party.broadcast_packet(PartySmallWindowUpdate.new(self))
       end
-      clan?.try &.broadcast_to_online_members(PledgeShowMemberListUpdate.new(self))
+      clan.try &.broadcast_to_online_members(PledgeShowMemberListUpdate.new(self))
       reward_skills
       if !override_skill_conditions? && Config.decrease_skill_level
         check_player_skills
@@ -896,7 +892,7 @@ class L2PcInstance < L2Playable
   end
 
   def do_auto_loot(target : L2Attackable, item_id : Int32, item_count : Int64)
-    if in_party? && !ItemTable[item_id].has_ex_immediate_effect?
+    if (party = party()) && !ItemTable[item_id].has_ex_immediate_effect?
       party.distribute_item(self, item_id, item_count, false, target)
     elsif item_id == Inventory::ADENA_ID
       add_adena("Loot", item_count, target, true)
@@ -921,7 +917,7 @@ class L2PcInstance < L2Playable
   end
 
   def leave_party
-    if in_party?
+    if party = party()
       party.remove_party_member(self, L2Party::MessageType::Disconnected)
       @party = nil
     end
@@ -1012,10 +1008,10 @@ class L2PcInstance < L2Playable
   def get_relation(pc : L2PcInstance) : Int32
     rel = 0
 
-    if clan = clan?
+    if clan = clan()
       rel |= RelationChanged::CLAN_MEMBER
 
-      if clan == pc.clan?
+      if clan == pc.clan
         rel |= RelationChanged::CLAN_MATE
       end
 
@@ -1028,9 +1024,9 @@ class L2PcInstance < L2Playable
       rel |= RelationChanged::LEADER
     end
 
-    party = party?
+    party = party()
 
-    if party && party == pc.party?
+    if party && party == pc.party
       rel |= RelationChanged::HAS_PARTY
 
       case i = party.members.index(self)
@@ -1074,12 +1070,12 @@ class L2PcInstance < L2Playable
       end
     end
 
-    if clan && pc.clan?
+    if clan && (pc_clan = pc.clan)
       if pc.pledge_type != L2Clan::SUBUNIT_ACADEMY
         if pledge_type != L2Clan::SUBUNIT_ACADEMY
-          if pc.clan.at_war_with?(clan.id)
+          if pc_clan.at_war_with?(clan.id)
             rel |= RelationChanged::ONE_SIDED_WAR
-            if clan.at_war_with?(pc.clan.id)
+            if clan.at_war_with?(pc_clan.id)
               rel |= RelationChanged::MUTUAL_WAR
             end
           end
@@ -1222,7 +1218,7 @@ class L2PcInstance < L2Playable
 
     if skill
       all_shortcuts.each do |sc|
-        if sc.id == skill.id && sc.type.skill? && !(3080 <= skill.id <= 3259)
+        if sc.id == skill.id && sc.type.skill? && !skill.id.between?(3080, 3259)
           delete_shortcut(sc.slot, sc.page)
         end
       end
@@ -1255,7 +1251,7 @@ class L2PcInstance < L2Playable
       return false
     end
 
-    if charges < skill.charge_consume || (in_airship? && !skill.has_effect_type?(L2EffectType::REFUEL_AIRSHIP))
+    if charges < skill.charge_consume || (in_airship? && !skill.has_effect_type?(EffectType::REFUEL_AIRSHIP))
       sm = SystemMessage.s1_cannot_be_used
       sm.add_skill_name(skill)
       send_packet(sm)
@@ -1375,7 +1371,7 @@ class L2PcInstance < L2Playable
     end
     # debug "before fishing check"
     if fishing?
-      unless skill.has_effect_type?(L2EffectType::FISHING, L2EffectType::FISHING_START)
+      unless skill.has_effect_type?(EffectType::FISHING, EffectType::FISHING_START)
         send_packet(SystemMessageId::ONLY_FISHING_SKILLS_NOW)
         debug "#check_use_magic_conditions: failed fishing check."
         return false
@@ -1507,10 +1503,12 @@ class L2PcInstance < L2Playable
         return false
       end
 
-      if target.acting_player? && siege_state > 0 && inside_siege_zone?
-        if target.acting_player.siege_state == siege_state
-          if target.acting_player != self
-            if target.acting_player.siege_side == siege_side
+      pc_target = target.acting_player
+
+      if pc_target && siege_state > 0 && inside_siege_zone?
+        if pc_target.siege_state == siege_state
+          if pc_target != self
+            if pc_target.siege_side == siege_side
               if TerritoryWarManager.tw_in_progress?
                 send_packet(SystemMessageId::YOU_CANNOT_ATTACK_A_MEMBER_OF_THE_SAME_TERRITORY)
               else
@@ -1530,10 +1528,9 @@ class L2PcInstance < L2Playable
       end
 
       if target.is_a?(L2EventMonsterInstance)
-        warn { "TODO: #{target} is a L2EventMonsterInstance." }
-        # if target.event_skill_attack_blocked?
-        #   return false
-        # end
+        if target.block_skill_attack?
+          return false
+        end
       end
 
       # debug "before auto attackable check"
@@ -1610,7 +1607,7 @@ class L2PcInstance < L2Playable
     return false unless skill && target
     return true unless target.is_a?(L2Playable)
 
-    if skill.debuff? || skill.has_effect_type?(L2EffectType::STEAL_ABNORMAL) || skill.bad?
+    if skill.debuff? || skill.has_effect_type?(EffectType::STEAL_ABNORMAL) || skill.bad?
       return false unless target_player = target.acting_player
       return false if self == target
       current_skill = current_skill()
@@ -1636,8 +1633,8 @@ class L2PcInstance < L2Playable
         end
       end
 
-      if in_party? && target_player.in_party?
-        if party.leader == target_player.party.leader
+      if (party = party()) && (target_party = target_player.party)
+        if party.leader == target_party.leader
           if skill.effect_range > 0 && ctrl && target() == target
             if skill.damage?
               return true
@@ -1646,7 +1643,7 @@ class L2PcInstance < L2Playable
 
           debug "L2PcInstance#check_pvp_skill: in the same party."
           return false
-        elsif party.command_channel?.try &.includes?(target_player)
+        elsif party.command_channel.try &.includes?(target_player)
           if skill.effect_range > 0 && ctrl && target() == target
             if skill.damage?
               return true
@@ -1668,7 +1665,7 @@ class L2PcInstance < L2Playable
         end
       end
 
-      clan1, clan2 = clan?, target_player.clan?
+      clan1, clan2 = clan, target_player.clan
 
       if clan1 && clan2
         if clan1.at_war_with?(clan2.id) && clan2.at_war_with?(clan1.id)
@@ -1823,16 +1820,16 @@ class L2PcInstance < L2Playable
       self.hero = true
     end
 
-    if clan = clan?
+    if clan = clan()
       clan.add_skill_effects(self)
       if clan.level >= SiegeManager.siege_clan_min_level && clan_leader?
         SiegeManager.add_siege_skills(self)
       end
       if clan.castle_id > 0
-        CastleManager.get_castle_by_owner!(clan).give_residential_skills(self)
+        CastleManager.get_castle_by_owner(clan).not_nil!.give_residential_skills(self)
       end
       if clan.fort_id > 0
-        FortManager.get_fort_by_owner!(clan).give_residential_skills(self)
+        FortManager.get_fort_by_owner(clan).not_nil!.give_residential_skills(self)
       end
     end
 
@@ -1848,9 +1845,6 @@ class L2PcInstance < L2Playable
         debug { "#{equipped_item} has failed the item restriction check." }
         inv.unequip_item_in_slot(i)
 
-        # iu = InventoryUpdate.new
-        # iu.add_modified_item equipped_item
-        # send_packet iu
         send_packet(InventoryUpdate.modified(equipped_item))
 
         if equipped_item.template.body_part == L2Item::SLOT_BACK
@@ -1873,15 +1867,12 @@ class L2PcInstance < L2Playable
   end
 
   def disarm_weapons : Bool
-    return true unless wpn = inventory.rhand_slot?
+    return true unless wpn = inventory.rhand_slot
     return false if cursed_weapon_equipped?
     return false if combat_flag_equipped?
     return false if wpn.weapon_item!.force_equip?
 
     old = inventory.unequip_item_in_body_slot_and_record(wpn.template.body_part)
-    # iu = InventoryUpdate.new
-    # old.each { |i| iu.add_modified_item i }
-    # send_packet iu
     if old.size == 1
       send_packet(InventoryUpdate.modified(old[0]))
     elsif old.size > 1
@@ -1911,14 +1902,11 @@ class L2PcInstance < L2Playable
   end
 
   def disarm_shield : Bool
-    unless shld = inventory.lhand_slot?
+    unless shld = inventory.lhand_slot
       return true
     end
 
     old = inventory.unequip_item_in_body_slot_and_record(shld.template.body_part)
-    # iu = InventoryUpdate.new
-    # old.each { |i| iu.add_modified_item i }
-    # send_packet iu
     if old.size == 1
       send_packet(InventoryUpdate.modified(old.first))
     elsif old.size > 1
@@ -1961,34 +1949,22 @@ class L2PcInstance < L2Playable
   end
 
   def in_party_with?(target : L2Character) : Bool
-    unless in_party? && target.in_party?
-      return false
-    end
-    party.leader_l2id == target.party.leader_l2id
+    in_party? && target.in_party? && party == target.party
   end
 
   def in_command_channel_with?(target : L2Character) : Bool
-    if !in_party? || !target.in_party?
-      return false
-    end
-
-    if !party.in_command_channel? || !target.party.in_command_channel?
-      return false
-    end
-
-    party.command_channel.leader_l2id == target.party.command_channel.leader_l2id
+    return false unless party = party()
+    return false unless target_party = target.party
+    return false unless cc = party.command_channel
+    return false unless target_cc = target_party.command_channel
+    cc == target_cc
   end
 
   def at_war_with?(target : L2Character?) : Bool
     return false unless target
-
-    if clan? && !academy_member?
-      if target.clan? && !target.academy_member?
-        return clan.at_war_with?(target.clan)
-      end
-    end
-
-    false
+    return false if academy_member? || target.academy_member?
+    return false unless (clan = clan()) && (target_clan = target.clan)
+    clan.at_war_with?(target_clan)
   end
 
   def academy_member? : Bool
@@ -1999,9 +1975,7 @@ class L2PcInstance < L2Playable
     super
 
     broadcast_user_info
-    if has_summon?
-      summon!.broadcast_status_update
-    end
+    summon.try &.broadcast_status_update
   end
 
   private def on_die_drop_item(killer : L2Character?)
@@ -2013,10 +1987,12 @@ class L2PcInstance < L2Playable
       return
     end
 
-    pk = killer.acting_player?
+    pk = killer.acting_player
 
-    if karma <= 0 && pk && pk.clan? && clan? && pk.clan.at_war_with?(clan_id)
-      return
+    if karma <= 0 && pk && (pk_clan = pk.clan) && clan
+      if pk_clan.at_war_with?(clan_id)
+        return
+      end
     end
 
     if (!inside_pvp_zone? || !pk) && (!gm? || Config.karma_drop_gm)
@@ -2052,7 +2028,7 @@ class L2PcInstance < L2Playable
         inventory.items.each do |i|
           if i.shadow_item? || i.time_limited_item? || !i.droppable? ||
             i.id == Inventory::ADENA_ID || i.template.type_2 == ItemType2::QUEST ||
-            (has_summon? && summon!.control_l2id == i.id) ||
+            ((smn = summon) && smn.control_l2id == i.id) ||
             Config.karma_list_nondroppable_items.includes?(i.id) ||
             Config.karma_list_nondroppable_pet_items.includes?(i.id)
 
@@ -2216,8 +2192,8 @@ class L2PcInstance < L2Playable
   end
 
   def level_mod : Float64
-    if transformed?
-      level_mod = transformation.get_level_mod(self)
+    if transformed? && (transform = transformation)
+      level_mod = transform.get_level_mod(self)
       if level_mod > -1
         return level_mod
       end
@@ -2255,12 +2231,12 @@ class L2PcInstance < L2Playable
   end
 
   def charged_shot?(type : ShotType) : Bool
-    wpn = active_weapon_instance?
+    wpn = active_weapon_instance
     !!wpn && wpn.charged_shot?(type)
   end
 
   def set_charged_shot(type : ShotType, charged : Bool)
-    active_weapon_instance?.try &.set_charged_shot(type, charged)
+    active_weapon_instance.try &.set_charged_shot(type, charged)
   end
 
   def add_auto_shot(id : Int32)
@@ -2532,7 +2508,8 @@ class L2PcInstance < L2Playable
   end
 
   def clan_leader? : Bool
-    !!clan? && l2id == clan.leader_id
+    return false unless clan = clan()
+    l2id == clan.leader_id
   end
 
   def sub_stat : PcStat
@@ -2596,22 +2573,18 @@ class L2PcInstance < L2Playable
 
     reward_skills
 
-    if clan?
+    if clan = clan()
       clan.update_clan_member(self)
       clan.broadcast_to_online_members(PledgeShowMemberListUpdate.new(self))
     end
 
-    if in_party?
-      party.recalculate_party_level
+    party.try &.recalculate_party_level
+
+    if (transformed? || in_stance?) && (transform = transformation)
+      transform.on_level_up(self)
     end
 
-    if transformed? || in_stance?
-      transformation.on_level_up(self)
-    end
-
-    if has_pet?
-      pet = summon.as(L2PetInstance)
-
+    if pet = summon.as?(L2PetInstance)
       if pet.pet_data.sync_level? && pet.level != level
         pet.stat.level = level
         pet.stat.get_exp_for_level(level)
@@ -2621,11 +2594,12 @@ class L2PcInstance < L2Playable
       end
     end
 
-    su = StatusUpdate.new(self)
-    su.add_level(level)
-    su.add_max_cp(max_cp)
-    su.add_max_hp(max_hp)
-    su.add_max_mp(max_mp)
+    # su = StatusUpdate.new(self)
+    # su.add_level(level)
+    # su.add_max_cp(max_cp)
+    # su.add_max_hp(max_hp)
+    # su.add_max_mp(max_mp)
+    su = StatusUpdate.level_max_cp_hp_mp(self, level, max_cp, max_hp, max_mp)
     send_packet(su)
 
     refresh_overloaded
@@ -2812,8 +2786,8 @@ class L2PcInstance < L2Playable
     known_list.known_players.each_value do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
-      if has_summon?
-        rc = RelationChanged.new(summon!, get_relation(pc), auto_attackable?(pc))
+      if smn = summon
+        rc = RelationChanged.new(smn, get_relation(pc), auto_attackable?(pc))
         pc.send_packet(rc)
       end
     end
@@ -2825,8 +2799,8 @@ class L2PcInstance < L2Playable
     known_list.known_players.each_value do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
-      if has_summon?
-        rc = RelationChanged.new(summon!, get_relation(pc), auto_attackable?(pc))
+      if smn = summon
+        rc = RelationChanged.new(smn, get_relation(pc), auto_attackable?(pc))
         pc.send_packet(rc)
       end
     end
@@ -2862,7 +2836,7 @@ class L2PcInstance < L2Playable
   end
 
   def reduce_arrow_count(bolts : Bool)
-    unless arrows = inventory.lhand_slot?
+    unless arrows = inventory.lhand_slot
       inventory.unequip_item_in_slot(Inventory::LHAND)
       if bolts
         @bolt_item = nil
@@ -2905,8 +2879,8 @@ class L2PcInstance < L2Playable
   end
 
   def check_and_equip_arrows : L2ItemInstance?
-    if inventory.lhand_slot?.nil?
-      @arrow_item = inventory.find_arrow_for_bow(active_weapon_item?)
+    if inventory.lhand_slot.nil?
+      @arrow_item = inventory.find_arrow_for_bow(active_weapon_item)
       if @arrow_item
         inventory.lhand_slot = @arrow_item
         send_packet(ItemList.new(self, false))
@@ -2919,8 +2893,8 @@ class L2PcInstance < L2Playable
   end
 
   def check_and_equip_bolts : L2ItemInstance?
-    if inventory.lhand_slot?.nil?
-      @bolt_item = inventory.find_bolt_for_crossbow(active_weapon_item?)
+    if inventory.lhand_slot.nil?
+      @bolt_item = inventory.find_bolt_for_crossbow(active_weapon_item)
       if @bolt_item
         inventory.lhand_slot = @bolt_item
         send_packet(ItemList.new(self, false))
@@ -3050,11 +3024,19 @@ class L2PcInstance < L2Playable
   end
 
   def transformation_id : Int32
-    transformed? ? transformation.id : 0
+    if transformed? && (transform = transformation)
+      return transform.id
+    end
+
+    0
   end
 
   def transformation_display_id : Int32
-    transformed? ? transformation.display_id : 0
+    if transformed? && (transform = transformation)
+      return transform.display_id
+    end
+
+    0
   end
 
   def update_abnormal_effect
@@ -3071,7 +3053,7 @@ class L2PcInstance < L2Playable
   end
 
   def broadcast_status_update
-    su = StatusUpdate.current_cp_hp_mp(self)
+    su = StatusUpdate.cp_hp_mp(self)
     send_packet(su)
 
     need_cp_update = need_cp_update?
@@ -3098,8 +3080,8 @@ class L2PcInstance < L2Playable
   end
 
   def send_info(pc : L2PcInstance)
-    if in_boat?
-      set_xyz(boat!.location)
+    if boat = boat()
+      set_xyz(boat.location)
 
       pc.send_packet(CharInfo.new(self))
       pc.send_packet(ExBrExtraUserInfo.new(self))
@@ -3126,10 +3108,10 @@ class L2PcInstance < L2Playable
         end
       end
 
-      gov = GetOnVehicle.new(l2id, boat!.l2id, in_vehicle_position)
+      gov = GetOnVehicle.new(l2id, boat.l2id, in_vehicle_position.not_nil!)
       pc.send_packet(gov)
-    elsif in_airship?
-      set_xyz(airship!.location)
+    elsif airship = airship()
+      set_xyz(airship.location)
 
       pc.send_packet(CharInfo.new(self))
       pc.send_packet(ExBrExtraUserInfo.new(self))
@@ -3156,7 +3138,7 @@ class L2PcInstance < L2Playable
         end
       end
 
-      pc.send_packet(ExGetOnAirship.new(self, airship!))
+      pc.send_packet(ExGetOnAirship.new(self, airship))
     else
       pc.send_packet(CharInfo.new(self))
       pc.send_packet(ExBrExtraUserInfo.new(self))
@@ -3225,9 +3207,9 @@ class L2PcInstance < L2Playable
 
   def send_damage_message(target, damage, mcrit, pcrit, miss)
     if miss
-      if target.player?
+      if target.is_a?(L2PcInstance)
         sm = SystemMessage.c1_evaded_c2_attack
-        sm.add_pc_name(target.acting_player)
+        sm.add_pc_name(target)
         sm.add_char_name(self)
         target.send_packet(sm)
       end
@@ -3284,7 +3266,7 @@ class L2PcInstance < L2Playable
 
     abort_attack
     abort_cast
-    stop_move
+    stop_move(nil)
     @movie_id = id
     send_packet(ExStartScenePlayer.new(id))
   end
@@ -3320,7 +3302,7 @@ class L2PcInstance < L2Playable
       @cubics.clear
     end
 
-    party?.try &.remove_party_member(self, L2Party::MessageType::Expelled)
+    party.try &.remove_party_member(self, L2Party::MessageType::Expelled)
 
     @olympiad_game_id = id
 
@@ -3412,9 +3394,9 @@ class L2PcInstance < L2Playable
       sl.add_skill(s.display_id, s.display_level, s.passive?, disabled, enchantable)
     end
 
-    if @transformation
+    if transform = @transformation
       ts = {} of Int32 => Int32
-      if template = transformation.get_template(self)
+      if template = transform.get_template(self)
         template.skills.each do |holder|
           ts[holder.skill_id] ||= holder.skill_lvl
           if ts[holder.skill_id] < holder.skill_lvl
@@ -3462,10 +3444,6 @@ class L2PcInstance < L2Playable
     @vehicle.as?(L2AirshipInstance)
   end
 
-  def airship! : L2AirshipInstance
-    airship.not_nil!
-  end
-
   def in_store_mode? : Bool
     !private_store_type.none?
   end
@@ -3492,35 +3470,27 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def active_weapon_instance? : L2ItemInstance?
-    inventory.rhand_slot?
+  def active_weapon_instance : L2ItemInstance?
+    inventory.rhand_slot
   end
 
-  def active_weapon_item? : L2Weapon?
-    active_weapon_instance?.try &.template.as(L2Weapon) || fists_weapon_item?
+  def active_weapon_item : L2Weapon?
+    active_weapon_instance.try &.template.as(L2Weapon) || fists_weapon_item
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
-    inventory.lhand_slot?
+  def secondary_weapon_instance : L2ItemInstance?
+    inventory.lhand_slot
   end
 
-  def secondary_weapon_item? : L2Item?
-    secondary_weapon_instance?.try &.template
+  def secondary_weapon_item : L2Item?
+    secondary_weapon_instance.try &.template
   end
 
-  def chest_armor_instance? : L2ItemInstance?
-    inventory.chest_slot?
-  end
-
-  def chest_armor_instance : L2ItemInstance
+  def chest_armor_instance : L2ItemInstance?
     inventory.chest_slot
   end
 
-  def legs_armor_instance? : L2ItemInstance?
-    inventory.legs_slot?
-  end
-
-  def legs_armor_instance : L2ItemInstance
+  def legs_armor_instance : L2ItemInstance?
     inventory.legs_slot
   end
 
@@ -3533,8 +3503,8 @@ class L2PcInstance < L2Playable
   end
 
   def wearing_heavy_armor? : Bool
-    legs = legs_armor_instance?
-    armor = chest_armor_instance?
+    legs = legs_armor_instance
+    armor = chest_armor_instance
 
     if chest && legs
       if legs.item_type == ArmorType::HEAVY
@@ -3556,8 +3526,8 @@ class L2PcInstance < L2Playable
   end
 
   def wearing_light_armor? : Bool
-    legs = legs_armor_instance?
-    armor = chest_armor_instance?
+    legs = legs_armor_instance
+    armor = chest_armor_instance
 
     if chest && legs
       if legs.item_type == ArmorType::LIGHT
@@ -3606,11 +3576,11 @@ class L2PcInstance < L2Playable
   end
 
   def in_looter_party?(looter_id : Int32) : Bool
-    if party = party?
+    if party = party()
       looter = L2World.get_player(looter_id)
 
-      if party.in_command_channel? && looter
-        return party.command_channel.members.includes?(looter)
+      if (cc = party.command_channel) && looter
+        return cc.members.includes?(looter)
       end
 
       if looter
@@ -3633,7 +3603,7 @@ class L2PcInstance < L2Playable
 
     send_packet(StopMove.new(self))
 
-    party = party?
+    party = party()
 
     target.sync do
       unless target.visible?
@@ -3731,7 +3701,7 @@ class L2PcInstance < L2Playable
       else
         add_item("Pickup", target, nil, true)
 
-        if weapon = inventory.rhand_slot?
+        if weapon = inventory.rhand_slot
           if etc_item = target.as?(L2EtcItem)
             item_type = etc_item.item_type
             if weapon.item_type == WeaponType::BOW && item_type == EtcItemType::ARROW
@@ -3936,15 +3906,15 @@ class L2PcInstance < L2Playable
     @event_status = PlayerEventHolder.new(self)
   end
 
-  def event_status=(holder : PlayerEventHolder)
+  def event_status=(holder : PlayerEventHolder?)
     @event_status = holder
   end
 
   def collision_radius : Float64
     if mounted? && mount_npc_id > 0
       NpcData[mount_npc_id].f_collision_radius
-    elsif transformed?
-      transformation.get_collision_radius(self)
+    elsif transformed? && (transform = transformation)
+      transform.get_collision_radius(self)
     else
       if appearance.sex
         base_template.f_collision_radius_female
@@ -3957,8 +3927,8 @@ class L2PcInstance < L2Playable
   def collision_height : Float64
     if mounted? && mount_npc_id > 0
       NpcData[mount_npc_id].f_collision_height
-    elsif transformed?
-      transformation.get_collision_height(self)
+    elsif transformed? && (transform = transformation)
+      transform.get_collision_height(self)
     else
       if appearance.sex
         base_template.f_collision_height_female
@@ -3973,9 +3943,9 @@ class L2PcInstance < L2Playable
   end
 
   def castle_lord?(castle_id : Int32) : Bool
-    return false unless clan = clan?
+    return false unless clan = clan()
 
-    if clan.leader.player_instance? == self
+    if clan.leader.player_instance == self
       castle = CastleManager.get_castle_by_owner(clan)
       if castle && castle == CastleManager.get_castle_by_id(castle_id)
         return true
@@ -3995,6 +3965,7 @@ class L2PcInstance < L2Playable
 
   def ally_crest_id : Int32
     return 0 if clan_id == 0
+    return 0 unless clan = clan()
     return 0 if clan.ally_id == 0
     clan.ally_crest_id
   end
@@ -4050,7 +4021,7 @@ class L2PcInstance < L2Playable
     elsif CursedWeaponsManager.cursed?(new_item.id)
       CursedWeaponsManager.activate(self, new_item)
     elsif FortSiegeManager.combat?(item.id)
-      fort = FortManager.get_fort!(self)
+      fort = FortManager.get_fort(self).not_nil!
       fort.siege.announce_to_player(SystemMessage.c1_acquired_the_flag, name)
     elsif item.id >= 13560 && item.id <= 13568
       TerritoryWarManager.get_territory_ward(item.id - 13479).try &.activate(self, item)
@@ -4460,14 +4431,6 @@ class L2PcInstance < L2Playable
     if Config.force_inventory_update
       send_packet(ItemList.new(self, false))
     else
-      # iu = InventoryUpdate.new
-      # if old_item.count > 0 && old_item != new_item
-      #   iu.add_modified_item old_item
-      # else
-      #   iu.add_removed_item old_item
-      # end
-      # send_packet iu
-
       if old_item.count > 0 && old_item != new_item
         iu = InventoryUpdate.modified(old_item)
       else
@@ -4483,14 +4446,6 @@ class L2PcInstance < L2Playable
       if Config.force_inventory_update
         target_player.send_packet(ItemList.new(target_player, false))
       else
-        # iu = InventoryUpdate.new
-        # if new_item.count > 0
-        #   iu.add_modified_item new_item
-        # else
-        #   iu.add_new_item new_item
-        # end
-        # target_player.send_packet iu
-
         if new_item.count > 0
           iu = InventoryUpdate.modified(new_item)
         else
@@ -4554,7 +4509,7 @@ class L2PcInstance < L2Playable
   end
 
   def enchant_effect : Int32
-    if wpn = active_weapon_instance?
+    if wpn = active_weapon_instance
       return Math.min(wpn.enchant_level, 127)
     end
 
@@ -4562,7 +4517,8 @@ class L2PcInstance < L2Playable
   end
 
   def clan_crest_large_id : Int32
-    if @clan && clan.castle_id != 0 && clan.hideout_id != 0
+    clan = clan()
+    if clan && clan.castle_id != 0 && clan.hideout_id != 0
       return clan.crest_large_id
     end
 
@@ -4834,7 +4790,7 @@ class L2PcInstance < L2Playable
   end
 
   def update_pvp_status(target : L2Character)
-    unless pc = target.acting_player?
+    unless pc = target.acting_player
       return
     end
 
@@ -4865,7 +4821,7 @@ class L2PcInstance < L2Playable
 
   def on_kill_update_pvp_karma(target : L2Character?)
     return unless target.is_a?(L2Playable)
-    target_player = target.acting_player?
+    target_player = target.acting_player
     return if target_player.nil? || target_player == self
 
     if cursed_weapon_equipped? && target.player?
@@ -4880,7 +4836,7 @@ class L2PcInstance < L2Playable
     if inside_pvp_zone? || target_player.inside_pvp_zone?
       if siege_state > 0 && target_player.siege_state > 0
         if siege_state != target_player.siege_state
-          if (killer_clan = clan?) && (target_clan = target_player.clan?)
+          if (killer_clan = clan) && (target_clan = target_player.clan)
             killer_clan.add_siege_kill
             target_clan.add_siege_death
           end
@@ -4890,13 +4846,15 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if (check_if_pvp(target) && (target_player.pvp_flag != 0)) ||
+    if (check_if_pvp(target) && target_player.pvp_flag != 0) ||
        (inside_pvp_zone? && target_player.inside_pvp_zone?)
 
       increase_pvp_kills(target)
     else
-      if target_player.clan? && clan? && clan.at_war_with?(target_player.clan_id)
-        if target_player.clan.at_war_with?(clan_id)
+      clan = clan()
+      target_clan = target_player.clan
+      if target_clan && clan && clan.at_war_with?(target_player.clan_id)
+        if target_clan.at_war_with?(clan_id)
           if target_player.pledge_type != L2Clan::SUBUNIT_ACADEMY
             if pledge_type != L2Clan::SUBUNIT_ACADEMY
               increase_pvp_kills(target)
@@ -4942,9 +4900,7 @@ class L2PcInstance < L2Playable
     return false if locked? || transformed? || in_stance?
     return false if AttackStances.includes?(self)
     return false if casting_now? || casting_simultaneously_now?
-    return false if in_boat? || in_airship?
-
-    true
+    !in_boat? && !in_airship?
   end
 
   def need_mp_update? : Bool
@@ -5026,10 +4982,6 @@ class L2PcInstance < L2Playable
     @last_location.set_xyz(0, 0, 0)
   end
 
-  def vehicle! : L2Vehicle
-    vehicle.not_nil!
-  end
-
   def reduce_current_hp(value : Float64, attacker : L2Character?, awake : Bool, dot : Bool, skill : Skill?)
     if skill
       status.reduce_hp(value, attacker, awake, dot, skill.toggle?, skill.dmg_directly_to_hp?)
@@ -5064,13 +5016,6 @@ class L2PcInstance < L2Playable
     @snooped_player.delete(pc)
   end
 
-  def sitting? : Bool
-    @wait_type_sitting
-  end
-
-  def sitting=(@wait_type_sitting : Bool)
-  end
-
   def sit_down(check_cast : Bool = true)
     if OnPlayerSit.new(self).notify(self).try &.terminate
       return
@@ -5080,7 +5025,7 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if !@wait_type_sitting && !attacking_disabled? && !out_of_control?
+    if !@sitting && !attacking_disabled? && !out_of_control?
       unless immobilized?
         break_attack
         self.sitting = true
@@ -5097,9 +5042,9 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if @wait_type_sitting && !looks_dead? && !in_store_mode?
+    if @sitting && !looks_dead? && !in_store_mode?
       if effect_list.affected?(EffectFlag::RELAXING)
-        stop_effects(L2EffectType::RELAXING)
+        stop_effects(EffectType::RELAXING)
       end
 
       broadcast_packet(ChangeWaitType.new(self, ChangeWaitType::STANDING))
@@ -5192,7 +5137,7 @@ class L2PcInstance < L2Playable
   # expected. Probably should give L2J the heads up.
   def target=(new_target : L2Object?)
     if new_target
-      in_party = new_target.player? && in_party? && party.includes?(new_target)
+      in_party = new_target.player? && party.try &.includes?(new_target)
 
       new_target = nil if !in_party && (new_target.z - z).abs > 1000
       new_target = nil if new_target && !in_party && !new_target.visible?
@@ -5260,9 +5205,7 @@ class L2PcInstance < L2Playable
   def on_teleported
     super
 
-    if in_airship?
-      airship!.send_info(self)
-    end
+    airship.try &.send_info(self)
 
     revalidate_zone(true)
 
@@ -5377,13 +5320,13 @@ class L2PcInstance < L2Playable
   def on_action_request
     if spawn_protected?
       if Config.restore_servitor_on_reconnect && !has_summon?
-        if SummonTable.servitors.has_key?(@l2id)
+        if SummonTable.servitors.has_key?(l2id)
           SummonTable.restore_servitor(self)
         end
       end
 
       if Config.restore_pet_on_reconnect && !has_summon?
-        if SummonTable.pets.has_key?(@l2id)
+        if SummonTable.pets.has_key?(l2id)
           SummonTable.restore_pet(self)
         end
       end
@@ -5402,7 +5345,7 @@ class L2PcInstance < L2Playable
     return false if attacker.is_a?(L2FriendlyMobInstance)
     return true if attacker.monster?
 
-    if attacker.playable? && duel_state.duelling? && duel_id == attacker.acting_player.duel_id
+    if attacker.playable? && duel_state.duelling? && duel_id == attacker.acting_player.not_nil!.duel_id
       duel = DuelManager.get_duel(duel_id).not_nil!
       if duel.team_a.includes?(self) && duel.team_a.includes?(attacker)
         return false
@@ -5413,11 +5356,13 @@ class L2PcInstance < L2Playable
       return true
     end
 
-    return false if in_party? && party.members.includes?(attacker)
+    if party.try &.members.includes?(attacker)
+      return false
+    end
 
-    if attacker.player? && attacker.acting_player.in_olympiad_mode?
+    if attacker.is_a?(L2PcInstance) && attacker.in_olympiad_mode?
       if in_olympiad_mode? && olympiad_start?
-        if attacker.acting_player.olympiad_game_id == olympiad_game_id
+        if attacker.olympiad_game_id == olympiad_game_id
           return true
         end
       end
@@ -5436,21 +5381,22 @@ class L2PcInstance < L2Playable
         return false
       end
 
-      attacker_pc = attacker.acting_player
-      if clan = clan?
+      attacker_pc = attacker.acting_player.not_nil!
+      if clan = clan()
         siege = SiegeManager.get_siege(*xyz)
-        if siege && attacker_pc.clan?
-          if siege.defender?(attacker_pc.clan) && siege.defender?(clan)
+        attacker_pc_clan = attacker_pc.clan
+        if siege && attacker_pc_clan
+          if siege.defender?(attacker_pc_clan) && siege.defender?(clan)
             return false
           end
 
-          if siege.attacker?(attacker_pc.clan) && siege.attacker?(clan)
+          if siege.attacker?(attacker_pc_clan) && siege.attacker?(clan)
             return false
           end
         end
 
-        if attacker_pc.clan? && clan.at_war_with?(attacker_pc.clan_id)
-          if attacker_pc.clan.at_war_with?(clan_id) && wants_peace == 0
+        if attacker_pc_clan && clan.at_war_with?(attacker_pc.clan_id)
+          if attacker_pc_clan.at_war_with?(clan_id) && wants_peace == 0
             if attacker_pc.wants_peace == 0 && !academy_member?
               return true
             end
@@ -5464,7 +5410,7 @@ class L2PcInstance < L2Playable
         end
       end
 
-      if clan?.try &.member?(attacker.l2id)
+      if clan.try &.member?(attacker.l2id)
         return false
       end
 
@@ -5478,7 +5424,7 @@ class L2PcInstance < L2Playable
         end
       end
     elsif attacker.is_a?(L2DefenderInstance)
-      if clan = clan?
+      if clan = clan()
         siege = SiegeManager.get_siege(self)
         return !!siege && siege.attacker?(clan)
       end
@@ -5504,26 +5450,25 @@ class L2PcInstance < L2Playable
 
       if in_duel? && target.in_duel? && target.duel_id == duel_id
         return true
-      elsif in_party? && target.in_party?
-        if party == target.party
+      elsif (party = party()) && (target_party = target.party)
+        if party == target_party
           return false
         end
-        if party.command_channel? && target.party.command_channel?
-          if party.command_channel == target.party.command_channel
-            return false
-          end
+        cc = party.command_channel
+        if cc && cc == target_party.command_channel
+          return false
         end
-      elsif clan? && target.clan?
+      elsif (clan = clan()) && (target_clan = target.clan)
         if clan_id == target.clan_id
           return false
         end
         if (ally_id > 0 || target.ally_id > 0) && ally_id == target.ally_id
           return false
         end
-        if clan.at_war_with?(target.clan.id) && target.clan.at_war_with?(clan.id)
+        if clan.at_war_with?(target_clan.id) && target_clan.at_war_with?(clan.id)
           return true
         end
-      elsif clan? || target.clan?
+      elsif clan? || target.clan
         if target.pvp_flag == 0 && target.karma == 0
           return false
         end
@@ -5642,7 +5587,7 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if (has_summon? && summon!.control_l2id == id) || mount_l2id == id
+    if ((smn = summon) && smn.control_l2id == id) || mount_l2id == id
       debug { "Tried to #{action} pet control item." }
 
       return
@@ -5729,7 +5674,7 @@ class L2PcInstance < L2Playable
   end
 
   def query_game_guard
-    if client
+    if client = client()
       client.game_guard_ok = false
       send_packet(GameGuardQuery::STATIC_PACKET)
     end
@@ -5747,7 +5692,7 @@ class L2PcInstance < L2Playable
   end
 
   def flood_protectors : FloodProtectors
-    client.flood_protectors
+    client.not_nil!.flood_protectors
   end
 
   def check_reco_bonus_task
@@ -5869,9 +5814,9 @@ class L2PcInstance < L2Playable
     if inside_no_landing_zone?
       return true
     else
-      if inside_siege_zone? && clan?
+      if inside_siege_zone? && (clan = clan())
         if CastleManager.get_castle(self) == CastleManager.get_castle_by_owner(clan)
-          if self == clan.leader.player_instance?
+          if self == clan.leader.player_instance
             return true
           end
         end
@@ -5884,7 +5829,7 @@ class L2PcInstance < L2Playable
   def dismount : Bool
     was_flying = flying?
 
-    send_packet(SetupGauge.new(3, 0, 0))
+    send_packet(SetupGauge.green(0, 0))
     pet_id = @mount_npc_id
     set_mount(0, 0)
     stop_feed
@@ -5921,8 +5866,7 @@ class L2PcInstance < L2Playable
   def current_feed=(num : Int32)
     last_hungry_state = hungry?
     @current_feed = num > max_feed ? max_feed : num
-    sg = SetupGauge.new(
-      3,
+    sg = SetupGauge.green(
       (current_feed * 10000) / feed_consume,
       (max_feed * 10000) / feed_consume
     )
@@ -5938,8 +5882,7 @@ class L2PcInstance < L2Playable
     if has_summon?
       self.current_feed = summon.as(L2PetInstance).current_feed
       @control_item_id = summon.as(L2PetInstance).control_l2id
-      sg = SetupGauge.new(
-        3,
+      sg = SetupGauge.green(
         (current_feed * 10000) // feed_consume,
         (max_feed * 10000) // feed_consume
       )
@@ -5949,8 +5892,7 @@ class L2PcInstance < L2Playable
       end
     elsif @can_feed
       self.current_feed = max_feed
-      sg = SetupGauge.new(
-        3,
+      sg = SetupGauge.green(
         (current_feed * 10000) // feed_consume,
         (max_feed * 10000) // feed_consume
       )
@@ -5980,8 +5922,7 @@ class L2PcInstance < L2Playable
   def current_feed=(num : Int32)
     last_hungry_state = hungry?
     @current_feed = num > max_feed ? max_feed : num
-    sg = SetupGauge.new(
-      3,
+    sg = SetupGauge.green(
       (current_feed * 10000) // feed_consume,
       (max_feed * 10000) // feed_consume
     )
@@ -6135,7 +6076,8 @@ class L2PcInstance < L2Playable
   end
 
   def in_offline_mode? : Bool
-    @client.nil? || client.detached?
+    return true unless client = @client
+    client.detached?
   end
 
   def active_enchant_item_id=(l2id : Int32)
@@ -6451,11 +6393,13 @@ class L2PcInstance < L2Playable
   end
 
   def transformed? : Bool
-    !!@transformation && !transformation.stance?
+    return false unless t = @transformation
+    !t.stance?
   end
 
   def in_stance? : Bool
-    !!@transformation && transformation.stance?
+    return false unless t = @transformation
+    t.stance?
   end
 
   def transform(transformation : Transform)
@@ -6585,7 +6529,7 @@ class L2PcInstance < L2Playable
   def start_water_task
     if alive? && @water_task.nil?
       time_in_water = calc_stat(Stats::BREATH, 60_000, self)
-      send_packet(SetupGauge.new(2, time_in_water.to_i32))
+      send_packet(SetupGauge.cyan(time_in_water.to_i32))
       task = WaterTask.new(self)
       @water_task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, time_in_water, 1000)
     end
@@ -6595,7 +6539,7 @@ class L2PcInstance < L2Playable
     if task = @water_task
       task.cancel
       @water_task = nil
-      send_packet(SetupGauge.new(2, 0))
+      send_packet(SetupGauge.cyan(0))
     end
   end
 
@@ -6608,7 +6552,7 @@ class L2PcInstance < L2Playable
   end
 
   def revalidate_zone(force : Bool)
-    return unless reg = world_region?
+    return unless reg = world_region
 
     if force
       @zone_validate_counter = 4i8
@@ -6773,9 +6717,7 @@ class L2PcInstance < L2Playable
 
       stop_charge_task
 
-      if has_servitor?
-        summon!.unsummon(self)
-      end
+      summon.as?(L2ServitorInstance).try &.unsummon(self)
 
       if class_index == 0
         self.class_template = base_class
@@ -6791,9 +6733,7 @@ class L2PcInstance < L2Playable
 
       self.learning_class = class_id
 
-      if in_party?
-        party.recalculate_party_level
-      end
+      party.try &.recalculate_party_level
 
       all_skills.each { |skill| remove_skill(skill, false, true) }
 
@@ -6921,7 +6861,7 @@ class L2PcInstance < L2Playable
     return false unless super
 
     if killer
-      if pk = killer.acting_player?
+      if pk = killer.acting_player
         OnPlayerPvPKill.new(pk, self).async(self)
 
         # TvTEvent.on_kill(killer, self)
@@ -6955,11 +6895,11 @@ class L2PcInstance < L2Playable
           on_die_drop_item(killer)
 
           if !pvp_zone && !siege_zone
-            if pk && pk.clan? && clan? && !academy_member? && !pk.academy_member?
-              if (clan.at_war_with?(pk.clan_id) && pk.clan.at_war_with?(clan.id)) || (in_siege? && pk.in_siege?)
+            if pk && (pk_clan = pk.clan) && (clan = clan()) && !academy_member? && !pk.academy_member?
+              if (clan.at_war_with?(pk.clan_id) && pk_clan.at_war_with?(clan.id)) || (in_siege? && pk.in_siege?)
                 if AntiFeedManager.check(killer, self)
                   if clan.reputation_score > 0
-                    pk.clan.add_reputation_score(Config.reputation_score_per_kill, false)
+                    pk_clan.add_reputation_score(Config.reputation_score_per_kill, false)
                   end
                   if clan.reputation_score > 0
                     clan.add_reputation_score(Config.reputation_score_per_kill, false)
@@ -6992,7 +6932,7 @@ class L2PcInstance < L2Playable
       skill_channelized.abort_channelization
     end
 
-    if rift = @party.try &.dimensional_rift?
+    if rift = @party.try &.dimensional_rift
       rift.dead_member_list << self
     end
 
@@ -7028,9 +6968,9 @@ class L2PcInstance < L2Playable
       start_feed(@mount_npc_id)
     end
 
-    if in_party? && party.in_dimensional_rift?
+    if (party = party()) && (rift = party.dimensional_rift)
       unless DimensionalRiftManager.in_peace_zone?(*xyz)
-        party.dimensional_rift.member_resurrected(self)
+        rift.member_resurrected(self)
       end
     end
 
@@ -7069,11 +7009,11 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if (pet && has_pet? && summon!.dead?) || (!pet && dead?)
+    if (pet && ((p = summon.as?(L2PetInstance)) && p.dead?)) || (!pet && dead?)
       @revive_requested = 1
       @revive_recovery = recovery
       @revive_power = Formulas.skill_resurrect_restore_percent(power.to_f, reviver)
-      restore_exp = ((exp_before_death - exp / 100) * @revive_power).round.to_i
+      restore_exp = (((exp_before_death - exp) * @revive_power) / 100).round.to_i!
       @revive_pet = pet
 
       if charm_of_courage?
@@ -7083,39 +7023,32 @@ class L2PcInstance < L2Playable
       else
         dlg = ConfirmDlg.resurrection_request_by_c1_for_s2_xp
         dlg.add_pc_name(reviver)
-        dlg.add_string(restore_exp.abs.to_i.to_s)
+        dlg.add_string(restore_exp.to_i64.abs.to_s)
         send_packet(dlg)
       end
     end
   end
 
   def revive_answer(answer : Int)
-    debug "L2PcInstance#revive_answer(answer: #{answer})"
-    debug "@revive_requested: #{@revive_requested}"
-    debug "@revive_pet: #{@revive_pet}"
     return if @revive_requested != 1
     return if alive? && !@revive_pet
-    return if @revive_pet && has_pet? && summon!.alive?
+    return if @revive_pet && (pet = summon.as?(L2PetInstance)) && pet.alive?
 
     if answer == 1
       if !@revive_pet
         @revive_power != 0 ? do_revive(@revive_power) : do_revive
 
         if @revive_recovery != 0
-          set_current_hp_mp(
-            max_hp * (@revive_recovery / 100.0),
-            max_mp * (@revive_recovery / 100.0)
-          )
+          percent = @revive_recovery / 100
+          set_current_hp_mp(max_hp * percent, max_mp * percent)
           set_current_cp(0)
         end
-      elsif pet = summon.as?(L2PetInstance)
+      elsif pet
         @revive_power != 0 ? pet.do_revive(@revive_power) : pet.do_revive
 
         if @revive_recovery != 0
-          pet.set_current_hp_mp(
-            pet.max_hp * (@revive_recovery / 100.0),
-            pet.max_mp * (@revive_recovery / 100.0)
-          )
+          percent = @revive_recovery / 100
+          pet.set_current_hp_mp(pet.max_hp * percent, pet.max_mp * percent)
         end
       end
     end
@@ -7180,7 +7113,7 @@ class L2PcInstance < L2Playable
     end
 
     if instance_id > 0
-      if !Config.allow_summon_in_instance || !InstanceManager.get_instance!(instance_id).summon_allowed?
+      if !Config.allow_summon_in_instance || !InstanceManager.get_instance(instance_id).not_nil!.summon_allowed?
         send_packet(SystemMessageId::YOU_MAY_NOT_SUMMON_FROM_YOUR_CURRENT_LOCATION)
         return false
       end
@@ -7204,7 +7137,7 @@ class L2PcInstance < L2Playable
   end
 
   def start_fishing(x : Int32, y : Int32, z : Int32)
-    stop_move
+    stop_move(nil)
     self.immobilized = true
     @fishing = true
     @fish_x, @fish_y, @fish_z = x, y, z
@@ -7623,7 +7556,7 @@ class L2PcInstance < L2Playable
     elsif dead?
       send_packet(SystemMessageId::YOU_CANNOT_USE_MY_TELEPORTS_WHILE_YOU_ARE_DEAD)
       false
-    elsif type == 1 && (in_7s_dungeon? || (in_party? && party.in_dimensional_rift?))
+    elsif type == 1 && (in_7s_dungeon? || ((party = party()) && party.in_dimensional_rift?))
       send_packet(SystemMessageId::YOU_CANNOT_USE_MY_TELEPORTS_TO_REACH_THIS_AREA)
       false
     elsif in_water?
@@ -7643,6 +7576,14 @@ class L2PcInstance < L2Playable
     else
       true
     end
+  end
+
+  def attack_type : WeaponType
+    if transformed? && (t = transformation.try &.get_template(acting_player))
+      return t.base_attack_type
+    end
+
+    super
   end
 
   def to_log(io : IO)

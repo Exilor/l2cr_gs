@@ -49,7 +49,7 @@ class Scripts::Q00356_DigUpTheSeaOfSpores < Quest
       qs.exit_quest(true, true)
       html = event
     when "FINISH"
-      value = rand(100)
+      value = Rnd.rand(100)
       adena = 0
       if value < 20
         adena = 44000

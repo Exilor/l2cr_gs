@@ -56,7 +56,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     team_two_players = [] of L2PcInstance
 
     until list.empty?
-      t1 = list.delete_first(list.sample)
+      t1 = list.delete_first(list.sample(random: Rnd))
 
       if t1.nil? || t1.empty?
         next
@@ -74,7 +74,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
         next
       end
 
-      t2 = list.delete_first(list.sample)
+      t2 = list.delete_first(list.sample(random: Rnd))
       if t2.nil? || t2.empty?
         list << t1
         team_one_players.clear
@@ -236,7 +236,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
 
     @team_one_size.times do |i|
       par = @team_one[i]
-      if par.player?.nil?
+      unless par.player?
         return false
       end
 
@@ -246,7 +246,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
 
     @team_two_size.times do |i|
       par = @team_two[i]
-      if par.player?.nil?
+      unless par.player?
         return false
       end
 
@@ -260,15 +260,19 @@ class OlympiadGameTeams < AbstractOlympiadGame
   def clean_effects
     @team_one_size.downto(0) do |i|
       par = @team_one[i]
-      if par.player? && !par.defaulted? && !par.disconnected? && par.player.olympiad_game_id == @stadium_id
-        clean_effects(par.player)
+      if par.player? && !par.defaulted? && !par.disconnected?
+        if par.player.olympiad_game_id == @stadium_id
+          clean_effects(par.player)
+        end
       end
     end
 
     @team_two_size.downto(0) do |i|
       par = @team_two[i]
-      if par.player? && !par.defaulted? && !par.disconnected? && par.player.olympiad_game_id == @stadium_id
-        clean_effects(par.player)
+      if par.player? && !par.defaulted? && !par.disconnected?
+        if par.player.olympiad_game_id == @stadium_id
+          clean_effects(par.player)
+        end
       end
     end
   end

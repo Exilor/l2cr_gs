@@ -53,7 +53,7 @@ class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
     end
 
     info = MOBS[npc.id]
-    random = rand(100)
+    random = Rnd.rand(100)
 
     if random < info.first_chance
       qs.give_item_randomly(npc, LIENRIK_EGG1, 1, 0, 1.0, true)

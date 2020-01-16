@@ -27,7 +27,7 @@ class EffectHandler::RandomizeHate < AbstractEffect
     effected.add_damage_hate(target, 0, hate)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 end

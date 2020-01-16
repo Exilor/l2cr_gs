@@ -13,7 +13,7 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.multisell.try_perform_action("multisell choose")
-      debug "#{pc.name} is spamming multisell."
+      debug { "#{pc.name} is spamming multisell." }
       pc.multisell = nil
       return
     end
@@ -48,7 +48,7 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
     list.entries.each do |entry|
       if entry.entry_id == @entry_id
         if !entry.stackable? && @amount > 1
-          warn "#{pc} tried to buy more than one non-stackable items."
+          warn { "#{pc} tried to buy more than one non-stackable items." }
           pc.multisell = nil
           return
         end
@@ -137,7 +137,7 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
             end
           else
             unless item_to_take = inv.get_item_by_item_id(e.item_id)
-              warn "#{pc} doesn't have an item with item_id #{e.item_id}."
+              warn { "#{pc} doesn't have an item with item_id #{e.item_id}." }
               pc.multisell = nil
               return
             end
@@ -145,7 +145,7 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
             if Config.alt_blacksmith_use_recipes || !e.maintain_ingredient?
               if item_to_take.stackable?
                 unless pc.destroy_item("Multisell", item_to_take.l2id, e.item_count * @amount, pc.target, true)
-                  debug "Couldn't destroy #{item_to_take}."
+                  debug { "Couldn't destroy #{item_to_take}." }
                   pc.multisell = nil
                   return
                 end

@@ -72,23 +72,23 @@ module MapRegionManager
     0
   end
 
-  def get_map_region_x(x)
+  def get_map_region_x(x : Int32) : Int32
     (x >> 15) + 9 + 11
   end
 
-  def get_map_region_y(y)
+  def get_map_region_y(y : Int32) : Int32
     (y >> 15) + 10 + 8
   end
 
-  def get_closest_town_name(char)
+  def get_closest_town_name(char : L2Character) : String
     get_map_region(char).try &.town || "Aden Castle Town"
   end
 
-  def get_area_castle(char)
+  def get_area_castle(char : L2Character) : Int32
     get_map_region(char).try &.castle || 0
   end
 
-  def get_restart_region(char, point)
+  def get_restart_region(char : L2Character, point : String) : L2MapRegion
     region = REGIONS[point]
 
     if tmp = region.banned_race[char.race]?
@@ -100,18 +100,16 @@ module MapRegionManager
     REGIONS[DEFAULT_RESPAWN]
   end
 
-  def get_map_region_by_name(name : String)
+  def get_map_region_by_name(name : String) : L2MapRegion
     REGIONS[name]
   end
 
   def get_tele_to_location(char : L2Character, where : TeleportWhereType) : Location
-    if char.player?
-      pc = char.acting_player
-
+    if pc = char.as?(L2PcInstance)
       castle = nil
       fort = nil
       clan_hall = nil
-      clan = pc.clan?
+      clan = pc.clan
 
       if clan && !pc.flying_mounted? && !pc.flying?
         if where.clanhall?
@@ -127,9 +125,7 @@ module MapRegionManager
         end
 
         if where.castle?
-          castle = CastleManager.get_castle_by_owner(clan)
-
-          unless castle
+          unless castle = CastleManager.get_castle_by_owner(clan)
             castle = CastleManager.get_castle(pc)
             unless castle && castle.siege.in_progress? && castle.siege.get_defender_clan(clan)
               castle = nil
@@ -213,7 +209,7 @@ module MapRegionManager
 
       if castle = CastleManager.get_castle(pc)
         if castle.siege.in_progress?
-          if clan = pc.clan?
+          if clan = pc.clan
             if castle.siege.defender?(clan) || castle.siege.attacker?(clan)
               if SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DAWN
                 return castle.residence_zone.other_spawn_loc
@@ -236,15 +232,15 @@ module MapRegionManager
     temp = nil
 
     if zone
-      temp = get_restart_region(char, zone.get_respawn_point(char.acting_player))
+      temp = get_restart_region(char, zone.get_respawn_point(char.acting_player.not_nil!))
     else
       temp = get_map_region(char)
     end
 
     if temp
-      temp.spawn_loc
-    else
-      REGIONS[DEFAULT_RESPAWN].spawn_loc
+      return temp.spawn_loc
     end
+
+    REGIONS[DEFAULT_RESPAWN].spawn_loc
   end
 end

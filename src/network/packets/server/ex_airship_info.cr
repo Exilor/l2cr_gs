@@ -23,7 +23,7 @@ class Packets::Outgoing::ExAirshipInfo < GameServerPacket
     @helm_id = ship.helm_l2id
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x60
 

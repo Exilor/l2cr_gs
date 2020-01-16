@@ -306,7 +306,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         return "32370-02.htm"
       end
     elsif npc_id == AGENT
-      party = player.party?
+      party = player.party
       if party.nil? || party.leader_l2id != player.l2id
         return "32372-01a.htm"
       end
@@ -337,7 +337,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
   def on_talk(npc, player)
     if npc.id == TOMBSTONE
-      unless party = player.party?
+      unless party = player.party
         return "32344-03.htm"
       end
 
@@ -442,7 +442,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
     end
 
     if event.casecmp?("enter") && npc_id == DORIAN
-      party = player.party?
+      party = player.party
 
       if party && party.leader_l2id == player.l2id
         party.members.each do |m|
@@ -451,11 +451,8 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           end
         end
 
-        party.members.each do |m|
-          m.tele_to_location(-13400, 272827, -15300, true)
-        end
+        party.members.each &.tele_to_location(-13400, 272827, -15300, true)
         html = nil
-
       else
         html = "32373-02a.htm"
       end
@@ -471,9 +468,9 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
       start_quest_timer("close", 120000, npc, nil)
       html = nil
-    elsif (event.casecmp?("up") || event.casecmp?("down")) && TELE_COORDS.has_key?(npc_id)
+    elsif event.match?(/\Aup|down\z/i) && TELE_COORDS.has_key?(npc_id)
       direction = event.casecmp?("up") ? 0 : 1
-      party = player.party?
+      party = player.party
       if party.nil?
         player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       elsif party.leader_l2id != player.l2id
@@ -494,7 +491,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         i0 = TALKED_CONTRAPTIONS.includes?(npc.l2id) ? 0 : 1
         i1 = player.class_id.maestro? ? 6 : 3
 
-        if rand(1000) < (i1 - i0) * 100
+        if Rnd.rand(1000) < (i1 - i0) * 100
           TALKED_CONTRAPTIONS << npc.l2id
           html = player.class_id.maestro? ? "32371-03a.htm" : "32371-03.htm"
         else
@@ -524,7 +521,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
     elsif npc_id == AGENT
       if event.casecmp?("tele_to_7th_floor") && @allow_agent_spawn == false
         html = nil
-        party = player.party?
+        party = player.party
         if party.nil?
           player.tele_to_location(-12501, 281397, -11936)
           if @allow_agent_spawn_7th
@@ -555,7 +552,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         end
       elsif event.casecmp?("buff") && !@allow_agent_spawn_7th
         html = nil
-        party = player.party?
+        party = player.party
         if party.nil?
           if !Util.in_range?(400, player, npc, true)
             html = "32372-01b.htm"
@@ -588,8 +585,8 @@ class Scripts::TullyWorkshop < AbstractNpcAI
               MinionList.spawn_minion(monster, 25596)
             end
 
-            if party = player.party?
-              target = party.members.sample
+            if party = player.party
+              target = party.members.sample(random: Rnd)
             else
               target = player
             end
@@ -608,7 +605,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       end
     elsif event.casecmp?("teleport") && npc_id == DWARVEN_GHOST
       html = nil
-      party = player.party?
+      party = player.party
       if party.nil?
         player.tele_to_location(-12176, 279696, -13596)
       else
@@ -633,7 +630,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       html = nil
       tp_id = event.from(10).to_i
 
-      if party = player.party?
+      if party = player.party
         if !party.leader?(player)
           player.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_ENTER)
         elsif !Util.in_range?(3000, player, npc, true)
@@ -660,24 +657,26 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         npc.as(L2MonsterInstance).clear_aggro_list
         attacker.tele_to_location(npc.x + 50, npc.y - 50, npc.z)
       end
-    elsif (npc_id == TEMENIR || npc_id == KIRETCENAH) && SPAWNED_FOLLOWERS.includes?(npc)
-      victim1 = SPAWNED_FOLLOWERS[1] # TEMENIR
-      victim2 = SPAWNED_FOLLOWERS[0] # KIRETCENAH
-      actor = SPAWNED_FOLLOWERS[2] # DRAXIUS
+    elsif npc_id == TEMENIR || npc_id == KIRETCENAH
+      if SPAWNED_FOLLOWERS.includes?(npc)
+        victim1 = SPAWNED_FOLLOWERS[1] # TEMENIR
+        victim2 = SPAWNED_FOLLOWERS[0] # KIRETCENAH
+        actor = SPAWNED_FOLLOWERS[2] # DRAXIUS
 
-      if actor && actor.alive?
-        transf_hp = actor.max_hp * 0.0001
-        if rand(10000) > 1500 && victim1 && victim1.alive?
-          if actor.current_hp - transf_hp > 1
-            actor.current_hp = actor.current_hp - transf_hp
-            victim1.current_hp = victim1.current_hp + transf_hp
+        if actor && actor.alive?
+          transf_hp = actor.max_hp * 0.0001
+          if Rnd.rand(10000) > 1500 && victim1 && victim1.alive?
+            if actor.current_hp - transf_hp > 1
+              actor.current_hp -= transf_hp
+              victim1.current_hp += transf_hp
+            end
           end
-        end
 
-        if rand(10000) > 3000 && victim2 && victim2.alive?
-          if actor.current_hp - transf_hp > 1
-            actor.current_hp = actor.current_hp - transf_hp
-            victim2.current_hp = victim2.current_hp + transf_hp
+          if Rnd.rand(10000) > 3000 && victim2 && victim2.alive?
+            if actor.current_hp - transf_hp > 1
+              actor.current_hp -= transf_hp
+              victim2.current_hp += transf_hp
+            end
           end
         end
       end
@@ -687,12 +686,12 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       victim = npc_id == TEMENIR ? SPAWNED_FOLLOWERS[1] : SPAWNED_FOLLOWERS[2]
       actor = SPAWNED_FOLLOWERS[0]
 
-      if actor && victim && actor.alive? && victim.alive? && rand(1000) > 333
+      if actor && victim && actor.alive? && victim.alive? && Rnd.rand(1000) > 333
         actor.clear_aggro_list
         actor.intention = AI::ACTIVE
         actor.target = victim
         actor.do_cast(NPC_HEAL)
-        victim.current_hp = victim.current_hp + (victim.max_hp * 0.03) # FIXME: not retail, it should be done after spell is finished, but it cannot be tracked now
+        victim.current_hp += (victim.max_hp * 0.03) # FIXME: not retail, it should be done after spell is finished, but it cannot be tracked now
       end
     end
 
@@ -700,8 +699,8 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   end
 
   def on_faction_call(npc, caller, attacker, is_summon)
-    npc_id = npc.id
-    if npc_id == TEMENIR || npc_id == DRAXIUS || npc_id == KIRETCENAH
+    case npc.id
+    when TEMENIR, DRAXIUS, KIRETCENAH
       npc = npc.as(L2MonsterInstance)
       unless npc.has_minions?
         MinionList.spawn_minion(npc, 25596)
@@ -745,7 +744,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         if @countdown_time > 60000
           if @countdown_time % 60000 == 0
             if _npc && _npc.id == INGENIOUS_CONTRAPTION
-              broadcast_npc_say(_npc, Say2::NPC_SHOUT, NpcString::S1_MINUTES_REMAINING, (@countdown_time / 60000).to_i)
+              broadcast_npc_say(_npc, Say2::NPC_SHOUT, NpcString::S1_MINUTES_REMAINING, @countdown_time // 60000)
             end
           end
         elsif @countdown_time <= 0
@@ -770,14 +769,14 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           start_quest_timer("disable_zone", 300000, nil, nil)
         else
           if _npc && _npc.id == INGENIOUS_CONTRAPTION
-            broadcast_npc_say(_npc, Say2::NPC_SHOUT, NpcString::S1_SECONDS_REMAINING, (@countdown_time / 1000).to_i)
+            broadcast_npc_say(_npc, Say2::NPC_SHOUT, NpcString::S1_SECONDS_REMAINING, @countdown_time // 1000)
           end
         end
       end
       @countdown = ThreadPoolManager.schedule_general_at_fixed_rate(task, 60000, 10000)
       broadcast_npc_say(POSTMORTEM_SPAWNS[0], Say2::NPC_SHOUT, NpcString::DETONATOR_INITIALIZATION_TIME_S1_MINUTES_FROM_NOW, (@countdown_time / 60000).to_i)
     elsif npc_id == TIMETWISTER_GOLEM && @countdown
-      if rand(1000) >= 700
+      if Rnd.rand(1000) >= 700
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::A_FATAL_ERROR_HAS_OCCURRED)
         if @countdown_time > 180000
           @countdown_time = Math.max(@countdown_time - 180000, 60000)
@@ -843,11 +842,11 @@ class Scripts::TullyWorkshop < AbstractNpcAI
             if i == room_data[1]
               DEATH_COUNT[room_data[0]][i] = 0
             else
-              DEATH_COUNT[room_data[0]][i] = (DEATH_COUNT[room_data[0]][i] + 1) * rand(3)
+              DEATH_COUNT[room_data[0]][i] = (DEATH_COUNT[room_data[0]][i] + 1) * Rnd.rand(3)
             end
           end
 
-          if rand(1000) > 500
+          if Rnd.rand(1000) > 500
             @next_servant_idx += 1
           end
         end
@@ -878,9 +877,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
   def on_spawn(npc)
     if npc.id == TULLY && npc.inside_radius?(-12557, 273901, -9000, 1000, true, false)
-      POSTMORTEM_SPAWNS.each do |spawned_npc|
-        spawned_npc.delete_me
-      end
+      POSTMORTEM_SPAWNS.each &.delete_me
       POSTMORTEM_SPAWNS.clear
     elsif npc.id == DARION
       if tmp = @pillar_spawn
@@ -915,10 +912,6 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   end
 
   private def get_room_data(npc)
-    # int[] ret =
-    #   -1,
-    #   -1
-    # }
     ret = {-1, -1}
     if npc
       sp = npc.spawn
@@ -943,9 +936,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   end
 
   private def init_death_counter(floor)
-    4.times do |i|
-      DEATH_COUNT[floor][i] = rand(DEATH_COUNTS[floor])
-    end
+    4.times { |i| DEATH_COUNT[floor][i] = Rnd.rand(DEATH_COUNTS[floor]) }
   end
 
   private def do_7th_floor_spawn
@@ -953,7 +944,6 @@ class Scripts::TullyWorkshop < AbstractNpcAI
     @has_7th_floor_attack_began = false
 
     SPAWNLIST_7TH_FLOOR.each do |data|
-      # monster = add_spawn(data[0], data[1], data[2], data[3], data[4], false, 0, false).as(L2MonsterInstance)
       monster = add_spawn(*data, false, 0, false).as(L2MonsterInstance)
       tmp = data[0]
       if tmp == TEMENIR || tmp == DRAXIUS || tmp == KIRETCENAH

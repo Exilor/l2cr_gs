@@ -3,7 +3,7 @@ require "../game_server_packet"
 class Packets::Outgoing::KeyPacket < GameServerPacket
   initializer key : Bytes, response : Bool
 
-  def write_impl
+  private def write_impl
     c 0x2e
 
     c @response ? 1 : 0

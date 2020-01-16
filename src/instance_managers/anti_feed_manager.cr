@@ -19,7 +19,7 @@ module AntiFeedManager
       return true
     end
 
-    unless target_player = target.acting_player?
+    unless target_player = target.acting_player
       return false
     end
 
@@ -32,12 +32,12 @@ module AntiFeedManager
     end
 
     if Config.antifeed_dualbox && attacker
-      unless attacker_player = attacker.acting_player?
+      unless attacker_player = attacker.acting_player
         return false
       end
 
-      target_client = target_player.client?
-      attacker_client = attacker_player.client?
+      target_client = target_player.client
+      attacker_client = attacker_player.client
       if target_client.nil? || attacker_client.nil?
         return !Config.antifeed_disconnected_as_dualbox
       end
@@ -61,7 +61,7 @@ module AntiFeedManager
   end
 
   def try_add_player(event_id : Int32, pc : L2PcInstance, max : Int32) : Bool
-    try_add_client(event_id, pc.client?, max)
+    try_add_client(event_id, pc.client, max)
   end
 
   def try_add_client(event_id : Int32, client : GameClient?, max : Int32) : Bool
@@ -86,7 +86,7 @@ module AntiFeedManager
   end
 
   def remove_player(event_id : Int32, pc : L2PcInstance) : Bool
-    remove_client(event_id, pc.client?)
+    remove_client(event_id, pc.client)
   end
 
   def remove_client(event_id : Int32, client : GameClient?) : Bool
@@ -124,7 +124,7 @@ module AntiFeedManager
   end
 
   def get_limit(pc : L2PcInstance, max : Int32) : Int32
-    get_limit(pc.client?, max)
+    get_limit(pc.client, max)
   end
 
   def get_limit(client : GameClient?, max : Int32) : Int32

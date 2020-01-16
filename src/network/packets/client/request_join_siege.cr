@@ -17,7 +17,7 @@ class Packets::Incoming::RequestJoinSiege < GameClientPacket
       return
     end
 
-    unless clan = pc.clan?
+    unless clan = pc.clan
       return
     end
 

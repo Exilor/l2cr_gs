@@ -20,13 +20,13 @@ class Packets::Incoming::RequestGiveNickName < GameClientPacket
         return
       end
 
-      if pc.clan.level < 3
+      if pc.clan.not_nil!.level < 3
         pc.send_packet(SystemMessageId::CLAN_LVL_3_NEEDED_TO_ENDOWE_TITLE)
         return
       end
 
-      if member1 = pc.clan.get_clan_member(@target)
-        if member = member1.player_instance?
+      if member1 = pc.clan.not_nil!.get_clan_member(@target)
+        if member = member1.player_instance
           member.title = @title
           member.send_packet(SystemMessageId::TITLE_CHANGED)
           member.broadcast_title_info

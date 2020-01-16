@@ -32,9 +32,10 @@ class Scripts::AnomicFoundry < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, player)
-    if event.casecmp?("make_spawn_1")
+    case event.casecmp
+    when "make_spawn_1"
       if HellboundEngine.level >= 10
-        idx = rand(3)
+        idx = Rnd.rand(3)
         if SPAWNED[idx] < SPAWNS[idx][5]
           tmp = SPAWNS[idx]
           add_spawn(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], false, 0, false)
@@ -42,16 +43,16 @@ class Scripts::AnomicFoundry < AbstractNpcAI
         end
         start_quest_timer("make_spawn_1", @respawn_time, nil, nil)
       end
-    elsif event.casecmp?("make_spawn_2")
+    when "make_spawn_2"
       if SPAWNED[4] < SPAWNS[4][5]
         tmp = SPAWNS[4]
         add_spawn(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], false, 0, false)
       end
-    elsif event.casecmp?("return_laborer")
+    when "return_laborer"
       if npc && npc.alive?
         npc.as(L2Attackable).return_home
       end
-    elsif event.casecmp?("reset_respawn_time")
+    when "reset_respawn_time"
       @respawn_time = 60000
     end
 
@@ -59,7 +60,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
   end
 
   def on_aggro_range_enter(npc, player, is_summon)
-    if rand(10000) < 2000
+    if Rnd.rand(10000) < 2000
       request_help(npc, player, 500, FOREMAN)
       request_help(npc, player, 500, LESSER_EVIL)
       request_help(npc, player, 500, GREATER_EVIL)
@@ -84,15 +85,15 @@ class Scripts::AnomicFoundry < AbstractNpcAI
       end
     end
 
-    if rand(10000) < 2000
+    if Rnd.rand(10000) < 2000
       atk_idx += 1
       ATTACK_INDEX[npc.l2id] = atk_idx
       request_help(npc, attacker, 1000 * atk_idx, FOREMAN)
       request_help(npc, attacker, 1000 * atk_idx, LESSER_EVIL)
       request_help(npc, attacker, 1000 * atk_idx, GREATER_EVIL)
-      if rand(10) < 1
-        x = npc.x + rand(-800..800)
-        y = npc.y + rand(-800..800)
+      if Rnd.rand(10) < 1
+        x = npc.x + Rnd.rand(-800..800)
+        y = npc.y + Rnd.rand(-800..800)
         loc = Location.new(x, y, npc.z, npc.heading)
         npc.set_intention(AI::MOVE_TO, loc)
       end
@@ -106,7 +107,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
       SPAWNED[get_spawn_group(npc)] -= 1
       SpawnTable.delete_spawn(npc.spawn, false)
     elsif npc.id == LABORER
-      if rand(10000) < 8000
+      if Rnd.rand(10000) < 8000
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::PROCESS_SHOULDNT_BE_DELAYED_BECAUSE_OF_ME)
         if @respawn_time < @respawn_max
           @respawn_time += 10000

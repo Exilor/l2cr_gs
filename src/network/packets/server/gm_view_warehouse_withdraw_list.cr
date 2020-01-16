@@ -15,7 +15,7 @@ class Packets::Outgoing::GMViewWarehouseWithdrawList < Packets::Outgoing::Abstra
     @money = clan.warehouse.adena
   end
 
-  def write_impl
+  private def write_impl
     c 0x9b
 
     s @player_name

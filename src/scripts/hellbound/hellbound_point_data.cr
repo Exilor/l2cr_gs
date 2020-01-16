@@ -31,21 +31,21 @@ module HellboundPointData
     npc_id = tmp.to_i
 
     unless tmp = d["points"]?
-      error "Missing reward point info for NPC with id #{npc_id}."
+      error { "Missing reward point info for NPC with id #{npc_id}." }
       return
     end
 
     points = tmp.to_i
 
     unless tmp = d["minHellboundLvl"]?
-      error "Missing minHellboundLvl info for NPC with id #{npc_id}."
+      error { "Missing minHellboundLvl info for NPC with id #{npc_id}." }
       return
     end
 
     min_hb_lvl = tmp.to_i
 
     unless tmp = d["maxHellboundLvl"]?
-      error "Missing maxHellboundLvl info for NPC with id #{npc_id}."
+      error { "Missing maxHellboundLvl info for NPC with id #{npc_id}." }
       return
     end
 

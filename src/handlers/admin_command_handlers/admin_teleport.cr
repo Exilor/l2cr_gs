@@ -274,10 +274,8 @@ module AdminCommandHandler::AdminTeleport
 
         pc.send_message("Created #{target.template.name} on #{target.l2id}.")
 
-        if Config.debug
-          info { "Spawn at #{target.xyz}." }
-          warn { "GM #{pc.name} (#{pc.l2id}) moved NPC #{target.l2id}." }
-        end
+        debug { "Spawn at #{target.xyz}." }
+        debug { "GM #{pc.name} (#{pc.l2id}) moved NPC #{target.l2id}." }
       rescue e
         warn e
         pc.send_message("Target is not in game.")

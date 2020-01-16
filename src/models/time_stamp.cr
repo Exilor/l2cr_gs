@@ -1,6 +1,5 @@
 struct TimeStamp
-  getter id1 : Int32, id2 : Int32, group = -1
-  getter stamp : Int64, reuse : Int64
+  getter id1 : Int32, id2 : Int32, group = -1, stamp : Int64, reuse : Int64
 
   def initialize(skill : Skill, reuse : Int, time : Int)
     @id1 = skill.id

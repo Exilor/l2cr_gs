@@ -76,7 +76,7 @@ class Scripts::Q00331_ArrowOfVengeance < Quest
 
   def on_kill(npc, pc, is_pet)
     if st = get_quest_state(pc, false)
-      if rand(100) < MONSTERS[npc.id]
+      if Rnd.rand(100) < MONSTERS[npc.id]
         case npc.id
         when 20145
           st.give_items(HARPY_FEATHER, 1)

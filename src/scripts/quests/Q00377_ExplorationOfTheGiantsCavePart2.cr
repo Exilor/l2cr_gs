@@ -56,7 +56,7 @@ class Scripts::Q00377_ExplorationOfTheGiantsCavePart2 < Quest
     if qs = get_random_party_member_state(pc, -1, 3, npc)
       npc_id = npc.id
       if tmp = MOBS1[npc_id]?
-        item_count = rand(1000) < tmp ? 3 : 2
+        item_count = Rnd.rand(1000) < tmp ? 3 : 2
         give_item_randomly(qs.player, npc, TITAN_ANCIENT_BOOK, item_count, 0, 1.0, true)
       else
         give_item_randomly(qs.player, npc, TITAN_ANCIENT_BOOK, 1, 0, MOBS2[npc_id], true)

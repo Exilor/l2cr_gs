@@ -1,48 +1,50 @@
 class EffectHandler::DefenceTrait < AbstractEffect
-  @traits : EnumMap(TraitType, Float32)?
+  @defence_traits = Slice({UInt8, Float32}).empty
 
   def initialize(attach_cond, apply_cond, set, params)
     super
 
     if params.empty?
-      warn { "Params of #{self.class} must not be empty" }
-      return
+      raise "params of #{self.class} must not be empty"
     end
 
-    traits = EnumMap(TraitType, Float32).new
-    params.each do |k, v|
-      trait_type = TraitType.parse(k)
-      value = v.to_s.to_f32
+    defence_traits = [] of {UInt8, Float32}
+
+    params.each do |key, val|
+      trait_type = TraitType.parse(key)
+      value = val.to_s.to_f32
       next if value == 0
 
-      traits[trait_type] = (value + 100) // 100
+      defence_traits << {trait_type.to_u8, (value + 100) / 100}
     end
 
-    @traits = traits
+    @defence_traits = defence_traits.to_slice
   end
 
   def on_start(info)
-    return unless traits = @traits
+    return if @defence_traits.empty?
+
     stat = info.effected.stat
-    traits.each do |type, value|
+    @defence_traits.each do |trait_id, value|
       if value < 2
-        stat.defence_traits[type.to_i] *= value
-        stat.defence_traits_count[type.to_i] += 1
+        stat.defence_traits[trait_id] *= value
+        stat.defence_traits_count[trait_id] += 1
       else
-        stat.traits_invul[type.to_i] += 1
+        stat.traits_invul[trait_id] += 1
       end
     end
   end
 
   def on_exit(info)
-    return unless traits = @traits
+    return if @defence_traits.empty?
+
     stat = info.effected.stat
-    traits.each do |type, value|
+    @defence_traits.each do |trait_id, value|
       if value < 2
-        stat.defence_traits[type.to_i] /= value
-        stat.defence_traits_count[type.to_i] -= 1
+        stat.defence_traits[trait_id] /= value
+        stat.defence_traits_count[trait_id] -= 1
       else
-        stat.traits_invul[type.to_i] -= 1
+        stat.traits_invul[trait_id] -= 1
       end
     end
   end

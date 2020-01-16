@@ -6,7 +6,6 @@ require "../models/crop_procure"
 module CastleManorManager
   extend self
   extend XMLReader
-  # extend Storable
 
   private INSERT_PRODUCT = "INSERT INTO castle_manor_production VALUES (?, ?, ?, ?, ?, ?)"
   private INSERT_CROP = "INSERT INTO castle_manor_procure VALUES (?, ?, ?, ?, ?, ?, ?)"
@@ -34,9 +33,9 @@ module CastleManorManager
     min = time.minute
     maintenance_min = Config.alt_manor_refresh_min + Config.alt_manor_maintenance_min
 
-    if ((hour >= Config.alt_manor_refresh_time) && (min >= maintenance_min)) || (hour < Config.alt_manor_approve_time) || ((hour == Config.alt_manor_approve_time) && (min <= Config.alt_manor_approve_min))
+    if (hour >= Config.alt_manor_refresh_time && min >= maintenance_min) || hour < Config.alt_manor_approve_time || (hour == Config.alt_manor_approve_time && min <= Config.alt_manor_approve_min)
       @@mode = ManorMode::MODIFIABLE
-    elsif hour == Config.alt_manor_refresh_time && ((min >= Config.alt_manor_refresh_min) && (min < maintenance_min))
+    elsif hour == Config.alt_manor_refresh_time && (min >= Config.alt_manor_refresh_min && min < maintenance_min)
       @@mode = ManorMode::MAINTENANCE
     end
 
@@ -48,9 +47,7 @@ module CastleManorManager
       ThreadPoolManager.schedule_general_at_fixed_rate(->store_me, delay, interval)
     end
 
-    if Config.debug
-      info { "Current mode: #{@@mode}." }
-    end
+    info { "Current mode: #{@@mode}." }
   end
 
   def load_xml
@@ -199,14 +196,10 @@ module CastleManorManager
           PROCURE_NEXT[castle_id].clear # L2J sets this to empty list
         else
           production = next_production.dup
-          production.each do |s|
-            s.amount = s.start_amount
-          end
+          production.each { |s| s.amount = s.start_amount }
           PRODUCTION_NEXT[castle_id] = production
           procure = next_procure.dup
-          procure.each do |cr|
-            cr.amount = cr.start_amount
-          end
+          procure.each { |cr| cr.amount = cr.start_amount }
           PROCURE_NEXT[castle_id] = procure
         end
       end
@@ -217,7 +210,7 @@ module CastleManorManager
         if owner = castle.owner?
           leader = owner.leader?
           if leader && leader.online?
-            leader.player_instance.send_packet(SystemMessageId::THE_MANOR_INFORMATION_HAS_BEEN_UPDATED)
+            leader.player_instance.try &.send_packet(SystemMessageId::THE_MANOR_INFORMATION_HAS_BEEN_UPDATED)
           end
         end
       end
@@ -248,7 +241,7 @@ module CastleManorManager
 
             leader = owner.leader?
             if leader && leader.online?
-              leader.player_instance.send_packet(SystemMessageId::THE_AMOUNT_IS_NOT_SUFFICIENT_AND_SO_THE_MANOR_IS_NOT_IN_OPERATION)
+              leader.player_instance.try &.send_packet(SystemMessageId::THE_AMOUNT_IS_NOT_SUFFICIENT_AND_SO_THE_MANOR_IS_NOT_IN_OPERATION)
             end
           else
             castle.add_to_treasury_no_tax(-manor_cost)
@@ -263,9 +256,7 @@ module CastleManorManager
 
     schedule_mode_change
 
-    if Config.debug
-      info "Manor mode changed to #{@@mode}."
-    end
+    debug { "Manor mode changed to #{@@mode}." }
   end
 
   def set_next_seed_production(list : Array(SeedProduction), castle_id : Int32)
@@ -324,14 +315,7 @@ module CastleManorManager
   def update_current_production(castle_id : Int32, items : Enumerable(SeedProduction))
     sql = "UPDATE castle_manor_production SET amount = ? WHERE castle_id = ? AND seed_id = ? AND next_period = 0"
     # TODO: do it in batch
-    items.each do |sp|
-      GameDB.exec(
-        sql,
-        sp.amount,
-        castle_id,
-        sp.id
-      )
-    end
+    items.each { |sp| GameDB.exec(sql, sp.amount, castle_id, sp.id) }
   rescue e
     error e
   end
@@ -339,14 +323,7 @@ module CastleManorManager
   def update_current_procure(castle_id : Int32, items : Enumerable(CropProcure))
     sql = "UPDATE castle_manor_procure SET amount = ? WHERE castle_id = ? AND crop_id = ? AND next_period = 0"
     # TODO: do it in batch
-    items.each do |sp|
-      GameDB.exec(
-        sql,
-        sp.amount,
-        castle_id,
-        sp.id
-      )
-    end
+    items.each { |sp| GameDB.exec(sql, sp.amount, castle_id, sp.id) }
   rescue e
     error e
   end
@@ -389,9 +366,7 @@ module CastleManorManager
       s = get_seed(seed.id)
       total += s ? s.seed_reference_price * seed.start_amount : 1
     end
-    procure.each do |crop|
-      total += crop.price * crop.start_amount
-    end
+    procure.each { |crop| total += crop.price * crop.start_amount }
 
     total
   end

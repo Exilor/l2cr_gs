@@ -5,11 +5,11 @@ class Packets::Outgoing::StopMoveInVehicle < GameServerPacket
 
   def initialize(pc : L2PcInstance, @boat_id : Int32)
     @pc_id = pc.l2id
-    @pos = pc.in_vehicle_position
+    @pos = pc.in_vehicle_position.not_nil!
     @heading = pc.heading
   end
 
-  def write_impl
+  private def write_impl
     c 0x7f
 
     d @pc_id

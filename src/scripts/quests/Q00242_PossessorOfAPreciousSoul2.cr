@@ -174,7 +174,7 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       case st.cond
       when 4
         npc.do_die(npc)
-        if CHANCE_FOR_HAIR >= rand(100)
+        if CHANCE_FOR_HAIR >= Rnd.rand(100)
           st.give_items(GOLDEN_HAIR, 1)
           st.set_cond(5, true)
           html = "31752-01.html"

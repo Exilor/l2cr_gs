@@ -72,19 +72,19 @@ class Scripts::Q00631_DeliciousTopChoiceMeat < Quest
     when "31537-06.html"
       if st.cond?(2)
         if get_quest_items_count(pc, PRIME_MEAT) >= PRIME_MEAT_COUNT
-          case rand(10)
+          case Rnd.rand(10)
           when 0
-            st.reward_items(RECIPE.sample, 1)
+            st.reward_items(RECIPE.sample(random: Rnd), 1)
           when 1
-            st.reward_items(PIECE.sample, 1)
+            st.reward_items(PIECE.sample(random: Rnd), 1)
           when 2
-            st.reward_items(PIECE.sample, 2)
+            st.reward_items(PIECE.sample(random: Rnd), 2)
           when 3
-            st.reward_items(PIECE.sample, 3)
+            st.reward_items(PIECE.sample(random: Rnd), 3)
           when 4
-            st.reward_items(PIECE.sample, rand(5) + 2)
+            st.reward_items(PIECE.sample(random: Rnd), Rnd.rand(5) + 2)
           when 5
-            st.reward_items(PIECE.sample, rand(7) + 2)
+            st.reward_items(PIECE.sample(random: Rnd), Rnd.rand(7) + 2)
           when 6
             st.reward_items(GOLDEN_SPICE_CRATE, 1)
           when 7

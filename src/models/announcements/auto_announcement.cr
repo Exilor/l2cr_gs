@@ -6,6 +6,7 @@ class AutoAnnouncement < Announcement
 
   @task : Scheduler::DelayedTask?
   @current_state = 0
+
   property initial : Int64
   property delay : Int64
   property repeat : Int32 = -1

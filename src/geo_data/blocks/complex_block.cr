@@ -1,21 +1,8 @@
 struct ComplexBlock
   include IBlock
 
-  # def initialize(io : IO)
-  #   ptr = Pointer(Int16).malloc(BLOCK_CELLS)
-  #   tmp = Slice.new(ptr.as(UInt8*), BLOCK_CELLS * 2)
-  #   io.read(tmp)
-  #   @data = Slice(Int16).new(ptr, BLOCK_CELLS)
-  # end
-
-  # def initialize(io : IO)
-  #   @data = Pointer(Int16).malloc(BLOCK_CELLS)
-  #   tmp = Slice.new(@data.as(UInt8*), BLOCK_CELLS * 2)
-  #   io.read(tmp)
-  # end
-
   def initialize(io : IO)
-    @data = GC.malloc_atomic(BLOCK_CELLS.to_u32 * 2).as(Int16*)
+    @data = GC.malloc_atomic(BLOCK_CELLS * 2).as(Int16*)
     slice = @data.as(UInt8*).to_slice(BLOCK_CELLS * 2)
     io.read_fully(slice)
   end

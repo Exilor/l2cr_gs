@@ -11,8 +11,7 @@ class Scripts::Dorian < AbstractNpcAI
   end
 
   def on_see_creature(npc, creature, is_summon)
-    if creature.player?
-      pc = creature.acting_player
+    if pc = creature.as?(L2PcInstance)
       qs = pc.get_quest_state(Scripts::Q00024_InhabitantsOfTheForestOfTheDead.simple_name)
       if qs && qs.cond?(3)
         take_items(pc, SILVER_CROSS, -1)

@@ -41,7 +41,7 @@ module TaskManager
 
   def register_task(task : Task)
     key = task.name
-    unless tmp = TASKS[key]?
+    unless TASKS.has_key?(key)
       task.init
       TASKS[key] = task
     end

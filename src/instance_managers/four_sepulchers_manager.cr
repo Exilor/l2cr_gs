@@ -46,7 +46,7 @@ module FourSepulchersManager
       Int32.slice(25346, 189534, -88969, -7216, 32768),
       Int32.slice(25342, 173195, -76560, -7215, 49277),
       Int32.slice(25339, 175591, -72744, -7215, 49317)
-    },
+    }
   }
 
   private ARCHON_SPAWNED        = Concurrent::Map(Int32, Bool).new
@@ -91,8 +91,6 @@ module FourSepulchersManager
   class_property? warm_up_time   : Bool = false
   class_property? attack_time    : Bool = false
   class_property? cool_down_time : Bool = false
-
-
 
   def init
     @@change_cool_down_time_task.try &.cancel
@@ -165,7 +163,7 @@ module FourSepulchersManager
         next
       end
 
-      GrandBossManager.get_zone!(loc[0], loc[1], loc[2]).oust_all_players
+      GrandBossManager.get_zone(loc[0], loc[1], loc[2]).not_nil!.oust_all_players
     end
 
     delete_all_mobs
@@ -476,17 +474,18 @@ module FourSepulchersManager
       end
 
       if Config.fs_party_member_count > 1
-        if !pc.in_party? || pc.party.size < Config.fs_party_member_count
+        party = pc.party
+        if party.nil? || party.size < Config.fs_party_member_count
           show_html_file(pc, "#{npc_id}-SP.htm", npc, nil)
           return
         end
 
-        unless pc.party.leader?(pc)
+        unless party.leader?(pc)
           show_html_file(pc, "#{npc_id}-NL.htm", npc, nil)
           return
         end
 
-        pc.party.members.each do |m|
+        party.members.each do |m|
           qs = m.get_quest_state(host_quest.name)
           if qs.nil? || (!qs.started? && !qs.completed?)
             show_html_file(pc, "#{npc_id}-NS.htm", npc, m)
@@ -503,13 +502,13 @@ module FourSepulchersManager
             return
           end
         end
-      elsif Config.fs_party_member_count <= 1 && pc.in_party?
-        unless pc.party.leader?(pc)
+      elsif Config.fs_party_member_count <= 1 && (party = pc.party)
+        unless party.leader?(pc)
           show_html_file(pc, "#{npc_id}-NL.htm", npc, nil)
           return
         end
 
-        pc.party.members.each do |m|
+        party.members.each do |m|
           qs = m.get_quest_state(host_quest.name)
           if qs.nil? || (!qs.started? && !qs.completed?)
             show_html_file(pc, "#{npc_id}-NS.htm", npc, m)
@@ -558,16 +557,16 @@ module FourSepulchersManager
   private def entry(npc_id : Int32, pc : L2PcInstance)
     loc = START_HALL_SPAWNS[npc_id]
 
-    if Config.fs_party_member_count > 1
-      members = Array(L2PcInstance).new(pc.party.size)
-      pc.party.members.each do |m|
+    if Config.fs_party_member_count > 1 && (party = pc.party)
+      members = Array(L2PcInstance).new(party.size)
+      party.members.each do |m|
         if m.alive? && Util.in_range?(700, pc, m, true)
           members << m
         end
       end
 
       members.each do |m|
-        GrandBossManager.get_zone!(loc[0], loc[1], loc[2]).allow_player_entry(m, 30)
+        GrandBossManager.get_zone(loc[0], loc[1], loc[2]).not_nil!.allow_player_entry(m, 30)
         drift_x = Rnd.rand(-80..80)
         drift_y = Rnd.rand(-80..80)
         m.tele_to_location(loc[0] + drift_x, loc[1] + drift_y, loc[2])
@@ -585,17 +584,17 @@ module FourSepulchersManager
 
       HALL_IN_USE[npc_id] = true
     end
-    # same as the code aboce
-    if Config.fs_party_member_count <= 1 && pc.in_party?
-      members = Array(L2PcInstance).new(pc.party.size)
-      pc.party.members.each do |m|
+
+    if Config.fs_party_member_count <= 1 && (party = pc.party)
+      members = Array(L2PcInstance).new(party.size)
+      party.members.each do |m|
         if m.alive? && Util.in_range?(700, pc, m, true)
           members << m
         end
       end
 
       members.each do |m|
-        GrandBossManager.get_zone!(loc[0], loc[1], loc[2]).allow_player_entry(m, 30)
+        GrandBossManager.get_zone(loc[0], loc[1], loc[2]).not_nil!.allow_player_entry(m, 30)
         drift_x = Rnd.rand(-80..80)
         drift_y = Rnd.rand(-80..80)
         m.tele_to_location(loc[0] + drift_x, loc[1] + drift_y, loc[2])
@@ -613,7 +612,7 @@ module FourSepulchersManager
 
       HALL_IN_USE[npc_id] = true
     else
-      GrandBossManager.get_zone!(loc[0], loc[1], loc[2]).allow_player_entry(pc, 30)
+      GrandBossManager.get_zone(loc[0], loc[1], loc[2]).not_nil!.allow_player_entry(pc, 30)
       drift_x = Rnd.rand(-80..80)
       drift_y = Rnd.rand(-80..80)
       pc.tele_to_location(loc[0] + drift_x, loc[1] + drift_y, loc[2])
@@ -800,22 +799,17 @@ module FourSepulchersManager
 
   def location_shadow_spawns
     loc_no = Rnd.rand(4)
-    gatekeeper = {
-      31929,
-      31934,
-      31939,
-      31944
-    }
+    gatekeeper = {31929, 31934, 31939, 31944}
 
     4.times do |i|
       begin
         key_npc_id = gatekeeper[i]
         sp = SHADOW_SPAWNS[key_npc_id]
         sp.amount = 1
-        sp.x = SHADOW_SPAWN_LOC[loc_no][i][1]
-        sp.y = SHADOW_SPAWN_LOC[loc_no][i][2]
-        sp.z = SHADOW_SPAWN_LOC[loc_no][i][3]
-        sp.heading = SHADOW_SPAWN_LOC[loc_no][i][4]
+        sp.x = SHADOW_SPAWN_LOC.dig(loc_no, i, 1)
+        sp.y = SHADOW_SPAWN_LOC.dig(loc_no, i, 2)
+        sp.z = SHADOW_SPAWN_LOC.dig(loc_no, i, 3)
+        sp.heading = SHADOW_SPAWN_LOC.dig(loc_no, i, 4)
         SHADOW_SPAWNS[key_npc_id] = sp
       rescue e
         error e

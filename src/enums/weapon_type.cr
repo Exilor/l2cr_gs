@@ -6,11 +6,7 @@ class WeaponType < EnumClass
 
   getter trait_type
 
-  protected def initialize(@trait_type : TraitType)
-    unless 0 <= to_i <= 16
-      raise "weapon type with value #{to_i} outside of range (valid: 0..16)"
-    end
-  end
+  protected initializer trait_type : TraitType
 
   add(SWORD,        TraitType::SWORD)
   add(BLUNT,        TraitType::BLUNT)

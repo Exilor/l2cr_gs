@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExBrPremiumState < GameServerPacket
   initializer id : Int32, state : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xd9
 

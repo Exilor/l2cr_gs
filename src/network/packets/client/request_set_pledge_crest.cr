@@ -6,7 +6,7 @@ class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
     @length = d
 
     if @length > 256
-      debug "Length is too large (#{@length})."
+      debug { "Crest data size is too large (#{@length}/256)." }
       @data = nil
       return
     end
@@ -51,7 +51,7 @@ class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
         return
       end
 
-      if crest = CrestTable.create_crest(_data, L2Crest::CrestType::PLEDGE)
+      if crest = CrestTable.create_crest(_data, L2Crest::PLEDGE)
         clan.change_clan_crest(crest.id)
         pc.send_packet(SystemMessageId::CLAN_CREST_WAS_SUCCESSFULLY_REGISTRED)
       end

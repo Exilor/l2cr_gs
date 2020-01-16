@@ -32,7 +32,7 @@ module BypassHandler::QuestLink
   end
 
   private def show_quest_choose_window(pc, npc, quests)
-    debug "#show_quest_choose_window pc: #{pc.name}, npc: #{npc.name}, quests: #{quests.map(&.class)}"
+    # debug "#show_quest_choose_window pc: #{pc.name}, npc: #{npc.name}, quests: #{quests.map(&.class)}"
 
     str = String.build(150) do |sb|
       sb << "<html><body>"
@@ -57,11 +57,17 @@ module BypassHandler::QuestLink
           color = "787878"
         end
 
-        sb << "<a action=\"bypass -h npc_#{npc.l2id}_Quest #{quest.name}\">"
-        sb << "<font color=\"#{color}\">["
+        sb << "<a action=\"bypass -h npc_"
+        sb << npc.l2id
+        sb << "_Quest "
+        sb << quest.name
+        sb << "\"><font color=\""
+        sb << color
+        sb << "\">["
 
         if quest.custom?
-          sb << "#{quest.descr}#{state}"
+          sb << quest.descr
+          sb << state
         else
           quest_id = quest.id
           if quest_id > 10000
@@ -69,24 +75,28 @@ module BypassHandler::QuestLink
           elsif quest_id == 146
             quest_id = 640
           end
-          sb << "<fstring>#{quest_id}#{state}</fstring>"
+          sb << "<fstring>"
+          sb << quest_id
+          sb << state
+          sb << "</fstring>"
         end
         sb << "]</font></a><br>"
 
         if pc.apprentice > 0 && L2World.get_player(pc.apprentice)
-          if quest_id == TO_LEAD_AND_BE_LED
+          case quest_id
+          when TO_LEAD_AND_BE_LED
             sb << "<a action=\"bypass -h Quest Q00118_ToLeadAndBeLed sponsor\"><font color=\""
             sb << color
             sb << "\">[<fstring>"
-            sb << quest_id << state
+            sb << quest_id
+            sb << state
             sb << "</fstring> (Sponsor)]</font></a><br>"
-          end
-
-          if quest_id == THE_LEADER_AND_THE_FOLLOWER
+          when THE_LEADER_AND_THE_FOLLOWER
             sb << "<a action=\"bypass -h Quest Q00123_TheLeaderAndTheFollower sponsor\"><font color=\""
             sb << color
             sb << "\">[<fstring>"
-            sb << quest_id << state
+            sb << quest_id
+            sb << state
             sb << "</fstring> (Sponsor)]</font></a><br>"
           end
         end
@@ -102,7 +112,7 @@ module BypassHandler::QuestLink
     states = [] of QuestState
 
     unless template = NpcData[npc_id]?
-      warn { "#{pc} requested quests for talk on non existing npc #{npc_id}." }
+      # warn { "#{pc} requested quests for talk on non existing npc #{npc_id}." }
       return states
     end
 
@@ -112,32 +122,31 @@ module BypassHandler::QuestLink
           if st = pc.get_quest_state(quest.name)
             states << st
           end
-        else
-          debug "#{quest} is not visible in the quest window."
+        # else
+        #   debug { "#{quest} is not visible in the quest window." }
         end
       end
     end
 
-    debug "#get_quests_for_talk: no quests." if states.empty?
+    # debug "#get_quests_for_talk: no quests." if states.empty?
 
     states
   end
 
   private def show_quest_window(pc : L2PcInstance, npc : L2Npc, quest_id : String)
-    debug "#show_quest_window #{pc}, #{npc}, #{quest_id}"
+    # debug "#show_quest_window #{pc}, #{npc}, #{quest_id}"
 
     q = QuestManager.get_quest(quest_id)
     qs = pc.get_quest_state(quest_id)
 
     if q
-      if (q.id >= 1 && q.id < 20000) && (pc.weight_penalty >= 3 || !pc.inventory_under_90?(true))
+      if (0...20000).covers?(q.id) && (pc.weight_penalty >= 3 || !pc.inventory_under_90?(true))
         pc.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
         return
       end
 
       unless qs
-        if q.id >= 1 && q.id < 20000
-          # too many active quests
+        if (0...20000).covers?(q.id)
           if pc.all_active_quests.size >= MAX_QUEST_COUNT
             html = NpcHtmlMessage.new(npc.l2id)
             html.set_file(pc, "data/html/fullquest.html")
@@ -149,7 +158,7 @@ module BypassHandler::QuestLink
 
       q.notify_talk(npc, pc)
     else
-      debug "Quest with id #{quest_id.inspect} not found."
+      # debug { "Quest with id #{quest_id.inspect} not found." }
       content = Quest.get_no_quest_msg(pc)
     end
 
@@ -161,23 +170,23 @@ module BypassHandler::QuestLink
   end
 
   private def show_quest_window(pc : L2PcInstance, npc : L2Npc)
-    debug "#show_quest_window #{pc}, #{npc}"
+    # debug "#show_quest_window #{pc}, #{npc}"
     condition_meet = false
     options = Set(Quest).new
     quests = get_quests_for_talk(pc, npc.id)
-    debug "Checking the quest conditions for #{npc.name} (#{quests.size} quests)."
+    # debug { "Checking the quest conditions for #{npc.name} (#{quests.size} quests)." }
     quests.each do |state|
       unless quest = state.quest
-        warn { "#{pc} requested incorrect quest state for non existing quest #{state.quest_name}." }
+        # warn { "#{pc} requested incorrect quest state for non existing quest #{state.quest_name}." }
         next
       end
 
-      if quest.id.between?(0, 20000)
+      if (0...20000).covers?(quest.id)
         options << quest
         if quest.can_start_quest?(pc)
           condition_meet = true
-        else
-          debug "#{pc.name} can't start quest #{quest}"
+        # else
+        #   debug { "#{pc.name} can't start quest #{quest}" }
         end
       end
     end
@@ -188,33 +197,33 @@ module BypassHandler::QuestLink
 
       if quest = listener.owner.as?(Quest)
         if quest.visible_in_quest_window?
-          if quest.id.between?(0, 20000)
+          if (0...20000).covers?(quest.id)
             options << quest
             if quest.can_start_quest?(pc)
               condition_meet = true
             else
-              debug "#{pc.name} can't start quest #{quest}"
+              # debug { "#{pc.name} can't start quest #{quest}" }
             end
           end
         else
-          debug "#{quest} is not visible in the quest window."
+          # debug { "#{quest} is not visible in the quest window." }
         end
       end
     end
 
-    if options.empty?
-      debug "No quests found."
-    else
-      debug "Found quests: #{options.map &.name}"
-    end
+    # if options.empty?
+    #   debug "No quests found."
+    # else
+    #   debug { "Found quests: #{options.map &.name}" }
+    # end
 
     if !condition_meet
-      debug "Conditions not met."
+      # debug "Conditions not met."
       show_quest_window(pc, npc, "")
     elsif options.size > 1 || pc.apprentice > 0 && L2World.get_player(pc.apprentice) && options.any? { |q| q.id == TO_LEAD_AND_BE_LED }
       show_quest_choose_window(pc, npc, options)
     elsif options.size == 1
-      debug "Found 1 quest."
+      # debug "Found 1 quest."
       show_quest_window(pc, npc, options.first.name)
     else
       show_quest_window(pc, npc, "")

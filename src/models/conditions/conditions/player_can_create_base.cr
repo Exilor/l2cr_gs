@@ -3,7 +3,7 @@ class Condition
     initializer val : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
-      unless effector && effector.player?
+      unless effector && effector.player? && (pc = effector.acting_player)
         return !@val
       end
 
@@ -11,13 +11,13 @@ class Condition
         raise "No skill for PlayerCanCreateBase"
       end
 
-      pc = effector.acting_player
-
       can = true
 
-      if pc.looks_dead? || pc.cursed_weapon_equipped? || pc.clan?.nil?
+      if pc.looks_dead? || pc.cursed_weapon_equipped? || pc.clan.nil?
         can = false
       end
+
+      clan = pc.clan.not_nil!
 
       castle = CastleManager.get_castle(pc)
       fort = FortManager.get_fort(pc)
@@ -32,7 +32,7 @@ class Condition
         sm.add_skill_name(skill)
         pc.send_packet(sm)
         can = false
-      elsif (castle && castle.siege.get_attacker_clan?(pc.clan?).nil?) || (fort && fort.siege.get_attacker_clan?(pc.clan?).nil?)
+      elsif (castle && castle.siege.get_attacker_clan(clan).nil?) || (fort && fort.siege.get_attacker_clan(clan).nil?)
         sm = SystemMessage.s1_cannot_be_used
         sm.add_skill_name(skill)
         pc.send_packet(sm)
@@ -42,7 +42,7 @@ class Condition
         sm.add_skill_name(skill)
         pc.send_packet(sm)
         can = false
-      elsif (castle && castle.siege.get_attacker_clan(pc.clan).num_flags >= SiegeManager.flag_max_count) || (fort && fort.siege.get_attacker_clan(pc.clan).num_flags >= FortSiegeManager.flag_max_count)
+      elsif (castle && castle.siege.get_attacker_clan(clan).not_nil!.num_flags >= SiegeManager.flag_max_count) || (fort && fort.siege.get_attacker_clan(clan).not_nil!.num_flags >= FortSiegeManager.flag_max_count)
         sm = SystemMessage.s1_cannot_be_used
         sm.add_skill_name(skill)
         pc.send_packet(sm)

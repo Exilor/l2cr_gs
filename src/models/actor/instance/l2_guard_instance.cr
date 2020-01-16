@@ -1,7 +1,7 @@
 require "../known_list/guard_known_list"
 
 class L2GuardInstance < L2Attackable
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2GuardInstance
   end
 
@@ -10,20 +10,20 @@ class L2GuardInstance < L2Attackable
   end
 
   def get_html_path(npc_id, val)
-    pom = val == 0 ? npc_id : "#{npc_id}-#{val}"
-    "data/html/guard/#{pom}.htm"
+    if val == 0
+      "data/html/guard/#{npc_id}.htm"
+    else
+      "data/html/guard/#{npc_id}-#{val}.htm"
+    end
   end
 
-  def on_action(pc, interact = true)
+  def on_action(pc : L2PcInstance, interact : Bool)
     return unless can_target?(pc)
 
     if l2id != pc.target_id
       pc.target = self
     elsif interact
       if in_aggro_list?(pc)
-        if Config.debug
-          debug "#{pc.name} attacked guard #{l2id}."
-        end
         pc.set_intention(AI::ATTACK, self)
       else
         if can_interact?(pc)

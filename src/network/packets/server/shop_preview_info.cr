@@ -1,7 +1,7 @@
 class Packets::Outgoing::ShopPreviewInfo < GameServerPacket
   initializer items : Hash(Int32, Int32)
 
-  def write_impl
+  private def write_impl
     c 0xf6
 
     d Inventory::TOTALSLOTS

@@ -30,7 +30,7 @@ class TargetAnalysis
     elsif target.get_p_atk(nil) * 0.8 < target.get_m_atk(nil, nil) || target.get_m_atk(nil, nil) * 0.8 > target.get_p_atk(nil)
       @balanced = true
     else
-      weapon = target.active_weapon_item?
+      weapon = target.active_weapon_item
       if weapon && (weapon.item_type == WeaponType::BOW || weapon.item_type == WeaponType::CROSSBOW)
         @archer = true
       else

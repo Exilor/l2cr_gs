@@ -7,7 +7,7 @@ class Packets::Outgoing::AllyCrest < GameServerPacket
     @data = CrestTable.get_crest(crest_id).try &.data
   end
 
-  def write_impl
+  private def write_impl
     c 0xaf
 
     d @crest_id

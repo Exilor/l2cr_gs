@@ -1,4 +1,4 @@
-class Crossings
+abstract struct Crossings
   @yranges = Slice(Float64).new(10)
   @limit = 0
 
@@ -55,7 +55,7 @@ class Crossings
     false
   end
 
-  class EvenOdd < Crossings
+  struct EvenOdd < Crossings
     def covers?(ystart, yend)
       @limit == 2 && @yranges[0] <= ystart && @yranges[1] >= yend
     end

@@ -48,9 +48,9 @@ module Util
   end
 
   def calculate_distance(x1 : Float64, y1 : Float64, z1 : Float64, x2 : Float64, y2 : Float64, z2 : Float64, z_axis : Bool, squared : Bool) : Float64
-    dist = (x1 - x2).abs2 + (y1 - y2).abs2
+    dist = Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)
     if z_axis
-      dist += (z1 - z2).abs2
+      dist += Math.pow(z1 - z2, 2)
     end
     squared ? dist : Math.sqrt(dist)
   end
@@ -83,7 +83,7 @@ module Util
     angle_target = Math.to_degrees(Math.atan2(to_y - from_y, to_x - from_x))
 
     if angle_target < 0
-      angle_target = 360 + angle_target
+      angle_target = 360.0 + angle_target
     end
 
     angle_target
@@ -111,38 +111,36 @@ module Util
   def build_html_bypass_cache(pc, scope, html)
     html_lower = html.downcase
     bypass_end = 0
-    bypass_start = html_lower.index("=\"bypass ", bypass_end) || -1
-    # debug "build_html_bypass_cache"
-    while bypass_start != -1
-      bypass_start_end = bypass_start &+ 9
-      bypass_end = html_lower.index("\"", bypass_start_end) || -1
-      break if bypass_end == -1
-      h_param_pos = html_lower.index("-h ", bypass_start_end) || -1
-      if h_param_pos != -1 && h_param_pos < bypass_end
-        bypass = html[h_param_pos &+ 3...bypass_end].strip
+    bypass_start = html_lower.index("=\"bypass ", bypass_end)
+
+    while bypass_start
+      bypass_start_end = bypass_start + 9
+      break unless bypass_end = html_lower.index("\"", bypass_start_end)
+      h_param_pos = html_lower.index("-h ", bypass_start_end)
+      if h_param_pos && h_param_pos < bypass_end
+        bypass = html[h_param_pos + 3...bypass_end].strip
       else
         bypass = html[bypass_start_end...bypass_end].strip
       end
 
-      first_parameter_start = bypass.index(AbstractHtmlPacket::VAR_PARAM_START_CHAR) || -1
-      if first_parameter_start != -1
-        bypass = bypass[0...first_parameter_start + 1]
+      first_param_start = bypass.index(AbstractHtmlPacket::VAR_PARAM_START_CHAR)
+      if first_param_start
+        bypass = bypass[0...first_param_start + 1]
       end
 
       pc.add_html_action(scope, bypass)
-      bypass_start = html_lower.index("=\"bypass ", bypass_end) || -1
+      bypass_start = html_lower.index("=\"bypass ", bypass_end)
     end
   end
 
   def build_html_link_cache(pc, scope, html)
     html_lower = html.downcase
     link_end = 0
-    link_start = html_lower.index("=\"link ", link_end) || -1
-    # debug "build_html_link_cache"
-    while link_start != -1
-      link_start_end = link_start &+ 7
-      link_end = html_lower.index("\"", link_start_end) || -1
-      break if link_end == -1
+    link_start = html_lower.index("=\"link ", link_end)
+
+    while link_start
+      link_start_end = link_start + 7
+      break unless link_end = html_lower.index("\"", link_start_end)
       html_link = html[link_start_end...link_end].strip
       if html_link.empty?
         next
@@ -152,14 +150,14 @@ module Util
       end
 
       pc.add_html_action(scope, "link #{html_link}")
-      link_start = html_lower.index("=\"link ", link_end) || -1
+      link_start = html_lower.index("=\"link ", link_end)
     end
   end
 
 
   def build_html_action_cache(pc, scope, npc_l2id, html)
-    html = html.to_s
     raise ArgumentError.new("npc_l2id can't be negative") if npc_l2id < 0
+    html = html.to_s
     pc.set_html_action_origin_l2id scope, npc_l2id
     build_html_bypass_cache(pc, scope, html)
     build_html_link_cache(pc, scope, html)
@@ -248,7 +246,11 @@ module Util
 
         c = obj.as(L2Character)
 
-        if (c.z < npc.z - 100 && c.z > npc.z + 100) || !GeoData.can_see_target?(*c.xyz, *npc.xyz)
+        if c.z < npc.z - 100 && c.z > npc.z + 100
+          next
+        end
+
+        unless GeoData.can_see_target?(*c.xyz, *npc.xyz)
           next
         end
 
@@ -264,10 +266,10 @@ module Util
   def count_params(str : String) : Int32
     count = 0
 
-    0.upto(str.size &- 2) do |i|
+    0.upto(str.size - 2) do |i|
       c1 = str[i]
       if c1 == 'C' || c1 == 'S'
-        c2 = str[i &+ 1]
+        c2 = str[i + 1]
         if c2.number?
           count = Math.max(count, c2.to_i)
         end

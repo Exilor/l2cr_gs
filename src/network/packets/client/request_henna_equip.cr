@@ -20,7 +20,7 @@ class Packets::Incoming::RequestHennaEquip < GameClientPacket
     end
 
     unless henna = HennaData.get_henna(@symbol_id)
-      warn "Invalid henna ID #{@symbol_id} from player #{pc}."
+      warn { "Invalid henna ID #{@symbol_id} from player #{pc}." }
       action_failed
       return
     end

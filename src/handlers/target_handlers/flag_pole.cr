@@ -11,6 +11,6 @@ module TargetHandler::FlagPole
   end
 
   def target_type
-    L2TargetType::FLAGPOLE
+    TargetType::FLAGPOLE
   end
 end

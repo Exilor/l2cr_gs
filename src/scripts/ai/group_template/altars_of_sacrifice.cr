@@ -131,13 +131,13 @@ class Scripts::AltarsOfSacrifice < AbstractNpcAI
       altar_idx = get_spawn_boss_index(event)
       altar = ALTARS[altar_idx]
       begin
-        debug "Spawning boss at #{altar.@middle_point}"
+        debug { "Spawning boss at #{altar.@middle_point.xyz.join(' ')}" }
         altar.spawn_boss
         start_quest_timer(make_despawn_boss_evt(altar_idx), ALTAR_STATE_CHANGE_DELAY, nil, nil)
       rescue e
         error "Failed to spawn altar boss."
         error e
-        # let's try again to spawn it in 5 seconds
+        # Try again in 5 seconds
         start_quest_timer(event, 5000, nil, nil)
       end
     elsif despawn_boss_evt?(event)

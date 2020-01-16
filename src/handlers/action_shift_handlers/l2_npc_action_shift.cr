@@ -111,8 +111,6 @@ module ActionShiftHandler::L2NpcActionShift
       handler_class = BypassHandler["NpcViewMod"].class
       if handler_class.responds_to?(:send_npc_view)
         handler_class.send_npc_view(pc, target)
-      else
-        warn "No handler found for NpcViewMod."
       end
     end
 

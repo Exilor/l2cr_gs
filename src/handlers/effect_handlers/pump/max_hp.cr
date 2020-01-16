@@ -9,17 +9,16 @@ class EffectHandler::MaxHp < AbstractEffect
     super
 
     @type = params.get_enum("type", EffectCalculationType, EffectCalculationType::DIFF)
-    case @type
-    when EffectCalculationType::DIFF
+    if @type.diff?
       @power = params.get_f64("power", 0)
     else
-      @power = 1.0 + params.get_f64("power", 0) / 100
+      @power = 1.0 + (params.get_f64("power", 0) / 100)
     end
 
     @heal = params.get_bool("heal", false)
 
     if params.empty?
-      warn "@params must not be empty."
+      raise "@params must not be empty."
     end
   end
 
@@ -28,15 +27,16 @@ class EffectHandler::MaxHp < AbstractEffect
     char_stat = effected.stat
     amount = @power
 
-    case @type
-    when EffectCalculationType::DIFF
-      char_stat.active_char.add_stat_func(FuncAdd.new(Stats::MAX_HP, 1, self, @power))
+    if @type.diff?
+      func = FuncAdd.new(Stats::MAX_HP, 1, self, @power)
+      char_stat.active_char.add_stat_func(func)
       if @heal
         effected.current_hp += @power
       end
-    when EffectCalculationType::PER
+    else
       max_hp = effected.max_hp.to_f
-      char_stat.active_char.add_stat_func(FuncMul.new(Stats::MAX_HP, 1, self, @power))
+      func = FuncMul.new(Stats::MAX_HP, 1, self, @power)
+      char_stat.active_char.add_stat_func(func)
       if @heal
         amount = (@power - 1) * max_hp
         effected.current_hp += amount
@@ -51,7 +51,6 @@ class EffectHandler::MaxHp < AbstractEffect
   end
 
   def on_exit(info)
-    char_stat = info.effected.stat
-    char_stat.active_char.remove_stats_owner(self)
+    info.effected.stat.active_char.remove_stats_owner(self)
   end
 end

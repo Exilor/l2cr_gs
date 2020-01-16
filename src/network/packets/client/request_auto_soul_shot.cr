@@ -23,7 +23,7 @@ class Packets::Incoming::RequestAutoSoulShot < GameClientPacket
 
     if @type == 1
       if @item_id < 6535 || @item_id > 6540 # fishing shots are not auto on retail
-        if 6645 <= @item_id <= 6647 || 20332 <= @item_id <= 20334
+        if @item_id.between?(6645, 6647) || @item_id.between?(20332, 20334)
           if summon = pc.summon
             if item.etc_item!.handler_name == "BeastSoulShot"
               if summon.soulshots_per_hit > item.count
@@ -50,11 +50,12 @@ class Packets::Incoming::RequestAutoSoulShot < GameClientPacket
             pc.send_packet(SystemMessageId::NO_SERVITOR_CANNOT_AUTOMATE_USE)
           end
         else
-          if pc.active_weapon_item? != pc.fists_weapon_item? && item.template.crystal_type == pc.active_weapon_item.item_grade_s_plus
+          wep = pc.active_weapon_item
+          if wep != pc.fists_weapon_item && item.template.crystal_type == wep.not_nil!.item_grade_s_plus
             pc.add_auto_shot(@item_id)
             pc.send_packet(ExAutoSoulShot.new(@item_id, @type))
           else
-            if ((@item_id >= 2509) && (@item_id <= 2514)) || ((@item_id >= 3947) && (@item_id <= 3952)) || (@item_id == 5790) || ((@item_id >= 22072) && (@item_id <= 22081))
+            if @item_id.between?(2509, 2514) || @item_id.between?(3947, 3952) || @item_id == 5790 || @item_id.between?(22072, 22081)
               pc.send_packet(SystemMessageId::SPIRITSHOTS_GRADE_MISMATCH)
               return action_failed # custom
             else

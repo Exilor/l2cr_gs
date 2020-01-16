@@ -1,8 +1,7 @@
 class Options
-  include Loggable
-
   @funcs = [] of FuncTemplate
   @activation_skills = [] of OptionsSkillHolder
+
   property active_skill : SkillHolder?
   property passive_skill : SkillHolder?
 

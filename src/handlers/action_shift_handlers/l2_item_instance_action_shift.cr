@@ -9,8 +9,7 @@ module ActionShiftHandler::L2ItemInstanceActionShift
         raise "Expected #{item}:#{item.class} to be a L2ItemInstance"
       end
       str = String.build do |io|
-        io << "<html><body><center><font color=\"LEVEL\">Item Info</font></center><br><table border=0>"
-        io << "<tr><td>Object ID: </td><td>"
+        io << "<html><body><center><font color=\"LEVEL\">Item Info</font></center><br><table border=0><tr><td>Object ID: </td><td>"
         io << item.l2id
         io << "</td></tr><tr><td>Item ID: </td><td>"
         io << item.id

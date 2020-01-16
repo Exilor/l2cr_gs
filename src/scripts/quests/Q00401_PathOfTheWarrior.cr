@@ -203,7 +203,7 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
   end
 
   private def check_weapon(pc)
-    return false unless weapon = pc.active_weapon_instance?
+    return false unless weapon = pc.active_weapon_instance
     weapon.id == RUSTED_BRONZE_SWORD3
   end
 end

@@ -125,12 +125,12 @@ class OlympiadGameTask
       end
     # Game start, port players to arena
     when GameState::GAME_STARTED
-      if !start_game
-        @state = GameState::GAME_CANCELLED
-      else
+      if start_game
         @state = GameState::BATTLE_COUNTDOWN_FIRST
         @countdown = BATTLE_START_TIME_FIRST[0]
         delay = 5
+      else
+        @state = GameState::GAME_CANCELLED
       end
     # Battle start countdown, first part (60-10)
     when GameState::BATTLE_COUNTDOWN_FIRST

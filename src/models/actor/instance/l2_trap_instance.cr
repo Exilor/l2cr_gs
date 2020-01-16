@@ -12,6 +12,7 @@ class L2TrapInstance < L2Npc
   @trap_task : Scheduler::PeriodicTask?
   @skill : SkillHolder?
   @in_arena = false
+
   getter life_time : Int32 = 0
   getter? triggered = false
   property remaining_time : Int32 = 0
@@ -41,15 +42,11 @@ class L2TrapInstance < L2Npc
     raise "This constructor must not be called"
   end
 
-  def owner? : L2PcInstance?
+  def owner : L2PcInstance?
     @owner
   end
 
-  def owner : L2PcInstance
-    @owner.not_nil!
-  end
-
-  def acting_player? : L2PcInstance?
+  def acting_player : L2PcInstance?
     @owner
   end
 
@@ -80,7 +77,9 @@ class L2TrapInstance < L2Npc
       return true
     end
 
-    unless char && @owner
+    owner = @owner
+
+    unless char && owner
       return false
     end
 
@@ -104,8 +103,8 @@ class L2TrapInstance < L2Npc
       return true
     end
 
-    if owner.in_party? && char.in_party?
-      if owner.party.leader_l2id == char.party.leader_l2id
+    if (owner_party = owner.party) && (char_party = char.party)
+      if owner_party == char_party
         return true
       end
     end
@@ -118,17 +117,19 @@ class L2TrapInstance < L2Npc
       return false
     end
 
-    unless Skill.check_for_area_offensive_skills(self, target, skill, @in_arena)
+    unless skill.offensive_aoe_check(self, target, @in_arena)
       return false
     end
 
-    if target.player? && target.acting_player.in_observer_mode?
+    if target.is_a?(L2PcInstance) && target.in_observer_mode?
       return false
     end
 
-    if @owner && owner.in_olympiad_mode?
-      pc = target.acting_player?
-      if pc && pc.in_olympiad_mode? && pc.olympiad_side == owner.olympiad_side
+    owner = @owner
+    pc = target.acting_player
+
+    if owner && owner.in_olympiad_mode? && pc
+      if pc.in_olympiad_mode? && pc.olympiad_side == owner.olympiad_side
         return false
       end
     end
@@ -137,12 +138,11 @@ class L2TrapInstance < L2Npc
       return true
     end
 
-    if @owner
+    if owner
       if target.attackable?
         return true
       end
 
-      pc = target.acting_player?
       if pc && pc.pvp_flag == 0 && pc.karma == 0
         return false
       end
@@ -172,15 +172,15 @@ class L2TrapInstance < L2Npc
     # return nil
   end
 
-  def karma
+  def karma : Int32
     @owner.try &.karma || 0
   end
 
-  def pvp_flag
-    @owner.try &.pvp_flag || 0
+  def pvp_flag : Int8
+    @owner.try &.pvp_flag || 0i8
   end
 
-  def skill
+  def skill : Skill
     @skill.not_nil!.skill
   end
 
@@ -204,9 +204,8 @@ class L2TrapInstance < L2Npc
   end
 
   def send_damage_message(target, damage, mcrit, pcrit, miss)
-    if miss || @owner.nil?
-      return
-    end
+    return if miss
+    return unless owner = @owner
 
     if owner.in_olympiad_mode? && target.is_a?(L2PcInstance)
       if target.in_olympiad_mode?
@@ -216,7 +215,7 @@ class L2TrapInstance < L2Npc
       end
     end
 
-    if target.invul? || target.hp_blocked? && !target.npc?
+    if (target.invul? || target.hp_blocked?) && !target.npc?
       owner.send_packet(SystemMessageId::ATTACK_WAS_BLOCKED)
     else
       sm = SystemMessage.c1_done_s3_damage_to_c2
@@ -235,14 +234,16 @@ class L2TrapInstance < L2Npc
 
   def set_detected(detector : L2Character)
     if @in_arena
-      if detector.playable?
-        send_info(detector.acting_player)
+      if detector.playable? && (pc = detector.acting_player)
+        send_info(pc)
       end
 
       return
     end
 
-    if @owner && owner.pvp_flag == 0 && owner.karma == 0
+    owner = @owner
+
+    if owner && owner.pvp_flag == 0 && owner.karma == 0
       return
     end
 
@@ -250,8 +251,8 @@ class L2TrapInstance < L2Npc
 
     OnTrapAction.new(self, detector, TrapAction::DETECTED).async(self)
 
-    if detector.playable?
-      send_info(detector.acting_player)
+    if detector.playable? && (pc = detector.acting_player)
+      send_info(pc)
     end
   end
 
@@ -286,8 +287,8 @@ class L2TrapInstance < L2Npc
       @owner = nil
     end
 
-    if visible? && !dead?
-      world_region?.try &.remove_from_zones(self)
+    if visible? && alive?
+      world_region.try &.remove_from_zones(self)
       delete_me
     end
   end

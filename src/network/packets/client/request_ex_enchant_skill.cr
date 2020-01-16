@@ -30,17 +30,17 @@ class Packets::Incoming::RequestExEnchantSkill < GameClientPacket
 
     esl = EnchantSkillGroupsData.get_skill_enchantment_by_skill_id(@skill_id)
     unless esl
-      warn "No L2EnchantSkillLearn found for skill with ID #{@skill_id}."
+      warn { "No L2EnchantSkillLearn found for skill with ID #{@skill_id}." }
       return
     end
 
     unless esd = esl.get_enchant_skill_holder(@skill_lvl)
-      error "Missing EnchantSkillHolder for #{skill}."
+      error { "Missing EnchantSkillHolder for #{skill}." }
       return
     end
     old_level = pc.get_skill_level(@skill_id)
     if old_level != esl.get_min_skill_level(@skill_lvl)
-      warn "Level mismatch for enchanting #{skill}."
+      warn { "Level mismatch for enchanting #{skill}." }
       return
     end
 
@@ -64,13 +64,13 @@ class Packets::Incoming::RequestExEnchantSkill < GameClientPacket
       end
 
       check = pc.stat.remove_sp(required_sp)
-      debug "Has enough sp: #{check}."
+      debug { "Has enough sp: #{check}." }
       if Config.es_sp_book_needed && use_book
         check &= pc.destroy_item("Consume", spb.not_nil!.l2id, 1, pc, true)
       end
-      debug "Has the correct book: #{check}."
+      debug { "Has the correct book: #{check}." }
       check &= pc.destroy_item_by_item_id("Consume", Inventory::ADENA_ID, required_adena, pc, true)
-      debug "Has enough adena (#{required_adena}): #{check}."
+      debug { "Has enough adena (#{required_adena}): #{check}." }
       unless check
         pc.send_packet(SystemMessageId::YOU_DONT_HAVE_ALL_OF_THE_ITEMS_NEEDED_TO_ENCHANT_THAT_SKILL)
         return
@@ -99,7 +99,7 @@ class Packets::Incoming::RequestExEnchantSkill < GameClientPacket
       pc.send_packet(ExEnchantSkillInfoDetail.new(0, @skill_id, new_level + 1, pc))
       pc.update_shortcuts(@skill_id, new_level)
     else
-      debug "Required sp: #{required_sp}, available: #{pc.sp}."
+      debug { "Required sp: #{required_sp}, available: #{pc.sp}." }
       pc.send_packet(SystemMessageId::YOU_DONT_HAVE_ENOUGH_SP_TO_ENCHANT_THAT_SKILL)
     end
   end

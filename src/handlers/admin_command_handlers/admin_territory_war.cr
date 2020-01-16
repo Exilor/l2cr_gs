@@ -64,39 +64,32 @@ module AdminCommandHandler::AdminTerritoryWar
         if TerritoryWarManager.tw_in_progress?
           TerritoryWarManager.territory_wards.each do |ward|
             if npc = ward.npc?
-              io << "<table width=270><tr>"
-              io << "<td width=135 ALIGN=\"LEFT\">"
+              io << "<table width=270><tr><td width=135 ALIGN=\"LEFT\">"
               io << npc.name
-              io << "</td>"
-              io << "<td width=135 ALIGN=\"RIGHT\"><button value=\"TeleTo\" action=\"bypass -h admin_move_to "
+              io << "</td><td width=135 ALIGN=\"RIGHT\"><button value=\"TeleTo\" action=\"bypass -h admin_move_to "
               io << npc.x
               io << " "
               io << npc.y
               io << " "
               io << npc.z
-              io << "\" width=50 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></td>"
-              io << "</tr></table>"
+              io << "\" width=50 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></td></tr></table>"
             elsif player = ward.player?
-              io << "<table width=270><tr>"
-              io << "<td width=135 ALIGN=\"LEFT\">"
-              io << player.active_weapon_instance.item_name
+              io << "<table width=270><tr><td width=135 ALIGN=\"LEFT\">"
+              io << player.active_weapon_instance.not_nil!.item_name
               io << " - "
               io << player.name
-              io << "</td>"
-              io << "<td width=135 ALIGN=\"RIGHT\"><button value=\"TeleTo\" action=\"bypass -h admin_move_to "
+              io << "</td><td width=135 ALIGN=\"RIGHT\"><button value=\"TeleTo\" action=\"bypass -h admin_move_to "
               io << player.x
               io << " "
               io << player.y
               io << " "
               io << player.z
-              io << "\" width=50 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></td>"
-              io << "</tr></table>"
+              io << "\" width=50 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_ct1.button_df\"></td></tr></table>"
             end
           end
           io << "<br><center><button value=\"Back\" action=\"bypass -h admin_territory_war\" width=50 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></center></body></html>"
         else
-          io << "<br><br><center>The Ward List is empty!<br>TW has probably NOT started"
-          io << "<br><button value=\"Back\" action=\"bypass -h admin_territory_war\" width=50 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></center></body></html>"
+          io << "<br><br><center>The Ward List is empty!<br>TW has probably NOT started<br><button value=\"Back\" action=\"bypass -h admin_territory_war\" width=50 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></center></body></html>"
         end
       end
 

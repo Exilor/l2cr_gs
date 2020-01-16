@@ -220,11 +220,11 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       return super
     end
 
-    unless clan = killer.clan?
+    unless clan = killer.clan
       return super
     end
 
-    unless leader = clan.leader.player_instance?
+    unless leader = clan.leader.player_instance
       return super
     end
 
@@ -251,7 +251,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       if leader_qs.memo_state < 8511 || leader_qs.memo_state >= 8500
         leader_qs.memo_state = leader_qs.memo_state + 1
 
-        if leader_qs.memo_state >= 8505 && rand(100) < 50
+        if leader_qs.memo_state >= 8505 && Rnd.rand(100) < 50
           leader_qs.memo_state = 8500
           add_spawn(GRAVE_KEYMASTER, npc, true, 0, false)
         elsif leader_qs.memo_state >= 8510
@@ -261,7 +261,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       end
     when SPITEFUL_SOUL_LEADER
       if leader_qs.memo_state == 5000
-        rnd = rand(100)
+        rnd = Rnd.rand(100)
         if rnd < 10
           give_item_randomly(leader, SPITEFUL_SOUL_ENERGY, 1, 10, 1, false)
         elsif rnd < 60
@@ -293,7 +293,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       if npc.id == SIR_GUSTAV_ATHEBALDT
         if lqs
           if pc.clan_leader?
-            if clan = pc.clan?
+            if clan = pc.clan
               if clan.level < 4
                 html = "30760-01.html"
               elsif clan.level >= 5
@@ -513,8 +513,8 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
   end
 
   private def get_leader_quest_state(pc, quest)
-    if clan = pc.clan?
-      if leader = clan.leader.player_instance?
+    if clan = pc.clan
+      if leader = clan.leader.player_instance
         leader.get_quest_state(quest)
       end
     end

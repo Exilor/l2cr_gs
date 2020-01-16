@@ -8,6 +8,7 @@ class L2MonsterInstance < L2Attackable
   @master : L2MonsterInstance?
   @minion_list : MinionList?
   @maintenance_task : Scheduler::PeriodicTask?
+
   setter enable_minions : Bool = true
 
   def initialize(template : L2NpcTemplate)
@@ -98,7 +99,7 @@ class L2MonsterInstance < L2Attackable
   end
 
   def leader : L2MonsterInstance
-    @master.not_nil!
+    @master || raise "This #{self.class} has no master"
   end
 
   def leader=(leader : L2MonsterInstance?)
@@ -118,10 +119,14 @@ class L2MonsterInstance < L2Attackable
   end
 
   def walker? : Bool
-    leader? ? leader.walker? : super
+    (leader = leader?) ? leader.walker? : super
   end
 
   def give_raid_curse? : Bool
-    raid_minion? && leader? ? leader.give_raid_curse? : super
+    if raid_minion? && (leader = leader?)
+      return leader.give_raid_curse?
+    end
+
+    super
   end
 end

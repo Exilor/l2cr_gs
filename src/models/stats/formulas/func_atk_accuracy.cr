@@ -3,10 +3,9 @@ class FuncAtkAccuracy < AbstractFunction
     super(Stats::ACCURACY_COMBAT)
   end
 
-  def calc(effector, effected, skill, init_val)
+  def calc(effector, effected, skill, value)
     level = effector.level
-
-    value = init_val + (Math.sqrt(effector.dex * 6)) + level
+    value += (Math.sqrt(effector.dex) * 6) + level
 
     if level > 77
       value += level - 76

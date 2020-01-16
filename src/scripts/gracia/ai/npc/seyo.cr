@@ -38,7 +38,7 @@ class Scripts::Seyo < AbstractNpcAI
       else
         npc.script_value = 1
         take_items(pc, STONE_FRAGMENT, 1)
-        if rand(100) == 0
+        if Rnd.rand(100) == 0
           give_items(pc, STONE_FRAGMENT, 100)
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::AMAZING_S1_TOOK_100_OF_THESE_SOUL_STONE_FRAGMENTS_WHAT_A_COMPLETE_SWINDLER, pc.name)
         else
@@ -55,14 +55,14 @@ class Scripts::Seyo < AbstractNpcAI
       else
         npc.script_value = 1
         take_items(pc, STONE_FRAGMENT, 5)
-        chance = rand(100)
+        chance = Rnd.rand(100)
         if chance < 20
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::AHEM_S1_HAS_NO_LUCK_AT_ALL_TRY_PRAYING, pc.name)
         elsif chance < 80
           give_items(pc, STONE_FRAGMENT, 1)
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::ITS_BETTER_THAN_LOSING_IT_ALL_RIGHT_OR_DOES_THIS_FEEL_WORSE)
         else
-          item_count = rand(10..16)
+          item_count = Rnd.rand(10..16)
           give_items(pc, STONE_FRAGMENT, item_count)
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::S1_PULLED_ONE_WITH_S2_DIGITS_LUCKY_NOT_BAD, pc.name, item_count.to_s)
         end
@@ -77,7 +77,7 @@ class Scripts::Seyo < AbstractNpcAI
       else
         npc.script_value = 1
         take_items(pc, STONE_FRAGMENT, 20)
-        chance = rand(10000)
+        chance = Rnd.rand(10000)
         if chance == 0
           give_items(pc, STONE_FRAGMENT, 10000)
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::AH_ITS_OVER_WHAT_KIND_OF_GUY_IS_THAT_DAMN_FINE_YOU_S1_TAKE_IT_AND_GET_OUTTA_HERE, pc.name)
@@ -85,7 +85,7 @@ class Scripts::Seyo < AbstractNpcAI
           give_items(pc, STONE_FRAGMENT, 1)
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::YOU_DONT_FEEL_BAD_RIGHT_ARE_YOU_SAD_BUT_DONT_CRY)
         else
-          give_items(pc, STONE_FRAGMENT, rand(1..100))
+          give_items(pc, STONE_FRAGMENT, Rnd.rand(1..100))
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::A_BIG_PIECE_IS_MADE_UP_OF_LITTLE_PIECES_SO_HERES_A_LITTLE_PIECE)
         end
         start_quest_timer("TRICKERY_TIMER", 5000, npc, nil)

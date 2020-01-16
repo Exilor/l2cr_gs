@@ -8,7 +8,7 @@ class Packets::Incoming::RequestOustPledgeMember < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    unless clan = pc.clan?
+    unless clan = pc.clan
       pc.send_packet(SystemMessageId::YOU_ARE_NOT_A_CLAN_MEMBER)
       return
     end
@@ -24,11 +24,11 @@ class Packets::Incoming::RequestOustPledgeMember < GameClientPacket
     end
 
     unless member = clan.get_clan_member(@target)
-      warn "Target #{@target.inspect} is not a member of clan #{clan.name}."
+      warn { "Target #{@target.inspect} is not a member of clan #{clan.name}." }
       return
     end
 
-    if member.online? && member.player_instance.in_combat?
+    if member.online? && member.player_instance.try &.in_combat?
       pc.send_packet(SystemMessageId::CLAN_MEMBER_CANNOT_BE_DISMISSED_DURING_COMBAT)
       return
     end
@@ -48,7 +48,7 @@ class Packets::Incoming::RequestOustPledgeMember < GameClientPacket
     clan.broadcast_to_online_members(PledgeShowMemberListDelete.new(@target))
 
     if member.online?
-      member.player_instance.send_packet(SystemMessageId::CLAN_MEMBERSHIP_TERMINATED)
+      member.player_instance.try &.send_packet(SystemMessageId::CLAN_MEMBERSHIP_TERMINATED)
     end
   end
 end

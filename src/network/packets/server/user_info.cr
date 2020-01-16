@@ -17,8 +17,8 @@ class Packets::Outgoing::UserInfo < GameServerPacket
       @relation |= 0x80
     end
 
-    if @pc.in_airship? && @pc.airship!.captain?(@pc)
-      @airship_helm = @pc.airship!.helm_item_id
+    if (airship = @pc.airship) && airship.captain?(@pc)
+      @airship_helm = airship.helm_item_id
     else
       @airship_helm = 0
     end
@@ -39,7 +39,7 @@ class Packets::Outgoing::UserInfo < GameServerPacket
     @fly_walk_speed  = @pc.flying? ? @walk_speed : 0
   end
 
-  def write_impl
+  private def write_impl
     c 0x32
 
     l @pc
@@ -68,19 +68,19 @@ class Packets::Outgoing::UserInfo < GameServerPacket
     d @pc.current_load
     d @pc.max_load
 
-    d @pc.active_weapon_item? ? 40 : 20
+    d @pc.active_weapon_item ? 40 : 20
 
     inv = @pc.inventory
 
-    PAPERDOLL_ORDER.each do |slot|
+    paperdoll_order do |slot|
       d inv.get_paperdoll_l2id(slot)
     end
 
-    PAPERDOLL_ORDER.each do |slot|
+    paperdoll_order do |slot|
       d inv.get_paperdoll_item_display_id(slot)
     end
 
-    PAPERDOLL_ORDER.each do |slot|
+    paperdoll_order do |slot|
       d inv.get_paperdoll_augmentation_id(slot)
     end
 
@@ -170,7 +170,7 @@ class Packets::Outgoing::UserInfo < GameServerPacket
     d @pc.clan_crest_large_id
 
     c @pc.noble? ? 1 : 0
-    c @pc.hero? ? 1 : 0
+    c @pc.hero? || (@pc.gm? && Config.gm_hero_aura) ? 1 : 0
     c @pc.fishing? ? 1 : 0
 
     d @pc.fish_x

@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExReplyDominionInfo < GameServerPacket
   static_packet
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x92
 
@@ -9,7 +9,7 @@ class Packets::Outgoing::ExReplyDominionInfo < GameServerPacket
     d territory_list.size
     territory_list.each do |t|
       d t.territory_id
-      s CastleManager.get_castle_by_id!(t.castle_id).name.downcase + "_dominion"
+      s CastleManager.get_castle_by_id(t.castle_id).not_nil!.name.downcase + "_dominion"
       s t.owner_clan.name
       d t.owned_ward_ids.size
       t.owned_ward_ids.each do |i|

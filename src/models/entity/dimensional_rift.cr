@@ -10,6 +10,7 @@ class DimensionalRift
   @has_jumped = false
   @dead_players = Concurrent::Array(L2PcInstance).new
   @revived_in_waiting_room = Concurrent::Array(L2PcInstance).new
+
   getter type, current_room
   property teleport_timer : TaskGroup?
   property teleport_timer_task : Scheduler::DelayedTask?
@@ -132,8 +133,8 @@ class DimensionalRift
   end
 
   def party_member_exited(pc : L2PcInstance)
-    @dead_players.delete(pc)
-    @revived_in_waiting_room.delete(pc)
+    @dead_players.delete_first(pc)
+    @revived_in_waiting_room.delete_first(pc)
 
     if @party.size < Config.rift_min_party_size || @party.size == 1
       @party.each { |m| teleport_to_waiting_room(m) }
@@ -142,11 +143,12 @@ class DimensionalRift
   end
 
   def manual_teleport(pc : L2PcInstance, npc : L2Npc)
-    if !pc.in_party? || !pc.party.in_dimensional_rift?
+    party = pc.party
+    if party.nil? || !party.in_dimensional_rift?
       return
     end
 
-    if pc.l2id != pc.party.leader_l2id
+    if pc.l2id != party.leader_l2id
       DimensionalRiftManager.show_html_file(pc, "data/html/seven_signs/rift/NotPartyLeader.htm", npc)
       return
     end
@@ -172,11 +174,12 @@ class DimensionalRift
   end
 
   def manual_exit_rift(pc : L2PcInstance, npc : L2Npc)
-    if !pc.in_party? || !pc.party.in_dimensional_rift?
+    party = pc.party
+    if party.nil? || party.in_dimensional_rift?
       return
     end
 
-    if pc.l2id != pc.party.leader_l2id
+    if pc.l2id != party.leader_l2id
       DimensionalRiftManager.show_html_file(pc, "data/html/seven_signs/rift/NotPartyLeader.htm", npc)
       return
     end
@@ -248,7 +251,7 @@ class DimensionalRift
   end
 
   def member_resurrected(pc : L2PcInstance)
-    @dead_players.delete(pc)
+    @dead_players.delete_first(pc)
   end
 
   def used_teleport(pc : L2PcInstance)

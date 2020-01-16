@@ -64,9 +64,7 @@ class L2SepulcherNpcInstance < L2Npc
     end
 
     if self != pc.target
-      if Config.debug
-        debug "New target selected: #{l2id}."
-      end
+      debug { "New target selected: #{l2id}." }
 
       pc.target = self
     elsif interact
@@ -110,7 +108,7 @@ class L2SepulcherNpcInstance < L2Npc
     when 31455..31467
       self.invul = false
       reduce_current_hp(max_hp + 1.0, pc, nil)
-      if party = pc.party?
+      if party = pc.party
         unless party.leader?(pc)
           pc = party.leader
         end
@@ -170,7 +168,7 @@ class L2SepulcherNpcInstance < L2Npc
         end
 
         open_next_door(id)
-        if party = pc.party?
+        if party = pc.party
           party.members.each do |m|
             if it = m.inventory.get_item_by_item_id(HALLS_KEY)
               m.destroy_item_by_item_id("Quest", HALLS_KEY, it.count, m, true)

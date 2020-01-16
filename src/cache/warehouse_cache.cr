@@ -2,10 +2,11 @@ module WarehouseCache
   extend self
 
   private CACHE = Concurrent::Map(L2PcInstance, Int64).new
-  @@CACHE_TIME = 0
+
+  @@cache_time = 0
 
   def load
-    @@CACHE_TIME = Config.warehouse_cache_time * 60
+    @@cache_time = Config.warehouse_cache_time * 60
     ThreadPoolManager.schedule_ai_at_fixed_rate(self, 120_000, 60_000)
   end
 
@@ -19,7 +20,7 @@ module WarehouseCache
 
   def call
     CACHE.each do |pc, time|
-      if Time.ms - time > @@CACHE_TIME
+      if Time.ms - time > @@cache_time
         pc.clear_warehouse
         CACHE.delete(pc)
       end

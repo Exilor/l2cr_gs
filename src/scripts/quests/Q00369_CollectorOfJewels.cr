@@ -59,7 +59,7 @@ class Scripts::Q00369_CollectorOfJewels < Quest
 
   def on_kill(npc, pc, is_summon)
     item = MOBS_DROP_CHANCES[npc.id]
-    if rand(100) < item.chance
+    if Rnd.rand(100) < item.chance
       if winner = get_random_party_member(pc, npc)
         st = get_quest_state!(winner, false)
         item_count = st.memo_state?(1) ? 50 : 200

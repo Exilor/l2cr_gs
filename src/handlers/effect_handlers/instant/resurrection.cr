@@ -6,11 +6,11 @@ class EffectHandler::Resurrection < AbstractEffect
     @power = params.get_i32("power", 0)
   end
 
-  def effect_type
-    L2EffectType::RESURRECTION
+  def effect_type : EffectType
+    EffectType::RESURRECTION
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -18,8 +18,8 @@ class EffectHandler::Resurrection < AbstractEffect
     target, caster = info.effected, info.effector
 
     if caster.player?
-      if target.acting_player?
-        target.acting_player.revive_request(caster.acting_player, info.skill, target.pet?, @power, 0)
+      if pc = target.acting_player
+        pc.revive_request(caster.acting_player.not_nil!, info.skill, target.pet?, @power, 0)
       end
     else
       DecayTaskManager.cancel(target)

@@ -1,7 +1,7 @@
 class Packets::Outgoing::SiegeDefenderList < GameServerPacket
   initializer castle : Castle
 
-  def write_impl
+  private def write_impl
     c 0xcb
 
     d @castle.residence_id
@@ -46,7 +46,7 @@ class Packets::Outgoing::SiegeDefenderList < GameServerPacket
     end
 
     @castle.siege.defender_waiting_clans.each do |sc|
-      clan = ClanTable.get_clan!(sc.clan_id)
+      clan = ClanTable.get_clan(sc.clan_id).not_nil!
       d clan.id
       s clan.name
       s clan.leader_name

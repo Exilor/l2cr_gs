@@ -7,7 +7,7 @@ class Packets::Outgoing::ExUseSharedGroupItem < GameServerPacket
     @total_time = total_time // 1000
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x4a
 

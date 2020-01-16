@@ -61,8 +61,8 @@ class Scripts::Q00365_DevilsLegacy < Quest
       elsif pc.adena < 600
         html = "30092-03.html"
       else
-        if rand(100) < 80
-          chance = rand(100)
+        if Rnd.rand(100) < 80
+          chance = Rnd.rand(100)
           if chance < 1
             item_id = ENCHANT_WEAPON_D
           elsif chance < 4
@@ -76,7 +76,7 @@ class Scripts::Q00365_DevilsLegacy < Quest
           end
           html = "30092-05.html"
         else
-          chance = rand(1000)
+          chance = Rnd.rand(1000)
           if chance < 10
             item_id = ENCHANT_WEAPON_C
           elsif chance < 40

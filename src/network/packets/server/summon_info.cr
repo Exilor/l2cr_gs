@@ -20,7 +20,7 @@ class Packets::Outgoing::SummonInfo < Packets::Outgoing::AbstractNpcInfo
     self.invisible = char.invisible?
   end
 
-  def write_impl
+  private def write_impl
     gm_see_invis = false
 
     if invisible?
@@ -76,7 +76,11 @@ class Packets::Outgoing::SummonInfo < Packets::Outgoing::AbstractNpcInfo
     d 0x01
     d sum.pvp_flag
     d sum.karma
-    d gm_see_invis ? sum.abnormal_visual_effects | AbnormalVisualEffect::STEALTH.mask : sum.abnormal_visual_effects
+    if gm_see_invis
+      d sum.abnormal_visual_effects | AbnormalVisualEffect::STEALTH.mask
+    else
+      d sum.abnormal_visual_effects
+    end
     d 0
     d 0
     d 0

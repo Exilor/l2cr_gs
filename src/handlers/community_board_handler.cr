@@ -7,9 +7,9 @@ module CommunityBoardHandler
 
   def load
     {% for const in @type.constants %}
-      const = {{const.id}}
-      if const.is_a?(IParseBoardHandler)
-        register(const)
+      obj = {{const.id}}
+      if obj.is_a?(IParseBoardHandler)
+        register(obj)
       end
     {% end %}
   end

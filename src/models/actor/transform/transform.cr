@@ -1,10 +1,9 @@
 require "./transform_type"
 
 class Transform
-  # include Identifiable
-
   @male_template : TransformTemplate?
   @female_template : TransformTemplate?
+
   getter id : Int32
   getter display_id : Int32
   getter type : TransformType

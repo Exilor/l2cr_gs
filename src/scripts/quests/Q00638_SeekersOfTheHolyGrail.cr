@@ -109,7 +109,7 @@ class Scripts::Q00638_SeekersOfTheHolyGrail < Quest
     when "reward"
       if qs.started?
         if get_quest_items_count(pc, TOTEM) >= TOTEMS_REQUIRED_COUNT
-          if rand(100) < 80
+          if Rnd.rand(100) < 80
             if Rnd.bool
               reward_items(pc, SCROLL_ENCHANT_A_S, 1)
             else
@@ -137,7 +137,7 @@ class Scripts::Q00638_SeekersOfTheHolyGrail < Quest
     if qs = get_random_party_member_state(killer, -1, 3, npc)
       info = MOBS_DROP_CHANCES[npc.id]
       if give_item_randomly(qs.player, npc, info.id, 1, 0, info.chance, true)
-        if info.key_id > 0 && rand(100) < info.key_chance
+        if info.key_id > 0 && Rnd.rand(100) < info.key_chance
           npc.drop_item(qs.player, info.key_id, info.key_count.to_i64)
         end
       end

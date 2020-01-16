@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExCubeGameChangePoints < GameServerPacket
   initializer time_left : Int32, blue_points : Int32, red_points : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x98
 

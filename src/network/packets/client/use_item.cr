@@ -12,7 +12,6 @@ class Packets::Incoming::UseItem < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    # debug "#{pc} requests to use item with ID #{@l2id}."
 
     unless flood_protectors.use_item.try_perform_action("use item")
       debug "Flood detected."
@@ -64,8 +63,7 @@ class Packets::Incoming::UseItem < GameClientPacket
     if !Config.alt_game_karma_player_can_teleport && pc.karma > 0
       item.template.skills.try &.each do |holder|
         if skill = holder.skill?
-          if skill.has_effect_type?(L2EffectType::TELEPORT)
-            debug { "#{pc.name} can't use #{item.template.name} because it's a teleport item and he has karma."}
+          if skill.has_effect_type?(EffectType::TELEPORT)
             return
           end
         end
@@ -105,7 +103,7 @@ class Packets::Incoming::UseItem < GameClientPacket
 
       case item.body_part
       when L2Item::SLOT_LR_HAND, L2Item::SLOT_L_HAND, L2Item::SLOT_R_HAND
-        if pc.active_weapon_item? && pc.active_weapon_item.id == 9819
+        if (wpn = pc.active_weapon_item) && wpn.id == 9819
           send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
           return
         end
@@ -144,13 +142,11 @@ class Packets::Incoming::UseItem < GameClientPacket
         end
       when L2Item::SLOT_CHEST, L2Item::SLOT_BACK, L2Item::SLOT_GLOVES, L2Item::SLOT_FEET, L2Item::SLOT_HEAD, L2Item::SLOT_FULL_ARMOR, L2Item::SLOT_LEGS
         if pc.race.kamael? && item.template.item_type == ArmorType::HEAVY
-          debug { "#{pc.name} is Kamael and cannot equip heavy armor." }
           pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
           return
         end
       when L2Item::SLOT_DECO
         if !item.equipped? && pc.inventory.talisman_slots == 0
-          debug { "#{pc.name} has no talisman slots." }
           pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
           return
         end
@@ -160,19 +156,20 @@ class Packets::Incoming::UseItem < GameClientPacket
         set_next_action(pc, item)
       elsif pc.attacking_now?
         time = Time.ns_to_ms(pc.attack_end_time - Time.ns)
-        debug { "Using equippable item in #{time} ms." }
         task = ScheduleEquip.new(pc, item)
         ThreadPoolManager.schedule_general(task, time)
       else
         pc.use_equippable_item(item, true)
       end
     else
-      weapon_item = pc.active_weapon_item?
-      if weapon_item && weapon_item.item_type == WeaponType::FISHINGROD && (((@item_id >= 6519) && (@item_id <= 6527)) || ((@item_id >= 7610) && (@item_id <= 7613)) || ((@item_id >= 7807) && (@item_id <= 7809)) || ((@item_id >= 8484) && (@item_id <= 8486)) || ((@item_id >= 8505) && (@item_id <= 8513)))
-        pc.inventory.lhand_slot = item
-        pc.broadcast_user_info
-        send_packet(ItemList.new(pc, false))
-        return
+      weapon_item = pc.active_weapon_item
+      if weapon_item && weapon_item.item_type == WeaponType::FISHINGROD
+        if @item_id.between?(6519, 6527) || @item_id.between?(7610, 7613) || @item_id.between?(7807, 7809) || @item_id.between?(8484, 8486) || @item_id.between?(8505, 8513)
+          pc.inventory.lhand_slot = item
+          pc.broadcast_user_info
+          send_packet(ItemList.new(pc, false))
+          return
+        end
       end
 
       return unless handler = ItemHandler[item.template.as?(L2EtcItem)]
@@ -235,7 +232,7 @@ class Packets::Incoming::UseItem < GameClientPacket
   private def custom_item_bypass(pc, item) : Bool
     return false unless pc.gm?
     if ls = Packets::Incoming::AbstractRefinePacket::LIFE_STONES[item.id]?
-      return true unless wpn = pc.active_weapon_instance?
+      return true unless wpn = pc.active_weapon_instance
 
       unequipped = pc.inventory.unequip_item_in_slot_and_record(wpn.location_slot)
       iu = InventoryUpdate.new

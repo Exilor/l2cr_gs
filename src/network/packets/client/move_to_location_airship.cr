@@ -21,7 +21,7 @@ class Packets::Incoming::MoveToLocationAirship < GameClientPacket
 
     z = ship.z
 
-    return if 0 <= @command <= 3 && !ship.can_be_controlled?
+    return if @command.between?(0, 3) && !ship.can_be_controlled?
 
     case @command
     when 0

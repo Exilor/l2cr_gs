@@ -2,8 +2,7 @@ require "../../../enums/abnormal_type"
 
 class Condition
   class PlayerCheckAbnormal < Condition
-    def initialize(@type : AbnormalType, @level : Int32 = -1)
-    end
+    initializer type : AbnormalType, level : Int32 = -1
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       info = effector.effect_list.get_buff_info_by_abnormal_type(@type)

@@ -21,7 +21,7 @@ class Scripts::NornilsGardenQuest < AbstractInstance
 
   def check_conditions(pc)
     qs = pc.get_quest_state(Scripts::Q00236_SeedsOfChaos.simple_name)
-    !!qs && qs.memo_state >= 40 && qs.memo_state <= 45
+    !!qs && qs.memo_state.between?(40, 45)
   end
 
   def on_adv_event(event, npc, player)

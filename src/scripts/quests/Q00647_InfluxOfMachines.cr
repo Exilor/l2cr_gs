@@ -55,7 +55,7 @@ class Scripts::Q00647_InfluxOfMachines < Quest
       html = event
     when "32069-06.html"
       if st.cond?(2) && st.get_quest_items_count(BROKEN_GOLEM_FRAGMENT) >= FRAGMENT_COUNT
-        st.give_items(RECIPES.sample, 1)
+        st.give_items(RECIPES.sample(random: Rnd), 1)
         st.exit_quest(true, true)
         html = event
       else
@@ -69,7 +69,7 @@ class Scripts::Q00647_InfluxOfMachines < Quest
   def on_kill(npc, pc, is_summon)
     if member = get_random_party_member(pc, 1)
       st = get_quest_state!(member, false)
-      if st.cond?(1) && rand(1000) < MOBS[npc.id]
+      if st.cond?(1) && Rnd.rand(1000) < MOBS[npc.id]
         st.give_items(BROKEN_GOLEM_FRAGMENT, 1)
         if st.get_quest_items_count(BROKEN_GOLEM_FRAGMENT) >= FRAGMENT_COUNT
           st.set_cond(2, true)

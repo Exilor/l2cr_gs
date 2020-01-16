@@ -7,7 +7,7 @@ module TargetHandler::CorpseClan
     target_list = nil
 
     if char.playable?
-      unless pc = char.acting_player?
+      unless pc = char.acting_player
         return EMPTY_TARGET_LIST
       end
 
@@ -15,14 +15,14 @@ module TargetHandler::CorpseClan
         return [pc] of L2Object
       end
 
-      clan = pc.clan?
+      clan = pc.clan
 
       if clan
         radius = skill.affect_range
         max_targets = skill.affect_limit
 
         clan.members.each do |m|
-          next unless obj = m.player_instance?
+          next unless obj = m.player_instance
 
           next if obj == pc
 
@@ -30,11 +30,8 @@ module TargetHandler::CorpseClan
             if pc.duel_id != obj.duel_id
               next
             end
-
-            if pc.in_party? && obj.in_party?
-              if pc.party.leader_l2id != obj.party.leader_l2id
-                next
-              end
+            if pc.party && obj.party && pc.party != obj.party
+              next
             end
           end
 
@@ -46,7 +43,7 @@ module TargetHandler::CorpseClan
           #   next
           # end
 
-          unless Skill.add_character(char, obj, radius, false)
+          unless add_character(char, obj, radius, false)
             next
           end
 
@@ -98,6 +95,6 @@ module TargetHandler::CorpseClan
   end
 
   def target_type
-    L2TargetType::CORPSE_CLAN
+    TargetType::CORPSE_CLAN
   end
 end

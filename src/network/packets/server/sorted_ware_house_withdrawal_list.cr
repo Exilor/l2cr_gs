@@ -37,7 +37,7 @@ class Packets::Outgoing::SortedWareHouseWithdrawalList < GameServerPacket
     debug "Not implemented." # it's very complicated and i suspect custom
   end
 
-  def write_impl
+  private def write_impl
     c 0x1f
   end
 

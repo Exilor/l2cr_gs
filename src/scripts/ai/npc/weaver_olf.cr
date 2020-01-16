@@ -144,7 +144,7 @@ class Scripts::WeaverOlf < AbstractNpcAI
         if pc.adena > price
           take_items(pc, Inventory::ADENA_ID, price)
           take_items(pc, item_ids[0], 1)
-          rand = rand(200)
+          rand = Rnd.rand(200)
           if rand <= CHANCES[0]
             give_items(pc, item_ids[1], 1)
           elsif rand <= CHANCES[1]

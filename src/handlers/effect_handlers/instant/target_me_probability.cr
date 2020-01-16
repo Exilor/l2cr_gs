@@ -6,7 +6,7 @@ class EffectHandler::TargetMeProbability < AbstractEffect
     @chance = params.get_i32("chance", 100)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -19,7 +19,7 @@ class EffectHandler::TargetMeProbability < AbstractEffect
 
     return unless effected.playable?
     return if effected.target == effector
-    return unless effector = effector.acting_player?
+    return unless effector = effector.acting_player
 
     if effector.check_pvp_skill(effected, info.skill)
       effected.target = info.effector

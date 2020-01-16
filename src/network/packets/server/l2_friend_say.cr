@@ -1,7 +1,7 @@
 class Packets::Outgoing::L2FriendSay < GameServerPacket
   initializer sender : String, receiver : String, message : String
 
-  def write_impl
+  private def write_impl
     c 0x78
 
     d 0 # unk

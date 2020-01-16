@@ -28,16 +28,17 @@ class Packets::Outgoing::Attack < GameServerPacket
   end
 
   private def write_hit(hit)
+    return unless hit
     d hit.target_id
     d hit.damage
     c hit.flags
   end
 
-  def write_impl
+  private def write_impl
     c 0x33
 
     d @attacker_id
-    write_hit(@single_hit.not_nil!)
+    write_hit(@single_hit)
     l @attacker_loc
 
     if others = @other_hits
@@ -56,9 +57,7 @@ class Packets::Outgoing::Attack < GameServerPacket
     private HITFLAG_SHLD  = 0x40
     private HITFLAG_MISS  = 0x80
 
-    getter damage
-    getter flags : Int32
-    getter target_id : Int32
+    getter damage, flags : Int32, target_id : Int32
 
     def initialize(target : L2Object, @damage : Int32, miss : Bool, crit : Bool, shld : Int, soulshot : Bool, ss_grade : Int)
       @target_id = target.l2id

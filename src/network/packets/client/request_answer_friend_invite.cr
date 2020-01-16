@@ -17,18 +17,7 @@ class Packets::Incoming::RequestAnswerFriendInvite < GameClientPacket
     end
 
     if @response == 1
-      begin
-        sql = "INSERT INTO character_friends (charId, friendId) VALUES (?, ?), (?, ?)"
-        GameDB.exec(
-          sql,
-          requestor.l2id,
-          pc.l2id,
-          pc.l2id,
-          requestor.l2id
-        )
-      rescue e
-        error e
-      end
+      GameDB.friend.insert(pc, requestor)
 
       sm = SystemMessageId::YOU_HAVE_SUCCEEDED_INVITING_FRIEND
       requestor.send_packet(sm)

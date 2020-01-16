@@ -8,7 +8,8 @@ module TargetHandler::BehindArea
       return EMPTY_TARGET_LIST
     end
 
-    if (((target == char) || target.looks_dead?) && (skill.cast_range >= 0)) || (!(target.attackable? || target.playable?))
+    if ((target == char || target.looks_dead?) && skill.cast_range >= 0) ||
+       !(target.attackable? || target.playable?)
       char.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
       return EMPTY_TARGET_LIST
     end
@@ -18,7 +19,7 @@ module TargetHandler::BehindArea
     target_list = nil
 
     if skill.cast_range >= 0
-      if !Skill.check_for_area_offensive_skills(char, target, skill, src_in_arena)
+      unless skill.offensive_aoe_check(char, target, src_in_arena)
         return EMPTY_TARGET_LIST
       end
 
@@ -44,7 +45,7 @@ module TargetHandler::BehindArea
       if Util.in_range?(skill.affect_range, origin, obj, true)
         next unless obj.behind?(char)
 
-        if !Skill.check_for_area_offensive_skills(char, obj, skill, src_in_arena)
+        unless skill.offensive_aoe_check(char, obj, src_in_arena)
           next
         end
 
@@ -61,6 +62,6 @@ module TargetHandler::BehindArea
   end
 
   def target_type
-    L2TargetType::BEHIND_AREA
+    TargetType::BEHIND_AREA
   end
 end

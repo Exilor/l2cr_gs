@@ -45,12 +45,7 @@ class Couple
   def marry
     sql = "UPDATE mods_wedding set married = ?, weddingDate = ? where id = ?"
     @wedding_date.ms = Time.ms
-    GameDB.exec(
-      sql,
-      true,
-      @wedding_date.ms,
-      @id
-    )
+    GameDB.exec(sql, true, @wedding_date.ms, @id)
     @married = true
   rescue e
     error e

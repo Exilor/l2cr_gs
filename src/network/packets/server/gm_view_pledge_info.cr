@@ -1,7 +1,7 @@
 class Packets::Outgoing::GMViewPledgeInfo < GameServerPacket
   initializer clan : L2Clan, pc : L2PcInstance
 
-  def write_impl
+  private def write_impl
     c 0x96
 
     s @pc.name

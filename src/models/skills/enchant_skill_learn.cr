@@ -2,6 +2,7 @@ struct EnchantSkillLearn
   include Loggable
 
   @enchant_routes = {} of Int32 => Int32
+
   getter_initializer id : Int32, base_level : Int32
 
   def add_new_enchant_route(route : Int32, group : Int32)
@@ -45,7 +46,7 @@ struct EnchantSkillLearn
     return if enchant_type < 1
     return unless tmp = @enchant_routes[enchant_type]?
     unless group = EnchantSkillGroupsData.get_enchant_skill_group_by_id(tmp)
-      warn "EnchantSkillLearn: Missing group #{enchant_type}"
+      warn { "EnchantSkillLearn: Missing group #{enchant_type}" }
       return
     end
     index = get_enchant_index(level)

@@ -20,7 +20,7 @@ class PcRefund < ItemContainer
 
     begin
       if size > 12
-        if removed_item = @items.shift
+        if removed_item = @items.shift?
           ItemTable.destroy_item("ClearRefund", removed_item, owner, nil)
           removed_item.update_database(true)
         end

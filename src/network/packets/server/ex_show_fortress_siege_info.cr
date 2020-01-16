@@ -13,7 +13,7 @@ class Packets::Outgoing::ExShowFortressSiegeInfo < GameServerPacket
     @csize2 = fort.siege.commanders.size
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x17
 

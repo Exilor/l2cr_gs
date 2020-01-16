@@ -1,2 +1,2 @@
-record PageResult, pages : Int32, pager_template : Array(String),
-  body_template : Array(String)
+record PageResult, pages : Int32, pager_template : String::Builder,
+  body_template : String::Builder

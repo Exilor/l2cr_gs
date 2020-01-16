@@ -9,7 +9,7 @@ class EffectHandler::Mp < AbstractEffect
     @mode = params.get_enum("mode", EffectCalculationType, EffectCalculationType::DIFF)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

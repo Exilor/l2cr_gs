@@ -8,28 +8,27 @@ module TargetHandler::Party
 
     radius = skill.affect_range
 
-    if char.summon?
-      pc = char.acting_player
-      if Skill.add_character(char, pc, radius, false)
+    if char.is_a?(L2Summon)
+      pc = char.owner
+      if add_character(char, pc, radius, false)
         target_list << pc
       end
-    elsif char.player?
-      pc = char.acting_player
-      if Skill.add_summon(char, pc, radius, false)
-        target_list << pc.summon!
+    elsif pc = char.as?(L2PcInstance)
+      if smn = add_summon(char, pc, radius, false)
+        target_list << smn
       end
     end
 
-    if char.in_party?
-      char.party.each do |m|
+    if party = char.party
+      party.each do |m|
         next if m == pc
 
-        if Skill.add_character(char, m, radius, false)
+        if add_character(char, m, radius, false)
           target_list << m
         end
 
-        if Skill.add_summon(char, m, radius, false)
-          target_list << m.summon!
+        if smn = add_summon(char, m, radius, false)
+          target_list << smn
         end
       end
     end
@@ -38,6 +37,6 @@ module TargetHandler::Party
   end
 
   def target_type
-    L2TargetType::PARTY
+    TargetType::PARTY
   end
 end

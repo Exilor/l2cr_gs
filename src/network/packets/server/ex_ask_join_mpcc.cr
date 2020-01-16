@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExAskJoinMPCC < GameServerPacket
   initializer requestor_name : String
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x1a
 

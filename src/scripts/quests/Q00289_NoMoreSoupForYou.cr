@@ -59,8 +59,8 @@ class Scripts::Q00289_NoMoreSoupForYou < Quest
       return
     end
 
-    b = rand(18)
-    c = rand(7)
+    b = Rnd.rand(18)
+    c = Rnd.rand(7)
     html = event
 
     npc = npc.not_nil!

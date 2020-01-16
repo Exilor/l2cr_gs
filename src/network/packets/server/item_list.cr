@@ -7,7 +7,7 @@ class Packets::Outgoing::ItemList < Packets::Outgoing::AbstractItemPacket
     @items = pc.inventory.items.reject &.quest_item?
   end
 
-  def write_impl
+  private def write_impl
     c 0x11
 
     h @show_window ? 1 : 0

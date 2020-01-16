@@ -6,8 +6,6 @@ struct EnchantOptions
   end
 
   def []=(index : Int32, option : Int32)
-    # if @options.size > index
-      @options[index] = option
-    # end
+    @options[index] = option
   end
 end

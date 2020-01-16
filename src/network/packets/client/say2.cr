@@ -137,7 +137,7 @@ class Packets::Incoming::Say2 < GameClientPacket
     end
 
     if pc.chat_banned? && @text[0] != '.'
-      if pc.effect_list.get_first_effect(L2EffectType::CHAT_BLOCK)
+      if pc.effect_list.get_first_effect(EffectType::CHAT_BLOCK)
         pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REPORTED_SO_CHATTING_NOT_ALLOWED)
       else
         Config.ban_chat_channels.each do |chat_id|

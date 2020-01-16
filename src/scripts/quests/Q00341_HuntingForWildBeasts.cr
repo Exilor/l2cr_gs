@@ -63,7 +63,7 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
     if st && st.cond?(1)
       skins = st.get_quest_items_count(BEAR_SKIN)
       if skins < REQUIRED_COUNT
-        if rand(100) < MONSTERS[npc.id]
+        if Rnd.rand(100) < MONSTERS[npc.id]
           st.give_items(BEAR_SKIN, 1)
           if skins + 1 < REQUIRED_COUNT
             st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

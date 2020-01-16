@@ -79,8 +79,8 @@ class Scripts::Q00650_ABrokenDream < Quest
     end
 
     mob_chance = MONSTER_DROP_CHANCES[npc.id]
-    if party = killer.party?
-      killer.party.members.each do |m|
+    if party = killer.party
+      party.members.each do |m|
         qs = get_quest_state(m, false)
         if qs && qs.started?
           list << m
@@ -89,8 +89,8 @@ class Scripts::Q00650_ABrokenDream < Quest
     end
 
     unless list.empty?
-      pc = list.sample
-      if rand(1000) < mob_chance && Util.in_range?(1500, npc, pc, true)
+      pc = list.sample(random: Rnd)
+      if Rnd.rand(1000) < mob_chance && Util.in_range?(1500, npc, pc, true)
         give_items(pc, REMNANTS_OF_OLD_DWARVES_DREAMS, 1)
         play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
       end

@@ -43,22 +43,22 @@ class Scripts::Amaskari < AbstractNpcAI
       npc.invul = false
       # npc.do_cast(INVINCIBILITY)
     elsif event.casecmp?("onspawn_msg") && npc && npc.alive?
-      if rand(100) > 20
+      if Rnd.rand(100) > 20
         broadcast_npc_say(npc, Say2::NPC_ALL, MINIONS_NPCSTRING_ID[2])
-      elsif rand(100) > 40
+      elsif Rnd.rand(100) > 40
         broadcast_npc_say(npc, Say2::NPC_ALL, MINIONS_NPCSTRING_ID[3])
       end
-      start_quest_timer("onspawn_msg", (rand(8) + 1) * 30000, npc, nil)
+      start_quest_timer("onspawn_msg", (Rnd.rand(8) + 1) * 30000, npc, nil)
     end
 
     nil
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)
-    if npc.id == AMASKARI && rand(1000) < 25
+    if npc.id == AMASKARI && Rnd.rand(1000) < 25
       broadcast_npc_say(npc, Say2::NPC_ALL, AMASKARI_NPCSTRING_ID[0])
       npc.as(L2MonsterInstance).minion_list.spawned_minions.each do |minion|
-        if minion && minion.alive? && rand(10) == 0
+        if minion && minion.alive? && Rnd.rand(10) == 0
           broadcast_npc_say(minion, Say2::NPC_ALL, MINIONS_NPCSTRING_ID[0])
           minion.current_hp -= minion.current_hp / 5
         end
@@ -94,7 +94,7 @@ class Scripts::Amaskari < AbstractNpcAI
     elsif npc.id == AMASKARI
       npc.as(L2MonsterInstance).minion_list.spawned_minions.each do |minion|
         if minion.alive?
-          if rand(1000) > 300
+          if Rnd.rand(1000) > 300
             broadcast_npc_say(minion, Say2::NPC_ALL, MINIONS_NPCSTRING_ID[1])
           end
           HellboundEngine.update_trust(30, true)
@@ -107,7 +107,7 @@ class Scripts::Amaskari < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    start_quest_timer("onspawn_msg", (rand(3) + 1) * 30000, npc, nil)
+    start_quest_timer("onspawn_msg", (Rnd.rand(3) + 1) * 30000, npc, nil)
     return super
   end
 end

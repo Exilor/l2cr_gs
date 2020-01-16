@@ -13,11 +13,11 @@ class EffectHandler::DispelByCategory < AbstractEffect
     @max = params.get_i32("max", 0)
   end
 
-  def effect_type
-    L2EffectType::DISPEL
+  def effect_type : EffectType
+    EffectType::DISPEL
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

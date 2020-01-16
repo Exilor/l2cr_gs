@@ -98,7 +98,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     end
 
     def get_rand_mob(spice)
-      @spice_to_mob[spice][0].sample
+      @spice_to_mob[spice][0].sample(random: Rnd)
     end
   end
 
@@ -283,7 +283,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     # find the next mob to spawn, based on the current npc_id, growth_level, and food.
     if growth_level == 2
       # if tamed, the mob that will spawn depends on the class type (fighter/mage) of the player!
-      if rand(2) == 0
+      if Rnd.rand(2) == 0
         if player.class_id.mage_class?
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 1, 1)
         else
@@ -292,7 +292,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
       else
         # if not tamed, there is a small chance that have "mad cow" disease.
         # that is a stronger-than-normal animal that attacks its feeder
-        if rand(5) == 0
+        if Rnd.rand(5) == 0
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 0, 1)
         else
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 0, 0)
@@ -323,9 +323,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     # if this is finally a trained mob, then despawn any other trained mobs that the
     # player might have and initialize the Tamed Beast.
     if TAMED_BEASTS.includes?(next_npc_id)
-      player.tamed_beasts.each do |old_trained|
-        old_trained.delete_me
-      end
+      player.tamed_beasts.each &.delete_me
 
       next_npc = L2TamedBeastInstance.new(next_npc_id, player, food - FOOD_SKILL_DIFF, *npc.xyz)
       next_npc.set_running
@@ -336,7 +334,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
 
       # also, perform a rare random chat
       if rand(20) == 0
-        message = NpcString[rand(2024..2029)]
+        message = NpcString.get(rand(2024..2029))
         packet = NpcSay.new(next_npc, 0, message)
         if message.param_count > 0 # player name, $s1
           packet.add_string_parameter(player.name)
@@ -349,7 +347,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     #   if tamed beast exists and is alive)
     #     if player has 1+ golden/crystal spice)
     #       take one golden/crystal spice
-    #       say random NpcString(rand(2029, 2038))
+    #       say random NpcString(Rnd.rand(2029, 2038))
     #   end
     # end
     #   */
@@ -445,7 +443,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
       end
 
       # rare random talk...
-      if rand(20) == 0
+      if Rnd.rand(20) == 0
         message = TEXT[growth_level].sample
         packet = NpcSay.new(npc, 0, message)
         if message.param_count > 0 # player name, $s1
@@ -462,7 +460,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
       end
 
       # Polymorph the mob, with a certain chance, given its current growth level
-      if rand(100) < GROWTH_CAPABLE_MONSTERS[npc_id].chance
+      if Rnd.rand(100) < GROWTH_CAPABLE_MONSTERS[npc_id].chance
         spawn_next(npc, growth_level, caster, food)
       end
     elsif TAMED_BEASTS.includes?(npc_id) && npc.is_a?(L2TamedBeastInstance)

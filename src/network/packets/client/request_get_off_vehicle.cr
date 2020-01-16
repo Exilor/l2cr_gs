@@ -15,7 +15,7 @@ class Packets::Incoming::RequestGetOffVehicle < GameClientPacket
     return unless pc = active_char
 
     if !pc.in_boat? || pc.boat!.l2id != @boat_id || pc.boat!.moving? || !pc.inside_radius?(@x, @y, @z, 1000, true, false)
-      debug "#{pc} can't get off vehicle."
+      debug { "#{pc} can't get off vehicle." }
       action_failed
       return
     end

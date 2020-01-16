@@ -1,7 +1,7 @@
 class Packets::Outgoing::ExCubeGameEnd < GameServerPacket
   initializer red_won : Bool
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x98
 

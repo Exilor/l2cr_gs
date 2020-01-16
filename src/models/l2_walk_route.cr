@@ -5,7 +5,7 @@ struct L2WalkRoute
   getter? repeat_walk
 
   def initialize(@name : String, @node_list : Array(L2NpcWalkerNode), repeat : Bool, once : Bool, @repeat_type : Int8)
-    @repeat_walk = repeat_type >= 0 && repeat_type <= 2 ? repeat : false
+    @repeat_walk = repeat_type.between?(0, 2) ? repeat : false
   end
 
   def last_node : L2NpcWalkerNode

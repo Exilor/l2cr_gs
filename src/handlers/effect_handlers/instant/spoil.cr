@@ -11,7 +11,7 @@ class EffectHandler::Spoil < AbstractEffect
     ret
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

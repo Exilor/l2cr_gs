@@ -2,6 +2,7 @@ class L2MapRegion
   @other_spawns : Array(Location)?
   @chaotic_spawns : Array(Location)?
   @banish_spawns : Array(Location)?
+
   getter banned_race = EnumMap(Race, String).new
   getter! maps : Array({Int32, Int32})?
   getter! spawns : Array(Location)?
@@ -35,10 +36,10 @@ class L2MapRegion
 
   def spawn_loc : Location
     if Config.random_respawn_in_town_enabled
-      spawns.sample(random: Rnd)
-    else
-      spawns[0]
+      return spawns.sample(random: Rnd)
     end
+
+    spawns[0]
   end
 
   def other_spawn_loc : Location

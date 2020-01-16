@@ -26,12 +26,12 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
     return unless pc = active_char
 
     if @command.empty?
-      warn "#{pc} send an empty bypass."
+      warn { "#{pc} send an empty bypass." }
       pc.logout
       return
     end
 
-    debug "#{pc} sent #{@command.inspect}."
+    debug { "#{pc} sent #{@command.inspect}." }
 
     validate = true
 
@@ -46,12 +46,12 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
     if validate
       origin_id = pc.validate_html_action(@command)
       if origin_id == -1
-        warn "#{pc} sent non cached bypass #{@command.inspect}."
+        warn { "#{pc} sent non cached bypass #{@command.inspect}." }
         return
       end
 
       if origin_id > 0 && !Util.inside_range_of_l2id?(pc, origin_id, L2Npc::INTERACTION_DISTANCE)
-        debug "#{pc} is too far from the NPC."
+        debug { "#{pc} is too far from the NPC." }
         return
       end
     end
@@ -70,7 +70,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
           if pc.gm?
             pc.send_message("The command #{command.from(6).inspect} does not exist")
           end
-          warn "#{pc} requested an admin command that doesn't exist."
+          warn { "#{pc} requested an admin command that doesn't exist." }
           return
         end
 
@@ -190,21 +190,19 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
             handler.use_bypass(@command, pc, nil)
           end
         else
-          warn "#{pc} sent an unhandled server bypass request: #{@command.inspect}."
+          warn { "#{pc} sent an unhandled server bypass request: #{@command.inspect}." }
         end
       end
     rescue e
       msg = NpcHtmlMessage.new
       msg.html = String.build(200) do |io|
-        io << "<html><body>"
-        io << "Bypass error: " << e << "<br1>"
-        io << "Bypass command: "
+        io << "<html><body>Bypass error: "
+        io << e
+        io << "<br1>Bypass command: "
         @command.inspect(io)
-        io << "<br1>"
-        io << "Stack trace:<br1>"
+        io << "<br1>Stack trace:<br1>"
         e.backtrace.join("<br1>", io)
-        io << "<br1>"
-        io << "</body></html>"
+        io << "<br1></body></html>"
       end
       msg.disable_validation
       pc.send_packet(msg)

@@ -20,9 +20,9 @@ module BotReportTable
 
   private IP_REGISTRY = {} of Int32 => Int64
   private CHAR_REGISTRY = {} of Int32 => ReporterCharData
-  private CHAR_REGISTRY_LOCK = Mutex.new
+  private CHAR_REGISTRY_LOCK = Mutex.new(:Reentrant)
   private REPORTS = Concurrent::Map(Int32, ReportedCharData).new
-  private PUNISHMENTS = Concurrent::Map(Int32, PunishmentHolder).new
+  private PUNISHMENTS = Concurrent::Map(Int32, PunishHolder).new
 
   def load
     if Config.botreport_enable
@@ -90,12 +90,7 @@ module BotReportTable
     REPORTS.each do |key, value|
       report_table = value.reporters
       report_table.each do |k, v|
-        GameDB.exec(
-          SQL_INSERT_REPORTED_CHAR_DATA,
-          key,
-          k,
-          v
-        )
+        GameDB.exec(SQL_INSERT_REPORTED_CHAR_DATA, key, k, v)
       end
     end
   rescue e
@@ -107,7 +102,7 @@ module BotReportTable
       return false
     end
 
-    bot = target.acting_player?
+    bot = target.acting_player
 
     if bot.nil? || target.l2id == reporter.l2id
       return false
@@ -123,7 +118,7 @@ module BotReportTable
       return false
     end
 
-    if bot.clan? && bot.clan.at_war_with?(reporter.clan?)
+    if (clan = bot.clan) && clan.at_war_with?(reporter.clan)
       reporter.send_packet(SystemMessageId::YOU_CANNOT_REPORT_CLAN_WAR_ENEMY)
       return false
     end
@@ -155,7 +150,7 @@ module BotReportTable
           return false
         end
 
-        if !Config.botreport_allow_reports_from_same_clan_members && rcd.reported_by_same_clan?(reporter.clan?)
+        if !Config.botreport_allow_reports_from_same_clan_members && rcd.reported_by_same_clan?(reporter.clan)
           reporter.send_packet(SystemMessageId::CANNOT_REPORT_TARGET_ALREDY_REPORTED_BY_CLAN_ALLY_MEMBER_OR_SAME_IP)
           return false
         end
@@ -218,11 +213,11 @@ module BotReportTable
     end
   end
 
-  private def punish_bot(bot : L2PcInstance, ph : PunishmentHolder?)
+  private def punish_bot(bot : L2PcInstance, ph : PunishHolder?)
     if ph
       ph.punish.apply_effects(bot, bot)
       if ph.system_message_id > -1
-        if id = SystemMessageId.get_system_message_id?(ph.system_message_id)
+        if id = SystemMessageId.get?(ph.system_message_id)
           bot.send_packet(id)
         end
       end
@@ -231,7 +226,7 @@ module BotReportTable
 
   def add_punishment(needed_reports : Int32, skill_id : Int32, skill_lvl : Int32, sys_msg : Int32)
     if sk = SkillData[skill_id, skill_lvl]?
-      PUNISHMENTS[needed_reports] = PunishmentHolder.new(sk, sys_msg)
+      PUNISHMENTS[needed_reports] = PunishHolder.new(sk, sys_msg)
     else
       warn { "Could not add punishment for #{needed_reports} report(s): Skill #{skill_id}-#{skill_lvl} does not exist." }
     end
@@ -259,14 +254,14 @@ module BotReportTable
 
     delay = c.ms - Time.ms
 
-    ThreadPoolManager.schedule_general(ResetPointTask.new, delay)
+    ThreadPoolManager.schedule_general(ResetPointTask, delay)
   rescue e
     warn e
-    ThreadPoolManager.schedule_general(ResetPointTask.new, 24 * 3600 * 1000)
+    ThreadPoolManager.schedule_general(ResetPointTask, 24 * 3600 * 1000)
   end
 
   private def hash_ip(pc) : Int32
-    con = pc.client.connection.ip
+    con = pc.client.not_nil!.connection.ip
     bytes = con.split('.')
     ip = bytes.map &.to_i
 
@@ -348,10 +343,10 @@ module BotReportTable
     end
   end
 
-  private record PunishmentHolder, punish : Skill, system_message_id : Int32
+  private record PunishHolder, punish : Skill, system_message_id : Int32
 
-  struct ResetPointTask
-    def call
+  private module ResetPointTask
+    def self.call
       BotReportTable.reset_points_and_schedule
     end
   end

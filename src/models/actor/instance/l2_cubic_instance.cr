@@ -1,7 +1,6 @@
 require "../tasks/cubic/*"
 
 class L2CubicInstance
-  # include Identifiable
   include Synchronizable
   include Packets::Outgoing
   include Loggable
@@ -34,6 +33,7 @@ class L2CubicInstance
   @action_task : Scheduler::PeriodicTask?
   @disappear_task : Scheduler::DelayedTask?
   @active = false
+
   getter skills = [] of Skill
   getter owner, cubic_power, cubic_max_count
   getter? given_by_other
@@ -83,17 +83,6 @@ class L2CubicInstance
 
     task = CubicDisappear.new(self)
     @disappear_task = ThreadPoolManager.schedule_general(task, @cubic_duration * 1000)
-
-    debug "New cubic:"
-    debug "  owner: #{@owner}"
-    debug "  cubic_id: #{@cubic_id}"
-    debug "  level: #{level}"
-    debug "  cubic_power: #{@cubic_power}"
-    debug "  cubic_delay: #{@cubic_delay}"
-    debug "  cubic_skill_chance: #{@cubic_skill_chance}"
-    debug "  cubic_max_count: #{@cubic_max_count}"
-    debug "  cubic_duration: #{@cubic_duration}"
-    debug "  given_by_other: #{@given_by_other}"
   end
 
   def do_action
@@ -138,14 +127,13 @@ class L2CubicInstance
 
     # TODO: tvt event check
 
-    if @owner.in_duel?
-      duel = DuelManager.get_duel(@owner.duel_id).not_nil!
+    if @owner.in_duel? && (duel = DuelManager.get_duel(@owner.duel_id))
       player_a = duel.team_leader_a
       player_b = duel.team_leader_b
 
       if duel.party_duel?
-        party_a = player_a.party?
-        party_b = player_b.party?
+        party_a = player_a.party
+        party_b = player_b.party
         party_enemy = nil
 
         if party_a
@@ -198,7 +186,7 @@ class L2CubicInstance
 
     if @owner.in_olympiad_mode?
       if @owner.olympiad_start?
-        if target_player = @owner.acting_player?
+        if target_player = @owner.acting_player
           if target_player.olympiad_game_id == @owner.olympiad_game_id
             if target_player.olympiad_side != @owner.olympiad_side
               @target = owner_target.as(L2Character)
@@ -217,8 +205,8 @@ class L2CubicInstance
           return
         end
 
-        if summon = @owner.summon
-          if attackable.in_aggro_list?(summon) && attackable.alive?
+        if smn = @owner.summon
+          if attackable.in_aggro_list?(smn) && attackable.alive?
             @target = attackable
             return
           end
@@ -228,57 +216,55 @@ class L2CubicInstance
       enemy = nil
       target_it = true
 
-      if ((@owner.pvp_flag > 0) && !@owner.inside_peace_zone?) || @owner.inside_pvp_zone?
+      if (@owner.pvp_flag > 0 && !@owner.inside_peace_zone?) || @owner.inside_pvp_zone?
         if owner_target.alive?
           enemy = owner_target.acting_player
         end
 
         if enemy
           target_it = true
-          if party = @owner.party?
+          if party = @owner.party
             if party.includes?(enemy)
-              debug "#{@owner} and #{enemy} are in the same party."
+              debug { "#{@owner} and #{enemy} are in the same party." }
               target_it = false
-            elsif party.command_channel?
-              if party.command_channel.includes?(enemy)
-                debug "#{@owner} and #{enemy} are in the same command channel."
-                target_it = false
-              end
+            elsif (cc = party.command_channel) && cc.includes?(enemy)
+              debug { "#{@owner} and #{enemy} are in the same command channel." }
+              target_it = false
             end
           end
 
-          clan = @owner.clan?
+          clan = @owner.clan
           if clan && !@owner.inside_pvp_zone?
             if clan.member?(enemy.l2id)
-              debug "#{@owner} and #{enemy} are in the same clan."
+              debug { "#{@owner} and #{enemy} are in the same clan." }
               target_it = false
             end
 
             if @owner.ally_id > 0 && enemy.ally_id > 0
               if @owner.ally_id == enemy.ally_id
-                debug "#{@owner} and #{enemy} are in the same alliance."
+                debug { "#{@owner} and #{enemy} are in the same alliance." }
                 target_it = false
               end
             end
           end
 
           if enemy.pvp_flag == 0 && !enemy.inside_pvp_zone?
-            debug "#{enemy} is not pvp flagged and is not inside a PVP zone."
+            debug { "#{enemy} is not pvp flagged and is not inside a PVP zone." }
             target_it = false
           end
 
           if enemy.inside_peace_zone?
-            debug "#{enemy} is inside peace zone."
+            debug { "#{enemy} is inside peace zone." }
             target_it = false
           end
 
           if @owner.siege_state > 0 && @owner.siege_state == enemy.siege_state
-            debug "#{@owner} and #{enemy} are on the same siege side."
+            debug { "#{@owner} and #{enemy} are on the same siege side." }
             target_it = false
           end
 
           unless enemy.visible?
-            debug "#{enemy} is not visible."
+            debug { "#{enemy} is not visible." }
             target_it = false
           end
 
@@ -329,7 +315,8 @@ class L2CubicInstance
           target.break_cast
         end
 
-        if target.calc_stat(Stats::VENGEANCE_SKILL_MAGIC_DAMAGE, 0, target, skill) > Rnd.rand(100)
+        vng = target.calc_stat(Stats::VENGEANCE_SKILL_MAGIC_DAMAGE, 0, target, skill)
+        if vng > Rnd.rand(100)
           damage = 0
         else
           @owner.send_damage_message(target, damage.to_i, mcrit, false, false)
@@ -353,7 +340,11 @@ class L2CubicInstance
       shld = Formulas.shld_use(@owner, target, skill)
       damage = Formulas.magic_dam(self, target, skill, mcrit, shld)
       hp_add = 0.4 * damage
-      hp = @owner.current_hp + hp_add > @owner.max_hp ? @owner.max_hp : @owner.current_hp + hp_add
+      if @owner.current_hp + hp_add > @owner.max_hp
+        hp = @owner.max_hp
+      else
+        hp = @owner.current_hp + hp_add
+      end
       @owner.current_hp = hp.to_f64
       if damage > 0
         if !target.raid? && Formulas.atk_break(target, damage)
@@ -361,7 +352,8 @@ class L2CubicInstance
           target.break_cast
         end
 
-        if target.calc_stat(Stats::VENGEANCE_SKILL_MAGIC_DAMAGE, 0, target, skill) > Rnd.rand(100)
+        vng = target.calc_stat(Stats::VENGEANCE_SKILL_MAGIC_DAMAGE, 0, target, skill)
+        if vng > Rnd.rand(100)
           damage = 0
         else
           @owner.send_damage_message(target, damage.to_i, mcrit, false, false)
@@ -382,7 +374,7 @@ class L2CubicInstance
       end
 
       shld = Formulas.shld_use(@owner, target, skill)
-      if skill.has_effect_type?(L2EffectType::STUN, L2EffectType::PARALYZE, L2EffectType::ROOT, L2EffectType::AGGRESSION)
+      if skill.has_effect_type?(EffectType::STUN, EffectType::PARALYZE, EffectType::ROOT, EffectType::AGGRESSION)
         if Formulas.cubic_skill_success(self, target, skill, shld)
           skill.apply_effects(@owner, target, false, false, true, 0)
         end
@@ -397,16 +389,16 @@ class L2CubicInstance
     x = owner.x - target.x
     y = owner.y - target.y
     z = owner.z - target.z
-    (x * x) + (y * y) + (z * z) <= range.abs2
+    x.abs2 + y.abs2 + z.abs2 <= range.abs2
   end
 
   def cubic_target_for_heal
     target = nil
     percent_left = 100.0
-    party = @owner.party?
+    party = @owner.party
 
-    if @owner.in_duel?
-      unless DuelManager.get_duel(@owner.duel_id).not_nil!.party_duel?
+    if @owner.in_duel? && (duel = DuelManager.get_duel(@owner.duel_id))
+      unless duel.party_duel?
         party = nil
       end
     end
@@ -424,14 +416,14 @@ class L2CubicInstance
           end
         end
 
-        if summon = m.summon
-          next if summon.dead?
-          next unless L2CubicInstance.in_cubic_range?(@owner, summon)
+        if smn = m.summon
+          next if smn.dead?
+          next unless L2CubicInstance.in_cubic_range?(@owner, smn)
 
-          if summon.current_hp < summon.max_hp
-            if percent_left > summon.current_hp / m.max_hp
-              percent_left = summon.current_hp / summon.max_hp
-              target = summon
+          if smn.current_hp < smn.max_hp
+            if percent_left > smn.current_hp / m.max_hp
+              percent_left = smn.current_hp / smn.max_hp
+              target = smn
             end
           end
         end
@@ -442,11 +434,11 @@ class L2CubicInstance
         target = @owner
       end
 
-      if summon = @owner.summon
-        if summon.alive? && summon.current_hp < summon.max_hp
-          if percent_left > summon.current_hp / summon.max_hp
-            if L2CubicInstance.in_cubic_range?(@owner, summon)
-              target = summon
+      if smn = @owner.summon
+        if smn.alive? && smn.current_hp < smn.max_hp
+          if percent_left > smn.current_hp / smn.max_hp
+            if L2CubicInstance.in_cubic_range?(@owner, smn)
+              target = smn
             end
           end
         end

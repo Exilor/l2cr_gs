@@ -6,7 +6,7 @@ class EffectHandler::GiveSp < AbstractEffect
     @sp = params.get_i32("sp", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

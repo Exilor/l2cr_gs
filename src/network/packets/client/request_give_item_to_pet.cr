@@ -24,7 +24,7 @@ class Packets::Incoming::RequestGiveItemToPet < GameClientPacket
     end
     return unless item = pc.inventory.get_item_by_l2id(@l2id)
     if @amount > item.count
-      # handle illega player action
+      Util.punish(pc, "tried to get item with object id #{@l2id} from pet but the count is invalid (#{@amount}/#{item.count}).")
       return
     end
     return if item.augmented?
@@ -49,7 +49,7 @@ class Packets::Incoming::RequestGiveItemToPet < GameClientPacket
     end
 
     unless pc.transfer_item("Transfer", @l2id, @amount, pet.inventory, pet)
-      warn "Invalid item transfer request from #{pc} to #{pet}."
+      warn { "Invalid item transfer request from #{pc} to #{pet}." }
     end
   end
 end

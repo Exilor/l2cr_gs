@@ -3,8 +3,8 @@ module TargetHandler::PartyOther
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    if target && target != char && char.in_party? && target.in_party?
-      if char.party.leader_l2id == target.party.leader_l2id
+    if target && target != char && (p1 = char.party) && (p2 = target.party)
+      if p1 == p2
         if target.alive?
           if target.is_a?(L2PcInstance)
             case skill.id
@@ -35,6 +35,6 @@ module TargetHandler::PartyOther
   end
 
   def target_type
-    L2TargetType::PARTY_OTHER
+    TargetType::PARTY_OTHER
   end
 end

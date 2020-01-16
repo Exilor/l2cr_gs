@@ -82,9 +82,9 @@ abstract class L2Playable < L2Character
     return false unless target
     return false if target == self
     return false unless target.playable?
-    return false unless player = acting_player?
+    return false unless player = acting_player
     return false if player.karma != 0
-    return false unless target_player = target.acting_player?
+    return false unless target_player = target.acting_player
     return false if target_player == self
     return false if target_player.karma != 0
     return false if target_player.pvp_flag == 0
@@ -120,25 +120,23 @@ abstract class L2Playable < L2Character
     end
 
     self.target = nil
-    stop_move
+    stop_move(nil)
 
     status.stop_hp_mp_regeneration
 
     delete_buffs = true
 
     if noblesse_blessing_affected?
-      stop_effects(L2EffectType::NOBLESSE_BLESSING)
+      stop_effects(EffectType::NOBLESSE_BLESSING)
       delete_buffs = false
     end
 
     if resurrect_special_affected?
-      stop_effects(L2EffectType::RESURRECTION_SPECIAL)
+      stop_effects(EffectType::RESURRECTION_SPECIAL)
       delete_buffs = true
     end
 
-    if player?
-      pc = acting_player
-
+    if player? && (pc = acting_player)
       if pc.charm_of_courage?
         if pc.in_siege?
           pc.revive_request(pc, nil, false, 0, 0)
@@ -154,9 +152,9 @@ abstract class L2Playable < L2Character
 
     broadcast_status_update
 
-    world_region?.try &.on_death(self)
+    world_region.try &.on_death(self)
 
-    pc = acting_player
+    pc = acting_player.not_nil!
 
     unless pc.notify_quest_of_death_empty?
       pc.notify_quest_of_death.each do |qs|
@@ -170,10 +168,8 @@ abstract class L2Playable < L2Character
       end
     end
 
-    if killer
-      if player = killer.acting_player?
-        player.on_kill_update_pvp_karma(self)
-      end
+    if killer && (player = killer.acting_player)
+      player.on_kill_update_pvp_karma(self)
     end
 
     notify_event(AI::DEAD)

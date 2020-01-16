@@ -29,7 +29,7 @@ class Scripts::CastleSiegeManager < AbstractNpcAI
     elsif in_siege?(npc)
       html = "CastleSiegeManager-02.html"
     else
-      if hall = npc.conquerable_hall?
+      if hall = npc.conquerable_hall
         hall.show_siege_info(player)
       else
         npc.castle.siege.list_register_clan(player)
@@ -40,7 +40,7 @@ class Scripts::CastleSiegeManager < AbstractNpcAI
   end
 
   private def in_siege?(npc)
-    if (hall = npc.conquerable_hall?) && hall.in_siege?
+    if (hall = npc.conquerable_hall) && hall.in_siege?
       return true
     elsif npc.castle.siege.in_progress?
       return true

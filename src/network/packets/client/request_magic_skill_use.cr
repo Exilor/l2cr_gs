@@ -26,7 +26,7 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
     unless skill = pc.get_known_skill(@id)
       unless skill = pc.get_custom_skill(@id)
         unless skill = pc.get_transform_skill(@id)
-          warn "Skill with ID #{@id} not known by player #{pc.name}."
+          warn { "Skill with ID #{@id} not known by player #{pc.name}." }
           action_failed
           return
         end
@@ -46,7 +46,7 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
     end
 
     unless Config.alt_game_karma_player_can_teleport
-      if pc.karma > 0 && skill.has_effect_type?(L2EffectType::TELEPORT)
+      if pc.karma > 0 && skill.has_effect_type?(EffectType::TELEPORT)
         return
       end
     end

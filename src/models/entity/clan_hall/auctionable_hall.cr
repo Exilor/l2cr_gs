@@ -2,6 +2,7 @@ require "../clan_hall"
 
 class AuctionableHall < ClanHall
   @ch_rate = 604800000
+
   getter lease : Int32
   getter paid_until : Int64
   getter grade : Int32
@@ -62,7 +63,7 @@ class AuctionableHall < ClanHall
       return
     end
 
-    clan = ClanTable.get_clan!(owner_id)
+    clan = ClanTable.get_clan(owner_id).not_nil!
     wh = clan.warehouse
 
     if wh.adena >= lease

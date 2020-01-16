@@ -14,7 +14,7 @@ module GameTimer
   TICKS_SUN_STATE_CHANGE = TICKS_PER_IG_DAY // 4
 
   private MOVING_OBJECTS = Set(L2Character).new
-  private REFERENCE_TIME = Time.now.at_beginning_of_day.ms
+  private REFERENCE_TIME = Time.local.at_beginning_of_day.ms
 
   def load
     spawn run
@@ -25,7 +25,7 @@ module GameTimer
     change_mode = ->DayNightSpawnManager.notify_change_mode
 
     until cancelled?
-      next_tick = Time.ms &+ 100
+      next_tick = Time.ms + 100
 
       sync do
         begin
@@ -36,7 +36,7 @@ module GameTimer
         end
       end
 
-      sleep_time = next_tick &- Time.ms
+      sleep_time = next_tick - Time.ms
       if sleep_time > 0
         sleep(sleep_time.milliseconds)
       end

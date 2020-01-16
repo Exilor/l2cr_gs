@@ -20,7 +20,7 @@ module TargetHandler::AreaSummon
 
       next if !(obj.attackable? || obj.playable?)
 
-      if !Skill.check_for_area_offensive_skills(char, obj, skill, src_in_arena)
+      unless skill.offensive_aoe_check(char, obj, src_in_arena)
         next
       end
 
@@ -35,6 +35,6 @@ module TargetHandler::AreaSummon
   end
 
   def target_type
-    L2TargetType::AREA_SUMMON
+    TargetType::AREA_SUMMON
   end
 end

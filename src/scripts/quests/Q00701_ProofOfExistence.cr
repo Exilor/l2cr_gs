@@ -54,21 +54,21 @@ class Scripts::Q00701_ProofOfExistence < Quest
     end
     st = get_quest_state!(member, false)
     if npc.id == ENIRA
-      chance = rand(1000)
+      chance = Rnd.rand(1000)
       if chance < 708
-        count = rand(2) + 1
+        count = Rnd.rand(2) + 1
       elsif chance < 978
-        count = rand(3) + 3
+        count = Rnd.rand(3) + 3
       elsif chance < 994
-        count = rand(4) + 6
+        count = Rnd.rand(4) + 6
       elsif chance < 998
-        count = rand(4) + 10
+        count = Rnd.rand(4) + 10
       else
-        count = rand(5) + 14
+        count = Rnd.rand(5) + 14
       end
       st.give_items(BANSHEE_QUEENS_EYE, count)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
-    elsif rand(1000) < MOBS[npc.id]
+    elsif Rnd.rand(1000) < MOBS[npc.id]
       st.give_items(DEADMANS_REMAINS, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end

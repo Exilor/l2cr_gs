@@ -14,7 +14,6 @@ class NpcVariables < AbstractVariables
   end
 
   def get_summon(name : String) : L2Summon?
-    # self[name]?.as?(L2Summon)
     get_object(name, L2Summon?)
   end
 

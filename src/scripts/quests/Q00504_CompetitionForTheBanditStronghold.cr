@@ -14,12 +14,12 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
   private CONTEST_CERTIFICATE = 4333
   private TROPHY_OF_ALLIANCE = 5009
 
-
+  @bandit_stronghold : SiegableHall
 
   def initialize
     super(504, self.class.simple_name, "Competition for the Bandit Stronghold")
 
-    @bandit_stronghold = ClanHallSiegeManager.get_siegable_hall!(35)
+    @bandit_stronghold = ClanHallSiegeManager.get_siegable_hall(35).not_nil!
 
     add_start_npc(MESSENGER)
     add_talk_id(MESSENGER)
@@ -42,7 +42,7 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
       return
     end
 
-    if rand(10) < MONSTERS[npc.id]
+    if Rnd.rand(10) < MONSTERS[npc.id]
       st.give_items(TARLK_AMULET, 1)
       if st.get_quest_items_count(TARLK_AMULET) < 30
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -51,13 +51,12 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
       end
     end
 
-
     nil
   end
 
   def on_talk(npc, pc)
     st = get_quest_state!(pc)
-    clan = pc.clan?
+    clan = pc.clan
 
     if !@bandit_stronghold.waiting_battle?
       html = get_htm(pc, "35437-09.html")

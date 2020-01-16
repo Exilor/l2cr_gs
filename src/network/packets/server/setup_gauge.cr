@@ -1,38 +1,34 @@
 class Packets::Outgoing::SetupGauge < GameServerPacket
-  private BLUE = 0u8
-  private RED  = 1u8
-  private CYAN = 2u8
-
   @char_id = 0
 
-  initializer color : UInt8, cur_time : Int32, max_time : Int32
+  private initializer color : UInt8, now : Int32, max : Int32 = now
 
-  def initialize(@color : UInt8, time : Int32)
-    @max_time = @cur_time = time
+  def self.blue(*args)
+    new(0, *args)
   end
 
-  def self.blue(cur : Int32, max : Int32 = cur)
-    new(BLUE, cur, max)
+  def self.red(*args)
+    new(1, *args)
   end
 
-  def self.red(cur : Int32, max : Int32 = cur)
-    new(RED, cur, max)
+  def self.cyan(*args)
+    new(2, *args)
   end
 
-  def self.cyan(cur : Int32, max : Int32 = cur)
-    new(CYAN, cur, max)
+  def self.green(*args)
+    new(3, *args)
   end
 
   def run_impl
     @char_id = active_char.not_nil!.l2id
   end
 
-  def write_impl
+  private def write_impl
     c 0x6b
 
     d @char_id
     d @color
-    d @cur_time
-    d @max_time
+    d @now
+    d @max
   end
 end

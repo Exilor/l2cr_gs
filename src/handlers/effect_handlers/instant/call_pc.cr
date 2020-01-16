@@ -9,15 +9,13 @@ class EffectHandler::CallPc < AbstractEffect
     @item_count = params.get_i32("itemCount", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    return if info.effected == info.effector
-
-    target = info.effected.acting_player
-    char = info.effector.acting_player
+    target = info.effected.acting_player.not_nil!
+    char = info.effector.acting_player.not_nil!
 
     if char.can_summon_target?(target)
       target.add_script(SummonRequestHolder.new(char, @item_id, @item_count))

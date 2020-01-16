@@ -1,7 +1,7 @@
 class Packets::Outgoing::ShortcutRegister < GameServerPacket
   initializer shortcut : Shortcut
 
-  def write_impl
+  private def write_impl
     c 0x44
 
     d @shortcut.type.to_i

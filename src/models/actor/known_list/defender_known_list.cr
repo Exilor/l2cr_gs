@@ -6,14 +6,11 @@ class DefenderKnownList < AttackableKnownList
       return false
     end
 
-    castle = active_char.castle?
-    fort = active_char.fort?
-    hall = active_char.conquerable_hall?
+    me = active_char
 
-    if (fort && fort.zone.active?) || (castle && castle.zone.active?) || (hall && hall.siege_zone.active?)
-      pc = nil
+    if ((fort = me.fort?) && fort.zone.active?) || ((castle = me.castle?) && castle.zone.active?) || ((hall = me.conquerable_hall) && hall.siege_zone.active?)
       if obj.playable?
-        pc = obj.acting_player?
+        pc = obj.acting_player
       end
 
       siege_id = fort.try &.residence_id
@@ -21,8 +18,8 @@ class DefenderKnownList < AttackableKnownList
       siege_id ||= hall.try &.id || 0
 
       if pc && ((pc.siege_state == 2 && !pc.registered_on_this_siege_field?(siege_id)) || (pc.siege_state == 1 && !TerritoryWarManager.ally_field?(pc, siege_id)) || pc.siege_state == 0)
-        if active_char.intention.idle?
-          active_char.intention = AI::ACTIVE
+        if me.intention.idle?
+          me.intention = AI::ACTIVE
         end
       end
     end

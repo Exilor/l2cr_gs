@@ -27,20 +27,10 @@ module ClassListData
   end
 
   def get_class(class_id : ClassId) : ClassInfo?
-    CLASS_DATA[class_id]?
+    CLASS_DATA[class_id]
   end
 
   def get_class(class_id : Int32) : ClassInfo?
-    if id = ClassId[class_id]?
-      CLASS_DATA[id]?
-    end
-  end
-
-  def get_class!(arg) : ClassInfo
-    unless info = get_class(arg)
-      raise "No ClassInfo for #{arg.inspect}"
-    end
-
-    info
+    get_class(ClassId[class_id])
   end
 end

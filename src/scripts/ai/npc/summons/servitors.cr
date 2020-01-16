@@ -28,81 +28,37 @@ class Scripts::Servitors < AbstractNpcAI
 
   private MONSTERS = {
     PAKO_THE_CAT => {
-      CRYSTAL_OF_STARTING_1ST,
-      CRYSTAL_OF_INPROGRESS_1ST,
-      CRYSTAL_OF_DEFEAT_1ST
+      CRYSTAL_OF_STARTING_1ST, CRYSTAL_OF_INPROGRESS_1ST, CRYSTAL_OF_DEFEAT_1ST
     },
     UNICORN_RACER => {
-      CRYSTAL_OF_STARTING_3RD,
-      CRYSTAL_OF_INPROGRESS_3RD,
-      CRYSTAL_OF_DEFEAT_3RD
+      CRYSTAL_OF_STARTING_3RD, CRYSTAL_OF_INPROGRESS_3RD, CRYSTAL_OF_DEFEAT_3RD
     },
     SHADOW_TUREN => {
-      CRYSTAL_OF_STARTING_5TH,
-      CRYSTAL_OF_INPROGRESS_5TH,
-      CRYSTAL_OF_DEFEAT_5TH
+      CRYSTAL_OF_STARTING_5TH, CRYSTAL_OF_INPROGRESS_5TH, CRYSTAL_OF_DEFEAT_5TH
     },
     MIMI_THE_CAT => {
-      CRYSTAL_OF_STARTING_2ND,
-      CRYSTAL_OF_INPROGRESS_2ND,
-      CRYSTAL_OF_DEFEAT_2ND
+      CRYSTAL_OF_STARTING_2ND, CRYSTAL_OF_INPROGRESS_2ND, CRYSTAL_OF_DEFEAT_2ND
     },
     UNICORN_PHANTASM => {
-      CRYSTAL_OF_STARTING_4TH,
-      CRYSTAL_OF_INPROGRESS_4TH,
-      CRYSTAL_OF_DEFEAT_4TH
+      CRYSTAL_OF_STARTING_4TH, CRYSTAL_OF_INPROGRESS_4TH, CRYSTAL_OF_DEFEAT_4TH
     },
     SILHOUETTE_TILFO => {
-      CRYSTAL_OF_STARTING_6TH,
-      CRYSTAL_OF_INPROGRESS_6TH,
-      CRYSTAL_OF_DEFEAT_6TH
+      CRYSTAL_OF_STARTING_6TH, CRYSTAL_OF_INPROGRESS_6TH, CRYSTAL_OF_DEFEAT_6TH
     }
   }
 
   SUMMONS = {
-    # Kat the Cat
-    14111, 14112, 14113, 14114,
-    # Mew the Cat
-    14159, 14160, 14161, 14162,
-    # Boxer the Unicorn
-    14295, 14296, 14297, 14298,
-    # Mirage the Unicorn
-    14343, 14344, 14345, 14346,
-    # Shadow
-    14479, 14480, 14481, 14482,
-    # Silhouette
-    14527, 14528, 14529, 14530
+    14111, 14112, 14113, 14114, # Kat the Cat
+    14159, 14160, 14161, 14162, # Mew the Cat
+    14295, 14296, 14297, 14298, # Boxer the Unicorn
+    14343, 14344, 14345, 14346, # Mirage the Unicorn
+    14479, 14480, 14481, 14482, # Shadow
+    14527, 14528, 14529, 14530  # Silhouette
   }
 
   def initialize
     super(self.class.simple_name, "ai/npc/Summons")
   end
-
-  # register(:on_creature_kill) do
-  #   Event(EventType::ON_CREATURE_KILL)
-  #   Type(ListenerRegisterType::NPC)
-  #   Id(14111, 14112, 14113, 14114, # Kat the Cat
-  #      14159, 14160, 14161, 14162, # Mew the Cat
-  #      14295, 14296, 14297, 14298, # Boxer the Unicorn
-  #      14343, 14344, 14345, 14346, # Mirage the Unicorn
-  #      14479, 14480, 14481, 14482, # Shadow
-  #      14527, 14528, 14529, 14530  # Silhouette
-  #   )
-  # end
-
-  # register_event do |evt|
-  #   evt.method_name = :on_creature_kill
-  #   evt.event_type = :ON_CREATURE_KILL
-  #   evt.register_type = :NPC
-  #   evt.ids = [
-  #     14111, 14112, 14113, 14114, # Kat the Cat
-  #     14159, 14160, 14161, 14162, # Mew the Cat
-  #     14295, 14296, 14297, 14298, # Boxer the Unicorn
-  #     14343, 14344, 14345, 14346, # Mirage the Unicorn
-  #     14479, 14480, 14481, 14482, # Shadow
-  #     14527, 14528, 14529, 14530  # Silhouette
-  #   ]
-  # end
 
   @[Register(event: ON_CREATURE_KILL, register: NPC, id: Scripts::Servitors::SUMMONS)]
   def on_creature_kill(event : OnCreatureKill)

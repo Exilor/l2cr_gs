@@ -7,16 +7,15 @@ module Formulas
   extend Loggable
   include Packets::Outgoing
 
+  SHIELD_DEFENSE_FAILED = 0
+  SHIELD_DEFENSE_SUCCEED = 1
+  SHIELD_DEFENSE_PERFECT_BLOCK = 2
+
   {% for const in Stats.constants %}
     private {{const}} = Stats::{{const}}
   {% end %}
 
   private HP_REGENERATE_PERIOD = 3000 # ms.
-
-  SHIELD_DEFENSE_FAILED = 0
-  SHIELD_DEFENSE_SUCCEED = 1
-  SHIELD_DEFENSE_PERFECT_BLOCK = 2
-
   private MELEE_ATTACK_RANGE = 40
 
   @@npc_std_calculators : Slice(Calculator?)?
@@ -47,6 +46,7 @@ module Formulas
   def std_door_calculators : Slice(Calculator?)
     @@std_door_calculators ||= begin
       std = Slice.new(Stats.size, nil.as(Calculator?))
+
       std[ACCURACY_COMBAT.to_i] = Calculator.new(FuncAtkAccuracy::INSTANCE)
       std[EVASION_RATE.to_i] = Calculator.new(FuncAtkEvasion::INSTANCE)
       std[POWER_DEFENCE.to_i] = Calculator.new(FuncGatesPDefMod::INSTANCE)
@@ -108,8 +108,8 @@ module Formulas
   end
 
   def hp_regen(char : L2Character) : Float64
-    if char.player?
-      init = char.acting_player.template.get_base_hp_regen(char.level)
+    if char.is_a?(L2PcInstance)
+      init = char.template.get_base_hp_regen(char.level)
     else
       init = char.template.base_hp_reg
     end
@@ -126,9 +126,7 @@ module Formulas
       hp_regen_multiplier *= Config.champion_hp_regen
     end
 
-    if char.player?
-      pc = char.acting_player
-
+    if pc = char.as?(L2PcInstance)
       if SevenSignsFestival.festival_in_progress? && pc.festival_participant?
         hp_regen_multiplier *= festival_regen_modifier(pc)
       else
@@ -138,10 +136,10 @@ module Formulas
         end
       end
 
-      if pc.inside_clan_hall_zone? && pc.clan? && pc.clan.hideout_id > 0
+      if pc.inside_clan_hall_zone? && (clan = pc.clan) && clan.hideout_id > 0
         zone = ZoneManager.get_zone(pc, L2ClanHallZone)
         pos_ch_idx = zone.try &.residence_id || -1
-        clan_hall_index = pc.clan.hideout_id
+        clan_hall_index = clan.hideout_id
         if clan_hall_index > 0 && clan_hall_index == pos_ch_idx
           if hall = ClanHallManager.get_clan_hall_by_id(clan_hall_index)
             if func = hall.get_function(ClanHall::FUNC_RESTORE_HP)
@@ -151,10 +149,10 @@ module Formulas
         end
       end
 
-      if pc.inside_castle_zone? && pc.clan? && pc.clan.castle_id > 0
+      if pc.inside_castle_zone? && (clan = pc.clan) && clan.castle_id > 0
         zone = ZoneManager.get_zone(pc, L2CastleZone)
         pos_castle_idx = zone.try &.residence_id || -1
-        castle_index = pc.clan.castle_id
+        castle_index = clan.castle_id
         if castle_index > 0 && castle_index == pos_castle_idx
           if castle = CastleManager.get_castle_by_id(castle_index)
             if func = castle.get_function(Castle::FUNC_RESTORE_HP)
@@ -164,10 +162,10 @@ module Formulas
         end
       end
 
-      if pc.inside_fort_zone? && pc.clan? && pc.clan.fort_id > 0
+      if pc.inside_fort_zone? && (clan = pc.clan) && clan.fort_id > 0
         zone = ZoneManager.get_zone(pc, L2FortZone)
         pos_fort_idx = zone.try &.residence_id || -1
-        fort_index = pc.clan.fort_id
+        fort_index = clan.fort_id
         if fort_index > 0 && fort_index == pos_fort_idx
           if fort = FortManager.get_fort_by_id(fort_index)
             if func = fort.get_function(Castle::FUNC_RESTORE_HP)
@@ -200,13 +198,15 @@ module Formulas
   end
 
   def mp_regen(char : L2Character) : Float64
-    init = char.player? ? char.acting_player.template.get_base_mp_regen(char.level) : char.template.base_mp_reg
+    if char.is_a?(L2PcInstance)
+      init = char.template.get_base_mp_regen(char.level)
+    else
+      init = char.template.base_mp_reg
+    end
     mp_regen_multiplier = char.raid? ? Config.raid_mp_regen_multiplier : Config.mp_regen_multiplier
     mp_regen_bonus = 0.0
 
-    if char.player?
-      pc = char.acting_player
-
+    if pc = char.as?(L2PcInstance)
       if SevenSignsFestival.festival_in_progress? && pc.festival_participant?
         mp_regen_multiplier *= festival_regen_modifier(pc)
       else
@@ -216,10 +216,10 @@ module Formulas
         end
       end
 
-      if pc.inside_clan_hall_zone? && pc.clan? && pc.clan.hideout_id > 0
+      if pc.inside_clan_hall_zone? && (clan = pc.clan) && clan.hideout_id > 0
         zone = ZoneManager.get_zone(pc, L2ClanHallZone)
         pos_ch_idx = zone.try &.residence_id || -1
-        clan_hall_index = pc.clan.hideout_id
+        clan_hall_index = clan.hideout_id
         if clan_hall_index > 0 && clan_hall_index == pos_ch_idx
           if hall = ClanHallManager.get_clan_hall_by_id(clan_hall_index)
             if func = hall.get_function(ClanHall::FUNC_RESTORE_MP)
@@ -229,10 +229,10 @@ module Formulas
         end
       end
 
-      if pc.inside_castle_zone? && pc.clan? && pc.clan.castle_id > 0
+      if pc.inside_castle_zone? && (clan = pc.clan) && clan.castle_id > 0
         zone = ZoneManager.get_zone(pc, L2CastleZone)
         pos_castle_idx = zone.try &.residence_id || -1
-        castle_index = pc.clan.castle_id
+        castle_index = clan.castle_id
         if castle_index > 0 && castle_index == pos_castle_idx
           if castle = CastleManager.get_castle_by_id(castle_index)
             if func = castle.get_function(Castle::FUNC_RESTORE_MP)
@@ -242,10 +242,10 @@ module Formulas
         end
       end
 
-      if pc.inside_fort_zone? && pc.clan? && pc.clan.fort_id > 0
+      if pc.inside_fort_zone? && (clan = pc.clan) && clan.fort_id > 0
         zone = ZoneManager.get_zone(pc, L2FortZone)
         pos_fort_idx = zone.try &.residence_id || -1
-        fort_index = pc.clan.fort_id
+        fort_index = clan.fort_id
         if fort_index > 0 && fort_index == pos_fort_idx
           if fort = FortManager.get_fort_by_id(fort_index)
             if func = fort.get_function(Castle::FUNC_RESTORE_MP)
@@ -389,24 +389,11 @@ module Formulas
       val = (Math.sqrt(val) / target.get_m_def(nil, nil)) * 11.0
       m_atk_mod = val
     end
-    # debug "magic_level: #{magic_level}"
-    # debug "skill lvl_bonus_rate: #{skill.lvl_bonus_rate}"
-    # debug "activate_rate: #{activate_rate}"
-    # debug "target_base_stat: #{target_base_stat}"
-    # debug "base_mod: #{base_mod}"
-    # debug "element_mod: #{element_mod}"
-    # debug "trait_mod: #{trait_mod}"
-    # debug "m_atk_mod: #{m_atk_mod}"
-    # debug "buff_debuff_mod: #{buff_debuff_mod}"
-    # debug "min_chance: #{skill.min_chance}"
-    # debug "max_chance: #{skill.max_chance}"
 
     rate = base_mod * element_mod * trait_mod * m_atk_mod * buff_debuff_mod
-    # debug "constrained: #{rate.clamp(skill.min_chance, skill.max_chance)}"
     final_rate = trait_mod > 0 ? rate.clamp(skill.min_chance, skill.max_chance) : 0.0
 
     if final_rate <= Rnd.rand(100)
-      # debug "Effect of skill #{skill} failed. Rate: #{rate}, final rate: #{final_rate}."
       if attacker.playable? # custom check, to not create unnecesary SystemMessages
         sm = SystemMessage.c1_resisted_your_s2
         sm.add_char_name(target)
@@ -470,9 +457,6 @@ module Formulas
   def hit_miss(attacker : L2Character, target : L2Character) : Bool
     chance = ((80 + (2 * (attacker.accuracy - target.get_evasion_rate(attacker)))) * 10).to_i
     chance *= HitConditionBonusData.get_condition_bonus(attacker, target)
-    # chance = Math.max(chance, 200)
-    # chance = Math.min(chance, 980)
-    # chance < Rnd.rand(1000)
     chance.clamp(200, 980) < Rnd.rand(1000)
   end
 
@@ -485,7 +469,7 @@ module Formulas
   end
 
   def shld_use(attacker : L2Character, target : L2Character, skill : Skill?, send_msg : Bool) : Int8
-    item = target.secondary_weapon_item?
+    item = target.secondary_weapon_item
 
     if !item || (!item.is_a?(L2Armor) || item.item_type == ArmorType::SIGIL)
       return 0i8
@@ -499,7 +483,7 @@ module Formulas
 
     shld_success = SHIELD_DEFENSE_FAILED
 
-    at_weapon = attacker.active_weapon_item?
+    at_weapon = attacker.active_weapon_item
 
     if at_weapon && at_weapon.item_type == WeaponType::BOW
       shld_rate *= 1.3
@@ -559,45 +543,30 @@ module Formulas
 
     damage *= ss_boost
 
-    # debug "damage 2: #{damage}"
     if crit
       a = 2 * attacker.calc_stat(CRITICAL_DAMAGE, 1, target)
-      # debug "a: #{a}"
       b = attacker.calc_stat(CRITICAL_DAMAGE_POS, 1, target)
-      # debug "b: #{b}"
       c = target.calc_stat(DEFENCE_CRITICAL_DAMAGE, 1, target)
-      # debug "c: #{c}"
       d = (76 * damage * proximity_bonus) / defence
-      # debug "(damage: #{damage} * proximity_bonus: #{proximity_bonus}) = #{damage * proximity_bonus}"
-      # debug "defence: #{defence}"
-      # debug "d: #{d}"
       damage = a * b * c * d
       damage += (attacker.calc_stat(CRITICAL_DAMAGE_ADD, 0, target) * 77) / defence
       damage += target.calc_stat(DEFENCE_CRITICAL_DAMAGE_ADD, 0, target)
-      # debug "damage 2.5: #{damage}"
     else
       damage = (76 * damage * proximity_bonus) / defence
-      # debug "damage 2.5: #{damage}"
     end
-    # debug "damage 3: #{damage}"
+
     damage *= attack_trait_bonus(attacker, target)
-    # debug "damage 4: #{damage}"
+    damage *= attacker.random_damage_multiplier
 
-    # damage *= attacker.random_damage_multiplier # to test resistances and such
-
-    # debug "damage 5: #{damage}"
-
-    # debug "damage 7: #{damage}"
     if pvp
       damage *= attacker.calc_stat(PVP_PHYSICAL_DMG)
     end
 
     damage *= attribute_bonus(attacker, target, nil)
-    # debug "damage 8: #{damage}"
+
     if target.attackable?
-      # debug "damage 10: #{damage}"
-      if !target.raid? && !target.raid_minion? && target.level >= Config.min_npc_lvl_dmg_penalty && attacker.acting_player? && target.level - attacker.acting_player.level >= 2
-        lvl_diff = target.level - attacker.acting_player.level - 1
+      if !target.raid? && !target.raid_minion? && target.level >= Config.min_npc_lvl_dmg_penalty && attacker.acting_player && target.level - attacker.acting_player.not_nil!.level >= 2
+        lvl_diff = target.level - attacker.acting_player.not_nil!.level - 1
         if crit
           if lvl_diff >= Config.npc_crit_dmg_penalty.size
             damage *= Config.npc_crit_dmg_penalty[Config.npc_crit_dmg_penalty.size - 1]
@@ -614,7 +583,6 @@ module Formulas
       end
     end
 
-    # debug "#phys_dam: #{damage}"
     Math.max(damage, 1.0)
   end
 
@@ -648,7 +616,7 @@ module Formulas
     if Config.alt_game_magicfailures && !magic_success(attacker, target, skill)
       if attacker.player?
         if magic_success(attacker, target, skill) && target.level - attacker.level <= 9
-          if skill.has_effect_type?(L2EffectType::HP_DRAIN)
+          if skill.has_effect_type?(EffectType::HP_DRAIN)
             attacker.send_packet(SystemMessageId::DRAIN_HALF_SUCCESFUL)
           else
             attacker.send_packet(SystemMessageId::ATTACK_FAILED)
@@ -667,7 +635,7 @@ module Formulas
       damage *= attacker.calc_stat(MAGIC_CRIT_DMG)
     end
 
-    # damage *= attacker.random_damage_multiplier # commented out for testing
+    damage *= attacker.random_damage_multiplier
 
     if pvp
       stat = skill.magic? ? PVP_MAGICAL_DMG : PVP_PHYS_SKILL_DMG
@@ -679,9 +647,9 @@ module Formulas
     if target.attackable?
       if !target.raid? && !target.raid_minion?
         if target.level >= Config.min_npc_lvl_dmg_penalty
-          if attacker.acting_player?
-            if target.level - attacker.acting_player.level >= 2
-              lvl_diff = target.level - attacker.acting_player.level - 1
+          if pc_attacker = attacker.acting_player
+            if target.level - pc_attacker.level >= 2
+              lvl_diff = target.level - pc_attacker.level - 1
               if lvl_diff >= Config.npc_skill_dmg_penalty.size
                 damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
               else
@@ -712,7 +680,7 @@ module Formulas
 
     if Config.alt_game_magicfailures && !magic_success(owner, target, skill)
       if magic_success(owner, target, skill) && target.level - skill.magic_level <= 9
-        if skill.has_effect_type?(L2EffectType::HP_DRAIN)
+        if skill.has_effect_type?(EffectType::HP_DRAIN)
           owner.send_packet(SystemMessageId::DRAIN_HALF_SUCCESFUL)
         else
           owner.send_packet(SystemMessageId::ATTACK_FAILED)
@@ -727,7 +695,7 @@ module Formulas
       end
 
       if target.player?
-        if skill.has_effect_type?(L2EffectType::HP_DRAIN)
+        if skill.has_effect_type?(EffectType::HP_DRAIN)
           sm = SystemMessage.resisted_c1_drain
           sm.add_char_name(owner)
           target.send_packet(sm)
@@ -769,9 +737,9 @@ module Formulas
 
     if target.attackable? && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_magic_penalty
-        if attacker.acting_player?
-          if target.level - attacker.acting_player.level >= 3
-            lvl_diff = target.level - attacker.acting_player.level - 2
+        if attacker_pc = attacker.acting_player
+          if target.level - attacker_pc.level >= 3
+            lvl_diff = target.level - attacker_pc.level - 2
             if lvl_diff >= Config.npc_skill_chance_penalty.size
               target_modifier = Config.npc_skill_chance_penalty[Config.npc_skill_chance_penalty.size - 1]
             else
@@ -803,7 +771,7 @@ module Formulas
     end
 
     if Config.alt_game_cancel_bow && target.attacking_now?
-      if (wpn = target.active_weapon_item?) && wpn.item_type == WeaponType::BOW
+      if (wpn = target.active_weapon_item) && wpn.item_type == WeaponType::BOW
         init = 15.0
       end
     end
@@ -813,12 +781,7 @@ module Formulas
     init += Math.sqrt(13 * dmg)
     init -= (BaseStats::MEN.calc_bonus(target) * 100) - 100
     rate = target.calc_stat(ATTACK_CANCEL, init)
-    # rate = Math.max(Math.min(rate, 99), 1)
-    # debug "Rate of interrupt: #{rate} (damage: #{dmg})."
-    # success = Rnd.rand(100) < rate
-    success = Rnd.rand(100) < rate.clamp(1, 99)
-
-    success
+    Rnd.rand(100) < rate.clamp(1, 99)
   end
 
   def physical_skill_evasion(char : L2Character, target : L2Character, skill : Skill) : Bool
@@ -876,19 +839,11 @@ module Formulas
 
   def probability(chance : Float64, attacker : L2Character, target : L2Character, skill : Skill) : Bool
     temp = ((((((skill.magic_level + chance) - target.level) + 30) - target.int) * attribute_bonus(attacker, target, skill)) * general_trait_bonus(attacker, target, skill.trait_type, false))
-    # debug "#probability #{temp.round 2}"
     Rnd.rand(100) < temp
   end
 
   def attribute_bonus(attacker : L2Character, target : L2Character, skill : Skill?) : Float64
     if skill
-      # debug "Calculating attribute bonus of #{skill}:"
-      # debug "  Skill element: #{skill.attribute_type}"
-      # debug "  Skill element power: #{skill.attribute_power}"
-      # debug "  #{attacker}'s attack element: #{attacker.attack_element}"
-      # debug "  #{attacker}'s attack element power: #{attacker.get_attack_element_value(attacker.attack_element)}"
-      # debug "  #{target}'s defense: #{target.get_defense_element_value(attacker.attack_element)}"
-
       if skill.attribute_type.none? || attacker.attack_element != skill.attribute_type.to_i
         return 1.0
       end
@@ -1040,9 +995,9 @@ module Formulas
     if target.attackable?
       if !target.raid? && !target.raid_minion?
         if target.level >= Config.min_npc_lvl_dmg_penalty
-          if attacker.acting_player?
-            if target.level - attacker.acting_player.level >= 2
-              lvl_diff = target.level - attacker.acting_player.level - 1
+          if pc_attacker = attacker.acting_player
+            if target.level - pc_attacker.level >= 2
+              lvl_diff = target.level - pc_attacker.level - 1
               if lvl_diff >= Config.npc_skill_dmg_penalty.size
                 damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
               else
@@ -1165,7 +1120,7 @@ module Formulas
     penalty_mod = 1.0
     if target.is_a?(L2Attackable) && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_dmg_penalty
-        if (pc = attacker.acting_player?) && target.level - pc.level >= 2
+        if (pc = attacker.acting_player) && target.level - pc.level >= 2
           lvl_diff = target.level - pc.level - 1
           if lvl_diff >= Config.npc_skill_dmg_penalty.size
             penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
@@ -1192,7 +1147,7 @@ module Formulas
     base_rate = blow_chance * dex_mod * side_mod
     rate = char.calc_stat(BLOW_RATE, base_rate, target)
     result = Rnd.rand(100) < rate
-    if char.player?
+    if char.playable? || target.playable?
       char.say result ? "Blow succeeded (chance: #{rate}%)." : "Blow failed (chance: #{rate}%)."
     end
     result
@@ -1329,9 +1284,9 @@ module Formulas
     penalty_mod = 1.0
     if target.attackable? && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_dmg_penalty
-        if attacker.acting_player?
-          if target.level - attacker.acting_player.level >= 2
-            lvl_diff = target.level - attacker.acting_player.level - 1
+        if attacker.acting_player
+          if target.level - attacker.acting_player.not_nil!.level >= 2
+            lvl_diff = target.level - attacker.acting_player.not_nil!.level - 1
             if lvl_diff >= Config.npc_skill_dmg_penalty.size
               penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
             else
@@ -1380,12 +1335,12 @@ module Formulas
   end
 
   def siege_regen_modifier(pc : L2PcInstance) : Float64
-    return 0.0 unless clan = pc.clan?
+    return 0.0 unless clan = pc.clan
 
     siege = SiegeManager.get_siege(*pc.xyz)
     return 0.0 unless siege && siege.in_progress?
 
-    return 0.0 unless siege_clan = siege.get_attacker_clan?(clan.id)
+    return 0.0 unless siege_clan = siege.get_attacker_clan(clan.id)
     return 0.0 unless flag = siege_clan.flag[0]?
     return 0.0 unless Util.in_range?(200, pc, flag, true)
 
@@ -1437,9 +1392,9 @@ module Formulas
 
     if target.is_a?(L2Attackable) && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_dmg_penalty
-        if attacker.acting_player?
-          if target.level - attacker.acting_player.level >= 2
-            lvl_diff = target.level - attacker.acting_player.level - 1
+        if attacker.acting_player
+          if target.level - attacker.acting_player.not_nil!.level >= 2
+            lvl_diff = target.level - attacker.acting_player.not_nil!.level - 1
             if lvl_diff >= Config.npc_skill_dmg_penalty.size
               penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
             else

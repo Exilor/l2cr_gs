@@ -2,7 +2,7 @@ class Packets::Outgoing::MonRaceInfo < GameServerPacket
   initializer unknown1 : Int32, unknown2 : Int32, monsters : Array(L2Npc),
     speeds : Slice(Slice(Int32))
 
-  def write_impl
+  private def write_impl
     c 0xe3
 
     d @unknown1

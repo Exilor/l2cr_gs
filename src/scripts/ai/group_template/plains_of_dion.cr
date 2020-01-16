@@ -2,7 +2,7 @@ class Scripts::PlainsOfDion < AbstractNpcAI
   private DELU_LIZARDMEN = {
     21104, # Delu Lizardman Supplier
     21105, # Delu Lizardman Special Agent
-    21107, # Delu Lizardman Commander
+    21107  # Delu Lizardman Commander
   }
 
   private MONSTERS_MSG = {

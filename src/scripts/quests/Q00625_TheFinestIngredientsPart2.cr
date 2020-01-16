@@ -48,7 +48,7 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
     when "31521-08.html"
       if qs.cond?(3)
         if has_item?(pc, SPECIAL_YETI_MEAT)
-          random = rand(1000)
+          random = Rnd.rand(1000)
           if random < 167
             reward_items(pc, GREATER_DYE_OF_STR_1)
           elsif random < 334
@@ -149,7 +149,7 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
   def on_kill(npc, killer, is_summon)
     qs = get_random_party_member_state(killer, 1, 2, npc)
     if qs && Util.in_range?(1500, npc, killer, true)
-      if npc.summoner? == killer
+      if npc.summoner == killer
         qs.set_cond(3, true)
         give_items(qs.player, SPECIAL_YETI_MEAT)
       end

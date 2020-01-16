@@ -39,28 +39,28 @@ module AdminCommandHandler::AdminPledge
         return false
       elsif action == "dismiss"
         ClanTable.destroy_clan(player.clan_id)
-        clan = player.clan?
-        if clan.nil?
-          pc.send_message("Clan disbanded.")
-        else
+        if player.clan
           pc.send_message("There was a problem while destroying the clan.")
+        else
+          pc.send_message("Clan disbanded.")
         end
       elsif action == "info"
-        pc.send_packet(GMViewPledgeInfo.new(player.clan, player))
+        pc.send_packet(GMViewPledgeInfo.new(player.clan.not_nil!, player))
       elsif parameter.nil?
         pc.send_message("Usage: #pledge <setlevel|rep> <number>")
       elsif action == "setlevel"
         level = parameter.to_i
+        clan = player.clan.not_nil!
         if level.between?(0, 11)
-          player.clan.change_level(level)
-          pc.send_message("You set level #{level} for clan #{player.clan.name}")
+          clan.change_level(level)
+          pc.send_message("You set level #{level} for clan #{clan.name}")
         else
           pc.send_message("Level incorrect.")
         end
       elsif action.starts_with?("rep")
         begin
           points = parameter.to_i
-          clan = player.clan
+          clan = player.clan.not_nil!
           if clan.level < 5
             pc.send_message("Only clans of level 5 or above may receive reputation points.")
             show_main_page(pc)

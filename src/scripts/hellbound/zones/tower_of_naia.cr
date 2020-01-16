@@ -117,7 +117,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       {22394, -46536, 246275, -9120, 0},
       {22393, -46239, 245996, -9120, 0},
       {22394, -46229, 246347, -9120, 0},
-      {22394, -46019, 246198, -9120, 0},
+      {22394, -46019, 246198, -9120, 0}
     ],
     18495 => [
       {22439, -48146, 249597, -9124, -16280},
@@ -127,13 +127,13 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       {22439, -49715, 249601, -9104, -16360},
       {22439, -49714, 248696, -9104, 15932},
       {22439, -49225, 248710, -9104, 16512},
-      {22439, -48705, 248708, -9104, 16576},
+      {22439, -48705, 248708, -9104, 16576}
     ],
     18496 => [
       {22441, -51176, 246055, -9984, 0},
       {22441, -51699, 246190, -9984, 0},
       {22442, -52060, 245956, -9984, 0},
-      {22442, -51565, 246433, -9984, 0},
+      {22442, -51565, 246433, -9984, 0}
     ],
     18497 => [
       {22440, -49754, 243866, -9968, -16328},
@@ -143,7 +143,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       {22440, -49264, 242946, -9968, 16312},
       {22440, -49268, 243869, -9968, -16448},
       {22440, -48186, 242934, -9968, 16576},
-      {22440, -48185, 243855, -9968, -16448},
+      {22440, -48185, 243855, -9968, -16448}
     ],
     18498 => [
       {22411, -46355, 246375, -9984, 0},
@@ -151,11 +151,11 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       {22393, -45952, 245748, -9984, 0},
       {22394, -46428, 246254, -9984, 0},
       {22393, -46490, 245871, -9984, 0},
-      {22394, -45877, 246309, -9984, 0},
+      {22394, -45877, 246309, -9984, 0}
     ],
     18499 => [
       {22395, -48730, 248067, -9984, 0},
-      {22395, -49112, 248250, -9984, 0},
+      {22395, -49112, 248250, -9984, 0}
     ],
     18500 => [
       {22393, -51954, 246475, -10848, 0},
@@ -164,22 +164,22 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       {22393, -51913, 246206, -10848, 0},
       {22394, -51663, 245979, -10848, 0},
       {22394, -51969, 245809, -10848, 0},
-      {22412, -51259, 246357, -10848, 0},
+      {22412, -51259, 246357, -10848, 0}
     ],
     18501 => [
       {22395, -48856, 243949, -10848, 0},
-      {22395, -49144, 244190, -10848, 0},
+      {22395, -49144, 244190, -10848, 0}
     ],
     18502 => [
       {22441, -46471, 246135, -11704, 0},
       {22441, -46449, 245997, -11704, 0},
       {22441, -46235, 246187, -11704, 0},
       {22441, -46513, 246326, -11704, 0},
-      {22441, -45889, 246313, -11704, 0},
+      {22441, -45889, 246313, -11704, 0}
     ],
     18503 => [
       {22395, -49067, 248050, -11712, 0},
-      {22395, -48957, 248223, -11712, 0},
+      {22395, -48957, 248223, -11712, 0}
     ],
     18504 => [
       {22413, -51748, 246138, -12568, 0},
@@ -187,7 +187,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       {22413, -51787, 246594, -12568, 0},
       {22413, -51892, 246544, -12568, 0},
       {22413, -51500, 245781, -12568, 0},
-      {22413, -51941, 246045, -12568, 0},
+      {22413, -51941, 246045, -12568, 0}
     ],
     18505 => [
       {18490, -48238, 243347, -13376, 0},
@@ -201,7 +201,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       {18490, -47841, 243819, -13376, 0},
       {18490, -48646, 243764, -13376, 0},
       {18490, -47806, 243850, -13376, 0},
-      {18490, -48456, 243447, -13376, 0},
+      {18490, -48456, 243447, -13376, 0}
     ]
   }
 
@@ -256,7 +256,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
         return "18492-02.htm"
       end
       return "18492-01.htm"
-    elsif npc_id >= ROOM_MANAGER_FIRST && npc_id <= ROOM_MANAGER_LAST
+    elsif npc_id.between?(ROOM_MANAGER_FIRST, ROOM_MANAGER_LAST)
       if ACTIVE_ROOMS.has_key?(npc_id) && !ACTIVE_ROOMS[npc_id]
         unless player.in_party?
           player.send_packet(SystemMessageId::CAN_OPERATE_MACHINE_WHEN_IN_PARTY)
@@ -349,7 +349,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     elsif event.casecmp?("teleport") && (lock = @lock)
       html = nil
       player = player.not_nil!
-      if party = player.party?
+      if party = player.party
         if Util.in_range?(3000, party.leader, npc, true)
           party.members.each do |m|
             if Util.in_range?(2000, m, npc, true)
@@ -374,7 +374,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     elsif event.casecmp?("go") && ACTIVE_ROOMS.has_key?(npc_id) && !ACTIVE_ROOMS[npc_id]
       html = nil
       player = player.not_nil!
-      if party = player.party?
+      if party = player.party
         remove_foreigners(npc_id, party)
         start_room(npc_id)
         ThreadPoolManager.schedule_general(StopRoomTask.new(self, npc_id), 300000)
@@ -428,7 +428,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       end
 
       if manager_id > 0 && (spawned = NPC_SPAWNS[manager_id]?)
-        spawned.delete(npc)
+        spawned.delete_first(npc)
         if spawned.empty? && (door_list = DOORS[manager_id]?)
           DoorData.get_door!(door_list[1]).open_me
           NPC_SPAWNS.delete(manager_id)
@@ -438,7 +438,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       @challenge_state = STATE_SPORE_CHALLENGE_IN_PROGRESS
       mark_elpy_respawn
       DoorData.get_door!(18250025).close_me
-      ZoneManager.get_zone_by_id!(200100).enabled = true
+      ZoneManager.get_zone_by_id(200100).not_nil!.enabled = true
 
       10.times do
         add_spawn(SPORE_BASIC, -45474, 247450, -13994, 49152, false, 0, false)
@@ -467,7 +467,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
             INDEX_COUNT[(spore_group - 1).abs] += 1
           end
 
-          if INDEX_COUNT[spore_group].abs < ELEMENT_INDEX_LIMIT && INDEX_COUNT[spore_group].abs > 0 && INDEX_COUNT[spore_group] % 20 == 0 && rand(100) < 50
+          if INDEX_COUNT[spore_group].abs < ELEMENT_INDEX_LIMIT && INDEX_COUNT[spore_group].abs > 0 && INDEX_COUNT[spore_group] % 20 == 0 && Rnd.rand(100) < 50
             el = ELEMENTS_NAME[ELEMENTS.bsearch(npc_id)]
             SPORE_SPAWNS.each do |spore|
               if spore && spore.alive? && spore.id == npc_id
@@ -476,7 +476,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
             end
           end
           if INDEX_COUNT[spore_group].abs < ELEMENT_INDEX_LIMIT
-            if ((INDEX_COUNT[spore_group] > 0 && (npc_id == SPORE_FIRE || npc_id == SPORE_WIND)) || (INDEX_COUNT[spore_group] <= 0 && (npc_id == SPORE_WATER || npc_id == SPORE_EARTH))) && rand(1000) > 200
+            if ((INDEX_COUNT[spore_group] > 0 && (npc_id == SPORE_FIRE || npc_id == SPORE_WIND)) || (INDEX_COUNT[spore_group] <= 0 && (npc_id == SPORE_WATER || npc_id == SPORE_EARTH))) && Rnd.rand(1000) > 200
               spawn_opposite_spore(npc_id)
             else
               spawn_random_spore
@@ -508,18 +508,20 @@ class Scripts::TowerOfNaia < AbstractNpcAI
 
     if npc_id == MUTATED_ELPY
       DoorData.get_door!(18250025).open_me
-      ZoneManager.get_zone_by_id!(200100).enabled = false
-      ZoneManager.get_zone_by_id!(200101).enabled = true
-      ZoneManager.get_zone_by_id!(200101).enabled = false
-    elsif (npc_id == SPORE_BASIC || (npc_id >= SPORE_FIRE && npc_id <= SPORE_EARTH)) && @challenge_state == STATE_SPORE_CHALLENGE_IN_PROGRESS
-      SPORE_SPAWNS << npc
-      npc.running = false
-      coord = SPORES_MOVE_POINTS.sample
-      npc.spawn.x = coord[0]
-      npc.spawn.y = coord[1]
-      npc.spawn.z = coord[2]
-      npc.set_intention(AI::MOVE_TO, Location.new(*coord, 0))
-      start_quest_timer("despawn_spore", 60000, npc, nil)
+      ZoneManager.get_zone_by_id(200100).not_nil!.enabled = false
+      ZoneManager.get_zone_by_id(200101).not_nil!.enabled = true
+      ZoneManager.get_zone_by_id(200101).not_nil!.enabled = false
+    elsif npc_id == SPORE_BASIC || npc_id.between?(SPORE_FIRE, SPORE_EARTH)
+      if @challenge_state == STATE_SPORE_CHALLENGE_IN_PROGRESS
+        SPORE_SPAWNS << npc
+        npc.running = false
+        coord = SPORES_MOVE_POINTS.sample(random: Rnd)
+        npc.spawn.x = coord[0]
+        npc.spawn.y = coord[1]
+        npc.spawn.z = coord[2]
+        npc.set_intention(AI::MOVE_TO, Location.new(*coord, 0))
+        start_quest_timer("despawn_spore", 60000, npc, nil)
+      end
     end
 
     super
@@ -540,7 +542,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     remove_all_players(manager_id)
     ACTIVE_ROOMS[manager_id] = false
 
-    if door_list = DOORS[manager_id]
+    if door_list = DOORS[manager_id]?
       DoorData.get_door!(door_list[0]).open_me
       DoorData.get_door!(door_list[1]).close_me
     end
@@ -562,13 +564,13 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     @win_index = -1
     INDEX_COUNT[0] = 0
     INDEX_COUNT[1] = 0
-    ZoneManager.get_zone_by_id!(200100).enabled = false
-    ZoneManager.get_zone_by_id!(200101).enabled = false
-    ZoneManager.get_zone_by_id!(200101).enabled = true
+    ZoneManager.get_zone_by_id(200100).not_nil!.enabled = false
+    ZoneManager.get_zone_by_id(200101).not_nil!.enabled = false
+    ZoneManager.get_zone_by_id(200101).not_nil!.enabled = true
   end
 
   private def mark_elpy_respawn
-    respawn_time = (rand(43200..216000) * 1000) + Time.ms
+    respawn_time = (Rnd.rand(43200..216000) * 1000) + Time.ms
     GlobalVariablesManager["elpy_respawn_time"] = respawn_time
   end
 
@@ -596,13 +598,13 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     if respawn_time <= time
       add_spawn(MUTATED_ELPY, -45474, 247450, -13994, 49152, false, 0, false)
     else
-      task = ->{ add_spawn(MUTATED_ELPY, -45474, 247450, -13994, 49152, false, 0, false) }
+      task = -> { add_spawn(MUTATED_ELPY, -45474, 247450, -13994, 49152, false, 0, false) }
       ThreadPoolManager.schedule_general(task, respawn_time - time)
     end
   end
 
   private def spawn_random_spore
-    add_spawn(rand(SPORE_FIRE..SPORE_EARTH), -45474, 247450, -13994, 49152, false, 0, false)
+    add_spawn(Rnd.rand(SPORE_FIRE..SPORE_EARTH), -45474, 247450, -13994, 49152, false, 0, false)
   end
 
   private def spawn_opposite_spore(src_spore_id)
@@ -636,7 +638,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     return unless tmp = ZONES[manager_id]?
     return unless zone = ZoneManager.get_zone_by_id(tmp)
     zone.players_inside.each do |pc|
-      if party2 = pc.party?
+      if party2 = pc.party
         if party2.leader_l2id != party.leader_l2id
           pc.tele_to_location(16110, 243841, 11616)
         end

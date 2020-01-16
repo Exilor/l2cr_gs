@@ -45,28 +45,34 @@ class Scripts::ToIVortex < AbstractNpcAI
   def initialize
     super(self.class.simple_name, "ai/npc/Teleports")
 
-    add_start_npc(KEPLON, EUCLIE, PITHGON, DIMENSION_VORTEX_1, DIMENSION_VORTEX_2, DIMENSION_VORTEX_3)
-    add_talk_id(KEPLON, EUCLIE, PITHGON, DIMENSION_VORTEX_1, DIMENSION_VORTEX_2, DIMENSION_VORTEX_3)
+    add_start_npc(
+      KEPLON, EUCLIE, PITHGON, DIMENSION_VORTEX_1, DIMENSION_VORTEX_2,
+      DIMENSION_VORTEX_3
+    )
+    add_talk_id(
+      KEPLON, EUCLIE, PITHGON, DIMENSION_VORTEX_1, DIMENSION_VORTEX_2,
+      DIMENSION_VORTEX_3
+    )
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player && npc
+  def on_adv_event(event, npc, pc)
+    return unless pc && npc
     npc_id = npc.id
 
     case event
-    when "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+    when "1".."10" # "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
       loc = TOI_FLOORS[event]
       item_id = TOI_FLOOR_ITEMS[event]
-      if has_quest_items?(player, item_id)
-        take_items(player, item_id, 1)
-        player.tele_to_location(loc, true)
+      if has_quest_items?(pc, item_id)
+        take_items(pc, item_id, 1)
+        pc.tele_to_location(loc, true)
       else
         return "no-stones.htm"
       end
     when "GREEN", "BLUE", "RED"
-      if player.adena >= 10000
-        take_items(player, Inventory::ADENA_ID, 10000)
-        give_items(player, DIMENSION_TRADE[event], 1)
+      if pc.adena >= 10000
+        take_items(pc, Inventory::ADENA_ID, 10000)
+        give_items(pc, DIMENSION_TRADE[event], 1)
       else
         return "#{npc_id}no-adena.htm"
       end

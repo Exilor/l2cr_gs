@@ -14,7 +14,7 @@ class Packets::Outgoing::ExPCCafePointInfo < GameServerPacket
     @point_type = m_add_points < 0 ? 3 : 0
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x32
 

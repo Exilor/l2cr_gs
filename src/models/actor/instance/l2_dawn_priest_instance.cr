@@ -1,7 +1,7 @@
 require "./l2_signs_priest_instance"
 
 class L2DawnPriestInstance < L2SignsPriestInstance
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2DawnPriestInstance
   end
 

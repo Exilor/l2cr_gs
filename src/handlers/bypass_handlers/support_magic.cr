@@ -97,7 +97,7 @@ module BypassHandler::SupportMagic
         end
       end
 
-      if level >= CUBIC_LOWEST && level <= CUBIC_HIGHEST
+      if level.between?(CUBIC_LOWEST, CUBIC_HIGHEST)
         pc.do_simultaneous_cast(CUBIC)
       end
     end

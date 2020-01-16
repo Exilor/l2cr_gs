@@ -6,12 +6,12 @@ class Packets::Outgoing::ValidateLocationInVehicle < GameServerPacket
 
   def initialize(pc : L2PcInstance)
     @pc_id = pc.l2id
-    @boat_id = pc.boat!.l2id
+    @boat_id = pc.boat.not_nil!.l2id
     @heading = pc.heading
-    @pos = pc.in_vehicle_position
+    @pos = pc.in_vehicle_position.not_nil!
   end
 
-  def write_impl
+  private def write_impl
     c 0x80
 
     d @pc_id

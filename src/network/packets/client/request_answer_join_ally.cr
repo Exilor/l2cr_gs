@@ -20,17 +20,17 @@ class Packets::Incoming::RequestAnswerJoinAlly < GameClientPacket
         return
       end
 
-      clan = requestor.clan
+      clan = requestor.clan.not_nil!
 
       if clan.check_ally_join_condition(requestor, pc)
         requestor.send_packet(SystemMessageId::YOU_HAVE_SUCCEEDED_INVITING_FRIEND)
         pc.send_packet(SystemMessageId::YOU_ACCEPTED_ALLIANCE)
-
-        pc.clan.ally_id = clan.ally_id
-        pc.clan.ally_name = clan.ally_name
-        pc.clan.set_ally_penalty_expiry_time(0, 0)
-        pc.clan.change_ally_crest(clan.ally_crest_id, true)
-        pc.clan.update_clan_in_db
+        clan = pc.clan.not_nil!
+        clan.ally_id = clan.ally_id
+        clan.ally_name = clan.ally_name
+        clan.set_ally_penalty_expiry_time(0, 0)
+        clan.change_ally_crest(clan.ally_crest_id, true)
+        clan.update_clan_in_db
       end
     end
 

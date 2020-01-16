@@ -1,8 +1,9 @@
 class L2SiegeFlagInstance < L2Npc
   @can_talk = false
-  getter? advanced_headquarter = false
-  getter! clan : L2Clan
+
   getter! siege : Siegable
+  getter! clan : L2Clan
+  getter? advanced_headquarter = false
 
   def initialize(pc : L2PcInstance, template : L2NpcTemplate, advanced : Bool, outpost : Bool)
     super(template)
@@ -31,7 +32,7 @@ class L2SiegeFlagInstance < L2Npc
       raise "Initialization failed @clan.nil?: #{@clan.nil?}, @siege.nil?: #{@siege.nil?}"
     end
 
-    unless sc = siege.get_attacker_clan?(clan)
+    unless sc = siege.get_attacker_clan(clan)
       raise "Cannot find siege clan for #{@clan}"
     end
 

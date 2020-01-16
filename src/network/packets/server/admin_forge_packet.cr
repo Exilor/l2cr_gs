@@ -3,7 +3,7 @@ class Packets::Outgoing::AdminForgePacket < GameServerPacket
 
   @parts = [] of Part
 
-  def write_impl
+  private def write_impl
     @parts.each { |p| generate(p.b, p.str) }
   end
 

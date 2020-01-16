@@ -7,7 +7,6 @@ class L2DecoyInstance < L2Decoy
   def initialize(template : L2NpcTemplate, owner : L2PcInstance, @total_life_time : Int32)
     super(template, owner)
 
-    @total_life_time = total_life_time
     @time_remaining = total_life_time
     skill_level = template.display_id - 13070
     skill = SkillData[5272, skill_level]

@@ -10,7 +10,9 @@ class L2AirshipAI < L2VehicleAI
   end
 
   def client_stop_moving(loc : Location?)
-    @actor.stop_move(loc) if @actor.moving?
+    if @actor.moving?
+      @actor.stop_move(loc)
+    end
 
     if @client_moving || loc
       @client_moving = false

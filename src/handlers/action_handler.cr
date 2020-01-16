@@ -9,9 +9,9 @@ module ActionHandler
 
   def self.load
     {% for const in @type.constants %}
-      const = {{const.id}}
-      if const.is_a?(self)
-        register(const)
+      obj = {{const.id}}
+      if obj.is_a?(self)
+        register(obj)
       end
     {% end %}
   end

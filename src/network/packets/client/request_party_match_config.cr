@@ -12,7 +12,7 @@ class Packets::Incoming::RequestPartyMatchConfig < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    if !pc.in_party_match_room? && pc.party? && pc.party.leader != pc
+    if !pc.in_party_match_room? && ((party = pc.party) && party.leader != pc)
       pc.send_packet(SystemMessageId::CANT_VIEW_PARTY_ROOMS)
       action_failed
       return

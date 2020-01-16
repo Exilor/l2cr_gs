@@ -20,6 +20,7 @@ class L2RaceManagerInstance < L2Npc
   @@state = RACE_END
   @@minutes = 5
   @@managers = [] of self
+
   protected class_property race_number : Int32 = 4
   protected class_property packet : MonRaceInfo?
 

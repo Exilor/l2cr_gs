@@ -17,7 +17,7 @@ class Packets::Outgoing::WareHouseWithdrawalList < Packets::Outgoing::AbstractIt
     @items = wh.items
   end
 
-  def write_impl
+  private def write_impl
     c 0x42
 
     h @type

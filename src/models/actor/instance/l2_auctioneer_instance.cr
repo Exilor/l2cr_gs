@@ -3,7 +3,7 @@ class L2AuctioneerInstance < L2Npc
   private COND_BUSY_BECAUSE_OF_SIEGE = 1
   private COND_REGULAR = 3
 
-  @pending_auctions = Hash(Int32, Auction).new
+  @pending_auctions = Concurrent::Map(Int32, Auction).new
 
   def instance_type : InstanceType
     InstanceType::L2AuctioneerInstance
@@ -44,9 +44,8 @@ class L2AuctioneerInstance < L2Npc
             unless st.empty?
               bid = Math.min(st.shift.to_i64, Inventory.max_adena)
             end
-
-            a = Auction.new(pc.clan.hideout_id, pc.clan, days * 86400000, bid, ClanHallManager.get_clan_hall_by_owner!(pc.clan).name)
-            @pending_auctions.delete(a.id)
+            clan = pc.clan.not_nil!
+            a = Auction.new(clan.hideout_id, clan, days * 86400000, bid, ClanHallManager.get_clan_hall_by_owner(clan).not_nil!.name)
 
             @pending_auctions[a.id] = a
 
@@ -57,23 +56,23 @@ class L2AuctioneerInstance < L2Npc
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_MIN%"] = a.starting_bid
-            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_clan_hall_by_owner!(pc.clan).desc
+            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_clan_hall_by_owner(clan).not_nil!.desc
             html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_sale2"
             html["%objectId%"] = l2id
             pc.send_packet(html)
-          rescue e
+          rescue
             pc.send_message("Invalid bid")
           end
-        rescue e
+        rescue
           pc.send_message("Invalid auction duration")
         end
         return
       elsif actual_cmd.casecmp?("confirmAuction")
         begin
-          a = @pending_auctions[pc.clan.hideout_id]
+          a = @pending_auctions[pc.clan.not_nil!.hideout_id]
           a.confirm_auction
-          @pending_auctions.delete(pc.clan.hideout_id)
-        rescue e
+          @pending_auctions.delete(pc.clan.not_nil!.hideout_id)
+        rescue
           pc.send_message("Invalid auction")
         end
         return
@@ -82,17 +81,13 @@ class L2AuctioneerInstance < L2Npc
           return
         end
 
-        if Config.debug
-          debug "bidding show successful"
-        end
+        debug "bidding show successful"
 
         begin
           format = "%d/%m/%Y %H:%M"
           auction_id = val.to_i
 
-          if Config.debug
-            debug "auction test started"
-          end
+          debug "auction test started"
 
           filename = "data/html/auction/AgitAuctionInfo.htm"
 
@@ -102,14 +97,14 @@ class L2AuctioneerInstance < L2Npc
             html["%AGIT_NAME%"] = a.item_name
             html["%OWNER_PLEDGE_NAME%"] = a.seller_clan_name
             html["%OWNER_PLEDGE_MASTER%"] = a.seller_name
-            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).grade * 10
-            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).lease
-            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).location
+            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.grade * 10
+            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.lease
+            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.location
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
             html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) // 3600000} hours #{((a.end_date - Time.ms) // 60000) % 60} minutes"
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_COUNT%"] = a.bidders.size
-            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).desc
+            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.desc
             html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_list"
             html["%AGIT_LINK_BIDLIST%"] = "bypass -h npc_#{l2id}_bidlist #{a.id}"
             html["%AGIT_LINK_RE%"] = "bypass -h npc_#{l2id}_bid1 #{a.id}"
@@ -118,7 +113,7 @@ class L2AuctioneerInstance < L2Npc
           end
 
           pc.send_packet(html)
-        rescue e
+        rescue
           pc.send_message("Invalid auction")
         end
         return
@@ -135,16 +130,17 @@ class L2AuctioneerInstance < L2Npc
               bid = Math.min(st.shift.to_i64, Inventory.max_adena)
             end
 
-            AuctionManager.get_auction!(auction_id).set_bid(pc, bid)
-          rescue e
+            AuctionManager.get_auction(auction_id).not_nil!.set_bid(pc, bid)
+          rescue
             pc.send_message("Invalid bid")
           end
-        rescue e
+        rescue
           pc.send_message("Invalid auction")
         end
         return
       elsif actual_cmd.casecmp?("bid1")
-        if pc.clan?.nil? || pc.clan.level < 2
+        clan = pc.clan
+        if clan.nil? || clan.level < 2
           pc.send_packet(SystemMessageId::AUCTION_ONLY_CLAN_LEVEL_2_HIGHER)
           return
         end
@@ -153,7 +149,7 @@ class L2AuctioneerInstance < L2Npc
           return
         end
 
-        if (pc.clan.auction_bidded_at > 0 && pc.clan.auction_bidded_at != val.to_i) || pc.clan.hideout_id > 0
+        if (clan.auction_bidded_at > 0 && clan.auction_bidded_at != val.to_i) || clan.hideout_id > 0
           pc.send_packet(SystemMessageId::ALREADY_SUBMITTED_BID)
           return
         end
@@ -161,20 +157,20 @@ class L2AuctioneerInstance < L2Npc
         begin
           filename = "data/html/auction/AgitBid1.htm"
 
-          min_bid = AuctionManager.get_auction!(val.to_i).highest_bidder_max_bid
+          min_bid = AuctionManager.get_auction(val.to_i).not_nil!.highest_bidder_max_bid
           if min_bid == 0
-            min_bid = AuctionManager.get_auction!(val.to_i).starting_bid
+            min_bid = AuctionManager.get_auction(val.to_i).not_nil!.starting_bid
           end
 
           html = NpcHtmlMessage.new(l2id)
           html.set_file(pc, filename)
           html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_bidding #{val}"
-          html["%PLEDGE_ADENA%"] = pc.clan.warehouse.adena
+          html["%PLEDGE_ADENA%"] = clan.warehouse.adena
           html["%AGIT_AUCTION_MINBID%"] = min_bid
           html["npc_%objectId%_bid"] = "npc_#{l2id}_bid #{val}"
           pc.send_packet(html)
           return
-        rescue e
+        rescue
           pc.send_message("Invalid auction")
         end
         return
@@ -193,9 +189,7 @@ class L2AuctioneerInstance < L2Npc
           limit *= val.to_i
         end
 
-        if Config.debug
-          debug "cmd list: auction test started"
-        end
+        debug "cmd list: auction test started"
 
         items = String.build do |io|
           io << "<table width=280 border=0><tr>"
@@ -222,7 +216,7 @@ class L2AuctioneerInstance < L2Npc
             end
 
             io << "<tr><td>"
-            io << ClanHallManager.get_auctionable_hall_by_id!(a.item_id).location
+            io << ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.location
             io << "</td><td><a action=\"bypass -h npc_"
             io << l2id
             io << "_bidding "
@@ -249,20 +243,18 @@ class L2AuctioneerInstance < L2Npc
       elsif actual_cmd.casecmp?("bidlist")
         auction_id = 0
         if val.empty?
-          if pc.clan.auction_bidded_at <= 0
+          if pc.clan.not_nil!.auction_bidded_at <= 0
             return
           end
-          auction_id = pc.clan.auction_bidded_at
+          auction_id = pc.clan.not_nil!.auction_bidded_at
         else
           auction_id = val.to_i
         end
 
-        if Config.debug
-          debug "cmd bidlist: auction test started"
-        end
+        debug "cmd bidlist: auction test started"
 
         biders = String.build do |io|
-          bidders = AuctionManager.get_auction!(auction_id).bidders
+          bidders = AuctionManager.get_auction(auction_id).not_nil!.bidders
           bidders.each_value do |b|
             io << "<tr><td>"
             io << b.clan_name
@@ -290,71 +282,72 @@ class L2AuctioneerInstance < L2Npc
         pc.send_packet(html)
         return
       elsif actual_cmd.casecmp?("selectedItems")
-        if pc.clan? && pc.clan.hideout_id == 0 && pc.clan.auction_bidded_at > 0
+        clan = pc.clan
+        if clan && clan.hideout_id == 0 && clan.auction_bidded_at > 0
           format = "%d/%m/%Y %H:%M"
           filename = "data/html/auction/AgitBidInfo.htm"
           html = NpcHtmlMessage.new(l2id)
           html.set_file(pc, filename)
-          a = AuctionManager.get_auction(pc.clan.auction_bidded_at)
+          a = AuctionManager.get_auction(clan.auction_bidded_at)
           if a
             html["%AGIT_NAME%"] = a.item_name
             html["%OWNER_PLEDGE_NAME%"] = a.seller_clan_name
             html["%OWNER_PLEDGE_MASTER%"] = a.seller_name
-            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).grade * 10
-            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).lease
-            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).location
+            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.grade * 10
+            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.lease
+            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.location
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
             html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) // 3600000} hours #{((a.end_date - Time.ms) // 60000) % 60} minutes"
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_MYBID%"] = a.bidders[pc.clan_id].bid
-            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).desc
+            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.desc
             html["%objectId%"] = l2id
             html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_start"
           else
-            warn "Auctioneer Auction null for AuctionBiddedAt: #{pc.clan.auction_bidded_at}."
+            warn "Auctioneer Auction null for AuctionBiddedAt: #{clan.auction_bidded_at}."
           end
 
           pc.send_packet(html)
           return
-        elsif pc.clan? && AuctionManager.get_auction(pc.clan.hideout_id)
+        elsif (clan = pc.clan) && AuctionManager.get_auction(clan.hideout_id)
           format = "%d/%m/%Y %H:%M"
           filename = "data/html/auction/AgitSaleInfo.htm"
           html = NpcHtmlMessage.new(l2id)
           html.set_file(pc, filename)
-          a = AuctionManager.get_auction(pc.clan.hideout_id)
+          a = AuctionManager.get_auction(clan.hideout_id)
           if a
             html["%AGIT_NAME%"] = a.item_name
             html["%AGIT_OWNER_PLEDGE_NAME%"] = a.seller_clan_name
             html["%OWNER_PLEDGE_MASTER%"] = a.seller_name
-            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).grade * 10
-            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).lease
-            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).location
+            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.grade * 10
+            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.lease
+            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.location
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
             html["%AGIT_AUCTION_REMAIN%"] = "#{(a.end_date - Time.ms) // 3600000} hours #{((a.end_date - Time.ms) // 60000) % 60} minutes"
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_BIDCOUNT%"] = a.bidders.size
-            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id!(a.item_id).desc
+            html["%AGIT_AUCTION_DESC%"] = ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.desc
             html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_start"
             html["%id%"] = a.id
             html["%objectId%"] = l2id
           else
-            warn "Auctioneer Auction null for getHasHideout: #{pc.clan.hideout_id}."
+            warn "Auctioneer Auction null for getHasHideout: #{clan.hideout_id}."
           end
 
           pc.send_packet(html)
           return
-        elsif pc.clan? && pc.clan.hideout_id != 0
-          item_id = pc.clan.hideout_id
+        elsif (clan = pc.clan) && clan.hideout_id != 0
+          item_id = clan.hideout_id
           filename = "data/html/auction/AgitInfo.htm"
           html = NpcHtmlMessage.new(l2id)
           html.set_file(pc, filename)
           if ClanHallManager.get_auctionable_hall_by_id(item_id)
-            html["%AGIT_NAME%"] = ClanHallManager.get_auctionable_hall_by_id!(item_id).name
-            html["%AGIT_OWNER_PLEDGE_NAME%"] = pc.clan.name
-            html["%OWNER_PLEDGE_MASTER%"] = pc.clan.leader_name
-            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id!(item_id).grade * 10
-            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id!(item_id).lease
-            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id!(item_id).location
+            html["%AGIT_NAME%"] = ClanHallManager.get_auctionable_hall_by_id(item_id).not_nil!.name
+            html["%AGIT_OWNER_PLEDGE_NAME%"] = clan.name
+            html["%OWNER_PLEDGE_MASTER%"] = clan.leader_name
+            html["%AGIT_SIZE%"] = ClanHallManager.get_auctionable_hall_by_id(item_id).not_nil!.grade * 10
+            html["%AGIT_LEASE%"] = ClanHallManager.get_auctionable_hall_by_id(item_id).not_nil!.lease
+            html["%AGIT_LOCATION%"] = ClanHallManager.get_auctionable_hall_by_id(item_id).not_nil!.location
             html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_start"
             html["%objectId%"] = l2id
           else
@@ -363,15 +356,15 @@ class L2AuctioneerInstance < L2Npc
 
           pc.send_packet(html)
           return
-        elsif pc.clan? && pc.clan.hideout_id == 0
+        elsif (clan = pc.clan) && clan.hideout_id == 0
           pc.send_packet(SystemMessageId::NO_OFFERINGS_OWN_OR_MADE_BID_FOR)
           return
-        elsif pc.clan?.nil?
+        elsif pc.clan.nil?
           pc.send_packet(SystemMessageId::CANNOT_PARTICIPATE_IN_AN_AUCTION)
           return
         end
       elsif actual_cmd.casecmp?("cancelBid")
-        bid = AuctionManager.get_auction!(pc.clan.auction_bidded_at).bidders[pc.clan_id].bid
+        bid = AuctionManager.get_auction(pc.clan.not_nil!.auction_bidded_at).not_nil!.bidders[pc.clan_id].bid
         filename = "data/html/auction/AgitBidCancel.htm"
         html = NpcHtmlMessage.new(l2id)
         html.set_file(pc, filename)
@@ -382,7 +375,7 @@ class L2AuctioneerInstance < L2Npc
         pc.send_packet(html)
         return
       elsif actual_cmd.casecmp?("doCancelBid")
-        if a = AuctionManager.get_auction(pc.clan.auction_bidded_at)
+        if a = AuctionManager.get_auction(pc.clan.not_nil!.auction_bidded_at)
           a.cancel_bid(pc.clan_id)
           pc.send_packet(SystemMessageId::CANCELED_BID)
         end
@@ -399,13 +392,13 @@ class L2AuctioneerInstance < L2Npc
         filename = "data/html/auction/AgitSaleCancel.htm"
         html = NpcHtmlMessage.new(l2id)
         html.set_file(pc, filename)
-        html["%AGIT_DEPOSIT%"] = ClanHallManager.get_clan_hall_by_owner!(pc.clan).lease
+        html["%AGIT_DEPOSIT%"] = ClanHallManager.get_clan_hall_by_owner(pc.clan.not_nil!).not_nil!.lease
         html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_selectedItems"
         html["%objectId%"] = l2id
         pc.send_packet(html)
         return
       elsif actual_cmd.casecmp?("doCancelAuction")
-        if a = AuctionManager.get_auction(pc.clan.hideout_id)
+        if a = AuctionManager.get_auction(pc.clan.not_nil!.hideout_id)
           a.cancel_auction
           pc.send_message("Your auction has been canceled")
         end
@@ -414,7 +407,7 @@ class L2AuctioneerInstance < L2Npc
         filename = "data/html/auction/AgitSale2.htm"
         html = NpcHtmlMessage.new(l2id)
         html.set_file(pc, filename)
-        html["%AGIT_LAST_PRICE%"] = ClanHallManager.get_clan_hall_by_owner!(pc.clan).lease
+        html["%AGIT_LAST_PRICE%"] = ClanHallManager.get_clan_hall_by_owner(pc.clan.not_nil!).not_nil!.lease
         html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_sale"
         html["%objectId%"] = l2id
         pc.send_packet(html)
@@ -431,8 +424,8 @@ class L2AuctioneerInstance < L2Npc
         filename = "data/html/auction/AgitSale1.htm"
         html = NpcHtmlMessage.new(l2id)
         html.set_file(pc, filename)
-        html["%AGIT_DEPOSIT%"] = ClanHallManager.get_clan_hall_by_owner!(pc.clan).lease
-        html["%AGIT_PLEDGE_ADENA%"] = pc.clan.warehouse.adena
+        html["%AGIT_DEPOSIT%"] = ClanHallManager.get_clan_hall_by_owner(pc.clan.not_nil!).not_nil!.lease
+        html["%AGIT_PLEDGE_ADENA%"] = pc.clan.not_nil!.warehouse.adena
         html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_selectedItems"
         html["%objectId%"] = l2id
         pc.send_packet(html)
@@ -451,19 +444,19 @@ class L2AuctioneerInstance < L2Npc
           filename = "data/html/auction/AgitBid2.htm"
           html = NpcHtmlMessage.new(l2id)
           html.set_file(pc, filename)
-          a = AuctionManager.get_auction(pc.clan.auction_bidded_at)
-          if a
+
+          if a = AuctionManager.get_auction(pc.clan.not_nil!.auction_bidded_at)
             html["%AGIT_AUCTION_BID%"] = a.bidders[pc.clan_id].bid
             html["%AGIT_AUCTION_MINBID%"] = a.starting_bid
             html["%AGIT_AUCTION_END%"] = Time.from_ms(a.end_date).to_s(format)
             html["%AGIT_LINK_BACK%"] = "bypass -h npc_#{l2id}_selectedItems"
             html["npc_%objectId%_bid1"] = "npc_#{l2id}_bid1 #{a.id}"
           else
-            warn "Auctioneer Auction null for AuctionBiddedAt #{pc.clan.auction_bidded_at}"
+            warn "Auctioneer Auction null for AuctionBiddedAt #{pc.clan.not_nil!.auction_bidded_at}"
           end
 
           pc.send_packet(html)
-        rescue e
+        rescue
           pc.send_message("Invalid auction")
         end
         return

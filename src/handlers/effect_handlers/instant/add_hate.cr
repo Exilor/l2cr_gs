@@ -6,7 +6,7 @@ class EffectHandler::AddHate < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

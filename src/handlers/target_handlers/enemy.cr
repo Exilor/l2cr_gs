@@ -9,7 +9,7 @@ module TargetHandler::Enemy
         return EMPTY_TARGET_LIST
       end
 
-      pc = char.acting_player?
+      pc = char.acting_player
 
       if target.dead? || (!target.attackable? && pc && !pc.check_if_pvp(target) && !pc.current_skill.not_nil!.ctrl?)
         char.send_packet(SystemMessageId::INCORRECT_TARGET)
@@ -23,6 +23,6 @@ module TargetHandler::Enemy
   end
 
   def target_type
-    L2TargetType::ENEMY
+    TargetType::ENEMY
   end
 end

@@ -49,7 +49,7 @@ module BypassHandler::RentPet
     return unless pc.reduce_adena("Rent", price.to_i64, pc.last_folk_npc, true)
 
     pc.mount(pet_id, 0, false)
-    sg = SetupGauge.new(3, time * 1000)
+    sg = SetupGauge.green(time * 1000)
     pc.send_packet(sg)
     pc.start_rent_pet(time)
   end

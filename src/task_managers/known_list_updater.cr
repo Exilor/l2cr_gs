@@ -14,13 +14,6 @@ module KnownListUpdater
   end
 
   def call
-    # debug "[#{@@timer}] Updating - update pass: #{@@update_pass}, full update: #{@@timer == FULL_UPDATE_TIMER}."
-    # full_update_pass = !@@update_pass && @@timer == FULL_UPDATE_TIMER
-    # if full_update_pass
-    #   timer = Timer.new
-    #   warn "Full update pass has begun."
-    # end
-
     L2World.world_regions.each do |regions|
       regions.each do |reg|
         begin
@@ -40,10 +33,6 @@ module KnownListUpdater
         end
       end
     end
-
-    # if full_update_pass
-    #   warn "Full update pass completed in #{timer.try &.result(10)} s."
-    # end
 
     @@update_pass = !@@update_pass
     @@timer = @@timer > 0 ? @@timer - 1 : FULL_UPDATE_TIMER

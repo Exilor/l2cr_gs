@@ -9,7 +9,7 @@ class Packets::Outgoing::ExBrExtraUserInfo < GameServerPacket
     @invisible = pc.invisible?
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0xda
 

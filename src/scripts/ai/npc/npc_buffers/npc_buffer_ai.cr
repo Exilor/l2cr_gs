@@ -4,15 +4,9 @@ struct NpcBufferAI
   initializer npc : L2Npc, skill_data : NpcBufferSkillData
 
   def call
-    # unless @npc
-    #   warn "No NPC."
-    #   return
-    # end
-
     skill = @skill_data.skill
 
     unless @npc.visible?
-      # warn 'NPC is not visible.'
       return
     end
 
@@ -26,19 +20,17 @@ struct NpcBufferAI
       return
     end
 
-    summoner = @npc.summoner?
+    summoner = @npc.summoner
 
-    unless summoner && summoner.player?
+    unless summoner && (pc = summoner.as?(L2PcInstance))
       warn "Summoner is nil or not a player."
       return
     end
 
-    pc = summoner.acting_player
-
     case @skill_data.affect_scope
     when AffectScope::PARTY
-      if pc.in_party?
-        pc.party.members.each do |m|
+      if party = pc.party
+        party.members.each do |m|
           if m.alive? && Util.in_range?(skill.affect_range, @npc, m, true)
             skill.apply_effects(pc, m)
           end
@@ -73,7 +65,7 @@ struct NpcBufferAI
   def friendly?(pc, target)
     return false unless target.playable?
 
-    target_player = target.acting_player
+    target_player = target.acting_player.not_nil!
 
     case
     when pc == target_player
@@ -106,7 +98,7 @@ struct NpcBufferAI
 
     return false unless target.playable?
 
-    target_player = target.acting_player
+    target_player = target.acting_player.not_nil!
     if friendly?(pc, target_player)
       return false
     end

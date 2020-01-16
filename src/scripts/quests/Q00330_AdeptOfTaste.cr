@@ -155,7 +155,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when MANDRAGORA_SPROUT1, MANDRAGORA_SPROUT2
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, SONIAS_BOTANY_BOOK) && !has_at_least_one_quest_item?(killer, RED_MANDRAGORA_SAP, WHITE_MANDRAGORA_SAP)
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 70
               if get_quest_items_count(killer, RED_MANDRAGORA_ROOT) < 40
                 give_items(killer, RED_MANDRAGORA_ROOT, 1)
@@ -180,7 +180,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when MANDRAGORA_SAPLING
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, SONIAS_BOTANY_BOOK) && !has_at_least_one_quest_item?(killer, RED_MANDRAGORA_SAP, WHITE_MANDRAGORA_SAP)
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 77
               if get_quest_items_count(killer, RED_MANDRAGORA_ROOT) < 40
                 give_items(killer, RED_MANDRAGORA_ROOT, 1)
@@ -205,7 +205,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when MANDRAGORA_BLOSSOM
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, SONIAS_BOTANY_BOOK) && !has_at_least_one_quest_item?(killer, RED_MANDRAGORA_SAP, WHITE_MANDRAGORA_SAP)
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 87
               if get_quest_items_count(killer, RED_MANDRAGORA_ROOT) < 40
                 give_items(killer, RED_MANDRAGORA_ROOT, 1)
@@ -230,7 +230,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when BLOODY_BEE
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, JACOBS_INSECT_BOOK)
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 80
               if get_quest_items_count(killer, NECTAR) < 20
                 give_items(killer, NECTAR, 1)
@@ -255,7 +255,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when GRAY_ANT
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, GLYVKAS_BOTANY_BOOK)
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 87
               if get_quest_items_count(killer, GREEN_MARSH_MOSS) < 20
                 give_items(killer, GREEN_MARSH_MOSS, 1)
@@ -280,7 +280,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when GIANT_CRIMSON_ANT
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, GLYVKAS_BOTANY_BOOK)
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 90
               if get_quest_items_count(killer, GREEN_MARSH_MOSS) < 20
                 give_items(killer, GREEN_MARSH_MOSS, 1)
@@ -305,7 +305,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when STINGER_WASP
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, JACOBS_INSECT_BOOK)
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 92
               if get_quest_items_count(killer, NECTAR) < 20
                 give_items(killer, NECTAR, 1)
@@ -330,7 +330,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when MONSTER_EYE_SEARCHER
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, ROLLANTS_CREATURE_BOOK) && get_quest_items_count(killer, BODY_OF_MONSTER_EYE) < 30
-            i0 = rand(100)
+            i0 = Rnd.rand(100)
             if i0 < 77
               if get_quest_items_count(killer, BODY_OF_MONSTER_EYE) == 29
                 give_items(killer, BODY_OF_MONSTER_EYE, 1)
@@ -357,7 +357,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
       when MONSTER_EYE_GAZER
         if get_quest_items_count(killer, RED_MANDRAGORA_SAP) + get_quest_items_count(killer, WHITE_MANDRAGORA_SAP) + get_quest_items_count(killer, HONEY) + get_quest_items_count(killer, GOLDEN_HONEY) + get_quest_items_count(killer, DIONIAN_POTATO) + get_quest_items_count(killer, GREEN_MOSS_BUNDLE) + get_quest_items_count(killer, BROWN_MOSS_BUNDLE) + get_quest_items_count(killer, MONSTER_EYE_MEAT) < 5
           if has_quest_items?(killer, INGREDIENT_LIST, ROLLANTS_CREATURE_BOOK) && get_quest_items_count(killer, BODY_OF_MONSTER_EYE) < 30
-            if rand(10) < 7
+            if Rnd.rand(10) < 7
               give_items(killer, BODY_OF_MONSTER_EYE, 1)
               if get_quest_items_count(killer, BODY_OF_MONSTER_EYE) == 30
                 play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -400,7 +400,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
             html = "30469-04.html"
           else
             if get_quest_items_count(pc, WHITE_MANDRAGORA_SAP) + get_quest_items_count(pc, GOLDEN_HONEY) + get_quest_items_count(pc, BROWN_MOSS_BUNDLE) == 0
-              if rand(10) < 5
+              if Rnd.rand(10) < 5
                 take_items(pc, INGREDIENT_LIST, -1)
                 take_items(pc, RED_MANDRAGORA_SAP, -1)
                 take_items(pc, WHITE_MANDRAGORA_SAP, -1)
@@ -428,7 +428,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
             end
 
             if get_quest_items_count(pc, WHITE_MANDRAGORA_SAP) + get_quest_items_count(pc, GOLDEN_HONEY) + get_quest_items_count(pc, BROWN_MOSS_BUNDLE) == 1
-              if rand(10) < 5
+              if Rnd.rand(10) < 5
                 take_items(pc, INGREDIENT_LIST, -1)
                 take_items(pc, RED_MANDRAGORA_SAP, -1)
                 take_items(pc, WHITE_MANDRAGORA_SAP, -1)
@@ -456,7 +456,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
             end
 
             if get_quest_items_count(pc, WHITE_MANDRAGORA_SAP) + get_quest_items_count(pc, GOLDEN_HONEY) + get_quest_items_count(pc, BROWN_MOSS_BUNDLE) == 2
-              if rand(10) < 5
+              if Rnd.rand(10) < 5
                 take_items(pc, INGREDIENT_LIST, -1)
                 take_items(pc, RED_MANDRAGORA_SAP, -1)
                 take_items(pc, WHITE_MANDRAGORA_SAP, -1)
@@ -484,7 +484,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
             end
 
             if get_quest_items_count(pc, WHITE_MANDRAGORA_SAP) + get_quest_items_count(pc, GOLDEN_HONEY) + get_quest_items_count(pc, BROWN_MOSS_BUNDLE) == 3
-              if rand(10) < 5
+              if Rnd.rand(10) < 5
                 take_items(pc, INGREDIENT_LIST, -1)
                 take_items(pc, RED_MANDRAGORA_SAP, -1)
                 take_items(pc, WHITE_MANDRAGORA_SAP, -1)

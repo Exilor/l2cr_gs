@@ -7,8 +7,8 @@ module EffectHandler
       @power = params.get_f64("power", 0)
     end
 
-    def effect_type
-      L2EffectType::HP
+    def effect_type : EffectType
+      EffectType::HP
     end
 
     def on_start(info)
@@ -31,7 +31,7 @@ module EffectHandler
         static_shot_bonus = 2.4 * skill.mp_consume2
         m_atk_mul = 4
       else
-        if grade = char.active_weapon_instance?.try &.template.item_grade
+        if grade = char.active_weapon_instance.try &.template.item_grade
           m_atk_mul = grade.s84? ? 4 : grade.s80? ? 2 : 1
         end
         m_atk_mul = bss ? m_atk_mul * 4 : m_atk_mul + 1
@@ -76,7 +76,7 @@ module EffectHandler
       end
     end
 
-    def instant?
+    def instant? : Bool
       true
     end
   end

@@ -8,7 +8,7 @@ module GeoPathFinding
   private PATH_NODES_INDEX = {} of Int32 => Slice(Int32)
 
   def load
-    info "Loading path nodes..."
+    debug "Loading path nodes..."
     timer = Timer.new
 
     Dir.glob(Config.pathnode_dir + "/*.pn") do |path|
@@ -26,11 +26,11 @@ module GeoPathFinding
 
   private def load_path_node_file(rx, ry)
     unless rx.between?(L2World::TILE_X_MIN, L2World::TILE_X_MAX)
-      error "Pathnode file x outside world bounds (#{rx})"
+      error { "Pathnode file x outside world bounds (#{rx})" }
       return
     end
     unless ry.between?(L2World::TILE_Y_MIN, L2World::TILE_Y_MAX)
-      error "Pathnode file y outside world bounds (#{ry})"
+      error { "Pathnode file y outside world bounds (#{ry})" }
       return
     end
 
@@ -43,8 +43,8 @@ module GeoPathFinding
 
     index = 0
 
-    size = File.info(path).size
-    slice = GC.malloc_atomic(size.to_u32).as(UInt8*).to_slice(size)
+    size = File.size(path)
+    slice = GC.malloc_atomic(size).as(UInt8*).to_slice(size)
     File.open(path, &.read_fully(slice))
     indexes = Slice(Int32).new(65536)
 
@@ -65,10 +65,10 @@ module GeoPathFinding
   def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Array(AbstractNodeLoc)?
     gx = (x - L2World::MAP_MIN_X) >> 4
 		gy = (y - L2World::MAP_MIN_Y) >> 4
-		gz = z.to_i16
+		gz = z.to_i16!
 		gtx = (tx - L2World::MAP_MIN_X) >> 4
 		gty = (ty - L2World::MAP_MIN_Y) >> 4
-		gtz = tz.to_i16
+		gtz = tz.to_i16!
 
 		start = read_node(gx, gy, gz)
 		stop = read_node(gtx, gty, gtz)
@@ -169,7 +169,7 @@ module GeoPathFinding
       if direction_x != previous_direction_x || direction_y != previous_direction_y
         previous_direction_x = direction_x
         previous_direction_y = direction_y
-        path.unshift(node.loc)
+        path.unshift(node.loc) # consider using push and then reverse
       end
 
       node = node.parent
@@ -188,18 +188,15 @@ module GeoPathFinding
     reg_offset = get_region_offset(get_region_x(node_x), get_region_y(node_y))
     pn = PATH_NODES[reg_offset]
 
-    neighbors = Array(AbstractNode(GeoNodeLoc)).new(8)
+    neighbors = Array(GeoNode).new(8)
     neighbor = pn[idx].to_i8 # N
     idx += 1
 
-    new_node_x : Int16
-    new_node_y : Int16
-
     if neighbor > 0
       neighbor -= 1
-      new_node_x = (node_x).to_i16
+      new_node_x = node_x.to_i16
       new_node_y = (node_y - 1).to_i16
-      if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
     end
@@ -211,7 +208,7 @@ module GeoPathFinding
       neighbor -= 1
       new_node_x = (node_x + 1).to_i16
       new_node_y = (node_y - 1).to_i16
-      if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
     end
@@ -222,8 +219,8 @@ module GeoPathFinding
     if neighbor > 0
       neighbor -= 1
       new_node_x = (node_x + 1).to_i16
-      new_node_y = (node_y).to_i16
-      if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+      new_node_y = node_y.to_i16
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
     end
@@ -235,7 +232,7 @@ module GeoPathFinding
 			neighbor -= 1
 			new_node_x = (node_x + 1).to_i16
 			new_node_y = (node_y + 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+			if new_node = read_node(new_node_x, new_node_y, neighbor)
 				neighbors << new_node
 			end
 		end
@@ -245,9 +242,9 @@ module GeoPathFinding
 
 		if neighbor > 0
 			neighbor -= 1
-			new_node_x = (node_x).to_i16
+			new_node_x = node_x.to_i16
 			new_node_y = (node_y + 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+			if new_node = read_node(new_node_x, new_node_y, neighbor)
 				neighbors << new_node
 			end
 		end
@@ -259,7 +256,7 @@ module GeoPathFinding
 			neighbor -= 1
 			new_node_x = (node_x - 1).to_i16
 			new_node_y = (node_y + 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+			if new_node = read_node(new_node_x, new_node_y, neighbor)
 				neighbors << new_node
 			end
 		end
@@ -270,8 +267,8 @@ module GeoPathFinding
 		if neighbor > 0
 			neighbor -= 1
 			new_node_x = (node_x - 1).to_i16
-			new_node_y = (node_y).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+			new_node_y = node_y.to_i16
+			if new_node = read_node(new_node_x, new_node_y, neighbor)
 				neighbors << new_node
 			end
 		end
@@ -283,56 +280,55 @@ module GeoPathFinding
 			neighbor -= 1
 			new_node_x = (node_x - 1).to_i16
 			new_node_y = (node_y - 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor) # overload confusion
+			if new_node = read_node(new_node_x, new_node_y, neighbor)
 				neighbors << new_node
 			end
 		end
 
-    # neighbors
-    # Array(GeoNode).new(neighbors.to_unsafe.as(GeoNode*), neighbors.size)
-    neighbors.unsafe_as(Array(GeoNode))
+    neighbors
   end
 
   private def read_node(node_x : Int16, node_y : Int16, layer : Int8) : GeoNode?
-    reg_offset = get_region_offset(get_region_x(node_x.to_i32), get_region_y(node_y.to_i32))
-    unless path_nodes_exist?(reg_offset)
+    offset = get_region_offset(get_region_x(node_x.to_i32), get_region_y(node_y.to_i32))
+    unless path_nodes_exist?(offset)
+      debug "Path nodes do not exist for offset #{offset} (1)"
       return
     end
 
     nbx : Int16 = get_node_block(node_x.to_i32)
     nby : Int16 = get_node_block(node_y.to_i32)
-    tmp = PATH_NODES_INDEX[reg_offset]
-    idx : Int32 = tmp[(nby << 8) + nbx]
-    pn = PATH_NODES[reg_offset]
+    tmp = PATH_NODES_INDEX[offset]
+    idx : Int32 = tmp[(nby.to_i32 << 8) + nbx]
+    pn = PATH_NODES[offset]
     nodes = pn[idx].to_i8
     idx += (layer.to_i32 * 10) + 1
     if nodes < layer
-      puts "Something wrong with #read_node(Int16, Int16, Int8)!"
+      debug "Something wrong with #read_node(Int16, Int16, Int8)"
     end
-    node_z = IO::ByteFormat::LittleEndian.decode(Int16, pn + idx)
+    node_z = IO::ByteFormat::BigEndian.decode(Int16, pn + idx)
     idx += 2
 
     GeoNode.new(GeoNodeLoc.new(node_x, node_y, node_z), idx)
   end
 
   private def read_node(gx : Int32, gy : Int32, z : Int16) : GeoNode?
-    node_x = get_node_pos(gx)
-    node_y = get_node_pos(gy)
+    node_x : Int16 = get_node_pos(gx)
+    node_y : Int16 = get_node_pos(gy)
     reg_x = get_region_x(node_x.to_i32)
     reg_y = get_region_y(node_y.to_i32)
-    reg_offset = get_region_offset(reg_x, reg_y)
+    offset : Int16 = get_region_offset(reg_x, reg_y)
 
-    unless path_nodes_exist?(reg_offset)
-      debug "Path nodes do not exist for reg_offset #{reg_offset}"
+    unless path_nodes_exist?(offset)
+      debug "Path nodes do not exist for offset #{offset} (2)"
       return
     end
 
     nbx : Int16 = get_node_block(node_x.to_i32)
     nby : Int16 = get_node_block(node_y.to_i32)
-    debug "reg_offset: #{reg_offset}"
-    tmp = PATH_NODES_INDEX[reg_offset]
+
+    tmp = PATH_NODES_INDEX[offset]
     idx : Int32 = tmp[(nby.to_i32 << 8) + nbx]
-    pn = PATH_NODES[reg_offset]
+    pn = PATH_NODES[offset]
 
     nodes = pn[idx].to_i8
     idx += 1
@@ -340,7 +336,7 @@ module GeoPathFinding
     idx2 = 0
     last_z = Int16::MIN
     while nodes > 0
-      node_z = IO::ByteFormat::LittleEndian.decode(Int16, pn + idx)
+      node_z = IO::ByteFormat::BigEndian.decode(Int16, pn + idx)
       if (last_z - z).abs > (node_z - z).abs
         last_z = node_z
         idx2 = idx + 2
@@ -352,23 +348,6 @@ module GeoPathFinding
     GeoNode.new(GeoNodeLoc.new(node_x, node_y, last_z), idx2)
   end
 
-  private def get_region_offset(*args)
-    PathFinding.get_region_offset(*args)
-  end
-
-  private def get_node_pos(*args)
-    PathFinding.get_node_pos(*args)
-  end
-
-  private def get_region_x(*args)
-    PathFinding.get_region_x(*args)
-  end
-
-  private def get_region_y(*args)
-    PathFinding.get_region_y(*args)
-  end
-
-  private def get_node_block(*args)
-    PathFinding.get_node_block(*args)
-  end
+  delegate get_region_offset, get_node_pos, get_region_x, get_region_y,
+    get_node_block, to: PathFinding
 end

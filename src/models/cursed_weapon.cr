@@ -4,6 +4,7 @@ class CursedWeapon
 
   @remove_task : Scheduler::PeriodicTask?
   @transformation_id = 0
+
   property disappear_chance : Int32 = 0
   property drop_rate : Int32 = 0
   property duration : Int32 = 0
@@ -294,8 +295,8 @@ class CursedWeapon
     player.karma = 9999999
     player.pk_kills = 0
 
-    if player.in_party?
-      player.party.remove_party_member(player, L2Party::MessageType::Expelled)
+    if party = player.party
+      party.remove_party_member(player, L2Party::MessageType::Expelled)
     end
 
     do_transform
@@ -329,9 +330,7 @@ class CursedWeapon
   end
 
   def save_data
-    if Config.debug
-      info "Saving data."
-    end
+    debug "Saving data."
 
     begin
       del = "DELETE FROM cursed_weapons WHERE itemId = ?"

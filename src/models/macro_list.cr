@@ -6,6 +6,7 @@ class MacroList
 
   @macro_id = 1000
   @macros = Concurrent::Map(Int32, Macro).new
+
   getter revision = 1
 
   initializer owner : L2PcInstance

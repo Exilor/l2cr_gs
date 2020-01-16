@@ -46,7 +46,7 @@ module OlympiadGameManager
         TASKS.each_with_index do |task, i|
           task.sync do
             unless task.running?
-              if (ready_classed || ready_teams) && i % 2 == 0
+              if (ready_classed || ready_teams) && i.even?
                 if ready_teams && i % 4 == 0
                   new_game = OlympiadGameTeams.create_game(i, OlympiadManager.registered_teams_based)
                   if new_game
@@ -103,13 +103,13 @@ module OlympiadGameManager
     TASKS[id]
   end
 
-  def get_olympiad_task!(id : Int32) : OlympiadGameTask
-    unless task = get_olympiad_task(id)
-      raise "No olympiad task found with id #{id}"
-    end
+  # def get_olympiad_task!(id : Int32) : OlympiadGameTask
+  #   unless task = get_olympiad_task(id)
+  #     raise "No olympiad task found with id #{id}"
+  #   end
 
-    task
-  end
+  #   task
+  # end
 
   def number_of_stadiums : Int32
     TASKS.size

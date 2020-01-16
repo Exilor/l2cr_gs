@@ -15,12 +15,13 @@ module UserCommandHandler::SiegeStatus
       return false
     end
 
+    return false unless clan = pc.clan
+
     SiegeManager.sieges.each do |siege|
       unless siege.in_progress?
         next
       end
 
-      clan = pc.clan
       if !siege.attacker?(clan) && !siege.defender?(clan)
         next
       end

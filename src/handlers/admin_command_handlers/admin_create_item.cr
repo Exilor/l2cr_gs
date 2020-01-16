@@ -84,7 +84,8 @@ module AdminCommandHandler::AdminCreateItem
       end
 
       L2World.players.each do |player|
-        if pc != player && player.online? && player.client && !player.client.detached?
+        client = player.client
+        if pc != player && player.online? && client && !client.detached?
           player.inventory.add_item("Admin", id, num, player, pc)
           player.send_message("Admin gave you #{template.name} x#{num}.")
           counter += 1

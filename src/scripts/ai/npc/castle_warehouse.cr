@@ -23,8 +23,8 @@ class Scripts::CastleWarehouse < AbstractNpcAI
     add_first_talk_id(NPCS)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless npc && player
+  def on_adv_event(event, npc, pc)
+    return unless npc && pc
 
     html = event
 
@@ -32,30 +32,30 @@ class Scripts::CastleWarehouse < AbstractNpcAI
     when "warehouse-01.html", "warehouse-02.html", "warehouse-03.html"
       # do nothing
     when "warehouse-04.html"
-      if npc.my_lord?(player)
-        html = get_htm(player, "warehouse-04.html")
-        html = html.sub("%blood%", player.clan.blood_alliance_count.to_s)
+      if npc.my_lord?(pc) && (clan = pc.clan)
+        html = get_htm(pc, "warehouse-04.html")
+        html = html.sub("%blood%", clan.blood_alliance_count.to_s)
       else
         html = "warehouse-no.html"
       end
     when "Receive"
-      if !npc.my_lord?(player)
+      if !npc.my_lord?(pc)
         html = "warehouse-no.html"
-      elsif player.clan.blood_alliance_count == 0
+      elsif pc.clan.not_nil!.blood_alliance_count == 0
         html = "warehouse-05.html"
       else
-        give_items(player, BLOOD_ALLIANCE, player.clan.blood_alliance_count)
-        player.clan.reset_blood_alliance_count
+        give_items(pc, BLOOD_ALLIANCE, pc.clan.not_nil!.blood_alliance_count)
+        pc.clan.not_nil!.reset_blood_alliance_count
         html = "warehouse-06.html"
       end
     when "Exchange"
-      if !npc.my_lord?(player)
+      if !npc.my_lord?(pc)
         html = "warehouse-no.html"
-      elsif !has_quest_items?(player, BLOOD_ALLIANCE)
+      elsif !has_quest_items?(pc, BLOOD_ALLIANCE)
         html = "warehouse-08.html"
       else
-        take_items(player, BLOOD_ALLIANCE, 1)
-        give_items(player, BLOOD_OATH, 30)
+        take_items(pc, BLOOD_ALLIANCE, 1)
+        give_items(pc, BLOOD_OATH, 30)
         html = "warehouse-07.html"
       end
     else
@@ -65,7 +65,7 @@ class Scripts::CastleWarehouse < AbstractNpcAI
     html
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     "warehouse-01.html"
   end
 end

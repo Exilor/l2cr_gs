@@ -2,14 +2,14 @@ class Announcement
   include Loggable
   include IAnnouncement
 
-  getter id : Int32 = 0
-  property type : AnnouncementType = AnnouncementType::NORMAL
-  property content : String = ""
-  property author : String = ""
-
   private INSERT_QUERY = "INSERT INTO announcements (type, content, author) VALUES (?, ?, ?)"
   private UPDATE_QUERY = "UPDATE announcements SET type = ?, content = ?, author = ? WHERE id = ?"
   private DELETE_QUERY = "DELETE FROM announcements WHERE id = ?"
+  getter id : Int32 = 0
+
+  property type : AnnouncementType = AnnouncementType::NORMAL
+  property content : String = ""
+  property author : String = ""
 
   getter_initializer type : AnnouncementType, content : String, author : String
 
@@ -37,13 +37,7 @@ class Announcement
   end
 
   def update_me : Bool
-    GameDB.exec(
-      UPDATE_QUERY,
-      @type.to_i,
-      @content,
-      @author,
-      @id
-    )
+    GameDB.exec(UPDATE_QUERY, @type.to_i, @content, @author, @id)
     true
   rescue e
     error e

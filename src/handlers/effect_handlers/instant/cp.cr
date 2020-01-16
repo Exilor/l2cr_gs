@@ -9,11 +9,11 @@ class EffectHandler::Cp < AbstractEffect
     @mode = params.get_enum("mode", EffectCalculationType, EffectCalculationType::DIFF)
   end
 
-  def effect_type
-    L2EffectType::CP
+  def effect_type : EffectType
+    EffectType::CP
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

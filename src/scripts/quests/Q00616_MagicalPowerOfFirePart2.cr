@@ -84,9 +84,9 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    respawn_min_delay = (43200000 * Config.raid_min_respawn_multiplier).to_i
-    respawn_max_delay = (129600000 * Config.raid_max_respawn_multiplier).to_i
-    respawn_delay = rand(respawn_min_delay..respawn_max_delay)
+    respawn_min_delay = (43200000i64 * Config.raid_min_respawn_multiplier).to_i64
+    respawn_max_delay = (129600000i64 * Config.raid_max_respawn_multiplier).to_i64
+    respawn_delay = Rnd.rand(respawn_min_delay..respawn_max_delay)
     cancel_quest_timer("despawn_nastron", npc, nil)
     save_global_quest_var("Q00616_respawn", (Time.ms + respawn_delay).to_s)
     start_quest_timer("spawn_npc", respawn_delay, nil, nil)

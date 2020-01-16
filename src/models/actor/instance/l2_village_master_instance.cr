@@ -6,8 +6,11 @@ class L2VillageMasterInstance < L2NpcInstance
   end
 
   def get_html_path(npc_id, val)
-    pom = val == 0 ? npc_id : "#{npc_id}-#{val}"
-    "data/html/villagemaster/#{pom}.htm"
+    if val == 0
+      "data/html/villagemaster/#{npc_id}.htm"
+    else
+      "data/html/villagemaster/#{npc_id}-#{val}.htm"
+    end
   end
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
@@ -21,37 +24,109 @@ class L2VillageMasterInstance < L2NpcInstance
           pc.send_packet(SystemMessageId::CLAN_NAME_INCORRECT)
           return
         end
+
         ClanTable.create_clan(pc, clan_name)
       end
     when "create_academy"
-      pc.send_message("Bypass \"create_academy\" not implemented.")
+      unless st.empty?
+        create_subpledge(pc, st.shift, nil, L2Clan::SUBUNIT_ACADEMY, 5)
+      end
     when "rename_pledge"
-      pc.send_message("Bypass \"rename_pledge\" not implemented.")
+      if st.size > 1
+        rename_subpledge(pc, st.shift.to_i, st.shift)
+      end
     when "create_royal"
-      pc.send_message("Bypass \"create_royal\" not implemented.")
+      if st.size > 1
+        create_subpledge(pc, st.shift, st.shift, L2Clan::SUBUNIT_ROYAL1, 6)
+      end
     when "create_knight"
-      pc.send_message("Bypass \"create_knight\" not implemented.")
+      if st.size > 1
+        create_subpledge(pc, st.shift, st.shift, L2Clan::SUBUNIT_KNIGHT1, 7)
+      end
     when "assign_subpl_leader"
-      pc.send_message("Bypass \"assign_subpl_leader\" not implemented.")
+      if st.size > 1
+        assign_subpledge_leader(pc, st.shift, st.shift)
+      end
     when "create_ally"
-      pc.send_message("Bypass \"create_ally\" not implemented.")
+      unless (clan = pc.clan) && pc.clan_leader?
+        pc.send_packet(SystemMessageId::ONLY_CLAN_LEADER_CREATE_ALLIANCE)
+        return
+      end
+
+      unless st.empty?
+        clan.create_ally(pc, st.shift)
+      end
     when "dissolve_ally"
-      pc.send_message("Bypass \"dissolve_ally\" not implemented.")
+      pc.clan.not_nil!.dissolve_ally(pc)
     when "dissolve_clan"
-      pc.send_message("Bypass \"dissolve_clan\" not implemented.")
+      dissolve_clan(pc)
     when "change_clan_leader"
-      pc.send_message("Bypass \"change_clan_leader\" not implemented.")
+      unless (clan = pc.clan) && pc.clan_leader?
+        pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
+        return
+      end
+
+      if st.empty?
+        return
+      end
+
+      new_leader_name = st.shift
+
+      unless member = clan.get_clan_member(new_leader_name)
+        sm = SystemMessage.s1_does_not_exist
+        sm.add_string(new_leader_name)
+        pc.send_packet(sm)
+        return
+      end
+
+      unless member.online? && (new_leader = member.player_instance)
+        pc.send_packet(SystemMessageId::INVITED_USER_NOT_ONLINE)
+        return
+      end
+
+      if new_leader.academy_member?
+        pc.send_packet(SystemMessageId::RIGHT_CANT_TRANSFERRED_TO_ACADEMY_MEMBER)
+        return
+      end
+
+      if Config.alt_clan_leader_instant_activation
+        clan.set_new_leader(member)
+        return
+      end
+
+      msg = NpcHtmlMessage.new(l2id)
+      if clan.new_leader_id == 0
+        clan.set_new_leader_id(member.l2id, true)
+        msg.set_file(pc, "data/scripts/village_master/Clan/9000-07-success.htm")
+      else
+        msg.set_file(pc, "data/scripts/village_master/Clan/9000-07-in-progress.htm")
+      end
+
+      pc.send_packet(msg)
     when "cancel_clan_leader_change"
-      pc.send_message("Bypass \"cancel_clan_leader_change\" not implemented.")
+      unless (clan = pc.clan) && pc.clan_leader?
+        pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
+        return
+      end
+
+      msg = NpcHtmlMessage.new(l2id)
+      if clan.new_leader_id != 0
+        clan.set_new_leader_id(0, true)
+        msg.set_file(pc, "data/scripts/village_master/Clan/9000-07-canceled.htm")
+      else
+        msg.html = "<html><body>You don't have clan leader delegation applications submitted yet!</body></html>"
+      end
+
+      pc.send_packet(msg)
     when "recover_clan"
-      pc.send_message("Bypass \"recover_clan\" not implemented.")
+      recover_clan(pc)
     when "increase_clan_level"
-      if pc.clan.level_up_clan(pc)
+      if pc.clan.not_nil!.level_up_clan(pc)
         pc.broadcast_packet(MagicSkillUse.new(pc, 5103, 1, 0, 0))
         pc.broadcast_packet(MagicSkillLaunched.new(pc, 5103, 1))
       end
     when "learn_clan_skills"
-      pc.send_message("Bypass \"learn_clan_skills\" not implemented.")
+      L2VillageMasterInstance.show_pledge_skill_list(pc)
     when "Subclass"
       if pc.casting_now? || pc.casting_simultaneously_now?
         pc.send_packet(SystemMessageId::SUBCLASS_NO_CHANGE_OR_CREATE_WHILE_SKILL_IN_USE)
@@ -117,8 +192,8 @@ class L2VillageMasterInstance < L2NpcInstance
             html.set_file(pc, "data/html/villagemaster/SubClass_Add.htm")
             content1 = subs_available.map do |sub|
               "<a action=\"bypass -h npc_%objectId%_Subclass 4 #{sub.to_i}\" " \
-              "msg=\"1268;#{ClassListData.get_class!(sub.to_i).class_name}" \
-              "\">#{ClassListData.get_class!(sub.to_i).client_code}" \
+              "msg=\"1268;#{ClassListData.get_class(sub.to_i).class_name}" \
+              "\">#{ClassListData.get_class(sub.to_i).client_code}" \
               "</a><br>"
             end
             html["%list%"] = content1.join
@@ -143,7 +218,7 @@ class L2VillageMasterInstance < L2NpcInstance
           content2 = String.build(200) do |io|
             if check_village_master(pc.base_class)
               io << "<a action=\"bypass -h npc_%objectId%_Subclass 5 0\">"
-              ClassListData.get_class!(pc.base_class).client_code(io)
+              ClassListData.get_class(pc.base_class).client_code(io)
               io << "</a><br>"
             end
 
@@ -151,7 +226,7 @@ class L2VillageMasterInstance < L2NpcInstance
               if check_village_master(subclass.class_definition)
                 io << "<a action=\"bypass -h npc_%objectId%_Subclass 5 "
                 io << subclass.class_index.to_s << "\">"
-                ClassListData.get_class!(subclass.class_id).client_code(io)
+                ClassListData.get_class(subclass.class_id).client_code(io)
                 io << "</a><br>"
               end
             end
@@ -175,7 +250,7 @@ class L2VillageMasterInstance < L2NpcInstance
               each_subclass(pc) do |subclass|
                 io << "Sub-class #{class_index}<br><a action=\"bypass -h "
                 io << "npc_%objectId%_Subclass 6 #{subclass.class_index}\">"
-                ClassListData.get_class!(subclass.class_id).client_code(io)
+                ClassListData.get_class(subclass.class_id).client_code(io)
                 io << "</a><br>"
                 class_index += 1
               end
@@ -184,19 +259,19 @@ class L2VillageMasterInstance < L2NpcInstance
           else
             html.set_file(pc, "data/html/villagemaster/SubClass_Modify.htm")
             if temp = pc.subclasses[1]?.try &.class_id
-              html["%sub1%"] = ClassListData.get_class!(temp).client_code
+              html["%sub1%"] = ClassListData.get_class(temp).client_code
             else
               html["<a action=\"bypass -h npc_%objectId%_Subclass 6 1\">%sub1%</a><br>"] = ""
             end
 
             if temp = pc.subclasses[2]?.try &.class_id
-              html["%sub2%"] = ClassListData.get_class!(temp).client_code
+              html["%sub2%"] = ClassListData.get_class(temp).client_code
             else
               html["<a action=\"bypass -h npc_%objectId%_Subclass 6 2\">%sub2%</a><br>"] = ""
             end
 
             if temp = pc.subclasses[3]?.try &.class_id
-              html["%sub3%"] = ClassListData.get_class!(temp).client_code
+              html["%sub3%"] = ClassListData.get_class(temp).client_code
             else
               html["<a action=\"bypass -h npc_%objectId%_Subclass 6 3\">%sub3%</a><br>"] = ""
             end
@@ -291,7 +366,7 @@ class L2VillageMasterInstance < L2NpcInstance
           subs_available.each do |subclass|
             io << "<a action=\"bypass -h npc_%objectId%_Subclass 7 "
             io << "#{param_one} #{subclass.to_i}\" msg=\"1445;\">"
-            ClassListData.get_class!(subclass.to_i).client_code(io)
+            ClassListData.get_class(subclass.to_i).client_code(io)
             io << "</a><br>"
           end
         end
@@ -326,7 +401,7 @@ class L2VillageMasterInstance < L2NpcInstance
           pc.active_class = param_one
 
           html.set_file(pc, "data/html/villagemaster/SubClass_ModifyOk.htm")
-          html["%name%"] = ClassListData.get_class!(param_two).client_code
+          html["%name%"] = ClassListData.get_class(param_two).client_code
 
           pc.send_packet(SystemMessageId::ADD_NEW_SUBCLASS)
         else
@@ -437,10 +512,10 @@ class L2VillageMasterInstance < L2NpcInstance
 
   def check_village_master(pclass : PlayerClass?) : Bool
     if Config.alt_game_subclass_everywhere
-      true
-    else
-      check_village_master_race(pclass) && check_village_master_teach_type(pclass)
+      return true
     end
+
+    check_village_master_race(pclass) && check_village_master_teach_type(pclass)
   end
 
   private def each_subclass(pc : L2PcInstance, & : Subclass ->)
@@ -452,7 +527,7 @@ class L2VillageMasterInstance < L2NpcInstance
   end
 
   def self.show_pledge_skill_list(pc : L2PcInstance)
-    unless pc.clan_leader?
+    unless (clan = pc.clan) && pc.clan_leader?
       html = NpcHtmlMessage.new
       html.set_file(pc, "data/html/villagemaster/NotClanLeader.htm")
       pc.send_packet(html)
@@ -460,7 +535,7 @@ class L2VillageMasterInstance < L2NpcInstance
       return
     end
 
-    skills = SkillTreesData.get_available_pledge_skills(pc.clan)
+    skills = SkillTreesData.get_available_pledge_skills(clan)
     asl = AcquireSkillList.new(AcquireSkillType::PLEDGE)
 
     skills.each do |s|
@@ -468,12 +543,12 @@ class L2VillageMasterInstance < L2NpcInstance
     end
 
     if skills.size > 0
-      if pc.clan.level < 8
+      if clan.level < 8
         sm = SystemMessage.do_not_have_further_skills_to_learn_s1
-        if pc.clan.level < 5
+        if clan.level < 5
           sm.add_int(5)
         else
-          sm.add_int(pc.clan.level  + 1)
+          sm.add_int(clan.level + 1)
         end
         pc.send_packet(sm)
       else
@@ -486,5 +561,240 @@ class L2VillageMasterInstance < L2NpcInstance
     end
 
     pc.action_failed
+  end
+
+  private def dissolve_clan(pc)
+    unless (clan = pc.clan) && pc.clan_leader?
+      pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
+      return
+    end
+
+    if clan.ally_id != 0
+      pc.send_packet(SystemMessageId::CANNOT_DISPERSE_THE_CLANS_IN_ALLY)
+      return
+    end
+
+    if clan.at_war?
+      pc.send_packet(SystemMessageId::CANNOT_DISSOLVE_WHILE_IN_WAR)
+      return
+    end
+
+    if clan.castle_id != 0 || clan.hideout_id != 0 || clan.fort_id != 0
+      pc.send_packet(SystemMessageId::CANNOT_DISSOLVE_WHILE_OWNING_CLAN_HALL_OR_CASTLE)
+      return
+    end
+
+    CastleManager.castles.each do |castle|
+      if SiegeManager.registered?(clan, castle.residence_id)
+        pc.send_packet(SystemMessageId::CANNOT_DISSOLVE_WHILE_IN_SIEGE)
+        return
+      end
+    end
+
+    FortManager.forts.each do |fort|
+      if FortSiegeManager.registered?(clan, fort.residence_id)
+        pc.send_packet(SystemMessageId::CANNOT_DISSOLVE_WHILE_IN_SIEGE)
+        return
+      end
+    end
+
+    if pc.inside_siege_zone?
+      pc.send_packet(SystemMessageId::CANNOT_DISSOLVE_WHILE_IN_SIEGE)
+      return
+    end
+
+    time = Time.ms
+
+    if clan.dissolving_expiry_time > time
+      pc.send_packet(SystemMessageId::DISSOLUTION_IN_PROGRESS)
+      return
+    end
+
+    clan.dissolving_expiry_time = Time.ms + Time.days_to_ms(Config.alt_clan_dissolve_days)
+    clan.update_clan_in_db
+
+    pc.calculate_death_exp_penalty(nil, false)
+    ClanTable.schedule_remove_clan(clan.id)
+  end
+
+  private def recover_clan(pc)
+    unless (clan = pc.clan) && pc.clan_leader?
+      pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
+      return
+    end
+
+    clan.dissolving_expiry_time = 0
+    clan.update_clan_in_db
+  end
+
+  private def create_subpledge(pc, clan_name, leader_name, pledge_type, min_lvl)
+    unless (clan = pc.clan) && pc.clan_leader?
+      pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
+      return
+    end
+
+    if clan.level < min_lvl
+      if pledge_type == L2Clan::SUBUNIT_ACADEMY
+        pc.send_packet(SystemMessageId::YOU_DO_NOT_MEET_CRITERIA_IN_ORDER_TO_CREATE_A_CLAN_ACADEMY)
+      else
+        pc.send_packet(SystemMessageId::YOU_DO_NOT_MEET_CRITERIA_IN_ORDER_TO_CREATE_A_MILITARY_UNIT)
+      end
+
+      return
+    end
+
+    if !valid_name?(clan_name) || clan_name.size < 2
+      pc.send_packet(SystemMessageId::CLAN_NAME_INCORRECT)
+      return
+    end
+
+    if clan_name.size > ClanTable::CLAN_NAME_MAX_LENGTH
+      pc.send_packet(SystemMessageId::CLAN_NAME_TOO_LONG)
+      return
+    end
+
+    ClanTable.clans.each do |c|
+      if c.get_subpledge(clan_name)
+        if pledge_type == L2Clan::SUBUNIT_ACADEMY
+          sm = SystemMessage.s1_already_exists
+          sm.add_string(clan_name)
+          pc.send_packet(sm)
+        else
+          pc.send_packet(SystemMessageId::ANOTHER_MILITARY_UNIT_IS_ALREADY_USING_THAT_NAME)
+        end
+
+        return
+      end
+    end
+
+    leader = clan.get_clan_member(leader_name)
+
+    if pledge_type != L2Clan::SUBUNIT_ACADEMY
+      if leader && leader.pledge_type != 0
+        if pledge_type >= L2Clan::SUBUNIT_KNIGHT1
+          pc.send_packet(SystemMessageId::CAPTAIN_OF_ORDER_OF_KNIGHTS_CANNOT_BE_APPOINTED)
+        elsif pledge_type >= L2Clan::SUBUNIT_ROYAL1
+          pc.send_packet(SystemMessageId::CAPTAIN_OF_ROYAL_GUARD_CANNOT_BE_APPOINTED)
+        end
+
+        return
+      end
+    end
+
+    if pledge_type != L2Clan::SUBUNIT_ACADEMY
+      leader_id = leader.not_nil!.l2id
+    else
+      leader_id = 0
+    end
+
+    unless clan.create_subpledge(pc, pledge_type, leader_id, clan_name)
+      debug "Subpledge creation failed."
+      return
+    end
+
+    if pledge_type == L2Clan::SUBUNIT_ACADEMY
+      sm = SystemMessage.the_s1s_clan_academy_has_been_created
+      sm.add_string(clan.name)
+    elsif pledge_type >= L2Clan::SUBUNIT_KNIGHT1
+      sm = SystemMessage.the_knights_of_s1_have_been_created
+      sm.add_string(clan.name)
+    elsif pledge_type >= L2Clan::SUBUNIT_ROYAL1
+      sm = SystemMessage.the_royal_guard_of_s1_have_been_created
+      sm.add_string(clan.name)
+    else
+      sm = SystemMessageId::CLAN_CREATED
+    end
+
+    pc.send_packet(sm)
+
+    leader = clan.get_clan_member(leader_name).not_nil!
+
+    if pledge_type != L2Clan::SUBUNIT_ACADEMY
+      if leader_player = leader.not_nil!.player_instance
+        leader_player.pledge_class = L2ClanMember.calculate_pledge_class(leader_player)
+        leader_player.send_packet(UserInfo.new(leader_player))
+        leader_player.send_packet(ExBrExtraUserInfo.new(leader_player))
+      end
+    end
+  end
+
+  private def rename_subpledge(pc, pledge_type, pledge_name)
+    unless (clan = pc.clan) && pc.clan_leader?
+      pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
+      return
+    end
+
+    unless subpledge = clan.get_subpledge(pledge_type)
+      pc.send_message("Pledge doesn't exist.")
+      return
+    end
+
+    if !valid_name?(pledge_name) || pledge_name.size < 2
+      pc.send_packet(SystemMessageId::CLAN_NAME_INCORRECT)
+      return
+    end
+
+    if pledge_name.size > ClanTable::CLAN_NAME_MAX_LENGTH
+      pc.send_packet(SystemMessageId::CLAN_NAME_TOO_LONG)
+      return
+    end
+
+    subpledge.name = pledge_name
+    clan.update_subpledge_in_db(subpledge.id)
+    clan.broadcast_clan_status
+    pc.send_message("Pledge name changed.")
+  end
+
+  private def assign_subpledge_leader(pc, clan_name, leader_name)
+    unless (clan = pc.clan) && pc.clan_leader?
+      pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
+      return
+    end
+
+    if leader_name.size > 16
+      pc.send_packet(SystemMessageId::NAMING_CHARNAME_UP_TO_16CHARS)
+      return
+    end
+
+    if pc.name == leader_name
+      pc.send_packet(SystemMessageId::CAPTAIN_OF_ROYAL_GUARD_CANNOT_BE_APPOINTED)
+      return
+    end
+
+    subpledge = clan.get_subpledge(clan_name)
+
+    if subpledge.nil? || subpledge.id == L2Clan::SUBUNIT_ACADEMY
+      pc.send_packet(SystemMessageId::CLAN_NAME_INCORRECT)
+      return
+    end
+
+    leader = clan.get_clan_member(leader_name)
+
+    if leader.nil? || leader.pledge_type != 0
+      if subpledge.id >= L2Clan::SUBUNIT_KNIGHT1
+        pc.send_packet(SystemMessageId::CAPTAIN_OF_ORDER_OF_KNIGHTS_CANNOT_BE_APPOINTED)
+      elsif subpledge.id >= L2Clan::SUBUNIT_ROYAL1
+        pc.send_packet(SystemMessageId::CAPTAIN_OF_ROYAL_GUARD_CANNOT_BE_APPOINTED)
+      end
+
+      return
+    end
+
+    subpledge.leader_id = leader.l2id
+    clan.update_subpledge_in_db(subpledge.id)
+
+    leader = clan.get_clan_member(leader_name).not_nil!
+
+    if leader_player = leader.player_instance
+      leader_player.pledge_class = L2ClanMember.calculate_pledge_class(leader_player)
+      leader_player.send_packet(UserInfo.new(leader_player))
+      leader_player.send_packet(ExBrExtraUserInfo.new(leader_player))
+    end
+
+    clan.broadcast_clan_status
+    sm = SystemMessage.c1_has_been_selected_as_captain_of_s2
+    sm.add_string(leader_name)
+    sm.add_string(clan_name)
+    clan.broadcast_to_online_members(sm)
   end
 end

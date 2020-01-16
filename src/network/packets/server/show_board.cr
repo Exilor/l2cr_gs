@@ -11,11 +11,11 @@ class Packets::Outgoing::ShowBoard < GameServerPacket
     end
   end
 
-  def write_impl
+  private def write_impl
     c 0x7b
 
     c 0x01 # 0 hide, 1 show
-    # debug @content
+
     s "bypass _bbshome" # top
     s "bypass _bbsgetfav" # favorite
     s "bypass _bbsloc" # region

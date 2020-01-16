@@ -13,7 +13,7 @@ class Packets::Outgoing::FlyToLocation < GameServerPacket
     initialize(char, *dst.xyz, fly_type)
   end
 
-  def write_impl
+  private def write_impl
     c 0xd4
 
     d @l2id

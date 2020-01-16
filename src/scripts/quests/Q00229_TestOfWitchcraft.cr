@@ -261,7 +261,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
         end
       when TAMLIN_ORC, TAMLIN_ORC_ARCHER
         if has_quest_items?(killer, VADINS_CRUCIFIX)
-          if rand(100) < 50 && get_quest_items_count(killer, TAMLIN_ORC_AMULET) < 20
+          if Rnd.rand(100) < 50 && get_quest_items_count(killer, TAMLIN_ORC_AMULET) < 20
             give_items(killer, TAMLIN_ORC_AMULET, 1)
             if get_quest_items_count(killer, TAMLIN_ORC_AMULET) >= 20
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -507,7 +507,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
   end
 
   private def check_weapon(pc)
-    weapon = pc.active_weapon_instance?
+    weapon = pc.active_weapon_instance
     !!weapon && weapon.id == SWORD_OF_BINDING
   end
 end

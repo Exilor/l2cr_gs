@@ -64,7 +64,7 @@ class Packets::Incoming::RequestPackageSend < GameClientPacket
     _items.each do |i|
       item = pc.check_item_manipulation(i.id, i.count, "freight")
       if item.nil?
-        warn "Error depositing a warehouse object for player #{pc.name}."
+        warn { "Error depositing a warehouse object for player #{pc.name}." }
         warehouse.delete_me
         return
       elsif item.freightable?
@@ -97,14 +97,14 @@ class Packets::Incoming::RequestPackageSend < GameClientPacket
 
     _items.each do |i|
       unless old_item = pc.check_item_manipulation(i.id, i.count, "deposit")
-        warn "Error depositing to freight for player #{pc.name} (old_item is nil)."
+        warn { "Error depositing to freight for player #{pc.name} (old_item is nil)." }
         warehouse.delete_me
         return
       end
 
       new_item = pc.inventory.transfer_item("trade", i.id, i.count, warehouse, pc, nil)
       unless new_item
-        warn "Error depositing to freight for player #{pc.name} (new_item is nil)."
+        warn { "Error depositing to freight for player #{pc.name} (new_item is nil)." }
         next
       end
 

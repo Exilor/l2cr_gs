@@ -1,5 +1,5 @@
 class EffectHandler::DetectHiddenObjects < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 

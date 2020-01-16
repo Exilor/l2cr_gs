@@ -6,7 +6,7 @@ class Packets::Outgoing::RecipeBookItemList < GameServerPacket
   def add_recipes(@recipes : Enumerable(L2RecipeList))
   end
 
-  def write_impl
+  private def write_impl
     c 0xdc
 
     d @dwarven_craft ? 0 : 1

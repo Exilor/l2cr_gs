@@ -30,11 +30,11 @@ class EffectHandler::MagicalAttackMp < AbstractEffect
     true
   end
 
-  def effect_type
-    L2EffectType::MAGICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::MAGICAL_ATTACK
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 

@@ -33,7 +33,7 @@ class Packets::Outgoing::StaticObject < GameServerPacket
     @damage_grade = door.damage
   end
 
-  def write_impl
+  private def write_impl
     c 0x9f
 
     d @static_l2id

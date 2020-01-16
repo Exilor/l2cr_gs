@@ -7,26 +7,26 @@ module TargetHandler::TargetParty
     return target_list if only_first
 
     radius = skill.affect_range
-    player = char.acting_player
+    player = char.acting_player.not_nil!
 
     if char.summon?
-      if Skill.add_character(char, player, radius, false)
+      if add_character(char, player, radius, false)
         target_list << player
       end
     elsif char.player?
-      if Skill.add_summon(char, player, radius, false)
-        target_list << player.summon!
+      if smn = add_summon(char, player, radius, false)
+        target_list << smn
       end
     end
 
-    if char.in_party?
-      char.party.members.each do |m|
+    if party = char.party
+      party.members.each do |m|
         next if m == player
-        if Skill.add_character(char, m, radius, false)
+        if add_character(char, m, radius, false)
           target_list << m
         end
-        if Skill.add_summon(char, m, radius, false)
-          target_list << m.summon!
+        if smn = add_summon(char, m, radius, false)
+          target_list << smn
         end
       end
     end
@@ -35,6 +35,6 @@ module TargetHandler::TargetParty
   end
 
   def target_type
-    L2TargetType::TARGET_PARTY
+    TargetType::TARGET_PARTY
   end
 end

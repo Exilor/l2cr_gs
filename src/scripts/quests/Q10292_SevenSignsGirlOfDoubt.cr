@@ -74,8 +74,8 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
       npc = npc.not_nil!
       if !npc.variables.get_bool(I_QUEST1, false)
         npc.variables[I_QUEST1] = true
-        add_spawn(CREATURE_OF_THE_DUSK1, 89440, -238016, -9632, rand(360), false, 0, false, pc.instance_id)
-        add_spawn(CREATURE_OF_THE_DUSK2, 89524, -238131, -9632, rand(360), false, 0, false, pc.instance_id)
+        add_spawn(CREATURE_OF_THE_DUSK1, 89440, -238016, -9632, Rnd.rand(360), false, 0, false, pc.instance_id)
+        add_spawn(CREATURE_OF_THE_DUSK2, 89524, -238131, -9632, Rnd.rand(360), false, 0, false, pc.instance_id)
       else
         html = "32784-07.html"
       end

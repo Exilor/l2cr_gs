@@ -4,7 +4,7 @@ require "../../../models/items/l2_weapon"
 require "../../../models/items/l2_etc_item"
 
 class ItemDocument < AbstractDocument
-  class Item
+  private class Item
     property id = 0
     property set = StatsSet.new
     property current_level = 0
@@ -15,9 +15,7 @@ class ItemDocument < AbstractDocument
 
   private getter! current_item : Item
 
-  def item_list
-    @item_list ||= [] of L2Item
-  end
+  getter(item_list) { [] of L2Item }
 
   private def parse_document(doc, file)
     doc.each_element do |n|
@@ -101,9 +99,12 @@ class ItemDocument < AbstractDocument
     return if current_item.item?
     type =
     case current_item.type
-    when "Armor" then L2Armor
-    when "Weapon" then L2Weapon
-    when "EtcItem" then L2EtcItem
+    when "Armor"
+      L2Armor
+    when "Weapon"
+      L2Weapon
+    when "EtcItem"
+      L2EtcItem
     end
 
     if type

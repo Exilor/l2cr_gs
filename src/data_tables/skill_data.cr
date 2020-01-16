@@ -10,7 +10,7 @@ module SkillData
   private ENCHANTABLE = Set(Int32).new
 
   def load
-    info "Loading skills..."
+    debug "Loading skills..."
     timer = Timer.new
 
     SKILLS.clear
@@ -62,7 +62,7 @@ module SkillData
 
   def []?(id : Int, level : Int) : Skill?
     fetch(id, level) do
-      warn { "No skill found for ID #{id} and level #{level}." }
+      warn { "No skill found with ID #{id} and level #{level}." }
       nil
     end
   end

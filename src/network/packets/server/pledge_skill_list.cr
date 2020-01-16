@@ -1,7 +1,5 @@
 class Packets::Outgoing::PledgeSkillList < GameServerPacket
-  struct SubpledgeSkill
-    getter_initializer sub_type : Int32, skill_id : Int32, skill_lvl : Int32
-  end
+  record SubpledgeSkill, sub_type : Int32, skill_id : Int32, skill_lvl : Int32
 
   @skills : Enumerable(Skill)
   @sub_skills : Array(SubpledgeSkill)
@@ -11,7 +9,7 @@ class Packets::Outgoing::PledgeSkillList < GameServerPacket
     @sub_skills = clan.all_sub_skills
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x3a
 

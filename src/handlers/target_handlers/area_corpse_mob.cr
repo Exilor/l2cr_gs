@@ -4,7 +4,7 @@ module TargetHandler::AreaCorpseMob
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
     if target.nil? || (!target.attackable? || target.alive?)
-      if char.acting_player?
+      if char.acting_player
         char.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
       end
 
@@ -22,7 +22,7 @@ module TargetHandler::AreaCorpseMob
         next
       end
 
-      if !Skill.check_for_area_offensive_skills(char, obj, skill, src_in_arena)
+      unless skill.offensive_aoe_check(char, obj, src_in_arena)
         next
       end
 
@@ -33,6 +33,6 @@ module TargetHandler::AreaCorpseMob
   end
 
   def target_type
-    L2TargetType::AREA_CORPSE_MOB
+    TargetType::AREA_CORPSE_MOB
   end
 end

@@ -15,7 +15,7 @@ class Packets::Outgoing::MoveToLocation < GameServerPacket
     @zd = char.z_destination
   end
 
-  def write_impl
+  private def write_impl
     c 0x2f
 
     d @id

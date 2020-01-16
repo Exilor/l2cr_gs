@@ -31,14 +31,14 @@ class Packets::Incoming::RequestSendPost < GameClientPacket
     attach_count = d
 
     if attach_count < 0 || attach_count > Config.max_item_in_packet
-      debug "attach_count (#{attach_count}) outside of accepted values."
+      debug { "attach_count (#{attach_count}) outside of accepted values." }
       return
     end
 
     if (attach_count * BATCH_LENGTH) + 8 != buffer.remaining
       debug "Buffer remaining size mismatch."
-      debug "Should be #{(attach_count * BATCH_LENGTH) + 8} but is #{buffer.remaining}."
-      debug "(attach_count: #{attach_count})"
+      debug { "Should be #{(attach_count * BATCH_LENGTH) + 8} but is #{buffer.remaining}." }
+      debug { "(attach_count: #{attach_count})" }
       return
     end
 
@@ -62,13 +62,6 @@ class Packets::Incoming::RequestSendPost < GameClientPacket
   private def run_impl
     return unless Config.allow_mail
     return unless pc = active_char
-
-    # if @items
-    #   debug "Items:"
-    #   @items.each { |it| debug it }
-    # else
-    #   debug "No items to be sent."
-    # end
 
     unless Config.allow_attachments
       @items = nil
@@ -220,13 +213,13 @@ class Packets::Incoming::RequestSendPost < GameClientPacket
     _items.each do |i|
       old_item = pc.check_item_manipulation(i.l2id, i.count, "attach")
       if old_item.nil? || (!old_item.tradeable? || old_item.equipped?)
-        warn "Error adding attachment for #{pc.name} (old_item is nil)."
+        warn { "Error adding attachment for #{pc.name} (old_item is nil)." }
         return false
       end
 
       new_item = pc.inventory.transfer_item("SendMail", i.l2id, i.count, attachments, pc, receiver)
       unless new_item
-        warn "Error adding attachment for #{pc.name} (new_item is nil)."
+        warn { "Error adding attachment for #{pc.name} (new_item is nil)." }
         next
       end
       new_item.set_item_location(new_item.item_location, msg.id)

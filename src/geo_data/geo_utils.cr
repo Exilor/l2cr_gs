@@ -95,10 +95,6 @@ module GeoUtils
   end
 
   private def get_direction_color(x, y, z, nswe)
-    if GeoData.check_nearest_nswe(x, y, z, nswe)
-      :GREEN
-    else
-      :RED
-    end
+    GeoData.check_nearest_nswe(x, y, z, nswe) ? :GREEN : :RED
   end
 end

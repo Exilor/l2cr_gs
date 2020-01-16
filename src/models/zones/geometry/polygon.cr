@@ -2,6 +2,7 @@ require "./crossings"
 
 class Polygon
   @bounds : Rectangle?
+
   getter x_points : Slice(Int32)
   getter y_points : Slice(Int32)
   getter n_points : Int32

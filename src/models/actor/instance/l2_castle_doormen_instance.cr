@@ -10,7 +10,7 @@ class L2CastleDoormenInstance < L2DoormenInstance
     st.shift?
 
     until st.empty?
-      if hall = conquerable_hall?
+      if hall = conquerable_hall
         hall.open_close_door(st.shift.to_i, true)
       else
         castle.open_door(pc, st.shift.to_i)
@@ -23,7 +23,7 @@ class L2CastleDoormenInstance < L2DoormenInstance
     st.shift?
 
     until st.empty?
-      if hall = conquerable_hall?
+      if hall = conquerable_hall
         hall.open_close_door(st.shift.to_i, false)
       else
         castle.close_door(pc, st.shift.to_i)
@@ -32,8 +32,8 @@ class L2CastleDoormenInstance < L2DoormenInstance
   end
 
   private def owner_clan?(pc : L2PcInstance) : Bool
-    if pc.clan? && pc.has_clan_privilege?(ClanPrivilege::CS_OPEN_DOOR)
-      if hall = conquerable_hall?
+    if pc.clan && pc.has_clan_privilege?(ClanPrivilege::CS_OPEN_DOOR)
+      if hall = conquerable_hall
         if pc.clan_id == hall.owner_id
           return true
         end
@@ -48,7 +48,7 @@ class L2CastleDoormenInstance < L2DoormenInstance
   end
 
   private def under_siege? : Bool
-    if hall = conquerable_hall?
+    if hall = conquerable_hall
       return hall.in_siege?
     end
 

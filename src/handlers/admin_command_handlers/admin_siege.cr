@@ -37,10 +37,10 @@ module AdminCommandHandler::AdminSiege
 
       if command.starts_with?("admin_clanhall")
         if val.num?
-          clanhall = ClanHallManager.get_clan_hall_by_id!(val.to_i)
+          clanhall = ClanHallManager.get_clan_hall_by_id(val.to_i).not_nil!
           case command
           when "admin_clanhallset"
-            unless player && (clan = player.clan?)
+            unless player && (clan = player.clan)
               pc.send_packet(SystemMessageId::INCORRECT_TARGET)
               return false
             end
@@ -100,7 +100,7 @@ module AdminCommandHandler::AdminSiege
           end
         end
       else
-        castle = CastleManager.get_castle!(val)
+        castle = CastleManager.get_castle(val).not_nil!
         case command
         when "admin_add_attacker"
           if player
@@ -129,7 +129,7 @@ module AdminCommandHandler::AdminSiege
         when "admin_move_defenders"
           pc.send_message("Not implemented yet.")
         when "admin_setcastle"
-          if clan = player.try &.clan?
+          if clan = player.try &.clan
             castle.owner = clan
           else
             pc.send_packet(SystemMessageId::INCORRECT_TARGET)
@@ -206,7 +206,7 @@ module AdminCommandHandler::AdminSiege
     i = 0
     reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/castles.htm")
-    list = [] of String | Int32
+    list = String::Builder.new
     CastleManager.castles.each do |castle|
       name = castle.name
       list << "<td fixwidth=90><a action=\"bypass -h admin_siege "
@@ -220,8 +220,8 @@ module AdminCommandHandler::AdminSiege
         i = 0
       end
     end
-    reply["%castles%"] = list.join
-    list.clear
+    reply["%castles%"] = list
+    list = String::Builder.new
     i = 0
     ClanHallSiegeManager.conquerable_halls.each_value do |hall|
       list << "<td fixwidth=90><a action=\"bypass -h admin_chsiege_siegablehall "
@@ -235,8 +235,8 @@ module AdminCommandHandler::AdminSiege
         i = 0
       end
     end
-    reply["%siegableHalls%"] = list.join
-    list.clear
+    reply["%siegableHalls%"] = list
+    list = String::Builder.new
     i = 0
     ClanHallManager.clan_halls.each_value do |clanhall|
       list << "<td fixwidth=134><a action=\"bypass -h admin_clanhall "
@@ -250,8 +250,8 @@ module AdminCommandHandler::AdminSiege
         i = 0
       end
     end
-    reply["%clanhalls%"] = list.join
-    list.clear
+    reply["%clanhalls%"] = list
+    list = String::Builder.new
     i = 0
     ClanHallManager.free_clan_halls.each_value do |clanhall|
       list << "<td fixwidth=134><a action=\"bypass -h admin_clanhall "
@@ -265,7 +265,7 @@ module AdminCommandHandler::AdminSiege
         i = 0
       end
     end
-    reply["%freeclanhalls%"] = list.join
+    reply["%freeclanhalls%"] = list
     pc.send_packet(reply)
   end
 

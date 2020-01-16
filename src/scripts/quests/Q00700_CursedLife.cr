@@ -92,7 +92,7 @@ class Scripts::Q00700_CursedLife < Quest
     if st = get_quest_state(pc, false)
       if npc.id == ROK
         amount = 0
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         if chance < 700
           amount = 1
         elsif chance < 885
@@ -100,20 +100,20 @@ class Scripts::Q00700_CursedLife < Quest
         elsif chance < 949
           amount = 3
         elsif chance < 966
-          amount = rand(5) + 4
+          amount = Rnd.rand(5) + 4
         elsif chance < 985
-          amount = rand(9) + 4
+          amount = Rnd.rand(9) + 4
         elsif chance < 993
-          amount = rand(7) + 13
+          amount = Rnd.rand(7) + 13
         elsif chance < 997
-          amount = rand(15) + 9
+          amount = Rnd.rand(15) + 9
         elsif chance < 999
-          amount = rand(23) + 53
+          amount = Rnd.rand(23) + 53
         else
-          amount = rand(49) + 76
+          amount = Rnd.rand(49) + 76
         end
         st.give_items(SWALLOWED_BONES, amount)
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         if chance < 520
           amount = 1
         elsif chance < 771
@@ -121,30 +121,30 @@ class Scripts::Q00700_CursedLife < Quest
         elsif chance < 836
           amount = 3
         elsif chance < 985
-          amount = rand(2) + 4
+          amount = Rnd.rand(2) + 4
         elsif chance < 995
-          amount = rand(4) + 5
+          amount = Rnd.rand(4) + 5
         else
-          amount = rand(8) + 6
+          amount = Rnd.rand(8) + 6
         end
         st.give_items(SWALLOWED_STERNUM, amount)
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         if chance < 185
-          amount = rand(2) + 1
+          amount = Rnd.rand(2) + 1
         elsif chance < 370
-          amount = rand(6) + 2
+          amount = Rnd.rand(6) + 2
         elsif chance < 570
-          amount = rand(6) + 7
+          amount = Rnd.rand(6) + 7
         elsif chance < 850
-          amount = rand(6) + 12
+          amount = Rnd.rand(6) + 12
         else
-          amount = rand(6) + 17
+          amount = Rnd.rand(6) + 17
         end
         st.give_items(SWALLOWED_SKULL, amount)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       else
         chances = MONSTERS[npc.id]
-        chance = rand(1000)
+        chance = Rnd.rand(1000)
         if chance < chances[0]
           st.give_items(SWALLOWED_BONES, 1)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

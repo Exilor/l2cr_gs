@@ -10,8 +10,8 @@ class EffectHandler::Fear < AbstractEffect
     EffectFlag::FEAR.mask
   end
 
-  def effect_type
-    L2EffectType::FEAR
+  def effect_type : EffectType
+    EffectType::FEAR
   end
 
   def ticks

@@ -116,8 +116,8 @@ class Scripts::Q10289_FadeToBlack < Quest
 
   def on_kill(anays, killer, is_summon)
     if qs = get_random_party_member_state(killer, -1, 3, anays)
-      if party = qs.player.party?
-        rnd = rand(party.size)
+      if party = qs.player.party
+        rnd = Rnd.rand(party.size)
         idx = 0
 
         party.members.each do |member|

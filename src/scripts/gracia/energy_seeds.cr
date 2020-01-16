@@ -418,7 +418,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
           door.close_me
         end
       end
-      ZoneManager.get_zone_by_id!(SOD_ZONE).players_inside do |ch|
+      ZoneManager.get_zone_by_id(SOD_ZONE).not_nil!.players_inside.each do |ch|
         ch.tele_to_location(SOD_EXIT_POINT)
       end
       stop_ai(GraciaSeed::DESTRUCTION)
@@ -511,7 +511,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
         handle_quest_drop(pc, 15535)
       end
       if Rnd.rand(100) < 50
-        mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[0].sample)
+        mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[0].sample(random: Rnd))
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)
         mob.set_intention(AI::ATTACK, pc)
@@ -521,7 +521,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
         handle_quest_drop(pc, 15535)
       end
       if Rnd.rand(100) < 50
-        mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[1].sample)
+        mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[1].sample(random: Rnd))
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)
         mob.set_intention(AI::ATTACK, pc)
@@ -531,7 +531,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
         handle_quest_drop(pc, 15535)
       end
       if Rnd.rand(100) < 50
-        mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[2].sample)
+        mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[2].sample(random: Rnd))
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)
         mob.set_intention(AI::ATTACK, pc)
@@ -566,15 +566,15 @@ class Scripts::EnergySeeds < AbstractNpcAI
 
   private struct ESSpawn
     getter seed_id
-    initializer spawn_id : Int32, seed_id : GraciaSeed,
-      loc : Location, npc_ids : Array(Int32)
+    initializer spawn_id : Int32, seed_id : GraciaSeed, loc : Location,
+      npc_ids : Array(Int32)
 
     def schedule_respawn(delay)
       task = -> do
         # if the AI is inactive, do not spawn the NPC
         if EnergySeeds.seed_active?(@seed_id)
           # get a random NPC that should spawn at this location
-          sp = AbstractScript.add_spawn(@npc_ids.sample, @loc, false, 0)
+          sp = AbstractScript.add_spawn(@npc_ids.sample(random: Rnd), @loc, false, 0)
           SPAWNED_NPCS[sp] = @spawn_id
         end
       end

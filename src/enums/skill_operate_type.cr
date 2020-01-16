@@ -21,7 +21,7 @@ enum SkillOperateType : UInt8
   T
 
   def active? : Bool
-    A1 <= self <= DA2
+    between?(A1, DA2)
   end
 
   def channeling? : Bool

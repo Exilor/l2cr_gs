@@ -10,21 +10,20 @@ class Scripts::SinEater < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, player)
-    if event == "TALK" && player && player.summon
+    if event == "TALK" && player && (smn = player.summon)
       if Rnd.rand(100) < 30
         random = Rnd.rand(100)
-        summon = player.summon!
 
         if random < 20
-          broadcast_summon_say(summon, NpcString::YAWWWWN_ITS_SO_BORING_HERE_WE_SHOULD_GO_AND_FIND_SOME_ACTION)
+          broadcast_summon_say(smn, NpcString::YAWWWWN_ITS_SO_BORING_HERE_WE_SHOULD_GO_AND_FIND_SOME_ACTION)
         elsif random < 40
-          broadcast_summon_say(summon, NpcString::HEY_IF_YOU_CONTINUE_TO_WASTE_TIME_YOU_WILL_NEVER_FINISH_YOUR_PENANCE)
+          broadcast_summon_say(smn, NpcString::HEY_IF_YOU_CONTINUE_TO_WASTE_TIME_YOU_WILL_NEVER_FINISH_YOUR_PENANCE)
         elsif random < 60
-          broadcast_summon_say(summon, NpcString::I_KNOW_YOU_DONT_LIKE_ME_THE_FEELING_IS_MUTUAL)
+          broadcast_summon_say(smn, NpcString::I_KNOW_YOU_DONT_LIKE_ME_THE_FEELING_IS_MUTUAL)
         elsif random < 80
-          broadcast_summon_say(summon, NpcString::I_NEED_A_DRINK)
+          broadcast_summon_say(smn, NpcString::I_NEED_A_DRINK)
         else
-          broadcast_summon_say(summon, NpcString::OH_THIS_IS_DRAGGING_ON_TOO_LONG_AT_THIS_RATE_I_WONT_MAKE_IT_HOME_BEFORE_THE_SEVEN_SEALS_ARE_BROKEN)
+          broadcast_summon_say(smn, NpcString::OH_THIS_IS_DRAGGING_ON_TOO_LONG_AT_THIS_RATE_I_WONT_MAKE_IT_HOME_BEFORE_THE_SEVEN_SEALS_ARE_BROKEN)
         end
       end
 

@@ -108,11 +108,11 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
         end
       when LANGK_LIZARDMAN_WARRIOR
         if qs.memo_state?(3)
-          if !has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && rand(100) <= 19
+          if !has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && Rnd.rand(100) <= 19
             give_items(killer, AGNESS_HOLY_SYMBOL, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           elsif has_quest_items?(killer, AGNESS_HOLY_SYMBOL)
-            if !has_quest_items?(killer, AGNESS_ROSARY) && rand(100) <= 18
+            if !has_quest_items?(killer, AGNESS_ROSARY) && Rnd.rand(100) <= 18
               give_items(killer, AGNESS_ROSARY, 1)
               play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
             end
@@ -120,11 +120,11 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
         end
       when LANGK_LIZARDMAN_SCOUT, LANGK_LIZARDMAN
         if qs.memo_state?(3)
-          if !has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && rand(100) <= 18
+          if !has_quest_items?(killer, AGNESS_HOLY_SYMBOL) && Rnd.rand(100) <= 18
             give_items(killer, AGNESS_HOLY_SYMBOL, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           elsif has_quest_items?(killer, AGNESS_HOLY_SYMBOL)
-            if !has_quest_items?(killer, AGNESS_ROSARY) && rand(100) <= 18
+            if !has_quest_items?(killer, AGNESS_ROSARY) && Rnd.rand(100) <= 18
               give_items(killer, AGNESS_ROSARY, 1)
               play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
             end

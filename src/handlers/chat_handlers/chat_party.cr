@@ -3,14 +3,14 @@ module ChatHandler::ChatParty
   extend ChatHandler
 
   def handle_chat(type, pc, params, text)
-    if pc.in_party?
+    if party = pc.party
       if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
         pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)
         return
       end
 
       cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.name, text)
-      pc.party.broadcast_creature_say(cs, pc)
+      party.broadcast_creature_say(cs, pc)
     end
   end
 

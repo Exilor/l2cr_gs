@@ -1,5 +1,6 @@
 class L2FlameTowerInstance < L2Tower
   @zone_list : Array(Int32)?
+
   setter upgrade_level : Int32 = 0
 
   def do_die(killer : L2Character?) : Bool
@@ -16,15 +17,14 @@ class L2FlameTowerInstance < L2Tower
     return unless list = @zone_list
     return unless @upgrade_level == 0
 
-    max_index = @upgrade_level * 2
-    max_index.times do |i|
+    (@upgrade_level * 2).times do |i|
       if zone = ZoneManager.get_zone_by_id(list[i])
         zone.enabled = state
       end
     end
   end
 
-  def instance_type
+  def instance_type : InstanceType
     InstanceType::L2FlameTowerInstance
   end
 

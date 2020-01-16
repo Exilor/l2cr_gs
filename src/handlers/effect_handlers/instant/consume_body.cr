@@ -1,5 +1,5 @@
 class EffectHandler::ConsumeBody < AbstractEffect
-  def instant?
+  def instant? : Bool
     true
   end
 

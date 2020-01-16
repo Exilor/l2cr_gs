@@ -70,7 +70,7 @@ class Scripts::ForgeOfTheGods < AbstractNpcAI
   end
 
   def on_kill(npc, killer, is_summon)
-    rand = rand(100)
+    rand = Rnd.rand(100)
     mob = nil
     @npc_count += 1
 

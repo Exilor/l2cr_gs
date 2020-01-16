@@ -1,31 +1,31 @@
 require "./l2_character_ai"
 
 class L2DoorAI < L2CharacterAI
-  def on_intention_idle
+  private def on_intention_idle
   end
 
-  def on_intention_active
+  private def on_intention_active
   end
 
-  def on_intention_rest
+  private def on_intention_rest
   end
 
-  def on_intention_attack(target)
+  private def on_intention_attack(target)
   end
 
-  def on_intention_cast(skill, target)
+  private def on_intention_cast(skill, target)
   end
 
-  def on_intention_move_to(destination)
+  private def on_intention_move_to(destination)
   end
 
-  def on_intention_follow(target)
+  private def on_intention_follow(target)
   end
 
-  def on_intention_pick_up(item)
+  private def on_intention_pick_up(item)
   end
 
-  def on_intention_interact(object)
+  private def on_intention_interact(object)
   end
 
   def on_event_think
@@ -72,7 +72,7 @@ class L2DoorAI < L2CharacterAI
   def on_event_dead
   end
 
-  struct OnEventAttackedDoorTask
+  private struct OnEventAttackedDoorTask
     initializer door : L2DoorInstance, attacker : L2Character
 
     def call

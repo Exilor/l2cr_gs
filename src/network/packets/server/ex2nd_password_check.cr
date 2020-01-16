@@ -5,7 +5,7 @@ class Packets::Outgoing::Ex2ndPasswordCheck < GameServerPacket
 
   initializer window_type : Int32
 
-  def write_impl
+  private def write_impl
     c 0xfe
 
     h 0xe5

@@ -13,7 +13,7 @@ class Packets::Outgoing::MagicSkillLaunched < GameServerPacket
     @char_id = char.l2id
   end
 
-  def write_impl
+  private def write_impl
     c 0x54
 
     d @char_id

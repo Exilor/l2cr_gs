@@ -6,12 +6,12 @@ class EffectHandler::ChangeFace < AbstractEffect
     @value = params.get_i8("value", 0)
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
   def on_start(info)
-    return unless pc = info.effector.acting_player?
+    return unless pc = info.effector.acting_player
     return if pc.looks_dead?
     pc.appearance.face = @value
     pc.broadcast_user_info

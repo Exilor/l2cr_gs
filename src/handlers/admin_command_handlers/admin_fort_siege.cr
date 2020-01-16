@@ -39,13 +39,13 @@ module AdminCommandHandler::AdminFortSiege
       elsif command.casecmp?("admin_list_fortsiege_clans")
         pc.send_message("Not implemented yet")
       elsif command.casecmp?("admin_setfort")
-        if player.nil? || player.clan?.nil?
-          pc.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
+        if clan = player.try &.clan
+          fort.end_of_siege(clan)
         else
-          fort.end_of_siege(player.clan)
+          pc.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
         end
       elsif command.casecmp?("admin_removefort")
-        if clan = fort.owner_clan?
+        if fort.owner_clan?
           fort.remove_owner(true)
         else
           pc.send_message("Unable to remove fort")

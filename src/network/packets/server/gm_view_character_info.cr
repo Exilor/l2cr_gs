@@ -20,7 +20,7 @@ class Packets::Outgoing::GMViewCharacterInfo < GameServerPacket
     @fly_walk_speed  = @pc.flying? ? @walk_speed : 0
   end
 
-  def write_impl
+  private def write_impl
     c 0x95
 
     l @pc
@@ -47,15 +47,15 @@ class Packets::Outgoing::GMViewCharacterInfo < GameServerPacket
     d @pc.current_load
     d @pc.max_load
     d @pc.pk_kills
-    PAPERDOLL_ORDER.each do |slot|
+    paperdoll_order do |slot|
       d @pc.inventory.get_paperdoll_l2id(slot)
     end
 
-    PAPERDOLL_ORDER.each do |slot|
+    paperdoll_order do |slot|
       d @pc.inventory.get_paperdoll_item_display_id(slot)
     end
 
-    PAPERDOLL_ORDER.each do |slot|
+    paperdoll_order do |slot|
       d @pc.inventory.get_paperdoll_augmentation_id(slot)
     end
     d @pc.inventory.talisman_slots

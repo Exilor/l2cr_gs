@@ -56,7 +56,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
 
   private DEINONYCHUS = 22203
 
-  @@first_talk = true
+  @first_talk = true
 
   def initialize
     super(643, self.class.simple_name, "Rise and Fall of the Elroki Tribe")
@@ -103,7 +103,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
       if st.get_quest_items_count(BONES_OF_A_PLAINS_DINOSAUR) < 300
         html = "32117-04.html"
       else
-        st.reward_items(PIECE.sample, 5)
+        st.reward_items(PIECE.sample(random: Rnd), 5)
         st.take_items(BONES_OF_A_PLAINS_DINOSAUR, 300)
         st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         html = "32117-05.html"
@@ -123,7 +123,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
 
     if MOBS1.includes?(npc_id)
       chance = CHANCE_MOBS1 * Config.rate_quest_drop
-      if rand(1000) < chance
+      if Rnd.rand(1000) < chance
         st.reward_items(BONES_OF_A_PLAINS_DINOSAUR, 2)
       else
         st.reward_items(BONES_OF_A_PLAINS_DINOSAUR, 1)
@@ -133,7 +133,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
 
     if MOBS2.includes?(npc_id)
       chance = CHANCE_MOBS2 * Config.rate_quest_drop
-      if rand(1000) < chance
+      if Rnd.rand(1000) < chance
         st.reward_items(BONES_OF_A_PLAINS_DINOSAUR, 1)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       end
@@ -141,7 +141,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
 
     if npc_id == DEINONYCHUS
       chance = CHANCE_DEINO * Config.rate_quest_drop
-      if rand(1000) < chance
+      if Rnd.rand(1000) < chance
         st.reward_items(BONES_OF_A_PLAINS_DINOSAUR, 1)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       end
@@ -164,8 +164,8 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
           html = "32106-14.html"
         end
       elsif npc.id == KARAKAWEI
-        if @@first_talk
-          @@first_talk = false
+        if @first_talk
+          @first_talk = false
           html = "32117-01.html"
         else
           html = "32117-03.html"

@@ -36,79 +36,77 @@ class Scripts::FortressSiegeManager < AbstractNpcAI
     return unless npc && pc
 
     case event
-    when "FortressSiegeManager-11.html", "FortressSiegeManager-13.html",
-         "FortressSiegeManager-14.html", "FortressSiegeManager-15.html",
-         "FortressSiegeManager-16.html"
-      return htmltext = event
+    when /\AFortressSiegeManager-1[13456]\.html\z/
+      return event
     when "register"
-      clan = pc.clan?
+      clan = pc.clan
       if clan.nil?
-        htmltext = "FortressSiegeManager-02.html"
+        html = "FortressSiegeManager-02.html"
       else
         fortress = npc.fort
         castle = npc.castle
 
         if clan.fort_id == fortress.residence_id
-          html = NpcHtmlMessage.new(npc.l2id)
-          html.html = get_htm(pc, "FortressSiegeManager-12.html")
-          html["%clanName%"] = fortress.owner_clan.name
-          return html.html
+          msg = NpcHtmlMessage.new(npc.l2id)
+          msg.html = get_htm(pc, "FortressSiegeManager-12.html")
+          msg["%clanName%"] = fortress.owner_clan.name
+          return msg.html
         elsif !pc.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
-          htmltext = "FortressSiegeManager-10.html"
+          html = "FortressSiegeManager-10.html"
         elsif clan.level < FortSiegeManager.siege_clan_min_level
-          htmltext = "FortressSiegeManager-04.html"
-        elsif pc.clan.castle_id == castle.residence_id && fortress.fort_state == 2
-          htmltext = "FortressSiegeManager-18.html"
+          html = "FortressSiegeManager-04.html"
+        elsif clan.castle_id == castle.residence_id && fortress.fort_state == 2
+          html = "FortressSiegeManager-18.html"
         elsif clan.castle_id != 0 && clan.castle_id != castle.residence_id && FortSiegeManager.can_register_just_territory?
-          htmltext = "FortressSiegeManager-17.html"
+          html = "FortressSiegeManager-17.html"
         elsif fortress.time_until_rebel_army > 0 && fortress.time_until_rebel_army <= 7200
-          htmltext = "FortressSiegeManager-19.html"
+          html = "FortressSiegeManager-19.html"
         else
           case npc.fort.siege.add_attacker(pc, true)
           when 1
-            htmltext = "FortressSiegeManager-03.html"
+            html = "FortressSiegeManager-03.html"
           when 2
-            htmltext = "FortressSiegeManager-07.html"
+            html = "FortressSiegeManager-07.html"
           when 3
-            htmltext = "FortressSiegeManager-06.html"
+            html = "FortressSiegeManager-06.html"
           when 4
             sm = SystemMessage.registered_to_s1_fortress_battle
             sm.add_string(npc.fort.name)
             pc.send_packet(sm)
-            htmltext = "FortressSiegeManager-05.html"
+            html = "FortressSiegeManager-05.html"
           end
         end
       end
     when "cancel"
-      clan = pc.clan?
+      clan = pc.clan
       if clan.nil?
-        htmltext = "FortressSiegeManager-02.html"
+        html = "FortressSiegeManager-02.html"
       else
         fortress = npc.fort
 
         if clan.fort_id == fortress.residence_id
-          html = NpcHtmlMessage.new(npc.l2id)
-          html.html = get_htm(pc, "FortressSiegeManager-12.html")
-          html["%clanName%"] = fortress.owner_clan.name
-          return html.html
+          msg = NpcHtmlMessage.new(npc.l2id)
+          msg.html = get_htm(pc, "FortressSiegeManager-12.html")
+          msg["%clanName%"] = fortress.owner_clan.name
+          return msg.html
         elsif !pc.has_clan_privilege?(ClanPrivilege::CS_MANAGE_SIEGE)
-          htmltext = "FortressSiegeManager-10.html"
+          html = "FortressSiegeManager-10.html"
         elsif !FortSiegeManager.registered?(clan, fortress.residence_id)
-          htmltext = "FortressSiegeManager-09.html"
+          html = "FortressSiegeManager-09.html"
         else
           fortress.siege.remove_attacker(clan)
-          htmltext = "FortressSiegeManager-08.html"
+          html = "FortressSiegeManager-08.html"
         end
       end
     when "warInfo"
       if npc.fort.siege.attacker_clans.empty?
-        htmltext = "FortressSiegeManager-20.html"
+        html = "FortressSiegeManager-20.html"
       else
-        htmltext = "FortressSiegeManager-21.html"
+        html = "FortressSiegeManager-21.html"
       end
     end
 
-    htmltext
+    html
   end
 
   def on_first_talk(npc, pc)

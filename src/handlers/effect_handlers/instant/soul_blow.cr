@@ -15,11 +15,11 @@ class EffectHandler::SoulBlow < AbstractEffect
     !a && b
   end
 
-  def effect_type
-    L2EffectType::PHYSICAL_ATTACK
+  def effect_type : EffectType
+    EffectType::PHYSICAL_ATTACK
   end
 
-  def instant?
+  def instant? : Bool
     true
   end
 
@@ -43,8 +43,8 @@ class EffectHandler::SoulBlow < AbstractEffect
       target.break_cast
     end
 
-    if char.player?
-      char.acting_player.send_damage_message(char, damage.to_i, false, true, false)
+    if char.is_a?(L2PcInstance)
+      char.send_damage_message(target, damage.to_i, false, true, false)
     end
 
     Formulas.damage_reflected(char, target, skill, true)

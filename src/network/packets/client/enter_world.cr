@@ -21,13 +21,13 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     else
       id = InstanceManager.get_player_instance(pc.l2id)
       if id > 0
-        InstanceManager.get_instance!(id).remove_player(pc.l2id)
+        InstanceManager.get_instance(id).not_nil!.remove_player(pc.l2id)
       end
     end
 
     if Config.debug
       if L2World.find_object(pc.l2id)
-        warn "#{pc} already exists in L2World."
+        warn { "#{pc} already exists in L2World." }
       end
     end
 
@@ -78,7 +78,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       pc.dead = true
     end
 
-    if clan = pc.clan?
+    if clan = pc.clan
       pc.send_packet(PledgeSkillList.new(clan))
       notify_clan_members(pc)
       notify_sponsor_or_apprentice(pc)
@@ -133,11 +133,11 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       send_packet(PledgeStatusChanged.new(clan))
 
       if clan.castle_id > 0
-        CastleManager.get_castle_by_owner!(clan).give_residential_skills(pc)
+        CastleManager.get_castle_by_owner(clan).not_nil!.give_residential_skills(pc)
       end
 
       if clan.fort_id > 0
-        FortManager.get_fort_by_owner!(clan).give_residential_skills(pc)
+        FortManager.get_fort_by_owner(clan).not_nil!.give_residential_skills(pc)
       end
 
       show_clan_notice = clan.notice_enabled?
@@ -228,11 +228,11 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     SevenSigns.send_current_period_msg(pc)
     AnnouncementsTable.show_announcements(pc)
 
-    if show_clan_notice
+    if clan && show_clan_notice
       notice = NpcHtmlMessage.new
       notice.set_file(pc, "data/html/clanNotice.htm")
-      notice["%clan_name%"] = pc.clan.name
-      notice["%notice_text%"] = pc.clan.notice
+      notice["%clan_name%"] = clan.name
+      notice["%notice_text%"] = clan.notice
       notice.disable_validation
       send_packet(notice)
     elsif Config.server_news
@@ -323,6 +323,20 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       pc.send_packet(ExNotifyPremiumItem::STATIC_PACKET)
     end
 
+    if pc.race.dark_elf?
+      if pc.get_skill_level(294) == 1 && (skill = SkillData[294, 1]?)
+        if GameTimer.night?
+          sm = SystemMessage.it_is_now_midnight_and_the_effect_of_s1_can_be_felt
+          sm.add_skill_name(skill)
+        else
+          sm = SystemMessage.it_is_dawn_and_the_effect_of_s1_will_now_disappear
+          sm.add_skill_name(skill)
+        end
+        pc.send_packet(sm)
+        pc.update_and_broadcast_status(2)
+      end
+    end
+
     pc.refresh_overloaded
     if tmp = pc.original_cp_hp_mp
       pc.current_cp, pc.current_hp, pc.current_mp = tmp
@@ -334,7 +348,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
   end
 
   private def notify_clan_members(pc)
-    if clan = pc.clan?
+    if clan = pc.clan
       clan.get_clan_member(pc.l2id).not_nil!.player_instance = pc
       sm = SystemMessage.clan_member_s1_logged_in
       sm.add_string(pc.name)

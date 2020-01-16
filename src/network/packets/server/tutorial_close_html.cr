@@ -7,7 +7,7 @@ class Packets::Outgoing::TutorialCloseHtml < GameServerPacket
     .clear_html_actions(HtmlActionScope::TUTORIAL_HTML)
   end
 
-  def write_impl
+  private def write_impl
     c 0xa9
   end
 end

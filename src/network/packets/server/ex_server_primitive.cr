@@ -116,7 +116,7 @@ class Packets::Outgoing::ExServerPrimitive < GameServerPacket
     @lines << Line.new("", color, false, *loc1.xyz, *loc2.xyz)
   end
 
-  def write_impl
+  private def write_impl
     c 0xfe
     h 0x11
 
@@ -134,7 +134,7 @@ class Packets::Outgoing::ExServerPrimitive < GameServerPacket
       d color >> 16 & 0xff
       d color >> 8 & 0xff
       d color & 0xff
-      d point.name_colored? ? 1 : 0
+      d point.name_colored ? 1 : 0
       l point
     end
     @lines.each do |line|
@@ -144,7 +144,7 @@ class Packets::Outgoing::ExServerPrimitive < GameServerPacket
       d color >> 16 & 0xff
       d color >> 8 & 0xff
       d color & 0xff
-      d line.name_colored? ? 1 : 0
+      d line.name_colored ? 1 : 0
       l line
       d line.x2
       d line.y2
@@ -164,11 +164,8 @@ class Packets::Outgoing::ExServerPrimitive < GameServerPacket
   end
 
   private class Point
-    getter name, color, x, y, z
-    getter? name_colored
-
-    initializer name : String, color : Int32, name_colored : Bool, x : Int32,
-      y : Int32, z : Int32
+    getter_initializer name : String, color : Int32, name_colored : Bool,
+      x : Int32, y : Int32, z : Int32
   end
 
   private class Line < Point

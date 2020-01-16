@@ -9,10 +9,10 @@ module TargetHandler::EnemySummon
       return EMPTY_TARGET_LIST
     end
 
-    if ((char.player? && (char.summon != target) &&
-      target.alive? && ((target.owner.pvp_flag != 0) || (target.owner.karma > 0))) ||
-      (target.owner.inside_pvp_zone? && char.acting_player.inside_pvp_zone?) ||
-      (target.owner.in_duel? && char.acting_player.in_duel? && (target.owner.duel_id == char.acting_player.duel_id)))
+    pc = char.as?(L2PcInstance)
+    owner = target.owner
+
+    if (pc && char.summon != target && target.alive? && (owner.pvp_flag != 0 || owner.karma > 0)) || (owner.inside_pvp_zone? && (pc && pc.inside_pvp_zone?)) || (owner.in_duel? && pc && (pc.in_duel? && owner.duel_id == pc.duel_id))
 
       return [target] of L2Object
     end
@@ -21,6 +21,6 @@ module TargetHandler::EnemySummon
   end
 
   def target_type
-    L2TargetType::ENEMY_SUMMON
+    TargetType::ENEMY_SUMMON
   end
 end

@@ -19,10 +19,10 @@ class Scripts::Ranku < AbstractNpcAI
         if minion && minion.alive? && TRACKING_SET.includes?(minion.l2id)
           players = minion.known_list.known_players.values
           if players.empty?
-            warn "#{minion}'s known list contains no players."
+            warn { "#{minion}'s known list contains no players." }
             next
           end
-          killer = players.sample
+          killer = players.sample(random: Rnd)
           minion.reduce_current_hp(minion.max_hp.fdiv(100), killer, nil)
         end
       end

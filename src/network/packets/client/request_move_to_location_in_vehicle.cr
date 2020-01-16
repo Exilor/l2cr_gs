@@ -41,8 +41,8 @@ class Packets::Incoming::RequestMoveToLocationInVehicle < GameClientPacket
       end
     end
 
-    if pc.attacking_now? && pc.active_weapon_item?
-      if pc.active_weapon_item.item_type == WeaponType::BOW
+    if pc.attacking_now? && (wpn = pc.active_weapon_item)
+      if wpn.item_type == WeaponType::BOW
         action_failed
         return
       end
@@ -65,14 +65,13 @@ class Packets::Incoming::RequestMoveToLocationInVehicle < GameClientPacket
       return
     end
 
-    if pc.in_boat?
-      boat = pc.boat!
+    if boat = pc.boat
       if boat.l2id != @boat_id
         action_failed
         return
       end
     else
-      boat = BoatManager[@boat_id]?
+      boat = BoatManager.get_boat(@boat_id)
 
       if boat.nil? || !boat.inside_radius?(pc, 300, true, false)
         action_failed
