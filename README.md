@@ -79,12 +79,12 @@ In order for the game server to work it needs the following:
   - [x] Epic bosses (general support)
     - [x] Core
     - [x] Orfen
-    - [ ] Antharas
+    - [x] Antharas
     - [x] Valakas
-    - [ ] Beleth
-    - [ ] Frintezza
-    - [ ] Freya
-    - [ ] Zaken
+    - [x] Beleth
+    - [x] Frintezza
+    - [x] Freya
+    - [x] Zaken
     - [x] Queen Ant
   - [ ] Treasure chests
   - [x] Feedable monsters
@@ -109,17 +109,17 @@ In order for the game server to work it needs the following:
   - [x] Shout
   - [x] Party
   - [x] Clan
-  - [ ] Alliance
-  - [ ] Hero
+  - [x] Alliance
+  - [x] Hero
   - [x] Party match room
   - [x] Whisper
-  - [ ] Battlefield
+  - [x] Battlefield
   - [x] Linking items in chat window
 - [x] Macros
 - [ ] Manor system
   - [x] Preliminary support
-  - [ ] Harvesting
-  - [ ] Selling crops
+  - [ ] Harvesting (untested)
+  - [ ] Selling crops (untested)
 - [x] Quest system
   - [x] First class change
   - [x] Second class change
@@ -161,21 +161,16 @@ In order for the game server to work it needs the following:
 - [x] Gatekeepers
   - [x] Low level player discount
   - [ ] Weekend discount (untested)
-  - [ ] Town-in-siege checking (untested)
+  - [x] Town-in-siege checking
 - [ ] Lottery
 - [ ] Clan halls
   - [ ] Auction (needs testing)
   - [x] Services (buffs, hp/mp/cp regen...)
   - [ ] Siegable halls (preliminary support, untested)
-- [ ] Castles (preliminary support, untested)
+- [x] Castles
 - [ ] Fortresses (preliminary support, untested)
 - [ ] Territory War (preliminary support, untested)
 - [x] Instances
-  - [x] The system itself
-  - [x] Pailaka
-  - [x] Kamaloka (needs more testing)
-  - [x] Nornil's Garden
-  - [ ] All the others
 - [x] Subclasses
   - [x] Subclass quests
   - [x] Subclass skills (skills learned on main class depending on subclass)
@@ -187,16 +182,16 @@ In order for the game server to work it needs the following:
   - [x] Fishing shots quest
 - [x] Admin commands
 - [x] User commands
-- [ ] Four Sepulchers (needs testing)
+- [x] Four Sepulchers (untested)
 - [x] Duels
-  - [ ] Party duels (not tested)
+  - [ ] Party duels (untested)
 - [x] Mail system
   - [x] Attachments
-- [ ] Punishment manager (not tested)
+- [x] Punishment manager (untested)
 - [x] Cursed weapons
 - [x] Olympiad (untested)
 - [x] Day/night monsters in Forest of the Dead
 - [x] Community Board
   - [x] Clan notice on login
-- [ ] Fantasy Island
+- [x] Fantasy Island
 - [x] Server shutdown/restart
