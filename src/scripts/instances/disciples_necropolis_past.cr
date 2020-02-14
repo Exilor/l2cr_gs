@@ -233,7 +233,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
   def on_attack(npc, pc, damage, is_summon)
     if InstanceManager.get_player_world(pc).is_a?(DNPWorld)
       if npc.script_value?(0)
-        if npc.current_hp < npc.max_hp * 0.1
+        if npc.hp_percent < 10
           give_items(pc, SEAL_OF_BINDING, 1)
           pc.send_packet(SystemMessageId::THE_SEALING_DEVICE_ACTIVATION_COMPLETE)
           npc.script_value = 1

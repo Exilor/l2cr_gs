@@ -87,7 +87,7 @@ module LoginServerClient
       when 0x03 then PlayerAuthResponse.new
       when 0x04 then KickPlayer.new
       when 0x05 then RequestCharacters.new
-      # when 0x06 then ChangePassword.new
+      # when 0x06 then ChangePasswordResponse.new
       end
 
       if packet
@@ -146,7 +146,7 @@ module LoginServerClient
 
   def add_game_server_login(account : String, client : GameClient) : Bool
     if ACCOUNTS.has_key?(account)
-      error { "Account #{account.inspect} already present in ACCOUNTS." }
+      error { "Account \"#{account}\" already present in ACCOUNTS." }
       return false
     end
 
@@ -161,7 +161,7 @@ module LoginServerClient
 
   def send_logout(account : String?)
     if account
-      debug { "Sending PlayerLogout for #{account.inspect} to LoginServer." }
+      debug { "Sending PlayerLogout for \"#{account}\" to LoginServer." }
       begin
         send_packet(PlayerLogout.new(account))
       rescue e
@@ -204,6 +204,12 @@ module LoginServerClient
     rescue e
       error e
     end
+  end
+
+  def send_change_password(account : String, char_name : String, old_pass : String, new_pass : String)
+    send_packet(ChangePassword.new(account, char_name, old_pass, new_pass))
+  rescue e
+    error e
   end
 
   def server_status=(status : Int32)
@@ -266,6 +272,10 @@ module LoginServerClient
 
   def status_string : String
     ServerStatus::STATUS_STRING[@@status]
+  end
+
+  def get_client(name : String) : GameClient?
+    ACCOUNTS[name]?
   end
 end
 

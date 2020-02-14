@@ -283,7 +283,7 @@ class L2Npc < L2Character
   end
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
-    debug "L2Npc#on_bypass_feedback(#{pc}, #{command.inspect})"
+    # debug "L2Npc#on_bypass_feedback(#{pc}, #{command.inspect})"
     if busy? && busy_message.size > 0
       pc.action_failed
       html = NpcHtmlMessage.new(l2id)
@@ -294,12 +294,12 @@ class L2Npc < L2Character
       pc.send_packet(html)
     else
       if handler = BypassHandler[command]
-        debug "#{handler} will handle #{command.inspect}."
-        handler.use_bypass(command, pc, self) # <-
+        debug { "#{handler} will handle #{command.inspect}." }
+        handler.use_bypass(command, pc, self)
       else
-        warn "Unknown NPC bypass #{command.inspect}."
+        warn { "Unknown NPC bypass #{command.inspect}." }
         if pc.gm?
-          pc.send_message("Unknown NPC bypass #{command.inspect} (Npc ID: #{id}).")
+          pc.send_message("Unknown NPC bypass #{command.inspect} (Npc id: #{id}).")
         end
       end
     end
@@ -466,8 +466,7 @@ class L2Npc < L2Character
   end
 
   def show_pk_deny_chat_window(pc : L2PcInstance, type : String)
-    html = HtmCache.get_htm(pc, "data/html/#{type}/#{id}-pk.htm")
-    if html
+    if html = HtmCache.get_htm(pc, "data/html/#{type}/#{id}-pk.htm")
       insert_l2id_and_show_chat_window(pc, html)
       pc.action_failed
       true
@@ -493,7 +492,7 @@ class L2Npc < L2Character
       if HtmCache.includes?(temp)
         return temp
       else
-        warn { "L2Npc#get_html_path(#{npc_id}, #{val}) HtmCache can't find #{temp.inspect}." }
+        warn { "L2Npc#get_html_path(#{npc_id}, #{val}) HtmCache can't find \"#{temp}\"." }
       end
     else
       if HtmCache.loadable?(temp)
@@ -882,10 +881,7 @@ class L2Npc < L2Character
 
   def in_my_spawn_group?(npc : L2Npc) : Bool
     return false unless sp = spawn?
-
-    !npc.spawn?.nil? &&
-    !sp.name.nil? &&
-    sp.name == npc.spawn.name
+    !npc.spawn?.nil? && !sp.name.nil? && sp.name == npc.spawn.name
   end
 
   def stays_in_spawn_loc? : Bool

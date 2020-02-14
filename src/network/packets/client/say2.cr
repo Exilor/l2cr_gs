@@ -105,14 +105,14 @@ class Packets::Incoming::Say2 < GameClientPacket
     debug { "[#{CHAT_NAMES[@type]}] #{pc.name}: #{@text}" }
 
     if @type < 0 || @type >= CHAT_NAMES.size
-      warn { "Invalid pc type #{@type} from #{pc.name.inspect}." }
+      warn { "Invalid pc type #{@type} from #{pc.name}." }
       pc.action_failed
       pc.logout
       return
     end
 
     if @text.empty?
-      warn { "#{pc.name.inspect} sent an empty chat message." }
+      warn { "#{pc.name} sent an empty chat message." }
       pc.action_failed
       pc.logout
       return

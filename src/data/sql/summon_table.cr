@@ -45,7 +45,7 @@ module SummonTable
   def restore_pet(pc : L2PcInstance)
     obj_id = PETS[pc.l2id]
     unless item = pc.inventory.get_item_by_l2id(obj_id)
-      warn { "No pet summoning item found with l2id #{obj_id.inspect}." }
+      warn { "No pet summoning item found with l2id #{obj_id}." }
       return
     end
 

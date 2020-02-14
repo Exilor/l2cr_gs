@@ -71,30 +71,24 @@ abstract class L2Summon < L2Playable
   end
 
   def karma : Int32
-    owner.try &.karma || 0
+    owner.karma
   end
 
   def pvp_flag : Int8
-    owner.try &.pvp_flag || 0i8
+    owner.pvp_flag
   end
 
   def send_packet(arg : GameServerPacket | SystemMessageId)
-    owner.try &.send_packet(arg)
+    owner.send_packet(arg)
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    if owner = owner()
-      gsp.invisible = owner.invisible?
-    end
-
+    gsp.invisible = owner.invisible?
     super
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Number)
-    if owner = owner()
-      gsp.invisible = owner.invisible?
-    end
-
+    gsp.invisible = owner.invisible?
     super
   end
 
@@ -103,7 +97,6 @@ abstract class L2Summon < L2Playable
   end
 
   def in_party? : Bool
-    return false unless owner = owner()
     owner.in_party?
   end
 
@@ -174,7 +167,6 @@ abstract class L2Summon < L2Playable
   end
 
   def update_and_broadcast_status(val : Int32)
-    return unless owner = owner()
     send_packet(PetInfo.new(self, val))
     send_packet(PetStatusUpdate.new(self))
     broadcast_npc_info(val) if visible?
@@ -209,7 +201,7 @@ abstract class L2Summon < L2Playable
     inventory?.try &.destroy_all_items("pet deleted", owner, self)
     decay_me
     known_list.remove_all_known_objects
-    owner().try &.pet = nil
+    owner().pet = nil
 
     super()
   end
@@ -265,7 +257,6 @@ abstract class L2Summon < L2Playable
   end
 
   def auto_attackable?(attacker : L2Character) : Bool
-    return false unless owner = owner()
     owner.auto_attackable?(attacker)
   end
 
@@ -284,7 +275,7 @@ abstract class L2Summon < L2Playable
   end
 
   def team : Team
-    owner.try &.team || Team::NONE
+    owner.team
   end
 
   def do_die(killer : L2Character?) : Bool
@@ -297,12 +288,10 @@ abstract class L2Summon < L2Playable
 
     return false unless super(killer)
 
-    if owner = owner()
-      known_list.each_character do |mob|
-        if mob.is_a?(L2Attackable) && mob.alive?
-          if info = mob.aggro_list[self]?
-            mob.add_damage_hate(owner, info.damage, info.hate)
-          end
+    known_list.each_character do |mob|
+      if mob.is_a?(L2Attackable) && mob.alive?
+        if info = mob.aggro_list[self]?
+          mob.add_damage_hate(owner, info.damage, info.hate)
         end
       end
     end
@@ -352,7 +341,6 @@ abstract class L2Summon < L2Playable
   def use_magic(skill : Skill?, force : Bool, dont_move : Bool) : Bool
     return false unless skill
     return false if dead?
-    return false unless owner()
     return false if skill.passive?
     return false if casting_now?
 
@@ -570,20 +558,19 @@ abstract class L2Summon < L2Playable
   end
 
   def do_attack
-    # debug "L2Summon#do_attack"
-    if target = owner.try &.target
+    if target = owner.target
       self.target = target
       set_intention(AI::ATTACK, target)
     end
   end
 
   def can_attack?(ctrl : Bool) : Bool
-    return false unless target = owner.try &.target
+    return false unless target = owner.target
     return false if self == target || owner == target
 
     npc_id = id
 
-    if PASSIVE_SUMMONS.includes?(npc_id)
+    if PASSIVE_SUMMONS.bincludes?(npc_id)
       action_failed
       return false
     end
@@ -689,35 +676,17 @@ abstract class L2Summon < L2Playable
   end
 
   def clan_id : Int32
-    owner.try &.clan_id || 0
+    owner.clan_id
   end
 
   def ally_id : Int32
-    owner.try &.ally_id || 0
+    owner.ally_id
   end
 
   def form_id : Int32
-    # form_id = 0
-    # npc_id = id()
-
-    # if npc_id == 16_041 || npc_id == 16_042
-    #   if level() > 69
-    #     form_id = 3
-    #   elsif level() > 64
-    #     form_id = 2
-    #   elsif level() > 59
-    #     form_id = 1
-    # elsif npc_id == 16_025 || npc_id == 16_037
-    #   if level() > 69
-    #     form_id = 3
-    #   elsif level() > 64
-    #     form_id = 2
-    #   elsif level() > 59
-    #     form_id = 1
-    # end
-    id = id()
     level = level()
-    if id == 16_041 || id == 16_042 || id == 16_025 || id == 16_037
+    case id
+    when 16_041, 16_042, 16_025, 16_037
       return 3 if level > 69
       return 2 if level > 64
       return 1 if level > 59
@@ -728,7 +697,9 @@ abstract class L2Summon < L2Playable
 
   def to_s(io : IO)
     if owner = @owner
-      io << "#{owner.name}'s #{name.inspect}"
+      io << owner.name
+      io << "'s "
+      io << name
     else
       super
     end

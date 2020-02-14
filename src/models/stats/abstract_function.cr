@@ -2,11 +2,10 @@ abstract class AbstractFunction
   alias Owner = L2Object | AbstractEffect | Skill | Options |
     Elementals::ElementalStatBoni
 
-  getter stat, order, owner, value, apply_cond
+  getter_initializer stat : Stats, order : Int32 = 1, owner : Owner? = nil,
+    value : Float64 = 0.0, apply_cond : Condition? = nil
 
-  initializer stat : Stats, order : Int32 = 1, owner : Owner? = nil, value : Float64 = 0.0, apply_cond : Condition? = nil
-
-  abstract def calc(effector : L2Character, effected : L2Character, skill : Skill?, val : Float64)
+  abstract def calc(effector : L2Character, effected : L2Character, skill : Skill?, val : Float64) # : Float64
 
   # Convenience method for subclasses.
   private def test(effector : L2Character, effected : L2Character?, skill : Skill?) : Bool

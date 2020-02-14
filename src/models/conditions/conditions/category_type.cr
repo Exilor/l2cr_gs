@@ -1,7 +1,9 @@
 class Condition
   class CategoryType < Condition
+    @categories : Slice(::CategoryType)
+
     def initialize(categories)
-      @categories = Set(::CategoryType).new(categories)
+      @categories = categories.uniq.to_slice
     end
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool

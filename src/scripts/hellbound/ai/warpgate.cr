@@ -6,7 +6,7 @@ class Scripts::Warpgate < AbstractNpcAI
     32316,
     32317,
     32318,
-    32319,
+    32319
   }
   # Locations
   private ENTER_LOC = Location.new(-11272, 236464, -3248)

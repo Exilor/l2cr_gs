@@ -6,7 +6,7 @@ class EffectHandler::Unsummon < AbstractEffect
     @chance = params.get_i32("chance", 100)
   end
 
-  def calc_success(info)
+  def calc_success(info : BuffInfo) : Bool
     effector, effected, skill = info.effector, info.effected, info.skill
     magic_level = skill.magic_level
 
@@ -26,13 +26,13 @@ class EffectHandler::Unsummon < AbstractEffect
   end
 
   def on_start(info)
-    return unless summon = info.effected.summon
-    owner = summon.owner
+    return unless smn = info.effected.summon
+    owner = smn.owner
 
-    summon.abort_attack
-    summon.abort_cast
-    summon.stop_all_effects
-    summon.unsummon(owner)
+    smn.abort_attack
+    smn.abort_cast
+    smn.stop_all_effects
+    smn.unsummon(owner)
     owner.send_packet(SystemMessageId::YOUR_SERVITOR_HAS_VANISHED)
   end
 end

@@ -172,18 +172,18 @@ class Scripts::BeastFarm < AbstractNpcAI
     GROWTH_CAPABLE_MONSTERS[18898] = temp
 
     # Tamed beasts data
-    TAMED_BEAST_DATA << TamedBeast.new("%name% of Focus", [SkillHolder.new(6432, 1), SkillHolder.new(6668, 1)])
-    TAMED_BEAST_DATA << TamedBeast.new("%name% of Guiding", [SkillHolder.new(6433, 1), SkillHolder.new(6670, 1)])
-    TAMED_BEAST_DATA << TamedBeast.new("%name% of Swifth", [SkillHolder.new(6434, 1), SkillHolder.new(6667, 1)])
-    TAMED_BEAST_DATA << TamedBeast.new("Berserker %name%", [SkillHolder.new(6671, 1)])
-    TAMED_BEAST_DATA << TamedBeast.new("%name% of Protect", [SkillHolder.new(6669, 1), SkillHolder.new(6672, 1)])
-    TAMED_BEAST_DATA << TamedBeast.new("%name% of Vigor", [SkillHolder.new(6431, 1), SkillHolder.new(6666, 1)])
+    TAMED_BEAST_DATA << TamedBeast.new("%name% of Focus", [SkillHolder.new(6432), SkillHolder.new(6668)])
+    TAMED_BEAST_DATA << TamedBeast.new("%name% of Guiding", [SkillHolder.new(6433), SkillHolder.new(6670)])
+    TAMED_BEAST_DATA << TamedBeast.new("%name% of Swifth", [SkillHolder.new(6434), SkillHolder.new(6667)])
+    TAMED_BEAST_DATA << TamedBeast.new("Berserker %name%", [SkillHolder.new(6671)])
+    TAMED_BEAST_DATA << TamedBeast.new("%name% of Protect", [SkillHolder.new(6669), SkillHolder.new(6672)])
+    TAMED_BEAST_DATA << TamedBeast.new("%name% of Vigor", [SkillHolder.new(6431), SkillHolder.new(6666)])
   end
 
-  def spawn_next(npc, player, next_npc_id, food)
+  def spawn_next(npc, pc, next_npc_id, food)
     # remove the feedinfo of the mob that got despawned, if any
     if tmp = FEED_INFO[npc.l2id]?
-      if tmp == player.l2id
+      if tmp == pc.l2id
         FEED_INFO.delete(npc.l2id)
       end
     end
@@ -196,9 +196,9 @@ class Scripts::BeastFarm < AbstractNpcAI
     # }
 
     # if this is finally a trained mob, then despawn any other trained mobs that the
-    # player might have and initialize the Tamed Beast.
+    # pc might have and initialize the Tamed Beast.
     if TAMED_BEASTS.includes?(next_npc_id)
-      next_npc = L2TamedBeastInstance.new(next_npc_id, player, food, npc.x, npc.y, npc.z, true)
+      next_npc = L2TamedBeastInstance.new(next_npc_id, pc, food, *npc.xyz, true)
 
       beast = TAMED_BEAST_DATA.sample(random: Rnd)
       name = beast.name
@@ -213,26 +213,26 @@ class Scripts::BeastFarm < AbstractNpcAI
         name = name.sub("%name%", "Alpine Grendel")
       end
       next_npc.name = name
-      next_npc.broadcast_packet(NpcInfo.new(next_npc, player))
+      next_npc.broadcast_packet(NpcInfo.new(next_npc, pc))
       next_npc.set_running
 
       beast.skills.each do |sh|
-        next_npc.add_beast_skill(SkillData[sh.skill_id, sh.skill_lvl])
+        next_npc.add_beast_skill(sh.skill)
       end
 
-      Scripts::Q00020_BringUpWithLove.check_jewel_of_innocence(player)
+      Scripts::Q00020_BringUpWithLove.check_jewel_of_innocence(pc)
     else
       # if not trained, the newly spawned mob will automatically be agro against its feeder
       # (what happened to "never bite the hand that feeds you" anyway?!)
       next_npc = add_spawn(next_npc_id, npc).as(L2Attackable)
 
-      # register the player in the feedinfo for the mob that just spawned
-      FEED_INFO[next_npc.l2id] = player.l2id
+      # register the pc in the feedinfo for the mob that just spawned
+      FEED_INFO[next_npc.l2id] = pc.l2id
       next_npc.set_running
-      next_npc.add_damage_hate(player, 0, 99999)
-      next_npc.set_intention(AI::ATTACK, player)
+      next_npc.add_damage_hate(pc, 0, 99999)
+      next_npc.set_intention(AI::ATTACK, pc)
 
-      player.target = next_npc
+      pc.target = next_npc
     end
   end
 
@@ -249,6 +249,10 @@ class Scripts::BeastFarm < AbstractNpcAI
     if FEEDABLE_BEASTS.includes?(npc_id) || (skill_id != SKILL_GOLDEN_SPICE && skill_id != SKILL_CRYSTAL_SPICE && skill_id != SKILL_BLESSED_GOLDEN_SPICE && skill_id != SKILL_BLESSED_CRYSTAL_SPICE && skill_id != SKILL_SGRADE_GOLDEN_SPICE && skill_id != SKILL_SGRADE_CRYSTAL_SPICE)
       return super
     end
+    # check if this can be done in ruby
+    # if FEEDABLE_BEASTS.includes?(npc_id) || !skill_id.in?(SKILL_GOLDEN_SPICE, SKILL_CRYSTAL_SPICE, SKILL_BLESSED_GOLDEN_SPICE, SKILL_BLESSED_CRYSTAL_SPICE, SKILL_SGRADE_GOLDEN_SPICE, SKILL_SGRADE_CRYSTAL_SPICE)
+    #   return super
+    # end
 
     # first gather some values on local variables
     l2id = npc.l2id

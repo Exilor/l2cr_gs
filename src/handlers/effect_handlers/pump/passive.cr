@@ -1,6 +1,6 @@
 module EffectHandler
   class Passive < AbstractEffect
-    def can_start?(info)
+    def can_start?(info : BuffInfo) : Bool
       info.effected.attackable?
     end
 

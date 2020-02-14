@@ -9,6 +9,7 @@ require "./user_command_handler"
 require "./admin_command_handler"
 require "./community_board_handler"
 require "./punishment_handler"
+require "./voiced_command_handler"
 
 module MasterHandler
   def self.load
@@ -23,5 +24,6 @@ module MasterHandler
     UserCommandHandler.load
     PunishmentHandler.load
     TargetHandler.load
+    VoicedCommandHandler.load
   end
 end

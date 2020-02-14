@@ -50,11 +50,6 @@ class DropProtection
       unprotect
       @protected = true
       @owner = pc
-
-      if @owner.nil?
-        raise "Tried to protect dropped item with nil owner"
-      end
-
       @task = ThreadPoolManager.schedule_general(self, PROTECTED_MILLIS_TIME)
     end
   end

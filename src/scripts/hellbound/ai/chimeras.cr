@@ -44,7 +44,7 @@ class Scripts::Chimeras < AbstractNpcAI
   def on_skill_see(npc, caster, skill, targets, is_summon)
     if skill.id == BOTTLE && npc.alive?
       if !targets.empty? && targets[0] == npc
-        if npc.current_hp < npc.max_hp * 0.1
+        if npc.hp_percent < 10
           if HellboundEngine.level == 7
             HellboundEngine.update_trust(3, true)
           end

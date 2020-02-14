@@ -1,18 +1,12 @@
 # custom
 class Scripts::ContractPayment < AbstractNpcAI
-  private NPCS = {
-    14575, 14576, 14577, 14578, 14579, 14580, 14581, 14582, 14583, 14584,
-    14585, 14586, 14587, 14588, 14589, 14590, 14591, 14592, 14593, 14594,
-    14595, 14596, 14597, 14598, 14599, 14600, 14601, 14602, 14603, 14604,
-    14605, 14606, 14607, 14608, 14609, 14610, 14611, 14612, 14613, 14614,
-    14615, 14616, 14617, 14618
-  }
+  private NPCS = 14575..14618
 
   private CONTRACT_PAYMENT_ID = 4140
 
   def initialize
     super(self.class.simple_name, "ai/group_template")
-    add_summon_spawn_id(NPCS)
+    NPCS.each { |id| add_summon_spawn_id(id) }
   end
 
   def on_summon_spawn(summon)
@@ -23,6 +17,11 @@ class Scripts::ContractPayment < AbstractNpcAI
     return unless pc
 
     if smn = get_valid_summon(pc)
+      if smn.casting_now?
+        # Wait for the next tick
+        return
+      end
+
       if pc.effect_list.get_buff_info_by_skill_id(CONTRACT_PAYMENT_ID).nil?
         attack_target = smn.ai.attack_target?
         skill = get_skill(smn)
@@ -46,7 +45,7 @@ class Scripts::ContractPayment < AbstractNpcAI
     return unless pc.online?
     return unless (smn = pc.summon) && smn.alive?
     return unless (smn.visible? || smn.teleporting?)
-    return unless smn.id.between?(NPCS[0], NPCS[-1])
+    return unless NPCS.includes?(smn.id)
     smn
   end
 

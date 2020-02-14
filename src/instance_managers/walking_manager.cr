@@ -207,13 +207,13 @@ module WalkingManager
             else
               if node = r["npcString"]?
                 unless npc_string = NpcString.parse?(node)
-                  warn { "Unknown NpcString #{node.inspect} for route #{route_name}." }
+                  warn { "Unknown NpcString #{node} for route #{route_name}." }
                   next
                 end
               else
                 if node = r["npcStringId"]?
                   unless npc_string = NpcString.get?(node.to_i)
-                    warn { "Unknown NpcString #{node.inspect} for route #{route_name}." }
+                    warn { "Unknown NpcString #{node} for route #{route_name}." }
                     next
                   end
                 end

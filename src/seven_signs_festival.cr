@@ -861,7 +861,7 @@ module SevenSignsFestival
             sm.add_int(Config.festival_win_points)
             clan.broadcast_to_online_members(sm)
           else
-            warn { "No clan found with name #{name.inspect}." }
+            warn { "No clan found with name \"#{name}\"." }
           end
         else
           warn "clan_name column is nil."

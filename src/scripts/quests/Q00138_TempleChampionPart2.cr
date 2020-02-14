@@ -22,7 +22,10 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
     add_start_npc(SYLVAIN)
     add_talk_id(SYLVAIN, PUPINA, ANGUS, SLA)
     add_kill_id(MOBS)
-    register_quest_items(TEMPLE_MANIFESTO, RELICS_OF_THE_DARK_ELF_TRAINEE, ANGUS_RECOMMENDATION, PUPINAS_RECOMMENDATION)
+    register_quest_items(
+      TEMPLE_MANIFESTO, RELICS_OF_THE_DARK_ELF_TRAINEE, ANGUS_RECOMMENDATION,
+      PUPINAS_RECOMMENDATION
+    )
   end
 
   def on_adv_event(event, npc, pc)

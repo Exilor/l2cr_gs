@@ -9,4 +9,7 @@ class Packets::Outgoing::ExChangeClientEffectInfo < GameServerPacket
     d @key
     d @value
   end
+
+  FREYA_DEFAULT = new(0, 0, 1)
+  FREYA_DESTROYED = new(0, 0, 2)
 end

@@ -39,7 +39,7 @@ module AdminCommandHandler::AdminRide
           TransformData.transform_player(JET_BIKE_TRANSFORMATION_ID, player)
         end
       else
-        pc.send_message("Command #{command.inspect} not recognized.")
+        pc.send_message("Command \"#{command}\" not recognized.")
         return false
       end
 

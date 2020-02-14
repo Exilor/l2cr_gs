@@ -11,9 +11,8 @@ class Packets::Incoming::RequestAutoSoulShot < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-
-    return unless pc.private_store_type.none? && !pc.active_requester
-    return unless pc.alive?
+    return if pc.dead?
+    return unless pc.private_store_type.none? && pc.active_requester.nil?
     return unless item = pc.inventory.get_item_by_item_id(@item_id)
 
     unless pc.inventory.can_manipulate_with_item_id?(@item_id)

@@ -8,7 +8,7 @@ class PcKnownList < PlayableKnownList
 
     me = active_char
 
-    if object.poly.morphed? && object.poly.poly_type == "item"
+    if object.poly? && object.poly.morphed? && object.poly.poly_type == "item"
       me.send_packet(SpawnItem.new(object))
     else
       if object.visible_for?(me)

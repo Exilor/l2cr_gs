@@ -158,45 +158,43 @@ class Scripts::NornilsGarden < AbstractInstance
 
   def teleport_player(player, loc, instance_id)
     give_buffs(player)
-    if summon = player.summon
-      give_buffs(summon)
+    if smn = player.summon
+      give_buffs(smn)
     end
 
     super
   end
 
-  private def exit_instance(player)
-    inst = InstanceManager.get_world(player.instance_id)
+  private def exit_instance(pc)
+    inst = InstanceManager.get_world(pc.instance_id)
     if inst.is_a?(NornilsWorld)
       world = inst
-      world.remove_allowed(player.l2id)
-      teleport_player(player, EXIT_PPL, 0)
+      world.remove_allowed(pc.l2id)
+      teleport_player(pc, EXIT_PPL, 0)
     end
   end
 
-  private def enter_instance(npc, player)
-    world = InstanceManager.get_player_world(player)
-    if world
+  private def enter_instance(npc, pc)
+    if world = InstanceManager.get_player_world(pc)
       if !world.is_a?(NornilsWorld) || world.template_id != TEMPLATE_ID
-        player.send_packet(SystemMessageId::YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON)
+        pc.send_packet(SystemMessageId::YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON)
         return
       end
       # check for level difference again on reenter
-      if player.level > INSTANCE_LVL_MAX || player.level < INSTANCE_LVL_MIN
+      if pc.level > INSTANCE_LVL_MAX || pc.level < INSTANCE_LVL_MIN
         sm = SystemMessage.c1_s_level_requirement_is_not_sufficient_and_cannot_be_entered
-        sm.add_pc_name(player)
-        player.send_packet(sm)
+        sm.add_pc_name(pc)
+        pc.send_packet(sm)
         return
       end
       # check what instance still exist
-      inst = InstanceManager.get_instance(world.instance_id)
-      if inst
-        teleport_player(player, SPAWN_PPL, world.instance_id)
+      if inst = InstanceManager.get_instance(world.instance_id)
+        teleport_player(pc, SPAWN_PPL, world.instance_id)
       end
       return
     end
     # Creating new instance
-    result = chech_conditions(npc, player)
+    result = chech_conditions(npc, pc)
     unless result.casecmp?("ok")
       return result
     end
@@ -205,7 +203,7 @@ class Scripts::NornilsGarden < AbstractInstance
     inst = InstanceManager.get_instance(instance_id).not_nil!
 
     inst.name = InstanceManager.get_instance_id_name(TEMPLATE_ID)
-    inst.exit_loc = Location.new(player)
+    inst.exit_loc = Location.new(pc)
     inst.allow_summon = false
     inst.duration = DURATION_TIME * 60000
     inst.empty_destroy_time = EMPTY_DESTROY_TIME.to_i64 * 60000
@@ -218,7 +216,7 @@ class Scripts::NornilsGarden < AbstractInstance
     prepare_instance(world)
 
     # and finally teleport party into instance
-    if party = player.party
+    if party = pc.party
       party.members.each do |party_member|
         world.add_allowed(party_member.l2id)
         teleport_player(party_member, SPAWN_PPL, instance_id)
@@ -229,8 +227,7 @@ class Scripts::NornilsGarden < AbstractInstance
   private def prepare_instance(world)
     world.first_npc = add_spawn(18362, -109702, 74696, -12528, 49568, false, 0, false, world.instance_id)
 
-    door = get_door(16200010, world.instance_id)
-    if door
+    if door = get_door(16200010, world.instance_id)
       door.targetable = false
       door.mesh_index = 2
     end
@@ -244,7 +241,7 @@ class Scripts::NornilsGarden < AbstractInstance
         world.spawned_1 = true
 
         GROUP_1.each do |mob|
-          add_spawn(mob[0], mob[1], mob[2], mob[3], mob[4], false, 0, false, world.instance_id)
+          add_spawn(*mob.values_at(0, 1, 2, 3, 4), false, 0, false, world.instance_id)
         end
       end
     end
@@ -254,11 +251,11 @@ class Scripts::NornilsGarden < AbstractInstance
     inst = InstanceManager.get_world(npc.instance_id)
     if inst.is_a?(NornilsWorld)
       world = inst
-      if !world.spawned_2
+      unless world.spawned_2
         world.spawned_2 = true
 
         GROUP_2.each do |mob|
-          add_spawn(mob[0], mob[1], mob[2], mob[3], mob[4], false, 0, false, world.instance_id)
+          add_spawn(*mob.values_at(0, 1, 2, 3, 4), false, 0, false, world.instance_id)
         end
       end
     end
@@ -268,11 +265,11 @@ class Scripts::NornilsGarden < AbstractInstance
     inst = InstanceManager.get_world(cha.instance_id)
     if inst.is_a?(NornilsWorld)
       world = inst
-      if !world.spawned_3
+      unless world.spawned_3
         world.spawned_3 = true
 
         GROUP_3.each do |mob|
-          add_spawn(mob[0], mob[1], mob[2], mob[3], mob[4], false, 0, false, world.instance_id)
+          add_spawn(*mob.values_at(0, 1, 2, 3, 4), false, 0, false, world.instance_id)
         end
       end
     end
@@ -286,66 +283,66 @@ class Scripts::NornilsGarden < AbstractInstance
         world.spawned_4 = true
 
         GROUP_4.each do |mob|
-          add_spawn(mob[0], mob[1], mob[2], mob[3], mob[4], false, 0, false, world.instance_id)
+          add_spawn(*mob.values_at(0, 1, 2, 3, 4), false, 0, false, world.instance_id)
         end
       end
     end
   end
 
-  def open_door(st, player, door_id)
+  def open_door(st, pc, door_id)
     st.unset("correct")
-    tmpworld = InstanceManager.get_world(player.instance_id)
+    tmpworld = InstanceManager.get_world(pc.instance_id)
     if tmpworld.is_a?(NornilsWorld)
       open_door(door_id, tmpworld.instance_id)
     end
   end
 
-  private def chech_conditions(npc, player) : String
+  private def chech_conditions(npc, pc) : String
     # custom
-    if player.gm?
-      debug "Skipping conditions check because #{player.name} is a GM (custom)."
+    if pc.gm?
+      debug "Skipping conditions check because #{pc.name} is a GM (custom)."
       return "ok"
     end
 
 
-    # player must be in party
-    unless party = player.party
-      player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
+    # pc must be in party
+    unless party = pc.party
+      pc.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return "32330-05.html"
     end
     # ...and be party leader
-    if party.leader != player
-      player.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_ENTER)
+    if party.leader != pc
+      pc.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_ENTER)
       return "32330-08.html"
     end
     kamael = false
 
     # for each party member
     party.members.each do |party_member|
-      # player level must be in range
+      # pc level must be in range
       if party_member.level > INSTANCE_LVL_MAX
         sm = SystemMessage.c1_s_level_requirement_is_not_sufficient_and_cannot_be_entered
         sm.add_pc_name(party_member)
-        player.send_packet(sm)
+        pc.send_packet(sm)
         return "32330-06.html"
       end
       if party_member.level < INSTANCE_LVL_MIN
         sm = SystemMessage.c1_s_level_requirement_is_not_sufficient_and_cannot_be_entered
         sm.add_pc_name(party_member)
-        player.send_packet(sm)
+        pc.send_packet(sm)
         return "32330-07.html"
       end
       if party_member.class_id.level != 0
         sm = SystemMessage.c1_s_level_requirement_is_not_sufficient_and_cannot_be_entered
         sm.add_pc_name(party_member)
-        player.send_packet(sm)
+        pc.send_packet(sm)
         return "32330-06.html"
       end
-      # player must be near party leader
-      unless party_member.inside_radius?(player, 500, true, true)
+      # pc must be near party leader
+      unless party_member.inside_radius?(pc, 500, true, true)
         sm = SystemMessage.c1_is_in_a_location_which_cannot_be_entered_therefore_it_cannot_be_processed
         sm.add_pc_name(party_member)
-        player.send_packet(sm)
+        pc.send_packet(sm)
         return "32330-08.html"
       end
       if party_member.race.to_i == 5
@@ -355,7 +352,7 @@ class Scripts::NornilsGarden < AbstractInstance
         else
           sm = SystemMessage.c1_s_quest_requirement_is_not_sufficient_and_cannot_be_entered
           sm.add_pc_name(party_member)
-          player.send_packet(sm)
+          pc.send_packet(sm)
           return "32330-08.html"
         end
       end
@@ -368,19 +365,19 @@ class Scripts::NornilsGarden < AbstractInstance
     "ok"
   end
 
-  def on_enter_zone(character, zone)
-    if character.is_a?(L2PcInstance) && character.alive?
-      if !character.teleporting? && character.online?
-        world = InstanceManager.get_world(character.instance_id)
+  def on_enter_zone(char, zone)
+    if char.is_a?(L2PcInstance) && char.alive?
+      if !char.teleporting? && char.online?
+        world = InstanceManager.get_world(char.instance_id)
         if world.is_a?(NornilsWorld)
           AUTO_GATES.each do |auto|
             if zone.id == auto[0]
               open_door(auto[1], world.instance_id)
             end
             if zone.id == 20111
-              spawn3(character)
+              spawn3(char)
             elsif zone.id == 20112
-              spawn4(character)
+              spawn4(char)
             end
           end
         end
@@ -390,18 +387,18 @@ class Scripts::NornilsGarden < AbstractInstance
     super
   end
 
-  def on_adv_event(event, npc, player)
-    player = player.not_nil!
+  def on_adv_event(event, npc, pc)
+    pc = pc.not_nil!
     npc = npc.not_nil!
     html = event
-    st = get_quest_state(player, false)
-    return get_no_quest_msg(player) unless st
+    st = get_quest_state(pc, false)
+    return get_no_quest_msg(pc) unless st
 
     if npc.id == GARDEN_GUARD && event.casecmp?("enter_instance")
-      html = enter_instance(npc, player)
+      html = enter_instance(npc, pc)
     elsif npc.id == 32258 && event.casecmp?("exit")
       begin
-        exit_instance(player)
+        exit_instance(pc)
       rescue e
         error e
       end
@@ -415,11 +412,11 @@ class Scripts::NornilsGarden < AbstractInstance
       elsif event.casecmp?("check")
         correct = st.get_int("correct")
         if npc.id == 32260 && correct == 3
-          open_door(st, player, 16200014)
+          open_door(st, pc, 16200014)
         elsif npc.id == 32261 && correct == 3
-          open_door(st, player, 16200015)
+          open_door(st, pc, 16200015)
         elsif npc.id == 32262 && correct == 4
-          open_door(st, player, 16200016)
+          open_door(st, pc, 16200016)
         else
           return "#{npc.id}-00.html"
         end
@@ -429,19 +426,19 @@ class Scripts::NornilsGarden < AbstractInstance
     html
   end
 
-  def on_talk(npc, player)
+  def on_talk(npc, pc)
     if FINAL_GATES.includes?(npc.id)
-      cst = player.get_quest_state(Scripts::Q00179_IntoTheLargeCavern.simple_name)
+      cst = pc.get_quest_state(Scripts::Q00179_IntoTheLargeCavern.simple_name)
       if cst && cst.state.started?
         return "#{npc.id}-01.html"
       end
 
-      get_no_quest_msg(player)
+      get_no_quest_msg(pc)
     end
   end
 
-  def on_first_talk(npc, player)
-    get_quest_state(player, true)
+  def on_first_talk(npc, pc)
+    get_quest_state(pc, true)
     "#{npc.id}.html"
   end
 
@@ -457,8 +454,8 @@ class Scripts::NornilsGarden < AbstractInstance
     nil
   end
 
-  def on_kill(npc, player, is_summon)
-    st = get_quest_state(player, false)
+  def on_kill(npc, pc, is_summon)
+    st = get_quest_state(pc, false)
     if st.nil?
       return
     end
@@ -466,11 +463,11 @@ class Scripts::NornilsGarden < AbstractInstance
     GATEKEEPERS.each do |gk|
       if npc.id == gk[0]
         # Drop key
-        npc.drop_item(player, gk[1], 1)
+        npc.drop_item(pc, gk[1], 1)
 
         # Check if gatekeeper should open bridge, and open it
         if gk[2] > 0
-          tmpworld = InstanceManager.get_world(player.instance_id)
+          tmpworld = InstanceManager.get_world(pc.instance_id)
           if tmpworld.is_a?(NornilsWorld)
             open_door(gk[2], tmpworld.instance_id)
           end
@@ -484,7 +481,7 @@ class Scripts::NornilsGarden < AbstractInstance
     super
   end
 
-  def on_enter_instance(player, world, first_entrance)
+  def on_enter_instance(pc, world, first_entrance)
     # do nothing
   end
 end

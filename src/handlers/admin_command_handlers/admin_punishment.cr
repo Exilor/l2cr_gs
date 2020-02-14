@@ -3,7 +3,7 @@ module AdminCommandHandler::AdminPunishment
   extend AdminCommandHandler
   include Packets::Outgoing
 
-  private DATE_FORMAT = "yyyy.MM.dd HH:mm:ss"
+  private DATE_FORMAT = "%Y.%m.%d %H:%M:%S"
 
   def use_admin_command(command, pc)
     st = command.split

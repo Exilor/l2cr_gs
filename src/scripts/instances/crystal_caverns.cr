@@ -11,7 +11,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     getter room_status = [0, 0, 0, 0] # 0: not spawned, 1: spawned, 2: cleared
     getter copies = [] of L2Npc
     getter crystal_golems = {} of L2Npc => CrystalGolem
-    getter opened_doors = {} of L2DoorInstance => L2PcInstance
+    getter opened_doors = Concurrent::Map(L2DoorInstance, L2PcInstance).new
     getter npc_list_2 = {} of Int32 => Hash(L2Npc, Bool)
     getter oracles = {} of L2Npc => L2Npc?
     getter key_keepers = [] of L2Npc
@@ -93,7 +93,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     60000,
     50000,
     40000
-  } # Kechi Hencmans spawn times
+  } # Kechi Henchmans spawn times
   private MOBLIST = {
     22279,
     22280,
@@ -418,7 +418,6 @@ class Scripts::CrystalCaverns < AbstractInstance
 
   private def check_conditions(player)
     if player.override_instance_conditions?
-      debug "#{player} overrides instance conditions."
       return true
     end
 
@@ -504,12 +503,14 @@ class Scripts::CrystalCaverns < AbstractInstance
       player.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_ENTER)
       return false
     end
+
+    item_ids = {BLUE_CRYSTAL, RED_CRYSTAL, CLEAR_CRYSTAL}
     party.members.each do |m|
       # item1 = m.inventory.get_item_by_item_id(BLUE_CRYSTAL)
       # item2 = m.inventory.get_item_by_item_id(RED_CRYSTAL)
       # item3 = m.inventory.get_item_by_item_id(CLEAR_CRYSTAL)
       # if item1.nil? || item2.nil? || item3.nil?
-      item_ids = {BLUE_CRYSTAL, RED_CRYSTAL, CLEAR_CRYSTAL}
+
       unless item_ids.all? { |id| m.inventory.get_item_by_item_id(id) }
         sm = SystemMessage.c1_item_requirement_not_sufficient
         sm.add_pc_name(m)
@@ -708,7 +709,7 @@ class Scripts::CrystalCaverns < AbstractInstance
   end
 
   # /*
-  #  * private def runBaylorRoom(world : CCWorld) { world.status = 30; add_spawn(29101,152758,143479,-12706,52961,false,0,false,world.instance_id,0);#up power add_spawn(29101,151951,142078,-12706,65203,false,0,false,world.instance_id,0);#up power
+  #  * private def run_baylor_room(world : CCWorld) { world.status = 30; add_spawn(29101,152758,143479,-12706,52961,false,0,false,world.instance_id,0);#up power add_spawn(29101,151951,142078,-12706,65203,false,0,false,world.instance_id,0);#up power
   #  * add_spawn(29101,154396,140667,-12706,22197,false,0,false,world.instance_id,0);#up power add_spawn(29102,152162,141249,-12706,5511,false,0,false,world.instance_id,0);#down power add_spawn(29102,153571,140458,-12706,16699,false,0,false,world.instance_id,0);#down power
   #  * add_spawn(29102,154976,141265,-12706,26908,false,0,false,world.instance_id,0);#down power add_spawn(29102,155203,142071,-12706,31560,false,0,false,world.instance_id,0);#down power add_spawn(29102,154380,143468,-12708,43943,false,0,false,world.instance_id,0);#down power
   #  * add_spawn(32271,153573,142069,-9722,11175,false,0,false,world.instance_id); world.Baylor = add_spawn(BAYLOR,153557,142089,-12735,11175,false,0,false,world.instance_id,0); }

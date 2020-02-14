@@ -94,7 +94,6 @@ class L2PcInstance < L2Playable
   @offline_shop_start = 0
   @in_duel = false
   @exchange_refusal = false
-  @engage_request = false
   @revive_pet = false
   @quests = Concurrent::Map(String, QuestState).new
   @water_task : Scheduler::PeriodicTask?
@@ -175,7 +174,6 @@ class L2PcInstance < L2Playable
   getter current_skill : SkillUseHolder?
   getter current_pet_skill : SkillUseHolder?
   getter premium_item_list = Concurrent::Map(Int32, L2PremiumItem).new # L2J: _premiumItems
-  getter event_status : PlayerEventHolder?
   getter fish_combat : L2Fishing?
   getter current_feed = 0
   getter account_name
@@ -201,6 +199,7 @@ class L2PcInstance < L2Playable
   getter? message_refusal = false
   getter? silence_mode = false
   getter? inventory_disabled = false
+  getter? engage_request = false
   setter uptime : Int64 = 0i64
   setter can_revive : Bool = true
   setter active_requester : L2PcInstance?
@@ -271,6 +270,7 @@ class L2PcInstance < L2Playable
   property in_vehicle_position : Location?
   property servitor_share : EnumMap(Stats, Float64)?
   property lure : L2ItemInstance?
+  property event_status : PlayerEventHolder?
   property? sitting : Bool = false
   property? reco_two_hours_given : Bool = false
   property? enchanting : Bool = false
@@ -423,7 +423,13 @@ class L2PcInstance < L2Playable
         error e
       end
 
-      # handy's block checker event
+      if Config.enable_block_checker_event && block_checker_arena != -1
+        begin
+          HandysBlockCheckerManager.on_disconnect(self)
+        rescue e
+          error e
+        end
+      end
 
       begin
         @online = false
@@ -1049,7 +1055,7 @@ class L2PcInstance < L2Playable
       when 8
         rel |= RelationChanged::PARTY1
       else
-        raise "wrong index for member in party: #{i.inspect}"
+        raise "Wrong index for member in party: \"#{i}\""
       end
     end
 
@@ -1084,18 +1090,28 @@ class L2PcInstance < L2Playable
     end
 
     if block_checker_arena != -1
-      warn "TODO: block checker."
-    #   rel |= RelationChanged::INSIEGE
-    #   holder = HandysBlockCheckerManager.get_holder(block_checker_arena)
-    #   if holder.get_player_team(self) == 0
-    #     rel |= RelationChanged::ENEMY
-    #   else
-    #     rel |= RelationChanged::ALLY
-    #   end
-    #   rel |= RelationChanged::ATTACKER
+      rel |= RelationChanged::INSIEGE
+      holder = HandysBlockCheckerManager.get_holder(block_checker_arena)
+      if holder.get_player_team(self) == 0
+        rel |= RelationChanged::ENEMY
+      else
+        rel |= RelationChanged::ALLY
+      end
+      rel |= RelationChanged::ATTACKER
     end
 
     rel
+  end
+
+  protected def send_instance_update(instance : Instance, hide : Bool)
+    start_time = ((Time.ms - instance.instance_start_time) / 1000).to_i32
+    end_time = ((instance.instance_end_time - instance.instance_start_time) / 1000).to_i32
+    if instance.timer_increase?
+      ui = ExSendUIEvent.new(self, hide, true, start_time, end_time, instance.timer_text)
+    else
+      ui = ExSendUIEvent.new(self, hide, false, end_time - start_time, 0, instance.timer_text)
+    end
+    send_packet(ui)
   end
 
   def online_int : Int32
@@ -3883,9 +3899,9 @@ class L2PcInstance < L2Playable
 
   def engage_answer(answer : Int32)
     if !@engage_request
-      return
+      # do nothing
     elsif @engage_id == 0
-      return
+      # do nothing
     else
       set_engage_request(false, 0)
       if target = L2World.get_player(@engage_id)
@@ -3904,10 +3920,6 @@ class L2PcInstance < L2Playable
 
   def set_event_status
     @event_status = PlayerEventHolder.new(self)
-  end
-
-  def event_status=(holder : PlayerEventHolder?)
-    @event_status = holder
   end
 
   def collision_radius : Float64
@@ -4023,8 +4035,10 @@ class L2PcInstance < L2Playable
     elsif FortSiegeManager.combat?(item.id)
       fort = FortManager.get_fort(self).not_nil!
       fort.siege.announce_to_player(SystemMessage.c1_acquired_the_flag, name)
-    elsif item.id >= 13560 && item.id <= 13568
-      TerritoryWarManager.get_territory_ward(item.id - 13479).try &.activate(self, item)
+    elsif item.id.between?(13560, 13568)
+      if ward = TerritoryWarManager.get_territory_ward(item.id - 13479)
+        ward.activate(self, item)
+      end
     end
   end
 
@@ -4079,8 +4093,10 @@ class L2PcInstance < L2Playable
         drop_item("InvDrop", created_item, nil, true)
       elsif CursedWeaponsManager.cursed?(created_item.id)
         CursedWeaponsManager.activate(self, created_item)
-      elsif item.id >= 13560 && item.id <= 13568
-        TerritoryWarManager.get_territory_ward(item.id - 13479).try &.activate(self, created_item)
+      elsif item.id.between?(13560, 13568)
+        if ward = TerritoryWarManager.get_territory_ward(item.id - 13479)
+          ward.activate(self, created_item)
+        end
       end
 
       return created_item
@@ -5319,6 +5335,8 @@ class L2PcInstance < L2Playable
 
   def on_action_request
     if spawn_protected?
+      send_packet(SystemMessageId::YOU_ARE_NO_LONGER_PROTECTED_FROM_AGGRESSIVE_MONSTERS)
+
       if Config.restore_servitor_on_reconnect && !has_summon?
         if SummonTable.servitors.has_key?(l2id)
           SummonTable.restore_servitor(self)
@@ -5345,15 +5363,19 @@ class L2PcInstance < L2Playable
     return false if attacker.is_a?(L2FriendlyMobInstance)
     return true if attacker.monster?
 
-    if attacker.playable? && duel_state.duelling? && duel_id == attacker.acting_player.not_nil!.duel_id
-      duel = DuelManager.get_duel(duel_id).not_nil!
-      if duel.team_a.includes?(self) && duel.team_a.includes?(attacker)
-        return false
-      elsif duel.team_b.includes?(self) && duel.team_b.includes?(attacker)
-        return false
-      end
+    attacker_pc = attacker.acting_player
+    if attacker.playable? && attacker_pc && duel_state.duelling?
+      if duel_id == attacker_pc.duel_id
+        if duel = DuelManager.get_duel(duel_id)
+          if duel.team_a.includes?(self) && duel.team_a.includes?(attacker)
+            return false
+          elsif duel.team_b.includes?(self) && duel.team_b.includes?(attacker)
+            return false
+          end
 
-      return true
+          return true
+        end
+      end
     end
 
     if party.try &.members.includes?(attacker)
@@ -5376,12 +5398,11 @@ class L2PcInstance < L2Playable
       return false
     end
 
-    if attacker.playable?
+    if attacker.playable? && attacker_pc
       if inside_peace_zone?
         return false
       end
 
-      attacker_pc = attacker.acting_player.not_nil!
       if clan = clan()
         siege = SiegeManager.get_siege(*xyz)
         attacker_pc_clan = attacker_pc.clan
@@ -5691,6 +5712,26 @@ class L2PcInstance < L2Playable
     end
   end
 
+  def set_lang(lang : String) : Bool
+    result = false
+
+    if Config.multilang_enable
+      if Config.multilang_allowed.includes?(lang)
+        @lang = lang
+        result = true
+      else
+        @lang = Config.multilang_default
+      end
+
+      @html_prefix = "data/lang/#{@lang}/"
+    else
+      @lang = nil
+      @html_prefix = nil
+    end
+
+    result
+  end
+
   def flood_protectors : FloodProtectors
     client.not_nil!.flood_protectors
   end
@@ -5856,7 +5897,7 @@ class L2PcInstance < L2Playable
       self.flying = true
     end
 
-    debug "#set_mount npc_id: #{npc_id}, npc_level: #{npc_level}: mount type: #{type.inspect}."
+    # debug "#set_mount npc_id: #{npc_id}, npc_level: #{npc_level}: mount type: #{type.inspect}."
 
     @mount_type = type
     @mount_npc_id = npc_id
@@ -6697,7 +6738,7 @@ class L2PcInstance < L2Playable
     begin
       return false if @transformation
 
-      inventory.augmented_items do |item|
+      inventory.augmented_items.each do |item|
         if item.equipped?
           item.augmentation.remove_bonus(self)
         end
@@ -6800,16 +6841,15 @@ class L2PcInstance < L2Playable
     return unless event && !event.empty?
 
     unless quest = QuestManager.get_quest(quest_name)
-      warn "#process_quest_event: quest_name #{quest_name.inspect} not found."
+      # warn { "#process_quest_event: quest_name #{quest_name.inspect} not found." }
       return
     end
 
     if last_quest_npc_l2id > 0
-      obj = L2World.find_object(last_quest_npc_l2id)
-      if obj.is_a?(L2Npc)
-        if inside_radius?(obj, L2Npc::INTERACTION_DISTANCE, false, false)
-          # debug "#process_quest_event: notifying quest #{quest.class.simple_name} of event #{event.inspect}."
-          quest.notify_event(event, obj, self)
+      if npc = L2World.find_object(last_quest_npc_l2id).as?(L2Npc)
+        if inside_radius?(npc, L2Npc::INTERACTION_DISTANCE, false, false)
+          # debug { "#process_quest_event: notifying quest #{quest.class.simple_name} of event #{event.inspect}." }
+          quest.notify_event(event, npc, self)
         end
       end
     end
@@ -6866,7 +6906,7 @@ class L2PcInstance < L2Playable
 
         # TvTEvent.on_kill(killer, self)
         # if TvTEvent.participant?(pk)
-        #   pk.event_status.kills.add(self)
+        #   pk.event_status.kills << self
         # end
       end
 
@@ -7584,6 +7624,11 @@ class L2PcInstance < L2Playable
     end
 
     super
+  end
+
+  private def bad_coords
+    tele_to_location(Location.new(0, 0, 0), false)
+    send_message("Error with your coordinates.")
   end
 
   def to_log(io : IO)

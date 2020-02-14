@@ -11,15 +11,16 @@ class BuffInfo
   getter period_start_ticks : Int32
   getter task : Scheduler::DelayedTask?
   getter effects = [] of AbstractEffect
-  getter! effector
-  getter! effected
-  getter! skill
+  getter effector, effected, skill
   property abnormal_time : Int32
   property charges : Int32 = 0
   property? removed : Bool = false
   property? in_use : Bool = true
 
-  def initialize(@effector : L2Character?, @effected : L2Character?, @skill : Skill?)
+  def initialize(effector : L2Character, effected : L2Character, skill : Skill)
+    @effector = effector
+    @effected = effected
+    @skill = skill
     @abnormal_time = Formulas.effect_abnormal_time(effector, effected, skill)
     @period_start_ticks = GameTimer.ticks
   end
@@ -111,25 +112,27 @@ class BuffInfo
 
     @effects.each do |e|
       unless e.instant?
-        # warn "About to call on_exit on #{e}"
         e.on_exit(self)
       end
     end
 
     remove_abnormal_visual_effects
-    # monster check is custom
-    if effected.acting_player && !effected.summon? # unless effected.monster? || (effected.summon? && !effected.as(L2Summon).owner.has_summon?)
-      if skill.toggle?
-        sm = Packets::Outgoing::SystemMessage.s1_has_been_aborted
-      elsif removed?
-        sm = Packets::Outgoing::SystemMessage.effect_s1_has_been_removed
-      elsif !skill.passive?
-        sm = Packets::Outgoing::SystemMessage.s1_has_worn_off
-      end
+    # This check is custom. Allocating a packet for something that doesn't have
+    # a human player behind it is a waste of resources.
+    if @effected.acting_player
+      if !(@effected.summon? && !@effected.as(L2Summon).owner.has_summon?)
+        if @skill.toggle?
+          sm = Packets::Outgoing::SystemMessage.s1_has_been_aborted
+        elsif removed?
+          sm = Packets::Outgoing::SystemMessage.effect_s1_has_been_removed
+        elsif !@skill.passive?
+          sm = Packets::Outgoing::SystemMessage.s1_has_worn_off
+        end
 
-      if sm
-        sm.add_skill_name(skill)
-        effected.send_packet(sm)
+        if sm
+          sm.add_skill_name(@skill)
+          @effected.send_packet(sm)
+        end
       end
     end
 

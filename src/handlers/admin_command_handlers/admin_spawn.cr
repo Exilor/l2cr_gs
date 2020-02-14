@@ -153,10 +153,10 @@ module AdminCommandHandler::AdminSpawn
       begin
         # admin_list_spawns x[xxxx] x[xx]
         params = command.split
-        if params[1].match?(/[0-9]*/)
+        if params[1].num?
           npc_id = params[1].to_i
         else
-          params[1] = params[1].sub('_', ' ')
+          params[1] = params[1].tr("_", " ")
           unless template = NpcData.get_template_by_name(params[1])
             raise "No template with name #{params[1]}"
           end
@@ -166,7 +166,7 @@ module AdminCommandHandler::AdminSpawn
           teleport_index = params[2].to_i
         end
       rescue
-        pc.send_message("Command format is #list_spawns <npc_id|npc_name> [tele_index]")
+        pc.send_message("Command format is //list_spawns <npc_id|npc_name> [tele_index]")
       end
       if command.starts_with?("admin_list_positions")
         find_npc_instances(pc, npc_id, teleport_index, true)
@@ -224,7 +224,7 @@ module AdminCommandHandler::AdminSpawn
   private def spawn_monster(pc, mob_id, respawn_time, mob_count, permanent)
     target = pc.target || pc
 
-    if mob_id.match?(/[0-9]*/)
+    if mob_id.num?
       # First parameter was an ID number
       template = NpcData[mob_id.to_i]
     else
@@ -252,7 +252,7 @@ module AdminCommandHandler::AdminSpawn
       else
         sp.instance_id = 0
       end
-      # TODO add checks for GrandBossSpawnManager
+      # L2J TODO add checks for GrandBossSpawnManager
       if RaidBossSpawnManager.defined?(sp.id)
         pc.send_message("You cannot spawn another instance of #{template.name}.")
       else

@@ -84,13 +84,13 @@ class L2ServitorInstance < L2Summon
     SummonEffectsTable.apply_servitor_effects(self, owner, reference_skill)
   end
 
-  def unsummon(owner : L2PcInstance?)
+  def unsummon(owner : L2PcInstance)
     @life_task.try &.cancel
 
     super
 
     unless @restore_summon
-      SummonTable.remove_servitor(owner.not_nil!)
+      SummonTable.remove_servitor(owner)
     end
   end
 
@@ -103,15 +103,15 @@ class L2ServitorInstance < L2Summon
   end
 
   def attack_element : Int8
-    owner.try &.attack_element || super
+    owner.attack_element
   end
 
   def get_attack_element_value(attr_id : Int) : Int32
-    owner.try &.get_attack_element_value(attr_id) || super
+    owner.get_attack_element_value(attr_id)
   end
 
   def get_defense_element_value(attr_id : Int) : Int32
-    owner.try &.get_defense_element_value(attr_id) || super
+    owner.get_defense_element_value(attr_id)
   end
 
   def servitor? : Bool
@@ -119,48 +119,39 @@ class L2ServitorInstance < L2Summon
   end
 
   def get_m_atk(target : L2Character?, skill : Skill?) : Float64
-    return super unless pc = acting_player
-    super + (pc.get_m_atk(target, skill) * (pc.get_servitor_share_bonus(Stats::MAGIC_ATTACK) - 1.0))
+    super + (owner.get_m_atk(target, skill) * (owner.get_servitor_share_bonus(Stats::MAGIC_ATTACK) - 1.0))
   end
 
   def get_m_def(target : L2Character?, skill : Skill?) : Float64
-    return super unless pc = acting_player
-    super + (pc.get_m_def(target, skill) * (pc.get_servitor_share_bonus(Stats::MAGIC_DEFENCE) - 1.0))
+    super + (owner.get_m_def(target, skill) * (owner.get_servitor_share_bonus(Stats::MAGIC_DEFENCE) - 1.0))
   end
 
   def get_p_atk(target : L2Character?) : Float64
-    return super unless pc = acting_player
-    super + (pc.get_p_atk(target) * (pc.get_servitor_share_bonus(Stats::POWER_ATTACK) - 1.0))
+    super + (owner.get_p_atk(target) * (owner.get_servitor_share_bonus(Stats::POWER_ATTACK) - 1.0))
   end
 
   def get_p_def(target : L2Character?) : Float64
-    return super unless pc = acting_player
-    super + (pc.get_p_def(target) * (pc.get_servitor_share_bonus(Stats::POWER_DEFENCE) - 1.0))
+    super + (owner.get_p_def(target) * (owner.get_servitor_share_bonus(Stats::POWER_DEFENCE) - 1.0))
   end
 
   def m_atk_spd : Int32
-    return super unless pc = acting_player
-    (super + (pc.m_atk_spd * (pc.get_servitor_share_bonus(Stats::MAGIC_ATTACK_SPEED) - 1.0))).to_i
+    (super + (owner.m_atk_spd * (owner.get_servitor_share_bonus(Stats::MAGIC_ATTACK_SPEED) - 1.0))).to_i
   end
 
   def max_hp : Int32
-    return super unless pc = acting_player
-    (super + (pc.max_hp * (pc.get_servitor_share_bonus(Stats::MAX_HP) - 1.0))).to_i
+    (super + (owner.max_hp * (owner.get_servitor_share_bonus(Stats::MAX_HP) - 1.0))).to_i
   end
 
   def max_mp : Int32
-    return super unless pc = acting_player
-    (super + (pc.max_mp * (pc.get_servitor_share_bonus(Stats::MAX_MP) - 1.0))).to_i
+    (super + (owner.max_mp * (owner.get_servitor_share_bonus(Stats::MAX_MP) - 1.0))).to_i
   end
 
   def get_critical_hit(target : L2Character?, skill : Skill?) : Int32
-    return super unless pc = acting_player
-    super + (pc.get_critical_hit(target, skill) * (pc.get_servitor_share_bonus(Stats::CRITICAL_RATE) - 1.0)).to_i
+    super + (owner.get_critical_hit(target, skill) * (owner.get_servitor_share_bonus(Stats::CRITICAL_RATE) - 1.0)).to_i
   end
 
   def p_atk_spd : Float64
-    return super unless pc = acting_player
-    super + (pc.p_atk_spd * (pc.get_servitor_share_bonus(Stats::POWER_ATTACK_SPEED) - 1.0))
+    super + (owner.p_atk_spd * (owner.get_servitor_share_bonus(Stats::POWER_ATTACK_SPEED) - 1.0))
   end
 
   def max_recoverable_hp : Int32

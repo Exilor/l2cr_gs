@@ -730,8 +730,8 @@ module Config
   class_property wedding_divorce_costs : Int32 = 0
   class_property hellbound_status : Bool = false
   class_property banking_system_enabled : Bool = false
-  class_property banking_system_goldbars : Int32 = 0
-  class_property banking_system_adena : Int32 = 0
+  class_property banking_system_goldbars : Int64 = 0i64
+  class_property banking_system_adena : Int64 = 0i64
   class_property enable_warehousesorting_clan : Bool = false
   class_property enable_warehousesorting_private : Bool = false
   class_property offline_trade_enable : Bool = false
@@ -1579,8 +1579,7 @@ module Config
     @@expertise_penalty = cfg.get_bool("ExpertisePenalty", true)
     @@store_recipe_shoplist = cfg.get_bool("StoreRecipeShopList")
     @@store_ui_settings = cfg.get_bool("StoreCharUiSettings")
-    @@forbidden_names = cfg.get_string_array("ForbiddenNames", %w(annou ammou amnou anmou anou amou announcements announce))
-    @@forbidden_names.not_nil!.uniq!
+    @@forbidden_names = cfg.get_string_array("ForbiddenNames", %w(annou ammou amnou anmou anou amou announcements announce)).uniq
     @@silence_mode_exclude = cfg.get_bool("AltValidateTriggerSkills")
     @@player_movement_block_time = cfg.get_i32("NpcTalkBlockingTime") * 1000
 
@@ -1991,8 +1990,8 @@ module Config
     @@enable_warehousesorting_private = cfg.get_bool("EnableWarehouseSortingPrivate")
     # TODO: more TVT config
     @@banking_system_enabled = cfg.get_bool("BankingEnabled")
-    @@banking_system_goldbars = cfg.get_i32("BankingGoldbarCount", 1)
-    @@banking_system_adena = cfg.get_i32("BankingAdenaCount", 500000000)
+    @@banking_system_goldbars = cfg.get_i64("BankingGoldbarCount", 1)
+    @@banking_system_adena = cfg.get_i64("BankingAdenaCount", 500000000)
 
     @@offline_trade_enable = cfg.get_bool("OfflineTradeEnable")
     @@offline_craft_enable = cfg.get_bool("OfflineCraftEnable")

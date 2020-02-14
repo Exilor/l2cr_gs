@@ -135,7 +135,7 @@ module BypassHandler::OlympiadManagerLink
         when 11 # register team
           OlympiadManager.register_noble(pc, CompetitionType::TEAMS)
         else
-          warn { "Couldn't send packet for request #{val.inspect}." }
+          warn { "Couldn't send packet for request \"#{val}\"." }
         end
       elsif command.downcase.starts_with?("olybuff")
         buff_count = pc.olympiad_buff_count

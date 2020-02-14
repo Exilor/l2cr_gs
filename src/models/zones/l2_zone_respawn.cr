@@ -1,7 +1,7 @@
 require "./l2_zone_type"
 
 abstract class L2ZoneRespawn < L2ZoneType
-  @spawn_locs : Array(Location)?
+  @spawn_locs = [] of Location
   @other_spawn_locs : Array(Location)?
   @chaotic_spawn_locs : Array(Location)?
   @banish_spawn_locs : Array(Location)?
@@ -18,13 +18,13 @@ abstract class L2ZoneRespawn < L2ZoneType
       when "banish"
         add_banish_spawn(x, y, z)
       else
-        warn "Unknown location type #{type.inspect}."
+        warn { "Unknown location type #{type.inspect}." }
       end
     end
   end
 
   def add_spawn(x : Int32, y : Int32, z : Int32)
-    (@spawn_locs ||= [] of Location) << Location.new(x, y, z)
+    @spawn_locs << Location.new(x, y, z)
   end
 
   def add_other_spawn(x : Int32, y : Int32, z : Int32)
@@ -39,24 +39,24 @@ abstract class L2ZoneRespawn < L2ZoneType
     (@banish_spawn_locs ||= [] of Location) << Location.new(x, y, z)
   end
 
-  def spawns : Array(Location)?
+  def spawns : Array(Location)
     @spawn_locs
   end
 
   def spawn_loc : Location
     if Config.random_respawn_in_town_enabled
-      @spawn_locs.not_nil!.sample(random: Rnd)
+      @spawn_locs.sample(random: Rnd)
     else
-      @spawn_locs.not_nil!.first
+      @spawn_locs.first
     end
   end
 
   def other_spawn_loc : Location
-    if @other_spawn_locs
+    if tmp = @other_spawn_locs
       if Config.random_respawn_in_town_enabled
-        @other_spawn_locs.not_nil!.sample(random: Rnd)
+        tmp.sample(random: Rnd)
       else
-        @other_spawn_locs.not_nil!.first
+        tmp.first
       end
     else
       spawn_loc
@@ -64,11 +64,11 @@ abstract class L2ZoneRespawn < L2ZoneType
   end
 
   def chaotic_spawn_loc : Location
-    if @chaotic_spawn_locs
+    if tmp = @chaotic_spawn_locs
       if Config.random_respawn_in_town_enabled
-        @chaotic_spawn_locs.not_nil!.sample(random: Rnd)
+        tmp.sample(random: Rnd)
       else
-        @chaotic_spawn_locs.not_nil!.first
+        tmp.first
       end
     else
       spawn_loc
@@ -76,11 +76,11 @@ abstract class L2ZoneRespawn < L2ZoneType
   end
 
   def banish_spawn_loc : Location
-    if @banish_spawn_locs
+    if tmp = @banish_spawn_locs
       if Config.random_respawn_in_town_enabled
-        @banish_spawn_locs.not_nil!.sample(random: Rnd)
+        tmp.sample(random: Rnd)
       else
-        @banish_spawn_locs.not_nil!.first
+        tmp.first
       end
     else
       spawn_loc

@@ -65,7 +65,9 @@ class Packets::Outgoing::CharInfo < GameServerPacket
       end
     end
 
-    template = NpcData[@pc.poly.poly_id]? if @pc.poly.morphed?
+    if @pc.poly? && @pc.poly.morphed?
+      template = NpcData[@pc.poly.poly_id]?
+    end
 
     if template
       c 0x0c

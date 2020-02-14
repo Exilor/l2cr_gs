@@ -52,7 +52,6 @@ class Duel
   end
 
   def start_duel
-    debug "start_duel"
     broadcast_to_team_1(ExDuelReady::PARTY_DUEL)
     broadcast_to_team_2(ExDuelReady::PARTY_DUEL)
     broadcast_to_team_1(ExDuelStart::PARTY_DUEL)
@@ -94,7 +93,6 @@ class Duel
   end
 
   def stop_fighting
-    debug "stop_fighting"
     @team_a.each do |pc|
       pc.abort_cast
       pc.intention = AI::ACTIVE
@@ -111,7 +109,6 @@ class Duel
   end
 
   def save_player_conditions
-    debug "save_player_conditions"
     @team_a.each do |pc|
       @player_conditions[pc.l2id] = PlayerCondition.new(pc, @party_duel)
     end
@@ -188,14 +185,12 @@ class Duel
   end
 
   private def play_kneel_animation
-    debug "play_kneel_animation"
     losers.try &.each do |pc|
       pc.broadcast_packet(SocialAction.new(pc.l2id, 7))
     end
   end
 
   def countdown : Int32
-    debug "#countdown: #{@countdown}"
     if (@countdown -= 1) > 3
       return @countdown
     end
@@ -214,7 +209,6 @@ class Duel
   end
 
   def end_duel
-    debug "end_duel"
     ede = @party_duel ? ExDuelEnd::PARTY_DUEL : ExDuelEnd::PLAYER_DUEL
     broadcast_to_team_1(ede)
     broadcast_to_team_2(ede)
@@ -224,15 +218,12 @@ class Duel
   end
 
   private def clear
-    debug "clear"
     InstanceManager.destroy_instance(duel_instance_id)
     DuelManager.remove_duel(self)
   end
 
   private def send_end_messages
-    result = check_end_duel_condition
-    debug "#send_end_messages: #{result}."
-    case result
+    case check_end_duel_condition
     when DuelResult::TEAM_1_WIN, DuelResult::TEAM_2_SURRENDER
       if @party_duel
         sm = SystemMessage.c1_party_has_won_the_duel
@@ -260,8 +251,6 @@ class Duel
   end
 
   def check_end_duel_condition : DuelResult
-    debug "check_end_duel_condition"
-
     if @surrender_request != 0
       if @surrender_request == 1
         return DuelResult::TEAM_1_SURRENDER
@@ -294,7 +283,6 @@ class Duel
   end
 
   def do_surrender(pc : L2PcInstance)
-    debug "do_surrender"
     if @surrender_request != 0 || @party_duel
       return
     end
@@ -313,7 +301,6 @@ class Duel
   end
 
   def on_player_defeat(pc : L2PcInstance)
-    debug "on_player_defeat"
     pc.duel_state = DuelState::DEAD
     pc.team = Team::NONE
 

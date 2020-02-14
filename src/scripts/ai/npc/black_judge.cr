@@ -2,9 +2,7 @@ class Scripts::BlackJudge < AbstractNpcAI
   # NPC
   private BLACK_JUDGE = 30981
   # Misc
-  private COSTS = {
-    3600, 8640, 25200, 50400, 86400, 144000
-  }
+  private COSTS = {3600, 8640, 25200, 50400, 86400, 144000}
 
   def initialize
     super(self.class.simple_name, "ai/npc")

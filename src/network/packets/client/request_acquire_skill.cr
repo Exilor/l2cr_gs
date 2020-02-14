@@ -55,7 +55,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       return
     end
 
-    debug { "Requested to learn #{@skill_type.inspect} #{skill}." }
+    debug { "Requested to learn #{@skill_type} #{skill}." }
 
     case @skill_type
     when AcquireSkillType::CLASS
@@ -177,10 +177,10 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
                   end
                 end
               else
-                warn { "Non-existent item for object Id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
+                warn { "Non-existent item for object id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
               end
             else
-              warn { "Invalid item object Id #{item_l2id.inspect} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
+              warn { "Invalid item object id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
             end
           end
         end

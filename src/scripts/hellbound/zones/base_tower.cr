@@ -4,7 +4,7 @@ class Scripts::BaseTower < AbstractNpcAI
   private KENDAL = 32301
   private BODY_DESTROYER = 22363
   # Skills
-  private DEATH_WORD = SkillHolder.new(5256, 1)
+  private DEATH_WORD = SkillHolder.new(5256)
   # Misc
   private BODY_DESTROYER_TARGET_LIST = {} of Int32 => L2PcInstance
 

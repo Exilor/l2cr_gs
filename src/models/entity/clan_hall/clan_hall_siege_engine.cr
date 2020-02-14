@@ -20,7 +20,7 @@ abstract class ClanHallSiegeEngine < Quest
   @siege_task : Scheduler::DelayedTask?
   @mission_accomplished = false
 
-  getter attackers = {} of Int32 => L2SiegeClan
+  getter attackers = Concurrent::Map(Int32, L2SiegeClan).new
 
   def initialize(name : String, descr : String, hall_id : Int32)
     super(-1, name, descr)
@@ -132,7 +132,7 @@ abstract class ClanHallSiegeEngine < Quest
     # return nil
   end
 
-  def get_defender_clan(clan : L2Clan) : L2SiegeClan?
+  def get_defender_clan(clan : L2Clan?) : L2SiegeClan?
     # return nil
   end
 

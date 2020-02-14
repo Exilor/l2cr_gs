@@ -1,5 +1,5 @@
 class L2SepulcherMonsterInstance < L2MonsterInstance
-  private FAKE_PETRIFICATION = SkillHolder.new(4616, 1)
+  private FAKE_PETRIFICATION = SkillHolder.new(4616)
 
   @victim_spawn_key_box_task : Scheduler::DelayedTask?
   @victim_shout : Scheduler::DelayedTask?

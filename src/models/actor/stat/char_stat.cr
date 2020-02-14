@@ -70,10 +70,10 @@ class CharStat
     val = calc_stat(EVASION_RATE, 0, target).round.to_i
 
     if @active_char.override_max_stats_value?
-      val
-    else
-      Math.min(val, Config.max_evasion)
+      return val
     end
+
+    Math.min(val, Config.max_evasion)
   end
 
   def str : Int32
@@ -270,7 +270,7 @@ class CharStat
     if Config.champion_enable && @active_char.champion?
       val = Config.champion_spd_atk
     else
-      val =1.0
+      val = 1.0
     end
 
     val *= @active_char.template.base_p_atk_spd
@@ -302,7 +302,11 @@ class CharStat
   end
 
   def physical_attack_angle : Int32
-    @active_char.active_weapon_item.try &.base_attack_angle || 120
+    if weapon_item = @active_char.active_weapon_item
+      return weapon_item.base_attack_angle
+    end
+
+    120
   end
 
   def get_weapon_reuse_modifier(target : L2Character?) : Float64

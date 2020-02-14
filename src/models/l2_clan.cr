@@ -85,6 +85,8 @@ class L2Clan
     initialize_privs
   end
 
+  delegate size, to: @members
+
   def members : Enumerable(L2ClanMember)
     @members.local_each_value
   end
@@ -290,10 +292,6 @@ class L2Clan
     end
 
     OnPlayerClanLeft.new(ex_member, self).async
-  end
-
-  def members_count : Int32
-    @members.size
   end
 
   def get_subpledge_members_count(subpl : Int32) : Int32
@@ -851,7 +849,7 @@ class L2Clan
 
   class RankPrivs
     getter rank, party
-    getter privs : EnumBitmask(ClanPrivilege)
+    property privs : EnumBitmask(ClanPrivilege)
 
     getter_initializer rank : Int32, party : Int32,
       privs : EnumBitmask(ClanPrivilege)
@@ -987,7 +985,7 @@ class L2Clan
 
   def set_rank_privs(rank : Int32, privs : Int32)
     if pr = @privs[rank]?
-      priv.privs = pr
+      pr.privs = privs
       begin
         sql = "INSERT INTO clan_privs (clan_id,rank,party,privs) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE privs = ?"
         GameDB.exec(sql, id, rank, 0, privs, privs)
@@ -1017,7 +1015,7 @@ class L2Clan
   end
 
   def all_rank_privs : Slice(RankPrivs)
-    @privs.values_slice || Slice(RankPrivs).empty
+    @privs.values_slice
   end
 
   def get_leader_subpledge(leader_id : Int32) : Int32
@@ -1377,7 +1375,7 @@ class L2Clan
         end
       end
     when 5
-      if reputation_score >= Config.clan_level_6_cost && members_count >= Config.clan_level_6_requirement
+      if reputation_score >= Config.clan_level_6_cost && size >= Config.clan_level_6_requirement
         set_reputation_score(reputation_score - Config.clan_level_6_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_6_cost)
@@ -1385,7 +1383,7 @@ class L2Clan
         increase_clan_level = true
       end
     when 6
-      if reputation_score >= Config.clan_level_7_cost && members_count >= Config.clan_level_7_requirement
+      if reputation_score >= Config.clan_level_7_cost && size >= Config.clan_level_7_requirement
         set_reputation_score(reputation_score - Config.clan_level_7_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_7_cost)
@@ -1393,7 +1391,7 @@ class L2Clan
         increase_clan_level = true
       end
     when 7
-      if reputation_score >= Config.clan_level_8_cost && members_count >= Config.clan_level_8_requirement
+      if reputation_score >= Config.clan_level_8_cost && size >= Config.clan_level_8_requirement
         set_reputation_score(reputation_score - Config.clan_level_8_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_8_cost)
@@ -1401,7 +1399,7 @@ class L2Clan
         increase_clan_level = true
       end
     when 8
-      if reputation_score >= Config.clan_level_9_cost && pc.inventory.get_item_by_item_id(9910) && members_count >= Config.clan_level_9_requirement
+      if reputation_score >= Config.clan_level_9_cost && pc.inventory.get_item_by_item_id(9910) && size >= Config.clan_level_9_requirement
         if pc.destroy_item_by_item_id("ClanLvl", 9910, 150, pc.target, false)
           set_reputation_score(reputation_score - Config.clan_level_9_cost, true)
           sm = SystemMessage.s1_deducted_from_clan_rep
@@ -1415,7 +1413,7 @@ class L2Clan
         end
       end
     when 9
-      if reputation_score >= Config.clan_level_10_cost && pc.inventory.get_item_by_item_id(9910) && members_count >= Config.clan_level_10_requirement
+      if reputation_score >= Config.clan_level_10_cost && pc.inventory.get_item_by_item_id(9910) && size >= Config.clan_level_10_requirement
         if pc.destroy_item_by_item_id("ClanLvl", 9911, 5, pc.target, false)
           set_reputation_score(reputation_score - Config.clan_level_10_cost, true)
           sm = SystemMessage.s1_deducted_from_clan_rep
@@ -1431,7 +1429,7 @@ class L2Clan
     when 10
       territories = TerritoryWarManager.territories
       has_territory = territories.any? { |t| t.owner_clan.id == id }
-      if has_territory && reputation_score >= Config.clan_level_11_cost && members_count >= Config.clan_level_11_requirement
+      if has_territory && reputation_score >= Config.clan_level_11_cost && size >= Config.clan_level_11_requirement
         set_reputation_score(reputation_score - Config.clan_level_11_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_11_cost)

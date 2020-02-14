@@ -3,7 +3,7 @@ class Packets::Outgoing::MyTargetSelected < GameServerPacket
   @color : Int32
 
   def initialize(pc : L2PcInstance, target : L2Character)
-    if target.is_a?(L2ControllableAirshipInstance)
+    if target.is_a?(L2ControllableAirShipInstance)
       @target_id = target.helm_l2id
     else
       @target_id = target.l2id

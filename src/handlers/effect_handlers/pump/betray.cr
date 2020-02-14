@@ -1,5 +1,5 @@
 class EffectHandler::Betray < AbstractEffect
-  def can_start?(info)
+  def can_start?(info : BuffInfo) : Bool
     info.effector.player? && info.effected.summon?
   end
 

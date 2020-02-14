@@ -10,7 +10,7 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
   # Misc
   private MIN_LEVEL = 10
   # Buff
-  private UNSEALED_ALTAR = SkillHolder.new(4549, 1)
+  private UNSEALED_ALTAR = SkillHolder.new(4549)
   # Rewards
   private WARRIORS_SWORD = 9720
   private SOULSHOTS_NO_GRADE_FOR_ROOKIES = ItemHolder.new(5789, 7000)

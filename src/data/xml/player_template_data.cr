@@ -5,7 +5,7 @@ module PlayerTemplateData
   extend XMLReader
 
   private TEMPLATES = EnumMap(ClassId, L2PcTemplate).new
-  @@new_character_templates : Array(L2PcTemplate)?
+  private NEW_CHARACTER_TEMPLATES = [] of L2PcTemplate
 
   def load
     TEMPLATES.clear
@@ -27,7 +27,6 @@ module PlayerTemplateData
         when "staticdata"
           set = StatsSet.new
           set["classId"] = class_id
-          creation_points = [] of Location
           d.each_element do |nd|
             next if nd.name.casecmp?("text")
             if nd.children.size > 1
@@ -40,12 +39,7 @@ module PlayerTemplateData
                   end
                 end
 
-                if cnd.name.casecmp?("node")
-                  x = cnd["x"].to_i
-                  y = cnd["y"].to_i
-                  z = cnd["z"].to_i
-                  creation_points << Location.new(x, y, z)
-                elsif cnd.name.casecmp?("walk")
+                if cnd.name.casecmp?("walk")
                   set["baseWalkSpd"] = cnd.text
                 elsif cnd.name.casecmp?("run")
                   set["baseRunSpd"] = cnd.text
@@ -63,7 +57,7 @@ module PlayerTemplateData
           end
           set["basePDef"] = set.get_i32("basePDefchest", 0) + set.get_i32("basePDeflegs", 0) + set.get_i32("basePDefhead", 0) + set.get_i32("basePDeffeet", 0) + set.get_i32("basePDefgloves", 0) + set.get_i32("basePDefunderwear", 0) + set.get_i32("basePDefcloak", 0)
           set["baseMDef"] = set.get_i32("baseMDefrear", 0) + set.get_i32("baseMDeflear", 0) + set.get_i32("baseMDefrfinger", 0) + set.get_i32("baseMDefrfinger", 0) + set.get_i32("baseMDefneck", 0)
-          template = L2PcTemplate.new(set, creation_points)
+          template = L2PcTemplate.new(set)
           TEMPLATES[ClassId[class_id]] = template
          when "lvlUpgainData"
           d.each_element do |ln|
@@ -85,7 +79,7 @@ module PlayerTemplateData
     end
   end
 
-  def [](id : Int) : L2PcTemplate
+  def [](id : Int32) : L2PcTemplate
     class_id = ClassId.fetch(id) { raise "No ClassId with id #{id}" }
     self[class_id]
   end
@@ -95,18 +89,20 @@ module PlayerTemplateData
   end
 
   def new_character_templates : Array(L2PcTemplate)
-    @@new_character_templates ||= [
-      TEMPLATES[ClassId::FIGHTER],
-      TEMPLATES[ClassId::MAGE],
-      TEMPLATES[ClassId::ELVEN_FIGHTER],
-      TEMPLATES[ClassId::ELVEN_MAGE],
-      TEMPLATES[ClassId::DARK_FIGHTER],
-      TEMPLATES[ClassId::DARK_MAGE],
-      TEMPLATES[ClassId::ORC_FIGHTER],
-      TEMPLATES[ClassId::ORC_MAGE],
-      TEMPLATES[ClassId::DWARVEN_FIGHTER],
-      TEMPLATES[ClassId::MALE_SOLDIER],
-      TEMPLATES[ClassId::FEMALE_SOLDIER]
-    ]
+    if NEW_CHARACTER_TEMPLATES.empty?
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::FIGHTER]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::MAGE]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::ELVEN_FIGHTER]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::ELVEN_MAGE]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::DARK_FIGHTER]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::DARK_MAGE]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::ORC_FIGHTER]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::ORC_MAGE]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::DWARVEN_FIGHTER]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::MALE_SOLDIER]
+      NEW_CHARACTER_TEMPLATES << TEMPLATES[ClassId::FEMALE_SOLDIER]
+    end
+
+    NEW_CHARACTER_TEMPLATES
   end
 end

@@ -12,7 +12,7 @@ class SkillChannelizer
 
   def start_channeling(skill : Skill)
     if channeling?
-      warn "#{@channelizer} is already channeling."
+      warn { "#{@channelizer} is already channeling." }
       return
     end
 
@@ -24,7 +24,7 @@ class SkillChannelizer
 
   def stop_channeling
     unless channeling?
-      warn "#{@channelizer} is not currently channeling."
+      warn { "#{@channelizer} is not currently channeling." }
       return
     end
 
@@ -65,7 +65,7 @@ class SkillChannelizer
 
     if _skill.channeling_skill_id > 0
       unless base_skill = SkillData[_skill.channeling_skill_id, 1]?
-        warn "Can't find skill with id #{_skill.channeling_skill_id}."
+        warn { "Can't find skill with id #{_skill.channeling_skill_id}." }
         @channelizer.abort_cast
         return
       end
@@ -88,7 +88,6 @@ class SkillChannelizer
         if !Util.in_range?(_skill.effect_range, @channelizer, character, true)
           next
         elsif !GeoData.can_see_target?(@channelizer, character)
-          debug "GeoData says that #{@channelizer} can't see #{character}."
           next
         else
           max_skill_level = SkillData.get_max_level(_skill.channeling_skill_id)
@@ -97,7 +96,7 @@ class SkillChannelizer
 
           if info.nil? || info.skill.level < skill_level
             unless skill = SkillData[_skill.channeling_skill_id, skill_level]?
-              warn "Can't find skill with ID #{_skill.channeling_skill_id} and level #{skill_level}."
+              warn { "Can't find skill with id #{_skill.channeling_skill_id} and level #{skill_level}." }
               @channelizer.abort_cast
               return
             end

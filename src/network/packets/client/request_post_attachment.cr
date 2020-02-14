@@ -73,7 +73,7 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
 
       unless item.item_location.mail?
         Util.punish(pc, "tried to get an item from mail which was not in the mail.")
-        warn { "#{item} should be in ItemLocation::MAIL but it's in #{item.item_location.inspect}." }
+        warn { "#{item} should be in ItemLocation::MAIL but it's in #{item.item_location}." }
         return
       end
 

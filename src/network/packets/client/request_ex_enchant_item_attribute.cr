@@ -68,10 +68,22 @@ class Packets::Incoming::RequestExEnchantItemAttribute < GameClientPacket
     limit = get_limit(item, stone_id)
     power_to_add = get_power_to_add(stone_id, element_value, item)
 
-    if (item.weapon? && old_element && (old_element.element != element_to_add) && (old_element.element != -2)) || (item.armor? && item.get_elemental(element_to_add).nil? && item.elementals && (item.elementals.size >= 3))
-      send_packet(SystemMessageId::ANOTHER_ELEMENTAL_POWER_ALREADY_ADDED)
-      pc.active_enchant_attr_item_id = L2PcInstance::ID_NONE
-      return
+    if item.weapon? && old_element && old_element.element != element_to_add
+      if old_element.element != -2
+        send_packet(SystemMessageId::ANOTHER_ELEMENTAL_POWER_ALREADY_ADDED)
+        pc.active_enchant_attr_item_id = L2PcInstance::ID_NONE
+        return
+      end
+    end
+
+    if item.armor? && item.get_elemental(element_to_add).nil?
+      if elementals = item.elementals
+        if elementals.size >= 3
+          send_packet(SystemMessageId::ANOTHER_ELEMENTAL_POWER_ALREADY_ADDED)
+          pc.active_enchant_attr_item_id = L2PcInstance::ID_NONE
+          return
+        end
+      end
     end
 
     if item.armor?

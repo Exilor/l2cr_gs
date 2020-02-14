@@ -94,7 +94,7 @@ class Instance
     @doors[door_id] = door
   end
 
-  def doors
+  def doors : Enumerable(L2DoorInstance)
     @doors.local_each_value
   end
 
@@ -148,7 +148,7 @@ class Instance
       return temp.map &.do_spawn
     end
 
-    warn { "Cannot spawn NPCs, wrong group name #{group_name.inspect}." }
+    warn { "Cannot spawn NPCs, wrong group name \"#{group_name}\"." }
     nil
   end
 
@@ -383,26 +383,26 @@ class Instance
         remaining -= 10_000
       end
     elsif remaining > 300_000
-      time_left = remaining / 60_000
+      time_left = remaining // 60_000
       interval = 300_000
       sm = SystemMessage.dungeon_expires_in_s1_minutes
       sm.add_string(time_left.to_s)
       Broadcast.to_players_in_instance(sm, id)
       remaining -= 300_000
     elsif remaining > 60_000
-      time_left = remaining / 60_000
+      time_left = remaining // 60_000
       interval = 60_000
       sm = SystemMessage.dungeon_expires_in_s1_minutes
       sm.add_string(time_left.to_s)
       Broadcast.to_players_in_instance(sm, id)
       remaining -= 60_000
     elsif remaining > 30_000
-      time_left = remaining / 1000
+      time_left = remaining // 1000
       interval = 30_000
       cs = CreatureSay.new(0, Say2::ALLIANCE, "Notice", "#{time_left} seconds left")
       remaining -= 30_000
     else
-      time_left = remaining / 1000
+      time_left = remaining // 1000
       interval = 10_000
       cs = CreatureSay.new(0, Say2::ALLIANCE, "Notice", "#{time_left} seconds left")
       remaining -= 10_000

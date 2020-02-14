@@ -652,7 +652,7 @@ abstract class AbstractSagaQuest < Quest
         if npc_id == @npc[0]
           if pc.level >= 76
             html = "0-09.htm"
-            if get_class_id(pc) < 131 || get_class_id(pc) > 135 # in Kamael quests, npc wants to chat for a bit before changing class
+            unless get_class_id(pc).between?(131, 135) # in Kamael quests, npc wants to chat for a bit before changing class
               st.exit_quest(false)
               add_exp_and_sp(pc, 2299404, 0)
               give_adena(pc, 5000000, true)
@@ -720,8 +720,8 @@ abstract class AbstractSagaQuest < Quest
   end
 
   private def delete_spawn(st, npc)
-    if SPAWN_LIST.delete(npc)
-      npc.not_nil!.delete_me
+    if npc && SPAWN_LIST.delete(npc)
+      npc.delete_me
     end
   end
 

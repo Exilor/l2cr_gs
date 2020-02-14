@@ -123,7 +123,7 @@ module CommunityBoardHandler::ClanBoard
           io << "</td><td FIXWIDTH=100 align=center>"
           io << clan.level
           io << "</td><td FIXWIDTH=100 align=center>"
-          io << clan.members_count
+          io << clan.size
           io << "</td><td FIXWIDTH=5></td></tr><tr><td height=5></td></tr></table><img src=\"L2UI.SquareBlank\" width=\"610\" height=\"3\"><img src=\"L2UI.SquareGray\" width=\"610\" height=\"1\">"
         end
       end
@@ -198,7 +198,7 @@ module CommunityBoardHandler::ClanBoard
         io << "</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>CLAN LEVEL</td><td fixWIDTH=195 align=left height=16>"
         io << clan.level
         io << "</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>CLAN MEMBERS</td><td fixWIDTH=195 align=left height=16>"
-        io << clan.members_count
+        io << clan.size
         io << "</td></tr><tr><td height=7></td></tr><tr><td fixWIDTH=100 align=left>CLAN LEADER</td><td fixWIDTH=195 align=left height=16>"
         io << clan.leader_name
         io << "</td></tr><tr><td height=7></td></tr>"

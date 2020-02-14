@@ -122,7 +122,7 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
     when "ACCEPT"
       if qs.created?
         qs.start_quest
-        if !has_quest_items?(pc, RING_OF_TESTIMONY_1ST)
+        unless has_quest_items?(pc, RING_OF_TESTIMONY_1ST)
           give_items(pc, RING_OF_TESTIMONY_1ST, 1)
         end
         play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)

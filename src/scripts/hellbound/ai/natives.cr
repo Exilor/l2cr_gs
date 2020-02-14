@@ -10,7 +10,7 @@ class Scripts::Natives < AbstractNpcAI
   # Misc
   private DOORS = {
     19250003,
-    19250004,
+    19250004
   }
 
   def initialize

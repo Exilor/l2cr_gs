@@ -11,7 +11,7 @@ class EffectHandler::EnergyAttack < AbstractEffect
     @ignore_shield = params.get_bool("ignoreShieldDefence", false)
   end
 
-  def calc_success(info)
+  def calc_success(info : BuffInfo) : Bool
     # L2J wants the accuracy of this verified
     !Formulas.physical_skill_evasion(info.effector, info.effected, info.skill)
   end

@@ -13,7 +13,7 @@ class EventAnnouncement
   end
 
   def type=(type : AnnouncementType)
-    raise "type= not supported by EventAnnouncement"
+    raise "#type= not supported by EventAnnouncement"
   end
 
   def author : String
@@ -21,7 +21,7 @@ class EventAnnouncement
   end
 
   def author=(author : String)
-    raise "author= not supported by EventAnnouncement"
+    raise "#author= not supported by EventAnnouncement"
   end
 
   def valid? : Bool
@@ -38,6 +38,6 @@ class EventAnnouncement
   end
 
   def update_me : Bool
-    raise "update_me not supported by EventAnnouncement"
+    raise "#update_me not supported by EventAnnouncement"
   end
 end

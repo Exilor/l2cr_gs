@@ -1,8 +1,10 @@
 class Condition
   class PlayerHasPet < Condition
+    @item_ids : Slice(Int32)?
+
     def initialize(item_ids : Array(Int32)?)
       unless item_ids.size == 1 && item_ids[0] == 0
-        @item_ids = item_ids
+        @item_ids = item_ids.sort.to_slice
       end
     end
 
@@ -11,7 +13,7 @@ class Condition
       return false unless pet = pc.summon.as?(L2PetInstance)
       return true unless item_ids = @item_ids
       return false unless control_item = pet.control_item
-      item_ids.includes?(control_item.id)
+      item_ids.bincludes?(control_item.id)
     end
   end
 end

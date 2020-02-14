@@ -106,8 +106,8 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    raise "no npc" unless npc
-    return unless pc
+    npc = npc.not_nil!
+    pc = pc.not_nil!
     return unless qs = get_quest_state(pc, false)
 
     case event

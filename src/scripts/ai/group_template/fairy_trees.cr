@@ -10,7 +10,7 @@ class Scripts::FairyTrees < AbstractNpcAI
   }
 
   # Skill
-  private VENOMOUS_POISON = SkillHolder.new(4243, 1) # Venomous Poison
+  private VENOMOUS_POISON = SkillHolder.new(4243) # Venomous Poison
 
   # Misc
   private MIN_DISTANCE = 1500
@@ -24,7 +24,7 @@ class Scripts::FairyTrees < AbstractNpcAI
 
   def on_kill(npc, killer, is_summon)
     if npc.calculate_distance(killer, true, false) <= MIN_DISTANCE
-      20.times do |i|
+      20.times do
         guardian = add_spawn(SOUL_GUARDIAN, npc, false, 30000)
         attacker = is_summon ? (killer.summon || killer) : killer
         add_attack_desire(guardian, attacker)

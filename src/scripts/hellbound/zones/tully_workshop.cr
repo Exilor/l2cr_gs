@@ -691,7 +691,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         actor.intention = AI::ACTIVE
         actor.target = victim
         actor.do_cast(NPC_HEAL)
-        victim.current_hp += (victim.max_hp * 0.03) # FIXME: not retail, it should be done after spell is finished, but it cannot be tracked now
+        victim.current_hp += victim.max_hp * 0.03 # FIXME: not retail, it should be done after spell is finished, but it cannot be tracked now
       end
     end
 
@@ -973,9 +973,6 @@ class Scripts::TullyWorkshop < AbstractNpcAI
     start_quest_timer("cube_68_spawn", 60000, nil, nil)
   end
 
-  # /**
-  #  * Spawns Crystal Pillar (we can't track initial spawn if it done from spawn table) and opens / closes doors according to Darion's state
-  #  */
   private def do_on_load_spawn
     # Ghost of Tully and Spooky Tombstone should be spawned, if Tully isn't alive
     unless RaidBossSpawnManager.get_raid_boss_status_id(TULLY).alive?

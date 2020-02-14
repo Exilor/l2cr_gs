@@ -1,8 +1,22 @@
 class Packets::Incoming::RequestWriteHeroWords < GameClientPacket
+  @msg = ""
+
   private def read_impl
+    @msg = s
   end
 
   private def run_impl
-    warn "Not implemented."
+    return unless pc = active_char
+
+    unless pc.hero?
+      return
+    end
+
+    if @msg.size > 300
+      debug { "Message too long (#{@msg.size})." }
+      return
+    end
+
+    Hero.set_hero_message(pc, @msg)
   end
 end

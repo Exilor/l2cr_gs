@@ -14,7 +14,7 @@ class EffectHandler::ConvertItem < AbstractEffect
     return if new_item_id == -1
 
     enchant_level = wpn.enchant_level
-    elementals = wpn.elementals?.try &.first?
+    elementals = wpn.elementals.try &.first?
     unequipped = pc.inventory.unequip_item_in_body_slot_and_record(wpn.template.body_part)
     return if unequipped.empty?
     iu = InventoryUpdate.new

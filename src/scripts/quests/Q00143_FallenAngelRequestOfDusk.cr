@@ -20,7 +20,10 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
     super(143, self.class.simple_name, "Fallen Angel - Request of Dusk")
 
     add_talk_id(NATOOLS, TOBIAS, CASIAN, ROCK, ANGEL)
-    register_quest_items(SEALED_PROPHECY_PATH_OF_THE_GOD, PROPHECY_PATH_OF_THE_GOD, EMPTY_SOUND_CRYSTAL, ANGEL_MEDICINE, ANGELS_MESSAGE)
+    register_quest_items(
+      SEALED_PROPHECY_PATH_OF_THE_GOD, PROPHECY_PATH_OF_THE_GOD,
+      EMPTY_SOUND_CRYSTAL, ANGEL_MEDICINE, ANGELS_MESSAGE
+    )
   end
 
   def on_adv_event(event, npc, pc)

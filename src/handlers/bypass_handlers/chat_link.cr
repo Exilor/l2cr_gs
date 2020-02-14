@@ -10,7 +10,6 @@ module BypassHandler::ChatLink
     if val == 0 && npc.has_listener?(EventType::ON_NPC_FIRST_TALK)
       OnNpcFirstTalk.new(npc, pc).async(npc)
     else
-      debug "Showing chat window."
       npc.show_chat_window(pc, val)
     end
 

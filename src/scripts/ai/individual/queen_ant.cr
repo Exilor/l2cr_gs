@@ -5,13 +5,7 @@ class Scripts::QueenAnt < AbstractNpcAI
   private GUARD = 29004
   private ROYAL = 29005
 
-  private MOBS = {
-    QUEEN,
-    LARVA,
-    NURSE,
-    GUARD,
-    ROYAL
-  }
+  private MOBS = {QUEEN, LARVA, NURSE, GUARD, ROYAL}
 
   private OUST_LOC_1 = Location.new(-19480, 187344, -5600)
   private OUST_LOC_2 = Location.new(-17928, 180912, -5520)
@@ -25,8 +19,8 @@ class Scripts::QueenAnt < AbstractNpcAI
   private ALIVE = 0 # Queen Ant is spawned.
   private DEAD = 1 # Queen Ant has been killed.
 
-  private HEAL1 = SkillHolder.new(4020, 1)
-  private HEAL2 = SkillHolder.new(4024, 1)
+  private HEAL1 = SkillHolder.new(4020)
+  private HEAL2 = SkillHolder.new(4024)
 
   private NURSES = Concurrent::Array(L2MonsterInstance).new
 

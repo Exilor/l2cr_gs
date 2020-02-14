@@ -10,7 +10,7 @@ class Packets::Outgoing::FriendListExtended < GameServerPacket
 
     pc.friends.each do |obj_id|
       unless name = CharNameTable.get_name_by_id(obj_id)
-        warn "#{name.inspect} not found in CharNameTable."
+        warn { "Name for player with object id #{obj_id} not found in CharNameTable." }
         next
       end
 

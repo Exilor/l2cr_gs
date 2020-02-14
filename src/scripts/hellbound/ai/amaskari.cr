@@ -3,7 +3,7 @@ class Scripts::Amaskari < AbstractNpcAI
   private AMASKARI = 22449
   private AMASKARI_PRISONER = 22450
   # Skills
-  # private static SkillHolder INVINCIBILITY = SkillHolder.new(5417, 1)
+  # private static SkillHolder INVINCIBILITY = SkillHolder.new(5417)
   private BUFF_ID = 4632
   private BUFF = {
     SkillHolder.new(BUFF_ID, 1),

@@ -5,7 +5,7 @@ struct NpcRoutesHolder
     @correspondences[get_unique_key location] = route_name
   end
 
-  def get_route_name(npc)
+  def get_route_name(npc : L2Npc) : String
     if sp = npc.spawn?
       key = get_unique_key(sp.location)
       return @correspondences.fetch(key, "")
@@ -15,6 +15,6 @@ struct NpcRoutesHolder
   end
 
   private def get_unique_key(loc)
-    "#{loc.x}-#{loc.y}-#{loc.z}"
+    loc.xyz.join('-')
   end
 end

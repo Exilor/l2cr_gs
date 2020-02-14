@@ -25,7 +25,7 @@ class L2ItemInstance < L2Object
   getter mana = -1
   getter time : Int64 = 0i64
   getter drop_protection = DropProtection.new
-  getter! elementals : Array(Elementals)
+  getter elementals : Array(Elementals)?
   getter! augmentation : L2Augmentation
   getter? published = false
   property custom_type_1 : Int32 = 0
@@ -44,7 +44,7 @@ class L2ItemInstance < L2Object
     super(l2id)
 
     unless item = ItemTable[item_id]?
-      raise ArgumentError.new("No L2Item with ID #{item_id}")
+      raise ArgumentError.new("No L2Item with id #{item_id}")
     end
 
     @item = item
@@ -97,11 +97,9 @@ class L2ItemInstance < L2Object
     body_part, mask, use_skill_dis_time, default_enchant_level, to: @item
 
   def pickup_me(pc : L2Character)
-    unless world_region
+    unless old_region = world_region
       warn "#pickup_me: @world_region should not be nil"
     end
-
-    old_region = world_region
 
     pc.broadcast_packet(GetItem.new(self, pc.l2id))
 
@@ -133,7 +131,7 @@ class L2ItemInstance < L2Object
       ref_name = "no-reference"
       case reference
       when L2Object
-        ref_name = reference.name || "no-name"
+        ref_name = reference.name.empty? ? "no-name" : reference.name
       when String
         ref_name = reference
       end
@@ -222,6 +220,7 @@ class L2ItemInstance < L2Object
     if item_location.inventory? || item_location.paperdoll?
       return @item.enchantable
     end
+
     0
   end
 
@@ -772,8 +771,12 @@ class L2ItemInstance < L2Object
     return unless augment = @augmentation
     @augmentation = nil
 
-    sql = "DELETE FROM item_attributes WHERE itemId = ?"
-    GameDB.exec(sql, l2id)
+    begin
+      sql = "DELETE FROM item_attributes WHERE itemId = ?"
+      GameDB.exec(sql, l2id)
+    rescue e
+      error e
+    end
 
     if pc = acting_player
       OnPlayerAugment.new(pc, self, augment, false).async(@item)
@@ -781,30 +784,24 @@ class L2ItemInstance < L2Object
   end
 
   def restore_attributes
-    begin
-      sql1 = "SELECT augAttributes FROM item_attributes WHERE itemId=?"
-      GameDB.query_each(sql1, l2id) do |rs|
-        aug_attributes = rs.read(Int32)
-        if aug_attributes != -1
-          @augmentation = L2Augmentation.new(aug_attributes)
-        end
+    sql1 = "SELECT augAttributes FROM item_attributes WHERE itemId=?"
+    GameDB.query_each(sql1, l2id) do |rs|
+      aug_attributes = rs.read(Int32)
+      if aug_attributes != -1
+        @augmentation = L2Augmentation.new(aug_attributes)
       end
-    rescue e
-      error e
     end
 
-    begin
-      sql2 = "SELECT elemType,elemValue FROM item_elementals WHERE itemId=?"
-      GameDB.query_each(sql2, l2id) do |rs|
-        elem_type = rs.read(Int8)
-        elem_value = rs.read(Int32)
-        if elem_type != -1 && elem_value != -1
-          apply_attribute(elem_type, elem_value)
-        end
+    sql2 = "SELECT elemType,elemValue FROM item_elementals WHERE itemId=?"
+    GameDB.query_each(sql2, l2id) do |rs|
+      elem_type = rs.read(Int8)
+      elem_value = rs.read(Int32)
+      if elem_type != -1 && elem_value != -1
+        apply_attribute(elem_type, elem_value)
       end
-    rescue e
-      error e
     end
+  rescue e
+    error e
   end
 
   private def apply_attribute(element : Int8, value : Int32)
@@ -828,39 +825,29 @@ class L2ItemInstance < L2Object
     return if !get_elemental(element) && element != -1
     @elementals.try &.reject! { |e| e.element == element }
 
-    if element != -1
-      sql = "DELETE FROM item_elementals WHERE itemId = ? AND elemType = ?"
-      begin
+    begin
+      if element != -1
+        sql = "DELETE FROM item_elementals WHERE itemId = ? AND elemType = ?"
         GameDB.exec(sql, l2id, element)
-      rescue e
-        error e
-      end
-    else
-      sql = "DELETE FROM item_elementals WHERE itemId = ?"
-      begin
+      else
+        sql = "DELETE FROM item_elementals WHERE itemId = ?"
         GameDB.exec(sql, l2id)
-      rescue e
-        error e
       end
+    rescue e
+      error e
     end
   end
 
   private def update_item_elements
-    begin
-      sql = "DELETE FROM item_elementals WHERE itemId = ?"
-      GameDB.exec(sql, l2id)
-    rescue e
-      error e
-    end
+    sql = "DELETE FROM item_elementals WHERE itemId = ?"
+    GameDB.exec(sql, l2id)
 
-    begin
-      sql = "INSERT INTO item_elementals VALUES(?,?,?)"
-      @elementals.try &.each do |elm|
-        GameDB.exec(sql, l2id, elm.element, elm.value)
-      end
-    rescue e
-      error e
+    sql = "INSERT INTO item_elementals VALUES(?,?,?)"
+    @elementals.try &.each do |elm|
+      GameDB.exec(sql, l2id, elm.element, elm.value)
     end
+  rescue e
+    error e
   end
 
   def apply_enchant_stats
@@ -924,9 +911,7 @@ class L2ItemInstance < L2Object
   end
 
   def end_of_life
-    debug "#{self.class}#end_of_life"
     unless pc = acting_player
-      warn { "#{self.class}#end_of_life returning early because there's no acting player." }
       return
     end
 
@@ -963,7 +948,7 @@ class L2ItemInstance < L2Object
     else
       @mana = 0
     end
-    debug "Mana decreased: #{@mana}"
+
     @stored_in_db = false if @stored_in_db
     @consuming_mana = false if reset_consuming_mana
 

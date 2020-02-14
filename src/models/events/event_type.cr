@@ -55,7 +55,7 @@ class EventType
   def_event(ON_ATTACKABLE_FACTION_CALL, OnAttackableFactionCall) do
     getter npc, caller, attacker
     getter? summon
-    initializer npc : L2Npc, caller : L2Npc, attacker : L2PcInstance,
+    initializer npc : L2Npc, caller : L2Npc, attacker : L2PcInstance?,
       summon : Bool
   end
   def_event(ON_ATTACKABLE_KILL, OnAttackableKill) do

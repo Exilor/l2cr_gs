@@ -33,7 +33,6 @@ struct TrapTask
         break
       end
     end
-
   rescue e
     error e
     @trap.unsummon

@@ -14,7 +14,7 @@ class EffectHandler::TickHpFatal < AbstractEffect
     EffectType::DMG_OVER_TIME
   end
 
-  def on_action_time(info)
+  def on_action_time(info : BuffInfo) : Bool
     target = info.effected
     return false if target.dead?
 

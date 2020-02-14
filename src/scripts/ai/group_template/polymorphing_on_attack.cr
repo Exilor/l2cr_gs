@@ -1,18 +1,21 @@
 class Scripts::PolymorphingOnAttack < AbstractNpcAI
+  private record PolyData, npc_id : Int32, hp_percent : Int32, chance : Int32,
+    messages_index : Int32
+
   private MOBS = {
-    21258 => {21259, 100, 100, -1}, # Fallen Orc Shaman -> Sharp Talon Tiger (always polymorphs)
-    21261 => {21262, 100,  20,  0}, # Ol Mahum Transcender 1st stage
-    21262 => {21263, 100,  10,  1}, # Ol Mahum Transcender 2nd stage
-    21263 => {21264, 100,   5,  2}, # Ol Mahum Transcender 3rd stage
-    21265 => {21271, 100,  33,  0}, # Cave Ant Larva -> Cave Ant
-    21266 => {21269, 100, 100, -1}, # Cave Ant Larva -> Cave Ant (always polymorphs)
-    21267 => {21270, 100, 100, -1}, # Cave Ant Larva -> Cave Ant Soldier (always polymorphs)
-    21271 => {21272,  66,  10,  1}, # Cave Ant -> Cave Ant Soldier
-    21272 => {21273,  33,   5,  2}, # Cave Ant Soldier -> Cave Noble Ant
-    21521 => {21522, 100,  30, -1}, # Claws of Splendor
-    21527 => {21528, 100,  30, -1}, # Anger of Splendor
-    21533 => {21534, 100,  30, -1}, # Alliance of Splendor
-    21537 => {21538, 100,  30, -1}  # Fang of Splendor
+    21258 => PolyData.new(21259, 100, 100, -1), # Fallen Orc Shaman -> Sharp Talon Tiger (always polymorphs)
+    21261 => PolyData.new(21262, 100,  20,  0), # Ol Mahum Transcender 1st stage
+    21262 => PolyData.new(21263, 100,  10,  1), # Ol Mahum Transcender 2nd stage
+    21263 => PolyData.new(21264, 100,   5,  2), # Ol Mahum Transcender 3rd stage
+    21265 => PolyData.new(21271, 100,  33,  0), # Cave Ant Larva -> Cave Ant
+    21266 => PolyData.new(21269, 100, 100, -1), # Cave Ant Larva -> Cave Ant (always polymorphs)
+    21267 => PolyData.new(21270, 100, 100, -1), # Cave Ant Larva -> Cave Ant Soldier (always polymorphs)
+    21271 => PolyData.new(21272,  66,  10,  1), # Cave Ant -> Cave Ant Soldier
+    21272 => PolyData.new(21273,  33,   5,  2), # Cave Ant Soldier -> Cave Noble Ant
+    21521 => PolyData.new(21522, 100,  30, -1), # Claws of Splendor
+    21527 => PolyData.new(21528, 100,  30, -1), # Anger of Splendor
+    21533 => PolyData.new(21534, 100,  30, -1), # Alliance of Splendor
+    21537 => PolyData.new(21538, 100,  30, -1)  # Fang of Splendor
   }
 
   private TEXTS = {
@@ -39,26 +42,24 @@ class Scripts::PolymorphingOnAttack < AbstractNpcAI
   end
 
   def on_attack(npc, attacker, damage, is_summon)
-    if npc.visible? && npc.alive?
-      if tmp = MOBS[npc.id]?
-        if npc.current_hp <= (npc.max_hp * tmp[1]) / 100
-          if Rnd.rand(100) < tmp[2]
-            if tmp[3] >= 0
-              str = TEXTS[tmp[3]].sample(random: Rnd)
-              cs = CreatureSay.new(npc.l2id, Say2::NPC_ALL, npc.name, str)
-              npc.broadcast_packet(cs)
-            end
+    return unless npc.visible? && npc.alive?
+    return unless tmp = MOBS[npc.id]?
+    # return unless npc.current_hp <= (npc.max_hp * tmp.hp_percent) / 100
+    return unless npc.hp_percent <= tmp.hp_percent
+    return unless Rnd.rand(100) < tmp.chance
 
-            npc.delete_me
-            new_npc = add_spawn(tmp[0], npc.x, npc.y, npc.z + 10, npc.heading, false, 0, true)
-            original_attacker = is_summon ? attacker.summon : attacker
-            new_npc.set_running
-            npc.add_damage_hate(original_attacker, 0, 500)
-            new_npc.set_intention(AI::ATTACK, original_attacker)
-          end
-        end
-      end
+    if tmp.messages_index >= 0
+      str = TEXTS[tmp.messages_index].sample
+      cs = CreatureSay.new(npc.l2id, Say2::NPC_ALL, npc.name, str)
+      npc.broadcast_packet(cs)
     end
+
+    npc.delete_me
+    new_npc = add_spawn(tmp.npc_id, npc.x, npc.y, npc.z + 10, npc.heading, false, 0, true)
+    original_attacker = is_summon ? attacker.summon : attacker
+    new_npc.set_running
+    new_npc.as(L2Attackable).add_damage_hate(original_attacker, 0, 500)
+    new_npc.set_intention(AI::ATTACK, original_attacker)
 
     super
   end

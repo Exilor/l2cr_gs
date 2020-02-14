@@ -6,7 +6,7 @@ class EffectHandler::MagicalAttackMp < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def calc_success(info)
+  def calc_success(info : BuffInfo) : Bool
     target = info.effected
     return false if target.invul? || target.mp_blocked?
 

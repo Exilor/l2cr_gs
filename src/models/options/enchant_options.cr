@@ -1,9 +1,7 @@
 struct EnchantOptions
-  getter level, options
+  getter options = Slice(Int32).new(3)
 
-  def initialize(@level : Int32)
-    @options = Slice(Int32).new(3)
-  end
+  getter_initializer level : Int32
 
   def []=(index : Int32, option : Int32)
     @options[index] = option

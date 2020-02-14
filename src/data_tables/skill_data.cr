@@ -40,15 +40,15 @@ module SkillData
     SkillTreesData.load
   end
 
-  private def fetch(id : Int, level : Int)
-    if skill = SKILLS[(id * 1021) + level]?
+  private def get(id, level)
+    if skill = SKILLS[get_skill_hash(id, level)]
       return skill
     end
 
     max_lvl = get_max_level(id)
 
     if max_lvl > 0 && level > max_lvl
-      skill = SKILLS[(id * 1021) + max_lvl]
+      skill = SKILLS[get_skill_hash(id, max_lvl)]
       warn { "Nonexistent skill-level #{id}-#{level} (#{skill})." }
       return skill
     end
@@ -56,22 +56,22 @@ module SkillData
     yield
   end
 
-  def [](id : Int, level : Int) : Skill
-    fetch(id, level) { raise "No skill found with ID #{id} and level #{level}" }
+  def [](id : Int32, level : Int32) : Skill
+    get(id, level) { raise "No skill found with id #{id} and level #{level}" }
   end
 
-  def []?(id : Int, level : Int) : Skill?
-    fetch(id, level) do
-      warn { "No skill found with ID #{id} and level #{level}." }
+  def []?(id : Int32, level : Int32) : Skill?
+    get(id, level) do
+      warn { "No skill found with id #{id} and level #{level}." }
       nil
     end
   end
 
-  def get_max_level(id : Int) : Int32
+  def get_max_level(id : Int32) : Int32
     SKILLS_MAX_LEVEL.fetch(id, 0)
   end
 
-  def enchantable?(id : Int) : Bool
+  def enchantable?(id : Int32) : Bool
     ENCHANTABLE.includes?(id)
   end
 

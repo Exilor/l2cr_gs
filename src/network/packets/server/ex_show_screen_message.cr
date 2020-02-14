@@ -49,7 +49,7 @@ class Packets::Outgoing::ExShowScreenMessage < GameServerPacket
     @npc_string = npc_string.id
   end
 
-  def initialize(@type : Int32, @sys_message_id : Int32, @position : Int32, @unk1 : Int32, @size : Int32, @unk2 : Int32, @unk3 : Int32, @effect : Bool, @time : Int32, @fade : Bool, @text : String, npc_string : NpcString, params : String)
+  def initialize(@type : Int32, @sys_message_id : Int32, @position : Int32, @unk1 : Int32, @size : Int32, @unk2 : Int32, @unk3 : Int32, @effect : Bool, @time : Int32, @fade : Bool, @text : String?, npc_string : NpcString, params : String?)
     @npc_string = npc_string.id
   end
 

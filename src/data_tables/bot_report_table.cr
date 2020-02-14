@@ -232,7 +232,7 @@ module BotReportTable
     end
   end
 
-  def reset_points_and_schedule
+  private def reset_points_and_schedule
     CHAR_REGISTRY_LOCK.synchronize do
       CHAR_REGISTRY.each_value do |rcd|
         rcd.points = 7
@@ -254,10 +254,10 @@ module BotReportTable
 
     delay = c.ms - Time.ms
 
-    ThreadPoolManager.schedule_general(ResetPointTask, delay)
+    ThreadPoolManager.schedule_general(->reset_points_and_schedule, delay)
   rescue e
     warn e
-    ThreadPoolManager.schedule_general(ResetPointTask, 24 * 3600 * 1000)
+    ThreadPoolManager.schedule_general(->reset_points_and_schedule, 24 * 3600 * 1000)
   end
 
   private def hash_ip(pc) : Int32
@@ -344,10 +344,4 @@ module BotReportTable
   end
 
   private record PunishHolder, punish : Skill, system_message_id : Int32
-
-  private module ResetPointTask
-    def self.call
-      BotReportTable.reset_points_and_schedule
-    end
-  end
 end

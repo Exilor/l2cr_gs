@@ -267,8 +267,8 @@ module Util
     count = 0
 
     0.upto(str.size - 2) do |i|
-      c1 = str[i]
-      if c1 == 'C' || c1 == 'S'
+      case str[i]
+      when 'C', 'S'
         c2 = str[i + 1]
         if c2.number?
           count = Math.max(count, c2.to_i)
@@ -307,5 +307,29 @@ module Util
 
   def max(val1, val2, *args)
     args.empty? ? Math.max(val1, val2) : {val1, val2, args.max}.max
+  end
+
+  def get_index_of_min_value(*args : Int32) : Int32
+    index = 0
+
+    1.upto(args.size - 1) do |i|
+      if args[i] < args[index]
+        index = i
+      end
+    end
+
+    index
+  end
+
+  def get_index_of_max_value(*args : Int32) : Int32
+    index = 0
+
+    1.upto(args.size - 1) do |i|
+      if args[i] > args[index]
+        index = i
+      end
+    end
+
+    index
   end
 end

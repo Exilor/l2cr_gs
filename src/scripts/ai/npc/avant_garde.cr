@@ -4,8 +4,8 @@ class Scripts::AvantGarde < AbstractNpcAI
 
   # Items
   private ITEMS = {
-    10280, 10281, 10282, 10283, 10284, 10285, 10286, 10287, 10288, 10289,
-    10290, 10291, 10292, 10293, 10294, 10612
+    10280, 10281, 10282, 10283, 10284, 10285, 10286, 10287, 10288, 10289, 10290,
+    10291, 10292, 10293, 10294, 10612
   }
 
   # Misc
@@ -35,7 +35,6 @@ class Scripts::AvantGarde < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, player)
-    debug "on_adv_event: #{event.inspect}"
     return unless player
 
     case event

@@ -12,12 +12,12 @@ module Hero
   private GET_CLAN_ALLY = "SELECT characters.clanid AS clanid, coalesce(clan_data.ally_Id, 0) AS allyId FROM characters LEFT JOIN clan_data ON clan_data.clan_id = characters.clanid WHERE characters.charId = ?"
   private DELETE_ITEMS = "DELETE FROM items WHERE item_id IN (6842, 6611, 6612, 6613, 6614, 6615, 6616, 6617, 6618, 6619, 6620, 6621, 9388, 9389, 9390) AND owner_id NOT IN (SELECT charId FROM characters WHERE accesslevel > 0)"
 
-  private HEROES = {} of Int32 => StatsSet
-  private COMPLETE_HEROS = {} of Int32 => StatsSet
-  private HERO_COUNTS = {} of Int32 => StatsSet
-  private HERO_FIGHTS = {} of Int32 => Array(StatsSet)
-  private HERO_DIARY = {} of Int32 => Array(StatsSet)
-  private HERO_MESSAGE = {} of Int32 => String
+  private HEROES = Concurrent::Map(Int32, StatsSet).new
+  private COMPLETE_HEROS = Concurrent::Map(Int32, StatsSet).new
+  private HERO_COUNTS = Concurrent::Map(Int32, StatsSet).new
+  private HERO_FIGHTS = Concurrent::Map(Int32, Array(StatsSet)).new
+  private HERO_DIARY = Concurrent::Map(Int32, Array(StatsSet)).new
+  private HERO_MESSAGE = Concurrent::Map(Int32, String).new
 
   ACTION_RAID_KILLED = 1
   ACTION_HERO_GAINED = 2
@@ -254,7 +254,7 @@ module Hero
     error e
   end
 
-  def heroes : Hash(Int32, StatsSet)
+  def heroes : IHash(Int32, StatsSet)
     HEROES
   end
 

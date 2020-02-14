@@ -10,8 +10,8 @@ class Scripts::Q10273_GoodDayToFly < Quest
   # Item
   private MARK = 13856
   # Skills
-  private AURA_BIRD_FALCON = SkillHolder.new(5982, 1)
-  private AURA_BIRD_OWL = SkillHolder.new(5983, 1)
+  private AURA_BIRD_FALCON = SkillHolder.new(5982)
+  private AURA_BIRD_OWL = SkillHolder.new(5983)
 
   def initialize
     super(10273, self.class.simple_name, "Good Day to Fly")

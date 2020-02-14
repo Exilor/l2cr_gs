@@ -11,7 +11,7 @@ class EffectHandler::Backstab < AbstractEffect
     @critical_chance = params.get_i32("criticalChance", 0)
   end
 
-  def calc_success(info)
+  def calc_success(info : BuffInfo) : Bool
     effected, effector, skill = info.effected, info.effector, info.skill
     !info.effected.in_front_of?(effected) &&
     !Formulas.physical_skill_evasion(effector, effected, skill) &&

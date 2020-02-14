@@ -14,16 +14,16 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
     add_summon_spawn_id(IMPROVED_BABY_PETS)
   end
 
-  def on_adv_event(event, npc, player)
-    debug "#on_adv_event: #{event}, #{npc}, #{player}"
-    if player
-      pet = player.summon
+  def on_adv_event(event, npc, pc)
+    debug "#on_adv_event: #{event}, #{npc}, #{pc}"
+    if pc
+      pet = pc.summon
       if pet.nil?
-        cancel_quest_timer("CAST_BUFF", nil, player)
-        cancel_quest_timer("CAST_HEAL", nil, player)
-      elsif event == "CAST_HEAL" && player.in_combat? && !pet.hungry?
-        hp_per = (player.current_hp / player.max_hp) * 100
-        mp_per = (player.current_mp / player.max_mp) * 100
+        cancel_quest_timer("CAST_BUFF", nil, pc)
+        cancel_quest_timer("CAST_HEAL", nil, pc)
+      elsif event == "CAST_HEAL" && pc.in_combat? && !pet.hungry?
+        hp_per = pc.hp_percent
+        mp_per = pc.mp_percent
         heal_step = ((pet.level / 5) - 11).to_i
         heal_type = pet.template.parameters.get_i32("heal_type", 0)
 

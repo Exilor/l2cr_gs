@@ -9,8 +9,8 @@ class Scripts::Sandstorms < AbstractNpcAI
     add_aggro_range_enter_id(SANDSTORM) # Sandstorm
   end
 
-  def on_aggro_range_enter(npc, player, is_summon)
-    npc.target = player
+  def on_aggro_range_enter(npc, pc, is_summon)
+    npc.target = pc
     npc.do_cast(GUST)
 
     super

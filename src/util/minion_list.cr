@@ -160,7 +160,7 @@ class MinionList
     minion.instance_id = master.instance_id
 
     offset = 200
-    min_radius = (master.collision_radius + 30)
+    min_radius = master.collision_radius + 30
 
     new_x = Rnd.rand((min_radius.to_i * 2).to_i32..offset * 2)
     new_y = Rnd.rand(new_x..offset * 2)

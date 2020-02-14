@@ -127,7 +127,7 @@ class L2TeleporterInstance < L2Npc
 
   def do_teleport(pc : L2PcInstance, val : Int)
     unless list = TeleportLocationTable[val]?
-      warn { "No teleport destination with ID #{val.inspect}." }
+      warn { "No teleport destination with id #{val}." }
       return
     end
 

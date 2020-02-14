@@ -8,7 +8,7 @@ class Scripts::Quarry < AbstractNpcAI
     ItemChanceHolder.new(9629, 145),  # Adamantine
     ItemChanceHolder.new(1876, 6667), # Mithril ore
     ItemChanceHolder.new(1877, 1333), # Adamantine nugget
-    ItemChanceHolder.new(1874, 2222), # Oriharukon ore
+    ItemChanceHolder.new(1874, 2222)  # Oriharukon ore
   }
   # Zone
   private ZONE = 40107

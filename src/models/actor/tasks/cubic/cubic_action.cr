@@ -17,12 +17,10 @@ class CubicAction
     unless AttackStances.includes?(@cubic.owner)
       if @cubic.owner.has_summon?
         unless AttackStances.includes?(@cubic.owner.summon)
-          debug "returning because summon doesn't have an attack stance"
           @cubic.stop_action
           return
         end
       else
-        debug "returning because owner doesn't have an attack stance"
         @cubic.stop_action
         return
       end
@@ -30,7 +28,6 @@ class CubicAction
 
     if @cubic.cubic_max_count > -1
       if @current_count.get >= @cubic.cubic_max_count
-        warn "Cubic has reached its max count."
         @cubic.stop_action
         return
       end
@@ -52,32 +49,41 @@ class CubicAction
       @cubic.owner.broadcast_packet(msu)
       @current_count.add(1)
     elsif Rnd.rand(1..100) < @chance
-      # debug "Choosing a skill among #{@cubic.skills}."
       return unless skill = @cubic.skills.sample?(random: Rnd)
-      debug "Skill: #{skill}."
+
       if skill.id == L2CubicInstance::SKILL_CUBIC_HEAL
         @cubic.cubic_target_for_heal
       else
         @cubic.cubic_target
 
         unless L2CubicInstance.in_cubic_range?(@cubic.owner, @cubic.target)
-          debug "#{@cubic} is not in range of target #{@cubic.target}."
           @cubic.target = nil
         end
       end
 
       target = @cubic.target
-      debug "Cubic target: #{target}."
       if target && target.alive?
         msu = Packets::Outgoing::MagicSkillUse.new(@cubic.owner, target, skill.id, skill.level, 0, 0)
         @cubic.owner.broadcast_packet(msu)
         targets = [target]
 
-        if skill.continuous?
-          @cubic.use_cubic_continuous(skill, targets)
-        else
-          skill.activate_skill(@cubic, targets)
-        end
+        # if skill.continuous?
+        #   @cubic.use_cubic_continuous(skill, targets)
+        # else
+        #   skill.activate_skill(@cubic, targets)
+        # end
+
+        # if skill.has_effect_type?(EffectType::MAGICAL_ATTACK)
+        #   @cubic.use_cubic_m_dam(skill, targets)
+        # elsif skill.has_effect_type?(EffectType::HP_DRAIN)
+        #   @cubic.use_cubic_drain(skill, targets)
+        # elsif skill.has_effect_type?(EffectType::STUN, EffectType::ROOT, EffectType::PARALYZE)
+        #   @cubic.use_cubic_disabler(skill, targets)
+        # elsif skill.has_effect_type?(EffectType::DMG_OVER_TIME)
+        #   @cubic.use_cubic_continuous(skill, targets)
+        # elsif skill.has_effect_type?(EffectType::AGGRESSION)
+        #   @cubic.use_cubic_disabler(skill, targets)
+        # end
 
         if skill.has_effect_type?(EffectType::MAGICAL_ATTACK)
           @cubic.use_cubic_m_dam(skill, targets)
@@ -85,10 +91,12 @@ class CubicAction
           @cubic.use_cubic_drain(skill, targets)
         elsif skill.has_effect_type?(EffectType::STUN, EffectType::ROOT, EffectType::PARALYZE)
           @cubic.use_cubic_disabler(skill, targets)
-        elsif skill.has_effect_type?(EffectType::DMG_OVER_TIME)
+        elsif skill.continuous?
           @cubic.use_cubic_continuous(skill, targets)
         elsif skill.has_effect_type?(EffectType::AGGRESSION)
           @cubic.use_cubic_disabler(skill, targets)
+        else
+          skill.activate_skill(@cubic, targets)
         end
 
         @current_count.add(1)

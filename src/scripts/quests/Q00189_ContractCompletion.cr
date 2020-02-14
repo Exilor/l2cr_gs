@@ -14,7 +14,9 @@ class Scripts::Q00189_ContractCompletion < Quest
     super(189, self.class.simple_name, "Contract Completion")
 
     add_start_npc(BLUEPRINT_SELLER_LUKA)
-    add_talk_id(BLUEPRINT_SELLER_LUKA, HEAD_BLACKSMITH_KUSTO, RESEARCHER_LORAIN, SHEGFIELD)
+    add_talk_id(
+      BLUEPRINT_SELLER_LUKA, HEAD_BLACKSMITH_KUSTO, RESEARCHER_LORAIN, SHEGFIELD
+    )
     register_quest_items(SCROLL_OF_DECODING)
   end
 

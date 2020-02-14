@@ -34,12 +34,8 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
     add_kill_id(MONSTERS)
     add_talk_id(ROIEN, ALTRAN)
     register_quest_items(
-      BROKEN_SWORD_HANDLE,
-      BROKEN_BLADE_BOTTOM,
-      BROKEN_BLADE_TOP,
-      ALTRANS_NOTE,
-      ROIENS_LETTER,
-      DIRECTIONS_TO_RUINS
+      BROKEN_SWORD_HANDLE, BROKEN_BLADE_BOTTOM, BROKEN_BLADE_TOP, ALTRANS_NOTE,
+      ROIENS_LETTER, DIRECTIONS_TO_RUINS
     )
   end
 

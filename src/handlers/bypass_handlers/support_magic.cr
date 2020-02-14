@@ -3,37 +3,37 @@ module BypassHandler::SupportMagic
   extend BypassHandler
 
   # Buffs
-  private HASTE_1 = SkillHolder.new(4327, 1)
-  private HASTE_2 = SkillHolder.new(5632, 1)
-  private CUBIC   = SkillHolder.new(4338, 1)
+  private HASTE_1 = SkillHolder.new(4327)
+  private HASTE_2 = SkillHolder.new(5632)
+  private CUBIC   = SkillHolder.new(4338)
   private FIGHTER_BUFFS = {
-    SkillHolder.new(4322, 1), # Wind Walk
-    SkillHolder.new(4323, 1), # Shield
-    SkillHolder.new(5637, 1), # Magic Barrier
-    SkillHolder.new(4324, 1), # Bless the Body
-    SkillHolder.new(4325, 1), # Vampiric Rage
-    SkillHolder.new(4326, 1)  # Regeneration
+    SkillHolder.new(4322), # Wind Walk
+    SkillHolder.new(4323), # Shield
+    SkillHolder.new(5637), # Magic Barrier
+    SkillHolder.new(4324), # Bless the Body
+    SkillHolder.new(4325), # Vampiric Rage
+    SkillHolder.new(4326)  # Regeneration
   }
   private MAGE_BUFFS = {
-    SkillHolder.new(4322, 1), # Wind Walk
-    SkillHolder.new(4323, 1), # Shield
-    SkillHolder.new(5637, 1), # Magic Barrier
-    SkillHolder.new(4328, 1), # Bless the Soul
-    SkillHolder.new(4329, 1), # Acumen
-    SkillHolder.new(4330, 1), # Concentration
-    SkillHolder.new(4331, 1)  # Empower
+    SkillHolder.new(4322), # Wind Walk
+    SkillHolder.new(4323), # Shield
+    SkillHolder.new(5637), # Magic Barrier
+    SkillHolder.new(4328), # Bless the Soul
+    SkillHolder.new(4329), # Acumen
+    SkillHolder.new(4330), # Concentration
+    SkillHolder.new(4331)  # Empower
   }
   private SUMMON_BUFFS = {
-    SkillHolder.new(4322, 1), # Wind Walk
-    SkillHolder.new(4323, 1), # Shield
-    SkillHolder.new(5637, 1), # Magic Barrier
-    SkillHolder.new(4324, 1), # Bless the Body
-    SkillHolder.new(4325, 1), # Vampiric Rage
-    SkillHolder.new(4326, 1), # Regeneration
-    SkillHolder.new(4328, 1), # Bless the Soul
-    SkillHolder.new(4329, 1), # Acumen
-    SkillHolder.new(4330, 1), # Concentration
-    SkillHolder.new(4331, 1)  # Empower
+    SkillHolder.new(4322), # Wind Walk
+    SkillHolder.new(4323), # Shield
+    SkillHolder.new(5637), # Magic Barrier
+    SkillHolder.new(4324), # Bless the Body
+    SkillHolder.new(4325), # Vampiric Rage
+    SkillHolder.new(4326), # Regeneration
+    SkillHolder.new(4328), # Bless the Soul
+    SkillHolder.new(4329), # Acumen
+    SkillHolder.new(4330), # Concentration
+    SkillHolder.new(4331)  # Empower
   }
 
   # Levels

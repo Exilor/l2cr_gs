@@ -7,7 +7,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
   private ADENA2 = 1000000i64
   private CHANCE2 = 10
   # Skill
-  private SKILL = SkillHolder.new(6234, 1)
+  private SKILL = SkillHolder.new(6234)
 
   def initialize
     super(self.class.simple_name, "ai/individual")
@@ -20,7 +20,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
     if npc.script_value?(0)
       npc.script_value = 1
       start_quest_timer("say",  (Rnd.rand(5) + 3) * 1000, npc, nil, true)
-    elsif npc.current_hp < npc.max_hp * 0.2 && npc.script_value?(1)
+    elsif npc.hp_percent < 20 && npc.script_value?(1)
       start_quest_timer("reward", 10000, npc, attacker)
       msg = NpcString::WAIT_WAIT_STOP_SAVE_ME_AND_ILL_GIVE_YOU_10000000_ADENA
       broadcast_npc_say(npc, Say2::NPC_ALL, msg)

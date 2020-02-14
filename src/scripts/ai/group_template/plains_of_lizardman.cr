@@ -26,7 +26,7 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
   private STICKY_MUSHROOM_SKILL = SkillHolder.new(6428)
   private ENERGY_PLANT_SKILL = SkillHolder.new(6430)
   # Misc
-  private HP_PERCENTAGE = 0.60
+  private HP_PERCENTAGE = 60
   # Buffs
   private BUFFS = {
     SkillHolder.new(6625, 1), # Energy of Life
@@ -76,7 +76,7 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
   def on_attack(npc, attacker, damage, is_summon)
     case npc.id
     when TANTA_SUMMONER
-      if npc.current_hp < npc.max_hp * HP_PERCENTAGE && npc.script_value?(0)
+      if npc.hp_percent < HP_PERCENTAGE && npc.script_value?(0)
         npc.script_value = 1
         npc.do_cast(DEMOTIVATION_HEX)
         add_attack_desire(add_spawn(TANTA_SCOUT, *npc.xyz, 0, false, 0, false), attacker)

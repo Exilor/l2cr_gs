@@ -1,6 +1,10 @@
 class Condition
   class PlayerHasClanHall < Condition
-    initializer halls : Array(Int32)
+    @halls : Slice(Int32)
+
+    def initialize(halls)
+      @halls = halls.sort.to_slice
+    end
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       unless pc = effector.acting_player
@@ -15,7 +19,7 @@ class Condition
         return clan.hideout_id > 0
       end
 
-      @halls.includes?(clan.hideout_id)
+      @halls.bincludes?(clan.hideout_id)
     end
   end
 end

@@ -6,8 +6,7 @@ struct InstanceReenterTimeHolder
   getter hour = -1
   getter minute = -1
 
-  def initialize(@time : Int64)
-  end
+  initializer time : Int64
 
   def initialize(@day : DayOfWeek?, @hour : Int32, @minute : Int32)
     @time = -1i64

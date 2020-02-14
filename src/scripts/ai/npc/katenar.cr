@@ -1,4 +1,3 @@
-# Complements the quest Q00065_CertifiedSoulBreaker.
 class Scripts::Katenar < AbstractNpcAI
   # NPC
   KATENAR = 32242

@@ -16,7 +16,7 @@ class EffectHandler::ConsumeRest < AbstractEffect
     EffectType::RELAXING
   end
 
-  def on_action_time(info)
+  def on_action_time(info : BuffInfo) : Bool
     target = info.effected
     return false if target.dead?
 

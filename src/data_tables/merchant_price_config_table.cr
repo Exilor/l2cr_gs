@@ -16,13 +16,11 @@ module MerchantPriceConfigTable
   end
 
   def get_merchant_price_config(npc : L2MerchantInstance) : MerchantPriceConfig
-    MPCS.each_value do |mpc|
-      if (reg = npc.world_region) && reg.contains_zone?(mpc.zone_id)
-        return mpc
-      end
+    ret = MPCS.find_value do |mpc|
+      (reg = npc.world_region) && reg.contains_zone?(mpc.zone_id)
     end
 
-    default_mpc
+    ret || default_mpc
   end
 
   private def parse_document(doc, file)

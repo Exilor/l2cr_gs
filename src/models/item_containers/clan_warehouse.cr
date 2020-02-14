@@ -38,7 +38,6 @@ class ClanWarehouse < Warehouse
   def add_item(process : String?, item_id : Int32, count : Int64, enchant_level : Int32, actor : L2PcInstance?, reference) : L2ItemInstance?
     unless item = super
       raise "Expected super to not return nil"
-      return
     end
 
     OnPlayerClanWHItemAdd.new(process, actor, item, self).async(item.template)

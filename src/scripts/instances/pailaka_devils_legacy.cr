@@ -109,11 +109,11 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
       case npc.id
       when POWDER_KEG
         if damage > 0 && npc.script_value?(0)
-          npc.known_list.each_character(600) do |monster|
-            if monster.is_a?(L2Attackable) && monster.monster?
-              monster.add_damage_hate(npc, 0, 999)
-              monster.set_intention(AI::ATTACK, npc)
-              monster.reduce_current_hp(500.0 + Rnd.rand(0..200), npc, BOOM.skill)
+          npc.known_list.each_character(600) do |mob|
+            if mob.is_a?(L2Attackable) && mob.monster?
+              mob.add_damage_hate(npc, 0, 999)
+              mob.set_intention(AI::ATTACK, npc)
+              mob.reduce_current_hp(500.0 + Rnd.rand(0..200), npc, BOOM.skill)
             end
           end
           npc.do_cast(BOOM)
@@ -121,7 +121,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
           start_quest_timer("DELETE", 2000, npc, nil)
         end
       when LEMATAN
-        if npc.script_value?(0) && npc.current_hp < npc.max_hp * 0.5
+        if npc.script_value?(0) && npc.hp_percent < 50
           npc.disable_core_ai(true)
           npc.script_value = 1
           npc.running = true

@@ -41,7 +41,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
     add_spawn_id(SCARECROW)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     case event
     when "TRAINING"
       npc = npc.not_nil!
@@ -62,9 +62,9 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
         end
       end
     when "DO_CAST"
-      if npc && player && Rnd.rand(100) < 3
+      if npc && pc && Rnd.rand(100) < 3
         if npc.check_do_cast_conditions(STUDENT_CANCEL.skill)
-          npc.target = player
+          npc.target = pc
           npc.do_cast(STUDENT_CANCEL)
         end
         npc.script_value = 0
@@ -78,47 +78,53 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
     super
   end
 
-  def on_attack(npc, player, damage, is_summon)
-    mob = npc
-
+  def on_attack(npc, pc, damage, is_summon)
     case npc.id
     when KNIGHT
-      if Rnd.rand(100) < 10 && mob.most_hated == player && mob.check_do_cast_conditions(WARRIOR_THRUSTING.skill)
-        npc.target = player
-        npc.do_cast(WARRIOR_THRUSTING)
+      if Rnd.rand(100) < 10 && npc.most_hated == pc
+        if npc.check_do_cast_conditions(WARRIOR_THRUSTING.skill)
+          npc.target = pc
+          npc.do_cast(WARRIOR_THRUSTING)
+        end
       end
     when CAPTAIN
-      if Rnd.rand(100) < 20 && npc.current_hp < npc.max_hp * 0.5 && npc.script_value?(0)
-        if npc.check_do_cast_conditions(KNIGHT_BLESS.skill)
-          npc.target = npc
-          npc.do_cast(KNIGHT_BLESS)
+      if Rnd.rand(100) < 20 && npc.hp_percent < 50
+        if npc.script_value?(0)
+          if npc.check_do_cast_conditions(KNIGHT_BLESS.skill)
+            npc.target = npc
+            npc.do_cast(KNIGHT_BLESS)
+          end
+          npc.script_value = 1
+          broadcast_npc_say(npc, Say2::ALL, NpcString::FOR_THE_GLORY_OF_SOLINA)
+          add_attack_desire(add_spawn(KNIGHT, npc), pc)
         end
-        npc.script_value = 1
-        broadcast_npc_say(npc, Say2::ALL, NpcString::FOR_THE_GLORY_OF_SOLINA)
-        add_attack_desire(add_spawn(KNIGHT, npc), player)
       end
     when GUIDE
-      if Rnd.rand(100) < 3 && mob.most_hated == player && npc.check_do_cast_conditions(ORDEAL_STRIKE.skill)
-        npc.target = player
-        npc.do_cast(ORDEAL_STRIKE)
+      if Rnd.rand(100) < 3 && npc.most_hated == pc
+        if npc.check_do_cast_conditions(ORDEAL_STRIKE.skill)
+          npc.target = pc
+          npc.do_cast(ORDEAL_STRIKE)
+        end
       end
     when SEEKER
-      if Rnd.rand(100) < 33 && mob.most_hated == player && npc.check_do_cast_conditions(SAVIOR_STRIKE.skill)
-        npc.target = npc
-        npc.do_cast(SAVIOR_STRIKE)
+      if Rnd.rand(100) < 33 && npc.most_hated == pc
+        if npc.check_do_cast_conditions(SAVIOR_STRIKE.skill)
+          npc.target = npc
+          npc.do_cast(SAVIOR_STRIKE)
+        end
       end
     when ASCETIC
-      if mob.most_hated == player && npc.script_value?(0)
+      if npc.most_hated == pc && npc.script_value?(0)
         npc.script_value = 1
-        start_quest_timer("DO_CAST", 20000, npc, player)
+        start_quest_timer("DO_CAST", 20000, npc, pc)
       end
     end
 
     super
   end
 
-  def on_npc_hate(mob, player, is_summon)
-    !!player.active_weapon_instance
+  def on_npc_hate(mob, pc, is_summon)
+    !!pc.active_weapon_instance
   end
 
   def on_aggro_range_enter(npc, pc, is_summon)
@@ -167,7 +173,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
     debug { "#on_skill_see: #{npc}, #{caster}, #{skill}, #{targets}, #{is_summon}" }
-    if skill.has_effect_type?(EffectType::AGGRESSION) && targets.size != 0
+    if skill.has_effect_type?(EffectType::AGGRESSION)
       targets.each do |obj|
         if obj == npc
           broadcast_npc_say(npc, Say2::NPC_ALL, DIVINITY_MSG.sample, caster.name)

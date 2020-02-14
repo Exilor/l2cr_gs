@@ -6,7 +6,7 @@ class EffectHandler::DeleteHate < AbstractEffect
     @chance = params.get_i32("chance", 100)
   end
 
-  def calc_success(info)
+  def calc_success(info : BuffInfo) : Bool
     Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
   end
 

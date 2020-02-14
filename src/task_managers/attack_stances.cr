@@ -14,7 +14,7 @@ module AttackStances
 
     if char.is_a?(L2PcInstance)
       char.cubics.each_value do |cubic|
-        unless cubic.id == L2CubicInstance::LIFE_CUBIC
+        if cubic.id != L2CubicInstance::LIFE_CUBIC
           cubic.do_action
         end
       end
@@ -27,13 +27,13 @@ module AttackStances
 
   def delete(char : L2Character?)
     return unless char
-    char = char.acting_player.not_nil! if char.summon?
+    char = char.acting_player if char.summon?
     TASKS.delete(char)
   end
 
   def includes?(char : L2Character?) : Bool
     return false unless char
-    char = char.acting_player.not_nil! if char.summon?
+    char = char.acting_player if char.summon?
     TASKS.has_key?(char)
   end
 

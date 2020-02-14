@@ -341,7 +341,7 @@ abstract class L2Item < ListenersContainer
           msg = cond.message
           msg_id = cond.message_id
           if msg
-            debug "SystemMessage with text #{msg.inspect}"
+            debug "SystemMessage with text \"#{msg}\""
             char.send_message(msg)
           elsif msg_id != 0
             debug "SystemMessage with id #{msg_id}. add_name: #{cond.add_name?}"

@@ -129,7 +129,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
       case npc.id
       when ABYSSAL_JEWEL_1
         if qs.memo_state?(40000) || qs.memo_state?(40001)
-          if npc.current_hp < npc.max_hp * 0.8 && npc.variables.get_i32("i_quest0") == 0
+          if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
             20.times do |i|
               spwn = add_spawn(JEWEL_GUARDIAN_MARA, npc, true, 180000)
               add_attack_desire(spwn, attacker)
@@ -138,7 +138,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             start_quest_timer("DESPAWN", 900000, npc, attacker)
           end
 
-          if npc.current_hp < npc.max_hp * 0.4
+          if npc.hp_percent < 40
             unless has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_1ST)
               give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_1ST, 1)
               play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -147,12 +147,12 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         end
 
-        if npc.current_hp < npc.max_hp * 0.1
+        if npc.hp_percent < 10
           npc.delete_me
         end
       when ABYSSAL_JEWEL_2
         if qs.memo_state?(40000) || qs.memo_state?(40010)
-          if npc.current_hp < npc.max_hp * 0.8 && npc.variables.get_i32("i_quest0") == 0
+          if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
             20.times do |i|
               add_attack_desire(add_spawn(JEWEL_GUARDIAN_MUSFEL, npc, true, 180000), attacker)
             end
@@ -160,7 +160,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             start_quest_timer("DESPAWN", 900000, npc, attacker)
           end
 
-          if npc.current_hp < npc.max_hp * 0.4
+          if npc.hp_percent < 40
             unless has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND)
               give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND, 1)
               play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -169,12 +169,12 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         end
 
-        if npc.current_hp < npc.max_hp * 0.1
+        if npc.hp_percent < 10
           npc.delete_me
         end
       when ABYSSAL_JEWEL_3
         if qs.memo_state?(70000)
-          if npc.current_hp < npc.max_hp * 0.8 && npc.variables.get_i32("i_quest0") == 0
+          if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
             add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180000), attacker)
             add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180000), attacker)
             add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180000), attacker)
@@ -182,7 +182,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             npc.variables["i_quest0"] = 1
           end
 
-          if npc.current_hp < npc.max_hp * 0.4
+          if npc.hp_percent < 40
             unless has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_3RD)
               give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_3RD, 1)
               play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -190,7 +190,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         end
 
-        if npc.current_hp < npc.max_hp * 0.1
+        if npc.hp_percent < 10
           npc.delete_me
         end
       end

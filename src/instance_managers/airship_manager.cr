@@ -16,7 +16,6 @@ module AirshipManager
   private TEMPLATE = L2CharTemplate.new StatsSet {
     "npcId" => 9,
     "level" => 0,
-    # "jClass" => "boat",
     "baseSTR" => 0,
     "baseCON" => 0,
     "baseDEX" => 0,
@@ -71,7 +70,7 @@ module AirshipManager
     if airship = AIRSHIPS[owner_id]?
       airship.refresh_id
     else
-      airship = L2ControllableAirshipInstance.new(TEMPLATE, owner_id)
+      airship = L2ControllableAirShipInstance.new(TEMPLATE, owner_id)
       AIRSHIPS[owner_id] = airship
       airship.max_fuel = 600
       airship.fuel = info.get_i32("fuel")

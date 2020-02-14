@@ -809,7 +809,7 @@ abstract class Inventory < ItemContainer
   end
 
   protected def refresh_weight
-    weight = @items.sum(0i64) { |item| item.template.weight * item.count }
+    weight = @items.sum { |item| item.template.weight.to_i64 * item.count }
     @total_weight = Math.min(weight, Int32::MAX).to_i
   end
 

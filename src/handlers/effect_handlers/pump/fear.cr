@@ -1,5 +1,5 @@
 class EffectHandler::Fear < AbstractEffect
-  def can_start?(info)
+  def can_start?(info : BuffInfo) : Bool
     e = info.effected
     e.player? || e.summon? || (e.attackable? &&
     !((e.is_a?(L2DefenderInstance)) || (e.is_a?(L2FortCommanderInstance)) ||
@@ -18,7 +18,7 @@ class EffectHandler::Fear < AbstractEffect
     5
   end
 
-  def on_action_time(info)
+  def on_action_time(info : BuffInfo) : Bool
     info.effected.notify_event(AI::AFRAID, info.effector, false)
     false
   end

@@ -49,18 +49,18 @@ class Scripts::SelMahumSquad < AbstractNpcAI
     add_spell_finished_id(CHEF)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     case event
     when "chef_disable_reward"
       npc.not_nil!.variables["REWARD_TIME_GONE"] = 1
     when "chef_heal_player"
-      heal_player(npc.not_nil!, player.not_nil!)
+      heal_player(npc.not_nil!, pc.not_nil!)
     when "chef_remove_invul"
       if npc.is_a?(L2MonsterInstance)
         npc.invul = false
         npc.variables.delete("INVUL_REMOVE_TIMER_STARTED")
-        if player && player.alive? && npc.known_list.knows_player?(player)
-          add_attack_desire(npc, player)
+        if pc && pc.alive? && npc.known_list.knows_player?(pc)
+          add_attack_desire(npc, pc)
         end
       end
     when "chef_set_invul"
@@ -247,17 +247,17 @@ class Scripts::SelMahumSquad < AbstractNpcAI
     super
   end
 
-  def on_spell_finished(npc, player, skill)
+  def on_spell_finished(npc, pc, skill)
     if skill && skill.id == 6330
-      heal_player(npc, player)
+      heal_player(npc, pc)
     end
 
     super
   end
 
-  private def heal_player(npc, player)
-    if player && player.alive? && npc.variables.get_i32("INVUL_REMOVE_TIMER_STARTED") != 1 && (npc.intention.attack? || npc.intention.cast?)
-      npc.target = player
+  private def heal_player(npc, pc)
+    if pc && pc.alive? && npc.variables.get_i32("INVUL_REMOVE_TIMER_STARTED") != 1 && (npc.intention.attack? || npc.intention.cast?)
+      npc.target = pc
       npc.do_cast(SALMON_PORRIDGE_ATTACK)
     else
       cancel_quest_timer("chef_set_invul", npc, nil)

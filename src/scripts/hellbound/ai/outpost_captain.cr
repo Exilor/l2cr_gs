@@ -3,7 +3,7 @@ class Scripts::OutpostCaptain < AbstractNpcAI
   private CAPTAIN = 18466
   private DEFENDERS = {
     22357, # Enceinte Defender
-    22358, # Enceinte Defender
+    22358  # Enceinte Defender
   }
   private DOORKEEPER = 32351
 

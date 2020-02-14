@@ -6,7 +6,7 @@ class EffectHandler::Transformation < AbstractEffect
     @id = params.get_i32("id", 0)
   end
 
-  def can_start?(info)
+  def can_start?(info : BuffInfo) : Bool
     info.effected.player?
   end
 

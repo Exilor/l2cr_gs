@@ -129,6 +129,12 @@ class CharKnownList < ObjectKnownList
     end
   end
 
+  def each_character(radius : Int32) : Enumerable(L2Character)
+    ret = [] of L2Character
+    each_character(radius) { |char| ret << char }
+    ret
+  end
+
   def each_player(radius : Int32, & : L2PcInstance ->) : Nil
     char = active_char
     @known_players.try &.each_value do |pc|
@@ -136,6 +142,12 @@ class CharKnownList < ObjectKnownList
         yield pc
       end
     end
+  end
+
+  def each_player(radius : Int32) : Enumerable(L2PcInstance)
+    ret = [] of L2PcInstance
+    each_player(radius) { |pc| ret << pc }
+    ret
   end
 
   def active_char : L2Character

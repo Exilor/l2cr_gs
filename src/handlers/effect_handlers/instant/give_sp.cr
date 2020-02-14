@@ -11,7 +11,7 @@ class EffectHandler::GiveSp < AbstractEffect
   end
 
   def on_start(info)
-    effected, effector = info.effected?, info.effector?
+    effected, effector = info.effected, info.effector
     if effector.is_a?(L2PcInstance) && effected.is_a?(L2PcInstance)
       effector.add_exp_and_sp(0, @sp)
     end

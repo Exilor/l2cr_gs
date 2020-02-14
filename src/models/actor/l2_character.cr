@@ -156,6 +156,18 @@ abstract class L2Character < L2Object
     super.as(CharKnownList)
   end
 
+  def world_region=(new_region : L2WorldRegion?)
+    if old_region = world_region
+      if new_region
+        old_region.revalidate_zones(self)
+      else
+        old_region.remove_from_zones(self)
+      end
+    end
+
+    super
+  end
+
   def summon : L2Summon?
     # return nil
   end
@@ -2302,11 +2314,11 @@ abstract class L2Character < L2Object
     status.current_mp
   end
 
-  def hp_percentage : Int32
+  def hp_percent : Int32
     ((current_hp / max_hp) * 100.0).to_i
   end
 
-  def mp_percentage : Int32
+  def mp_percent : Int32
     ((current_mp / max_mp) * 100.0).to_i
   end
 
@@ -3971,6 +3983,10 @@ abstract class L2Character < L2Object
     end
 
     broadcast_packet(cs)
+  end
+
+  private def bad_coords
+    decay_me
   end
 
   # custom methods

@@ -82,7 +82,7 @@ class PcInventory < Inventory
   def get_unique_items_by_enchant_level(adena : Bool, a_adena : Bool, avail : Bool = true) : Array(L2ItemInstance)
     list = [] of L2ItemInstance
 
-    @items.select do |item|
+    @items.each do |item|
       next if !adena && item.id == ADENA_ID
       next if !a_adena && item.id == ANCIENT_ADENA_ID
       duplicate = list.any? { |it| it.id == item.id && it.enchant_level == item.enchant_level }
@@ -126,24 +126,6 @@ class PcInventory < Inventory
     list
   end
 
-  # def get_available_items(adena : Bool, allow_non_tradeable : Bool, freightable : Bool) : Array(L2ItemInstance)
-  #   list = [] of L2ItemInstance
-
-  #   @items.each do |item|
-  #     if !item.available?(@owner, adena, allow_non_tradeable) || !can_manipulate_with_item_id?(item.id)
-  #       next
-  #     elsif freightable
-  #       if item.item_location.inventory? && item.freightable?
-  #         list << item
-  #       end
-  #     else
-  #       list << item
-  #     end
-  #   end
-
-  #   list
-  # end
-
   def get_available_items(adena : Bool, allow_non_tradeable : Bool, freightable : Bool) : Array(L2ItemInstance)
     @items.select do |item|
       case
@@ -161,10 +143,6 @@ class PcInventory < Inventory
 
   def augmented_items : Array(L2ItemInstance)
     @items.select &.augmented?
-  end
-
-  def augmented_items(& : L2ItemInstance ->)
-    @items.each { |item| yield item if item.augmented? }
   end
 
   def element_items : Array(L2ItemInstance)
@@ -234,7 +212,7 @@ class PcInventory < Inventory
     super
   end
 
-  def add_item(process : String?, item : L2ItemInstance, actor : L2PcInstance, reference) : L2ItemInstance?
+  def add_item(process : String?, item : L2ItemInstance, actor : L2PcInstance?, reference) : L2ItemInstance?
     item = super
 
     if item
@@ -245,7 +223,7 @@ class PcInventory < Inventory
       end
     end
 
-    if item
+    if item && actor
       OnPlayerItemAdd.new(actor, item).async(actor, item.template)
     end
 
@@ -422,13 +400,11 @@ class PcInventory < Inventory
     loot_weight = 0
     required_slots = 0
 
-    if item_list
-      item_list.each do |item|
-        if !item.stackable? || get_inventory_item_count(item.id, -1) <= 0
-          required_slots += 1
-        end
-        loot_weight += item.weight
+    item_list.each do |item|
+      if !item.stackable? || get_inventory_item_count(item.id, -1) <= 0
+        required_slots += 1
       end
+      loot_weight += item.weight
     end
 
     result = validate_capacity(required_slots) && validate_weight(loot_weight)

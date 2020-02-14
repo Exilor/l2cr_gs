@@ -24,7 +24,7 @@ class EffectHandler::SummonNpc < AbstractEffect
   end
 
   def on_start(info)
-    return unless pc = info.effected?.as?(L2PcInstance)
+    return unless pc = info.effected.as?(L2PcInstance)
     return if pc.looks_dead? || pc.mounted?
 
     if @npc_id <= 0 || @npc_count <= 0

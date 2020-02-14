@@ -32,7 +32,7 @@ class Packets::Incoming::PlayerAuthResponse < LoginServerPacket
       end
       LoginServerClient.waiting_clients.delete_first(wc)
     else
-      warn "Didn't find waiting client for account #{@account.inspect}."
+      warn { "Didn't find waiting client for account \"#{@account}\"." }
     end
   end
 end

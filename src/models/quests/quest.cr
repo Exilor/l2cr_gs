@@ -3,13 +3,13 @@ require "./quest_timer"
 require "./state"
 
 class Quest < AbstractScript
-  private DEFAULT_NO_QUEST_MSG          = "<html><body>You are either not on a quest that involves this NPC, or you don't meet this NPC's minimum quest requirements.</body></html>"
+  private DEFAULT_NO_QUEST_MSG = "<html><body>You are either not on a quest that involves this NPC, or you don't meet this NPC's minimum quest requirements.</body></html>"
   private DEFAULT_ALREADY_COMPLETED_MSG = "<html><body>This quest has already been completed.</body></html>"
 
-  private QUEST_DELETE_FROM_CHAR_QUERY                      = "DELETE FROM character_quests WHERE charId=? AND name=?"
+  private QUEST_DELETE_FROM_CHAR_QUERY = "DELETE FROM character_quests WHERE charId=? AND name=?"
   private QUEST_DELETE_FROM_CHAR_QUERY_NON_REPEATABLE_QUERY = "DELETE FROM character_quests WHERE charId=? AND name=? AND var!=?"
 
-  private RESET_HOUR    =  6
+  private RESET_HOUR = 6
   private RESET_MINUTES = 30
 
   @rw_lock = Mutex.new(:Reentrant) # should be a "reentrant read write lock"
@@ -128,7 +128,7 @@ class Quest < AbstractScript
 
   def notify_attack(npc, attacker, damage, is_summon, skill)
     res : String? = on_attack(npc, attacker, damage, is_summon, skill) ||
-          on_attack(npc, attacker, damage, is_summon)
+      on_attack(npc, attacker, damage, is_summon)
   rescue e
     show_error(attacker, e)
   else
@@ -183,7 +183,7 @@ class Quest < AbstractScript
     warn e
   end
 
-  def notify_event(event, npc, pc)
+  def notify_event(event : String, npc : L2Npc?, pc : L2PcInstance?)
     res : String? = on_adv_event(event, npc, pc)
   rescue e
     show_error(pc, e)
@@ -385,8 +385,8 @@ class Quest < AbstractScript
     warn e
   end
 
-  def notify_on_can_see_me(npc, pc)
-    on_can_see_me
+  def notify_on_can_see_me(npc, pc) : Bool
+    on_can_see_me(npc, pc)
   rescue e
     warn e
     false
@@ -555,7 +555,7 @@ class Quest < AbstractScript
 
     if pc && pc.gm?
       trace = e.backtrace.join("<br>")
-      res : String? = "<html><body><title>Script error</title>#{trace}</body></html>"
+      res = "<html><body><title>Script error</title>#{trace}</body></html>"
       return show_result(pc, res)
     end
 
@@ -591,9 +591,9 @@ class Quest < AbstractScript
         state_name = rs.get_string("value")
 
         unless q = QuestManager.get_quest(id)
-          warn { "Missing quest #{id.inspect} for player #{pc.name}." }
+          warn { "Missing quest \"#{id}\" for player #{pc.name}." }
           if Config.autodelete_invalid_quest_data
-            warn "Deleting invalid quest data for #{id.inspect}."
+            warn { "Deleting invalid quest data for \"#{id}\"." }
             sql = "DELETE FROM character_quests WHERE charId = ? AND name = ?"
             GameDB.exec(sql, pc.l2id, id)
           end
@@ -615,9 +615,9 @@ class Quest < AbstractScript
         value = rs.get_string("value")
 
         unless qs = pc.get_quest_state(id)
-          warn { "Missing variable #{var.inspect} in quest #{id.inspect} for player #{pc.name}." }
+          warn { "Missing variable \"#{var}\" in quest \"#{id}\" for player #{pc.name}." }
           if Config.autodelete_invalid_quest_data
-            warn { "Deleting invalid variable #{var.inspect} for quest #{id.inspect}." }
+            warn { "Deleting invalid variable \"#{var}\" for quest \"#{id}\"." }
             sql = "DELETE FROM character_quests WHERE charId = ? AND name = ? AND var = ?"
             GameDB.exec(sql, pc.l2id, id, var)
           end
@@ -643,18 +643,16 @@ class Quest < AbstractScript
   end
 
   def load_global_quest_var(var : String) : String
-    result = ""
-
     begin
       sql = "SELECT value FROM quest_global_data WHERE quest_name = ? AND var = ?"
       GameDB.query_each(sql, name, var) do |rs|
-        result = rs.read(String)
+        return rs.read(String)
       end
     rescue e
       error e
     end
 
-    result
+    ""
   end
 
   def delete_global_quest_var(var : String)
@@ -708,7 +706,7 @@ class Quest < AbstractScript
     create_quest_var_in_db(qs, "<state>", State[qs.state])
   end
 
-  def self.update_quest_in_db(qs)
+  def self.update_quest_in_db(qs : QuestState)
     update_quest_var_in_db(qs, "<state>", State[qs.state])
   end
 
@@ -877,7 +875,7 @@ class Quest < AbstractScript
     true
   end
 
-  def check_party_member_conditions(qs, cond, npc)
+  def check_party_member_conditions(qs : QuestState, cond : Int32, npc : L2Npc) : Bool
     return false unless qs
 
     if cond == -1
@@ -893,29 +891,28 @@ class Quest < AbstractScript
 
   def show_page(pc : L2PcInstance, file_name : String, has_quest : Bool)
     if content = get_htm(pc, file_name)
-      npc = pc.last_folk_npc
-      if has_quest && npc
+      if has_quest && (npc = pc.last_folk_npc)
         content = content.gsub("%objectId%") { npc.l2id }
       end
-      reply = NpcHtmlMessage.new(npc.try &.l2id || 0, content)
+      reply = NpcHtmlMessage.new(npc ? npc.l2id : 0, content)
       pc.send_packet(reply)
     else
-      warn { "Quest#show_page: Missing content for #{file_name.inspect}." }
+      warn { "Quest#show_page: Missing content for \"#{file_name}\"." }
     end
   end
 
   def show_quest_page(pc : L2PcInstance, file_name : String, quest_id : Int32)
     if content = get_htm(pc, file_name)
       npc = pc.last_folk_npc
-      reply = NpcQuestHtmlMessage.new(npc.try &.l2id || 0, quest_id)
+      reply = NpcQuestHtmlMessage.new(npc ? npc.l2id : 0, quest_id)
       reply.html = content
       pc.send_packet(reply)
     else
-      warn { "Quest#show_quest_page: Missing content for #{file_name.inspect}." }
+      warn { "Quest#show_quest_page: Missing content for \"#{file_name}\"." }
     end
   end
 
-  def check_distance_to_target(pc : L2PcInstance, target)
+  def check_distance_to_target(pc : L2PcInstance, target) : Bool
     target.nil? || Util.in_range?(1500, pc, target, true)
   end
 
@@ -934,12 +931,12 @@ class Quest < AbstractScript
       end
 
       if quest_window && quest_id > 0 && quest_id < 20000 && quest_id != 999
-        reply = NpcQuestHtmlMessage.new(npc.try &.l2id || 0, quest_id)
+        reply = NpcQuestHtmlMessage.new(npc ? npc.l2id : 0, quest_id)
         reply.html = content
         reply["%playername%"] = pc.name
         pc.send_packet(reply)
       else
-        reply = NpcHtmlMessage.new(npc.try &.l2id || 0, content)
+        reply = NpcHtmlMessage.new(npc ? npc.l2id : 0, content)
         reply["%playername%"] = pc.name
         pc.send_packet(reply)
       end
@@ -977,7 +974,7 @@ class Quest < AbstractScript
     content
   end
 
-  def registered_item_ids
+  def registered_item_ids : Array(Int32)
     @quest_item_ids
   end
 
@@ -1009,7 +1006,7 @@ class Quest < AbstractScript
     end
   end
 
-  def start_conditions : String?
+  def start_conditions : Hash(Proc(L2PcInstance, Bool), String)
     @start_condition || sync do
       @start_condition ||= {} of L2PcInstance -> Bool => String
     end
@@ -1020,7 +1017,7 @@ class Quest < AbstractScript
     conds.nil? || conds.local_each_key.all? &.call(pc)
   end
 
-  def get_start_condition_html(pc : L2PcInstance)
+  def get_start_condition_html(pc : L2PcInstance) : String?
     return unless conds = @start_condition
     conds.each do |cond, value|
       return value unless cond.call(pc)
@@ -1272,11 +1269,11 @@ class Quest < AbstractScript
     if content = get_htm(pc, file_name)
       pc.send_packet(TutorialShowHtml.new(content))
     else
-      warn { "Quest#show_tutorial_html: #{file_name.inspect} not found." }
+      warn { "Quest#show_tutorial_html: \"#{file_name}\" not found." }
     end
   end
 
-  def has_memo?(talker : L2PcInstance, quest_id : Int) : Bool
+  def has_memo?(talker : L2PcInstance, quest_id : Int32) : Bool
     quest = QuestManager.get_quest(quest_id)
     !!quest && talker.has_quest_state?(quest.name)
   end

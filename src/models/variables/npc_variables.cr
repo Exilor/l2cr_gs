@@ -18,6 +18,6 @@ class NpcVariables < AbstractVariables
   end
 
   def get_i32(key : String) : Int32
-    super(key, 0)
+    get_i32(key, 0)
   end
 end

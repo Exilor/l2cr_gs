@@ -51,7 +51,7 @@ class Scripts::AltarsOfSacrifice < AbstractNpcAI
   private BOSS_MIN_SPAWN_RADIUS = 250
   private BOSS_MAX_SPAWN_RADIUS = 500
   # every 240 minutes/4 hours, altars change
-  private ALTAR_STATE_CHANGE_DELAY = 240 * 60 * 1000
+  private ALTAR_STATE_CHANGE_DELAY = 240i64 * 60 * 1000
 
   private ALTARS = {
     # TalkingIsland

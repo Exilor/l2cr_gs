@@ -327,7 +327,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
 	end
 
   def on_attack(npc, attacker, damage, is_summon)
-    debug "#on_attack npc.id: #{npc.id}, npc.script_value: #{npc.script_value.inspect}, is_summon: #{is_summon}"
 		case npc.id
     when PAKO_THE_CAT
 			case npc.script_value

@@ -30,11 +30,11 @@ class Scripts::DemonPrince < AbstractNpcAI
 
   def on_attack(npc, attacker, damage, is_summon, skill)
     if npc.alive?
-      if !ATTACK_STATE.has_key?(npc.l2id) && npc.current_hp < npc.max_hp * 0.5
+      if !ATTACK_STATE.has_key?(npc.l2id) && npc.hp_percent < 50
         npc.do_cast(UD)
         spawn_minions(npc)
         ATTACK_STATE[npc.l2id] = false
-      elsif npc.current_hp < npc.max_hp * 0.1 && ATTACK_STATE.has_key?(npc.l2id)
+      elsif npc.hp_percent < 10 && ATTACK_STATE.has_key?(npc.l2id)
         unless ATTACK_STATE[npc.l2id]
           npc.do_cast(UD)
           spawn_minions(npc)

@@ -3,11 +3,6 @@ module TargetHandler::CorpseMob
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    unless target
-      char.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
-      return EMPTY_TARGET_LIST
-    end
-
     unless target.is_a?(L2Attackable) && target.dead?
       char.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
       return EMPTY_TARGET_LIST

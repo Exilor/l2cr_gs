@@ -1,4 +1,4 @@
-struct Elementals
+class Elementals
   private TABLE = {} of Int32 => ElementalItems
 
   NONE  = -1i8
@@ -27,11 +27,13 @@ struct Elementals
     @boni = ElementalStatBoni.new(element, value)
   end
 
-  def element=(@element : Int8)
+  def element=(element : Int8)
+    @element = element
     @boni.element = element
   end
 
-  def value=(@value : Int32)
+  def value=(value : Int32)
+    @value = value
     @boni.value = value
   end
 

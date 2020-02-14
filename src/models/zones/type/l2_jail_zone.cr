@@ -42,11 +42,11 @@ class L2JailZone < L2ZoneType
     end
   end
 
-  def location_in : Location
+  def self.location_in : Location
     JAIL_IN_LOC
   end
 
-  def location_out : Location
+  def self.location_out : Location
     JAIL_OUT_LOC
   end
 end

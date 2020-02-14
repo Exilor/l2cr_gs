@@ -56,7 +56,7 @@ class Scripts::Kamaloka < AbstractInstance
     Location.new(-49805, -206139, -8117),
     Location.new(-10700, -174882, -10936),
     Location.new(-10700, -174882, -10936),
-    Location.new(22003, -174886, -10900),
+    Location.new(22003, -174886, -10900)
   ]
 
   # Respawn delay for the mobs in the first room, seconds Default: 25
@@ -1075,11 +1075,11 @@ class Scripts::Kamaloka < AbstractInstance
     31340
   ]
 
-  class KamaWorld < InstanceWorld
+  private class KamaWorld < InstanceWorld
     property index : Int32 = 0  # 0-18 index of the kama type in arrays
     property shaman : Int32 = 0 # l2id of the shaman
-    property! first_room : Array(L2Spawn)? # L2Spawn[] list of the spawns in the first room (excluding shaman)
-    property! second_room : Array(Int32)? # Integer[] list of l2ids mobs in the second room
+    property! first_room : Array(L2Spawn)? # list of the spawns in the first room (excluding shaman)
+    property! second_room : Array(Int32)? # list of l2ids mobs in the second room
     property mini_boss : Int32 = 0 # l2id of the miniboss
     property boss : L2Npc? # L2Npc - boss
   end
@@ -1156,7 +1156,7 @@ class Scripts::Kamaloka < AbstractInstance
         return false
       end
       # player must be near party leader
-      if !m.inside_radius?(player, 1000, true, true)
+      unless m.inside_radius?(player, 1000, true, true)
         sm = SystemMessage.c1_is_in_a_location_which_cannot_be_entered_therefore_it_cannot_be_processed
         sm.add_pc_name(m)
         player.send_packet(sm)
@@ -1167,7 +1167,7 @@ class Scripts::Kamaloka < AbstractInstance
       if instance_times
         instance_times.each_key do |id|
           # find instance with same name (kamaloka or labyrinth)
-          # TODO: Don"t use instance name, use other system.
+          # TODO: Don't use instance name, use other system.
           unless instance_name == InstanceManager.get_instance_id_name(id)
             next
           end
@@ -1181,7 +1181,8 @@ class Scripts::Kamaloka < AbstractInstance
         end
       end
     end
-    return true
+
+    true
   end
 
   # Removing all buffs from player and pet except BUFFS_WHITELIST
@@ -1268,7 +1269,8 @@ class Scripts::Kamaloka < AbstractInstance
       remove_buffs(m)
       teleport_player(m, TELEPORTS[index], instance_id)
     end
-    return
+
+    nil
   end
 
   # Called on instance finish and handles reenter time for instance
@@ -1497,7 +1499,7 @@ class Scripts::Kamaloka < AbstractInstance
     super
   end
 
-  def on_enter_instance(player, world, first_entrance)
+  def on_enter_instance(pc, world, first_entrance)
     # no-op
   end
 end

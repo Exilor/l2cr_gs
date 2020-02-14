@@ -71,7 +71,7 @@ class L2PetInstance < L2Summon
   end
 
   private def feed_task
-    if !@owner || !owner.has_summon? || self != owner.summon
+    if !owner.has_summon? || self != owner.summon
       stop_feed
       return
     elsif current_feed > feed_consume
@@ -429,7 +429,7 @@ class L2PetInstance < L2Summon
       end
 
       if removed_item.nil?
-        warn { "Couldn't destroy pet control item (owner: #{owner}, evolve: #{evolve.inspect})." }
+        warn { "Couldn't destroy pet control item (owner: #{owner}, evolve: #{evolve})." }
       else
         owner.send_packet(InventoryUpdate.removed(removed_item))
         owner.send_packet(StatusUpdate.current_load(owner))

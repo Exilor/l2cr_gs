@@ -46,6 +46,10 @@ class L2Vehicle < L2Character
     @dock_id > 0
   end
 
+  def in_dock=(dock_id : Int32)
+    @dock_id = dock_id
+  end
+
   def oust_loc : Location
     @oust_loc ||
     MapRegionManager.get_tele_to_location(self, TeleportWhereType::TOWN)

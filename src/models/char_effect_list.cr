@@ -1,7 +1,7 @@
 require "../network/**"
 require "./skills/buff_info"
 require "../util/linked_list"
-
+# Using a Concurrent::LinkedList causes a CPU leak
 class CharEffectList
   include Packets::Outgoing
   include Synchronizable
@@ -26,27 +26,27 @@ class CharEffectList
   initializer owner : L2Character
 
   def buffs : IList(BuffInfo)
-    @buffs || sync { @buffs ||= Deque(BuffInfo).new }
+    @buffs || sync { @buffs ||= Concurrent::Deque(BuffInfo).new }
   end
 
   def debuffs : IList(BuffInfo)
-    @debuffs || sync { @debuffs ||= Deque(BuffInfo).new }
+    @debuffs || sync { @debuffs ||= Concurrent::Deque(BuffInfo).new }
   end
 
   def dances : IList(BuffInfo)
-    @dances || sync { @dances ||= Deque(BuffInfo).new }
+    @dances || sync { @dances ||= Concurrent::Deque(BuffInfo).new }
   end
 
   def passives : IList(BuffInfo)
-    @passives || sync { @passives ||= Deque(BuffInfo).new }
+    @passives || sync { @passives ||= Concurrent::Deque(BuffInfo).new }
   end
 
   def toggles : IList(BuffInfo)
-    @toggles || sync { @toggles ||= Deque(BuffInfo).new }
+    @toggles || sync { @toggles ||= Concurrent::Deque(BuffInfo).new }
   end
 
   def triggered : IList(BuffInfo)
-    @triggered || sync { @triggered ||= Deque(BuffInfo).new }
+    @triggered || sync { @triggered ||= Concurrent::Deque(BuffInfo).new }
   end
 
   private def stacked_effects : IHash(AbnormalType, BuffInfo)
@@ -107,15 +107,15 @@ class CharEffectList
   end
 
   def get_first_effect(type : EffectType) : BuffInfo?
-    find { |info| info.effects.any? { |effect| effect.effect_type == type } }
+    find &.effects.any? { |effect| effect.effect_type == type }
   end
 
-  def get_buff_info_by_skill_id(id : Int) : BuffInfo?
+  def get_buff_info_by_skill_id(id : Int32) : BuffInfo?
     find { |info| info.skill.id == id } ||
     @passives.try &.find { |info| info.skill.id == id }
   end
 
-  def affected_by_skill?(id : Int) : Bool
+  def affected_by_skill?(id : Int32) : Bool
     !!get_buff_info_by_skill_id(id)
   end
 
@@ -190,7 +190,7 @@ class CharEffectList
     end
 
     if info.skill.abnormal_instant? && has_buffs?
-      @buffs.try &.each do |buff|
+      buffs.each do |buff|
         if buff.skill.abnormal_type == info.skill.abnormal_type
           unless buff.in_use?
             buff.in_use = true
@@ -294,7 +294,7 @@ class CharEffectList
     update_effect_list(update)
   end
 
-  def stop_skill_effects(removed : Bool, id : Int)
+  def stop_skill_effects(removed : Bool, id : Int32)
     get_buff_info_by_skill_id(id).try { |info| remove(removed, info) }
   end
 
@@ -409,8 +409,7 @@ class CharEffectList
   end
 
   def add(info : BuffInfo)
-    return unless skill = info.skill?
-
+    skill = info.skill
     return if @blocked_buff_slots.try &.includes?(skill.abnormal_type)
 
     if skill.passive?

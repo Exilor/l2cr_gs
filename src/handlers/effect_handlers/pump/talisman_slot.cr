@@ -6,15 +6,15 @@ class EffectHandler::TalismanSlot < AbstractEffect
     @slots = params.get_i32("slots", 0)
   end
 
-  def can_start?(info)
-    !!info.effected? && info.effected.player?
+  def can_start?(info : BuffInfo) : Bool
+    info.effected.player?
   end
 
   def on_start(info)
     info.effected.acting_player.not_nil!.stat.add_talisman_slots(@slots)
   end
 
-  def on_action_time(info)
+  def on_action_time(info : BuffInfo) : Bool
     info.skill.passive?
   end
 

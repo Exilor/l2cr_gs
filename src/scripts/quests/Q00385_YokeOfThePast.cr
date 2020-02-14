@@ -72,18 +72,16 @@ class Scripts::Q00385_YokeOfThePast < Quest
     case event
     when "ziggurat-03.htm", "ziggurat-04.htm", "ziggurat-06.htm",
          "ziggurat-07.htm"
-      html = event
+      event
     when "ziggurat-05.htm"
       if qs.created?
         qs.start_quest
-        html = event
       end
+      event
     when "ziggurat-10.html"
       qs.exit_quest(true, true)
-      html = event
+      event
     end
-
-    html
   end
 
   def on_talk(npc, pc)
@@ -94,7 +92,8 @@ class Scripts::Q00385_YokeOfThePast < Quest
     when State::STARTED
       if has_quest_items?(pc, SCROLL_OF_ANCIENT_MAGIC)
         reward_items(
-          pc, BLANK_SCROLL,
+          pc,
+          BLANK_SCROLL,
           get_quest_items_count(pc, SCROLL_OF_ANCIENT_MAGIC)
         )
         take_items(pc, SCROLL_OF_ANCIENT_MAGIC, -1)

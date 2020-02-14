@@ -19,7 +19,7 @@ abstract class AbstractEnchantItem
 
   def initialize(set : StatsSet)
     @id = set.get_i32("id")
-    if item?.nil?
+    if ItemTable[@id]?.nil?
       raise "Item with id #{@id} not found"
     elsif !ENCHANT_TYPES.includes?(item.item_type)
       raise "Item with id #{@id} not in AbstractEnchantItem::ENCHANT_TYPES " \
@@ -29,10 +29,6 @@ abstract class AbstractEnchantItem
     @grade = set.get_enum("targetGrade", CrystalType, CrystalType::NONE)
     @max_enchant_level = set.get_i32("maxEnchant", 65535)
     @bonus_rate = set.get_f64("bonusRate", 0)
-  end
-
-  def item? : L2Item?
-    ItemTable[@id]?
   end
 
   def item : L2Item

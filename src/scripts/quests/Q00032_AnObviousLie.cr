@@ -32,61 +32,58 @@ class Scripts::Q00032_AnObviousLie < Quest
   def on_adv_event(event, npc, pc)
     return unless pc
     return unless qs = get_quest_state(pc, false)
-    html = nil
 
     case event
     when "30120-02.html"
       if qs.created?
         qs.start_quest
-        html = event
+        event
       end
     when "30094-02.html"
       if qs.cond?(1)
         give_items(pc, MAP_OF_GENTLER, 1)
         qs.set_cond(2, true)
-        html = event
+        event
       end
     when "31706-02.html"
       if qs.cond?(2) && has_quest_items?(pc, MAP_OF_GENTLER)
         take_items(pc, MAP_OF_GENTLER, -1)
         qs.set_cond(3, true)
-        html = event
+        event
       end
     when "30094-06.html"
       if qs.cond?(4) && has_item?(pc, MEDICINAL_HERB)
         take_item(pc, MEDICINAL_HERB)
         qs.set_cond(5, true)
-        html = event
+        event
       end
     when "30094-09.html"
       if qs.cond?(5) && has_item?(pc, SPIRIT_ORE)
         take_item(pc, SPIRIT_ORE)
         qs.set_cond(6, true)
-        html = event
+        event
       end
     when "30094-12.html"
       if qs.cond?(7)
         qs.set_cond(8, true)
-        html = event
+        event
       end
     when "30094-15.html"
-      html = event
+      event
     when "31706-05.html"
       if qs.cond?(6)
         qs.set_cond(7, true)
-        html = event
+        event
       end
     when "cat", "raccoon", "rabbit"
       if qs.cond?(8) && take_all_items(pc, THREAD, SUEDE)
         give_items(pc, EARS[event], 1)
         qs.exit_quest(false, true)
-        html = "30094-16.html"
+        "30094-16.html"
       else
-        html = "30094-17.html"
+        "30094-17.html"
       end
     end
-
-    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -100,7 +97,7 @@ class Scripts::Q00032_AnObviousLie < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
-    html = get_no_quest_msg(pc)
+
     case npc.id
     when MAXIMILIAN
       if qs.created?
@@ -148,6 +145,6 @@ class Scripts::Q00032_AnObviousLie < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

@@ -104,7 +104,7 @@ module TaskManager
       interval = task.params[0].to_i64 * 86_400_000
       hour = task.params[1].split(':')
       if hour.size != 3
-        warn "Task #{task.id} has an incorrect hour format."
+        warn { "Task #{task.id} has an incorrect hour format." }
         return false
       end
       check = Calendar.new
@@ -115,7 +115,7 @@ module TaskManager
         min.minute = hour[1].to_i
         min.second = hour[2].to_i
       rescue e
-        error "Task #{task.id} has an incorrect time format: #{hour.inspect}."
+        error { "Task #{task.id} has an incorrect time format: #{hour}." }
         error e
         return false
       end

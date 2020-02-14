@@ -9,12 +9,12 @@ class Packets::Outgoing::NpcInfo < Packets::Outgoing::AbstractNpcInfo
   @r_hand : Int32
   @l_hand : Int32
   @enchant_effect : Int32
-  @attackable : Bool
+  @attackable = false
   @name : String
   @title : String
   @display_effect : Int32
 
-  def initialize(@npc : L2Npc, attacker : L2Character)
+  def initialize(@npc : L2Npc, attacker : L2Character?)
     super(npc)
 
     @id_template = npc.template.display_id
@@ -23,7 +23,9 @@ class Packets::Outgoing::NpcInfo < Packets::Outgoing::AbstractNpcInfo
     @enchant_effect = npc.enchant_effect
     @collision_height = npc.collision_height
     @collision_radius = npc.collision_radius
-    @attackable = npc.auto_attackable?(attacker)
+    if attacker
+      @attackable = npc.auto_attackable?(attacker)
+    end
     if npc.template.using_server_side_name?
       @name = npc.name
     end

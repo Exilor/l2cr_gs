@@ -17,7 +17,7 @@ class QuestState
 
   delegate created?, started?, completed?, to: @state
 
-  def quest
+  def quest : Quest
     QuestManager.get_quest(@quest_name).not_nil!
   end
 
@@ -25,7 +25,7 @@ class QuestState
     set_state(state, true)
   end
 
-  def set_state(state : State, save_in_db : Bool = true) : Bool
+  def set_state(state : State, save_in_db) : Bool
     return false if @state == state
     new_quest = created?
     @state = state
@@ -51,7 +51,6 @@ class QuestState
   end
 
   def set(var : String, val : String?) : String?
-    debug "#set(var: #{var.inspect}, val: #{val.inspect})"
     val ||= ""
 
     _vars = (@vars ||= {} of String => String)
@@ -91,18 +90,16 @@ class QuestState
   end
 
   def get_global_quest_var(var : String) : String
-    result = ""
-
     begin
       sql = "SELECT value FROM character_quest_global_data WHERE charId = ? AND var = ?"
       GameDB.query_each(sql, @player.l2id, var) do |rs|
-        result = rs.read(String)
+        return rs.read(String)
       end
     rescue e
       error e
     end
 
-    result
+    ""
   end
 
   def get(var : String) : String?
@@ -143,6 +140,7 @@ class QuestState
     if started?
       set("cond", value.to_s)
     end
+
     self
   end
 
@@ -202,12 +200,12 @@ class QuestState
     started? ? get_int("memoState") : -1
   end
 
-  def memo_state=(value : Int)
+  def memo_state=(value : Int32)
     set("memoState", value.to_s)
     self
   end
 
-  def memo_state?(ms : Int)
+  def memo_state?(ms : Int32)
     get_int("memoState") == ms
   end
 
@@ -215,15 +213,15 @@ class QuestState
     memo_state > 0
   end
 
-  def get_memo_state_ex(slot : Int)
+  def get_memo_state_ex(slot : Int32) : Int32
     started? ? get_int("memoStateEx#{slot}") : 0
   end
 
-  def memo_state_ex?(slot : Int, mse : Int) : Bool
+  def memo_state_ex?(slot : Int32, mse : Int32) : Bool
     get_memo_state_ex(slot) == mse
   end
 
-  def set_memo_state_ex(slot : Int, value : Int) : self
+  def set_memo_state_ex(slot : Int32, value : Int32) : self
     set("memoStateEx#{slot}", value.to_s)
     self
   end
@@ -310,7 +308,6 @@ class QuestState
     AbstractScript.give_items(@player, item_id, count.to_i64, attribute_id, attribute_level)
   end
 
-
   def add_exp_and_sp(exp : Int, sp : Int)
     AbstractScript.add_exp_and_sp(@player, exp, sp)
   end
@@ -365,11 +362,13 @@ class QuestState
     self
   end
 
-  def start_quest : self
+  def start_quest(play_sound : Bool = true, cond : Int32 = 1) : self
     if created? && !quest.custom?
-      set("cond", "1")
+      set("cond", cond)
       self.state = State::STARTED
-      play_sound(Sound::ITEMSOUND_QUEST_ACCEPT)
+      if play_sound
+        play_sound(Sound::ITEMSOUND_QUEST_ACCEPT)
+      end
     end
 
     self
@@ -408,7 +407,7 @@ class QuestState
   end
 
   def give_item_randomly(npc : L2Npc?, item_id : Int, min_amount : Int, max_amount : Int, limit : Int, chance : Float64, play_sound : Bool) : Bool
-    AbstractScript.give_item_randomly(@layer, npc, amount, limit, min_amount, max_amount, limit, chance, play_sound)
+    AbstractScript.give_item_randomly(@player, npc, amount, limit, min_amount, max_amount, limit, chance, play_sound)
   end
 
   def reward_items(*args)
@@ -470,35 +469,39 @@ class QuestState
     set("NRmemo", value.to_s)
   end
 
-  def remove_nr_memo(pc, value)
+  def remove_nr_memo(pc : L2PcInstance, value : Int32)
     unset("NRmemo")
   end
 
-  def set_nr_memo_state(pc, slot, value)
+  def set_nr_memo_state(pc : L2PcInstance, slot : Int32, value : Int32)
     set("NRmemoState#{slot}", value.to_s)
   end
 
-  def get_nr_memo_state(pc, slot)
+  def get_nr_memo_state(pc : L2PcInstance, slot : Int32) : Int32
     get_int("NRmemoState#{slot}")
   end
 
-  def set_nr_memo_state_ex(pc, slot, unknown, value)
+  def set_nr_memo_state_ex(pc : L2PcInstance, slot : Int32, unknown : Int32, value : Int32)
     set("NRmemoStateEx#{slot}", value.to_s)
   end
 
-  def get_nr_memo_state_ex(pc, slot, unknown)
+  def get_nr_memo_state_ex(pc : L2PcInstance, slot : Int32, unknown : Int32) : Int32
     get_int("NRmemoStateEx#{slot}")
   end
 
-  def has_nr_memo?(pc, slot)
+  def has_nr_memo?(pc : L2PcInstance, slot : Int32) : Bool
     get_int("NRmemo") == slot
   end
 
-  def set_nr_flag_journal(pc, quest_id, val)
+  def set_nr_flag_journal(pc : L2PcInstance, quest_id : Int32, val : Int32)
     # L2J not done
   end
 
   def to_log(io : IO)
-    io << "QuestState(name: #{@quest_name} vars: #{@vars.inspect})"
+    io << "QuestState(name: "
+    io << @quest_name
+    io << ", vars: "
+    @vars.inspect(io)
+    io << ')'
   end
 end

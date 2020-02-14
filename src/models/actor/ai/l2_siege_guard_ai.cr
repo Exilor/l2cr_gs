@@ -240,7 +240,7 @@ class L2SiegeGuardAI < L2CharacterAI
         next
       end
 
-      if npc.@ai # TODO: possibly check not needed
+      if npc.ai? # TODO: possibly check not needed
         if npc.alive? && (target.z - npc.z).abs < 600
           if npc.ai.intention.idle? || npc.ai.intention.active?
             if target.inside_radius?(npc, 1500, true, false)
@@ -253,7 +253,7 @@ class L2SiegeGuardAI < L2CharacterAI
         end
         # heal friends
         if @self_analysis.has_heal_or_resurrect? && !@actor.attacking_disabled?
-          if npc.current_hp < npc.max_hp * 0.6
+          if npc.hp_percent < 60
             if @actor.current_hp > @actor.max_hp / 2
               if @actor.current_mp > @actor.max_mp / 2 && npc.in_combat?
                 @self_analysis.heal_skills.each do |sk|

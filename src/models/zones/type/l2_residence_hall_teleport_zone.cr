@@ -27,7 +27,7 @@ class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
     initializer zone : L2ResidenceHallTeleportZone
 
     def call
-      loc = @zone.spawns.not_nil!.sample(random: Rnd)
+      loc = @zone.spawns.sample(random: Rnd)
       @zone.players_inside.each &.tele_to_location(loc, false)
     end
   end

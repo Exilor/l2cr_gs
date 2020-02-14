@@ -1,6 +1,7 @@
 class Scripts::SelMahumDrill < AbstractNpcAI
   class Actions < EnumClass
     getter social_action_id, alt_social_action_id, repeat_count, repeat_interval
+
     protected initializer social_action_id : Int32,
       alt_social_action_id : Int32, repeat_count : Int32,
       repeat_interval : Int32
@@ -65,7 +66,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
     start_quest_timer("return_home", 120000, nil, nil, true)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     case event
     when "do_social_action"
       if npc && npc.alive?

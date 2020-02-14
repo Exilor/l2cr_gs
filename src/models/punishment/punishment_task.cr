@@ -72,7 +72,7 @@ class PunishmentTask
     if handler = PunishmentHandler[@type]
       handler.on_start(self)
     else
-      warn "No punishment handler found for type #{@type.inspect}."
+      warn "No punishment handler found for type \"#{@type}\"."
     end
   end
 
@@ -88,7 +88,7 @@ class PunishmentTask
     if handler = PunishmentHandler[@type]
       handler.on_end(self)
     else
-      warn "No punishment handler found for type #{@type.inspect}."
+      warn "No punishment handler found for type \"#{@type}\"."
     end
   end
 

@@ -19,9 +19,9 @@ abstract class L2Object < ListenersContainer
   @instance_id = Atomic(Int32).new(0)
 
   getter l2id
-  getter world_region : L2WorldRegion?
   getter! known_list : ObjectKnownList
   getter? invisible = false
+  property world_region : L2WorldRegion?
   property name : String = ""
 
   def initialize(@l2id : Int32)
@@ -35,7 +35,7 @@ abstract class L2Object < ListenersContainer
 
   def decay_me : Bool
     unless region = world_region
-      # warn "L2Object#decay_me: @world_region must not be nil here."
+      warn "L2Object#decay_me: @world_region must not be nil here."
     end
 
     sync do
@@ -134,13 +134,13 @@ abstract class L2Object < ListenersContainer
       if instance_id > 0 && old_i
         old_i.remove_player(l2id)
         if old_i.show_timer?
-          send_instance_update(old_i, true)
+          me.send_instance_update(old_i, true)
         end
       end
       if new_instance_id > 0
         new_i.add_player(l2id)
         if new_i.show_timer?
-          send_instance_update(new_i, false)
+          me.send_instance_update(new_i, false)
         end
       end
       if smn = me.summon
@@ -275,7 +275,7 @@ abstract class L2Object < ListenersContainer
 
   def spawn_me : Bool
     if @world_region || x == 0 || y == 0 || z == 0
-      raise "Failed L2Object#spawn_me (2)"
+      raise "L2Object#spawn_me() assertion failed"
     end
 
     sync do
@@ -293,7 +293,7 @@ abstract class L2Object < ListenersContainer
 
   def spawn_me(x : Int32, y : Int32, z : Int32)
     if @world_region
-      raise "Failed L2Object#spawn_me (1)"
+      raise "L2Object#spawn_me(Int32, Int32, Int32) assertion failed"
     end
 
     sync do
@@ -340,15 +340,7 @@ abstract class L2Object < ListenersContainer
   end
 
   private def bad_coords
-    warn "L2Object#bad_coords."
-
-    case me = self
-    when L2Character
-      decay_me
-    when L2PcInstance
-      me.tele_to_location(Location.new(0, 0, 0), false)
-      me.send_message("Error with your coordinates.")
-    end
+    # no-op
   end
 
   def set_xyz(loc : Locatable)
@@ -397,20 +389,6 @@ abstract class L2Object < ListenersContainer
     end
   end
 
-  def world_region=(new_region : L2WorldRegion?)
-    old_region = world_region
-    me = self
-    if old_region && me.is_a?(L2Character)
-      if new_region
-        old_region.revalidate_zones(me)
-      else
-        old_region.remove_from_zones(me)
-      end
-    end
-
-    @world_region = new_region
-  end
-
   def calculate_distance(x : Int32, y : Int32, z : Int32, z_axis : Bool, squared : Bool) : Float64
     distance = Math.pow(x - x(), 2) + Math.pow(y - y(), 2)
     if z_axis
@@ -427,18 +405,6 @@ abstract class L2Object < ListenersContainer
     heading = Util.calculate_heading_from(self, loc) - heading()
     heading += 65_535 if heading < 0
     Util.convert_heading_to_degree(heading)
-  end
-
-  def send_instance_update(instance : Instance, hide : Bool)
-    start_time = ((Time.ms - instance.instance_start_time) / 1000).to_i32
-    end_time = ((instance.instance_end_time - instance.instance_start_time) / 1000).to_i32
-    pc = acting_player.not_nil!
-    if instance.timer_increase?
-      ui = ExSendUIEvent.new(pc, hide, true, start_time, end_time, instance.timer_text)
-    else
-      ui = ExSendUIEvent.new(pc, hide, false, end_time - start_time, 0, instance.timer_text)
-    end
-    send_packet(ui)
   end
 
   def invisible=(bool : Bool)
@@ -487,13 +453,12 @@ abstract class L2Object < ListenersContainer
     get_script(ObjectPoly) || add_script(ObjectPoly.new(self))
   end
 
+  def poly? : ObjectPoly?
+    get_script(ObjectPoly)
+  end
+
   def to_s(io : IO)
-    io << self.class
-    io << '('
-    name.inspect(io)
-    io << ": "
-    io << l2id
-    io << ')'
+    io << self.class << '(' << name << ": " << l2id << ')'
   end
 
   def inspect(io : IO)

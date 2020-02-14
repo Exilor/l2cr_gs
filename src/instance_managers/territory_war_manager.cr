@@ -257,8 +257,7 @@ module TerritoryWarManager
       return
     end
 
-    REGISTERED_CLANS[castle_id] ||= [] of L2Clan
-    REGISTERED_CLANS[castle_id] << clan
+    (REGISTERED_CLANS[castle_id] ||= [] of L2Clan) << clan
     change_registration(castle_id, clan.id, false)
   end
 
@@ -268,15 +267,14 @@ module TerritoryWarManager
       return
     end
 
-    REGISTERED_MERCENARIES[castle_id] ||= [] of Int32
-    REGISTERED_MERCENARIES[castle_id] << pc.l2id
+    (REGISTERED_MERCENARIES[castle_id] ||= [] of Int32) << pc.l2id
     change_registration(castle_id, pc.l2id, false)
   end
 
   def remove_clan(castle_id : Int32, clan : L2Clan)
     if array = REGISTERED_CLANS[castle_id]?
       if idx = array.index(clan)
-        REGISTERED_CLANS.delete_at(idx)
+        array.delete_at(idx)
         change_registration(castle_id, clan.id, true)
       end
     end
@@ -285,7 +283,7 @@ module TerritoryWarManager
   def remove_merc(castle_id : Int32, pc : L2PcInstance)
     if array = REGISTERED_MERCENARIES[castle_id]?
       if idx = array.index(pc.l2id)
-        REGISTERED_MERCENARIES.delete_at(idx)
+        array.delete_at(idx)
         change_registration(castle_id, pc.l2id, true)
       end
     end

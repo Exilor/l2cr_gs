@@ -3,10 +3,10 @@ module WarehouseCache
 
   private CACHE = Concurrent::Map(L2PcInstance, Int64).new
 
-  @@cache_time = 0
+  @@cache_time = 0i64
 
   def load
-    @@cache_time = Config.warehouse_cache_time * 60
+    @@cache_time = Config.warehouse_cache_time.to_i64 * 60000
     ThreadPoolManager.schedule_ai_at_fixed_rate(self, 120_000, 60_000)
   end
 

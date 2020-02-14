@@ -37,9 +37,7 @@ struct GroupedGeneralDropItem
   end
 
   def normalize_me : GroupedGeneralDropItem
-    sum_chance = @items.sum(0.0) do |item|
-      (item.chance * @chance) / 100
-    end
+    sum_chance = @items.sum { |item| (item.chance * @chance) / 100 }
 
     group = GroupedGeneralDropItem.new(sum_chance, @drop_calculation_strategy, KillerChanceModifierStrategy::NO_RULES, @precise_strategy)
     group.items = @items.map do |item|
@@ -79,7 +77,7 @@ struct GroupedGeneralDropItem
       chance_modifier *= get_killer_chance_modifier(victim, killer)
     end
 
-    sum_chance = @items.sum(0.0) do |item|
+    sum_chance = @items.sum do |item|
       (item.get_chance(victim) * @chance * chance_modifier) / 100
     end
 

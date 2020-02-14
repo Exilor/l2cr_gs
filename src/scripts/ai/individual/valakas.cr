@@ -63,6 +63,7 @@ class Scripts::Valakas < AbstractNpcAI
   # Misc
   @time_tracker = 0i64
   @valakas_target : L2Playable?
+
   private getter! zone : L2BossZone
 
   def initialize
@@ -123,7 +124,8 @@ class Scripts::Valakas < AbstractNpcAI
 
   def on_adv_event(event, npc, pc)
     if npc
-      if event.casecmp?("beginning")
+      case event.casecmp
+      when "beginning"
         # Stores current time
         @time_tracker = Time.ms
 
@@ -148,7 +150,7 @@ class Scripts::Valakas < AbstractNpcAI
         start_quest_timer("spawn_9", 23530, npc, nil) # 6700 - end of cinematic
         start_quest_timer("spawn_10", 26000, npc, nil) # 2500 - AI + unlock
       # Regeneration && inactivity task
-      elsif event.casecmp?("regen_task")
+      when "regen_task"
         # Inactivity task - 15min
         if GrandBossManager.get_boss_status(VALAKAS) == FIGHTING
           if @time_tracker + 900000 < Time.ms
@@ -190,46 +192,46 @@ class Scripts::Valakas < AbstractNpcAI
           npc.do_cast(VALAKAS_REGENERATION_1)
         end
       # Spawn cinematic, regen_task and choose of skill.
-      elsif event.casecmp?("spawn_1")
+      when "spawn_1"
         zone.broadcast_packet(SpecialCamera.new(npc, 1800, 180, -1, 1500, 15000, 10000, 0, 0, 1, 0, 0))
-      elsif event.casecmp?("spawn_2")
+      when "spawn_2"
         zone.broadcast_packet(SpecialCamera.new(npc, 1300, 180, -5, 3000, 15000, 10000, 0, -5, 1, 0, 0))
-      elsif event.casecmp?("spawn_3")
+      when "spawn_3"
         zone.broadcast_packet(SpecialCamera.new(npc, 500, 180, -8, 600, 15000, 10000, 0, 60, 1, 0, 0))
-      elsif event.casecmp?("spawn_4")
+      when "spawn_4"
         zone.broadcast_packet(SpecialCamera.new(npc, 800, 180, -8, 2700, 15000, 10000, 0, 30, 1, 0, 0))
-      elsif event.casecmp?("spawn_5")
+      when "spawn_5"
         zone.broadcast_packet(SpecialCamera.new(npc, 200, 250, 70, 0, 15000, 10000, 30, 80, 1, 0, 0))
-      elsif event.casecmp?("spawn_6")
+      when "spawn_6"
         zone.broadcast_packet(SpecialCamera.new(npc, 1100, 250, 70, 2500, 15000, 10000, 30, 80, 1, 0, 0))
-      elsif event.casecmp?("spawn_7")
+      when "spawn_7"
         zone.broadcast_packet(SpecialCamera.new(npc, 700, 150, 30, 0, 15000, 10000, -10, 60, 1, 0, 0))
-      elsif event.casecmp?("spawn_8")
+      when "spawn_8"
         zone.broadcast_packet(SpecialCamera.new(npc, 1200, 150, 20, 2900, 15000, 10000, -10, 30, 1, 0, 0))
-      elsif event.casecmp?("spawn_9")
+      when "spawn_9"
         zone.broadcast_packet(SpecialCamera.new(npc, 750, 170, -10, 3400, 15000, 4000, 10, -15, 1, 0, 0))
-      elsif event.casecmp?("spawn_10")
+      when "spawn_10"
         GrandBossManager.set_boss_status(VALAKAS, FIGHTING)
         npc.invul = false
 
         start_quest_timer("regen_task", 60000, npc, nil, true)
         start_quest_timer("skill_task", 2000, npc, nil, true)
       # Death cinematic, spawn of Teleport Cubes.
-      elsif event.casecmp?("die_1")
+      when "die_1"
         zone.broadcast_packet(SpecialCamera.new(npc, 2000, 130, -1, 0, 15000, 10000, 0, 0, 1, 1, 0))
-      elsif event.casecmp?("die_2")
+      when "die_2"
         zone.broadcast_packet(SpecialCamera.new(npc, 1100, 210, -5, 3000, 15000, 10000, -13, 0, 1, 1, 0))
-      elsif event.casecmp?("die_3")
+      when "die_3"
         zone.broadcast_packet(SpecialCamera.new(npc, 1300, 200, -8, 3000, 15000, 10000, 0, 15, 1, 1, 0))
-      elsif event.casecmp?("die_4")
+      when "die_4"
         zone.broadcast_packet(SpecialCamera.new(npc, 1000, 190, 0, 500, 15000, 10000, 0, 10, 1, 1, 0))
-      elsif event.casecmp?("die_5")
+      when "die_5"
         zone.broadcast_packet(SpecialCamera.new(npc, 1700, 120, 0, 2500, 15000, 10000, 12, 40, 1, 1, 0))
-      elsif event.casecmp?("die_6")
+      when "die_6"
         zone.broadcast_packet(SpecialCamera.new(npc, 1700, 20, 0, 700, 15000, 10000, 10, 10, 1, 1, 0))
-      elsif event.casecmp?("die_7")
+      when "die_7"
         zone.broadcast_packet(SpecialCamera.new(npc, 1700, 10, 0, 1000, 15000, 10000, 20, 70, 1, 1, 0))
-      elsif event.casecmp?("die_8")
+      when "die_8"
         zone.broadcast_packet(SpecialCamera.new(npc, 1700, 10, 0, 300, 15000, 250, 20, -20, 1, 1, 0))
 
         TELEPORT_CUBE_LOCATIONS.each do |loc|
@@ -237,15 +239,16 @@ class Scripts::Valakas < AbstractNpcAI
         end
 
         start_quest_timer("remove_players", 900000, nil, nil)
-      elsif event.casecmp?("skill_task")
+      when "skill_task"
         call_skill_ai(npc)
       end
     else
-      if event.casecmp?("valakas_unlock")
+      case event.casecmp
+      when "valakas_unlock"
          valakas = add_spawn(VALAKAS, -105200, -253104, -15264, 32768, false, 0)
         GrandBossManager.add_boss(valakas.as(L2GrandBossInstance))
         GrandBossManager.set_boss_status(VALAKAS, DORMANT)
-      elsif event.casecmp?("remove_players")
+      when "remove_players"
         zone.oust_all_players
       end
     end
@@ -372,7 +375,7 @@ class Scripts::Valakas < AbstractNpcAI
   # use AoE skills.
   # Lower than 50% HP, he will begin to use Meteor skill.
   private def get_rand_skill(npc) : SkillHolder
-    hp_ratio = ((npc.current_hp / npc.max_hp) * 100).to_i
+    hp_ratio = npc.hp_percent
 
     # Valakas Lava Skin has priority.
     if hp_ratio < 75 && Rnd.rand(150) == 0

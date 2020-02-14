@@ -132,7 +132,7 @@ class GameClient
               answer = 1
             end
           else
-            warn { "#mark_to_delete_char No clan with ID #{clan_id} found." }
+            warn { "#mark_to_delete_char No clan with id #{clan_id} found." }
           end
         end
       end

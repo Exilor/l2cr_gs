@@ -6,15 +6,15 @@ class Scripts::ArenaManager < AbstractNpcAI
   }
   # Skill
   private BUFFS = {
-    SkillHolder.new(6805, 1), # Arena Empower
-    SkillHolder.new(6806, 1), # Arena Acumen
-    SkillHolder.new(6807, 1), # Arena Concentration
-    SkillHolder.new(6808, 1), # Arena Might
-    SkillHolder.new(6804, 1), # Arena Wind Walk
-    SkillHolder.new(6812, 1)  # Arena Berserker Spirit
+    SkillHolder.new(6805), # Arena Empower
+    SkillHolder.new(6806), # Arena Acumen
+    SkillHolder.new(6807), # Arena Concentration
+    SkillHolder.new(6808), # Arena Might
+    SkillHolder.new(6804), # Arena Wind Walk
+    SkillHolder.new(6812)  # Arena Berserker Spirit
   }
-  private CP_RECOVERY = SkillHolder.new(4380, 1) # Arena: CP Recovery
-  private HP_RECOVERY = SkillHolder.new(6817, 1) # Arena HP Recovery
+  private CP_RECOVERY = SkillHolder.new(4380) # Arena: CP Recovery
+  private HP_RECOVERY = SkillHolder.new(6817) # Arena HP Recovery
   # Misc
   private CP_COST = 1000
   private HP_COST = 1000

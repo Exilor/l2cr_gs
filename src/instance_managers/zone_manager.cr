@@ -262,19 +262,21 @@ module ZoneManager
     CLASS_ZONES.local_each_value.sum &.size
   end
 
-  def get_all_zones(zone_type : T.class) : Indexable(T) forall T
-    ret = CLASS_ZONES[zone_type].values_slice
-    unless ret.is_a?(Indexable(T))
-      raise "Expected #{ret}:#{ret.class} to be an Indexable(#{T})"
-    end
-    ret
+  def get_all_zones(zone_type : T.class) : Slice(T) forall T
+    # ret = CLASS_ZONES[zone_type].values_slice
+    # unless ret.is_a?(Slice(T))
+    #   raise "Expected #{ret}:#{ret.class} to be a Slice(#{T})"
+    # end
+    # ret
+
+    CLASS_ZONES[zone_type].values_slice.unsafe_as(Slice(T))
   end
 
   def get_all_zones(zone_type : T.class, & : T ->) forall T
     CLASS_ZONES[zone_type].each_value { |zone| yield zone.as(T) }
   end
 
-  def get_zone_by_id(id : Int) : L2ZoneType?
+  def get_zone_by_id(id : Int32) : L2ZoneType?
     CLASS_ZONES.each_value do |map|
       if val = map[id]?
         return val
@@ -284,7 +286,7 @@ module ZoneManager
     nil
   end
 
-  def get_zone_by_id(id : Int, zone_type : T.class) : T? forall T
+  def get_zone_by_id(id : Int32, zone_type : T.class) : T? forall T
     CLASS_ZONES[zone_type][id]?.as(T?)
   end
 

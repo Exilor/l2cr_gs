@@ -1,7 +1,7 @@
 require "./l2_character_ai"
 
 class L2AttackableAI < L2CharacterAI
-  class FearTask
+  private class FearTask
     initializer ai : L2AttackableAI, effector : L2Character, start : Bool
 
     def call
@@ -30,7 +30,6 @@ class L2AttackableAI < L2CharacterAI
     on_event_think
   end
 
-  ##############################################################################
   private def auto_attack_condition(target : L2Character?) : Bool
     return false unless target
 
@@ -419,14 +418,6 @@ class L2AttackableAI < L2CharacterAI
     end
   end
 
-   # Manage AI attack thinks of a L2Attackable (called by onEvtThink).<br>
-   # <b><u>Actions</u>:</b>
-   # <ul>
-   # <li>Update the attack timeout if actor is running</li>
-   # <li>If target is dead or timeout is expired, stop this attack and set the Intention to ACTIVE</li>
-   # <li>Call all L2Object of its Faction inside the Faction Range</li>
-   # <li>Chose a target and order to attack it with magic skill or physical attack</li>
-   # </ul>
   private def think_attack
     npc = active_char
     if npc.casting_now?
@@ -500,11 +491,15 @@ class L2AttackableAI < L2CharacterAI
                       end
                     end
 
+                    unless oat.acting_player
+                      warn { "#{oat} doesn't have an acting player." }
+                    end
+
                     obj.notify_event(AGGRESSION, oat, 1)
                     evt = OnAttackableFactionCall.new(
                       obj,
                       active_char,
-                      oat.acting_player.not_nil!,
+                      oat.acting_player,
                       oat.is_a?(L2Summon)
                     )
                     EventDispatcher.notify(evt, obj)
@@ -531,7 +526,7 @@ class L2AttackableAI < L2CharacterAI
     combined_collision = collision + most_hate.template.collision_radius
 
     ai_suicide_skills = npc.template.get_ai_skills(AISkillScope::SUICIDE)
-    if !ai_suicide_skills.empty? && (npc.current_hp / npc.max_hp) * 100 < 30
+    if !ai_suicide_skills.empty? && npc.hp_percent < 30
       skill = ai_suicide_skills.sample(random: Rnd)
       if Util.in_range?(skill.affect_range, active_char, most_hate, false)
         if npc.has_skill_chance? && cast(skill)
@@ -644,10 +639,10 @@ class L2AttackableAI < L2CharacterAI
     unless general_skills.empty?
       ai_heal_skills = npc.template.get_ai_skills(AISkillScope::HEAL)
       unless ai_heal_skills.empty?
-        percentage = (npc.current_hp / npc.max_hp) * 100
+        percentage = npc.hp_percent
         if npc.minion?
           if (leader = npc.leader?) && !leader.dead?
-            if Rnd.rand(100) > (leader.current_hp / leader.max_hp) * 100
+            if Rnd.rand(100) > leader.hp_percent
               ai_heal_skills.each do |heal_skill|
                 if heal_skill.target_type.self?
                   next
@@ -711,7 +706,7 @@ class L2AttackableAI < L2CharacterAI
                 next
               end
 
-              percentage = (targets.current_hp / targets.max_hp) * 100
+              percentage = targets.hp_percent
               if Rnd.rand(100) < (100 - percentage) / 10
                 if GeoData.can_see_target?(npc, targets)
                   client_stop_moving(nil)
@@ -972,11 +967,11 @@ class L2AttackableAI < L2CharacterAI
     end
 
     if sk.has_effect_type?(EffectType::HP)
-      percentage = (caster.current_hp / caster.max_hp) * 100
+      percentage = caster.hp_percent
       if caster.minion? && !sk.target_type.self?
         leader = caster.leader?
         if leader && !leader.dead?
-          if Rnd.rand(100) > (leader.current_hp / leader.max_hp) * 100
+          if Rnd.rand(100) > leader.hp_percent
             tmp = sk.cast_range + caster.template.collision_radius
             tmp += leader.template.collision_radius
             unless Util.in_range?(tmp, caster, leader, false)
@@ -1014,7 +1009,7 @@ class L2AttackableAI < L2CharacterAI
             next
           end
 
-          percentage = (obj.current_hp / obj.max_hp) * 100
+          percentage = obj.hp_percent
           if Rnd.rand(100) < (100 - percentage) / 10
             if GeoData.can_see_target?(caster, obj)
               client_stop_moving(nil)
@@ -1340,6 +1335,12 @@ class L2AttackableAI < L2CharacterAI
     if !skill.static? && ((skill.magic? && caster.muted?) || caster.physical_muted?)
       return false
     end
+    # custom, to prevent mobs trying and failing to cast short range skills from afar
+    if target = attack_target?
+      unless caster.inside_radius?(target, skill.effect_range + caster.template.collision_radius, true, false)
+        return false
+      end
+    end
 
     true
   end
@@ -1410,7 +1411,7 @@ class L2AttackableAI < L2CharacterAI
             end
           end
         end
-      elsif positive
+      else
         dist = 0.0
         dist2 = 0.0
         range = 0
@@ -1791,7 +1792,7 @@ class L2AttackableAI < L2CharacterAI
     super
   end
 
-  private def on_event_aggression(target, long aggro)
+  private def on_event_aggression(target, aggro)
     me = active_char
     if me.dead?
       return

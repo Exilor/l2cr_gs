@@ -16,6 +16,8 @@ class L2SummonAI < L2PlayableAI
   end
 
   private def on_intention_attack(target)
+    return unless target
+
     if Config.pathfinding > 0
       if PathFinding.find_path(
           *@actor.xyz,

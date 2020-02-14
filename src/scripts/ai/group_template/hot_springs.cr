@@ -42,7 +42,6 @@ class Scripts::HotSprings < AbstractNpcAI
   end
 
   private def try_to_infect(npc, attacker, disease_id)
-    npc.say("Infecting #{attacker.name}")
     info = attacker.effect_list.get_buff_info_by_skill_id(disease_id)
     skill_lvl = !info ? 1 : info.skill.level < 10 ? info.skill.level + 1 : 10
     skill = SkillData[disease_id, skill_lvl]?

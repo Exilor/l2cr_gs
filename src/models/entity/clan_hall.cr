@@ -12,7 +12,7 @@ abstract class ClanHall
   FUNC_DECO_FRONTPLATEFORM = 7 # Only Auctionable Halls
   FUNC_DECO_CURTAINS = 8 # Only Auctionable Halls
 
-  @functions = Hash(Int32, ClanHallFunction).new
+  @functions = Concurrent::Map(Int32, ClanHallFunction).new
   @clan_hall_id = 0
 
   getter doors = [] of L2DoorInstance
@@ -84,7 +84,7 @@ abstract class ClanHall
     if pc.clan_id == owner_id
       open_close_door(door_id, open)
     else
-      debug "#{pc.name}'s clan with id #{pc.clan_id} is not the owner of this clan hall with owner id #{owner_id}."
+      debug { "#{pc.name}'s clan with id #{pc.clan_id} is not the owner of this clan hall with owner id #{owner_id}." }
     end
   end
 
@@ -241,19 +241,19 @@ abstract class ClanHall
 
     def db_save
       sql = "REPLACE INTO clanhall_functions (hall_id, type, lvl, lease, rate, endTime) VALUES (?,?,?,?,?,?)"
-      GameDB.exec( sql, @ch.id, type, lvl, lease, rate, end_time)
+      GameDB.exec(sql, @ch.id, type, lvl, lease, rate, end_time)
     rescue e
       error e
     end
 
-    def lease
+    def lease : Int32
       @fee
     end
 
     def lease=(@fee : Int32)
     end
 
-    def end_time
+    def end_time : Int64
       @end_date
     end
 

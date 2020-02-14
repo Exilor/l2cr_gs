@@ -3,7 +3,7 @@ class EffectHandler::Buff < AbstractEffect
     EffectType::BUFF
   end
 
-  def on_action_time(info)
+  def on_action_time(info : BuffInfo) : Bool
     info.skill.passive? || info.skill.toggle?
   end
 end

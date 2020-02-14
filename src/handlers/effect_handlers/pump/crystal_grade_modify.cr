@@ -6,7 +6,7 @@ class EffectHandler::CrystalGradeModify < AbstractEffect
     @grade = params.get_i32("grade", 0)
   end
 
-  def can_start?(info)
+  def can_start?(info : BuffInfo) : Bool
     info.effected.player?
   end
 

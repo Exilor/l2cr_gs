@@ -8,7 +8,6 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
   private def run_impl
     return unless pc = active_char
     unless player = L2World.get_player(@name)
-      debug "#{@name.inspect} not found."
       return
     end
 

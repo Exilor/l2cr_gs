@@ -107,8 +107,8 @@ class L2ClanMember
   def pledge_type=(type : Int32)
     @pledge_type = type
 
-    if @player_instance
-      @player_instance.pledge_type = type
+    if pc = @player_instance
+      pc.pledge_type = type
     else
       update_pledge_type
     end

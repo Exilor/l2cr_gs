@@ -14,7 +14,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     return unless pc = active_char
     return unless run_custom_cmd(pc) == :proceed
 
-    command = "admin_#{@command[/^(\S)+/]}"
+    command = "admin_" + @command[/^(\S)+/]
 
     unless handler = AdminCommandHandler[command]
       if pc.gm?
@@ -32,16 +32,18 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
     if Config.gmaudit
       GMAudit.log("#{pc.name} [#{pc.l2id}]", @command, pc.target.try &.name || "no-target")
-      debug { "#{pc} used command #{command.inspect}." }
+      debug { "#{pc} used command \"#{command}\"." }
     end
 
-    handler.use_admin_command("admin_#{@command}", pc)
+    handler.use_admin_command("admin_" + @command, pc)
   end
 
   private def run_custom_cmd(pc)
     case @command
     when "save"
       pc.store_me
+    when "save_all"
+      L2World.players.each &.store_me
     when /^add_sp\s\d+$/
       pc.add_sp(args[0].to_i)
       send_packet(UserInfo.new(pc))
@@ -151,9 +153,9 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       if q = QuestManager.get_quest(id)
         state = q.new_quest_state(pc)
         state.start_quest
-        pc.send_message("Started quest #{q.descr.inspect}.")
+        pc.send_message("Started quest \"#{q.descr}\".")
       else
-        pc.send_message("Quest with ID #{id} not found.")
+        pc.send_message("Quest with id #{id} not found.")
       end
     else
       return :proceed
@@ -316,46 +318,51 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   private def spawn_npc
     npc_id = args.last.to_i
     unless NpcData[npc_id]?
-      pc.send_message "No NPC with ID #{npc_id} exists."
+      pc.send_message("No NPC with id #{npc_id} exists.")
       return
     end
-    spawn = L2Spawn.new(npc_id)
-    spawn.instance_id = pc.instance_id
-    spawn.heading = pc.heading
-    spawn.x, spawn.y, spawn.z = pc.xyz
-    spawn.stop_respawn
+    sp = L2Spawn.new(npc_id)
+    sp.instance_id = pc.instance_id
+    sp.heading = pc.heading
+    sp.x, sp.y, sp.z = pc.xyz
+    sp.stop_respawn
 
-    spawn.spawn_one(false)
+    sp.spawn_one(false)
   end
 
   private def spawn_npc_by_name
     name = args.join(' ')
     unless template = NpcData.templates.find &.name.casecmp?(name)
-      pc.send_message "No NPC with name #{name} exists."
+      pc.send_message("No NPC with name #{name} exists.")
       return
     end
-    spawn = L2Spawn.new(template.id)
-    spawn.instance_id = pc.instance_id
-    spawn.heading = pc.heading
-    spawn.x, spawn.y, spawn.z = pc.xyz
-    spawn.stop_respawn
+    sp = L2Spawn.new(template.id)
+    sp.instance_id = pc.instance_id
+    sp.heading = pc.heading
+    sp.x, sp.y, sp.z = pc.xyz
+    sp.stop_respawn
 
-    spawn.spawn_one(false)
+    sp.spawn_one(false)
   end
 
   private def goto_npc
     name = args.join(' ')
-    npc = L2World.objects.find do |obj|
-      obj.as?(L2Npc).try &.name.try &.casecmp?(name)
-    end
-    name2 = name.downcase
-    npc ||= L2World.objects.find do |obj|
-      obj.as?(L2Npc).try &.name.try &.includes?(name2)
+
+    unless name.num?
+      npc = L2World.objects.find do |obj|
+        obj.as?(L2Npc).try &.name.try &.casecmp?(name)
+      end
+      unless npc
+        name2 = name.downcase
+        npc = L2World.objects.find do |obj|
+          obj.as?(L2Npc).try &.name.try &.includes?(name2)
+        end
+      end
     end
 
-    if name.num?
+    if npc.nil? && name.num?
       id = name.to_i
-      npc ||= L2World.objects.find do |obj|
+      npc = L2World.objects.find do |obj|
         obj.is_a?(L2Npc) && obj.id == id
       end
     end
@@ -363,7 +370,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     if npc
       pc.tele_to_location(npc)
     else
-      pc.send_message("No npc called #{name.inspect} was found.")
+      pc.send_message("No npc with name or id \"#{name}\" was found.")
     end
   end
 
@@ -465,7 +472,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         pc.send_message("ClassId #{class_id} is not a 3rd class.")
       end
     else
-      pc.send_message("No class found for #{id.inspect}")
+      pc.send_message("No class found for \"#{id}\"")
       html = String.build do |io|
         io.puts "<html><title>Class names</title><body>"
         ClassId.each do |id|

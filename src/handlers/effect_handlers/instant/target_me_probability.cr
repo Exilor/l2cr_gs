@@ -10,7 +10,7 @@ class EffectHandler::TargetMeProbability < AbstractEffect
     true
   end
 
-  def calc_success(info)
+  def calc_success(info : BuffInfo) : Bool
     Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
   end
 

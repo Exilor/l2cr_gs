@@ -11,8 +11,8 @@ class Scripts::SinEater < AbstractNpcAI
 
   def on_adv_event(event, npc, player)
     if event == "TALK" && player && (smn = player.summon)
-      if Rnd.rand(100) < 30
-        random = Rnd.rand(100)
+      if rand(100) < 30
+        random = rand(100)
 
         if random < 20
           broadcast_summon_say(smn, NpcString::YAWWWWN_ITS_SO_BORING_HERE_WE_SHOULD_GO_AND_FIND_SOME_ACTION)
@@ -35,7 +35,7 @@ class Scripts::SinEater < AbstractNpcAI
 
   @[Register(event: ON_CREATURE_KILL, register: NPC, id: 12564)]
   def on_creature_kill(event : OnCreatureKill)
-    random = Rnd.rand(100)
+    random = rand(100)
     summon = event.target.as(L2Summon)
 
     if random < 30
@@ -49,8 +49,8 @@ class Scripts::SinEater < AbstractNpcAI
 
   @[Register(event: ON_CREATURE_ATTACKED, register: NPC, id: 12564)]
   def on_creature_attacked(event : OnCreatureAttacked)
-    if Rnd.rand(100) < 30
-      random = Rnd.rand(100)
+    if rand(100) < 30
+      random = rand(100)
       summon = event.target.as(L2Summon)
 
       if random < 35
@@ -64,13 +64,17 @@ class Scripts::SinEater < AbstractNpcAI
   end
 
   def on_summon_spawn(summon)
-    broadcast_summon_say(summon, Rnd.bool ? NpcString::HEY_IT_SEEMS_LIKE_YOU_NEED_MY_HELP_DOESNT_IT : NpcString::ALMOST_GOT_IT_OUCH_STOP_DAMN_THESE_BLOODY_MANACLES)
+    if rand(2) == 0
+      broadcast_summon_say(summon, NpcString::HEY_IT_SEEMS_LIKE_YOU_NEED_MY_HELP_DOESNT_IT)
+    else
+      broadcast_summon_say(summon, NpcString::ALMOST_GOT_IT_OUCH_STOP_DAMN_THESE_BLOODY_MANACLES)
+    end
     start_quest_timer("TALK", 60000, nil, summon.owner)
   end
 
   def on_summon_talk(summon)
-    if Rnd.rand(100) < 10
-      random = Rnd.rand(100)
+    if rand(100) < 10
+      random = rand(100)
 
       if random < 25
         broadcast_summon_say(summon, NpcString::USING_A_SPECIAL_SKILL_HERE_COULD_TRIGGER_A_BLOODBATH)
@@ -86,9 +90,7 @@ class Scripts::SinEater < AbstractNpcAI
 
   private def broadcast_summon_say(summon, npc_string)
     summon.broadcast_packet(
-      NpcSay.new(
-        summon.l2id, Say2::NPC_ALL, summon.id, npc_string
-      )
+      NpcSay.new(summon.l2id, Say2::NPC_ALL, summon.id, npc_string)
     )
   end
 end

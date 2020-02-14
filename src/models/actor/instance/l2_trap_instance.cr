@@ -151,6 +151,38 @@ class L2TrapInstance < L2Npc
     true
   end
 
+  # def check_target(target : L2Character) : Bool
+  #   unless target.inside_radius?(self, 150, false, false)
+  #     return false
+  #   end
+
+  #   unless skill.offensive_aoe_check(self, target, @in_arena)
+  #     return false
+  #   end
+
+  #   # I figure that since a trap without owner is spawned only in quests, that
+  #   # the intended targets would be anything other than other monsters.
+  #   unless owner = @owner
+  #     return target.is_a?(L2Playable)
+  #   end
+
+  #   if target.is_a?(L2Npc) && !target.is_a?(L2Attackable)
+  #     return false
+  #   end
+
+  #   if target.is_a?(L2FriendlyMobInstance) || target.is_a?(L2TamedBeastInstance)
+  #     return false
+  #   end
+
+  #   # I can imagine no scenario where a player could auto-attack an enemy but
+  #   # his traps shouldn't be triggered by it.
+  #   if pc = target.acting_player
+  #     return pc.auto_attackable?(owner)
+  #   end
+
+  #   true
+  # end
+
   def delete_me
     if owner = @owner
       owner.trap = nil
@@ -160,15 +192,15 @@ class L2TrapInstance < L2Npc
     super
   end
 
-  def active_weapon_item? : L2Weapon?
+  def active_weapon_item : L2Weapon?
     # return nil
   end
 
-  def secondary_weapon_instance? : L2ItemInstance?
+  def secondary_weapon_instance : L2ItemInstance?
     # return nil
   end
 
-  def secondary_weapon_item? : L2Weapon?
+  def secondary_weapon_item : L2Weapon?
     # return nil
   end
 

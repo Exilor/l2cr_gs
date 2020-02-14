@@ -101,7 +101,7 @@ abstract class AI
     when REST
       on_intention_rest
     when ATTACK
-      unless arg0.is_a?(L2Character)
+      unless arg0.is_a?(L2Character?)
         raise "Wrong types for on_intention_attack: arg0: #{arg0}, arg1: #{arg1}"
       end
 

@@ -1,6 +1,6 @@
 class EffectHandler::Flag < AbstractEffect
-  def can_start?(info)
-    info.effected?.is_a?(L2PcInstance)
+  def can_start?(info : BuffInfo) : Bool
+    info.effected.is_a?(L2PcInstance)
   end
 
   def on_exit(info)

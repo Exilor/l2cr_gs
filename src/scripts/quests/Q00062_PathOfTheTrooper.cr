@@ -22,7 +22,10 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
     add_start_npc(MASTER_GWAIN)
     add_talk_id(MASTER_GWAIN, MASTER_SHUBAIN)
     add_kill_id(FELIM_LIZARDMAN_WARRIOR, VENOMOUS_SPIDER, TUMRAN_BUGBEAR)
-    register_quest_items(FELIM_LIZARDMAN_HEAD, VENOMOUS_SPIDERS_LEG, TUMRAN_BUGBEAR_HEART, SHUBAINS_RECOMMENDATION)
+    register_quest_items(
+      FELIM_LIZARDMAN_HEAD, VENOMOUS_SPIDERS_LEG, TUMRAN_BUGBEAR_HEART,
+      SHUBAINS_RECOMMENDATION
+    )
   end
 
   def on_adv_event(event, npc, pc)

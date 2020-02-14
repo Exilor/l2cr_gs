@@ -1,9 +1,9 @@
 class Packets::Outgoing::CharCreateFail < GameServerPacket
-  private initializer error : UInt8
+  private initializer error_code : UInt8
 
   private def write_impl
     c 0x10
-    d @error
+    d @error_code
   end
 
   CREATION_FAILED     = new(0)

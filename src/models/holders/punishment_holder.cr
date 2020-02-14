@@ -2,17 +2,17 @@ require "../punishment/punishment_type"
 require "../punishment/punishment_task"
 
 struct PunishmentHolder
-  @holder = Hash(String, Hash(PunishmentType, PunishmentTask)).new
+  @holder = Concurrent::Map(String, Concurrent::Map(PunishmentType, PunishmentTask)).new
 
   def add_punishment(task : PunishmentTask)
     unless task.expired?
       key = task.key.to_s
-      val = (@holder[key] ||= Hash(PunishmentType, PunishmentTask).new)
+      val = (@holder[key] ||= Concurrent::Map(PunishmentType, PunishmentTask).new)
       val[task.type] = task
     end
   end
 
-  def stop_punishment(task)
+  def stop_punishment(task : PunishmentTask)
     key = task.key.to_s
     if punishments = @holder[key]?
       task.stop_punishment

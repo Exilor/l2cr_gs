@@ -1,6 +1,10 @@
 class Condition
   class PlayerInstanceId < Condition
-    initializer ids : Array(Int32)
+    @ids : Slice(Int32)
+
+    def initialize(ids)
+      @ids = ids.sort.to_slice
+    end
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       return false unless pc = effector.acting_player
@@ -9,7 +13,7 @@ class Condition
       world = InstanceManager.get_player_world(pc)
       return false unless world
       return false unless world.instance_id == instance_id
-      @ids.includes?(world.template_id)
+      @ids.bincludes?(world.template_id)
     end
   end
 end

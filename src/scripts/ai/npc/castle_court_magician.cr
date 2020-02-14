@@ -102,6 +102,7 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
     when "giveTalisman"
       if get_quest_items_count(player, EPAULETTE) < 10
         html = "courtmagician-06.html"
+        return html
       end
 
       chance = Rnd.rand(100)

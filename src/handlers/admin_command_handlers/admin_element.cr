@@ -70,7 +70,7 @@ module AdminCommandHandler::AdminElement
         debug "type == -1"
         item_instance.clear_element_attr(type)
       else
-        debug "type: #{type}"
+        debug "type: #{type}, value: #{value}"
         item_instance.set_element_attr(type, value)
       end
 

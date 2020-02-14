@@ -8,7 +8,7 @@ class Packets::Incoming::RequestStartPledgeWar < GameClientPacket
   private def run_impl
     return unless (pc = active_char) && (pc_clan = pc.clan)
 
-    if pc_clan.level < 3 || pc_clan.members_count < Config.alt_clan_members_for_war
+    if pc_clan.level < 3 || pc_clan.size < Config.alt_clan_members_for_war
       pc.send_packet(SystemMessageId::CLAN_WAR_DECLARED_IF_CLAN_LVL3_OR_15_MEMBER)
       action_failed
       return
@@ -28,7 +28,7 @@ class Packets::Incoming::RequestStartPledgeWar < GameClientPacket
       pc.send_packet(SystemMessageId::CLAN_WAR_AGAINST_A_ALLIED_CLAN_NOT_WORK)
       action_failed
       return
-    elsif enemy_clan.level < 3 || enemy_clan.members_count < Config.alt_clan_members_for_war
+    elsif enemy_clan.level < 3 || enemy_clan.size < Config.alt_clan_members_for_war
       pc.send_packet(SystemMessageId::CLAN_WAR_DECLARED_IF_CLAN_LVL3_OR_15_MEMBER)
       action_failed
       return

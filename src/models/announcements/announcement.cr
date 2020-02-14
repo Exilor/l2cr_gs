@@ -29,11 +29,10 @@ class Announcement
     GameDB.query_each("SELECT id FROM announcements ORDER BY id DESC LIMIT 1") do |rs|
       @id = rs.read(Int32)
     end
+    true
   rescue e
     error e
     false
-  else
-    true
   end
 
   def update_me : Bool

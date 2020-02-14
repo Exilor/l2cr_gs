@@ -9,9 +9,9 @@ class Packets::Outgoing::ExGetBossRecord < GameServerPacket
     d @total_score
     if list = @list
       d list.size
-      list.each do |k, v|
-        d k
-        d v
+      list.each do |boss_id, info|
+        d boss_id
+        d info
         d 0
       end
     else

@@ -338,7 +338,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         return "30738-15.html"
       when 7
         if qs.has_quest_items?(Q_WISH_POTION)
-          if qs.get_int(EXCHANGE) == 0
+          if qs.get_int(EXCHANGE) == -1
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 1)
             qs.set(FLAG, 1)
@@ -350,7 +350,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         return "30738-14.html"
       when 8
         if qs.has_quest_items?(Q_WISH_POTION)
-          if qs.get_int(EXCHANGE) == 0
+          if qs.get_int(EXCHANGE) == -1
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 2)
             qs.set(FLAG, 2)
@@ -362,7 +362,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         return "30738-14.html"
       when 9
         if qs.has_quest_items?(Q_WISH_POTION)
-          if qs.get_int(EXCHANGE) == 0
+          if qs.get_int(EXCHANGE) == -1
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 3)
             qs.set(FLAG, 3)
@@ -374,8 +374,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
         return "30738-14.html"
       when 10
         if qs.has_quest_items?(Q_WISH_POTION)
-          if qs.get_int(EXCHANGE) == 0
-
+          if qs.get_int(EXCHANGE) == -1
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 4)
             qs.set(FLAG, 4)

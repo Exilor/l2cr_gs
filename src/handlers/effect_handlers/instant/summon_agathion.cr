@@ -16,7 +16,7 @@ class EffectHandler::SummonAgathion < AbstractEffect
   end
 
   def on_start(info)
-    unless pc = info.effected?.as?(L2PcInstance)
+    unless pc = info.effected.as?(L2PcInstance)
       return
     end
 

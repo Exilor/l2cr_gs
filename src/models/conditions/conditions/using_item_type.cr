@@ -9,8 +9,6 @@ class Condition
     end
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
-      return false unless effector
-
       unless effector.is_a?(L2PcInstance)
         return @armor ? false : @mask & effector.attack_type.mask != 0
       end

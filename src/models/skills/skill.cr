@@ -17,11 +17,7 @@ class Skill
   extend Loggable
 
   enum SkillType : UInt8
-    PHYSICAL
-    MAGIC
-    STATIC
-    DANCE
-    TRIGGER
+    PHYSICAL, MAGIC, STATIC, DANCE, TRIGGER
   end
 
   @effect_lists = EnumMap(EffectScope, Array(AbstractEffect)).new
@@ -158,7 +154,7 @@ class Skill
       begin
         v1, v2 = tmp.split('-')
       rescue e
-        raise "Invalid affectLimit value #{tmp.inspect} for skill id #{@id}"
+        raise "Invalid affectLimit value \"#{tmp}\" for skill id #{@id}"
       end
       @affect_limit = {v1.to_i, v2.to_i}
     else
@@ -206,7 +202,7 @@ class Skill
     values.split(';') do |prod_list|
       prod_data = prod_list.split(',')
       if prod_data.size < 3
-        warn "Wrong size for extractable skill info: #{prod_data.size}."
+        warn { "Wrong size for extractable skill info: #{prod_data.size}." }
       end
       chance = 0.0
       length = prod_data.size - 1
@@ -239,7 +235,6 @@ class Skill
   delegate fly_type?, active?, passive?, toggle?, self_continuous?, channeling?,
     to: @operate_type
 
-  # used in L2PcInstance#check_pvp_skill
   def aoe? : Bool
     @target_type.area? ||
     @target_type.aura? ||
@@ -338,14 +333,14 @@ class Skill
         msg = cond.message
         msg_id = cond.message_id
         if msg_id != 0
-          debug "SystemMessage with id #{msg_id.inspect}"
+          debug "SystemMessage with id #{msg_id}"
           sm = Packets::Outgoing::SystemMessage[msg_id]
           if cond.add_name?
             sm.add_skill_name(@id)
           end
           char.send_packet(sm)
         elsif msg
-          debug "Condition message: #{msg.inspect}"
+          debug "Condition message: #{msg}"
           char.send_message(msg)
         end
 
@@ -527,7 +522,20 @@ class Skill
   private def activate_skill(caster : L2Character, cubic : L2CubicInstance?, targets : Enumerable(L2Object))
     case @id
     when 5852, 5853
-      warn "TODO: HandysBlockCheckerManager"
+      return unless block = targets.first?.as?(L2BlockInstance)
+      return unless pc = caster.as?(L2PcInstance)
+      arena = pc.block_checker_arena
+      if arena != -1
+        unless holder = HandysBlockCheckerManager.get_holder(arena)
+          return
+        end
+
+        team = holder.get_player_team(pc)
+        color = block.color_effect
+        if (team == 0 && color == 0) || (team == 1 && color == 0x53)
+          block.change_color(pc, holder, team)
+        end
+      end
     else
       targets.each do |target|
         target = target.as(L2Character)
@@ -726,7 +734,6 @@ class Skill
     if aves
       @abnormal_visual_effects = aves.to_slice
     end
-
   end
 
   def extractable_skill : L2ExtractableSkill?

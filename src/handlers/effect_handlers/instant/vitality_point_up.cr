@@ -11,7 +11,7 @@ class EffectHandler::VitalityPointUp < AbstractEffect
   end
 
   def on_start(info)
-    return unless pc = info.effected?.as?(L2PcInstance)
+    return unless pc = info.effected.as?(L2PcInstance)
 
     pc.update_vitality_points(@value, false, false)
     pc.send_packet(UserInfo.new(pc))

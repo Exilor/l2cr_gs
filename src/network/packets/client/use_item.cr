@@ -132,7 +132,7 @@ class Packets::Incoming::UseItem < GameClientPacket
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
             end
-          when Race::HUMAN, Race::DWARF, Race::ELF, Race::DARK_ELF, Race::ORC
+          else
             case wpn.item_type
             when WeaponType::RAPIER, WeaponType::CROSSBOW, WeaponType::ANCIENTSWORD
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)

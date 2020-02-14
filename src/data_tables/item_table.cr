@@ -182,8 +182,6 @@ module ItemTable
         rescue e
           error { "Failed to delete pet associated with #{item}." }
           error e
-        else
-          debug { "Deleted a pet associated with #{item}." }
         end
       end
     end

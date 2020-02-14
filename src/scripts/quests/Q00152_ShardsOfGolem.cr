@@ -19,7 +19,9 @@ class Scripts::Q00152_ShardsOfGolem < Quest
     add_start_npc(HARRYS)
     add_talk_id(HARRYS, ALTRAN)
     add_kill_id(STONE_GOLEM)
-    register_quest_items(HARRYS_1ST_RECIEPT, HARRYS_2ND_RECIEPT, GOLEM_SHARD, TOOL_BOX)
+    register_quest_items(
+      HARRYS_1ST_RECIEPT, HARRYS_2ND_RECIEPT, GOLEM_SHARD, TOOL_BOX
+    )
   end
 
   def on_adv_event(event, npc, pc)
@@ -47,12 +49,14 @@ class Scripts::Q00152_ShardsOfGolem < Quest
 
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
-    if st && st.cond?(2) && Rnd.rand(100) < 30 && st.get_quest_items_count(GOLEM_SHARD) < 5
-      st.give_items(GOLEM_SHARD, 1)
-      if st.get_quest_items_count(GOLEM_SHARD) >= 5
-        st.set_cond(3, true)
-      else
-        st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
+    if st && st.cond?(2) && Rnd.rand(100) < 30
+      if st.get_quest_items_count(GOLEM_SHARD) < 5
+        st.give_items(GOLEM_SHARD, 1)
+        if st.get_quest_items_count(GOLEM_SHARD) >= 5
+          st.set_cond(3, true)
+        else
+          st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
+        end
       end
     end
     super

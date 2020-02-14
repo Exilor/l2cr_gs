@@ -12,8 +12,8 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
   private SOULPIECE_WATER = 13861
   private SOULPIECE_AIR = 13862
   # Skills
-  private BLESSING_OF_FIRE = SkillHolder.new(2635, 1)
-  private BLESSING_OF_EARTH = SkillHolder.new(2636, 1)
+  private BLESSING_OF_FIRE = SkillHolder.new(2635)
+  private BLESSING_OF_EARTH = SkillHolder.new(2636)
 
   def initialize
     super(10275, self.class.simple_name, "Containing the Attribute Power")

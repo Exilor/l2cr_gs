@@ -29,11 +29,7 @@ class Transform
   end
 
   def set_template(male : Bool, template : TransformTemplate)
-    if male
-      @male_template = template
-    else
-      @female_template = template
-    end
+    male ? (@male_template = template) : (@female_template = template)
   end
 
   def stance? : Bool

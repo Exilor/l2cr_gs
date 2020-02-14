@@ -18,7 +18,8 @@ abstract class Condition
     @add_name = true
   end
 
-  def listener=(@listener : ConditionListener?)
+  def listener=(listener : ConditionListener?)
+    @listener = listener
     notify_changed
   end
 

@@ -34,12 +34,8 @@ abstract class AbstractGetScrollToHometownQuest < Quest
 		add_talk_id(GALLADUCCI)
 		add_talk_id(NPC_ITEMS.keys)
 		register_quest_items(
-      GALLADUCCIS_ORDER_1,
-      GALLADUCCIS_ORDER_2,
-      GALLADUCCIS_ORDER_3,
-      PURIFIED_MAGIC_NECKLACE,
-      GEMSTONE_POWDER,
-      MAGIC_SWORD_HILT
+      GALLADUCCIS_ORDER_1, GALLADUCCIS_ORDER_2, GALLADUCCIS_ORDER_3,
+      PURIFIED_MAGIC_NECKLACE, GEMSTONE_POWDER, MAGIC_SWORD_HILT
     )
   end
 
@@ -88,8 +84,9 @@ abstract class AbstractGetScrollToHometownQuest < Quest
   end
 
   def on_talk(npc, pc)
-    html = get_no_quest_msg(pc)
-    return html unless st = get_quest_state(pc, true)
+    unless st = get_quest_state(pc, true)
+      return get_no_quest_msg(pc)
+    end
 
     case npc.id
     when GALLADUCCI
@@ -144,6 +141,6 @@ abstract class AbstractGetScrollToHometownQuest < Quest
       end
     end
 
-    html
+    html || get_no_quest_msg(pc)
   end
 end

@@ -9,8 +9,8 @@ class EffectHandler::BlockAction < AbstractEffect
     end
   end
 
-  def can_start?(info)
-    info.effected?.is_a?(L2PcInstance)
+  def can_start?(info : BuffInfo) : Bool
+    info.effected.is_a?(L2PcInstance)
   end
 
   def check_condition(id : Object)

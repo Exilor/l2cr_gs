@@ -10,8 +10,6 @@ class MagicUseTask
     skill : Skill, skill_time : Int32, simultaneous : Bool
 
   def call
-    return unless @character
-
     case @phase
     when 1
       @character.on_magic_launched_timer(self)

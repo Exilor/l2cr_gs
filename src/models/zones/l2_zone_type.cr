@@ -61,7 +61,7 @@ abstract class L2ZoneType < ListenersContainer
     when "default_enabled"
       @enabled = Bool.new(value)
     else
-      warn { "Unknown parameter #{name.inspect} in zone #{@id}." }
+      warn { "Unknown parameter \"#{name}\" in zone #{@id}." }
     end
   end
 

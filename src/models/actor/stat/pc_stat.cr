@@ -153,10 +153,10 @@ class PcStat < PlayableStat
 
   def p_atk_spd : Float64
     if active_char.override_max_stats_value?
-      super
-    else
-      Math.min(super, Config.max_patk_speed).to_f
+      return super
     end
+
+    Math.min(super, Config.max_patk_speed).to_f
   end
 
   def update_vitality_level(quiet : Bool)

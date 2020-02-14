@@ -9,7 +9,8 @@ abstract class AbstractEffect
   getter ticks = 0
   getter func_templates : Array(FuncTemplate)?
 
-  def initialize(@attach_cond : Condition?, @apply_cond : Condition?, @set : StatsSet, @params : StatsSet)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
+    @attach_cond = attach_cond
     @name = set.get_string("name")
   end
 
@@ -17,7 +18,7 @@ abstract class AbstractEffect
     name = set.get_string("name")
 
     unless handler = EffectHandler[name]
-      raise "no effect handler for #{name.inspect}"
+      raise "No effect handler for \"#{name}\""
     end
 
     handler.new(attach_cond, apply_cond, set, params)
@@ -28,7 +29,7 @@ abstract class AbstractEffect
   end
 
   def ticks_multiplier : Float64
-    (ticks * Config.effect_tick_ratio).fdiv(1000)
+    (ticks * Config.effect_tick_ratio) / 1000
   end
 
   def calc_success(info : BuffInfo) : Bool
@@ -67,22 +68,18 @@ abstract class AbstractEffect
     false
   end
 
-  def get_stat_funcs(caster : L2Character, target : L2Character, skill : Skill)
-    if func_templates = @func_templates
-      temp = nil
+  def get_stat_funcs(caster : L2Character, target : L2Character, skill : Skill) : Indexable(AbstractFunction)
+    if templates = @func_templates
+      ret = nil
 
-      func_templates.each do |template|
+      templates.each do |template|
         if fn = template.get_func(caster, target, skill, self)
-          if temp
-            temp << fn
-          else
-            temp = [fn] of AbstractFunction
-          end
+          ret ? ret << fn : (ret = [fn] of AbstractFunction)
         end
       end
 
-      if temp && !temp.empty?
-        return temp
+      if ret && !ret.empty?
+        return ret
       end
     end
 

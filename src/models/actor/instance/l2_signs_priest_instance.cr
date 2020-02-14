@@ -36,7 +36,7 @@ class L2SignsPriestInstance < L2Npc
               cabal = st.shift.to_i
             rescue e
               error e
-              warn { "Failed to retrieve cabal from bypass command. Npc ID: #{id}, command: #{command.inspect}." }
+              warn { "Failed to retrieve cabal from bypass command. Npc ID: #{id}, command: \"#{command}\"." }
             end
           end
         end
@@ -393,7 +393,7 @@ class L2SignsPriestInstance < L2Npc
           html.html = text
           pc.send_packet(html)
         else
-          warn { "Problem with HTML text #{path.inspect}." }
+          warn { "Problem with HTML text \"#{path}\"." }
         end
       when 7 # exchange ancient adena for adena
         ancient_adena = 0i64

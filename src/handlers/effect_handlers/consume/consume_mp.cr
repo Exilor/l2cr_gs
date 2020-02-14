@@ -8,7 +8,7 @@ class EffectHandler::ConsumeMp < AbstractEffect
     @ticks = params.get_i32("ticks")
   end
 
-  def on_action_time(info)
+  def on_action_time(info : BuffInfo) : Bool
     return false if info.effected.dead?
 
     target = info.effected

@@ -126,7 +126,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     {6, 4, 3, 1, 5, 2},
     {3, 5, 2, 4, 1, 6},
     {3, 2, 4, 5, 1, 6},
-    {5, 4, 3, 1, 6, 2},
+    {5, 4, 3, 1, 6, 2}
   }
   # Second room - golem spawn locatons - random
   private GOLEM_SPAWN = {
@@ -136,7 +136,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     {CCG[1], 147713, 181179},
     {CCG[0], 147569, 181410},
     {CCG[1], 147810, 181517},
-    {CCG[0], 147805, 181281},
+    {CCG[0], 147805, 181281}
   }
 
   # forth room - random shadow column
@@ -158,7 +158,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     {0, 1, 0, 1, 0, 1, 0},
     {0, 0, 0, 1, 1, 1, 0},
     {1, 0, 1, 0, 0, 1, 0},
-    {0, 1, 1, 0, 0, 0, 1},
+    {0, 1, 1, 0, 0, 0, 1}
   }
 
   @no_random_walk = true
@@ -175,35 +175,35 @@ class Scripts::DarkCloudMansion < AbstractInstance
     add_kill_id(TOKILL)
   end
 
-  private def check_conditions(player)
-    if player.override_instance_conditions?
-      debug { "#{player} overrides instance conditions." }
+  private def check_conditions(pc)
+    if pc.override_instance_conditions?
+      debug { "#{pc} overrides instance conditions." }
       return true
     end
 
-    unless party = player.party
-      player.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
+    unless party = pc.party
+      pc.send_packet(SystemMessageId::NOT_IN_PARTY_CANT_ENTER)
       return false
     end
-    if party.leader != player
-      player.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_ENTER)
+    if party.leader != pc
+      pc.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_ENTER)
       return false
     end
     if party.size > 2
-      player.send_packet(SystemMessageId::PARTY_EXCEEDED_THE_LIMIT_CANT_ENTER)
+      pc.send_packet(SystemMessageId::PARTY_EXCEEDED_THE_LIMIT_CANT_ENTER)
       return false
     end
     party.members.each do |m|
       if m.level < 78
         sm = SystemMessage.c1_s_level_requirement_is_not_sufficient_and_cannot_be_entered
         sm.add_pc_name(m)
-        player.send_packet(sm)
+        pc.send_packet(sm)
         return false
       end
-      unless m.inside_radius?(player, 1000, true, true)
+      unless m.inside_radius?(pc, 1000, true, true)
         sm = SystemMessage.c1_is_in_a_location_which_cannot_be_entered_therefore_it_cannot_be_processed
         sm.add_pc_name(m)
-        player.send_packet(sm)
+        pc.send_packet(sm)
         return false
       end
     end
@@ -211,10 +211,10 @@ class Scripts::DarkCloudMansion < AbstractInstance
     return true
   end
 
-  def on_enter_instance(player, world, first_entrance)
+  def on_enter_instance(pc, world, first_entrance)
     if first_entrance
       run_start_room(world.as(DMCWorld))
-      if party = player.party
+      if party = pc.party
         party.members.each do |m|
           get_quest_state(m, true)
           world.add_allowed(m.l2id)
@@ -222,7 +222,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
         end
       end
     else
-      teleport_player(player, Location.new(146534, 180464, -6117), world.instance_id)
+      teleport_player(pc, Location.new(146534, 180464, -6117), world.instance_id)
     end
   end
 
@@ -608,7 +608,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     world.rooms.clear
   end
 
-  private def check_beleth_sample(world, npc, player)
+  private def check_beleth_sample(world, npc, pc)
     fifth_room = world.rooms[:FifthRoom]
 
     fifth_room.npc_list.each do |mob|
@@ -618,12 +618,12 @@ class Scripts::DarkCloudMansion < AbstractInstance
           if mob.status == 1
             mob.npc.broadcast_packet(NpcSay.new(mob.npc.l2id, Say2::NPC_ALL, mob.npc.id, SUCCESS_CHAT.sample))
             fifth_room.found += 1
-            start_quest_timer("decayMe", 1500, npc, player)
+            start_quest_timer("decayMe", 1500, npc, pc)
           else
             fifth_room.reset = 1
             mob.npc.broadcast_packet(NpcSay.new(mob.npc.l2id, Say2::NPC_ALL, mob.npc.id, FAILED_CHAT.sample))
-            start_quest_timer("decayChatBelethSamples", 4000, npc, player)
-            start_quest_timer("decayBelethSamples", 4500, npc, player)
+            start_quest_timer("decayChatBelethSamples", 4000, npc, pc)
+            start_quest_timer("decayBelethSamples", 4500, npc, pc)
           end
         else
           return
@@ -696,7 +696,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     end
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     unless npc
       return ""
     end
@@ -739,7 +739,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     ""
   end
 
-  def on_kill(npc, player, is_summon)
+  def on_kill(npc, pc, is_summon)
     world = InstanceManager.get_world(npc.instance_id)
     if world.is_a?(DMCWorld)
       if world.status == 0
@@ -817,7 +817,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     super
   end
 
-  def on_first_talk(npc, player)
+  def on_first_talk(npc, pc)
     world = InstanceManager.get_world(npc.instance_id)
     if world.is_a?(DMCWorld)
       if world.status == 4
@@ -835,10 +835,10 @@ class Scripts::DarkCloudMansion < AbstractInstance
       end
 
       if npc.id == SYM_TRUTH && world.status == 10
-        npc.show_chat_window(player)
+        npc.show_chat_window(pc)
 
-        unless has_quest_items?(player, CC)
-          give_items(player, CC, 1)
+        unless has_quest_items?(pc, CC)
+          give_items(pc, CC, 1)
         end
       end
     end
@@ -846,10 +846,10 @@ class Scripts::DarkCloudMansion < AbstractInstance
     ""
   end
 
-  def on_talk(npc, player)
+  def on_talk(npc, pc)
     npc_id = npc.id
     if npc_id == YIYEN
-      enter_instance(player, DMCWorld.new, "DarkCloudMansion.xml", TEMPLATE_ID)
+      enter_instance(pc, DMCWorld.new, "DarkCloudMansion.xml", TEMPLATE_ID)
     else
       world = InstanceManager.get_world(npc.instance_id)
       unless world.is_a?(DMCWorld)
@@ -857,10 +857,10 @@ class Scripts::DarkCloudMansion < AbstractInstance
       end
 
       if npc_id == SYM_TRUTH
-        if world.allowed?(player.l2id)
-          world.remove_allowed(player.l2id)
+        if world.allowed?(pc.l2id)
+          world.remove_allowed(pc.l2id)
         end
-        teleport_player(player, Location.new(139968, 150367, -3111), 0)
+        teleport_player(pc, Location.new(139968, 150367, -3111), 0)
         instance_id = npc.instance_id
         instance = InstanceManager.get_instance(instance_id).not_nil!
         if instance.players.empty?

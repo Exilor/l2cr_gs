@@ -3,7 +3,7 @@ class Scripts::SummonPc < AbstractNpcAI
   private PORTA = 20213
   private PERUM = 20221
   # Skill
-  private SUMMON_PC = SkillHolder.new(4161, 1)
+  private SUMMON_PC = SkillHolder.new(4161)
   # Misc
   private MIN_DISTANCE = 300
   private MIN_DISTANCE_MOST_HATED = 100

@@ -109,7 +109,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     end
   end
 
-  private def on_Intention_Attack(target)
+  private def on_intention_Attack(target)
     # Calculate the attack timeout
     @attack_timeout = MAX_ATTACK_TIMEOUT + GameTimer.ticks
 
@@ -285,7 +285,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
         end
         # heal friends
         if @self_analysis.has_heal_or_resurrect? && !@actor.attacking_disabled?
-          if npc.current_hp < npc.max_hp * 0.6
+          if npc.hp_percent < 60
             if @actor.current_hp > @actor.max_hp // 2
               if @actor.current_mp > @actor.max_mp // 2 && npc.in_combat?
                 @self_analysis.heal_skills.each do |sk|

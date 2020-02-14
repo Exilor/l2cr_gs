@@ -16,7 +16,7 @@ class EffectHandler::ConsumeFakeDeath < AbstractEffect
     info.effected.start_fake_death
   end
 
-  def on_action_time(info)
+  def on_action_time(info : BuffInfo) : Bool
     target = info.effected
     return false if target.dead?
     mana_dam = @power * ticks_multiplier

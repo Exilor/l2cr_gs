@@ -21,7 +21,7 @@ class Packets::Incoming::RequestExTryToPutEnchantTargetItem < GameClientPacket
 
     scroll = pc.inventory.get_item_by_l2id(pc.active_enchant_item_id)
     unless scroll
-      warn { "Enchant scroll with item_id #{pc.active_enchant_item_id.inspect} not found in #{pc.name}'s inventory." }
+      warn { "Enchant scroll with item_id #{pc.active_enchant_item_id} not found in #{pc.name}'s inventory." }
       return
     end
 

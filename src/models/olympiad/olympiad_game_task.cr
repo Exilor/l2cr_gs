@@ -248,7 +248,7 @@ class OlympiadGameTask
       @zone.spawn_buffers
     end
 
-    unless @game.not_nil!.port_players_to_arena(@zone.spawns.not_nil!)
+    unless @game.not_nil!.port_players_to_arena(@zone.spawns)
       return false
     end
 

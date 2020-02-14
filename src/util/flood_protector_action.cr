@@ -27,9 +27,12 @@ class FloodProtectorAction
         if @count.get >= @config.punishment_limit && @config.punishment_type
           @punishment_in_progress = true
           case @config.punishment_type
-          when "kick" then kick_player
-          when "ban"  then ban_account
-          when "jail" then jail_char
+          when "kick"
+            kick_player
+          when "ban"
+            ban_account
+          when "jail"
+            jail_char
           end
           @punishment_in_progress = false
         end

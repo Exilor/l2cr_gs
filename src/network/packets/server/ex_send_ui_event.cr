@@ -1,5 +1,6 @@
 class Packets::Outgoing::ExSendUIEvent < GameServerPacket
   @l2id : Int32
+  @params = Slice(String).empty
 
   def initialize(pc : L2PcInstance, type : Bool, count_up : Bool, start_time : Int32, end_time : Int32, param : String)
     initialize(pc, type, count_up, start_time, end_time, -1, {param})
@@ -9,7 +10,14 @@ class Packets::Outgoing::ExSendUIEvent < GameServerPacket
     initialize(pc, type, count_up, start_time, end_time, npc_string.id, params)
   end
 
-  def initialize(pc : L2PcInstance, @type : Bool, @count_up : Bool, @start_time : Int32, @end_time : Int32, @npc_string_id : Int32, @params : Enumerable(String))
+  def initialize(pc : L2PcInstance, type : Bool, count_up : Bool, start_time : Int32, end_time : Int32, npc_string : NpcString, params : Enumerable(String)? = nil)
+    initialize(pc, type, count_up, start_time, end_time, npc_string.id, params)
+  end
+
+  def initialize(pc : L2PcInstance, @type : Bool, @count_up : Bool, @start_time : Int32, @end_time : Int32, @npc_string_id : Int32, params : Enumerable(String)? = nil)
+    if params
+      @params = params.to_slice
+    end
     @l2id = pc.l2id
   end
 
@@ -27,8 +35,6 @@ class Packets::Outgoing::ExSendUIEvent < GameServerPacket
     s (@end_time / 60).to_s
     s (@end_time % 60).to_s
     d @npc_string_id
-    if params = @params
-      params.each { |param| s param }
-    end
+    @params.each { |param| s param }
   end
 end

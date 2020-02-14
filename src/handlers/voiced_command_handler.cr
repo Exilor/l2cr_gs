@@ -25,7 +25,8 @@ module VoicedCommandHandler
     HANDLERS[cmd]?
   end
 
-  # abstract def commands : Enumerable(String)
+  abstract def commands : Enumerable(String)
+  abstract def use_voiced_command(cmd : String, pc : L2PcInstance, params : String) : Bool
 end
 
 require "./voiced_command_handlers/*"

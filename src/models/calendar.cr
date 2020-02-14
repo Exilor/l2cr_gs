@@ -235,7 +235,7 @@ class Calendar
     when Unit::MONTH
       add(value.months)
     else
-      raise ArgumentError.new("Invalid unit #{unit.inspect}")
+      raise ArgumentError.new("Invalid unit #{unit}")
     end
   end
 

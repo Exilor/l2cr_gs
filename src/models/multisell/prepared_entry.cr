@@ -25,8 +25,6 @@ class Multisell::PreparedEntry < Multisell::Entry
         else
           adena_amount += ing.item_count
         end
-
-        next
       elsif maintain_enchantment && item && ing.armor_or_weapon?
         info = Multisell::ItemInfo.new(item)
         new_ingredient = ing.clone

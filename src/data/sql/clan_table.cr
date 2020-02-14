@@ -253,7 +253,7 @@ module ClanTable
       end
     end
 
-    if count == clan1.members_count - 1
+    if count == clan1.size - 1
       clan1.delete_enemy_clan(clan2)
       clan2.delete_enemy_clan(clan1)
       delete_clan_war(clan1.id, clan2.id)

@@ -99,8 +99,12 @@ class Scripts::Q00380_BringOutTheFlavorOfIngredients < Quest
     qs = get_random_party_member_state(killer, -1, 3, npc)
     if qs && qs.cond < 4
       item = MONSTER_CHANCES[npc.id]
-      if give_item_randomly(qs.player, npc, item.id, 1, item.count, item.chance, true)
-        qs.set_cond(qs.cond + 1, true)
+      if give_item_randomly(qs.player, npc, item.id, 1, item.count, item.chance, false)
+        if get_quest_items_count(killer, RITRON_FRUIT) >= 3 && get_quest_items_count(killer, MOON_FLOWER) >= 3 && get_quest_items_count(killer, LEECH_FLUIDS) >= 10
+          qs.set_cond(qs.cond + 1, true)
+        else
+          play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
+        end
       end
     end
 

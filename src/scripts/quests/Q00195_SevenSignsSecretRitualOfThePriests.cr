@@ -15,7 +15,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
   # Misc
   private MIN_LEVEL = 79
   # Skills
-  # private static SkillHolder TRANSFORM_DISPEL = SkillHolder.new(6200, 1)
+  # private static SkillHolder TRANSFORM_DISPEL = SkillHolder.new(6200)
   private TRANSFORMATION = SkillHolder.new(6204)
 
   def initialize

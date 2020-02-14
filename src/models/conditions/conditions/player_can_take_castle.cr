@@ -5,9 +5,8 @@ class Condition
       if pc.looks_dead? || pc.cursed_weapon_equipped? || !pc.clan_leader?
         return false
       end
-      unless skill
-        raise "No skill!"
-      end
+
+      skill = skill.not_nil!
 
       castle = CastleManager.get_castle(pc)
 

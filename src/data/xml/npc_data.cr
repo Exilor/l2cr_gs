@@ -277,7 +277,9 @@ module NpcData
           parameters["Privates"] ||= tmp
         end
 
-        template.parameters = parameters || StatsSet::EMPTY
+        if parameters && !parameters.empty?
+          template.parameters = parameters
+        end
 
         if skills
           ai_skill_lists = nil
@@ -439,14 +441,15 @@ module NpcData
     get_templates { |template| types.any? &.casecmp?(template.type) }
   end
 
-  private class MinionData
+  private struct MinionData
     include XMLReader
     include Loggable
 
     getter minions
 
+    @minions = {} of Int32 => Array(MinionHolder)
+
     def initialize
-      @minions = {} of Int32 => Array(MinionHolder)
       parse_datapack_file("minionData.xml")
       info { "Loaded #{@minions.size} minion data." }
     end

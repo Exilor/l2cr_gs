@@ -17,7 +17,7 @@ class Fort < AbstractResidence
   @fort_owner : L2Clan?
   @state = 0
   @castle_id = 0
-  @functions = {} of Int32 => FortFunction
+  @functions = Concurrent::Map(Int32, FortFunction).new
   @fort_updater = Slice(Scheduler::Task?).new(2, nil.as(Scheduler::Task?))
   @suspicious_merchant_spawned = false
   @siege_npcs = Concurrent::Array(L2Spawn).new
@@ -692,9 +692,10 @@ class Fort < AbstractResidence
   class FortFunction
     include Loggable
 
+    @in_debt = false
+
     getter type, rate
     property lvl : Int32
-    @in_debt = false
 
     def initialize(@fort : Fort, @type : Int32, @lvl : Int32, @fee : Int32, @temp_fee : Int32, @rate : Int64, @end_date : Int64, cwh : Bool)
       initialize_task(cwh)

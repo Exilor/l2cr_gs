@@ -1,6 +1,6 @@
 require "../stat/controllable_airship_stat"
 
-class L2ControllableAirshipInstance < L2AirshipInstance
+class L2ControllableAirShipInstance < L2AirshipInstance
   private HELM = 13556
   private LOW_FUEL = 40
 
@@ -166,7 +166,7 @@ class L2ControllableAirshipInstance < L2AirshipInstance
 
   def refresh_id
     super
-    IdFactory.release_id(@helm_id)
+    IdFactory.release(@helm_id)
     @helm_id = IdFactory.next
   end
 
@@ -179,7 +179,7 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct CheckTask
-    initializer airship : L2ControllableAirshipInstance
+    initializer airship : L2ControllableAirShipInstance
 
     def call
       if @airship.visible? && @airship.empty? && !@airship.in_dock?
@@ -189,7 +189,7 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct ConsumeFuelTask
-    initializer airship : L2ControllableAirshipInstance
+    initializer airship : L2ControllableAirShipInstance
 
     def call
       fuel = @airship.fuel
@@ -206,7 +206,7 @@ class L2ControllableAirshipInstance < L2AirshipInstance
   end
 
   private struct DecayTask
-    initializer airship : L2ControllableAirshipInstance
+    initializer airship : L2ControllableAirShipInstance
 
     def call
       @airship.delete_me

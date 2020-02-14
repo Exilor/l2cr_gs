@@ -21,6 +21,6 @@ class Packets::Incoming::LoginServerFail < LoginServerPacket
   end
 
   private def run_impl
-    debug "Rejected by LoginServer (#{REASONS[@reason_id]?.inspect})."
+    debug "Rejected by LoginServer (rason: \"#{REASONS[@reason_id]?}\")."
   end
 end

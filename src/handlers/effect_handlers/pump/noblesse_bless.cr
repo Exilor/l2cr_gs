@@ -1,5 +1,5 @@
 class EffectHandler::NoblesseBless < AbstractEffect
-  def can_start?(info)
+  def can_start?(info : BuffInfo) : Bool
     info.effected.playable?
   end
 

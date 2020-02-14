@@ -16,14 +16,14 @@ class Packets::Incoming::RequestLinkHtml < GameClientPacket
     end
 
     if @link.includes?("..")
-      warn { "Player #{pc.name} sent an invalid html link: #{@link.inspect}." }
+      warn { "Player #{pc.name} sent an invalid html link: \"#{@link}\"." }
       return
     end
 
     html_l2id = pc.validate_html_action("link #{@link}")
 
     if html_l2id == -1
-      warn { "Player #{pc.name} sent non cached html link: #{@link.inspect}." }
+      warn { "Player #{pc.name} sent non cached html link: \"#{@link}\"." }
       return
     end
 

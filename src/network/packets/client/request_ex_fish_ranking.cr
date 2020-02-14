@@ -3,6 +3,6 @@ class Packets::Incoming::RequestExFishRanking < GameClientPacket
   end
 
   private def run_impl
-    warn "Not implemented."
+    warn "Not implemented (not by L2J either)."
   end
 end

@@ -12,7 +12,7 @@ module InstanceManager
   private INSTANCES = Concurrent::Map(Int32, Instance).new
   private INSTANCE_WORLDS = Concurrent::Map(Int32, InstanceWorld).new
   private INSTANCE_ID_NAMES = {} of Int32 => String
-  private PLAYER_INSTANCE_TIMES = Concurrent::Map(Int32, Hash(Int32, Int64)).new
+  private PLAYER_INSTANCE_TIMES = Concurrent::Map(Int32, IHash(Int32, Int64)).new
 
   @@dynamic = 300_000
 
@@ -33,7 +33,7 @@ module InstanceManager
     PLAYER_INSTANCE_TIMES[pc_l2id].fetch(id, -1i64)
   end
 
-  def get_all_instance_times(pc_l2id : Int32) : Hash(Int32, Int64)
+  def get_all_instance_times(pc_l2id : Int32) : IHash(Int32, Int64)
     unless PLAYER_INSTANCE_TIMES.has_key?(pc_l2id)
       restore_instance_times(pc_l2id)
     end
@@ -66,7 +66,7 @@ module InstanceManager
   def restore_instance_times(pc_l2id : Int32)
     return if PLAYER_INSTANCE_TIMES.has_key?(pc_l2id)
 
-    PLAYER_INSTANCE_TIMES[pc_l2id] = {} of Int32 => Int64
+    PLAYER_INSTANCE_TIMES[pc_l2id] = Concurrent::Map(Int32, Int64).new
 
     GameDB.each(RESTORE_INSTANCE_TIMES, pc_l2id) do |rs|
       id = rs.get_i32("instanceId")
@@ -124,7 +124,7 @@ module InstanceManager
   end
 
   def get_player_instance(l2id : Int32) : Int32
-    INSTANCES.find_value { |v| v.includes?(l2id) }.try &.id || 0
+    INSTANCES.find_value(&.includes?(l2id)).try &.id || 0
   end
 
   def create_instance(id : Int32) : Bool

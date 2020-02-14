@@ -130,7 +130,7 @@ class Auction
     end
 
     unless clan = ClanTable.get_clan_by_name(clan_name)
-      warn { "Clan #{clan_name.inspect} not found." }
+      warn { "Clan \"#{clan_name}\" not found." }
       return
     end
 
@@ -300,8 +300,8 @@ class Auction
       @time_bid.ms = time_bid
     end
 
-    def time_bid=(time : Int64)
-      @time_bid.ms = time
+    def time_bid=(ms : Int64)
+      @time_bid.ms = ms
     end
   end
 

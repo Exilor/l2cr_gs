@@ -1,7 +1,6 @@
 class EffectHandler::BlockParty < AbstractEffect
-  def can_start?(info)
-    effected = info.effected
-    !!effected && effected.player?
+  def can_start?(info : BuffInfo) : Bool
+    info.effected.is_a?(L2PcInstance)
   end
 
   def on_exit(info)

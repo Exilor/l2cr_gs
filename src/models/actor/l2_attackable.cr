@@ -174,7 +174,7 @@ class L2Attackable < L2Npc
   def calculate_rewards(last_attacker : L2Character?)
     return if @aggro_list.empty?
 
-    rewards = {} of L2PcInstance => DamageDoneInfo# { |h, k| h[k] = DamageDoneInfo.new(k) } # L2PcInstance => DamageDoneInfo
+    rewards = {} of L2PcInstance => DamageDoneInfo
 
     max_dealer = nil
     max_damage = 0
@@ -191,8 +191,6 @@ class L2Attackable < L2Npc
           total_damage += damage
 
           reward = rewards[attacker] ||= DamageDoneInfo.new(attacker)
-          # rewards.put_if_absent(attacker, DamageDoneInfo.new(attacker))
-          reward = rewards[attacker]
           reward.add_damage(damage)
 
           if reward.damage > max_damage
@@ -220,8 +218,6 @@ class L2Attackable < L2Npc
         attacker_party = attacker.party
         if smn = attacker.summon.as?(L2ServitorInstance)
           penalty = smn.exp_multiplier
-        else
-          penalty = 1.0
         end
 
         if attacker_party.nil?
@@ -234,11 +230,12 @@ class L2Attackable < L2Npc
               exp *= Config.champion_rewards_exp_sp
               sp  *= Config.champion_rewards_exp_sp
             end
-            exp *= penalty
 
+            if penalty
+              exp *= penalty
+            end
 
-
-            if overhit? &&
+            if overhit?
               if overhit_attacker = @overhit_attacker.try &.acting_player
                 if attacker == overhit_attacker
                   attacker.send_packet(SystemMessageId::OVER_HIT)
@@ -317,8 +314,7 @@ class L2Attackable < L2Npc
           sp *= party_mul
 
           if overhit?
-            overhit_attacker = overhit_attacker()
-            if overhit_attacker
+            if overhit_attacker = overhit_attacker()
               if overhit_pc = overhit_attacker.acting_player
                 if attacker == overhit_pc
                   attacker.send_packet(SystemMessageId::OVER_HIT)
@@ -377,13 +373,7 @@ class L2Attackable < L2Npc
     info = @aggro_list[attacker] ||= AggroInfo.new(attacker)
     info.add_damage(damage)
 
-    target_player = attacker.acting_player
-
-    # if target_player.nil? || (target_player.trap.nil? || !target_player.trap!.triggered?)
-    #   info.add_hate(aggro)
-    # end
-
-    if target_player
+    if target_player = attacker.acting_player
       if trap = target_player.trap
         unless trap.triggered?
           info.add_hate(aggro)
@@ -656,8 +646,6 @@ class L2Attackable < L2Npc
   end
 
   def set_overhit_values(attacker : L2Character?, damage : Float64)
-    damage = damage.to_f
-
     overhit_dmg = -(current_hp - damage)
 
     if overhit_dmg < 0
@@ -810,7 +798,13 @@ class L2Attackable < L2Npc
     return 0f32 if damage <= 0
     lvl = level
     exp = exp_reward
-    divider = (lvl > 0) && (exp > 0) ? (template.base_hp_max * 9 * lvl * lvl) / (100 * exp) : 0
+
+    if lvl > 0 && exp > 0
+      divider = (template.base_hp_max * 9 * lvl * lvl) / (100 * exp)
+    else
+      divider = 0
+    end
+
     return 0f32 if divider == 0
 
     (-Math.min(damage, max_hp).fdiv(divider)).to_f32

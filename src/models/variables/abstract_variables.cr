@@ -1,6 +1,6 @@
 require "../interfaces/script_type"
 
-abstract class AbstractVariables < StatsSet
+abstract class AbstractVariables
   include Loggable
   include ScriptType
 
@@ -13,7 +13,7 @@ abstract class AbstractVariables < StatsSet
       @atomic.set(coerce(val))
     end
 
-    def get
+    def get : Bool
       coerce(@atomic.get)
     end
 
@@ -21,7 +21,7 @@ abstract class AbstractVariables < StatsSet
       @atomic.lazy_set(coerce(val))
     end
 
-    def lazy_get
+    def lazy_get : Bool
       coerce(@atomic.lazy_get)
     end
 
@@ -39,14 +39,14 @@ abstract class AbstractVariables < StatsSet
     end
   end
 
-  def initialize
-    super
-    @has_changes = AtomicBool.new(false)
-  end
+  @stats_set = StatsSet.new
+  @has_changes = AtomicBool.new(false)
 
-  def []=(key : String, value : ValueType?)
+  forward_missing_to @stats_set
+
+  def []=(key : String, value : StatsSet::ValueType)
     @has_changes.compare_and_set(false, true)
-    super
+    @stats_set[key] = value
   end
 
   def has_changes? : Bool
@@ -55,7 +55,7 @@ abstract class AbstractVariables < StatsSet
 
   def delete(key : String)
     @has_changes.compare_and_set(false, true)
-    super
+    @stats_set.delete(key)
   end
 
   def compare_and_set_changes(expect : Bool, update : Bool) : Bool

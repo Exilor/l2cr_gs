@@ -35,10 +35,7 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
     add_talk_id(ARNOLD, GALLINT, JOHNSTONE, KENYOS)
     add_kill_id(MONSTERS.keys)
     register_quest_items(
-      GALLINTS_OAK_WAND,
-      SPIRITBOUND_WAND1,
-      SPIRITBOUND_WAND2,
-      SPIRITBOUND_WAND3
+      GALLINTS_OAK_WAND, SPIRITBOUND_WAND1, SPIRITBOUND_WAND2, SPIRITBOUND_WAND3
     )
   end
 

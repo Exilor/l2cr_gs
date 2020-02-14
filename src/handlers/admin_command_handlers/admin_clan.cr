@@ -40,7 +40,7 @@ module AdminCommandHandler::AdminClan
       end
 
       html["%clan_points%"] = clan.reputation_score
-      html["%clan_players_count%"] = clan.members_count
+      html["%clan_players_count%"] = clan.size
       html["%clan_ally%"] = clan.ally_id > 0 ? clan.ally_name : "Not in ally"
       html["%current_player_objectId%"] = player.l2id
       html["%current_player_name%"] = player.name

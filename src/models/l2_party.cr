@@ -29,8 +29,8 @@ class L2Party < AbstractPlayerGroup
     Expelled, Left, None, Disconnected
   end
 
-  def initialize(leader : L2PcInstance, @distribution_type : PartyDistributionType)
-    @distribution_type = distribution_type
+  def initialize(leader : L2PcInstance, dist_type : PartyDistributionType)
+    @distribution_type = dist_type
     @members = Concurrent::Array { leader }
     @party_lvl = leader.level
   end
@@ -39,23 +39,24 @@ class L2Party < AbstractPlayerGroup
     @position_packet ||= PartyMemberPosition.new(self)
   end
 
-  def pending_invitation=(@pending_invitation : Bool)
+  def pending_invitation=(val : Bool)
+    @pending_invitation = val
     ticks = GameTimer.ticks
     timeout = L2PcInstance::REQUEST_TIMEOUT
     tps = GameTimer::TICKS_PER_SECOND
-    @pending_invite_timeout = ticks + timeout + tps
+    @pending_invite_timeout = ticks + (timeout * tps)
   end
 
   def invitation_request_expired? : Bool
     @pending_invite_timeout <= GameTimer.ticks
   end
 
-  def get_checked_random_member(item_id : Int32, target : L2Character) : L2PcInstance
+  def get_checked_random_member(item_id : Int32, target : L2Character) : L2PcInstance?
     @members.select do |m|
       m.inventory.validate_capacity_by_item_id(item_id) &&
       Util.in_range?(Config.alt_party_range2, target, m, true)
     end
-    .sample(random: Rnd)
+    .sample?(random: Rnd)
   end
 
   def get_checked_next_looter(item_id : Int32, target : L2Character) : L2PcInstance?
@@ -268,7 +269,7 @@ class L2Party < AbstractPlayerGroup
 
   def get_player_by_name(name : String) : L2PcInstance
     @members.find { |m| m.name == name } ||
-    raise("Party member with name #{name.inspect} not found.")
+    raise("Party member with name \"#{name}\" not found.")
   end
 
   def recalculate_party_level : Int32
@@ -284,8 +285,10 @@ class L2Party < AbstractPlayerGroup
   end
 
   def distribute_item(pc : L2PcInstance, item : L2ItemInstance)
+    count = item.count
+
     if item.id == Inventory::ADENA_ID
-      distribute_adena(pc, item.count, pc)
+      distribute_adena(pc, count, pc)
       ItemTable.destroy_item("Party", item, pc, nil)
       return
     end
@@ -293,13 +296,13 @@ class L2Party < AbstractPlayerGroup
     target = get_actual_looter(pc, item.id, false, pc)
     target.add_item("Party", item, pc, true)
 
-    return unless item.count > 0
+    return unless count > 0
 
-    if item.count > 1
+    if count > 1
       sm = SystemMessage.c1_obtained_s3_s2
       sm.add_string(target.name)
       sm.add_item_name(item)
-      sm.add_long(item.count)
+      sm.add_long(count)
     else
       sm = SystemMessage.c1_obtained_s2
       sm.add_string(target.name)

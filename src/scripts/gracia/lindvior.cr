@@ -12,7 +12,6 @@ class Scripts::Lindvior < AbstractNpcAI
 
   @@alt_mode = false
   @@alt_mode_min = 60 # schedule delay in minutes if ALT_MODE enabled
-
   @lindvior_camera : L2Npc?
   @tomaris : L2Npc?
   @artius : L2Npc?

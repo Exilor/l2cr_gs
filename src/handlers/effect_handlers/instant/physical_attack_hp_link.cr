@@ -6,7 +6,7 @@ class EffectHandler::PhysicalAttackHpLink < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def calc_success(info)
+  def calc_success(info : BuffInfo) : Bool
     !Formulas.physical_skill_evasion(info.effector, info.effected, info.skill)
   end
 

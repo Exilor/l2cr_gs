@@ -82,7 +82,7 @@ class Scripts::Q00383_TreasureHunt < Quest
     when "31148-02.html"
       if qs.cond?(2)
         if has_quest_items?(pc, THIEF_KEY)
-          take_items(pc, THIEF_KEY, -1)
+          take_items(pc, THIEF_KEY, 1)
           qs.exit_quest(true, true)
           html = event
 

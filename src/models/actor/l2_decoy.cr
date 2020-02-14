@@ -8,6 +8,11 @@ abstract class L2Decoy < L2Character
     self.invul = false
   end
 
+  def on_spawn
+    super
+    send_packet(CharInfo.new(self))
+  end
+
   def acting_player : L2PcInstance
     @owner
   end
@@ -36,7 +41,7 @@ abstract class L2Decoy < L2Character
 
   def unsummon(owner : L2PcInstance)
     if visible? && alive?
-      @world_region.try &.remove_from_zones(self)
+      world_region.try &.remove_from_zones(self)
       owner.decoy = nil
       decay_me
       known_list.remove_all_known_objects
@@ -48,7 +53,7 @@ abstract class L2Decoy < L2Character
   end
 
   def send_packet(arg : GameServerPacket | SystemMessageId)
-    @owner.send_packet(arg)
+    owner.send_packet(arg)
   end
 
   def update_abnormal_effect

@@ -746,7 +746,7 @@ module AdminCommandHandler::AdminEditChar
       find_disconnected = true
     else
       unless /^(?:(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2(?:[0-4][0-9]|5[0-5]))\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2(?:[0-4][0-9]|5[0-5]))$/ == ip_address
-        raise "Malformed IPv4 number #{ip_address.inspect}"
+        raise "Malformed IPv4 number \"#{ip_address}\""
       end
     end
 

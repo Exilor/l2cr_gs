@@ -1,4 +1,4 @@
-require "../../core/src/core"
+require "../../l2cr_core/src/core"
 
 require "./models/forward_declarations"
 require "./config"

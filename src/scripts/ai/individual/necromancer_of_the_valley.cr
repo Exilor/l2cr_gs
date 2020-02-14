@@ -6,7 +6,7 @@ class Scripts::NecromancerOfTheValley < AbstractNpcAI
   # Skill
   private SELF_DESTRUCTION = SkillHolder.new(6850)
   # Misc
-  private HP_PERCENTAGE = 0.60
+  private HP_PERCENTAGE = 60
 
   def initialize
     super(self.class.simple_name, "ai/individual")
@@ -16,7 +16,7 @@ class Scripts::NecromancerOfTheValley < AbstractNpcAI
   end
 
   def on_attack(npc, attacker, damage, is_summon)
-    if npc.current_hp < npc.max_hp * HP_PERCENTAGE
+    if npc.hp_percent < HP_PERCENTAGE
       if Rnd.rand(10) < 1
         if Rnd.bool
           ghost = add_spawn(EXPLODING_ORC_GHOST, *npc.xyz, 0, false, 0, false)

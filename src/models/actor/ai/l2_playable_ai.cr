@@ -2,6 +2,8 @@ require "./l2_character_ai"
 
 class L2PlayableAI < L2CharacterAI
   private def on_intention_attack(target)
+    return unless target
+
     if target.playable? && (pc_target = target.acting_player)
       if pc_target.protection_blessing_affected?
         if pc_target.level - @actor.level >= 10

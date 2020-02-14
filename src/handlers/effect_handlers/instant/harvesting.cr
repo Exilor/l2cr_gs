@@ -4,7 +4,7 @@ class EffectHandler::Harvesting < AbstractEffect
   end
 
   def on_start(info)
-    return unless pc = info.effector?.as?(L2PcInstance)
+    return unless pc = info.effector.as?(L2PcInstance)
     return unless mob = info.effected.as?(L2MonsterInstance)
     return unless mob.dead?
 

@@ -19,7 +19,7 @@ class PetStat < SummonStat
 
     return false if pet.uncontrollable? || !add_exp(exp)
 
-    # custom (no message is sent in H5)
+    # deprecated (no message is sent in H5)
     sm = SystemMessage.pet_earned_s1_exp
     sm.add_long(exp)
     pet.send_packet(sm)

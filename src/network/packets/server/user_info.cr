@@ -106,7 +106,6 @@ class Packets::Outgoing::UserInfo < GameServerPacket
     d @fly_run_speed
     d @fly_walk_speed
 
-    # repeated on purpose
     d @fly_run_speed
     d @fly_walk_speed
 
@@ -122,7 +121,7 @@ class Packets::Outgoing::UserInfo < GameServerPacket
 
     title = @pc.gm? && @pc.invisible? ? "Invisible" : @pc.title
 
-    if @pc.poly.morphed?
+    if @pc.poly? && @pc.poly.morphed?
       poly_obj = NpcData[@pc.poly.poly_id]?
       if poly_obj
         title += " - #{poly_obj.name}"

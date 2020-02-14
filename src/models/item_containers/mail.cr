@@ -17,7 +17,7 @@ class Mail < ItemContainer
 
   def message_id=(id : Int32)
     @message_id = id
-    @items.each { |it| it.set_item_location(base_location, id) }
+    @items.each &.set_item_location(base_location, id)
     update_database
   end
 

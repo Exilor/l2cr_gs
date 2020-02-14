@@ -242,19 +242,19 @@ module BypassHandler::NpcViewMod
       end
 
       if left_height >= right_height + height
-        right_sb << sb
+        right_sb << sb.to_s
         right_height += height
       else
-        left_sb << sb
+        left_sb << sb.to_s
         left_height += height
       end
     end
 
     body_sb = String::Builder.new
     body_sb << "<table><tr><td>"
-    body_sb << left_sb
+    body_sb << left_sb.to_s
     body_sb << "</td><td>"
-    body_sb << right_sb
+    body_sb << right_sb.to_s
     body_sb << "</td></tr></table>"
 
     unless html = HtmCache.get_htm(pc, "data/html/mods/NpcView/DropList.htm")
@@ -264,7 +264,7 @@ module BypassHandler::NpcViewMod
     html = html.gsub("%name%", npc.name)
     html = html.gsub("%dropListButtons%", get_drop_list_buttons(npc))
     html = html.gsub("%pages%", pages_str)
-    html = html.gsub("%items%", body_sb)
+    html = html.gsub("%items%", body_sb.to_s)
     Util.send_cb_html(pc, html)
   end
 

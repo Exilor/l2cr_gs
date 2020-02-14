@@ -2,7 +2,10 @@ module HellboundPointData
   extend self
   extend XMLReader
 
-  private POINTS_INFO = {} of Int32 => {Int32, Int32, Int32, Int32}
+  private record HellboundPoint, points : Int32, min_lvl : Int32,
+    max_lvl : Int32, lowest_trust_limit : Int32
+
+  private POINTS_INFO = {} of Int32 => HellboundPoint
 
   def load
     POINTS_INFO.clear
@@ -55,31 +58,31 @@ module HellboundPointData
       lowest_trust_limit = tmp.to_i
     end
 
-    POINTS_INFO[npc_id] = {
+    POINTS_INFO[npc_id] = HellboundPoint.new(
       points,
       min_hb_lvl,
       max_hb_lvl,
       lowest_trust_limit || 0
-    }
+    )
   end
 
-  def points_info : Hash(Int32, {Int32, Int32, Int32, Int32})
+  def points_info : Hash(Int32, HellboundPoint)
     POINTS_INFO
   end
 
   def get_points_amount(npc_id : Int32) : Int32
-    POINTS_INFO[npc_id][0]
+    POINTS_INFO[npc_id].points
   end
 
   def get_min_hb_lvl(npc_id : Int32) : Int32
-    POINTS_INFO[npc_id][1]
+    POINTS_INFO[npc_id].min_lvl
   end
 
   def get_max_hb_lvl(npc_id : Int32) : Int32
-    POINTS_INFO[npc_id][2]
+    POINTS_INFO[npc_id].max_lvl
   end
 
   def get_lowest_trust_limit(npc_id : Int32) : Int32
-    POINTS_INFO[npc_id][3]
+    POINTS_INFO[npc_id].lowest_trust_limit
   end
 end

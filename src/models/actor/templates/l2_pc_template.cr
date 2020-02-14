@@ -5,8 +5,8 @@ class L2PcTemplate < L2CharTemplate
   @base_hp : Slice(Float32)
   @base_mp : Slice(Float32)
   @base_cp : Slice(Float32)
-  @_base_hp_reg : Slice(Float64) # @base_*_reg already exist in super as Float32
-  @_base_mp_reg : Slice(Float64) # @base_*_reg already exist in super as Float32
+  @_base_hp_reg : Slice(Float64) # @base_hp_reg already exist in super as Float32
+  @_base_mp_reg : Slice(Float64) # @base_mp_reg already exist in super as Float32
   @base_cp_reg : Slice(Float64)
   @base_safe_fall_height : Int32
   @base_slot_def : Hash(Int32, Int32)
@@ -15,7 +15,7 @@ class L2PcTemplate < L2CharTemplate
   getter f_collision_radius_female : Float64
   getter f_collision_height_female : Float64
 
-  def initialize(set : StatsSet, @creation_points : Array(Location))
+  def initialize(set : StatsSet)
     super(set)
 
     @class_id = ClassId[set.get_i32("classId")]
@@ -49,11 +49,7 @@ class L2PcTemplate < L2CharTemplate
     @base_safe_fall_height = set.get_i32("baseSafeFall", 333)
   end
 
-  def creation_point : Location
-    @creation_points.sample(random: Rnd)
-  end
-
-  def set_upgain_value(param : String, level : Int, val : Float)
+  def set_upgain_value(param : String, level : Int32, val : Float64)
     case param
     when "hp"
       @base_hp[level] = val.to_f32
@@ -68,35 +64,35 @@ class L2PcTemplate < L2CharTemplate
     when "cpRegen"
       @base_cp_reg[level] = val.to_f64
     else
-      raise "Wrong param for L2PcTemplate#set_upgain_value: #{param.inspect}"
+      raise "Wrong param for L2PcTemplate#set_upgain_value: #{param}"
     end
   end
 
-  def get_base_hp_max(level : Int) : Float32
+  def get_base_hp_max(level : Int32) : Float32
     @base_hp[level]
   end
 
-  def get_base_hp_regen(level : Int) : Float64
+  def get_base_hp_regen(level : Int32) : Float64
     @_base_hp_reg[level]
   end
 
-  def get_base_mp_max(level : Int) : Float32
+  def get_base_mp_max(level : Int32) : Float32
     @base_mp[level]
   end
 
-  def get_base_mp_regen(level : Int) : Float64
+  def get_base_mp_regen(level : Int32) : Float64
     @_base_mp_reg[level]
   end
 
-  def get_base_cp_max(level : Int) : Float32
+  def get_base_cp_max(level : Int32) : Float32
     @base_cp[level]
   end
 
-  def get_base_cp_regen(level : Int) : Float64
+  def get_base_cp_regen(level : Int32) : Float64
     @base_cp_reg[level]
   end
 
-  def get_base_def_by_slot(slot : Int) : Int32
+  def get_base_def_by_slot(slot : Int32) : Int32
     @base_slot_def.fetch(slot, 0)
   end
 

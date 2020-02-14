@@ -38,7 +38,7 @@ class L2Spawn
           {{sub}}
       {% end %}
       else
-        raise "No constructor for #{template.type.inspect} found"
+        raise "No constructor for \"#{template.type}\" found"
       end
     {% end %}
   end

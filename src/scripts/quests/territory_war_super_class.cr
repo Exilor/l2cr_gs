@@ -10,6 +10,7 @@ class TerritoryWarSuperClass < Quest
   @npc_ids = [] of Int32
   @random_min = 0
   @random_max = 0
+
   protected getter territory_id = 0
   protected getter class_ids = [] of Int32
 
