@@ -763,7 +763,7 @@ module Formulas
   end
 
   def atk_break(target : L2Character, dmg : Float64) : Bool
-    return false if target.channeling?
+    return false if target.channeling? || target.raid? || target.invul?
     init = 0.0
 
     if Config.alt_game_cancel_cast && target.casting_now?
@@ -776,7 +776,7 @@ module Formulas
       end
     end
 
-    return false if target.raid? || target.invul? || init <= 0
+    return false if init <= 0
 
     init += Math.sqrt(13 * dmg)
     init -= (BaseStats::MEN.calc_bonus(target) * 100) - 100

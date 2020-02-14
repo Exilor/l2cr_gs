@@ -38,7 +38,7 @@ class EffectHandler::Backstab < AbstractEffect
     target.reduce_current_hp(damage, char, skill)
     target.notify_damage_received(damage, char, skill, true, false, false)
 
-    if !target.raid? && Formulas.atk_break(target, damage)
+    if Formulas.atk_break(target, damage)
       target.break_attack
       target.break_cast
     end

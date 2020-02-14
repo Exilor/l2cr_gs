@@ -20,10 +20,7 @@ class EffectHandler::HpDrain < AbstractEffect
   def on_start(info)
     target, char, skill = info.effected, info.effector, info.skill
 
-    # The skill id check is how L2J prevents Storm Cubic from dealing massive
-    # damage but it causes other cubic skills to be activated twice. Instead I
-    # made changes in CubicAction to handle it.
-    return if char.looks_dead?# || skill.id == 4050 # cubic drain
+    return if char.looks_dead?
 
     sps = skill.use_spiritshot? && char.charged_shot?(ShotType::SPIRITSHOTS)
     bss = skill.use_spiritshot? && char.charged_shot?(ShotType::BLESSED_SPIRITSHOTS)
@@ -52,7 +49,7 @@ class EffectHandler::HpDrain < AbstractEffect
     char.current_hp = hp_final
 
     if damage > 0
-      if !target.raid? && Formulas.atk_break(target, damage)
+      if Formulas.atk_break(target, damage)
         target.break_attack
         target.break_cast
       end

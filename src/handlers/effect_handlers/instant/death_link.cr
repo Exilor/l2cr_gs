@@ -35,7 +35,7 @@ class EffectHandler::DeathLink < AbstractEffect
     damage = Formulas.magic_dam(char, target, skill, shld, sps, bss, mcrit, power)
 
     if damage > 0
-      if !target.raid? && Formulas.atk_break(target, damage)
+      if Formulas.atk_break(target, damage)
         target.break_attack
         target.break_cast
       end

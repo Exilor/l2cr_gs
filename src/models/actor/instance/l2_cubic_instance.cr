@@ -310,7 +310,7 @@ class L2CubicInstance
       damage = Formulas.magic_dam(self, target, skill, mcrit, shld)
 
       if damage > 0
-        if !target.raid? && Formulas.atk_break(target, damage)
+        if Formulas.atk_break(target, damage)
           target.break_attack
           target.break_cast
         end
@@ -347,7 +347,7 @@ class L2CubicInstance
       end
       @owner.current_hp = hp.to_f64
       if damage > 0
-        if !target.raid? && Formulas.atk_break(target, damage)
+        if Formulas.atk_break(target, damage)
           target.break_attack
           target.break_cast
         end

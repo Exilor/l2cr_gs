@@ -34,7 +34,7 @@ class EffectHandler::MagicalAttackByAbnormal < AbstractEffect
     damage *= ((target.buff_count * 0.3) + 1.3) / 4
 
     if damage > 0
-      if !target.raid? && Formulas.atk_break(target, damage)
+      if Formulas.atk_break(target, damage)
         target.break_attack
         target.break_cast
       end
