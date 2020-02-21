@@ -22,5 +22,5 @@ class Packets::Incoming::RequestCursedWeaponLocation < GameClientPacket
     end
   end
 
-  private record CursedWeaponInfo, pos : Location, id : Int32, status : Int32
+  record CursedWeaponInfo, pos : Location, id : Int32, status : Int32
 end

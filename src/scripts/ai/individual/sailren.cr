@@ -21,7 +21,9 @@ class Scripts::Sailren < AbstractNpcAI
   @zone : L2NoRestartZone
 
   enum Status : UInt8
-    ALIVE, IN_COMBAT, DEAD
+    ALIVE
+    IN_COMBAT
+    DEAD
   end
 
   def initialize

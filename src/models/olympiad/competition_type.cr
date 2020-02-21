@@ -1,5 +1,8 @@
 enum CompetitionType : UInt8
-  CLASSED, NON_CLASSED, TEAMS, OTHER
+  CLASSED
+  NON_CLASSED
+  TEAMS
+  OTHER
 
   def to_s : String
     case self

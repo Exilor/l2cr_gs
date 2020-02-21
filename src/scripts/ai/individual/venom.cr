@@ -41,7 +41,8 @@ class Scripts::Venom < AbstractNpcAI
   private TARGETS = [] of L2PcInstance
 
   enum MoveTo : UInt8
-    THRONE, PRISON
+    THRONE
+    PRISON
   end
 
   @venom : L2Npc?

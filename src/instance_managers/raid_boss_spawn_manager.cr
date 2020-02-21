@@ -8,7 +8,9 @@ module RaidBossSpawnManager
   private STORED_INFO = Concurrent::Map(Int32, StatsSet).new
 
   enum Status : UInt8
-    ALIVE, DEAD, UNDEFINED
+    ALIVE
+    DEAD
+    UNDEFINED
   end
 
   def load

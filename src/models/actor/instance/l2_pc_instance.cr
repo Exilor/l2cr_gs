@@ -286,8 +286,7 @@ class L2PcInstance < L2Playable
   property? married : Bool = false
   property? marry_request : Bool = false
   property? marry_accepted : Bool = false
-  # L2J: _combatFlagEquippedId
-  property? combat_flag_equipped : Bool = false
+  property? combat_flag_equipped : Bool = false # L2J: _combatFlagEquippedId
   property? fishing : Bool = false
   property? in_olympiad_mode : Bool = false
   property? olympiad_start : Bool = false
@@ -3389,6 +3388,14 @@ class L2PcInstance < L2Playable
     broadcast_user_info
   end
 
+  def get_loto(i : Int32) : Int32
+    @loto[i]
+  end
+
+  def set_loto(i : Int32, val : Int32)
+    @loto[i] = val
+  end
+
   def send_skill_list
     disabled = false
 
@@ -3711,7 +3718,7 @@ class L2PcInstance < L2Playable
 
       if party
         party.distribute_item(self, target)
-      elsif target.id == Inventory::ADENA_ID && inventory.adena_instance?
+      elsif target.id == Inventory::ADENA_ID && inventory.adena_instance
         add_adena("Pickup", target.count, nil, true)
         ItemTable.destroy_item("Pickup", target, self, nil)
       else
@@ -3826,8 +3833,7 @@ class L2PcInstance < L2Playable
   end
 
   def tele_to_location(loc : Locatable, random_offset : Bool)
-    vehicle = vehicle()
-    if vehicle && !vehicle.teleporting?
+    if (vehicle = vehicle()) && !vehicle.teleporting?
       self.vehicle = nil
     end
 
@@ -4347,7 +4353,7 @@ class L2PcInstance < L2Playable
       if Config.force_inventory_update
         send_packet(ItemList.new(self, false))
       else
-        send_packet(InventoryUpdate.single(inventory.adena_instance))
+        send_packet(InventoryUpdate.single(inventory.adena_instance.not_nil!))
       end
     end
   end
@@ -4366,7 +4372,7 @@ class L2PcInstance < L2Playable
       if Config.force_inventory_update
         send_packet(ItemList.new(self, false))
       else
-        send_packet(InventoryUpdate.single(inventory.ancient_adena_instance))
+        send_packet(InventoryUpdate.single(inventory.ancient_adena_instance.not_nil!))
       end
     end
   end
@@ -4383,7 +4389,7 @@ class L2PcInstance < L2Playable
     end
 
     if count > 0
-      adena_item = inventory.adena_instance
+      adena_item = inventory.adena_instance.not_nil!
       unless inventory.reduce_adena(process, count, self, reference)
         return false
       end
@@ -4416,7 +4422,7 @@ class L2PcInstance < L2Playable
     end
 
     if count > 0
-      aa_item = inventory.ancient_adena_instance
+      aa_item = inventory.ancient_adena_instance.not_nil!
       unless inventory.reduce_ancient_adena(process, count, self, reference)
         return false
       end
@@ -4609,7 +4615,13 @@ class L2PcInstance < L2Playable
   end
 
   def recalc_henna_stats
-    @henna_int=@henna_str=@henna_con=@henna_men=@henna_wit=@henna_dex=0
+    @henna_int = 0
+    @henna_str = 0
+    @henna_con = 0
+    @henna_men = 0
+    @henna_wit = 0
+    @henna_dex = 0
+
     @henna.each do |h|
       next unless h
       @henna_int += @henna_int + h.int > 5 ? 5 - @henna_int : h.int
@@ -4662,13 +4674,12 @@ class L2PcInstance < L2Playable
   end
 
   def all_active_quests : Array(Quest)
-    quests = Array(Quest).new(@quests.size)
+    quests = [] of Quest
 
     @quests.each_value do |qs|
       next if !qs.started? && !Config.developer
       quest = qs.quest
-      quest_id = quest.id
-      next unless quest_id.between?(1, 19999)
+      next unless quest.id.between?(1, 19999)
       quests << quest
     end
 
@@ -4696,14 +4707,14 @@ class L2PcInstance < L2Playable
   end
 
   def add_notify_quest_of_death(qs : QuestState?)
-    return unless qs
-    unless notify_quest_of_death.includes?(qs)
+    if qs && !notify_quest_of_death.includes?(qs)
       notify_quest_of_death << qs
     end
   end
 
   def notify_quest_of_death_empty? : Bool
-    @notify_quest_of_death.nil? || notify_quest_of_death.empty?
+    return true unless tmp = @notify_quest_of_death
+    tmp.empty?
   end
 
   def ip_address : String

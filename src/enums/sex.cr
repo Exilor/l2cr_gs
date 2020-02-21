@@ -1,3 +1,5 @@
 enum Sex : UInt8
-  MALE, FEMALE, ETC
+  MALE
+  FEMALE
+  ETC
 end

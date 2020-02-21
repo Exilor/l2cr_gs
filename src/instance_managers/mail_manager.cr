@@ -125,6 +125,13 @@ module MailManager
   end
 
   def delete_message_in_db(msg_id : Int32)
-    GameDB.exec("DELETE FROM messages WHERE messageId = ?", msg_id)
+    begin
+      GameDB.exec("DELETE FROM messages WHERE messageId = ?", msg_id)
+    rescue e
+      error e
+    end
+
+    MESSAGES.delete(msg_id)
+    IdFactory.release(msg_id)
   end
 end

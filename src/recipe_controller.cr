@@ -248,7 +248,7 @@ module RecipeController
       end
 
       if @target != @pc && @price > 0
-        adena_transfer = @target.transfer_item("PayManufacture", @target.inventory.adena_instance.l2id, @price, @pc.inventory, @pc)
+        adena_transfer = @target.transfer_item("PayManufacture", @target.inventory.adena_instance.not_nil!.l2id, @price, @pc.inventory, @pc)
         unless adena_transfer
           @target.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
           abort

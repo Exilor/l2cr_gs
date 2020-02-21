@@ -1,6 +1,7 @@
 class EffectHandler::BlockDamage < AbstractEffect
   enum BlockType : UInt8
-    HP, MP
+    HP
+    MP
   end
 
   @type : BlockType

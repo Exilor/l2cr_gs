@@ -55,16 +55,19 @@ class ObjectKnownList
 
   def find_objects
     me = @active_object
-    return unless region = me.world_region
+    return unless world_region = me.world_region
 
     if me.playable?
-      region.objects.each_value do |object|
-        if object != me
-          object.known_list.add_known_object(me)
+      world_region.sorrounding_regions.each do |region|
+        world_region.objects.each_value do |object|
+          if object != me
+            add_known_object(object)
+            object.known_list.add_known_object(me)
+          end
         end
       end
     elsif me.character?
-      region.sorrounding_regions.each do |region|
+      world_region.sorrounding_regions.each do |region|
         if region.active?
           region.playables.each_value do |object|
             if object != me

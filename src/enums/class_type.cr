@@ -1,3 +1,5 @@
 enum ClassType : UInt8
-  Fighter, Mystic, Priest
+  Fighter
+  Mystic
+  Priest
 end

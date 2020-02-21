@@ -46,6 +46,7 @@ require "./instance_managers/four_sepulchers_manager"
 require "./instance_managers/auction_manager"
 require "./instance_managers/item_auction_manager"
 require "./instance_managers/petition_manager"
+require "./instance_managers/lottery"
 require "./task_managers/task_manager"
 require "./task_managers/known_list_updater"
 require "./task_managers/attack_stances"
@@ -287,6 +288,7 @@ module GameServer
 
     AttackStances.load
     WarehouseCache.load
+    Lottery.load
 
     host = Config.gameserver_hostname
     port = Config.port_game

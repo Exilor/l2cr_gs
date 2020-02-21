@@ -13,7 +13,10 @@ class Message
   REJECTED = 2
 
   enum SendBySystem : UInt8
-    PLAYER, NEWS, NONE, ALEGRIA
+    PLAYER
+    NEWS
+    NONE
+    ALEGRIA
   end
 
   @attachments : Mail?

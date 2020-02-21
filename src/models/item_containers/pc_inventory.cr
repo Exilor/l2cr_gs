@@ -32,32 +32,16 @@ class PcInventory < Inventory
     ItemLocation::PAPERDOLL
   end
 
-  def adena_instance? : L2ItemInstance?
+  def adena_instance : L2ItemInstance?
     @adena
-  end
-
-  def adena_instance : L2ItemInstance
-    unless adena = @adena
-      raise "Player #{name}'s @adena failed nil assertion"
-    end
-
-    adena
   end
 
   def adena : Int64
     @adena.try &.count || 0i64
   end
 
-  def ancient_adena_instance? : L2ItemInstance?
+  def ancient_adena_instance : L2ItemInstance?
     @ancient_adena
-  end
-
-  def ancient_adena_instance : L2ItemInstance
-    unless ancient_adena = @ancient_adena
-      raise "Player #{name}'s @ancient_adena failed nil assertion"
-    end
-
-    ancient_adena
   end
 
   def ancient_adena : Int64

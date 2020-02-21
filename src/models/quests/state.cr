@@ -1,5 +1,7 @@
 enum State : UInt8
-  CREATED, STARTED, COMPLETED
+  CREATED
+  STARTED
+  COMPLETED
 
   def self.[](val : String) : self
     case val

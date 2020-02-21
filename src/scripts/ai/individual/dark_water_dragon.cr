@@ -106,7 +106,7 @@ class Scripts::DarkWaterDragon < AbstractNpcAI
     if npc_id == DRAGON
       TRACKING_SET.delete(npc_l2id)
       SECOND_SPAWN.delete(npc_l2id)
-      faf = add_spawn(FAFURION, npc.x, npc.y, npc.z, 0, false, 0).as(L2Attackable) # spawns Fafurion Kindred when Dard Water Dragon is dead
+      faf = add_spawn(FAFURION, *npc.xyz, 0, false, 0).as(L2Attackable) # spawns Fafurion Kindred when Dard Water Dragon is dead
       ID_MAP[faf.l2id] = killer
     elsif npc_id == FAFURION
       cancel_quest_timer("fafurion_poison", npc, nil)
@@ -152,7 +152,7 @@ class Scripts::DarkWaterDragon < AbstractNpcAI
   end
 
   def spawn_shade(attacker, npc_id, x, y, z)
-     shade = add_spawn(npc_id, x, y, z, 0, false, 0)
+    shade = add_spawn(npc_id, x, y, z, 0, false, 0)
     shade.set_running
     shade.as(L2Attackable).add_damage_hate(attacker, 0, 999)
     shade.set_intention(AI::ATTACK, attacker)

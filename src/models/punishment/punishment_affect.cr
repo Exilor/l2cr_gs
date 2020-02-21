@@ -1,3 +1,5 @@
 enum PunishmentAffect : UInt8
-  ACCOUNT, CHARACTER, IP
+  ACCOUNT
+  CHARACTER
+  IP
 end

@@ -54,6 +54,8 @@ abstract class L2Character < L2Object
   getter calculators : Slice(Calculator?)
   getter(skill_channelizer) { SkillChannelizer.new(self) }
   getter(skill_channelized) { SkillChannelized.new }
+  getter! stat : CharStat
+  getter! status : CharStatus
   getter? running = false
   getter? core_ai_disabled = false
   setter paralyzed : Bool = false
@@ -69,8 +71,6 @@ abstract class L2Character < L2Object
   property team : Team = Team::NONE
   property summoner : L2Character?
   property! template : L2CharTemplate
-  property! stat : CharStat
-  property! status : CharStatus
   property? lethalable : Bool = true
   property? casting_now : Bool = false
   property? casting_simultaneously_now : Bool = false
@@ -1364,7 +1364,7 @@ abstract class L2Character < L2Object
 
       # custom (so that physical attack skills complete their animations)
       if skill.cool_time > 0
-        skill_anim_time += skill.cool_time.fdiv(p_atk_spd) * 333 # 200
+        skill_anim_time += (skill.cool_time / p_atk_spd * 333.0).clamp(50, 200)
       end
 
       if simultaneously

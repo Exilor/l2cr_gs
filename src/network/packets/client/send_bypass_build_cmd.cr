@@ -250,7 +250,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         item.world_region = nil
         L2World.remove_visible_object(item, old_region)
 
-        if item.id == Inventory::ADENA_ID && pc.inventory.adena_instance?
+        if item.id == Inventory::ADENA_ID && pc.inventory.adena_instance
           if party
             party.distribute_item(pc, item)
           else

@@ -253,6 +253,7 @@ module AutoSpawnHandler
   class AutoSpawnInstance
     @spawn_index = 0
     @broadcast_announcement = false
+
     getter id
     getter location_list = Concurrent::Array(Location).new
     getter npc_instance_list = Concurrent::LinkedList(L2Npc).new

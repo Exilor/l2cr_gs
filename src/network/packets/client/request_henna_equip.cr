@@ -29,10 +29,8 @@ class Packets::Incoming::RequestHennaEquip < GameClientPacket
     if henna.allowed_class?(pc.class_id) && count >= henna.wear_count && pc.adena >= henna.wear_fee && pc.add_henna(henna)
       pc.destroy_item_by_item_id("Henna", henna.dye_item_id, henna.wear_count.to_i64, pc, true)
       pc.inventory.reduce_adena("Henna", henna.wear_fee.to_i64, pc, pc.last_folk_npc)
-      # iu = InventoryUpdate.new
-      # iu.add_modified_item pc.inventory.adena_instance
-      # send_packet(iu)
-      send_packet(InventoryUpdate.modified(pc.inventory.adena_instance))
+
+      send_packet(InventoryUpdate.modified(pc.inventory.adena_instance.not_nil!))
       send_packet(SystemMessageId::SYMBOL_ADDED)
     else
       send_packet(SystemMessageId::CANT_DRAW_SYMBOL)

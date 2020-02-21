@@ -9,7 +9,8 @@ struct Topic
   getter id, forum_id, owner_name, date
 
   enum ConstructorType : UInt8
-    RESTORE, CREATE
+    RESTORE
+    CREATE
   end
 
   def initialize(ct : ConstructorType, @id : Int32, @forum_id : Int32, @topic_name : String, @date : Int64, @owner_name : String, @owner_id : Int32, @type : Int32, @creply : Int32)

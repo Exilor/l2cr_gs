@@ -215,7 +215,13 @@ class Calendar
   # end
 
   enum Unit : UInt8
-    MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH
+    MILLISECOND
+    SECOND
+    MINUTE
+    HOUR
+    DAY
+    WEEK
+    MONTH
   end
 
   def add(unit : Unit, value : Number)

@@ -1,3 +1,6 @@
 enum InstanceRemoveBuffType : UInt8
-  NONE, ALL, WHITELIST, BLACKLIST
+  NONE
+  ALL
+  WHITELIST
+  BLACKLIST
 end

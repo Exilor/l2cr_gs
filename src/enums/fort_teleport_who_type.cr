@@ -1,3 +1,5 @@
 enum FortTeleportWhoType : UInt8
-  All, Attacker, Owner
+  All
+  Attacker
+  Owner
 end

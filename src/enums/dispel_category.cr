@@ -1,3 +1,5 @@
 enum DispelCategory : UInt8
-  ALL, BUFF, DEBUFF
+  ALL
+  BUFF
+  DEBUFF
 end

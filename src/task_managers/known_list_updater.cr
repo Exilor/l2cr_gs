@@ -9,8 +9,10 @@ module KnownListUpdater
   @@timer = FULL_UPDATE_TIMER
 
   def load
-    interval = Config.knownlist_update_interval
-    ThreadPoolManager.schedule_ai_at_fixed_rate(self, 1000, interval)
+    unless Config.move_based_knownlist
+      interval = Config.knownlist_update_interval
+      ThreadPoolManager.schedule_ai_at_fixed_rate(self, 1000, interval)
+    end
   end
 
   def call

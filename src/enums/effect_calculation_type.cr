@@ -1,3 +1,4 @@
 enum EffectCalculationType : UInt8
-  DIFF, PER
+  DIFF
+  PER
 end

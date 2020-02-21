@@ -85,10 +85,10 @@
 #     {% type = "#{prefix}#{name[1..-1].id}".id %}
 
 #     def get_{{name.id}}(key : String) : {{type}}
-#       value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
+#       value = @hash[key]
 
 #       if value.nil?
-#         raise KeyError.new("Nil value for key #{key}")
+#         raise "Nil value for key " + key
 #       end
 
 #       if value.responds_to?(:to_{{name.id}})
@@ -117,10 +117,10 @@
 #   {% end %}
 
 #   def get_bool(key : String)
-#     value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
+#     value = @hash[key]
 
 #     if value.nil?
-#       raise KeyError.new("Nil value for key #{key}")
+#       raise "Nil value for key " + key
 #     end
 
 #     if value.is_a?(Bool)
@@ -142,7 +142,7 @@
 #     value = @hash.fetch(key) { return default }
 
 #     if value.nil?
-#       raise KeyError.new("Nil value for key #{key}")
+#       raise "Nil value for key " + key
 #     end
 
 #     case value
@@ -208,10 +208,10 @@
 #   end
 
 #   def get_enum(key : String, enum_class : T.class) : T forall T
-#     value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
+#     value = @hash[key]
 
 #     if value.nil?
-#       raise KeyError.new("Nil value for key #{key}")
+#       raise "Nil value for key " + key
 #     end
 
 #     if value.is_a?(String)
@@ -225,7 +225,7 @@
 #     value = @hash.fetch(key) { return default }
 
 #     if value.nil?
-#       raise KeyError.new("Nil value for key #{key}")
+#       raise "Nil value for key " + key
 #     end
 
 #     if value.is_a?(String)
@@ -254,7 +254,7 @@
 #         raise "Invalid value for get_string_array: #{value}:#{value.class}"
 #       end
 #       return default.map &.to_s if value.empty?
-#       value.split(/;|,/) # (value.includes?(';') ? ';' : ',')
+#       value.split(/;|,/)
 #     else
 #       if default.is_a?(String)
 #         default.split(/;|,/) # (default.includes?(';') ? ';' : ',')
@@ -433,10 +433,10 @@ struct StatsSet
     {% type = "#{prefix}#{name[1..-1].id}".id %}
 
     def get_{{name.id}}(key : String) : {{type}}
-      value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
+      value = @hash[key]
 
       if value.nil?
-        raise KeyError.new("Nil value for key #{key}")
+        raise "Nil value for key " + key
       end
 
       if value.responds_to?(:to_{{name.id}})
@@ -465,10 +465,10 @@ struct StatsSet
   {% end %}
 
   def get_bool(key : String)
-    value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
+    value = @hash[key]
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key}")
+      raise "Nil value for key " + key
     end
 
     if value.is_a?(Bool)
@@ -479,7 +479,7 @@ struct StatsSet
       elsif value.compare("false", true) == 0
         false
       else
-        raise "Invalid value for get_bool: #{value}"
+        raise "Invalid value for get_bool: " + value
       end
     else
       raise "Invalid value for get_bool: #{value}:#{value.class}"
@@ -490,7 +490,7 @@ struct StatsSet
     value = @hash.fetch(key) { return default }
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key}")
+      raise "Nil value for key " + key
     end
 
     case value
@@ -502,7 +502,7 @@ struct StatsSet
       elsif value.compare("false", true) == 0
         false
       else
-        raise "Invalid value for get_bool: #{value}"
+        raise "Invalid value for get_bool: " + value
       end
     else
       raise "Invalid value for get_bool: #{value}:#{value.class}"
@@ -556,10 +556,10 @@ struct StatsSet
   end
 
   def get_enum(key : String, enum_class : T.class) : T forall T
-    value = @hash.fetch(key) { raise KeyError.new("Missing key: #{key}") }
+    value = @hash[key]
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key}")
+      raise "Nil value for key " + key
     end
 
     if value.is_a?(String)
@@ -573,7 +573,7 @@ struct StatsSet
     value = @hash.fetch(key) { return default }
 
     if value.nil?
-      raise KeyError.new("Nil value for key #{key}")
+      raise "Nil value for key " + key
     end
 
     if value.is_a?(String)
@@ -602,10 +602,10 @@ struct StatsSet
         raise "Invalid value for get_string_array: #{value}:#{value.class}"
       end
       return default.map &.to_s if value.empty?
-      value.split(/;|,/) # (value.includes?(';') ? ';' : ',')
+      value.split(/;|,/)
     else
       if default.is_a?(String)
-        default.split(/;|,/) # (default.includes?(';') ? ';' : ',')
+        default.split(/;|,/)
       else
         if default.is_a?(Array(String))
           default

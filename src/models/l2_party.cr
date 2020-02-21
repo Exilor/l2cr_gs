@@ -26,7 +26,10 @@ class L2Party < AbstractPlayerGroup
   property dimensional_rift : DimensionalRift?
 
   enum MessageType : UInt8
-    Expelled, Left, None, Disconnected
+    Expelled
+    Left
+    None
+    Disconnected
   end
 
   def initialize(leader : L2PcInstance, dist_type : PartyDistributionType)

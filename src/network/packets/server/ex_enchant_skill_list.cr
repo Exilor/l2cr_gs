@@ -1,6 +1,9 @@
 class Packets::Outgoing::ExEnchantSkillList < GameServerPacket
   enum EnchantSkillType : UInt8
-    NORMAL, SAFE, UNTRAIN, CHANGE_ROUTE
+    NORMAL
+    SAFE
+    UNTRAIN
+    CHANGE_ROUTE
   end
 
   private record Skill, id : Int32, next_level : Int32

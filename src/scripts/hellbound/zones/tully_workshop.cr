@@ -857,14 +857,18 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       else
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::S1_ILL_BE_BACK_DONT_GET_COMFORTABLE, killer.name)
       end
-    elsif (npc_id == TEMENIR || npc_id == DRAXIUS || npc_id == KIRETCENAH) && SPAWNED_FOLLOWERS.includes?(npc)
+    elsif npc_id.in?(TEMENIR, DRAXIUS, KIRETCENAH) && SPAWNED_FOLLOWERS.includes?(npc)
       @killed_followers_count += 1
       if @killed_followers_count >= 3
         do_7th_floor_despawn
       end
     elsif npc_id == DARION
-      if tmp = @pillar_spawn
-        tmp.last_spawn.not_nil!.invul = false
+      if pillar = @pillar_spawn
+        if sp = pillar.last_spawn
+          sp.invul = false
+        else
+          warn { "Last spawn for pillar #{pillar} is nil." }
+        end
       end
 
       handle_doors_on_death
@@ -880,8 +884,12 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       POSTMORTEM_SPAWNS.each &.delete_me
       POSTMORTEM_SPAWNS.clear
     elsif npc.id == DARION
-      if tmp = @pillar_spawn
-        tmp.last_spawn.not_nil!.invul = true
+      if pillar = @pillar_spawn
+        if sp = pillar.last_spawn
+          sp.invul = false
+        else
+          warn { "Last spawn for pillar #{pillar} is nil." }
+        end
       end
       handle_doors_on_respawn
     elsif npc.id == PILLAR
@@ -891,20 +899,20 @@ class Scripts::TullyWorkshop < AbstractNpcAI
     super
   end
 
-  def on_spell_finished(npc, player, skill)
+  def on_spell_finished(npc, pc, skill)
     npc_id = npc.id
     skill_id = skill.id
 
     if npc_id == AGENT && skill_id == 5526
-      player.tele_to_location(21935, 243923, 11088, true) # to the roof
+      pc.tele_to_location(21935, 243923, 11088, true) # to the roof
     elsif npc_id == TEMENIR && skill_id == 5331
       if npc.alive?
         npc.current_hp += npc.max_hp * 0.005
       end
     elsif npc_id >= SERVANT_FIRST && npc_id <= SERVANT_LAST && skill_id == 5392
-      broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::S1_THANK_YOU_FOR_GIVING_ME_YOUR_LIFE, player.name)
-      dmg = player.current_hp / (npc.id - 22404)
-      player.reduce_current_hp(dmg, nil, nil)
+      broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::S1_THANK_YOU_FOR_GIVING_ME_YOUR_LIFE, pc.name)
+      dmg = pc.current_hp / (npc.id - 22404)
+      pc.reduce_current_hp(dmg, nil, nil)
       npc.current_hp = (npc.current_hp + 10) - (npc.id - 22404)
     end
 

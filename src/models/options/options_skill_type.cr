@@ -1,3 +1,5 @@
 enum OptionsSkillType : UInt8
-  ATTACK, MAGIC, CRITICAL
+  ATTACK
+  MAGIC
+  CRITICAL
 end

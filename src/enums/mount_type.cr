@@ -1,5 +1,8 @@
 enum MountType : UInt8
-  NONE, STRIDER, WYVERN, WOLF
+  NONE
+  STRIDER
+  WYVERN
+  WOLF
 
   def self.find_by_npc_id(id : Int32) : self
     CategoryData.in_category?(CategoryType::STRIDER, id) ? STRIDER :

@@ -434,7 +434,7 @@ class TradeList
       owner_iu = InventoryUpdate.new
       pc_iu = InventoryUpdate.new
 
-      adena_item = pc_inv.adena_instance
+      adena_item = pc_inv.adena_instance.not_nil!
 
       unless pc_inv.reduce_adena("PrivateStore", total_price, pc, @owner)
         pc.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
@@ -633,11 +633,11 @@ class TradeList
           return false # L2J believes this should never happen
         end
 
-        adena_item = owner_inv.adena_instance
+        adena_item = owner_inv.adena_instance.not_nil!
         owner_inv.reduce_adena("PrivateStore", total_price, @owner, pc)
         owner_iu.add_item(adena_item)
         pc_inv.add_adena("PrivateStore", total_price, pc, @owner)
-        pc_iu.add_item(pc_inv.adena_instance)
+        pc_iu.add_item(pc_inv.adena_instance.not_nil!)
       end
 
       if ok

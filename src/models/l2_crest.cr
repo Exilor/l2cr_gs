@@ -1,6 +1,8 @@
 struct L2Crest
   enum Type : UInt8
-    PLEDGE, PLEDGE_LARGE, ALLY
+    PLEDGE
+    PLEDGE_LARGE
+    ALLY
 
     def self.get_by_id(id : Int) : self?
       case id

@@ -1,5 +1,7 @@
 enum ItemAuctionState : UInt8
-  CREATED, STARTED, FINISHED
+  CREATED
+  STARTED
+  FINISHED
 
   def state_id : Int8
     to_i8

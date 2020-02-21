@@ -17,7 +17,11 @@ class Skill
   extend Loggable
 
   enum SkillType : UInt8
-    PHYSICAL, MAGIC, STATIC, DANCE, TRIGGER
+    PHYSICAL
+    MAGIC
+    STATIC
+    DANCE
+    TRIGGER
   end
 
   @effect_lists = EnumMap(EffectScope, Array(AbstractEffect)).new

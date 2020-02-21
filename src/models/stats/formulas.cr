@@ -394,16 +394,20 @@ module Formulas
     final_rate = trait_mod > 0 ? rate.clamp(skill.min_chance, skill.max_chance) : 0.0
 
     if final_rate <= Rnd.rand(100)
-      if attacker.playable? # custom check, to not create unnecesary SystemMessages
+      if attacker.acting_player
         sm = SystemMessage.c1_resisted_your_s2
         sm.add_char_name(target)
         sm.add_skill_name(skill)
         attacker.send_packet(sm)
       end
-      debug { "Failed #{skill} from #{attacker} against #{target.name} (#{final_rate.to_i}%)." }
+      if (attacker.acting_player || target.acting_player).try &.gm?
+        debug { "Failed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
+      end
       return false
     end
-    debug { "Landed #{skill} from #{attacker} against #{target.name} (#{final_rate.to_i}%)." }
+    if (attacker.acting_player || target.acting_player).try &.gm?
+      debug { "Landed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
+    end
     true
   end
 
@@ -429,7 +433,7 @@ module Formulas
     time = skill.passive? || skill.toggle? ? -1 : skill.abnormal_time
 
     if target && target.servitor? && skill.abnormal_instant?
-      time /= 2
+      time //= 2
     end
 
     if skill_mastery(caster, skill)
@@ -752,14 +756,7 @@ module Formulas
 
     res_modifier = target.calc_stat(MAGIC_SUCCESS_RES, 1, nil, skill)
     rate = 100 - (lvl_modifier * target_modifier * res_modifier).round
-    res = Rnd.rand(100) < rate
-    if !res && attacker.player?
-      debug "#{skill} failed chance: (#{rate.round 2}%)."
-      debug "  lvl_difference: #{lvl_difference}"
-      debug "  lvl_modifier: #{lvl_modifier}"
-      debug "  target_modifier: #{target_modifier}"
-    end
-    res
+    Rnd.rand(100) < rate
   end
 
   def atk_break(target : L2Character, dmg : Float64) : Bool
@@ -1147,8 +1144,9 @@ module Formulas
     base_rate = blow_chance * dex_mod * side_mod
     rate = char.calc_stat(BLOW_RATE, base_rate, target)
     result = Rnd.rand(100) < rate
-    if char.playable? || target.playable?
-      char.say result ? "Blow succeeded (chance: #{rate}%)." : "Blow failed (chance: #{rate}%)."
+    if (char.acting_player || target.acting_player).try &.gm?
+      tmp = result ? "landed" : "missed"
+      debug { "Blow from #{char.name} against #{target.name} #{tmp} (chance: #{rate}%)." }
     end
     result
   end
@@ -1168,21 +1166,16 @@ module Formulas
       vuln = target.calc_stat(CANCEL_VULN, 0, target)
       prof = char.calc_stat(CANCEL_PROF, 0, target)
       res_mod = 1.0 + (((vuln + prof) * -1) / 100)
-      final_rate = rate / res_mod
+      final_rate = (rate / res_mod).to_i
 
       effect_list = target.effect_list
-      if target.effect_list.has_buffs?
-        temp = target.effect_list.buffs.dup
-      else
-        temp = [] of BuffInfo
-      end
-
+      temp = [] of BuffInfo
       temp.concat(effect_list.buffs) if effect_list.has_buffs?
       temp.concat(effect_list.triggered) if effect_list.has_triggered?
       temp.concat(effect_list.dances) if effect_list.has_dances?
       temp.each do |info|
         next unless info.skill.can_be_stolen?
-        unless cancel_success(info, cancel_magic_lvl, final_rate.to_i, skill)
+        unless cancel_success(info, cancel_magic_lvl, final_rate, skill)
           next
         end
         cancelled << info

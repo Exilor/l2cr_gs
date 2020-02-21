@@ -1,7 +1,12 @@
 class Condition
   class PlayerBaseStats < Condition
     enum BaseStat : UInt8
-      Int, Str, Con, Dex, Men, Wit
+      Int
+      Str
+      Con
+      Dex
+      Men
+      Wit
     end
 
     initializer stat : BaseStat, value : Int32

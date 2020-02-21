@@ -31,7 +31,6 @@ module GameTimer
         begin
           MOVING_OBJECTS.reject! &.update_position
         rescue e
-          error "Error updating the position of moving objects."
           error e
         end
       end
