@@ -259,7 +259,7 @@ class Skill
   def can_be_stolen? : Bool
     !passive? && !toggle? && !debuff? && !hero_skill? && !gm_skill? &&
     !(static? && id != CommonSkill::CARAVANS_SECRET_MEDICINE.id) &&
-    irreplaceable_buff? && id != CommonSkill::SERVITOR_SHARE.id
+    !irreplaceable_buff? && id != CommonSkill::SERVITOR_SHARE.id
   end
 
   def has_abnormal_visual_effects? : Bool

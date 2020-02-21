@@ -1197,7 +1197,7 @@ module Formulas
 
   def cancel_success(info : BuffInfo, cancel_magic_lvl : Int32, rate : Int32, skill : Skill) : Bool
     if info.skill.magic_level > 0
-      rate *= 1 + ((cancel_magic_lvl - info.skill.magic_level) / 100.00)
+      rate *= 1 + ((cancel_magic_lvl - info.skill.magic_level) / 100)
     end
 
     Rnd.rand(100) < rate.clamp(skill.min_chance, skill.max_chance)
