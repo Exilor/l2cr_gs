@@ -307,7 +307,7 @@ class Scripts::Baium < AbstractNpcAI
       end
 
       if skill.nil?
-        refresh_ai_params(attacker, npc, damage * 1000)
+        refresh_ai_params(attacker, npc, damage.to_i64 * 1000)
       elsif npc.hp_percent < 25
         refresh_ai_params(attacker, npc, (damage // 3) * 100)
       elsif npc.hp_percent < 50

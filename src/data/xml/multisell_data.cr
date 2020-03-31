@@ -24,8 +24,8 @@ module MultisellData
     info { "Loaded #{ENTRIES.size} multisell lists in #{timer} s." }
   end
 
-  private def parse_document(doc, file_name)
-    id = File.basename(file_name.path, ".xml").to_i
+  private def parse_document(doc, file)
+    id = File.basename(file.path, ".xml").to_i
 
     entry_id = 1
     list = ListContainer.new(id)

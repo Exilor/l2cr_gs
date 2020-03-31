@@ -3,7 +3,6 @@ class Packets::Incoming::UseItem < GameClientPacket
 
   @l2id = 0
   @ctrl = false
-  @item_id = 0
 
   private def read_impl
     @l2id = d
@@ -41,9 +40,9 @@ class Packets::Incoming::UseItem < GameClientPacket
       return
     end
 
-    @item_id = item.id
+    item_id = item.id
 
-    if pc.dead? || !pc.inventory.can_manipulate_with_item_id?(@item_id)
+    if pc.dead? || !pc.inventory.can_manipulate_with_item_id?(item_id)
       sm = SystemMessage.s1_cannot_be_used
       sm.add_item_name(item)
       pc.send_packet(sm)
@@ -55,7 +54,7 @@ class Packets::Incoming::UseItem < GameClientPacket
       return
     end
 
-    if pc.fishing? && (@item_id < 6535 || @item_id > 6540)
+    if pc.fishing? && (item_id < 6535 || item_id > 6540)
       pc.send_packet(SystemMessageId::CANNOT_DO_WHILE_FISHING_3)
       return
     end
@@ -76,24 +75,24 @@ class Packets::Incoming::UseItem < GameClientPacket
       reuse = pc.get_item_remaining_reuse_time(item.l2id)
       if reuse > 0
         reuse_data(pc, item, reuse)
-        send_shared_group_update(pc, shared_reuse_group, reuse, reuse_delay)
+        send_shared_group_update(pc, shared_reuse_group, reuse, reuse_delay, item_id)
         return
       end
 
       reuse_on_group = pc.get_reuse_delay_on_group(shared_reuse_group)
       if reuse_on_group > 0
         reuse_data(pc, item, reuse_on_group)
-        send_shared_group_update(pc, shared_reuse_group, reuse_on_group, reuse_delay)
+        send_shared_group_update(pc, shared_reuse_group, reuse_on_group, reuse_delay, item_id)
         return
       end
     end
 
     if item.equippable?
-      if @item_id == FORMAL_WEAR_ID && pc.cursed_weapon_equipped?
+      if item_id == FORMAL_WEAR_ID && pc.cursed_weapon_equipped?
         return
       end
 
-      if FortSiegeManager.combat?(@item_id)
+      if FortSiegeManager.combat?(item_id)
         return
       end
 
@@ -155,16 +154,16 @@ class Packets::Incoming::UseItem < GameClientPacket
       if pc.casting_now? || pc.casting_simultaneously_now?
         set_next_action(pc, item)
       elsif pc.attacking_now?
-        time = Time.ns_to_ms(pc.attack_end_time - Time.ns)
-        task = ScheduleEquip.new(pc, item)
-        ThreadPoolManager.schedule_general(task, time)
+        task = EquipItemTask.new(pc, item)
+        ThreadPoolManager.schedule_general(task, pc.attack_end_time - Time.ms)
       else
         pc.use_equippable_item(item, true)
       end
     else
       weapon_item = pc.active_weapon_item
       if weapon_item && weapon_item.item_type == WeaponType::FISHINGROD
-        if @item_id.between?(6519, 6527) || @item_id.between?(7610, 7613) || @item_id.between?(7807, 7809) || @item_id.between?(8484, 8486) || @item_id.between?(8505, 8513)
+        case item_id
+        when 6519..6527, 7610..7613, 7807..7809, 8484..8486, 8505..8513
           pc.inventory.lhand_slot = item
           pc.broadcast_user_info
           send_packet(ItemList.new(pc, false))
@@ -177,7 +176,7 @@ class Packets::Incoming::UseItem < GameClientPacket
       if handler.use_item(pc, item, @ctrl)
         if reuse_delay > 0
           pc.add_time_stamp_item(item, reuse_delay.to_i64)
-          send_shared_group_update(pc, shared_reuse_group, reuse_delay, reuse_delay)
+          send_shared_group_update(pc, shared_reuse_group, reuse_delay, reuse_delay, item_id)
         end
       end
     end
@@ -190,7 +189,7 @@ class Packets::Incoming::UseItem < GameClientPacket
     pc.ai.next_action = next_action
   end
 
-  private struct ScheduleEquip
+  private struct EquipItemTask
     initializer pc : L2PcInstance, item : L2ItemInstance
 
     def call
@@ -199,9 +198,9 @@ class Packets::Incoming::UseItem < GameClientPacket
   end
 
   private def reuse_data(pc : L2PcInstance, item : L2ItemInstance, remaining_time : Int)
-    hours   =  remaining_time / 3_600_000
-    minutes = (remaining_time % 3_000_000) / 60_000
-    seconds = (remaining_time / 1000) % 60
+    hours   =  remaining_time // 3_600_000
+    minutes = (remaining_time % 3_000_000) // 60_000
+    seconds = (remaining_time // 1000) % 60
 
     if hours > 0
       sm = SystemMessage.s2_hours_s3_minutes_s4_seconds_remaining_for_reuse_s1
@@ -221,10 +220,9 @@ class Packets::Incoming::UseItem < GameClientPacket
     pc.send_packet(sm)
   end
 
-  private def send_shared_group_update(pc : L2PcInstance, group, remaining, reuse)
-    debug "Shared reuse group: #{group}."
+  private def send_shared_group_update(pc : L2PcInstance, group, remaining, reuse, item_id)
     if group > 0
-      ex = ExUseSharedGroupItem.new(@item_id, group, remaining.to_i32, reuse)
+      ex = ExUseSharedGroupItem.new(item_id, group, remaining.to_i32, reuse)
       pc.send_packet(ex)
     end
   end

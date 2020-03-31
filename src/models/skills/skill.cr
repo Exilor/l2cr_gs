@@ -24,6 +24,8 @@ class Skill
     TRIGGER
   end
 
+  private EMPTY_TARGET_LIST = [] of L2Object
+
   @effect_lists = EnumMap(EffectScope, Array(AbstractEffect)).new
   @extractable_items : L2ExtractableSkill?
   @operate_type : SkillOperateType
@@ -276,10 +278,7 @@ class Skill
 
   def affect_limit : Int32
     lim1 = @affect_limit[1]
-    if lim1 == 0
-      return @affect_limit[0]
-    end
-    @affect_limit[0] + Rnd.rand(lim1)
+    lim1 == 0 ? @affect_limit[0] : @affect_limit[0] + Rnd.rand(lim1)
   end
 
   def continuous? : Bool
@@ -365,14 +364,11 @@ class Skill
     get_target_list(char, only_first, target)
   end
 
-  EMPTY_TARGET_LIST = [] of L2Object
-
   def get_target_list(char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     if handler = TargetHandler[target_type]
       begin
         return handler.get_target_list(self, char, only_first, target)
       rescue e
-        error "Exception in Skill#get_target_list."
         error e
       end
     else

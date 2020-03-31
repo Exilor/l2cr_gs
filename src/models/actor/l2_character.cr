@@ -28,9 +28,9 @@ abstract class L2Character < L2Object
   @hp_update_dec_check = 0.0
   @hp_update_interval  = 0.0
   @zones = Bytes.new(ZoneId.size)
-  @zones_mutex = Mutex.new(:Reentrant)
+  @zones_mutex = MyMutex.new
   @zone_validate_counter = 4i8
-  @teleport_lock = Mutex.new(:Reentrant)
+  @teleport_lock = MyMutex.new
   @invul_against_skills : IHash(Int32, InvulSkillHolder)?
   @reuse_time_stamp_items : IHash(Int32, TimeStamp)?
   @reuse_time_stamp_skills : IHash(Int32, TimeStamp)?
@@ -727,11 +727,8 @@ abstract class L2Character < L2Object
   end
 
   def behind?(target : L2Object?) : Bool
-    return false unless target
-
-    max_angle_diff = 60.0
-
-    if target.character?
+    if target.is_a?(L2Character)
+      max_angle_diff = 60.0
       angle_char = Util.calculate_angle_from(self, target)
       angle_target = Util.convert_heading_to_degree(target.heading)
       angle_diff = angle_char - angle_target
@@ -904,7 +901,7 @@ abstract class L2Character < L2Object
     return if stats.empty?
 
     me = self
-    if me.is_a?(L2Summon) && me.owner
+    if me.is_a?(L2Summon)
       me.update_and_broadcast_status(1)
     end
 
@@ -1976,7 +1973,7 @@ abstract class L2Character < L2Object
   end
 
   def attacking_now? : Bool
-    @attack_end_time > Time.ns
+    @attack_end_time > Time.ms
   end
 
   def title=(string : String?)
@@ -2500,7 +2497,8 @@ abstract class L2Character < L2Object
   end
 
   def do_attack(target : L2Character?)
-    return if target.nil? || attacking_disabled?
+    return unless target
+    return if attacking_disabled?
 
     term = OnCreatureAttack.new(self, target).notify(self)
     if term && term.terminate
@@ -2606,29 +2604,29 @@ abstract class L2Character < L2Object
       unless can_use_range_weapon?
         return
       end
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_to_hit + (reuse // 2))
+      @attack_end_time = Time.ms + time_to_hit + (reuse // 2)
       hitted = do_attack_hit_by_bow(attack, target, time_atk, reuse)
     when WeaponType::CROSSBOW
       unless can_use_range_weapon?
         return
       end
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_to_hit + (reuse // 2))
+      @attack_end_time = Time.ms + time_to_hit + (reuse // 2)
       hitted = do_attack_hit_by_crossbow(attack, target, time_atk, reuse)
     when WeaponType::POLE
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_atk)
+      @attack_end_time = Time.ms + time_atk
       hitted = do_attack_hit_by_pole(attack, target, time_to_hit)
     when WeaponType::FIST
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_atk)
+      @attack_end_time = Time.ms + time_atk
       if player?
         hitted = do_attack_hit_by_dual(attack, target, time_to_hit)
       else
         hitted = do_attack_hit_simple(attack, target, time_to_hit)
       end
     when WeaponType::DUAL, WeaponType::DUALFIST, WeaponType::DUALDAGGER
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_atk)
+      @attack_end_time = Time.ms + time_atk
       hitted = do_attack_hit_by_dual(attack, target, time_to_hit)
     else
-      @attack_end_time = Time.ns + Time.ms_to_ns(time_atk)
+      @attack_end_time = Time.ms + time_atk
       hitted = do_attack_hit_simple(attack, target, time_to_hit)
     end
 
@@ -2662,7 +2660,8 @@ abstract class L2Character < L2Object
     end
 
     task = NotifyAITask.new(self, AI::READY_TO_ACT)
-    ThreadPoolManager.schedule_ai(task, time_atk + reuse)
+    # ThreadPoolManager.schedule_ai(task, (time_atk + reuse).fdiv(100).ceil * 100)
+    ThreadPoolManager.schedule_ai(task, time_atk + reuse + 1)
   end
 
   def attack_type : WeaponType

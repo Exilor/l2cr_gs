@@ -34,27 +34,24 @@ module L2Cr
   end
 
   def command_line_task
-    if task = @@command_line_task
-      task.cancel
-      @@command_line_task = nil
-    else
-      @@command_line_task = ThreadPoolManager.schedule_general_at_fixed_rate(CommandLineTask, 100, 100)
+    spawn do
+      while cmd = STDIN.gets.try &.chomp
+        print "=> "
+        response = CommandLineTask.handle_cmd(cmd)
+        puts response.colorize(:light_magenta)
+      end
     end
   end
 
   private module CommandLineTask
     extend self
 
-    def call
-      if cmd = STDIN.gets
-        print "=> "
-        response = handle_cmd(cmd)
-        puts response.colorize(:light_magenta)
-      end
-    end
+    @@last_cmd = ""
 
-    private def handle_cmd(cmd : String)
+    def handle_cmd(cmd : String)
       case cmd
+      when "\eOA"
+        handle_cmd(@@last_cmd)
       when "info"
         L2Cr.on_screen_info_task
       when /^shutdown\s\d+/
@@ -105,8 +102,14 @@ module L2Cr
         end
       when "uptime"
         puts Time.local - GameServer.start_time
+      when "pool_stats"
+        puts ThreadPoolManager.stats
       else
         return "unknown command #{cmd.inspect}"
+      end
+
+      if !cmd.empty? && cmd != "\eOA"
+        @@last_cmd = cmd
       end
 
       nil

@@ -25,22 +25,19 @@ class Scripts::Q00362_BardsMandolin < Quest
       return
     end
 
-    html = nil
     case event
     when "30957-02.htm"
       st.start_quest
       st.memo_state = 1
-      html = event
+      event
     when "30957-07.html", "30957-08.html"
       if st.memo_state?(5)
         st.give_adena(10000, true)
         st.reward_items(THEME_OF_JOURNEY, 1)
         st.exit_quest(true, true)
-        html = event
+        event
       end
     end
-
-    html
   end
 
   def on_talk(npc, pc)

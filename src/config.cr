@@ -104,6 +104,9 @@ module Config
   CH_SIEGE_FILE = "/config/ConquerableHallSiege.properties"
   GEODATA_FILE = "/config/GeoData.properties"
   L2CR_CONFIG_FILE = "/config/l2cr.properties"
+
+  class_property queue_size : Int32 = 20
+  class_property scheduler_sleep_time : Float64 = 0.1
   # --------------------------------------------------
   # L2J Variable Definitions
   # --------------------------------------------------
@@ -1158,6 +1161,8 @@ module Config
     begin
       cfg.parse(Dir.current + L2CR_CONFIG_FILE)
       @@safe_es_sp_book_needed = cfg.get_bool("SafeEnchantSkillSpBookNeeded", true)
+      @@queue_size = cfg.get_i32("QueueSize", 20)
+      @@scheduler_sleep_time = cfg.get_f64("SchedulerSleepTime", 0.1)
     rescue e
       warn e
     end

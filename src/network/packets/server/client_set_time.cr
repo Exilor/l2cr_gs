@@ -1,25 +1,22 @@
 class Packets::Outgoing::ClientSetTime < GameServerPacket
-  @time = GameTimer.time
+  @time : Int32? = GameTimer.time
   @speed = 6
 
-  def initialize(@time : Int32, @speed : Int32)
-  end
-
-  def initialize(@time : Int32)
-  end
-
-  def initialize
-  end
+  initializer
+  initializer time : Int32?
+  initializer time : Int32, speed : Int32
 
   def initialize(time : String, @speed : Int32 = 6)
-    hh, mm = time.split(':').map &.to_i
-    @time = (hh * 60) + mm
+    hh, mm = time.split(':')
+    @time = (hh.to_i * 60) + mm.to_i
   end
 
   private def write_impl
     c 0xf2
 
-    d @time
+    d @time || GameTimer.time
     d @speed
   end
+
+  STATIC_PACKET = new(time: nil)
 end

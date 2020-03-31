@@ -146,13 +146,13 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
     cip.y = rs.get_i32("y")
     cip.z = rs.get_i32("z")
 
-    # if Config.multilang_enable
-    #   lang = rs.get_string("lang")
-    #   unless Config.multilang_allowed.includes?(lang)
-    #     lang = Config.multilang_default
-    #   end
-    #   cip.html_prefix = "data/lang/#{lang}/"
-    # end
+    if Config.multilang_enable
+      lang = rs.get_string("lang")
+      unless Config.multilang_allowed.includes?(lang)
+        lang = Config.multilang_default
+      end
+      cip.html_prefix = "data/lang/#{lang}/"
+    end
 
     if base_class_id != active_class_id
       load_character_subclass_info(cip, l2id, active_class_id)

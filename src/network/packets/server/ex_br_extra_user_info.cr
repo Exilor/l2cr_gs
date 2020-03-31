@@ -6,7 +6,7 @@ class Packets::Outgoing::ExBrExtraUserInfo < GameServerPacket
     @id = pc.l2id
     @effects = pc.abnormal_visual_effects_event
     @lecture_mark = 0 # L2J TODO
-    @invisible = pc.invisible?
+    self.invisible = pc.invisible?
   end
 
   private def write_impl

@@ -1,7 +1,7 @@
 require "../../instances/abstract_instance"
 
 class Scripts::HallOfSuffering < AbstractInstance
-  private class HSWorld < InstanceWorld
+  private class HOSWorld < InstanceWorld
     property npc_list = {} of L2Npc => Bool
     property start_time = 0i64
     property party_leader_name = ""
@@ -173,7 +173,7 @@ class Scripts::HallOfSuffering < AbstractInstance
         world.add_allowed(pc.l2id)
       end
 
-      run_tumors(world.as(HSWorld))
+      run_tumors(world.as(HOSWorld))
     else
       teleport_player(pc, ENTER_TELEPORT, world.instance_id)
     end
@@ -317,7 +317,7 @@ class Scripts::HallOfSuffering < AbstractInstance
   def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
     world = InstanceManager.get_world(npc.instance_id)
-    if world.is_a?(HSWorld)
+    if world.is_a?(HOSWorld)
       if event.casecmp?("spawnBossGuards")
         if !world.klanikus.in_combat? && !world.klodekus.in_combat?
           world.bosses_attacked = false
@@ -365,7 +365,7 @@ class Scripts::HallOfSuffering < AbstractInstance
 
   def on_attack(npc, attacker, damage, is_summon, skill)
     world = InstanceManager.get_world(npc.instance_id)
-    if world.is_a?(HSWorld)
+    if world.is_a?(HOSWorld)
       if !world.bosses_attacked?
         world.bosses_attacked = true
         start_quest_timer("spawnBossGuards", BOSS_MINION_SPAWN_TIME, npc, nil)
@@ -391,7 +391,7 @@ class Scripts::HallOfSuffering < AbstractInstance
 
   def on_kill(npc, killer, is_summon)
     world = InstanceManager.get_world(npc.instance_id)
-    if world.is_a?(HSWorld)
+    if world.is_a?(HOSWorld)
       if npc.id == TUMOR_ALIVE
         add_spawn(TUMOR_DEAD, npc, false, 0, false, npc.instance_id)
       end
@@ -425,16 +425,16 @@ class Scripts::HallOfSuffering < AbstractInstance
   def on_first_talk(npc, pc)
     if npc.id == TEPIOS
       world = InstanceManager.get_player_world(pc)
-      if world.as(HSWorld).reward_item_id == -1
+      if world.as(HOSWorld).reward_item_id == -1
         warn { "Hall of Suffering: #{pc.name}(#{pc.l2id}) is try to cheat!" }
-        return get_party_leader_text(pc, world.as(HSWorld))
-      elsif world.as(HSWorld).rewarded?
+        return get_party_leader_text(pc, world.as(HOSWorld))
+      elsif world.as(HOSWorld).rewarded?
         return "32530-11.htm"
       elsif (party = pc.party) && party.leader_l2id == pc.l2id
-        return world.as(HSWorld).reward_htm
+        return world.as(HOSWorld).reward_htm
       end
 
-      return get_party_leader_text(pc, world.as(HSWorld))
+      return get_party_leader_text(pc, world.as(HOSWorld))
     end
 
     super
@@ -444,21 +444,21 @@ class Scripts::HallOfSuffering < AbstractInstance
     get_quest_state!(talker)
 
     if npc.id == MOUTH_OF_EKIMUS
-      enter_instance(talker, HSWorld.new, "HallOfSuffering.xml", TEMPLATE_ID)
+      enter_instance(talker, HOSWorld.new, "HallOfSuffering.xml", TEMPLATE_ID)
     elsif npc.id == TEPIOS
       world = InstanceManager.get_player_world(talker)
-      if world.as(HSWorld).reward_item_id == -1
+      if world.as(HOSWorld).reward_item_id == -1
         warn { "Hall of Suffering: #{talker.name}(#{talker.l2id}) is try to cheat!" }
-        return get_party_leader_text(talker, world.as(HSWorld))
-      elsif world.as(HSWorld).rewarded?
+        return get_party_leader_text(talker, world.as(HOSWorld))
+      elsif world.as(HOSWorld).rewarded?
         return "32530-11.htm"
       elsif (party = talker.party) && party.leader_l2id == talker.l2id
-        world.as(HSWorld).rewarded = true
+        world.as(HOSWorld).rewarded = true
         party.members.each do |m|
           st = m.get_quest_state(Q00695_DefendTheHallOfSuffering.simple_name)
           if st && st.memo_state?(2)
             give_items(m, 736, 1) # Scroll of Escape
-            give_items(m, world.as(HSWorld).reward_item_id, 1)
+            give_items(m, world.as(HOSWorld).reward_item_id, 1)
             st.exit_quest(true)
           end
         end
@@ -466,7 +466,7 @@ class Scripts::HallOfSuffering < AbstractInstance
         return ""
       end
 
-      return get_party_leader_text(talker, world.as(HSWorld))
+      return get_party_leader_text(talker, world.as(HOSWorld))
     end
 
     super

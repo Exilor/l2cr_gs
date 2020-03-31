@@ -172,6 +172,8 @@ module OfflineTradersTable
 
     GameDB.exec(CLEAR_OFFLINE_TABLE)
     GameDB.exec(CLEAR_OFFLINE_TABLE_ITEMS)
+
+    info { "Loaded #{n_traders} offline traders." }
   rescue e
     error e
   end

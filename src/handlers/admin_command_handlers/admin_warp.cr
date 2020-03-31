@@ -23,11 +23,11 @@ module AdminCommandHandler::AdminWarp
     pc.broadcast_packet(msu)
 
 
-    if summon = pc.summon
-      msu = MagicSkillUse.new(summon, summon, 628, 1, 1, 1)
-      summon.broadcast_packet(msu)
-      summon.tele_to_location(*pc.xyz)
-      summon.follow_owner
+    if smn = pc.summon
+      msu = MagicSkillUse.new(smn, smn, 628, 1, 1, 1)
+      smn.broadcast_packet(msu)
+      smn.tele_to_location(*pc.xyz)
+      smn.follow_owner
     end
   end
 

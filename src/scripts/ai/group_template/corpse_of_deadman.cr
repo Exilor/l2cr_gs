@@ -12,6 +12,7 @@ class Scripts::CorpseOfDeadman < AbstractNpcAI
   def on_spawn(npc)
     npc.current_hp = 0.0
     npc.dead = true
+
     super
   end
 end

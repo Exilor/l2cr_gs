@@ -33,7 +33,6 @@ class Packets::Outgoing::ServerStatus < MMO::OutgoingPacket(LoginServerClient)
   ON = 0x01
   OFF = 0x00
 
-  # this being a struct seems to have caused a segfault for a time
   private record Attribute, id : Int32, value : Int32
 
   @attributes = [] of Attribute

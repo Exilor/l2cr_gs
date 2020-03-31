@@ -62,7 +62,7 @@ class L2PcInstance < L2Playable
 
   @reco_bonus_task : Scheduler::DelayedTask?
   @reco_give_task : Scheduler::PeriodicTask?
-  @subclass_lock = Mutex.new(:Reentrant)
+  @subclass_lock = MyMutex.new
   @cur_weight_penalty = 0
   @last_compass_zone = 0
   @charges = Atomic(Int32).new(0)
@@ -162,7 +162,7 @@ class L2PcInstance < L2Playable
   getter active_enchant_item_id = ID_NONE
   getter cubics = Concurrent::Map(Int32, L2CubicInstance).new
   getter active_shots = Concurrent::Set(Int32).new(1)
-  getter soulshot_lock = Mutex.new(:Reentrant)
+  getter soulshot_lock = MyMutex.new
   getter fish_x = 0
   getter fish_y = 0
   getter fish_z = 0
@@ -798,7 +798,7 @@ class L2PcInstance < L2Playable
   end
 
   def class_id=(id : Int32)
-    # unless @subclass_lock.try_lock
+    # unless @subclass_lock.lock?
     #   return
     # end
 
@@ -6670,7 +6670,7 @@ class L2PcInstance < L2Playable
   end
 
   def add_subclass(class_id : Int32, class_index : Int32)
-    # unless @subclass_lock.try_lock
+    # unless @subclass_lock.lock?
     #   debug "Subclass lock is locked."
     #   return false
     # end
@@ -6721,7 +6721,7 @@ class L2PcInstance < L2Playable
   end
 
   def modify_subclass(class_index : Int32, new_class_id : Int32) : Bool
-    # return false unless @subclass_lock.try_lock
+    # return false unless @subclass_lock.lock?
 
     begin
       GameDB.transaction do
@@ -6744,7 +6744,7 @@ class L2PcInstance < L2Playable
   end
 
   def change_active_class(class_index : Int32)
-    # return false unless @subclass_lock.try_lock
+    # return false unless @subclass_lock.lock?
 
     begin
       return false if @transformation

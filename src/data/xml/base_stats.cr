@@ -26,6 +26,7 @@ class BaseStats < EnumClass
   add(NONE) { |char| 1.0 }
 
   def self.load
+    debug "Loading..."
     parse_datapack_file("stats/statBonus.xml")
   end
 

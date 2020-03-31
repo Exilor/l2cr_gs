@@ -1,5 +1,5 @@
 class Scripts::HideoutOfTheDawn < AbstractInstance
-  private class HotDWorld < InstanceWorld
+  private class HOTDWorld < InstanceWorld
   end
 
   # NPCs
@@ -30,7 +30,7 @@ class Scripts::HideoutOfTheDawn < AbstractInstance
       event
     when "32593-01.html"
       pc = pc.not_nil!
-      enter_instance(pc, HotDWorld.new, "HideoutOfTheDawn.xml", TEMPLATE_ID)
+      enter_instance(pc, HOTDWorld.new, "HideoutOfTheDawn.xml", TEMPLATE_ID)
       event
     end
   end

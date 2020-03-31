@@ -16,14 +16,14 @@ module LoginServerClient
   IN_BUFFER.set_encoding("UTF-16LE")
   OUT_BUFFER.set_encoding("UTF-16LE")
 
-  class_getter port = 9014
-  class_getter game_port = 7777
-  class_getter host = "127.0.0.1"
-  class_getter game_host = "127.0.0.1"
+  class_getter port = 0
+  class_getter game_port = 0
+  class_getter host = ""
+  class_getter game_host = ""
   class_getter hex_id = Bytes.empty
   class_getter request_id = 1
   class_getter accept_alternate = true
-  class_getter max_players = 9999
+  class_getter max_players = 0
   class_getter status = 0
   class_getter reserve_host = false
   class_property server_name : String = ""
@@ -31,6 +31,12 @@ module LoginServerClient
   private class_getter! socket : TCPSocket
 
   def start
+    @@port = Config.game_server_login_port
+    @@game_port = Config.port_game
+    @@host = Config.game_server_login_host == "*" ? "127.0.0.1" : Config.game_server_login_host
+    @@host = @@host == "*" ? "127.0.0.1" : Socket::IPAddress.new(@@host, @@port).address
+    @@game_host = Config.gameserver_hostname == "*" ? "127.0.0.1" : Config.gameserver_hostname
+    @@game_host = @@game_host == "*" ? "127.0.0.1" : Socket::IPAddress.new(@@game_host, @@game_port).address
     @@max_players = Config.maximum_online_users
     @@hex_id = Config.hex_id
     if @@hex_id.empty?

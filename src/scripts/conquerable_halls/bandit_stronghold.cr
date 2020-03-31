@@ -33,8 +33,7 @@ class Scripts::BanditStronghold < FlagWar
     @flag_coords << Location.new(81981, -15708, -1858, 60392)
     @flag_coords << Location.new(84375, -17060, -1860, 27712)
 
-    zone_list = ZoneManager.get_all_zones(L2ResidenceHallTeleportZone)
-    zone_list.each do |tele_zone|
+    ZoneManager.get_all_zones(L2ResidenceHallTeleportZone) do |tele_zone|
       if tele_zone.residence_id != BANDIT_STRONGHOLD
         next
       end

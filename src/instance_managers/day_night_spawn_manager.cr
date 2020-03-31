@@ -48,18 +48,15 @@ module DayNightSpawnManager
   end
 
   # custom: should be private but i want to call it from SendBypassBuildCmd
-  def change_mode(mode : Int32) # just use a bool?
+  def change_mode(night : Bool) # just use a bool?
     return if NIGHT_CREATURES.empty? && DAY_CREATURES.empty? && BOSSES.empty?
 
-    case mode
-    when 0
-      spawn_day_creatures
-      special_night_boss(0)
-    when 1
+    if night
       spawn_night_creatures
       special_night_boss(1)
     else
-      error { "Wrong mode #{mode}." }
+      spawn_day_creatures
+      special_night_boss(0)
     end
   end
 
@@ -69,7 +66,7 @@ module DayNightSpawnManager
   end
 
   def notify_change_mode
-    change_mode(GameTimer.night? ? 1 : 0)
+    change_mode(GameTimer.night?)
   rescue e
     error e
   end
@@ -80,20 +77,20 @@ module DayNightSpawnManager
     NIGHT_CREATURES.clear
   end
 
-  private def special_night_boss(mode)
+  private def special_night_boss(night)
     BOSSES.each_key do |s|
       boss = BOSSES[s]?
-      if boss.nil? && mode == 1
+      if boss.nil? && night
         boss = s.do_spawn.as(L2RaidBossInstance)
         RaidBossSpawnManager.notify_spawn_night_boss(boss)
         BOSSES[s] = boss
         next
       end
 
-      next if boss.nil? && mode == 0
+      next if boss.nil? && !night
 
       if boss && boss.id == 25328 && boss.raid_status.alive?
-        handle_hellmans(boss, mode)
+        handle_hellmans(boss, night)
       end
 
       return
@@ -102,16 +99,15 @@ module DayNightSpawnManager
     error e
   end
 
-  private def handle_hellmans(boss, mode)
-    case mode
-    when 0
-      boss.delete_me
-      info "Deleting Hellmann raid boss."
-    when 1
+  private def handle_hellmans(boss, night)
+    if night
       unless boss.visible?
         boss.spawn_me
       end
       info "Spawning Hellmann raid boss."
+    else
+      boss.delete_me
+      info "Deleting Hellmann raid boss."
     end
   end
 

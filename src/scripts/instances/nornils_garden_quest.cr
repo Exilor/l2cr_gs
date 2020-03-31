@@ -1,5 +1,5 @@
 class Scripts::NornilsGardenQuest < AbstractInstance
-  private class NornilsGardenQuestWorld < InstanceWorld
+  private class NGQWorld < InstanceWorld
     property origin_loc : Location?
   end
 
@@ -30,7 +30,7 @@ class Scripts::NornilsGardenQuest < AbstractInstance
     case event
     when "enter"
       if check_conditions(player)
-        world = NornilsGardenQuestWorld.new
+        world = NGQWorld.new
         world.origin_loc = player.location
         enter_instance(player, world, "NornilsGardenQuest.xml", TEMPLATE_ID)
         q236.set_cond(16, true)
@@ -40,7 +40,7 @@ class Scripts::NornilsGardenQuest < AbstractInstance
       end
     when "exit"
       if q236 && q236.completed?
-        world = InstanceManager.get_player_world(player).as(NornilsGardenQuestWorld)
+        world = InstanceManager.get_player_world(player).as(NGQWorld)
         world.remove_allowed(player.l2id)
         finish_instance(world, 5000)
 

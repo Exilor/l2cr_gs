@@ -131,9 +131,9 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
     debug { "Dropping #{drop} at #{@x} #{@y} #{@z}." }
 
-    if pc.gm?
+    if drop && pc.gm?
       target = pc.target.try &.name
-      GMAudit.log(pc, "Drop", target, "(id: #{drop.try &.id}, name: #{drop.try &.item_name}, obj_id: #{drop.try &.l2id}, x: #{pc.x}, y: #{pc.y}, z: #{pc.z})")
+      GMAudit.log(pc, "Drop", target, "(id: #{drop.id}, name: #{drop.item_name}, obj_id: #{drop.l2id}, x: #{pc.x}, y: #{pc.y}, z: #{pc.z})")
     end
 
     if drop && drop.id == Inventory::ADENA_ID && drop.count >= 1_000_000

@@ -13,10 +13,7 @@ module OlympiadGameManager
   class_getter? battle_started = false
 
   def load
-    unless zones = ZoneManager.get_all_zones(L2OlympiadStadiumZone)
-      raise "No olympiad stadium zones defined (nil)"
-    end
-
+    zones = ZoneManager.get_all_zones(L2OlympiadStadiumZone)
     if zones.empty?
       raise "No olympiad stadium zones defined (empty)"
     end

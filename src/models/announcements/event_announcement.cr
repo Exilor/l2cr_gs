@@ -1,10 +1,12 @@
+require "./i_announcement"
+
 class EventAnnouncement
   include IAnnouncement
 
-  getter id
+  getter id : Int32
   property content : String
 
-  def initialize(@range : Range(Time, Time), @content : String)
+  def initialize(@range : DateRange, @content : String)
     @id = IdFactory.next
   end
 
@@ -25,7 +27,7 @@ class EventAnnouncement
   end
 
   def valid? : Bool
-    Time.now.between?(@range.begin, @range.end)
+    @range.within_range?(Time.now)
   end
 
   def delete_me : Bool

@@ -1,5 +1,5 @@
 class Scripts::LibraryOfSages < AbstractInstance
-  private class LoSWorld < InstanceWorld
+  private class LOSWorld < InstanceWorld
     property! elcadia : L2Npc
   end
 
@@ -43,7 +43,7 @@ class Scripts::LibraryOfSages < AbstractInstance
     pc = pc.not_nil!
 
     world = InstanceManager.get_player_world(pc)
-    if world.is_a?(LoSWorld)
+    if world.is_a?(LOSWorld)
       case event
       when "TELEPORT2"
         teleport_player(pc, LIBRARY_LOC, world.instance_id)
@@ -68,7 +68,7 @@ class Scripts::LibraryOfSages < AbstractInstance
   end
 
   def on_talk(npc, talker)
-    enter_instance(talker, LoSWorld.new, "LibraryOfSages.xml", TEMPLATE_ID)
+    enter_instance(talker, LOSWorld.new, "LibraryOfSages.xml", TEMPLATE_ID)
     super
   end
 
@@ -78,7 +78,7 @@ class Scripts::LibraryOfSages < AbstractInstance
     end
 
     teleport_player(pc, START_LOC, world.instance_id, false)
-    spawn_elcadia(pc, world.as(LoSWorld))
+    spawn_elcadia(pc, world.as(LOSWorld))
   end
 
   private def spawn_elcadia(pc, world)

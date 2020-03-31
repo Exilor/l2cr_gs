@@ -273,14 +273,13 @@ class FortSiege
   end
 
   def killed_commander(instance : L2FortCommanderInstance)
-    fort = fort?
-    if @commanders.empty? || fort.nil?
+    if @commanders.empty?
       return
     end
 
     if sp = instance.spawn?
       commanders = FortSiegeManager.get_commander_spawn_list(fort.residence_id)
-      commanders.each do |sp2|
+      commanders.not_nil!.each do |sp2|
         if sp2.id == sp.id
           str = nil
           case sp2.message_id
@@ -301,7 +300,7 @@ class FortSiege
           end
         end
       end
-      @commanders.delete(sp)
+      @commanders.delete_first(sp)
 
       if @commanders.empty?
         spawn_flag(fort.residence_id)
@@ -709,32 +708,32 @@ class FortSiege
     case time
     when 3600
       task = -> { schedule_start_siege_task(600) }
-      ThreadPoolManager.schedule_general(task, 3000000)
+      ThreadPoolManager.schedule_general(task, 3_000_000)
     when 600
       fort.despawn_suspicious_merchant
       sm = SystemMessage.s1_minutes_until_the_fortress_battle_starts
       sm.add_int(10)
       announce_to_player(sm)
       task = -> { schedule_start_siege_task(300) }
-      ThreadPoolManager.schedule_general(task, 300000)
+      ThreadPoolManager.schedule_general(task, 300_000)
     when 300
       sm = SystemMessage.s1_minutes_until_the_fortress_battle_starts
       sm.add_int(5)
       announce_to_player(sm)
       task = -> { schedule_start_siege_task(60) }
-      ThreadPoolManager.schedule_general(task, 240000)
+      ThreadPoolManager.schedule_general(task, 240_000)
     when 60
       sm = SystemMessage.s1_minutes_until_the_fortress_battle_starts
       sm.add_int(1)
       announce_to_player(sm)
       task = -> { schedule_start_siege_task(30) }
-      ThreadPoolManager.schedule_general(task, 30000)
+      ThreadPoolManager.schedule_general(task, 30_000)
     when 30
       sm = SystemMessage.s1_seconds_until_the_fortress_battle_starts
       sm.add_int(30)
       announce_to_player(sm)
       task = -> { schedule_start_siege_task(10) }
-      ThreadPoolManager.schedule_general(task, 20000)
+      ThreadPoolManager.schedule_general(task, 20_000)
     when 10
       sm = SystemMessage.s1_seconds_until_the_fortress_battle_starts
       sm.add_int(10)
@@ -773,7 +772,7 @@ class FortSiege
   end
 
   private def schedule_siege_restore
-    unless in_progress
+    unless in_progress?
       return
     end
 

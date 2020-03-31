@@ -2,7 +2,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
   include XMLReader
 
   private class FETWorld < InstanceWorld
-    getter lock = Mutex.new(:Reentrant)
+    getter lock = MyMutex.new
     getter demons = Concurrent::Array(L2MonsterInstance).new
     getter portraits = Concurrent::Map(L2MonsterInstance, Int32).new
     getter npc_list = Concurrent::Array(L2Npc).new

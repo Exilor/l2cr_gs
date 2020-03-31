@@ -55,40 +55,40 @@ module AdminCommandHandler::AdminFightCalculator
 
     if npc1 && npc2
       reply_msg = String.build do |io|
-        io << "<html><title>Selected mobs to fight</title>"
-        io << "<body>"
-        io << "<table>"
-        io << "<tr><td>First</td><td>Second</td></tr>"
-        io << "<tr><td>level "
+        io << "<html><title>Selected mobs to fight</title>" \
+              "<body>" \
+              "<table>" \
+              "<tr><td>First</td><td>Second</td></tr>" \
+              "<tr><td>level "
         io << lvl1
         io << "</td><td>level "
         io << lvl2
-        io << "</td></tr>"
-        io << "<tr><td>id "
+        io << "</td></tr>" \
+               "<tr><td>id "
         io << npc1.id
         io << "</td><td>id "
         io << npc2.id
-        io << "</td></tr>"
-        io << "<tr><td>"
+        io << "</td></tr>" \
+              "<tr><td>"
         io << npc1.name
         io << "</td><td>"
         io << npc2.name
-        io << "</td></tr>"
-        io << "</table>"
-        io << "<center><br><br><br>"
-        io << "<button value=\"OK\" action=\"bypass -h admin_fight_calculator_show "
+        io << "</td></tr>" \
+              "</table>" \
+              "<center><br><br><br>" \
+              "<button value=\"OK\" action=\"bypass -h admin_fight_calculator_show "
         io << npc1.id
         io << " "
         io << npc2.id
-        io << "\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
-        io << "</center>"
-        io << "</body></html>"
+        io << "\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">" \
+              "</center>" \
+              "</body></html>"
       end
     elsif lvl1 != 0 && npc1.nil?
       npcs = NpcData.get_all_of_level(lvl1)
       reply_msg = String.build(50 + (npcs.size * 200)) do |io|
-        io << "<html><title>Select first mob to fight</title>"
-        io << "<body><table>"
+        io << "<html><title>Select first mob to fight</title>" \
+              "<body><table>"
 
         npcs.each do |n|
           io << "<tr><td><a action=\"bypass -h admin_fight_calculator lvl1 "
@@ -109,8 +109,8 @@ module AdminCommandHandler::AdminFightCalculator
     elsif lvl2 != 0 && npc2.nil?
       npcs = NpcData.get_all_of_level(lvl2)
       reply_msg = String.build(50 + (npcs.size * 200)) do |io|
-        io << "<html><title>Select second mob to fight</title>"
-        io << "<body><table>"
+        io << "<html><title>Select second mob to fight</title>" \
+          "<body><table>"
 
         npcs.each do |n|
           io << "<tr><td><a action=\"bypass -h admin_fight_calculator lvl1 "
@@ -130,16 +130,16 @@ module AdminCommandHandler::AdminFightCalculator
       end
     else
       reply_msg = String.build do |io|
-        io << "<html><title>Select mobs to fight</title>"
-        io << "<body>"
-        io << "<table>"
-        io << "<tr><td>First</td><td>Second</td></tr>"
-        io << "<tr><td><edit var=\"lvl1\" width=80></td><td><edit var=\"lvl2\" width=80></td></tr>"
-        io << "</table>"
-        io << "<center><br><br><br>"
-        io << "<button value=\"OK\" action=\"bypass -h admin_fight_calculator lvl1 $lvl1 lvl2 $lvl2\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
-        io << "</center>"
-        io << "</body></html>"
+        io << "<html><title>Select mobs to fight</title>" \
+              "<body>" \
+              "<table>" \
+              "<tr><td>First</td><td>Second</td></tr>" \
+              "<tr><td><edit var=\"lvl1\" width=80></td><td><edit var=\"lvl2\" width=80></td></tr>" \
+              "</table>" \
+              "<center><br><br><br>" \
+              "<button value=\"OK\" action=\"bypass -h admin_fight_calculator lvl1 $lvl1 lvl2 $lvl2\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">" \
+              "</center>" \
+              "</body></html>"
       end
     end
 
@@ -268,9 +268,9 @@ module AdminCommandHandler::AdminFightCalculator
     admin_reply = NpcHtmlMessage.new
 
     reply_msg = String.build(1000) do |io|
-      io << "<html><title>Selected mobs to fight</title>"
-      io << "<body>"
-      io << "<table>"
+      io << "<html><title>Selected mobs to fight</title>" \
+            "<body>" \
+            "<table>"
 
       if params.size == 0
         io << "<tr><td width=140>Parameter</td><td width=70>me</td><td width=70>target</td></tr>"
@@ -286,18 +286,18 @@ module AdminCommandHandler::AdminFightCalculator
       io << miss1
       io << "%</td><td>"
       io << miss2
-      io << "%</td></tr>"
-      io << "<tr><td>shld</td><td>"
+      io << "%</td></tr>" \
+            "<tr><td>shld</td><td>"
       io << shld2
       io << "%</td><td>"
       io << shld1
-      io << "%</td></tr>"
-      io << "<tr><td>crit</td><td>"
+      io << "%</td></tr>" \
+            "<tr><td>crit</td><td>"
       io << crit1
       io << "%</td><td>"
       io << crit2
-      io << "%</td></tr>"
-      io << "<tr><td>pAtk / pDef</td><td>"
+      io << "%</td></tr>" \
+            "<tr><td>pAtk / pDef</td><td>"
       io << patk1.to_i
       io << " / "
       io << pdef1.to_i
@@ -305,33 +305,33 @@ module AdminCommandHandler::AdminFightCalculator
       io << patk2.to_i
       io << " / "
       io << pdef2.to_i
-      io << "</td></tr>"
-      io << "<tr><td>made hits</td><td>"
+      io << "</td></tr>" \
+            "<tr><td>made hits</td><td>"
       io << satk1
       io << "</td><td>"
       io << satk2
-      io << "</td></tr>"
-      io << "<tr><td>dmg per hit</td><td>"
+      io << "</td></tr>" \
+            "<tr><td>dmg per hit</td><td>"
       io << dmg1.to_i
       io << "</td><td>"
       io << dmg2.to_i
-      io << "</td></tr>"
-      io << "<tr><td>got dmg</td><td>"
+      io << "</td></tr>" \
+            "<tr><td>got dmg</td><td>"
       io << tdmg2
       io << "</td><td>"
       io << tdmg1
-      io << "</td></tr>"
-      io << "<tr><td>got regen</td><td>"
+      io << "</td></tr>" \
+            "<tr><td>got regen</td><td>"
       io << hp1
       io << "</td><td>"
       io << hp2
-      io << "</td></tr>"
-      io << "<tr><td>had HP</td><td>"
+      io << "</td></tr>" \
+            "<tr><td>had HP</td><td>"
       io << maxhp1.to_i
       io << "</td><td>"
       io << maxhp2.to_i
-      io << "</td></tr>"
-      io << "<tr><td>die</td>"
+      io << "</td></tr>" \
+            "<tr><td>die</td>"
 
       if tdmg2 - hp1 > 1
         io << "<td>"
@@ -349,9 +349,9 @@ module AdminCommandHandler::AdminFightCalculator
         io << "<td>never</td>"
       end
 
-      io << "</tr>"
-      io << "</table>"
-      io << "<center><br>"
+      io << "</tr>" \
+            "</table>" \
+            "<center><br>"
 
       if params.size == 0
         io << "<button value=\"Retry\" action=\"bypass -h admin_fight_calculator_show\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
@@ -363,8 +363,8 @@ module AdminCommandHandler::AdminFightCalculator
         io << "\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
       end
 
-      io << "</center>"
-      io << "</body></html>"
+      io << "</center>" \
+            "</body></html>"
     end
     admin_reply.html = reply_msg
     pc.send_packet(admin_reply)

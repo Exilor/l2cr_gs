@@ -236,7 +236,7 @@ abstract class AirShipController < Quest
         warn { "Zero arrival path length." }
         @arrival_path = nil
       else
-        p = path.sample
+        p = path.last
         unless zone.inside_zone?(p.location)
           warn { "Arrival path finish point (#{p.x}, #{p.y}, #{p.z}) not in zone #{@dock_zone}." }
           @arrival_path = nil
@@ -257,7 +257,7 @@ abstract class AirShipController < Quest
         warn "Empty path."
         @depart_path = nil
       else
-        p = path.sample
+        p = path.last
         if zone.inside_zone?(p.location)
           warn { "Departure path finish point (#{p.x}, #{p.y}, #{p.z}) in zone #{@dock_zone}." }
           @depart_path = nil

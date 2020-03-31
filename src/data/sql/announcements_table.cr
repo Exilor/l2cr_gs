@@ -12,6 +12,8 @@ module AnnouncementsTable
   private DATA = Concurrent::Map(Int32, IAnnouncement).new
 
   def load
+    debug "Loading..."
+
     DATA.clear
 
     GameDB.each("SELECT * FROM announcements") do |rs|

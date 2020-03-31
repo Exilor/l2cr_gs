@@ -15,7 +15,7 @@ class GameClient
   getter state = State::CONNECTED
   getter stats = ClientStats.new
   getter start_time = Time.ms
-  getter active_char_lock = Mutex.new(:Reentrant)
+  getter active_char_lock = MyMutex.new
   getter(flood_protectors) { FloodProtectors.new(self) }
   property active_char : L2PcInstance?
   property additional_close_packet : GameServerPacket?
@@ -42,11 +42,9 @@ class GameClient
       return
     end
 
-    if gsp.invisible?
-      if pc = @active_char
-        unless pc.override_see_all_players?
-          return
-        end
+    if gsp.invisible? && (pc = @active_char)
+      unless pc.override_see_all_players?
+        return
       end
     end
 
@@ -207,13 +205,10 @@ class GameClient
     @detached = true
     close(Packets::Outgoing::ServerClose::STATIC_PACKET)
     sync do
-      if @cleanup_task
-        cancel_cleanup
-      end
-
+      cancel_cleanup
       @cleanup_task = ThreadPoolManager.schedule_general(->cleanup_task, 0)
     end
-  rescue e # debug
+  rescue e
     error e
   end
 
@@ -260,7 +255,24 @@ class GameClient
       return
     end
 
-    if @packet_queue.full?
+    # if @packet_queue.full?
+    #   if stats.count_queue_overflow
+    #     warn "Client disconnected (too many queue overflows)."
+    #     close_now
+    #   else
+    #     debug "@packet_queue is full."
+    #     send_packet(Packets::Outgoing::ActionFailed::STATIC_PACKET)
+    #   end
+
+    #   return
+    # end
+
+    # @packet_queue.send(gcp)
+
+    select
+    when @packet_queue.send(gcp)
+      # do nothing
+    else
       if stats.count_queue_overflow
         warn "Client disconnected (too many queue overflows)."
         close_now
@@ -271,8 +283,6 @@ class GameClient
 
       return
     end
-
-    @packet_queue.send(gcp)
 
     begin
       if @state.connected?
@@ -295,19 +305,41 @@ class GameClient
   def call
     count = 0
 
-    until @packet_queue.empty?
-      unless packet = (@packet_queue.receive rescue nil)#?
-        return
+    # until @packet_queue.empty?
+    #   unless packet = (@packet_queue.receive rescue nil)#?
+    #     return
+    #   end
+
+    #   if @detached
+    #     @packet_queue.close
+    #     return
+    #   end
+
+    #   packet.run
+
+    #   count += 1
+    # end
+
+    loop do
+      select
+      when packet = @packet_queue.receive?
+        break unless packet
+        if @detached
+          @packet_queue.close
+          return
+        end
+
+        packet.run
+
+        count += 1
+
+        if stats.count_burst(count)
+          debug { "count_burst(#{count}) returned true." }
+          return
+        end
+      else
+        break
       end
-
-      if @detached
-        @packet_queue.close
-        return
-      end
-
-      packet.run
-
-      count += 1
     end
   end
 
@@ -408,6 +440,7 @@ class GameClient
   end
 
   private def cleanup_task
+    {% if flag?(:preview_mt) %} debug "cleanup_task" {% end %}
     if auto_save_task = @auto_save_task
       auto_save_task.cancel
       @auto_save_task = nil
@@ -429,6 +462,7 @@ class GameClient
   rescue e
     error e
   ensure
+    {% if flag?(:preview_mt) %} debug { "Calling LoginServerClient.send_logout(account_name: #{@account_name})." } {% end %}
     LoginServerClient.send_logout(@account_name)
   end
 

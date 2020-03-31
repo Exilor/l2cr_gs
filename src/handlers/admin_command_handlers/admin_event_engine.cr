@@ -31,7 +31,7 @@ module AdminCommandHandler::AdminEventEngine
 
           File.open("#{Config.datapack_root}/data/events/#{event_name}") do |f|
             admin_reply.set_file("en", "data/html/mods/EventEngine/Participation.htm")
-            admin_reply["%event_name%"] = event_name
+            admin_reply["%eventName%"] = event_name
             admin_reply["%eventCreator%"] = f.gets.not_nil!
             admin_reply["%eventInfo%"] = f.gets.not_nil!
             admin_reply["npc_%objectId%_event_participate"] = "admin_event" # Weird, but nice hack, isnt it? :)
@@ -300,8 +300,8 @@ module AdminCommandHandler::AdminEventEngine
     reply_msg << "<html><title>[ L2J EVENT ENGINE ]</title><body><br><br><center><font color=LEVEL>Event name:</font><br>"
 
     if @@temp_name.empty?
-      reply_msg << "You can also use #event_name text to insert a new title"
-      reply_msg << "<center><multiedit var=\"name\" width=260 height=24> <button value=\"Set Event Name\" action=\"bypass -h admin_event_name $name\" width=120 height=20 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
+      reply_msg << "You can also use #event_name text to insert a new title" \
+        "<center><multiedit var=\"name\" width=260 height=24> <button value=\"Set Event Name\" action=\"bypass -h admin_event_name $name\" width=120 height=20 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
     else
       reply_msg << @@temp_name
     end
@@ -314,8 +314,8 @@ module AdminCommandHandler::AdminEventEngine
       reply_msg << @@temp_buffer
     end
 
-    reply_msg << "<center><multiedit var=\"txt\" width=270 height=100> <button value=\"Add text\" action=\"bypass -h admin_add $txt\" width=120 height=20 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
-    reply_msg << "<button value=\"Remove text\" action=\"bypass -h admin_delete_buffer\" width=120 height=20 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
+    reply_msg << "<center><multiedit var=\"txt\" width=270 height=100> <button value=\"Add text\" action=\"bypass -h admin_add $txt\" width=120 height=20 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">" \
+      "<button value=\"Remove text\" action=\"bypass -h admin_delete_buffer\" width=120 height=20 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
 
     unless @@temp_name.empty? && @@temp_buffer.empty?
       reply_msg << "<br><button value=\"Store Event Data\" action=\"bypass -h admin_event_store\" width=160 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
@@ -333,8 +333,8 @@ module AdminCommandHandler::AdminEventEngine
 
     sb << "<html><body><title>[ L2J EVENT ENGINE ]</title><br><center> Current event: <font color=\"LEVEL\">"
     sb << L2Event.event_name
-    sb << "</font></center><br>INFO: To start an event, you must first set the number of teams, then type their names in the boxes and finally type the NPC ID that will be the event manager (can be any existing npc) next to the \"Announce Event!\" button.<br><table width=100%>"
-    sb << "<tr><td><button value=\"Announce Event!\" action=\"bypass -h admin_event_announce $event_npcid "
+    sb << "</font></center><br>INFO: To start an event, you must first set the number of teams, then type their names in the boxes and finally type the NPC ID that will be the event manager (can be any existing npc) next to the \"Announce Event!\" button.<br><table width=100%>" \
+      "<tr><td><button value=\"Announce Event!\" action=\"bypass -h admin_event_announce $event_npcid "
     sb << team_numbers
     sb << " "
     i = 0
@@ -344,12 +344,12 @@ module AdminCommandHandler::AdminEventEngine
       sb << " - "
       i += 1
     end
-    sb << "\" width=140 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-    sb << "<td><edit var=\"event_npcid\" width=100 height=20></td></tr>"
-    sb << "<tr><td><button value=\"Set number of teams\" action=\"bypass -h admin_event_change_teams_number $event_teams_number\" width=140 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-    sb << "<td><edit var=\"event_teams_number\" width=100 height=20></td></tr>"
-    sb << "</table><br><center> <br><br>"
-    sb << "<font color=\"LEVEL\">Teams' names:</font><br><table width=100% cellspacing=8>"
+    sb << "\" width=140 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
+      "<td><edit var=\"event_npcid\" width=100 height=20></td></tr>" \
+      "<tr><td><button value=\"Set number of teams\" action=\"bypass -h admin_event_change_teams_number $event_teams_number\" width=140 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
+      "<td><edit var=\"event_teams_number\" width=100 height=20></td></tr>" \
+      "</table><br><center> <br><br>" \
+      "<font color=\"LEVEL\">Teams' names:</font><br><table width=100% cellspacing=8>"
     i = 1
     while i - 1 < team_numbers
       sb << "<tr><td align=center>Team #"
@@ -370,8 +370,8 @@ module AdminCommandHandler::AdminEventEngine
     sb = String::Builder.new
     sb << "<html><title>[ L2J EVENT ENGINE ]</title><body><br><center>Current event: <font color=\"LEVEL\">"
     sb << L2Event.event_name
-    sb << "</font></center><br><table cellspacing=-1 width=280><tr><td align=center>Type the team ID(s) that will be affected by the commands. Commands with '*' work with only 1 team ID in the field, while '!' - none.</td></tr><tr><td align=center><edit var=\"team_number\" width=100 height=15></td></tr>"
-    sb << "<tr><td>&nbsp;</td></tr><tr><td><table width=200>"
+    sb << "</font></center><br><table cellspacing=-1 width=280><tr><td align=center>Type the team ID(s) that will be affected by the commands. Commands with '*' work with only 1 team ID in the field, while '!' - none.</td></tr><tr><td align=center><edit var=\"team_number\" width=100 height=15></td></tr>" \
+      "<tr><td>&nbsp;</td></tr><tr><td><table width=200>"
     unless @@npcs_deleted
       sb << "<tr><td><button value=\"Start!\" action=\"bypass -h admin_event_control_begin\" width=100 height=20 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td><font color=\"LEVEL\">Destroys all event npcs so no more people can't participate now on</font></td></tr>"
     end

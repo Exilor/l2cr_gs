@@ -13,7 +13,7 @@ class L2ItemInstance < L2Object
   private MANA_CONSUMPTION_RATE = 60_000
 
   @consuming_mana = false
-  @db_lock = Mutex.new(:Reentrant)
+  @db_lock = MyMutex.new
   @shots_mask = 0
   @enchant_options = [] of Options
   @life_time_task : Scheduler::DelayedTask?

@@ -35,7 +35,7 @@ abstract class L2Object < ListenersContainer
 
   def decay_me : Bool
     unless region = world_region
-      warn "L2Object#decay_me: @world_region must not be nil here."
+      # debug "L2Object#decay_me: @world_region must not be nil here."
     end
 
     sync do

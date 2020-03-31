@@ -59,15 +59,15 @@ module AdminCommandHandler::AdminInstanceZone
     times = InstanceManager.get_all_instance_times(player.l2id)
 
     html = String.build(500 + (times.size * 200)) do |io|
-      io << "<html><center><table width=260><tr>"
-      io << "<td width=40><button value=\"Main\" action=\"bypass -h admin_admin\" width=40 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-      io << "<td width=180><center>Character Instances</center></td>"
-      io << "<td width=40><button value=\"Back\" action=\"bypass -h admin_current_player\" width=40 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-      io << "</tr></table><br><font color=\"LEVEL\">Instances for "
+      io << "<html><center><table width=260><tr>" \
+            "<td width=40><button value=\"Main\" action=\"bypass -h admin_admin\" width=40 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
+            "<td width=180><center>Character Instances</center></td>" \
+            "<td width=40><button value=\"Back\" action=\"bypass -h admin_current_player\" width=40 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
+            "</tr></table><br><font color=\"LEVEL\">Instances for "
       io << player.name
-      io << "</font><center><br>"
-      io << "<table>"
-      io << "<tr><td width=150>Name</td><td width=50>Time</td><td width=70>Action</td></tr>"
+      io << "</font><center><br>" \
+            "<table>" \
+            "<tr><td width=150>Name</td><td width=50>Time</td><td width=70>Action</td></tr>"
 
       times.each do |id, time|
         hours = 0

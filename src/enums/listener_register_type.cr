@@ -1,4 +1,5 @@
-enum ListenerRegisterType : UInt8
+# arithmetic overflow in case statement if UInt8
+enum ListenerRegisterType# : UInt8
   NPC
   ZONE
   ITEM

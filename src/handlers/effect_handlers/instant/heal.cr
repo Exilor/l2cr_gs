@@ -54,10 +54,6 @@ module EffectHandler
         target.current_hp += amount
       end
 
-      if skill.id == 4051
-        debug "Life Cubic healing #{target} for #{amount.round(2)} HP."
-      end
-
       if target.player?
         if skill.id == 4051
           target.send_packet(SystemMessageId::REJUVENATING_HP)

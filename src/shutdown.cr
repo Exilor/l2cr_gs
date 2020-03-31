@@ -116,8 +116,8 @@ class Shutdown
       #   error e
       # end
 
-      # debug "Shutting down the thread pool..."
-      # ThreadPoolManager.shutdown
+      debug "Shutting down the thread pool..."
+      ThreadPoolManager.shutdown
 
       begin
         GameDB.close

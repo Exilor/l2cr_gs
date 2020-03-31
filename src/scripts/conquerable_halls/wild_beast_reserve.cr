@@ -31,8 +31,7 @@ class Scripts::WildBeastReserve < FlagWar
     @flag_coords << Location.new(59116, -93251, -1302, 31000)
     @flag_coords << Location.new(56432, -92864, -1303, 64000)
 
-    zone_list = ZoneManager.get_all_zones(L2ResidenceHallTeleportZone)
-    zone_list.each do |tele_zone|
+    ZoneManager.get_all_zones(L2ResidenceHallTeleportZone) do |tele_zone|
       if tele_zone.residence_id != BEAST_FARM
         next
       end

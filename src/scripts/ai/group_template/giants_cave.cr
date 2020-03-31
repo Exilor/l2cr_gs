@@ -45,7 +45,7 @@ class Scripts::GiantsCave < AbstractNpcAI
   def on_aggro_range_enter(npc, player, is_summon)
     if npc.script_value?(0)
       npc.script_value = 1
-      if Rnd.bool
+      if rand(2) == 1
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::YOU_GUYS_ARE_DETECTED)
       else
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::WHAT_KIND_OF_CREATURES_ARE_YOU)

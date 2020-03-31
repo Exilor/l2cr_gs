@@ -247,7 +247,7 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
             if get_quest_items_count(pc, KASHA_BEAR_PELT, KASHA_BLADE_SPIDER_HUSK, FIRST_FIERY_EGG) < 3
               html = "30585-08.html"
             else
-              take_items(pc, -1, [FIRE_CHARM, KASHA_BEAR_PELT, KASHA_BLADE_SPIDER_HUSK, FIRST_FIERY_EGG])
+              take_items(pc, -1, {FIRE_CHARM, KASHA_BEAR_PELT, KASHA_BLADE_SPIDER_HUSK, FIRST_FIERY_EGG})
               give_items(pc, HESTUI_MASK, 1)
               give_items(pc, SECOND_FIERY_EGG, 1)
               st.set_cond(3, true)

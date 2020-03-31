@@ -1,7 +1,7 @@
+require "../models/date_range"
+
 module EventDroplist
   extend self
-
-  private alias DateRange = Range(Time, Time)
 
   private DROPS = [] of DateDrop
 

@@ -30,7 +30,7 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
         dx = @x - pc.in_vehicle_position.not_nil!.x
         dy = @y - pc.in_vehicle_position.not_nil!.y
 
-        diff_sq = (dx * dx) + (dy * dy)
+        diff_sq = Math.pow(dx, 2) + Math.pow(dy, 2)
         if diff_sq > 250_000
           pos = pc.in_vehicle_position.not_nil!
           send_packet(GetOnVehicle.new(pc.l2id, @data, pos))

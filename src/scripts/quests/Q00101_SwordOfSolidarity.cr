@@ -158,7 +158,7 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
         end
       when 3
         if st.has_quest_items?(BROKEN_BLADE_BOTTOM, BROKEN_BLADE_TOP)
-          take_items(pc, -1, [DIRECTIONS_TO_RUINS, BROKEN_BLADE_TOP, BROKEN_BLADE_BOTTOM])
+          take_items(pc, -1, {DIRECTIONS_TO_RUINS, BROKEN_BLADE_TOP, BROKEN_BLADE_BOTTOM})
           st.give_items(ALTRANS_NOTE, 1)
           st.set_cond(4, true)
           html = "30283-04.html"

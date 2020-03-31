@@ -7,6 +7,7 @@ module CategoryData
   private CATEGORIES = EnumMap(CategoryType, Set(Int32)).new
 
   def load
+    debug "Loading..."
     timer = Timer.new
     CATEGORIES.clear
     parse_datapack_file("categoryData.xml")

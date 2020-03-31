@@ -10,6 +10,7 @@ module SecondaryAuthData
   class_getter? enabled = false
 
   def load
+    debug "Loading..."
     FORBIDDEN_PASSWORDS.clear
     parse_datapack_file("../config/SecondaryAuth.xml")
     info { "Loaded #{FORBIDDEN_PASSWORDS.size} forbidden passwords." }

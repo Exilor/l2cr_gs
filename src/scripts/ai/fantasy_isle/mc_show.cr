@@ -184,14 +184,9 @@ class Scripts::MC_Show < AbstractNpcAI
     hour_diff *= 3600000
     min_diff *= 60000
     diff = hour_diff + min_diff
-    debug { "Show starting at #{Time.local + diff.milliseconds}" }
-    # TODO startRepeatingQuestTimer("Start", diff, 14400000, nil, nil)
-    # missing option to provide different initial delay
-    ThreadPoolManager.schedule_general_at_fixed_rate(->start_mc_show, diff, 14400000)
-  end
 
-  private def start_mc_show
-    notify_event("Start", nil, nil)
+    debug { "Show starting at #{Time.local + diff.milliseconds}" }
+    start_quest_timer("Start", 14400000, nil, nil, true)
   end
 
   private def auto_chat(npc, npc_string, type)

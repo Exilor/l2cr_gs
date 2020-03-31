@@ -27,19 +27,21 @@ class EffectHandler::MaxMp < AbstractEffect
     char_stat = effected.stat
     amount = @power
 
-    if @type.diff?
-      func = FuncAdd.new(Stats::MAX_MP, 1, self, @power)
-      char_stat.active_char.add_stat_func(func)
-      if @heal
-        effected.current_mp += @power
-      end
-    else
-      max_mp = effected.max_mp.to_f
-      func = FuncMul.new(Stats::MAX_MP, 1, self, @power)
-      char_stat.active_char.add_stat_func(func)
-      if @heal
-        amount = (@power - 1) * max_mp
-        effected.current_mp += amount
+    char_stat.sync do
+      if @type.diff?
+        func = FuncAdd.new(Stats::MAX_MP, 1, self, @power)
+        char_stat.active_char.add_stat_func(func)
+        if @heal
+          effected.current_mp += @power
+        end
+      else
+        max_mp = effected.max_mp.to_f
+        func = FuncMul.new(Stats::MAX_MP, 1, self, @power)
+        char_stat.active_char.add_stat_func(func)
+        if @heal
+          amount = (@power - 1) * max_mp
+          effected.current_mp += amount
+        end
       end
     end
 
@@ -51,6 +53,9 @@ class EffectHandler::MaxMp < AbstractEffect
   end
 
   def on_exit(info)
-    info.effected.stat.active_char.remove_stats_owner(self)
+    char_stat = info.effected.stat
+    char_stat.sync do
+      char_stat.active_char.remove_stats_owner(self)
+    end
   end
 end

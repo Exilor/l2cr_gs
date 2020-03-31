@@ -50,7 +50,7 @@ module HtmlUtil
       io << "\"><img src=\""
       io << image
       io << "\" width="
-      io << ((current / max) * width).to_i64
+      io << ((current // max) * width).to_i64
       io << " height="
       io << image_height
       io << "></td></tr><tr><td align=center><table cellpadding=0 cellspacing="

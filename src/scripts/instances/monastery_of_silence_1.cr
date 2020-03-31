@@ -1,5 +1,5 @@
 class Scripts::MonasteryOfSilence1 < AbstractInstance
-  private class MoSWorld < InstanceWorld
+  private class MOSWorld < InstanceWorld
     property dead_tomb_guardian_count = 0
     property dead_solina_guardian_count = 0
     property! elcadia : L2Npc
@@ -163,14 +163,14 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
     end
 
     teleport_player(pc, START_LOC, world.instance_id, false)
-    spawn_elcadia(pc, world.as(MoSWorld))
+    spawn_elcadia(pc, world.as(MOSWorld))
   end
 
   def on_adv_event(event, npc, player)
     npc = npc.not_nil!
 
     world = InstanceManager.get_world(npc.instance_id)
-    if world.is_a?(MoSWorld)
+    if world.is_a?(MOSWorld)
       case event
       when "TELE2"
         player = player.not_nil!
@@ -353,7 +353,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
 
   def on_kill(npc, pc, is_summon)
     world = InstanceManager.get_world(npc.instance_id)
-    if world.is_a?(MoSWorld)
+    if world.is_a?(MOSWorld)
       case npc.id
       when GUARDIAN_OF_THE_TOMB_1, GUARDIAN_OF_THE_TOMB_2,
            GUARDIAN_OF_THE_TOMB_3, GUARDIAN_OF_THE_TOMB_4
@@ -402,7 +402,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
 
   def on_talk(npc, talker)
     if npc.id == ODD_GLOBE
-      enter_instance(talker, MoSWorld.new, "MonasteryOfSilence.xml", TEMPLATE_ID)
+      enter_instance(talker, MOSWorld.new, "MonasteryOfSilence.xml", TEMPLATE_ID)
     end
 
     super

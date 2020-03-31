@@ -36,7 +36,7 @@ class Packets::Incoming::AddTradeItem < GameClientPacket
     end
 
     unless pc.access_level.allow_transaction?
-      pc.send_message("You access level does not allow trading.")
+      pc.send_message("Your access level does not allow trading.")
       pc.cancel_active_trade
       return
     end

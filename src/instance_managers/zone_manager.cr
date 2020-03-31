@@ -15,6 +15,7 @@ module ZoneManager
   class_getter(debug_items) { [] of L2ItemInstance }
 
   def load
+    debug "Loading zones..."
     timer = Timer.new
     CLASS_ZONES.clear
     SPAWN_TERRITORIES.clear
@@ -263,12 +264,6 @@ module ZoneManager
   end
 
   def get_all_zones(zone_type : T.class) : Slice(T) forall T
-    # ret = CLASS_ZONES[zone_type].values_slice
-    # unless ret.is_a?(Slice(T))
-    #   raise "Expected #{ret}:#{ret.class} to be a Slice(#{T})"
-    # end
-    # ret
-
     CLASS_ZONES[zone_type].values_slice.unsafe_as(Slice(T))
   end
 

@@ -15,7 +15,8 @@ class ListenersContainer
   end
 
   def add_listener(lst : AbstractEventListener) : AbstractEventListener
-    (listeners[lst.type] ||= [] of AbstractEventListener) << lst
+    tmp = (listeners[lst.type] ||= [] of AbstractEventListener)
+    tmp << lst
     lst
   end
 

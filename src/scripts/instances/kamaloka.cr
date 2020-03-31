@@ -1075,7 +1075,7 @@ class Scripts::Kamaloka < AbstractInstance
     31340
   ]
 
-  private class KamaWorld < InstanceWorld
+  private class KWorld < InstanceWorld
     property index : Int32 = 0  # 0-18 index of the kama type in arrays
     property shaman : Int32 = 0 # l2id of the shaman
     property! first_room : Array(L2Spawn)? # list of the spawns in the first room (excluding shaman)
@@ -1216,7 +1216,7 @@ class Scripts::Kamaloka < AbstractInstance
     # player already in the instance
     if world
       # but not in kamaloka
-      if !world.is_a?(KamaWorld) || world.template_id != template_id
+      if !world.is_a?(KWorld) || world.template_id != template_id
         player.send_packet(SystemMessageId::YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON)
         return
       end
@@ -1253,7 +1253,7 @@ class Scripts::Kamaloka < AbstractInstance
     inst.empty_destroy_time = EMPTY_DESTROY_TIME.to_i64 * 60000
 
     # Creating new instanceWorld, using our instance_id and template_id
-    world = KamaWorld.new
+    world = KWorld.new
     world.instance_id = instance_id
     world.template_id = template_id
     # set index for easy access to the arrays
@@ -1276,7 +1276,7 @@ class Scripts::Kamaloka < AbstractInstance
   # Called on instance finish and handles reenter time for instance
   # @param world instanceWorld
   def finish_instance(world)
-    if world.is_a?(KamaWorld)
+    if world.is_a?(KWorld)
       reenter = Calendar.new
       reenter.minute = RESET_MIN
       # if time is >= RESET_HOUR - roll to the next day
@@ -1379,7 +1379,7 @@ class Scripts::Kamaloka < AbstractInstance
       # only party leader can talk with escape teleporter
       if party && party.leader?(player)
         world = InstanceManager.get_world(npc.instance_id)
-        if world.is_a?(KamaWorld)
+        if world.is_a?(KWorld)
           # party members must be in the instance
           if world.allowed?(player.l2id)
             inst = InstanceManager.get_instance(world.instance_id).not_nil!
@@ -1413,7 +1413,7 @@ class Scripts::Kamaloka < AbstractInstance
   end
 
   def on_kill(npc, player, is_summon)
-    world = InstanceManager.get_world(npc.instance_id).as(KamaWorld)
+    world = InstanceManager.get_world(npc.instance_id).as(KWorld)
     l2id = npc.l2id
 
     # first room was spawned ?

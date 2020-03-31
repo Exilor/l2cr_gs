@@ -159,7 +159,7 @@ module BypassHandler::Loto
       message = ""
       pc.inventory.items.each do |item|
         if item.id == TICKET && item.custom_type_1 < loto_number
-          message +=  "<a action=\"bypass -h npc_%objectId%_Loto #{item.l2id}\"#{item.custom_type_1} Event Number "
+          message += "<a action=\"bypass -h npc_%objectId%_Loto #{item.l2id}\">#{item.custom_type_1} Event Number "
           numbers = Lottery.decode_numbers(item.enchant_level, item.custom_type_2)
           5.times do |i|
             message += "#{numbers[i]} "

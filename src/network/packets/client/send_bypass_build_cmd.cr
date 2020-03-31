@@ -59,10 +59,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       rush
     when "skills"
       send_skill_info
-    when /^day_mobs$/
-      DayNightSpawnManager.change_mode(0)
-    when /^night_mobs$/
-      DayNightSpawnManager.change_mode(1)
     when /^get_ch\s\d+$/
       ClanHallManager.set_owner(args[0].to_i, pc.clan.not_nil!) if pc.clan
     when "destroy_items"
@@ -75,7 +71,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when "realtime"
       send_packet(ClientSetTime.new(time: Time.now.to_s("%H:%M"), speed: 1))
     when "gametime"
-      send_packet(ClientSetTime.new)
+      send_packet(ClientSetTime::STATIC_PACKET)
     when /^milk\s\d+$/
       milk_target
     when "aspir"
@@ -237,7 +233,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     pc = pc()
     radius = 1000 if radius == 0
     party = pc.party
-    pc.known_list.known_objects.values.each do |item|
+    pc.known_list.known_objects.values_slice.each do |item|
       begin
         next unless item.is_a?(L2ItemInstance)
         if item.template.has_ex_immediate_effect? && item.etc_item?

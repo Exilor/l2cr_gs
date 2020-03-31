@@ -1,5 +1,5 @@
 class Scripts::PailakaDevilsLegacy < AbstractInstance
-  private class DIWorld < InstanceWorld
+  private class PDLWorld < InstanceWorld
     getter followers_list = Concurrent::Array(L2Attackable).new
     property! lematan_npc : L2Attackable?
   end
@@ -61,14 +61,14 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
     if event == "enter"
       pc = pc.not_nil!
       qs = pc.get_quest_state(Scripts::Q00129_PailakaDevilsLegacy.simple_name).not_nil!
-      enter_instance(pc, DIWorld.new, "PailakaDevilsLegacy.xml", TEMPLATE_ID)
+      enter_instance(pc, PDLWorld.new, "PailakaDevilsLegacy.xml", TEMPLATE_ID)
       if qs.cond?(1)
         qs.set_cond(2, true)
         html = "32498-01.htm"
       else
         html = "32498-02.htm"
       end
-    elsif world.is_a?(DIWorld)
+    elsif world.is_a?(PDLWorld)
       case event
       when "FOLLOWER_CAST"
         if world.lematan_npc? && world.lematan_npc.alive?
@@ -105,7 +105,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
   def on_attack(npc, attacker, damage, is_summon)
     world = InstanceManager.get_world(npc.instance_id)
 
-    if world.is_a?(DIWorld)
+    if world.is_a?(PDLWorld)
       case npc.id
       when POWDER_KEG
         if damage > 0 && npc.script_value?(0)
@@ -156,7 +156,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
   def on_kill(npc, player, is_summon)
     world = InstanceManager.get_world(npc.instance_id)
 
-    if world.is_a?(DIWorld)
+    if world.is_a?(PDLWorld)
       world.followers_list.each do |follower|
         follower.delete_me
       end
@@ -171,7 +171,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
     if char.is_a?(L2PcInstance) && char.alive? && !char.teleporting? && char.online?
       world = InstanceManager.get_world(char.instance_id)
       if world && world.template_id == TEMPLATE_ID
-        start_quest_timer("TELEPORT", 1000, world.as(DIWorld).lematan_npc?, char)
+        start_quest_timer("TELEPORT", 1000, world.as(PDLWorld).lematan_npc?, char)
       end
     end
 
@@ -188,7 +188,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
   def on_enter_instance(player, world, first_entrance)
     if first_entrance
       world.add_allowed(player.l2id)
-      world.as(DIWorld).lematan_npc = add_spawn(LEMATAN, LEMATAN_SPAWN, false, 0, false, world.instance_id).as(L2Attackable)
+      world.as(PDLWorld).lematan_npc = add_spawn(LEMATAN, LEMATAN_SPAWN, false, 0, false, world.instance_id).as(L2Attackable)
     end
     teleport_player(player, TELEPORT, world.instance_id)
   end

@@ -157,7 +157,7 @@ class L2Spawn
     @current_count
   end
 
-  def spawn_one(val : Bool)
+  def spawn_one(val : Bool) : L2Npc
     do_spawn(val)
   end
 
@@ -169,7 +169,7 @@ class L2Spawn
     @do_respawn = true
   end
 
-  def do_spawn?(summon_spawn : Bool = false)
+  private def do_spawn?(summon_spawn : Bool = false) : L2Npc?
     case @template.type
     when "L2Pet", "L2Decoy", "L2Trap"
       @current_count += 1
@@ -189,7 +189,7 @@ class L2Spawn
     initialize_npc_instance(npc)
   end
 
-  def do_spawn(summon_spawn : Bool = false)
+  def do_spawn(summon_spawn : Bool = false) : L2Npc
     do_spawn?(summon_spawn).not_nil!
   end
 
@@ -201,7 +201,7 @@ class L2Spawn
     !!@spawn_territory && @location.x == 0 && @location.y == 0
   end
 
-  private def initialize_npc_instance(mob : L2Npc)
+  private def initialize_npc_instance(mob : L2Npc) : L2Npc
     new_x = new_y = new_z = 0
 
     if territory_based?

@@ -79,18 +79,13 @@ module AdminCommandHandler::AdminEvents
         if event.is_a?(Event)
           io << "<font color=\"LEVEL\">"
           io << event.name
-          io << ":</font><br1>"
-          io << "<table width=270><tr>"
-          io << "<td><button value=\"Start\" action=\"bypass -h admin_event_start_menu "
+          io << ":</font><br1><table width=270><tr><td><button value=\"Start\" action=\"bypass -h admin_event_start_menu "
           io << event.name
-          io << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-          io << "<td><button value=\"Stop\" action=\"bypass -h admin_event_stop_menu "
+          io << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td><button value=\"Stop\" action=\"bypass -h admin_event_stop_menu "
           io << event.name
-          io << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-          io << "<td><button value=\"Menu\" action=\"bypass -h admin_event_bypass "
+          io << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td><button value=\"Menu\" action=\"bypass -h admin_event_bypass "
           io << event.name
-          io << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-          io << "</tr></table><br>"
+          io << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br>"
         end
       end
     end

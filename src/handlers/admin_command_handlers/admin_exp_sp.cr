@@ -70,7 +70,7 @@ module AdminCommandHandler::AdminExpSp
       return false
     end
     if expval != 0 || spval != 0
-      player.send_message("Admin is adding you #{expval} xp and #{spval} sp.")
+      player.send_message("Admin is adding #{expval} xp and #{spval} sp to you.")
       player.add_exp_and_sp(expval, spval)
       player.broadcast_user_info
 
@@ -108,7 +108,7 @@ module AdminCommandHandler::AdminExpSp
     end
     if expval != 0 || spval != 0
       # Common character information
-      player.send_message("Admin is removing you #{expval} xp and #{spval} sp.")
+      player.send_message("Admin is removing #{expval} xp and #{spval} sp from you.")
       player.remove_exp_and_sp(expval, spval)
       player.broadcast_user_info
       # Admin information

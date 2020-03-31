@@ -82,7 +82,7 @@ module GameDB
 
         if pc.class_index == 0 && active_class_id != pc.base_class
           pc.class_id = pc.base_class
-          warn "Reverted to base class."
+          warn { "Reverted #{pc.name} to base class." }
         else
           pc.active_class = active_class_id
         end

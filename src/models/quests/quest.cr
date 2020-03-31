@@ -12,7 +12,7 @@ class Quest < AbstractScript
   private RESET_HOUR = 6
   private RESET_MINUTES = 30
 
-  @rw_lock = Mutex.new(:Reentrant) # should be a "reentrant read write lock"
+  @rw_lock = MyMutex.new # should be a "reentrant read write lock"
   @on_enter_world = false
   @quest_item_ids = [] of Int32
   @quest_timers : IHash(String, Array(QuestTimer))?

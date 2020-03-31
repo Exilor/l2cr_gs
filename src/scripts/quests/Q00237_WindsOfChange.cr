@@ -44,7 +44,7 @@ class Scripts::Q00237_WindsOfChange < Quest
          "30969-08b.html",
          "30969-08c.html",
          "30897-02.html", # ROMAN
-         "30925-02.html", # MORELYN
+         "30925-02.html" # MORELYN
       html = event
     when "30899-06.html"
       st.start_quest
@@ -97,8 +97,8 @@ class Scripts::Q00237_WindsOfChange < Quest
     html
   end
 
-  def on_talk(npc, talker)
-    st = get_quest_state!(talker)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     case npc.id
     when FLAUEN
@@ -106,7 +106,7 @@ class Scripts::Q00237_WindsOfChange < Quest
       when State::COMPLETED
         html = "30899-09.html"
       when State::CREATED
-        html = talker.level >= MIN_LEVEL ? "30899-01.htm" : "30899-00.html"
+        html = pc.level >= MIN_LEVEL ? "30899-01.htm" : "30899-00.html"
       when State::STARTED
         case st.cond
         when 1, 4
@@ -121,7 +121,7 @@ class Scripts::Q00237_WindsOfChange < Quest
       end
     when IASON
       if st.completed?
-        html = get_no_quest_msg(talker)
+        html = get_no_quest_msg(pc)
       else
         case st.cond
         when 1
@@ -174,6 +174,6 @@ class Scripts::Q00237_WindsOfChange < Quest
       end
     end
 
-    html || get_no_quest_msg(talker)
+    html || get_no_quest_msg(pc)
   end
 end

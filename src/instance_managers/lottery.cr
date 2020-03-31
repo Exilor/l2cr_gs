@@ -279,7 +279,7 @@ module Lottery
         res[id] = nr
         id += 1
       end
-      type2 /= 2
+      type2 //= 2
       nr += 1
     end
 
@@ -303,7 +303,7 @@ module Lottery
 
         count = 0
 
-        1.upto(16) do |i|
+        1.upto(16) do
           val = curenchant // 2
           if val != (curenchant / 2).round
             count += 1
@@ -336,7 +336,7 @@ module Lottery
         debug { "count: #{count}, id: #{id}, enchant: #{enchant}, type2: #{type2}." }
       end
     rescue e
-      error "Error while checking lottery ticket ##{id}:"
+      error { "Error while checking lottery ticket ##{id}:" }
       error e
     end
 

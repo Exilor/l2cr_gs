@@ -25,7 +25,9 @@ module GlobalVariablesManager
     end
 
     def store_me : Bool
-      return false unless has_changes?
+      unless has_changes?
+        return false
+      end
 
       begin
         GameDB.transaction do |tr|
@@ -46,6 +48,7 @@ module GlobalVariablesManager
   private INSTANCE = GlobalVariables.new
 
   def load
+    debug "Loading..."
     restore_me
     info { "Loaded #{size} variables." }
   end

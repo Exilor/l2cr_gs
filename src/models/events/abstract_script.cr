@@ -573,6 +573,14 @@ abstract class AbstractScript
 
   delegate has_at_least_one_quest_item?, to: AbstractScript
 
+  def get_enchant_level(pc : L2PcInstance, item_id : Int32) : Int32
+    if item = pc.inventory.get_item_by_item_id(item_id)
+      return item.enchant_level
+    end
+
+    0
+  end
+
   def self.add_minion(master : L2MonsterInstance, minion_id : Int32) : L2Npc?
     MinionList.spawn_minion(master, minion_id)
   end
@@ -870,6 +878,10 @@ abstract class AbstractScript
   end
 
   delegate teleport_player, to: AbstractScript
+
+  def get_item_equipped(pc : L2PcInstance, slot : Int32) : Int32
+    pc.inventory.get_paperdoll_item_id(slot)
+  end
 
   def execute_for_each_player(pc : L2PcInstance, npc : L2Npc, is_summon : Bool, include_party : Bool, include_cc : Bool)
     if (include_party || include_cc) && (party = pc.party)

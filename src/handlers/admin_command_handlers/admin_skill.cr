@@ -113,25 +113,25 @@ module AdminCommandHandler::AdminSkill
     admin_reply = NpcHtmlMessage.new
     msg_size = 500 + (max_pages * 50) + (((skills_end - skills_start) + 1) * 50)
     msg = String.build(msg_size) do |io|
-      io << "<html><body><table width=260><tr><td width=40><button value"
-      io << "=\"Main\" action=\"bypass -h admin_admin\" width=40 height=15"
-      io << " back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-      io << "<td width=180><center>Character Selection Menu</center></td><td"
-      io << " width=40><button value=\"Back\" action=\"bypass -h"
-      io << " admin_show_skills\" width=40 height=15 back=\"L2UI_ct1.button_"
-      io << "df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><br><center"
-      io << ">Editing <font color=\"LEVEL\">"
+      io << "<html><body><table width=260><tr><td width=40><button value" \
+            "=\"Main\" action=\"bypass -h admin_admin\" width=40 height=15" \
+            " back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
+            "<td width=180><center>Character Selection Menu</center></td><td" \
+            " width=40><button value=\"Back\" action=\"bypass -h" \
+            " admin_show_skills\" width=40 height=15 back=\"L2UI_ct1.button_" \
+            "df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><br><center" \
+            ">Editing <font color=\"LEVEL\">"
       io << pc.name
-      io << "</font></center><br>"
-      io << "<table width=270><tr><td>Lv: "
+      io << "</font></center><br>" \
+            "<table width=270><tr><td>Lv: "
       io << pc.level
       io << " "
       ClassListData.get_class(pc.class_id).client_code(io)
-      io << "</td></tr></table><br>"
-      io << "<table width=270><tr><td>Note: Dont forget that modifying players "
-      io << "skills can</td></tr><tr><td>ruin the game...</td></tr></table><br>"
-      io << "<center>Click on the skill you wish to remove:</center><br><center>"
-      io << "<table width=270><tr>"
+      io << "</td></tr></table><br>" \
+            "<table width=270><tr><td>Note: Dont forget that modifying players " \
+            "skills can</td></tr><tr><td>ruin the game...</td></tr></table><br>" \
+            "<center>Click on the skill you wish to remove:</center><br><center>" \
+            "<table width=270><tr>"
       max_pages.times do |x|
         io << "<td><a action=\"bypass -h admin_remove_skills "
         io << x
@@ -139,8 +139,8 @@ module AdminCommandHandler::AdminSkill
         io << x + 1
         io << "</a></td>"
       end
-      io << "</tr></table></center><br><table width=270><tr><td width=80>Name:"
-      io << "</td><td width=60>Level:</td><td width=40>Id:</td></tr>"
+      io << "</tr></table></center><br><table width=270><tr><td width=80>Name:" \
+            "</td><td width=60>Level:</td><td width=40>Id:</td></tr>"
       (skills_start...skills_end).each do |i|
         io << "<tr><td width=80><a action=\"bypass -h admin_remove_skill "
         io << skills[i].id
@@ -152,15 +152,15 @@ module AdminCommandHandler::AdminSkill
         io << skills[i].id
         io << "</td></tr>"
       end
-      io << "</table><br><center><table>Remove skill by ID :<tr><td>Id: </td>"
-      io << "<td><edit var=\"id_to_remove\" width=110></td></tr></table>"
-      io << "</center><center><button value=\"Remove skill\" action=\"bypass -h"
-      io << " admin_remove_skill $id_to_remove\" width=110 height=15 back=\"L2U"
-      io << "I_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></center><br><center>"
-      io << "<button value=\"Back\" action=\"bypass -h admin_current_player\" "
-      io << "width=40 height=15 back=\"L2UI_ct1.button_df\"fore=\"L2UI_ct1.butt"
-      io << "on_df\"></center>"
-      io << "</body></html>"
+      io << "</table><br><center><table>Remove skill by ID :<tr><td>Id: </td>" \
+            "<td><edit var=\"id_to_remove\" width=110></td></tr></table>" \
+            "</center><center><button value=\"Remove skill\" action=\"bypass -h" \
+            " admin_remove_skill $id_to_remove\" width=110 height=15 back=\"L2U" \
+            "I_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></center><br><center>" \
+            "<button value=\"Back\" action=\"bypass -h admin_current_player\" " \
+            "width=40 height=15 back=\"L2UI_ct1.button_df\"fore=\"L2UI_ct1.butt" \
+            "on_df\"></center>" \
+            "</body></html>"
     end
     admin_reply.html = msg
     pc.send_packet(admin_reply)

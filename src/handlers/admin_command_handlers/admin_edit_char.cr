@@ -547,18 +547,15 @@ module AdminCommandHandler::AdminEditChar
     end
     fn2 = ->(player : L2PcInstance) do
       String.build do |io|
-        io << "<tr>"
-        io << "<td width=80><a action=\"bypass -h admin_character_info "
+        io << "<tr><td width=80><a action=\"bypass -h admin_character_info "
         io << player.name
         io << "\">"
         io << player.name
-        io << "</a></td>"
-        io << "<td width=110>"
+        io << "</a></td><td width=110>"
         ClassListData.get_class(player.class_id).client_code(io)
         io << "</td><td width=40>"
         io << player.level
-        io << "</td>"
-        io << "</tr>"
+        io << "</td></tr>"
       end
     end
 

@@ -19,7 +19,7 @@ class ItemAuctionInstance
   private SELECT_PLAYERS_ID_BY_AUCTION_ID = "SELECT playerObjId, playerBid FROM item_auction_bid WHERE auctionId = ?"
 
   @auctions = {} of Int32 => ItemAuction
-  @auctions_lock = Mutex.new(:Reentrant)
+  @auctions_lock = MyMutex.new
   @items = [] of AuctionItem
   @state_task : Scheduler::DelayedTask?
 

@@ -1,6 +1,8 @@
 abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
+  private record SkillInfo, id : Int32, level : Int32
+  private record ZoneInfo, x : Int32, y : Int32, z : Int32
   private record SMParam, type : Int8,
-    value : String | Int32 | Int64 | {Int32, Int32} | {Int32, Int32, Int32}
+    value : String | Int32 | Int64 | SkillInfo | ZoneInfo
 
   private TEXT          =  0i8
   private INT_NUMBER    =  1i8
@@ -29,14 +31,12 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
   end
 
   delegate id, to: @system_message_id
-
-  private def param_count
-    @system_message_id.param_count
-  end
+  private delegate param_count, to: @system_message_id
 
   private def add_param(param)
     if @params.size == param_count
-      raise "#{@system_message_id} takes #{param_count} parameters"
+      raise "#{@system_message_id} already has the maximum number of " \
+        "parameters (#{param_count})"
     end
 
     @params << param
@@ -115,7 +115,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
   end
 
   def add_zone_name(x : Int32, y : Int32, z : Int32) : self
-    add_param(SMParam.new(ZONE_NAME, {x, y, z}))
+    add_param(SMParam.new(ZONE_NAME, ZoneInfo.new(x, y, z)))
   end
 
   def add_skill_name(skill : Skill) : self
@@ -127,7 +127,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
   end
 
   def add_skill_name(id : Int32, lvl : Int32 = 1) : self
-    add_param(SMParam.new(SKILL_NAME, {id, lvl}))
+    add_param(SMParam.new(SKILL_NAME, SkillInfo.new(id, lvl)))
   end
 
   def add_elemental(type : Int) : self
@@ -156,7 +156,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
 
     if @params.size < param_count
       raise "Too few parameters for #{@system_message_id} " \
-        "(given #{@params.size} but #{param_count} required)"
+        "(#{@params.size} were given but #{param_count} are required)"
     end
 
     d param_count
@@ -168,13 +168,13 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
         s value
       when Int64
         q value
-      when Tuple(Int32, Int32)
-        d value[0] # skill_id
-        d value[1] # lvl
-      when Tuple(Int32, Int32, Int32)
-        d value[0] # x
-        d value[1] # y
-        d value[2] # z
+      when SkillInfo
+        d value.id
+        d value.level
+      when ZoneInfo
+        d value.x
+        d value.y
+        d value.z
       else # Int32
         d value
       end

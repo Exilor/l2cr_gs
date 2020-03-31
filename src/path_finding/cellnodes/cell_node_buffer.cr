@@ -18,12 +18,11 @@ class CellNodeBuffer
     @target_z = 0
     @time_stamp = 0i64
     @last_elapsed_time = 0i64
-    @lock = Mutex.new(:Reentrant)
+    @lock = MyMutex.new
   end
 
-  def lock
-    # @lock.try_lock
-    true
+  def lock : Bool
+    @lock.lock?
   end
 
   def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32) : CellNode?
@@ -58,8 +57,9 @@ class CellNodeBuffer
 
   def free
     @current = nil
-    @buffer.each { |ary| ary.each { |buf| buf.try &.free } }
-    # @lock.unlock
+    # @buffer.each { |ary| ary.each { |buf| buf.try &.free } }
+    @buffer.each { |ary| ary.each &.try &.free }
+    @lock.unlock
     @last_elapsed_time = Time.ms - @time_stamp
   end
 
@@ -194,7 +194,7 @@ class CellNodeBuffer
     end
 
     if count == limit
-      warn "Too long loop detected (cost: #{new_node.cost})."
+      warn { "Too long loop detected (cost: #{new_node.cost})." }
     end
 
     node.next = new_node

@@ -27,7 +27,7 @@ abstract class Packets::Outgoing::OnScreenInfo < GameServerPacket
     d 0
     d 0
     d 0
-    d 10000
+    d 1000
     d 0
     d -1
     s text

@@ -8,6 +8,7 @@ module MapRegionManager
   private DEFAULT_RESPAWN = "talking_island_town"
 
   def load
+    debug "Loading..."
     REGIONS.clear
     parse_datapack_directory("mapregion")
     info { "Loaded #{REGIONS.size} regions." }

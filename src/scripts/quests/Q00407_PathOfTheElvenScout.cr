@@ -174,7 +174,7 @@ class Scripts::Q00407_PathOfTheElvenScout < Quest
           elsif letter_count < 4
             html = "30337-05.html"
           else
-            take_items(pc, -1, [PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER])
+            take_items(pc, -1, {PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER})
             give_items(pc, MORETTIES_HERB, 1)
             give_items(pc, MORETTIS_LETTER, 1)
             qs.set_cond(4, true)
@@ -196,7 +196,7 @@ class Scripts::Q00407_PathOfTheElvenScout < Quest
             qs.set_cond(5, true)
             html = "30426-01.html"
           else
-            take_items(pc, -1, [RUSTED_KEY, MORETTIES_HERB, MORETTIS_LETTER])
+            take_items(pc, -1, {RUSTED_KEY, MORETTIES_HERB, MORETTIS_LETTER})
             give_items(pc, PRIASS_LETTER, 1)
             qs.set_cond(7, true)
             html = "30426-02.html"

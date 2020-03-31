@@ -8,15 +8,15 @@ module DimensionalRiftManager
   private alias NpcHtmlMessage = Packets::Outgoing::NpcHtmlMessage
   private DIMENSIONAL_FRAGMENT_ITEM_ID = 7079
 
-  private ROOMS = Hash(Int8, Hash(Int8, DimensionalRiftRoom)).new
+  private ROOMS = Hash(Int8, Hash(Int8, DimensionalRiftRoom)).new(initial_capacity: 7)
 
   def load
     load_rooms
     load_spawns
   end
 
-  def get_room(type, room) : DimensionalRiftRoom
-    ROOMS[type]?.try &.[room]? ||
+  def get_room(type : Int8, room : Int8) : DimensionalRiftRoom
+    ROOMS.dig?(type, room) ||
     raise("Room with type #{type} and room #{room} not found")
   end
 

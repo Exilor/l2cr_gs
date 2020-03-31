@@ -18,7 +18,7 @@ module ItemHandler::ItemSkillsTemplate
     end
 
     unless check_reuse(playable, nil, item)
-      debug "#check_reuse returned false."
+      # debug "#check_reuse returned false."
       return false
     end
 
@@ -39,17 +39,17 @@ module ItemHandler::ItemSkillsTemplate
         end
 
         unless skill.check_condition(playable, playable.target, false)
-          debug { "Failed condition for #{skill}." }
+          # debug { "Failed condition for #{skill}." }
           return false
         end
 
         if playable.skill_disabled?(skill)
-          debug { "#{skill} is disabled." }
+          # debug { "#{skill} is disabled." }
           return false
         end
 
         unless check_reuse(playable, skill, item)
-          debug "Failed check_reuse"
+          # debug "Failed check_reuse"
           return false
         end
 
@@ -64,12 +64,12 @@ module ItemHandler::ItemSkillsTemplate
         end
 
         if skill.simultaneous_cast? || ((tpl.has_immediate_effect? || tpl.has_ex_immediate_effect?) && skill.static?)
-          debug "Doing simultaneous cast."
+          # debug "Doing simultaneous cast."
           playable.do_simultaneous_cast(skill)
         else
           playable.intention = AI::IDLE
           unless playable.use_magic(skill, force, false)
-            debug "#use_magic returned false."
+            # debug "#use_magic returned false."
             return false
           end
         end

@@ -10,8 +10,8 @@ class ItemAuction
   private DELETE_ITEM_AUCTION_BID = "DELETE FROM item_auction_bid WHERE auctionId = ? AND playerObjId = ?"
   private INSERT_ITEM_AUCTION_BID = "INSERT INTO item_auction_bid (auctionId, playerObjId, playerBid) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE playerBid = ?"
 
-  @auction_bids_lock = Mutex.new(:Reentrant)
-  @auction_state_lock = Mutex.new(:Reentrant)
+  @auction_bids_lock = MyMutex.new
+  @auction_state_lock = MyMutex.new
   @last_bid_player_l2id = 0
 
   getter highest_bid : ItemAuctionBid?
