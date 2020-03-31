@@ -1,5 +1,3 @@
-![](https://github.com/Exilor/l2cr_gs/.github/workflows/main.yml/badge.svg)
-
 # l2cr
 
 A Lineage 2 (High Five) server emulator ported from [L2J](http://www.l2jserver.com) (written in Java) to Crystal.
