@@ -585,7 +585,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       time = ((distance / npc.walk_speed) * 1000).to_i
       npc.running = false
       npc.disable_core_ai(true)
-      npc.no_rnd_walk = true
+      npc.no_random_walk = true
       npc.set_intention(AI::MOVE_TO, Location.new(*coords, heading))
       npc.spawn.x = coords[0]
       npc.spawn.y = coords[1]
@@ -629,7 +629,6 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     if spawn_list = SPAWNS[manager_id]?
       spawned = Concurrent::Array(L2Npc).new
       spawn_list.each do |sp|
-        # spawned_npc = add_spawn(sp[0], sp[1], sp[2], sp[3], sp[4], false, 0, false)
         spawned_npc = add_spawn(sp.npc_id, sp.x, sp.y, sp.z, sp.heading, false, 0, false)
         spawned << spawned_npc
       end

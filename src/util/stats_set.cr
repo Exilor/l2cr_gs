@@ -351,7 +351,7 @@ struct StatsSet
   end
 
   def initialize(attrs : XML::Attributes)
-    @hash = Hash(String, ValueType).new(attrs.size)
+    @hash = Hash(String, ValueType).new(initial_capacity: attrs.size)
     merge(attrs)
   end
 
@@ -435,10 +435,6 @@ struct StatsSet
     def get_{{name.id}}(key : String) : {{type}}
       value = @hash[key]
 
-      if value.nil?
-        raise "Nil value for key " + key
-      end
-
       if value.responds_to?(:to_{{name.id}})
         if value.is_a?(String)
           value.to_{{name.id}}(strict: false)
@@ -465,15 +461,10 @@ struct StatsSet
   {% end %}
 
   def get_bool(key : String)
-    value = @hash[key]
-
-    if value.nil?
-      raise "Nil value for key " + key
-    end
-
-    if value.is_a?(Bool)
+    case value = @hash[key]
+    when Bool
       value
-    elsif value.is_a?(String)
+    when String
       if value.compare("true", true) == 0
         true
       elsif value.compare("false", true) == 0
@@ -488,10 +479,6 @@ struct StatsSet
 
   def get_bool(key : String, default : Bool)
     value = @hash.fetch(key) { return default }
-
-    if value.nil?
-      raise "Nil value for key " + key
-    end
 
     case value
     when Bool
@@ -529,8 +516,7 @@ struct StatsSet
   end
 
   def get_regex(key : String) : Regex
-    value = @hash[key]
-    case value
+    case value = @hash[key]
     when Regex
       value
     when String
@@ -542,8 +528,7 @@ struct StatsSet
   end
 
   def get_regex(key : String, default)
-    value = @hash[key]?
-    case value
+    case value = @hash[key]?
     when Regex
       value
     when String
@@ -556,13 +541,8 @@ struct StatsSet
   end
 
   def get_enum(key : String, enum_class : T.class) : T forall T
-    value = @hash[key]
-
-    if value.nil?
-      raise "Nil value for key " + key
-    end
-
-    if value.is_a?(String)
+    case value = @hash[key]
+    when String
       enum_class.parse(value)
     else
       raise "Invalid value for get_enum: #{value}:#{value.class}"
@@ -570,13 +550,8 @@ struct StatsSet
   end
 
   def get_enum(key : String, enum_class : T.class, default : T?) : T? forall T
-    value = @hash.fetch(key) { return default }
-
-    if value.nil?
-      raise "Nil value for key " + key
-    end
-
-    if value.is_a?(String)
+    case value = @hash.fetch(key) { return default }
+    when String
       enum_class.parse(value)
     else
       raise "Invalid value for get_enum: #{value}:#{value.class}"
@@ -623,7 +598,7 @@ struct StatsSet
   def get_i32_hash(key, *default)
     value = @hash[key]
     return value if value.is_a?(Hash)
-    unless value.nil? || value.is_a?(String)
+    unless value.is_a?(String)
       raise "Invalid value for get_string_array: #{value}:#{value.class}"
     end
     value = default.to_s if value.nil? || value.empty?

@@ -85,7 +85,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
       npc.running = false
       npc.target = npc
 
-      if npc.no_rnd_walk?
+      if npc.no_random_walk?
         npc.do_cast(CAMP_FIRE_TIRED)
         npc.display_effect = MAHUM_EFFECT_SLEEP
       end
@@ -110,7 +110,10 @@ class Scripts::SelMahumSquad < AbstractNpcAI
       if npc.is_a?(L2MonsterInstance) && npc.alive?
         npc.return_home
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -149,8 +152,8 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         broadcast_npc_say(sender, Say2::NPC_ALL, CHEF_FSTRINGS.sample, 1250)
       end
     when "SCE_CAMPFIRE_START"
-      if !receiver.no_rnd_walk? && !receiver.dead? && !receiver.intention.attack? && SQUAD_LEADERS.includes?(receiver.id)
-        receiver.no_rnd_walk = true # Moving to fire - i_ai0 = 1
+      if !receiver.no_random_walk? && !receiver.dead? && !receiver.intention.attack? && SQUAD_LEADERS.includes?(receiver.id)
+        receiver.no_random_walk = true # Moving to fire - i_ai0 = 1
         receiver.running = true
         loc = sender.get_point_in_range(100, 200)
         loc.heading = receiver.heading
@@ -163,17 +166,17 @@ class Scripts::SelMahumSquad < AbstractNpcAI
       if receiver.id == STOVE && receiver.summoner == sender
         receiver.delete_me
       elsif !receiver.intention.attack? && SQUAD_LEADERS.includes?(receiver.id)
-        receiver.no_rnd_walk = false
+        receiver.no_random_walk = false
         receiver.variables.delete("BUSY_STATE")
         receiver.r_hand_id = THS_WEAPON
         start_quest_timer("return_from_fire", 3000, receiver, nil)
       end
     when "SCE_DINNER_EAT"
       if receiver.alive? && !receiver.intention.attack? && receiver.variables.get_i32("BUSY_STATE", 0) == 0 && SQUAD_LEADERS.includes?(receiver.id)
-        if receiver.no_rnd_walk? # i_ai0 ==
+        if receiver.no_random_walk? # i_ai0 ==
           receiver.r_hand_id = THS_WEAPON
         end
-        receiver.no_rnd_walk = true # Moving to fire - i_ai0 = 1
+        receiver.no_random_walk = true # Moving to fire - i_ai0 = 1
         receiver.variables["BUSY_STATE"] = 1 # Eating - i_ai3 = 1
         receiver.running = true
         broadcast_npc_say(
@@ -193,7 +196,10 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         receiver.variables["FULL_BARREL_REWARDING_PLAYER"] = reference.not_nil!.l2id # TODO: Use it in 289 quest
         start_quest_timer("reset_full_bottle_prize", 180000, receiver, nil)
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -213,7 +219,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
 
   def on_move_finished(npc)
     # Npc moves to fire
-    if npc.no_rnd_walk? && npc.x == npc.variables.get_i32("DESTINATION_X")
+    if npc.no_random_walk? && npc.x == npc.variables.get_i32("DESTINATION_X")
       if npc.y == npc.variables.get_i32("DESTINATION_Y")
         npc.r_hand_id = OHS_WEAPON
         start_quest_timer("fire_arrived", 3000, npc, nil)
@@ -241,7 +247,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
       start_quest_timer("fire", 1000, npc, nil)
     elsif SQUAD_LEADERS.includes?(npc.id)
       npc.display_effect = 3
-      npc.no_rnd_walk = false
+      npc.no_random_walk = false
     end
 
     super
@@ -270,7 +276,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
   private def handle_pre_attack_motion(attacked)
     cancel_quest_timer("remove_effects", attacked, nil)
     attacked.variables.delete("BUSY_STATE")
-    attacked.no_rnd_walk = false
+    attacked.no_random_walk = false
     attacked.display_effect = MAHUM_EFFECT_NONE
     if attacked.right_hand_item == OHS_WEAPON
       attacked.r_hand_id = THS_WEAPON

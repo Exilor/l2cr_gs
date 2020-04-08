@@ -401,7 +401,10 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         SECOND_ROOM_DOORS.each do |door_id|
           close_door(door_id, world.instance_id)
         end
+      else
+        # automatically added
       end
+
 
       world.inc_status
       return true
@@ -415,7 +418,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
     if add_to_kill_table
       world.npc_list << npc
     end
-    npc.no_rnd_walk = true
+    npc.no_random_walk = true
     if npc.is_a?(L2Attackable)
       npc.can_see_through_silent_move = true
     end
@@ -516,7 +519,10 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       when 2 # finish morph
         @world.active_scarlet.r_hand_id = SECOND_SCARLET_WEAPON
         @world.active_scarlet.invul = false
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -769,7 +775,10 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @tomb.control_status(@world)
         @world.video = false
         start_pc
+      else
+        # automatically added
       end
+
     end
 
     private def stop_pc
@@ -835,7 +844,10 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         add_aggro_to_mobs
       when 4
         @tomb.control_status(@world)
+      else
+        # automatically added
       end
+
     end
 
     private def add_aggro_to_mobs

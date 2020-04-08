@@ -48,7 +48,10 @@ class Scripts::Q00252_ItSmellsDelicious < Quest
         qs.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -93,7 +96,10 @@ class Scripts::Q00252_ItSmellsDelicious < Quest
         if has_max_diaries?(qs) && has_max_cookbook_pages?(qs)
           html = "30200-07.html"
         end
+      else
+        # automatically added
       end
+
     else
       html = "30200-03.html"
     end

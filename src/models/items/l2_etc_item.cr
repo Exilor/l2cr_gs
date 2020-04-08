@@ -17,7 +17,10 @@ class L2EtcItem < L2Item
     case @default_action # ActionType
     when .soulshot?, .summon_soulshot?, .spiritshot?, .summon_spiritshot?
       @item_type = EtcItemType::SHOT
+    else
+      # automatically added
     end
+
 
     @type_1 = ItemType1::ITEM_QUESTITEM_ADENA
     @type_2 = ItemType2::OTHER

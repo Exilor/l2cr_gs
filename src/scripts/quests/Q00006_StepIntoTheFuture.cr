@@ -1,21 +1,21 @@
 class Scripts::Q00006_StepIntoTheFuture < Quest
   # NPCs
-	private ROXXY = 30006
-	private BAULRO = 30033
-	private SIR_COLLIN = 30311
-	# Items
-	private BAULRO_LETTER = 7571
-	private SCROLL_OF_ESCAPE_GIRAN = 7559
-	private MARK_OF_TRAVELER = 7570
-	# Misc
-	private MIN_LEVEL = 3
+  private ROXXY = 30006
+  private BAULRO = 30033
+  private SIR_COLLIN = 30311
+  # Items
+  private BAULRO_LETTER = 7571
+  private SCROLL_OF_ESCAPE_GIRAN = 7559
+  private MARK_OF_TRAVELER = 7570
+  # Misc
+  private MIN_LEVEL = 3
 
   def initialize
     super(6, self.class.simple_name, "Step Into the Future")
 
     add_start_npc(ROXXY)
-		add_talk_id(ROXXY, BAULRO, SIR_COLLIN)
-		register_quest_items(BAULRO_LETTER)
+    add_talk_id(ROXXY, BAULRO, SIR_COLLIN)
+    register_quest_items(BAULRO_LETTER)
   end
 
   def on_adv_event(event, npc, pc)
@@ -68,7 +68,10 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when BAULRO
       if st.started?
         if st.cond?(1)
@@ -85,7 +88,10 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
           html = "30311-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

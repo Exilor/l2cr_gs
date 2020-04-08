@@ -97,7 +97,10 @@ module AdminCommandHandler::AdminTeleport
           z += int_val
         when "down"
           z -= int_val
+        else
+          # automatically added
         end
+
         pc.tele_to_location(Location.new(x, y, z))
         show_teleport_window(pc)
       rescue
@@ -122,7 +125,10 @@ module AdminCommandHandler::AdminTeleport
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         end
       end
+    else
+      # automatically added
     end
+
 
     true
   end
@@ -323,27 +329,27 @@ module AdminCommandHandler::AdminTeleport
   def commands
     %w(
     admin_show_moves
-		admin_show_moves_other
-		admin_show_teleport
-		admin_teleport_to_character
-		admin_teleportto
-		admin_move_to
-		admin_teleport_character
-		admin_recall
-		admin_walk
-		teleportto
-		recall
-		admin_recall_npc
-		admin_gonorth
-		admin_gosouth
-		admin_goeast
-		admin_gowest
-		admin_goup
-		admin_godown
-		admin_tele
-		admin_teleto
-		admin_instant_move
-		admin_sendhome
+    admin_show_moves_other
+    admin_show_teleport
+    admin_teleport_to_character
+    admin_teleportto
+    admin_move_to
+    admin_teleport_character
+    admin_recall
+    admin_walk
+    teleportto
+    recall
+    admin_recall_npc
+    admin_gonorth
+    admin_gosouth
+    admin_goeast
+    admin_gowest
+    admin_goup
+    admin_godown
+    admin_tele
+    admin_teleto
+    admin_instant_move
+    admin_sendhome
     )
   end
 end

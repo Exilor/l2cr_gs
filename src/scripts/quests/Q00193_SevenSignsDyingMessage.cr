@@ -116,7 +116,10 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
           html = "level_check.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -183,20 +186,32 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
           if st.has_quest_items?(SCULPTURE_OF_DOUBT)
             html = "32569-09.html"
           end
+        else
+          # automatically added
         end
+
       when ERIC
         case st.cond
         when 2
           html = "32570-01.html"
         when 3
           html = "32570-03.html"
+        else
+          # automatically added
         end
+
       when SIR_GUSTAV_ATHEBALDT
         if st.cond?(6)
           html = "30760-01.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

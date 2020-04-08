@@ -123,10 +123,16 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
             st.set("talk", "1")
             html = "30895-09.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when XENOVIA
       if st.started?
         case st.cond
@@ -142,9 +148,15 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
           end
         when 4
           html = "30912-15.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
 
     html || get_no_quest_msg(pc)

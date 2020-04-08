@@ -40,7 +40,10 @@ class Scripts::Q00331_ArrowOfVengeance < Quest
         html = event
       when "30125-07.html"
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -69,7 +72,10 @@ class Scripts::Q00331_ArrowOfVengeance < Quest
       else
         html = "30125-04.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -84,7 +90,10 @@ class Scripts::Q00331_ArrowOfVengeance < Quest
           st.give_items(MEDUSA_VENOM, 1)
         when 20176
           st.give_items(WYRMS_TOOTH, 1)
+        else
+          # automatically added
         end
+
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       end
     end

@@ -59,7 +59,10 @@ class Scripts::Q00297_GatekeepersFavor < Quest
         st.exit_quest(true, true)
         html = "30540-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

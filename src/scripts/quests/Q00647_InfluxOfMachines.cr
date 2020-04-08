@@ -61,7 +61,10 @@ class Scripts::Q00647_InfluxOfMachines < Quest
       else
         html = "32069-07.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -95,7 +98,10 @@ class Scripts::Q00647_InfluxOfMachines < Quest
           html = "32069-05.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

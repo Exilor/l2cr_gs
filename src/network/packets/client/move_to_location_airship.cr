@@ -57,6 +57,9 @@ class Packets::Incoming::MoveToLocationAirship < GameClientPacket
       end
 
       ship.execute_path(dst)
+    else
+      # automatically added
     end
+
   end
 end

@@ -51,7 +51,10 @@ class Scripts::Q00159_ProtectTheWaterSource < Quest
             st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -98,10 +101,16 @@ class Scripts::Q00159_ProtectTheWaterSource < Quest
               html = "30154-08.html"
             end
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

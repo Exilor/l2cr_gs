@@ -44,7 +44,10 @@ class Scripts::Q00380_BringOutTheFlavorOfIngredients < Quest
           qs.exit_quest(true, true)
           html = event
         end
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -87,10 +90,16 @@ class Scripts::Q00380_BringOutTheFlavorOfIngredients < Quest
         end
       when 9
         html = "30069-12.html"
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -96,7 +96,10 @@ module ItemHandler::ItemSkillsTemplate
       if !has_consume_skill && item.template.has_immediate_effect?
         return true
       end
+    else
+      # automatically added
     end
+
 
     false
   end

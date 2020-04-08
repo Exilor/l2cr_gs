@@ -34,7 +34,10 @@ class Scripts::Jinia < AbstractNpcAI
 
         html = "32781-04.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

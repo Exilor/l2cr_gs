@@ -83,7 +83,10 @@ class Scripts::Q00288_HandleWithCare < Quest
         st.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -121,7 +124,10 @@ class Scripts::Q00288_HandleWithCare < Quest
       if st.cond?(2) && st.has_quest_items?(HIGH_GRADE_LIZARD_SCALE)
         html = "32741-07.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

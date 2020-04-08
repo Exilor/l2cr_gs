@@ -232,7 +232,10 @@ class Scripts::Q00620_FourGoblets < Quest
         end
 
         st.set_memo_state_ex(1, 2)
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -320,7 +323,10 @@ class Scripts::Q00620_FourGoblets < Quest
       # TODO (Adry_85): Need rework
       FourSepulchersManager.try_entry(npc.not_nil!, pc)
       return ""
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -419,7 +425,10 @@ class Scripts::Q00620_FourGoblets < Quest
         html = "31923-01.html"
       when JUDGES_SEPULCHER_MANAGER
         html = "31924-01.html"
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -613,7 +622,10 @@ class Scripts::Q00620_FourGoblets < Quest
           give_items(pc, ARCANA_MACE_HEAD)
         end
       end
+    else
+      # automatically added
     end
+
 
     take_items(pc, SEALED_BOX, 1)
 

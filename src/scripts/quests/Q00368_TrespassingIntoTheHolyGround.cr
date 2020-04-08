@@ -37,7 +37,10 @@ class Scripts::Q00368_TrespassingIntoTheHolyGround < Quest
       event
     when "30926-06.html"
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, pc, is_summon)

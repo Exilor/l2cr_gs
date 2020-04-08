@@ -63,7 +63,10 @@ class Scripts::LairOfAntharas < AbstractNpcAI
       end
     when DRAGON_GUARD, DRAGON_MAGE
       cancel_quest_timer("CHECK_HOME", npc, nil)
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -72,7 +75,7 @@ class Scripts::LairOfAntharas < AbstractNpcAI
     mob = npc.as(L2Attackable)
     mob.on_kill_delay = 0
     if npc.id == DRAGON_GUARD || npc.id == DRAGON_MAGE
-      mob.no_rnd_walk = true
+      mob.no_random_walk = true
       start_quest_timer("CHECK_HOME", 10000, npc, nil, true)
     end
 

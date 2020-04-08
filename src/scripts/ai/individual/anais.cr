@@ -78,7 +78,10 @@
           @current = nil
         end
         npc.do_die(nil)
+      else
+        # automatically added
       end
+
 
       super
     end

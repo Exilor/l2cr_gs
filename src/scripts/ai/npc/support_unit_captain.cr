@@ -174,7 +174,10 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
       else
         html = "unitcaptain-03.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

@@ -102,7 +102,10 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
       if st.memo_state?(2)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -128,7 +131,10 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
           html = pc.level >= MIN_LEVEL ? "32020-06.html" : "32020-08.html"
         when 2
           html = "32020-07.html"
+        else
+          # automatically added
         end
+
       when JINIA
         if st.memo_state?(1)
           msx1 = st.get_memo_state_ex(1)
@@ -161,7 +167,10 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
           st.add_exp_and_sp(921805, 82230)
           st.exit_quest(false, true)
           html = "32654-04.html"
+        else
+          # automatically added
         end
+
       when KRUN
         case st.memo_state
         when 2
@@ -171,8 +180,14 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
           st.add_exp_and_sp(921805, 82230)
           st.exit_quest(false, true)
           html = "32653-04.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

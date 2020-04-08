@@ -49,6 +49,9 @@ class Packets::Incoming::RequestGMCommand < GameClientPacket
       elsif clan
         send_packet(GMViewWarehouseWithdrawList.new(clan))
       end
+    else
+      # automatically added
     end
+
   end
 end

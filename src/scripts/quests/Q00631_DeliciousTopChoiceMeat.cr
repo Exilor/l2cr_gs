@@ -93,12 +93,18 @@ class Scripts::Q00631_DeliciousTopChoiceMeat < Quest
             st.reward_items(CRYSTAL_SPICE_COMPRESSED_PACK, 1)
           when 9
             st.reward_items(CRYSTAL_SPICE_COMPRESSED_PACK, 2)
+          else
+            # automatically added
           end
+
           st.exit_quest(true, true)
           html = event
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end

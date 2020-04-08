@@ -563,7 +563,10 @@ class Siege
       players = attackers_in_zone
     when .spectator?
       players = spectators_in_zone
+    else
+      # automatically added
     end
+
 
     if players
       players.each do |pc|
@@ -673,7 +676,10 @@ class Siege
         add_attacker(rs.get_i32("clan_id"))
       when DEFENDER_NOT_APPROVED
         add_defender_waiting(rs.get_i32("clan_id"))
+      else
+        # automatically added
       end
+
     end
   rescue e
     error e
@@ -756,7 +762,10 @@ class Siege
       add_attacker(clan.id)
     when DEFENDER_NOT_APPROVED
       add_defender_waiting(clan.id)
+    else
+      # automatically added
     end
+
   rescue e
     error e
   end

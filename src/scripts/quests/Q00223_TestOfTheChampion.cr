@@ -129,7 +129,10 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         qs.set_cond(2, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -155,7 +158,10 @@ class Scripts::Q00223_TestOfTheChampion < Quest
           npc.script_value = 1
         when 1
           npc.script_value = 2
+        else
+          # automatically added
         end
+
       when ROAD_SCAVENGER
         case npc.script_value
         when 0
@@ -173,7 +179,10 @@ class Scripts::Q00223_TestOfTheChampion < Quest
           npc.script_value = 1
         when 1
           npc.script_value = 2
+        else
+          # automatically added
         end
+
       when BLOODY_AXE_ELITE
         case npc.script_value
         when 0
@@ -186,8 +195,14 @@ class Scripts::Q00223_TestOfTheChampion < Quest
           npc.script_value = 1
         when 1
           npc.script_value = 2
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -266,7 +281,10 @@ class Scripts::Q00223_TestOfTheChampion < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -378,7 +396,10 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         elsif has_at_least_one_quest_item?(pc, ASCALONS_2ND_LETTER, WHITE_ROSE_INSIGNIA, GROOTS_LETTER, ASCALONS_3RD_LETTER, MOUENS_1ST_ORDER, MOUENS_2ND_ORDER, MOUENS_LETTER)
           html = "30625-07.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == VETERAN_ASCALON
         html = get_already_completed_msg(pc)

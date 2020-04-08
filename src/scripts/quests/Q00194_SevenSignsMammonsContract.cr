@@ -199,7 +199,10 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
           html = "level_check.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -278,7 +281,10 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
           end
         when 12
           html = "32571-28.html"
+        else
+          # automatically added
         end
+
       when FROG
         case st.cond
         when 1..3
@@ -293,7 +299,10 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
           if st.has_quest_items?(FROG_KINGS_BEAD) && pc.transformation_id == 111
             html = "32572-07.html"
           end
+        else
+          # automatically added
         end
+
       when TESS
         case st.cond
         when 1..6
@@ -310,7 +319,10 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
               html = "32573-06.html"
             end
           end
+        else
+          # automatically added
         end
+
       when KUTA
         case st.cond
         when 1..9
@@ -325,13 +337,22 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
           if st.has_quest_items?(NATIVES_GLOVE) && pc.transformation_id == 124
             html = "32574-07.html"
           end
+        else
+          # automatically added
         end
+
       when CLAUDIA_ATHEBALDT
         if st.cond?(12)
           html = "31001-01.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

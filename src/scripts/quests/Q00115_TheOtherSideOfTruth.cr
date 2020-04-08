@@ -158,7 +158,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = event
           end
         end
+      else
+        # automatically added
       end
+
     when "32021-03.html"
       case npc.not_nil!.id
       when ICE_SCULPTURE1
@@ -197,7 +200,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = event
           end
         end
+      else
+        # automatically added
       end
+
     when "32021-06.html"
       case npc.not_nil!.id
       when ICE_SCULPTURE1
@@ -220,8 +226,14 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           st.set_cond(8)
           html = event
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -280,7 +292,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             st.exit_quest(false, true)
             html = "32020-30.html"
           end
+        else
+          # automatically added
         end
+
       when MISA
         case st.cond
         when 1
@@ -297,7 +312,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           end
         when 7
           html = "32018-06.html"
+        else
+          # automatically added
         end
+
       when KIER
         case st.cond
         when 8
@@ -313,7 +331,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           unless st.has_quest_items?(REPORT_PIECE)
             html = "32022-05.html"
           end
+        else
+          # automatically added
         end
+
       when ICE_SCULPTURE1
         case st.cond
         when 7
@@ -340,7 +361,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           else
             html = "32021-10.html"
           end
+        else
+          # automatically added
         end
+
       when ICE_SCULPTURE2
         case st.cond
         when 7
@@ -367,7 +391,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           else
             html = "32021-10.html"
           end
+        else
+          # automatically added
         end
+
       when ICE_SCULPTURE3
         case st.cond
         when 7
@@ -394,7 +421,10 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           else
             html = "32021-10.html"
           end
+        else
+          # automatically added
         end
+
       when ICE_SCULPTURE4
         case st.cond
         when 7
@@ -421,9 +451,18 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           else
             html = "32021-10.html"
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

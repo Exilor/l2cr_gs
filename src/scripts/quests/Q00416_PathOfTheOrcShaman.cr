@@ -162,7 +162,10 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         st.set_cond(21, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -191,7 +194,10 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
       when 107
         st.memo_state = 108
         st.set_cond(19, true)
+      else
+        # automatically added
       end
+
 
       return super
     end
@@ -331,7 +337,10 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
           st.memo_state = 109
           st.set_cond(20, true)
           html = "32090-08.html"
+        else
+          # automatically added
         end
+
       when DUDA_MARA_TOTEM_SPIRIT
         if st.memo_state?(1)
           if has_quest_items?(pc, BLOOD_CAULDRON)
@@ -365,8 +374,14 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
           html = "32057-03.html"
         when 109
           html = "32057-04.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

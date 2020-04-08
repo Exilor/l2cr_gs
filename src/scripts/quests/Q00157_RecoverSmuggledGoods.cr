@@ -29,7 +29,10 @@ class Scripts::Q00157_RecoverSmuggledGoods < Quest
       when "30005-04.htm"
         st.start_quest
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -67,7 +70,10 @@ class Scripts::Q00157_RecoverSmuggledGoods < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     end
 
     html

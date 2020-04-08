@@ -217,7 +217,10 @@ class Scripts::Q00702_ATrapForRevenge < Quest
         count = Rnd.rand(5) + 14
       end
       st.give_items(VARIANT_DRAKE_WING_HORNS, count)
+    else
+      # automatically added
     end
+
     st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
 
     nil
@@ -236,7 +239,10 @@ class Scripts::Q00702_ATrapForRevenge < Quest
         end
       when State::STARTED
         html = st.cond?(1) ? "32563-05.html" : "32563-06.html"
+      else
+        # automatically added
       end
+
     end
 
     if st.state == State::STARTED
@@ -246,14 +252,20 @@ class Scripts::Q00702_ATrapForRevenge < Quest
           html = "32557-01.html"
         when 2
           html = "32557-02.html"
+        else
+          # automatically added
         end
+
       elsif npc.id == TENIUS
         case st.cond
         when 1
           html = "32555-01.html"
         when 2
           html = "32555-04.html"
+        else
+          # automatically added
         end
+
       end
     end
 

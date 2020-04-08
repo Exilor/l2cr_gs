@@ -296,7 +296,10 @@ module AdminCommandHandler::AdminShowQuests
         sb << qnumber
         sb << "</font><font color=\"ee0000\"> doesn't exist!</font></center></body></html>"
       end
+    else
+      # automatically added
     end
+
     reply.html = sb.to_s
     actor.send_packet(reply)
   rescue e
@@ -332,7 +335,10 @@ module AdminCommandHandler::AdminShowQuests
         target.send_packet(QuestList.new)
         target.send_packet(ExShowQuestMark.new(qs.quest.id))
         val[0] = qs.quest.name
+      else
+        # automatically added
       end
+
     else
       qs = qs.not_nil!
       if val[2] == "delete"

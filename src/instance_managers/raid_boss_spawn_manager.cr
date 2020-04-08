@@ -178,8 +178,9 @@ module RaidBossSpawnManager
     if is_dead
       boss.raid_status = Status::DEAD
 
-      min_delay = (boss.spawn.respawn_min_delay * Config.raid_min_respawn_multiplier).to_i
-      max_delay = (boss.spawn.respawn_max_delay * Config.raid_max_respawn_multiplier).to_i
+      sp = boss.spawn
+      min_delay = (sp.respawn_min_delay * Config.raid_min_respawn_multiplier).to_i
+      max_delay = (sp.respawn_max_delay * Config.raid_max_respawn_multiplier).to_i
       delay = Rnd.rand(min_delay..max_delay)
       respawn_time = Time.ms + delay
 

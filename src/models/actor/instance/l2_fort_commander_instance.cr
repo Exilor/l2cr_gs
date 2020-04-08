@@ -65,7 +65,10 @@ class L2FortCommanderInstance < L2DefenderInstance
             npc_string = NpcString::EVERYONE_CONCENTRATE_YOUR_ATTACKS_ON_S1_SHOW_THE_ENEMY_YOUR_RESOLVE
           when 3
             npc_string = NpcString::SPIRIT_OF_FIRE_UNLEASH_YOUR_POWER_BURN_THE_ENEMY
+          else
+            # automatically added
           end
+
 
           if npc_string
             ns = NpcSay.new(l2id, Packets::Incoming::Say2::NPC_SHOUT, id, npc_string)

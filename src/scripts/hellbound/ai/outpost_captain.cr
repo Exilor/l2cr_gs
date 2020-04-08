@@ -33,7 +33,7 @@ class Scripts::OutpostCaptain < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc.no_rnd_walk = true
+    npc.no_random_walk = true
 
     if npc.id == CAPTAIN
       if door = DoorData.get_door(20250001)

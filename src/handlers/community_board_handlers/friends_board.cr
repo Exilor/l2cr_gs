@@ -12,7 +12,10 @@ module CommunityBoardHandler::FriendsBoard
       CommunityBoardHandler.add_bypass(pc, "Ignore list", command)
       html = HtmCache.get_htm(pc, "data/html/CommunityBoard/friends_block_list.html").not_nil!
       CommunityBoardHandler.separate_and_send(html, pc)
+    else
+      # automatically added
     end
+
 
     true
   end

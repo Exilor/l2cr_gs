@@ -111,7 +111,10 @@ class Scripts::VarkaSilenosSupport < AbstractNpcAI
       else
         html = "31383-no.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

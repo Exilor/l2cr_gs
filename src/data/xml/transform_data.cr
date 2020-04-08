@@ -35,7 +35,10 @@ module TransformData
                   case s.name.casecmp
                   when "base", "stats", "defense", "magicDefense", "collision", "moving"
                     set.merge(s.attributes)
+                  else
+                    # automatically added
                   end
+
                 end
 
                 template_data = TransformTemplate.new(set)
@@ -110,7 +113,10 @@ module TransformData
 
                 tld = TransformLevelData.new(levels_set)
                 template_data.add_level_data(tld)
+              else
+                # automatically added
               end
+
             end
           end
         end

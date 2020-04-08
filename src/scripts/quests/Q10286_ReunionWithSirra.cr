@@ -81,7 +81,10 @@ class Scripts::Q10286_ReunionWithSirra < Quest
       if st.memo_state?(2)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -116,7 +119,10 @@ class Scripts::Q10286_ReunionWithSirra < Quest
             html = "32760-05.html"
           when 2
             html = "32760-06.html"
+          else
+            # automatically added
           end
+
         end
       when SIRRA
         if st.memo_state?(1)
@@ -132,7 +138,10 @@ class Scripts::Q10286_ReunionWithSirra < Quest
           st.exit_quest(false, true)
           html = "32781-01.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

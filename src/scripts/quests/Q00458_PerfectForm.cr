@@ -117,7 +117,10 @@ class Scripts::Q00458_PerfectForm < Quest
       else
         html = no_quest
       end
+    else
+      # automatically added
     end
+
 
     if overhit_html
       html = get_htm(pc, html)
@@ -203,8 +206,14 @@ class Scripts::Q00458_PerfectForm < Quest
         end
       when 2
         html = "32768-13.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

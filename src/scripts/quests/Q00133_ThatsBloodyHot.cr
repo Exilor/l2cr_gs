@@ -69,7 +69,10 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
           html = "32292-07.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -106,7 +109,10 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
           html = "32292-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

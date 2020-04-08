@@ -41,7 +41,10 @@ class Scripts::Q00650_ABrokenDream < Quest
         st.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -66,7 +69,10 @@ class Scripts::Q00650_ABrokenDream < Quest
       else
         html = "32054-06.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

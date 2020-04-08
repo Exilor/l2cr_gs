@@ -85,7 +85,10 @@ class Scripts::SubclassCertification < AbstractNpcAI
       html = do_certification(pc, st, "ClassAbility", TRANSFORMATION_SEALBOOKS[get_class_index(pc)]?, 80)
     when "Main.html", "Explanation.html", "NotObtain.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end

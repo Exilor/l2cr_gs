@@ -89,7 +89,10 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
         end
       when State::COMPLETED
         html = "35437-07a.html"
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

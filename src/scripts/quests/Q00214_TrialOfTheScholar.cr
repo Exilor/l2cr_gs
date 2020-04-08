@@ -279,7 +279,10 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
       take_items(pc, ENCHANTED_GARGOYLES_NAIL, -1)
       qs.set_cond(30, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -365,7 +368,10 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -658,7 +664,10 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
         elsif has_quest_items?(pc, TRIFFS_RING, SCRIPTURE_CHAPTER_1, SCRIPTURE_CHAPTER_2, SCRIPTURE_CHAPTER_3, SCRIPTURE_CHAPTER_4) && !has_at_least_one_quest_item?(pc, POITANS_NOTES, CASIANS_LIST)
           html = "30612-08.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == MAGISTER_MIRIEN
         html = get_already_completed_msg(pc)

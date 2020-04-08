@@ -25,7 +25,10 @@ class Scripts::Q00998_FallenAngelSelect < Quest
       start_quest(Q00142_FallenAngelRequestOfDawn.simple_name, pc)
     when "dusk"
       start_quest(Q00143_FallenAngelRequestOfDusk.simple_name, pc)
+    else
+      # automatically added
     end
+
 
     nil
   end

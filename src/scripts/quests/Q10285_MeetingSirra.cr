@@ -104,7 +104,10 @@ class Scripts::Q10285_MeetingSirra < Quest
       if pc.level >= MIN_LEVEL
         pc.tele_to_location(FREYA_LOC, 0)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -135,7 +138,10 @@ class Scripts::Q10285_MeetingSirra < Quest
           st.add_exp_and_sp(939075, 83855)
           st.exit_quest(false, true)
           html = "32020-08.html"
+        else
+          # automatically added
         end
+
       when JINIA
         if st.memo_state?(1)
           case st.get_memo_state_ex(1)
@@ -151,7 +157,10 @@ class Scripts::Q10285_MeetingSirra < Quest
             html = "32760-08.html"
           when 5
             html = "32760-15.html"
+          else
+            # automatically added
           end
+
         end
       when KEGOR
         if st.memo_state?(1)
@@ -162,7 +171,10 @@ class Scripts::Q10285_MeetingSirra < Quest
             html = "32761-03.html"
           when 3
             html = "32761-04.html"
+          else
+            # automatically added
           end
+
         end
       when SIRRA
         if st.memo_state?(1)
@@ -183,7 +195,10 @@ class Scripts::Q10285_MeetingSirra < Quest
           html = "32029-01.html"
           st.set_cond(8, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

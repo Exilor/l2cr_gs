@@ -52,7 +52,10 @@ class Scripts::CastleAmbassador < AbstractNpcAI
         cancel_quest_timer("DESPAWN", npc, nil)
         npc.broadcast_event("DESPAWN", 1000, nil)
         npc.delete_me
+      else
+        # automatically added
       end
+
 
 
       if html && player

@@ -19,24 +19,24 @@ class EffectHandler::BlockAction < AbstractEffect
 
   def on_exit(info)
     if @blocked_actions.includes?(BotReportTable::PARTY_ACTION_BLOCK_ID)
-			PunishmentManager.stop_punishment(
+      PunishmentManager.stop_punishment(
         info.effected.l2id,
         PunishmentAffect::CHARACTER,
         PunishmentType::PARTY_BAN
       )
-		end
-		if @blocked_actions.includes?(BotReportTable::CHAT_BLOCK_ID)
-			PunishmentManager.stop_punishment(
+    end
+    if @blocked_actions.includes?(BotReportTable::CHAT_BLOCK_ID)
+      PunishmentManager.stop_punishment(
         info.effected.l2id,
         PunishmentAffect::CHARACTER,
         PunishmentType::CHAT_BAN
       )
-		end
+    end
   end
 
   def on_start(info)
     if @blocked_actions.includes?(BotReportTable::PARTY_ACTION_BLOCK_ID)
-			PunishmentManager.start_punishment(
+      PunishmentManager.start_punishment(
         PunishmentTask.new(
           0,
           info.effected.l2id,
@@ -48,10 +48,10 @@ class EffectHandler::BlockAction < AbstractEffect
           true
         )
       )
-		end
+    end
 
-		if @blocked_actions.includes?(BotReportTable::CHAT_BLOCK_ID)
-			PunishmentManager.start_punishment(
+    if @blocked_actions.includes?(BotReportTable::CHAT_BLOCK_ID)
+      PunishmentManager.start_punishment(
         PunishmentTask.new(
           0,
           info.effected.l2id,
@@ -63,6 +63,6 @@ class EffectHandler::BlockAction < AbstractEffect
           true
         )
       )
-		end
+    end
   end
 end

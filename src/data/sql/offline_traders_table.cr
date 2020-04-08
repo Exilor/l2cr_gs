@@ -56,6 +56,8 @@ module OfflineTradersTable
             pc.manufacture_items.each_value do |i|
               GameDB.exec(SAVE_ITEMS, pc.l2id, i.recipe_id, 0, i.cost)
             end
+          else
+            # do nothing
           end
 
           GameDB.exec(
@@ -147,8 +149,11 @@ module OfflineTradersTable
             end
 
             pc.store_name = rs.get_string("title")
+          else
+            # do nothing
           end
         rescue e
+          warn e
         end
 
         pc.sit_down

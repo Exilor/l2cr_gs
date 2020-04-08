@@ -1,39 +1,39 @@
 class BoatInnadrilTour
   include BoatEngine
-  
+
   private TOUR = [
     VehiclePathPoint.new(105129, 226240, -3610, 150, 800),
-		VehiclePathPoint.new(90604, 238797, -3610, 150, 800),
-		VehiclePathPoint.new(74853, 237943, -3610, 150, 800),
-		VehiclePathPoint.new(68207, 235399, -3610, 150, 800),
-		VehiclePathPoint.new(63226, 230487, -3610, 150, 800),
-		VehiclePathPoint.new(61843, 224797, -3610, 150, 800),
-		VehiclePathPoint.new(61822, 203066, -3610, 150, 800),
-		VehiclePathPoint.new(59051, 197685, -3610, 150, 800),
-		VehiclePathPoint.new(54048, 195298, -3610, 150, 800),
-		VehiclePathPoint.new(41609, 195687, -3610, 150, 800),
-		VehiclePathPoint.new(35821, 200284, -3610, 150, 800),
-		VehiclePathPoint.new(35567, 205265, -3610, 150, 800),
-		VehiclePathPoint.new(35617, 222471, -3610, 150, 800),
-		VehiclePathPoint.new(37932, 226588, -3610, 150, 800),
-		VehiclePathPoint.new(42932, 229394, -3610, 150, 800),
-		VehiclePathPoint.new(74324, 245231, -3610, 150, 800),
-		VehiclePathPoint.new(81872, 250314, -3610, 150, 800),
-		VehiclePathPoint.new(101692, 249882, -3610, 150, 800),
-		VehiclePathPoint.new(107907, 256073, -3610, 150, 800),
-		VehiclePathPoint.new(112317, 257133, -3610, 150, 800),
-		VehiclePathPoint.new(126273, 255313, -3610, 150, 800),
-		VehiclePathPoint.new(128067, 250961, -3610, 150, 800),
-		VehiclePathPoint.new(128520, 238249, -3610, 150, 800),
-		VehiclePathPoint.new(126428, 235072, -3610, 150, 800),
-		VehiclePathPoint.new(121843, 234656, -3610, 150, 800),
-		VehiclePathPoint.new(120096, 234268, -3610, 150, 800),
-		VehiclePathPoint.new(118572, 233046, -3610, 150, 800),
-		VehiclePathPoint.new(117671, 228951, -3610, 150, 800),
-		VehiclePathPoint.new(115936, 226540, -3610, 150, 800),
-		VehiclePathPoint.new(113628, 226240, -3610, 150, 800),
-		VehiclePathPoint.new(111300, 226240, -3610, 150, 800),
-		VehiclePathPoint.new(111264, 226240, -3610, 150, 800)
+    VehiclePathPoint.new(90604, 238797, -3610, 150, 800),
+    VehiclePathPoint.new(74853, 237943, -3610, 150, 800),
+    VehiclePathPoint.new(68207, 235399, -3610, 150, 800),
+    VehiclePathPoint.new(63226, 230487, -3610, 150, 800),
+    VehiclePathPoint.new(61843, 224797, -3610, 150, 800),
+    VehiclePathPoint.new(61822, 203066, -3610, 150, 800),
+    VehiclePathPoint.new(59051, 197685, -3610, 150, 800),
+    VehiclePathPoint.new(54048, 195298, -3610, 150, 800),
+    VehiclePathPoint.new(41609, 195687, -3610, 150, 800),
+    VehiclePathPoint.new(35821, 200284, -3610, 150, 800),
+    VehiclePathPoint.new(35567, 205265, -3610, 150, 800),
+    VehiclePathPoint.new(35617, 222471, -3610, 150, 800),
+    VehiclePathPoint.new(37932, 226588, -3610, 150, 800),
+    VehiclePathPoint.new(42932, 229394, -3610, 150, 800),
+    VehiclePathPoint.new(74324, 245231, -3610, 150, 800),
+    VehiclePathPoint.new(81872, 250314, -3610, 150, 800),
+    VehiclePathPoint.new(101692, 249882, -3610, 150, 800),
+    VehiclePathPoint.new(107907, 256073, -3610, 150, 800),
+    VehiclePathPoint.new(112317, 257133, -3610, 150, 800),
+    VehiclePathPoint.new(126273, 255313, -3610, 150, 800),
+    VehiclePathPoint.new(128067, 250961, -3610, 150, 800),
+    VehiclePathPoint.new(128520, 238249, -3610, 150, 800),
+    VehiclePathPoint.new(126428, 235072, -3610, 150, 800),
+    VehiclePathPoint.new(121843, 234656, -3610, 150, 800),
+    VehiclePathPoint.new(120096, 234268, -3610, 150, 800),
+    VehiclePathPoint.new(118572, 233046, -3610, 150, 800),
+    VehiclePathPoint.new(117671, 228951, -3610, 150, 800),
+    VehiclePathPoint.new(115936, 226540, -3610, 150, 800),
+    VehiclePathPoint.new(113628, 226240, -3610, 150, 800),
+    VehiclePathPoint.new(111300, 226240, -3610, 150, 800),
+    VehiclePathPoint.new(111264, 226240, -3610, 150, 800)
   ]
 
   private DOCK = TOUR[-1]
@@ -92,7 +92,10 @@ class BoatInnadrilTour
       # debug "The tour has ended and the boat has come back to its harbor."
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVED_AT_INNADRIL, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
+    else
+      # automatically added
     end
+
 
     @cycle += 1
     if @cycle > 9

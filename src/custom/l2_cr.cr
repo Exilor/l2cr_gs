@@ -63,16 +63,7 @@ module L2Cr
       when "restart"
         Shutdown.start_shutdown(nil, 0, true)
       when "ids"
-        puts "#{IdFactory::IDS.@ranges} (#{IdFactory::IDS.@ranges.size})"
-      when "heal_raids"
-        L2World.objects.each do |o|
-          if o.is_a?(L2RaidBossInstance)
-            if o.current_hp < o.max_hp || o.current_mp < o.max_mp
-              puts "Healing #{o.name}"
-              o.heal!
-            end
-          end
-        end
+        puts "#{IdFactory::IDS.@ranges} (#{IdFactory::IDS.@ranges.size} ranges)"
       when "check_ids"
         L2Cr.check_ids
       when /^valakas\s\w+$/

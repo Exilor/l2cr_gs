@@ -1,30 +1,30 @@
 class BoatRunePrimeval
   include BoatEngine
-  
+
   private RUNE_TO_PRIMEVAL = [
     VehiclePathPoint.new(32750, -39300, -3610, 180, 800),
-		VehiclePathPoint.new(27440, -39328, -3610, 250, 1000),
-		VehiclePathPoint.new(19616, -39360, -3610, 270, 1000),
-		VehiclePathPoint.new(3840, -38528, -3610, 270, 1000),
-		VehiclePathPoint.new(1664, -37120, -3610, 270, 1000),
-		VehiclePathPoint.new(896, -34560, -3610, 180, 1800),
-		VehiclePathPoint.new(832, -31104, -3610, 180, 180),
-		VehiclePathPoint.new(2240, -29132, -3610, 150, 1800),
-		VehiclePathPoint.new(4160, -27828, -3610, 150, 1800),
-		VehiclePathPoint.new(5888, -27279, -3610, 150, 1800),
-		VehiclePathPoint.new(7000, -27279, -3610, 150, 1800),
-		VehiclePathPoint.new(10342, -27279, -3610, 150, 1800)
+    VehiclePathPoint.new(27440, -39328, -3610, 250, 1000),
+    VehiclePathPoint.new(19616, -39360, -3610, 270, 1000),
+    VehiclePathPoint.new(3840, -38528, -3610, 270, 1000),
+    VehiclePathPoint.new(1664, -37120, -3610, 270, 1000),
+    VehiclePathPoint.new(896, -34560, -3610, 180, 1800),
+    VehiclePathPoint.new(832, -31104, -3610, 180, 180),
+    VehiclePathPoint.new(2240, -29132, -3610, 150, 1800),
+    VehiclePathPoint.new(4160, -27828, -3610, 150, 1800),
+    VehiclePathPoint.new(5888, -27279, -3610, 150, 1800),
+    VehiclePathPoint.new(7000, -27279, -3610, 150, 1800),
+    VehiclePathPoint.new(10342, -27279, -3610, 150, 1800)
   ]
 
   private PRIMEVAL_TO_RUNE = [
     VehiclePathPoint.new(15528, -27279, -3610, 180, 800),
-		VehiclePathPoint.new(22304, -29664, -3610, 290, 800),
-		VehiclePathPoint.new(33824, -26880, -3610, 290, 800),
-		VehiclePathPoint.new(38848, -21792, -3610, 240, 1200),
-		VehiclePathPoint.new(43424, -22080, -3610, 180, 1800),
-		VehiclePathPoint.new(44320, -25152, -3610, 180, 1800),
-		VehiclePathPoint.new(40576, -31616, -3610, 250, 800),
-		VehiclePathPoint.new(36819, -35315, -3610, 220, 800)
+    VehiclePathPoint.new(22304, -29664, -3610, 290, 800),
+    VehiclePathPoint.new(33824, -26880, -3610, 290, 800),
+    VehiclePathPoint.new(38848, -21792, -3610, 240, 1200),
+    VehiclePathPoint.new(43424, -22080, -3610, 180, 1800),
+    VehiclePathPoint.new(44320, -25152, -3610, 180, 1800),
+    VehiclePathPoint.new(40576, -31616, -3610, 250, 800),
+    VehiclePathPoint.new(36819, -35315, -3610, 220, 800)
   ]
 
   private RUNE_DOCK = [VehiclePathPoint.new(34381, -37680, -3610, 220, 800)]
@@ -78,7 +78,10 @@ class BoatRunePrimeval
       BoatManager.dock_ship(BoatManager::RUNE_HARBOR, true)
       BoatManager.broadcast_packets(RUNE_DOCK[0], PRIMEVAL_DOCK, ARRIVED_AT_RUNE, ARRIVED_AT_RUNE_2, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 180_000)
+    else
+      # automatically added
     end
+
 
     @shout_count = 0
     @cycle += 1

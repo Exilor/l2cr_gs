@@ -141,7 +141,10 @@ class Scripts::Q00235_MimirsElixir < Quest
           html = event
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -196,7 +199,10 @@ class Scripts::Q00235_MimirsElixir < Quest
           html = "30721-16.html"
         when 8
           html = "30721-17.html"
+        else
+          # automatically added
         end
+
       when JOAN
         case st.memo_state
         when 2
@@ -205,12 +211,18 @@ class Scripts::Q00235_MimirsElixir < Quest
           html = "30718-04.html"
         when 4
           html = "30718-05.html"
+        else
+          # automatically added
         end
+
       when ALCHEMISTS_MIXING_URN
         if st.memo_state?(7) && has_quest_items?(player, MAGISTERS_MIXING_STONE)
           html = "31149-01.html"
         end
+      else
+        # automatically added
       end
+
     elsif st.completed?
       if npc.id == LADD
         html = get_already_completed_msg(player)

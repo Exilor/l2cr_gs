@@ -1,49 +1,49 @@
 class BoatGiranTalking
   include BoatEngine
-  
+
   private GIRAN_TO_TALKING = [
     VehiclePathPoint.new(51914, 189023, -3610, 150, 800),
-		VehiclePathPoint.new(60567, 189789, -3610, 150, 800),
-		VehiclePathPoint.new(63732, 197457, -3610, 200, 800),
-		VehiclePathPoint.new(63732, 219946, -3610, 250, 800),
-		VehiclePathPoint.new(62008, 222240, -3610, 250, 1200),
-		VehiclePathPoint.new(56115, 226791, -3610, 250, 1200),
-		VehiclePathPoint.new(40384, 226432, -3610, 300, 800),
-		VehiclePathPoint.new(37760, 226432, -3610, 300, 800),
-		VehiclePathPoint.new(27153, 226791, -3610, 300, 800),
-		VehiclePathPoint.new(12672, 227535, -3610, 300, 800),
-		VehiclePathPoint.new(-1808, 228280, -3610, 300, 800),
-		VehiclePathPoint.new(-22165, 230542, -3610, 300, 800),
-		VehiclePathPoint.new(-42523, 235205, -3610, 300, 800),
-		VehiclePathPoint.new(-68451, 259560, -3610, 250, 800),
-		VehiclePathPoint.new(-70848, 261696, -3610, 200, 800),
-		VehiclePathPoint.new(-83344, 261610, -3610, 200, 800),
-		VehiclePathPoint.new(-88344, 261660, -3610, 180, 800),
-		VehiclePathPoint.new(-92344, 261660, -3610, 180, 800),
-		VehiclePathPoint.new(-94242, 261659, -3610, 150, 800)
+    VehiclePathPoint.new(60567, 189789, -3610, 150, 800),
+    VehiclePathPoint.new(63732, 197457, -3610, 200, 800),
+    VehiclePathPoint.new(63732, 219946, -3610, 250, 800),
+    VehiclePathPoint.new(62008, 222240, -3610, 250, 1200),
+    VehiclePathPoint.new(56115, 226791, -3610, 250, 1200),
+    VehiclePathPoint.new(40384, 226432, -3610, 300, 800),
+    VehiclePathPoint.new(37760, 226432, -3610, 300, 800),
+    VehiclePathPoint.new(27153, 226791, -3610, 300, 800),
+    VehiclePathPoint.new(12672, 227535, -3610, 300, 800),
+    VehiclePathPoint.new(-1808, 228280, -3610, 300, 800),
+    VehiclePathPoint.new(-22165, 230542, -3610, 300, 800),
+    VehiclePathPoint.new(-42523, 235205, -3610, 300, 800),
+    VehiclePathPoint.new(-68451, 259560, -3610, 250, 800),
+    VehiclePathPoint.new(-70848, 261696, -3610, 200, 800),
+    VehiclePathPoint.new(-83344, 261610, -3610, 200, 800),
+    VehiclePathPoint.new(-88344, 261660, -3610, 180, 800),
+    VehiclePathPoint.new(-92344, 261660, -3610, 180, 800),
+    VehiclePathPoint.new(-94242, 261659, -3610, 150, 800)
   ]
 
   private TALKING_DOCK = [VehiclePathPoint.new(-96622, 261660, -3610, 150, 800)]
 
   private TALKING_TO_GIRAN = [
     VehiclePathPoint.new(-113925, 261660, -3610, 150, 800),
-		VehiclePathPoint.new(-126107, 249116, -3610, 180, 800),
-		VehiclePathPoint.new(-126107, 234499, -3610, 180, 800),
-		VehiclePathPoint.new(-126107, 219882, -3610, 180, 800),
-		VehiclePathPoint.new(-109414, 204914, -3610, 180, 800),
-		VehiclePathPoint.new(-92807, 204914, -3610, 180, 800),
-		VehiclePathPoint.new(-80425, 216450, -3610, 250, 800),
-		VehiclePathPoint.new(-68043, 227987, -3610, 250, 800),
-		VehiclePathPoint.new(-63744, 231168, -3610, 250, 800),
-		VehiclePathPoint.new(-60844, 231369, -3610, 250, 1800),
-		VehiclePathPoint.new(-44915, 231369, -3610, 200, 800),
-		VehiclePathPoint.new(-28986, 231369, -3610, 200, 800),
-		VehiclePathPoint.new(8233, 207624, -3610, 200, 800),
-		VehiclePathPoint.new(21470, 201503, -3610, 180, 800),
-		VehiclePathPoint.new(40058, 195383, -3610, 180, 800),
-		VehiclePathPoint.new(43022, 193793, -3610, 150, 800),
-		VehiclePathPoint.new(45986, 192203, -3610, 150, 800),
-		VehiclePathPoint.new(48950, 190613, -3610, 150, 800)
+    VehiclePathPoint.new(-126107, 249116, -3610, 180, 800),
+    VehiclePathPoint.new(-126107, 234499, -3610, 180, 800),
+    VehiclePathPoint.new(-126107, 219882, -3610, 180, 800),
+    VehiclePathPoint.new(-109414, 204914, -3610, 180, 800),
+    VehiclePathPoint.new(-92807, 204914, -3610, 180, 800),
+    VehiclePathPoint.new(-80425, 216450, -3610, 250, 800),
+    VehiclePathPoint.new(-68043, 227987, -3610, 250, 800),
+    VehiclePathPoint.new(-63744, 231168, -3610, 250, 800),
+    VehiclePathPoint.new(-60844, 231369, -3610, 250, 1800),
+    VehiclePathPoint.new(-44915, 231369, -3610, 200, 800),
+    VehiclePathPoint.new(-28986, 231369, -3610, 200, 800),
+    VehiclePathPoint.new(8233, 207624, -3610, 200, 800),
+    VehiclePathPoint.new(21470, 201503, -3610, 180, 800),
+    VehiclePathPoint.new(40058, 195383, -3610, 180, 800),
+    VehiclePathPoint.new(43022, 193793, -3610, 150, 800),
+    VehiclePathPoint.new(45986, 192203, -3610, 150, 800),
+    VehiclePathPoint.new(48950, 190613, -3610, 150, 800)
   ]
 
   private GIRAN_DOCK = TALKING_TO_GIRAN[-1]
@@ -171,7 +171,10 @@ class BoatGiranTalking
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVED_AT_GIRAN, ARRIVED_AT_GIRAN_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
+    else
+      # automatically added
     end
+
 
     @shout_count = 0
     @cycle += 1

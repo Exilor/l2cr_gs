@@ -167,7 +167,10 @@ module AdminCommandHandler::AdminCHSiege
         siegable.start_siege
       when SiegeStatus::RUNNING
         siegable.end_siege
+      else
+        # automatically added
       end
+
     end
 
     send_siegable_hall_page(pc, split[1], hall)

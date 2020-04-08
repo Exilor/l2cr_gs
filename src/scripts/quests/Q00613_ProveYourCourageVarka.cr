@@ -76,7 +76,10 @@ class Scripts::Q00613_ProveYourCourageVarka < Quest
       else
         html = "31377-06.html"
       end
+    else
+      # automatically added
     end
+
     html || get_no_quest_msg(pc)
   end
 end

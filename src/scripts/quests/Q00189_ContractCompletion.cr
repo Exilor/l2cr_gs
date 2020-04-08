@@ -60,7 +60,10 @@ class Scripts::Q00189_ContractCompletion < Quest
         qs.set_cond(3, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -96,15 +99,24 @@ class Scripts::Q00189_ContractCompletion < Quest
           html = "30673-04.html"
         when 4
           html = "30673-05.html"
+        else
+          # automatically added
         end
+
       when SHEGFIELD
         case qs.cond
         when 2
           html = "30068-01.html"
         when 3
           html = "30068-04.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == BLUEPRINT_SELLER_LUKA
         html = get_already_completed_msg(pc)

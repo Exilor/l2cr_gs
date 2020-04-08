@@ -115,7 +115,10 @@ class Scripts::Q00064_CertifiedBerserker < Quest
         qs.set_cond(13, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -171,7 +174,10 @@ class Scripts::Q00064_CertifiedBerserker < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -276,7 +282,10 @@ class Scripts::Q00064_CertifiedBerserker < Quest
         elsif memo_state == 10
           html = "32253-03.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == MASTER_ORKURUS
         html = "32207-05.html"

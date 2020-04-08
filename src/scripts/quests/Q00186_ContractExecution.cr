@@ -72,7 +72,10 @@ class Scripts::Q00186_ContractExecution < Quest
         qs.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -125,7 +128,10 @@ class Scripts::Q00186_ContractExecution < Quest
         elsif memo_state == 3
           html = "31437-05.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == RESEARCHER_LORAIN
         html = get_already_completed_msg(pc)

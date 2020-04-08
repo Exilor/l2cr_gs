@@ -391,7 +391,10 @@ abstract class ChamberOfDelusion < AbstractInstance
     when "SCE_DREAM_FIRE_IN_THE_HOLE"
       receiver.busy = true
       receiver.do_cast(FAIL_SKILL)
+    else
+      # automatically added
     end
+
 
     nil
   end

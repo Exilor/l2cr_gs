@@ -61,7 +61,10 @@ class Scripts::Q00276_TotemOfTheHestui < Quest
         if st.give_item_randomly(KASHA_CRYSTAL, 1, 1, 1, true)
           st.set_cond(2)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -94,8 +97,14 @@ class Scripts::Q00276_TotemOfTheHestui < Quest
           st.exit_quest(true, true)
           html = "30571-05.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

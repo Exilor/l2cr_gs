@@ -47,7 +47,10 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
         html = pc.level >= 46 ? "32012-01.htm" : "32012-01a.htm"
       when State::STARTED
         html = "32012-02.html"
+      else
+        # automatically added
       end
+
     when SARA
       if st.started?
         if Rnd.rand(10) <= 4
@@ -60,7 +63,10 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
         end
         st.exit_quest(true, true)
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

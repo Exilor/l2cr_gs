@@ -51,7 +51,7 @@ class L2Fish
     when "hard_swift" then 8
     when "hard_ugly"  then 9
     when "hs_fish"    then 10
-	  else 0
+    else 0
     end
   end
 

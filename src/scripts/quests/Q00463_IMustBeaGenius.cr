@@ -141,7 +141,10 @@ class Scripts::Q00463_IMustBeaGenius < Quest
           html = "32069-06.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

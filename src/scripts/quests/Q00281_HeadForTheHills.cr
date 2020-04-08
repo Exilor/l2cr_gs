@@ -1,37 +1,37 @@
 class Scripts::Q00281_HeadForTheHills < Quest
-	# Item
-	private CLAWS = 9796
-	# NPC
-	private MERCELA = 32173
-	# Message
-	private MESSAGE = ExShowScreenMessage.new(NpcString::ACQUISITION_OF_SOULSHOT_FOR_BEGINNERS_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000)
-	# Misc
-	private MIN_LVL = 6
-	# Monsters
-	private MONSTERS = {
+  # Item
+  private CLAWS = 9796
+  # NPC
+  private MERCELA = 32173
+  # Message
+  private MESSAGE = ExShowScreenMessage.new(NpcString::ACQUISITION_OF_SOULSHOT_FOR_BEGINNERS_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000)
+  # Misc
+  private MIN_LVL = 6
+  # Monsters
+  private MONSTERS = {
     22234 => 390, # Green Goblin
-		22235 => 450, # Mountain Werewolf
-		22236 => 650, # Muertos Archer
-		22237 => 720, # Mountain Fungus
-		22238 => 920, # Mountain Werewolf Chief
-		22239 => 990  # Muertos Guard
+    22235 => 450, # Mountain Werewolf
+    22236 => 650, # Muertos Archer
+    22237 => 720, # Mountain Fungus
+    22238 => 920, # Mountain Werewolf Chief
+    22239 => 990  # Muertos Guard
   }
-	# Rewards
-	private REWARDS = {
-		115,  # Earring of Wisdom
-		876,  # Ring of Anguish
-		907,  # Necklace of Anguish
-		22,   # Leather Shirt
-		428,  # Feriotic Tunic
-		1100, # Cotton Tunic
-		29,   # Leather Pants
-		463,  # Feriotic Stockings
-		1103, # Cotton Stockings
-		736   # Scroll of Escape
-	}
+  # Rewards
+  private REWARDS = {
+    115,  # Earring of Wisdom
+    876,  # Ring of Anguish
+    907,  # Necklace of Anguish
+    22,   # Leather Shirt
+    428,  # Feriotic Tunic
+    1100, # Cotton Tunic
+    29,   # Leather Pants
+    463,  # Feriotic Stockings
+    1103, # Cotton Stockings
+    736   # Scroll of Escape
+  }
 
   private SOULSHOTS_NO_GRADE_FOR_ROOKIES = ItemHolder.new(5789, 6000)
-	private SPIRITSHOTS_NO_GRADE_FOR_ROOKIES = ItemHolder.new(5790, 3000)
+  private SPIRITSHOTS_NO_GRADE_FOR_ROOKIES = ItemHolder.new(5790, 3000)
 
   def initialize
     super(281, self.class.simple_name, "Head for the Hills!")
@@ -79,7 +79,10 @@ class Scripts::Q00281_HeadForTheHills < Quest
       else
         "32173-10.html"
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, killer, is_summon)

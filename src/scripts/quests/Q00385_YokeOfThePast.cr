@@ -81,7 +81,10 @@ class Scripts::Q00385_YokeOfThePast < Quest
     when "ziggurat-10.html"
       qs.exit_quest(true, true)
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)
@@ -101,7 +104,10 @@ class Scripts::Q00385_YokeOfThePast < Quest
       else
         html = "ziggurat-08.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

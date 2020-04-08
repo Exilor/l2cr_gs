@@ -24,7 +24,10 @@ class Packets::Incoming::CharacterDelete < GameClientPacket
       send_packet(CharDeleteFail::YOU_MAY_NOT_DELETE_CLAN_MEMBER)
     when 2
       send_packet(CharDeleteFail::CLAN_LEADERS_MAY_NOT_BE_DELETED)
+    else
+      # automatically added
     end
+
 
     csi = CharSelectionInfo.new(client.account_name, client.session_id.play_ok_1, 0)
     send_packet(csi)

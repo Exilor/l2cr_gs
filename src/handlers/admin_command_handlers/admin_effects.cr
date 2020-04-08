@@ -362,7 +362,10 @@ module AdminCommandHandler::AdminEffects
         packet = SSQInfo.new(2)
       when "dusk"
         packet = SSQInfo.new(1)
+      else
+        # automatically added
       end
+
     when "sky"
       case state
       when "night"
@@ -375,7 +378,10 @@ module AdminCommandHandler::AdminEffects
         else
           packet = ExRedSky.new(10)
         end
+      else
+        # automatically added
       end
+
     else
       pc.send_message("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>")
     end
@@ -402,7 +408,10 @@ module AdminCommandHandler::AdminEffects
       filename = "ave_event.htm"
     when .includes?("social")
       filename = "social.htm"
+    else
+      # automatically added
     end
+
 
     AdminHtml.show_admin_html(pc, filename)
   end

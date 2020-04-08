@@ -162,7 +162,10 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         price = Config.outer_door_upgrade_price3
       when 5
         price = Config.outer_door_upgrade_price5
+      else
+        # automatically added
       end
+
     when 2 # Inner Door
       case level
       when 2
@@ -171,7 +174,10 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         price = Config.inner_door_upgrade_price3
       when 5
         price = Config.inner_door_upgrade_price5
+      else
+        # automatically added
       end
+
     when 3 # Wall
       case level
       when 2
@@ -180,15 +186,24 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         price = Config.wall_upgrade_price3
       when 5
         price = Config.wall_upgrade_price5
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DUSK
       price *= 3
     when SevenSigns::CABAL_DAWN
       price *= 0.8
+    else
+      # automatically added
     end
+
 
     price.to_i
   end
@@ -226,14 +241,20 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       price = Config.trap_upgrade_price3
     when 4
       price = Config.trap_upgrade_price4
+    else
+      # automatically added
     end
+
 
     case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DUSK
       price *= 3
     when SevenSigns::CABAL_DAWN
       price *= 0.8
+    else
+      # automatically added
     end
+
 
     price.to_i
   end
@@ -440,7 +461,10 @@ class Scripts::CastleChamberlain < AbstractNpcAI
             html["%ss_event%"] = "1000507"
           when SevenSigns::PERIOD_SEAL_VALIDATION, SevenSigns::PERIOD_COMP_RESULTS
             html["%ss_event%"] = "1000508"
+          else
+            # automatically added
           end
+
           html["%ss_avarice%"] = get_seal_owner(1)
           html["%ss_gnosis%"] = get_seal_owner(2)
           html["%ss_strife%"] = get_seal_owner(3)
@@ -809,7 +833,10 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       else
         htmltext = "chamberlain-21.html"
       end
+    else
+      # automatically added
     end
+
 
     htmltext
   end

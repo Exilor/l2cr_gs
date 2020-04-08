@@ -104,7 +104,10 @@ module SkillTreesData
             when "subClassConditions"
               slot, lvl = b["slot"].to_i, b["lvl"].to_i
               skill_learn.add_subclass_conditions(slot, lvl)
+            else
+              # automatically added
             end
+
           end
 
           hash = SkillData.get_skill_hash(skill_learn.skill_id, skill_learn.skill_level)
@@ -540,7 +543,10 @@ module SkillTreesData
       get_subclass_skill(id, lvl)
     when AcquireSkillType::COLLECT
       get_collect_skill(id, lvl)
+    else
+      # automatically added
     end
+
   end
 
   def get_class_skill(id : Int32, lvl : Int32, class_id : ClassId) : L2SkillLearn?

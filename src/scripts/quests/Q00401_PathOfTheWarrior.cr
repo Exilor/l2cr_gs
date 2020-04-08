@@ -1,36 +1,36 @@
 class Scripts::Q00401_PathOfTheWarrior < Quest
   # NPCs
-	private MASTER_AURON = 30010
-	private TRADER_SIMPLON = 30253
-	# Items
-	private AURONS_LETTER = 1138
-	private WARRIOR_GUILD_MARK = 1139
-	private RUSTED_BRONZE_SWORD1 = 1140
-	private RUSTED_BRONZE_SWORD2 = 1141
-	private RUSTED_BRONZE_SWORD3 = 1142
-	private SIMPLONS_LETTER = 1143
-	private VENOMOUS_SPIDERS_LEG = 1144
-	# Reward
-	private MEDALLION_OF_WARRIOR = 1145
-	# Monster
-	private TRACKER_SKELETON = 20035
-	private VENOMOUS_SPIDERS = 20038
-	private TRACKER_SKELETON_LEADER = 20042
-	private ARACHNID_TRACKER = 20043
-	# Misc
-	private MIN_LEVEL = 18
+  private MASTER_AURON = 30010
+  private TRADER_SIMPLON = 30253
+  # Items
+  private AURONS_LETTER = 1138
+  private WARRIOR_GUILD_MARK = 1139
+  private RUSTED_BRONZE_SWORD1 = 1140
+  private RUSTED_BRONZE_SWORD2 = 1141
+  private RUSTED_BRONZE_SWORD3 = 1142
+  private SIMPLONS_LETTER = 1143
+  private VENOMOUS_SPIDERS_LEG = 1144
+  # Reward
+  private MEDALLION_OF_WARRIOR = 1145
+  # Monster
+  private TRACKER_SKELETON = 20035
+  private VENOMOUS_SPIDERS = 20038
+  private TRACKER_SKELETON_LEADER = 20042
+  private ARACHNID_TRACKER = 20043
+  # Misc
+  private MIN_LEVEL = 18
 
   def initialize
     super(401, self.class.simple_name, "Path Of The Warrior")
 
     add_start_npc(MASTER_AURON)
-		add_talk_id(MASTER_AURON, TRADER_SIMPLON)
-		add_attack_id(VENOMOUS_SPIDERS, ARACHNID_TRACKER)
-		add_kill_id(
+    add_talk_id(MASTER_AURON, TRADER_SIMPLON)
+    add_attack_id(VENOMOUS_SPIDERS, ARACHNID_TRACKER)
+    add_kill_id(
       TRACKER_SKELETON, VENOMOUS_SPIDERS, TRACKER_SKELETON_LEADER,
       ARACHNID_TRACKER
     )
-		register_quest_items(
+    register_quest_items(
       AURONS_LETTER, WARRIOR_GUILD_MARK, RUSTED_BRONZE_SWORD1,
       RUSTED_BRONZE_SWORD2, RUSTED_BRONZE_SWORD3, SIMPLONS_LETTER,
       VENOMOUS_SPIDERS_LEG
@@ -81,7 +81,10 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         qs.set_cond(2, true)
         event
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -100,7 +103,10 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         elsif npc.variables.get_i32("lastAttacker") != attacker.l2id
           npc.script_value = 2
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -135,7 +141,10 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -196,7 +205,10 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         elsif has_quest_items?(pc, SIMPLONS_LETTER)
           html = "30253-06.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html

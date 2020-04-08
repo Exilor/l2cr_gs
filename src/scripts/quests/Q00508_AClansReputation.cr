@@ -57,7 +57,10 @@ class Scripts::Q00508_AClansReputation < Quest
       pc.send_packet(RadarControl.new(0, 2, 144600, -5500, -4100))
     when "30868-7.html"
       st.exit_quest(true, true)
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -125,7 +128,10 @@ class Scripts::Q00508_AClansReputation < Quest
       else
         html = "30868-0.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

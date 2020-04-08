@@ -1,21 +1,21 @@
 abstract class AbstractGetScrollToHometownQuest < Quest
   # Npcs
-	private GALLADUCCI = 30097
-	private GENTLER = 30094
-	private SANDRA = 30090
-	private DUSTIN = 30116
-	# Items
-	private MARK_OF_TRAVELER = 7570
-	private GALLADUCCIS_ORDER_1 = 7563
-	private GALLADUCCIS_ORDER_2 = 7564
-	private GALLADUCCIS_ORDER_3 = 7565
-	private PURIFIED_MAGIC_NECKLACE = 7566
-	private GEMSTONE_POWDER = 7567
-	private MAGIC_SWORD_HILT = 7568
-	# Misc
-	private MIN_LVL = 3
-	# Reward
-	private SCROLL_OF_ESCAPE_TALKING_ISLAND_VILLAGE = 7554
+  private GALLADUCCI = 30097
+  private GENTLER = 30094
+  private SANDRA = 30090
+  private DUSTIN = 30116
+  # Items
+  private MARK_OF_TRAVELER = 7570
+  private GALLADUCCIS_ORDER_1 = 7563
+  private GALLADUCCIS_ORDER_2 = 7564
+  private GALLADUCCIS_ORDER_3 = 7565
+  private PURIFIED_MAGIC_NECKLACE = 7566
+  private GEMSTONE_POWDER = 7567
+  private MAGIC_SWORD_HILT = 7568
+  # Misc
+  private MIN_LVL = 3
+  # Reward
+  private SCROLL_OF_ESCAPE_TALKING_ISLAND_VILLAGE = 7554
   private SCROLL_OF_ESCAPE_ELVEN_VILLAGE = 7555
   private SCROLL_OF_ESCAPE_DARK_ELF_VILLAGE = 7556
   private SCROLL_OF_ESCAPE_ORC_VILLAGE = 7557
@@ -23,17 +23,17 @@ abstract class AbstractGetScrollToHometownQuest < Quest
 
   private NPC_ITEMS = {
     GENTLER => ItemHolder.new(1, GALLADUCCIS_ORDER_1.to_i64),
-		SANDRA  => ItemHolder.new(3, GALLADUCCIS_ORDER_2.to_i64),
-		DUSTIN  => ItemHolder.new(5, GALLADUCCIS_ORDER_3.to_i64)
+    SANDRA  => ItemHolder.new(3, GALLADUCCIS_ORDER_2.to_i64),
+    DUSTIN  => ItemHolder.new(5, GALLADUCCIS_ORDER_3.to_i64)
   }
 
   def initialize(id, name, desc)
     super
 
     add_start_npc(GALLADUCCI)
-		add_talk_id(GALLADUCCI)
-		add_talk_id(NPC_ITEMS.keys)
-		register_quest_items(
+    add_talk_id(GALLADUCCI)
+    add_talk_id(NPC_ITEMS.keys)
+    register_quest_items(
       GALLADUCCIS_ORDER_1, GALLADUCCIS_ORDER_2, GALLADUCCIS_ORDER_3,
       PURIFIED_MAGIC_NECKLACE, GEMSTONE_POWDER, MAGIC_SWORD_HILT
     )
@@ -69,7 +69,10 @@ abstract class AbstractGetScrollToHometownQuest < Quest
       else
         return "30097-16.html"
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -122,10 +125,16 @@ abstract class AbstractGetScrollToHometownQuest < Quest
           if st.has_quest_items?(PURIFIED_MAGIC_NECKLACE)
             html = "30097-14.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when GENTLER, SANDRA, DUSTIN
       if st.started?
         i = NPC_ITEMS[npc.id]
@@ -139,7 +148,10 @@ abstract class AbstractGetScrollToHometownQuest < Quest
           html = "#{npc.id}-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

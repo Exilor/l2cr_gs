@@ -54,7 +54,10 @@ module HellboundSpawns
       when "hellboundLevel"
         min_level = n["min"]?.try &.to_i || 1
         max_level = n["max"]?.try &.to_i || 100
+      else
+        # automatically added
       end
+
     end
 
     sp = L2Spawn.new(npc_id)

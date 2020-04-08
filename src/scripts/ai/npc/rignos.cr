@@ -44,7 +44,10 @@ class Scripts::Rignos < AbstractNpcAI
       end
     when "TIME_OUT"
       npc.not_nil!.script_value = 0
+    else
+      # automatically added
     end
+
 
     super
   end

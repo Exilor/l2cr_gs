@@ -36,7 +36,10 @@ class Scripts::Q00016_TheComingDarkness < Quest
         st.take_items(CRYSTAL_OF_SEAL, 1)
         st.set_cond(cond + 1, true)
       end
+    else
+      # automatically added
     end
+
     return html
   end
 
@@ -69,7 +72,10 @@ class Scripts::Q00016_TheComingDarkness < Quest
       else
         html = npc_id.to_s + "-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

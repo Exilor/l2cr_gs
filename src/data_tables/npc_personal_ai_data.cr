@@ -25,9 +25,12 @@ module NpcPersonalAIData
         when "disableRandomAnimation"
           npc.random_animation_enabled = val == 0
         when "disableRandomWalk"
-          npc.no_rnd_walk = val == 1
-          sp.no_rnd_walk = val == 1
+          npc.no_random_walk = val == 1
+          sp.no_random_walk = val == 1
+        else
+          # automatically added
         end
+
       end
     end
   end

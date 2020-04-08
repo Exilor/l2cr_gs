@@ -28,7 +28,10 @@ module OptionData
               case fd.name
               when /\A(?:add|sub|mul|div|set|share|enchant|enchanthp)\z/
                 parse_funcs(fd, fd.name, op)
+              else
+                # automatically added
               end
+
             end
           when "active_skill"
             id, lvl = cd["id"].to_i, cd["level"].to_i
@@ -48,7 +51,10 @@ module OptionData
             id, lvl, chance = cd["id"].to_i, cd["level"].to_i, cd["chance"].to_f
             sh = OptionsSkillHolder.new(id, lvl, chance, OptionsSkillType::CRITICAL)
             op.add_activation_skill(sh)
+          else
+            # automatically added
           end
+
         end
 
         OPTION_DATA[op.id] = op

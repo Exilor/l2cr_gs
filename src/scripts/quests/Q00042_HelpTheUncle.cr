@@ -55,7 +55,10 @@ class Scripts::Q00042_HelpTheUncle < Quest
     when "30828-09.html"
       st.give_items(PET_TICKET, 1)
       st.exit_quest(false, true)
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -98,10 +101,16 @@ class Scripts::Q00042_HelpTheUncle < Quest
           html = "30828-07.html"
         when 5
           html = "30828-08.html"
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when SOPHYA
       if st.started?
         case st.cond
@@ -109,9 +118,15 @@ class Scripts::Q00042_HelpTheUncle < Quest
           html = "30735-01.html"
         when 5
           html = "30735-03.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -131,7 +131,10 @@ module L2Event
           return true
         end
       end
+    else
+      # automatically added
     end
+
 
     false
   end
@@ -202,7 +205,10 @@ module L2Event
         return "Cannot start event, it is on standby mode."
       when EventState::OFF
         @@event_state = EventState::STANDBY
+      else
+        # automatically added
       end
+
 
       AntiFeedManager.register_event(AntiFeedManager::L2EVENT_ID)
       AntiFeedManager.clear(AntiFeedManager::L2EVENT_ID)
@@ -258,7 +264,10 @@ module L2Event
         @@event_state = EventState::ON
       when EventState::OFF # Event is off, so no problem turning it on.
         return "Cannot start event, it is off. Participation start is required."
+      else
+        # automatically added
       end
+
 
       unspawn_event_npcs
       TEAMS.clear
@@ -332,7 +341,10 @@ module L2Event
       @@event_creator = ""
       @@event_info = ""
       return "The event has been stopped, all players unregistered and all event npcs unspawned."
+    else
+      # automatically added
     end
+
 
     "The event has been successfully finished."
   end

@@ -33,7 +33,10 @@ class FloodProtectorAction
             ban_account
           when "jail"
             jail_char
+          else
+            # automatically added
           end
+
           @punishment_in_progress = false
         end
       end

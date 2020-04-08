@@ -255,20 +255,6 @@ class GameClient
       return
     end
 
-    # if @packet_queue.full?
-    #   if stats.count_queue_overflow
-    #     warn "Client disconnected (too many queue overflows)."
-    #     close_now
-    #   else
-    #     debug "@packet_queue is full."
-    #     send_packet(Packets::Outgoing::ActionFailed::STATIC_PACKET)
-    #   end
-
-    #   return
-    # end
-
-    # @packet_queue.send(gcp)
-
     select
     when @packet_queue.send(gcp)
       # do nothing
@@ -304,21 +290,6 @@ class GameClient
 
   def call
     count = 0
-
-    # until @packet_queue.empty?
-    #   unless packet = (@packet_queue.receive rescue nil)#?
-    #     return
-    #   end
-
-    #   if @detached
-    #     @packet_queue.close
-    #     return
-    #   end
-
-    #   packet.run
-
-    #   count += 1
-    # end
 
     loop do
       select

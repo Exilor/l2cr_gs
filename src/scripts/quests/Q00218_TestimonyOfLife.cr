@@ -172,7 +172,10 @@ class Scripts::Q00218_TestimonyOfLife < Quest
         qs.set_cond(15, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -291,7 +294,10 @@ class Scripts::Q00218_TestimonyOfLife < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
 
     end
 
@@ -475,7 +481,10 @@ class Scripts::Q00218_TestimonyOfLife < Quest
             html = "30655-06.html"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == MASTER_CARDIEN
         html = get_already_completed_msg(pc)

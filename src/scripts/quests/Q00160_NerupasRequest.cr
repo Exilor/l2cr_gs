@@ -102,8 +102,14 @@ class Scripts::Q00160_NerupasRequest < Quest
         elsif has_quest_items?(pc, NIGHTSHADE_LEAF)
           html = "30152-02.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -39,7 +39,10 @@ class L2PetManagerInstance < L2MerchantInstance
         exchange(pc, 7583, 6648)
       when 3
         exchange(pc, 7584, 6649)
+      else
+        # automatically added
       end
+
     elsif command.starts_with?("evolve")
       ok = false
 
@@ -54,7 +57,10 @@ class L2PetManagerInstance < L2MerchantInstance
         ok = Evolve.do_evolve(pc, self, 6650, 10313, 55)
       when 5
         ok = Evolve.do_evolve(pc, self, 6649, 10312, 55)
+      else
+        # automatically added
       end
+
 
       unless ok
         html = NpcHtmlMessage.new(l2id)
@@ -75,7 +81,10 @@ class L2PetManagerInstance < L2MerchantInstance
         ok = Evolve.do_restore(pc, self, 10309, 4423, 55)
       when 5
         ok = Evolve.do_restore(pc, self, 10310, 4424, 55)
+      else
+        # automatically added
       end
+
 
       unless ok
         html = NpcHtmlMessage.new(l2id)

@@ -107,7 +107,7 @@ module LoginServerClient
     end
   rescue IO::EOFError
     warn "Disconnected from LoginServer."
-  rescue e : Errno
+  rescue e : IO::Error
     error e.message
   rescue e
     unless cancelled?
@@ -118,6 +118,7 @@ module LoginServerClient
   end
 
   def send_packet(packet : MMO::OutgoingPacket(self))
+    {% if flag?(:preview_mt) %} debug { "send_packet start: #{packet}" } {% end %}
     return if cancelled?
 
     OUT_BUFFER.clear
@@ -138,6 +139,8 @@ module LoginServerClient
     OUT_BUFFER.write_bytes(remaining.to_u16)
 
     socket.write(OUT_BUFFER.to_slice)
+
+    {% if flag?(:preview_mt) %} debug { "send_packet end: #{packet}" } {% end %}
   rescue e : IO::Error
     error e
   end
@@ -166,15 +169,15 @@ module LoginServerClient
   end
 
   def send_logout(account : String?)
-    if account
-      debug { "Sending PlayerLogout for \"#{account}\" to LoginServer." }
-      begin
-        send_packet(PlayerLogout.new(account))
-      rescue e
-        error e
-      ensure
-        ACCOUNTS.delete(account)
-      end
+    return unless account
+
+    debug { "Sending PlayerLogout for \"#{account}\" to LoginServer." }
+    begin
+      send_packet(PlayerLogout.new(account))
+    rescue e
+      error e
+    ensure
+      ACCOUNTS.delete(account)
     end
   end
 

@@ -42,7 +42,10 @@ class Scripts::Q00286_FabulousFeathers < Quest
       else
         html = "32164-07.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

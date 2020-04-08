@@ -27,7 +27,10 @@ class Scripts::Q10282_ToTheSeedOfAnnihilation < Quest
     when "32734-02.htm"
       st.add_exp_and_sp(1148480, 99110)
       st.exit_quest(false)
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -52,7 +55,10 @@ class Scripts::Q10282_ToTheSeedOfAnnihilation < Quest
           html = "32734-01.htm"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

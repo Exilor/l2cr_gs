@@ -152,7 +152,10 @@ module AdminCommandHandler::AdminAnnouncements
             pc.send_message("Announce type can be changed only to NORMAL or CRITICAL")
             return false
           end
+        else
+          # automatically added
         end
+
         # ************************************
         if st.empty?
           pc.send_message("Syntax: #announces add <type> <delay> <repeat> <text>")
@@ -356,8 +359,14 @@ module AdminCommandHandler::AdminAnnouncements
         content = content.gsub("%pages%", result.pager_template.to_s)
         content = content.gsub("%announcements%", result.body_template.to_s)
         Util.send_cb_html(pc, content)
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     false
   end

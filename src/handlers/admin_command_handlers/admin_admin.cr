@@ -4,71 +4,71 @@ module AdminCommandHandler::AdminAdmin
 
   def use_admin_command(command, pc)
     case
-		when command.starts_with?("admin_admin")
-			show_main_page(pc, command)
+    when command.starts_with?("admin_admin")
+      show_main_page(pc, command)
     when command == "admin_config_server"
-			show_config_page(pc)
+      show_config_page(pc)
     when command.starts_with?("admin_gmliston")
-			AdminData.show_gm(pc)
-			pc.send_message("Registered into gm list")
-			AdminHtml.show_admin_html(pc, "gm_menu.htm")
+      AdminData.show_gm(pc)
+      pc.send_message("Registered into gm list")
+      AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_gmlistoff")
-			AdminData.hide_gm(pc)
-			pc.send_message("Removed from gm list")
-			AdminHtml.show_admin_html(pc, "gm_menu.htm")
+      AdminData.hide_gm(pc)
+      pc.send_message("Removed from gm list")
+      AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_silence")
-			if pc.silence_mode?
-				pc.silence_mode = false
-				pc.send_packet(SystemMessageId::MESSAGE_ACCEPTANCE_MODE)
-			else
-				pc.silence_mode = true
-				pc.send_packet(SystemMessageId::MESSAGE_REFUSAL_MODE)
+      if pc.silence_mode?
+        pc.silence_mode = false
+        pc.send_packet(SystemMessageId::MESSAGE_ACCEPTANCE_MODE)
+      else
+        pc.silence_mode = true
+        pc.send_packet(SystemMessageId::MESSAGE_REFUSAL_MODE)
       end
 
-			AdminHtml.show_admin_html(pc, "gm_menu.htm")
+      AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_saveolymp")
-			Olympiad.instance.save_olympiad_status
-			pc.send_message("olympiad system saved.")
+      Olympiad.instance.save_olympiad_status
+      pc.send_message("olympiad system saved.")
     when command.starts_with?("admin_endolympiad")
-			begin
-				Olympiad.instance.manual_select_heroes
-			rescue e
-				error "An error occured while ending olympiad:"
+      begin
+        Olympiad.instance.manual_select_heroes
+      rescue e
+        error "An error occured while ending olympiad:"
         error e
       else
         pc.send_message("Heroes formed.")
       end
     when command.starts_with?("admin_sethero")
-			unless target = pc.target
-				pc.send_packet(SystemMessageId::INCORRECT_TARGET)
-				return false
+      unless target = pc.target
+        pc.send_packet(SystemMessageId::INCORRECT_TARGET)
+        return false
       end
 
       target = target.as?(L2PcInstance) || pc
-			target.hero = !target.hero?
-			target.broadcast_user_info
+      target.hero = !target.hero?
+      target.broadcast_user_info
     when command.starts_with?("admin_givehero")
-			unless pc.target
-				pc.send_packet(SystemMessageId::INCORRECT_TARGET)
-				return false
+      unless pc.target
+        pc.send_packet(SystemMessageId::INCORRECT_TARGET)
+        return false
       end
 
       target = pc.target.as?(L2PcInstance) || pc
-			if Hero.hero?(target.l2id)
-				pc.send_message("This player has already claimed the hero status.")
-				return false
+      if Hero.hero?(target.l2id)
+        pc.send_message("This player has already claimed the hero status.")
+        return false
       end
 
-			unless Hero.unclaimed_hero?(target.l2id)
-				pc.send_message("This player cannot claim the hero status.")
-				return false
+      unless Hero.unclaimed_hero?(target.l2id)
+        pc.send_message("This player cannot claim the hero status.")
+        return false
       end
-			Hero.claim_hero(target)
+      Hero.claim_hero(target)
     when command.starts_with?("admin_diet")
       pc.diet_mode = command.ends_with?("on")
       pc.send_message(pc.diet_mode? ? "Diet mode on" : "Diet mode off")
-			pc.refresh_overloaded
-			AdminHtml.show_admin_html(pc, "gm_menu.htm")
+      pc.refresh_overloaded
+      AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_tradeoff")
       pc.trade_refusal = command.ends_with?("on")
       if pc.trade_refusal?
@@ -76,49 +76,49 @@ module AdminCommandHandler::AdminAdmin
       else
         pc.send_message("Trade refusal disabled")
       end
-			AdminHtml.show_admin_html(pc, "gm_menu.htm")
+      AdminHtml.show_admin_html(pc, "gm_menu.htm")
     when command.starts_with?("admin_setconfig")
-			st = command.split
-			st.shift?
-			begin
-				p_name = st.shift
-				p_value = st.shift
-				if Config.set_parameter_value(p_name, p_value)
-					pc.send_message("Config parameter #{p_name} set to #{p_value}")
-				else
-					pc.send_message("Invalid parameter")
+      st = command.split
+      st.shift?
+      begin
+        p_name = st.shift
+        p_value = st.shift
+        if Config.set_parameter_value(p_name, p_value)
+          pc.send_message("Config parameter #{p_name} set to #{p_value}")
+        else
+          pc.send_message("Invalid parameter")
         end
-			rescue e
-				pc.send_message "Usage: //setconfig <parameter> <value>"
-			ensure
-		    show_config_page(pc)
+      rescue e
+        pc.send_message "Usage: //setconfig <parameter> <value>"
+      ensure
+        show_config_page(pc)
       end
     when command.starts_with?("admin_set")
-			st = command.split
-			cmd = st.shift.split('_')
-			begin
-				parameter = st.shift.split('=')
-				p_name = parameter[0].strip
-				p_value = parameter[1].strip
-				if Config.set_parameter_value(p_name, p_value)
-					pc.send_message("parameter #{p_name} succesfully set to #{p_value}")
-				else
-					pc.send_message("Invalid parameter")
+      st = command.split
+      cmd = st.shift.split('_')
+      begin
+        parameter = st.shift.split('=')
+        p_name = parameter[0].strip
+        p_value = parameter[1].strip
+        if Config.set_parameter_value(p_name, p_value)
+          pc.send_message("parameter #{p_name} succesfully set to #{p_value}")
+        else
+          pc.send_message("Invalid parameter")
         end
-			rescue e
+      rescue e
         warn e
-				if cmd.size == 2
-					pc.send_message("Usage: //set parameter=value")
+        if cmd.size == 2
+          pc.send_message("Usage: //set parameter=value")
         end
-			ensure
-				if cmd.size == 3
-					if cmd[2].casecmp?("mod")
-						AdminHtml.show_admin_html(pc, "mods_menu.htm")
+      ensure
+        if cmd.size == 3
+          if cmd[2].casecmp?("mod")
+            AdminHtml.show_admin_html(pc, "mods_menu.htm")
           end
         end
       end
     when command.starts_with?("admin_gmon")
-  		# nothing
+      # nothing
     end
 
     true
@@ -146,17 +146,17 @@ module AdminCommandHandler::AdminAdmin
     msg = <<-HTML
       <html><title>L2J :: Config</title><body>
       <center><table width=270><tr><td width=60><button value=\"Main\" action=\"bypass -h admin_admin\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=150>Config Server Panel</td><td width=60><button value=\"Back\" action=\"bypass -h admin_admin4\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table></center><br>
-  		<center><table width=260><tr><td width=140></td><td width=40></td><td width=40></td></tr>
-  		<tr><td><font color=\"00AA00\">Drop:</font></td><td></td><td></td></tr>
-  		<tr><td><font color=\"LEVEL\">Rate EXP</font> = #{Config.rate_xp}</td><td><edit var=\"param1\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig RateXp $param1\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
-  		<tr><td><font color=\"LEVEL\">Rate SP</font> = #{Config.rate_sp}</td><td><edit var=\"param2\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig RateSp $param2\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
-  		<tr><td><font color=\"LEVEL\">Rate Drop Spoil</font> = #{Config.rate_corpse_drop_chance_multiplier}</td><td><edit var=\"param4\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig RateDropSpoil $param4\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
-  		<tr><td width=140></td><td width=40></td><td width=40></td></tr>
-  		<tr><td><font color=\"00AA00\">Enchant:</font></td><td></td><td></td></tr>
-  		<tr><td><font color=\"LEVEL\">Enchant Element Stone</font> = #{Config.enchant_chance_element_stone}</td><td><edit var=\"param8\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementStone $param8\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
-  		<tr><td><font color=\"LEVEL\">Enchant Element Crystal</font> = #{Config.enchant_chance_element_crystal}</td><td><edit var=\"param9\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementCrystal $param9\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
-  		<tr><td><font color=\"LEVEL\">Enchant Element Jewel</font> = #{Config.enchant_chance_element_jewel}</td><td><edit var=\"param10\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementJewel $param10\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
-  		<tr><td><font color=\"LEVEL\">Enchant Element Energy</font> = #{Config.enchant_chance_element_energy}</td><td><edit var=\"param11\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementEnergy $param11\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
+      <center><table width=260><tr><td width=140></td><td width=40></td><td width=40></td></tr>
+      <tr><td><font color=\"00AA00\">Drop:</font></td><td></td><td></td></tr>
+      <tr><td><font color=\"LEVEL\">Rate EXP</font> = #{Config.rate_xp}</td><td><edit var=\"param1\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig RateXp $param1\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
+      <tr><td><font color=\"LEVEL\">Rate SP</font> = #{Config.rate_sp}</td><td><edit var=\"param2\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig RateSp $param2\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
+      <tr><td><font color=\"LEVEL\">Rate Drop Spoil</font> = #{Config.rate_corpse_drop_chance_multiplier}</td><td><edit var=\"param4\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig RateDropSpoil $param4\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
+      <tr><td width=140></td><td width=40></td><td width=40></td></tr>
+      <tr><td><font color=\"00AA00\">Enchant:</font></td><td></td><td></td></tr>
+      <tr><td><font color=\"LEVEL\">Enchant Element Stone</font> = #{Config.enchant_chance_element_stone}</td><td><edit var=\"param8\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementStone $param8\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
+      <tr><td><font color=\"LEVEL\">Enchant Element Crystal</font> = #{Config.enchant_chance_element_crystal}</td><td><edit var=\"param9\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementCrystal $param9\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
+      <tr><td><font color=\"LEVEL\">Enchant Element Jewel</font> = #{Config.enchant_chance_element_jewel}</td><td><edit var=\"param10\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementJewel $param10\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
+      <tr><td><font color=\"LEVEL\">Enchant Element Energy</font> = #{Config.enchant_chance_element_energy}</td><td><edit var=\"param11\" width=40 height=15></td><td><button value=\"Set\" action=\"bypass -h admin_setconfig EnchantChanceElementEnergy $param11\" width=40 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>
       </table></body></html>
     HTML
     admin_reply.html = msg

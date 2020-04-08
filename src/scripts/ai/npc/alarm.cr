@@ -113,7 +113,10 @@ class Scripts::Alarm < AbstractNpcAI
           html = "32367-185_10.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -148,7 +151,10 @@ class Scripts::Alarm < AbstractNpcAI
       qs = player.get_quest_state("Q00184_ArtOfPersuasion")
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
+    else
+      # automatically added
     end
+
 
     !!qs && (memo_state < 0 || qs.memo_state?(memo_state))
   end
@@ -159,7 +165,10 @@ class Scripts::Alarm < AbstractNpcAI
       qs = player.get_quest_state("Q00184_ArtOfPersuasion")
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
+    else
+      # automatically added
     end
+
 
     if qs
       qs.memo_state = memo_state
@@ -172,7 +181,10 @@ class Scripts::Alarm < AbstractNpcAI
       qs = player.get_quest_state("Q00184_ArtOfPersuasion")
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
+    else
+      # automatically added
     end
+
 
     qs ? qs.get_memo_state_ex(slot) : -1
   end
@@ -183,7 +195,10 @@ class Scripts::Alarm < AbstractNpcAI
       qs = player.get_quest_state("Q00184_ArtOfPersuasion")
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
+    else
+      # automatically added
     end
+
 
     if qs
       qs.set_memo_state_ex(slot, memo_state_ex)

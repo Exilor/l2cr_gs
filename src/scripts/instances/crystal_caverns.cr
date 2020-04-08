@@ -1467,7 +1467,10 @@ class Scripts::CrystalCaverns < AbstractInstance
           open_door(24220001, world.instance_id)
           run_emerald_rooms(world, ROOM1_SPAWNS, 1)
         end
+      else
+        # automatically added
       end
+
     end
 
     nil

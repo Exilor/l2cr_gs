@@ -77,7 +77,10 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
       when "Mold_Hardener"
         st.reward_items(MOLD_HARDENER, 3)
         st.give_adena(17200, true)
+      else
+        # automatically added
       end
+
       html = "31518-10.html"
       st.exit_quest(true)
     when "31519-02.html"
@@ -134,16 +137,28 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
           html = "31518-07.html"
         when 4
           html = "31518-08.html"
+        else
+          # automatically added
         end
+
       when ENFEUX
         case st.cond
         when 3
           html = "31519-01.html"
         when 4
           html = "31519-03.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -287,7 +287,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
         else
           show_page(talker, "buffs-no-pet.htm")
         end
+      else
+        # automatically added
       end
+
     when -1000
       case reply
       when 1
@@ -324,7 +327,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
         else
           show_page(talker, "newbie-guide-012.htm")
         end
+      else
+        # automatically added
       end
+
     when -303
       case reply
       when 528
@@ -347,8 +353,14 @@ class Scripts::NewbieGuide < AbstractNpcAI
         else
           show_page(talker, "newbie-guide-014.htm")
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     case npc.id
     when NEWBIE_GUIDE_HUMAN
@@ -381,7 +393,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
       unless tmp.empty?
         return tmp
       end
+    else
+      # automatically added
     end
+
 
     ""
   end
@@ -476,7 +491,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
         when .kamael?
           qs.add_radar(-119378, 49242, 22)
           return "newbie-guide-01f.htm"
+        else
+          # automatically added
         end
+
         unless qs.has_nr_memo?(talker, GUIDE_MISSION)
           qs.set_nr_memo(talker, GUIDE_MISSION)
           qs.set_nr_memo_state(talker, GUIDE_MISSION, 0)
@@ -510,7 +528,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(115717, -183488, -1483)
             return "newbie-guide-05h.htm"
+          else
+            # automatically added
           end
+
           if talker.level >= 9
             qs.give_adena(5563, true)
             qs.add_exp_and_sp(16851, 711)
@@ -550,7 +571,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-119378, 49242, 22)
             return "newbie-guide-04f.htm"
+          else
+            # automatically added
           end
+
           unless qs.has_nr_memo?(talker, GUIDE_MISSION)
             qs.set_nr_memo(talker, GUIDE_MISSION)
             qs.set_nr_memo_state(talker, GUIDE_MISSION, 0)
@@ -613,7 +637,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
         when .kamael?
           qs.add_radar(-119378, 49242, 22)
           return "newbie-guide-07f.htm"
+        else
+          # automatically added
         end
+
         unless qs.has_nr_memo?(talker, GUIDE_MISSION)
           qs.set_nr_memo(talker, GUIDE_MISSION)
           qs.set_nr_memo_state(talker, GUIDE_MISSION, 0)
@@ -649,7 +676,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-118080, 42835, 720)
             return "newbie-guide-10h.htm"
+          else
+            # automatically added
           end
+
           if talker.level >= 9
             qs.give_adena(5563, true)
             qs.add_exp_and_sp(16851, 711)
@@ -689,7 +719,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-119378, 49242, 22)
             return "newbie-guide-09f.htm"
+          else
+            # automatically added
           end
+
           unless qs.has_nr_memo?(talker, GUIDE_MISSION)
             qs.set_nr_memo(talker, GUIDE_MISSION)
             qs.set_nr_memo_state(talker, GUIDE_MISSION, 0)
@@ -724,7 +757,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-125872, 38208, 1251)
             return "newbie-guide-11f.htm"
+          else
+            # automatically added
           end
+
           if talker.level >= 14
             qs.give_adena(13002, true)
             qs.add_exp_and_sp(62876, 2891)
@@ -775,7 +811,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-118080, 42835, 720)
             return "newbie-guide-10h.htm"
+          else
+            # automatically added
           end
+
           unless qs.has_nr_memo?(talker, GUIDE_MISSION)
             qs.set_nr_memo(talker, GUIDE_MISSION)
             qs.set_nr_memo_state(talker, GUIDE_MISSION, 0)
@@ -824,7 +863,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-125872, 38208, 1251)
             return "newbie-guide-11f.htm"
+          else
+            # automatically added
           end
+
         end
         unless qs.has_nr_memo?(talker, GUIDE_MISSION)
           qs.set_nr_memo(talker, GUIDE_MISSION)
@@ -1012,7 +1054,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(-82041, 242718, -3725)
       return "30598-05.htm"
+    else
+      # automatically added
     end
+
 
     ""
   end
@@ -1161,7 +1206,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(49262, 53607, -3216)
       return "30599-05.htm"
+    else
+      # automatically added
     end
+
 
     ""
   end
@@ -1326,7 +1374,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(12311, 17470, -4574)
       return "30600-05.htm"
+    else
+      # automatically added
     end
+
 
     ""
   end
@@ -1495,7 +1546,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(116852, -183595, -1566)
       return "30601-05.htm"
+    else
+      # automatically added
     end
+
 
     ""
   end
@@ -1626,7 +1680,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(-44624, -111873, -238)
       return "30602-05.htm"
+    else
+      # automatically added
     end
+
 
     ""
   end
@@ -1831,7 +1888,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(-118080, 42835, 720)
       return "32135-05.htm"
+    else
+      # automatically added
     end
+
 
     ""
   end

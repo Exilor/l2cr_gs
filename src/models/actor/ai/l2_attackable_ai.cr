@@ -359,7 +359,7 @@ class L2AttackableAI < L2CharacterAI
         end
       end
     # Order to the L2MonsterInstance to random walk (1/100)
-    elsif (sp = npc.spawn?) && Rnd.rand(RANDOM_WALK_RATE) == 0 && !npc.no_rnd_walk?
+    elsif (sp = npc.spawn?) && Rnd.rand(RANDOM_WALK_RATE) == 0 && !npc.no_random_walk?
       x1 = 0
       y1 = 0
       z1 = 0
@@ -1646,7 +1646,10 @@ class L2AttackableAI < L2CharacterAI
           end
           actor.target = obj
           self.attack_target = obj
+        else
+          # automatically added
         end
+
       end
     end
   end
@@ -1748,7 +1751,10 @@ class L2AttackableAI < L2CharacterAI
         think_attack
       when CAST
         think_cast
+      else
+        # automatically added
       end
+
     rescue e
       error e
     ensure

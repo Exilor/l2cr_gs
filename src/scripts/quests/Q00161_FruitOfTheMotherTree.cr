@@ -54,7 +54,10 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when THALIA
       if st.started?
         if st.cond?(1) && st.has_quest_items?(ANDELLRIAS_LETTER)
@@ -66,7 +69,10 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
           html = "30371-02.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

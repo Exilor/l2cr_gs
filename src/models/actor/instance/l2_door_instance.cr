@@ -306,7 +306,10 @@ class L2DoorInstance < L2Character
       open_me
     when -1
       close_me
+    else
+      # automatically added
     end
+
   end
 
   def door_name : String

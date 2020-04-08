@@ -5,11 +5,11 @@ class Scripts::Q00260_OrcHunting < Quest
   private MIN_LVL = 6
   private MONSTERS = {
     20468 => ORC_AMULET, # Kaboo Orc
-		20469 => ORC_AMULET, # Kaboo Orc Archer
-		20470 => ORC_AMULET, # Kaboo Orc Grunt
-		20471 => ORC_NECKLACE, # Kaboo Orc Fighter
-		20472 => ORC_NECKLACE, # Kaboo Orc Fighter Leader
-		20473 => ORC_NECKLACE # Kaboo Orc Fighter Lieutenant
+    20469 => ORC_AMULET, # Kaboo Orc Archer
+    20470 => ORC_AMULET, # Kaboo Orc Grunt
+    20471 => ORC_NECKLACE, # Kaboo Orc Fighter
+    20472 => ORC_NECKLACE, # Kaboo Orc Fighter Leader
+    20473 => ORC_NECKLACE # Kaboo Orc Fighter Lieutenant
   }
 
   def initialize
@@ -34,7 +34,10 @@ class Scripts::Q00260_OrcHunting < Quest
       event
     when "30221-08.html"
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, killer, is_summon)
@@ -77,7 +80,10 @@ class Scripts::Q00260_OrcHunting < Quest
         debug "#{pc} has no quest items."
         html = "30221-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

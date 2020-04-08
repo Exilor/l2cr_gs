@@ -53,7 +53,10 @@ class Scripts::Q00275_DarkWingedSpies < Quest
           end
           st.take_items(VARANGKAS_PARASITE, -1)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -94,8 +97,14 @@ class Scripts::Q00275_DarkWingedSpies < Quest
           st.exit_quest(true, true)
           html = "30567-05.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

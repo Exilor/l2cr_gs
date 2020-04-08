@@ -44,7 +44,10 @@ class Scripts::Q00654_JourneyToASettlement < Quest
         st.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end

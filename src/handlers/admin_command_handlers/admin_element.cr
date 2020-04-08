@@ -5,19 +5,19 @@ module AdminCommandHandler::AdminElement
   def use_admin_command(command, pc)
     armor_type =
       if command.starts_with?("admin_setlh")
-  			Inventory::HEAD
+        Inventory::HEAD
       elsif command.starts_with?("admin_setlc")
-  			Inventory::CHEST
+        Inventory::CHEST
       elsif command.starts_with?("admin_setlg")
-  			Inventory::GLOVES
+        Inventory::GLOVES
       elsif command.starts_with?("admin_setlb")
-  			Inventory::FEET
+        Inventory::FEET
       elsif command.starts_with?("admin_setll")
-  			Inventory::LEGS
+        Inventory::LEGS
       elsif command.starts_with?("admin_setlw")
-  			Inventory::RHAND
+        Inventory::RHAND
       elsif command.starts_with?("admin_setls")
-  			Inventory::LHAND
+        Inventory::LHAND
       end
 
     begin

@@ -57,10 +57,16 @@ class Scripts::Q00176_StepsForHonor < Quest
         st.give_items(CLOAK, 1)
         st.exit_quest(false, true)
         html = "36479-13.html"
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       html = "36479-01.html"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

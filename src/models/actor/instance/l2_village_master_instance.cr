@@ -409,7 +409,10 @@ class L2VillageMasterInstance < L2NpcInstance
           pc.send_message("The sub class could not be added, you have been reverted to your base class.")
           return
         end
+      else
+        # automatically added
       end
+
 
       html["%objectId%"] = l2id
       pc.send_packet(html)

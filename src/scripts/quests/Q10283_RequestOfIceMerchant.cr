@@ -70,7 +70,10 @@ class Scripts::Q10283_RequestOfIceMerchant < Quest
         html = event
         start_quest_timer("DESPAWN", 2000, npc, nil)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -106,7 +109,10 @@ class Scripts::Q10283_RequestOfIceMerchant < Quest
         if st.memo_state?(2)
           html = @talker == pc.l2id ? "32760-01.html" : "32760-05.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

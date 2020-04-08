@@ -28,7 +28,10 @@ module AdminCommandHandler::AdminCamera
         return false
       end
       AbstractScript.special_camera_3(pc, target, com[1].to_i, com[2].to_i, com[3].to_i, com[4].to_i, com[5].to_i, com[6].to_i, com[7].to_i, com[8].to_i, com[9].to_i, com[10].to_i, com[11].to_i)
+    else
+      # automatically added
     end
+
 
     true
   end

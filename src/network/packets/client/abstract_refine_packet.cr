@@ -171,7 +171,10 @@ abstract class Packets::Incoming::AbstractRefinePacket < GameClientPacket
         case item.template.item_type
         when WeaponType::NONE, WeaponType::FISHINGROD
           return false
+        else
+          # automatically added
         end
+
       elsif item.template.is_a?(L2Armor)
         case item.template.body_part
         when L2Item::SLOT_LR_FINGER, L2Item::SLOT_LR_EAR, L2Item::SLOT_NECK

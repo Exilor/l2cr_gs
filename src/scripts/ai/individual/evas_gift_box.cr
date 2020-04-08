@@ -26,7 +26,7 @@ class Scripts::EvasGiftBox < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc.no_rnd_walk = true
+    npc.no_random_walk = true
     npc.as(L2Attackable).on_kill_delay = 0
 
     super

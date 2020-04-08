@@ -717,7 +717,10 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           @allow_agent_spawn_7th = true
         end
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -1035,7 +1038,10 @@ class Scripts::TullyWorkshop < AbstractNpcAI
             door.open_me
           when STATE_CLOSE
             door.close_me
+          else
+            # automatically added
           end
+
         end
       end
     end

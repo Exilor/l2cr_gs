@@ -174,7 +174,10 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
       add_spawn(GUIDE_SOLINA, 88655, -250591, -8320, 144, false, 0, false, pc.instance_id)
       add_spawn(SOLINA_LAY_BROTHER, 88655, -250591, -8320, 144, false, 0, false, pc.instance_id)
       add_spawn(SOLINA_LAY_BROTHER, 88655, -250591, -8320, 144, false, 0, false, pc.instance_id)
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -209,7 +212,10 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
         html = "32792-04.html"
       when 3
         html = pc.subclass_active? ? "32792-09.html" : "32792-07.html"
+      else
+        # automatically added
       end
+
     when RELIC_GUARDIAN
       if qs.cond?(2)
         if has_checked_all_right_books?(qs)
@@ -250,7 +256,10 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
       if qs.cond?(2)
         html = "#{npc.id}-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

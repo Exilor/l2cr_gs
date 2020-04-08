@@ -57,7 +57,10 @@ module AdminCommandHandler::AdminMonsterRace
       pc.broadcast_packet(spk)
 
       ThreadPoolManager.schedule_general(RunRace.new(codes, pc), 5000)
+    else
+      # automatically added
     end
+
   end
 
   private struct RunRace

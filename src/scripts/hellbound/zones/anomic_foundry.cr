@@ -54,7 +54,10 @@ class Scripts::AnomicFoundry < AbstractNpcAI
       end
     when "reset_respawn_time"
       @respawn_time = 60000
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -130,7 +133,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
     end
 
     if npc.id == LABORER
-      npc.no_rnd_walk = true
+      npc.no_random_walk = true
     end
 
     super

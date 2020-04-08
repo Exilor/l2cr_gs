@@ -70,7 +70,10 @@ class Scripts::Quarry < AbstractNpcAI
         npc.spawn.decrease_count(npc)
         HellboundEngine.update_trust(TRUST, true)
       end
+    else
+      # automatically added
     end
+
 
     html
   end

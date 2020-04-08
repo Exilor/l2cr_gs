@@ -47,7 +47,10 @@ class Scripts::Lindvior < AbstractNpcAI
       start_quest_timer("tomaris_shout2", 90000, @tomaris, nil)
       start_quest_timer("lindvior_scene", 120000, @lindvior_camera, nil)
       schedule_next_lindvior_visit
+    else
+      # automatically added
     end
+
 
     super
   end

@@ -142,7 +142,10 @@ module MultisellData
         pc.send_packet(SystemMessageId::NOT_ENOUGH_FAME_POINTS)
         return true
       end
+    else
+      # automatically added
     end
+
 
     false
   end
@@ -160,7 +163,10 @@ module MultisellData
       pc.send_packet(UserInfo.new(pc))
       pc.send_packet(ExBrExtraUserInfo.new(pc))
       return true
+    else
+      # automatically added
     end
+
 
     false
   end
@@ -173,7 +179,10 @@ module MultisellData
       pc.fame += amount.to_i
       pc.send_packet(UserInfo.new(pc))
       pc.send_packet(ExBrExtraUserInfo.new(pc))
+    else
+      # automatically added
     end
+
   end
 
   private def verify

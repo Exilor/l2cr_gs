@@ -9,7 +9,10 @@ struct L2Crest
       when 1 then PLEDGE
       when 2 then PLEDGE_LARGE
       when 3 then ALLY
+      else
+        # automatically added
       end
+
     end
 
     def id : Int32

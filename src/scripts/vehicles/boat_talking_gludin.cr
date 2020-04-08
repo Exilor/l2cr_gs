@@ -162,7 +162,10 @@ class BoatTalkingGludin
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVED_AT_TALKING, ARRIVED_AT_TALKING_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
+    else
+      # automatically added
     end
+
 
     @shout_count = 0
     @cycle += 1

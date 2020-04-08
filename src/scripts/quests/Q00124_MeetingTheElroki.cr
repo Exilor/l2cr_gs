@@ -46,7 +46,10 @@ class Scripts::Q00124_MeetingTheElroki < Quest
         st.give_items(MANTARASA_EGG, 1)
         st.set_cond(6, true)
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -66,10 +69,16 @@ class Scripts::Q00124_MeetingTheElroki < Quest
           html = "32113-06.html"
         when 3..5
           html = "32113-07.html"
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when MUSHIKA
       if st.started?
         case st.get_int("cond")
@@ -99,7 +108,10 @@ class Scripts::Q00124_MeetingTheElroki < Quest
             st.add_exp_and_sp(301922, 30294)
             st.exit_quest(false, true)
           end
+        else
+          # automatically added
         end
+
       end
     when KARAKAWEI
       if st.started?
@@ -112,7 +124,10 @@ class Scripts::Q00124_MeetingTheElroki < Quest
           html = "32117-07.html"
         when 6
           html = "32117-06.html"
+        else
+          # automatically added
         end
+
       end
     when MANTARASA
       if st.started?
@@ -123,9 +138,15 @@ class Scripts::Q00124_MeetingTheElroki < Quest
           html = "32118-03.html"
         when 6
           html = "32118-02.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -109,7 +109,10 @@ class Scripts::Q00378_GrandFeast < Quest
       else
         html = "30594-17.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -172,7 +175,10 @@ class Scripts::Q00378_GrandFeast < Quest
             item = ENCHANTED_EARRING
             quantity = 1i64
             adena = 2200i64
+          else
+            # automatically added
           end
+
 
           give_items(pc, item, quantity)
           give_adena(pc, adena, true)
@@ -181,7 +187,10 @@ class Scripts::Q00378_GrandFeast < Quest
         else
           html = "30594-19.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

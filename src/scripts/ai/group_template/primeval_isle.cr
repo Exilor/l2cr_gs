@@ -149,7 +149,10 @@ class Scripts::PrimevalIsle < AbstractNpcAI
       if npc && npc.alive?
         INVIN_BUFF_ON.skill.apply_effects(npc, npc)
       end
+    else
+      # automatically added
     end
+
 
     super
   end

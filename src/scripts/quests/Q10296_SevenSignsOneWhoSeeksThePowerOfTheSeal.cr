@@ -71,7 +71,10 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
         st.set_cond(4, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -149,7 +152,10 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
           st.set_cond(3, true)
           html = "32787-04.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

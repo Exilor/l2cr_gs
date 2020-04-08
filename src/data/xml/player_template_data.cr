@@ -74,7 +74,10 @@ module PlayerTemplateData
               end
             end
           end
+        else
+          # automatically added
         end
+
       end
     end
   end

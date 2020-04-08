@@ -27,7 +27,10 @@ class Scripts::Q00110_ToThePrimevalIsle < Quest
       st.give_adena(191678, true)
       st.add_exp_and_sp(251602, 25245)
       st.exit_quest(false, true)
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -43,12 +46,18 @@ class Scripts::Q00110_ToThePrimevalIsle < Quest
         html = "31338-1a.html"
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when MARQUEZ
       if st.cond?(1)
         html = "32113-1.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

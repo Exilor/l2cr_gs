@@ -66,7 +66,10 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
     when "30666-08.html"
       st.set_cond(7, true)
       st.unset("talk")
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -124,7 +127,10 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
         end
       when 6
         html = "30118-10.html"
+      else
+        # automatically added
       end
+
     when ANGUS
       case st.cond
       when 3
@@ -140,7 +146,10 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
         end
       when 5
         html = "30474-05.html"
+      else
+        # automatically added
       end
+
     when SLA
       case st.cond
       when 6
@@ -154,8 +163,14 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
         end
       when 7
         html = "30666-09.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

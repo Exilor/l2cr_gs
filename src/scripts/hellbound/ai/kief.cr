@@ -72,7 +72,10 @@ class Scripts::Kief < AbstractNpcAI
           html = "32354-11f.htm"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end

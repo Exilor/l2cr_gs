@@ -54,7 +54,10 @@ module BypassHandler::NpcViewMod
         warn e
         return false
       end
+    else
+      # automatically added
     end
+
 
     true
   end

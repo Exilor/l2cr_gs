@@ -26,7 +26,7 @@ class Scripts::HellboundCore < AbstractNpcAI
 
   def on_spawn(npc)
     if npc.id == NAIA
-      npc.no_rnd_walk = true
+      npc.no_random_walk = true
     else
       start_quest_timer("cast", 10000, npc, nil)
     end

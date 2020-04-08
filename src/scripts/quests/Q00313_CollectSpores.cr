@@ -30,7 +30,10 @@ class Scripts::Q00313_CollectSpores < Quest
       end
     when "30150-04.htm"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -64,8 +67,14 @@ class Scripts::Q00313_CollectSpores < Quest
           st.exit_quest(true, true)
           html = "30150-07.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

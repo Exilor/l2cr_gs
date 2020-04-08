@@ -1,27 +1,27 @@
 class Scripts::Q00005_MinersFavor < Quest
   # NPCs
-	private BOLTER = 30554
-	private SHARI  = 30517
-	private GARITA = 30518
-	private REED   = 30520
-	private BRUNON = 30526
-	# Items
-	private BOLTERS_LIST = 1547
-	private MINING_BOOTS = 1548
-	private MINERS_PICK = 1549
-	private BOOMBOOM_POWDER = 1550
-	private REDSTONE_BEER = 1551
-	private BOLTERS_SMELLY_SOCKS = 1552
-	private NECKLACE = 906
-	# Misc
-	private MIN_LEVEL = 2
+  private BOLTER = 30554
+  private SHARI  = 30517
+  private GARITA = 30518
+  private REED   = 30520
+  private BRUNON = 30526
+  # Items
+  private BOLTERS_LIST = 1547
+  private MINING_BOOTS = 1548
+  private MINERS_PICK = 1549
+  private BOOMBOOM_POWDER = 1550
+  private REDSTONE_BEER = 1551
+  private BOLTERS_SMELLY_SOCKS = 1552
+  private NECKLACE = 906
+  # Misc
+  private MIN_LEVEL = 2
 
   def initialize
     super(5, self.class.simple_name, "Miner's Favor")
 
     add_start_npc(BOLTER)
-		add_talk_id(BOLTER, SHARI, GARITA, REED, BRUNON)
-		register_quest_items(
+    add_talk_id(BOLTER, SHARI, GARITA, REED, BRUNON)
+    register_quest_items(
       BOLTERS_LIST,
       MINING_BOOTS,
       MINERS_PICK,
@@ -52,7 +52,10 @@ class Scripts::Q00005_MinersFavor < Quest
       check_progress(pc, st)
     when "30554-05.html"
       return
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -81,7 +84,10 @@ class Scripts::Q00005_MinersFavor < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when BRUNON
       if st.started?
         if has_quest_items?(pc, MINERS_PICK)
@@ -96,7 +102,10 @@ class Scripts::Q00005_MinersFavor < Quest
       html = give_item(pc, st, npc.id, BOOMBOOM_POWDER)
     when GARITA
       html = give_item(pc, st, npc.id, MINING_BOOTS)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

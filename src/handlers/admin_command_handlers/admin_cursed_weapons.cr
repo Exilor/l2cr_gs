@@ -43,43 +43,33 @@ module AdminCommandHandler::AdminCursedWeapons
 
           if cw.activated?
             pl = cw.player?
-            msg << "<tr><td>Weilder:</td><td>"
+            msg << "<tr><td>Wielder:</td><td>"
             msg << (pl.nil? ? "nil" : pl.name)
-            msg << "</td></tr>"
-            msg << "<tr><td>Karma:</td><td>"
+            msg << "</td></tr><tr><td>Karma:</td><td>"
             msg << cw.player_karma
-            msg << "</td></tr>"
-            msg << "<tr><td>Kills:</td><td>"
+            msg << "</td></tr><tr><td>Kills:</td><td>"
             msg << cw.player_pk_kills
             msg << "/"
             msg << cw.nb_kills
-            msg << "</td></tr>"
-            msg << "<tr><td>Time remaining:</td><td>"
+            msg << "</td></tr><tr><td>Time remaining:</td><td>"
             msg << (cw.time_left // 60000)
-            msg << " min.</td></tr>"
-            msg << "<tr><td><button value=\"Remove\" action=\"bypass -h admin_cw_remove "
+            msg << " min.</td></tr><tr><td><button value=\"Remove\" action=\"bypass -h admin_cw_remove "
             msg << item_id
-            msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-            msg << "<td><button value=\"Go\" action=\"bypass -h admin_cw_goto "
+            msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td><button value=\"Go\" action=\"bypass -h admin_cw_goto "
             msg << item_id
             msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>"
           elsif cw.dropped?
-            msg << "<tr><td>Position:</td><td>Lying on the ground</td></tr>"
-            msg << "<tr><td>Time remaining:</td><td>"
+            msg << "<tr><td>Position:</td><td>Lying on the ground</td></tr><tr><td>Time remaining:</td><td>"
             msg << (cw.time_left // 60000)
-            msg << " min.</td></tr>"
-            msg << "<tr><td>Kills:</td><td>"
+            msg << " min.</td></tr><tr><td>Kills:</td><td>"
             msg << cw.nb_kills
-            msg << "</td></tr>"
-            msg << "<tr><td><button value=\"Remove\" action=\"bypass -h admin_cw_remove "
+            msg << "</td></tr><tr><td><button value=\"Remove\" action=\"bypass -h admin_cw_remove "
             msg << item_id
-            msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>"
-            msg << "<td><button value=\"Go\" action=\"bypass -h admin_cw_goto "
+            msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td><button value=\"Go\" action=\"bypass -h admin_cw_goto "
             msg << item_id
             msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>"
           else
-            msg << "<tr><td>Position:</td><td>Doesn't exist.</td></tr>"
-            msg << "<tr><td><button value=\"Give to Target\" action=\"bypass -h admin_cw_add "
+            msg << "<tr><td>Position:</td><td>Doesn't exist.</td></tr><tr><td><button value=\"Give to Target\" action=\"bypass -h admin_cw_add "
             msg << item_id
             msg << "\" width=130 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td></td></tr>"
           end
@@ -106,8 +96,7 @@ module AdminCommandHandler::AdminCursedWeapons
           end
         end
         cw = cwm.get_cursed_weapon(id)
-      rescue e
-        warn e
+      rescue
         pc.send_message("Usage: #cw_remove|#cw_goto|#cw_add <item_id|name>")
       end
 

@@ -127,7 +127,10 @@ class Scripts::Q00224_TestOfSagittarius < Quest
         qs.set_cond(3, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -227,7 +230,10 @@ class Scripts::Q00224_TestOfSagittarius < Quest
             add_spawn(SERPENT_DEMON_KADESH, npc, true, 300000)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -350,7 +356,10 @@ class Scripts::Q00224_TestOfSagittarius < Quest
             html = "30717-02.html"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == GUILD_PRESIDENT_BERNARD
         html = get_already_completed_msg(pc)

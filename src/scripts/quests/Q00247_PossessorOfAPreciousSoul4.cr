@@ -48,7 +48,10 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         st.exit_quest(false, true)
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -72,12 +75,18 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when LADY_OF_LAKE
       if st.cond?(2)
         html = "31745-1.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

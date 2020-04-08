@@ -193,7 +193,10 @@ module ZoneManager
             when {{sub.stringify}}
               constructor = {{sub}}
           {% end %}
+          else
+            # automatically added
           end
+
         {% end %}
 
         if constructor
@@ -218,7 +221,10 @@ module ZoneManager
             race = cd["name"]
             point = cd["point"]
             temp.as(L2RespawnZone).add_race_respawn_point(race, point)
+          else
+            # automatically added
           end
+
         end
 
         if check_id(zone_id)

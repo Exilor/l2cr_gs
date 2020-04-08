@@ -252,7 +252,10 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         qs.set_cond(6, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -271,7 +274,10 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           end
         when 1
           npc.script_value = 2
+        else
+          # automatically added
         end
+
       when REVENANT_OF_TANTOS_CHIEF
         case npc.script_value
         when 0
@@ -285,8 +291,14 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::INDIGNANT_AND_UNFAIR_DEATH))
             npc.script_value = 2
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -426,7 +438,10 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::ILL_GET_REVENGE_SOMEDAY))
           qs.set_cond(10, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -655,7 +670,10 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         elsif has_at_least_one_quest_item?(pc, TANAPIS_ORDER, RITUAL_BOX)
           html = "30642-13.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == PREFECT_VOKIAN
         html = get_already_completed_msg(pc)

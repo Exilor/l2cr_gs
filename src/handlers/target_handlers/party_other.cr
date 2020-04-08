@@ -20,7 +20,10 @@ module TargetHandler::PartyOther
               end
 
               return EMPTY_TARGET_LIST
+            else
+              # automatically added
             end
+
           end
 
           return [target] of L2Object

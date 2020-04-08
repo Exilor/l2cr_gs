@@ -75,10 +75,16 @@ class Scripts::Q00168_DeliverSupplies < Quest
               st.exit_quest(false, true)
               html = "30349-07.html" # it looks like this needs a file ending in -08
             end
+          else
+            # automatically added
           end
+
         when State::COMPLETED
           html = get_already_completed_msg(pc)
+        else
+          # automatically added
         end
+
       when HARANT
         if st.cond?(1) && st.has_quest_items?(JENNAS_LETTER)
           st.take_items(JENNAS_LETTER, -1)
@@ -101,7 +107,10 @@ class Scripts::Q00168_DeliverSupplies < Quest
         elsif !st.has_quest_items?(SENTRIES[npc.id]) && st.has_quest_items?(OLD_BRONZE_SWORD)
           html = "#{npc.id}-02.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

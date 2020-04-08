@@ -29,9 +29,9 @@ struct ZoneCuboid < L2ZoneForm
 
   def get_distance_to_zone(x : Int32, y : Int32) : Float64
     _x1 = @r.x
-		_x2 = @r.x + @r.width
-		_y1 = @r.y
-		_y2 = @r.y + @r.height
+    _x2 = @r.x + @r.width
+    _y1 = @r.y
+    _y2 = @r.y + @r.height
     shortest_dist = Math.pow(_x1 - x, 2) + Math.pow(_y1 - y, 2)
 
     test = Math.pow(_x1 - x, 2) + Math.pow(_y2 - y, 2)
@@ -62,19 +62,19 @@ struct ZoneCuboid < L2ZoneForm
 
   def visualize_zone(z : Int32)
     _x1 = @r.x
-		_x2 = @r.x + @r.width
-		_y1 = @r.y
-		_y2 = @r.y + @r.height
+    _x2 = @r.x + @r.width
+    _y1 = @r.y
+    _y2 = @r.y + @r.height
 
-		_x1.step(to: _x2 - 1, by: STEP) do |x|
-			drop_debug_item(Inventory::ADENA_ID, 1, x, _y1, z);
-			drop_debug_item(Inventory::ADENA_ID, 1, x, _y2, z);
-		end
+    _x1.step(to: _x2 - 1, by: STEP) do |x|
+      drop_debug_item(Inventory::ADENA_ID, 1, x, _y1, z);
+      drop_debug_item(Inventory::ADENA_ID, 1, x, _y2, z);
+    end
 
-		_y1.step(to: _y2 - 1, by: STEP) do |y|
-			drop_debug_item(Inventory::ADENA_ID, 1, _x1, y, z);
-			drop_debug_item(Inventory::ADENA_ID, 1, _x2, y, z);
-		end
+    _y1.step(to: _y2 - 1, by: STEP) do |y|
+      drop_debug_item(Inventory::ADENA_ID, 1, _x1, y, z);
+      drop_debug_item(Inventory::ADENA_ID, 1, _x2, y, z);
+    end
   end
 
   def random_point : {Int32, Int32, Int32}

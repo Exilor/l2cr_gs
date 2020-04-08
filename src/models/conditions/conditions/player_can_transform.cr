@@ -24,7 +24,10 @@ class Condition
       when .flying_mounted?, .mounted?
         pc.send_packet(SystemMessageId::YOU_CANNOT_POLYMORPH_WHILE_RIDING_A_PET)
         can = false
+      else
+        # automatically added
       end
+
 
       @val == can
     end

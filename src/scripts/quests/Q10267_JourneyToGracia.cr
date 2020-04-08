@@ -30,7 +30,10 @@ class Scripts::Q10267_JourneyToGracia < Quest
       st.give_adena(92500, true)
       st.add_exp_and_sp(75480, 7570)
       st.exit_quest(false, true)
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -47,7 +50,10 @@ class Scripts::Q10267_JourneyToGracia < Quest
         html = "30857-07.html"
       when State::COMPLETED
         html = "30857-0a.html"
+      else
+        # automatically added
       end
+
     when PAPIKU
       if st.started?
         html = st.cond?(1) ? "32564-01.html" : "32564-03.html"
@@ -58,7 +64,10 @@ class Scripts::Q10267_JourneyToGracia < Quest
       elsif st.completed?
         html = "32548-03.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

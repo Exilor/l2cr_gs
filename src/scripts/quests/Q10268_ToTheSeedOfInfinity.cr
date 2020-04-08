@@ -39,7 +39,10 @@ class Scripts::Q10268_ToTheSeedOfInfinity < Quest
         html = "32548-06.html"
       when State::COMPLETED
         html = "32548-0a.html"
+      else
+        # automatically added
       end
+
     when TEPIOS
       case st.state
       when State::STARTED
@@ -49,8 +52,14 @@ class Scripts::Q10268_ToTheSeedOfInfinity < Quest
         st.exit_quest(false, true)
       when State::COMPLETED
         html = "32530-02.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

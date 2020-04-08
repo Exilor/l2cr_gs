@@ -34,7 +34,10 @@ class Scripts::BlackJudge < AbstractNpcAI
       else
         html = "30981-08.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

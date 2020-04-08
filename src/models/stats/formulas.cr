@@ -423,7 +423,10 @@ module Formulas
       init_val = BaseStats::STR.calc_bonus(actor)
     when
       init_val = BaseStats::INT.calc_bonus(actor)
+    else
+      # automatically added
     end
+
 
     init_val *= actor.calc_stat(SKILL_CRITICAL_PROBABILITY, 1)
     Rnd.rand(100) < init_val
@@ -505,7 +508,10 @@ module Formulas
         target.send_packet(SystemMessageId::SHIELD_DEFENCE_SUCCESSFULL)
       when SHIELD_DEFENSE_PERFECT_BLOCK
         target.send_packet(SystemMessageId::YOUR_EXCELLENT_SHIELD_DEFENSE_WAS_A_SUCCESS)
+      else
+        # automatically added
       end
+
     end
 
     shld_success.to_i8
@@ -526,7 +532,10 @@ module Formulas
       end
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
+    else
+      # automatically added
     end
+
 
     pvp = attacker.playable? && target.playable?
     if attacker.behind_target?
@@ -601,7 +610,10 @@ module Formulas
       mdef += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
+    else
+      # automatically added
     end
+
 
     matk = attacker.get_m_atk(target, skill)
     pvp = attacker.playable? && target.playable?
@@ -676,7 +688,10 @@ module Formulas
       mdef += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
+    else
+      # automatically added
     end
+
 
     damage = (91.0 * attacker.cubic_power) / mdef
 
@@ -966,7 +981,10 @@ module Formulas
       end
     when 3
       return 1.0 if ignore_res
+    else
+      # automatically added
     end
+
 
     result = (attacker.stat.get_attack_trait(trait_type).to_f - target.stat.get_defence_trait(trait_type)) + 1.0
     result.clamp(0.05, 2.0)
@@ -982,7 +1000,10 @@ module Formulas
       m_def += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
+    else
+      # automatically added
     end
+
 
     m_atk *= bss ? 4 : sps ? 2 : 1
 
@@ -1089,7 +1110,10 @@ module Formulas
       defence += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
+    else
+      # automatically added
     end
+
 
     pvp = attacker.playable? && target.playable?
     damage = 0.0
@@ -1190,7 +1214,10 @@ module Formulas
           end
         end
       end
+    else
+      # automatically added
     end
+
 
     cancelled
   end
@@ -1249,7 +1276,10 @@ module Formulas
       defence += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
+    else
+      # automatically added
     end
+
 
     pvp = attacker.playable? && target.playable?
     damage = 0.0
@@ -1358,7 +1388,10 @@ module Formulas
       end
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
+    else
+      # automatically added
     end
+
 
     pvp = attacker.playable? && target.playable?
     if attacker.behind_target?

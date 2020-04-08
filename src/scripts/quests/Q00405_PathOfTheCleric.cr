@@ -61,7 +61,10 @@ class Scripts::Q00405_PathOfTheCleric < Quest
       else
         html = "30022-02.htm"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -197,7 +200,10 @@ class Scripts::Q00405_PathOfTheCleric < Quest
         elsif !has_at_least_one_quest_item?(pc, LIONELS_BOOK, CERTIFICATE_OF_GALLINT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND, LEMONIELLS_COVENANT)
           html = "30408-05.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

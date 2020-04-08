@@ -70,7 +70,10 @@ class Scripts::Q00628_HuntGoldenRam < Quest
         qs.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -132,8 +135,14 @@ class Scripts::Q00628_HuntGoldenRam < Quest
             html = "31554-06.html"
           end
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

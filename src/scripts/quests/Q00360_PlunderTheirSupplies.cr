@@ -39,7 +39,10 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
     when "30873-10.html"
       st.exit_quest(false, true)
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, killer, is_pet)
@@ -99,7 +102,10 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
           html = "30873-07.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

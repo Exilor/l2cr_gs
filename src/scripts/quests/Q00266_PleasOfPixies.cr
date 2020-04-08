@@ -89,8 +89,14 @@ class Scripts::Q00266_PleasOfPixies < Quest
           st.exit_quest(true, true)
           html = "31852-06.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

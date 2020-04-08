@@ -209,7 +209,10 @@ class Scripts::Q00060_GoodWorksReward < Quest
           return "31092-21.html"
         when ClassId::ARTISAN
           return "31092-22.html"
+        else
+          # automatically added
         end
+
         qs.exit_quest(false, true)
       end
     when "REPLY_5"
@@ -251,7 +254,10 @@ class Scripts::Q00060_GoodWorksReward < Quest
           return "31092-21a.html"
         when ClassId::ARTISAN
           return "31092-22a.html"
+        else
+          # automatically added
         end
+
       end
     when "REPLY_6"
       if pc.class_id.warrior?
@@ -683,7 +689,10 @@ class Scripts::Q00060_GoodWorksReward < Quest
         end
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -792,7 +801,10 @@ class Scripts::Q00060_GoodWorksReward < Quest
         elsif memo_state == 7
           html = "32487-09.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == BLUEPRINT_SELLER_DAEGER
         html = get_already_completed_msg(pc)

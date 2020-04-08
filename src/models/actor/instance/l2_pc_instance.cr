@@ -1189,7 +1189,10 @@ class L2PcInstance < L2Playable
         send_packet(PrivateStoreListBuy.new(self, pc))
       when PrivateStoreType::MANUFACTURE
         send_packet(RecipeShopSellList.new(self, pc))
+      else
+        # automatically added
       end
+
     elsif char
       char.on_action(self)
     end
@@ -3190,7 +3193,10 @@ class L2PcInstance < L2Playable
       pc.send_packet(PrivateStoreMsgBuy.new(self))
     when PrivateStoreType::MANUFACTURE
       pc.send_packet(RecipeShopMsg.new(self))
+    else
+      # automatically added
     end
+
 
     if transformed?
       send_packet(CharInfo.new(pc))
@@ -3207,7 +3213,10 @@ class L2PcInstance < L2Playable
       send_packet(ExBrExtraUserInfo.new(self))
     when 2
       broadcast_user_info
+    else
+      # automatically added
     end
+
   end
 
   def update_abnormal_effect
@@ -3483,7 +3492,10 @@ class L2PcInstance < L2Playable
     when 0x2c..0x30; 248
     when 0x31..0x34; 252
     when 0x35..0x39; 247
+    else
+      # automatically added
     end
+
 
     if item_id
       ItemTable[item_id].as(L2Weapon)
@@ -5505,7 +5517,10 @@ class L2PcInstance < L2Playable
           return false
         end
       end
+    else
+      # automatically added
     end
+
 
     true
   end
@@ -5906,7 +5921,10 @@ class L2PcInstance < L2Playable
       end
     when MountType::WYVERN
       self.flying = true
+    else
+      # automatically added
     end
+
 
     # debug "#set_mount npc_id: #{npc_id}, npc_level: #{npc_level}: mount type: #{type.inspect}."
 
@@ -7241,7 +7259,10 @@ class L2PcInstance < L2Playable
           check_delay = @fish.not_nil!.guts_check_time * 100
         when 6521, 6524, 6527, 8507, 8510, 8513
           check_delay = @fish.not_nil!.guts_check_time * 66
+        else
+          # automatically added
         end
+
       end
 
       task = LookingForFishTask.new(self, @fish.not_nil!.start_combat_time, @fish.not_nil!.fish_guts, @fish.not_nil!.fish_group, noob, upper_grade)
@@ -7299,7 +7320,10 @@ class L2PcInstance < L2Playable
         else
           type = 6
         end
+      else
+        # automatically added
       end
+
     when 1 # normal fish
       case @lure.not_nil!.id
       when 7610..7613
@@ -7342,7 +7366,10 @@ class L2PcInstance < L2Playable
         else
           type = 2
         end
+      else
+        # automatically added
       end
+
     when 2 # upper grade fish, luminous lure
       case @lure.not_nil!.id
       when 8506 # green lure, preferred by fast-moving (nimble) fish (type 8)
@@ -7377,8 +7404,14 @@ class L2PcInstance < L2Playable
         else
           type = 9
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     type
   end
@@ -7404,7 +7437,10 @@ class L2PcInstance < L2Playable
         skill_lvl = 20
       when 8
         skill_lvl = 23
+      else
+        # automatically added
       end
+
     end
 
     if skill_lvl <= 0

@@ -46,14 +46,20 @@ class Scripts::Q00653_WildMaiden < Quest
         html = pc.level >= MIN_LEVEL ? "32013-01.htm" : "32013-01a.htm"
       when State::STARTED
         html = "32013-02.htm"
+      else
+        # automatically added
       end
+
     when GALIBREDO
       if st.started?
         st.give_adena(2553, true)
         st.exit_quest(true, true)
         html = "30181-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

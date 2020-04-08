@@ -115,7 +115,10 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
         open_door(DOOR_4, world.instance_id)
       when 40
         open_door(DOOR_5, world.instance_id)
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -177,7 +180,10 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
                 if Util.in_range?(2000, caster, pc, true)
                   pc.send_packet(NpcSay.new(caster.l2id, Say2::TELL, caster.id, NpcString::DEAR_S1_GIVE_ME_MORE_STRENGTH).add_string_parameter(pc.name))
                 end
+              else
+                # automatically added
               end
+
             end
           end
         end
@@ -197,7 +203,10 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
           start_quest_timer("FIGHT", 1000, nil, pc)
           break
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -225,7 +234,10 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
         npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::LEAVE_NOW))
         npc.script_value = 1
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -266,7 +278,10 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::WHY_ARE_YOU_GETTING_IN_OUR_WAY))
     when LILIM_SLAYER
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::FOR_SHILEN))
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -304,7 +319,10 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
           start_quest_timer("FIGHT", 1000, nil, pc)
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

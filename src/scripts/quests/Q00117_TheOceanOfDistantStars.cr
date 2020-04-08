@@ -107,7 +107,10 @@ class Scripts::Q00117_TheOceanOfDistantStars < Quest
         take_items(pc, BOOK_OF_GREY_STAR, -1)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -153,11 +156,17 @@ class Scripts::Q00117_TheOceanOfDistantStars < Quest
           end
         when 6
           html = "32053-10.html"
+        else
+          # automatically added
         end
+
       when GHOST_OF_A_RAILROAD_ENGINEER
         if qs.memo_state?(9)
           html = "32054-01.html"
+      else
+        # automatically added
       end
+
       when GHOST_OF_AN_ANCIENT_RAILROAD_ENGINEER
         case qs.memo_state
         when 1
@@ -168,7 +177,10 @@ class Scripts::Q00117_TheOceanOfDistantStars < Quest
           html = "32055-04.html"
         when 9
           html = "32055-07.html"
+        else
+          # automatically added
         end
+
       when BOX
         if qs.memo_state?(4)
           html = "32076-01.html"
@@ -191,7 +203,10 @@ class Scripts::Q00117_TheOceanOfDistantStars < Quest
           end
         when 8
           html = "32052-09.html"
+        else
+          # automatically added
         end
+
       end
     end
 

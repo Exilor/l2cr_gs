@@ -65,7 +65,10 @@ class Scripts::BanditStronghold < FlagWar
       "messenger_flag4.htm"
     when 35427
       "messenger_flag5.htm"
+    else
+      # automatically added
     end
+
   end
 
   def get_ally_html(ally : Int32) : String?
@@ -80,6 +83,9 @@ class Scripts::BanditStronghold < FlagWar
       "messenger_ally4result.htm"
     when 35432
       "messenger_ally5result.htm"
+    else
+      # automatically added
     end
+
   end
 end

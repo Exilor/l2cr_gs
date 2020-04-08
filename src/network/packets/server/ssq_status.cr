@@ -29,14 +29,20 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
         d SystemMessageId::RESULTS_PERIOD.id
       when SevenSigns::PERIOD_SEAL_VALIDATION
         d SystemMessageId::VALIDATION_PERIOD.id
+      else
+        # automatically added
       end
+
 
       case current_period
       when SevenSigns::PERIOD_COMP_RECRUITING, SevenSigns::PERIOD_COMP_RESULTS
         d SystemMessageId::UNTIL_TODAY_6PM.id
       when SevenSigns::PERIOD_COMPETITION, SevenSigns::PERIOD_SEAL_VALIDATION
         d SystemMessageId::UNTIL_MONDAY_6PM.id
+      else
+        # automatically added
       end
+
 
       c SevenSigns.get_player_cabal(@l2id)
       c SevenSigns.get_player_seal(@l2id)
@@ -175,7 +181,10 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               c SevenSigns::CABAL_NULL
               d SystemMessageId::SEAL_NOT_OWNED_35_LESS_VOTED.id
             end
+          else
+            # automatically added
           end
+
         when SevenSigns::CABAL_DAWN
           case winning_cabal
           when SevenSigns::CABAL_NULL
@@ -205,7 +214,10 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               c SevenSigns::CABAL_NULL
               d SystemMessageId::SEAL_OWNED_10_LESS_VOTED.id
             end
+          else
+            # automatically added
           end
+
         when SevenSigns::CABAL_DUSK
           case winning_cabal
           when SevenSigns::CABAL_NULL
@@ -235,9 +247,18 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               c SevenSigns::CABAL_NULL
               d SystemMessageId::SEAL_OWNED_10_LESS_VOTED.id
             end
+          else
+            # automatically added
           end
+
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
   end
 end

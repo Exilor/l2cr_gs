@@ -108,7 +108,10 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
         end
       end
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -150,7 +153,10 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -261,7 +267,10 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
             html = "30423-03.html"
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

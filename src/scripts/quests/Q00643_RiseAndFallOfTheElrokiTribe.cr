@@ -108,7 +108,10 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         html = "32117-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -171,7 +174,10 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
           html = "32117-03.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

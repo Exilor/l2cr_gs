@@ -298,7 +298,10 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
          "30835-05.html", "30934-03a.html", "30935-01.html", "30935-01a.html",
          "30935-01b.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -340,7 +343,10 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
             qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) - 1)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -382,7 +388,10 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
       when COLLECTOR_TRUMPIN
         qs.set("param1", 0)
         html = "30935-01.html"
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

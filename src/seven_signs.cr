@@ -28,8 +28,8 @@ module SevenSigns
 
   # The quest event and seal validation periods last for approximately one week
   # with a 15 minutes "interval" period sandwiched between them.
-  PERIOD_MINOR_LENGTH = 900000
-  PERIOD_MAJOR_LENGTH = 604800000 - PERIOD_MINOR_LENGTH
+  PERIOD_MINOR_LENGTH = 900_000
+  PERIOD_MAJOR_LENGTH = 604_800_000 - PERIOD_MINOR_LENGTH
 
   RECORD_SEVEN_SIGNS_ID = 5707
   RECORD_SEVEN_SIGNS_COST = 500i64
@@ -144,7 +144,10 @@ module SevenSigns
       end
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
       last_period_change.ms = @@last_save.ms + PERIOD_MINOR_LENGTH
+    else
+      # automatically added
     end
+
 
     @@last_save.ms > 7 && @@last_save < last_period_change
   end
@@ -240,7 +243,10 @@ module SevenSigns
           crest_of_dawn_spawns.each do |dawn_crest|
             AutoSpawnHandler.set_spawn_active(dawn_crest, false)
           end
+        else
+          # automatically added
         end
+
       else
         AutoSpawnHandler.set_spawn_active(merchant_spawn, false)
         AutoSpawnHandler.set_spawn_active(lilith_spawn, false)
@@ -356,7 +362,10 @@ module SevenSigns
       @@next_period_change.minute = PERIOD_START_MINS
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
       @@next_period_change.add(PERIOD_MINOR_LENGTH.milliseconds) # 15 mins
+    else
+      # automatically added
     end
+
 
     info { "Next period change set to #{@@next_period_change.time}." }
   end
@@ -371,7 +380,10 @@ module SevenSigns
       "Quest Event Results"
     when PERIOD_SEAL_VALIDATION
       "Seal Validation"
+    else
+      # automatically added
     end
+
   end
 
   def competition_period? : Bool
@@ -411,7 +423,10 @@ module SevenSigns
     when PERIOD_SEAL_VALIDATION
       next_quest_start = next_period_change
       next_valid_start = next_period_change + PERIOD_MAJOR_LENGTH + PERIOD_MINOR_LENGTH
+    else
+      # automatically added
     end
+
 
     !(
       ((next_quest_start < till_date) && (till_date < next_valid_start)) ||
@@ -427,7 +442,10 @@ module SevenSigns
       return (((@@dawn_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dawn_festival_score).to_i32
     when CABAL_DUSK
       return (((@@dusk_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dusk_festival_score).to_i32
+    else
+      # automatically added
     end
+
 
     0
   end
@@ -715,7 +733,10 @@ module SevenSigns
       @@dawn_stone_score += contrib_score
     when CABAL_DUSK
       @@dusk_stone_score += contrib_score
+    else
+      # automatically added
     end
+
 
     unless Config.alt_sevensigns_lazy_update
       save_seven_signs_data(id)
@@ -749,7 +770,10 @@ module SevenSigns
       pc.send_packet(SystemMessageId::RESULTS_PERIOD_BEGUN)
     when PERIOD_SEAL_VALIDATION
       pc.send_packet(SystemMessageId::VALIDATION_PERIOD_BEGUN)
+    else
+      # automatically added
     end
+
   end
 
   def initialize_seals
@@ -803,7 +827,10 @@ module SevenSigns
           else
             new_seal_owner = CABAL_NULL
           end
+        else
+          # automatically added
         end
+
       when CABAL_DAWN
         case cabal_highest_score
         when CABAL_NULL
@@ -826,7 +853,10 @@ module SevenSigns
           else
             new_seal_owner = CABAL_NULL
           end
+        else
+          # automatically added
         end
+
       when CABAL_DUSK
         case cabal_highest_score
         when CABAL_NULL
@@ -849,8 +879,14 @@ module SevenSigns
           else
             new_seal_owner = CABAL_NULL
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
 
       SIGNS_SEAL_OWNERS[seal] = new_seal_owner
 
@@ -875,7 +911,10 @@ module SevenSigns
         end
 
         CastleManager.validate_taxes(new_seal_owner)
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -970,7 +1009,10 @@ module SevenSigns
         send_message_to_all(SystemMessageId::DAWN_WON)
       when CABAL_DUSK
         send_message_to_all(SystemMessageId::DUSK_WON)
+      else
+        # automatically added
       end
+
 
       @@previous_winner = winner
 
@@ -994,7 +1036,10 @@ module SevenSigns
       @@dusk_stone_score = 0.0
       @@dawn_festival_score = 0
       @@dusk_festival_score = 0
+    else
+      # automatically added
     end
+
 
     save_seven_signs_data
     save_seven_signs_status

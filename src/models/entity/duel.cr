@@ -242,7 +242,10 @@ class Duel
       sm.add_string(@leader_b.name)
     when DuelResult::CANCELED, DuelResult::TIMEOUT
       sm = SystemMessageId::THE_DUEL_HAS_ENDED_IN_A_TIE
+    else
+      # automatically added
     end
+
 
     if sm
       broadcast_to_team_1(sm)

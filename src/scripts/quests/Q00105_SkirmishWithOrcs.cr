@@ -57,7 +57,10 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
       end
     when "30218-05.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -76,7 +79,10 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
           st.give_items(KABOO_CHIEFS_2ST_TORQUE, 1)
           st.set_cond(4, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -120,7 +126,10 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html
   end

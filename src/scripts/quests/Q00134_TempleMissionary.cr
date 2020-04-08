@@ -120,10 +120,16 @@ class Scripts::Q00134_TempleMissionary < Quest
             st.set("talk", "1")
             html = "30067-08.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when ROUKE
       if st.started?
         case st.cond
@@ -152,9 +158,15 @@ class Scripts::Q00134_TempleMissionary < Quest
           end
         when 5
           html = "31418-09.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

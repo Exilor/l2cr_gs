@@ -105,7 +105,10 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           html = "30912-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -209,7 +212,10 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           end
 
           qs.exit_quest(true, true)
+        else
+          # automatically added
         end
+
       when ORPHEUS
         if has_quest_items?(pc, USELESS_BONE_PIECES)
           html = "30971-01.html"
@@ -243,14 +249,20 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           end
         when 8
           html = "30973-11.html"
+        else
+          # automatically added
         end
+
       when XENOVIA
         if qs.memo_state?(2)
           html = "30912-01.html"
         elsif qs.memo_state?(7) || qs.memo_state?(8) || has_quest_items?(pc, POWDER_TO_SUMMON_DEAD_SOULS)
           html = "30912-06.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

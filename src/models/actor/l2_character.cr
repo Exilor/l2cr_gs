@@ -79,7 +79,7 @@ abstract class L2Character < L2Object
   property? overloaded : Bool = false
   property? teleporting : Bool = false
   property? immobilized : Bool = false
-  property? no_rnd_walk : Bool = false
+  property? no_random_walk : Bool = false
   property? flying : Bool = false
   property? show_summon_animation : Bool = false
 
@@ -1034,7 +1034,10 @@ abstract class L2Character < L2Object
           pc.send_packet(op)
         end
       end
+    else
+      # automatically added
     end
+
   end
 
   def set_running
@@ -2660,7 +2663,6 @@ abstract class L2Character < L2Object
     end
 
     task = NotifyAITask.new(self, AI::READY_TO_ACT)
-    # ThreadPoolManager.schedule_ai(task, (time_atk + reuse).fdiv(100).ceil * 100)
     ThreadPoolManager.schedule_ai(task, time_atk + reuse + 1)
   end
 
@@ -3138,7 +3140,10 @@ abstract class L2Character < L2Object
     when L2PcInstance
       me.fake_death = false
       me.recent_fake_death = true
+    else
+      # automatically added
     end
+
 
     broadcast_packet(ChangeWaitType.new(self, ChangeWaitType::STOP_FAKE_DEATH))
     broadcast_packet(Revive.new(self))
@@ -3380,7 +3385,10 @@ abstract class L2Character < L2Object
       if InstanceManager.get_instance(instance_id).try &.pvp_instance?
         return false
       end
+    else
+      # automatically added
     end
+
 
     @zones[id.to_i] > 0
   end

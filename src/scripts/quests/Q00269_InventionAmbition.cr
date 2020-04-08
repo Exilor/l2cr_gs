@@ -41,7 +41,10 @@ class Scripts::Q00269_InventionAmbition < Quest
       html = event
     when "32486-08.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -71,7 +74,10 @@ class Scripts::Q00269_InventionAmbition < Quest
       else
         html = "32486-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

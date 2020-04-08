@@ -158,7 +158,10 @@ class Scripts::Q00023_LidiasHeart < Quest
         qs.set_cond(10)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -191,7 +194,10 @@ class Scripts::Q00023_LidiasHeart < Quest
         when 8
           qs.set_cond(6, true)
           html = "31328-22.html"
+        else
+          # automatically added
         end
+
       when TRADER_VIOLET
         case qs.memo_state
         when 10
@@ -209,7 +215,10 @@ class Scripts::Q00023_LidiasHeart < Quest
             qs.exit_quest(false, true)
             html = "31386-03.html"
           end
+        else
+          # automatically added
         end
+
       when TOMBSTONE
         case qs.memo_state
         when 8
@@ -218,7 +227,10 @@ class Scripts::Q00023_LidiasHeart < Quest
           html = "31523-04.html"
         when 10
           html = "31523-05.html"
+        else
+          # automatically added
         end
+
       when GHOST_OF_VON_HELLMANN
         memo_state = qs.memo_state
         if memo_state == 8
@@ -252,7 +264,10 @@ class Scripts::Q00023_LidiasHeart < Quest
           if has_quest_items?(pc, LIDIAS_HAIRPIN, LIDIAS_DIARY)
             html = "31526-13.html"
           end
+        else
+          # automatically added
         end
+
       when BOX
         if qs.memo_state == 11
           if has_quest_items?(pc, SILVER_KEY)
@@ -261,7 +276,10 @@ class Scripts::Q00023_LidiasHeart < Quest
             html = "31530-03.html"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == HIGH_PRIEST_INNOCENTIN
         html = get_already_completed_msg(pc)

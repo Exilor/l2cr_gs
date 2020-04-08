@@ -102,7 +102,10 @@ class Scripts::MercenaryCaptain < AbstractNpcAI
           list_id = 685 + npc.castle.residence_id
           MultisellData.separate_and_send(list_id, pc, npc, false)
         end
+      else
+        # automatically added
       end
+
     elsif event.casecmp?("say") && !npc.decayed?
       if TerritoryWarManager.tw_in_progress?
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::CHARGE_CHARGE_CHARGE)

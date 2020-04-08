@@ -37,7 +37,10 @@ class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
         st.add_exp_and_sp(126668, 11731)
         st.exit_quest(false, true)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -61,7 +64,10 @@ class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
       elsif npc_id == ABERCROMBIE && st.cond?(2) && st.has_quest_items?(BOX)
         html = "31555-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -65,7 +65,10 @@ class Scripts::Q10272_LightFragment < Quest
       else
         event = "32557-04.html"
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -116,7 +119,10 @@ class Scripts::Q10272_LightFragment < Quest
         html = "32560-06.html"
       when State::COMPLETED
         html = "32560-04.html"
+      else
+        # automatically added
       end
+
     when ARTIUS
       if st.completed?
         html = "32559-19.html"
@@ -155,7 +161,10 @@ class Scripts::Q10272_LightFragment < Quest
           st.give_adena(556980, true)
           st.add_exp_and_sp(1009016, 91363)
           st.exit_quest(false, true)
+        else
+          # automatically added
         end
+
       end
     when GINBY
       case st.cond
@@ -169,14 +178,20 @@ class Scripts::Q10272_LightFragment < Quest
         html = "32566-10.html"
       when 6
         html = "32566-10.html"
+      else
+        # automatically added
       end
+
     when LELRIKIA
       case st.cond
       when 3
         html = "32567-01.html"
       when 4
         html = "32567-05.html"
+      else
+        # automatically added
       end
+
     when LEKON
       case st.cond
       when 7
@@ -190,8 +205,14 @@ class Scripts::Q10272_LightFragment < Quest
         end
       when 8
         html = "32557-06.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -1,10 +1,10 @@
 class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
   # NPCs
-	private CADMON = 31296
-	private HELMUT = 31258
-	private NARAN_NARAN_ASHANUK  = 31378
-	# Item
-	private MUNITIONS_BOX = 7232
+  private CADMON = 31296
+  private HELMUT = 31258
+  private NARAN_NARAN_ASHANUK  = 31378
+  # Item
+  private MUNITIONS_BOX = 7232
 
   private MIN_LEVEL = 74
 
@@ -37,7 +37,10 @@ class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
       else
         "31378-03.html"
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)
@@ -68,7 +71,10 @@ class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
       if npc.id == CADMON
         html = get_already_completed_msg(pc)
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -71,7 +71,10 @@ class Scripts::Q00165_ShilensHunt < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

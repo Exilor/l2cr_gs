@@ -220,8 +220,7 @@ module AdminCommandHandler::AdminBuffs
     html << "<br><center><button value=\"Refresh\" action=\"bypass -h admin_getbuffs"
     html << (passive ? "_ps " : " ")
     html << target.name
-    html << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
-    html << "<button value=\"Remove All\" action=\"bypass -h admin_stopallbuffs "
+    html << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><button value=\"Remove All\" action=\"bypass -h admin_stopallbuffs "
     html << target.l2id
     html << "\" width=80 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><br>"
     # Legend
@@ -241,9 +240,16 @@ module AdminCommandHandler::AdminBuffs
     blocked_buff_slots = target.effect_list.@blocked_buff_slots
     if blocked_buff_slots && blocked_buff_slots.empty?
       html << "<br>Blocked buff slots: "
-      slots = ""
-      target.effect_list.blocked_buff_slots.each do |slot|
-        slots += slot.to_s + ", "
+      # slots = ""
+      # target.effect_list.blocked_buff_slots.each do |slot|
+      #   slots += slot.to_s + ", "
+      # end
+
+      slots = String.build do |io|
+        target.effect_list.blocked_buff_slots.each do |slot|
+          io << slot
+          io << ", "
+        end
       end
 
       if !slots.empty? && slots.size > 3

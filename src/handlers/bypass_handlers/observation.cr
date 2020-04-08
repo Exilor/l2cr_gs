@@ -94,7 +94,10 @@ module BypassHandler::Observation
     when "observeoracle", "observe"
       do_observe(pc, target, loc, cost)
       return true
+    else
+      # automatically added
     end
+
 
     false
   end

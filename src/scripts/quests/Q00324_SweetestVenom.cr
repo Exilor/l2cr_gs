@@ -50,7 +50,10 @@ class Scripts::Q00324_SweetestVenom < Quest
         else
           html = "30351-05.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

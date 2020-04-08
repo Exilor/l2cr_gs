@@ -158,7 +158,10 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
         qs.set_cond(19)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -178,7 +181,10 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
         if (npc.variables.get_i32("Q00415_last_attacker") != attacker.l2id) || !check_weapon(attacker)
           npc.script_value = 2
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -312,7 +318,10 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
             qs.set_cond(18, true)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -446,7 +455,10 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
         elsif memo_state == 5
           html = "32056-09.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

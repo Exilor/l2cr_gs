@@ -139,7 +139,10 @@ class Scripts::Q00422_RepentYourSins < Quest
         qs.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -183,7 +186,10 @@ class Scripts::Q00422_RepentYourSins < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -317,7 +323,10 @@ class Scripts::Q00422_RepentYourSins < Quest
         elsif memo_state == 12
           html = "30718-04.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

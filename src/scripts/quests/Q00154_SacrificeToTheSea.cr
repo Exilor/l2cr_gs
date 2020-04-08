@@ -1,28 +1,28 @@
 class Scripts::Q00154_SacrificeToTheSea < Quest
   # NPCs
-	private ROCKSWELL = 30312
-	private CRISTEL = 30051
-	private ROLLFNAN = 30055
-	# Items
-	private FOX_FUR = 1032
-	private FOX_FUR_YAM = 1033
-	private MAIDEN_DOLL = 1034
-	# Monsters
-	private ELDER_KELTIR = 20544
-	private YOUNG_KELTIR = 20545
-	private KELTIR = 20481
-	# Reward
-	private MAGE_EARING = 113
-	# Misc
-	private MIN_LVL = 2
+  private ROCKSWELL = 30312
+  private CRISTEL = 30051
+  private ROLLFNAN = 30055
+  # Items
+  private FOX_FUR = 1032
+  private FOX_FUR_YAM = 1033
+  private MAIDEN_DOLL = 1034
+  # Monsters
+  private ELDER_KELTIR = 20544
+  private YOUNG_KELTIR = 20545
+  private KELTIR = 20481
+  # Reward
+  private MAGE_EARING = 113
+  # Misc
+  private MIN_LVL = 2
 
   def initialize
     super(154, self.class.simple_name, "Sacrifice to the Sea")
 
     add_start_npc(ROCKSWELL)
-		add_talk_id(ROCKSWELL, CRISTEL, ROLLFNAN)
-		add_kill_id(ELDER_KELTIR, YOUNG_KELTIR, KELTIR)
-		register_quest_items(FOX_FUR, FOX_FUR_YAM, MAIDEN_DOLL)
+    add_talk_id(ROCKSWELL, CRISTEL, ROLLFNAN)
+    add_kill_id(ELDER_KELTIR, YOUNG_KELTIR, KELTIR)
+    register_quest_items(FOX_FUR, FOX_FUR_YAM, MAIDEN_DOLL)
   end
 
   def on_adv_event(event, npc, pc)
@@ -56,7 +56,10 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
           add_exp_and_sp(pc, 0, 1000)
           qs.exit_quest(false, true)
           html = "30312-06.html"
+        else
+          # automatically added
         end
+
       else
         html = get_already_completed_msg(pc)
       end
@@ -73,7 +76,10 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
         html = "30051-03.html"
       when 4
         html = "30051-04.html"
+      else
+        # automatically added
       end
+
     when ROLLFNAN
       case qs.cond
       when 1, 2
@@ -85,8 +91,14 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
         html = "30055-01.html"
       when 4
         html = "30055-02.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

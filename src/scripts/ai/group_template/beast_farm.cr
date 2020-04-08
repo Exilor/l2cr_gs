@@ -211,7 +211,10 @@ class Scripts::BeastFarm < AbstractNpcAI
         name = name.sub("%name%", "Alpine Buffalo")
       when 18872
         name = name.sub("%name%", "Alpine Grendel")
+      else
+        # automatically added
       end
+
       next_npc.name = name
       next_npc.broadcast_packet(NpcInfo.new(next_npc, pc))
       next_npc.set_running

@@ -87,7 +87,10 @@ module NpcData
                 unless minions.empty?
                   parameters[params_node["name"]] = minions
                 end
+              else
+                # automatically added
               end
+
             end
           when "race", "sex"
             set[npc.name] = npc.content.upcase
@@ -150,7 +153,10 @@ module NpcData
                       set.add(st, "baseDark", "value")
                     when "HOLY"
                       set.add(st, "baseHoly", "value")
+                    else
+                      # automatically added
                     end
+
                   when "defence"
                     set.add(st, "baseFireRes", "fire")
                     set.add(st, "baseWaterRes", "water")
@@ -159,7 +165,10 @@ module NpcData
                     set.add(st, "baseHolyRes", "holy")
                     set.add(st, "baseDarkRes", "dark")
                     set.add(st, "baseElementRes", "default")
+                  else
+                    # automatically added
                   end
+
                 end
               when "speed"
                 stat.each_element do |spd|
@@ -172,11 +181,17 @@ module NpcData
                     set.add(spd, "baseRunSpd", "ground")
                     set.add(spd, "baseSwimRunSpd", "swim")
                     set.add(spd, "baseFlyRunSpd", "fly")
+                  else
+                    # automatically added
                   end
+
                 end
               when "hittime"
                 set["hitTime"] = stat.content
+              else
+                # automatically added
               end
+
             end
           when "status"
             set.add(npc, "unique")
@@ -199,7 +214,7 @@ module NpcData
                 if skill = SkillData[id, level]?
                   skills[id] = skill
                 else
-                  warn { "No skill found with ID #{id} and level #{level}." }
+                  warn { "No skill found with id #{id} and level #{level}." }
                 end
               end
             end
@@ -241,7 +256,10 @@ module NpcData
                     ignore_clan_npc_ids << cln.text.to_i
                   end
                 end
+              else
+                # automatically added
               end
+
             end
           when "droplists"
             npc.each_element do |dn|
@@ -260,9 +278,15 @@ module NpcData
               when "height"
                 set.add(col, "collisionHeight", "normal")
                 set.add(col, "collisionHeightGrown", "grown")
+              else
+                # automatically added
               end
+
             end
+          else
+            # automatically added
           end
+
         end
 
         if template = NPCS[npc_id]?
@@ -368,7 +392,7 @@ module NpcData
           if item.is_a?(GeneralDropItem)
             items << item
           else
-            warn { "Grouped general drop item supports only general drop item (#{item.class})" }
+            warn { "Grouped general drop item supports only general drop item (#{item.class})." }
           end
         end
         drop_item.items = items

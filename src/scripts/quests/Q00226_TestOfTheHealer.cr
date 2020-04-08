@@ -161,7 +161,10 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         play_sound(pc, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -196,7 +199,10 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           qs.set_cond(3, true)
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -304,7 +310,10 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           html = "30659-04.html"
         when 4
           html = "30659-05.html"
+        else
+          # automatically added
         end
+
       when WINDY_SHAORING
         if has_quest_items?(pc, PICTURE_OF_WINDY)
           html = "30660-01.html"
@@ -409,7 +418,10 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         elsif memo_state >= 8
           html = "30674-04.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == PRIEST_BANDELLOS
         html = get_already_completed_msg(pc)

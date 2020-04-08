@@ -90,7 +90,10 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
     when "30418-02.html"
       give_items(pc, CANDLE, 1)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -132,7 +135,10 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -220,7 +226,10 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
             html = "30419-03.html"
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

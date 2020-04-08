@@ -1,44 +1,44 @@
 class Scripts::Q00404_PathOfTheHumanWizard < Quest
   # NPCs
-	private PARINA = 30391
-	private EARTH_SNAKE = 30409
-	private WASTELAND_LIZARDMAN = 30410
-	private FLAME_SALAMANDER = 30411
-	private WIND_SYLPH = 30412
-	private WATER_UNDINE = 30413
-	# Items
-	private MAP_OF_LUSTER = 1280
-	private KEY_OF_FLAME = 1281
-	private FLAME_EARING = 1282
-	private BROKEN_BRONZE_MIRROR = 1283
-	private WIND_FEATHER = 1284
-	private WIND_BANGLE = 1285
-	private RAMAS_DIARY = 1286
-	private SPARKLE_PEBBLE = 1287
-	private WATER_NECKLACE = 1288
-	private RUSTY_COIN = 1289
-	private RED_SOIL = 1290
-	private EARTH_RING = 1291
-	# Reward
-	private BEAD_OF_SEASON = 1292
-	# Monster
-	private RED_BEAR = 20021
-	private RATMAN_WARRIOR = 20359
-	# Quest Monster
-	private WATER_SEER = 27030
-	# Misc
-	private MIN_LEVEL = 18
+  private PARINA = 30391
+  private EARTH_SNAKE = 30409
+  private WASTELAND_LIZARDMAN = 30410
+  private FLAME_SALAMANDER = 30411
+  private WIND_SYLPH = 30412
+  private WATER_UNDINE = 30413
+  # Items
+  private MAP_OF_LUSTER = 1280
+  private KEY_OF_FLAME = 1281
+  private FLAME_EARING = 1282
+  private BROKEN_BRONZE_MIRROR = 1283
+  private WIND_FEATHER = 1284
+  private WIND_BANGLE = 1285
+  private RAMAS_DIARY = 1286
+  private SPARKLE_PEBBLE = 1287
+  private WATER_NECKLACE = 1288
+  private RUSTY_COIN = 1289
+  private RED_SOIL = 1290
+  private EARTH_RING = 1291
+  # Reward
+  private BEAD_OF_SEASON = 1292
+  # Monster
+  private RED_BEAR = 20021
+  private RATMAN_WARRIOR = 20359
+  # Quest Monster
+  private WATER_SEER = 27030
+  # Misc
+  private MIN_LEVEL = 18
 
   def initialize
     super(404, self.class.simple_name, "Path Of The Human Wizard")
 
     add_start_npc(PARINA)
-		add_talk_id(
+    add_talk_id(
       PARINA, EARTH_SNAKE, WASTELAND_LIZARDMAN, FLAME_SALAMANDER, WIND_SYLPH,
       WATER_UNDINE
     )
-		add_kill_id(RED_BEAR, RATMAN_WARRIOR, WATER_SEER)
-		register_quest_items(
+    add_kill_id(RED_BEAR, RATMAN_WARRIOR, WATER_SEER)
+    register_quest_items(
       MAP_OF_LUSTER, KEY_OF_FLAME, FLAME_EARING, BROKEN_BRONZE_MIRROR,
       WIND_FEATHER, WIND_BANGLE, RAMAS_DIARY, SPARKLE_PEBBLE, WATER_NECKLACE,
       RUSTY_COIN, RED_SOIL, EARTH_RING
@@ -73,7 +73,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       give_items(pc, WIND_FEATHER, 1)
       qs.set_cond(6, true)
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, pc, is_summon)
@@ -87,7 +90,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         on_ratman_warrior_killed(qs, pc)
       when WATER_SEER
         on_water_seer_killed(qs, pc)
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -151,7 +157,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         html = on_talk_with_wind_sylph(qs, pc)
       when WATER_UNDINE
         html = on_talk_with_water_undine(qs, pc)
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

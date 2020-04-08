@@ -89,7 +89,10 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
         npc = npc.not_nil!
         npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::OOOH))
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -113,7 +116,10 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
           html = "31521-06.html"
         when 3
           html = "31521-07.html"
+        else
+          # automatically added
         end
+
       elsif qs.completed?
         html = get_already_completed_msg(talker)
       end
@@ -133,8 +139,14 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
         end
       when 3
         html = "31542-05.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(talker)
   end

@@ -1,29 +1,29 @@
 class Scripts::Q00166_MassOfDarkness < Quest
   # NPCs
-	private UNDRIAS = 30130
-	private IRIA = 30135
-	private DORANKUS = 30139
-	private TRUDY = 30143
-	# Items
-	private UNDRIAS_LETTER = 1088
-	private CEREMONIAL_DAGGER = 1089
-	private DREVIANT_WINE = 1090
-	private GARMIELS_SCRIPTURE = 1091
-	# Misc
-	private MIN_LVL = 2
+  private UNDRIAS = 30130
+  private IRIA = 30135
+  private DORANKUS = 30139
+  private TRUDY = 30143
+  # Items
+  private UNDRIAS_LETTER = 1088
+  private CEREMONIAL_DAGGER = 1089
+  private DREVIANT_WINE = 1090
+  private GARMIELS_SCRIPTURE = 1091
+  # Misc
+  private MIN_LVL = 2
 
   private NPCS = {
     IRIA     => CEREMONIAL_DAGGER,
-		DORANKUS => DREVIANT_WINE,
-		TRUDY    => GARMIELS_SCRIPTURE
+    DORANKUS => DREVIANT_WINE,
+    TRUDY    => GARMIELS_SCRIPTURE
   }
 
   def initialize
     super(166, self.class.simple_name, "Mass of Darkness")
 
     add_start_npc(UNDRIAS)
-		add_talk_id(UNDRIAS, IRIA, DORANKUS, TRUDY)
-		register_quest_items(
+    add_talk_id(UNDRIAS, IRIA, DORANKUS, TRUDY)
+    register_quest_items(
       UNDRIAS_LETTER,
       CEREMONIAL_DAGGER,
       DREVIANT_WINE,
@@ -72,7 +72,10 @@ class Scripts::Q00166_MassOfDarkness < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when IRIA, DORANKUS, TRUDY
       if st.started?
         npc_id = npc.id
@@ -88,7 +91,10 @@ class Scripts::Q00166_MassOfDarkness < Quest
           html = "#{npc_id}-02.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

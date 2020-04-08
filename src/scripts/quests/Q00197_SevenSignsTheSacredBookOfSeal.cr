@@ -112,7 +112,10 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
         st.set_cond(6, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -200,8 +203,14 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
             html = "32596-05.html"
           end
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -2,45 +2,45 @@ require "../../models/holders/item_chance_holder"
 
 class Scripts::Q00403_PathOfTheRogue < Quest
   # NPCs
-	private CAPTAIN_BEZIQUE = 30379
-	private NETI = 30425
-	# Items
-	private BEZIQUES_LETTER = 1180
-	private NETIS_BOW = 1181
-	private NETIS_DAGGER = 1182
-	private SPARTOIS_BONES = 1183
-	private HORSESHOE_OF_LIGHT = 1184
-	private MOST_WANTED_LIST = 1185
-	private STOLEN_JEWELRY = 1186
-	private STOLEN_TOMES = 1187
-	private STOLEN_RING = 1188
-	private STOLEN_NECKLACE = 1189
-	private STOLEN_ITEMS = {STOLEN_JEWELRY, STOLEN_TOMES,  STOLEN_RING, STOLEN_NECKLACE}
-	# Reward
-	private BEZIQUES_RECOMMENDATION = 1190
-	# Misc
-	private MIN_LEVEL = 18
-	private REQUIRED_ITEM_COUNT = 10
-	# Quest Monster
-	private CATS_EYE_BANDIT = 27038
-	# Monster
-	private MONSTER_DROPS = {
-		20035 => ItemChanceHolder.new(SPARTOIS_BONES, 2), # Tracker Skeleton
-		20042 => ItemChanceHolder.new(SPARTOIS_BONES, 3), # Tracker Skeleton Leader
-		20045 => ItemChanceHolder.new(SPARTOIS_BONES, 2), # Skeleton Scout
-		20051 => ItemChanceHolder.new(SPARTOIS_BONES, 2), # Skeleton Bowman
-		20054 => ItemChanceHolder.new(SPARTOIS_BONES, 8), # Ruin Spartoi
-		20060 => ItemChanceHolder.new(SPARTOIS_BONES, 8)  # Raging Spartoi
-	}
+  private CAPTAIN_BEZIQUE = 30379
+  private NETI = 30425
+  # Items
+  private BEZIQUES_LETTER = 1180
+  private NETIS_BOW = 1181
+  private NETIS_DAGGER = 1182
+  private SPARTOIS_BONES = 1183
+  private HORSESHOE_OF_LIGHT = 1184
+  private MOST_WANTED_LIST = 1185
+  private STOLEN_JEWELRY = 1186
+  private STOLEN_TOMES = 1187
+  private STOLEN_RING = 1188
+  private STOLEN_NECKLACE = 1189
+  private STOLEN_ITEMS = {STOLEN_JEWELRY, STOLEN_TOMES,  STOLEN_RING, STOLEN_NECKLACE}
+  # Reward
+  private BEZIQUES_RECOMMENDATION = 1190
+  # Misc
+  private MIN_LEVEL = 18
+  private REQUIRED_ITEM_COUNT = 10
+  # Quest Monster
+  private CATS_EYE_BANDIT = 27038
+  # Monster
+  private MONSTER_DROPS = {
+    20035 => ItemChanceHolder.new(SPARTOIS_BONES, 2), # Tracker Skeleton
+    20042 => ItemChanceHolder.new(SPARTOIS_BONES, 3), # Tracker Skeleton Leader
+    20045 => ItemChanceHolder.new(SPARTOIS_BONES, 2), # Skeleton Scout
+    20051 => ItemChanceHolder.new(SPARTOIS_BONES, 2), # Skeleton Bowman
+    20054 => ItemChanceHolder.new(SPARTOIS_BONES, 8), # Ruin Spartoi
+    20060 => ItemChanceHolder.new(SPARTOIS_BONES, 8)  # Raging Spartoi
+  }
 
   def initialize
     super(403, self.class.simple_name, "Path Of The Rogue")
 
     add_start_npc(CAPTAIN_BEZIQUE)
-		add_talk_id(CAPTAIN_BEZIQUE, NETI)
-		add_attack_id(MONSTER_DROPS.keys + [CATS_EYE_BANDIT])
-		add_kill_id(MONSTER_DROPS.keys + [CATS_EYE_BANDIT])
-		register_quest_items(
+    add_talk_id(CAPTAIN_BEZIQUE, NETI)
+    add_attack_id(MONSTER_DROPS.keys + [CATS_EYE_BANDIT])
+    add_kill_id(MONSTER_DROPS.keys + [CATS_EYE_BANDIT])
+    register_quest_items(
       BEZIQUES_LETTER, NETIS_BOW, NETIS_DAGGER, SPARTOIS_BONES,
       HORSESHOE_OF_LIGHT, MOST_WANTED_LIST, STOLEN_JEWELRY, STOLEN_TOMES,
       STOLEN_RING, STOLEN_NECKLACE
@@ -88,7 +88,10 @@ class Scripts::Q00403_PathOfTheRogue < Quest
       end
 
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -114,7 +117,10 @@ class Scripts::Q00403_PathOfTheRogue < Quest
         elsif npc.variables.get_i32("lastAttacker") != attacker.l2id
           npc.script_value = 2
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -177,14 +183,14 @@ class Scripts::Q00403_PathOfTheRogue < Quest
       when CAPTAIN_BEZIQUE
         if has_quest_items?(pc, STOLEN_JEWELRY, STOLEN_TOMES, STOLEN_RING, STOLEN_NECKLACE)
           give_adena(pc, 163800, true)
-					take_items(pc, NETIS_BOW, 1)
-					take_items(pc, NETIS_DAGGER, 1)
-					take_items(pc, MOST_WANTED_LIST, 1)
-					take_items(pc, STOLEN_JEWELRY, 1)
-					take_items(pc, STOLEN_TOMES, 1)
-					take_items(pc, STOLEN_RING, 1)
-					take_items(pc, STOLEN_NECKLACE, 1)
-					give_items(pc, BEZIQUES_RECOMMENDATION, 1)
+          take_items(pc, NETIS_BOW, 1)
+          take_items(pc, NETIS_DAGGER, 1)
+          take_items(pc, MOST_WANTED_LIST, 1)
+          take_items(pc, STOLEN_JEWELRY, 1)
+          take_items(pc, STOLEN_TOMES, 1)
+          take_items(pc, STOLEN_RING, 1)
+          take_items(pc, STOLEN_NECKLACE, 1)
+          give_items(pc, BEZIQUES_RECOMMENDATION, 1)
 
           level = pc.level
           if level >= 20
@@ -200,16 +206,16 @@ class Scripts::Q00403_PathOfTheRogue < Quest
           qs.save_global_quest_var("1ClassQuestFinished", "1")
           html = "30379-09.html"
         elsif !has_quest_items?(pc, HORSESHOE_OF_LIGHT) && has_quest_items?(pc, BEZIQUES_LETTER)
-					html = "30379-07.html"
+          html = "30379-07.html"
         elsif has_quest_items?(pc, HORSESHOE_OF_LIGHT)
-					take_items(pc, HORSESHOE_OF_LIGHT, 1)
-					give_items(pc, MOST_WANTED_LIST, 1)
-					qs.set_cond(5, true)
-					html = "30379-08.html"
+          take_items(pc, HORSESHOE_OF_LIGHT, 1)
+          give_items(pc, MOST_WANTED_LIST, 1)
+          qs.set_cond(5, true)
+          html = "30379-08.html"
         elsif has_quest_items?(pc, NETIS_BOW, NETIS_DAGGER) && !has_quest_items?(pc, MOST_WANTED_LIST)
-					html = "30379-10.html"
+          html = "30379-10.html"
         elsif has_quest_items?(pc, MOST_WANTED_LIST)
-					html = "30379-11.html"
+          html = "30379-11.html"
         end
       when NETI
         if has_quest_items?(pc, BEZIQUES_LETTER)
@@ -228,7 +234,10 @@ class Scripts::Q00403_PathOfTheRogue < Quest
         elsif has_quest_items?(pc, HORSESHOE_OF_LIGHT)
           html = "30425-08.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

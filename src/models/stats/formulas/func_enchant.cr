@@ -26,7 +26,10 @@ class FuncEnchant < AbstractFunction
         val += (3 * enchant) + (6 * overenchant)
       when CrystalType::D, CrystalType::NONE
         val += (2 * enchant) + (4 * overenchant)
+      else
+        # automatically added
       end
+
 
       return val
     end
@@ -70,7 +73,10 @@ class FuncEnchant < AbstractFunction
         else
           val += (2 * enchant) + (4 * overenchant)
         end
+      else
+        # automatically added
       end
+
     end
 
     val

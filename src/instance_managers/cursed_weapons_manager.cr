@@ -46,7 +46,10 @@ module CursedWeaponsManager
             cw.disappear_chance = cd["val"].to_i
           when "stagekills"
             cw.stage_kills = cd["val"].to_i
+          else
+            # automatically added
           end
+
         end
 
         CURSED_WEAPONS[id] = cw

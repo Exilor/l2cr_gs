@@ -84,10 +84,16 @@ class Scripts::Q00033_MakeAPairOfDressShoes < Quest
           html = "30838-11.html"
         when 5
           html = "30838-12.html"
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when LEIKAR
       if st.started?
         if st.cond?(1)
@@ -104,7 +110,10 @@ class Scripts::Q00033_MakeAPairOfDressShoes < Quest
           html = "30164-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -1329,7 +1329,7 @@ class Scripts::Kamaloka < AbstractInstance
           sp.start_respawn
           world.first_room << sp # store mobs spawns
         end
-        npc.no_rnd_walk = true
+        npc.no_random_walk = true
       end
     end
 
@@ -1341,7 +1341,7 @@ class Scripts::Kamaloka < AbstractInstance
 
       spawns.each do |sp|
         npc = add_spawn(npcs[0], sp[0], sp[1], sp[2], 0, false, 0, false, world.instance_id)
-        npc.no_rnd_walk = true
+        npc.no_random_walk = true
         world.second_room << npc.l2id
       end
     end
@@ -1349,7 +1349,7 @@ class Scripts::Kamaloka < AbstractInstance
     # miniboss
     if tmp = MINIBOSS[index]?
       npc = add_spawn(tmp[0], tmp[1], tmp[2], tmp[3], 0, false, 0, false, world.instance_id)
-      npc.no_rnd_walk = true
+      npc.no_random_walk = true
       world.mini_boss = npc.l2id
     end
 

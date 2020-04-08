@@ -98,7 +98,10 @@ class Scripts::Q00461_RumbleInTheBase < Quest
           html = "30200-02.htm"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

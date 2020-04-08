@@ -63,7 +63,10 @@ class Scripts::WildBeastReserve < FlagWar
       "messenger_flag4.htm"
     when 35611
       "messenger_flag5.htm"
+    else
+      # automatically added
     end
+
   end
 
   def get_ally_html(ally : Int32) : String?
@@ -78,7 +81,10 @@ class Scripts::WildBeastReserve < FlagWar
       "messenger_ally4result.htm"
     when 35622
       "messenger_ally5result.htm"
+    else
+      # automatically added
     end
+
   end
 
   def can_pay_registration?

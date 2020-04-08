@@ -106,7 +106,10 @@ class Scripts::Q00611_AllianceWithVarkaSilenos < Quest
       count = OFFICER_BADGE_COUNT[st.cond - 1]
     when KETRA_BADGE_CAPTAIN
       count = CAPTAIN_BADGE_COUNT[st.cond - 1]
+    else
+      # automatically added
     end
+
 
     st.get_quest_items_count(item_id) < count
   end
@@ -230,8 +233,14 @@ class Scripts::Q00611_AllianceWithVarkaSilenos < Quest
         if st.has_quest_items?(VARKA_MARKS[4])
           html = "31378-24.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

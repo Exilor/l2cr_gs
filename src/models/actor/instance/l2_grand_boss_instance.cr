@@ -19,7 +19,7 @@ class L2GrandBossInstance < L2MonsterInstance
   end
 
   def on_spawn
-    self.no_rnd_walk = true
+    self.no_random_walk = true
     super
   end
 

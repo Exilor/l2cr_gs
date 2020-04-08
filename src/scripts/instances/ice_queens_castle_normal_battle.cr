@@ -473,7 +473,10 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
                 start_quest_timer("BLIZZARD", 20000, breath, nil)
                 world.spawned_mobs << breath
               end
+            else
+              # automatically added
             end
+
           end
         when "LEADER_DELAY"
           if npc.variables.get_i32("DELAY_VAL") == 0
@@ -482,7 +485,10 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         when "SHOW_GLAKIAS_TIMER"
           time = ((world.controller.variables.get_i64("TIMER_END", 0) - Time.ms) / 1000).to_i32
           manage_timer(world, time, NpcString::BATTLE_END_LIMIT_TIME)
+        else
+          # automatically added
         end
+
       end
     end
 
@@ -738,7 +744,10 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             end
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -768,7 +777,10 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         if skill == SELF_DESTRUCTION.skill
           npc.do_die(nil)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -828,7 +840,10 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         world.spawned_mobs.delete_first(npc)
       when BREATH
         world.spawned_mobs.delete_first(npc)
+      else
+        # automatically added
       end
+
     end
 
     super

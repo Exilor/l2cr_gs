@@ -90,7 +90,7 @@ class Scripts::PrisonGuards < AbstractNpcAI
       npc.immobilized = true
       npc.invul = true
     else
-      npc.no_rnd_walk = true
+      npc.no_random_walk = true
       cancel_quest_timer("CHECK_HOME", npc, nil)
       start_quest_timer("CHECK_HOME", 30000, npc, nil)
     end

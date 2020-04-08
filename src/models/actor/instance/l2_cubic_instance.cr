@@ -79,7 +79,10 @@ class L2CubicInstance
       @skills << SkillData[4165, 9]
     when SMART_CUBIC_SHILLIENTEMPLAR
       @skills << SkillData[4049, 8]
+    else
+      # automatically added
     end
+
 
     task = CubicDisappear.new(self)
     @disappear_task = ThreadPoolManager.schedule_general(task, @cubic_duration * 1000)

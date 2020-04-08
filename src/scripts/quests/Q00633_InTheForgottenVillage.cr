@@ -80,7 +80,10 @@ class Scripts::Q00633_InTheForgottenVillage < Quest
         qs.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -97,7 +100,10 @@ class Scripts::Q00633_InTheForgottenVillage < Quest
         end
       when ZOMBIES_LIVER
         give_item_randomly(qs.player, npc, ZOMBIES_LIVER, 1, 0, info.chance, true)
+      else
+        # automatically added
       end
+
     end
 
     super

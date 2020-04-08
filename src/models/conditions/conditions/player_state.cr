@@ -35,7 +35,10 @@ class Condition
           return pc.in_olympiad_mode? == @required
         end
         return !@required
+      else
+        # automatically added
       end
+
 
       !@required
     end

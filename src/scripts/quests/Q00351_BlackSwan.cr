@@ -80,7 +80,10 @@ class Scripts::Q00351_BlackSwan < Quest
     when "30969-09.html"
       html = event
       qs.exit_quest(true, true)
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -135,7 +138,10 @@ class Scripts::Q00351_BlackSwan < Quest
           html = "30897-02.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

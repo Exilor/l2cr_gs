@@ -58,8 +58,8 @@ class TaskExecutor
   end
 
   class Scheduler < self
-    private struct PriorityQueue
-      @values = [] of Task
+    private struct PriorityQueue(T)
+      @values = [] of T
 
       def peek
         @values.last?
@@ -96,7 +96,7 @@ class TaskExecutor
     def initialize(*, pool_size = 20, error_handler = DEFAULT_ERROR_HANDLER)
       super(pool_size: pool_size, error_handler: error_handler)
 
-      @queue = PriorityQueue.new
+      @queue = PriorityQueue(Task).new
       @queue_lock = Mutex.new
       @scheduling_worker = init_scheduler
     end

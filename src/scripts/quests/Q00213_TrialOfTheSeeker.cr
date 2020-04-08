@@ -164,7 +164,10 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
       give_items(pc, ANALYSIS_RESULT, 1)
       qs.set_cond(14, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -253,7 +256,10 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
             qs.set_cond(16)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -378,7 +384,10 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
         elsif has_quest_items?(pc, ANALYSIS_RESULT)
           html = "30715-06.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == MASTER_DUFNER
         html = get_already_completed_msg(pc)

@@ -1,33 +1,33 @@
 class Scripts::Q00004_LongLiveThePaagrioLord < Quest
   # NPCs
-	private KUNAI = 30559
-	private USKA = 30560
-	private GROOKIN = 30562
-	private VARKEES = 30566
-	private NAKUSIN = 30578
-	private HESTUI = 30585
-	private URUTU = 30587
-	# Items
-	private CLUB = 4
-	private HONEY_KHANDAR = 1541
-	private BEAR_FUR_CLOAK = 1542
-	private BLOODY_AXE = 1543
-	private ANCESTOR_SKULL = 1544
-	private SPIDER_DUST = 1545
-	private DEEP_SEA_ORB = 1546
-	# Misc
-	private MIN_LEVEL = 2
+  private KUNAI = 30559
+  private USKA = 30560
+  private GROOKIN = 30562
+  private VARKEES = 30566
+  private NAKUSIN = 30578
+  private HESTUI = 30585
+  private URUTU = 30587
+  # Items
+  private CLUB = 4
+  private HONEY_KHANDAR = 1541
+  private BEAR_FUR_CLOAK = 1542
+  private BLOODY_AXE = 1543
+  private ANCESTOR_SKULL = 1544
+  private SPIDER_DUST = 1545
+  private DEEP_SEA_ORB = 1546
+  # Misc
+  private MIN_LEVEL = 2
 
   def initialize
     super(4, self.class.simple_name, "Long Live the Pa'agrio Lord")
 
-		add_start_npc(NAKUSIN)
-		add_talk_id(NAKUSIN, VARKEES, URUTU, HESTUI, KUNAI, USKA, GROOKIN)
-		register_quest_items(
+    add_start_npc(NAKUSIN)
+    add_talk_id(NAKUSIN, VARKEES, URUTU, HESTUI, KUNAI, USKA, GROOKIN)
+    register_quest_items(
       HONEY_KHANDAR, BEAR_FUR_CLOAK, BLOODY_AXE, ANCESTOR_SKULL, SPIDER_DUST,
       DEEP_SEA_ORB
     )
-	end
+  end
 
   def on_adv_event(event, npc, pc)
     return unless pc
@@ -39,7 +39,10 @@ class Scripts::Q00004_LongLiveThePaagrioLord < Quest
       event
     when "30578-05.html"
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)
@@ -74,7 +77,10 @@ class Scripts::Q00004_LongLiveThePaagrioLord < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when VARKEES
       html = give_item(pc, st, npc.id, HONEY_KHANDAR)
     when URUTU
@@ -87,7 +93,10 @@ class Scripts::Q00004_LongLiveThePaagrioLord < Quest
       html = give_item(pc, st, npc.id, ANCESTOR_SKULL)
     when GROOKIN
       html = give_item(pc, st, npc.id, BLOODY_AXE)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

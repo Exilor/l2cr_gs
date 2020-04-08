@@ -28,7 +28,10 @@ class Scripts::ManorManager < AbstractNpcAI
     case event
     when "manager-help-01.htm", "manager-help-02.htm", "manager-help-03.htm"
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_first_talk(npc, pc)

@@ -25,7 +25,10 @@ module PunishmentHandler::ChatBanHandler
           apply_to_player(pc)
         end
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_end(task)
@@ -51,7 +54,10 @@ module PunishmentHandler::ChatBanHandler
           remove_from_player(pc)
         end
       end
+    else
+      # automatically added
     end
+
   end
 
   private def apply_to_player(task, pc)

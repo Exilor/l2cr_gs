@@ -83,7 +83,10 @@ class Scripts::Q00032_AnObviousLie < Quest
       else
         "30094-17.html"
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, killer, is_summon)
@@ -129,7 +132,10 @@ class Scripts::Q00032_AnObviousLie < Quest
         else
           html = "30094-14.html"
         end
+      else
+        # automatically added
       end
+
     when MIKI_THE_CAT
       case qs.cond
       when 2
@@ -142,8 +148,14 @@ class Scripts::Q00032_AnObviousLie < Quest
         html = "31706-04.html"
       when 7
         html = "31706-06.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

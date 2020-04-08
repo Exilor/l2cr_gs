@@ -425,7 +425,10 @@ class Scripts::Stage1 < AbstractInstance
           spawn_flagged_npcs(world, 8)
         when 9
           # instance end
+        else
+          # automatically added
         end
+
         world.inc_status
         return true
       ensure
@@ -454,7 +457,7 @@ class Scripts::Stage1 < AbstractInstance
     if add_to_kill_table
       world.npc_list[npc] = false
     end
-    npc.no_rnd_walk = true
+    npc.no_random_walk = true
     if npc.is_a?(L2Attackable)
       npc.can_see_through_silent_move = true
     end
@@ -663,7 +666,10 @@ class Scripts::Stage1 < AbstractInstance
             add_spawn(npc_id, *trap.xyz, trap.heading, true, 0, true, world.instance_id)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     nil

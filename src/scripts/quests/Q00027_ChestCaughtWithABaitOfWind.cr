@@ -39,7 +39,10 @@ class Scripts::Q00027_ChestCaughtWithABaitOfWind < Quest
         html = "31434-01.htm"
       end
 
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -73,8 +76,14 @@ class Scripts::Q00027_ChestCaughtWithABaitOfWind < Quest
         if st.cond?(2)
           html = "31434-00.htm"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

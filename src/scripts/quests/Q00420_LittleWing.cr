@@ -296,7 +296,10 @@ class Scripts::Q00420_LittleWing < Quest
         qs.set("drake_hunt", DEAD_SEEKER)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -344,7 +347,10 @@ class Scripts::Q00420_LittleWing < Quest
           else
             html = "30610-11.html"
           end
+        else
+          # automatically added
         end
+
       when MARIA
         case qs.cond
         when 2
@@ -357,7 +363,10 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 3
           html = "30608-06.html"
+        else
+          # automatically added
         end
+
       when BYRON
         case qs.cond
         when 2
@@ -380,7 +389,10 @@ class Scripts::Q00420_LittleWing < Quest
           else
             html = "30711-07.html"
           end
+        else
+          # automatically added
         end
+
       when MIMYU
         case qs.cond
         when 4
@@ -407,7 +419,10 @@ class Scripts::Q00420_LittleWing < Quest
           html = "30747-11.html"
         when 8
           html = "30747-12.html"
+        else
+          # automatically added
         end
+
       when EXARION
         case qs.cond
         when 5
@@ -425,7 +440,10 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30748-05.html"
+        else
+          # automatically added
         end
+
       when ZWOV
         case qs.cond
         when 5
@@ -443,7 +461,10 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30749-05.html"
+        else
+          # automatically added
         end
+
       when KALIBRAN
         case qs.cond
         when 5
@@ -458,7 +479,10 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30750-06.html"
+        else
+          # automatically added
         end
+
       when SUZET
         case qs.cond
         when 5
@@ -476,7 +500,10 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30751-06.html"
+        else
+          # automatically added
         end
+
       when SHAMHAI
         case qs.cond
         when 5
@@ -494,11 +521,20 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30752-05.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

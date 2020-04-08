@@ -209,7 +209,10 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       athrea.script_value = 50301
        kalis = add_spawn(WITCH_KALIS, 160690, 21176, -3712, 0, false, 0)
       kalis.script_value = 50302
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -280,7 +283,10 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       if leader_qs.memo_state < 8511 || leader_qs.memo_state >= 8500
         add_spawn(IMPERIAL_COFFER, npc, true, 0, false)
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -484,7 +490,10 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
             html = "30868-11.html"
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)
@@ -507,7 +516,10 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::CURSE_OF_THE_GODS_ON_THE_ONE_THAT_DEFILES_THE_PROPERTY_OF_THE_EMPIRE))
     when BLITZ_WYRM
       start_quest_timer("DESPAWN_BLITZ_WYRM", 180000, npc, nil)
+    else
+      # automatically added
     end
+
 
     super
   end

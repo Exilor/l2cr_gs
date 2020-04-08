@@ -114,7 +114,10 @@ class Scripts::Q00038_DragonFangs < Quest
           html = "30344-03.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -138,7 +141,10 @@ class Scripts::Q00038_DragonFangs < Quest
         if has_item?(talker, TOTEM_TOOTH_2ND)
           html = "30034-08.html"
         end
+      else
+        # automatically added
       end
+
     when MAGISTER_ROHMER
       if qs.cond?(4)
         html = "30344-01.html"
@@ -158,11 +164,17 @@ class Scripts::Q00038_DragonFangs < Quest
           end
         when 3
           html = "30386-08.html"
+        else
+          # automatically added
         end
+
       elsif qs.completed?
         html = get_already_completed_msg(talker)
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(talker)
   end
@@ -179,7 +191,10 @@ class Scripts::Q00038_DragonFangs < Quest
       if qs && give_item_randomly(qs.player, npc, TOTEM_TOOTH_2ND.id, 1, TOTEM_TOOTH_2ND.count, 0.5, true)
         qs.set_cond(7)
       end
+    else
+      # automatically added
     end
+
 
     super
   end

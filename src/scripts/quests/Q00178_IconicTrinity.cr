@@ -196,7 +196,10 @@ class Scripts::Q00178_IconicTrinity < Quest
          "32257-07.html", "32257-08.html", "32257-09.html", "32257-10.html",
          "32257-11.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -236,7 +239,10 @@ class Scripts::Q00178_IconicTrinity < Quest
           else
             html = "32138-15.html"
           end
+        else
+          # automatically added
         end
+
       when ICON_OF_THE_PAST
         case qs.memo_state
         when 1
@@ -248,7 +254,10 @@ class Scripts::Q00178_IconicTrinity < Quest
           html = "32255-09.html"
         when 4, 5
           html = "32255-14.html"
+        else
+          # automatically added
         end
+
       when ICON_OF_THE_PRESENT
         case qs.memo_state
         when 4
@@ -260,7 +269,10 @@ class Scripts::Q00178_IconicTrinity < Quest
           html = "32256-09.html"
         when 7, 8
           html = "32256-15.html"
+        else
+          # automatically added
         end
+
       when ICON_OF_THE_FUTURE
         case qs.memo_state
         when 7
@@ -272,8 +284,14 @@ class Scripts::Q00178_IconicTrinity < Quest
           html = "32257-10.html"
         when 10
           html = "32257-13.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == HIERARCH_KEKROPUS
         html = get_already_completed_msg(pc)

@@ -31,7 +31,10 @@ class Scripts::SymbolMaker < AbstractNpcAI
       pc.send_packet(HennaEquipList.new(pc))
     when "Remove"
       pc.send_packet(HennaRemoveList.new(pc))
+    else
+      # automatically added
     end
+
 
     nil
   end

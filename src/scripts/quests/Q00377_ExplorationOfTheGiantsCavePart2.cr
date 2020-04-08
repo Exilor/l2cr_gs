@@ -49,7 +49,10 @@ class Scripts::Q00377_ExplorationOfTheGiantsCavePart2 < Quest
     when "31147-quit.html"
       qs.exit_quest(true, true)
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, pc, is_summon)

@@ -213,7 +213,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
           return "30232-12.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     get_no_quest_msg(pc)
   end
@@ -288,8 +291,14 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return "#{npc_id}-19.html"
       when 22
         return "#{npc_id}-01.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     case npc_id
     when PANO
@@ -312,7 +321,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, PANO, 2, Q_BERETHS_SILVER_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_SILVER_DRAGON)
       when 21
         return short_third_step(qs, PANO, 3, Q_BERETHS_SILVER_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_SILVER_DRAGON)
+      else
+        # automatically added
       end
+
     when COLLOB
       case event_id
       when 6
@@ -333,7 +345,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, COLLOB, 2, Q_BERETHS_GOLD_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_BLOOD_DRAGON)
       when 21
         return short_third_step(qs, COLLOB, 3, Q_BERETHS_GOLD_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_BLOOD_DRAGON)
+      else
+        # automatically added
       end
+
     when RAPIN
       case event_id
       when 6
@@ -354,7 +369,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, RAPIN, 2, Q_MANAKS_BLOOD_WEREWOLF, Q_SILVER_UNDINE, Q_SILVER_DRYAD, Q_GOLD_WYRM)
       when 21
         return short_third_step(qs, RAPIN, 3, Q_MANAKS_BLOOD_WEREWOLF, Q_SILVER_UNDINE, Q_SILVER_DRYAD, Q_GOLD_WYRM)
+      else
+        # automatically added
       end
+
     when HAGGER
       case event_id
       when 6
@@ -375,7 +393,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, HAGGER, 2, Q_NIAS_SILVER_FAIRY, Q_BLOOD_WEREWOLF, Q_SILVER_GOLEM, Q_GOLD_DRAKE)
       when 21
         return short_third_step(qs, HAGGER, 3, Q_NIAS_SILVER_FAIRY, Q_BLOOD_WEREWOLF, Q_SILVER_GOLEM, Q_GOLD_DRAKE)
+      else
+        # automatically added
       end
+
     when STAN
       case event_id
       when 6
@@ -396,7 +417,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, STAN, 2, Q_MANAKS_SILVER_DRYAD, Q_SILVER_DRYAD, Q_BLOOD_BASILISK, Q_GOLD_GIANT)
       when 21
         return short_third_step(qs, STAN, 3, Q_MANAKS_SILVER_DRYAD, Q_SILVER_DRYAD, Q_BLOOD_BASILISK, Q_GOLD_GIANT)
+      else
+        # automatically added
       end
+
     when RESEARCHER_LORAIN
       case event_id
       when 6
@@ -417,7 +441,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, RESEARCHER_LORAIN, 2, Q_NIAS_GOLD_WYVERN, Q_BLOOD_DREVANUL, Q_SILVER_GOLEM, Q_GOLD_KNIGHT)
       when 21
         return short_third_step(qs, RESEARCHER_LORAIN, 3, Q_NIAS_GOLD_WYVERN, Q_BLOOD_DREVANUL, Q_SILVER_GOLEM, Q_GOLD_KNIGHT)
+      else
+        # automatically added
       end
+
     when BLACKSMITH_DUNING
       case event_id
       when 6
@@ -438,7 +465,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, BLACKSMITH_DUNING, 2, Q_MANAKS_GOLD_GIANT, Q_SILVER_UNDINE, Q_BLOOD_SUCCUBUS, Q_GOLD_GIANT)
       when 21
         return short_third_step(qs, BLACKSMITH_DUNING, 3, Q_MANAKS_GOLD_GIANT, Q_SILVER_UNDINE, Q_BLOOD_SUCCUBUS, Q_GOLD_GIANT)
+      else
+        # automatically added
       end
+
     when MAGISTER_PAGE
       case event_id
       when 6
@@ -459,7 +489,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, MAGISTER_PAGE, 2, Q_NIAS_BLOOD_MEDUSA, Q_BLOOD_WEREWOLF, Q_SILVER_FAIRY, Q_GOLD_KNIGHT)
       when 21
         return short_third_step(qs, MAGISTER_PAGE, 3, Q_NIAS_BLOOD_MEDUSA, Q_BLOOD_WEREWOLF, Q_SILVER_FAIRY, Q_GOLD_KNIGHT)
+      else
+        # automatically added
       end
+
     when HEAD_BLACKSMITH_FERRIS
       case event.to_i
       when 6
@@ -480,7 +513,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return short_third_step(qs, HEAD_BLACKSMITH_FERRIS, 2, Q_BERETHS_BLOOD_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_BLOOD_DRAGON)
       when 21
         return short_third_step(qs, HEAD_BLACKSMITH_FERRIS, 3, Q_BERETHS_BLOOD_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_BLOOD_DRAGON)
+      else
+        # automatically added
       end
+
     when UNION_PRESIDENT_BERNARD
       case event_id
       when 1
@@ -502,7 +538,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.show_question_mark(336)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "30702-06.html"
+      else
+        # automatically added
       end
+
     when WAREHOUSE_KEEPER_SORINT
       case event_id
       when 1
@@ -704,8 +743,14 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.play_sound(Sound::ITEMSOUND_QUEST_FINISH)
         qs.exit_quest(true)
         return "30232-18a.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -722,7 +767,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       end
 
       return super
+    else
+      # automatically added
     end
+
 
     if qs = get_random_player_from_party(killer, npc, 3)
       case npc.id
@@ -827,7 +875,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         if Rnd.rand(1000) < 160
           give_item_randomly(qs.player, npc, Q_BLOOD_MEDUSA, 1, 0, 1, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -890,7 +941,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
+    else
+      # automatically added
     end
+
 
     "#{npc_id}-10.html"
   end
@@ -925,7 +979,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
+    else
+      # automatically added
     end
+
 
     "#{npc_id}-10.html"
   end
@@ -964,7 +1021,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
+    else
+      # automatically added
     end
+
 
     "#{npc_id}-10.html"
   end
@@ -983,7 +1043,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.give_items(item_3, 1)
       when 11
         qs.give_items(item_4, 1)
+      else
+        # automatically added
       end
+
 
       qs.set(PARAM_1, 0)
       return "#{npc_id}-20.html"
@@ -1043,7 +1106,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return "#{npc_id}-48.html"
       when 59
         return "#{npc_id}-49.html"
+      else
+        # automatically added
       end
+
 
       qs.set(PARAM_1, 0)
     else
@@ -1075,7 +1141,10 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return "#{npc_id}-50.html"
       when 2
         return "#{npc_id}-51.html"
+      else
+        # automatically added
       end
+
     end
   end
 

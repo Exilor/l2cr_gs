@@ -32,7 +32,10 @@ class Scripts::Q00014_WhereaboutsOfTheArchaeologist < Quest
       else
         html = "31538-02.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -57,9 +60,15 @@ class Scripts::Q00014_WhereaboutsOfTheArchaeologist < Quest
           html = "31263-02.html"
         when GHOST_OF_ADVENTURER
           html = "31538-00.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

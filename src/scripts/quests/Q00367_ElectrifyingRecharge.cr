@@ -43,7 +43,10 @@ class Scripts::Q00367_ElectrifyingRecharge < Quest
     when "30673-06.html"
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end

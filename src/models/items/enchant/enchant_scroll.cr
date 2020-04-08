@@ -14,9 +14,9 @@ class EnchantScroll < AbstractEnchantItem
 
     @scroll_group_id = set.get_i32("scrollGroupId", 0)
     type = item.item_type
-		@weapon = type == EtcItemType::ANCIENT_CRYSTAL_ENCHANT_WP || type == EtcItemType::BLESS_SCRL_ENCHANT_WP || type == EtcItemType::SCRL_ENCHANT_WP
-		@blessed = type == EtcItemType::BLESS_SCRL_ENCHANT_AM || type == EtcItemType::BLESS_SCRL_ENCHANT_WP
-		@safe = type == EtcItemType::ANCIENT_CRYSTAL_ENCHANT_AM || type == EtcItemType::ANCIENT_CRYSTAL_ENCHANT_WP
+    @weapon = type == EtcItemType::ANCIENT_CRYSTAL_ENCHANT_WP || type == EtcItemType::BLESS_SCRL_ENCHANT_WP || type == EtcItemType::SCRL_ENCHANT_WP
+    @blessed = type == EtcItemType::BLESS_SCRL_ENCHANT_AM || type == EtcItemType::BLESS_SCRL_ENCHANT_WP
+    @safe = type == EtcItemType::ANCIENT_CRYSTAL_ENCHANT_AM || type == EtcItemType::ANCIENT_CRYSTAL_ENCHANT_WP
   end
 
   def add_item(item_id : Int32)

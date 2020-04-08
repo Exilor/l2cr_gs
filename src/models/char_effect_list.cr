@@ -2,6 +2,8 @@ require "../network/**"
 require "./skills/buff_info"
 require "../util/linked_list"
 # Using a Concurrent::LinkedList causes a CPU leak
+# update: apparently noy anymore since it's a class instead of a struct
+# update 2: instead it appears to cause a greater memory usage over time
 class CharEffectList
   include Packets::Outgoing
   include Synchronizable
@@ -18,7 +20,7 @@ class CharEffectList
   @passives : IList(BuffInfo)?
   @toggles : IList(BuffInfo)?
   @triggered : IList(BuffInfo)?
-  @blocked_buff_slots : EnumSet(AbnormalType)?
+  @blocked_buff_slots : ISet(AbnormalType)?
   @hidden_buffs = Atomic(Int32).new(0)
 
   property short_buff : BuffInfo?
@@ -26,27 +28,27 @@ class CharEffectList
   initializer owner : L2Character
 
   def buffs : IList(BuffInfo)
-    @buffs || sync { @buffs ||= Concurrent::Deque(BuffInfo).new }
+    @buffs || sync { @buffs ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
   def debuffs : IList(BuffInfo)
-    @debuffs || sync { @debuffs ||= Concurrent::Deque(BuffInfo).new }
+    @debuffs || sync { @debuffs ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
   def dances : IList(BuffInfo)
-    @dances || sync { @dances ||= Concurrent::Deque(BuffInfo).new }
+    @dances || sync { @dances ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
   def passives : IList(BuffInfo)
-    @passives || sync { @passives ||= Concurrent::Deque(BuffInfo).new }
+    @passives || sync { @passives ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
   def toggles : IList(BuffInfo)
-    @toggles || sync { @toggles ||= Concurrent::Deque(BuffInfo).new }
+    @toggles || sync { @toggles ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
   def triggered : IList(BuffInfo)
-    @triggered || sync { @triggered ||= Concurrent::Deque(BuffInfo).new }
+    @triggered || sync { @triggered ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
   private def stacked_effects : IHash(AbnormalType, BuffInfo)
@@ -55,9 +57,9 @@ class CharEffectList
     end
   end
 
-  def blocked_buff_slots : EnumSet(AbnormalType)
+  def blocked_buff_slots : ISet(AbnormalType)
     @blocked_buff_slots || sync do
-      @blocked_buff_slots ||= EnumSet(AbnormalType).new
+      @blocked_buff_slots ||= Concurrent::Set(AbnormalType).new
     end
   end
 
@@ -549,7 +551,10 @@ class CharEffectList
       is_summon = true
       ps = PartySpelled.new(owner)
       pss = PartySpelled.new(owner)
+    else
+      # automatically added
     end
+
 
     @buffs.try &.each do |info|
       if info.skill.healing_potion_skill?
@@ -578,7 +583,10 @@ class CharEffectList
         if party = owner.party
           party.broadcast_packet(ps)
         end
+      else
+        # automatically added
       end
+
     end
 
     if os

@@ -92,7 +92,10 @@ class Scripts::Q00621_EggDelivery < Quest
         qs.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -117,10 +120,16 @@ class Scripts::Q00621_EggDelivery < Quest
           unless has_quest_items?(talker, BOILED_EGG)
             html = "31521-08.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(talker)
+      else
+        # automatically added
       end
+
     when PULIN
       if qs.started?
         case qs.cond
@@ -130,7 +139,10 @@ class Scripts::Q00621_EggDelivery < Quest
           end
         when 2
           html = "31543-04.html"
+        else
+          # automatically added
         end
+
       end
     when NAFF, CROCUS, KUBER, BOELIN
       if qs.started?
@@ -146,7 +158,10 @@ class Scripts::Q00621_EggDelivery < Quest
       if qs.started? && qs.cond?(7)
         html = "31584-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(talker)
   end

@@ -35,7 +35,10 @@ class Scripts::Q00001_LettersOfLove < Quest
         give_items(pc, DARINS_LETTER, 1)
         event
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)
@@ -59,7 +62,10 @@ class Scripts::Q00001_LettersOfLove < Quest
             st.set_cond(2, true)
             html = "30006-01.html"
           end
+        else
+          # automatically added
         end
+
       when 2
         case npc.id
         when DARIN
@@ -73,7 +79,10 @@ class Scripts::Q00001_LettersOfLove < Quest
           if has_quest_items?(pc, ROXXYS_KERCHIEF)
             html = "30006-02.html"
           end
+        else
+          # automatically added
         end
+
       when 3
         case npc.id
         when DARIN
@@ -93,7 +102,10 @@ class Scripts::Q00001_LettersOfLove < Quest
           elsif has_quest_items?(pc, BAULROS_POTION)
             html = "30033-02.html"
           end
+        else
+          # automatically added
         end
+
       when 4
         case npc.id
         when DARIN
@@ -111,11 +123,20 @@ class Scripts::Q00001_LettersOfLove < Quest
           if has_quest_items?(pc, BAULROS_POTION)
             html = "30006-03.html"
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

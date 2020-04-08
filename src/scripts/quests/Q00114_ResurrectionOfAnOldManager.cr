@@ -50,7 +50,10 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         html = "32041-13.html"
       when 5
         html = "32041-14.html"
+      else
+        # automatically added
       end
+
     when "32041-15.html"
       st.set("talk", "1")
     when "32041-23.html"
@@ -253,7 +256,10 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
             html = "32041-16.html"
           when 2
             html = "32041-24.html"
+          else
+            # automatically added
           end
+
         when 6..8, 10, 11, 13..15
           html = "32041-27.html"
         when 9, 12, 16
@@ -271,10 +277,16 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           html = "32041-41.html"
         when 27
           html = "32041-42.html"
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when WENDY
       if st.started?
         case st.cond
@@ -298,7 +310,10 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
             html = "32047-11b.html"
           when 3
             html = "32047-11c.html"
+          else
+            # automatically added
           end
+
         when 7
           html = "32047-11c.html"
         when 8
@@ -331,7 +346,10 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           html = "32047-24a.html"
         when 26
           html = "32047-32c.html"
+        else
+          # automatically added
         end
+
       end
     when NEWYEAR
       if st.started?
@@ -340,7 +358,10 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           html = "31961-01.html"
         when 22
           html = "31961-03.html"
+        else
+          # automatically added
         end
+
       end
     when BOX
       if st.started?
@@ -353,7 +374,10 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           html = "32050-04b.html"
         when 24
           html = "32050-05z.html"
+        else
+          # automatically added
         end
+
       end
     when STONES
       if st.started?
@@ -364,9 +388,15 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           html = "32046-03.html"
         when 27
           html = "32046-04.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -92,7 +92,10 @@ abstract class AbstractDocument
       parse_using_condition(n)
     when "game"
       parse_game_condition(n)
+    else
+      # automatically added
     end
+
   end
 
   private def parse_logic_and(n, template)
@@ -320,7 +323,10 @@ abstract class AbstractDocument
       when "categorytype"
         ary = text.split(',').map { |s| CategoryType.parse(get_value(s)) }
         cond = join_and(cond, Condition::CategoryType.new(ary))
+      else
+        # automatically added
       end
+
     end
 
     cond
@@ -404,7 +410,10 @@ abstract class AbstractDocument
       when "invsize"
         size = get_value(text).to_i
         cond = join_and(cond, Condition::TargetInvSize.new(size))
+      else
+        # automatically added
       end
+
     end
 
     unless cond
@@ -461,7 +470,10 @@ abstract class AbstractDocument
         cond = join_and(cond, Condition::SlotItemId.new(slot, id, enchant))
       when "weaponchange"
         cond = join_and(cond, Condition::ChangeWeapon.new(Bool.new(text)))
+      else
+        # automatically added
       end
+
     end
 
     unless cond
@@ -485,7 +497,10 @@ abstract class AbstractDocument
       when "chance"
         val = get_value(text).to_i
         cond = join_and(cond, Condition::GameChance.new(val))
+      else
+        # automatically added
       end
+
     end
 
     unless cond
@@ -527,7 +542,10 @@ abstract class AbstractDocument
         attach_effect(n, template, condition, scope)
       when /^(?:add|sub|mul|div|set|share|enchant|enchanthp)$/
         attach_func(n, template, name, condition)
+      else
+        # automatically added
       end
+
 
       n = n.next_element
     end

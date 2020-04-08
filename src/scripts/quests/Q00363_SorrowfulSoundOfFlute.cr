@@ -53,7 +53,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
       st.memo_state = 4
       st.set_cond(3, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -82,7 +85,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           st.exit_quest(true, false)
           st.play_sound(Sound::ITEMSOUND_QUEST_GIVEUP)
           html = "30956-10.html"
+        else
+          # automatically added
         end
+
       when POITAN
         if st.memo_state?(2) && st.get_int("ex") % 100 < 10
           ex = st.get_int("ex")
@@ -94,7 +100,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30458-02.html"
           when 2
             html = "30458-03.html"
+          else
+            # automatically added
           end
+
 
           st.set_cond(2, true)
         elsif st.memo_state >= 2 && st.get_int("ex") % 100 >= 10
@@ -111,7 +120,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30594-02.html"
           when 2
             html = "30594-03.html"
+          else
+            # automatically added
           end
+
 
           st.set_cond(2, true)
         elsif st.memo_state >= 2 && st.get_int("ex") % 10000 >= 1000
@@ -128,7 +140,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30057-02.html"
           when 2
             html = "30057-03.html"
+          else
+            # automatically added
           end
+
 
           st.set_cond(2, true)
         elsif st.memo_state >= 2 && st.get_int("ex") % 100000 >= 10000
@@ -145,7 +160,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30058-02.html"
           when 2
             html = "30058-03.html"
+          else
+            # automatically added
           end
+
 
           st.set_cond(2, true)
         elsif st.memo_state >= 2 && st.get_int("ex") % 1000 >= 100
@@ -162,7 +180,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30595-02.html"
           when 2
             html = "30595-03.html"
+          else
+            # automatically added
           end
+
 
           st.set_cond(2, true)
         elsif st.memo_state >= 2 && st.get_int("ex") >= 100000
@@ -190,8 +211,14 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
         elsif st.memo_state >= 5
           html = "30959-03.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -41,7 +41,10 @@ class Scripts::Q00239_WontYouJoinUs < Quest
         st.set_cond(3, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -117,8 +120,14 @@ class Scripts::Q00239_WontYouJoinUs < Quest
           st.add_exp_and_sp(1319736, 103553)
           st.exit_quest(false, true)
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(talker)
   end

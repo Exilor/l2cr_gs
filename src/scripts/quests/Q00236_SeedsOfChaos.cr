@@ -420,7 +420,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
          "32334-10.html",  "32334-11.html",  "32334-12.html",  "32334-13.html",
          "32334-14.html",  "32334-15.html",  "32334-16.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -455,7 +458,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
             qs.set_cond(9, true)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -490,7 +496,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           html = "32138-06.html"
         when 40
           html = "32138-13.html"
+        else
+          # automatically added
         end
+
       when KURSTIN
         case qs.memo_state
         when 11
@@ -501,7 +510,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           if qs.get_memo_state_ex(1) == 1
             html = "31387-11.html"
           end
+        else
+          # automatically added
         end
+
       when MYSTERIOU_WIZARD
         case qs.memo_state
         when 1
@@ -537,7 +549,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           end
         when 11
           html = "31522-16b.html"
+        else
+          # automatically added
         end
+
       when VICE_HIERARCH_MAO
         if qs.memo_state >= 40 && qs.memo_state <= 45
           html = "32190-01.html"
@@ -557,7 +572,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           if qs.get_memo_state_ex(1) == 0
             html = "32235-09z.html"
           end
+        else
+          # automatically added
         end
+
       when HARKILGAMED
         case qs.memo_state
         when 20
@@ -573,7 +591,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           html = "32236-07z.html"
         when 22
           html = "32236-08z.html"
+        else
+          # automatically added
         end
+
       when RODENPICULA
         case qs.memo_state
         when 40
@@ -586,7 +607,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           html = "32237-14.html"
         when 45
           html = "32237-15.html"
+        else
+          # automatically added
         end
+
       when ROCK
         case qs.memo_state
         when 20
@@ -597,7 +621,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           html = "32238-05.html"
         when 30
           html = "32238-09.html"
+        else
+          # automatically added
         end
+
       when MOTHER_NORNIL
         case qs.memo_state
         when 40
@@ -610,7 +637,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           html = "32239-06.html"
         when 45
           html = "32239-09.html"
+        else
+          # automatically added
         end
+
       when KATENAR_A
         case qs.memo_state
         when 3
@@ -628,7 +658,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           if !has_quest_items?(pc, BLOOD_JEWEL)
             html = "32332-05z.html"
           end
+        else
+          # automatically added
         end
+
       when KATENAR_B
         case qs.memo_state
         when 7
@@ -648,7 +681,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           end
         when 11
           html = "32333-06b.html"
+        else
+          # automatically added
         end
+
       when HARKILGAMED_A
         case qs.memo_state
         when 22
@@ -662,8 +698,14 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           end
         when 30
           html = "32334-18.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == HIERARCH_KEKROPUS
         html = get_already_completed_msg(pc)
@@ -702,7 +744,10 @@ class Scripts::Q00236_SeedsOfChaos < Quest
       if c0
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::S1_HAS_EVERYTHING_BEEN_FOUND).add_string_parameter(c0.appearance.visible_name))
       end
+    else
+      # automatically added
     end
+
 
     super
   end

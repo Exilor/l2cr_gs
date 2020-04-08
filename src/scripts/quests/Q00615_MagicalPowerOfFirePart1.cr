@@ -83,7 +83,10 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
       npc = npc.not_nil!
       npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::ASEFA_HAS_ALREADY_SEEN_YOUR_FACE))
       npc.delete_me
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -121,7 +124,10 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
         if st.cond?(1)
           html = "31378-03.html"
         end
+      else
+        # automatically added
       end
+
     when UDAN
       if st.started?
         case st.cond
@@ -142,13 +148,19 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
           st.give_items(WISDOM_STONE, 1)
           st.exit_quest(true, true)
           html = "31379-04.html"
+        else
+          # automatically added
         end
+
       end
     when ASEFA_BOX
       if st.cond?(2)
         html = "31559-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

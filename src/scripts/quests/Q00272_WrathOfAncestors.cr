@@ -65,8 +65,14 @@ class Scripts::Q00272_WrathOfAncestors < Quest
         st.give_adena(1500, true)
         st.exit_quest(true, true)
         html = "30572-06.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html
   end

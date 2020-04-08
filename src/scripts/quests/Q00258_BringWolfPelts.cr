@@ -1,24 +1,24 @@
 class Scripts::Q00258_BringWolfPelts < Quest
   # Npc
-	private LECTOR = 30001
-	# Item
-	private WOLF_PELT = 702
-	# Monsters
-	private MONSTERS = {
-		20120, # Wolf
-		20442, # Elder Wolf
-	}
-	# Rewards
-	private REWARDS = {
-		390  => 1,  # Cotton Shirt
-		29   => 6,  # Leather Pants
-		22   => 9,  # Leather Shirt
-		1119 => 13, # Short Leather Gloves
-		426  => 16  # Tunic
-	}
-	# Misc
-	private MIN_LVL = 3
-	private WOLF_PELT_COUNT = 40
+  private LECTOR = 30001
+  # Item
+  private WOLF_PELT = 702
+  # Monsters
+  private MONSTERS = {
+    20120, # Wolf
+    20442, # Elder Wolf
+  }
+  # Rewards
+  private REWARDS = {
+    390  => 1,  # Cotton Shirt
+    29   => 6,  # Leather Pants
+    22   => 9,  # Leather Shirt
+    1119 => 13, # Short Leather Gloves
+    426  => 16  # Tunic
+  }
+  # Misc
+  private MIN_LVL = 3
+  private WOLF_PELT_COUNT = 40
 
   def initialize
     super(258, self.class.simple_name, "Bring Wolf Pelts")
@@ -76,8 +76,14 @@ class Scripts::Q00258_BringWolfPelts < Quest
           st.exit_quest(true, true)
           html = "30001-05.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

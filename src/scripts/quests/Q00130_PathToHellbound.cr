@@ -51,7 +51,10 @@ class Scripts::Q00130_PathToHellbound < Quest
         st.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -85,7 +88,10 @@ class Scripts::Q00130_PathToHellbound < Quest
           html = "30612-07.html"
         when 3
           html = "30612-09.html"
+        else
+          # automatically added
         end
+
       elsif npc.id == GALATE
         case st.cond
         when 1
@@ -94,9 +100,15 @@ class Scripts::Q00130_PathToHellbound < Quest
           html = "32292-04.html"
         when 3
           html = "32292-05.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

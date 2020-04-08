@@ -154,7 +154,10 @@ class Scripts::Q00232_TestOfTheLord < Quest
         add_spawn(npc, FIRST_ORC, FIRST_ORC_SPAWN, false, 10000)
       end
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -233,7 +236,10 @@ class Scripts::Q00232_TestOfTheLord < Quest
             qs.set_cond(5, true)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -440,7 +446,10 @@ class Scripts::Q00232_TestOfTheLord < Quest
           end
           html = "30649-08.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == FLAME_LORD_KAKAI
         html = get_already_completed_msg(pc)

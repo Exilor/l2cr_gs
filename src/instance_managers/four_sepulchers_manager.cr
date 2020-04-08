@@ -205,7 +205,10 @@ module FourSepulchersManager
           sp.y = -82853
           sp.z = -7200
           sp.heading = -16248
+        else
+          # automatically added
         end
+
 
         MANAGERS << sp
         SpawnTable.add_new_spawn(sp, false)
@@ -696,7 +699,10 @@ module FourSepulchersManager
           case npc_id
           when 31469, 31472, 31474, 31477, 31479, 31482, 31484, 31487
             mobs << mob
+          else
+            # automatically added
           end
+
 
           ALL_MOBS << mob
         end
@@ -707,7 +713,10 @@ module FourSepulchersManager
         VISCOUNT_MOBS[npc_id] = mobs
       when 31472, 31477, 31482, 31487
         DUKE_MOBS[npc_id] = mobs
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -885,7 +894,10 @@ module FourSepulchersManager
         min = 50i8
       when 53, 54, 56, 57
         min = 55i8
+      else
+        # automatically added
       end
+
     end
 
     min

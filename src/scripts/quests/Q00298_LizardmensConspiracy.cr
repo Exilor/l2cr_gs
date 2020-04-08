@@ -55,7 +55,10 @@ class Scripts::Q00298_LizardmensConspiracy < Quest
           html = "30344-07.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -91,7 +94,10 @@ class Scripts::Q00298_LizardmensConspiracy < Quest
           html = "30344-02.html"
         when 3
           html = "30344-03.html"
+        else
+          # automatically added
         end
+
       end
     end
 

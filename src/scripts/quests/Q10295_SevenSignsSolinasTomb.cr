@@ -155,7 +155,10 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
           html = "32860-03.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -200,7 +203,10 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
           html = "32793-10.html"
         when 6
           html = "32793-11.html"
+        else
+          # automatically added
         end
+
       when SOLINA
         if st.memo_state?(4)
           html = "32794-01.html"
@@ -294,9 +300,15 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
             html = "32787-05.html"
           when 5
             html = "32787-06.html"
+          else
+            # automatically added
           end
+
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

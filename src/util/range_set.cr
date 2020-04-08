@@ -54,11 +54,11 @@ struct RangeSet(T)
     self
   end
 
-  def self.[](*numbers : T) : RangeSet(T)
-    set = RangeSet(T).new
-    numbers.each { |n| set << n }
-    set
-  end
+  # def self.[](*numbers : T) : RangeSet(T)
+  #   set = RangeSet(T).new
+  #   numbers.each { |n| set << n }
+  #   set
+  # end
 
   def add(value : T) : Bool
     old = size
@@ -100,15 +100,15 @@ struct RangeSet(T)
   end
 
   # The number of numbers it would take to unify all the ranges into one.
-  def holes
-    holes = 0
-    @ranges.each_with_index do |r1, i|
-      if r2 = @ranges[i + 1]?
-        holes += r2.begin - r1.end - 1
-      end
-    end
-    holes
-  end
+  # def holes
+  #   holes = 0
+  #   @ranges.each_with_index do |r1, i|
+  #     if r2 = @ranges[i + 1]?
+  #       holes += r2.begin - r1.end - 1
+  #     end
+  #   end
+  #   holes
+  # end
 
   def delete(value) : T?
     i = @ranges.bsearch_index { |r| r.begin >= value || r.end >= value }

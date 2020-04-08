@@ -93,7 +93,10 @@ class Scripts::Q00414_PathOfTheOrcRaider < Quest
         qs.set_cond(6, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -154,7 +157,10 @@ class Scripts::Q00414_PathOfTheOrcRaider < Quest
             qs.set_cond(7, true)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -224,7 +230,10 @@ class Scripts::Q00414_PathOfTheOrcRaider < Quest
             html = "31978-05.html"
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

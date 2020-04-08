@@ -39,7 +39,10 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
         html = "30909-02.htm"
       end
 
+    else
+      # automatically added
     end
+
     html
   end
 
@@ -68,13 +71,22 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
           end
         when 2
           html = "31574-09.htm"
+        else
+          # automatically added
         end
+
       when ANABEL
         if st.cond?(2)
           html = "30909-01.htm"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -100,7 +100,10 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
       end
     when "30747-07.html", "30747-08.html", "30747-09.html", "30747-10.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -130,7 +133,10 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
         html = "30610-07.html"
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when MIMYU
       case qs.memo_state
       when 100
@@ -190,7 +196,10 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
                 when DRAGONFLUTE_OF_TWILIGHT
                   take_items(pc, DRAGONFLUTE_OF_TWILIGHT, -1)
                   give_items(pc, DRAGON_BUGLE_OF_TWILIGHT, 1)
+                else
+                  # automatically added
                 end
+
 
                 qs.exit_quest(true, true)
                 html = "30747-16.html"
@@ -202,8 +211,14 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -246,7 +261,10 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, data.message))
           when 2
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::LEAVE_NOW_BEFORE_YOU_INCUR_THE_WRATH_OF_THE_GUARDIAN_GHOST))
+          else
+            # automatically added
           end
+
         end
       elsif Rnd.rand(100) < 30
         npc.target = attacker

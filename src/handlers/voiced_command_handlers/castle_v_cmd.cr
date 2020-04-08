@@ -71,7 +71,10 @@ module VoicedCommandHandler::CastkeVCmd
       if clan && pc.clan_leader? && clan.castle_id > 0
         pc.mount(12621, 0, true)
       end
+    else
+      # automatically added
     end
+
 
     true
   end

@@ -7,7 +7,10 @@ class StaticObjectKnownList < CharKnownList
       return 4000
     when L2DefenderInstance
       return 800
+    else
+      # automatically added
     end
+
 
     0
   end
@@ -18,7 +21,10 @@ class StaticObjectKnownList < CharKnownList
       return 2000
     when L2DefenderInstance
       return 600
+    else
+      # automatically added
     end
+
 
     0
   end

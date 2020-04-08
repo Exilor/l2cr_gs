@@ -111,7 +111,10 @@ class Scripts::KetraOrcSupport < AbstractNpcAI
       else
         html = "31376-no.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

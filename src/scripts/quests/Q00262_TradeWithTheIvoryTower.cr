@@ -68,8 +68,14 @@ class Scripts::Q00262_TradeWithTheIvoryTower < Quest
           st.give_adena(3000, true)
           st.exit_quest(true, true)
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

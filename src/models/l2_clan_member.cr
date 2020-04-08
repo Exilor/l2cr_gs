@@ -208,7 +208,10 @@ class L2ClanMember
               pledge_class = 3
             end
           end
+        else
+          # automatically added
         end
+
       when 7
         case pc.pledge_type
         when -1
@@ -231,7 +234,10 @@ class L2ClanMember
               pledge_class = 4
             end
           end
+        else
+          # automatically added
         end
+
       when 8
         case pc.pledge_type
         when -1
@@ -254,7 +260,10 @@ class L2ClanMember
               pledge_class = 5
             end
           end
+        else
+          # automatically added
         end
+
       when 9
         case pc.pledge_type
         when -1
@@ -277,7 +286,10 @@ class L2ClanMember
               pledge_class = 6
             end
           end
+        else
+          # automatically added
         end
+
       when 10
         case pc.pledge_type
         when -1
@@ -300,7 +312,10 @@ class L2ClanMember
               pledge_class = 7
             end
           end
+        else
+          # automatically added
         end
+
       when 11
         case pc.pledge_type
         when -1
@@ -323,7 +338,10 @@ class L2ClanMember
               pledge_class = 8
             end
           end
+        else
+          # automatically added
         end
+
       else
         pledge_class = 1
       end

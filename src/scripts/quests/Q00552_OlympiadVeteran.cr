@@ -71,7 +71,10 @@ class Scripts::Q00552_OlympiadVeteran < Quest
           if matches == 5 && !st.has_quest_items?(TEAM_EVENT_CERTIFICATE)
             st.give_items(TEAM_EVENT_CERTIFICATE, 1)
           end
+        else
+          # automatically added
         end
+
       end
     end
 
@@ -100,7 +103,10 @@ class Scripts::Q00552_OlympiadVeteran < Quest
           if matches == 5
             st.give_items(TEAM_EVENT_CERTIFICATE, 1)
           end
+        else
+          # automatically added
         end
+
       end
     end
   end
@@ -135,4 +141,3 @@ class Scripts::Q00552_OlympiadVeteran < Quest
     html || get_no_quest_msg(pc)
   end
 end
-

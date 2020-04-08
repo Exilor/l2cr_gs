@@ -247,7 +247,10 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         qs.save_global_quest_var("1ClassQuestFinished", "1")
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -293,7 +296,10 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -356,7 +362,10 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
           html = "31963-08.html"
         when 202
           html = "31963-11.html"
+        else
+          # automatically added
         end
+
       when RAILROAD_WORKER_OBI
         case qs.memo_state
         when 10
@@ -365,8 +374,14 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
           html = "32052-08.html"
         when 102
           html = "32052-09.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

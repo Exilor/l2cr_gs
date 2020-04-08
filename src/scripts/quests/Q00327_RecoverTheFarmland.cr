@@ -200,7 +200,10 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         take_items(pc, ANCIENT_JADE_NECKLACE, 1)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -271,7 +274,10 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       if st.started?
         html = "30314-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

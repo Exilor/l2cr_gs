@@ -106,7 +106,10 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           html = "level_check.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -121,7 +124,10 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
       "32579-01.html"
     when SHELF
       "32580-01.html"
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)
@@ -151,7 +157,10 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           html = "32576-01.html"
         when 2
           html = "32576-03.html"
+        else
+          # automatically added
         end
+
       when RAYMOND
         case st.cond
         when 2
@@ -170,7 +179,10 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           end
         when 4
           html = "30289-12.html"
+        else
+          # automatically added
         end
+
       when LIGHT_OF_DAWN
         if st.cond?(3)
           if st.has_quest_items?(IDENTITY_CARD)
@@ -195,8 +207,14 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         if st.cond?(4) && st.has_quest_items?(SHUNAIMANS_CONTRACT)
           html = "30969-01.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

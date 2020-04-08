@@ -114,7 +114,10 @@ class Scripts::Q00690_JudesRequest < Quest
       else
         html = "32356-05.htm"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

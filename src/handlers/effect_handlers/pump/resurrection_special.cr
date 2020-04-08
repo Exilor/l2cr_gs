@@ -26,6 +26,9 @@ class EffectHandler::ResurrectionSpecial < AbstractEffect
       effected.revive_request(caster, skill, false, @res_power, @res_recovery)
     when L2PetInstance
       effected.owner.revive_request(effected.owner, skill, true, @res_power, @res_recovery)
+    else
+      # automatically added
     end
+
   end
 end

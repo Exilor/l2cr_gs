@@ -175,7 +175,10 @@ module BypassHandler::Loto
               message += "- 3rd Prize"
             when 4
               message += "- 4th Prize"
+            else
+              # automatically added
             end
+
 
             message += " #{check[1]}a."
           end

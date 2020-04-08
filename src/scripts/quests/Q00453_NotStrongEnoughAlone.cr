@@ -217,7 +217,10 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
           html = "32734-03.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

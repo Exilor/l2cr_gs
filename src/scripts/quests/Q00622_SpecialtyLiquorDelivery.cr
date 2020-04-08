@@ -92,7 +92,10 @@ class Scripts::Q00622_SpecialtyLiquorDelivery < Quest
         qs.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -117,10 +120,16 @@ class Scripts::Q00622_SpecialtyLiquorDelivery < Quest
           unless has_quest_items?(pc, SPECIAL_DRINK)
             html = "31521-08.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when BOELIN
       if qs.started?
         case qs.cond
@@ -130,7 +139,10 @@ class Scripts::Q00622_SpecialtyLiquorDelivery < Quest
           end
         when 2
           html = "31547-04.html"
+        else
+          # automatically added
         end
+
       end
     when KUBER, CROCUS, NAFF, PULIN
       if qs.started?
@@ -146,7 +158,10 @@ class Scripts::Q00622_SpecialtyLiquorDelivery < Quest
       if qs.started? && qs.cond?(7)
         html = "31267-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

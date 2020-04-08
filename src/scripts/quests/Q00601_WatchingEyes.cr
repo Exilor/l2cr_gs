@@ -92,7 +92,10 @@ class Scripts::Q00601_WatchingEyes < Quest
       html = pc.level >= 71 ? "31683-01.htm" : "31683-00.htm"
     when State::STARTED
       html = st.cond?(1) ? "31683-03.html" : "31683-04.html"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

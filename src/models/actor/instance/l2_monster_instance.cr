@@ -35,7 +35,7 @@ class L2MonsterInstance < L2Attackable
   def on_spawn
     unless teleporting?
       if leader?
-        self.no_rnd_walk = true
+        self.no_random_walk = true
         self.raid_minion = leader.raid?
         leader.minion_list.on_minion_spawn(self)
       end

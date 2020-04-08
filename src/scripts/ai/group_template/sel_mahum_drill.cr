@@ -105,7 +105,10 @@ class Scripts::SelMahumDrill < AbstractNpcAI
           end
         end
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -151,7 +154,10 @@ class Scripts::SelMahumDrill < AbstractNpcAI
         if MAHUM_CHIEFS.includes?(receiver.id)
           broadcast_npc_say(receiver, Say2::NPC_ALL, CHIEF_FSTRINGS.sample)
         end
+      else
+        # automatically added
       end
+
     end
 
     super

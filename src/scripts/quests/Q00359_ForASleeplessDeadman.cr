@@ -50,7 +50,10 @@ class Scripts::Q00359_ForASleeplessDeadman < Quest
       reward_items(pc, REWARDS.sample(random: Rnd), 4)
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end

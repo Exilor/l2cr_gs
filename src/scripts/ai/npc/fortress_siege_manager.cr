@@ -74,7 +74,10 @@ class Scripts::FortressSiegeManager < AbstractNpcAI
             sm.add_string(npc.fort.name)
             pc.send_packet(sm)
             html = "FortressSiegeManager-05.html"
+          else
+            # automatically added
           end
+
         end
       end
     when "cancel"
@@ -104,7 +107,10 @@ class Scripts::FortressSiegeManager < AbstractNpcAI
       else
         html = "FortressSiegeManager-21.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

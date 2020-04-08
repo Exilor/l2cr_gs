@@ -28,7 +28,10 @@ class Scripts::Q00695_DefendTheHallOfSuffering < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         event
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)

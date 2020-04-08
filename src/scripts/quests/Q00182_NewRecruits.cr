@@ -53,7 +53,10 @@ class Scripts::Q00182_NewRecruits < Quest
         st.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -83,7 +86,10 @@ class Scripts::Q00182_NewRecruits < Quest
         if st.memo_state?(1)
           html = "32258-01.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

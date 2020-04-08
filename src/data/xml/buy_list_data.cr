@@ -71,7 +71,10 @@ module BuyListData
           list_node.each_element do |npcs_node|
             buy_list.add_allowed_npc(npcs_node.text.to_i)
           end
+        else
+          # automatically added
         end
+
       end
 
       BUY_LISTS[buy_list.list_id] = buy_list

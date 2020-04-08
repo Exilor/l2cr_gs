@@ -327,6 +327,10 @@ module GameServer
 
     listener.run
   end
+
+  def close_selector
+    @@listener.try &.shutdown
+  end
 end
 
 GameServer.start

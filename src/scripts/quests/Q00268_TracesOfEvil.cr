@@ -64,8 +64,14 @@ class Scripts::Q00268_TracesOfEvil < Quest
             st.exit_quest(true, true)
             html = "30559-06.html"
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

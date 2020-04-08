@@ -159,7 +159,10 @@ class Scripts::Q00227_TestOfTheReformer < Quest
         lizard.set_intention(AI::ATTACK, pilgrim)
       end
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -184,7 +187,10 @@ class Scripts::Q00227_TestOfTheReformer < Quest
         if attacker.player?
           npc.script_value = attacker.l2id
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -280,7 +286,10 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           qs.memo_state = 14
           qs.set_cond(16, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -443,7 +452,10 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           qs.memo_state = 8
           html = "30732-01.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == PRIESTESS_PUPINA
         html = get_already_completed_msg(pc)
@@ -463,7 +475,10 @@ class Scripts::Q00227_TestOfTheReformer < Quest
       npc.running = true
       npc.set_intention(AI::MOVE_TO, MOVE_TO)
       npc.variables["SPAWNED"] = 0
+    else
+      # automatically added
     end
+
 
     super
   end

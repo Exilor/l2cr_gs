@@ -1,31 +1,31 @@
 class Scripts::Q00101_SwordOfSolidarity < Quest
   # NPCs
-	private ROIEN = 30008
-	private ALTRAN = 30283
-	# Items
-	private BROKEN_SWORD_HANDLE = 739
-	private BROKEN_BLADE_BOTTOM = 740
-	private BROKEN_BLADE_TOP = 741
-	private ALTRANS_NOTE = 742
-	private ROIENS_LETTER = 796
-	private DIRECTIONS_TO_RUINS = 937
-	# Monsters
-	private MONSTERS = {
-		20361, # Tunath Orc Marksman
-		20362  # Tunath Orc Warrior
-	}
-	# Rewards
-	private REWARDS = {
-		ItemHolder.new(738, 1), # Sword of Solidarity
-		ItemHolder.new(1060, 100), # Lesser Healing Potion
-		ItemHolder.new(4412, 10), # Echo Crystal - Theme of Battle
-		ItemHolder.new(4413, 10), # Echo Crystal - Theme of Love
-		ItemHolder.new(4414, 10), # Echo Crystal - Theme of Solitude
-		ItemHolder.new(4415, 10), # Echo Crystal - Theme of Feast
-		ItemHolder.new(4416, 10), # Echo Crystal - Theme of Celebration
-	}
-	# Misc
-	private MIN_LVL = 9
+  private ROIEN = 30008
+  private ALTRAN = 30283
+  # Items
+  private BROKEN_SWORD_HANDLE = 739
+  private BROKEN_BLADE_BOTTOM = 740
+  private BROKEN_BLADE_TOP = 741
+  private ALTRANS_NOTE = 742
+  private ROIENS_LETTER = 796
+  private DIRECTIONS_TO_RUINS = 937
+  # Monsters
+  private MONSTERS = {
+    20361, # Tunath Orc Marksman
+    20362  # Tunath Orc Warrior
+  }
+  # Rewards
+  private REWARDS = {
+    ItemHolder.new(738, 1), # Sword of Solidarity
+    ItemHolder.new(1060, 100), # Lesser Healing Potion
+    ItemHolder.new(4412, 10), # Echo Crystal - Theme of Battle
+    ItemHolder.new(4413, 10), # Echo Crystal - Theme of Love
+    ItemHolder.new(4414, 10), # Echo Crystal - Theme of Solitude
+    ItemHolder.new(4415, 10), # Echo Crystal - Theme of Feast
+    ItemHolder.new(4416, 10), # Echo Crystal - Theme of Celebration
+  }
+  # Misc
+  private MIN_LVL = 9
 
   def initialize
     super(101, self.class.simple_name, "Sword of Solidarity")
@@ -66,7 +66,10 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
         st.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -140,10 +143,16 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
           if st.has_quest_items?(BROKEN_SWORD_HANDLE)
             html = "30008-07.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when ALTRAN
       case st.cond
       when 1
@@ -171,8 +180,14 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
         if st.has_quest_items?(BROKEN_SWORD_HANDLE)
           html = "30283-06.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

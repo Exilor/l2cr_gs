@@ -1,27 +1,27 @@
 class Scripts::Q00174_SupplyCheck < Quest
   private MIN_LEVEL = 2
   # NPCs
-	private NIKA = 32167
-	private BENIS = 32170
-	private MARCELA = 32173
+  private NIKA = 32167
+  private BENIS = 32170
+  private MARCELA = 32173
 
-	# Items
-	private WAREHOUSE_MANIFEST = 9792
-	private GROCERY_STORE_MANIFEST = 9793
-	private REWARD = {
-		23,   # Wooden Breastplate
-		43,   # Wooden Helmet
-		49,   # Gloves
-		2386, # Wooden Gaiters
-		37    # Leather Shoes
-	}
+  # Items
+  private WAREHOUSE_MANIFEST = 9792
+  private GROCERY_STORE_MANIFEST = 9793
+  private REWARD = {
+    23,   # Wooden Breastplate
+    43,   # Wooden Helmet
+    49,   # Gloves
+    2386, # Wooden Gaiters
+    37    # Leather Shoes
+  }
 
   def initialize
     super(174, self.class.simple_name, "Supply Check")
 
     add_start_npc(MARCELA)
-		add_talk_id(MARCELA, BENIS, NIKA)
-		register_quest_items(WAREHOUSE_MANIFEST, GROCERY_STORE_MANIFEST)
+    add_talk_id(MARCELA, BENIS, NIKA)
+    register_quest_items(WAREHOUSE_MANIFEST, GROCERY_STORE_MANIFEST)
   end
 
   def on_adv_event(event, npc, pc)
@@ -62,10 +62,16 @@ class Scripts::Q00174_SupplyCheck < Quest
           npc_str = NpcString::DELIVERY_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE
           show_on_screen_msg(pc, npc_str, 2, 5000)
           html = "32173-07.html"
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when BENIS
       if st.started?
         case st.cond
@@ -77,7 +83,10 @@ class Scripts::Q00174_SupplyCheck < Quest
           html = "32170-02.html"
         when 3
           html = "32170-03.html"
+        else
+          # automatically added
         end
+
       end
     when NIKA
       if st.started?
@@ -90,9 +99,15 @@ class Scripts::Q00174_SupplyCheck < Quest
           html = "32167-02.html"
         when 4
           html = "32167-03.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

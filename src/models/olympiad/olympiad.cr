@@ -688,7 +688,10 @@ class Olympiad < ListenersContainer
       # logging
 
       HEROS_TO_BE << hero
+    else
+      # automatically added
     end
+
 
   rescue e
     error e

@@ -62,7 +62,10 @@ class Scripts::Q00320_BonesTellTheFuture < Quest
       else
         html = "30359-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

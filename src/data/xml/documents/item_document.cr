@@ -81,7 +81,10 @@ class ItemDocument < AbstractDocument
         if condition
           current_item.item.attach(condition)
         end
+      else
+        # automatically added
       end
+
     end
 
     make_item
@@ -105,7 +108,10 @@ class ItemDocument < AbstractDocument
       L2Weapon
     when "EtcItem"
       L2EtcItem
+    else
+      # automatically added
     end
+
 
     if type
       current_item.item = type.new(current_item.set)

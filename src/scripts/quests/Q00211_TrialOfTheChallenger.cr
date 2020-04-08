@@ -107,7 +107,10 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         qs.set_cond(8, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -142,7 +145,10 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
             end
           when 8..10
             html = "30644-10.html"
+          else
+            # automatically added
           end
+
         elsif qs.completed?
           html = get_already_completed_msg(pc)
         end
@@ -166,7 +172,10 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         html = "30645-06.html"
       when 8, 9
         html = "30645-09.html"
+      else
+        # automatically added
       end
+
     when CHEST_OF_SHYSLASSYS
       if qs.started?
         html = "30647-01.html"
@@ -194,7 +203,10 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         qs.exit_quest(false, true)
         html = "30646-07.html"
+      else
+        # automatically added
       end
+
     when FILAUR
       case qs.cond
       when 8
@@ -205,8 +217,14 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         html = "30535-02.html"
       when 10
         html = "30535-03.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -247,7 +265,10 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         end
         qs.set_cond(10, true)
       end
+    else
+      # automatically added
     end
+
 
     super
   end

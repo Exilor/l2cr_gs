@@ -94,7 +94,10 @@ class Scripts::Q00250_WatchWhatYouEat < Quest
         end
       when State::COMPLETED
         html = "32743-done.htm"
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

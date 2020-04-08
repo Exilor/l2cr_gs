@@ -1,9 +1,9 @@
 class Scripts::Q00013_ParcelDelivery < Quest
   # NPCs
-	private FUNDIN = 31274
-	private VULCAN = 31539
-	# Item
-	private PACKAGE = 7263
+  private FUNDIN = 31274
+  private VULCAN = 31539
+  # Item
+  private PACKAGE = 7263
 
   def initialize
     super(13, self.class.simple_name, "Parcel Delivery")
@@ -29,7 +29,10 @@ class Scripts::Q00013_ParcelDelivery < Quest
       else
         return "31539-02.html"
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -51,11 +54,17 @@ class Scripts::Q00013_ParcelDelivery < Quest
           html = "31274-02.html"
         when VULCAN
           html = "31539-00.html"
+        else
+          # automatically added
         end
+
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

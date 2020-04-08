@@ -280,9 +280,9 @@ class Instance
             end
             spawn_dat.instance_id = id()
             if allow_random_walk.nil?
-              spawn_dat.no_rnd_walk = !@allow_random_walk
+              spawn_dat.no_random_walk = !@allow_random_walk
             else
-              spawn_dat.no_rnd_walk = !allow_random_walk
+              spawn_dat.no_random_walk = !allow_random_walk
             end
             spawn_dat.area_name = area_name
             spawn_dat.global_map_id = global_map_id
@@ -354,7 +354,10 @@ class Instance
             @buff_exception_list << temp.to_i
           end
         end
+      else
+        # automatically added
       end
+
     end
   end
 

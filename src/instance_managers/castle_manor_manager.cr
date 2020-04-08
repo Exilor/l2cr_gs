@@ -147,7 +147,10 @@ module CastleManorManager
     when .approved?
       @@next_mode_change.hour = Config.alt_manor_refresh_time
       @@next_mode_change.minute = Config.alt_manor_refresh_min
+    else
+      # automatically added
     end
+
 
     ThreadPoolManager.schedule_general(->change_mode, @@next_mode_change.ms - Time.ms)
   end
@@ -252,7 +255,10 @@ module CastleManorManager
       if Config.alt_manor_save_all_actions
         store_me
       end
+    else
+      # automatically added
     end
+
 
     schedule_mode_change
 

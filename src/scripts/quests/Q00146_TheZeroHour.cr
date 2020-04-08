@@ -65,7 +65,10 @@ class Scripts::Q00146_TheZeroHour < Quest
       end
     when State::COMPLETED
       html = "31554-01b.htm"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

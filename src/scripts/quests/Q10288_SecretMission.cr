@@ -47,7 +47,10 @@ class Scripts::Q10288_SecretMission < Quest
         pc.tele_to_location(TELEPORT)
         return
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -75,7 +78,10 @@ class Scripts::Q10288_SecretMission < Quest
         end
       when State::COMPLETED
         html = "31350-07.html"
+      else
+        # automatically added
       end
+
     when AQUILANI
       if st.started?
         if st.cond?(1) && st.has_quest_items?(LETTER)
@@ -88,7 +94,10 @@ class Scripts::Q10288_SecretMission < Quest
       if st.started? && st.cond?(2) && st.has_quest_items?(LETTER)
         return "32757-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

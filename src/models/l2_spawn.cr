@@ -27,7 +27,7 @@ class L2Spawn
   property global_map_id : Int32 = 0
   property area_name : String?
   property? custom : Bool = false
-  property? no_rnd_walk : Bool = false
+  property? no_random_walk : Bool = false
 
   def initialize(@template : L2NpcTemplate)
     {% begin %}
@@ -170,11 +170,14 @@ class L2Spawn
   end
 
   private def do_spawn?(summon_spawn : Bool = false) : L2Npc?
-    case @template.type
+    case @template.type.casecmp
     when "L2Pet", "L2Decoy", "L2Trap"
       @current_count += 1
       return
+    else
+      # automatically added
     end
+
 
     npc = @constructor.new(@template)
 
@@ -198,7 +201,7 @@ class L2Spawn
   end
 
   def territory_based? : Bool
-    !!@spawn_territory && @location.x == 0 && @location.y == 0
+    !!@spawn_territory && @location.x.zero? && @location.y.zero?
   end
 
   private def initialize_npc_instance(mob : L2Npc) : L2Npc
@@ -206,8 +209,8 @@ class L2Spawn
 
     if territory_based?
       new_x, new_y, new_z = @spawn_territory.not_nil!.random_point
-    elsif x() == 0 || y() == 0
-      if location_id() == 0
+    elsif x().zero? || y().zero?
+      if location_id().zero?
         return mob
       end
 
@@ -234,7 +237,7 @@ class L2Spawn
       mob.variables.clear
     end
 
-    mob.no_rnd_walk = @no_rnd_walk
+    mob.no_random_walk = no_random_walk?
 
     heading = heading()
 
@@ -250,9 +253,9 @@ class L2Spawn
 
     if Config.champion_enable && Config.champion_frequency > 0
       if mob.is_a?(L2MonsterInstance)
-        if !@template.undying? && !mob.raid? && !mob.raid_minion?
+        if !template.undying? && !mob.raid? && !mob.raid_minion?
           if mob.level.between?(Config.champ_min_lvl, Config.champ_max_lvl)
-            if Config.champion_enable_in_instances || instance_id == 0
+            if Config.champion_enable_in_instances || instance_id.zero?
               if Rnd.rand(100) < Config.champion_frequency
                 mob.champion = true
               end

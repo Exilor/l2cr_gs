@@ -15,7 +15,10 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
     case template.id
     when 25339, 25342, 25346, 25349
       self.raid = true
+    else
+      # automatically added
     end
+
   end
 
   def instance_type : InstanceType
@@ -47,7 +50,10 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
       # nothing
     when 25339, 25342, 25346, 25349
       self.raid = true
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -95,7 +101,10 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
         task.cancel
       end
       @on_dead_event_task = ThreadPoolManager.schedule_effect(OnDeadEvent.new(self), 8500)
+    else
+      # automatically added
     end
+
 
     true
   end
@@ -170,7 +179,10 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
         FourSepulchersManager.spawn_archon_of_halisha(@mob.mysterious_box_id)
       when 25339, 25342, 25346, 25349
         FourSepulchersManager.spawn_emperors_grave_npc(@mob.mysterious_box_id)
+      else
+        # automatically added
       end
+
     end
   end
 

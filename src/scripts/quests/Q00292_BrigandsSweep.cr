@@ -50,7 +50,10 @@ class Scripts::Q00292_BrigandsSweep < Quest
       if qs.started?
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -128,7 +131,10 @@ class Scripts::Q00292_BrigandsSweep < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
     when BALANKI
       if qs.started?
         if has_quest_items?(pc, SUSPICIOUS_CONTRACT)
@@ -139,7 +145,10 @@ class Scripts::Q00292_BrigandsSweep < Quest
           html = "30533-01.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

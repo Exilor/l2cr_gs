@@ -38,7 +38,10 @@ class Scripts::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
         st.exit_quest(false, true)
         html = "31442-02.htm"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -68,13 +71,22 @@ class Scripts::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
           end
         when 2
           html = "31572-09.htm"
+        else
+          # automatically added
         end
+
       when KIKI
         if st.cond?(2)
           html = "31442-01.htm"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

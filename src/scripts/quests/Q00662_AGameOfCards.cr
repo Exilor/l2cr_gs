@@ -200,7 +200,10 @@ class Scripts::Q00662_AGameOfCards < Quest
         if i9 % 32 < 31
           st.set("ExMemoState", (i9 * 100) + i5)
         end
+      else
+        # automatically added
       end
+
 
       if i9 % 32 < 31
         html = get_htm(pc, "30845-12.html")
@@ -404,7 +407,10 @@ class Scripts::Q00662_AGameOfCards < Quest
       else
         html = "30845-20.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -473,7 +479,10 @@ class Scripts::Q00662_AGameOfCards < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

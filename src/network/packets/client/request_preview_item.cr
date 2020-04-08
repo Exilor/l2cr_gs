@@ -97,7 +97,10 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
             next
           end
         end
+      else
+        # automatically added
       end
+
 
       if item_list.has_key?(slot)
         pc.send_packet(SystemMessageId::YOU_CAN_NOT_TRY_THOSE_ITEMS_ON_AT_THE_SAME_TIME)

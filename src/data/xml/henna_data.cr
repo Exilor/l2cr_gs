@@ -34,7 +34,10 @@ module HennaData
         set["cancel_fee"] = c["fee"]
       when "classId"
         wear_class_ids << ClassId[c.text.to_i]
+      else
+        # automatically added
       end
+
     end
 
     henna = L2Henna.new(set)

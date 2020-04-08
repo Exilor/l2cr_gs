@@ -40,7 +40,10 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
           elsif hp_per < 30
             cast_heal_skill(pet, heal_step.clamp(0, 3), 2)
           end
+        else
+          # automatically added
         end
+
       elsif event == "CAST_BUFF" && !pet.affected_by_skill?(BUFF_CONTROL)
         unless pet.hungry?
           buff_step = (((pet.level / 5) - 11).clamp(0, 3)).to_i

@@ -239,7 +239,10 @@ class PcStat < PlayableStat
         return Config.rate_vitality_level_3.to_f
       when 4
         return Config.rate_vitality_level_4.to_f
+      else
+        # automatically added
       end
+
     end
 
     1.0

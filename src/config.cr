@@ -1648,7 +1648,6 @@ module Config
     @@alt_dev_no_handlers = cfg.get_bool("nohandlers", false)
     @@alt_dev_no_quests = cfg.get_bool("noquests", false)
     @@alt_dev_no_spawns = cfg.get_bool("AltDevNoSpawns")
-    # const_set(:ALT_DEV_NO_SPAWNS, true) if ARGV.include?("nospawns")
     @@alt_dev_show_quests_load_in_logs = cfg.get_bool("AltDevShowQuestsLoadInLogs")
     @@alt_dev_show_scripts_load_in_logs = cfg.get_bool("AltDevShowScriptsLoadInLogs")
     @@thread_p_effects = cfg.get_i32("ThreadPoolSizeEffects", 10)

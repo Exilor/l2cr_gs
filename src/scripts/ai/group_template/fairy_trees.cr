@@ -39,7 +39,7 @@ class Scripts::FairyTrees < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc.no_rnd_walk = true
+    npc.no_random_walk = true
     npc.immobilized = true
 
     super

@@ -248,7 +248,10 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
       end
     when "DESPAWN_BOX"
       npc.not_nil!.delete_me
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -302,7 +305,10 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
           html = "31349-03a.html"
         when 2
           html = "31349-11.html"
+        else
+          # automatically added
         end
+
       when MYSTERIOUS_WIZARD
         case qs.memo_state
         when 1
@@ -357,7 +363,10 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
           html = "31348-18.html"
         when 24
           html = "31348-19.html"
+        else
+          # automatically added
         end
+
       when BROKEN_BOOKSHELF2, BROKEN_BOOKSHELF3, BROKEN_BOOKSHELF4
         if qs.memo_state % 100 == 7
           html = "31533-01.html"
@@ -398,14 +407,20 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
           html = "31532-23.html"
         when 24
           html = "31532-24.html"
+        else
+          # automatically added
         end
+
       when TOMBSTONE
         case qs.memo_state
         when 11
           html = "31531-01.html"
         when 12
           html = "31531-03.html"
+        else
+          # automatically added
         end
+
       when COFFIN
         if qs.memo_state?(11)
           give_items(pc, LIDAS_DRESS, 1)
@@ -415,12 +430,18 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
           qs.set_cond(13, true)
           html = "31536-01.html"
         end
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       if npc.id == PRIEST_BENEDICT
         html = get_already_completed_msg(pc)
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

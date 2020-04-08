@@ -222,7 +222,10 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
         qs.set_cond(9, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -295,7 +298,10 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -603,7 +609,10 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
             html = "30622-05.html"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == WAREHOUSE_KEEPER_PARMAN
         html = get_already_completed_msg(pc)

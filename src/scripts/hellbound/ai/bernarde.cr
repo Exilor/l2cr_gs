@@ -39,7 +39,10 @@ class Scripts::Bernarde < AbstractNpcAI
       event = "32300-02e.htm"
     when "rumors"
       event = "32300-#{HellboundEngine.level}r.htm"
+    else
+      # automatically added
     end
+
 
     event
   end

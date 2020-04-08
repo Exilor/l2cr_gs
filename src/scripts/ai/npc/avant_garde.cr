@@ -31,7 +31,10 @@ class Scripts::AvantGarde < AbstractNpcAI
       AvantGarde.show_transform_skill_list(player)
     when AcquireSkillType::SUBCLASS
       AvantGarde.show_subclass_skill_list(player)
+    else
+      # automatically added
     end
+
   end
 
   def on_adv_event(event, npc, player)
@@ -143,7 +146,10 @@ class Scripts::AvantGarde < AbstractNpcAI
           player.destroy_item("CancelCertificationExtraBooks", item, npc, false)
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end

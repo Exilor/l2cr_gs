@@ -52,7 +52,10 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
     when "30497-06.html"
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -83,14 +86,20 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
         else
           html = "30497-04.html"
         end
+      else
+        # automatically added
       end
+
     when MARIUS
       if st.get_quest_items_count(SPIDER_SKIN) >= SKIN_COUNT
         html = "30405-02.html"
       else
         html = "30405-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

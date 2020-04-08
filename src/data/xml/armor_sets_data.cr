@@ -66,7 +66,10 @@ module ArmorSetsData
             set.wit = a["val"].to_i
           when "int"
             set.int = a["val"].to_i
+          else
+            # automatically added
           end
+
         end
 
         SETS[set.chest_id] = set

@@ -126,7 +126,10 @@ class Scripts::Q00228_TestOfMagus < Quest
       give_items(pc, LILAC_CHARM, 1)
       qs.set_cond(3, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -240,7 +243,10 @@ class Scripts::Q00228_TestOfMagus < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -394,7 +400,10 @@ class Scripts::Q00228_TestOfMagus < Quest
         elsif has_quest_items?(pc, SCORE_OF_ELEMENTS)
           html = "30612-05.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == BARD_RUKAL
         html = get_already_completed_msg(pc)

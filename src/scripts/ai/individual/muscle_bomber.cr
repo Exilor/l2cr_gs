@@ -60,7 +60,10 @@ class Scripts::MuscleBomber < AbstractNpcAI
         end
         start_quest_timer(TIMER_SUMMON, 60000, npc, pc)
       end
+    else
+      # automatically added
     end
+
 
     super
   end

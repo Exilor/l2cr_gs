@@ -52,7 +52,10 @@ class Scripts::Q00369_CollectorOfJewels < Quest
     when "30376-07.html"
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -102,7 +105,10 @@ class Scripts::Q00369_CollectorOfJewels < Quest
         else
           html = "30376-11.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

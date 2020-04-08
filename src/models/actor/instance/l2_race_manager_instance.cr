@@ -99,7 +99,10 @@ class L2RaceManagerInstance < L2Npc
       @@state = RACE_END
       sm.add_int(MonsterRace.first_place)
       sm.add_int(MonsterRace.second_place)
+    else
+      # automatically added
     end
+
 
     broadcast(sm)
 

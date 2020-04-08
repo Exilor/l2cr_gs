@@ -1,13 +1,13 @@
 class Scripts::Q00009_IntoTheCityOfHumans < Quest
   # NPCs
-	private PETUKAI = 30583
-	private TANAPI = 30571
-	private TAMIL = 30576
-	# Items
-	private SCROLL_OF_ESCAPE_GIRAN = 7559
-	private MARK_OF_TRAVELER = 7570
-	# Misc
-	private MIN_LEVEL = 3
+  private PETUKAI = 30583
+  private TANAPI = 30571
+  private TAMIL = 30576
+  # Items
+  private SCROLL_OF_ESCAPE_GIRAN = 7559
+  private MARK_OF_TRAVELER = 7570
+  # Misc
+  private MIN_LEVEL = 3
 
   def initialize
     super(9, self.class.simple_name, "Into the City of Humans")
@@ -60,7 +60,10 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when TANAPI
       if st.started?
         html = st.cond?(1) ? "30571-01.html" : "30571-03.html"
@@ -69,7 +72,10 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
       if st.started? && st.cond?(2)
         html = "30576-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

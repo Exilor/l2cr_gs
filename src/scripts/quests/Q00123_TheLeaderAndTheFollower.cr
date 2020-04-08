@@ -76,9 +76,15 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
             else
               html = "31961-11a.html"
             end
+          else
+            # automatically added
           end
+
         end
+      else
+        # automatically added
       end
+
 
       return html
     end
@@ -120,7 +126,10 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
         qs.set_cond(5, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -146,7 +155,10 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -230,7 +242,10 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

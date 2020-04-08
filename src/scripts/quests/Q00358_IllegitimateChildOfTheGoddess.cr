@@ -44,7 +44,10 @@ class Scripts::Q00358_IllegitimateChildOfTheGoddess < Quest
     when "30862-04.htm"
       st.start_quest
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, pc, is_summon)

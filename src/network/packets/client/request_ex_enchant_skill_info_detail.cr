@@ -23,7 +23,10 @@ class Packets::Incoming::RequestExEnchantSkillInfoDetail < GameClientPacket
       req_skill_lvl = @skill_lvl + 1 # untrain
     when 3
       req_skill_lvl = @skill_lvl # change route
+    else
+      # automatically added
     end
+
 
     player_skill_lvl = pc.get_skill_level(@skill_id)
 

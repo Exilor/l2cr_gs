@@ -86,8 +86,14 @@ class Scripts::Q00264_KeenClaws < Quest
           st.exit_quest(true, true)
           html = "30136-05.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

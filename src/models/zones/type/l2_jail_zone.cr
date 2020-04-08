@@ -2,7 +2,7 @@ require "../../actor/tasks/player/teleport_task"
 
 class L2JailZone < L2ZoneType
   private JAIL_IN_LOC  = Location.new(-114356, -249645, -2984)
-	private JAIL_OUT_LOC = Location.new(17836, 170178, -3507)
+  private JAIL_OUT_LOC = Location.new(17836, 170178, -3507)
 
   def on_enter(char)
     if char.player?

@@ -1,21 +1,21 @@
 class Scripts::Q00007_ATripBegins < Quest
   # NPCs
-	private MIRABEL = 30146
-	private ARIEL = 30148
-	private ASTERIOS = 30154
-	# Items
-	private ARIELS_RECOMMENDATION = 7572
-	private SCROLL_OF_ESCAPE_GIRAN = 7559
-	private MARK_OF_TRAVELER = 7570
-	# Misc
-	private MIN_LEVEL = 3
+  private MIRABEL = 30146
+  private ARIEL = 30148
+  private ASTERIOS = 30154
+  # Items
+  private ARIELS_RECOMMENDATION = 7572
+  private SCROLL_OF_ESCAPE_GIRAN = 7559
+  private MARK_OF_TRAVELER = 7570
+  # Misc
+  private MIN_LEVEL = 3
 
   def initialize
     super(7, self.class.simple_name, "A Trip Begins")
 
     add_start_npc(MIRABEL)
-		add_talk_id(MIRABEL, ARIEL, ASTERIOS)
-		register_quest_items(ARIELS_RECOMMENDATION)
+    add_talk_id(MIRABEL, ARIEL, ASTERIOS)
+    register_quest_items(ARIELS_RECOMMENDATION)
   end
 
   def on_adv_event(event, npc, pc)
@@ -68,7 +68,10 @@ class Scripts::Q00007_ATripBegins < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when ARIEL
       if st.started?
         if st.cond?(1)
@@ -85,7 +88,10 @@ class Scripts::Q00007_ATripBegins < Quest
           html = "30154-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

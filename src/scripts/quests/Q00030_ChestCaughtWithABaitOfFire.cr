@@ -38,7 +38,10 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
         st.exit_quest(false, true)
         html = "30629-03.htm"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -68,13 +71,22 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
           end
         when 2
           html = "31577-05.htm"
+        else
+          # automatically added
         end
+
       when RUKAL
         if st.cond?(2)
           html = "30629-01.htm"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

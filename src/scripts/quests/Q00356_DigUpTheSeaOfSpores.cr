@@ -63,7 +63,10 @@ class Scripts::Q00356_DigUpTheSeaOfSpores < Quest
       end
       give_adena(pc, adena.to_i64, true)
       qs.exit_quest(true, true)
+    else
+      # automatically added
     end
+
 
     html
   end

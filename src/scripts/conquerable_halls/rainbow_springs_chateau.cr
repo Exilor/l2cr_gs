@@ -263,7 +263,10 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
           ACCEPTED_CLANS.delete(clan.not_nil!)
           html = "messenger_yetti020.htm"
         end
+      else
+        # automatically added
       end
+
     when CARETAKER
       if event == "portToArena"
         party = pc.party
@@ -308,7 +311,10 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
           end
         end
       end
+    else
+      # automatically added
     end
+
 
     if event.starts_with?("enterText")
       clan = clan.not_nil!

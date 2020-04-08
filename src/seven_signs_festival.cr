@@ -1171,7 +1171,10 @@ module SevenSignsFestival
       bonus = SevenSigns::SEAL_STONE_GREEN_VALUE
     when SevenSigns::SEAL_STONE_RED_ID
       bonus = SevenSigns::SEAL_STONE_RED_VALUE
+    else
+      # automatically added
     end
+
 
     total = ACCUMULATED_BONUSES[festival_id] + (stone_amount * bonus)
     ACCUMULATED_BONUSES[festival_id] = total
@@ -1231,7 +1234,10 @@ module SevenSignsFestival
       @@dawn_chat_guide = npc
     when 31137
       @@dusk_chat_guide = npc
+    else
+      # automatically added
     end
+
   end
 
   private struct FestivalManager

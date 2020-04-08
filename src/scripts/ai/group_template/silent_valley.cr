@@ -45,7 +45,10 @@ class Scripts::SilentValley < AbstractNpcAI
         npc.do_die(nil)
       when "SPAWN_CHEST"
         add_spawn(CHEST, npc.x - 100, npc.y, npc.z - 100, 0, false, 0)
+      else
+        # automatically added
       end
+
     end
 
     nil
@@ -122,7 +125,10 @@ class Scripts::SilentValley < AbstractNpcAI
         start_quest_timer("CLEAR", 60_000, receiver, nil)
       when "CLEAR_ALL_INSTANT"
         receiver.do_die(nil)
+      else
+        # automatically added
       end
+
     end
 
     super

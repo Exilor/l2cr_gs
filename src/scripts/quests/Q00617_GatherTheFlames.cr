@@ -137,7 +137,10 @@ class Scripts::Q00617_GatherTheFlames < Quest
       else
         html = "31271-04.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

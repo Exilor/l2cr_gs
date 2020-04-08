@@ -41,7 +41,10 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
       when "30147-04.htm"
         st.start_quest
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -107,7 +110,10 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

@@ -82,7 +82,10 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
         st.add_exp_and_sp(719843, 0)
         st.exit_quest(false, true)
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -178,7 +181,10 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
         end
       when State::STARTED
         html = "31740-5.html"
+      else
+        # automatically added
       end
+
     when OSSIAN
       case st.state
       when State::STARTED
@@ -203,8 +209,14 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
           if st.get_quest_items_count(RELIC_BOX) == 1
             html = "31741-11.html"
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     when LADD
       case st.state
       when State::STARTED
@@ -213,8 +225,14 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

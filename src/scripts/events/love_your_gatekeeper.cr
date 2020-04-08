@@ -50,7 +50,10 @@ class Scripts::LoveYourGatekeeper < LongTimeEvent
       end
 
       return
+    else
+      # automatically added
     end
+
 
     event
   end

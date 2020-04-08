@@ -201,7 +201,10 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     case pc.class_id
     when .dwarven_fighter?, .scavenger?, .bounty_hunter?, .fortune_seeker?
       is_spoiler = true
+    else
+      # automatically added
     end
+
     party = pc.party
 
     timer = Timer.new
@@ -627,7 +630,10 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when ClassId::DOOMBRINGER
       add_light_armor(pc, items)
       items << pc.inventory.add_item("GM", 15907, 1, pc, nil) # Pyseal Blade
+    else
+      # automatically added
     end
+
 
     items << pc.inventory.add_item("GM", 21720, 1, pc, nil) # Soul Cloak of Freya
 

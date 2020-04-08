@@ -111,7 +111,10 @@ class Scripts::Minigame < AbstractNpcAI
       room.clean
     when "afterthat"
       npc.delete_me
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -148,7 +151,10 @@ class Scripts::Minigame < AbstractNpcAI
     when TREASURE_BOX
       npc.disable_core_ai(true)
       start_quest_timer("afterthat", 180000, npc, nil)
+    else
+      # automatically added
     end
+
 
     super
   end

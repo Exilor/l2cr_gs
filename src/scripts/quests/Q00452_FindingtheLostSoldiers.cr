@@ -71,7 +71,10 @@ class Scripts::Q00452_FindingtheLostSoldiers < Quest
         else
           html = "32773-6.html"
         end
+      else
+        # automatically added
       end
+
     else
       if st.cond?(1)
         html = "corpse-1.html"

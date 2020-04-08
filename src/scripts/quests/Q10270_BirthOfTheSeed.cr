@@ -45,7 +45,10 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
           st.give_items(LICH_CRYSTAL, 1)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -128,7 +131,10 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
           html = event
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -206,8 +212,14 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
             st.exit_quest(false, true)
             html = "32559-11.html"
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

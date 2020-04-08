@@ -75,7 +75,10 @@ class Scripts::Q00512_BladeUnderFoot < Quest
     when "36403-11.html"
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end

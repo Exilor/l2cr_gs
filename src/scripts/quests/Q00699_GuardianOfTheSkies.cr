@@ -38,7 +38,10 @@ class Scripts::Q00699_GuardianOfTheSkies < Quest
       when "32557-09.html"
         st.exit_quest(true, true)
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -95,7 +98,10 @@ class Scripts::Q00699_GuardianOfTheSkies < Quest
       else
         html = "32557-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

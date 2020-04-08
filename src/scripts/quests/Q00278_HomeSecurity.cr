@@ -65,7 +65,10 @@ class Scripts::Q00278_HomeSecurity < Quest
 
       st.exit_quest(true, true)
       html = "31537-07.html"
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -83,7 +86,10 @@ class Scripts::Q00278_HomeSecurity < Quest
         if st.give_item_randomly(npc, SEL_MAHUM_MANE, 1, SEL_MAHUM_MANE_COUNT, 0.85, true)
           st.set_cond(2, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     nil

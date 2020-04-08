@@ -1,10 +1,10 @@
 class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
   # NPCs
-	private CADMON = 31296
-	private LEON = 31256
-	private WAHKAN = 31371
-	# Item
-	private MUNITIONS_BOX = 7231
+  private CADMON = 31296
+  private LEON = 31256
+  private WAHKAN = 31371
+  # Item
+  private MUNITIONS_BOX = 7231
 
   private MIN_LEVEL = 74
 
@@ -37,7 +37,10 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
       else
         "31371-03.html"
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)
@@ -64,12 +67,18 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
         if st.memo_state?(21) && has_quest_items?(pc, MUNITIONS_BOX)
           html = "31371-01.html"
         end
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       if npc.id == CADMON
         html = get_already_completed_msg(pc)
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

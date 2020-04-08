@@ -276,7 +276,10 @@ abstract class L2Item < ListenersContainer
       self.elementals = Elementals.new(Elementals::HOLY, obj.value.to_i)
     when Stats::DARK_RES, Stats::DARK_POWER
       self.elementals = Elementals.new(Elementals::DARK, obj.value.to_i)
+    else
+      # automatically added
     end
+
 
     if temp = @func_templates
       temp << obj

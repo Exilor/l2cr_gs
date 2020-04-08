@@ -30,7 +30,10 @@ class Scripts::Q00319_ScentOfDeath < Quest
       when "30138-04.htm"
         st.start_quest
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -70,8 +73,14 @@ class Scripts::Q00319_ScentOfDeath < Quest
         st.take_items(ZOMBIES_SKIN, -1)
         st.exit_quest(true, true)
         html = "30138-06.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

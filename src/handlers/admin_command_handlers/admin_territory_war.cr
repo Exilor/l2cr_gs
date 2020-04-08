@@ -42,7 +42,10 @@ module AdminCommandHandler::AdminTerritoryWar
             return false
           end
           cal.minute = min
+        else
+          # automatically added
         end
+
 
         if cal.ms < Time.ms
           pc.send_message("Unable to change TW Date")

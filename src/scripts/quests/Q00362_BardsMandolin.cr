@@ -37,7 +37,10 @@ class Scripts::Q00362_BardsMandolin < Quest
         st.exit_quest(true, true)
         event
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_talk(npc, pc)
@@ -63,7 +66,10 @@ class Scripts::Q00362_BardsMandolin < Quest
           html = "30957-05.html"
         when 5
           html = "30957-06.html"
+        else
+          # automatically added
         end
+
       when GALION
         if st.memo_state?(2)
           st.memo_state = 3
@@ -93,8 +99,14 @@ class Scripts::Q00362_BardsMandolin < Quest
         elsif st.memo_state >= 5
           html = "30956-02.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

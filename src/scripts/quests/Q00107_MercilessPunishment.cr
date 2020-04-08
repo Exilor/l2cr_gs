@@ -66,7 +66,10 @@ class Scripts::Q00107_MercilessPunishment < Quest
         give_items(pc, HATOSS_ORDER_3, 1)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -118,10 +121,16 @@ class Scripts::Q00107_MercilessPunishment < Quest
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30568-11.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when CENTURION_PARUGON
       if qs.started?
         if qs.cond?(1) && has_quest_items?(pc, HATOSS_ORDER_1)
@@ -129,7 +138,10 @@ class Scripts::Q00107_MercilessPunishment < Quest
           html = "30580-01.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -153,7 +165,10 @@ class Scripts::Q00107_MercilessPunishment < Quest
           give_items(killer, LETTER_TO_ELF, 1)
           qs.set_cond(7, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super

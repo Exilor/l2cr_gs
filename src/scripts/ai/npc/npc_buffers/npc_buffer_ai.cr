@@ -55,9 +55,15 @@ struct NpcBufferAI
 
             skill.apply_effects(target, target)
           end
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     ThreadPoolManager.schedule_general(self, @skill_data.delay)
   end

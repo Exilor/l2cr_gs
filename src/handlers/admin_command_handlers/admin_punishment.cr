@@ -103,7 +103,10 @@ module AdminCommandHandler::AdminPunishment
           else
             warn "data/html/admin/punishment-player.htm is missing"
           end
+        else
+          # automatically added
         end
+
       end
     when "admin_punishment_add"
       # Add new punishment
@@ -226,7 +229,10 @@ module AdminCommandHandler::AdminPunishment
       unless st.empty?
         return use_admin_command(sprintf("admin_punishment_remove %s %s %s", st.shift, PunishmentAffect::CHARACTER, PunishmentType::JAIL), pc)
       end
+    else
+      # automatically added
     end
+
 
     true
   end

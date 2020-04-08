@@ -3,7 +3,7 @@ module AdminCommandHandler::AdminRide
   extend AdminCommandHandler
 
   private PURPLE_MANED_HORSE_TRANSFORMATION_ID = 106
-	private JET_BIKE_TRANSFORMATION_ID = 20001
+  private JET_BIKE_TRANSFORMATION_ID = 20001
 
   def use_admin_command(command, pc)
     unless player = get_ride_target(pc)
@@ -69,14 +69,14 @@ module AdminCommandHandler::AdminRide
   def commands
     %w(
       admin_ride_horse
-  		admin_ride_bike
-  		admin_ride_wyvern
-  		admin_ride_strider
-  		admin_unride_wyvern
-  		admin_unride_strider
-  		admin_unride
-  		admin_ride_wolf
-  		admin_unride_wolf
+      admin_ride_bike
+      admin_ride_wyvern
+      admin_ride_strider
+      admin_unride_wyvern
+      admin_unride_strider
+      admin_unride
+      admin_ride_wolf
+      admin_unride_wolf
     )
   end
 end

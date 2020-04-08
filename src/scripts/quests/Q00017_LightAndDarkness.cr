@@ -42,7 +42,10 @@ class Scripts::Q00017_LightAndDarkness < Quest
         st.take_items(BLOOD_OF_SAINT, 1)
         st.set_cond(cond + 1, true)
       end
+    else
+      # automatically added
     end
+
     return html
   end
 
@@ -76,8 +79,14 @@ class Scripts::Q00017_LightAndDarkness < Quest
         elsif st.cond > npc_id - 31507
           html = npc_id.to_s + "-03.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

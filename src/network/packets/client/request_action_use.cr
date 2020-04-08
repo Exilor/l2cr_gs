@@ -764,7 +764,10 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       lvl = PetDataTable.get_pet_data(summon.id).get_available_level(skill_id, summon.level)
     when L2ServitorInstance
       lvl = SummonSkillsTable.get_available_level(summon, skill_id)
+    else
+      # automatically added
     end
+
 
     if lvl > 0
       summon.target = target

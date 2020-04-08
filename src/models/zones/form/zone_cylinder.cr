@@ -15,41 +15,41 @@ struct ZoneCylinder < L2ZoneForm
   end
 
   def intersects_rectangle?(ax1 : Int32, ax2 : Int32, ay1 : Int32, ay2 : Int32) : Bool
-		if @x > ax1 && @x < ax2 && @y > ay1 && @y < ay2
-			return true
-		end
+    if @x > ax1 && @x < ax2 && @y > ay1 && @y < ay2
+      return true
+    end
 
-		if Math.pow(ax1 - @x, 2) + Math.pow(ay1 - @y, 2) < @rad_s
-			return true
-		end
-		if Math.pow(ax1 - @x, 2) + Math.pow(ay2 - @y, 2) < @rad_s
-			return true
-		end
-		if Math.pow(ax2 - @x, 2) + Math.pow(ay1 - @y, 2) < @rad_s
-			return true
-		end
-		if Math.pow(ax2 - @x, 2) + Math.pow(ay2 - @y, 2) < @rad_s
-			return true
-		end
+    if Math.pow(ax1 - @x, 2) + Math.pow(ay1 - @y, 2) < @rad_s
+      return true
+    end
+    if Math.pow(ax1 - @x, 2) + Math.pow(ay2 - @y, 2) < @rad_s
+      return true
+    end
+    if Math.pow(ax2 - @x, 2) + Math.pow(ay1 - @y, 2) < @rad_s
+      return true
+    end
+    if Math.pow(ax2 - @x, 2) + Math.pow(ay2 - @y, 2) < @rad_s
+      return true
+    end
 
-		if @x > ax1 && @x < ax2
-			if (@y - ay2).abs < @rad
-				return true
-			end
-			if (@y - ay1).abs < @rad
-				return true
-			end
-		end
-		if @y > ay1 && @y < ay2
-			if (@x - ax2).abs < @rad
-				return true
-			end
-			if (@x - ax1).abs < @rad
-				return true
-			end
-		end
+    if @x > ax1 && @x < ax2
+      if (@y - ay2).abs < @rad
+        return true
+      end
+      if (@y - ay1).abs < @rad
+        return true
+      end
+    end
+    if @y > ay1 && @y < ay2
+      if (@x - ax2).abs < @rad
+        return true
+      end
+      if (@x - ax1).abs < @rad
+        return true
+      end
+    end
 
-		false
+    false
   end
 
   def get_distance_to_zone(x : Int32, y : Int32) : Float64

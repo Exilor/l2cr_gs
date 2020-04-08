@@ -112,7 +112,7 @@ class TarBeetleSpawn
           sp.z = GeoData.get_spawn_height(loc)
 
           npc = sp.do_spawn
-          npc.no_rnd_walk = true
+          npc.no_random_walk = true
           npc.immobilized = true
           npc.invul = true
           npc.disable_core_ai(true)

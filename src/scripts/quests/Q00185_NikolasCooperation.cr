@@ -105,7 +105,10 @@ class Scripts::Q00185_NikolasCooperation < Quest
         qs.set_cond(5, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -158,7 +161,10 @@ class Scripts::Q00185_NikolasCooperation < Quest
         elsif memo_state == 5
           html = "32366-07.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == MAESTRO_NIKOLA
         html = get_already_completed_msg(player)

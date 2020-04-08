@@ -48,7 +48,10 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
         html = get_htm(pc, event)
         html = html.sub("%next_siege%", siege_date)
       end
+    else
+      # automatically added
     end
+
 
     html
   end

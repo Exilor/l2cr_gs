@@ -117,7 +117,10 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
         qs.set_cond(15, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     return html
   end
@@ -145,7 +148,10 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
           qs.set_cond(14, true)
           give_items(killer, DEBRIS_OF_WILLOW, 1)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -329,7 +335,10 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
             html = "30652-03.html"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == HERMIT_SANTIAGO
         html = get_already_completed_msg(pc)

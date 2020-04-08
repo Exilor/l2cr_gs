@@ -47,7 +47,10 @@ class Scripts::Fisherman < AbstractNpcAI
       html = event
     when "BuySellRefund"
       npc.show_buy_window(pc, npc.id * 100, true)
+    else
+      # automatically added
     end
+
 
     html
   end

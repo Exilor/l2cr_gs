@@ -442,7 +442,10 @@ module GamePacketHandler
         print_debug(opcode, buffer, state, client)
         return
       end
+    else
+      # automatically added
     end
+
 
     # if packet_type.is_a?(GameClientPacket.class)
     #   packet_type.new

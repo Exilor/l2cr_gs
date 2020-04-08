@@ -11,7 +11,10 @@ class Scripts::Asamah < AbstractNpcAI
     case event
     when "32115-03.htm", "32115-04.htm"
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_first_talk(npc, player)

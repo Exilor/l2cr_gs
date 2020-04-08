@@ -98,7 +98,10 @@ abstract class Inventory < ItemContainer
         if inv.lhand_slot
           inv.lhand_slot = nil
         end
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -711,7 +714,10 @@ abstract class Inventory < ItemContainer
              L2Item::SLOT_LEGS, L2Item::SLOT_FEET, L2Item::SLOT_GLOVES,
              L2Item::SLOT_HEAD
           return
+        else
+          # automatically added
         end
+
       end
     end
 

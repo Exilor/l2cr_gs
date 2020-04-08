@@ -3,13 +3,13 @@ abstract class AbstractEnchantItem
 
   private ENCHANT_TYPES = {
     EtcItemType::ANCIENT_CRYSTAL_ENCHANT_AM,
-		EtcItemType::ANCIENT_CRYSTAL_ENCHANT_WP,
-		EtcItemType::BLESS_SCRL_ENCHANT_AM,
-		EtcItemType::BLESS_SCRL_ENCHANT_WP,
-		EtcItemType::SCRL_ENCHANT_AM,
-		EtcItemType::SCRL_ENCHANT_WP,
-		EtcItemType::SCRL_INC_ENCHANT_PROP_AM,
-		EtcItemType::SCRL_INC_ENCHANT_PROP_WP,
+    EtcItemType::ANCIENT_CRYSTAL_ENCHANT_WP,
+    EtcItemType::BLESS_SCRL_ENCHANT_AM,
+    EtcItemType::BLESS_SCRL_ENCHANT_WP,
+    EtcItemType::SCRL_ENCHANT_AM,
+    EtcItemType::SCRL_ENCHANT_WP,
+    EtcItemType::SCRL_INC_ENCHANT_PROP_AM,
+    EtcItemType::SCRL_INC_ENCHANT_PROP_WP,
   }
 
   getter id : Int32

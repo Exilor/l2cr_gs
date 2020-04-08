@@ -56,7 +56,10 @@ module RecipeData
             set["rareCount"] = c["count"].to_i
             set["rarity"] = c["rarity"].to_i
             has_rare = true
+          else
+            # automatically added
           end
+
         end
         recipe_list = L2RecipeList.new(set, has_rare)
         recipe_part_list.each { |x| recipe_list.add_recipe(x) }

@@ -69,7 +69,10 @@ class Scripts::Q00061_LawEnforcement < Quest
         qs.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -105,7 +108,10 @@ class Scripts::Q00061_LawEnforcement < Quest
           html = "32138-10.html"
         when 4
           html = "32138-10.html"
+        else
+          # automatically added
         end
+
       when EINDBURGH
         if qs.memo_state?(4)
           html = get_htm(pc, "32469-01.html")
@@ -113,7 +119,10 @@ class Scripts::Q00061_LawEnforcement < Quest
         elsif qs.memo_state?(5)
           html = "32469-02.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

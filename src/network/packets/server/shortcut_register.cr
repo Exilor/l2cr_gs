@@ -23,6 +23,9 @@ class Packets::Outgoing::ShortcutRegister < GameServerPacket
     when ShortcutType::ACTION..ShortcutType::BOOKMARK
       d @shortcut.id
       d @shortcut.character_type
+    else
+      # automatically added
     end
+
   end
 end

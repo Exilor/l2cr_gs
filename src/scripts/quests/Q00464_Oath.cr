@@ -81,7 +81,10 @@ class Scripts::Q00464_Oath < Quest
         html = "32596-04f.html"
       when 9
         html = "32596-04g.html"
+      else
+        # automatically added
       end
+
     when "end_quest"
       unless st.has_quest_items?(BOOK2)
         return get_no_quest_msg(pc)
@@ -117,7 +120,10 @@ class Scripts::Q00464_Oath < Quest
       else
         html = "strongbox-03.html"
       end
+    else
+      # automatically added
     end
+
 
     if start_quest
       if pc.level >= MIN_LEVEL
@@ -165,7 +171,10 @@ class Scripts::Q00464_Oath < Quest
           html = "32596-05f.html"
         when 9
           html = "32596-05g.html"
+        else
+          # automatically added
         end
+
       elsif st.cond > 1 && st.get_int("npc") == npc_id
         html = "#{npc_id}-01.html"
       end

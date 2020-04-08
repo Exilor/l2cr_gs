@@ -345,7 +345,10 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
       when "TELEPORT_TO_PLAYER"
         player = player.not_nil!
         world.elcadia.tele_to_location(*player.xyz, 0, world.instance_id)
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -383,7 +386,10 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
         if st && st.memo_state?(2)
           st.memo_state = 3
         end
+      else
+        # automatically added
       end
+
     end
 
     nil
@@ -395,7 +401,10 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
       start_quest_timer("OPEN_DOORS", 1000, npc, nil)
     when TOMB_OF_THE_SAINTESS
       start_quest_timer("CLOSE_TOMB_DOORS", 1000, npc, nil)
+    else
+      # automatically added
     end
+
 
     super
   end

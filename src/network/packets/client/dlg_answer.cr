@@ -71,6 +71,9 @@ class Packets::Incoming::DlgAnswer < GameClientPacket
       if holder && holder.door == pc.target && @answer == 1
         holder.door.close_me
       end
+    else
+      # automatically added
     end
+
   end
 end

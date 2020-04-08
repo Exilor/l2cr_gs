@@ -77,7 +77,10 @@ class Scripts::Q00454_CompletelyLost < Quest
       start_quest_timer("EXPIRED_TIMER", 2000, npc, nil)
     when "EXPIRED_TIMER"
       npc.delete_me
+    else
+      # automatically added
     end
+
 
     # For NPC-only timers, player is nil and no further checks or actions are required.
     unless pc
@@ -148,7 +151,10 @@ class Scripts::Q00454_CompletelyLost < Quest
       if qs.memo_state?(1)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -234,7 +240,10 @@ class Scripts::Q00454_CompletelyLost < Quest
       cancel_quest_timer("TIME_LIMIT3", receiver, nil)
       cancel_quest_timer("TIME_LIMIT4", receiver, nil)
       cancel_quest_timer("TIME_LIMIT5", receiver, nil)
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -431,9 +440,18 @@ class Scripts::Q00454_CompletelyLost < Quest
 
           qs.exit_quest(QuestType::DAILY, true)
           html = "32736-03.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

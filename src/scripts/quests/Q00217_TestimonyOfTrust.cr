@@ -173,7 +173,10 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
         qs.set_cond(12, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -307,7 +310,10 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -505,7 +511,10 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
         elsif memo_state == 18
           html = "30657-05.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == HIGH_PRIEST_HOLLINT
         html = get_already_completed_msg(pc)

@@ -29,7 +29,10 @@ class Scripts::Q10280_MutatedKaneusSchuttgart < Quest
     when "31972-03.htm"
       st.give_adena(210000, true)
       st.exit_quest(false, true)
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -77,7 +80,10 @@ class Scripts::Q10280_MutatedKaneusSchuttgart < Quest
         end
       when State::COMPLETED
         html = "31981-06.htm"
+      else
+        # automatically added
       end
+
     when ATRAXIA
       case st.state
       when State::STARTED
@@ -88,8 +94,14 @@ class Scripts::Q10280_MutatedKaneusSchuttgart < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

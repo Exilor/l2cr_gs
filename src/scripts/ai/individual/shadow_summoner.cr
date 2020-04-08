@@ -78,7 +78,10 @@ class Scripts::ShadowSummoner < AbstractNpcAI
       id = Rnd.bool ? DEMONS_BANQUET_1 : DEMONS_BANQUET_2
       demons_banquet = add_spawn(id, npc.x + 150, npc.y + 150, npc.z, npc.heading, false, 0)
       add_attack_desire(demons_banquet, pc, 10000)
+    else
+      # automatically added
     end
+
 
     super
   end

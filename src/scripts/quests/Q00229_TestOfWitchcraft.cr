@@ -184,7 +184,10 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
         add_spawn(npc, DREVANUL_PRINCE_ZERUEL, DREVANUL_PRINCE_ZERUEL_SPAWN, false, 0)
       end
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -214,7 +217,10 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::THAT_SWORD_IS_REALLY))
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -308,7 +314,10 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
             qs.set_cond(10)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -496,7 +505,10 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
             html = "30633-03.htm"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == SHADOW_ORIM
         html = get_already_completed_msg(pc)

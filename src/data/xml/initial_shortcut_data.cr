@@ -25,7 +25,10 @@ module InitialShortcutData
           parse_shortcuts(d)
         when "macros"
           parse_macros(d)
+        else
+          # automatically added
         end
+
       end
     end
   end
@@ -78,7 +81,10 @@ module InitialShortcutData
           d1 = b["itemId"].to_i
         when .delay? # MacroType::DELAY
           d1 = b["delay"].to_i
+        else
+          # automatically added
         end
+
         commands << MacroCMD.new(entry, type, d1, d2, cmd)
         entry += 1
       end
@@ -122,7 +128,10 @@ module InitialShortcutData
       when ShortcutType::MACRO
         next unless mcr = MACRO_PRESETS[shortcut_id]
         pc.register_macro(mcr)
+      else
+        # automatically added
       end
+
 
       sc2 = Shortcut.new(sc1.slot, sc1.page, sc1.type, shortcut_id, sc1.level, sc1.character_type)
       pc.send_packet(Packets::Outgoing::ShortcutRegister.new(sc2))
@@ -140,7 +149,10 @@ module InitialShortcutData
       when ShortcutType::MACRO
         next unless mcr = MACRO_PRESETS[shortcut_id]?
         pc.register_macro(mcr)
+      else
+        # automatically added
       end
+
 
       sc2 = Shortcut.new(sc1.slot, sc1.page, sc1.type, shortcut_id, sc1.level, sc1.character_type)
       pc.send_packet(Packets::Outgoing::ShortcutRegister.new(sc2))

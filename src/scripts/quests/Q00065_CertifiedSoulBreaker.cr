@@ -171,7 +171,10 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
         qs.set_cond(11, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -208,7 +211,10 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
           end
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::GRR_WHO_ARE_YOU_AND_WHY_HAVE_YOU_STOPPED_ME))
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -428,7 +434,10 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
         elsif memo_state == 14
           html = "32243-07.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == GRAND_MASTER_VITUS
         html = get_already_completed_msg(pc)

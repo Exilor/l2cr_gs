@@ -87,7 +87,10 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
       end
     when "32617-02.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -154,9 +157,15 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
           end
         when 3
           html = "32597-12.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

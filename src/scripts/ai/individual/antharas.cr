@@ -120,7 +120,10 @@ class Scripts::Antharas < AbstractNpcAI
         @antharas = antharas
         add_boss(@antharas)
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_adv_event(event, npc, player)
@@ -379,7 +382,10 @@ class Scripts::Antharas < AbstractNpcAI
       end
     when "MANAGE_SKILL"
       manage_skills(npc)
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -584,7 +590,10 @@ class Scripts::Antharas < AbstractNpcAI
           @attacker_2_hate = 500
         when 4
           @attacker_3_hate = 500
+        else
+          # automatically added
         end
+
       end
 
       distance_c2 = npc.calculate_distance(c2.not_nil!, true, false)

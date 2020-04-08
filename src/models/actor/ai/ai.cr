@@ -136,7 +136,10 @@ abstract class AI
       end
 
       on_intention_interact(arg0)
+    else
+      # automatically added
     end
+
 
     if @next_action.try &.intention?(intention)
       @next_action = nil
@@ -245,7 +248,10 @@ abstract class AI
       end
 
       on_event_afraid(arg0, arg1)
+    else
+      # automatically added
     end
+
 
     if (ni = @next_action) && ni.event?(event)
       ni.do_action

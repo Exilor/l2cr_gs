@@ -341,7 +341,10 @@ module AugmentationData
       if Rnd.rand(1..100) <= Config.augmentation_acc_skill_chance
         generate_skill = true
       end
+    else
+      # automatically added
     end
+
 
     if !generate_skill && Rnd.rand(1..100) <= Config.augmentation_basestat_chance
       stat34 = Rnd.rand(BASESTAT_STR..BASESTAT_MEN)
@@ -373,7 +376,10 @@ module AugmentationData
         stat34 = PURPLE_SKILLS[ls_level].sample(random: Rnd)
       when 3
         stat34 = RED_SKILLS[ls_level].sample(random: Rnd)
+      else
+        # automatically added
       end
+
     end
 
     if stat34 == 0

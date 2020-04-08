@@ -91,7 +91,10 @@ class Scripts::Q00037_MakeFormalWear < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when LEIKAR
       if st.started?
         case st.cond
@@ -113,7 +116,10 @@ class Scripts::Q00037_MakeFormalWear < Quest
           else
             html =  "31520-11.html"
           end
+        else
+          # automatically added
         end
+
       end
     when JEREMY
       if st.started?
@@ -126,7 +132,10 @@ class Scripts::Q00037_MakeFormalWear < Quest
           html = "31521-04.html"
         when 5
           html = "31521-06.html"
+        else
+          # automatically added
         end
+
       end
     when MIST
       if st.started?
@@ -135,9 +144,15 @@ class Scripts::Q00037_MakeFormalWear < Quest
           html = "31627-01.html"
         when 4
           html = "31627-03.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

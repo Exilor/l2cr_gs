@@ -1,14 +1,14 @@
 class Scripts::Q00010_IntoTheWorld < Quest
   # NPCs
-	private REED = 30520
-	private BALANKI = 30533
-	private GERALD = 30650
-	# Items
-	private VERY_EXPENSIVE_NECKLACE = 7574
-	private SCROLL_OF_ESCAPE_GIRAN = 7559
-	private MARK_OF_TRAVELER = 7570
-	# Misc
-	private MIN_LEVEL = 3
+  private REED = 30520
+  private BALANKI = 30533
+  private GERALD = 30650
+  # Items
+  private VERY_EXPENSIVE_NECKLACE = 7574
+  private SCROLL_OF_ESCAPE_GIRAN = 7559
+  private MARK_OF_TRAVELER = 7570
+  # Misc
+  private MIN_LEVEL = 3
 
   def initialize
     super(10, self.class.simple_name, "Into the World")
@@ -70,7 +70,10 @@ class Scripts::Q00010_IntoTheWorld < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when REED
       if st.started?
         case st.cond
@@ -82,7 +85,10 @@ class Scripts::Q00010_IntoTheWorld < Quest
           html = "30520-04.html"
         when 4
           html = "30520-06.html"
+        else
+          # automatically added
         end
+
       end
     when GERALD
       if st.started?
@@ -92,7 +98,10 @@ class Scripts::Q00010_IntoTheWorld < Quest
           html = "30650-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

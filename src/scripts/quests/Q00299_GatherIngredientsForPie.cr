@@ -87,7 +87,10 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
       else
         html = "30620-15.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -116,14 +119,20 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
         html = "30063-01.html"
       when 4
         html = "30063-03.html"
+      else
+        # automatically added
       end
+
     when BRIGHT
       case qs.cond
       when 5
         html = "30466-01.html"
       when 6
         html = "30466-03.html"
+      else
+        # automatically added
       end
+
     when EMILLY
       case qs.state
       when State::CREATED
@@ -148,9 +157,18 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
           if has_quest_items?(pc, FRUIT_BASKET)
             html = "30620-13.html"
           end
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

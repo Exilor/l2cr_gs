@@ -142,7 +142,10 @@ class Scripts::Q00386_StolenDignity < Quest
         return take_html(pc, qs, ask - 18)
       when 55..63
         return before_reward(pc, qs, ask - 54)
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -293,7 +296,10 @@ class Scripts::Q00386_StolenDignity < Quest
       qs.give_items(HAND_OF_CABRIO_HEAD, count)
     when 32
       qs.give_items(CRYSTAL_OF_DEAMON_PIECE, count)
+    else
+      # automatically added
     end
+
   end
 
   private def create_bingo_board(qs)
@@ -457,7 +463,10 @@ class Scripts::Q00386_StolenDignity < Quest
         if Rnd.rand(1000) < 487
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super

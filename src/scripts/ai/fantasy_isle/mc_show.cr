@@ -212,7 +212,10 @@ class Scripts::MC_Show < AbstractNpcAI
         start_quest_timer("social1", 5500, npc, nil)
         start_quest_timer("social1", 12500, npc, nil)
         start_quest_timer("28", 19700, npc, nil)
+      else
+        # automatically added
       end
+
     end
 
     super

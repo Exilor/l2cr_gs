@@ -93,7 +93,10 @@ class Scripts::Q00212_TrialOfDuty < Quest
         qs.memo_state = 11
         qs.set_cond(14, true)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -169,7 +172,10 @@ class Scripts::Q00212_TrialOfDuty < Quest
           qs.set_cond(15, true)
         end
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -202,7 +208,10 @@ class Scripts::Q00212_TrialOfDuty < Quest
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             reward_dimensional_diamonds(pc)
           end
+        else
+          # automatically added
         end
+
       else
         html = get_already_completed_msg(pc)
       end
@@ -230,7 +239,10 @@ class Scripts::Q00212_TrialOfDuty < Quest
         end
       when 4
         html = "30653-04.html"
+      else
+        # automatically added
       end
+
     when SIR_KIEL_NIGHTHAWK
       case qs.memo_state
       when 4
@@ -259,7 +271,10 @@ class Scripts::Q00212_TrialOfDuty < Quest
         end
       when 8
         html = "30654-06.html"
+      else
+        # automatically added
       end
+
     when SPIRIT_OF_SIR_TALIANUS
       if qs.memo_state?(6)
         if has_quest_items?(pc, MIRROR_OF_ORPIC, TALIANUSS_REPORT)
@@ -295,7 +310,10 @@ class Scripts::Q00212_TrialOfDuty < Quest
         if has_quest_items?(pc, TEAR_OF_LOYALTY)
           html = "30655-05.html"
         end
+      else
+        # automatically added
       end
+
     when DUSTIN
       case qs.memo_state
       when 10
@@ -328,7 +346,10 @@ class Scripts::Q00212_TrialOfDuty < Quest
         if has_quest_items?(pc, LETTER_OF_DUSTIN)
           html = "30116-10.html"
         end
+      else
+        # automatically added
       end
+
     when SIR_COLLIN_WINDAWOOD
       case qs.memo_state
       when 12
@@ -343,8 +364,14 @@ class Scripts::Q00212_TrialOfDuty < Quest
         if has_quest_items?(pc, LETTER_OF_WINDAWOOD)
           html = "30311-02.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

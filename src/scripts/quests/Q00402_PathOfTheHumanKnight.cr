@@ -1,66 +1,66 @@
 class Scripts::Q00402_PathOfTheHumanKnight < Quest
   # NPCs
-	private HIGH_PRIEST_BIOTIN = 30031
-	private LEVIAN = 30037
-	private CAPTAIN_GILBERT = 30039
-	private HIGH_PRIEST_RAYMOND = 30289
-	private CAPTAIN_BATHIS = 30332
-	private CAPTAIN_BEZIQUE = 30379
-	private SIR_KLAUS_VASPER = 30417
-	private SIR_ARON_TANFORD = 30653
-	# Items
-	private SQUIRES_MARK = 1271
-	private COIN_OF_LORDS1 = 1162
-	private COIN_OF_LORDS2 = 1163
-	private COIN_OF_LORDS3 = 1164
-	private COIN_OF_LORDS4 = 1165
-	private COIN_OF_LORDS5 = 1166
-	private COIN_OF_LORDS6 = 1167
-	private GLUDIO_GUARDS_1ST_BADGE = 1168
-	private BUGBEAR_NECKLACE = 1169
-	private EINHASADS_1ST_TEMPLE_BADGE = 1170
-	private EINHASAD_CRUCIFIX = 1171
-	private GLUDIO_GUARDS_2ND_BADGE = 1172
-	private VENOMOUS_SPIDERS_LEG = 1173
-	private EINHASADS_2ND_TEMPLE_BADGE = 1174
-	private LIZARDMANS_TOTEM = 1175
-	private GLUDIO_GUARDS_3RD_BADGE = 1176
-	private GIANT_SPIDERS_HUSK = 1177
-	private EINHASADS_3RD_TEMPLE_BADGE = 1178
-	private SKULL_OF_SILENT_HORROR = 1179
-	# Reward
-	private SWORD_OF_RITUAL = 1161
-	# Monster
-	private LANGK_LIZARDMAN_WARRIOR = 20024
-	private LANGK_LIZARDMAN_SCOUT = 20027
-	private LANGK_LIZARDMAN = 20030
-	private VENOMOUS_SPIDER = 20038
-	private ARACHNID_TRACKER = 20043
-	private ARACHNID_PREDATOR = 20050
-	private GIANT_SPIDER = 20103
-	private TALON_SPIDER = 20106
-	private BLADE_SPIDER = 20108
-	private SILENT_HORROR = 20404
-	private BUGBEAR_RAIDER = 20775
-	# Quest Monster
-	private UNDEAD_PRIEST = 27024
-	# Misc
-	private MIN_LEVEL = 18
+  private HIGH_PRIEST_BIOTIN = 30031
+  private LEVIAN = 30037
+  private CAPTAIN_GILBERT = 30039
+  private HIGH_PRIEST_RAYMOND = 30289
+  private CAPTAIN_BATHIS = 30332
+  private CAPTAIN_BEZIQUE = 30379
+  private SIR_KLAUS_VASPER = 30417
+  private SIR_ARON_TANFORD = 30653
+  # Items
+  private SQUIRES_MARK = 1271
+  private COIN_OF_LORDS1 = 1162
+  private COIN_OF_LORDS2 = 1163
+  private COIN_OF_LORDS3 = 1164
+  private COIN_OF_LORDS4 = 1165
+  private COIN_OF_LORDS5 = 1166
+  private COIN_OF_LORDS6 = 1167
+  private GLUDIO_GUARDS_1ST_BADGE = 1168
+  private BUGBEAR_NECKLACE = 1169
+  private EINHASADS_1ST_TEMPLE_BADGE = 1170
+  private EINHASAD_CRUCIFIX = 1171
+  private GLUDIO_GUARDS_2ND_BADGE = 1172
+  private VENOMOUS_SPIDERS_LEG = 1173
+  private EINHASADS_2ND_TEMPLE_BADGE = 1174
+  private LIZARDMANS_TOTEM = 1175
+  private GLUDIO_GUARDS_3RD_BADGE = 1176
+  private GIANT_SPIDERS_HUSK = 1177
+  private EINHASADS_3RD_TEMPLE_BADGE = 1178
+  private SKULL_OF_SILENT_HORROR = 1179
+  # Reward
+  private SWORD_OF_RITUAL = 1161
+  # Monster
+  private LANGK_LIZARDMAN_WARRIOR = 20024
+  private LANGK_LIZARDMAN_SCOUT = 20027
+  private LANGK_LIZARDMAN = 20030
+  private VENOMOUS_SPIDER = 20038
+  private ARACHNID_TRACKER = 20043
+  private ARACHNID_PREDATOR = 20050
+  private GIANT_SPIDER = 20103
+  private TALON_SPIDER = 20106
+  private BLADE_SPIDER = 20108
+  private SILENT_HORROR = 20404
+  private BUGBEAR_RAIDER = 20775
+  # Quest Monster
+  private UNDEAD_PRIEST = 27024
+  # Misc
+  private MIN_LEVEL = 18
 
   def initialize
     super(402, self.class.simple_name, "Path Of The Human Knight")
 
     add_start_npc(SIR_KLAUS_VASPER)
-		add_talk_id(
+    add_talk_id(
       SIR_KLAUS_VASPER, HIGH_PRIEST_BIOTIN, LEVIAN, HIGH_PRIEST_RAYMOND,
       CAPTAIN_GILBERT, CAPTAIN_BATHIS, CAPTAIN_BEZIQUE, SIR_ARON_TANFORD
     )
-		add_kill_id(
+    add_kill_id(
       LANGK_LIZARDMAN_WARRIOR, LANGK_LIZARDMAN_SCOUT, LANGK_LIZARDMAN,
       VENOMOUS_SPIDER, ARACHNID_TRACKER, ARACHNID_PREDATOR, GIANT_SPIDER,
       TALON_SPIDER, BLADE_SPIDER, SILENT_HORROR, BUGBEAR_RAIDER, UNDEAD_PRIEST
     )
-		register_quest_items(
+    register_quest_items(
       SQUIRES_MARK, COIN_OF_LORDS1, COIN_OF_LORDS2, COIN_OF_LORDS3,
       COIN_OF_LORDS4, COIN_OF_LORDS5, COIN_OF_LORDS6, GLUDIO_GUARDS_1ST_BADGE,
       BUGBEAR_NECKLACE, EINHASADS_1ST_TEMPLE_BADGE, EINHASAD_CRUCIFIX,
@@ -150,7 +150,10 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
     when "30332-02.html"
       give_items(pc, GLUDIO_GUARDS_1ST_BADGE, 1)
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, killer, is_summon)
@@ -170,7 +173,10 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
         reward_kill(killer, GLUDIO_GUARDS_1ST_BADGE, BUGBEAR_NECKLACE, 10)
       when UNDEAD_PRIEST
         reward_kill(killer, EINHASADS_1ST_TEMPLE_BADGE, EINHASAD_CRUCIFIX, 12, 5)
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -326,7 +332,10 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
         if has_quest_items?(pc, SQUIRES_MARK)
           html = "30653-01.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

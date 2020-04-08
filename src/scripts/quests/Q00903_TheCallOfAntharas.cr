@@ -33,7 +33,10 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
       when TARASK_DRAGON
         st.give_items(TARASK_DRAGONS_LEATHER_FRAGMENT, 1)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
+      else
+        # automatically added
       end
+
 
       if st.has_quest_items?(BEHEMOTH_DRAGON_LEATHER)
         if st.has_quest_items?(TARASK_DRAGONS_LEATHER_FRAGMENT)
@@ -56,7 +59,10 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
       when "30755-06.html"
         st.start_quest
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -88,7 +94,10 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         st.exit_quest(QuestType::DAILY, true)
         html = "30755-08.html"
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       if !st.now_available?
         html = "30755-02.html"
@@ -102,7 +111,10 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
           html = "30755-01.htm"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

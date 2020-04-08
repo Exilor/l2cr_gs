@@ -64,14 +64,14 @@ module GeoPathFinding
 
   def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Array(AbstractNodeLoc)?
     gx = (x - L2World::MAP_MIN_X) >> 4
-		gy = (y - L2World::MAP_MIN_Y) >> 4
-		gz = z.to_i16!
-		gtx = (tx - L2World::MAP_MIN_X) >> 4
-		gty = (ty - L2World::MAP_MIN_Y) >> 4
-		gtz = tz.to_i16!
+    gy = (y - L2World::MAP_MIN_Y) >> 4
+    gz = z.to_i16!
+    gtx = (tx - L2World::MAP_MIN_X) >> 4
+    gty = (ty - L2World::MAP_MIN_Y) >> 4
+    gtz = tz.to_i16!
 
-		start = read_node(gx, gy, gz)
-		stop = read_node(gtx, gty, gtz)
+    start = read_node(gx, gy, gz)
+    stop = read_node(gtx, gty, gtz)
 
     unless start && stop
       debug "!(start && stop)"
@@ -229,61 +229,61 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-			neighbor -= 1
-			new_node_x = (node_x + 1).to_i16
-			new_node_y = (node_y + 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor)
-				neighbors << new_node
-			end
-		end
+      neighbor -= 1
+      new_node_x = (node_x + 1).to_i16
+      new_node_y = (node_y + 1).to_i16
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
+        neighbors << new_node
+      end
+    end
 
-		neighbor = pn[idx].to_i8 # S
+    neighbor = pn[idx].to_i8 # S
     idx += 1
 
-		if neighbor > 0
-			neighbor -= 1
-			new_node_x = node_x.to_i16
-			new_node_y = (node_y + 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor)
-				neighbors << new_node
-			end
-		end
+    if neighbor > 0
+      neighbor -= 1
+      new_node_x = node_x.to_i16
+      new_node_y = (node_y + 1).to_i16
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
+        neighbors << new_node
+      end
+    end
 
-		neighbor = pn[idx].to_i8 # SW
+    neighbor = pn[idx].to_i8 # SW
     idx += 1
 
-		if neighbor > 0
-			neighbor -= 1
-			new_node_x = (node_x - 1).to_i16
-			new_node_y = (node_y + 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor)
-				neighbors << new_node
-			end
-		end
+    if neighbor > 0
+      neighbor -= 1
+      new_node_x = (node_x - 1).to_i16
+      new_node_y = (node_y + 1).to_i16
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
+        neighbors << new_node
+      end
+    end
 
-		neighbor = pn[idx].to_i8 # W
+    neighbor = pn[idx].to_i8 # W
     idx += 1
 
-		if neighbor > 0
-			neighbor -= 1
-			new_node_x = (node_x - 1).to_i16
-			new_node_y = node_y.to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor)
-				neighbors << new_node
-			end
-		end
+    if neighbor > 0
+      neighbor -= 1
+      new_node_x = (node_x - 1).to_i16
+      new_node_y = node_y.to_i16
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
+        neighbors << new_node
+      end
+    end
 
-		neighbor = pn[idx].to_i8 # SW
+    neighbor = pn[idx].to_i8 # SW
     idx += 1
 
-		if neighbor > 0
-			neighbor -= 1
-			new_node_x = (node_x - 1).to_i16
-			new_node_y = (node_y - 1).to_i16
-			if new_node = read_node(new_node_x, new_node_y, neighbor)
-				neighbors << new_node
-			end
-		end
+    if neighbor > 0
+      neighbor -= 1
+      new_node_x = (node_x - 1).to_i16
+      new_node_y = (node_y - 1).to_i16
+      if new_node = read_node(new_node_x, new_node_y, neighbor)
+        neighbors << new_node
+      end
+    end
 
     neighbors
   end

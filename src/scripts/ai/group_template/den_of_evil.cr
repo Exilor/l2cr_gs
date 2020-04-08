@@ -76,7 +76,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
     npc.immobilized = true
 
     unless zone = ZoneManager.get_zone(npc, L2EffectZone)
-      warn { "NPC #{npc} spawned outside of L2EffectZone, check your zone coords." }
+      warn { "NPC #{npc} spawned in a missing zone." }
       return
     end
     skill_id = get_skill_id_by_npc_id(npc.id)
@@ -99,7 +99,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
       15000
     )
     unless zone = ZoneManager.get_zone(npc, L2EffectZone)
-      warn { "NPC #{npc} killed outside of L2EffectZone, check your zone coords." }
+      warn { "NPC #{npc} killed in a missing zone." }
       return
     end
     skill_id = get_skill_id_by_npc_id(npc.id)
@@ -134,7 +134,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
           if char.do_die(nil)
             if char.npc?
               # respawn eye
-              if EYE_IDS.includes?(char.id)
+              if EYE_IDS.bincludes?(char.id)
                 ThreadPoolManager.schedule_ai(-> {
                     @owner.add_spawn(EYE_IDS.sample(random: Rnd), char.location, false, 0)
                   },

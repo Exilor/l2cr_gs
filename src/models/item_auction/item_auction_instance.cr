@@ -256,7 +256,10 @@ class ItemAuctionInstance
             @instance.state_task = ThreadPoolManager.schedule_general(self, Math.max(@auction.ending_time - Time.ms, 0))
             return
           end
+        else
+          # automatically added
         end
+
 
         unless @auction.set_auction_state(state, ItemAuctionState::FINISHED)
           raise "Could not set auction state: #{ItemAuctionState::FINISHED}, expected: #{state}"

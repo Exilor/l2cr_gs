@@ -130,13 +130,19 @@ class Packets::Incoming::UseItem < GameClientPacket
             when WeaponType::NONE
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
+            else
+              # automatically added
             end
+
           else
             case wpn.item_type
             when WeaponType::RAPIER, WeaponType::CROSSBOW, WeaponType::ANCIENTSWORD
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
+            else
+              # automatically added
             end
+
           end
         end
       when L2Item::SLOT_CHEST, L2Item::SLOT_BACK, L2Item::SLOT_GLOVES, L2Item::SLOT_FEET, L2Item::SLOT_HEAD, L2Item::SLOT_FULL_ARMOR, L2Item::SLOT_LEGS
@@ -149,7 +155,10 @@ class Packets::Incoming::UseItem < GameClientPacket
           pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
           return
         end
+      else
+        # automatically added
       end
+
 
       if pc.casting_now? || pc.casting_simultaneously_now?
         set_next_action(pc, item)
@@ -168,7 +177,10 @@ class Packets::Incoming::UseItem < GameClientPacket
           pc.broadcast_user_info
           send_packet(ItemList.new(pc, false))
           return
+        else
+          # automatically added
         end
+
       end
 
       return unless handler = ItemHandler[item.template.as?(L2EtcItem)]

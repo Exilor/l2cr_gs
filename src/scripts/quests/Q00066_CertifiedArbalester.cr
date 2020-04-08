@@ -247,7 +247,10 @@ class Scripts::Q00066_CertifiedArbalester < Quest
         qs.set_cond(19, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -429,7 +432,10 @@ class Scripts::Q00066_CertifiedArbalester < Quest
           qs.memo_state = 32
           qs.set_cond(20, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -613,7 +619,10 @@ class Scripts::Q00066_CertifiedArbalester < Quest
             html = "32220-28.html"
           end
         end
+      else
+        # automatically added
       end
+
     end
     if qs.completed?
       if npc.id == MASTER_RINDY

@@ -133,7 +133,10 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
     when "30682-02.html"
       give_items(pc, PEKIRONS_TOTEM, 1)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -226,7 +229,10 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
           give_items(killer, HERMODTS_SKULL, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
+      else
+        # automatically added
       end
+
 
     end
 
@@ -402,7 +408,10 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
             html = "30682-05.html"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == SEER_SOMAK
         html = get_already_completed_msg(pc)

@@ -90,7 +90,10 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
             when 3
               qs.memo_state = 4
               give_items(pc, CRUCIFIX)
+            else
+              # automatically added
             end
+
 
             html = "30754-09.html"
           end
@@ -111,8 +114,14 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
         html = "30754-12.html"
       when 4
         html = "30754-13.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -210,7 +219,10 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
           html = "30857-02.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

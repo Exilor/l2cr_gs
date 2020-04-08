@@ -105,7 +105,10 @@ module AdminCommandHandler::AdminClan
         clan.set_new_leader(member)
         pc.send_message("Task have been forcely executed.")
       end
+    else
+      # automatically added
     end
+
 
     true
   end

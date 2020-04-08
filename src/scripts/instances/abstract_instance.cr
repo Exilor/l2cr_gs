@@ -140,7 +140,10 @@ abstract class AbstractInstance < AbstractNpcAI
           end
         end
       end
+    else
+      # automatically added
     end
+
   end
 
   abstract def on_enter_instance(pc : L2PcInstance, world : InstanceWorld, first_entrance : Bool)

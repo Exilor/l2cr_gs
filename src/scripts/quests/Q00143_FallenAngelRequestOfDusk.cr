@@ -104,7 +104,10 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when TOBIAS
       if st.started?
         case st.cond
@@ -121,7 +124,10 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
           end
           st.exit_quest(false, true)
           html = "30297-07.html"
+        else
+          # automatically added
         end
+
       end
     when CASIAN
       if st.started?
@@ -143,7 +149,10 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
           html = "32368-02.html"
         when 5
           html = "32368-05.html"
+        else
+          # automatically added
         end
+
       end
     when ANGEL
       if st.started?
@@ -158,9 +167,15 @@ class Scripts::Q00143_FallenAngelRequestOfDusk < Quest
           else
             html = "32369-02.html"
           end
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -63,7 +63,10 @@ class Scripts::Q00432_BirthdayPartySong < Quest
       html = pc.level >= 31 ? "31043-01.htm" : "31043-00.htm"
     when State::STARTED
       html = st.cond?(1) ? "31043-03.html" : "31043-04.html"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -30,7 +30,10 @@ class L2ClanHallDoormenInstance < L2DoormenInstance
           ok = Evolve.do_evolve(pc, self, 4424, 10310, 55)
         when 5
           ok = Evolve.do_evolve(pc, self, 10426, 10611, 70)
+        else
+          # automatically added
         end
+
 
         html = NpcHtmlMessage.new(l2id)
         if ok

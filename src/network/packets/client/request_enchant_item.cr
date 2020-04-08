@@ -188,7 +188,10 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
             # optional logging
           end
         end
+      else
+        # automatically added
       end
+
 
       send_packet(StatusUpdate.current_load(pc))
 

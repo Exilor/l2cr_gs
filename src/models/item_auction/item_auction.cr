@@ -220,7 +220,10 @@ class ItemAuction
             @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
           end
         end
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -245,7 +248,10 @@ class ItemAuction
       if @starting_time < Time.ms - Time.days_to_ms(Config.alt_item_auction_expired_after)
         return false
       end
+    else
+      # automatically added
     end
+
 
     player_l2id = player.l2id
 

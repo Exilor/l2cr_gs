@@ -43,7 +43,10 @@ module ItemHandler::MercTicket
         pc.send_packet(SystemMessageId::THIS_MERCENARY_CANNOT_BE_POSITIONED_ANYMORE)
         return false
       end
+    else
+      # automatically added
     end
+
 
     if MercTicketManager.at_castle_limit?(item.id)
       pc.send_packet(SystemMessageId::THIS_MERCENARY_CANNOT_BE_POSITIONED_ANYMORE)

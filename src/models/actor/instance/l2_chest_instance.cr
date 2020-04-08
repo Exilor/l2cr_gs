@@ -3,7 +3,7 @@ class L2ChestInstance < L2MonsterInstance
 
   def initialize(template : L2NpcTemplate)
     super
-    self.no_rnd_walk = true
+    self.no_random_walk = true
   end
 
   def instance_type : InstanceType
@@ -40,7 +40,10 @@ class L2ChestInstance < L2MonsterInstance
         id = 21763
       when 18297, 18298
         id = 21786
+      else
+        # automatically added
       end
+
     end
 
     super(NpcData[id], last_attacker)

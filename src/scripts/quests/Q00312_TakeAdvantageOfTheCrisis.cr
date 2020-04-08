@@ -75,7 +75,10 @@ class Scripts::Q00312_TakeAdvantageOfTheCrisis < Quest
       else
         html = "30535-07.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -39,7 +39,10 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
             st.give_items(ASHUTAR_HEART, 1)
           end
           st.set_cond(3, true)
+        else
+          # automatically added
         end
+
       end
     end
   end
@@ -68,7 +71,10 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
         else
           html = "31560-04.html"
         end
+      else
+        # automatically added
       end
+
     else
       if event == "despawn_ashutar"
         npc = npc.not_nil!
@@ -120,7 +126,10 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
             html = "31372-05.html"
           end
         end
+      else
+        # automatically added
       end
+
     when VARKA_TOTEM
       if st.started?
         case st.cond
@@ -130,9 +139,15 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
           html = spawn_ashutar(npc, st)
         when 3
           html = "31560-05.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

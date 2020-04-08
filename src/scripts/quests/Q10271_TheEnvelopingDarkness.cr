@@ -28,7 +28,10 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
         st.take_items(MEDIBAL_DOCUMENT, -1)
         st.set_cond(4, true)
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -58,10 +61,16 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
           st.give_adena(62516, true)
           st.add_exp_and_sp(377403, 37867)
           st.exit_quest(false, true)
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = "32560-03.html"
+      else
+        # automatically added
       end
+
     when EL
       if st.completed?
         html = "32556-02.html"
@@ -75,7 +84,10 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
           html = "32556-08.html"
         when 4
           html = "32556-09.html"
+        else
+          # automatically added
         end
+
       end
     when MEDIBAL_CORPSE
       if st.completed?
@@ -88,9 +100,15 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
           st.give_items(MEDIBAL_DOCUMENT, 1)
         when 3, 4
           html = "32528-03.html"
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

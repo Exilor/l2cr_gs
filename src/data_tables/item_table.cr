@@ -66,7 +66,10 @@ module ItemTable
         ARMORS[item.id] = item
       when L2Weapon
         WEAPONS[item.id] = item
+      else
+        # automatically added
       end
+
     end
 
     0.upto(highest) do |i|
@@ -140,7 +143,10 @@ module ItemTable
         ref = reference.name || "no-name"
       when String
         ref = reference
+      else
+        # automatically added
       end
+
       name = actor.target.try &.name || "no-name"
       GMAudit.log(actor, "#{process} (id: #{item_id}, count: #{item.count}, name: #{item.item_name}, item_obj_id: #{item.l2id})", name, "L2Object referencing this action is: #{ref}")
     end
@@ -171,7 +177,10 @@ module ItemTable
           ref = reference.name || "no-name"
         when String
           ref = reference
+        else
+          # automatically added
         end
+
         name = actor.target.try &.name || "no-target"
         GMAudit.log(actor, "#{process} (id: #{item.id}, count: #{item.count}, item_obj_id: #{item.l2id})", name, "L2Object referencing this action is: #{ref}")
       end

@@ -66,7 +66,10 @@ class Scripts::Q00455_WingsOfSand < Quest
       when "32864-05.htm"
         st.start_quest
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -95,7 +98,10 @@ class Scripts::Q00455_WingsOfSand < Quest
       when 3
         give_items(st)
         html = "32864-07.html"
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       if !st.now_available?
         html = "32864-08.html"
@@ -105,7 +111,10 @@ class Scripts::Q00455_WingsOfSand < Quest
           html = "32864-01.htm"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

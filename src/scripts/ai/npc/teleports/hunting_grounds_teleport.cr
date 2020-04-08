@@ -54,7 +54,10 @@ class Scripts::HuntingGroundsTeleport < AbstractNpcAI
       html = check ? "low_rune.htm" : "hg_rune.htm"
     when 31997, 31998
       html = check ? "low_schuttgart.htm" : "hg_schuttgart.htm"
+    else
+      # automatically added
     end
+
 
     html || ""
   end

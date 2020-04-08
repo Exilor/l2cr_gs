@@ -130,7 +130,10 @@ class Scripts::Q00287_FiguringItOut < Quest
       else
         html = "32742-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

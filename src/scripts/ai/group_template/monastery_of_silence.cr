@@ -73,7 +73,10 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
       if npc
         npc.script_value = 0
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -118,7 +121,10 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
         npc.script_value = 1
         start_quest_timer("DO_CAST", 20000, npc, pc)
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -149,7 +155,10 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
           npc.script_value = 1
           start_quest_timer("DO_CAST", 20000, npc, pc)
         end
+      else
+        # automatically added
       end
+
 
 
       if skill && npc.check_do_cast_conditions(skill.skill)

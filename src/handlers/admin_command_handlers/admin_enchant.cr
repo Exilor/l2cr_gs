@@ -9,33 +9,33 @@ module AdminCommandHandler::AdminEnchant
       armor_type =
       if command.starts_with?("admin_seteh")
         Inventory::HEAD
-  		elsif command.starts_with?("admin_setec")
+      elsif command.starts_with?("admin_setec")
         Inventory::CHEST
-  		elsif command.starts_with?("admin_seteg")
+      elsif command.starts_with?("admin_seteg")
         Inventory::GLOVES
-  		elsif command.starts_with?("admin_setel")
+      elsif command.starts_with?("admin_setel")
         Inventory::FEET
-  		elsif command.starts_with?("admin_seteb")
+      elsif command.starts_with?("admin_seteb")
         Inventory::LEGS
-  		elsif command.starts_with?("admin_setew")
+      elsif command.starts_with?("admin_setew")
         Inventory::RHAND
-  		elsif command.starts_with?("admin_setes")
+      elsif command.starts_with?("admin_setes")
         Inventory::LHAND
-  		elsif command.starts_with?("admin_setle")
+      elsif command.starts_with?("admin_setle")
         Inventory::LEAR
-  		elsif command.starts_with?("admin_setre")
+      elsif command.starts_with?("admin_setre")
         Inventory::REAR
-  		elsif command.starts_with?("admin_setlf")
+      elsif command.starts_with?("admin_setlf")
         Inventory::LFINGER
-  		elsif command.starts_with?("admin_setrf")
+      elsif command.starts_with?("admin_setrf")
         Inventory::RFINGER
-  		elsif command.starts_with?("admin_seten")
+      elsif command.starts_with?("admin_seten")
         Inventory::NECK
-  		elsif command.starts_with?("admin_setun")
+      elsif command.starts_with?("admin_setun")
         Inventory::UNDER
-  		elsif command.starts_with?("admin_setba")
+      elsif command.starts_with?("admin_setba")
         Inventory::CLOAK
-  		elsif command.starts_with?("admin_setbe")
+      elsif command.starts_with?("admin_setbe")
         Inventory::BELT
       else
         -1
@@ -99,21 +99,21 @@ module AdminCommandHandler::AdminEnchant
   def commands
     %w(
       admin_seteh
-  		admin_setec
-  		admin_seteg
-  		admin_setel
-  		admin_seteb
-  		admin_setew
-  		admin_setes
-  		admin_setle
-  		admin_setre
-  		admin_setlf
-  		admin_setrf
-  		admin_seten
-  		admin_setun
-  		admin_setba
-  		admin_setbe
-  		admin_enchant
+      admin_setec
+      admin_seteg
+      admin_setel
+      admin_seteb
+      admin_setew
+      admin_setes
+      admin_setle
+      admin_setre
+      admin_setlf
+      admin_setrf
+      admin_seten
+      admin_setun
+      admin_setba
+      admin_setbe
+      admin_enchant
     )
   end
 end

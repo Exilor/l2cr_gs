@@ -42,7 +42,7 @@ module ItemsAutoDestroy
           end
         else
           if Config.autodestroy_item_after == 0
-            sleep_time = 3600000
+            sleep_time = 3_600_000
           else
             sleep_time = Config.autodestroy_item_after * 1000
           end

@@ -165,7 +165,10 @@ class L2SepulcherNpcInstance < L2Npc
         when 31929, 31934, 31939, 31944
           FourSepulchersManager.spawn_shadow(id)
           # in java, here goes a "default:" not preceeded by a "break"
+        else
+          # automatically added
         end
+
 
         open_next_door(id)
         if party = pc.party

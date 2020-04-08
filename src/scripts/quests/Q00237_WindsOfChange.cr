@@ -92,7 +92,10 @@ class Scripts::Q00237_WindsOfChange < Quest
       st.add_exp_and_sp(892773, 60012)
       st.exit_quest(false, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -117,8 +120,14 @@ class Scripts::Q00237_WindsOfChange < Quest
           html = "30899-11.html"
         when 5, 6
           html = "30899-08.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     when IASON
       if st.completed?
         html = get_no_quest_msg(pc)
@@ -132,7 +141,10 @@ class Scripts::Q00237_WindsOfChange < Quest
           html = "30969-07.html"
         when 5, 6
           html = "30969-11.html"
+        else
+          # automatically added
         end
+
       end
     when ROMAN
       case st.cond
@@ -140,14 +152,20 @@ class Scripts::Q00237_WindsOfChange < Quest
         html = "30897-01.html"
       when 3, 4
         html = "30897-04.html"
+      else
+        # automatically added
       end
+
     when MORELYN
       case st.cond
       when 3
         html = "30925-01.html"
       when 4
         html = "30925-04.html"
+      else
+        # automatically added
       end
+
     when HELVETICA
       if st.completed?
         if st.has_quest_items?(VICINITY_OF_FOS) || st.player.quest_completed?(Q00238_SuccessFailureOfBusiness.simple_name)
@@ -172,7 +190,10 @@ class Scripts::Q00237_WindsOfChange < Quest
       elsif st.cond?(6)
         html = "32643-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

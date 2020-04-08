@@ -61,7 +61,10 @@ class Scripts::LibraryOfSages < AbstractInstance
         cancel_quest_timer("FOLLOW", npc, pc)
         teleport_player(pc, START_LOC, world.instance_id)
         world.elcadia.tele_to_location(*START_LOC.xyz, 0, world.instance_id)
+      else
+        # automatically added
       end
+
     end
 
     super

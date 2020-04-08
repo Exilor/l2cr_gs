@@ -757,7 +757,10 @@ class L2Attackable < L2Npc
         when 4308 then count *= 7 # Strong type x7
         when 4309 then count *= 8 # Strong type x8
         when 4310 then count *= 9 # Strong type x9
+        else
+          # automatically added
         end
+
       end
 
       diff = level - seed.level - 5
@@ -835,4 +838,3 @@ class L2Attackable < L2Npc
     true
   end
 end
-

@@ -38,7 +38,10 @@ module UIData
         parse_commands(cat, d)
       when "keys"
         parse_keys(cat, d)
+      else
+        # automatically added
       end
+
     end
   end
 
@@ -66,7 +69,10 @@ module UIData
           akey.toggle_key2 = val
         when "showType"
           akey.show_status = val
+        else
+          # automatically added
         end
+
       end
       add_key(KEYS, cat, akey)
     end

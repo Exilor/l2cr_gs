@@ -591,7 +591,10 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         npc.do_cast(QUEST_TRAP_POWER_SHOT)
         html = event
       end
+    else
+      # automatically added
     end
+
 
 
     html
@@ -649,7 +652,10 @@ class Scripts::Q00120_PavelsLastResearch < Quest
           if has_quest_items?(pc, HEART_OF_ATLANTA)
             html = "32046-45.html"
           end
+        else
+          # automatically added
         end
+
       else
         if pc.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
           html = get_already_completed_msg(pc)
@@ -691,7 +697,10 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         if has_quest_items?(pc, WENDYS_NECKLACE)
           html = "32047-34.html"
         end
+      else
+        # automatically added
       end
+
     when YUMI
       case qs.memo_state
       when 2
@@ -702,7 +711,10 @@ class Scripts::Q00120_PavelsLastResearch < Quest
           html = "32041-04.html"
         when 2
           html = "32041-06.html"
+        else
+          # automatically added
         end
+
       when 5
         if qs.get_memo_state_ex(0) > 0
           html = "32041-07.html"
@@ -731,7 +743,10 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         if has_quest_items?(pc, WENDYS_NECKLACE)
           html = "32041-28.html"
         end
+      else
+        # automatically added
       end
+
     when WEATHERMASTER_1
       case qs.memo_state
       when 8
@@ -747,7 +762,10 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         end
       when 11
         html = "32042-14.html"
+      else
+        # automatically added
       end
+
     when WEATHERMASTER_2
       case qs.memo_state
       when 16
@@ -758,7 +776,10 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         html = "32043-09.html"
       when 19
         html = "32043-23.html"
+      else
+        # automatically added
       end
+
     when WEATHERMASTER_3
       case qs.memo_state
       when 20
@@ -767,15 +788,24 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         html = "32044-08.html"
       when 22
         html = "32044-22.html"
+      else
+        # automatically added
       end
+
     when DOCTOR_CHAOS_SECRET_BOOKSHELF
       case qs.memo_state
       when 13
         html = "32045-01.html"
       when 14
         html = "32045-03.html"
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

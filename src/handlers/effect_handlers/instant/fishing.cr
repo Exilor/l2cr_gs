@@ -1,6 +1,6 @@
 class EffectHandler::Fishing < AbstractEffect
   MIN_BAIT_DISTANCE = 90
-	MAX_BAIT_DISTANCE = 250
+  MAX_BAIT_DISTANCE = 250
 
   def instant? : Bool
     true

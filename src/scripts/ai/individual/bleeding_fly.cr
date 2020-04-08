@@ -85,7 +85,10 @@ class Scripts::BleedingFly < AbstractNpcAI
           start_quest_timer(TIMER_LOW_HP, 80000, npc, nil)
         end
       end
+    else
+      # automatically added
     end
+
 
     super
   end

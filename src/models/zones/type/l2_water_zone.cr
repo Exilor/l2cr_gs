@@ -17,7 +17,10 @@ class L2WaterZone < L2ZoneType
           pc.send_packet(NpcInfo.new(char, pc))
         end
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_exit(char)
@@ -34,7 +37,10 @@ class L2WaterZone < L2ZoneType
           pc.send_packet(NpcInfo.new(char, pc))
         end
       end
+    else
+      # automatically added
     end
+
   end
 
   def water_z : Int32

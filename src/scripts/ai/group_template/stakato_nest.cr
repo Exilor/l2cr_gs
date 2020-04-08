@@ -4,40 +4,23 @@ class Scripts::StakatoNest < AbstractNpcAI
     22621, 22622, 22623, 22624, 22625, 22626, 22627, 22628, 22629, 22630,
     22631, 22632, 22633, 25667
   }
-  # Coocons
-  private COCOONS = {
-    18793, 18794, 18795, 18796, 18797, 18798
-  }
-  # Cannibalistic Stakato Leader
-  private STAKATO_LEADER = 22625
 
-  # Spike Stakato Nurse
-  private STAKATO_NURSE = 22630
-  # Spike Stakato Nurse (Changed)
-  private STAKATO_NURSE_2 = 22631
-  # Spiked Stakato Baby
-  private STAKATO_BABY = 22632
-  # Spiked Stakato Captain
-  private STAKATO_CAPTAIN = 22629
+  private COCOONS = {18793, 18794, 18795, 18796, 18797, 18798}
 
-  # Female Spiked Stakato
-  private STAKATO_FEMALE = 22620
-  # Male Spiked Stakato
-  private STAKATO_MALE = 22621
-  # Male Spiked Stakato (Changed)
-  private STAKATO_MALE_2 = 22622
-  # Spiked Stakato Guard
-  private STAKATO_GUARD = 22619
+  private STAKATO_LEADER     = 22625 # Cannibalistic Stakato Leader
+  private STAKATO_NURSE      = 22630 # Spike Stakato Nurse
+  private STAKATO_NURSE_2    = 22631 # Spike Stakato Nurse (Changed)
+  private STAKATO_BABY       = 22632 # Spiked Stakato Baby
+  private STAKATO_CAPTAIN    = 22629 # Spiked Stakato Captain
+  private STAKATO_FEMALE     = 22620 # Female Spiked Stakato
+  private STAKATO_MALE       = 22621 # Male Spiked Stakato
+  private STAKATO_MALE_2     = 22622 # Male Spiked Stakato (Changed)
+  private STAKATO_GUARD      = 22619 # Spiked Stakato Guard
+  private STAKATO_CHIEF      = 25667 # Cannibalistic Stakato Chief
+  private GROWTH_ACCELERATOR = 2905  # Growth Accelerator
+  private SMALL_COCOON       = 14833 # Small Stakato Cocoon
+  private LARGE_COCOON       = 14834 # Large Stakato Cocoon
 
-  # Cannibalistic Stakato Chief
-  private STAKATO_CHIEF = 25667
-  # Growth Accelerator
-  private GROWTH_ACCELERATOR = 2905
-  # Small Stakato Cocoon
-  private SMALL_COCOON = 14833
-  # Large Stakato Cocoon
-  private LARGE_COCOON = 14834
-  # Skill
   private EATING_FOLLOWER_HEAL = SkillHolder.new(4484)
 
   def initialize
@@ -103,7 +86,10 @@ class Scripts::StakatoNest < AbstractNpcAI
       else
         give_cocoon(killer, npc)
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -122,15 +108,17 @@ class Scripts::StakatoNest < AbstractNpcAI
     return unless npc && pc
     return unless npc.alive?
 
-    npc_id = 0
     case event
     when "nurse_change"
       npc_id = STAKATO_NURSE_2
     when "male_change"
       npc_id = STAKATO_MALE_2
+    else
+      # automatically added
     end
 
-    if npc_id > 0
+
+    if npc_id
       npc.spawn.decrease_count(npc)
       npc.delete_me
       spawned = add_spawn(npc_id, *npc.xyz, npc.heading, false, 0, true)

@@ -17,7 +17,10 @@ module TargetHandler::Enemy
       end
 
       return [target] of L2Object
+    else
+      # automatically added
     end
+
 
     EMPTY_TARGET_LIST
   end

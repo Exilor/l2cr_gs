@@ -31,7 +31,10 @@ class Scripts::Q00015_SweetWhispers < Quest
         st.add_exp_and_sp(350531, 28204)
         st.exit_quest(false, true)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -62,13 +65,22 @@ class Scripts::Q00015_SweetWhispers < Quest
           html = "31518-00.html"
         when 2
           html = "31518-01a.html"
+        else
+          # automatically added
         end
+
       when HIERARCH
         if st.cond?(2)
           html = "31517-00.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

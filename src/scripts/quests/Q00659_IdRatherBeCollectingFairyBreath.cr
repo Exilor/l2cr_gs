@@ -48,7 +48,10 @@ class Scripts::Q00659_IdRatherBeCollectingFairyBreath < Quest
     when "30634-08.html"
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end

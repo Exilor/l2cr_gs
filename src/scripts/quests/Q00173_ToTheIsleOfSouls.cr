@@ -61,12 +61,18 @@ class Scripts::Q00173_ToTheIsleOfSouls < Quest
         html = st.cond?(1) ? "30097-04.html" : "30097-05.html"
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when GENTLER
       if st.started?
         html = st.cond?(1) ? "30094-01.html" : "30094-03.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

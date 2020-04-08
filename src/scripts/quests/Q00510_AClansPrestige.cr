@@ -29,7 +29,10 @@ class Scripts::Q00510_AClansPrestige < Quest
       st.start_quest
     when "31331-6.html"
       st.exit_quest(true, true)
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -87,7 +90,10 @@ class Scripts::Q00510_AClansPrestige < Quest
         clan.broadcast_to_online_members(PledgeShowInfoUpdate.new(clan))
         html = "31331-7.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

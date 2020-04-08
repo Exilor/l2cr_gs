@@ -101,7 +101,10 @@ class Scripts::Q00701_ProofOfExistence < Quest
       else
         html = "32559-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

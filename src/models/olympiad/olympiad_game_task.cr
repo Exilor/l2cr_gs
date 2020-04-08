@@ -201,7 +201,10 @@ class OlympiadGameTask
       @state = GameState::IDLE
       @game = nil
       return
+    else
+      # automatically added
     end
+
 
     ThreadPoolManager.schedule_general(self, delay * 1000)
   rescue e
@@ -213,7 +216,10 @@ class OlympiadGameTask
       @state = GameState::IDLE
       @game = nil
       return
+    else
+      # automatically added
     end
+
 
     warn e
     warn { "Exception in #{@state}, trying to port players back." }

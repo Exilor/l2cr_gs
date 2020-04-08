@@ -68,7 +68,10 @@ class Scripts::Q00039_RedEyedInvaders < Quest
           html = "30332-10.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -89,7 +92,10 @@ class Scripts::Q00039_RedEyedInvaders < Quest
         html = "30332-07.html"
       when 5
         html = "30332-08.html"
+      else
+        # automatically added
       end
+
     when GUARD_BABENCO
       if qs.created?
         html = pc.level >= MIN_LVL ? "30334-01.htm" : "30334-02.htm"
@@ -98,7 +104,10 @@ class Scripts::Q00039_RedEyedInvaders < Quest
       elsif qs.completed?
         html = get_already_completed_msg(pc)
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -151,7 +160,10 @@ class Scripts::Q00039_RedEyedInvaders < Quest
           qs.set_cond(5)
         end
       end
+    else
+      # automatically added
     end
+
 
     super
   end

@@ -83,10 +83,16 @@ class Scripts::Q00240_ImTheOnlyOneYouCanTrust < Quest
           st.exit_quest(false, true)
           html = "32640-10.html"
         end
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       html = "32640-11.html"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

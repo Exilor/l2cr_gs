@@ -125,7 +125,10 @@ class Scripts::Q00289_NoMoreSoupForYou < Quest
             html = "30200-03.htm"
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

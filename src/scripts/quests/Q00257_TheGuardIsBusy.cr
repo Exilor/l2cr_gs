@@ -10,37 +10,37 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
   end
 
   # NPC
-	private GILBERT = 30039
-	# Misc
-	private MIN_LVL = 6
-	# Items
-	private GLUDIO_LORDS_MARK = 1084
-	private ORC_AMULET = 752
-	private ORC_NECKLACE = 1085
-	private WEREWOLF_FANG = 1086
+  private GILBERT = 30039
+  # Misc
+  private MIN_LVL = 6
+  # Items
+  private GLUDIO_LORDS_MARK = 1084
+  private ORC_AMULET = 752
+  private ORC_NECKLACE = 1085
+  private WEREWOLF_FANG = 1086
   # Monsters
-	private MONSTERS = {
+  private MONSTERS = {
     20006 => {
       MobDrop.new(10, 2, ORC_AMULET, 2), # Orc Archer
       MobDrop.new(10, 10, ORC_AMULET, 1) # Orc Archer
     },
-		20093 => {MobDrop.new(100, 85, ORC_NECKLACE, 1)},  # Orc Fighter
-		20096 => {MobDrop.new(100, 95, ORC_NECKLACE, 1)},  # Orc Fighter Sub Leader
-		20098 => {MobDrop.new(100, 100, ORC_NECKLACE, 1)}, # Orc Fighter Leader
-		20130 => {MobDrop.new(10, 7, ORC_AMULET, 1)},      # Orc
-		20131 => {MobDrop.new(10, 9, ORC_AMULET, 1)},      # Orc Grunt
-		20132 => {MobDrop.new(10, 7, WEREWOLF_FANG, 1)},   # Werewolf
-		20342 => {MobDrop.new(0, 1, WEREWOLF_FANG, 1)},    # Werewolf Chieftain
-		20343 => {MobDrop.new(100, 85, WEREWOLF_FANG, 1)}  # Werewolf Hunter
+    20093 => {MobDrop.new(100, 85, ORC_NECKLACE, 1)},  # Orc Fighter
+    20096 => {MobDrop.new(100, 95, ORC_NECKLACE, 1)},  # Orc Fighter Sub Leader
+    20098 => {MobDrop.new(100, 100, ORC_NECKLACE, 1)}, # Orc Fighter Leader
+    20130 => {MobDrop.new(10, 7, ORC_AMULET, 1)},      # Orc
+    20131 => {MobDrop.new(10, 9, ORC_AMULET, 1)},      # Orc Grunt
+    20132 => {MobDrop.new(10, 7, WEREWOLF_FANG, 1)},   # Werewolf
+    20342 => {MobDrop.new(0, 1, WEREWOLF_FANG, 1)},    # Werewolf Chieftain
+    20343 => {MobDrop.new(100, 85, WEREWOLF_FANG, 1)}  # Werewolf Hunter
   }
 
   def initialize
     super(257, self.class.simple_name, "The Guard is Busy")
 
     add_start_npc(GILBERT)
-		add_talk_id(GILBERT)
-		add_kill_id(MONSTERS.keys)
-		register_quest_items(
+    add_talk_id(GILBERT)
+    add_kill_id(MONSTERS.keys)
+    register_quest_items(
       ORC_AMULET, GLUDIO_LORDS_MARK, ORC_NECKLACE, WEREWOLF_FANG
     )
   end
@@ -59,7 +59,10 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
       event
     when "30039-06.html"
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, killer, is_summon)
@@ -96,7 +99,10 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
       else
         html = "30039-04.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

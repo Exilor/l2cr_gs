@@ -124,7 +124,10 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when RAYMOND
       if st.started?
         case st.cond
@@ -147,7 +150,10 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
           end
           st.exit_quest(false, true)
           html = "30289-07.html"
+        else
+          # automatically added
         end
+
       end
     when CASIAN
       if st.started?
@@ -165,7 +171,10 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
           end
         when 4..6
           html = "30612-09.html"
+        else
+          # automatically added
         end
+
       end
     when ROCK
       if st.started?
@@ -178,7 +187,10 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
           html = "32368-01.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

@@ -84,7 +84,10 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         st.set_cond(5, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -137,10 +140,16 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30523-09.html"
           end
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when TRADER_REEP
       case st.cond
       when 1
@@ -236,7 +245,10 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         if has_at_least_one_quest_item?(pc, BERRY_TART, BAT_DIAGRAM, STAR_DIAMOND)
           html = "30526-08.html"
         end
+      else
+        # automatically added
       end
+
     when WAREHOUSE_KEEPER_MURDOC
       case st.cond
       when 9
@@ -252,7 +264,10 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         end
       when 11, 12
         html = "30521-03.html"
+      else
+        # automatically added
       end
+
     when WAREHOUSE_KEEPER_AIRY
       case st.cond
       when 10
@@ -275,7 +290,10 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
           html = "30522-04.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -314,7 +332,10 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
             st.set_cond(12)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super

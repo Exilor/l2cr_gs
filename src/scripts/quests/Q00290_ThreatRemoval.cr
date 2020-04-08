@@ -57,7 +57,10 @@ class Scripts::Q00290_ThreatRemoval < Quest
           st.reward_items(FIRE_CRYSTAL, 1)
         when 9, 10
           st.reward_items(FIRE_CRYSTAL, 2)
+        else
+          # automatically added
         end
+
 
         html = event
       end
@@ -79,7 +82,10 @@ class Scripts::Q00290_ThreatRemoval < Quest
         st.exit_quest(true, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -118,7 +124,10 @@ class Scripts::Q00290_ThreatRemoval < Quest
           html = "30201-05.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

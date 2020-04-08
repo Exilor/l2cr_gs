@@ -427,7 +427,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_hp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery hp_cancel\">Deactivate</a>]#{hp_grade2}"
               when 3
                 html["%change_hp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery hp_cancel\">Deactivate</a>]#{hp_grade3}"
+              else
+                # automatically added
               end
+
             else
               html["%hp_recovery%"] = "none"
               html["%hp_period%"] = "none"
@@ -441,7 +444,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_hp%"] = hp_grade2
               when 3
                 html["%change_hp%"] = hp_grade3
+              else
+                # automatically added
               end
+
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_EXP)
               html["%exp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_expreg_fee_ratio // 1000 // 60 // 60 // 24} Day)"
@@ -456,7 +462,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_exp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery exp_cancel\">Deactivate</a>]#{exp_grade2}"
               when 3
                 html["%change_exp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery exp_cancel\">Deactivate</a>]#{exp_grade3}"
+              else
+                # automatically added
               end
+
             else
               html["%exp_recovery%"] = "none"
               html["%exp_period%"] = "none"
@@ -470,7 +479,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_exp%"] = exp_grade2
               when 3
                 html["%change_exp%"] = exp_grade3
+              else
+                # automatically added
               end
+
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_MP)
               html["%mp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_mpreg_fee_ratio // 1000 // 60 // 60 // 24} Day)"
@@ -485,7 +497,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_mp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery mp_cancel\">Deactivate</a>]#{mp_grade2}"
               when 3
                 html["%change_mp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery mp_cancel\">Deactivate</a>]#{mp_grade3}"
+              else
+                # automatically added
               end
+
             else
               html["%mp_recovery%"] = "none"
               html["%mp_period%"] = "none"
@@ -499,7 +514,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_mp%"] = mp_grade2
               when 3
                 html["%change_mp%"] = mp_grade3
+              else
+                # automatically added
               end
+
             end
             send_html_message(pc, html)
           elsif val.casecmp?("other")
@@ -710,7 +728,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                   send_html_message(pc, html)
                 end
                 return
+              else
+                # automatically added
               end
+
             end
             html = NpcHtmlMessage.new(l2id)
             html.set_file(pc, "data/html/clanHallManager/edit_other.htm")
@@ -742,7 +763,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_support%"] = "[<a action=\"bypass -h npc_%objectId%_manage other support_cancel\">Deactivate</a>]#{support_grade2}"
               when 3
                 html["%change_support%"] = "[<a action=\"bypass -h npc_%objectId%_manage other support_cancel\">Deactivate</a>]#{support_grade3}"
+              else
+                # automatically added
               end
+
             else
               html["%support%"] = "none"
               html["%support_period%"] = "none"
@@ -756,7 +780,10 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_support%"] = support_grade2
               when 3
                 html["%change_support%"] = support_grade3
+              else
+                # automatically added
               end
+
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_ITEM_CREATE)
               html["%item%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_item_fee_ratio // 1000 // 60 // 60 // 24} Day)"

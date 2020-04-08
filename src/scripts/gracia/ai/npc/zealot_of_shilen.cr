@@ -33,7 +33,7 @@ class Scripts::ZealotOfShilen < AbstractNpcAI
 
   def on_spawn(npc)
     if npc.id == ZEALOT
-      npc.no_rnd_walk = true
+      npc.no_random_walk = true
     else
       npc.invul = true
       npc.as(L2Attackable).can_return_to_spawn_point = false

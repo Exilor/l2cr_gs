@@ -60,7 +60,10 @@ class WalkInfo
           when WalkingManager::REPEAT_TELE_FIRST
             npc.tele_to_location(npc.spawn.location)
             @current_node_id = 0
+          else
+            # automatically added
           end
+
         elsif @current_node_id == WalkingManager::NO_REPEAT
           @current_node_id = 1
           @forward = true

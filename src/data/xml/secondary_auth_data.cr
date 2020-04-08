@@ -32,7 +32,10 @@ module SecondaryAuthData
           list_node.find_element("password") do |pass|
             FORBIDDEN_PASSWORDS << pass.text
           end
+        else
+          # automatically added
         end
+
       end
     end
   rescue e

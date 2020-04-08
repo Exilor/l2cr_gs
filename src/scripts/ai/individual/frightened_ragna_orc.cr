@@ -101,7 +101,10 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
       loc = Location.new(x, y, npc.z, npc.heading)
       npc.set_intention(AI::MOVE_TO, loc)
       npc.delete_me
+    else
+      # automatically added
     end
+
 
     nil
   end

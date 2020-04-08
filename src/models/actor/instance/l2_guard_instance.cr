@@ -47,7 +47,7 @@ class L2GuardInstance < L2Attackable
   end
 
   def on_spawn
-    self.no_rnd_walk = true
+    self.no_random_walk = true
     super
 
     if region = L2World.get_region(x, y)

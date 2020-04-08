@@ -83,7 +83,10 @@ class Scripts::Venom < AbstractNpcAI
       else
         return "35506-02.html"
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -106,7 +109,10 @@ class Scripts::Venom < AbstractNpcAI
       if npc
         npc.delete_me
       end
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -170,7 +176,10 @@ class Scripts::Venom < AbstractNpcAI
         end
         TARGETS.clear
       end
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -192,7 +201,10 @@ class Scripts::Venom < AbstractNpcAI
       if check_status == DEAD
         npc.delete_me
       end
+    else
+      # automatically added
     end
+
 
     if check_status == DEAD
       npc.delete_me
@@ -247,7 +259,10 @@ class Scripts::Venom < AbstractNpcAI
       end
       cancel_quest_timer("raid_check", @venom, nil)
       cancel_quest_timer("tower_check", @venom, nil)
+    else
+      # automatically added
     end
+
 
     @loc.not_nil!.location = @venom.not_nil!.location
   end

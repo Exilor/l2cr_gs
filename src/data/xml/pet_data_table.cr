@@ -31,7 +31,10 @@ module PetDataTable
             data.hungry_limit = p["val"].to_i
           when "sync_level"
             data.sync_level = p["val"].to_i == 1
+          else
+            # automatically added
           end
+
         when "skills"
           p.find_element("skill") do |s|
             id = s["skillId"].to_i
@@ -65,7 +68,10 @@ module PetDataTable
             end
             data.add_new_stat(level, L2PetLevelData.new(set))
           end
+        else
+          # automatically added
         end
+
       end
 
       PETS[npc_id] = data

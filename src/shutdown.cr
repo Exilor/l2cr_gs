@@ -8,9 +8,9 @@ class Shutdown
   private ABORT = 3
   private MODE_TEXT = {"SIGTERM", "shutting down", "restarting", "aborting"}
 
-  protected getter shutdown_mode : Int32
-
   @@counter_instance : self?
+
+  protected getter shutdown_mode : Int32
 
   def initialize
     @seconds_shut = -1
@@ -54,8 +54,8 @@ class Shutdown
   def telnet_abort(ip)
     warn { "IP #{ip} issued shutdown ABORT. #{MODE_TEXT[@shutdown_mode]} has been stopped." }
 
-    if @@counter_instance
-      @@counter_instance.try &.abort
+    if ci = @@counter_instance
+      ci.abort
       Broadcast.to_all_online_players("Server aborts #{MODE_TEXT[@shutdown_mode]}.", false)
     end
   end
@@ -108,13 +108,13 @@ class Shutdown
       save_data
       tc1.start
 
-      # begin
-      #   GameServer.close_selector
-      #   GameServer.info { "Selector thread has been shut down (#{tc1})." }
-      #   tc1.start
-      # rescue e
-      #   error e
-      # end
+      begin
+        GameServer.close_selector
+        GameServer.info { "Selector thread has been shut down (#{tc1})." }
+        tc1.start
+      rescue e
+        error e
+      end
 
       debug "Shutting down the thread pool..."
       ThreadPoolManager.shutdown
@@ -146,6 +146,8 @@ class Shutdown
         exit(2)
       when ABORT
         LoginServerClient.server_status = ServerStatus::STATUS_AUTO
+      else
+        # automatically added
       end
     end
   end
@@ -193,6 +195,8 @@ class Shutdown
       when 60
         LoginServerClient.server_status = ServerStatus::STATUS_DOWN
         send_server_quit(60)
+      else
+        # automatically added
       end
 
       @seconds_shut -= 1
@@ -213,7 +217,10 @@ class Shutdown
       info "GM shutdown received. Shutting down now."
     when GM_RESTART
       info "GM restart received. Restarting now."
+    else
+      # automatically added
     end
+
 
     tc = Timer.new
 
@@ -304,7 +311,7 @@ class Shutdown
         end
         pc.delete_me
       rescue e
-        error "Error disconnecting #{pc.name}."
+        error { "Error disconnecting #{pc.name}." }
         error e
       end
     end

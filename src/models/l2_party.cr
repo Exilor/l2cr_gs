@@ -602,7 +602,10 @@ class L2Party < AbstractPlayerGroup
       end
     when PartyDistributionType::BY_TURN_INCLUDING_SPOIL
       looter = get_checked_next_looter(item_id, target)
+    else
+      # automatically added
     end
+
 
     looter || pc
   end

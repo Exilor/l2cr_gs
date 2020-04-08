@@ -79,8 +79,14 @@ class Scripts::Q00274_SkirmishWithTheWerewolves < Quest
           st.exit_quest(true, true)
           html = totems > 0 ? "30569-07.html" : "30569-06.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

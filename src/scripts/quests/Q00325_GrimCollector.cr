@@ -162,7 +162,10 @@ class Scripts::Q00325_GrimCollector < Quest
         st.give_adena(((complete * 341) + 543), true)
         st.take_items(COMPLETE_SKELETON, -1)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -207,7 +210,10 @@ class Scripts::Q00325_GrimCollector < Quest
         else
           html = "30336-04.html"
         end
+      else
+        # automatically added
       end
+
     when VARSAK
       if st.started? && st.has_quest_items?(ANATOMY_DIAGRAM)
         html = "30342-01.html"
@@ -226,7 +232,10 @@ class Scripts::Q00325_GrimCollector < Quest
           end
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

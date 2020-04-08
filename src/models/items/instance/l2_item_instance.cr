@@ -134,7 +134,10 @@ class L2ItemInstance < L2Object
         ref_name = reference.name.empty? ? "no-name" : reference.name
       when String
         ref_name = reference
+      else
+        # automatically added
       end
+
       target_name = pc.target.try &.name || "no-target"
       GMAudit.log("#{pc.name} [#{pc.l2id}]", "#{process}(#{id()} name: #{name})", target_name, "L2Object referencing this action is: #{ref_name}")
     end
@@ -206,7 +209,10 @@ class L2ItemInstance < L2Object
         ref_name = reference.name || "no-name"
       when String
         ref_name = reference
+      else
+        # automatically added
       end
+
       target_name = pc.target.try &.name || "no-target"
       GMAudit.log("#{pc.name} [#{pc.l2id}]", "#{process}(#{id()} name: #{name})", target_name, "L2Object referencing this action is: #{ref_name}")
     end
@@ -961,7 +967,10 @@ class L2ItemInstance < L2Object
       sm = SystemMessage.s1s_remaining_mana_is_now_5
     when 1
       sm = SystemMessage.s1s_remaining_mana_is_now_1
+    else
+      # automatically added
     end
+
 
     if sm
       sm.add_item_name(@item)

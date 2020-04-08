@@ -96,7 +96,10 @@ module VoicedCommandHandler::ChatAdmin
           return false
         end
       end
+    else
+      # automatically added
     end
+
 
     true
   end

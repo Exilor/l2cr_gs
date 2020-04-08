@@ -130,7 +130,10 @@ class Scripts::Q00457_LostAndFound < Quest
       else
         html = "32759-02.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

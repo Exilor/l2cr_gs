@@ -1,31 +1,31 @@
 class Scripts::Q00003_WillTheSealBeBroken < Quest
   # NPC
-	private TALLOTH = 30141
-	# Monsters
-	private OMEN_BEAST = 20031
-	private TAINTED_ZOMBIE = 20041
-	private STINK_ZOMBIE = 20046
-	private LESSER_SUCCUBUS = 20048
-	private LESSER_SUCCUBUS_TUREN = 20052
-	private LESSER_SUCCUBUS_TILFO = 20057
-	# Items
-	private OMEN_BEAST_EYE = 1081
-	private TAINT_STONE = 1082
-	private SUCCUBUS_BLOOD = 1083
-	private ENCHANT = 956
-	# Misc
-	private MIN_LEVEL = 16
+  private TALLOTH = 30141
+  # Monsters
+  private OMEN_BEAST = 20031
+  private TAINTED_ZOMBIE = 20041
+  private STINK_ZOMBIE = 20046
+  private LESSER_SUCCUBUS = 20048
+  private LESSER_SUCCUBUS_TUREN = 20052
+  private LESSER_SUCCUBUS_TILFO = 20057
+  # Items
+  private OMEN_BEAST_EYE = 1081
+  private TAINT_STONE = 1082
+  private SUCCUBUS_BLOOD = 1083
+  private ENCHANT = 956
+  # Misc
+  private MIN_LEVEL = 16
 
   def initialize
     super(3, self.class.simple_name, "Will the Seal be Broken?")
 
     add_start_npc(TALLOTH)
-		add_talk_id(TALLOTH)
-		add_kill_id(
+    add_talk_id(TALLOTH)
+    add_kill_id(
       OMEN_BEAST, TAINTED_ZOMBIE, STINK_ZOMBIE, LESSER_SUCCUBUS,
       LESSER_SUCCUBUS_TILFO, LESSER_SUCCUBUS_TUREN
     )
-		register_quest_items(OMEN_BEAST_EYE, TAINT_STONE, SUCCUBUS_BLOOD)
+    register_quest_items(OMEN_BEAST_EYE, TAINT_STONE, SUCCUBUS_BLOOD)
   end
 
   def on_adv_event(event, npc, pc)
@@ -38,7 +38,10 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
       event
     when "30141-05.html"
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, pc, is_summon)
@@ -52,7 +55,10 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
       give_item(m, st, TAINT_STONE, registered_item_ids)
     when LESSER_SUCCUBUS, LESSER_SUCCUBUS_TILFO, LESSER_SUCCUBUS_TUREN
       give_item(m, st, SUCCUBUS_BLOOD, registered_item_ids)
+    else
+      # automatically added
     end
+
 
     super
   end
@@ -83,7 +89,10 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

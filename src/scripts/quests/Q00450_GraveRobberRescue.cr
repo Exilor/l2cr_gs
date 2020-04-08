@@ -64,7 +64,10 @@ class Scripts::Q00450_GraveRobberRescue < Quest
           st.exit_quest(QuestType::DAILY, true)
           html = "32650-10.html"
         end
+      else
+        # automatically added
       end
+
     elsif st.cond?(1)
       if npc.busy?
         return

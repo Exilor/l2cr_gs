@@ -48,7 +48,7 @@ module DayNightSpawnManager
   end
 
   # custom: should be private but i want to call it from SendBypassBuildCmd
-  def change_mode(night : Bool) # just use a bool?
+  def change_mode(night : Bool)
     return if NIGHT_CREATURES.empty? && DAY_CREATURES.empty? && BOSSES.empty?
 
     if night

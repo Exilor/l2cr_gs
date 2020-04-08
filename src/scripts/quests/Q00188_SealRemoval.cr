@@ -59,7 +59,10 @@ class Scripts::Q00188_SealRemoval < Quest
         qs.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -91,7 +94,10 @@ class Scripts::Q00188_SealRemoval < Quest
         if qs.memo_state?(2)
           html = "30970-01.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == RESEARCHER_LORAIN
         html = get_already_completed_msg(pc)

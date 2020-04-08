@@ -92,7 +92,10 @@ module AdminCommandHandler::AdminCreateItem
         end
       end
       pc.send_message("You gave #{template.name} to #{counter} players.")
+    else
+      # automatically added
     end
+
 
     true
   end

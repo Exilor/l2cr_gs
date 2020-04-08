@@ -53,7 +53,10 @@ module AdminCommandHandler::AdminGeodata
       end
     when "admin_geogrid"
       GeoUtils.debug_grid(pc)
+    else
+      # automatically added
     end
+
 
     true
   end
@@ -62,9 +65,9 @@ module AdminCommandHandler::AdminGeodata
     {
       "admin_geo_pos",
       "admin_geo_spawn_pos",
-  		"admin_geo_can_move",
-  		"admin_geo_can_see",
-  		"admin_geogrid"
+      "admin_geo_can_move",
+      "admin_geo_can_see",
+      "admin_geogrid"
     }
   end
 end

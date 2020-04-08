@@ -32,7 +32,10 @@ class Scripts::QueenShyeed < AbstractNpcAI
         npc.delete_me
         start_respawn
       end
+    else
+      # automatically added
     end
+
 
     nil
   end

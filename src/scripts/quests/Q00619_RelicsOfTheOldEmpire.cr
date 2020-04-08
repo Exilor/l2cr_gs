@@ -179,7 +179,10 @@ class Scripts::Q00619_RelicsOfTheOldEmpire < Quest
     when "31538-08.html"
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end

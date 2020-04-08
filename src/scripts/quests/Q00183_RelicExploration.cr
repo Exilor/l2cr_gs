@@ -68,7 +68,10 @@ class Scripts::Q00183_RelicExploration < Quest
           quest.notify_event("30621-03a.html", npc, pc)
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -94,7 +97,10 @@ class Scripts::Q00183_RelicExploration < Quest
         elsif qs.memo_state?(2)
           html = "30673-05.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       html = get_already_completed_msg(pc)
     end

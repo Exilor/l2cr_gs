@@ -105,7 +105,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           LOCS.each do |loc|
             box = add_spawn(npc, Rnd.rand(BOX_OF_ATHREA_1..BOX_OF_ATHREA_5), loc, false, 300000)
             box.disable_core_ai(true)
-            box.no_rnd_walk = true
+            box.no_random_walk = true
           end
           html = event
         else
@@ -142,7 +142,10 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         give_items(pc, SYMBOL_OF_LOYALTY, 1)
         qs.set("flag", 2501)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -193,7 +196,10 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           end
           arthea.script_value = arthea.script_value + 1
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -232,7 +238,10 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         else
           html = "30756-10.html"
         end
+      else
+        # automatically added
       end
+
     when STATUE_OF_OFFERING
       if lqs && lqs.memo_state?(2)
         if !pc.clan_leader?
@@ -267,7 +276,10 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           end
         when 5
           html = "30758-09.html"
+        else
+          # automatically added
         end
+
       end
     when KALIS
       if qs.memo_state?(1) && !has_quest_items?(pc, SYMBOL_OF_LOYALTY)
@@ -298,7 +310,10 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
       elsif lqs && !pc.clan_leader?
         html = "30759-12.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

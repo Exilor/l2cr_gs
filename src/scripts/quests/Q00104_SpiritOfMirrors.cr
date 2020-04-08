@@ -1,32 +1,32 @@
 class Scripts::Q00104_SpiritOfMirrors < Quest
   # NPCs
-	private GALLINT   = 30017
-	private ARNOLD    = 30041
-	private JOHNSTONE = 30043
-	private KENYOS    = 30045
-	# Items
-	private GALLINTS_OAK_WAND = 748
-	private SPIRITBOUND_WAND1 = 1135
-	private SPIRITBOUND_WAND2 = 1136
-	private SPIRITBOUND_WAND3 = 1137
-	# Monsters
-	private MONSTERS = {
+  private GALLINT   = 30017
+  private ARNOLD    = 30041
+  private JOHNSTONE = 30043
+  private KENYOS    = 30045
+  # Items
+  private GALLINTS_OAK_WAND = 748
+  private SPIRITBOUND_WAND1 = 1135
+  private SPIRITBOUND_WAND2 = 1136
+  private SPIRITBOUND_WAND3 = 1137
+  # Monsters
+  private MONSTERS = {
     27003 => SPIRITBOUND_WAND1, # Spirit Of Mirrors
-		27004 => SPIRITBOUND_WAND2, # Spirit Of Mirrors
-		27005 => SPIRITBOUND_WAND3  # Spirit Of Mirrors
+    27004 => SPIRITBOUND_WAND2, # Spirit Of Mirrors
+    27005 => SPIRITBOUND_WAND3  # Spirit Of Mirrors
   }
   # Rewards
-	private REWARDS = {
-		ItemHolder.new(1060, 100), # Lesser Healing Potion
-		ItemHolder.new(4412, 10),  # Echo Crystal - Theme of Battle
-		ItemHolder.new(4413, 10),  # Echo Crystal - Theme of Love
-		ItemHolder.new(4414, 10),  # Echo Crystal - Theme of Solitude
-		ItemHolder.new(4415, 10),  # Echo Crystal - Theme of Feast
-		ItemHolder.new(4416, 10),  # Echo Crystal - Theme of Celebration
-		ItemHolder.new(747, 1),    # Wand of Adept
-	}
-	# Misc
-	private MIN_LVL = 10
+  private REWARDS = {
+    ItemHolder.new(1060, 100), # Lesser Healing Potion
+    ItemHolder.new(4412, 10),  # Echo Crystal - Theme of Battle
+    ItemHolder.new(4413, 10),  # Echo Crystal - Theme of Love
+    ItemHolder.new(4414, 10),  # Echo Crystal - Theme of Solitude
+    ItemHolder.new(4415, 10),  # Echo Crystal - Theme of Feast
+    ItemHolder.new(4416, 10),  # Echo Crystal - Theme of Celebration
+    ItemHolder.new(747, 1),    # Wand of Adept
+  }
+  # Misc
+  private MIN_LVL = 10
 
   def initialize
     super(104, self.class.simple_name, "Spirit of Mirrors")
@@ -102,7 +102,10 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when ARNOLD, JOHNSTONE, KENYOS
       if qs.cond?(1)
         unless qs.set?(npc.name)
@@ -114,7 +117,10 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
       end
 
       html = "#{npc.id}-01.html"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

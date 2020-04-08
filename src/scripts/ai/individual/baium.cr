@@ -90,7 +90,10 @@ class Scripts::Baium < AbstractNpcAI
       else
         notify_event("CLEAR_STATUS", nil, nil)
       end
+    else
+      # automatically added
     end
+
   end
 
   def on_adv_event(event, npc, player)
@@ -290,7 +293,10 @@ class Scripts::Baium < AbstractNpcAI
       if npc
         manage_skills(npc)
       end
+    else
+      # automatically added
     end
+
 
     super
   end

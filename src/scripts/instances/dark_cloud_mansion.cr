@@ -234,14 +234,14 @@ class Scripts::DarkCloudMansion < AbstractInstance
     this_npc.npc = add_spawn(BM[0], 146817, 180335, -6117, 0, false, 0, false, world.instance_id)
     start_room.npc_list << this_npc
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[0], 146741, 180589, -6117, 0, false, 0, false, world.instance_id)
     start_room.npc_list << this_npc
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     world.rooms[:StartRoom] = start_room
   end
@@ -253,56 +253,56 @@ class Scripts::DarkCloudMansion < AbstractInstance
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[1], 147217, 180112, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[2], 147217, 180209, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[1], 148521, 180112, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[0], 148521, 180209, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[1], 148525, 180910, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[2], 148435, 180910, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[1], 147242, 180910, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(BM[2], 147242, 180819, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     hall.npc_list << this_npc
 
@@ -321,28 +321,28 @@ class Scripts::DarkCloudMansion < AbstractInstance
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(HG[1], 147842, 179837, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     first_room.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(HG[0], 147711, 179708, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     first_room.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(HG[1], 147842, 179552, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     first_room.npc_list << this_npc
 
     this_npc = DMCNpc.new
     this_npc.npc = add_spawn(HG[0], 147964, 179708, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     first_room.npc_list << this_npc
 
@@ -412,32 +412,32 @@ class Scripts::DarkCloudMansion < AbstractInstance
     this_npc.dead = false
     this_npc.npc = add_spawn(BM[1], 148765, 180450, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[2], 148865, 180190, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[1], 148995, 180190, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[0], 149090, 180450, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[1], 148995, 180705, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[2], 148865, 180705, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     world.rooms[:ThirdRoom] = third_room
@@ -452,32 +452,32 @@ class Scripts::DarkCloudMansion < AbstractInstance
     this_npc.dead = false
     this_npc.npc = add_spawn(BM[1], 148765, 180450, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[2], 148865, 180190, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[1], 148995, 180190, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[0], 149090, 180450, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[1], 148995, 180705, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     this_npc.npc = add_spawn(BM[2], 148865, 180705, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
     end
     third_room.npc_list << this_npc
     world.rooms[:ThirdRoom2] = third_room
@@ -537,7 +537,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     while x < 149175
       this_npc = DMCNpc.new
       this_npc.npc = add_spawn(BS[idx], x, 182145, -6117, 48810, false, 0, false, world.instance_id)
-      this_npc.npc.no_rnd_walk = true
+      this_npc.npc.no_random_walk = true
       this_npc.order = idx
       this_npc.status = temp[idx]
       this_npc.count = 0
@@ -581,7 +581,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
 
     npc.golem = add_spawn(mob_id, x, y, -6117, 0, false, 0, false, world.instance_id)
     if @no_random_walk
-      npc.golem.no_rnd_walk = true
+      npc.golem.no_random_walk = true
     end
   end
 

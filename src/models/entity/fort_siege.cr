@@ -291,7 +291,10 @@ class FortSiege
             str = NpcString::AT_LAST_THE_MAGIC_FIELD_THAT_PROTECTS_THE_FORTRESS_HAS_WEAKENED_VOLUNTEERS_STAND_BACK
           when 4
             str = NpcString::I_FEEL_SO_MUCH_GRIEF_THAT_I_CANT_EVEN_TAKE_CARE_OF_MYSELF_THERE_ISNT_ANY_REASON_FOR_ME_TO_STAY_HERE_ANY_LONGER
+          else
+            # automatically added
           end
+
 
           if str
             say = Packets::Incoming::Say2::NPC_SHOUT

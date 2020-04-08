@@ -65,7 +65,10 @@ class Scripts::Q00151_CureForFever < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when YOHANES
       if st.started?
         if st.cond?(2) && st.has_quest_items?(POISON_SAC)
@@ -77,7 +80,10 @@ class Scripts::Q00151_CureForFever < Quest
           html = "30032-02.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

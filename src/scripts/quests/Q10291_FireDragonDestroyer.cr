@@ -100,7 +100,10 @@ class Scripts::Q10291_FireDragonDestroyer < Quest
       end
     when State::COMPLETED
       html = "31540-09.html"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

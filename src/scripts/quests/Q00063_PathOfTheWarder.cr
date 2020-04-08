@@ -137,7 +137,10 @@ class Scripts::Q00063_PathOfTheWarder < Quest
         qs.set_cond(8, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -181,7 +184,10 @@ class Scripts::Q00063_PathOfTheWarder < Quest
           give_items(killer, TAKS_CAPTURED_SOUL, 1)
           qs.set_cond(12, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -313,7 +319,10 @@ class Scripts::Q00063_PathOfTheWarder < Quest
         elsif memo_state >= 11
           html = "30297-07.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == MASTER_GOBIE
         if has_quest_items?(pc, STEELRAZOR_EVALUTION)

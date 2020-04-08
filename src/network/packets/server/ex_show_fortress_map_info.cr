@@ -34,7 +34,10 @@ class Packets::Outgoing::ExShowFortressMapInfo < GameServerPacket
             d 1
           end
         end
+      else
+        # automatically added
       end
+
     else
       @fort.fort_size.times do
         d 0

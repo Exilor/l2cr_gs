@@ -1,61 +1,61 @@
 class BoatGludinRune
   include BoatEngine
-  
+
   private GLUDIN_TO_RUNE = [
     VehiclePathPoint.new(-95686, 155514, -3610, 150, 800),
-		VehiclePathPoint.new(-98112, 159040, -3610, 150, 800),
-		VehiclePathPoint.new(-104192, 160608, -3610, 200, 1800),
-		VehiclePathPoint.new(-109952, 159616, -3610, 250, 1800),
-		VehiclePathPoint.new(-112768, 154784, -3610, 290, 1800),
-		VehiclePathPoint.new(-114688, 139040, -3610, 290, 1800),
-		VehiclePathPoint.new(-115232, 134368, -3610, 290, 1800),
-		VehiclePathPoint.new(-113888, 121696, -3610, 290, 1800),
-		VehiclePathPoint.new(-107808, 104928, -3610, 290, 1800),
-		VehiclePathPoint.new(-97152, 75520, -3610, 290, 800),
-		VehiclePathPoint.new(-85536, 67264, -3610, 290, 1800),
-		VehiclePathPoint.new(-64640, 55840, -3610, 290, 1800),
-		VehiclePathPoint.new(-60096, 44672, -3610, 290, 1800),
-		VehiclePathPoint.new(-52672, 37440, -3610, 290, 1800),
-		VehiclePathPoint.new(-46144, 33184, -3610, 290, 1800),
-		VehiclePathPoint.new(-36096, 24928, -3610, 290, 1800),
-		VehiclePathPoint.new(-33792, 8448, -3610, 290, 1800),
-		VehiclePathPoint.new(-23776, 3424, -3610, 290, 1000),
-		VehiclePathPoint.new(-12000, -1760, -3610, 290, 1000),
-		VehiclePathPoint.new(672, 480, -3610, 290, 1800),
-		VehiclePathPoint.new(15488, 200, -3610, 290, 1000),
-		VehiclePathPoint.new(24736, 164, -3610, 290, 1000),
-		VehiclePathPoint.new(32192, -1156, -3610, 290, 1000),
-		VehiclePathPoint.new(39200, -8032, -3610, 270, 1000),
-		VehiclePathPoint.new(44320, -25152, -3610, 270, 1000),
-		VehiclePathPoint.new(40576, -31616, -3610, 250, 800),
-		VehiclePathPoint.new(36819, -35315, -3610, 220, 800)
+    VehiclePathPoint.new(-98112, 159040, -3610, 150, 800),
+    VehiclePathPoint.new(-104192, 160608, -3610, 200, 1800),
+    VehiclePathPoint.new(-109952, 159616, -3610, 250, 1800),
+    VehiclePathPoint.new(-112768, 154784, -3610, 290, 1800),
+    VehiclePathPoint.new(-114688, 139040, -3610, 290, 1800),
+    VehiclePathPoint.new(-115232, 134368, -3610, 290, 1800),
+    VehiclePathPoint.new(-113888, 121696, -3610, 290, 1800),
+    VehiclePathPoint.new(-107808, 104928, -3610, 290, 1800),
+    VehiclePathPoint.new(-97152, 75520, -3610, 290, 800),
+    VehiclePathPoint.new(-85536, 67264, -3610, 290, 1800),
+    VehiclePathPoint.new(-64640, 55840, -3610, 290, 1800),
+    VehiclePathPoint.new(-60096, 44672, -3610, 290, 1800),
+    VehiclePathPoint.new(-52672, 37440, -3610, 290, 1800),
+    VehiclePathPoint.new(-46144, 33184, -3610, 290, 1800),
+    VehiclePathPoint.new(-36096, 24928, -3610, 290, 1800),
+    VehiclePathPoint.new(-33792, 8448, -3610, 290, 1800),
+    VehiclePathPoint.new(-23776, 3424, -3610, 290, 1000),
+    VehiclePathPoint.new(-12000, -1760, -3610, 290, 1000),
+    VehiclePathPoint.new(672, 480, -3610, 290, 1800),
+    VehiclePathPoint.new(15488, 200, -3610, 290, 1000),
+    VehiclePathPoint.new(24736, 164, -3610, 290, 1000),
+    VehiclePathPoint.new(32192, -1156, -3610, 290, 1000),
+    VehiclePathPoint.new(39200, -8032, -3610, 270, 1000),
+    VehiclePathPoint.new(44320, -25152, -3610, 270, 1000),
+    VehiclePathPoint.new(40576, -31616, -3610, 250, 800),
+    VehiclePathPoint.new(36819, -35315, -3610, 220, 800)
   ]
 
   private RUNE_DOCK = [VehiclePathPoint.new(34381, -37680, -3610, 200, 800)]
 
   private RUNE_TO_GLUDIN = [
     VehiclePathPoint.new(32750, -39300, -3610, 150, 800),
-		VehiclePathPoint.new(27440, -39328, -3610, 180, 1000),
-		VehiclePathPoint.new(21456, -34272, -3610, 200, 1000),
-		VehiclePathPoint.new(6608, -29520, -3610, 250, 800),
-		VehiclePathPoint.new(4160, -27828, -3610, 270, 800),
-		VehiclePathPoint.new(2432, -25472, -3610, 270, 1000),
-		VehiclePathPoint.new(-8000, -16272, -3610, 220, 1000),
-		VehiclePathPoint.new(-18976, -9760, -3610, 290, 800),
-		VehiclePathPoint.new(-23776, 3408, -3610, 290, 800),
-		VehiclePathPoint.new(-33792, 8432, -3610, 290, 800),
-		VehiclePathPoint.new(-36096, 24912, -3610, 290, 800),
-		VehiclePathPoint.new(-46144, 33184, -3610, 290, 800),
-		VehiclePathPoint.new(-52688, 37440, -3610, 290, 800),
-		VehiclePathPoint.new(-60096, 44672, -3610, 290, 800),
-		VehiclePathPoint.new(-64640, 55840, -3610, 290, 800),
-		VehiclePathPoint.new(-85552, 67248, -3610, 290, 800),
-		VehiclePathPoint.new(-97168, 85264, -3610, 290, 800),
-		VehiclePathPoint.new(-107824, 104912, -3610, 290, 800),
-		VehiclePathPoint.new(-102151, 135704, -3610, 290, 800),
-		VehiclePathPoint.new(-96686, 140595, -3610, 290, 800),
-		VehiclePathPoint.new(-95686, 147717, -3610, 250, 800),
-		VehiclePathPoint.new(-95686, 148218, -3610, 200, 800)
+    VehiclePathPoint.new(27440, -39328, -3610, 180, 1000),
+    VehiclePathPoint.new(21456, -34272, -3610, 200, 1000),
+    VehiclePathPoint.new(6608, -29520, -3610, 250, 800),
+    VehiclePathPoint.new(4160, -27828, -3610, 270, 800),
+    VehiclePathPoint.new(2432, -25472, -3610, 270, 1000),
+    VehiclePathPoint.new(-8000, -16272, -3610, 220, 1000),
+    VehiclePathPoint.new(-18976, -9760, -3610, 290, 800),
+    VehiclePathPoint.new(-23776, 3408, -3610, 290, 800),
+    VehiclePathPoint.new(-33792, 8432, -3610, 290, 800),
+    VehiclePathPoint.new(-36096, 24912, -3610, 290, 800),
+    VehiclePathPoint.new(-46144, 33184, -3610, 290, 800),
+    VehiclePathPoint.new(-52688, 37440, -3610, 290, 800),
+    VehiclePathPoint.new(-60096, 44672, -3610, 290, 800),
+    VehiclePathPoint.new(-64640, 55840, -3610, 290, 800),
+    VehiclePathPoint.new(-85552, 67248, -3610, 290, 800),
+    VehiclePathPoint.new(-97168, 85264, -3610, 290, 800),
+    VehiclePathPoint.new(-107824, 104912, -3610, 290, 800),
+    VehiclePathPoint.new(-102151, 135704, -3610, 290, 800),
+    VehiclePathPoint.new(-96686, 140595, -3610, 290, 800),
+    VehiclePathPoint.new(-95686, 147717, -3610, 250, 800),
+    VehiclePathPoint.new(-95686, 148218, -3610, 200, 800)
   ]
 
   private ARRIVED_AT_GLUDIN = CreatureSay.new(0, Say2::BOAT, 801, SystemMessageId::FERRY_ARRIVED_AT_GLUDIN)
@@ -202,7 +202,10 @@ class BoatGludinRune
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVED_AT_GLUDIN, ARRIVED_AT_GLUDIN_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
+    else
+      # automatically added
     end
+
 
     @shout_count = 0
     @cycle += 1

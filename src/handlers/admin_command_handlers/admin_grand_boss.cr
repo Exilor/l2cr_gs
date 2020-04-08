@@ -86,7 +86,10 @@ module AdminCommandHandler::AdminGrandBoss
       else
         pc.send_message("Usage: #grandboss_abort Id")
       end
+    else
+      # automatically added
     end
+
 
     true
   end
@@ -111,7 +114,10 @@ module AdminCommandHandler::AdminGrandBoss
         html_path = "data/html/admin/grandboss_orfen.htm"
       when CORE
         html_path = "data/html/admin/grandboss_core.htm"
+      else
+        # automatically added
       end
+
 
       if {ANTHARAS, VALAKAS, BAIUM}.includes?(boss_id)
         dead_status = 3
@@ -128,7 +134,10 @@ module AdminCommandHandler::AdminGrandBoss
         when 3
           text_color = "FF0000" # Red
           text = "Dead"
+        else
+          # automatically added
         end
+
       else
         dead_status = 1
         case boss_status
@@ -138,7 +147,10 @@ module AdminCommandHandler::AdminGrandBoss
         when 1
           text_color = "FF0000" # Red
           text = "Dead"
+        else
+          # automatically added
         end
+
       end
 
       html = NpcHtmlMessage.new(0, 1)

@@ -98,7 +98,10 @@ module BypassHandler::QuestLink
             sb << quest_id
             sb << state
             sb << "</fstring> (Sponsor)]</font></a><br>"
+          else
+            # automatically added
           end
+
         end
       end
 

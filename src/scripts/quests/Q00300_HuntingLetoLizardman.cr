@@ -55,7 +55,10 @@ class Scripts::Q00300_HuntingLetoLizardman < Quest
       else
         html = "30126-07.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -90,8 +93,14 @@ class Scripts::Q00300_HuntingLetoLizardman < Quest
         if st.get_quest_items_count(BRACELET_OF_LIZARDMAN) >= REQUIRED_BRACELET_COUNT
           html = "30126-05.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

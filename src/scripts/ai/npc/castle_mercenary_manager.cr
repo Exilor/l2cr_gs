@@ -53,7 +53,10 @@ class Scripts::CastleMercenaryManager < AbstractNpcAI
       html = on_first_talk(npc, pc)
     when "mercmanager-01.html"
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end

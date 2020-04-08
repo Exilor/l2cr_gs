@@ -38,7 +38,10 @@ class Scripts::Q00106_ForgottenTruth < Quest
         st.give_items(ONYX_TALISMAN1, 1)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -87,7 +90,10 @@ class Scripts::Q00106_ForgottenTruth < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when KARTA
       if st.started?
         case st.cond
@@ -113,9 +119,15 @@ class Scripts::Q00106_ForgottenTruth < Quest
           if st.has_quest_items?(KARTAS_TRANSLATION)
             html = "30133-04.html"
           end
+        else
+          # automatically added
         end
+
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

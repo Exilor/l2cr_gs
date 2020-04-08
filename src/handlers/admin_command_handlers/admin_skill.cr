@@ -28,15 +28,15 @@ module AdminCommandHandler::AdminSkill
     elsif command == "admin_get_skills"
       admin_get_skills(pc)
     elsif command == "admin_reset_skills"
-			admin_reset_skills(pc)
+      admin_reset_skills(pc)
     elsif command == "admin_give_all_skills"
-			admin_give_all_skills(pc, false)
+      admin_give_all_skills(pc, false)
     elsif command == "admin_give_all_skills_fs"
-			admin_give_all_skills(pc, true)
+      admin_give_all_skills(pc, true)
     elsif command == "admin_give_clan_skills"
-			admin_give_clan_skills(pc, false)
+      admin_give_clan_skills(pc, false)
     elsif command == "admin_give_all_clan_skills"
-			admin_give_clan_skills(pc, true)
+      admin_give_clan_skills(pc, true)
     elsif command == "admin_remove_all_skills"
       unless target = pc.target.as?(L2PcInstance)
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
@@ -335,20 +335,20 @@ module AdminCommandHandler::AdminSkill
   def commands
     {
       "admin_show_skills",
-  		"admin_remove_skills",
-  		"admin_skill_list",
-  		"admin_skill_index",
-  		"admin_add_skill",
-  		"admin_remove_skill",
-  		"admin_get_skills",
-  		"admin_reset_skills",
-  		"admin_give_all_skills",
-  		"admin_give_all_skills_fs",
-  		"admin_give_clan_skills",
-  		"admin_give_all_clan_skills",
-  		"admin_remove_all_skills",
-  		"admin_add_clan_skill",
-  		"admin_setskill"
+      "admin_remove_skills",
+      "admin_skill_list",
+      "admin_skill_index",
+      "admin_add_skill",
+      "admin_remove_skill",
+      "admin_get_skills",
+      "admin_reset_skills",
+      "admin_give_all_skills",
+      "admin_give_all_skills_fs",
+      "admin_give_clan_skills",
+      "admin_give_all_clan_skills",
+      "admin_remove_all_skills",
+      "admin_add_clan_skill",
+      "admin_setskill"
     }
   end
 end

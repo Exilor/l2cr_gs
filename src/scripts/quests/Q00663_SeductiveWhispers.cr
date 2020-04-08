@@ -123,13 +123,19 @@ class Scripts::Q00663_SeductiveWhispers < Quest
             win_count = (qs.memo_state // 10) + 1
             html = get_html(pc, "30846-16.html", 0, 0, win_count, 0)
           end
+        else
+          # automatically added
         end
+
       elsif qs.memo_state?(1005)
         html = "30846-23.html"
       elsif qs.memo_state?(1006)
         html = "30846-26.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -445,7 +451,10 @@ class Scripts::Q00663_SeductiveWhispers < Quest
       if qs.started?
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end

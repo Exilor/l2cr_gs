@@ -33,7 +33,10 @@ class EffectHandler::Cp < AbstractEffect
       else
         amount = Math.max((target.max_cp * @amount) / 100.0, target.max_recoverable_cp - target.current_cp)
       end
+    else
+      # automatically added
     end
+
 
     if amount != 0
       target.current_cp += amount

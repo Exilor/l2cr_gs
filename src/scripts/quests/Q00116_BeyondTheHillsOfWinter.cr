@@ -56,7 +56,10 @@ class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
         st.exit_quest(false, true)
         html = "32052-03.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -89,8 +92,14 @@ class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
         if st.memo_state?(2) && st.has_quest_items?(SUPPLYING_GOODS)
           html = "32052-01.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

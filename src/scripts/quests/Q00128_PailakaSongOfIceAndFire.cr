@@ -112,7 +112,10 @@ class Scripts::Q00128_PailakaSongOfIceAndFire < Quest
         end
       end
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -168,7 +171,10 @@ class Scripts::Q00128_PailakaSongOfIceAndFire < Quest
       elsif st.cond?(9)
         html = "32510-01.htm"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end
@@ -218,7 +224,10 @@ class Scripts::Q00128_PailakaSongOfIceAndFire < Quest
           take_items(pc, BOOK7, -1)
           add_spawn(ADLER2, -53297, 185027, -4617, 33486, false, 0, false, npc.instance_id)
         end
+      else
+        # automatically added
       end
+
     end
 
     super

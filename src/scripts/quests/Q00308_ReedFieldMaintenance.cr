@@ -91,7 +91,10 @@ class Scripts::Q00308_ReedFieldMaintenance < Quest
     when "32646-11.html"
       st.exit_quest(true, true)
       event
+    else
+      # automatically added
     end
+
   end
 
   def on_kill(npc, killer, is_summon)

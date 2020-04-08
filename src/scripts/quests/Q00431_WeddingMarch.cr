@@ -66,7 +66,10 @@ class Scripts::Q00431_WeddingMarch < Quest
       html = pc.level >= MIN_LEVEL ? "31042-01.htm" : "31042-00.htm"
     when State::STARTED
       html = st.cond?(1) ? "31042-03.html" : "31042-04.html"
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

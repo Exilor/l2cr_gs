@@ -107,7 +107,10 @@ module SpawnTable
     when 2 # night
       DayNightSpawnManager.add_night_creature(sp)
       ret = 1
+    else
+      # automatically added
     end
+
 
     add_spawn(sp)
 

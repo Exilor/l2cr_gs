@@ -221,7 +221,10 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
       st.give_adena(460483, true)
       st.add_exp_and_sp(1015973, 102802)
       st.exit_quest(false, true)
+    else
+      # automatically added
     end
+
 
     event
   end
@@ -256,10 +259,16 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
           html = "32115-4j.html"
         when 22
           html = "32115-5a.html"
+        else
+          # automatically added
         end
+
       when State::COMPLETED
         html = get_already_completed_msg(pc)
+      else
+        # automatically added
       end
+
     when ULU_KAIMU
       if st.started?
         case st.cond
@@ -274,7 +283,10 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
           html = "32119-4c.html"
         when 5
           html = "32119-5a.html"
+        else
+          # automatically added
         end
+
       end
     when BALU_KAIMU
       if st.started?
@@ -376,7 +388,10 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
           html = "32114-2.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

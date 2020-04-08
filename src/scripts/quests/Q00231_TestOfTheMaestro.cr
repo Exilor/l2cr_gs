@@ -114,7 +114,10 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
       add_attack_desire(add_spawn(KING_BUGBEAR, 140395, -194147, -3146, 0, false, 200000, false), pc)
       add_attack_desire(add_spawn(KING_BUGBEAR, 140395, -194147, -3146, 0, false, 200000, false), pc)
       add_attack_desire(add_spawn(KING_BUGBEAR, 140395, -194147, -3146, 0, false, 200000, false), pc)
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -163,7 +166,10 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -305,7 +311,10 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
             html = "30673-05.html"
           end
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == IRON_GATES_LOCKIRIN
         html = get_already_completed_msg(pc)

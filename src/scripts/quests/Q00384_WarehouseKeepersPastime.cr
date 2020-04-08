@@ -89,7 +89,10 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
         end
         return "30685-07.html"
       end
+    else
+      # automatically added
     end
+
 
     get_no_quest_msg(pc)
   end
@@ -153,7 +156,10 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
           return take_html(pc, qs, ask - 18, CLIFF)
         when 55..63
           return before_reward(pc, qs, ask - 54, CLIFF)
+        else
+          # automatically added
         end
+
       when WAREHOUSE_CHIEF_BAXT
         ask = event.to_i
         case ask
@@ -187,8 +193,14 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
           return take_html(pc, qs, ask - 18, WAREHOUSE_CHIEF_BAXT)
         when 55..63
           return before_reward(pc, qs, ask - 54, WAREHOUSE_CHIEF_BAXT)
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -516,7 +528,10 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
         if Rnd.rand(1000) < 346
           give_item_randomly(qs.player, npc, Q_IRONGATE_MEDAL, 1, 0, 1, true)
         end
+      else
+        # automatically added
       end
+
     end
 
     super

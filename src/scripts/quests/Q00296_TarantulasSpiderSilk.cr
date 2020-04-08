@@ -54,7 +54,10 @@ class Scripts::Q00296_TarantulasSpiderSilk < Quest
           html = "30548-02.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end

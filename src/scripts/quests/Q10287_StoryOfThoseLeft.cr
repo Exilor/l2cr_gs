@@ -65,7 +65,10 @@ class Scripts::Q10287_StoryOfThoseLeft < Quest
         html = "32020-09.html"
         st.exit_quest(false, true)
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -124,7 +127,10 @@ class Scripts::Q10287_StoryOfThoseLeft < Quest
             html = "32761-05.html"
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)

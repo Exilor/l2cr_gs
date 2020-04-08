@@ -33,7 +33,10 @@ class Scripts::Q00020_BringUpWithLove < Quest
         st.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -58,8 +61,14 @@ class Scripts::Q00020_BringUpWithLove < Quest
         else
           html = "31537-14.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

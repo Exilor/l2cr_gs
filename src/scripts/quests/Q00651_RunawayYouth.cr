@@ -45,14 +45,20 @@ class Scripts::Q00651_RunawayYouth < Quest
         html = pc.level >= MIN_LEVEL ? "32014-01.htm" : "32014-01a.htm"
       when State::STARTED
         html = "32014-02.html"
+      else
+        # automatically added
       end
+
     when BATIDAE
       if st.started?
         st.give_adena(2883, true)
         st.exit_quest(true, true)
         html = "31989-01.html"
       end
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

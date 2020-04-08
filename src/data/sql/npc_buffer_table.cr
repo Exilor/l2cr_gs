@@ -13,13 +13,12 @@ module NpcBufferTable
     info { "Loaded #{BUFFERS.size} buffers and #{count} skills." }
   end
 
-  private def load_from(table) : Int32
+  private def load_from(sql) : Int32
     count = 0
     begin
       last_npc_id = 0
       skills = nil
 
-      sql = table
       GameDB.each(sql) do |rs|
         npc_id = rs.get_i32("npc_id")
         if npc_id < 0

@@ -218,7 +218,10 @@ module AdminCommandHandler::AdminSpawn
       info { "<spawn npc_id=\"#{i}\" x=\"#{x}\" y=\"#{y}\" z=\"#{z}\" heading=\"#{h}\" respawn=\"0\" />" }
     when 2
       info { "{ #{i}, #{x}, #{y}, #{z}, #{h} }," }
+    else
+      # automatically added
     end
+
   end
 
   private def spawn_monster(pc, mob_id, respawn_time, mob_count, permanent)

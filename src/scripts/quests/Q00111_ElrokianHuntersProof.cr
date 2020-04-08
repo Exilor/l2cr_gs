@@ -122,7 +122,10 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
         qs.exit_quest(false, true)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -190,7 +193,10 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
           html = "32113-29.html"
         when 10..12
           html = "32113-30.html"
+        else
+          # automatically added
         end
+
       when MUSHIKA
         if qs.memo_state?(1)
           qs.set_cond(2, true)
@@ -227,7 +233,10 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
           end
         when 12
           html = "32115-12.html"
+        else
+          # automatically added
         end
+
       when KIRIKACHIN
         case qs.memo_state
         when 1..5
@@ -247,9 +256,18 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
           html = "32116-08.html"
         when 12
           html = "32116-09.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

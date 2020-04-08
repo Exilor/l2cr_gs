@@ -51,12 +51,18 @@ module AdminCommandHandler::AdminPcCondOverride
                 end
               end
               pc.send_message("All condition exceptions have been disabled.")
+            else
+              # automatically added
             end
+
           end
 
           use_admin_command(commands[0], pc)
         end
+      else
+        # automatically added
       end
+
     end
 
     true

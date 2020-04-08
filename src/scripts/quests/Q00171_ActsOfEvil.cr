@@ -99,7 +99,10 @@ class Scripts::Q00171_ActsOfEvil < Quest
       qs.memo_state = 10
       qs.set_cond(10, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -230,7 +233,10 @@ class Scripts::Q00171_ActsOfEvil < Quest
             end
           end
         end
+      else
+        # automatically added
       end
+
     end
 
     super
@@ -289,7 +295,10 @@ class Scripts::Q00171_ActsOfEvil < Quest
           add_exp_and_sp(pc, 159820, 9182)
           html = "30381-17.html"
           qs.exit_quest(false, true)
+        else
+          # automatically added
         end
+
       when TRADER_ARODIN
         if memo_state == 1
           qs.memo_state = 2
@@ -361,7 +370,10 @@ class Scripts::Q00171_ActsOfEvil < Quest
         elsif memo_state == 11
           html = "30617-08.html"
         end
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == GUARD_ALVAH
         html = get_already_completed_msg(pc)

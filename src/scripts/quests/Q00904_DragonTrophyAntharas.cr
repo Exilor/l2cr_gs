@@ -37,7 +37,10 @@ class Scripts::Q00904_DragonTrophyAntharas < Quest
       when "30755-07.html"
         st.start_quest
         html = event
+      else
+        # automatically added
       end
+
     end
 
     html
@@ -69,7 +72,10 @@ class Scripts::Q00904_DragonTrophyAntharas < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         st.exit_quest(QuestType::DAILY, true)
         html = "30755-09.html"
+      else
+        # automatically added
       end
+
     when State::COMPLETED
       if !st.now_available?
         html = "30755-03.html"
@@ -83,7 +89,10 @@ class Scripts::Q00904_DragonTrophyAntharas < Quest
           html = "30755-01.htm"
         end
       end
+    else
+      # automatically added
     end
+
 
 
     html || get_no_quest_msg(pc)

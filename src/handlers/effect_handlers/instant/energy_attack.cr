@@ -36,7 +36,10 @@ class EffectHandler::EnergyAttack < AbstractEffect
         defence -= target.shld_def
       when Formulas::SHIELD_DEFENSE_PERFECT_BLOCK
         defence = -1.0
+      else
+        # automatically added
       end
+
     end
 
     damage = 1.0

@@ -42,7 +42,10 @@ class Scripts::Q00283_TheFewTheProudTheBrave < Quest
     when "32133-09.html"
       st.exit_quest(true, true)
       html = event
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -68,7 +71,10 @@ class Scripts::Q00283_TheFewTheProudTheBrave < Quest
       else
         html = "32133-05.html"
       end
+    else
+      # automatically added
     end
+
 
     html
   end

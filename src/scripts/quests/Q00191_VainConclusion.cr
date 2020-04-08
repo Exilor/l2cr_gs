@@ -62,7 +62,10 @@ class Scripts::Q00191_VainConclusion < Quest
         take_items(pc, REPAIRED_METALLOGRAPH, -1)
         html = event
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -88,7 +91,10 @@ class Scripts::Q00191_VainConclusion < Quest
           html = "30068-01.html"
         when 3
           html = "30068-04.html"
+        else
+          # automatically added
         end
+
       when HEAD_BLACKSMITH_KUSTO
         if qs.memo_state?(4)
           html = "30512-01.html"
@@ -105,8 +111,14 @@ class Scripts::Q00191_VainConclusion < Quest
           html = "30673-04.html"
         when 4
           html = "30673-05.html"
+        else
+          # automatically added
         end
+
+      else
+        # automatically added
       end
+
     elsif qs.completed?
       if npc.id == DOROTHY_LOCKSMITH
         html = get_already_completed_msg(pc)

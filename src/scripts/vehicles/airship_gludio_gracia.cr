@@ -220,7 +220,10 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
       @ship.dock_id = GLUDIO_DOCK_ID
       @ship.oust_players
       ThreadPoolManager.schedule_general(self, 60000)
+    else
+      # automatically added
     end
+
 
     @cycle += 1
     if @cycle > 7

@@ -92,7 +92,10 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
           html = "level_check.html"
         end
       end
+    else
+      # automatically added
     end
+
 
     html
   end
@@ -129,7 +132,10 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
           if st.has_quest_items?(JACOBS_NECKLACE)
             html = "30676-09.html"
           end
+        else
+          # automatically added
         end
+
       when HECTOR
         if st.cond?(3)
           if st.has_quest_items?(CROOPS_INTRODUCTION)
@@ -154,8 +160,14 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
         if st.cond?(7) && st.has_quest_items?(CROOPS_LETTER)
           html = "30191-01.html"
         end
+      else
+        # automatically added
       end
+
+    else
+      # automatically added
     end
+
 
     html || get_no_quest_msg(pc)
   end

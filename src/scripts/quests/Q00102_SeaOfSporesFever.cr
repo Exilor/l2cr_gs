@@ -135,10 +135,16 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
               st.exit_quest(false, true)
               html = "30284-06.html"
             end
+          else
+            # automatically added
           end
+
         when State::COMPLETED
           html = get_already_completed_msg(pc)
+        else
+          # automatically added
         end
+
       when COBENDELL
         case st.cond
         when 1
@@ -172,7 +178,10 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
           if has_at_least_one_quest_item?(pc, COBENDELLS_MEDICINE1, COBENDELLS_MEDICINE2, COBENDELLS_MEDICINE3, COBENDELLS_MEDICINE4, COBENDELLS_MEDICINE5)
             html = "30156-07.html"
           end
+        else
+          # automatically added
         end
+
       when GARTRANDELL, RAYEN, VELTRESS, BERROS
         if st.has_quest_items?(ALBERIUS_LIST, SENTINELS[npc.id])
           st.take_items(SENTINELS[npc.id], -1)
@@ -182,7 +191,10 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
 
           html = "#{npc.id}-01.html"
         end
+      else
+        # automatically added
       end
+
     end
 
     html || get_no_quest_msg(pc)
