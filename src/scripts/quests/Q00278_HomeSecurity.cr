@@ -66,7 +66,7 @@ class Scripts::Q00278_HomeSecurity < Quest
       st.exit_quest(true, true)
       html = "31537-07.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -87,7 +87,7 @@ class Scripts::Q00278_HomeSecurity < Quest
           st.set_cond(2, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

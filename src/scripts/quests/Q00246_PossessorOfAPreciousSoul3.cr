@@ -83,7 +83,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -182,7 +182,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
       when State::STARTED
         html = "31740-5.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when OSSIAN
@@ -210,11 +210,11 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
             html = "31741-11.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when LADD
@@ -226,11 +226,11 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -35,7 +35,7 @@ class Scripts::Q00260_OrcHunting < Quest
     when "30221-08.html"
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -81,7 +81,7 @@ class Scripts::Q00260_OrcHunting < Quest
         html = "30221-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -37,7 +37,7 @@ class EffectHandler::EnergyAttack < AbstractEffect
       when Formulas::SHIELD_DEFENSE_PERFECT_BLOCK
         defence = -1.0
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

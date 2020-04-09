@@ -106,7 +106,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -155,7 +155,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
           broadcast_npc_say(receiver, Say2::NPC_ALL, CHIEF_FSTRINGS.sample)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

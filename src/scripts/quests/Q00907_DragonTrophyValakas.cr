@@ -38,7 +38,7 @@ class Scripts::Q00907_DragonTrophyValakas < Quest
         st.start_quest
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -73,7 +73,7 @@ class Scripts::Q00907_DragonTrophyValakas < Quest
         st.exit_quest(QuestType::DAILY, true)
         html = "31540-09.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
@@ -90,7 +90,7 @@ class Scripts::Q00907_DragonTrophyValakas < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -97,7 +97,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
       when "DELETE"
         npc.delete_me
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -146,7 +146,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
           when 6
             npc.drop_item(attacker, HEALING_POTION, Rnd.rand(1i64..10i64))
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -154,7 +154,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
           start_quest_timer("DELETE", 3000, npc, attacker)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

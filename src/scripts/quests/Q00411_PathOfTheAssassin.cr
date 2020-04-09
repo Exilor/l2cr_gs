@@ -73,7 +73,7 @@ class Scripts::Q00411_PathOfTheAssassin < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -101,7 +101,7 @@ class Scripts::Q00411_PathOfTheAssassin < Quest
           qs.set_cond(6, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -186,7 +186,7 @@ class Scripts::Q00411_PathOfTheAssassin < Quest
           html = "30419-11.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

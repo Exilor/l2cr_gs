@@ -30,7 +30,7 @@ class Scripts::Q10276_MutatedKaneusGludio < Quest
       st.give_adena(8500, true)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -80,7 +80,7 @@ class Scripts::Q10276_MutatedKaneusGludio < Quest
       when State::COMPLETED
         html = "30332-06.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ROHMER
@@ -94,11 +94,11 @@ class Scripts::Q10276_MutatedKaneusGludio < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -62,7 +62,7 @@ class Scripts::Q00276_TotemOfTheHestui < Quest
           st.set_cond(2)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -98,11 +98,11 @@ class Scripts::Q00276_TotemOfTheHestui < Quest
           html = "30571-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

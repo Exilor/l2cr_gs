@@ -1,6 +1,6 @@
 class BoatTalkingGludin
   include BoatEngine
-  
+
   private TALKING_TO_GLUDIN = [
     VehiclePathPoint.new(-121385, 261660, -3610, 180, 800),
     VehiclePathPoint.new(-127694, 253312, -3610, 200, 800),
@@ -163,7 +163,7 @@ class BoatTalkingGludin
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

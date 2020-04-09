@@ -30,7 +30,7 @@ class Scripts::CrimsonHatuOtis < AbstractNpcAI
         npc.do_cast(BOSS_HASTE)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

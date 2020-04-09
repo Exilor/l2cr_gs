@@ -27,7 +27,7 @@ class Scripts::Asher < AbstractNpcAI
     when "32714-01.html"
       return event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

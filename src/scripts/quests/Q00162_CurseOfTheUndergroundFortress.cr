@@ -42,7 +42,7 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
         st.start_quest
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -111,7 +111,7 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

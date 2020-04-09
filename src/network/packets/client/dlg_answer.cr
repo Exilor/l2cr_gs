@@ -72,7 +72,7 @@ class Packets::Incoming::DlgAnswer < GameClientPacket
         holder.door.close_me
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

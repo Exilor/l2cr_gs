@@ -37,7 +37,7 @@ class Scripts::Q00263_OrcSubjugation < Quest
     when "30346-08.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -81,7 +81,7 @@ class Scripts::Q00263_OrcSubjugation < Quest
         html = "30346-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

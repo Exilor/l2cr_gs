@@ -51,7 +51,7 @@ class Scripts::Q00324_SweetestVenom < Quest
           html = "30351-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

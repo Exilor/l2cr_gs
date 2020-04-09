@@ -44,7 +44,7 @@ class Scripts::Q00306_CrystalOfFireAndIce < Quest
     when "30004-09.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -83,7 +83,7 @@ class Scripts::Q00306_CrystalOfFireAndIce < Quest
         html = "30004-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -30,7 +30,7 @@ class Scripts::Q10278_MutatedKaneusHeine < Quest
       st.give_adena(50000, true)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -81,7 +81,7 @@ class Scripts::Q10278_MutatedKaneusHeine < Quest
       when State::COMPLETED
         html = "30916-06.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MINEVIA
@@ -95,11 +95,11 @@ class Scripts::Q10278_MutatedKaneusHeine < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -174,7 +174,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -311,7 +311,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -512,7 +512,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
           html = "30657-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

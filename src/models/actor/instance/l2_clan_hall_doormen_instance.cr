@@ -31,7 +31,7 @@ class L2ClanHallDoormenInstance < L2DoormenInstance
         when 5
           ok = Evolve.do_evolve(pc, self, 10426, 10611, 70)
         else
-          # automatically added
+          # [automatically added else]
         end
 
 

@@ -163,7 +163,7 @@ class Scripts::Q00419_GetAPet < Quest
           give_items(pc, ANIMAL_SLAYERS_LIST, 1)
           html = "30731-08a.htm"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -184,7 +184,7 @@ class Scripts::Q00419_GetAPet < Quest
       when Race::KAMAEL
         take_give_quest_items(pc, ANIMAL_SLAYERS_LIST, BLOODY_RED_CLAW)
       else
-        # automatically added
+        # [automatically added else]
       end
 
       qs.memo_state = 0
@@ -235,7 +235,7 @@ class Scripts::Q00419_GetAPet < Quest
             when 4
               reply_offset4 = random_reply_offset
             else
-              # automatically added
+              # [automatically added else]
             end
 
             link_count += 1
@@ -253,7 +253,7 @@ class Scripts::Q00419_GetAPet < Quest
       qs.memo_state = 0
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -306,7 +306,7 @@ class Scripts::Q00419_GetAPet < Quest
       when CRIMSON_SPIDER2
         try_reward(killer, ANIMAL_SLAYERS_1ST_LIST, BLOODY_RED_CLAW, 75)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -377,7 +377,7 @@ class Scripts::Q00419_GetAPet < Quest
           html = "30256-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

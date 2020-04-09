@@ -283,7 +283,7 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
          "30844-10.html", "30844-11.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -455,7 +455,7 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
           html = "31001-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

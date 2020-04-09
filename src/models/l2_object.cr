@@ -154,7 +154,7 @@ abstract class L2Object < ListenersContainer
         new_i.add_npc(me)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

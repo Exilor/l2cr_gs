@@ -58,7 +58,7 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -141,7 +141,7 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -167,7 +167,7 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

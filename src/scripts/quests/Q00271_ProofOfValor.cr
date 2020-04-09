@@ -86,11 +86,11 @@ class Scripts::Q00271_ProofOfValor < Quest
           html = "30577-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

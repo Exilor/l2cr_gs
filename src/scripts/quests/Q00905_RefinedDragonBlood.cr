@@ -83,7 +83,7 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
         st.exit_quest(QuestType::DAILY, true)
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -114,7 +114,7 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
           html = "32864-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
@@ -125,7 +125,7 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
         html = pc.level < MIN_LEVEL ? "32864-02.html" : "32864-01.htm"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

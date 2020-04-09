@@ -13,7 +13,7 @@ module AdminCommandHandler::AdminShop
     when "admin_gmshop"
       AdminHtml.show_admin_html(pc, "gmshops.htm")
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

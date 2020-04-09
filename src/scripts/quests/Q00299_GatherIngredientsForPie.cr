@@ -88,7 +88,7 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
         html = "30620-15.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -120,7 +120,7 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
       when 4
         html = "30063-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when BRIGHT
@@ -130,7 +130,7 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
       when 6
         html = "30466-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when EMILLY
@@ -158,15 +158,15 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
             html = "30620-13.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

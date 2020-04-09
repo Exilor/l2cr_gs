@@ -81,7 +81,7 @@ class Scripts::Q00351_BlackSwan < Quest
       html = event
       qs.exit_quest(true, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -139,7 +139,7 @@ class Scripts::Q00351_BlackSwan < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

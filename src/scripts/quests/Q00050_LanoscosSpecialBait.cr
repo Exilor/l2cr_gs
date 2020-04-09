@@ -33,7 +33,7 @@ class Scripts::Q00050_LanoscosSpecialBait < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -72,7 +72,7 @@ class Scripts::Q00050_LanoscosSpecialBait < Quest
     when State::STARTED
       html = st.cond?(1) ? "31570-05.html" : "31570-04.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

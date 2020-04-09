@@ -99,7 +99,7 @@ module BypassHandler::QuestLink
             sb << state
             sb << "</fstring> (Sponsor)]</font></a><br>"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

@@ -108,7 +108,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -146,7 +146,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
           when 8..10
             html = "30644-10.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         elsif qs.completed?
@@ -173,7 +173,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
       when 8, 9
         html = "30645-09.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when CHEST_OF_SHYSLASSYS
@@ -204,7 +204,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         qs.exit_quest(false, true)
         html = "30646-07.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when FILAUR
@@ -218,11 +218,11 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
       when 10
         html = "30535-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -266,7 +266,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         qs.set_cond(10, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -69,7 +69,7 @@ class Scripts::Q00183_RelicExploration < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -98,7 +98,7 @@ class Scripts::Q00183_RelicExploration < Quest
           html = "30673-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

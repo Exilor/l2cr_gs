@@ -142,7 +142,7 @@ class Scripts::Q00463_IMustBeaGenius < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

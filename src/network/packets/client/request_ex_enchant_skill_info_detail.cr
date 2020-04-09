@@ -24,7 +24,7 @@ class Packets::Incoming::RequestExEnchantSkillInfoDetail < GameClientPacket
     when 3
       req_skill_lvl = @skill_lvl # change route
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

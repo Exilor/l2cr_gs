@@ -55,7 +55,7 @@ class Scripts::Q00700_CursedLife < Quest
       st.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -87,7 +87,7 @@ class Scripts::Q00700_CursedLife < Quest
         html = "32560-06.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

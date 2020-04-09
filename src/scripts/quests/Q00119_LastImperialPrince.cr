@@ -42,7 +42,7 @@ class Scripts::Q00119_LastImperialPrince < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -83,7 +83,7 @@ class Scripts::Q00119_LastImperialPrince < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

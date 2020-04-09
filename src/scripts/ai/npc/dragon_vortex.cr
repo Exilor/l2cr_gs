@@ -80,7 +80,7 @@ class Scripts::DragonVortex < AbstractNpcAI
     when "CANSPAWN"
       npc.variables[I_QUEST0] = false
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

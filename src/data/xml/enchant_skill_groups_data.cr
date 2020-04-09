@@ -48,11 +48,11 @@ module EnchantSkillGroupsData
 
     if tmp = ENCHANT_SKILL_GROUPS[group]?
       enchantable_skill.add_new_enchant_route(route, group)
-      tmp.enchant_group_details.size
-    else
-      error { "Error while loading enchant skill ID: #{skill_id} route: #{route} missing group: #{group}." }
-      0
+      return tmp.enchant_group_details.size
     end
+
+    error { "Error while loading enchant skill ID: #{skill_id} route: #{route} missing group: #{group}." }
+    0
   end
 
   def get_skill_enchantment_for_skill(skill : Skill) : EnchantSkillLearn?

@@ -113,13 +113,13 @@ class Scripts::Q00141_ShadowFoxPart3 < Quest
       when 4
         html = "30894-19.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

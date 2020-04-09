@@ -39,7 +39,7 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
         html = "30629-03.htm"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -72,7 +72,7 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
         when 2
           html = "31577-05.htm"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when RUKAL
@@ -80,11 +80,11 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
           html = "30629-01.htm"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

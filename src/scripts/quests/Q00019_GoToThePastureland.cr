@@ -59,7 +59,7 @@ class Scripts::Q00019_GoToThePastureland < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif npc.id == TUNATUN && st.cond?(1)

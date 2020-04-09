@@ -42,7 +42,7 @@ class Scripts::Q00366_SilverHairedShaman < Quest
     when "30111-06.html"
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -132,7 +132,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -178,7 +178,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -223,13 +223,13 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
         when 11
           html = "31739-12.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GABRIELLE
@@ -239,7 +239,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 2
         html = "30753-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GILMORE
@@ -249,7 +249,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 3
         html = "30754-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when KANTABILON
@@ -265,7 +265,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 8
         html = "31042-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when STEDMIEL
@@ -275,7 +275,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 10
         html = "30692-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when VIRGIL
@@ -289,7 +289,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 18
         html = "31742-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when OGMAR
@@ -299,7 +299,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 13
         html = "31744-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when RAHORAKTI
@@ -315,7 +315,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 16
         html = "31336-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when KASSANDRA
@@ -327,7 +327,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 17
         html = "31743-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when CARADINE
@@ -335,7 +335,7 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
         html = "31740-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -112,7 +112,7 @@ class Scripts::VarkaSilenosSupport < AbstractNpcAI
         html = "31383-no.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

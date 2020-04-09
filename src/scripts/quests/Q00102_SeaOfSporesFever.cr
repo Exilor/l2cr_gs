@@ -136,13 +136,13 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
               html = "30284-06.html"
             end
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when State::COMPLETED
           html = get_already_completed_msg(pc)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when COBENDELL
@@ -179,7 +179,7 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
             html = "30156-07.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when GARTRANDELL, RAYEN, VELTRESS, BERROS
@@ -192,7 +192,7 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
           html = "#{npc.id}-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

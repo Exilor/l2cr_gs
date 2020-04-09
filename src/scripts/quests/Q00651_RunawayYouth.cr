@@ -46,7 +46,7 @@ class Scripts::Q00651_RunawayYouth < Quest
       when State::STARTED
         html = "32014-02.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when BATIDAE
@@ -56,7 +56,7 @@ class Scripts::Q00651_RunawayYouth < Quest
         html = "31989-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

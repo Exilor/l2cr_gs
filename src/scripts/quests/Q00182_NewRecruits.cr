@@ -54,7 +54,7 @@ class Scripts::Q00182_NewRecruits < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -87,7 +87,7 @@ class Scripts::Q00182_NewRecruits < Quest
           html = "32258-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

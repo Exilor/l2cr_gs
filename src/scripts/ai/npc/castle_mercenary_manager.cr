@@ -54,7 +54,7 @@ class Scripts::CastleMercenaryManager < AbstractNpcAI
     when "mercmanager-01.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

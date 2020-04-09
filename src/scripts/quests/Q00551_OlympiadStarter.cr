@@ -46,7 +46,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
         st.exit_quest(QuestType::DAILY, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

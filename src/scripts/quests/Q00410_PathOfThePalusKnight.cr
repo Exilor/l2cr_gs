@@ -81,7 +81,7 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -121,7 +121,7 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -182,7 +182,7 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
           html = "30422-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

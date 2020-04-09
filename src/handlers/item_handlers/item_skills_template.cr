@@ -97,7 +97,7 @@ module ItemHandler::ItemSkillsTemplate
         return true
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -38,7 +38,7 @@ class Scripts::Q00368_TrespassingIntoTheHolyGround < Quest
     when "30926-06.html"
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

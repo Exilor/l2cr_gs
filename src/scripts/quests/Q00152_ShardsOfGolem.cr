@@ -42,7 +42,7 @@ class Scripts::Q00152_ShardsOfGolem < Quest
           html = event
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -90,13 +90,13 @@ class Scripts::Q00152_ShardsOfGolem < Quest
               html = "30035-05.html"
             end
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when State::COMPLETED
             html = get_already_completed_msg(pc)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ALTRAN
@@ -125,11 +125,11 @@ class Scripts::Q00152_ShardsOfGolem < Quest
             html = "30283-05.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

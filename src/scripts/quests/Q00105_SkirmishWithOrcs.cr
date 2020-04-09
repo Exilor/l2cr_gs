@@ -58,7 +58,7 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
     when "30218-05.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -80,7 +80,7 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
           st.set_cond(4, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -127,7 +127,7 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

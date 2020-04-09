@@ -101,7 +101,7 @@ class Scripts::GiftOfVitality < LongTimeEvent
         html = "4306-okbuff.htm"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -72,7 +72,7 @@ class Scripts::Q00552_OlympiadVeteran < Quest
             st.give_items(TEAM_EVENT_CERTIFICATE, 1)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -104,7 +104,7 @@ class Scripts::Q00552_OlympiadVeteran < Quest
             st.give_items(TEAM_EVENT_CERTIFICATE, 1)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

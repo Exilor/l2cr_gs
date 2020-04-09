@@ -33,7 +33,7 @@ class Scripts::QueenShyeed < AbstractNpcAI
         start_respawn
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

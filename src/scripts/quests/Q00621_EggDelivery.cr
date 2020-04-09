@@ -93,7 +93,7 @@ class Scripts::Q00621_EggDelivery < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -121,13 +121,13 @@ class Scripts::Q00621_EggDelivery < Quest
             html = "31521-08.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(talker)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when PULIN
@@ -140,7 +140,7 @@ class Scripts::Q00621_EggDelivery < Quest
         when 2
           html = "31543-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -159,7 +159,7 @@ class Scripts::Q00621_EggDelivery < Quest
         html = "31584-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

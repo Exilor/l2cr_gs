@@ -67,7 +67,7 @@ class Scripts::Q00455_WingsOfSand < Quest
         st.start_quest
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -99,7 +99,7 @@ class Scripts::Q00455_WingsOfSand < Quest
         give_items(st)
         html = "32864-07.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
@@ -112,7 +112,7 @@ class Scripts::Q00455_WingsOfSand < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -88,7 +88,7 @@ class Packets::Incoming::RequestExRemoveItemAttribute < GameClientPacket
         return 160000i64
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

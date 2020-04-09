@@ -424,7 +424,7 @@ module Formulas
     when
       init_val = BaseStats::INT.calc_bonus(actor)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -509,7 +509,7 @@ module Formulas
       when SHIELD_DEFENSE_PERFECT_BLOCK
         target.send_packet(SystemMessageId::YOUR_EXCELLENT_SHIELD_DEFENSE_WAS_A_SUCCESS)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -533,7 +533,7 @@ module Formulas
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -611,7 +611,7 @@ module Formulas
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -689,7 +689,7 @@ module Formulas
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -982,7 +982,7 @@ module Formulas
     when 3
       return 1.0 if ignore_res
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1001,7 +1001,7 @@ module Formulas
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1111,7 +1111,7 @@ module Formulas
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1215,7 +1215,7 @@ module Formulas
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1277,7 +1277,7 @@ module Formulas
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1313,8 +1313,6 @@ module Formulas
             if lvl_diff >= Config.npc_skill_dmg_penalty.size
               penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
             else
-              p lvl_diff
-              p Config.npc_skill_dmg_penalty
               penalty_mod *= Config.npc_skill_dmg_penalty[lvl_diff]
             end
           end
@@ -1389,7 +1387,7 @@ module Formulas
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -58,7 +58,7 @@ module AdminCommandHandler::AdminMonsterRace
 
       ThreadPoolManager.schedule_general(RunRace.new(codes, pc), 5000)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

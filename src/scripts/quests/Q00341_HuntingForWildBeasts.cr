@@ -34,7 +34,7 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
         st.start_quest
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -57,7 +57,7 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
         html = "30078-06.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

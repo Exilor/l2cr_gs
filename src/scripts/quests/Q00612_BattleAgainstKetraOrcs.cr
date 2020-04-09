@@ -81,7 +81,7 @@ class Scripts::Q00612_BattleAgainstKetraOrcs < Quest
     when State::STARTED
       html = st.has_quest_items?(MOLAR) ? "31377-04.html" : "31377-05.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

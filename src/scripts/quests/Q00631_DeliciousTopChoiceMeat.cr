@@ -94,7 +94,7 @@ class Scripts::Q00631_DeliciousTopChoiceMeat < Quest
           when 9
             st.reward_items(CRYSTAL_SPICE_COMPRESSED_PACK, 2)
           else
-            # automatically added
+            # [automatically added else]
           end
 
           st.exit_quest(true, true)
@@ -102,7 +102,7 @@ class Scripts::Q00631_DeliciousTopChoiceMeat < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

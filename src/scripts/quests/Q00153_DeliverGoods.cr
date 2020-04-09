@@ -71,7 +71,7 @@ class Scripts::Q00153_DeliverGoods < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
@@ -102,7 +102,7 @@ class Scripts::Q00153_DeliverGoods < Quest
           html = "30054-02.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

@@ -106,7 +106,7 @@ class Scripts::Q00185_NikolasCooperation < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -162,7 +162,7 @@ class Scripts::Q00185_NikolasCooperation < Quest
           html = "32366-07.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

@@ -45,7 +45,7 @@ class Scripts::Rignos < AbstractNpcAI
     when "TIME_OUT"
       npc.not_nil!.script_value = 0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

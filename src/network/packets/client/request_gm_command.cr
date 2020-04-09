@@ -50,7 +50,7 @@ class Packets::Incoming::RequestGMCommand < GameClientPacket
         send_packet(GMViewWarehouseWithdrawList.new(clan))
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

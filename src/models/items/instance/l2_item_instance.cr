@@ -135,7 +135,7 @@ class L2ItemInstance < L2Object
       when String
         ref_name = reference
       else
-        # automatically added
+        # [automatically added else]
       end
 
       target_name = pc.target.try &.name || "no-target"
@@ -210,7 +210,7 @@ class L2ItemInstance < L2Object
       when String
         ref_name = reference
       else
-        # automatically added
+        # [automatically added else]
       end
 
       target_name = pc.target.try &.name || "no-target"
@@ -968,7 +968,7 @@ class L2ItemInstance < L2Object
     when 1
       sm = SystemMessage.s1s_remaining_mana_is_now_1
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

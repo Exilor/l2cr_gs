@@ -34,7 +34,7 @@ class Scripts::Q00020_BringUpWithLove < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -62,11 +62,11 @@ class Scripts::Q00020_BringUpWithLove < Quest
           html = "31537-14.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -40,7 +40,7 @@ class Scripts::Q00027_ChestCaughtWithABaitOfWind < Quest
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -77,11 +77,11 @@ class Scripts::Q00027_ChestCaughtWithABaitOfWind < Quest
           html = "31434-00.htm"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

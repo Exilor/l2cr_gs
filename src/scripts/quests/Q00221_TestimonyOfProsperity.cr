@@ -223,7 +223,7 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -299,7 +299,7 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -610,7 +610,7 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

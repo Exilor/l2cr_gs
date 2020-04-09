@@ -163,7 +163,7 @@ class Scripts::Q00325_GrimCollector < Quest
         st.take_items(COMPLETE_SKELETON, -1)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -211,7 +211,7 @@ class Scripts::Q00325_GrimCollector < Quest
           html = "30336-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when VARSAK
@@ -233,7 +233,7 @@ class Scripts::Q00325_GrimCollector < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

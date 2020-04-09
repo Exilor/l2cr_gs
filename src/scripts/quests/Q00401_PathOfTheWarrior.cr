@@ -82,7 +82,7 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -104,7 +104,7 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
           npc.script_value = 2
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -142,7 +142,7 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -206,7 +206,7 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
           html = "30253-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

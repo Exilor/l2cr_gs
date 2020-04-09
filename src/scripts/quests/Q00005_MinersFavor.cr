@@ -53,7 +53,7 @@ class Scripts::Q00005_MinersFavor < Quest
     when "30554-05.html"
       return
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -85,7 +85,7 @@ class Scripts::Q00005_MinersFavor < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when BRUNON
@@ -103,7 +103,7 @@ class Scripts::Q00005_MinersFavor < Quest
     when GARITA
       html = give_item(pc, st, npc.id, MINING_BOOTS)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

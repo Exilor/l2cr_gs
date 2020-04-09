@@ -69,7 +69,7 @@ class Scripts::Q00039_RedEyedInvaders < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -93,7 +93,7 @@ class Scripts::Q00039_RedEyedInvaders < Quest
       when 5
         html = "30332-08.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GUARD_BABENCO
@@ -105,7 +105,7 @@ class Scripts::Q00039_RedEyedInvaders < Quest
         html = get_already_completed_msg(pc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -161,7 +161,7 @@ class Scripts::Q00039_RedEyedInvaders < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

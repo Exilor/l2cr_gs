@@ -80,7 +80,7 @@ class Scripts::Q00132_MatrasCuriosity < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -108,7 +108,7 @@ class Scripts::Q00132_MatrasCuriosity < Quest
       when 3
         html = "32245-06.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

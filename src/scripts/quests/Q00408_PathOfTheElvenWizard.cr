@@ -109,7 +109,7 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
       end
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -154,7 +154,7 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -268,7 +268,7 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

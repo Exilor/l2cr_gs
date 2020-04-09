@@ -19,7 +19,7 @@ module AdminCommandHandler::AdminHtml
       end
       show_html(pc, tokens.shift, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
     true

@@ -154,11 +154,11 @@ class Scripts::Q00456_DontKnowDontCare < Quest
             html = "32864-10.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -187,7 +187,7 @@ class Scripts::Q00456_DontKnowDontCare < Quest
       ALLOWED_PLAYER_MAP.delete(npc.l2id)
       npc.delete_me
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -66,7 +66,7 @@ class Scripts::BanditStronghold < FlagWar
     when 35427
       "messenger_flag5.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -84,7 +84,7 @@ class Scripts::BanditStronghold < FlagWar
     when 35432
       "messenger_ally5result.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

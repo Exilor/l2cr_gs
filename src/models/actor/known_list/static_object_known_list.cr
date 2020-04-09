@@ -8,7 +8,7 @@ class StaticObjectKnownList < CharKnownList
     when L2DefenderInstance
       return 800
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -22,7 +22,7 @@ class StaticObjectKnownList < CharKnownList
     when L2DefenderInstance
       return 600
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

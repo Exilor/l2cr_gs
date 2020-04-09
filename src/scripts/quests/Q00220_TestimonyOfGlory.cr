@@ -253,7 +253,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -275,7 +275,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         when 1
           npc.script_value = 2
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when REVENANT_OF_TANTOS_CHIEF
@@ -292,11 +292,11 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
             npc.script_value = 2
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -439,7 +439,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           qs.set_cond(10, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -671,7 +671,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           html = "30642-13.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

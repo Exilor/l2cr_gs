@@ -152,7 +152,7 @@ class Scripts::DragonValley < AbstractNpcAI
           when 3
             MORALE_BOOST3.skill.apply_effects(member, member)
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

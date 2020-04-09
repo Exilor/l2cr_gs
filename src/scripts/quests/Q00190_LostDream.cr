@@ -46,7 +46,7 @@ class Scripts::Q00190_LostDream < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -103,7 +103,7 @@ class Scripts::Q00190_LostDream < Quest
           html = "30673-02.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

@@ -41,7 +41,7 @@ class L2ChestInstance < L2MonsterInstance
       when 18297, 18298
         id = 21786
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

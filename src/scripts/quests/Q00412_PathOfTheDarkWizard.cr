@@ -91,7 +91,7 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
       give_items(pc, CANDLE, 1)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -136,7 +136,7 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -227,7 +227,7 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

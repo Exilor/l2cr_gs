@@ -86,7 +86,7 @@ class Scripts::SubclassCertification < AbstractNpcAI
     when "Main.html", "Explanation.html", "NotObtain.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

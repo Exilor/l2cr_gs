@@ -26,7 +26,7 @@ module PunishmentHandler::ChatBanHandler
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -55,7 +55,7 @@ module PunishmentHandler::ChatBanHandler
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

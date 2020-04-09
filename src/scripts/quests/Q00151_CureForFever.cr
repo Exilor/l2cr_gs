@@ -66,7 +66,7 @@ class Scripts::Q00151_CureForFever < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when YOHANES
@@ -81,7 +81,7 @@ class Scripts::Q00151_CureForFever < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -55,7 +55,7 @@ module BypassHandler::NpcViewMod
         return false
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

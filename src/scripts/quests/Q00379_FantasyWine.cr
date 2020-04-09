@@ -54,7 +54,7 @@ class Scripts::Q00379_FantasyWine < Quest
         qs.exit_quest(true, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -299,7 +299,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
          "30935-01b.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -344,7 +344,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -389,7 +389,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
         qs.set("param1", 0)
         html = "30935-01.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

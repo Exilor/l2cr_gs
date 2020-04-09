@@ -221,7 +221,7 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
       @ship.oust_players
       ThreadPoolManager.schedule_general(self, 60000)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

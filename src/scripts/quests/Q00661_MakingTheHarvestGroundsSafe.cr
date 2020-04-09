@@ -54,7 +54,7 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
       qs.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -74,7 +74,7 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
         html = "30210-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

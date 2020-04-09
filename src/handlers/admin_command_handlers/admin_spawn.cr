@@ -219,7 +219,7 @@ module AdminCommandHandler::AdminSpawn
     when 2
       info { "{ #{i}, #{x}, #{y}, #{z}, #{h} }," }
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -90,7 +90,7 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
         npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::OOOH))
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -117,7 +117,7 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
         when 3
           html = "31521-07.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif qs.completed?
@@ -140,11 +140,11 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
       when 3
         html = "31542-05.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

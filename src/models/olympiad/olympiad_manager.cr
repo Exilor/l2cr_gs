@@ -119,7 +119,7 @@ module OlympiadManager
           sm.add_pc_name(noble)
           pc.send_packet(sm)
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -233,7 +233,7 @@ module OlympiadManager
       party.broadcast_packet(SystemMessage.you_have_registered_in_a_waiting_list_of_team_games)
       TEAMS_BASED_REGISTERS << team
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

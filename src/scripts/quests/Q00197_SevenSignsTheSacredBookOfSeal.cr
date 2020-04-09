@@ -113,7 +113,7 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -204,11 +204,11 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

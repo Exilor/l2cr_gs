@@ -123,7 +123,7 @@ class L2SummonAI < L2PlayableAI
       when INTERACT
         think_interact
       else
-        # automatically added
+        # [automatically added else]
       end
 
     ensure
@@ -194,7 +194,7 @@ class L2SummonAI < L2PlayableAI
     when ACTIVE, FOLLOW, IDLE, MOVE_TO, PICK_UP
       @actor.as(L2Summon).follow_status = @start_follow
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

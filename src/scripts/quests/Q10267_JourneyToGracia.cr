@@ -31,7 +31,7 @@ class Scripts::Q10267_JourneyToGracia < Quest
       st.add_exp_and_sp(75480, 7570)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -51,7 +51,7 @@ class Scripts::Q10267_JourneyToGracia < Quest
       when State::COMPLETED
         html = "30857-0a.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when PAPIKU
@@ -65,7 +65,7 @@ class Scripts::Q10267_JourneyToGracia < Quest
         html = "32548-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -40,7 +40,7 @@ class L2PetManagerInstance < L2MerchantInstance
       when 3
         exchange(pc, 7584, 6649)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif command.starts_with?("evolve")
@@ -58,7 +58,7 @@ class L2PetManagerInstance < L2MerchantInstance
       when 5
         ok = Evolve.do_evolve(pc, self, 6649, 10312, 55)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -82,7 +82,7 @@ class L2PetManagerInstance < L2MerchantInstance
       when 5
         ok = Evolve.do_restore(pc, self, 10310, 4424, 55)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

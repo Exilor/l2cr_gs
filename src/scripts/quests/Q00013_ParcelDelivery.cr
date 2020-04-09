@@ -30,7 +30,7 @@ class Scripts::Q00013_ParcelDelivery < Quest
         return "31539-02.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -55,14 +55,14 @@ class Scripts::Q00013_ParcelDelivery < Quest
         when VULCAN
           html = "31539-00.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

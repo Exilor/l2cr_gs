@@ -101,7 +101,7 @@ class Scripts::Q00307_ControlDeviceOfTheGiants < Quest
         save_global_quest_var("Respawn", (Time.ms + RESPAWN_DELAY).to_s)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -130,7 +130,7 @@ class Scripts::Q00307_ControlDeviceOfTheGiants < Quest
         html = "32711-10.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -131,7 +131,7 @@ class Scripts::Q00287_FiguringItOut < Quest
         html = "32742-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

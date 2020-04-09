@@ -87,7 +87,7 @@ module AdminCommandHandler::AdminGrandBoss
         pc.send_message("Usage: #grandboss_abort Id")
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -115,7 +115,7 @@ module AdminCommandHandler::AdminGrandBoss
       when CORE
         html_path = "data/html/admin/grandboss_core.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -135,7 +135,7 @@ module AdminCommandHandler::AdminGrandBoss
           text_color = "FF0000" # Red
           text = "Dead"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
@@ -148,7 +148,7 @@ module AdminCommandHandler::AdminGrandBoss
           text_color = "FF0000" # Red
           text = "Dead"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

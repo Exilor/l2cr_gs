@@ -55,7 +55,7 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when THALIA
@@ -70,7 +70,7 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

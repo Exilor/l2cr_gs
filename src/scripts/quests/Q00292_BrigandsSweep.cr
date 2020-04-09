@@ -51,7 +51,7 @@ class Scripts::Q00292_BrigandsSweep < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -132,7 +132,7 @@ class Scripts::Q00292_BrigandsSweep < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when BALANKI
@@ -146,7 +146,7 @@ class Scripts::Q00292_BrigandsSweep < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -159,7 +159,7 @@ class Scripts::Q00023_LidiasHeart < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -195,7 +195,7 @@ class Scripts::Q00023_LidiasHeart < Quest
           qs.set_cond(6, true)
           html = "31328-22.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when TRADER_VIOLET
@@ -216,7 +216,7 @@ class Scripts::Q00023_LidiasHeart < Quest
             html = "31386-03.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when TOMBSTONE
@@ -228,7 +228,7 @@ class Scripts::Q00023_LidiasHeart < Quest
         when 10
           html = "31523-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when GHOST_OF_VON_HELLMANN
@@ -265,7 +265,7 @@ class Scripts::Q00023_LidiasHeart < Quest
             html = "31526-13.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when BOX
@@ -277,7 +277,7 @@ class Scripts::Q00023_LidiasHeart < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

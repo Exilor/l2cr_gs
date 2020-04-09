@@ -84,7 +84,7 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
       npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::ASEFA_HAS_ALREADY_SEEN_YOUR_FACE))
       npc.delete_me
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -125,7 +125,7 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
           html = "31378-03.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when UDAN
@@ -149,7 +149,7 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
           st.exit_quest(true, true)
           html = "31379-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -158,7 +158,7 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
         html = "31559-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

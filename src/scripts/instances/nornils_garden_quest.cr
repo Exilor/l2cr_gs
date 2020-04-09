@@ -49,7 +49,7 @@ class Scripts::NornilsGardenQuest < AbstractInstance
         htmltext = "32239-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -72,7 +72,7 @@ class Scripts::NornilsGardenQuest < AbstractInstance
     when MOTHER_NORNIL
       q236 && q236.completed? ? "32239-02.html" : "32239-01.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

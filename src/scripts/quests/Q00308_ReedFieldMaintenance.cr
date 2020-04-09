@@ -92,7 +92,7 @@ class Scripts::Q00308_ReedFieldMaintenance < Quest
       st.exit_quest(true, true)
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -172,7 +172,7 @@ abstract class Packets::Incoming::AbstractRefinePacket < GameClientPacket
         when WeaponType::NONE, WeaponType::FISHINGROD
           return false
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif item.template.is_a?(L2Armor)

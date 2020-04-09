@@ -124,7 +124,7 @@ module AdminCommandHandler::AdminLogin
         when 0x40
           name_type += "Free"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

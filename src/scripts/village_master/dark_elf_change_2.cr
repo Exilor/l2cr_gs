@@ -62,7 +62,7 @@ class Scripts::DarkElfChange2 < AbstractNpcAI
     when "33", "34", "36", "37", "40", "41", "43"
       class_change_requested(pc, event.to_i)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

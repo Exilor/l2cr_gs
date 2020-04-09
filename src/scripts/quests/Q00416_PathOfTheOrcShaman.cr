@@ -163,7 +163,7 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -195,7 +195,7 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         st.memo_state = 108
         st.set_cond(19, true)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -338,7 +338,7 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
           st.set_cond(20, true)
           html = "32090-08.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when DUDA_MARA_TOTEM_SPIRIT
@@ -375,11 +375,11 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         when 109
           html = "32057-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

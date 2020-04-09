@@ -147,7 +147,7 @@ class L2SignsPriestInstance < L2Npc
         when SevenSigns::SEAL_STRIFE
           pc.send_packet(SystemMessageId::FIGHT_FOR_STRIFE)
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -217,7 +217,7 @@ class L2SignsPriestInstance < L2Npc
             red_contrib = contribution_count
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -379,7 +379,7 @@ class L2SignsPriestInstance < L2Npc
 
           return
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -541,7 +541,7 @@ class L2SignsPriestInstance < L2Npc
 
           return
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -597,7 +597,7 @@ class L2SignsPriestInstance < L2Npc
             when SevenSigns::SEAL_STONE_RED_ID
               ancient_adena_reward = SevenSigns.calc_ancient_adena_reward(0, 0, convert_count)
             else
-              # automatically added
+              # [automatically added else]
             end
 
 

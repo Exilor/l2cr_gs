@@ -97,7 +97,7 @@ module VoicedCommandHandler::ChatAdmin
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

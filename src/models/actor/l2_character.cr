@@ -1035,7 +1035,7 @@ abstract class L2Character < L2Object
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -3141,7 +3141,7 @@ abstract class L2Character < L2Object
       me.fake_death = false
       me.recent_fake_death = true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -3386,7 +3386,7 @@ abstract class L2Character < L2Object
         return false
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

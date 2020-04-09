@@ -80,7 +80,7 @@ class Scripts::Q00281_HeadForTheHills < Quest
         "32173-10.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

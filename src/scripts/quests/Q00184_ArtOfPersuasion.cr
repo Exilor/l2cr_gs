@@ -108,7 +108,7 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -158,7 +158,7 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
           html = "32366-07.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

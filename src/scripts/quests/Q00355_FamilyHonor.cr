@@ -91,7 +91,7 @@ class Scripts::Q00355_FamilyHonor < Quest
         html = "30929-08.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -76,13 +76,13 @@ class Scripts::Q00168_DeliverSupplies < Quest
               html = "30349-07.html" # it looks like this needs a file ending in -08
             end
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when State::COMPLETED
           html = get_already_completed_msg(pc)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HARANT
@@ -108,7 +108,7 @@ class Scripts::Q00168_DeliverSupplies < Quest
           html = "#{npc.id}-02.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

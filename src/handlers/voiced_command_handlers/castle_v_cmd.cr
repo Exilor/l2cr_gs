@@ -72,7 +72,7 @@ module VoicedCommandHandler::CastkeVCmd
         pc.mount(12621, 0, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

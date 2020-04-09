@@ -38,7 +38,7 @@ class Scripts::Katenar < AbstractNpcAI
         npc.delete_me
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

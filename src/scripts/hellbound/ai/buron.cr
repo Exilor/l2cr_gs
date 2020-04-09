@@ -33,7 +33,7 @@ class Scripts::Buron < AbstractNpcAI
           when "Pants"
             pc.add_item("Quest", PANTS, 1, npc, true)
           else
-            # automatically added
+            # [automatically added else]
           end
 
           html = nil

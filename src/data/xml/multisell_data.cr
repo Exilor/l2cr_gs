@@ -143,7 +143,7 @@ module MultisellData
         return true
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -164,7 +164,7 @@ module MultisellData
       pc.send_packet(ExBrExtraUserInfo.new(pc))
       return true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -180,7 +180,7 @@ module MultisellData
       pc.send_packet(UserInfo.new(pc))
       pc.send_packet(ExBrExtraUserInfo.new(pc))
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

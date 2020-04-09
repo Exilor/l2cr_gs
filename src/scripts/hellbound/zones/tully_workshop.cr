@@ -718,7 +718,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1039,7 +1039,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           when STATE_CLOSE
             door.close_me
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

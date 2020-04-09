@@ -36,7 +36,7 @@ class Scripts::HotSprings < AbstractNpcAI
       when ATROXSPAWN, BANDERSNATCH
         try_to_infect(npc, attacker, FLU)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

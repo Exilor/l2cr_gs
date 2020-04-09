@@ -47,7 +47,7 @@ class Scripts::Q00653_WildMaiden < Quest
       when State::STARTED
         html = "32013-02.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GALIBREDO
@@ -57,7 +57,7 @@ class Scripts::Q00653_WildMaiden < Quest
         html = "30181-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

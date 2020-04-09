@@ -74,7 +74,7 @@ class Packets::Incoming::RequestCrystallizeItem < GameClientPacket
     when .s?
       can_crystallize = false if skill_level <= 4
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

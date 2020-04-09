@@ -67,7 +67,7 @@ module ArmorSetsData
           when "int"
             set.int = a["val"].to_i
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

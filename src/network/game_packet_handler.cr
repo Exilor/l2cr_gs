@@ -443,7 +443,7 @@ module GamePacketHandler
         return
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

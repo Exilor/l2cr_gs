@@ -357,7 +357,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
     when GraciaSeed::ANNIHILATION_BISTAKON..GraciaSeed::ANNIHILATION_COKRAKON
       return true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -467,7 +467,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
           char.tele_to_location(SOD_EXIT_POINT)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -543,7 +543,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
         mob.set_intention(AI::ATTACK, pc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -58,7 +58,7 @@ class Scripts::ElfHumanWizardChange2 < AbstractNpcAI
     when "12", "13", "14", "27", "28"
       class_change_requested(pc, event.to_i)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

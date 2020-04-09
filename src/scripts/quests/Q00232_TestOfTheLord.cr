@@ -155,7 +155,7 @@ class Scripts::Q00232_TestOfTheLord < Quest
       end
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -237,7 +237,7 @@ class Scripts::Q00232_TestOfTheLord < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -447,7 +447,7 @@ class Scripts::Q00232_TestOfTheLord < Quest
           html = "30649-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

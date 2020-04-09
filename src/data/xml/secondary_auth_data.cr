@@ -33,7 +33,7 @@ module SecondaryAuthData
             FORBIDDEN_PASSWORDS << pass.text
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

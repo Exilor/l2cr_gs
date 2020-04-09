@@ -93,7 +93,7 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -133,7 +133,7 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
             html = "30676-09.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HECTOR
@@ -161,11 +161,11 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
           html = "30191-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

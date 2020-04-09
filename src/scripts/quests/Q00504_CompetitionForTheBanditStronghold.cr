@@ -90,7 +90,7 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
       when State::COMPLETED
         html = "35437-07a.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

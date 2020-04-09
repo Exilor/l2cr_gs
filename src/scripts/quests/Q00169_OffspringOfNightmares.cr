@@ -39,7 +39,7 @@ class Scripts::Q00169_OffspringOfNightmares < Quest
           html = event
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -86,7 +86,7 @@ class Scripts::Q00169_OffspringOfNightmares < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

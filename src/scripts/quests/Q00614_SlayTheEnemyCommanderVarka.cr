@@ -77,7 +77,7 @@ class Scripts::Q00614_SlayTheEnemyCommanderVarka < Quest
         html = "31377-06.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

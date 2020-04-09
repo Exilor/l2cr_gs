@@ -48,7 +48,7 @@ class Scripts::Q10288_SecretMission < Quest
         return
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -79,7 +79,7 @@ class Scripts::Q10288_SecretMission < Quest
       when State::COMPLETED
         html = "31350-07.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when AQUILANI
@@ -95,7 +95,7 @@ class Scripts::Q10288_SecretMission < Quest
         return "32757-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

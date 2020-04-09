@@ -95,7 +95,7 @@ module BypassHandler::Observation
       do_observe(pc, target, loc, cost)
       return true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

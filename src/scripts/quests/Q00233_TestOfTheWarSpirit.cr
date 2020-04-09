@@ -134,7 +134,7 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
       give_items(pc, PEKIRONS_TOTEM, 1)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -230,7 +230,7 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -409,7 +409,7 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

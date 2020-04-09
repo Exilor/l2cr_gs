@@ -60,7 +60,7 @@ class Scripts::Q00297_GatekeepersFavor < Quest
         html = "30540-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

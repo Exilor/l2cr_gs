@@ -210,7 +210,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
        kalis = add_spawn(WITCH_KALIS, 160690, 21176, -3712, 0, false, 0)
       kalis.script_value = 50302
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -284,7 +284,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
         add_spawn(IMPERIAL_COFFER, npc, true, 0, false)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -491,7 +491,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -517,7 +517,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
     when BLITZ_WYRM
       start_quest_timer("DESPAWN_BLITZ_WYRM", 180000, npc, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

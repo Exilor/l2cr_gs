@@ -32,7 +32,7 @@ class Scripts::Q00015_SweetWhispers < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -66,7 +66,7 @@ class Scripts::Q00015_SweetWhispers < Quest
         when 2
           html = "31518-01a.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HIERARCH
@@ -74,11 +74,11 @@ class Scripts::Q00015_SweetWhispers < Quest
           html = "31517-00.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

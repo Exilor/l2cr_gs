@@ -47,7 +47,7 @@ module CursedWeaponsManager
           when "stagekills"
             cw.stage_kills = cd["val"].to_i
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

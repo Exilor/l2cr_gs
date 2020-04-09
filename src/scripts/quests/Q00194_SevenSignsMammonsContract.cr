@@ -200,7 +200,7 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -282,7 +282,7 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
         when 12
           html = "32571-28.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when FROG
@@ -300,7 +300,7 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
             html = "32572-07.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when TESS
@@ -320,7 +320,7 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when KUTA
@@ -338,7 +338,7 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
             html = "32574-07.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when CLAUDIA_ATHEBALDT
@@ -346,11 +346,11 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
           html = "31001-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -233,7 +233,7 @@ class Scripts::Q00620_FourGoblets < Quest
 
         st.set_memo_state_ex(1, 2)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -324,7 +324,7 @@ class Scripts::Q00620_FourGoblets < Quest
       FourSepulchersManager.try_entry(npc.not_nil!, pc)
       return ""
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -426,7 +426,7 @@ class Scripts::Q00620_FourGoblets < Quest
       when JUDGES_SEPULCHER_MANAGER
         html = "31924-01.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -623,7 +623,7 @@ class Scripts::Q00620_FourGoblets < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

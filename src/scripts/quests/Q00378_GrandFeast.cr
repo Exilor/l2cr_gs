@@ -110,7 +110,7 @@ class Scripts::Q00378_GrandFeast < Quest
         html = "30594-17.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -176,7 +176,7 @@ class Scripts::Q00378_GrandFeast < Quest
             quantity = 1i64
             adena = 2200i64
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -188,7 +188,7 @@ class Scripts::Q00378_GrandFeast < Quest
           html = "30594-19.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

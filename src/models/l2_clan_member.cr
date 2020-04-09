@@ -209,7 +209,7 @@ class L2ClanMember
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 7
@@ -235,7 +235,7 @@ class L2ClanMember
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 8
@@ -261,7 +261,7 @@ class L2ClanMember
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 9
@@ -287,7 +287,7 @@ class L2ClanMember
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 10
@@ -313,7 +313,7 @@ class L2ClanMember
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 11
@@ -339,7 +339,7 @@ class L2ClanMember
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else

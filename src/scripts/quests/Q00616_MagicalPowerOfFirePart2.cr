@@ -40,7 +40,7 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
           end
           st.set_cond(3, true)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -72,7 +72,7 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
           html = "31558-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
@@ -127,7 +127,7 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when KETRA_TOTEM
@@ -140,12 +140,12 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
         when 3
           html = "31558-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

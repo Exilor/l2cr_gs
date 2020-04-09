@@ -86,7 +86,7 @@ class Scripts::BleedingFly < AbstractNpcAI
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

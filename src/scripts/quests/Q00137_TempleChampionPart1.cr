@@ -50,7 +50,7 @@ class Scripts::Q00137_TempleChampionPart1 < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

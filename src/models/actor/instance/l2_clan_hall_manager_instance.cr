@@ -428,7 +428,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_hp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery hp_cancel\">Deactivate</a>]#{hp_grade3}"
               else
-                # automatically added
+                # [automatically added else]
               end
 
             else
@@ -445,7 +445,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_hp%"] = hp_grade3
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -463,7 +463,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_exp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery exp_cancel\">Deactivate</a>]#{exp_grade3}"
               else
-                # automatically added
+                # [automatically added else]
               end
 
             else
@@ -480,7 +480,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_exp%"] = exp_grade3
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -498,7 +498,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_mp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery mp_cancel\">Deactivate</a>]#{mp_grade3}"
               else
-                # automatically added
+                # [automatically added else]
               end
 
             else
@@ -515,7 +515,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_mp%"] = mp_grade3
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -729,7 +729,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 end
                 return
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -764,7 +764,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_support%"] = "[<a action=\"bypass -h npc_%objectId%_manage other support_cancel\">Deactivate</a>]#{support_grade3}"
               else
-                # automatically added
+                # [automatically added else]
               end
 
             else
@@ -781,7 +781,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               when 3
                 html["%change_support%"] = support_grade3
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end

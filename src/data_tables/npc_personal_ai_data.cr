@@ -28,7 +28,7 @@ module NpcPersonalAIData
           npc.no_random_walk = val == 1
           sp.no_random_walk = val == 1
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

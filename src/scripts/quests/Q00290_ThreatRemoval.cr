@@ -58,7 +58,7 @@ class Scripts::Q00290_ThreatRemoval < Quest
         when 9, 10
           st.reward_items(FIRE_CRYSTAL, 2)
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -83,7 +83,7 @@ class Scripts::Q00290_ThreatRemoval < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -125,7 +125,7 @@ class Scripts::Q00290_ThreatRemoval < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

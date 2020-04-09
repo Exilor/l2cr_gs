@@ -65,7 +65,7 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -93,13 +93,13 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
         when 7
           html = "31555-07.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when CORPSE_OF_DWARF
@@ -109,7 +109,7 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
       when 2
         html = "31665-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when FORGOTTEN_MONUMENT_1..FORGOTTEN_MONUMENT_4
@@ -120,7 +120,7 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
         html = "#{npc.id}-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

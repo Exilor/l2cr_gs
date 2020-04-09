@@ -65,7 +65,7 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
       qs.set_cond(4, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -162,7 +162,7 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
           html = "30317-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

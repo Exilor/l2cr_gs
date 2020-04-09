@@ -166,7 +166,7 @@ class L2SepulcherNpcInstance < L2Npc
           FourSepulchersManager.spawn_shadow(id)
           # in java, here goes a "default:" not preceeded by a "break"
         else
-          # automatically added
+          # [automatically added else]
         end
 
 

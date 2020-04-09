@@ -30,7 +30,7 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
       when SevenSigns::PERIOD_SEAL_VALIDATION
         d SystemMessageId::VALIDATION_PERIOD.id
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -40,7 +40,7 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
       when SevenSigns::PERIOD_COMPETITION, SevenSigns::PERIOD_SEAL_VALIDATION
         d SystemMessageId::UNTIL_MONDAY_6PM.id
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -182,7 +182,7 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               d SystemMessageId::SEAL_NOT_OWNED_35_LESS_VOTED.id
             end
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when SevenSigns::CABAL_DAWN
@@ -215,7 +215,7 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               d SystemMessageId::SEAL_OWNED_10_LESS_VOTED.id
             end
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when SevenSigns::CABAL_DUSK
@@ -248,16 +248,16 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               d SystemMessageId::SEAL_OWNED_10_LESS_VOTED.id
             end
           else
-            # automatically added
+            # [automatically added else]
           end
 
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -72,7 +72,7 @@ module BuyListData
             buy_list.add_allowed_npc(npcs_node.text.to_i)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

@@ -54,7 +54,7 @@ module AdminCommandHandler::AdminGeodata
     when "admin_geogrid"
       GeoUtils.debug_grid(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

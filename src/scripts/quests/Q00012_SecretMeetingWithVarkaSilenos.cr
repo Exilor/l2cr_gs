@@ -38,7 +38,7 @@ class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
         "31378-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -72,7 +72,7 @@ class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
         html = get_already_completed_msg(pc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

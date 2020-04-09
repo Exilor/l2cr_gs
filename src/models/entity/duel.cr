@@ -243,7 +243,7 @@ class Duel
     when DuelResult::CANCELED, DuelResult::TIMEOUT
       sm = SystemMessageId::THE_DUEL_HAS_ENDED_IN_A_TIE
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

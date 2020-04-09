@@ -32,7 +32,7 @@ class Packets::Outgoing::ExShowFortressSiegeInfo < GameServerPacket
         when 3
           d 0x00
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 4 # L2J TODO: change 4 to 5 once control room supporte
@@ -49,11 +49,11 @@ class Packets::Outgoing::ExShowFortressSiegeInfo < GameServerPacket
         when 4
           d 0x01
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else

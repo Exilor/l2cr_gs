@@ -71,7 +71,7 @@ class Scripts::Quarry < AbstractNpcAI
         HellboundEngine.update_trust(TRUST, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

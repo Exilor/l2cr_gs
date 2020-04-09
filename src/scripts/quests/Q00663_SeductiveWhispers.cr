@@ -124,7 +124,7 @@ class Scripts::Q00663_SeductiveWhispers < Quest
             html = get_html(pc, "30846-16.html", 0, 0, win_count, 0)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif qs.memo_state?(1005)
@@ -133,7 +133,7 @@ class Scripts::Q00663_SeductiveWhispers < Quest
         html = "30846-26.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -452,7 +452,7 @@ class Scripts::Q00663_SeductiveWhispers < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

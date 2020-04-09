@@ -112,7 +112,7 @@ class Scripts::KetraOrcSupport < AbstractNpcAI
         html = "31376-no.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

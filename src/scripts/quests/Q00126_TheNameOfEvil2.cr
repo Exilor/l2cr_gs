@@ -222,7 +222,7 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
       st.add_exp_and_sp(1015973, 102802)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -260,13 +260,13 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
         when 22
           html = "32115-5a.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ULU_KAIMU
@@ -284,7 +284,7 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
         when 5
           html = "32119-5a.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -389,7 +389,7 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

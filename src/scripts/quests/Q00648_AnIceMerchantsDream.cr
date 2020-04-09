@@ -154,7 +154,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
         st.set("ex", 0)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -223,7 +223,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
         html = "32023-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

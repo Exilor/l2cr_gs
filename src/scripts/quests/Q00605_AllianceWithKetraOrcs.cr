@@ -232,11 +232,11 @@ class Scripts::Q00605_AllianceWithKetraOrcs < Quest
           html = "31371-24.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

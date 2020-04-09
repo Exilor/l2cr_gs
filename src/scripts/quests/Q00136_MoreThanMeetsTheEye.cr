@@ -146,13 +146,13 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
             html = "30832-16.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ERRICKIN
@@ -196,7 +196,7 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -102,7 +102,7 @@ class Scripts::Q00701_ProofOfExistence < Quest
         html = "32559-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

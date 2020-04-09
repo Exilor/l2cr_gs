@@ -69,7 +69,7 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -109,7 +109,7 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
         html = "32245-06.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -171,7 +171,7 @@ class Scripts::Q00383_TreasureHunt < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

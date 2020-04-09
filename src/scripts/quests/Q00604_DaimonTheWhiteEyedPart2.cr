@@ -111,7 +111,7 @@ class Scripts::Q00604_DaimonTheWhiteEyedPart2 < Quest
         html = "31541-04.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

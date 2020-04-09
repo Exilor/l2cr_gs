@@ -102,7 +102,7 @@ class Scripts::Q10290_LandDragonConqueror < Quest
     when State::COMPLETED
       html = "30755-09.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

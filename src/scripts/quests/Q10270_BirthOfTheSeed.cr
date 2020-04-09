@@ -46,7 +46,7 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -132,7 +132,7 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -213,11 +213,11 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
             html = "32559-11.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

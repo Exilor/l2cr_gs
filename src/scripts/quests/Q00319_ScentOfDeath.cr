@@ -31,7 +31,7 @@ class Scripts::Q00319_ScentOfDeath < Quest
         st.start_quest
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -74,11 +74,11 @@ class Scripts::Q00319_ScentOfDeath < Quest
         st.exit_quest(true, true)
         html = "30138-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

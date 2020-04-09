@@ -63,7 +63,7 @@ class Scripts::Q00320_BonesTellTheFuture < Quest
         html = "30359-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

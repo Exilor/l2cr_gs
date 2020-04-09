@@ -32,7 +32,7 @@ class Scripts::AvantGarde < AbstractNpcAI
     when AcquireSkillType::SUBCLASS
       AvantGarde.show_subclass_skill_list(player)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -147,7 +147,7 @@ class Scripts::AvantGarde < AbstractNpcAI
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -118,7 +118,7 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -149,7 +149,7 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
           give_items(killer, DEBRIS_OF_WILLOW, 1)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -336,7 +336,7 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

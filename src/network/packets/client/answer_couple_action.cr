@@ -46,7 +46,7 @@ class Packets::Incoming::AnswerCoupleAction < GameClientPacket
       sm.add_pc_name(pc)
       target.send_packet(sm)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

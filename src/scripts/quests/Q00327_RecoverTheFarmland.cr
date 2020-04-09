@@ -201,7 +201,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -275,7 +275,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         html = "30314-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

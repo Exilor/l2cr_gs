@@ -43,7 +43,7 @@ class Scripts::Natives < AbstractNpcAI
         html = "32357-01b.htm"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

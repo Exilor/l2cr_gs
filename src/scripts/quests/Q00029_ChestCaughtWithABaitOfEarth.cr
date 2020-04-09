@@ -40,7 +40,7 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
     html
@@ -72,7 +72,7 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
         when 2
           html = "31574-09.htm"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ANABEL
@@ -80,11 +80,11 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
           html = "30909-01.htm"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -202,7 +202,7 @@ class OlympiadGameTask
       @game = nil
       return
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -217,7 +217,7 @@ class OlympiadGameTask
       @game = nil
       return
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

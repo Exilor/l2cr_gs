@@ -248,7 +248,7 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -297,7 +297,7 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -363,7 +363,7 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         when 202
           html = "31963-11.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when RAILROAD_WORKER_OBI
@@ -375,11 +375,11 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         when 102
           html = "32052-09.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

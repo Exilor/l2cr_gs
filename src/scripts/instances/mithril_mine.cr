@@ -70,7 +70,7 @@ class Scripts::MithrilMine < AbstractInstance
       end
       InstanceManager.get_instance(world.instance_id).not_nil!.duration = 3000
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -147,7 +147,7 @@ class Scripts::MithrilMine < AbstractInstance
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

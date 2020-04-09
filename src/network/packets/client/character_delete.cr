@@ -25,7 +25,7 @@ class Packets::Incoming::CharacterDelete < GameClientPacket
     when 2
       send_packet(CharDeleteFail::CLAN_LEADERS_MAY_NOT_BE_DELETED)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -82,7 +82,7 @@ class ItemDocument < AbstractDocument
           current_item.item.attach(condition)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -109,7 +109,7 @@ class ItemDocument < AbstractDocument
     when "EtcItem"
       L2EtcItem
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

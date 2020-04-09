@@ -64,7 +64,7 @@ class Scripts::WildBeastReserve < FlagWar
     when 35611
       "messenger_flag5.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -82,7 +82,7 @@ class Scripts::WildBeastReserve < FlagWar
     when 35622
       "messenger_ally5result.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

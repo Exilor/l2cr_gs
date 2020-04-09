@@ -35,7 +35,7 @@ module HennaData
       when "classId"
         wear_class_ids << ClassId[c.text.to_i]
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

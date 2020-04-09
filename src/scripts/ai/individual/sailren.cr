@@ -147,7 +147,7 @@ class Scripts::Sailren < AbstractNpcAI
         start_quest_timer("CHECK_ATTACK", 120000, nil, nil)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -187,7 +187,7 @@ class Scripts::Sailren < AbstractNpcAI
       when TREX
         start_quest_timer("SPAWN_SAILREN", 180000, nil, nil)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

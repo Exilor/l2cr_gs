@@ -6,7 +6,7 @@ module WarehouseCache
   @@cache_time = 0i64
 
   def load
-    @@cache_time = Config.warehouse_cache_time.to_i64 * 60000
+    @@cache_time = Config.warehouse_cache_time.to_i64 * 60_000
     ThreadPoolManager.schedule_ai_at_fixed_rate(self, 120_000, 60_000)
   end
 

@@ -38,7 +38,7 @@ class Scripts::Q00641_AttackSailren < Quest
         st.exit_quest(true, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -76,7 +76,7 @@ class Scripts::Q00641_AttackSailren < Quest
     when State::STARTED
       html = st.cond?(1) ? "32109-1a.html" : "32109-2.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

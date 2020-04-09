@@ -60,7 +60,7 @@ class Scripts::Q00629_CleanUpTheSwampOfScreams < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

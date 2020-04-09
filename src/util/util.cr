@@ -274,7 +274,7 @@ module Util
           count = Math.max(count, c2.to_i)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -392,7 +392,7 @@ abstract class ChamberOfDelusion < AbstractInstance
       receiver.busy = true
       receiver.do_cast(FAIL_SKILL)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

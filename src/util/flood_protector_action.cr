@@ -34,7 +34,7 @@ class FloodProtectorAction
           when "jail"
             jail_char
           else
-            # automatically added
+            # [automatically added else]
           end
 
           @punishment_in_progress = false

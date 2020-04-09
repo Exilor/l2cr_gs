@@ -65,7 +65,7 @@ class Scripts::Q00040_ASpecialOrder < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -95,13 +95,13 @@ class Scripts::Q00040_ASpecialOrder < Quest
             html = "30081-09.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when OFULLE
@@ -120,7 +120,7 @@ class Scripts::Q00040_ASpecialOrder < Quest
       when 4
         html = "31572-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GESTO
@@ -139,11 +139,11 @@ class Scripts::Q00040_ASpecialOrder < Quest
       when 7
         html = "30511-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

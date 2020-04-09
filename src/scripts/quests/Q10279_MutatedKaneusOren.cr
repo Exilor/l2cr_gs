@@ -30,7 +30,7 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
       st.give_adena(100000, true)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -81,7 +81,7 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
       when State::COMPLETED
         html = "30916-06.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ROVIA
@@ -97,7 +97,7 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
       else
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -44,7 +44,7 @@ class Scripts::Q00316_DestroyPlagueCarriers < Quest
     when "30155-09.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

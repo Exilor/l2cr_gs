@@ -49,7 +49,7 @@ class Scripts::Q00252_ItSmellsDelicious < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -97,7 +97,7 @@ class Scripts::Q00252_ItSmellsDelicious < Quest
           html = "30200-07.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else

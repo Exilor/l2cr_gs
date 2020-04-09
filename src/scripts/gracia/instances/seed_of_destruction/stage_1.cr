@@ -426,7 +426,7 @@ class Scripts::Stage1 < AbstractInstance
         when 9
           # instance end
         else
-          # automatically added
+          # [automatically added else]
         end
 
         world.inc_status
@@ -667,7 +667,7 @@ class Scripts::Stage1 < AbstractInstance
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -50,7 +50,7 @@ class SkillDocument < AbstractDocument
         parse_skill(n)
         @skills.concat(current_skill.skills)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -188,7 +188,7 @@ class SkillDocument < AbstractDocument
         when "selfEffects"
           parse_template(n, current_skill.current_skills[i], EffectScope::SELF)
         else
-          # automatically added
+          # [automatically added else]
         end
 
         n = n.next_element

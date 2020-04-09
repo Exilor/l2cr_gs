@@ -79,7 +79,7 @@ class Scripts::ShadowSummoner < AbstractNpcAI
       demons_banquet = add_spawn(id, npc.x + 150, npc.y + 150, npc.z, npc.heading, false, 0)
       add_attack_desire(demons_banquet, pc, 10000)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

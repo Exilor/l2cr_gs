@@ -77,11 +77,11 @@ class Scripts::Q00258_BringWolfPelts < Quest
           html = "30001-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

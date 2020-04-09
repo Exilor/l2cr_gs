@@ -65,7 +65,7 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
       when GUARDS_OF_THE_DAWN_3
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::WHO_ARE_YOU_A_NEW_FACE_LIKE_YOU_CAN_T_APPROACH_THIS_PLACE)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -76,7 +76,7 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -152,7 +152,7 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
       pc.tele_to_location(-75925, 213399, -7128)
       return "32580-01.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

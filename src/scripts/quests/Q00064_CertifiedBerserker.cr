@@ -116,7 +116,7 @@ class Scripts::Q00064_CertifiedBerserker < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -175,7 +175,7 @@ class Scripts::Q00064_CertifiedBerserker < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -283,7 +283,7 @@ class Scripts::Q00064_CertifiedBerserker < Quest
           html = "32253-03.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

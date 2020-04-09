@@ -342,7 +342,7 @@ module AugmentationData
         generate_skill = true
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -377,7 +377,7 @@ module AugmentationData
       when 3
         stat34 = RED_SKILLS[ls_level].sample(random: Rnd)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

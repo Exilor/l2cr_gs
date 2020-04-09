@@ -48,7 +48,7 @@ class Scripts::Q00382_KailsMagicCoin < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

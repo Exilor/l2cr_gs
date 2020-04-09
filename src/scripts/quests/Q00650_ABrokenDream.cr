@@ -42,7 +42,7 @@ class Scripts::Q00650_ABrokenDream < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -70,7 +70,7 @@ class Scripts::Q00650_ABrokenDream < Quest
         html = "32054-06.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -53,7 +53,7 @@ class Scripts::CastleAmbassador < AbstractNpcAI
         npc.broadcast_event("DESPAWN", 1000, nil)
         npc.delete_me
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

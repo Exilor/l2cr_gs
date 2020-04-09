@@ -71,7 +71,7 @@ class Scripts::Q00628_HuntGoldenRam < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -136,11 +136,11 @@ class Scripts::Q00628_HuntGoldenRam < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -60,7 +60,7 @@ class Scripts::OrcChange1 < AbstractNpcAI
     when "45", "47", "50"
       class_change_requested(pc, npc, event.to_i)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

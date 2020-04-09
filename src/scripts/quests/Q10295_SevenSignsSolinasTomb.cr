@@ -156,7 +156,7 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -204,7 +204,7 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
         when 6
           html = "32793-11.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when SOLINA
@@ -301,12 +301,12 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
           when 5
             html = "32787-06.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

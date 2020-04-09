@@ -45,7 +45,7 @@ class Scripts::Q00358_IllegitimateChildOfTheGoddess < Quest
       st.start_quest
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

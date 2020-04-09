@@ -1647,7 +1647,7 @@ class L2AttackableAI < L2CharacterAI
           actor.target = obj
           self.attack_target = obj
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -1752,7 +1752,7 @@ class L2AttackableAI < L2CharacterAI
       when CAST
         think_cast
       else
-        # automatically added
+        # [automatically added else]
       end
 
     rescue e

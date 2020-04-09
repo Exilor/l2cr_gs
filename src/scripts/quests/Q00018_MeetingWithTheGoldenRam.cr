@@ -38,7 +38,7 @@ class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -65,7 +65,7 @@ class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
         html = "31555-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

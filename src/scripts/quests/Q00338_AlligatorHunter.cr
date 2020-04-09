@@ -68,7 +68,7 @@ class Scripts::Q00338_AlligatorHunter < Quest
     when State::STARTED
       html = "30892-04.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

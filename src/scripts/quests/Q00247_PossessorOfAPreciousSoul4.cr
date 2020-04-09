@@ -49,7 +49,7 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -76,7 +76,7 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when LADY_OF_LAKE
@@ -84,7 +84,7 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
         html = "31745-1.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

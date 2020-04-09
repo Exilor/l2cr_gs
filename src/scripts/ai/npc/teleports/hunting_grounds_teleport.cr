@@ -55,7 +55,7 @@ class Scripts::HuntingGroundsTeleport < AbstractNpcAI
     when 31997, 31998
       html = check ? "low_schuttgart.htm" : "hg_schuttgart.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

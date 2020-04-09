@@ -116,7 +116,7 @@ class Scripts::Core < AbstractNpcAI
       MINIONS.each &.decay_me
       MINIONS.clear
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

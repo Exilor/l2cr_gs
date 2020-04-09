@@ -363,7 +363,7 @@ module AdminCommandHandler::AdminEffects
       when "dusk"
         packet = SSQInfo.new(1)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when "sky"
@@ -379,7 +379,7 @@ module AdminCommandHandler::AdminEffects
           packet = ExRedSky.new(10)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
@@ -409,7 +409,7 @@ module AdminCommandHandler::AdminEffects
     when .includes?("social")
       filename = "social.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -107,13 +107,13 @@ class Scripts::Q00034_InSearchOfCloth < Quest
             html = "30088-09.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when VARAN
@@ -124,7 +124,7 @@ class Scripts::Q00034_InSearchOfCloth < Quest
         when 2
           html = "30294-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -140,12 +140,12 @@ class Scripts::Q00034_InSearchOfCloth < Quest
         when 6
           html = "30165-06.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

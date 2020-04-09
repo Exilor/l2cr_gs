@@ -18,7 +18,7 @@ class L2WaterZone < L2ZoneType
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -38,7 +38,7 @@ class L2WaterZone < L2ZoneType
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

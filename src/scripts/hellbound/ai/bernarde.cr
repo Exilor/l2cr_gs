@@ -40,7 +40,7 @@ class Scripts::Bernarde < AbstractNpcAI
     when "rumors"
       event = "32300-#{HellboundEngine.level}r.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

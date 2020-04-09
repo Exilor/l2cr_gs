@@ -66,7 +66,7 @@ class Scripts::Q00146_TheZeroHour < Quest
     when State::COMPLETED
       html = "31554-01b.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

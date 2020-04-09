@@ -73,7 +73,7 @@ class Scripts::Q00186_ContractExecution < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -129,7 +129,7 @@ class Scripts::Q00186_ContractExecution < Quest
           html = "31437-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

@@ -116,7 +116,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
       when 40
         open_door(DOOR_5, world.instance_id)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -181,7 +181,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
                   pc.send_packet(NpcSay.new(caster.l2id, Say2::TELL, caster.id, NpcString::DEAR_S1_GIVE_ME_MORE_STRENGTH).add_string_parameter(pc.name))
                 end
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -204,7 +204,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
           break
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -235,7 +235,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
         npc.script_value = 1
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -279,7 +279,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
     when LILIM_SLAYER
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::FOR_SHILEN))
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -320,7 +320,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -49,7 +49,7 @@ class Scripts::Q00659_IdRatherBeCollectingFairyBreath < Quest
       st.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

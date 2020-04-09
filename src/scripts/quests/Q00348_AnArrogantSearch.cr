@@ -108,7 +108,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         return super
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -160,7 +160,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         when 3
           give_adena(player, 13000, true)
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -228,7 +228,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       st.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -322,7 +322,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -420,7 +420,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -442,7 +442,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::I_HAVE_THE_KEY_WHY_DONT_YOU_COME_AND_TAKE_IT))
       start_quest_timer("DESPAWN", 600000, npc, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -499,7 +499,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             give_items(player, HANELLINS_3RD_LETTER, 1)
             st.set_cond(8, true)
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when 5
@@ -514,7 +514,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             when 3
               html = "30864-19.html"
             else
-              # automatically added
+              # [automatically added else]
             end
 
           end
@@ -557,7 +557,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
                 html = "30864-38.html"
               end
             else
-              # automatically added
+              # [automatically added else]
             end
 
 
@@ -618,7 +618,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
               when 3
                 give_adena(player, 13000, true)
               else
-                # automatically added
+                # [automatically added else]
               end
 
 
@@ -718,7 +718,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         when 19
           html = "30864-49.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when IASON_HEINE
@@ -970,7 +970,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -127,7 +127,7 @@ class Scripts::WyvernManager < AbstractNpcAI
     when ManagerType::FORT
       npc.fort.name
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -179,7 +179,7 @@ class Scripts::WyvernManager < AbstractNpcAI
         html = mount_wyvern(npc, pc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

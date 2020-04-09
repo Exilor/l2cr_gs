@@ -105,7 +105,7 @@ class Scripts::Q10285_MeetingSirra < Quest
         pc.tele_to_location(FREYA_LOC, 0)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -139,7 +139,7 @@ class Scripts::Q10285_MeetingSirra < Quest
           st.exit_quest(false, true)
           html = "32020-08.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when JINIA
@@ -158,7 +158,7 @@ class Scripts::Q10285_MeetingSirra < Quest
           when 5
             html = "32760-15.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end
@@ -172,7 +172,7 @@ class Scripts::Q10285_MeetingSirra < Quest
           when 3
             html = "32761-04.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end
@@ -196,7 +196,7 @@ class Scripts::Q10285_MeetingSirra < Quest
           st.set_cond(8, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

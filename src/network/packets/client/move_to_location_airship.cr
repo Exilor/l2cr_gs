@@ -58,7 +58,7 @@ class Packets::Incoming::MoveToLocationAirship < GameClientPacket
 
       ship.execute_path(dst)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

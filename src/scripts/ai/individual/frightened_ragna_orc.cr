@@ -102,7 +102,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
       npc.set_intention(AI::MOVE_TO, loc)
       npc.delete_me
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

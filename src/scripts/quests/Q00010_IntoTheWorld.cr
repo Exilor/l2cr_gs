@@ -71,7 +71,7 @@ class Scripts::Q00010_IntoTheWorld < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when REED
@@ -86,7 +86,7 @@ class Scripts::Q00010_IntoTheWorld < Quest
         when 4
           html = "30520-06.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -99,7 +99,7 @@ class Scripts::Q00010_IntoTheWorld < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

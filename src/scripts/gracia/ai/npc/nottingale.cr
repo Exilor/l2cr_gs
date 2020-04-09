@@ -51,7 +51,7 @@ class Scripts::Nottingale < AbstractNpcAI
       pc.send_packet(RADARS[event[6...8].to_i])
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

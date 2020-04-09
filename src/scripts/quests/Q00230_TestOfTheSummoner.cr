@@ -192,7 +192,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         start_quest_timer("KILLED_ATTACKER", 5000, npc, nil)
       end
   else
-    # automatically added
+    # [automatically added else]
     end
 
 
@@ -229,7 +229,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       when 4
         give_items(pc, LARAS_5TH_LIST, 1)
    else
-     # automatically added
+     # [automatically added else]
       end
 
       qs.set_cond(2, true)
@@ -248,7 +248,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       when 4
         give_items(pc, LARAS_5TH_LIST, 1)
    else
-     # automatically added
+     # [automatically added else]
       end
 
       html = event
@@ -331,7 +331,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       take_items(pc, CRYSTAL_OF_DEFEAT_6TH, 1)
       html = event
   else
-    # automatically added
+    # [automatically added else]
     end
 
 
@@ -410,7 +410,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           npc.delete_me
         end
    else
-     # automatically added
+     # [automatically added else]
       end
 
     when SHADOW_TUREN
@@ -485,7 +485,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           npc.delete_me
         end
    else
-     # automatically added
+     # [automatically added else]
       end
 
     when UNICORN_PHANTASM
@@ -525,7 +525,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           npc.delete_me
         end
    else
-     # automatically added
+     # [automatically added else]
       end
 
     when SILHOUETTE_TILFO
@@ -565,11 +565,11 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           npc.delete_me
         end
    else
-     # automatically added
+     # [automatically added else]
       end
 
   else
-    # automatically added
+    # [automatically added else]
     end
 
 
@@ -684,7 +684,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           html = "30634-01.html"
         end
    else
-     # automatically added
+     # [automatically added else]
       end
 
     elsif qs.started?
@@ -912,7 +912,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       if npc.id == HIGH_SUMMONER_GALATEA
         html = get_already_completed_msg(pc)
    else
-     # automatically added
+     # [automatically added else]
       end
 
     end

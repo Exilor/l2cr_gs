@@ -25,7 +25,7 @@ class Condition
         pc.send_packet(SystemMessageId::YOU_CANNOT_POLYMORPH_WHILE_RIDING_A_PET)
         can = false
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

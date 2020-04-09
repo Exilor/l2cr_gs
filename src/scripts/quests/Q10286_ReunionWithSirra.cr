@@ -82,7 +82,7 @@ class Scripts::Q10286_ReunionWithSirra < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -120,7 +120,7 @@ class Scripts::Q10286_ReunionWithSirra < Quest
           when 2
             html = "32760-06.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end
@@ -139,7 +139,7 @@ class Scripts::Q10286_ReunionWithSirra < Quest
           html = "32781-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -143,7 +143,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         qs.set("flag", 2501)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -197,7 +197,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           arthea.script_value = arthea.script_value + 1
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -239,7 +239,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           html = "30756-10.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when STATUE_OF_OFFERING
@@ -277,7 +277,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         when 5
           html = "30758-09.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -311,7 +311,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         html = "30759-12.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

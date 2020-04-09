@@ -63,13 +63,13 @@ class Scripts::Q00174_SupplyCheck < Quest
           show_on_screen_msg(pc, npc_str, 2, 5000)
           html = "32173-07.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when BENIS
@@ -84,7 +84,7 @@ class Scripts::Q00174_SupplyCheck < Quest
         when 3
           html = "32170-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -100,12 +100,12 @@ class Scripts::Q00174_SupplyCheck < Quest
         when 4
           html = "32167-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

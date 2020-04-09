@@ -34,7 +34,7 @@ module HitConditionBonusData
         when "rain"
           @@rain_bonus  = d["val"].to_i
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

@@ -67,7 +67,7 @@ class Scripts::ArenaManager < AbstractNpcAI
         pc.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

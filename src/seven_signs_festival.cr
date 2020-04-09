@@ -1172,7 +1172,7 @@ module SevenSignsFestival
     when SevenSigns::SEAL_STONE_RED_ID
       bonus = SevenSigns::SEAL_STONE_RED_VALUE
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1235,7 +1235,7 @@ module SevenSignsFestival
     when 31137
       @@dusk_chat_guide = npc
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

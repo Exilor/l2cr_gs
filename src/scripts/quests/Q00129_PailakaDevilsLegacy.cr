@@ -61,7 +61,7 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -154,7 +154,7 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -181,7 +181,7 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
           qs.set_cond(4, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

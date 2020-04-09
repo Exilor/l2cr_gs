@@ -45,7 +45,7 @@ class Scripts::Q00645_GhostsOfBatur < Quest
         st.exit_quest(true, true)
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -92,7 +92,7 @@ class Scripts::Q00645_GhostsOfBatur < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

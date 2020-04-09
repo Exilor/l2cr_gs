@@ -107,7 +107,7 @@ class Scripts::GrandBossTeleporters < AbstractNpcAI
       z = TELEPORT_OUT_OF_VALAKAS_LAIR.z
       pc.tele_to_location(x, y, z)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

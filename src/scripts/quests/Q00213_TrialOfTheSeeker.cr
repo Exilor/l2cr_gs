@@ -165,7 +165,7 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
       qs.set_cond(14, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -257,7 +257,7 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -385,7 +385,7 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
           html = "30715-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

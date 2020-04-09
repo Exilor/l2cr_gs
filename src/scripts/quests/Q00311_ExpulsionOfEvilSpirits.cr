@@ -66,7 +66,7 @@ class Scripts::Q00311_ExpulsionOfEvilSpirits < Quest
         html = "32655-14.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -107,7 +107,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -125,7 +125,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
     when SHELF
       "32580-01.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -158,7 +158,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         when 2
           html = "32576-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when RAYMOND
@@ -180,7 +180,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         when 4
           html = "30289-12.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when LIGHT_OF_DAWN
@@ -208,11 +208,11 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           html = "30969-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

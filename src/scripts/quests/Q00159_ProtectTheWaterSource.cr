@@ -52,7 +52,7 @@ class Scripts::Q00159_ProtectTheWaterSource < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -102,13 +102,13 @@ class Scripts::Q00159_ProtectTheWaterSource < Quest
             end
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

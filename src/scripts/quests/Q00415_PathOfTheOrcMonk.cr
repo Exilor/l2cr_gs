@@ -159,7 +159,7 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -182,7 +182,7 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
           npc.script_value = 2
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -319,7 +319,7 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -456,7 +456,7 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
           html = "32056-09.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

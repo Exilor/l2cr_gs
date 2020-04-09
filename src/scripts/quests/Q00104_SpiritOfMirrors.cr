@@ -103,7 +103,7 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ARNOLD, JOHNSTONE, KENYOS
@@ -118,7 +118,7 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
 
       html = "#{npc.id}-01.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

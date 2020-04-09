@@ -69,7 +69,7 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when BAULRO
@@ -89,7 +89,7 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

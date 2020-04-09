@@ -16,7 +16,7 @@ class IllegalPlayerActionTask
       pc.send_message("Illegal action performed")
       pc.send_message("You will be teleported to GM Consultation Service area and jailed.")
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -56,7 +56,7 @@ class IllegalPlayerActionTask
       )
       PunishmentManager.start_punishment(task)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

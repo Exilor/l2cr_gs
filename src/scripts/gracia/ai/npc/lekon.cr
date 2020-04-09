@@ -37,7 +37,7 @@ class Scripts::Lekon < AbstractNpcAI
         html = "32557-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -99,7 +99,7 @@ abstract class Inventory < ItemContainer
           inv.lhand_slot = nil
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -715,7 +715,7 @@ abstract class Inventory < ItemContainer
              L2Item::SLOT_HEAD
           return
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

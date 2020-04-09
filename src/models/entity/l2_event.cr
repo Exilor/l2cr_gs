@@ -132,7 +132,7 @@ module L2Event
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -206,7 +206,7 @@ module L2Event
       when EventState::OFF
         @@event_state = EventState::STANDBY
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -265,7 +265,7 @@ module L2Event
       when EventState::OFF # Event is off, so no problem turning it on.
         return "Cannot start event, it is off. Participation start is required."
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -342,7 +342,7 @@ module L2Event
       @@event_info = ""
       return "The event has been stopped, all players unregistered and all event npcs unspawned."
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

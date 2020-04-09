@@ -18,7 +18,7 @@ class L2EtcItem < L2Item
     when .soulshot?, .summon_soulshot?, .spiritshot?, .summon_spiritshot?
       @item_type = EtcItemType::SHOT
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

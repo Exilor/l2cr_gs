@@ -147,7 +147,7 @@ class Scripts::Q00234_FatesWhisper < Quest
     when CHEST_OF_GOLKONDA
       start_quest_timer("23404", 1000 * 120, npc, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -167,7 +167,7 @@ class Scripts::Q00234_FatesWhisper < Quest
       when 8
         return "30178-04.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when CLIFF
@@ -353,7 +353,7 @@ class Scripts::Q00234_FatesWhisper < Quest
         end
         return "31002-43i.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when COFFER_OF_THE_DEAD
@@ -393,7 +393,7 @@ class Scripts::Q00234_FatesWhisper < Quest
         return "31030-02.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -408,7 +408,7 @@ class Scripts::Q00234_FatesWhisper < Quest
       when "23401", "23402", "23403", "23404"
         npc.decay_me
       else
-        # automatically added
+        # [automatically added else]
       end
 
       return super
@@ -444,7 +444,7 @@ class Scripts::Q00234_FatesWhisper < Quest
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "30178-02.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when CLIFF
@@ -459,7 +459,7 @@ class Scripts::Q00234_FatesWhisper < Quest
           return "30182-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MASTER_KASPAR
@@ -485,7 +485,7 @@ class Scripts::Q00234_FatesWhisper < Quest
           return "30833-03b.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MAESTRO_LEORIN
@@ -734,11 +734,11 @@ class Scripts::Q00234_FatesWhisper < Quest
           return "31002-44.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -814,7 +814,7 @@ class Scripts::Q00234_FatesWhisper < Quest
       add_spawn(CHEST_OF_HALLATE, npc.location)
       return super
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -833,7 +833,7 @@ class Scripts::Q00234_FatesWhisper < Quest
           qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

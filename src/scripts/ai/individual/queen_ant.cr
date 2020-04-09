@@ -150,7 +150,7 @@ class Scripts::QueenAnt < AbstractNpcAI
     when ROYAL, GUARD
       mob.raid_minion = true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -117,7 +117,7 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -187,7 +187,7 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
             html = "32569-09.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ERIC
@@ -197,7 +197,7 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
         when 3
           html = "32570-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when SIR_GUSTAV_ATHEBALDT
@@ -205,11 +205,11 @@ class Scripts::Q00193_SevenSignsDyingMessage < Quest
           html = "30760-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

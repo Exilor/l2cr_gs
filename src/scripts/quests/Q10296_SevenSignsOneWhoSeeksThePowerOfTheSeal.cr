@@ -72,7 +72,7 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -153,7 +153,7 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
           html = "32787-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

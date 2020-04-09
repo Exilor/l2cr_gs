@@ -111,7 +111,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         npc.return_home
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -197,7 +197,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         start_quest_timer("reset_full_bottle_prize", 180000, receiver, nil)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

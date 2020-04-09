@@ -23,7 +23,7 @@ class Scripts::Q00121_PavelTheGiant < Quest
       st.add_exp_and_sp(346320, 26069)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -42,7 +42,7 @@ class Scripts::Q00121_PavelTheGiant < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when YUMI
@@ -50,7 +50,7 @@ class Scripts::Q00121_PavelTheGiant < Quest
         html = "32041-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

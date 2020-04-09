@@ -41,7 +41,7 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
             cast_heal_skill(pet, heal_step.clamp(0, 3), 2)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif event == "CAST_BUFF" && !pet.affected_by_skill?(BUFF_CONTROL)

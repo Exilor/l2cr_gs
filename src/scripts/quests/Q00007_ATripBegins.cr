@@ -69,7 +69,7 @@ class Scripts::Q00007_ATripBegins < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ARIEL
@@ -89,7 +89,7 @@ class Scripts::Q00007_ATripBegins < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

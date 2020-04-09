@@ -175,7 +175,7 @@ class L2Spawn
       @current_count += 1
       return
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

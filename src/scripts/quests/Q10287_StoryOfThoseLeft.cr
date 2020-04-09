@@ -66,7 +66,7 @@ class Scripts::Q10287_StoryOfThoseLeft < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -128,7 +128,7 @@ class Scripts::Q10287_StoryOfThoseLeft < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

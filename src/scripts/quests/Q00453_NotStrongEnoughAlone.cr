@@ -218,7 +218,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

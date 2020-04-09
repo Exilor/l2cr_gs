@@ -30,7 +30,7 @@ class Scripts::Q10277_MutatedKaneusDion < Quest
       st.give_adena(20000, true)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -81,7 +81,7 @@ class Scripts::Q10277_MutatedKaneusDion < Quest
       when State::COMPLETED
         html = "30071-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MIRIEN
@@ -95,11 +95,11 @@ class Scripts::Q10277_MutatedKaneusDion < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

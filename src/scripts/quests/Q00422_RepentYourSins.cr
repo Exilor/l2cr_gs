@@ -140,7 +140,7 @@ class Scripts::Q00422_RepentYourSins < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -187,7 +187,7 @@ class Scripts::Q00422_RepentYourSins < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -324,7 +324,7 @@ class Scripts::Q00422_RepentYourSins < Quest
           html = "30718-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -103,7 +103,7 @@ class Scripts::MercenaryCaptain < AbstractNpcAI
           MultisellData.separate_and_send(list_id, pc, npc, false)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif event.casecmp?("say") && !npc.decayed?

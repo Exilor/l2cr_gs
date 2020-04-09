@@ -128,7 +128,7 @@ class Scripts::Q00224_TestOfSagittarius < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -231,7 +231,7 @@ class Scripts::Q00224_TestOfSagittarius < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -357,7 +357,7 @@ class Scripts::Q00224_TestOfSagittarius < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

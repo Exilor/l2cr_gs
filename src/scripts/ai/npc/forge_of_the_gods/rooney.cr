@@ -47,7 +47,7 @@ class Scripts::Rooney < AbstractNpcAI
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::WHY_DONT_I_GO_THAT_WAY_THIS_TIME)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

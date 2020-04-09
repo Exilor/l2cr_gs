@@ -564,7 +564,7 @@ class Siege
     when .spectator?
       players = spectators_in_zone
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -677,7 +677,7 @@ class Siege
       when DEFENDER_NOT_APPROVED
         add_defender_waiting(rs.get_i32("clan_id"))
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -763,7 +763,7 @@ class Siege
     when DEFENDER_NOT_APPROVED
       add_defender_waiting(clan.id)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   rescue e

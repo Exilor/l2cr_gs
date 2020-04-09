@@ -84,7 +84,7 @@ class Scripts::Venom < AbstractNpcAI
         return "35506-02.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -110,7 +110,7 @@ class Scripts::Venom < AbstractNpcAI
         npc.delete_me
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -177,7 +177,7 @@ class Scripts::Venom < AbstractNpcAI
         TARGETS.clear
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -202,7 +202,7 @@ class Scripts::Venom < AbstractNpcAI
         npc.delete_me
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -260,7 +260,7 @@ class Scripts::Venom < AbstractNpcAI
       cancel_quest_timer("raid_check", @venom, nil)
       cancel_quest_timer("tower_check", @venom, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

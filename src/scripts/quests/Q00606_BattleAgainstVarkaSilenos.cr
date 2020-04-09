@@ -81,7 +81,7 @@ class Scripts::Q00606_BattleAgainstVarkaSilenos < Quest
     when State::STARTED
       html = st.has_quest_items?(MANE) ? "31370-04.html" : "31370-05.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

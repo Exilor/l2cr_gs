@@ -60,7 +60,7 @@ class Scripts::BaseTower < AbstractNpcAI
         BODY_DESTROYER_TARGET_LIST.delete(npc.l2id)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

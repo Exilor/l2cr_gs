@@ -74,7 +74,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       qs.set_cond(6, true)
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -91,7 +91,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       when WATER_SEER
         on_water_seer_killed(qs, pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -158,7 +158,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       when WATER_UNDINE
         html = on_talk_with_water_undine(qs, pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

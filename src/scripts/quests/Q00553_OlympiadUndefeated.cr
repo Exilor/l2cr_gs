@@ -69,7 +69,7 @@ class Scripts::Q00553_OlympiadUndefeated < Quest
             st.set_cond(2)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

@@ -33,7 +33,7 @@ class Scripts::Q00267_WrathOfVerdure < Quest
     when "31853-08.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -77,7 +77,7 @@ class Scripts::Q00267_WrathOfVerdure < Quest
         html = "31853-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

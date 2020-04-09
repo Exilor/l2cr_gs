@@ -124,7 +124,7 @@ class Scripts::Q00222_TestOfTheDuelist < Quest
       qs.set_cond(4, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -301,7 +301,7 @@ class Scripts::Q00222_TestOfTheDuelist < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

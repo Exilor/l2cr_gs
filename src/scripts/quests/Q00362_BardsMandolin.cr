@@ -38,7 +38,7 @@ class Scripts::Q00362_BardsMandolin < Quest
         event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -67,7 +67,7 @@ class Scripts::Q00362_BardsMandolin < Quest
         when 5
           html = "30957-06.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when GALION
@@ -100,11 +100,11 @@ class Scripts::Q00362_BardsMandolin < Quest
           html = "30956-02.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

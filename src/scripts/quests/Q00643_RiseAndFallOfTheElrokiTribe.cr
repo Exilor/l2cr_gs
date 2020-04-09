@@ -109,7 +109,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
         html = "32117-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -175,7 +175,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -52,7 +52,7 @@ class Scripts::Q00130_PathToHellbound < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -89,7 +89,7 @@ class Scripts::Q00130_PathToHellbound < Quest
         when 3
           html = "30612-09.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif npc.id == GALATE
@@ -101,12 +101,12 @@ class Scripts::Q00130_PathToHellbound < Quest
         when 3
           html = "32292-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

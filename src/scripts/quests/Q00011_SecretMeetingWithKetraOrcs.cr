@@ -38,7 +38,7 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
         "31371-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -68,7 +68,7 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
           html = "31371-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
@@ -76,7 +76,7 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
         html = get_already_completed_msg(pc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -280,7 +280,7 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
       qs.set_cond(30, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -369,7 +369,7 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -665,7 +665,7 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
           html = "30612-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

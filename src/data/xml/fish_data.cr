@@ -56,7 +56,7 @@ module FishData
         when 2
           HARD[fish.fish_id] = fish
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

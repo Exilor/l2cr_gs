@@ -84,7 +84,7 @@ class Scripts::Q00251_NoSecrets < Quest
     when State::COMPLETED
       html = "30201-06.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -221,7 +221,7 @@ class ItemAuction
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -249,7 +249,7 @@ class ItemAuction
         return false
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

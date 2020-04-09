@@ -552,7 +552,7 @@ class CharEffectList
       ps = PartySpelled.new(owner)
       pss = PartySpelled.new(owner)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -584,7 +584,7 @@ class CharEffectList
           party.broadcast_packet(ps)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -87,11 +87,11 @@ class Scripts::Q00264_KeenClaws < Quest
           html = "30136-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

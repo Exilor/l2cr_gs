@@ -100,7 +100,7 @@ class L2RaceManagerInstance < L2Npc
       sm.add_int(MonsterRace.first_place)
       sm.add_int(MonsterRace.second_place)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

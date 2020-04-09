@@ -72,7 +72,7 @@ class Scripts::IceQueensCastle < AbstractInstance
         pc.tele_to_location(EXIT_LOC, 0)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

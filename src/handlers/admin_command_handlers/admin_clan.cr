@@ -106,7 +106,7 @@ module AdminCommandHandler::AdminClan
         pc.send_message("Task have been forcely executed.")
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

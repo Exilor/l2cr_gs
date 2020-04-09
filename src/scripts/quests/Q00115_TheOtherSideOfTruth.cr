@@ -159,7 +159,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when "32021-03.html"
@@ -201,7 +201,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when "32021-06.html"
@@ -227,11 +227,11 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           html = event
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -293,7 +293,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32020-30.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when MISA
@@ -313,7 +313,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         when 7
           html = "32018-06.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when KIER
@@ -332,7 +332,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32022-05.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ICE_SCULPTURE1
@@ -362,7 +362,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ICE_SCULPTURE2
@@ -392,7 +392,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ICE_SCULPTURE3
@@ -422,7 +422,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ICE_SCULPTURE4
@@ -452,15 +452,15 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -75,7 +75,7 @@ class Scripts::Q00280_TheFoodChain < Quest
         html = "32175-10.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -110,7 +110,7 @@ class Scripts::Q00280_TheFoodChain < Quest
         html = "32175-04.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

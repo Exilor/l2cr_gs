@@ -105,7 +105,7 @@ module SkillTreesData
               slot, lvl = b["slot"].to_i, b["lvl"].to_i
               skill_learn.add_subclass_conditions(slot, lvl)
             else
-              # automatically added
+              # [automatically added else]
             end
 
           end
@@ -544,7 +544,7 @@ module SkillTreesData
     when AcquireSkillType::COLLECT
       get_collect_skill(id, lvl)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

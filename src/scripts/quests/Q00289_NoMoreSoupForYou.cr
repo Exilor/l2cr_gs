@@ -126,7 +126,7 @@ class Scripts::Q00289_NoMoreSoupForYou < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

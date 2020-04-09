@@ -68,13 +68,13 @@ class Scripts::Q10501_ZakenEmbroideredSoulCloak < Quest
           html = "32612-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = "32612-03.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

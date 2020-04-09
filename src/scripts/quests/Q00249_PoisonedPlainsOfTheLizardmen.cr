@@ -45,7 +45,7 @@ class Scripts::Q00249_PoisonedPlainsOfTheLizardmen < Quest
       when State::COMPLETED
         html = "30196-05.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif npc.id == JOHNNY

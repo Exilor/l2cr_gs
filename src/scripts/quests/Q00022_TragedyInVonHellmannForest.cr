@@ -190,7 +190,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -273,7 +273,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
           html = "31334-18.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GHOST_OF_PRIEST
@@ -318,7 +318,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
           html = "31328-21.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when WELL
@@ -337,7 +337,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       when 13..16
         html = "31527-05.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GHOST_OF_ADVENTURER
@@ -355,7 +355,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
           when 9
             html = "31529-10.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end
@@ -386,11 +386,11 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
           html = "31529-17.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

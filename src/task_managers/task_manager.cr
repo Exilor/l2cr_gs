@@ -127,7 +127,7 @@ module TaskManager
       task.scheduled = ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, interval)
       return true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

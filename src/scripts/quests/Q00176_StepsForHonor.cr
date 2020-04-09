@@ -58,13 +58,13 @@ class Scripts::Q00176_StepsForHonor < Quest
         st.exit_quest(false, true)
         html = "36479-13.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = "36479-01.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -276,7 +276,7 @@ class BlockCheckerEngine
         # Schedule Event End Count Down
         @engine.task = ThreadPoolManager.schedule_general(-> { @engine.end_event_task }, 180000)
       else
-        # automatically added
+        # [automatically added else]
       end
 
       # random % 2, if == 0 will spawn a red block

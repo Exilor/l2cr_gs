@@ -145,7 +145,7 @@ module SevenSigns
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
       last_period_change.ms = @@last_save.ms + PERIOD_MINOR_LENGTH
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -244,7 +244,7 @@ module SevenSigns
             AutoSpawnHandler.set_spawn_active(dawn_crest, false)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
@@ -363,7 +363,7 @@ module SevenSigns
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
       @@next_period_change.add(PERIOD_MINOR_LENGTH.milliseconds) # 15 mins
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -381,7 +381,7 @@ module SevenSigns
     when PERIOD_SEAL_VALIDATION
       "Seal Validation"
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -424,7 +424,7 @@ module SevenSigns
       next_quest_start = next_period_change
       next_valid_start = next_period_change + PERIOD_MAJOR_LENGTH + PERIOD_MINOR_LENGTH
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -443,7 +443,7 @@ module SevenSigns
     when CABAL_DUSK
       return (((@@dusk_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dusk_festival_score).to_i32
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -734,7 +734,7 @@ module SevenSigns
     when CABAL_DUSK
       @@dusk_stone_score += contrib_score
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -771,7 +771,7 @@ module SevenSigns
     when PERIOD_SEAL_VALIDATION
       pc.send_packet(SystemMessageId::VALIDATION_PERIOD_BEGUN)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -828,7 +828,7 @@ module SevenSigns
             new_seal_owner = CABAL_NULL
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when CABAL_DAWN
@@ -854,7 +854,7 @@ module SevenSigns
             new_seal_owner = CABAL_NULL
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when CABAL_DUSK
@@ -880,11 +880,11 @@ module SevenSigns
             new_seal_owner = CABAL_NULL
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -912,7 +912,7 @@ module SevenSigns
 
         CastleManager.validate_taxes(new_seal_owner)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -1010,7 +1010,7 @@ module SevenSigns
       when CABAL_DUSK
         send_message_to_all(SystemMessageId::DUSK_WON)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -1037,7 +1037,7 @@ module SevenSigns
       @@dawn_festival_score = 0
       @@dusk_festival_score = 0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

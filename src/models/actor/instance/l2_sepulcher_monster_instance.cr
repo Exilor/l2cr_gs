@@ -16,7 +16,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
     when 25339, 25342, 25346, 25349
       self.raid = true
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -51,7 +51,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
     when 25339, 25342, 25346, 25349
       self.raid = true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -102,7 +102,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
       end
       @on_dead_event_task = ThreadPoolManager.schedule_effect(OnDeadEvent.new(self), 8500)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -180,7 +180,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
       when 25339, 25342, 25346, 25349
         FourSepulchersManager.spawn_emperors_grave_npc(@mob.mysterious_box_id)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

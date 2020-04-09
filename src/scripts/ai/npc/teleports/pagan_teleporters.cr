@@ -31,7 +31,7 @@ class Scripts::PaganTeleporters < AbstractNpcAI
       close_door(19160010, 0)
       close_door(19160011, 0)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -73,7 +73,7 @@ class Scripts::PaganTeleporters < AbstractNpcAI
       start_quest_timer("Close_Door2", 10000, nil, nil)
       return "FadedMark.htm"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

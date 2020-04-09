@@ -76,7 +76,7 @@ class Scripts::Q00312_TakeAdvantageOfTheCrisis < Quest
         html = "30535-07.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

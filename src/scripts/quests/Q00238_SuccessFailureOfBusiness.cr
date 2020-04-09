@@ -42,7 +42,7 @@ class Scripts::Q00238_SuccessFailureOfBusiness < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -115,11 +115,11 @@ class Scripts::Q00238_SuccessFailureOfBusiness < Quest
           st.exit_quest(false, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

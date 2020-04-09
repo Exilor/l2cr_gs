@@ -41,7 +41,7 @@ class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
       qs.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

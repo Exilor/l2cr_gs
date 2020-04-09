@@ -62,7 +62,7 @@ class Scripts::Q00172_NewHorizons < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when RAGARA
@@ -70,7 +70,7 @@ class Scripts::Q00172_NewHorizons < Quest
         html = "32163-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -73,7 +73,7 @@ class Scripts::HealerTrainer < AbstractNpcAI
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

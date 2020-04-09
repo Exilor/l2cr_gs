@@ -48,7 +48,7 @@ class Scripts::Fisherman < AbstractNpcAI
     when "BuySellRefund"
       npc.show_buy_window(pc, npc.id * 100, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

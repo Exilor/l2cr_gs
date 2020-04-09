@@ -65,7 +65,7 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
       BLESSING_OF_EARTH.skill.apply_effects(pc, pc)
       st.give_items(YANGSWORD, 1, AttributeType::EARTH.id.to_i32, 10)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -112,7 +112,7 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -134,13 +134,13 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 2
           html = "30839-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = "30839-0a.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when WEBER
@@ -154,13 +154,13 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 7
           html = "31307-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = "31307-0a.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when YIN
@@ -177,7 +177,7 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 6
           html = "32325-10.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -195,12 +195,12 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 11
           html = "32326-10.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

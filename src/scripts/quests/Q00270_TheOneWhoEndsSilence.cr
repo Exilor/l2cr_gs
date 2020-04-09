@@ -160,7 +160,7 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
         html = "32757-13.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -190,7 +190,7 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
     when DIVINITY_MAGUS
       give_item(get_random_party_member(killer, 1), npc, 953, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -211,7 +211,7 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
         html = "32757-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -255,7 +255,7 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
         scroll_id = 9898
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

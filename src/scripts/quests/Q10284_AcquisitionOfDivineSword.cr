@@ -103,7 +103,7 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -132,7 +132,7 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
         when 2
           html = "32020-07.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when JINIA
@@ -168,7 +168,7 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
           st.exit_quest(false, true)
           html = "32654-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when KRUN
@@ -181,11 +181,11 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
           st.exit_quest(false, true)
           html = "32653-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

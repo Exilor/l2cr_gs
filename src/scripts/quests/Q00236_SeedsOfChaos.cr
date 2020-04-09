@@ -421,7 +421,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
          "32334-14.html",  "32334-15.html",  "32334-16.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -459,7 +459,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -497,7 +497,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 40
           html = "32138-13.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when KURSTIN
@@ -511,7 +511,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
             html = "31387-11.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when MYSTERIOU_WIZARD
@@ -550,7 +550,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 11
           html = "31522-16b.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when VICE_HIERARCH_MAO
@@ -573,7 +573,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
             html = "32235-09z.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HARKILGAMED
@@ -592,7 +592,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 22
           html = "32236-08z.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when RODENPICULA
@@ -608,7 +608,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 45
           html = "32237-15.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ROCK
@@ -622,7 +622,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 30
           html = "32238-09.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when MOTHER_NORNIL
@@ -638,7 +638,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 45
           html = "32239-09.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when KATENAR_A
@@ -659,7 +659,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
             html = "32332-05z.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when KATENAR_B
@@ -682,7 +682,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 11
           html = "32333-06b.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HARKILGAMED_A
@@ -699,11 +699,11 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 30
           html = "32334-18.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?
@@ -745,7 +745,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::S1_HAS_EVERYTHING_BEEN_FOUND).add_string_parameter(c0.appearance.visible_name))
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

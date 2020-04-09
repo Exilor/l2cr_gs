@@ -160,7 +160,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
       end
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -188,7 +188,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           npc.script_value = attacker.l2id
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -287,7 +287,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           qs.set_cond(16, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -453,7 +453,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           html = "30732-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?
@@ -476,7 +476,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
       npc.set_intention(AI::MOVE_TO, MOVE_TO)
       npc.variables["SPAWNED"] = 0
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

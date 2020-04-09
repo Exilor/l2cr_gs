@@ -402,7 +402,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
           close_door(door_id, world.instance_id)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -520,7 +520,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.active_scarlet.r_hand_id = SECOND_SCARLET_WEAPON
         @world.active_scarlet.invul = false
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -776,7 +776,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.video = false
         start_pc
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -845,7 +845,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       when 4
         @tomb.control_status(@world)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

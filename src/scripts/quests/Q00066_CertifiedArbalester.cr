@@ -248,7 +248,7 @@ class Scripts::Q00066_CertifiedArbalester < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -433,7 +433,7 @@ class Scripts::Q00066_CertifiedArbalester < Quest
           qs.set_cond(20, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -620,7 +620,7 @@ class Scripts::Q00066_CertifiedArbalester < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

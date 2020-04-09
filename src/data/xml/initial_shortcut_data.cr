@@ -26,7 +26,7 @@ module InitialShortcutData
         when "macros"
           parse_macros(d)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -82,7 +82,7 @@ module InitialShortcutData
         when .delay? # MacroType::DELAY
           d1 = b["delay"].to_i
         else
-          # automatically added
+          # [automatically added else]
         end
 
         commands << MacroCMD.new(entry, type, d1, d2, cmd)
@@ -129,7 +129,7 @@ module InitialShortcutData
         next unless mcr = MACRO_PRESETS[shortcut_id]
         pc.register_macro(mcr)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -150,7 +150,7 @@ module InitialShortcutData
         next unless mcr = MACRO_PRESETS[shortcut_id]?
         pc.register_macro(mcr)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

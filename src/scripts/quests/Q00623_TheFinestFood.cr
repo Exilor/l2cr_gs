@@ -67,7 +67,7 @@ class Scripts::Q00623_TheFinestFood < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -88,14 +88,14 @@ class Scripts::Q00623_TheFinestFood < Quest
         when 2
           html = "31521-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif qs.completed?
         html = get_already_completed_msg(talker)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

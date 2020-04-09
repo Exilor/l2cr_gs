@@ -44,11 +44,11 @@ class Scripts::Q10273_GoodDayToFly < Quest
       when 2
         AURA_BIRD_OWL.skill.apply_effects(pc, pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

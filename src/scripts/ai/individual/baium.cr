@@ -91,7 +91,7 @@ class Scripts::Baium < AbstractNpcAI
         notify_event("CLEAR_STATUS", nil, nil)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -294,7 +294,7 @@ class Scripts::Baium < AbstractNpcAI
         manage_skills(npc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

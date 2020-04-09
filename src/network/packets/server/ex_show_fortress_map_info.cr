@@ -35,7 +35,7 @@ class Packets::Outgoing::ExShowFortressMapInfo < GameServerPacket
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else

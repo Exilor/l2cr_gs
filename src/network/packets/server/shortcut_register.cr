@@ -24,7 +24,7 @@ class Packets::Outgoing::ShortcutRegister < GameServerPacket
       d @shortcut.id
       d @shortcut.character_type
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

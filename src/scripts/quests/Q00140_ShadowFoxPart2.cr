@@ -124,13 +124,13 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
             html = "30895-09.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when XENOVIA
@@ -149,12 +149,12 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
         when 4
           html = "30912-15.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

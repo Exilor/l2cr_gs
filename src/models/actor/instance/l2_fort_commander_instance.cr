@@ -66,7 +66,7 @@ class L2FortCommanderInstance < L2DefenderInstance
           when 3
             npc_string = NpcString::SPIRIT_OF_FIRE_UNLEASH_YOUR_POWER_BURN_THE_ENEMY
           else
-            # automatically added
+            # [automatically added else]
           end
 
 

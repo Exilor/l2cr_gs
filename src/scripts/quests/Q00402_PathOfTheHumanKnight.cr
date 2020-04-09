@@ -151,7 +151,7 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
       give_items(pc, GLUDIO_GUARDS_1ST_BADGE, 1)
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -174,7 +174,7 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
       when UNDEAD_PRIEST
         reward_kill(killer, EINHASADS_1ST_TEMPLE_BADGE, EINHASAD_CRUCIFIX, 12, 5)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -333,7 +333,7 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
           html = "30653-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

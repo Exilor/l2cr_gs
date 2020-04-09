@@ -72,7 +72,7 @@ class Scripts::Q00165_ShilensHunt < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

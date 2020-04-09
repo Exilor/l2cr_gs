@@ -89,7 +89,7 @@ class Scripts::Q00403_PathOfTheRogue < Quest
 
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -118,7 +118,7 @@ class Scripts::Q00403_PathOfTheRogue < Quest
           npc.script_value = 2
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -235,7 +235,7 @@ class Scripts::Q00403_PathOfTheRogue < Quest
           html = "30425-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

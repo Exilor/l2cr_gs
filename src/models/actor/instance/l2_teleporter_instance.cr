@@ -41,7 +41,7 @@ class L2TeleporterInstance < L2Npc
           return
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
       return if tokens.empty?

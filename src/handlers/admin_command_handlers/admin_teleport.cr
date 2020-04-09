@@ -98,7 +98,7 @@ module AdminCommandHandler::AdminTeleport
         when "down"
           z -= int_val
         else
-          # automatically added
+          # [automatically added else]
         end
 
         pc.tele_to_location(Location.new(x, y, z))
@@ -126,7 +126,7 @@ module AdminCommandHandler::AdminTeleport
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

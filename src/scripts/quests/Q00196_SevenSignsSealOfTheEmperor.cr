@@ -124,7 +124,7 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -166,7 +166,7 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
         when 6
           html = "30969-15.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when MERCHANT_OF_MAMMON
@@ -199,7 +199,7 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
         when 5
           html = "32586-15.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when WOOD
@@ -216,11 +216,11 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
           pc.send_packet(SystemMessageId::USING_COURT_MAGICIANS_STAFF_TO_OPEN_DOOR)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

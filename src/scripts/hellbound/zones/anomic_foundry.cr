@@ -55,7 +55,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
     when "reset_respawn_time"
       @respawn_time = 60000
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

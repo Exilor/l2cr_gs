@@ -133,7 +133,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
          "30469-04t4.html", "30469-04t5.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -379,7 +379,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -704,7 +704,7 @@ class Scripts::Q00330_AdeptOfTaste < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

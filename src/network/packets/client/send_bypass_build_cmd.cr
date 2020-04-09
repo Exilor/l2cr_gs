@@ -202,7 +202,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when .dwarven_fighter?, .scavenger?, .bounty_hunter?, .fortune_seeker?
       is_spoiler = true
     else
-      # automatically added
+      # [automatically added else]
     end
 
     party = pc.party
@@ -631,7 +631,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       add_light_armor(pc, items)
       items << pc.inventory.add_item("GM", 15907, 1, pc, nil) # Pyseal Blade
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

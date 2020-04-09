@@ -70,7 +70,7 @@ abstract class AbstractGetScrollToHometownQuest < Quest
         return "30097-16.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -126,13 +126,13 @@ abstract class AbstractGetScrollToHometownQuest < Quest
             html = "30097-14.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GENTLER, SANDRA, DUSTIN
@@ -149,7 +149,7 @@ abstract class AbstractGetScrollToHometownQuest < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

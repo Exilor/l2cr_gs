@@ -102,7 +102,7 @@ class Scripts::Q00602_ShadowOfLight < Quest
     when State::STARTED
       html = st.cond?(1) ? "31683-03.html" : "31683-04.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

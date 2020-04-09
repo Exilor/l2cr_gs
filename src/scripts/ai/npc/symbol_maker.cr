@@ -32,7 +32,7 @@ class Scripts::SymbolMaker < AbstractNpcAI
     when "Remove"
       pc.send_packet(HennaRemoveList.new(pc))
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

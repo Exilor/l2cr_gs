@@ -138,7 +138,7 @@ class Scripts::Q00063_PathOfTheWarder < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -185,7 +185,7 @@ class Scripts::Q00063_PathOfTheWarder < Quest
           qs.set_cond(12, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -320,7 +320,7 @@ class Scripts::Q00063_PathOfTheWarder < Quest
           html = "30297-07.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

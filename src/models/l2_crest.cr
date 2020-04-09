@@ -10,7 +10,7 @@ struct L2Crest
       when 2 then PLEDGE_LARGE
       when 3 then ALLY
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

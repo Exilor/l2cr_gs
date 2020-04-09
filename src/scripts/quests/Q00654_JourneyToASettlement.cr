@@ -45,7 +45,7 @@ class Scripts::Q00654_JourneyToASettlement < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

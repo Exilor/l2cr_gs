@@ -148,7 +148,7 @@ module CastleManorManager
       @@next_mode_change.hour = Config.alt_manor_refresh_time
       @@next_mode_change.minute = Config.alt_manor_refresh_min
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -256,7 +256,7 @@ module CastleManorManager
         store_me
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

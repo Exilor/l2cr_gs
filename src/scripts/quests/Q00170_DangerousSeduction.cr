@@ -68,7 +68,7 @@ class Scripts::Q00170_DangerousSeduction < Quest
     when State::COMPLETED
       html = get_already_completed_msg(player)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

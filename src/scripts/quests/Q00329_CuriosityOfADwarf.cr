@@ -45,7 +45,7 @@ class Scripts::Q00329_CuriosityOfADwarf < Quest
     when "30437-07.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -88,7 +88,7 @@ class Scripts::Q00329_CuriosityOfADwarf < Quest
         html = "30437-04.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

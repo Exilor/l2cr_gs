@@ -172,7 +172,7 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -212,7 +212,7 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::GRR_WHO_ARE_YOU_AND_WHY_HAVE_YOU_STOPPED_ME))
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -435,7 +435,7 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
           html = "32243-07.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

@@ -138,7 +138,7 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -216,7 +216,7 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
           qs.set_cond(6, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -388,7 +388,7 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
           html = "30730-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

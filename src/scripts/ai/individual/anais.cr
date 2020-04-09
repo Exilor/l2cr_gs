@@ -79,7 +79,7 @@
         end
         npc.do_die(nil)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

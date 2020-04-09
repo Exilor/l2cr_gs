@@ -18,7 +18,7 @@ class MagicUseTask
     when 3
       @character.on_magic_finalizer(self)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -43,7 +43,7 @@ class Scripts::Q00286_FabulousFeathers < Quest
         html = "32164-07.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -60,7 +60,7 @@ class Scripts::Q00642_APowerfulPrimevalCreature < Quest
         html = "32105-13.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

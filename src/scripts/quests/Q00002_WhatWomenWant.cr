@@ -86,13 +86,13 @@ class Scripts:: Q00002_WhatWomenWant < Quest
           add_exp_and_sp(pc, 4254, 335)
           give_adena(pc, 1850, true)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MIRABEL
@@ -131,7 +131,7 @@ class Scripts:: Q00002_WhatWomenWant < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

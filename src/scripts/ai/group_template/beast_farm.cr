@@ -212,7 +212,7 @@ class Scripts::BeastFarm < AbstractNpcAI
       when 18872
         name = name.sub("%name%", "Alpine Grendel")
       else
-        # automatically added
+        # [automatically added else]
       end
 
       next_npc.name = name

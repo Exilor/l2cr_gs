@@ -51,7 +51,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
       when 5
         html = "32041-14.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when "32041-15.html"
@@ -257,7 +257,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           when 2
             html = "32041-24.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when 6..8, 10, 11, 13..15
@@ -278,13 +278,13 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 27
           html = "32041-42.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when WENDY
@@ -311,7 +311,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           when 3
             html = "32047-11c.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when 7
@@ -347,7 +347,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 26
           html = "32047-32c.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -359,7 +359,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 22
           html = "31961-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -375,7 +375,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 24
           html = "32050-05z.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -389,12 +389,12 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 27
           html = "32046-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

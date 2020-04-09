@@ -173,7 +173,7 @@ class Scripts::Q00218_TestimonyOfLife < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -295,7 +295,7 @@ class Scripts::Q00218_TestimonyOfLife < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -482,7 +482,7 @@ class Scripts::Q00218_TestimonyOfLife < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

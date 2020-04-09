@@ -62,7 +62,7 @@ class Scripts::Q00173_ToTheIsleOfSouls < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GENTLER
@@ -70,7 +70,7 @@ class Scripts::Q00173_ToTheIsleOfSouls < Quest
         html = st.cond?(1) ? "30094-01.html" : "30094-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

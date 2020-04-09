@@ -34,7 +34,7 @@ class Scripts::Q00053_LinnaeusSpecialBait < Quest
         html = "31577-5.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -73,7 +73,7 @@ class Scripts::Q00053_LinnaeusSpecialBait < Quest
     when State::STARTED
       html = st.cond?(1) ? "31577-4.html" : "31577-2.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -62,7 +62,7 @@ class Scripts::LibraryOfSages < AbstractInstance
         teleport_player(pc, START_LOC, world.instance_id)
         world.elcadia.tele_to_location(*START_LOC.xyz, 0, world.instance_id)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

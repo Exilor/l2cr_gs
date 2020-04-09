@@ -1468,7 +1468,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           run_emerald_rooms(world, ROOM1_SPAWNS, 1)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

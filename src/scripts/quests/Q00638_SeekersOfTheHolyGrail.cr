@@ -129,7 +129,7 @@ class Scripts::Q00638_SeekersOfTheHolyGrail < Quest
         html = "31328-09.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

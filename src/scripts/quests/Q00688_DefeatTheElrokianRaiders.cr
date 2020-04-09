@@ -57,7 +57,7 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
       st.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -93,7 +93,7 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
         html = "32105-12.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

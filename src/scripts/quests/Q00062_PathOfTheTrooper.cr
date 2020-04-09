@@ -46,7 +46,7 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -83,7 +83,7 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -142,7 +142,7 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
             html = "32197-10.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when MASTER_SHUBAIN
@@ -171,11 +171,11 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
         when 4
           html = "32194-07.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

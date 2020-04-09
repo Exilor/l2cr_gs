@@ -97,7 +97,7 @@ class Scripts::Q00634_InSearchOfFragmentsOfDimension < Quest
         event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

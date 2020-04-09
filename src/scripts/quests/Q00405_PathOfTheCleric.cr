@@ -62,7 +62,7 @@ class Scripts::Q00405_PathOfTheCleric < Quest
         html = "30022-02.htm"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -201,7 +201,7 @@ class Scripts::Q00405_PathOfTheCleric < Quest
           html = "30408-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

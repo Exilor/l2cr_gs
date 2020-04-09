@@ -29,7 +29,7 @@ class Scripts::Q00695_DefendTheHallOfSuffering < Quest
         event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

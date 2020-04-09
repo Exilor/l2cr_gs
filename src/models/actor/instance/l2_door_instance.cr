@@ -307,7 +307,7 @@ class L2DoorInstance < L2Character
     when -1
       close_me
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

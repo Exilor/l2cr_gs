@@ -99,7 +99,7 @@ class Scripts::Q00461_RumbleInTheBase < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -194,7 +194,7 @@ module ZoneManager
               constructor = {{sub}}
           {% end %}
           else
-            # automatically added
+            # [automatically added else]
           end
 
         {% end %}
@@ -222,7 +222,7 @@ module ZoneManager
             point = cd["point"]
             temp.as(L2RespawnZone).add_race_respawn_point(race, point)
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

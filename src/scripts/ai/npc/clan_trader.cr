@@ -50,7 +50,7 @@ class Scripts::ClanTrader < AbstractNpcAI
     when "exchange-ke"
       give_reputation(npc, pc, Config.knightsepaulette_points, KNIGHTS_EPAULETTE, KNIGHTS_EPAULETTE_COUNT)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

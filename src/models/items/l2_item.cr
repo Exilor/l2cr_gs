@@ -277,7 +277,7 @@ abstract class L2Item < ListenersContainer
     when Stats::DARK_RES, Stats::DARK_POWER
       self.elementals = Elementals.new(Elementals::DARK, obj.value.to_i)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

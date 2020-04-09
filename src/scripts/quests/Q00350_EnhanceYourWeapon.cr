@@ -295,7 +295,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
     when AbsorbCrystalType::LAST_HIT
       level_crystal(killer, pcs[killer], mob)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -372,7 +372,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
             NPC_LEVELING_INFO[npc_id] = temp
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

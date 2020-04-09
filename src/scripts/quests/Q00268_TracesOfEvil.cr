@@ -65,11 +65,11 @@ class Scripts::Q00268_TracesOfEvil < Quest
             html = "30559-06.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

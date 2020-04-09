@@ -689,7 +689,7 @@ class Olympiad < ListenersContainer
 
       HEROS_TO_BE << hero
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

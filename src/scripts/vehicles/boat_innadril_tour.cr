@@ -93,7 +93,7 @@ class BoatInnadrilTour
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVED_AT_INNADRIL, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

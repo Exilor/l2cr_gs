@@ -88,7 +88,7 @@ module NpcData
                   parameters[params_node["name"]] = minions
                 end
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -154,7 +154,7 @@ module NpcData
                     when "HOLY"
                       set.add(st, "baseHoly", "value")
                     else
-                      # automatically added
+                      # [automatically added else]
                     end
 
                   when "defence"
@@ -166,7 +166,7 @@ module NpcData
                     set.add(st, "baseDarkRes", "dark")
                     set.add(st, "baseElementRes", "default")
                   else
-                    # automatically added
+                    # [automatically added else]
                   end
 
                 end
@@ -182,14 +182,14 @@ module NpcData
                     set.add(spd, "baseSwimRunSpd", "swim")
                     set.add(spd, "baseFlyRunSpd", "fly")
                   else
-                    # automatically added
+                    # [automatically added else]
                   end
 
                 end
               when "hittime"
                 set["hitTime"] = stat.content
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -257,7 +257,7 @@ module NpcData
                   end
                 end
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -279,12 +279,12 @@ module NpcData
                 set.add(col, "collisionHeight", "normal")
                 set.add(col, "collisionHeightGrown", "grown")
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

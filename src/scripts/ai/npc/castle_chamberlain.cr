@@ -163,7 +163,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       when 5
         price = Config.outer_door_upgrade_price5
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when 2 # Inner Door
@@ -175,7 +175,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       when 5
         price = Config.inner_door_upgrade_price5
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when 3 # Wall
@@ -187,11 +187,11 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       when 5
         price = Config.wall_upgrade_price5
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -201,7 +201,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
     when SevenSigns::CABAL_DAWN
       price *= 0.8
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -242,7 +242,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
     when 4
       price = Config.trap_upgrade_price4
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -252,7 +252,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
     when SevenSigns::CABAL_DAWN
       price *= 0.8
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -462,7 +462,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
           when SevenSigns::PERIOD_SEAL_VALIDATION, SevenSigns::PERIOD_COMP_RESULTS
             html["%ss_event%"] = "1000508"
           else
-            # automatically added
+            # [automatically added else]
           end
 
           html["%ss_avarice%"] = get_seal_owner(1)
@@ -834,7 +834,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

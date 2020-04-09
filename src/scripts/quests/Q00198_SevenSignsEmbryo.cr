@@ -88,7 +88,7 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
     when "32617-02.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -158,12 +158,12 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
         when 3
           html = "32597-12.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

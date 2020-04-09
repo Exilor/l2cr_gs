@@ -47,7 +47,7 @@ class Scripts::Q00026_TiredOfWaiting < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -72,7 +72,7 @@ class Scripts::Q00026_TiredOfWaiting < Quest
         html = st.has_quest_items?(DELIVERY_BOX) ? "31045-01.html" : "31045-09.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

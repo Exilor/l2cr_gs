@@ -210,7 +210,7 @@ class Scripts::Q00060_GoodWorksReward < Quest
         when ClassId::ARTISAN
           return "31092-22.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
         qs.exit_quest(false, true)
@@ -255,7 +255,7 @@ class Scripts::Q00060_GoodWorksReward < Quest
         when ClassId::ARTISAN
           return "31092-22a.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -690,7 +690,7 @@ class Scripts::Q00060_GoodWorksReward < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -802,7 +802,7 @@ class Scripts::Q00060_GoodWorksReward < Quest
           html = "32487-09.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

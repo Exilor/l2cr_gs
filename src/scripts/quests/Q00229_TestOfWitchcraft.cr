@@ -185,7 +185,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
       end
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -218,7 +218,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -315,7 +315,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -506,7 +506,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

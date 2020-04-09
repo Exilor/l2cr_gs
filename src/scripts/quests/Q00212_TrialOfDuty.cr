@@ -94,7 +94,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
         qs.set_cond(14, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -173,7 +173,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -209,7 +209,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
             reward_dimensional_diamonds(pc)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
@@ -240,7 +240,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
       when 4
         html = "30653-04.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when SIR_KIEL_NIGHTHAWK
@@ -272,7 +272,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
       when 8
         html = "30654-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when SPIRIT_OF_SIR_TALIANUS
@@ -311,7 +311,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
           html = "30655-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when DUSTIN
@@ -347,7 +347,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
           html = "30116-10.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when SIR_COLLIN_WINDAWOOD
@@ -365,11 +365,11 @@ class Scripts::Q00212_TrialOfDuty < Quest
           html = "30311-02.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

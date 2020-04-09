@@ -32,7 +32,7 @@ module PetDataTable
           when "sync_level"
             data.sync_level = p["val"].to_i == 1
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when "skills"
@@ -69,7 +69,7 @@ module PetDataTable
             data.add_new_stat(level, L2PetLevelData.new(set))
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

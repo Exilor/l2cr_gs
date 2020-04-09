@@ -43,7 +43,7 @@ class Scripts::Q00017_LightAndDarkness < Quest
         st.set_cond(cond + 1, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
     return html
@@ -80,11 +80,11 @@ class Scripts::Q00017_LightAndDarkness < Quest
           html = npc_id.to_s + "-03.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

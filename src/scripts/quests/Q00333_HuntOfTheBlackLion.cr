@@ -433,7 +433,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -628,7 +628,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -743,7 +743,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           html = "30737-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -95,7 +95,7 @@ class Scripts::Q00250_WatchWhatYouEat < Quest
       when State::COMPLETED
         html = "32743-done.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

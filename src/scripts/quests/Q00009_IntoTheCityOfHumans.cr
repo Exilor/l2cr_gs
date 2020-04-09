@@ -61,7 +61,7 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when TANAPI
@@ -73,7 +73,7 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
         html = "30576-01.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

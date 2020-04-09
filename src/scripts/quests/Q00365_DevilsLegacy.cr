@@ -105,7 +105,7 @@ class Scripts::Q00365_DevilsLegacy < Quest
         reward_items(pc, item_id, 1)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -144,7 +144,7 @@ class Scripts::Q00365_DevilsLegacy < Quest
         html = qs.memo_state?(1) ? "30092-01.html" : "30092-07.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

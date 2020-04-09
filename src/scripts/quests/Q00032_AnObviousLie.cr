@@ -84,7 +84,7 @@ class Scripts::Q00032_AnObviousLie < Quest
         "30094-17.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -133,7 +133,7 @@ class Scripts::Q00032_AnObviousLie < Quest
           html = "30094-14.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MIKI_THE_CAT
@@ -149,11 +149,11 @@ class Scripts::Q00032_AnObviousLie < Quest
       when 7
         html = "31706-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

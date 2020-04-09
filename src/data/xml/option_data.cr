@@ -29,7 +29,7 @@ module OptionData
               when /\A(?:add|sub|mul|div|set|share|enchant|enchanthp)\z/
                 parse_funcs(fd, fd.name, op)
               else
-                # automatically added
+                # [automatically added else]
               end
 
             end
@@ -52,7 +52,7 @@ module OptionData
             sh = OptionsSkillHolder.new(id, lvl, chance, OptionsSkillType::CRITICAL)
             op.add_activation_skill(sh)
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

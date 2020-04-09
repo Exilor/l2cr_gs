@@ -66,7 +66,7 @@ class Scripts::Q00451_LuciensAltar < Quest
           html = "30537-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif st.cond?(1) && st.has_quest_items?(REPLENISHED_BEAD)

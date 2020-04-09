@@ -26,7 +26,7 @@ module PunishmentHandler::BanHandler
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -60,7 +60,7 @@ class Scripts::Q00188_SealRemoval < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -95,7 +95,7 @@ class Scripts::Q00188_SealRemoval < Quest
           html = "30970-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

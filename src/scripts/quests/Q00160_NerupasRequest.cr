@@ -103,11 +103,11 @@ class Scripts::Q00160_NerupasRequest < Quest
           html = "30152-02.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

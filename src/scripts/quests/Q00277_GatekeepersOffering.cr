@@ -63,7 +63,7 @@ class Scripts::Q00277_GatekeepersOffering < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

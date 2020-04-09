@@ -80,7 +80,7 @@ class Scripts::Q00131_BirdInACage < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -111,7 +111,7 @@ class Scripts::Q00131_BirdInACage < Quest
         when 5
           html = "32264-18.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif npc.id == PARME
@@ -122,7 +122,7 @@ class Scripts::Q00131_BirdInACage < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

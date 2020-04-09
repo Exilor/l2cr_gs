@@ -33,7 +33,7 @@ class Scripts::HideoutOfTheDawn < AbstractInstance
       enter_instance(pc, HOTDWorld.new, "HideoutOfTheDawn.xml", TEMPLATE_ID)
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

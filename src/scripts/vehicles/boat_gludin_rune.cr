@@ -203,7 +203,7 @@ class BoatGludinRune
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

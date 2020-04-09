@@ -61,7 +61,7 @@ class Scripts::Q00189_ContractCompletion < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -100,7 +100,7 @@ class Scripts::Q00189_ContractCompletion < Quest
         when 4
           html = "30673-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when SHEGFIELD
@@ -110,11 +110,11 @@ class Scripts::Q00189_ContractCompletion < Quest
         when 3
           html = "30068-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

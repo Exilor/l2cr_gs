@@ -189,7 +189,7 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

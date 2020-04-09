@@ -45,7 +45,7 @@ class Scripts::Q00380_BringOutTheFlavorOfIngredients < Quest
           html = event
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -91,13 +91,13 @@ class Scripts::Q00380_BringOutTheFlavorOfIngredients < Quest
       when 9
         html = "30069-12.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

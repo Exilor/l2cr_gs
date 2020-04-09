@@ -62,7 +62,7 @@ class Scripts::Q00370_AnElderSowsSeeds < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

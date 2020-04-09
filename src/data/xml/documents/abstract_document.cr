@@ -93,7 +93,7 @@ abstract class AbstractDocument
     when "game"
       parse_game_condition(n)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -324,7 +324,7 @@ abstract class AbstractDocument
         ary = text.split(',').map { |s| CategoryType.parse(get_value(s)) }
         cond = join_and(cond, Condition::CategoryType.new(ary))
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -411,7 +411,7 @@ abstract class AbstractDocument
         size = get_value(text).to_i
         cond = join_and(cond, Condition::TargetInvSize.new(size))
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -471,7 +471,7 @@ abstract class AbstractDocument
       when "weaponchange"
         cond = join_and(cond, Condition::ChangeWeapon.new(Bool.new(text)))
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -498,7 +498,7 @@ abstract class AbstractDocument
         val = get_value(text).to_i
         cond = join_and(cond, Condition::GameChance.new(val))
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -543,7 +543,7 @@ abstract class AbstractDocument
       when /^(?:add|sub|mul|div|set|share|enchant|enchanthp)$/
         attach_func(n, template, name, condition)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

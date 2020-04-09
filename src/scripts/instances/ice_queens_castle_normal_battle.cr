@@ -474,7 +474,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
                 world.spawned_mobs << breath
               end
             else
-              # automatically added
+              # [automatically added else]
             end
 
           end
@@ -486,7 +486,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           time = ((world.controller.variables.get_i64("TIMER_END", 0) - Time.ms) / 1000).to_i32
           manage_timer(world, time, NpcString::BATTLE_END_LIMIT_TIME)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -745,7 +745,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -778,7 +778,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           npc.do_die(nil)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -841,7 +841,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
       when BREATH
         world.spawned_mobs.delete_first(npc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

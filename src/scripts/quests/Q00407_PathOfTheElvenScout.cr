@@ -71,7 +71,7 @@ class Scripts::Q00407_PathOfTheElvenScout < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -208,7 +208,7 @@ class Scripts::Q00407_PathOfTheElvenScout < Quest
           html = "30426-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

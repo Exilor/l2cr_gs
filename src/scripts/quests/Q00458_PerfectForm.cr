@@ -118,7 +118,7 @@ class Scripts::Q00458_PerfectForm < Quest
         html = no_quest
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -207,11 +207,11 @@ class Scripts::Q00458_PerfectForm < Quest
       when 2
         html = "32768-13.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

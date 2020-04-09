@@ -42,7 +42,7 @@ class Scripts::Q00239_WontYouJoinUs < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -121,11 +121,11 @@ class Scripts::Q00239_WontYouJoinUs < Quest
           st.exit_quest(false, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -71,7 +71,7 @@ class Scripts::Q00364_JovialAccordion < Quest
       st.set_cond(2, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -97,7 +97,7 @@ class Scripts::Q00364_JovialAccordion < Quest
           st.exit_quest(true, true)
           html = "30959-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when BEER_CHEST
@@ -156,15 +156,15 @@ class Scripts::Q00364_JovialAccordion < Quest
         when 5
           html = "30957-07.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

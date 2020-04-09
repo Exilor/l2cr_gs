@@ -29,7 +29,7 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
         st.set_cond(4, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -62,13 +62,13 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
           st.add_exp_and_sp(377403, 37867)
           st.exit_quest(false, true)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = "32560-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when EL
@@ -85,7 +85,7 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
         when 4
           html = "32556-09.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -101,12 +101,12 @@ class Scripts::Q10271_TheEnvelopingDarkness < Quest
         when 3, 4
           html = "32528-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

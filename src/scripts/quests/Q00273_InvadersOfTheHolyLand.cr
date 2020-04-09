@@ -37,7 +37,7 @@ class Scripts::Q00273_InvadersOfTheHolyLand < Quest
       when "30566-09.html"
         html = event
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -92,7 +92,7 @@ class Scripts::Q00273_InvadersOfTheHolyLand < Quest
         html = "30566-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

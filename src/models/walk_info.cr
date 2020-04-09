@@ -61,7 +61,7 @@ class WalkInfo
             npc.tele_to_location(npc.spawn.location)
             @current_node_id = 0
           else
-            # automatically added
+            # [automatically added else]
           end
 
         elsif @current_node_id == WalkingManager::NO_REPEAT

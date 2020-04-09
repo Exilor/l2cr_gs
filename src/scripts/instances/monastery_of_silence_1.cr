@@ -346,7 +346,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
         player = player.not_nil!
         world.elcadia.tele_to_location(*player.xyz, 0, world.instance_id)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -387,7 +387,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
           st.memo_state = 3
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -402,7 +402,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
     when TOMB_OF_THE_SAINTESS
       start_quest_timer("CLOSE_TOMB_DOORS", 1000, npc, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

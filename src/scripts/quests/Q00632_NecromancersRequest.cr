@@ -81,7 +81,7 @@ class Scripts::Q00632_NecromancersRequest < Quest
       qs.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

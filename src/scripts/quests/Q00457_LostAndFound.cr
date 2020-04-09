@@ -131,7 +131,7 @@ class Scripts::Q00457_LostAndFound < Quest
         html = "32759-02.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

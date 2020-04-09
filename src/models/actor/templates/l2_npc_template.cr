@@ -218,7 +218,7 @@ class L2NpcTemplate < L2CharTemplate
           result ? result.concat(drops) : (result = drops)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

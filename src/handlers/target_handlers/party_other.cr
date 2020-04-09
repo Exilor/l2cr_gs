@@ -21,7 +21,7 @@ module TargetHandler::PartyOther
 
               return EMPTY_TARGET_LIST
             else
-              # automatically added
+              # [automatically added else]
             end
 
           end

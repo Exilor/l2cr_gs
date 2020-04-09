@@ -40,7 +40,7 @@ class Scripts::Q00004_LongLiveThePaagrioLord < Quest
     when "30578-05.html"
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -78,7 +78,7 @@ class Scripts::Q00004_LongLiveThePaagrioLord < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when VARKEES
@@ -94,7 +94,7 @@ class Scripts::Q00004_LongLiveThePaagrioLord < Quest
     when GROOKIN
       html = give_item(pc, st, npc.id, BLOODY_AXE)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -73,7 +73,7 @@ class Scripts::Q00166_MassOfDarkness < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when IRIA, DORANKUS, TRUDY
@@ -92,7 +92,7 @@ class Scripts::Q00166_MassOfDarkness < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

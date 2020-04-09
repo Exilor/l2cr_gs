@@ -78,7 +78,7 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
         st.reward_items(MOLD_HARDENER, 3)
         st.give_adena(17200, true)
       else
-        # automatically added
+        # [automatically added else]
       end
 
       html = "31518-10.html"
@@ -138,7 +138,7 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
         when 4
           html = "31518-08.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ENFEUX
@@ -148,15 +148,15 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
         when 4
           html = "31519-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

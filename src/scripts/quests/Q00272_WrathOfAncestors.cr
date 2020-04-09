@@ -66,11 +66,11 @@ class Scripts::Q00272_WrathOfAncestors < Quest
         st.exit_quest(true, true)
         html = "30572-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

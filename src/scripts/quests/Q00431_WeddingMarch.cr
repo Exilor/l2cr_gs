@@ -67,7 +67,7 @@ class Scripts::Q00431_WeddingMarch < Quest
     when State::STARTED
       html = st.cond?(1) ? "31042-03.html" : "31042-04.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

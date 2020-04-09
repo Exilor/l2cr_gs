@@ -142,7 +142,7 @@ class Scripts::Q00235_MimirsElixir < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -200,7 +200,7 @@ class Scripts::Q00235_MimirsElixir < Quest
         when 8
           html = "30721-17.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when JOAN
@@ -212,7 +212,7 @@ class Scripts::Q00235_MimirsElixir < Quest
         when 4
           html = "30718-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ALCHEMISTS_MIXING_URN
@@ -220,7 +220,7 @@ class Scripts::Q00235_MimirsElixir < Quest
           html = "31149-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif st.completed?

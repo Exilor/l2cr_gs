@@ -206,7 +206,7 @@ module FourSepulchersManager
           sp.z = -7200
           sp.heading = -16248
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -700,7 +700,7 @@ module FourSepulchersManager
           when 31469, 31472, 31474, 31477, 31479, 31482, 31484, 31487
             mobs << mob
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -714,7 +714,7 @@ module FourSepulchersManager
       when 31472, 31477, 31482, 31487
         DUKE_MOBS[npc_id] = mobs
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -895,7 +895,7 @@ module FourSepulchersManager
       when 53, 54, 56, 57
         min = 55i8
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

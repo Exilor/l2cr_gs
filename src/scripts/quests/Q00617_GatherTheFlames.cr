@@ -138,7 +138,7 @@ class Scripts::Q00617_GatherTheFlames < Quest
         html = "31271-04.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -65,7 +65,7 @@ class Scripts::Q00450_GraveRobberRescue < Quest
           html = "32650-10.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif st.cond?(1)

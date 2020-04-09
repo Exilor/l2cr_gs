@@ -102,7 +102,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           give_items(pc, BRONKS_INGOT, 1)
           html = "30519-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -116,7 +116,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
       when 1
         html = "30519-11.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when "reply_3"
@@ -151,7 +151,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         give_items(pc, BRONKS_INGOT, 1)
         html = "30519-04.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when "30556-05b.html"
@@ -211,7 +211,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -232,7 +232,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
             npc.script_value = 2
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HUNTER_TARANTULA, PLUNDER_TARANTULA, HONEY_BEAR
@@ -248,7 +248,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         else
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -284,7 +284,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -446,7 +446,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           html = "31958-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

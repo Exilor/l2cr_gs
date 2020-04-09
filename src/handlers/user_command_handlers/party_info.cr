@@ -20,7 +20,7 @@ module UserCommandHandler::PartyInfo
       when .by_turn_including_spoil?
         pc.send_packet(SystemMessageId::LOOTING_BY_TURN_INCLUDE_SPOIL)
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

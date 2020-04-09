@@ -197,7 +197,7 @@ class Scripts::Q00178_IconicTrinity < Quest
          "32257-11.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -240,7 +240,7 @@ class Scripts::Q00178_IconicTrinity < Quest
             html = "32138-15.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ICON_OF_THE_PAST
@@ -255,7 +255,7 @@ class Scripts::Q00178_IconicTrinity < Quest
         when 4, 5
           html = "32255-14.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ICON_OF_THE_PRESENT
@@ -270,7 +270,7 @@ class Scripts::Q00178_IconicTrinity < Quest
         when 7, 8
           html = "32256-15.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ICON_OF_THE_FUTURE
@@ -285,11 +285,11 @@ class Scripts::Q00178_IconicTrinity < Quest
         when 10
           html = "32257-13.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

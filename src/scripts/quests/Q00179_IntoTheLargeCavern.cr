@@ -66,7 +66,7 @@ class Scripts::Q00179_IntoTheLargeCavern < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif npc.id == MENACING_MACHINE && st.state == State::STARTED

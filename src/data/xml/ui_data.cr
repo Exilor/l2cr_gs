@@ -39,7 +39,7 @@ module UIData
       when "keys"
         parse_keys(cat, d)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -70,7 +70,7 @@ module UIData
         when "showType"
           akey.show_status = val
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

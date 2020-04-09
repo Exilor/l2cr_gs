@@ -70,7 +70,7 @@ class Scripts::Q00061_LawEnforcement < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -109,7 +109,7 @@ class Scripts::Q00061_LawEnforcement < Quest
         when 4
           html = "32138-10.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when EINDBURGH
@@ -120,7 +120,7 @@ class Scripts::Q00061_LawEnforcement < Quest
           html = "32469-02.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

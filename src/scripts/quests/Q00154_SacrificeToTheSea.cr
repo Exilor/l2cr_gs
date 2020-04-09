@@ -57,7 +57,7 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
           qs.exit_quest(false, true)
           html = "30312-06.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
@@ -77,7 +77,7 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
       when 4
         html = "30051-04.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ROLLFNAN
@@ -92,11 +92,11 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
       when 4
         html = "30055-02.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

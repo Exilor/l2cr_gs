@@ -69,7 +69,7 @@ class Scripts::DarkWaterDragon < AbstractNpcAI
       end
       npc.reduce_current_hp(500, npc, nil) # poison kills Fafurion if he is not healed
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

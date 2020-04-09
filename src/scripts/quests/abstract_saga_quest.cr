@@ -307,7 +307,7 @@ abstract class AbstractSagaQuest < Quest
 
       return
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -674,7 +674,7 @@ abstract class AbstractSagaQuest < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

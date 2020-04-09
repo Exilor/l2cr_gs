@@ -55,7 +55,7 @@ class Scripts::Q00296_TarantulasSpiderSilk < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -12,7 +12,7 @@ class Scripts::Asamah < AbstractNpcAI
     when "32115-03.htm", "32115-04.htm"
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

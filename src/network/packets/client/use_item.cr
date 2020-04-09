@@ -131,7 +131,7 @@ class Packets::Incoming::UseItem < GameClientPacket
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
             else
-              # automatically added
+              # [automatically added else]
             end
 
           else
@@ -140,7 +140,7 @@ class Packets::Incoming::UseItem < GameClientPacket
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
             else
-              # automatically added
+              # [automatically added else]
             end
 
           end
@@ -156,7 +156,7 @@ class Packets::Incoming::UseItem < GameClientPacket
           return
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
@@ -178,7 +178,7 @@ class Packets::Incoming::UseItem < GameClientPacket
           send_packet(ItemList.new(pc, false))
           return
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end

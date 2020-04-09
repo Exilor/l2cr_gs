@@ -765,7 +765,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     when L2ServitorInstance
       lvl = SummonSkillsTable.get_available_level(summon, skill_id)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

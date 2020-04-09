@@ -69,11 +69,11 @@ class Scripts::Q00262_TradeWithTheIvoryTower < Quest
           st.exit_quest(true, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

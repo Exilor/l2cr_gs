@@ -54,7 +54,7 @@ class Scripts::Q00275_DarkWingedSpies < Quest
           st.take_items(VARANGKAS_PARASITE, -1)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -98,11 +98,11 @@ class Scripts::Q00275_DarkWingedSpies < Quest
           html = "30567-05.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

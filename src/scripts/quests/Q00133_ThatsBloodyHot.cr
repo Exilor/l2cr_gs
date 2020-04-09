@@ -70,7 +70,7 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -110,7 +110,7 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

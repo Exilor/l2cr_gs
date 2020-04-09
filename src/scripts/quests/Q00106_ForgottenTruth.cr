@@ -39,7 +39,7 @@ class Scripts::Q00106_ForgottenTruth < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -91,7 +91,7 @@ class Scripts::Q00106_ForgottenTruth < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when KARTA
@@ -120,12 +120,12 @@ class Scripts::Q00106_ForgottenTruth < Quest
             html = "30133-04.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

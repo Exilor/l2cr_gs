@@ -90,7 +90,7 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
         html = "30989-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -136,7 +136,7 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
       when SERPENT_DEMON_BIFRONS
         add_spawn(CHEST_OF_BIFRONS, npc, true, 30000)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -206,7 +206,7 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
           html = "30989-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

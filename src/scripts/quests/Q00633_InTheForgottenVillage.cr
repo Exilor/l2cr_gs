@@ -81,7 +81,7 @@ class Scripts::Q00633_InTheForgottenVillage < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -101,7 +101,7 @@ class Scripts::Q00633_InTheForgottenVillage < Quest
       when ZOMBIES_LIVER
         give_item_randomly(qs.player, npc, ZOMBIES_LIVER, 1, 0, info.chance, true)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

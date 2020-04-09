@@ -46,7 +46,7 @@ class Scripts::SilentValley < AbstractNpcAI
       when "SPAWN_CHEST"
         add_spawn(CHEST, npc.x - 100, npc.y, npc.z - 100, 0, false, 0)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -126,7 +126,7 @@ class Scripts::SilentValley < AbstractNpcAI
       when "CLEAR_ALL_INSTANT"
         receiver.do_die(nil)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -168,7 +168,7 @@ module AdminCommandHandler::AdminCHSiege
       when SiegeStatus::RUNNING
         siegable.end_siege
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

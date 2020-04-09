@@ -172,7 +172,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -261,7 +261,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -384,7 +384,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?
@@ -412,7 +412,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
     when BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, BREKA_ORC_WARRIOR
       check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS) && get_quest_items_count(pc, DUNINGS_KEY) < 30
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

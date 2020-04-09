@@ -80,7 +80,7 @@ class L2CubicInstance
     when SMART_CUBIC_SHILLIENTEMPLAR
       @skills << SkillData[4049, 8]
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

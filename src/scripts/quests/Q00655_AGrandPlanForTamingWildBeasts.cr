@@ -49,7 +49,7 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
         html = html.sub("%next_siege%", siege_date)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

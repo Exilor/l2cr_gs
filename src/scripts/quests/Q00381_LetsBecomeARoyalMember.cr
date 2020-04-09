@@ -44,7 +44,7 @@ class Scripts::Q00381_LetsBecomeARoyalMember < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -96,11 +96,11 @@ class Scripts::Q00381_LetsBecomeARoyalMember < Quest
           html = "30090-03.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

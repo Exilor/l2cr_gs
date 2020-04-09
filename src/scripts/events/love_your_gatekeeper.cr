@@ -51,7 +51,7 @@ class Scripts::LoveYourGatekeeper < LongTimeEvent
 
       return
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -162,7 +162,7 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         st.unset("Memo")
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -232,13 +232,13 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
             st.exit_quest(false, true)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when KARAKAWEI
@@ -263,7 +263,7 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         when 8
           html = "32117-18.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -332,18 +332,18 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
           when 3
             html = "32121-20.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         when 8
           html = "32121-21.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

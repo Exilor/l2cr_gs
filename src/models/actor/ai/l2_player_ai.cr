@@ -214,7 +214,7 @@ class L2PlayerAI < L2PlayableAI
       when INTERACT
         think_interact
       else
-        # automatically added
+        # [automatically added else]
       end
 
     ensure

@@ -40,7 +40,7 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
       st.exit_quest(false, true)
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -103,7 +103,7 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -59,11 +59,11 @@ class Scripts::Q00303_CollectArrowheads < Quest
           html = "30029-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -143,7 +143,7 @@ class Scripts::Q00386_StolenDignity < Quest
       when 55..63
         return before_reward(pc, qs, ask - 54)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -297,7 +297,7 @@ class Scripts::Q00386_StolenDignity < Quest
     when 32
       qs.give_items(CRYSTAL_OF_DEAMON_PIECE, count)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -464,7 +464,7 @@ class Scripts::Q00386_StolenDignity < Quest
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

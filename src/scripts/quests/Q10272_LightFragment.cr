@@ -66,7 +66,7 @@ class Scripts::Q10272_LightFragment < Quest
         event = "32557-04.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -120,7 +120,7 @@ class Scripts::Q10272_LightFragment < Quest
       when State::COMPLETED
         html = "32560-04.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when ARTIUS
@@ -162,7 +162,7 @@ class Scripts::Q10272_LightFragment < Quest
           st.add_exp_and_sp(1009016, 91363)
           st.exit_quest(false, true)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -179,7 +179,7 @@ class Scripts::Q10272_LightFragment < Quest
       when 6
         html = "32566-10.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when LELRIKIA
@@ -189,7 +189,7 @@ class Scripts::Q10272_LightFragment < Quest
       when 4
         html = "32567-05.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when LEKON
@@ -206,11 +206,11 @@ class Scripts::Q10272_LightFragment < Quest
       when 8
         html = "32557-06.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

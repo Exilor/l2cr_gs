@@ -88,13 +88,13 @@ class Scripts::Q00036_MakeASewingKit < Quest
           html = "30847-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -63,7 +63,7 @@ class Scripts::Q00191_VainConclusion < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -92,7 +92,7 @@ class Scripts::Q00191_VainConclusion < Quest
         when 3
           html = "30068-04.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HEAD_BLACKSMITH_KUSTO
@@ -112,11 +112,11 @@ class Scripts::Q00191_VainConclusion < Quest
         when 4
           html = "30673-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

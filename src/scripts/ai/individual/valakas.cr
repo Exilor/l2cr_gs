@@ -242,7 +242,7 @@ class Scripts::Valakas < AbstractNpcAI
       when "skill_task"
         call_skill_ai(npc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
@@ -254,7 +254,7 @@ class Scripts::Valakas < AbstractNpcAI
       when "remove_players"
         zone.oust_all_players
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

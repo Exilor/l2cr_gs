@@ -101,7 +101,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
     when "30747-07.html", "30747-08.html", "30747-09.html", "30747-10.html"
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -134,7 +134,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MIMYU
@@ -197,7 +197,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
                   take_items(pc, DRAGONFLUTE_OF_TWILIGHT, -1)
                   give_items(pc, DRAGON_BUGLE_OF_TWILIGHT, 1)
                 else
-                  # automatically added
+                  # [automatically added else]
                 end
 
 
@@ -212,11 +212,11 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -262,7 +262,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
           when 2
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::LEAVE_NOW_BEFORE_YOU_INCUR_THE_WRATH_OF_THE_GUARDIAN_GHOST))
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

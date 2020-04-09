@@ -115,7 +115,7 @@ class Scripts::Q00038_DragonFangs < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -142,7 +142,7 @@ class Scripts::Q00038_DragonFangs < Quest
           html = "30034-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when MAGISTER_ROHMER
@@ -165,14 +165,14 @@ class Scripts::Q00038_DragonFangs < Quest
         when 3
           html = "30386-08.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       elsif qs.completed?
         html = get_already_completed_msg(talker)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -192,7 +192,7 @@ class Scripts::Q00038_DragonFangs < Quest
         qs.set_cond(7)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

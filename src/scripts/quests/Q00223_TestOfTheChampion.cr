@@ -130,7 +130,7 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -159,7 +159,7 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         when 1
           npc.script_value = 2
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ROAD_SCAVENGER
@@ -180,7 +180,7 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         when 1
           npc.script_value = 2
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when BLOODY_AXE_ELITE
@@ -196,11 +196,11 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         when 1
           npc.script_value = 2
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -282,7 +282,7 @@ class Scripts::Q00223_TestOfTheChampion < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -397,7 +397,7 @@ class Scripts::Q00223_TestOfTheChampion < Quest
           html = "30625-07.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

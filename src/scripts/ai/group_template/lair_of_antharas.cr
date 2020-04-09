@@ -64,7 +64,7 @@ class Scripts::LairOfAntharas < AbstractNpcAI
     when DRAGON_GUARD, DRAGON_MAGE
       cancel_quest_timer("CHECK_HOME", npc, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

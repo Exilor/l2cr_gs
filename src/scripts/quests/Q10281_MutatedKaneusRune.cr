@@ -27,7 +27,7 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
       st.give_adena(360000, true)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -72,7 +72,7 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
       when State::COMPLETED
         html = "31340-06.htm"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when KAYAN
@@ -82,11 +82,11 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -92,7 +92,7 @@ class Scripts::Q00309_ForAGoodCause < Quest
       st.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

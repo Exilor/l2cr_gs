@@ -57,7 +57,7 @@ module RecipeData
             set["rarity"] = c["rarity"].to_i
             has_rare = true
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end

@@ -57,7 +57,7 @@ class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
         html = "32052-03.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -93,11 +93,11 @@ class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
           html = "32052-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

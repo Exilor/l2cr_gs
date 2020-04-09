@@ -82,7 +82,7 @@ class Scripts::Q00413_PathOfTheShillienOracle < Quest
       end
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -113,7 +113,7 @@ class Scripts::Q00413_PathOfTheShillienOracle < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -190,7 +190,7 @@ class Scripts::Q00413_PathOfTheShillienOracle < Quest
           html = "30377-07.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

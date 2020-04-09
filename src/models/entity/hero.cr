@@ -143,7 +143,7 @@ module Hero
           diary_entry["action"] = castle.name + " Castle was successful taken"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

@@ -44,7 +44,7 @@ class Scripts::DwarfWarehouseChange1 < AbstractNpcAI
     when "54"
       class_change_requested(player, npc, event.to_i)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

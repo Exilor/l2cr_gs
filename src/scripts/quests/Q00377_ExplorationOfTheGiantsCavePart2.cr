@@ -50,7 +50,7 @@ class Scripts::Q00377_ExplorationOfTheGiantsCavePart2 < Quest
       qs.exit_quest(true, true)
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

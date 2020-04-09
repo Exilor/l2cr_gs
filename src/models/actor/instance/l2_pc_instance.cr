@@ -1190,7 +1190,7 @@ class L2PcInstance < L2Playable
       when PrivateStoreType::MANUFACTURE
         send_packet(RecipeShopSellList.new(self, pc))
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif char
@@ -3194,7 +3194,7 @@ class L2PcInstance < L2Playable
     when PrivateStoreType::MANUFACTURE
       pc.send_packet(RecipeShopMsg.new(self))
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -3214,7 +3214,7 @@ class L2PcInstance < L2Playable
     when 2
       broadcast_user_info
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -3493,7 +3493,7 @@ class L2PcInstance < L2Playable
     when 0x31..0x34; 252
     when 0x35..0x39; 247
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -5518,7 +5518,7 @@ class L2PcInstance < L2Playable
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -5922,7 +5922,7 @@ class L2PcInstance < L2Playable
     when MountType::WYVERN
       self.flying = true
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -7260,7 +7260,7 @@ class L2PcInstance < L2Playable
         when 6521, 6524, 6527, 8507, 8510, 8513
           check_delay = @fish.not_nil!.guts_check_time * 66
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
@@ -7321,7 +7321,7 @@ class L2PcInstance < L2Playable
           type = 6
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when 1 # normal fish
@@ -7367,7 +7367,7 @@ class L2PcInstance < L2Playable
           type = 2
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when 2 # upper grade fish, luminous lure
@@ -7405,11 +7405,11 @@ class L2PcInstance < L2Playable
           type = 9
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -7438,7 +7438,7 @@ class L2PcInstance < L2Playable
       when 8
         skill_lvl = 23
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

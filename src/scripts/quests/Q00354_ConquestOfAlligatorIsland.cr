@@ -67,7 +67,7 @@ class Scripts::Q00354_ConquestOfAlligatorIsland < Quest
         html = "30895-12.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

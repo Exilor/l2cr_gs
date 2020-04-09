@@ -100,7 +100,7 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -194,7 +194,7 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
             html = "32784-16.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when HARDIN
@@ -204,7 +204,7 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
           html = "30832-03.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -36,7 +36,7 @@ class Condition
         end
         return !@required
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

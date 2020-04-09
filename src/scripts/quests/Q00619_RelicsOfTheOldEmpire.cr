@@ -180,7 +180,7 @@ class Scripts::Q00619_RelicsOfTheOldEmpire < Quest
       st.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

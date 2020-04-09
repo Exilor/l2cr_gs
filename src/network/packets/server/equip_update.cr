@@ -40,7 +40,7 @@ class Packets::Outgoing::EquipUpdate < GameServerPacket
     when L2Item::SLOT_BELT
       d 0x10
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

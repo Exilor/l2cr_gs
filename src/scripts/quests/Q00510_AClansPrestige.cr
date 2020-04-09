@@ -30,7 +30,7 @@ class Scripts::Q00510_AClansPrestige < Quest
     when "31331-6.html"
       st.exit_quest(true, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -91,7 +91,7 @@ class Scripts::Q00510_AClansPrestige < Quest
         html = "31331-7.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

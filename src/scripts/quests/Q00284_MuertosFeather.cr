@@ -46,7 +46,7 @@ class Scripts::Q00284_MuertosFeather < Quest
       qs.exit_quest(true, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

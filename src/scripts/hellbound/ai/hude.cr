@@ -55,7 +55,7 @@ class Scripts::Hude < AbstractNpcAI
         MultisellData.separate_and_send(322980002, pc, npc, false)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

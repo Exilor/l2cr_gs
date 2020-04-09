@@ -249,7 +249,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
     when "DESPAWN_BOX"
       npc.not_nil!.delete_me
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -306,7 +306,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         when 2
           html = "31349-11.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when MYSTERIOUS_WIZARD
@@ -364,7 +364,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         when 24
           html = "31348-19.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when BROKEN_BOOKSHELF2, BROKEN_BOOKSHELF3, BROKEN_BOOKSHELF4
@@ -408,7 +408,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         when 24
           html = "31532-24.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when TOMBSTONE
@@ -418,7 +418,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         when 12
           html = "31531-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when COFFIN
@@ -431,7 +431,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
           html = "31536-01.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
@@ -439,7 +439,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         html = get_already_completed_msg(pc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

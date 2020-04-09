@@ -162,7 +162,7 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -200,7 +200,7 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -311,7 +311,7 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         when 4
           html = "30659-05.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when WINDY_SHAORING
@@ -419,7 +419,7 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           html = "30674-04.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     elsif qs.completed?

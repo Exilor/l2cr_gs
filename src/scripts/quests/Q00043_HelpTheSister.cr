@@ -56,7 +56,7 @@ class Scripts::Q00043_HelpTheSister < Quest
       st.give_items(PET_TICKET, 1)
       st.exit_quest(false, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -102,13 +102,13 @@ class Scripts::Q00043_HelpTheSister < Quest
         when 5
           html = "30829-08.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when GALLADUCCI
@@ -119,12 +119,12 @@ class Scripts::Q00043_HelpTheSister < Quest
         when 5
           html = "30097-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

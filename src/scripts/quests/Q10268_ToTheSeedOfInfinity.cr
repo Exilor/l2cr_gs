@@ -40,7 +40,7 @@ class Scripts::Q10268_ToTheSeedOfInfinity < Quest
       when State::COMPLETED
         html = "32548-0a.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when TEPIOS
@@ -53,11 +53,11 @@ class Scripts::Q10268_ToTheSeedOfInfinity < Quest
       when State::COMPLETED
         html = "32530-02.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

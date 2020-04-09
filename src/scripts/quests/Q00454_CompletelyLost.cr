@@ -78,7 +78,7 @@ class Scripts::Q00454_CompletelyLost < Quest
     when "EXPIRED_TIMER"
       npc.delete_me
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -152,7 +152,7 @@ class Scripts::Q00454_CompletelyLost < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -241,7 +241,7 @@ class Scripts::Q00454_CompletelyLost < Quest
       cancel_quest_timer("TIME_LIMIT4", receiver, nil)
       cancel_quest_timer("TIME_LIMIT5", receiver, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -441,15 +441,15 @@ class Scripts::Q00454_CompletelyLost < Quest
           qs.exit_quest(QuestType::DAILY, true)
           html = "32736-03.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

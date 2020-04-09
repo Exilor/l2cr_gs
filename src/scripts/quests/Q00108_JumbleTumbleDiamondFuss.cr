@@ -85,7 +85,7 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -141,13 +141,13 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
             html = "30523-09.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when TRADER_REEP
@@ -246,7 +246,7 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
           html = "30526-08.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when WAREHOUSE_KEEPER_MURDOC
@@ -265,7 +265,7 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
       when 11, 12
         html = "30521-03.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when WAREHOUSE_KEEPER_AIRY
@@ -291,7 +291,7 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -333,7 +333,7 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

@@ -137,7 +137,7 @@ abstract class AI
 
       on_intention_interact(arg0)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -249,7 +249,7 @@ abstract class AI
 
       on_event_afraid(arg0, arg1)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

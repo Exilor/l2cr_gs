@@ -114,7 +114,7 @@ class Scripts::Alarm < AbstractNpcAI
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -152,7 +152,7 @@ class Scripts::Alarm < AbstractNpcAI
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -166,7 +166,7 @@ class Scripts::Alarm < AbstractNpcAI
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -182,7 +182,7 @@ class Scripts::Alarm < AbstractNpcAI
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -196,7 +196,7 @@ class Scripts::Alarm < AbstractNpcAI
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -54,7 +54,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
       st.set_cond(3, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -86,7 +86,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           st.play_sound(Sound::ITEMSOUND_QUEST_GIVEUP)
           html = "30956-10.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when POITAN
@@ -101,7 +101,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           when 2
             html = "30458-03.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -121,7 +121,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           when 2
             html = "30594-03.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -141,7 +141,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           when 2
             html = "30057-03.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -161,7 +161,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           when 2
             html = "30058-03.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -181,7 +181,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           when 2
             html = "30595-03.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
 
@@ -212,11 +212,11 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           html = "30959-03.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

@@ -264,7 +264,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
           html = "messenger_yetti020.htm"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when CARETAKER
@@ -312,7 +312,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

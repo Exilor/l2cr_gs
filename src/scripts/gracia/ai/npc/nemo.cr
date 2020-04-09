@@ -59,7 +59,7 @@ class Scripts::Nemo < AbstractNpcAI
         spawned_npc.script_value -= 1
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

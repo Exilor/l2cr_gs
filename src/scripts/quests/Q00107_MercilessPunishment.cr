@@ -67,7 +67,7 @@ class Scripts::Q00107_MercilessPunishment < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -122,13 +122,13 @@ class Scripts::Q00107_MercilessPunishment < Quest
             html = "30568-11.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when CENTURION_PARUGON
@@ -139,7 +139,7 @@ class Scripts::Q00107_MercilessPunishment < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -166,7 +166,7 @@ class Scripts::Q00107_MercilessPunishment < Quest
           qs.set_cond(7, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

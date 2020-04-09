@@ -935,7 +935,6 @@ abstract class AbstractScript
 
     {% for m in @type.methods %}
       {% if ann = m.annotation(Register) %}
-        # debug "{{m.name}} has an annotation."
         # method = -> {{m.name}}({{m.args.first.restriction}})
         method = ->(evt : BaseEvent) do
           {{m.name}}(evt.as({{m.args.first.restriction || "BaseEvent".id}}))

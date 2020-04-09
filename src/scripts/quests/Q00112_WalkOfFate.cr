@@ -32,7 +32,7 @@ class Scripts::Q00112_WalkOfFate < Quest
       st.exit_quest(false, true)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -52,13 +52,13 @@ class Scripts::Q00112_WalkOfFate < Quest
       when KARUDA
         html = "32017-01.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

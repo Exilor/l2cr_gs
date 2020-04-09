@@ -40,7 +40,7 @@ class FortUpdater
         @fort.set_fort_state(0, 0)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   rescue e

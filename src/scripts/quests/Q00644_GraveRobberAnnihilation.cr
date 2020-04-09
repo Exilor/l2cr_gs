@@ -57,7 +57,7 @@ class Scripts::Q00644_GraveRobberAnnihilation < Quest
         html = "32017-07.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -86,7 +86,7 @@ class Scripts::Q00644_GraveRobberAnnihilation < Quest
         html = "32017-05.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

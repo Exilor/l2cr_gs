@@ -93,7 +93,7 @@ class Scripts::Q00310_OnlyWhatRemains < Quest
         html = "32640-10.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

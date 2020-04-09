@@ -84,7 +84,7 @@ class Scripts::Q00288_HandleWithCare < Quest
         html = event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -125,7 +125,7 @@ class Scripts::Q00288_HandleWithCare < Quest
         html = "32741-07.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

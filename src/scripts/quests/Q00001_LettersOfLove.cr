@@ -36,7 +36,7 @@ class Scripts::Q00001_LettersOfLove < Quest
         event
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -63,7 +63,7 @@ class Scripts::Q00001_LettersOfLove < Quest
             html = "30006-01.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 2
@@ -80,7 +80,7 @@ class Scripts::Q00001_LettersOfLove < Quest
             html = "30006-02.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 3
@@ -103,7 +103,7 @@ class Scripts::Q00001_LettersOfLove < Quest
             html = "30033-02.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when 4
@@ -124,17 +124,17 @@ class Scripts::Q00001_LettersOfLove < Quest
             html = "30006-03.html"
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

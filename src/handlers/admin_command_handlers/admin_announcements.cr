@@ -153,7 +153,7 @@ module AdminCommandHandler::AdminAnnouncements
             return false
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
         # ************************************
@@ -360,11 +360,11 @@ module AdminCommandHandler::AdminAnnouncements
         content = content.gsub("%announcements%", result.body_template.to_s)
         Util.send_cb_html(pc, content)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

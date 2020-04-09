@@ -82,7 +82,7 @@ class Scripts::Q00385_YokeOfThePast < Quest
       qs.exit_quest(true, true)
       event
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end
@@ -105,7 +105,7 @@ class Scripts::Q00385_YokeOfThePast < Quest
         html = "ziggurat-08.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

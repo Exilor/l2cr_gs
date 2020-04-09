@@ -43,7 +43,7 @@ module AdminCommandHandler::AdminTerritoryWar
           end
           cal.minute = min
         else
-          # automatically added
+          # [automatically added else]
         end
 
 

@@ -75,7 +75,7 @@ class Scripts::FortressSiegeManager < AbstractNpcAI
             pc.send_packet(sm)
             html = "FortressSiegeManager-05.html"
           else
-            # automatically added
+            # [automatically added else]
           end
 
         end
@@ -108,7 +108,7 @@ class Scripts::FortressSiegeManager < AbstractNpcAI
         html = "FortressSiegeManager-21.html"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

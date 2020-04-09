@@ -63,7 +63,7 @@ class Scripts::PailakaSongOfIceAndFire < AbstractInstance
       npc.invisible = !npc.invisible?
       start_quest_timer("BLOOM_TIMER", 5000, npc, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -86,7 +86,7 @@ class Scripts::PailakaSongOfIceAndFire < AbstractInstance
       when 4, 5
         npc.drop_item(pc, HEAL_POTION, Rnd.rand(1i64..10i64))
       else
-        # automatically added
+        # [automatically added else]
       end
 
 

@@ -568,7 +568,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -983,7 +983,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
       give_items(player, SECOND_CIRCLE_REQUEST_6B, 1)
       html = event
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -1160,7 +1160,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
            HARIT_LIZARDMAN_ARCHER, HARIT_LIZARDMAN_WARRIOR
         evolve_blood_crystal(qs.player)
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

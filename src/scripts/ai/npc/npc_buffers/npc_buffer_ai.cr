@@ -56,12 +56,12 @@ struct NpcBufferAI
             skill.apply_effects(target, target)
           end
         else
-          # automatically added
+          # [automatically added else]
         end
 
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

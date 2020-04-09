@@ -48,7 +48,7 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
       when State::STARTED
         html = "32012-02.html"
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when SARA
@@ -64,7 +64,7 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
         st.exit_quest(true, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

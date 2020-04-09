@@ -240,7 +240,7 @@ class PcStat < PlayableStat
       when 4
         return Config.rate_vitality_level_4.to_f
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

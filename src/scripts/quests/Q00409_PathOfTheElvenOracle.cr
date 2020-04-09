@@ -80,7 +80,7 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
         add_attack_desire(add_spawn(TAMIL, npc, true, 0i64, true), pc)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -101,7 +101,7 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
         when TAMIL
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::AS_YOU_WISH_MASTER))
         else
-          # automatically added
+          # [automatically added else]
         end
 
 
@@ -112,7 +112,7 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           npc.script_value = 2
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -141,7 +141,7 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           qs.set_cond(5, true)
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end
@@ -241,7 +241,7 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           end
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

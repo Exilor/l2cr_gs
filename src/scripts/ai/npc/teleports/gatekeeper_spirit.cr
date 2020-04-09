@@ -44,7 +44,7 @@ class Scripts::GatekeeperSpirit < AbstractNpcAI
     when "TeleportOut"
       pc.not_nil!.tele_to_location(EXIT, true)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -58,7 +58,7 @@ class Scripts::GatekeeperSpirit < AbstractNpcAI
     when LILITH
       start_quest_timer("LILITH", 10000, npc, killer)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

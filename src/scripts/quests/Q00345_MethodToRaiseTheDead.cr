@@ -106,7 +106,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
         end
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -213,7 +213,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
 
           qs.exit_quest(true, true)
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when ORPHEUS
@@ -250,7 +250,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
         when 8
           html = "30973-11.html"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when XENOVIA
@@ -260,7 +260,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           html = "30912-06.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     end

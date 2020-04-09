@@ -112,7 +112,7 @@ class Scripts::Minigame < AbstractNpcAI
     when "afterthat"
       npc.delete_me
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -152,7 +152,7 @@ class Scripts::Minigame < AbstractNpcAI
       npc.disable_core_ai(true)
       start_quest_timer("afterthat", 180000, npc, nil)
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

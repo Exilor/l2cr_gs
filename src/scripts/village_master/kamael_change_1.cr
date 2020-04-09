@@ -36,7 +36,7 @@ class Scripts::KamaelChange1 < AbstractNpcAI
     when "125", "126"
       class_change_requested(pc, event.to_i)
     else
-      # automatically added
+      # [automatically added else]
     end
 
   end

@@ -39,7 +39,7 @@ class Scripts::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
         html = "31442-02.htm"
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -72,7 +72,7 @@ class Scripts::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
         when 2
           html = "31572-09.htm"
         else
-          # automatically added
+          # [automatically added else]
         end
 
       when KIKI
@@ -80,11 +80,11 @@ class Scripts::Q00028_ChestCaughtWithABaitOfIcyAir < Quest
           html = "31442-01.htm"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

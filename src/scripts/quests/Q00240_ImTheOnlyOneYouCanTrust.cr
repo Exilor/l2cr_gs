@@ -84,13 +84,13 @@ class Scripts::Q00240_ImTheOnlyOneYouCanTrust < Quest
           html = "32640-10.html"
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
     when State::COMPLETED
       html = "32640-11.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

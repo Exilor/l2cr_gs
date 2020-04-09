@@ -18,7 +18,7 @@ module TargetHandler::Enemy
 
       return [target] of L2Object
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

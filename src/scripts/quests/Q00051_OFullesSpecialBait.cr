@@ -32,7 +32,7 @@ class Scripts::Q00051_OFullesSpecialBait < Quest
         st.exit_quest(false, true)
       end
     else
-      # automatically added
+      # [automatically added else]
     end
 
 
@@ -70,7 +70,7 @@ class Scripts::Q00051_OFullesSpecialBait < Quest
     when State::STARTED
       html = st.cond?(1) ? "31572-05.html" : "31572-04.html"
     else
-      # automatically added
+      # [automatically added else]
     end
 
 

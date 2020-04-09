@@ -410,7 +410,7 @@ class L2VillageMasterInstance < L2NpcInstance
           return
         end
       else
-        # automatically added
+        # [automatically added else]
       end
 
 
