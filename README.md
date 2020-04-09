@@ -1,3 +1,5 @@
+Note for RX14: if you try to compile this, the main file is src/game_server.cr and the folder l2cr_core should be in the same folder as l2cr_gs.
+
 # l2cr
 
 A Lineage 2 (High Five) server emulator ported from [L2J](http://www.l2jserver.com) (written in Java) to Crystal.
