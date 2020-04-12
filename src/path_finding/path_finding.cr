@@ -26,7 +26,7 @@ module PathFinding
     engine.path_nodes_exist?(reg_offset)
   end
 
-  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Array(AbstractNodeLoc)?
+  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Deque(AbstractNodeLoc)?
     engine.find_path(x, y, z, tx, ty, tz, instance_id, playable)
   end
 

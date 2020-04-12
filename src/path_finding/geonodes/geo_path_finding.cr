@@ -62,7 +62,7 @@ module GeoPathFinding
     PATH_NODES_INDEX.has_key?(region_offset)
   end
 
-  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Array(AbstractNodeLoc)?
+  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Deque(AbstractNodeLoc)?
     gx = (x - L2World::MAP_MIN_X) >> 4
     gy = (y - L2World::MAP_MIN_Y) >> 4
     gz = z.to_i16!
@@ -110,7 +110,7 @@ module GeoPathFinding
     search_by_closest2(start, stop)
   end
 
-  def search_by_closest2(start : GeoNode, stop : GeoNode) : Array(AbstractNodeLoc)?
+  def search_by_closest2(start : GeoNode, stop : GeoNode) : Deque(AbstractNodeLoc)?
     visited = Array(GeoNode).new(550)
     to_visit = [start] of GeoNode
 
@@ -157,8 +157,8 @@ module GeoPathFinding
     nil
   end
 
-  def construct_path2(node : AbstractNode(GeoNodeLoc)) : Array(AbstractNodeLoc)
-    path = [] of AbstractNodeLoc
+  def construct_path2(node : AbstractNode(GeoNodeLoc)) : Deque(AbstractNodeLoc)
+    path = Deque(AbstractNodeLoc).new
     previous_direction_x : Int32 = -1000
     previous_direction_y : Int32 = -1000
 
@@ -169,7 +169,7 @@ module GeoPathFinding
       if direction_x != previous_direction_x || direction_y != previous_direction_y
         previous_direction_x = direction_x
         previous_direction_y = direction_y
-        path.unshift(node.loc) # consider using push and then reverse
+        path.unshift(node.loc)
       end
 
       node = node.parent
@@ -291,7 +291,7 @@ module GeoPathFinding
   private def read_node(node_x : Int16, node_y : Int16, layer : Int8) : GeoNode?
     offset = get_region_offset(get_region_x(node_x.to_i32), get_region_y(node_y.to_i32))
     unless path_nodes_exist?(offset)
-      debug "Path nodes do not exist for offset #{offset} (1)"
+      debug { "Path nodes do not exist for offset #{offset} (1)" }
       return
     end
 
@@ -319,7 +319,7 @@ module GeoPathFinding
     offset : Int16 = get_region_offset(reg_x, reg_y)
 
     unless path_nodes_exist?(offset)
-      debug "Path nodes do not exist for offset #{offset} (2)"
+      debug { "Path nodes do not exist for offset #{offset} (2)" }
       return
     end
 

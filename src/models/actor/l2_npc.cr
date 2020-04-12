@@ -57,6 +57,8 @@ class L2Npc < L2Character
     template.skills.each_value do |skill|
       add_skill(skill)
     end
+
+    init_char_status_update_values
   end
 
   def initialize(npc_id : Int32)

@@ -22,7 +22,7 @@ require "./instance/l2_raid_boss_instance"
 abstract class L2Character < L2Object
   include SkillsHolder
 
-  MAX_HP_BAR_PX = 352.0
+  private MAX_BAR_PX = 352.0
 
   @hp_update_inc_check = 0.0
   @hp_update_dec_check = 0.0
@@ -144,7 +144,7 @@ abstract class L2Character < L2Object
 
   private def init_char_status_update_values
     @hp_update_inc_check = max_hp.to_f
-    @hp_update_interval = @hp_update_inc_check / MAX_HP_BAR_PX
+    @hp_update_interval = @hp_update_inc_check / MAX_BAR_PX
     @hp_update_dec_check = @hp_update_inc_check - @hp_update_interval
   end
 
@@ -177,13 +177,13 @@ abstract class L2Character < L2Object
   end
 
   def has_pet? : Bool
-    smn = summon()
-    !!smn && smn.pet?
+    return false unless smn = summon()
+    smn.pet?
   end
 
   def has_servitor? : Bool
-    smn = summon()
-    !!smn && smn.servitor?
+    return false unless smn = summon()
+    smn.servitor?
   end
 
   def broadcast_packet(gsp : GameServerPacket)
@@ -200,11 +200,11 @@ abstract class L2Character < L2Object
     end
   end
 
-  def need_hp_update? : Bool
+  private def need_hp_update? : Bool
     current_hp = current_hp()
     max_hp = max_hp()
 
-    return true if current_hp <= 1 || max_hp < MAX_HP_BAR_PX
+    return true if current_hp <= 1 || max_hp < MAX_BAR_PX
 
     if current_hp < @hp_update_dec_check || (current_hp - @hp_update_dec_check).abs <= 1e-6 || current_hp > @hp_update_inc_check || (current_hp - @hp_update_inc_check).abs <= 1e-6
       if (current_hp - max_hp).abs <= 1e-6
@@ -212,14 +212,7 @@ abstract class L2Character < L2Object
         @hp_update_dec_check = current_hp - @hp_update_interval
       else
         double_multi = current_hp / @hp_update_interval
-
-        if double_multi.infinite?
-          warn { "L2Character#need_hp_update? double_multi is infinite. current_hp: #{current_hp}, @hp_update_interval: #{@hp_update_interval}." }
-          return current_hp < max_hp # custom crappy fix
-        end
-
         int_multi = double_multi.to_i
-
         @hp_update_dec_check = @hp_update_interval * (double_multi < int_multi ? int_multi - 1 : int_multi)
         @hp_update_inc_check = @hp_update_dec_check + @hp_update_interval
       end
@@ -382,16 +375,6 @@ abstract class L2Character < L2Object
 
   def get_item_remaining_reuse_time(item_l2id : Int32) : Int64
     sync do
-      # if temp = @reuse_time_stamp_items
-      #   if temp2 = temp[item_l2id]
-      #     temp2.remaining
-      #   else
-      #     -1i64
-      #   end
-      # else
-      #   -1i64
-      # end
-
       @reuse_time_stamp_items.try &.[item_l2id]?.try &.remaining || -1i64
     end
   end
@@ -959,7 +942,7 @@ abstract class L2Character < L2Object
   end
 
   def broadcast_status_update
-    if status.status_listener.empty?# || !need_hp_update?
+    if status.status_listener.empty? || !need_hp_update?
       return
     end
 
@@ -3543,7 +3526,7 @@ abstract class L2Character < L2Object
     property geo_path_accurate_ty : Int32 = 0
     property geo_path_gtx : Int32 = 0
     property geo_path_gty : Int32 = 0
-    property! geo_path : Array(AbstractNodeLoc)?
+    property! geo_path : Deque(AbstractNodeLoc)?
     property? disregarding_geodata : Bool = false
   end
 
@@ -3855,7 +3838,7 @@ abstract class L2Character < L2Object
 
     GameTimer.register(self)
 
-    if ticks_to_move * GameTimer::MILLIS_IN_TICK > 3_000
+    if ticks_to_move * GameTimer::MILLIS_IN_TICK > 3000
       task = NotifyAITask.new(self, AI::ARRIVED_REVALIDATE)
       ThreadPoolManager.schedule_ai(task, 2000)
     end
@@ -3995,8 +3978,6 @@ abstract class L2Character < L2Object
   private def bad_coords
     decay_me
   end
-
-  # custom methods
 
   def alive? : Bool
     !dead?

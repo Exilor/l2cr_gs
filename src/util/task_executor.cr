@@ -94,6 +94,7 @@ class TaskExecutor
     @scheduling_worker : Fiber
 
     def initialize(*, pool_size = 20, error_handler = DEFAULT_ERROR_HANDLER)
+      # Implicit args super throws a syntax error due to a compiler bug
       super(pool_size: pool_size, error_handler: error_handler)
 
       @queue = PriorityQueue(Task).new

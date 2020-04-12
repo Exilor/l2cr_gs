@@ -723,10 +723,10 @@ class L2PcInstance < L2Playable
   private def init_pc_status_update_values
     max_cp = max_cp().to_f
     max_mp = max_mp().to_f
-    @cp_update_interval  = max_cp / 352.0
+    @cp_update_interval  = max_cp / MAX_BAR_PX
     @cp_update_inc_check = max_cp
     @cp_update_dec_check = max_cp - @cp_update_interval
-    @mp_update_interval  = max_mp / 352.0
+    @mp_update_interval  = max_mp / MAX_BAR_PX
     @mp_update_inc_check = max_mp
     @mp_update_dec_check = max_mp - @mp_update_interval
   end
@@ -2218,30 +2218,6 @@ class L2PcInstance < L2Playable
     end
 
     super
-  end
-
-  def need_cp_update? : Bool
-    current_cp = current_cp()
-    max_cp = max_cp()
-
-    return true if current_cp <= 1 || max_cp < MAX_HP_BAR_PX
-
-    if current_cp < @cp_update_dec_check || (current_cp - @cp_update_dec_check).abs <= 1e-6 || current_cp > @cp_update_inc_check || (current_cp - @cp_update_inc_check).abs <= 1e-6
-      if (current_cp - max_cp).abs <= 1e-6
-        @cp_update_inc_check = current_cp + 1
-        @cp_update_dec_check = current_cp - @cp_update_interval
-      else
-        double_multi = current_cp / @cp_update_interval
-        int_multi = double_multi.to_i
-
-        @cp_update_dec_check = @cp_update_interval * (double_multi < int_multi ? int_multi - 1 : int_multi)
-        @cp_update_inc_check = @cp_update_dec_check + @cp_update_interval
-      end
-
-      return true
-    end
-
-    false
   end
 
   def update_not_move_until
@@ -4946,7 +4922,7 @@ class L2PcInstance < L2Playable
     current_mp = current_mp()
     max_mp = max_mp()
 
-    return true if current_mp <= 1 || max_mp < MAX_HP_BAR_PX
+    return true if current_mp <= 1 || max_mp < MAX_BAR_PX
 
     if current_mp < @mp_update_dec_check || (current_mp - @mp_update_dec_check).abs <= 1e-6 || current_mp > @mp_update_inc_check || (current_mp - @mp_update_inc_check).abs <= 1e-6
       if (current_mp - max_mp).abs <= 1e-6
@@ -4958,6 +4934,30 @@ class L2PcInstance < L2Playable
 
         @mp_update_dec_check = @mp_update_interval * (double_multi < int_multi ? int_multi - 1 : int_multi)
         @mp_update_inc_check = @mp_update_dec_check + @mp_update_interval
+      end
+
+      return true
+    end
+
+    false
+  end
+
+  def need_cp_update? : Bool
+    current_cp = current_cp()
+    max_cp = max_cp()
+
+    return true if current_cp <= 1 || max_cp < MAX_BAR_PX
+
+    if current_cp < @cp_update_dec_check || (current_cp - @cp_update_dec_check).abs <= 1e-6 || current_cp > @cp_update_inc_check || (current_cp - @cp_update_inc_check).abs <= 1e-6
+      if (current_cp - max_cp).abs <= 1e-6
+        @cp_update_inc_check = current_cp + 1
+        @cp_update_dec_check = current_cp - @cp_update_interval
+      else
+        double_multi = current_cp / @cp_update_interval
+        int_multi = double_multi.to_i
+
+        @cp_update_dec_check = @cp_update_interval * (double_multi < int_multi ? int_multi - 1 : int_multi)
+        @cp_update_inc_check = @cp_update_dec_check + @cp_update_interval
       end
 
       return true

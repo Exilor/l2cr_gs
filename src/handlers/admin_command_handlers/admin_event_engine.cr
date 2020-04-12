@@ -103,7 +103,7 @@ module AdminCommandHandler::AdminEventEngine
 
         admin_reply = NpcHtmlMessage.new
 
-        reply_msg = "<html><title>[ L2J EVENT ENGINE ]</title><body><br><center>The event <font color=\"LEVEL\">#{L2Event.event_name}</font> has been announced, now you can type #event_panel to see the event panel control</center><br></body></html>"
+        reply_msg = "<html><title>[ EVENT ENGINE ]</title><body><br><center>The event <font color=\"LEVEL\">#{L2Event.event_name}</font> has been announced, now you can type #event_panel to see the event panel control</center><br></body></html>"
         admin_reply.html = reply_msg
         pc.send_packet(admin_reply)
       elsif actual_cmd.starts_with?("admin_event_control_begin")
@@ -289,7 +289,7 @@ module AdminCommandHandler::AdminEventEngine
   def show_main_page(pc : L2PcInstance)
     admin_reply = NpcHtmlMessage.new
 
-    reply_msg = "<html><title>[ L2J EVENT ENGINE ]</title><body><br><center><button value=\"Create NEW event \" action=\"bypass -h admin_event_new\" width=150 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><center><br><font color=LEVEL>Stored Events:</font><br></center>#{show_stored_events}</body></html>"
+    reply_msg = "<html><title>[ EVENT ENGINE ]</title><body><br><center><button value=\"Create NEW event \" action=\"bypass -h admin_event_new\" width=150 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><center><br><font color=LEVEL>Stored Events:</font><br></center>#{show_stored_events}</body></html>"
     admin_reply.html = reply_msg
     pc.send_packet(admin_reply)
   end
@@ -297,7 +297,7 @@ module AdminCommandHandler::AdminEventEngine
   def show_new_event_page(pc : L2PcInstance)
     admin_reply = NpcHtmlMessage.new
     reply_msg = String::Builder.new(500)
-    reply_msg << "<html><title>[ L2J EVENT ENGINE ]</title><body><br><br><center><font color=LEVEL>Event name:</font><br>"
+    reply_msg << "<html><title>[ EVENT ENGINE ]</title><body><br><br><center><font color=LEVEL>Event name:</font><br>"
 
     if @@temp_name.empty?
       reply_msg << "You can also use #event_name text to insert a new title" \
@@ -331,7 +331,7 @@ module AdminCommandHandler::AdminEventEngine
     admin_reply = NpcHtmlMessage.new
     sb = String::Builder.new
 
-    sb << "<html><body><title>[ L2J EVENT ENGINE ]</title><br><center> Current event: <font color=\"LEVEL\">"
+    sb << "<html><body><title>[ EVENT ENGINE ]</title><br><center> Current event: <font color=\"LEVEL\">"
     sb << L2Event.event_name
     sb << "</font></center><br>INFO: To start an event, you must first set the number of teams, then type their names in the boxes and finally type the NPC ID that will be the event manager (can be any existing npc) next to the \"Announce Event!\" button.<br><table width=100%>" \
       "<tr><td><button value=\"Announce Event!\" action=\"bypass -h admin_event_announce $event_npcid "
@@ -368,7 +368,7 @@ module AdminCommandHandler::AdminEventEngine
   private def show_event_control(pc)
     admin_reply = NpcHtmlMessage.new
     sb = String::Builder.new
-    sb << "<html><title>[ L2J EVENT ENGINE ]</title><body><br><center>Current event: <font color=\"LEVEL\">"
+    sb << "<html><title>[ EVENT ENGINE ]</title><body><br><center>Current event: <font color=\"LEVEL\">"
     sb << L2Event.event_name
     sb << "</font></center><br><table cellspacing=-1 width=280><tr><td align=center>Type the team ID(s) that will be affected by the commands. Commands with '*' work with only 1 team ID in the field, while '!' - none.</td></tr><tr><td align=center><edit var=\"team_number\" width=100 height=15></td></tr>" \
       "<tr><td>&nbsp;</td></tr><tr><td><table width=200>"

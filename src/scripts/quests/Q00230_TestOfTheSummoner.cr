@@ -374,6 +374,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
+      else
+        # nothing
       end
     when UNICORN_RACER
       case npc.script_value
@@ -409,8 +411,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
 
     when SHADOW_TUREN
@@ -484,10 +486,9 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
-
     when UNICORN_PHANTASM
       case npc.script_value
       when 0
@@ -524,8 +525,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
 
     when SILHOUETTE_TILFO
@@ -564,14 +565,12 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
-
-  else
-    # [automatically added else]
+    else
+      # [automatically added else]
     end
-
 
     super
   end
@@ -683,10 +682,9 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         else
           html = "30634-01.html"
         end
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
-
     elsif qs.started?
       case npc.id
       when HIGH_SUMMONER_GALATEA
@@ -907,12 +905,14 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         else
           html = "30640-10.html"
         end
+      else
+        # nothing
       end
     elsif qs.completed?
       if npc.id == HIGH_SUMMONER_GALATEA
         html = get_already_completed_msg(pc)
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
 
     end

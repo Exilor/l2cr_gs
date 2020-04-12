@@ -31,7 +31,7 @@ module VoicedCommandHandler::StatsVCmd
 
     msg = String::Builder.new(300)
     msg << status.kills.size * 50
-    msg << "<html><body><center><font color=\"LEVEL\">[ L2J EVENT ENGINE ]</font></center><br><br>Statistics for player <font color=\"LEVEL\">"
+    msg << "<html><body><center><font color=\"LEVEL\">[ EVENT ENGINE ]</font></center><br><br>Statistics for player <font color=\"LEVEL\">"
     msg << pc.name
     msg << "</font><br>Total kills <font color=\"FF0000\">"
     msg << status.kills.size

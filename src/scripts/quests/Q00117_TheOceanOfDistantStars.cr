@@ -159,14 +159,12 @@ class Scripts::Q00117_TheOceanOfDistantStars < Quest
         else
           # [automatically added else]
         end
-
       when GHOST_OF_A_RAILROAD_ENGINEER
         if qs.memo_state?(9)
           html = "32054-01.html"
-      else
-        # [automatically added else]
-      end
-
+        else
+          # [automatically added else]
+        end
       when GHOST_OF_AN_ANCIENT_RAILROAD_ENGINEER
         case qs.memo_state
         when 1
@@ -180,7 +178,6 @@ class Scripts::Q00117_TheOceanOfDistantStars < Quest
         else
           # [automatically added else]
         end
-
       when BOX
         if qs.memo_state?(4)
           html = "32076-01.html"
@@ -206,7 +203,8 @@ class Scripts::Q00117_TheOceanOfDistantStars < Quest
         else
           # [automatically added else]
         end
-
+      else
+        # nothing
       end
     end
 

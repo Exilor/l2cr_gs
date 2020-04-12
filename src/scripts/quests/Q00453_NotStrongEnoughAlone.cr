@@ -192,7 +192,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
         html = "32734-03.html"
       end
     when State::STARTED
-        case st.cond
+      case st.cond
       when 1
         html = "32734-10.html"
       when 2
@@ -205,6 +205,8 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
         st.give_items(REWARD.sample(random: Rnd).sample(random: Rnd), 1)
         st.exit_quest(QuestType::DAILY, true)
         html = "32734-14.html"
+      else
+        # nothing
       end
     when State::COMPLETED
       if !st.now_available?

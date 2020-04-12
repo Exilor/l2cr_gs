@@ -20,7 +20,7 @@ module CellPathFinding
       if args.size != 2
         raise "invalid buffer definition: #{buf}"
       end
-      ALL_BUFFERS << BufferInfo.new(args.first.to_i32, args.last.to_i32)
+      ALL_BUFFERS << BufferInfo.new(args.first.to_i, args.last.to_i)
     end
   end
 
@@ -28,95 +28,7 @@ module CellPathFinding
     false
   end
 
-  # def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Array(AbstractNodeLoc)?
-  #   gx = GeoData.get_geo_x(x)
-  #   gy = GeoData.get_geo_y(y)
-  #   unless GeoData.has_geo?(x, y)
-  #     return
-  #   end
-  #   gz = GeoData.get_height(x, y, z)
-
-  #   gtx = GeoData.get_geo_x(tx)
-  #   gty = GeoData.get_geo_y(ty)
-  #   unless GeoData.has_geo?(tx, ty)
-  #     return
-  #   end
-  #   gtz = GeoData.get_height(tx, ty, tz)
-
-  #   buffer = alloc(64 + (2 * Math.max((gx - gtx).abs, (gy - gty).abs)), playable)
-  #   unless buffer
-  #     return
-  #   end
-
-  #   begin
-  #     result = buffer.find_path(gx, gy, gz, gtx, gty, gtz)
-
-  #     unless result
-  #       # debug "Couldn't find a buffer."
-  #       @@find_fails += 1
-  #       return
-  #     end
-
-  #     path = construct_path(result)
-  #   rescue e
-  #     error e
-  #     return
-  #   ensure
-  #     buffer.free
-  #   end
-
-  #   if path.size < 3 || Config.max_postfilter_passes <= 0
-  #     @@find_success += 1
-  #     return path
-  #   end
-
-  #   time_stamp = Time.ms
-  #   @@post_filter_uses += 1
-
-  #   if playable
-  #     @@post_filter_playable_uses += 1
-  #   end
-
-  #   pass = 0
-
-  #   loop do
-  #     pass += 1
-  #     @@post_filter_passes += 1
-  #     remove = false
-  #     end_point = path[1..-1]
-  #     current_x = x
-  #     current_y = y
-  #     current_z = z
-  #     mid_point = 0
-
-  #     until end_point.empty?
-  #       loc_middle = path[mid_point]
-  #       loc_end = end_point.shift
-  #       if GeoData.can_move?(current_x, current_y, current_z, loc_end.x, loc_end.y, loc_end.z, instance_id)
-  #         path.delete_at(mid_point)
-  #         remove = true
-  #       else
-  #         current_x = loc_middle.x
-  #         current_y = loc_middle.y
-  #         current_z = loc_middle.z
-  #         mid_point += 1
-  #       end
-  #     end
-
-  #     unless playable && remove && path.size > 2 && pass < Config.max_postfilter_passes
-  #       break
-  #     end
-  #   end
-
-  #   # debug
-
-  #   @@find_success += 1
-  #   @@post_filter_elapsed += Time.ms - time_stamp
-
-  #   path
-  # end
-
-  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Array(AbstractNodeLoc)?
+  def find_path(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id : Int32, playable : Bool) : Deque(AbstractNodeLoc)?
     gx = GeoData.get_geo_x(x)
     gy = GeoData.get_geo_y(y)
     unless GeoData.has_geo?(x, y)
@@ -202,8 +114,8 @@ module CellPathFinding
     path
   end
 
-  private def construct_path(node : AbstractNode) : Array(AbstractNodeLoc)
-    path = [] of AbstractNodeLoc
+  private def construct_path(node : AbstractNode) : Deque(AbstractNodeLoc)
+    path = Deque(AbstractNodeLoc).new
 
     previous_direction_x = Int32::MIN
     previous_direction_y = Int32::MIN
