@@ -3,30 +3,29 @@ task default: :run
 commands = ["crystal build"]
 name_parts = ["l2cr_gs"]
 
-if ARGV.include?("mt")
+if ARGV.delete("mt")
   commands << "-Dpreview_mt"
   name_parts << "_mt"
 end
 
 commands << "src/game_server.cr"
 
-if ARGV.include?("debug")
+if ARGV.delete("debug")
   commands << "--debug"
   name_parts << "_debug"
 end
 
-if ARGV.include?("sm")
+if ARGV.delete("sm")
   commands << "--single-module"
   name_parts << "_sm"
 end
 
-if ARGV.include?("release")
+if ARGV.delete("release")
   commands << "--release"
-  # commands << "--lto=thin" # doesn't compile
   name_parts << "_release"
 end
 
-if ARGV.include?("nodebug")
+if ARGV.delete("nodebug")
   commands << "--no-debug"
   name_parts << "_nodebug"
 end
@@ -35,6 +34,7 @@ EXECUTABLE_NAME = name_parts.join
 
 commands << "--progress" # enable progress output
 commands << "--error-trace"
+commands << "--threads 4" # remove when i get more ram
 commands << "-o" << EXECUTABLE_NAME
 
 BUILD_COMMAND = commands.join(" ")
