@@ -2,7 +2,7 @@ class CursedWeapon
   include Loggable
   include Packets::Outgoing
 
-  @remove_task : Scheduler::PeriodicTask?
+  @remove_task : TaskExecutor::Scheduler::PeriodicTask?
   @transformation_id = 0
 
   property disappear_chance : Int32 = 0

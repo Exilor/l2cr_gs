@@ -6,7 +6,7 @@ class L2SummonAI < L2PlayableAI
   @thinking = false
   @start_avoid = false
   @start_follow : Bool
-  @avoid_task : Scheduler::PeriodicTask?
+  @avoid_task : TaskExecutor::Scheduler::PeriodicTask?
   @last_attack : L2Character?
 
   def initialize(summon : L2Summon)

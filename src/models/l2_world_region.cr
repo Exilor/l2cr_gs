@@ -2,7 +2,7 @@ class L2WorldRegion
   include Loggable
   include Synchronizable
 
-  @neighbors_task : Scheduler::DelayedTask?
+  @neighbors_task : TaskExecutor::Scheduler::DelayedTask?
 
   getter sorrounding_regions = Concurrent::LinkedList(self).new
   getter zones = Concurrent::Array(L2ZoneType).new

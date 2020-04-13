@@ -1,10 +1,10 @@
 class L2SepulcherMonsterInstance < L2MonsterInstance
   private FAKE_PETRIFICATION = SkillHolder.new(4616)
 
-  @victim_spawn_key_box_task : Scheduler::DelayedTask?
-  @victim_shout : Scheduler::DelayedTask?
-  @change_immortal_task : Scheduler::DelayedTask?
-  @on_dead_event_task : Scheduler::DelayedTask?
+  @victim_spawn_key_box_task : TaskExecutor::Scheduler::DelayedTask?
+  @victim_shout : TaskExecutor::Scheduler::DelayedTask?
+  @change_immortal_task : TaskExecutor::Scheduler::DelayedTask?
+  @on_dead_event_task : TaskExecutor::Scheduler::DelayedTask?
 
   property mysterious_box_id : Int32 = 0
 

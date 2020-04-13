@@ -1,5 +1,5 @@
 class QuestTimer
-  @task : Scheduler::Task?
+  @task : TaskExecutor::Scheduler::Task?
   @time : Int64
 
   getter name, npc, player, quest

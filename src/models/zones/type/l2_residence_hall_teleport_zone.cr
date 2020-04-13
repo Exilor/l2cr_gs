@@ -1,7 +1,7 @@
 require "./l2_residence_teleport_zone"
 
 class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
-  @tele_task : Scheduler::DelayedTask?
+  @tele_task : TaskExecutor::Scheduler::DelayedTask?
 
   def set_parameter(name, value)
     if name == "residenceZoneId"

@@ -7,8 +7,8 @@ class TarBeetleSpawn
   private REFRESH_SPAWN_TASK = -> { ZONES.each &.refresh_spawn }
   private REFRESH_SHOTS_TASK = -> { ZONES.each &.refresh_shots }
 
-  @spawn_task : Scheduler::PeriodicTask?
-  @shot_task : Scheduler::PeriodicTask?
+  @spawn_task : TaskExecutor::Scheduler::PeriodicTask?
+  @shot_task : TaskExecutor::Scheduler::PeriodicTask?
 
   def initialize
     load

@@ -64,8 +64,8 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
   private PENDING_ITEM_TO_GET = {} of L2Clan => Int32
 
   @rainbow : SiegableHall?
-  @next_siege : Scheduler::DelayedTask?
-  @siege_end : Scheduler::DelayedTask?
+  @next_siege : TaskExecutor::Scheduler::DelayedTask?
+  @siege_end : TaskExecutor::Scheduler::DelayedTask?
   @registration_ends : String?
   @gourds = {} of Int32 => L2Spawn
 

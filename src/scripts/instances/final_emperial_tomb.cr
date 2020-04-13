@@ -12,8 +12,8 @@ class Scripts::FinalEmperialTomb < AbstractInstance
     property scarlet_h = 0
     property scarlet_a = 0
     property dark_choir_player_count = 0
-    property song_task : Scheduler::DelayedTask?
-    property song_effect_task : Scheduler::DelayedTask?
+    property song_task : TaskExecutor::Scheduler::DelayedTask?
+    property song_effect_task : TaskExecutor::Scheduler::DelayedTask?
     property! on_song : FrintezzaSong
     property! frintezza_dummy : L2Npc?
     property! overhead_dummy : L2Npc?

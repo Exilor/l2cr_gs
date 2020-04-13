@@ -30,8 +30,8 @@ class L2CubicInstance
   SKILL_CUBIC_CURE = 5579
 
   @cubic_delay : Int32
-  @action_task : Scheduler::PeriodicTask?
-  @disappear_task : Scheduler::DelayedTask?
+  @action_task : TaskExecutor::Scheduler::PeriodicTask?
+  @disappear_task : TaskExecutor::Scheduler::DelayedTask?
   @active = false
 
   getter skills = [] of Skill

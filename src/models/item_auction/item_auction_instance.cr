@@ -21,7 +21,7 @@ class ItemAuctionInstance
   @auctions = {} of Int32 => ItemAuction
   @auctions_lock = MyMutex.new
   @items = [] of AuctionItem
-  @state_task : Scheduler::DelayedTask?
+  @state_task : TaskExecutor::Scheduler::DelayedTask?
 
   getter current_auction : ItemAuction?
   getter next_auction : ItemAuction?
@@ -300,7 +300,7 @@ class ItemAuctionInstance
     end
   end
 
-  def state_task=(new_task : Scheduler::DelayedTask)
+  def state_task=(new_task : TaskExecutor::Scheduler::DelayedTask)
     if state_task = @state_task
       state_task.cancel
     end

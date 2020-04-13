@@ -3,7 +3,7 @@ class DropProtection
 
   private PROTECTED_MILLIS_TIME = 15000
 
-  @task : Scheduler::DelayedTask?
+  @task : TaskExecutor::Scheduler::DelayedTask?
 
   getter owner : L2PcInstance?
   getter? "protected"

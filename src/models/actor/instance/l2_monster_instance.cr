@@ -7,7 +7,7 @@ class L2MonsterInstance < L2Attackable
 
   @master : L2MonsterInstance?
   @minion_list : MinionList?
-  @maintenance_task : Scheduler::PeriodicTask?
+  @maintenance_task : TaskExecutor::Scheduler::PeriodicTask?
 
   setter enable_minions : Bool = true
 

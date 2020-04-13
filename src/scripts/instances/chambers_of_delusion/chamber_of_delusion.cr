@@ -1,7 +1,7 @@
 abstract class ChamberOfDelusion < AbstractInstance
   private class CDWorld < InstanceWorld
     getter party_inside, chamber
-    getter banish_task : Scheduler::PeriodicTask?
+    getter banish_task : TaskExecutor::Scheduler::PeriodicTask?
     property current_room : Int32
 
     def initialize(chamber : ChamberOfDelusion, party : L2Party)

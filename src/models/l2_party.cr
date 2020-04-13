@@ -9,8 +9,8 @@ class L2Party < AbstractPlayerGroup
   private PARTY_POSITION_BROADCAST_INTERVAL = 12
   private PARTY_DISTRIBUTION_TYPE_REQUEST_TIMEOUT = 15
 
-  @position_broadcast_task : Scheduler::PeriodicTask?
-  @change_distribution_type_request_task : Scheduler::DelayedTask?
+  @position_broadcast_task : TaskExecutor::Scheduler::PeriodicTask?
+  @change_distribution_type_request_task : TaskExecutor::Scheduler::DelayedTask?
   @change_distribution_type_answers : Set(Int32)?
   @position_packet : PartyMemberPosition?
   @item_last_loot = 0

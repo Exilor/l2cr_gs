@@ -1,7 +1,7 @@
 class SkillChannelizer
   include Loggable
 
-  @task : Scheduler::PeriodicTask?
+  @task : TaskExecutor::Scheduler::PeriodicTask?
 
   getter! channelized : Array(L2Character)
   getter! skill : Skill

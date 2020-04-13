@@ -1,8 +1,8 @@
 module DecayTaskManager
   extend self
 
-  private TASKS = Concurrent::Map(L2Character, Scheduler::DelayedTask).new
-  private POOL = Scheduler.new(pool_size: 1)
+  private TASKS = Concurrent::Map(L2Character, TaskExecutor::Scheduler::DelayedTask).new
+  private POOL = TaskExecutor::Scheduler.new(pool_size: 1)
 
   def add(char : L2Character)
     if template = char.template.as?(L2NpcTemplate)

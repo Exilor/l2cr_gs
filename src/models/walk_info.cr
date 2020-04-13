@@ -8,7 +8,7 @@ class WalkInfo
 
   getter current_node_id = 0
   property last_action : Int64 = 0i64
-  property walk_check_task : Scheduler::PeriodicTask?
+  property walk_check_task : TaskExecutor::Scheduler::PeriodicTask?
   property? blocked : Bool = false
   property? suspended : Bool = false
   property? stopped_by_attack : Bool = false

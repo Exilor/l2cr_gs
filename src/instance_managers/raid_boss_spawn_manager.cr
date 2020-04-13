@@ -4,7 +4,7 @@ module RaidBossSpawnManager
 
   private BOSSES      = Concurrent::Map(Int32, L2RaidBossInstance).new
   private SPAWNS      = Concurrent::Map(Int32, L2Spawn).new
-  private SCHEDULES   = Concurrent::Map(Int32, Scheduler::DelayedTask).new
+  private SCHEDULES   = Concurrent::Map(Int32, TaskExecutor::Scheduler::DelayedTask).new
   private STORED_INFO = Concurrent::Map(Int32, StatsSet).new
 
   enum Status : UInt8

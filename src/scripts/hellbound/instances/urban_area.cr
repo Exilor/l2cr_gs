@@ -1,6 +1,6 @@
 class Scripts::UrbanArea < AbstractInstance
   private class UrbanAreaWorld < InstanceWorld
-    property active_amaskari_call : Scheduler::DelayedTask?
+    property active_amaskari_call : TaskExecutor::Scheduler::DelayedTask?
     property! spawned_amaskari : L2MonsterInstance?
     property? amaskari_dead = false
   end

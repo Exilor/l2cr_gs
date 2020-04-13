@@ -1,7 +1,7 @@
 class Product
   include Loggable
 
-  @restock_task : Scheduler::DelayedTask?
+  @restock_task : TaskExecutor::Scheduler::DelayedTask?
 
   getter buy_list_id, item, restock_delay, max_count
 

@@ -69,7 +69,7 @@ class BlockCheckerEngine
   # Event is started
   property? started = false
   # Event end
-  setter task : Scheduler::DelayedTask?
+  setter task : TaskExecutor::Scheduler::DelayedTask?
   # Preserve from exploit reward by logging out
   @abnormal_end = false
 

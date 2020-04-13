@@ -2,7 +2,7 @@ require "../../../data/sql/summon_effects_table"
 
 class L2ServitorInstance < L2Summon
   @consume_item_interval_remaining = 0
-  @life_task : Scheduler::PeriodicTask?
+  @life_task : TaskExecutor::Scheduler::PeriodicTask?
 
   getter life_time = 0
   getter consume_item_interval = 0

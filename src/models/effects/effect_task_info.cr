@@ -1,2 +1,2 @@
 record EffectTaskInfo, effect_task : EffectTickTask,
-  scheduled_future : Scheduler::PeriodicTask
+  scheduled_future : TaskExecutor::Scheduler::PeriodicTask

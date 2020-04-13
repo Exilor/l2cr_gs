@@ -20,8 +20,8 @@ class L2AttackableAI < L2CharacterAI
   @chaos_time = 0
   @last_buff_tick = 0
   @thinking = false
-  @ai_task : Scheduler::PeriodicTask?
-  @fear_task : Scheduler::PeriodicTask?
+  @ai_task : TaskExecutor::Scheduler::PeriodicTask?
+  @fear_task : TaskExecutor::Scheduler::PeriodicTask?
 
   property fear_time : Int32 = 0
   property global_aggro : Int32 = -10

@@ -16,7 +16,7 @@ class L2ItemInstance < L2Object
   @db_lock = MyMutex.new
   @shots_mask = 0
   @enchant_options = [] of Options
-  @life_time_task : Scheduler::DelayedTask?
+  @life_time_task : TaskExecutor::Scheduler::DelayedTask?
 
   getter owner_id = 0
   getter count : Int64 = 0i64
@@ -35,7 +35,7 @@ class L2ItemInstance < L2Object
   property drop_time : Int64 = 0i64
   property last_change : Int32 = 2
   property dropper_l2id : Int32 = 0
-  property item_loot_schedule : Scheduler::DelayedTask?
+  property item_loot_schedule : TaskExecutor::Scheduler::DelayedTask?
   property? protected : Bool = false
   property? exists_in_db : Bool = false
   property? stored_in_db : Bool = false

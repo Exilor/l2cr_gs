@@ -650,7 +650,7 @@ module SevenSignsFestival
   private FESTIVAL_DATA = {} of Int32 => Hash(Int32, StatsSet)
 
   @@manager_instance : FestivalManager?
-  @@manager_scheduled_task : Scheduler::PeriodicTask?
+  @@manager_scheduled_task : TaskExecutor::Scheduler::PeriodicTask?
   @@next_festival_cycle_start = 0i64
   @@dawn_chat_guide : L2Npc?
   @@dusk_chat_guide : L2Npc?
@@ -721,7 +721,7 @@ module SevenSignsFestival
     !npc_id.between?(18109, 18118)
   end
 
-  def festival_manager_schedule : Scheduler::PeriodicTask
+  def festival_manager_schedule : TaskExecutor::Scheduler::PeriodicTask
     @@manager_scheduled_task || start_festival_manager
     @@manager_scheduled_task.not_nil!
   end

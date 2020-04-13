@@ -2,9 +2,9 @@ class L2SepulcherNpcInstance < L2Npc
   private HTML_FILE_PATH = "data/html/SepulcherNpc/"
   private HALLS_KEY = 7260
 
-  @close_task : Scheduler::DelayedTask?
-  @spawn_next_mysterious_box_task : Scheduler::DelayedTask?
-  @spawn_monster_task : Scheduler::DelayedTask?
+  @close_task : TaskExecutor::Scheduler::DelayedTask?
+  @spawn_next_mysterious_box_task : TaskExecutor::Scheduler::DelayedTask?
+  @spawn_monster_task : TaskExecutor::Scheduler::DelayedTask?
 
   def initialize(template : L2NpcTemplate)
     super

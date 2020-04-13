@@ -9,7 +9,7 @@ class BuffInfo
   @tasks : IHash(AbstractEffect, EffectTaskInfo)?
 
   getter period_start_ticks : Int32
-  getter task : Scheduler::DelayedTask?
+  getter task : TaskExecutor::Scheduler::DelayedTask?
   getter effects = [] of AbstractEffect
   getter effector, effected, skill
   property abnormal_time : Int32

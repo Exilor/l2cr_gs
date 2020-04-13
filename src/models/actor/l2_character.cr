@@ -40,7 +40,7 @@ abstract class L2Character < L2Object
   @ai : L2CharacterAI?
   @exceptions = 0i64
   @move : MoveData?
-  @skill_cast_2 : Scheduler::DelayedTask?
+  @skill_cast_2 : TaskExecutor::Scheduler::DelayedTask?
   @attack_by_list : ISet(L2Character)?
 
   getter title : String = ""
@@ -60,7 +60,7 @@ abstract class L2Character < L2Object
   getter? core_ai_disabled = false
   setter paralyzed : Bool = false
   setter pending_revive : Bool = false
-  setter skill_cast : Scheduler::DelayedTask?
+  setter skill_cast : TaskExecutor::Scheduler::DelayedTask?
   setter invul : Bool = false
   property attack_end_time : Int64 = 0i64
   property bow_attack_end_time : Int32 = 0

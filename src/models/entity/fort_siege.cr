@@ -11,9 +11,9 @@ class FortSiege
   private DELETE_FORT_SIEGECLANS = "DELETE FROM fortsiege_clans WHERE fort_id = ?"
 
   @siege_guard_manager : FortSiegeGuardManager?
-  @siege_end : Scheduler::DelayedTask?
-  @siege_restore : Scheduler::DelayedTask?
-  @siege_start_task : Scheduler::DelayedTask?
+  @siege_end : TaskExecutor::Scheduler::DelayedTask?
+  @siege_restore : TaskExecutor::Scheduler::DelayedTask?
+  @siege_start_task : TaskExecutor::Scheduler::DelayedTask?
   @attacker_clans = Concurrent::Array(L2SiegeClan).new
 
   getter commanders = Concurrent::Array(L2Spawn).new
