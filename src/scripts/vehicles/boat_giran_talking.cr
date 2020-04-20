@@ -75,38 +75,30 @@ class BoatGiranTalking
   def call
     case @cycle
     when 0
-      # debug "Leaving for Talking Island in 5 minutes."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], LEAVE_GIRAN5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 1
-      # debug "Leaving for Talking Island in 1 minute."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], LEAVE_GIRAN1)
       ThreadPoolManager.schedule_general(self, 40_000)
     when 2
-      # debug "About to leave for Talking Island."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], LEAVE_GIRAN0)
       ThreadPoolManager.schedule_general(self, 20_000)
     when 3
-      # debug "Leaving for Talking Island."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], LEAVING_GIRAN, ARRIVAL_TALKING15)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       @boat.pay_for_ride(3946, 1, 46763, 187041, -3451)
       @boat.execute_path(GIRAN_TO_TALKING)
       ThreadPoolManager.schedule_general(self, 250_000)
     when 4
-      # debug "Arriving in Talking Island in 10 minutes."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, ARRIVAL_TALKING10)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 5
-      # debug "Arriving in Talking Island in 5 minutes."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, ARRIVAL_TALKING5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 6
-      # debug "Arriving in Talking Island in 1 minute,"
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, ARRIVAL_TALKING1)
     when 7
       if BoatManager.dock_busy? BoatManager::TALKING_ISLAND
-        # debug "The Talking Island Harbor is busy."
         if @shout_count == 0
           BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, BUSY_TALKING)
         end
@@ -122,25 +114,20 @@ class BoatGiranTalking
         @boat.execute_path(TALKING_DOCK)
       end
     when 8
-      # debug "Docked in Talking Island Harbor. Leaving For Giran in 10 minutes."
       BoatManager.dock_ship(BoatManager::TALKING_ISLAND, true)
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, ARRIVED_AT_TALKING, ARRIVED_AT_TALKING_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     when 9
-      # debug "Leaving for Giran in 5 minutes."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, LEAVE_TALKING5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 10
-      # debug "Leaving for Giran in 1 minute."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, LEAVE_TALKING1)
       ThreadPoolManager.schedule_general(self, 40_000)
     when 11
-      # debug "About to leave for Giran."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, LEAVE_TALKING0)
       ThreadPoolManager.schedule_general(self, 20_000)
     when 12
-      # debug "Leaving for Giran."
       BoatManager.dock_ship(BoatManager::TALKING_ISLAND, false)
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, LEAVING_TALKING)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
@@ -148,33 +135,26 @@ class BoatGiranTalking
       @boat.execute_path(TALKING_TO_GIRAN)
       ThreadPoolManager.schedule_general(self, 200_000)
     when 13
-      # debug "Arriving in Giran in 20 minutes."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVAL_GIRAN20)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 14
-      # debug "Arriving in Giran in 15 minutes."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVAL_GIRAN15)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 15
-      # debug "Arriving in Giran in 10 minutes."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVAL_GIRAN10)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 16
-      # debug "Arriving in Giran in 5 minutes."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVAL_GIRAN5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 17
-      # debug "Arriving in Giran in 1 minute."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVAL_GIRAN1)
     when 18
-      # debug "Docked in Giran Harbor. Departing again in 10 minutes."
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVED_AT_GIRAN, ARRIVED_AT_GIRAN_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     else
       # [automatically added else]
     end
-
 
     @shout_count = 0
     @cycle += 1

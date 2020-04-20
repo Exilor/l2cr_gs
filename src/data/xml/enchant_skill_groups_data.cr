@@ -29,14 +29,14 @@ module EnchantSkillGroupsData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("group") do |d|
-        id = d["id"].to_i
+    find_element(doc, "list") do |n|
+      find_element(n, "group") do |d|
+        id = parse_int(d, "id")
 
         group = ENCHANT_SKILL_GROUPS[id] ||= EnchantSkillGroup.new(id)
 
-        d.find_element("enchant") do |b|
-          set = StatsSet.new(b.attributes)
+        find_element(d, "enchant") do |b|
+          set = get_attributes(b)
           group.add_enchant_detail(set)
         end
       end
@@ -51,7 +51,7 @@ module EnchantSkillGroupsData
       return tmp.enchant_group_details.size
     end
 
-    error { "Error while loading enchant skill ID: #{skill_id} route: #{route} missing group: #{group}." }
+    error { "Error while loading enchant skill id: #{skill_id} route: #{route} missing group: #{group}." }
     0
   end
 

@@ -63,6 +63,7 @@ class Scripts::Q00033_MakeAPairOfDressShoes < Quest
 
   def on_talk(npc, pc)
     st = get_quest_state!(pc)
+
     case npc.id
     when WOODLEY
       case st.state
@@ -87,13 +88,11 @@ class Scripts::Q00033_MakeAPairOfDressShoes < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when LEIKAR
       if st.started?
         if st.cond?(1)
@@ -113,7 +112,6 @@ class Scripts::Q00033_MakeAPairOfDressShoes < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

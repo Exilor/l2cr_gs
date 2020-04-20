@@ -33,7 +33,6 @@ class Scripts::Q00013_ParcelDelivery < Quest
       # [automatically added else]
     end
 
-
     event
   end
 
@@ -57,14 +56,12 @@ class Scripts::Q00013_ParcelDelivery < Quest
         else
           # [automatically added else]
         end
-
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

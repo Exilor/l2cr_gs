@@ -38,7 +38,6 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
         st.exit_quest(false, true)
         html = "30909-02.htm"
       end
-
     else
       # [automatically added else]
     end
@@ -74,7 +73,6 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
         else
           # [automatically added else]
         end
-
       when ANABEL
         if st.cond?(2)
           html = "30909-01.htm"
@@ -82,11 +80,9 @@ class Scripts::Q00029_ChestCaughtWithABaitOfEarth < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

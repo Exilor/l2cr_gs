@@ -36,7 +36,6 @@ class Scripts::Q00050_LanoscosSpecialBait < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -64,6 +63,7 @@ class Scripts::Q00050_LanoscosSpecialBait < Quest
 
   def on_talk(npc, pc)
     st = get_quest_state!(pc)
+
     case st.state
     when State::COMPLETED
       html = get_already_completed_msg(pc)
@@ -74,7 +74,6 @@ class Scripts::Q00050_LanoscosSpecialBait < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

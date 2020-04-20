@@ -2,8 +2,6 @@ require "../../instance_managers/airship_manager"
 require "./boat_engine"
 
 class Scripts::AirShipGludioGracia < AbstractNpcAI
-  include Loggable
-
   private CONTROLLERS = {32607, 32609}
   private GLUDIO_DOCK_ID = 10
   private GRACIA_DOCK_ID = 11
@@ -119,7 +117,7 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
         return obj
       end
     end
-    # warn "Controller not found."
+
     nil
   end
 
@@ -152,24 +150,26 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
     when @ship.in_dock? && @ship.inside_radius?(pc, 600, true, false)
       @ship.add_passenger(pc)
     else
-      if !@ship.in_dock?
-        pc.send_html <<-HTML
-          <html>
-            <body>
-              Custom message:<br>
-              The airship is not docked.
-            </body>
-          </html>
-        HTML
-      elsif !@ship.inside_radius?(pc, 600, true, false)
-        pc.send_html <<-HTML
-          <html>
-            <body>
-              Custom message:<br>
-              The airship is too far away (#{pc.calculate_distance(@ship, true, false).round}/600).
-            </body>
-          </html>
-        HTML
+      if pc.gm?
+        if !@ship.in_dock?
+          pc.send_html <<-HTML
+            <html>
+              <body>
+                Custom message:<br>
+                The airship is not docked.
+              </body>
+            </html>
+          HTML
+        elsif !@ship.inside_radius?(pc, 600, true, false)
+          pc.send_html <<-HTML
+            <html>
+              <body>
+                Custom message:<br>
+                The airship is too far away (#{pc.calculate_distance(@ship, true, false).to_i}/600).
+              </body>
+            </html>
+          HTML
+        end
       end
     end
 
@@ -183,39 +183,31 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
   def call
     case @cycle
     when 0
-      # debug "Leaving the Gludio dock."
       broadcast_in_gludio(NpcString::THE_REGULARLY_SCHEDULED_AIRSHIP_THAT_FLIES_TO_THE_GRACIA_CONTINENT_HAS_DEPARTED)
       @ship.dock_id = 0
       @ship.execute_path(GLUDIO_TO_WARPGATE)
     when 1
       # @ship.tele_to_location -167874, 256731, -509, 41035, false
-      # debug "Setting oust location to Gracia."
       @ship.oust_loc = OUST_GRACIA
       ThreadPoolManager.schedule_general(self, 5000)
     when 2
-      # debug "Heading to the Warpgate to Gracia."
       @ship.execute_path(WARPGATE_TO_GRACIA)
     when 3
-      # debug "Arrived in Gracia. Leaving for Gludio in 1 minute."
       broadcast_in_gracia(NpcString::THE_REGULARLY_SCHEDULED_AIRSHIP_HAS_ARRIVED_IT_WILL_DEPART_FOR_THE_ADEN_CONTINENT_IN_1_MINUTE)
       @ship.dock_id = GRACIA_DOCK_ID
       @ship.oust_players
       ThreadPoolManager.schedule_general(self, 60000)
     when 4
-      # debug "Leaving the Gracia dock."
       broadcast_in_gracia(NpcString::THE_REGULARLY_SCHEDULED_AIRSHIP_THAT_FLIES_TO_THE_ADEN_CONTINENT_HAS_DEPARTED)
       @ship.dock_id = 0
       @ship.execute_path(GRACIA_TO_WARPGATE)
     when 5
       # @ship.tele_to_location -157261, 255664, 221, 64781, false
-      # debug "Setting oust location to Gludio."
       @ship.oust_loc = OUST_GLUDIO
       ThreadPoolManager.schedule_general(self, 5000)
     when 6
-      # debug "Heading to the Warpgate to Gludio."
       @ship.execute_path(WARPGATE_TO_GLUDIO)
     when 7
-      # debug "Arrived in Gludio. Leaving for Gracia in 1 minute."
       broadcast_in_gludio(NpcString::THE_REGULARLY_SCHEDULED_AIRSHIP_HAS_ARRIVED_IT_WILL_DEPART_FOR_THE_GRACIA_CONTINENT_IN_1_MINUTE)
       @ship.dock_id = GLUDIO_DOCK_ID
       @ship.oust_players
@@ -223,7 +215,6 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
     else
       # [automatically added else]
     end
-
 
     @cycle += 1
     if @cycle > 7

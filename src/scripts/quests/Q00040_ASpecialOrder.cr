@@ -68,7 +68,6 @@ class Scripts::Q00040_ASpecialOrder < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -97,13 +96,11 @@ class Scripts::Q00040_ASpecialOrder < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when OFULLE
       case st.cond
       when 2
@@ -122,7 +119,6 @@ class Scripts::Q00040_ASpecialOrder < Quest
       else
         # [automatically added else]
       end
-
     when GESTO
       case st.cond
       when 5
@@ -141,11 +137,9 @@ class Scripts::Q00040_ASpecialOrder < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

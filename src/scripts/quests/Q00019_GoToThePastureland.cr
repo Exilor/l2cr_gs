@@ -61,7 +61,6 @@ class Scripts::Q00019_GoToThePastureland < Quest
       else
         # [automatically added else]
       end
-
     elsif npc.id == TUNATUN && st.cond?(1)
       html = "31537-01.html"
     end

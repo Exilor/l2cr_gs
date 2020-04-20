@@ -40,7 +40,6 @@ class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
     else
       # [automatically added else]
     end
-
   end
 
   def on_talk(npc, pc)
@@ -74,7 +73,6 @@ class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

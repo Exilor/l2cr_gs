@@ -307,42 +307,43 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |list|
-      list.each_element do |n|
-        case n.name.casecmp
+    find_element(doc, "list") do |list|
+      each_element(list) do |n, n_name|
+        case n_name.casecmp
         when "crystal"
-          n.find_element("item") do |d|
-            item_id = d["itemId"].to_i
-            level = d["level"].to_i
-            leveled_item_id = d["leveledItemId"].to_i
+          find_element(n, "item") do |d|
+            item_id = parse_int(d, "itemId")
+            level = parse_int(d, "level")
+            leveled_item_id = parse_int(d, "leveledItemId")
 
             sc = SoulCrystal.new(level, item_id, leveled_item_id)
             SOUL_CRYSTALS[item_id] = sc
           end
         when "npc"
-          n.find_element("item") do |d|
-            npc_id = d["npcId"].to_i
+          find_element(n, "item") do |d|
+            npc_id = parse_int(d, "npcId")
 
             temp = {} of Int32 => LevelingInfo
 
-            d.each_element do |cd|
+            each_element(d) do |cd, cd_name|
               skill_needed = false
               chance = 5
               absorb_type = AbsorbCrystalType::LAST_HIT
 
-              if cd.name.casecmp?("detail")
-                if tmp = cd["absorbType"]?
-                  absorb_type = AbsorbCrystalType.parse(tmp)
+              if cd_name.casecmp?("detail")
+                if tmp = parse_enum(cd, "absorbType", AbsorbCrystalType, nil)
+                  absorb_type = tmp
                 end
-                if tmp = cd["chance"]?
-                  chance = tmp.to_i
+                if tmp = parse_int(cd, "chance", nil)
+                  chance = tmp
                 end
-                if tmp = cd["skill"]?
-                  skill_needed = Bool.new(tmp)
+                tmp = parse_bool(cd, "skill", false)
+                unless tmp.nil?
+                  skill_needed = tmp
                 end
 
-                att1 = cd["maxLevel"]?
-                att2 = cd["levelList"]?
+                att1 = parse_int(cd, "maxLevel", nil)
+                att2 = parse_string(cd, "levelList", nil)
 
                 unless att1 || att2
                   raise "Missing maxlevel/levelList in NPC List (npc_id: #{npc_id})."
@@ -374,7 +375,6 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
         else
           # [automatically added else]
         end
-
       end
     end
   end

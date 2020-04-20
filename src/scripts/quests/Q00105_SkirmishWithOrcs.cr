@@ -61,7 +61,6 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -82,7 +81,6 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -129,7 +127,6 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
     else
       # [automatically added else]
     end
-
 
     html
   end

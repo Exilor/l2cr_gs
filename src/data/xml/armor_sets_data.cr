@@ -25,51 +25,50 @@ module ArmorSetsData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("set") do |d|
+    find_element(doc, "list") do |n|
+      find_element(n, "set") do |d|
         set = ArmorSet.new
-        d.each_element do |a|
-          case a.name
+        each_element(d) do |a, a_name|
+          case a_name
           when "chest"
-            set.chest_id = a["id"].to_i
+            set.chest_id = parse_int(a, "id")
           when "feet"
-            set.feet << a["id"].to_i
+            set.feet << parse_int(a, "id")
           when "gloves"
-            set.gloves << a["id"].to_i
+            set.gloves << parse_int(a, "id")
           when "head"
-            set.head << a["id"].to_i
+            set.head << parse_int(a, "id")
           when "legs"
-            set.legs << a["id"].to_i
+            set.legs << parse_int(a, "id")
           when "shield"
-            set.shield << a["id"].to_i
+            set.shield << parse_int(a, "id")
           when "skill"
-            id = a["id"].to_i
-            lvl = a["level"].to_i
+            id = parse_int(a, "id")
+            lvl = parse_int(a, "level")
             set.skills << SkillHolder.new(id, lvl)
           when "shield_skill"
-            id = a["id"].to_i
-            lvl = a["level"].to_i
+            id = parse_int(a, "id")
+            lvl = parse_int(a, "level")
             set.shield_skills << SkillHolder.new(id, lvl)
           when "enchant6skill"
-            id = a["id"].to_i
-            lvl = a["level"].to_i
+            id = parse_int(a, "id")
+            lvl = parse_int(a, "level")
             set.enchant_6_skill << SkillHolder.new(id, lvl)
           when "con"
-            set.con = a["val"].to_i
+            set.con = parse_int(a, "val")
           when "dex"
-            set.dex = a["val"].to_i
+            set.dex = parse_int(a, "val")
           when "str"
-            set.str = a["val"].to_i
+            set.str = parse_int(a, "val")
           when "men"
-            set.men = a["val"].to_i
+            set.men = parse_int(a, "val")
           when "wit"
-            set.wit = a["val"].to_i
+            set.wit = parse_int(a, "val")
           when "int"
-            set.int = a["val"].to_i
+            set.int = parse_int(a, "val")
           else
             # [automatically added else]
           end
-
         end
 
         SETS[set.chest_id] = set

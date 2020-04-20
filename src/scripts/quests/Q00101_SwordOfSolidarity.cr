@@ -70,7 +70,6 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -146,13 +145,11 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when ALTRAN
       case st.cond
       when 1
@@ -183,11 +180,9 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

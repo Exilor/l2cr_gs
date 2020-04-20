@@ -138,13 +138,11 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
           else
             # [automatically added else]
           end
-
         when State::COMPLETED
           html = get_already_completed_msg(pc)
         else
           # [automatically added else]
         end
-
       when COBENDELL
         case st.cond
         when 1
@@ -181,7 +179,6 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
         else
           # [automatically added else]
         end
-
       when GARTRANDELL, RAYEN, VELTRESS, BERROS
         if st.has_quest_items?(ALBERIUS_LIST, SENTINELS[npc.id])
           st.take_items(SENTINELS[npc.id], -1)
@@ -194,7 +191,6 @@ class Scripts::Q00102_SeaOfSporesFever < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)

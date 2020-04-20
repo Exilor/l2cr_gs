@@ -20,17 +20,17 @@ module EnchantItemData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.each_element do |d|
-        if d.name.casecmp?("enchant")
-          set = StatsSet.new(d.attributes)
+    find_element(doc, "list") do |n|
+      each_element(n) do |d, d_name|
+        if d_name.casecmp?("enchant")
+          set = get_attributes(d)
           item = EnchantScroll.new(set)
-          d.find_element("item") do |cd|
-            item.add_item(cd["id"].to_i)
+          find_element(d, "item") do |cd|
+            item.add_item(parse_int(cd, "id"))
           end
           SCROLLS[item.id] = item
-        elsif d.name.casecmp?("support")
-          set = StatsSet.new(d.attributes)
+        elsif d_name.casecmp?("support")
+          set = get_attributes(d)
           item = EnchantSupportItem.new(set)
           SUPPORTS[item.id] = item
         end

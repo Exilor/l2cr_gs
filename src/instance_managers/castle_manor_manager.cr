@@ -56,11 +56,11 @@ module CastleManorManager
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("castle") do |d|
-        castle_id = d["id"].to_i
-        d.find_element("crop") do |c|
-          set = StatsSet.new(c.attributes)
+    find_element(doc, "list") do |n|
+      find_element(n, "castle") do |d|
+        castle_id = parse_int(d, "id")
+        find_element(d, "crop") do |c|
+          set = get_attributes(c)
           set["castleId"] = castle_id
           SEEDS[set.get_i32("seedId")] = L2Seed.new(set)
         end

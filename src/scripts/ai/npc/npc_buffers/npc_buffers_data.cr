@@ -10,13 +10,13 @@ module NpcBuffersData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("npc") do |d|
-        npc_id = d["id"].to_i
+    find_element(doc, "list") do |n|
+      find_element(n, "npc") do |d|
+        npc_id = parse_int(d, "id")
         npc = NpcBufferData.new(npc_id)
 
-        d.find_element("skill") do |c|
-          set = StatsSet.new(c.attributes)
+        find_element(d, "skill") do |c|
+          set = get_attributes(c)
           npc.add_skill(NpcBufferSkillData.new(set))
         end
 

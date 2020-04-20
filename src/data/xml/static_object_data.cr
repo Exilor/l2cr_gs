@@ -11,9 +11,9 @@ module StaticObjectData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("object") do |d|
-        add_object(StatsSet.new(d.attributes))
+    find_element(doc, "list") do |n|
+      find_element(n,"object") do |d|
+        add_object(get_attributes(d))
       end
     end
   end

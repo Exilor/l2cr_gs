@@ -40,7 +40,6 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
     else
       # [automatically added else]
     end
-
   end
 
   def on_talk(npc, pc)
@@ -70,7 +69,6 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
       else
         # [automatically added else]
       end
-
     when State::COMPLETED
       if npc.id == CADMON
         html = get_already_completed_msg(pc)
@@ -78,7 +76,6 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

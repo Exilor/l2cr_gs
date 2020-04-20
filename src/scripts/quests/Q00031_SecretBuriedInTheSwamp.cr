@@ -68,7 +68,6 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -95,13 +94,11 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when CORPSE_OF_DWARF
       case st.cond
       when 1
@@ -111,7 +108,6 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
       else
         # [automatically added else]
       end
-
     when FORGOTTEN_MONUMENT_1..FORGOTTEN_MONUMENT_4
       loc = MONUMENTS.index(npc.id).not_nil! + 3
       if st.cond?(loc)
@@ -122,7 +118,6 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

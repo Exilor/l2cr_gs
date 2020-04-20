@@ -146,44 +146,47 @@ class Scripts::FinalEmperialTomb < AbstractInstance
   private def parse_document(doc, file)
     spawn_count = 0
 
-    doc.find_element("list") do |list|
-      list.each_element do |n|
-        if n.name.casecmp?("npc")
-          n.find_element("spawn") do |d|
-            npc_id = d["npcId"].to_i
-            flag = d["flag"].to_i
+    find_element(doc, "list") do |list|
+      each_element(list) do |n, n_name|
+        if n_name.casecmp?("npc")
+          find_element(n, "spawn") do |d|
+            npc_id = parse_int(d, "npcId")
+            flag = parse_int(d, "flag")
             SPAWN_LIST[flag] ||= [] of FETSpawn
-            d.each_element do |cd|
-              if cd.name.casecmp?("loc")
+             each_element(d) do |cd, cd_name|
+              if cd_name.casecmp?("loc")
                 spw = FETSpawn.new
                 spw.npc_id = npc_id
-                next unless tmp = cd["x"]?
-                spw.x = tmp.to_i
-                next unless tmp = cd["y"]?
-                spw.y = tmp.to_i
-                next unless tmp = cd["z"]?
-                spw.z = tmp.to_i
-                next unless tmp = cd["heading"]?
-                spw.heading = tmp.to_i
-                if tmp = cd["mustKill"]?
-                  spw.needed_next_flag = Bool.new(tmp)
+                next unless x = parse_int(cd, "x", nil)
+                spw.x = x
+                next unless y = parse_int(cd, "y", nil)
+                spw.y = y
+                next unless z = parse_int(cd, "z", nil)
+                spw.z = z
+                next unless heading = parse_int(cd, "heading", nil)
+                spw.heading = heading
+                tmp = parse_bool(cd, "mustKill", nil)
+                unless tmp.nil?
+                  spw.needed_next_flag = tmp
                 end
                 if spw.needed_next_flag?
                   MUST_KILL_MOBS_ID << npc_id
                 end
                 SPAWN_LIST[flag] << spw
                 spawn_count += 1
-              elsif cd.name.casecmp?("zone")
+              elsif cd_name.casecmp?("zone")
                 spw = FETSpawn.new
                 spw.npc_id = npc_id
                 spw.is_zone = true
 
-                next unless tmp = cd["id"]?
-                spw.zone = tmp.to_i
-                next unless tmp = cd["count"]?
-                spw.count = tmp.to_i
-                if tmp = cd["mustKill"]?
-                  spw.needed_next_flag = Bool.new(tmp)
+                next unless zone = parse_int(cd, "id", nil)
+                spw.zone = zone
+                next unless count = parse_int(cd, "count", nil)
+                spw.count = count
+
+                tmp = parse_bool(cd, "mustKill", nil)
+                unless tmp.nil?
+                  spw.needed_next_flag = tmp
                 end
                 if spw.needed_next_flag?
                   MUST_KILL_MOBS_ID << npc_id
@@ -193,33 +196,28 @@ class Scripts::FinalEmperialTomb < AbstractInstance
               end
             end
           end
-        elsif n.name.casecmp?("spawnZones")
-          n.find_element("zone") do |d|
-            unless tmp = d["id"]?
+        elsif n_name.casecmp?("spawnZones")
+          find_element(n, "zone") do |d|
+            unless id = parse_int(d, "id", nil)
               warn "Missing id in spawnZones list."
               next
             end
-            id = tmp.to_i
 
-            unless tmp = d["minZ"]?
+            unless min_z = parse_int(d, "minZ", nil)
               warn "Missing minZ in spawnZones list."
               next
             end
-            min_z = tmp.to_i
 
-            unless tmp = d["maxZ"]?
+            unless max_z = parse_int(d, "maxZ", nil)
               warn "Missing maxZ in spawnZones list."
               next
             end
-            max_z = tmp.to_i
 
             ter = L2Territory.new(id)
 
-            d.find_element("point") do |cd|
-              next unless tmp = cd["x"]?
-              x = tmp.to_i
-              next unless tmp = cd["y"]?
-              y = tmp.to_i
+            find_element(d, "point") do |cd|
+              next unless x = parse_int(cd, "x", nil)
+              next unless y = parse_int(cd, "y", nil)
 
               ter.add(x, y, min_z, max_z, 0)
             end

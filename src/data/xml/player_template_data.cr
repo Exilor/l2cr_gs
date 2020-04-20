@@ -19,40 +19,40 @@ module PlayerTemplateData
     class_id = 0
     data_count = 0
 
-    doc.find_element("list") do |list|
-      list.each_element do |d|
-        case d.name.casecmp
+    find_element(doc, "list") do |list|
+      each_element(list) do |d, d_name|
+        case d_name.casecmp
         when "classId"
-          class_id = d.text.to_i
+          class_id = get_content(d).to_i
         when "staticdata"
           set = StatsSet.new
           set["classId"] = class_id
-          d.each_element do |nd|
-            next if nd.name.casecmp?("text")
-            if nd.children.size > 1
-              nd.each_element do |cnd|
-                if nd.name.casecmp?("collisionMale")
-                  if cnd.name.casecmp?("radius")
-                    set["collisionRadius"] = cnd.text
-                  elsif cnd.name.casecmp?("height")
-                    set["collisionHeight"] = cnd.text
+          each_element(d) do |nd, nd_name|
+            next if nd_name.casecmp?("text")
+            if get_children(nd).size > 1
+              each_element(nd) do |cnd, cnd_name|
+                if nd_name.casecmp?("collisionMale")
+                  if cnd_name.casecmp?("radius")
+                    set["collisionRadius"] = get_content(cnd)
+                  elsif cnd_name.casecmp?("height")
+                    set["collisionHeight"] = get_content(cnd)
                   end
                 end
 
-                if cnd.name.casecmp?("walk")
-                  set["baseWalkSpd"] = cnd.text
-                elsif cnd.name.casecmp?("run")
-                  set["baseRunSpd"] = cnd.text
-                elsif cnd.name.casecmp?("slowSwim")
-                  set["baseSwimWalkSpd"] = cnd.text
-                elsif cnd.name.casecmp?("fastSwim")
-                  set["baseSwimRunSpd"] = cnd.text
-                elsif cnd.name != "text"
-                  set[nd.name + cnd.name] = cnd.text
+                if cnd_name.casecmp?("walk")
+                  set["baseWalkSpd"] = get_content(cnd)
+                elsif cnd_name.casecmp?("run")
+                  set["baseRunSpd"] = get_content(cnd)
+                elsif cnd_name.casecmp?("slowSwim")
+                  set["baseSwimWalkSpd"] = get_content(cnd)
+                elsif cnd_name.casecmp?("fastSwim")
+                  set["baseSwimRunSpd"] = get_content(cnd)
+                elsif cnd_name != "text"
+                  set[nd_name + cnd_name] = get_content(cnd)
                 end
               end
             else
-              set[nd.name] = nd.text
+              set[nd_name] = get_content(nd)
             end
           end
           set["basePDef"] = set.get_i32("basePDefchest", 0) + set.get_i32("basePDeflegs", 0) + set.get_i32("basePDefhead", 0) + set.get_i32("basePDeffeet", 0) + set.get_i32("basePDefgloves", 0) + set.get_i32("basePDefunderwear", 0) + set.get_i32("basePDefcloak", 0)
@@ -60,14 +60,13 @@ module PlayerTemplateData
           template = L2PcTemplate.new(set)
           TEMPLATES[ClassId[class_id]] = template
          when "lvlUpgainData"
-          d.each_element do |ln|
-            if ln.name.casecmp?("level")
-              level = ln["val"].to_i
-              ln.each_element do |vn|
-                name = vn.name
-                if name.starts_with?("hp", "mp", "cp")
+          each_element(d) do |ln, ln_name|
+            if ln_name.casecmp?("level")
+              level = parse_int(ln, "val")
+              each_element(ln) do |vn, vn_name|
+                if vn_name.starts_with?("hp", "mp", "cp")
                   if tmp = TEMPLATES[ClassId[class_id]]?
-                    tmp.set_upgain_value(name, level, vn.text.to_f)
+                    tmp.set_upgain_value(vn_name, level, get_content(vn).to_f)
                     data_count += 1
                   end
                 end
@@ -77,7 +76,6 @@ module PlayerTemplateData
         else
           # [automatically added else]
         end
-
       end
     end
   end

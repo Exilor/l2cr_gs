@@ -14,8 +14,8 @@ module HellboundPointData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |list|
-      list.each_element do |d|
+    find_element(doc, "list") do |list|
+      each_element(list) do |d|
         parse_point(d)
       end
     end
@@ -26,44 +26,30 @@ module HellboundPointData
       return
     end
 
-    unless tmp = d["id"]?
+    unless npc_id = parse_int(d, "id", nil)
       error "Missing NPC id."
       return
     end
 
-    npc_id = tmp.to_i
-
-    unless tmp = d["points"]?
+    unless points = parse_int(d, "points", nil)
       error { "Missing reward point info for NPC with id #{npc_id}." }
       return
     end
 
-    points = tmp.to_i
-
-    unless tmp = d["minHellboundLvl"]?
+    unless min_hb_lvl = parse_int(d, "minHellboundLvl", nil)
       error { "Missing minHellboundLvl info for NPC with id #{npc_id}." }
       return
     end
 
-    min_hb_lvl = tmp.to_i
-
-    unless tmp = d["maxHellboundLvl"]?
+    unless max_hb_lvl = parse_int(d, "maxHellboundLvl", nil)
       error { "Missing maxHellboundLvl info for NPC with id #{npc_id}." }
       return
     end
 
-    max_hb_lvl = tmp.to_i
+    lowest_trust_limit = parse_int(d, "lowestTrustLimit", 0)
 
-    if tmp = d["lowestTrustLimit"]?
-      lowest_trust_limit = tmp.to_i
-    end
-
-    POINTS_INFO[npc_id] = HellboundPoint.new(
-      points,
-      min_hb_lvl,
-      max_hb_lvl,
-      lowest_trust_limit || 0
-    )
+    hp = HellboundPoint.new(points, min_hb_lvl, max_hb_lvl, lowest_trust_limit)
+    POINTS_INFO[npc_id] = hp
   end
 
   def points_info : Hash(Int32, HellboundPoint)

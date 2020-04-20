@@ -59,7 +59,6 @@ class Scripts::Q00042_HelpTheUncle < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -104,13 +103,11 @@ class Scripts::Q00042_HelpTheUncle < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when SOPHYA
       if st.started?
         case st.cond
@@ -126,7 +123,6 @@ class Scripts::Q00042_HelpTheUncle < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

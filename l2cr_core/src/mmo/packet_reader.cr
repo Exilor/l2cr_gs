@@ -30,7 +30,7 @@ class MMO::PacketReader(T)
 
       manager.recycle_buffer(buf)
 
-      debug { "#{con.to_log} stopped receiving packets." }
+      {% if flag?(:preview_mt) %} debug { "#{con.to_log} stopped receiving packets." } {% end %}
     end
   end
 
@@ -57,6 +57,8 @@ class MMO::PacketReader(T)
         {% if flag?(:preview_mt) %} debug { "closing connection (read result: #{result})" } {% end %}
         con.client.on_forced_disconnection
         manager.close_connection_impl(con)
+      else
+        # nothing
       end
       false
     end

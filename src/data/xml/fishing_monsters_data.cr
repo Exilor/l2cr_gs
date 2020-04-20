@@ -13,9 +13,9 @@ module FishingMonstersData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("fishingMonster") do |d|
-        set = StatsSet.new(d.attributes)
+    find_element(doc, "list") do |n|
+      find_element(n, "fishingMonster") do |d|
+        set = get_attributes(d)
         mob = L2FishingMonster.new(set)
         DATA[mob.id] = mob
       end

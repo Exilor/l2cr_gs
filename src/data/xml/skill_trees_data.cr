@@ -65,49 +65,49 @@ module SkillTreesData
   private def parse_document(doc, file)
     c_id = -1
     class_id = nil
-    doc.find_element("list") do |n|
-      n.find_element("skillTree") do |d|
+
+    find_element(doc, "list") do |n|
+      find_element(n, "skillTree") do |d|
         class_skill_tree = {} of Int32 => L2SkillLearn
         transfer_skill_tree = {} of Int32 => L2SkillLearn
 
-        type = d["type"]
+        type = parse_string(d, "type")
 
-        if id = d["classId"]?.try &.to_i
+        if id = parse_int(d, "classId", nil)
           c_id = id
           class_id = ClassId[id]
         else
           c_id = -1
         end
 
-        if id = d["parentClassId"]?.try &.to_i
+        if id = parse_int(d, "parentClassId", nil)
           PARENT_CLASS_MAP[class_id.not_nil!] = ClassId[id]
         end
 
-        d.each_element do |c|
-          learn_skill_set = StatsSet.new(c.attributes)
+        each_element(d) do |c|
+          learn_skill_set = get_attributes(c)
           skill_learn = L2SkillLearn.new(learn_skill_set)
 
-          c.each_element do |b|
-            case b.name
+          each_element(c) do |b, b_name|
+            case b_name
             when "item"
-              id, count = b["id"].to_i, b["count"].to_i
-              skill_learn.add_required_item(ItemHolder.new(id, count.to_i64))
+              id, count = parse_int(b, "id"), parse_long(b, "count")
+              skill_learn.add_required_item(ItemHolder.new(id, count))
             when "preRequisiteSkill"
-              id, lvl = b["id"].to_i, b["lvl"].to_i
+              id, lvl = parse_int(b, "id"), parse_int(b, "lvl")
               skill_learn.add_required_skill(SkillHolder.new(id, lvl))
             when "race"
-              skill_learn.add_race(Race.parse(b.content))
+              skill_learn.add_race(Race.parse(get_content(b)))
             when "residenceId"
-              skill_learn.add_residence_id(b.content.to_i)
+              skill_learn.add_residence_id(get_content(b).to_i)
             when "socialClass"
-              skill_learn.social_class = SocialClass.parse(b.content)
+              skill_learn.social_class = SocialClass.parse(get_content(b))
             when "subClassConditions"
-              slot, lvl = b["slot"].to_i, b["lvl"].to_i
+              slot, lvl = parse_int(b, "slot"), parse_int(b, "lvl")
               skill_learn.add_subclass_conditions(slot, lvl)
             else
               # [automatically added else]
             end
-
           end
 
           hash = SkillData.get_skill_hash(skill_learn.skill_id, skill_learn.skill_level)
@@ -546,7 +546,6 @@ module SkillTreesData
     else
       # [automatically added else]
     end
-
   end
 
   def get_class_skill(id : Int32, lvl : Int32, class_id : ClassId) : L2SkillLearn?
@@ -629,7 +628,6 @@ module SkillTreesData
       return true
     end
 
-
     max_lvl = SkillData.get_max_level(skill.id)
     hash = SkillData.get_skill_hash(skill.id, Math.min(skill.level, max_lvl))
 
@@ -680,20 +678,18 @@ module SkillTreesData
       end
     end
 
-    info do
-      "Loaded #{class_skill_tree_count} Class Skills for #{CLASS_SKILL_TREES.size} Class Skill Trees.\n" \
-      "Loaded #{SUBCLASS_SKILL_TREE.size} Subclass Skills.\n" \
-      "Loaded #{transfer_skill_tree_count} Transfer Skills for #{TRANSFER_SKILL_TREES.size} Transfer Skill Trees.\n" \
-      "Loaded #{FISHING_SKILL_TREE.size} Fishing Skills, #{dw_fish_skill_tree_count} Dwarven only Fishing Skills.\n" \
-      "Loaded #{COLLECT_SKILL_TREE.size} Collect Skills.\n" \
-      "Loaded #{PLEDGE_SKILL_TREE.size} Pledge Skills, #{PLEDGE_SKILL_TREE.size - res_skill_count} for Pledge and #{res_skill_count} Residential.\n" \
-      "Loaded #{SUBPLEDGE_SKILL_TREE.size} Subpledge Skills.\n" \
-      "Loaded #{TRANSFORM_SKILL_TREE.size} Transform Skills.\n" \
-      "Loaded #{NOBLE_SKILL_TREE.size} Noble Skills.\n" \
-      "Loaded #{HERO_SKILL_TREE.size} Hero Skills.\n" \
-      "Loaded #{GM_SKILL_TREE.size} GM Skills.\n" \
-      "Loaded #{GM_AURA_SKILL_TREE.size} GM Aura Skills.\n" \
-      "Loaded #{COMMON_SKILL_TREE.size} Common Skills to all classes."
-    end
+    info { "Loaded #{class_skill_tree_count} Class Skills for #{CLASS_SKILL_TREES.size} Class Skill Trees." }
+    info { "Loaded #{SUBCLASS_SKILL_TREE.size} Subclass Skills." }
+    info { "Loaded #{transfer_skill_tree_count} Transfer Skills for #{TRANSFER_SKILL_TREES.size} Transfer Skill Trees." }
+    info { "Loaded #{FISHING_SKILL_TREE.size} Fishing Skills, #{dw_fish_skill_tree_count} Dwarven only Fishing Skills." }
+    info { "Loaded #{COLLECT_SKILL_TREE.size} Collect Skills." }
+    info { "Loaded #{PLEDGE_SKILL_TREE.size} Pledge Skills, #{PLEDGE_SKILL_TREE.size - res_skill_count} for Pledge and #{res_skill_count} Residential." }
+    info { "Loaded #{SUBPLEDGE_SKILL_TREE.size} Subpledge Skills." }
+    info { "Loaded #{TRANSFORM_SKILL_TREE.size} Transform Skills." }
+    info { "Loaded #{NOBLE_SKILL_TREE.size} Noble Skills." }
+    info { "Loaded #{HERO_SKILL_TREE.size} Hero Skills." }
+    info { "Loaded #{GM_SKILL_TREE.size} GM Skills." }
+    info { "Loaded #{GM_AURA_SKILL_TREE.size} GM Aura Skills." }
+    info { "Loaded #{COMMON_SKILL_TREE.size} Common Skills to all classes." }
   end
 end

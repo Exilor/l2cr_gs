@@ -88,7 +88,6 @@ class Scripts:: Q00002_WhatWomenWant < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else

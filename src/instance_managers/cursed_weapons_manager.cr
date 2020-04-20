@@ -26,30 +26,29 @@ module CursedWeaponsManager
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("item") do |d|
-        id = d["id"].to_i
-        skill_id = d["skillId"].to_i
-        name = d["name"]
+    find_element(doc, "list") do |n|
+      find_element(n, "item") do |d|
+        id = parse_int(d, "id")
+        skill_id = parse_int(d, "skillId")
+        name = parse_string(d, "name")
 
         cw = CursedWeapon.new(id, skill_id, name)
 
-        d.each_element do |cd|
-          case cd.name.casecmp
+        each_element(d) do |cd, cd_name|
+          case cd_name.casecmp
           when "droprate"
-            cw.drop_rate = cd["val"].to_i
+            cw.drop_rate = parse_int(cd, "val")
           when "duration"
-            cw.duration = cd["val"].to_i
+            cw.duration = parse_int(cd, "val")
           when "durationlost"
-            cw.duration_lost = cd["val"].to_i
+            cw.duration_lost = parse_int(cd, "val")
           when "disapearchance"
-            cw.disappear_chance = cd["val"].to_i
+            cw.disappear_chance = parse_int(cd, "val")
           when "stagekills"
-            cw.stage_kills = cd["val"].to_i
+            cw.stage_kills = parse_int(cd, "val")
           else
             # [automatically added else]
           end
-
         end
 
         CURSED_WEAPONS[id] = cw

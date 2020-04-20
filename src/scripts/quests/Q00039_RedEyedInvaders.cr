@@ -72,7 +72,6 @@ class Scripts::Q00039_RedEyedInvaders < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -95,7 +94,6 @@ class Scripts::Q00039_RedEyedInvaders < Quest
       else
         # [automatically added else]
       end
-
     when GUARD_BABENCO
       if qs.created?
         html = pc.level >= MIN_LVL ? "30334-01.htm" : "30334-02.htm"
@@ -107,7 +105,6 @@ class Scripts::Q00039_RedEyedInvaders < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -163,7 +160,6 @@ class Scripts::Q00039_RedEyedInvaders < Quest
     else
       # [automatically added else]
     end
-
 
     super
   end

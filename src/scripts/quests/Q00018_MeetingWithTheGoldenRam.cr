@@ -41,7 +41,6 @@ class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -67,7 +66,6 @@ class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

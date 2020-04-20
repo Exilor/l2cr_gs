@@ -2,6 +2,7 @@ module BotReportTable
   extend self
   extend Loggable
   extend Synchronizable
+  extend XMLReader
   include Packets::Outgoing
 
   private COLUMN_BOT_ID = 1
@@ -27,12 +28,12 @@ module BotReportTable
   def load
     if Config.botreport_enable
       begin
-        punishments_path = Dir.current + "/config/botreport_punishments.xml"
-        punishments_str = File.read(punishments_path)
-        doc = XML.parse(punishments_str)
-        try_parse(doc)
+        path = Dir.current + "/config/botreport_punishments.xml"
+        XMLReader.parse_file(path) do |doc|
+          parse_document(doc)
+        end
       rescue e
-        error { "Could not load punishments from #{punishments_path}" }
+        error { "Could not load punishments from #{path}" }
       end
 
       load_reported_char_data
@@ -316,27 +317,13 @@ module BotReportTable
     end
   end
 
-  private def try_parse(node)
-    node.find_element("list") do |list|
-      list.find_element("punishment") do |pn|
-        report_count = -1
-        skill_id = -1
-        skill_level = 1
-        sys_message = -1
-        begin
-          report_count = pn["neededReportCount"].to_i
-          skill_id = pn["skillId"].to_i
-
-          if level = pn["skillLevel"]?
-            skill_level = level.to_i
-          end
-
-          if sm_id = pn["sysMessageId"]?
-            sys_message = sm_id.to_i
-          end
-        rescue e
-          error e
-        end
+  private def parse_document(doc)
+    find_element(doc, "list") do |list|
+      find_element(list, "punishment") do |pn|
+        report_count = parse_int(pn, "neededReportCount", -1)
+        skill_id = parse_int(pn, "skillId", -1)
+        skill_level = parse_int(pn, "skillLevel", -1)
+        sys_message = parse_int(pn, "sysMessageId", -1)
 
         add_punishment(report_count, skill_id, skill_level, sys_message)
       end

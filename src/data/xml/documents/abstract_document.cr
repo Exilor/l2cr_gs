@@ -19,9 +19,9 @@ abstract class AbstractDocument
 
   def parse
     begin
-      text = @file.gets_to_end
-      doc = XML.parse(text)
-      parse_document(doc, "")
+      XMLReader.parse_file(@file.path) do |doc, file|
+        parse_document(doc, file)
+      end
     rescue e
       error e
     end
@@ -29,21 +29,21 @@ abstract class AbstractDocument
     self
   end
 
-  def parse_table(n)
-    name = n["name"]
+  private def parse_table(n)
+    name = parse_string(n, "name")
 
     unless name.starts_with?('#')
       raise "Table name must start with '#' (it's \"#{name}\")"
     end
 
-    ary = n.children.first.text.to_s.strip.split(/\s|\t|\n|\r|\f/)
+    ary = get_content(get_first_child(n)).to_s.strip.split(/\s|\t|\n|\r|\f/)
     ary.reject! &.empty?
     @tables[name] = ary
   end
 
-  def parse_set(n, set, level)
-    name = n["name"].strip
-    value = n["val"].strip
+  private def parse_set(n, set, level)
+    name = parse_string(n, "name").strip
+    value = parse_string(n, "val").strip
     ch = value.empty? ? ' ' : value[0]
     if ch == '#' || ch == '-' || ch.number?
       set[name] = get_value(value, level)
@@ -52,11 +52,12 @@ abstract class AbstractDocument
     end
   end
 
-  def get_value(value : String, template = nil)
+  private def get_value(value : String, template = nil)
     if value.starts_with?('#')
-      if template.is_a?(Skill)
+      case template
+      when Skill
         get_table_value(value)
-      elsif template.is_a?(Int)
+      when Int
         get_table_value(value, template.to_i)
       else
         raise "template error with #get_value (#{template.class})"
@@ -70,14 +71,14 @@ abstract class AbstractDocument
     @tables.clear
   end
 
-  private def parse_condition(n : XML::Node?, template) : Condition?
+  private def parse_condition(n, template) : Condition?
     while n && !n.type.element_node?
       n = n.next_sibling
     end
 
     return unless n
 
-    case n.name.casecmp
+    case get_node_name(n).casecmp
     when "and"
       parse_logic_and(n, template)
     when "or"
@@ -93,19 +94,16 @@ abstract class AbstractDocument
     when "game"
       parse_game_condition(n)
     else
-      # [automatically added else]
+      # nothing
     end
-
   end
 
   private def parse_logic_and(n, template)
     cond = Condition::LogicAnd.new
 
-    n.each_element do |n|
-      if n.type.element_node?
-        new_cond = parse_condition(n, template)
-        cond.add(new_cond) if new_cond
-      end
+    each_element(n) do |n|
+      new_cond = parse_condition(n, template)
+      cond.add(new_cond) if new_cond
     end
 
     if cond.conditions.empty?
@@ -118,11 +116,9 @@ abstract class AbstractDocument
   private def parse_logic_or(n, template)
     cond = Condition::LogicOr.new
 
-    n.each_element do |n|
-      if n.type.element_node?
-        new_cond = parse_condition(n, template)
-        cond.add(new_cond) if new_cond
-      end
+    each_element(n) do |n|
+      new_cond = parse_condition(n, template)
+      cond.add(new_cond) if new_cond
     end
 
     if cond.conditions.empty?
@@ -133,11 +129,9 @@ abstract class AbstractDocument
   end
 
   private def parse_logic_not(n, template)
-    n.each_element do |n|
-      if n.type.element_node?
-        if c = parse_condition(n, template)
-          return Condition::LogicNot.new(c)
-        end
+    each_element(n) do |n|
+      if c = parse_condition(n, template)
+        return Condition::LogicNot.new(c)
       end
     end
 
@@ -148,7 +142,7 @@ abstract class AbstractDocument
   private def parse_player_condition(n, template)
     cond = nil
 
-    n.attributes.each_pair do |name, text|
+    each_attribute(n) do |name, text|
       case name.casecmp
       when "races"
         races = text.split(',').map { |r| Race.parse(r) }
@@ -324,9 +318,8 @@ abstract class AbstractDocument
         ary = text.split(',').map { |s| CategoryType.parse(get_value(s)) }
         cond = join_and(cond, Condition::CategoryType.new(ary))
       else
-        # [automatically added else]
+        # nothing
       end
-
     end
 
     cond
@@ -335,7 +328,7 @@ abstract class AbstractDocument
   private def parse_target_condition(n, template)
     cond = nil
 
-    n.attributes.each_pair do |name, text|
+    each_attribute(n) do |name, text|
       case name.casecmp
       when "aggro"
         cond = join_and(cond, Condition::TargetAggro.new(Bool.new(text)))
@@ -348,8 +341,8 @@ abstract class AbstractDocument
       when "levelrange"
         range = get_value(text, template).split(';')
         if range.size == 2
-          range = range.map &.to_i
-          cond = join_and(cond, Condition::TargetLevelRange.new(range[0]..range[1]))
+          range = range[0].to_i..range[1].to_i
+          cond = join_and(cond, Condition::TargetLevelRange.new(range))
         end
       when "mypartyexceptme"
         cond = join_and(cond, Condition::TargetMyPartyExceptMe.new(Bool.new(text)))
@@ -384,7 +377,7 @@ abstract class AbstractDocument
         cond = join_and(cond, Condition::TargetRace.new(Race.parse(text)))
       when "using"
         mask = 0
-        text.split(',').each do |item|
+        text.split(',') do |item|
           item = item.strip
 
           if wt = WeaponType.parse?(item)
@@ -411,9 +404,8 @@ abstract class AbstractDocument
         size = get_value(text).to_i
         cond = join_and(cond, Condition::TargetInvSize.new(size))
       else
-        # [automatically added else]
+        # nothing
       end
-
     end
 
     unless cond
@@ -426,11 +418,11 @@ abstract class AbstractDocument
   private def parse_using_condition(n)
     cond = nil
 
-    n.attributes.each_pair do |name, text|
+    each_attribute(n) do |name, text|
       case name.casecmp
       when "kind"
         mask = 0
-        text.split(',').each do |item|
+        text.split(',') do |item|
           item = item.strip
 
           if wt = WeaponType.parse?(item)
@@ -445,7 +437,7 @@ abstract class AbstractDocument
         cond = join_and(cond, Condition::UsingItemType.new(mask))
       when "slot"
         mask = 0
-        text.split(',').each do |item|
+        text.split(',') do |item|
           item = item.strip
           old = mask
 
@@ -471,9 +463,8 @@ abstract class AbstractDocument
       when "weaponchange"
         cond = join_and(cond, Condition::ChangeWeapon.new(Bool.new(text)))
       else
-        # [automatically added else]
+        # nothing
       end
-
     end
 
     unless cond
@@ -486,7 +477,7 @@ abstract class AbstractDocument
   private def parse_game_condition(n)
     cond = nil
 
-    n.attributes.each_pair do |name, text|
+    each_attribute(n) do |name, text|
       case name.casecmp
       when "skill"
         cond = join_and(cond, Condition::WithSkill.new(Bool.new(text)))
@@ -498,9 +489,8 @@ abstract class AbstractDocument
         val = get_value(text).to_i
         cond = join_and(cond, Condition::GameChance.new(val))
       else
-        # [automatically added else]
+        # nothing
       end
-
     end
 
     unless cond
@@ -512,53 +502,51 @@ abstract class AbstractDocument
 
   private def parse_template(n, template, scope : EffectScope? = nil)
     condition = nil
-    # debug "#{template.name}: #{n.children.inspect}"
-    return unless n = n.first_element_child
 
-    if n.name.casecmp?("cond")
-      condition = parse_condition(n.first_element_child, template)
+    return unless n = get_first_element_child(n)
 
-      msg, msg_id = n["msg"]?, n["msgId"]?
+    if get_node_name(n).casecmp?("cond")
+      condition = parse_condition(get_first_element_child(n), template)
+
+      msg, msg_id = parse_string(n, "msg", nil), parse_string(n, "msgId", nil)
 
       if condition && msg
         condition.message = msg
       elsif condition && msg_id
         condition.message_id = get_value(msg_id).to_i
-        add_name = n["addName"]?
+        add_name = parse_string(n, "addName", nil)
         if add_name && get_value(msg_id).to_i > 0
           condition.add_name
         end
       end
 
-      n = n.next_element
+      n = get_next_element(n)
     end
 
     while n
-      case name = n.name.downcase
+      case (name = get_node_name(n)).casecmp
       when "effect"
         if template.is_a?(AbstractEffect)
           raise "Nested effects"
         end
         attach_effect(n, template, condition, scope)
-      when /^(?:add|sub|mul|div|set|share|enchant|enchanthp)$/
+      when "add", "sub", "mul", "div", "set", "share", "enchant", "enchanthp"
         attach_func(n, template, name, condition)
       else
         # [automatically added else]
       end
 
-
-      n = n.next_element
+      n = get_next_element(n)
     end
   end
 
   private def attach_func(n, template, func_name, attach_cond)
-    stat = Stats.from_value(n["stat"].to_s)
+    stat = Stats.from_value(parse_string(n, "stat"))
     order = -1
 
-    order_node = n["order"]?
-    order = order_node ? order_node.to_i : -1
+    order_node = parse_int(n, "order", -1)
 
-    unless value_string = n["val"]?
+    unless value_string = parse_string(n, "val", nil)
       raise "Missing 'val' on item func"
     end
 
@@ -568,7 +556,7 @@ abstract class AbstractDocument
       value = value_string.to_f
     end
 
-    apply_cond = parse_condition(n.first_element_child, template)
+    apply_cond = parse_condition(get_first_element_child(n), template)
     ft = FuncTemplate.new(attach_cond, apply_cond, func_name, order, stat, value)
 
     if template.is_a?(L2Item) || template.is_a?(AbstractEffect)
@@ -578,15 +566,15 @@ abstract class AbstractDocument
 
   private def attach_effect(n, template, attach_cond, scope = nil)
     set = StatsSet.new
-    n.attributes.each_pair do |name, text|
+    each_attribute(n) do |name, text|
       set[name] = get_value(text, template)
     end
 
-    first_child = n.first_element_child
+    first_child = get_first_element_child(n)
     parameters = parse_parameters(first_child, template)
     apply_cond = parse_condition(first_child, template)
 
-    if template.responds_to?(:id) # L2J: instanceof IIdentifiable
+    if template.responds_to?(:id)
       set["id"] = template.id
     end
 
@@ -594,11 +582,10 @@ abstract class AbstractDocument
     parse_template(n, effect)
 
     if template.is_a?(L2Item)
-      error "Item #{template} with effects."
+      error { "Item #{template} with effects." }
     elsif template.is_a?(Skill)
       if effect
         if scope
-          # debug "#{template.name} (#{template.id}) => #{scope}"
           template.add_effect(scope, effect)
         elsif template.passive?
           template.add_effect(EffectScope::PASSIVE, effect)
@@ -627,14 +614,14 @@ abstract class AbstractDocument
     parameters = nil
 
     while n
-      if n.type.element_node? && n.name.casecmp?("param")
+      if get_node_name(n).casecmp?("param")
         parameters ||= StatsSet.new
-        n.attributes.each_pair do |name, text|
+        each_attribute(n) do |name, text|
           parameters[name] = get_value(text, template)
         end
       end
 
-      n = n.next_element
+      n = get_next_element(n)
     end
 
     parameters || StatsSet::EMPTY

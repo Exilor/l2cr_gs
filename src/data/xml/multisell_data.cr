@@ -30,25 +30,24 @@ module MultisellData
     entry_id = 1
     list = ListContainer.new(id)
 
-    doc.find_element("list") do |n|
-      taxes = n["applyTaxes"]?
-      list.apply_taxes = !!taxes && Bool.new(taxes)
+    find_element(doc, "list") do |n|
+      list.apply_taxes = parse_bool(n, "applyTaxes", false)
 
-      if use_rate = n["useRate"]?
-        list.use_rate = use_rate.to_f
+      if use_rate = parse_double(n, "useRate", nil)
+        list.use_rate = use_rate
       end
 
-      list.maintain_enchantment = n["maintainEnchantment"]? == "true"
+      list.maintain_enchantment = parse_bool(n, "maintainEnchantment", false)
 
-      n.each_element do |d|
-        if d.name.casecmp?("item")
+      each_element(n) do |d, d_name|
+        if d_name.casecmp?("item")
           entry = parse_entry(d, entry_id, list)
           entry_id += 1
           list.entries << entry
-        elsif d.name.casecmp?("npcs")
-          d.find_element("npc") do |b|
+        elsif d_name.casecmp?("npcs")
+          find_element(d, "npc") do |b|
             if b.text.num?
-              npc_id = b.text.to_i
+              npc_id = get_content(b).to_i
               if npc_id > 0
                 list.allow_npc(npc_id)
               end
@@ -64,19 +63,22 @@ module MultisellData
   private def parse_entry(n, entry_id, list)
     entry = Entry.new(entry_id)
 
-    first = n.first_element_child
+    first = get_first_element_child(n)
     n = first
 
     while n
-      if n.name.casecmp?("ingredient")
-        set = StatsSet.new(n.attributes)
+      case get_node_name(n).casecmp
+      when "ingredient"
+        set = get_attributes(n)
         entry.add_ingredient(Ingredient.new(set))
-      elsif n.name.casecmp?("production")
-        set = StatsSet.new(n.attributes)
+      when "production"
+        set = get_attributes(n)
         entry.add_product(Ingredient.new(set))
+      else
+        # nothing
       end
 
-      n = n.next_element
+      n = get_next_element(n)
     end
 
     entry

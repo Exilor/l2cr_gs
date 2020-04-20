@@ -41,7 +41,6 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
     else
       # [automatically added else]
     end
-
   end
 
   def on_kill(npc, pc, is_summon)
@@ -58,7 +57,6 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
     else
       # [automatically added else]
     end
-
 
     super
   end
@@ -92,7 +90,6 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

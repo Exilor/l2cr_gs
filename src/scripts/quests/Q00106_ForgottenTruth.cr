@@ -42,7 +42,6 @@ class Scripts::Q00106_ForgottenTruth < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -93,7 +92,6 @@ class Scripts::Q00106_ForgottenTruth < Quest
       else
         # [automatically added else]
       end
-
     when KARTA
       if st.started?
         case st.cond
@@ -122,12 +120,10 @@ class Scripts::Q00106_ForgottenTruth < Quest
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

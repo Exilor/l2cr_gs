@@ -121,10 +121,8 @@ class DimensionalRift
     end
 
     spawn_timer = TaskGroup.new
-    spawn_timer_task = -> do
-      DimensionalRiftManager.get_room(@type, room).spawn
-    end
-    @spawn_timer_task = spawn_timer.schedule(spawn_timer_task, Config.rift_spawn_delay)
+    tmp = -> { DimensionalRiftManager.get_room(@type, room).spawn }
+    @spawn_timer_task = spawn_timer.schedule(tmp, Config.rift_spawn_delay)
     @spawn_timer = spawn_timer
   end
 
@@ -175,7 +173,7 @@ class DimensionalRift
 
   def manual_exit_rift(pc : L2PcInstance, npc : L2Npc)
     party = pc.party
-    if party.nil? || party.in_dimensional_rift?
+    if party.nil? || !party.in_dimensional_rift?
       return
     end
 
@@ -291,7 +289,7 @@ class DimensionalRift
   end
 
   def max_jumps : Int8
-    if Config.rift_max_jumps <= 8 && Config.rift_max_jumps >= 1
+    if Config.rift_max_jumps.between?(1, 8)
       return Config.rift_max_jumps.to_i8
     end
 
@@ -301,14 +299,14 @@ class DimensionalRift
   private struct TaskGroup # L2J: java.util.Timer
     @tasks = [] of TaskExecutor::Scheduler::Task
 
-    def schedule(job, delay)
-      task = ThreadPoolManager.schedule_general(job, delay)
+    def schedule(callable, delay)
+      task = ThreadPoolManager.schedule_general(callable, delay)
       @tasks << task
       task
     end
 
-    def schedule(job, delay, interval)
-      task = ThreadPoolManager.schedule_general_at_fixed_rate(job, delay, interval)
+    def schedule(callable, delay, interval)
+      task = ThreadPoolManager.schedule_general_at_fixed_rate(callable, delay, interval)
       @tasks << task
       task
     end

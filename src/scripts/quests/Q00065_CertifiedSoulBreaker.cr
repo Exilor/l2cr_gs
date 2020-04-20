@@ -175,7 +175,6 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -214,7 +213,6 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -437,7 +435,6 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
       else
         # [automatically added else]
       end
-
     elsif qs.completed?
       if npc.id == GRAND_MASTER_VITUS
         html = get_already_completed_msg(pc)
@@ -454,9 +451,8 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
       npc.running = true
       npc.set_intention(AI::MOVE_TO, MOVE_TO)
     elsif npc.id == GUARDIAN_ANGEL
-      c0 = npc.variables.get_object("player0", L2PcInstance?)
       start_quest_timer("DESPAWN_70", 70000, npc, nil)
-      if c0
+      if c0 = npc.variables.get_object("player0", L2PcInstance?)
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::S1_STEP_BACK_FROM_THE_CONFOUNDED_BOX_I_WILL_TAKE_IT_MYSELF).add_string_parameter(c0.appearance.visible_name))
       end
     end

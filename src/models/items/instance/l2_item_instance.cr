@@ -829,7 +829,11 @@ class L2ItemInstance < L2Object
 
   def clear_element_attr(element : Int)
     return if !get_elemental(element) && element != -1
-    @elementals.try &.reject! { |e| e.element == element }
+    if elementals = @elementals
+      if element != -1 && elementals.size > 1
+        elementals.reject! { |e| e.element == element }
+      end
+    end
 
     begin
       if element != -1
@@ -911,7 +915,7 @@ class L2ItemInstance < L2Object
       end_of_life
     else
       @life_time_task.try &.cancel
-      task = ScheduleLifeTimeTask.new(self)
+      task = LifetimeTask.new(self)
       @life_time_task = ThreadPoolManager.schedule_general(task, remaining_time)
     end
   end
@@ -1016,7 +1020,7 @@ class L2ItemInstance < L2Object
   def schedule_consume_mana_task
     return if @consuming_mana
     @consuming_mana = true
-    task = ScheduleConsumeManaTask.new(self)
+    task = ConsumeManaTask.new(self)
     ThreadPoolManager.schedule_general(task, MANA_CONSUMPTION_RATE)
   end
 
@@ -1035,7 +1039,7 @@ class L2ItemInstance < L2Object
     end
   end
 
-  private struct ScheduleLifeTimeTask
+  private struct LifetimeTask
     include Loggable
 
     initializer item : L2ItemInstance
@@ -1047,7 +1051,7 @@ class L2ItemInstance < L2Object
     end
   end
 
-  private struct ScheduleConsumeManaTask
+  private struct ConsumeManaTask
     include Loggable
 
     initializer item : L2ItemInstance

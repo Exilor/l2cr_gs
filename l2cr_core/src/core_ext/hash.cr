@@ -15,7 +15,7 @@ class Hash(K, V)
       ptr[idx] = value
       idx += 1
     end
-    Slice.new(ptr, size)
+    ptr.to_slice(size)
   end
 
   def keys_slice : Slice(K)
@@ -25,7 +25,7 @@ class Hash(K, V)
       ptr[idx] = value
       idx += 1
     end
-    Slice.new(ptr, size)
+    ptr.to_slice(size)
   end
 
   def select_values(& : V ->) : Array(V)
@@ -39,7 +39,6 @@ class Hash(K, V)
     include Iterator({K, V})
 
     @hash : Hash(K, V)
-    # @current : Entry(K, V)?
     @index : Int32
 
     def next

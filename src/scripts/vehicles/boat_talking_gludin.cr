@@ -55,19 +55,15 @@ class BoatTalkingGludin
   def call
     case @cycle
     when 0
-      # debug "Leaving for Gludin in 5 minutes."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVE_TALKING5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 1
-      # debug "Leaving for Gludin in 1 minute."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVE_TALKING1, LEAVE_TALKING1_2)
       ThreadPoolManager.schedule_general(self, 40_000)
     when 2
-      # debug "About to leave for Gludin."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVE_TALKING0)
       ThreadPoolManager.schedule_general(self, 20_000)
     when 3
-      # debug "Leaving for Gludin."
       BoatManager.dock_ship(BoatManager::TALKING_ISLAND, false)
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVING_TALKING)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
@@ -75,19 +71,15 @@ class BoatTalkingGludin
       @boat.execute_path(TALKING_TO_GLUDIN)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 4
-      # debug "Arriving in Gludin in 10 minutes."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], ARRIVAL_GLUDIN10)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 5
-      # debug "Arriving in Gludin in 5 minutes."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], ARRIVAL_GLUDIN5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 6
-      # debug "Arriving in Gludin in 1 minute."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], ARRIVAL_GLUDIN1)
     when 7
       if BoatManager.dock_busy? BoatManager::GLUDIN_HARBOR
-        # debug "The Gludin Harbor is busy."
         if @shout_count == 0
           BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], BUSY_GLUDIN)
         end
@@ -103,25 +95,20 @@ class BoatTalkingGludin
         @boat.execute_path(GLUDIN_DOCK)
       end
     when 8
-      # debug "Docked in Gludin Harbor. Leaving For Talking Island in 10 minutes."
       BoatManager.dock_ship(BoatManager::GLUDIN_HARBOR, true)
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], ARRIVED_AT_GLUDIN, ARRIVED_AT_GLUDIN_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     when 9
-      # debug "Leaving for Talking Island in 5 minutes."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVE_GLUDIN5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 10
-      # debug "Leaving for Talking Island in 1 minute."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVE_GLUDIN1, LEAVE_TALKING1_2)
       ThreadPoolManager.schedule_general(self, 40_000)
     when 11
-      # debug "About to leave for Talking Island."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVE_GLUDIN0)
       ThreadPoolManager.schedule_general(self, 20_000)
     when 12
-      # debug "Leaving for Talking Island."
       BoatManager.dock_ship(BoatManager::GLUDIN_HARBOR, false)
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], LEAVING_GLUDIN)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
@@ -129,19 +116,15 @@ class BoatTalkingGludin
       @boat.execute_path(GLUDIN_TO_TALKING)
       ThreadPoolManager.schedule_general(self, 150_000)
     when 13
-      # debug "Arriving in Talking Island in 10 minutes."
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_TALKING10)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 14
-      # debug "Arriving in Talking Island in 5 minutes"
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_TALKING5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 15
-      # debug "Arriving in Talking Island in 1 minute,"
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_TALKING1)
     when 16
       if BoatManager.dock_busy? BoatManager::TALKING_ISLAND
-        # debug "The Talking Island Harbor is busy."
         if @shout_count == 0
           BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], BUSY_TALKING)
         end
@@ -157,7 +140,6 @@ class BoatTalkingGludin
         @boat.execute_path(TALKING_DOCK)
       end
     when 17
-      # debug "Docked in Talking Island Harbor. Leaving For Gludin in 10 minutes."
       BoatManager.dock_ship(BoatManager::TALKING_ISLAND, true)
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVED_AT_TALKING, ARRIVED_AT_TALKING_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
@@ -165,7 +147,6 @@ class BoatTalkingGludin
     else
       # [automatically added else]
     end
-
 
     @shout_count = 0
     @cycle += 1

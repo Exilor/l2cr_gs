@@ -24,9 +24,9 @@ module MerchantPriceConfigTable
   end
 
   private def parse_document(doc, file)
-    doc.find_element("merchantPriceConfig") do |n|
-      default_id = n["defaultPriceConfig"].to_i
-      n.each_element do |d|
+    find_element(doc, "merchantPriceConfig") do |n|
+      default_id = parse_int(n, "defaultPriceConfig")
+      each_element(n) do |d|
         if mpc = parse_merchant_price_config(d)
           MPCS[mpc.id] = mpc
         end
@@ -52,31 +52,11 @@ module MerchantPriceConfigTable
   end
 
   def parse_merchant_price_config(n)
-    unless id = n["id"]?
-      raise "priceConfig must define 'id'"
-    end
-    id = id.to_i
-
-    unless name = n["name"]?
-      raise "priceConfig must define 'name'"
-    end
-
-    unless base_tax = n["baseTax"]?
-      raise "priceConfig must define 'baseTax'"
-    end
-    base_tax = base_tax.to_i
-
-    if castle_id = n["castleId"]?
-      castle_id = castle_id.to_i
-    else
-      castle_id = -1
-    end
-
-    if zone_id = n["zoneId"]?
-      zone_id = zone_id.to_i
-    else
-      zone_id = -1
-    end
+    id = parse_int(n, "id")
+    name = parse_string(n, "name")
+    base_tax = parse_int(n, "baseTax")
+    castle_id = parse_int(n, "castleId", -1)
+    zone_id = parse_int(n, "zoneId", -1)
 
     MerchantPriceConfig.new(id, name, base_tax, castle_id, zone_id)
   end

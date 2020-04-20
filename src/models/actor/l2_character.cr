@@ -211,6 +211,7 @@ abstract class L2Character < L2Object
         @hp_update_inc_check = current_hp + 1
         @hp_update_dec_check = current_hp - @hp_update_interval
       else
+        return true if @hp_update_interval == 0
         double_multi = current_hp / @hp_update_interval
         int_multi = double_multi.to_i
         @hp_update_dec_check = @hp_update_interval * (double_multi < int_multi ? int_multi - 1 : int_multi)

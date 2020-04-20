@@ -193,7 +193,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -275,7 +274,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       else
         # [automatically added else]
       end
-
     when GHOST_OF_PRIEST
       play_sound(pc, Sound::AMBSOUND_HORROR_15)
       if npc.script_value == pc.l2id
@@ -320,7 +318,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       else
         # [automatically added else]
       end
-
     when WELL
       case qs.cond
       when 10
@@ -339,7 +336,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       else
         # [automatically added else]
       end
-
     when GHOST_OF_ADVENTURER
       case qs.cond
       when 9
@@ -388,11 +384,9 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

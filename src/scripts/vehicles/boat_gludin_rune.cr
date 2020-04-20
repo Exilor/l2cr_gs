@@ -87,19 +87,15 @@ class BoatGludinRune
   def call
     case @cycle
     when 0
-      # debug "Leaving for Rune in 5 minutes."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], LEAVE_GLUDIN5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 1
-      # debug "Leaving for Rune in 1 minute."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], LEAVE_GLUDIN1)
       ThreadPoolManager.schedule_general(self, 40_000)
     when 2
-      # debug "About to leave for Rune."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], LEAVE_GLUDIN0)
       ThreadPoolManager.schedule_general(self, 20_000)
     when 3
-      # debug "Leaving for Rune."
       BoatManager.dock_ship(BoatManager::GLUDIN_HARBOR, false)
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], LEAVING_GLUDIN)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
@@ -107,23 +103,18 @@ class BoatGludinRune
       @boat.execute_path(GLUDIN_TO_RUNE)
       ThreadPoolManager.schedule_general(self, 250_000)
     when 4
-      # debug "Arriving in Rune in 15 minutes."
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_RUNE15)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 5
-      # debug "Arriving in Rune in 10 minutes."
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_RUNE10)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 6
-      # debug "Arriving in Rune in 5 minutes."
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_RUNE5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 7
-      # debug "Arriving in Rune in 1 minute."
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_RUNE1)
     when 8
       if BoatManager.dock_busy? BoatManager::RUNE_HARBOR
-        # debug "The Rune Harbor is busy."
         if @shout_count == 0
           BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], BUSY_RUNE)
         end
@@ -139,25 +130,20 @@ class BoatGludinRune
         @boat.execute_path(RUNE_DOCK)
       end
     when 9
-      # debug "Docked in Rune Harbor. Leaving For Gludin in 10 minutes."
       BoatManager.dock_ship(BoatManager::RUNE_HARBOR, true)
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], ARRIVED_AT_RUNE, ARRIVED_AT_RUNE_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     when 10
-      # debug "Leaving for Gludin in 5 minutes."
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], LEAVE_RUNE5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 11
-      # debug "Leaving for Gludin in 1 minute."
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], LEAVE_RUNE1)
       ThreadPoolManager.schedule_general(self, 40_000)
     when 12
-      # debug "About to leave for Gludin."
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], LEAVE_RUNE0)
       ThreadPoolManager.schedule_general(self, 20_000)
     when 13
-      # debug "Leaving for Gludin."
       BoatManager.dock_ship(BoatManager::RUNE_HARBOR, false)
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], LEAVING_RUNE)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
@@ -165,23 +151,18 @@ class BoatGludinRune
       @boat.execute_path(RUNE_TO_GLUDIN)
       ThreadPoolManager.schedule_general(self, 60_000)
     when 14
-      # debug "Arriving in Gludin in 15 minutes."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVAL_GLUDIN15)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 15
-      # debug "Arriving in Gludin in 10 minutes."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVAL_GLUDIN10)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 16
-      # debug "Arriving in Gludin in 5 minutes."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVAL_GLUDIN5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 17
-      # debug "Arriving in Gludin in 1 minute."
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVAL_GLUDIN1)
     when 18
       if BoatManager.dock_busy? BoatManager::GLUDIN_HARBOR
-        # debug "The Gludin Harbor is busy."
         if @shout_count == 0
           BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], BUSY_GLUDIN)
         end
@@ -197,7 +178,6 @@ class BoatGludinRune
         @boat.execute_path(GLUDIN_DOCK)
       end
     when 19
-      # debug "Docked in Gludin Harbor. Departing in 10 minutes."
       BoatManager.dock_ship(BoatManager::GLUDIN_HARBOR, true)
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVED_AT_GLUDIN, ARRIVED_AT_GLUDIN_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
@@ -205,7 +185,6 @@ class BoatGludinRune
     else
       # [automatically added else]
     end
-
 
     @shout_count = 0
     @cycle += 1

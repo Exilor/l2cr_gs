@@ -77,12 +77,10 @@ module ItemTable
     end
     TEMPLATES.trim
 
-    info do
-      "Loaded #{a = ETC_ITEMS.size} etc item templates.\n" \
-      "Loaded #{b = ARMORS.size} armor item templates.\n" \
-      "Loaded #{c = WEAPONS.size} weapon item templates.\n" \
-      "Loaded #{a + b + c} item templates in #{timer} s."
-    end
+    info { "Loaded #{ETC_ITEMS.size} etc item templates." }
+    info { "Loaded #{ARMORS.size} armor item templates." }
+    info { "Loaded #{WEAPONS.size} weapon item templates." }
+    info { "Loaded #{ETC_ITEMS.size + ARMORS.size + WEAPONS.size} item templates in #{timer} s." }
   end
 
   def [](id : Int) : L2Item

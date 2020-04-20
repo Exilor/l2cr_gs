@@ -240,10 +240,6 @@ module AdminCommandHandler::AdminBuffs
     blocked_buff_slots = target.effect_list.@blocked_buff_slots
     if blocked_buff_slots && blocked_buff_slots.empty?
       html << "<br>Blocked buff slots: "
-      # slots = ""
-      # target.effect_list.blocked_buff_slots.each do |slot|
-      #   slots += slot.to_s + ", "
-      # end
 
       slots = String.build do |io|
         target.effect_list.blocked_buff_slots.each do |slot|
@@ -257,7 +253,7 @@ module AdminCommandHandler::AdminBuffs
       end
     end
     html << "</html>"
-    # Send the packet
+
     pc.send_packet(NpcHtmlMessage.new(html.to_s))
 
     if Config.gmaudit

@@ -17,7 +17,7 @@ class Scripts::Stage1 < AbstractInstance
     property h = 0
     property zone = 0
     property count = 0
-    property? zone = false
+    property? is_zone = false
     property? needed_next_flag = false
   end
 
@@ -151,75 +151,75 @@ class Scripts::Stage1 < AbstractInstance
   private def parse_document(doc, file)
     spawn_count = 0
 
-    doc.find_element("list") do |list|
-      list.each_element do |n|
-        if n.name.casecmp?("npc")
-          n.each_element do |d|
-            if d.name.casecmp?("spawn")
-              unless tmp = d["npcId"]?
+    find_element(doc, "list") do |list|
+        each_element(list) do |n, n_name|
+        if n_name.casecmp?("npc")
+          each_element(n) do |d, d_name|
+            if d_name.casecmp?("spawn")
+              unless npc_id = parse_int(d, "npcId", nil)
                 error "Missing npc_id in npc List, skipping."
                 next
               end
-              npc_id = tmp.to_i
 
-              unless tmp = d["flag"]?
+              unless flag = parse_int(d, "flag", nil)
                 error { "Missing flag in npc List npc_id: #{npc_id}, skipping." }
                 next
               end
-              flag = tmp.to_i
 
               SPAWN_LIST[flag] ||= [] of SODSpawn
 
-              d.each_element do |cd|
-                if cd.name.casecmp?("loc")
+              each_element(d) do |cd, cd_name|
+                if cd_name.casecmp?("loc")
                   spw = SODSpawn.new
                   spw.npc_id = npc_id
 
-                  if tmp = cd["x"]?
-                    spw.x = tmp.to_i
+                  if tmp = parse_int(cd, "x", nil)
+                    spw.x = tmp
                   else
                     next
                   end
-                  if tmp = cd["y"]?
-                    spw.y = tmp.to_i
+                  if tmp = parse_int(cd, "y", nil)
+                    spw.y = tmp
                   else
                     next
                   end
-                  if tmp = cd["z"]?
-                    spw.z = tmp.to_i
+                  if tmp = parse_int(cd, "z", nil)
+                    spw.z = tmp
                   else
                     next
                   end
-                  if tmp = cd["heading"]?
-                    spw.h = tmp.to_i
+                  if tmp = parse_int(cd, "heading", nil)
+                    spw.h = tmp
                   else
                     next
                   end
-                  if tmp = cd["mustKill"]?
-                    spw.needed_next_flag = Bool.new(tmp)
+                  tmp = parse_bool(cd, "mustKill", nil)
+                  unless tmp.nil?
+                    spw.needed_next_flag = tmp
                   end
                   if spw.needed_next_flag?
                     MUST_KILL_MOBS_ID << npc_id
                   end
                   SPAWN_LIST[flag] << spw
                   spawn_count += 1
-                elsif cd.name.casecmp?("zone")
+                elsif cd_name.casecmp?("zone")
                   spw = SODSpawn.new
                   spw.npc_id = npc_id
-                  spw.zone = true
+                  spw.is_zone = true
 
-                  if tmp = cd["id"]?
-                    spw.zone = tmp.to_i
+                  if tmp = parse_int(cd, "id", nil)
+                    spw.zone = tmp
                   else
                     next
                   end
-                  if tmp = cd["count"]?
-                    spw.count = tmp.to_i
+                  if tmp = parse_int(cd, "count", nil)
+                    spw.count = tmp
                   else
                     next
                   end
-                  if tmp = cd["mustKill"]?
-                    spw.needed_next_flag = Bool.new(tmp)
+                  tmp = parse_bool(cd, "mustKill", nil)
+                  unless tmp.nil?
+                    spw.needed_next_flag = tmp
                   end
                   if spw.needed_next_flag?
                     MUST_KILL_MOBS_ID << npc_id
@@ -230,36 +230,32 @@ class Scripts::Stage1 < AbstractInstance
               end
             end
           end
-        elsif n.name.casecmp?("spawnZones")
-          n.each_element do |d|
-            if d.name.casecmp?("zone")
-              unless tmp = d["id"]?
+        elsif n_name.casecmp?("spawnZones")
+          each_element(n) do |d, d_name|
+            if d_name.casecmp?("zone")
+              unless id = parse_int(d, "id", nil)
                 error "Missing id in spawnZones List, skipping."
                 next
               end
-              id = tmp.to_i
-              unless tmp = d["minZ"]?
+
+              unless minz = parse_int(d, "minZ", nil)
                 error { "Missing minZ in spawnZones List id: #{id}, skipping." }
                 next
               end
-              minz = tmp.to_i
-              unless tmp = d["maxZ"]?
+
+              unless maxz = parse_int(d, "maxZ", nil)
                 error { "Missing maxZ in spawnZones List id: #{id}, skipping." }
                 next
               end
-              maxz = tmp.to_i
+
               ter = L2Territory.new(id)
 
-              d.each_element do |cd|
-                if cd.name.casecmp?("point")
-                  if tmp = cd["x"]?
-                    x = tmp.to_i
-                  else
+              each_element(d) do |cd, cd_name|
+                if cd_name.casecmp?("point")
+                  unless x = parse_int(cd, "x", nil)
                     next
                   end
-                  if tmp = cd["y"]?
-                    y = tmp.to_i
-                  else
+                  unless y = parse_int(cd, "y", nil)
                     next
                   end
 
@@ -369,7 +365,7 @@ class Scripts::Stage1 < AbstractInstance
     if world.lock.lock?
       begin
         SPAWN_LIST[flag].each do |spw|
-          if spw.zone?
+          if spw.is_zone?
             spw.count.times do |i|
               if tmp = SPAWN_ZONE_LIST[spw.zone]
                 if loc = tmp.random_point

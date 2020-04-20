@@ -19,8 +19,9 @@ module RecipeData
     recipe_part_list = [] of L2RecipeInstance
     recipe_stat_use_list = [] of L2RecipeStatInstance
     recipe_alt_stat_change_list = [] of L2RecipeStatInstance
-    doc.find_element("list") do |n|
-      n.find_element("item") do |d|
+
+    find_element(doc, "list") do |n|
+      find_element(n, "item") do |d|
         recipe_part_list.clear
         recipe_stat_use_list.clear
         recipe_alt_stat_change_list.clear
@@ -28,45 +29,46 @@ module RecipeData
         has_rare = false
         set = StatsSet.new
 
-        set["id"] = d["id"].to_i
-        set["recipeId"] = d["recipeId"].to_i
-        set["recipeName"] = d["name"]
-        set["craftLevel"] = d["craftLevel"].to_i
-        set["isDwarvenRecipe"] = d["type"].casecmp?("dwarven")
-        set["successRate"] = d["successRate"].to_i
-        d.each_element do |c|
-          case c.name.casecmp
+        set["id"] = parse_int(d, "id")
+        set["recipeId"] = parse_int(d, "recipeId")
+        set["recipeName"] = parse_string(d, "name")
+        set["craftLevel"] = parse_int(d, "craftLevel")
+        set["isDwarvenRecipe"] = parse_string(d, "type").casecmp?("dwarven")
+        set["successRate"] = parse_int(d, "successRate")
+        each_element(d) do |c, c_name|
+          case c_name.casecmp
           when "statUse"
-            stat_name = c["name"]
-            value = c["value"].to_i
+            stat_name = parse_string(c, "name")
+            value = parse_int(c, "value")
             recipe_stat_use_list << L2RecipeStatInstance.new(stat_name, value)
           when "altStatChange"
-            stat_name = c["name"]
-            value = c["value"].to_i
+            stat_name = parse_string(c, "name")
+            value = parse_int(c, "value")
             recipe_alt_stat_change_list << L2RecipeStatInstance.new(stat_name, value)
           when "ingredient"
-            id = c["id"].to_i
-            count = c["count"].to_i
+            id = parse_int(c, "id")
+            count = parse_int(c, "count")
             recipe_part_list << L2RecipeInstance.new(id, count)
           when "production"
-            set["itemId"] = c["id"].to_i
-            set["count"] = c["count"].to_i
+            set["itemId"] = parse_int(c, "id")
+            set["count"] = parse_int(c, "count")
           when "productionRare"
-            set["rareItemId"] = c["id"].to_i
-            set["rareCount"] = c["count"].to_i
-            set["rarity"] = c["rarity"].to_i
+            set["rareItemId"] = parse_int(c, "id")
+            set["rareCount"] = parse_int(c, "count")
+            set["rarity"] = parse_int(c, "rarity")
             has_rare = true
           else
             # [automatically added else]
           end
-
         end
+
         recipe_list = L2RecipeList.new(set, has_rare)
         recipe_part_list.each { |x| recipe_list.add_recipe(x) }
         recipe_stat_use_list.each { |x| recipe_list.add_stat_use(x) }
         recipe_alt_stat_change_list.each do |x|
           recipe_list.add_alt_stat_change(x)
         end
+
         RECIPES[recipe_list.id] = recipe_list
       end
     end

@@ -18,9 +18,9 @@ module InitialShortcutData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.each_element do |d|
-        case d.name
+    find_element(doc, "list") do |n|
+      each_element(n) do |d, d_name|
+        case d_name
         when "shortcuts"
           parse_shortcuts(d)
         when "macros"
@@ -34,17 +34,16 @@ module InitialShortcutData
   end
 
   private def parse_shortcuts(d)
-    class_id_node = d["classId"]?
     list = [] of Shortcut
-    d.find_element("page") do |c|
-      page_id = c["pageId"].to_i
-      c.find_element("slot") do |b|
+    find_element(d, "page") do |c|
+      page_id = parse_int(c, "pageId")
+      find_element(c, "slot") do |b|
         list << create_shortcut(page_id, b)
       end
     end
 
-    if class_id_node
-      temp = ClassId[class_id_node.to_i]
+    if class_id = parse_int(d, "classId", nil)
+      temp = ClassId[class_id]
       INITIAL_SHORTCUT_DATA[temp] = list
     else
       INITIAL_GLOBAL_SHORTCUT_LIST.concat(list)
@@ -52,35 +51,35 @@ module InitialShortcutData
   end
 
   private def parse_macros(d)
-    d.find_element("macro") do |c|
-      next unless c["enabled"]?.nil? || Bool.new(c["enabled"])
-      macro_id = c["macroId"].to_i
-      icon = c["icon"].to_i
-      name = c["name"]
-      description = c["description"]
-      acronym = c["acronym"]
+    find_element(d, "macro") do |c|
+      next if parse_bool(c, "enabled", nil) == false
+      macro_id = parse_int(c, "macroId")
+      icon = parse_int(c, "icon")
+      name = parse_string(c, "name")
+      description = parse_string(c, "description")
+      acronym = parse_string(c, "acronym")
       commands = [] of MacroCMD
       entry = 0
 
-      c.find_element("command") do |b|
-        type = MacroType.parse(b["type"])
+      find_element(c, "command") do |b|
+        type = parse_enum(b, "type", MacroType)
         d1 = d2 = 0
-        cmd = b.text
+        cmd = get_content(b)
         case type
-        when .skill? # MacroType::SKILL
-          d1 = b["skillId"].to_i
-          d2 = b["skillLvl"].to_i
-        when .action? # MacroType::ACTION
-          d1 = b["actionId"].to_i
-        when .text? # MacroType::TEXT
+         when MacroType::SKILL
+          d1 = parse_int(b, "skillId")
+          d2 = parse_int(b, "skillLvl")
+        when MacroType::ACTION
+          d1 = parse_int(b, "actionId")
+        when MacroType::TEXT
           # nothing to do
-        when .shortcut? # MacroType::SHORTCUT
-          d1 = b["page"].to_i
-          d2 = b["slot"].to_i
-        when .item? # MacroType::ITEM
-          d1 = b["itemId"].to_i
-        when .delay? # MacroType::DELAY
-          d1 = b["delay"].to_i
+        when MacroType::SHORTCUT
+          d1 = parse_int(b, "page")
+          d2 = parse_int(b, "slot")
+        when MacroType::ITEM
+          d1 = parse_int(b, "itemId")
+        when MacroType::DELAY
+          d1 = parse_int(b, "delay")
         else
           # [automatically added else]
         end
@@ -95,11 +94,11 @@ module InitialShortcutData
   end
 
   private def create_shortcut(page, b)
-    slot = b["slotId"].to_i
-    type = ShortcutType.parse(b["shortcutType"])
-    id = b["shortcutId"].to_i
-    level = b["shortcutLevel"]?.try &.to_i || 0
-    char_type = b["characterType"]?.try &.to_i || 0
+    slot = parse_int(b, "slotId")
+    type = parse_enum(b, "shortcutType", ShortcutType)
+    id = parse_int(b, "shortcutId")
+    level = parse_int(b, "shortcutLevel", 0)
+    char_type = parse_int(b, "characterType", 0)
     Shortcut.new(slot, page, type, id, level, char_type)
   end
 

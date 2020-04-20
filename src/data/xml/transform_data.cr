@@ -18,27 +18,26 @@ module TransformData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("transform") do |d|
-        set = StatsSet.new(d.attributes)
+    find_element(doc, "list") do |n|
+      find_element(n, "transform") do |d|
+        set = get_attributes(d)
 
         transform = Transform.new(set)
 
-        d.each_element do |cd|
-          male = cd.name.casecmp?("male")
-          if /^(?:male|female)$/i === cd.name
+        each_element(d) do |cd, cd_name|
+          male = cd_name.casecmp?("male")
+          if /^(?:male|female)$/i === cd_name
             template_data = nil
-            cd.each_element do |z|
-              case z.name.casecmp
+            each_element(cd) do |z, z_name|
+              case z_name.casecmp
               when "common"
-                z.each_element do |s|
-                  case s.name.casecmp
-                  when "base", "stats", "defense", "magicDefense", "collision", "moving"
-                    set.merge(s.attributes)
+                each_element(z) do |s, s_name|
+                  case s_name.casecmp
+                  when /\A(?:base|stats|defense|magicDefense|collision|moving)\z/i
+                    each_attribute(s) { |name, value| set[name] = value }
                   else
                     # [automatically added else]
                   end
-
                 end
 
                 template_data = TransformTemplate.new(set)
@@ -47,12 +46,12 @@ module TransformData
                 template_data ||= TransformTemplate.new(set)
                 transform.set_template(male, template_data)
 
-                z.each_element do |s|
+                each_element(z) do |s|
                   i = 0
-                  s.attributes.each_pair do |name, value|
+                  each_attribute(s) do |name, value|
                     if name.casecmp?("id")
                       id = value.to_i
-                      lvl = s.attributes.to_a[i + 1][1].to_i
+                      lvl = get_attributes(s).to_a[i + 1][1].to_i
                       template_data.add_skill(SkillHolder.new(id, lvl))
                     end
                     i += 1
@@ -62,20 +61,20 @@ module TransformData
                 template_data ||= TransformTemplate.new(set)
                 transform.set_template(male, template_data)
 
-                actions = z.content.split.map &.to_i
+                actions = get_content(z).split.map &.to_i
                 list = Packets::Outgoing::ExBasicActionList.new(actions)
                 template_data.basic_action_list = list
               when "additionalskills"
                 template_data ||= TransformTemplate.new(set)
                 transform.set_template(male, template_data)
 
-                z.each_element do |s|
-                  if s.name.casecmp?("skill")
+                each_element(z) do |s, s_name|
+                  if s_name.casecmp?("skill")
                     i = 0
-                    s.attributes.each_pair do |name, value|
+                    each_attribute(s) do |name, value|
                       if name.casecmp?("id")
                         id = value.to_i
-                        temp = s.attributes.to_a
+                        temp = get_attributes(s).to_a
                         lvl = temp[i + 1][1].to_i
                         min_lvl = temp[i + 2][1].to_i
                         holder = AdditionalSkillHolder.new(id, lvl, min_lvl)
@@ -89,12 +88,12 @@ module TransformData
                 template_data ||= TransformTemplate.new(set)
                 transform.set_template(male, template_data)
 
-                z.find_element("item") do |s|
+                find_element(z, "item") do |s|
                   i = 0
-                  s.attributes.each_pair do |name, value|
+                  each_attribute(s) do |name, value|
                     if name.casecmp?("id") # CHECK
                       id = value.to_i
-                      temp = s.attributes.to_a[i + 1][1]
+                      temp = get_attributes(s).to_a[i + 1][1]
                       allowed = Bool.new(temp)
                       holder = AdditionalItemHolder.new(id, allowed)
                       template_data.add_additional_item(holder)
@@ -107,8 +106,8 @@ module TransformData
                 transform.set_template(male, template_data)
 
                 levels_set = StatsSet.new
-                z.find_element("level") do |s|
-                  levels_set.merge(s.attributes)
+                find_element(z, "level") do |s|
+                  levels_set.merge!(get_attributes(s))
                 end
 
                 tld = TransformLevelData.new(levels_set)
@@ -116,7 +115,6 @@ module TransformData
               else
                 # [automatically added else]
               end
-
             end
           end
         end

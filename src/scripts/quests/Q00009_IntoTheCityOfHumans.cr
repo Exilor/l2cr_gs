@@ -63,7 +63,6 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
       else
         # [automatically added else]
       end
-
     when TANAPI
       if st.started?
         html = st.cond?(1) ? "30571-01.html" : "30571-03.html"
@@ -75,7 +74,6 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

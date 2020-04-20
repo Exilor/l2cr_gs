@@ -18,10 +18,10 @@ class ItemDocument < AbstractDocument
   getter(item_list) { [] of L2Item }
 
   private def parse_document(doc, file)
-    doc.each_element do |n|
-      if n.name.casecmp?("list")
-        n.each_element do |d|
-          if d.name.casecmp?("item")
+    each_element(doc) do |n, n_name|
+      if n_name.casecmp?("list")
+        each_element(n) do |d, d_name|
+          if d_name.casecmp?("item")
             parse_item(d)
 
             if item = @current_item.try &.item?
@@ -34,9 +34,9 @@ class ItemDocument < AbstractDocument
   end
 
   private def parse_item(n)
-    item_id = n["id"].to_i
-    class_name = n["type"]
-    item_name = n["name"]
+    item_id = parse_int(n, "id")
+    class_name = parse_string(n, "type")
+    item_name = parse_string(n, "name")
 
     @current_item = Item.new
     current_item.id = item_id
@@ -45,8 +45,8 @@ class ItemDocument < AbstractDocument
     current_item.set["item_id"] = item_id
     current_item.set["name"] = item_name
 
-    n.each_element do |n|
-      case n.name.casecmp
+    each_element(n) do |n, n_name|
+      case n_name.casecmp
       when "table"
         if current_item.item?
           raise "Item created but table node found"
@@ -63,16 +63,16 @@ class ItemDocument < AbstractDocument
       when "cond"
         make_item
 
-        condition = parse_condition(n.first_element_child, current_item.item)
+        condition = parse_condition(get_first_element_child(n), current_item.item)
 
-        msg = n["msg"]?
-        msg_id = n["msgId"]?
+        msg = parse_string(n, "msg", nil)
+        msg_id = parse_string(n, "msgId", nil)
 
         if condition && msg
           condition.message = msg
         elsif condition && msg_id
           condition.message_id = get_value(msg_id).to_i
-          add_name = n["addName"]?
+          add_name = parse_string(n, "addName", nil)
           if add_name && get_value(msg_id).to_i > 0
             condition.add_name
           end
@@ -84,7 +84,6 @@ class ItemDocument < AbstractDocument
       else
         # [automatically added else]
       end
-
     end
 
     make_item
@@ -100,21 +99,16 @@ class ItemDocument < AbstractDocument
 
   private def make_item
     return if current_item.item?
-    type =
+
     case current_item.type
     when "Armor"
-      L2Armor
+      current_item.item = L2Armor.new(current_item.set)
     when "Weapon"
-      L2Weapon
+      current_item.item = L2Weapon.new(current_item.set)
     when "EtcItem"
-      L2EtcItem
+      current_item.item = L2EtcItem.new(current_item.set)
     else
       # [automatically added else]
-    end
-
-
-    if type
-      current_item.item = type.new(current_item.set)
     end
   end
 end

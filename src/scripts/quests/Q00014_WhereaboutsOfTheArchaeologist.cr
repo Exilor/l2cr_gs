@@ -36,7 +36,6 @@ class Scripts::Q00014_WhereaboutsOfTheArchaeologist < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -63,12 +62,10 @@ class Scripts::Q00014_WhereaboutsOfTheArchaeologist < Quest
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

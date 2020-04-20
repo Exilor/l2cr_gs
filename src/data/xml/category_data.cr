@@ -15,14 +15,13 @@ module CategoryData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |node|
-      node.find_element("category") do |list_node|
-        name = list_node["name"]
-        if category_type = CategoryType.parse?(name)
+    find_element(doc, "list") do |node|
+      find_element(node, "category") do |list_node|
+        if category_type = parse_enum(list_node, "name", CategoryType, nil)
           ids = Set(Int32).new
 
-          list_node.find_element("id") do |c|
-            ids << c.content.to_i
+          find_element(list_node, "id") do |c|
+            ids << get_content(c).to_i
           end
 
           CATEGORIES[category_type] = ids
@@ -37,6 +36,7 @@ module CategoryData
     end
 
     warn { "Can't find category data for \"#{type}\"." }
+
     false
   end
 

@@ -13,8 +13,8 @@ module HellboundSpawns
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |list|
-      list.each_element do |d|
+    find_element(doc, "list") do |list|
+      each_element(list) do |d|
         parse_spawn(d)
       end
     end
@@ -25,39 +25,36 @@ module HellboundSpawns
       return
     end
 
-    unless tmp = npc["id"]?
+    unless npc_id = parse_int(npc, "id", nil)
       error "Missing NPC id."
       return
     end
 
-    npc_id = tmp.to_i
     delay = random_interval = 0
     min_level = 1
     max_level = 100
     loc = nil
 
-    npc.each_element do |n|
+    each_element(npc) do |n, n_name|
       min_level = 1
       max_level = 100
 
-      case n.name
+      case n_name
       when "location"
-        heading = n["heading"]?.try &.to_i || 0
-        loc = Location.new(n["x"].to_i, n["y"].to_i, n["z"].to_i, heading)
+        heading = parse_int(n, "heading", 0)
+        x = parse_int(n, "x")
+        y = parse_int(n, "y")
+        z = parse_int(n, "z")
+        loc = Location.new(x, y, z, heading)
       when "respawn"
-        delay = n["delay"].to_i
-        if tmp = n["randomInterval"]?
-          random_interval = tmp.to_i
-        else
-          random_interval = 1
-        end
+        delay = parse_int(n, "delay")
+        random_interval = parse_int(n, "randomInterval", 1)
       when "hellboundLevel"
-        min_level = n["min"]?.try &.to_i || 1
-        max_level = n["max"]?.try &.to_i || 100
+        min_level = parse_int(n, "min", 1)
+        max_level = parse_int(n, "max", 100)
       else
         # [automatically added else]
       end
-
     end
 
     sp = L2Spawn.new(npc_id)

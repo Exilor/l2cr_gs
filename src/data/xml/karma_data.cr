@@ -11,10 +11,10 @@ module KarmaData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("pcKarmaIncrease") do |n|
-      n.find_element("increase") do |d|
-        lvl = d["lvl"].to_i
-        val = d["val"].to_f
+    find_element(doc, "pcKarmaIncrease") do |n|
+      find_element(n, "increase") do |d|
+        lvl = parse_int(d, "lvl")
+        val = parse_double(d, "val")
         KARMA_TABLE[lvl] = val
       end
     end

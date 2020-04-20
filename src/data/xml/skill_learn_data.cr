@@ -11,14 +11,14 @@ module SkillLearnData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("npc") do |l|
+    find_element(doc, "list") do |n|
+      find_element(n, "npc") do |l|
         class_ids = [] of ClassId
-        l.find_element("classId") do |c|
-          cid = c.text.to_i
+        find_element(l, "classId") do |c|
+          cid = get_content(c).to_i
           class_ids << ClassId[cid]
         end
-        id = l["id"].to_i
+        id = parse_int(l, "id")
         SKILL_LEARN[id] = class_ids
       end
     end

@@ -42,7 +42,6 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -74,7 +73,6 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
         else
           # [automatically added else]
         end
-
       when RUKAL
         if st.cond?(2)
           html = "30629-01.htm"
@@ -82,11 +80,9 @@ class Scripts::Q00030_ChestCaughtWithABaitOfFire < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

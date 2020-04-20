@@ -120,7 +120,6 @@ class Scripts::Q00021_HiddenTruth < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -165,7 +164,6 @@ class Scripts::Q00021_HiddenTruth < Quest
         else
           # [automatically added else]
         end
-
       when GHOST_OF_VON_HELLMANS_PAGE
         if st.cond?(3)
           if @move_ended
@@ -190,7 +188,6 @@ class Scripts::Q00021_HiddenTruth < Quest
         else
           # [automatically added else]
         end
-
       when AGRIPEL
         if st.has_quest_items?(CROSS_OF_EINHASAD) && st.cond?(6)
           st.set("AGRIPEL", "1")
@@ -245,7 +242,6 @@ class Scripts::Q00021_HiddenTruth < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)

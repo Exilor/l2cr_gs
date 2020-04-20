@@ -65,7 +65,6 @@ class Scripts::Q00001_LettersOfLove < Quest
         else
           # [automatically added else]
         end
-
       when 2
         case npc.id
         when DARIN
@@ -82,7 +81,6 @@ class Scripts::Q00001_LettersOfLove < Quest
         else
           # [automatically added else]
         end
-
       when 3
         case npc.id
         when DARIN
@@ -105,7 +103,6 @@ class Scripts::Q00001_LettersOfLove < Quest
         else
           # [automatically added else]
         end
-
       when 4
         case npc.id
         when DARIN
@@ -126,17 +123,14 @@ class Scripts::Q00001_LettersOfLove < Quest
         else
           # [automatically added else]
         end
-
       else
         # [automatically added else]
       end
-
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

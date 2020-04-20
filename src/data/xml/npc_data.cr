@@ -39,9 +39,9 @@ module NpcData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("npc") do |d|
-        npc_id = d["id"].to_i
+    find_element(doc, "list") do |n|
+      find_element(n, "npc") do |d|
+        npc_id = parse_int(d, "id")
 
         set = StatsSet.new
 
@@ -52,35 +52,35 @@ module NpcData
         drop_lists = nil
 
         set["id"] = npc_id
-        set.add(d, "displayId")
-        set.add(d, "level")
-        set.add(d, "type")
-        set.add(d, "name")
-        set.add(d, "usingServerSideName")
-        set.add(d, "title")
-        set.add(d, "usingServerSideTitle")
+        add_from_node(d, set, "displayId")
+        add_from_node(d, set, "level")
+        add_from_node(d, set, "type")
+        add_from_node(d, set, "name")
+        add_from_node(d, set, "usingServerSideName")
+        add_from_node(d, set, "title")
+        add_from_node(d, set, "usingServerSideTitle")
 
-        d.each_element do |npc|
-          case npc.name.casecmp
+        each_element(d) do |npc, npc_name|
+          case npc_name.casecmp
           when "parameters"
             parameters ||= StatsSet.new
-            npc.each_element do |params_node|
-              case params_node.name.casecmp
+            each_element(npc) do |params_node, params_node_name|
+              case params_node_name.casecmp
               when "param"
-                parameters[params_node["name"]] = params_node["value"]
+                parameters[parse_string(params_node, "name")] = parse_string(params_node, "value")
               when "skill"
-                name = params_node["name"]
-                id = params_node["id"].to_i
-                level = params_node["level"].to_i
+                name = parse_string(params_node, "name")
+                id = parse_int(params_node, "id")
+                level = parse_int(params_node, "level")
                 skill = SkillHolder.new(id, level)
                 parameters[name] = skill
               when "minions"
                 minions = Array(MinionHolder).new(1)
-                params_node.find_element("npc") do |minions_node|
-                  minion_id = minions_node["id"].to_i
-                  minion_count = minions_node["count"].to_i
-                  minion_respawn = minions_node["respawnTime"].to_i64
-                  minion_point = minions_node["weightPoint"].to_i
+                find_element(params_node, "npc") do |minions_node|
+                  minion_id = parse_int(minions_node, "id")
+                  minion_count = parse_int(minions_node, "count")
+                  minion_respawn = parse_long(minions_node, "respawnTime")
+                  minion_point = parse_int(minions_node, "weightPoint")
                   minions << MinionHolder.new(minion_id, minion_count, minion_respawn, minion_point)
                 end
 
@@ -90,203 +90,194 @@ module NpcData
               else
                 # [automatically added else]
               end
-
             end
           when "race", "sex"
-            set[npc.name] = npc.content.upcase
+            set[npc_name] = get_content(npc).upcase
           when "equipment"
-            set.add(npc, "chestId", "chest")
-            set.add(npc, "rhandId", "rhand")
-            set.add(npc, "lhandId", "lhand")
-            set.add(npc, "weaponEnchant")
+            add_from_node(npc, set, "chestId", "chest")
+            add_from_node(npc, set, "rhandId", "rhand")
+            add_from_node(npc, set, "lhandId", "lhand")
+            add_from_node(npc, set, "weaponEnchant")
           when "acquire"
-            set.add(npc, "expRate")
-            set.add(npc, "sp")
-            set.add(npc, "raidPoints")
+            add_from_node(npc, set, "expRate")
+            add_from_node(npc, set, "sp")
+            add_from_node(npc, set, "raidPoints")
           when "stats"
-            set.add(npc, "baseSTR", "str")
-            set.add(npc, "baseINT", "int")
-            set.add(npc, "baseDEX", "dex")
-            set.add(npc, "baseWIT", "wit")
-            set.add(npc, "baseCON", "con")
-            set.add(npc, "baseMEN", "men")
+            add_from_node(npc, set, "baseSTR", "str")
+            add_from_node(npc, set, "baseINT", "int")
+            add_from_node(npc, set, "baseDEX", "dex")
+            add_from_node(npc, set, "baseWIT", "wit")
+            add_from_node(npc, set, "baseCON", "con")
+            add_from_node(npc, set, "baseMEN", "men")
 
-            npc.each_element do |stat|
-              case stat.name.casecmp
+            each_element(npc) do |stat, stat_name|
+              case stat_name.casecmp
               when "vitals"
-                set.add(stat, "baseHpMax", "hp")
-                set.add(stat, "baseHpReg", "hpRegen")
-                set.add(stat, "baseMpMax", "mp")
-                set.add(stat, "baseMpReg", "mpRegen")
+                add_from_node(stat, set, "baseHpMax", "hp")
+                add_from_node(stat, set, "baseHpReg", "hpRegen")
+                add_from_node(stat, set, "baseMpMax", "mp")
+                add_from_node(stat, set, "baseMpReg", "mpRegen")
               when "attack"
-                set.add(stat, "basePAtk", "physical")
-                set.add(stat, "baseMAtk", "magical")
-                set.add(stat, "baseRndDam", "random")
-                set.add(stat, "baseCritRate", "critical")
-                set.add(stat, "accuracy", "accuracy")
-                set.add(stat, "basePAtkSpd", "attackSpeed")
-                set.add(stat, "reuseDelay", "reuseDelay")
-                set.add(stat, "baseAtkType", "type")
-                set.add(stat, "baseAtkRange", "range")
-                set.add(stat, "distance", "distance")
-                set.add(stat, "width", "width")
+                add_from_node(stat, set, "basePAtk", "physical")
+                add_from_node(stat, set, "baseMAtk", "magical")
+                add_from_node(stat, set, "baseRndDam", "random")
+                add_from_node(stat, set, "baseCritRate", "critical")
+                add_from_node(stat, set, "accuracy", "accuracy")
+                add_from_node(stat, set, "basePAtkSpd", "attackSpeed")
+                add_from_node(stat, set, "reuseDelay", "reuseDelay")
+                add_from_node(stat, set, "baseAtkType", "type")
+                add_from_node(stat, set, "baseAtkRange", "range")
+                add_from_node(stat, set, "distance", "distance")
+                add_from_node(stat, set, "width", "width")
               when "defence"
-                set.add(stat, "basePDef", "physical")
-                set.add(stat, "baseMDef", "magical")
-                set.add(stat, "evasion", "evasion")
-                set.add(stat, "baseShldDef", "shield")
-                set.add(stat, "baseShldRate", "shieldRate")
+                add_from_node(stat, set, "basePDef", "physical")
+                add_from_node(stat, set, "baseMDef", "magical")
+                add_from_node(stat, set, "evasion", "evasion")
+                add_from_node(stat, set, "baseShldDef", "shield")
+                add_from_node(stat, set, "baseShldRate", "shieldRate")
               when "attribute"
-                stat.each_element do |st|
-                  case st.name.casecmp
+                each_element(stat) do |st, st_name|
+                  case st_name.casecmp
                   when "attack"
-                    case st["type"]?.try &.casecmp
+                    case parse_string(st, "type").casecmp
                     when "FIRE"
-                      set.add(st, "baseFire", "value")
+                      add_from_node(st, set, "baseFire", "value")
                     when "WATER"
-                      set.add(st, "baseWater", "value")
+                      add_from_node(st, set, "baseWater", "value")
                     when "WIND"
-                      set.add(st, "baseWind", "value")
+                      add_from_node(st, set, "baseWind", "value")
                     when "EARTH"
-                      set.add(st, "baseEarth", "value")
+                      add_from_node(st, set, "baseEarth", "value")
                     when "DARK"
-                      set.add(st, "baseDark", "value")
+                      add_from_node(st, set, "baseDark", "value")
                     when "HOLY"
-                      set.add(st, "baseHoly", "value")
+                      add_from_node(st, set, "baseHoly", "value")
                     else
                       # [automatically added else]
                     end
-
                   when "defence"
-                    set.add(st, "baseFireRes", "fire")
-                    set.add(st, "baseWaterRes", "water")
-                    set.add(st, "baseWindRes", "wind")
-                    set.add(st, "baseEarthRes", "earth")
-                    set.add(st, "baseHolyRes", "holy")
-                    set.add(st, "baseDarkRes", "dark")
-                    set.add(st, "baseElementRes", "default")
+                    add_from_node(st, set, "baseFireRes", "fire")
+                    add_from_node(st, set, "baseWaterRes", "water")
+                    add_from_node(st, set, "baseWindRes", "wind")
+                    add_from_node(st, set, "baseEarthRes", "earth")
+                    add_from_node(st, set, "baseHolyRes", "holy")
+                    add_from_node(st, set, "baseDarkRes", "dark")
+                    add_from_node(st, set, "baseElementRes", "default")
                   else
                     # [automatically added else]
                   end
-
                 end
               when "speed"
-                stat.each_element do |spd|
-                  case spd.name.casecmp
+                each_element(stat) do |spd, spd_name|
+                  case spd_name.casecmp
                   when "walk"
-                    set.add(spd, "baseWalkSpd", "ground")
-                    set.add(spd, "baseSwimWalkSpd", "swim")
-                    set.add(spd, "baseFlyWalkSpd", "fly")
+                    add_from_node(spd, set, "baseWalkSpd", "ground")
+                    add_from_node(spd, set, "baseSwimWalkSpd", "swim")
+                    add_from_node(spd, set, "baseFlyWalkSpd", "fly")
                   when "run"
-                    set.add(spd, "baseRunSpd", "ground")
-                    set.add(spd, "baseSwimRunSpd", "swim")
-                    set.add(spd, "baseFlyRunSpd", "fly")
+                    add_from_node(spd, set, "baseRunSpd", "ground")
+                    add_from_node(spd, set, "baseSwimRunSpd", "swim")
+                    add_from_node(spd, set, "baseFlyRunSpd", "fly")
                   else
                     # [automatically added else]
                   end
 
                 end
               when "hittime"
-                set["hitTime"] = stat.content
+                set["hitTime"] = get_content(stat)
               else
                 # [automatically added else]
               end
-
             end
           when "status"
-            set.add(npc, "unique")
-            set.add(npc, "attackable")
-            set.add(npc, "targetable")
-            set.add(npc, "undying")
-            set.add(npc, "showName")
-            set.add(npc, "flying")
-            set.add(npc, "canMove")
-            set.add(npc, "noSleepMode")
-            set.add(npc, "passableDoor")
-            set.add(npc, "hasSummoner")
-            set.add(npc, "canBeSown")
+            add_from_node(npc, set, "unique")
+            add_from_node(npc, set, "attackable")
+            add_from_node(npc, set, "targetable")
+            add_from_node(npc, set, "undying")
+            add_from_node(npc, set, "showName")
+            add_from_node(npc, set, "flying")
+            add_from_node(npc, set, "canMove")
+            add_from_node(npc, set, "noSleepMode")
+            add_from_node(npc, set, "passableDoor")
+            add_from_node(npc, set, "hasSummoner")
+            add_from_node(npc, set, "canBeSown")
           when "skilllist"
             skills = {} of Int32 => Skill
-            npc.each_element do |sn|
-              if sn.name.casecmp?("skill")
-                id = sn["id"].to_i
-                level = sn["level"].to_i
-                if skill = SkillData[id, level]?
-                  skills[id] = skill
-                else
-                  warn { "No skill found with id #{id} and level #{level}." }
-                end
+            find_element(npc, "skill") do |sn|
+              id = parse_int(sn, "id")
+              level = parse_int(sn, "level")
+              if skill = SkillData[id, level]?
+                skills[id] = skill
+              else
+                warn { "No skill found with id #{id} and level #{level}." }
               end
             end
           when "shots"
-            set.add(npc, "soulShot", "soul")
-            set.add(npc, "spiritShot", "spirit")
-            set.add(npc, "shotShotChance", "shotChance")
-            set.add(npc, "spiritShotChance", "spiritChance")
+            add_from_node(npc, set, "soulShot", "soul")
+            add_from_node(npc, set, "spiritShot", "spirit")
+            add_from_node(npc, set, "shotShotChance", "shotChance")
+            add_from_node(npc, set, "spiritShotChance", "spiritChance")
           when "corpsetime"
-            set["corpseTime"] = npc.text
+            set["corpseTime"] = get_content(npc)
           when "excrteffect"
-            set["exCrtEffect"] = npc.text
+            set["exCrtEffect"] = get_content(npc)
           when "snpcprophprate"
-            set["sNpcPropHpRate"] = npc.text
+            set["sNpcPropHpRate"] = get_content(npc)
           when "ai"
-            set.add(npc, "aiType", "type")
-            set.add(npc, "aggroRange")
-            set.add(npc, "clanHelpRange")
-            set.add(npc, "dodge")
-            set.add(npc, "isChaos")
-            set.add(npc, "isAggressive")
-            npc.each_element do |ai|
-              case ai.name.casecmp
+             add_from_node(npc, set, "aiType", "type")
+            add_from_node(npc, set, "aggroRange")
+            add_from_node(npc, set, "clanHelpRange")
+            add_from_node(npc, set, "dodge")
+            add_from_node(npc, set, "isChaos")
+            add_from_node(npc, set, "isAggressive")
+            each_element(npc) do |ai, ai_name|
+              case ai_name.casecmp
               when "skill"
-                set.add(ai, "minSkillChance", "minChance")
-                set.add(ai, "maxSkillChance", "maxChance")
-                set.add(ai, "primarySkillId", "primaryId")
-                set.add(ai, "shortRangeSkillId", "shortRangeId")
-                set.add(ai, "shortRangeSkillChance", "shortRangeChance")
-                set.add(ai, "longRangeSkillId", "longRangeId")
-                set.add(ai, "longRangeSkillChance", "longRangeChance")
+                add_from_node(ai, set, "minSkillChance", "minChance")
+                add_from_node(ai, set, "maxSkillChance", "maxChance")
+                add_from_node(ai, set, "primarySkillId", "primaryId")
+                add_from_node(ai, set, "shortRangeSkillId", "shortRangeId")
+                add_from_node(ai, set, "shortRangeSkillChance", "shortRangeChance")
+                add_from_node(ai, set, "longRangeSkillId", "longRangeId")
+                add_from_node(ai, set, "longRangeSkillChance", "longRangeChance")
               when "clanlist"
-                ai.each_element do |cln|
-                  if cln.name.casecmp?("clan")
+                each_element(ai) do |cln, cln_name|
+                  if cln_name.casecmp?("clan")
                     clans ||= Set(Int32).new
-                    clans << get_or_create_clan_id(cln.text)
-                  elsif cln.name.casecmp?("ignorenpcid")
+                    clans << get_or_create_clan_id(get_content(cln))
+                  elsif cln_name.casecmp?("ignorenpcid")
                     ignore_clan_npc_ids ||= Set(Int32).new
-                    ignore_clan_npc_ids << cln.text.to_i
+                    ignore_clan_npc_ids << get_content(cln).to_i
                   end
                 end
               else
                 # [automatically added else]
               end
-
             end
           when "droplists"
-            npc.each_element do |dn|
-              drop_list_scope = DropListScope.parse(dn.name)
+            each_element(npc) do |dn, dn_name|
+              drop_list_scope = DropListScope.parse(dn_name)
               drop_lists ||= EnumMap(DropListScope, Slice(IDropItem)).new
               drop_list = [] of IDropItem
               parse_drop_list(dn, drop_list_scope, drop_list)
               drop_lists[drop_list_scope] = drop_list.to_slice
             end
           when "collision"
-            npc.each_element do |col|
-              case col.name.casecmp
+            each_element(npc) do |col, col_name|
+              case col_name.casecmp
               when "radius"
-                set.add(col, "collisionRadius", "normal")
-                set.add(col, "collisionRadiusGrown", "grown")
+                add_from_node(col, set, "collisionRadius", "normal")
+                add_from_node(col, set, "collisionRadiusGrown", "grown")
               when "height"
-                set.add(col, "collisionHeight", "normal")
-                set.add(col, "collisionHeightGrown", "grown")
+                add_from_node(col, set, "collisionHeight", "normal")
+                add_from_node(col, set, "collisionHeightGrown", "grown")
               else
                 # [automatically added else]
               end
-
             end
           else
             # [automatically added else]
           end
-
         end
 
         if template = NPCS[npc_id]?
@@ -380,11 +371,11 @@ module NpcData
   end
 
   private def parse_drop_list(drop_list_node, drop_list_scope, drops)
-    drop_list_node.each_element do |dn|
-      if dn.name.casecmp?("group")
-        drop_item = drop_list_scope.new_grouped_drop_item(dn["chance"].to_f)
+    each_element(drop_list_node) do |dn, dn_name|
+      if dn_name.casecmp?("group")
+        drop_item = drop_list_scope.new_grouped_drop_item(parse_double(dn, "chance"))
         grouped_drop_list = [] of IDropItem
-        dn.each_element do |gn|
+        each_element(dn) do |gn|
           parse_drop_list_item(gn, drop_list_scope, grouped_drop_list)
         end
         items = Array(GeneralDropItem).new(grouped_drop_list.size)
@@ -404,11 +395,11 @@ module NpcData
   end
 
   private def parse_drop_list_item(dli, drop_list_scope, drops)
-    if dli.name.casecmp?("item")
-      id = dli["id"].to_i
-      min = dli["min"].to_i64
-      max = dli["max"].to_i64
-      chance = dli["chance"].to_f
+    if get_node_name(dli).casecmp?("item")
+      id = parse_int(dli, "id")
+      min = parse_long(dli, "min")
+      max = parse_long(dli, "max")
+      chance = parse_double(dli, "chance")
       drop_item = drop_list_scope.new_drop_item(id, min, max, chance)
       drops << drop_item
     end
@@ -479,17 +470,15 @@ module NpcData
     end
 
     private def parse_document(doc, file)
-      doc.find_element("list") do |node|
-        node.find_element("npc") do |list|
+      find_element(doc, "list") do |node|
+        find_element(node, "npc") do |list|
           minions = [] of MinionHolder
-          id = list["id"].to_i
-          list.each_element do |npc|
-            if npc.name == "minion"
-              id2 = npc["id"].to_i
-              count = npc["count"].to_i
-              respawn = npc["respawnTime"].to_i64
-              minions << MinionHolder.new(id2, count, respawn, 0)
-            end
+          id = parse_int(list, "id")
+          find_element(list, "minion") do |npc|
+            id2 = parse_int(npc, "id")
+            count = parse_int(npc, "count")
+            respawn = parse_long(npc, "respawnTime")
+            minions << MinionHolder.new(id2, count, respawn, 0)
           end
           @minions[id] = minions
         end

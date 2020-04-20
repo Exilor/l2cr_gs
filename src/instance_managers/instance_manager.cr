@@ -87,10 +87,10 @@ module InstanceManager
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("instance") do |d|
-        id = d["id"].to_i
-        name = d["name"]
+    find_element(doc, "list") do |n|
+      find_element(n, "instance") do |d|
+        id = parse_int(d, "id")
+        name = parse_string(d, "name")
         INSTANCE_ID_NAMES[id] = name
       end
     end

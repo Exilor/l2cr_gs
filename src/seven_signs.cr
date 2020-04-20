@@ -100,14 +100,14 @@ module SevenSigns
         info { "The #{get_cabal_name(cabal_highest_score)} were victorious last week." }
       end
     elsif cabal_highest_score == CABAL_NULL
-      info "The competition, if the current trend continues, will end in a tie this week."
+      info "If the current trend continues this week's competition will end in a tie."
     else
       info { "The #{get_cabal_name(cabal_highest_score)} are in the lead this week." }
     end
 
     milli_to_change = 0
 
-    if next_period_change_in_past?
+    if next_period_change_in_the_past?
       info "Next period change occurred while the server was offline. Changing periods now."
     else
       set_calendar_for_next_period_change
@@ -131,7 +131,7 @@ module SevenSigns
     @@active_period
   end
 
-  private def next_period_change_in_past? : Bool
+  private def next_period_change_in_the_past? : Bool
     last_period_change = Calendar.new
     case current_period
     when PERIOD_SEAL_VALIDATION, PERIOD_COMPETITION

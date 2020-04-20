@@ -24,26 +24,26 @@ class TarBeetleSpawn
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |d|
-      d.find_element("spawnZone") do |r|
-        npc_count = r["maxNpcCount"].to_i
+    find_element(doc, "list") do |d|
+      find_element(d, "spawnZone") do |r|
+        npc_count = parse_int(r, "maxNpcCount")
         sp = SpawnZone.new(npc_count, ZONES.size)
-        r.find_element("zone") do |b|
-          min_z = b["minZ"].to_i
-          max_z = b["maxZ"].to_i
+        find_element(r, "zone") do |b|
+          min_z = parse_int(b, "minZ")
+          max_z = parse_int(b, "maxZ")
           zone = Zone.new
-          b.each_element do |c|
-            if c.name == "point"
-              x = c["x"].to_i
-              y = c["y"].to_i
+          each_element(b) do |c, c_name|
+            if c_name == "point"
+              x = parse_int(c, "x")
+              y = parse_int(c, "y")
               zone.add(x, y, min_z, max_z, 0)
-            elsif c.name == "bannedZone"
+            elsif c_name == "bannedZone"
               banned_zone = Zone.new
-              b_min_z = c["minZ"].to_i
-              b_max_z = c["maxZ"].to_i
-              c.find_element("point") do |f|
-                x = f["x"].to_i
-                y = f["y"].to_i
+              b_min_z = parse_int(c, "minZ")
+              b_max_z = parse_int(c, "maxZ")
+              find_element(c, "point") do |f|
+                x = parse_int(f, "x")
+                y = parse_int(f, "y")
                 banned_zone.add(x, y, b_min_z, b_max_z, 0)
               end
               zone.add_banned_zone(banned_zone)

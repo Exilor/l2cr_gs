@@ -221,7 +221,7 @@ class L2Clan
 
   def remove_clan_member(l2id : Int32, clan_join_expiry_time : Int64)
     unless ex_member = @members.delete(l2id)
-      warn { "Member with ID #{l2id} not found in the clan." }
+      warn { "Member with id #{l2id} not found in the clan." }
       return
     end
 

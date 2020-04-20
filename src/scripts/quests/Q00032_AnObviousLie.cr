@@ -86,7 +86,6 @@ class Scripts::Q00032_AnObviousLie < Quest
     else
       # [automatically added else]
     end
-
   end
 
   def on_kill(npc, killer, is_summon)
@@ -135,7 +134,6 @@ class Scripts::Q00032_AnObviousLie < Quest
       else
         # [automatically added else]
       end
-
     when MIKI_THE_CAT
       case qs.cond
       when 2
@@ -151,11 +149,9 @@ class Scripts::Q00032_AnObviousLie < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

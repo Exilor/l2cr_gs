@@ -42,23 +42,19 @@ class BoatRunePrimeval
   def call
     case @cycle
     when 0
-      # debug "Leaving for Primeval Isle."
       BoatManager.dock_ship(BoatManager::RUNE_HARBOR, false)
       BoatManager.broadcast_packets(RUNE_DOCK[0], PRIMEVAL_DOCK, LEAVING_RUNE, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       @boat.pay_for_ride(8925, 1, 34513, -38009, -3640)
       @boat.execute_path(RUNE_TO_PRIMEVAL)
     when 1
-      # debug "Docked in Primeval Isle Harbor. Departing in 3 minutes."
       BoatManager.broadcast_packets(PRIMEVAL_DOCK, RUNE_DOCK[0], ARRIVED_AT_PRIMEVAL, ARRIVED_AT_PRIMEVAL_2, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 180_000)
     when 2
-      # debug "Leaving for Rune."
       BoatManager.broadcast_packets(PRIMEVAL_DOCK, RUNE_DOCK[0], LEAVING_PRIMEVAL, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       @boat.pay_for_ride(8924, 1, 10447, -24982, -3664)
       @boat.execute_path(PRIMEVAL_TO_RUNE)
     when 3
       if BoatManager.dock_busy?(BoatManager::RUNE_HARBOR)
-        # debug "The Rune Harbor is busy."
         if @shout_count == 0
           BoatManager.broadcast_packets(RUNE_DOCK[0], PRIMEVAL_DOCK, BUSY_RUNE)
         end
@@ -74,14 +70,12 @@ class BoatRunePrimeval
         @boat.execute_path(RUNE_DOCK)
       end
     when 4
-      # debug "Docked in Rune Harbor. Departing in 3 minutes."
       BoatManager.dock_ship(BoatManager::RUNE_HARBOR, true)
       BoatManager.broadcast_packets(RUNE_DOCK[0], PRIMEVAL_DOCK, ARRIVED_AT_RUNE, ARRIVED_AT_RUNE_2, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 180_000)
     else
       # [automatically added else]
     end
-
 
     @shout_count = 0
     @cycle += 1

@@ -17,7 +17,7 @@ class SkillDocument < AbstractDocument
     property current_skills = [] of Skill
     property current_level = 0
 
-    def get_enchsets(num : Int)
+    def get_enchsets(num)
       case num
       when 1 then enchsets1
       when 2 then enchsets2
@@ -37,10 +37,10 @@ class SkillDocument < AbstractDocument
   private getter! current_skill : SkillInfo?
 
   private def parse_document(doc, file)
-    doc.each_element do |n|
-      case n.name.casecmp
+    each_element(doc) do |n, n_name|
+      case n_name.casecmp
       when "list"
-        n.find_element("skill") do |d|
+        find_element(n, "skill") do |d|
           @current_skill = SkillInfo.new
           parse_skill(d)
           @skills.concat(current_skill.skills)
@@ -52,7 +52,6 @@ class SkillDocument < AbstractDocument
       else
         # [automatically added else]
       end
-
     end
   end
 
@@ -84,14 +83,13 @@ class SkillDocument < AbstractDocument
   end
 
   private def parse_skill(n)
-    skill_id = n["id"].to_i
-    skill_name = n["name"]
-    levels = n["levels"]
-    last_level = levels.to_i
+    skill_id = parse_int(n, "id")
+    skill_name = parse_string(n, "name")
+    last_level = parse_int(n, "levels")
 
-    enchant_levels = Array.new(9, 0)
+    enchant_levels = Slice.new(9, 0)
     1.upto(8) do |i|
-      if lvl = n["enchantGroup#{i}"]?.try &.to_i
+      if lvl = parse_int(n, "enchantGroup#{i}", nil)
         enchant_levels[i] = EnchantSkillGroupsData.add_new_route_for_skill(skill_id, last_level, i, lvl)
       end
     end
@@ -108,16 +106,16 @@ class SkillDocument < AbstractDocument
     end
 
     if current_skill.sets.size != last_level
-      raise "Number of levels mismatch for skill with ID #{skill_id}"
+      raise "Number of levels mismatch for skill with id #{skill_id}"
     end
 
-    first = n.first_element_child
+    first = get_first_element_child(n)
 
-    n.find_element("table") { |t| parse_table(t) }
+    find_element(n, "table") { |t| parse_table(t) }
 
     1.upto(last_level) do |i|
-      n.find_element("set") do |n|
-        if n["name"].casecmp?("capsuled_items_skill")
+      find_element(n, "set") do |n|
+        if parse_string(n, "name").casecmp?("capsuled_items_skill")
           set_extractable_skill_data(current_skill.sets[i - 1], get_table_value("#extractableItems", i))
         else
           parse_set(n, current_skill.sets[i - 1], i)
@@ -135,11 +133,11 @@ class SkillDocument < AbstractDocument
 
         enchsets << set
 
-        n.find_element("set") do |n|
+        find_element(n, "set") do |n|
           parse_set(n, enchsets[i], current_skill.sets.size)
         end
 
-        n.find_element("enchant#{l}") { |n| parse_set(n, enchsets[i], i + 1) }
+        find_element(n, "enchant#{l}") { |n| parse_set(n, enchsets[i], i + 1) }
       end
       if enchsets.size != enchant_levels[l]
         raise "Number of enchant levels mismatch for skill #{skill_id}, enchant levels #{l}"
@@ -152,26 +150,26 @@ class SkillDocument < AbstractDocument
       current_skill.current_level = i
       n = first
       while n
-        n_name = n.name
+        n_name = get_node_name(n)
         case n_name.casecmp
         when "cond"
-          if child = n.first_element_child
+          if child = get_first_element_child(n)
             condition = parse_condition(child, current_skill.current_skills[i])
-            msg = n["msg"]?
-            msg_id = n["msgId"]?
+            msg = parse_string(n, "msg", nil)
+            msg_id = parse_string(n, "msgId", nil)
 
             if condition && msg
               condition.message = get_value(msg, nil)
             elsif condition && msg_id
               condition.message_id = get_value(msg_id, nil).to_i
-              if n["addName"]? && get_value(msg_id, nil).to_i > 0
+              if parse_string(n, "addName", nil) && get_value(msg_id, nil).to_i > 0
                 condition.add_name
               end
             end
 
             current_skill.current_skills[i].attach(condition, false)
           else
-            error "#{n} has no children"
+            error { "#{n} has no children" }
           end
         when "effects"
           parse_template(n, current_skill.current_skills[i])
@@ -191,7 +189,7 @@ class SkillDocument < AbstractDocument
           # [automatically added else]
         end
 
-        n = n.next_element
+        n = get_next_element(n)
       end
     end
 
@@ -209,61 +207,64 @@ class SkillDocument < AbstractDocument
 
         n = first
         while n
-          n_name = n.name
-          if n_name.casecmp?("enchant#{i}cond")
+          case get_node_name(n).casecmp
+          when "enchant#{i}cond"
             found_cond = true
-            condition = parse_condition(n.first_element_child, current_skill.current_skills[i])
-            msg = n["msg"]?
-            msg_id = n["msgId"]?.try &.to_i
+            condition = parse_condition(get_first_element_child(n), current_skill.current_skills[i])
+            msg = parse_string(n, "msg", nil)
+            msg_id = parse_int(n, "msgId", 0)
             if condition && msg
               condition.message = msg
             elsif condition && msg_id
               condition.message_id = msg_id
-              if n["addName"]? && msg_id > 0
+              if parse_string(n, "addName", nil) && msg_id > 0
                 condition.add_name
               end
             end
 
             current_skill.current_skills[i].attach(condition, false)
-          elsif n_name.casecmp?("enchant#{{{i}}}Effects")
+          when "enchant#{{{i}}}Effects"
             found_effect = true
             parse_template(n, current_skill.current_skills[i])
-          elsif n_name.casecmp?("enchant#{{{i}}}startEffects")
+          when "enchant#{{{i}}}startEffects"
             found_start_effects = true
             parse_template(n, current_skill.current_skills[i], EffectScope::START)
-          elsif n_name.casecmp?("enchant#{{{i}}}channelingEffects")
+          when "enchant#{{{i}}}channelingEffects"
             found_channeling_effects = true
             parse_template(n, current_skill.current_skills[i], EffectScope::CHANNELING)
-          elsif n_name.casecmp?("enchant#{{{i}}}pveEffects")
+          when "enchant#{{{i}}}pveEffects"
             found_pve_effects = true
             parse_template(n, current_skill.current_skills[i], EffectScope::PVE)
-          elsif n_name.casecmp?("enchant#{{{i}}}pvpEffects")
+          when "enchant#{{{i}}}pvpEffects"
             found_pvp_effects = true
             parse_template(n, current_skill.current_skills[i], EffectScope::PVP)
-          elsif n_name.casecmp?("enchant#{{{i}}}endEffects")
+          when "enchant#{{{i}}}endEffects"
             found_end_effects = true
             parse_template(n, current_skill.current_skills[i], EffectScope::STOP)
-          elsif n_name.casecmp?("enchant#{{{i}}}selfEffects")
+          when "enchant#{{{i}}}selfEffects"
             found_self_effects = true
             parse_template(n, current_skill.current_skills[i], EffectScope::SELF)
+          else
+            # nothing
           end
-          n = n.next_element
+
+          n = get_next_element(n)
         end
 
         if !found_cond || !found_effect || !found_channeling_effects || !found_start_effects || !found_pve_effects || !found_pvp_effects || !found_end_effects || !found_self_effects
           current_skill.current_level = last_level - 1
           n = first
           while n
-            n_name = n.name
+            n_name = get_node_name(n)
             if !found_cond && n_name.casecmp?("cond")
               condition = parse_condition(n.children.first, current_skill.current_skills[i])
-              msg = n["msg"]?
-              msg_id = n["msgId"]?.try &.to_i
+              msg = parse_string(n, "msg", nil)
+              msg_id = parse_int(n, "msgId", 0)
               if condition && msg
                 condition.message = msg
               elsif condition && msg_id
                 condition.message_id = msg_id
-                if n["addName"]? && msg_id > 0
+                if parse_string(n, "addName", nil) && msg_id > 0
                   condition.add_name
                 end
               end
@@ -284,7 +285,8 @@ class SkillDocument < AbstractDocument
             elsif !found_self_effects && n_name.casecmp?("selfEffects")
               parse_template(n, current_skill.current_skills[i], EffectScope::SELF)
             end
-            n = n.next_element
+
+            n = get_next_element(n)
           end
         end
 

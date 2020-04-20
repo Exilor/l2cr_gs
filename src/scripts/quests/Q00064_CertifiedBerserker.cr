@@ -119,7 +119,6 @@ class Scripts::Q00064_CertifiedBerserker < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -177,7 +176,6 @@ class Scripts::Q00064_CertifiedBerserker < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -285,7 +283,6 @@ class Scripts::Q00064_CertifiedBerserker < Quest
       else
         # [automatically added else]
       end
-
     elsif qs.completed?
       if npc.id == MASTER_ORKURUS
         html = "32207-05.html"

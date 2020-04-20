@@ -32,14 +32,14 @@ module EnchantItemGroupsData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.each_element do |d|
-        if d.name.casecmp?("enchantRateGroup")
-          name = d["name"]
+    find_element(doc, "list") do |n|
+      each_element(n) do |d, d_name|
+        if d_name.casecmp?("enchantRateGroup")
+          name = parse_string(d, "name")
           group = EnchantItemGroup.new(name)
-          d.find_element "current" do |cd|
-            range = cd["enchant"]
-            chance = cd["chance"].to_f
+          find_element d, "current" do |cd|
+            range = parse_string(cd, "enchant")
+            chance = parse_double(cd, "chance")
             min, max = -1, 0
             if range.includes?('-')
               split = range.split('-')
@@ -57,20 +57,20 @@ module EnchantItemGroupsData
             end
           end
           ITEM_GROUPS[name] = group
-        elsif d.name.casecmp?("enchantScrollGroup")
-          id = d["id"].to_i
+        elsif d_name.casecmp?("enchantScrollGroup")
+          id = parse_int(d, "id")
           group = EnchantScrollGroup.new(id)
-          d.find_element("enchantRate") do |cd|
+          find_element(d, "enchantRate") do |cd|
             rate_group = EnchantRateItem.new(cd["group"])
-            cd.find_element("item") do |z|
-              if slot = z["slot"]?
+            find_element(cd, "item") do |z|
+              if slot = parse_string(z, "slot", nil)
                 rate_group.add_slot(ItemTable::SLOTS[slot])
               end
-              if mw = z["magicWeapon"]?
+              if mw = parse_string(z, "magicWeapon", nil)
                 rate_group.magic_weapon = Bool.new(mw)
               end
-              if id2 = z["id"]?
-                rate_group.item_id = id2.to_i
+              if id2 = parse_int(z, "id", nil)
+                rate_group.item_id = id2
               end
             end
             group.add_rate_group(rate_group)

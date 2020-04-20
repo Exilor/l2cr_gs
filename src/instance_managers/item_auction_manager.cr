@@ -50,9 +50,9 @@ module ItemAuctionManager
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |list|
-      list.find_element("instance") do |nb|
-        instance_id = nb["id"].to_i
+    find_element(doc, "list") do |list|
+      find_element(list, "instance") do |nb|
+        instance_id = parse_int(nb, "id")
         if MANAGER_INSTANCES.has_key?(instance_id)
           raise "Duplicate instance id #{instance_id}"
         end

@@ -257,7 +257,6 @@ class Scripts::Q00060_GoodWorksReward < Quest
         else
           # [automatically added else]
         end
-
       end
     when "REPLY_6"
       if pc.class_id.warrior?
@@ -693,7 +692,6 @@ class Scripts::Q00060_GoodWorksReward < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -804,7 +802,6 @@ class Scripts::Q00060_GoodWorksReward < Quest
       else
         # [automatically added else]
       end
-
     elsif qs.completed?
       if npc.id == BLUEPRINT_SELLER_DAEGER
         html = get_already_completed_msg(pc)

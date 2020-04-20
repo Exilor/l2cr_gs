@@ -72,6 +72,7 @@ class Scripts::Q00036_MakeASewingKit < Quest
 
   def on_talk(npc, pc)
     st = get_quest_state!(pc)
+
     case st.state
     when State::CREATED
       html = pc.level >= MIN_LEVEL ? "30847-01.htm" : "30847-02.html"
@@ -96,7 +97,6 @@ class Scripts::Q00036_MakeASewingKit < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

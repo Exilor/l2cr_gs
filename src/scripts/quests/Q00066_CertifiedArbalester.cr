@@ -251,7 +251,6 @@ class Scripts::Q00066_CertifiedArbalester < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -435,7 +434,6 @@ class Scripts::Q00066_CertifiedArbalester < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -622,8 +620,8 @@ class Scripts::Q00066_CertifiedArbalester < Quest
       else
         # [automatically added else]
       end
-
     end
+
     if qs.completed?
       if npc.id == MASTER_RINDY
         if pc.class_id.arbalester?

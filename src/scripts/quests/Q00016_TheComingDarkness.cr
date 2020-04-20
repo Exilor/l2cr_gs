@@ -68,14 +68,13 @@ class Scripts::Q00016_TheComingDarkness < Quest
           html = "31517-02a.html"
         end
       elsif npc_id - 31511 == st.cond
-        html = npc_id.to_s + "-00.html"
+        html = "#{npc_id}-00.html"
       else
-        html = npc_id.to_s + "-01.html"
+        html = "#{npc_id}-01.html"
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

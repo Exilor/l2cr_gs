@@ -15,12 +15,12 @@ module ClassListData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("class") do |d|
-        class_id = ClassId[d["classId"].to_i]
-        class_name = d["name"]
-        parent_str = d["parentClassId"]?
-        parent = ClassId[parent_str.to_i] if parent_str
+    find_element(doc, "list") do |n|
+      find_element(n, "class") do |d|
+        class_id = ClassId[parse_int(d, "classId")]
+        class_name = parse_string(d, "name")
+        parent_id = parse_int(d, "parentClassId", nil)
+        parent = ClassId[parent_id] if parent_id
         CLASS_DATA[class_id] = ClassInfo.new(class_id, class_name, parent)
       end
     end

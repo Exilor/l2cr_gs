@@ -105,7 +105,6 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
       else
         # [automatically added else]
       end
-
     when ARNOLD, JOHNSTONE, KENYOS
       if qs.cond?(1)
         unless qs.set?(npc.name)
@@ -120,7 +119,6 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -16,27 +16,26 @@ module HitConditionBonusData
   end
 
   private def parse_document(doc, file)
-    doc.each_element do |d|
-      d.each_element do |d|
-        case d.name.casecmp
+    each_element(doc) do |n|
+      each_element(n) do |d, d_name|
+        case d_name.casecmp
         when "front"
-          @@front_bonus = d["val"].to_i
+          @@front_bonus = parse_int(d, "val")
         when "side"
-          @@side_bonus  = d["val"].to_i
+          @@side_bonus  = parse_int(d, "val")
         when "back"
-          @@back_bonus  = d["val"].to_i
+          @@back_bonus  = parse_int(d, "val")
         when "high"
-          @@high_bonus  = d["val"].to_i
+          @@high_bonus  = parse_int(d, "val")
         when "low"
-          @@low_bonus   = d["val"].to_i
+          @@low_bonus   = parse_int(d, "val")
         when "dark"
-          @@dark_bonus  = d["val"].to_i
+          @@dark_bonus  = parse_int(d, "val")
         when "rain"
-          @@rain_bonus  = d["val"].to_i
+          @@rain_bonus  = parse_int(d, "val")
         else
           # [automatically added else]
         end
-
       end
     end
   end

@@ -158,13 +158,11 @@ class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when MYSTERIOUS_WIZARD
       if st.started?
         if st.cond?(10)
@@ -209,18 +207,15 @@ class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
           else
             # [automatically added else]
           end
-
         when 9, 10
           html = "31532-20.html"
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

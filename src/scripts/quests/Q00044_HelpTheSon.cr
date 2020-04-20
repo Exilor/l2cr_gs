@@ -60,7 +60,6 @@ class Scripts::Q00044_HelpTheSon < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -105,13 +104,11 @@ class Scripts::Q00044_HelpTheSon < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when DRIKUS
       if st.started?
         case st.cond
@@ -122,12 +119,10 @@ class Scripts::Q00044_HelpTheSon < Quest
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

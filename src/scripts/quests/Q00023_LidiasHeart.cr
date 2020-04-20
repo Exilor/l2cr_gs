@@ -162,7 +162,6 @@ class Scripts::Q00023_LidiasHeart < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -197,7 +196,6 @@ class Scripts::Q00023_LidiasHeart < Quest
         else
           # [automatically added else]
         end
-
       when TRADER_VIOLET
         case qs.memo_state
         when 10
@@ -218,7 +216,6 @@ class Scripts::Q00023_LidiasHeart < Quest
         else
           # [automatically added else]
         end
-
       when TOMBSTONE
         case qs.memo_state
         when 8
@@ -230,7 +227,6 @@ class Scripts::Q00023_LidiasHeart < Quest
         else
           # [automatically added else]
         end
-
       when GHOST_OF_VON_HELLMANN
         memo_state = qs.memo_state
         if memo_state == 8
@@ -267,7 +263,6 @@ class Scripts::Q00023_LidiasHeart < Quest
         else
           # [automatically added else]
         end
-
       when BOX
         if qs.memo_state == 11
           if has_quest_items?(pc, SILVER_KEY)
@@ -279,7 +274,6 @@ class Scripts::Q00023_LidiasHeart < Quest
       else
         # [automatically added else]
       end
-
     elsif qs.completed?
       if npc.id == HIGH_PRIEST_INNOCENTIN
         html = get_already_completed_msg(pc)

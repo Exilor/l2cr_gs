@@ -334,7 +334,6 @@ abstract class L2Item < ListenersContainer
 
     @pre_conditions.try &.each do |cond|
       unless cond.test(char, target, nil, nil)
-        debug "Failed #{cond.inspect}."
         if char.is_a?(L2Summon)
           char.send_packet(SystemMessageId::PET_CANNOT_USE_ITEM)
           return false
@@ -344,10 +343,8 @@ abstract class L2Item < ListenersContainer
           msg = cond.message
           msg_id = cond.message_id
           if msg
-            debug "SystemMessage with text \"#{msg}\""
             char.send_message(msg)
           elsif msg_id != 0
-            debug "SystemMessage with id #{msg_id}. add_name: #{cond.add_name?}"
             sm = SystemMessage[msg_id]
             if cond.add_name?
               sm.add_item_name(@item_id)

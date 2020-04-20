@@ -31,13 +31,13 @@ class BaseStats < EnumClass
   end
 
   private def self.parse_document(doc, file)
-    doc.find_element("list") do |list|
-      list.each_element do |stat|
-        stat.find_element("stat") do |value|
-          index = value["value"].to_i
-          bonus = value["bonus"].to_f
+    find_element(doc, "list") do |list|
+      each_element(list) do |stat, stat_name|
+        find_element(stat, "stat") do |value|
+          index = parse_int(value, "value")
+          bonus = parse_double(value, "bonus")
 
-          case stat.name.casecmp
+          case stat_name.casecmp
           when "STR"
             STR_BONUS[index] = bonus
           when "DEX"
@@ -51,7 +51,7 @@ class BaseStats < EnumClass
           when "MEN"
             MEN_BONUS[index] = bonus
           else
-            raise "Wrong stat name #{stat.name}"
+            raise "Wrong stat name #{stat_name}"
           end
         end
       end

@@ -89,18 +89,18 @@ module AugmentationData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |l|
-      l.find_element("weapon") do |n|
-        weapon_type = n["type"]
-        n.find_element("stone") do |c|
-          stone_id = c["id"].to_i
-          c.find_element("variation") do |v|
-            variation_id = v["id"].to_i
-            v.find_element("category") do |j|
-              category_chance = j["probability"].to_i
-              j.find_element("augment") do |e|
-                augment_id = e["id"].to_i
-                augment_chance = e["chance"].to_f32
+    find_element(doc, "list") do |l|
+      find_element(l, "weapon") do |n|
+        weapon_type = parse_string(n, "type")
+        find_element(n, "stone") do |c|
+          stone_id = parse_int(c, "id")
+          find_element(c, "variation") do |v|
+            variation_id = parse_int(v, "id")
+            find_element(v, "category") do |j|
+              category_chance = parse_int(j, "probability")
+              find_element(j, "augment") do |e|
+                augment_id = parse_int(e, "id")
+                augment_chance = parse_float(e, "chance")
                 if file.path.ends_with?("retailchances.xml")
                   aug = AugmentationChance.new(
                     weapon_type,
@@ -128,21 +128,21 @@ module AugmentationData
         end
       end
 
-      l.find_element("augmentation") do |d| # for accessory augmentations
+      find_element(l, "augmentation") do |d| # for accessory augmentations
         bad_augment_data = 0
 
         skill_id = 0
-        augmentation_id = d["id"].to_i
+        augmentation_id = parse_int(d, "id")
         skill_lvl = 0
         type = "blue"
 
-        d.each_element do |cd|
-          if cd.name.casecmp?("skillId")
-            skill_id = cd["val"].to_i
-          elsif cd.name.casecmp?("skillLevel")
-            skill_lvl = cd["val"].to_i
-          elsif cd.name.casecmp?("type")
-            type = cd["val"]
+        each_element(d) do |cd, cd_name|
+          if cd_name.casecmp?("skillId")
+            skill_id = parse_int(cd, "val")
+          elsif cd_name.casecmp?("skillLevel")
+            skill_lvl = parse_int(cd, "val")
+          elsif cd_name.casecmp?("type")
+            type = parse_string(cd, "val")
           end
         end
 

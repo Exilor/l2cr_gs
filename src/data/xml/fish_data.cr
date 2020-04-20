@@ -44,9 +44,9 @@ module FishData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("fish") do |d|
-        set = StatsSet.new(d.attributes)
+    find_element(doc, "list") do |n|
+      find_element(n, "fish") do |d|
+        set = get_attributes(d)
         fish = L2Fish.new(set)
         case fish.fish_grade
         when 0
@@ -58,7 +58,6 @@ module FishData
         else
           # [automatically added else]
         end
-
       end
     end
   end

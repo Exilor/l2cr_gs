@@ -191,8 +191,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       else
         start_quest_timer("KILLED_ATTACKER", 5000, npc, nil)
       end
-  else
-    # [automatically added else]
+    else
+      # [automatically added else]
     end
 
 
@@ -228,8 +228,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         give_items(pc, LARAS_4TH_LIST, 1)
       when 4
         give_items(pc, LARAS_5TH_LIST, 1)
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
 
       qs.set_cond(2, true)
@@ -247,8 +247,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         give_items(pc, LARAS_4TH_LIST, 1)
       when 4
         give_items(pc, LARAS_5TH_LIST, 1)
-   else
-     # [automatically added else]
+      else
+        # [automatically added else]
       end
 
       html = event
@@ -330,10 +330,9 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       take_items(pc, CRYSTAL_OF_FOUL_6TH, 1)
       take_items(pc, CRYSTAL_OF_DEFEAT_6TH, 1)
       html = event
-  else
-    # [automatically added else]
+    else
+      # [automatically added else]
     end
-
 
     html
   end
@@ -414,7 +413,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       else
         # [automatically added else]
       end
-
     when SHADOW_TUREN
       case npc.script_value
       when 0
@@ -451,6 +449,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
+      else
+        # Syntactically required else
       end
     when MIMI_THE_CAT
       case npc.script_value
@@ -528,7 +528,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       else
         # [automatically added else]
       end
-
     when SILHOUETTE_TILFO
       case npc.script_value
       when 0
@@ -662,6 +661,8 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           give_items(killer, data.crystal_of_victory, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
+      else
+        # Syntactically required else
       end
     end
 
@@ -914,7 +915,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)

@@ -61,18 +61,16 @@ module ZoneManager
   private def parse_document(doc, file)
     rs = [] of {Int32, Int32}
 
-    doc.find_element("list") do |n|
-      next if n["enabled"]? && !Bool.new(n["enabled"])
+    find_element(doc, "list") do |n|
+      next if parse_bool(n, "enabled", nil) == false
 
-      n.find_element("zone") do |d|
-        unless zone_type = d["type"]
+      find_element(n, "zone") do |d|
+        unless zone_type = parse_string(d, "type", nil)
           warn { "Missing type for zone in file #{file}." }
           next
         end
 
-        if temp = d["id"]?
-          zone_id = temp.to_i
-        else
+        unless zone_id = parse_int(d, "id", nil)
           if zone_type.casecmp?("NpcSpawnTerritory")
             zone_id = 0
           else
@@ -81,7 +79,7 @@ module ZoneManager
           end
         end
 
-        zone_name = d["name"]
+        zone_name = parse_string(d, "name")
 
         if zone_type.casecmp?("NpcSpawnTerritory")
           if zone_name.nil?
@@ -93,14 +91,14 @@ module ZoneManager
           end
         end
 
-        min_z = d["minZ"].to_i
-        max_z = d["maxZ"].to_i
+        min_z = parse_int(d, "minZ")
+        max_z = parse_int(d, "maxZ")
 
-        zone_type = d["type"]
-        zone_shape = d["shape"]
+        zone_type = parse_string(d, "type")
+        zone_shape = parse_string(d, "shape")
 
-        d.find_element("node") do |cd|
-          rs << {cd["X"].to_i, cd["Y"].to_i}
+        find_element(d, "node") do |cd|
+          rs << {parse_int(cd, "X"), parse_int(cd, "Y")}
         end
 
         coords = rs.clone
@@ -127,7 +125,7 @@ module ZoneManager
             next
           end
         when "Cylinder"
-          zone_rad = d["rad"].to_i
+          zone_rad = parse_int(d, "rad")
           if coords.size == 1 && zone_rad > 0
             zone_form = ZoneCylinder.new(*coords[0], min_z, max_z, zone_rad)
           else
@@ -180,12 +178,6 @@ module ZoneManager
         # end
 
         constructor_name = "L2#{zone_type}"
-        # constructor = nil
-        # {% for sub in L2ZoneType.all_subclasses %}
-        #   if constructor_name == {{sub.stringify}}
-        #     constructor = {{sub.id}}
-        #   end
-        # {% end %}
         constructor = nil
         {% begin %}
           case constructor_name
@@ -196,7 +188,6 @@ module ZoneManager
           else
             # [automatically added else]
           end
-
         {% end %}
 
         if constructor
@@ -207,24 +198,24 @@ module ZoneManager
           next
         end
 
-        d.each_element do |cd|
-          case cd.name.casecmp
+        each_element(d) do |cd, cd_name|
+          case cd_name.casecmp
           when "stat"
-            temp.set_parameter(cd["name"], cd["val"])
+            name, val = parse_string(cd, "name"), parse_string(cd, "val")
+            temp.set_parameter(name, val)
           when "spawn"
-            spawn_x = cd["X"].to_i
-            spawn_y = cd["Y"].to_i
-            spawn_z = cd["Z"].to_i
-            val = cd["type"]?
+            spawn_x = parse_int(cd, "X")
+            spawn_y = parse_int(cd, "Y")
+            spawn_z = parse_int(cd, "Z")
+            val = parse_string(cd, "type", nil)
             temp.as(L2ZoneRespawn).parse_loc(spawn_x, spawn_y, spawn_z, val)
           when "race"
-            race = cd["name"]
-            point = cd["point"]
+            race = parse_string(cd, "name")
+            point = parse_string(cd, "point")
             temp.as(L2RespawnZone).add_race_respawn_point(race, point)
           else
             # [automatically added else]
           end
-
         end
 
         if check_id(zone_id)
@@ -257,7 +248,7 @@ module ZoneManager
     CLASS_ZONES.local_each_value.any? &.has_key?(id)
   end
 
-  def add_zone(id : Int32, zone : L2ZoneType)
+  private def add_zone(id : Int32, zone : L2ZoneType)
     if map = CLASS_ZONES[zone.class]?
       map[id] = zone
     else
@@ -265,8 +256,8 @@ module ZoneManager
     end
   end
 
-  def size : Int32
-    CLASS_ZONES.local_each_value.sum &.size
+  private def size : Int32
+    CLASS_ZONES.sum { |_, v| v.size }
   end
 
   def get_all_zones(zone_type : T.class) : Slice(T) forall T
@@ -288,7 +279,8 @@ module ZoneManager
   end
 
   def get_zone_by_id(id : Int32, zone_type : T.class) : T? forall T
-    CLASS_ZONES[zone_type][id]?.as(T?)
+    # CLASS_ZONES[zone_type][id]?.as(T?)
+    CLASS_ZONES.dig?(zone_type, id).as(T?)
   end
 
   def get_zone(obj : L2Object?, type : T.class) : T? forall T
@@ -325,14 +317,9 @@ module ZoneManager
     SPAWN_TERRITORIES[name]?
   end
 
-  def get_spawn_territories(object : L2Object)
-    ret = [] of NpcSpawnTerritory
-    SPAWN_TERRITORIES.each_value do |territory|
-      if territory.inside_zone?(*object.xyz)
-        ret << territory
-      end
-    end
-    ret
+  def get_spawn_territories(object : L2Object) : Array(NpcSpawnTerritory)
+    x, y, z = object.xyz
+    SPAWN_TERRITORIES.select_values &.inside_zone?(x, y, z)
   end
 
   def get_spawn_territories(object : L2Object, & : NpcSpawnTerritory ->) : Nil
@@ -346,7 +333,7 @@ module ZoneManager
   def get_arena(char : L2Character?) : L2ArenaZone?
     return unless char
 
-    get_zones(*char.xyz).each do |zone|
+    get_zones(*char.xyz) do |zone|
       if zone.is_a?(L2ArenaZone) && zone.character_in_zone?(char)
         return zone
       end
@@ -358,7 +345,7 @@ module ZoneManager
   def get_olympiad_stadium(char : L2Character?) : L2OlympiadStadiumZone?
     return unless char
 
-    get_zones(*char.xyz).each do |zone|
+    get_zones(*char.xyz) do |zone|
       if zone.is_a?(L2OlympiadStadiumZone) && zone.character_in_zone?(char)
         return zone
       end

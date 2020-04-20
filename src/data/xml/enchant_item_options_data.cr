@@ -14,16 +14,16 @@ module EnchantItemOptionsData
   private def parse_document(doc, file)
     counter = 0
 
-    doc.find_element("list") do |list|
-      list.find_element("item") do |d|
-        item_id = d["id"].to_i
+    find_element(doc, "list") do |list|
+      find_element(list, "item") do |d|
+        item_id = parse_int(d, "id")
         DATA[item_id] ||= {} of Int32 => EnchantOptions
-        d.find_element("options") do |cd|
-          level = cd["level"].to_i
+        find_element(d, "options") do |cd|
+          level = parse_int(cd, "level")
           op = EnchantOptions.new(level)
           DATA[item_id][op.level] = op
           3.times do |i|
-            att = cd["option#{i + 1}"]?
+            att = parse_string(cd, "option#{i + 1}", nil)
             if att && att.num?
               op[i] = att.to_i
             end

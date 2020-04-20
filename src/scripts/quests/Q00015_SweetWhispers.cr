@@ -35,7 +35,6 @@ class Scripts::Q00015_SweetWhispers < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -68,7 +67,6 @@ class Scripts::Q00015_SweetWhispers < Quest
         else
           # [automatically added else]
         end
-
       when HIERARCH
         if st.cond?(2)
           html = "31517-00.html"
@@ -76,11 +74,9 @@ class Scripts::Q00015_SweetWhispers < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

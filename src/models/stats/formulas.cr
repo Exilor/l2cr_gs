@@ -973,7 +973,7 @@ module Formulas
   def general_trait_bonus(attacker : L2Character, target : L2Character, trait_type : TraitType, ignore_res : Bool) : Float64
     return 1.0 if trait_type.none?
 
-    return 0.0 if target.stat.trait_invul? trait_type
+    return 0.0 if target.stat.trait_invul?(trait_type)
     case trait_type.type
     when 2
       if !attacker.stat.has_attack_trait?(trait_type) || !target.stat.has_defence_trait?(trait_type)
@@ -982,7 +982,7 @@ module Formulas
     when 3
       return 1.0 if ignore_res
     else
-      # [automatically added else]
+      return 1.0
     end
 
 

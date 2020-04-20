@@ -16,8 +16,6 @@ struct Enum
   end
 
   def self.mask : UInt64
-    # {{(((1u64 << @type.constants.size) - 1).stringify + "u64").id}}
-
     (1u64 << size) - 1
   end
 end

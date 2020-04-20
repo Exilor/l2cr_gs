@@ -175,11 +175,11 @@ module WalkingManager
   end
 
   private def parse_document(doc, file)
-    doc.each_element do |n|
-      n.find_element("route") do |d|
-        route_name = d["name"]
-        repeat = d["repeat"].casecmp?("true")
-        repeat_style = d["repeatStyle"]
+    each_element(doc) do |n|
+      find_element(n, "route") do |d|
+        route_name = parse_string(d, "name")
+        repeat = parse_bool(d, "repeat")
+        repeat_style = parse_string(d, "repeatStyle")
         repeat_type =
         case repeat_style.casecmp
         when "back"
@@ -195,23 +195,23 @@ module WalkingManager
         end
 
         list = [] of L2NpcWalkerNode
-        d.each_element do |r|
-          if r.name == "point"
-            x = r["X"].to_i
-            y = r["Y"].to_i
-            z = r["Z"].to_i
-            delay = r["delay"].to_i
-            run = Bool.new(r["run"])
-            if node = r["string"]?
+        each_element(d) do |r, r_name|
+          if r_name == "point"
+            x = parse_int(r, "X")
+            y = parse_int(r, "Y")
+            z = parse_int(r, "Z")
+            delay = parse_int(r, "delay")
+            run = parse_bool(r, "run")
+            if node = parse_string(r, "string", nil)
               chat_string = node
             else
-              if node = r["npcString"]?
+              if node = parse_string(r, "npcString", nil)
                 unless npc_string = NpcString.parse?(node)
                   warn { "Unknown NpcString #{node} for route #{route_name}." }
                   next
                 end
               else
-                if node = r["npcStringId"]?
+                if node = parse_string(r, "npcStringId", nil)
                   unless npc_string = NpcString.get?(node.to_i)
                     warn { "Unknown NpcString #{node} for route #{route_name}." }
                     next
@@ -220,11 +220,11 @@ module WalkingManager
               end
             end
             list << L2NpcWalkerNode.new(x, y, z, delay, run, npc_string, chat_string)
-          elsif r.name == "target"
-            npc_id = r["id"].to_i
-            x = r["spawnX"].to_i
-            y = r["spawnY"].to_i
-            z = r["spawnZ"].to_i
+          elsif r_name == "target"
+            npc_id = parse_int(r, "id")
+            x = parse_int(r, "spawnX")
+            y = parse_int(r, "spawnY")
+            z = parse_int(r, "spawnZ")
             holder = ROUTES_TO_ATTACH[npc_id] ||= NpcRoutesHolder.new
             holder.add_route(route_name, Location.new(x, y, z))
           end

@@ -14,67 +14,58 @@ module PetDataTable
   end
 
   private def parse_document(doc, file)
-    child = doc.children.find { |c| c.element? }.not_nil!
-    child.find_element("pet") do |d|
-      npc_id = d["id"].to_i
-      item_id = d["itemId"].to_i
-      data = L2PetData.new(npc_id, item_id)
-      d.each_element do |p|
-        case p.name
-        when "set"
-          case p["name"]
-          when "food"
-            p["val"].split(';') do |food_id|
-              data.add_food(food_id.to_i)
+    find_element(doc, "pets") do |n|
+      find_element(n, "pet") do |d|
+        npc_id = parse_int(d, "id")
+        item_id = parse_int(d, "itemId")
+        data = L2PetData.new(npc_id, item_id)
+        each_element(d) do |p, p_name|
+          case p_name
+          when "set"
+            case parse_string(p, "name")
+            when "food"
+              parse_string(p, "val").split(';') do |food_id|
+                data.add_food(food_id.to_i)
+              end
+            when "hungry_limit"
+              data.hungry_limit = parse_int(p, "val")
+            when "sync_level"
+              data.sync_level = parse_int(p, "val") == 1
+            else
+              # [automatically added else]
             end
-          when "hungry_limit"
-            data.hungry_limit = p["val"].to_i
-          when "sync_level"
-            data.sync_level = p["val"].to_i == 1
+          when "skills"
+            find_element(p, "skill") do |s|
+              id = parse_int(s, "skillId")
+              lvl = parse_int(s, "skillLvl")
+              min_lvl = parse_int(s, "minLvl")
+              data.add_new_skill(id, lvl, min_lvl)
+            end
+          when "stats"
+            find_element(p, "stat") do |s|
+              set = StatsSet.new
+              level = parse_int(s, "level")
+              each_element(s) do |b|
+                if parse_string(b, "name") == "speed_on_ride"
+                  add_from_node(b, set, "walkSpeedOnRide", "walk")
+                  add_from_node(b, set, "runSpeedOnRide", "run")
+                  add_from_node(b, set, "slowSwimSpeedOnRide", "slowSwim")
+                  add_from_node(b, set, "fastSwimSpeedOnRide", "fastSwim")
+                  add_from_node(b, set, "slowFlySpeedOnRide", "slowFly")
+                  add_from_node(b, set, "fastFlySpeedOnRide", "fastFly")
+                else
+                  set[parse_string(b, "name")] = parse_string(b, "val")
+                end
+              end
+              data.add_new_stat(level, L2PetLevelData.new(set))
+            end
           else
             # [automatically added else]
           end
-
-        when "skills"
-          p.find_element("skill") do |s|
-            id = s["skillId"].to_i
-            lvl = s["skillLvl"].to_i
-            min_lvl = s["minLvl"].to_i
-            data.add_new_skill(id, lvl, min_lvl)
-          end
-        when "stats"
-          p.find_element("stat") do |s|
-            set = StatsSet.new
-            level = s["level"].to_i
-            s.each_element do |b|
-              if b["name"] == "speed_on_ride"
-                set["walkSpeedOnRide"] = b["walk"]
-                set["runSpeedOnRide"] = b["run"]
-                if temp = b["slowSwim"]?
-                  set["slowSwimSpeedOnRide"] = temp
-                end
-                if temp = b["fastSwim"]?
-                  set["fastSwimSpeedOnRide"] = temp
-                end
-                if fly = b["slowFly"]?
-                  set["slowFlySpeedOnRide"] = fly
-                end
-                if fly = b["fastFly"]?
-                  set["fastFlySpeedOnRide"] = fly
-                end
-              else
-                set[b["name"]] = b["val"]
-              end
-            end
-            data.add_new_stat(level, L2PetLevelData.new(set))
-          end
-        else
-          # [automatically added else]
         end
 
+        PETS[npc_id] = data
       end
-
-      PETS[npc_id] = data
     end
   end
 
@@ -87,26 +78,16 @@ module PetDataTable
   end
 
   def get_pet_data(pet_id : Int) : L2PetData
-    data = PETS.fetch(pet_id) do
-      raise "Missing pet data for NPC id #{pet_id}."
-    end
-
-    data
+    PETS.fetch(pet_id) { raise "Missing pet data for NPC id #{pet_id}." }
   end
 
   def get_pet_min_level(pet_id : Int) : Int32
-    tmp = PETS.fetch(pet_id) do
-      raise "No L2PetData for pet id #{pet_id}"
-    end
-
+    tmp = PETS.fetch(pet_id) { raise "No L2PetData for pet id #{pet_id}." }
     tmp.min_level.to_i32
   end
 
   def get_pet_items_by_npc(npc_id : Int) : Int32
-    tmp = PETS.fetch(npc_id) do
-      raise "No L2PetData for npc id #{npc_id}"
-    end
-
+    tmp = PETS.fetch(npc_id) { raise "No L2PetData for npc id #{npc_id}." }
     tmp.item_id
   end
 

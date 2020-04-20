@@ -56,7 +56,6 @@ class Scripts::Q00005_MinersFavor < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -87,7 +86,6 @@ class Scripts::Q00005_MinersFavor < Quest
       else
         # [automatically added else]
       end
-
     when BRUNON
       if st.started?
         if has_quest_items?(pc, MINERS_PICK)
@@ -105,7 +103,6 @@ class Scripts::Q00005_MinersFavor < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

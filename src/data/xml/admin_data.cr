@@ -21,17 +21,17 @@ module AdminData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.each_element do |d|
-        if d.name.casecmp?("access")
-          set = StatsSet.new(d.attributes)
+    find_element(doc, "list") do |n|
+      each_element(n) do |d, d_name|
+        if d_name.casecmp?("access")
+          set = get_attributes(d)
           level = AccessLevel.new(set)
           if level.level > @@highest_level
             @@highest_level = level.level
           end
           ACCESS_LEVELS[level.level] = level
-        elsif d.name.casecmp?("admin")
-          set = StatsSet.new(d.attributes)
+        elsif d_name.casecmp?("admin")
+          set = get_attributes(d)
           command = AdminCommandAccessRight.new(set)
           ADMIN_COMMAND_ACCESS_RIGHTS[command.admin_command] = command
         end

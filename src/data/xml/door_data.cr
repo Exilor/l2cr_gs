@@ -18,9 +18,9 @@ module DoorData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |a|
-      a.find_element("door") do |b|
-        set = StatsSet.new(b.attributes)
+    find_element(doc, "list") do |a|
+      find_element(a, "door") do |b|
+        set = get_attributes(b)
         set["baseHpMax"] ||= 1
         make_door(set)
         TEMPLATES[set.get_i32("id")] = set

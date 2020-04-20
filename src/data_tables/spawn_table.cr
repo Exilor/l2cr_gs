@@ -204,36 +204,38 @@ module SpawnTable
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |list|
+    find_element(doc, "list") do |list|
       next unless list["enabled"].casecmp?("true")
-      list.find_element("spawn") do |param|
+      find_element(list, "spawn") do |param|
         map = nil
-        spawn_name = param["name"]?
+        spawn_name = parse_string(param, "name", nil)
         territory_name = nil
-        if zone = param["zone"]?
+        if zone = parse_string(param, "zone", nil)
           if ZoneManager.get_spawn_territory(zone)
             territory_name = zone
           end
         end
-        param.each_element do |npctag|
-          if npctag.name.casecmp?("AIData")
+        each_element(param) do |npctag, npctag_name|
+          if npctag_name.casecmp?("AIData")
             map ||= {} of String => Int32
-            npctag.each_element do |c|
-              next if c.name == "#text"
-              case c.name
+            each_element(npctag) do |c, c_name|
+              case c_name
+              when "#text"
+                next
               when "disableRandomAnimation", "disableRandomWalk"
-                val = c.text.casecmp?("true") ? 1 : 0
+                val = get_content(c).casecmp?("true") ? 1 : 0
               else
-                val = c.text.to_i
+                val = get_content(c).to_i
               end
-              map[c.name] = val
-            end
-          elsif npctag.name.casecmp?("npc")
-            template_id = npctag["id"].to_i
 
-            x = npctag["x"]?.try &.to_i || 0
-            y = npctag["y"]?.try &.to_i || 0
-            z = npctag["z"]?.try &.to_i || 0
+              map[c_name] = val
+            end
+          elsif npctag_name.casecmp?("npc")
+            template_id = parse_int(npctag, "id")
+
+            x = parse_int(npctag, "x", 0)
+            y = parse_int(npctag, "y", 0)
+            z = parse_int(npctag, "z", 0)
 
             spawn_info = StatsSet.new
             spawn_info["npcTemplateid"] = template_id
@@ -243,23 +245,23 @@ module SpawnTable
             spawn_info["territoryName"] = territory_name
             spawn_info["spawnName"] = spawn_name
 
-            if val = npctag["heading"]?.try &.to_i
+            if val = parse_int(npctag, "heading", nil)
               spawn_info["heading"] = val
             end
 
-            if val = npctag["count"]?.try &.to_i
+            if val = parse_int(npctag, "count", nil)
               spawn_info["count"] = val
             end
 
-            if val = npctag["respawnDelay"]?.try &.to_i
+            if val = parse_int(npctag, "respawnDelay", nil)
               spawn_info["respawnDelay"] = val
             end
 
-            if val = npctag["spawnRandom"]?.try &.to_i
+            if val = parse_int(npctag, "spawnRandom", nil)
               spawn_info["respawnRandom"] = val
             end
 
-            if val = npctag["periodOfDay"]?
+            if val = parse_string(npctag, "periodOfDay", nil)
               if val.casecmp?("day") || val.casecmp?("night")
                 spawn_info["periodOfDay"] = val.casecmp?("day") ? 1 : 2
               end

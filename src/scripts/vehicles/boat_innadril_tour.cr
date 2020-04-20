@@ -52,50 +52,39 @@ class BoatInnadrilTour
   def call
     case @cycle
     when 0
-      # debug "The tour around Innadril will start in 5 minutes."
       BoatManager.broadcast_packets(DOCK, DOCK, LEAVE_INNADRIL5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 1
-      # debug "The tour around Innadril will start in 1 minute"
       BoatManager.broadcast_packets(DOCK, DOCK, LEAVE_INNADRIL1)
       ThreadPoolManager.schedule_general(self, 40_000)
     when 2
-      # debug "The tour around Innadril is about to start."
       BoatManager.broadcast_packets(DOCK, DOCK, LEAVE_INNADRIL0)
       ThreadPoolManager.schedule_general(self, 20_000)
     when 3
-      # debug "Starting the tour."
       BoatManager.broadcast_packets(DOCK, DOCK, LEAVING_INNADRIL, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       @boat.pay_for_ride(0, 1, 107092, 219098, -3952)
       @boat.execute_path(TOUR)
       ThreadPoolManager.schedule_general(self, 650_000)
     when 4
-      # debug "The tour will end in 20 minutes."
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVAL20)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 5
-      # debug "The tour will end in 15 minutes."
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVAL15)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 6
-      # debug "The tour will end in 10 minutes."
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVAL10)
       ThreadPoolManager.schedule_general(self, 300_000)
     when 7
-      # debug "The tour will end in 5 minutes."
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVAL5)
       ThreadPoolManager.schedule_general(self, 240_000)
     when 8
-      # debug "The tour will end in 1 minute."
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVAL1)
     when 9
-      # debug "The tour has ended and the boat has come back to its harbor."
       BoatManager.broadcast_packets(DOCK, DOCK, ARRIVED_AT_INNADRIL, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
     else
       # [automatically added else]
     end
-
 
     @cycle += 1
     if @cycle > 9

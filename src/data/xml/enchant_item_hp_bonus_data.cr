@@ -12,11 +12,11 @@ module EnchantItemHPBonusData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("enchantHP") do |d|
+    find_element(doc, "list") do |n|
+      find_element(n, "enchantHP") do |d|
         bonuses = [] of Int32
-        d.find_element("bonus") { |e| bonuses << e.content.to_i }
-        grade = CrystalType.parse(d["grade"])
+        find_element(d, "bonus") { |e| bonuses << get_content(e).to_i }
+        grade = parse_enum(d, "grade", CrystalType)
         ARMOR_HP_BONUSES[grade] = bonuses
       end
     end

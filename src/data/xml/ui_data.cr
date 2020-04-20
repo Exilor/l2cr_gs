@@ -23,17 +23,17 @@ module UIData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("category") do |d|
+    find_element(doc, "list") do |n|
+      find_element(n, "category") do |d|
         parse_category(d)
       end
     end
   end
 
   private def parse_category(n)
-    cat = n["id"].to_i
-    n.each_element do |d|
-      case d.name.casecmp
+    cat = parse_int(n, "id")
+    each_element(n) do |d, d_name|
+      case d_name.casecmp
       when "commands"
         parse_commands(cat, d)
       when "keys"
@@ -41,21 +41,20 @@ module UIData
       else
         # [automatically added else]
       end
-
     end
   end
 
   private def parse_commands(cat, d)
-    d.find_element("cmd") do |c|
-      add_category(CATEGORIES, cat, c.content.to_i)
+    find_element(d, "cmd") do |c|
+      add_category(CATEGORIES, cat, get_content(c).to_i)
     end
   end
 
   private def parse_keys(cat, d)
-    d.find_element("key") do |c|
+    find_element(d, "key") do |c|
       akey = ActionKey.new(cat)
 
-      c.attributes.each_pair do |att, val|
+      each_attribute(c) do |att, val|
         val = val.to_i
 
         case att
@@ -72,8 +71,8 @@ module UIData
         else
           # [automatically added else]
         end
-
       end
+
       add_key(KEYS, cat, akey)
     end
   end

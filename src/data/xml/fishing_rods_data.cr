@@ -19,9 +19,9 @@ module FishingRodsData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("fishingRod") do |d|
-        set = StatsSet.new(d.attributes)
+    find_element(doc, "list") do |n|
+      find_element(n, "fishingRod") do |d|
+        set = get_attributes(d)
         fishing_rod = L2FishingRod.new(set)
         FISHING_RODS[fishing_rod.item_id] = fishing_rod
       end

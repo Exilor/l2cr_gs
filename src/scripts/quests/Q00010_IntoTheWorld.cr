@@ -73,7 +73,6 @@ class Scripts::Q00010_IntoTheWorld < Quest
       else
         # [automatically added else]
       end
-
     when REED
       if st.started?
         case st.cond
@@ -88,7 +87,6 @@ class Scripts::Q00010_IntoTheWorld < Quest
         else
           # [automatically added else]
         end
-
       end
     when GERALD
       if st.started?
@@ -101,7 +99,6 @@ class Scripts::Q00010_IntoTheWorld < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -94,7 +94,6 @@ class Scripts::Q00037_MakeFormalWear < Quest
       else
         # [automatically added else]
       end
-
     when LEIKAR
       if st.started?
         case st.cond
@@ -119,7 +118,6 @@ class Scripts::Q00037_MakeFormalWear < Quest
         else
           # [automatically added else]
         end
-
       end
     when JEREMY
       if st.started?
@@ -135,7 +133,6 @@ class Scripts::Q00037_MakeFormalWear < Quest
         else
           # [automatically added else]
         end
-
       end
     when MIST
       if st.started?
@@ -147,12 +144,10 @@ class Scripts::Q00037_MakeFormalWear < Quest
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

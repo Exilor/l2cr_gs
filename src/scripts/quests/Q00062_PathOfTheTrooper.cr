@@ -49,7 +49,6 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -85,7 +84,6 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -144,7 +142,6 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
         else
           # [automatically added else]
         end
-
       when MASTER_SHUBAIN
         case qs.cond
         when 1
@@ -173,11 +170,9 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
         else
           # [automatically added else]
         end
-
       else
         # [automatically added else]
       end
-
     elsif qs.completed?
       if npc.id == MASTER_GWAIN
         html = "32197-05.html"

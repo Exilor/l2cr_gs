@@ -17,25 +17,24 @@ module SecondaryAuthData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |node|
-      node.each_element do |list_node|
-        case list_node.name.casecmp
+    find_element(doc, "list") do |node|
+      each_element(node) do |list_node, list_node_name|
+        case list_node_name.casecmp
         when "enabled"
-          @@enabled = Bool.new(list_node.text)
+          @@enabled = Bool.new(get_content(list_node))
         when "maxAttempts"
-          @@max_attempts = list_node.text.to_i
+          @@max_attempts = get_content(list_node).to_i
         when "banTime"
-          @@ban_time = list_node.text.to_i
+          @@ban_time = get_content(list_node).to_i
         when "recoveryLink"
-          @@recovery_link = list_node.text
+          @@recovery_link = get_content(list_node)
         when "forbiddenPasswords"
-          list_node.find_element("password") do |pass|
-            FORBIDDEN_PASSWORDS << pass.text
+          find_element(list_node, "password") do |pass|
+            FORBIDDEN_PASSWORDS << get_content(pass)
           end
         else
           # [automatically added else]
         end
-
       end
     end
   rescue e

@@ -94,6 +94,8 @@ module LoginServerClient
       when 0x04 then KickPlayer.new
       when 0x05 then RequestCharacters.new
       # when 0x06 then ChangePasswordResponse.new
+      else
+        # Syntactically required else
       end
 
       if packet

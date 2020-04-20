@@ -18,17 +18,17 @@ module PlayerCreationPointData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("startpoints") do |d|
+    find_element(doc, "list") do |n|
+      find_element(n, "startpoints") do |d|
         creation_points = [] of Location
-        d.each_element do |c|
-          if c.name.casecmp?("spawn")
-            x = c["x"].to_i
-            y = c["y"].to_i
-            z = c["z"].to_i
+        each_element(d) do |c, c_name|
+          if c_name.casecmp?("spawn")
+            x = parse_int(c, "x")
+            y = parse_int(c, "y")
+            z = parse_int(c, "z")
             creation_points << Location.new(x, y, z)
-          elsif c.name.casecmp?("classid")
-            id = c.text.to_i
+          elsif c_name.casecmp?("classid")
+            id = get_content(c).to_i
             class_id = ClassId[id]
             DATA[class_id] = creation_points
           end

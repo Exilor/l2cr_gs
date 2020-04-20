@@ -109,13 +109,11 @@ class Scripts::Q00034_InSearchOfCloth < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when VARAN
       if st.started?
         case st.cond
@@ -126,7 +124,6 @@ class Scripts::Q00034_InSearchOfCloth < Quest
         else
           # [automatically added else]
         end
-
       end
     when RALFORD
       if st.started?
@@ -142,12 +139,10 @@ class Scripts::Q00034_InSearchOfCloth < Quest
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

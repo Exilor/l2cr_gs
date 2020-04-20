@@ -20,11 +20,10 @@ module SiegeScheduleData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("schedule") do |cd|
+    find_element(doc, "list") do |n|
+      find_element(n, "schedule") do |cd|
         set = StatsSet.new
-        cd.attributes.each do |attr|
-          key, val = attr.name, attr.text
+        each_attribute(cd) do |key, val|
           if key == "day"
             val = get_value_for_field(val)
           end
@@ -36,7 +35,7 @@ module SiegeScheduleData
     end
   end
 
-  private def get_value_for_field(field : String) : Int32
+  private def get_value_for_field(field) : Int32
     case field.casecmp
     when "SUNDAY" then 1
     when "MONDAY" then 2

@@ -61,7 +61,6 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -144,7 +143,6 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
       # [automatically added else]
     end
 
-
     html || get_no_quest_msg(pc)
   end
 
@@ -169,7 +167,6 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
     else
       # [automatically added else]
     end
-
 
     super
   end

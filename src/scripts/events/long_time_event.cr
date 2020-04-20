@@ -22,7 +22,6 @@ class LongTimeEvent < Quest
   def initialize(name, descr)
     super(-1, name, descr)
 
-    # load_config
     begin
       parse_datapack_file("scripts/events/#{name}/config.xml")
     rescue e
@@ -43,17 +42,17 @@ class LongTimeEvent < Quest
   end
 
   private def parse_document(doc, file)
-    doc = doc.first_element_child.not_nil!
+    first_node = get_first_element_child(doc).not_nil!
 
-    unless doc.name.casecmp?("event")
+    unless get_node_name(first_node).casecmp?("event")
       raise "Bad config file #{file.path}"
     end
 
-    @event_name = doc["name"]
-    period = doc["active"]
+    @event_name = parse_string(first_node, "name")
+    period = parse_string(first_node, "active")
     @event_period = DateRange.parse(period, "%d %m %Y")
 
-    if drop_period = doc["dropPeriod"]?
+    if drop_period = parse_string(first_node, "dropPeriod", nil)
       @drop_period = DateRange.parse(drop_period, "%d %m %Y")
       if !@event_period.within_range?(@drop_period.start_date) || !@event_period.within_range?(@drop_period.end_date)
         @drop_period = @event_period
@@ -65,16 +64,15 @@ class LongTimeEvent < Quest
     today = Time.now
 
     if @event_period.start_date.after?(today) || @event_period.within_range?(today)
-      doc.each_element do |n|
-        # Loading droplist
-        if n.name.casecmp?("droplist")
-          n.each_element do |d|
-            if d.name.casecmp?("add")
+      each_element(first_node) do |n, n_name|
+        if n_name.casecmp?("droplist")
+          each_element(n) do |d, d_name|
+            if d_name.casecmp?("add")
               begin
-                item_id = d["item"].to_i
-                min_count = d["min"].to_i64
-                max_count = d["max"].to_i64
-                chance = d["chance"]
+                item_id = parse_int(d, "item")
+                min_count = parse_long(d, "min")
+                max_count = parse_long(d, "max")
+                chance = parse_string(d, "chance")
                 final_chance = 0.0
 
                 if !chance.empty? && chance.ends_with?("%")
@@ -102,16 +100,15 @@ class LongTimeEvent < Quest
               end
             end
           end
-        elsif n.name.casecmp?("spawnlist")
-          # Loading spawnlist
-          n.each_element do |d|
-            if d.name.casecmp?("add")
+        elsif n_name.casecmp?("spawnlist")
+          each_element(n) do |d, d_name|
+            if d_name.casecmp?("add")
               begin
-                npc_id = d["npc"].to_i
-                x = d["x"].to_i
-                y = d["y"].to_i
-                z = d["z"].to_i
-                heading = d["heading"]?.try &.to_i || 0
+                npc_id = parse_int(d, "npc")
+                x = parse_int(d, "x")
+                y = parse_int(d, "y")
+                z = parse_int(d, "z")
+                heading = parse_int(d, "heading", 0)
 
                 unless NpcData[npc_id]?
                   warn { "NPC id #{npc_id} is wrong. NPC was not added in spawnlist" }
@@ -124,11 +121,12 @@ class LongTimeEvent < Quest
               end
             end
           end
-        elsif n.name.casecmp?("messages")
-          # Loading Messages
-          n.each_element do |d|
-            if d.name.casecmp?("add")
-              if (msg_type = d["type"]?) && (msg_text = d["text"]?)
+        elsif n_name.casecmp?("messages")
+          each_element(n) do |d, d_name|
+            if d_name.casecmp?("add")
+              msg_type = parse_string(d, "type", nil)
+              msg_text = parse_string(d, "text", nil)
+              if msg_type && msg_text
                 if msg_type.casecmp?("onEnd")
                   @end_message = msg_text
                 elsif msg_type.casecmp?("onEnter")
@@ -144,7 +142,6 @@ class LongTimeEvent < Quest
 
   protected def start_event
     time = Time.ms
-    # Add drop
     if time < @drop_period.end_date.ms
       DROP_LIST.each do |drop|
         EventDroplist.add_global_drop(
@@ -157,19 +154,13 @@ class LongTimeEvent < Quest
       end
     end
 
-    # Add spawns
     ms_to_end = @event_period.end_date.ms - time
     SPAWN_LIST.each do |sp|
       add_spawn(sp.npc_id, *sp.loc.xyz, sp.loc.heading, false, ms_to_end, false)
     end
 
-    # Send message on begin
     Broadcast.to_all_online_players(@on_enter_message)
-
-    # Add announce for entering players
     AnnouncementsTable.add_announcement(EventAnnouncement.new(@event_period, @on_enter_message))
-
-    # Schedule event end (now only for message sending)
     ThreadPoolManager.schedule_general(ScheduleEnd.new(self), ms_to_end)
   end
 

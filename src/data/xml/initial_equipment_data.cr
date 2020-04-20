@@ -18,18 +18,18 @@ module InitialEquipmentData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("equipment") { |d| parse_equipment(d) }
+    find_element(doc, "list") do |n|
+      find_element(n, "equipment") { |d| parse_equipment(d) }
     end
   end
 
   private def parse_equipment(d)
-    id = d["classId"].to_i
+    id = parse_int(d, "classId")
     class_id = ClassId[id]
     equip_list = [] of PcItemTemplate
 
-    d.find_element("item") do |c|
-      set = StatsSet.new(c.attributes)
+    find_element(d, "item") do |c|
+      set = get_attributes(c)
       equip_list << PcItemTemplate.new(set)
     end
 

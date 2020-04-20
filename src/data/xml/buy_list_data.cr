@@ -50,31 +50,30 @@ module BuyListData
     return unless buy_list_id.num?
     buy_list_id = buy_list_id.to_i
 
-    doc.find_element("list") do |node|
+    find_element(doc, "list") do |node|
       buy_list = L2BuyList.new(buy_list_id)
 
-      node.each_element do |list_node|
-        case list_node.name.casecmp
+      each_element(node) do |list_node, list_node_name|
+        case list_node_name.casecmp
         when "item"
-          item_id       = list_node["id"]?.try &.to_i || -1
-          price         = list_node["price"]?.try &.to_i64 || -1i64
-          restock_delay = list_node["restock_delay"]?.try &.to_i64 || -1i64
-          count         = list_node["count"]?.try &.to_i64 || -1i64
+          item_id       = parse_int(list_node, "id", -1)
+          price         = parse_long(list_node, "price", -1i64)
+          restock_delay = parse_long(list_node, "restock_delay", -1i64)
+          count         = parse_long(list_node, "count", -1i64)
 
           if item = ItemTable[item_id]?
             pr = Product.new(buy_list.list_id, item, price, restock_delay, count)
             buy_list.add_product(pr)
           else
-            warn { "Item with ID #{item_id} not found." }
+            warn { "Item with id #{item_id} not found." }
           end
         when "npcs"
-          list_node.each_element do |npcs_node|
-            buy_list.add_allowed_npc(npcs_node.text.to_i)
+          each_element(list_node) do |npcs_node|
+            buy_list.add_allowed_npc(get_content(npcs_node).to_i)
           end
         else
           # [automatically added else]
         end
-
       end
 
       BUY_LISTS[buy_list.list_id] = buy_list

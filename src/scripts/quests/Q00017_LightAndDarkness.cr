@@ -46,7 +46,7 @@ class Scripts::Q00017_LightAndDarkness < Quest
       # [automatically added else]
     end
 
-    return html
+    html
   end
 
   def on_talk(npc, pc)
@@ -75,18 +75,16 @@ class Scripts::Q00017_LightAndDarkness < Quest
         end
       when SAINT_ALTAR_1, SAINT_ALTAR_2, SAINT_ALTAR_3, SAINT_ALTAR_4
         if npc_id - 31507 == st.cond
-          html = npc_id.to_s + (blood > 0 ? "-00.html" : "-02.html")
+          html = blood > 0 ? "#{npc_id}-00.html" : "#{npc_id}-02.html"
         elsif st.cond > npc_id - 31507
-          html = npc_id.to_s + "-03.html"
+          html = "#{npc_id}-03.html"
         end
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

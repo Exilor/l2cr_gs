@@ -11,33 +11,32 @@ module HennaData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("henna") do |d|
+    find_element(doc, "list") do |n|
+      find_element(n, "henna") do |d|
         parse_henna(d)
       end
     end
   end
 
   private def parse_henna(d)
-    set = StatsSet.new(d.attributes)
+    set = get_attributes(d)
     wear_class_ids = [] of ClassId
 
-    d.each_element do |c|
-      case c.name
+    each_element(d) do |c, c_name|
+      case c_name
       when "stats"
-        set.merge(c.attributes)
+        set.merge!(get_attributes(c))
       when "wear"
-        set["wear_count"] = c["count"]
-        set["wear_fee"] = c["fee"]
+        set["wear_count"] = parse_string(c, "count")
+        set["wear_fee"] = parse_string(c, "fee")
       when "cancel"
-        set["cancel_count"] = c["count"]
-        set["cancel_fee"] = c["fee"]
+        set["cancel_count"] = parse_string(c, "count")
+        set["cancel_fee"] = parse_string(c, "fee")
       when "classId"
-        wear_class_ids << ClassId[c.text.to_i]
+        wear_class_ids << ClassId[get_content(c).to_i]
       else
         # [automatically added else]
       end
-
     end
 
     henna = L2Henna.new(set)

@@ -676,7 +676,6 @@ abstract class AbstractSagaQuest < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html

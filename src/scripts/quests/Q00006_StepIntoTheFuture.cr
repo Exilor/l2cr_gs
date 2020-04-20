@@ -71,7 +71,6 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
       else
         # [automatically added else]
       end
-
     when BAULRO
       if st.started?
         if st.cond?(1)
@@ -91,7 +90,6 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

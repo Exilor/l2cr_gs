@@ -37,7 +37,6 @@ class Scripts::Q00020_BringUpWithLove < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -64,11 +63,9 @@ class Scripts::Q00020_BringUpWithLove < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

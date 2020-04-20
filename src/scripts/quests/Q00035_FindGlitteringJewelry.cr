@@ -78,8 +78,8 @@ class Scripts::Q00035_FindGlitteringJewelry < Quest
   end
 
   def on_talk(npc, pc)
-    html = get_no_quest_msg(pc)
     st = get_quest_state!(pc)
+
     case npc.id
     when ELLIE
       case st.state
@@ -104,13 +104,11 @@ class Scripts::Q00035_FindGlitteringJewelry < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when FELTON
       if st.started?
         if st.cond?(1)
@@ -123,8 +121,6 @@ class Scripts::Q00035_FindGlitteringJewelry < Quest
       # [automatically added else]
     end
 
-
-    html
+    html || get_no_quest_msg(pc)
   end
-
 end

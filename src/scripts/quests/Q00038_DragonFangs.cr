@@ -57,7 +57,6 @@ class Scripts::Q00038_DragonFangs < Quest
           html = "30386-07.html"
         end
       end
-
     when "30034-02.html"
       if qs.cond?(3)
         if has_quest_items?(pc, TOTEM_TOOTH_1ST)
@@ -118,7 +117,6 @@ class Scripts::Q00038_DragonFangs < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -144,7 +142,6 @@ class Scripts::Q00038_DragonFangs < Quest
       else
         # [automatically added else]
       end
-
     when MAGISTER_ROHMER
       if qs.cond?(4)
         html = "30344-01.html"
@@ -175,7 +172,6 @@ class Scripts::Q00038_DragonFangs < Quest
       # [automatically added else]
     end
 
-
     html || get_no_quest_msg(talker)
   end
 
@@ -194,7 +190,6 @@ class Scripts::Q00038_DragonFangs < Quest
     else
       # [automatically added else]
     end
-
 
     super
   end

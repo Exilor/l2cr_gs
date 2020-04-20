@@ -331,19 +331,15 @@ class Skill
 
     conditions.each do |cond|
       unless cond.test(char, target, self)
-        debug "Failed #{cond} (effector: #{char}, effected: #{target})."
-        debug "Conditions: #{conditions}."
         msg = cond.message
         msg_id = cond.message_id
         if msg_id != 0
-          debug "SystemMessage with id #{msg_id}"
           sm = Packets::Outgoing::SystemMessage[msg_id]
           if cond.add_name?
             sm.add_skill_name(@id)
           end
           char.send_packet(sm)
         elsif msg
-          debug "Condition message: #{msg}"
           char.send_message(msg)
         end
 

@@ -73,7 +73,6 @@ class Scripts::Q00061_LawEnforcement < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -111,7 +110,6 @@ class Scripts::Q00061_LawEnforcement < Quest
         else
           # [automatically added else]
         end
-
       when EINDBURGH
         if qs.memo_state?(4)
           html = get_htm(pc, "32469-01.html")
@@ -122,7 +120,6 @@ class Scripts::Q00061_LawEnforcement < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)

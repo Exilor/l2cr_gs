@@ -252,7 +252,6 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
       # [automatically added else]
     end
 
-
     html || get_no_quest_msg(pc)
   end
 
@@ -366,7 +365,6 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         else
           # [automatically added else]
         end
-
       when BROKEN_BOOKSHELF2, BROKEN_BOOKSHELF3, BROKEN_BOOKSHELF4
         if qs.memo_state % 100 == 7
           html = "31533-01.html"
@@ -410,7 +408,6 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         else
           # [automatically added else]
         end
-
       when TOMBSTONE
         case qs.memo_state
         when 11
@@ -420,7 +417,6 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         else
           # [automatically added else]
         end
-
       when COFFIN
         if qs.memo_state?(11)
           give_items(pc, LIDAS_DRESS, 1)
@@ -433,7 +429,6 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
       else
         # [automatically added else]
       end
-
     when State::COMPLETED
       if npc.id == PRIEST_BENEDICT
         html = get_already_completed_msg(pc)
@@ -441,7 +436,6 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

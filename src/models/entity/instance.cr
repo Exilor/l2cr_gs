@@ -6,6 +6,7 @@ require "../holders/instance_reenter_time_holder"
 class Instance
   include Packets::Outgoing
   include Loggable
+  include XMLReader
 
   private alias Say2 = Packets::Incoming::Say2
 
@@ -153,118 +154,99 @@ class Instance
   end
 
   def load_instance_template(file_name : String)
-    File.open("#{Config.datapack_root}/instances/#{file_name}") do |file|
-      doc = XML.parse(file)
-      doc.each_element do |n|
-        if n.name.casecmp?("instance")
-          parse_instance(n)
-        end
-      end
-    end
+    parse_datapack_file("instances/" + file_name)
   rescue e
     error e
   end
 
-  private def parse_instance(n)
-    @name = n["name"]
+  private def parse_document(doc, file)
+    each_element(doc) do |n, n_name|
+      if n_name.casecmp?("instance")
+        parse_instance(n)
+      end
+    end
+  end
 
-    if temp = n["ejectTime"]?
+  private def parse_instance(node)
+    @name = parse_string(node, "name")
+
+    if temp = parse_long(node, "ejectTime", nil)
       @eject_time = 1000i64 * temp.to_i64
     end
 
-    if temp = n["allowRandomWalk"]?
-      @allow_random_walk = Bool.new(temp)
+    temp = parse_bool(node, "allowRandomWalk", nil)
+    unless temp.nil?
+      @allow_random_walk = temp
     end
 
-    first = n
-    first.each_element do |n|
-      case n.name.downcase
+    each_element(node) do |n, n_name|
+      case n_name.casecmp
       when "activitytime"
-        if temp = n["val"]?
+        if temp = parse_long(n, "val", nil)
           delay = 15000
           ctu = CheckTimeUp.new(self, temp.to_i * 60000)
           @check_time_up_task = ThreadPoolManager.schedule_general(ctu, delay)
-          @instance_end_time = Time.ms + (temp.to_i * 60000) + 15000
+          @instance_end_time = Time.ms + (temp.to_i64 * 60000) + 15000
         end
       when "allowsummon"
-        if temp = n["val"]?
-          self.allow_summon = Bool.new(temp)
+        temp = parse_bool(n, "val", nil)
+        unless temp.nil?
+          self.allow_summon = temp
         end
       when "emptydestroytime"
-        if temp = n["val"]?
+        if temp = parse_string(n, "val", nil)
           @empty_destroy_time = temp.to_i64 * 1000
         end
       when "showtimer"
-        if temp = n["val"]?
+        if temp = parse_string(n, "val", nil)
           @show_timer = Bool.new(temp)
         end
-        if temp = n["increase"]?
+        if temp = parse_string(n, "increase", nil)
           @timer_increase = Bool.new(temp)
         end
-        if temp = n["text"]?
+        if temp = parse_string(n, "text", nil)
           @timer_text = temp
         end
       when "pvpinstance"
-        if temp = n["val"]
+        if temp = parse_string(n, "val", nil)
           self.pvp_instance = Bool.new(temp)
         end
       when "doorlist"
-        n.find_element("door") do |d|
-          door_id = d["doorId"].to_i
+        find_element(n, "door") do |d|
+          door_id = parse_int(d, "doorId")
           unless template = DoorData.get_door_template(door_id)
             raise "Door with id #{door_id} not found."
-            exit(1)
           end
           ss = StatsSet.new
-          ss.merge(template)
-          d.find_element("set") do |b|
-            key = b["name"]
-            val = b["val"]
+          ss.merge!(template)
+          find_element(d, "set") do |b|
+            key = parse_string(b, "name")
+            val = parse_string(b, "val")
             ss[key] = val
           end
           add_door(door_id, ss)
         end
       when "spawnlist"
-        n.find_element("group") do |group|
-          spawn_group = group["name"]
+        find_element(n, "group") do |group|
+          spawn_group = parse_string(group, "name")
           manual_spawn = [] of L2Spawn
-          group.each_element do |d|
-            npc_id = 0
-            x = 0
-            y = 0
-            z = 0
-            heading = 0
-            respawn = 0
-            respawn_random = 0
-            delay = -1
-            global_map_id = 0
+          each_element(group) do |d|
+            npc_id = parse_int(d, "npcId", 0)
+            x = parse_int(d, "x", 0)
+            y = parse_int(d, "y", 0)
+            z = parse_int(d, "z", 0)
+            heading = parse_int(d, "heading", 0)
+            respawn = parse_int(d, "respawn", 0)
 
-            npc_id = d["npcId"].to_i
-            x = d["x"].to_i
-            y = d["y"].to_i
-            z = d["z"].to_i
-            heading = d["heading"].to_i
-            respawn = d["respawn"].to_i
+            delay = parse_int(d, "onKillDelay", -1)
+            respawn_random = parse_int(d, "respawnRandom", 0)
 
-            if temp = d["onKillDelay"]?
-              delay = temp.to_i
-            end
-
-            if temp = d["respawnRandom"]?
-              respawn_random = temp.to_i
-            end
-
-            if temp = d["allowRandomWalk"]?
+            if temp = parse_string(d, "allowRandomWalk", nil)
               allow_random_walk = Bool.new(temp)
             end
 
-            if temp = d["areaName"]?
-              area_name = temp
-            end
-
-            if temp = d["globalMapId"]?
-              global_map_id = temp.to_i
-            end
+            area_name = parse_string(d, "areaName", nil)
+            global_map_id = parse_int(d, "globalMapId", 0)
 
             spawn_dat = L2Spawn.new(npc_id)
             spawn_dat.x = x
@@ -300,64 +282,63 @@ class Instance
           end
         end
       when "exitpoint"
-        x = n["x"].to_i
-        y = n["y"].to_i
-        z = n["z"].to_i
+        x = parse_int(n, "x")
+        y = parse_int(n, "y")
+        z = parse_int(n, "z")
         @exit_loc = Location.new(x, y, z)
       when "spawnpoints"
         @enter_locations.clear
-        n.find_element("Location") do |loc|
+        find_element(n, "Location") do |loc|
           begin
-            x = loc["x"].to_i
-            y = loc["y"].to_i
-            z = loc["z"].to_i
+            x = parse_int(loc, "x")
+            y = parse_int(loc, "y")
+            z = parse_int(loc, "z")
             @enter_locations << Location.new(x, y, z)
           rescue e
             error e
           end
         end
       when "reenter"
-        if temp = n["additionStyle"]?
-          @reenter_type = InstanceReenterType.parse(temp)
+        if temp = parse_enum(n, "additionStyle", InstanceReenterType, nil)
+          @reenter_type = temp
         end
 
-        n.find_element("reset") do |d|
+        find_element(n, "reset") do |d|
           time = -1i64
           day = nil
           hour = -1
           minute = -1
 
-          if temp = d["time"]?
+          if temp = parse_string(d, "time", nil)
             time = temp.to_i64
             if time > 0
               @reenter_data << InstanceReenterTimeHolder.new(time)
             end
           elsif time == -1
-            if temp = d["day"]?
+            if temp = parse_string(d, "day", nil)
               day = DayOfWeek.parse(temp)
             end
-            if temp = d["hour"]?
+            if temp = parse_string(d, "hour", nil)
               hour = temp.to_i
             end
-            if temp = d["minute"]?
+            if temp = parse_string(d, "minute", nil)
               minute = temp.to_i
             end
             @reenter_data << InstanceReenterTimeHolder.new(day, hour, minute)
           end
         end
       when "removebuffs"
-        if temp = n["type"]?
-          @remove_buff_type = InstanceRemoveBuffType.parse(temp)
+        if temp = parse_enum(n, "type", InstanceRemoveBuffType, nil)
+          @remove_buff_type = temp
         end
-        n.find_element("skill") do |d|
-          if temp = d["id"]?
-            @buff_exception_list << temp.to_i
+        find_element(n, "skill") do |d|
+          if temp = parse_int(d, "id", nil)
+            @buff_exception_list << temp
           end
         end
       else
         # [automatically added else]
       end
-
     end
   end
 

@@ -59,8 +59,6 @@ class Scripts::CastleDungeon < AbstractInstance
     add_start_npc(CASTLE_DUNGEON.keys)
     add_talk_id(CASTLE_DUNGEON.keys)
     add_kill_id(*RAIDS1, *RAIDS2, *RAIDS3)
-    # add_kill_id(RAIDS2)
-    # add_kill_id(RAIDS3)
   end
 
   def on_enter_instance(pc, world, first_entrance)
@@ -140,9 +138,10 @@ class Scripts::CastleDungeon < AbstractInstance
   end
 
   private def spawn_raid(world)
-    if world.status == 0
+    case world.status
+    when 0
       spawn_id = RAIDS1.sample(random: Rnd)
-    elsif world.status == 1
+    when 1
       spawn_id = RAIDS2.sample(random: Rnd)
     else
       spawn_id = RAIDS3.sample(random: Rnd)

@@ -13,10 +13,10 @@ module PlayerXpPercentLostData
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("xpLost") do |d|
-        level = d["level"].to_i
-        val = d["val"].to_f
+    find_element(doc, "list") do |n|
+      find_element(n, "xpLost") do |d|
+        level = parse_int(d, "level")
+        val = parse_double(d, "val")
         DATA[level] = val
       end
     end

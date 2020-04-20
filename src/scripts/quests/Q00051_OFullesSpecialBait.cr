@@ -35,7 +35,6 @@ class Scripts::Q00051_OFullesSpecialBait < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -62,6 +61,7 @@ class Scripts::Q00051_OFullesSpecialBait < Quest
 
   def on_talk(npc, pc)
     st = get_quest_state!(pc)
+
     case st.state
     when State::COMPLETED
       html = get_already_completed_msg(pc)
@@ -72,7 +72,6 @@ class Scripts::Q00051_OFullesSpecialBait < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

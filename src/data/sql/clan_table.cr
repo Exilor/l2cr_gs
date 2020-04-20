@@ -183,7 +183,6 @@ module ClanTable
           error e
         end
 
-
         if castle_id != 0
           begin
             tr.exec("UPDATE castle SET taxPercent = 0 WHERE id = ?", clan_id)

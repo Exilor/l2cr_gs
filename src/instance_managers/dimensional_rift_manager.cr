@@ -59,18 +59,18 @@ module DimensionalRiftManager
   private def parse_document(doc, file)
     count_good = count_bad = 0
 
-    doc.find_element("rift") do |rift|
-      rift.find_element("area") do |area|
+    find_element(doc, "rift") do |rift|
+      find_element(rift, "area") do |area|
         # 0 waiting room, 1 recruit, 2 soldier, 3 officer, 4 captain, 5 commander, 6 hero
-        type = area["type"].to_i8
+        type = parse_byte(area, "type")
 
-        area.find_element("room") do |room|
-          room_id = room["id"].to_i8
+        find_element(area, "room") do |room|
+          room_id = parse_byte(room, "id")
 
-          room.find_element("spawn") do |sp|
-            mob_id = sp["mobId"].to_i
-            delay = sp["delay"].to_i
-            count = sp["count"].to_i
+          find_element(room, "spawn") do |sp|
+            mob_id = parse_int(sp, "mobId")
+            delay = parse_int(sp, "delay")
+            count = parse_int(sp, "count")
 
             count.times do |i|
               unless rift_room = ROOMS.dig?(type, room_id)

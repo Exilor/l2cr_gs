@@ -38,11 +38,9 @@ class Scripts::Q00027_ChestCaughtWithABaitOfWind < Quest
         st.exit_quest(false, true)
         html = "31434-01.htm"
       end
-
     else
       # [automatically added else]
     end
-
 
     html
   end
@@ -79,11 +77,9 @@ class Scripts::Q00027_ChestCaughtWithABaitOfWind < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

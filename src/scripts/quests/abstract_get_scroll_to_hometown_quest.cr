@@ -128,13 +128,11 @@ abstract class AbstractGetScrollToHometownQuest < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when GENTLER, SANDRA, DUSTIN
       if st.started?
         i = NPC_ITEMS[npc.id]
@@ -151,7 +149,6 @@ abstract class AbstractGetScrollToHometownQuest < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

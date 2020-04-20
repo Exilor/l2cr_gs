@@ -5,6 +5,7 @@ require "./auction_item"
 class ItemAuctionInstance
   include Loggable
   include Packets::Outgoing
+  include XMLReader
 
   private DATE_FORMAT = "%H:%m:%S %d.%m.%y"
 
@@ -27,22 +28,18 @@ class ItemAuctionInstance
   getter next_auction : ItemAuction?
 
   def initialize(@instance_id : Int32, @auction_ids : Atomic(Int32), node)
-    nanode = node.attributes
-    generator_config = StatsSet.new
-    nanode.each do |attr|
-      generator_config[attr.name] = attr.text
-    end
+    generator_config = get_attributes(node)
 
     @date_generator = AuctionDateGenerator.new(generator_config)
 
-    node.find_element("item") do |na|
+    find_element(node, "item") do |na|
       begin
-        auction_item_id = na["auctionItemId"].to_i
-        auction_lenght = na["auctionLenght"].to_i
-        auction_init_bid = na["auctionInitBid"].to_i64
+        auction_item_id = parse_int(na, "auctionItemId")
+        auction_lenght = parse_int(na, "auctionLenght")
+        auction_init_bid = parse_long(na, "auctionInitBid")
 
-        item_id = na["itemId"].to_i
-        item_count = na["itemCount"].to_i64
+        item_id = parse_int(na, "itemId")
+        item_count = parse_long(na, "itemCount")
 
         if auction_lenght < 1
           raise ArgumentError.new("auctionLenght < 1 for instance_id: #{@instance_id}, item_id: #{item_id}")
@@ -63,10 +60,8 @@ class ItemAuctionInstance
 
         @items << item
 
-        na.find_element("extra") do |nb|
-          nb.attributes.each do |attr|
-            item_extra[attr.name] = attr.text
-          end
+        find_element(na, "extra") do |nb|
+          item_extra.merge!(get_attributes(nb))
         end
       rescue e
         error e

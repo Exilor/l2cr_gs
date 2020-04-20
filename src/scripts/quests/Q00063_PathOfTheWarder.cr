@@ -141,7 +141,6 @@ class Scripts::Q00063_PathOfTheWarder < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -187,7 +186,6 @@ class Scripts::Q00063_PathOfTheWarder < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -322,7 +320,6 @@ class Scripts::Q00063_PathOfTheWarder < Quest
       else
         # [automatically added else]
       end
-
     elsif qs.completed?
       if npc.id == MASTER_GOBIE
         if has_quest_items?(pc, STEELRAZOR_EVALUTION)

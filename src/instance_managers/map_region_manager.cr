@@ -15,22 +15,24 @@ module MapRegionManager
   end
 
   private def parse_document(doc, file)
-    doc.find_element("list") do |n|
-      n.find_element("region") do |d|
-        name = d["name"]
-        town = d["town"]
-        loc_id = d["locId"].to_i
-        castle = d["castle"].to_i
-        bbs = d["bbs"].to_i
+    find_element(doc, "list") do |n|
+      find_element(n, "region") do |d|
+        name = parse_string(d, "name")
+        town = parse_string(d, "town")
+        loc_id = parse_int(d, "locId")
+        castle = parse_int(d, "castle")
+        bbs = parse_int(d, "bbs")
         region = L2MapRegion.new(name, town, loc_id, castle, bbs)
-        d.each_element do |c|
-          if c.name.casecmp?("respawnPoint")
-            spawn_x = c["X"].to_i
-            spawn_y = c["Y"].to_i
-            spawn_z = c["Z"].to_i
-            other = c["isOther"]?.try &.casecmp?("true")
-            chaotic = c["isChaotic"]?.try &.casecmp?("true")
-            banish = c["isBanish"]?.try &.casecmp?("true")
+
+        each_element(d) do |c, c_name|
+          case c_name.casecmp
+          when "respawnPoint"
+            spawn_x = parse_int(c, "X")
+            spawn_y = parse_int(c, "Y")
+            spawn_z = parse_int(c, "Z")
+            other = parse_string(c, "isOther", nil).try &.casecmp?("true")
+            chaotic = parse_string(c, "isChaotic", nil).try &.casecmp?("true")
+            banish = parse_string(c, "isBanish", nil).try &.casecmp?("true")
 
             if other
               region.add_other_spawn(spawn_x, spawn_y, spawn_z)
@@ -41,12 +43,19 @@ module MapRegionManager
             else
               region.add_spawn(spawn_x, spawn_y, spawn_z)
             end
-          elsif c.name.casecmp?("map")
-            region.add_map(c["X"].to_i, c["Y"].to_i)
-          elsif c.name.casecmp?("banned")
-            region.add_banned_race(c["race"], c["point"])
+          when "map"
+            spawn_x = parse_int(c, "X")
+            spawn_y = parse_int(c, "Y")
+            region.add_map(spawn_x, spawn_y)
+          when "banned"
+            race = parse_string(c, "race")
+            point = parse_string(c, "point")
+            region.add_banned_race(race, point)
+          else
+            # nothing
           end
         end
+
         REGIONS[name] = region
       end
     end
