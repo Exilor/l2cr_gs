@@ -164,8 +164,8 @@ class Scripts::PrimevalIsle < AbstractNpcAI
         ag_type = npc.template.parameters.get_i32("ag_type", 0)
         prob_physical_special1 = npc.template.parameters.get_i32("ProbPhysicalSpecial1", 0)
         prob_physical_special2 = npc.template.parameters.get_i32("ProbPhysicalSpecial2", 0)
-        physical_special1 = npc.template.parameters.get_object("PhysicalSpecial1", SkillHolder)
-        physical_special2 = npc.template.parameters.get_object("PhysicalSpecial2", SkillHolder)
+        physical_special1 = npc.template.get_skill_holder("PhysicalSpecial1").not_nil!
+        physical_special2 = npc.template.get_skill_holder("PhysicalSpecial2").not_nil!
 
         if (Rnd.rand(100) < 30 && npc.id == DEINO) || (npc.id == ORNIT && npc.script_value?(0))
           mob.clear_aggro_list
@@ -274,9 +274,9 @@ class Scripts::PrimevalIsle < AbstractNpcAI
     else
       prob_physical_special1 = npc.template.parameters.get_i32("ProbPhysicalSpecial1", 0)
       prob_physical_special2 = npc.template.parameters.get_i32("ProbPhysicalSpecial2", 0)
-      self_range_buff1 = npc.template.parameters.get_object("SelfRangeBuff1", SkillHolder)
-      physical_special1 = npc.template.parameters.get_object("PhysicalSpecial1", SkillHolder)
-      physical_special2 = npc.template.parameters.get_object("PhysicalSpecial2", SkillHolder)
+      self_range_buff1 = npc.template.get_skill_holder("SelfRangeBuff1").not_nil!
+      physical_special1 = npc.template.get_skill_holder("PhysicalSpecial1").not_nil!
+      physical_special2 = npc.template.get_skill_holder("PhysicalSpecial2").not_nil!
 
       if npc.hp_percent <= 50
         npc.variables["SKILL_MULTIPLER"] = 2

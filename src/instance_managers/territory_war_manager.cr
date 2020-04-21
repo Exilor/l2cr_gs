@@ -43,7 +43,7 @@ module TerritoryWarManager
   @@scheduled_reward_online_task : TaskExecutor::Scheduler::PeriodicTask?
 
   def load
-    cfg = StatsSet.new
+    cfg = PropertiesReader.new
     cfg.parse(Dir.current + Config::TW_CONFIGURATION_FILE)
 
     @@DEFENDER_MAX_CLANS = cfg.get_i32("DefenderMaxClans", 500)

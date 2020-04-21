@@ -378,7 +378,7 @@ class MinionSpawnManager < AbstractNpcAI
   def on_spawn(npc)
     npc = npc.as(L2MonsterInstance)
     if npc.template.parameters["SummonPrivateRate"]?.nil?
-      npc.minion_list.spawn_minions(npc.template.parameters.get_minion_list("Privates"))
+      npc.minion_list.spawn_minions(npc.template.get_minion_list("Privates"))
       npc.script_value = 1
     else
       npc.script_value = 0
@@ -391,7 +391,7 @@ class MinionSpawnManager < AbstractNpcAI
     if npc.is_a?(L2MonsterInstance) && !npc.teleporting?
       if Rnd.rand(1..100) <= npc.template.parameters.get_i32("SummonPrivateRate", 0)
         if npc.script_value?(0)
-          npc.template.parameters.get_minion_list("Privates").each do |is|
+          npc.template.get_minion_list("Privates").each do |is|
             add_minion(npc, is.id)
           end
 

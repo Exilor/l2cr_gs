@@ -21,7 +21,7 @@ class L2TrapInstance < L2Npc
   def initialize(template : L2NpcTemplate, instance_id : Int32, life_time : Int32)
     super(template)
 
-    @skill = template.parameters.get_object("trap_skill", SkillHolder)
+    @skill = template.get_skill_holder("trap_skill").not_nil!
     @has_life_time = life_time >= 0
     @life_time = life_time != 0 ? life_time : 30_000
     @remaining_time = @life_time

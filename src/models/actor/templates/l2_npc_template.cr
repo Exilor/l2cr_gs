@@ -5,6 +5,8 @@ require "../../../enums/ai_skill_scope"
 
 class L2NpcTemplate < L2CharTemplate
   @clans : Set(Int32)?
+  @minions : Hash(String, Slice(MinionHolder))?
+  @skill_holders : Hash(String, SkillHolder)?
 
   getter ignore_clan_npc_ids : Set(Int32)?
   getter id = 0
@@ -113,6 +115,32 @@ class L2NpcTemplate < L2CharTemplate
 
     @collision_radius_grown = set.get_f64("collisionRadiusGrown", 0)
     @collision_height_grown = set.get_f64("collisionHeightGrown", 0)
+  end
+
+  def get_minion_list(key : String) : Slice(MinionHolder)
+    if tmp = @minions
+      if minions = tmp[key]?
+        return minions
+      end
+    end
+
+    Slice(MinionHolder).empty
+  end
+
+  def add_minion_list(key, minions : Slice(MinionHolder))
+    tmp = @minions ||= {} of String => Slice(MinionHolder)
+    tmp[key] ||= minions
+  end
+
+  def get_skill_holder(key : String) : SkillHolder?
+    if tmp = @skill_holders
+      tmp[key]?
+    end
+  end
+
+  def add_skill_holder(key, holder : SkillHolder)
+    tmp = @skill_holders ||= {} of String => SkillHolder
+    tmp[key] ||= holder
   end
 
   def type?(str : String) : Bool

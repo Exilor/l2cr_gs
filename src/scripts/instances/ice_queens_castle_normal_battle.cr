@@ -400,7 +400,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             npc.do_cast(SELF_DESTRUCTION)
           end
         when "ATTACK_FREYA"
-          skill = npc.template.parameters.get_object("Skill01_ID", SkillHolder)
+          skill = npc.template.get_skill_holder("Skill01_ID").not_nil!
           if npc.inside_radius?(world.freya, 100, true, false)
             if npc.check_do_cast_conditions(skill.skill) && !npc.casting_now?
               npc.target = world.freya

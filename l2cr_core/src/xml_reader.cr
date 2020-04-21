@@ -200,7 +200,11 @@ module XMLReader
     default
   end
 
-  private def add_from_node(node : XML::Node, map : StatsSet, map_key : String, node_key : String = map_key) : Nil
+  private def add_from_node(node : XML::Node, map : StatsSet, map_key : String) : Nil
+    add_from_node(node, map, map_key, map_key)
+  end
+
+  private def add_from_node(node : XML::Node, map : StatsSet, map_key : String, node_key : String) : Nil
     if val = parse_string(node, node_key, nil)
       map[map_key] = val
     end

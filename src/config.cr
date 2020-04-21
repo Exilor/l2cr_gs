@@ -1,5 +1,4 @@
 require "./models/l2_world"
-require "./util/stats_set"
 require "./models/holders/item_holder"
 
 module Config
@@ -1107,7 +1106,7 @@ module Config
   class_property try_load_unspecified_regions : Bool = false
   class_property geodata_regions : Hash(String, Bool) = {} of String => Bool
 
-  private def load_protector_settings(cfg : StatsSet)
+  private def load_protector_settings(cfg)
     load_flood_protector_config(cfg, @@flood_protector_use_item, "UseItem", 4)
     load_flood_protector_config(cfg, @@flood_protector_roll_dice, "RollDice", 42)
     load_flood_protector_config(cfg, @@flood_protector_firework, "Firework", 42)
@@ -1153,7 +1152,7 @@ module Config
   def load
     timer = Timer.new
 
-    cfg = StatsSet.new
+    cfg = PropertiesReader.new
 
     # Custom
     begin

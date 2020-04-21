@@ -50,8 +50,8 @@ abstract class AbstractNpcAI < Quest
   end
 
   def spawn_minions(npc : L2Npc, spawn_name : String)
-    npc.template.parameters.get_minion_list(spawn_name).each do |is|
-      add_minion(npc.as(L2MonsterInstance), is.id)
+    npc.template.get_minion_list(spawn_name).each do |list|
+      add_minion(npc.as(L2MonsterInstance), list.id)
     end
   end
 end

@@ -46,7 +46,7 @@ class MinionList
 
     if !@reused_minion_references &&
        !@master.template.parameters["SummonPrivateRate"]? &&
-       !@master.template.parameters.get_minion_list("Privates").empty? &&
+       !@master.template.get_minion_list("Privates").empty? &&
        ((sp = @master.spawn?) && sp.respawn_enabled?)
 
       @reused_minion_references = Concurrent::Array(L2MonsterInstance).new

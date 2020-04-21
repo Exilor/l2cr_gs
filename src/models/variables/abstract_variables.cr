@@ -44,7 +44,7 @@ abstract class AbstractVariables
 
   forward_missing_to @stats_set
 
-  def []=(key : String, value : StatsSet::ValueType)
+  def []=(key : String, value)
     @has_changes.compare_and_set(false, true)
     @stats_set[key] = value
   end

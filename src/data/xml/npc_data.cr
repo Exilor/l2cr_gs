@@ -50,6 +50,8 @@ module NpcData
         clans = nil
         ignore_clan_npc_ids = nil
         drop_lists = nil
+        minion_lists = nil
+        skill_holders = nil
 
         set["id"] = npc_id
         add_from_node(d, set, "displayId")
@@ -69,13 +71,13 @@ module NpcData
               when "param"
                 parameters[parse_string(params_node, "name")] = parse_string(params_node, "value")
               when "skill"
+                skill_holders ||= [] of {String, SkillHolder}
                 name = parse_string(params_node, "name")
                 id = parse_int(params_node, "id")
                 level = parse_int(params_node, "level")
-                skill = SkillHolder.new(id, level)
-                parameters[name] = skill
+                skill_holders << {name, SkillHolder.new(id, level)}
               when "minions"
-                minions = Array(MinionHolder).new(1)
+                minions = [] of MinionHolder
                 find_element(params_node, "npc") do |minions_node|
                   minion_id = parse_int(minions_node, "id")
                   minion_count = parse_int(minions_node, "count")
@@ -85,7 +87,8 @@ module NpcData
                 end
 
                 unless minions.empty?
-                  parameters[params_node["name"]] = minions
+                  minion_lists ||= [] of {String, Array(MinionHolder)}
+                  minion_lists << {parse_string(params_node, "name"), minions}
                 end
               else
                 # [automatically added else]
@@ -287,9 +290,20 @@ module NpcData
           NPCS[template.id] = template
         end
 
+        if minion_lists
+          minion_lists.each do |name, list|
+            template.add_minion_list(name, list.to_slice)
+          end
+        end
+
+        if skill_holders
+          skill_holders.each do |name, holder|
+            template.add_skill_holder(name, holder)
+          end
+        end
+
         if tmp = minion_data.minions[npc_id]?
-          parameters ||= StatsSet.new
-          parameters["Privates"] ||= tmp
+          template.add_minion_list("Privates", tmp.to_slice)
         end
 
         if parameters && !parameters.empty?

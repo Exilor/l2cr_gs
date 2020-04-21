@@ -134,7 +134,7 @@ class Olympiad < ListenersContainer
 
     unless loaded
       warn "Failed to load data from database. Trying to load from file."
-      cfg = StatsSet.new
+      cfg = PropertiesReader.new
       cfg.parse(Dir.current + Config::OLYMPIAD_CONFIG_FILE)
       # error check
 

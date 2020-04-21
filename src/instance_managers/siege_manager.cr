@@ -16,7 +16,7 @@ module SiegeManager
   class_getter blood_alliance_reward = 0
 
   def load
-    cfg = StatsSet.new
+    cfg = PropertiesReader.new
     cfg.parse(Dir.current + Config::SIEGE_CONFIGURATION_FILE)
 
     @@attacker_max_clans = cfg.get_i32("AttackerMaxClans", 500)

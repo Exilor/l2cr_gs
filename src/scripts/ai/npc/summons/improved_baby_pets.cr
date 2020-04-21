@@ -75,14 +75,14 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
     end
 
     parameters = summon.template.parameters
-    skill = parameters.get_object("step#{step_n}_buff0#{buff_n}", SkillHolder?)
+    skill = summon.template.get_skill_holder("step#{step_n}_buff0#{buff_n}")
 
     # unless skill
     #   warn "Skill not found."
     # end
 
     if skill
-      merged_skill = parameters.get_object("step#{step_n}_merged_buff0#{buff_n}", SkillHolder?)
+      merged_skill = summon.template.get_skill_holder("step#{step_n}_merged_buff0#{buff_n}")
       target_type = parameters.get_i32("step#{step_n}_buff_target0#{buff_n}", 0)
       if !has_abnormal?(owner, skill.skill.abnormal_type) && summon.check_do_cast_conditions(skill.skill)
         if merged_skill && has_abnormal?(owner, merged_skill.skill.abnormal_type)
@@ -119,7 +119,7 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
   private def cast_heal_skill(summon, step_n, heal_num)
     owner = summon.owner
     parameters = summon.template.parameters
-    skill = parameters.get_object("step#{step_n}_heal0#{heal_num}", SkillHolder?)
+    skill = summon.template.get_skill_holder("step#{step_n}_heal0#{heal_num}")
     target_type = parameters.get_i32("step #{step_n}_heal_target0#{heal_num}", 0)
 
     if skill && owner.alive? && summon.check_do_cast_conditions(skill.skill)

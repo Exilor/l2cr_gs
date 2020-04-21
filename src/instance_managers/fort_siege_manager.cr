@@ -19,7 +19,7 @@ module FortSiegeManager
 
   def load
     path = Dir.current + Config::FORTSIEGE_CONFIGURATION_FILE
-    cfg = StatsSet.new
+    cfg = PropertiesReader.new
     cfg.parse(path)
 
     @@can_register_just_territory = Bool.new(cfg.get_string("JustToTerritory", "true"))
