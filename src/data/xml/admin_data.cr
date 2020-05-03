@@ -57,9 +57,9 @@ module AdminData
       if level.level > 0 && level.level == @@highest_level
         tmp = AdminCommandAccessRight.new(command, true, level.level)
         ADMIN_COMMAND_ACCESS_RIGHTS[command] = tmp
-        info { "No rights defined for admin command \"#{command}\". Auto setting access level #{level.level}." }
+        info { "No rights defined for admin command '#{command}'. Auto setting access level #{level.level}." }
       else
-        info { "No rights defined for admin command \"#{command}\"." }
+        info { "No rights defined for admin command '#{command}'." }
         return false
       end
     end
@@ -69,7 +69,7 @@ module AdminData
 
   def require_confirm?(command : String) : Bool
     unless tmp = ADMIN_COMMAND_ACCESS_RIGHTS[command]
-      info { "No rights defined for admin command \"#{command}\"." }
+      info { "No rights defined for admin command '#{command}'." }
       return false
     end
 

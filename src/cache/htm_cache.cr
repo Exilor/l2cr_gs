@@ -96,7 +96,7 @@ module HtmCache
   def get_htm_force(prefix : String?, path : String) : String
     unless content = get_htm(prefix, path)
       content = "<html><body>My text is missing:<br>#{path}</body></html>"
-      warn { "Missing HTML page: \"#{path}\"." }
+      warn { "Missing HTML page: '#{path}'." }
     end
 
     content

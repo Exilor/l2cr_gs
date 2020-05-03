@@ -64,20 +64,20 @@ abstract struct Crossings
       return if ystart >= yend
 
       from = 0
-      while from < @limit && ystart > @yranges[from + 1]
-        from += 2
+      while from < @limit && ystart > @yranges[from &+ 1]
+        from &+= 2
       end
       to = from
       while from < @limit
         yrlo = @yranges[from]
-        from += 1
+        from &+= 1
         yrhi = @yranges[from]
-        from += 1
+        from &+= 1
         if yend < yrlo
           @yranges[to] = ystart.to_f64
-          to += 1
+          to &+= 1
           @yranges[to] = yend.to_f64
-          to += 1
+          to &+= 1
           ystart = yrlo
           yend = yrhi
           next
@@ -108,9 +108,9 @@ abstract struct Crossings
           end
           if yll != ylh
             @yranges[to] = yll.to_f64
-            to += 1
+            to &+= 1
             @yranges[to] = ylh.to_f64
-            to += 1
+            to &+= 1
           end
           ystart = yhl
           yend = yhh
@@ -123,17 +123,17 @@ abstract struct Crossings
       if to < from && from < @limit
         @yranges[to, @limit - from].copy_from(@yranges[from, @limit - from])
       end
-      to += @limit - from
+      to &+= @limit - from
       if ystart < yend
         if to >= @yranges.size
-          new_ranges = Slice(Float64).new(to + 10)
+          new_ranges = Slice(Float64).new(to &+ 10)
           new_ranges.copy_from(@yranges)
           @yranges = new_ranges
         end
         @yranges[to] = ystart.to_f64
-        to += 1
+        to &+= 1
         @yranges[to] = ystart.to_f64
-        to += 1
+        to &+= 1
       end
 
       @limit = to

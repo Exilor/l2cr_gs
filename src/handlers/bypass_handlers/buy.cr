@@ -8,12 +8,12 @@ module BypassHandler::Buy
     commands = command.split
 
     if commands.size < 2
-      warn { "Too few commands. Original command: \"#{command}\"." }
+      warn { "Too few commands. Original command: '#{command}'." }
       return false
     end
 
     unless commands[1].num?
-      warn { "Invalid shop_id \"#{commands[1]}\" (commands: \"#{commands}\")." }
+      warn { "Invalid shop_id '#{commands[1]}' (commands: '#{commands}')." }
       return false
     end
 

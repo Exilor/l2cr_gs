@@ -24,7 +24,7 @@ class Packets::Incoming::RequestOustPledgeMember < GameClientPacket
     end
 
     unless member = clan.get_clan_member(@target)
-      warn { "Target \"#{@target}\" is not a member of clan #{clan.name}." }
+      warn { "Target '#{@target}' is not a member of clan #{clan.name}." }
       return
     end
 

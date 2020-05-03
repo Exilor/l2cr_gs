@@ -325,43 +325,41 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
 
             temp = {} of Int32 => LevelingInfo
 
-            each_element(d) do |cd, cd_name|
+            find_element(d, "detail") do |cd|
               skill_needed = false
               chance = 5
               absorb_type = AbsorbCrystalType::LAST_HIT
 
-              if cd_name.casecmp?("detail")
-                if tmp = parse_enum(cd, "absorbType", AbsorbCrystalType, nil)
-                  absorb_type = tmp
-                end
-                if tmp = parse_int(cd, "chance", nil)
-                  chance = tmp
-                end
-                tmp = parse_bool(cd, "skill", false)
-                unless tmp.nil?
-                  skill_needed = tmp
-                end
+              if tmp = parse_enum(cd, "absorbType", AbsorbCrystalType, nil)
+                absorb_type = tmp
+              end
+              if tmp = parse_int(cd, "chance", nil)
+                chance = tmp
+              end
+              tmp = parse_bool(cd, "skill", false)
+              unless tmp.nil?
+                skill_needed = tmp
+              end
 
-                att1 = parse_int(cd, "maxLevel", nil)
-                att2 = parse_string(cd, "levelList", nil)
+              att1 = parse_int(cd, "maxLevel", nil)
+              att2 = parse_string(cd, "levelList", nil)
 
-                unless att1 || att2
-                  raise "Missing maxlevel/levelList in NPC List (npc_id: #{npc_id})."
+              unless att1 || att2
+                raise "Missing maxlevel/levelList in NPC List (npc_id: #{npc_id})."
+              end
+
+              info = LevelingInfo.new(absorb_type, skill_needed, chance)
+
+              if att1
+                max_level = att1.to_i
+                max_level.times do |i|
+                  temp[i] = info
                 end
-
-                info = LevelingInfo.new(absorb_type, skill_needed, chance)
-
-                if att1
-                  max_level = att1.to_i
-                  max_level.times do |i|
-                    temp[i] = info
-                  end
-                elsif att2
-                  st = att2.split(',')
-                  st.each do |token|
-                    value = token.strip.to_i
-                    temp[value] = info
-                  end
+              elsif att2
+                st = att2.split(',')
+                st.each do |token|
+                  value = token.strip.to_i
+                  temp[value] = info
                 end
               end
             end

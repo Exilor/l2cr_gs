@@ -64,6 +64,9 @@ class L2BlockInstance < L2MonsterInstance
 
     change_points = ExCubeGameChangePoints.new(time_left, eng.blue_points, eng.red_points)
     secret_points = ExCubeGameExtendedChangePoints.new(time_left, eng.blue_points, eng.red_points, red, pc, eng.get_player_points(pc, red))
+
+    eng.holder.broadcast_packet_to_team(change_points)
+    eng.holder.broadcast_packet_to_team(secret_points)
   end
 
   private def drop_item(id : Int32, eng : BlockCheckerEngine, pc : L2PcInstance)

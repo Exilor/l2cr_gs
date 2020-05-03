@@ -33,7 +33,7 @@ abstract class AbstractDocument
     name = parse_string(n, "name")
 
     unless name.starts_with?('#')
-      raise "Table name must start with '#' (it's \"#{name}\")"
+      raise "Table name must start with '#' (it's '#{name}')"
     end
 
     ary = get_content(get_first_child(n)).to_s.strip.split(/\s|\t|\n|\r|\f/)

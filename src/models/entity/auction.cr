@@ -130,7 +130,7 @@ class Auction
     end
 
     unless clan = ClanTable.get_clan_by_name(clan_name)
-      warn { "Clan \"#{clan_name}\" not found." }
+      warn { "Clan '#{clan_name}' not found." }
       return
     end
 

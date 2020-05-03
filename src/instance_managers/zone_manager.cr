@@ -86,7 +86,7 @@ module ZoneManager
             warn { "Missing name for NpcSpawnTerritory in file #{file}." }
             next
           elsif SPAWN_TERRITORIES.has_key?(zone_name)
-            warn { "Name \"#{zone_name}\" already used for another zone, check file #{file}." }
+            warn { "Name '#{zone_name}' already used for another zone, check file #{file}." }
             next
           end
         end
@@ -133,7 +133,7 @@ module ZoneManager
             next
           end
         else
-          warn { "Unknown shape \"#{zone_shape}\" for zone in file #{file}." }
+          warn { "Unknown shape '#{zone_shape}' for zone in file #{file}." }
           next
         end
 

@@ -83,14 +83,15 @@ module SpawnTable
     sp.heading       = data.get_i32("heading", -1)
     sp.set_respawn_delay(data.get_i32("respawnDelay", 0), data.get_i32("respawnRandom", 0))
     sp.location_id   = data.get_i32("locId", 0)
-    territory_name   = data.get_string("territoryName", "")
-    spawn_name       = data.get_string("spawnName", "")
+    territory_name   = data.get_string("territoryName", nil)
+    spawn_name       = data.get_string("spawnName", nil)
     sp.custom        = data.get_bool("isCustomSpawn", false)
-    unless spawn_name.nil? || spawn_name.empty?
+
+    if spawn_name && !spawn_name.empty?
       sp.name = spawn_name
     end
 
-    unless territory_name.empty?
+    if territory_name && !territory_name.empty?
       sp.spawn_territory = ZoneManager.get_spawn_territory(territory_name)
     end
 
@@ -110,7 +111,6 @@ module SpawnTable
     else
       # [automatically added else]
     end
-
 
     add_spawn(sp)
 
@@ -205,7 +205,8 @@ module SpawnTable
 
   private def parse_document(doc, file)
     find_element(doc, "list") do |list|
-      next unless list["enabled"].casecmp?("true")
+      next if parse_bool(list, "enabled", nil) == false
+
       find_element(list, "spawn") do |param|
         map = nil
         spawn_name = parse_string(param, "name", nil)
@@ -262,8 +263,10 @@ module SpawnTable
             end
 
             if val = parse_string(npctag, "periodOfDay", nil)
-              if val.casecmp?("day") || val.casecmp?("night")
-                spawn_info["periodOfDay"] = val.casecmp?("day") ? 1 : 2
+              if val.casecmp?("day")
+                spawn_info["periodOfDay"] =  1
+              elsif val.casecmp?("night")
+                spawn_info["periodOfDay"] = 2
               end
             end
 

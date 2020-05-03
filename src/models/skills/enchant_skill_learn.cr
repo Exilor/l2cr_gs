@@ -22,7 +22,7 @@ struct EnchantSkillLearn
   end
 
   def first_route_group : EnchantSkillGroup?
-    EnchantSkillGroupsData.get_enchant_skill_group_by_id(@enchant_routes.first.try &.last)
+    EnchantSkillGroupsData.get_enchant_skill_group_by_id(@enchant_routes.first_value)
   end
 
   def each_route(& : Int32 ->)
@@ -46,7 +46,7 @@ struct EnchantSkillLearn
     return if enchant_type < 1
     return unless tmp = @enchant_routes[enchant_type]?
     unless group = EnchantSkillGroupsData.get_enchant_skill_group_by_id(tmp)
-      warn { "EnchantSkillLearn: Missing group #{enchant_type}" }
+      warn { "Missing group #{enchant_type}." }
       return
     end
     index = get_enchant_index(level)

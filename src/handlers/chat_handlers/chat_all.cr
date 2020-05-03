@@ -23,7 +23,7 @@ module ChatHandler::ChatAll
         vch.use_voiced_command(command, pc, params || "")
         vcd_used = true
       else
-        debug { "No handler registered for bypass \"#{command}\"." }
+        debug { "No handler registered for bypass '#{command}'." }
       end
     end
 

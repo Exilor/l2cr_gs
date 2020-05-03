@@ -149,7 +149,7 @@ class Scripts::Valakas < AbstractNpcAI
         start_quest_timer("spawn_8", 16830, npc, nil) # 1400
         start_quest_timer("spawn_9", 23530, npc, nil) # 6700 - end of cinematic
         start_quest_timer("spawn_10", 26000, npc, nil) # 2500 - AI + unlock
-      # Regeneration && inactivity task
+        # Regeneration && inactivity task
       when "regen_task"
         # Inactivity task - 15min
         if GrandBossManager.get_boss_status(VALAKAS) == FIGHTING

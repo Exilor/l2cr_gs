@@ -18,7 +18,7 @@ abstract class AbstractEffect
     name = set.get_string("name")
 
     unless handler = EffectHandler[name]
-      raise "No effect handler for \"#{name}\""
+      raise "No effect handler for '#{name}'"
     end
 
     handler.new(attach_cond, apply_cond, set, params)

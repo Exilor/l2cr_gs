@@ -296,12 +296,12 @@ class L2Npc < L2Character
       pc.send_packet(html)
     else
       if handler = BypassHandler[command]
-        debug { "#{handler} will handle #{command.inspect}." }
+        debug { "#{handler} will handle '#{command}'." }
         handler.use_bypass(command, pc, self)
       else
-        warn { "Unknown NPC bypass #{command.inspect}." }
+        warn { "Unknown NPC bypass '#{command}'." }
         if pc.gm?
-          pc.send_message("Unknown NPC bypass #{command.inspect} (Npc id: #{id}).")
+          pc.send_message("Unknown NPC bypass '#{command}' (Npc id: #{id}).")
         end
       end
     end
@@ -494,7 +494,7 @@ class L2Npc < L2Character
       if HtmCache.includes?(temp)
         return temp
       else
-        warn { "L2Npc#get_html_path(#{npc_id}, #{val}) HtmCache can't find \"#{temp}\"." }
+        warn { "L2Npc#get_html_path(#{npc_id}, #{val}) HtmCache can't find '#{temp}'." }
       end
     else
       if HtmCache.loadable?(temp)

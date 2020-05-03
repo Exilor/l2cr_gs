@@ -90,6 +90,7 @@ module GameDB
     end
 
     def load(pc : L2PcInstance)
+      current_time = Time.ms
       GameDB.each(SELECT, pc.l2id, pc.class_index) do |rs|
         remaining_time = rs.get_i32("remaining_time")
         reuse_delay = rs.get_i64("reuse_delay")
@@ -101,7 +102,7 @@ module GameDB
           next
         end
 
-        time = systime - Time.ms
+        time = systime - current_time
         if time > 10
           pc.disable_skill(skill, time)
           pc.add_time_stamp(skill, reuse_delay, systime)

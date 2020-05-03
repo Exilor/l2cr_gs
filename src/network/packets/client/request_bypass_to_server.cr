@@ -31,7 +31,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
       return
     end
 
-    debug { "#{pc} sent \"#{@command}\"." }
+    debug { "#{pc} sent '#{@command}'." }
 
     validate = true
 
@@ -46,7 +46,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
     if validate
       origin_id = pc.validate_html_action(@command)
       if origin_id == -1
-        warn { "#{pc} sent non cached bypass \"#{@command}\"." }
+        warn { "#{pc} sent non cached bypass '#{@command}'." }
         return
       end
 
@@ -68,7 +68,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
         handler = AdminCommandHandler[command]
         unless handler
           if pc.gm?
-            pc.send_message("The command \"#{command.from(6)}\" does not exist")
+            pc.send_message("The command '#{command.from(6)}' does not exist")
           end
           warn { "#{pc} requested an admin command that doesn't exist." }
           return
@@ -82,7 +82,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
         if AdminData.require_confirm?(command)
           pc.admin_confirm_cmd = @command
           dlg = ConfirmDlg.s1
-          dlg.add_string("Are you sure you want execute command \"#{@command.from(6)}\"?")
+          dlg.add_string("Are you sure you want execute command '#{@command.from(6)}'?")
           pc.add_action(PlayerAction::ADMIN_COMMAND)
           pc.send_packet(dlg)
         else
@@ -188,7 +188,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
             handler.use_bypass(@command, pc, nil)
           end
         else
-          warn { "#{pc} sent an unhandled server bypass request: \"#{@command}\"." }
+          warn { "#{pc} sent an unhandled server bypass request: '#{@command}'." }
         end
       end
     rescue e

@@ -660,8 +660,8 @@ abstract class L2Character < L2Object
     when !global_empty && object_empty && template_empty
       global_listeners
     else
-      deq_size = object_listeners.size + template_listeners.size
-      deq_size += global_listeners.size
+      deq_size = object_listeners.size &+ template_listeners.size
+      deq_size &+= global_listeners.size
       ret = Deque(AbstractEventListener).new(deq_size)
       ret.concat(object_listeners)
       ret.concat(template_listeners)
@@ -1021,7 +1021,6 @@ abstract class L2Character < L2Object
     else
       # [automatically added else]
     end
-
   end
 
   def set_running
@@ -3120,14 +3119,11 @@ abstract class L2Character < L2Object
       stop_effects(EffectType::FAKE_DEATH)
     end
 
-    case me = self
-    when L2PcInstance
+    me = self
+    if me.is_a?(L2PcInstance)
       me.fake_death = false
       me.recent_fake_death = true
-    else
-      # [automatically added else]
     end
-
 
     broadcast_packet(ChangeWaitType.new(self, ChangeWaitType::STOP_FAKE_DEATH))
     broadcast_packet(Revive.new(self))
@@ -3372,7 +3368,6 @@ abstract class L2Character < L2Object
     else
       # [automatically added else]
     end
-
 
     @zones[id.to_i] > 0
   end

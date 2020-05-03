@@ -18,10 +18,10 @@ struct EnchantItemGroup
           return holder.chance
         end
       end
-      warn { "Couldn't match chance for item group \"#{@name}\"." }
+      warn { "Couldn't match chance for item group '#{@name}'." }
       return @chances.last.chance
     end
-    warn { "Item group \"#{@name}\" doesn't have any @chances." }
+    warn { "Item group '#{@name}' doesn't have any @chances." }
     -1f64
   end
 end

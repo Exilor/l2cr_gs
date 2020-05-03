@@ -231,40 +231,38 @@ class Scripts::Stage1 < AbstractInstance
             end
           end
         elsif n_name.casecmp?("spawnZones")
-          each_element(n) do |d, d_name|
-            if d_name.casecmp?("zone")
-              unless id = parse_int(d, "id", nil)
-                error "Missing id in spawnZones List, skipping."
-                next
-              end
-
-              unless minz = parse_int(d, "minZ", nil)
-                error { "Missing minZ in spawnZones List id: #{id}, skipping." }
-                next
-              end
-
-              unless maxz = parse_int(d, "maxZ", nil)
-                error { "Missing maxZ in spawnZones List id: #{id}, skipping." }
-                next
-              end
-
-              ter = L2Territory.new(id)
-
-              each_element(d) do |cd, cd_name|
-                if cd_name.casecmp?("point")
-                  unless x = parse_int(cd, "x", nil)
-                    next
-                  end
-                  unless y = parse_int(cd, "y", nil)
-                    next
-                  end
-
-                  ter.add(x, y, minz, maxz, 0)
-                end
-              end
-
-              SPAWN_ZONE_LIST[id] = ter
+          find_element(n, "zone") do |d|
+            unless id = parse_int(d, "id", nil)
+              error "Missing id in spawnZones List, skipping."
+              next
             end
+
+            unless minz = parse_int(d, "minZ", nil)
+              error { "Missing minZ in spawnZones List id: #{id}, skipping." }
+              next
+            end
+
+            unless maxz = parse_int(d, "maxZ", nil)
+              error { "Missing maxZ in spawnZones List id: #{id}, skipping." }
+              next
+            end
+
+            ter = L2Territory.new(id)
+
+            each_element(d) do |cd, cd_name|
+              if cd_name.casecmp?("point")
+                unless x = parse_int(cd, "x", nil)
+                  next
+                end
+                unless y = parse_int(cd, "y", nil)
+                  next
+                end
+
+                ter.add(x, y, minz, maxz, 0)
+              end
+            end
+
+            SPAWN_ZONE_LIST[id] = ter
           end
         end
       end

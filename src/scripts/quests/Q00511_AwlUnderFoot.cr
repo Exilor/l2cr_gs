@@ -132,7 +132,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
       return "FortressWarden-02b.htm"
     elsif is_enter && dungeon.reenter_time > Time.ms
       return "FortressWarden-07.htm"
-  end
+    end
 
     unless party = pc.party
       return "FortressWarden-03.htm"

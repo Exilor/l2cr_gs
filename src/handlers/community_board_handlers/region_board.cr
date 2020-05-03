@@ -28,7 +28,7 @@ module CommunityBoardHandler::RegionBoard
       CommunityBoardHandler.add_bypass(pc, "Region>", command)
       id = command.sub("_bbsloc;", "")
       unless id.num?
-        warn { "Player #{pc.name} sent an invalid region bypass: \"#{command}\"." }
+        warn { "Player #{pc.name} sent an invalid region bypass: '#{command}'." }
         return false
       end
 

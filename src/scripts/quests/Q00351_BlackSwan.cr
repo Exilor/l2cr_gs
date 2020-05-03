@@ -93,7 +93,7 @@ class Scripts::Q00351_BlackSwan < Quest
 
     if qs.nil? || !Util.in_range?(1500, npc, killer, true)
       return
-   end
+    end
 
     random = Rnd.rand(20)
     if random < 10

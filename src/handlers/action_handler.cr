@@ -21,7 +21,6 @@ module ActionHandler
   end
 
   def self.[](type : InstanceType) : self?
-    temp = type
     handler = nil
     while type
       break if handler = HANDLERS[type]?

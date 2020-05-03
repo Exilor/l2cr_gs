@@ -26,12 +26,12 @@ class GameCrypt
 
     temp = 0
     size.times do |i|
-      temp2 = raw[offset + i]
+      temp2 = raw[offset &+ i]
       temp = temp2 ^ @out_key[i & 15] ^ temp
-      raw[offset + i] = temp
+      raw[offset &+ i] = temp
     end
 
-    @out_key.as(Int32*)[2] += size
+    @out_key.as(Int32*)[2] &+= size
   end
 
   def decrypt(raw : UInt8*, offset : Int32, size : Int32)
@@ -39,12 +39,12 @@ class GameCrypt
 
     temp = 0
     size.times do |i|
-      temp2 = raw[offset + i]
-      raw[offset + i] = temp2 ^ @in_key[i & 15] ^ temp
+      temp2 = raw[offset &+ i]
+      raw[offset &+ i] = temp2 ^ @in_key[i & 15] ^ temp
       temp = temp2
     end
 
-    @in_key.as(Int32*)[2] += size
+    @in_key.as(Int32*)[2] &+= size
   end
 
   def self.sample : Bytes

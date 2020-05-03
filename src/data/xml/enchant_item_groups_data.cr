@@ -37,7 +37,7 @@ module EnchantItemGroupsData
         if d_name.casecmp?("enchantRateGroup")
           name = parse_string(d, "name")
           group = EnchantItemGroup.new(name)
-          find_element d, "current" do |cd|
+          find_element(d, "current") do |cd|
             range = parse_string(cd, "enchant")
             chance = parse_double(cd, "chance")
             min, max = -1, 0
@@ -61,7 +61,7 @@ module EnchantItemGroupsData
           id = parse_int(d, "id")
           group = EnchantScrollGroup.new(id)
           find_element(d, "enchantRate") do |cd|
-            rate_group = EnchantRateItem.new(cd["group"])
+            rate_group = EnchantRateItem.new(parse_string(cd, "group"))
             find_element(cd, "item") do |z|
               if slot = parse_string(z, "slot", nil)
                 rate_group.add_slot(ItemTable::SLOTS[slot])

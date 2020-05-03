@@ -35,12 +35,12 @@ module CategoryData
       return category.includes?(id)
     end
 
-    warn { "Can't find category data for \"#{type}\"." }
+    warn { "Can't find category data for '#{type}'." }
 
     false
   end
 
   def [](type : CategoryType) : Set(Int32)
-    CATEGORIES.fetch(type) { raise "No category data for \"#{type}\"" }
+    CATEGORIES.fetch(type) { raise "No category data for '#{type}'" }
   end
 end

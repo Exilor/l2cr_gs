@@ -149,7 +149,7 @@ class Instance
       return temp.map &.do_spawn
     end
 
-    warn { "Cannot spawn NPCs, wrong group name \"#{group_name}\"." }
+    warn { "Cannot spawn NPCs, wrong group name '#{group_name}'." }
     nil
   end
 
@@ -160,10 +160,8 @@ class Instance
   end
 
   private def parse_document(doc, file)
-    each_element(doc) do |n, n_name|
-      if n_name.casecmp?("instance")
-        parse_instance(n)
-      end
+    find_element(doc, "instance") do |n|
+      parse_instance(n)
     end
   end
 

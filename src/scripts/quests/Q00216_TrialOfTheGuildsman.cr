@@ -278,7 +278,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
             html = "30103-02.html"
           else
             html = "30103-03.htm"
-        end
+          end
         else
           html = "30103-01.html"
         end

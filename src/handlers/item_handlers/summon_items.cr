@@ -40,7 +40,7 @@ module ItemHandler::SummonItems
     pet_data = PetDataTable.get_pet_data_by_item_id(item.id)
 
     if pet_data.nil? || pet_data.npc_id == -1
-      warn { "Bad pet data: #{pet_data.inspect}" }
+      warn { "Bad pet data: #{pet_data.inspect}." }
       return false
     end
 

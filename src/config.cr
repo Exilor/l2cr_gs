@@ -1187,7 +1187,7 @@ module Config
       datapack_root = Dir.current + "/data"
     end
     unless Dir.exists?(datapack_root)
-      raise "Datapack not found in \"#{datapack_root}\""
+      raise "Datapack not found at '#{datapack_root}'"
     end
     @@datapack_root = datapack_root
     @@player_name_template = cfg.get_regex("PlayerNameTemplate", /.*/)

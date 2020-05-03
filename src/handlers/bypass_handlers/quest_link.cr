@@ -7,7 +7,7 @@ module BypassHandler::QuestLink
   private THE_LEADER_AND_THE_FOLLOWER = 123
 
   def use_bypass(command, pc, target)
-    debug { "#use_bypass command: \"#{command}\", pc: #{pc}, target: #{target}" }
+    debug { "#use_bypass command: '#{command}', pc: #{pc}, target: #{target}" }
     quest = command.from(5).strip
     if quest.empty?
       unless target.is_a?(L2Npc)

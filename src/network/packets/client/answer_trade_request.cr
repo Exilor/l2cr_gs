@@ -16,12 +16,12 @@ class Packets::Incoming::AnswerTradeRequest < GameClientPacket
     partner = pc.active_requester
 
     if partner.nil?
-      pc.send_packet(TradeDone::ZERO)
+      pc.send_packet(TradeDone::CANCEL)
       pc.send_packet(SystemMessageId::TARGET_IS_NOT_FOUND_IN_THE_GAME)
       pc.active_requester = nil
       return
     elsif L2World.get_player(partner.l2id).nil?
-      pc.send_packet(TradeDone::ZERO)
+      pc.send_packet(TradeDone::CANCEL)
       pc.send_packet(SystemMessageId::TARGET_IS_NOT_FOUND_IN_THE_GAME)
       pc.active_requester = nil
       return

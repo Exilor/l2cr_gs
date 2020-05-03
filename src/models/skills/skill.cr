@@ -160,7 +160,7 @@ class Skill
       begin
         v1, v2 = tmp.split('-')
       rescue e
-        raise "Invalid affectLimit value \"#{tmp}\" for skill id #{@id}"
+        raise "Invalid affectLimit value '#{tmp}' for skill id #{@id}"
       end
       @affect_limit = {v1.to_i, v2.to_i}
     else

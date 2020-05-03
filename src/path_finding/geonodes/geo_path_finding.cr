@@ -15,7 +15,7 @@ module GeoPathFinding
       base_name = File.basename(path, ".pn")
       parts = base_name.split('_')
       unless parts.size == 2 && parts.all? &.num?
-        raise "Invalid path node file name \"#{base_name}\""
+        raise "Invalid path node file name '#{base_name}'"
       end
       rx, ry = parts.map &.to_i8
       load_path_node_file(rx, ry)

@@ -35,7 +35,7 @@ class Scripts::Selina < AbstractNpcAI
         return on_first_talk(npc, pc)
       end
     else
-      warn { "#{pc.name} sent invalid event \"#{event}\"" }
+      warn { "#{pc.name} sent invalid event '#{event}'" }
     end
 
     "31556-02.html"

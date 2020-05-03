@@ -12,11 +12,7 @@ module ArmorSetsData
     info { "Loaded #{SETS.size} armor set data." }
   end
 
-  def [](id : Int32) : ArmorSet
-    SETS.fetch(id) { raise "No armor set with id #{id}" }
-  end
-
-  def []?(id : Int32) : ArmorSet?
+  def [](id : Int32) : ArmorSet?
     SETS[id]?
   end
 

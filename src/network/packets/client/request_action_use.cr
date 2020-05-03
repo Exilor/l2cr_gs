@@ -793,7 +793,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     end
 
     unless holder = summon.template.get_skill_holder(skill_name)
-      warn { "#{summon} requested missing skill \"#{skill_name}\"." }
+      warn { "#{summon} requested missing skill '#{skill_name}'." }
       return
     end
 

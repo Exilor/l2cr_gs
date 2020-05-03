@@ -254,8 +254,8 @@ class Scripts::Q00662_AGameOfCards < Quest
                 if i2 == i3
                   i6 = i6 + 1
                   i8 = i8 + 4
+                end
               end
-            end
               if i8 % 4 < 2
                 if i2 == i4
                   i6 = i6 + 1

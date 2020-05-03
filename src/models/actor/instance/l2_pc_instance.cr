@@ -1054,7 +1054,7 @@ class L2PcInstance < L2Playable
       when 8
         rel |= RelationChanged::PARTY1
       else
-        raise "Wrong index for member in party: \"#{i}\""
+        raise "Wrong index for member in party: '#{i}'"
       end
     end
 
@@ -1192,7 +1192,6 @@ class L2PcInstance < L2Playable
       else
         # [automatically added else]
       end
-
     elsif char
       char.on_action(self)
     end
@@ -3173,7 +3172,6 @@ class L2PcInstance < L2Playable
       # [automatically added else]
     end
 
-
     if transformed?
       send_packet(CharInfo.new(pc))
     end
@@ -3192,7 +3190,6 @@ class L2PcInstance < L2Playable
     else
       # [automatically added else]
     end
-
   end
 
   def update_abnormal_effect
@@ -3471,7 +3468,6 @@ class L2PcInstance < L2Playable
     else
       # [automatically added else]
     end
-
 
     if item_id
       ItemTable[item_id].as(L2Weapon)
@@ -4446,6 +4442,7 @@ class L2PcInstance < L2Playable
       else
         iu = InventoryUpdate.removed(old_item)
       end
+
       send_packet(iu)
     end
 
@@ -4461,6 +4458,7 @@ class L2PcInstance < L2Playable
         else
           iu = InventoryUpdate.added(new_item)
         end
+
         target_player.send_packet(iu)
       end
 
@@ -5521,7 +5519,6 @@ class L2PcInstance < L2Playable
       # [automatically added else]
     end
 
-
     true
   end
 
@@ -5582,7 +5579,7 @@ class L2PcInstance < L2Playable
     list.lock
     @active_trade_list = nil
 
-    send_packet(TradeDone::ZERO)
+    send_packet(TradeDone::CANCEL)
     sm = SystemMessage.c1_canceled_trade
     sm.add_pc_name(partner)
     send_packet(sm)
@@ -5590,7 +5587,7 @@ class L2PcInstance < L2Playable
 
   def on_trade_finish(success : Bool)
     @active_trade_list = nil
-    send_packet(TradeDone::ONE)
+    send_packet(TradeDone::ACCEPT)
     if success
       send_packet(SystemMessageId::TRADE_SUCCESSFUL)
     end
@@ -5924,7 +5921,6 @@ class L2PcInstance < L2Playable
     else
       # [automatically added else]
     end
-
 
     # debug "#set_mount npc_id: #{npc_id}, npc_level: #{npc_level}: mount type: #{type.inspect}."
 
@@ -7262,7 +7258,6 @@ class L2PcInstance < L2Playable
         else
           # [automatically added else]
         end
-
       end
 
       task = LookingForFishTask.new(self, @fish.not_nil!.start_combat_time, @fish.not_nil!.fish_guts, @fish.not_nil!.fish_group, noob, upper_grade)
@@ -7323,7 +7318,6 @@ class L2PcInstance < L2Playable
       else
         # [automatically added else]
       end
-
     when 1 # normal fish
       case @lure.not_nil!.id
       when 7610..7613
@@ -7369,7 +7363,6 @@ class L2PcInstance < L2Playable
       else
         # [automatically added else]
       end
-
     when 2 # upper grade fish, luminous lure
       case @lure.not_nil!.id
       when 8506 # green lure, preferred by fast-moving (nimble) fish (type 8)
@@ -7407,11 +7400,9 @@ class L2PcInstance < L2Playable
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     type
   end
@@ -7440,7 +7431,6 @@ class L2PcInstance < L2Playable
       else
         # [automatically added else]
       end
-
     end
 
     if skill_lvl <= 0

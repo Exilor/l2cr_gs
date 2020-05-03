@@ -96,7 +96,7 @@ struct GeoDriver
       raise ArgumentError.new("x coord #{x} outside of world bounds")
     end
 
-    (x - WORLD_MIN_X) // 16
+    (x &- WORLD_MIN_X) // 16
   end
 
   def get_geo_y(y : Int32) : Int32
@@ -104,16 +104,16 @@ struct GeoDriver
       raise ArgumentError.new("y coord #{y} outside of world bounds")
     end
 
-    (y - WORLD_MIN_Y) // 16
+    (y &- WORLD_MIN_Y) // 16
   end
 
   def get_world_x(x : Int32) : Int32
     check_geo_x(x)
-    (x * 16) + WORLD_MIN_X + 8
+    (x &* 16) &+ WORLD_MIN_X &+ 8
   end
 
   def get_world_y(y : Int32) : Int32
     check_geo_y(y)
-    (y * 16) + WORLD_MIN_Y + 8
+    (y &* 16) &+ WORLD_MIN_Y &+ 8
   end
 end

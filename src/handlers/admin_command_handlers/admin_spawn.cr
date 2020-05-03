@@ -215,7 +215,7 @@ module AdminCommandHandler::AdminSpawn
     when 0
       info { "('',1,#{i},#{x},#{y},#{z},0,0,#{h},60,0,0)," }
     when 1
-      info { "<spawn npc_id=\"#{i}\" x=\"#{x}\" y=\"#{y}\" z=\"#{z}\" heading=\"#{h}\" respawn=\"0\" />" }
+      info { "<spawn npc_id='#{i}' x='#{x}' y='#{y}' z='#{z}' heading='#{h}' respawn='0' />" }
     when 2
       info { "{ #{i}, #{x}, #{y}, #{z}, #{h} }," }
     else
@@ -235,46 +235,44 @@ module AdminCommandHandler::AdminSpawn
       template = NpcData.get_template_by_name(mob_id.sub('_', ' '))
     end
 
-    begin
-      unless template
-        raise "No template for mob id #{mob_id}"
-      end
-      sp = L2Spawn.new(template)
-      if Config.save_gmspawn_on_custom
-        sp.custom = true
-      end
-      sp.x = target.x
-      sp.y = target.y
-      sp.z = target.z
-      sp.amount = mob_count
-      sp.heading = pc.heading
-      sp.respawn_delay = respawn_time
-      if pc.instance_id > 0
-        sp.instance_id = pc.instance_id
-        permanent = false
-      else
-        sp.instance_id = 0
-      end
-      # L2J TODO add checks for GrandBossSpawnManager
-      if RaidBossSpawnManager.defined?(sp.id)
-        pc.send_message("You cannot spawn another instance of #{template.name}.")
-      else
-        if template.type?("L2RaidBoss")
-          sp.respawn_min_delay = 43200
-          sp.respawn_max_delay = 129600
-          RaidBossSpawnManager.add_new_spawn(sp, 0, template.base_hp_max.to_f, template.base_mp_max.to_f, permanent)
-        else
-          SpawnTable.add_new_spawn(sp, permanent)
-          sp.init
-        end
-        unless permanent
-          sp.stop_respawn
-        end
-        pc.send_message("Created #{template.name} on #{target.l2id}")
-      end
-    rescue
-      pc.send_packet(SystemMessageId::TARGET_CANT_FOUND)
+    unless template
+      raise "No template for mob id #{mob_id}"
     end
+    sp = L2Spawn.new(template)
+    if Config.save_gmspawn_on_custom
+      sp.custom = true
+    end
+    sp.x = target.x
+    sp.y = target.y
+    sp.z = target.z
+    sp.amount = mob_count
+    sp.heading = pc.heading
+    sp.respawn_delay = respawn_time
+    if pc.instance_id > 0
+      sp.instance_id = pc.instance_id
+      permanent = false
+    else
+      sp.instance_id = 0
+    end
+    # L2J TODO add checks for GrandBossSpawnManager
+    if RaidBossSpawnManager.defined?(sp.id)
+      pc.send_message("You cannot spawn another instance of #{template.name}.")
+    else
+      if template.type?("L2RaidBoss")
+        sp.respawn_min_delay = 43200
+        sp.respawn_max_delay = 129600
+        RaidBossSpawnManager.add_new_spawn(sp, 0, template.base_hp_max.to_f, template.base_mp_max.to_f, permanent)
+      else
+        SpawnTable.add_new_spawn(sp, permanent)
+        sp.init
+      end
+      unless permanent
+        sp.stop_respawn
+      end
+      pc.send_message("Created #{template.name} on #{target.l2id}")
+    end
+  rescue
+    pc.send_packet(SystemMessageId::TARGET_CANT_FOUND)
   end
 
   private def show_monsters(pc, level, from)

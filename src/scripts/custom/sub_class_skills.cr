@@ -194,7 +194,7 @@ class Scripts::SubClassSkills < Quest
   private def get_cert_skills(pc)
     tmp = [] of Skill
     pc.all_skills.each do |s|
-      if s && ALL_CERT_SKILL_IDS.bsearch(s.id) >= 0
+      if ALL_CERT_SKILL_IDS.bincludes?(s.id)
         tmp << s
       end
     end

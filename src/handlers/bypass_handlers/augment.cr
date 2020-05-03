@@ -13,7 +13,7 @@ module BypassHandler::Augment
       pc.send_packet(ExShowVariationCancelWindow::STATIC_PACKET)
       true
     else
-      debug { "Wrong bypass subcommand \"#{command[8]}\"." }
+      debug { "Wrong bypass subcommand '#{command[8]}'." }
       false
     end
   end

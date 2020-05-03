@@ -328,7 +328,7 @@ class Scripts::Q00426_QuestForFishingShot < Quest
           reward_items(qs.player, SWEET_FLUID, tmp.reward + 1)
         else
           reward_items(qs.player, SWEET_FLUID, tmp.reward)
-      end
+        end
         play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
       else
         tmp = MOBS[npc.id]

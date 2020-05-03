@@ -5,8 +5,8 @@ module NpcPersonalAIData
 
   def store_data(spawn_dat : L2Spawn, data : Hash(String, Int32)?)
     if data && !data.empty?
-      spawn_dat.name ||= Rnd.i64.to_s
-      AI_DATA[spawn_dat.name.not_nil!] = data
+      name = spawn_dat.name ||= Rnd.i64.to_s
+      AI_DATA[name] = data
     end
   end
 
@@ -30,7 +30,6 @@ module NpcPersonalAIData
         else
           # [automatically added else]
         end
-
       end
     end
   end

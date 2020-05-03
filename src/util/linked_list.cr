@@ -148,7 +148,7 @@ class Concurrent::LinkedList(E)
             cas_tail(t, first)
           end
         else
-          if first && (item = first.item)
+          if first && first.item
             return first
           else
             cas_head(h, first)

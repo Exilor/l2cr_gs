@@ -83,7 +83,7 @@ class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
           give_adena(pc, (egg1_count * 34) + 4000, true)
         else
           give_adena(pc, (egg1_count * 34) + 2000, true)
-      end
+        end
 
         take_items(pc, LIENRIK_EGG1, -1)
         html = "31067-10.html"

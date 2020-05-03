@@ -69,7 +69,6 @@ module ItemTable
       else
         # [automatically added else]
       end
-
     end
 
     0.upto(highest) do |i|

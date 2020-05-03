@@ -32,53 +32,53 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
   end
 
   private def run_impl
-    debug "Request to create a character named \"#{@name}\"."
+    debug "Request to create a character named '#{@name}'."
 
     if @name.size < 1 || @name.size > 16
-      debug { "\"#{@name}\" is either too short or too long." }
+      debug { "'#{@name}' is either too short or too long." }
       send_packet(CharCreateFail::REASON_16_ENG_CHARS)
       return
     end
 
     Config.forbidden_names.each do |name|
       if @name.downcase.includes?(name)
-        debug { "\"#{@name}\" is blacklisted." }
+        debug { "'#{@name}' is blacklisted." }
         send_packet(CharCreateFail::INCORRECT_NAME)
         return
       end
     end
 
     unless @name.alnum? && Config.player_name_template === @name
-      debug { "\"#{@name}\" contains non-alnum characters." }
+      debug { "'#{@name}' contains non-alnum characters." }
       send_packet(CharCreateFail::INCORRECT_NAME)
       return
     end
 
     if @face > 2 || @face < 0
-      debug { "Incorrect face #{@face} for \"#{@name}\"." }
+      debug { "Incorrect face #{@face} for '#{@name}'." }
       send_packet(CharCreateFail::CREATION_FAILED)
       return
     end
 
     if @hair_style < 0 || @sex == 0 && @hair_style > 4 || @sex != 0 && @hair_style > 6
-      debug { "Incorrect hair style/sex combination for \"#{@name}\"." }
+      debug { "Incorrect hair style/sex combination for '#{@name}'." }
       send_packet(CharCreateFail::CREATION_FAILED)
       return
     end
 
     if @hair_color > 3 || @hair_color < 0
-      debug { "Incorrect hair color #{@hair_color} for \"#{@name}\"." }
+      debug { "Incorrect hair color #{@hair_color} for '#{@name}'." }
       send_packet(CharCreateFail::CREATION_FAILED)
       return
     end
 
     CharNameTable.sync do
       if CharNameTable.get_account_character_count(client.account_name) > Config.max_characters_number_per_account && Config.max_characters_number_per_account > 0
-        debug { "Max number of characters reached for \"#{client.account_name}\"." }
+        debug { "Max number of characters reached for '#{client.account_name}'." }
         send_packet(CharCreateFail::TOO_MANY_CHARACTERS)
         return
       elsif CharNameTable.name_exists?(@name)
-        debug { "\"#{@name}\" already exists." }
+        debug { "'#{@name}' already exists." }
         send_packet(CharCreateFail::NAME_ALREADY_EXISTS)
         return
       end

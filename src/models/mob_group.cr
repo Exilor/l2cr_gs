@@ -4,10 +4,9 @@ require "./l2_group_spawn"
 class MobGroup
   include Loggable
 
-  getter group_id, max_mob_count
   getter(mobs) { Concurrent::Array(L2ControllableMobInstance).new }
 
-  initializer group_id : Int32, npc_template : L2NpcTemplate,
+  getter_initializer group_id : Int32, template : L2NpcTemplate,
     max_mob_count : Int32
 
   def active_mob_count : Int32
@@ -31,12 +30,8 @@ class MobGroup
     else
       "Idle"
     end
-  rescue e
+  rescue
     "Unspawned"
-  end
-
-  def template : L2NpcTemplate
-    @npc_template
   end
 
   def group_member?(mob : L2ControllableMobInstance) : Bool

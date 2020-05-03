@@ -32,7 +32,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
     if Config.gmaudit
       GMAudit.log("#{pc.name} [#{pc.l2id}]", @command, pc.target.try &.name || "no-target")
-      debug { "#{pc} used command \"#{command}\"." }
+      debug { "#{pc} used command '#{command}'." }
     end
 
     handler.use_admin_command("admin_" + @command, pc)
@@ -149,7 +149,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       if q = QuestManager.get_quest(id)
         state = q.new_quest_state(pc)
         state.start_quest
-        pc.send_message("Started quest \"#{q.descr}\".")
+        pc.send_message("Started quest '#{q.descr}'.")
       else
         pc.send_message("Quest with id #{id} not found.")
       end
@@ -369,7 +369,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     if npc
       pc.tele_to_location(npc)
     else
-      pc.send_message("No npc with name or id \"#{name}\" was found.")
+      pc.send_message("No npc with name or id '#{name}' was found.")
     end
   end
 
@@ -471,7 +471,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         pc.send_message("ClassId #{class_id} is not a 3rd class.")
       end
     else
-      pc.send_message("No class found for \"#{id}\"")
+      pc.send_message("No class found for '#{id}'")
       html = String.build do |io|
         io.puts "<html><title>Class names</title><body>"
         ClassId.each do |id|

@@ -18,7 +18,7 @@ abstract class L2ZoneRespawn < L2ZoneType
       when "banish"
         add_banish_spawn(x, y, z)
       else
-        warn { "Unknown location type #{type.inspect}." }
+        warn { "Unknown location type '#{type}'." }
       end
     end
   end

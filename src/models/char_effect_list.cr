@@ -175,14 +175,14 @@ class CharEffectList
     stop_and_remove(true, info, get_effect_list(info.skill))
   end
 
-  def stop_and_remove(info : BuffInfo?, effects : Enumerable(BuffInfo)?)
-    stop_and_remove(true, info, effects)
+  def stop_and_remove(info : BuffInfo?, effect_list)
+    stop_and_remove(true, info, effect_list)
   end
 
-  def stop_and_remove(removed : Bool, info : BuffInfo?, buffs)
-    return unless info && buffs
+  def stop_and_remove(removed : Bool, info : BuffInfo?, effect_list)
+    return unless info && effect_list
 
-    buffs.delete_first(info)
+    effect_list.delete_first(info)
     info.stop_all_effects(removed)
 
     if !info.in_use?
@@ -192,7 +192,7 @@ class CharEffectList
     end
 
     if info.skill.abnormal_instant? && has_buffs?
-      buffs.each do |buff|
+      effect_list.each do |buff|
         if buff.skill.abnormal_type == info.skill.abnormal_type
           unless buff.in_use?
             buff.in_use = true
@@ -415,11 +415,9 @@ class CharEffectList
     return if @blocked_buff_slots.try &.includes?(skill.abnormal_type)
 
     if skill.passive?
-      unless skill.abnormal_type.none?
-        raise "Passive skill #{skill} with AbnormalType #{skill.abnormal_type}."
+      unless skill.check_condition(info.effector, info.effected, false)
+        return
       end
-
-      return unless skill.check_condition(info.effector, info.effected, false)
 
       passives = passives()
       passives.safe_each do |b|

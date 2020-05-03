@@ -13,7 +13,7 @@ class L2SkillLearn
   getter pre_req_skills = [] of SkillHolder
   getter residence_ids = [] of Int32
   getter subclass_conditions = [] of SubclassData # L2J: _subClassLvlNumber
-  getter? residence_skill : Bool
+  getter? residencial_skill : Bool
   getter? learned_by_npc : Bool
   getter? learned_by_fs : Bool
   getter? auto_get : Bool
@@ -26,7 +26,7 @@ class L2SkillLearn
     @get_level = set.get_i32("getLevel")
     @auto_get = set.get_bool("autoGet", false)
     @level_up_sp = set.get_i32("levelUpSp", 0)
-    @residence_skill = set.get_bool("residenceSkill", false)
+    @residencial_skill = set.get_bool("residenceSkill", false)
     @learned_by_npc = set.get_bool("learnedByNpc", false)
     @learned_by_fs = set.get_bool("learnedByFS", false)
   end
@@ -66,9 +66,5 @@ class L2SkillLearn
     end
 
     level_up_sp
-  end
-
-  def residencial_skill? : Bool
-    residence_skill?
   end
 end

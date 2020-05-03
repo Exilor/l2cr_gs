@@ -1,8 +1,8 @@
 name: l2cr_gs
 version: 0.0.0
+
 dependencies:
   db:
     github: crystal-lang/crystal-db
-    # branch: master
   mysql:
     github: crystal-lang/crystal-mysql

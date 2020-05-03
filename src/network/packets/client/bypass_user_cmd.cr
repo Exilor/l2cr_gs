@@ -10,7 +10,7 @@ class Packets::Incoming::BypassUserCmd < GameClientPacket
 
     unless handler = UserCommandHandler[@cmd]
       if pc.gm?
-        pc.send_message("User CMD \"#{@cmd}\" does not exist.")
+        pc.send_message("User CMD '#{@cmd}' does not exist.")
       end
 
       return

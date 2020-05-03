@@ -60,15 +60,13 @@ module PlayerTemplateData
           template = L2PcTemplate.new(set)
           TEMPLATES[ClassId[class_id]] = template
          when "lvlUpgainData"
-          each_element(d) do |ln, ln_name|
-            if ln_name.casecmp?("level")
-              level = parse_int(ln, "val")
-              each_element(ln) do |vn, vn_name|
-                if vn_name.starts_with?("hp", "mp", "cp")
-                  if tmp = TEMPLATES[ClassId[class_id]]?
-                    tmp.set_upgain_value(vn_name, level, get_content(vn).to_f)
-                    data_count += 1
-                  end
+          find_element(d, "level") do |ln|
+            level = parse_int(ln, "val")
+            each_element(ln) do |vn, vn_name|
+              if vn_name.starts_with?("hp", "mp", "cp")
+                if tmp = TEMPLATES[ClassId[class_id]]?
+                  tmp.set_upgain_value(vn_name, level, get_content(vn).to_f)
+                  data_count += 1
                 end
               end
             end

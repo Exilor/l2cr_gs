@@ -652,7 +652,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
   def on_attack(npc, attacker, damage, is_summon, skill)
     npc_id = npc.id
-    if TELEPORTING_MONSTERS.bsearch(npc_id) >= 0
+    if TELEPORTING_MONSTERS.bincludes?(npc_id)
       if (npc.z - attacker.z).abs > 150
         npc.as(L2MonsterInstance).clear_aggro_list
         attacker.tele_to_location(npc.x + 50, npc.y - 50, npc.z)
@@ -798,7 +798,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           end
         end
       end
-    elsif SIN_WARDENS.bsearch(npc_id) >= 0
+    elsif SIN_WARDENS.bincludes?(npc_id)
       room_data = get_room_data(npc)
       if room_data[0] >= 0 && room_data[1] >= 0
         DEATH_COUNT[room_data[0]][room_data[1]] += 1
@@ -824,7 +824,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           end
         end
       end
-    elsif npc_id >= SERVANT_FIRST && npc_id <= SERVANT_LAST
+    elsif npc_id.between?(SERVANT_FIRST, SERVANT_LAST)
       room_data = get_room_data(npc)
 
       if room_data[0] >= 0 && room_data[1] >= 0 && @allow_agent_spawn
@@ -937,7 +937,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
               # ret[1] = j # room number: 0 == 1'st and so on
               ret = {i, j}
               return ret
-          end
+            end
           end
         end
       end
@@ -1036,12 +1036,9 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           case @state
           when STATE_OPEN
             door.open_me
-          when STATE_CLOSE
+          else # STATE_CLOSE
             door.close_me
-          else
-            # [automatically added else]
           end
-
         end
       end
     end

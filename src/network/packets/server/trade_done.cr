@@ -6,6 +6,6 @@ class Packets::Outgoing::TradeDone < GameServerPacket
     d @num
   end
 
-  ZERO = new(0)
-  ONE  = new(1)
+  CANCEL = new(0)
+  ACCEPT = new(1)
 end

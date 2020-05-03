@@ -140,7 +140,6 @@ abstract class AI
       # [automatically added else]
     end
 
-
     if @next_action.try &.intention?(intention)
       @next_action = nil
     end
@@ -251,7 +250,6 @@ abstract class AI
     else
       # [automatically added else]
     end
-
 
     if (ni = @next_action) && ni.event?(event)
       ni.do_action

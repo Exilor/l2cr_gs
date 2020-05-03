@@ -172,7 +172,7 @@ abstract class ChamberOfDelusion < AbstractInstance
   private def mark_restriction(world)
     if world.is_a?(CDWorld)
       reenter = Calendar.new
-      reenterminute = RESET_MIN
+      reenter.minute = RESET_MIN
       reenter.hour = RESET_HOUR
       if reenter.before?(Time.local)
         reenter.add(:DAY, 1)
@@ -429,7 +429,7 @@ abstract class ChamberOfDelusion < AbstractInstance
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state(pc, false) || new_quest_state(pc)
+    get_quest_state(pc, false) || new_quest_state(pc)
 
     if npc.id == @entrance_gatekeeper
       if check_conditions(pc)

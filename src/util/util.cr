@@ -12,15 +12,15 @@ module Util
 
     rad = 0
     if obj1.is_a?(L2Character)
-      rad += obj1.template.collision_radius
+      rad &+= obj1.template.collision_radius
     end
     if obj2.is_a?(L2Character)
-      rad += obj2.template.collision_radius
+      rad &+= obj2.template.collision_radius
     end
 
-    d = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y)
+    d = Math.hypot(obj1.x &- obj2.x, obj1.y &- obj2.y)
     if z_axis
-      d = Math.hypot(d, obj1.z - obj2.z)
+      d = Math.hypot(d, obj1.z &- obj2.z)
     end
 
     d - (rad / 2) <= range
@@ -30,9 +30,9 @@ module Util
     return false unless obj1 && obj2
     return true if radius == -1
 
-    d = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y)
+    d = Math.hypot(obj1.x &- obj2.x, obj1.y &- obj2.y)
     if z_axis
-      return Math.hypot(d, obj1.z - obj2.z) <= radius
+      return Math.hypot(d, obj1.z &- obj2.z) <= radius
     end
 
     d <= radius
@@ -118,14 +118,14 @@ module Util
       break unless bypass_end = html_lower.index("\"", bypass_start_end)
       h_param_pos = html_lower.index("-h ", bypass_start_end)
       if h_param_pos && h_param_pos < bypass_end
-        bypass = html[h_param_pos + 3...bypass_end].strip
+        bypass = html[h_param_pos &+ 3...bypass_end].strip
       else
         bypass = html[bypass_start_end...bypass_end].strip
       end
 
       first_param_start = bypass.index(AbstractHtmlPacket::VAR_PARAM_START_CHAR)
       if first_param_start
-        bypass = bypass[0...first_param_start + 1]
+        bypass = bypass[0...first_param_start &+ 1]
       end
 
       pc.add_html_action(scope, bypass)
@@ -139,7 +139,7 @@ module Util
     link_start = html_lower.index("=\"link ", link_end)
 
     while link_start
-      link_start_end = link_start + 7
+      link_start_end = link_start &+ 7
       break unless link_end = html_lower.index("\"", link_start_end)
       html_link = html[link_start_end...link_end].strip
       if html_link.empty?
@@ -205,14 +205,14 @@ module Util
         pc.send_packet(ShowBoard.new(html, "101"))
         pc.send_packet(ShowBoard.new(nil, "102"))
         pc.send_packet(ShowBoard.new(nil, "103"))
-      elsif size < 16250 * 2
+      elsif size < 16250 &* 2
         pc.send_packet(ShowBoard.new(html[0...16250], "101"))
         pc.send_packet(ShowBoard.new(html.from(16250), "102"))
         pc.send_packet(ShowBoard.new(nil, "103"))
-      elsif size < 16250 * 3
+      elsif size < 16250 &* 3
         pc.send_packet(ShowBoard.new(html[0...16250], "101"))
-        pc.send_packet(ShowBoard.new(html[16250...16250 * 2], "102"))
-        pc.send_packet(ShowBoard.new(html.from(16250 * 2), "103"))
+        pc.send_packet(ShowBoard.new(html[16250...16250 &* 2], "102"))
+        pc.send_packet(ShowBoard.new(html.from(16250 &* 2), "103"))
       else
         pc.send_packet(ShowBoard.new("<html><body><br><center>Error: HTML was too long!</center></body></html>", "101"))
         pc.send_packet(ShowBoard.new(nil, "102"))
@@ -246,7 +246,7 @@ module Util
 
         c = obj.as(L2Character)
 
-        if c.z < npc.z - 100 && c.z > npc.z + 100
+        if c.z < npc.z &- 100 && c.z > npc.z &+ 100
           next
         end
 
@@ -255,7 +255,7 @@ module Util
         end
 
         if Util.in_range?(range, npc, obj, true) && c.alive?
-          count += 1
+          count &+= 1
         end
       end
     end
@@ -266,17 +266,16 @@ module Util
   def count_params(str : String) : Int32
     count = 0
 
-    0.upto(str.size - 2) do |i|
+    0.upto(str.size &- 2) do |i|
       case str[i]
       when 'C', 'S'
-        c2 = str[i + 1]
+        c2 = str[i &+ 1]
         if c2.number?
           count = Math.max(count, c2.to_i)
         end
       else
         # [automatically added else]
       end
-
     end
 
     count
@@ -304,18 +303,18 @@ module Util
     sprintf("%.2f", amount)
   end
 
-  def min(val1, val2, *args)
-    args.empty? ? Math.min(val1, val2) : {val1, val2, args.min}.min
+  def min(val, *args : Object)
+    Math.min(val, args.min)
   end
 
-  def max(val1, val2, *args)
-    args.empty? ? Math.max(val1, val2) : {val1, val2, args.max}.max
+  def max(val, *args : Object)
+    Math.max(val, args.max)
   end
 
   def get_index_of_min_value(*args : Int32) : Int32
     index = 0
 
-    1.upto(args.size - 1) do |i|
+    1.upto(args.size &- 1) do |i|
       if args[i] < args[index]
         index = i
       end
@@ -327,7 +326,7 @@ module Util
   def get_index_of_max_value(*args : Int32) : Int32
     index = 0
 
-    1.upto(args.size - 1) do |i|
+    1.upto(args.size &- 1) do |i|
       if args[i] > args[index]
         index = i
       end

@@ -46,7 +46,7 @@ class Scripts::Epidos < AbstractNpcAI
         end
 
         minions_count.times do |i|
-          MinionList.spawn_minion(npc.as(L2MonsterInstance), MINIONS[EPIDOSES.bsearch(npc.id)])
+          MinionList.spawn_minion(npc.as(L2MonsterInstance), MINIONS[EPIDOSES.bsearch_index_of(npc.id) || 0])
         end
 
         LAST_HP[npc.l2id] = npc.current_hp

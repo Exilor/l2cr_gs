@@ -252,7 +252,7 @@ abstract class Inventory < ItemContainer
       return unless pc = inv.owner.as?(L2PcInstance)
       return unless chest_item = inv.chest_slot
 
-      return unless armor_set = ArmorSetsData[chest_item.id]?
+      return unless armor_set = ArmorSetsData[chest_item.id]
 
       update = false
       update_time_stamp = false
@@ -318,14 +318,14 @@ abstract class Inventory < ItemContainer
       remove = false
 
       if slot == CHEST
-        return unless armor_set = ArmorSetsData[item.id]?
+        return unless armor_set = ArmorSetsData[item.id]
         remove = true
         skills = armor_set.skills
         shield_skill = armor_set.shield_skills
         skill_id_6 = armor_set.enchant_6_skill
       else
         return unless chest_item = inv.chest_slot
-        return unless armor_set = ArmorSetsData[chest_item.id]?
+        return unless armor_set = ArmorSetsData[chest_item.id]
         if armor_set.contains_item?(slot, item.id)
           remove = true
           skills = armor_set.skills

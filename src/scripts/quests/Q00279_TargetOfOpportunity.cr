@@ -57,8 +57,7 @@ class Scripts::Q00279_TargetOfOpportunity < Quest
       return
     end
 
-    idx = MONSTERS.bsearch(npc.id)
-    if idx < 0
+    unless idx = MONSTERS.bsearch_index_of(npc.id)
       return
     end
 

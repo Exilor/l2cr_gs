@@ -129,29 +129,28 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
           html = "30644-03.htm"
         end
       elsif qs.started?
-          case qs.cond
-          when 1
-            html = "30644-07.html"
-          when 2
-            if has_quest_items?(pc, SCROLL_OF_SHYSLASSYS)
-              take_items(pc, SCROLL_OF_SHYSLASSYS, -1)
-              give_items(pc, LETTER_OF_KASH, 1)
-              qs.set_cond(3, true)
-              html = "30644-08.html"
-            end
-          when 3
-            if has_quest_items?(pc, LETTER_OF_KASH)
-              html = "30644-09.html"
-            end
-          when 8..10
-            html = "30644-10.html"
-          else
-            # [automatically added else]
+        case qs.cond
+        when 1
+          html = "30644-07.html"
+        when 2
+          if has_quest_items?(pc, SCROLL_OF_SHYSLASSYS)
+            take_items(pc, SCROLL_OF_SHYSLASSYS, -1)
+            give_items(pc, LETTER_OF_KASH, 1)
+            qs.set_cond(3, true)
+            html = "30644-08.html"
           end
-
-        elsif qs.completed?
-          html = get_already_completed_msg(pc)
+        when 3
+          if has_quest_items?(pc, LETTER_OF_KASH)
+            html = "30644-09.html"
+          end
+        when 8..10
+          html = "30644-10.html"
+        else
+          # [automatically added else]
         end
+      elsif qs.completed?
+        html = get_already_completed_msg(pc)
+      end
     when MARTIAN
       case qs.cond
       when 3
@@ -175,7 +174,6 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
       else
         # [automatically added else]
       end
-
     when CHEST_OF_SHYSLASSYS
       if qs.started?
         html = "30647-01.html"
@@ -206,7 +204,6 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
       else
         # [automatically added else]
       end
-
     when FILAUR
       case qs.cond
       when 8
@@ -220,11 +217,9 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
       else
         # [automatically added else]
       end
-
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

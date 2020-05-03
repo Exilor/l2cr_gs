@@ -34,7 +34,6 @@ EXECUTABLE_NAME = name_parts.join
 
 commands << "--progress" # enable progress output
 commands << "--error-trace"
-commands << "--threads 4" # remove when i get more ram
 commands << "-o" << EXECUTABLE_NAME
 
 BUILD_COMMAND = commands.join(" ")

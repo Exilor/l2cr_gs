@@ -15,17 +15,13 @@ module HellboundPointData
 
   private def parse_document(doc, file)
     find_element(doc, "list") do |list|
-      each_element(list) do |d|
+      find_element(list, "npc") do |d|
         parse_point(d)
       end
     end
   end
 
   private def parse_point(d)
-    unless d.name == "npc"
-      return
-    end
-
     unless npc_id = parse_int(d, "id", nil)
       error "Missing NPC id."
       return

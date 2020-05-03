@@ -87,7 +87,7 @@ module L2Cr
             pc.access_level = 8
           end
         else
-          puts "Player #{name.inspect} not found in game."
+          puts "Player '#{name}' not found in game."
           # sql = "UPDATE characters SET accesslevel=? WHERE char_name=?"
           # GameDB.exec(sql, 8, name)
         end
@@ -96,7 +96,7 @@ module L2Cr
       when "pool_stats"
         puts ThreadPoolManager.stats
       else
-        return "unknown command #{cmd.inspect}"
+        return "unknown command '#{cmd}'"
       end
 
       if !cmd.empty? && cmd != "\eOA"

@@ -43,7 +43,7 @@ module CellPathFinding
     end
     gtz = GeoData.get_height(tx, ty, tz)
 
-    buffer = alloc(64 + (2 * Math.max((gx - gtx).abs, (gy - gty).abs)), playable)
+    buffer = alloc(64 &+ (2 * Math.max((gx - gtx).abs, (gy - gty).abs)), playable)
     unless buffer
       return
     end
@@ -53,7 +53,7 @@ module CellPathFinding
 
       unless result
         # debug "Couldn't find a buffer."
-        # @@find_fails += 1
+        # @@find_fails &+= 1
         return
       end
 
@@ -66,12 +66,12 @@ module CellPathFinding
     end
 
     if path.size < 3 || Config.max_postfilter_passes <= 0
-      # @@find_success += 1
+      # @@find_success &+= 1
       return path
     end
 
     # time_stamp = Time.ms
-    # @@post_filter_uses += 1
+    # @@post_filter_uses &+= 1
 
     # if playable
     #   @@post_filter_playable_uses += 1
@@ -80,8 +80,8 @@ module CellPathFinding
     pass = 0
 
     loop do
-      pass += 1
-      # @@post_filter_passes += 1
+      pass &+= 1
+      # @@post_filter_passes &+= 1
       remove = false
       current_x = x
       current_y = y
@@ -159,11 +159,11 @@ module CellPathFinding
       if i.map_size >= size
         i.buffers.each do |buf|
           if buf.lock
-            i.uses += 1
+            i.uses &+= 1
             if playable
-              i.playable_uses += 1
+              i.playable_uses &+= 1
             end
-            i.elapsed += buf.elapsed_time
+            i.elapsed &+= buf.elapsed_time
             current = buf
             break
           end
@@ -175,16 +175,16 @@ module CellPathFinding
         current.lock
         if i.buffers.size < i.count
           i.buffers << current
-          i.uses += 1
+          i.uses &+= 1
           if playable
-            i.playable_uses += 1
+            i.playable_uses &+= 1
           end
           break
         end
 
-        i.overflows += 1
+        i.overflows &+= 1
         if playable
-          i.playable_overflows += 1
+          i.playable_overflows &+= 1
         end
       end
     end

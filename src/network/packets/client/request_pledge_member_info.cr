@@ -10,7 +10,7 @@ class Packets::Incoming::RequestPledgeMemberInfo < GameClientPacket
     return unless pc = active_char
     return unless clan = pc.clan
     unless member = clan.get_clan_member(@player_name)
-      warn { "Requested info about clan member with name \"#{@player_name}\" but was not found." }
+      warn { "Requested info about clan member with name '#{@player_name}' but was not found." }
       return
     end
     pc.send_packet(PledgeReceiveMemberInfo.new(member))

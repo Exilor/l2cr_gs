@@ -40,7 +40,6 @@ module BoatManager
     set = StatsSet.new
     set["npcId"] = boat_id
     set["level"] = 0
-    set["jClass"] = "boat"
 
     set["baseSTR"] = 0
     set["baseCON"] = 0

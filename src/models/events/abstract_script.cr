@@ -252,7 +252,7 @@ abstract class AbstractScript
             listeners << temp.add_listener(block.call(temp))
           end
         else
-          warn { "\"#{register_type}\" not handled." }
+          warn { "'#{register_type}' not handled." }
         end
 
         set = @registered_ids[register_type] ||= Concurrent::Set(Int32).new
@@ -271,7 +271,7 @@ abstract class AbstractScript
       when ListenerRegisterType::GLOBAL_PLAYERS
         listeners << Containers::PLAYERS.add_listener(block.call(Containers::PLAYERS))
       else
-        warn { "\"#{register_type}\" not handled." }
+        warn { "#{register_type} not handled." }
       end
     end
 

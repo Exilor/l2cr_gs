@@ -31,14 +31,14 @@ class Polygon
       cur_x = @x_points[i]
       cur_y = @y_points[i]
       if cur_y == last_y
-        i += 1
+        i &+= 1
         last_x = cur_x
         last_y = cur_y
         next
       end
       if cur_x < last_x
         if x >= last_x
-          i += 1
+          i &+= 1
           last_x = cur_x
           last_y = cur_y
           next
@@ -46,7 +46,7 @@ class Polygon
         left_x = cur_x
       else
         if x >= cur_x
-          i += 1
+          i &+= 1
           last_x = cur_x
           last_y = cur_y
           next
@@ -56,14 +56,14 @@ class Polygon
 
       if cur_y < last_y
         if y < cur_y || y >= last_y
-          i += 1
+          i &+= 1
           last_x = cur_x
           last_y = cur_y
           next
         end
         if x < left_x
-          hits += 1
-          i += 1
+          hits &+= 1
+          i &+= 1
           last_x = cur_x
           last_y = cur_y
           next
@@ -72,14 +72,14 @@ class Polygon
         test_2 = y - cur_y
       else
         if y < last_y || y >= cur_y
-          i += 1
+          i &+= 1
           last_x = cur_x
           last_y = cur_y
           next
         end
         if x < left_x
-          hits += 1
-          i += 1
+          hits &+= 1
+          i &+= 1
           last_x = cur_x
           last_y = cur_y
           next
@@ -89,10 +89,10 @@ class Polygon
       end
 
       if test_1 < test_2 / (last_y - cur_y) * (last_x - cur_x)
-        hits += 1
+        hits &+= 1
       end
 
-      i += 1
+      i &+= 1
       last_x = cur_x
       last_y = cur_y
     end
@@ -111,22 +111,19 @@ class Polygon
     h = h.to_f
 
     if @n_points <= 0 || !bounding_box.intersects?(x, y, w, h)
-      false
-    else
-      cross = get_crossings(x, y, x + w, y + h)
-      cross.nil? || !cross.empty?
+      return false
     end
+
+    cross = get_crossings(x, y, x + w, y + h)
+    cross.nil? || !cross.empty?
   end
 
   def bounding_box
     if @n_points == 0
-      Rectangle.new(0, 0)
-    else
-      unless @bounds
-        calculate_bounds(@x_points, @y_points, @n_points)
-      end
-      @bounds.not_nil!.bounds
+      return Rectangle.new(0, 0)
     end
+
+    (@bounds || calculate_bounds(@x_points, @y_points, @n_points)).bounds
   end
 
   def bounds

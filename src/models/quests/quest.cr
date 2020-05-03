@@ -591,9 +591,9 @@ class Quest < AbstractScript
         state_name = rs.get_string("value")
 
         unless q = QuestManager.get_quest(id)
-          warn { "Missing quest \"#{id}\" for player #{pc.name}." }
+          warn { "Missing quest '#{id}' for player #{pc.name}." }
           if Config.autodelete_invalid_quest_data
-            warn { "Deleting invalid quest data for \"#{id}\"." }
+            warn { "Deleting invalid quest data for '#{id}'." }
             sql = "DELETE FROM character_quests WHERE charId = ? AND name = ?"
             GameDB.exec(sql, pc.l2id, id)
           end
@@ -615,9 +615,9 @@ class Quest < AbstractScript
         value = rs.get_string("value")
 
         unless qs = pc.get_quest_state(id)
-          warn { "Missing variable \"#{var}\" in quest \"#{id}\" for player #{pc.name}." }
+          warn { "Missing variable '#{var}' in quest '#{id}' for player #{pc.name}." }
           if Config.autodelete_invalid_quest_data
-            warn { "Deleting invalid variable \"#{var}\" for quest \"#{id}\"." }
+            warn { "Deleting invalid variable '#{var}' for quest '#{id}'." }
             sql = "DELETE FROM character_quests WHERE charId = ? AND name = ? AND var = ?"
             GameDB.exec(sql, pc.l2id, id, var)
           end
@@ -897,7 +897,7 @@ class Quest < AbstractScript
       reply = NpcHtmlMessage.new(npc ? npc.l2id : 0, content)
       pc.send_packet(reply)
     else
-      warn { "Quest#show_page: Missing content for \"#{file_name}\"." }
+      warn { "Quest#show_page: Missing content for '#{file_name}'." }
     end
   end
 
@@ -908,7 +908,7 @@ class Quest < AbstractScript
       reply.html = content
       pc.send_packet(reply)
     else
-      warn { "Quest#show_quest_page: Missing content for \"#{file_name}\"." }
+      warn { "Quest#show_quest_page: Missing content for '#{file_name}'." }
     end
   end
 
@@ -1269,7 +1269,7 @@ class Quest < AbstractScript
     if content = get_htm(pc, file_name)
       pc.send_packet(TutorialShowHtml.new(content))
     else
-      warn { "Quest#show_tutorial_html: \"#{file_name}\" not found." }
+      warn { "Quest#show_tutorial_html: '#{file_name}' not found." }
     end
   end
 

@@ -157,7 +157,7 @@ module LoginServerClient
 
   def add_game_server_login(account : String, client : GameClient) : Bool
     if ACCOUNTS.has_key?(account)
-      error { "Account \"#{account}\" already present in ACCOUNTS." }
+      error { "Account '#{account}' already present in ACCOUNTS." }
       return false
     end
 
@@ -173,7 +173,7 @@ module LoginServerClient
   def send_logout(account : String?)
     return unless account
 
-    debug { "Sending PlayerLogout for \"#{account}\" to LoginServer." }
+    debug { "Sending PlayerLogout for '#{account}' to LoginServer." }
     begin
       send_packet(PlayerLogout.new(account))
     rescue e

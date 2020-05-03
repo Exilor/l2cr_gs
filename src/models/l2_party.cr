@@ -272,7 +272,7 @@ class L2Party < AbstractPlayerGroup
 
   def get_player_by_name(name : String) : L2PcInstance
     @members.find { |m| m.name == name } ||
-    raise("Party member with name \"#{name}\" not found.")
+    raise("Party member with name '#{name}' not found.")
   end
 
   def recalculate_party_level : Int32

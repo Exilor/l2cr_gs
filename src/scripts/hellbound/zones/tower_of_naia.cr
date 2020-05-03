@@ -471,7 +471,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
           end
 
           if INDEX_COUNT[spore_group].abs < ELEMENT_INDEX_LIMIT && INDEX_COUNT[spore_group].abs > 0 && INDEX_COUNT[spore_group] % 20 == 0 && Rnd.rand(100) < 50
-            el = ELEMENTS_NAME[ELEMENTS.bsearch(npc_id)]
+            el = ELEMENTS_NAME[ELEMENTS.bsearch_index_of(npc_id) || 0]
             SPORE_SPAWNS.each do |spore|
               if spore && spore.alive? && spore.id == npc_id
                 broadcast_npc_say(spore, Say2::NPC_ALL, SPORES_NPCSTRINGS.sample, el)
@@ -488,7 +488,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
           # index value was reached
             @challenge_state = STATE_SPORE_CHALLENGE_SUCCESSFULL
             @despawned_spores_count.set(0)
-            @win_index = ELEMENTS.bsearch(npc_id)
+            @win_index = ELEMENTS.bsearch_index_of(npc_id) || 0
             coord = SPORES_MERGE_POSITION[@win_index]
 
             SPORE_SPAWNS.each do |spore|
@@ -613,8 +613,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
   end
 
   private def spawn_opposite_spore(src_spore_id)
-    idx = ELEMENTS.bsearch(src_spore_id)
-    if idx >= 0
+    if idx = ELEMENTS.bsearch_index_of(src_spore_id)
       add_spawn(OPPOSITE_ELEMENTS[idx], -45474, 247450, -13994, 49152, false, 0, false)
     end
   end

@@ -1,5 +1,5 @@
 struct DateRange
-  getter_initializer start_date = Time.now, end_date = Time.now
+  getter_initializer start_date = Time.local, end_date = Time.local
 
   def self.parse(date_range : String, format : String) : self
     date = date_range.split('-')

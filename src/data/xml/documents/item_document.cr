@@ -18,16 +18,12 @@ class ItemDocument < AbstractDocument
   getter(item_list) { [] of L2Item }
 
   private def parse_document(doc, file)
-    each_element(doc) do |n, n_name|
-      if n_name.casecmp?("list")
-        each_element(n) do |d, d_name|
-          if d_name.casecmp?("item")
-            parse_item(d)
+    find_element(doc, "list") do |n|
+      find_element(n, "item") do |d|
+        parse_item(d)
 
-            if item = @current_item.try &.item?
-              item_list << item
-            end
-          end
+        if item = current_item.item?
+          item_list << item
         end
       end
     end

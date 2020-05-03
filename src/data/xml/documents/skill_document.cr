@@ -128,7 +128,7 @@ class SkillDocument < AbstractDocument
       enchant_levels[l].times do |i|
         set = StatsSet.new
         set["skill_id"] = current_skill.id
-        set["level"] = i + (100 * l) + 1
+        set["level"] = i &+ (100 &* l) &+ 1
         set["name"] = current_skill.name
 
         enchsets << set
@@ -137,7 +137,7 @@ class SkillDocument < AbstractDocument
           parse_set(n, enchsets[i], current_skill.sets.size)
         end
 
-        find_element(n, "enchant#{l}") { |n| parse_set(n, enchsets[i], i + 1) }
+        find_element(n, "enchant#{l}") { |n| parse_set(n, enchsets[i], i &+ 1) }
       end
       if enchsets.size != enchant_levels[l]
         raise "Number of enchant levels mismatch for skill #{skill_id}, enchant levels #{l}"
@@ -252,7 +252,7 @@ class SkillDocument < AbstractDocument
         end
 
         if !found_cond || !found_effect || !found_channeling_effects || !found_start_effects || !found_pve_effects || !found_pvp_effects || !found_end_effects || !found_self_effects
-          current_skill.current_level = last_level - 1
+          current_skill.current_level = last_level &- 1
           n = first
           while n
             n_name = get_node_name(n)
@@ -290,7 +290,7 @@ class SkillDocument < AbstractDocument
           end
         end
 
-        i += 1
+        i &+= 1
       end
     {% end %}
 

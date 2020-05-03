@@ -143,7 +143,7 @@ module CharNameTable
     if ret.is_a?(Number)
       ret.to_i32
     else
-      warn { "#{ret.inspect} is not a number, it's a #{ret.class}" }
+      warn { "#{ret} is not a number, it's a #{ret.class}" }
       0
     end
   end

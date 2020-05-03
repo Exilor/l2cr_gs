@@ -44,7 +44,6 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html
@@ -113,7 +112,6 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)
