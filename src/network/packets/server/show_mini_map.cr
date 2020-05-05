@@ -5,7 +5,7 @@ class Packets::Outgoing::ShowMiniMap < GameServerPacket
     c 0xa3
 
     d @map_id
-    c SevenSigns.current_period
+    c SevenSigns.instance.current_period
   end
 
   DEFAULT = new(1665)

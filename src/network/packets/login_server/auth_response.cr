@@ -37,7 +37,7 @@ class Packets::Incoming::AuthResponse < LoginServerPacket
       ss.add(ServerStatus::SERVER_AGE, ServerStatus::SERVER_AGE_ALL)
     end
 
-    LoginServerClient.server_name = @server_name
+    LoginServerClient.instance.server_name = @server_name
 
     client.send_packet(ss)
 

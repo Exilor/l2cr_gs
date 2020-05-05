@@ -31,8 +31,10 @@ class CharSelectInfoPackage
   property html_prefix : String?
 
 
-  def initialize(@l2id : Int32, @name : String)
-    @paperdoll = PcInventory.restore_visible_inventory(@l2id)
+  def initialize(l2id : Int32, name : String)
+    @l2id = l2id
+    @name = name
+    @paperdoll = PcInventory.restore_visible_inventory(l2id)
   end
 
   def get_paperdoll_l2id(slot : Int) : Int32

@@ -22,10 +22,10 @@ class Scripts::Kief < AbstractNpcAI
 
     case event
     when "Badges"
-      case HellboundEngine.level
+      case HellboundEngine.instance.level
       when 2, 3
         if has_quest_items?(pc, DARION_BADGE)
-          HellboundEngine.update_trust((get_quest_items_count(pc, DARION_BADGE) * 10).to_i32, true)
+          HellboundEngine.instance.update_trust((get_quest_items_count(pc, DARION_BADGE) * 10).to_i32, true)
           take_items(pc, DARION_BADGE, -1)
           return "32354-10.htm"
         end
@@ -33,7 +33,7 @@ class Scripts::Kief < AbstractNpcAI
         html = "32354-10a.htm"
       end
     when "Bottle"
-      if HellboundEngine.level >= 7
+      if HellboundEngine.instance.level >= 7
         if get_quest_items_count(pc, STINGER) >= 20
           take_items(pc, STINGER, 20)
           give_items(pc, BOTTLE, 1)
@@ -43,9 +43,9 @@ class Scripts::Kief < AbstractNpcAI
         end
       end
     when "dlf"
-      if HellboundEngine.level == 7
+      if HellboundEngine.instance.level == 7
         if has_quest_items?(pc, DIM_LIFE_FORCE)
-          HellboundEngine.update_trust((get_quest_items_count(pc, DIM_LIFE_FORCE) * 20).to_i32, true)
+          HellboundEngine.instance.update_trust((get_quest_items_count(pc, DIM_LIFE_FORCE) * 20).to_i32, true)
           take_items(pc, DIM_LIFE_FORCE, -1)
           html = "32354-11a.htm"
         else
@@ -53,9 +53,9 @@ class Scripts::Kief < AbstractNpcAI
         end
       end
     when "lf"
-      if HellboundEngine.level == 7
+      if HellboundEngine.instance.level == 7
         if has_quest_items?(pc, LIFE_FORCE)
-          HellboundEngine.update_trust((get_quest_items_count(pc, LIFE_FORCE) * 80).to_i32, true)
+          HellboundEngine.instance.update_trust((get_quest_items_count(pc, LIFE_FORCE) * 80).to_i32, true)
           take_items(pc, LIFE_FORCE, -1)
           html = "32354-11c.htm"
         else
@@ -63,9 +63,9 @@ class Scripts::Kief < AbstractNpcAI
         end
       end
     when "clf"
-      if HellboundEngine.level == 7
+      if HellboundEngine.instance.level == 7
         if has_quest_items?(pc, CONTAINED_LIFE_FORCE)
-          HellboundEngine.update_trust((get_quest_items_count(pc, CONTAINED_LIFE_FORCE) * 200).to_i32, true)
+          HellboundEngine.instance.update_trust((get_quest_items_count(pc, CONTAINED_LIFE_FORCE) * 200).to_i32, true)
           take_items(pc, CONTAINED_LIFE_FORCE, -1)
           html = "32354-11e.htm"
         else
@@ -81,7 +81,7 @@ class Scripts::Kief < AbstractNpcAI
   end
 
   def on_first_talk(npc, pc)
-    case HellboundEngine.level
+    case HellboundEngine.instance.level
     when 1
       "32354-01.htm"
     when 2, 3

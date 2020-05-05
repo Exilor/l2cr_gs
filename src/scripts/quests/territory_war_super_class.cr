@@ -23,7 +23,7 @@ class TerritoryWarSuperClass < Quest
       # Calculate next TW date
       cal = Calendar.new
 
-      next_siege_date = GlobalVariablesManager.get_i64(TerritoryWarManager::GLOBAL_VARIABLE, 0)
+      next_siege_date = GlobalVariablesManager.instance.get_i64(TerritoryWarManager::GLOBAL_VARIABLE, 0)
       if next_siege_date > Time.ms
         cal.ms = next_siege_date
       else
@@ -40,7 +40,7 @@ class TerritoryWarSuperClass < Quest
         if cal.before?(Time.now)
           cal.add(:WEEK, 2)
         end
-        GlobalVariablesManager[TerritoryWarManager::GLOBAL_VARIABLE] = cal.ms
+        GlobalVariablesManager.instance[TerritoryWarManager::GLOBAL_VARIABLE] = cal.ms
       end
       TerritoryWarManager.tw_start_time_in_millis = cal.ms
       info { "Siege date: #{cal.time}." }

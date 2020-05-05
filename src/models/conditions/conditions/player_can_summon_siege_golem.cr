@@ -29,7 +29,7 @@ class Condition
       elsif pc.clan_id != 0 && ((castle && (castle.siege.get_attacker_clan(pc.clan_id).nil?)) || (fort && (fort.siege.get_attacker_clan(pc.clan_id).nil?)))
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         can = false
-      elsif SevenSigns.check_summon_conditions(pc)
+      elsif SevenSigns.instance.check_summon_conditions(pc)
         can = false
       end
 

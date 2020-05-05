@@ -145,8 +145,12 @@ class TradeItem
   property attack_element_power : Int32 = 0
   property enchant_options : Slice(Int32) = L2ItemInstance::DEFAULT_ENCHANT_OPTIONS
 
-  def initialize(@item : L2Item | L2ItemInstance | TradeItem, @count : Int64, @price : Int64)
+  def initialize(item : L2Item | L2ItemInstance | TradeItem, count : Int64, price : Int64)
+    @item = item
+    @count = count
+    @price = price
     @store_count = count
+
     initialize(item)
   end
 

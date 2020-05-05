@@ -21,7 +21,7 @@ class Scripts::Bernarde < AbstractNpcAI
 
     case event
     when "HolyWater"
-      if HellboundEngine.level == 2
+      if HellboundEngine.instance.level == 2
         if pc.inventory.get_inventory_item_count(DARION_BADGE, -1, false) >= 5
           if pc.exchange_items_by_id("Quest", npc, DARION_BADGE, 5, HOLY_WATER, 1, true)
             return "32300-02b.htm"
@@ -30,15 +30,15 @@ class Scripts::Bernarde < AbstractNpcAI
       end
       event = "32300-02c.htm"
     when "Treasure"
-      if HellboundEngine.level == 3 && has_quest_items?(pc, TREASURE)
+      if HellboundEngine.instance.level == 3 && has_quest_items?(pc, TREASURE)
         trust = (get_quest_items_count(pc, TREASURE) * 1000).to_i
-        HellboundEngine.update_trust(trust, true)
+        HellboundEngine.instance.update_trust(trust, true)
         take_items(pc, TREASURE, -1)
         return "32300-02d.htm"
       end
       event = "32300-02e.htm"
     when "rumors"
-      event = "32300-#{HellboundEngine.level}r.htm"
+      event = "32300-#{HellboundEngine.instance.level}r.htm"
     else
       # [automatically added else]
     end
@@ -48,7 +48,7 @@ class Scripts::Bernarde < AbstractNpcAI
   end
 
   def on_first_talk(npc, pc)
-    case HellboundEngine.level
+    case HellboundEngine.instance.level
     when 0, 1
       transformed?(pc) ? "32300-01a.htm" : "32300-01.htm"
     when 2

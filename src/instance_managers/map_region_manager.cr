@@ -221,7 +221,7 @@ module MapRegionManager
         if castle.siege.in_progress?
           if clan = pc.clan
             if castle.siege.defender?(clan) || castle.siege.attacker?(clan)
-              if SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DAWN
+              if SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DAWN
                 return castle.residence_zone.other_spawn_loc
               end
             end

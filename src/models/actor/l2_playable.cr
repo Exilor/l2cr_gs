@@ -183,10 +183,10 @@ abstract class L2Playable < L2Character
   end
 
   abstract def store_me
-  abstract def do_pickup_item(object : L2Object)
+  abstract def do_pickup_item(target : L2Object)
   abstract def karma : Int32
   abstract def pvp_flag : Int8
   abstract def use_magic(skill : Skill, force : Bool, dont_move : Bool) : Bool
-  abstract def store_effect(store_effects : Bool)
+  abstract def store_effect(store : Bool)
   abstract def restore_effects
 end

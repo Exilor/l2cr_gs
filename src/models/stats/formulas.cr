@@ -127,7 +127,7 @@ module Formulas
     end
 
     if pc = char.as?(L2PcInstance)
-      if SevenSignsFestival.festival_in_progress? && pc.festival_participant?
+      if SevenSignsFestival.instance.festival_in_progress? && pc.festival_participant?
         hp_regen_multiplier *= festival_regen_modifier(pc)
       else
         siege_modifier = siege_regen_modifier(pc)
@@ -207,7 +207,7 @@ module Formulas
     mp_regen_bonus = 0.0
 
     if pc = char.as?(L2PcInstance)
-      if SevenSignsFestival.festival_in_progress? && pc.festival_participant?
+      if SevenSignsFestival.instance.festival_in_progress? && pc.festival_participant?
         mp_regen_multiplier *= festival_regen_modifier(pc)
       else
         siege_modifier = siege_regen_modifier(pc)
@@ -293,7 +293,7 @@ module Formulas
   end
 
   def festival_regen_modifier(pc : L2PcInstance) : Float64
-    info = SevenSignsFestival.get_festival_for_player(pc)
+    info = SevenSignsFestival.instance.get_festival_for_player(pc)
     oracle, festival_id = info
     if festival_id < 0
       return 0.0
@@ -427,7 +427,6 @@ module Formulas
       # [automatically added else]
     end
 
-
     init_val *= actor.calc_stat(SKILL_CRITICAL_PROBABILITY, 1)
     Rnd.rand(100) < init_val
   end
@@ -511,7 +510,6 @@ module Formulas
       else
         # [automatically added else]
       end
-
     end
 
     shld_success.to_i8
@@ -535,7 +533,6 @@ module Formulas
     else
       # [automatically added else]
     end
-
 
     pvp = attacker.playable? && target.playable?
     if attacker.behind_target?
@@ -614,7 +611,6 @@ module Formulas
       # [automatically added else]
     end
 
-
     matk = attacker.get_m_atk(target, skill)
     pvp = attacker.playable? && target.playable?
 
@@ -691,7 +687,6 @@ module Formulas
     else
       # [automatically added else]
     end
-
 
     damage = (91.0 * attacker.cubic_power) / mdef
 
@@ -1004,7 +999,6 @@ module Formulas
       # [automatically added else]
     end
 
-
     m_atk *= bss ? 4 : sps ? 2 : 1
 
     damage = (Math.sqrt(m_atk) * power * (mp / 97)) / m_def
@@ -1114,7 +1108,6 @@ module Formulas
       # [automatically added else]
     end
 
-
     pvp = attacker.playable? && target.playable?
     damage = 0.0
     proximity_bonus = attacker.behind_target? ? 1.2 : attacker.in_front_of_target? ? 1.0 : 1.1
@@ -1218,7 +1211,6 @@ module Formulas
       # [automatically added else]
     end
 
-
     cancelled
   end
 
@@ -1279,7 +1271,6 @@ module Formulas
     else
       # [automatically added else]
     end
-
 
     pvp = attacker.playable? && target.playable?
     damage = 0.0
@@ -1389,7 +1380,6 @@ module Formulas
     else
       # [automatically added else]
     end
-
 
     pvp = attacker.playable? && target.playable?
     if attacker.behind_target?

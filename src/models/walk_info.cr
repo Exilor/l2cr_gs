@@ -15,12 +15,12 @@ class WalkInfo
 
   initializer route_name : String
 
-  def route? : L2WalkRoute?
-    WalkingManager.get_route(@route_name)
-  end
-
   def route : L2WalkRoute
-    route?.not_nil!
+    unless route = WalkingManager.get_route(@route_name)
+      raise "Route '#{@route_name}' not found"
+    end
+
+    route
   end
 
   def current_node : L2NpcWalkerNode

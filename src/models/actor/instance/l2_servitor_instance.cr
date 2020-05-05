@@ -52,7 +52,7 @@ class L2ServitorInstance < L2Summon
     true
   end
 
-  def do_pickup_item(item : L2Object)
+  def do_pickup_item(target : L2Object)
     # no-op
   end
 

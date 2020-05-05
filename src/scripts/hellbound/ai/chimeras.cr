@@ -30,7 +30,7 @@ class Scripts::Chimeras < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    if HellboundEngine.level == 7
+    if HellboundEngine.instance.level == 7
       loc = LOCATIONS.sample(random: Rnd)
       unless npc.inside_radius?(loc, 200, false, false)
         npc.spawn.location = loc
@@ -45,8 +45,8 @@ class Scripts::Chimeras < AbstractNpcAI
     if skill.id == BOTTLE && npc.alive?
       if !targets.empty? && targets[0] == npc
         if npc.hp_percent < 10
-          if HellboundEngine.level == 7
-            HellboundEngine.update_trust(3, true)
+          if HellboundEngine.instance.level == 7
+            HellboundEngine.instance.update_trust(3, true)
           end
 
           npc.dead = true

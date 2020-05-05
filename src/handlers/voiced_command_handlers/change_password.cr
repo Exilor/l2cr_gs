@@ -34,7 +34,7 @@ module VoicedCommandHandler::ChangePassword
             return false
           end
 
-          LoginServerClient.send_change_password(pc.account_name, pc.name, current_password, new_password)
+          LoginServerClient.instance.send_change_password(pc.account_name, pc.name, current_password, new_password)
         else
           pc.send_message("Invalid password. You have to fill all the boxes.")
           return false

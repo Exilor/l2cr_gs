@@ -10,7 +10,9 @@ class QuestState
   getter state, player
   getter quest_name : String
 
-  def initialize(quest : Quest, @player : L2PcInstance, @state : State)
+  def initialize(quest : Quest, player : L2PcInstance, state : State)
+    @player = player
+    @state = state
     @quest_name = quest.name
     player.quest_state = self
   end

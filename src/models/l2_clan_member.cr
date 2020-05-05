@@ -14,7 +14,7 @@ class L2ClanMember
   getter clan
   getter player_instance : L2PcInstance?
 
-  def initialize(@clan : L2Clan, pc : L2PcInstance)
+  def initialize(clan : L2Clan, pc : L2PcInstance)
     @clan = clan
     @level = pc.level
     @title = pc.title
@@ -31,7 +31,8 @@ class L2ClanMember
     @player_instance = pc
   end
 
-  def initialize(@clan : L2Clan, rs : ResultSetReader)
+  def initialize(clan : L2Clan, rs : ResultSetReader)
+    @clan = clan
     @name = rs.get_string("char_name")
     @level = rs.get_i32("level")
     @class_id = rs.get_i32("classid")

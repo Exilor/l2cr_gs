@@ -16,7 +16,7 @@ class Scripts::Jude < AbstractNpcAI
     return unless pc
 
     if event.casecmp?("TreasureSacks")
-      if HellboundEngine.level == 3
+      if HellboundEngine.instance.level == 3
         if get_quest_items_count(pc, NATIVE_TREASURE) >= 40
           take_items(pc, NATIVE_TREASURE, 40)
           give_items(pc, RING_OF_WIND_MASTERY, 1)
@@ -30,7 +30,7 @@ class Scripts::Jude < AbstractNpcAI
   end
 
   def on_first_talk(npc, pc)
-    case HellboundEngine.level
+    case HellboundEngine.instance.level
     when 0..2
       "32356-01.htm"
     when 3, 4

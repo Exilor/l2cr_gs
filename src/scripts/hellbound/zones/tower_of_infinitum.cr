@@ -61,7 +61,7 @@ class Scripts::TowerOfInfinitum < AbstractNpcAI
     npc_id = npc.id
 
     if event.casecmp?("enter") && npc_id == JERIAN
-      if HellboundEngine.level >= 11
+      if HellboundEngine.instance.level >= 11
         party = pc.party
         if party && party.leader_l2id == pc.l2id
           party.members.each do |m|

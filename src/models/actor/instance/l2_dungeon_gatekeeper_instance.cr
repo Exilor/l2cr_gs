@@ -10,11 +10,11 @@ class L2DungeonGatekeeperInstance < L2Npc
     actual_cmd = st.shift
 
     filename = SevenSigns::SEVEN_SIGNS_HTML_PATH
-    avarice_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_AVARICE)
-    gnosis_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_GNOSIS)
-    cabal = SevenSigns.get_player_cabal(pc.l2id)
-    seal_validation = SevenSigns.seal_validation_period?
-    winner = SevenSigns.cabal_highest_score
+    avarice_owner = SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_AVARICE)
+    gnosis_owner = SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_GNOSIS)
+    cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
+    seal_validation = SevenSigns.instance.seal_validation_period?
+    winner = SevenSigns.instance.cabal_highest_score
     dawn = SevenSigns::CABAL_DAWN
     dusk = SevenSigns::CABAL_DUSK
     null = SevenSigns::CABAL_NULL

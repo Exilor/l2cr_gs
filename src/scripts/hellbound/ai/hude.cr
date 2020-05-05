@@ -24,7 +24,7 @@ class Scripts::Hude < AbstractNpcAI
 
     case event
     when "scertif"
-      if HellboundEngine.level > 3
+      if HellboundEngine.instance.level > 3
         if has_quest_items?(pc, BASIC_CERT) && get_quest_items_count(pc, MARK_OF_BETRAYAL) >= 30 && get_quest_items_count(pc, STINGER) >= 60
           take_items(pc, MARK_OF_BETRAYAL, 30)
           take_items(pc, STINGER, 60)
@@ -35,7 +35,7 @@ class Scripts::Hude < AbstractNpcAI
       end
       return "32298-04b.htm"
     when "pcertif"
-      if HellboundEngine.level > 6
+      if HellboundEngine.instance.level > 6
         if has_quest_items?(pc, STANDART_CERT) && get_quest_items_count(pc, LIFE_FORCE) >= 56 && get_quest_items_count(pc, CONTAINED_LIFE_FORCE) >= 14
           take_items(pc, LIFE_FORCE, 56)
           take_items(pc, CONTAINED_LIFE_FORCE, 14)

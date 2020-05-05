@@ -574,7 +574,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
 
   private def mark_elpy_respawn
     respawn_time = (Rnd.rand(43200..216000) * 1000) + Time.ms
-    GlobalVariablesManager["elpy_respawn_time"] = respawn_time
+    GlobalVariablesManager.instance["elpy_respawn_time"] = respawn_time
   end
 
   private def move_to(npc, coords)
@@ -596,7 +596,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
   end
 
   private def spawn_elpy
-    respawn_time = GlobalVariablesManager.get_i64("elpy_respawn_time", 0)
+    respawn_time = GlobalVariablesManager.instance.get_i64("elpy_respawn_time", 0)
     time = Time.ms
     if respawn_time <= time
       add_spawn(MUTATED_ELPY, -45474, 247450, -13994, 49152, false, 0, false)

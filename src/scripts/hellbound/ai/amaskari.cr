@@ -97,7 +97,7 @@ class Scripts::Amaskari < AbstractNpcAI
           if Rnd.rand(1000) > 300
             broadcast_npc_say(minion, Say2::NPC_ALL, MINIONS_NPCSTRING_ID[1])
           end
-          HellboundEngine.update_trust(30, true)
+          HellboundEngine.instance.update_trust(30, true)
           minion.delete_me
         end
       end

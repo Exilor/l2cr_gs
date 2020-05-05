@@ -143,7 +143,7 @@ module GameServer
     GameTimer.load
     MapRegionManager.load
     AnnouncementsTable.load
-    GlobalVariablesManager.load
+    GlobalVariablesManager.instance
     BaseStats.load
     TerritoryTable.load
 
@@ -213,7 +213,7 @@ module GameServer
     Hero.load
 
     AutoSpawnHandler.load
-    SevenSigns.load
+    SevenSigns.instance
 
     HtmCache.load
     CrestTable.load
@@ -257,8 +257,8 @@ module GameServer
       ItemsAutoDestroy.load
     end
 
-    SevenSigns.spawn_seven_signs_npc
-    SevenSignsFestival.load
+    SevenSigns.instance.spawn_seven_signs_npc
+    SevenSignsFestival.instance
 
     if Config.allow_wedding
       CoupleManager.load
@@ -319,7 +319,7 @@ module GameServer
     info { "Maximum number of connected players: #{Config.maximum_online_users}." }
     info { "Server loaded in #{timer} s." }
 
-    LoginServerClient.start
+    LoginServerClient.instance
 
     L2Cr.command_line_task
 

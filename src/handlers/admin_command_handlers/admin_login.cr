@@ -17,7 +17,7 @@ module AdminCommandHandler::AdminLogin
         st.shift
         number = st.shift
         begin
-          LoginServerClient.max_players = number.to_i
+          LoginServerClient.instance.max_players = number.to_i
           pc.send_message("maxPlayer set to #{number}")
           show_main_page(pc)
         rescue e
@@ -45,7 +45,7 @@ module AdminCommandHandler::AdminLogin
         end
         if Config.server_list_type != new_type
           Config.server_list_type = new_type
-          LoginServerClient.send_server_type
+          LoginServerClient.instance.send_server_type
           pc.send_message("Server Type changed to #{get_server_type_name(new_type)}")
           show_main_page(pc)
         else
@@ -65,7 +65,7 @@ module AdminCommandHandler::AdminLogin
           age = mode.to_i
           if Config.server_list_age != age
             Config.server_list_type = age
-            LoginServerClient.send_server_status(ServerStatus::SERVER_AGE, age)
+            LoginServerClient.instance.send_server_status(ServerStatus::SERVER_AGE, age)
             pc.send_message("Server Age changed to #{age}")
             show_main_page(pc)
           else
@@ -89,11 +89,11 @@ module AdminCommandHandler::AdminLogin
   private def show_main_page(pc)
     html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/login.htm")
-    html["%server_name%"] = LoginServerClient.server_name
-    html["%status%"] = LoginServerClient.status_string
+    html["%server_name%"] = LoginServerClient.instance.server_name
+    html["%status%"] = LoginServerClient.instance.status_string
     html["%clock%"] = get_server_type_name(Config.server_list_type)
     html["%brackets%"] = Config.server_list_bracket
-    html["%max_players%"] = LoginServerClient.max_players
+    html["%max_players%"] = LoginServerClient.instance.max_players
     pc.send_packet(html)
   end
 
@@ -134,12 +134,12 @@ module AdminCommandHandler::AdminLogin
   end
 
   private def allow_to_all
-    LoginServerClient.server_status = ServerStatus::STATUS_AUTO
+    LoginServerClient.instance.server_status = ServerStatus::STATUS_AUTO
     Config.server_gmonly = false
   end
 
   private def gm_only
-    LoginServerClient.server_status = ServerStatus::STATUS_GM_ONLY
+    LoginServerClient.instance.server_status = ServerStatus::STATUS_GM_ONLY
     Config.server_gmonly = true
   end
 

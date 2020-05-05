@@ -34,7 +34,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
   def on_adv_event(event, npc, player)
     case event.casecmp
     when "make_spawn_1"
-      if HellboundEngine.level >= 10
+      if HellboundEngine.instance.level >= 10
         idx = Rnd.rand(3)
         if SPAWNED[idx] < SPAWNS[idx][5]
           tmp = SPAWNS[idx]

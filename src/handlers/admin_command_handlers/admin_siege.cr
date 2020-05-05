@@ -289,7 +289,7 @@ module AdminCommandHandler::AdminSiege
       new_day.day_of_week = Calendar::SATURDAY
     end
 
-    unless SevenSigns.date_in_seal_valid_period?(new_day)
+    unless SevenSigns.instance.date_in_seal_valid_period?(new_day)
       new_day.add(:WEEK, 1)
     end
 

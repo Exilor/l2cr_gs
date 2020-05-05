@@ -11,9 +11,9 @@ class TaskSevenSignsUpdate < Task
   end
 
   def on_time_elapsed(task : ExecutedTask)
-    SevenSigns.save_seven_signs_status
-    unless SevenSigns.seal_validation_period?
-      SevenSignsFestival.save_festival_data(false)
+    SevenSigns.instance.save_seven_signs_status
+    unless SevenSigns.instance.seal_validation_period?
+      SevenSignsFestival.instance.save_festival_data(false)
     end
 
     info "Saved SevenSigns data."

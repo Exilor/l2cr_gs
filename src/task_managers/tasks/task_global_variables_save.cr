@@ -11,6 +11,6 @@ class TaskGlobalVariablesSave < Task
   end
 
   def on_time_elapsed(task : ExecutedTask)
-    GlobalVariablesManager.store_me
+    GlobalVariablesManager.instance.store_me
   end
 end

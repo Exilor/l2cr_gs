@@ -679,7 +679,7 @@ class L2PcInstance < L2Playable
         if Config.store_ui_settings
           store_ui_settings
         end
-        SevenSigns.save_seven_signs_data(l2id)
+        SevenSigns.instance.save_seven_signs_data(l2id)
         get_script(PlayerVariables).try &.store_me
         get_script(AccountVariables).try &.store_me
       # end
@@ -1332,7 +1332,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def use_magic(skill : Skill, force : Bool, still : Bool) : Bool
+  def use_magic(skill : Skill, force : Bool, dont_move : Bool) : Bool
     if skill.passive?
       action_failed
       debug { "Tried to use passive skill #{skill}." }
@@ -1342,23 +1342,23 @@ class L2PcInstance < L2Playable
     if casting_now?
       current_skill = current_skill()
       if current_skill && skill.id == current_skill.skill_id
-        # debug { "#use_magic(#{skill}, #{force}, #{still}) aborted (a skill is being casted)." }
+        # debug { "#use_magic(#{skill}, #{force}, #{dont_move}) aborted (a skill is being casted)." }
         action_failed
         return false
       elsif skill_disabled?(skill)
-        debug { "#use_magic(#{skill}, #{force}, #{still}) aborted (skill is disabled)." }
+        debug { "#use_magic(#{skill}, #{force}, #{dont_move}) aborted (skill is disabled)." }
         action_failed
         return false
       end
 
-      # debug { "#use_magic(#{skill}, #{force}, #{still}) skill queued (char is casting)." }
-      set_queued_skill(skill, force, still)
+      # debug { "#use_magic(#{skill}, #{force}, #{dont_move}) skill queued (char is casting)." }
+      set_queued_skill(skill, force, dont_move)
       action_failed
       return false
     end
 
     self.casting_now = true
-    set_current_skill(skill, force, still)
+    set_current_skill(skill, force, dont_move)
 
     if queued_skill
       set_queued_skill(nil, false, false)
@@ -2197,7 +2197,7 @@ class L2PcInstance < L2Playable
   end
 
   def festival_participant? : Bool
-    SevenSignsFestival.participant?(self)
+    SevenSignsFestival.instance.participant?(self)
   end
 
   def set_current_skill(skill : Skill?, ctrl : Bool, shift : Bool)
@@ -4737,9 +4737,7 @@ class L2PcInstance < L2Playable
   def start_warn_user_take_break
     @task_warn_user_take_break ||=
     ThreadPoolManager.schedule_general_at_fixed_rate(
-      WarnUserTakeBreakTask.new(self),
-      7200000,
-      7200000
+      WarnUserTakeBreakTask.new(self), 7200000, 7200000
     )
   end
 
@@ -4984,7 +4982,7 @@ class L2PcInstance < L2Playable
   end
 
   def account_access_level=(level : Int32)
-    LoginServerClient.send_access_level(account_name, level)
+    LoginServerClient.instance.send_access_level(account_name, level)
   end
 
   def access_level : AccessLevel
@@ -5120,9 +5118,9 @@ class L2PcInstance < L2Playable
   def on_player_enter
     start_warn_user_take_break
 
-    if SevenSigns.seal_validation_period? || SevenSigns.comp_results_period?
+    if SevenSigns.instance.seal_validation_period? || SevenSigns.instance.comp_results_period?
       if !gm? && in_7s_dungeon?
-        if SevenSigns.get_player_cabal(l2id) != SevenSigns.cabal_highest_score
+        if SevenSigns.instance.get_player_cabal(l2id) != SevenSigns.instance.cabal_highest_score
           tele_to_location(TeleportWhereType::TOWN)
           self.in_7s_dungeon = false
           send_message("You have been teleported to the nearest town due to the beginning of the Seal Validation period.")
@@ -5130,7 +5128,7 @@ class L2PcInstance < L2Playable
       end
     else
       if !gm? && in_7s_dungeon?
-        if SevenSigns.get_player_cabal(l2id) == SevenSigns::CABAL_NULL
+        if SevenSigns.instance.get_player_cabal(l2id) == SevenSigns::CABAL_NULL
           tele_to_location(TeleportWhereType::TOWN)
           self.in_7s_dungeon = false
           send_message("You have been teleported to the nearest town because you have not signed for any cabal.")
@@ -7186,9 +7184,9 @@ class L2PcInstance < L2Playable
 
     # (L2J) TODO: on retail character can enter 7s dungeon with summon friend, but should be teleported away by mobs, because currently this is not working in L2J we do not allowing summoning.
     if in_7s_dungeon?
-      target_cabal = SevenSigns.get_player_cabal(target.l2id)
-      if SevenSigns.seal_validation_period?
-        if target_cabal != SevenSigns.cabal_highest_score
+      target_cabal = SevenSigns.instance.get_player_cabal(target.l2id)
+      if SevenSigns.instance.seal_validation_period?
+        if target_cabal != SevenSigns.instance.cabal_highest_score
           send_packet(SystemMessageId::YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING)
           return false
         end

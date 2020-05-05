@@ -160,7 +160,7 @@ class L2Party < AbstractPlayerGroup
       @members.delete_first(pc)
       recalculate_party_level
       if pc.festival_participant?
-        SevenSignsFestival.update_participants(pc, self)
+        SevenSignsFestival.instance.update_participants(pc, self)
       end
 
       begin

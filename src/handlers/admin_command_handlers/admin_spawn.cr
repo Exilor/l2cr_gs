@@ -122,7 +122,7 @@ module AdminCommandHandler::AdminSpawn
       SpawnTable.load
       RaidBossSpawnManager.load
       AutoSpawnHandler.reload
-      SevenSigns.spawn_seven_signs_npc
+      SevenSigns.instance.spawn_seven_signs_npc
       warn "Reloading scripts is not supported."
       # QuestManager.reload_all_scripts
       AdminData.broadcast_message_to_gms("NPC Respawn completed")

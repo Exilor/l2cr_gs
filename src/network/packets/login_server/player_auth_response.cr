@@ -14,7 +14,7 @@ class Packets::Incoming::PlayerAuthResponse < LoginServerPacket
   end
 
   private def run_impl
-    wc = LoginServerClient.waiting_clients.find { |c| c.account == @account }
+    wc = LoginServerClient.instance.waiting_clients.find { |c| c.account == @account }
     if wc
       if @authed
         client.send_packet(Packets::Outgoing::PlayerInGame.new(@account))
@@ -27,10 +27,10 @@ class Packets::Incoming::PlayerAuthResponse < LoginServerPacket
 
         wc.client.char_selection = csi.char_info
       else
-        LoginServerClient.accounts.delete(wc.account)
+        LoginServerClient.instance.accounts.delete(wc.account)
         warn "SessionKey is not correct."
       end
-      LoginServerClient.waiting_clients.delete_first(wc)
+      LoginServerClient.instance.waiting_clients.delete_first(wc)
     else
       warn { "Didn't find waiting client for account '#{@account}'." }
     end

@@ -10,12 +10,6 @@ class Calendar
   HOUR = 3600
   DAY = 86_400
 
-  # MILLISECOND = 1.millisecond
-  # SECOND = 1.second
-  # MINUTE = 1.minute
-  # HOUR = 1.hour
-  # DAY = 1.day
-
   SUNDAY = 1
   MONDAY = 2
   TUESDAY = 3
@@ -192,27 +186,6 @@ class Calendar
       @time -= difference.years
     end
   end
-
-  # def add(unit : Symbol, value : Number)
-  #   case unit
-  #   when :MILLISECOND
-  #     add(value.milliseconds)
-  #   when :SECOND
-  #     add(value.seconds)
-  #   when :MINUTE
-  #     add(value.minutes)
-  #   when :HOUR
-  #     add(value.hours)
-  #   when :DAY
-  #     add(value.days)
-  #   when :WEEK
-  #     add(value.weeks)
-  #   when :MONTH
-  #     add(value.months)
-  #   else
-  #     raise ArgumentError.new("Invalid unit #{unit.inspect}")
-  #   end
-  # end
 
   enum Unit : UInt8
     MILLISECOND

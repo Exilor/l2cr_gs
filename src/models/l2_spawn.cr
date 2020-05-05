@@ -9,7 +9,6 @@ class L2Spawn
 
   private SPAWN_LISTENERS = Concurrent::Array(SpawnListener).new
 
-  @maximum_count = 0
   @current_count = 0
   @do_respawn = false
   @last_spawn_points : IHash(Int32, Location)?
@@ -26,10 +25,12 @@ class L2Spawn
   property respawn_max_delay : Int32 = 0
   property global_map_id : Int32 = 0
   property area_name : String?
+  property amount : Int32 = 0
   property? custom : Bool = false
   property? no_random_walk : Bool = false
 
-  def initialize(@template : L2NpcTemplate)
+  def initialize(template : L2NpcTemplate)
+    @template = template
     {% begin %}
       @constructor =
       case "#{template.type}Instance"
@@ -49,13 +50,6 @@ class L2Spawn
 
   def id : Int32
     @template.id
-  end
-
-  def amount : Int32
-    @maximum_count
-  end
-
-  def amount=(@maximum_count : Int32)
   end
 
   def get_location(obj : L2Object?) : Location
@@ -135,7 +129,7 @@ class L2Spawn
     @spawned_npcs.delete_first(old)
     @last_spawn_points.try &.delete(old.l2id)
 
-    if @do_respawn && @scheduled_count + @current_count < @maximum_count
+    if @do_respawn && @scheduled_count + @current_count < @amount
       @scheduled_count += 1
 
       if respawn_random?
@@ -150,7 +144,7 @@ class L2Spawn
   end
 
   def init
-    while @current_count < @maximum_count
+    while @current_count < @amount
       do_spawn
     end
     @do_respawn = @respawn_min_delay != 0

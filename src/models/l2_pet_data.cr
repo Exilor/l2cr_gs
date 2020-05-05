@@ -3,10 +3,10 @@ require "./l2_pet_level_data"
 
 class L2PetData
   @level_stats = {} of Int32 => L2PetLevelData
-  @skills = [] of L2PetSkillLearn
 
   getter min_level = Int8::MAX
   getter food = [] of Int32
+  getter available_skills = [] of L2PetSkillLearn
   property hungry_limit : Int32 = 1
   property? sync_level : Bool = false
 
@@ -29,13 +29,13 @@ class L2PetData
   end
 
   def add_new_skill(skill_id : Int32, skill_lvl : Int32, pet_lvl : Int32)
-    @skills << L2PetSkillLearn.new(skill_id, skill_lvl, pet_lvl)
+    @available_skills << L2PetSkillLearn.new(skill_id, skill_lvl, pet_lvl)
   end
 
   def get_available_level(skill_id : Int32, pet_lvl : Int32) : Int32
     lvl = 0
 
-    @skills.each do |sk|
+    @available_skills.each do |sk|
       next if sk.skill_id != skill_id
       if sk.skill_lvl == 0
         if pet_lvl < 70
@@ -61,10 +61,6 @@ class L2PetData
     end
 
     lvl
-  end
-
-  def available_skills : Array(L2PetSkillLearn)
-    @skills
   end
 
   class L2PetSkillLearn < SkillHolder

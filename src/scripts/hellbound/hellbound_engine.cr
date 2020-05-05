@@ -14,7 +14,7 @@ class Scripts::HellboundEngine < AbstractNpcAI
   private UPDATE_INTERVAL = 60000 # 1 minute
   private UPDATE_EVENT = "UPDATE"
 
-  protected class_getter! instance : self
+  class_getter! instance : self
 
   getter cached_level = -1
   getter max_trust = 0
@@ -101,7 +101,7 @@ class Scripts::HellboundEngine < AbstractNpcAI
   end
 
   def level : Int32
-    GlobalVariablesManager.get_i32("HBLevel", 0)
+    GlobalVariablesManager.instance.get_i32("HBLevel", 0)
   end
 
   def level=(lvl : Int32)
@@ -111,16 +111,16 @@ class Scripts::HellboundEngine < AbstractNpcAI
 
     info { "Changing level from #{level} to #{lvl}." }
 
-    GlobalVariablesManager["HBLevel"] = lvl
+    GlobalVariablesManager.instance["HBLevel"] = lvl
   end
 
   def trust : Int32
-    GlobalVariablesManager.get_i32("HBTrust", 0)
+    GlobalVariablesManager.instance.get_i32("HBTrust", 0)
   end
 
   def trust=(trust : Int32)
     debug { "Changing trust from #{trust()} to #{trust}." } if trust != trust()
-    GlobalVariablesManager["HBTrust"] = trust
+    GlobalVariablesManager.instance["HBTrust"] = trust
   end
 
   def locked? : Bool
@@ -227,38 +227,6 @@ class Scripts::HellboundEngine < AbstractNpcAI
         self.trust = final_trust
       end
     end
-  end
-
-  def self.level
-    instance.level
-  end
-
-  def self.level=(l)
-    instance.level = l
-  end
-
-  def self.update_trust(*a)
-    instance.update_trust(*a)
-  end
-
-  def self.trust
-    instance.trust
-  end
-
-  def self.trust=(t)
-    instance.trust = t
-  end
-
-  def self.locked?
-    instance.locked?
-  end
-
-  def self.max_trust
-    instance.max_trust
-  end
-
-  def self.min_trust
-    instance.min_trust
   end
 end
 

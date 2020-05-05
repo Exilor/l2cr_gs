@@ -40,7 +40,7 @@ class Scripts::CastleMercenaryManager < AbstractNpcAI
       msg["%feud_name%"] = 1001000 + castle.residence_id
       pc.send_packet(msg)
     when "buy"
-      if SevenSigns.seal_validation_period?
+      if SevenSigns.instance.seal_validation_period?
         list_id = "#{npc.id}#{st.shift}".to_i
         unless npc.is_a?(L2MerchantInstance)
           raise "Expected #{npc} to be a L2MerchantInstance"
@@ -66,7 +66,7 @@ class Scripts::CastleMercenaryManager < AbstractNpcAI
       if npc.castle.siege.in_progress?
         html = "mercmanager-siege.html"
       else
-        case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
+        case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
         when SevenSigns::CABAL_DUSK
           html = "mercmanager-dusk.html"
         when SevenSigns::CABAL_DAWN

@@ -1,9 +1,9 @@
 require "./models/calendar"
 require "./models/auto_spawn_handler"
 
-module SevenSigns
-  extend self
-  extend Loggable
+class SevenSigns
+  include Singleton
+  include Loggable
   include Packets::Outgoing
 
   SEVEN_SIGNS_HTML_PATH = "data/html/seven_signs/"
@@ -74,19 +74,19 @@ module SevenSigns
   private SIGNS_DUSK_SEAL_TOTALS = Concurrent::Map(Int32, Int32).new
   private SIGNS_DAWN_SEAL_TOTALS = Concurrent::Map(Int32, Int32).new
 
-  @@last_save = Calendar.new
-  @@next_period_change = Calendar.new
-  @@active_period = 0
-  @@dawn_stone_score = 0.0
-  @@dusk_stone_score = 0.0
-  @@dawn_festival_score = 0
-  @@dusk_festival_score = 0
-  @@comp_winner = 0
-  @@previous_winner = 0
+  @last_save = Calendar.new
+  @next_period_change = Calendar.new
+  @active_period = 0
+  @dawn_stone_score = 0.0
+  @dusk_stone_score = 0.0
+  @dawn_festival_score = 0
+  @dusk_festival_score = 0
+  @comp_winner = 0
+  @previous_winner = 0
 
-  class_getter current_cycle = 0
+  getter current_cycle = 0
 
-  def load
+  def initialize
     restore_seven_signs_data
 
     info { "Currently in the #{current_period_name} period." }
@@ -128,7 +128,7 @@ module SevenSigns
   end
 
   def current_period : Int32
-    @@active_period
+    @active_period
   end
 
   private def next_period_change_in_the_past? : Bool
@@ -143,13 +143,13 @@ module SevenSigns
         last_period_change.add(-7.days)
       end
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
-      last_period_change.ms = @@last_save.ms + PERIOD_MINOR_LENGTH
+      last_period_change.ms = @last_save.ms + PERIOD_MINOR_LENGTH
     else
       # [automatically added else]
     end
 
 
-    @@last_save.ms > 7 && @@last_save < last_period_change
+    @last_save.ms > 7 && @last_save < last_period_change
   end
 
   def spawn_seven_signs_npc
@@ -331,12 +331,12 @@ module SevenSigns
   end
 
   private def days_to_period_change : Int64
-    days = @@next_period_change.day_of_week - PERIOD_START_DAY
+    days = @next_period_change.day_of_week - PERIOD_START_DAY
     days < 0 ? 0i64 - days : 7i64 - days
   end
 
   def milli_to_period_change : Int64
-    @@next_period_change.ms - Time.ms
+    @next_period_change.ms - Time.ms
   end
 
   def set_calendar_for_next_period_change
@@ -345,33 +345,33 @@ module SevenSigns
       days_to_change = days_to_period_change
       # debug "days to change: #{days_to_change}"
       if days_to_change == 7
-        if @@next_period_change.hour < PERIOD_START_HOUR
+        if @next_period_change.hour < PERIOD_START_HOUR
           days_to_change = 0
-        elsif @@next_period_change.hour == PERIOD_START_DAY
-          if @@next_period_change.minute < PERIOD_START_MINS
+        elsif @next_period_change.hour == PERIOD_START_DAY
+          if @next_period_change.minute < PERIOD_START_MINS
             days_to_change = 0
           end
         end
       end
 
       if days_to_change > 0
-        @@next_period_change.add(days_to_change.days)
+        @next_period_change.add(days_to_change.days)
       end
 
-      @@next_period_change.hour = PERIOD_START_HOUR
-      @@next_period_change.minute = PERIOD_START_MINS
+      @next_period_change.hour = PERIOD_START_HOUR
+      @next_period_change.minute = PERIOD_START_MINS
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
-      @@next_period_change.add(PERIOD_MINOR_LENGTH.milliseconds) # 15 mins
+      @next_period_change.add(PERIOD_MINOR_LENGTH.milliseconds) # 15 mins
     else
       # [automatically added else]
     end
 
 
-    info { "Next period change set to #{@@next_period_change.time}." }
+    info { "Next period change set to #{@next_period_change.time}." }
   end
 
   def current_period_name : String?
-    case @@active_period
+    case @active_period
     when PERIOD_COMP_RECRUITING
       "Quest Event Initialization"
     when PERIOD_COMPETITION
@@ -387,15 +387,15 @@ module SevenSigns
   end
 
   def competition_period? : Bool
-    @@active_period == PERIOD_COMPETITION
+    @active_period == PERIOD_COMPETITION
   end
 
   def seal_validation_period? : Bool
-    @@active_period == PERIOD_SEAL_VALIDATION
+    @active_period == PERIOD_SEAL_VALIDATION
   end
 
   def comp_results_period? : Bool
-    @@active_period == PERIOD_COMP_RESULTS
+    @active_period == PERIOD_COMP_RESULTS
   end
 
   def date_in_seal_valid_period?(date : Calendar) : Bool
@@ -436,12 +436,12 @@ module SevenSigns
   end
 
   def get_current_score(cabal : Int) : Int32
-    total = @@dawn_stone_score.to_f64 + @@dusk_stone_score
+    total = @dawn_stone_score.to_f64 + @dusk_stone_score
     case cabal
     when CABAL_DAWN
-      return (((@@dawn_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dawn_festival_score).to_i32
+      return (((@dawn_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @dawn_festival_score).to_i32
     when CABAL_DUSK
-      return (((@@dusk_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @@dusk_festival_score).to_i32
+      return (((@dusk_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @dusk_festival_score).to_i32
     else
       # [automatically added else]
     end
@@ -453,9 +453,9 @@ module SevenSigns
   def get_current_stone_score(cabal : Int) : Float64
     case cabal
     when CABAL_DAWN
-      @@dawn_stone_score
+      @dawn_stone_score
     when CABAL_DUSK
-      @@dusk_stone_score
+      @dusk_stone_score
     else
       0.0
     end
@@ -464,9 +464,9 @@ module SevenSigns
   def get_current_festival_score(cabal : Int) : Int32
     case cabal
     when CABAL_DAWN
-      @@dawn_festival_score
+      @dawn_festival_score
     when CABAL_DUSK
-      @@dusk_festival_score
+      @dusk_festival_score
     else
       0
     end
@@ -559,13 +559,13 @@ module SevenSigns
     end
 
     GameDB.each(LOAD_STATUS) do |rs|
-      @@current_cycle = rs.get_i32("current_cycle")
-      @@active_period = rs.get_i32("active_period")
-      @@previous_winner = rs.get_i32("previous_winner")
-      @@dawn_stone_score = rs.get_f64("dawn_stone_score")
-      @@dawn_festival_score = rs.get_i32("dawn_festival_score")
-      @@dusk_stone_score = rs.get_f64("dusk_stone_score")
-      @@dusk_festival_score = rs.get_i32("dusk_festival_score")
+      @current_cycle = rs.get_i32("current_cycle")
+      @active_period = rs.get_i32("active_period")
+      @previous_winner = rs.get_i32("previous_winner")
+      @dawn_stone_score = rs.get_f64("dawn_stone_score")
+      @dawn_festival_score = rs.get_i32("dawn_festival_score")
+      @dusk_stone_score = rs.get_f64("dusk_stone_score")
+      @dusk_festival_score = rs.get_i32("dusk_festival_score")
       SIGNS_SEAL_OWNERS[SEAL_AVARICE] = rs.get_i32("avarice_owner")
       SIGNS_SEAL_OWNERS[SEAL_GNOSIS] = rs.get_i32("gnosis_owner")
       SIGNS_SEAL_OWNERS[SEAL_STRIFE] = rs.get_i32("strife_owner")
@@ -575,7 +575,7 @@ module SevenSigns
       SIGNS_DUSK_SEAL_TOTALS[SEAL_AVARICE] = rs.get_i32("avarice_dusk_score")
       SIGNS_DUSK_SEAL_TOTALS[SEAL_GNOSIS] = rs.get_i32("gnosis_dusk_score")
       SIGNS_DUSK_SEAL_TOTALS[SEAL_STRIFE] = rs.get_i32("strife_dusk_score")
-      @@last_save.ms = rs.get_i64("date")
+      @last_save.ms = rs.get_i64("date")
     end
   rescue e
     error e
@@ -618,16 +618,16 @@ module SevenSigns
   end
 
   def save_seven_signs_status
-    @@last_save = Calendar.new
+    @last_save = Calendar.new
     GameDB.exec(
       UPDATE_STATUS,
-      @@current_cycle,
-      @@active_period,
-      @@previous_winner,
-      @@dawn_stone_score,
-      @@dawn_festival_score,
-      @@dusk_stone_score,
-      @@dusk_festival_score,
+      @current_cycle,
+      @active_period,
+      @previous_winner,
+      @dawn_stone_score,
+      @dawn_festival_score,
+      @dusk_stone_score,
+      @dusk_festival_score,
       SIGNS_SEAL_OWNERS[SEAL_AVARICE],
       SIGNS_SEAL_OWNERS[SEAL_GNOSIS],
       SIGNS_SEAL_OWNERS[SEAL_STRIFE],
@@ -637,13 +637,13 @@ module SevenSigns
       SIGNS_DUSK_SEAL_TOTALS[SEAL_AVARICE],
       SIGNS_DUSK_SEAL_TOTALS[SEAL_GNOSIS],
       SIGNS_DUSK_SEAL_TOTALS[SEAL_STRIFE],
-      SevenSignsFestival.current_festival_cycle,
-      SevenSignsFestival.get_accumulated_bonus(0),
-      SevenSignsFestival.get_accumulated_bonus(1),
-      SevenSignsFestival.get_accumulated_bonus(2),
-      SevenSignsFestival.get_accumulated_bonus(3),
-      SevenSignsFestival.get_accumulated_bonus(4),
-      @@last_save.ms
+      SevenSignsFestival.instance.current_festival_cycle,
+      SevenSignsFestival.instance.get_accumulated_bonus(0),
+      SevenSignsFestival.instance.get_accumulated_bonus(1),
+      SevenSignsFestival.instance.get_accumulated_bonus(2),
+      SevenSignsFestival.instance.get_accumulated_bonus(3),
+      SevenSignsFestival.instance.get_accumulated_bonus(4),
+      @last_save.ms
     )
   rescue e
     error e
@@ -730,9 +730,9 @@ module SevenSigns
 
     case get_player_cabal(id)
     when CABAL_DAWN
-      @@dawn_stone_score += contrib_score
+      @dawn_stone_score += contrib_score
     when CABAL_DUSK
-      @@dusk_stone_score += contrib_score
+      @dusk_stone_score += contrib_score
     else
       # [automatically added else]
     end
@@ -748,14 +748,14 @@ module SevenSigns
 
   def add_festival_score(cabal : Int, amount : Int)
     if cabal == CABAL_DUSK
-      @@dusk_festival_score += amount
-      if @@dawn_festival_score >= amount
-        @@dawn_festival_score -= amount
+      @dusk_festival_score += amount
+      if @dawn_festival_score >= amount
+        @dawn_festival_score -= amount
       end
     else
-      @@dawn_festival_score += amount
-      if @@dusk_festival_score >= amount
-        @@dusk_festival_score -= amount
+      @dawn_festival_score += amount
+      if @dusk_festival_score >= amount
+        @dusk_festival_score -= amount
       end
     end
   end
@@ -993,16 +993,16 @@ module SevenSigns
 
   private def seven_signs_period_change
     period_ended = current_period
-    @@active_period += 1
+    @active_period += 1
     case period_ended
     when PERIOD_COMP_RECRUITING
-      SevenSignsFestival.start_festival_manager
+      SevenSignsFestival.instance.start_festival_manager
       send_message_to_all(SystemMessageId::QUEST_EVENT_PERIOD_BEGUN)
     when PERIOD_COMPETITION
       send_message_to_all(SystemMessageId::QUEST_EVENT_PERIOD_ENDED)
       winner = cabal_highest_score
-      SevenSignsFestival.festival_manager_schedule.cancel
-      SevenSignsFestival.reward_highest_ranked
+      SevenSignsFestival.instance.festival_manager_schedule.cancel
+      SevenSignsFestival.instance.reward_highest_ranked
       calc_new_seal_owners
       case winner
       when CABAL_DAWN
@@ -1014,7 +1014,7 @@ module SevenSigns
       end
 
 
-      @@previous_winner = winner
+      @previous_winner = winner
 
       CastleManager.castles.each do |castle|
         castle.ticket_buy_count = 0
@@ -1023,23 +1023,22 @@ module SevenSigns
       initialize_seals
       give_cp_mult(get_seal_owner(SEAL_STRIFE))
       send_message_to_all(SystemMessageId::SEAL_VALIDATION_PERIOD_BEGUN)
-      info { "The #{get_cabal_name(@@previous_winner)} have won the competition with #{get_current_score(@@previous_winner)} points." }
+      info { "The #{get_cabal_name(@previous_winner)} have won the competition with #{get_current_score(@previous_winner)} points." }
     when PERIOD_SEAL_VALIDATION
-      @@active_period = PERIOD_COMP_RECRUITING
+      @active_period = PERIOD_COMP_RECRUITING
       send_message_to_all(SystemMessageId::SEAL_VALIDATION_PERIOD_ENDED)
       remove_cp_mult
       reset_player_data
       reset_seals
-      @@current_cycle += 1
-      SevenSignsFestival.reset_festival_data(false)
-      @@dawn_stone_score = 0.0
-      @@dusk_stone_score = 0.0
-      @@dawn_festival_score = 0
-      @@dusk_festival_score = 0
+      @current_cycle += 1
+      SevenSignsFestival.instance.reset_festival_data(false)
+      @dawn_stone_score = 0.0
+      @dusk_stone_score = 0.0
+      @dawn_festival_score = 0
+      @dusk_festival_score = 0
     else
       # [automatically added else]
     end
-
 
     save_seven_signs_data
     save_seven_signs_status

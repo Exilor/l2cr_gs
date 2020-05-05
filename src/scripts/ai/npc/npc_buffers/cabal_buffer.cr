@@ -66,7 +66,7 @@ class Scripts::CabalBuffer < AbstractNpcAI
 
       winner = loser = false
 
-      winning_cabal = SevenSigns.cabal_highest_score
+      winning_cabal = SevenSigns.instance.cabal_highest_score
       losing_cabal = SevenSigns::CABAL_NULL
       if winning_cabal == SevenSigns::CABAL_DAWN
         losing_cabal = SevenSigns::CABAL_DUSK
@@ -79,7 +79,7 @@ class Scripts::CabalBuffer < AbstractNpcAI
           next
         end
 
-        player_cabal = SevenSigns.get_player_cabal(pc.l2id)
+        player_cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
 
         if player_cabal == winning_cabal && player_cabal != SevenSigns::CABAL_NULL && @npc.id == SevenSigns::ORATOR_NPC_ID
           if !pc.mage_class?

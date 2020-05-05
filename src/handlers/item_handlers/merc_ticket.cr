@@ -27,19 +27,19 @@ module ItemHandler::MercTicket
       return false
     end
 
-    if SevenSigns.current_period != SevenSigns::PERIOD_SEAL_VALIDATION
+    if SevenSigns.instance.current_period != SevenSigns::PERIOD_SEAL_VALIDATION
       pc.send_packet(SystemMessageId::THIS_MERCENARY_CANNOT_BE_POSITIONED_ANYMORE)
       return false
     end
 
-    case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
+    case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_NULL
-      if SevenSigns.check_is_dawn_posting_ticket(item_id)
+      if SevenSigns.instance.check_is_dawn_posting_ticket(item_id)
         pc.send_packet(SystemMessageId::THIS_MERCENARY_CANNOT_BE_POSITIONED_ANYMORE)
         return false
       end
     when SevenSigns::CABAL_DUSK
-      unless SevenSigns.check_is_dawn_posting_ticket(item_id)
+      unless SevenSigns.instance.check_is_dawn_posting_ticket(item_id)
         pc.send_packet(SystemMessageId::THIS_MERCENARY_CANNOT_BE_POSITIONED_ANYMORE)
         return false
       end

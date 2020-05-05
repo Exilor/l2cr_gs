@@ -29,10 +29,10 @@ class Scripts::GatekeeperSpirit < AbstractNpcAI
       add_spawn(GATEKEEPER_SPIRIT_EXIT, SPAWN_LILITH_GATEKEEPER, false, 900000)
     when "TeleportIn"
       pc = pc.not_nil!
-      cabal = SevenSigns.get_player_cabal(pc.l2id)
-      avarice_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_AVARICE)
-      winner = SevenSigns.cabal_highest_score
-      if !SevenSigns.seal_validation_period?
+      cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
+      avarice_owner = SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_AVARICE)
+      winner = SevenSigns.instance.cabal_highest_score
+      if !SevenSigns.instance.seal_validation_period?
         html = "31111-no.html"
       elsif winner == SevenSigns::CABAL_DUSK && cabal == SevenSigns::CABAL_DUSK && avarice_owner == SevenSigns::CABAL_DUSK
         pc.tele_to_location(TELEPORT_DUSK, false)

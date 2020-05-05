@@ -5,8 +5,9 @@ class AccountVariables < AbstractVariables
   private DELETE_QUERY = "DELETE FROM account_gsdata WHERE account_name = ?"
   private INSERT_QUERY = "INSERT INTO account_gsdata (account_name, var, value) VALUES (?, ?, ?)"
 
-  def initialize(@account_name : String)
+  def initialize(account_name : String)
     super()
+    @account_name = account_name
     restore_me
   end
 
@@ -31,7 +32,7 @@ class AccountVariables < AbstractVariables
     GameDB.transaction do |tr|
       tr.exec(DELETE_QUERY, @account_name)
       each do |var, val|
-        tr.exec(INSERT_QUERY, @account_name, var, val.to_s)
+        tr.exec(INSERT_QUERY, @account_name, var, val)
       end
     end
 

@@ -27,7 +27,7 @@ class Scripts::Natives < AbstractNpcAI
   end
 
   def on_first_talk(npc, pc)
-    level = HellboundEngine.level
+    level = HellboundEngine.instance.level
 
     case npc.id
     when NATIVE
@@ -59,7 +59,7 @@ class Scripts::Natives < AbstractNpcAI
         if get_quest_items_count(pc, MARK_OF_BETRAYAL) >= 10
           take_items(pc, MARK_OF_BETRAYAL, 10)
           broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::ALRIGHT_NOW_LEODAS_IS_YOURS)
-          HellboundEngine.update_trust(-50, true)
+          HellboundEngine.instance.update_trust(-50, true)
 
           DOORS.each do |door_id|
             if door = DoorData.get_door(door_id)
@@ -90,7 +90,7 @@ class Scripts::Natives < AbstractNpcAI
         if get_quest_items_count(pc, BADGES) >= 5
           take_items(pc, BADGES, 5)
           npc.busy = true # Prevent Native from take items more, than once
-          HellboundEngine.update_trust(100, true)
+          HellboundEngine.instance.update_trust(100, true)
           html = "32357-02.htm"
           start_quest_timer("delete_me", 3000, npc, nil)
         else
@@ -107,7 +107,7 @@ class Scripts::Natives < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    if npc.id == NATIVE && HellboundEngine.level < 6
+    if npc.id == NATIVE && HellboundEngine.instance.level < 6
       start_quest_timer("hungry_death", 600000, npc, nil)
     end
 

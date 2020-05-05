@@ -5,7 +5,8 @@ class UIKeysSettings
   getter categories = {} of Int32 => Array(Int32)
   getter? saved = true
 
-  def initialize(@pc_id : Int32)
+  def initialize(pc_id : Int32)
+    @pc_id = pc_id
     load_from_db
   end
 

@@ -120,7 +120,7 @@ module OfflineTradersTable
         pc.client = client
         pc.offline_start_time = time
         pc.spawn_me(*pc.xyz)
-        LoginServerClient.add_game_server_login(pc.account_name, client)
+        LoginServerClient.instance.add_game_server_login(pc.account_name, client)
         begin
           case type
           when .buy?

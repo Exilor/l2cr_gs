@@ -230,7 +230,7 @@ module WalkingManager
           end
         end
 
-        ROUTES[route_name] = L2WalkRoute.new(route_name, list, repeat, false, repeat_type.to_i8)
+        ROUTES[route_name] = L2WalkRoute.new(route_name, list, repeat, repeat_type.to_i8)
       end
     end
   end

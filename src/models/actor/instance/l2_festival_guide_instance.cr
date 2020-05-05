@@ -103,8 +103,8 @@ class L2FestivalGuideInstance < L2Npc
     html = NpcHtmlMessage.new(l2id)
     html.set_file(pc, filename)
     html["%objectId%"] = l2id
-    html["%festivalType%"] = SevenSignsFestival.get_festival_name(@festival_type)
-    html["%cycleMins%"] = SevenSignsFestival.mins_to_next_cycle
+    html["%festivalType%"] = SevenSignsFestival.instance.get_festival_name(@festival_type)
+    html["%cycleMins%"] = SevenSignsFestival.instance.mins_to_next_cycle
 
     if !is_description && "#{val}#{suffix}" == "2b"
       html["%minFestivalPartyMembers%"] = Config.alt_festival_min_player
@@ -131,9 +131,9 @@ class L2FestivalGuideInstance < L2Npc
   private def stats_table : String
     String.build(1000) do |io|
       5.times do |i|
-        dawn_score = SevenSignsFestival.get_highest_score(SevenSigns::CABAL_DAWN, i)
-        dusk_score = SevenSignsFestival.get_highest_score(SevenSigns::CABAL_DUSK, i)
-        festival_name = SevenSignsFestival.get_festival_name(i)
+        dawn_score = SevenSignsFestival.instance.get_highest_score(SevenSigns::CABAL_DAWN, i)
+        dusk_score = SevenSignsFestival.instance.get_highest_score(SevenSigns::CABAL_DUSK, i)
+        festival_name = SevenSignsFestival.instance.get_festival_name(i)
         winning_cabal = "Children of Dusk"
         if dawn_score > dusk_score
           winning_cabal = "Children of Dawn"
@@ -157,8 +157,8 @@ class L2FestivalGuideInstance < L2Npc
   private def bonus_table : String
     String.build(500) do |io|
       5.times do |i|
-        acc_score = SevenSignsFestival.get_accumulated_bonus(i)
-        festival_name = SevenSignsFestival.get_festival_name(i)
+        acc_score = SevenSignsFestival.instance.get_accumulated_bonus(i)
+        festival_name = SevenSignsFestival.instance.get_festival_name(i)
         io << "<tr><td align=\"center\" width=\"150\">"
         io << festival_name
         io << "</td><td align=\"center\" width=\"150\">"

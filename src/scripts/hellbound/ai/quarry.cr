@@ -68,7 +68,7 @@ class Scripts::Quarry < AbstractNpcAI
         npc.auto_attackable = false
         npc.delete_me
         npc.spawn.decrease_count(npc)
-        HellboundEngine.update_trust(TRUST, true)
+        HellboundEngine.instance.update_trust(TRUST, true)
       end
     else
       # [automatically added else]
@@ -88,7 +88,7 @@ class Scripts::Quarry < AbstractNpcAI
   end
 
   def on_first_talk(npc, pc)
-    if HellboundEngine.level != 5
+    if HellboundEngine.instance.level != 5
       return "32299.htm"
     end
 
@@ -104,7 +104,7 @@ class Scripts::Quarry < AbstractNpcAI
     if npc.is_a?(L2Attackable)
       if npc.id == SLAVE
         if npc.alive? && !npc.decayed? && npc.intention.follow?
-          if HellboundEngine.level == 5
+          if HellboundEngine.instance.level == 5
             start_quest_timer("DECAY", 1000, npc, nil)
             begin
               broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THANK_YOU_FOR_THE_RESCUE_ITS_A_SMALL_GIFT)

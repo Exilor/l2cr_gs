@@ -10,7 +10,13 @@ class PartyMatchRoom
   property min_lvl : Int32
   property max_lvl : Int32
 
-  def initialize(@id : Int32, @title : String, @loot_type : Int32, @min_lvl : Int32, @max_lvl : Int32, @max_members : Int32, owner : L2PcInstance)
+  def initialize(id : Int32, title : String, loot_type : Int32, min_lvl : Int32, max_lvl : Int32, max_members : Int32, owner : L2PcInstance)
+    @id = id
+    @title = title
+    @loot_type = loot_type
+    @min_lvl = min_lvl
+    @max_lvl = max_lvl
+    @max_members = max_members
     @party_members = [owner]
   end
 
@@ -64,6 +70,6 @@ class PartyMatchRoom
   end
 
   def owner : L2PcInstance
-    @party_members[0]
+    @party_members.first
   end
 end

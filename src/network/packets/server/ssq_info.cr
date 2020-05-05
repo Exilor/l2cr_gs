@@ -4,8 +4,8 @@ class Packets::Outgoing::SSQInfo < GameServerPacket
   initializer state : Int32
 
   def initialize
-    if SevenSigns.seal_validation_period?
-      winner = SevenSigns.cabal_highest_score
+    if SevenSigns.instance.seal_validation_period?
+      winner = SevenSigns.instance.cabal_highest_score
 
       if winner == SevenSigns::CABAL_DAWN
         @state = 2
@@ -33,8 +33,8 @@ class Packets::Outgoing::SSQInfo < GameServerPacket
     when SevenSigns::CABAL_NULL
       NULL
     else
-      if SevenSigns.seal_validation_period?
-        case SevenSigns.cabal_highest_score
+      if SevenSigns.instance.seal_validation_period?
+        case SevenSigns.instance.cabal_highest_score
         when SevenSigns::CABAL_DAWN
           DAWN
         when SevenSigns::CABAL_DUSK

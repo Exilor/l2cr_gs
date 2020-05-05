@@ -51,7 +51,7 @@ module AdminCommandHandler::AdminTerritoryWar
           pc.send_message("Unable to change TW Date")
         elsif cal.ms != TerritoryWarManager.tw_start_time_in_millis
           TerritoryWarManager.tw_start_time_in_millis = cal.ms
-          GlobalVariablesManager[TerritoryWarManager::GLOBAL_VARIABLE] = cal.ms
+          GlobalVariablesManager.instance[TerritoryWarManager::GLOBAL_VARIABLE] = cal.ms
         end
       end
       show_siege_time_page(pc)

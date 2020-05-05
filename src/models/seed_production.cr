@@ -1,7 +1,10 @@
 class SeedProduction
   getter id, price, start_amount
 
-  def initialize(@id : Int32, amount : Int64, @price : Int64, @start_amount : Int64)
+  def initialize(id : Int32, amount : Int64, price : Int64, start_amount : Int64)
+    @id = id
+    @price = price
+    @start_amount = start_amount
     @amount = Atomic(Int64).new(amount)
   end
 

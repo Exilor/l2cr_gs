@@ -17,7 +17,7 @@ class Scripts::HuntingGroundsTeleport < AbstractNpcAI
   end
 
   def on_talk(npc, pc)
-    player_cabal = SevenSigns.get_player_cabal(pc.l2id)
+    player_cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
 
     if player_cabal == SevenSigns::CABAL_NULL
       if DAWN_NPCS.includes?(npc.id)
@@ -27,9 +27,9 @@ class Scripts::HuntingGroundsTeleport < AbstractNpcAI
       end
     end
 
-    check = SevenSigns.seal_validation_period? &&
-    player_cabal == SevenSigns.get_seal_owner(SevenSigns::SEAL_GNOSIS) &&
-    SevenSigns.get_player_seal(pc.l2id) == SevenSigns::SEAL_GNOSIS
+    check = SevenSigns.instance.seal_validation_period? &&
+    player_cabal == SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_GNOSIS) &&
+    SevenSigns.instance.get_player_seal(pc.l2id) == SevenSigns::SEAL_GNOSIS
 
     case npc.id
     when 31078, 31085

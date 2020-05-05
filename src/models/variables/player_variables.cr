@@ -5,8 +5,9 @@ class PlayerVariables < AbstractVariables
   private DELETE_QUERY = "DELETE FROM character_variables WHERE charId = ?"
   private INSERT_QUERY = "INSERT INTO character_variables (charId, var, val) VALUES (?, ?, ?)"
 
-  def initialize(@l2id : Int32)
+  def initialize(l2id : Int32)
     super()
+    @l2id = l2id
     restore_me
   end
 
@@ -32,7 +33,7 @@ class PlayerVariables < AbstractVariables
     GameDB.transaction do |tr|
       tr.exec(DELETE_QUERY, @l2id)
       each do |var, val|
-        tr.exec(INSERT_QUERY, @l2id, var, val.to_s)
+        tr.exec(INSERT_QUERY, @l2id, var, val)
       end
     end
 

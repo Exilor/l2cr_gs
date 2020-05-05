@@ -19,8 +19,8 @@ abstract class AbstractDocument
 
   def parse
     begin
-      XMLReader.parse_file(@file.path) do |doc, file|
-        parse_document(doc, file)
+      XMLReader.parse_file(@file) do |doc|
+        parse_document(doc, @file)
       end
     rescue e
       error e
@@ -542,9 +542,7 @@ abstract class AbstractDocument
 
   private def attach_func(n, template, func_name, attach_cond)
     stat = Stats.from_value(parse_string(n, "stat"))
-    order = -1
-
-    order_node = parse_int(n, "order", -1)
+    order = parse_int(n, "order", -1)
 
     unless value_string = parse_string(n, "val", nil)
       raise "Missing 'val' on item func"
@@ -561,6 +559,8 @@ abstract class AbstractDocument
 
     if template.is_a?(L2Item) || template.is_a?(AbstractEffect)
       template.attach(ft)
+    else
+      raise "Can't attach stat to #{template}:#{template.class}"
     end
   end
 

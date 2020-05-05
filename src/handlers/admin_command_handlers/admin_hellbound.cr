@@ -13,7 +13,7 @@ module AdminCommandHandler::AdminHellbound
           return false
         end
 
-        HellboundEngine.level = level
+        HellboundEngine.instance.level = level
         pc.send_message("Hellbound level set to #{level}")
         return true
       rescue e
@@ -31,10 +31,10 @@ module AdminCommandHandler::AdminHellbound
   private def show_menu(pc)
     html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/hellbound.htm")
-    html["%hbstage%"] = HellboundEngine.level
-    html["%trust%"] = HellboundEngine.trust
-    html["%maxtrust%"] = HellboundEngine.max_trust
-    html["%mintrust%"] = HellboundEngine.min_trust
+    html["%hbstage%"] = HellboundEngine.instance.level
+    html["%trust%"] = HellboundEngine.instance.trust
+    html["%maxtrust%"] = HellboundEngine.instance.max_trust
+    html["%mintrust%"] = HellboundEngine.instance.min_trust
     pc.send_packet(html)
   end
 

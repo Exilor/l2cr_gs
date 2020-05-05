@@ -59,7 +59,7 @@ class Scripts::UrbanArea < AbstractInstance
   def on_talk(npc, pc)
     if npc.id == KANAF
       unless pc.override_instance_conditions?
-        if HellboundEngine.level < 10
+        if HellboundEngine.instance.level < 10
           html = "32346-lvl.htm"
         end
 
@@ -125,7 +125,7 @@ class Scripts::UrbanArea < AbstractInstance
 
             broadcast_npc_say(npc, Say2::NPC_ALL, NATIVES_NPC_STRING_ID[0])
             broadcast_npc_say(npc, Say2::NPC_ALL, NATIVES_NPC_STRING_ID[1])
-            HellboundEngine.update_trust(10, true)
+            HellboundEngine.instance.update_trust(10, true)
             npc.schedule_despawn(3000)
             # Try to call Amaskari
             if world.spawned_amaskari? && !world.spawned_amaskari.dead?

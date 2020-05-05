@@ -10,7 +10,9 @@ class L2WorldRegion
   getter objects = Concurrent::Map(Int32, L2Object).new
   getter? active : Bool
 
-  def initialize(@tile_x : Int32, @tile_y : Int32)
+  def initialize(tile_x : Int32, tile_y : Int32)
+    @tile_x = tile_x
+    @tile_y = tile_y
     @active = Config.grids_always_on
   end
 

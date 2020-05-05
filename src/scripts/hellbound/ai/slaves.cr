@@ -18,7 +18,7 @@ class Scripts::Slaves < AbstractNpcAI
 
   def on_spawn(npc)
     npc = npc.as(L2MonsterInstance)
-    npc.enable_minions = HellboundEngine.level < 5
+    npc.enable_minions = HellboundEngine.instance.level < 5
     npc.on_kill_delay = 1000
 
     super
@@ -35,8 +35,8 @@ class Scripts::Slaves < AbstractNpcAI
       slave.abort_cast
       broadcast_npc_say(slave, Say2::NPC_ALL, NpcString::THANK_YOU_FOR_SAVING_ME_FROM_THE_CLUTCHES_OF_EVIL)
 
-      if HellboundEngine.level.between?(1, 2)
-        HellboundEngine.update_trust(TRUST_REWARD, false)
+      if HellboundEngine.instance.level.between?(1, 2)
+        HellboundEngine.instance.update_trust(TRUST_REWARD, false)
       end
       slave.set_intention(AI::MOVE_TO, MOVE_TO)
       DecayTaskManager.add(slave)

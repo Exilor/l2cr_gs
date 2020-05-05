@@ -37,7 +37,7 @@ class Scripts::Sailren < AbstractNpcAI
     add_kill_id(VELOCIRAPTOR, PTEROSAUR, TREX, SAILREN)
     add_attack_id(VELOCIRAPTOR, PTEROSAUR, TREX, SAILREN)
 
-    remain = GlobalVariablesManager.get_i64("SailrenRespawn", 0) - Time.ms
+    remain = GlobalVariablesManager.instance.get_i64("SailrenRespawn", 0) - Time.ms
     if remain > 0
       @status = Status::DEAD
       start_quest_timer("CLEAR_STATUS", remain, nil, nil)
@@ -169,7 +169,7 @@ class Scripts::Sailren < AbstractNpcAI
         @status = Status::DEAD
         add_spawn(CUBIC, 27644, -6638, -2008, 0, false, 300000)
         respawn_time = RESPAWN * 3600000
-        GlobalVariablesManager["SailrenRespawn"] = Time.ms + respawn_time
+        GlobalVariablesManager.instance["SailrenRespawn"] = Time.ms + respawn_time
         cancel_quest_timer("CHECK_ATTACK", nil, nil)
         cancel_quest_timer("TIME_OUT", nil, nil)
         start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)

@@ -18,7 +18,7 @@ module AdminCommandHandler::AdminMammon
         return false
       end
 
-      unless SevenSigns.seal_validation_period?
+      unless SevenSigns.instance.seal_validation_period?
         pc.send_packet(SystemMessageId::SSQ_COMPETITION_UNDERWAY)
         return false
       end
@@ -45,7 +45,7 @@ module AdminCommandHandler::AdminMammon
         pc.send_message("Merchant of Mammon isn't registered for spawn.")
       end
     elsif command.starts_with?("admin_mammon_respawn")
-      unless SevenSigns.seal_validation_period?
+      unless SevenSigns.instance.seal_validation_period?
         pc.send_packet(SystemMessageId::SSQ_COMPETITION_UNDERWAY)
         return true
       end

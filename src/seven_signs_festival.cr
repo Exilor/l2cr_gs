@@ -1,8 +1,8 @@
-module SevenSignsFestival
-  extend self
-  extend Synchronizable
-  extend SpawnListener
-  extend Loggable
+class SevenSignsFestival
+  include Singleton
+  include Synchronizable
+  include SpawnListener
+  include Loggable
 
   private GET_CLAN_NAME = "SELECT clan_name FROM clan_data WHERE clan_id = (SELECT clanid FROM characters WHERE char_name = ?)"
 
@@ -649,25 +649,25 @@ module SevenSignsFestival
   private DUSK_FESTIVAL_SCORES = {} of Int32 => Int64
   private FESTIVAL_DATA = {} of Int32 => Hash(Int32, StatsSet)
 
-  @@manager_instance : FestivalManager?
-  @@manager_scheduled_task : TaskExecutor::Scheduler::PeriodicTask?
-  @@next_festival_cycle_start = 0i64
-  @@dawn_chat_guide : L2Npc?
-  @@dusk_chat_guide : L2Npc?
+  @manager_instance : FestivalManager?
+  @manager_scheduled_task : TaskExecutor::Scheduler::PeriodicTask?
+  @next_festival_cycle_start = 0i64
+  @dawn_chat_guide : L2Npc?
+  @dusk_chat_guide : L2Npc?
 
-  class_property signs_cycle : Int32 = 0
-  class_property festival_cycle : Int32 = 0
-  class_property next_festival_start : Int64 = 0i64
-  class_property? festival_initialized : Bool = false
-  class_property? festival_in_progress : Bool = false
-  class_property? no_party_register : Bool = false
+  property signs_cycle : Int32 = 0
+  property festival_cycle : Int32 = 0
+  property next_festival_start : Int64 = 0i64
+  property? festival_initialized : Bool = false
+  property? festival_in_progress : Bool = false
+  property? no_party_register : Bool = false
 
-  def load
+  def initialize
     restore_festival_data
 
-    @@signs_cycle = SevenSigns.current_cycle
+    @signs_cycle = SevenSigns.instance.current_cycle
 
-    if SevenSigns.seal_validation_period?
+    if SevenSigns.instance.seal_validation_period?
       info "Initialization bypassed due to Seal Validation being in effect."
       return
     end
@@ -722,15 +722,15 @@ module SevenSignsFestival
   end
 
   def festival_manager_schedule : TaskExecutor::Scheduler::PeriodicTask
-    @@manager_scheduled_task || start_festival_manager
-    @@manager_scheduled_task.not_nil!
+    @manager_scheduled_task || start_festival_manager
+    @manager_scheduled_task.not_nil!
   end
 
   def start_festival_manager
-    return if @@manager_instance
-    @@manager_instance = FestivalManager.new
-    set_next_festival_start(Config.alt_festival_manager_start + SevenSignsFestival.festival_signup_time)
-    @@manager_scheduled_task = ThreadPoolManager.schedule_general_at_fixed_rate(@@manager_instance.not_nil!, Config.alt_festival_manager_start, Config.alt_festival_cycle_length)
+    return if @manager_instance
+    @manager_instance = FestivalManager.new
+    set_next_festival_start(Config.alt_festival_manager_start + SevenSignsFestival.instance.festival_signup_time)
+    @manager_scheduled_task = ThreadPoolManager.schedule_general_at_fixed_rate(@manager_instance.not_nil!, Config.alt_festival_manager_start, Config.alt_festival_cycle_length)
     info { "The first Festival of Darkness cycle begins in #{Time.ms_to_mins(Config.alt_festival_manager_start)} minutes." }
   end
 
@@ -775,9 +775,9 @@ module SevenSignsFestival
       end
 
       GameDB.each(query) do |rs|
-        @@festival_cycle = rs.get_i32("festival_cycle")
-        FESTIVAL_COUNT.times do |i|
-          ACCUMULATED_BONUSES[i] = rs.get_i32("accumulated_bonus#{i}")
+        @festival_cycle = rs.get_i32("festival_cycle")
+        ACCUMULATED_BONUSES.map_with_index! do |i|
+          rs.get_i32("accumulated_bonus#{i}")
         end
       end
     rescue e
@@ -806,7 +806,7 @@ module SevenSignsFestival
     end
 
     if update_settings
-      SevenSigns.save_seven_signs_status
+      SevenSigns.instance.save_seven_signs_status
     end
   end
 
@@ -871,8 +871,8 @@ module SevenSignsFestival
   end
 
   def reset_festival_data(update_settings : Bool)
-    @@festival_cycle = 0
-    @@signs_cycle = SevenSigns.current_cycle
+    @festival_cycle = 0
+    @signs_cycle = SevenSigns.instance.current_cycle
 
     FESTIVAL_COUNT.times do |i|
       ACCUMULATED_BONUSES[i] = 0
@@ -895,21 +895,21 @@ module SevenSignsFestival
 
       temp = StatsSet.new
       temp["festivalId"] = festival_id
-      temp["cycle"] = @@signs_cycle
+      temp["cycle"] = @signs_cycle
       temp["date"] = "0"
       temp["score"] = 0
       temp["members"] = ""
 
       if i >= FESTIVAL_COUNT
-        temp["cabal"] = SevenSigns.get_cabal_short_name(SevenSigns::CABAL_DAWN)
+        temp["cabal"] = SevenSigns.instance.get_cabal_short_name(SevenSigns::CABAL_DAWN)
       else
-        temp["cabal"] = SevenSigns.get_cabal_short_name(SevenSigns::CABAL_DUSK)
+        temp["cabal"] = SevenSigns.instance.get_cabal_short_name(SevenSigns::CABAL_DUSK)
       end
 
       new_data[i] = temp
     end
 
-    FESTIVAL_DATA[@@signs_cycle] = new_data
+    FESTIVAL_DATA[@signs_cycle] = new_data
 
     save_festival_data(update_settings)
 
@@ -923,43 +923,43 @@ module SevenSignsFestival
   end
 
   def current_festival_cycle : Int32
-    @@festival_cycle
+    @festival_cycle
   end
 
   def festival_initialized? : Bool
-    @@festival_initialized
+    @festival_initialized
   end
 
   def festival_in_progress? : Bool
-    @@festival_in_progress
+    @festival_in_progress
   end
 
   def set_next_cycle_start
-    @@next_festival_cycle_start = Time.ms + Config.alt_festival_cycle_length
+    @next_festival_cycle_start = Time.ms + Config.alt_festival_cycle_length
   end
 
   def set_next_festival_start(ms : Int64)
-    @@next_festival_start = Time.ms + ms
+    @next_festival_start = Time.ms + ms
   end
 
   def mins_to_next_cycle : Int64
-    if SevenSigns.seal_validation_period?
+    if SevenSigns.instance.seal_validation_period?
       return -1i64
     end
 
-    (@@next_festival_cycle_start - Time.ms) // 60000
+    (@next_festival_cycle_start - Time.ms) // 60000
   end
 
   def mins_to_next_festival : Int32
-    if SevenSigns.seal_validation_period?
+    if SevenSigns.instance.seal_validation_period?
       return -1
     end
 
-    (((@@next_festival_start - Time.ms) // 60000) + 1).to_i32
+    (((@next_festival_start - Time.ms) // 60000) + 1).to_i32
   end
 
   def time_to_next_festival_str : String
-    if SevenSigns.seal_validation_period?
+    if SevenSigns.instance.seal_validation_period?
       "<font color=\"FF0000\">This is the Seal Validation period. Festivals will resume next week.</font>"
     else
       "<font color=\"FF0000\">The next festival will begin in #{mins_to_next_festival} minute(s).</font>"
@@ -981,8 +981,8 @@ module SevenSignsFestival
   end
 
   def participant?(pc : L2PcInstance) : Bool
-    return false if SevenSigns.seal_validation_period?
-    return false unless @@manager_instance
+    return false if SevenSigns.instance.seal_validation_period?
+    return false unless @manager_instance
 
     id = pc.l2id
     DAWN_FESTIVAL_PARTICIPANTS.each_value do |participants|
@@ -1036,8 +1036,8 @@ module SevenSignsFestival
 
     oracle, festival_id = get_festival_for_player(pc)
     return unless festival_id > -1
-    if @@festival_initialized
-      festival_inst = @@manager_instance.not_nil!.get_festival_instance(oracle, festival_id)
+    if @festival_initialized
+      festival_inst = @manager_instance.not_nil!.get_festival_instance(oracle, festival_id)
       if festival_party.nil?
         get_participants(oracle, festival_id).not_nil!.each do |id|
           if member = L2World.get_player(id)
@@ -1076,7 +1076,7 @@ module SevenSignsFestival
       offset_id += 5
     end
 
-    FESTIVAL_DATA[@@signs_cycle]?.try &.[offset_id]? || begin
+    FESTIVAL_DATA[@signs_cycle]?.try &.[offset_id]? || begin
       data = StatsSet.new
       data["score"] = 0
       data["members"] = ""
@@ -1142,7 +1142,7 @@ module SevenSignsFestival
 
       if offering_score > other_score
         points = FESTIVAL_LEVEL_SCORES[festival_id]
-        SevenSigns.add_festival_score(oracle, points)
+        SevenSigns.instance.add_festival_score(oracle, points)
       end
 
       save_festival_data(true)
@@ -1183,13 +1183,13 @@ module SevenSignsFestival
   def distrib_accumulated_bonus(pc : L2PcInstance) : Int32
     bonus = 0
     name = pc.name
-    cabal = SevenSigns.get_player_cabal(pc.l2id)
+    cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
 
-    if cabal != SevenSigns.cabal_highest_score
+    if cabal != SevenSigns.instance.cabal_highest_score
       return 0
     end
 
-    if temp = FESTIVAL_DATA[@@signs_cycle]?
+    if temp = FESTIVAL_DATA[@signs_cycle]?
       temp.each_value do |data|
         if data.get_string("members").index(name)
           festival_id = data.get_i32("festival_id")
@@ -1207,8 +1207,8 @@ module SevenSignsFestival
   end
 
   def send_message_to_all(name : String, string : NpcString)
-    return unless dawn_guide = @@dawn_chat_guide
-    return unless dusk_guide = @@dusk_chat_guide
+    return unless dawn_guide = @dawn_chat_guide
+    return unless dusk_guide = @dusk_chat_guide
     send_message_to_all(name, string, dawn_guide)
     send_message_to_all(name, string, dusk_guide)
   end
@@ -1222,7 +1222,7 @@ module SevenSignsFestival
   end
 
   def increase_challenge(oracle : Int32, festival_id : Int32) : Bool
-    @@manager_instance.not_nil!
+    @manager_instance.not_nil!
     .get_festival_instance(oracle, festival_id).not_nil!
     .increase_challenge
   end
@@ -1231,9 +1231,9 @@ module SevenSignsFestival
     return unless npc
     case npc.id
     when 31127
-      @@dawn_chat_guide = npc
+      @dawn_chat_guide = npc
     when 31137
-      @@dusk_chat_guide = npc
+      @dusk_chat_guide = npc
     else
       # [automatically added else]
     end
@@ -1246,45 +1246,45 @@ module SevenSignsFestival
     @festival_instances = {} of Int32 => L2DarknessFestival
 
     def initialize
-      SevenSignsFestival.festival_cycle += 1
-      SevenSignsFestival.set_next_cycle_start
-      SevenSignsFestival.set_next_festival_start(
-        Config.alt_festival_cycle_length - SevenSignsFestival.festival_signup_time
+      SevenSignsFestival.instance.festival_cycle += 1
+      SevenSignsFestival.instance.set_next_cycle_start
+      SevenSignsFestival.instance.set_next_festival_start(
+        Config.alt_festival_cycle_length - SevenSignsFestival.instance.festival_signup_time
       )
     end
 
     def call
-      return if SevenSigns.seal_validation_period?
+      return if SevenSigns.instance.seal_validation_period?
 
-      if SevenSigns.milli_to_period_change < Config.alt_festival_cycle_length
+      if SevenSigns.instance.milli_to_period_change < Config.alt_festival_cycle_length
         return
-      elsif SevenSignsFestival.mins_to_next_festival == 2
-        SevenSignsFestival.send_message_to_all("Festival Guide", NpcString::THE_MAIN_EVENT_WILL_START_IN_2_MINUTES_PLEASE_REGISTER_NOW)
+      elsif SevenSignsFestival.instance.mins_to_next_festival == 2
+        SevenSignsFestival.instance.send_message_to_all("Festival Guide", NpcString::THE_MAIN_EVENT_WILL_START_IN_2_MINUTES_PLEASE_REGISTER_NOW)
       end
 
-      wait(SevenSignsFestival.festival_signup_time)
+      wait(SevenSignsFestival.instance.festival_signup_time)
 
       DAWN_PREVIOUS_PARTICIPANTS.clear
       DUSK_PREVIOUS_PARTICIPANTS.clear
 
       @festival_instances.each_value &.unspawn_mobs
 
-      SevenSignsFestival.no_party_register = true
+      SevenSignsFestival.instance.no_party_register = true
 
-      while SevenSignsFestival.no_party_register?
+      while SevenSignsFestival.instance.no_party_register?
         if DUSK_FESTIVAL_PARTICIPANTS.empty? && DAWN_FESTIVAL_PARTICIPANTS.empty?
-          SevenSignsFestival.set_next_cycle_start
-          SevenSignsFestival.set_next_festival_start(
-            Config.alt_festival_cycle_length - SevenSignsFestival.festival_signup_time
+          SevenSignsFestival.instance.set_next_cycle_start
+          SevenSignsFestival.instance.set_next_festival_start(
+            Config.alt_festival_cycle_length - SevenSignsFestival.instance.festival_signup_time
           )
-          wait(Config.alt_festival_cycle_length - SevenSignsFestival.festival_signup_time)
+          wait(Config.alt_festival_cycle_length - SevenSignsFestival.instance.festival_signup_time)
           @festival_instances.each_value do |inst|
             unless inst.npc_instances.empty?
               inst.unspawn_mobs
             end
           end
         else
-          SevenSignsFestival.no_party_register = false
+          SevenSignsFestival.instance.no_party_register = false
         end
       end
 
@@ -1300,10 +1300,10 @@ module SevenSignsFestival
         end
       end
 
-      SevenSignsFestival.festival_initialized = true
+      SevenSignsFestival.instance.festival_initialized = true
 
-      SevenSignsFestival.next_festival_start = Config.alt_festival_cycle_length
-      SevenSignsFestival.send_message_to_all(
+      SevenSignsFestival.instance.next_festival_start = Config.alt_festival_cycle_length
+      SevenSignsFestival.instance.send_message_to_all(
         "Festival Guide", NpcString::THE_MAIN_EVENT_IS_NOW_STARTING
       )
 
@@ -1311,7 +1311,7 @@ module SevenSignsFestival
 
       elapsed_time = Config.alt_festival_first_spawn
 
-      SevenSignsFestival.festival_in_progress = true
+      SevenSignsFestival.instance.festival_in_progress = true
 
       @festival_instances.each_value do |inst|
         inst.festival_start
@@ -1355,16 +1355,16 @@ module SevenSignsFestival
 
       wait(Config.alt_festival_length - elapsed_time)
 
-      SevenSignsFestival.festival_in_progress = false
+      SevenSignsFestival.instance.festival_in_progress = false
 
       @festival_instances.each_value &.festival_end
 
       DAWN_FESTIVAL_PARTICIPANTS.clear
       DUSK_FESTIVAL_PARTICIPANTS.clear
 
-      SevenSignsFestival.festival_initialized = false
+      SevenSignsFestival.instance.festival_initialized = false
 
-      SevenSignsFestival.send_message_to_all("Festival Witch", NpcString::THAT_WILL_DO_ILL_MOVE_YOU_TO_THE_OUTSIDE_SOON)
+      SevenSignsFestival.instance.send_message_to_all("Festival Witch", NpcString::THAT_WILL_DO_ILL_MOVE_YOU_TO_THE_OUTSIDE_SOON)
     rescue e
       error e
     end
@@ -1374,7 +1374,7 @@ module SevenSignsFestival
     end
 
     def get_festival_instance(oracle : Int, festival_id : Int) : L2DarknessFestival?
-      return unless SevenSignsFestival.festival_initialized?
+      return unless SevenSignsFestival.instance.festival_initialized?
       festival_id += oracle == SevenSigns::CABAL_DUSK ? 10 : 20
       @festival_instances[festival_id]?
     end
@@ -1501,7 +1501,7 @@ module SevenSignsFestival
       npc_spawns.each do |npc_spawn|
         curr_spawn = FestivalSpawn.new(npc_spawn)
         if spawn_type == 1
-          if SevenSignsFestival.festival_archer?(curr_spawn.npc_id)
+          if SevenSignsFestival.instance.festival_archer?(curr_spawn.npc_id)
             next
           end
         end

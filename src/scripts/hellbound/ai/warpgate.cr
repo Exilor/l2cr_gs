@@ -42,7 +42,7 @@ class Scripts::Warpgate < AbstractNpcAI
   end
 
   def on_first_talk(npc, player)
-    HellboundEngine.locked? ? "Warpgate-01.html" : "Warpgate-02.html"
+    HellboundEngine.instance.locked? ? "Warpgate-01.html" : "Warpgate-02.html"
   end
 
   def on_enter_zone(char, zone)

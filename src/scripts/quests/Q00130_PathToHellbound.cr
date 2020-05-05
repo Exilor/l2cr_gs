@@ -69,7 +69,7 @@ class Scripts::Q00130_PathToHellbound < Quest
       html = get_already_completed_msg(pc)
     when State::CREATED
       if npc.id == CASIAN
-        if !HellboundEngine.locked?
+        if !HellboundEngine.instance.locked?
           if pc.level >= MIN_LEVEL
             html = "30612-01.htm"
           else

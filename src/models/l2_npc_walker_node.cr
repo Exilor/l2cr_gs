@@ -6,8 +6,12 @@ class L2NpcWalkerNode < Location
   getter delay, npc_string
   getter? run_to_location
 
-  def initialize(x : Int32, y : Int32, z : Int32, @delay : Int32, @run_to_location : Bool, @npc_string : NpcString?, chat_string : String?)
+  def initialize(x : Int32, y : Int32, z : Int32, delay : Int32, run_to_location : Bool, npc_string : NpcString?, chat_string : String?)
     super(x, y, z)
+
+    @delay = delay
+    @run_to_location = run_to_location
+    @npc_string = npc_string
     @chat_string = chat_string || ""
   end
 

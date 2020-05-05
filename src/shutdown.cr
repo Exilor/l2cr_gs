@@ -98,7 +98,7 @@ class Shutdown
       end
 
       begin
-        LoginServerClient.terminate
+        LoginServerClient.instance.terminate
         info { "LoginServerClient terminated (#{tc1})." }
         tc1.start
       rescue e
@@ -145,7 +145,7 @@ class Shutdown
         Shutdown.instance.mode = GM_RESTART
         exit(2)
       when ABORT
-        LoginServerClient.server_status = ServerStatus::STATUS_AUTO
+        LoginServerClient.instance.server_status = ServerStatus::STATUS_AUTO
       else
         # [automatically added else]
       end
@@ -193,7 +193,7 @@ class Shutdown
       when 1..5, 10, 30, 120, 180, 240, 300, 420, 480, 540
         send_server_quit(@seconds_shut)
       when 60
-        LoginServerClient.server_status = ServerStatus::STATUS_DOWN
+        LoginServerClient.instance.server_status = ServerStatus::STATUS_DOWN
         send_server_quit(60)
       else
         # [automatically added else]
@@ -224,17 +224,17 @@ class Shutdown
 
     tc = Timer.new
 
-    unless SevenSigns.seal_validation_period?
-      SevenSignsFestival.save_festival_data(false)
+    unless SevenSigns.instance.seal_validation_period?
+      SevenSignsFestival.instance.save_festival_data(false)
       info { "Festival data saved in #{tc} seconds." }
       tc.start
     end
 
-    SevenSigns.save_seven_signs_data
+    SevenSigns.instance.save_seven_signs_data
     info { "Seven Signs data saved in #{tc} seconds." }
     tc.start
 
-    SevenSigns.save_seven_signs_status
+    SevenSigns.instance.save_seven_signs_status
     info { "Seven Signs status saved in #{tc} seconds." }
     tc.start
 
@@ -280,7 +280,7 @@ class Shutdown
     info { "QuestManager data saved in #{tc} seconds." }
     tc.start
 
-    GlobalVariablesManager.store_me
+    GlobalVariablesManager.instance.store_me
     info { "Global variables saved in #{tc} seconds." }
     tc.start
 

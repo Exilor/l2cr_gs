@@ -350,10 +350,10 @@ class L2Npc < L2Character
     npc_id = template.id
 
     file_name = SevenSigns::SEVEN_SIGNS_HTML_PATH
-    seal_avarice_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_AVARICE)
-    seal_gnosis_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_GNOSIS)
-    player_cabal = SevenSigns.get_player_cabal(pc.l2id)
-    comp_winner = SevenSigns.cabal_highest_score
+    seal_avarice_owner = SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_AVARICE)
+    seal_gnosis_owner = SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_GNOSIS)
+    player_cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
+    comp_winner = SevenSigns.instance.cabal_highest_score
 
     case npc_id
     when 31127..31131
@@ -461,7 +461,7 @@ class L2Npc < L2Character
     end
 
     html["%objectId%"] = l2id
-    html["%festivalMins%"] = SevenSignsFestival.time_to_next_festival_str
+    html["%festivalMins%"] = SevenSignsFestival.instance.time_to_next_festival_str
 
     pc.send_packet(html)
     pc.action_failed

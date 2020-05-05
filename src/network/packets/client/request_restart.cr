@@ -41,7 +41,7 @@ class Packets::Incoming::RequestRestart < GameClientPacket
     end
 
     if pc.festival_participant?
-      if SevenSignsFestival.festival_initialized?
+      if SevenSignsFestival.instance.festival_initialized?
         pc.send_message("You cannot restart while you are a participant in a festival.")
         send_packet(RestartResponse::NO)
         return

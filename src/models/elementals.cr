@@ -23,7 +23,9 @@ class Elementals
 
   getter element, value
 
-  def initialize(@element : Int8, @value : Int32)
+  def initialize(element : Int8, value : Int32)
+    @element = element
+    @value = value
     @boni = ElementalStatBoni.new(element, value)
   end
 

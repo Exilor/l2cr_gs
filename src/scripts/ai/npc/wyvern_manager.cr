@@ -153,7 +153,7 @@ class Scripts::WyvernManager < AbstractNpcAI
         html = "wyvernmanager-02.html"
       elsif Config.allow_wyvern_always
         html = gsub(npc, pc)
-      elsif MANAGERS[npc.id].castle? && SevenSigns.seal_validation_period? && SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DUSK
+      elsif MANAGERS[npc.id].castle? && SevenSigns.instance.seal_validation_period? && SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DUSK
         html = "wyvernmanager-dusk.html"
       else
         html = gsub(npc, pc)
@@ -170,7 +170,7 @@ class Scripts::WyvernManager < AbstractNpcAI
           pc.send_message("You cannot summon wyvern while in siege.")
           return
         end
-        if MANAGERS[npc.id].castle? && SevenSigns.seal_validation_period? && SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DUSK
+        if MANAGERS[npc.id].castle? && SevenSigns.instance.seal_validation_period? && SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DUSK
           html = "wyvernmanager-dusk.html"
         else
           html = mount_wyvern(npc, pc)
@@ -191,7 +191,7 @@ class Scripts::WyvernManager < AbstractNpcAI
       if Config.allow_wyvern_always
         html = gsub(npc, pc)
       else
-        if MANAGERS[npc.id].castle? && SevenSigns.seal_validation_period? && SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DUSK
+        if MANAGERS[npc.id].castle? && SevenSigns.instance.seal_validation_period? && SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE) == SevenSigns::CABAL_DUSK
           html = "wyvernmanager-dusk.html"
         else
           html = gsub(npc, pc)

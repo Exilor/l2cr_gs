@@ -8,8 +8,9 @@ struct BlockList
 
   getter block_list : Array(Int32)
 
-  def initialize(@owner : L2PcInstance)
-    @block_list = OFFLINE_LIST[owner.l2id]? || BlockList.load_list(@owner.l2id)
+  def initialize(owner : L2PcInstance)
+    @owner = owner
+    @block_list = OFFLINE_LIST[owner.l2id]? || BlockList.load_list(owner.l2id)
   end
 
   protected def add_to_block_list(target : Int32)

@@ -8,7 +8,7 @@ class Packets::Incoming::RequestSSQStatus < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    if SevenSigns.seal_validation_period? || SevenSigns.comp_results_period?
+    if SevenSigns.instance.seal_validation_period? || SevenSigns.instance.comp_results_period?
       if @page == 4
         return
       end

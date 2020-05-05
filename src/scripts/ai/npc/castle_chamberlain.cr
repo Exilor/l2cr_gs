@@ -195,7 +195,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
     end
 
 
-    case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
+    case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DUSK
       price *= 3
     when SevenSigns::CABAL_DAWN
@@ -209,7 +209,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
   end
 
   private def get_seal_owner(seal)
-    case SevenSigns.get_seal_owner(seal)
+    case SevenSigns.instance.get_seal_owner(seal)
     when SevenSigns::CABAL_DAWN
       "1000511"
     when SevenSigns::CABAL_DUSK
@@ -220,7 +220,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
   end
 
   private def tax_limit
-    case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
+    case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DAWN
       25
     when SevenSigns::CABAL_DUSK
@@ -246,7 +246,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
     end
 
 
-    case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
+    case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DUSK
       price *= 3
     when SevenSigns::CABAL_DAWN
@@ -320,7 +320,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
           htmltext = "chamberlain-08.html"
         elsif !domain_fortress_in_contract_status?(castle.residence_id)
           htmltext = "chamberlain-27.html"
-        elsif !SevenSigns.comp_results_period?
+        elsif !SevenSigns.instance.comp_results_period?
           htmltext = "chamberlain-26.html"
         else
           htmltext = "chamberlain-12.html"
@@ -454,7 +454,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
           html["%clanname%"] = clan.name
           html["%castlename%"] = 1001000 + castle.residence_id
 
-          case SevenSigns.current_period
+          case SevenSigns.instance.current_period
           when SevenSigns::PERIOD_COMP_RECRUITING
             html["%ss_event%"] = "1000509"
           when SevenSigns::PERIOD_COMPETITION
@@ -789,7 +789,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
-          if SevenSigns.get_player_cabal(pc.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.competition_period?
+          if SevenSigns.instance.get_player_cabal(pc.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.instance.competition_period?
             ticket_count = castle.ticket_buy_count
             if ticket_count < Config.ssq_dawn_ticket_quantity / Config.ssq_dawn_ticket_bundle
               html = get_html_packet(pc, npc, "ssq_selldawnticket.html")
@@ -812,7 +812,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         if castle.siege.in_progress?
           htmltext = "chamberlain-08.html"
         else
-          if SevenSigns.get_player_cabal(pc.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.competition_period?
+          if SevenSigns.instance.get_player_cabal(pc.l2id) == SevenSigns::CABAL_DAWN && SevenSigns.instance.competition_period?
             ticket_count = castle.ticket_buy_count
             if ticket_count < Config.ssq_dawn_ticket_quantity / Config.ssq_dawn_ticket_bundle
               total_cost = Config.ssq_dawn_ticket_price * Config.ssq_dawn_ticket_bundle

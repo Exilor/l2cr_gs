@@ -56,7 +56,7 @@ class L2SignsPriestInstance < L2Npc
         item_id = SevenSigns::RECORD_SEVEN_SIGNS_ID
         pc.inventory.add_item("SevenSigns", item_id, 1, pc, self)
       when 33 # participate request
-        old_cabal = SevenSigns.get_player_cabal(pc.l2id)
+        old_cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
 
         if old_cabal != SevenSigns::CABAL_NULL
           if is_a?(L2DawnPriestInstance)
@@ -100,7 +100,7 @@ class L2SignsPriestInstance < L2Npc
           show_chat_window(pc, SevenSigns::SEVEN_SIGNS_HTML_PATH + "signs_33_dawn_no.htm")
         end
       when 3, 8 # join cabal intro 1, festival of darkness intro
-        show_chat_window(pc, val, SevenSigns.get_cabal_short_name(cabal), false)
+        show_chat_window(pc, val, SevenSigns.instance.get_cabal_short_name(cabal), false)
       when 4 # join a cabal
         new_seal = command.from(15).to_i
 
@@ -131,7 +131,7 @@ class L2SignsPriestInstance < L2Npc
           end
         end
 
-        SevenSigns.set_player_info(pc.l2id, cabal, new_seal)
+        SevenSigns.instance.set_player_info(pc.l2id, cabal, new_seal)
 
         if cabal == SevenSigns::CABAL_DAWN
           pc.send_packet(SystemMessageId::SEVENSIGNS_PARTECIPATION_DAWN)
@@ -151,16 +151,16 @@ class L2SignsPriestInstance < L2Npc
         end
 
 
-        show_chat_window(pc, 4, SevenSigns.get_cabal_short_name(cabal), false)
+        show_chat_window(pc, 4, SevenSigns.instance.get_cabal_short_name(cabal), false)
       when 5
         if is_a?(L2DawnPriestInstance)
-          if SevenSigns.get_player_cabal(pc.l2id) == SevenSigns::CABAL_NULL
+          if SevenSigns.instance.get_player_cabal(pc.l2id) == SevenSigns::CABAL_NULL
             show_chat_window(pc, val, "dawn_no", false)
           else
             show_chat_window(pc, val, "dawn", false)
           end
         else
-          if SevenSigns.get_player_cabal(pc.l2id) == SevenSigns::CABAL_NULL
+          if SevenSigns.instance.get_player_cabal(pc.l2id) == SevenSigns::CABAL_NULL
             show_chat_window(pc, val, "dusk_no", false)
           else
             show_chat_window(pc, val, "dusk", false)
@@ -177,7 +177,7 @@ class L2SignsPriestInstance < L2Npc
         contrib_green_stone_count = contrib_green_stones.try &.count || 0i64
         contrib_red_stone_count = contrib_red_stones.try &.count || 0i64
 
-        score = SevenSigns.get_player_contrib_score(pc.l2id)
+        score = SevenSigns.instance.get_player_contrib_score(pc.l2id)
         contribution_count = 0i64
 
         contrib_stones_found = false
@@ -258,7 +258,7 @@ class L2SignsPriestInstance < L2Npc
             show_chat_window(pc, 6, "dusk_low_stones", false)
           end
         else
-          score = SevenSigns.add_player_stone_contrib(pc.l2id, blue_contrib, green_contrib, red_contrib)
+          score = SevenSigns.instance.add_player_stone_contrib(pc.l2id, blue_contrib, green_contrib, red_contrib)
           sm = SystemMessage.contrib_score_increased_s1
           sm.add_long(score)
           pc.send_packet(sm)
@@ -280,7 +280,7 @@ class L2SignsPriestInstance < L2Npc
         green_stone_count = green_stones.try &.count || 0i64
         red_stone_count = red_stones.try &.count || 0i64
 
-        contrib_score = SevenSigns.get_player_contrib_score(pc.l2id)
+        contrib_score = SevenSigns.instance.get_player_contrib_score(pc.l2id)
         stones_found = false
 
         if contrib_score == Config.alt_maximum_player_contrib
@@ -365,7 +365,7 @@ class L2SignsPriestInstance < L2Npc
               show_chat_window(pc, val, "dusk_no_stones", false)
             end
           else
-            contrib_score = SevenSigns.add_player_stone_contrib(pc.l2id, blue_contrib_count, green_contrib_count, red_contrib_count)
+            contrib_score = SevenSigns.instance.add_player_stone_contrib(pc.l2id, blue_contrib_count, green_contrib_count, red_contrib_count)
             sm = SystemMessage.contrib_score_increased_s1
             sm.add_long(contrib_score)
             pc.send_packet(sm)
@@ -427,14 +427,14 @@ class L2SignsPriestInstance < L2Npc
 
         show_chat_window(pc, SevenSigns::SEVEN_SIGNS_HTML_PATH + "blkmrkt_5.htm")
       when 9 # receive contribution rewards
-        return unless SevenSigns.seal_validation_period?
+        return unless SevenSigns.instance.seal_validation_period?
 
-        player_cabal = SevenSigns.get_player_cabal(pc.l2id)
-        winning_cabal = SevenSigns.cabal_highest_score
+        player_cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
+        winning_cabal = SevenSigns.instance.cabal_highest_score
 
         return unless player_cabal == winning_cabal
 
-        reward = SevenSigns.get_ancient_adena_reward(pc.l2id, true)
+        reward = SevenSigns.instance.get_ancient_adena_reward(pc.l2id, true)
         if reward < 3
           if is_a?(L2DawnPriestInstance)
             show_chat_window(pc, 9, "dawn_b", false)
@@ -509,7 +509,7 @@ class L2SignsPriestInstance < L2Npc
           green_stone_count_all = green_stones_all.try &.count || 0i64
           red_stone_count_all = red_stones_all.try &.count || 0i64
 
-          ancient_adena_reward_all = SevenSigns.calc_ancient_adena_reward(blue_stone_count_all, green_stone_count_all, red_stone_count_all)
+          ancient_adena_reward_all = SevenSigns.instance.calc_ancient_adena_reward(blue_stone_count_all, green_stone_count_all, red_stone_count_all)
 
           if ancient_adena_reward_all == 0
             if is_a?(L2DawnPriestInstance)
@@ -591,11 +591,11 @@ class L2SignsPriestInstance < L2Npc
           if convert_count <= total_count && convert_count > 0
             case convert_stone_id
             when SevenSigns::SEAL_STONE_BLUE_ID
-              ancient_adena_reward = SevenSigns.calc_ancient_adena_reward(convert_count, 0, 0)
+              ancient_adena_reward = SevenSigns.instance.calc_ancient_adena_reward(convert_count, 0, 0)
             when SevenSigns::SEAL_STONE_GREEN_ID
-              ancient_adena_reward = SevenSigns.calc_ancient_adena_reward(0, convert_count, 0)
+              ancient_adena_reward = SevenSigns.instance.calc_ancient_adena_reward(0, convert_count, 0)
             when SevenSigns::SEAL_STONE_RED_ID
-              ancient_adena_reward = SevenSigns.calc_ancient_adena_reward(0, 0, convert_count)
+              ancient_adena_reward = SevenSigns.instance.calc_ancient_adena_reward(0, 0, convert_count)
             else
               # [automatically added else]
             end
@@ -626,7 +626,7 @@ class L2SignsPriestInstance < L2Npc
         end
       when 19 # choose seal (when joining a cabal)
         chosen_seal = command.from(16).to_i
-        file_suffix = "#{SevenSigns.get_seal_name(chosen_seal, true)}_#{SevenSigns.get_cabal_short_name(cabal)}"
+        file_suffix = "#{SevenSigns.instance.get_seal_name(chosen_seal, true)}_#{SevenSigns.instance.get_cabal_short_name(cabal)}"
         show_chat_window(pc, val, file_suffix, false)
       when 20 # seal status (when joining a cabal)
         content = String.build do |io|
@@ -637,12 +637,12 @@ class L2SignsPriestInstance < L2Npc
           end
 
           1.upto(3) do |i|
-            seal_owner = SevenSigns.get_seal_owner(i)
+            seal_owner = SevenSigns.instance.get_seal_owner(i)
             if seal_owner != SevenSigns::CABAL_NULL
-              io << '[' << SevenSigns.get_seal_name(i, false) << ": "
-              io << SevenSigns.get_cabal_name(seal_owner) << "]<br>"
+              io << '[' << SevenSigns.instance.get_seal_name(i, false) << ": "
+              io << SevenSigns.instance.get_cabal_name(seal_owner) << "]<br>"
             else
-              io << '[' << SevenSigns.get_seal_name(i, false)
+              io << '[' << SevenSigns.instance.get_seal_name(i, false)
               io << ": Nothingness]<br>"
             end
           end

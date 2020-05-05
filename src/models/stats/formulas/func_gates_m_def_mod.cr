@@ -4,7 +4,7 @@ class FuncGatesMDefMod < AbstractFunction
   end
 
   def calc(effector, effected, skill, init_val)
-    case SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
+    case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DAWN
       init_val * Config.alt_siege_dawn_gates_mdef_mult
     when SevenSigns::CABAL_DUSK

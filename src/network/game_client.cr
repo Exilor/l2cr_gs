@@ -433,8 +433,8 @@ class GameClient
   rescue e
     error e
   ensure
-    {% if flag?(:preview_mt) %} debug { "Calling LoginServerClient.send_logout(account_name: #{@account_name})." } {% end %}
-    LoginServerClient.send_logout(@account_name)
+    {% if flag?(:preview_mt) %} debug { "Calling LoginServerClient.instance.send_logout(account_name: #{@account_name})." } {% end %}
+    LoginServerClient.instance.send_logout(@account_name)
   end
 
   def on_buffer_underflow

@@ -18,14 +18,14 @@ class Scripts::OutpostCaptain < AbstractNpcAI
   def on_adv_event(event, npc, player)
     if npc && event.casecmp?("LEVEL_UP")
       npc.delete_me
-      HellboundEngine.level = 9
+      HellboundEngine.instance.level = 9
     end
 
     super
   end
 
   def on_kill(npc, killer, is_summon)
-    if HellboundEngine.level == 8
+    if HellboundEngine.instance.level == 8
       add_spawn(DOORKEEPER, npc.spawn.location, false, 0, false)
     end
 

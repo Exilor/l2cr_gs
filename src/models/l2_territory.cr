@@ -8,7 +8,7 @@ class L2Territory
 
   getter proc_max = 0
 
-  def initialize(@terr : Int32) # Integer
+  def initialize(@terr : Int32)
     @x_min = @y_min = @z_min = 999999
     @x_max = @y_max = @z_max = -999999
     @points = Concurrent::Array(Point).new
@@ -94,7 +94,7 @@ class L2Territory
       end
     end
 
-    warn "Can't make point for territory #{@terr}."
+    warn { "Can't make point for territory #{@terr}." }
 
     nil
   end

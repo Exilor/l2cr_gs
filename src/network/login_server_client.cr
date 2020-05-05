@@ -1,7 +1,7 @@
-module LoginServerClient
-  extend self
-  extend Cancellable
-  extend Loggable
+class LoginServerClient
+  include Singleton
+  include Cancellable
+  include Loggable
   include Packets::Incoming
   include Packets::Outgoing
 
@@ -16,40 +16,40 @@ module LoginServerClient
   IN_BUFFER.set_encoding("UTF-16LE")
   OUT_BUFFER.set_encoding("UTF-16LE")
 
-  class_getter port = 0
-  class_getter game_port = 0
-  class_getter host = ""
-  class_getter game_host = ""
-  class_getter hex_id = Bytes.empty
-  class_getter request_id = 1
-  class_getter accept_alternate = true
-  class_getter max_players = 0
-  class_getter status = 0
-  class_getter reserve_host = false
-  class_property server_name : String = ""
-  private class_getter! crypt : NewCrypt
-  private class_getter! socket : TCPSocket
+  getter port = 0
+  getter game_port = 0
+  getter host = ""
+  getter game_host = ""
+  getter hex_id = Bytes.empty
+  getter request_id = 1
+  getter accept_alternate = true
+  getter max_players = 0
+  getter status = 0
+  getter reserve_host = false
+  property server_name : String = ""
+  private getter! crypt : NewCrypt
+  private getter! socket : TCPSocket
 
-  def start
-    @@port = Config.game_server_login_port
-    @@game_port = Config.port_game
-    @@host = Config.game_server_login_host == "*" ? "127.0.0.1" : Config.game_server_login_host
-    @@host = @@host == "*" ? "127.0.0.1" : Socket::IPAddress.new(@@host, @@port).address
-    @@game_host = Config.gameserver_hostname == "*" ? "127.0.0.1" : Config.gameserver_hostname
-    @@game_host = @@game_host == "*" ? "127.0.0.1" : Socket::IPAddress.new(@@game_host, @@game_port).address
-    @@max_players = Config.maximum_online_users
-    @@hex_id = Config.hex_id
-    if @@hex_id.empty?
-      @@hex_id = Rnd.bytes(16)
-      @@request_id = Config.request_id
+  def initialize
+    @port = Config.game_server_login_port
+    @game_port = Config.port_game
+    @host = Config.game_server_login_host == "*" ? "127.0.0.1" : Config.game_server_login_host
+    @host = @host == "*" ? "127.0.0.1" : Socket::IPAddress.new(@host, @port).address
+    @game_host = Config.gameserver_hostname == "*" ? "127.0.0.1" : Config.gameserver_hostname
+    @game_host = @game_host == "*" ? "127.0.0.1" : Socket::IPAddress.new(@game_host, @game_port).address
+    @max_players = Config.maximum_online_users
+    @hex_id = Config.hex_id
+    if @hex_id.empty?
+      @hex_id = Rnd.bytes(16)
+      @request_id = Config.request_id
     else
-      @@request_id = Config.server_id
+      @request_id = Config.server_id
     end
 
-    @@accept_alternate = Config.accept_alternate_id
-    @@reserve_host = Config.reserve_host_on_login
-    # @@subnets = Config.game_server_subnets
-    # @@hosts = Config.game_server_hosts
+    @accept_alternate = Config.accept_alternate_id
+    @reserve_host = Config.reserve_host_on_login
+    # @subnets = Config.game_server_subnets
+    # @hosts = Config.game_server_hosts
 
     spawn do
       until cancelled?
@@ -65,9 +65,9 @@ module LoginServerClient
   end
 
   private def read_loop
-    info { "Trying to connect to LoginServer at #{@@host}:#{@@port}" }
-    @@socket = TCPSocket.new(@@host, @@port)
-    @@crypt = NewCrypt.new("_;v.]05-31!|+-%xT!^[$\00".bytes)
+    info { "Trying to connect to LoginServer at #{@host}:#{@port}" }
+    @socket = TCPSocket.new(@host, @port)
+    @crypt = NewCrypt.new("_;v.]05-31!|+-%xT!^[$\00".bytes)
     until cancelled?
       IN_BUFFER.clear
 
@@ -116,7 +116,7 @@ module LoginServerClient
       error e
     end
   ensure
-    @@socket.try &.close
+    @socket.try &.close
   end
 
   def send_packet(packet : MMO::OutgoingPacket(self))
@@ -183,7 +183,7 @@ module LoginServerClient
     end
   end
 
-  def max_players=(@@max_players : Int32)
+  def max_players=(@max_players : Int32)
     send_server_status(ServerStatus::MAX_PLAYERS, max_players)
   end
 
@@ -191,7 +191,7 @@ module LoginServerClient
     case status
     when ServerStatus::STATUS_AUTO..ServerStatus::STATUS_GM_ONLY
       send_server_status(ServerStatus::SERVER_LIST_STATUS, status)
-      @@status = status
+      @status = status
     else
       raise ArgumentError.new("Wrong status #{status}")
     end
@@ -227,22 +227,22 @@ module LoginServerClient
     case status
     when ServerStatus::STATUS_AUTO
       send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_AUTO)
-      @@status = status
+      @status = status
     when ServerStatus::STATUS_DOWN
       send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_DOWN)
-      @@status = status
+      @status = status
     when ServerStatus::STATUS_FULL
       send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_FULL)
-      @@status = status
+      @status = status
     when ServerStatus::STATUS_GM_ONLY
       send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_GM_ONLY)
-      @@status = status
+      @status = status
     when ServerStatus::STATUS_GOOD
       send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_GOOD)
-      @@status = status
+      @status = status
     when ServerStatus::STATUS_NORMAL
       send_server_status(ServerStatus::SERVER_LIST_STATUS, ServerStatus::STATUS_NORMAL)
-      @@status = status
+      @status = status
     else
       raise ArgumentError.new("Server status #{status} does not exist")
     end
@@ -282,7 +282,7 @@ module LoginServerClient
   end
 
   def status_string : String
-    ServerStatus::STATUS_STRING[@@status]
+    ServerStatus::STATUS_STRING[@status]
   end
 
   def get_client(name : String) : GameClient?

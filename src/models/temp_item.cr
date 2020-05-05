@@ -4,9 +4,10 @@ class TempItem
   getter reference_price : Int32
   property quantity : Int32
 
-  def initialize(item : L2ItemInstance, @quantity : Int32)
+  def initialize(item : L2ItemInstance, quantity : Int32)
     @item_id = item.id
     @item_name = item.template.name
     @reference_price = item.reference_price
+    @quantity = quantity
   end
 end

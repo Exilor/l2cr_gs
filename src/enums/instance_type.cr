@@ -7,7 +7,7 @@ class InstanceType < EnumClass
   getter parent
 
   protected def initialize(@parent : self?)
-    high = to_i64 - Int64::MAX - 1
+    high = to_i64 - 64 - 1
     if high < 0
       @type_l = 1i64 << to_i
       @type_h = 0i64

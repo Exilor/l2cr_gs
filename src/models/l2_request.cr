@@ -6,13 +6,14 @@ class L2Request
   property partner : L2PcInstance?
   property request_packet : GameClientPacket?
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     clear
   end
 
   def clear
     @partner = @request_packet = nil
-    @requestor = @answerer = false # unused?
+    @requestor = @answerer = false
   end
 
   def set_request(partner : L2PcInstance?, packet : GameClientPacket?) : Bool

@@ -14,6 +14,19 @@ class FuncEnchant < AbstractFunction
       enchant = 3
     end
 
+    if effector.is_a?(L2PcInstance)
+      if effector.in_olympiad_mode? && Config.alt_oly_enchant_limit >= 0
+        if enchant + overenchant > Config.alt_oly_enchant_limit
+          if Config.alt_oly_enchant_limit > 3
+            overenchant = Config.alt_oly_enchant_limit - 3
+          else
+            overenchant = 0
+            enchant = Config.alt_oly_enchant_limit
+          end
+        end
+      end
+    end
+
     if @stat.magic_defence? || @stat.power_defence?
       return val + enchant + (3 * overenchant)
     end

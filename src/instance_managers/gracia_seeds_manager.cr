@@ -22,9 +22,9 @@ module GraciaSeedsManager
     case seed_type
     when SODTYPE
       # Seed of Destruction
-      GlobalVariablesManager["SoDState"] = @@sod_state
-      GlobalVariablesManager["SoDTiatKilled"] = @@sod_tiat_killed
-      GlobalVariablesManager["SoDLSCDate"] = SOD_LAST_STATE_CHANGE_DATE.ms
+      GlobalVariablesManager.instance["SoDState"] = @@sod_state
+      GlobalVariablesManager.instance["SoDTiatKilled"] = @@sod_tiat_killed
+      GlobalVariablesManager.instance["SoDLSCDate"] = SOD_LAST_STATE_CHANGE_DATE.ms
     when SOITYPE
       # Seed of Infinity
     when SOATYPE
@@ -35,10 +35,10 @@ module GraciaSeedsManager
   end
 
   def load_data
-    if tmp = GlobalVariablesManager.has_key?("SoDState")
-      @@sod_state = GlobalVariablesManager.get_i32("SoDState")
-      @@sod_tiat_killed = GlobalVariablesManager.get_i32("SoDTiatKilled", @@sod_tiat_killed)
-      SOD_LAST_STATE_CHANGE_DATE.ms = GlobalVariablesManager.get_i64("SoDLSCDate")
+    if tmp = GlobalVariablesManager.instance.has_key?("SoDState")
+      @@sod_state = GlobalVariablesManager.instance.get_i32("SoDState")
+      @@sod_tiat_killed = GlobalVariablesManager.instance.get_i32("SoDTiatKilled", @@sod_tiat_killed)
+      SOD_LAST_STATE_CHANGE_DATE.ms = GlobalVariablesManager.instance.get_i64("SoDLSCDate")
     else
       save_data(SODTYPE)
     end

@@ -18,9 +18,9 @@ class Scripts::Buron < AbstractNpcAI
 
     html = event
     if event.casecmp?("Rumor")
-      html = "32345-#{HellboundEngine.level}r.htm"
+      html = "32345-#{HellboundEngine.instance.level}r.htm"
     else
-      if HellboundEngine.level < 2
+      if HellboundEngine.instance.level < 2
         html = "32345-lowlvl.htm"
       else
         if get_quest_items_count(pc, DARION_BADGE) >= 10
@@ -49,7 +49,7 @@ class Scripts::Buron < AbstractNpcAI
   def on_first_talk(npc, pc)
     get_quest_state!(pc)
 
-    case HellboundEngine.level
+    case HellboundEngine.instance.level
     when 1
       "32345-01.htm"
     when 2..4

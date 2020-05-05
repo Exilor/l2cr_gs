@@ -56,13 +56,13 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
       end
     when "32292-06.html"
       if st.cond?(4)
-        if !HellboundEngine.locked?
+        if !HellboundEngine.instance.locked?
           st.give_adena(254247, true)
           st.add_exp_and_sp(331457, 32524)
           st.exit_quest(false, true)
           html = event
         else
-          HellboundEngine.level = 1
+          HellboundEngine.instance.level = 1
           st.give_adena(254247, true)
           st.add_exp_and_sp(325881, 32524)
           st.exit_quest(false, true)

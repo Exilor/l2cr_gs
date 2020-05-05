@@ -14,12 +14,12 @@ class L2DuskPriestInstance < L2SignsPriestInstance
   def show_chat_window(pc : L2PcInstance)
     pc.action_failed
     file_name = SevenSigns::SEVEN_SIGNS_HTML_PATH
-    gnosis_owner = SevenSigns.get_seal_owner(SevenSigns::SEAL_GNOSIS)
-    cabal = SevenSigns.get_player_cabal(pc.l2id)
-    seal_validation_period = SevenSigns.seal_validation_period?
-    comp_results_period = SevenSigns.comp_results_period?
-    recruit_period = SevenSigns.current_period
-    comp_winner = SevenSigns.cabal_highest_score
+    gnosis_owner = SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_GNOSIS)
+    cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
+    seal_validation_period = SevenSigns.instance.seal_validation_period?
+    comp_results_period = SevenSigns.instance.comp_results_period?
+    recruit_period = SevenSigns.instance.current_period
+    comp_winner = SevenSigns.instance.cabal_highest_score
 
     case cabal
     when SevenSigns::CABAL_DUSK

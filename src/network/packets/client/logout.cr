@@ -35,7 +35,7 @@ class Packets::Incoming::Logout < GameClientPacket
     end
 
     if pc.festival_participant?
-      if SevenSignsFestival.festival_initialized?
+      if SevenSignsFestival.instance.festival_initialized?
         pc.send_message("You cannot log out while you are a participant in a Festival.")
         action_failed
         return

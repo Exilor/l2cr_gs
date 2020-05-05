@@ -75,13 +75,18 @@ class L2Clan
   property char_penalty_expiry_time : Int64 = 0i64
   property dissolving_expiry_time : Int64 = 0i64
 
-  def initialize(@clan_id : Int32)
+  def initialize(clan_id : Int32)
+    @clan_id = clan_id
+
     initialize_privs
     restore
     warehouse.restore
   end
 
-  def initialize(@clan_id : Int32, @name : String)
+  def initialize(clan_id : Int32, name : String)
+    @clan_id = clan_id
+    @name = name
+
     initialize_privs
   end
 

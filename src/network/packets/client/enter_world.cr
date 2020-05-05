@@ -151,10 +151,10 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       pc.siege_side = TerritoryWarManager.get_registered_territory_id(pc)
     end
 
-    if SevenSigns.seal_validation_period? && SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE) != SevenSigns::CABAL_NULL
-      cabal = SevenSigns.get_player_cabal(pc.l2id)
+    if SevenSigns.instance.seal_validation_period? && SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE) != SevenSigns::CABAL_NULL
+      cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
       if cabal != SevenSigns::CABAL_NULL
-        if cabal == SevenSigns.get_seal_owner(SevenSigns::SEAL_STRIFE)
+        if cabal == SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
           pc.add_skill(CommonSkill::THE_VICTOR_OF_WAR.skill)
         else
           pc.add_skill(CommonSkill::THE_VANQUISHED_OF_WAR.skill)
@@ -225,7 +225,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     # pc.send_message(get_text("Q29weXJpZ2h0IDIwMDQtMjAxOQ=="))
     # pc.send_message(get_text("VGhhbmsgeW91IGZvciAxNSB5ZWFycyE="))
 
-    SevenSigns.send_current_period_msg(pc)
+    SevenSigns.instance.send_current_period_msg(pc)
     AnnouncementsTable.show_announcements(pc)
 
     if clan && show_clan_notice

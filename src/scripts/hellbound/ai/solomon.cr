@@ -8,9 +8,9 @@ class Scripts::Solomon < AbstractNpcAI
   end
 
   def on_first_talk(npc, player)
-    if HellboundEngine.level == 5
+    if HellboundEngine.instance.level == 5
       return "32355-01.htm"
-    elsif HellboundEngine.level > 5
+    elsif HellboundEngine.instance.level > 5
       return "32355-01a.htm"
     end
 

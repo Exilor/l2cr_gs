@@ -18,12 +18,12 @@ module BypassHandler::Festival
     val = command[9].to_i
     case val
     when 1 # Participate
-      if SevenSigns.seal_validation_period?
+      if SevenSigns.instance.seal_validation_period?
         npc.show_chat_window(pc, 2, "a", false)
         return true
       end
 
-      if SevenSignsFestival.festival_initialized?
+      if SevenSignsFestival.instance.festival_initialized?
         pc.send_message("You cannot sign up while a festival is in progress.")
         return true
       end
@@ -43,13 +43,13 @@ module BypassHandler::Festival
         return true
       end
 
-      if pc.level == SevenSignsFestival.get_max_level_for_festival(npc.festival_type)
+      if pc.level == SevenSignsFestival.instance.get_max_level_for_festival(npc.festival_type)
         npc.show_chat_window(pc, 2, "d", false)
         return true
       end
 
       if pc.festival_participant?
-        SevenSignsFestival.set_participants(npc.festival_oracle, npc.festival_type, party)
+        SevenSignsFestival.instance.set_participants(npc.festival_oracle, npc.festival_type, party)
         npc.show_chat_window(pc, 2, "f", false)
         return true
       end
@@ -66,17 +66,17 @@ module BypassHandler::Festival
         return false
       end
 
-      SevenSignsFestival.set_participants(npc.festival_oracle, npc.festival_type, pc.party)
-      SevenSignsFestival.add_accumulated_bonus(npc.festival_type, stone_type, stone_count)
+      SevenSignsFestival.instance.set_participants(npc.festival_oracle, npc.festival_type, pc.party)
+      SevenSignsFestival.instance.add_accumulated_bonus(npc.festival_type, stone_type, stone_count)
 
       npc.show_chat_window(pc, 2, "e", false)
     when 3 # Register score
-      if SevenSigns.seal_validation_period?
+      if SevenSigns.instance.seal_validation_period?
         npc.show_chat_window(pc, 3, "a", false)
         return true
       end
 
-      if SevenSignsFestival.festival_in_progress?
+      if SevenSignsFestival.instance.festival_in_progress?
         pc.send_message("You cannot register a score while a festival is in progress.")
         return true
       end
@@ -86,7 +86,7 @@ module BypassHandler::Festival
         return true
       end
 
-      prev_participants = SevenSignsFestival.get_previous_participants(npc.festival_oracle, npc.festival_type)
+      prev_participants = SevenSignsFestival.instance.get_previous_participants(npc.festival_oracle, npc.festival_type)
 
       unless prev_participants && prev_participants.includes?(pc.l2id)
         npc.show_chat_window(pc, 3, "b", false)
@@ -109,7 +109,7 @@ module BypassHandler::Festival
         return true
       end
 
-      is_highest_score = SevenSignsFestival.set_final_score(pc, npc.festival_oracle, npc.festival_type, offering_score)
+      is_highest_score = SevenSignsFestival.instance.set_final_score(pc, npc.festival_oracle, npc.festival_type, offering_score)
       sm = SystemMessage.contrib_score_increased_s1
       sm.add_long(offering_score)
       pc.send_packet(sm)
@@ -122,9 +122,9 @@ module BypassHandler::Festival
       str = String.build(500) do |io|
         io << "<html><body>Festival Guide:<br>These are the top scores of the week, for the "
 
-        dawn_data = SevenSignsFestival.get_highest_score_data(SevenSigns::CABAL_DAWN, npc.festival_type)
-        dusk_data = SevenSignsFestival.get_highest_score_data(SevenSigns::CABAL_DUSK, npc.festival_type)
-        overall_data = SevenSignsFestival.get_overall_highest_score_data(npc.festival_type)
+        dawn_data = SevenSignsFestival.instance.get_highest_score_data(SevenSigns::CABAL_DAWN, npc.festival_type)
+        dusk_data = SevenSignsFestival.instance.get_highest_score_data(SevenSigns::CABAL_DUSK, npc.festival_type)
+        overall_data = SevenSignsFestival.instance.get_overall_highest_score_data(npc.festival_type)
 
         dawn_score = dawn_data.get_i32("score")
         dusk_score = dusk_data.get_i32("score")
@@ -134,7 +134,7 @@ module BypassHandler::Festival
           overall_score = overall_data.get_i32("score")
         end
 
-        io << SevenSignsFestival.get_festival_name(npc.festival_type)
+        io << SevenSignsFestival.instance.get_festival_name(npc.festival_type)
         io << " festival.<br>"
 
         if dawn_score > 0
@@ -194,7 +194,7 @@ module BypassHandler::Festival
         return true
       end
 
-      unless SevenSignsFestival.festival_in_progress?
+      unless SevenSignsFestival.instance.festival_in_progress?
         return true
       end
 
@@ -203,7 +203,7 @@ module BypassHandler::Festival
         return true
       end
 
-      if SevenSignsFestival.increase_challenge(npc.festival_oracle, npc.festival_type)
+      if SevenSignsFestival.instance.increase_challenge(npc.festival_oracle, npc.festival_type)
         npc.show_chat_window(pc, 8, "b", false)
       else
         npc.show_chat_window(pc, 8, "c", false)
@@ -214,7 +214,7 @@ module BypassHandler::Festival
       end
 
       if party.leader?(pc)
-        SevenSignsFestival.update_participants(pc, nil)
+        SevenSignsFestival.instance.update_participants(pc, nil)
       else
         if party.size > Config.alt_festival_min_player
           party.remove_party_member(pc, L2Party::MessageType::Expelled)
@@ -223,12 +223,12 @@ module BypassHandler::Festival
         end
       end
     when 0 # Distribute accumulated bonus
-      unless SevenSigns.seal_validation_period?
+      unless SevenSigns.instance.seal_validation_period?
         pc.send_message("Bonuses cannot be paid during the competition period.")
         return true
       end
 
-      if SevenSignsFestival.distrib_accumulated_bonus(pc) > 0
+      if SevenSignsFestival.instance.distrib_accumulated_bonus(pc) > 0
         npc.show_chat_window(pc, 0, "a", false)
       else
         npc.show_chat_window(pc, 0, "b", false)

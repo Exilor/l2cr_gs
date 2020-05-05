@@ -288,9 +288,9 @@ module VoicedCommandHandler::Wedding
     end
 
     if partner.in_7s_dungeon? && !pc.in_7s_dungeon?
-      cabal = SevenSigns.get_player_cabal(pc.l2id)
-      seal_validation_period = SevenSigns.seal_validation_period?
-      comp_winner = SevenSigns.cabal_highest_score
+      cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
+      seal_validation_period = SevenSigns.instance.seal_validation_period?
+      comp_winner = SevenSigns.instance.cabal_highest_score
 
       if seal_validation_period
         if cabal != comp_winner

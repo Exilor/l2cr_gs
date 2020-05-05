@@ -248,7 +248,6 @@ class L2NpcTemplate < L2CharTemplate
       else
         # [automatically added else]
       end
-
     end
 
     result

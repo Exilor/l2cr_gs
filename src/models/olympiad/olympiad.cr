@@ -2,6 +2,8 @@ require "./olympiad_game_manager"
 require "./olympiad_announcer"
 
 class Olympiad < ListenersContainer
+  include Singleton
+
   private alias SystemMessage = Packets::Outgoing::SystemMessage
 
   private NOBLES = {} of Int32 => StatsSet
@@ -887,9 +889,5 @@ class Olympiad < ListenersContainer
 
   def self.in_comp_period? : Bool
     instance.in_comp_period?
-  end
-
-  def self.instance
-    @@instance ||= new
   end
 end

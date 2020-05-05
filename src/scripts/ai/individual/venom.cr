@@ -278,16 +278,16 @@ class Scripts::Venom < AbstractNpcAI
   private def check_status
     status = ALIVE
 
-    if GlobalVariablesManager.has_key?("VenomStatus")
-      status = GlobalVariablesManager.get_i32("VenomStatus")
+    if GlobalVariablesManager.instance.has_key?("VenomStatus")
+      status = GlobalVariablesManager.instance.get_i32("VenomStatus")
     else
-      GlobalVariablesManager["VenomStatus"] = 0
+      GlobalVariablesManager.instance["VenomStatus"] = 0
     end
 
     status
   end
 
   private def update_status(status)
-    GlobalVariablesManager["VenomStatus"] = status.to_s
+    GlobalVariablesManager.instance["VenomStatus"] = status.to_s
   end
 end

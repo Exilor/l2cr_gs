@@ -10,7 +10,11 @@ class TerritoryWard
   property! old_location : Location?
   property! item : L2ItemInstance?
 
-  def initialize(@territory_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, @item_id : Int32, @owner_castle_id : Int32, @npc : L2Npc?)
+  def initialize(territory_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, item_id : Int32, owner_castle_id : Int32, npc : L2Npc?)
+    @territory_id = territory_id
+    @item_id = item_id
+    @owner_castle_id = owner_castle_id
+    @npc = npc
     @location = Location.new(x, y, z, heading)
   end
 

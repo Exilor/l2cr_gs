@@ -484,10 +484,10 @@ class L2PetInstance < L2Summon
     end
   end
 
-  def store_effect(store_effects : Bool)
+  def store_effect(store : Bool)
     return unless Config.summon_store_skill_cooltime
     SummonEffectsTable.clear_pet_effects(control_l2id)
-    GameDB.pet_skill_save.insert(self, store_effects)
+    GameDB.pet_skill_save.insert(self, store)
   end
 
   def restore_effects

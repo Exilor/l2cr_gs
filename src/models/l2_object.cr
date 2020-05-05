@@ -24,7 +24,8 @@ abstract class L2Object < ListenersContainer
   property world_region : L2WorldRegion?
   property name : String = ""
 
-  def initialize(@l2id : Int32)
+  def initialize(l2id : Int32)
+    @l2id = l2id
     init_known_list
   end
 
