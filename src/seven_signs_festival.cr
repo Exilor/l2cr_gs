@@ -722,13 +722,12 @@ class SevenSignsFestival
   end
 
   def festival_manager_schedule : TaskExecutor::Scheduler::PeriodicTask
-    @manager_scheduled_task || start_festival_manager
-    @manager_scheduled_task.not_nil!
+    (@manager_scheduled_task || start_festival_manager).not_nil!
   end
 
   def start_festival_manager
     return if @manager_instance
-    @manager_instance = FestivalManager.new
+    @manager_instance = FestivalManager.new(self)
     set_next_festival_start(Config.alt_festival_manager_start + SevenSignsFestival.instance.festival_signup_time)
     @manager_scheduled_task = ThreadPoolManager.schedule_general_at_fixed_rate(@manager_instance.not_nil!, Config.alt_festival_manager_start, Config.alt_festival_cycle_length)
     info { "The first Festival of Darkness cycle begins in #{Time.ms_to_mins(Config.alt_festival_manager_start)} minutes." }
@@ -754,7 +753,6 @@ class SevenSignsFestival
         end
         temp = FESTIVAL_DATA[festival_cycle] ||= {} of Int32 => StatsSet
         temp[festival_id] = dat
-        # should be reflected inside FESTIVAL_DATA now
       end
     rescue e
       error e
@@ -1245,11 +1243,12 @@ class SevenSignsFestival
 
     @festival_instances = {} of Int32 => L2DarknessFestival
 
-    def initialize
-      SevenSignsFestival.instance.festival_cycle += 1
-      SevenSignsFestival.instance.set_next_cycle_start
-      SevenSignsFestival.instance.set_next_festival_start(
-        Config.alt_festival_cycle_length - SevenSignsFestival.instance.festival_signup_time
+    def initialize(festival : SevenSignsFestival)
+      @festival = festival
+      @festival.festival_cycle += 1
+      @festival.set_next_cycle_start
+      @festival.set_next_festival_start(
+        Config.alt_festival_cycle_length - @festival.festival_signup_time
       )
     end
 
@@ -1258,33 +1257,33 @@ class SevenSignsFestival
 
       if SevenSigns.instance.milli_to_period_change < Config.alt_festival_cycle_length
         return
-      elsif SevenSignsFestival.instance.mins_to_next_festival == 2
-        SevenSignsFestival.instance.send_message_to_all("Festival Guide", NpcString::THE_MAIN_EVENT_WILL_START_IN_2_MINUTES_PLEASE_REGISTER_NOW)
+      elsif @festival.mins_to_next_festival == 2
+        @festival.send_message_to_all("Festival Guide", NpcString::THE_MAIN_EVENT_WILL_START_IN_2_MINUTES_PLEASE_REGISTER_NOW)
       end
 
-      wait(SevenSignsFestival.instance.festival_signup_time)
+      wait(@festival.festival_signup_time)
 
       DAWN_PREVIOUS_PARTICIPANTS.clear
       DUSK_PREVIOUS_PARTICIPANTS.clear
 
       @festival_instances.each_value &.unspawn_mobs
 
-      SevenSignsFestival.instance.no_party_register = true
+      @festival.no_party_register = true
 
-      while SevenSignsFestival.instance.no_party_register?
+      while @festival.no_party_register?
         if DUSK_FESTIVAL_PARTICIPANTS.empty? && DAWN_FESTIVAL_PARTICIPANTS.empty?
-          SevenSignsFestival.instance.set_next_cycle_start
-          SevenSignsFestival.instance.set_next_festival_start(
-            Config.alt_festival_cycle_length - SevenSignsFestival.instance.festival_signup_time
+          @festival.set_next_cycle_start
+          @festival.set_next_festival_start(
+            Config.alt_festival_cycle_length - @festival.festival_signup_time
           )
-          wait(Config.alt_festival_cycle_length - SevenSignsFestival.instance.festival_signup_time)
+          wait(Config.alt_festival_cycle_length - @festival.festival_signup_time)
           @festival_instances.each_value do |inst|
             unless inst.npc_instances.empty?
               inst.unspawn_mobs
             end
           end
         else
-          SevenSignsFestival.instance.no_party_register = false
+          @festival.no_party_register = false
         end
       end
 
@@ -1300,10 +1299,10 @@ class SevenSignsFestival
         end
       end
 
-      SevenSignsFestival.instance.festival_initialized = true
+      @festival.festival_initialized = true
 
-      SevenSignsFestival.instance.next_festival_start = Config.alt_festival_cycle_length
-      SevenSignsFestival.instance.send_message_to_all(
+      @festival.next_festival_start = Config.alt_festival_cycle_length
+      @festival.send_message_to_all(
         "Festival Guide", NpcString::THE_MAIN_EVENT_IS_NOW_STARTING
       )
 
@@ -1311,7 +1310,7 @@ class SevenSignsFestival
 
       elapsed_time = Config.alt_festival_first_spawn
 
-      SevenSignsFestival.instance.festival_in_progress = true
+      @festival.festival_in_progress = true
 
       @festival_instances.each_value do |inst|
         inst.festival_start
@@ -1355,16 +1354,16 @@ class SevenSignsFestival
 
       wait(Config.alt_festival_length - elapsed_time)
 
-      SevenSignsFestival.instance.festival_in_progress = false
+      @festival.festival_in_progress = false
 
       @festival_instances.each_value &.festival_end
 
       DAWN_FESTIVAL_PARTICIPANTS.clear
       DUSK_FESTIVAL_PARTICIPANTS.clear
 
-      SevenSignsFestival.instance.festival_initialized = false
+      @festival.festival_initialized = false
 
-      SevenSignsFestival.instance.send_message_to_all("Festival Witch", NpcString::THAT_WILL_DO_ILL_MOVE_YOU_TO_THE_OUTSIDE_SOON)
+      @festival.send_message_to_all("Festival Witch", NpcString::THAT_WILL_DO_ILL_MOVE_YOU_TO_THE_OUTSIDE_SOON)
     rescue e
       error e
     end
@@ -1374,7 +1373,7 @@ class SevenSignsFestival
     end
 
     def get_festival_instance(oracle : Int, festival_id : Int) : L2DarknessFestival?
-      return unless SevenSignsFestival.instance.festival_initialized?
+      return unless @festival.festival_initialized?
       festival_id += oracle == SevenSigns::CABAL_DUSK ? 10 : 20
       @festival_instances[festival_id]?
     end
