@@ -11,7 +11,7 @@ struct FourSepulchersChangeCoolDownTimeTask
     time = Calendar.new
 
     if !manager.first_time_run? && time.minute > manager.cycle_min
-      time.hour -= 1
+      time.hour &-= 1
     end
 
     time.minute = manager.cycle_min.to_i

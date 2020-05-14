@@ -107,7 +107,6 @@ class EffectHandler::Fishing < AbstractEffect
 
       if bait_z == Int32::MIN
         if pc.gm?
-          debug "Non-gms wouldn't be able to fish here."
           bait_z = pc.z
         else
           pc.send_packet(SystemMessageId::CANNOT_FISH_HERE)

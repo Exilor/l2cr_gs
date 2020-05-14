@@ -5,13 +5,12 @@ require "./actor/instance/*"
 
 class L2Spawn
   include Positionable
-  include Loggable
 
   private SPAWN_LISTENERS = Concurrent::Array(SpawnListener).new
 
   @current_count = 0
   @do_respawn = false
-  @last_spawn_points : IHash(Int32, Location)?
+  @last_spawn_points : Interfaces::Map(Int32, Location)?
   @constructor : L2Npc.class = L2Npc
 
   getter template
@@ -125,12 +124,12 @@ class L2Spawn
   def decrease_count(old : L2Npc)
     return if @current_count <= 0
 
-    @current_count -= 1
+    @current_count &-= 1
     @spawned_npcs.delete_first(old)
     @last_spawn_points.try &.delete(old.l2id)
 
     if @do_respawn && @scheduled_count + @current_count < @amount
-      @scheduled_count += 1
+      @scheduled_count &+= 1
 
       if respawn_random?
         delay = Rnd.rand(@respawn_min_delay..@respawn_max_delay)
@@ -272,7 +271,7 @@ class L2Spawn
       points[mob.l2id] = Location.new(new_x, new_y, new_z)
     end
 
-    @current_count += 1
+    @current_count &+= 1
 
     mob
   end
@@ -338,7 +337,7 @@ class L2Spawn
 
     def call
       @spawn.respawn_npc(@old_npc)
-      @spawn.scheduled_count -= 1
+      @spawn.scheduled_count &-= 1
     end
   end
 end

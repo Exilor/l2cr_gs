@@ -39,7 +39,6 @@ class Condition
         # [automatically added else]
       end
 
-
       !@required
     end
   end

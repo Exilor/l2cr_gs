@@ -12,7 +12,7 @@ module ForumsBBSManager
   def load
     sql = "SELECT forum_id FROM forums WHERE forum_type = 0"
     GameDB.each(sql) do |rs|
-      forum_id = rs.get_i32("forum_id")
+      forum_id = rs.get_i32(:"forum_id")
       f = Forum.new(forum_id, nil)
       add_forum(f)
     end

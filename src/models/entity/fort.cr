@@ -247,19 +247,19 @@ class Fort < AbstractResidence
     owner_id = 0
     sql = "SELECT * FROM fort WHERE id = ?"
     GameDB.each(sql, residence_id) do |rs|
-      self.name = rs.get_string("name")
+      self.name = rs.get_string(:"name")
 
       date = Calendar.new
-      date.ms = rs.get_i64("siegeDate")
+      date.ms = rs.get_i64(:"siegeDate")
       @siege_date = date
       date = Calendar.new
-      date.ms = rs.get_i64("lastOwnedTime")
+      date.ms = rs.get_i64(:"lastOwnedTime")
       @last_owned_time = date
-      owner_id = rs.get_i32("owner")
-      @fort_type = rs.get_i32("fortType")
-      @state = rs.get_i32("state")
-      @castle_id = rs.get_i32("castleId")
-      @supply_lvl = rs.get_i32("supplyLvL")
+      owner_id = rs.get_i32(:"owner")
+      @fort_type = rs.get_i32(:"fortType")
+      @state = rs.get_i32(:"state")
+      @castle_id = rs.get_i32(:"castleId")
+      @supply_lvl = rs.get_i32(:"supplyLvL")
     end
 
     if owner_id > 0
@@ -304,11 +304,11 @@ class Fort < AbstractResidence
   private def load_functions
     sql = "SELECT * FROM fort_functions WHERE fort_id = ?"
     GameDB.each(sql, residence_id) do |rs|
-      type = rs.get_i32("type")
-      lvl = rs.get_i32("lvl")
-      lease = rs.get_i32("lease")
-      rate = rs.get_i64("rate")
-      end_time = rs.get_i64("endTime")
+      type = rs.get_i32(:"type")
+      lvl = rs.get_i32(:"lvl")
+      lease = rs.get_i32(:"lease")
+      rate = rs.get_i64(:"rate")
+      end_time = rs.get_i64(:"endTime")
       fn = FortFunction.new(self, type, lvl, lease, 0, rate, end_time, true)
       @functions[type] = fn
     end
@@ -387,10 +387,10 @@ class Fort < AbstractResidence
   private def load_door_upgrade
     sql = "SELECT * FROM fort_doorupgrade WHERE fortId = ?"
     GameDB.each(sql, residence_id) do |rs|
-      door_id = rs.get_i32("doorId")
-      hp = rs.get_i32("hp")
-      p_def = rs.get_i32("pDef")
-      m_def = rs.get_i32("mDef")
+      door_id = rs.get_i32(:"doorId")
+      hp = rs.get_i32(:"hp")
+      p_def = rs.get_i32(:"pDef")
+      m_def = rs.get_i32(:"mDef")
       upgrade_door(door_id, hp, p_def, m_def)
     end
   rescue e
@@ -599,12 +599,12 @@ class Fort < AbstractResidence
   private def init_npcs
     sql = "SELECT * FROM fort_spawnlist WHERE fortId = ? AND spawnType = ?"
     GameDB.each(sql, residence_id, 0) do |rs|
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
+      sp = L2Spawn.new(rs.get_i32(:"npcId").to_u16!.to_i32)
       sp.amount = 1
-      sp.x = rs.get_i32("x")
-      sp.y = rs.get_i32("y")
-      sp.z = rs.get_i32("z")
-      sp.heading = rs.get_i32("heading")
+      sp.x = rs.get_i32(:"x")
+      sp.y = rs.get_i32(:"y")
+      sp.z = rs.get_i32(:"z")
+      sp.heading = rs.get_i32(:"heading")
       sp.respawn_delay = 60
       SpawnTable.add_new_spawn(sp, false)
       sp.do_spawn
@@ -618,12 +618,12 @@ class Fort < AbstractResidence
     @siege_npcs.clear
     sql = "SELECT id, npcId, x, y, z, heading FROM fort_spawnlist WHERE fortId = ? AND spawnType = ? ORDER BY id"
     GameDB.each(sql, residence_id, 2) do |rs|
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
+      sp = L2Spawn.new(rs.get_i32(:"npcId").to_u16!.to_i32)
       sp.amount = 1
-      sp.x = rs.get_i32("x")
-      sp.y = rs.get_i32("y")
-      sp.z = rs.get_i32("z")
-      sp.heading = rs.get_i32("heading")
+      sp.x = rs.get_i32(:"x")
+      sp.y = rs.get_i32(:"y")
+      sp.z = rs.get_i32(:"z")
+      sp.heading = rs.get_i32(:"heading")
       sp.respawn_delay = 60
       @siege_npcs << sp
     end
@@ -635,12 +635,12 @@ class Fort < AbstractResidence
     @npc_commanders.clear
     sql = "SELECT id, npcId, x, y, z, heading FROM fort_spawnlist WHERE fortId = ? AND spawnType = ? ORDER BY id"
     GameDB.each(sql, residence_id, 1) do |rs|
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
+      sp = L2Spawn.new(rs.get_i32(:"npcId").to_u16!.to_i32)
       sp.amount = 1
-      sp.x = rs.get_i32("x")
-      sp.y = rs.get_i32("y")
-      sp.z = rs.get_i32("z")
-      sp.heading = rs.get_i32("heading")
+      sp.x = rs.get_i32(:"x")
+      sp.y = rs.get_i32(:"y")
+      sp.z = rs.get_i32(:"z")
+      sp.heading = rs.get_i32(:"heading")
       sp.respawn_delay = 60
       @npc_commanders << sp
     end
@@ -654,13 +654,13 @@ class Fort < AbstractResidence
     @available_castles.clear
     sql = "SELECT id, npcId, x, y, z, heading, castleId FROM fort_spawnlist WHERE fortId = ? AND spawnType = ? ORDER BY id"
     GameDB.each(sql, residence_id, 3) do |rs|
-      castle_id = rs.get_i32("castleId")
-      sp = L2Spawn.new(rs.get_i32("npcId").to_u16!.to_i32)
+      castle_id = rs.get_i32(:"castleId")
+      sp = L2Spawn.new(rs.get_i32(:"npcId").to_u16!.to_i32)
       sp.amount = 1
-      sp.x = rs.get_i32("x")
-      sp.y = rs.get_i32("y")
-      sp.z = rs.get_i32("z")
-      sp.heading = rs.get_i32("heading")
+      sp.x = rs.get_i32(:"x")
+      sp.y = rs.get_i32(:"y")
+      sp.z = rs.get_i32(:"z")
+      sp.heading = rs.get_i32(:"heading")
       sp.respawn_delay = 60
       @special_envoys << sp
       @envoy_castles[sp.id] = castle_id

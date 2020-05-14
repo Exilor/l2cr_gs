@@ -25,17 +25,15 @@ module CommunityBoardHandler::HomeBoard
   end
 
   private def get_favorite_count(pc)
-    count = 0
-
     begin
       GameDB.each(COUNT_FAVORITES, pc.l2id) do |rs|
-        count = rs.get_i32("favorites")
+        return rs.get_i32(:"favorites")
       end
     rescue e
       error e
     end
 
-    count
+    0
   end
 
   private def get_region_count(pc)

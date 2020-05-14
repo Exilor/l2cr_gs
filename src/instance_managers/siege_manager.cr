@@ -150,8 +150,8 @@ module SiegeManager
   private def load_trap_upgrade(castle_id : Int32)
     sql = "SELECT * FROM castle_trapupgrade WHERE castleId=?"
     GameDB.each(sql, castle_id) do |rs|
-      idx = rs.get_i32("towerIndex")
-      lvl = rs.get_i32("level")
+      idx = rs.get_i32(:"towerIndex")
+      lvl = rs.get_i32(:"level")
       FLAME_TOWERS[castle_id][idx].upgrade_level = lvl
     end
   rescue e

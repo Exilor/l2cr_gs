@@ -10,7 +10,7 @@ abstract class AbstractScript
 
   private alias Say2 = Packets::Incoming::Say2
 
-  @registered_ids = Concurrent::Map(ListenerRegisterType, ISet(Int32)).new
+  @registered_ids = Concurrent::Map(ListenerRegisterType, Interfaces::Set(Int32)).new
 
   getter listeners = Concurrent::Array(AbstractEventListener).new
   property? active : Bool = false

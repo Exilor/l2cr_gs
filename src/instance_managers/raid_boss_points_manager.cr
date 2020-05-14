@@ -7,9 +7,9 @@ module RaidBossPointsManager
   def load
     sql = "SELECT `charId`,`boss_id`,`points` FROM `character_raid_points`"
     GameDB.each(sql) do |rs|
-      char_id = rs.get_i32("charId")
-      boss_id = rs.get_i32("boss_id")
-      points = rs.get_i32("points")
+      char_id = rs.get_i32(:"charId")
+      boss_id = rs.get_i32(:"boss_id")
+      points = rs.get_i32(:"points")
       values = LIST[char_id] ||= {} of Int32 => Int32
       values[boss_id] = points
     end

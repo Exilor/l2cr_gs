@@ -199,7 +199,7 @@ class Shutdown
         # [automatically added else]
       end
 
-      @seconds_shut -= 1
+      @seconds_shut &-= 1
 
       sleep 1
 

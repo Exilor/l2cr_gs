@@ -16,9 +16,9 @@ module GameDB
       GameDB.each(SELECT, l2id) do |rs|
         active_class_id = rs.get_u8(:"classid").to_i32
         female = rs.get_i32(:"sex") != Sex::MALE.to_i
-        face = rs.get_i8("face")
-        hair_color = rs.get_i8("hairColor")
-        hair_style = rs.get_i8("hairStyle")
+        face = rs.get_i8(:"face")
+        hair_color = rs.get_i8(:"hairColor")
+        hair_style = rs.get_i8(:"hairStyle")
         app = PcAppearance.new(face, hair_color, hair_style, female)
         account = rs.get_string(:"account_name")
 
@@ -97,7 +97,7 @@ module GameDB
         pc.death_penalty_buff_level = rs.get_i32(:"death_penalty_level")
         pc.set_vitality_points(rs.get_i32(:"vitality_points"), true)
 
-        pc.create_date.time = rs.get_time("createDate")
+        pc.create_date.time = rs.get_time(:"createDate")
 
         x, y, z = rs.get_i32(:"x"), rs.get_i32(:"y"), rs.get_i32(:"z")
         pc.set_xyz_invisible(x, y, z)

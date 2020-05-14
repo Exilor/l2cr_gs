@@ -9,7 +9,7 @@ module GameDB
 
     def load(pc : L2PcInstance)
       GameDB.each(SELECT, pc.l2id) do |rs|
-        pc.add_friend(rs.get_i32("friendId"))
+        pc.add_friend(rs.get_i32(:"friendId"))
       end
     rescue e
       error e

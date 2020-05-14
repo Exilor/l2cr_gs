@@ -21,7 +21,7 @@ module EventDroplist
     DROPS << DateDrop.new(date_range, event_drop)
   end
 
-  def all_drops
+  def all_drops : Array(DateDrop)
     time = Time.now
     DROPS.select &.includes?(time)
   end

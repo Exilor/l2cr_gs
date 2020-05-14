@@ -2,7 +2,6 @@ require "./models/temp_item"
 
 module RecipeController
   extend self
-  extend Loggable
   include Packets::Outgoing
 
   private ACTIVE_MAKERS = Concurrent::Map(Int32, RecipeItemMaker).new
@@ -260,7 +259,6 @@ module RecipeController
 
       if @items.nil?
         # not done in L2J
-        warn "@items is nil"
       elsif Rnd.rand(100) < @recipe_list.success_rate
         reward_player
         update_make_info(true)

@@ -12,10 +12,10 @@ module GameDB
 
     def load(pc : L2PcInstance)
       GameDB.each(SELECT, pc.l2id, pc.class_index) do |rs|
-        id = rs.get_i32("skill_id")
-        level = rs.get_i32("skill_level")
+        id = rs.get_i32(:"skill_id")
+        level = rs.get_i32(:"skill_level")
         unless skill = SkillData[id, level]?
-          warn { "Skill with ID #{id} and lv. #{level} not found." }
+          warn { "Skill with if #{id} and lv. #{level} not found." }
           next
         end
 
@@ -52,16 +52,6 @@ module GameDB
       # new_skills.each do |skill|
       #   GameDB.exec(REPLACE, pc.l2id, skill.id, skill.level, class_index)
       # end
-
-
-
-      # ps = GameDB.prepare
-      # temp = new_skills.map do |skill|
-      #   [pc.l2id, skill.id, skill.level, class_index] of DB::Any
-      # end
-      # ps.exec(REPLACE, temp)
-
-
 
       return if new_skills.empty?
       class_index = new_class_index > -1 ? new_class_index : pc.class_index

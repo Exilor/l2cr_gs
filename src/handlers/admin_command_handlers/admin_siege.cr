@@ -214,7 +214,7 @@ module AdminCommandHandler::AdminSiege
       list << "\">"
       list << name
       list << "</a></td>"
-      i += 1
+      i &+= 1
       if i > 2
         list << "</tr><tr>"
         i = 0
@@ -229,7 +229,7 @@ module AdminCommandHandler::AdminSiege
       list << "\">"
       list << hall.name
       list << "</a></td>"
-      i += 1
+      i &+= 1
       if i > 1
         list << "</tr><tr>"
         i = 0
@@ -244,7 +244,7 @@ module AdminCommandHandler::AdminSiege
       list << "\">"
       list << clanhall.name
       list << "</a></td>"
-      i += 1
+      i &+= 1
       if i > 1
         list << "</tr><tr>"
         i = 0
@@ -259,7 +259,7 @@ module AdminCommandHandler::AdminSiege
       list << "\">"
       list << clanhall.name
       list << "</a></td>"
-      i += 1
+      i &+= 1
       if i > 1
         list << "</tr><tr>"
         i = 0

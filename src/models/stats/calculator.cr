@@ -19,21 +19,21 @@ class Calculator
   def add_func(func : AbstractFunction)
     sync do
       funcs = @functions
-      tmp = Pointer(AbstractFunction).malloc(funcs.size + 1)
+      tmp = Pointer(AbstractFunction).malloc(funcs.size &+ 1)
 
       order = func.order
 
       i = 0
       while i < funcs.size && order >= funcs[i].order
         tmp[i] = funcs[i]
-        i += 1
+        i &+= 1
       end
 
       tmp[i] = func
 
       while i < funcs.size
-        tmp[i + 1] = funcs[i]
-        i += 1
+        tmp[i &+ 1] = funcs[i]
+        i &+= 1
       end
 
       @functions = tmp.to_slice(funcs.size + 1)
@@ -43,27 +43,27 @@ class Calculator
   def remove_func(func : AbstractFunction)
     sync do
       funcs = @functions
-      tmp = Pointer(AbstractFunction).malloc(funcs.size - 1)
+      tmp = Pointer(AbstractFunction).malloc(funcs.size &- 1)
 
       i = 0
-      while i < funcs.size - 1 && func != funcs[i]
+      while i < funcs.size &- 1 && func != funcs[i]
         tmp[i] = funcs[i]
-        i += 1
+        i &+= 1
       end
 
       if i == funcs.size
         return
       end
-      i += 1
+      i &+= 1
       while i < funcs.size
-        tmp[i - 1] = funcs[i]
-        i += 1
+        tmp[i &- 1] = funcs[i]
+        i &+= 1
       end
 
       if funcs.size == 1
         @functions = Slice(AbstractFunction).empty
       else
-        @functions = tmp.to_slice(funcs.size - 1)
+        @functions = tmp.to_slice(funcs.size &- 1)
       end
     end
   end

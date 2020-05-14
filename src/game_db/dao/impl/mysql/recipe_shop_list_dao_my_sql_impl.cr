@@ -11,8 +11,8 @@ module GameDB
       pc.manufacture_items.clear
 
       GameDB.each(SELECT, pc.l2id) do |rs|
-        recipe_id = rs.get_i32("recipeId")
-        price = rs.get_i64("price")
+        recipe_id = rs.get_i32(:"recipeId")
+        price = rs.get_i64(:"price")
 
         item = L2ManufactureItem.new(recipe_id, price)
         pc.manufacture_items[recipe_id] = item

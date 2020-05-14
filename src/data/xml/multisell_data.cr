@@ -90,12 +90,12 @@ module MultisellData
 
   def separate_and_send(list_id : Int32, pc : L2PcInstance, npc : L2Npc?, inventory_only : Bool, product_multiplier : Float64, ingredient_multiplier : Float64)
     unless template = ENTRIES[list_id]?
-      warn { "Cannot find list with ID #{list_id} requested by #{pc} from #{npc}." }
+      warn { "Cannot find list with id #{list_id} requested by #{pc} from #{npc}." }
       return
     end
 
     if (npc && !template.npc_allowed?(npc.id)) || (!npc && template.npc_only?)
-      warn { "#{pc} tried to open multisell from '#{npc}' which isn't allowed." }
+      warn { "#{pc} tried to open multisell from #{npc} which isn't allowed." }
       return
     end
 
@@ -148,7 +148,6 @@ module MultisellData
       # [automatically added else]
     end
 
-
     false
   end
 
@@ -169,7 +168,6 @@ module MultisellData
       # [automatically added else]
     end
 
-
     false
   end
 
@@ -184,7 +182,6 @@ module MultisellData
     else
       # [automatically added else]
     end
-
   end
 
   private def verify

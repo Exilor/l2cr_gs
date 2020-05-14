@@ -29,6 +29,5 @@ class EffectHandler::ResurrectionSpecial < AbstractEffect
     else
       # [automatically added else]
     end
-
   end
 end

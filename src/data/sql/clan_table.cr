@@ -18,7 +18,7 @@ module ClanTable
     clan_count = 0
 
     GameDB.each("SELECT clan_id FROM clan_data") do |rs|
-      clan_id = rs.get_i32("clan_id")
+      clan_id = rs.get_i32(:"clan_id")
       CLANS[clan_id] = L2Clan.new(clan_id)
       clan = get_clan(clan_id).not_nil!
       if clan.dissolving_expiry_time != 0
@@ -338,8 +338,8 @@ module ClanTable
   private def restore_wars
     sql = "SELECT clan1, clan2 FROM clan_wars"
     GameDB.each(sql) do |rs|
-      clan1 = get_clan(rs.get_i32("clan1"))
-      clan2 = get_clan(rs.get_i32("clan2"))
+      clan1 = get_clan(rs.get_i32(:"clan1"))
+      clan2 = get_clan(rs.get_i32(:"clan2"))
 
       if clan1 && clan2
         clan1.enemy_clan = clan2

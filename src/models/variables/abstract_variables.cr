@@ -1,7 +1,6 @@
 require "../interfaces/script_type"
 
 abstract class AbstractVariables
-  include Loggable
   include ScriptType
 
   private struct AtomicBool

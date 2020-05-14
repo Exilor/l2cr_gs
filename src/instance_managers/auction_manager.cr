@@ -55,7 +55,7 @@ module AuctionManager
   def load
     sql = "SELECT id FROM auction ORDER BY id"
     GameDB.each(sql) do |rs|
-      AUCTIONS << Auction.new(rs.get_i32("id"))
+      AUCTIONS << Auction.new(rs.get_i32(:"id"))
     end
 
     info { "Loaded #{AUCTIONS.size} auctions." }
@@ -89,7 +89,7 @@ module AuctionManager
       if ITEM_INIT_DATA_ID[i] == id
         break
       end
-      i += 1
+      i &+= 1
     end
 
     if i >= ITEM_INIT_DATA_ID.size || ITEM_INIT_DATA_ID[i] != id

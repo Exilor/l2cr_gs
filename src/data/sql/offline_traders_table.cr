@@ -82,7 +82,7 @@ module OfflineTradersTable
     n_traders = 0
 
     GameDB.each(LOAD_OFFLINE_STATUS) do |rs|
-      time = rs.get_i64("time")
+      time = rs.get_i64(:"time")
 
       if Config.offline_max_days > 0
         cal = Calendar.new
@@ -93,7 +93,7 @@ module OfflineTradersTable
         end
       end
 
-      type_id = rs.get_i32("type")
+      type_id = rs.get_i32(:"type")
       unless type = PrivateStoreType[type_id]?
         warn { "PrivateStoreType with id #{type_id} does not exist." }
         next
@@ -108,9 +108,9 @@ module OfflineTradersTable
       begin
         client = GameClient.new(nil)
         client.detached = true
-        char_id = rs.get_i32("charId")
+        char_id = rs.get_i32(:"charId")
         unless pc = L2PcInstance.load(char_id)
-          raise "No player with charId #{char_id} found in database."
+          raise "No player with charId #{char_id} found in database"
         end
         client.active_char = pc
         pc.set_online_status(true, false)
@@ -131,7 +131,7 @@ module OfflineTradersTable
               end
             end
 
-            pc.buy_list.title = rs.get_string("title")
+            pc.buy_list.title = rs.get_string(:"title")
           when .sell?, .package_sell?
             GameDB.each(LOAD_OFFLINE_ITEMS, pc.l2id) do |items|
               arg1, arg2, arg3 = items.get_i32(2), items.get_i64(3), items.get_i64(4)
@@ -140,7 +140,7 @@ module OfflineTradersTable
               end
             end
 
-            pc.sell_list.title = rs.get_string("title")
+            pc.sell_list.title = rs.get_string(:"title")
             pc.sell_list.packaged = type.package_sell?
           when .manufacture?
             GameDB.each(LOAD_OFFLINE_ITEMS, pc.l2id) do |items|
@@ -148,7 +148,7 @@ module OfflineTradersTable
               pc.manufacture_items[arg1] = L2ManufactureItem.new(arg1, arg2)
             end
 
-            pc.store_name = rs.get_string("title")
+            pc.store_name = rs.get_string(:"title")
           else
             # do nothing
           end

@@ -1,14 +1,6 @@
 class EffectHandler::Spoil < AbstractEffect
   def calc_success(info) : Bool
-    ret = Formulas.magic_success(info.effector, info.effected, info.skill)
-    if ret # custom, just pretty lights
-      if sk = CommonSkill::FIREWORK.skill?
-        pc = info.effector
-        msu = MagicSkillUse.new(pc, info.effected, sk.id, sk.level, sk.hit_time, sk.reuse_delay)
-        pc.broadcast_packet(msu)
-      end
-    end
-    ret
+    Formulas.magic_success(info.effector, info.effected, info.skill)
   end
 
   def instant? : Bool

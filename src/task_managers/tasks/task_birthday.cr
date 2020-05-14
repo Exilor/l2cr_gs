@@ -20,9 +20,9 @@ class TaskBirthday < Task
 
     begin
       GameDB.each(SELECT_PENDING_BIRTHDAY_GIFTS, Time.s_to_ms(last_activation)) do |rs|
-        name = rs.get_string("char_name")
-        age = rs.get_i32("age")
-        id = rs.get_i32("charId")
+        name = rs.get_string(:"char_name")
+        age = rs.get_i32(:"age")
+        id = rs.get_i32(:"charId")
 
         text = Config.alt_birthday_mail_text
         text = text.gsub("$c1", name)

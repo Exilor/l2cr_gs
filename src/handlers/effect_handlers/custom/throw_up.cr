@@ -1,4 +1,6 @@
 class EffectHandler::ThrowUp < AbstractEffect
+  include Loggable
+
   @fly_radius : Int32
 
   def initialize(attach_cond, apply_cond, set, params)

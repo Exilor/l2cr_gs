@@ -19,10 +19,10 @@ class Packets::Outgoing::FriendListExtended < GameServerPacket
         begin
           sql = "SELECT char_name, online, classid, level FROM characters WHERE charId = ?"
           GameDB.each(sql, obj_id) do |rs|
-            char_name = rs.get_string("char_name")
-            online = rs.get_i32("online") == 0
-            class_id = rs.get_i32("classid")
-            level = rs.get_i32("level")
+            char_name = rs.get_string(:"char_name")
+            online = rs.get_i32(:"online") == 0
+            class_id = rs.get_i32(:"classid")
+            level = rs.get_i32(:"level")
 
             info = FriendInfo.new(obj_id, char_name, online, class_id, level)
             friends << info

@@ -1,6 +1,4 @@
 class TaskExecutor
-  private DEFAULT_ERROR_HANDLER = ->raise(Exception)
-
   private class WorkerPool
     private class UnboundedChannel(T) < Channel(T)
       def initialize
@@ -45,7 +43,7 @@ class TaskExecutor
     end
   end
 
-  def initialize(*, pool_size = 20, error_handler = DEFAULT_ERROR_HANDLER)
+  def initialize(*, pool_size = 20, error_handler = ->raise(Exception))
     @pool = WorkerPool.new(pool_size, error_handler)
   end
 
@@ -93,7 +91,7 @@ class TaskExecutor
 
     @scheduling_worker : Fiber
 
-    def initialize(*, pool_size = 20, error_handler = DEFAULT_ERROR_HANDLER)
+    def initialize(*, pool_size = 20, error_handler = ->raise(Exception))
       # Implicit args super throws a syntax error due to a compiler bug
       super(pool_size: pool_size, error_handler: error_handler)
 

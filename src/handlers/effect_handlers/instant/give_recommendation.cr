@@ -7,7 +7,8 @@ class EffectHandler::GiveRecommendation < AbstractEffect
     @amount = params.get_i32("amount", 0)
 
     if @amount == 0
-      warn { "Amount parameter is missing or is 0. ID: " + set.get_i32("id", -1).to_s }
+      id = set.get_i32("id", -1)
+      raise "Amount parameter is missing or is 0. id: #{id}"
     end
   end
 

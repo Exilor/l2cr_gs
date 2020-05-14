@@ -7,13 +7,14 @@ class Packets::Outgoing::Die < GameServerPacket
   @jailed = false
   @static_res = false
 
-  def initialize(@char : L2Character)
-    if pc = char.as?(L2PcInstance)
-      @access = pc.access_level
-      @clan = pc.clan
-      @jailed = pc.jailed?
+  def initialize(char : L2Character)
+    if char.is_a?(L2PcInstance)
+      @access = char.access_level
+      @clan = char.clan
+      @jailed = char.jailed?
     end
 
+    @char = char
     @sweepable = char.sweep_active?
     @can_teleport = @char.can_revive? && !@char.pending_revive?
   end

@@ -78,14 +78,14 @@ struct SiegeGuardManager
     end
 
     GameDB.each(sql, castle.residence_id, arg) do |rs|
-      npc_id = rs.get_i32("npcId").to_u16!.to_i32
+      npc_id = rs.get_i32(:"npcId").to_u16!.to_i32
       sp = L2Spawn.new(npc_id)
       sp.amount = 1
-      sp.x = rs.get_i32("x")
-      sp.y = rs.get_i32("y")
-      sp.z = rs.get_i32("z")
-      sp.heading = rs.get_i32("heading")
-      sp.respawn_delay = rs.get_i32("respawnDelay")
+      sp.x = rs.get_i32(:"x")
+      sp.y = rs.get_i32(:"y")
+      sp.z = rs.get_i32(:"z")
+      sp.heading = rs.get_i32(:"heading")
+      sp.respawn_delay = rs.get_i32(:"respawnDelay")
       sp.location_id = 0
 
       @siege_guard_spawn << sp

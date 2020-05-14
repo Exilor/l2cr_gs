@@ -14,56 +14,56 @@ class CharEffectList
   @has_buffs_removed_on_damage = false
   @has_debuffs_removed_on_damage = false
   @party_only = false
-  @buffs : IList(BuffInfo)?
-  @debuffs : IList(BuffInfo)?
-  @dances : IList(BuffInfo)?
-  @passives : IList(BuffInfo)?
-  @toggles : IList(BuffInfo)?
-  @triggered : IList(BuffInfo)?
-  @blocked_buff_slots : ISet(AbnormalType)?
+  @buffs : Interfaces::List(BuffInfo)?
+  @debuffs : Interfaces::List(BuffInfo)?
+  @dances : Interfaces::List(BuffInfo)?
+  @passives : Interfaces::List(BuffInfo)?
+  @toggles : Interfaces::List(BuffInfo)?
+  @triggered : Interfaces::List(BuffInfo)?
+  @blocked_buff_slots : Interfaces::Set(AbnormalType)?
   @hidden_buffs = Atomic(Int32).new(0)
 
   property short_buff : BuffInfo?
 
   initializer owner : L2Character
 
-  def buffs : IList(BuffInfo)
+  def buffs : Interfaces::List(BuffInfo)
     @buffs || sync { @buffs ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def debuffs : IList(BuffInfo)
+  def debuffs : Interfaces::List(BuffInfo)
     @debuffs || sync { @debuffs ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def dances : IList(BuffInfo)
+  def dances : Interfaces::List(BuffInfo)
     @dances || sync { @dances ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def passives : IList(BuffInfo)
+  def passives : Interfaces::List(BuffInfo)
     @passives || sync { @passives ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def toggles : IList(BuffInfo)
+  def toggles : Interfaces::List(BuffInfo)
     @toggles || sync { @toggles ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  def triggered : IList(BuffInfo)
+  def triggered : Interfaces::List(BuffInfo)
     @triggered || sync { @triggered ||= Concurrent::LinkedList(BuffInfo).new }
   end
 
-  private def stacked_effects : IHash(AbnormalType, BuffInfo)
+  private def stacked_effects : Interfaces::Map(AbnormalType, BuffInfo)
     @stacked_effects || sync do
       @stacked_effects ||= Concurrent::Map(AbnormalType, BuffInfo).new
     end
   end
 
-  def blocked_buff_slots : ISet(AbnormalType)
+  def blocked_buff_slots : Interfaces::Set(AbnormalType)
     @blocked_buff_slots || sync do
       @blocked_buff_slots ||= Concurrent::Set(AbnormalType).new
     end
   end
 
-  private def each_with_list(& : BuffInfo, IList(BuffInfo) ->) : Nil
+  private def each_with_list(& : BuffInfo, Interfaces::List(BuffInfo) ->) : Nil
     {@buffs, @triggered, @dances, @toggles, @debuffs}.each do |list|
       list.try { |list| list.safe_each { |info| yield info, list } }
     end
@@ -99,7 +99,7 @@ class CharEffectList
     ret
   end
 
-  def get_effect_list(skill : Skill) : IList(BuffInfo)
+  def get_effect_list(skill : Skill) : Interfaces::List(BuffInfo)
     return passives  if skill.passive?
     return debuffs   if skill.debuff?
     return triggered if skill.trigger?
@@ -499,7 +499,7 @@ class CharEffectList
 
         stop_and_remove(info, effects)
 
-        to_remove -= 1
+        to_remove &-= 1
       end
     end
 

@@ -1,4 +1,6 @@
 class EffectHandler::SummonNpc < AbstractEffect
+  include Loggable
+
   @despawn_delay : Int32
   @npc_id : Int32
   @npc_count : Int32
@@ -28,12 +30,12 @@ class EffectHandler::SummonNpc < AbstractEffect
     return if pc.looks_dead? || pc.mounted?
 
     if @npc_id <= 0 || @npc_count <= 0
-      warn { "Invalid NPC ID or count for skill #{info.skill}." }
+      error { "Invalid NPC id or count for skill #{info.skill}." }
       return
     end
 
     unless template = NpcData[@npc_id]?
-      warn { "Template for NPC ID #{@npc_id} not found." }
+      error { "Template for NPC id #{@npc_id} not found." }
       return
     end
 

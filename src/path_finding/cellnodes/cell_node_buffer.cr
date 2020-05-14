@@ -37,7 +37,7 @@ class CellNodeBuffer
 
     MAX_ITERATIONS.times do
       if current.loc.node_x == @target_x && current.loc.node_y == @target_y
-        if (current.loc.z - @target_z).abs < 64
+        if (current.loc.z &- @target_z).abs < 64
           return current
         end
       end
@@ -181,7 +181,7 @@ class CellNodeBuffer
 
     node = current!
     count = 0
-    limit = MAX_ITERATIONS * 4
+    limit = MAX_ITERATIONS &* 4
 
     while node.next? && count < limit
       count &+= 1

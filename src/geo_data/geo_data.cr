@@ -12,12 +12,8 @@ module GeoData
   private SPAWN_Z_DELTA_LIMIT = 100
   private FILE_NAME_FORMAT = "%d_%d.l2j"
 
-  private class_getter! driver : GeoDriver
-
   def load
     debug "Loading geodata files..."
-
-    @@driver = GeoDriver.new
 
     timer = Timer.new
     loaded_regions = 0
@@ -29,12 +25,12 @@ module GeoData
         if !load_file.nil?
           if load_file
             debug { "Loading #{File.basename(file_path)}" }
-            driver.load_region(file_path, region_x, region_y)
+            GeoDriver.load_region(file_path, region_x, region_y)
             loaded_regions += 1
           end
         elsif Config.try_load_unspecified_regions && File.exists?(file_path)
           debug { "Loading #{File.basename(file_path)}" }
-          driver.load_region(file_path, region_x, region_y)
+          GeoDriver.load_region(file_path, region_x, region_y)
           loaded_regions += 1
         end
       end
@@ -44,11 +40,11 @@ module GeoData
   end
 
   def has_geo_pos?(x : Int32, y : Int32) : Bool
-    driver.has_geo_pos?(x, y)
+    GeoDriver.has_geo_pos?(x, y)
   end
 
   def check_nearest_nswe(x : Int32, y : Int32, z : Int32, nswe : Int32) : Bool
-    driver.check_nearest_nswe(x, y, z, nswe)
+    GeoDriver.check_nearest_nswe(x, y, z, nswe)
   end
 
   def check_nearest_nswe_anti_corner_cut(x : Int32, y : Int32, z : Int32, nswe : Int32) : Bool
@@ -78,31 +74,31 @@ module GeoData
   end
 
   def get_nearest_z(x : Int32, y : Int32, z : Int32) : Int32
-    driver.get_nearest_z(x, y, z)
+    GeoDriver.get_nearest_z(x, y, z)
   end
 
   def get_next_lower_z(x : Int32, y : Int32, z : Int32) : Int32
-    driver.get_next_lower_z(x, y, z)
+    GeoDriver.get_next_lower_z(x, y, z)
   end
 
   def get_next_higher_z(x : Int32, y : Int32, z : Int32) : Int32
-    driver.get_next_higher_z(x, y, z)
+    GeoDriver.get_next_higher_z(x, y, z)
   end
 
   def get_geo_x(x : Int32) : Int32
-    driver.get_geo_x(x)
+    GeoDriver.get_geo_x(x)
   end
 
   def get_geo_y(y : Int32) : Int32
-    driver.get_geo_y(y)
+    GeoDriver.get_geo_y(y)
   end
 
   def get_world_x(x : Int32) : Int32
-    driver.get_world_x(x)
+    GeoDriver.get_world_x(x)
   end
 
   def get_world_y(y : Int32) : Int32
-    driver.get_world_y(y)
+    GeoDriver.get_world_y(y)
   end
 
   def get_height(x : Int32, y : Int32, z : Int32) : Int32
@@ -286,7 +282,7 @@ module GeoData
     while iter.next
       cur_x = iter.x
       cur_y = iter.y
-      curZ = get_nearest_z(cur_x, cur_y, prev_z)
+      cur_z = get_nearest_z(cur_x, cur_y, prev_z)
 
       if has_geo_pos?(prev_x, prev_y)
         nswe = GeoUtils.compute_nswe(prev_x, prev_y, cur_x, cur_y)
@@ -297,7 +293,7 @@ module GeoData
 
       prev_x = cur_x
       prev_y = cur_y
-      prev_z = curZ
+      prev_z = cur_z
     end
 
     if has_geo_pos?(prev_x, prev_y) && prev_z != to_z

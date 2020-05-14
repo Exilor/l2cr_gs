@@ -13,9 +13,6 @@ require "../../data/xml/skill_trees_data"
 require "../../network/packets/server/system_message"
 
 class Skill
-  include Loggable
-  extend Loggable
-
   enum SkillType : UInt8
     PHYSICAL
     MAGIC
@@ -208,30 +205,25 @@ class Skill
     values.split(';') do |prod_list|
       prod_data = prod_list.split(',')
       if prod_data.size < 3
-        warn { "Wrong size for extractable skill info: #{prod_data.size}." }
+        raise "Wrong size for extractable skill info: #{prod_data.size}"
       end
       chance = 0.0
       length = prod_data.size - 1
-      begin
-        items = [] of ItemHolder
-        (0...length).step(2) do |j|
-          prod_id = prod_data[j].to_i
-          quantity = prod_data[j + 1].to_i64
-          if prod_id <= 0 || quantity <= 0
-            warn "Wrong prod id or quantity for extractable skill."
-          end
-          items << ItemHolder.new(prod_id, quantity)
+      items = [] of ItemHolder
+      (0...length).step(2) do |j|
+        prod_id = prod_data[j].to_i
+        quantity = prod_data[j + 1].to_i64
+        if prod_id <= 0 || quantity <= 0
+          raise "Wrong prod id or quantity for extractable skill"
         end
-        chance = prod_data[length].to_f
-      rescue e
-        warn e
-        next
+        items << ItemHolder.new(prod_id, quantity)
       end
+      chance = prod_data[length].to_f
       products << L2ExtractableProductItem.new(items, chance)
     end
 
     if products.empty?
-      warn "Empty extractable skill."
+      raise "Empty extractable skill"
     end
 
     L2ExtractableSkill.new(products)
@@ -362,14 +354,10 @@ class Skill
 
   def get_target_list(char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     if handler = TargetHandler[target_type]
-      begin
-        return handler.get_target_list(self, char, only_first, target)
-      rescue e
-        error e
-      end
-    else
-      char.send_message("Target type of skill is not currently handled.")
+      return handler.get_target_list(self, char, only_first, target)
     end
+
+    char.send_message("Target type of skill is not currently handled.")
 
     EMPTY_TARGET_LIST
   end

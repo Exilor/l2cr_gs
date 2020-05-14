@@ -38,9 +38,9 @@ class WalkInfo
         @current_node_id = new_node
       else
         if @forward
-          @current_node_id += 1
+          @current_node_id &+= 1
         else
-          @current_node_id -= 1
+          @current_node_id &-= 1
         end
 
         if @current_node_id == route.nodes_count
@@ -54,7 +54,7 @@ class WalkInfo
           case route.repeat_type
           when WalkingManager::REPEAT_GO_BACK
             @forward = false
-            @current_node_id -= 2
+            @current_node_id &-= 2
           when WalkingManager::REPEAT_GO_FIRST
             @current_node_id = 0
           when WalkingManager::REPEAT_TELE_FIRST
@@ -63,7 +63,6 @@ class WalkInfo
           else
             # [automatically added else]
           end
-
         elsif @current_node_id == WalkingManager::NO_REPEAT
           @current_node_id = 1
           @forward = true

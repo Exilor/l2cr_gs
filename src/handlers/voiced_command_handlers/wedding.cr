@@ -118,7 +118,7 @@ module VoicedCommandHandler::Wedding
     begin
       sql = "SELECT friendId FROM character_friends WHERE charId=?"
       GameDB.each(sql, pc_target.l2id) do |rs|
-        if rs.get_i32("friendId") == pc.l2id
+        if rs.get_i32(:"friendId") == pc.l2id
           found = true
           break
         end

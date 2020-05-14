@@ -3,25 +3,25 @@ enum State : UInt8
   STARTED
   COMPLETED
 
-  def self.[](val : String) : self
-    case val
+  def name : String
+    case self
+    when STARTED
+      "Started"
+    when COMPLETED
+      "Completed"
+    else
+      "Start"
+    end
+  end
+
+  def self.parse(name : String) : self
+    case name
     when "Started"
       STARTED
     when "Completed"
       COMPLETED
     else
       CREATED
-    end
-  end
-
-  def self.[](val : self) : String
-    case val
-    when STARTED
-      "Started"
-    when COMPLETED
-      "Completed"
-    else
-      "Created"
     end
   end
 end

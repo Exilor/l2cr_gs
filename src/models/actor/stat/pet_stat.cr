@@ -31,13 +31,7 @@ class PetStat < SummonStat
   end
 
   def get_exp_for_level(level : Int32) : Int64
-    data = PetDataTable.get_pet_level_data(@active_char.id, level)
-
-    unless data
-      warn "Pet level data not found."
-    end
-
-    data.pet_max_exp
+    PetDataTable.get_pet_level_data(@active_char.id, level).pet_max_exp
   end
 
   def feed_battle : Int32
@@ -51,9 +45,6 @@ class PetStat < SummonStat
   def level=(value : Int32)
     pet = active_char
     pet.pet_data = PetDataTable.get_pet_level_data(pet.template.id, value)
-    unless pet.pet_level_data
-      raise "no pet data for npc #{pet.template.id}"
-    end
     pet.stop_feed
     super
     pet.start_feed

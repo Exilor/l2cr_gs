@@ -37,10 +37,10 @@ module GameDB
 
     def load(pc : L2PcInstance)
       GameDB.each(SELECT, pc.l2id) do |rs|
-        item_id = rs.get_i32("itemId")
-        # item_l2id = rs.get_i32("itemObjId") # unused
-        reuse_delay = rs.get_i64("reuseDelay")
-        systime = rs.get_i64("systime")
+        item_id = rs.get_i32(:"itemId")
+        # item_l2id = rs.get_i32(:"itemObjId") # unused
+        reuse_delay = rs.get_i64(:"reuseDelay")
+        systime = rs.get_i64(:"systime")
         in_inventory = true
 
         unless item = pc.inventory.get_item_by_item_id(item_id)
@@ -55,7 +55,7 @@ module GameDB
             if in_inventory && item.etc_item?
               group = item.shared_reuse_group
               if group > 0
-                debug "Shared reuse group: #{group}."
+                debug { "Shared reuse group: #{group}." }
                 p = Packets::Outgoing::ExUseSharedGroupItem.new(item_id, group, remaining.to_i32, reuse_delay.to_i32)
                 pc.send_packet(p)
               end
@@ -66,7 +66,7 @@ module GameDB
 
       delete(pc)
     rescue e
-      error "Could not restore #{pc.name}'s item reuse data."
+      error { "Could not restore #{pc.name}'s item reuse data." }
       error e
     end
   end

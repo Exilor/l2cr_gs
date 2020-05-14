@@ -42,7 +42,6 @@ class FortUpdater
     else
       # [automatically added else]
     end
-
   rescue e
     error e
   end

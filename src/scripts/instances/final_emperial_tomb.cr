@@ -173,7 +173,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
                   MUST_KILL_MOBS_ID << npc_id
                 end
                 SPAWN_LIST[flag] << spw
-                spawn_count += 1
+                spawn_count &+= 1
               elsif cd_name.casecmp?("zone")
                 spw = FETSpawn.new
                 spw.npc_id = npc_id
@@ -192,7 +192,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
                   MUST_KILL_MOBS_ID << npc_id
                 end
                 SPAWN_LIST[flag] << spw
-                spawn_count += 1
+                spawn_count &+= 1
               end
             end
           end
@@ -424,7 +424,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       npc.disable_core_ai(true)
     end
     if npc_id == DARK_CHOIR_PLAYER
-      world.dark_choir_player_count += 1
+      world.dark_choir_player_count &+= 1
     end
   end
 
@@ -928,7 +928,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         ThreadPoolManager.schedule_general(StatusTask.new(self, world, 0), 2000)
         debug "Hall alarm is disabled and doors will open."
       elsif npc.id == DARK_CHOIR_PLAYER
-        world.dark_choir_player_count -= 1
+        world.dark_choir_player_count &-= 1
         if world.dark_choir_player_count < 1
           ThreadPoolManager.schedule_general(StatusTask.new(self, world, 2), 2000)
           debug "All Dark Choir Players are killed and doors will open."

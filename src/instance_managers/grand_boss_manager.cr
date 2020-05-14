@@ -16,15 +16,15 @@ module GrandBossManager
     sql = "SELECT * from grandboss_data ORDER BY boss_id"
     GameDB.each(sql) do |rs|
       info = StatsSet.new
-      boss_id = rs.get_i32("boss_id")
-      info["loc_x"] = rs.get_i32("loc_x")
-      info["loc_y"] = rs.get_i32("loc_y")
-      info["loc_z"] = rs.get_i32("loc_z")
-      info["heading"] = rs.get_i32("heading")
-      info["respawn_time"] = rs.get_i64("respawn_time")
-      info["currentHP"] = rs.get_f64("currentHP").to_i32
-      info["currentMP"] = rs.get_f64("currentMP").to_i32
-      status = rs.get_i32("status")
+      boss_id = rs.get_i32(:"boss_id")
+      info["loc_x"] = rs.get_i32(:"loc_x")
+      info["loc_y"] = rs.get_i32(:"loc_y")
+      info["loc_z"] = rs.get_i32(:"loc_z")
+      info["heading"] = rs.get_i32(:"heading")
+      info["respawn_time"] = rs.get_i64(:"respawn_time")
+      info["currentHP"] = rs.get_f64(:"currentHP").to_i32
+      info["currentMP"] = rs.get_f64(:"currentMP").to_i32
+      status = rs.get_i32(:"status")
       BOSS_STATUS[boss_id] = status
       STORED_INFO[boss_id] = info
       if status == 0
@@ -33,7 +33,7 @@ module GrandBossManager
         info { "#{NpcData[boss_id].name} (#{boss_id}) is dead." }
       end
       if status > 0
-        time = Time.from_ms(rs.get_i64("respawn_time"))
+        time = Time.from_ms(rs.get_i64(:"respawn_time"))
         info { "Next spawn date of #{NpcData[boss_id].name} is #{time}." }
       end
     end
@@ -59,8 +59,8 @@ module GrandBossManager
 
     sql = "SELECT * from grandboss_list ORDER BY player_id"
     GameDB.each(sql) do |rs|
-      id = rs.get_i32("player_id")
-      zone_id = rs.get_i32("zone")
+      id = rs.get_i32(:"player_id")
+      zone_id = rs.get_i32(:"zone")
       zones[zone_id] << id
     end
 
@@ -199,7 +199,7 @@ module GrandBossManager
     ZONES.clear
   end
 
-  def zones : IHash(Int32, L2BossZone)
+  def zones : Interfaces::Map(Int32, L2BossZone)
     ZONES
   end
 end

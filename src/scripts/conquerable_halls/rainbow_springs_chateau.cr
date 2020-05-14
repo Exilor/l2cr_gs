@@ -104,7 +104,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
         @rainbow.not_nil!.free
         owner.hideout_id = 0
         ACCEPTED_CLANS << owner
-        spot_left -= 1
+        spot_left &-= 1
       end
 
       spot_left.times do |i|
@@ -131,7 +131,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
         end
       end
       if ACCEPTED_CLANS.size >= 2
-        @next_siege = ThreadPoolManager.schedule_general(->siege_starts_task, 3600000)
+        @next_siege = ThreadPoolManager.schedule_general(->start_siege_task, 3600000)
         @rainbow.not_nil!.update_siege_status(SiegeStatus::WAITING_BATTLE)
       else
         Broadcast.to_all_online_players("Rainbow Springs Chateau siege aborted due lack of population")
@@ -161,7 +161,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
       # XXX @rainbow.not_nil!.siegeEnds
 
       ThreadPoolManager.schedule_general(->set_final_attackers_task, @rainbow.not_nil!.next_siege_time)
-      set_registration_end_string((@rainbow.not_nil!.next_siege_time + Time.ms) - 3600000)
+      set_registration_end_string(@rainbow.not_nil!.next_siege_time + Time.ms - 3600000)
       # Teleport out of the arenas is made 2 mins after game ends
       ThreadPoolManager.schedule_general(TeleportBack, 120000)
     end
@@ -266,7 +266,6 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
       else
         # [automatically added else]
       end
-
     when CARETAKER
       if event == "portToArena"
         party = pc.party
@@ -315,7 +314,6 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
       # [automatically added else]
     end
 
-
     if event.starts_with?("enterText")
       clan = clan.not_nil!
       # Shouldn't happen
@@ -341,7 +339,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
           list << clan
           # PENDING_ITEM_TO_GET.sync do
             if left = PENDING_ITEM_TO_GET[clan]?
-              PENDING_ITEM_TO_GET[clan] = left + 1
+              PENDING_ITEM_TO_GET[clan] = left &+ 1
             else
               PENDING_ITEM_TO_GET[clan] = 1
             end
@@ -466,7 +464,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
     ACCEPTED_CLANS.size.times do |i|
       if @gourds[i]?.nil?
         begin
-          sp = @gourds[i] = L2Spawn.new(@gourds[i])
+          sp = @gourds[i] = L2Spawn.new(GOURDS[i])
           sp.x = ARENAS[i].x + 150
           sp.y = ARENAS[i].y + 150
           sp.z = ARENAS[i].z
@@ -490,10 +488,10 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
 
   private def move_gourds
     ACCEPTED_CLANS.size.times do |i|
-      old_spawn = @gourds[(idx - 1) - i]
+      old_spawn = @gourds[ACCEPTED_CLANS.size &- 1 &- i]
       cur_spawn = @gourds[i]
 
-      @gourds[(idx - 1) - i] = cur_spawn
+      @gourds[ACCEPTED_CLANS.size &- 1 &- i] = cur_spawn
 
       cur_spawn.last_spawn.try &.tele_to_location(old_spawn.location)
     end
@@ -569,7 +567,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
 
   def load_attackers
     GameDB.each("SELECT * FROM rainbowsprings_attacker_list") do |rs|
-      WAR_DECREES_COUNT[rs.get_i32("clan_id")] = rs.get_i64("decrees_count")
+      WAR_DECREES_COUNT[rs.get_i32("clan_id")] = rs.get_i64(:"decrees_count")
     end
   rescue e
     error e
@@ -590,7 +588,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
 
   def launch_siege
     @next_siege.cancel
-    ThreadPoolManager.execute_general(->siege_starts_task)
+    ThreadPoolManager.execute_general(->start_siege_task)
   end
 
   def end_siege

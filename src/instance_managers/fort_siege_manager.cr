@@ -22,13 +22,13 @@ module FortSiegeManager
     cfg = PropertiesReader.new
     cfg.parse(path)
 
-    @@can_register_just_territory = Bool.new(cfg.get_string("JustToTerritory", "true"))
-    @@attacker_max_clans = cfg.get_i32("AttackerMaxClans", "500")
-    @@flag_max_count = cfg.get_i32("MaxFlags", "1")
-    @@siege_clan_min_level = cfg.get_i32("SiegeClanMinLevel", "4")
-    @@siege_length = cfg.get_i32("SiegeLength", "60")
-    @@countdown_length = cfg.get_i32("CountDownLength", "10")
-    @@suspicious_merchant_respawn_delay = cfg.get_i32("SuspiciousMerchantRespawnDelay", "180")
+    @@can_register_just_territory = cfg.get_bool("JustToTerritory", true)
+    @@attacker_max_clans = cfg.get_i32("AttackerMaxClans", 500)
+    @@flag_max_count = cfg.get_i32("MaxFlags", 1)
+    @@siege_clan_min_level = cfg.get_i32("SiegeClanMinLevel", 4)
+    @@siege_length = cfg.get_i32("SiegeLength", 60)
+    @@countdown_length = cfg.get_i32("CountDownLength", 10)
+    @@suspicious_merchant_respawn_delay = cfg.get_i32("SuspiciousMerchantRespawnDelay", 180)
 
     COMMANDER_SPAWN_LIST.clear
     FLAG_LIST.clear
@@ -63,7 +63,7 @@ module FortSiegeManager
       COMMANDER_SPAWN_LIST[fort.residence_id] = commander_spawns
 
       (1...4).each do |i|
-        key =  "#{fort.name.delete(' ')}Flag#{i}"
+        key = "#{fort.name.delete(' ')}Flag#{i}"
         params = cfg.get_string(key, "")
         if params.empty?
           break

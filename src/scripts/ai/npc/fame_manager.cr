@@ -31,7 +31,7 @@ class Scripts::FameManager < AbstractNpcAI
       if pc.pk_kills > 0
         if pc.fame >= DECREASE_COST && pc.level >= MIN_LVL && pc.class_id.level >= CLASS_LVL
           pc.fame = pc.fame - DECREASE_COST
-          pc.pk_kills -= 1
+          pc.pk_kills &-= 1
           pc.send_packet(UserInfo.new(pc))
           html = "#{npc.id}-06.html"
         else
@@ -57,7 +57,6 @@ class Scripts::FameManager < AbstractNpcAI
     else
       # [automatically added else]
     end
-
 
     html
   end

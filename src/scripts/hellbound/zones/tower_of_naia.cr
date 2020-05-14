@@ -210,7 +210,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
 
   private INDEX_COUNT = Slice.new(2, 0)
   private ACTIVE_ROOMS = {} of Int32 => Bool
-  private NPC_SPAWNS = Concurrent::Map(Int32, IArray(L2Npc)).new
+  private NPC_SPAWNS = Concurrent::Map(Int32, Interfaces::Array(L2Npc)).new
   private SPORE_SPAWNS = Concurrent::Set(L2Npc).new
 
   @counter = 90
@@ -459,15 +459,15 @@ class Scripts::TowerOfNaia < AbstractNpcAI
 
         if spore_group >= 0
           if npc_id == SPORE_FIRE || npc_id == SPORE_WIND
-            INDEX_COUNT[spore_group] += 2
+            INDEX_COUNT[spore_group] &+= 2
           else
-            INDEX_COUNT[spore_group] -= 2
+            INDEX_COUNT[spore_group] &-= 2
           end
 
           if INDEX_COUNT[(spore_group - 1).abs] > 0
-            INDEX_COUNT[(spore_group - 1).abs] += 1
+            INDEX_COUNT[(spore_group - 1).abs] &+= 1
           elsif INDEX_COUNT[(spore_group - 1).abs] < 0
-            INDEX_COUNT[(spore_group - 1).abs] += 1
+            INDEX_COUNT[(spore_group - 1).abs] &+= 1
           end
 
           if INDEX_COUNT[spore_group].abs < ELEMENT_INDEX_LIMIT && INDEX_COUNT[spore_group].abs > 0 && INDEX_COUNT[spore_group] % 20 == 0 && Rnd.rand(100) < 50

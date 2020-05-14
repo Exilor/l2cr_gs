@@ -8,10 +8,10 @@ module GameDB
 
     def load(pc : L2PcInstance)
       GameDB.each(GET_PREMIUM_ITEMS, pc.l2id) do |rs|
-        item_num = rs.get_i32("itemNum")
-        item_id = rs.get_i32("itemId")
-        item_count = rs.get_i64("itemCount")
-        item_sender = rs.get_string("itemSender")
+        item_num = rs.get_i32(:"itemNum")
+        item_id = rs.get_i32(:"itemId")
+        item_count = rs.get_i64(:"itemCount")
+        item_sender = rs.get_string(:"itemSender")
         item = L2PremiumItem.new(item_id, item_count, item_sender)
         pc.premium_item_list[item_num] = item
       end

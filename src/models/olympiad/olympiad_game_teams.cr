@@ -45,7 +45,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     end
   end
 
-  def self.create_list_of_participants(list : IArray(IArray(Int32))) : Array(Array(Participant))?
+  def self.create_list_of_participants(list : Interfaces::Array(Interfaces::Array(Int32))) : Array(Array(Participant))?
     if list.nil? || list.size < 2
       return
     end
@@ -115,7 +115,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     nil
   end
 
-  def self.create_game(id : Int32, list : IArray(IArray(Int32))) : OlympiadGameTeams?
+  def self.create_game(id : Int32, list : Interfaces::Array(Interfaces::Array(Int32))) : OlympiadGameTeams?
     unless teams = create_list_of_participants(list)
       return
     end
@@ -497,30 +497,30 @@ class OlympiadGameTeams < AbstractOlympiadGame
     @team_one_size.times do |i|
       points = Math.max((points_t1[i] // divider_1).to_i, 1)
       points_t1[i] = points
-      totalpoints_t1 -= points
+      totalpoints_t1 &-= points
     end
 
     @team_two_size.downto(0) do |i|
       points = Math.max((points_t2[i] // divider_2).to_i, 1)
       points_t2[i] = points
-      totalpoints_t2 -= points
+      totalpoints_t2 &-= points
     end
 
     # compensating remaining points, first team from begin to end, second from end to begin
     i = 0
     while totalpoints_t1 > 0 && i < @team_one_size
       if points_t1[i] < maxpoints_t1[i]
-        points_t1[i] += 1
-        totalpoints_t1 -= 1
+        points_t1[i] &+= 1
+        totalpoints_t1 &-= 1
       end
-      i += 1
+      i &+= 1
     end
 
     i = @team_two_size
-    while totalpoints_t2 > 0 && (i -= 1) >= 0
+    while totalpoints_t2 > 0 && (i &-= 1) >= 0
       if points_t2[i] < maxpoints_t2[i]
-        points_t2[i] += 1
-        totalpoints_t2 -= 1
+        points_t2[i] &+= 1
+        totalpoints_t2 &-= 1
       end
     end
 
@@ -756,7 +756,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
       par = @team_one[i]
       if par.l2id == player.l2id
         unless par.disconnected?
-          @damage_t1 += damage
+          @damage_t1 &+= damage
         end
 
         return
@@ -767,7 +767,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
       par = @team_two[i]
       if par.l2id == player.l2id
         unless par.disconnected?
-          @damage_t2 += damage
+          @damage_t2 &+= damage
         end
 
         return

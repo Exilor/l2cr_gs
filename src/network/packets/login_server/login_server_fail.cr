@@ -1,8 +1,6 @@
 require "../login_server_packet"
 
 class Packets::Incoming::LoginServerFail < LoginServerPacket
-  include Loggable
-
   private REASONS = {
     "None",
     "Reason: ip banned",
@@ -21,6 +19,6 @@ class Packets::Incoming::LoginServerFail < LoginServerPacket
   end
 
   private def run_impl
-    debug "Rejected by LoginServer (rason: '#{REASONS[@reason_id]?}')."
+    error { "Rejected by LoginServer (rason: '#{REASONS[@reason_id]?}')." }
   end
 end

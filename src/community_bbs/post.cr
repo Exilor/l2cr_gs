@@ -59,13 +59,13 @@ struct Post
     sql = "SELECT * FROM posts WHERE post_forum_id=? AND post_topic_id=? ORDER BY post_id ASC"
     GameDB.each(sql, t.forum_id, t.id) do |rs|
       cp = CPost.new
-      cp.post_id = rs.get_i32("post_id")
-      cp.post_owner = rs.get_string("post_owner_name")
-      cp.post_owner_id = rs.get_i32("post_ownerid")
-      cp.post_date = rs.get_i64("post_date")
-      cp.post_topic_id = rs.get_i32("post_topic_id")
-      post_forum_id = rs.get_i32("post_forum_id")
-      cp.post_txt = rs.get_string("post_txt")
+      cp.post_id = rs.get_i32(:"post_id")
+      cp.post_owner = rs.get_string(:"post_owner_name")
+      cp.post_owner_id = rs.get_i32(:"post_ownerid")
+      cp.post_date = rs.get_i64(:"post_date")
+      cp.post_topic_id = rs.get_i32(:"post_topic_id")
+      post_forum_id = rs.get_i32(:"post_forum_id")
+      cp.post_txt = rs.get_string(:"post_txt")
       @post << cp
     end
   rescue e

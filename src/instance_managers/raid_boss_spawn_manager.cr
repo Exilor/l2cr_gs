@@ -21,18 +21,18 @@ module RaidBossSpawnManager
 
     sql = "SELECT * FROM raidboss_spawnlist ORDER BY boss_id"
     GameDB.each(sql) do |rs|
-      dat = L2Spawn.new(rs.get_i32("boss_id"))
-      dat.x = rs.get_i32("loc_x")
-      dat.y = rs.get_i32("loc_y")
-      dat.z = rs.get_i32("loc_z")
-      dat.amount = rs.get_i32("amount")
-      dat.heading = rs.get_i32("heading")
-      respawn_delay = rs.get_i32("respawn_delay")
-      respawn_random = rs.get_i32("respawn_random")
+      dat = L2Spawn.new(rs.get_i32(:"boss_id"))
+      dat.x = rs.get_i32(:"loc_x")
+      dat.y = rs.get_i32(:"loc_y")
+      dat.z = rs.get_i32(:"loc_z")
+      dat.amount = rs.get_i32(:"amount")
+      dat.heading = rs.get_i32(:"heading")
+      respawn_delay = rs.get_i32(:"respawn_delay")
+      respawn_random = rs.get_i32(:"respawn_random")
       dat.set_respawn_delay(respawn_delay, respawn_random)
-      respawn_time = rs.get_i64("respawn_time")
-      current_hp = rs.get_f64("currentHP")
-      current_mp = rs.get_f64("currentMP")
+      respawn_time = rs.get_i64(:"respawn_time")
+      current_hp = rs.get_f64(:"currentHP")
+      current_mp = rs.get_f64(:"currentMP")
       add_new_spawn(dat, respawn_time, current_hp, current_mp, false)
     end
 
@@ -119,15 +119,15 @@ module RaidBossSpawnManager
     SPAWNS.has_key?(boss_id)
   end
 
-  def bosses : IHash(Int32, L2RaidBossInstance)
+  def bosses : Interfaces::Map(Int32, L2RaidBossInstance)
     BOSSES
   end
 
-  def spawns : IHash(Int32, L2Spawn)
+  def spawns : Interfaces::Map(Int32, L2Spawn)
     SPAWNS
   end
 
-  def stored_info : IHash(Int32, StatsSet)
+  def stored_info : Interfaces::Map(Int32, StatsSet)
     STORED_INFO
   end
 

@@ -9,8 +9,8 @@ struct TrapTask
     return if @trap.triggered?
 
     if @trap.has_life_time?
-      @trap.remaining_time -= TICK
-      if @trap.remaining_time < @trap.life_time - 15_000
+      @trap.remaining_time &-= TICK
+      if @trap.remaining_time < @trap.life_time &- 15_000
         sa = Packets::Outgoing::SocialAction.new(@trap.l2id, 2)
         @trap.broadcast_packet(sa)
       end

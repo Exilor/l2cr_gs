@@ -32,7 +32,7 @@ class L2Npc < L2Character
   setter auto_attackable : Bool = false
   property busy_message : String = ""
   property killing_blow_weapon : Int32 = 0
-  property! summoned_npcs : IHash(Int32, L2Npc)?
+  property! summoned_npcs : Interfaces::Map(Int32, L2Npc)?
   property! spawn : L2Spawn?
   property? busy : Bool = false
   property? random_animation_enabled : Bool = true

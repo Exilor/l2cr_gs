@@ -2,7 +2,7 @@ abstract class AbstractPlayerGroup
   include Enumerable(L2PcInstance)
   include Packets::Outgoing
 
-  abstract def members : IArray(L2PcInstance)
+  abstract def members : Interfaces::Array(L2PcInstance)
   abstract def leader : L2PcInstance
   abstract def leader=(pc : L2PcInstance)
   abstract def level : Int32

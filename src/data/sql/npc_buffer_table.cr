@@ -20,16 +20,16 @@ module NpcBufferTable
       skills = nil
 
       GameDB.each(sql) do |rs|
-        npc_id = rs.get_i32("npc_id")
+        npc_id = rs.get_i32(:"npc_id")
         if npc_id < 0
-          error "npc_id #{npc_id} is negative."
+          error { "npc_id #{npc_id} is negative." }
           npc_id = npc_id.to_u16!.to_i32
         end
-        skill_id = rs.get_i32("skill_id")
-        skill_level = rs.get_i32("skill_level")
-        fee_id = rs.get_i32("skill_fee_id")
-        fee_amount = rs.get_i32("skill_fee_amount")
-        group = rs.get_i32("buff_group")
+        skill_id = rs.get_i32(:"skill_id")
+        skill_level = rs.get_i32(:"skill_level")
+        fee_id = rs.get_i32(:"skill_fee_id")
+        fee_amount = rs.get_i32(:"skill_fee_amount")
+        group = rs.get_i32(:"buff_group")
 
         if npc_id != last_npc_id
           if skills && last_npc_id != 0
@@ -78,7 +78,7 @@ module NpcBufferTable
       @skills[group] = NpcBufferData.new(skill_id, skill_level, fee_id, fee_amount)
     end
 
-    def get_skill_group_info(group : Int32)
+    def get_skill_group_info(group : Int32) : NpcBufferData?
       @skills[group]?
     end
   end

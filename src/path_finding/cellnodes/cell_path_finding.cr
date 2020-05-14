@@ -43,7 +43,7 @@ module CellPathFinding
     end
     gtz = GeoData.get_height(tx, ty, tz)
 
-    buffer = alloc(64 &+ (2 * Math.max((gx - gtx).abs, (gy - gty).abs)), playable)
+    buffer = alloc(64 &+ (2 &* Math.max((gx &- gtx).abs, (gy &- gty).abs)), playable)
     unless buffer
       return
     end

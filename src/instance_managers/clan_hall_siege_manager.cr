@@ -13,15 +13,15 @@ module ClanHallSiegeManager
 
     GameDB.each(SQL_LOAD_HALLS) do |rs|
       set = StatsSet.new
-      id = rs.get_i32("clanHallId")
+      id = rs.get_i32(:"clanHallId")
       set["id"] = id
-      set["name"] = rs.get_string("name")
-      set["ownerId"] = rs.get_i32("ownerId")
-      set["desc"] = rs.get_string("desc")
-      set["location"] = rs.get_string("location")
-      set["nextSiege"] = rs.get_i64("nextSiege")
-      set["siegeLenght"] = rs.get_i64("siegeLenght")
-      set["scheduleConfig"] = rs.get_string("schedule_config")
+      set["name"] = rs.get_string(:"name")
+      set["ownerId"] = rs.get_i32(:"ownerId")
+      set["desc"] = rs.get_string(:"desc")
+      set["location"] = rs.get_string(:"location")
+      set["nextSiege"] = rs.get_i64(:"nextSiege")
+      set["siegeLenght"] = rs.get_i64(:"siegeLenght")
+      set["scheduleConfig"] = rs.get_string(:"schedule_config")
       hall = SiegableHall.new(set)
       SIEGABLE_HALLS[id] = hall
       ClanHallManager.add_clan_hall(hall)

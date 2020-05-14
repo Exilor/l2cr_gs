@@ -1,6 +1,8 @@
 require "../../../models/holders/pet_item_holder"
 
 class EffectHandler::SummonPet < AbstractEffect
+  include Loggable
+
   def on_start(info)
     return unless info.effector
     return unless info.effected

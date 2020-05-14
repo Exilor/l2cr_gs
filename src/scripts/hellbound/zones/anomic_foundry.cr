@@ -89,7 +89,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
     end
 
     if Rnd.rand(10000) < 2000
-      atk_idx += 1
+      atk_idx &+= 1
       ATTACK_INDEX[npc.l2id] = atk_idx
       request_help(npc, attacker, 1000 * atk_idx, FOREMAN)
       request_help(npc, attacker, 1000 * atk_idx, LESSER_EVIL)
@@ -107,7 +107,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
 
   def on_kill(npc, killer, is_summon)
     if get_spawn_group(npc) >= 0
-      SPAWNED[get_spawn_group(npc)] -= 1
+      SPAWNED[get_spawn_group(npc)] &-= 1
       SpawnTable.delete_spawn(npc.spawn, false)
     elsif npc.id == LABORER
       if Rnd.rand(10000) < 8000
@@ -129,7 +129,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
   def on_spawn(npc)
     SpawnTable.add_new_spawn(npc.spawn, false)
     if get_spawn_group(npc) >= 0
-      SPAWNED[get_spawn_group(npc)] += 1
+      SPAWNED[get_spawn_group(npc)] &+= 1
     end
 
     if npc.id == LABORER

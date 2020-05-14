@@ -1,5 +1,3 @@
-require "../../../models/clan_info"
-
 class Packets::Outgoing::AllianceInfo < GameServerPacket
   getter name : String
   getter leader_c : String
@@ -42,6 +40,16 @@ class Packets::Outgoing::AllianceInfo < GameServerPacket
       s aci.clan.leader_name
       d aci.total
       d aci.online
+    end
+  end
+
+  private struct ClanInfo
+    getter clan, total : Int32, online : Int32
+
+    def initialize(clan : L2Clan)
+      @clan = clan
+      @total = clan.size
+      @online = clan.online_members_count
     end
   end
 end

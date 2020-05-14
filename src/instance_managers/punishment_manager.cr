@@ -17,13 +17,13 @@ module PunishmentManager
     expired = 0
 
     GameDB.each("SELECT * FROM punishments") do |rs|
-      id = rs.get_i32("id")
-      key = rs.get_string("key")
-      affect = PunishmentAffect.parse?(rs.get_string("affect"))
-      type = PunishmentType.parse?(rs.get_string("type"))
-      exp_time = rs.get_i64("expiration")
-      reason = rs.get_string("reason")
-      punished_by = rs.get_string("punishedBy")
+      id = rs.get_i32(:"id")
+      key = rs.get_string(:"key")
+      affect = PunishmentAffect.parse?(rs.get_string(:"affect"))
+      type = PunishmentType.parse?(rs.get_string(:"type"))
+      exp_time = rs.get_i64(:"expiration")
+      reason = rs.get_string(:"reason")
+      punished_by = rs.get_string(:"punishedBy")
 
       if type && affect
         if exp_time > 0 && Time.ms > exp_time

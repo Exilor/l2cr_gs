@@ -61,14 +61,14 @@ module TerritoryWarManager
     begin
       sql = "SELECT * FROM territory_spawnlist"
       GameDB.each(sql) do |rs|
-        castle_id = rs.get_i32("castleId")
-        npc_id = rs.get_i32("npcId").to_u16!.to_i32
-        x = rs.get_i32("x")
-        y = rs.get_i32("y")
-        z = rs.get_i32("z")
-        heading = rs.get_i32("heading")
+        castle_id = rs.get_i32(:"castleId")
+        npc_id = rs.get_i32(:"npcId").to_u16!.to_i32
+        x = rs.get_i32(:"x")
+        y = rs.get_i32(:"y")
+        z = rs.get_i32(:"z")
+        heading = rs.get_i32(:"heading")
         loc = Location.new(x, y, z, heading)
-        spawn_type = rs.get_i32("spawnType")
+        spawn_type = rs.get_i32(:"spawnType")
         TERRITORY_LIST[castle_id] ||= Territory.new(castle_id)
         case spawn_type
         when 0..2
@@ -77,7 +77,7 @@ module TerritoryWarManager
         when 3
           TERRITORY_LIST[castle_id].add_ward_spawn_place(loc)
         else
-          id = rs.get_i32("id")
+          id = rs.get_i32(:"id")
           warn { "Unknown npc type for #{id}." }
         end
       end
@@ -88,9 +88,9 @@ module TerritoryWarManager
     begin
       sql = "SELECT * FROM territories"
       GameDB.each(sql) do |rs|
-        castle_id = rs.get_i32("castleId")
-        fort_id = rs.get_i32("fortId")
-        owned_ward_ids = rs.get_string("ownedWardIds")
+        castle_id = rs.get_i32(:"castleId")
+        fort_id = rs.get_i32(:"fortId")
+        owned_ward_ids = rs.get_string(:"ownedWardIds")
         if t = TERRITORY_LIST[castle_id]?
           t.fort_id = fort_id
           castle = CastleManager.get_castle_by_id(castle_id).not_nil!
@@ -120,8 +120,8 @@ module TerritoryWarManager
     begin
       sql = "SELECT * FROM territory_registrations"
       GameDB.each(sql) do |rs|
-        castle_id = rs.get_i32("castleId")
-        registered_id = rs.get_i32("registeredId")
+        castle_id = rs.get_i32(:"castleId")
+        registered_id = rs.get_i32(:"registeredId")
         if clan = ClanTable.get_clan(registered_id)
           REGISTERED_CLANS[castle_id] ||= [] of L2Clan
           REGISTERED_CLANS[castle_id] << clan
@@ -398,7 +398,7 @@ module TerritoryWarManager
     CLAN_FLAGS.delete(clan)
   end
 
-  def territory_wards : IArray(TerritoryWard)
+  def territory_wards : Interfaces::Array(TerritoryWard)
     TERRITORY_WARDS
   end
 
@@ -1096,7 +1096,7 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def attacker_clans : IArray(L2SiegeClan)?
+  def attacker_clans : Interfaces::Array(L2SiegeClan)?
     raise "not supported"
   end
 
@@ -1116,7 +1116,7 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def defender_clans : IArray(L2SiegeClan)?
+  def defender_clans : Interfaces::Array(L2SiegeClan)?
     raise "not supported"
   end
 
@@ -1124,7 +1124,7 @@ module TerritoryWarManager
     raise "not supported"
   end
 
-  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
+  def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
     raise "not supported"
   end
 

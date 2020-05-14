@@ -26,32 +26,32 @@ module GameDB
 
     def load(control : L2ItemInstance, template : L2NpcTemplate, owner : L2PcInstance) : L2PetInstance?
       GameDB.each(SELECT, control.l2id) do |rs|
-        pet = L2PetInstance.new(template, owner, control, rs.get_i32("level"))
+        pet = L2PetInstance.new(template, owner, control, rs.get_i32(:"level"))
         pet.respawned = true
 
-        if name = rs.get_string?("name")
+        if name = rs.get_string?(:"name")
           pet.name = name
         else
-          debug "#{pet} has no name in DB."
+          debug { "#{pet} has no name in DB." }
         end
 
-        exp = rs.get_i64("exp")
+        exp = rs.get_i64(:"exp")
         info = PetDataTable.get_pet_level_data(pet.id, pet.level)
         if info && exp < info.pet_max_exp
           exp = info.pet_max_exp
         end
 
         pet.exp = exp
-        pet.sp = rs.get_i32("sp")
-        pet.status.current_hp = rs.get_f64("curHp")
-        pet.status.current_mp = rs.get_f64("curMp")
+        pet.sp = rs.get_i32(:"sp")
+        pet.status.current_hp = rs.get_f64(:"curHp")
+        pet.status.current_mp = rs.get_f64(:"curMp")
         pet.status.current_cp = pet.max_cp.to_f64
-        if rs.get_f64("curHp") < 1
+        if rs.get_f64(:"curHp") < 1
           pet.dead = true
           pet.stop_hp_mp_regeneration
         end
 
-        pet.current_feed = rs.get_i32("fed")
+        pet.current_feed = rs.get_i32(:"fed")
 
         return pet
       end

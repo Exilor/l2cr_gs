@@ -1,8 +1,6 @@
 require "../login_server_packet"
 
 class Packets::Incoming::KickPlayer < LoginServerPacket
-  include Loggable
-
   @account = ""
 
   private def read_impl

@@ -123,11 +123,11 @@ class Olympiad < ListenersContainer
 
     begin
       GameDB.each(OLYMPIAD_LOAD_DATA) do |rs|
-        @current_cycle = rs.get_i32("current_cycle")
-        @period = rs.get_i32("period")
-        @olympiad_end = rs.get_i64("olympiad_end")
-        @validation_end = rs.get_i64("validation_end")
-        @next_weekly_change = rs.get_i64("next_weekly_change")
+        @current_cycle = rs.get_i32(:"current_cycle")
+        @period = rs.get_i32(:"period")
+        @olympiad_end = rs.get_i64(:"olympiad_end")
+        @validation_end = rs.get_i64(:"validation_end")
+        @next_weekly_change = rs.get_i64(:"next_weekly_change")
         loaded = true
       end
     rescue e

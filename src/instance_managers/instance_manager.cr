@@ -12,7 +12,7 @@ module InstanceManager
   private INSTANCES = Concurrent::Map(Int32, Instance).new
   private INSTANCE_WORLDS = Concurrent::Map(Int32, InstanceWorld).new
   private INSTANCE_ID_NAMES = {} of Int32 => String
-  private PLAYER_INSTANCE_TIMES = Concurrent::Map(Int32, IHash(Int32, Int64)).new
+  private PLAYER_INSTANCE_TIMES = Concurrent::Map(Int32, Interfaces::Map(Int32, Int64)).new
 
   @@dynamic = 300_000
 
@@ -33,7 +33,7 @@ module InstanceManager
     PLAYER_INSTANCE_TIMES[pc_l2id].fetch(id, -1i64)
   end
 
-  def get_all_instance_times(pc_l2id : Int32) : IHash(Int32, Int64)
+  def get_all_instance_times(pc_l2id : Int32) : Interfaces::Map(Int32, Int64)
     unless PLAYER_INSTANCE_TIMES.has_key?(pc_l2id)
       restore_instance_times(pc_l2id)
     end
@@ -69,8 +69,8 @@ module InstanceManager
     PLAYER_INSTANCE_TIMES[pc_l2id] = Concurrent::Map(Int32, Int64).new
 
     GameDB.each(RESTORE_INSTANCE_TIMES, pc_l2id) do |rs|
-      id = rs.get_i32("instanceId")
-      time = rs.get_i64("time")
+      id = rs.get_i32(:"instanceId")
+      time = rs.get_i64(:"time")
       if time < Time.ms
         delete_instance_time(pc_l2id, id)
       else
@@ -157,7 +157,7 @@ module InstanceManager
     @@dynamic
   end
 
-  def instances : IHash(Int32, Instance)
+  def instances : Interfaces::Map(Int32, Instance)
     INSTANCES
   end
 end

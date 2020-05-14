@@ -1,7 +1,7 @@
 class Packets::Outgoing::PrivateStoreListSell < Packets::Outgoing::AbstractItemPacket
   @l2id : Int32
   @adena : Int64
-  @items : IArray(TradeItem)
+  @items : Interfaces::Array(TradeItem)
   @package_sale : Bool
 
   def initialize(pc : L2PcInstance, store_pc : L2PcInstance)

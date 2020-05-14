@@ -3,8 +3,6 @@ require "../game_server/player_in_game"
 require "../server/char_selection_info"
 
 class Packets::Incoming::PlayerAuthResponse < LoginServerPacket
-  include Loggable
-
   @account = ""
   @authed = false
 

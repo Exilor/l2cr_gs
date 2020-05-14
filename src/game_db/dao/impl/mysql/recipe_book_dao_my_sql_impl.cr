@@ -31,9 +31,9 @@ module GameDB
 
       if common
         GameDB.each(SELECT_COMMON, pc.l2id) do |rs|
-          recipe = RecipeData.get_recipe_list(rs.get_i32("id"))
-          if rs.get_i32("type") == 1
-            if rs.get_i32("classIndex") == pc.class_index
+          recipe = RecipeData.get_recipe_list(rs.get_i32(:"id"))
+          if rs.get_i32(:"type") == 1
+            if rs.get_i32(:"classIndex") == pc.class_index
               pc.register_dwarven_recipe_list(recipe, false)
             end
           else
@@ -42,7 +42,7 @@ module GameDB
         end
       else
         GameDB.each(SELECT, pc.l2id, pc.class_index) do |rs|
-          recipe = RecipeData.get_recipe_list(rs.get_i32("id"))
+          recipe = RecipeData.get_recipe_list(rs.get_i32(:"id"))
           pc.register_dwarven_recipe_list(recipe, false)
         end
       end

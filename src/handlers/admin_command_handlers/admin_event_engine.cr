@@ -90,7 +90,7 @@ module AdminCommandHandler::AdminEventEngine
         until st.empty?
           temp2 = st.shift
           unless temp2 == " "
-            L2Event::TEAM_NAMES[i += 1] = temp2[1...temp2.size - 1]
+            L2Event::TEAM_NAMES[i &+= 1] = temp2[1...temp2.size - 1]
           end
         end
 
@@ -194,7 +194,7 @@ module AdminCommandHandler::AdminEventEngine
         trans_ids = Slice.new(st.size, 0)
         i = 0
         until st.empty? # Every next ST should be a transform ID
-          trans_ids[i += 1] = st.shift.to_i
+          trans_ids[i &+= 1] = st.shift.to_i
         end
 
         L2Event::TEAMS[team_id].each do |player|
@@ -228,7 +228,7 @@ module AdminCommandHandler::AdminEventEngine
         team_ids = Slice.new(st.size - 2, 0)
         i = 0
         while st.size - 2 > 0 # The last 2 tokens are used for "n" and "item id"
-          team_ids[i += 1] = st.shift.to_i
+          team_ids[i &+= 1] = st.shift.to_i
         end
 
         n = st.shift.split(/\\*/)
@@ -342,7 +342,7 @@ module AdminCommandHandler::AdminEventEngine
       sb << "$event_teams_name"
       sb << i
       sb << " - "
-      i += 1
+      i &+= 1
     end
     sb << "\" width=140 height=32 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
       "<td><edit var=\"event_npcid\" width=100 height=20></td></tr>" \
@@ -357,7 +357,7 @@ module AdminCommandHandler::AdminEventEngine
       sb << " name:</td><td><edit var=\"event_teams_name"
       sb << i
       sb << "\" width=150 height=15></td></tr>"
-      i += 1
+      i &+= 1
     end
     sb << "</table></body></html>"
 

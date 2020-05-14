@@ -1,5 +1,4 @@
 class ClientStats
-  include Loggable
   include Synchronizable
 
   @flood_detected = false
@@ -33,26 +32,26 @@ class ClientStats
   def initialize
     @buffer_size = Config.client_packet_queue_measure_interval
     @packets_in_second = Slice(Int32).new(@buffer_size)
-    @head = @buffer_size - 1
+    @head = @buffer_size &- 1
   end
 
   def drop_packet : Bool
     result = @flood_detected || @queue_overflow_detected
     if result
-      @dropped_packets += 1
+      @dropped_packets &+= 1
     end
     result
   end
 
   def count_unknown_packet : Bool
-    @unknown_packets += 1
+    @unknown_packets &+= 1
     tick = Time.ms
     if tick - @unknown_packets_start_tick > 60_000
       @unknown_packets_start_tick = tick
       @unknown_packets_in_min = 1
       return false
     end
-    @unknown_packets_in_min += 1
+    @unknown_packets_in_min &+= 1
     @unknown_packets_in_min > Config.client_packet_queue_max_unknown_per_min
   end
 
@@ -65,13 +64,13 @@ class ClientStats
       return false
     end
 
-    @total_bursts += 1
+    @total_bursts &+= 1
     true
   end
 
   def count_queue_overflow : Bool
     @queue_overflow_detected = true
-    @total_queue_overflows += 1
+    @total_queue_overflows &+= 1
 
     tick = Time.ms
     if tick - @overflow_start_tick > 60_000
@@ -80,12 +79,12 @@ class ClientStats
       return false
     end
 
-    @overflows_in_min += 1
+    @overflows_in_min &+= 1
     @overflows_in_min > Config.client_packet_queue_max_overflows_per_min
   end
 
   def count_underflow_exception : Bool
-    @total_underflow_exceptions += 1
+    @total_underflow_exceptions &+= 1
 
     tick = Time.ms
     if tick - @underflow_reads_start_tick > 60_000
@@ -94,7 +93,7 @@ class ClientStats
       return false
     end
 
-    @underflow_reads_in_min += 1
+    @underflow_reads_in_min &+= 1
     @underflow_reads_in_min > Config.client_packet_queue_max_underflows_per_min
   end
 
@@ -107,8 +106,8 @@ class ClientStats
   end
 
   def count_packet(queue_size : Int32)
-    @processed_packets += 1
-    @total_queue_size += queue_size
+    @processed_packets &+= 1
+    @total_queue_size &+= queue_size
     if @max_queue_size < queue_size
       @max_queue_size = queue_size
     end
@@ -119,7 +118,7 @@ class ClientStats
 
   def count_packet : Bool
     sync do
-      @total_count += 1
+      @total_count &+= 1
       tick = Time.ms
       if tick - @packet_count_start_tick > 1000
         @packet_count_start_tick = tick
@@ -130,18 +129,18 @@ class ClientStats
         if @head <= 0
           @head = @buffer_size
         end
-        @head -= 1
-        @total_count -= @packets_in_second[@head]
+        @head &-= 1
+        @total_count &-= @packets_in_second[@head]
         @packets_in_second[@head] = 1
         return @flood_detected
       end
 
-      count = @packets_in_second[@head] += 1
+      count = @packets_in_second[@head] &+= 1
       unless @flood_detected
         if count > Config.client_packet_queue_max_packets_per_second
-          @short_floods += 1
+          @short_floods &+= 1
         elsif long_flood_detected
-          @long_floods += 1
+          @long_floods &+= 1
         else
           return false
         end
@@ -151,7 +150,7 @@ class ClientStats
           @flood_start_tick = tick
           @floods_in_min = 1
         else
-          @floods_in_min += 1
+          @floods_in_min &+= 1
         end
         true
       end

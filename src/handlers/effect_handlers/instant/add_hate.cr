@@ -18,7 +18,7 @@ class EffectHandler::AddHate < AbstractEffect
     if val > 0
       mob.add_damage_hate(info.effector, 0, val)
     elsif val < 0
-      mob.reduce_hate(info.effector, -val) # check -val works
+      mob.reduce_hate(info.effector, -val)
     end
   end
 end

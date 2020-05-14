@@ -167,7 +167,7 @@ module BypassHandler::OlympiadManagerLink
           if skill = npc_buff_group_info.skill.skill?
             target.target = pc
 
-            buff_count -= 1
+            buff_count &-= 1
             pc.olympiad_buff_count = buff_count
 
             target.broadcast_packet(MagicSkillUse.new(target, pc, skill.id, skill.level, 0, 0))

@@ -206,7 +206,7 @@ abstract class FlagWar < ClanHallSiegeEngine
             end
             html = html.gsub("%clan#{i}%", clan.not_nil!.name)
             html = html.gsub("%clanMem#{i}%", value.players.size.to_s)
-            i += 1
+            i &+= 1
           end
           if @data.size < 5
             @data.size.upto(4) do |c|
@@ -340,7 +340,7 @@ abstract class FlagWar < ClanHallSiegeEngine
       @hall.zone.banish_non_siege_participants
 
       start_siege
-    } , 300000)
+    }, 300000)
   end
 
   def on_siege_starts
@@ -510,7 +510,7 @@ abstract class FlagWar < ClanHallSiegeEngine
 
   def load_attackers
     GameDB.each(SQL_LOAD_ATTACKERS, @hall.id) do |rs|
-      clan_id = rs.get_i32("clan_id")
+      clan_id = rs.get_i32(:"clan_id")
 
       unless ClanTable.get_clan(clan_id)
         warn { "Loaded an unexistent clan as attacker (clan id #{clan_id})." }
@@ -518,8 +518,8 @@ abstract class FlagWar < ClanHallSiegeEngine
       end
 
       data = ClanData.new
-      data.flag = rs.get_i32("flag")
-      data.npc = rs.get_i32("npc")
+      data.flag = rs.get_i32(:"flag")
+      data.npc = rs.get_i32(:"npc")
 
       @data[clan_id] = data
       load_attacker_members(clan_id)
@@ -537,7 +537,7 @@ abstract class FlagWar < ClanHallSiegeEngine
 
     begin
       GameDB.each(SQL_LOAD_MEMEBERS, clan_id) do |rs|
-        list_instance << rs.get_i32("object_id")
+        list_instance << rs.get_i32(:"object_id")
       end
     rescue e
       error e

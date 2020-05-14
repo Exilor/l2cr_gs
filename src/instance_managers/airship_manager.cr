@@ -160,8 +160,8 @@ module AirshipManager
 
   def load
     GameDB.each(LOAD_DB) do |rs|
-      info = StatsSet {"fuel" => rs.get_i32("fuel")}
-      AIRSHIPS_INFO[rs.get_i32("owner_id")] = info
+      info = StatsSet {"fuel" => rs.get_i32(:"fuel")}
+      AIRSHIPS_INFO[rs.get_i32(:"owner_id")] = info
     end
 
     info { "Loaded #{AIRSHIPS_INFO.size} private airships." }

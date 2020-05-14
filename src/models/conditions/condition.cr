@@ -3,7 +3,6 @@ require "./condition_listener"
 abstract class Condition
   include ConditionListener
   include Packets::Outgoing
-  include Loggable
 
   private alias SystemMessage = Packets::Outgoing::SystemMessage
 

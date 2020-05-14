@@ -1,4 +1,6 @@
 class EffectHandler::OutpostDestroy < AbstractEffect
+  include Loggable
+
   def instant? : Bool
     true
   end

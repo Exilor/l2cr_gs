@@ -74,7 +74,7 @@ class SiegableHall < ClanHall
 
   def siege=(siegable : ClanHallSiegeEngine)
     @siege = siegable
-    @siege_zone.siege_instance = siegable # nilable?
+    @siege_zone.not_nil!.siege_instance = siegable # nilable?
   end
 
   def siege_date : Calendar
@@ -89,7 +89,8 @@ class SiegableHall < ClanHall
     @next_siege.ms = ms
   end
 
-  def next_siege_date=(@next_siege : Calendar)
+  def next_siege_date=(next_siege : Calendar)
+    @next_siege = next_siege
   end
 
   def update_next_siege

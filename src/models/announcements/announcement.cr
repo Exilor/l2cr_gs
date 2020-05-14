@@ -14,10 +14,10 @@ class Announcement
   getter_initializer type : AnnouncementType, content : String, author : String
 
   def initialize(rs : ResultSetReader)
-    @id = rs.get_i32("id")
+    @id = rs.get_i32(:"id")
     @type = AnnouncementType[rs.get_i32("type")]
-    @content = rs.get_string("content")
-    @author = rs.get_string("author")
+    @content = rs.get_string(:"content")
+    @author = rs.get_string(:"author")
   end
 
   def valid? : Bool

@@ -122,7 +122,7 @@ abstract class ItemContainer
     else
       count.times do |i|
         unless template = ItemTable[item_id]?
-          raise "ItemContainer#add_item: invalid item ID #{item_id}"
+          raise "ItemContainer#add_item: invalid item id #{item_id}"
         end
 
         actual_count = template.stackable? ? count : 1i64

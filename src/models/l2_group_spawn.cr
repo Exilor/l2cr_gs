@@ -1,6 +1,8 @@
 require "./l2_spawn"
 
 class L2GroupSpawn < L2Spawn
+  include Loggable
+
   def initialize(template : L2NpcTemplate)
     super
     self.amount = 1

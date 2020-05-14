@@ -15,7 +15,7 @@ class Quest < AbstractScript
   @rw_lock = MyMutex.new # should be a "reentrant read write lock"
   @on_enter_world = false
   @quest_item_ids = [] of Int32
-  @quest_timers : IHash(String, Array(QuestTimer))?
+  @quest_timers : Interfaces::Map(String, Array(QuestTimer))?
   @start_condition : Hash(Proc(L2PcInstance, Bool), String)?
 
   getter name, descr
@@ -73,7 +73,7 @@ class Quest < AbstractScript
     get_quest_state(pc, true).not_nil!
   end
 
-  def quest_timers : IHash(String, Array(QuestTimer))
+  def quest_timers : Interfaces::Map(String, Array(QuestTimer))
     @quest_timers || sync do
       @quest_timers ||= Concurrent::Map(String, Array(QuestTimer)).new
     end
@@ -587,8 +587,8 @@ class Quest < AbstractScript
     begin
       sql = "SELECT name, value FROM character_quests WHERE charId = ? AND var = ?"
       GameDB.each(sql, pc.l2id, "<state>") do |rs|
-        id = rs.get_string("name")
-        state_name = rs.get_string("value")
+        id = rs.get_string(:"name")
+        state_name = rs.get_string(:"value")
 
         unless q = QuestManager.get_quest(id)
           warn { "Missing quest '#{id}' for player #{pc.name}." }
@@ -601,7 +601,7 @@ class Quest < AbstractScript
           next
         end
 
-        QuestState.new(q, pc, State[state_name])
+        QuestState.new(q, pc, State.parse(state_name))
       end
     rescue e
       error e
@@ -610,9 +610,9 @@ class Quest < AbstractScript
     begin
       sql = "SELECT name, var, value FROM character_quests WHERE charId = ? AND var <> ?"
       GameDB.each(sql, pc.l2id, "<state>") do |rs|
-        id = rs.get_string("name")
-        var = rs.get_string("var")
-        value = rs.get_string("value")
+        id = rs.get_string(:"name")
+        var = rs.get_string(:"var")
+        value = rs.get_string(:"value")
 
         unless qs = pc.get_quest_state(id)
           warn { "Missing variable '#{var}' in quest '#{id}' for player #{pc.name}." }
@@ -703,11 +703,11 @@ class Quest < AbstractScript
   end
 
   def self.create_quest_in_db(qs : QuestState)
-    create_quest_var_in_db(qs, "<state>", State[qs.state])
+    create_quest_var_in_db(qs, "<state>", qs.state.name)
   end
 
   def self.update_quest_in_db(qs : QuestState)
-    update_quest_var_in_db(qs, "<state>", State[qs.state])
+    update_quest_var_in_db(qs, "<state>", qs.state.name)
   end
 
   def self.get_no_quest_msg(pc : L2PcInstance) : String
@@ -1146,10 +1146,6 @@ class Quest < AbstractScript
   end
 
   def get_random_party_member_state(pc : L2PcInstance?, state : State) : L2PcInstance?
-    get_random_party_member(pc, state.to_i)
-  end
-
-  def get_random_party_member_state(pc : L2PcInstance?, state : Int) : L2PcInstance?
     return unless pc
 
     party = pc.party

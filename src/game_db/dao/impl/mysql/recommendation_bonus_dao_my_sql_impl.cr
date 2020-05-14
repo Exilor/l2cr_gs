@@ -11,9 +11,9 @@ module GameDB
 
       begin
         GameDB.each(SELECT, pc.l2id) do |rs|
-          pc.recom_have = rs.get_i32("rec_have")
-          pc.recom_left = rs.get_i32("rec_left")
-          time_left = rs.get_i64("time_left")
+          pc.recom_have = rs.get_i32(:"rec_have")
+          pc.recom_left = rs.get_i32(:"rec_left")
+          time_left = rs.get_i64(:"time_left")
         end
       rescue e
         error e

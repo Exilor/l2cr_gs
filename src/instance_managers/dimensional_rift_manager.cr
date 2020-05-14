@@ -22,19 +22,19 @@ module DimensionalRiftManager
 
   private def load_rooms
     GameDB.each("SELECT * FROM dimensional_rift") do |rs|
-      type = rs.get_i8("type")
-      room_id = rs.get_i8("room_id")
+      type = rs.get_i8(:"type")
+      room_id = rs.get_i8(:"room_id")
 
-      x_min = rs.get_i32("xMin")
-      x_max = rs.get_i32("xMax")
-      y_min = rs.get_i32("yMin")
-      y_max = rs.get_i32("yMax")
-      z1 = rs.get_i32("zMin")
-      z2 = rs.get_i32("zMax")
-      xt = rs.get_i32("xT")
-      yt = rs.get_i32("yT")
-      zt = rs.get_i32("zT")
-      boss_room = rs.get_i8("boss") > 0
+      x_min = rs.get_i32(:"xMin")
+      x_max = rs.get_i32(:"xMax")
+      y_min = rs.get_i32(:"yMin")
+      y_max = rs.get_i32(:"yMax")
+      z1 = rs.get_i32(:"zMin")
+      z2 = rs.get_i32(:"zMax")
+      xt = rs.get_i32(:"xT")
+      yt = rs.get_i32(:"yT")
+      zt = rs.get_i32(:"zT")
+      boss_room = rs.get_i8(:"boss") > 0
 
       ROOMS[type] ||= Hash(Int8, DimensionalRiftRoom).new(initial_capacity: 9)
 

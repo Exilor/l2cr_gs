@@ -28,7 +28,6 @@ module InitialShortcutData
         else
           # [automatically added else]
         end
-
       end
     end
   end
@@ -131,7 +130,6 @@ module InitialShortcutData
         # [automatically added else]
       end
 
-
       sc2 = Shortcut.new(sc1.slot, sc1.page, sc1.type, shortcut_id, sc1.level, sc1.character_type)
       pc.send_packet(Packets::Outgoing::ShortcutRegister.new(sc2))
       pc.register_shortcut(sc2)
@@ -151,7 +149,6 @@ module InitialShortcutData
       else
         # [automatically added else]
       end
-
 
       sc2 = Shortcut.new(sc1.slot, sc1.page, sc1.type, shortcut_id, sc1.level, sc1.character_type)
       pc.send_packet(Packets::Outgoing::ShortcutRegister.new(sc2))

@@ -427,7 +427,7 @@ class Siege
   end
 
   def killed_ct(ct : L2Npc)
-    @control_tower_count -= 1
+    @control_tower_count &-= 1
     if @control_tower_count < 0
       @control_tower_count = 0
     end
@@ -669,13 +669,13 @@ class Siege
 
     sql = "SELECT clan_id,type FROM siege_clans where castle_id=?"
     GameDB.each(sql, castle.residence_id) do |rs|
-      case type_id = rs.get_i32("type")
+      case type_id = rs.get_i32(:"type")
       when DEFENDER
-        add_defender(rs.get_i32("clan_id"))
+        add_defender(rs.get_i32(:"clan_id"))
       when ATTACKER
-        add_attacker(rs.get_i32("clan_id"))
+        add_attacker(rs.get_i32(:"clan_id"))
       when DEFENDER_NOT_APPROVED
-        add_defender_waiting(rs.get_i32("clan_id"))
+        add_defender_waiting(rs.get_i32(:"clan_id"))
       else
         # [automatically added else]
       end
@@ -857,7 +857,7 @@ class Siege
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans : IArray(L2SiegeClan)?
+  def attacker_clans : Interfaces::Array(L2SiegeClan)?
     @normal_side ? @attacker_clans : @defender_clans
   end
 
@@ -873,7 +873,7 @@ class Siege
     defender_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def defender_clans : IArray(L2SiegeClan)?
+  def defender_clans : Interfaces::Array(L2SiegeClan)?
     @normal_side ? @defender_clans : @attacker_clans
   end
 
@@ -905,7 +905,7 @@ class Siege
     end
   end
 
-  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
+  def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
     unless clan
       return
     end

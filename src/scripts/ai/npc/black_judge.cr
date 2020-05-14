@@ -19,13 +19,13 @@ class Scripts::BlackJudge < AbstractNpcAI
 
     case event
     when "remove_info"
-      html = "30981-0#{level + 1}.html"
+      html = "30981-0#{level &+ 1}.html"
     when "remove_dp"
       if pc.death_penalty_buff_level > 0
         cost = COSTS[level]
         if pc.adena >= cost
           take_items(pc, Inventory::ADENA_ID, cost)
-          pc.death_penalty_buff_level -= 1
+          pc.death_penalty_buff_level &-= 1
           pc.send_packet(SystemMessageId::DEATH_PENALTY_LIFTED)
           pc.send_packet(EtcStatusUpdate.new(pc))
         else

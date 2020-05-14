@@ -30,11 +30,11 @@ module UserCommandHandler::ClanWarsList
 
     begin
       GameDB.each(sql, clan.id, clan.id) do |rs|
-        clan_name = rs.get_string("clan_name")
-        ally_id = rs.get_i32("ally_id")
+        clan_name = rs.get_string(:"clan_name")
+        ally_id = rs.get_i32(:"ally_id")
 
         if ally_id > 0
-          ally_name = rs.get_string("ally_name")
+          ally_name = rs.get_string(:"ally_name")
 
           sm = Packets::Outgoing::SystemMessage.s1_s2_alliance
           sm.add_string(clan_name)

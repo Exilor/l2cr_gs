@@ -3,10 +3,9 @@ require "../effects/effect_task_info"
 require "../effects/effect_tick_task"
 
 class BuffInfo
-  include Loggable
   include Synchronizable
 
-  @tasks : IHash(AbstractEffect, EffectTaskInfo)?
+  @tasks : Interfaces::Map(AbstractEffect, EffectTaskInfo)?
 
   getter period_start_ticks : Int32
   getter task : TaskExecutor::Scheduler::DelayedTask?

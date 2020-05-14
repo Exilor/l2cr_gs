@@ -181,7 +181,7 @@ module AdminCommandHandler::AdminSpawn
   private def find_npc_instances(pc, npc_id, teleport_index, show_position)
     i = 0
     SpawnTable.get_spawns(npc_id).each do |sp|
-      i += 1
+      i &+= 1
       npc = sp.last_spawn
       if teleport_index > -1
         if teleport_index == i
@@ -293,8 +293,8 @@ module AdminCommandHandler::AdminSpawn
         io << "\">"
         io << mobs[i].name
         io << "</a><br1>"
-        i += 1
-        j += 1
+        i &+= 1
+        j &+= 1
       end
 
       if i == mob_count
@@ -329,8 +329,8 @@ module AdminCommandHandler::AdminSpawn
         io << "\">"
         io << mobs[i].name
         io << "</a><br1>"
-        i += 1
-        j += 1
+        i &+= 1
+        j &+= 1
       end
 
       if i == mob_count

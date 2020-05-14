@@ -1,7 +1,7 @@
 class Packets::Incoming::GameGuardReply < GameClientPacket
   no_action_request
 
-  @data = Bytes.empty
+  @data = Bytes.new(8)
 
   private VALID = {
     0x88, 0x40, 0x1c, 0xa7, 0x83, 0x42, 0xe9, 0x15, 0xde, 0xc3,
@@ -9,14 +9,14 @@ class Packets::Incoming::GameGuardReply < GameClientPacket
   }
 
   private def read_impl
-    @data = b(4)
+    b(@data, 0, 4)
     d
-    @data += b(4)
+    b(@data, 4, 4)
   end
 
   private def run_impl
     # TODO: actually check the reply (requires SHA digest).
-    debug @data
+    debug { "Received GameGuard data: #{@data}" }
     client.game_guard_ok = true
   end
 end

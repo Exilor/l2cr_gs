@@ -62,7 +62,7 @@ module SkillData
 
   def []?(id : Int32, level : Int32) : Skill?
     get(id, level) do
-      warn { "No skill found with id #{id} and level #{level}." }
+      warn { "#[]? - No skill found with id #{id} and level #{level}." }
       nil
     end
   end

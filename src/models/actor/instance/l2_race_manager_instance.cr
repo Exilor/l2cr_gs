@@ -85,7 +85,7 @@ class L2RaceManagerInstance < L2Npc
       if sm.id == 820
         sm.add_int(@@race_number)
       end
-      @@minutes -= 1
+      @@minutes &-= 1
     when 819 # MONSRACE_S1_TICKET_SALES_CLOSED
       sm.add_int(@@race_number)
       @@state = WAITING

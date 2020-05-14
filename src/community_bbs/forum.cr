@@ -36,11 +36,11 @@ class Forum
     begin
       sql = "SELECT * FROM forums WHERE forum_id=?"
       GameDB.each(sql, @forum_id) do |rs|
-        @forum_name = rs.get_string("forum_name")
-        @forum_post = rs.get_i32("forum_post")
-        @forum_type = rs.get_i32("forum_type")
-        @forum_perm = rs.get_i32("forum_perm")
-        @owner_id = rs.get_i32("forum_owner_id")
+        @forum_name = rs.get_string(:"forum_name")
+        @forum_post = rs.get_i32(:"forum_post")
+        @forum_type = rs.get_i32(:"forum_type")
+        @forum_perm = rs.get_i32(:"forum_perm")
+        @owner_id = rs.get_i32(:"forum_owner_id")
       end
     rescue e
       error e
@@ -49,14 +49,14 @@ class Forum
     begin
       sql = "SELECT * FROM topic WHERE topic_forum_id=? ORDER BY topic_id DESC"
       GameDB.each(sql, @forum_id) do |rs|
-        topic_id = rs.get_i32("topic_id")
-        topic_forum_id = rs.get_i32("topic_forum_id")
-        topic_name = rs.get_string("topic_name")
-        topic_date = rs.get_i64("topic_date")
-        topic_owner_name = rs.get_string("topic_ownername")
-        topic_owner_id = rs.get_i32("topic_ownerid")
-        topic_type = rs.get_i32("topic_type")
-        topic_reply = rs.get_i32("topic_reply")
+        topic_id = rs.get_i32(:"topic_id")
+        topic_forum_id = rs.get_i32(:"topic_forum_id")
+        topic_name = rs.get_string(:"topic_name")
+        topic_date = rs.get_i64(:"topic_date")
+        topic_owner_name = rs.get_string(:"topic_ownername")
+        topic_owner_id = rs.get_i32(:"topic_ownerid")
+        topic_type = rs.get_i32(:"topic_type")
+        topic_reply = rs.get_i32(:"topic_reply")
         t = Topic.new(
           Topic::ConstructorType::RESTORE,
           topic_id,
@@ -78,7 +78,7 @@ class Forum
   private def children
     sql = "SELECT forum_id FROM forums WHERE forum_parent=?"
     GameDB.each(sql, @forum_id) do |rs|
-      f = Forum.new(rs.get_i32("forum_id"), self)
+      f = Forum.new(rs.get_i32(:"forum_id"), self)
       @children << f
       ForumsBBSManager.add_forum(f)
     end

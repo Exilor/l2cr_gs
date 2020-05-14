@@ -152,8 +152,4 @@ class BoatTalkingGludin
     @cycle += 1
     @cycle = 0 if @cycle > 17
   end
-
-  def to_log(io : IO)
-    io << "Boat (Talking Island - Gludin)"
-  end
 end

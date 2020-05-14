@@ -26,6 +26,7 @@ abstract class ClanHallSiegeEngine < Quest
     super(-1, name, descr)
 
     @hall = ClanHallSiegeManager.get_siegable_hall(hall_id).not_nil!
+    @hall.siege = self
     delay = @hall.next_siege_time - Time.ms - 3600000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
     info { "Siege scheduled for #{siege_date.time}." }
@@ -34,7 +35,7 @@ abstract class ClanHallSiegeEngine < Quest
 
   def load_attackers
     GameDB.each(SQL_LOAD_ATTACKERS, @hall.id) do |rs|
-      id = rs.get_i32("attacker_id")
+      id = rs.get_i32(:"attacker_id")
       clan = L2SiegeClan.new(id, SiegeClanType::ATTACKER)
       @attackers[id] = clan
     end
@@ -56,13 +57,13 @@ abstract class ClanHallSiegeEngine < Quest
 
   def load_guards
     GameDB.each(SQL_LOAD_GUARDS, @hall.id) do |rs|
-      npc_id = rs.get_i32("npcId").to_u16!.to_i32
+      npc_id = rs.get_i32(:"npcId").to_u16!.to_i32
       sp = L2Spawn.new(npc_id)
-      sp.x = rs.get_i32("x")
-      sp.y = rs.get_i32("y")
-      sp.z = rs.get_i32("z")
-      sp.heading = rs.get_i32("heading")
-      sp.respawn_delay = rs.get_i32("respawnDelay")
+      sp.x = rs.get_i32(:"x")
+      sp.y = rs.get_i32(:"y")
+      sp.z = rs.get_i32(:"z")
+      sp.heading = rs.get_i32(:"heading")
+      sp.respawn_delay = rs.get_i32(:"respawnDelay")
       sp.amount = 1
       @guards << sp
     end
@@ -83,7 +84,7 @@ abstract class ClanHallSiegeEngine < Quest
     end
   end
 
-  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
+  def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
     if temp = get_attacker_clan(clan)
       temp.flag # nilable?
     end
@@ -108,7 +109,7 @@ abstract class ClanHallSiegeEngine < Quest
     end
   end
 
-  def attacker_clans : IArray(L2SiegeClan)?
+  def attacker_clans : Interfaces::Array(L2SiegeClan)?
     @attackers.values
   end
 
@@ -136,7 +137,7 @@ abstract class ClanHallSiegeEngine < Quest
     # return nil
   end
 
-  def defender_clans : IArray(L2SiegeClan)?
+  def defender_clans : Interfaces::Array(L2SiegeClan)?
     # return nil
   end
 

@@ -13,9 +13,9 @@ module GameDB
       henna = nil
 
       GameDB.each(SELECT, pc.l2id, pc.class_index) do |rs|
-        slot = rs.get_i32("slot")
+        slot = rs.get_i32(:"slot")
         next unless slot.between?(1, 3)
-        symbol_id = rs.get_i32("symbol_id")
+        symbol_id = rs.get_i32(:"symbol_id")
         next if symbol_id == 0
         henna ||= Slice(L2Henna?).new(3, nil.as(L2Henna?))
         henna[slot - 1] = HennaData.get_henna(symbol_id)

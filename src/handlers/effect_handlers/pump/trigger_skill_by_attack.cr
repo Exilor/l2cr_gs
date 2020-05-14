@@ -1,4 +1,6 @@
 class EffectHandler::TriggerSkillByAttack < AbstractEffect
+  include Loggable
+
   @min_attacker_level : Int32
   @max_attacker_level : Int32
   @min_damage : Int32

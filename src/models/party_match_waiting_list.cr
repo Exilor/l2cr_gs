@@ -3,7 +3,7 @@ module PartyMatchWaitingList
 
   private PLAYERS = Concurrent::Set(L2PcInstance).new
 
-  def players : ISet(L2PcInstance)
+  def players : Interfaces::Set(L2PcInstance)
     PLAYERS
   end
 

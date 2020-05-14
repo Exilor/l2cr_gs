@@ -29,13 +29,13 @@ module GameDB
 
     def load(pc : L2PcInstance)
       GameDB.each(SELECT, pc.l2id) do |rs|
-        id = rs.get_i32("Id")
-        x = rs.get_i32("x")
-        y = rs.get_i32("y")
-        z = rs.get_i32("z")
-        icon = rs.get_i32("icon")
-        tag = rs.get_string("tag")
-        name = rs.get_string("name")
+        id = rs.get_i32(:"Id")
+        x = rs.get_i32(:"x")
+        y = rs.get_i32(:"y")
+        z = rs.get_i32(:"z")
+        icon = rs.get_i32(:"icon")
+        tag = rs.get_string(:"tag")
+        name = rs.get_string(:"name")
 
         pc.tp_bookmarks[id] = TeleportBookmark.new(id, x, y, z, icon, tag, name)
       end

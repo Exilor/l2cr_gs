@@ -31,16 +31,16 @@ module AutoSpawnHandler
     sql1 = "SELECT * FROM random_spawn ORDER BY groupId ASC"
     sql2 = "SELECT * FROM random_spawn_loc WHERE groupId=?"
     GameDB.each(sql1) do |rs|
-      npc_id = rs.get_i32("npcId").to_u16!.to_i32
-      initial_delay = rs.get_i32("initialDelay")
-      respawn_delay = rs.get_i32("respawnDelay")
-      despawn_delay = rs.get_i32("despawnDelay")
+      npc_id = rs.get_i32(:"npcId").to_u16!.to_i32
+      initial_delay = rs.get_i32(:"initialDelay")
+      respawn_delay = rs.get_i32(:"respawnDelay")
+      despawn_delay = rs.get_i32(:"despawnDelay")
       inst = register_spawn(npc_id, initial_delay, respawn_delay, despawn_delay)
-      inst.spawn_count = rs.get_i32("count")
-      inst.broadcast = rs.get_bool("broadcastSpawn")
-      inst.random_spawn = rs.get_bool("randomSpawn")
+      inst.spawn_count = rs.get_i32(:"count")
+      inst.broadcast = rs.get_bool(:"broadcastSpawn")
+      inst.random_spawn = rs.get_bool(:"randomSpawn")
 
-      GameDB.each(sql2, rs.get_i32("groupId")) do |rs2|
+      GameDB.each(sql2, rs.get_i32(:"groupId")) do |rs2|
         x = rs2.get_i32("x")
         y = rs2.get_i32("y")
         z = rs2.get_i32("z")

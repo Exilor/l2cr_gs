@@ -5,7 +5,7 @@ class L2CommandChannel < AbstractPlayerGroup
 
   getter leader : L2PcInstance
   getter level : Int32
-  getter parties : IArray(L2Party)
+  getter parties : Interfaces::Array(L2Party)
 
   def initialize(leader : L2PcInstance)
     @leader = leader

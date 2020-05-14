@@ -1,4 +1,6 @@
 class EffectHandler::TriggerSkillByAvoid < AbstractEffect
+  include Loggable
+
   @chance : Int32
   @target_type : TargetType
 

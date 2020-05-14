@@ -1,6 +1,4 @@
 abstract class AbstractEnchantItem
-  include Loggable
-
   private ENCHANT_TYPES = {
     EtcItemType::ANCIENT_CRYSTAL_ENCHANT_AM,
     EtcItemType::ANCIENT_CRYSTAL_ENCHANT_WP,

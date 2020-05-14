@@ -1,6 +1,4 @@
 class SkillChannelizer
-  include Loggable
-
   @task : TaskExecutor::Scheduler::PeriodicTask?
 
   getter! channelized : Array(L2Character)
@@ -14,7 +12,6 @@ class SkillChannelizer
 
   def start_channeling(skill : Skill)
     if channeling?
-      warn { "#{@channelizer} is already channeling." }
       return
     end
 
@@ -26,7 +23,6 @@ class SkillChannelizer
 
   def stop_channeling
     unless channeling?
-      warn { "#{@channelizer} is not currently channeling." }
       return
     end
 
@@ -67,7 +63,6 @@ class SkillChannelizer
 
     if _skill.channeling_skill_id > 0
       unless base_skill = SkillData[_skill.channeling_skill_id, 1]?
-        warn { "Can't find skill with id #{_skill.channeling_skill_id}." }
         @channelizer.abort_cast
         return
       end
@@ -98,7 +93,6 @@ class SkillChannelizer
 
           if info.nil? || info.skill.level < skill_level
             unless skill = SkillData[_skill.channeling_skill_id, skill_level]?
-              warn { "Can't find skill with id #{_skill.channeling_skill_id} and level #{skill_level}." }
               @channelizer.abort_cast
               return
             end

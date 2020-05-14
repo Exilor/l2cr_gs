@@ -88,7 +88,7 @@ class L2PcInstance < L2Playable
   @mp_update_interval  = 0.0
   @falling_timestamp = 0i64
   @last_item_auction_info_request = 0i64
-  @custom_skills : IHash(Int32, Skill)?
+  @custom_skills : Interfaces::Map(Int32, Skill)?
   @action_mask = 0
   @can_feed = false
   @offline_shop_start = 0
@@ -97,29 +97,29 @@ class L2PcInstance < L2Playable
   @revive_pet = false
   @quests = Concurrent::Map(String, QuestState).new
   @water_task : TaskExecutor::Scheduler::PeriodicTask?
-  @transform_skills : IHash(Int32, Skill)?
+  @transform_skills : Interfaces::Map(Int32, Skill)?
   @vitality_task : TaskExecutor::Scheduler::PeriodicTask?
   @teleport_watchdog : TaskExecutor::Scheduler::DelayedTask?
   @soul_task : TaskExecutor::Scheduler::DelayedTask?
   @charge_task : TaskExecutor::Scheduler::DelayedTask?
   @task_warn_user_take_break : TaskExecutor::Scheduler::PeriodicTask?
   @pvp_reg_task : TaskExecutor::Scheduler::PeriodicTask?
-  @notify_quest_of_death : ISet(QuestState)?
+  @notify_quest_of_death : Interfaces::Set(QuestState)?
   @dwarven_recipe_book = Concurrent::Map(Int32, L2RecipeList).new
   @common_recipe_book = Concurrent::Map(Int32, L2RecipeList).new
-  @tamed_beasts : ISet(L2TamedBeastInstance)?
+  @tamed_beasts : Interfaces::Set(L2TamedBeastInstance)?
   @warehouse : PcWarehouse?
   @snoop_listener = Concurrent::Set(L2PcInstance).new(1)
   @snooped_player = Concurrent::Set(L2PcInstance).new(1)
   @fish : L2Fish?
   @task_for_fish : TaskExecutor::Scheduler::PeriodicTask?
-  @friends : ISet(Int32)?
+  @friends : Interfaces::Set(Int32)?
   @level_data : L2PetLevelData?
   @mount_feed_task : TaskExecutor::Scheduler::PeriodicTask?
   @dismount_task : TaskExecutor::Scheduler::DelayedTask?
   @rent_pet_task : TaskExecutor::Scheduler::PeriodicTask?
   @fame_task : TaskExecutor::Scheduler::PeriodicTask?
-  @manufacture_items : IHash(Int32, L2ManufactureItem)?
+  @manufacture_items : Interfaces::Map(Int32, L2ManufactureItem)?
   @access_level : AccessLevel?
   @html_prefix : String?
   @sell_list : TradeList?
@@ -4686,7 +4686,7 @@ class L2PcInstance < L2Playable
     notify_quest_of_death.delete(qs)
   end
 
-  def notify_quest_of_death : ISet(QuestState)
+  def notify_quest_of_death : Interfaces::Set(QuestState)
     @notify_quest_of_death || sync do
       @notify_quest_of_death ||= Concurrent::Set(QuestState).new
     end
@@ -6074,7 +6074,7 @@ class L2PcInstance < L2Playable
     stop_reco_give_task
   end
 
-  def tamed_beasts : ISet(L2TamedBeastInstance)
+  def tamed_beasts : Interfaces::Set(L2TamedBeastInstance)
     @tamed_beasts || sync do
       @tamed_beasts ||= Concurrent::Set(L2TamedBeastInstance).new
     end
@@ -6621,7 +6621,7 @@ class L2PcInstance < L2Playable
     if force
       @zone_validate_counter = 4i8
     else
-      @zone_validate_counter -= 1i8
+      @zone_validate_counter &-= 1i8
       if @zone_validate_counter < 0
         @zone_validate_counter = 4i8
       else
@@ -7475,7 +7475,7 @@ class L2PcInstance < L2Playable
     stop_looking_for_fish_task
   end
 
-  def friends : ISet(Int32)
+  def friends : Interfaces::Set(Int32)
     @friends || sync { @friends ||= Concurrent::Set(Int32).new }
   end
 

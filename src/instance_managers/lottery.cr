@@ -41,14 +41,14 @@ module Lottery
   private def start_lottery_task
     GameDB.each(SELECT_LAST_LOTTERY) do |rs|
       begin
-        @@id = rs.get_i32("idnr")
+        @@id = rs.get_i32(:"idnr")
 
-        if rs.get_i32("finished") == 1
+        if rs.get_i32(:"finished") == 1
           @@id += 1
-          @@prize = rs.get_i64("newprize")
+          @@prize = rs.get_i64(:"newprize")
         else
-          @@prize = rs.get_i64("prize")
-          @@end_date = rs.get_i64("enddate")
+          @@prize = rs.get_i64(:"prize")
+          @@end_date = rs.get_i64(:"enddate")
 
           if @@end_date <= Time.ms + (2 * MINUTE)
             finish_lottery_task
@@ -151,8 +151,8 @@ module Lottery
 
     begin
       GameDB.each(SELECT_LOTTERY_ITEM, id) do |rs|
-        cur_enchant = rs.get_i32("enchant_level") & enchant
-        curtype2 = rs.get_i32("custom_type2") & type2
+        cur_enchant = rs.get_i32(:"enchant_level") & enchant
+        curtype2 = rs.get_i32(:"custom_type2") & type2
 
         if cur_enchant == 0 && curtype2 == 0
           next
@@ -294,8 +294,8 @@ module Lottery
     res = Slice.new(2, 0i64)
     begin
       GameDB.each(SELECT_LOTTERY_TICKET, id) do |rs|
-        curenchant = rs.get_i32("number1") & enchant
-        curtype2 = rs.get_i32("number2") & type2
+        curenchant = rs.get_i32(:"number1") & enchant
+        curtype2 = rs.get_i32(:"number2") & type2
 
         if curenchant == 0 && curtype2 == 0
           return res
@@ -321,19 +321,17 @@ module Lottery
           # do nothing
         when 5
           res[0] = 1
-          res[1] = rs.get_i64("prize1")
+          res[1] = rs.get_i64(:"prize1")
         when 4
           res[0] = 2
-          res[1] = rs.get_i64("prize2")
+          res[1] = rs.get_i64(:"prize2")
         when 3
           res[0] = 3
-          res[1] = rs.get_i64("prize3")
+          res[1] = rs.get_i64(:"prize3")
         else
           res[0] = 4
           res[1] = Config.alt_lottery_2_and_1_number_prize
         end
-
-        debug { "count: #{count}, id: #{id}, enchant: #{enchant}, type2: #{type2}." }
       end
     rescue e
       error { "Error while checking lottery ticket ##{id}:" }

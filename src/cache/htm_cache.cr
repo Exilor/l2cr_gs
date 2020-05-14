@@ -6,7 +6,7 @@ module HtmCache
   @@bytes_buff_len = 0u64
 
   class_getter loaded_files = 0
-  private class_getter! cache : IHash(String, String)
+  private class_getter! cache : Interfaces::Map(String, String)
 
   def load
     @@root = Config.datapack_root.chomp("/data")

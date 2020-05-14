@@ -17,7 +17,7 @@ module AnnouncementsTable
     DATA.clear
 
     GameDB.each("SELECT * FROM announcements") do |rs|
-      type_id = rs.get_i32("type")
+      type_id = rs.get_i32(:"type")
       type = AnnouncementType[type_id]
       case type
       when .normal?, .critical?

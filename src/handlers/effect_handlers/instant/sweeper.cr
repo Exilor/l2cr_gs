@@ -8,7 +8,6 @@ class EffecyHandler::Sweeper < AbstractEffect
     return unless pc = info.effector.as?(L2PcInstance)
 
     unless mob.check_spoil_owner(pc, false)
-      debug "#{pc.name} is not the spoil owner of #{mob.name}."
       return
     end
 

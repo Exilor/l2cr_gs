@@ -120,7 +120,6 @@ module CharNameTable
       begin
         sql = "SELECT account_name FROM characters WHERE char_name=?"
         GameDB.query_each(sql, name) do |rs|
-          # In theory, if there's iteration there's a match
           return true
         end
       rescue e
@@ -133,11 +132,6 @@ module CharNameTable
 
   def get_account_character_count(account : String) : Int32
     sql = "SELECT COUNT(char_name) FROM characters WHERE account_name=?"
-
-    # GameDB.query_each(sql, account) do |rs|
-    #   return rs.read(Int64).to_i32
-    # end
-    # 0
 
     ret = GameDB.scalar(sql, account)
     if ret.is_a?(Number)

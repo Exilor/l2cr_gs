@@ -199,30 +199,30 @@ class Scripts::Q00419_GetAPet < Quest
         link_id = 0
         find_response = false
         until find_response
-          random_link_offset = Rnd.rand(14) + 4
+          random_link_offset = Rnd.rand(14) &+ 4
           i7 = 1
           i = 1
           while i <= random_link_offset
-            i7 *= 2
-            i += 1
+            i7 &*= 2
+            i &+= 1
           end
           if i7 & qs.memo_state == 0 && random_link_offset < 18
             find_response = true
-            qs.memo_state = (qs.memo_state + 1) | i7
-            link_id = 1110000 + (5 * (random_link_offset - 4))
-            html = "30731-#{20 + (random_link_offset - 4)}.htm"
+            qs.memo_state = (qs.memo_state &+ 1) | i7
+            link_id = 1110000 &+ (5 * (random_link_offset &- 4))
+            html = "30731-#{20 &+ (random_link_offset &- 4)}.htm"
           end
         end
 
         link_count = 1
         reply_offset1 = reply_offset2 = reply_offset3 = reply_offset4 = i8 = 0
         while link_count < 5
-          random_reply_offset = Rnd.rand(4) + 1
+          random_reply_offset = Rnd.rand(4) &+ 1
           i7 = 1
           i = 1
           while i <= random_reply_offset
-            i7 *= 2
-            i += 1
+            i7 &*= 2
+            i &+= 1
           end
           if i7 & i8 == 0 && random_reply_offset < 5
             case link_count
@@ -238,7 +238,7 @@ class Scripts::Q00419_GetAPet < Quest
               # [automatically added else]
             end
 
-            link_count += 1
+            link_count &+= 1
             i8 |= i7
           end
         end
@@ -255,7 +255,6 @@ class Scripts::Q00419_GetAPet < Quest
     else
       # [automatically added else]
     end
-
 
     html
   end
@@ -308,7 +307,6 @@ class Scripts::Q00419_GetAPet < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -379,7 +377,6 @@ class Scripts::Q00419_GetAPet < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)

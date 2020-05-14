@@ -505,11 +505,11 @@ class Scripts::DarkCloudMansion < AbstractInstance
         end
         fourth_room.npc_list << this_npc
 
-        y -= 125
-        yy += 1
+        y &-= 125
+        yy &+= 1
       end
-      x += 125
-      xx += 1
+      x &+= 125
+      xx &+= 1
     end
 
     world.rooms[:FourthRoom] = fourth_room
@@ -588,7 +588,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
   private def check_stone(npc, order, npc_obj, world)
     1.upto(6) do |i|
       # if there is a non zero value in the precedent step, the sequence is ok
-      if order[i] == 0 && order[i - 1] != 0
+      if order[i] == 0 && order[i &- 1] != 0
         if npc_obj.order == i && npc_obj.status == 0
           order[i] = 1
           npc_obj.status = 1
@@ -617,7 +617,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
           mob.count = 1
           if mob.status == 1
             mob.npc.broadcast_packet(NpcSay.new(mob.npc.l2id, Say2::NPC_ALL, mob.npc.id, SUCCESS_CHAT.sample))
-            fifth_room.found += 1
+            fifth_room.found &+= 1
             start_quest_timer("decayMe", 1500, npc, pc)
           else
             fifth_room.reset = 1
@@ -638,11 +638,11 @@ class Scripts::DarkCloudMansion < AbstractInstance
 
     fifth_room.npc_list.each do |mob|
       if mob.npc? == npc
-        decayed_samples += 1
+        decayed_samples &+= 1
         mob.count = 2
       else
         if mob.count == 2
-          decayed_samples += 1
+          decayed_samples &+= 1
         end
       end
     end
@@ -650,7 +650,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
     if fifth_room.reset == 1
       fifth_room.npc_list.each do |mob|
         if mob.count == 0 || mob.status == 1 && mob.count != 2
-          decayed_samples += 1
+          decayed_samples &+= 1
           mob.npc.decay_me
           mob.count = 2
         end
@@ -685,8 +685,8 @@ class Scripts::DarkCloudMansion < AbstractInstance
       if mob.npc? == npc
         7.times do |i|
           if mob.order == i && fourth_room.counter == i
-            open_door(W1 + i, world.instance_id)
-            fourth_room.counter += 1
+            open_door(W1 &+ i, world.instance_id)
+            fourth_room.counter &+= 1
             if fourth_room.counter == 7
               run_third_room2(world)
             end

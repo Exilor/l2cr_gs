@@ -12,10 +12,10 @@ module CommunityBoardHandler::FavoriteBoard
       sb = String::Builder.new
       begin
         GameDB.each(SELECT_FAVORITES, pc.l2id) do |rs|
-          link = list.gsub("%fav_bypass%", rs.get_string("favBypass"))
-          link = link.gsub("%fav_title%", rs.get_string("favTitle"))
-          link = link.gsub("%fav_add_date%", rs.get_time("favAddDate").to_s("%Y.%m.%d %H:%M:%S"))
-          link = link.gsub("%fav_id%", rs.get_i32("favId"))
+          link = list.gsub("%fav_bypass%", rs.get_string(:"favBypass"))
+          link = link.gsub("%fav_title%", rs.get_string(:"favTitle"))
+          link = link.gsub("%fav_add_date%", rs.get_time(:"favAddDate").to_s("%Y.%m.%d %H:%M:%S"))
+          link = link.gsub("%fav_id%", rs.get_i32(:"favId"))
           sb << link
         end
         html = HtmCache.get_htm(pc, "data/html/CommunityBoard/favorite.html").not_nil!

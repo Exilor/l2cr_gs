@@ -91,11 +91,11 @@ struct Shortcuts
 
     sql = "SELECT charId, slot, page, type, shortcut_id, level FROM character_shortcuts WHERE charId=? AND class_index=?"
     GameDB.each(sql, @owner.l2id, @owner.class_index) do |rs|
-      slot  = rs.get_i32("slot")
-      page  = rs.get_i32("page")
-      type  = rs.get_i32("type")
-      id    = rs.get_i32("shortcut_id")
-      level = rs.get_i32("level")
+      slot  = rs.get_i32(:"slot")
+      page  = rs.get_i32(:"page")
+      type  = rs.get_i32(:"type")
+      id    = rs.get_i32(:"shortcut_id")
+      level = rs.get_i32(:"level")
 
       shortcut = Shortcut.new(slot, page, ShortcutType[type], id, level, 1)
       @shortcuts[slot + (page * MAX_SHORTCUTS_PER_BAR)] = shortcut

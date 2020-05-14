@@ -103,13 +103,13 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
   end
 
   protected def self.restore_char(rs) : CharSelectInfoPackage?
-    l2id = rs.get_i32("charId")
-    name = rs.get_string("char_name")
+    l2id = rs.get_i32(:"charId")
+    name = rs.get_string(:"char_name")
 
-    delete_time = rs.get_i64("deletetime")
+    delete_time = rs.get_i64(:"deletetime")
     if delete_time > 0
       if Time.ms > delete_time
-        if clan = ClanTable.get_clan(rs.get_i32("clanid"))
+        if clan = ClanTable.get_clan(rs.get_i32(:"clanid"))
           clan.remove_clan_member(l2id, 0)
         end
         GameClient.delete_char_by_l2id(l2id)
@@ -118,36 +118,36 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
     end
 
     cip = CharSelectInfoPackage.new(l2id, name)
-    cip.access_level = rs.get_i32("accesslevel")
-    cip.level = rs.get_i32("level")
-    cip.max_hp = rs.get_i32("maxhp")
-    cip.current_hp = rs.get_f64("curhp")
-    cip.max_mp = rs.get_i32("maxmp")
-    cip.current_mp = rs.get_f64("curmp")
-    cip.karma = rs.get_i32("karma")
-    cip.pk_kills = rs.get_i32("pkkills")
-    cip.pvp_kills = rs.get_i32("pvpkills")
-    cip.face = rs.get_i32("face")
-    cip.hair_style = rs.get_i32("hairstyle")
-    cip.hair_color = rs.get_i32("haircolor")
-    cip.sex = rs.get_i32("sex")
+    cip.access_level = rs.get_i32(:"accesslevel")
+    cip.level = rs.get_i32(:"level")
+    cip.max_hp = rs.get_i32(:"maxhp")
+    cip.current_hp = rs.get_f64(:"curhp")
+    cip.max_mp = rs.get_i32(:"maxmp")
+    cip.current_mp = rs.get_f64(:"curmp")
+    cip.karma = rs.get_i32(:"karma")
+    cip.pk_kills = rs.get_i32(:"pkkills")
+    cip.pvp_kills = rs.get_i32(:"pvpkills")
+    cip.face = rs.get_i32(:"face")
+    cip.hair_style = rs.get_i32(:"hairstyle")
+    cip.hair_color = rs.get_i32(:"haircolor")
+    cip.sex = rs.get_i32(:"sex")
 
-    cip.exp = rs.get_i64("exp")
-    cip.sp = rs.get_i32("sp")
-    cip.vitality_points = rs.get_i32("vitality_points")
-    cip.clan_id = rs.get_i32("clanid")
+    cip.exp = rs.get_i64(:"exp")
+    cip.sp = rs.get_i32(:"sp")
+    cip.vitality_points = rs.get_i32(:"vitality_points")
+    cip.clan_id = rs.get_i32(:"clanid")
 
-    cip.race = rs.get_i32("race")
+    cip.race = rs.get_i32(:"race")
 
     base_class_id = rs.get_u8("base_class").to_i32
     active_class_id = rs.get_u8("classid").to_i32
 
-    cip.x = rs.get_i32("x")
-    cip.y = rs.get_i32("y")
-    cip.z = rs.get_i32("z")
+    cip.x = rs.get_i32(:"x")
+    cip.y = rs.get_i32(:"y")
+    cip.z = rs.get_i32(:"z")
 
     if Config.multilang_enable
-      lang = rs.get_string("lang")
+      lang = rs.get_string(:"lang")
       unless Config.multilang_allowed.includes?(lang)
         lang = Config.multilang_default
       end
@@ -168,7 +168,7 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
     if weapon_id > 0
       sql = "SELECT augAttributes FROM item_attributes WHERE itemId=?"
       GameDB.each(sql, weapon_id) do |rs|
-        augment = rs.get_i32("augAttributes")
+        augment = rs.get_i32(:"augAttributes")
         cip.augmentation_id = augment == -1 ? 0 : augment
       end
     end
@@ -180,7 +180,7 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
     end
 
     cip.delete_time = delete_time
-    cip.last_access = rs.get_i64("lastAccess")
+    cip.last_access = rs.get_i64(:"lastAccess")
 
     cip
   end
@@ -188,9 +188,9 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
   private def self.load_character_subclass_info(cip, l2id, active_class_id)
     sql = "SELECT exp, sp, level FROM character_subclasses WHERE charId=? && class_id=? ORDER BY charId"
     GameDB.each(sql, l2id, active_class_id) do |rs|
-      cip.exp = rs.get_i64("exp")
-      cip.sp = rs.get_i32("sp")
-      cip.level = rs.get_i32("level")
+      cip.exp = rs.get_i64(:"exp")
+      cip.sp = rs.get_i32(:"sp")
+      cip.level = rs.get_i32(:"level")
     end
   rescue e
     error "Could not restore char subclass info."

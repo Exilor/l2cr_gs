@@ -126,7 +126,7 @@ module GeoPathFinding
       if node == stop
         return construct_path2(node)
       end
-      i += 1
+      i &+= 1
 
       visited << node
       node.attach_neighbors(read_neighbors(node))
@@ -193,9 +193,9 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
+      neighbor &-= 1
       new_node_x = node_x.to_i16
-      new_node_y = (node_y - 1).to_i16
+      new_node_y = (node_y &- 1).to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
@@ -205,9 +205,9 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
-      new_node_x = (node_x + 1).to_i16
-      new_node_y = (node_y - 1).to_i16
+      neighbor &-= 1
+      new_node_x = (node_x &+ 1).to_i16
+      new_node_y = (node_y &- 1).to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
@@ -217,8 +217,8 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
-      new_node_x = (node_x + 1).to_i16
+      neighbor &-= 1
+      new_node_x = (node_x &+ 1).to_i16
       new_node_y = node_y.to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
@@ -229,9 +229,9 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
-      new_node_x = (node_x + 1).to_i16
-      new_node_y = (node_y + 1).to_i16
+      neighbor &-= 1
+      new_node_x = (node_x &+ 1).to_i16
+      new_node_y = (node_y &+ 1).to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
@@ -241,9 +241,9 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
+      neighbor &-= 1
       new_node_x = node_x.to_i16
-      new_node_y = (node_y + 1).to_i16
+      new_node_y = (node_y &+ 1).to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
@@ -253,9 +253,9 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
-      new_node_x = (node_x - 1).to_i16
-      new_node_y = (node_y + 1).to_i16
+      neighbor &-= 1
+      new_node_x = (node_x &- 1).to_i16
+      new_node_y = (node_y &+ 1).to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
@@ -265,8 +265,8 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
-      new_node_x = (node_x - 1).to_i16
+      neighbor &-= 1
+      new_node_x = (node_x &- 1).to_i16
       new_node_y = node_y.to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
@@ -277,9 +277,9 @@ module GeoPathFinding
     idx += 1
 
     if neighbor > 0
-      neighbor -= 1
-      new_node_x = (node_x - 1).to_i16
-      new_node_y = (node_y - 1).to_i16
+      neighbor &-= 1
+      new_node_x = (node_x &- 1).to_i16
+      new_node_y = (node_y &- 1).to_i16
       if new_node = read_node(new_node_x, new_node_y, neighbor)
         neighbors << new_node
       end
@@ -298,15 +298,15 @@ module GeoPathFinding
     nbx : Int16 = get_node_block(node_x.to_i32)
     nby : Int16 = get_node_block(node_y.to_i32)
     tmp = PATH_NODES_INDEX[offset]
-    idx : Int32 = tmp[(nby.to_i32 << 8) + nbx]
+    idx : Int32 = tmp[(nby.to_i32 << 8) &+ nbx]
     pn = PATH_NODES[offset]
     nodes = pn[idx].to_i8
-    idx += (layer.to_i32 * 10) + 1
+    idx += (layer.to_i32 &* 10) &+ 1
     if nodes < layer
       debug "Something wrong with #read_node(Int16, Int16, Int8)"
     end
     node_z = IO::ByteFormat::BigEndian.decode(Int16, pn + idx)
-    idx += 2
+    idx &+= 2
 
     GeoNode.new(GeoNodeLoc.new(node_x, node_y, node_z), idx)
   end
@@ -327,11 +327,11 @@ module GeoPathFinding
     nby : Int16 = get_node_block(node_y.to_i32)
 
     tmp = PATH_NODES_INDEX[offset]
-    idx : Int32 = tmp[(nby.to_i32 << 8) + nbx]
+    idx : Int32 = tmp[(nby.to_i32 << 8) &+ nbx]
     pn = PATH_NODES[offset]
 
     nodes = pn[idx].to_i8
-    idx += 1
+    idx &+= 1
 
     idx2 = 0
     last_z = Int16::MIN
@@ -339,10 +339,10 @@ module GeoPathFinding
       node_z = IO::ByteFormat::BigEndian.decode(Int16, pn + idx)
       if (last_z - z).abs > (node_z - z).abs
         last_z = node_z
-        idx2 = idx + 2
+        idx2 = idx &+ 2
       end
-      idx += 10
-      nodes -= 1
+      idx &+= 10
+      nodes &-= 1
     end
 
     GeoNode.new(GeoNodeLoc.new(node_x, node_y, last_z), idx2)

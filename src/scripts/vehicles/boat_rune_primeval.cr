@@ -83,8 +83,4 @@ class BoatRunePrimeval
       @cycle = 0
     end
   end
-
-  def to_log(io : IO)
-    io << "Boat (Rune - Primeval Isle)"
-  end
 end

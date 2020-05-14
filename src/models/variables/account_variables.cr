@@ -1,6 +1,8 @@
 require "./abstract_variables"
 
 class AccountVariables < AbstractVariables
+  include Loggable
+
   private SELECT_QUERY = "SELECT * FROM account_gsdata WHERE account_name = ?"
   private DELETE_QUERY = "DELETE FROM account_gsdata WHERE account_name = ?"
   private INSERT_QUERY = "INSERT INTO account_gsdata (account_name, var, value) VALUES (?, ?, ?)"
@@ -13,8 +15,8 @@ class AccountVariables < AbstractVariables
 
   def restore_me : Bool
     GameDB.each(SELECT_QUERY, @account_name) do |rs|
-      var = rs.get_string("var")
-      val = rs.get_string("val")
+      var = rs.get_string(:"var")
+      val = rs.get_string(:"val")
       self[var] = val
     end
 

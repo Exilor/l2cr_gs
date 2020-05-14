@@ -45,33 +45,33 @@ class BlockCheckerEngine
 
   private DEFAULT_ARENA = -1i8
 
+  # Preserve from exploit reward by logging out
+  @abnormal_end = false
+  # Sets if the red team won the event at the end of this (used for packets)
+  @red_winner = false
+  # List of dropped items in event (for later deletion)
+  @drops = Concurrent::Array(L2ItemInstance).new
+
   # Maps to hold player of each team and his points
   getter red_team_points = Concurrent::Map(L2PcInstance, Int32).new
   getter blue_team_points = Concurrent::Map(L2PcInstance, Int32).new
-  # The initial points of the event
-  property red_points = 15
-  property blue_points = 15
-  # Sets if the red team won the event at the end of this (used for packets)
-  @red_winner = false
   # All blocks
   getter spawns = Concurrent::Array(L2Spawn).new
   # Common z coordinate
   getter z_coord = -2405
-  # List of dropped items in event (for later deletion)
-  @drops = Concurrent::Array(L2ItemInstance).new
-
   # Current used arena
   getter arena = -1
   # The object which holds all basic members info
   getter! holder : ArenaParticipantsHolder
+  # Event end
+  setter task : TaskExecutor::Scheduler::DelayedTask?
+  # The initial points of the event
+  property red_points = 15
+  property blue_points = 15
   # Time when the event starts. Used on packet sending
   property started_time = 0i64
   # Event is started
   property? started = false
-  # Event end
-  setter task : TaskExecutor::Scheduler::DelayedTask?
-  # Preserve from exploit reward by logging out
-  @abnormal_end = false
 
   def initialize(holder : ArenaParticipantsHolder, arena : Int32)
     @holder = holder
@@ -123,13 +123,13 @@ class BlockCheckerEngine
       if team == 0
         points = @red_team_points[pc] + 1
         @red_team_points[pc] = points
-        @red_points += 1
-        @blue_points -= 1
+        @red_points &+= 1
+        @blue_points &-= 1
       else
         points = @blue_team_points[pc] + 1
         @blue_team_points[pc] = points
-        @blue_points += 1
-        @red_points -= 1
+        @blue_points &+= 1
+        @red_points &-= 1
       end
     end
   end

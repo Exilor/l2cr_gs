@@ -4,7 +4,6 @@ require "./task_zone_settings"
 require "../events/event_type"
 
 abstract class L2ZoneType < ListenersContainer
-  include Loggable
   include Packets::Outgoing
 
   @check_affected = false

@@ -1,5 +1,4 @@
 class L2Fishing
-  include Loggable
   include Synchronizable
   include Packets::Outgoing
 
@@ -98,7 +97,7 @@ class L2Fishing
   private def ai_task
     return if @thinking
     @thinking = true
-    @time -= 1
+    @time &-= 1
 
     begin
       if @mode == 1
@@ -124,7 +123,7 @@ class L2Fishing
           end
         end
       else
-        @stop -= 1
+        @stop &-= 1
       end
     ensure
       @thinking = false

@@ -142,7 +142,7 @@ module CastleManager
 
   def load_instances
     GameDB.each("SELECT id FROM castle ORDER BY id") do |rs|
-      id = rs.get_i32("id")
+      id = rs.get_i32(:"id")
       CASTLES << Castle.new(id)
     end
 

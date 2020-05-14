@@ -35,19 +35,19 @@ class Message
   property? returned : Bool = false
 
   def initialize(rs : ResultSetReader)
-    @message_id = rs.get_i32("messageId")
-    @sender_id = rs.get_i32("senderId")
-    @receiver_id = rs.get_i32("receiverId")
-    @subject = rs.get_string("subject")
-    @content = rs.get_string("content")
-    @expiration = rs.get_i64("expiration")
-    @req_adena = rs.get_i64("reqAdena")
-    @has_attachments = rs.get_bool("hasAttachments")
-    @unread = rs.get_bool("isUnread")
-    @deleted_by_sender = rs.get_bool("isDeletedBySender")
-    @deleted_by_receiver = rs.get_bool("isDeletedByReceiver")
-    @send_by_system = rs.get_i32("sendBySystem")
-    @returned = rs.get_bool("isReturned")
+    @message_id = rs.get_i32(:"messageId")
+    @sender_id = rs.get_i32(:"senderId")
+    @receiver_id = rs.get_i32(:"receiverId")
+    @subject = rs.get_string(:"subject")
+    @content = rs.get_string(:"content")
+    @expiration = rs.get_i64(:"expiration")
+    @req_adena = rs.get_i64(:"reqAdena")
+    @has_attachments = rs.get_bool(:"hasAttachments")
+    @unread = rs.get_bool(:"isUnread")
+    @deleted_by_sender = rs.get_bool(:"isDeletedBySender")
+    @deleted_by_receiver = rs.get_bool(:"isDeletedByReceiver")
+    @send_by_system = rs.get_i32(:"sendBySystem")
+    @returned = rs.get_bool(:"isReturned")
   end
 
   def initialize(@sender_id : Int32, @receiver_id : Int32, cod : Bool, @subject : String, @content : String, @req_adena : Int64)
@@ -190,9 +190,8 @@ class Message
       return if @has_attachments || @attachments
       @attachments = Mail.new(@sender_id, @message_id)
       @has_attachments = true
-      task = AttachmentsUnloadTask.new(self)
       @unload_task = ThreadPoolManager.schedule_general(
-        task,
+        AttachmentsUnloadTask.new(self),
         UNLOAD_ATTACHMENTS_INTERVAL + Rnd.rand(UNLOAD_ATTACHMENTS_INTERVAL)
       )
       @attachments

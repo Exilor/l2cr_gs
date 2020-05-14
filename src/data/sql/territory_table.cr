@@ -11,17 +11,17 @@ module TerritoryTable
 
     sql = "SELECT * FROM locations WHERE loc_id>0"
     GameDB.each(sql) do |rs|
-      terr_id = rs.get_i32("loc_id")
+      terr_id = rs.get_i32(:"loc_id")
       unless terr = TERRITORIES[terr_id]?
         terr = L2Territory.new(terr_id)
         TERRITORIES[terr_id] = terr
       end
       terr.add(
-        rs.get_i32("loc_x"),
-        rs.get_i32("loc_y"),
-        rs.get_i32("loc_zmin"),
-        rs.get_i32("loc_zmax"),
-        rs.get_i32("proc")
+        rs.get_i32(:"loc_x"),
+        rs.get_i32(:"loc_y"),
+        rs.get_i32(:"loc_zmin"),
+        rs.get_i32(:"loc_zmax"),
+        rs.get_i32(:"proc")
       )
     end
 

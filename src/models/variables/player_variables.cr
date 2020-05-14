@@ -1,6 +1,8 @@
 require "./abstract_variables"
 
 class PlayerVariables < AbstractVariables
+  include Loggable
+
   private SELECT_QUERY = "SELECT * FROM character_variables WHERE charId = ?"
   private DELETE_QUERY = "DELETE FROM character_variables WHERE charId = ?"
   private INSERT_QUERY = "INSERT INTO character_variables (charId, var, val) VALUES (?, ?, ?)"
@@ -13,8 +15,8 @@ class PlayerVariables < AbstractVariables
 
   def restore_me : Bool
     GameDB.each(SELECT_QUERY, @l2id) do |rs|
-      var = rs.get_string("var")
-      val = rs.get_string("val")
+      var = rs.get_string(:"var")
+      val = rs.get_string(:"val")
 
       self[var] = val
     end

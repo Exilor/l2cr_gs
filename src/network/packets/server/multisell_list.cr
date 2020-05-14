@@ -16,15 +16,15 @@ class Packets::Outgoing::MultisellList < GameServerPacket
     c 0xd0
 
     d @list.list_id
-    d 1 + (@index / MultisellData::PAGE_SIZE)
+    d 1 &+ (@index // MultisellData::PAGE_SIZE)
     d @finished ? 1 : 0
     d MultisellData::PAGE_SIZE
     d @size
 
     while @size > 0
-      @size -= 1
+      @size &-= 1
       ent = @list.entries[@index]
-      @index += 1
+      @index &+= 1
 
       d ent.entry_id
       c ent.stackable? ? 1 : 0

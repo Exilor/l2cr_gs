@@ -51,7 +51,7 @@ module MerchantPriceConfigTable
     MPCS.each_value &.update_references
   end
 
-  def parse_merchant_price_config(n)
+  private def parse_merchant_price_config(n)
     id = parse_int(n, "id")
     name = parse_string(n, "name")
     base_tax = parse_int(n, "baseTax")

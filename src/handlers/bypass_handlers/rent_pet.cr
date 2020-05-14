@@ -35,7 +35,7 @@ module BypassHandler::RentPet
 
     if val > 10
       pet_id = 12526
-      val -= 10
+      val &-= 10
       price /= 2
     else
       pet_id = 12621
@@ -43,8 +43,8 @@ module BypassHandler::RentPet
 
     return if val < 1 || val > 4
 
-    price *= COST[val - 1]
-    time = RIDE_TIME[val - 1]
+    price *= COST[val &- 1]
+    time = RIDE_TIME[val &- 1]
 
     return unless pc.reduce_adena("Rent", price.to_i64, pc.last_folk_npc, true)
 

@@ -53,9 +53,9 @@ module GameDB
     def load(pet : L2PetInstance)
       unless SummonEffectsTable.contains_pet_id?(pet.control_l2id)
         GameDB.each(RESTORE_SKILL_SAVE, pet.control_l2id) do |rs|
-          time = rs.get_i32("remaining_time")
-          skill_id = rs.get_i32("skill_id")
-          skill_lvl = rs.get_i32("skill_level")
+          time = rs.get_i32(:"remaining_time")
+          skill_id = rs.get_i32(:"skill_id")
+          skill_lvl = rs.get_i32(:"skill_level")
           unless skill = SkillData[skill_id, skill_lvl]?
             next
           end

@@ -2,6 +2,7 @@ require "../models/variables/abstract_variables"
 
 class GlobalVariablesManager < AbstractVariables
   include Singleton
+  include Loggable
 
   private SELECT_QUERY = "SELECT * FROM global_variables"
   private DELETE_QUERY = "DELETE FROM global_variables"
@@ -18,7 +19,7 @@ class GlobalVariablesManager < AbstractVariables
   def restore_me : Bool
     begin
       GameDB.each(SELECT_QUERY) do |rs|
-        self[rs.get_string("var")] = rs.get_string("value")
+        self[rs.get_string("var")] = rs.get_string(:"value")
       end
     rescue e
       error e

@@ -54,7 +54,7 @@ module TransformData
                       lvl = get_attributes(s).to_a[i + 1][1].to_i
                       template_data.add_skill(SkillHolder.new(id, lvl))
                     end
-                    i += 1
+                    i &+= 1
                   end
                 end
               when "actions"
@@ -98,7 +98,7 @@ module TransformData
                       holder = AdditionalItemHolder.new(id, allowed)
                       template_data.add_additional_item(holder)
                     end
-                    i += 1
+                    i &+= 1
                   end
                 end
               when "levels"

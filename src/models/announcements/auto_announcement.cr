@@ -19,9 +19,9 @@ class AutoAnnouncement < Announcement
   def initialize(rs : ResultSetReader)
     super
 
-    @initial = rs.get_i64("initial")
-    @delay = rs.get_i64("delay")
-    @repeat = rs.get_i32("repeat")
+    @initial = rs.get_i64(:"initial")
+    @delay = rs.get_i64(:"delay")
+    @repeat = rs.get_i32(:"repeat")
 
     restart_me
   end

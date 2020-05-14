@@ -1,13 +1,10 @@
 class MinionList
-  include Loggable
-  extend Loggable
-
   @minion_references = Concurrent::Array(L2MonsterInstance).new
-  @reused_minion_references : IArray(L2MonsterInstance)?
+  @reused_minion_references : Interfaces::Array(L2MonsterInstance)?
 
   initializer master : L2MonsterInstance
 
-  def spawned_minions : IArray(L2MonsterInstance)
+  def spawned_minions : Interfaces::Array(L2MonsterInstance)
     @minion_references
   end
 

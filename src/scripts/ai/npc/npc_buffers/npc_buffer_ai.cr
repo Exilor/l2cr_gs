@@ -1,6 +1,4 @@
 struct NpcBufferAI
-  include Loggable
-
   initializer npc : L2Npc, skill_data : NpcBufferSkillData
 
   def call
@@ -11,19 +9,16 @@ struct NpcBufferAI
     end
 
     if @npc.decayed?
-      warn "NPC is decayed."
       return
     end
 
     if @npc.dead?
-      warn "NPC is dead."
       return
     end
 
     summoner = @npc.summoner
 
     unless summoner && (pc = summoner.as?(L2PcInstance))
-      warn "Summoner is nil or not a player."
       return
     end
 
@@ -58,12 +53,10 @@ struct NpcBufferAI
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     ThreadPoolManager.schedule_general(self, @skill_data.delay)
   end

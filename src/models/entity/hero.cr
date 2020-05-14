@@ -46,7 +46,7 @@ module Hero
       hero[Olympiad::CLASS_ID] = rs.get_i32(Olympiad::CLASS_ID)
       hero[COUNT] = rs.get_i32(COUNT)
       hero[PLAYED] = rs.get_i32(PLAYED)
-      hero[CLAIMED] = Bool.new(rs.get_string(CLAIMED))
+      hero[CLAIMED] = rs.get_bool(CLAIMED)
 
       load_fights(char_id)
       load_diary(char_id)
@@ -64,7 +64,7 @@ module Hero
       hero[Olympiad::CLASS_ID] = rs.get_i32(Olympiad::CLASS_ID)
       hero[COUNT] = rs.get_i32(COUNT)
       hero[PLAYED] = rs.get_i32(PLAYED)
-      hero[CLAIMED] = Bool.new(rs.get_string(CLAIMED))
+      hero[CLAIMED] = rs.get_bool(CLAIMED)
 
       process_heroes(GET_CLAN_ALLY, char_id, hero)
 
@@ -79,8 +79,8 @@ module Hero
 
   private def process_heroes(sql, char_id, hero)
     GameDB.each(sql, char_id) do |rs|
-      clan_id = rs.get_i32("clanid")
-      ally_id = rs.get_i32("allyId")
+      clan_id = rs.get_i32(:"clanid")
+      ally_id = rs.get_i32(:"allyId")
       clan_name = ""
       ally_name = ""
       clan_crest = 0
@@ -111,7 +111,7 @@ module Hero
   def load_message(char_id : Int32)
     sql = "SELECT message FROM heroes WHERE charId=?"
     GameDB.each(sql, char_id) do |rs|
-      msg = rs.get_string("message")
+      msg = rs.get_string(:"message")
       HERO_MESSAGE[char_id] = msg
     end
   rescue e
@@ -124,9 +124,9 @@ module Hero
     sql = "SELECT * FROM  heroes_diary WHERE charId=? ORDER BY time ASC"
     GameDB.each(sql, char_id) do |rs|
       diary_entry = StatsSet.new
-      time = rs.get_i64("time")
-      action = rs.get_i32("action")
-      param = rs.get_i32("param")
+      time = rs.get_i64(:"time")
+      action = rs.get_i32(:"action")
+      param = rs.get_i32(:"param")
 
       date = Time.from_ms(time).to_s("%Y-%m-%d %H")
       diary_entry["date"] = date
@@ -148,7 +148,7 @@ module Hero
 
 
       diary << diary_entry
-      diary_entries += 1
+      diary_entries &+= 1
     end
 
     HERO_DIARY[char_id] = diary
@@ -177,14 +177,14 @@ module Hero
 
     sql = "SELECT * FROM olympiad_fights WHERE (charOneId=? OR charTwoId=?) AND start<? ORDER BY start ASC"
     GameDB.each(sql, char_id, char_id, from) do |rs|
-      char_one_id = rs.get_i32("charOneId")
-      char_one_class = rs.get_i32("charOneClass")
-      char_two_id = rs.get_i32("charTwoId")
-      char_two_class = rs.get_i32("charTwoClass")
-      winner = rs.get_i32("winner")
-      start = rs.get_i32("start")
-      time = rs.get_i64("time")
-      classed = rs.get_i32("classed")
+      char_one_id = rs.get_i32(:"charOneId")
+      char_one_class = rs.get_i32(:"charOneClass")
+      char_two_id = rs.get_i32(:"charTwoId")
+      char_two_class = rs.get_i32(:"charTwoClass")
+      winner = rs.get_i32(:"winner")
+      start = rs.get_i32(:"start")
+      time = rs.get_i64(:"time")
+      classed = rs.get_i32(:"classed")
 
       if char_id == char_one_id
         if name = CharNameTable.get_name_by_id(char_two_id)
@@ -202,18 +202,18 @@ module Hero
 
           if winner == 1
             fight["result"] = "<font color=\"00ff00\">victory</font>"
-            victories += 1
+            victories &+= 1
           elsif winner == 2
             fight["result"] = "<font color=\"ff0000\">loss</font>"
-            losses += 1
+            losses &+= 1
           elsif winner == 0
             fight["result"] = "<font color=\"ffff00\">draw</font>"
-            draws += 1
+            draws &+= 1
           end
 
           fights << fight
 
-          number_of_fights += 1
+          number_of_fights &+= 1
         end
       elsif char_id == char_two_id
         if name = CharNameTable.get_name_by_id(char_one_id)
@@ -231,18 +231,18 @@ module Hero
 
           if winner == 1
             fight["result"] = "<font color=\"ff0000\">loss</font>"
-            losses += 1
+            losses &+= 1
           elsif winner == 2
             fight["result"] = "<font color=\"00ff00\">victory</font>"
-            victories += 1
+            victories &+= 1
           elsif winner == 0
             fight["result"] = "<font color=\"ffff00\">draw</font>"
-            draws += 1
+            draws &+= 1
           end
 
           fights << fight
 
-          number_of_fights += 1
+          number_of_fights &+= 1
         end
       end
     end
@@ -257,7 +257,7 @@ module Hero
     error e
   end
 
-  def heroes : IHash(Int32, StatsSet)
+  def heroes : Interfaces::Map(Int32, StatsSet)
     HEROES
   end
 
@@ -305,7 +305,7 @@ module Hero
         counter = 0
         breakat = 0
         flist = String.build(500) do |io|
-          i = (page - 1) * per_page
+          i = (page &- 1) &* per_page
           while i < list.size
             breakat = i
             diary_entry = list[i]
@@ -324,11 +324,11 @@ module Hero
             io << "<tr><td>&nbsp;</td></tr></table>"
             io << "</td></tr>"
             color = !color
-            counter += 1
+            counter &+= 1
             if counter >= per_page
               break
             end
-            i += 1
+            i &+= 1
           end
         end
 
@@ -380,7 +380,7 @@ module Hero
         color = true
         counter = 0
         breakat = 0
-        i = (page - 1) * per_page
+        i = (page &- 1) &* per_page
         while i < hero_fights.size
           breakat = i
           fight = hero_fights[i]
@@ -412,12 +412,12 @@ module Hero
           io << "<tr><td colspan=2>&nbsp;</td></tr></table>"
           io << "</td></tr>"
           color = !color
-          counter += 1
+          counter &+= 1
           if counter > per_page
             break
           end
 
-          i += 1
+          i &+= 1
         end
 
         if breakat < hero_fights.size - 1
@@ -547,8 +547,8 @@ module Hero
 
         begin
           GameDB.each(GET_CLAN_ALLY, hero_id) do |rs|
-            clan_id = rs.get_i32("clanid")
-            ally_id = rs.get_i32("allyId")
+            clan_id = rs.get_i32(:"clanid")
+            ally_id = rs.get_i32(:"allyId")
             clan_name = ally_name = ""
             clan_crest = ally_crest = 0
             if clan_id > 0

@@ -199,10 +199,10 @@ module TopicBBSManager
             io << Time.now
             io << "</td></tr></table><img src=\"L2UI.Squaregray\" width=\"610\" height=\"1\">"
           end
-          i += 1
+          i &+= 1
         end
 
-        j -= 1
+        j &-= 1
       end
 
       io << "<br><table width=610 cellspace=0 cellpadding=0><tr><td width=50>" \
@@ -246,7 +246,7 @@ module TopicBBSManager
         io << "<td><button action=\"bypass _bbstopics;read;"
         io << forum.id
         io << ';'
-        io << (index + 1)
+        io << (index &+ 1)
         io << "\" back=\"l2ui_ch3.next1_down\" fore=\"l2ui_ch3.next1\" width=16 height=16 ></td>"
       end
     end

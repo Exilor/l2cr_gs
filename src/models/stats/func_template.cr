@@ -86,7 +86,6 @@ struct FuncTemplate
       return
     end
 
-    # Using ::new directly conflicts with subclasses with a 0-arity #initialize
     @constructor.call(@stat, @order, owner, @value, @apply_cond)
   end
 end

@@ -621,16 +621,11 @@ class L2ItemInstance < L2Object
   end
 
   class ItemDropTask
-    include Loggable
 
     initializer item : L2ItemInstance, dropper : L2Character?, x : Int32,
       y : Int32, z : Int32
 
     def call
-      if @item.world_region
-        warn { "@world_region for #{@item} should be nil" }
-      end
-
       if dropper = @dropper
         loc = GeoData.move_check(*dropper.xyz, @x, @y, @z, dropper.instance_id)
         @x, @y, @z = loc.xyz

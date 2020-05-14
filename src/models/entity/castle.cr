@@ -290,26 +290,26 @@ class Castle < AbstractResidence
     sql2 = "SELECT clan_id FROM clan_data WHERE hasCastle = ?"
 
     GameDB.each(sql1, residence_id) do |rs|
-      self.name = rs.get_string("name")
+      self.name = rs.get_string(:"name")
 
       date = Calendar.new
-      date.ms = rs.get_i64("siegeDate")
+      date.ms = rs.get_i64(:"siegeDate")
       @siege_date = date
       date = Calendar.new
-      date.ms = rs.get_i64("regTimeEnd")
+      date.ms = rs.get_i64(:"regTimeEnd")
       @siege_time_registration_end_date = date
 
-      @tax_percent = rs.get_i32("taxPercent")
-      @treasury = rs.get_i64("treasury")
+      @tax_percent = rs.get_i32(:"taxPercent")
+      @treasury = rs.get_i64(:"treasury")
 
-      @show_npc_crest = rs.get_bool("showNpcCrest")
-      @ticket_buy_count = rs.get_i32("ticketBuyCount")
+      @show_npc_crest = rs.get_bool(:"showNpcCrest")
+      @ticket_buy_count = rs.get_i32(:"ticketBuyCount")
     end
 
     @tax_rate = @tax_percent / 100.0
 
     GameDB.each(sql2, residence_id) do |rs|
-      @owner_id = rs.get_i32("clan_id")
+      @owner_id = rs.get_i32(:"clan_id")
     end
   rescue e
     error e
@@ -318,11 +318,11 @@ class Castle < AbstractResidence
   private def load_functions
     sql = "SELECT * FROM castle_functions WHERE castle_id = ?"
     GameDB.each(sql, residence_id) do |rs|
-      type = rs.get_i32("type")
-      lvl = rs.get_i32("lvl")
-      lease = rs.get_i32("lease")
-      rate = rs.get_i64("rate")
-      end_time = rs.get_i64("endTime")
+      type = rs.get_i32(:"type")
+      lvl = rs.get_i32(:"lvl")
+      lease = rs.get_i32(:"lease")
+      rate = rs.get_i64(:"rate")
+      end_time = rs.get_i64(:"endTime")
       fn = CastleFunction.new(self, type, lvl, lease, 0, rate, end_time, true)
       @functions[type] = fn
     end
@@ -384,8 +384,8 @@ class Castle < AbstractResidence
   private def load_door_upgrade
     sql = "SELECT * FROM castle_doorupgrade WHERE castleId=?"
     GameDB.each(sql, residence_id) do |rs|
-      door_id = rs.get_i32("doorId")
-      ratio = rs.get_i32("ratio")
+      door_id = rs.get_i32(:"doorId")
+      ratio = rs.get_i32(:"ratio")
       set_door_upgrade(door_id, ratio, false)
     end
   rescue e

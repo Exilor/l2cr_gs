@@ -33,17 +33,17 @@ class L2ClanMember
 
   def initialize(clan : L2Clan, rs : ResultSetReader)
     @clan = clan
-    @name = rs.get_string("char_name")
-    @level = rs.get_i32("level")
-    @class_id = rs.get_i32("classid")
-    @l2id = rs.get_i32("charId")
-    @pledge_type = rs.get_i32("subpledge")
-    @title = rs.get_string("title")
-    @power_grade = rs.get_i32("power_grade")
-    @apprentice = rs.get_i32("apprentice")
-    @sponsor = rs.get_i32("sponsor")
-    @sex = rs.get_i32("sex") != 0
-    @race_ordinal = rs.get_i32("race")
+    @name = rs.get_string(:"char_name")
+    @level = rs.get_i32(:"level")
+    @class_id = rs.get_i32(:"classid")
+    @l2id = rs.get_i32(:"charId")
+    @pledge_type = rs.get_i32(:"subpledge")
+    @title = rs.get_string(:"title")
+    @power_grade = rs.get_i32(:"power_grade")
+    @apprentice = rs.get_i32(:"apprentice")
+    @sponsor = rs.get_i32(:"sponsor")
+    @sex = rs.get_i32(:"sex") != 0
+    @race_ordinal = rs.get_i32(:"race")
   end
 
   def player_instance=(player : L2PcInstance?)
@@ -142,7 +142,9 @@ class L2ClanMember
     error e
   end
 
-  def set_apprentice_and_sponsor(@apprentice : Int32, @sponsor : Int32)
+  def set_apprentice_and_sponsor(apprentice : Int32, sponsor : Int32)
+    @apprentice = apprentice
+    @sponsor = sponsor
   end
 
   def race_ordinal : Int32
@@ -212,7 +214,6 @@ class L2ClanMember
         else
           # [automatically added else]
         end
-
       when 7
         case pc.pledge_type
         when -1
@@ -238,7 +239,6 @@ class L2ClanMember
         else
           # [automatically added else]
         end
-
       when 8
         case pc.pledge_type
         when -1
@@ -264,7 +264,6 @@ class L2ClanMember
         else
           # [automatically added else]
         end
-
       when 9
         case pc.pledge_type
         when -1
@@ -290,7 +289,6 @@ class L2ClanMember
         else
           # [automatically added else]
         end
-
       when 10
         case pc.pledge_type
         when -1
@@ -316,7 +314,6 @@ class L2ClanMember
         else
           # [automatically added else]
         end
-
       when 11
         case pc.pledge_type
         when -1
@@ -342,7 +339,6 @@ class L2ClanMember
         else
           # [automatically added else]
         end
-
       else
         pledge_class = 1
       end

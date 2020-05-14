@@ -1,4 +1,6 @@
 class EffectHandler::TriggerSkillBySkill < AbstractEffect
+  include Loggable
+
   @cast_skill_id : Int32
   @chance : Int32
   @target_type : TargetType

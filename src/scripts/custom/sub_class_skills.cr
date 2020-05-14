@@ -98,7 +98,7 @@ class Scripts::SubClassSkills < Quest
                 cert_skills.size.downto(0) do |index|
                   if c_skills[index][0] == id
                     skill = cert_skills[index]?
-                    c_skills[index][1] -= 1
+                    c_skills[index][1] &-= 1
                     break
                   end
                 end
@@ -132,7 +132,7 @@ class Scripts::SubClassSkills < Quest
                 cert_items.size.downto(0) do |index|
                   if c_items[index][0] == id
                     item = cert_items[index]?
-                    c_items[index][1] -= 1
+                    c_items[index][1] &-= 1
                     break
                   end
                 end

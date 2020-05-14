@@ -12,7 +12,6 @@ module HitConditionBonusData
 
   def load
     parse_datapack_file("stats/hitConditionBonus.xml")
-    info "Loaded hit condition bonuses."
   end
 
   private def parse_document(doc, file)

@@ -147,11 +147,11 @@ class LoginServerClient
     error e
   end
 
-  def waiting_clients : IArray(WaitingClient)
+  def waiting_clients : Interfaces::Array(WaitingClient)
     WAITING
   end
 
-  def accounts : IHash(String, GameClient)
+  def accounts : Interfaces::Map(String, GameClient)
     ACCOUNTS
   end
 
@@ -254,7 +254,7 @@ class LoginServerClient
     sql = "SELECT deletetime FROM characters WHERE account_name=?"
     GameDB.each(sql, account) do |rs|
       chars += 1
-      del_time = rs.get_i64("deletetime")
+      del_time = rs.get_i64(:"deletetime")
       if del_time != 0
         to_delete << del_time
       end

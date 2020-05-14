@@ -19,8 +19,9 @@ module ClassListData
       find_element(n, "class") do |d|
         class_id = ClassId[parse_int(d, "classId")]
         class_name = parse_string(d, "name")
-        parent_id = parse_int(d, "parentClassId", nil)
-        parent = ClassId[parent_id] if parent_id
+        if parent_id = parse_int(d, "parentClassId", nil)
+          parent = ClassId[parent_id]
+        end
         CLASS_DATA[class_id] = ClassInfo.new(class_id, class_name, parent)
       end
     end

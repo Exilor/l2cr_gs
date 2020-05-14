@@ -85,7 +85,7 @@ class UIKeysSettings
     begin
       sql = "SELECT * FROM character_ui_categories WHERE `charId` = ? ORDER BY `catId`, `order`"
       GameDB.each(sql, @pc_id) do |rs|
-        UIData.add_category(@categories, rs.get_i32("catId"), rs.get_i32("cmdId"))
+        UIData.add_category(@categories, rs.get_i32(:"catId"), rs.get_i32(:"cmdId"))
       end
     rescue e
       error e
@@ -104,12 +104,12 @@ class UIKeysSettings
     begin
       sql = "SELECT * FROM character_ui_actions WHERE `charId` = ? ORDER BY `cat`, `order`"
       GameDB.each(sql, @pc_id) do |rs|
-        cat = rs.get_i32("cat")
-        cmd = rs.get_i32("cmd")
-        key = rs.get_i32("key")
-        tgKey1 = rs.get_i32("tgKey1")
-        tgKey2 = rs.get_i32("tgKey2")
-        show = rs.get_i32("show")
+        cat = rs.get_i32(:"cat")
+        cmd = rs.get_i32(:"cmd")
+        key = rs.get_i32(:"key")
+        tgKey1 = rs.get_i32(:"tgKey1")
+        tgKey2 = rs.get_i32(:"tgKey2")
+        show = rs.get_i32(:"show")
         ak = ActionKey.new(cat, cmd, key, tgKey1, tgKey2, show)
         UIData.add_key(@keys, cat, ak)
       end

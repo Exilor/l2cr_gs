@@ -9,7 +9,7 @@ class Packets::Incoming::RequestKeyMapping < GameClientPacket
     return unless pc = active_char
 
     if Config.store_ui_settings
-      pc.send_packet(ExUISetting.new(pc))
+      pc.send_packet(ExUInterfaces::Setting.new(pc))
     end
   end
 end

@@ -61,9 +61,9 @@ module GameDB
         class_index = servitor.owner.class_index
         ref_skill = servitor.reference_skill
         GameDB.each(RESTORE_SKILL_SAVE, owner_id, class_index, ref_skill) do |rs|
-          time = rs.get_i32("remaining_time")
-          skill_id = rs.get_i32("skill_id")
-          skill_lvl = rs.get_i32("skill_level")
+          time = rs.get_i32(:"remaining_time")
+          skill_id = rs.get_i32(:"skill_id")
+          skill_lvl = rs.get_i32(:"skill_level")
           unless skill = SkillData[skill_id, skill_lvl]?
             next
           end

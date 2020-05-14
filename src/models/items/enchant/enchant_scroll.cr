@@ -2,6 +2,8 @@ require "./abstract_enchant_item"
 require "./enchant_result_type"
 
 class EnchantScroll < AbstractEnchantItem
+  include Loggable
+
   @items : Set(Int32)?
 
   getter scroll_group_id : Int32

@@ -1165,6 +1165,9 @@ module Formulas
       tmp = result ? "landed" : "missed"
       debug { "Blow from #{char.name} against #{target.name} #{tmp} (chance: #{rate}%)." }
     end
+    if !result && (pc = char.acting_player)
+      pc.send_packet(SystemMessageId::ATTACK_FAILED)
+    end
     result
   end
 
@@ -1445,5 +1448,9 @@ module Formulas
 
   def skill_crit(attacker : L2Character, target : L2Character, crit_chance : Int32) : Bool
     BaseStats::STR.calc_bonus(attacker) * crit_chance > Rnd.rand * 100
+  end
+
+  def soul_bonus(skill : Skill, info : BuffInfo) : Float64
+    skill.max_soul_consume_count > 0 ? (info.charges * 0.04) + 1 : 1.0
   end
 end

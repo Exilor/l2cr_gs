@@ -17,7 +17,6 @@ class EffectHandler::Harvesting < AbstractEffect
       end
 
       unless item = mob.take_harvest
-        debug "take_harvest failed."
         return
       end
 

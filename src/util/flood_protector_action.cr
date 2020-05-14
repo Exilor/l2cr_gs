@@ -78,7 +78,7 @@ class FloodProtectorAction
         task = PunishmentTask.new(char_id, PunishmentAffect::CHARACTER, PunishmentType::JAIL, Time.ms + @config.punishment_time, "", self.class.simple_name)
         PunishmentManager.start_punishment(task)
       end
-      warn { "#{pc.name} jailed for flooding." }
+      warn { pc.name + " jailed for flooding." }
     end
   end
 

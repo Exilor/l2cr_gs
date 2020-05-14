@@ -10,12 +10,12 @@ class ExecutedTask
   def_equals_and_hash @id
 
   def initialize(@task : Task, @type : TaskType, rs : ResultSetReader)
-    @id = rs.get_i32("id")
-    @last_activation = rs.get_i64("last_activation")
+    @id = rs.get_i32(:"id")
+    @last_activation = rs.get_i64(:"last_activation")
     @params = {
-      rs.get_string("param1"),
-      rs.get_string("param2"),
-      rs.get_string("param3")
+      rs.get_string(:"param1"),
+      rs.get_string(:"param2"),
+      rs.get_string(:"param3")
     }
   end
 

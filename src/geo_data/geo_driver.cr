@@ -3,8 +3,8 @@ require "./i_block"
 require "./regions/null_region"
 require "./regions/region"
 
-struct GeoDriver
-  include Loggable
+module GeoDriver
+  extend self
 
   # world dimensions: 1048576 * 1048576 = 1099511627776
   private WORLD_MIN_X = -655360
@@ -31,7 +31,7 @@ struct GeoDriver
   # Cells in the world in the y axis
   GEO_CELLS_Y = GEO_BLOCKS_Y * IBlock::BLOCK_CELLS_Y
 
-  @regions = Pointer(IRegion).malloc(GEO_REGIONS, NullRegion)
+  private REGIONS = Pointer(IRegion).malloc(GEO_REGIONS, NullRegion)
 
   private def check_geo_x(x : Int32)
     if x < 0 || x >= GEO_CELLS_X
@@ -49,7 +49,7 @@ struct GeoDriver
     check_geo_x(x)
     check_geo_y(y)
 
-    @regions[((x // IRegion::REGION_CELLS_X) * GEO_REGIONS_Y) + (y // IRegion::REGION_CELLS_Y)]
+    REGIONS[((x // IRegion::REGION_CELLS_X) * GEO_REGIONS_Y) + (y // IRegion::REGION_CELLS_Y)]
   end
 
   # Using the file IO to create the region is much slower.
@@ -61,14 +61,14 @@ struct GeoDriver
         slice = GC.malloc_atomic(size).as(UInt8*).to_slice(size)
         f.read_fully(slice)
         io = IO::Memory.new(slice)
-        @regions[offset] = Region.new(io)
+        REGIONS[offset] = Region.new(io)
       end
     end
   end
 
   def unload_region(x : Int32, y : Int32)
     offset = (x * GEO_REGIONS_Y) + y
-    @regions[offset] = NullRegion
+    REGIONS[offset] = NullRegion
   end
 
   def has_geo_pos?(x : Int32, y : Int32) : Bool

@@ -221,8 +221,4 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
       @cycle = 0
     end
   end
-
-  def to_log(io : IO)
-    io << "Airship (Gludio - Gracia)"
-  end
 end

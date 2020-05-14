@@ -92,12 +92,12 @@ module GameDB
     def load(pc : L2PcInstance)
       current_time = Time.ms
       GameDB.each(SELECT, pc.l2id, pc.class_index) do |rs|
-        remaining_time = rs.get_i32("remaining_time")
-        reuse_delay = rs.get_i64("reuse_delay")
-        systime = rs.get_i64("systime")
-        restore_type = rs.get_i32("restore_type")
+        remaining_time = rs.get_i32(:"remaining_time")
+        reuse_delay = rs.get_i64(:"reuse_delay")
+        systime = rs.get_i64(:"systime")
+        restore_type = rs.get_i32(:"restore_type")
 
-        skill = SkillData[rs.get_i32("skill_id"), rs.get_i32("skill_level")]?
+        skill = SkillData[rs.get_i32(:"skill_id"), rs.get_i32(:"skill_level")]?
         unless skill
           next
         end

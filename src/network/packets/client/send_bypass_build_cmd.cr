@@ -18,7 +18,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
     unless handler = AdminCommandHandler[command]
       if pc.gm?
-        pc.send_message("The command #{command.from(6)} does not exist.")
+        pc.send_message("The command '#{command.from(6)}' does not exist.")
       end
 
       return
@@ -26,7 +26,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
     unless AdminData.has_access?(command, pc.access_level)
       pc.send_message("You don't have the access right to use this command")
-      warn { "#{pc} tried to use admin command #{command} without the proper access level." }
+      warn { "#{pc.name} tried to use admin command '#{command}' without the proper access level." }
       return
     end
 
@@ -55,10 +55,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       set_mp
     when /^cp\s\d+/
       set_cp
-    when "rush"
-      rush
-    when "skills"
-      send_skill_info
     when /^get_ch\s\d+$/
       ClanHallManager.set_owner(args[0].to_i, pc.clan.not_nil!) if pc.clan
     when "destroy_items"
@@ -69,15 +65,13 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when "sunset"
       send_packet(SunSet::STATIC_PACKET)
     when "realtime"
-      send_packet(ClientSetTime.new(time: Time.now.to_s("%H:%M"), speed: 1))
+      send_packet(ClientSetTime.new(time: Time.local.to_s("%H:%M"), speed: 1))
     when "gametime"
       send_packet(ClientSetTime::STATIC_PACKET)
     when /^milk\s\d+$/
       milk_target
     when "aspir"
       aspir(999999)
-    when /^clan_level\s\d$/
-      pc.clan.try &.level = args.first.to_i
     when /^uplift\s.*/
       uplift_target
     when "cancel"
@@ -86,19 +80,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       char_target.effect_list.stop_all_debuffs
     when "reuse"
       reset_skill_reuse
-    when /^ivar\s\S+$/
-      print_ivar
-    when /^spawn2\s\d+$/
-      spawn_npc
-    when /^spawn2\s(\w\s?)+$/
-      spawn_npc_by_name
     when /^goto_npc\s.+$/
       goto_npc
-    when "interrupt"
-      if target = pc.target.as?(L2Character)
-        target.abort_cast
-        target.abort_attack
-      end
     when "recall_bots"
       L2World.players.each do |player|
         if player.name.starts_with?("bot") && player != pc
@@ -138,21 +121,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       all_go_back
     when "all_follow_me"
       all_follow_me
-    when /^summon(\s\d+)?/
-      summon_npc
-    when "attack"
-      attack_my_target
     when "recall_party"
       pc.party.try &.each { |m| m.tele_to_location(pc, true) if m != pc }
-    when /start_quest\s\d+/
-      id = args[0].to_i
-      if q = QuestManager.get_quest(id)
-        state = q.new_quest_state(pc)
-        state.start_quest
-        pc.send_message("Started quest '#{q.descr}'.")
-      else
-        pc.send_message("Quest with id #{id} not found.")
-      end
     else
       return :proceed
     end
@@ -170,23 +140,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
   private def set_cp
     char_target.current_cp = args[0].to_f64
-  end
-
-  private def rush
-    if pc.moving?
-      dst = Location.new(pc.x_destination, pc.y_destination, pc.z_destination)
-      pc.broadcast_packet(FlyToLocation.new(pc, dst, FlyType::CHARGE))
-      pc.set_xyz(pc.x_destination, pc.y_destination, pc.z_destination)
-      pc.stop_move(nil)
-
-      if summon = pc.summon
-        summon.broadcast_packet(FlyToLocation.new(summon, dst, FlyType::CHARGE))
-        summon.set_xyz(dst)
-        summon.follow_owner
-      end
-    else
-      pc.send_message("You need to be moving in order to rush.")
-    end
   end
 
   private def milk_target
@@ -286,64 +239,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     char_target.as?(L2PcInstance) || active_char.not_nil!
   end
 
-  private def learn_skill
-    return unless pc = active_char
-    if args.size == 1
-      lvl = 1
-    else
-      lvl = args.last.to_i
-    end
-
-    id = args.first.to_i
-    if skill = SkillData[id, lvl]?
-      pc.add_skill(skill, false)
-      pc.send_skill_list
-      pc.send_message("You learnt #{skill}")
-    else
-      pc.send_message("No skill exists with ID #{id} and level #{lvl}.")
-    end
-  end
-
-  private def print_ivar
-    name = args.first
-    {% for ivar in L2PcInstance.instance_vars %}
-      if name.casecmp?({{ivar.stringify}})
-        debug pc.@{{ivar.id}}.inspect
-        return
-      end
-    {% end %}
-  end
-
-  private def spawn_npc
-    npc_id = args.last.to_i
-    unless NpcData[npc_id]?
-      pc.send_message("No NPC with id #{npc_id} exists.")
-      return
-    end
-    sp = L2Spawn.new(npc_id)
-    sp.instance_id = pc.instance_id
-    sp.heading = pc.heading
-    sp.x, sp.y, sp.z = pc.xyz
-    sp.stop_respawn
-
-    sp.spawn_one(false)
-  end
-
-  private def spawn_npc_by_name
-    name = args.join(' ')
-    unless template = NpcData.templates.find &.name.casecmp?(name)
-      pc.send_message("No NPC with name #{name} exists.")
-      return
-    end
-    sp = L2Spawn.new(template.id)
-    sp.instance_id = pc.instance_id
-    sp.heading = pc.heading
-    sp.x, sp.y, sp.z = pc.xyz
-    sp.stop_respawn
-
-    sp.spawn_one(false)
-  end
-
   private def goto_npc
     name = args.join(' ')
 
@@ -419,42 +314,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     if target.is_a?(L2MonsterInstance)
       target.champion = !target.champion?
       target.send_info(pc)
-    end
-  end
-
-  private def summon_npc
-    id = args.first?.try &.to_i
-    id ||= pc.target.as?(L2Npc).try &.id
-    return unless id
-    return unless template = NpcData[id]?
-    summon = L2ServitorInstance.new(template, pc)
-    pc.pet = summon.heal!
-    summon.name = template.name
-
-    if t = pc.target.as?(L2Npc)
-      summon.set_xyz_invisible(*t.xyz)
-    end
-
-    summon.spawn_me
-    msu = MagicSkillUse.new(summon, summon, 5456, 1, 1, 1)
-    summon.broadcast_packet(msu)
-    summon.@life_task.try &.cancel
-    summon.set_running
-  end
-
-  private def attack_my_target
-    return unless target = pc.target.as?(L2Character)
-
-    pc.known_list.each_character do |char|
-      next unless char.is_a?(L2Attackable)
-      next if char == target
-
-      char.known_list.add_known_object(target)
-
-      info = char.aggro_list[target] ||= AggroInfo.new(target)
-      info.add_hate(9999999)
-      char.target = target
-      char.set_intention(AI::ATTACK, target)
     end
   end
 
@@ -634,7 +493,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       # [automatically added else]
     end
 
-
     items << pc.inventory.add_item("GM", 21720, 1, pc, nil) # Soul Cloak of Freya
 
     items.each do |item|
@@ -646,7 +504,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
         item.enchant_level = 8
       end
 
-      if item.item_id == 15717 || item.item_id == 15718
+      if item.item_id.in?(15717, 15718)
         unless item.equipped?
           pc.inventory.equip_item(item)
         end
@@ -692,26 +550,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       pc.inventory.add_item("GM", 15586, 1, pc, nil)  # Elegia Shoes
     }
     items.concat(items2)
-  end
-
-  private def send_skill_info
-    return unless pc = active_char
-    unless target = pc.target.as?(L2Npc)
-      target = pc.target.as?(L2PcInstance) || pc
-      p target.skills
-      return
-    end
-
-    html = String.build do |io|
-      io.puts "<html><title>AI skill list</title><body>"
-      AISkillScope.each do |scope|
-        skills = target.template.get_ai_skills(scope).join(", ")
-        io.puts "#{scope}: #{skills}<br1>"
-      end
-      io.puts "</body></html>"
-    end
-    msg = NpcHtmlMessage.new(html)
-    pc.send_packet(msg)
   end
 
   private def pc

@@ -5,10 +5,7 @@ module PlayerXpPercentLostData
   private DATA = [] of Float64
 
   def load
-    DATA.clear
-    (Config.max_player_level + 1).times do
-      DATA << 1.0
-    end
+    DATA.replace([1.0] * (Config.max_player_level + 1))
     parse_datapack_file("stats/chars/playerXpPercentLost.xml")
   end
 
@@ -24,7 +21,6 @@ module PlayerXpPercentLostData
 
   def [](level : Int) : Float64
     DATA.fetch(level) do
-      max = Config.max_player_level + 1
       warn { "Unknown experience loss percent for level #{level}." }
       DATA[-1]
     end

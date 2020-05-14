@@ -4,7 +4,7 @@ module SpawnTable
 
   private SELECT_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM spawnlist"
   private SELECT_CUSTOM_SPAWNS = "SELECT count, npc_templateid, locx, locy, locz, heading, respawn_delay, respawn_random, loc_id, periodOfDay FROM custom_spawnlist"
-  private SPAWN_TABLE = Concurrent::Map(Int32, ISet(L2Spawn)).new
+  private SPAWN_TABLE = Concurrent::Map(Int32, Interfaces::Set(L2Spawn)).new
 
   @@xml_spawn_count = 0
 
@@ -41,21 +41,21 @@ module SpawnTable
 
     sql = is_custom ? SELECT_CUSTOM_SPAWNS : SELECT_SPAWNS
     GameDB.each(sql) do |rs|
-      npc_id = rs.get_i32("npc_templateid").to_u16!.to_i32
+      npc_id = rs.get_i32(:"npc_templateid").to_u16!.to_i32
       unless check_template(npc_id)
         next
       end
 
       dat["npcTemplateid"] = npc_id
-      dat["count"] = rs.get_i32("count")
-      dat["x"] = rs.get_i32("locx")
-      dat["y"] = rs.get_i32("locy")
-      dat["z"] = rs.get_i32("locz")
-      dat["heading"] = rs.get_i32("heading")
-      dat["respawnDelay"] = rs.get_i32("respawn_delay")
-      dat["respawnRandom"] = rs.get_i32("respawn_random")
-      dat["locId"] = rs.get_i32("loc_id")
-      dat["periodOfDay"] = rs.get_i32("periodOfDay")
+      dat["count"] = rs.get_i32(:"count")
+      dat["x"] = rs.get_i32(:"locx")
+      dat["y"] = rs.get_i32(:"locy")
+      dat["z"] = rs.get_i32(:"locz")
+      dat["heading"] = rs.get_i32(:"heading")
+      dat["respawnDelay"] = rs.get_i32(:"respawn_delay")
+      dat["respawnRandom"] = rs.get_i32(:"respawn_random")
+      dat["locId"] = rs.get_i32(:"loc_id")
+      dat["periodOfDay"] = rs.get_i32(:"periodOfDay")
       dat["isCustomSpawn"] = is_custom
 
       spawn_count += add_spawn(dat)
@@ -128,8 +128,8 @@ module SpawnTable
     end
   end
 
-  def get_spawns(npc_id : Int32) : ISet(L2Spawn)
-    SPAWN_TABLE.fetch(npc_id, ISet.empty(L2Spawn))
+  def get_spawns(npc_id : Int32) : Interfaces::Set(L2Spawn)
+    SPAWN_TABLE.fetch(npc_id, Interfaces::Set.empty(L2Spawn))
   end
 
   def get_spawn_count(npc_id : Int32) : Int32

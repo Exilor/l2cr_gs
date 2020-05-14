@@ -13,11 +13,11 @@ module SummonSkillsTable
 
     sql = "SELECT templateId, minLvl, skillId, skillLvl FROM pets_skills"
     GameDB.each(sql) do |rs|
-      npc_id = rs.get_i32("templateId")
+      npc_id = rs.get_i32(:"templateId")
       skill_tree = SKILL_TREES[npc_id] ||= {} of Int32 => L2PetSkillLearn
-      id = rs.get_i32("skillId")
-      lvl = rs.get_i32("skillLvl")
-      skill_learn = L2PetSkillLearn.new(id, lvl, rs.get_i32("minLvl"))
+      id = rs.get_i32(:"skillId")
+      lvl = rs.get_i32(:"skillLvl")
+      skill_learn = L2PetSkillLearn.new(id, lvl, rs.get_i32(:"minLvl"))
       skill_tree[SkillData.get_skill_hash(id, lvl + 1)] = skill_learn
       count += 1
     end

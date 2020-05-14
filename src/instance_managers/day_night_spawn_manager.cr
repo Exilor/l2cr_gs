@@ -29,7 +29,7 @@ module DayNightSpawnManager
         s.stop_respawn
         if last = s.last_spawn
           last.delete_me
-          i += 1
+          i &+= 1
         end
       end
 
@@ -40,7 +40,7 @@ module DayNightSpawnManager
     do_spawn.each do |s|
       s.start_respawn
       s.do_spawn
-      i += 1
+      i &+= 1
     end
     info { "Spawned #{i} #{spawn_info} creatures." }
   rescue e

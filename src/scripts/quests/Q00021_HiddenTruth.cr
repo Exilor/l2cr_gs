@@ -84,7 +84,7 @@ class Scripts::Q00021_HiddenTruth < Quest
         page.script_value = player.l2id
         page.broadcast_packet(NpcSay.new(page.l2id, Say2::NPC_ALL, page.id, NpcString::MY_MASTER_HAS_INSTRUCTED_ME_TO_BE_YOUR_GUIDE_S1).add_string_parameter(player.name))
         WalkingManager.start_moving(page, PAGE_ROUTE_NAME)
-        @page_count += 1
+        @page_count &+= 1
         st.set_cond(3)
         html = event
       else
@@ -114,7 +114,7 @@ class Scripts::Q00021_HiddenTruth < Quest
       npc.delete_me
     when "DESPAWN"
       npc = npc.not_nil!
-      @page_count -= 1
+      @page_count &-= 1
       npc.delete_me
     else
       # [automatically added else]
@@ -150,7 +150,7 @@ class Scripts::Q00021_HiddenTruth < Quest
           else
             if @page_count < 5
               page = add_spawn(GHOST_OF_VON_HELLMANS_PAGE, PAGE_LOC, true, 0)
-              @page_count += 1
+              @page_count &+= 1
               @page_spawned = true
               page.script_value = pc.l2id
               WalkingManager.start_moving(page, PAGE_ROUTE_NAME)

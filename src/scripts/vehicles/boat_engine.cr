@@ -1,6 +1,4 @@
 module BoatEngine
-  include Loggable
-
   private alias CreatureSay = Packets::Outgoing::CreatureSay
   private alias Say2 = Packets::Incoming::Say2
 

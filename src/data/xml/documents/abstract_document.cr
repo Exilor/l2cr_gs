@@ -227,7 +227,7 @@ abstract class AbstractDocument
         castle = get_value(text).to_i
         cond = join_and(cond, Condition::PlayerHasCastle.new(castle))
       when "sex"
-        sex = get_value(text).to_i
+        sex = get_value(text) == "1" # 0: male, 1: female
         cond = join_and(cond, Condition::PlayerSex.new(sex))
       when "flymounted"
         cond = join_and(cond, Condition::PlayerFlyMounted.new(Bool.new(text)))

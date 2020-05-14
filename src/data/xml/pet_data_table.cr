@@ -45,6 +45,7 @@ module PetDataTable
             find_element(p, "stat") do |s|
               set = StatsSet.new
               level = parse_int(s, "level")
+
               each_element(s) do |b|
                 if parse_string(b, "name") == "speed_on_ride"
                   add_from_node(b, set, "walkSpeedOnRide", "walk")
@@ -57,6 +58,7 @@ module PetDataTable
                   set[parse_string(b, "name")] = parse_string(b, "val")
                 end
               end
+
               data.add_new_stat(level, L2PetLevelData.new(set))
             end
           else
@@ -74,21 +76,19 @@ module PetDataTable
   end
 
   def get_pet_level_data(pet_id : Int, pet_level : Int) : L2PetLevelData?
-    get_pet_data(pet_id).try &.get_pet_level_data(pet_level)
+    get_pet_data(pet_id).get_pet_level_data(pet_level)
   end
 
   def get_pet_data(pet_id : Int) : L2PetData
-    PETS.fetch(pet_id) { raise "Missing pet data for NPC id #{pet_id}." }
+    PETS.fetch(pet_id) { raise "Missing pet data for id #{pet_id}" }
   end
 
   def get_pet_min_level(pet_id : Int) : Int32
-    tmp = PETS.fetch(pet_id) { raise "No L2PetData for pet id #{pet_id}." }
-    tmp.min_level.to_i32
+    get_pet_data(pet_id).min_level.to_i32
   end
 
   def get_pet_items_by_npc(npc_id : Int) : Int32
-    tmp = PETS.fetch(npc_id) { raise "No L2PetData for npc id #{npc_id}." }
-    tmp.item_id
+    get_pet_data(npc_id).item_id
   end
 
   def mountable?(npc_id : Int32) : Bool

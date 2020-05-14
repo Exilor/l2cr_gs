@@ -107,14 +107,14 @@ class MacroList
 
     sql = "SELECT charId, id, icon, name, descr, acronym, commands FROM character_macroses WHERE charId=?"
     GameDB.each(sql, @owner.l2id) do |rs|
-      id = rs.get_i32("id")
-      icon = rs.get_i32("icon")
-      name = rs.get_string("name")
-      descr = rs.get_string("descr")
-      acronym = rs.get_string("acronym")
+      id = rs.get_i32(:"id")
+      icon = rs.get_i32(:"icon")
+      name = rs.get_string(:"name")
+      descr = rs.get_string(:"descr")
+      acronym = rs.get_string(:"acronym")
       commands = [] of MacroCMD
 
-      st1 = rs.get_string("commands").split(';')
+      st1 = rs.get_string(:"commands").split(';')
       until st1.empty?
         st = st1.shift.split(',')
         if st.size < 3

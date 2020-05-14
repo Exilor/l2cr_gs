@@ -146,7 +146,7 @@ module FourSepulchersManager
   private def time_calculator
     tmp = Calendar.new
     if tmp.minute < @@cycle_min
-      tmp.hour -= 1
+      tmp.hour &-= 1
     end
     tmp.minute = @@cycle_min
 
@@ -208,7 +208,6 @@ module FourSepulchersManager
         else
           # [automatically added else]
         end
-
 
         MANAGERS << sp
         SpawnTable.add_new_spawn(sp, false)
@@ -310,26 +309,20 @@ module FourSepulchersManager
     begin
       sql = "SELECT id, count, npc_templateid, locx, locy, locz, heading, respawn_delay, key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY id"
       GameDB.each(sql, 0) do |rs|
-        template_id = rs.get_i32("npc_templateid")
-        if template_id < 0
-          raise "got an unintended negative i32 from DB at #{__LINE__}"
-        end
-        count = rs.get_i32("count")
-        x = rs.get_i32("locx")
-        y = rs.get_i32("locy")
-        z = rs.get_i32("locz")
-        heading = rs.get_i32("heading")
-        respawn_delay = rs.get_i32("respawn_delay")
+        template_id = rs.get_i32(:"npc_templateid")
+        count = rs.get_i32(:"count")
+        x = rs.get_i32(:"locx")
+        y = rs.get_i32(:"locy")
+        z = rs.get_i32(:"locz")
+        heading = rs.get_i32(:"heading")
+        respawn_delay = rs.get_i32(:"respawn_delay")
         sp = L2Spawn.new(template_id)
         sp.amount = count
         sp.x, sp.y, sp.z = x, y, z
         sp.heading = heading
         sp.respawn_delay = respawn_delay
         SpawnTable.add_new_spawn(sp, false)
-        key_npc_id = rs.get_i32("key_npc_id")
-        if key_npc_id < 0
-          raise "got an unintended negative i32 from DB at #{__LINE__}"
-        end
+        key_npc_id = rs.get_i32(:"key_npc_id")
 
         MYSTERIOUS_BOX_SPAWNS[key_npc_id] = sp
       end
@@ -382,17 +375,10 @@ module FourSepulchersManager
     sql = "SELECT Distinct key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY key_npc_id"
     GameDB.each(sql, type) do |rs1|
       key_npc_id = rs1.get_i32("key_npc_id")
-      if key_npc_id < 0
-        raise "got an unintended negative i32 from DB at #{__LINE__}"
-      end
       spawns = [] of L2Spawn
       sql = "SELECT id, count, npc_templateid, locx, locy, locz, heading, respawn_delay, key_npc_id FROM four_sepulchers_spawnlist Where key_npc_id = ? and spawntype = ? ORDER BY id"
       GameDB.each(sql, key_npc_id, type) do |rs2|
         template_id = rs2.get_i32("npc_templateid")
-        if template_id < 0
-          raise "got an unintended negative i32 from DB at #{__LINE__}"
-        end
-
         sp = L2Spawn.new(template_id)
         sp.amount = rs2.get_i32("count")
         sp.x = rs2.get_i32("locx")
@@ -500,7 +486,7 @@ module FourSepulchersManager
             return
           end
 
-          if pc.weight_penalty >= 3 # I think it should check 'm' rather than 'pc'
+          if m.weight_penalty >= 3 # I think it should check 'm' rather than 'pc'
             m.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
             return
           end
@@ -523,7 +509,7 @@ module FourSepulchersManager
             return
           end
 
-          if pc.weight_penalty >= 3 # I think it should check 'm' rather than 'pc'
+          if m.weight_penalty >= 3 # I think it should check 'm' rather than 'pc'
             m.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
             return
           end
@@ -570,8 +556,8 @@ module FourSepulchersManager
 
       members.each do |m|
         GrandBossManager.get_zone(loc[0], loc[1], loc[2]).not_nil!.allow_player_entry(m, 30)
-        drift_x = Rnd.rand(-80..80)
-        drift_y = Rnd.rand(-80..80)
+        drift_x = rand(-80..80)
+        drift_y = rand(-80..80)
         m.tele_to_location(loc[0] + drift_x, loc[1] + drift_y, loc[2])
         m.destroy_item_by_item_id("Quest", ENTRANCE_PASS, 1, m, true)
         unless m.inventory.get_item_by_item_id(ANTIQUE_BROOCH)
@@ -598,8 +584,8 @@ module FourSepulchersManager
 
       members.each do |m|
         GrandBossManager.get_zone(loc[0], loc[1], loc[2]).not_nil!.allow_player_entry(m, 30)
-        drift_x = Rnd.rand(-80..80)
-        drift_y = Rnd.rand(-80..80)
+        drift_x = rand(-80..80)
+        drift_y = rand(-80..80)
         m.tele_to_location(loc[0] + drift_x, loc[1] + drift_y, loc[2])
         m.destroy_item_by_item_id("Quest", ENTRANCE_PASS, 1, m, true)
         unless m.inventory.get_item_by_item_id(ANTIQUE_BROOCH)
@@ -616,8 +602,8 @@ module FourSepulchersManager
       HALL_IN_USE[npc_id] = true
     else
       GrandBossManager.get_zone(loc[0], loc[1], loc[2]).not_nil!.allow_player_entry(pc, 30)
-      drift_x = Rnd.rand(-80..80)
-      drift_y = Rnd.rand(-80..80)
+      drift_x = rand(-80..80)
+      drift_y = rand(-80..80)
       pc.tele_to_location(loc[0] + drift_x, loc[1] + drift_y, loc[2])
       pc.destroy_item_by_item_id("Quest", ENTRANCE_PASS, 1, pc, true)
       unless pc.inventory.get_item_by_item_id(ANTIQUE_BROOCH)
@@ -703,7 +689,6 @@ module FourSepulchersManager
             # [automatically added else]
           end
 
-
           ALL_MOBS << mob
         end
       end
@@ -716,7 +701,6 @@ module FourSepulchersManager
       else
         # [automatically added else]
       end
-
     end
   end
 

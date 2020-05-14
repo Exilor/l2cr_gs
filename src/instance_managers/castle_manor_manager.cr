@@ -79,13 +79,13 @@ module CastleManorManager
       pnext = [] of SeedProduction
 
       GameDB.each(sql1, castle_id) do |rs|
-        seed_id = rs.get_i32("seed_id")
+        seed_id = rs.get_i32(:"seed_id")
         if SEEDS.has_key?(seed_id)
-          amount = rs.get_i64("amount")
-          price = rs.get_i64("price")
-          start_amount = rs.get_i64("start_amount")
+          amount = rs.get_i64(:"amount")
+          price = rs.get_i64(:"price")
+          start_amount = rs.get_i64(:"start_amount")
           sp = SeedProduction.new(seed_id, amount, price, start_amount)
-          if rs.get_bool("next_period")
+          if rs.get_bool(:"next_period")
             pnext << sp
           else
             pcurrent << sp
@@ -104,14 +104,14 @@ module CastleManorManager
       crop_ids = crop_ids()
 
       GameDB.each(sql2, castle_id) do |rs|
-        crop_id = rs.get_i32("crop_id")
+        crop_id = rs.get_i32(:"crop_id")
         if crop_ids.includes?(crop_id)
-          amount = rs.get_i64("amount")
-          reward_type = rs.get_i32("reward_type")
-          start_amount = rs.get_i64("start_amount")
-          price = rs.get_i64("price")
+          amount = rs.get_i64(:"amount")
+          reward_type = rs.get_i32(:"reward_type")
+          start_amount = rs.get_i64(:"start_amount")
+          price = rs.get_i64(:"price")
           cp = CropProcure.new(crop_id, amount, reward_type, start_amount, price)
-          if rs.get_bool("next_period")
+          if rs.get_bool(:"next_period")
             pnext << cp
           else
             pcurrent << cp

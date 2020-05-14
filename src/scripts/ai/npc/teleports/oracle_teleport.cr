@@ -150,7 +150,7 @@ class Scripts::OracleTeleport < AbstractNpcAI
         if id1 == npc_id
           break
         end
-        i += 1
+        i &+= 1
       end
       st.set("id", i.to_s)
       st.state = State::STARTED
@@ -178,7 +178,7 @@ class Scripts::OracleTeleport < AbstractNpcAI
         if ziggurat == npc_id
           break
         end
-        i += 1
+        i &+= 1
       end
       st.set("id", i.to_s)
       st.state = State::STARTED
@@ -202,7 +202,7 @@ class Scripts::OracleTeleport < AbstractNpcAI
         if dawn == npc_id
           break
         end
-        i += 1
+        i &+= 1
       end
       st.set("id", i.to_s)
       play_sound(pc, Sound::ITEMSOUND_QUEST_ACCEPT)
@@ -216,7 +216,7 @@ class Scripts::OracleTeleport < AbstractNpcAI
         if dusk == npc_id
           break
         end
-        i += 1
+        i &+= 1
       end
       st.set("id", i.to_s)
       play_sound(pc, Sound::ITEMSOUND_QUEST_ACCEPT)

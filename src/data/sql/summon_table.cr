@@ -14,8 +14,8 @@ module SummonTable
   def load
     if Config.restore_servitor_on_reconnect
       GameDB.each(INIT_SUMMONS) do |rs|
-        owner_id = rs.get_i32("ownerId")
-        skill_id = rs.get_i32("summonSkillId")
+        owner_id = rs.get_i32(:"ownerId")
+        skill_id = rs.get_i32(:"summonSkillId")
         SERVITORS[owner_id] = skill_id
       end
 
@@ -26,8 +26,8 @@ module SummonTable
 
     if Config.restore_pet_on_reconnect
       GameDB.each(INIT_PET) do |rs|
-        owner_id = rs.get_i32("ownerId")
-        item_id = rs.get_i32("item_obj_id")
+        owner_id = rs.get_i32(:"ownerId")
+        item_id = rs.get_i32(:"item_obj_id")
         PETS[owner_id] = item_id
       end
 
@@ -93,9 +93,9 @@ module SummonTable
     skill_id = SERVITORS[pc.l2id]
 
     GameDB.each(LOAD_SUMMON, pc.l2id, skill_id) do |rs|
-      cur_hp = rs.get_i32("curHp")
-      cur_mp = rs.get_i32("curMp")
-      time = rs.get_i32("time")
+      cur_hp = rs.get_i32(:"curHp")
+      cur_mp = rs.get_i32(:"curMp")
+      time = rs.get_i32(:"time")
       unless skill = SkillData[skill_id, pc.get_skill_level(skill_id)]?
         remove_servitor(pc)
         return
@@ -128,11 +128,11 @@ module SummonTable
     debug { "Saved #{summon}." }
   end
 
-  def pets : IHash(Int32, Int32)
+  def pets : Interfaces::Map(Int32, Int32)
     PETS
   end
 
-  def servitors : IHash(Int32, Int32)
+  def servitors : Interfaces::Map(Int32, Int32)
     SERVITORS
   end
 end

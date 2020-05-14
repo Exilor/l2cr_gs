@@ -491,9 +491,9 @@ class L2AttackableAI < L2CharacterAI
                       end
                     end
 
-                    unless oat.acting_player
-                      warn { "#{oat} doesn't have an acting player." }
-                    end
+                    # unless oat.acting_player
+                    #   warn { "#{oat} doesn't have an acting player." }
+                    # end
 
                     obj.notify_event(AGGRESSION, oat, 1)
                     evt = OnAttackableFactionCall.new(

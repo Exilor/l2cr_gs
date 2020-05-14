@@ -13,12 +13,12 @@ class Couple
 
     sql = "SELECT * FROM mods_wedding WHERE id = ?"
     GameDB.each(sql, 1) do |rs|
-      @player1_id = rs.get_i32("player1Id")
-      @player2_id = rs.get_i32("player2Id")
-      @married = rs.get_bool("married")
+      @player1_id = rs.get_i32(:"player1Id")
+      @player2_id = rs.get_i32(:"player2Id")
+      @married = rs.get_bool(:"married")
 
-      @affiance_date.ms = rs.get_i64("affianceDate")
-      @wedding_date.ms = rs.get_i64("weddingDate")
+      @affiance_date.ms = rs.get_i64(:"affianceDate")
+      @wedding_date.ms = rs.get_i64(:"weddingDate")
     end
   rescue e
     error e

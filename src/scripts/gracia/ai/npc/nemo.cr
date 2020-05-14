@@ -45,7 +45,7 @@ class Scripts::Nemo < AbstractNpcAI
         maguen.broadcast_status_update
         show_on_screen_msg(pc, NpcString::MAGUEN_APPEARANCE, 2, 4000)
         maguen_ai.start_quest_timer("DIST_CHECK_TIMER", 1000, maguen, pc)
-        npc.script_value += 1
+        npc.script_value &+= 1
         html = "32735-05.html"
       else
         html = "32735-06.html"
@@ -56,7 +56,7 @@ class Scripts::Nemo < AbstractNpcAI
       spawned_npc = npc.variables.get_object("SPAWNED_NPC", L2Npc?)
       if spawned_npc && spawned_npc.script_value > 0
         pc.variables.delete("TEST_MAGUEN")
-        spawned_npc.script_value -= 1
+        spawned_npc.script_value &-= 1
       end
     else
       # [automatically added else]

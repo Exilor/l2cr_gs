@@ -28,7 +28,6 @@ class Condition
         # [automatically added else]
       end
 
-
       @val == can
     end
   end

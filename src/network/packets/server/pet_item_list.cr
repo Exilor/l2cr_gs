@@ -1,5 +1,5 @@
 class Packets::Outgoing::PetItemList < Packets::Outgoing::AbstractItemPacket
-  initializer items : IArray(L2ItemInstance)
+  initializer items : Interfaces::Array(L2ItemInstance)
 
   private def write_impl
     c 0xb3

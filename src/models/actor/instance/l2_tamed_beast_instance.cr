@@ -13,7 +13,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   @home_z = 0
   @buff_task : TaskExecutor::Scheduler::PeriodicTask?
   @duration_check_task : TaskExecutor::Scheduler::PeriodicTask?
-  @beast_skills : IArray(Skill)?
+  @beast_skills : Interfaces::Array(Skill)?
 
   getter food_type = 0
   getter! owner : L2PcInstance
@@ -382,7 +382,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
       @beast.template.skills.each_value do |skill|
         # if the skill is a buff, check if the owner has it already [ owner.getEffect(L2Skill skill) ]
         if skill.continuous? && !skill.debuff?
-          i += 1
+          i &+= 1
           if i == rnd
             buffs_to_give = skill
           end
@@ -392,7 +392,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
         end
       end
       # if the owner has less than 60% of this beast's available buff, cast a random buff
-      if (@num_buffs * 2) // 3 > total_buffs_on_owner
+      if (@num_buffs &* 2) // 3 > total_buffs_on_owner
         @beast.sit_cast_and_follow(buffs_to_give.not_nil!, owner)
       end
       @beast.set_intention(AI::FOLLOW, @beast.owner)

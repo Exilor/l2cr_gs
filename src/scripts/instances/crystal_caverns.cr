@@ -781,13 +781,13 @@ class Scripts::CrystalCaverns < AbstractInstance
           world.dragon_claw_start = Time.ms
           world.dragon_claw_need = caster.party.not_nil!.size - 1
         else
-          world.dragon_claw_need -= 1
+          world.dragon_claw_need &-= 1
         end
         if world.dragon_claw_need == 0
           npc.stop_skill_effects(false, 5225)
           npc.broadcast_packet(MagicSkillUse.new(npc, npc, 5480, 1, 4000, 0))
           if world.raid_status == 3
-            world.raid_status += 1
+            world.raid_status &+= 1
           end
         end
       end
@@ -800,7 +800,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           world.dragon_scale_start = Time.ms
           world.dragon_scale_needed = caster.party.not_nil!.size - 1
         else
-          world.dragon_scale_needed -= 1
+          world.dragon_scale_needed &-= 1
         end
         if world.dragon_scale_needed == 0 && Rnd.rand(100) < 80
           npc.invul = false
@@ -873,7 +873,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     if npc.id == BAYLOR && skill.id == 5225
       world = InstanceManager.get_world(npc.instance_id)
       if world.is_a?(CCWorld)
-        world.raid_status += 1
+        world.raid_status &+= 1
       end
     end
 
@@ -914,7 +914,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           start_quest_timer("checkKechiAttack", 1000, npc, nil)
         end
       elsif event.casecmp?("spawnGuards")
-        world.kechis_henchman_spawn += 1
+        world.kechis_henchman_spawn &+= 1
         world.guards << add_spawn(KECHIS_HENCHMAN, 153622, 149699, -12131, 56890, false, 0, false, world.instance_id)
         world.guards << add_spawn(KECHIS_HENCHMAN, 153609, 149622, -12131, 64023, false, 0, false, world.instance_id)
         world.guards << add_spawn(KECHIS_HENCHMAN, 153606, 149428, -12131, 64541, false, 0, false, world.instance_id)
@@ -989,7 +989,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           cancel_quest_timers("checkBaylorAttack")
           start_quest_timer("baylor_alarm", 40000, npc, nil)
           start_quest_timer("baylor_skill", 5000, npc, nil, true)
-          world.raid_status += 1
+          world.raid_status &+= 1
         else
           start_quest_timer("checkBaylorAttack", 1000, npc, nil)
         end
@@ -1098,7 +1098,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           if d1 < 10000 || d2 < 10000
             npc.broadcast_packet(MagicSkillUse.new(npc, npc, 5441, 1, 1, 0))
             cry_golem.at_destination = true
-            world.correct_golems += 1
+            world.correct_golems &+= 1
             if world.correct_golems >= 2
               open_door(24220026, world.instance_id)
               world.status = 4
@@ -1236,7 +1236,7 @@ class Scripts::CrystalCaverns < AbstractInstance
             world.room_status[i] = 2
           end
           if world.room_status[i] == 2
-            world.cleaned_rooms += 1
+            world.cleaned_rooms &+= 1
             if world.cleaned_rooms == 21
               run_darnel(world)
             end
@@ -1435,12 +1435,10 @@ class Scripts::CrystalCaverns < AbstractInstance
         baylor_instance.duration = time.to_i
 
         radius = 150
-        i = 0
         members = world.raiders.size
-        world.raiders.each do |p|
-          x = (radius * Math.cos((i * 2 * Math::PI) / members)).to_i
-          y = (radius * Math.sin((i * 2 * Math::PI) / members)).to_i
-          i += 1
+        world.raiders.each_with_index do |p, i|
+          x = (radius * Math.cos((i &* 2 * Math::PI) / members)).to_i
+          y = (radius * Math.sin((i &* 2 * Math::PI) / members)).to_i
           p.tele_to_location(Location.new(153571 + x, 142075 + y, -12737))
           if pet = p.summon
             pet.tele_to_location(Location.new(153571 + x, 142075 + y, -12737), true)
@@ -1503,7 +1501,7 @@ class Scripts::CrystalCaverns < AbstractInstance
               unless has_quest_items?(character, SECRET_KEY)
                 return ""
               end
-              if world.room_status[zone.id - 20104] == 0
+              if world.room_status[zone.id &- 20104] == 0
                 run_emerald_rooms(world, spawns, room)
               end
               door.open_me

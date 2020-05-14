@@ -728,7 +728,7 @@ class SevenSignsFestival
   def start_festival_manager
     return if @manager_instance
     @manager_instance = FestivalManager.new(self)
-    set_next_festival_start(Config.alt_festival_manager_start + SevenSignsFestival.instance.festival_signup_time)
+    set_next_festival_start(Config.alt_festival_manager_start + festival_signup_time)
     @manager_scheduled_task = ThreadPoolManager.schedule_general_at_fixed_rate(@manager_instance.not_nil!, Config.alt_festival_manager_start, Config.alt_festival_cycle_length)
     info { "The first Festival of Darkness cycle begins in #{Time.ms_to_mins(Config.alt_festival_manager_start)} minutes." }
   end
@@ -737,17 +737,17 @@ class SevenSignsFestival
     begin
       sql = "SELECT festivalId, cabal, cycle, date, score, members FROM seven_signs_festival"
       GameDB.each(sql) do |rs|
-        festival_cycle = rs.get_i32("cycle")
-        festival_id = rs.get_i32("festivalId")
-        cabal = rs.get_string("cabal")
+        festival_cycle = rs.get_i32(:"cycle")
+        festival_id = rs.get_i32(:"festivalId")
+        cabal = rs.get_string(:"cabal")
 
         dat = StatsSet.new
         dat["festivalId"] = festival_id
         dat["cabal"] = cabal
         dat["cycle"] = festival_cycle
-        dat["date"] = rs.get_i64("date").to_s
-        dat["score"] = rs.get_i32("score")
-        dat["members"] = rs.get_string("members")
+        dat["date"] = rs.get_i64(:"date").to_s
+        dat["score"] = rs.get_i32(:"score")
+        dat["members"] = rs.get_string(:"members")
         if cabal == "dawn"
           festival_id += FESTIVAL_COUNT
         end
@@ -773,7 +773,7 @@ class SevenSignsFestival
       end
 
       GameDB.each(query) do |rs|
-        @festival_cycle = rs.get_i32("festival_cycle")
+        @festival_cycle = rs.get_i32(:"festival_cycle")
         ACCUMULATED_BONUSES.map_with_index! do |i|
           rs.get_i32("accumulated_bonus#{i}")
         end
@@ -851,7 +851,7 @@ class SevenSignsFestival
       end
     else
       GameDB.each(GET_CLAN_NAME, name) do |rs|
-        if clan_name = rs.get_string?("clan_name")
+        if clan_name = rs.get_string?(:"clan_name")
           if clan = ClanTable.get_clan_by_name(clan_name)
             clan.add_reputation_score(Config.festival_win_points, true)
             sm = Packets::Outgoing::SystemMessage.clan_member_c1_was_in_highest_ranked_party_in_festival_of_darkness_and_gained_s2_reputation
@@ -1368,8 +1368,8 @@ class SevenSignsFestival
       error e
     end
 
-    def wait(time)
-      sleep(Time.ms_to_s(time))
+    private def wait(time)
+      sleep(time.milliseconds)
     end
 
     def get_festival_instance(oracle : Int, festival_id : Int) : L2DarknessFestival?
@@ -1381,6 +1381,7 @@ class SevenSignsFestival
 
   private class L2DarknessFestival
     @challenge_increased = false
+
     getter cabal, level_range, witch_spawn, start_location
     getter witch_instance : L2Npc?
     getter participants : Array(Int32)
@@ -1575,9 +1576,10 @@ class SevenSignsFestival
     end
 
     def relocate_player(pc : L2PcInstance, removing : Bool)
-      orig_pos = @original_locations[pc.l2id]
       if removing
-        @original_locations.delete(pc.l2id)
+        orig_pos = @original_locations.delete(pc.l2id).not_nil!
+      else
+        orig_pos = @original_locations[pc.l2id]
       end
 
       pc.intention = AI::IDLE

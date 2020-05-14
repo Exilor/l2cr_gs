@@ -3,7 +3,7 @@ class ObjectKnownList
 
   getter_initializer active_object : L2Object
 
-  def known_objects : IHash(Int32, L2Object)
+  def known_objects : Interfaces::Map(Int32, L2Object)
     @known_objects || sync do
       @known_objects ||= Concurrent::Map(Int32, L2Object).new
     end

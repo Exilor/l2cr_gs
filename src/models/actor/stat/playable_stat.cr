@@ -1,8 +1,6 @@
 require "./char_stat"
 
 class PlayableStat < CharStat
-  include Loggable
-
   @exp = Atomic(Int64).new(0i64)
   @sp = Atomic(Int32).new(0)
 
@@ -29,7 +27,6 @@ class PlayableStat < CharStat
     evt = OnPlayableExpChanged.new(active_char, current_exp, total_exp)
     term = EventDispatcher.notify(evt, active_char, TerminateReturn)
     if term && term.terminate
-      debug "PlayableStat#add_exp OnPlayableExpChanged#terminate returned true"
       return false
     end
 
@@ -43,7 +40,7 @@ class PlayableStat < CharStat
       value = exp_for_max_level - 1 - current_exp
     end
 
-    @exp.add(value) # there's no method to add and get the new value :(
+    @exp.add(value) # there's no method to add and get the new value
     if value + current_exp >= get_exp_for_level(level + 1)
       sync_exp_level(true)
     end
@@ -80,7 +77,7 @@ class PlayableStat < CharStat
       while tmp <= max_level
         if current_exp >= get_exp_for_level(tmp)
           if current_exp >= get_exp_for_level(tmp + 1)
-            tmp += 1
+            tmp &+= 1
             next
           end
 
@@ -98,17 +95,17 @@ class PlayableStat < CharStat
           break
         end
 
-        tmp += 1
+        tmp &+= 1
       end
     else
       tmp = current_level
       while tmp >= minimum_level
         if current_exp < get_exp_for_level(tmp)
           if current_exp < get_exp_for_level(tmp - 1)
-            tmp -= 1
+            tmp &-= 1
             next
           end
-          tmp -= 1
+          tmp &-= 1
           if tmp < minimum_level
             tmp = minimum_level
           end
@@ -123,7 +120,7 @@ class PlayableStat < CharStat
           break
         end
 
-        tmp -= 1
+        tmp &-= 1
       end
     end
   end
@@ -135,7 +132,6 @@ class PlayableStat < CharStat
       if current_level < max_level
         value = max_level - current_level
       else
-        debug "Already at max level (#{max_level})."
         return false
       end
     end
@@ -149,7 +145,6 @@ class PlayableStat < CharStat
     end
 
     unless level_increased
-      debug "Level didn't increase."
       return false
     end
 
@@ -160,7 +155,6 @@ class PlayableStat < CharStat
 
   def add_sp(sp : Int32) : Bool
     if sp < 0
-      warn "wrong sp for PlayableStat#add_sp(sp: #{sp})"
       return false
     end
 

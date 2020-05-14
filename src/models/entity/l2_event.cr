@@ -10,7 +10,7 @@ module L2Event
   end
 
   TEAM_NAMES = Concurrent::Map(Int32, String).new
-  TEAMS = Concurrent::Map(Int32, IArray(L2PcInstance)).new
+  TEAMS = Concurrent::Map(Int32, Interfaces::Array(L2PcInstance)).new
   private REGISTERED_PLAYERS = Concurrent::Array(L2PcInstance).new
   private CONNECTION_LOSS_DATA = Concurrent::Map(L2PcInstance, PlayerEventHolder).new
 
@@ -135,7 +135,6 @@ module L2Event
       # [automatically added else]
     end
 
-
     false
   end
 
@@ -209,7 +208,6 @@ module L2Event
         # [automatically added else]
       end
 
-
       AntiFeedManager.register_event(AntiFeedManager::L2EVENT_ID)
       AntiFeedManager.clear(AntiFeedManager::L2EVENT_ID)
 
@@ -267,7 +265,6 @@ module L2Event
       else
         # [automatically added else]
       end
-
 
       unspawn_event_npcs
       TEAMS.clear
@@ -345,11 +342,10 @@ module L2Event
       # [automatically added else]
     end
 
-
     "The event has been successfully finished."
   end
 
-  private def sort_by_value(map : IHash(L2PcInstance, Int32))
+  private def sort_by_value(map : Interfaces::Map(L2PcInstance, Int32))
     list = map.to_a
     list.sort_by! { |tuple| tuple[1] }
     map.clear

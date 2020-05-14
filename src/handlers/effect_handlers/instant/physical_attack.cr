@@ -43,10 +43,7 @@ class EffectHandler::PhysicalAttack < AbstractEffect
     end
 
     damage = Formulas.skill_phys_dam(char, target, skill, shld, false, ss, @power)
-    if skill.max_soul_consume_count > 0
-      charged_souls = info.charges
-      damage *= 1 + (charged_souls * 0.04)
-    end
+    damage *= Formulas.soul_bonus(skill, info)
     damage *= 2 if crit
 
     if damage > 0

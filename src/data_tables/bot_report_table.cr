@@ -50,7 +50,7 @@ module BotReportTable
       c.minute = hour[1].to_i
 
       if Time.ms < c.ms
-        c.day_of_year -= 1
+        c.day_of_year &-= 1
       end
 
       last_reset_time = c.ms
@@ -87,11 +87,13 @@ module BotReportTable
   end
 
   def save_reported_char_data
-    GameDB.exec(SQL_CLEAR_REPORTED_CHAR_DATA)
-    REPORTS.each do |key, value|
-      report_table = value.reporters
-      report_table.each do |k, v|
-        GameDB.exec(SQL_INSERT_REPORTED_CHAR_DATA, key, k, v)
+    GameDB.transaction do |tr|
+      tr.exec(SQL_CLEAR_REPORTED_CHAR_DATA)
+      REPORTS.each do |key, value|
+        report_table = value.reporters
+        report_table.each do |k, v|
+          tr.exec(SQL_INSERT_REPORTED_CHAR_DATA, key, k, v)
+        end
       end
     end
   rescue e
@@ -215,12 +217,11 @@ module BotReportTable
   end
 
   private def punish_bot(bot : L2PcInstance, ph : PunishHolder?)
-    if ph
-      ph.punish.apply_effects(bot, bot)
-      if ph.system_message_id > -1
-        if id = SystemMessageId.get?(ph.system_message_id)
-          bot.send_packet(id)
-        end
+    return unless ph
+    ph.punish.apply_effects(bot, bot)
+    if ph.system_message_id > -1
+      if id = SystemMessageId.get?(ph.system_message_id)
+        bot.send_packet(id)
       end
     end
   end
@@ -263,10 +264,9 @@ module BotReportTable
 
   private def hash_ip(pc) : Int32
     con = pc.client.not_nil!.connection.ip
-    bytes = con.split('.')
-    ip = bytes.map &.to_i
+    ip = con.split('.')
 
-    ip[0] | (ip[1] << 8) | (ip[2] << 16) | (ip[3] << 24)
+    ip[0].to_i | (ip[1].to_i << 8) | (ip[2].to_i << 16) | (ip[3].to_i << 24)
   end
 
   private def time_has_passed?(map : Hash(Int32, Int64), l2id : Int32) : Bool

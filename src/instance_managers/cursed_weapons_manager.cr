@@ -59,12 +59,12 @@ module CursedWeaponsManager
   private def restore
     sql = "SELECT itemId, charId, playerKarma, playerPkKills, nbKills, endTime FROM cursed_weapons"
     GameDB.each(sql) do |rs|
-      cw = CURSED_WEAPONS[rs.get_i32("itemId")]
-      cw.player_id = rs.get_i32("charId")
-      cw.player_karma = rs.get_i32("playerKarma")
-      cw.player_pk_kills = rs.get_i32("playerPkKills")
-      cw.nb_kills = rs.get_i32("nbKills")
-      cw.end_time = rs.get_i64("endTime")
+      cw = CURSED_WEAPONS[rs.get_i32(:"itemId")]
+      cw.player_id = rs.get_i32(:"charId")
+      cw.player_karma = rs.get_i32(:"playerKarma")
+      cw.player_pk_kills = rs.get_i32(:"playerPkKills")
+      cw.nb_kills = rs.get_i32(:"nbKills")
+      cw.end_time = rs.get_i64(:"endTime")
       cw.reactivate
     end
   rescue e
@@ -79,7 +79,7 @@ module CursedWeaponsManager
 
       sql = "SELECT owner_id FROM items WHERE item_id=?"
       GameDB.each(sql, item_id) do |rs|
-        player_id = rs.get_i32("owner_id")
+        player_id = rs.get_i32(:"owner_id")
         warn { "Player #{player_id} owns the cursed weapon #{item_id} but he shouldn't." }
         begin
           sql = "DELETE FROM items WHERE owner_id=? AND item_id=?"

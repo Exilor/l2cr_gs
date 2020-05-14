@@ -472,35 +472,35 @@ class L2Clan
 
   def restore
     GameDB.each(SELECT_CLAN_DATA, id) do |rs|
-      self.name = rs.get_string("clan_name")
-      self.level = rs.get_i32("clan_level")
-      self.castle_id = rs.get_i32("hasCastle")
-      @blood_alliance_count = rs.get_i32("blood_alliance_count")
-      @blood_oath_count = rs.get_i32("blood_oath_count")
-      self.ally_id = rs.get_i32("ally_id")
-      self.ally_name = rs.get_string?("ally_name")
+      self.name = rs.get_string(:"clan_name")
+      self.level = rs.get_i32(:"clan_level")
+      self.castle_id = rs.get_i32(:"hasCastle")
+      @blood_alliance_count = rs.get_i32(:"blood_alliance_count")
+      @blood_oath_count = rs.get_i32(:"blood_oath_count")
+      self.ally_id = rs.get_i32(:"ally_id")
+      self.ally_name = rs.get_string?(:"ally_name")
       set_ally_penalty_expiry_time(
-        rs.get_i64("ally_penalty_expiry_time"),
-        rs.get_i32("ally_penalty_type")
+        rs.get_i64(:"ally_penalty_expiry_time"),
+        rs.get_i32(:"ally_penalty_type")
       )
       if ally_penalty_expiry_time < Time.ms
         set_ally_penalty_expiry_time(0, 0)
       end
-      self.char_penalty_expiry_time = rs.get_i64("char_penalty_expiry_time")
+      self.char_penalty_expiry_time = rs.get_i64(:"char_penalty_expiry_time")
       if char_penalty_expiry_time + (Config.alt_clan_join_days * 86400000) < Time.ms
         self.char_penalty_expiry_time = 0
       end
-      self.dissolving_expiry_time = rs.get_i64("dissolving_expiry_time")
+      self.dissolving_expiry_time = rs.get_i64(:"dissolving_expiry_time")
 
-      self.crest_id = rs.get_i32("crest_id")
-      self.crest_large_id = rs.get_i32("crest_large_id")
-      self.ally_crest_id = rs.get_i32("ally_crest_id")
+      self.crest_id = rs.get_i32(:"crest_id")
+      self.crest_large_id = rs.get_i32(:"crest_large_id")
+      self.ally_crest_id = rs.get_i32(:"ally_crest_id")
 
-      set_reputation_score(rs.get_i32("reputation_score"), false)
-      set_auction_bidded_at(rs.get_i32("auction_bid_at"), false)
-      set_new_leader_id(rs.get_i32("new_leader_id"), false)
+      set_reputation_score(rs.get_i32(:"reputation_score"), false)
+      set_auction_bidded_at(rs.get_i32(:"auction_bid_at"), false)
+      set_new_leader_id(rs.get_i32(:"new_leader_id"), false)
 
-      leader_id = rs.get_i32("leader_id")
+      leader_id = rs.get_i32(:"leader_id")
 
       sql = "SELECT char_name,level,classid,charId,title,power_grade,subpledge,apprentice,sponsor,sex,race FROM characters WHERE clanid=?"
       GameDB.each(sql, id) do |rs2|
@@ -522,8 +522,8 @@ class L2Clan
   private def restore_notice
     sql = "SELECT enabled,notice FROM clan_notices WHERE clan_id=?"
     GameDB.each(sql, id) do |rs|
-      @notice_enabled = rs.get_bool("enabled")
-      @notice = rs.get_string("notice")
+      @notice_enabled = rs.get_bool(:"enabled")
+      @notice = rs.get_string(:"notice")
     end
   end
 
@@ -557,10 +557,10 @@ class L2Clan
   def restore_skills
     sql = "SELECT skill_id,skill_level,sub_pledge_id FROM clan_skills WHERE clan_id=?"
     GameDB.each(sql, id) do |rs|
-      id = rs.get_i32("skill_id")
-      level = rs.get_i32("skill_level")
+      id = rs.get_i32(:"skill_id")
+      level = rs.get_i32(:"skill_level")
       skill = SkillData[id, level]
-      sub_type = rs.get_i32("sub_pledge_id")
+      sub_type = rs.get_i32(:"sub_pledge_id")
       if sub_type == -1
         @skills[skill.id] = skill
       elsif sub_type == 0
@@ -608,7 +608,7 @@ class L2Clan
         if subunit = get_subpledge(subtype)
           old_skill = subunit.add_new_skill(new_skill)
         else
-          warn "Subpledge #{subtype} does not exist for this clan."
+          warn { "Subpledge #{subtype} does not exist for this clan." }
           return old_skill
         end
       end
@@ -817,11 +817,11 @@ class L2Clan
     !@at_war_with.empty?
   end
 
-  def war_list : ISet(Int32)
+  def war_list : Interfaces::Set(Int32)
     @at_war_with
   end
 
-  def attacker_list : ISet(Int32)
+  def attacker_list : Interfaces::Set(Int32)
     @at_war_attackers
   end
 
@@ -871,9 +871,9 @@ class L2Clan
   private def restore_subpledges
     sql = "SELECT sub_pledge_id,name,leader_id FROM clan_subpledges WHERE clan_id=?"
     GameDB.each(sql, id) do |rs|
-      id = rs.get_i32("sub_pledge_id")
-      name = rs.get_string("name")
-      leader_id = rs.get_i32("leader_id")
+      id = rs.get_i32(:"sub_pledge_id")
+      name = rs.get_string(:"name")
+      leader_id = rs.get_i32(:"leader_id")
       pledge = Subpledge.new(id, name, leader_id)
       @subpledges[id] = pledge
     end
@@ -955,7 +955,6 @@ class L2Clan
       else
         # [automatically added else]
       end
-
     end
 
     pledge_type
@@ -972,8 +971,8 @@ class L2Clan
   private def restore_rank_privs
     sql = "SELECT privs,rank,party FROM clan_privs WHERE clan_id=?"
     GameDB.each(sql, id) do |rs|
-      rank = rs.get_i32("rank")
-      privileges = rs.get_i32("privs")
+      rank = rs.get_i32(:"rank")
+      privileges = rs.get_i32(:"privs")
       next if rank == -1
       @privs[rank].privs = privileges
     end

@@ -65,7 +65,7 @@ module FortManager
 
   def load_instances
     GameDB.each("SELECT id FROM fort ORDER BY id") do |rs|
-      forts << Fort.new(rs.get_i32("id"))
+      forts << Fort.new(rs.get_i32(:"id"))
     end
 
     info { "Loaded #{FORTS.size} fortresses." }

@@ -31,10 +31,7 @@ class EffectHandler::FatalBlow < AbstractEffect
     ss = skill.use_soulshot? && char.charged_shot?(ShotType::SOULSHOTS)
     shld = Formulas.shld_use(char, target, skill)
     damage = Formulas.blow_damage(char, target, skill, shld, ss, @power)
-    if skill.max_soul_consume_count > 0
-      charged_souls = info.charges
-      damage *= 1 + (charged_souls * 0.04)
-    end
+    damage *= Formulas.soul_bonus(skill, info)
 
     crit = false
 

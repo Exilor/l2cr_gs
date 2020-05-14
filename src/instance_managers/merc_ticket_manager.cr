@@ -60,10 +60,10 @@ module MercTicketManager
     start_index = 0
     sql = "SELECT * FROM castle_siege_guards Where isHired = 1"
     GameDB.each(sql) do |rs|
-      npc_id = rs.get_i32("npcId")
-      x = rs.get_i32("x")
-      y = rs.get_i32("y")
-      z = rs.get_i32("z")
+      npc_id = rs.get_i32(:"npcId")
+      x = rs.get_i32(:"x")
+      y = rs.get_i32(:"y")
+      z = rs.get_i32(:"z")
       if castle = CastleManager.get_castle(x, y, z)
         if merc_placed[castle.residence_id - 1] >= MERCS_MAX_PER_CASTLE[castle.residence_id - 1]
           next

@@ -43,21 +43,20 @@ class Scripts::CharacterBirthday < Quest
     case event.casecmp
     when "despawn_npc"
       npc.do_die(pc)
-      @spawns -= 1
+      @spawns &-= 1
     when "change"
       if has_quest_items?(pc, 10250)
         take_items(pc, 10250, 1)
         give_items(pc, 21594, 1)
         html = nil
         npc.do_die(pc)
-        @spawns -= 1
+        @spawns &-= 1
       else
         html = "32600-nohat.htm"
       end
     else
       # [automatically added else]
     end
-
 
     html
   end
@@ -72,7 +71,7 @@ class Scripts::CharacterBirthday < Quest
     else
       spawned = add_spawn(32600, pc.x + 10, pc.y + 10, pc.z + 10, 0, false, 0, true)
       start_quest_timer("despawn_npc", 180000, spawned, pc)
-      @spawns += 1
+      @spawns &+= 1
     end
 
     nil

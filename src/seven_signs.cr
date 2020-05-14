@@ -148,7 +148,6 @@ class SevenSigns
       # [automatically added else]
     end
 
-
     @last_save.ms > 7 && @last_save < last_period_change
   end
 
@@ -226,7 +225,6 @@ class SevenSigns
           crest_of_dusk_spawns.each do |dusk_crest|
             AutoSpawnHandler.set_spawn_active(dusk_crest, false)
           end
-
         when CABAL_DUSK
           unless AutoSpawnHandler.get_auto_spawn_instance(anakim_spawn.l2id, true).spawn_active?
             AutoSpawnHandler.set_spawn_active(anakim_spawn, true)
@@ -246,7 +244,6 @@ class SevenSigns
         else
           # [automatically added else]
         end
-
       else
         AutoSpawnHandler.set_spawn_active(merchant_spawn, false)
         AutoSpawnHandler.set_spawn_active(lilith_spawn, false)
@@ -343,7 +340,6 @@ class SevenSigns
     case current_period
     when PERIOD_SEAL_VALIDATION, PERIOD_COMPETITION
       days_to_change = days_to_period_change
-      # debug "days to change: #{days_to_change}"
       if days_to_change == 7
         if @next_period_change.hour < PERIOD_START_HOUR
           days_to_change = 0
@@ -366,7 +362,6 @@ class SevenSigns
       # [automatically added else]
     end
 
-
     info { "Next period change set to #{@next_period_change.time}." }
   end
 
@@ -383,7 +378,6 @@ class SevenSigns
     else
       # [automatically added else]
     end
-
   end
 
   def competition_period? : Bool
@@ -427,7 +421,6 @@ class SevenSigns
       # [automatically added else]
     end
 
-
     !(
       ((next_quest_start < till_date) && (till_date < next_valid_start)) ||
       ((next_valid_start < next_quest_start) &&
@@ -445,7 +438,6 @@ class SevenSigns
     else
       # [automatically added else]
     end
-
 
     0
   end
@@ -545,37 +537,37 @@ class SevenSigns
 
   def restore_seven_signs_data
     GameDB.each(LOAD_DATA) do |rs|
-      char_id = rs.get_i32("charId")
+      char_id = rs.get_i32(:"charId")
       dat = StatsSet.new
       dat["charId"] = char_id
-      dat["cabal"] = rs.get_string("cabal")
-      dat["seal"] = rs.get_i32("seal")
-      dat["red_stones"] = rs.get_i32("red_stones")
-      dat["green_stones"] = rs.get_i32("green_stones")
-      dat["blue_stones"] = rs.get_i32("blue_stones")
-      dat["ancient_adena_amount"] = rs.get_f64("ancient_adena_amount")
-      dat["contribution_score"] = rs.get_f64("contribution_score")
+      dat["cabal"] = rs.get_string(:"cabal")
+      dat["seal"] = rs.get_i32(:"seal")
+      dat["red_stones"] = rs.get_i32(:"red_stones")
+      dat["green_stones"] = rs.get_i32(:"green_stones")
+      dat["blue_stones"] = rs.get_i32(:"blue_stones")
+      dat["ancient_adena_amount"] = rs.get_f64(:"ancient_adena_amount")
+      dat["contribution_score"] = rs.get_f64(:"contribution_score")
       SIGNS_PLAYER_DATA[char_id] = dat
     end
 
     GameDB.each(LOAD_STATUS) do |rs|
-      @current_cycle = rs.get_i32("current_cycle")
-      @active_period = rs.get_i32("active_period")
-      @previous_winner = rs.get_i32("previous_winner")
-      @dawn_stone_score = rs.get_f64("dawn_stone_score")
-      @dawn_festival_score = rs.get_i32("dawn_festival_score")
-      @dusk_stone_score = rs.get_f64("dusk_stone_score")
-      @dusk_festival_score = rs.get_i32("dusk_festival_score")
-      SIGNS_SEAL_OWNERS[SEAL_AVARICE] = rs.get_i32("avarice_owner")
-      SIGNS_SEAL_OWNERS[SEAL_GNOSIS] = rs.get_i32("gnosis_owner")
-      SIGNS_SEAL_OWNERS[SEAL_STRIFE] = rs.get_i32("strife_owner")
-      SIGNS_DAWN_SEAL_TOTALS[SEAL_AVARICE] = rs.get_i32("avarice_dawn_score")
-      SIGNS_DAWN_SEAL_TOTALS[SEAL_GNOSIS] = rs.get_i32("gnosis_dawn_score")
-      SIGNS_DAWN_SEAL_TOTALS[SEAL_STRIFE] = rs.get_i32("strife_dawn_score")
-      SIGNS_DUSK_SEAL_TOTALS[SEAL_AVARICE] = rs.get_i32("avarice_dusk_score")
-      SIGNS_DUSK_SEAL_TOTALS[SEAL_GNOSIS] = rs.get_i32("gnosis_dusk_score")
-      SIGNS_DUSK_SEAL_TOTALS[SEAL_STRIFE] = rs.get_i32("strife_dusk_score")
-      @last_save.ms = rs.get_i64("date")
+      @current_cycle = rs.get_i32(:"current_cycle")
+      @active_period = rs.get_i32(:"active_period")
+      @previous_winner = rs.get_i32(:"previous_winner")
+      @dawn_stone_score = rs.get_f64(:"dawn_stone_score")
+      @dawn_festival_score = rs.get_i32(:"dawn_festival_score")
+      @dusk_stone_score = rs.get_f64(:"dusk_stone_score")
+      @dusk_festival_score = rs.get_i32(:"dusk_festival_score")
+      SIGNS_SEAL_OWNERS[SEAL_AVARICE] = rs.get_i32(:"avarice_owner")
+      SIGNS_SEAL_OWNERS[SEAL_GNOSIS] = rs.get_i32(:"gnosis_owner")
+      SIGNS_SEAL_OWNERS[SEAL_STRIFE] = rs.get_i32(:"strife_owner")
+      SIGNS_DAWN_SEAL_TOTALS[SEAL_AVARICE] = rs.get_i32(:"avarice_dawn_score")
+      SIGNS_DAWN_SEAL_TOTALS[SEAL_GNOSIS] = rs.get_i32(:"gnosis_dawn_score")
+      SIGNS_DAWN_SEAL_TOTALS[SEAL_STRIFE] = rs.get_i32(:"strife_dawn_score")
+      SIGNS_DUSK_SEAL_TOTALS[SEAL_AVARICE] = rs.get_i32(:"avarice_dusk_score")
+      SIGNS_DUSK_SEAL_TOTALS[SEAL_GNOSIS] = rs.get_i32(:"gnosis_dusk_score")
+      SIGNS_DUSK_SEAL_TOTALS[SEAL_STRIFE] = rs.get_i32(:"strife_dusk_score")
+      @last_save.ms = rs.get_i64(:"date")
     end
   rescue e
     error e
@@ -737,7 +729,6 @@ class SevenSigns
       # [automatically added else]
     end
 
-
     unless Config.alt_sevensigns_lazy_update
       save_seven_signs_data(id)
       save_seven_signs_status
@@ -773,7 +764,6 @@ class SevenSigns
     else
       # [automatically added else]
     end
-
   end
 
   def initialize_seals
@@ -830,7 +820,6 @@ class SevenSigns
         else
           # [automatically added else]
         end
-
       when CABAL_DAWN
         case cabal_highest_score
         when CABAL_NULL
@@ -856,7 +845,6 @@ class SevenSigns
         else
           # [automatically added else]
         end
-
       when CABAL_DUSK
         case cabal_highest_score
         when CABAL_NULL
@@ -882,11 +870,9 @@ class SevenSigns
         else
           # [automatically added else]
         end
-
       else
         # [automatically added else]
       end
-
 
       SIGNS_SEAL_OWNERS[seal] = new_seal_owner
 
@@ -914,7 +900,6 @@ class SevenSigns
       else
         # [automatically added else]
       end
-
     end
   end
 
@@ -1012,7 +997,6 @@ class SevenSigns
       else
         # [automatically added else]
       end
-
 
       @previous_winner = winner
 

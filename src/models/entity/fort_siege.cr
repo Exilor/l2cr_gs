@@ -547,7 +547,7 @@ class FortSiege
 
     sql = "SELECT clan_id FROM fortsiege_clans WHERE fort_id=?"
     GameDB.each(sql, fort.residence_id) do |rs|
-      clan_id = rs.get_i32("clan_id")
+      clan_id = rs.get_i32(:"clan_id")
       add_attacker(clan_id)
     end
   rescue e
@@ -640,7 +640,7 @@ class FortSiege
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans : IArray(L2SiegeClan)?
+  def attacker_clans : Interfaces::Array(L2SiegeClan)?
     @attacker_clans
   end
 
@@ -648,7 +648,7 @@ class FortSiege
     fort.siege_date
   end
 
-  def get_flag(clan : L2Clan?) : IArray(L2Npc)?
+  def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
     if clan
       if sc = get_attacker_clan(clan)
         sc.flag
@@ -674,7 +674,7 @@ class FortSiege
     # return nil
   end
 
-  def defender_clans : IArray(L2SiegeClan)?
+  def defender_clans : Interfaces::Array(L2SiegeClan)?
     # return nil
   end
 

@@ -17,19 +17,19 @@ module ClanHallManager
     GameDB.each("SELECT * FROM clanhall ORDER BY id") do |rs|
       set = StatsSet.new
 
-      id = rs.get_i32("id")
-      owner_id = rs.get_i32("ownerId")
-      lease = rs.get_i32("lease")
+      id = rs.get_i32(:"id")
+      owner_id = rs.get_i32(:"ownerId")
+      lease = rs.get_i32(:"lease")
 
       set["id"] = id
-      set["name"] = rs.get_string("name")
+      set["name"] = rs.get_string(:"name")
       set["ownerId"] = owner_id
       set["lease"] = lease
-      set["desc"] = rs.get_string("desc")
-      set["location"] = rs.get_string("location")
-      set["paidUntil"] = rs.get_i64("paidUntil")
-      set["grade"] = rs.get_i32("Grade")
-      set["paid"] = rs.get_bool("paid")
+      set["desc"] = rs.get_string(:"desc")
+      set["location"] = rs.get_string(:"location")
+      set["paidUntil"] = rs.get_i64(:"paidUntil")
+      set["grade"] = rs.get_i32(:"Grade")
+      set["paid"] = rs.get_bool(:"paid")
       ch = AuctionableHall.new(set)
       ALL_AUCTIONABLE_CLAN_HALLS[id] = ch
       add_clan_hall(ch)
@@ -54,19 +54,19 @@ module ClanHallManager
     error e
   end
 
-  def all_clan_halls : IHash(Int32, ClanHall)
+  def all_clan_halls : Interfaces::Map(Int32, ClanHall)
     ALL_CLAN_HALLS
   end
 
-  def free_clan_halls : IHash(Int32, AuctionableHall)
+  def free_clan_halls : Interfaces::Map(Int32, AuctionableHall)
     FREE_CLAN_HALLS
   end
 
-  def clan_halls : IHash(Int32, AuctionableHall)
+  def clan_halls : Interfaces::Map(Int32, AuctionableHall)
     CLAN_HALLS
   end
 
-  def auctionable_clan_halls : IHash(Int32, AuctionableHall)
+  def auctionable_clan_halls : Interfaces::Map(Int32, AuctionableHall)
     ALL_AUCTIONABLE_CLAN_HALLS
   end
 

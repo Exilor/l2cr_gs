@@ -37,16 +37,16 @@ class Auction
   private def load
     sql = "SELECT * FROM auction WHERE id = ?"
     GameDB.each(sql, id) do |rs|
-      @current_bid = rs.get_i64("currentBid")
-      @end_date = rs.get_i64("endDate")
-      @item_id = rs.get_i32("itemId")
-      @item_name = rs.get_string("itemName")
-      @item_l2id = rs.get_i32("itemObjectId")
-      @item_type = rs.get_string("itemType")
-      @seller_id = rs.get_i32("sellerId")
-      @seller_clan_name = rs.get_string("sellerClanName")
-      @seller_name = rs.get_string("sellerName")
-      @starting_bid = rs.get_i64("startingBid")
+      @current_bid = rs.get_i64(:"currentBid")
+      @end_date = rs.get_i64(:"endDate")
+      @item_id = rs.get_i32(:"itemId")
+      @item_name = rs.get_string(:"itemName")
+      @item_l2id = rs.get_i32(:"itemObjectId")
+      @item_type = rs.get_string(:"itemType")
+      @seller_id = rs.get_i32(:"sellerId")
+      @seller_clan_name = rs.get_string(:"sellerClanName")
+      @seller_name = rs.get_string(:"sellerName")
+      @starting_bid = rs.get_i64(:"startingBid")
     end
     load_bid
   rescue e
@@ -61,17 +61,17 @@ class Auction
     sql = "SELECT bidderId, bidderName, maxBid, clan_name, time_bid FROM auction_bid WHERE auctionId = ? ORDER BY maxBid DESC"
     GameDB.each(sql, id) do |rs|
       if first
-        @highest_bidder_id = rs.get_i32("bidderId")
-        @highest_bidder_name = rs.get_string("bidderName")
-        @highest_bidder_max_bid = rs.get_i64("maxBid")
+        @highest_bidder_id = rs.get_i32(:"bidderId")
+        @highest_bidder_name = rs.get_string(:"bidderName")
+        @highest_bidder_max_bid = rs.get_i64(:"maxBid")
         first = false
       end
 
-      bidder_id = rs.get_i32("bidderId")
-      bidder_name = rs.get_string("bidderName")
-      clan_name = rs.get_string("clan_name")
-      max_bid = rs.get_i64("maxBid")
-      time_bid = rs.get_i64("time_bid")
+      bidder_id = rs.get_i32(:"bidderId")
+      bidder_name = rs.get_string(:"bidderName")
+      clan_name = rs.get_string(:"clan_name")
+      max_bid = rs.get_i64(:"maxBid")
+      time_bid = rs.get_i64(:"time_bid")
       bidder = Bidder.new(bidder_name, clan_name, max_bid, time_bid)
       @bidders[bidder_id] = bidder
     end

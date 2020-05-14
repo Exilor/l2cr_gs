@@ -37,7 +37,6 @@ class EffectHandler::Cp < AbstractEffect
       # [automatically added else]
     end
 
-
     if amount != 0
       target.current_cp += amount
     end

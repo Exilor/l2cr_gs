@@ -50,7 +50,6 @@ class EffectHandler::Summon < AbstractEffect
     if summon.level > Config.max_pet_level
       exp = ExperienceData.get_exp_for_level(Config.max_pet_level - 1)
       summon.stat.exp = exp
-      warn { "#{summon} had a level above its maximum possible level." }
     else
       exp = ExperienceData.get_exp_for_level(summon.level % Config.max_pet_level)
       summon.stat.exp = exp

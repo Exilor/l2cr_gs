@@ -23,10 +23,10 @@ module BuyListData
   private def load_from_db
     sql = "SELECT * FROM `buylists`"
     GameDB.each(sql) do |rs|
-      list_id = rs.get_i32("buylist_id")
-      item_id = rs.get_i32("item_id")
-      count = rs.get_i64("count")
-      next_restock_time = rs.get_i64("next_restock_time")
+      list_id = rs.get_i32(:"buylist_id")
+      item_id = rs.get_i32(:"item_id")
+      count = rs.get_i64(:"count")
+      next_restock_time = rs.get_i64(:"next_restock_time")
       unless buy_list = get_buy_list(list_id)
         warn { "BuyList with id #{list_id} found in database but not loaded from xml." }
         next

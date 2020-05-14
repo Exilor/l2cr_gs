@@ -13,7 +13,12 @@ class QuestTimer
     initialize(qs.quest, name, time, nil, qs.player, false)
   end
 
-  def initialize(@quest : Quest, @name : String, time : Number, @npc : L2Npc?, @player : L2PcInstance?, @repeating : Bool)
+  def initialize(quest : Quest, name : String, time : Number, npc : L2Npc?, player : L2PcInstance?, repeating : Bool)
+    @quest = quest
+    @name = name
+    @npc = npc
+    @player = player
+    @repeating = repeating
     @time = time.to_i64
 
     if repeating

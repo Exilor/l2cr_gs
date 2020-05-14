@@ -29,7 +29,7 @@ module CrestTable
     begin
       sql = "SELECT `crest_id`, `data`, `type` FROM `crests` ORDER BY `crest_id` DESC"
       GameDB.each(sql) do |rs|
-        id = rs.get_i32("crest_id")
+        id = rs.get_i32(:"crest_id")
         if @@next_id.get <= id
           @@next_id.set(id + 1)
         end
@@ -39,8 +39,8 @@ module CrestTable
           next
         end
 
-        data = rs.get_bytes("data")
-        type = rs.get_i32("type")
+        data = rs.get_bytes(:"data")
+        type = rs.get_i32(:"type")
         if crest_type = L2Crest::Type.get_by_id(type)
           CRESTS[id] = L2Crest.new(id, data, crest_type)
         else

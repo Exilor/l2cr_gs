@@ -19,7 +19,7 @@ class L2Party < AbstractPlayerGroup
   @change_request_distribution_type : PartyDistributionType?
   @party_lvl : Int32
 
-  getter members : IArray(L2PcInstance)
+  getter members : Interfaces::Array(L2PcInstance)
   getter? pending_invitation = false
   property distribution_type : PartyDistributionType
   property command_channel : L2CommandChannel?
@@ -170,7 +170,7 @@ class L2Party < AbstractPlayerGroup
           pc.skill_channelized.abort_channelization
         end
       rescue e
-        error e
+        warn e
       end
 
       if type.expelled?
@@ -380,7 +380,7 @@ class L2Party < AbstractPlayerGroup
       keys = rewards.keys
       while left_over > 0
         rewards[keys.sample(random: Rnd)] += 1
-        left_over -= 1
+        left_over &-= 1
       end
     end
 

@@ -242,7 +242,6 @@ class PcStat < PlayableStat
       else
         # [automatically added else]
       end
-
     end
 
     1.0

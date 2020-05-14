@@ -119,7 +119,7 @@ class Calendar
     if dow == 0
       @time -= 6.days
     else
-      @time -= (dow - 1).days
+      @time -= (dow &- 1).days
     end
 
     case day
@@ -251,7 +251,7 @@ class Calendar
     when Unit::MINUTE
       59
     when Unit::DAY
-      Time::DAYS_MONTH[month + 1]
+      Time::DAYS_MONTH[month &+ 1]
     when Unit::MONTH
       11
     else

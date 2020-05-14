@@ -7,7 +7,7 @@ module GameDB
 
     def load_pet_inventory(pc : L2PcInstance)
       GameDB.each(SELECT, pc.l2id) do |rs|
-        pc.has_pet_items = rs.get_i32("object_id") > 0
+        pc.has_pet_items = rs.get_i32(:"object_id") > 0
         return
       end
 

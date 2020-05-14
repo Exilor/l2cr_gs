@@ -32,7 +32,7 @@ struct BlockList
     begin
       sql = "SELECT friendId FROM character_friends WHERE charId=? AND relation=1"
       GameDB.each(sql, obj_id) do |rs|
-        friend_id = rs.get_i32("friendId")
+        friend_id = rs.get_i32(:"friendId")
         list << friend_id
       end
     rescue e

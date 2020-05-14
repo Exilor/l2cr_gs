@@ -49,12 +49,12 @@ module TaskManager
 
   private def start_all_tasks
     GameDB.each(SQL_STATEMENTS[0]) do |rs|
-      key = rs.get_string("task").strip.downcase
+      key = rs.get_string(:"task").strip.downcase
       unless task = TASKS[key]?
         next
       end
 
-      type = TaskType.parse(rs.get_string("type"))
+      type = TaskType.parse(rs.get_string(:"type"))
       unless type.none?
         current = ExecutedTask.new(task, type, rs)
         if launch_task(current)

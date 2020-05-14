@@ -1,5 +1,4 @@
 class Scripts::CustomAnnouncePkPvP
-  include Loggable
   include AbstractEventListener::Owner
 
   def initialize
@@ -15,7 +14,6 @@ class Scripts::CustomAnnouncePkPvP
   private def on_player_pvp_kill(event : OnPlayerPvPKill)
     pk = event.active_char
     if pk.gm?
-      debug { "#{pk.name} is a gm." }
       return
     end
 

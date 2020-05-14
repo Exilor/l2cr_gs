@@ -9,7 +9,7 @@ module CoupleManager
   def load
     sql = "SELECT id FROM mods_wedding ORDER BY id"
     GameDB.each(sql) do |rs|
-      couples << Couple.new(rs.get_i32("id"))
+      couples << Couple.new(rs.get_i32(:"id"))
     end
     info { "Loaded #{couples.size} couples." }
   rescue e

@@ -1,5 +1,5 @@
 class Concurrent::LinkedList(E)
-  include IList(E)
+  include Interfaces::List(E)
 
   private class Node(E)
     def initialize(item : E?)
@@ -233,7 +233,7 @@ class Concurrent::LinkedList(E)
     while p
       item = p.item
       unless item.nil?
-        yield item
+        yield(item)
       end
 
       p = p.succ

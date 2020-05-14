@@ -9,6 +9,7 @@ module MailManager
 
   def load
     timer = Timer.new
+    time = Time.ms
     count = 0
 
     GameDB.each("SELECT * FROM messages ORDER BY expiration") do |rs|
@@ -18,10 +19,10 @@ module MailManager
       count += 1
       expiration = msg.expiration
       task = MessageDeletionTask.new(msg_id)
-      if expiration < Time.ms
+      if expiration < time
         ThreadPoolManager.schedule_general(task, 10000)
       else
-        ThreadPoolManager.schedule_general(task, expiration - Time.ms)
+        ThreadPoolManager.schedule_general(task, expiration - time)
       end
     end
 

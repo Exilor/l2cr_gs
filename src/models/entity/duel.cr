@@ -191,7 +191,7 @@ class Duel
   end
 
   def countdown : Int32
-    if (@countdown -= 1) > 3
+    if (@countdown &-= 1) > 3
       return @countdown
     end
 

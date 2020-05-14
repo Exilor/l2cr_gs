@@ -68,7 +68,7 @@ class Scripts::SkillTransfer < AbstractNpcAI
               next
             end
 
-            count -= 1
+            count &-= 1
 
             if count < 0
               class_name = ClassListData.get_class(pc.class_id).class_name

@@ -343,7 +343,7 @@ class PcInventory < Inventory
 
     if item.quest_item?
       sync do
-        @quest_slots -= 1
+        @quest_slots &-= 1
         if @quest_slots < 0
           @quest_slots = 0
           warn "Quest inventory size < 0!"
@@ -371,10 +371,10 @@ class PcInventory < Inventory
 
     sql = "SELECT object_id,item_id,loc_data,enchant_level FROM items WHERE owner_id=? AND loc='PAPERDOLL'"
     GameDB.each(sql, id) do |rs|
-      slot = rs.get_i32("loc_data")
-      paperdoll[slot][0] = rs.get_i32("object_id")
-      paperdoll[slot][1] = rs.get_i32("item_id")
-      paperdoll[slot][2] = rs.get_i32("enchant_level")
+      slot = rs.get_i32(:"loc_data")
+      paperdoll[slot][0] = rs.get_i32(:"object_id")
+      paperdoll[slot][1] = rs.get_i32(:"item_id")
+      paperdoll[slot][2] = rs.get_i32(:"enchant_level")
     end
 
     paperdoll

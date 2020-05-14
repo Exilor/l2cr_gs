@@ -185,7 +185,7 @@ class L2AuctioneerInstance < L2Npc
         if val.empty?
           start = 1
         else
-          start = (limit * (val.to_i - 1)) + 1
+          start = (limit &* (val.to_i &- 1)) &+ 1
           limit *= val.to_i
         end
 
@@ -209,10 +209,10 @@ class L2AuctioneerInstance < L2Npc
             if i > limit
               break
             elsif i < start
-              i += 1
+              i &+= 1
               next
             else
-              i += 1
+              i &+= 1
             end
 
             io << "<tr><td>"
@@ -263,7 +263,7 @@ class L2AuctioneerInstance < L2Npc
             io << "</td><td>"
             io << b.time_bid.year
             io << '/'
-            io << (b.time_bid.month + 1)
+            io << (b.time_bid.month &+ 1)
             io << '/'
             io << b.time_bid.day
             io << "</td><td>"

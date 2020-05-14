@@ -53,11 +53,11 @@ module GameDB
     def load(pc : L2PcInstance)
       GameDB.each(SELECT, pc.l2id) do |rs|
         sub = Subclass.new(pc)
-        sub.class_id = rs.get_i32("class_id")
-        sub.exp = rs.get_i64("exp")
-        sub.level = rs.get_i32("level")
-        sub.sp = rs.get_i32("sp")
-        sub.class_index = rs.get_i32("class_index")
+        sub.class_id = rs.get_i32(:"class_id")
+        sub.exp = rs.get_i64(:"exp")
+        sub.level = rs.get_i32(:"level")
+        sub.sp = rs.get_i32(:"sp")
+        sub.class_index = rs.get_i32(:"class_index")
 
         pc.subclasses[sub.class_index] = sub
       end

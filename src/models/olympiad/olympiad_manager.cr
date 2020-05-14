@@ -3,26 +3,26 @@ module OlympiadManager
   include Packets::Outgoing
 
   private NON_CLASS_BASED_REGISTERS = Concurrent::Array(Int32).new
-  private CLASS_BASED_REGISTERS = Concurrent::Map(Int32, IArray(Int32)).new
-  private TEAMS_BASED_REGISTERS = Concurrent::Array(IArray(Int32)).new
+  private CLASS_BASED_REGISTERS = Concurrent::Map(Int32, Interfaces::Array(Int32)).new
+  private TEAMS_BASED_REGISTERS = Concurrent::Array(Interfaces::Array(Int32)).new
 
-  def registered_non_class_based : IArray(Int32)
+  def registered_non_class_based : Interfaces::Array(Int32)
     NON_CLASS_BASED_REGISTERS
   end
 
-  def registered_class_based : IHash(Int32, IArray(Int32))
+  def registered_class_based : Interfaces::Map(Int32, Interfaces::Array(Int32))
     CLASS_BASED_REGISTERS
   end
 
-  def registered_teams_based : IArray(IArray(Int32))
+  def registered_teams_based : Interfaces::Array(Interfaces::Array(Int32))
     TEAMS_BASED_REGISTERS
   end
 
-  def enough_registered_classed : Array(IArray(Int32))?
+  def enough_registered_classed : Array(Interfaces::Array(Int32))?
     ret = nil
     CLASS_BASED_REGISTERS.each_value do |class_list|
       if class_list.size >= Config.alt_oly_classed
-        (ret ||= [] of IArray(Int32)) << class_list
+        (ret ||= [] of Interfaces::Array(Int32)) << class_list
       end
     end
     ret
@@ -411,7 +411,7 @@ module OlympiadManager
   end
 
   private struct AnnounceUnregToTeam
-    initializer team : IArray(Int32)
+    initializer team : Interfaces::Array(Int32)
 
     def call
       sm = SystemMessage.you_have_been_deleted_from_the_waiting_list_of_a_game

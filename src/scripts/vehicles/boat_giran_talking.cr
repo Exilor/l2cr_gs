@@ -162,8 +162,4 @@ class BoatGiranTalking
       @cycle = 0
     end
   end
-
-  def to_log(io : IO)
-    io << "Boat (Giran - Talking Island)"
-  end
 end

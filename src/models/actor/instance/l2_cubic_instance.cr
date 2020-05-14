@@ -3,7 +3,6 @@ require "../tasks/cubic/*"
 class L2CubicInstance
   include Synchronizable
   include Packets::Outgoing
-  include Loggable
 
   # Type of Cubics
   STORM_CUBIC = 1
@@ -228,10 +227,8 @@ class L2CubicInstance
           target_it = true
           if party = @owner.party
             if party.includes?(enemy)
-              debug { "#{@owner} and #{enemy} are in the same party." }
               target_it = false
             elsif (cc = party.command_channel) && cc.includes?(enemy)
-              debug { "#{@owner} and #{enemy} are in the same command channel." }
               target_it = false
             end
           end
@@ -239,41 +236,34 @@ class L2CubicInstance
           clan = @owner.clan
           if clan && !@owner.inside_pvp_zone?
             if clan.member?(enemy.l2id)
-              debug { "#{@owner} and #{enemy} are in the same clan." }
               target_it = false
             end
 
             if @owner.ally_id > 0 && enemy.ally_id > 0
               if @owner.ally_id == enemy.ally_id
-                debug { "#{@owner} and #{enemy} are in the same alliance." }
                 target_it = false
               end
             end
           end
 
           if enemy.pvp_flag == 0 && !enemy.inside_pvp_zone?
-            debug { "#{enemy} is not pvp flagged and is not inside a PVP zone." }
             target_it = false
           end
 
           if enemy.inside_peace_zone?
-            debug { "#{enemy} is inside peace zone." }
             target_it = false
           end
 
           if @owner.siege_state > 0 && @owner.siege_state == enemy.siege_state
-            debug { "#{@owner} and #{enemy} are on the same siege side." }
             target_it = false
           end
 
           unless enemy.visible?
-            debug { "#{enemy} is not visible." }
             target_it = false
           end
 
           if target_it
             @target = enemy
-            # debug "#{@target}"
             return
           end
         end

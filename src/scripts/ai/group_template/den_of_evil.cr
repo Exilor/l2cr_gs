@@ -68,7 +68,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
   private def get_skill_id_by_npc_id(npc_id)
     diff = npc_id - EYE_IDS[0]
     diff *= 2
-    SKILL_ID + diff
+    SKILL_ID &+ diff
   end
 
   def on_spawn(npc)
@@ -81,7 +81,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
     end
     skill_id = get_skill_id_by_npc_id(npc.id)
     skill_level = zone.get_skill_level(skill_id)
-    zone.add_skill(skill_id, skill_level + 1)
+    zone.add_skill(skill_id, skill_level &+ 1)
     if skill_level == 3 # 3+1=4
       ThreadPoolManager.schedule_ai(KashaDestruction.new(self, zone), KASHA_DESTRUCT_DELAY)
       zone.broadcast_packet(SystemMessage.kasha_eye_pitches_tosses_explode)
@@ -116,13 +116,13 @@ class Scripts::DenOfEvil < AbstractNpcAI
 
     def call
       i = SKILL_ID
-      while i <= SKILL_ID + 4
+      while i <= SKILL_ID &+ 4
         # test 3 skills if some is lvl 4
         if @zone.get_skill_level(i) > 3
           destroy_zone
           break
         end
-        i += 2
+        i &+= 2
       end
     end
 
@@ -146,9 +146,9 @@ class Scripts::DenOfEvil < AbstractNpcAI
         end
       end
       i = SKILL_ID
-      while i <= SKILL_ID + 4
+      while i <= SKILL_ID &+ 4
         @zone.remove_skill(i)
-        i += 2
+        i &+= 2
       end
     end
   end

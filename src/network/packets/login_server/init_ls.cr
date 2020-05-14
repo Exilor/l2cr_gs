@@ -3,8 +3,6 @@ require "../game_server/blowfish_key"
 require "../game_server/auth_request"
 
 class Packets::Incoming::InitLS < LoginServerPacket
-  include Loggable
-
   private REVISION = 0x0106
 
   @protocol = 0
@@ -19,7 +17,7 @@ class Packets::Incoming::InitLS < LoginServerPacket
   private def run_impl
     # debug "Protocol: #{@protocol}"
     unless @protocol == REVISION
-      error "Protocol revision mistmatch (LS: #{@protocol}, GS: #{REVISION})."
+      error { "Protocol revision mistmatch (LS: #{@protocol}, GS: #{REVISION})." }
     end
     # debug "Key: #{@key}"
     client.send_packet(Outgoing::BlowfishKey.new)

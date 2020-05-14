@@ -91,8 +91,4 @@ class BoatInnadrilTour
       @cycle = 0
     end
   end
-
-  def to_log(io : IO)
-    io << "Boat (Innadril Tour)"
-  end
 end

@@ -76,7 +76,7 @@ module AdminCommandHandler::AdminFortSiege
         io << " id: "
         io << fort.residence_id
         io << "</a></td>"
-        i += 1
+        i &+= 1
 
         if i > 2
           io << "</tr><tr>"

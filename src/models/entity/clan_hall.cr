@@ -119,11 +119,11 @@ abstract class ClanHall
   private def load_functions
     sql = "SELECT * FROM clanhall_functions WHERE hall_id = ?"
     GameDB.each(sql, id) do |rs|
-      type = rs.get_i32("type")
-      lvl = rs.get_i32("lvl")
-      lease = rs.get_i32("lease")
-      rate = rs.get_i64("rate")
-      end_time = rs.get_i64("endTime")
+      type = rs.get_i32(:"type")
+      lvl = rs.get_i32(:"lvl")
+      lease = rs.get_i32(:"lease")
+      rate = rs.get_i64(:"rate")
+      end_time = rs.get_i64(:"endTime")
 
       fn = ClanHallFunction.new(self, type, lvl, lease, 0, rate, end_time, true)
       @functions[type] = fn

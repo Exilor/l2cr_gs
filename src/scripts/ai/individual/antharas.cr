@@ -267,19 +267,19 @@ class Scripts::Antharas < AbstractNpcAI
       end
     when "SPAWN_MINION"
       npc = npc.not_nil!
-      if @minion_multiplier > 1 && @minion_count < 100 - (@minion_multiplier * 2)
+      if @minion_multiplier > 1 && @minion_count < 100 &- (@minion_multiplier &* 2)
         @minion_multiplier.times do |i|
           add_spawn(BEHEMOTH, npc, true)
           add_spawn(TERASQUE, npc, true)
         end
-        @minion_count += @minion_multiplier * 2
+        @minion_count &+= @minion_multiplier &* 2
       elsif @minion_count < 98
         add_spawn(BEHEMOTH, npc, true)
         add_spawn(TERASQUE, npc, true)
-        @minion_count += 2
+        @minion_count &+= 2
       elsif @minion_count < 99
         add_spawn(Rnd.bool ? BEHEMOTH : TERASQUE, npc, true)
-        @minion_count += 1
+        @minion_count &+= 1
       end
 
       if Rnd.rand(100) > 10 && @minion_multiplier < 4
@@ -291,7 +291,7 @@ class Scripts::Antharas < AbstractNpcAI
         if char.npc?
           char.delete_me
         elsif char.player?
-          char.tele_to_location(79800 + Rnd.rand(600), 151200 + Rnd.rand(1100), -3534)
+          char.tele_to_location(79800 &+ Rnd.rand(600), 151200 &+ Rnd.rand(1100), -3534)
         end
       end
     when "TID_USED_FEAR"
@@ -386,7 +386,6 @@ class Scripts::Antharas < AbstractNpcAI
       # [automatically added else]
     end
 
-
     super
   end
 
@@ -452,7 +451,7 @@ class Scripts::Antharas < AbstractNpcAI
         start_quest_timer("CLEAR_ZONE", 900000, nil, nil)
         set_status(DEAD)
       else
-        @minion_count -= 1
+        @minion_count &-= 1
       end
     end
 
