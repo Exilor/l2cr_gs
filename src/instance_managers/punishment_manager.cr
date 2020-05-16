@@ -15,6 +15,7 @@ module PunishmentManager
 
     initiated = 0
     expired = 0
+    time = Time.ms
 
     GameDB.each("SELECT * FROM punishments") do |rs|
       id = rs.get_i32(:"id")
@@ -26,7 +27,7 @@ module PunishmentManager
       punished_by = rs.get_string(:"punishedBy")
 
       if type && affect
-        if exp_time > 0 && Time.ms > exp_time
+        if exp_time > 0 && time > exp_time
           expired += 1
         else
           initiated += 1

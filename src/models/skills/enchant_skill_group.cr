@@ -7,11 +7,11 @@ struct EnchantSkillGroup
       @sp_cost = set.get_i32("sp")
       @exp_cost = set.get_i32("exp")
       @adena_cost = set.get_i32("adena")
-      @rate = Slice(Int8).new(24) { |i| set.get_i8("chance#{i + 76}", 0) }
+      @rate = Slice(Int8).new(24) { |i| set.get_i8("chance#{i &+ 76}", 0) }
     end
 
     def get_rate(pc : L2PcInstance) : Int8
-      pc.level < 76 ? 0i8 : @rate[pc.level - 76]
+      pc.level < 76 ? 0i8 : @rate[pc.level &- 76]
     end
   end
 

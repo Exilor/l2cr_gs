@@ -28,7 +28,6 @@ module PunishmentHandler::JailHandler
     else
       # [automatically added else]
     end
-
   end
 
   def on_end(task)
@@ -57,16 +56,15 @@ module PunishmentHandler::JailHandler
     else
       # [automatically added else]
     end
-
   end
 
   private def apply_to_player(task, pc)
     pc.instance_id = 0
     pc.in_7s_dungeon = false
 
-    # if !TvTEvent.inactive? && TvTEvent.player_participant?(pc.l2id)
-    #   TvT.remove_participant(pc.l2id)
-    # end
+    if !TvTEvent.inactive? && TvTEvent.participant?(pc.l2id)
+      TvTEvent.remove_participant(pc.l2id)
+    end
 
     if OlympiadManager.registered_in_comp?(pc)
       OlympiadManager.remove_disconnected_competitor(pc)

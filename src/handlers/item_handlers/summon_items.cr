@@ -8,9 +8,9 @@ module ItemHandler::SummonItems
       return false
     end
 
-    # unless TvTEvent.on_item_summon(playable.l2id)
-    #   return false
-    # end
+    unless TvTEvent.on_item_summon(playable.l2id)
+      return false
+    end
 
     pc = playable.acting_player
 

@@ -109,6 +109,7 @@ require "./shutdown"
 require "./models/entity/instance"
 require "./models/entity/hero"
 require "./models/olympiad/olympiad"
+require "./models/entity/tvt_manager"
 require "./custom/l2_cr"
 
 module GameServer
@@ -277,7 +278,7 @@ module GameServer
     at_exit { Shutdown.run }
     Signal::INT.trap { exit }
 
-    # TvTManager.load
+    TvTManager.load
     KnownListUpdater.load
 
     if Config.offline_trade_enable || Config.offline_craft_enable

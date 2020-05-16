@@ -1,5 +1,4 @@
 module ItemHandler
-  extend Loggable
   include Loggable
   include Packets::Outgoing
 

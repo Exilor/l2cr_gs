@@ -1,7 +1,6 @@
 require "../enums/instance_type"
 
 module ActionShiftHandler
-  extend Loggable
   include Loggable
   include Packets::Outgoing
 

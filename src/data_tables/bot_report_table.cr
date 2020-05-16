@@ -33,7 +33,7 @@ module BotReportTable
           parse_document(doc)
         end
       rescue e
-        error { "Could not load punishments from #{path}" }
+        error { "Could not load punishments from '#{path}'." }
       end
 
       load_reported_char_data
@@ -81,7 +81,7 @@ module BotReportTable
       end
     end
 
-    info { "Loaded #{REPORTS.size} bot reports" }
+    info { "Loaded #{REPORTS.size} bot reports." }
   rescue e
     error e
   end
@@ -303,17 +303,8 @@ module BotReportTable
     end
 
     def reported_by_same_clan?(clan : L2Clan?)
-      unless clan
-        return false
-      end
-
-      @reporters.each_key do |reporter_id|
-        if clan.member?(reporter_id)
-          return true
-        end
-      end
-
-      false
+      return false unless clan
+      @reporters.local_each_key.any? { |reporter_id| clan.member?(reporter_id) }
     end
   end
 

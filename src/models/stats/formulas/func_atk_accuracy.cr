@@ -8,11 +8,11 @@ class FuncAtkAccuracy < AbstractFunction
     value += (Math.sqrt(effector.dex) * 6) + level
 
     if level > 77
-      value += level - 76
+      value += level &- 76
     end
 
     if level > 69
-      value += level - 69
+      value += level &- 69
     end
 
     value

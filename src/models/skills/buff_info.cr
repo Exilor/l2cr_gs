@@ -68,7 +68,7 @@ class BuffInfo
 
       if e.ticks > 0
         effect_task = EffectTickTask.new(self, e)
-        time = e.ticks * Config.effect_tick_ratio
+        time = e.ticks &* Config.effect_tick_ratio
         scheduled_future = ThreadPoolManager.schedule_effect_at_fixed_rate(effect_task, time, time)
         add_task(e, EffectTaskInfo.new(effect_task, scheduled_future))
       end

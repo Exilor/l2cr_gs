@@ -1,9 +1,7 @@
 require "./base_event"
 require "./returns/*"
 require "./event_dispatcher"
-
-class TvTEventTeam < Mutex
-end
+require "../entity/tvt_event_team"
 
 class EventType
   getter event_class, return_class

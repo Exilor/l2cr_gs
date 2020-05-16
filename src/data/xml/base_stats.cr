@@ -26,7 +26,6 @@ class BaseStats < EnumClass
   add(NONE) { |char| 1.0 }
 
   def self.load
-    debug "Loading..."
     parse_datapack_file("stats/statBonus.xml")
   end
 
@@ -51,7 +50,7 @@ class BaseStats < EnumClass
           when "MEN"
             MEN_BONUS[index] = bonus
           else
-            raise "Wrong stat name #{stat_name}"
+            raise "Wrong stat name " + stat_name
           end
         end
       end

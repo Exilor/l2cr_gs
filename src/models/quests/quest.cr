@@ -279,14 +279,16 @@ class Quest < AbstractScript
   end
 
   def notify_item_event(item, pc, event)
-    if res : String? = on_item_event(item, pc, event)
-      if res.casecmp?("true") || res.casecmp?("false")
+    begin
+      res : String? = on_item_event(item, pc, event)
+      if res && (res.casecmp?("true") || res.casecmp?("false"))
         return
       end
+    rescue e
+      show_error(pc, e)
+      return
     end
-  rescue e
-    show_error(pc, e)
-  else
+
     show_result(pc, res)
   end
 
@@ -316,16 +318,16 @@ class Quest < AbstractScript
 
   def notify_see_creature(npc, creature, is_summon)
     if is_summon || creature.player?
-      player = creature.acting_player
+      pc = creature.acting_player
     end
     res : String? = on_see_creature(npc, creature, is_summon)
   rescue e
-    if player
-      show_error(player, e)
+    if pc
+      show_error(pc, e)
     end
   else
-    if player
-      show_result(player, res)
+    if pc
+      show_result(pc, res)
     end
   end
 

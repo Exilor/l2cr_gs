@@ -49,7 +49,7 @@ abstract class AbstractOlympiadGame
     end
 
     # safety precautions
-    if pc.in_observer_mode? # || TvTEvent.player_participant?(pc.l2id)
+    if pc.in_observer_mode? || TvTEvent.participant?(pc.l2id)
       return SystemMessageId::THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_DOES_NOT_MEET_THE_REQUIREMENTS_FOR_JOINING_THE_GAME
     end
 

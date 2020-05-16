@@ -30,7 +30,7 @@ struct EnchantSkillLearn
   end
 
   def get_min_skill_level(level : Int32) : Int32
-    level % 100 == 1 ? @base_level : level - 1
+    level % 100 == 1 ? @base_level : level &- 1
   end
 
   def max_enchant?(level : Int32) : Bool

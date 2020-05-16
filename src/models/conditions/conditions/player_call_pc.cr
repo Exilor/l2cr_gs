@@ -13,7 +13,7 @@ class Condition
         pc.send_packet(SystemMessageId::YOU_MAY_NOT_SUMMON_FROM_YOUR_CURRENT_LOCATION)
       when pc.in_observer_mode?
         # do nothing
-      when false # !TvTEvent.on_escape_use(pc.l2id)
+      when !TvTEvent.on_escape_use(pc.l2id)
         pc.send_packet(SystemMessageId::YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING)
       when pc.inside_no_summon_friend_zone? || pc.inside_jail_zone? || pc.flying_mounted?
         pc.send_packet(SystemMessageId::YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING)

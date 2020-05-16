@@ -23,7 +23,7 @@ module EnchantItemOptionsData
           op = EnchantOptions.new(level)
           DATA[item_id][op.level] = op
           3.times do |i|
-            att = parse_string(cd, "option#{i + 1}", nil)
+            att = parse_string(cd, "option#{i &+ 1}", nil)
             if att && att.num?
               op[i] = att.to_i
             end

@@ -1,5 +1,12 @@
+require "./tvt_event_teleporter"
+require "./tvt_event_listener"
+
 module TvTEvent
-  include Loggable
+  extend self
+  extend Loggable
+  extend Synchronizable
+  include Packets::Outgoing
+
   enum EventState : UInt8
     INACTIVE
     INACTIVATING
@@ -13,6 +20,7 @@ module TvTEvent
   private TEAMS = Array(TvTEventTeam).new(2)
 
   @@state = EventState::INACTIVE
+  @@state_lock = Mutex.new
   @@npc_spawn : L2Spawn?
   @@last_npc_spawn : L2Npc?
 
@@ -22,10 +30,8 @@ module TvTEvent
     delegate {{const.stringify.underscore + "?"}}, to: @@state
   {% end %}
 
-  #  * Teams initializing
-  #  */
   def init
-    AntiFeedManager.registerEvent(AntiFeedManager::TVT_ID)
+    AntiFeedManager.register_event(AntiFeedManager::TVT_ID)
     TEAMS << TvTEventTeam.new(Config.tvt_event_team_1_name, Config.tvt_event_team_1_coordinates)
     TEAMS << TvTEventTeam.new(Config.tvt_event_team_2_name, Config.tvt_event_team_2_coordinates)
   end
@@ -38,44 +44,47 @@ module TvTEvent
   #  */
   def start_participation
     begin
-      @@npc_spawn = L2Spawn.new(Config.tvt_event_participation_npc_id)
+      @@npc_spawn = sp = L2Spawn.new(Config.tvt_event_participation_npc_id)
 
-      @@npc_spawn.x = Config.tvt_event_participation_npc_coordinates[0]
-      @@npc_spawn.y = Config.tvt_event_participation_npc_coordinates[1]
-      @@npc_spawn.z = Config.tvt_event_participation_npc_coordinates[2]
-      @@npc_spawn.amount = 1
-      @@npc_spawn.heading = Config.tvt_event_participation_npc_coordinates[3]
-      @@npc_spawn.respawn_delay = 1
+      sp.x = Config.tvt_event_participation_npc_coordinates[0]
+      sp.y = Config.tvt_event_participation_npc_coordinates[1]
+      sp.z = Config.tvt_event_participation_npc_coordinates[2]
+      sp.amount = 1
+      sp.heading = Config.tvt_event_participation_npc_coordinates[3]
+      sp.respawn_delay = 1
       # later no need to delete spawn from db, we don't store it (false)
-      SpawnTable.add_new_spawn(@@npc_spawn, false)
-      @@npc_spawn.init
-      @@last_npc_spawn = @@npc_spawn.last_spawn
-      @@last_npc_spawn.current_hp = @@last_npc_spawn.max_hp
-      @@last_npc_spawn.title = "TvT Event Participation"
-      @@last_npc_spawn.isAggressive # ??
-      @@last_npc_spawn.decay_me
-      @@last_npc_spawn.spawn_me(*@@npc_spawn.last_spawn.xyz)
-      @@last_npc_spawn.broadcast_packet(MagicSkillUse.new(@@last_npc_spawn, @@last_npc_spawn, 1034, 1, 1, 1))
+      SpawnTable.add_new_spawn(sp, false)
+      sp.init
+      @@last_npc_spawn = last_sp = sp.last_spawn.not_nil!
+      last_sp.max_hp!
+      last_sp.title = "TvT Event Participation"
+      last_sp.aggressive? # ??
+      last_sp.decay_me
+      last_sp.spawn_me(*sp.last_spawn.not_nil!.xyz)
+      last_sp.broadcast_packet(MagicSkillUse.new(last_sp, last_sp, 1034, 1, 1, 1))
     rescue e
       warn e
       return false
     end
 
     set_state(EventState::PARTICIPATING)
-    EventDispatcher.async(new OnTvTEventRegistrationStart)
+    EventDispatcher.async(OnTvTEventRegistrationStart.new)
     true
   end
 
-  private def get_highest_level_player(Map<Integer, L2PcInstance> players)
-    int maxLevel = Integer.MIN_VALUE, maxLevelId = -1
-    for (player : players.values)
-      if player.level >= maxLevel)
-        maxLevel = player.level
-        maxLevelId = player.l2id
+  private def get_highest_level_player(players)
+    max_lvl = Int32::MIN
+    max_lvl_id = -1
+
+    players.each_value do |pc|
+      if pc.level >= max_lvl
+        max_lvl = pc.level
+        max_lvl_id = pc.l2id
+      end
     end
-    }
-    return maxLevelId
-  }
+
+    max_lvl_id
+  end
 
   # Starts the TvTEvent fight
   # 1. Set state EventState::STARTING
@@ -85,41 +94,30 @@ module TvTEvent
   # 5. Teleport all participants to team spot
   #
   # @return boolean: true if success, otherwise false
-  def start_fight
+  def start_fight : Bool
     # Set state to STARTING
     set_state(EventState::STARTING)
 
     # Randomize and balance team distribution
-    Map<Integer, L2PcInstance> participants = {
-    participants.putAll(TEAMS[0].getParticipatedPlayers)
-    participants.putAll(TEAMS[1].getParticipatedPlayers)
+    participants = TEAMS[0].participants.merge(TEAMS[1].participants)
     TEAMS[0].clean_me
     TEAMS[1].clean_me
 
-    player
-    Iterator<L2PcInstance> iter
-    if needParticipationFee)
-      iter = participants.values.iterator
-      while (iter.hasNext)
-        player = iter.next
-        if !hasParticipationFee(player))
-          iter.remove
-      end
-      }
-  end
+    if needs_participation_fee?
+      participants.select! { |_, pc| has_participation_fee?(pc) }
+    end
 
-    balance = {
-      0,
-      0
-    }, priority = 0, highest_lvl_player_id
+    balance = Slice.new(2, 0)
+    priority = 0
+    highest_lvl_player_id = 0
     # TODO: participants should be sorted by level instead of using get_highest_level_player for every fetch
     until participants.empty?
       # Priority team gets one player
       highest_lvl_player_id = get_highest_level_player(participants)
-      highest_lvl_player = participants.get(highest_lvl_player_id)
-      participants.remove(highest_lvl_player_id)
-      TEAMS[priority].addPlayer(highest_lvl_player)
-      balance[priority] += highest_lvl_player.getLevel
+      highest_lvl_player = participants[highest_lvl_player_id]
+      participants.delete(highest_lvl_player_id)
+      TEAMS[priority].add_player(highest_lvl_player)
+      balance[priority] += highest_lvl_player.level
       # Exiting if no more players
       if participants.empty?
         break
@@ -128,16 +126,16 @@ module TvTEvent
       # TODO: Code not dry
       priority = 1 - priority
       highest_lvl_player_id = get_highest_level_player(participants)
-      highest_lvl_player = participants.get(highest_lvl_player_id)
-      participants.remove(highest_lvl_player_id)
-      TEAMS[priority].addPlayer(highest_lvl_player)
-      balance[priority] += highest_lvl_player.getLevel
+      highest_lvl_player = participants[highest_lvl_player_id]
+      participants.delete(highest_lvl_player_id)
+      TEAMS[priority].add_player(highest_lvl_player)
+      balance[priority] += highest_lvl_player.level
       # Recalculating priority
       priority = balance[0] > balance[1] ? 1 : 0
-    }
+    end
 
     # Check for enought participants
-    if (TEAMS[0].participant_player_count < Config.tvt_event_min_players_inteams) || (TEAMS[1].participant_player_count < Config.tvt_event_min_players_inteams))
+    if TEAMS[0].participants_count < Config.tvt_event_min_players_in_teams || TEAMS[1].participants_count < Config.tvt_event_min_players_in_teams
       # Set state INACTIVE
       set_state(EventState::INACTIVE)
       # Cleanup of teams
@@ -147,62 +145,52 @@ module TvTEvent
       despawn_npc
       AntiFeedManager.clear(AntiFeedManager::TVT_ID)
       return false
-  end
+    end
 
-    if needParticipationFee)
-      iter = TEAMS[0].getParticipatedPlayers.values.iterator
-      while (iter.hasNext)
-        player = iter.next
-        if !payParticipationFee(player))
-          iter.remove
+    if needs_participation_fee?
+      TEAMS[0].participants.select! do |_, pc|
+        pay_participation_fee(pc)
       end
-      }
-      iter = TEAMS[1].getParticipatedPlayers.values.iterator
-      while (iter.hasNext)
-        player = iter.next
-        if !payParticipationFee(player))
-          iter.remove
+      TEAMS[1].participants.select! do |_, pc|
+        pay_participation_fee(pc)
       end
-      }
-  end
+    end
 
-    if Config.tvt_event_in_instance)
-      try
-        @@tvt_event_instance = InstanceManager.createDynamicInstance(Config.tvt_event_instance_file)
-        InstanceManager.getInstance(@@tvt_event_instance).setAllowSummon(false)
-        InstanceManager.getInstance(@@tvt_event_instance).setPvPInstance(true)
-        InstanceManager.getInstance(@@tvt_event_instance).setEmptyDestroyTime((Config.tvt_event_start_leave_teleport_delay * 1000) + 60000L)
-      }
+    if Config.tvt_event_in_instance
+      begin
+        @@tvt_event_instance = InstanceManager.create_dynamic_instance(Config.tvt_event_instance_file)
+        inst = InstanceManager.get_instance(@@tvt_event_instance).not_nil!
+        inst.allow_summon = false
+        inst.pvp_instance = true
+        inst.empty_destroy_time = (Config.tvt_event_start_leave_teleport_delay.to_i64 * 1000) + 60000
       rescue e
+        error e
         @@tvt_event_instance = 0
-        _log.log(Level.WARNING, "TvTEventEngine[TvTEvent.createDynamicInstance]: exception: " + e.getMessage, e)
-      }
-  end
+      end
+    end
 
     # Opens all doors specified in configs for tvt
-    openDoors(Config.tvt_doors_ids_to_open)
+    open_doors(Config.tvt_doors_ids_to_open)
     # Closes all doors specified in configs for tvt
-    closeDoors(Config.tvt_doors_ids_to_close)
+    close_doors(Config.tvt_doors_ids_to_close)
     # Set state STARTED
     set_state(EventState::STARTED)
 
     # Iterate over all teams
-    for (TvTEventTeam team : TEAMS)
+    TEAMS.each do |team|
       # Iterate over all participated player instances in this team
-      for (playerInstance : team.getParticipatedPlayers.values)
-        if playerInstance != nil)
-          # Disable player revival.
-          playerInstance.setCanRevive(false)
-          # Teleporter implements Runnable and starts itself
-          new TvTEventTeleporter(playerInstance, team.coordinates, false, false)
+      team.participants.each_value do |pc|
+        # Disable player revival.
+        pc.can_revive = false
+        # Teleporter implements Runnable and starts itself
+        TvTEventTeleporter.new(pc, team.coordinates, false, false)
       end
-      }
-    }
+    end
 
     # Notify to scripts.
-    EventDispatcher.async(new OnTvTEventStart)
-    return true
-  }
+    EventDispatcher.async(OnTvTEventStart.new)
+    true
+  end
 
   # Calculates the TvTEvent reward
   # 1. If both teams are at a tie(points equals), send it as system message to all participants, if one of the teams have 0 participants left online abort rewarding
@@ -212,85 +200,77 @@ module TvTEvent
   # 5. Show win html to wining team participants
   #
   # @return String: winning team name
-  def String calculateRewards
-    if TEAMS[0].getPoints == TEAMS[1].getPoints)
+  def calculate_rewards : String
+    if TEAMS[0].points == TEAMS[1].points
       # Check if one of the teams have no more players left
-      if (TEAMS[0].participant_player_count == 0) || (TEAMS[1].participant_player_count == 0))
+      if TEAMS[0].participants_count == 0 || TEAMS[1].participants_count == 0
         # set state to rewarding
         set_state(EventState::REWARDING)
         # return here, the fight can't be completed
         return "TvT Event: Event has ended. No team won due to inactivity!"
-    end
+      end
 
       # Both teams have equals points
-      sysMsgToparticipants("TvT Event: Event has ended, both teams have tied.")
-      if Config.tvt_reward_team_tie)
-        rewardTeam(TEAMS[0])
-        rewardTeam(TEAMS[1])
+      message_all_participants("TvT Event: Event has ended, both teams have tied.")
+      if Config.tvt_reward_team_tie
+        reward_team(TEAMS[0])
+        reward_team(TEAMS[1])
         return "TvT Event: Event has ended with both teams tying."
-    end
+      end
+
       return "TvT Event: Event has ended with both teams tying."
-  end
+    end
 
     # Set state REWARDING so nobody can point anymore
     set_state(EventState::REWARDING)
 
     # Get team which has more points
-    TvTEventTeam team = TEAMS[TEAMS[0].getPoints > TEAMS[1].getPoints ? 0 : 1]
-    rewardTeam(team)
+    team = TEAMS[TEAMS[0].points > TEAMS[1].points ? 0 : 1]
+    reward_team(team)
 
     # Notify to scripts.
-    EventDispatcher.async(new OnTvTEventFinish)
-    return "TvT Event: Event finish. Team " + team.name + " won with " + team.getPoints + " kills."
-  }
+    EventDispatcher.async(OnTvTEventFinish.new)
 
-  private static rewardTeam(TvTEventTeam team)
+    "TvT Event: Event finish. Team #{team.name} won with #{team.points} kills."
+  end
+
+  private def reward_team(team)
     # Iterate over all participated player instances of the winning team
-    for (playerInstance : team.getParticipatedPlayers.values)
-      # Check for nilpointer
-      if playerInstance.nil?)
-        continue
-    end
-
-      SystemMessage systemMessage = nil
-
+    team.participants.each_value do |pc|
       # Iterate over all tvt event rewards
-      for (int[] reward : Config.tvt_event_rewards)
-        PcInventory inv = playerInstance.getInventory
+      Config.tvt_event_rewards.each do |reward|
+        inv = pc.inventory
 
         # Check for stackable item, non stackabe items need to be added one by one
-        if ItemTable.getTemplate(reward[0]).isStackable)
-          inv.addItem("TvT Event", reward[0], reward[1], playerInstance, playerInstance)
+        if ItemTable[reward[0]].stackable?
+          inv.add_item("TvT Event", reward[0], reward[1].to_i64, pc, pc)
 
-          if reward[1] > 1)
-            systemMessage = SystemMessage.getSystemMessage(SystemMessageId.EARNED_S2_S1_S)
-            systemMessage.add_item_name(reward[0])
-            systemMessage.addLong(reward[1])
+          if reward[1] > 1
+            sm = SystemMessage.earned_s2_s1_s
+            sm.add_item_name(reward[0])
+            sm.add_long(reward[1])
           else
-            systemMessage = SystemMessage.getSystemMessage(SystemMessageId.EARNED_ITEM_S1)
-            systemMessage.add_item_name(reward[0])
-        end
+            sm = SystemMessage.earned_item_s1
+            sm.add_item_name(reward[0])
+          end
 
-          playerInstance.send_packet(systemMessage)
+          pc.send_packet(sm)
         else
-          for (int i = 0; i < reward[1]; ++i)
-            inv.addItem("TvT Event", reward[0], 1, playerInstance, playerInstance)
-            systemMessage = SystemMessage.getSystemMessage(SystemMessageId.EARNED_ITEM_S1)
-            systemMessage.add_item_name(reward[0])
-            playerInstance.send_packet(systemMessage)
-          }
+          reward[1].times do |i|
+            inv.add_item("TvT Event", reward[0], 1, pc, pc)
+            sm = SystemMessage.earned_item_s1
+            sm.add_item_name(reward[0])
+            pc.send_packet(sm)
+          end
+        end
       end
-      }
 
-      StatusUpdate statusUpdate = new StatusUpdate(playerInstance)
-      final NpcHtmlMessage npcHtmlMessage = NpcHtmlMessage.new
-
-      statusUpdate.addAttribute(StatusUpdate.CUR_LOAD, playerInstance.getCurrentLoad)
-      npcHtmlMessage.setHtml(HtmCache.get_htm(playerInstance, HTML_PATH + "Reward.html"))
-      playerInstance.send_packet(statusUpdate)
-      playerInstance.send_packet(npcHtmlMessage)
-    }
-  }
+      html_msg = NpcHtmlMessage.new
+      html_msg.html = HtmCache.get_htm(pc, HTML_PATH + "Reward.html").not_nil!
+      pc.send_packet(html_msg)
+      pc.send_packet(StatusUpdate.current_load(pc))
+    end
+  end
 
   # Stops the TvTEvent fight
   # 1. Set state EventState::INACTIVATING
@@ -299,26 +279,23 @@ module TvTEvent
   # 4. Teleport all participants back to participation npc location
   # 5. Teams cleaning
   # 6. Set state EventState::INACTIVE
-  def stopFight
+  def stop_fight
     # Set state INACTIVATING
     set_state(EventState::INACTIVATING)
     # Unspawn event npc
     despawn_npc
     # Opens all doors specified in configs for tvt
-    openDoors(Config.tvt_doors_ids_to_close)
+    open_doors(Config.tvt_doors_ids_to_close)
     # Closes all doors specified in Configs for tvt
-    closeDoors(Config.tvt_doors_ids_to_open)
+    close_doors(Config.tvt_doors_ids_to_open)
 
     # Iterate over all teams
-    for (TvTEventTeam team : TEAMS)
-      for (playerInstance : team.getParticipatedPlayers.values)
-        # Check for nilpointer
-        if playerInstance
-          # Enable player revival.
-          playerInstance.setCanRevive(true)
-          # Teleport back.
-          new TvTEventTeleporter(playerInstance, Config.tvt_event_participation_npc_coordinates, false, false)
-        end
+    TEAMS.each do |team|
+      team.participants.each_value do |pc|
+        # Enable player revival.
+        pc.can_revive = true
+        # Teleport back.
+        TvTEventTeleporter.new(pc, Config.tvt_event_participation_npc_coordinates, false, false)
       end
     end
 
@@ -334,20 +311,20 @@ module TvTEvent
    # * 1. Calculate the id of the team in which the player should be added
    # * 2. Add the player to the calculated team
    # *
-   # * @param playerInstance as L2PcInstance
+   # * @param pc as L2PcInstance
    # * @return boolean: true if success, otherwise false
-  def synchronized addParticipant(playerInstance) : Bool
-    return false unless playerInstance
+  def add_participant(pc) : Bool
+    return false unless pc
 
     sync do
       # Check to which team the player should be added
-      if TEAMS[0].participant_player_count == TEAMS[1].participant_player_count)
+      if TEAMS[0].participants_count == TEAMS[1].participants_count
         team_id = Rnd.rand(2i8)
       else
-        team_id = TEAMS[0].participant_player_count > TEAMS[1].participant_player_count ? 1i8 : 0i8
+        team_id = TEAMS[0].participants_count > TEAMS[1].participants_count ? 1i8 : 0i8
       end
-      playerInstance.add_event_listener(TvTEventListener.new(playerInstance))
-      TEAMS[team_id].add_player(playerInstance)
+      pc.add_event_listener(TvTEventListener.new(pc))
+      TEAMS[team_id].add_player(pc)
     end
   end
 
@@ -355,310 +332,300 @@ module TvTEvent
   # 1. Get team id of the player
   # 2. Remove player from it's team
   #
-  # @param playerObjectId
+  # @param l2id
   # @return boolean: true if success, otherwise false
-  def removeParticipant(int playerObjectId)
+  def remove_participant(l2id : Int32) : Bool
     # Get the teamId of the player
-    byte teamId = getParticipantTeamId(playerObjectId)
+    team_id = get_participant_team_id(l2id)
 
     # Check if the player is participant
-    if teamId != -1)
+    if team_id != -1
       # Remove the player from team
-      TEAMS[teamId].removePlayer(playerObjectId)
+      TEAMS[team_id].remove_player(l2id)
 
-      player = L2World.getPlayer(playerObjectId)
-      if player
-        player.removeEventListener(TvTEventListener.class)
-    end
+      if pc = L2World.get_player(l2id)
+        pc.remove_event_listener(TvTEventListener)
+      end
+
       return true
+    end
+
+    false
   end
 
-    return false
-  }
+  def needs_participation_fee?
+    Config.tvt_event_participation_fee[0] != 0 &&
+    Config.tvt_event_participation_fee[1] != 0
+  end
 
-  def needParticipationFee
-    return (Config.tvt_event_participation_fee[0] != 0) && (Config.tvt_event_participation_fee[1] != 0)
-  }
+  def has_participation_fee?(pc : L2PcInstance) : Bool
+    pc.inventory.get_inventory_item_count(Config.tvt_event_participation_fee[0], -1) >= Config.tvt_event_participation_fee[1]
+  end
 
-  def hasParticipationFee(playerInstance)
-    return playerInstance.getInventory.getInventoryItemCount(Config.tvt_event_participation_fee[0], -1) >= Config.tvt_event_participation_fee[1]
-  }
+  def pay_participation_fee(pc : L2PcInstance) : Bool
+    pc.destroy_item_by_item_id("TvT Participation Fee", Config.tvt_event_participation_fee[0], Config.tvt_event_participation_fee[1], @@last_npc_spawn, true)
+  end
 
-  def payParticipationFee(playerInstance)
-    return playerInstance.destroyItemByItemId("TvT Participation Fee", Config.tvt_event_participation_fee[0], Config.tvt_event_participation_fee[1], @@last_npc_spawn, true)
-  }
+  def participation_fee : String
+    item_id = Config.tvt_event_participation_fee[0]
+    item_num = Config.tvt_event_participation_fee[1]
 
-  def String getParticipationFee
-    int itemId = Config.tvt_event_participation_fee[0]
-    int itemNum = Config.tvt_event_participation_fee[1]
-
-    if (itemId == 0) || (itemNum == 0))
+    if item_id == 0 || item_num == 0
       return "-"
-  end
+    end
 
-    return StringUtil.concat(String.valueOf(itemNum), " ", ItemTable.getTemplate(itemId).name)
-  }
+    "#{item_num} #{ItemTable[item_id].name}"
+  end
 
   # Send a SystemMessage to all participated players
   # 1. Send the message to all players of team number one
   # 2. Send the message to all players of team number two
   #
   # @param message as String
-  def sysMsgToparticipants(String message)
-    for (playerInstance : TEAMS[0].getParticipatedPlayers.values)
-      if playerInstance != nil)
-        playerInstance.send_message(message)
+  def message_all_participants(message : String)
+    TEAMS[0].participants.each_value do |pc|
+      pc.send_message(message)
     end
-    }
 
-    for (playerInstance : TEAMS[1].getParticipatedPlayers.values)
-      if playerInstance != nil)
-        playerInstance.send_message(message)
-    end
-    }
-  }
-
-  private static L2DoorInstance getDoor(int doorId)
-    L2DoorInstance door = nil
-    if @@tvt_event_instance <= 0)
-      door = DoorData.getDoor(doorId)
-    else
-      final Instance inst = InstanceManager.getInstance(@@tvt_event_instance)
-      if inst)
-        door = inst.getDoor(doorId)
+    TEAMS[1].participants.each_value do |pc|
+      pc.send_message(message)
     end
   end
-    return door
-  }
+
+  private def get_door(door_id : Int32) : L2DoorInstance?
+    if @@tvt_event_instance <= 0
+      DoorData.get_door(door_id)
+    else
+      if inst = InstanceManager.get_instance(@@tvt_event_instance)
+        inst.get_door(door_id)
+      end
+    end
+  end
 
   # Close doors specified in configs
   # @param doors
-  private static closeDoors(List<Integer> doors)
-    for (int doorId : doors)
-      final L2DoorInstance doorInstance = getDoor(doorId)
-      if doorInstance != nil)
-        doorInstance.closeMe
+  private def close_doors(doors : Array(Int32))
+    doors.each do |door_id|
+      if door = get_door(door_id)
+        door.close_me
+      end
     end
-    }
-  }
+  end
 
   # Open doors specified in configs
   # @param doors
-  private static openDoors(List<Integer> doors)
-    for (int doorId : doors)
-      final L2DoorInstance doorInstance = getDoor(doorId)
-      if doorInstance != nil)
-        doorInstance.openMe
+  private def open_doors(doors : Array(Int32))
+    doors.each do |door_id|
+      if door = get_door(door_id)
+        door.open_me
+      end
     end
-    }
-  }
+  end
 
   # UnSpawns the TvTEvent npc
-  private static despawn_npc
+  private def despawn_npc
     # Delete the npc
-    @@last_npc_spawn.delete_me
-    SpawnTable.deleteSpawn(@@last_npc_spawn.spawn?, false)
+    @@last_npc_spawn.not_nil!.delete_me
+    SpawnTable.delete_spawn(@@last_npc_spawn.not_nil!.spawn, false)
     # Stop respawning of the npc
-    @@npc_spawn.stopRespawn
+    @@npc_spawn.not_nil!.stop_respawn
     @@npc_spawn = nil
     @@last_npc_spawn = nil
-  }
+  end
 
   # Called when a player logs in
   #
-  # @param playerInstance as L2PcInstance
-  def onLogin(playerInstance)
-    if (playerInstance.nil?) || (!starting? && !started?))
+  # @param pc_instance as L2PcInstance
+  def on_login(pc)
+    if pc.nil? || (!starting? && !started?)
       return
-  end
+    end
 
-    byte teamId = getParticipantTeamId(playerInstance.l2id)
+    team_id = get_participant_team_id(pc.l2id)
 
-    if teamId == -1)
+    if team_id == -1
       return
-  end
+    end
 
-    TEAMS[teamId].addPlayer(playerInstance)
-    new TvTEventTeleporter(playerInstance, TEAMS[teamId].coordinates, true, false)
-  }
+    TEAMS[team_id].add_player(pc)
+    TvTEventTeleporter.new(pc, TEAMS[team_id].coordinates, true, false)
+  end
 
   # Called when a player logs out
   #
-  # @param playerInstance as L2PcInstance
-  def onLogout(playerInstance)
-    if (playerInstance != nil) && (starting? || started? || participating?))
-      if removeParticipant(playerInstance.l2id))
-        playerInstance.setXYZInvisible((Config.tvt_event_participation_npc_coordinates[0] + Rnd.rand(101)) - 50, (Config.tvt_event_participation_npc_coordinates[1] + Rnd.rand(101)) - 50, Config.tvt_event_participation_npc_coordinates[2])
+  # @param pc as L2PcInstance
+  def on_logout(pc)
+    if pc && (starting? || started? || participating?)
+      if remove_participant(pc.l2id)
+        pc.set_xyz_invisible(
+          Config.tvt_event_participation_npc_coordinates[0] + rand(101) - 50,
+          Config.tvt_event_participation_npc_coordinates[1] + rand(101) - 50,
+          Config.tvt_event_participation_npc_coordinates[2]
+        )
+      end
     end
   end
-  }
 
-  # Called on every onAction in L2PcIstance
+  # Called on every on_action in L2PcInstance
   #
-  # @param playerInstance
-  # @param targetedPlayerObjectId
+  # @param pc
+  # @param target_l2id
   # @return boolean: true if player is allowed to target, otherwise false
-  def onAction(playerInstance, int targetedPlayerObjectId)
-    if (playerInstance.nil?) || !started?)
+  def on_action(pc : L2PcInstance, target_l2id : Int32) : Bool
+    if pc.nil? || !started?
       return true
-  end
+    end
 
-    if playerInstance.isGM)
+    if pc.gm?
       return true
-  end
+    end
 
-    byte playerTeamId = getParticipantTeamId(playerInstance.l2id)
-    byte targetedPlayerTeamId = getParticipantTeamId(targetedPlayerObjectId)
+    team_id = get_participant_team_id(pc.l2id)
+    target_team_id = get_participant_team_id(target_l2id)
 
-    if ((playerTeamId != -1) && (targetedPlayerTeamId == -1)) || ((playerTeamId == -1) && (targetedPlayerTeamId != -1)))
+    if team_id != -1 && target_team_id == -1
       return false
-  end
+    end
 
-    if (playerTeamId != -1) && (targetedPlayerTeamId != -1) && (playerTeamId == targetedPlayerTeamId) && (playerInstance.l2id != targetedPlayerObjectId) && !Config.tvt_event_target_team_members_allowed)
+    if team_id == -1 && target_team_id != -1
       return false
-  end
+    end
 
-    return true
-  }
+    if team_id != -1 && target_team_id != -1 && team_id == target_team_id
+      if pc.l2id != target_l2id && !Config.tvt_event_target_team_members_allowed
+        return false
+      end
+    end
+
+    true
+  end
 
   # Called on every scroll use
   #
-  # @param playerObjectId
+  # @param l2id
   # @return boolean: true if player is allowed to use scroll, otherwise false
-  def onScrollUse(int playerObjectId)
-    if !started?)
+  def on_scroll_use(l2id : Int32) : Bool
+    unless started?
       return true
-  end
+    end
 
-    if player?Participant(playerObjectId) && !Config.tvt_event_scroll_allowed)
+    if participant?(l2id) && !Config.tvt_event_scroll_allowed
       return false
-  end
+    end
 
-    return true
-  }
+    true
+  end
 
   # Called on every potion use
-  # @param playerObjectId
+  # @param l2id
   # @return boolean: true if player is allowed to use potions, otherwise false
-  def onPotionUse(int playerObjectId)
-    if !started?)
+  def on_potion_use(l2id : Int32) : Bool
+    unless started?
       return true
-  end
+    end
 
-    if player?Participant(playerObjectId) && !Config.tvt_event_potions_allowed)
+    if participant?(l2id) && !Config.tvt_event_potions_allowed
       return false
-  end
+    end
 
-    return true
-  }
+    true
+  end
 
   # Called on every escape use(thanks to nbd)
-  # @param playerObjectId
+  # @param l2id
   # @return boolean: true if player is not in tvt event, otherwise false
-  def onEscapeUse(int playerObjectId)
-    if !started?)
+  def on_escape_use(l2id : Int32) : Bool
+    unless started?
       return true
-  end
+    end
 
-    if player?Participant(playerObjectId))
+    if participant?(l2id)
       return false
-  end
+    end
 
-    return true
-  }
+    true
+  end
 
   # Called on every summon item use
-  # @param playerObjectId
+  # @param l2id
   # @return boolean: true if player is allowed to summon by item, otherwise false
-  def onItemSummon(int playerObjectId)
-    if !started?)
+  def on_item_summon(l2id : Int32) : Bool
+    unless started?
       return true
-  end
+    end
 
-    if player?Participant(playerObjectId) && !Config.tvt_event_summon_by_item_allowed)
+    if participant?(l2id) && !Config.tvt_event_summon_by_item_allowed
       return false
-  end
+    end
 
-    return true
-  }
+    true
+  end
 
   # Is called when a player is killed
   #
-  # @param killerCharacter as L2Character
-  # @param killedPlayerInstance as L2PcInstance
-  def onKill(L2Character killerCharacter, L2PcInstance killedPlayerInstance)
-    if (killedPlayerInstance.nil?) || !started?)
+  # @param killer_char as L2Character
+  # @param killed_pc as L2PcInstance
+  def on_kill(killer_char : L2Character, killed_pc : L2PcInstance)
+    if killed_pc.nil? || !started?
       return
-  end
-
-    byte killedTeamId = getParticipantTeamId(killedPlayerInstance.l2id)
-
-    if killedTeamId == -1)
-      return
-  end
-
-    new TvTEventTeleporter(killedPlayerInstance, TEAMS[killedTeamId].coordinates, false, false)
-
-    if killerCharacter.nil?)
-      return
-  end
-
-    L2PcInstance killerPlayerInstance = nil
-
-    if (killerCharacter.is_a?(L2PetInstance) || (killerCharacter.is_a?(L2ServitorInstance))
-      killerPlayerInstance = ((L2Summon) killerCharacter).getOwner
-
-      if killerPlayerInstance.nil?)
-        return
     end
-  end
-    elsif killerCharacter.is_a?(L2PcInstance)
-      killerPlayerInstance = (L2PcInstance) killerCharacter
+
+    killed_team_id = get_participant_team_id(killed_pc.l2id)
+
+    if killed_team_id == -1
+      return
+    end
+
+    TvTEventTeleporter.new(killed_pc, TEAMS[killed_team_id].coordinates, false, false)
+
+    unless killer_char
+      return
+    end
+
+    if killer_char.is_a?(L2PetInstance) || killer_char.is_a?(L2ServitorInstance)
+      killer_pc_instance = killer_char.owner
+    elsif killer_char.is_a?(L2PcInstance)
+      killer_pc_instance = killer_char
     else
       return
-  end
+    end
 
-    byte killerTeamId = getParticipantTeamId(killerPlayerInstance.l2id)
+    killer_team_id = get_participant_team_id(killer_pc_instance.l2id)
 
-    if (killerTeamId != -1) && (killedTeamId != -1) && (killerTeamId != killedTeamId))
-      TvTEventTeam killerTeam = TEAMS[killerTeamId]
+    if killer_team_id != -1 && killed_team_id != -1 && killer_team_id != killed_team_id
+      killer_team = TEAMS[killer_team_id]
 
-      killerTeam.increasePoints
+      killer_team.increase_points
 
-      cs = CreatureSay.new(killerPlayerInstance.l2id, Say2::TELL, killerPlayerInstance.name, "I have killed " + killedPlayerInstance.name + "!")
+      cs = CreatureSay.new(killer_pc_instance.l2id, Packets::Incoming::Say2::TELL, killer_pc_instance.name, "I have killed " + killed_pc.name + "!")
 
-      for (playerInstance : TEAMS[killerTeamId].getParticipatedPlayers.values)
-        if playerInstance != nil)
-          playerInstance.send_packet(cs)
+      TEAMS[killer_team_id].participants.each_value do |pc|
+        pc.send_packet(cs)
       end
-      }
 
       # Notify to scripts.
-      EventDispatcher.async(OnTvTEventKill.new(killerPlayerInstance, killedPlayerInstance, killerTeam))
+      EventDispatcher.async(OnTvTEventKill.new(killer_pc_instance, killed_pc, killer_team))
+    end
   end
-  }
 
   #  * Called on Appearing packet received (player finished teleporting)
-  #  * @param playerInstance
+  #  * @param pc_instance
   #  */
-  def on_teleported(playerInstance)
-    if !started? || (playerInstance.nil?) || !player?Participant(playerInstance.l2id))
+  def on_teleported(pc : L2PcInstance)
+    if !started? || pc.nil? || !participant?(pc.l2id)
       return
-  end
+    end
 
-    if playerInstance.mage_class?
-      if (Config.tvt_event_mage_buffs != nil) && !Config.tvt_event_mage_buffs.empty?)
-        for (Entry<Integer, Integer> e : Config.tvt_event_mage_buffs.entrySet)
-          Skill skill = SkillData.getSkill(e.getKey, e.getValue)
-          if skill != nil)
-            skill.apply_effects(playerInstance, playerInstance)
-          end
+    if pc.mage_class?
+      Config.tvt_event_mage_buffs.each do |k, v|
+        if skill = SkillData[k, v]?
+          skill.apply_effects(pc, pc)
         end
       end
     else
       Config.tvt_event_fighter_buffs.each do |k, v|
         if skill = SkillData[k, v]?
-          skill.apply_effects(playerInstance, playerInstance)
+          skill.apply_effects(pc, pc)
         end
       end
     end
@@ -668,26 +635,26 @@ module TvTEvent
   # @param target
   # @param skill
   # @return true if player valid for skill
-  def final checkForTvTSkill(L2PcInstance source, L2PcInstance target, Skill skill)
-    if !started?)
+  def check_for_tvt_skill(source : L2PcInstance, target : L2PcInstance, skill : Skill) : Bool
+    unless started?
       return true
-  end
+    end
     # TvT is started
-    sourcePlayerId = source.l2id
-    targetPlayerId = target.l2id
-    final isSourceParticipant = player?Participant(sourcePlayerId)
-    final isTargetParticipant = player?Participant(targetPlayerId)
+    source_id = source.l2id
+    target_id = target.l2id
+    is_source_participant = participant?(source_id)
+    is_target_participant = participant?(target_id)
 
     # both players not participating
-    if !isSourceParticipant && !isTargetParticipant)
+    if !is_source_participant && !is_target_participant
       return true
-  end
+    end
     # one player not participating
-    if !(isSourceParticipant && isTargetParticipant))
+    unless is_source_participant && is_target_participant
       return false
     end
     # players in the different teams ?
-    if getParticipantTeamId(sourcePlayerId) != getParticipantTeamId(targetPlayerId))
+    if get_participant_team_id(source_id) != get_participant_team_id(target_id)
       unless skill.bad?
         return false
       end
@@ -699,60 +666,74 @@ module TvTEvent
   # Sets the TvTEvent state
   # @param state as EventState
   private def set_state(state)
-    synchronized (@@state)
-      @@state = state
-    end
+    @@state_lock.synchronize { @@state = state }
   end
 
   # Returns the team id of a player, if player is not participant it returns -1
-  # @param playerObjectId
+  # @param l2id
   # @return byte: team name of the given playerName, if not in event -1
-  def byte getParticipantTeamId(int playerObjectId)
-    return (byte) (TEAMS[0].include?Player(playerObjectId) ? 0 : (TEAMS[1].include?Player(playerObjectId) ? 1 : -1))
-  }
-
-  # Returns the team of a player, if player is not participant it returns nil
-  # @param playerObjectId
-  # @return TvTEventTeam: team of the given playerObjectId, if not in event nil
-  def TvTEventTeam getParticipantTeam(int playerObjectId)
-    return (TEAMS[0].include?Player(playerObjectId) ? TEAMS[0] : (TEAMS[1].include?Player(playerObjectId) ? TEAMS[1] : nil))
-  }
-
-  # Returns the enemy team of a player, if player is not participant it returns nil
-  # @param playerObjectId
-  # @return TvTEventTeam: enemy team of the given playerObjectId, if not in event nil
-  def TvTEventTeam getParticipantEnemyTeam(int playerObjectId)
-    return (TEAMS[0].include?Player(playerObjectId) ? TEAMS[1] : (TEAMS[1].include?Player(playerObjectId) ? TEAMS[0] : nil))
-  }
-
-  # Returns the team coordinates in which the player is in, if player is not in a team return
-  # @param playerObjectId
-  # @return int[]: coordinates of teams, 2 elements, index 0 for team 1 and index 1 for team 2
-  def int[] getParticipantTeamCoordinates(int playerObjectId)
-    return TEAMS[0].include?Player(playerObjectId) ? TEAMS[0].coordinates : (TEAMS[1].include?Player(playerObjectId) ? TEAMS[1].coordinates : nil)
-  }
-
-  # Is given player participant of the event?
-  # @param playerObjectId
-  # @return boolean: true if player is participant, ohterwise false
-  def player?Participant(int playerObjectId)
-    if !participating? && !starting? && !started?
-      return false
+  def get_participant_team_id(l2id : Int32) : Int8
+    if TEAMS[0].contains_player?(l2id)
+      0i8
+    else
+      TEAMS[1].contains_player?(l2id) ? 1i8 : -1i8
+    end
   end
 
-    return TEAMS[0].include?Player(playerObjectId) || TEAMS[1].include?Player(playerObjectId)
-  }
+  # Returns the team of a player, if player is not participant it returns nil
+  # @param l2id
+  # @return TvTEventTeam: team of the given l2id, if not in event nil
+  def get_participant_team(l2id : Int32) : TvTEventTeam?
+    if TEAMS[0].contains_player?(l2id)
+      TEAMS[0]
+    else
+      TEAMS[1] if TEAMS[1].contains_player?(l2id)
+    end
+  end
+
+  # Returns the enemy team of a player, if player is not participant it returns nil
+  # @param l2id
+  # @return TvTEventTeam: enemy team of the given l2id, if not in event nil
+  def get_participant_enemy_team(l2id : Int32) : TvTEventTeam?
+    if TEAMS[0].contains_player?(l2id)
+      TEAMS[1]
+    else
+      TEAMS[0] if TEAMS[1].contains_player?(l2id)
+    end
+  end
+
+  # Returns the team coordinates in which the player is in, if player is not in a team return
+  # @param l2id
+  # @return int[]: coordinates of teams, 2 elements, index 0 for team 1 and index 1 for team 2
+  def get_participant_team_coordinates(l2id : Int32) : Array(Int32)
+    if TEAMS[0].contains_player?(l2id)
+      TEAMS[0].coordinates
+    else
+      TEAMS[1].coordinates if TEAMS[1].contains_player?(l2id)
+    end
+  end
+
+  # Is given player participant of the event?
+  # @param l2id
+  # @return boolean: true if player is participant, ohterwise false
+  def participant?(l2id : Int32)
+    if !participating? && !starting? && !started?
+      return false
+    end
+
+    TEAMS[0].contains_player?(l2id) || TEAMS[1].contains_player?(l2id)
+  end
 
   # Returns participated player count
   #
   # @return int: amount of players registered in the event
-  def int getParticipatedPlayersCount
+  def participants_count : Int32
     if !participating? && !starting? && !started?
       return 0
     end
 
-    return TEAMS[0].participant_player_count + TEAMS[1].participant_player_count
-  }
+    TEAMS[0].participants_count + TEAMS[1].participants_count
+  end
 
   # Returns teams names
   #
@@ -764,13 +745,13 @@ module TvTEvent
   # Returns player count of both teams
   #
   # @return int[]: player count of teams, 2 elements, index 0 for team 1 and index 1 for team 2
-  def getTeamsPlayerCounts
-    TEAMS.map &.participant_player_count
-  }
+  def teams_player_counts : Array(Int32)
+    TEAMS.map &.participants_count
+  end
 
   # Returns points count of both teams
   # @return int[]: points of teams, 2 elements, index 0 for team 1 and index 1 for team 2
-  def getTeamsPoints
+  def teams_points : Array(Int32)
     TEAMS.map &.points
   end
 end

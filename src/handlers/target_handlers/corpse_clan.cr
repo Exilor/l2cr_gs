@@ -39,9 +39,9 @@ module TargetHandler::CorpseClan
             next
           end
 
-          # unless TvTEvent.check_for_tvt_skill(pc, obj, skill)
-          #   next
-          # end
+          unless TvTEvent.check_for_tvt_skill(pc, obj, skill)
+            next
+          end
 
           unless add_character(char, obj, radius, false)
             next

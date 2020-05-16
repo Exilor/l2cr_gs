@@ -2,8 +2,6 @@ module ActionHandler::L2PetInstanceAction
   extend self
   extend ActionHandler
 
-  private CURSED_WEAPON_VICTIM_MIN_LEVEL = 21
-
   def action(pc, target, interact) : Bool
     if pc.locked_target? && pc.locked_target != target
       pc.send_packet(SystemMessageId::FAILED_CHANGE_TARGET)

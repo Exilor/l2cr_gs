@@ -7,10 +7,10 @@ module ItemHandler::ItemSkillsTemplate
       return false
     end
 
-    # unless TvTEvent.on_scroll_use(playable.l2id)
-    #   playable.action_failed
-    #   return false
-    # end
+    unless TvTEvent.on_scroll_use(playable.l2id)
+      playable.action_failed
+      return false
+    end
 
     if playable.pet? && !item.tradeable?
       playable.send_packet(SystemMessageId::ITEM_NOT_FOR_PETS)

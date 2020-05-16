@@ -33,15 +33,15 @@ module TvTManager
       end
     end
     if next_start_time
-      @@task = TvTStartTask.new(next_start_time.ms)
-      ThreadPoolManager.execute_general(@@task)
+      @@task = task = TvTStartTask.new(self, next_start_time.ms)
+      ThreadPoolManager.execute_general(task)
     end
   rescue e
     warn "Error figuring out a start time. Check TvTEventInterval in config file."
   end
 
   def start_reg
-    if !TvTEvent.start_participation?
+    if !TvTEvent.start_participation
       Broadcast.to_all_online_players("TvT Event: Event was cancelled.")
       warn "Error spawning event npc for participation."
 
@@ -50,8 +50,8 @@ module TvTManager
       Broadcast.to_all_online_players("TvT Event: Registration opened for #{Config.tvt_event_participation_time} minute(s).")
 
       # schedule registration end
-      @@task.start_time = Time.ms + (60000i64 * Config.tvt_event_participation_time)
-      ThreadPoolManager.execute_general(@@task)
+      @@task.not_nil!.start_time = Time.ms + (60000i64 * Config.tvt_event_participation_time)
+      ThreadPoolManager.execute_general(@@task.not_nil!)
     end
   end
 
@@ -79,7 +79,8 @@ module TvTManager
 
   def skip_delay
     task = @@task.not_nil!
-    if task.next_run.cancel(false)
+    unless task.next_run.done?
+      task.next_run.cancel
       task.start_time = Time.ms
       ThreadPoolManager.execute_general(task)
     end
@@ -95,7 +96,7 @@ module TvTManager
       delay = ((@start_time - Time.ms) / 1000).round.to_i
 
       if delay > 0
-        @manager.announce(delay)
+        announce(delay)
       end
 
       next_msg = 0

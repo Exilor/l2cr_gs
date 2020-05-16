@@ -45,9 +45,9 @@ module TargetHandler::Clan
             next
           end
 
-          # unless TvTEvent.check_for_tvt_skill(pc, obj, skill)
-          #   next
-          # end
+          unless TvTEvent.check_for_tvt_skill(pc, obj, skill)
+            next
+          end
 
           if !only_first && (smn = add_summon(char, obj, radius, false))
             target_list << smn

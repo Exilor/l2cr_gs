@@ -212,7 +212,7 @@ class Skill
       items = [] of ItemHolder
       (0...length).step(2) do |j|
         prod_id = prod_data[j].to_i
-        quantity = prod_data[j + 1].to_i64
+        quantity = prod_data[j &+ 1].to_i64
         if prod_id <= 0 || quantity <= 0
           raise "Wrong prod id or quantity for extractable skill"
         end
@@ -407,9 +407,9 @@ class Skill
           end
         end
 
-        # unless TvTEvent.check_for_tvt_skill(player, target_player, self)
-        #   return false
-        # end
+        unless TvTEvent.check_for_tvt_skill(player, target_player, self)
+          return false
+        end
 
         if !source_in_arena && !target_player.inside_pvp_zone?
           unless target_player.inside_siege_zone?

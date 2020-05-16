@@ -215,10 +215,10 @@ module VoicedCommandHandler::Wedding
       return false
     end
 
-    # unless TvTEvent.on_escape_use(pc.l2id)
-    #   pc.action_failed
-    #   return false
-    # end
+    unless TvTEvent.on_escape_use(pc.l2id)
+      pc.action_failed
+      return false
+    end
 
     if pc.inside_no_summon_friend_zone?
       pc.send_message("You are in area which blocks summoning.")
@@ -305,10 +305,10 @@ module VoicedCommandHandler::Wedding
       end
     end
 
-    # unless TvTEvent.on_escape_use(partner.l2id)
-    #   pc.send_message("Your partner is in an event.")
-    #   return false
-    # end
+    unless TvTEvent.on_escape_use(partner.l2id)
+      pc.send_message("Your partner is in an event.")
+      return false
+    end
 
     if partner.inside_no_summon_friend_zone?
       pc.send_message("Your partner is in area which blocks summoning.")

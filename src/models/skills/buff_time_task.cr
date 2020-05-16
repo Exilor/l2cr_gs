@@ -47,6 +47,6 @@ struct BuffTimeTask
   end
 
   def elapsed_time : Int32
-    (Time.s - @start_time).to_i32
+    (Time.s &- @start_time).to_i32
   end
 end

@@ -1,3 +1,5 @@
+require "../../entity/tvt_event"
+
 class Condition
   class PlayerCanEscape < Condition
     initializer val : Bool
@@ -10,7 +12,7 @@ class Condition
       case
       when pc.nil?
         can = false
-      when false # !TvTEvent.on_escape_use(pc.l2id)
+      when !TvTEvent.on_escape_use(pc.l2id)
         can = false
       when pc.in_duel?
         can = false

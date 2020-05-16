@@ -593,11 +593,11 @@ class L2PcInstance < L2Playable
         error e
       end
 
-      # begin
-      #   TvTEvent.on_logout(self)
-      # rescue e
-      #   error e
-      # end
+      begin
+        TvTEvent.on_logout(self)
+      rescue e
+        error e
+      end
 
       begin
         inventory.delete_me
@@ -5263,7 +5263,7 @@ class L2PcInstance < L2Playable
       sum.update_and_broadcast_status(0)
     end
 
-    # TvTEvent.on_teleported(self)
+    TvTEvent.on_teleported(self)
   end
 
   def teleporting=(tele : Bool)
@@ -6642,43 +6642,39 @@ class L2PcInstance < L2Playable
       end
       @last_compass_zone = ExSetCompassZoneCode::ALTEREDZONE
       cz = ExSetCompassZoneCode.new(ExSetCompassZoneCode::ALTEREDZONE)
-      send_packet(cz)
     when inside_siege_zone?
       if @last_compass_zone == ExSetCompassZoneCode::SIEGEWARZONE2
         return
       end
       @last_compass_zone = ExSetCompassZoneCode::SIEGEWARZONE2
       cz = ExSetCompassZoneCode.new(ExSetCompassZoneCode::SIEGEWARZONE2)
-      send_packet(cz)
     when inside_pvp_zone?
       if @last_compass_zone == ExSetCompassZoneCode::PVPZONE
         return
       end
       @last_compass_zone = ExSetCompassZoneCode::PVPZONE
       cz = ExSetCompassZoneCode.new(ExSetCompassZoneCode::PVPZONE)
-      send_packet(cz)
     when in_7s_dungeon?
       if @last_compass_zone == ExSetCompassZoneCode::SEVENSIGNSZONE
         return
       end
       @last_compass_zone = ExSetCompassZoneCode::SEVENSIGNSZONE
       cz = ExSetCompassZoneCode.new(ExSetCompassZoneCode::SEVENSIGNSZONE)
-      send_packet(cz)
     when inside_peace_zone?
       if @last_compass_zone == ExSetCompassZoneCode::PEACEZONE
         return
       end
       @last_compass_zone = ExSetCompassZoneCode::PEACEZONE
       cz = ExSetCompassZoneCode.new(ExSetCompassZoneCode::PEACEZONE)
-      send_packet(cz)
     else
       if @last_compass_zone == ExSetCompassZoneCode::GENERALZONE
         return
       end
       @last_compass_zone = ExSetCompassZoneCode::GENERALZONE
       cz = ExSetCompassZoneCode.new(ExSetCompassZoneCode::GENERALZONE)
-      send_packet(cz)
     end
+
+    send_packet(cz)
   end
 
   def add_subclass(class_id : Int32, class_index : Int32)
@@ -6927,10 +6923,10 @@ class L2PcInstance < L2Playable
       if pk = killer.acting_player
         OnPlayerPvPKill.new(pk, self).async(self)
 
-        # TvTEvent.on_kill(killer, self)
-        # if TvTEvent.participant?(pk)
-        #   pk.event_status.kills << self
-        # end
+        TvTEvent.on_kill(killer, self)
+        if L2Event.participant?(pk)
+          pk.event_status.not_nil!.kills << self
+        end
       end
 
       broadcast_status_update
@@ -7151,7 +7147,7 @@ class L2PcInstance < L2Playable
       return false
     end
 
-    if target.festival_participant? || target.flying_mounted? || target.combat_flag_equipped?# || !TvTEvent.on_escape_use(target.l2id))
+    if target.festival_participant? || target.flying_mounted? || target.combat_flag_equipped? || !TvTEvent.on_escape_use(target.l2id)
       send_packet(SystemMessageId::YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING)
       return false
     end
@@ -7408,7 +7404,6 @@ class L2PcInstance < L2Playable
   private def random_fish_lvl : Int32
     skill_lvl = get_skill_level(1315)
     if info = effect_list.get_buff_info_by_skill_id(2274)
-      skill_lvl = 0
       case info.skill.level
       when 1
         skill_lvl = 2
@@ -7427,7 +7422,7 @@ class L2PcInstance < L2Playable
       when 8
         skill_lvl = 23
       else
-        # [automatically added else]
+        skill_lvl = 0
       end
     end
 
@@ -7523,7 +7518,7 @@ class L2PcInstance < L2Playable
   end
 
   def remove_event_listener(klass : EventListener.class)
-    @event_listeners.reject! { |lst| lst.class == klass}
+    @event_listeners.delete_if { |lst| lst.class == klass }
   end
 
   def teleport_bookmarks : Slice(TeleportBookmark)

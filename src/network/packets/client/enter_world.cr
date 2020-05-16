@@ -301,7 +301,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       end
     end
 
-    # TvTEvent.on_login(pc)
+    TvTEvent.on_login(pc)
 
     if Config.welcome_message_enabled
       text = Config.welcome_message_text
