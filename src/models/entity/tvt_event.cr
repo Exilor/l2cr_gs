@@ -705,7 +705,7 @@ module TvTEvent
   # Returns the team coordinates in which the player is in, if player is not in a team return
   # @param l2id
   # @return int[]: coordinates of teams, 2 elements, index 0 for team 1 and index 1 for team 2
-  def get_participant_team_coordinates(l2id : Int32) : Array(Int32)
+  def get_participant_team_coordinates(l2id : Int32) : Slice(Int32)?
     if TEAMS[0].contains_player?(l2id)
       TEAMS[0].coordinates
     else
