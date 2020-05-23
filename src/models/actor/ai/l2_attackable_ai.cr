@@ -352,10 +352,8 @@ class L2AttackableAI < L2CharacterAI
         move_to(x1, y1, z1)
         return
       elsif Rnd.rand(RANDOM_WALK_RATE) == 0
-        npc.template.get_ai_skills(AISkillScope::BUFF).each do |sk|
-          if cast(sk)
-            return
-          end
+        if npc.template.get_ai_skills(AISkillScope::BUFF).any? { |sk| cast(sk) }
+          return
         end
       end
     # Order to the L2MonsterInstance to random walk (1/100)
@@ -365,20 +363,19 @@ class L2AttackableAI < L2CharacterAI
       z1 = 0
       range = Config.max_drift_range
 
-      npc.template.get_ai_skills(AISkillScope::BUFF).each do |sk|
-        if cast(sk)
-          return
-        end
+      if npc.walker?
+        return
+      end
+
+      if npc.template.get_ai_skills(AISkillScope::BUFF).any? { |sk| cast(sk) }
+        return
       end
 
       # If NPC with random coord in territory - old method (for backward compatibility)
       if sp.x == 0 && sp.y == 0 && sp.spawn_territory.nil?
         # Calculate a destination point in the spawn area
-        location = TerritoryTable.get_random_point(sp.location_id)
-        if location
-          x1 = location.x
-          y1 = location.y
-          z1 = location.z
+        if loc = TerritoryTable.get_random_point(sp.location_id)
+          x1, y1, z1 = loc.xyz
         end
 
         # Calculate the distance between the current position of the L2Character and the target (x,y)

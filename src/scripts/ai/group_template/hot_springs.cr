@@ -39,14 +39,13 @@ class Scripts::HotSprings < AbstractNpcAI
         # [automatically added else]
       end
 
-
       super
     end
   end
 
   private def try_to_infect(npc, attacker, disease_id)
     info = attacker.effect_list.get_buff_info_by_skill_id(disease_id)
-    skill_lvl = !info ? 1 : info.skill.level < 10 ? info.skill.level + 1 : 10
+    skill_lvl = !info ? 1 : info.skill.level < 10 ? info.skill.level &+ 1 : 10
     skill = SkillData[disease_id, skill_lvl]?
 
     if skill && !npc.casting_now? && npc.check_do_cast_conditions(skill)

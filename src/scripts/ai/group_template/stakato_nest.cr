@@ -90,12 +90,11 @@ class Scripts::StakatoNest < AbstractNpcAI
       # [automatically added else]
     end
 
-
     super
   end
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
-    if COCOONS.includes?(npc.id) && targets.includes?(npc) && skill.id == GROWTH_ACCELERATOR
+    if COCOONS.bincludes?(npc.id) && targets.includes?(npc) && skill.id == GROWTH_ACCELERATOR
       npc.do_die(caster)
       spawned = add_spawn(STAKATO_CHIEF, *npc.xyz, Util.calculate_heading_from(npc, caster), false, 0, true)
       add_attack_desire(spawned, caster)
@@ -116,7 +115,6 @@ class Scripts::StakatoNest < AbstractNpcAI
     else
       # [automatically added else]
     end
-
 
     if npc_id
       npc.spawn.decrease_count(npc)
@@ -141,6 +139,7 @@ class Scripts::StakatoNest < AbstractNpcAI
   end
 
   private def give_cocoon(pc, npc)
-    pc.add_item("StakatoCocoon", Rnd.rand(100) > 80 ? LARGE_COCOON : SMALL_COCOON, 1, npc, true)
+    item_id = Rnd.rand(100) > 80 ? LARGE_COCOON : SMALL_COCOON
+    pc.add_item("StakatoCocoon", item_id, 1, npc, true)
   end
 end

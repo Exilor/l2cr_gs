@@ -93,7 +93,6 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
       # [automatically added else]
     end
 
-
     get_no_quest_msg(pc)
   end
 
@@ -159,7 +158,6 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
         else
           # [automatically added else]
         end
-
       when WAREHOUSE_CHIEF_BAXT
         ask = event.to_i
         case ask
@@ -196,11 +194,9 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
         else
           # [automatically added else]
         end
-
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -531,7 +527,6 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
       else
         # [automatically added else]
       end
-
     end
 
     super

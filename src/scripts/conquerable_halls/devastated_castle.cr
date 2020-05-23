@@ -74,11 +74,10 @@ class Scripts::DevastatedCastle < ClanHallSiegeEngine
   def winner : L2Clan?
     counter = 0
     most_damaged = 0
-    DAMAGE_TO_GUSTAV.each do |key, value|
-      damage = value
+    DAMAGE_TO_GUSTAV.each do |clan_id, damage|
       if damage > counter
         counter = damage
-        most_damaged = key
+        most_damaged = clan_id
       end
     end
 

@@ -484,7 +484,7 @@ abstract class L2Summon < L2Playable
     end
   end
 
-  def do_cast(skill)
+  def do_cast(skill : Skill)
     pc = acting_player
     unless pc.check_pvp_skill(target, skill)
       unless pc.access_level.allow_peace_attack?

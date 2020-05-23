@@ -571,7 +571,7 @@ abstract class FlagWar < ClanHallSiegeEngine
     error e
   end
 
-  class ClanData
+  private class ClanData
     getter players_instance = Array(L2PcInstance).new(18)
     getter players = Array(Int32).new(18)
     property flag = 0

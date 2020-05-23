@@ -40,12 +40,6 @@ class Scripts::SummonPc < AbstractNpcAI
   def on_spell_finished(npc, pc, skill)
     if skill.id == SUMMON_PC.skill_id && npc.alive?
       if npc.variables.get_bool("attacked", false)
-        # pc.tele_to_location(npc)
-        # add_attack_desire(npc, pc)
-        # npc.variables["attacked"] = false
-
-        # This is my own implementation. It's less visually disruptive for the
-        # player and it doesn't mess with aggro lists.
         pc.set_xyz(*npc.xyz)
         pc.stop_move(nil)
         pc.broadcast_packet(ValidateLocation.new(pc))
@@ -59,7 +53,7 @@ class Scripts::SummonPc < AbstractNpcAI
   private def do_summon_pc(npc, attacker)
     if SUMMON_PC.skill.mp_consume2 < npc.current_mp
       if SUMMON_PC.skill.hp_consume < npc.current_hp
-        if !npc.skill_disabled?(SUMMON_PC.skill)
+        unless npc.skill_disabled?(SUMMON_PC.skill)
           npc.target = attacker
           npc.do_cast(SUMMON_PC.skill)
           npc.variables["attacked"] = true

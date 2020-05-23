@@ -73,14 +73,14 @@ class Scripts::SelMahumDrill < AbstractNpcAI
         if MAHUM_CHIEFS.includes?(npc.id)
           if npc.variables.get_i32("BUSY_STATE") == 0 && npc.intention.active? && npc.stays_in_spawn_loc?
             idx = Rnd.rand(6)
-            if idx <= CHIEF_SOCIAL_ACTIONS.size - 1
+            if idx <= CHIEF_SOCIAL_ACTIONS.size &- 1
               npc.broadcast_social_action(CHIEF_SOCIAL_ACTIONS[idx])
               npc.variables["SOCIAL_ACTION_NEXT_INDEX"] = idx # Pass social action index to soldiers via script value
               npc.broadcast_event("do_social_action", TRAINING_RANGE, nil)
             end
           end
 
-          start_quest_timer("do_social_action", 15000, npc, nil)
+          start_quest_timer("do_social_action", 15_000, npc, nil)
         elsif MAHUM_SOLDIERS.includes?(npc.id)
           idx = npc.variables.get_i32("SOCIAL_ACTION_NEXT_INDEX")
           handle_social_action(npc, SOLDIER_SOCIAL_ACTIONS[idx], false)
@@ -108,7 +108,6 @@ class Scripts::SelMahumDrill < AbstractNpcAI
     else
       # [automatically added else]
     end
-
 
     super
   end
@@ -157,7 +156,6 @@ class Scripts::SelMahumDrill < AbstractNpcAI
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -203,7 +201,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
 
     remain_count = npc.variables.get_i32("SOCIAL_ACTION_REMAINED_COUNT")
     if remain_count > 0
-      npc.variables["SOCIAL_ACTION_REMAINED_COUNT"] = remain_count - 1
+      npc.variables["SOCIAL_ACTION_REMAINED_COUNT"] = remain_count &- 1
       start_quest_timer("do_social_action", action.repeat_interval, npc, nil)
     end
   end

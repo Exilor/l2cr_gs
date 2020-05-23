@@ -121,14 +121,14 @@ class Scripts::PrimevalIsle < AbstractNpcAI
     when "USE_SKILL"
       if npc && npc.alive?
         npc.do_cast(npc.id == SPRIGNANT[0] ? ANESTHESIA : DEADLY_POISON)
-        start_quest_timer("USE_SKILL", 15000, npc, nil)
+        start_quest_timer("USE_SKILL", 15_000, npc, nil)
       end
     when "GHOST_DESPAWN"
       if npc && npc.alive?
         if !npc.in_combat?
           npc.delete_me
         else
-          start_quest_timer("GHOST_DESPAWN", 1800000, npc, nil)
+          start_quest_timer("GHOST_DESPAWN", 1_800_000, npc, nil)
         end
       end
     when "TREX_ATTACK"
@@ -143,7 +143,7 @@ class Scripts::PrimevalIsle < AbstractNpcAI
     when "START_INVUL"
       if npc && npc.alive?
         npc.do_cast(INVIN_BUFF_ON)
-        start_quest_timer("START_INVUL_2", 30000, npc, nil)
+        start_quest_timer("START_INVUL_2", 30_000, npc, nil)
       end
     when "START_INVUL_2"
       if npc && npc.alive?
@@ -152,7 +152,6 @@ class Scripts::PrimevalIsle < AbstractNpcAI
     else
       # [automatically added else]
     end
-
 
     super
   end
@@ -249,24 +248,24 @@ class Scripts::PrimevalIsle < AbstractNpcAI
       end
 
       if Util.calculate_distance(npc, attacker, true, false) > 100
-        if !npc.skill_disabled?(LONGRANGEDMAGIC1.skill) && Rnd.rand(100) <= 10 * npc.script_value
+        if !npc.skill_disabled?(LONGRANGEDMAGIC1.skill) && Rnd.rand(100) <= 10 &* npc.script_value
           npc.target = attacker
           npc.do_cast(LONGRANGEDMAGIC1)
         end
       else
-        if !npc.skill_disabled?(LONGRANGEDMAGIC1.skill) && Rnd.rand(100) <= 10 * npc.script_value
+        if !npc.skill_disabled?(LONGRANGEDMAGIC1.skill) && Rnd.rand(100) <= 10 &* npc.script_value
           npc.target = target
           npc.do_cast(LONGRANGEDMAGIC1)
         end
-        if !npc.skill_disabled?(PHYSICALSPECIAL1.skill) && Rnd.rand(100) <= 5 * npc.script_value
+        if !npc.skill_disabled?(PHYSICALSPECIAL1.skill) && Rnd.rand(100) <= 5 &* npc.script_value
           npc.target = target
           npc.do_cast(PHYSICALSPECIAL1)
         end
-        if !npc.skill_disabled?(PHYSICALSPECIAL2.skill) && Rnd.rand(100) <= 3 * npc.script_value
+        if !npc.skill_disabled?(PHYSICALSPECIAL2.skill) && Rnd.rand(100) <= 3 &* npc.script_value
           npc.target = target
           npc.do_cast(PHYSICALSPECIAL2)
         end
-        if !npc.skill_disabled?(PHYSICALSPECIAL3.skill) && Rnd.rand(100) <= 5 * npc.script_value
+        if !npc.skill_disabled?(PHYSICALSPECIAL3.skill) && Rnd.rand(100) <= 5 &* npc.script_value
           npc.target = target
           npc.do_cast(PHYSICALSPECIAL3)
         end
@@ -342,13 +341,13 @@ class Scripts::PrimevalIsle < AbstractNpcAI
 
   def on_spawn(npc)
     if SPRIGNANT.includes?(npc.id)
-      start_quest_timer("USE_SKILL", 15000, npc, nil)
+      start_quest_timer("USE_SKILL", 15_000, npc, nil)
     elsif TREX.includes?(npc.id)
       collect_ghost = npc.template.parameters.get_i32("CollectGhost", 0)
       collect_despawn = npc.template.parameters.get_i32("CollectGhostDespawnTime", 30)
 
       if collect_ghost == 1
-        start_quest_timer("GHOST_DESPAWN", collect_despawn * 60000, npc, nil)
+        start_quest_timer("GHOST_DESPAWN", collect_despawn * 60_000, npc, nil)
       end
     else
       npc.variables["SELFBUFF_USED"] = 0

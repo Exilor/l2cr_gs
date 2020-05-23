@@ -55,7 +55,7 @@ class Scripts::Q00383_TreasureHunt < Quest
     when "30890-05.htm"
       if has_quest_items?(pc, PIRATES_TREASURE_MAP)
         give_adena(pc, 1000, false)
-        take_items(pc, PIRATES_TREASURE_MAP, -1)
+        take_items(pc, PIRATES_TREASURE_MAP, 1)
         html = event
       end
     when "30890-06.htm"
@@ -67,7 +67,7 @@ class Scripts::Q00383_TreasureHunt < Quest
     when "30890-07.htm"
       if has_quest_items?(pc, PIRATES_TREASURE_MAP)
         qs.start_quest
-        take_items(pc, PIRATES_TREASURE_MAP, -1)
+        take_items(pc, PIRATES_TREASURE_MAP, 1)
         html = event
       end
     when "30890-08.html", "30890-09.html", "30890-10.html"

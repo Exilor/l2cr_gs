@@ -83,7 +83,7 @@ module Config
   GENERAL_CONFIG_FILE = "/config/General.properties"
   HEXID_FILE = "/config/hexid.txt"
   ID_CONFIG_FILE = "/config/IdFactory.properties"
-  L2JMOD_CONFIG_FILE = "/config/L2JMods.properties"
+  MOD_CONFIG_FILE = "/config/L2JMods.properties"
   LOGIN_CONFIGURATION_FILE = "/config/LoginServer.properties"
   NPC_CONFIG_FILE = "/config/NPC.properties"
   PVP_CONFIG_FILE = "/config/PVP.properties"
@@ -104,9 +104,6 @@ module Config
   GEODATA_FILE = "/config/GeoData.properties"
   L2CR_CONFIG_FILE = "/config/l2cr.properties"
 
-  # --------------------------------------------------
-  # L2J Variable Definitions
-  # --------------------------------------------------
   class_property alt_game_delevel : Bool = false
   class_property decrease_skill_level : Bool = false
   class_property alt_weight_limit : Float64 = 0.0
@@ -664,7 +661,7 @@ module Config
   class_property! flood_protector_character_select : FloodProtectorConfig
   class_property! flood_protector_item_auction : FloodProtectorConfig
   # --------------------------------------------------
-  # L2JMods Settings
+  # Mods Settings
   # --------------------------------------------------
   class_property champion_enable : Bool = false
   class_property champion_passive : Bool = false
@@ -704,7 +701,7 @@ module Config
   class_property tvt_event_team_1_coordinates : Slice(Int32) = Slice(Int32).new(3)
   class_property tvt_event_team_2_name : String = ""
   class_property tvt_event_team_2_coordinates : Slice(Int32) = Slice(Int32).new(3)
-  class_property tvt_event_rewards : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
+  class_property tvt_event_rewards : Array(Slice(Int32)) = [] of Slice(Int32)
   class_property tvt_event_target_team_members_allowed : Bool = false
   class_property tvt_event_scroll_allowed : Bool = false
   class_property tvt_event_potions_allowed : Bool = false
@@ -1566,7 +1563,6 @@ module Config
     @@party_xp_cutoff_method = cfg.get_string("PartyXpCutoffMethod", "highfive")
     @@party_xp_cutoff_percent = cfg.get_f64("PartyXpCutoffPercent", 3)
     @@party_xp_cutoff_level = cfg.get_i32("PartyXpCutoffLevel", 20)
-    # @@party_xp_cutoff_gaps = cfg.get_i32_hash("PartyXpCutoffGaps")
     gaps = cfg.get_string("PartyXpCutoffGaps", "0,9;10,14;15,99").split(';')
     @@party_xp_cutoff_gaps = Slice(Slice(Int32)).new(gaps.size) { |i| Slice(Int32).new(2) }
     gaps.each_with_index do |gap, i|
@@ -1944,7 +1940,7 @@ module Config
     @@rate_drop_chance_multiplier = cfg.get_i32_float_assoc("DropChanceMultiplierByItemId")
 
     # Mods
-    cfg.parse(Dir.current + L2JMOD_CONFIG_FILE)
+    cfg.parse(Dir.current + MOD_CONFIG_FILE)
     @@champion_enable = cfg.get_bool("ChampionEnable")
     @@champion_passive = cfg.get_bool("ChampionPassive")
     @@champion_frequency = cfg.get_i32("ChampionFrequency", -1)
@@ -1976,7 +1972,7 @@ module Config
     @@tvt_event_participation_npc_id = cfg.get_i32("TvTEventParticipationNpcId", 0)
 
     @@allow_wedding = cfg.get_bool("AllowWedding")
-    @@wedding_price = cfg.get_i32("WeddingPrice", 250000000)
+    @@wedding_price = cfg.get_i32("WeddingPrice", 250_000_000)
     @@wedding_punish_infidelity = cfg.get_bool("WeddingPunishInfidelity", true)
     @@wedding_teleport = cfg.get_bool("WeddingTeleport", true)
     @@wedding_teleport_price = cfg.get_i32("WeddingTeleportPrice", 50000)
@@ -1987,10 +1983,147 @@ module Config
 
     @@enable_warehousesorting_clan = cfg.get_bool("EnableWarehouseSortingClan")
     @@enable_warehousesorting_private = cfg.get_bool("EnableWarehouseSortingPrivate")
-    # TODO: more TVT config
+
+    if @@tvt_event_participation_npc_id == 0
+      @@tvt_event_enabled = false
+
+    else
+      coords = cfg.get_string("TvTEventParticipationNpcCoordinates", "0,0,0").split(',')
+      if coords.size < 3
+        @@tvt_event_enabled = false
+        warn { "Invalid config property #{coords}." }
+      else
+        @@tvt_event_participation_npc_coordinates[0] = coords[0].to_i
+        @@tvt_event_participation_npc_coordinates[1] = coords[1].to_i
+        @@tvt_event_participation_npc_coordinates[2] = coords[2].to_i
+        if coords.size == 4
+          @@tvt_event_participation_npc_coordinates[3] = coords[3].to_i
+        end
+        @@tvt_event_min_players_in_teams = cfg.get_i32("TvTEventMinPlayersInTeams", 1)
+        @@tvt_event_max_players_in_teams = cfg.get_i32("TvTEventMaxPlayersInTeams", 20)
+        @@tvt_event_min_lvl = cfg.get_i8("TvTEventMinPlayerLevel", 1i8)
+        @@tvt_event_max_lvl = cfg.get_i8("TvTEventMaxPlayerLevel", 80i8)
+        @@tvt_event_respawn_teleport_delay = cfg.get_i32("TvTEventRespawnTeleportDelay", 20)
+        @@tvt_event_start_leave_teleport_delay = cfg.get_i32("TvTEventStartLeaveTeleportDelay", 20)
+        @@tvt_event_effects_removal = cfg.get_i32("TvTEventEffectsRemoval", 0)
+        @@tvt_event_max_participants_per_ip = cfg.get_i32("TvTEventMaxParticipantsPerIP", 0)
+        @@tvt_allow_voiced_command = cfg.get_bool("TvTAllowVoicedInfoCommand", false)
+        @@tvt_event_team_1_name = cfg.get_string("TvTEventTeam1Name", "Team1")
+        coords = cfg.get_string("TvTEventTeam1Coordinates", "0,0,0").split(',')
+        if coords.size < 3
+          @@tvt_event_enabled = false
+          warn "Invalid config property -> TvTEventTeam1Coordinates"
+        else
+          @@tvt_event_team_1_coordinates[0] = coords[0].to_i
+          @@tvt_event_team_1_coordinates[1] = coords[1].to_i
+          @@tvt_event_team_1_coordinates[2] = coords[2].to_i
+          @@tvt_event_team_2_name = cfg.get_string("TvTEventTeam2Name", "Team2")
+          coords = cfg.get_string("TvTEventTeam2Coordinates", "0,0,0").split(',')
+          if coords.size < 3
+            @@tvt_event_enabled = false
+            warn "Invalid config property -> TvTEventTeam2Coordinates"
+          else
+            @@tvt_event_team_2_coordinates[0] = coords[0].to_i
+            @@tvt_event_team_2_coordinates[1] = coords[1].to_i
+            @@tvt_event_team_2_coordinates[2] = coords[2].to_i
+            coords = cfg.get_string("TvTEventParticipationFee", "0,0").split(',')
+            begin
+              @@tvt_event_participation_fee[0] = coords[0].to_i
+              @@tvt_event_participation_fee[1] = coords[1].to_i
+            rescue
+              if coords.size > 0
+                warn "Invalid config property -> TvTEventParticipationFee"
+              end
+            end
+            coords = cfg.get_string("TvTEventReward", "57,100000").split(';')
+            coords.each do |reward|
+              reward_split = reward.split(',')
+              if reward_split.size != 2
+                warn { "Invalid config property -> TvTEventReward #{reward}" }
+              else
+                begin
+                  @@tvt_event_rewards << Int32.slice(
+                    reward_split[0].to_i,
+                    reward_split[1].to_i
+                  )
+                rescue
+                  unless reward.empty?
+                    warn { "Invalid config property -> TvTEventReward #{reward}" }
+                  end
+                end
+              end
+            end
+
+            @@tvt_event_target_team_members_allowed = cfg.get_bool("TvTEventTargetTeamMembersAllowed", true)
+            @@tvt_event_scroll_allowed = cfg.get_bool("TvTEventScrollsAllowed", false)
+            @@tvt_event_potions_allowed = cfg.get_bool("TvTEventPotionsAllowed", false)
+            @@tvt_event_summon_by_item_allowed = cfg.get_bool("TvTEventSummonByItemAllowed", false)
+            @@tvt_reward_team_tie = cfg.get_bool("TvTRewardTeamTie", false)
+            coords = cfg.get_string("TvTDoorsToOpen", "").split(';')
+            coords.each do |door|
+              begin
+                @@tvt_doors_ids_to_open << door.to_i
+              rescue
+                unless door.empty?
+                  warn { "Invalid config property -> TvTDoorsToOpen #{door}" }
+                end
+              end
+            end
+
+            coords = cfg.get_string("TvTDoorsToClose", "").split(';')
+            coords.each do |door|
+              begin
+                @@tvt_doors_ids_to_close << door.to_i
+              rescue
+                unless door.empty?
+                  warn { "Invalid config property -> TvTDoorsToClose #{door}" }
+                end
+              end
+            end
+
+            coords = cfg.get_string("TvTEventFighterBuffs", "").split(';')
+            unless coords[0].empty?
+              coords.each do |skill|
+                skill_split = skill.split(',')
+                if skill_split.size != 2
+                  warn { "Invalid config property -> TvTEventFighterBuffs #{skill}" }
+                else
+                  begin
+                    @@tvt_event_fighter_buffs[skill_split[0].to_i] = skill_split[1].to_i
+                  rescue
+                    unless skill.empty?
+                      warn { "Invalid config property -> TvTEventFighterBuffs #{skill}" }
+                    end
+                  end
+                end
+              end
+            end
+
+            coords = cfg.get_string("TvTEventMageBuffs", "").split(';')
+            unless coords[0].empty?
+              coords.each do |skill|
+                skill_split = skill.split(',')
+                if skill_split.size != 2
+                  warn { "Invalid config property -> TvTEventMageBuffs #{skill}" }
+                else
+                  begin
+                    @@tvt_event_mage_buffs[skill_split[0].to_i] = skill_split[1].to_i
+                  rescue
+                    unless skill.empty?
+                      warn { "Invalid config property -> TvTEventMageBuffs #{skill}" }
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
     @@banking_system_enabled = cfg.get_bool("BankingEnabled")
     @@banking_system_goldbars = cfg.get_i64("BankingGoldbarCount", 1)
-    @@banking_system_adena = cfg.get_i64("BankingAdenaCount", 500000000)
+    @@banking_system_adena = cfg.get_i64("BankingAdenaCount", 500_000_000)
 
     @@offline_trade_enable = cfg.get_bool("OfflineTradeEnable")
     @@offline_craft_enable = cfg.get_bool("OfflineCraftEnable")
@@ -2035,8 +2168,8 @@ module Config
     @@karma_list_nondroppable_items = cfg.get_i32_array("ListOfNonDroppableItems", [57,1147,425,1146,461,10,2368,7,6,2370,2369,6842,6611,6612,6613,6614,6615,6616,6617,6618,6619,6620,6621,7694,8181,5575,7694,9388,9389,9390])
     @@karma_list_nondroppable_items.sort!
     @@karma_list_nondroppable_pet_items.sort!
-    @@pvp_normal_time = cfg.get_i32("PvPVsNormalTime", 120000)
-    @@pvp_pvp_time = cfg.get_i32("PvPVsPvPTime", 60000)
+    @@pvp_normal_time = cfg.get_i32("PvPVsNormalTime", 120_000)
+    @@pvp_pvp_time = cfg.get_i32("PvPVsPvPTime", 60_000)
 
     # Olympiad
     cfg.parse(Dir.current + OLYMPIAD_CONFIG_FILE)

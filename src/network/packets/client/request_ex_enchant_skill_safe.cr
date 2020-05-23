@@ -80,7 +80,6 @@ class Packets::Incoming::RequestExEnchantSkillSafe < GameClientPacket
       if Rnd.rand(100) <= rate
         # logging
         pc.add_skill(skill, true)
-        debug { "Learned skill ID: #{@skill_id} Level: #{@skill_lvl} for #{required_sp} SP, #{required_adena} Adena." }
         pc.send_packet(ExEnchantSkillResult::TRUE)
         sm = SystemMessage.you_have_succeeded_in_enchanting_the_skill_s1
         sm.add_skill_name(@skill_id)

@@ -1799,7 +1799,6 @@ class L2PcInstance < L2Playable
     skills_for_store = [] of Skill
 
     skills.each do |sk|
-      debug { "Learning #{sk.name}" }
       next if get_known_skill(sk.id) == sk
       count += 1 if get_skill_level(sk.id) == -1
 
@@ -2587,11 +2586,6 @@ class L2PcInstance < L2Playable
       end
     end
 
-    # su = StatusUpdate.new(self)
-    # su.add_level(level)
-    # su.add_max_cp(max_cp)
-    # su.add_max_hp(max_hp)
-    # su.add_max_mp(max_mp)
     su = StatusUpdate.level_max_cp_hp_mp(self, level, max_cp, max_hp, max_mp)
     send_packet(su)
 
@@ -2613,7 +2607,6 @@ class L2PcInstance < L2Playable
 
   def exp=(exp : Int64)
     if exp < 0
-      warn { "L2PcInstance#exp=: Negative exp #{exp}." }
       exp = 0i64
     end
 
@@ -2669,7 +2662,6 @@ class L2PcInstance < L2Playable
 
   def add_exp_and_sp(add_to_exp : Int64, add_to_sp : Int32, use_bonuses : Bool)
     unless access_level.can_gain_exp?
-      warn "Access level forbids earning experience."
       return
     end
 
@@ -4042,7 +4034,7 @@ class L2PcInstance < L2Playable
 
   def add_item(process : String?, item_id : Int32, count : Int64, enchant_level : Int32, reference, send_msg : Bool) : L2ItemInstance?
     unless item = ItemTable[item_id]?
-      error "Item with ID #{item_id} does not exist."
+      error { "Item with id #{item_id} does not exist." }
       return
     end
 
@@ -5185,11 +5177,6 @@ class L2PcInstance < L2Playable
       if old_target == new_target
         if new_target && new_target != self
           validate_location_of(new_target)
-          # if new_target.in_boat?
-          #   send_packet ValidateLocationInVehicle.new(new_target)
-          # else
-          #   send_packet ValidateLocation.new(new_target)
-          # end
         end
 
         return
@@ -5202,11 +5189,6 @@ class L2PcInstance < L2Playable
       target = new_target
       if new_target != self
         validate_location_of(target)
-        # if new_target.in_boat?
-        #   send_packet ValidateLocationInVehicle.new(target)
-        # else
-        #   send_packet ValidateLocation.new(target)
-        # end
       end
       send_packet(MyTargetSelected.new(self, target))
       target.add_status_listener(self)
@@ -5222,8 +5204,7 @@ class L2PcInstance < L2Playable
     super
   end
 
-  # custom
-  def validate_location_of(obj : L2Object)
+  private def validate_location_of(obj : L2Object)
     if obj.is_a?(L2PcInstance)
       if obj.in_boat?
         send_packet(ValidateLocationInVehicle.new(obj))
@@ -5920,8 +5901,6 @@ class L2PcInstance < L2Playable
       # [automatically added else]
     end
 
-    # debug "#set_mount npc_id: #{npc_id}, npc_level: #{npc_level}: mount type: #{type.inspect}."
-
     @mount_type = type
     @mount_npc_id = npc_id
     @mount_level = npc_level
@@ -6401,7 +6380,7 @@ class L2PcInstance < L2Playable
     elsif @common_recipe_book.delete(recipe_id)
       GameDB.recipe_book.delete(self, recipe_id, false)
     else
-      warn { "Attempted to remove a recipe with ID #{recipe_id} that #{name} doesn't know." }
+      warn { "Attempted to remove a recipe with id #{recipe_id} that #{name} doesn't know." }
     end
 
     all_shortcuts.each do |sc|
@@ -6685,7 +6664,7 @@ class L2PcInstance < L2Playable
 
     begin
       if total_subclasses == Config.max_subclass || class_index == 0
-        debug "total subclasses: #{total_subclasses}, class_index: #{class_index}."
+        debug { "total subclasses: #{total_subclasses}, class_index: #{class_index}." }
         return false
       end
 
@@ -7649,7 +7628,7 @@ class L2PcInstance < L2Playable
   end
 
   def attack_type : WeaponType
-    if transformed? && (t = transformation.try &.get_template(acting_player))
+    if transformed? && (t = transformation.try &.get_template(self))
       return t.base_attack_type
     end
 

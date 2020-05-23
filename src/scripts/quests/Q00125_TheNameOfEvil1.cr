@@ -10,6 +10,8 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
   private DEINONYCHUS_BONE = 8780
   private EPITAPH_OF_WISDOM = 8781
   private GAZKH_FRAGMENT = 8782
+  # Skills
+  private REPRESENTATION_ENTER_THE_SAILREN_NEST_QUEST_ID = 5089
 
   private ORNITHOMIMUS = {
     22200 => 661,
@@ -165,7 +167,6 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -234,13 +235,11 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         else
           # [automatically added else]
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       else
         # [automatically added else]
       end
-
     when KARAKAWEI
       if st.started?
         case st.cond
@@ -265,7 +264,6 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         else
           # [automatically added else]
         end
-
       end
     when ULU_KAIMU
       if st.started?
@@ -275,7 +273,7 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         when 5
           if st.get("Memo").nil?
             html = "32119-02.html"
-            npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
+            npc.broadcast_packet(MagicSkillUse.new(npc, pc, REPRESENTATION_ENTER_THE_SAILREN_NEST_QUEST_ID, 1, 1000, 0))
             st.unset("T")
             st.unset("E")
             st.unset("P")
@@ -296,12 +294,12 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
           html = "32120-01.html"
         when 6
           if st.get("Memo").nil?
-            html = "32120-02.html"
-            npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
+            npc.broadcast_packet(MagicSkillUse.new(npc, pc, REPRESENTATION_ENTER_THE_SAILREN_NEST_QUEST_ID, 1, 1000, 0))
             st.unset("T")
             st.unset("O")
             st.unset("O2")
             st.unset("N")
+            html = "32120-02.html"
           else
             html = "32120-09.html"
           end
@@ -317,35 +315,34 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         when 1..6
           html = "32121-01.html"
         when 7
-          case st.get_int("Memo")
-          when 0
+          if st.get("Memo").nil?
             html = "32121-02.html"
-            npc.broadcast_packet(MagicSkillUse.new(npc, pc, 5089, 1, 1000, 0))
+            npc.broadcast_packet(MagicSkillUse.new(npc, pc, REPRESENTATION_ENTER_THE_SAILREN_NEST_QUEST_ID, 1, 1000, 0))
             st.unset("W")
             st.unset("A")
             st.unset("G")
             st.unset("U")
-          when 1
-            html = "32121-09.html"
-          when 2
-            html = "32121-19.html"
-          when 3
-            html = "32121-20.html"
           else
-            # [automatically added else]
+            case st.get_int("Memo")
+            when 1
+              html = "32121-09.html"
+            when 2
+              html = "32121-19.html"
+            when 3
+              html = "32121-20.html"
+            else
+              # [automatically added else]
+            end
           end
-
         when 8
           html = "32121-21.html"
         else
           # [automatically added else]
         end
-
       end
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

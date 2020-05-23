@@ -29,7 +29,7 @@ class Scripts::PrisonGuards < AbstractNpcAI
           npc.tele_to_location(npc.spawn.location)
         end
       end
-      start_quest_timer("CHECK_HOME", 30000, npc, nil)
+      start_quest_timer("CHECK_HOME", 30_000, npc, nil)
     end
 
     super
@@ -42,7 +42,7 @@ class Scripts::PrisonGuards < AbstractNpcAI
           if get_quest_items_count(pc, STAMP) <= 3 && npc.script_value?(0)
             give_items(pc, STAMP, 1)
             npc.script_value = 1
-            start_quest_timer("CLEAR_STATUS", 600000, npc, nil)
+            start_quest_timer("CLEAR_STATUS", 600_000, npc, nil)
           end
         end
       else
@@ -92,7 +92,7 @@ class Scripts::PrisonGuards < AbstractNpcAI
     else
       npc.no_random_walk = true
       cancel_quest_timer("CHECK_HOME", npc, nil)
-      start_quest_timer("CHECK_HOME", 30000, npc, nil)
+      start_quest_timer("CHECK_HOME", 30_000, npc, nil)
     end
 
     super

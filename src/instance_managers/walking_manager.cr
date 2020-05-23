@@ -39,22 +39,19 @@ module WalkingManager
     !(walk.stopped_by_attack? || walk.suspended?)
   end
 
-  def get_route(route)
+  def get_route(route : String) : L2WalkRoute?
     ROUTES[route]?
   end
 
-  def registered?(npc)
+  def registered?(npc : L2Npc) : Bool
     ACTIVE_ROUTES.has_key?(npc.l2id)
   end
 
-  def get_route_name(npc)
+  def get_route_name(npc : L2Npc) : String
     ACTIVE_ROUTES[npc.l2id]?.try &.route.name || ""
   end
 
-  def start_moving(npc, route_name)
-    unless ROUTES.has_key?(route_name)
-    end
-
+  def start_moving(npc : L2Npc, route_name : String)
     return unless npc && npc.alive? && ROUTES.has_key?(route_name)
 
     if !ACTIVE_ROUTES.has_key?(npc.l2id)
@@ -101,18 +98,17 @@ module WalkingManager
     end
   end
 
-  def cancel_moving(npc)
+  def cancel_moving(npc : L2Npc)
     sync do
       if walk = ACTIVE_ROUTES[npc.l2id]?
         walk.suspended = false
         walk.stopped_by_attack = false
         start_moving(npc, walk.route.name)
-      else
       end
     end
   end
 
-  def stop_moving(npc, suspend, stopped_by_attack)
+  def stop_moving(npc : L2Npc, suspend : Bool, stopped_by_attack : Bool)
     if npc.monster?
       monster = npc.leader? || npc
     end
@@ -134,7 +130,7 @@ module WalkingManager
     end
   end
 
-  def on_arrived(npc)
+  def on_arrived(npc : L2Npc)
     return unless walk = ACTIVE_ROUTES[npc.l2id]?
 
     OnNpcMoveNodeArrived.new(npc).async(npc)
@@ -162,11 +158,11 @@ module WalkingManager
     end
   end
 
-  def on_death(npc)
+  def on_death(npc : L2Npc)
     cancel_moving(npc)
   end
 
-  def on_spawn(npc)
+  def on_spawn(npc : L2Npc)
     if route_name = ROUTES_TO_ATTACH[npc.id]?.try &.get_route_name(npc)
       unless route_name.empty?
         start_moving(npc, route_name)

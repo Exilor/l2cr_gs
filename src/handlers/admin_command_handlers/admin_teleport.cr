@@ -3,7 +3,6 @@ module AdminCommandHandler::AdminTeleport
   extend AdminCommandHandler
 
   def use_admin_command(command, pc)
-    debug command
     case command
     when "admin_teleto"
       pc.tele_mode = 1
@@ -14,6 +13,8 @@ module AdminCommandHandler::AdminTeleport
       pc.tele_mode = 2
     when "admin_teleto end"
       pc.tele_mode = 0
+    when "admin_warp"
+      warp(pc)
     when "admin_show_moves"
       AdminHtml.show_admin_html(pc, "teleports.htm")
     when "admin_show_moves_other"
@@ -128,7 +129,6 @@ module AdminCommandHandler::AdminTeleport
     else
       # [automatically added else]
     end
-
 
     true
   end
@@ -326,6 +326,27 @@ module AdminCommandHandler::AdminTeleport
     error e
   end
 
+  private def warp(pc)
+    unless pc.moving?
+      pc.send_message("You need to be moving in order to warp.")
+      return
+    end
+
+    pc.set_xyz(pc.x_destination, pc.y_destination, pc.z_destination)
+    pc.stop_move(nil)
+    pc.broadcast_packet(ValidateLocation.new(pc))
+    msu = MagicSkillUse.new(pc, pc, 628, 1, 1, 1)
+    pc.broadcast_packet(msu)
+
+
+    if smn = pc.summon
+      msu = MagicSkillUse.new(smn, smn, 628, 1, 1, 1)
+      smn.broadcast_packet(msu)
+      smn.tele_to_location(*pc.xyz)
+      smn.follow_owner
+    end
+  end
+
   def commands
     %w(
     admin_show_moves
@@ -350,6 +371,7 @@ module AdminCommandHandler::AdminTeleport
     admin_teleto
     admin_instant_move
     admin_sendhome
+    admin_warp
     )
   end
 end

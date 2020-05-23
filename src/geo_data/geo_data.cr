@@ -26,12 +26,12 @@ module GeoData
           if load_file
             debug { "Loading #{File.basename(file_path)}" }
             GeoDriver.load_region(file_path, region_x, region_y)
-            loaded_regions += 1
+            loaded_regions &+= 1
           end
         elsif Config.try_load_unspecified_regions && File.exists?(file_path)
           debug { "Loading #{File.basename(file_path)}" }
           GeoDriver.load_region(file_path, region_x, region_y)
-          loaded_regions += 1
+          loaded_regions &+= 1
         end
       end
     end

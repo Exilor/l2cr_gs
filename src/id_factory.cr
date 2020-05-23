@@ -48,7 +48,7 @@ module IdFactory
 
   private FIRST_OID = 0x10000000
 
-  # Ids start from FIRST_OID for no other reason than compatibility with L2J.
+  # Ids start from FIRST_OID for compatibility with L2J.
   IDS = RangeSet.new(0..FIRST_OID)
 
   def load

@@ -31,9 +31,9 @@ class GameClient
 
     @packet_queue = Channel(GameClientPacket).new(Config.client_packet_queue_size)
 
-    interval = Config.char_store_interval * 60000
+    interval = Config.char_store_interval * 60_000
     if interval > 0
-      @auto_save_task = ThreadPoolManager.schedule_general_at_fixed_rate(->auto_save_task, 300000, interval)
+      @auto_save_task = ThreadPoolManager.schedule_general_at_fixed_rate(->auto_save_task, 300_000, interval)
     end
   end
 
@@ -144,7 +144,7 @@ class GameClient
         GameClient.delete_char_by_l2id(id)
       else
         sql = "UPDATE characters SET deletetime=? WHERE charId=?"
-        GameDB.exec(sql, Time.ms + (Config.delete_days * 86400000), id)
+        GameDB.exec(sql, Time.ms + (Config.delete_days * 86_400_000), id)
       end
     end
 
@@ -270,21 +270,17 @@ class GameClient
       return
     end
 
-    begin
-      if @state.connected?
-        if stats.processed_packets > 3
-          if Config.packet_handler_debug
-            warn "Client disconnected (too many packets in non-authed state)."
-          end
-          close_now
-          return
+    if @state.connected?
+      if stats.processed_packets > 3
+        if Config.packet_handler_debug
+          warn "Client disconnected (too many packets in non-authed state)."
         end
-        ThreadPoolManager.execute_io_packet(self)
-      else
-        ThreadPoolManager.execute_packet(self)
+        close_now
+        return
       end
-    rescue e # rejected execution error
-      error e # unless ThreadPoolManager is shutting down.
+      ThreadPoolManager.execute_io_packet(self)
+    else
+      ThreadPoolManager.execute_packet(self)
     end
   end
 
@@ -302,7 +298,7 @@ class GameClient
 
         packet.run
 
-        count += 1
+        count &+= 1
 
         if stats.count_burst(count)
           debug { "count_burst(#{count}) returned true." }

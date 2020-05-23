@@ -378,11 +378,10 @@ class L2CubicInstance
   def self.in_cubic_range?(owner : L2Character?, target : L2Character?) : Bool
     return false unless owner && target
 
-    range = MAX_MAGIC_RANGE
     x = owner.x - target.x
     y = owner.y - target.y
     z = owner.z - target.z
-    x.abs2 + y.abs2 + z.abs2 <= range.abs2
+    Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2) <= MAX_MAGIC_RANGE.abs2
   end
 
   def cubic_target_for_heal

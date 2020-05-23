@@ -60,6 +60,8 @@ class TvTEventTeleporter
         @pc.team = Team::BLUE
       when 2
         @pc.team = Team::RED
+      else
+        # nothing
       end
     else
       @pc.team = Team::NONE

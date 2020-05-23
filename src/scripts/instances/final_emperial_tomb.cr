@@ -442,7 +442,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         if @world.demons.size > MAX_DEMONS
           break
         end
-        demon = @tomb.add_spawn(PORTRAIT_SPAWNS[i][0] + 2, PORTRAIT_SPAWNS[i][5], PORTRAIT_SPAWNS[i][6], PORTRAIT_SPAWNS[i][7], PORTRAIT_SPAWNS[i][8], false, 0, false, @world.instance_id).as(L2MonsterInstance)
+        demon = @tomb.add_spawn(PORTRAIT_SPAWNS[i][0] &+ 2, PORTRAIT_SPAWNS[i][5], PORTRAIT_SPAWNS[i][6], PORTRAIT_SPAWNS[i][7], PORTRAIT_SPAWNS[i][8], false, 0, false, @world.instance_id).as(L2MonsterInstance)
         @tomb.update_known_list(@world, demon)
         @world.demons << demon
       end
@@ -476,9 +476,9 @@ class Scripts::FinalEmperialTomb < AbstractInstance
             FRINTEZZA_SONG_LIST.each do |element|
               if rnd < element.chance
                 @world.on_song = element
-                @tomb.broadcast_packet(@world, ExShowScreenMessage.new(2, -1, 2, 0, 0, 0, 0, true, 4000, false, nil, element.song_name, nil))
+                @tomb.broadcast_packet(@world, ExShowScreenMessage.new(2, -1, 2, 0, 0, 0, 0, true, 4000, false, nil, element.song_name))
                 @tomb.broadcast_packet(@world, MagicSkillUse.new(@world.frintezza, @world.frintezza, element.skill.skill_id, element.skill.skill_lvl, element.skill.skill.hit_time, 0))
-                @world.song_effect_task = ThreadPoolManager.schedule_general(SongTask.new(@tomb, @world, 1), element.skill.skill.hit_time - 10000)
+                @world.song_effect_task = ThreadPoolManager.schedule_general(SongTask.new(@tomb, @world, 1), element.skill.skill.hit_time &- 10000)
                 @world.song_task = ThreadPoolManager.schedule_general(SongTask.new(@tomb, @world, 0), element.skill.skill.hit_time)
                 break
               end
@@ -520,7 +520,6 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       else
         # [automatically added else]
       end
-
     end
   end
 
@@ -584,7 +583,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @tomb.update_known_list(@world, @world.frintezza)
 
         PORTRAIT_SPAWNS.each do |element|
-          demon = @tomb.add_spawn(element[0] + 2, element[5], element[6], element[7], element[8], false, 0, false, @world.instance_id).as(L2MonsterInstance)
+          demon = @tomb.add_spawn(element[0] &+ 2, element[5], element[6], element[7], element[8], false, 0, false, @world.instance_id).as(L2MonsterInstance)
           demon.immobilized = true
           demon.disable_all_skills
           @tomb.update_known_list(@world, demon)
@@ -721,9 +720,9 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.scarlet_z = @world.active_scarlet.z
         @world.scarlet_h = @world.active_scarlet.heading
         if @world.scarlet_h < 32768
-          @world.scarlet_a = (180 - (@world.scarlet_h / 182.044444444).to_i).abs
+          @world.scarlet_a = (180 &- (@world.scarlet_h / 182.044444444).to_i).abs
         else
-          @world.scarlet_a = (540 - (@world.scarlet_h / 182.044444444).to_i).abs
+          @world.scarlet_a = (540 &- (@world.scarlet_h / 182.044444444).to_i).abs
         end
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 250, @world.scarlet_a, 12, 0, 1000, 0, 0, 1, 0, 0))
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 250, @world.scarlet_a, 12, 0, 10000, 0, 0, 1, 0, 0))
@@ -756,7 +755,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.active_scarlet.enable_all_skills
         @world.video = false
       when 33
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 300, @world.scarlet_a - 180, 5, 0, 7000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 300, @world.scarlet_a &- 180, 5, 0, 7000, 0, 0, 1, 0, 0))
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 200, @world.scarlet_a, 85, 4000, 10000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 34), 7400)
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 35), 7500)
@@ -776,7 +775,6 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       else
         # [automatically added else]
       end
-
     end
 
     private def stop_pc
@@ -958,8 +956,8 @@ class Scripts::FinalEmperialTomb < AbstractInstance
     if npc.id == GUIDE
       enter_instance(pc, FETWorld.new, "FinalEmperialTomb.xml", TEMPLATE_ID)
     elsif npc.id == CUBE
-      x = -87534 + Rnd.rand(500)
-      y = -153048 + Rnd.rand(500)
+      x = -87534 &+ Rnd.rand(500)
+      y = -153048 &+ Rnd.rand(500)
       pc.tele_to_location(x, y, -9165)
       return
     end

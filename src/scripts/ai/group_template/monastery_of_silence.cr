@@ -77,7 +77,6 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
       # [automatically added else]
     end
 
-
     super
   end
 
@@ -125,7 +124,6 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
       # [automatically added else]
     end
 
-
     super
   end
 
@@ -158,8 +156,6 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
       else
         # [automatically added else]
       end
-
-
 
       if skill && npc.check_do_cast_conditions(skill.skill)
         npc.target = pc

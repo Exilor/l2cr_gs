@@ -44,17 +44,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       pc.store_me
     when "save_all"
       L2World.players.each &.store_me
-    when /^add_sp\s\d+$/
-      pc.add_sp(args[0].to_i)
-      send_packet(UserInfo.new(pc))
     when "save_items"
       ItemsOnGroundManager.save_in_db
-    when /^hp\s\d+/
-      set_hp
-    when /^mp\s\d+/
-      set_mp
-    when /^cp\s\d+/
-      set_cp
     when /^get_ch\s\d+$/
       ClanHallManager.set_owner(args[0].to_i, pc.clan.not_nil!) if pc.clan
     when "destroy_items"
@@ -128,18 +119,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
 
     nil
-  end
-
-  private def set_hp
-    char_target.current_hp = args[0].to_f64
-  end
-
-  private def set_mp
-    char_target.current_mp = args[0].to_f64
-  end
-
-  private def set_cp
-    char_target.current_cp = args[0].to_f64
   end
 
   private def milk_target

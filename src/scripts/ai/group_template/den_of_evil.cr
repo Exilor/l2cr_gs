@@ -82,7 +82,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
     skill_id = get_skill_id_by_npc_id(npc.id)
     skill_level = zone.get_skill_level(skill_id)
     zone.add_skill(skill_id, skill_level &+ 1)
-    if skill_level == 3 # 3+1=4
+    if skill_level == 3
       ThreadPoolManager.schedule_ai(KashaDestruction.new(self, zone), KASHA_DESTRUCT_DELAY)
       zone.broadcast_packet(SystemMessage.kasha_eye_pitches_tosses_explode)
     elsif skill_level == 2
@@ -104,7 +104,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
     end
     skill_id = get_skill_id_by_npc_id(npc.id)
     skill_level = zone.get_skill_level(skill_id)
-    zone.add_skill(skill_id, skill_level - 1)
+    zone.add_skill(skill_id, skill_level &- 1)
 
     super
   end
@@ -138,7 +138,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
                 ThreadPoolManager.schedule_ai(-> {
                     @owner.add_spawn(EYE_IDS.sample(random: Rnd), char.location, false, 0)
                   },
-                  15000
+                  15_000
                 )
               end
             end

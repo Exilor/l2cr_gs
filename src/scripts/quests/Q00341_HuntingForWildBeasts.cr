@@ -36,14 +36,13 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html
   end
 
   def on_talk(npc, pc)
-    st = get_quest_state!(pc, false)
+    st = get_quest_state!(pc, true)
 
     case st.state
     when State::CREATED
@@ -59,7 +58,6 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

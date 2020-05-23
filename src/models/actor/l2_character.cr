@@ -322,7 +322,6 @@ abstract class L2Character < L2Object
 
   def remove_skill(id : Int32, cancel_effect : Bool) : Skill?
     if old_skill = @skills.delete(id)
-      debug { "L2Character#remove_skill: Removed #{old_skill}." }
       if last_skill_cast && casting_now?
         if old_skill.id == last_skill_cast.not_nil!.id
           abort_cast
@@ -3059,7 +3058,7 @@ abstract class L2Character < L2Object
   end
 
   def all_skills : Enumerable(Skill)
-    @skills.values_slice # !
+    @skills.values_slice
   end
 
   def all_skills_disabled? : Bool

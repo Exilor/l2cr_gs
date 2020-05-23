@@ -1,7 +1,7 @@
 class Packets::Outgoing::TeleportToLocation < GameServerPacket
   @id : Int32
 
-  def initialize(obj : L2Object, @x : Int32, @y : Int32, @z : Int32, @heading : Int32, *, @no_fadeout : Bool = false)
+  def initialize(obj : L2Object, @x : Int32, @y : Int32, @z : Int32, @heading : Int32, *, @fadeout : Bool = false)
     @id = obj.l2id
   end
 
@@ -12,7 +12,7 @@ class Packets::Outgoing::TeleportToLocation < GameServerPacket
     d @x
     d @y
     d @z
-    d @no_fadeout ? 1 : 0
+    d @fadeout ? 0 : 1
     d @heading
   end
 end

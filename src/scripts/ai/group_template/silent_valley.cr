@@ -48,7 +48,6 @@ class Scripts::SilentValley < AbstractNpcAI
       else
         # [automatically added else]
       end
-
     end
 
     nil
@@ -112,7 +111,7 @@ class Scripts::SilentValley < AbstractNpcAI
       npc.invul = true
       start_quest_timer("CLEAR_EVENT", 300_000, npc, nil)
     else
-      start_quest_timer("SPAWN_CHEST", 10000, npc, nil)
+      start_quest_timer("SPAWN_CHEST", 10_000, npc, nil)
     end
 
     super
@@ -128,7 +127,6 @@ class Scripts::SilentValley < AbstractNpcAI
       else
         # [automatically added else]
       end
-
     end
 
     super

@@ -69,7 +69,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
       end
     when "fire"
       npc = npc.not_nil!
-      start_quest_timer("fire", 30000 + Rnd.rand(5000), npc, nil)
+      start_quest_timer("fire", 30_000 + Rnd.rand(5000), npc, nil)
       npc.display_effect = FIRE_EFFECT_NONE
 
       if Rnd.rand(GameTimer.night? ? 2 : 4) < 1
@@ -94,7 +94,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         npc.display_effect = MAHUM_EFFECT_EAT
       end
 
-      start_quest_timer("remove_effects", 300000, npc, nil)
+      start_quest_timer("remove_effects", 300_000, npc, nil)
     when "notify_dinner"
       npc = npc.not_nil!
       npc.broadcast_event("SCE_DINNER_EAT", 600, nil)
@@ -121,12 +121,12 @@ class Scripts::SelMahumSquad < AbstractNpcAI
   def on_attack(npc, attacker, damage, is_summon, skill)
     if npc.id == CHEF && npc.variables.get_i32("BUSY_STATE") == 0
       if npc.variables.get_i32("INVUL_REMOVE_TIMER_STARTED") == 0
-        start_quest_timer("chef_remove_invul", 180000, npc, attacker)
-        start_quest_timer("chef_disable_reward", 60000, npc, nil)
+        start_quest_timer("chef_remove_invul", 180_000, npc, attacker)
+        start_quest_timer("chef_disable_reward", 60_000, npc, nil)
         npc.variables["INVUL_REMOVE_TIMER_STARTED"] = 1
       end
       start_quest_timer("chef_heal_player", 1000, npc, attacker)
-      start_quest_timer("chef_set_invul", 60000, npc, nil)
+      start_quest_timer("chef_set_invul", 60_000, npc, nil)
       npc.variables["BUSY_STATE"] = 1
     elsif SQUAD_LEADERS.includes?(npc.id)
       handle_pre_attack_motion(npc)
@@ -194,19 +194,18 @@ class Scripts::SelMahumSquad < AbstractNpcAI
     when "SCE_SOUP_FAILURE"
       if SQUAD_LEADERS.includes?(receiver.id)
         receiver.variables["FULL_BARREL_REWARDING_PLAYER"] = reference.not_nil!.l2id # TODO: Use it in 289 quest
-        start_quest_timer("reset_full_bottle_prize", 180000, receiver, nil)
+        start_quest_timer("reset_full_bottle_prize", 180_000, receiver, nil)
       end
     else
       # [automatically added else]
     end
-
 
     super
   end
 
   def on_kill(npc, killer, is_summon)
     if npc.monster? && npc.variables.get_i32("REWARD_TIME_GONE") == 0
-      npc.drop_item(killer, 15492, 1)
+      npc.drop_item(killer, 15_492, 1)
     end
 
     cancel_quest_timer("chef_remove_invul", npc, nil)

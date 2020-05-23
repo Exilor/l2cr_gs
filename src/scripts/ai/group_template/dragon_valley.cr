@@ -154,7 +154,6 @@ class Scripts::DragonValley < AbstractNpcAI
           else
             # [automatically added else]
           end
-
         end
       end
     end

@@ -87,13 +87,12 @@ class Scripts::SubClassSkills < Quest
           next
         end
 
-        if q_value.ends_with?(';') # found skill
+        if q_value.ends_with?(';')
           begin
             id = q_value.sub(';', "").to_i
 
             skill = nil
             if cert_skills
-              # searching skill in test array
               if c_skills
                 cert_skills.size.downto(0) do |index|
                   if c_skills[index][0] == id
@@ -104,8 +103,7 @@ class Scripts::SubClassSkills < Quest
                 end
               end
               if skill
-                unless CERT_SKILLS_BY_LEVEL[i].includes?(id)
-                  # should remove this skill ?
+                unless CERT_SKILLS_BY_LEVEL[i].bincludes?(id)
                   Util.handle_illegal_player_action(pc, "Invalid cert variable WITH skill:#{q_name}=#{q_value} - skill does not match certificate level", IllegalActionPunishmentType::NONE)
                 end
               else
@@ -114,11 +112,10 @@ class Scripts::SubClassSkills < Quest
             else
               Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - no certified skills found", IllegalActionPunishmentType::NONE)
             end
-          rescue e
+          rescue
             Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - not a number", IllegalActionPunishmentType::NONE)
           end
         else
-        # found item
           begin
             id = q_value.to_i
             if id == 0
@@ -127,7 +124,6 @@ class Scripts::SubClassSkills < Quest
 
             item = nil
             if cert_items
-              # searching item in test array
               if c_items
                 cert_items.size.downto(0) do |index|
                   if c_items[index][0] == id
@@ -138,7 +134,7 @@ class Scripts::SubClassSkills < Quest
                 end
               end
               if item
-                unless CERT_ITEMS_BY_LEVEL[i].includes?(item.id)
+                unless CERT_ITEMS_BY_LEVEL[i].bincludes?(item.id)
                   Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - item found but does not match certificate level", IllegalActionPunishmentType::NONE)
                 end
               else
@@ -147,7 +143,7 @@ class Scripts::SubClassSkills < Quest
             else
               Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - no cert item found in inventory", IllegalActionPunishmentType::NONE)
             end
-          rescue e
+          rescue
             Util.handle_illegal_player_action(pc, "Invalid cert variable:#{q_name}=#{q_value} - not a number", IllegalActionPunishmentType::NONE)
           end
         end
@@ -192,14 +188,7 @@ class Scripts::SubClassSkills < Quest
   end
 
   private def get_cert_skills(pc)
-    tmp = [] of Skill
-    pc.all_skills.each do |s|
-      if ALL_CERT_SKILL_IDS.bincludes?(s.id)
-        tmp << s
-      end
-    end
-
-    tmp
+    pc.all_skills.select { |s| ALL_CERT_SKILL_IDS.bincludes?(s.id) }
   end
 
   private def get_cert_items(pc)

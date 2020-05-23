@@ -1,6 +1,5 @@
 class Scripts::LairOfAntharas < AbstractNpcAI
   # NPC
-  private KNORIKS = 22857
   private DRAGON_KNIGHT = 22844
   private DRAGON_KNIGHT2 = 22845
   private ELITE_DRAGON_KNIGHT = 22846
@@ -9,8 +8,6 @@ class Scripts::LairOfAntharas < AbstractNpcAI
   private DRAGON_MAGE = 22853
   # Misc
   private KNIGHT_CHANCE = 30
-  private KNORIKS_CHANCE = 60
-  private KNORIKS_CHANCE2 = 50
 
   def initialize
     super(self.class.simple_name, "ai/group_template")
@@ -18,7 +15,6 @@ class Scripts::LairOfAntharas < AbstractNpcAI
     add_kill_id(DRAGON_KNIGHT, DRAGON_KNIGHT2, DRAGON_GUARD, DRAGON_MAGE)
     add_spawn_id(DRAGON_KNIGHT, DRAGON_KNIGHT2, DRAGON_GUARD, DRAGON_MAGE)
     add_move_finished_id(DRAGON_GUARD, DRAGON_MAGE)
-    add_aggro_range_enter_id(KNORIKS)
   end
 
   def on_adv_event(event, npc, pc)
@@ -29,17 +25,6 @@ class Scripts::LairOfAntharas < AbstractNpcAI
         npc.heading = npc.spawn.heading
         npc.broadcast_packet(ValidateLocation.new(npc))
       end
-    end
-
-    super
-  end
-
-  def on_aggro_range_enter(npc, pc, is_summon)
-    if npc.script_value?(0) && Rnd.rand(100) < KNORIKS_CHANCE
-      if Rnd.rand(100) < KNORIKS_CHANCE2
-        npc.script_value = 1
-      end
-      broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::WHOS_THERE_IF_YOU_DISTURB_THE_TEMPER_OF_THE_GREAT_LAND_DRAGON_ANTHARAS_I_WILL_NEVER_FORGIVE_YOU)
     end
 
     super
@@ -66,7 +51,6 @@ class Scripts::LairOfAntharas < AbstractNpcAI
     else
       # [automatically added else]
     end
-
 
     super
   end
