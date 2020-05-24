@@ -39,7 +39,7 @@ In order for the game server to work it needs the following:
   - [x] Augmentations
   - [x] Shadow items
   - [x] Equipment preview
-  - [x] Elements (further testing needed)
+  - [x] Elements
   - [x] Crystallizing
   - [x] Crafting
   - [x] Armor set bonuses
