@@ -194,3 +194,4 @@ In order for the game server to work it needs the following:
   - [x] Clan notice on login
 - [x] Fantasy Island
 - [x] Server shutdown/restart
+- [x] Handy's Block Checker minigame
