@@ -39,7 +39,7 @@ In order for the game server to work it needs the following:
   - [x] Augmentations
   - [x] Shadow items
   - [x] Equipment preview
-  - [x] Elements (further testing needed)
+  - [x] Elements
   - [x] Crystallizing
   - [x] Crafting
   - [x] Armor set bonuses
@@ -60,13 +60,12 @@ In order for the game server to work it needs the following:
   - [x] Servitor resummon on login
   - [ ] Pet resummon on login
 - [x] Cubics
-  - [ ] Storm cubic's damage is wrong
 - [x] Traps
 - [x] Decoys
 - [x] Trading between players
   - [x] Direct trade
   - [x] Private store
-    - [ ] Bulk buying/selling
+    - [x] Bulk buying/selling
 - [x] Monsters
   - [x] Can use skills (okay-ish)
   - [x] On kill rewards
@@ -92,8 +91,8 @@ In order for the game server to work it needs the following:
 - [x] Parties
   - [x] Rewards distribution
   - [x] Inviting, kicking out, changing leader, exiting
-  - [ ] Command channel
-  - [ ] Party finder (needs more testing)
+  - [x] Command channel
+  - [x] Party finder (needs more testing)
 - [x] Clans
   - [x] Creation
   - [x] Inviting new members
@@ -195,3 +194,4 @@ In order for the game server to work it needs the following:
   - [x] Clan notice on login
 - [x] Fantasy Island
 - [x] Server shutdown/restart
+- [x] Handy's Block Checker minigame
