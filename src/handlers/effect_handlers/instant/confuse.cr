@@ -30,7 +30,7 @@ class EffectHandler::Confuse < AbstractEffect
 
     target_list = [] of L2Character
 
-    target.known_list.known_objects.each_value do |obj|
+    target.known_list.each_object do |obj|
       if (target.monster? && obj.attackable?) || obj.character?
         if obj != target
           target_list << obj.as(L2Character)

@@ -41,7 +41,7 @@ module SkillData
   end
 
   private def get(id, level)
-    if skill = SKILLS[get_skill_hash(id, level)]
+    if skill = SKILLS[get_skill_hash(id, level)]?
       return skill
     end
 
@@ -96,6 +96,6 @@ module SkillData
   end
 
   def get_skill_hash(id : Int32, lvl : Int32) : Int32
-    (id * 1021) + lvl
+    (id * 1021) &+ lvl
   end
 end

@@ -33,7 +33,7 @@ class Packets::Outgoing::RecipeShopManageList < GameServerPacket
       d recipes.size
       recipes.each_with_index do |recipe, i|
         d recipe.id
-        d i + 1
+        d i &+ 1
       end
     end
 

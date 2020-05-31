@@ -17,12 +17,12 @@ class L2FestivalMonsterInstance < L2MonsterInstance
     false
   end
 
-  def do_item_drop(killing_char : L2Character?)
-    unless killing_char.is_a?(L2PcInstance)
+  def do_item_drop(killer : L2Character?)
+    unless killer.is_a?(L2PcInstance)
       return
     end
 
-    unless party = killing_char.party
+    unless party = killer.party
       return
     end
 

@@ -14,7 +14,8 @@ class QuestState
     @player = player
     @state = state
     @quest_name = quest.name
-    player.quest_state = self
+
+    player.set_quest_state(self)
   end
 
   delegate created?, started?, completed?, to: @state
@@ -500,10 +501,8 @@ class QuestState
   end
 
   def to_log(io : IO)
-    io << "QuestState(name: "
+    io << "QuestState("
     io << @quest_name
-    io << ", vars: "
-    @vars.inspect(io)
     io << ')'
   end
 end

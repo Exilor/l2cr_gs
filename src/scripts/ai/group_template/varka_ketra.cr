@@ -116,7 +116,7 @@ class Scripts::VarkaKetra < AbstractNpcAI
         take_items(pc, mark, -1)
 
         if i > 0
-          give_items(pc, marks[i - 1], 1)
+          give_items(pc, marks[i &- 1], 1)
         end
 
         return

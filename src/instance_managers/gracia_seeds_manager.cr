@@ -57,6 +57,8 @@ module GraciaSeedsManager
         ThreadPoolManager.schedule_effect(task, Config.sod_stage_2_length - time_past)
       end
     when 3
+      # L2J TODO
+      set_sod_state(1, true)
     else
       warn { "Unknown Seed of Destruction state #{@@sod_state}." }
     end
@@ -73,7 +75,7 @@ module GraciaSeedsManager
 
   def increase_sod_tiat_killed
     if @@sod_state == 1
-      @@sod_tiat_killed += 1
+      @@sod_tiat_killed &+= 1
       if @@sod_tiat_killed >= Config.sod_tiat_kill_count
         set_sod_state(2, false)
       end

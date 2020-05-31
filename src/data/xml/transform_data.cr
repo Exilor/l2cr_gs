@@ -51,7 +51,7 @@ module TransformData
                   each_attribute(s) do |name, value|
                     if name.casecmp?("id")
                       id = value.to_i
-                      lvl = get_attributes(s).to_a[i + 1][1].to_i
+                      lvl = get_attributes(s).to_a[i &+ 1][1].to_i
                       template_data.add_skill(SkillHolder.new(id, lvl))
                     end
                     i &+= 1
@@ -75,8 +75,8 @@ module TransformData
                       if name.casecmp?("id")
                         id = value.to_i
                         temp = get_attributes(s).to_a
-                        lvl = temp[i + 1][1].to_i
-                        min_lvl = temp[i + 2][1].to_i
+                        lvl = temp[i &+ 1][1].to_i
+                        min_lvl = temp[i &+ 2][1].to_i
                         holder = AdditionalSkillHolder.new(id, lvl, min_lvl)
                         template_data.add_additional_skill(holder)
                       end
@@ -93,7 +93,7 @@ module TransformData
                   each_attribute(s) do |name, value|
                     if name.casecmp?("id") # CHECK
                       id = value.to_i
-                      temp = get_attributes(s).to_a[i + 1][1]
+                      temp = get_attributes(s).to_a[i &+ 1][1]
                       allowed = Bool.new(temp)
                       holder = AdditionalItemHolder.new(id, allowed)
                       template_data.add_additional_item(holder)

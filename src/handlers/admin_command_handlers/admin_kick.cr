@@ -18,7 +18,7 @@ module AdminCommandHandler::AdminKick
       count = 0
       L2World.players.each do |player|
         unless player.gm?
-          count += 1
+          count &+= 1
           player.logout
         end
       end

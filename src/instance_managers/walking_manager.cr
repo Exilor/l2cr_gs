@@ -28,7 +28,7 @@ module WalkingManager
 
   def on_walk?(npc : L2Npc)
     if npc.monster?
-      monster = npc.leader? || npc
+      monster = npc.leader || npc
     end
 
     if (monster && !registered?(monster)) || !registered?(npc)
@@ -110,7 +110,7 @@ module WalkingManager
 
   def stop_moving(npc : L2Npc, suspend : Bool, stopped_by_attack : Bool)
     if npc.monster?
-      monster = npc.leader? || npc
+      monster = npc.leader || npc
     end
 
     if (monster && !registered?(monster)) || !registered?(npc)

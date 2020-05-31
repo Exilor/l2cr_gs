@@ -3,7 +3,7 @@ module UserCommandHandler::Unstuck
   extend UserCommandHandler
 
   def use_user_command(id, pc)
-    if false # !TvT.on_escape_use(pc.l2id)
+    if !TvTEvent.on_escape_use(pc.l2id)
       pc.action_failed
       return false
     elsif pc.jailed?
@@ -41,7 +41,7 @@ module UserCommandHandler::Unstuck
       return true
     else
       if Config.unstuck_interval > 100
-        pc.send_message("You use Escape: #{unstuck_timer // 60000} seconds.")
+        pc.send_message("You use Escape: #{unstuck_timer // 60_000} seconds.")
       else
         pc.send_message("You use Escape: #{unstuck_timer // 1000} seconds.")
       end

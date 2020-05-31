@@ -151,9 +151,9 @@ module FourSepulchersManager
     tmp.minute = @@cycle_min
 
     @@cool_down_time_end = tmp.ms
-    @@entry_time_end = @@cool_down_time_end + (Config.fs_time_entry * 60000)
-    @@warm_up_time_end = @@entry_time_end + (Config.fs_time_warmup * 60000)
-    @@attack_time_end = @@warm_up_time_end + (Config.fs_time_attack * 60000)
+    @@entry_time_end = @@cool_down_time_end + (Config.fs_time_entry * 60_000)
+    @@warm_up_time_end = @@entry_time_end + (Config.fs_time_warmup * 60_000)
+    @@attack_time_end = @@warm_up_time_end + (Config.fs_time_attack * 60_000)
   end
 
   def clean
@@ -388,7 +388,7 @@ module FourSepulchersManager
         sp.respawn_delay = rs2.get_i32("respawn_delay")
         SpawnTable.add_new_spawn(sp, false)
         spawns << sp
-        loaded += 1
+        loaded &+= 1
       end
       map[key_npc_id] = spawns
     end
@@ -881,7 +881,6 @@ module FourSepulchersManager
       else
         # [automatically added else]
       end
-
     end
 
     min
@@ -895,10 +894,11 @@ module FourSepulchersManager
 
       min = minute_select(min)
 
-      msg = NpcString::MINUTES_HAVE_PASSED
 
       if min == 90
         msg = NpcString::GAME_OVER_THE_TELEPORT_WILL_APPEAR_MOMENTARILY
+      else
+        msg = NpcString::MINUTES_HAVE_PASSED
       end
 
       MANAGERS.each do |temp|

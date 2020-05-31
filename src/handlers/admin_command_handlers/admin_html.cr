@@ -26,7 +26,7 @@ module AdminCommandHandler::AdminHtml
   end
 
   def show_admin_html(pc, path)
-    show_html(pc, "data/html/admin/#{path}", false)
+    show_html(pc, "data/html/admin/" + path, false)
   end
 
   def show_html(pc, path, reload)

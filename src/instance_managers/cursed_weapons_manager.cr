@@ -124,7 +124,7 @@ module CursedWeaponsManager
 
     if pc.cursed_weapon_equipped?
       cw2 = CURSED_WEAPONS[pc.cursed_weapon_equipped_id]
-      cw2.nb_kills = cw2.stage_kills - 1
+      cw2.nb_kills = cw2.stage_kills &- 1
       cw2.increase_kills
       cw.player = pc
       cw.end_of_life

@@ -336,12 +336,12 @@ abstract class AbstractScript
 
   def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character)
     items = item.calculate_drops(victim, pc)
-    if !items || items.empty?
-      false
-    else
-      give_items(pc, items)
-      true
+    if items.nil? || items.empty?
+      return false
     end
+
+    give_items(pc, items)
+    true
   end
 
   def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder))
@@ -351,11 +351,11 @@ abstract class AbstractScript
   def self.give_items(pc : L2PcInstance, item : ItemHolder, limit : Int) : Bool
     max_to_give = limit - pc.inventory.get_inventory_item_count(item.id, -1)
     if max_to_give <= 0
-      false
-    else
-      give_items(pc, item.id, Math.min(max_to_give, item.count))
-      true
+      return false
     end
+
+    give_items(pc, item.id, Math.min(max_to_give, item.count))
+    true
   end
 
   def self.give_items(pc : L2PcInstance, item : ItemHolder, limit : Int, play_sound : Bool)
@@ -427,7 +427,7 @@ abstract class AbstractScript
 
   def self.get_quest_items_count(pc : L2PcInstance, item_id : Indexable(Int32)) : Int64
     if item_id.size > 1
-      count = 0i64
+      count = 0u64
 
       pc.inventory.items.each do |item|
         item_id.each do |id|
@@ -435,14 +435,13 @@ abstract class AbstractScript
             if count + item.count > Int64::MAX
               return Int64::MAX
             end
-            count += item.count
           end
         end
       end
 
-      count
+      count.to_i64!
     else
-      pc.inventory.get_inventory_item_count(item_id[0], -1).to_i64
+      pc.inventory.get_inventory_item_count(item_id.unsafe_fetch(1), -1).to_i64
     end
   end
 
@@ -631,8 +630,11 @@ abstract class AbstractScript
     # Multiplying by the rates results in a Float and we need an Integer.
     count = count.to_i64
 
-    inst = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
-    send_item_get_message(pc, inst.not_nil!, count)
+    if inst = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
+      send_item_get_message(pc, inst, count)
+    else
+      warn { "Failed to add item with id #{item_id} x#{count} to #{pc.name}." }
+    end
   end
 
   delegate reward_items, to: AbstractScript
@@ -811,7 +813,7 @@ abstract class AbstractScript
 
   def self.add_spawn(summoner : L2Npc?, npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool, instance_id : Int) : L2Npc
     if x == 0 && y == 0
-      raise "Invalid spawn coordinates for NPC #{npc_id}."
+      raise "Invalid spawn coordinates for NPC #{npc_id}"
     end
 
     if random_offset
@@ -834,7 +836,7 @@ abstract class AbstractScript
     sp.stop_respawn
 
     unless npc = sp.spawn_one(is_summon_spawn)
-      raise "Npc wasn't spawned"
+      raise "NPC wasn't spawned"
     end
 
     if despawn_delay > 0

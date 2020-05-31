@@ -100,6 +100,14 @@ abstract class L2Summon < L2Playable
     owner.in_party?
   end
 
+  def duel_id
+    owner.duel_id
+  end
+
+  def in_duel?
+    owner.in_duel?
+  end
+
   def on_spawn
     super
 
@@ -130,7 +138,7 @@ abstract class L2Summon < L2Playable
   end
 
   def update_abnormal_effect
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       pc.send_packet(SummonInfo.new(self, pc, 1))
     end
   end
@@ -150,7 +158,7 @@ abstract class L2Summon < L2Playable
   def follow_status=(val : Bool)
     @follow_status = val
 
-     if val
+    if val
       set_intention(AI::FOLLOW, owner)
     else
       set_intention(AI::IDLE)
@@ -177,7 +185,7 @@ abstract class L2Summon < L2Playable
   end
 
   def broadcast_npc_info(val : Int32)
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       unless pc == owner
         pc.send_packet(SummonInfo.new(self, pc, val))
       end
@@ -265,13 +273,13 @@ abstract class L2Summon < L2Playable
   end
 
   def exp_for_this_level : Int64
-    return 0i64 if level >= Config.max_pet_level + 1
+    return 0i64 if level >= Config.max_pet_level &+ 1
     ExperienceData.get_exp_for_level(level)
   end
 
   def exp_for_next_level : Int64
     return 0i64 if level >= Config.max_pet_level
-    ExperienceData.get_exp_for_level(level + 1)
+    ExperienceData.get_exp_for_level(level &+ 1)
   end
 
   def team : Team
@@ -366,7 +374,7 @@ abstract class L2Summon < L2Playable
       return false
     end
 
-    if current_mp < stat.get_mp_consume1(skill) + stat.get_mp_consume2(skill)
+    if current_mp < stat.get_mp_consume1(skill) &+ stat.get_mp_consume2(skill)
       send_packet(SystemMessageId::NOT_ENOUGH_MP)
       return false
     end
@@ -586,7 +594,7 @@ abstract class L2Summon < L2Playable
       set_intention(AI::ATTACK, target)
     end
 
-    if pet? && level - owner.level > 20
+    if pet? && level &- owner.level > 20
       send_packet(SystemMessageId::PET_TOO_HIGH_TO_CONTROL)
       action_failed
       return false

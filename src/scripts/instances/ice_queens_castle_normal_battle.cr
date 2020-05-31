@@ -262,7 +262,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           unless world.freya.invul?
             blizzard_force_count = world.controller.variables.get_i32("BLIZZARD_FORCE_COUNT", 0)
             if world.hard_mode? && blizzard_force_count < 4 && world.freya.current_hp < world.freya.max_hp * (0.8 - (0.2 * blizzard_force_count))
-              world.controller.variables["BLIZZARD_FORCE_COUNT"] = blizzard_force_count + 1
+              world.controller.variables["BLIZZARD_FORCE_COUNT"] = blizzard_force_count &+ 1
               world.freya.do_cast(ETERNAL_BLIZZARD_FORCE)
               manage_screen_msg(world, NpcString::MAGIC_POWER_SO_STRONG_THAT_IT_COULD_MAKE_YOU_LOSE_YOUR_MIND_CAN_BE_FELT_FROM_SOMEWHERE)
             else
@@ -378,7 +378,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           npc.mortal = true
           npc.do_die(nil)
         when "BLIZZARD"
-          npc.variables["SUICIDE_COUNT"] = npc.variables.get_i32("SUICIDE_COUNT") + 1
+          npc.variables["SUICIDE_COUNT"] = npc.variables.get_i32("SUICIDE_COUNT") &+ 1
 
           if npc.variables.get_i32("SUICIDE_ON") == 0
             if npc.variables.get_i32("SUICIDE_COUNT") == 2
@@ -476,7 +476,6 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             else
               # [automatically added else]
             end
-
           end
         when "LEADER_DELAY"
           if npc.variables.get_i32("DELAY_VAL") == 0
@@ -488,7 +487,6 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         else
           # [automatically added else]
         end
-
       end
     end
 
@@ -821,7 +819,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         end
 
         if knight_count < 10 && world.status?(2)
-          knight_count += 1
+          knight_count &+= 1
           var["KNIGHT_COUNT"] = knight_count
 
           if knight_count == 10
@@ -843,7 +841,6 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
       else
         # [automatically added else]
       end
-
     end
 
     super

@@ -112,7 +112,7 @@ class L2BossZone < L2ZoneType
         count = 0
         characters_inside.each do |obj|
           if obj.playable?
-            count += 1
+            count &+= 1
           elsif obj.attackable? && obj.raid?
             settings.raid_list << obj
           end

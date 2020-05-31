@@ -14,10 +14,7 @@ class L2QuestGuardInstance < L2GuardInstance
     super
 
     if attacker.is_a?(L2Attackable)
-      # This uninitialized player is necessary because using nil like L2J does
-      # would complicate all other code involving this EventType.
-      fake_player = uninitialized L2PcInstance
-      OnAttackableAttack.new(fake_player, self, damage, skill, false).async(self)
+      OnAttackableAttack.new(nil, self, damage, skill, false).async(self)
     end
   end
 
@@ -27,10 +24,7 @@ class L2QuestGuardInstance < L2GuardInstance
     end
 
     if killer.is_a?(L2Attackable)
-      # This uninitialized player is necessary because using nil like L2J does
-      # would complicate all other code involving this EventType.
-      fake_player = uninitialized L2PcInstance
-      OnAttackableKill.new(fake_player, self, false).delayed(self, @on_kill_delay.to_i64)
+      OnAttackableKill.new(nil, self, false).delayed(self, @on_kill_delay.to_i64)
     end
 
     true

@@ -61,7 +61,7 @@ class Scripts::StakatoNest < AbstractNpcAI
         end
       end
     when STAKATO_BABY
-      monster = npc.as(L2MonsterInstance).leader?
+      monster = npc.as(L2MonsterInstance).leader
       if monster && monster.alive?
         start_quest_timer("nurse_change", 5000, monster, killer)
       end
@@ -74,7 +74,7 @@ class Scripts::StakatoNest < AbstractNpcAI
         end
       end
     when STAKATO_FEMALE
-      monster = npc.as(L2MonsterInstance).leader?
+      monster = npc.as(L2MonsterInstance).leader
       if monster && monster.alive?
         start_quest_timer("male_change", 5000, monster, killer)
       end

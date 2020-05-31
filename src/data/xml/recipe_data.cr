@@ -85,7 +85,7 @@ module RecipeData
   def get_valid_recipe_list(pc : L2PcInstance?, id : Int32) : L2RecipeList?
     list = RECIPES[id]?
     if list.nil? || list.recipes.empty?
-      pc.send_message("No recipe for ID #{id}")
+      pc.send_message("No recipe for id #{id}")
       pc.in_craft_mode = false
       return
     end

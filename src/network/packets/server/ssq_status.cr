@@ -90,7 +90,7 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
       c 5 # nº of festivals
 
       5.times do |i|
-        c i + 1 # festival id
+        c i &+ 1 # festival id
         d SevenSignsFestival::FESTIVAL_LEVEL_SCORES[i]
 
         dusk_score = SevenSignsFestival.instance.get_highest_score(SevenSigns::CABAL_DUSK, i)

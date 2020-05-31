@@ -20,8 +20,7 @@ def run(executable)
 
     system("./#{executable} #{ARGV.join(' ')}")
 
-    end_time = (Time.local - start_time).to_i
-    min, sec = end_time.divmod(60)
+    min, sec = (Time.local - start_time).to_i.divmod(60)
 
     case $?.exit_code
     when 0
@@ -45,8 +44,7 @@ def build
 
   system(build_cmd)
 
-  end_time = (Time.local - start_time).to_i
-  min, sec = end_time.divmod(60)
+  min, sec = (Time.local - start_time).to_i.divmod(60)
 
   case $?.exit_code
   when 0

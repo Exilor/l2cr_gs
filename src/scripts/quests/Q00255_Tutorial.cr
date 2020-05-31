@@ -1293,7 +1293,6 @@ class Scripts::Q00255_Tutorial < Quest
 
   private def user_connected(pc)
     unless qs = get_quest_state(pc, true)
-      warn "QuestState wasn't obtained."
       return
     end
 
@@ -1303,7 +1302,6 @@ class Scripts::Q00255_Tutorial < Quest
 
     if pc.level < 6
       if get_one_time_quest_flag(pc, 255) != 0
-        debug "One time quest flag isn't 0."
         return
       end
       memo_state = qs.memo_state
@@ -1316,11 +1314,10 @@ class Scripts::Q00255_Tutorial < Quest
         memo_state = memo_state & 2147483392
       end
 
-      debug "Memo flag: #{memo_flag}."
 
       case memo_flag
       when 0
-        qs.start_quest_timer(("#{pc.l2id + 1000000}"), 10000)
+        qs.start_quest_timer((pc.l2id + 1000000).to_s, 10000)
         memo_state = 2147483392 & ~(8388608 | 1048576)
         qs.memo_state = 1 | memo_state
         if qs.get_memo_state_ex(1) < 0
@@ -1357,7 +1354,6 @@ class Scripts::Q00255_Tutorial < Quest
           # [automatically added else]
         end
 
-
         qs.play_sound(Sound::ITEMSOUND_QUEST_TUTORIAL)
       when 4
         qs.show_question_mark(pc, 12)
@@ -1365,7 +1361,6 @@ class Scripts::Q00255_Tutorial < Quest
       else
         # [automatically added else]
       end
-
 
       enable_tutorial_event(qs, memo_state)
     else
@@ -1408,7 +1403,6 @@ class Scripts::Q00255_Tutorial < Quest
       else
         # [automatically added else]
       end
-
 
       territory_war_id = qs.get_dominion_siege_id(pc)
       territory_war_state = qs.get_nr_memo_state_ex(pc, 728, 1)
@@ -1544,7 +1538,6 @@ class Scripts::Q00255_Tutorial < Quest
         else
           # [automatically added else]
         end
-
       else
         if qs.has_nr_memo?(pc, Q728_TERRITORY_WAR)
           if territory_war_state >= 81 && territory_war_state <= 89
@@ -1577,8 +1570,6 @@ class Scripts::Q00255_Tutorial < Quest
       end
     end
   end
-
-    # ---------------------------------- Event
 
   private def event_roien(event, pc, npc, qs)
     case event
@@ -1614,7 +1605,6 @@ class Scripts::Q00255_Tutorial < Quest
     else
       # [automatically added else]
     end
-
   end
 
   private def event_gallint(event, pc, npc, qs)
@@ -1655,7 +1645,6 @@ class Scripts::Q00255_Tutorial < Quest
     else
       # [automatically added else]
     end
-
   end
 
   private def event_jundin(event, pc, npc, qs)
@@ -1696,7 +1685,6 @@ class Scripts::Q00255_Tutorial < Quest
     else
       # [automatically added else]
     end
-
   end
 
   private def event_nerupa(event, pc, npc, qs)
@@ -1731,7 +1719,6 @@ class Scripts::Q00255_Tutorial < Quest
     else
       # [automatically added else]
     end
-
   end
 
   private def event_foreman_laferon(event, pc, npc, qs)
@@ -1765,7 +1752,6 @@ class Scripts::Q00255_Tutorial < Quest
     else
       # [automatically added else]
     end
-
   end
 
   private def event_guardian_vulkus(event, pc, npc, qs)
@@ -1794,7 +1780,6 @@ class Scripts::Q00255_Tutorial < Quest
     else
       # [automatically added else]
     end
-
   end
 
   private def event_subelder_perwan(event, pc, npc, qs)
@@ -1811,8 +1796,6 @@ class Scripts::Q00255_Tutorial < Quest
       show_page(pc, "32133-002.htm")
     end
   end
-
-  # ---------------------------------- Talks
 
   private def talk_roien(pc, qs)
     if qs.has_quest_items?(RECOMMENDATION_1)

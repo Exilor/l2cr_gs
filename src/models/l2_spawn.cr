@@ -165,12 +165,11 @@ class L2Spawn
   private def do_spawn?(summon_spawn : Bool = false) : L2Npc?
     case @template.type.casecmp
     when "L2Pet", "L2Decoy", "L2Trap"
-      @current_count += 1
+      @current_count &+= 1
       return
     else
       # [automatically added else]
     end
-
 
     npc = @constructor.new(@template)
 

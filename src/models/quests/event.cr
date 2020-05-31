@@ -1,8 +1,8 @@
 require "./quest"
 
 abstract class Event < Quest
-  def initialize(name : String, descr : String)
-    super(-1, name, descr)
+  def initialize(name : String, description : String)
+    super(-1, name, description)
   end
 
   abstract def event_start(event_maker : L2PcInstance) : Bool

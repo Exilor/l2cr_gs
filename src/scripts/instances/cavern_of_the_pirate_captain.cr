@@ -319,7 +319,7 @@ class Scripts::CavernOfThePirateCaptain < AbstractInstance
 
     15.times do |i|
       if ROOM_DATA[i][3] == candle_id || ROOM_DATA[i][4] == candle_id
-        return i + 1
+        return i &+ 1
       end
     end
 
@@ -362,12 +362,12 @@ class Scripts::CavernOfThePirateCaptain < AbstractInstance
 
     36.times do |i|
       candle = add_spawn(CANDLE, CANDLE_LOC[i], false, 0, false, world.instance_id)
-      candle.variables["candleId"] = i + 1
+      candle.variables["candleId"] = i &+ 1
       candles.push(candle)
     end
 
     3.upto(6) do |i|
-      candles[ROOM_DATA[world.zaken_room - 1][i] - 1].variables["isBlue"] = 1
+      candles[ROOM_DATA[world.zaken_room &- 1][i] - 1].variables["isBlue"] = 1
     end
     world.zaken = spawn_npc(world.is_83? ? ZAKEN_83 : ZAKEN_60, world.zaken_room, nil, world)
     world.zaken.invisible = true

@@ -12,7 +12,7 @@ class Scripts::AltarsOfSacrifice < AbstractNpcAI
 
     def spawn_boss
       if !has_bosses? || @spawned_boss
-        raise "illegal state"
+        raise "Illegal state"
       end
 
       spawn = L2Spawn.new(@boss_npc_ids.sample(random: Rnd))
@@ -131,7 +131,6 @@ class Scripts::AltarsOfSacrifice < AbstractNpcAI
       altar_idx = get_spawn_boss_index(event)
       altar = ALTARS[altar_idx]
       begin
-        debug { "Spawning boss at #{altar.@middle_point.xyz.join(' ')}" }
         altar.spawn_boss
         start_quest_timer(make_despawn_boss_evt(altar_idx), ALTAR_STATE_CHANGE_DELAY, nil, nil)
       rescue e

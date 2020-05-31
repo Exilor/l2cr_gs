@@ -85,6 +85,7 @@ class CubicAction
         #   @cubic.use_cubic_disabler(skill, targets)
         # end
 
+        # custom: works better in not making storm cubic attack twice
         if skill.has_effect_type?(EffectType::MAGICAL_ATTACK)
           @cubic.use_cubic_m_dam(skill, targets)
         elsif skill.has_effect_type?(EffectType::HP_DRAIN)

@@ -8,7 +8,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
   @thinking = false
 
   def initialize(creature : L2DefenderInstance)
-    super(creature)
+    super
 
     @self_analysis = SelfAnalysis.new(creature)
     @self_analysis.init
@@ -21,9 +21,9 @@ class L2FortSiegeGuardAI < L2CharacterAI
     on_event_think
   end
 
-  private def auto_attack_condition(target)
+  private def auto_attack_condition(target : L2Character)
     # Check if the target isn't another guard, folk or a door
-    if target.nil? || target.is_a?(L2DefenderInstance) || target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance) || target.looks_dead? || target.is_a?(L2FortCommanderInstance) || target.is_a?(L2Playable)
+    if target.is_a?(L2DefenderInstance) || target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance) || target.looks_dead? || target.is_a?(L2FortCommanderInstance) || target.is_a?(L2Playable)
       if target.is_a?(L2PcInstance)
         pc = target
       elsif target.is_a?(L2Summon)

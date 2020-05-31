@@ -5,7 +5,7 @@ module PlayerXpPercentLostData
   private DATA = [] of Float64
 
   def load
-    DATA.replace([1.0] * (Config.max_player_level + 1))
+    DATA.replace([1.0] * (Config.max_player_level &+ 1))
     parse_datapack_file("stats/chars/playerXpPercentLost.xml")
   end
 

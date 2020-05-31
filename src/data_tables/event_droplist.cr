@@ -23,18 +23,15 @@ module EventDroplist
 
   def all_drops : Array(DateDrop)
     time = Time.now
-    DROPS.select &.includes?(time)
+    DROPS.select &.date_range.within_range?(time)
   end
 
   private struct EventDrop
     getter_initializer item_id_list : Slice(Int32), min_count : Int64,
       max_count : Int64, drop_chance : Int32
 
-    def initialize(item_id : Int32, min : Int64, max : Int64, drop_chance : Int32)
-      @item_id_list = Slice.new(1, item_id)
-      @min_count = min
-      @max_count = max
-      @drop_chance = drop_chance
+    def initialize(item_id : Int32, min : Int64, max : Int64, chance : Int32)
+      initialize(Slice.new(1, item_id), min, max, chance)
     end
   end
 end

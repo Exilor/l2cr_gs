@@ -48,7 +48,7 @@ class L2StaticObjectInstance < L2Character
   end
 
   def set_map(texture : String, x : Int32, y : Int32)
-    @map = ShowTownMap.new("town_map.#{texture}", x, y)
+    @map = ShowTownMap.new("town_map." + texture, x, y)
   end
 
   def active_weapon_instance : L2ItemInstance?

@@ -42,7 +42,7 @@ module MultisellData
       each_element(n) do |d, d_name|
         if d_name.casecmp?("item")
           entry = parse_entry(d, entry_id, list)
-          entry_id += 1
+          entry_id &+= 1
           list.entries << entry
         elsif d_name.casecmp?("npcs")
           find_element(d, "npc") do |b|
@@ -189,12 +189,12 @@ module MultisellData
       list.entries.each do |ent|
         ent.ingredients.each do |ing|
           unless verify_ingredient(ing)
-            warn { "Cannot find ingredient with item ID: #{ing.item_id} in list #{list.list_id}." }
+            warn { "Cannot find ingredient with item id: #{ing.item_id} in list #{list.list_id}." }
           end
         end
         ent.products.each do |ing|
           unless verify_ingredient(ing)
-            warn { "Cannot find product with item ID: #{ing.item_id} in list #{list.list_id}." }
+            warn { "Cannot find product with item id: #{ing.item_id} in list #{list.list_id}." }
           end
         end
       end

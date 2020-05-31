@@ -487,7 +487,7 @@ class L2Clan
         set_ally_penalty_expiry_time(0, 0)
       end
       self.char_penalty_expiry_time = rs.get_i64(:"char_penalty_expiry_time")
-      if char_penalty_expiry_time + (Config.alt_clan_join_days * 86400000) < Time.ms
+      if char_penalty_expiry_time + (Config.alt_clan_join_days * 86_400_000) < Time.ms
         self.char_penalty_expiry_time = 0
       end
       self.dissolving_expiry_time = rs.get_i64(:"dissolving_expiry_time")
@@ -1059,7 +1059,7 @@ class L2Clan
       end
     end
 
-    @reputation_score = value.clamp(-100000000, 100000000)
+    @reputation_score = value.clamp(-100_000_000, 100_000_000)
     broadcast_to_online_members(PledgeShowInfoUpdate.new(self))
     update_clan_in_db if save
   end
@@ -1306,7 +1306,7 @@ class L2Clan
     self.ally_id = 0
     self.ally_name = nil
     change_ally_crest 0, false
-    set_ally_penalty_expiry_time time + (Config.alt_create_ally_days_when_dissolved * 86400000), L2Clan::PENALTY_TYPE_DISSOLVE_ALLY
+    set_ally_penalty_expiry_time time + (Config.alt_create_ally_days_when_dissolved * 86_400_000), L2Clan::PENALTY_TYPE_DISSOLVE_ALLY
     update_clan_in_db
   end
 
@@ -1383,7 +1383,7 @@ class L2Clan
       end
     when 5
       if reputation_score >= Config.clan_level_6_cost && size >= Config.clan_level_6_requirement
-        set_reputation_score(reputation_score - Config.clan_level_6_cost, true)
+        set_reputation_score(reputation_score &- Config.clan_level_6_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_6_cost)
         pc.send_packet(sm)
@@ -1391,7 +1391,7 @@ class L2Clan
       end
     when 6
       if reputation_score >= Config.clan_level_7_cost && size >= Config.clan_level_7_requirement
-        set_reputation_score(reputation_score - Config.clan_level_7_cost, true)
+        set_reputation_score(reputation_score &- Config.clan_level_7_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_7_cost)
         pc.send_packet(sm)
@@ -1399,7 +1399,7 @@ class L2Clan
       end
     when 7
       if reputation_score >= Config.clan_level_8_cost && size >= Config.clan_level_8_requirement
-        set_reputation_score(reputation_score - Config.clan_level_8_cost, true)
+        set_reputation_score(reputation_score &- Config.clan_level_8_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_8_cost)
         pc.send_packet(sm)
@@ -1408,7 +1408,7 @@ class L2Clan
     when 8
       if reputation_score >= Config.clan_level_9_cost && pc.inventory.get_item_by_item_id(9910) && size >= Config.clan_level_9_requirement
         if pc.destroy_item_by_item_id("ClanLvl", 9910, 150, pc.target, false)
-          set_reputation_score(reputation_score - Config.clan_level_9_cost, true)
+          set_reputation_score(reputation_score &- Config.clan_level_9_cost, true)
           sm = SystemMessage.s1_deducted_from_clan_rep
           sm.add_int(Config.clan_level_9_cost)
           pc.send_packet(sm)
@@ -1422,7 +1422,7 @@ class L2Clan
     when 9
       if reputation_score >= Config.clan_level_10_cost && pc.inventory.get_item_by_item_id(9910) && size >= Config.clan_level_10_requirement
         if pc.destroy_item_by_item_id("ClanLvl", 9911, 5, pc.target, false)
-          set_reputation_score(reputation_score - Config.clan_level_10_cost, true)
+          set_reputation_score(reputation_score &- Config.clan_level_10_cost, true)
           sm = SystemMessage.s1_deducted_from_clan_rep
           sm.add_int(Config.clan_level_10_cost)
           pc.send_packet(sm)
@@ -1437,7 +1437,7 @@ class L2Clan
       territories = TerritoryWarManager.territories
       has_territory = territories.any? { |t| t.owner_clan.id == id }
       if has_territory && reputation_score >= Config.clan_level_11_cost && size >= Config.clan_level_11_requirement
-        set_reputation_score(reputation_score - Config.clan_level_11_cost, true)
+        set_reputation_score(reputation_score &- Config.clan_level_11_cost, true)
         sm = SystemMessage.s1_deducted_from_clan_rep
         sm.add_int(Config.clan_level_11_cost)
         pc.send_packet(sm)
@@ -1590,7 +1590,7 @@ class L2Clan
   end
 
   def all_sub_skills : Array(PledgeSkillList::SubpledgeSkill)
-    list = Array(PledgeSkillList::SubpledgeSkill).new(@subpledge_skills.size + @subpledges.size)
+    list = Array(PledgeSkillList::SubpledgeSkill).new(@subpledge_skills.size &+ @subpledges.size)
     @subpledge_skills.each_value do |skill|
       list << PledgeSkillList::SubpledgeSkill.new(0, skill.id, skill.level)
     end

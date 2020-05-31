@@ -23,7 +23,7 @@ module NpcData
         timer.start
         count = NPCS.size
         parse_datapack_directory("stats/npcs/custom", true)
-        info { "Loaded #{NPCS.size - count} custom NPC templates in #{timer} s." }
+        info { "Loaded #{NPCS.size &- count} custom NPC templates in #{timer} s." }
       end
       @@minion_data = nil
       load_npcs_skill_learn

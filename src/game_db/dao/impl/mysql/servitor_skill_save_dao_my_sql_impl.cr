@@ -45,7 +45,7 @@ module GameDB
             skill.id,
             skill.level,
             info.time,
-            buff_index += 1
+            buff_index &+= 1
           )
 
           SummonEffectsTable.add_servitor_effect(servitor.owner, servitor.reference_skill, skill, info.time)

@@ -36,7 +36,7 @@ struct RangeSet(T)
     i = @ranges.bsearch_index { |r| r.begin >= value }.try &.pred || 0
     r = @ranges[i]
     return self if r.includes?(value)
-    next_range = @ranges[i + 1]?
+    next_range = @ranges[i &+ 1]?
     return self if next_range && next_range.includes?(value)
     extend_this_range = r.end + 1 == value
     extend_next_range = next_range && next_range.begin - 1 == value
@@ -46,9 +46,9 @@ struct RangeSet(T)
     elsif extend_this_range
       @ranges[i] = (r.begin)..value
     elsif extend_next_range
-      @ranges[i + 1] = value..(next_range.not_nil!.end)
+      @ranges[i &+ 1] = value..(next_range.not_nil!.end)
     else
-      @ranges.insert(i + 1, value..value)
+      @ranges.insert(i &+ 1, value..value)
     end
 
     self
@@ -103,7 +103,7 @@ struct RangeSet(T)
   # def holes
   #   holes = 0
   #   @ranges.each_with_index do |r1, i|
-  #     if r2 = @ranges[i + 1]?
+  #     if r2 = @ranges[i &+ 1]?
   #       holes += r2.begin - r1.end - 1
   #     end
   #   end
@@ -125,7 +125,7 @@ struct RangeSet(T)
       @ranges[i] = (range.begin)..(value - 1)
     else
       @ranges[i] = (range.begin)..(value - 1)
-      @ranges.insert(i + 1, (value + 1)..(range.end))
+      @ranges.insert(i &+ 1, (value + 1)..(range.end))
     end
 
     value

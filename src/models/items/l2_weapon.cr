@@ -159,7 +159,7 @@ class L2Weapon < L2Item
 
     if caster.is_a?(L2PcInstance)
       targets = [target] of L2Object
-      caster.known_list.known_objects.each_value do |npc|
+      caster.known_list.each_object do |npc|
         next unless npc.is_a?(L2Npc)
         next unless Util.in_range?(1000, npc, caster, false)
         evt = OnNpcSkillSee.new(npc, caster, skill, targets, false)

@@ -36,7 +36,7 @@ module BypassHandler::SkillList
                 end
 
                 text += "<a action=\"bypass -h npc_%objectId%_SkillList #{cid.to_i}\">Learn #{cid}'s class Skills</a><br>\n"
-                count += 1
+                count &+= 1
               end
 
               class_check = class_check.parent?

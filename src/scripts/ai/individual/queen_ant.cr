@@ -103,7 +103,7 @@ class Scripts::QueenAnt < AbstractNpcAI
           next
         end
         if queen_need_heal
-          if nurse.leader? == larva
+          if nurse.leader == larva
             next
           end
 
@@ -236,13 +236,13 @@ class Scripts::QueenAnt < AbstractNpcAI
     elsif (queen = @queen) && !queen.looks_dead?
       if npc_id == ROYAL
         mob = npc.as(L2MonsterInstance)
-        if leader = mob.leader?
+        if leader = mob.leader
           leader.minion_list.on_minion_die(mob, (280 + Rnd.rand(40)) * 1000)
         end
       elsif npc_id == NURSE
         mob = npc.as(L2MonsterInstance)
         NURSES.delete_first(mob)
-        if leader = mob.leader?
+        if leader = mob.leader
           leader.minion_list.on_minion_die(mob, 10000)
         end
       end

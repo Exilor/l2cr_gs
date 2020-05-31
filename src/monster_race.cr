@@ -13,7 +13,7 @@ module MonsterRace
       id = 31003
       random = Rnd.rand(24)
       loop do
-        (i - 1).downto(0) do |j|
+        (i &- 1).downto(0) do |j|
           if MONSTERS[j].template.id == id + random
             random = Rnd.rand(24)
             next
@@ -54,15 +54,15 @@ module MonsterRace
     8.times do |i|
       total = 0
       20.times do |j|
-        total += SPEEDS[i][j] = j == 19 ? 100 : Rnd.rand(60) + 65
+        total &+= SPEEDS[i][j] = j == 19 ? 100 : Rnd.rand(60) &+ 65
       end
       if total >= FIRST[1]
         SECOND[0] = FIRST[0]
         SECOND[1] = FIRST[1]
-        FIRST[0] = 8 - i
+        FIRST[0] = 8 &- i
         FIRST[1] = total
       elsif total >= SECOND[1]
-        SECOND[0] = 8 - i
+        SECOND[0] = 8 &- i
         SECOND[1] = total
       end
     end

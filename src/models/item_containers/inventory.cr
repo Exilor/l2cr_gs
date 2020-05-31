@@ -539,24 +539,19 @@ abstract class Inventory < ItemContainer
           old.last_change = L2ItemInstance::MODIFIED
 
           mask = 0
-          # debug "Mask before #{item}: #{@mask}"
           @paperdoll.each { |itm| mask |= itm.mask if itm }
 
           @mask = mask
-          # debug "Mask after #{item}: #{@mask}"
           @paperdoll_listeners.each &.notify_unequipped(slot, old, self)
 
           old.update_database
         end
 
         if item
-          # debug "Item mask: #{item.mask}"
           @paperdoll[slot] = item
           item.set_item_location(equip_location, slot)
           item.last_change = L2ItemInstance::MODIFIED
-          # debug "Mask before #{item}: #{@mask}"
           @mask |= item.mask
-          # debug "Mask after #{item}: #{@mask}"
           @paperdoll_listeners.each &.notify_equipped(slot, item, self)
           item.update_database
         end

@@ -18,7 +18,7 @@ module CellPathFinding
     Config.pathfind_buffers.split(';') do |buf|
       args = buf.split('x')
       if args.size != 2
-        raise "invalid buffer definition: #{buf}"
+        raise "Invalid buffer definition: " + buf
       end
       ALL_BUFFERS << BufferInfo.new(args.first.to_i, args.last.to_i)
     end

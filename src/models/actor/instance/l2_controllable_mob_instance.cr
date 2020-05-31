@@ -21,6 +21,7 @@ class L2ControllableMobInstance < L2MonsterInstance
     end
 
     self.ai = nil
+
     true
   end
 

@@ -5,7 +5,7 @@ module NpcPersonalAIData
 
   def store_data(spawn_dat : L2Spawn, data : Hash(String, Int32)?)
     if data && !data.empty?
-      name = spawn_dat.name ||= Rnd.i64.to_s
+      name = spawn_dat.name ||= spawn_dat.object_id.to_s
       AI_DATA[name] = data
     end
   end
@@ -19,17 +19,13 @@ module NpcPersonalAIData
   end
 
   def initialize_npc_parameters(npc : L2Npc, sp : L2Spawn, spawn_name : String?)
-    if map = AI_DATA[spawn_name]?
-      map.each do |key, val|
-        case key
-        when "disableRandomAnimation"
-          npc.random_animation_enabled = val == 0
-        when "disableRandomWalk"
-          npc.no_random_walk = val == 1
-          sp.no_random_walk = val == 1
-        else
-          # [automatically added else]
-        end
+    return unless map = AI_DATA[spawn_name]?
+    map.each do |key, val|
+      if key == "disableRandomAnimation"
+        npc.random_animation_enabled = val == 0
+      elsif key == "disableRandomWalk"
+        npc.no_random_walk = val == 1
+        sp.no_random_walk = val == 1
       end
     end
   end

@@ -7,7 +7,7 @@ module NpcBufferTable
   def load
     count = load_from("SELECT `npc_id`,`skill_id`,`skill_level`,`skill_fee_id`,`skill_fee_amount`,`buff_group` FROM `npc_buffer` ORDER BY `npc_id` ASC")
     if Config.custom_npcbuffer_tables
-      count += load_from("SELECT `npc_id`,`skill_id`,`skill_level`,`skill_fee_id`,`skill_fee_amount`,`buff_group` FROM `custom_npc_buffer` ORDER BY `npc_id` ASC")
+      count &+= load_from("SELECT `npc_id`,`skill_id`,`skill_level`,`skill_fee_id`,`skill_fee_amount`,`buff_group` FROM `custom_npc_buffer` ORDER BY `npc_id` ASC")
     end
 
     info { "Loaded #{BUFFERS.size} buffers and #{count} skills." }
@@ -43,7 +43,7 @@ module NpcBufferTable
         end
 
         last_npc_id = npc_id
-        count += 1
+        count &+= 1
       end
 
       if skills && last_npc_id != 0

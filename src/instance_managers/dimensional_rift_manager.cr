@@ -273,7 +273,7 @@ module DimensionalRiftManager
   def allowed_enter?(type : Int8)
     room = ROOMS[type]
     count = room.each_value.count &.party_inside?
-    count < room.size - 1
+    count < room.size &- 1
   end
 
   def get_free_rooms(type : Int8) : Array(Int8)

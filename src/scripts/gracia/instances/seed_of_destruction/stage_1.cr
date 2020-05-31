@@ -201,7 +201,7 @@ class Scripts::Stage1 < AbstractInstance
                     MUST_KILL_MOBS_ID << npc_id
                   end
                   SPAWN_LIST[flag] << spw
-                  spawn_count += 1
+                  spawn_count &+= 1
                 elsif cd_name.casecmp?("zone")
                   spw = SODSpawn.new
                   spw.npc_id = npc_id
@@ -225,7 +225,7 @@ class Scripts::Stage1 < AbstractInstance
                     MUST_KILL_MOBS_ID << npc_id
                   end
                   SPAWN_LIST[flag] << spw
-                  spawn_count += 1
+                  spawn_count &+= 1
                 end
               end
             end
@@ -539,7 +539,7 @@ class Scripts::Stage1 < AbstractInstance
           if world.device_spawned_mob_count < MAX_DEVICE_SPAWNED_MOB_COUNT
             if target.instance_id == npc.instance_id && target.alive?
               mob = add_spawn(SPAWN_MOB_IDS.sample, npc.spawn.location, false, 0, false, world.instance_id).as(L2Attackable)
-              world.device_spawned_mob_count += 1
+              world.device_spawned_mob_count &+= 1
               mob.can_see_through_silent_move = true
               mob.set_running
               if world.status >= 7

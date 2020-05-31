@@ -11,7 +11,7 @@ class FortUpdater
   def call
     case @updater_type
     when .periodic_update?
-      @run_count += 1
+      @run_count &+= 1
 
       if @fort.owner_clan?.nil? || @fort.owner_clan != @clan
         return

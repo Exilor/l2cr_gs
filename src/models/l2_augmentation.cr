@@ -31,7 +31,7 @@ struct L2Augmentation
 
     def initialize(id)
       @options = {0x0000FFFF & id, id >> 16}.map do |stat|
-        OptionData[stat] || raise "no Option found for stat with id #{stat}."
+        OptionData[stat] || raise "No option found for stat with id #{stat}"
       end
     end
 

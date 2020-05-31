@@ -81,7 +81,7 @@ class Scripts::Q10274_CollectingInTheAir < Quest
       end
     when State::STARTED
       count = st.get_quest_items_count(RED) + st.get_quest_items_count(BLUE)
-      count += st.get_quest_items_count(GREEN)
+      count &+= st.get_quest_items_count(GREEN)
       if count >= 8
         html = "32557-05.html"
         st.give_items(13728, 1)
@@ -93,7 +93,6 @@ class Scripts::Q10274_CollectingInTheAir < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

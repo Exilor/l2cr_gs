@@ -15,11 +15,11 @@ class MacroList
 
   def register_macro(mcr : Macro)
     if mcr.id == 0
-      mcr.id = @macro_id + 1
+      mcr.id = @macro_id &+ 1
       @macro_id += 1
       while @macros.has_key?(mcr.id)
         mcr.id = @macro_id
-        @macro_id += 1
+        @macro_id &+= 1
       end
       @macros[mcr.id] = mcr
     else
@@ -76,7 +76,7 @@ class MacroList
       end
 
       if io.bytesize > 255
-        io.back(io.bytesize - 255)
+        io.back(io.bytesize &- 255)
       end
     end
 

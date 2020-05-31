@@ -58,7 +58,7 @@ module AdminCommandHandler::AdminCHSiege
             pc.send_message("Incomplete day, hour or both")
           else
             d = day[0].to_i
-            month = day[1].to_i - 1
+            month = day[1].to_i &- 1
             year = day[2].to_i
             h = hour[0].to_i
             min = hour[1].to_i

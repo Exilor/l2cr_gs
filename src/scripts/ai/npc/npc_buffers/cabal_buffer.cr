@@ -74,7 +74,7 @@ class Scripts::CabalBuffer < AbstractNpcAI
         losing_cabal = SevenSigns::CABAL_DAWN
       end
 
-      @npc.known_list.known_players.each_value do |pc|
+      @npc.known_list.each_player do |pc|
         if pc.invul?
           next
         end

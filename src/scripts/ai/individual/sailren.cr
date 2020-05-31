@@ -150,7 +150,6 @@ class Scripts::Sailren < AbstractNpcAI
       # [automatically added else]
     end
 
-
     super
   end
 
@@ -167,15 +166,15 @@ class Scripts::Sailren < AbstractNpcAI
       case npc.id
       when SAILREN
         @status = Status::DEAD
-        add_spawn(CUBIC, 27644, -6638, -2008, 0, false, 300000)
-        respawn_time = RESPAWN * 3600000
+        add_spawn(CUBIC, 27644, -6638, -2008, 0, false, 300_000)
+        respawn_time = RESPAWN * 3_600_000
         GlobalVariablesManager.instance["SailrenRespawn"] = Time.ms + respawn_time
         cancel_quest_timer("CHECK_ATTACK", nil, nil)
         cancel_quest_timer("TIME_OUT", nil, nil)
         start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)
-        start_quest_timer("TIME_OUT", 300000, nil, nil)
+        start_quest_timer("TIME_OUT", 300_000, nil, nil)
       when VELOCIRAPTOR
-        @kill_count += 1
+        @kill_count &+= 1
         if @kill_count == 3
           pterosaur = add_spawn(PTEROSAUR, 27313, -6766, -1975, 0, false, 0)
           add_attack_desire(pterosaur, killer)
@@ -185,11 +184,10 @@ class Scripts::Sailren < AbstractNpcAI
         trex = add_spawn(TREX, 27313, -6766, -1975, 0, false, 0)
         add_attack_desire(trex, killer)
       when TREX
-        start_quest_timer("SPAWN_SAILREN", 180000, nil, nil)
+        start_quest_timer("SPAWN_SAILREN", 180_000, nil, nil)
       else
         # [automatically added else]
       end
-
     end
 
     super

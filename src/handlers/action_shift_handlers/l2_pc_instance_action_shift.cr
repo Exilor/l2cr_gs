@@ -9,7 +9,7 @@ module ActionShiftHandler::L2PcInstanceActionShift
       end
 
       if ach = AdminCommandHandler["admin_character_info"]
-        ach.use_admin_command("admin_character_info #{target.name}", pc)
+        ach.use_admin_command("admin_character_info " + target.name, pc)
       end
     end
 

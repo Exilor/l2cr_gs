@@ -33,7 +33,7 @@ class Scripts::Knoriks < AbstractNpcAI
       WalkingManager.on_spawn(npc.not_nil!)
     when "KNORIKS_SPAWN"
       if @spawn_count < 3
-        @spawn_count += 1
+        @spawn_count &+= 1
         add_spawn(KNORIKS, 140641, 114525, -3755, 0, false, 0)
         add_spawn(KNORIKS, 143789, 110205, -3968, 0, false, 0)
         add_spawn(KNORIKS, 146466, 109789, -3440, 0, false, 0)

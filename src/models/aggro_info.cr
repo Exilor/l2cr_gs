@@ -25,6 +25,6 @@ class AggroInfo
   end
 
   def add_damage(value : Int32)
-    @damage = Math.min(@damage + value.to_i64, 999_999_999).to_i32
+    @damage = Math.min(@damage.to_i64 + value, 999_999_999).to_i32
   end
 end

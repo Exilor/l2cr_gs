@@ -59,7 +59,7 @@ class BoatRunePrimeval
           BoatManager.broadcast_packets(RUNE_DOCK[0], PRIMEVAL_DOCK, BUSY_RUNE)
         end
 
-        @shout_count += 1
+        @shout_count &+= 1
         if @shout_count > 35
           @shout_count = 0
         end
@@ -78,7 +78,7 @@ class BoatRunePrimeval
     end
 
     @shout_count = 0
-    @cycle += 1
+    @cycle &+= 1
     if @cycle > 4
       @cycle = 0
     end

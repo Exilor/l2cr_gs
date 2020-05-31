@@ -136,7 +136,7 @@ class L2Npc < L2Character
   def send_info(pc : L2PcInstance)
     if visible_for?(pc)
       if Config.check_known && pc.gm?
-        pc.send_message("Added NPC #{name}")
+        pc.send_message("Added NPC " + name)
       end
 
       if run_speed == 0
@@ -848,7 +848,7 @@ class L2Npc < L2Character
   end
 
   def update_abnormal_effect
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       next unless visible_for?(pc)
 
       if run_speed == 0

@@ -1,25 +1,24 @@
 class QuestTimer
   @task : TaskExecutor::Scheduler::Task?
-  @time : Int64
 
   getter name, npc, player, quest
   getter? active = true
 
-  def initialize(quest : Quest, name : String, time : Number, npc : L2Npc?, pc : L2PcInstance?)
+  def initialize(quest : Quest, name : String, time : Int64, npc : L2Npc?, pc : L2PcInstance?)
     initialize(quest, name, time, npc, pc, false)
   end
 
-  def initialize(qs : QuestState, name : String, time : Number)
+  def initialize(qs : QuestState, name : String, time : Int64)
     initialize(qs.quest, name, time, nil, qs.player, false)
   end
 
-  def initialize(quest : Quest, name : String, time : Number, npc : L2Npc?, player : L2PcInstance?, repeating : Bool)
+  def initialize(quest : Quest, name : String, time : Int64, npc : L2Npc?, player : L2PcInstance?, repeating : Bool)
     @quest = quest
     @name = name
     @npc = npc
     @player = player
     @repeating = repeating
-    @time = time.to_i64
+    @time = time
 
     if repeating
       @task = ThreadPoolManager.schedule_general_at_fixed_rate(self, @time, @time)

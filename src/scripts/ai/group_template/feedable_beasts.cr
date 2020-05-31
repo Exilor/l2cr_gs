@@ -418,7 +418,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     # prevent exploit which allows 2 players to simultaneously raise the same 0-growth beast
     # If the mob is at 0th level (when it still listens to all feeders) lock it to the first feeder!
     if growth_level == 0 && FEED_INFO.has_key?(l2id)
-      debug "growth level is 0 or FEED_INFO doesn't have key #{l2id}"
+      debug { "Growth level is 0 or FEED_INFO doesn't have key #{l2id}." }
       return super
     end
 

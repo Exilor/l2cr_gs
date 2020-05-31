@@ -50,7 +50,7 @@ module BypassHandler::NpcViewMod
         page = st.empty? ? 0 : st.shift.to_i
         send_npc_drop_list(pc, npc, scope, page)
       rescue e
-        warn "Bypass[NpcViewMod] unknown drop list scope: #{dls_str}"
+        warn { "Bypass[NpcViewMod] unknown drop list scope: " + dls_str }
         warn e
         return false
       end

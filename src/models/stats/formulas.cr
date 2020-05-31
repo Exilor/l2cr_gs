@@ -7,9 +7,9 @@ module Formulas
   extend Loggable
   include Packets::Outgoing
 
-  SHIELD_DEFENSE_FAILED = 0
-  SHIELD_DEFENSE_SUCCEED = 1
-  SHIELD_DEFENSE_PERFECT_BLOCK = 2
+  SHIELD_DEFENSE_FAILED = 0i8
+  SHIELD_DEFENSE_SUCCEED = 1i8
+  SHIELD_DEFENSE_PERFECT_BLOCK = 2i8
 
   {% for const in Stats.constants %}
     private {{const}} = Stats::{{const}}
@@ -203,7 +203,13 @@ module Formulas
     else
       init = char.template.base_mp_reg
     end
-    mp_regen_multiplier = char.raid? ? Config.raid_mp_regen_multiplier : Config.mp_regen_multiplier
+
+    if char.raid?
+      mp_regen_multiplier = Config.raid_mp_regen_multiplier
+    else
+      mp_regen_multiplier = Config.mp_regen_multiplier
+    end
+
     mp_regen_bonus = 0.0
 
     if pc = char.as?(L2PcInstance)
@@ -352,7 +358,7 @@ module Formulas
     magic_level = skill.magic_level
 
     if magic_level <= -1
-      magic_level = target.level + 3
+      magic_level = target.level &+ 3
     end
 
     case skill.basic_property
@@ -372,7 +378,7 @@ module Formulas
       target_base_stat = 0
     end
 
-    base_mod = ((((((magic_level - target.level) + 3) * skill.lvl_bonus_rate) + activate_rate) + 30.0) - target_base_stat).to_f
+    base_mod = ((((((magic_level &- target.level) &+ 3) * skill.lvl_bonus_rate) &+ activate_rate) + 30.0) - target_base_stat).to_f
     element_mod = attribute_bonus(attacker, target, skill)
     trait_mod = general_trait_bonus(attacker, target, skill.trait_type, false)
     buff_debuff_mod = 1 + (target.calc_stat(skill.debuff? ? DEBUFF_VULN : BUFF_VULN, 1) / 100)
@@ -484,8 +490,8 @@ module Formulas
     shld_rate = target.calc_stat(SHIELD_RATE, 0, attacker)
     shld_rate *= BaseStats::DEX.calc_bonus(target)
     return 0i8 if shld_rate <= 1e-6
-    degree_side = target.calc_stat(SHIELD_DEFENCE_ANGLE, 0) + 120
-    return 0i8 if degree_side < 360 && !target.facing?(attacker, degree_side.to_i)
+    degree_side = target.calc_stat(SHIELD_DEFENCE_ANGLE, 0).to_i &+ 120
+    return 0i8 if degree_side < 360 && !target.facing?(attacker, degree_side)
 
     shld_success = SHIELD_DEFENSE_FAILED
 
@@ -495,7 +501,7 @@ module Formulas
       shld_rate *= 1.3
     end
 
-    if shld_rate > 0 && (100 - Config.alt_perfect_shld_block) < Rnd.rand(100)
+    if shld_rate > 0 && (100 &- Config.alt_perfect_shld_block) < Rnd.rand(100)
       shld_success = SHIELD_DEFENSE_PERFECT_BLOCK
     elsif shld_rate > Rnd.rand(100)
       shld_success = SHIELD_DEFENSE_SUCCEED
@@ -512,7 +518,7 @@ module Formulas
       end
     end
 
-    shld_success.to_i8
+    shld_success
   end
 
   def crit(attacker : L2Character, target : L2Character) : Bool
@@ -575,17 +581,17 @@ module Formulas
     damage *= attribute_bonus(attacker, target, nil)
 
     if target.attackable?
-      if !target.raid? && !target.raid_minion? && target.level >= Config.min_npc_lvl_dmg_penalty && attacker.acting_player && target.level - attacker.acting_player.not_nil!.level >= 2
-        lvl_diff = target.level - attacker.acting_player.not_nil!.level - 1
+      if !target.raid? && !target.raid_minion? && target.level >= Config.min_npc_lvl_dmg_penalty && attacker.acting_player && target.level &- attacker.acting_player.not_nil!.level >= 2
+        lvl_diff = target.level &- attacker.acting_player.not_nil!.level &- 1
         if crit
           if lvl_diff >= Config.npc_crit_dmg_penalty.size
-            damage *= Config.npc_crit_dmg_penalty[Config.npc_crit_dmg_penalty.size - 1]
+            damage *= Config.npc_crit_dmg_penalty[Config.npc_crit_dmg_penalty.size &- 1]
           else
             damage *= Config.npc_crit_dmg_penalty[lvl_diff]
           end
         else
           if lvl_diff >= Config.npc_dmg_penalty.size
-            damage *= Config.npc_dmg_penalty[Config.npc_dmg_penalty.size - 1]
+            damage *= Config.npc_dmg_penalty[Config.npc_dmg_penalty.size &- 1]
           else
             damage *= Config.npc_dmg_penalty[lvl_diff]
           end
@@ -627,7 +633,7 @@ module Formulas
     damage = ((91 * Math.sqrt(matk)) / mdef) * power
     if Config.alt_game_magicfailures && !magic_success(attacker, target, skill)
       if attacker.player?
-        if magic_success(attacker, target, skill) && target.level - attacker.level <= 9
+        if magic_success(attacker, target, skill) && target.level &- attacker.level <= 9
           if skill.has_effect_type?(EffectType::HP_DRAIN)
             attacker.send_packet(SystemMessageId::DRAIN_HALF_SUCCESFUL)
           else
@@ -660,10 +666,10 @@ module Formulas
       if !target.raid? && !target.raid_minion?
         if target.level >= Config.min_npc_lvl_dmg_penalty
           if pc_attacker = attacker.acting_player
-            if target.level - pc_attacker.level >= 2
-              lvl_diff = target.level - pc_attacker.level - 1
+            if target.level &- pc_attacker.level >= 2
+              lvl_diff = target.level &- pc_attacker.level &- 1
               if lvl_diff >= Config.npc_skill_dmg_penalty.size
-                damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
+                damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size &- 1]
               else
                 damage *= Config.npc_skill_dmg_penalty[lvl_diff]
               end
@@ -693,7 +699,7 @@ module Formulas
     owner = attacker.owner
 
     if Config.alt_game_magicfailures && !magic_success(owner, target, skill)
-      if magic_success(owner, target, skill) && target.level - skill.magic_level <= 9
+      if magic_success(owner, target, skill) && target.level &- skill.magic_level <= 9
         if skill.has_effect_type?(EffectType::HP_DRAIN)
           owner.send_packet(SystemMessageId::DRAIN_HALF_SUCCESFUL)
         else
@@ -729,10 +735,10 @@ module Formulas
       damage *= attacker.owner.calc_stat(PVE_MAGICAL_DMG)
       if !target.raid? && !target.raid_minion?
         if target.level >= Config.min_npc_lvl_dmg_penalty
-          if target.level - owner.level >= 2
-            lvl_diff = target.level - owner.level - 1
+          if target.level &- owner.level >= 2
+            lvl_diff = target.level &- owner.level &- 1
             if lvl_diff >= Config.npc_skill_dmg_penalty.size
-              damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
+              damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size &- 1]
             else
               damage *= Config.npc_skill_dmg_penalty[lvl_diff]
             end
@@ -745,17 +751,17 @@ module Formulas
   end
 
   def magic_success(attacker : L2Character, target : L2Character, skill : Skill) : Bool
-    lvl_difference = target.level - (skill.magic_level > 0 ? skill.magic_level : attacker.level)
+    lvl_difference = target.level &- (skill.magic_level > 0 ? skill.magic_level : attacker.level)
     lvl_modifier = 1.3 ** lvl_difference
     target_modifier = 1.0
 
     if target.attackable? && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_magic_penalty
         if attacker_pc = attacker.acting_player
-          if target.level - attacker_pc.level >= 3
-            lvl_diff = target.level - attacker_pc.level - 2
+          if target.level &- attacker_pc.level >= 3
+            lvl_diff = target.level &- attacker_pc.level &- 2
             if lvl_diff >= Config.npc_skill_chance_penalty.size
-              target_modifier = Config.npc_skill_chance_penalty[Config.npc_skill_chance_penalty.size - 1]
+              target_modifier = Config.npc_skill_chance_penalty[Config.npc_skill_chance_penalty.size &- 1]
             else
               target_modifier = Config.npc_skill_chance_penalty[lvl_diff]
             end
@@ -1008,10 +1014,10 @@ module Formulas
       if !target.raid? && !target.raid_minion?
         if target.level >= Config.min_npc_lvl_dmg_penalty
           if pc_attacker = attacker.acting_player
-            if target.level - pc_attacker.level >= 2
-              lvl_diff = target.level - pc_attacker.level - 1
+            if target.level &- pc_attacker.level >= 2
+              lvl_diff = target.level &- pc_attacker.level &- 1
               if lvl_diff >= Config.npc_skill_dmg_penalty.size
-                damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
+                damage *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size &- 1]
               else
                 damage *= Config.npc_skill_dmg_penalty[lvl_diff]
               end
@@ -1134,10 +1140,10 @@ module Formulas
     penalty_mod = 1.0
     if target.is_a?(L2Attackable) && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_dmg_penalty
-        if (pc = attacker.acting_player) && target.level - pc.level >= 2
-          lvl_diff = target.level - pc.level - 1
+        if (pc = attacker.acting_player) && target.level &- pc.level >= 2
+          lvl_diff = target.level &- pc.level &- 1
           if lvl_diff >= Config.npc_skill_dmg_penalty.size
-            penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
+            penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size &- 1]
           else
             penalty_mod *= Config.npc_skill_dmg_penalty[lvl_diff]
           end
@@ -1219,7 +1225,7 @@ module Formulas
 
   def cancel_success(info : BuffInfo, cancel_magic_lvl : Int32, rate : Int32, skill : Skill) : Bool
     if info.skill.magic_level > 0
-      rate *= 1 + ((cancel_magic_lvl - info.skill.magic_level) / 100)
+      rate *= 1 + ((cancel_magic_lvl &- info.skill.magic_level) / 100)
     end
 
     Rnd.rand(100) < rate.clamp(skill.min_chance, skill.max_chance)
@@ -1259,7 +1265,7 @@ module Formulas
   def lvl_bonus_mod(attacker : L2Character, target : L2Character, skill : Skill) : Float64
     attacker_lvl = skill.magic_level > 0 ? skill.magic_level : attacker.level
     rate_mod = 1.0 + (skill.lvl_bonus_rate.fdiv 100)
-    lvl_mod = 1.0 + ((attacker_lvl - target.level).fdiv 100)
+    lvl_mod = 1.0 + ((attacker_lvl &- target.level).fdiv 100)
     rate_mod * lvl_mod
   end
 
@@ -1302,10 +1308,10 @@ module Formulas
     if target.attackable? && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_dmg_penalty
         if attacker.acting_player
-          if target.level - attacker.acting_player.not_nil!.level >= 2
-            lvl_diff = target.level - attacker.acting_player.not_nil!.level - 1
+          if target.level &- attacker.acting_player.not_nil!.level >= 2
+            lvl_diff = target.level &- attacker.acting_player.not_nil!.level &- 1
             if lvl_diff >= Config.npc_skill_dmg_penalty.size
-              penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
+              penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size &- 1]
             else
               penalty_mod *= Config.npc_skill_dmg_penalty[lvl_diff]
             end
@@ -1410,23 +1416,23 @@ module Formulas
     if target.is_a?(L2Attackable) && !target.raid? && !target.raid_minion?
       if target.level >= Config.min_npc_lvl_dmg_penalty
         if attacker.acting_player
-          if target.level - attacker.acting_player.not_nil!.level >= 2
-            lvl_diff = target.level - attacker.acting_player.not_nil!.level - 1
+          if target.level &- attacker.acting_player.not_nil!.level >= 2
+            lvl_diff = target.level &- attacker.acting_player.not_nil!.level &- 1
             if lvl_diff >= Config.npc_skill_dmg_penalty.size
-              penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size - 1]
+              penalty_mod *= Config.npc_skill_dmg_penalty[Config.npc_skill_dmg_penalty.size &- 1]
             else
               penalty_mod *= Config.npc_skill_dmg_penalty[lvl_diff]
             end
 
             if crit
               if lvl_diff >= Config.npc_crit_dmg_penalty.size
-                penalty_mod *= Config.npc_crit_dmg_penalty[Config.npc_crit_dmg_penalty.size - 1]
+                penalty_mod *= Config.npc_crit_dmg_penalty[Config.npc_crit_dmg_penalty.size &- 1]
               else
                 penalty_mod *= Config.npc_crit_dmg_penalty[lvl_diff]
               end
             else
               if lvl_diff >= Config.npc_dmg_penalty.size
-                penalty_mod *= Config.npc_dmg_penalty[Config.npc_dmg_penalty.size - 1]
+                penalty_mod *= Config.npc_dmg_penalty[Config.npc_dmg_penalty.size &- 1]
               else
                 penalty_mod *= Config.npc_dmg_penalty[lvl_diff]
               end

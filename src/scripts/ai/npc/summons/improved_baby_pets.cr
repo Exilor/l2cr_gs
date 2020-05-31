@@ -15,7 +15,6 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    debug "#on_adv_event: #{event}, #{npc}, #{pc}"
     if pc
       pet = pc.summon
       if pet.nil?
@@ -43,7 +42,6 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
         else
           # [automatically added else]
         end
-
       elsif event == "CAST_BUFF" && !pet.affected_by_skill?(BUFF_CONTROL)
         unless pet.hungry?
           buff_step = (((pet.level / 5) - 11).clamp(0, 3)).to_i

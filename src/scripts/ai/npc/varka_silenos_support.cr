@@ -48,7 +48,7 @@ class Scripts::VarkaSilenosSupport < AbstractNpcAI
 
   private def get_alliance_level(pc)
     i = VARKA_MARKS.index { |mark| has_quest_items?(pc, mark) }
-    i ? -(i + 1) : 0
+    i ? -(i &+ 1) : 0
   end
 
   def on_adv_event(event, npc, pc)

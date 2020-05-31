@@ -311,7 +311,7 @@ module SkillTreesData
       if (auto && skill.auto_get?) || skill.learned_by_npc? || (fs && skill.learned_by_fs?)
         if pc.level >= skill.get_level
           if old_skill = holder.get_known_skill(skill.skill_id)
-            if old_skill.level == skill.skill_level - 1
+            if old_skill.level == skill.skill_level &- 1
               result << skill
             end
           elsif skill.skill_level == 1
@@ -377,7 +377,7 @@ module SkillTreesData
 
       if skill.learned_by_npc? && pc.level >= skill.get_level
         if old_skill = pc.skills[skill.skill_id]?
-          if old_skill.level == skill.skill_level - 1
+          if old_skill.level == skill.skill_level &- 1
             result << skill
           end
         elsif skill.skill_level == 1
@@ -394,7 +394,7 @@ module SkillTreesData
 
     COLLECT_SKILL_TREE.each_value do |skill|
       if old_skill = pc.skills[skill.skill_id]?
-        if old_skill.level == skill.skill_level - 1
+        if old_skill.level == skill.skill_level &- 1
           result << skill
         end
       elsif skill.skill_level == 1
@@ -433,7 +433,7 @@ module SkillTreesData
     TRANSFORM_SKILL_TREE.each_value do |skill|
       if pc.level >= skill.get_level && skill.races.empty? || skill.races.includes?(race)
         if old_skill = pc.skills[skill.skill_id]?
-          if old_skill.level == skill.skill_level - 1
+          if old_skill.level == skill.skill_level &- 1
             result << skill
           end
         elsif skill.skill_level == 1
@@ -451,7 +451,7 @@ module SkillTreesData
     PLEDGE_SKILL_TREE.each_value do |skill|
       if !skill.residencial_skill? && clan.level >= skill.get_level
         if old_skill = clan.skills[skill.skill_id]?
-          if old_skill.level + 1 == skill.skill_level
+          if old_skill.level &+ 1 == skill.skill_level
             result << skill
           end
         elsif skill.skill_level == 1
@@ -505,10 +505,10 @@ module SkillTreesData
           subclass_conds = skill.subclass_conditions
           unless subclass_conds.empty?
             if subclass.class_index <= subclass_conds.size
-              if subclass.class_index == subclass_conds[subclass.class_index - 1].slot
-                if subclass_conds[subclass.class_index - 1].lvl <= subclass.level
+              if subclass.class_index == subclass_conds[subclass.class_index &- 1].slot
+                if subclass_conds[subclass.class_index &- 1].lvl <= subclass.level
                   if old_skill = pc.skills[skill.skill_id]?
-                    if old_skill.level == skill.skill_level - 1
+                    if old_skill.level == skill.skill_level &- 1
                       result << skill
                     end
                   elsif skill.skill_level == 1
@@ -659,22 +659,22 @@ module SkillTreesData
 
   private def report
     class_skill_tree_count = 0
-    CLASS_SKILL_TREES.each_value { |tree| class_skill_tree_count += tree.size }
+    CLASS_SKILL_TREES.each_value { |tree| class_skill_tree_count &+= tree.size }
 
     transfer_skill_tree_count = 0
-    TRANSFER_SKILL_TREES.each_value { |tree| transfer_skill_tree_count += tree.size }
+    TRANSFER_SKILL_TREES.each_value { |tree| transfer_skill_tree_count &+= tree.size }
 
     dw_fish_skill_tree_count = 0
     FISHING_SKILL_TREE.each_value do |skill|
       if skill.races.includes?(Race::DWARF)
-        dw_fish_skill_tree_count += 1
+        dw_fish_skill_tree_count &+= 1
       end
     end
 
     res_skill_count = 0
     PLEDGE_SKILL_TREE.each_value do |skill|
       if skill.residencial_skill?
-        res_skill_count += 1
+        res_skill_count &+= 1
       end
     end
 
@@ -683,7 +683,7 @@ module SkillTreesData
     info { "Loaded #{transfer_skill_tree_count} Transfer Skills for #{TRANSFER_SKILL_TREES.size} Transfer Skill Trees." }
     info { "Loaded #{FISHING_SKILL_TREE.size} Fishing Skills, #{dw_fish_skill_tree_count} Dwarven only Fishing Skills." }
     info { "Loaded #{COLLECT_SKILL_TREE.size} Collect Skills." }
-    info { "Loaded #{PLEDGE_SKILL_TREE.size} Pledge Skills, #{PLEDGE_SKILL_TREE.size - res_skill_count} for Pledge and #{res_skill_count} Residential." }
+    info { "Loaded #{PLEDGE_SKILL_TREE.size} Pledge Skills, #{PLEDGE_SKILL_TREE.size &- res_skill_count} for Pledge and #{res_skill_count} Residential." }
     info { "Loaded #{SUBPLEDGE_SKILL_TREE.size} Subpledge Skills." }
     info { "Loaded #{TRANSFORM_SKILL_TREE.size} Transform Skills." }
     info { "Loaded #{NOBLE_SKILL_TREE.size} Noble Skills." }

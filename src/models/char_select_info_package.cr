@@ -37,11 +37,11 @@ class CharSelectInfoPackage
     @paperdoll = PcInventory.restore_visible_inventory(l2id)
   end
 
-  def get_paperdoll_l2id(slot : Int) : Int32
+  def get_paperdoll_l2id(slot : Int32) : Int32
     @paperdoll[slot][0]
   end
 
-  def get_paperdoll_item_id(slot : Int) : Int32
+  def get_paperdoll_item_id(slot : Int32) : Int32
     @paperdoll[slot][1]
   end
 

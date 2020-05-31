@@ -22,7 +22,7 @@ module EnchantSkillGroupsData
 
     routes = 0
     ENCHANT_SKILL_GROUPS.each_value do |group|
-      routes += group.enchant_group_details.size
+      routes &+= group.enchant_group_details.size
     end
 
     info { "Loaded #{ENCHANT_SKILL_GROUPS.size} groups and #{routes} routes in #{timer} s." }

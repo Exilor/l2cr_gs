@@ -24,7 +24,7 @@ class Packets::Outgoing::ExShowFortressMapInfo < GameServerPacket
       when 4
         count = 0
         commanders.each do |sp|
-          count += 1
+          count &+= 1
           if count == 4
             d 1
           end
@@ -37,7 +37,6 @@ class Packets::Outgoing::ExShowFortressMapInfo < GameServerPacket
       else
         # [automatically added else]
       end
-
     else
       @fort.fort_size.times do
         d 0

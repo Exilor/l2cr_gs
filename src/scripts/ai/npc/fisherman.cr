@@ -51,7 +51,6 @@ class Scripts::Fisherman < AbstractNpcAI
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -70,7 +69,7 @@ class Scripts::Fisherman < AbstractNpcAI
 
     skills.each do |s|
       if SkillData[s.skill_id, s.skill_level]?
-        count += 1
+        count &+= 1
         asl.add_skill(s.skill_id, s.skill_level, s.skill_level, s.level_up_sp, 1)
       end
     end

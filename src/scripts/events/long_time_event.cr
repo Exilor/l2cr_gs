@@ -15,8 +15,8 @@ class LongTimeEvent < Quest
   getter event_period = DateRange.new
   protected getter end_message = "Event ends!"
 
-  def initialize(name, descr)
-    super(-1, name, descr)
+  def initialize(name, description)
+    super(-1, name, description)
 
     begin
       parse_datapack_file("scripts/events/#{name}/config.xml")

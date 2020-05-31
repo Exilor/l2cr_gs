@@ -28,10 +28,10 @@ module AdminCommandHandler::AdminDebug
   private def set_debug(pc, target)
     if target.debugger?
       target.debugger = nil
-      pc.send_message("Stopped debugging #{target.name}")
+      pc.send_message("Stopped debugging " + target.name)
     else
       target.debugger = pc
-      pc.send_message("Started debugging #{target.name}")
+      pc.send_message("Started debugging " + target.name)
     end
   end
 

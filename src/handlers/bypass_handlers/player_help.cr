@@ -16,7 +16,7 @@ module BypassHandler::PlayerHelp
       html = NpcHtmlMessage.new
     end
 
-    html.set_file(pc, "data/html/help/#{st[0]}")
+    html.set_file(pc, "data/html/help/" + st[0])
     pc.send_packet(html)
 
     true

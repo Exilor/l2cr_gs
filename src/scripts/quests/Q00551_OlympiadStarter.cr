@@ -149,8 +149,8 @@ class Scripts::Q00551_OlympiadStarter < Quest
     elsif st.started?
       if st.memo_state?(1)
         count = st.get_quest_items_count(CERT_3)
-        count += st.get_quest_items_count(CERT_5)
-        count += st.get_quest_items_count(CERT_10)
+        count &+= st.get_quest_items_count(CERT_5)
+        count &+= st.get_quest_items_count(CERT_10)
 
         if count > 0
           html = "31688-07.html"

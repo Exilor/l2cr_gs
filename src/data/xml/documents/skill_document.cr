@@ -116,9 +116,9 @@ class SkillDocument < AbstractDocument
     1.upto(last_level) do |i|
       find_element(n, "set") do |n|
         if parse_string(n, "name").casecmp?("capsuled_items_skill")
-          set_extractable_skill_data(current_skill.sets[i - 1], get_table_value("#extractableItems", i))
+          set_extractable_skill_data(current_skill.sets[i &- 1], get_table_value("#extractableItems", i))
         else
-          parse_set(n, current_skill.sets[i - 1], i)
+          parse_set(n, current_skill.sets[i &- 1], i)
         end
       end
     end

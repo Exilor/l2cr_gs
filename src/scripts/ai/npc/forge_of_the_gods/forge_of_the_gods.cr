@@ -68,14 +68,13 @@ class Scripts::ForgeOfTheGods < AbstractNpcAI
       # [automatically added else]
     end
 
-
     nil
   end
 
   def on_kill(npc, killer, is_summon)
     rand = Rnd.rand(100)
     mob = nil
-    @npc_count += 1
+    @npc_count &+= 1
 
     # For monsters at Forge of the Gods - Lower level
     if npc.spawn.z < -5000 # && (_npcsAlive < 48))

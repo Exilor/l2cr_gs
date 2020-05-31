@@ -533,7 +533,7 @@ class Scripts::Beleth < AbstractNpcAI
     elsif npc.l2id == @allowed_l2id
       delete_all
 
-      @killed_count += 1
+      @killed_count &+= 1
       if @killed_count >= 5
         start_quest_timer("SPAWN_REAL", 60000, nil, nil)
       else

@@ -2,7 +2,6 @@ module GameDB
   module PlayerSkillSaveDAOMySQLImpl
     extend self
     extend PlayerSkillSaveDAO
-    extend Loggable
 
     private INSERT = "INSERT INTO character_skills_save (charId,skill_id,skill_level,remaining_time,reuse_delay,systime,restore_type,class_index,buff_index) VALUES (?,?,?,?,?,?,?,?,?)"
     private SELECT = "SELECT skill_id,skill_level,remaining_time, reuse_delay, systime, restore_type FROM character_skills_save WHERE charId=? AND class_index=? ORDER BY buff_index ASC"
@@ -18,7 +17,7 @@ module GameDB
       delete(pc, pc.class_index)
     end
 
-    def insert(pc, store_effects : Bool)
+    def insert(pc : L2PcInstance, store_effects : Bool)
       buff_index = 0
       stored_skills = [] of Int32
 
@@ -44,7 +43,7 @@ module GameDB
           stored_skills << skill.hash
 
           t = pc.get_skill_reuse_time_stamp(skill.hash)
-          buff_index += 1
+          buff_index &+= 1
           GameDB.exec(
             INSERT,
             pc.l2id,
@@ -67,7 +66,7 @@ module GameDB
           end
 
           if t.has_not_passed?
-            buff_index += 1
+            buff_index &+= 1
             stored_skills << hash
 
             GameDB.exec(

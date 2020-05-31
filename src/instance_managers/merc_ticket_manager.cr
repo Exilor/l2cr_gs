@@ -65,14 +65,14 @@ module MercTicketManager
       y = rs.get_i32(:"y")
       z = rs.get_i32(:"z")
       if castle = CastleManager.get_castle(x, y, z)
-        if merc_placed[castle.residence_id - 1] >= MERCS_MAX_PER_CASTLE[castle.residence_id - 1]
+        if merc_placed[castle.residence_id &- 1] >= MERCS_MAX_PER_CASTLE[castle.residence_id &- 1]
           next
         end
-        start_index = GUARDIAN_TYPES_COUNT * (castle.residence_id - 1)
-        merc_placed[castle.residence_id - 1] += 1
+        start_index = GUARDIAN_TYPES_COUNT &* (castle.residence_id &- 1)
+        merc_placed[castle.residence_id &- 1] &+= 1
       end
 
-      start_index.upto(start_index + GUARDIAN_TYPES_COUNT - 1) do |i|
+      start_index.upto(start_index &+ GUARDIAN_TYPES_COUNT &- 1) do |i|
         if NPC_IDS[i] == npc_id
           if castle && !castle.siege.in_progress?
             item_id = ITEM_IDS[i]
@@ -97,14 +97,14 @@ module MercTicketManager
     9.times do |i|
       i2 = 0
       while i2 < 50
-        if item_id >= ITEM_IDS[i2 + (i * GUARDIAN_TYPES_COUNT)] && item_id <= ITEM_IDS[i2 + 9 + (i * GUARDIAN_TYPES_COUNT)]
-          return i + 1
+        if item_id >= ITEM_IDS[i2 + (i * GUARDIAN_TYPES_COUNT)] && item_id <= ITEM_IDS[i2 &+ 9 &+ (i &* GUARDIAN_TYPES_COUNT)]
+          return i &+ 1
         end
         i2 += 10
       end
 
       if item_id >= ITEM_IDS[50] && item_id <= ITEM_IDS[51]
-        return i + 1
+        return i &+ 1
       end
     end
 
@@ -134,7 +134,7 @@ module MercTicketManager
       return true
     end
 
-    limit = MERCS_MAX_PER_CASTLE[castle_id - 1]
+    limit = MERCS_MAX_PER_CASTLE[castle_id &- 1]
     if limit <= 0
       return true
     end
@@ -147,7 +147,7 @@ module MercTicketManager
   end
 
   def get_max_allowed_merc(castle_id : Int32) : Int32
-    MERCS_MAX_PER_CASTLE[castle_id - 1]
+    MERCS_MAX_PER_CASTLE[castle_id &- 1]
   end
 
   def too_close_to_another_ticket?(x : Int32, y : Int32, z : Int32) : Bool

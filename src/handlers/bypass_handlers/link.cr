@@ -15,7 +15,7 @@ module BypassHandler::Link
       return false
     end
 
-    file_name = "data/html/#{html_path}"
+    file_name = "data/html/" + html_path
     l2id = target.try &.l2id || 0
     html = NpcHtmlMessage.new(l2id)
     html.set_file(pc, file_name)

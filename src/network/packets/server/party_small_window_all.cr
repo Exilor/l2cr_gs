@@ -7,9 +7,8 @@ class Packets::Outgoing::PartySmallWindowAll < GameServerPacket
     d @party.leader_l2id
     d @party.distribution_type.to_i
     d @party.size - 1
-    debug "Sending info to #{@newcomer} of party #{@party} whose leader is #{@party.leader}"
+
     @party.each do |m|
-      debug "m == newcomer: #{m == @newcomer} (m: #{m}, newcomer: #{@newcomer})"
       next if m == @newcomer
 
       d m.l2id
@@ -30,7 +29,7 @@ class Packets::Outgoing::PartySmallWindowAll < GameServerPacket
 
       if summon = m.summon
         d summon.l2id
-        d summon.id + 1000000
+        d summon.id + 1_000_000
         d summon.summon_type
         s summon.name
 

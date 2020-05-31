@@ -76,10 +76,10 @@ class TaskExecutor
         l = 0
         u = @values.size
         while l < u
-          m = l + ((u - l) // 2)
+          m = l &+ ((u &- l) // 2)
 
           if @values.unsafe_fetch(m) >= val
-            l = m + 1
+            l = m &+ 1
           else
             u = m
           end

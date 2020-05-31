@@ -82,7 +82,6 @@ class L2CubicInstance
       # [automatically added else]
     end
 
-
     task = CubicDisappear.new(self)
     @disappear_task = ThreadPoolManager.schedule_general(task, @cubic_duration * 1000)
   end
@@ -127,7 +126,17 @@ class L2CubicInstance
     @target = nil
     return unless owner_target = @owner.target
 
-    # TODO: tvt event check
+    if TvTEvent.started? && TvTEvent.participant?(@owner.l2id)
+      if enemy_team = TvTEvent.get_participant_enemy_team(@owner.l2id)
+        if target = owner_target.acting_player
+          if enemy_team.contains_player?(target.l2id) && target.alive?
+            @target = owner_target.as(L2Character)
+          end
+        end
+      end
+
+      return
+    end
 
     if @owner.in_duel? && (duel = DuelManager.get_duel(@owner.duel_id))
       player_a = duel.team_leader_a

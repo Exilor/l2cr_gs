@@ -64,7 +64,7 @@ class Scripts::GrandBossTeleporters < AbstractNpcAI
             z = TELEPORT_INTO_VALAKAS_LAIR.z
             pc.tele_to_location(x, y, z)
 
-            @player_count += 1
+            @player_count &+= 1
 
             if status == 0
               valakas = GrandBossManager.get_boss(29028)

@@ -1,5 +1,5 @@
-# arithmetic overflow in case statement if UInt8
-enum ListenerRegisterType# : UInt8
+# has thrown arithmetic overflow in case statement if UInt8 in multithreaded mode
+enum ListenerRegisterType : UInt8
   NPC
   ZONE
   ITEM

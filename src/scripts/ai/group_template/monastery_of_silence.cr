@@ -132,7 +132,6 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
   end
 
   def on_aggro_range_enter(npc, pc, is_summon)
-    debug { "#on_aggro_range_enter: #{npc}, #{pc}, #{is_summon}" }
     if pc.active_weapon_instance
       skill = nil
       case npc.id
@@ -177,7 +176,6 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
   end
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
-    debug { "#on_skill_see: #{npc}, #{caster}, #{skill}, #{targets}, #{is_summon}" }
     if skill.has_effect_type?(EffectType::AGGRESSION)
       targets.each do |obj|
         if obj == npc

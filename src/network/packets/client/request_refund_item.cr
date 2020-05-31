@@ -70,7 +70,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
         return
       end
 
-      (i + 1...items.size).each do |j|
+      (i &+ 1...items.size).each do |j|
         if idx == items[j]
           warn { "Duplicated refund index #{idx}, #{items[j]}." }
           Util.punish(pc, "sent a duplicate refund index.")

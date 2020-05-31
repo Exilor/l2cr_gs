@@ -44,7 +44,7 @@ class L2PetData
             lvl = 1
           end
         else
-          lvl = 7 + ((pet_lvl - 70) // 5)
+          lvl = 7 &+ ((pet_lvl &- 70) // 5)
         end
 
         max_lvl = SkillData.get_max_level(sk.skill_id)

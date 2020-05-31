@@ -39,7 +39,7 @@ module ZoneManager
     L2World.world_regions.each do |reg|
       reg.each do |r|
         r.zones.clear
-        count += 1
+        count &+= 1
       end
     end
 
@@ -177,7 +177,7 @@ module ZoneManager
         # when "L2WaterZone" then L2WaterZone
         # end
 
-        constructor_name = "L2#{zone_type}"
+        constructor_name = "L2" + zone_type
         constructor = nil
         {% begin %}
           case constructor_name

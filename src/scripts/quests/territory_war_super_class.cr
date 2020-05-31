@@ -14,7 +14,7 @@ class TerritoryWarSuperClass < Quest
   protected getter territory_id = 0
   protected getter class_ids = [] of Int32
 
-  def initialize(quest_id : Int32, name : String, descr : String)
+  def initialize(quest_id : Int32, name : String, description : String)
     super
 
     if quest_id < 0

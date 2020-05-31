@@ -208,7 +208,7 @@ class Skill
         raise "Wrong size for extractable skill info: #{prod_data.size}"
       end
       chance = 0.0
-      length = prod_data.size - 1
+      length = prod_data.size &- 1
       items = [] of ItemHolder
       (0...length).step(2) do |j|
         prod_id = prod_data[j].to_i
@@ -270,7 +270,7 @@ class Skill
 
   def affect_limit : Int32
     lim1 = @affect_limit[1]
-    lim1 == 0 ? @affect_limit[0] : @affect_limit[0] + Rnd.rand(lim1)
+    lim1 == 0 ? @affect_limit[0] : @affect_limit[0] &+ Rnd.rand(lim1)
   end
 
   def continuous? : Bool
@@ -428,7 +428,7 @@ class Skill
         end
       end
     else
-      if !target_player && target.is_a?(L2Attackable)
+      if target_player.nil? && target.is_a?(L2Attackable)
         if caster.is_a?(L2Attackable)
           return false
         end

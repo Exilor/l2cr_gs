@@ -21,7 +21,7 @@ class L2ChestInstance < L2MonsterInstance
     @must_reward_exp_sp = true
   end
 
-  def do_item_drop(template : L2NpcTemplate, last_attacker : L2Character?)
+  def do_item_drop(template : L2NpcTemplate, killer : L2Character?)
     id = template().id
 
     unless @special_drop
@@ -43,10 +43,9 @@ class L2ChestInstance < L2MonsterInstance
       else
         # [automatically added else]
       end
-
     end
 
-    super(NpcData[id], last_attacker)
+    super(NpcData[id], killer)
   end
 
   def movement_disabled? : Bool

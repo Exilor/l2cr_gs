@@ -31,7 +31,7 @@ module AdminCommandHandler::AdminSiege
     command = st.shift
 
     # Get castle
-    if st.any?
+    if !st.empty?
       player = pc.target.as?(L2PcInstance)
       val = st.shift
 

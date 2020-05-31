@@ -188,12 +188,12 @@ abstract class L2Character < L2Object
 
   def broadcast_packet(gsp : GameServerPacket)
     gsp.invisible = invisible?
-    known_list.known_players.each_value &.send_packet(gsp)
+    known_list.each_player &.send_packet(gsp)
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Number)
     gsp.invisible = invisible?
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       if inside_radius?(pc, radius, false, false)
         pc.send_packet(gsp)
       end
@@ -920,7 +920,7 @@ abstract class L2Character < L2Object
       end
     elsif me.is_a?(L2Npc)
       if broadcast_full
-        known_list.known_players.each_value do |pc|
+        known_list.each_player do |pc|
           if visible_for?(pc)
             if run_speed == 0
               pc.send_packet(ServerObjectInfo.new(me, pc))
@@ -1006,7 +1006,7 @@ abstract class L2Character < L2Object
     when L2Summon
       me.broadcast_status_update
     when L2Npc
-      known_list.known_players.each_value do |pc|
+      known_list.each_player do |pc|
         if visible_for?(pc)
           if run_speed == 0
             op = ServerObjectInfo.new(me, pc)
@@ -1547,7 +1547,7 @@ abstract class L2Character < L2Object
     call_skill(mut.skill, mut.targets)
 
     if mut.skill_time > 0
-      mut.count += 1
+      mut.count &+= 1
     end
 
     mut.phase = 3
@@ -1720,7 +1720,7 @@ abstract class L2Character < L2Object
         end
       end
 
-      player.known_list.known_objects.each_value do |mob|
+      player.known_list.each_object do |mob|
         if mob.is_a?(L2Npc)
           if mob.inside_radius?(player, 1000, true, true)
             OnNpcSkillSee.new(mob, player, skill, targets, summon?).async(mob)
@@ -2762,7 +2762,7 @@ abstract class L2Character < L2Object
     z = z()
     me = self
 
-    known_list.known_objects.each_value do |obj|
+    known_list.each_object do |obj|
       next unless obj.is_a?(L2Character)
       next if obj == target
       next if me.is_a?(L2PetInstance) && me.owner == self
@@ -3788,7 +3788,7 @@ abstract class L2Character < L2Object
               return
             end
             (m.geo_path.size - 1).times do |i|
-              if DoorData.check_if_doors_between(m.geo_path[i], m.geo_path[i + 1], instance_id)
+              if DoorData.check_if_doors_between(m.geo_path[i], m.geo_path[i &+ 1], instance_id)
                 m.geo_path = nil
                 set_intention(AI::IDLE)
                 return
@@ -3871,7 +3871,7 @@ abstract class L2Character < L2Object
 
     route_point = md.geo_path[m.on_geodata_path_index]
 
-    if md.on_geodata_path_index == md.geo_path.size - 2
+    if md.on_geodata_path_index == md.geo_path.size &- 2
       m.x_destination = md.geo_path_accurate_tx
       m.y_destination = md.geo_path_accurate_ty
     else

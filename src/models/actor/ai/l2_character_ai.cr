@@ -151,7 +151,7 @@ class L2CharacterAI < AI
 
     if object.is_a?(L2ItemInstance)
       unless object.item_location.void?
-        debug { "#{object}'s item_location is not VOID (#{object.item_location})." }
+        debug { "#{object}'s item_location should be VOID not #{object.item_location}." }
         return
       end
     end
@@ -387,7 +387,6 @@ class L2CharacterAI < AI
 
   private def maybe_move_to_position(loc : Location?, offset : Int32) : Bool
     unless loc
-      warn "L2CharacterAI#maybe_move_to_position: given loc is nil."
       return false
     end
 
@@ -437,7 +436,6 @@ class L2CharacterAI < AI
 
   private def maybe_move_to_pawn(target : L2Object?, offset : Int32) : Bool
     unless target
-      warn "L2CharacterAI#maybe_move_to_pawn: given target is nil."
       return false
     end
 
@@ -633,9 +631,9 @@ class L2CharacterAI < AI
         next unless GeoData.can_see_target?(@actor, target)
 
         if target.in_my_clan?(@actor.as(L2Npc))
-          count += 1
+          count &+= 1
           if target.affected_by_skill?(sk.id)
-            count2 += 1
+            count2 &+= 1
           end
         end
       end

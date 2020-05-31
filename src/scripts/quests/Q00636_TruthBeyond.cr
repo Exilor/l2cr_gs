@@ -31,7 +31,6 @@ class Scripts::Q00636_TruthBeyond < Quest
   end
 
   def on_enter_zone(char, zone)
-    debug "on_enter_zone(char: #{char}, zone: #{zone})"
     if char.is_a?(L2PcInstance)
       if char.destroy_item_by_item_id("Mark", VISITOR_MARK, 1, char, false)
         char.add_item("Mark", FADED_MARK, 1, char, true)

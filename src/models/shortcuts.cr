@@ -17,7 +17,7 @@ struct Shortcuts
   end
 
   def get_shortcut(slot : Int32, page : Int32) : Shortcut?
-    @shortcuts[slot + (page * MAX_SHORTCUTS_PER_BAR)]?
+    @shortcuts[slot &+ (page &* MAX_SHORTCUTS_PER_BAR)]?
   end
 
   def register_shortcut(shortcut : Shortcut)
@@ -57,7 +57,7 @@ struct Shortcuts
 
   def delete_shortcut(slot : Int32, page : Int32)
     sync do
-      old = @shortcuts.delete(slot + (page * MAX_SHORTCUTS_PER_BAR))
+      old = @shortcuts.delete(slot &+ (page &* MAX_SHORTCUTS_PER_BAR))
       return unless old
       delete_shortcut_from_db(old)
       @owner.send_packet(Packets::Outgoing::ShortcutInit.new(@owner))
@@ -98,7 +98,7 @@ struct Shortcuts
       level = rs.get_i32(:"level")
 
       shortcut = Shortcut.new(slot, page, ShortcutType[type], id, level, 1)
-      @shortcuts[slot + (page * MAX_SHORTCUTS_PER_BAR)] = shortcut
+      @shortcuts[slot &+ (page &* MAX_SHORTCUTS_PER_BAR)] = shortcut
     end
   rescue e
     error e

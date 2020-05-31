@@ -46,7 +46,8 @@ class BuffInfo
     ((GameTimer.ticks - @period_start_ticks) // GameTimer::TICKS_PER_SECOND)
   end
 
-  def stop_all_effects(@removed : Bool)
+  def stop_all_effects(removed : Bool)
+    @removed = removed
     if task = @task
       task.cancel unless task.cancelled?
     end

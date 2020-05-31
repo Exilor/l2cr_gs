@@ -179,7 +179,7 @@ class PlayerClass < EnumClass
     Spellhowler => EnumSet.new({Sorceror, Spellsinger, Spellhowler})
   }
 
-  private delegate get_set, to: self.class
+  private delegate get_set, to: PlayerClass
 
   def get_available_subclasses(pc : L2PcInstance) : EnumSet(PlayerClass)?
     subclasses = nil

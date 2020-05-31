@@ -1,7 +1,9 @@
 class L2EffectPointInstance < L2Npc
   @owner : L2PcInstance?
 
-  def initialize(template : L2NpcTemplate, @owner : L2PcInstance)
+  def initialize(template : L2NpcTemplate, owner : L2PcInstance)
+    @owner = owner
+
     super(template)
 
     self.invul = false

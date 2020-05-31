@@ -84,7 +84,7 @@ module InitialShortcutData
         end
 
         commands << MacroCMD.new(entry, type, d1, d2, cmd)
-        entry += 1
+        entry &+= 1
       end
 
       mcr = Macro.new(macro_id, icon, name, description, acronym, commands)

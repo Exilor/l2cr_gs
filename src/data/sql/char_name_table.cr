@@ -20,7 +20,7 @@ module CharNameTable
       lvl = rs.read(Int32)
       CHARS[id] = name
       ACCESS_LEVELS[id] = lvl
-      count += 1
+      count &+= 1
     end
     info { "Loaded #{count} names in #{timer} s." }
   end
@@ -137,7 +137,7 @@ module CharNameTable
     if ret.is_a?(Number)
       ret.to_i32
     else
-      warn { "#{ret} is not a number, it's a #{ret.class}" }
+      warn { "#{ret} is not a number, it's a #{ret.class}." }
       0
     end
   end

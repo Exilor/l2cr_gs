@@ -25,7 +25,7 @@ module SpawnTable
 
       if Config.custom_spawnlist_table
         fill_spawn_table(true)
-        info { "Loaded #{SPAWN_TABLE.size - spawn_count} custom NPC spawns in #{timer} s." }
+        info { "Loaded #{SPAWN_TABLE.size &- spawn_count} custom NPC spawns in #{timer} s." }
         timer.start
       end
 
@@ -58,7 +58,7 @@ module SpawnTable
       dat["periodOfDay"] = rs.get_i32(:"periodOfDay")
       dat["isCustomSpawn"] = is_custom
 
-      spawn_count += add_spawn(dat)
+      spawn_count &+= add_spawn(dat)
     end
 
     spawn_count
@@ -101,7 +101,7 @@ module SpawnTable
 
     case data.get_i32("periodOfDay", 0)
     when 0 # default
-      ret += sp.init
+      ret &+= sp.init
     when 1 # day
       DayNightSpawnManager.add_day_creature(sp)
       ret = 1
@@ -264,13 +264,13 @@ module SpawnTable
 
             if val = parse_string(npctag, "periodOfDay", nil)
               if val.casecmp?("day")
-                spawn_info["periodOfDay"] =  1
+                spawn_info["periodOfDay"] = 1
               elsif val.casecmp?("night")
                 spawn_info["periodOfDay"] = 2
               end
             end
 
-            @@xml_spawn_count += add_spawn(spawn_info, map)
+            @@xml_spawn_count &+= add_spawn(spawn_info, map)
           end
         end
       end

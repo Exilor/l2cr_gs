@@ -118,7 +118,7 @@ class PcStat < PlayableStat
     end
 
     if pc.mounted?
-      if pc.mount_level - pc.level >= 10
+      if pc.mount_level &- pc.level >= 10
         val /= 2
       end
 
@@ -139,7 +139,7 @@ class PcStat < PlayableStat
     end
 
     if pc.mounted?
-      if pc.mount_level - pc.level >= 10
+      if pc.mount_level &- pc.level >= 10
         val /= 2
       end
 

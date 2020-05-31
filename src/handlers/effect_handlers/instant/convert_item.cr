@@ -24,7 +24,7 @@ class EffectHandler::ConvertItem < AbstractEffect
     count = 0
     unequipped.each do |item|
       unless item.weapon?
-        count += 1
+        count &+= 1
         next
       end
 

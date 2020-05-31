@@ -18,7 +18,7 @@ class Packets::Outgoing::SendMacroList < GameServerPacket
       c mcr.commands.size
 
       mcr.commands.each_with_index do |command, i|
-        c i + 1
+        c i &+ 1
         c command.type.to_i
         d command.d1
         c command.d2

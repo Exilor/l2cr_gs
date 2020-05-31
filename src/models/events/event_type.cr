@@ -45,9 +45,10 @@ class EventType
     initializer npc : L2Npc, active_char : L2PcInstance, summon : Bool
   end
   def_event(ON_ATTACKABLE_ATTACK, OnAttackableAttack) do
-    getter target, damage, skill, attacker
+    getter target, damage, skill
+    getter! attacker
     getter? summon
-    initializer attacker : L2PcInstance, target : L2Attackable, damage : Int32,
+    initializer attacker : L2PcInstance?, target : L2Attackable, damage : Int32,
       skill : Skill?, summon : Bool
   end
   def_event(ON_ATTACKABLE_FACTION_CALL, OnAttackableFactionCall) do
@@ -57,9 +58,10 @@ class EventType
       summon : Bool
   end
   def_event(ON_ATTACKABLE_KILL, OnAttackableKill) do
-    getter target, attacker
+    getter target
+    getter! attacker
     getter? summon
-    initializer attacker : L2PcInstance, target : L2Attackable, summon : Bool
+    initializer attacker : L2PcInstance?, target : L2Attackable, summon : Bool
   end
   # Castle events
   def_event(ON_CASTLE_SIEGE_FINISH, OnCastleSiegeFinish) do
@@ -141,7 +143,7 @@ class EventType
   end
   def_event(ON_ITEM_CREATE, OnItemCreate) do
     getter_initializer process : String?, item : L2ItemInstance,
-      active_char : L2PcInstance?, reference : String | L2Object? # reference should be Object
+      active_char : L2PcInstance?, reference : String | L2Object?
   end
   def_event(ON_ITEM_TALK, OnItemTalk) do
     getter_initializer item : L2ItemInstance, active_char : L2PcInstance

@@ -13,7 +13,7 @@ class ClassId < EnumClass
   end
 
   def level : Int32
-    (parent = @parent) ? parent.level + 1 : 0
+    (parent = @parent) ? parent.level &+ 1 : 0
   end
 
   def child_of?(other : self) : Bool

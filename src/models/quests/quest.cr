@@ -18,11 +18,15 @@ class Quest < AbstractScript
   @quest_timers : Interfaces::Map(String, Array(QuestTimer))?
   @start_condition : Hash(Proc(L2PcInstance, Bool), String)?
 
-  getter name, descr
+  getter name, description
   getter initial_state = State::CREATED
   property? custom : Bool = false
 
-  def initialize(@quest_id : Int32, @name : String, @descr : String)
+  def initialize(quest_id : Int32, name : String, description : String)
+    @quest_id = quest_id
+    @name = name
+    @description = description
+
     super()
 
     if quest_id > 0
@@ -714,7 +718,7 @@ class Quest < AbstractScript
 
   def self.get_no_quest_msg(pc : L2PcInstance) : String
     result = HtmCache.get_htm(pc, "data/html/noquest.htm")
-    if result && result.size > 0
+    if result && !result.empty?
       return result
     end
 
@@ -957,12 +961,12 @@ class Quest < AbstractScript
     if file_name.starts_with?("data/")
       path = file_name
     else
-      path = "data/scripts/#{descr.downcase}/#{name}/#{file_name}"
+      path = "data/scripts/#{description.downcase}/#{name}/#{file_name}"
     end
     # debug "First try: #{path.inspect}."
     content = HtmCache.get_htm(path)
     unless content
-      path = "data/scripts/#{descr}/#{name}/#{file_name}"
+      path = "data/scripts/#{description}/#{name}/#{file_name}"
       # debug "Second try: #{path.inspect}."
       content = HtmCache.get_htm(path)
     end
@@ -1031,7 +1035,7 @@ class Quest < AbstractScript
     start_conditions[block] = html
   end
 
-  def add_cond_level(min : Int32, max : Int32, html)
+  def add_cond_level(min : Int32, max : Int32, html : String)
     add_cond_start(html) { |pc| pc.level.between?(min, max) }
   end
 
@@ -1074,7 +1078,7 @@ class Quest < AbstractScript
   end
 
   def add_cond_in_category(type : CategoryType, html : String)
-    add_cond_start(html, &.in_category?(type))
+    add_cond_start(html) { |pc| pc.in_category?(type) }
   end
 
   def get_already_completed_msg(pc : L2PcInstance) : String
@@ -1142,9 +1146,7 @@ class Quest < AbstractScript
       end
     end
 
-    if winner && check_distance_to_target(winner, npc)
-      winner
-    end
+    winner if winner && check_distance_to_target(winner, npc)
   end
 
   def get_random_party_member_state(pc : L2PcInstance?, state : State) : L2PcInstance?
@@ -1152,8 +1154,8 @@ class Quest < AbstractScript
 
     party = pc.party
     if party.nil? || party.members.empty?
-      temp = pc.get_quest_state(name)
-      if temp && temp.state == state
+      qs = pc.get_quest_state(name)
+      if qs && qs.state == state
         return pc
       end
 
@@ -1165,8 +1167,8 @@ class Quest < AbstractScript
     target = pc.target || pc
 
     party.members.each do |m|
-      temp = m.get_quest_state(name)
-      if temp && temp.state == state
+      qs = m.get_quest_state(name)
+      if qs && qs.state == state
         if m.inside_radius?(target, 1500, true, false)
           candidates << m
         end
@@ -1239,16 +1241,16 @@ class Quest < AbstractScript
     end
   end
 
-  def set_one_time_quest_flag(talker, quest_id, flag)
+  def set_one_time_quest_flag(pc, quest_id, flag)
     if quest = QuestManager.get_quest(quest_id)
       state = flag == 1 ? State::COMPLETED : State::STARTED
-      quest.get_quest_state!(talker).state = state
+      quest.get_quest_state!(pc).state = state
     end
   end
 
-  def get_one_time_quest_flag(talker, quest_id)
+  def get_one_time_quest_flag(pc, quest_id)
     quest = QuestManager.get_quest(quest_id)
-    (quest && quest.get_quest_state!(talker).completed?) ? 1 : 0
+    (quest && quest.get_quest_state!(pc).completed?) ? 1 : 0
   end
 
   def self.play_sound(pc : L2PcInstance, sound : IAudio)
@@ -1271,8 +1273,8 @@ class Quest < AbstractScript
     end
   end
 
-  def has_memo?(talker : L2PcInstance, quest_id : Int32) : Bool
+  def has_memo?(pc : L2PcInstance, quest_id : Int32) : Bool
     quest = QuestManager.get_quest(quest_id)
-    !!quest && talker.has_quest_state?(quest.name)
+    !!quest && pc.has_quest_state?(quest.name)
   end
 end

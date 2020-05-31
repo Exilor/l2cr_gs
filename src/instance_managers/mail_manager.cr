@@ -16,11 +16,11 @@ module MailManager
       msg = Message.new(rs)
       msg_id = msg.id
       MESSAGES[msg_id] = msg
-      count += 1
+      count &+= 1
       expiration = msg.expiration
       task = MessageDeletionTask.new(msg_id)
       if expiration < time
-        ThreadPoolManager.schedule_general(task, 10000)
+        ThreadPoolManager.schedule_general(task, 10_000)
       else
         ThreadPoolManager.schedule_general(task, expiration - time)
       end

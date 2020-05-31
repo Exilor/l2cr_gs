@@ -89,7 +89,6 @@ class Scripts::SubclassCertification < AbstractNpcAI
       # [automatically added else]
     end
 
-
     html
   end
 

@@ -237,7 +237,7 @@ module L2Event
           spawn_event_npc(pc)
           temp << pc
         end
-        pc.known_list.known_players.each_value do |pl|
+        pc.known_list.each_player do |pl|
           if (pl.x - pc.x).abs < 1000 && (pl.y - pc.y).abs < 1000
             if (pl.z - pc.z).abs < 1000
               temp << pl
@@ -271,7 +271,7 @@ module L2Event
       CONNECTION_LOSS_DATA.clear
 
       @@teams_number.times do |i|
-        TEAMS[i + 1] = Concurrent::Array(L2PcInstance).new
+        TEAMS[i &+ 1] = Concurrent::Array(L2PcInstance).new
       end
 
       i = 0
@@ -290,9 +290,9 @@ module L2Event
         end
 
         REGISTERED_PLAYERS.delete_first(toplvl_pc)
-        TEAMS[i + 1] << toplvl_pc
+        TEAMS[i &+ 1] << toplvl_pc
         toplvl_pc.set_event_status
-        i = (i + 1) % @@teams_number
+        i = (i &+ 1) % @@teams_number
       end
     rescue e
       error e

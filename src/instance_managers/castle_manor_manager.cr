@@ -151,7 +151,6 @@ module CastleManorManager
       # [automatically added else]
     end
 
-
     ThreadPoolManager.schedule_general(->change_mode, @@next_mode_change.ms - Time.ms)
   end
 
@@ -211,7 +210,7 @@ module CastleManorManager
     when .maintenance?
       CastleManager.castles.each do |castle|
         if owner = castle.owner?
-          leader = owner.leader?
+          leader = owner.leader
           if leader && leader.online?
             leader.player_instance.try &.send_packet(SystemMessageId::THE_MANOR_INFORMATION_HAS_BEEN_UPDATED)
           end
@@ -242,7 +241,7 @@ module CastleManorManager
             PRODUCTION_NEXT[castle_id].clear
             PROCURE_NEXT[castle_id].clear
 
-            leader = owner.leader?
+            leader = owner.leader
             if leader && leader.online?
               leader.player_instance.try &.send_packet(SystemMessageId::THE_AMOUNT_IS_NOT_SUFFICIENT_AND_SO_THE_MANOR_IS_NOT_IN_OPERATION)
             end
@@ -259,7 +258,6 @@ module CastleManorManager
       # [automatically added else]
     end
 
-
     schedule_mode_change
 
     debug { "Manor mode changed to #{@@mode}." }
@@ -269,21 +267,23 @@ module CastleManorManager
     PRODUCTION_NEXT[castle_id] = list
 
     if Config.alt_manor_save_all_actions
-      sql = "DELETE FROM castle_manor_production WHERE castle_id = ? AND next_period = 1"
-      GameDB.exec(sql, castle_id)
+      GameDB.transaction do |tr|
+        sql = "DELETE FROM castle_manor_production WHERE castle_id = ? AND next_period = 1"
+        tr.exec(sql, castle_id)
 
-      unless list.empty?
-        # TODO: do it in batch
-        list.each do |sp|
-          GameDB.exec(
-            INSERT_PRODUCT,
-            castle_id,
-            sp.id,
-            sp.amount,
-            sp.start_amount,
-            sp.price,
-            true
-          )
+        unless list.empty?
+          # TODO: do it in batch
+          list.each do |sp|
+            tr.exec(
+              INSERT_PRODUCT,
+              castle_id,
+              sp.id,
+              sp.amount,
+              sp.start_amount,
+              sp.price,
+              true
+            )
+          end
         end
       end
     end
@@ -295,22 +295,24 @@ module CastleManorManager
     PROCURE_NEXT[castle_id] = list
 
     if Config.alt_manor_save_all_actions
-      sql = "DELETE FROM castle_manor_procure WHERE castle_id = ? AND next_period = 1"
-      GameDB.exec(sql, castle_id)
+      GameDB.transaction do |tr|
+        sql = "DELETE FROM castle_manor_procure WHERE castle_id = ? AND next_period = 1"
+        tr.exec(sql, castle_id)
 
-      unless list.empty?
-        # TODO: do it in batch
-        list.each do |sp|
-          GameDB.exec(
-            INSERT_CROP,
-            castle_id,
-            sp.id,
-            sp.amount,
-            sp.start_amount,
-            sp.price,
-            sp.reward,
-            true
-          )
+        unless list.empty?
+          # TODO: do it in batch
+          list.each do |sp|
+            tr.exec(
+              INSERT_CROP,
+              castle_id,
+              sp.id,
+              sp.amount,
+              sp.start_amount,
+              sp.price,
+              sp.reward,
+              true
+            )
+          end
         end
       end
     end
@@ -321,7 +323,9 @@ module CastleManorManager
   def update_current_production(castle_id : Int32, items : Enumerable(SeedProduction))
     sql = "UPDATE castle_manor_production SET amount = ? WHERE castle_id = ? AND seed_id = ? AND next_period = 0"
     # TODO: do it in batch
-    items.each { |sp| GameDB.exec(sql, sp.amount, castle_id, sp.id) }
+    GameDB.transaction do |tr|
+      items.each { |sp| tr.exec(sql, sp.amount, castle_id, sp.id) }
+    end
   rescue e
     error e
   end
@@ -329,7 +333,9 @@ module CastleManorManager
   def update_current_procure(castle_id : Int32, items : Enumerable(CropProcure))
     sql = "UPDATE castle_manor_procure SET amount = ? WHERE castle_id = ? AND crop_id = ? AND next_period = 0"
     # TODO: do it in batch
-    items.each { |sp| GameDB.exec(sql, sp.amount, castle_id, sp.id) }
+    GameDB.transaction do |tr|
+      items.each { |sp| tr.exec(sql, sp.amount, castle_id, sp.id) }
+    end
   rescue e
     error e
   end
@@ -384,65 +390,67 @@ module CastleManorManager
     dp = "DELETE FROM castle_manor_procure"
     ip = INSERT_CROP
 
-    GameDB.exec(ds)
+    GameDB.transaction do |tr|
+      tr.exec(ds)
 
-    PRODUCTION.each do |key, value|
-      value.each do |sp|
-        GameDB.exec(
-          is,
-          key,
-          sp.id,
-          sp.amount,
-          sp.start_amount,
-          sp.price,
-          false
-        )
+      PRODUCTION.each do |key, value|
+        value.each do |sp|
+          tr.exec(
+            is,
+            key,
+            sp.id,
+            sp.amount,
+            sp.start_amount,
+            sp.price,
+            false
+          )
+        end
       end
-    end
 
-    PRODUCTION_NEXT.each do |key, value|
-      value.each do |sp|
-        GameDB.exec(
-          is,
-          key,
-          sp.id,
-          sp.amount,
-          sp.start_amount,
-          sp.price,
-          true
-        )
+      PRODUCTION_NEXT.each do |key, value|
+        value.each do |sp|
+          tr.exec(
+            is,
+            key,
+            sp.id,
+            sp.amount,
+            sp.start_amount,
+            sp.price,
+            true
+          )
+        end
       end
-    end
 
-    GameDB.exec(dp)
+      tr.exec(dp)
 
-    PROCURE.each do |key, value|
-      value.each do |cp|
-        GameDB.exec(
-          ip,
-          key,
-          cp.id,
-          cp.amount,
-          cp.start_amount,
-          cp.price,
-          cp.reward,
-          false
-        )
+      PROCURE.each do |key, value|
+        value.each do |cp|
+          tr.exec(
+            ip,
+            key,
+            cp.id,
+            cp.amount,
+            cp.start_amount,
+            cp.price,
+            cp.reward,
+            false
+          )
+        end
       end
-    end
 
-    PROCURE_NEXT.each do |key, value|
-      value.each do |cp|
-        GameDB.exec(
-          ip,
-          key,
-          cp.id,
-          cp.amount,
-          cp.start_amount,
-          cp.price,
-          cp.reward,
-          true
-        )
+      PROCURE_NEXT.each do |key, value|
+        value.each do |cp|
+          tr.exec(
+            ip,
+            key,
+            cp.id,
+            cp.amount,
+            cp.start_amount,
+            cp.price,
+            cp.reward,
+            true
+          )
+        end
       end
     end
 
@@ -463,11 +471,13 @@ module CastleManorManager
     PRODUCTION_NEXT[castle_id].clear
 
     if Config.alt_manor_save_all_actions
-      sql = "DELETE FROM castle_manor_production WHERE castle_id = ?"
-      GameDB.exec(sql, castle_id)
+      GameDB.transaction do |tr|
+        sql = "DELETE FROM castle_manor_production WHERE castle_id = ?"
+        tr.exec(sql, castle_id)
 
-      sql = "DELETE FROM castle_manor_procure WHERE castle_id = ?"
-      GameDB.exec(sql, castle_id)
+        sql = "DELETE FROM castle_manor_procure WHERE castle_id = ?"
+        tr.exec(sql, castle_id)
+      end
     end
   rescue e
     error e

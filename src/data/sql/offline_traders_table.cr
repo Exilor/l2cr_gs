@@ -166,7 +166,7 @@ module OfflineTradersTable
         pc.set_online_status(true, true)
         pc.restore_effects
         pc.broadcast_user_info
-        n_traders += 1
+        n_traders &+= 1
       rescue e
         error e
         if pc

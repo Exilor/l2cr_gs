@@ -84,7 +84,7 @@ class BoatTalkingGludin
           BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], BUSY_GLUDIN)
         end
 
-        @shout_count += 1
+        @shout_count &+= 1
         if @shout_count > 35
           @shout_count = 0
         end
@@ -129,7 +129,7 @@ class BoatTalkingGludin
           BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], BUSY_TALKING)
         end
 
-        @shout_count += 1
+        @shout_count &+= 1
         if @shout_count > 35
           @shout_count = 0
         end
@@ -149,7 +149,7 @@ class BoatTalkingGludin
     end
 
     @shout_count = 0
-    @cycle += 1
+    @cycle &+= 1
     @cycle = 0 if @cycle > 17
   end
 end

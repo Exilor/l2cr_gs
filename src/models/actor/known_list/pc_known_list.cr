@@ -40,7 +40,7 @@ class PcKnownList < PlayableKnownList
     me.send_packet(DeleteObject.new(object))
 
     if Config.check_known && object.npc? && me.gm?
-      me.send_message("Removed NPC: #{object.name}")
+      me.send_message("Removed NPC: " + object.name)
     end
 
     true

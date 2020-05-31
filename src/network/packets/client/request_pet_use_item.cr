@@ -34,19 +34,16 @@ class Packets::Incoming::RequestPetUseItem < GameClientPacket
     if reuse_delay > 0
       reuse = pet.get_item_remaining_reuse_time(item.l2id)
       if reuse > 0
-        debug { "#{item} is on cooldown." }
         return
       end
     end
 
     if !item.equipped? && !item.template.check_condition(pet, pet, true)
-      debug "#{!item.equipped?} && #{!item.template.check_condition(pet, pet, true)}"
       return
     end
 
     if item.equippable?
       unless item.template.condition_attached?
-        debug "item has no condition attached"
         send_packet(SystemMessageId::PET_CANNOT_USE_ITEM)
         return
       end
@@ -70,7 +67,6 @@ class Packets::Incoming::RequestPetUseItem < GameClientPacket
         end
       else
         send_packet(SystemMessageId::PET_CANNOT_USE_ITEM)
-        warn { "No item handler for #{item}." }
       end
     end
   end

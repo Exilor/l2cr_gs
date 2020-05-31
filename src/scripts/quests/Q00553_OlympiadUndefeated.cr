@@ -28,7 +28,7 @@ class Scripts::Q00553_OlympiadUndefeated < Quest
       st.start_quest
     elsif event.casecmp?("31688-04.html")
       count = st.get_quest_items_count(WIN_CONF_2)
-      count += st.get_quest_items_count(WIN_CONF_5)
+      count &+= st.get_quest_items_count(WIN_CONF_5)
 
       if count > 0
         st.give_items(OLY_CHEST, count)
@@ -52,7 +52,7 @@ class Scripts::Q00553_OlympiadUndefeated < Quest
 
       st = get_quest_state(player, false)
       if st && st.started? && st.cond?(1)
-        matches = st.get_int("undefeatable") + 1
+        matches = st.get_int("undefeatable") &+ 1
         st.set("undefeatable", matches.to_s)
         case matches
         when 2
@@ -71,7 +71,6 @@ class Scripts::Q00553_OlympiadUndefeated < Quest
         else
           # [automatically added else]
         end
-
       end
     end
 
@@ -105,8 +104,8 @@ class Scripts::Q00553_OlympiadUndefeated < Quest
       end
     else
       count = st.get_quest_items_count(WIN_CONF_2)
-      count += st.get_quest_items_count(WIN_CONF_5)
-      count += st.get_quest_items_count(WIN_CONF_10)
+      count &+= st.get_quest_items_count(WIN_CONF_5)
+      count &+= st.get_quest_items_count(WIN_CONF_10)
 
       if count == 3 && st.cond?(2)
         st.give_items(OLY_CHEST, 4)

@@ -71,8 +71,8 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       end
     when "30291-06.html"
       count = get_quest_items_count(pc, WATCHING_EYES)
-      count += get_quest_items_count(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD)
-      count += get_quest_items_count(pc, DELU_LIZARDMANS_SCALE)
+      count &+= get_quest_items_count(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD)
+      count &+= get_quest_items_count(pc, DELU_LIZARDMANS_SCALE)
       if count > 0
         give_adena(pc, count * 100, true)
         take_items(pc, -1, {WATCHING_EYES, ROUGHLY_HEWN_ROCK_GOLEM_SHARD, DELU_LIZARDMANS_SCALE})
@@ -88,7 +88,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       count1 = get_quest_items_count(pc, WATCHING_EYES)
       count2 = get_quest_items_count(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD)
       count3 = get_quest_items_count(pc, DELU_LIZARDMANS_SCALE)
-      count = count1 + count2 + count3
+      count = count1 &+ count2 &+ count3
       if count < 100
         html = "30291-11.html"
       else
@@ -147,8 +147,8 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       end
     when "30291-22.html"
       count = get_quest_items_count(pc, WATCHING_EYES)
-      count += get_quest_items_count(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD)
-      count += get_quest_items_count(pc, DELU_LIZARDMANS_SCALE)
+      count &+= get_quest_items_count(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD)
+      count &+= get_quest_items_count(pc, DELU_LIZARDMANS_SCALE)
       if count <= 0
         html = "30291-23.html"
       else
@@ -161,7 +161,6 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
     else
       # [automatically added else]
     end
-
 
     html
   end
@@ -211,11 +210,9 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
         else
           # [automatically added else]
         end
-
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)
@@ -224,7 +221,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
   private def trade_items(pc, required, count1, count2, count3)
     if count1 < required
       take_items(pc, WATCHING_EYES, count1)
-      required -= count1
+      required &-= count1
     else
       take_items(pc, WATCHING_EYES, required)
       required = 0
@@ -232,7 +229,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
 
     if count2 < required
       take_items(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD, count2)
-      required -= count2
+      required &-= count2
     else
       take_items(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD, required)
       required = 0

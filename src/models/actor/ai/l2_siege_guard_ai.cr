@@ -19,9 +19,9 @@ class L2SiegeGuardAI < L2CharacterAI
     on_event_think
   end
 
-  private def auto_attack_condition(target) : Bool
+  private def auto_attack_condition(target : L2Character) : Bool
     # Check if the target isn't another guard, folk or a door
-    if target.nil? || target.is_a?(L2DefenderInstance) || target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance) || target.looks_dead?
+    if target.is_a?(L2DefenderInstance) || target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance) || target.looks_dead?
       return false
     end
 

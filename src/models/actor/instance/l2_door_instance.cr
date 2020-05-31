@@ -309,7 +309,6 @@ class L2DoorInstance < L2Character
     else
       # [automatically added else]
     end
-
   end
 
   def door_name : String
@@ -334,7 +333,7 @@ class L2DoorInstance < L2Character
 
   def known_defenders
     ret = [] of L2DefenderInstance
-    known_list.known_objects.each_value do |o|
+    known_list.each_object do |o|
       if o.is_a?(L2DefenderInstance)
         ret << o
       end
@@ -343,7 +342,7 @@ class L2DoorInstance < L2Character
   end
 
   def known_defenders(& : L2DefenderInstance ->)
-    known_list.known_objects.each_value do |o|
+    known_list.each_object do |o|
       if o.is_a?(L2DefenderInstance)
         yield o
       end
@@ -407,7 +406,8 @@ class L2DoorInstance < L2Character
     end
   end
 
-  def targetable=(@targetable : Bool)
+  def targetable=(val : Bool)
+    @targetable = val
     broadcast_status_update
   end
 

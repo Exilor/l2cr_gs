@@ -37,7 +37,7 @@ class UIKeysSettings
         ary.each_with_index do |key, order|
           io << '(' << @pc_id << ", " << category << ", " << order << ", "
           io << key
-          if order + 1 == ary.size
+          if order &+ 1 == ary.size
             io << ')'
           else
             io << "),"
@@ -59,7 +59,7 @@ class UIKeysSettings
       @keys.each_value do |key_list|
         key_list.each_with_index do |key, order|
           key.get_sql_save_string(@pc_id, order, io)
-          if order + 1 != key_list.size
+          if order &+ 1 != key_list.size
             io << ','
           end
         end

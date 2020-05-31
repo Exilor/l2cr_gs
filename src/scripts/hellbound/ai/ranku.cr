@@ -50,7 +50,7 @@ class Scripts::Ranku < AbstractNpcAI
     if npc.id == MINION
       TRACKING_SET.delete(npc.l2id)
 
-      master = npc.as(L2MonsterInstance).leader?
+      master = npc.as(L2MonsterInstance).leader
       if master && master.alive?
         minion2 = MinionList.spawn_minion(master, MINION_2).not_nil!
         minion2.tele_to_location(npc.location)

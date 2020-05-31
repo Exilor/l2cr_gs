@@ -24,7 +24,7 @@ class L2SiegeZone < L2ZoneType
       if hall
         hall.siege_zone = self
       else
-        warn "Siegable clan hall with id #{value} does not exist."
+        warn { "Siegable clan hall with id #{value} does not exist." }
       end
     else
       super
@@ -96,7 +96,7 @@ class L2SiegeZone < L2ZoneType
       if char.registered_on_this_siege_field?(settings.siegable_id)
         lvl = 1
         if info = char.effect_list.get_buff_info_by_skill_id(5660)
-          lvl = Math.min(lvl + info.skill.level, 5)
+          lvl = Math.min(lvl &+ info.skill.level, 5)
         end
         if skill = SkillData[5660, lvl]?
           skill.apply_effects(char, char)

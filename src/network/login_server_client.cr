@@ -95,7 +95,7 @@ class LoginServerClient
       when 0x05 then RequestCharacters.new
       # when 0x06 then ChangePasswordResponse.new
       else
-        # Syntactically required else
+        warn { "Unknown opcode: 0x#{opcode.to_s(16)}." }
       end
 
       if packet
@@ -103,8 +103,6 @@ class LoginServerClient
         packet.buffer = IN_BUFFER
         packet.read
         packet.run
-      else
-        warn { "Unknown opcode: 0x#{opcode.to_s(16)}." }
       end
     end
   rescue IO::EOFError
@@ -253,7 +251,7 @@ class LoginServerClient
     to_delete = [] of Int64
     sql = "SELECT deletetime FROM characters WHERE account_name=?"
     GameDB.each(sql, account) do |rs|
-      chars += 1
+      chars &+= 1
       del_time = rs.get_i64(:"deletetime")
       if del_time != 0
         to_delete << del_time

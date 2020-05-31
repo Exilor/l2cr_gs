@@ -36,7 +36,7 @@ class Scripts::HealerTrainer < AbstractNpcAI
         count = 0
         SkillTreesData.get_available_transfer_skills(pc).each do |sl|
           if SkillData[sl.skill_id, sl.skill_level]?
-            count += 1
+            count &+= 1
             asl.add_skill(sl.skill_id, sl.skill_level, sl.skill_level, sl.level_up_sp, 0)
           end
         end
@@ -75,7 +75,6 @@ class Scripts::HealerTrainer < AbstractNpcAI
     else
       # [automatically added else]
     end
-
 
     html
   end

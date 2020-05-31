@@ -471,7 +471,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
           sp.heading = 1
           sp.amount = 1
         rescue e
-          warn { "Unable to spawn guard for clan index #{i}" }
+          warn { "Unable to spawn guard for clan index #{i}." }
         end
       end
       SpawnTable.add_new_spawn(@gourds[i], false)

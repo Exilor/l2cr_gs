@@ -181,12 +181,11 @@ class Scripts::MC_Show < AbstractNpcAI
     if min_diff < 0
       min_diff = 60 - (min_diff *= -1)
     end
-    hour_diff *= 3600000
-    min_diff *= 60000
+    hour_diff *= 3_600_000
+    min_diff *= 60_000
     diff = hour_diff + min_diff
 
-    debug { "Show starting at #{Time.local + diff.milliseconds}" }
-    start_quest_timer("Start", 14400000, nil, nil, true)
+    start_quest_timer("Start", 14_400_000, nil, nil, true)
   end
 
   private def auto_chat(npc, npc_string, type)
@@ -198,24 +197,23 @@ class Scripts::MC_Show < AbstractNpcAI
       case npc.id
       when 32433
         auto_chat(npc, MESSAGES[0], Say2::NPC_SHOUT)
-        start_quest_timer("1", 30000, npc, nil)
+        start_quest_timer("1", 30_000, npc, nil)
       when 32431
         npc.set_intention(AI::MOVE_TO, Location.new(-56657, -56338, -2008, 33102))
         start_quest_timer("social1", 6000, npc, nil, true)
-        start_quest_timer("7", 215000, npc, nil)
+        start_quest_timer("7", 215_000, npc, nil)
       when 32432
         start_quest_timer("social1", 6000, npc, nil, true)
-        start_quest_timer("7", 215000, npc, nil)
+        start_quest_timer("7", 215_000, npc, nil)
       when 32442..32446
-        start_quest_timer("11", 100000, npc, nil)
+        start_quest_timer("11", 100_000, npc, nil)
       when 32424..32428
         start_quest_timer("social1", 5500, npc, nil)
-        start_quest_timer("social1", 12500, npc, nil)
-        start_quest_timer("28", 19700, npc, nil)
+        start_quest_timer("social1", 12_500, npc, nil)
+        start_quest_timer("28", 19_700, npc, nil)
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -243,7 +241,7 @@ class Scripts::MC_Show < AbstractNpcAI
         add_spawn(SINGERS[1], -56594, -56516, -2008, 28672, false, 224000)
         add_spawn(SINGERS[1], -56580, -56203, -2008, 36863, false, 224000)
         add_spawn(SINGERS[1], -56606, -56157, -2008, 36863, false, 224000)
-        start_quest_timer("7", 215000, npc, nil)
+        start_quest_timer("7", 215_000, npc, nil)
       elsif event.casecmp?("7")
         case npc.id
         when 32433
@@ -266,7 +264,7 @@ class Scripts::MC_Show < AbstractNpcAI
         start_quest_timer("npc7_1", 4000, add_spawn(CIRCUS[3], -56552, -56248, -2008, 32768, false, 101000), nil)
         start_quest_timer("npc8_1", 3000, add_spawn(CIRCUS[4], -56493, -56473, -2008, 32768, false, 101000), nil)
         start_quest_timer("npc9_1", 3000, add_spawn(CIRCUS[4], -56504, -56201, -2008, 32768, false, 101000), nil)
-        start_quest_timer("11", 100000, npc, nil)
+        start_quest_timer("11", 100_000, npc, nil)
       elsif event.casecmp?("11")
         case npc.id
         when 32433
@@ -300,7 +298,7 @@ class Scripts::MC_Show < AbstractNpcAI
       elsif event.casecmp?("29")
         npc.set_intention(AI::MOVE_TO, Location.new(-56730, -56340, -2008, 32768))
         start_quest_timer("clean_npc", 4100, npc, nil)
-        start_quest_timer("timer_check", 60000, nil, nil, true)
+        start_quest_timer("timer_check", 60_000, nil, nil, true)
       elsif event.casecmp?("social1")
         npc.broadcast_social_action(1)
       elsif event.casecmp?("clean_npc")

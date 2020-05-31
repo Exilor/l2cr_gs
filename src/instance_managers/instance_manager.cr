@@ -143,7 +143,7 @@ module InstanceManager
 
   def create_dynamic_instance(template : String?) : Int32
     while get_instance(@@dynamic)
-      @@dynamic += 1
+      @@dynamic &+= 1
       if @@dynamic == Int32::MAX
         warn { "More than #{Int32::MAX - 300_000} instances have been created." }
         @@dynamic = 300_000

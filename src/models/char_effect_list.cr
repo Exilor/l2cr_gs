@@ -156,7 +156,7 @@ class CharEffectList
 
   def buff_count : Int32
     return 0 unless buffs = @buffs
-    buffs.size - @hidden_buffs.get - (@short_buff ? 1 : 0)
+    buffs.size &- @hidden_buffs.get &- (@short_buff ? 1 : 0)
   end
 
   def dance_count : Int32
@@ -171,16 +171,16 @@ class CharEffectList
     @hidden_buffs.get
   end
 
-  def stop_and_remove(info : BuffInfo?)
+  def stop_and_remove(info : BuffInfo)
     stop_and_remove(true, info, get_effect_list(info.skill))
   end
 
-  def stop_and_remove(info : BuffInfo?, effect_list)
+  def stop_and_remove(info : BuffInfo, effect_list)
     stop_and_remove(true, info, effect_list)
   end
 
-  def stop_and_remove(removed : Bool, info : BuffInfo?, effect_list)
-    return unless info && effect_list
+  def stop_and_remove(removed : Bool, info : BuffInfo, effect_list)
+    return unless effect_list
 
     effect_list.delete_first(info)
     info.stop_all_effects(removed)
@@ -300,8 +300,8 @@ class CharEffectList
     get_buff_info_by_skill_id(id).try { |info| remove(removed, info) }
   end
 
-  def stop_skill_effects(removed : Bool, skill : Skill?)
-    stop_skill_effects(removed, skill.id) if skill
+  def stop_skill_effects(removed : Bool, skill : Skill)
+    stop_skill_effects(removed, skill.id)
   end
 
   def stop_skill_effects(removed : Bool, type : AbnormalType) : Bool
@@ -381,38 +381,48 @@ class CharEffectList
   end
 
   def has_buffs? : Bool
-    !!(@buffs.try &.any?)
+    return false unless list = @buffs
+    !list.empty?
   end
 
   def has_debuffs? : Bool
-    !!(@debuffs.try &.any?)
+    return false unless list = @debuffs
+    !list.empty?
   end
 
   def has_triggered? : Bool
-    !!(@triggered.try &.any?)
+    return false unless list = @triggered
+    !list.empty?
   end
 
   def has_dances? : Bool
-    !!(@dances.try &.any?)
+    return false unless list = @dances
+    !list.empty?
   end
 
   def has_toggles? : Bool
-    !!(@toggles.try &.any?)
+    return false unless list = @toggles
+    !list.empty?
   end
 
   def has_passives? : Bool
-    !!(@passives.try &.any?)
+    return false unless list = @passives
+    !list.empty?
   end
 
-  def remove(removed : Bool, info : BuffInfo?)
-    return unless info
+  def remove(removed : Bool, info : BuffInfo)
     stop_and_remove(removed, info, get_effect_list(info.skill))
     update_effect_list(true)
   end
 
   def add(info : BuffInfo)
     skill = info.skill
-    return if @blocked_buff_slots.try &.includes?(skill.abnormal_type)
+
+    if blocked_slots = @blocked_buff_slots
+      if blocked_slots.includes?(skill.abnormal_type)
+        return
+      end
+    end
 
     if skill.passive?
       unless skill.check_condition(info.effector, info.effected, false)
@@ -476,11 +486,11 @@ class CharEffectList
       to_remove = -1
 
       if skill.dance?
-        to_remove = dance_count - Config.dances_max_amount
+        to_remove = dance_count &- Config.dances_max_amount
       elsif skill.trigger?
-        to_remove = triggered_buff_count - Config.triggered_buffs_max_amount
+        to_remove = triggered_buff_count &- Config.triggered_buffs_max_amount
       elsif !skill.healing_potion_skill?
-        to_remove = buff_count - @owner.stat.max_buff_count
+        to_remove = buff_count &- @owner.stat.max_buff_count
       end
 
       effects.safe_each do |info|
@@ -552,7 +562,6 @@ class CharEffectList
     else
       # [automatically added else]
     end
-
 
     @buffs.try &.each do |info|
       if info.skill.healing_potion_skill?

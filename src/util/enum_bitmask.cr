@@ -2,11 +2,11 @@ class EnumBitmask(T)
   property_initializer bitmask : Int32 = 0
 
   def initialize(set : Bool)
-    @bitmask = set ? T.mask.to_i32 : 0
+    @bitmask = set ? T.mask.to_i32! : 0
   end
 
   def set_all
-    @bitmask = T.mask.to_i32
+    @bitmask = T.mask.to_i32!
   end
 
   def clear

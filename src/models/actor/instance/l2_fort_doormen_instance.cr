@@ -24,8 +24,8 @@ class L2FortDoormenInstance < L2DoormenInstance
     st = command.from(10).split(", ")
     st.shift?
 
-    until st.empty?
-      fort.open_door(pc, st.shift.to_i)
+    st.each do |token|
+      fort.open_door(pc, token.to_i)
     end
   end
 
@@ -33,8 +33,8 @@ class L2FortDoormenInstance < L2DoormenInstance
     st = command.from(11).split(", ")
     st.shift?
 
-    until st.empty?
-      fort.close_door(pc, st.shift.to_i)
+    st.each do |token|
+      fort.close_door(pc, token.to_i)
     end
   end
 

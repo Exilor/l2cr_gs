@@ -132,7 +132,7 @@ class Scripts::Q00325_GrimCollector < Quest
         thigh = st.get_quest_items_count(THIGH_BONE).to_i64
         complete = st.get_quest_items_count(COMPLETE_SKELETON).to_i64
         total_count = head + heart + liver + skull + rib + spine + arm + thigh + complete
-        debug "total count: #{total_count}"
+
         if total_count > 0
           sum = (head * 30) + (heart * 20) + (liver * 20) + (skull * 100)
           sum += (rib * 40) + (spine * 14) + (arm * 14) + (thigh * 14)
@@ -144,7 +144,7 @@ class Scripts::Q00325_GrimCollector < Quest
           if complete > 0
             sum += 543 + (complete * 341)
           end
-          debug "sum: #{sum}"
+
           st.give_adena(sum, true)
         end
 
@@ -165,7 +165,6 @@ class Scripts::Q00325_GrimCollector < Quest
     else
       # [automatically added else]
     end
-
 
     html
   end
@@ -213,7 +212,6 @@ class Scripts::Q00325_GrimCollector < Quest
       else
         # [automatically added else]
       end
-
     when VARSAK
       if st.started? && st.has_quest_items?(ANATOMY_DIAGRAM)
         html = "30342-01.html"
@@ -235,7 +233,6 @@ class Scripts::Q00325_GrimCollector < Quest
     else
       # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

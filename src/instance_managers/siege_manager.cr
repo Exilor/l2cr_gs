@@ -30,7 +30,7 @@ module SiegeManager
     CastleManager.castles.each do |castle|
       control_towers = [] of TowerSpawn
 
-      1.upto(0xff - 1) do |i|
+      (1...0xff).each do |i|
         key_name = "#{castle.name}ControlTower#{i}"
         unless cfg.has_key?(key_name)
           break
@@ -50,7 +50,7 @@ module SiegeManager
 
       flame_towers = [] of TowerSpawn
 
-      1.upto(0xff - 1) do |i|
+      (1...0xff).each do |i|
         key_name = "#{castle.name}FlameTower#{i}"
         unless cfg.has_key?(key_name)
           break
@@ -74,8 +74,8 @@ module SiegeManager
 
       CONTROL_TOWERS[castle.residence_id] = control_towers
       FLAME_TOWERS[castle.residence_id] = flame_towers
-      temp = cfg.get_i32(castle.name + "MaxMercenaries", MercTicketManager::MERCS_MAX_PER_CASTLE[castle.residence_id - 1])
-      MercTicketManager::MERCS_MAX_PER_CASTLE[castle.residence_id - 1] = temp
+      temp = cfg.get_i32(castle.name + "MaxMercenaries", MercTicketManager::MERCS_MAX_PER_CASTLE[castle.residence_id &- 1])
+      MercTicketManager::MERCS_MAX_PER_CASTLE[castle.residence_id &- 1] = temp
 
       if castle.owner_id != 0
         load_trap_upgrade(castle.residence_id)

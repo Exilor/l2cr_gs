@@ -29,10 +29,10 @@ module AdminCommandHandler::AdminPcCondOverride
             if ex = PcCondOverride[token.to_i]?
               if pc.can_override_cond?(ex)
                 pc.remove_overrided_cond(ex)
-                pc.send_message("You've disabled #{ex.description}")
+                pc.send_message("You've disabled " + ex.description)
               else
                 pc.add_override_cond(ex)
-                pc.send_message("You've enabled #{ex.description}")
+                pc.send_message("You've enabled " + ex.description)
               end
             end
           else
@@ -54,7 +54,6 @@ module AdminCommandHandler::AdminPcCondOverride
             else
               # [automatically added else]
             end
-
           end
 
           use_admin_command(commands[0], pc)
@@ -62,7 +61,6 @@ module AdminCommandHandler::AdminPcCondOverride
       else
         # [automatically added else]
       end
-
     end
 
     true

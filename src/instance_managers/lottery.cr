@@ -44,7 +44,7 @@ module Lottery
         @@id = rs.get_i32(:"idnr")
 
         if rs.get_i32(:"finished") == 1
-          @@id += 1
+          @@id &+= 1
           @@prize = rs.get_i64(:"newprize")
         else
           @@prize = rs.get_i64(:"prize")
@@ -83,7 +83,7 @@ module Lottery
 
     if finish_time.day_of_week == Calendar::SUNDAY
       finish_time.hour = 19
-      @@end_date = finish_time.ms + 604800000
+      @@end_date = finish_time.ms + 604_800_000
     else
       finish_time.day_of_week = Calendar::SUNDAY
       finish_time.hour = 19
@@ -136,9 +136,9 @@ module Lottery
 
     5.times do |i|
       if nums[i] < 17
-        enchant += Math.pow(2, nums[i] - 1).to_i
+        enchant += Math.pow(2, nums[i] &- 1).to_i
       else
-        type2 += Math.pow(2, nums[i] - 17).to_i
+        type2 += Math.pow(2, nums[i] &- 17).to_i
       end
     end
 
@@ -164,13 +164,13 @@ module Lottery
           val = cur_enchant // 2
 
           if val != (cur_enchant / 2).round
-            count += 1
+            count &+= 1
           end
 
           val2 = curtype2 // 2
 
           if val2 != curtype2 // 2
-            count += 1
+            count &+= 1
           end
 
           cur_enchant = val
@@ -178,13 +178,13 @@ module Lottery
         end
 
         if count == 5
-          count1 += 1
+          count1 &+= 1
         elsif count == 4
-          count2 += 1
+          count2 &+= 1
         elsif count == 3
-          count3 += 1
+          count3 &+= 1
         elsif count > 0
-          count4 += 1
+          count4 &+= 1
         end
       end
     rescue e
@@ -251,7 +251,7 @@ module Lottery
     end
 
     ThreadPoolManager.schedule_general(->start_lottery_task, MINUTE)
-    @@id += 1
+    @@id &+= 1
 
     @@started = false
   end
@@ -265,10 +265,10 @@ module Lottery
       val = enchant // 2
       if val != (enchant / 2).round
         res[id] = nr
-        id += 1
+        id &+= 1
       end
       enchant //= 2
-      nr += 1
+      nr &+= 1
     end
 
     nr = 17
@@ -277,10 +277,10 @@ module Lottery
       val = type2 // 2
       if val != type2 / 2
         res[id] = nr
-        id += 1
+        id &+= 1
       end
       type2 //= 2
-      nr += 1
+      nr &+= 1
     end
 
     res
@@ -306,11 +306,11 @@ module Lottery
         1.upto(16) do
           val = curenchant // 2
           if val != (curenchant / 2).round
-            count += 1
+            count &+= 1
           end
           val2 = curtype2 // 2
           if val2 != curtype2 / 2
-            count += 1
+            count &+= 1
           end
           curenchant = val
           curtype2 = val2

@@ -80,16 +80,18 @@ class ObjectKnownList
   end
 
   def forget_objects(full_check : Bool)
-    if known_objects = @known_objects
-      me = @active_object
-      known_objects.each do |id, object|
-        next if !full_check && !object.playable?
-        if !object.visible? || !Util.in_short_radius?(get_distance_to_watch_object(object), me, object, true)
-          known_objects.delete(id)
-          remove_known_object(object, true)
-        end
+    me = @active_object
+    @known_objects.try &.each do |id, object|
+      next if !full_check && !object.playable?
+      if !object.visible? || !Util.in_short_radius?(get_distance_to_watch_object(object), me, object, true)
+        known_objects.delete(id)
+        remove_known_object(object, true)
       end
     end
+  end
+
+  def each_object(& : L2Object ->) : Nil
+    @known_objects.try &.each_value { |o| yield o }
   end
 
   def get_distance_to_forget_object(object : L2Object) : Int32

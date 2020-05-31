@@ -161,7 +161,7 @@ module AdminCommandHandler::AdminMenu
     else
       pc.instance_id = player.instance_id
       pc.tele_to_location(player.location, true)
-      pc.send_message("You're teleporting yourself to player #{player.name}")
+      pc.send_message("You're teleporting to player " + player.name)
     end
     show_main_page(pc)
   end

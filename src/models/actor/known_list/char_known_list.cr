@@ -121,9 +121,9 @@ class CharKnownList < ObjectKnownList
   end
 
   def each_character(radius : Int32, & : L2Character ->) : Nil
-    char = active_char
+    me = active_char
     each_character do |object|
-      if Util.in_range?(radius, char, object, true)
+      if Util.in_range?(radius, me, object, true)
         yield object
       end
     end
@@ -135,19 +135,28 @@ class CharKnownList < ObjectKnownList
     ret
   end
 
+  def each_player(& : L2PcInstance ->) : Nil
+    @known_players.try &.each_value { |pc| yield pc }
+  end
+
   def each_player(radius : Int32, & : L2PcInstance ->) : Nil
-    char = active_char
+    me = active_char
     @known_players.try &.each_value do |pc|
-      if Util.in_range?(radius, char, pc, true)
+      if Util.in_range?(radius, me, pc, true)
         yield pc
       end
     end
   end
 
   def each_player(radius : Int32) : Enumerable(L2PcInstance)
-    ret = [] of L2PcInstance
-    each_player(radius) { |pc| ret << pc }
-    ret
+    unless players = @known_players
+      return Slice(L2PcInstance).empty
+    end
+
+    me = active_char
+    players.local_each_value.select do |pc|
+      Util.in_range?(radius, me, pc, true)
+    end
   end
 
   def active_char : L2Character

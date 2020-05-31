@@ -7,7 +7,8 @@ class QuestItemHolder < ItemHolder
     initialize(id, chance, 1)
   end
 
-  def initialize(id : Int32, @chance : Int32, count : Int64)
+  def initialize(id : Int32, chance : Int32, count : Int64)
     super(id, count)
+    @chance = chance
   end
 end

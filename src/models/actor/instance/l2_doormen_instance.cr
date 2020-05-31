@@ -3,33 +3,33 @@ class L2DoormenInstance < L2NpcInstance
     InstanceType::L2DoormenInstance
   end
 
-  def on_bypass_feedback(pc : L2PcInstance, cmd : String)
-    if cmd.starts_with?("Chat")
+  def on_bypass_feedback(pc : L2PcInstance, command : String)
+    if command.starts_with?("Chat")
       show_chat_window(pc)
       return
-    elsif cmd.starts_with?("open_doors")
+    elsif command.starts_with?("open_doors")
       if owner_clan?(pc)
         if under_siege?
           cannot_manage_doors(pc)
         else
-          open_doors(pc, cmd)
+          open_doors(pc, command)
         end
       end
 
       return
-    elsif cmd.starts_with?("close_doors")
+    elsif command.starts_with?("close_doors")
       if owner_clan?(pc)
         if under_siege?
           cannot_manage_doors(pc)
         else
-          close_doors(pc, cmd)
+          close_doors(pc, command)
         end
       end
 
       return
-    elsif cmd.starts_with?("tele")
+    elsif command.starts_with?("tele")
       if owner_clan?(pc)
-        do_teleport(pc, cmd)
+        do_teleport(pc, command)
       end
 
       return
@@ -56,16 +56,16 @@ class L2DoormenInstance < L2NpcInstance
   private def open_doors(pc, cmd)
     st = cmd.from(10).split(", ")
     st.shift?
-    until st.empty?
-      DoorData.get_door!(st.shift.to_i).open_me
+    st.each do |token|
+      DoorData.get_door!(token.to_i).open_me
     end
   end
 
   private def close_doors(pc, cmd)
     st = cmd.from(11).split(", ")
     st.shift?
-    until st.empty?
-      DoorData.get_door!(st.shift.to_i).close_me
+    st.each do |token|
+      DoorData.get_door!(token.to_i).close_me
     end
   end
 

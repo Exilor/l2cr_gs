@@ -48,7 +48,7 @@ struct SiegeGuardManager
       sp.init
       if hired
         sp.stop_respawn
-        hired_count += 1
+        hired_count &+= 1
         if hired_count > hired_max
           return
         end

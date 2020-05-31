@@ -27,7 +27,7 @@ module ClassListData
     end
   end
 
-  def get_class(class_id : ClassId) : ClassInfo?
+  def get_class(class_id : ClassId) : ClassInfo
     CLASS_DATA[class_id]
   end
 

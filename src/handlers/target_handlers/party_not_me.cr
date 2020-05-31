@@ -7,7 +7,7 @@ module TargetHandler::PartyNotMe
       return EMPTY_TARGET_LIST
     end
 
-    target_list = Array(L2Object).new(party.members.size - 1)
+    target_list = Array(L2Object).new(party.members.size &- 1)
 
     party.members.each do |m|
       next if m.dead? || char == m

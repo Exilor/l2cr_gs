@@ -51,7 +51,7 @@ module AdminCommandHandler::AdminPolymorph
 
       id = parts[1].to_i
       unless TransformData.transform_player(id, player)
-        player.send_message("Unknown transformation ID: #{id}")
+        player.send_message("Unknown transformation id: #{id}")
         return false
       end
     end

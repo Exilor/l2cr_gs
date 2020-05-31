@@ -16,7 +16,7 @@ module CommunityBoardHandler::HomeBoard
     elsif command.starts_with?("_bbstop;")
       path = command.sub("_bbstop;", "")
       if path.size > 0 && path.ends_with?(".html")
-        html = HtmCache.get_htm_force("data/html/CommunityBoard/#{path}") # L2J: get_htm
+        html = HtmCache.get_htm_force("data/html/CommunityBoard/" + path) # L2J: get_htm
         CommunityBoardHandler.separate_and_send(html, pc)
       end
     end

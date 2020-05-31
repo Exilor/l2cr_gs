@@ -24,7 +24,7 @@ class TerritoryWard
         drop_it
       end
 
-      @npc = TerritoryWarManager.spawn_npc(36491 + @territory_id, old_location)
+      @npc = TerritoryWarManager.spawn_npc(36491 &+ @territory_id, old_location)
     end
   end
 
@@ -34,7 +34,7 @@ class TerritoryWard
         drop_it
       end
 
-      @npc = TerritoryWarManager.spawn_npc(36491 + @territory_id, @location)
+      @npc = TerritoryWarManager.spawn_npc(36491 &+ @territory_id, @location)
     end
   end
 

@@ -175,7 +175,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -185,7 +184,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
       if qs = get_random_party_member_state(killer, -1, 2, npc)
         count = 0
         if qs.player.class_id.scavenger? && npc.sweep_active?
-          count += 5
+          count &+= 5
         end
 
         if Rnd.bool && qs.player.class_id.artisan?
@@ -194,7 +193,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
         end
 
         if get_quest_items_count(qs.player, AMBER_BEAD) + count < 70
-          count += 5
+          count &+= 5
         end
 
         if count > 0
@@ -263,7 +262,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
     else
       # [automatically added else]
     end
-
 
     super
   end
@@ -386,7 +384,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
       else
         # [automatically added else]
       end
-
     elsif qs.completed?
       if npc.id == WAREHOUSE_KEEPER_VALKON
         html = get_already_completed_msg(pc)
@@ -414,7 +411,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
     else
       # [automatically added else]
     end
-
 
     check
   end

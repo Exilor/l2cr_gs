@@ -145,7 +145,7 @@ struct BlockList
   def self.send_list_to_owner(list_owner : L2PcInstance)
     list_owner.send_packet(SystemMessageId::BLOCK_LIST_HEADER)
     list_owner.block_list.block_list.each_with_index do |id, i|
-      list_owner.send_message("#{i + 1}. #{CharNameTable.get_name_by_id(id)}")
+      list_owner.send_message("#{i &+ 1}. #{CharNameTable.get_name_by_id(id)}")
     end
     list_owner.send_packet(SystemMessageId::FRIEND_LIST_FOOTER)
   end

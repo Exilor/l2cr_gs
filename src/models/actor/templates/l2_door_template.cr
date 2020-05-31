@@ -44,7 +44,7 @@ class L2DoorTemplate < L2CharTemplate
     @node_x = Slice(Int32).new(4)
     @node_y = Slice(Int32).new(4)
     4.times do |i|
-      st = set.get_string("node#{i + 1}").split(',')
+      st = set.get_string("node#{i &+ 1}").split(',')
       @node_x[i] = st.shift.to_i
       @node_y[i] = st.shift.to_i
     end

@@ -5,7 +5,7 @@ class L2AttackableAI < L2CharacterAI
     initializer ai : L2AttackableAI, effector : L2Character, start : Bool
 
     def call
-      @ai.fear_time -= FEAR_TICKS
+      @ai.fear_time &-= FEAR_TICKS
       @ai.on_event_afraid(@effector, @start)
       @start = false
     end
@@ -30,9 +30,7 @@ class L2AttackableAI < L2CharacterAI
     on_event_think
   end
 
-  private def auto_attack_condition(target : L2Character?) : Bool
-    return false unless target
-
+  private def auto_attack_condition(target : L2Character) : Bool
     me = active_char
 
     if target.invul?
@@ -79,7 +77,7 @@ class L2AttackableAI < L2CharacterAI
 
     if me.is_a?(L2GuardInstance)
       if player && player.karma > 0
-        return GeoData.can_see_target?(me, player) # Los Check
+        return GeoData.can_see_target?(me, player)
       end
       if target.is_a?(L2MonsterInstance) && Config.guard_attack_aggro_mob
         return target.aggressive? && GeoData.can_see_target?(me, target)
@@ -92,7 +90,7 @@ class L2AttackableAI < L2CharacterAI
       end
 
       if target.is_a?(L2PcInstance) && target.karma > 0
-        return GeoData.can_see_target?(me, target) # Los Check
+        return GeoData.can_see_target?(me, target)
       end
       return false
     else
@@ -237,7 +235,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     if @global_aggro >= 0
-      npc.known_list.known_objects.each_value do |obj|
+      npc.known_list.each_object do |obj|
         if !obj.is_a?(L2Character) || obj.is_a?(L2StaticObjectInstance)
           next
         end
@@ -316,7 +314,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     # Minions following leader
-    leader = npc.leader?
+    leader = npc.leader
     if leader && !leader.looks_dead?
       min_radius = 30
 
@@ -533,7 +531,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     if !npc.movement_disabled? && Rnd.rand(100) <= 3
-      npc.known_list.known_objects.each_value do |nearby|
+      npc.known_list.each_object do |nearby|
         if nearby.is_a?(L2Attackable)
           if npc.inside_radius?(nearby, collision, false, false)
             if nearby != most_hate
@@ -638,7 +636,7 @@ class L2AttackableAI < L2CharacterAI
       unless ai_heal_skills.empty?
         percentage = npc.hp_percent
         if npc.minion?
-          if (leader = npc.leader?) && !leader.dead?
+          if (leader = npc.leader) && !leader.dead?
             if Rnd.rand(100) > leader.hp_percent
               ai_heal_skills.each do |heal_skill|
                 if heal_skill.target_type.self?
@@ -649,8 +647,8 @@ class L2AttackableAI < L2CharacterAI
                   next
                 end
 
-                range = heal_skill.cast_range + collision
-                range += leader.template.collision_radius
+                range = heal_skill.cast_range &+ collision
+                range &+= leader.template.collision_radius
 
                 unless Util.in_range?(range, npc, leader, false)
                   if !party?(heal_skill) && !npc.movement_disabled?
@@ -728,7 +726,7 @@ class L2AttackableAI < L2CharacterAI
       ai_res_skill = npc.template.get_ai_skills(AISkillScope::RES)
       unless ai_res_skill.empty?
         if npc.minion?
-          if (leader = npc.leader?) && leader.dead?
+          if (leader = npc.leader) && leader.dead?
             ai_res_skill.each do |sk|
               if sk.target_type.self?
                 next
@@ -738,8 +736,8 @@ class L2AttackableAI < L2CharacterAI
                 next
               end
 
-              range = sk.cast_range + collision
-              range += leader.template.collision_radius
+              range = sk.cast_range &+ collision
+              range &+= leader.template.collision_radius
 
               unless Util.in_range?(range, npc, leader, false)
                 if !party?(sk) && !npc.movement_disabled?
@@ -836,7 +834,7 @@ class L2AttackableAI < L2CharacterAI
         target = attack_target?
         if target
           if target.moving?
-            range -= 100
+            range &-= 100
           end
           move_to_pawn(target, Math.max(range, 5))
         end
@@ -868,8 +866,8 @@ class L2AttackableAI < L2CharacterAI
 
     dist = caster.calculate_distance(attack_target, false, false)
     dist2 = dist - attack_target.template.collision_radius
-    range = caster.physical_attack_range + caster.template.collision_radius
-    range += attack_target.template.collision_radius
+    range = caster.physical_attack_range &+ caster.template.collision_radius
+    range &+= attack_target.template.collision_radius
     srange = sk.cast_range + caster.template.collision_radius
     if attack_target.moving?
       dist2 = dist2 - 30
@@ -966,11 +964,11 @@ class L2AttackableAI < L2CharacterAI
     if sk.has_effect_type?(EffectType::HP)
       percentage = caster.hp_percent
       if caster.minion? && !sk.target_type.self?
-        leader = caster.leader?
-        if leader && !leader.dead?
+        leader = caster.leader
+        if leader && leader.alive?
           if Rnd.rand(100) > leader.hp_percent
             tmp = sk.cast_range + caster.template.collision_radius
-            tmp += leader.template.collision_radius
+            tmp &+= leader.template.collision_radius
             unless Util.in_range?(tmp, caster, leader, false)
               if !party?(sk) && !caster.movement_disabled?
                 move_to_pawn(leader, tmp)
@@ -1153,7 +1151,7 @@ class L2AttackableAI < L2CharacterAI
     if sk.has_effect_type?(EffectType::RESURRECTION)
       if !party?(sk)
         if caster.minion? && !sk.target_type.self?
-          if leader = caster.leader?
+          if leader = caster.leader
             if leader.dead?
               tmp = sk.cast_range + caster.template.collision_radius
               unless Util.in_range?(tmp, caster, leader, false)
@@ -1244,8 +1242,8 @@ class L2AttackableAI < L2CharacterAI
     npc.target ||= target
 
     dist = npc.calculate_distance(target, false, false)
-    range = npc.physical_attack_range + npc.template.collision_radius
-    range += target.template.collision_radius
+    range = npc.physical_attack_range &+ npc.template.collision_radius
+    range &+= target.template.collision_radius
 
     random = Rnd.rand(100)
     if !target.immobilized? && random < 15
@@ -1365,8 +1363,8 @@ class L2AttackableAI < L2CharacterAI
             actor.target = attack_target
             dist = actor.calculate_distance(obj, false, false)
             dist2 = dist - actor.template.collision_radius
-            range = sk.cast_range + actor.template.collision_radius
-            range += obj.template.collision_radius
+            range = sk.cast_range &+ actor.template.collision_radius
+            range &+= obj.template.collision_radius
             if obj.moving?
               dist2 -= 70
             end
@@ -1390,8 +1388,8 @@ class L2AttackableAI < L2CharacterAI
             actor.target = attack_target
             dist = actor.calculate_distance(obj, false, false)
             dist2 = dist
-            range = sk.cast_range + actor.template.collision_radius
-            range += obj.template.collision_radius
+            range = sk.cast_range &+ actor.template.collision_radius
+            range &+= obj.template.collision_radius
             if obj.moving?
               dist2 -= 70
             end
@@ -1434,8 +1432,8 @@ class L2AttackableAI < L2CharacterAI
             actor.target = attack_target
             dist = actor.calculate_distance(obj, false, false)
             dist2 = dist - actor.template.collision_radius
-            range = sk.cast_range + actor.template.collision_radius
-            range += obj.template.collision_radius
+            range = sk.cast_range &+ actor.template.collision_radius
+            range &+= obj.template.collision_radius
             if obj.moving?
               dist2 -= 70
             end
@@ -1453,8 +1451,8 @@ class L2AttackableAI < L2CharacterAI
     else
       dist = 0.0
       dist2 = 0.0
-      range = sk.cast_range + actor.template.collision_radius
-      range += attack_target.template.collision_radius
+      range = sk.cast_range &+ actor.template.collision_radius
+      range &+= attack_target.template.collision_radius
       actor.known_list.each_character(range) do |obj|
         if obj.nil? || obj.dead? || !GeoData.can_see_target?(actor, obj)
           next
@@ -1463,8 +1461,8 @@ class L2AttackableAI < L2CharacterAI
           actor.target = attack_target
           dist = actor.calculate_distance(obj, false, false)
           dist2 = dist - actor.template.collision_radius
-          range = sk.cast_range + actor.template.collision_radius
-          range += obj.template.collision_radius
+          range = sk.cast_range &+ actor.template.collision_radius
+          range &+= obj.template.collision_radius
           if obj.moving?
             dist2 -= 70
           end
@@ -1503,8 +1501,8 @@ class L2AttackableAI < L2CharacterAI
           actor.target = attack_target
           dist = actor.calculate_distance(obj, false, false)
           dist2 = dist - actor.template.collision_radius
-          range = sk.cast_range + actor.template.collision_radius
-          range += attack_target.template.collision_radius
+          range = sk.cast_range &+ actor.template.collision_radius
+          range &+= attack_target.template.collision_radius
           # if(obj.moving?)
           # dist2 = dist2 - 40
         rescue e
@@ -1518,13 +1516,13 @@ class L2AttackableAI < L2CharacterAI
     end
 
     unless actor.is_a?(L2GuardInstance)
-      actor.known_list.known_objects.each_value do |obj|
+      actor.known_list.each_object do |obj|
         begin
           actor.target = attack_target
           dist = actor.calculate_distance(obj, false, false)
           dist2 = dist
-          range = sk.cast_range + actor.template.collision_radius
-          range += attack_target.template.collision_radius
+          range = sk.cast_range &+ actor.template.collision_radius
+          range &+= attack_target.template.collision_radius
           # if(obj.moving?)
           # dist2 = dist2 - 40
         rescue e
@@ -1578,8 +1576,8 @@ class L2AttackableAI < L2CharacterAI
         begin
           dist = actor.calculate_distance(obj, false, false)
           dist2 = dist - actor.template.collision_radius
-          range = actor.physical_attack_range + actor.template.collision_radius
-          range += obj.template.collision_radius
+          range = actor.physical_attack_range &+ actor.template.collision_radius
+          range &+= obj.template.collision_radius
           if obj.moving?
             dist2 -= 70
           end
@@ -1601,7 +1599,7 @@ class L2AttackableAI < L2CharacterAI
       end
     end
     unless actor.is_a?(L2GuardInstance)
-      actor.known_list.known_objects.each_value do |target|
+      actor.known_list.each_object do |target|
         next unless obj = target.as?(L2Character)
 
         if !GeoData.can_see_target?(actor, obj) || obj.dead?
@@ -1659,7 +1657,7 @@ class L2AttackableAI < L2CharacterAI
       count = 0
       hate_list.each do |obj|
         if count < Rnd.rand
-          count += 1
+          count &+= 1
           next
         end
 
@@ -1690,7 +1688,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     unless actor.is_a?(L2GuardInstance)
-      actor.known_list.known_objects.each_value do |target|
+      actor.known_list.each_object do |target|
         unless obj = target.as?(L2Character)
           next
         end
@@ -1787,7 +1785,7 @@ class L2AttackableAI < L2CharacterAI
         master.minion_list.on_assist(me, attacker)
       end
 
-      if (master = master.leader?) && master.has_minions?
+      if (master = master.leader) && master.has_minions?
         master.minion_list.on_assist(me, attacker)
       end
     end
@@ -1819,7 +1817,7 @@ class L2AttackableAI < L2CharacterAI
           master.minion_list.on_assist(me, target)
         end
 
-        if (master = master.leader?) && master.has_minions?
+        if (master = master.leader) && master.has_minions?
           master.minion_list.on_assist(me, target)
         end
       end

@@ -147,7 +147,7 @@ module AugmentationData
         end
 
         if skill_id == 0 || skill_lvl == 0
-          bad_augment_data += 1
+          bad_augment_data &+= 1
           next
         end
 

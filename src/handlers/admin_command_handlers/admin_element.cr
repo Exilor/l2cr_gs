@@ -67,10 +67,8 @@ module AdminCommandHandler::AdminElement
       player.inventory.unequip_item_in_slot(armor_type)
 
       if type == -1
-        debug "type == -1"
         item_instance.clear_element_attr(type)
       else
-        debug "type: #{type}, value: #{value}"
         item_instance.set_element_attr(type, value)
       end
 

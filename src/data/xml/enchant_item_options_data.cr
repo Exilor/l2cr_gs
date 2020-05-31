@@ -12,7 +12,7 @@ module EnchantItemOptionsData
   end
 
   private def parse_document(doc, file)
-    counter = 0
+    count = 0
 
     find_element(doc, "list") do |list|
       find_element(list, "item") do |d|
@@ -29,12 +29,12 @@ module EnchantItemOptionsData
             end
           end
 
-          counter += 1
+          count &+= 1
         end
       end
     end
 
-    info { "Loaded #{DATA.size} items and #{counter} options." }
+    info { "Loaded #{DATA.size} items and #{count} options." }
   end
 
   def get_options(item_id : Int32, enchant_level : Int32) : EnchantOptions?

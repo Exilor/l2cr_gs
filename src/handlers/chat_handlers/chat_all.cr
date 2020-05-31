@@ -15,15 +15,12 @@ module ChatHandler::ChatAll
         vch = VoicedCommandHandler[command]
       else
         command = text.from(1)
-        debug { "Command: #{command}" }
         vch = VoicedCommandHandler[command]
       end
 
       if vch
         vch.use_voiced_command(command, pc, params || "")
         vcd_used = true
-      else
-        debug { "No handler registered for bypass '#{command}'." }
       end
     end
 
@@ -37,7 +34,7 @@ module ChatHandler::ChatAll
         pc.send_packet(SystemMessageId::INCORRECT_SYNTAX)
       else
         cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.appearance.visible_name, text)
-        pc.known_list.known_players.each_value do |player|
+        pc.known_list.each_player do |player|
           if pc.inside_radius?(player, 1250, false, true)
             unless BlockList.blocked?(player, pc)
               player.send_packet(cs)

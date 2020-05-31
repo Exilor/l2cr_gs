@@ -265,7 +265,7 @@ class CursedWeapon
     if Rnd.rand(100_000) < @drop_rate
       drop_it(attackable, pc)
       @end_time = Time.ms + (@duration * 60_000)
-      @remove_task = start_remove_task(@duration_lost * 12000, @duration_lost * 12000)
+      @remove_task = start_remove_task(@duration_lost * 12_000, @duration_lost * 12_000)
       info { "#{@name} has dropped from #{attackable} killed by #{pc.name}." }
       return true
     end
@@ -292,7 +292,7 @@ class CursedWeapon
     save_data
 
     player.cursed_weapon_equipped_id = @item_id
-    player.karma = 9999999
+    player.karma = 9_999_999
     player.pk_kills = 0
 
     if party = player.party
@@ -364,7 +364,7 @@ class CursedWeapon
       player.pk_kills = @nb_kills
       player.send_packet(UserInfo.new(player))
       if @nb_kills % @stage_kills == 0
-        if @nb_kills <= @stage_kills * (@skill_max_level - 1)
+        if @nb_kills <= @stage_kills * (@skill_max_level &- 1)
           give_skill
         end
       end

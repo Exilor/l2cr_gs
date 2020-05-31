@@ -82,11 +82,11 @@ module ItemTable
     info { "Loaded #{ETC_ITEMS.size + ARMORS.size + WEAPONS.size} item templates in #{timer} s." }
   end
 
-  def [](id : Int) : L2Item
+  def [](id : Int32) : L2Item
     self[id]? || raise "No item template with id #{id}"
   end
 
-  def []?(index : Int) : L2Item?
+  def []?(index : Int32) : L2Item?
     TEMPLATES[index]
   end
 
@@ -116,7 +116,7 @@ module ItemTable
           return item
         end
         item.owner_id = actor.l2id
-        task = ThreadPoolManager.schedule_general(ResetOwner.new(item), 15000)
+        task = ThreadPoolManager.schedule_general(ResetOwner.new(item), 15_000)
         item.item_loot_schedule = task
       end
     end

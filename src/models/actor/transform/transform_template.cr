@@ -212,7 +212,7 @@ class TransformTemplate
     @data[data.level] = data
   end
 
-  def get_data(level : Int) : TransformLevelData?
+  def get_data(level : Int32) : TransformLevelData?
     @data[level]?
   end
 end

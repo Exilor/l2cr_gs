@@ -6,7 +6,7 @@ class Packets::Incoming::RequestRecordInfo < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    pc.known_list.known_objects.each_value do |obj|
+    pc.known_list.each_object do |obj|
       if obj.poly? && obj.poly.morphed? && obj.poly.poly_type == "item"
         pc.send_packet(SpawnItem.new(obj))
       else

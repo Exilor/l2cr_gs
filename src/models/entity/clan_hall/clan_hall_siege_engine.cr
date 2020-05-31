@@ -22,12 +22,12 @@ abstract class ClanHallSiegeEngine < Quest
 
   getter attackers = Concurrent::Map(Int32, L2SiegeClan).new
 
-  def initialize(name : String, descr : String, hall_id : Int32)
-    super(-1, name, descr)
+  def initialize(name : String, description : String, hall_id : Int32)
+    super(-1, name, description)
 
     @hall = ClanHallSiegeManager.get_siegable_hall(hall_id).not_nil!
     @hall.siege = self
-    delay = @hall.next_siege_time - Time.ms - 3600000
+    delay = @hall.next_siege_time - Time.ms - 3_600_000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
     info { "Siege scheduled for #{siege_date.time}." }
     load_attackers
@@ -238,7 +238,7 @@ abstract class ClanHallSiegeEngine < Quest
 
     on_siege_ends
 
-    delay = @hall.next_siege_time - Time.ms - 3600000
+    delay = @hall.next_siege_time - Time.ms - 3_600_000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
 
     info { "Siege of #{@hall.name} scheduled for #{@hall.siege_date.time}." }
@@ -249,7 +249,7 @@ abstract class ClanHallSiegeEngine < Quest
 
   def update_siege
     cancel_siege_task
-    delay = @hall.next_siege_time - 3600000
+    delay = @hall.next_siege_time - 3_600_000
     @siege_task = ThreadPoolManager.schedule_general(->prepare_owner_task, delay)
     info { "Siege of #{@hall.name} scheduled for #{@hall.siege_date.time}." }
   end

@@ -9,7 +9,9 @@ class PlayerEventHolder
   getter kills = Concurrent::Array(L2PcInstance).new
   property? sit_forced : Bool
 
-  def initialize(@pc : L2PcInstance, @sit_forced : Bool = false)
+  def initialize(pc : L2PcInstance, sit_forced : Bool = false)
+    @pc = pc
+    @sit_forced = sit_forced
     @name = pc.name
     @title = pc.title
     @clan_id = pc.clan_id

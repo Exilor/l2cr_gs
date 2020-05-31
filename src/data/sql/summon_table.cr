@@ -55,7 +55,7 @@ module SummonTable
     end
 
     unless template = NpcData[data.npc_id]?
-      warn { "No NPC template found with ID #{data.npc_id}." }
+      warn { "No NPC template found with id #{data.npc_id}." }
       return
     end
 

@@ -45,7 +45,7 @@ abstract class AirShipController < Quest
   getter depart_path : Slice(VehiclePathPoint)?
   getter docked_ship : L2ControllableAirShipInstance?
 
-  def initialize(quest_id, name, descr)
+  def initialize(quest_id, name, description)
     super
 
     @sm_need_more = SystemMessage.the_airship_need_more_s1

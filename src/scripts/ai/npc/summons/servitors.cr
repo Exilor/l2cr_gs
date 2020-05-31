@@ -63,7 +63,7 @@ class Scripts::Servitors < AbstractNpcAI
   @[Register(event: ON_CREATURE_KILL, register: NPC, id: Scripts::Servitors::SUMMONS)]
   def on_creature_kill(event : OnCreatureKill)
     attacker, target = event.attacker, event.target.as(L2Summon)
-    debug "on_creature_kill: attacker: #{attacker}, target: #{target}"
+
     if MONSTERS.has_key?(attacker.id) && target.servitor?
       if Util.in_range?(1500, attacker, target, true)
         owner = target.owner

@@ -83,7 +83,7 @@ module RaidBossPointsManager
     tmp_ranking = {} of Int32 => Int32
     list.each do |pair|
       tmp_ranking[pair[0]] = ranking
-      ranking += 1
+      ranking &+= 1
     end
 
     tmp_ranking

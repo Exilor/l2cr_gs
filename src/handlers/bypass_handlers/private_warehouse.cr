@@ -3,8 +3,6 @@ module BypassHandler::PrivateWarehouse
   extend BypassHandler
 
   def use_bypass(command, pc, target)
-    debug "#{command}, #{pc}, #{target}"
-
     return false unless target.is_a?(L2Npc)
     return false if pc.enchanting?
 

@@ -9,11 +9,11 @@ class L2CastleDoormenInstance < L2DoormenInstance
     st = command.from(10).split(", ")
     st.shift?
 
-    until st.empty?
+    st.each do |token|
       if hall = conquerable_hall
-        hall.open_close_door(st.shift.to_i, true)
+        hall.open_close_door(token.to_i, true)
       else
-        castle.open_door(pc, st.shift.to_i)
+        castle.open_door(pc, token.to_i)
       end
     end
   end
@@ -22,11 +22,11 @@ class L2CastleDoormenInstance < L2DoormenInstance
     st = command.from(11).split(", ")
     st.shift?
 
-    until st.empty?
+    st.each do |token|
       if hall = conquerable_hall
-        hall.open_close_door(st.shift.to_i, false)
+        hall.open_close_door(token.to_i, false)
       else
-        castle.close_door(pc, st.shift.to_i)
+        castle.close_door(pc, token.to_i)
       end
     end
   end

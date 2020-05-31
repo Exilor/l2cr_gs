@@ -957,7 +957,7 @@ class L2PcInstance < L2Playable
 
     gsp.invisible = invisible?
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       unless visible_for?(pc)
         next
       end
@@ -988,7 +988,7 @@ class L2PcInstance < L2Playable
 
     gsp.invisible = invisible?
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       if inside_radius?(pc, radius, false, false)
         pc.send_packet(gsp)
 
@@ -1304,8 +1304,7 @@ class L2PcInstance < L2Playable
       learn = SkillTreesData.get_class_skill(id, skill.level % 100, class_id)
       if learn
         lvl_diff = id == CommonSkill::EXPERTISE.id ? 0 : 9
-        if level < learn.get_level - lvl_diff
-          debug { "Decreasing the level of #{skill} by #{lvl_diff}" }
+        if level < learn.get_level &- lvl_diff
           decrease_skill_level(skill, lvl_diff)
         end
       end
@@ -1317,17 +1316,15 @@ class L2PcInstance < L2Playable
     skill_tree = SkillTreesData.get_complete_class_skill_tree(class_id)
     skill_tree.each_value do |sl|
       if sl.skill_id == skill.id && next_level < sl.skill_level
-        if level >= sl.get_level - lvl_diff
+        if level >= sl.get_level &- lvl_diff
           next_level = sl.skill_level
         end
       end
     end
 
     if next_level == -1
-      debug { "Removing #{skill}." }
       remove_skill(skill, true)
     else
-      debug { "Decreasing level of #{skill} from #{skill.level} to #{next_level}." }
       add_skill(SkillData[skill.id, next_level], true)
     end
   end
@@ -1335,7 +1332,6 @@ class L2PcInstance < L2Playable
   def use_magic(skill : Skill, force : Bool, dont_move : Bool) : Bool
     if skill.passive?
       action_failed
-      debug { "Tried to use passive skill #{skill}." }
       return false
     end
 
@@ -1346,7 +1342,6 @@ class L2PcInstance < L2Playable
         action_failed
         return false
       elsif skill_disabled?(skill)
-        debug { "#use_magic(#{skill}, #{force}, #{dont_move}) aborted (skill is disabled)." }
         action_failed
         return false
       end
@@ -1381,45 +1376,39 @@ class L2PcInstance < L2Playable
   end
 
   private def check_use_magic_conditions(skill : Skill, force_use : Bool, dont_move : Bool) : Bool
-    # debug { "check_use_magic_conditions #{skill}, #{force_use} #{dont_move}" }
     if out_of_control? || paralyzed? || stunned? || sleeping? || dead?
       action_failed
       return false
     end
-    # debug "before fishing check"
+
     if fishing?
       unless skill.has_effect_type?(EffectType::FISHING, EffectType::FISHING_START)
         send_packet(SystemMessageId::ONLY_FISHING_SKILLS_NOW)
-        debug "#check_use_magic_conditions: failed fishing check."
         return false
       end
     end
-    # debug "before observer mode check"
+
     if in_observer_mode?
       send_packet(SystemMessageId::OBSERVERS_CANNOT_PARTICIPATE)
       abort_cast
       action_failed
-      debug "#check_use_magic_conditions: failed observer mode check."
       return false
     end
-    # debug "before sitting check"
+
     if sitting?
       send_packet(SystemMessageId::CANT_MOVE_SITTING)
       action_failed
-      debug "#check_use_magic_conditions: failed sitting check."
       return false
     end
-    # debug "before toggle check"
+
     if skill.toggle? && affected_by_skill?(skill.id) # should be after "if sitting?"
       stop_skill_effects(true, skill.id)
       action_failed
-      debug "#check_use_magic_conditions: failed toggle check."
       return false
     end
-    # debug "before fake death check"
+
     if fake_death?
       action_failed
-      debug "#check_use_magic_conditions: failed fake death check."
       return false
     end
 
@@ -1427,8 +1416,7 @@ class L2PcInstance < L2Playable
     target_type = skill.target_type
 
     pos = current_skill_world_position
-    if target_type.ground? && !pos
-      warn { "@current_skill_world_position is nil for skill #{skill}." }
+    if target_type.ground? && pos.nil?
       action_failed
       return false
     end
@@ -1502,7 +1490,7 @@ class L2PcInstance < L2Playable
       send_packet(sm)
       return false
     end
-    # debug "before skill.check_condition check"
+
     unless skill.check_condition(self, target, false)
       action_failed
       return false
@@ -1550,7 +1538,6 @@ class L2PcInstance < L2Playable
         end
       end
 
-      # debug "before auto attackable check"
       if !target.auto_attackable?(self) && !force_use
         case target_type
         when .aura?, .front_aura?, .behind_aura?, .aura_corpse_mob?, .clan?,
@@ -1562,7 +1549,6 @@ class L2PcInstance < L2Playable
         end
       end
 
-      # debug "before dont_move check"
       if dont_move
         if target_type.ground?
           pos = pos.not_nil!
@@ -1580,7 +1566,7 @@ class L2PcInstance < L2Playable
         end
       end
     end
-    # debug "before effect_point check"
+
     if skill.effect_point > 0 && target.monster? && !force_use
       action_failed
       return false
@@ -1631,7 +1617,6 @@ class L2PcInstance < L2Playable
       ctrl = !!current_skill && current_skill.ctrl?
 
       if target.inside_peace_zone?
-        debug { "#check_pvp_skill: #{target} is inside a peace zone." }
         return false
       end
 
@@ -1658,7 +1643,6 @@ class L2PcInstance < L2Playable
             end
           end
 
-          debug "L2PcInstance#check_pvp_skill: in the same party."
           return false
         elsif party.command_channel.try &.includes?(target_player)
           if skill.effect_range > 0 && ctrl && target() == target
@@ -1667,7 +1651,6 @@ class L2PcInstance < L2Playable
             end
           end
 
-          debug "L2PcInstance#check_pvp_skill: in the same command channel."
           return false
         end
       end
@@ -1696,7 +1679,6 @@ class L2PcInstance < L2Playable
             return true
           end
 
-          debug "L2PcInstance#check_pvp_skill: in clan/ally but not at war."
           return false
         end
       end
@@ -1707,7 +1689,6 @@ class L2PcInstance < L2Playable
           return true
         end
 
-        debug "L2PcInstance#check_pvp_skill: target is not chaotic."
         return false
       end
 
@@ -1800,7 +1781,7 @@ class L2PcInstance < L2Playable
 
     skills.each do |sk|
       next if get_known_skill(sk.id) == sk
-      count += 1 if get_skill_level(sk.id) == -1
+      count &+= 1 if get_skill_level(sk.id) == -1
 
       if sk.toggle? && affected_by_skill?(sk.id)
         stop_skill_effects(true, sk.id)
@@ -2071,7 +2052,7 @@ class L2PcInstance < L2Playable
               debug { "Dropped #{i}." }
             end
 
-            drop_count += 1
+            drop_count &+= 1
             break if drop_count >= drop_limit
           end
         end
@@ -2130,9 +2111,9 @@ class L2PcInstance < L2Playable
 
     unless L2Event.participant?(self)
       if lvl < Config.max_player_level
-        lost_exp = (((stat.get_exp_for_level(lvl + 1) - stat.get_exp_for_level(lvl)) * percent_lost) / 100).round
+        lost_exp = (((stat.get_exp_for_level(lvl &+ 1) - stat.get_exp_for_level(lvl)) * percent_lost) / 100).round
       else
-        lost_exp = (((stat.get_exp_for_level(Config.max_player_level) - stat.get_exp_for_level(Config.max_player_level - 1)) * percent_lost) / 100).round
+        lost_exp = (((stat.get_exp_for_level(Config.max_player_level) - stat.get_exp_for_level(Config.max_player_level &- 1)) * percent_lost) / 100).round
       end
     end
 
@@ -2751,7 +2732,7 @@ class L2PcInstance < L2Playable
     karma = Math.max(karma, 0)
 
     if karma() == 0 && karma > 0
-      known_list.known_objects.each_value do |obj|
+      known_list.each_object do |obj|
         if obj.is_a?(L2GuardInstance)
           obj.intention = AI::ACTIVE
         end
@@ -2768,7 +2749,7 @@ class L2PcInstance < L2Playable
     send_packet(UserInfo.new(self))
     send_packet(ExBrExtraUserInfo.new(self))
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn = summon
@@ -2781,7 +2762,7 @@ class L2PcInstance < L2Playable
   def broadcast_karma
     send_packet(StatusUpdate.karma(self))
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn = summon
@@ -3375,15 +3356,19 @@ class L2PcInstance < L2Playable
 
     sl = SkillList.new
 
-    all_skills.each do |s|
-      if (@transformation && !s.passive?) || (has_transform_skill?(s.id) && s.passive?)
+    @skills.each do |id, s|
+      if @transformation && !s.passive?
         next
       end
 
-      enchantable = SkillData.enchantable?(s.id)
+      if has_transform_skill?(id) && s.passive?
+        next
+      end
+
+      enchantable = SkillData.enchantable?(id)
       if enchantable
-        esl = EnchantSkillGroupsData.get_skill_enchantment_by_skill_id(s.id)
-        if !esl || s.level < esl.base_level
+        esl = EnchantSkillGroupsData.get_skill_enchantment_by_skill_id(id)
+        if esl.nil? || s.level < esl.base_level
           enchantable = false
         end
       end
@@ -3462,11 +3447,11 @@ class L2PcInstance < L2Playable
     end
 
     if item_id
-      ItemTable[item_id].as(L2Weapon)
-    else
-      warn { "No fists found for #{ClassId[class_id]}." }
-      nil
+      return ItemTable[item_id].as(L2Weapon)
     end
+
+    # warn { "No fists found for #{ClassId[class_id]}." }
+    nil
   end
 
   def active_weapon_instance : L2ItemInstance?
@@ -3505,7 +3490,7 @@ class L2PcInstance < L2Playable
     legs = legs_armor_instance
     armor = chest_armor_instance
 
-    if chest && legs
+    if armor && legs
       if legs.item_type == ArmorType::HEAVY
         if armor.item_type == ArmorType::HEAVY
           return true
@@ -3528,7 +3513,7 @@ class L2PcInstance < L2Playable
     legs = legs_armor_instance
     armor = chest_armor_instance
 
-    if chest && legs
+    if armor && legs
       if legs.item_type == ArmorType::LIGHT
         if armor.item_type == ArmorType::LIGHT
           return true
@@ -3551,7 +3536,7 @@ class L2PcInstance < L2Playable
     legs = legs_armor_instance
     armor = chest_armor_instance
 
-    if chest && legs
+    if armor && legs
       if legs.item_type == ArmorType::MAGIC
         if armor.item_type == ArmorType::MAGIC
           return true
@@ -4544,11 +4529,11 @@ class L2PcInstance < L2Playable
 
   def remove_henna(slot : Int32) : Bool
     return false if slot < 1 || slot > 3
-    slot -= 1
+    slot &-= 1
     return false unless henna = @henna[slot]
     @henna[slot] = nil
 
-    GameDB.henna.delete(self, slot + 1)
+    GameDB.henna.delete(self, slot &+ 1)
 
     recalc_henna_stats
 
@@ -4577,7 +4562,7 @@ class L2PcInstance < L2Playable
         @henna[i] = henna
         recalc_henna_stats
 
-        GameDB.henna.insert(self, henna, i + 1)
+        GameDB.henna.insert(self, henna, i &+ 1)
 
         send_packet(HennaInfo.new(self))
         send_packet(UserInfo.new(self))
@@ -4602,17 +4587,17 @@ class L2PcInstance < L2Playable
 
     @henna.each do |h|
       next unless h
-      @henna_int += @henna_int + h.int > 5 ? 5 - @henna_int : h.int
-      @henna_str += @henna_str + h.str > 5 ? 5 - @henna_str : h.str
-      @henna_con += @henna_con + h.con > 5 ? 5 - @henna_con : h.con
-      @henna_men += @henna_men + h.men > 5 ? 5 - @henna_men : h.men
-      @henna_wit += @henna_wit + h.wit > 5 ? 5 - @henna_wit : h.wit
-      @henna_dex += @henna_dex + h.dex > 5 ? 5 - @henna_dex : h.dex
+      @henna_int += @henna_int &+ h.int > 5 ? 5 &- @henna_int : h.int
+      @henna_str += @henna_str &+ h.str > 5 ? 5 &- @henna_str : h.str
+      @henna_con += @henna_con &+ h.con > 5 ? 5 &- @henna_con : h.con
+      @henna_men += @henna_men &+ h.men > 5 ? 5 &- @henna_men : h.men
+      @henna_wit += @henna_wit &+ h.wit > 5 ? 5 &- @henna_wit : h.wit
+      @henna_dex += @henna_dex &+ h.dex > 5 ? 5 &- @henna_dex : h.dex
     end
   end
 
   def get_henna(slot : Int32) : L2Henna?
-    @henna[slot - 1] unless slot < 1 || slot > 3
+    @henna[slot &- 1] unless slot < 1 || slot > 3
   end
 
   def has_hennas? : Bool
@@ -4639,7 +4624,7 @@ class L2PcInstance < L2Playable
     @quests[quest_name]
   end
 
-  def quest_state=(qs : QuestState)
+  def set_quest_state(qs : QuestState)
     @quests[qs.quest_name] = qs
   end
 
@@ -4729,7 +4714,7 @@ class L2PcInstance < L2Playable
   def start_warn_user_take_break
     @task_warn_user_take_break ||=
     ThreadPoolManager.schedule_general_at_fixed_rate(
-      WarnUserTakeBreakTask.new(self), 7200000, 7200000
+      WarnUserTakeBreakTask.new(self), 7_200_000, 7_200_000
     )
   end
 
@@ -4744,9 +4729,7 @@ class L2PcInstance < L2Playable
     update_pvp_flag(1)
     @pvp_reg_task ||=
     ThreadPoolManager.schedule_general_at_fixed_rate(
-      PvPFlagTask.new(self),
-      1000,
-      1000
+      PvPFlagTask.new(self), 1000, 1000
     )
   end
 
@@ -4782,7 +4765,7 @@ class L2PcInstance < L2Playable
       send_packet(RelationChanged.new(smn, get_relation(self), false))
     end
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn
@@ -5261,8 +5244,7 @@ class L2PcInstance < L2Playable
         sync do
           @teleport_watchdog ||=
           ThreadPoolManager.schedule_general(
-            TeleportWatchdogTask.new(self),
-            Config.teleport_watchdog_timeout
+            TeleportWatchdogTask.new(self), Config.teleport_watchdog_timeout
           )
         end
       end
@@ -5746,10 +5728,14 @@ class L2PcInstance < L2Playable
         self.recom_left += 20
       end
 
-      @reco_bonus_task = ThreadPoolManager.schedule_general(RecoBonusTaskEnd.new(self), task_time)
+      @reco_bonus_task = ThreadPoolManager.schedule_general(
+        RecoBonusTaskEnd.new(self), task_time
+      )
     end
 
-    @reco_give_task = ThreadPoolManager.schedule_general_at_fixed_rate(RecoGiveTask.new(self), 7200000, 3600000)
+    @reco_give_task = ThreadPoolManager.schedule_general_at_fixed_rate(
+      RecoGiveTask.new(self), 7_200_000, 3_600_000
+    )
 
     store_recommendations
   end
@@ -5782,7 +5768,9 @@ class L2PcInstance < L2Playable
     effect_list.stop_all_toggles
     set_mount(npc_id, level)
     self.mount_l2id = control_item_l2id
-    start_feed(npc_id) if use_food
+    if use_food
+      start_feed(npc_id)
+    end
     broadcast_packet(Ride.new(self))
     broadcast_user_info
 
@@ -5910,8 +5898,7 @@ class L2PcInstance < L2Playable
     last_hungry_state = hungry?
     @current_feed = num > max_feed ? max_feed : num
     sg = SetupGauge.green(
-      (current_feed * 10000) / feed_consume,
-      (max_feed * 10000) / feed_consume
+      (current_feed * 10_000) / feed_consume, (max_feed * 10_000) / feed_consume
     )
     send_packet(sg)
     if last_hungry_state != hungry?
@@ -5926,22 +5913,26 @@ class L2PcInstance < L2Playable
       self.current_feed = summon.as(L2PetInstance).current_feed
       @control_item_id = summon.as(L2PetInstance).control_l2id
       sg = SetupGauge.green(
-        (current_feed * 10000) // feed_consume,
-        (max_feed * 10000) // feed_consume
+        (current_feed * 10_000) // feed_consume,
+        (max_feed * 10_000) // feed_consume
       )
       send_packet(sg)
       if alive?
-        @mount_feed_task = ThreadPoolManager.schedule_general_at_fixed_rate(PetFeedTask.new(self), 10000, 10000)
+        @mount_feed_task = ThreadPoolManager.schedule_general_at_fixed_rate(
+          PetFeedTask.new(self), 10_000, 10_000
+        )
       end
     elsif @can_feed
       self.current_feed = max_feed
       sg = SetupGauge.green(
-        (current_feed * 10000) // feed_consume,
-        (max_feed * 10000) // feed_consume
+        (current_feed * 10_000) // feed_consume,
+        (max_feed * 10_000) // feed_consume
       )
       send_packet(sg)
       if alive?
-        @mount_feed_task = ThreadPoolManager.schedule_general_at_fixed_rate(PetFeedTask.new(self), 10000, 10000)
+        @mount_feed_task = ThreadPoolManager.schedule_general_at_fixed_rate(
+          PetFeedTask.new(self), 10_000, 10_000
+        )
       end
     end
   end
@@ -5966,8 +5957,8 @@ class L2PcInstance < L2Playable
     last_hungry_state = hungry?
     @current_feed = num > max_feed ? max_feed : num
     sg = SetupGauge.green(
-      (current_feed * 10000) // feed_consume,
-      (max_feed * 10000) // feed_consume
+      (current_feed * 10_000) // feed_consume,
+      (max_feed * 10_000) // feed_consume
     )
     send_packet(sg)
     if last_hungry_state != hungry?
@@ -6328,7 +6319,7 @@ class L2PcInstance < L2Playable
       Config.max_pvtstoresell_slots_dwarf
     else
       Config.max_pvtstoresell_slots_other
-    end  + calc_stat(Stats::P_SELL_LIM, 0).to_i
+    end + calc_stat(Stats::P_SELL_LIM, 0).to_i
   end
 
   def private_buy_store_limit : Int32
@@ -7414,12 +7405,12 @@ class L2PcInstance < L2Playable
     if check <= 50
       random_lvl = skill_lvl
     elsif check <= 85
-      random_lvl = skill_lvl - 1
+      random_lvl = skill_lvl &- 1
       if random_lvl <= 0
         random_lvl = 1
       end
     else
-      random_lvl = skill_lvl + 1
+      random_lvl = skill_lvl &+ 1
       if random_lvl > 27
         random_lvl = 27
       end
@@ -7525,7 +7516,7 @@ class L2PcInstance < L2Playable
     id = 1
     while id <= @bookmark_slot
       break unless @tp_bookmarks.has_key?(id)
-      id += 1
+      id &+= 1
     end
 
     @tp_bookmarks[id] = TeleportBookmark.new(id, x, y, z, icon, tag, name)

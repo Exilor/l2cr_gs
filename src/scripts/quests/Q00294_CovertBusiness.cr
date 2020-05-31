@@ -37,7 +37,7 @@ class Scripts::Q00294_CovertBusiness < Quest
       chance = Rnd.rand(10)
       count = 0
       MONSTER_DROP_CHANCE[npc.id].each do |i|
-        count += 1
+        count &+= 1
         if chance > i
           if give_item_randomly(killer, npc, BAT_FANG, count, 100, 1.0, true)
             qs.set_cond(2)

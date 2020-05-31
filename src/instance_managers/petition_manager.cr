@@ -113,13 +113,13 @@ module PetitionManager
 
     pending_petitions.each_value do |cur_pt|
       if cur_pt.petitioner? && cur_pt.petitioner.l2id == pc.l2id
-        count += 1
+        count &+= 1
       end
     end
 
     completed_petitions.each_value do |cur_pt|
       if cur_pt.petitioner? && cur_pt.petitioner.l2id == pc.l2id
-        count += 1
+        count &+= 1
       end
     end
 
@@ -262,7 +262,7 @@ module PetitionManager
         io << cur_pt.type_as_string
         io << "</td></tr></table></td></tr>"
         color = !color
-        count += 1
+        count &+= 1
         if count > 10
           io << "<tr><td><font color=\"LEVEL\">There is more pending petition...</font><br></td></tr>"
           break

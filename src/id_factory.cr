@@ -83,7 +83,7 @@ module IdFactory
 
     temp.sort!
     temp.each { |id| IDS << id }
-    info { "#{temp.size} IDs loaded in #{timer} s." }
+    info { "#{temp.size} ids loaded in #{timer} s." }
   end
 
   def next : Int32

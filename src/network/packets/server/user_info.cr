@@ -124,7 +124,7 @@ class Packets::Outgoing::UserInfo < GameServerPacket
     if @pc.poly? && @pc.poly.morphed?
       poly_obj = NpcData[@pc.poly.poly_id]?
       if poly_obj
-        title += " - #{poly_obj.name}"
+        title = "#{title} - #{poly_obj.name}"
       end
     end
 

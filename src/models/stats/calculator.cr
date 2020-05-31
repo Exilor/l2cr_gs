@@ -36,7 +36,7 @@ class Calculator
         i &+= 1
       end
 
-      @functions = tmp.to_slice(funcs.size + 1)
+      @functions = tmp.to_slice(funcs.size &+ 1)
     end
   end
 

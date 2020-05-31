@@ -104,7 +104,7 @@ class Scripts::MithrilMine < AbstractInstance
       InstanceManager.get_instance(world.instance_id).not_nil!.duration = 1000
     else
       if npc.script_value?(1)
-        world.count += 1
+        world.count &+= 1
       end
 
       if world.count >= 5
@@ -149,7 +149,6 @@ class Scripts::MithrilMine < AbstractInstance
     else
       # [automatically added else]
     end
-
 
     super
   end

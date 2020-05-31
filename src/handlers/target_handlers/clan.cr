@@ -74,7 +74,7 @@ module TargetHandler::Clan
       target_list = [char] of L2Object
 
       max_targets = skill.affect_limit
-      char.known_list.known_objects.each_value do |new_target|
+      char.known_list.each_object do |new_target|
         if new_target.is_a?(L2Npc) && npc.in_my_clan?(new_target)
           unless Util.in_range?(skill.cast_range, char, new_target, true)
             next

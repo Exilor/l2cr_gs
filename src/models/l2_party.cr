@@ -377,10 +377,9 @@ class L2Party < AbstractPlayerGroup
     end
 
     if left_over > 0
-      keys = rewards.keys
-      while left_over > 0
+      keys = rewards.keys_slice
+      left_over.times do
         rewards[keys.sample(random: Rnd)] += 1
-        left_over &-= 1
       end
     end
 
@@ -424,7 +423,7 @@ class L2Party < AbstractPlayerGroup
     xp, sp = add_exp, add_sp
 
     if Config.party_xp_cutoff_method.casecmp?("highfive")
-      lvl_diff = top_lvl - pc.level
+      lvl_diff = top_lvl &- pc.level
       Config.party_xp_cutoff_gaps.each_with_index do |gap, i|
         if lvl_diff.between?(gap[0], gap[1])
           xp = (add_exp * Config.party_xp_cutoff_gap_percents[i]).to_i64 // 100
@@ -445,7 +444,7 @@ class L2Party < AbstractPlayerGroup
 
     if Config.party_xp_cutoff_method.casecmp?("level")
       members.each do |m|
-        if top_lvl - m.level <= Config.party_xp_cutoff_level
+        if top_lvl &- m.level <= Config.party_xp_cutoff_level
           valid_members << m
         end
       end
@@ -460,10 +459,10 @@ class L2Party < AbstractPlayerGroup
     elsif Config.party_xp_cutoff_method.casecmp?("auto")
       sq_level_sum = members.reduce(0) { |c, m| c + Math.pow(m.level, 2) }
 
-      i = members.size - 1
+      i = members.size &- 1
       return members if i < 1
       if i >= BONUS_EXP_SP.size
-        i = BONUS_EXP_SP.size - 1
+        i = BONUS_EXP_SP.size &- 1
       end
 
       members.each do |m|
@@ -482,7 +481,7 @@ class L2Party < AbstractPlayerGroup
   end
 
   private def get_base_exp_sp_bonus(members_count)
-    i = members_count - 1
+    i = members_count &- 1
     return 1 if i < 1
     if i >= BONUS_EXP_SP.size
       i = -1
@@ -559,7 +558,7 @@ class L2Party < AbstractPlayerGroup
 
       answers_list << member.l2id
 
-      if answers_list.size >= size - 1
+      if answers_list.size >= size &- 1
         finish_loot_request(true)
       end
     end

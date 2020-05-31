@@ -330,7 +330,7 @@ module AdminCommandHandler::AdminEditChar
           end
         end
 
-        pc.send_message("Clan penalty successfully removed to character: #{player.name}")
+        pc.send_message("Clan penalty successfully removed to character: " + player.name)
       rescue e
         error e
       end
@@ -478,7 +478,7 @@ module AdminCommandHandler::AdminEditChar
       if player
         player.noble = !player.noble?
         if player.l2id != pc.l2id
-          pc.send_message("You've changed nobless status of: #{player.name}")
+          pc.send_message("You've changed nobless status of: " + player.name)
         end
         player.send_message("GM changed your nobless status")
       end
@@ -543,7 +543,7 @@ module AdminCommandHandler::AdminEditChar
     html.set_file(pc, "data/html/admin/charlist.htm")
 
     fn1 = ->(i : Int32) do
-      "<td align=center><a action=\"bypass -h admin_show_characters #{i}\">Page #{i + 1}</a></td>"
+      "<td align=center><a action=\"bypass -h admin_show_characters #{i}\">Page #{i &+ 1}</a></td>"
     end
     fn2 = ->(player : L2PcInstance) do
       String.build do |io|
@@ -603,7 +603,7 @@ module AdminCommandHandler::AdminEditChar
     end
 
     repl = NpcHtmlMessage.new
-    repl.set_file(pc, "data/html/admin/#{filename}")
+    repl.set_file(pc, "data/html/admin/" + filename)
     repl["%name%"] = player.name
     repl["%level%"] = player.level
     if clan = player.clan

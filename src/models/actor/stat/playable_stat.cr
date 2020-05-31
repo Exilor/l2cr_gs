@@ -41,7 +41,7 @@ class PlayableStat < CharStat
     end
 
     @exp.add(value) # there's no method to add and get the new value
-    if value + current_exp >= get_exp_for_level(level + 1)
+    if value + current_exp >= get_exp_for_level(level &+ 1)
       sync_exp_level(true)
     end
 
@@ -76,7 +76,7 @@ class PlayableStat < CharStat
       tmp = current_level
       while tmp <= max_level
         if current_exp >= get_exp_for_level(tmp)
-          if current_exp >= get_exp_for_level(tmp + 1)
+          if current_exp >= get_exp_for_level(tmp &+ 1)
             tmp &+= 1
             next
           end
@@ -101,7 +101,7 @@ class PlayableStat < CharStat
       tmp = current_level
       while tmp >= minimum_level
         if current_exp < get_exp_for_level(tmp)
-          if current_exp < get_exp_for_level(tmp - 1)
+          if current_exp < get_exp_for_level(tmp &- 1)
             tmp &-= 1
             next
           end
@@ -140,7 +140,7 @@ class PlayableStat < CharStat
     value += current_level
     self.level = value
 
-    if exp >= get_exp_for_level(level + 1) || get_exp_for_level(level) > exp
+    if exp >= get_exp_for_level(level &+ 1) || get_exp_for_level(level) > exp
       self.exp = get_exp_for_level(level)
     end
 
@@ -210,7 +210,7 @@ class PlayableStat < CharStat
   end
 
   def max_exp_level : Int32
-    Config.max_player_level + 1
+    Config.max_player_level &+ 1
   end
 
   def max_level : Int32

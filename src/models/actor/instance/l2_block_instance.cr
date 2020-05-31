@@ -59,7 +59,7 @@ class L2BlockInstance < L2MonsterInstance
   private def increase_team_points_and_send(pc : L2PcInstance, team : Int32, eng : BlockCheckerEngine)
     eng.increase_player_points(pc, team)
 
-    time_left = ((eng.started_time - Time.ms) / 1000).to_i
+    time_left = ((eng.started_time - Time.ms) // 1000).to_i
     red = eng.holder.red_players.includes?(pc)
 
     change_points = ExCubeGameChangePoints.new(time_left, eng.blue_points, eng.red_points)

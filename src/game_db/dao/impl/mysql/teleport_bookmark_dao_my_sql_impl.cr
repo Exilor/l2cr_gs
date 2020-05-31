@@ -2,7 +2,6 @@ module GameDB
   module TeleportBookmarkDAOMySQLImpl
     extend self
     extend TeleportBookmarkDAO
-    include Loggable
 
     private INSERT = "INSERT INTO character_tpbookmark (charId,Id,x,y,z,icon,tag,name) values (?,?,?,?,?,?,?,?)"
     private UPDATE = "UPDATE character_tpbookmark SET icon=?,tag=?,name=? where charId=? AND Id=?"

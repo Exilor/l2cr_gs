@@ -101,12 +101,12 @@ class L2WorldRegion
   end
 
   private def switch_ai(val : Bool)
-    c = 0
+    # c = 0
 
     if val
       @objects.each_value do |o|
         if o.is_a?(L2Attackable)
-          c += 1
+          # c &+= 1
           o.status.start_hp_mp_regeneration
         elsif o.is_a?(L2Npc)
           o.start_random_animation_timer
@@ -117,7 +117,7 @@ class L2WorldRegion
     else
       @objects.each_value do |o|
         if o.is_a?(L2Attackable)
-          c += 1
+          # c &+= 1
           o.target = nil
           o.stop_move(nil)
           o.stop_all_effects
@@ -130,7 +130,7 @@ class L2WorldRegion
             o.ai.stop_ai_task
           end
         elsif o.vehicle?
-          c += 1
+          # c &+= 1
           o.known_list.remove_all_known_objects
         end
       end
@@ -193,7 +193,7 @@ class L2WorldRegion
       end
     end
 
-    # info "All visible NPCs have been removed."
+    info "All visible NPCs have been removed."
   end
 
   def to_s(io : IO)

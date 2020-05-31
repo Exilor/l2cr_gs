@@ -406,7 +406,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def calculate_direction_to(loc : Locatable) : Float64
-    heading = Util.calculate_heading_from(self, loc) - heading()
+    heading = Util.calculate_heading_from(self, loc) &- heading()
     heading += 65_535 if heading < 0
     Util.convert_heading_to_degree(heading)
   end
@@ -414,7 +414,7 @@ abstract class L2Object < ListenersContainer
   def invisible=(bool : Bool)
     if @invisible = bool
       del = DeleteObject.new(self)
-      known_list.known_objects.each_value do |obj|
+      known_list.each_object do |obj|
         if obj.is_a?(L2PcInstance) && !visible_for?(obj)
           obj.send_packet(del)
         end
@@ -425,7 +425,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def broadcast_info
-    known_list.known_objects.each_value do |obj|
+    known_list.each_object do |obj|
       if obj.is_a?(L2PcInstance) && visible_for?(obj)
         send_info(obj)
       end

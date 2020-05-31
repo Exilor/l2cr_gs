@@ -92,7 +92,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
 
         i = st.get_int(npc_id.to_s)
         if i < 15
-          st.set(npc_id.to_s, (i + 1).to_s)
+          st.set(npc_id.to_s, (i &+ 1).to_s)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
 
@@ -113,7 +113,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
 
         i = st.get_int(npc_id.to_s)
         if i < 20
-          st.set(npc_id.to_s, (i + 1).to_s)
+          st.set(npc_id.to_s, (i &+ 1).to_s)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
 
@@ -133,7 +133,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
 
         i = st.get_int(npc_id.to_s)
         if i < 20
-          st.set(npc_id.to_s, (i + 1).to_s)
+          st.set(npc_id.to_s, (i &+ 1).to_s)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
 

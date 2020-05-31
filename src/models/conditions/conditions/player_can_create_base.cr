@@ -12,17 +12,16 @@ class Condition
       end
 
       can = true
+      clan = pc.clan
 
-      if pc.looks_dead? || pc.cursed_weapon_equipped? || pc.clan.nil?
+      if pc.looks_dead? || pc.cursed_weapon_equipped? || clan.nil?
         can = false
       end
-
-      clan = pc.clan.not_nil!
 
       castle = CastleManager.get_castle(pc)
       fort = FortManager.get_fort(pc)
 
-      if castle && fort
+      if castle.nil? && fort.nil?
         sm = SystemMessage.s1_cannot_be_used
         sm.add_skill_name(skill)
         pc.send_packet(sm)

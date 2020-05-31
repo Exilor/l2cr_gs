@@ -20,7 +20,7 @@ class Scripts::MithrilMinesTeleporter < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    index = event.to_i - 1
+    index = event.to_i &- 1
     if loc = LOCS[index]?
       pc.not_nil!.tele_to_location(loc, false)
     end

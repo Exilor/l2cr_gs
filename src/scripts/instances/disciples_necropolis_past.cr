@@ -103,7 +103,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
 
   private def check_doors(npc, world)
     sync do
-      world.kill_count += 1
+      world.kill_count &+= 1
       case world.kill_count
       when 4
         open_door(DOOR_1, world.instance_id)

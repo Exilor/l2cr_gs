@@ -33,9 +33,8 @@ class Packets::Incoming::RequestLinkHtml < GameClientPacket
       end
     end
 
-    file_name = "data/html/#{@link}"
     msg = NpcHtmlMessage.new(html_l2id)
-    msg.set_file(pc, file_name)
+    msg.set_file(pc, "data/html/" + @link)
     send_packet(msg)
   end
 end

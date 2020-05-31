@@ -103,7 +103,6 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
       # [automatically added else]
     end
 
-
     html
   end
 
@@ -118,7 +117,7 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
         if kill_count < 0
           kill_count = 1
         else
-          kill_count += 1
+          kill_count &+= 1
         end
         st.set("kill_count", kill_count.to_s)
         if kill_count == 2
@@ -196,7 +195,6 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
         else
           # [automatically added else]
         end
-
       when HARDIN
         if st.memo_state?(7)
           html = "30832-01.html"
@@ -206,7 +204,6 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
       else
         # [automatically added else]
       end
-
     end
 
     html || get_no_quest_msg(pc)

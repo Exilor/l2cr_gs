@@ -156,7 +156,7 @@ class TradeList
           end
 
           if count != -1 && item.count > count
-            item.count = item.count - count
+            item.count -= count
           else
             @items.delete_first(item)
           end
@@ -410,9 +410,9 @@ class TradeList
         weight += template.weight * item.count
 
         if !template.stackable?
-          slots += item.count
+          slots &+= item.count
         elsif pc_inv.get_item_by_item_id(item.item_id).nil?
-          slots += 1
+          slots &+= 1
         end
       end
 

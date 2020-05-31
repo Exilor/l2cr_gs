@@ -84,7 +84,7 @@ module MerchantPriceConfigTable
     end
 
     def total_tax_rate : Float64
-      total_tax / 100.0
+      total_tax / 100
     end
 
     def update_references

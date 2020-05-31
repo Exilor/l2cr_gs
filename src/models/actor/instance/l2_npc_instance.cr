@@ -76,7 +76,7 @@ class L2NpcInstance < L2Npc
           s.get_calculated_level_up_sp(pc.class_id, class_id),
           0
         )
-        count += 1
+        count &+= 1
       end
     end
 

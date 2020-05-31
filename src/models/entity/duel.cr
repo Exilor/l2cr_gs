@@ -48,7 +48,7 @@ class Duel
     end
 
     task = DuelPreparationTask.new(self)
-    ThreadPoolManager.schedule_general(task, @countdown - 3)
+    ThreadPoolManager.schedule_general(task, @countdown &- 3)
   end
 
   def start_duel
@@ -98,6 +98,11 @@ class Duel
       pc.intention = AI::ACTIVE
       pc.target = nil
       pc.action_failed
+      if smn = pc.summon
+        smn.abort_cast
+        smn.abort_attack
+        smn.target = nil
+      end
     end
 
     @team_b.each do |pc|
@@ -105,6 +110,11 @@ class Duel
       pc.intention = AI::ACTIVE
       pc.target = nil
       pc.action_failed
+      if smn = pc.summon
+        smn.abort_cast
+        smn.abort_attack
+        smn.target = nil
+      end
     end
   end
 
@@ -171,7 +181,7 @@ class Duel
     end
 
     @team_b.each_with_index do |pc, i|
-      loc = instance.enter_locations[i + 9]
+      loc = instance.enter_locations[i &+ 9]
       pc.tele_to_location(*loc.xyz, 0, @duel_instance_id, 0)
     end
   end

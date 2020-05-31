@@ -238,7 +238,7 @@ module Util
   def get_players_count_in_radius(range : Int32, npc : L2Object, playable : Bool, invisible : Bool) : Int32
     count = 0
 
-    npc.known_list.known_objects.each_value do |obj|
+    npc.known_list.each_object do |obj|
       if playable && (obj.playable? || obj.pet?)
         if !invisible && obj.invisible?
           next

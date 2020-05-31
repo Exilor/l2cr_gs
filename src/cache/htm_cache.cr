@@ -61,7 +61,7 @@ module HtmCache
       @@bytes_buff_len = @@bytes_buff_len - old.bytesize + content.bytesize
     else
       @@bytes_buff_len += content.bytesize
-      @@loaded_files += 1
+      @@loaded_files &+= 1
     end
 
     cache[rel_path] = content

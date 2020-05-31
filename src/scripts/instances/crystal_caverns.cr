@@ -1232,7 +1232,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         end
       elsif world.status == 8
         4.times do |i|
-          if world.room_status[i] == 1 && check_kill_progress(i + 1, npc, world)
+          if world.room_status[i] == 1 && check_kill_progress(i &+ 1, npc, world)
             world.room_status[i] = 2
           end
           if world.room_status[i] == 2

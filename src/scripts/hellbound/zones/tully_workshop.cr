@@ -861,7 +861,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::S1_ILL_BE_BACK_DONT_GET_COMFORTABLE, killer.name)
       end
     elsif npc_id.in?(TEMENIR, DRAXIUS, KIRETCENAH) && SPAWNED_FOLLOWERS.includes?(npc)
-      @killed_followers_count += 1
+      @killed_followers_count &+= 1
       if @killed_followers_count >= 3
         do_7th_floor_despawn
       end

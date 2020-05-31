@@ -8,6 +8,6 @@ enum AttributeType : Int8
   DARK
 
   def id : Int8
-    to_i8
+    value
   end
 end

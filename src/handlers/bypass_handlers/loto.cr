@@ -56,7 +56,7 @@ module BypassHandler::Loto
           pc.set_loto(i, 0)
           found = 1
         elsif pc.get_loto(i) > 0
-          count += 1
+          count &+= 1
         end
       end
 
@@ -72,7 +72,7 @@ module BypassHandler::Loto
       count = 0
       5.times do |i|
         if pc.get_loto(i) > 0
-          count += 1
+          count &+= 1
           if pc.get_loto(i) < 10
             button = "0#{pc.get_loto(i)}"
           else
@@ -111,9 +111,9 @@ module BypassHandler::Loto
         end
 
         if pc.get_loto(i) < 17
-          enchant += Math.pow(2, pc.get_loto(i) - 1).to_i
+          enchant += Math.pow(2, pc.get_loto(i) &- 1).to_i
         else
-          type2 += Math.pow(2, pc.get_loto(i) - 17).to_i
+          type2 += Math.pow(2, pc.get_loto(i) &- 17).to_i
         end
       end
 

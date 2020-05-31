@@ -4,19 +4,21 @@ struct L2Crest
     PLEDGE_LARGE
     ALLY
 
-    def self.get_by_id(id : Int) : self?
+    def self.get_by_id(id : Int32) : self?
       case id
-      when 1 then PLEDGE
-      when 2 then PLEDGE_LARGE
-      when 3 then ALLY
+      when 1
+        PLEDGE
+      when 2
+        PLEDGE_LARGE
+      when 3
+        ALLY
       else
-        # [automatically added else]
+        # nil
       end
-
     end
 
     def id : Int32
-      to_i + 1
+      to_i &+ 1
     end
   end
 

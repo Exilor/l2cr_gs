@@ -51,11 +51,11 @@ class L2Territory
   def inside?(x : Int32, y : Int32) : Bool
     intersect_count = 0
     @points.size.times do |i|
-      p1 = @points[i > 0 ? i - 1 : -1]
+      p1 = @points[i > 0 ? i &- 1 : -1]
       p2 = @points[i]
 
       if intersects?(x, y, p1, p2)
-        intersect_count += 1
+        intersect_count &+= 1
       end
     end
     intersect_count % 2 == 1

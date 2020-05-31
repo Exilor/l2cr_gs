@@ -348,7 +348,6 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
       else
         # [automatically added else]
       end
-
     end
 
     super
@@ -360,7 +359,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
       case npc.id
       when GUARDIAN_OF_THE_TOMB_1, GUARDIAN_OF_THE_TOMB_2,
            GUARDIAN_OF_THE_TOMB_3, GUARDIAN_OF_THE_TOMB_4
-        world.dead_tomb_guardian_count += 1
+        world.dead_tomb_guardian_count &+= 1
         if world.dead_tomb_guardian_count == 4
           open_door(TOMB_DOOR, world.instance_id)
           st = pc.get_quest_state(Q10295_SevenSignsSolinasTomb.simple_name)
@@ -370,7 +369,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
         end
       when SOLINAS_GUARDIAN_1, SOLINAS_GUARDIAN_2, SOLINAS_GUARDIAN_3,
            SOLINAS_GUARDIAN_4
-        world.dead_solina_guardian_count += 1
+        world.dead_solina_guardian_count &+= 1
         if world.dead_solina_guardian_count == 4
           pc.show_quest_movie(27)
           st = pc.get_quest_state(Q10295_SevenSignsSolinasTomb.simple_name)
@@ -389,7 +388,6 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
       else
         # [automatically added else]
       end
-
     end
 
     nil
@@ -404,7 +402,6 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
     else
       # [automatically added else]
     end
-
 
     super
   end

@@ -51,7 +51,7 @@ struct ZoneNPoly < L2ZoneForm
     x, y = @p.x_points, @p.y_points
 
     @p.n_points.times do |i|
-      next_index = i + 1
+      next_index = i &+ 1
       if next_index == x.size
         next_index = 0
       end

@@ -64,7 +64,7 @@ class L2PcTemplate < L2CharTemplate
     when "cpRegen"
       @base_cp_reg[level] = val.to_f64
     else
-      raise "Wrong param for L2PcTemplate#set_upgain_value: #{param}"
+      raise "Wrong param for L2PcTemplate#set_upgain_value: " + param
     end
   end
 

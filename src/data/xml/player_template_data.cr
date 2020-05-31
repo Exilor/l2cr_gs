@@ -55,8 +55,8 @@ module PlayerTemplateData
               set[nd_name] = get_content(nd)
             end
           end
-          set["basePDef"] = set.get_i32("basePDefchest", 0) + set.get_i32("basePDeflegs", 0) + set.get_i32("basePDefhead", 0) + set.get_i32("basePDeffeet", 0) + set.get_i32("basePDefgloves", 0) + set.get_i32("basePDefunderwear", 0) + set.get_i32("basePDefcloak", 0)
-          set["baseMDef"] = set.get_i32("baseMDefrear", 0) + set.get_i32("baseMDeflear", 0) + set.get_i32("baseMDefrfinger", 0) + set.get_i32("baseMDefrfinger", 0) + set.get_i32("baseMDefneck", 0)
+          set["basePDef"] = set.get_i32("basePDefchest", 0) &+ set.get_i32("basePDeflegs", 0) &+ set.get_i32("basePDefhead", 0) &+ set.get_i32("basePDeffeet", 0) &+ set.get_i32("basePDefgloves", 0) &+ set.get_i32("basePDefunderwear", 0) &+ set.get_i32("basePDefcloak", 0)
+          set["baseMDef"] = set.get_i32("baseMDefrear", 0) &+ set.get_i32("baseMDeflear", 0) &+ set.get_i32("baseMDefrfinger", 0) &+ set.get_i32("baseMDefrfinger", 0) &+ set.get_i32("baseMDefneck", 0)
           template = L2PcTemplate.new(set)
           TEMPLATES[ClassId[class_id]] = template
          when "lvlUpgainData"
@@ -66,7 +66,7 @@ module PlayerTemplateData
               if vn_name.starts_with?("hp", "mp", "cp")
                 if tmp = TEMPLATES[ClassId[class_id]]?
                   tmp.set_upgain_value(vn_name, level, get_content(vn).to_f)
-                  data_count += 1
+                  data_count &+= 1
                 end
               end
             end

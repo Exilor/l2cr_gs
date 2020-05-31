@@ -34,7 +34,7 @@ module CrestTable
           @@next_id.set(id + 1)
         end
 
-        if !crests_in_use.includes?(id) && id != @@next_id.get - 1
+        if !crests_in_use.includes?(id) && id != @@next_id.get &- 1
           GameDB.exec("DELETE FROM crests WHERE crest_id=?", id)
           next
         end
@@ -151,7 +151,7 @@ module CrestTable
   def remove_crest(crest_id : Int)
     CRESTS.delete(crest_id)
 
-    if crest_id == @@next_id.get - 1
+    if crest_id == @@next_id.get &- 1
       return
     end
 
@@ -163,6 +163,6 @@ module CrestTable
   end
 
   def next_id : Int32
-    @@next_id.add(1) + 1
+    @@next_id.add(1) &+ 1
   end
 end

@@ -63,7 +63,14 @@ module AdminCommandHandler::AdminEffects
         pc.send_message("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>")
       end
     elsif command == "admin_play_sounds"
-      AdminHtml.show_admin_html(pc, "songs/songs#{command.from(18)}.htm")
+      AdminHtml.show_admin_html(pc, "songs/songs.htm")
+    elsif command.starts_with?("admin_play_sounds")
+      begin
+        play_admin_sound(pc, command.from(18))
+      rescue e
+        pc.send_message("Usage: //play_sounds <soundname>")
+        warn e
+      end
     elsif command.starts_with?("admin_play_sound")
       begin
         play_admin_sound(pc, command.from(17))
@@ -158,7 +165,7 @@ module AdminCommandHandler::AdminEffects
       pc.broadcast_packet(ExBrExtraUserInfo.new(pc))
     elsif command == "admin_clearteams"
       begin
-        pc.known_list.known_players.each_value do |pl|
+        pc.known_list.each_player do |pl|
           pl.team = Team::NONE
           pl.broadcast_user_info
         end
@@ -205,7 +212,7 @@ module AdminCommandHandler::AdminEffects
             else
               begin
                 radius = target.to_i
-                pc.known_list.known_objects.each_value do |object|
+                pc.known_list.each_object do |object|
                   if pc.inside_radius?(object, radius, false, false)
                     perform_social(social, object, pc)
                   end
@@ -248,7 +255,7 @@ module AdminCommandHandler::AdminEffects
         end
 
         if radius > 0
-          pc.known_list.known_objects.each_value do |object|
+          pc.known_list.each_object do |object|
             if pc.inside_radius?(object, radius, false, false)
               perform_abnormal_visual_effect(ave, object)
             end
@@ -365,7 +372,6 @@ module AdminCommandHandler::AdminEffects
       else
         # [automatically added else]
       end
-
     when "sky"
       case state
       when "night"
@@ -381,7 +387,6 @@ module AdminCommandHandler::AdminEffects
       else
         # [automatically added else]
       end
-
     else
       pc.send_message("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>")
     end
@@ -392,8 +397,7 @@ module AdminCommandHandler::AdminEffects
   end
 
   private def play_admin_sound(pc, sound)
-    snd = PlaySound.create_sound(sound)
-    pc.send_packet(snd)
+    snd = PlaySound.create_music(sound)
     pc.broadcast_packet(snd)
     pc.send_message("Playing #{sound}.")
   end
@@ -411,7 +415,6 @@ module AdminCommandHandler::AdminEffects
     else
       # [automatically added else]
     end
-
 
     AdminHtml.show_admin_html(pc, filename)
   end

@@ -24,7 +24,7 @@ module ClanTable
       if clan.dissolving_expiry_time != 0
         schedule_remove_clan(clan.id)
       end
-      clan_count += 1
+      clan_count &+= 1
     end
 
     info { "Loaded #{clan_count} clans." }
@@ -248,7 +248,7 @@ module ClanTable
     count = 0
     clan.each_player do |pc|
       if pc.wants_peace == 1
-        count += 1
+        count &+= 1
       end
     end
 

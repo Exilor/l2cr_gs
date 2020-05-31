@@ -38,7 +38,7 @@ module FortSiegeManager
       flag_spawns = [] of CombatFlag
 
       (1...5).each do |i|
-        key = fort.name.delete(' ') + "Commander#{i}"
+        key = "#{fort.name.delete(' ')}Commander#{i}"
         params = cfg.get_string(key, "")
         if params.empty?
           break

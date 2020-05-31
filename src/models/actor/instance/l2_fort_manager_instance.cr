@@ -117,8 +117,8 @@ class L2FortManagerInstance < L2MerchantInstance
         if pc.has_clan_privilege?(ClanPrivilege::CS_OPEN_DOOR)
           if !val.empty?
             open = val.to_i == 1
-            until st.empty?
-              fort.open_close_door(pc, st.shift.to_i, open)
+            st.each do |token|
+              fort.open_close_door(pc, token.to_i, open)
             end
             if open
               html = NpcHtmlMessage.new(l2id)

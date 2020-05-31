@@ -2,7 +2,6 @@ module GameDB
   module PremiumItemDAOMySQLImpl
     extend self
     extend PremiumItemDAO
-    extend Loggable
 
     private GET_PREMIUM_ITEMS = "SELECT itemNum, itemId, itemCount, itemSender FROM character_premium_items WHERE charId=?"
 

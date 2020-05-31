@@ -7,6 +7,6 @@ class Shortcut
     id : Int32, level : Int32, character_type : Int32
 
   def index : Int32
-    slot + (page * 12)
+    slot &+ (page &* 12)
   end
 end

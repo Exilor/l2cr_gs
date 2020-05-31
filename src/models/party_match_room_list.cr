@@ -9,7 +9,7 @@ module PartyMatchRoomList
   def add_party_match_room(id : Int32, room : PartyMatchRoom)
     sync do
       ROOMS[id] = room
-      @@max_id += 1
+      @@max_id &+= 1
     end
   end
 

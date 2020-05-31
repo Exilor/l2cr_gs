@@ -34,7 +34,6 @@ class L2ClanHallDoormenInstance < L2DoormenInstance
           # [automatically added else]
         end
 
-
         html = NpcHtmlMessage.new(l2id)
         if ok
           html.set_file(pc, "data/html/clanHallDoormen/evolve-ok.htm")

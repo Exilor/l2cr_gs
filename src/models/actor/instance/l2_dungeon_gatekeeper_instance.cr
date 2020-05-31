@@ -3,10 +3,10 @@ class L2DungeonGatekeeperInstance < L2Npc
     InstanceType::L2DungeonGatekeeperInstance
   end
 
-  def on_bypass_feedback(pc : L2PcInstance, cmd : String)
+  def on_bypass_feedback(pc : L2PcInstance, command : String)
     pc.action_failed
 
-    st = cmd.split
+    st = command.split
     actual_cmd = st.shift
 
     filename = SevenSigns::SEVEN_SIGNS_HTML_PATH

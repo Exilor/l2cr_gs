@@ -40,7 +40,7 @@ module TeleportLocationTable
 
       tp = L2TeleportLocation.new(id, x, y, z, price, item_id, for_noble)
       TELEPORTS[tp.tele_id] = tp
-      count += 1
+      count &+= 1
     end
     count
   end

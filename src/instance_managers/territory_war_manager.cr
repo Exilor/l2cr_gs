@@ -50,7 +50,7 @@ module TerritoryWarManager
     @@DEFENDER_MAX_PLAYERS = cfg.get_i32("DefenderMaxPlayers", 500)
     @@CLAN_MIN_LEVEL = cfg.get_i32("ClanMinLevel", 0)
     @@PLAYER_MIN_LEVEL = cfg.get_i32("PlayerMinLevel", 40)
-    @@war_length = cfg.get_i64("WarLength", 120) * 60000
+    @@war_length = cfg.get_i64("WarLength", 120) * 60_000
     @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE = cfg.get_bool("PlayerWithWardCanBeKilledInPeaceZone", false)
     @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS = cfg.get_bool("SpawnWardsWhenTWIsNotInProgress", false)
     @@RETURN_WARDS_WHEN_TW_STARTS = cfg.get_bool("ReturnWardsWhenTWStarts", false)
@@ -78,7 +78,7 @@ module TerritoryWarManager
           TERRITORY_LIST[castle_id].add_ward_spawn_place(loc)
         else
           id = rs.get_i32(:"id")
-          warn { "Unknown npc type for #{id}." }
+          warn { "Unknown npc type for id #{id}." }
         end
       end
     rescue e
@@ -142,19 +142,19 @@ module TerritoryWarManager
 
     if clan = pc.clan
       if clan.castle_id > 0
-        return clan.castle_id + 80
+        return clan.castle_id &+ 80
       end
 
       REGISTERED_CLANS.each do |id, array|
         if array.includes?(clan)
-          return id + 80
+          return id &+ 80
         end
       end
     end
 
     REGISTERED_MERCENARIES.each do |id, array|
       if array.includes?(pc.l2id)
-        return id + 80
+        return id &+ 80
       end
     end
 
@@ -162,7 +162,7 @@ module TerritoryWarManager
   end
 
   def ally_field?(pc : L2PcInstance, field_id : Int32) : Bool
-    temp_side = pc.siege_side - 80
+    temp_side = pc.siege_side &- 80
 
     if pc.siege_side == 0
       return false
@@ -303,13 +303,13 @@ module TerritoryWarManager
     if ter_new = TERRITORY_LIST[new_owner_id]?
       if ward = ter_new.free_ward_spawn_place
         ward.npc_id = territory_id
-        ret = spawn_npc(36491 + territory_id, ward.location)
+        ret = spawn_npc(36491 &+ territory_id, ward.location)
         ward.npc = ret
         if !tw_in_progress? && !@@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS
           ret.decay_me
         end
 
-        if ter_new.owner_clan? && ter_new.owned_ward_ids.includes?(new_owner_id + 80)
+        if ter_new.owner_clan? && ter_new.owned_ward_ids.includes?(new_owner_id &+ 80)
           ter_new.owned_ward_ids.each do |ward_id|
             SkillTreesData.get_available_residential_skills(ward_id).each do |s|
               if sk = SkillData[s.skill_id, s.skill_level]?
@@ -345,7 +345,7 @@ module TerritoryWarManager
           end
 
           unless ter_old.owned_ward_ids.empty?
-            unless ter_old.owned_ward_ids.includes?(old_owner_id + 80)
+            unless ter_old.owned_ward_ids.includes?(old_owner_id &+ 80)
               ter_old.owned_ward_ids.each do |ward_id|
                 SkillTreesData.get_available_residential_skills(ward_id).each do |s|
                   if sk = SkillData[s.skill_id, s.skill_level]?
@@ -373,7 +373,7 @@ module TerritoryWarManager
   end
 
   def get_hq_for_territory(territory_id : Int32) : L2SiegeFlagInstance?
-    TERRITORY_LIST[territory_id - 80].hq?
+    TERRITORY_LIST[territory_id &- 80].hq?
   end
 
   def set_hq_for_clan(clan : L2Clan, hq : L2SiegeFlagInstance?)
@@ -521,17 +521,35 @@ module TerritoryWarManager
       reward[1] += temp[4] * 2
       reward[1] += temp[5] > 0 ? 5 : 0
 
-      reward[1] += Math.min(TERRITORY_LIST[temp[0] - 80].quest_done[0], 10)
-      reward[1] += TERRITORY_LIST[temp[0] - 80].quest_done[1]
-      reward[1] += TERRITORY_LIST[temp[0] - 80].owned_ward_ids.size
+      reward[1] += Math.min(TERRITORY_LIST[temp[0] &- 80].quest_done[0], 10)
+      reward[1] += TERRITORY_LIST[temp[0] &- 80].quest_done[1]
+      reward[1] += TERRITORY_LIST[temp[0] &- 80].owned_ward_ids.size
       return reward
     end
 
     reward
   end
 
-  def debug_reward(pc)
-    # TODO
+  def debug_reward(pc : L2PcInstance)
+    pc.send_message("Registred TerrId: #{pc.siege_side}")
+
+    if temp = PARTICIPANT_POINTS[pc.l2id]?
+      pc.send_message("TerrId: #{temp[0]}")
+      pc.send_message("PcKill: #{temp[1]}")
+      pc.send_message("PcQuests: #{temp[2]}")
+      pc.send_message("npcKill: #{temp[3]}")
+      pc.send_message("CatatKill: #{temp[4]}")
+      pc.send_message("WardKill: #{temp[5]}")
+      pc.send_message("onlineTime: #{temp[6]}")
+    else
+      pc.send_message("No points.")
+    end
+
+    if temp = TERRITORY_LIST[pc.siege_side &- 80]?
+      pc.send_message("Your territory's jobs:")
+      pc.send_message("npcKill: #{temp.quest_done[0]}")
+      pc.send_message("WardCaptured: #{temp.quest_done[1]}")
+    end
   end
 
   def reset_reward(pc : L2PcInstance)
@@ -620,7 +638,7 @@ module TerritoryWarManager
           unless ward.npc.visible?
             ward.npc = ward.npc.spawn.do_spawn
           end
-          tw = TerritoryWard.new(ward.id, *ward.location.xyz, 0, ward.id + 13479, t.castle_id, ward.npc)
+          tw = TerritoryWard.new(ward.id, *ward.location.xyz, 0, ward.id &+ 13479, t.castle_id, ward.npc)
           TERRITORY_WARDS << tw
         end
       end
@@ -633,9 +651,9 @@ module TerritoryWarManager
 
     if @@RETURN_WARDS_WHEN_TW_STARTS
       TERRITORY_WARDS.each do |ward|
-        if ward.owner_castle_id != ward.territory_id - 80
+        if ward.owner_castle_id != ward.territory_id &- 80
           ward.unspawn_me
-          ward.npc = add_territory_ward(ward.territory_id, ward.territory_id - 80, ward.owner_castle_id, false)
+          ward.npc = add_territory_ward(ward.territory_id, ward.territory_id &- 80, ward.owner_castle_id, false)
         end
       end
     end
@@ -751,7 +769,7 @@ module TerritoryWarManager
               pc.siege_state = 1
             end
 
-            pc.siege_side = castle_id + 80
+            pc.siege_side = castle_id &+ 80
           end
 
           pc.broadcast_user_info
@@ -775,7 +793,7 @@ module TerritoryWarManager
             pc.siege_state = 1
           end
 
-          pc.siege_side = castle_id + 80
+          pc.siege_side = castle_id &+ 80
         end
 
         pc.broadcast_user_info
@@ -799,7 +817,7 @@ module TerritoryWarManager
               pc.siege_state = 1
             end
 
-            pc.siege_side = terr.castle_id + 80
+            pc.siege_side = terr.castle_id &+ 80
           end
 
           pc.broadcast_user_info
@@ -827,36 +845,36 @@ module TerritoryWarManager
     @@scheduled_start_tw_task.not_nil!.cancel
 
     time = START_TW_DATE.ms - Time.ms
-    if time > 7200000
+    if time > 7_200_000
       @@registration_over = false
-      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 7200000)
-    elsif time <= 7200000 && time > 1200000
+      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 7_200_000)
+    elsif time <= 7_200_000 && time > 1_200_000
       sm = SystemMessage.the_territory_war_registering_period_ended
       Broadcast.to_all_online_players(sm)
       @@registration_over = true
-      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 1200000) # Prepare task for 20 mins left before TW start.
-    elsif time <= 1200000 && time > 600000
+      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 1_200_000) # Prepare task for 20 mins left before TW start.
+    elsif time <= 1_200_000 && time > 600_000
       sm = SystemMessage.territory_war_begins_in_20_minutes
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
       @@registration_over = true
       update_player_tw_state_flags(false)
-      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 600000) # Prepare task for 10 mins left before TW start.
-    elsif time <= 600000 && time > 300000
+      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 600_000) # Prepare task for 10 mins left before TW start.
+    elsif time <= 600_000 && time > 300_000
       sm = SystemMessage.territory_war_begins_in_10_minutes
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
       @@registration_over = true
       update_player_tw_state_flags(false)
-      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 300000) # Prepare task for 5 mins left before TW start.
-    elsif time <= 300000 && time > 60000
+      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 300_000) # Prepare task for 5 mins left before TW start.
+    elsif time <= 300_000 && time > 60_000
       sm = SystemMessage.territory_war_begins_in_5_minutes
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
       @@registration_over = true
       update_player_tw_state_flags(false)
-      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 60000) # Prepare task for 1 min left before TW start.
-    elsif time <= 60000 && time > 0
+      @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time - 60_000) # Prepare task for 1 min left before TW start.
+    elsif time <= 60_000 && time > 0
       sm = SystemMessage.territory_war_begins_in_1_minute
       Broadcast.to_all_online_players(sm)
       @@tw_channel_open = true
@@ -868,7 +886,7 @@ module TerritoryWarManager
       @@registration_over = true
       start_territory_war
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, 1000) # Prepare task for TW end.
-      @@scheduled_reward_online_task = ThreadPoolManager.schedule_general_at_fixed_rate(->reward_online_participants, 60000, 60000)
+      @@scheduled_reward_online_task = ThreadPoolManager.schedule_general_at_fixed_rate(->reward_online_participants, 60_000, 60_000)
     end
   rescue e
     error e
@@ -876,25 +894,25 @@ module TerritoryWarManager
 
   private def schedule_end_tw_task
     @@scheduled_end_tw_task.not_nil!.cancel
-    time = (START_TW_DATE.ms + @@war_length) - Time.ms
-    if time > 3600000
+    time = START_TW_DATE.ms + @@war_length - Time.ms
+    if time > 3_600_000
       sm = SystemMessage.the_territory_war_will_end_in_s1_hours
       sm.add_int(2)
       announce_to_participants(sm, 0, 0)
-      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 3600000) # Prepare task for 1 hr left.
-    elsif time <= 3600000 && time > 600000
+      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 3_600_000) # Prepare task for 1 hr left.
+    elsif time <= 3_600_000 && time > 600_000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
-      sm.add_int((time // 60000).to_i)
+      sm.add_int((time // 60_000).to_i)
       announce_to_participants(sm, 0, 0)
-      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 600000) # Prepare task for 10 minute left.
-    elsif time <= 600000 && time > 300000
+      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 600_000) # Prepare task for 10 minute left.
+    elsif time <= 600_000 && time > 300_000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
-      sm.add_int((time // 60000).to_i)
+      sm.add_int((time // 60_000).to_i)
       announce_to_participants(sm, 0, 0)
-      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 300000) # Prepare task for 5 minute left.
-    elsif time <= 300000 && time > 10000
+      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 300_000) # Prepare task for 5 minute left.
+    elsif time <= 300_000 && time > 10000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
-      sm.add_int((time // 60000).to_i)
+      sm.add_int((time // 60_000).to_i)
       announce_to_participants(sm, 0, 0)
       @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 10000) # Prepare task for 10 seconds count down
     elsif time <= 10000 && time > 0
@@ -905,7 +923,7 @@ module TerritoryWarManager
     else
       end_territory_war
       # commented out in L2J _scheduledStartTWTask = ThreadPoolManager.schedule_general(new ScheduleStartTWTask(), 1000)
-      ThreadPoolManager.schedule_general(->close_territory_channel_task, 600000)
+      ThreadPoolManager.schedule_general(->close_territory_channel_task, 600_000)
     end
   rescue e
     error e
@@ -990,7 +1008,7 @@ module TerritoryWarManager
     property! hq : L2SiegeFlagInstance?
 
     def initialize(@castle_id : Int32)
-      @territory_id = castle_id + 80
+      @territory_id = castle_id &+ 80
     end
 
     def add_ward_spawn_place(loc : Location)

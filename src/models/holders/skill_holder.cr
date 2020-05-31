@@ -1,7 +1,8 @@
 class SkillHolder
   getter_initializer skill_id : Int32, skill_lvl : Int32
 
-  def initialize(@skill_id : Int32)
+  def initialize(skill_id : Int32)
+    @skill_id = skill_id
     @skill_lvl = 1
   end
 

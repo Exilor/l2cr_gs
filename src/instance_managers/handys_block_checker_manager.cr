@@ -23,7 +23,7 @@ module HandysBlockCheckerManager
   # Add a new vote to start the event for the specified arena id
   def increase_arena_votes(arena : Int32)
     sync do
-      new_votes = ARENA_VOTES[arena] + 1
+      new_votes = ARENA_VOTES[arena] &+ 1
       holder = ARENA_PLAYERS[arena]
 
       if new_votes > holder.all_players.size / 2 && !holder.event.started?

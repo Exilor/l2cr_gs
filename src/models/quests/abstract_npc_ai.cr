@@ -1,8 +1,8 @@
 require "./quest"
 
 abstract class AbstractNpcAI < Quest
-  def initialize(name : String, descr : String)
-    super(-1, name, descr)
+  def initialize(name : String, description : String)
+    super(-1, name, description)
   end
 
   def on_first_talk(npc, pc)
@@ -39,12 +39,12 @@ abstract class AbstractNpcAI < Quest
     Broadcast.to_known_players(npc, say)
   end
 
-  def broadcast_npc_say(npc : L2Npc, type : Int32, text : String, radius : Int)
+  def broadcast_npc_say(npc : L2Npc, type : Int32, text : String, radius : Int32)
     say = NpcSay.new(npc.l2id, type, npc.template.display_id, text)
     Broadcast.to_known_players_in_radius(npc, say, radius)
   end
 
-  def broadcast_npc_say(npc : L2Npc, type : Int32, string_id : NpcString, radius : Int)
+  def broadcast_npc_say(npc : L2Npc, type : Int32, string_id : NpcString, radius : Int32)
     say = NpcSay.new(npc.l2id, type, npc.template.display_id, string_id)
     Broadcast.to_known_players_in_radius(npc, say, radius)
   end

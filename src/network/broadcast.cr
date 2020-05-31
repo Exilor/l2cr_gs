@@ -3,7 +3,7 @@ module Broadcast
   include Packets::Outgoing
 
   def to_known_players(char : L2Character, gsp : GameServerPacket)
-    char.known_list.known_players.each_value do |pc|
+    char.known_list.each_player do |pc|
       pc.send_packet(gsp)
 
       if gsp.is_a?(CharInfo) && char.is_a?(L2PcInstance)
@@ -26,7 +26,7 @@ module Broadcast
   def to_known_players_in_radius(char : L2Character, gsp : GameServerPacket, radius : Int32)
     radius = 1500 if radius < 0
 
-    char.known_list.known_players.each_value do |pc|
+    char.known_list.each_player do |pc|
       if char.inside_radius?(pc, radius, false, false)
         pc.send_packet(gsp)
       end
@@ -46,7 +46,7 @@ module Broadcast
 
     char.send_packet(gsp) if char.player?
 
-    char.known_list.known_players.each_value do |pc|
+    char.known_list.each_player do |pc|
       if Util.in_range?(radius, char, pc, false)
         pc.send_packet(gsp)
       end

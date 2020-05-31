@@ -119,7 +119,7 @@ class BoatGludinRune
           BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], BUSY_RUNE)
         end
 
-        @shout_count += 1
+        @shout_count &+= 1
         if @shout_count > 35
           @shout_count = 0
         end
@@ -167,7 +167,7 @@ class BoatGludinRune
           BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], BUSY_GLUDIN)
         end
 
-        @shout_count += 1
+        @shout_count &+= 1
         if @shout_count > 35
           @shout_count = 0
         end
@@ -187,7 +187,7 @@ class BoatGludinRune
     end
 
     @shout_count = 0
-    @cycle += 1
+    @cycle &+= 1
     if @cycle > 19
       @cycle = 0
     end

@@ -171,7 +171,7 @@ class Concurrent::LinkedList(E)
         if count == Int32::MAX
           break
         end
-        count += 1
+        count &+= 1
       end
       p = p.succ
     end

@@ -96,8 +96,8 @@ abstract class ChamberOfDelusion < AbstractInstance
 
   getter instance_id
 
-  def initialize(name : String, descr : String, instance_id : Int32, instance_template_name : String, entrance_gk_id : Int32, room_gk_first_id : Int32, room_gk_last_id : Int32, aenkinel_id : Int32, box_id : Int32)
-    super(name, descr)
+  def initialize(name : String, description : String, instance_id : Int32, instance_template_name : String, entrance_gk_id : Int32, room_gk_first_id : Int32, room_gk_last_id : Int32, aenkinel_id : Int32, box_id : Int32)
+    super(name, description)
 
     @instance_id = instance_id
     @instance_template = instance_template_name

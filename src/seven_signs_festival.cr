@@ -1291,11 +1291,11 @@ class SevenSignsFestival
 
       FESTIVAL_COUNT.times do |i|
         if DUSK_FESTIVAL_PARTICIPANTS[i]?
-          @festival_instances[i + 10] = L2DarknessFestival.new(SevenSigns::CABAL_DUSK, i)
+          @festival_instances[i &+ 10] = L2DarknessFestival.new(SevenSigns::CABAL_DUSK, i)
         end
 
         if DAWN_FESTIVAL_PARTICIPANTS[i]?
-          @festival_instances[i + 20] = L2DarknessFestival.new(SevenSigns::CABAL_DAWN, i)
+          @festival_instances[i &+ 20] = L2DarknessFestival.new(SevenSigns::CABAL_DAWN, i)
         end
       end
 

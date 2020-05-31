@@ -33,7 +33,7 @@ module AdminCommandHandler::AdminReload
         pc.send_message("All walkers have been reloaded")
         AdminData.broadcast_message_to_gms(pc.name + ": Reloaded Walkers.")
       when "htm", "html"
-        if st.any?
+        if !st.empty?
           path = "#{Config.datapack_root}/data/html/#{st.shift}"
           if File.exists?(path)
             html = File.read(path)

@@ -51,7 +51,7 @@ module DocumentEngine
 
       skills = load_skill_file(file)
       skills.each { |s| hash[s.hash] = s }
-      count += skills.size
+      count &+= skills.size
     end
     puts
     STDOUT.flush

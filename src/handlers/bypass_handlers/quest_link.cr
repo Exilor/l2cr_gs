@@ -66,7 +66,7 @@ module BypassHandler::QuestLink
         sb << "\">["
 
         if quest.custom?
-          sb << quest.descr
+          sb << quest.description
           sb << state
         else
           quest_id = quest.id

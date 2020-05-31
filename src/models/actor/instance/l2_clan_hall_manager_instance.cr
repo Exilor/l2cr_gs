@@ -430,7 +430,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             else
               html["%hp_recovery%"] = "none"
               html["%hp_period%"] = "none"
@@ -447,7 +446,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_EXP)
               html["%exp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_expreg_fee_ratio // 1000 // 60 // 60 // 24} Day)"
@@ -465,7 +463,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             else
               html["%exp_recovery%"] = "none"
               html["%exp_period%"] = "none"
@@ -482,7 +479,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_MP)
               html["%mp_recovery%"] = "#{fn.lvl}%</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_mpreg_fee_ratio // 1000 // 60 // 60 // 24} Day)"
@@ -500,7 +496,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             else
               html["%mp_recovery%"] = "none"
               html["%mp_period%"] = "none"
@@ -517,7 +512,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             end
             send_html_message(pc, html)
           elsif val.casecmp?("other")
@@ -731,7 +725,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             end
             html = NpcHtmlMessage.new(l2id)
             html.set_file(pc, "data/html/clanHallManager/edit_other.htm")
@@ -766,7 +759,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             else
               html["%support%"] = "none"
               html["%support_period%"] = "none"
@@ -783,7 +775,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
               else
                 # [automatically added else]
               end
-
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_ITEM_CREATE)
               html["%item%"] = "Stage #{fn.lvl}</font> (<font color=\"FFAABB\">#{fn.lease}</font>Adena /#{Config.ch_item_fee_ratio // 1000 // 60 // 60 // 24} Day)"
@@ -913,6 +904,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                   end
                   send_html_message(pc, html)
                 end
+
                 return
               end
             end

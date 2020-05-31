@@ -90,7 +90,7 @@ class ItemDocument < AbstractDocument
   end
 
   private def get_table_value(name : String, idx : Int) : String
-    @tables[name][idx - 1]
+    @tables[name][idx &- 1]
   end
 
   private def make_item

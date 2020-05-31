@@ -446,7 +446,7 @@ abstract class AbstractDocument
           end
 
           if old == mask
-            warn { "parse_using_condition=\"slot\"] Unknown item slot name: #{item}" }
+            warn { "parse_using_condition: Unknown item slot name " + item }
           end
         end
 

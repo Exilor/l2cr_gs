@@ -30,8 +30,8 @@ class Scripts::Q00552_OlympiadVeteran < Quest
       st.start_quest
     elsif event.casecmp?("31688-04.html")
       count = st.get_quest_items_count(TEAM_EVENT_CERTIFICATE)
-      count += st.get_quest_items_count(CLASS_FREE_BATTLE_CERTIFICATE)
-      count += st.get_quest_items_count(CLASS_BATTLE_CERTIFICATE)
+      count &+= st.get_quest_items_count(CLASS_FREE_BATTLE_CERTIFICATE)
+      count &+= st.get_quest_items_count(CLASS_BATTLE_CERTIFICATE)
 
       if count > 0
         st.give_items(OLY_CHEST, count)
@@ -74,7 +74,6 @@ class Scripts::Q00552_OlympiadVeteran < Quest
         else
           # [automatically added else]
         end
-
       end
     end
 
@@ -106,7 +105,6 @@ class Scripts::Q00552_OlympiadVeteran < Quest
         else
           # [automatically added else]
         end
-
       end
     end
   end
@@ -126,8 +124,8 @@ class Scripts::Q00552_OlympiadVeteran < Quest
       end
     elsif st.started?
       count = st.get_quest_items_count(TEAM_EVENT_CERTIFICATE)
-      count += st.get_quest_items_count(CLASS_FREE_BATTLE_CERTIFICATE)
-      count += st.get_quest_items_count(CLASS_BATTLE_CERTIFICATE)
+      count &+= st.get_quest_items_count(CLASS_FREE_BATTLE_CERTIFICATE)
+      count &+= st.get_quest_items_count(CLASS_BATTLE_CERTIFICATE)
 
       if count == 3
         html = "31688-04.html"

@@ -96,10 +96,6 @@ class L2EffectZone < L2ZoneType
       return
     end
 
-    # unless @skills
-    #   sync { @skills ||= {} of Int32 => Int32 }
-    # end
-
     @skills[skill_id] = skill_lvl
   end
 

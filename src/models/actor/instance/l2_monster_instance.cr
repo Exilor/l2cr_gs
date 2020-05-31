@@ -5,9 +5,10 @@ require "../../../util/minion_list"
 class L2MonsterInstance < L2Attackable
   private MONSTER_MAINTENANCE_INTERVAL = 1000
 
-  @master : L2MonsterInstance?
   @minion_list : MinionList?
   @maintenance_task : TaskExecutor::Scheduler::PeriodicTask?
+
+  property leader : L2MonsterInstance?
 
   setter enable_minions : Bool = true
 
@@ -34,7 +35,7 @@ class L2MonsterInstance < L2Attackable
 
   def on_spawn
     unless teleporting?
-      if leader?
+      if leader = leader()
         self.no_random_walk = true
         self.raid_minion = leader.raid?
         leader.minion_list.on_minion_spawn(self)
@@ -87,23 +88,11 @@ class L2MonsterInstance < L2Attackable
       minion_list.on_master_die(true)
     end
 
-    if leader = leader?
+    if leader = leader()
       leader.minion_list.on_minion_die(self, 0)
     end
 
     super
-  end
-
-  def leader? : L2MonsterInstance?
-    @master
-  end
-
-  def leader : L2MonsterInstance
-    @master || raise "This #{self.class} has no master"
-  end
-
-  def leader=(leader : L2MonsterInstance?)
-    @master = leader
   end
 
   def has_minions? : Bool
@@ -119,11 +108,11 @@ class L2MonsterInstance < L2Attackable
   end
 
   def walker? : Bool
-    (leader = leader?) ? leader.walker? : super
+    (leader = leader()) ? leader.walker? : super
   end
 
   def give_raid_curse? : Bool
-    if raid_minion? && (leader = leader?)
+    if raid_minion? && (leader = leader())
       return leader.give_raid_curse?
     end
 

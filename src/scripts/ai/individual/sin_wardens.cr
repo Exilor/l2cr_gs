@@ -25,9 +25,9 @@ class Scripts::SinWardens < AbstractNpcAI
 
   def on_kill(npc, killer, is_summon)
     if npc.minion?
-      if (master = npc.leader?) && master.alive?
+      if (master = npc.leader) && master.alive?
         killed_count = KILLED_MINIONS.fetch(master.l2id, 0)
-        killed_count += 1
+        killed_count &+= 1
 
         if killed_count == 5
           npc_str = NpcString::WE_MIGHT_NEED_NEW_SLAVES_ILL_BE_BACK_SOON_SO_WAIT

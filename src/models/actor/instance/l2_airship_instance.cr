@@ -97,7 +97,7 @@ class L2AirshipInstance < L2Vehicle
     pc.set_xyz(*xyz)
     pc.revalidate_zone(true)
     # Without this the character attempts to go back to where he boarded the
-    # airship before he was teleported to it. It also happens in L2J.
+    # airship before he was teleported into it. This also happens in L2J.
     pc.stop_move(nil)
 
     true

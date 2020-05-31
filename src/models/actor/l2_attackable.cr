@@ -70,7 +70,7 @@ class L2Attackable < L2Npc
       return
     end
 
-    if current_mp < stat.get_mp_consume1(skill) + stat.get_mp_consume2(skill)
+    if current_mp < stat.get_mp_consume1(skill) &+ stat.get_mp_consume2(skill)
       return
     end
 
@@ -139,7 +139,7 @@ class L2Attackable < L2Npc
         master.minion_list.on_assist(self, attacker)
       end
 
-      if (master = master.leader?) && master.has_minions?
+      if (master = master.leader) && master.has_minions?
         master.minion_list.on_assist(self, attacker)
       end
     end
@@ -158,9 +158,9 @@ class L2Attackable < L2Npc
     mob = self
 
     if mob.is_a?(L2MonsterInstance)
-      if mob.leader? && mob.leader.has_minions?
+      if (leader = mob.leader) && leader.has_minions?
         respawn_time = Config.minions_respawn_time.fetch(id, -1)
-        mob.leader.minion_list.on_minion_die(mob, respawn_time)
+        leader.minion_list.on_minion_die(mob, respawn_time)
       end
 
       if mob.has_minions?
@@ -222,7 +222,7 @@ class L2Attackable < L2Npc
 
         if attacker_party.nil?
           if attacker.known_list.knows_object?(self)
-            lvl_diff = attacker.level - level
+            lvl_diff = attacker.level &- level
 
             exp, sp = calculate_exp_and_sp(lvl_diff, damage, total_damage)
 
@@ -301,7 +301,7 @@ class L2Attackable < L2Npc
             party_mul = party_dmg.fdiv(total_damage)
           end
 
-          lvl_diff = party_lvl - level
+          lvl_diff = party_lvl &- level
 
           exp, sp = calculate_exp_and_sp(lvl_diff, party_dmg, total_damage)
 
@@ -354,7 +354,7 @@ class L2Attackable < L2Npc
 
     notify_event(AI::ATTACKED, attacker)
 
-    add_damage_hate(attacker, damage, (damage.to_i64 * 100) // (level + 7))
+    add_damage_hate(attacker, damage, (damage.to_i64 * 100) // (level &+ 7))
 
     if pc = attacker.acting_player
       evt = OnAttackableAttack.new(pc, self, damage.to_i, skill, attacker.summon?)
@@ -394,7 +394,7 @@ class L2Attackable < L2Npc
 
       evt = OnAttackableAggroRangeEnter.new(self, target_player, attacker.summon?)
       evt.async(self)
-    elsif !target_player && aggro == 0
+    elsif target_player.nil? && aggro == 0
       aggro = 1
       info.add_hate(1)
     end
@@ -530,13 +530,13 @@ class L2Attackable < L2Npc
     info.hate
   end
 
-  def do_item_drop(main_dd : L2Character?)
-    do_item_drop(template, main_dd)
+  def do_item_drop(killer : L2Character?)
+    do_item_drop(template, killer)
   end
 
-  def do_item_drop(template : L2NpcTemplate, main_dd : L2Character?)
-    return unless main_dd
-    return unless pc = main_dd.acting_player
+  def do_item_drop(template : L2NpcTemplate, killer : L2Character?)
+    return unless killer
+    return unless pc = killer.acting_player
 
     CursedWeaponsManager.check_drop(self, pc)
 
@@ -566,7 +566,7 @@ class L2Attackable < L2Npc
 
     if Config.champion_enable && champion? && (Config.champion_reward_lower_lvl_item_chance > 0 || Config.champion_reward_higher_lvl_item_chance > 0)
       champqty = Rnd.rand(Config.champion_reward_qty).to_i64
-      item = ItemHolder.new(Config.champion_reward_id, champqty + 1)
+      item = ItemHolder.new(Config.champion_reward_id, champqty &+ 1)
 
       if pc.level <= level && Rnd.rand(100) < Config.champion_reward_lower_lvl_item_chance
         if Config.auto_loot || flying?
@@ -587,7 +587,23 @@ class L2Attackable < L2Npc
   def do_event_drop(last_attacker : L2Character?)
     return unless last_attacker
     return unless pc = last_attacker.acting_player
-    # TODO
+
+    if pc.level &- level > 9
+      return
+    end
+
+    EventDroplist.all_drops.each do |drop|
+      ev_drop = drop.event_drop
+      if Rnd.rand(1_000_000) < ev_drop.drop_chance
+        item_id = ev_drop.item_id_list.sample(random: Rnd)
+        item_count = Rnd.rand(ev_drop.min_count..ev_drop.max_count)
+        if Config.auto_loot || flying?
+          pc.do_auto_loot(self, item_id, item_count)
+        else
+          drop_item(pc, item_id, item_count)
+        end
+      end
+    end
   end
 
   def in_aggro_list?(char : L2Character) : Bool
@@ -693,7 +709,7 @@ class L2Attackable < L2Npc
 
     if Config.alt_game_exponent_xp == 0 && Config.alt_game_exponent_sp == 0
       if diff > 5
-        pow = 5.fdiv(6) ** (diff - 5)
+        pow = 5.fdiv(6) ** (diff &- 5)
         xp *= pow
         sp *= pow
       end
@@ -760,10 +776,9 @@ class L2Attackable < L2Npc
         else
           # [automatically added else]
         end
-
       end
 
-      diff = level - seed.level - 5
+      diff = level &- seed.level &- 5
       if diff > 0
         count += diff
       end
@@ -822,16 +837,12 @@ class L2Attackable < L2Npc
     @raid_minion = val
   end
 
-  def leader? : L2Attackable?
+  def leader : L2Attackable?
     # return nil
   end
 
-  def leader : L2Attackable
-    leader?.not_nil!
-  end
-
   def minion? : Bool
-    !!leader?
+    !!leader
   end
 
   def attackable? : Bool

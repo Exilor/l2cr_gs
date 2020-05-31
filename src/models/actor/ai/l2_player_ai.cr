@@ -124,7 +124,6 @@ class L2PlayerAI < L2PlayableAI
 
   private def think_cast
     unless skill = @skill
-      warn "Can't do #think_cast because @skill is nil."
       return
     end
 

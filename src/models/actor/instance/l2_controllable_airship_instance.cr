@@ -194,7 +194,7 @@ class L2ControllableAirShipInstance < L2AirshipInstance
     def call
       fuel = @airship.fuel
       if fuel > 0
-        fuel -= 10
+        fuel &-= 10
         if fuel < 0
           fuel = 0
         end

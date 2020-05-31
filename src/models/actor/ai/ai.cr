@@ -293,7 +293,7 @@ abstract class AI
     end
   end
 
-  protected def move_to_pawn(pawn : L2Object, offset : Int32)
+  def move_to_pawn(pawn : L2Object, offset : Int32)
     if @actor.movement_disabled?
       client_action_failed
       return

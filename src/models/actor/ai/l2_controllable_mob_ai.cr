@@ -190,7 +190,7 @@ class L2ControllableMobAI < L2AttackableAI
     else
       # notify aggression
       unless @actor.as(L2Npc).template.clans.empty?
-        @actor.known_list.known_objects.each_value do |npc|
+        @actor.known_list.each_object do |npc|
           unless npc.is_a?(L2Npc)
             next
           end

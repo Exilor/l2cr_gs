@@ -192,12 +192,12 @@ module AdminCommandHandler::AdminBuffs
           html << "\" width=30 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>"
         end
       end
-      count += 1
+      count &+= 1
     end
 
     html << "</table><table width=300 bgcolor=444444><tr>"
     max.times do |x|
-      pagenr = x + 1
+      pagenr = x &+ 1
       if page == pagenr
         html << "<td>Page "
         html << pagenr
@@ -207,7 +207,7 @@ module AdminCommandHandler::AdminBuffs
         html << (passive ? "_ps " : " ")
         html << target.name
         html << " "
-        html << (x + 1)
+        html << pagenr
         html << "\"> Page "
         html << pagenr
         html << " </a></td>"

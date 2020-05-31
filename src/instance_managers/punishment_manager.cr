@@ -28,9 +28,9 @@ module PunishmentManager
 
       if type && affect
         if exp_time > 0 && time > exp_time
-          expired += 1
+          expired &+= 1
         else
-          initiated += 1
+          initiated &+= 1
 
           task = PunishmentTask.new(id, key, affect, type, exp_time, reason, punished_by, true)
           TASKS[affect].add_punishment(task)

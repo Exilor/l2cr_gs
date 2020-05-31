@@ -41,7 +41,7 @@ module AdminCommandHandler::AdminTvTEvent
 
     if TvTEvent.started?
       unless coordinates = TvTEvent.get_participant_team_coordinates(target.l2id)
-        raise "Couldn't get TvT coordinates for player #{target.name}"
+        raise "Couldn't get TvT coordinates for player " + target.name
       end
 
       TvTEventTeleporter.new(target, coordinates.not_nil!, true, false)

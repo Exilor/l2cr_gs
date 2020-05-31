@@ -10,7 +10,7 @@ class L2WaterZone < L2ZoneType
         char.broadcast_user_info
       end
     when L2Npc
-      char.known_list.known_players.each_value do |pc|
+      char.known_list.each_player do |pc|
         if char.run_speed == 0
           pc.send_packet(ServerObjectInfo.new(char, pc))
         else
@@ -20,7 +20,6 @@ class L2WaterZone < L2ZoneType
     else
       # [automatically added else]
     end
-
   end
 
   def on_exit(char)
@@ -30,7 +29,7 @@ class L2WaterZone < L2ZoneType
     when L2PcInstance
       char.broadcast_user_info
     when L2Npc
-      char.known_list.known_players.each_value do |pc|
+      char.known_list.each_player do |pc|
         if char.run_speed == 0
           pc.send_packet(ServerObjectInfo.new(char, pc))
         else
@@ -40,7 +39,6 @@ class L2WaterZone < L2ZoneType
     else
       # [automatically added else]
     end
-
   end
 
   def water_z : Int32

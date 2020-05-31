@@ -31,7 +31,7 @@ class TaskBirthday < Task
         msg = Message.new(id, Config.alt_birthday_mail_text, text, Message::SendBySystem::ALEGRIA)
         msg.create_attachments.not_nil!.add_item("Birthday", Config.alt_birthday_gift, 1, nil, nil)
         MailManager.send_message(msg)
-        gift_count += 1
+        gift_count &+= 1
       end
     rescue e
       error e

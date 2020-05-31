@@ -92,7 +92,7 @@ class PetStat < SummonStat
   end
 
   def max_exp_level : Int32
-    Config.max_pet_level + 1
+    Config.max_pet_level &+ 1
   end
 
   def active_char : L2PetInstance

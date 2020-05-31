@@ -16,42 +16,42 @@ class L2VehicleAI < L2CharacterAI
   private def on_intention_interact(arg)
   end
 
-  def on_evt_attacked(arg)
+  private def on_event_attacked(arg)
   end
 
-  def on_evt_aggression(arg1, arg2)
+  private def on_event_aggression(arg1, arg2)
   end
 
-  def on_evt_stunned(arg)
+  private def on_event_stunned(arg)
   end
 
-  def on_evt_sleeping(arg)
+  private def on_event_sleeping(arg)
   end
 
-  def on_evt_rooted(arg)
+  private def on_event_rooted(arg)
   end
 
-  def on_evt_forget_object(arg)
+  private def on_event_forget_object(arg)
   end
 
-  def on_evt_cancel
+  private def on_event_cancel
   end
 
-  def on_evt_dead
+  private def on_event_dead
   end
 
-  def on_evt_fake_death
+  private def on_event_fake_death
   end
 
-  def on_evt_finish_casting
+  private def on_event_finish_casting
   end
 
-  def client_action_failed
+  private def client_action_failed
   end
 
   def move_to_pawn(arg1, arg2)
   end
 
-  def client_stopped_moving
+  private def client_stopped_moving
   end
 end

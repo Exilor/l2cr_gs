@@ -322,7 +322,7 @@ module AdminCommandHandler::AdminShowQuests
         target.send_packet(QuestList.new)
         target.send_packet(ExShowQuestMark.new(qs.quest.id))
         target.delete_quest_state(qs.quest_name)
-        actor.send_message("Removed quest #{qs.quest.descr} from #{target.name}.")
+        actor.send_message("Removed quest #{qs.quest.description} from #{target.name}.")
       when "CREATE"
         qs = QuestManager.get_quest(val[0].to_i).not_nil!.new_quest_state(target)
         qs.start_quest

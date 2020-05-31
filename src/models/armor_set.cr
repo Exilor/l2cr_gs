@@ -28,7 +28,7 @@ class ArmorSet
     contains_all?(chest, legs, head, gloves, feet)
   end
 
-  def contains_all?(chest : Int, legs : Int, head : Int, gloves : Int, feet : Int) : Bool
+  def contains_all?(chest : Int32, legs : Int32, head : Int32, gloves : Int32, feet : Int32) : Bool
     return false if @chest_id != 0  && @chest_id != chest
     return false if !@legs.empty?   && !@legs.includes?(legs)
     return false if !@head.empty?   && !@head.includes?(head)
@@ -37,7 +37,7 @@ class ArmorSet
     true
   end
 
-  def contains_item?(slot : Int, item_id : Int) : Bool
+  def contains_item?(slot : Int32, item_id : Int32) : Bool
     case slot
     when Inventory::CHEST
       @chest_id == item_id
@@ -54,7 +54,7 @@ class ArmorSet
     end
   end
 
-  def contains_shield?(shield_id : Int) : Bool
+  def contains_shield?(shield_id : Int32) : Bool
     @shield.includes?(shield_id)
   end
 

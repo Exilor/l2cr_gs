@@ -103,7 +103,7 @@ class BoatGiranTalking
           BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, BUSY_TALKING)
         end
 
-        @shout_count += 1
+        @shout_count &+= 1
         if @shout_count > 35
           @shout_count = 0
         end
@@ -157,7 +157,7 @@ class BoatGiranTalking
     end
 
     @shout_count = 0
-    @cycle += 1
+    @cycle &+= 1
     if @cycle > 18
       @cycle = 0
     end

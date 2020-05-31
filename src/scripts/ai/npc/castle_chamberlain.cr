@@ -334,8 +334,8 @@ class Scripts::CastleChamberlain < AbstractNpcAI
           html = get_html_packet(pc, npc, "chamberlain-13.html")
           html["%type%"] = st.shift
           sb = String.build do |io|
-            until st.empty?
-              io << st.shift
+            st.each do |token|
+              io << token
             end
           end
           html["%doors%"] = sb

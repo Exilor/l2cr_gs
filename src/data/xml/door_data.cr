@@ -28,7 +28,7 @@ module DoorData
     end
   end
 
-  def insert_collision_data(set : StatsSet)
+  private def insert_collision_data(set : StatsSet)
     height = set.get_i32("height")
     pos = set.get_string("node1").split(',')
     node_x = pos.shift.to_i
@@ -36,7 +36,7 @@ module DoorData
     pos = set.get_string("node2").split(',')
     pos_x = pos.shift.to_i
     pos_y = pos.shift.to_i
-    collision_radius = Math.min((node_x - pos_x).abs, (node_y - pos_y).abs)
+    collision_radius = Math.min((node_x &- pos_x).abs, (node_y &- pos_y).abs)
     collision_radius = 20 if collision_radius < 20
 
     set["collisionHeight"] = height
@@ -110,7 +110,7 @@ module DoorData
 
       intersect_face = false
       4.times do |i|
-        j = i + 1 < 4 ? i + 1 : 0
+        j = i &+ 1 < 4 ? i &+ 1 : 0
         denominator = ((ty - y) * (door.get_x(i) - door.get_x(j))) - ((tx - x) * (door.get_y(i) - door.get_y(j)))
         next if denominator == 0
 

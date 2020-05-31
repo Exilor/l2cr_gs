@@ -18,8 +18,8 @@ module SummonSkillsTable
       id = rs.get_i32(:"skillId")
       lvl = rs.get_i32(:"skillLvl")
       skill_learn = L2PetSkillLearn.new(id, lvl, rs.get_i32(:"minLvl"))
-      skill_tree[SkillData.get_skill_hash(id, lvl + 1)] = skill_learn
-      count += 1
+      skill_tree[SkillData.get_skill_hash(id, lvl &+ 1)] = skill_learn
+      count &+= 1
     end
 
     info { "Loaded #{count} pet skills." }
@@ -39,7 +39,7 @@ module SummonSkillsTable
           lvl = s.level // 10
           lvl = 1 if lvl <= 10
         else
-          lvl = 7 + ((s.level - 70) // 5)
+          lvl = 7 &+ ((s.level - 70) // 5)
         end
 
         max_lvl = SkillData.get_max_level(sk.id)

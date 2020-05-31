@@ -70,7 +70,7 @@ class Scripts::Amaskari < AbstractNpcAI
 
   def on_kill(npc, killer, is_summon)
     if npc.id == AMASKARI_PRISONER
-      master = npc.as(L2MonsterInstance).leader?
+      master = npc.as(L2MonsterInstance).leader
       if master && master.alive?
         broadcast_npc_say(master, Say2::NPC_ALL, AMASKARI_NPCSTRING_ID[1])
         info = master.effect_list.get_buff_info_by_skill_id(BUFF_ID)

@@ -16,7 +16,7 @@ class Packets::Outgoing::RecipeBookItemList < GameServerPacket
       d recipes.size
       recipes.each_with_index do |rp, i|
         d rp.id
-        d i + 1
+        d i &+ 1
       end
     else
       d 0

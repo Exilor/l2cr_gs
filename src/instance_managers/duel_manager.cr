@@ -13,12 +13,11 @@ module DuelManager
       return duel
     end
 
-    warn { "Duel with ID #{duel_id} not found. Existing duel IDs: #{DUELS.keys}." }
     nil
   end
 
   def add_duel(pc1 : L2PcInstance, pc2 : L2PcInstance, party_duel : Bool)
-    duel_id = @@current_duel_id.add(1) + 1
+    duel_id = @@current_duel_id.add(1) &+ 1
     debug { "Created new duel with ID #{duel_id}." }
     DUELS[duel_id] = Duel.new(pc1, pc2, party_duel, duel_id)
   end
@@ -30,7 +29,6 @@ module DuelManager
   def do_surrender(pc : L2PcInstance)
     return unless pc.in_duel?
     unless duel = get_duel(pc.duel_id)
-      warn { "Duel with ID #{pc.duel_id} not found." }
       return
     end
     duel.do_surrender(pc)
