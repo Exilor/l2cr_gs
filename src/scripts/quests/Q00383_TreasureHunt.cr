@@ -98,7 +98,7 @@ class Scripts::Q00383_TreasureHunt < Quest
           elsif random < 28
             reward_items(pc, SCROLL_ENCHANT_ARMOR_C)
           else
-            bonus += 500
+            bonus &+= 500
           end
 
           random = Rnd.rand(1000)
@@ -128,7 +128,7 @@ class Scripts::Q00383_TreasureHunt < Quest
           elsif random < 300
             reward_items(pc, DYE_W1M3_C)
           else
-            bonus += 300
+            bonus &+= 300
           end
 
           random = Rnd.rand(100)
@@ -148,7 +148,7 @@ class Scripts::Q00383_TreasureHunt < Quest
           elsif random < 27
             reward_items(pc, IMPERIAL_DIAMOND)
           else
-            bonus += 500
+            bonus &+= 500
           end
 
           random = Rnd.rand(100)
@@ -162,7 +162,7 @@ class Scripts::Q00383_TreasureHunt < Quest
           elsif random < 80
             reward_items(pc, MUSICAL_SCORE_THEME_OF_COMEDY)
           else
-            bonus += 500
+            bonus &+= 500
           end
 
           give_adena(pc, bonus, true)

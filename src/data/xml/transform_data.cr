@@ -26,17 +26,14 @@ module TransformData
 
         each_element(d) do |cd, cd_name|
           male = cd_name.casecmp?("male")
-          if /^(?:male|female)$/i === cd_name
+          if cd_name.match?(/^(?:male|female)$/i)
             template_data = nil
             each_element(cd) do |z, z_name|
               case z_name.casecmp
               when "common"
                 each_element(z) do |s, s_name|
-                  case s_name.casecmp
-                  when /\A(?:base|stats|defense|magicDefense|collision|moving)\z/i
+                  if s_name.match?(/\A(?:base|stats|defense|magicDefense|collision|moving)\z/i)
                     each_attribute(s) { |name, value| set[name] = value }
-                  else
-                    # [automatically added else]
                   end
                 end
 

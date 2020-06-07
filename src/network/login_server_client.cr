@@ -2,7 +2,6 @@ class LoginServerClient
   include Singleton
   include Cancellable
   include Loggable
-  include Packets::Incoming
   include Packets::Outgoing
 
   private record WaitingClient, account : String, client : GameClient,
@@ -13,8 +12,6 @@ class LoginServerClient
 
   private IN_BUFFER = ByteBuffer.new
   private OUT_BUFFER = ByteBuffer.new
-  IN_BUFFER.set_encoding("UTF-16LE")
-  OUT_BUFFER.set_encoding("UTF-16LE")
 
   getter port = 0
   getter game_port = 0
@@ -50,6 +47,9 @@ class LoginServerClient
     @reserve_host = Config.reserve_host_on_login
     # @subnets = Config.game_server_subnets
     # @hosts = Config.game_server_hosts
+
+    IN_BUFFER.set_encoding("UTF-16LE")
+    OUT_BUFFER.set_encoding("UTF-16LE")
 
     spawn do
       until cancelled?
@@ -87,13 +87,13 @@ class LoginServerClient
       IN_BUFFER.rewind
       opcode = IN_BUFFER.read_bytes(UInt8)
       packet = case opcode
-      when 0x00 then InitLS.new
-      when 0x01 then LoginServerFail.new
-      when 0x02 then AuthResponse.new
-      when 0x03 then PlayerAuthResponse.new
-      when 0x04 then KickPlayer.new
-      when 0x05 then RequestCharacters.new
-      # when 0x06 then ChangePasswordResponse.new
+      when 0x00 then Packets::Incoming::InitLS.new
+      when 0x01 then Packets::Incoming::LoginServerFail.new
+      when 0x02 then Packets::Incoming::AuthResponse.new
+      when 0x03 then Packets::Incoming::PlayerAuthResponse.new
+      when 0x04 then Packets::Incoming::KickPlayer.new
+      when 0x05 then Packets::Incoming::RequestCharacters.new
+      # when 0x06 then Packets::Incoming::ChangePasswordResponse.new
       else
         warn { "Unknown opcode: 0x#{opcode.to_s(16)}." }
       end

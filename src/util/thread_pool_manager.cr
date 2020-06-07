@@ -1,5 +1,3 @@
-require "./task_executor"
-
 module ThreadPoolManager
   extend self
   extend Loggable

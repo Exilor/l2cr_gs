@@ -526,7 +526,7 @@ class L2VillageMasterInstance < L2NpcInstance
   end
 
   private def valid_name?(name : String) : Bool
-    Config.clan_name_template === name
+    name.match?(Config.clan_name_template)
   end
 
   def self.show_pledge_skill_list(pc : L2PcInstance)

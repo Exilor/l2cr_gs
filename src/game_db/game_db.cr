@@ -7,39 +7,73 @@ module GameDB
   extend self
   extend Loggable
 
+  @@logdb = false
   private class_getter! db : DB::Database
 
   def load
     DAOFactory.load
     @@db = DB.open(Config.database_url)
+    @@logdb = ARGV.includes?("logdb")
   end
 
   def close
     db.close
   end
 
+  private struct LoggedTransaction
+    initializer con : DB::Connection
+
+    macro method_missing(call)
+      GameDB.with_debug({{*call.args}}) do
+        @con.{{call}}
+      end
+    end
+  end
+
   def transaction
-    db.transaction { |tr| yield tr.connection }
+    # db.transaction { |tr| yield tr.connection }
+    db.transaction { |tr| yield LoggedTransaction.new(tr.connection) }
   end
 
   def query_each(*args)
-    db.query_each(*args) { |rs| yield rs }
+    with_debug(*args) { db.query_each(*args) { |rs| yield rs } }
   end
 
   def each(*args)
-    db.query_each(*args) { |rs| yield ResultSetReader.new(rs) }
+    query_each(*args) { |rs| yield ResultSetReader.new(rs) }
   end
 
   def exec(*args)
-    db.exec(*args)
+    with_debug(*args) { db.exec(*args) }
   end
 
   def scalar(*args)
-    db.scalar(*args)
+    with_debug(*args) { db.scalar(*args) }
   end
 
   def prepare(sql : String)
     db.prepared(sql)
+  end
+
+  private def to_debug(sql : String, *args)
+    i = -1
+    sql.gsub("?") { args[i &+= 1] }
+  end
+
+  protected def with_debug(*args)
+    if @@logdb
+      timer = Timer.new
+      ret = yield
+      debug String.build { |io|
+        io << '('
+        io << timer.result(6)
+        io << " s) "
+        io << to_debug(*args)
+      }
+      ret
+    else
+      yield
+    end
   end
 
   # DAO

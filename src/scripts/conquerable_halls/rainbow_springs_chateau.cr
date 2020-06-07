@@ -57,7 +57,6 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
   }
 
   private DEBUFFS = [] of Skill
-
   private WAR_DECREES_COUNT = {} of Int32 => Int64
   private ACCEPTED_CLANS = [] of L2Clan
   private USED_TEXT_PASSAGES = {} of String => Array(L2Clan)
@@ -87,7 +86,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
     if @rainbow = ClanHallSiegeManager.get_siegable_hall(RAINBOW_SPRINGS)
       delay = @rainbow.not_nil!.next_siege_time
       if delay > -1
-        set_registration_end_string(delay - 3600000)
+        set_registration_end_string(delay - 3_600_000)
         @next_siege = ThreadPoolManager.schedule_general(->set_final_attackers_task, delay)
       else
         warn "No date set for RainBow Springs Chateau Clan hall siege."
@@ -131,7 +130,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
         end
       end
       if ACCEPTED_CLANS.size >= 2
-        @next_siege = ThreadPoolManager.schedule_general(->start_siege_task, 3600000)
+        @next_siege = ThreadPoolManager.schedule_general(->start_siege_task, 3_600_000)
         @rainbow.not_nil!.update_siege_status(SiegeStatus::WAITING_BATTLE)
       else
         Broadcast.to_all_online_players("Rainbow Springs Chateau siege aborted due lack of population")
@@ -161,7 +160,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
       # XXX @rainbow.not_nil!.siegeEnds
 
       ThreadPoolManager.schedule_general(->set_final_attackers_task, @rainbow.not_nil!.next_siege_time)
-      set_registration_end_string(@rainbow.not_nil!.next_siege_time + Time.ms - 3600000)
+      set_registration_end_string(@rainbow.not_nil!.next_siege_time + Time.ms - 3_600_000)
       # Teleport out of the arenas is made 2 mins after game ends
       ThreadPoolManager.schedule_general(TeleportBack, 120000)
     end
@@ -524,9 +523,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
   end
 
   private def shout_random_text(npc)
-    length = TEXT_PASSAGES.size
-
-    if USED_TEXT_PASSAGES.size >= length
+    if USED_TEXT_PASSAGES.size >= TEXT_PASSAGES.size
       return
     end
 
@@ -600,7 +597,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
     @rainbow ||= ClanHallSiegeManager.get_siegable_hall(RAINBOW_SPRINGS)
     @rainbow.not_nil!.next_siege_time = date
     @next_siege.try &.cancel
-    date -= 3600000
+    date -= 3_600_000
     set_registration_end_string(date)
     @next_siege = ThreadPoolManager.schedule_general(->set_final_attackers_task, @rainbow.not_nil!.next_siege_time)
   end

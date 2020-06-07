@@ -207,10 +207,10 @@ class Packets::Incoming::Say2 < GameClientPacket
         return false
       end
       result = String.build do |io|
-        pos += 3
+        pos &+= 3
         while (temp = @text[pos]).num?
           io << temp
-          pos += 1
+          pos &+= 1
         end
       end
       id = result.to_i
@@ -232,7 +232,7 @@ class Packets::Incoming::Say2 < GameClientPacket
         warn { "#{pc.name} sent an invalid publish item message (ID: #{id})." }
         return false
       end
-      pos1 += 1
+      pos1 &+= 1
     end
 
     true

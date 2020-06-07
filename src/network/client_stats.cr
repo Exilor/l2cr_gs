@@ -152,8 +152,10 @@ class ClientStats
         else
           @floods_in_min &+= 1
         end
+
         true
       end
+
       false
     end
   end
