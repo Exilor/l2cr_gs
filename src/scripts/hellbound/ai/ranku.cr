@@ -17,7 +17,7 @@ class Scripts::Ranku < AbstractNpcAI
     if npc && npc.id == RANKU && npc.alive? && event.casecmp?("checkup")
       npc.as(L2MonsterInstance).minion_list.spawned_minions.each do |minion|
         if minion && minion.alive? && TRACKING_SET.includes?(minion.l2id)
-          players = minion.known_list.known_players.values
+          players = minion.known_list.known_players.values_slice
           if players.empty?
             warn { "#{minion}'s known list contains no players." }
             next

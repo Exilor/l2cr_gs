@@ -44,8 +44,6 @@ class Scripts::Q00649_ALooterAndARailroadMan < Quest
         st.exit_quest(true, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -61,8 +59,6 @@ class Scripts::Q00649_ALooterAndARailroadMan < Quest
     when State::STARTED
       count = st.get_quest_items_count(THIEF_GUILD_MARK)
       html = count == 200 ? "32052-04.html" : "32052-05.html"
-    else
-      # [automatically added else]
     end
 
 

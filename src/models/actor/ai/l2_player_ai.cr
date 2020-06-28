@@ -212,10 +212,7 @@ class L2PlayerAI < L2PlayableAI
         think_pick_up
       when INTERACT
         think_interact
-      else
-        # [automatically added else]
       end
-
     ensure
       @thinking = false
     end

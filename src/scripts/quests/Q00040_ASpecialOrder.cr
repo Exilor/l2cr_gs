@@ -64,8 +64,6 @@ class Scripts::Q00040_ASpecialOrder < Quest
         st.set_cond(6, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -93,13 +91,9 @@ class Scripts::Q00040_ASpecialOrder < Quest
           if st.has_quest_items?(BOX_OF_SEED)
             html = "30081-09.html"
           end
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when OFULLE
       case st.cond
@@ -116,8 +110,6 @@ class Scripts::Q00040_ASpecialOrder < Quest
         end
       when 4
         html = "31572-06.html"
-      else
-        # [automatically added else]
       end
     when GESTO
       case st.cond
@@ -134,11 +126,7 @@ class Scripts::Q00040_ASpecialOrder < Quest
         end
       when 7
         html = "30511-06.html"
-      else
-        # [automatically added else]
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

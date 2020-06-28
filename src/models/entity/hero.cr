@@ -142,8 +142,6 @@ module Hero
         if castle = CastleManager.get_castle_by_id(param)
           diary_entry["action"] = castle.name + " Castle was successful taken"
         end
-      else
-        # [automatically added else]
       end
 
 

@@ -142,8 +142,6 @@ class Scripts::Q00386_StolenDignity < Quest
         return take_html(pc, qs, ask - 18)
       when 55..63
         return before_reward(pc, qs, ask - 54)
-      else
-        # [automatically added else]
       end
 
     end
@@ -296,8 +294,6 @@ class Scripts::Q00386_StolenDignity < Quest
       qs.give_items(HAND_OF_CABRIO_HEAD, count)
     when 32
       qs.give_items(CRYSTAL_OF_DEAMON_PIECE, count)
-    else
-      # [automatically added else]
     end
 
   end
@@ -314,16 +310,16 @@ class Scripts::Q00386_StolenDignity < Quest
 
     found = 0
     # Horizontal
-    found += 1 if q[0].num? && q[1].num? && q[2].num?
-    found += 1 if q[3].num? && q[4].num? && q[5].num?
-    found += 1 if q[6].num? && q[7].num? && q[8].num?
+    found += 1 if q[0].number? && q[1].number? && q[2].number?
+    found += 1 if q[3].number? && q[4].number? && q[5].number?
+    found += 1 if q[6].number? && q[7].number? && q[8].number?
     # Vertical
-    found += 1 if q[0].num? && q[3].num? && q[6].num?
-    found += 1 if q[1].num? && q[4].num? && q[7].num?
-    found += 1 if q[2].num? && q[5].num? && q[8].num?
+    found += 1 if q[0].number? && q[3].number? && q[6].number?
+    found += 1 if q[1].number? && q[4].number? && q[7].number?
+    found += 1 if q[2].number? && q[5].number? && q[8].number?
     # Diagonal
-    found += 1 if q[0].num? && q[4].num? && q[8].num?
-    found += 1 if q[2].num? && q[4].num? && q[6].num?
+    found += 1 if q[0].number? && q[4].number? && q[8].number?
+    found += 1 if q[2].number? && q[4].number? && q[6].number?
 
     found
   end
@@ -463,8 +459,6 @@ class Scripts::Q00386_StolenDignity < Quest
         if Rnd.rand(1000) < 487
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
-      else
-        # [automatically added else]
       end
 
     end

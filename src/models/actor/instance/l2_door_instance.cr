@@ -13,7 +13,7 @@ class L2DoorInstance < L2Character
 
   @castle_index = -2
   @fort_index = -2
-  @auto_close_task : TaskExecutor::Scheduler::DelayedTask?
+  @auto_close_task : TaskScheduler::DelayedTask?
 
   getter? open : Bool
   getter? targetable : Bool
@@ -306,8 +306,6 @@ class L2DoorInstance < L2Character
       open_me
     when -1
       close_me
-    else
-      # [automatically added else]
     end
   end
 

@@ -58,12 +58,8 @@ class Scripts::Q00303_CollectArrowheads < Quest
           st.exit_quest(true, true)
           html = "30029-06.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

@@ -313,8 +313,6 @@ class Scripts::Q00426_QuestForFishingShot < Quest
     when "3"
       qs.exit_quest(true)
       return "08.html"
-    else
-      # [automatically added else]
     end
 
 
@@ -353,8 +351,6 @@ class Scripts::Q00426_QuestForFishingShot < Quest
         return "04.html"
       end
       return "05.html"
-    else
-      # [automatically added else]
     end
 
 

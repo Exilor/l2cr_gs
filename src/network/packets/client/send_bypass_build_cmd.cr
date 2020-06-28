@@ -133,8 +133,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     case pc.class_id
     when .dwarven_fighter?, .scavenger?, .bounty_hunter?, .fortune_seeker?
       is_spoiler = true
-    else
-      # [automatically added else]
     end
 
     party = pc.party
@@ -221,7 +219,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   private def goto_npc
     name = args.join(' ')
 
-    unless name.num?
+    unless name.number?
       npc = L2World.objects.find do |obj|
         obj.as?(L2Npc).try &.name.try &.casecmp?(name)
       end
@@ -233,7 +231,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       end
     end
 
-    if npc.nil? && name.num?
+    if npc.nil? && name.number?
       id = name.to_i
       npc = L2World.objects.find do |obj|
         obj.is_a?(L2Npc) && obj.id == id
@@ -301,7 +299,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     return unless target = pc.target.as?(L2PcInstance)
     id = args.first {""}
 
-    class_id = ClassId.parse?(id) || (ClassId[id.to_i]? if id.num?)
+    class_id = ClassId.parse?(id) || (ClassId[id.to_i]? if id.number?)
     if class_id && !class_id.to_s.includes?("DUMMY")
       if class_id.level == 3
         do_uplift_target(target, class_id)
@@ -468,8 +466,6 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     when ClassId::DOOMBRINGER
       add_light_armor(pc, items)
       items << pc.inventory.add_item("GM", 15907, 1, pc, nil) # Pyseal Blade
-    else
-      # [automatically added else]
     end
 
     items << pc.inventory.add_item("GM", 21720, 1, pc, nil) # Soul Cloak of Freya

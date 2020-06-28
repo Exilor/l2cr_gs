@@ -27,7 +27,7 @@ module AdminCommandHandler::AdminTeleport
       teleport_to_character(pc, pc.target)
     when /\Aadmin_walk.*/
       val = command.from(11).split
-      if val.size == 3 && val.all? &.num?
+      if val.size == 3 && val.all? &.number?
         x = val.shift.to_i
         y = val.shift.to_i
         z = val.shift.to_i
@@ -98,8 +98,6 @@ module AdminCommandHandler::AdminTeleport
           z += int_val
         when "down"
           z -= int_val
-        else
-          # [automatically added else]
         end
 
         pc.tele_to_location(Location.new(x, y, z))
@@ -126,8 +124,6 @@ module AdminCommandHandler::AdminTeleport
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         end
       end
-    else
-      # [automatically added else]
     end
 
     true

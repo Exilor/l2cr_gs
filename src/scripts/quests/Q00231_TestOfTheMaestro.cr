@@ -114,8 +114,6 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
       add_attack_desire(add_spawn(KING_BUGBEAR, 140395, -194147, -3146, 0, false, 200000, false), pc)
       add_attack_desire(add_spawn(KING_BUGBEAR, 140395, -194147, -3146, 0, false, 200000, false), pc)
       add_attack_desire(add_spawn(KING_BUGBEAR, 140395, -194147, -3146, 0, false, 200000, false), pc)
-    else
-      # [automatically added else]
     end
 
 
@@ -166,8 +164,6 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -311,8 +307,6 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
             html = "30673-05.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

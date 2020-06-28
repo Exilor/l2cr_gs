@@ -26,13 +26,13 @@ module TransformData
 
         each_element(d) do |cd, cd_name|
           male = cd_name.casecmp?("male")
-          if cd_name.match?(/^(?:male|female)$/i)
+          if cd_name.matches?(/^(?:male|female)$/i)
             template_data = nil
             each_element(cd) do |z, z_name|
               case z_name.casecmp
               when "common"
                 each_element(z) do |s, s_name|
-                  if s_name.match?(/\A(?:base|stats|defense|magicDefense|collision|moving)\z/i)
+                  if s_name.matches?(/\A(?:base|stats|defense|magicDefense|collision|moving)\z/i)
                     each_attribute(s) { |name, value| set[name] = value }
                   end
                 end
@@ -109,8 +109,6 @@ module TransformData
 
                 tld = TransformLevelData.new(levels_set)
                 template_data.add_level_data(tld)
-              else
-                # [automatically added else]
               end
             end
           end
@@ -127,7 +125,7 @@ module TransformData
 
   def transform_player(id : Int, pc : L2PcInstance) : Transform?
     unless transform = DATA[id]?
-      warn { "Transformation with ID #{id} not found." }
+      warn { "Transformation with id #{id} not found." }
     end
     pc.transform(transform) if transform
     transform

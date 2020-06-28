@@ -57,8 +57,6 @@ module RecipeData
             set["rareCount"] = parse_int(c, "count")
             set["rarity"] = parse_int(c, "rarity")
             has_rare = true
-          else
-            # [automatically added else]
           end
         end
 

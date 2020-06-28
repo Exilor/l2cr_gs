@@ -88,8 +88,6 @@ class Scripts::Q00403_PathOfTheRogue < Quest
       end
 
       event
-    else
-      # [automatically added else]
     end
 
   end
@@ -117,8 +115,6 @@ class Scripts::Q00403_PathOfTheRogue < Quest
         elsif npc.variables.get_i32("lastAttacker") != attacker.l2id
           npc.script_value = 2
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -234,8 +230,6 @@ class Scripts::Q00403_PathOfTheRogue < Quest
         elsif has_quest_items?(pc, HORSESHOE_OF_LIGHT)
           html = "30425-08.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

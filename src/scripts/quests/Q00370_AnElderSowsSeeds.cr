@@ -61,8 +61,6 @@ class Scripts::Q00370_AnElderSowsSeeds < Quest
         st.exit_quest(true, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 

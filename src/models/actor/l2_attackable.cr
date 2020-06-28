@@ -765,22 +765,20 @@ class L2Attackable < L2Npc
       count = 1i64
       template.skills.each_key do |skill_id|
         case skill_id
-        when 4303 then count *= 2 # Strong type x2
-        when 4304 then count *= 3 # Strong type x3
-        when 4305 then count *= 4 # Strong type x4
-        when 4306 then count *= 5 # Strong type x5
-        when 4307 then count *= 6 # Strong type x6
-        when 4308 then count *= 7 # Strong type x7
-        when 4309 then count *= 8 # Strong type x8
-        when 4310 then count *= 9 # Strong type x9
-        else
-          # [automatically added else]
+        when 4303 then count &*= 2 # Strong type x2
+        when 4304 then count &*= 3 # Strong type x3
+        when 4305 then count &*= 4 # Strong type x4
+        when 4306 then count &*= 5 # Strong type x5
+        when 4307 then count &*= 6 # Strong type x6
+        when 4308 then count &*= 7 # Strong type x7
+        when 4309 then count &*= 8 # Strong type x8
+        when 4310 then count &*= 9 # Strong type x9
         end
       end
 
       diff = level &- seed.level &- 5
       if diff > 0
-        count += diff
+        count &+= diff
       end
 
       item = ItemHolder.new(seed.crop_id, count * Config.rate_drop_manor)

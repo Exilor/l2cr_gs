@@ -98,8 +98,6 @@ class Scripts::Q00461_RumbleInTheBase < Quest
           html = "30200-02.htm"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

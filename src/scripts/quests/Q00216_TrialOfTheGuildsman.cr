@@ -171,8 +171,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
         give_items(pc, DUNINGS_INSTRUCTIONS, 1)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -259,8 +257,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
-    else
-      # [automatically added else]
     end
 
     super
@@ -381,8 +377,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
             html = "30688-05.html"
           end
         end
-      else
-        # [automatically added else]
       end
     elsif qs.completed?
       if npc.id == WAREHOUSE_KEEPER_VALKON
@@ -408,8 +402,6 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
       check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, RED_PIGMENT) < 70
     when BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, BREKA_ORC_WARRIOR
       check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS) && get_quest_items_count(pc, DUNINGS_KEY) < 30
-    else
-      # [automatically added else]
     end
 
     check

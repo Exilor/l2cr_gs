@@ -442,8 +442,6 @@ module GamePacketHandler
         print_debug(opcode, buffer, state, client)
         return
       end
-    else
-      # [automatically added else]
     end
 
 

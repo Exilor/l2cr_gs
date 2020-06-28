@@ -427,8 +427,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_hp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery hp_cancel\">Deactivate</a>]#{hp_grade2}"
               when 3
                 html["%change_hp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery hp_cancel\">Deactivate</a>]#{hp_grade3}"
-              else
-                # [automatically added else]
               end
             else
               html["%hp_recovery%"] = "none"
@@ -443,8 +441,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_hp%"] = hp_grade2
               when 3
                 html["%change_hp%"] = hp_grade3
-              else
-                # [automatically added else]
               end
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_EXP)
@@ -460,8 +456,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_exp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery exp_cancel\">Deactivate</a>]#{exp_grade2}"
               when 3
                 html["%change_exp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery exp_cancel\">Deactivate</a>]#{exp_grade3}"
-              else
-                # [automatically added else]
               end
             else
               html["%exp_recovery%"] = "none"
@@ -476,8 +470,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_exp%"] = exp_grade2
               when 3
                 html["%change_exp%"] = exp_grade3
-              else
-                # [automatically added else]
               end
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_RESTORE_MP)
@@ -493,8 +485,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_mp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery mp_cancel\">Deactivate</a>]#{mp_grade2}"
               when 3
                 html["%change_mp%"] = "[<a action=\"bypass -h npc_%objectId%_manage recovery mp_cancel\">Deactivate</a>]#{mp_grade3}"
-              else
-                # [automatically added else]
               end
             else
               html["%mp_recovery%"] = "none"
@@ -509,8 +499,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_mp%"] = mp_grade2
               when 3
                 html["%change_mp%"] = mp_grade3
-              else
-                # [automatically added else]
               end
             end
             send_html_message(pc, html)
@@ -722,8 +710,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                   send_html_message(pc, html)
                 end
                 return
-              else
-                # [automatically added else]
               end
             end
             html = NpcHtmlMessage.new(l2id)
@@ -756,8 +742,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_support%"] = "[<a action=\"bypass -h npc_%objectId%_manage other support_cancel\">Deactivate</a>]#{support_grade2}"
               when 3
                 html["%change_support%"] = "[<a action=\"bypass -h npc_%objectId%_manage other support_cancel\">Deactivate</a>]#{support_grade3}"
-              else
-                # [automatically added else]
               end
             else
               html["%support%"] = "none"
@@ -772,8 +756,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
                 html["%change_support%"] = support_grade2
               when 3
                 html["%change_support%"] = support_grade3
-              else
-                # [automatically added else]
               end
             end
             if fn = clan_hall.get_function(ClanHall::FUNC_ITEM_CREATE)

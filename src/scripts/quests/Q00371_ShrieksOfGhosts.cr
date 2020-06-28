@@ -84,8 +84,6 @@ class Scripts::Q00371_ShrieksOfGhosts < Quest
 
         take_items(pc, ANCIENT_PORCELAIN, 1)
       end
-    else
-      # [automatically added else]
     end
 
 

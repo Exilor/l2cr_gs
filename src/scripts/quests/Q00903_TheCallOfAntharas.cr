@@ -33,8 +33,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
       when TARASK_DRAGON
         st.give_items(TARASK_DRAGONS_LEATHER_FRAGMENT, 1)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
-      else
-        # [automatically added else]
       end
 
 
@@ -59,8 +57,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
       when "30755-06.html"
         st.start_quest
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -94,8 +90,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         st.exit_quest(QuestType::DAILY, true)
         html = "30755-08.html"
-      else
-        # [automatically added else]
       end
 
     when State::COMPLETED
@@ -111,8 +105,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
           html = "30755-01.htm"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

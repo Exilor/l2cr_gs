@@ -38,8 +38,6 @@ class Scripts::Q00169_OffspringOfNightmares < Quest
           show_on_screen_msg(pc, NpcString::LAST_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000) # TODO: Newbie Guide
           html = event
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -85,8 +83,6 @@ class Scripts::Q00169_OffspringOfNightmares < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     end

@@ -6,7 +6,7 @@ class L2MonsterInstance < L2Attackable
   private MONSTER_MAINTENANCE_INTERVAL = 1000
 
   @minion_list : MinionList?
-  @maintenance_task : TaskExecutor::Scheduler::PeriodicTask?
+  @maintenance_task : TaskScheduler::PeriodicTask?
 
   property leader : L2MonsterInstance?
 

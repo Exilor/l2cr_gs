@@ -96,8 +96,6 @@ class Scripts::Q00634_InSearchOfFragmentsOfDimension < Quest
         qs.exit_quest(true, true)
         event
       end
-    else
-      # [automatically added else]
     end
 
   end

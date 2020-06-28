@@ -69,8 +69,6 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
           html = "32292-07.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -109,8 +107,6 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
           html = "32292-04.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

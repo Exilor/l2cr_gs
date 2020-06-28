@@ -237,7 +237,7 @@ module PetitionManager
         io << "<tr><td width=\"270\"><table width=\"270\" cellpadding=\"2\" bgcolor="
         io << (color ? "131210" : "444444")
         io << "><tr><td width=\"130\">"
-        Time.from_ms(cur_pt.submit_time).to_s(date_format, io)
+        Time.from_ms(cur_pt.submit_time).to_s(io, date_format)
         io << "</td><td width=\"140\" align=right><font color=\""
         io << (cur_pt.petitioner.online? ? "00FF00" : "999999")
         io << "\">"

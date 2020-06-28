@@ -18,8 +18,6 @@ module AdminCommandHandler::AdminHtml
         return false
       end
       show_html(pc, tokens.shift, true)
-    else
-      # [automatically added else]
     end
 
     true

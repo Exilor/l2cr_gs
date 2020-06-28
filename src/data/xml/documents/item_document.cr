@@ -77,8 +77,6 @@ class ItemDocument < AbstractDocument
         if condition
           current_item.item.attach(condition)
         end
-      else
-        # [automatically added else]
       end
     end
 
@@ -103,8 +101,6 @@ class ItemDocument < AbstractDocument
       current_item.item = L2Weapon.new(current_item.set)
     when "EtcItem"
       current_item.item = L2EtcItem.new(current_item.set)
-    else
-      # [automatically added else]
     end
   end
 end

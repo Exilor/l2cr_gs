@@ -18,14 +18,14 @@ class Scripts::TarBeetle < AbstractNpcAI
     add_spell_finished_id(TAR_BEETLE)
   end
 
-  def on_aggro_range_enter(npc, player, is_summon)
+  def on_aggro_range_enter(npc, pc, is_summon)
     if npc.script_value > 0
-      info = player.effect_list.get_buff_info_by_skill_id(TAR_SPITE)
+      info = pc.effect_list.get_buff_info_by_skill_id(TAR_SPITE)
       level = info ? info.skill.abnormal_lvl : 0
       if level < 3
         skill = SKILLS[level].skill
         unless npc.skill_disabled?(skill)
-          npc.target = player
+          npc.target = pc
           npc.do_cast(skill)
         end
       end
@@ -34,7 +34,7 @@ class Scripts::TarBeetle < AbstractNpcAI
     super
   end
 
-  def on_spell_finished(npc, player, skill)
+  def on_spell_finished(npc, pc, skill)
     if skill && skill.id == TAR_SPITE
       val = npc.script_value - 1
       if val <= 0 || SKILLS[0].skill.mp_consume2 > npc.current_mp

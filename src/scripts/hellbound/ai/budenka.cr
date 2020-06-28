@@ -14,7 +14,7 @@ class Scripts::Budenka < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    event if event.match?(/\ABudenka-0[2-5]\.html\z/)
+    event if event.matches?(/\ABudenka-0[2-5]\.html\z/)
   end
 
   def on_first_talk(npc, pc)

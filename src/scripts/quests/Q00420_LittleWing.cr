@@ -296,8 +296,6 @@ class Scripts::Q00420_LittleWing < Quest
         qs.set("drake_hunt", DEAD_SEEKER)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -347,8 +345,6 @@ class Scripts::Q00420_LittleWing < Quest
           else
             html = "30610-11.html"
           end
-        else
-          # [automatically added else]
         end
 
       when MARIA
@@ -363,8 +359,6 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 3
           html = "30608-06.html"
-        else
-          # [automatically added else]
         end
 
       when BYRON
@@ -389,8 +383,6 @@ class Scripts::Q00420_LittleWing < Quest
           else
             html = "30711-07.html"
           end
-        else
-          # [automatically added else]
         end
 
       when MIMYU
@@ -419,8 +411,6 @@ class Scripts::Q00420_LittleWing < Quest
           html = "30747-11.html"
         when 8
           html = "30747-12.html"
-        else
-          # [automatically added else]
         end
 
       when EXARION
@@ -440,8 +430,6 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30748-05.html"
-        else
-          # [automatically added else]
         end
 
       when ZWOV
@@ -461,8 +449,6 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30749-05.html"
-        else
-          # [automatically added else]
         end
 
       when KALIBRAN
@@ -479,8 +465,6 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30750-06.html"
-        else
-          # [automatically added else]
         end
 
       when SUZET
@@ -500,8 +484,6 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30751-06.html"
-        else
-          # [automatically added else]
         end
 
       when SHAMHAI
@@ -521,18 +503,12 @@ class Scripts::Q00420_LittleWing < Quest
           end
         when 7
           html = "30752-05.html"
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
 

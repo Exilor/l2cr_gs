@@ -54,7 +54,7 @@ class Scripts::KetraOrcSupport < AbstractNpcAI
   def on_adv_event(event, npc, pc)
     return unless pc && npc
 
-    if event.num? && (buff = BUFFS[event.to_i]?)
+    if event.number? && (buff = BUFFS[event.to_i]?)
       if get_quest_items_count(pc, HORN) >= buff.cost
         take_items(pc, HORN, buff.cost)
         npc.target = pc
@@ -111,8 +111,6 @@ class Scripts::KetraOrcSupport < AbstractNpcAI
       else
         html = "31376-no.html"
       end
-    else
-      # [automatically added else]
     end
 
 

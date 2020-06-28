@@ -79,8 +79,6 @@ class Scripts::Q00281_HeadForTheHills < Quest
       else
         "32173-10.html"
       end
-    else
-      # [automatically added else]
     end
 
   end

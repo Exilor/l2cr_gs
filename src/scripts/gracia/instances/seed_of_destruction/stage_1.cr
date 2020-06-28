@@ -419,8 +419,6 @@ class Scripts::Stage1 < AbstractInstance
           spawn_flagged_npcs(world, 8)
         when 9
           # instance end
-        else
-          # [automatically added else]
         end
 
         world.inc_status
@@ -660,8 +658,6 @@ class Scripts::Stage1 < AbstractInstance
             add_spawn(npc_id, *trap.xyz, trap.heading, true, 0, true, world.instance_id)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end

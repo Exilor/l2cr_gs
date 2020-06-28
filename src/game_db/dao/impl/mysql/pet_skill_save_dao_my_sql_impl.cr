@@ -8,42 +8,44 @@ module GameDB
     private DELETE_SKILL_SAVE = "DELETE FROM character_pet_skills_save WHERE petObjItemId=?"
 
     def insert(pet : L2PetInstance, store_effects : Bool)
-      GameDB.exec(DELETE_SKILL_SAVE, pet.control_l2id)
+      GameDB.transaction do |tr|
+        tr.exec(DELETE_SKILL_SAVE, pet.control_l2id)
 
-      if store_effects
-        buff_index = 0
-        stored_skills = [] of Int32
+        if store_effects
+          buff_index = 0
+          stored_skills = [] of Int32
 
-        pet.effect_list.each do |info|
-          skill = info.skill
-          if skill.abnormal_type.life_force_others?
-            next
+          pet.effect_list.each do |info|
+            skill = info.skill
+            if skill.abnormal_type.life_force_others?
+              next
+            end
+
+            if skill.toggle?
+              next
+            end
+
+            if skill.dance? && !Config.alt_store_dances
+              next
+            end
+
+            if stored_skills.includes?(skill.hash)
+              next
+            end
+
+            stored_skills << skill.hash
+
+            tr.exec(
+              ADD_SKILL_SAVE,
+              pet.control_l2id,
+              skill.id,
+              skill.level,
+              info.time,
+              buff_index &+= 1
+            )
+
+            SummonEffectsTable.add_pet_effect(pet.control_l2id, skill, info.time)
           end
-
-          if skill.toggle?
-            next
-          end
-
-          if skill.dance? && !Config.alt_store_dances
-            next
-          end
-
-          if stored_skills.includes?(skill.hash)
-            next
-          end
-
-          stored_skills << skill.hash
-
-          GameDB.exec(
-            ADD_SKILL_SAVE,
-            pet.control_l2id,
-            skill.id,
-            skill.level,
-            info.time,
-            buff_index += 1
-          )
-
-          SummonEffectsTable.add_pet_effect(pet.control_l2id, skill, info.time)
         end
       end
     rescue e

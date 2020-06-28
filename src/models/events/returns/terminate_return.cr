@@ -1,3 +1,5 @@
+require "./abstract_event_return"
+
 class TerminateReturn < AbstractEventReturn
   getter terminate
 

@@ -11,9 +11,9 @@ class FortSiege
   private DELETE_FORT_SIEGECLANS = "DELETE FROM fortsiege_clans WHERE fort_id = ?"
 
   @siege_guard_manager : FortSiegeGuardManager?
-  @siege_end : TaskExecutor::Scheduler::DelayedTask?
-  @siege_restore : TaskExecutor::Scheduler::DelayedTask?
-  @siege_start_task : TaskExecutor::Scheduler::DelayedTask?
+  @siege_end : TaskScheduler::DelayedTask?
+  @siege_restore : TaskScheduler::DelayedTask?
+  @siege_start_task : TaskScheduler::DelayedTask?
   @attacker_clans = Concurrent::Array(L2SiegeClan).new
 
   getter commanders = Concurrent::Array(L2Spawn).new
@@ -291,8 +291,6 @@ class FortSiege
             str = NpcString::AT_LAST_THE_MAGIC_FIELD_THAT_PROTECTS_THE_FORTRESS_HAS_WEAKENED_VOLUNTEERS_STAND_BACK
           when 4
             str = NpcString::I_FEEL_SO_MUCH_GRIEF_THAT_I_CANT_EVEN_TAKE_CARE_OF_MYSELF_THERE_ISNT_ANY_REASON_FOR_ME_TO_STAY_HERE_ANY_LONGER
-          else
-            # [automatically added else]
           end
 
 

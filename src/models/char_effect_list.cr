@@ -1,9 +1,7 @@
 require "../network/**"
 require "./skills/buff_info"
 require "../util/linked_list"
-# Using a Concurrent::LinkedList causes a CPU leak
-# update: apparently noy anymore since it's a class instead of a struct
-# update 2: instead it appears to cause a greater memory usage over time
+
 class CharEffectList
   include Packets::Outgoing
   include Synchronizable
@@ -65,16 +63,16 @@ class CharEffectList
 
   private def each_with_list(& : BuffInfo, Interfaces::List(BuffInfo) ->) : Nil
     {@buffs, @triggered, @dances, @toggles, @debuffs}.each do |list|
-      list.try { |list| list.safe_each { |info| yield info, list } }
+      list.try { |list| list.safe_each { |info| yield(info, list) } }
     end
   end
 
   def each(dances : Bool = true, & : BuffInfo ->) : Nil
-    @buffs.try     &.each { |info| yield info }
-    @triggered.try &.each { |info| yield info }
-    @dances.try    &.each { |info| yield info } if dances
-    @toggles.try   &.each { |info| yield info }
-    @debuffs.try   &.each { |info| yield info }
+    @buffs.try     &.each { |info| yield(info) }
+    @triggered.try &.each { |info| yield(info) }
+    @dances.try    &.each { |info| yield(info) } if dances
+    @toggles.try   &.each { |info| yield(info) }
+    @debuffs.try   &.each { |info| yield(info) }
   end
 
   def for_each(dances : Bool, & : BuffInfo -> Bool) : Nil
@@ -447,8 +445,8 @@ class CharEffectList
 
     return if info.effected.dead? && info.effector != info.effected
 
-   if skill.abnormal_type.none?
-      stop_skill_effects(false, skill)
+    if skill.abnormal_type.none?
+      stop_skill_effects(true, skill)
     else
       stacked_effects = stacked_effects()
       if stacked_effects.has_key?(skill.abnormal_type)
@@ -457,7 +455,7 @@ class CharEffectList
         if stacked_info && skill.abnormal_lvl >= stacked_info.skill.abnormal_lvl
           if skill.abnormal_instant?
             if stacked_info.skill.abnormal_instant?
-              stop_skill_effects(false, skill.abnormal_type)
+              stop_skill_effects(true, skill.abnormal_type)
             end
 
             if stacked_info = stacked_effects[skill.abnormal_type]?
@@ -467,10 +465,10 @@ class CharEffectList
             end
           else
             if stacked_info.skill.abnormal_instant?
-              stop_skill_effects(false, skill.abnormal_type)
+              stop_skill_effects(true, skill.abnormal_type)
             end
 
-            stop_skill_effects(false, skill.abnormal_type)
+            stop_skill_effects(true, skill.abnormal_type)
           end
         else
           return
@@ -559,8 +557,6 @@ class CharEffectList
       is_summon = true
       ps = PartySpelled.new(owner)
       pss = PartySpelled.new(owner)
-    else
-      # [automatically added else]
     end
 
     @buffs.try &.each do |info|
@@ -590,10 +586,7 @@ class CharEffectList
         if party = owner.party
           party.broadcast_packet(ps)
         end
-      else
-        # [automatically added else]
       end
-
     end
 
     if os

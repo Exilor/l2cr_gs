@@ -79,8 +79,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
         qs.memo_state = 3
         add_attack_desire(add_spawn(TAMIL, npc, true, 0i64, true), pc)
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -100,8 +98,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::THE_SACRED_FLAME_IS_OURS))
         when TAMIL
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::AS_YOU_WISH_MASTER))
-        else
-          # [automatically added else]
         end
 
 
@@ -111,8 +107,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
         if npc.variables.get_i32("firstAttacker") != attacker.l2id
           npc.script_value = 2
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -140,8 +134,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           give_items(killer, TAMIL_NECKLACE, 1)
           qs.set_cond(5, true)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -240,8 +232,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
             html = "30428-01.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     end

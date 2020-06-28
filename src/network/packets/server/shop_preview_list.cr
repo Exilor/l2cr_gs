@@ -1,9 +1,11 @@
 class Packets::Outgoing::ShopPreviewList < GameServerPacket
   @expertise = 0
 
-  initializer list : Enumerable(Product), list_id : Int32, adena : Int64
+  initializer list : Slice(Product), list_id : Int32, adena : Int64
 
-  def initialize(lst : L2BuyList, @adena : Int64, @expertise : Int32)
+  def initialize(lst : L2BuyList, adena : Int64, expertise : Int32)
+    @adena = adena
+    @expertise = expertise
     @list_id = lst.list_id
     @list = lst.products
   end

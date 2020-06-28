@@ -15,7 +15,7 @@ module AdminCommandHandler::AdminMessages
       end
     elsif command.starts_with?("admin_msgx ")
       tokens = command.split
-      if tokens.size <= 2 || !tokens[1].num?
+      if tokens.size <= 2 || !tokens[1].number?
         pc.send_message("Command format: #msgx <SYSTEM_MSG_ID> [item:Id] [skill:Id] [npc:Id] [zone:x,y,x] [castle:Id] [str:'text']")
         return false
       end

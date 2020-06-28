@@ -29,8 +29,6 @@ class Scripts::Q00013_ParcelDelivery < Quest
       else
         return "31539-02.html"
       end
-    else
-      # [automatically added else]
     end
 
     event
@@ -53,14 +51,10 @@ class Scripts::Q00013_ParcelDelivery < Quest
           html = "31274-02.html"
         when VULCAN
           html = "31539-00.html"
-        else
-          # [automatically added else]
         end
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

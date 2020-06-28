@@ -57,8 +57,6 @@ class Scripts::Q00357_WarehouseKeepersAmbition < Quest
         end
         qs.exit_quest(true, true)
         html = event
-      else
-        # [automatically added else]
       end
 
     end

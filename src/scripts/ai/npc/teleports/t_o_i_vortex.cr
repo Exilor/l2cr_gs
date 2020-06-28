@@ -76,8 +76,6 @@ class Scripts::ToIVortex < AbstractNpcAI
       else
         return "#{npc_id}no-adena.htm"
       end
-    else
-      # [automatically added else]
     end
 
 

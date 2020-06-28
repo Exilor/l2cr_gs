@@ -6,7 +6,7 @@ module AdminCommandHandler::AdminGeodata
     st = command.split
     actual_command = st.shift
 
-    case actual_command.downcase
+    case actual_command.casecmp
     when "admin_geo_pos"
       world_x = pc.x
       world_y = pc.y
@@ -53,10 +53,7 @@ module AdminCommandHandler::AdminGeodata
       end
     when "admin_geogrid"
       GeoUtils.debug_grid(pc)
-    else
-      # [automatically added else]
     end
-
 
     true
   end

@@ -23,7 +23,7 @@ module Formulas
 
   def npc_std_calculators : Slice(Calculator?)
     @@npc_std_calculators ||= begin
-      std = Slice.new(Stats.size, nil.as(Calculator?))
+      std = Slice(Calculator?).new(Stats.size)
 
       std[MAX_HP.to_i] = Calculator.new(FuncMaxHpMul::INSTANCE)
       std[MAX_MP.to_i] = Calculator.new(FuncMaxMpMul::INSTANCE)
@@ -45,7 +45,7 @@ module Formulas
 
   def std_door_calculators : Slice(Calculator?)
     @@std_door_calculators ||= begin
-      std = Slice.new(Stats.size, nil.as(Calculator?))
+      std = Slice(Calculator?).new(Stats.size)
 
       std[ACCURACY_COMBAT.to_i] = Calculator.new(FuncAtkAccuracy::INSTANCE)
       std[EVASION_RATE.to_i] = Calculator.new(FuncAtkEvasion::INSTANCE)
@@ -429,8 +429,6 @@ module Formulas
       init_val = BaseStats::STR.calc_bonus(actor)
     when
       init_val = BaseStats::INT.calc_bonus(actor)
-    else
-      # [automatically added else]
     end
 
     init_val *= actor.calc_stat(SKILL_CRITICAL_PROBABILITY, 1)
@@ -513,8 +511,6 @@ module Formulas
         target.send_packet(SystemMessageId::SHIELD_DEFENCE_SUCCESSFULL)
       when SHIELD_DEFENSE_PERFECT_BLOCK
         target.send_packet(SystemMessageId::YOUR_EXCELLENT_SHIELD_DEFENSE_WAS_A_SUCCESS)
-      else
-        # [automatically added else]
       end
     end
 
@@ -536,8 +532,6 @@ module Formulas
       end
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
-    else
-      # [automatically added else]
     end
 
     pvp = attacker.playable? && target.playable?
@@ -613,8 +607,6 @@ module Formulas
       mdef += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
-    else
-      # [automatically added else]
     end
 
     matk = attacker.get_m_atk(target, skill)
@@ -690,8 +682,6 @@ module Formulas
       mdef += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
-    else
-      # [automatically added else]
     end
 
     damage = (91.0 * attacker.cubic_power) / mdef
@@ -1001,8 +991,6 @@ module Formulas
       m_def += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
-    else
-      # [automatically added else]
     end
 
     m_atk *= bss ? 4 : sps ? 2 : 1
@@ -1110,8 +1098,6 @@ module Formulas
       defence += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
-    else
-      # [automatically added else]
     end
 
     pvp = attacker.playable? && target.playable?
@@ -1216,8 +1202,6 @@ module Formulas
           end
         end
       end
-    else
-      # [automatically added else]
     end
 
     cancelled
@@ -1277,8 +1261,6 @@ module Formulas
       defence += target.shld_def
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
-    else
-      # [automatically added else]
     end
 
     pvp = attacker.playable? && target.playable?
@@ -1386,8 +1368,6 @@ module Formulas
       end
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
-    else
-      # [automatically added else]
     end
 
     pvp = attacker.playable? && target.playable?

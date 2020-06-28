@@ -11,8 +11,8 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   @home_x = 0
   @home_y = 0
   @home_z = 0
-  @buff_task : TaskExecutor::Scheduler::PeriodicTask?
-  @duration_check_task : TaskExecutor::Scheduler::PeriodicTask?
+  @buff_task : TaskScheduler::PeriodicTask?
+  @duration_check_task : TaskScheduler::PeriodicTask?
   @beast_skills : Interfaces::Array(Skill)?
 
   getter food_type = 0

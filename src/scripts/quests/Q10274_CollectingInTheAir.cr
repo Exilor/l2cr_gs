@@ -56,8 +56,6 @@ class Scripts::Q10274_CollectingInTheAir < Quest
         st.give_items(BLUE, 1)
       when 18690..18692
         st.give_items(GREEN, 1)
-      else
-        # [automatically added else]
       end
 
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -90,8 +88,6 @@ class Scripts::Q10274_CollectingInTheAir < Quest
       else
         html = "32557-04.html"
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

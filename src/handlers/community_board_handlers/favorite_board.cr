@@ -41,7 +41,7 @@ module CommunityBoardHandler::FavoriteBoard
       end
     elsif command.starts_with?("_bbsdelfav_")
       fav_id = command.gsub("_bbsdelfav_", "")
-      unless fav_id.num?
+      unless fav_id.number?
         warn { "Couldn't delete favorite link (#{fav_id} is not a valid id)." }
         return false
       end

@@ -64,8 +64,6 @@ class Scripts::ForgeOfTheGods < AbstractNpcAI
       end
     when "refresh"
       @npc_count = 0
-    else
-      # [automatically added else]
     end
 
     nil

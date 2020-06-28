@@ -56,8 +56,6 @@ class Scripts::WarriorFishingBlock < AbstractNpcAI
       end
     when "DESPAWN"
       npc.decay_me
-    else
-      # [automatically added else]
     end
 
 

@@ -448,7 +448,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
       fight_time = Time.ms - @start_time
 
       p1_hp = 0.0
-      if @player_one.player? && !@player_one.player.dead?
+      if @player_one.player? && @player_one.player.alive?
         p1_hp = @player_one.player.current_hp + @player_one.player.current_cp
         if p1_hp < 0.5
           p1_hp = 0
@@ -456,7 +456,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
       end
 
       p2_hp = 0.0
-      if @player_two.player? && !@player_two.player.dead?
+      if @player_two.player? && @player_two.player.alive?
         p2_hp = @player_two.player.current_hp + @player_two.player.current_cp
         if p2_hp < 0.5
           p2_hp = 0

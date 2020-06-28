@@ -114,8 +114,6 @@ class Scripts::Q00690_JudesRequest < Quest
       else
         html = "32356-05.htm"
       end
-    else
-      # [automatically added else]
     end
 
 

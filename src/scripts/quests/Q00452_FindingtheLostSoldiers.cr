@@ -71,8 +71,6 @@ class Scripts::Q00452_FindingtheLostSoldiers < Quest
         else
           html = "32773-6.html"
         end
-      else
-        # [automatically added else]
       end
 
     else

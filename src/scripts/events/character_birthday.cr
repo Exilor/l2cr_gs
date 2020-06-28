@@ -54,8 +54,6 @@ class Scripts::CharacterBirthday < Quest
       else
         html = "32600-nohat.htm"
       end
-    else
-      # [automatically added else]
     end
 
     html

@@ -6,7 +6,7 @@ end
 executable = "game_server"
 
 unless File.exists?("./#{executable}")
-  puts "./#{executable} not found. Run the 'build' command first."
+  puts "./#{File.expand_path(executable)} not found. Run the 'build' command first."
   exit(0)
 end
 

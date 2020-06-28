@@ -356,8 +356,6 @@ class Scripts::EnergySeeds < AbstractNpcAI
       return GraciaSeedsManager.sod_state == 2
     when GraciaSeed::ANNIHILATION_BISTAKON..GraciaSeed::ANNIHILATION_COKRAKON
       return true
-    else
-      # [automatically added else]
     end
 
 
@@ -466,8 +464,6 @@ class Scripts::EnergySeeds < AbstractNpcAI
         if !EnergySeeds.seed_active?(GraciaSeed::DESTRUCTION) && !char.gm?
           char.tele_to_location(SOD_EXIT_POINT)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -542,8 +538,6 @@ class Scripts::EnergySeeds < AbstractNpcAI
         mob.add_damage_hate(pc, 0, 999)
         mob.set_intention(AI::ATTACK, pc)
       end
-    else
-      # [automatically added else]
     end
 
   end

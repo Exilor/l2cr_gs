@@ -33,8 +33,6 @@ class Scripts::Q00109_InSearchOfTheNest < Quest
       st.give_adena(161500, true)
       st.add_exp_and_sp(701500, 50000)
       st.exit_quest(false, true)
-    else
-      # [automatically added else]
     end
 
 
@@ -57,14 +55,10 @@ class Scripts::Q00109_InSearchOfTheNest < Quest
           html = "31553-2.html"
         when 3
           html = "31553-3a.html"
-        else
-          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     when SCOUTS_CORPSE
@@ -79,8 +73,6 @@ class Scripts::Q00109_InSearchOfTheNest < Quest
       if st.started? && st.cond?(3)
         html = "31554-1.html"
       end
-    else
-      # [automatically added else]
     end
 
 

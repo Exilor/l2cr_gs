@@ -107,8 +107,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         npc.delete_me
         return super
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -159,8 +157,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           give_adena(player, 4000, true)
         when 3
           give_adena(player, 13000, true)
-        else
-          # [automatically added else]
         end
 
 
@@ -227,8 +223,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
     when "30864-51.html"
       st.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -321,8 +315,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -419,8 +411,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             st.set_memo_state_ex(1, 0)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -441,8 +431,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
     when ANGEL_KILLER
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::I_HAVE_THE_KEY_WHY_DONT_YOU_COME_AND_TAKE_IT))
       start_quest_timer("DESPAWN", 600000, npc, nil)
-    else
-      # [automatically added else]
     end
 
 
@@ -498,8 +486,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             html = "30864-15.html"
             give_items(player, HANELLINS_3RD_LETTER, 1)
             st.set_cond(8, true)
-          else
-            # [automatically added else]
           end
 
         when 5
@@ -513,8 +499,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
               html = "30864-18.html"
             when 3
               html = "30864-19.html"
-            else
-              # [automatically added else]
             end
 
           end
@@ -556,8 +540,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
               elsif !has_quest_items?(player, BOUGH_OF_SAINT, WHITE_FABRIC_2)
                 html = "30864-38.html"
               end
-            else
-              # [automatically added else]
             end
 
 
@@ -617,8 +599,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
                 give_adena(player, 4000, true)
               when 3
                 give_adena(player, 13000, true)
-              else
-                # [automatically added else]
               end
 
 
@@ -717,8 +697,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
         when 19
           html = "30864-49.html"
-        else
-          # [automatically added else]
         end
 
       when IASON_HEINE
@@ -969,8 +947,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             html = "30832-03.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     end

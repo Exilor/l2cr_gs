@@ -54,8 +54,6 @@ class Scripts::Q00700_CursedLife < Quest
     when "32560-10.html"
       st.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -86,8 +84,6 @@ class Scripts::Q00700_CursedLife < Quest
       else
         html = "32560-06.html"
       end
-    else
-      # [automatically added else]
     end
 
 

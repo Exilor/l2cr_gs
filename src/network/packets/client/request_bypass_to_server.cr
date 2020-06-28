@@ -106,7 +106,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
 
         debug id
 
-        if id.num?
+        if id.number?
           object = L2World.find_object(id.to_i)
           debug "Target: #{object}"
           if object.is_a?(L2Npc) && end_of_id > 0
@@ -199,7 +199,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
         io << "<br1>Bypass command: "
         @command.inspect(io)
         io << "<br1>Stack trace:<br1>"
-        e.backtrace.join("<br1>", io)
+        e.backtrace.join(io, "<br1>")
         io << "<br1></body></html>"
       end
       msg.disable_validation

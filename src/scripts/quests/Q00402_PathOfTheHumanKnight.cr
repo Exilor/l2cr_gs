@@ -150,8 +150,6 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
     when "30332-02.html"
       give_items(pc, GLUDIO_GUARDS_1ST_BADGE, 1)
       event
-    else
-      # [automatically added else]
     end
 
   end
@@ -173,8 +171,6 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
         reward_kill(killer, GLUDIO_GUARDS_1ST_BADGE, BUGBEAR_NECKLACE, 10)
       when UNDEAD_PRIEST
         reward_kill(killer, EINHASADS_1ST_TEMPLE_BADGE, EINHASAD_CRUCIFIX, 12, 5)
-      else
-        # [automatically added else]
       end
 
     end
@@ -332,8 +328,6 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
         if has_quest_items?(pc, SQUIRES_MARK)
           html = "30653-01.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

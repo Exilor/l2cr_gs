@@ -98,8 +98,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
       if qs.cond?(6)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -158,8 +156,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
         html = "32785-11.html"
       when 8
         html = "32785-12.html"
-      else
-        # [automatically added else]
       end
 
     when SOPHIA1
@@ -186,8 +182,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
         html = "32861-12.html"
       when 8
         html = "32861-14.html"
-      else
-        # [automatically added else]
       end
 
     when PILE_OF_BOOKS1
@@ -210,8 +204,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
       if qs.cond?(6)
         html = "32813-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

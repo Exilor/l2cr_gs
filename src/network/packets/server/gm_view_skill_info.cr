@@ -1,7 +1,8 @@
 class Packets::Outgoing::GMViewSkillInfo < GameServerPacket
-  @skills : Enumerable(Skill)
+  @skills : Slice(Skill)
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     @skills = @pc.all_skills
   end
 

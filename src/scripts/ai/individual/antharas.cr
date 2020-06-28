@@ -120,8 +120,6 @@ class Scripts::Antharas < AbstractNpcAI
         @antharas = antharas
         add_boss(@antharas)
       end
-    else
-      # [automatically added else]
     end
 
   end
@@ -382,8 +380,6 @@ class Scripts::Antharas < AbstractNpcAI
       end
     when "MANAGE_SKILL"
       manage_skills(npc)
-    else
-      # [automatically added else]
     end
 
     super
@@ -589,8 +585,6 @@ class Scripts::Antharas < AbstractNpcAI
           @attacker_2_hate = 500
         when 4
           @attacker_3_hate = 500
-        else
-          # [automatically added else]
         end
 
       end

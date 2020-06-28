@@ -64,12 +64,10 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
       st.set_cond(10, true)
       BLESSING_OF_EARTH.skill.apply_effects(pc, pc)
       st.give_items(YANGSWORD, 1, AttributeType::EARTH.id.to_i32, 10)
-    else
-      # [automatically added else]
     end
 
 
-    if event.num?
+    if event.number?
       html = "#{npc.not_nil!.id}-1#{event}.html"
       st.give_items(10520 + event.to_i, 2)
       st.add_exp_and_sp(202160, 20375)
@@ -111,8 +109,6 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
           end
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -133,14 +129,10 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
           html = "30839-03.html"
         when 2
           html = "30839-05.html"
-        else
-          # [automatically added else]
         end
 
       when State::COMPLETED
         html = "30839-0a.html"
-      else
-        # [automatically added else]
       end
 
     when WEBER
@@ -153,14 +145,10 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
           html = "31307-03.html"
         when 7
           html = "31307-05.html"
-        else
-          # [automatically added else]
         end
 
       when State::COMPLETED
         html = "31307-0a.html"
-      else
-        # [automatically added else]
       end
 
     when YIN
@@ -176,8 +164,6 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
           st.take_items(SOULPIECE_WATER, -1)
         when 6
           html = "32325-10.html"
-        else
-          # [automatically added else]
         end
 
       end
@@ -194,13 +180,9 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
           st.take_items(SOULPIECE_AIR, -1)
         when 11
           html = "32326-10.html"
-        else
-          # [automatically added else]
         end
 
       end
-    else
-      # [automatically added else]
     end
 
 

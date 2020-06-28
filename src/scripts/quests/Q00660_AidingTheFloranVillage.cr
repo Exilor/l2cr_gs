@@ -158,8 +158,6 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
 
       take_items(pc, -1, {WATCHING_EYES, ROUGHLY_HEWN_ROCK_GOLEM_SHARD, DELU_LIZARDMANS_SCALE})
       qs.exit_quest(true, true)
-    else
-      # [automatically added else]
     end
 
     html
@@ -191,8 +189,6 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
         html = pc.level >= MIN_LEVEL ? "30608-01.htm" : "30608-04.html"
       when ALEX
         html = pc.level >= MIN_LEVEL ? "30291-01.htm" : "30291-02.htm"
-      else
-        # [automatically added else]
       end
 
     elsif qs.started?
@@ -207,11 +203,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
           html = "30291-04.html"
         when 2
           html = "30291-05.html"
-        else
-          # [automatically added else]
         end
-      else
-        # [automatically added else]
       end
     end
 

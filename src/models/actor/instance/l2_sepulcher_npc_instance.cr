@@ -2,9 +2,9 @@ class L2SepulcherNpcInstance < L2Npc
   private HTML_FILE_PATH = "data/html/SepulcherNpc/"
   private HALLS_KEY = 7260
 
-  @close_task : TaskExecutor::Scheduler::DelayedTask?
-  @spawn_next_mysterious_box_task : TaskExecutor::Scheduler::DelayedTask?
-  @spawn_monster_task : TaskExecutor::Scheduler::DelayedTask?
+  @close_task : TaskScheduler::DelayedTask?
+  @spawn_next_mysterious_box_task : TaskScheduler::DelayedTask?
+  @spawn_monster_task : TaskScheduler::DelayedTask?
 
   def initialize(template : L2NpcTemplate)
     super
@@ -165,12 +165,10 @@ class L2SepulcherNpcInstance < L2Npc
         when 31929, 31934, 31939, 31944
           FourSepulchersManager.spawn_shadow(id)
           # in java, here goes a "default:" not preceeded by a "break"
-        else
-          # [automatically added else]
         end
 
-
         open_next_door(id)
+
         if party = pc.party
           party.members.each do |m|
             if it = m.inventory.get_item_by_item_id(HALLS_KEY)

@@ -1133,7 +1133,7 @@ module Config
 
   def get_server_type_id(array : Array(String))
     array.reduce(0) do |ret, t|
-      case t.strip.downcase
+      case t.strip.casecmp
       when "normal"     then ret | 0x01
       when "relax"      then ret | 0x02
       when "test"       then ret | 0x04

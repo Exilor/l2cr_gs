@@ -46,8 +46,6 @@ class Scripts::Q00026_TiredOfWaiting < Quest
         st.exit_quest(false, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -70,8 +68,6 @@ class Scripts::Q00026_TiredOfWaiting < Quest
       if st.started?
         html = st.has_quest_items?(DELIVERY_BOX) ? "31045-01.html" : "31045-09.html"
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

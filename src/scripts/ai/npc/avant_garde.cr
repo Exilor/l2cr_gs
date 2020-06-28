@@ -31,8 +31,6 @@ class Scripts::AvantGarde < AbstractNpcAI
       AvantGarde.show_transform_skill_list(pc)
     when AcquireSkillType::SUBCLASS
       AvantGarde.show_subclass_skill_list(pc)
-    else
-      # [automatically added else]
     end
   end
 
@@ -100,7 +98,7 @@ class Scripts::AvantGarde < AbstractNpcAI
               qvar = st.get_global_quest_var(qvar_name)
               if qvar.ends_with?(';')
                 skill_id_var = qvar.sub(';', "")
-                if skill_id_var.num?
+                if skill_id_var.number?
                   skill_id = skill_id_var.to_i
                   if sk = SkillData[skill_id, 1]?
                     pc.remove_skill(sk)
@@ -110,7 +108,7 @@ class Scripts::AvantGarde < AbstractNpcAI
                   warn { "Invalid subclass skill id #{skill_id_var} for player #{pc.name}." }
                 end
               elsif !qvar.empty? && qvar != "0"
-                if qvar.num?
+                if qvar.number?
                   item_obj_id = qvar.to_i
                   item_instance = pc.inventory.get_item_by_l2id(item_obj_id)
                   if item_instance
@@ -145,8 +143,6 @@ class Scripts::AvantGarde < AbstractNpcAI
           pc.destroy_item("CancelCertificationExtraBooks", item, npc, false)
         end
       end
-    else
-      # [automatically added else]
     end
 
     html

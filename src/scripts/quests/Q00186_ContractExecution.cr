@@ -72,8 +72,6 @@ class Scripts::Q00186_ContractExecution < Quest
         qs.exit_quest(false, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -128,8 +126,6 @@ class Scripts::Q00186_ContractExecution < Quest
         elsif memo_state == 3
           html = "31437-05.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

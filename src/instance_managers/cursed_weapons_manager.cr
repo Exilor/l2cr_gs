@@ -46,8 +46,6 @@ module CursedWeaponsManager
             cw.disappear_chance = parse_int(cd, "val")
           when "stagekills"
             cw.stage_kills = parse_int(cd, "val")
-          else
-            # [automatically added else]
           end
         end
 

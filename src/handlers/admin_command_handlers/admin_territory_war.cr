@@ -42,8 +42,6 @@ module AdminCommandHandler::AdminTerritoryWar
             return false
           end
           cal.minute = min
-        else
-          # [automatically added else]
         end
 
 

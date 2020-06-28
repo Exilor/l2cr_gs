@@ -40,8 +40,6 @@ class Scripts::Knoriks < AbstractNpcAI
         add_spawn(KNORIKS, 145482, 120250, -3944, 0, false, 0)
         start_quest_timer("KNORIKS_SPAWN", 60_000, nil, nil)
       end
-    else
-      # nothing
     end
 
     super

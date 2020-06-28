@@ -44,7 +44,7 @@ module AdminCommandHandler::AdminPolymorph
       end
 
       parts = command.split
-      if parts.size != 2 || !parts[1].num?
+      if parts.size != 2 || !parts[1].number?
         pc.send_message("Usage: #transform <id>")
         return false
       end
@@ -58,7 +58,7 @@ module AdminCommandHandler::AdminPolymorph
 
     if command.starts_with?("admin_polymorph")
       parts = command.split
-      if parts.size < 2 || !parts[1].num?
+      if parts.size < 2 || !parts[1].number?
         pc.send_message("Usage: #polymorph [type] <id>")
         return false
       end

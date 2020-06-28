@@ -762,4 +762,3 @@ class Skill
     to_s(io)
   end
 end
-

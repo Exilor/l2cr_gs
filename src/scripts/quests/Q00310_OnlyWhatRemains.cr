@@ -92,8 +92,6 @@ class Scripts::Q00310_OnlyWhatRemains < Quest
         st.give_items(MULTI_COLORED_JEWEL, 1)
         html = "32640-10.html"
       end
-    else
-      # [automatically added else]
     end
 
 

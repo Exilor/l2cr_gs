@@ -33,15 +33,15 @@ module ClanTable
     restore_wars
   end
 
-  def clans
+  def clans : Enumerable(L2Clan)
     CLANS.local_each_value
   end
 
-  def clan_count
+  def clan_count : Int32
     CLANS.size
   end
 
-  def create_clan(pc : L2PcInstance, clan_name : String)
+  def create_clan(pc : L2PcInstance, clan_name : String) : L2Clan?
     return unless pc
 
     debug { "#{pc.name} (#{pc.l2id}) requested a clan creation." }
@@ -323,7 +323,7 @@ module ClanTable
       end
     end
 
-    delay = Math.max(get_clan(clan_id).not_nil!.dissolving_expiry_time - Time.ms, 300000)
+    delay = Math.max(get_clan(clan_id).not_nil!.dissolving_expiry_time - Time.ms, 300_000)
 
     ThreadPoolManager.schedule_general(task, delay)
   end

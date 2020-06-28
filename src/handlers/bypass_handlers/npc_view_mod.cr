@@ -16,7 +16,7 @@ module BypassHandler::NpcViewMod
     end
 
     actual_command = st.shift
-    case actual_command.downcase
+    case actual_command.casecmp
     when "view"
       if !st.empty?
         begin
@@ -54,10 +54,7 @@ module BypassHandler::NpcViewMod
         warn e
         return false
       end
-    else
-      # [automatically added else]
     end
-
 
     true
   end

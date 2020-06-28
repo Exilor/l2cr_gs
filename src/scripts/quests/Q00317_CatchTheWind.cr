@@ -44,8 +44,6 @@ class Scripts::Q00317_CatchTheWind < Quest
       end
 
       html = event
-    else
-      # [automatically added else]
     end
 
 

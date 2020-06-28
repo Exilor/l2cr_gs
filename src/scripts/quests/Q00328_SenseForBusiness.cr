@@ -45,8 +45,6 @@ class Scripts::Q00328_SenseForBusiness < Quest
       when "30436-06.html"
         st.exit_quest(true, true)
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -77,8 +75,6 @@ class Scripts::Q00328_SenseForBusiness < Quest
       else
         html = "30436-04.html"
       end
-    else
-      # [automatically added else]
     end
 
 

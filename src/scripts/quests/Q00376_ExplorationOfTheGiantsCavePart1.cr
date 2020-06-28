@@ -44,8 +44,6 @@ class Scripts::Q00376_ExplorationOfTheGiantsCavePart1 < Quest
     when "31147-quit.html"
       qs.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 

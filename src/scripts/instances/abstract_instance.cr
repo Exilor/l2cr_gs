@@ -140,8 +140,6 @@ abstract class AbstractInstance < AbstractNpcAI
           end
         end
       end
-    else
-      # [automatically added else]
     end
 
   end

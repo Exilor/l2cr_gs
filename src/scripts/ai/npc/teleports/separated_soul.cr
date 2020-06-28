@@ -62,8 +62,6 @@ class Scripts::SeparatedSoul < AbstractNpcAI
       end
     when 23242
       return "separatedsoul.htm"
-    else
-      # [automatically added else]
     end
 
 

@@ -105,8 +105,6 @@ class Scripts::Q00185_NikolasCooperation < Quest
         qs.set_cond(5, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -161,8 +159,6 @@ class Scripts::Q00185_NikolasCooperation < Quest
         elsif memo_state == 5
           html = "32366-07.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

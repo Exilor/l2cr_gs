@@ -198,7 +198,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
   @allow_agent_spawn = true
   @allow_agent_spawn_7th = true
   @has_7th_floor_attack_began = false
-  @countdown : TaskExecutor::Scheduler::PeriodicTask?
+  @countdown : TaskScheduler::PeriodicTask?
   @spawned_agent : L2Npc?
   @pillar_spawn : L2Spawn?
 
@@ -468,7 +468,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
       start_quest_timer("close", 120000, npc, nil)
       html = nil
-    elsif event.match?(/\Aup|down\z/i) && TELE_COORDS.has_key?(npc_id)
+    elsif event.matches?(/\Aup|down\z/i) && TELE_COORDS.has_key?(npc_id)
       direction = event.casecmp?("up") ? 0 : 1
       party = player.party
       if party.nil?
@@ -717,8 +717,6 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           @allow_agent_spawn_7th = true
         end
       end
-    else
-      # [automatically added else]
     end
 
 

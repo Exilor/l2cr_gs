@@ -25,8 +25,6 @@ module PunishmentHandler::BanHandler
           apply_to_player(pc)
         end
       end
-    else
-      # [automatically added else]
     end
 
   end

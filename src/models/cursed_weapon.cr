@@ -2,7 +2,7 @@ class CursedWeapon
   include Loggable
   include Packets::Outgoing
 
-  @remove_task : TaskExecutor::Scheduler::PeriodicTask?
+  @remove_task : TaskScheduler::PeriodicTask?
   @transformation_id = 0
 
   property disappear_chance : Int32 = 0
@@ -231,12 +231,10 @@ class CursedWeapon
     elsif @item_id == 8190
       @transformation_id = 301
     end
-    debug "transforming to ID #{@transformation_id}."
+
     if player.transformed? || player.in_stance?
       player.stop_transformation(true)
-      task = -> do
-        TransformData.transform_player(@transformation_id, player)
-      end
+      task = -> { TransformData.transform_player(@transformation_id, player) }
       ThreadPoolManager.schedule_general(task, 500)
     else
       TransformData.transform_player(@transformation_id, player)

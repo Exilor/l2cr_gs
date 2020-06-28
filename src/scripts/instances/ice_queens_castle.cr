@@ -71,8 +71,6 @@ class Scripts::IceQueensCastle < AbstractInstance
         pc.instance_id = 0
         pc.tele_to_location(EXIT_LOC, 0)
       end
-    else
-      # [automatically added else]
     end
 
 

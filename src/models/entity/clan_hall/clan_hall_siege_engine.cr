@@ -17,7 +17,7 @@ abstract class ClanHallSiegeEngine < Quest
 
   @guards = [] of L2Spawn
   @hall : SiegableHall
-  @siege_task : TaskExecutor::Scheduler::DelayedTask?
+  @siege_task : TaskScheduler::DelayedTask?
   @mission_accomplished = false
 
   getter attackers = Concurrent::Map(Int32, L2SiegeClan).new

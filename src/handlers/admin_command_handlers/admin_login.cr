@@ -123,8 +123,6 @@ module AdminCommandHandler::AdminLogin
           name_type += "Event"
         when 0x40
           name_type += "Free"
-        else
-          # [automatically added else]
         end
 
       end

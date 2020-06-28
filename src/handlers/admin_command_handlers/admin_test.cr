@@ -4,9 +4,7 @@ module AdminCommandHandler::AdminTest
 
   def use_admin_command(command, pc)
     if command == "admin_stats"
-      ThreadPoolManager.stats.each_line do |line|
-        pc.send_message(line)
-      end
+      pc.send_message("\"admin_stats\" not available.")
     elsif command.starts_with?("admin_skill_test")
       begin
         st = command.split

@@ -1,6 +1,6 @@
 class Scripts::UrbanArea < AbstractInstance
   private class UrbanAreaWorld < InstanceWorld
-    property active_amaskari_call : TaskExecutor::Scheduler::DelayedTask?
+    property active_amaskari_call : TaskScheduler::DelayedTask?
     property! spawned_amaskari : L2MonsterInstance?
     property? amaskari_dead = false
   end
@@ -128,7 +128,7 @@ class Scripts::UrbanArea < AbstractInstance
             HellboundEngine.instance.update_trust(10, true)
             npc.schedule_despawn(3000)
             # Try to call Amaskari
-            if world.spawned_amaskari? && !world.spawned_amaskari.dead?
+            if world.spawned_amaskari? && world.spawned_amaskari.alive?
               if Rnd.rand(1000) < 25
                 if Util.in_range?(5000, npc, world.spawned_amaskari, false)
                   world.active_amaskari_call.try &.cancel
@@ -165,7 +165,7 @@ class Scripts::UrbanArea < AbstractInstance
         broadcast_npc_say(npc, Say2::NPC_ALL, NPC_STRING_ID[0])
         npc.busy = true
 
-        if world.spawned_amaskari? && !world.spawned_amaskari.dead?
+        if world.spawned_amaskari? && world.spawned_amaskari.alive?
           if Rnd.rand(1000) < 25
             if Util.in_range?(1000, npc, world.spawned_amaskari, false)
               world.active_amaskari_call.try &.cancel
@@ -200,7 +200,7 @@ class Scripts::UrbanArea < AbstractInstance
         npc.busy = true
         npc.busy_message = "atk"
 
-        if world.spawned_amaskari? && !world.spawned_amaskari.dead?
+        if world.spawned_amaskari? && world.spawned_amaskari.alive?
           if Rnd.rand(1000) < 25
             if Util.in_range?(range, npc, world.spawned_amaskari, false)
               world.active_amaskari_call.try &.cancel
@@ -286,7 +286,7 @@ class Scripts::UrbanArea < AbstractInstance
       if @caller.alive?
         world = InstanceManager.get_world(@caller.instance_id)
         if world.is_a?(UrbanAreaWorld)
-          if world.spawned_amaskari? && !world.spawned_amaskari.dead?
+          if world.spawned_amaskari? && world.spawned_amaskari.alive?
             world.spawned_amaskari.tele_to_location(@caller.location)
             world.spawned_amaskari.broadcast_packet(NpcSay.new(world.spawned_amaskari.l2id, Say2::NPC_ALL, world.spawned_amaskari.id, NpcString::ILL_MAKE_YOU_FEEL_SUFFERING_LIKE_A_FLAME_THAT_IS_NEVER_EXTINGUISHED))
           end

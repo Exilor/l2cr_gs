@@ -12,7 +12,7 @@ module GMAudit
     end
 
     File.open("#{dir}/#{name}.txt", "a") do |io|
-      Time.now.to_s("%d-%m-%Y %H:%M:%S", io)
+      Time.now.to_s(io, "%d-%m-%Y %H:%M:%S")
       io.print('>', action, '>', target, '>', params, Config::EOL)
     end
   end

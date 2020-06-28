@@ -306,8 +306,6 @@ abstract class AbstractSagaQuest < Quest
       end
 
       return
-    else
-      # [automatically added else]
     end
 
 
@@ -673,8 +671,6 @@ abstract class AbstractSagaQuest < Quest
             html = "0-010.htm"
           end
         end
-      else
-        # [automatically added else]
       end
     end
 

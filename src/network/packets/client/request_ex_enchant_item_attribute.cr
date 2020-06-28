@@ -126,8 +126,6 @@ class Packets::Incoming::RequestExEnchantItemAttribute < GameClientPacket
       success = Rnd.rand(100) < Config.enchant_chance_element_jewel
     when Elementals::ElementalItemType::Energy
       success = Rnd.rand(100) < Config.enchant_chance_element_energy
-    else
-      # [automatically added else]
     end
 
 

@@ -72,8 +72,6 @@ class Scripts::HealerTrainer < AbstractNpcAI
           pc.reduce_adena("Cleanse", Config.fee_delete_transfer_skills, npc, true)
         end
       end
-    else
-      # [automatically added else]
     end
 
     html

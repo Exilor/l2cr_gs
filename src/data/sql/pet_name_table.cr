@@ -15,6 +15,6 @@ module PetNameTable
   end
 
   def valid?(name : String) : Bool
-    name.match?(Config.pet_name_template)
+    name.matches?(Config.pet_name_template)
   end
 end

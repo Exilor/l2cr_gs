@@ -108,8 +108,6 @@ module SpawnTable
     when 2 # night
       DayNightSpawnManager.add_night_creature(sp)
       ret = 1
-    else
-      # [automatically added else]
     end
 
     add_spawn(sp)
@@ -123,7 +121,7 @@ module SpawnTable
       template.type?("L2RaidBoss") ||
       (!Config.allow_class_masters && template.type?("L2ClassMaster")))
     else
-      error { "Data missing in NPC table for ID #{npc_id}." }
+      error { "Data missing in NPC table for id #{npc_id}." }
       false
     end
   end

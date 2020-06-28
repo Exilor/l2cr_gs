@@ -64,8 +64,6 @@ class Scripts::Q00347_GoGetTheCalculator < Quest
         qs.set_cond(3, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -96,8 +94,6 @@ class Scripts::Q00347_GoGetTheCalculator < Quest
           html = "30526-15.html"
         when 6
           html = "30526-09.html"
-        else
-          # [automatically added else]
         end
 
       when SPIRON
@@ -126,18 +122,12 @@ class Scripts::Q00347_GoGetTheCalculator < Quest
           html = "30527-03.html"
         when 6
           html = "30527-05.html"
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
 

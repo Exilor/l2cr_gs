@@ -5,12 +5,11 @@ class CellNodeBuffer
 
   private MAX_ITERATIONS = 3500
 
-  @buffer : Slice(Slice(CellNode?))
   @current : CellNode?
 
   def initialize(size : Int32)
     @map_size = size
-    @buffer = Slice.new(size) { Slice.new(size, nil.as(CellNode?)) }
+    @buffer = Slice(Slice(CellNode?)).new(size) { Slice(CellNode?).new(size) }
     @base_x = 0
     @base_y = 0
     @target_x = 0

@@ -44,8 +44,6 @@ class Scripts::Q00326_VanquishRemnants < Quest
         html = event
       when "30435-08.html"
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -94,8 +92,6 @@ class Scripts::Q00326_VanquishRemnants < Quest
       else
         html = "30435-04.html"
       end
-    else
-      # [automatically added else]
     end
 
 

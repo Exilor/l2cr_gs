@@ -148,8 +148,6 @@ class Scripts::Q00219_TestimonyOfFate < Quest
     when "31850-02.html"
       give_items(pc, TIMIRIRAN_SEED, 1)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -264,8 +262,6 @@ class Scripts::Q00219_TestimonyOfFate < Quest
           give_items(killer, BLACK_WILLOW_LEAF, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -457,8 +453,6 @@ class Scripts::Q00219_TestimonyOfFate < Quest
             html = "31850-05.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

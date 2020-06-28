@@ -41,8 +41,6 @@ class Scripts::Q00152_ShardsOfGolem < Quest
           st.set_cond(2, true)
           html = event
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -89,14 +87,10 @@ class Scripts::Q00152_ShardsOfGolem < Quest
               st.exit_quest(false, true)
               html = "30035-05.html"
             end
-          else
-            # [automatically added else]
           end
 
         when State::COMPLETED
             html = get_already_completed_msg(pc)
-        else
-          # [automatically added else]
         end
 
       when ALTRAN
@@ -124,12 +118,8 @@ class Scripts::Q00152_ShardsOfGolem < Quest
           if st.has_quest_items?(HARRYS_2ND_RECIEPT, TOOL_BOX)
             html = "30283-05.html"
           end
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     end

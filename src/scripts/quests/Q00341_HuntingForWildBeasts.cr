@@ -33,8 +33,6 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
       when "30078-04.htm"
         st.start_quest
         html = event
-      else
-        # [automatically added else]
       end
     end
 
@@ -55,8 +53,6 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
       else
         html = "30078-06.html"
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

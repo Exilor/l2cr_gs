@@ -79,8 +79,6 @@ class Scripts::Q00132_MatrasCuriosity < Quest
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -107,8 +105,6 @@ class Scripts::Q00132_MatrasCuriosity < Quest
         end
       when 3
         html = "32245-06.htm"
-      else
-        # [automatically added else]
       end
 
     end

@@ -68,8 +68,6 @@ class Scripts::Q00553_OlympiadUndefeated < Quest
             st.give_items(WIN_CONF_10, 1)
             st.set_cond(2)
           end
-        else
-          # [automatically added else]
         end
       end
     end

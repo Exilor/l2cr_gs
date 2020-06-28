@@ -53,8 +53,6 @@ class Packets::Incoming::RequestAnswerJoinParty < GameClientPacket
           pc.broadcast_user_info
         end
       end
-    else
-      # [automatically added else]
     end
 
 

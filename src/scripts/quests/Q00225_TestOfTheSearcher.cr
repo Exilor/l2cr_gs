@@ -137,8 +137,6 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
         qs.set_cond(14, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -215,8 +213,6 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
           give_items(killer, STRINGE_MAP, 1)
           qs.set_cond(6, true)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -387,8 +383,6 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
         elsif has_at_least_one_quest_item?(pc, COMBINED_MAP, ALEXS_RECOMMEND)
           html = "30730-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

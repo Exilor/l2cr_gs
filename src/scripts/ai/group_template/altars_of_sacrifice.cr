@@ -3,11 +3,14 @@ class Scripts::AltarsOfSacrifice < AbstractNpcAI
     include Loggable
 
     @spawned_boss : L2Npc?
-    @boss_npc_ids : Indexable(Int32) = Slice(Int32).empty
+    @boss_npc_ids : Slice(Int32)
 
-    initializer middle_point : Locatable
+    initializer middle_point : Locatable,
+      boss_npc_ids : Slice(Int32) = Slice(Int32).empty
 
-    def initialize(@middle_point : Locatable, *@boss_npc_ids : Int32)
+    def initialize(middle_point : Locatable, *boss_npc_ids : Int32)
+      @middle_point = middle_point
+      @boss_npc_ids = boss_npc_ids.to_slice
     end
 
     def spawn_boss

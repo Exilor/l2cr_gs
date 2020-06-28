@@ -55,8 +55,6 @@ class Scripts::KamaelChange2 < AbstractNpcAI
       event
     when "127", "128", "129", "130"
       class_change_requested(pc, npc, event.to_i)
-    else
-      # [automatically added else]
     end
 
   end

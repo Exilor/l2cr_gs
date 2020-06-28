@@ -101,13 +101,9 @@ class Scripts::Q00035_FindGlitteringJewelry < Quest
           else
             html = "30091-10.html"
           end
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when FELTON
       if st.started?
@@ -117,8 +113,6 @@ class Scripts::Q00035_FindGlitteringJewelry < Quest
           html = "30879-03.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

@@ -26,9 +26,9 @@ module BuyListData
       list_id = rs.get_i32(:"buylist_id")
       item_id = rs.get_i32(:"item_id")
       count = rs.get_i64(:"count")
-      next_restock_time = rs.get_i64(:"next_restock_time")
+
       unless buy_list = get_buy_list(list_id)
-        warn { "BuyList with id #{list_id} found in database but not loaded from xml." }
+        warn { "Buy list with id #{list_id} found in database but not loaded from xml." }
         next
       end
       unless product = buy_list.get_product_by_item_id(item_id)
@@ -38,7 +38,7 @@ module BuyListData
 
       if count < product.max_count
         product.count = count
-        product.restart_restock_task(next_restock_time)
+        product.restart_restock_task(rs.get_i64(:"next_restock_time"))
       end
     end
   rescue e
@@ -47,7 +47,7 @@ module BuyListData
 
   private def parse_document(doc, file)
     buy_list_id = File.basename(file.path, ".xml")
-    return unless buy_list_id.num?
+    return unless buy_list_id.number?
     buy_list_id = buy_list_id.to_i
 
     find_element(doc, "list") do |node|
@@ -71,8 +71,6 @@ module BuyListData
           each_element(list_node) do |npcs_node|
             buy_list.add_allowed_npc(get_content(npcs_node).to_i)
           end
-        else
-          # [automatically added else]
         end
       end
 

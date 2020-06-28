@@ -102,8 +102,6 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
         end
         start_quest_timer("fantasy_mushroom", 4000, npc, attacker)
       end
-    else
-      # [automatically added else]
     end
 
 

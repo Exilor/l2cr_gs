@@ -2,9 +2,9 @@ module SummonSkillsTable
   extend self
   extend Loggable
 
-  private record L2PetSkillLearn, id : Int32, level : Int32, min_level : Int32
+  private record SummonSkill, id : Int32, level : Int32, min_level : Int32
 
-  private SKILL_TREES = {} of Int32 => Hash(Int32, L2PetSkillLearn)
+  private SKILL_TREES = {} of Int32 => Hash(Int32, SummonSkill)
 
   def load
     SKILL_TREES.clear
@@ -14,10 +14,10 @@ module SummonSkillsTable
     sql = "SELECT templateId, minLvl, skillId, skillLvl FROM pets_skills"
     GameDB.each(sql) do |rs|
       npc_id = rs.get_i32(:"templateId")
-      skill_tree = SKILL_TREES[npc_id] ||= {} of Int32 => L2PetSkillLearn
+      skill_tree = SKILL_TREES[npc_id] ||= {} of Int32 => SummonSkill
       id = rs.get_i32(:"skillId")
       lvl = rs.get_i32(:"skillLvl")
-      skill_learn = L2PetSkillLearn.new(id, lvl, rs.get_i32(:"minLvl"))
+      skill_learn = SummonSkill.new(id, lvl, rs.get_i32(:"minLvl"))
       skill_tree[SkillData.get_skill_hash(id, lvl &+ 1)] = skill_learn
       count &+= 1
     end
@@ -39,7 +39,7 @@ module SummonSkillsTable
           lvl = s.level // 10
           lvl = 1 if lvl <= 10
         else
-          lvl = 7 &+ ((s.level - 70) // 5)
+          lvl = 7 &+ ((s.level &- 70) // 5)
         end
 
         max_lvl = SkillData.get_max_level(sk.id)

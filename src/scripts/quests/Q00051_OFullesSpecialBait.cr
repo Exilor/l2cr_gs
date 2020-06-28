@@ -31,8 +31,6 @@ class Scripts::Q00051_OFullesSpecialBait < Quest
         st.give_items(ICY_AIR_LURE, 4)
         st.exit_quest(false, true)
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -69,8 +67,6 @@ class Scripts::Q00051_OFullesSpecialBait < Quest
       html = pc.level >= 36 ? "31572-01.htm" : "31572-02.html"
     when State::STARTED
       html = st.cond?(1) ? "31572-05.html" : "31572-04.html"
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

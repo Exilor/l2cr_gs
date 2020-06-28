@@ -92,8 +92,6 @@ class Scripts::Q00621_EggDelivery < Quest
         qs.exit_quest(true, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -120,14 +118,10 @@ class Scripts::Q00621_EggDelivery < Quest
           unless has_quest_items?(talker, BOILED_EGG)
             html = "31521-08.html"
           end
-        else
-          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(talker)
-      else
-        # [automatically added else]
       end
 
     when PULIN
@@ -139,8 +133,6 @@ class Scripts::Q00621_EggDelivery < Quest
           end
         when 2
           html = "31543-04.html"
-        else
-          # [automatically added else]
         end
 
       end
@@ -158,8 +150,6 @@ class Scripts::Q00621_EggDelivery < Quest
       if qs.started? && qs.cond?(7)
         html = "31584-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

@@ -208,7 +208,7 @@ class Packets::Incoming::Say2 < GameClientPacket
       end
       result = String.build do |io|
         pos &+= 3
-        while (temp = @text[pos]).num?
+        while (temp = @text[pos]).number?
           io << temp
           pos &+= 1
         end

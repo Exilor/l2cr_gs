@@ -47,8 +47,6 @@ class Scripts::Q00624_TheFinestIngredientsPart1 < Quest
       else
         html = "31521-06.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -89,12 +87,8 @@ class Scripts::Q00624_TheFinestIngredientsPart1 < Quest
         html = "31521-03.html"
       when 2
         html = "31521-04.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

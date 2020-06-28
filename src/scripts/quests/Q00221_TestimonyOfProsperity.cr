@@ -222,8 +222,6 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
         qs.set_cond(9, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -298,8 +296,6 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
             end
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -609,8 +605,6 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
             html = "30622-05.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

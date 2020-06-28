@@ -60,8 +60,6 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
         qs.set_cond(3, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -153,8 +151,6 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
           html = "32511-01.htm"
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -180,8 +176,6 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
         if qs.cond?(3)
           qs.set_cond(4, true)
         end
-      else
-        # [automatically added else]
       end
 
     end

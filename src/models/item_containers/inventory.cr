@@ -31,7 +31,7 @@ abstract class Inventory < ItemContainer
     {% end %}
   {% end %}
 
-  @paperdoll = Slice(L2ItemInstance?).new(TOTALSLOTS, nil.as(L2ItemInstance?))
+  @paperdoll = Slice(L2ItemInstance?).new(TOTALSLOTS)
   @paperdoll_listeners = [] of PaperdollListener
 
   getter total_weight = 0
@@ -98,8 +98,6 @@ abstract class Inventory < ItemContainer
         if inv.lhand_slot
           inv.lhand_slot = nil
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -286,7 +284,7 @@ abstract class Inventory < ItemContainer
           end
 
           if armor_set.enchanted_6?(pc)
-            armor_set.enchant_6_skill_id.each do |sh|
+            armor_set.enchant_6_skills.each do |sh|
               if skill = sh.skill?
                 pc.add_skill(skill, false)
                 update = true
@@ -321,19 +319,19 @@ abstract class Inventory < ItemContainer
         return unless armor_set = ArmorSetsData[item.id]
         remove = true
         skills = armor_set.skills
-        shield_skill = armor_set.shield_skills
-        skill_id_6 = armor_set.enchant_6_skill
+        shield_skills = armor_set.shield_skills
+        id_6_skills = armor_set.enchant_6_skills
       else
         return unless chest_item = inv.chest_slot
         return unless armor_set = ArmorSetsData[chest_item.id]
         if armor_set.contains_item?(slot, item.id)
           remove = true
           skills = armor_set.skills
-          shield_skill = armor_set.shield_skills
-          skill_id_6 = armor_set.enchant_6_skill
+          shield_skills = armor_set.shield_skills
+          id_6_skills = armor_set.enchant_6_skills
         elsif armor_set.contains_shield?(item.id)
           remove = true
-          shield_skill = armor_set.shield_skills
+          shield_skills = armor_set.shield_skills
         end
       end
 
@@ -344,13 +342,13 @@ abstract class Inventory < ItemContainer
           end
         end
 
-        shield_skill.try &.each do |sh|
+        shield_skills.try &.each do |sh|
           if item_skill = sh.skill?
             pc.remove_skill(item_skill, false, item_skill.passive?)
           end
         end
 
-        skill_id_6.try &.each do |sh|
+        id_6_skills.try &.each do |sh|
           if item_skill = sh.skill?
             pc.remove_skill(item_skill, false, item_skill.passive?)
           end
@@ -709,8 +707,6 @@ abstract class Inventory < ItemContainer
              L2Item::SLOT_LEGS, L2Item::SLOT_FEET, L2Item::SLOT_GLOVES,
              L2Item::SLOT_HEAD
           return
-        else
-          # [automatically added else]
         end
 
       end

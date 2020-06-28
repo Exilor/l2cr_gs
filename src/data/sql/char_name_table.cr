@@ -12,6 +12,7 @@ module CharNameTable
     end
 
     timer = Timer.new
+
     count = 0
     sql = "SELECT charId, char_name, accesslevel FROM characters"
     GameDB.query_each(sql) do |rs|
@@ -22,6 +23,7 @@ module CharNameTable
       ACCESS_LEVELS[id] = lvl
       count &+= 1
     end
+
     info { "Loaded #{count} names in #{timer} s." }
   end
 
@@ -116,7 +118,6 @@ module CharNameTable
 
   def name_exists?(name : String) : Bool
     sync do
-
       begin
         sql = "SELECT account_name FROM characters WHERE char_name=?"
         GameDB.query_each(sql, name) do |rs|
@@ -132,13 +133,6 @@ module CharNameTable
 
   def get_account_character_count(account : String) : Int32
     sql = "SELECT COUNT(char_name) FROM characters WHERE account_name=?"
-
-    ret = GameDB.scalar(sql, account)
-    if ret.is_a?(Number)
-      ret.to_i32
-    else
-      warn { "#{ret} is not a number, it's a #{ret.class}." }
-      0
-    end
+    GameDB.scalar(sql, account).as(Int::Primitive).to_i32
   end
 end

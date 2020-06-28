@@ -146,8 +146,6 @@ class Shutdown
         exit(2)
       when ABORT
         LoginServerClient.instance.server_status = ServerStatus::STATUS_AUTO
-      else
-        # [automatically added else]
       end
     end
   end
@@ -195,8 +193,6 @@ class Shutdown
       when 60
         LoginServerClient.instance.server_status = ServerStatus::STATUS_DOWN
         send_server_quit(60)
-      else
-        # [automatically added else]
       end
 
       @seconds_shut &-= 1
@@ -217,8 +213,6 @@ class Shutdown
       info "GM shutdown received. Shutting down now."
     when GM_RESTART
       info "GM restart received. Restarting now."
-    else
-      # [automatically added else]
     end
 
 

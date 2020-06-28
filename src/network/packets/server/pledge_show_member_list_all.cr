@@ -1,8 +1,10 @@
 class Packets::Outgoing::PledgeShowMemberListAll < GameServerPacket
-  @members : Enumerable(L2ClanMember)
+  @members : Array(L2ClanMember) | Iterator(L2ClanMember)
   @pledge_type = 0
 
-  def initialize(@clan : L2Clan, @pc : L2PcInstance)
+  def initialize(clan : L2Clan, pc : L2PcInstance)
+    @clan = clan
+    @pc = pc
     @members = clan.members
   end
 

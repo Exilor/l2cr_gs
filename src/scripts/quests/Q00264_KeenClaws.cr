@@ -86,12 +86,8 @@ class Scripts::Q00264_KeenClaws < Quest
           st.exit_quest(true, true)
           html = "30136-05.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

@@ -123,8 +123,6 @@ class Scripts::Q00222_TestOfTheDuelist < Quest
       qs.memo_state = 2
       qs.set_cond(4, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -300,8 +298,6 @@ class Scripts::Q00222_TestOfTheDuelist < Quest
             qs.set_memo_state_ex(1, 0)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end

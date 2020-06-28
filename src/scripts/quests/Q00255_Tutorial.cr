@@ -250,8 +250,6 @@ class Scripts::Q00255_Tutorial < Quest
       talk_subelder_perwan(pc, qs)
     when NEWBIE_HELPER_KAMAEL
       talk_helper_krenisk(npc, pc, qs)
-    else
-      # [automatically added else]
     end
 
 
@@ -284,8 +282,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 1)
       when 3
         qs.play_sound(Voice::TUTORIAL_VOICE_010A)
-      else
-        # [automatically added else]
       end
 
     when NEWBIE_HELPER_HUMAN_MAGE
@@ -295,8 +291,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 1)
       when 3
         qs.play_sound(Voice::TUTORIAL_VOICE_010B)
-      else
-        # [automatically added else]
       end
 
     when NEWBIE_HELPER_DARK_ELF
@@ -310,8 +304,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 1)
       when 3
         qs.play_sound(Voice::TUTORIAL_VOICE_010D)
-      else
-        # [automatically added else]
       end
 
     when NEWBIE_HELPER_ELF
@@ -325,8 +317,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 1)
       when 3
         qs.play_sound(Voice::TUTORIAL_VOICE_010C)
-      else
-        # [automatically added else]
       end
 
     when NEWBIE_HELPER_DWARF
@@ -336,8 +326,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 1)
       when 3
         qs.play_sound(Voice::TUTORIAL_VOICE_010F)
-      else
-        # [automatically added else]
       end
 
     when NEWBIE_HELPER_ORC
@@ -351,8 +339,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 1)
       when 3
         qs.play_sound(Voice::TUTORIAL_VOICE_010E)
-      else
-        # [automatically added else]
       end
 
     when NEWBIE_HELPER_KAMAEL
@@ -362,8 +348,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 1)
       when 3
         qs.play_sound(Voice::TUTORIAL_VOICE_010G)
-      else
-        # [automatically added else]
       end
 
     when ROIEN
@@ -422,8 +406,6 @@ class Scripts::Q00255_Tutorial < Quest
         end
       end
       event_subelder_perwan(event_id, pc, npc, qs)
-    else
-      # [automatically added else]
     end
 
 
@@ -471,8 +453,6 @@ class Scripts::Q00255_Tutorial < Quest
       when ClassId::MALE_SOLDIER, ClassId::FEMALE_SOLDIER
         qs.play_sound(Voice::TUTORIAL_VOICE_001K_2000)
         show_tutorial_html(pc, "tutorial-kamael-001.htm")
-      else
-        # [automatically added else]
       end
 
       unless qs.has_quest_items?(TUTORIAL_GUIDE)
@@ -485,8 +465,6 @@ class Scripts::Q00255_Tutorial < Quest
     when -4
       qs.play_sound(Voice::TUTORIAL_VOICE_008_1000)
       qs.set_memo_state_ex(1, -5)
-    else
-      # [automatically added else]
     end
 
   end
@@ -551,8 +529,6 @@ class Scripts::Q00255_Tutorial < Quest
         enable_tutorial_event(qs, memo_flag)
       when 12
         qs.close_tutorial_html(pc)
-      else
-        # [automatically added else]
       end
 
 
@@ -593,8 +569,6 @@ class Scripts::Q00255_Tutorial < Quest
           qs.add_radar(108567, -173994, -406)
         when ClassId::MALE_SOLDIER, ClassId::FEMALE_SOLDIER
           qs.add_radar(-125872, 38016, 1251)
-        else
-          # [automatically added else]
         end
 
 
@@ -632,8 +606,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.add_radar(115271, -182692, -1445)
       when ClassId::MALE_SOLDIER, ClassId::FEMALE_SOLDIER
         qs.add_radar(-118132, 42788, 723)
-      else
-        # [automatically added else]
       end
 
 
@@ -666,8 +638,6 @@ class Scripts::Q00255_Tutorial < Quest
           qs.add_radar(10344, 14445, -4242)
         when ClassId::ORC_MAGE
           qs.add_radar(-46225, -113312, -21)
-        else
-          # [automatically added else]
         end
 
 
@@ -707,8 +677,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.show_question_mark(pc, 25)
         qs.play_sound(Sound::ITEMSOUND_QUEST_TUTORIAL)
         qs.memo_state = memo_state & ~1073741824
-      else
-        # [automatically added else]
       end
 
 
@@ -801,8 +769,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.memo_state = memo_state & ~8388608
         enable_tutorial_event(qs, memo_flag & ~8388608)
       end
-    else
-      # [automatically added else]
     end
 
   end
@@ -884,8 +850,6 @@ class Scripts::Q00255_Tutorial < Quest
         play_sound(pc, Sound::ITEMSOUND_QUEST_TUTORIAL)
         show_radar(pc, 146995, 23755, -1984, 2)
       end
-    else
-      # [automatically added else]
     end
 
   end
@@ -997,8 +961,6 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tutorial-28a.htm")
       when ClassId::WARDER
         show_tutorial_html(pc, "tutorial-28b.htm")
-      else
-        # [automatically added else]
       end
 
     when 32
@@ -1009,14 +971,10 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tutorial-22qb.htm")
       when ClassId::WARDER
         show_tutorial_html(pc, "tutorial-22qc.htm")
-      else
-        # [automatically added else]
       end
 
     when 34
       show_tutorial_html(pc, "tutorial-22qd.htm")
-    else
-      # [automatically added else]
     end
 
   end
@@ -1056,8 +1014,6 @@ class Scripts::Q00255_Tutorial < Quest
       when ClassId::MALE_SOLDIER, ClassId::FEMALE_SOLDIER
         show_tutorial_html(pc, "tutorial-human-fighter-007.htm")
         qs.add_radar(-125872, 38016, 1251)
-      else
-        # [automatically added else]
       end
 
 
@@ -1078,8 +1034,6 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tutorial-dwarven-fighter-008.htm")
       when ClassId::MALE_SOLDIER, ClassId::FEMALE_SOLDIER
         show_tutorial_html(pc, "tutorial-kamael-008.htm")
-      else
-        # [automatically added else]
       end
 
 
@@ -1106,8 +1060,6 @@ class Scripts::Q00255_Tutorial < Quest
         qs.add_radar(108567, -173994, -406)
       when ClassId::MALE_SOLDIER, ClassId::FEMALE_SOLDIER
         qs.add_radar(-125872, 38016, 1251)
-      else
-        # [automatically added else]
       end
 
 
@@ -1128,8 +1080,6 @@ class Scripts::Q00255_Tutorial < Quest
           show_tutorial_html(pc, "tutorial-fighter-orc-017.htm")
         when Race::KAMAEL
           show_tutorial_html(pc, "tutorial-kamael-017.htm")
-        else
-          # [automatically added else]
         end
 
       end
@@ -1143,8 +1093,6 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tutorial-mage-elf-020.htm")
       when Race::ORC
         show_tutorial_html(pc, "tutorial-mage-orc-020.htm")
-      else
-        # [automatically added else]
       end
 
     when 12
@@ -1173,8 +1121,6 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tutorial-21i.htm")
       when ClassId::FEMALE_SOLDIER
         show_tutorial_html(pc, "tutorial-21j.htm")
-      else
-        # [automatically added else]
       end
 
     when 15
@@ -1213,8 +1159,6 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tutorial-newbie-003e.htm")
       when Race::KAMAEL
         show_tutorial_html(pc, "tutorial-newbie-003f.htm")
-      else
-        # [automatically added else]
       end
 
     when 25
@@ -1235,8 +1179,6 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tutorial-newbie-002f.htm")
       when ClassId::MALE_SOLDIER, ClassId::FEMALE_SOLDIER
         show_tutorial_html(pc, "tutorial-newbie-002i.htm")
-      else
-        # [automatically added else]
       end
 
     when 26
@@ -1249,8 +1191,6 @@ class Scripts::Q00255_Tutorial < Quest
       case pc.class_id
       when ClassId::FIGHTER, ClassId::ORC_MAGE, ClassId::ORC_FIGHTER
         show_tutorial_html(pc, "tutorial-newbie-002h.htm")
-      else
-        # [automatically added else]
       end
 
     when 28
@@ -1277,16 +1217,12 @@ class Scripts::Q00255_Tutorial < Quest
         show_tutorial_html(pc, "tw-shuttgart.htm")
       when 68
         show_tutorial_html(pc, "tw-rune.htm")
-      else
-        # [automatically added else]
       end
 
     when 34
       if pc.level == 79
         show_tutorial_html(pc, "tutorial-ss-79.htm")
       end
-    else
-      # [automatically added else]
     end
 
   end
@@ -1350,16 +1286,12 @@ class Scripts::Q00255_Tutorial < Quest
           qs.show_question_mark(pc, 4)
         when 3
           qs.show_question_mark(pc, 5)
-        else
-          # [automatically added else]
         end
 
         qs.play_sound(Sound::ITEMSOUND_QUEST_TUTORIAL)
       when 4
         qs.show_question_mark(pc, 12)
         qs.play_sound(Sound::ITEMSOUND_QUEST_TUTORIAL)
-      else
-        # [automatically added else]
       end
 
       enable_tutorial_event(qs, memo_state)
@@ -1400,8 +1332,6 @@ class Scripts::Q00255_Tutorial < Quest
           qs.show_question_mark(pc, 34)
           qs.play_sound(Sound::ITEMSOUND_QUEST_TUTORIAL)
         end
-      else
-        # [automatically added else]
       end
 
       territory_war_id = qs.get_dominion_siege_id(pc)
@@ -1535,8 +1465,6 @@ class Scripts::Q00255_Tutorial < Quest
               qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
             end
           end
-        else
-          # [automatically added else]
         end
       else
         if qs.has_nr_memo?(pc, Q728_TERRITORY_WAR)
@@ -1602,8 +1530,6 @@ class Scripts::Q00255_Tutorial < Quest
     when 42
       qs.add_radar(-84081, 243277, -3723)
       show_page(pc, "30008-006.htm")
-    else
-      # [automatically added else]
     end
   end
 
@@ -1642,8 +1568,6 @@ class Scripts::Q00255_Tutorial < Quest
     when 42
       qs.add_radar(-84081, 243277, -3723)
       show_page(pc, "30017-006.htm")
-    else
-      # [automatically added else]
     end
   end
 
@@ -1682,8 +1606,6 @@ class Scripts::Q00255_Tutorial < Quest
     when 42
       qs.add_radar(17024, 13296, -3744)
       show_page(pc, "30129-006.htm")
-    else
-      # [automatically added else]
     end
   end
 
@@ -1716,8 +1638,6 @@ class Scripts::Q00255_Tutorial < Quest
     when 42
       qs.add_radar(45475, 48359, -3060)
       show_page(pc, "30370-006.htm")
-    else
-      # [automatically added else]
     end
   end
 
@@ -1749,8 +1669,6 @@ class Scripts::Q00255_Tutorial < Quest
     when 42
       qs.add_radar(115632, -177996, -905)
       show_page(pc, "30528-006.htm")
-    else
-      # [automatically added else]
     end
   end
 
@@ -1777,8 +1695,6 @@ class Scripts::Q00255_Tutorial < Quest
     when 42
       qs.add_radar(-45032, -113598, -192)
       show_page(pc, "30573-006.htm")
-    else
-      # [automatically added else]
     end
   end
 

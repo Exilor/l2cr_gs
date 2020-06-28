@@ -296,8 +296,6 @@ module AdminCommandHandler::AdminShowQuests
         sb << qnumber
         sb << "</font><font color=\"ee0000\"> doesn't exist!</font></center></body></html>"
       end
-    else
-      # [automatically added else]
     end
 
     reply.html = sb.to_s
@@ -335,8 +333,6 @@ module AdminCommandHandler::AdminShowQuests
         target.send_packet(QuestList.new)
         target.send_packet(ExShowQuestMark.new(qs.quest.id))
         val[0] = qs.quest.name
-      else
-        # [automatically added else]
       end
 
     else

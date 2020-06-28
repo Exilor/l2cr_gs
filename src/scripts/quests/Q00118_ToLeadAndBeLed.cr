@@ -81,13 +81,9 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
             else
               html = "30298-11a.html"
             end
-          else
-            # [automatically added else]
           end
 
         end
-      else
-        # [automatically added else]
       end
 
 
@@ -131,8 +127,6 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
         qs.set_cond(5, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -160,8 +154,6 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
             end
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -247,8 +239,6 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
 

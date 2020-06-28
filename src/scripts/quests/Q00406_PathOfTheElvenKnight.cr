@@ -64,8 +64,6 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
       end
       qs.set_cond(4, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -161,8 +159,6 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
         elsif has_quest_items?(pc, KLUTO_BOX)
           html = "30317-06.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

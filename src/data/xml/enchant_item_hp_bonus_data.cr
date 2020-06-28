@@ -33,8 +33,6 @@ module EnchantItemHPBonusData
 
             ft = FuncTemplate.new(nil, nil, StatFunction::ENCHANTHP.name, -1, Stats::MAX_HP, 0)
             item.attach(ft)
-          else
-            # [automatically added else]
           end
 
         end

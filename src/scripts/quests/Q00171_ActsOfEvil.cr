@@ -99,8 +99,6 @@ class Scripts::Q00171_ActsOfEvil < Quest
       qs.memo_state = 10
       qs.set_cond(10, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -233,8 +231,6 @@ class Scripts::Q00171_ActsOfEvil < Quest
             end
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -295,8 +291,6 @@ class Scripts::Q00171_ActsOfEvil < Quest
           add_exp_and_sp(pc, 159820, 9182)
           html = "30381-17.html"
           qs.exit_quest(false, true)
-        else
-          # [automatically added else]
         end
 
       when TRADER_ARODIN
@@ -370,8 +364,6 @@ class Scripts::Q00171_ActsOfEvil < Quest
         elsif memo_state == 11
           html = "30617-08.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

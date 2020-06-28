@@ -102,8 +102,6 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when ARNOLD, JOHNSTONE, KENYOS
       if qs.cond?(1)
@@ -116,8 +114,6 @@ class Scripts::Q00104_SpiritOfMirrors < Quest
       end
 
       html = "#{npc.id}-01.html"
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

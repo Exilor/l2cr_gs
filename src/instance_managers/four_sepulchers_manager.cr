@@ -76,10 +76,10 @@ module FourSepulchersManager
 
   class_getter cycle_min = 55i8
 
-  class_property change_cool_down_time_task : TaskExecutor::Scheduler::DelayedTask?
-  class_property change_entry_time_task     : TaskExecutor::Scheduler::DelayedTask?
-  class_property change_warm_up_time_task   : TaskExecutor::Scheduler::DelayedTask?
-  class_property change_attack_time_task    : TaskExecutor::Scheduler::DelayedTask?
+  class_property change_cool_down_time_task : TaskScheduler::DelayedTask?
+  class_property change_entry_time_task     : TaskScheduler::DelayedTask?
+  class_property change_warm_up_time_task   : TaskScheduler::DelayedTask?
+  class_property change_attack_time_task    : TaskScheduler::DelayedTask?
 
   class_property attack_time_end    : Int64 = 0i64
   class_property cool_down_time_end : Int64 = 0i64
@@ -205,8 +205,6 @@ module FourSepulchersManager
           sp.y = -82853
           sp.z = -7200
           sp.heading = -16248
-        else
-          # [automatically added else]
         end
 
         MANAGERS << sp
@@ -685,8 +683,6 @@ module FourSepulchersManager
           case npc_id
           when 31469, 31472, 31474, 31477, 31479, 31482, 31484, 31487
             mobs << mob
-          else
-            # [automatically added else]
           end
 
           ALL_MOBS << mob
@@ -698,8 +694,6 @@ module FourSepulchersManager
         VISCOUNT_MOBS[npc_id] = mobs
       when 31472, 31477, 31482, 31487
         DUKE_MOBS[npc_id] = mobs
-      else
-        # [automatically added else]
       end
     end
   end
@@ -878,8 +872,6 @@ module FourSepulchersManager
         min = 50i8
       when 53, 54, 56, 57
         min = 55i8
-      else
-        # [automatically added else]
       end
     end
 

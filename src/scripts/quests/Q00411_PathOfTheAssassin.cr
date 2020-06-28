@@ -72,8 +72,6 @@ class Scripts::Q00411_PathOfTheAssassin < Quest
         qs.set_cond(2, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -100,8 +98,6 @@ class Scripts::Q00411_PathOfTheAssassin < Quest
           give_items(killer, SHILENS_TEARS, 1)
           qs.set_cond(6, true)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -185,8 +181,6 @@ class Scripts::Q00411_PathOfTheAssassin < Quest
         elsif !has_at_least_one_quest_item?(pc, ARKENIAS_LETTER, LEIKANS_NOTE, SHILENS_TEARS, ARKENIAS_RECOMMENDATION, IRON_HEART, SHILENS_CALL)
           html = "30419-11.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

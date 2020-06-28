@@ -25,7 +25,7 @@ module AdminCommandHandler::AdminPcCondOverride
       when "admin_set_exception"
         unless st.empty?
           token = st.shift
-          if token.num?
+          if token.number?
             if ex = PcCondOverride[token.to_i]?
               if pc.can_override_cond?(ex)
                 pc.remove_overrided_cond(ex)
@@ -51,15 +51,11 @@ module AdminCommandHandler::AdminPcCondOverride
                 end
               end
               pc.send_message("All condition exceptions have been disabled.")
-            else
-              # [automatically added else]
             end
           end
 
           use_admin_command(commands[0], pc)
         end
-      else
-        # [automatically added else]
       end
     end
 

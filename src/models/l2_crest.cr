@@ -12,8 +12,6 @@ struct L2Crest
         PLEDGE_LARGE
       when 3
         ALLY
-      else
-        # nil
       end
     end
 

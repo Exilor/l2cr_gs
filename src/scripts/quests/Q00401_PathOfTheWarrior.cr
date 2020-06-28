@@ -81,8 +81,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         qs.set_cond(2, true)
         event
       end
-    else
-      # [automatically added else]
     end
 
   end
@@ -103,8 +101,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         elsif npc.variables.get_i32("lastAttacker") != attacker.l2id
           npc.script_value = 2
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -141,8 +137,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -205,8 +199,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         elsif has_quest_items?(pc, SIMPLONS_LETTER)
           html = "30253-06.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

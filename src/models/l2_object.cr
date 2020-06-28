@@ -154,8 +154,6 @@ abstract class L2Object < ListenersContainer
       if new_instance_id > 0
         new_i.add_npc(me)
       end
-    else
-      # [automatically added else]
     end
 
 

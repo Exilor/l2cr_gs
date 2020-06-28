@@ -4,7 +4,7 @@ class PunishmentTask
   private INSERT_QUERY = "INSERT INTO punishments (`key`, `affect`, `type`, `expiration`, `reason`, `punishedBy`) VALUES (?, ?, ?, ?, ?, ?)"
   private UPDATE_QUERY = "UPDATE punishments SET expiration = ? WHERE id = ?"
 
-  @task : TaskExecutor::Scheduler::DelayedTask?
+  @task : TaskScheduler::DelayedTask?
 
   getter key : String
   getter affect, type, expiration_time, reason, punished_by

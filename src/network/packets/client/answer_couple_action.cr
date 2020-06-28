@@ -45,8 +45,6 @@ class Packets::Incoming::AnswerCoupleAction < GameClientPacket
       sm = SystemMessage.c1_is_set_to_refuse_couple_actions
       sm.add_pc_name(pc)
       target.send_packet(sm)
-    else
-      # [automatically added else]
     end
 
 

@@ -17,8 +17,6 @@ class L2WaterZone < L2ZoneType
           pc.send_packet(NpcInfo.new(char, pc))
         end
       end
-    else
-      # [automatically added else]
     end
   end
 
@@ -36,8 +34,6 @@ class L2WaterZone < L2ZoneType
           pc.send_packet(NpcInfo.new(char, pc))
         end
       end
-    else
-      # [automatically added else]
     end
   end
 

@@ -80,8 +80,6 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
         qs.set_cond(6, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -120,8 +118,6 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -181,8 +177,6 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
         elsif has_quest_items?(pc, COFFIN_OF_ETERNAL_REST)
           html = "30422-06.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

@@ -73,8 +73,6 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       give_items(pc, WIND_FEATHER, 1)
       qs.set_cond(6, true)
       event
-    else
-      # [automatically added else]
     end
 
   end
@@ -90,8 +88,6 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         on_ratman_warrior_killed(qs, pc)
       when WATER_SEER
         on_water_seer_killed(qs, pc)
-      else
-        # [automatically added else]
       end
 
     end
@@ -157,8 +153,6 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         html = on_talk_with_wind_sylph(qs, pc)
       when WATER_UNDINE
         html = on_talk_with_water_undine(qs, pc)
-      else
-        # [automatically added else]
       end
 
     end

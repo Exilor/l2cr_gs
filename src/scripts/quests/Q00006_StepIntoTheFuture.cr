@@ -68,8 +68,6 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when BAULRO
       if st.started?
@@ -87,8 +85,6 @@ class Scripts::Q00006_StepIntoTheFuture < Quest
           html = "30311-04.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

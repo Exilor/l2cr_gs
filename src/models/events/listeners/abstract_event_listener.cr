@@ -1,3 +1,4 @@
+# Executable size went from 197 mb to 215 when changed to a struct
 abstract class AbstractEventListener
   module Owner
   end

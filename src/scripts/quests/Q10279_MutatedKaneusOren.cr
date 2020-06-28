@@ -29,8 +29,6 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
     when "30189-03.htm"
       st.give_adena(100000, true)
       st.exit_quest(false, true)
-    else
-      # [automatically added else]
     end
 
 
@@ -80,8 +78,6 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
         end
       when State::COMPLETED
         html = "30916-06.htm"
-      else
-        # [automatically added else]
       end
 
     when ROVIA
@@ -96,8 +92,6 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
         html = get_already_completed_msg(pc)
       else
       end
-    else
-      # [automatically added else]
     end
 
 

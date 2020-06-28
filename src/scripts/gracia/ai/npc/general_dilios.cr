@@ -36,7 +36,11 @@ class Scripts::GeneralDilios < AbstractNpcAI
     elsif event.starts_with?("guard_animation_")
       value = event.from(16).to_i
       GUARDS.each do |guard|
-        guard.last_spawn.not_nil!.broadcast_social_action(4)
+        if sp = guard.last_spawn
+          sp.broadcast_social_action(4)
+        else
+          debug { "Last spawn of #{guard} not found." }
+        end
       end
       if value < 2
         start_quest_timer("guard_animation_#{value + 1}", 1500, nil, nil)

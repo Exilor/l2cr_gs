@@ -22,7 +22,7 @@ module VoicedCommandHandler::ChatAdmin
         expiration_time = 0i64
         unless st.empty?
           token = st.shift
-          if token.num?
+          if token.number?
             expiration_time = Time.ms + (token.to_i64 * 60 * 1000)
           end
         end
@@ -96,8 +96,6 @@ module VoicedCommandHandler::ChatAdmin
           return false
         end
       end
-    else
-      # [automatically added else]
     end
 
 

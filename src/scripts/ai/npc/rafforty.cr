@@ -35,8 +35,6 @@ class Scripts::Rafforty < AbstractNpcAI
       take_items(pc, NECKLACE, 1)
       take_items(pc, BOTTLE, 1)
       give_items(pc, BLESSED_NECKLACE, 1)
-    else
-      # [automatically added else]
     end
 
 

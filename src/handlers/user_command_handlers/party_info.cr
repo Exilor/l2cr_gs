@@ -19,8 +19,6 @@ module UserCommandHandler::PartyInfo
         pc.send_packet(SystemMessageId::LOOTING_BY_TURN)
       when .by_turn_including_spoil?
         pc.send_packet(SystemMessageId::LOOTING_BY_TURN_INCLUDE_SPOIL)
-      else
-        # [automatically added else]
       end
 
 

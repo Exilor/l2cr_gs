@@ -66,8 +66,6 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
         st.exit_quest(false, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -142,13 +140,9 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
           if st.has_quest_items?(BROKEN_SWORD_HANDLE)
             html = "30008-07.html"
           end
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when ALTRAN
       case st.cond
@@ -177,11 +171,7 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
         if st.has_quest_items?(BROKEN_SWORD_HANDLE)
           html = "30283-06.html"
         end
-      else
-        # [automatically added else]
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

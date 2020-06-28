@@ -77,13 +77,13 @@ class Olympiad < ListenersContainer
   @comp_end = 0i64
   @comp_start = Calendar.new
   @comp_started = false
-  @scheduled_comp_start : TaskExecutor::Scheduler::DelayedTask?
-  @scheduled_comp_end : TaskExecutor::Scheduler::DelayedTask?
-  @scheduled_olympiad_end : TaskExecutor::Scheduler::DelayedTask?
-  @scheduled_weekly_task : TaskExecutor::Scheduler::PeriodicTask?
-  @scheduled_validation_task : TaskExecutor::Scheduler::DelayedTask?
-  @game_manager : TaskExecutor::Scheduler::PeriodicTask?
-  @game_announcer : TaskExecutor::Scheduler::PeriodicTask?
+  @scheduled_comp_start : TaskScheduler::DelayedTask?
+  @scheduled_comp_end : TaskScheduler::DelayedTask?
+  @scheduled_olympiad_end : TaskScheduler::DelayedTask?
+  @scheduled_weekly_task : TaskScheduler::PeriodicTask?
+  @scheduled_validation_task : TaskScheduler::DelayedTask?
+  @game_manager : TaskScheduler::PeriodicTask?
+  @game_announcer : TaskScheduler::PeriodicTask?
 
   getter current_cycle = 0
   getter period = 0
@@ -690,8 +690,6 @@ class Olympiad < ListenersContainer
       # logging
 
       HEROS_TO_BE << hero
-    else
-      # [automatically added else]
     end
 
 

@@ -63,8 +63,8 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
   private PENDING_ITEM_TO_GET = {} of L2Clan => Int32
 
   @rainbow : SiegableHall?
-  @next_siege : TaskExecutor::Scheduler::DelayedTask?
-  @siege_end : TaskExecutor::Scheduler::DelayedTask?
+  @next_siege : TaskScheduler::DelayedTask?
+  @siege_end : TaskScheduler::DelayedTask?
   @registration_ends : String?
   @gourds = {} of Int32 => L2Spawn
 
@@ -262,8 +262,6 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
           ACCEPTED_CLANS.delete(clan.not_nil!)
           html = "messenger_yetti020.htm"
         end
-      else
-        # [automatically added else]
       end
     when CARETAKER
       if event == "portToArena"
@@ -309,8 +307,6 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
           end
         end
       end
-    else
-      # [automatically added else]
     end
 
     if event.starts_with?("enterText")

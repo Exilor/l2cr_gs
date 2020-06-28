@@ -59,8 +59,6 @@ class Scripts::Q00629_CleanUpTheSwampOfScreams < Quest
         qs.exit_quest(true, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 

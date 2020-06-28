@@ -34,8 +34,6 @@ class Scripts::DwarfWarehouseChange2 < AbstractNpcAI
       event
     when "55"
       class_change_requested(pc, event.to_i)
-    else
-      # [automatically added else]
     end
 
   end

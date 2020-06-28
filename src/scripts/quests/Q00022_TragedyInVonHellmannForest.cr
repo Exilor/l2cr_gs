@@ -189,8 +189,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
         qs.memo_state = 10
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -271,8 +269,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
         if has_quest_items?(pc, CROSS_OF_EINHASAD)
           html = "31334-18.html"
         end
-      else
-        # [automatically added else]
       end
     when GHOST_OF_PRIEST
       play_sound(pc, Sound::AMBSOUND_HORROR_15)
@@ -315,8 +311,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
         else
           html = "31328-21.html"
         end
-      else
-        # [automatically added else]
       end
     when WELL
       case qs.cond
@@ -333,8 +327,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
         end
       when 13..16
         html = "31527-05.html"
-      else
-        # [automatically added else]
       end
     when GHOST_OF_ADVENTURER
       case qs.cond
@@ -350,8 +342,6 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
             html = "31529-03a.html"
           when 9
             html = "31529-10.html"
-          else
-            # [automatically added else]
           end
 
         end
@@ -381,11 +371,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
         if has_quest_items?(pc, REPORT_BOX)
           html = "31529-17.html"
         end
-      else
-        # [automatically added else]
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

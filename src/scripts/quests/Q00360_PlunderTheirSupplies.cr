@@ -39,8 +39,6 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
     when "30873-10.html"
       st.exit_quest(false, true)
       event
-    else
-      # [automatically added else]
     end
 
   end
@@ -102,8 +100,6 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
           html = "30873-07.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

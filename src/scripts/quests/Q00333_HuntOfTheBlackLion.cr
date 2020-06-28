@@ -432,8 +432,6 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           html = "30737-05.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -627,8 +625,6 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           give_items(killer, STAKATO_TALON, 8)
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_ITEMGET)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -742,8 +738,6 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         else
           html = "30737-01.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

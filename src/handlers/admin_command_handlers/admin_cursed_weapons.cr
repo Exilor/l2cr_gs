@@ -84,7 +84,7 @@ module AdminCommandHandler::AdminCursedWeapons
     else
       begin
         parameter = st.shift
-        if parameter.num?
+        if parameter.number?
           id = parameter.to_i
         else
           parameter = parameter.sub('_', ' ')

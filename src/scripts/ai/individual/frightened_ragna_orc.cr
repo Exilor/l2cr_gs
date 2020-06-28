@@ -21,7 +21,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
       npc.script_value = 1
       start_quest_timer("say",  (Rnd.rand(5) + 3) * 1000, npc, nil, true)
     elsif npc.hp_percent < 20 && npc.script_value?(1)
-      start_quest_timer("reward", 10000, npc, attacker)
+      start_quest_timer("reward", 10_000, npc, attacker)
       msg = NpcString::WAIT_WAIT_STOP_SAVE_ME_AND_ILL_GIVE_YOU_10000000_ADENA
       broadcast_npc_say(npc, Say2::NPC_ALL, msg)
       npc.script_value = 2
@@ -62,7 +62,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
       npc = npc.not_nil!
       pc = pc.not_nil!
       if npc.alive? && npc.script_value?(2)
-        if Rnd.rand(100000) < CHANCE2
+        if Rnd.rand(100_000) < CHANCE2
           if Rnd.bool
             msg = NpcString::TH_THANKS_I_COULD_HAVE_BECOME_GOOD_FRIENDS_WITH_YOU
           else
@@ -72,7 +72,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
           npc.script_value = 3
           npc.do_cast(SKILL.skill)
           10.times { npc.drop_item(pc, Inventory::ADENA_ID, ADENA2) }
-        elsif Rnd.rand(100000) < CHANCE
+        elsif Rnd.rand(100_000) < CHANCE
           if Rnd.bool
             msg = NpcString::TH_THANKS_I_COULD_HAVE_BECOME_GOOD_FRIENDS_WITH_YOU
           else
@@ -101,10 +101,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
       loc = Location.new(x, y, npc.z, npc.heading)
       npc.set_intention(AI::MOVE_TO, loc)
       npc.delete_me
-    else
-      # [automatically added else]
     end
-
 
     nil
   end

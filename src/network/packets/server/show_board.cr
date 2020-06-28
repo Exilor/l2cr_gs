@@ -6,7 +6,7 @@ class Packets::Outgoing::ShowBoard < GameServerPacket
   def initialize(args : Enumerable)
     @content = String.build(200) do |io|
       io << "1002\u0008"
-      args.join("\u0008", io)
+      args.join(io, "\u0008")
       io << "\u0008"
     end
   end

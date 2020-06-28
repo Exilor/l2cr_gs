@@ -81,8 +81,6 @@ class Scripts::Q00464_Oath < Quest
         html = "32596-04f.html"
       when 9
         html = "32596-04g.html"
-      else
-        # [automatically added else]
       end
 
     when "end_quest"
@@ -120,8 +118,6 @@ class Scripts::Q00464_Oath < Quest
       else
         html = "strongbox-03.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -171,8 +167,6 @@ class Scripts::Q00464_Oath < Quest
           html = "32596-05f.html"
         when 9
           html = "32596-05g.html"
-        else
-          # [automatically added else]
         end
 
       elsif st.cond > 1 && st.get_int("npc") == npc_id

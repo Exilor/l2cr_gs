@@ -107,8 +107,6 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
         qs.set_cond(5, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -157,8 +155,6 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
         elsif memo_state == 5
           html = "32366-07.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

@@ -46,8 +46,6 @@ class Scripts::Q00653_WildMaiden < Quest
         html = pc.level >= MIN_LEVEL ? "32013-01.htm" : "32013-01a.htm"
       when State::STARTED
         html = "32013-02.htm"
-      else
-        # [automatically added else]
       end
 
     when GALIBREDO
@@ -56,8 +54,6 @@ class Scripts::Q00653_WildMaiden < Quest
         st.exit_quest(true, true)
         html = "30181-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

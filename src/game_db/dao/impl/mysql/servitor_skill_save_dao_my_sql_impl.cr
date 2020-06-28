@@ -8,47 +8,49 @@ module GameDB
     private DELETE_SKILL_SAVE = "DELETE FROM character_summon_skills_save WHERE ownerId=? AND ownerClassIndex=? AND summonSkillId=?"
 
     def insert(servitor : L2ServitorInstance, store_effects : Bool)
-      GameDB.exec(
-        DELETE_SKILL_SAVE,
-        servitor.owner.l2id,
-        servitor.owner.class_index,
-        servitor.reference_skill
-      )
+      GameDB.transaction do |tr|
+        tr.exec(
+          DELETE_SKILL_SAVE,
+          servitor.owner.l2id,
+          servitor.owner.class_index,
+          servitor.reference_skill
+        )
 
-      if store_effects
-        buff_index = 0
-        stored_skills = [] of Int32
+        if store_effects
+          buff_index = 0
+          stored_skills = [] of Int32
 
-        servitor.effect_list.each(false) do |info|
-          skill = info.skill
+          servitor.effect_list.each(false) do |info|
+            skill = info.skill
 
-          if skill.abnormal_type.life_force_others?
-            next
+            if skill.abnormal_type.life_force_others?
+              next
+            end
+            if skill.toggle?
+              next
+            end
+            if skill.dance? && !Config.alt_store_dances
+              next
+            end
+            if stored_skills.includes?(skill.hash)
+              next
+            end
+
+            stored_skills << skill.hash
+
+            tr.exec(
+              ADD_SKILL_SAVE,
+              servitor.owner.l2id,
+              servitor.owner.class_index,
+              servitor.reference_skill,
+              skill.id,
+              skill.level,
+              info.time,
+              buff_index &+= 1
+            )
+
+            SummonEffectsTable.add_servitor_effect(servitor.owner, servitor.reference_skill, skill, info.time)
           end
-          if skill.toggle?
-            next
-          end
-          if skill.dance? && !Config.alt_store_dances
-            next
-          end
-          if stored_skills.includes?(skill.hash)
-            next
-          end
-
-          stored_skills << skill.hash
-
-          GameDB.exec(
-            ADD_SKILL_SAVE,
-            servitor.owner.l2id,
-            servitor.owner.class_index,
-            servitor.reference_skill,
-            skill.id,
-            skill.level,
-            info.time,
-            buff_index &+= 1
-          )
-
-          SummonEffectsTable.add_servitor_effect(servitor.owner, servitor.reference_skill, skill, info.time)
         end
       end
     rescue e

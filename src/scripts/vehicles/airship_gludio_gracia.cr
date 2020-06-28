@@ -212,8 +212,6 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
       @ship.dock_id = GLUDIO_DOCK_ID
       @ship.oust_players
       ThreadPoolManager.schedule_general(self, 60000)
-    else
-      # [automatically added else]
     end
 
     @cycle += 1

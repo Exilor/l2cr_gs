@@ -182,8 +182,6 @@ class BoatGludinRune
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVED_AT_GLUDIN, ARRIVED_AT_GLUDIN_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
-    else
-      # [automatically added else]
     end
 
     @shout_count = 0

@@ -1,5 +1,7 @@
 class Packets::Outgoing::ExChangePostState < GameServerPacket
-  initializer received_board : Bool, changed_msg_ids : Indexable(Int32),
+  @changed_msg_ids : Slice(Int32) | {Int32}
+
+  initializer received_board : Bool, changed_msg_ids : Slice(Int32) | {Int32},
     change_id : Int32
 
   def initialize(received_board : Bool, changed_msg_ids : Int32, change_id : Int32)

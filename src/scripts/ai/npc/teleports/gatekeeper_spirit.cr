@@ -43,8 +43,6 @@ class Scripts::GatekeeperSpirit < AbstractNpcAI
       end
     when "TeleportOut"
       pc.not_nil!.tele_to_location(EXIT, true)
-    else
-      # [automatically added else]
     end
 
 
@@ -57,8 +55,6 @@ class Scripts::GatekeeperSpirit < AbstractNpcAI
       start_quest_timer("ANAKIM", 10000, npc, killer)
     when LILITH
       start_quest_timer("LILITH", 10000, npc, killer)
-    else
-      # [automatically added else]
     end
 
 

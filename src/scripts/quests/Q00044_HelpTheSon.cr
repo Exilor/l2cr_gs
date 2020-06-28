@@ -56,8 +56,6 @@ class Scripts::Q00044_HelpTheSon < Quest
     when "30827-09.html"
       st.give_items(PET_TICKET, 1)
       st.exit_quest(false, true)
-    else
-      # [automatically added else]
     end
 
     html
@@ -101,13 +99,9 @@ class Scripts::Q00044_HelpTheSon < Quest
           html = "30827-07.html"
         when 5
           html = "30827-08.html"
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when DRIKUS
       if st.started?
@@ -116,12 +110,8 @@ class Scripts::Q00044_HelpTheSon < Quest
           html = "30505-01.html"
         when 5
           html = "30505-03.html"
-        else
-          # [automatically added else]
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

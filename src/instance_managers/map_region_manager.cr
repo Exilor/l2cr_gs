@@ -51,8 +51,6 @@ module MapRegionManager
             race = parse_string(c, "race")
             point = parse_string(c, "point")
             region.add_banned_race(race, point)
-          else
-            # nothing
           end
         end
 

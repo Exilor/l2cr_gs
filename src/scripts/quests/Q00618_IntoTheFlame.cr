@@ -63,8 +63,6 @@ class Scripts::Q00618_IntoTheFlame < Quest
       else
         html = "31271-03.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -108,12 +106,8 @@ class Scripts::Q00618_IntoTheFlame < Quest
         html = "31271-04.html"
       when 4
         html = "31271-06.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

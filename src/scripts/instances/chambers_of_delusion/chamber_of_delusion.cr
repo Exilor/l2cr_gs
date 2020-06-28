@@ -1,7 +1,7 @@
 abstract class ChamberOfDelusion < AbstractInstance
   private class CDWorld < InstanceWorld
     getter party_inside, chamber
-    getter banish_task : TaskExecutor::Scheduler::PeriodicTask?
+    getter banish_task : TaskScheduler::PeriodicTask?
     property current_room : Int32
 
     def initialize(chamber : ChamberOfDelusion, party : L2Party)
@@ -391,8 +391,6 @@ abstract class ChamberOfDelusion < AbstractInstance
     when "SCE_DREAM_FIRE_IN_THE_HOLE"
       receiver.busy = true
       receiver.do_cast(FAIL_SKILL)
-    else
-      # [automatically added else]
     end
 
 

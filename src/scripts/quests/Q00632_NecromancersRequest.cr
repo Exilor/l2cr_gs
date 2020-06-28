@@ -80,8 +80,6 @@ class Scripts::Q00632_NecromancersRequest < Quest
       take_items(pc, VAMPIRES_HEART, -1)
       qs.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 

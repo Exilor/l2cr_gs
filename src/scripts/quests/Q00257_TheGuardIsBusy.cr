@@ -59,8 +59,6 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
       event
     when "30039-06.html"
       event
-    else
-      # [automatically added else]
     end
 
   end
@@ -99,8 +97,6 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
       else
         html = "30039-04.html"
       end
-    else
-      # [automatically added else]
     end
 
 

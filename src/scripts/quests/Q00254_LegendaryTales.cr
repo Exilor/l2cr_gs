@@ -55,8 +55,6 @@ class Scripts::Q00254_LegendaryTales < Quest
       end
     when State::COMPLETED
       html = "30754-29.html"
-    else
-      # [automatically added else]
     end
 
 
@@ -106,8 +104,6 @@ class Scripts::Q00254_LegendaryTales < Quest
         reward_items(pc, event.to_i, 1)
         st.exit_quest(false, true)
       end
-    else
-      # [automatically added else]
     end
 
 

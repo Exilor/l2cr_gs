@@ -82,8 +82,6 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         st.exit_quest(QuestType::DAILY, true)
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -113,8 +111,6 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
         else
           html = "32864-08.html"
         end
-      else
-        # [automatically added else]
       end
 
     when State::COMPLETED
@@ -124,8 +120,6 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
         st.state = State::CREATED
         html = pc.level < MIN_LEVEL ? "32864-02.html" : "32864-01.htm"
       end
-    else
-      # [automatically added else]
     end
 
 

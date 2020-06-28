@@ -44,8 +44,6 @@ class Scripts::Q00645_GhostsOfBatur < Quest
       when "32017-09.html"
         st.exit_quest(true, true)
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -91,8 +89,6 @@ class Scripts::Q00645_GhostsOfBatur < Quest
           html = "32017-05.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

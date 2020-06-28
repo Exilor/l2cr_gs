@@ -67,8 +67,6 @@ class Scripts::Q00158_SeedOfEvil < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
 

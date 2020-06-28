@@ -170,8 +170,6 @@ class Scripts::Q00383_TreasureHunt < Quest
           html = "31148-03.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

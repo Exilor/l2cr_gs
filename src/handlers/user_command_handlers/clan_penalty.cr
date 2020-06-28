@@ -15,14 +15,14 @@ module UserCommandHandler::ClanPenalty
 
       if pc.clan_join_expiry_time > time
         io << "<td width=170>Unable to join a clan.</td><td width=100 align=center>"
-        ::Time.from_ms(pc.clan_join_expiry_time).to_s(format, io)
+        ::Time.from_ms(pc.clan_join_expiry_time).to_s(io, format)
         io << "</td>"
         penalty = true
       end
 
       if pc.clan_create_expiry_time > time
         io << "<td width=170>Unable to create a clan.</td><td width=100 align=center>"
-        ::Time.from_ms(pc.clan_create_expiry_time).to_s(format, io)
+        ::Time.from_ms(pc.clan_create_expiry_time).to_s(io, format)
         io << "</td>"
         penalty = true
       end
@@ -30,7 +30,7 @@ module UserCommandHandler::ClanPenalty
       clan = pc.clan
       if clan && clan.char_penalty_expiry_time > time
         io << "<td width=170>Unable to invite a clan member.</td><td width=100 align=center>"
-        ::Time.from_ms(clan.char_penalty_expiry_time).to_s(format, io)
+        ::Time.from_ms(clan.char_penalty_expiry_time).to_s(io, format)
         io << "</td>"
         penalty = true
       end

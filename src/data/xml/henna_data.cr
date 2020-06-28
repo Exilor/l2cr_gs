@@ -34,8 +34,6 @@ module HennaData
         set["cancel_fee"] = parse_string(c, "fee")
       when "classId"
         wear_class_ids << ClassId[get_content(c).to_i]
-      else
-        # [automatically added else]
       end
     end
 
@@ -48,7 +46,7 @@ module HennaData
     HENNA_LIST[id]?
   end
 
-  def get_henna_list(class_id : ClassId) : Enumerable(L2Henna)
-    HENNA_LIST.values.select! &.allowed_class?(class_id)
+  def get_henna_list(class_id : ClassId) : Array(L2Henna)
+    HENNA_LIST.local_each_value.select(&.allowed_class?(class_id)).to_a
   end
 end

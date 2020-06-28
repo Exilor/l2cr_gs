@@ -287,8 +287,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
         else
           show_page(talker, "buffs-no-pet.htm")
         end
-      else
-        # [automatically added else]
       end
 
     when -1000
@@ -327,8 +325,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
         else
           show_page(talker, "newbie-guide-012.htm")
         end
-      else
-        # [automatically added else]
       end
 
     when -303
@@ -353,12 +349,8 @@ class Scripts::NewbieGuide < AbstractNpcAI
         else
           show_page(talker, "newbie-guide-014.htm")
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 
@@ -393,8 +385,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       unless tmp.empty?
         return tmp
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -404,7 +394,7 @@ class Scripts::NewbieGuide < AbstractNpcAI
   private def teleport_request(pc, npc, teleport_id)
     if pc.level >= 20
       show_page(pc, "teleport-big-level.htm")
-    elsif {111, 112, 124}.includes?(pc.transformation_id)
+    elsif pc.transformation_id.in?(111, 112, 124)
       show_page(pc, "frog-teleport.htm")
     else
       if teleport_id < 0 || teleport_id > 5
@@ -491,8 +481,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
         when .kamael?
           qs.add_radar(-119378, 49242, 22)
           return "newbie-guide-01f.htm"
-        else
-          # [automatically added else]
         end
 
         unless qs.has_nr_memo?(talker, GUIDE_MISSION)
@@ -528,8 +516,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(115717, -183488, -1483)
             return "newbie-guide-05h.htm"
-          else
-            # [automatically added else]
           end
 
           if talker.level >= 9
@@ -571,8 +557,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-119378, 49242, 22)
             return "newbie-guide-04f.htm"
-          else
-            # [automatically added else]
           end
 
           unless qs.has_nr_memo?(talker, GUIDE_MISSION)
@@ -637,8 +621,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
         when .kamael?
           qs.add_radar(-119378, 49242, 22)
           return "newbie-guide-07f.htm"
-        else
-          # [automatically added else]
         end
 
         unless qs.has_nr_memo?(talker, GUIDE_MISSION)
@@ -676,8 +658,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-118080, 42835, 720)
             return "newbie-guide-10h.htm"
-          else
-            # [automatically added else]
           end
 
           if talker.level >= 9
@@ -719,8 +699,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-119378, 49242, 22)
             return "newbie-guide-09f.htm"
-          else
-            # [automatically added else]
           end
 
           unless qs.has_nr_memo?(talker, GUIDE_MISSION)
@@ -757,8 +735,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-125872, 38208, 1251)
             return "newbie-guide-11f.htm"
-          else
-            # [automatically added else]
           end
 
           if talker.level >= 14
@@ -811,8 +787,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-118080, 42835, 720)
             return "newbie-guide-10h.htm"
-          else
-            # [automatically added else]
           end
 
           unless qs.has_nr_memo?(talker, GUIDE_MISSION)
@@ -863,8 +837,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           when .kamael?
             qs.add_radar(-125872, 38208, 1251)
             return "newbie-guide-11f.htm"
-          else
-            # [automatically added else]
           end
 
         end
@@ -1054,8 +1026,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(-82041, 242718, -3725)
       return "30598-05.htm"
-    else
-      # [automatically added else]
     end
 
 
@@ -1206,8 +1176,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(49262, 53607, -3216)
       return "30599-05.htm"
-    else
-      # [automatically added else]
     end
 
 
@@ -1374,8 +1342,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(12311, 17470, -4574)
       return "30600-05.htm"
-    else
-      # [automatically added else]
     end
 
 
@@ -1546,8 +1512,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(116852, -183595, -1566)
       return "30601-05.htm"
-    else
-      # [automatically added else]
     end
 
 
@@ -1680,8 +1644,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(-44624, -111873, -238)
       return "30602-05.htm"
-    else
-      # [automatically added else]
     end
 
 
@@ -1888,8 +1850,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.clear_radar
       qs.add_radar(-118080, 42835, 720)
       return "32135-05.htm"
-    else
-      # [automatically added else]
     end
 
 

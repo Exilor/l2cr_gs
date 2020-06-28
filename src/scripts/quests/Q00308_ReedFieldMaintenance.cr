@@ -91,8 +91,6 @@ class Scripts::Q00308_ReedFieldMaintenance < Quest
     when "32646-11.html"
       st.exit_quest(true, true)
       event
-    else
-      # [automatically added else]
     end
 
   end

@@ -257,9 +257,9 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     when 1004 # Wind Hatchling/Strider - Wild Defense
       use_skill("Buff", pc, true)
     when 1005 # Star Hatchling/Strider - Bright Burst
-      use_skill(4712, true) # use_skill "DDMagic", true # using the name causes the pet to use lvl 1 skill
+      use_skill("DDMagic", true)
     when 1006 # Star Hatchling/Strider - Bright Heal
-      use_skill(4713, true) # use_skill "Heal", pc, true # using the name causes the pet to use lvl 1 skill
+      use_skill("Heal", true)
     when 1007 # Feline Queen - Blessing of Queen
       use_skill("Buff1", pc, false)
     when 1008 # Feline Queen - Gift of Queen
@@ -477,7 +477,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     when 66 # Shyness
       try_broadcast_social(15)
     else
-      warn { "Warning: #{pc.name} requested an unhandled action type: #{@id}." }
+      warn { "#{pc.name} requested an unhandled action type: #{@id}." }
     end
   end
 
@@ -764,8 +764,6 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       lvl = PetDataTable.get_pet_data(summon.id).get_available_level(skill_id, summon.level)
     when L2ServitorInstance
       lvl = SummonSkillsTable.get_available_level(summon, skill_id)
-    else
-      # [automatically added else]
     end
 
 

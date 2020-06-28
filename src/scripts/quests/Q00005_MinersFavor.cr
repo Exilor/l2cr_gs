@@ -52,8 +52,6 @@ class Scripts::Q00005_MinersFavor < Quest
       check_progress(pc, st)
     when "30554-05.html"
       return
-    else
-      # [automatically added else]
     end
 
     html
@@ -83,8 +81,6 @@ class Scripts::Q00005_MinersFavor < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when BRUNON
       if st.started?
@@ -100,8 +96,6 @@ class Scripts::Q00005_MinersFavor < Quest
       html = give_item(pc, st, npc.id, BOOMBOOM_POWDER)
     when GARITA
       html = give_item(pc, st, npc.id, MINING_BOOTS)
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

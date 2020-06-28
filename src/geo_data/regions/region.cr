@@ -7,8 +7,7 @@ struct Region
 
   def initialize(io : IO)
     @blocks = Pointer(IBlock).malloc(REGION_BLOCKS) do
-      block_type = io.read_byte
-      case block_type
+      case block_type = io.read_byte
       when IBlock::TYPE_FLAT
         FlatBlock.new(io)
       when IBlock::TYPE_COMPLEX
@@ -16,7 +15,7 @@ struct Region
       when IBlock::TYPE_MULTILAYER
         MultilayerBlock.new(io)
       else
-        raise "Invalid block type: '#{block_type}'"
+        raise "Invalid block type #{block_type}"
       end
     end
   end

@@ -87,7 +87,7 @@ module TvTManager
   end
 
   class TvTStartTask
-    getter! next_run : TaskExecutor::Scheduler::DelayedTask
+    getter! next_run : TaskScheduler::DelayedTask
     property start_time : Int64
 
     initializer manager : TvTManager, start_time : Int64

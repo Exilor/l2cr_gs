@@ -105,8 +105,6 @@ module SkillTreesData
             when "subClassConditions"
               slot, lvl = parse_int(b, "slot"), parse_int(b, "lvl")
               skill_learn.add_subclass_conditions(slot, lvl)
-            else
-              # [automatically added else]
             end
           end
 
@@ -543,8 +541,6 @@ module SkillTreesData
       get_subclass_skill(id, lvl)
     when AcquireSkillType::COLLECT
       get_collect_skill(id, lvl)
-    else
-      # [automatically added else]
     end
   end
 
@@ -690,6 +686,8 @@ module SkillTreesData
     info { "Loaded #{HERO_SKILL_TREE.size} Hero Skills." }
     info { "Loaded #{GM_SKILL_TREE.size} GM Skills." }
     info { "Loaded #{GM_AURA_SKILL_TREE.size} GM Aura Skills." }
-    info { "Loaded #{COMMON_SKILL_TREE.size} Common Skills to all classes." }
+    unless COMMON_SKILL_TREE.empty?
+      info { "Loaded #{COMMON_SKILL_TREE.size} Common Skills to all classes." }
+    end
   end
 end

@@ -952,8 +952,6 @@ class L2Clan
         pledge_type = get_available_pledge_types(SUBUNIT_KNIGHT3)
       when SUBUNIT_KNIGHT3
         pledge_type = get_available_pledge_types(SUBUNIT_KNIGHT4)
-      else
-        # [automatically added else]
       end
     end
 

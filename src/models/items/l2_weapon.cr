@@ -38,7 +38,7 @@ class L2Weapon < L2Item
     @mp_consume = set.get_i32("mp_consume", 0)
     @base_attack_range = set.get_i32("attack_range", 40)
     damage_range = set.get_string("damage_range", "").split(';')
-    if damage_range.size > 1 && damage_range[3].num?
+    if damage_range.size > 1 && damage_range[3].number?
       @base_attack_angle = damage_range[3].to_i
     else
       @base_attack_angle = 120

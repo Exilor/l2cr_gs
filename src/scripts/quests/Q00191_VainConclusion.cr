@@ -62,8 +62,6 @@ class Scripts::Q00191_VainConclusion < Quest
         take_items(pc, REPAIRED_METALLOGRAPH, -1)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -91,8 +89,6 @@ class Scripts::Q00191_VainConclusion < Quest
           html = "30068-01.html"
         when 3
           html = "30068-04.html"
-        else
-          # [automatically added else]
         end
 
       when HEAD_BLACKSMITH_KUSTO
@@ -111,12 +107,8 @@ class Scripts::Q00191_VainConclusion < Quest
           html = "30673-04.html"
         when 4
           html = "30673-05.html"
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

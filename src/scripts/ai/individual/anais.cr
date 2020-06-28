@@ -35,7 +35,7 @@
       end
     end
 
-    def on_adv_event(event, npc, player)
+    def on_adv_event(event, npc, pc)
       npc = npc.not_nil!
 
       case event
@@ -44,7 +44,7 @@
           cancel_quest_timer("CHECK", npc, nil)
         end
         if @current || @pot < 4
-          players = npc.known_list.known_players.values
+          players = npc.known_list.known_players.values_slice
           target = players.sample?(random: Rnd)
           @next_target = target || npc.target.as?(L2PcInstance)
           b = DIVINE_BURNERS[@pot]
@@ -66,7 +66,7 @@
             npc.do_cast(DIVINE_NOVA)
           elsif distance > 2000
             npc.do_die(nil)
-            cancel_quest_timer("GUARD_ATTACK", npc, player)
+            cancel_quest_timer("GUARD_ATTACK", npc, pc)
           end
         end
       when "SUICIDE"
@@ -78,8 +78,6 @@
           @current = nil
         end
         npc.do_die(nil)
-      else
-        # [automatically added else]
       end
 
       super

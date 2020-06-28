@@ -39,8 +39,6 @@ class Scripts::Q10269_ToTheSeedOfDestruction < Quest
         html = "32548-06.html"
       when State::COMPLETED
         html = "32548-0a.html"
-      else
-        # [automatically added else]
       end
 
     when ALLENOS
@@ -52,12 +50,8 @@ class Scripts::Q10269_ToTheSeedOfDestruction < Quest
         st.exit_quest(false, true)
       when State::COMPLETED
         html = "32526-02.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

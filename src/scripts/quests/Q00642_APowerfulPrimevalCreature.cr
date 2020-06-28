@@ -59,8 +59,6 @@ class Scripts::Q00642_APowerfulPrimevalCreature < Quest
         qs.exit_quest(true, true)
         html = "32105-13.html"
       end
-    else
-      # [automatically added else]
     end
 
 

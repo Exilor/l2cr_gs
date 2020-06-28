@@ -52,8 +52,6 @@ module HellboundSpawns
       when "hellboundLevel"
         min_level = parse_int(n, "min", 1)
         max_level = parse_int(n, "max", 100)
-      else
-        # [automatically added else]
       end
     end
 

@@ -1,7 +1,10 @@
 class Packets::Outgoing::RecipeShopManageList < GameServerPacket
-  @recipes : Enumerable(L2RecipeList)
+  @recipes : Slice(L2RecipeList)
 
-  def initialize(@seller : L2PcInstance, @dwarven : Bool)
+  def initialize(seller : L2PcInstance, dwarven : Bool)
+    @seller = seller
+    @dwarven = dwarven
+
     if dwarven && seller.has_dwarven_craft?
       @recipes = seller.dwarven_recipe_book
     else

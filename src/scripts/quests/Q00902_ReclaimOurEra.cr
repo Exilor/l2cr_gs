@@ -79,8 +79,6 @@ class Scripts::Q00902_ReclaimOurEra < Quest
       if st.cond?(1)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -133,12 +131,8 @@ class Scripts::Q00902_ReclaimOurEra < Quest
         end
         st.exit_quest(QuestType::DAILY, true)
         html = "31340-14.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

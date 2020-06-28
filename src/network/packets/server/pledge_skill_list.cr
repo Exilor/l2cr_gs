@@ -1,7 +1,7 @@
 class Packets::Outgoing::PledgeSkillList < GameServerPacket
   record SubpledgeSkill, sub_type : Int32, skill_id : Int32, skill_lvl : Int32
 
-  @skills : Enumerable(Skill)
+  @skills : Slice(Skill)
   @sub_skills : Array(SubpledgeSkill)
 
   def initialize(clan : L2Clan)

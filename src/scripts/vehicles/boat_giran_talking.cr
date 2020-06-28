@@ -152,8 +152,6 @@ class BoatGiranTalking
       BoatManager.broadcast_packets(GIRAN_DOCK, TALKING_DOCK[0], ARRIVED_AT_GIRAN, ARRIVED_AT_GIRAN_2)
       @boat.broadcast_packet(Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 300_000)
-    else
-      # [automatically added else]
     end
 
     @shout_count = 0

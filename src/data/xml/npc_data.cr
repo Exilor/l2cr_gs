@@ -90,8 +90,6 @@ module NpcData
                   minion_lists ||= [] of {String, Array(MinionHolder)}
                   minion_lists << {parse_string(params_node, "name"), minions}
                 end
-              else
-                # [automatically added else]
               end
             end
           when "race", "sex"
@@ -155,8 +153,6 @@ module NpcData
                       add_from_node(st, set, "baseDark", "value")
                     when "HOLY"
                       add_from_node(st, set, "baseHoly", "value")
-                    else
-                      # [automatically added else]
                     end
                   when "defence"
                     add_from_node(st, set, "baseFireRes", "fire")
@@ -166,8 +162,6 @@ module NpcData
                     add_from_node(st, set, "baseHolyRes", "holy")
                     add_from_node(st, set, "baseDarkRes", "dark")
                     add_from_node(st, set, "baseElementRes", "default")
-                  else
-                    # [automatically added else]
                   end
                 end
               when "speed"
@@ -181,15 +175,11 @@ module NpcData
                     add_from_node(spd, set, "baseRunSpd", "ground")
                     add_from_node(spd, set, "baseSwimRunSpd", "swim")
                     add_from_node(spd, set, "baseFlyRunSpd", "fly")
-                  else
-                    # [automatically added else]
                   end
 
                 end
               when "hittime"
                 set["hitTime"] = get_content(stat)
-              else
-                # [automatically added else]
               end
             end
           when "status"
@@ -253,8 +243,6 @@ module NpcData
                     ignore_clan_npc_ids << get_content(cln).to_i
                   end
                 end
-              else
-                # [automatically added else]
               end
             end
           when "droplists"
@@ -274,12 +262,8 @@ module NpcData
               when "height"
                 add_from_node(col, set, "collisionHeight", "normal")
                 add_from_node(col, set, "collisionHeightGrown", "grown")
-              else
-                # [automatically added else]
               end
             end
-          else
-            # [automatically added else]
           end
         end
 

@@ -69,8 +69,6 @@ abstract class AbstractGetScrollToHometownQuest < Quest
       else
         return "30097-16.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -125,13 +123,9 @@ abstract class AbstractGetScrollToHometownQuest < Quest
           if st.has_quest_items?(PURIFIED_MAGIC_NECKLACE)
             html = "30097-14.html"
           end
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when GENTLER, SANDRA, DUSTIN
       if st.started?
@@ -146,8 +140,6 @@ abstract class AbstractGetScrollToHometownQuest < Quest
           html = "#{npc.id}-04.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

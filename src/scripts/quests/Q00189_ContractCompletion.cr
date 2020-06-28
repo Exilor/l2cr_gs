@@ -60,8 +60,6 @@ class Scripts::Q00189_ContractCompletion < Quest
         qs.set_cond(3, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -99,8 +97,6 @@ class Scripts::Q00189_ContractCompletion < Quest
           html = "30673-04.html"
         when 4
           html = "30673-05.html"
-        else
-          # [automatically added else]
         end
 
       when SHEGFIELD
@@ -109,12 +105,8 @@ class Scripts::Q00189_ContractCompletion < Quest
           html = "30068-01.html"
         when 3
           html = "30068-04.html"
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

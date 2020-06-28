@@ -1,10 +1,10 @@
 class Packets::Incoming::RequestPackageSend < GameClientPacket
   private BATCH_LENGTH = 12
 
-  private record ItemHolder, id : Int32, count : Int64
+  private record Item, id : Int32, count : Int64
 
   @l2id = 0
-  @items : Slice(ItemHolder)?
+  @items : Slice(Item)?
 
   private def read_impl
     @l2id = d
@@ -22,7 +22,7 @@ class Packets::Incoming::RequestPackageSend < GameClientPacket
       if id < 1 || cnt < 0
         return
       end
-      ItemHolder.new(id, cnt)
+      Item.new(id, cnt)
     end
 
     @items = items

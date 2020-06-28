@@ -58,7 +58,7 @@ module MercTicketManager
     timer = Timer.new
     merc_placed = Slice(Int32).new(20)
     start_index = 0
-    sql = "SELECT * FROM castle_siege_guards Where isHired = 1"
+    sql = "SELECT * FROM castle_siege_guards WHERE isHired = 1"
     GameDB.each(sql) do |rs|
       npc_id = rs.get_i32(:"npcId")
       x = rs.get_i32(:"x")

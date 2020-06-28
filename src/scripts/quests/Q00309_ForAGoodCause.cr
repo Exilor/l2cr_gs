@@ -91,8 +91,6 @@ class Scripts::Q00309_ForAGoodCause < Quest
     when "32647-14.html", "32647-07.html"
       st.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 

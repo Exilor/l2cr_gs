@@ -48,7 +48,7 @@ class MacroList
   end
 
   def send_update
-    @revision += 1
+    @revision &+= 1
 
     size = @macros.size
     if size == 0

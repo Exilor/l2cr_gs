@@ -59,8 +59,8 @@ module L2World
       0.upto(REGIONS_Y) do |y|
         -1.upto(1) do |a|
           -1.upto(1) do |b|
-            xa = x + a
-            yb = y + b
+            xa = x &+ a
+            yb = y &+ b
             if xa.between?(0, REGIONS_X) && yb.between?(0, REGIONS_Y)
               WORLD_REGIONS[xa][yb].add_sorrounding_region(WORLD_REGIONS[x][y])
             end

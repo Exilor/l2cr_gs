@@ -53,8 +53,6 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
     when "30210-09.html"
       qs.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -73,8 +71,6 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
       else
         html = "30210-05.html"
       end
-    else
-      # [automatically added else]
     end
 
 

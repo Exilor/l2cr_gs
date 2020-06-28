@@ -103,8 +103,6 @@ module AdminCommandHandler::AdminPunishment
           else
             warn "data/html/admin/punishment-player.htm is missing"
           end
-        else
-          # [automatically added else]
         end
 
       end
@@ -137,7 +135,7 @@ module AdminCommandHandler::AdminPunishment
         return true
       end
 
-      if !exp.num? && exp != "-1"
+      if !exp.number? && exp != "-1"
         pc.send_message("Incorrect value specified for expiration time")
       end
 
@@ -229,8 +227,6 @@ module AdminCommandHandler::AdminPunishment
       unless st.empty?
         return use_admin_command(sprintf("admin_punishment_remove %s %s %s", st.shift, PunishmentAffect::CHARACTER, PunishmentType::JAIL), pc)
       end
-    else
-      # [automatically added else]
     end
 
 

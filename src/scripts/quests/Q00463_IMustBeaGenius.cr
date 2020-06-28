@@ -141,8 +141,6 @@ class Scripts::Q00463_IMustBeaGenius < Quest
           html = "32069-06.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

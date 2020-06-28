@@ -16,7 +16,7 @@ class L2ItemInstance < L2Object
   @db_lock = MyMutex.new
   @shots_mask = 0
   @enchant_options = [] of Options
-  @life_time_task : TaskExecutor::Scheduler::DelayedTask?
+  @life_time_task : TaskScheduler::DelayedTask?
 
   getter owner_id = 0
   getter count : Int64 = 0i64
@@ -35,7 +35,7 @@ class L2ItemInstance < L2Object
   property drop_time : Int64 = 0i64
   property last_change : Int32 = 2
   property dropper_l2id : Int32 = 0
-  property item_loot_schedule : TaskExecutor::Scheduler::DelayedTask?
+  property item_loot_schedule : TaskScheduler::DelayedTask?
   property? protected : Bool = false
   property? exists_in_db : Bool = false
   property? stored_in_db : Bool = false
@@ -134,8 +134,6 @@ class L2ItemInstance < L2Object
         ref_name = reference.name.empty? ? "no-name" : reference.name
       when String
         ref_name = reference
-      else
-        # [automatically added else]
       end
 
       target_name = pc.target.try &.name || "no-target"
@@ -209,8 +207,6 @@ class L2ItemInstance < L2Object
         ref_name = reference.name || "no-name"
       when String
         ref_name = reference
-      else
-        # [automatically added else]
       end
 
       target_name = pc.target.try &.name || "no-target"
@@ -966,8 +962,6 @@ class L2ItemInstance < L2Object
       sm = SystemMessage.s1s_remaining_mana_is_now_5
     when 1
       sm = SystemMessage.s1s_remaining_mana_is_now_1
-    else
-      # [automatically added else]
     end
 
 

@@ -32,8 +32,6 @@ module HitConditionBonusData
           @@dark_bonus  = parse_int(d, "val")
         when "rain"
           @@rain_bonus  = parse_int(d, "val")
-        else
-          # [automatically added else]
         end
       end
     end

@@ -32,8 +32,6 @@ class Scripts::TeleportWithCharm < AbstractNpcAI
       else
         return "30576-01.htm"
       end
-    else
-      # [automatically added else]
     end
 
 

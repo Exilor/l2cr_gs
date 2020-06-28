@@ -273,8 +273,6 @@ module Util
         if c2.number?
           count = Math.max(count, c2.to_i)
         end
-      else
-        # [automatically added else]
       end
     end
 

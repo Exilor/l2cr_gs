@@ -44,21 +44,7 @@ class Transform
     @type.pure_stat?
   end
 
-  def combat? : Bool
-    @type.combat?
-  end
-
-  def non_combat? : Bool
-    @type.non_combat?
-  end
-
-  def flying? : Bool
-    @type.flying?
-  end
-
-  def cursed? : Bool
-    @type.cursed?
-  end
+  delegate combat?, non_combat?, flying?, cursed?, to: @type
 
   def get_collision_height(pc : L2PcInstance) : Float64
     get_template(pc).try &.collision_height || pc.collision_height

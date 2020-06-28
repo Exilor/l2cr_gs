@@ -201,8 +201,6 @@ class OlympiadGameTask
       @state = GameState::IDLE
       @game = nil
       return
-    else
-      # [automatically added else]
     end
 
 
@@ -216,8 +214,6 @@ class OlympiadGameTask
       @state = GameState::IDLE
       @game = nil
       return
-    else
-      # [automatically added else]
     end
 
 

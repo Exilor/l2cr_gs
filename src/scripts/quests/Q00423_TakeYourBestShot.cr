@@ -36,8 +36,6 @@ class Scripts::Q00423_TakeYourBestShot < Quest
       end
     when "32744-07.html"
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -53,8 +51,6 @@ class Scripts::Q00423_TakeYourBestShot < Quest
           qs.memo_state = 2
           qs.set_cond(2, true)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -99,8 +95,6 @@ class Scripts::Q00423_TakeYourBestShot < Quest
           qs.exit_quest(true, true)
           html = "32740-03.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

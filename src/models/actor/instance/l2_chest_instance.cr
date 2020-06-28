@@ -40,8 +40,6 @@ class L2ChestInstance < L2MonsterInstance
         id = 21763
       when 18297, 18298
         id = 21786
-      else
-        # [automatically added else]
       end
     end
 

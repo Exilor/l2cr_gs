@@ -44,8 +44,6 @@ class Scripts::Q00358_IllegitimateChildOfTheGoddess < Quest
     when "30862-04.htm"
       st.start_quest
       event
-    else
-      # [automatically added else]
     end
 
   end

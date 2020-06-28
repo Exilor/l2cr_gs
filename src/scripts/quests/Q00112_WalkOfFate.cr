@@ -31,8 +31,6 @@ class Scripts::Q00112_WalkOfFate < Quest
       st.give_items(SCROLL_ENCHANT_ARMOR_D_GRADE, 1)
       st.exit_quest(false, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -51,14 +49,10 @@ class Scripts::Q00112_WalkOfFate < Quest
         html = "30572-05.html"
       when KARUDA
         html = "32017-01.html"
-      else
-        # [automatically added else]
       end
 
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
 

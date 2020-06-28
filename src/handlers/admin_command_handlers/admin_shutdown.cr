@@ -6,7 +6,7 @@ module AdminCommandHandler::AdminShutdown
     if command.starts_with?("admin_server_shutdown")
       begin
         val = command.from(22)
-        if val.num?
+        if val.number?
           server_shutdown(pc, val.to_i, false)
         else
           pc.send_message("Usage: #server_shutdown <seconds>")
@@ -18,7 +18,7 @@ module AdminCommandHandler::AdminShutdown
     elsif command.starts_with?("admin_server_restart")
       begin
         val = command.from(21)
-        if val.num?
+        if val.number?
           server_shutdown(pc, val.to_i, true)
         else
           pc.send_message("Usage: #server_restart <seconds>")

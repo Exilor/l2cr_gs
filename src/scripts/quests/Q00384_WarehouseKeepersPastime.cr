@@ -89,8 +89,6 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
         end
         return "30685-07.html"
       end
-    else
-      # [automatically added else]
     end
 
     get_no_quest_msg(pc)
@@ -155,8 +153,6 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
           return take_html(pc, qs, ask - 18, CLIFF)
         when 55..63
           return before_reward(pc, qs, ask - 54, CLIFF)
-        else
-          # [automatically added else]
         end
       when WAREHOUSE_CHIEF_BAXT
         ask = event.to_i
@@ -191,11 +187,7 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
           return take_html(pc, qs, ask - 18, WAREHOUSE_CHIEF_BAXT)
         when 55..63
           return before_reward(pc, qs, ask - 54, WAREHOUSE_CHIEF_BAXT)
-        else
-          # [automatically added else]
         end
-      else
-        # [automatically added else]
       end
     end
 
@@ -352,30 +344,30 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
     q = qs.get("selected").not_nil!.split
     found = 0
     # Horizontal
-    if (q[0] + q[1] + q[2]).match?(/\\d+/)
+    if (q[0] + q[1] + q[2]).matches?(/\\d+/)
       found += 1
     end
-    if (q[3] + q[4] + q[5]).match?(/\\d+/)
+    if (q[3] + q[4] + q[5]).matches?(/\\d+/)
       found += 1
     end
-    if (q[6] + q[7] + q[8]).match?(/\\d+/)
+    if (q[6] + q[7] + q[8]).matches?(/\\d+/)
       found += 1
     end
     # Vertical
-    if (q[0] + q[3] + q[6]).match?(/\\d+/)
+    if (q[0] + q[3] + q[6]).matches?(/\\d+/)
       found += 1
     end
-    if (q[1] + q[4] + q[7]).match?(/\\d+/)
+    if (q[1] + q[4] + q[7]).matches?(/\\d+/)
       found += 1
     end
-    if (q[2] + q[5] + q[8]).match?(/\\d+/)
+    if (q[2] + q[5] + q[8]).matches?(/\\d+/)
       found += 1
     end
     # Diagonal
-    if (q[0] + q[4] + q[8]).match?(/\\d+/)
+    if (q[0] + q[4] + q[8]).matches?(/\\d+/)
       found += 1
     end
-    if (q[2] + q[4] + q[6]).match?(/\\d+/)
+    if (q[2] + q[4] + q[6]).matches?(/\\d+/)
       found += 1
     end
 
@@ -524,8 +516,6 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
         if Rnd.rand(1000) < 346
           give_item_randomly(qs.player, npc, Q_IRONGATE_MEDAL, 1, 0, 1, true)
         end
-      else
-        # [automatically added else]
       end
     end
 

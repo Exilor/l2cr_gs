@@ -1,7 +1,7 @@
 class L2SiegeGuardAI < L2CharacterAI
   private MAX_ATTACK_TIMEOUT = 300 # 30 seconds
 
-  @ai_task : TaskExecutor::Scheduler::PeriodicTask?
+  @ai_task : TaskScheduler::PeriodicTask?
   @attack_range : Int32
   @thinking = false
 

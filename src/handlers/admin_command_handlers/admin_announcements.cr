@@ -41,7 +41,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         ann_init_delay = st.shift
-        unless ann_init_delay.num?
+        unless ann_init_delay.number?
           pc.send_message("Syntax: #announces add <type> <delay> <repeat> <text>")
           return false
         end
@@ -52,7 +52,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         ann_delay = st.shift
-        unless ann_delay.num?
+        unless ann_delay.number?
           pc.send_message("Syntax: #announces add <type> <delay> <repeat> <text>")
           return false
         end
@@ -67,7 +67,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         ann_repeat = st.shift
-        unless ann_repeat.num?
+        unless ann_repeat.number?
           pc.send_message("Syntax: #announces add <type> <delay> <repeat> <text>")
           return false
         end
@@ -99,7 +99,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         ann_id = st.shift
-        unless ann_id.num?
+        unless ann_id.number?
           pc.send_message("Syntax: #announces edit <id>")
           return false
         end
@@ -152,8 +152,6 @@ module AdminCommandHandler::AdminAnnouncements
             pc.send_message("Announce type can be changed only to NORMAL or CRITICAL")
             return false
           end
-        else
-          # [automatically added else]
         end
 
         # ************************************
@@ -162,7 +160,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         ann_init_delay = st.shift
-        unless ann_init_delay.num?
+        unless ann_init_delay.number?
           pc.send_message("Syntax: #announces add <type> <delay> <repeat> <text>")
           return false
         end
@@ -173,7 +171,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         ann_delay = st.shift
-        unless ann_delay.num?
+        unless ann_delay.number?
           pc.send_message("Syntax: #announces add <type> <delay> <repeat> <text>")
           return false
         end
@@ -188,7 +186,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         ann_repeat = st.shift
-        unless ann_repeat.num?
+        unless ann_repeat.number?
           pc.send_message("Syntax: #announces add <type> <delay> <repeat> <text>")
           return false
         end
@@ -225,7 +223,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         token = st.shift
-        unless token.num?
+        unless token.number?
           pc.send_message("Syntax: #announces remove <announcement id>")
           return false
         end
@@ -247,7 +245,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         token = st.shift
-        unless token.num?
+        unless token.number?
           pc.send_message("Syntax: #announces show <announcement id>")
           return false
         end
@@ -270,7 +268,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         token = st.shift
-        unless token.num?
+        unless token.number?
           pc.send_message("Syntax: #announces show <announcement id>")
           return false
         end
@@ -306,7 +304,7 @@ module AdminCommandHandler::AdminAnnouncements
         page = 0
         unless st.empty?
           token = st.shift
-          if token.num?
+          if token.number?
             page = token.to_i
           end
         end
@@ -359,14 +357,8 @@ module AdminCommandHandler::AdminAnnouncements
         content = content.gsub("%pages%", result.pager_template.to_s)
         content = content.gsub("%announcements%", result.body_template.to_s)
         Util.send_cb_html(pc, content)
-      else
-        # [automatically added else]
       end
-
-    else
-      # [automatically added else]
     end
-
 
     false
   end

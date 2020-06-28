@@ -93,8 +93,6 @@ class Scripts::Q00414_PathOfTheOrcRaider < Quest
         qs.set_cond(6, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -157,8 +155,6 @@ class Scripts::Q00414_PathOfTheOrcRaider < Quest
             qs.set_cond(7, true)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -230,8 +226,6 @@ class Scripts::Q00414_PathOfTheOrcRaider < Quest
             html = "31978-05.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     end

@@ -31,8 +31,6 @@ module PetDataTable
               data.hungry_limit = parse_int(p, "val")
             when "sync_level"
               data.sync_level = parse_int(p, "val") == 1
-            else
-              # [automatically added else]
             end
           when "skills"
             find_element(p, "skill") do |s|
@@ -61,8 +59,6 @@ module PetDataTable
 
               data.add_new_stat(level, L2PetLevelData.new(set))
             end
-          else
-            # [automatically added else]
           end
         end
 

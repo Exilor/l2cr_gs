@@ -56,8 +56,6 @@ class Scripts::Q00187_NikolasHeart < Quest
         qs.set_cond(2, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -92,8 +90,6 @@ class Scripts::Q00187_NikolasHeart < Quest
         elsif memo_state == 2
           html = "30621-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

@@ -39,7 +39,7 @@ abstract class AirShipController < Quest
   @fuel_table : Slice(Int32)?
   @movie_id = 0
   @bust = false
-  @depart_schedule : TaskExecutor::Scheduler::DelayedTask?
+  @depart_schedule : TaskScheduler::DelayedTask?
   @arrival_message : NpcSay?
 
   getter depart_path : Slice(VehiclePathPoint)?

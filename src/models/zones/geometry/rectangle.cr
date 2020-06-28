@@ -19,6 +19,6 @@ struct Rectangle < Rectangle2D
   end
 
   def z : Int32
-    raise "shouldn't call Rectangle#z"
+    raise "Rectangle#z shouldn't be called"
   end
 end

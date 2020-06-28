@@ -31,8 +31,6 @@ class Scripts::Q00052_WilliesSpecialBait < Quest
         st.give_items(EARTH_FISHING_LURE, 4)
         st.exit_quest(false, true)
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -68,8 +66,6 @@ class Scripts::Q00052_WilliesSpecialBait < Quest
       html = pc.level >= 48 ? "31574-01.htm" : "31574-02.html"
     when State::STARTED
       html = st.cond?(1) ? "31574-05.html" : "31574-04.html"
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

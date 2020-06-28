@@ -45,8 +45,6 @@ class Scripts::GhostChamberlainOfElmoreden < AbstractNpcAI
       else
         return "#{npc.id}-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

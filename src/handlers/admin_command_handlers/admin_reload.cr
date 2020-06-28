@@ -15,7 +15,7 @@ module AdminCommandHandler::AdminReload
       end
 
       type = st.shift
-      case type.downcase
+      case type.casecmp
       when "config"
         Config.load
         AdminData.broadcast_message_to_gms(pc.name + ": Reloaded Config.")

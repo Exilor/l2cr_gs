@@ -80,8 +80,6 @@ class Scripts::Q00606_BattleAgainstVarkaSilenos < Quest
       html = pc.level >= MIN_LEVEL ? "31370-01.htm" : "31370-02.htm"
     when State::STARTED
       html = st.has_quest_items?(MANE) ? "31370-04.html" : "31370-05.html"
-    else
-      # [automatically added else]
     end
 
 

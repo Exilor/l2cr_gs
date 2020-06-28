@@ -76,12 +76,8 @@ class Scripts::Q00258_BringWolfPelts < Quest
           st.exit_quest(true, true)
           html = "30001-05.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

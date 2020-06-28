@@ -28,8 +28,6 @@ class Scripts::ManorManager < AbstractNpcAI
     case event
     when "manager-help-01.htm", "manager-help-02.htm", "manager-help-03.htm"
       event
-    else
-      # [automatically added else]
     end
 
   end

@@ -205,8 +205,6 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
         st.give_items(REWARD.sample(random: Rnd).sample(random: Rnd), 1)
         st.exit_quest(QuestType::DAILY, true)
         html = "32734-14.html"
-      else
-        # nothing
       end
     when State::COMPLETED
       if !st.now_available?
@@ -219,10 +217,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
           html = "32734-03.html"
         end
       end
-    else
-      # [automatically added else]
     end
-
 
     html || get_no_quest_msg(pc)
   end

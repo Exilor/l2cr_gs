@@ -68,8 +68,6 @@ class Scripts::Q00008_AnAdventureBegins < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when ROSELYN
       if st.started?
@@ -87,8 +85,6 @@ class Scripts::Q00008_AnAdventureBegins < Quest
           html = "30144-04.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

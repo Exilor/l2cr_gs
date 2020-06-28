@@ -101,8 +101,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         when 2
           give_items(pc, BRONKS_INGOT, 1)
           html = "30519-04.html"
-        else
-          # [automatically added else]
         end
 
       end
@@ -115,8 +113,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         html = "30519-06.html"
       when 1
         html = "30519-11.html"
-      else
-        # [automatically added else]
       end
 
     when "reply_3"
@@ -150,8 +146,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
       when 2
         give_items(pc, BRONKS_INGOT, 1)
         html = "30519-04.html"
-      else
-        # [automatically added else]
       end
 
     when "30556-05b.html"
@@ -210,8 +204,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         qs.save_global_quest_var("1ClassQuestFinished", "1")
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -231,8 +223,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           if npc.variables.get_i32(FIRST_ATTACKER) != attacker.l2id
             npc.script_value = 2
           end
-        else
-          # [automatically added else]
         end
 
       when HUNTER_TARANTULA, PLUNDER_TARANTULA, HONEY_BEAR
@@ -247,8 +237,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           attacker.last_skill_cast = nil # Reset last skill cast.
         else
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -283,8 +271,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
             qs.set_cond(8)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -445,8 +431,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         if has_quest_items?(pc, BEAD_PARCEL2) && !has_quest_items?(pc, BEAD_PARCEL) && qs.memo_state?(2)
           html = "31958-01.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

@@ -48,7 +48,7 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
       end
     end
 
-    unless @name.alnum? && @name.match?(Config.player_name_template)
+    unless @name.alnum? && @name.matches?(Config.player_name_template)
       debug { "'#{@name}' contains non-alnum characters." }
       send_packet(CharCreateFail::INCORRECT_NAME)
       return

@@ -38,9 +38,9 @@ module TerritoryWarManager
   class_getter? registration_over = true
   class_getter? tw_channel_open = false
   class_getter? tw_in_progress = false
-  @@scheduled_start_tw_task : TaskExecutor::Scheduler::DelayedTask?
-  @@scheduled_end_tw_task : TaskExecutor::Scheduler::DelayedTask?
-  @@scheduled_reward_online_task : TaskExecutor::Scheduler::PeriodicTask?
+  @@scheduled_start_tw_task : TaskScheduler::DelayedTask?
+  @@scheduled_end_tw_task : TaskScheduler::DelayedTask?
+  @@scheduled_reward_online_task : TaskScheduler::PeriodicTask?
 
   def load
     cfg = PropertiesReader.new
@@ -996,7 +996,7 @@ module TerritoryWarManager
   class Territory
     include Loggable
 
-    @territory_ward_spawn_places = Slice(TerritoryNPCSpawn?).new(9, nil.as(TerritoryNPCSpawn?))
+    @territory_ward_spawn_places = Slice(TerritoryNPCSpawn?).new(9)
 
     getter quest_done = Slice(Int32).new(2)
     getter territory_id : Int32
@@ -1164,5 +1164,9 @@ module TerritoryWarManager
 
   def update_siege
     # no-op
+  end
+
+  def declare_lord(territory_id : Int32, pc : L2PcInstance)
+    # L2J TODO
   end
 end

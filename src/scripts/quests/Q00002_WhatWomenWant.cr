@@ -85,13 +85,9 @@ class Scripts:: Q00002_WhatWomenWant < Quest
           show_on_screen_msg(pc, NpcString::DELIVERY_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000)
           add_exp_and_sp(pc, 4254, 335)
           give_adena(pc, 1850, true)
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     when MIRABEL
@@ -129,8 +125,6 @@ class Scripts:: Q00002_WhatWomenWant < Quest
           html = "30157-01.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

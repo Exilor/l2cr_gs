@@ -39,8 +39,6 @@ class FortUpdater
         @fort.remove_owner(true)
         @fort.set_fort_state(0, 0)
       end
-    else
-      # [automatically added else]
     end
   rescue e
     error e

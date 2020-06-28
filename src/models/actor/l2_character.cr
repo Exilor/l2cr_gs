@@ -40,7 +40,7 @@ abstract class L2Character < L2Object
   @ai : L2CharacterAI?
   @exceptions = 0i64
   @move : MoveData?
-  @skill_cast_2 : TaskExecutor::Scheduler::DelayedTask?
+  @skill_cast_2 : TaskScheduler::DelayedTask?
   @attack_by_list : Interfaces::Set(L2Character)?
 
   getter title : String = ""
@@ -60,7 +60,7 @@ abstract class L2Character < L2Object
   getter? core_ai_disabled = false
   setter paralyzed : Bool = false
   setter pending_revive : Bool = false
-  setter skill_cast : TaskExecutor::Scheduler::DelayedTask?
+  setter skill_cast : TaskScheduler::DelayedTask?
   setter invul : Bool = false
   property attack_end_time : Int64 = 0i64
   property bow_attack_end_time : Int32 = 0
@@ -98,7 +98,7 @@ abstract class L2Character < L2Object
     elsif npc?
       @calculators = Formulas.npc_std_calculators
     else
-      @calculators = Slice.new(Stats.size, nil.as(Calculator?))
+      @calculators = Slice(Calculator?).new(Stats.size)
     end
 
     self.invul = true
@@ -1017,8 +1017,6 @@ abstract class L2Character < L2Object
           pc.send_packet(op)
         end
       end
-    else
-      # [automatically added else]
     end
   end
 
@@ -1665,7 +1663,7 @@ abstract class L2Character < L2Object
       end
 
       unless skill.static?
-        if active_weapon && !target.dead?
+        if active_weapon && target.alive?
           active_weapon.cast_on_magic_skill(self, target, skill)
         end
 
@@ -3233,7 +3231,7 @@ abstract class L2Character < L2Object
 
   def break_cast
     last_skill = last_skill_cast
-    if casting_now? && can_abort_cast? && last_skill
+    if last_skill && casting_now? && can_abort_cast?
       if last_skill.magic? || last_skill.static?
         abort_cast
 
@@ -3368,8 +3366,6 @@ abstract class L2Character < L2Object
       if InstanceManager.get_instance(instance_id).try &.pvp_instance?
         return false
       end
-    else
-      # [automatically added else]
     end
 
     @zones[id.to_i] > 0

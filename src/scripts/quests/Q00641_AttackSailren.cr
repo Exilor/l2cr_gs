@@ -37,8 +37,6 @@ class Scripts::Q00641_AttackSailren < Quest
         st.give_items(GAZKH, 1)
         st.exit_quest(true, true)
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -75,8 +73,6 @@ class Scripts::Q00641_AttackSailren < Quest
       end
     when State::STARTED
       html = st.cond?(1) ? "32109-1a.html" : "32109-2.html"
-    else
-      # [automatically added else]
     end
 
 

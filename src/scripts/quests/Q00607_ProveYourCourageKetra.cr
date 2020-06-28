@@ -76,8 +76,6 @@ class Scripts::Q00607_ProveYourCourageKetra < Quest
       else
         html = "31370-06.html"
       end
-    else
-      # [automatically added else]
     end
 
 

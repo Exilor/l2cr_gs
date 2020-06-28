@@ -149,8 +149,6 @@ class Scripts::QueenAnt < AbstractNpcAI
       NURSES << mob
     when ROYAL, GUARD
       mob.raid_minion = true
-    else
-      # [automatically added else]
     end
 
 

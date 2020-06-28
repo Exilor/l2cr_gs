@@ -101,8 +101,6 @@ class Scripts::Q10290_LandDragonConqueror < Quest
       end
     when State::COMPLETED
       html = "30755-09.html"
-    else
-      # [automatically added else]
     end
 
 

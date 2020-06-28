@@ -56,8 +56,6 @@ class Scripts::Q00644_GraveRobberAnnihilation < Quest
         st.exit_quest(true, true)
         html = "32017-07.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -85,8 +83,6 @@ class Scripts::Q00644_GraveRobberAnnihilation < Quest
       else
         html = "32017-05.html"
       end
-    else
-      # [automatically added else]
     end
 
 

@@ -19,7 +19,7 @@ module ZoneManager
     timer = Timer.new
     CLASS_ZONES.clear
     SPAWN_TERRITORIES.clear
-    parse_datapack_directory("zones", false)
+    parse_datapack_directory("zones")
     info { "Loaded #{CLASS_ZONES.size} zone classes and #{size} zones in #{timer} s." }
     timer.start
     parse_datapack_directory("zones/npcSpawnTerritories")
@@ -79,7 +79,7 @@ module ZoneManager
           end
         end
 
-        zone_name = parse_string(d, "name")
+        zone_name = parse_string(d, "name", nil)
 
         if zone_type.casecmp?("NpcSpawnTerritory")
           if zone_name.nil?
@@ -138,44 +138,10 @@ module ZoneManager
         end
 
         if zone_type.casecmp?("NpcSpawnTerritory")
+          zone_name = zone_name.not_nil!
           SPAWN_TERRITORIES[zone_name] = NpcSpawnTerritory.new(zone_name, zone_form)
           next
         end
-
-        # constructor =
-        # case constructor_name
-        # when "L2ArenaZone" then L2ArenaZone
-        # when "L2BossZone" then L2BossZone
-        # when "L2CastleZone" then L2CastleZone
-        # when "L2ClanHallZone" then L2ClanHallZone
-        # when "L2ConditionZone" then L2ConditionZone
-        # when "L2DamageZone" then L2DamageZone
-        # when "L2DerbyTrackZone" then L2DerbyTrackZone
-        # when "L2DynamicZone" then L2DynamicZone
-        # when "L2EffectZone" then L2EffectZone
-        # when "L2FishingZone" then L2FishingZone
-        # when "L2FortZone" then L2FortZone
-        # when "L2HqZone" then L2HqZone
-        # when "L2JailZone" then L2JailZone
-        # when "L2LandingZone" then L2LandingZone
-        # when "L2MotherTreeZone" then L2MotherTreeZone
-        # when "L2NoLandingZone" then L2NoLandingZone
-        # when "L2NoRestartZone" then L2NoRestartZone
-        # when "L2NoStoreZone" then L2NoStoreZone
-        # when "L2NoSummonFriendZone" then L2NoSummonFriendZone
-        # when "L2OlympiadStadiumZone" then L2OlympiadStadiumZone
-        # when "L2PeaceZone" then L2PeaceZone
-        # when "L2ResidenceHallTeleportZone" then L2ResidenceHallTeleportZone
-        # when "L2ResidenceTeleportZone" then L2ResidenceTeleportZone
-        # when "L2ResidenceZone" then L2ResidenceZone
-        # when "L2RespawnZone" then L2RespawnZone
-        # when "L2ScriptZone" then L2ScriptZone
-        # when "L2SiegableHallZone" then L2SiegableHallZone
-        # when "L2SiegeZone" then L2SiegeZone
-        # when "L2SwampZone" then L2SwampZone
-        # when "L2TownZone" then L2TownZone
-        # when "L2WaterZone" then L2WaterZone
-        # end
 
         constructor_name = "L2" + zone_type
         constructor = nil
@@ -185,8 +151,6 @@ module ZoneManager
             when {{sub.stringify}}
               constructor = {{sub}}
           {% end %}
-          else
-            # [automatically added else]
           end
         {% end %}
 
@@ -213,8 +177,6 @@ module ZoneManager
             race = parse_string(cd, "name")
             point = parse_string(cd, "point")
             temp.as(L2RespawnZone).add_race_respawn_point(race, point)
-          else
-            # [automatically added else]
           end
         end
 
@@ -279,7 +241,6 @@ module ZoneManager
   end
 
   def get_zone_by_id(id : Int32, zone_type : T.class) : T? forall T
-    # CLASS_ZONES[zone_type][id]?.as(T?)
     CLASS_ZONES.dig?(zone_type, id).as(T?)
   end
 
@@ -333,7 +294,7 @@ module ZoneManager
   def get_arena(char : L2Character?) : L2ArenaZone?
     return unless char
 
-    get_zones(*char.xyz) do |zone|
+    get_zones(char) do |zone|
       if zone.is_a?(L2ArenaZone) && zone.character_in_zone?(char)
         return zone
       end
@@ -345,7 +306,7 @@ module ZoneManager
   def get_olympiad_stadium(char : L2Character?) : L2OlympiadStadiumZone?
     return unless char
 
-    get_zones(*char.xyz) do |zone|
+    get_zones(char) do |zone|
       if zone.is_a?(L2OlympiadStadiumZone) && zone.character_in_zone?(char)
         return zone
       end

@@ -128,8 +128,6 @@ class Scripts::Q00638_SeekersOfTheHolyGrail < Quest
         qs.exit_quest(true, true)
         html = "31328-09.html"
       end
-    else
-      # [automatically added else]
     end
 
 

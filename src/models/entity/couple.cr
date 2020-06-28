@@ -16,7 +16,6 @@ class Couple
       @player1_id = rs.get_i32(:"player1Id")
       @player2_id = rs.get_i32(:"player2Id")
       @married = rs.get_bool(:"married")
-
       @affiance_date.ms = rs.get_i64(:"affianceDate")
       @wedding_date.ms = rs.get_i64(:"weddingDate")
     end

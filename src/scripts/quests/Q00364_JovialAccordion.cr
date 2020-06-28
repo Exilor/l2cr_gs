@@ -70,8 +70,6 @@ class Scripts::Q00364_JovialAccordion < Quest
       st.memo_state = 2
       st.set_cond(2, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -96,8 +94,6 @@ class Scripts::Q00364_JovialAccordion < Quest
           st.reward_items(THEME_OF_THE_FEAST, 1)
           st.exit_quest(true, true)
           html = "30959-05.html"
-        else
-          # [automatically added else]
         end
 
       when BEER_CHEST
@@ -155,16 +151,10 @@ class Scripts::Q00364_JovialAccordion < Quest
           end
         when 5
           html = "30957-07.html"
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

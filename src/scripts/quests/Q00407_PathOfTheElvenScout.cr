@@ -70,8 +70,6 @@ class Scripts::Q00407_PathOfTheElvenScout < Quest
         qs.set_cond(2, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -207,8 +205,6 @@ class Scripts::Q00407_PathOfTheElvenScout < Quest
         elsif has_quest_items?(pc, PRIASS_LETTER)
           html = "30426-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

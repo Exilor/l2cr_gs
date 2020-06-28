@@ -58,8 +58,6 @@ class Scripts::Nemo < AbstractNpcAI
         pc.variables.delete("TEST_MAGUEN")
         spawned_npc.script_value &-= 1
       end
-    else
-      # [automatically added else]
     end
 
 

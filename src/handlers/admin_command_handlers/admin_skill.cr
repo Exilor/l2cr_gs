@@ -20,7 +20,7 @@ module AdminCommandHandler::AdminSkill
       admin_add_skill(pc, val)
     elsif command.starts_with?("admin_remove_skill")
       id = command.from(19)
-      if id.num?
+      if id.number?
         admin_remove_skill(pc, id.to_i)
       else
         pc.send_message("Usage: //remove_skill <skill_id>")
@@ -50,7 +50,7 @@ module AdminCommandHandler::AdminSkill
     elsif command.starts_with?("admin_add_clan_skill")
       begin
         val = command.split
-        if val.size == 3 && val[1].num? && val[2].num?
+        if val.size == 3 && val[1].number? && val[2].number?
           admin_add_clan_skill(pc, val[1].to_i, val[2].to_i)
         else
           pc.send_message("Usage: //add_clan_skill <skill_id> <level>")

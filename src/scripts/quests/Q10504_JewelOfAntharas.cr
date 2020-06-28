@@ -44,8 +44,6 @@ class Scripts::Q10504_JewelOfAntharas < Quest
         st.start_quest
         give_items(pc, CLEAR_CRYSTAL, 1)
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -84,14 +82,10 @@ class Scripts::Q10504_JewelOfAntharas < Quest
         play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
         st.exit_quest(false, true)
         html = "30755-10.html"
-      else
-        # [automatically added else]
       end
 
     when State::COMPLETED
       html = "30755-03.html"
-    else
-      # [automatically added else]
     end
 
 

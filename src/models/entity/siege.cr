@@ -16,7 +16,7 @@ class Siege
   @flame_towers = [] of L2FlameTowerInstance
   @normal_side = true
   @siege_end_date = Calendar.new
-  @scheduled_start_siege_task : TaskExecutor::Scheduler::DelayedTask?
+  @scheduled_start_siege_task : TaskScheduler::DelayedTask?
   @first_owner_clan_id = -1
   @attacker_clans = Concurrent::Array(L2SiegeClan).new
   @defender_clans = Concurrent::Array(L2SiegeClan).new
@@ -563,8 +563,6 @@ class Siege
       players = attackers_in_zone
     when .spectator?
       players = spectators_in_zone
-    else
-      # [automatically added else]
     end
 
 
@@ -676,8 +674,6 @@ class Siege
         add_attacker(rs.get_i32(:"clan_id"))
       when DEFENDER_NOT_APPROVED
         add_defender_waiting(rs.get_i32(:"clan_id"))
-      else
-        # [automatically added else]
       end
 
     end
@@ -762,8 +758,6 @@ class Siege
       add_attacker(clan.id)
     when DEFENDER_NOT_APPROVED
       add_defender_waiting(clan.id)
-    else
-      # [automatically added else]
     end
 
   rescue e

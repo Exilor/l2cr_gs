@@ -28,8 +28,6 @@ class Scripts::Q00695_DefendTheHallOfSuffering < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         event
       end
-    else
-      # [automatically added else]
     end
 
   end

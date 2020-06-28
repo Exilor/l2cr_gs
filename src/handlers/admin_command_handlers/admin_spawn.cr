@@ -153,7 +153,7 @@ module AdminCommandHandler::AdminSpawn
       begin
         # admin_list_spawns x[xxxx] x[xx]
         params = command.split
-        if params[1].num?
+        if params[1].number?
           npc_id = params[1].to_i
         else
           params[1] = params[1].tr("_", " ")
@@ -218,8 +218,6 @@ module AdminCommandHandler::AdminSpawn
       info { "<spawn npc_id='#{i}' x='#{x}' y='#{y}' z='#{z}' heading='#{h}' respawn='0' />" }
     when 2
       info { "{ #{i}, #{x}, #{y}, #{z}, #{h} }," }
-    else
-      # [automatically added else]
     end
 
   end
@@ -227,7 +225,7 @@ module AdminCommandHandler::AdminSpawn
   private def spawn_monster(pc, mob_id, respawn_time, mob_count, permanent)
     target = pc.target || pc
 
-    if mob_id.num?
+    if mob_id.number?
       # First parameter was an ID number
       template = NpcData[mob_id.to_i]
     else

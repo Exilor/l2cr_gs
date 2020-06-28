@@ -282,8 +282,6 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
     when "30844-03.htm", "30844-05.html", "30844-05a.html", "30844-08.html",
          "30844-10.html", "30844-11.html"
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -454,8 +452,6 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
         else
           html = "31001-01.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

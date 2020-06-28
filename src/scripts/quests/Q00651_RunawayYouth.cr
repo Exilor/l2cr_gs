@@ -45,8 +45,6 @@ class Scripts::Q00651_RunawayYouth < Quest
         html = pc.level >= MIN_LEVEL ? "32014-01.htm" : "32014-01a.htm"
       when State::STARTED
         html = "32014-02.html"
-      else
-        # [automatically added else]
       end
 
     when BATIDAE
@@ -55,8 +53,6 @@ class Scripts::Q00651_RunawayYouth < Quest
         st.exit_quest(true, true)
         html = "31989-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

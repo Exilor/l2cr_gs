@@ -212,7 +212,7 @@ module GeoData
         if pt_index < ELEVATED_SEE_OVER_DISTANCE
           max_height = z &+ MAX_SEE_OVER_HEIGHT
         else
-          max_height = bee_cur_z + MAX_SEE_OVER_HEIGHT
+          max_height = bee_cur_z &+ MAX_SEE_OVER_HEIGHT
         end
 
         can_see_through = false

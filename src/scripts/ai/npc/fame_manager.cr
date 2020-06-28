@@ -54,8 +54,6 @@ class Scripts::FameManager < AbstractNpcAI
       else
         html = "#{npc.id}-03.html"
       end
-    else
-      # [automatically added else]
     end
 
     html

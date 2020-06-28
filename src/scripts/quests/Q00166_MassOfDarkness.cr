@@ -72,8 +72,6 @@ class Scripts::Q00166_MassOfDarkness < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     when IRIA, DORANKUS, TRUDY
@@ -91,8 +89,6 @@ class Scripts::Q00166_MassOfDarkness < Quest
           html = "#{npc_id}-02.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

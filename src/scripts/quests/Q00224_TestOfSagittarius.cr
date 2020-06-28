@@ -127,8 +127,6 @@ class Scripts::Q00224_TestOfSagittarius < Quest
         qs.set_cond(3, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -230,8 +228,6 @@ class Scripts::Q00224_TestOfSagittarius < Quest
             add_spawn(SERPENT_DEMON_KADESH, npc, true, 300000)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -356,8 +352,6 @@ class Scripts::Q00224_TestOfSagittarius < Quest
             html = "30717-02.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

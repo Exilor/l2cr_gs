@@ -105,8 +105,6 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           html = "30912-04.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -212,8 +210,6 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           end
 
           qs.exit_quest(true, true)
-        else
-          # [automatically added else]
         end
 
       when ORPHEUS
@@ -249,8 +245,6 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           end
         when 8
           html = "30973-11.html"
-        else
-          # [automatically added else]
         end
 
       when XENOVIA
@@ -259,8 +253,6 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
         elsif qs.memo_state?(7) || qs.memo_state?(8) || has_quest_items?(pc, POWDER_TO_SUMMON_DEAD_SOULS)
           html = "30912-06.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

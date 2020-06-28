@@ -96,8 +96,6 @@ class Scripts::Maguen < AbstractNpcAI
         nemo_ai.notify_event("DECREASE_COUNT", npc, pc)
       end
       npc.do_die(nil)
-    else
-      # [automatically added else]
     end
 
 
@@ -149,8 +147,6 @@ class Scripts::Maguen < AbstractNpcAI
           skill_to_cast = Rnd.rand(100) < 70 ? C_BUFF_1 : C_BUFF_2
         when 2
           skill_to_cast = Rnd.rand(100) < 70 ? R_BUFF_1 : R_BUFF_2
-        else
-          # [automatically added else]
         end
 
 
@@ -203,8 +199,6 @@ class Scripts::Maguen < AbstractNpcAI
             skill_to_cast = B_PLASMA2
           when 2
             skill_to_cast = B_PLASMA3
-          else
-            # [automatically added else]
           end
 
         when 2
@@ -215,8 +209,6 @@ class Scripts::Maguen < AbstractNpcAI
             skill_to_cast = C_PLASMA2
           when 2
             skill_to_cast = C_PLASMA3
-          else
-            # [automatically added else]
           end
 
         when 3
@@ -227,12 +219,8 @@ class Scripts::Maguen < AbstractNpcAI
             skill_to_cast = R_PLASMA2
           when 2
             skill_to_cast = R_PLASMA3
-          else
-            # [automatically added else]
           end
 
-        else
-          # [automatically added else]
         end
 
 

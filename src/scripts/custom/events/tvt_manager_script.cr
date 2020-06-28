@@ -61,8 +61,6 @@ class Scripts::TvTManagerScript < AbstractNpcAI
       else
         pc.send_message("You cannot unregister to this event.")
       end
-    else
-      # nothing
     end
 
     html
@@ -106,8 +104,6 @@ class Scripts::TvTManagerScript < AbstractNpcAI
       html = on_adv_event("join", nil, pc)
     when "tvtleave"
       html = on_adv_event("remove", nil, pc)
-    else
-      # nothing
     end
 
     if html

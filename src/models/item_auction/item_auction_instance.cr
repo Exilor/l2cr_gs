@@ -22,7 +22,7 @@ class ItemAuctionInstance
   @auctions = {} of Int32 => ItemAuction
   @auctions_lock = MyMutex.new
   @items = [] of AuctionItem
-  @state_task : TaskExecutor::Scheduler::DelayedTask?
+  @state_task : TaskScheduler::DelayedTask?
 
   getter current_auction : ItemAuction?
   getter next_auction : ItemAuction?
@@ -109,7 +109,7 @@ class ItemAuctionInstance
   end
 
   def check_and_set_current_and_next_auction
-    auctions = @auctions.values
+    auctions = @auctions.values_slice
 
     current_auction = nil
     next_auction = nil
@@ -251,8 +251,6 @@ class ItemAuctionInstance
             @instance.state_task = ThreadPoolManager.schedule_general(self, Math.max(@auction.ending_time - Time.ms, 0))
             return
           end
-        else
-          # [automatically added else]
         end
 
 
@@ -295,7 +293,7 @@ class ItemAuctionInstance
     end
   end
 
-  def state_task=(new_task : TaskExecutor::Scheduler::DelayedTask)
+  def state_task=(new_task : TaskScheduler::DelayedTask)
     if state_task = @state_task
       state_task.cancel
     end

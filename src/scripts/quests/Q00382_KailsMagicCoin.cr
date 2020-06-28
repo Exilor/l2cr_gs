@@ -47,8 +47,6 @@ class Scripts::Q00382_KailsMagicCoin < Quest
       if qs.started?
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 

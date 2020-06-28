@@ -403,9 +403,9 @@ class Scripts::NornilsGarden < AbstractInstance
         error e
       end
     elsif FINAL_GATES.includes?(npc.id)
-      if event.match?(/\A3226[012]-02.html\z/i)
+      if event.matches?(/\A3226[012]-02.html\z/i)
         st.unset("correct")
-      elsif event.num?
+      elsif event.number?
         correct = st.get_int("correct") + 1
         st.set("correct", correct.to_s)
         html = "#{npc.id}-0#{correct + 2}.html"

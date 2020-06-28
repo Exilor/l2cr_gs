@@ -68,7 +68,7 @@ class QuestState
     end
 
     if var == "cond"
-      previous_val = old && old.num? ? old.to_i : 0
+      previous_val = old && old.number? ? old.to_i : 0
       set_cond(val.to_i, previous_val)
     end
 
@@ -114,7 +114,7 @@ class QuestState
   def get_int(var : String) : Int32
     return -1 unless _vars = @vars
     return -1 unless variable = _vars[var]?
-    return -1 if variable.empty?# || !var.num?
+    return -1 if variable.empty?# || !var.number?
     begin
       variable.to_i
     rescue e
@@ -210,6 +210,10 @@ class QuestState
 
   def memo_state?(ms : Int32)
     get_int("memoState") == ms
+  end
+
+  def remove_memo : String
+    unset("memoState")
   end
 
   def has_memo_state? : Bool
@@ -465,7 +469,7 @@ class QuestState
 
   def now_available? : Bool
     val = get("restartTime")
-    val.nil? || (!val.num? || val.to_i <= Time.ms)
+    val.nil? || (!val.number? || val.to_i <= Time.ms)
   end
 
   def set_nr_memo(pc : L2PcInstance, value : Int32)
@@ -496,8 +500,16 @@ class QuestState
     get_int("NRmemo") == slot
   end
 
-  def set_nr_flag_journal(pc : L2PcInstance, quest_id : Int32, val : Int32)
-    # L2J not done
+  def set_nr_flag_journal(pc : L2PcInstance, quest_id : Int32, flag_id : Int32)
+    set("NRFlagJournal", flag_id.to_s)
+  end
+
+  def set_flag_journal(flag_id : Int32)
+    set("FlagJournal", flag_id.to_s)
+  end
+
+  def reset_flag_journal(flag_id : Int32)
+    unset("FlagJournal")
   end
 
   def to_log(io : IO)

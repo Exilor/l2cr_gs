@@ -43,11 +43,11 @@ module EnchantItemGroupsData
             min, max = -1, 0
             if range.includes?('-')
               split = range.split('-')
-              if split.size == 2 && split.all? &.num?
+              if split.size == 2 && split.all? &.number?
                 min = split[0].to_i
                 max = split[1].to_i
               end
-            elsif range.num?
+            elsif range.number?
               min = range.to_i
               max = min
             end

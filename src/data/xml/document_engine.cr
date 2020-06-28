@@ -3,7 +3,6 @@ require "./documents/item_document"
 
 module DocumentEngine
   extend self
-  extend Loggable
 
   private ITEM_FILES = [] of File
   private SKILL_FILES = [] of File
@@ -44,33 +43,25 @@ module DocumentEngine
   end
 
   def load_skills(hash : Hash(Int32, Skill))
-    count = 0
-    SKILL_FILES.each_with_index do |file, i|
+    SKILL_FILES.each_with_index(1) do |file, i|
       STDOUT.flush
-      print "\r #{file.path} (#{i + 1}/#{SKILL_FILES.size})"
+      print "\r#{file.path} (#{i}/#{SKILL_FILES.size})"
 
       skills = load_skill_file(file)
       skills.each { |s| hash[s.hash] = s }
-      count &+= skills.size
     end
     puts
     STDOUT.flush
-    info { "Loaded #{count} skill templates." }
   end
 
   def load_items : Array(L2Item)
     list = [] of L2Item
 
-    ITEM_FILES.each_with_index do |file, i|
-      print "\r #{file.path} (#{i + 1}/#{ITEM_FILES.size})"
-      begin
-        doc = ItemDocument.new(file)
-        doc.parse
-        list.concat(doc.item_list)
-      rescue e
-        error { "#{e.class} while parsing #{file}:" }
-        error e
-      end
+    ITEM_FILES.each_with_index(1) do |file, i|
+      print "\r#{file.path} (#{i}/#{ITEM_FILES.size})"
+      doc = ItemDocument.new(file)
+      doc.parse
+      list.concat(doc.item_list)
     end
     puts
     list

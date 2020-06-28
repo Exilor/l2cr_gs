@@ -20,8 +20,6 @@ module TargetHandler::PartyOther
               end
 
               return EMPTY_TARGET_LIST
-            else
-              # [automatically added else]
             end
 
           end

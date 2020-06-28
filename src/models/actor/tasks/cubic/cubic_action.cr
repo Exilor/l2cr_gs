@@ -67,25 +67,6 @@ class CubicAction
         @cubic.owner.broadcast_packet(msu)
         targets = [target]
 
-        # if skill.continuous?
-        #   @cubic.use_cubic_continuous(skill, targets)
-        # else
-        #   skill.activate_skill(@cubic, targets)
-        # end
-
-        # if skill.has_effect_type?(EffectType::MAGICAL_ATTACK)
-        #   @cubic.use_cubic_m_dam(skill, targets)
-        # elsif skill.has_effect_type?(EffectType::HP_DRAIN)
-        #   @cubic.use_cubic_drain(skill, targets)
-        # elsif skill.has_effect_type?(EffectType::STUN, EffectType::ROOT, EffectType::PARALYZE)
-        #   @cubic.use_cubic_disabler(skill, targets)
-        # elsif skill.has_effect_type?(EffectType::DMG_OVER_TIME)
-        #   @cubic.use_cubic_continuous(skill, targets)
-        # elsif skill.has_effect_type?(EffectType::AGGRESSION)
-        #   @cubic.use_cubic_disabler(skill, targets)
-        # end
-
-        # custom: works better in not making storm cubic attack twice
         if skill.has_effect_type?(EffectType::MAGICAL_ATTACK)
           @cubic.use_cubic_m_dam(skill, targets)
         elsif skill.has_effect_type?(EffectType::HP_DRAIN)

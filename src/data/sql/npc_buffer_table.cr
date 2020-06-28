@@ -13,7 +13,7 @@ module NpcBufferTable
     info { "Loaded #{BUFFERS.size} buffers and #{count} skills." }
   end
 
-  private def load_from(sql) : Int32
+  private def load_from(sql)
     count = 0
     begin
       last_npc_id = 0

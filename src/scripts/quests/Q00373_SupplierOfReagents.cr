@@ -215,8 +215,6 @@ class Scripts::Q00373_SupplierOfReagents < Quest
       else
         html = "31149-44.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -267,8 +265,6 @@ class Scripts::Q00373_SupplierOfReagents < Quest
         else
           give_item_randomly(qs.player, npc, QUICKSILVER, 2, 0, 1, true)
         end
-      else
-        # [automatically added else]
       end
 
     end

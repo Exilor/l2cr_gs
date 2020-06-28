@@ -109,8 +109,6 @@ class Scripts::Q00378_GrandFeast < Quest
       else
         html = "30594-17.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -175,8 +173,6 @@ class Scripts::Q00378_GrandFeast < Quest
             item = ENCHANTED_EARRING
             quantity = 1i64
             adena = 2200i64
-          else
-            # [automatically added else]
           end
 
 
@@ -187,8 +183,6 @@ class Scripts::Q00378_GrandFeast < Quest
         else
           html = "30594-19.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

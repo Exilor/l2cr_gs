@@ -22,65 +22,69 @@ module GameDB
       stored_skills = [] of Int32
 
       if store_effects
-        pc.effect_list.each do |info|
-          skill = info.skill
-          if skill.abnormal_type.life_force_others?
-            next
+        GameDB.transaction do |tr|
+          pc.effect_list.each do |info|
+            skill = info.skill
+            if skill.abnormal_type.life_force_others?
+              next
+            end
+
+            if skill.toggle?
+              next
+            end
+
+            if skill.dance? && !Config.alt_store_dances
+              next
+            end
+
+            if stored_skills.includes?(skill.hash)
+              next
+            end
+
+            stored_skills << skill.hash
+
+            t = pc.get_skill_reuse_time_stamp(skill.hash)
+            buff_index &+= 1
+            tr.exec(
+              INSERT,
+              pc.l2id,
+              skill.id,
+              skill.level,
+              info.time,
+              t && t.has_not_passed? ? t.reuse : 0,
+              t && t.has_not_passed? ? t.stamp : 0,
+              0,
+              pc.class_index,
+              buff_index
+            )
           end
-
-          if skill.toggle?
-            next
-          end
-
-          if skill.dance? && !Config.alt_store_dances
-            next
-          end
-
-          if stored_skills.includes?(skill.hash)
-            next
-          end
-
-          stored_skills << skill.hash
-
-          t = pc.get_skill_reuse_time_stamp(skill.hash)
-          buff_index &+= 1
-          GameDB.exec(
-            INSERT,
-            pc.l2id,
-            skill.id,
-            skill.level,
-            info.time,
-            t && t.has_not_passed? ? t.reuse : 0,
-            t && t.has_not_passed? ? t.stamp : 0,
-            0,
-            pc.class_index,
-            buff_index
-          )
         end
       end
 
       if reuse_time_stamps = pc.skill_reuse_time_stamps
-        reuse_time_stamps.each do |hash, t|
-          if stored_skills.includes?(hash)
-            next
-          end
+        GameDB.transaction do |tr|
+          reuse_time_stamps.each do |hash, t|
+            if stored_skills.includes?(hash)
+              next
+            end
 
-          if t.has_not_passed?
-            buff_index &+= 1
-            stored_skills << hash
+            if t.has_not_passed?
+              buff_index &+= 1
+              stored_skills << hash
 
-            GameDB.exec(
-              INSERT,
-              pc.l2id,
-              t.skill_id,
-              t.skill_lvl,
-              -1,
-              t.reuse,
-              t.stamp,
-              1,
-              pc.class_index,
-              buff_index
-            )
+              GameDB.exec(
+                INSERT,
+                pc.l2id,
+                t.skill_id,
+                t.skill_lvl,
+                -1,
+                t.reuse,
+                t.stamp,
+                1,
+                pc.class_index,
+                buff_index
+              )
+            end
           end
         end
       end

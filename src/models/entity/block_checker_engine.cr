@@ -64,7 +64,7 @@ class BlockCheckerEngine
   # The object which holds all basic members info
   getter! holder : ArenaParticipantsHolder
   # Event end
-  setter task : TaskExecutor::Scheduler::DelayedTask?
+  setter task : TaskScheduler::DelayedTask?
   # The initial points of the event
   property red_points = 15
   property blue_points = 15
@@ -275,8 +275,6 @@ class BlockCheckerEngine
       when 3
         # Schedule Event End Count Down
         @engine.task = ThreadPoolManager.schedule_general(-> { @engine.end_event_task }, 180000)
-      else
-        # [automatically added else]
       end
 
       # random % 2, if == 0 will spawn a red block

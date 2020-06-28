@@ -85,12 +85,8 @@ class Scripts::Q00271_ProofOfValor < Quest
           st.exit_quest(true, true)
           html = "30577-06.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

@@ -33,8 +33,6 @@ module VoicedCommandHandler::Banking
       else
         pc.send_message("You do not have any Goldbars to turn into #{Config.banking_system_adena} Adena.")
       end
-    else
-      # [automatically added else]
     end
 
 

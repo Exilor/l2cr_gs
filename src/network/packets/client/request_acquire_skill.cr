@@ -163,7 +163,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
           item_l2id = st.get_global_quest_var("#{var_name}#{i}")
           debug { "var_name: #{var_name}, item_l2id: #{item_l2id}" }
           if !item_l2id.empty? && !item_l2id.ends_with?(';') && item_l2id != "0"
-            if item_l2id.num?
+            if item_l2id.number?
               item_l2id = item_l2id.to_i
               if item = pc.inventory.get_item_by_l2id(item_l2id)
                 s.required_items.each do |item_id_count|

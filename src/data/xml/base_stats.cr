@@ -3,12 +3,12 @@ require "../../models/actor/l2_character"
 class BaseStats < EnumClass
   extend XMLReader
 
-  private STR_BONUS = Slice.new(100, 0.0)
-  private DEX_BONUS = Slice.new(100, 0.0)
-  private CON_BONUS = Slice.new(100, 0.0)
-  private INT_BONUS = Slice.new(100, 0.0)
-  private WIT_BONUS = Slice.new(100, 0.0)
-  private MEN_BONUS = Slice.new(100, 0.0)
+  private STR_BONUS = StaticArray(Float64, 100).new(0.0)
+  private DEX_BONUS = StaticArray(Float64, 100).new(0.0)
+  private CON_BONUS = StaticArray(Float64, 100).new(0.0)
+  private INT_BONUS = StaticArray(Float64, 100).new(0.0)
+  private WIT_BONUS = StaticArray(Float64, 100).new(0.0)
+  private MEN_BONUS = StaticArray(Float64, 100).new(0.0)
 
   protected def initialize(&@block : L2Character -> Float64)
   end

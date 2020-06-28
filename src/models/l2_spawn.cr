@@ -167,8 +167,6 @@ class L2Spawn
     when "L2Pet", "L2Decoy", "L2Trap"
       @current_count &+= 1
       return
-    else
-      # [automatically added else]
     end
 
     npc = @constructor.new(@template)
@@ -179,7 +177,9 @@ class L2Spawn
       npc.show_summon_animation = summon_spawn
     end
 
-    NpcPersonalAIData.initialize_npc_parameters(npc, self, @name)
+    if name = @name
+      NpcPersonalAIData.initialize_npc_parameters(npc, self, name)
+    end
 
     initialize_npc_instance(npc)
   end

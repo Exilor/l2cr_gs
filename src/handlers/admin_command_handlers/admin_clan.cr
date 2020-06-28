@@ -89,7 +89,7 @@ module AdminCommandHandler::AdminClan
     when "admin_clan_force_pending"
       unless st.empty?
         token = st.shift
-        unless token.num?
+        unless token.number?
           return true
         end
         clan_id = token.to_i
@@ -105,10 +105,7 @@ module AdminCommandHandler::AdminClan
         clan.set_new_leader(member)
         pc.send_message("Task have been forcely executed.")
       end
-    else
-      # [automatically added else]
     end
-
 
     true
   end
@@ -116,7 +113,7 @@ module AdminCommandHandler::AdminClan
   private def get_player(pc, st)
     if !st.empty?
       val = st.shift
-      if val.num?
+      if val.number?
         unless player = L2World.get_player(val.to_i)
           pc.send_packet(SystemMessageId::TARGET_IS_NOT_FOUND_IN_THE_GAME)
           return

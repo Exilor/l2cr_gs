@@ -8,7 +8,7 @@ class Packets::Outgoing::MyTargetSelected < GameServerPacket
     else
       @target_id = target.l2id
     end
-    @color = target.auto_attackable?(pc) ? pc.level - target.level : 0
+    @color = target.auto_attackable?(pc) ? pc.level &- target.level : 0
   end
 
   private def write_impl

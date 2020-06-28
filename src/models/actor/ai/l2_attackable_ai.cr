@@ -20,8 +20,8 @@ class L2AttackableAI < L2CharacterAI
   @chaos_time = 0
   @last_buff_tick = 0
   @thinking = false
-  @ai_task : TaskExecutor::Scheduler::PeriodicTask?
-  @fear_task : TaskExecutor::Scheduler::PeriodicTask?
+  @ai_task : TaskScheduler::PeriodicTask?
+  @fear_task : TaskScheduler::PeriodicTask?
 
   property fear_time : Int32 = 0
   property global_aggro : Int32 = -10
@@ -197,14 +197,14 @@ class L2AttackableAI < L2CharacterAI
     if @fear_time > 0 && @fear_task.nil?
       task = FearTask.new(self, effector, start)
       @fear_task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 0, FEAR_TICKS * 1000)
-      @actor.start_abnormal_visual_effect(true, {AbnormalVisualEffect::TURN_FLEE})
+      @actor.start_abnormal_visual_effect(true, AbnormalVisualEffect::TURN_FLEE)
     else
       super
 
       if (@actor.dead? || @fear_time <= 0) && @fear_task
         @fear_task.try &.cancel
         @fear_task = nil
-        @actor.stop_abnormal_visual_effect(true, {AbnormalVisualEffect::TURN_FLEE})
+        @actor.stop_abnormal_visual_effect(true, AbnormalVisualEffect::TURN_FLEE)
         set_intention(IDLE)
       end
     end
@@ -636,7 +636,7 @@ class L2AttackableAI < L2CharacterAI
       unless ai_heal_skills.empty?
         percentage = npc.hp_percent
         if npc.minion?
-          if (leader = npc.leader) && !leader.dead?
+          if (leader = npc.leader) && leader.alive?
             if Rnd.rand(100) > leader.hp_percent
               ai_heal_skills.each do |heal_skill|
                 if heal_skill.target_type.self?
@@ -904,7 +904,7 @@ class L2AttackableAI < L2CharacterAI
           return true
         end
       else
-        if GeoData.can_see_target?(caster, attack_target) && !can_aoe?(sk) && !attack_target.dead? && dist2 <= srange
+        if GeoData.can_see_target?(caster, attack_target) && !can_aoe?(sk) && attack_target.alive? && dist2 <= srange
           unless attack_target.affected_by_skill?(sk.id)
             client_stop_moving(nil)
             caster.do_cast(sk)
@@ -916,7 +916,7 @@ class L2AttackableAI < L2CharacterAI
             caster.do_cast(sk)
             return true
           end
-          if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && !attack_target.dead? && dist2 <= srange
+          if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && attack_target.alive? && dist2 <= srange
             client_stop_moving(nil)
             caster.do_cast(sk)
             return true
@@ -934,7 +934,7 @@ class L2AttackableAI < L2CharacterAI
 
     if sk.has_effect_type?(EffectType::DISPEL)
       if sk.target_type.one?
-        if attack_target.effect_list.get_first_effect(EffectType::BUFF) && GeoData.can_see_target?(caster, attack_target) && !attack_target.dead? && dist2 <= srange
+        if attack_target.effect_list.get_first_effect(EffectType::BUFF) && GeoData.can_see_target?(caster, attack_target) && attack_target.alive? && dist2 <= srange
           client_stop_moving(nil)
           caster.do_cast(sk)
           return true
@@ -953,7 +953,7 @@ class L2AttackableAI < L2CharacterAI
           client_stop_moving(nil)
           caster.do_cast(sk)
           return true
-        elsif (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && !attack_target.dead? && dist2 <= srange
+        elsif (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && attack_target.alive? && dist2 <= srange
           client_stop_moving(nil)
           caster.do_cast(sk)
           return true
@@ -1039,7 +1039,7 @@ class L2AttackableAI < L2CharacterAI
     if sk.has_effect_type?(EffectType::PHYSICAL_ATTACK, EffectType::MAGICAL_ATTACK, EffectType::HP_DRAIN)
       if !can_aura?(sk)
         if GeoData.can_see_target?(caster, attack_target)
-          if !attack_target.dead? && dist2 <= srange
+          if attack_target.alive? && dist2 <= srange
             client_stop_moving(nil)
             caster.do_cast(sk)
             return true
@@ -1062,7 +1062,7 @@ class L2AttackableAI < L2CharacterAI
 
     if sk.has_effect_type?(EffectType::SLEEP)
       if sk.target_type.one?
-        if !attack_target.dead? && dist2 <= srange
+        if attack_target.alive? && dist2 <= srange
           if dist2 > range || attack_target.moving?
             unless attack_target.affected_by_skill?(sk.id)
               client_stop_moving(nil)
@@ -1084,7 +1084,7 @@ class L2AttackableAI < L2CharacterAI
           caster.do_cast(sk)
           return true
         end
-        if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && !attack_target.dead? && dist2 <= srange
+        if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && attack_target.alive? && dist2 <= srange
           client_stop_moving(nil)
           caster.do_cast(sk)
           return true
@@ -1105,7 +1105,7 @@ class L2AttackableAI < L2CharacterAI
           caster.do_cast(sk)
           return true
         end
-        if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && !attack_target.dead? && dist2 <= srange
+        if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && attack_target.alive? && dist2 <= srange
           client_stop_moving(nil)
           caster.do_cast(sk)
           return true
@@ -1121,7 +1121,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     if sk.has_effect_type?(EffectType::DMG_OVER_TIME)
-      if GeoData.can_see_target?(caster, attack_target) && !can_aoe?(sk) && !attack_target.dead? && dist2 <= srange
+      if GeoData.can_see_target?(caster, attack_target) && !can_aoe?(sk) && attack_target.alive? && dist2 <= srange
         unless attack_target.affected_by_skill?(sk.id)
           client_stop_moving(nil)
           caster.do_cast(sk)
@@ -1133,7 +1133,7 @@ class L2AttackableAI < L2CharacterAI
           caster.do_cast(sk)
           return true
         end
-        if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && !attack_target.dead? && dist2 <= srange
+        if (sk.target_type.area? || sk.target_type.behind_area? || sk.target_type.front_area?) && GeoData.can_see_target?(caster, attack_target) && attack_target.alive? && dist2 <= srange
           client_stop_moving(nil)
           caster.do_cast(sk)
           return true
@@ -1212,7 +1212,7 @@ class L2AttackableAI < L2CharacterAI
 
     if !can_aura?(sk)
       if GeoData.can_see_target?(caster, attack_target)
-        if !attack_target.dead? && dist2 <= srange
+        if attack_target.alive? && dist2 <= srange
           client_stop_moving(nil)
           caster.do_cast(sk)
           return true
@@ -1641,10 +1641,7 @@ class L2AttackableAI < L2CharacterAI
           end
           actor.target = obj
           self.attack_target = obj
-        else
-          # [automatically added else]
         end
-
       end
     end
   end
@@ -1746,10 +1743,7 @@ class L2AttackableAI < L2CharacterAI
         think_attack
       when CAST
         think_cast
-      else
-        # [automatically added else]
       end
-
     rescue e
       error e
     ensure

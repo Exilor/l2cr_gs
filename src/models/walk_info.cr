@@ -8,7 +8,7 @@ class WalkInfo
 
   getter current_node_id = 0
   property last_action : Int64 = 0i64
-  property walk_check_task : TaskExecutor::Scheduler::PeriodicTask?
+  property walk_check_task : TaskScheduler::PeriodicTask?
   property? blocked : Bool = false
   property? suspended : Bool = false
   property? stopped_by_attack : Bool = false
@@ -60,8 +60,6 @@ class WalkInfo
           when WalkingManager::REPEAT_TELE_FIRST
             npc.tele_to_location(npc.spawn.location)
             @current_node_id = 0
-          else
-            # [automatically added else]
           end
         elsif @current_node_id == WalkingManager::NO_REPEAT
           @current_node_id = 1

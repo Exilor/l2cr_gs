@@ -12,8 +12,6 @@ module AdminCommandHandler::AdminShop
       end
     when "admin_gmshop"
       AdminHtml.show_admin_html(pc, "gmshops.htm")
-    else
-      # [automatically added else]
     end
 
 
@@ -21,7 +19,7 @@ module AdminCommandHandler::AdminShop
   end
 
   private def handle_buy_request(pc, command)
-    val = command.num? ? command.to_i : -1
+    val = command.number? ? command.to_i : -1
 
     if buy_list = BuyListData.get_buy_list(val)
       pc.send_packet(BuyList.new(buy_list, pc.adena, 0))

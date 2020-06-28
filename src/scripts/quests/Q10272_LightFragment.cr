@@ -65,8 +65,6 @@ class Scripts::Q10272_LightFragment < Quest
       else
         event = "32557-04.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -119,8 +117,6 @@ class Scripts::Q10272_LightFragment < Quest
         html = "32560-06.html"
       when State::COMPLETED
         html = "32560-04.html"
-      else
-        # [automatically added else]
       end
 
     when ARTIUS
@@ -161,8 +157,6 @@ class Scripts::Q10272_LightFragment < Quest
           st.give_adena(556980, true)
           st.add_exp_and_sp(1009016, 91363)
           st.exit_quest(false, true)
-        else
-          # [automatically added else]
         end
 
       end
@@ -178,8 +172,6 @@ class Scripts::Q10272_LightFragment < Quest
         html = "32566-10.html"
       when 6
         html = "32566-10.html"
-      else
-        # [automatically added else]
       end
 
     when LELRIKIA
@@ -188,8 +180,6 @@ class Scripts::Q10272_LightFragment < Quest
         html = "32567-01.html"
       when 4
         html = "32567-05.html"
-      else
-        # [automatically added else]
       end
 
     when LEKON
@@ -205,12 +195,8 @@ class Scripts::Q10272_LightFragment < Quest
         end
       when 8
         html = "32557-06.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

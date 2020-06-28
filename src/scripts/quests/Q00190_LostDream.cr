@@ -45,8 +45,6 @@ class Scripts::Q00190_LostDream < Quest
         qs.set_cond(2, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -102,8 +100,6 @@ class Scripts::Q00190_LostDream < Quest
         elsif memo_state == 4
           html = "30673-02.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

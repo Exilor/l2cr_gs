@@ -163,8 +163,6 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         st.set_cond(8, true)
         st.unset("Memo")
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -232,13 +230,9 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
             st.add_exp_and_sp(859195, 86603)
             st.exit_quest(false, true)
           end
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when KARAKAWEI
       if st.started?
@@ -261,8 +255,6 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
           html = "32117-17.html"
         when 8
           html = "32117-18.html"
-        else
-          # [automatically added else]
         end
       end
     when ULU_KAIMU
@@ -330,18 +322,12 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
               html = "32121-19.html"
             when 3
               html = "32121-20.html"
-            else
-              # [automatically added else]
             end
           end
         when 8
           html = "32121-21.html"
-        else
-          # [automatically added else]
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

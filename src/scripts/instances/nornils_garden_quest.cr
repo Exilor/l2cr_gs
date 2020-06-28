@@ -48,8 +48,6 @@ class Scripts::NornilsGardenQuest < AbstractInstance
         player.tele_to_location(world.origin_loc.not_nil!)
         htmltext = "32239-03.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -71,8 +69,6 @@ class Scripts::NornilsGardenQuest < AbstractInstance
       q236 && q236.completed? ? "32237-02.html" : "32237-01.html"
     when MOTHER_NORNIL
       q236 && q236.completed? ? "32239-02.html" : "32239-01.html"
-    else
-      # [automatically added else]
     end
 
   end

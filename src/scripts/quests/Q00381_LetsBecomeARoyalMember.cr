@@ -43,8 +43,6 @@ class Scripts::Q00381_LetsBecomeARoyalMember < Quest
         play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -95,12 +93,8 @@ class Scripts::Q00381_LetsBecomeARoyalMember < Quest
         else
           html = "30090-03.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

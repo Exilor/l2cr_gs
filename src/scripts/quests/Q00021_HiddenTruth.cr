@@ -116,8 +116,6 @@ class Scripts::Q00021_HiddenTruth < Quest
       npc = npc.not_nil!
       @page_count &-= 1
       npc.delete_me
-    else
-      # [automatically added else]
     end
 
     html
@@ -134,8 +132,6 @@ class Scripts::Q00021_HiddenTruth < Quest
           html = "31522-05.html"
         when State::COMPLETED
           html = get_already_completed_msg(pc)
-        else
-          # [automatically added else]
         end
 
       when TOMBSTONE
@@ -161,8 +157,6 @@ class Scripts::Q00021_HiddenTruth < Quest
           end
         when 4
           html = "31524-07c.html"
-        else
-          # [automatically added else]
         end
       when GHOST_OF_VON_HELLMANS_PAGE
         if st.cond?(3)
@@ -185,8 +179,6 @@ class Scripts::Q00021_HiddenTruth < Quest
           html = "31526-11.html"
         when 6
           html = "31526-15.html"
-        else
-          # [automatically added else]
         end
       when AGRIPEL
         if st.has_quest_items?(CROSS_OF_EINHASAD) && st.cond?(6)
@@ -239,8 +231,6 @@ class Scripts::Q00021_HiddenTruth < Quest
             html = "31328-06.html"
           end
         end
-      else
-        # [automatically added else]
       end
     end
 

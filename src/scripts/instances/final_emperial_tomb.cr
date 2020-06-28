@@ -12,8 +12,8 @@ class Scripts::FinalEmperialTomb < AbstractInstance
     property scarlet_h = 0
     property scarlet_a = 0
     property dark_choir_player_count = 0
-    property song_task : TaskExecutor::Scheduler::DelayedTask?
-    property song_effect_task : TaskExecutor::Scheduler::DelayedTask?
+    property song_task : TaskScheduler::DelayedTask?
+    property song_effect_task : TaskScheduler::DelayedTask?
     property! on_song : FrintezzaSong
     property! frintezza_dummy : L2Npc?
     property! overhead_dummy : L2Npc?
@@ -399,8 +399,6 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         SECOND_ROOM_DOORS.each do |door_id|
           close_door(door_id, world.instance_id)
         end
-      else
-        # [automatically added else]
       end
 
 
@@ -517,8 +515,6 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       when 2 # finish morph
         @world.active_scarlet.r_hand_id = SECOND_SCARLET_WEAPON
         @world.active_scarlet.invul = false
-      else
-        # [automatically added else]
       end
     end
   end
@@ -772,8 +768,6 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @tomb.control_status(@world)
         @world.video = false
         start_pc
-      else
-        # [automatically added else]
       end
     end
 
@@ -840,8 +834,6 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         add_aggro_to_mobs
       when 4
         @tomb.control_status(@world)
-      else
-        # [automatically added else]
       end
 
     end

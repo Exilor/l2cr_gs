@@ -155,13 +155,9 @@ class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
           st.give_items(LIDIA_HAIRPIN, 1)
           st.set_cond(8, true)
           html = "31389-21.html"
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when MYSTERIOUS_WIZARD
       if st.started?
@@ -204,17 +200,11 @@ class Scripts::Q00024_InhabitantsOfTheForestOfTheDead < Quest
             html = "31532-11.html"
           when 3
             html = "31532-15.html"
-          else
-            # [automatically added else]
           end
         when 9, 10
           html = "31532-20.html"
-        else
-          # [automatically added else]
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

@@ -90,8 +90,6 @@ class Scripts::Seyo < AbstractNpcAI
         end
         start_quest_timer("TRICKERY_TIMER", 5000, npc, nil)
       end
-    else
-      # [automatically added else]
     end
 
 

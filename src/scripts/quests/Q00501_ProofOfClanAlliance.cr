@@ -142,8 +142,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         give_items(pc, SYMBOL_OF_LOYALTY, 1)
         qs.set("flag", 2501)
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -196,8 +194,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           end
           arthea.script_value = arthea.script_value + 1
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -238,8 +234,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         else
           html = "30756-10.html"
         end
-      else
-        # [automatically added else]
       end
 
     when STATUE_OF_OFFERING
@@ -276,8 +270,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           end
         when 5
           html = "30758-09.html"
-        else
-          # [automatically added else]
         end
 
       end
@@ -310,8 +302,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
       elsif lqs && !pc.clan_leader?
         html = "30759-12.html"
       end
-    else
-      # [automatically added else]
     end
 
 

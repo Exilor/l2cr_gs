@@ -125,13 +125,9 @@ class Scripts::Q00135_TempleExecutor < Quest
           else
             html = "30068-06.html"
           end
-        else
-          # [automatically added else]
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when ALEX
       if st.started?
@@ -161,8 +157,6 @@ class Scripts::Q00135_TempleExecutor < Quest
           end
         when 5
           html = "30291-11.html"
-        else
-          # [automatically added else]
         end
       end
     when PANO
@@ -186,8 +180,6 @@ class Scripts::Q00135_TempleExecutor < Quest
           end
         when 5
           html = "30078-05.html"
-        else
-          # [automatically added else]
         end
       end
     when SONIN
@@ -211,12 +203,8 @@ class Scripts::Q00135_TempleExecutor < Quest
           end
         when 5
           html = "31773-05.html"
-        else
-          # [automatically added else]
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

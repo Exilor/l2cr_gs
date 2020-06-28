@@ -191,8 +191,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       else
         start_quest_timer("KILLED_ATTACKER", 5000, npc, nil)
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -228,8 +226,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         give_items(pc, LARAS_4TH_LIST, 1)
       when 4
         give_items(pc, LARAS_5TH_LIST, 1)
-      else
-        # [automatically added else]
       end
 
       qs.set_cond(2, true)
@@ -247,8 +243,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         give_items(pc, LARAS_4TH_LIST, 1)
       when 4
         give_items(pc, LARAS_5TH_LIST, 1)
-      else
-        # [automatically added else]
       end
 
       html = event
@@ -330,8 +324,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
       take_items(pc, CRYSTAL_OF_FOUL_6TH, 1)
       take_items(pc, CRYSTAL_OF_DEFEAT_6TH, 1)
       html = event
-    else
-      # [automatically added else]
     end
 
     html
@@ -373,8 +365,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-      else
-        # nothing
       end
     when UNICORN_RACER
       case npc.script_value
@@ -410,8 +400,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-      else
-        # [automatically added else]
       end
     when SHADOW_TUREN
       case npc.script_value
@@ -486,8 +474,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-      else
-        # [automatically added else]
       end
     when UNICORN_PHANTASM
       case npc.script_value
@@ -525,8 +511,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-      else
-        # [automatically added else]
       end
     when SILHOUETTE_TILFO
       case npc.script_value
@@ -564,11 +548,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-      else
-        # [automatically added else]
       end
-    else
-      # [automatically added else]
     end
 
     super
@@ -683,8 +663,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         else
           html = "30634-01.html"
         end
-      else
-        # [automatically added else]
       end
     elsif qs.started?
       case npc.id
@@ -906,14 +884,10 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
         else
           html = "30640-10.html"
         end
-      else
-        # nothing
       end
     elsif qs.completed?
       if npc.id == HIGH_SUMMONER_GALATEA
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     end
 

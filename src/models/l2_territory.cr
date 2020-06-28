@@ -66,7 +66,7 @@ class L2Territory
       pos = 0
       rnd = Rnd.rand(@proc_max)
       @points.each do |p1|
-        pos += p1.proc
+        pos &+= p1.proc
         if rnd <= pos
           return Location.new(p1.x, p1.y, Rnd.rand(p1.z_min..p1.z_max))
         end

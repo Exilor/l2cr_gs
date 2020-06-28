@@ -891,7 +891,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       elsif event.casecmp?("TeleportParme")
         player = player.not_nil!
         teleport_player(player, Location.new(153689, 142226, -9750), world.instance_id)
-      elsif event.match?(/\ATimer[2-5]\z/i)
+      elsif event.matches?(/\ATimer[2-5]\z/i)
         player = player.not_nil!
         if player.instance_id == world.instance_id
           teleport_player(player, Location.new(144653, 152606, -12126), world.instance_id)
@@ -899,7 +899,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           EVENT_TIMER_1.skill.apply_effects(player, player)
           start_quest_timer("Timer2", 300000, npc, player)
         end
-      elsif event.match?(/\ATimer[2-5]1\z/i)
+      elsif event.matches?(/\ATimer[2-5]1\z/i)
         InstanceManager.get_instance(world.instance_id).not_nil!.remove_npcs
         world.npc_list_2.clear
         run_steam_rooms(world, STEAM1_SPAWNS, 22)
@@ -1465,8 +1465,6 @@ class Scripts::CrystalCaverns < AbstractInstance
           open_door(24220001, world.instance_id)
           run_emerald_rooms(world, ROOM1_SPAWNS, 1)
         end
-      else
-        # [automatically added else]
       end
 
     end

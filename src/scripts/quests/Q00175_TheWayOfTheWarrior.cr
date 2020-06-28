@@ -86,8 +86,6 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
       npc.target = pc
       npc.do_cast(UNSEALED_ALTAR.skill)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -141,8 +139,6 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
           if has_item?(pc, MUERTOS_CLAW)
             html = "32138-12.html"
           end
-        else
-          # [automatically added else]
         end
 
       elsif qs.completed?
@@ -169,12 +165,8 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
         html = "32133-05.html"
       when 6
         html = "32133-07.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

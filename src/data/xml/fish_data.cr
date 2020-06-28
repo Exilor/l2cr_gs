@@ -55,8 +55,6 @@ module FishData
           NORMAL[fish.fish_id] = fish
         when 2
           HARD[fish.fish_id] = fish
-        else
-          # [automatically added else]
         end
       end
     end

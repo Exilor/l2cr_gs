@@ -6,7 +6,7 @@ class L2SummonAI < L2PlayableAI
   @thinking = false
   @start_avoid = false
   @start_follow : Bool
-  @avoid_task : TaskExecutor::Scheduler::PeriodicTask?
+  @avoid_task : TaskScheduler::PeriodicTask?
   @last_attack : L2Character?
 
   def initialize(summon : L2Summon)
@@ -122,10 +122,7 @@ class L2SummonAI < L2PlayableAI
         think_pick_up
       when INTERACT
         think_interact
-      else
-        # [automatically added else]
       end
-
     ensure
       @thinking = false
     end
@@ -193,10 +190,7 @@ class L2SummonAI < L2PlayableAI
     case intention
     when ACTIVE, FOLLOW, IDLE, MOVE_TO, PICK_UP
       @actor.as(L2Summon).follow_status = @start_follow
-    else
-      # [automatically added else]
     end
-
   end
 
   def start_follow_controller=(@start_follow : Bool)

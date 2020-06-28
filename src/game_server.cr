@@ -313,9 +313,9 @@ module GameServer
 
     @@listener = listener
 
-    timer2 = Timer.new
+    gc_timer = Timer.new
     GC.collect
-    debug { "Garbage collected in #{timer2} s." }
+    debug { "Garbage collected in #{gc_timer} s." }
 
     info { "Maximum number of connected players: #{Config.maximum_online_users}." }
     info { "Server loaded in #{timer} s." }

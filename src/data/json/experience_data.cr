@@ -22,6 +22,6 @@ module ExperienceData
   def get_percent_from_current_level(exp : Int64, level : Int32) : Float64
     exp_per_level = get_exp_for_level(level)
     exp_per_level2 = get_exp_for_level(level &+ 1)
-    (exp - exp_per_level).fdiv(exp_per_level2 - exp_per_level)
+    (exp &- exp_per_level).fdiv(exp_per_level2 &- exp_per_level)
   end
 end

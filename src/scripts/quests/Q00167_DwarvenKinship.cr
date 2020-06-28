@@ -48,8 +48,6 @@ class Scripts::Q00167_DwarvenKinship < Quest
         st.start_quest
         st.give_items(CARLONS_LETTER, 1)
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -70,8 +68,6 @@ class Scripts::Q00167_DwarvenKinship < Quest
           end
         when State::COMPLETED
           html = get_already_completed_msg(pc)
-        else
-          # [automatically added else]
         end
 
       when HAPROCK
@@ -84,8 +80,6 @@ class Scripts::Q00167_DwarvenKinship < Quest
         if st.cond?(2) && st.has_quest_items?(NORMANS_LETTER)
           html = "30210-01.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

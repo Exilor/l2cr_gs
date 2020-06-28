@@ -110,8 +110,6 @@ class Scripts::SelMahumSquad < AbstractNpcAI
       if npc.is_a?(L2MonsterInstance) && npc.alive?
         npc.return_home
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -152,7 +150,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         broadcast_npc_say(sender, Say2::NPC_ALL, CHEF_FSTRINGS.sample, 1250)
       end
     when "SCE_CAMPFIRE_START"
-      if !receiver.no_random_walk? && !receiver.dead? && !receiver.intention.attack? && SQUAD_LEADERS.includes?(receiver.id)
+      if !receiver.no_random_walk? && receiver.alive? && !receiver.intention.attack? && SQUAD_LEADERS.includes?(receiver.id)
         receiver.no_random_walk = true # Moving to fire - i_ai0 = 1
         receiver.running = true
         loc = sender.get_point_in_range(100, 200)
@@ -196,8 +194,6 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         receiver.variables["FULL_BARREL_REWARDING_PLAYER"] = reference.not_nil!.l2id # TODO: Use it in 289 quest
         start_quest_timer("reset_full_bottle_prize", 180_000, receiver, nil)
       end
-    else
-      # [automatically added else]
     end
 
     super

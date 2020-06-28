@@ -46,8 +46,6 @@ class Scripts::Q00156_MillenniumLove < Quest
           st.exit_quest(false, true)
           html = event
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -73,8 +71,6 @@ class Scripts::Q00156_MillenniumLove < Quest
           end
         when State::COMPLETED
           html = get_already_completed_msg(pc)
-        else
-          # [automatically added else]
         end
 
       when BAENEDES
@@ -87,12 +83,8 @@ class Scripts::Q00156_MillenniumLove < Quest
           if st.has_quest_items?(THEONS_DIARY)
             html = "30369-04.html"
           end
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     end

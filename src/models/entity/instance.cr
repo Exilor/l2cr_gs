@@ -10,8 +10,8 @@ class Instance
 
   private alias Say2 = Packets::Incoming::Say2
 
-  @check_time_up_task : TaskExecutor::Scheduler::DelayedTask?
-  @eject_dead_tasks = Concurrent::Map(Int32, TaskExecutor::Scheduler::DelayedTask?).new
+  @check_time_up_task : TaskScheduler::DelayedTask?
+  @eject_dead_tasks = Concurrent::Map(Int32, TaskScheduler::DelayedTask?).new
   @allow_random_walk = true
   @doors = Concurrent::Map(Int32, L2DoorInstance).new
   @manual_spawn = {} of String => Array(L2Spawn)
@@ -334,8 +334,6 @@ class Instance
             @buff_exception_list << temp
           end
         end
-      else
-        # [automatically added else]
       end
     end
   end

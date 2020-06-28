@@ -54,7 +54,7 @@ class Scripts::VarkaSilenosSupport < AbstractNpcAI
   def on_adv_event(event, npc, pc)
     return unless pc && npc
 
-    if event.num? && (buff = BUFFS[event.to_i]?)
+    if event.number? && (buff = BUFFS[event.to_i]?)
       if get_quest_items_count(pc, SEED) >= buff.cost
         take_items(pc, SEED, buff.cost)
         npc.target = pc
@@ -111,8 +111,6 @@ class Scripts::VarkaSilenosSupport < AbstractNpcAI
       else
         html = "31383-no.html"
       end
-    else
-      # [automatically added else]
     end
 
 

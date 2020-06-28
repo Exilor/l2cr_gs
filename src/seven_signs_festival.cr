@@ -26,7 +26,7 @@ class SevenSignsFestival
     {-75918, 110137, -4895, 0}, # 42 and below
     {-73835, 111969, -4895, 0}, # 53 and below
     {-76170, 113804, -4895, 0}, # 64 and below
-    {-78927, 109528, -4895, 0} # No level limit
+    {-78927, 109528, -4895, 0}  # No level limit
   }
 
   FESTIVAL_DUSK_PLAYER_SPAWNS = {
@@ -34,7 +34,7 @@ class SevenSignsFestival
     {-76941, 85307, -5151, 0}, # 42 and below
     {-74855, 87135, -5151, 0}, # 53 and below
     {-80208, 88222, -5151, 0}, # 64 and below
-    {-79954, 84697, -5151, 0} # No level limit
+    {-79954, 84697, -5151, 0}  # No level limit
   }
 
   private FESTIVAL_DAWN_WITCH_SPAWNS = {
@@ -42,7 +42,7 @@ class SevenSignsFestival
     {-75916, 110270, -4891, 0, 31133}, # 42 and below
     {-73979, 111970, -4891, 0, 31134}, # 53 and below
     {-76174, 113663, -4891, 0, 31135}, # 64 and below
-    {-78930, 109664, -4891, 0, 31136} # No level limit
+    {-78930, 109664, -4891, 0, 31136}  # No level limit
   }
 
   private FESTIVAL_DUSK_WITCH_SPAWNS = {
@@ -50,7 +50,7 @@ class SevenSignsFestival
     {-76942, 85438, -5147, 0, 31143}, # 42 and below
     {-74990, 87135, -5147, 0, 31144}, # 53 and below
     {-80207, 88222, -5147, 0, 31145}, # 64 and below
-    {-79952, 84833, -5147, 0, 31146} # No level limit
+    {-79952, 84833, -5147, 0, 31146}  # No level limit
   }
 
   private FESTIVAL_DAWN_PRIMARY_SPAWNS = {
@@ -650,7 +650,7 @@ class SevenSignsFestival
   private FESTIVAL_DATA = {} of Int32 => Hash(Int32, StatsSet)
 
   @manager_instance : FestivalManager?
-  @manager_scheduled_task : TaskExecutor::Scheduler::PeriodicTask?
+  @manager_scheduled_task : TaskScheduler::PeriodicTask?
   @next_festival_cycle_start = 0i64
   @dawn_chat_guide : L2Npc?
   @dusk_chat_guide : L2Npc?
@@ -721,7 +721,7 @@ class SevenSignsFestival
     !npc_id.between?(18109, 18118)
   end
 
-  def festival_manager_schedule : TaskExecutor::Scheduler::PeriodicTask
+  def festival_manager_schedule : TaskScheduler::PeriodicTask
     (@manager_scheduled_task || start_festival_manager).not_nil!
   end
 
@@ -1169,8 +1169,6 @@ class SevenSignsFestival
       bonus = SevenSigns::SEAL_STONE_GREEN_VALUE
     when SevenSigns::SEAL_STONE_RED_ID
       bonus = SevenSigns::SEAL_STONE_RED_VALUE
-    else
-      # [automatically added else]
     end
 
 
@@ -1232,8 +1230,6 @@ class SevenSignsFestival
       @dawn_chat_guide = npc
     when 31137
       @dusk_chat_guide = npc
-    else
-      # [automatically added else]
     end
 
   end

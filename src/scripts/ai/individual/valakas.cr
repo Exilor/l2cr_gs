@@ -241,8 +241,6 @@ class Scripts::Valakas < AbstractNpcAI
         start_quest_timer("remove_players", 900000, nil, nil)
       when "skill_task"
         call_skill_ai(npc)
-      else
-        # [automatically added else]
       end
 
     else
@@ -253,8 +251,6 @@ class Scripts::Valakas < AbstractNpcAI
         GrandBossManager.set_boss_status(VALAKAS, DORMANT)
       when "remove_players"
         zone.oust_all_players
-      else
-        # [automatically added else]
       end
 
     end

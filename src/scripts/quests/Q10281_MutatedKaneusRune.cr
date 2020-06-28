@@ -26,8 +26,6 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
     when "31335-03.htm"
       st.give_adena(360000, true)
       st.exit_quest(false, true)
-    else
-      # [automatically added else]
     end
 
 
@@ -71,8 +69,6 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
         html = st.has_quest_items?(TISSUE_WA) ? "31340-05.htm" : "31340-04.htm"
       when State::COMPLETED
         html = "31340-06.htm"
-      else
-        # [automatically added else]
       end
 
     when KAYAN
@@ -81,12 +77,8 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
         html = st.has_quest_items?(TISSUE_WA) ? "31335-02.htm" : "31335-01.htm"
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

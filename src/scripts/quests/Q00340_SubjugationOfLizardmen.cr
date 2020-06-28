@@ -89,8 +89,6 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
       else
         html = "30989-03.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -135,8 +133,6 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
         end
       when SERPENT_DEMON_BIFRONS
         add_spawn(CHEST_OF_BIFRONS, npc, true, 30000)
-      else
-        # [automatically added else]
       end
 
     end
@@ -205,8 +201,6 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
         if memo_state == 5
           html = "30989-01.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

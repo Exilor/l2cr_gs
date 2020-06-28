@@ -40,8 +40,6 @@ class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
     when "31067-08.html"
       qs.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 

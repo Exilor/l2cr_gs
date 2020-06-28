@@ -41,8 +41,6 @@ class Scripts::Q00119_LastImperialPrince < Quest
         st.set_cond(2, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -82,8 +80,6 @@ class Scripts::Q00119_LastImperialPrince < Quest
           html = "32009-05.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

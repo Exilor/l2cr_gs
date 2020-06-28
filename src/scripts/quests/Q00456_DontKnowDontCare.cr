@@ -153,12 +153,8 @@ class Scripts::Q00456_DontKnowDontCare < Quest
             qs.exit_quest(QuestType::DAILY, true)
             html = "32864-10.html"
           end
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     end
@@ -186,8 +182,6 @@ class Scripts::Q00456_DontKnowDontCare < Quest
     when TIMER_UNSPAWN_RAID_CORPSE
       ALLOWED_PLAYER_MAP.delete(npc.l2id)
       npc.delete_me
-    else
-      # [automatically added else]
     end
 
 

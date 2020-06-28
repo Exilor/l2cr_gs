@@ -130,8 +130,6 @@ class Scripts::Q00457_LostAndFound < Quest
       else
         html = "32759-02.html"
       end
-    else
-      # [automatically added else]
     end
 
 

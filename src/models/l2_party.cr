@@ -9,8 +9,8 @@ class L2Party < AbstractPlayerGroup
   private PARTY_POSITION_BROADCAST_INTERVAL = 12
   private PARTY_DISTRIBUTION_TYPE_REQUEST_TIMEOUT = 15
 
-  @position_broadcast_task : TaskExecutor::Scheduler::PeriodicTask?
-  @change_distribution_type_request_task : TaskExecutor::Scheduler::DelayedTask?
+  @position_broadcast_task : TaskScheduler::PeriodicTask?
+  @change_distribution_type_request_task : TaskScheduler::DelayedTask?
   @change_distribution_type_answers : Set(Int32)?
   @position_packet : PartyMemberPosition?
   @item_last_loot = 0
@@ -601,10 +601,7 @@ class L2Party < AbstractPlayerGroup
       end
     when PartyDistributionType::BY_TURN_INCLUDING_SPOIL
       looter = get_checked_next_looter(item_id, target)
-    else
-      # [automatically added else]
     end
-
 
     looter || pc
   end

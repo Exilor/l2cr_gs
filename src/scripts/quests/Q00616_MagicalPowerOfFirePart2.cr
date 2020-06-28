@@ -39,8 +39,6 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
             st.give_items(NASTRON_HEART, 1)
           end
           st.set_cond(3, true)
-        else
-          # [automatically added else]
         end
 
       end
@@ -71,8 +69,6 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
         else
           html = "31558-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     else
@@ -126,8 +122,6 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
             html = "31379-05.html"
           end
         end
-      else
-        # [automatically added else]
       end
 
     when KETRA_TOTEM
@@ -139,13 +133,9 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
           html = spawn_nastron(npc, st)
         when 3
           html = "31558-05.html"
-        else
-          # [automatically added else]
         end
 
       end
-    else
-      # [automatically added else]
     end
 
 

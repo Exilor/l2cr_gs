@@ -23,8 +23,6 @@ class Scripts::Q00122_OminousNews < Quest
       st.give_adena(8923, true)
       st.add_exp_and_sp(45151, 2310)
       st.exit_quest(false, true)
-    else
-      # [automatically added else]
     end
 
 
@@ -42,16 +40,12 @@ class Scripts::Q00122_OminousNews < Quest
         html = "31979-03.html"
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     when KARUDA
       if st.started?
         html = "32017-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

@@ -698,10 +698,7 @@ abstract class L2Summon < L2Playable
       return 3 if level > 69
       return 2 if level > 64
       return 1 if level > 59
-    else
-      # [automatically added else]
     end
-
 
     0
   end

@@ -66,8 +66,6 @@ module ItemTable
         ARMORS[item.id] = item
       when L2Weapon
         WEAPONS[item.id] = item
-      else
-        # [automatically added else]
       end
     end
 
@@ -140,8 +138,6 @@ module ItemTable
         ref = reference.name || "no-name"
       when String
         ref = reference
-      else
-        # [automatically added else]
       end
 
       name = actor.target.try &.name || "no-name"
@@ -174,8 +170,6 @@ module ItemTable
           ref = reference.name || "no-name"
         when String
           ref = reference
-        else
-          # [automatically added else]
         end
 
         name = actor.target.try &.name || "no-target"

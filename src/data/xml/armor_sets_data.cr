@@ -49,7 +49,7 @@ module ArmorSetsData
           when "enchant6skill"
             id = parse_int(a, "id")
             lvl = parse_int(a, "level")
-            set.enchant_6_skill << SkillHolder.new(id, lvl)
+            set.enchant_6_skills << SkillHolder.new(id, lvl)
           when "con"
             set.con = parse_int(a, "val")
           when "dex"
@@ -62,8 +62,6 @@ module ArmorSetsData
             set.wit = parse_int(a, "val")
           when "int"
             set.int = parse_int(a, "val")
-          else
-            # [automatically added else]
           end
         end
 

@@ -8,15 +8,11 @@ abstract struct Crossings
     @limit == 0
   end
 
-  def accumulate_line(x0, y0, x1, y1, direction = nil)
-    unless direction
-      if y0 <= y1
-        return accumulate_line(x0, y0, x1, y1, 1)
-      else
-        return accumulate_line(x1, y1, x0, y0, -1)
-      end
-    end
+  def accumulate_line(x0, y0, x1, y1)
+    accumulate_line(x1, y1, x0, y0, y0 <= y1 ? 1 : -1)
+  end
 
+  def accumulate_line(x0, y0, x1, y1, direction)
     if @yhi <= y0 || @ylo >= y1
       return false
     end

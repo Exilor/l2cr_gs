@@ -42,8 +42,6 @@ class Scripts::Q00293_TheHiddenVeins < Quest
       else
         html = "30539-02.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -96,14 +94,10 @@ class Scripts::Q00293_TheHiddenVeins < Quest
         else
           html = "30535-05.html"
         end
-      else
-        # [automatically added else]
       end
 
     when CHICHIRIN
       html = "30539-01.html"
-    else
-      # [automatically added else]
     end
 
 

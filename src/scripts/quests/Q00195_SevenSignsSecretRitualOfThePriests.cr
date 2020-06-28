@@ -106,8 +106,6 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           html = "level_check.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -124,8 +122,6 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
       "32579-01.html"
     when SHELF
       "32580-01.html"
-    else
-      # [automatically added else]
     end
 
   end
@@ -157,8 +153,6 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           html = "32576-01.html"
         when 2
           html = "32576-03.html"
-        else
-          # [automatically added else]
         end
 
       when RAYMOND
@@ -179,8 +173,6 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           end
         when 4
           html = "30289-12.html"
-        else
-          # [automatically added else]
         end
 
       when LIGHT_OF_DAWN
@@ -207,12 +199,8 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         if st.cond?(4) && st.has_quest_items?(SHUNAIMANS_CONTRACT)
           html = "30969-01.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

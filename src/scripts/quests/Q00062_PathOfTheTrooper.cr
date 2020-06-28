@@ -45,8 +45,6 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
         qs.set_cond(2, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -81,8 +79,6 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
             play_sound(qs.player, Sound::ITEMSOUND_QUEST_MIDDLE)
           end
         end
-      else
-        # [automatically added else]
       end
     end
 
@@ -139,8 +135,6 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
             qs.save_global_quest_var("1ClassQuestFinished", "1")
             html = "32197-10.html"
           end
-        else
-          # [automatically added else]
         end
       when MASTER_SHUBAIN
         case qs.cond
@@ -167,11 +161,7 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
           end
         when 4
           html = "32194-07.html"
-        else
-          # [automatically added else]
         end
-      else
-        # [automatically added else]
       end
     elsif qs.completed?
       if npc.id == MASTER_GWAIN

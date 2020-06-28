@@ -34,8 +34,6 @@ class Scripts::Q00260_OrcHunting < Quest
       event
     when "30221-08.html"
       event
-    else
-      # [automatically added else]
     end
 
   end
@@ -80,8 +78,6 @@ class Scripts::Q00260_OrcHunting < Quest
         debug "#{pc} has no quest items."
         html = "30221-05.html"
       end
-    else
-      # [automatically added else]
     end
 
 

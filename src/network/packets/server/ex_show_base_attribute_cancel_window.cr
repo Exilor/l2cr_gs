@@ -25,8 +25,6 @@ class Packets::Outgoing::ExShowBaseAttributeCancelWindow < GameServerPacket
       @price = item.template.is_a?(L2Weapon) ? 100_000_i64 : 80_000_i64
     when .s84?
       @price = item.template.is_a?(L2Weapon) ? 200_000_i64 : 160_000_i64
-    else
-      # [automatically added else]
     end
 
 

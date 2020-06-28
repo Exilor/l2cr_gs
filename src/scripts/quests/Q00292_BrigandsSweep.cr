@@ -50,8 +50,6 @@ class Scripts::Q00292_BrigandsSweep < Quest
       if qs.started?
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -131,8 +129,6 @@ class Scripts::Q00292_BrigandsSweep < Quest
             end
           end
         end
-      else
-        # [automatically added else]
       end
 
     when BALANKI
@@ -145,8 +141,6 @@ class Scripts::Q00292_BrigandsSweep < Quest
           html = "30533-01.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

@@ -71,8 +71,6 @@ class Scripts::Q00603_DaimonTheWhiteEyedPart1 < Quest
           html = "31683-11.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -98,8 +96,6 @@ class Scripts::Q00603_DaimonTheWhiteEyedPart1 < Quest
           html = "31683-07.html"
         when 8
           html = "31683-08.html"
-        else
-          # [automatically added else]
         end
 
       elsif qs.get_int("TABLET_#{npc.id}") == 0
@@ -109,8 +105,6 @@ class Scripts::Q00603_DaimonTheWhiteEyedPart1 < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
 

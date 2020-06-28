@@ -49,8 +49,6 @@ class SkillDocument < AbstractDocument
         @current_skill = SkillInfo.new
         parse_skill(n)
         @skills.concat(current_skill.skills)
-      else
-        # [automatically added else]
       end
     end
   end
@@ -185,8 +183,6 @@ class SkillDocument < AbstractDocument
           parse_template(n, current_skill.current_skills[i], EffectScope::STOP)
         when "selfEffects"
           parse_template(n, current_skill.current_skills[i], EffectScope::SELF)
-        else
-          # [automatically added else]
         end
 
         n = get_next_element(n)
@@ -244,8 +240,6 @@ class SkillDocument < AbstractDocument
           when "enchant#{{{i}}}selfEffects"
             found_self_effects = true
             parse_template(n, current_skill.current_skills[i], EffectScope::SELF)
-          else
-            # nothing
           end
 
           n = get_next_element(n)

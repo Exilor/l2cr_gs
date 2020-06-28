@@ -99,8 +99,6 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
       if st.memo_state?(8)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -192,8 +190,6 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
             st.exit_quest(false, true)
             html = "32784-16.html"
           end
-        else
-          # [automatically added else]
         end
       when HARDIN
         if st.memo_state?(7)
@@ -201,8 +197,6 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
         elsif st.memo_state?(8)
           html = "30832-03.html"
         end
-      else
-        # [automatically added else]
       end
     end
 

@@ -81,8 +81,6 @@ class Scripts::Q00413_PathOfTheShillienOracle < Quest
         qs.set_cond(2, true)
       end
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -112,8 +110,6 @@ class Scripts::Q00413_PathOfTheShillienOracle < Quest
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -189,8 +185,6 @@ class Scripts::Q00413_PathOfTheShillienOracle < Quest
         elsif has_quest_items?(pc, ANDARIEL_BOOK, GARMIELS_BOOK)
           html = "30377-07.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

@@ -64,12 +64,8 @@ class Scripts::Q00261_CollectorsDream < Quest
           st.exit_quest(true, true)
           html = "30222-05.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

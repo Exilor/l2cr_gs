@@ -8,7 +8,7 @@ class ArmorSet
   getter shield = [] of Int32
   getter skills = [] of SkillHolder
   getter shield_skills = [] of SkillHolder
-  getter enchant_6_skill = [] of SkillHolder
+  getter enchant_6_skills = [] of SkillHolder
   property chest_id : Int32 = 0
   property con : Int32 = 0
   property dex : Int32 = 0
@@ -61,14 +61,6 @@ class ArmorSet
   def contains_shield?(pc : L2PcInstance) : Bool
     return false unless shield_item = pc.inventory.lhand_slot
     @shield.includes?(shield_item.id)
-  end
-
-  def shield_skill_id : Array(SkillHolder)
-    @shield_skills
-  end
-
-  def enchant_6_skill_id : Array(SkillHolder)
-    @enchant_6_skill
   end
 
   def enchanted_6?(pc : L2PcInstance) : Bool

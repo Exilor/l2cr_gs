@@ -161,8 +161,6 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         play_sound(pc, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -199,8 +197,6 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           qs.set_cond(3, true)
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -310,8 +306,6 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           html = "30659-04.html"
         when 4
           html = "30659-05.html"
-        else
-          # [automatically added else]
         end
 
       when WINDY_SHAORING
@@ -418,8 +412,6 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         elsif memo_state >= 8
           html = "30674-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

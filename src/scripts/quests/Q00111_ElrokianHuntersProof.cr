@@ -122,8 +122,6 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
         qs.exit_quest(false, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -193,8 +191,6 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
           html = "32113-29.html"
         when 10..12
           html = "32113-30.html"
-        else
-          # [automatically added else]
         end
 
       when MUSHIKA
@@ -233,8 +229,6 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
           end
         when 12
           html = "32115-12.html"
-        else
-          # [automatically added else]
         end
 
       when KIRIKACHIN
@@ -256,16 +250,10 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
           html = "32116-08.html"
         when 12
           html = "32116-09.html"
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

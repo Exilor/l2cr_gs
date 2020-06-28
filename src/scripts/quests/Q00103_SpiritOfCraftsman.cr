@@ -57,8 +57,6 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
         give_items(pc, KARRODS_LETTER, 1)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -139,8 +137,6 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
           html = "30144-04.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)
@@ -164,8 +160,6 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
           qs.set_cond(4, true)
         end
       end
-    else
-      # [automatically added else]
     end
 
     super

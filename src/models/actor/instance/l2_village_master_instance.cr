@@ -252,7 +252,7 @@ class L2VillageMasterInstance < L2NpcInstance
                 io << "npc_%objectId%_Subclass 6 #{subclass.class_index}\">"
                 ClassListData.get_class(subclass.class_id).client_code(io)
                 io << "</a><br>"
-                class_index += 1
+                class_index &+= 1
               end
             end
             html["%list%"] = content3
@@ -311,7 +311,7 @@ class L2VillageMasterInstance < L2NpcInstance
         # end
 
         if allow_addition && valid_new_subclass?(pc, param_one)
-          unless pc.add_subclass(param_one, pc.total_subclasses + 1)
+          unless pc.add_subclass(param_one, pc.total_subclasses &+ 1)
             debug "L2VillageMasterInstance#on_bypass_feedback (line #{__LINE__}) pc.add_subclass returned false"
             return
           end
@@ -409,8 +409,6 @@ class L2VillageMasterInstance < L2NpcInstance
           pc.send_message("The sub class could not be added, you have been reverted to your base class.")
           return
         end
-      else
-        # [automatically added else]
       end
 
 
@@ -526,7 +524,7 @@ class L2VillageMasterInstance < L2NpcInstance
   end
 
   private def valid_name?(name : String) : Bool
-    name.match?(Config.clan_name_template)
+    name.matches?(Config.clan_name_template)
   end
 
   def self.show_pledge_skill_list(pc : L2PcInstance)
@@ -551,7 +549,7 @@ class L2VillageMasterInstance < L2NpcInstance
         if clan.level < 5
           sm.add_int(5)
         else
-          sm.add_int(clan.level + 1)
+          sm.add_int(clan.level &+ 1)
         end
         pc.send_packet(sm)
       else

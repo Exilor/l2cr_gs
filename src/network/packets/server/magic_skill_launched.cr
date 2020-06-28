@@ -6,10 +6,10 @@ class Packets::Outgoing::MagicSkillLaunched < GameServerPacket
   end
 
   def initialize(char : L2Character, skill_id : Int32, skill_level : Int32, target : L2Object)
-    initialize(char, skill_id, skill_level, {target.as(L2Object)})
+    initialize(char, skill_id, skill_level, {target})
   end
 
-  def initialize(char : L2Character, @skill_id : Int32, @skill_level : Int32, @targets : Enumerable(L2Object))
+  def initialize(char : L2Character, @skill_id : Int32, @skill_level : Int32, @targets : Array(L2Object) | {L2Object})
     @char_id = char.l2id
   end
 

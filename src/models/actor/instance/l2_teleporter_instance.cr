@@ -40,8 +40,6 @@ class L2TeleporterInstance < L2Npc
           pc.send_packet(SystemMessageId::YOU_CANNOT_ENTER_SEED_IN_FLYING_TRANSFORM)
           return
         end
-      else
-        # [automatically added else]
       end
 
       return if tokens.empty?

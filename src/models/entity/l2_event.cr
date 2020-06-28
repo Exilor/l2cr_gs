@@ -36,9 +36,9 @@ module L2Event
     -1
   end
 
-  def get_top_n_killers(n : Int32) : Array(L2PcInstance)
+  def get_top_n_killers(n : Int32) : Indexable(L2PcInstance)
     tmp = {} of L2PcInstance => Int32
-    TEAMS.values.each do |team_list|
+    TEAMS.each_value do |team_list|
       team_list.each do |pc|
         if es = pc.event_status
           tmp[pc] = es
@@ -48,7 +48,7 @@ module L2Event
 
     sort_by_value(tmp)
 
-    tmp.size <= n ? tmp.keys : tmp.keys[1...n]
+    tmp.size <= n ? tmp.keys_slice : tmp.keys_slice[1...n]
   end
 
   def show_event_html(pc : L2PcInstance, l2id : String)
@@ -131,8 +131,6 @@ module L2Event
           return true
         end
       end
-    else
-      # [automatically added else]
     end
 
     false
@@ -204,8 +202,6 @@ module L2Event
         return "Cannot start event, it is on standby mode."
       when EventState::OFF
         @@event_state = EventState::STANDBY
-      else
-        # [automatically added else]
       end
 
       AntiFeedManager.register_event(AntiFeedManager::L2EVENT_ID)
@@ -262,8 +258,6 @@ module L2Event
         @@event_state = EventState::ON
       when EventState::OFF # Event is off, so no problem turning it on.
         return "Cannot start event, it is off. Participation start is required."
-      else
-        # [automatically added else]
       end
 
       unspawn_event_npcs
@@ -338,8 +332,6 @@ module L2Event
       @@event_creator = ""
       @@event_info = ""
       return "The event has been stopped, all players unregistered and all event npcs unspawned."
-    else
-      # [automatically added else]
     end
 
     "The event has been successfully finished."

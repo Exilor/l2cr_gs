@@ -252,8 +252,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         qs.set_cond(6, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -274,8 +272,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           end
         when 1
           npc.script_value = 2
-        else
-          # [automatically added else]
         end
 
       when REVENANT_OF_TANTOS_CHIEF
@@ -291,12 +287,8 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::INDIGNANT_AND_UNFAIR_DEATH))
             npc.script_value = 2
           end
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     end
@@ -438,8 +430,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::ILL_GET_REVENGE_SOMEDAY))
           qs.set_cond(10, true)
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -670,8 +660,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         elsif has_at_least_one_quest_item?(pc, TANAPIS_ORDER, RITUAL_BOX)
           html = "30642-13.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

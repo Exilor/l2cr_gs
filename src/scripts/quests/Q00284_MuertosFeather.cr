@@ -45,8 +45,6 @@ class Scripts::Q00284_MuertosFeather < Quest
     when "32166-09.html"
       qs.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 

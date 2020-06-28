@@ -148,8 +148,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(DEMONS_BOOTS_FABRIC, 1)
           when 3
             qs.give_items(DEMONS_GLOVES_FABRIC, 1)
-          else
-            # [automatically added else]
           end
 
 
@@ -177,8 +175,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(DEMONS_BOOTS_FABRIC, 1)
           when 3
             qs.give_items(DEMONS_GLOVES_FABRIC, 1)
-          else
-            # [automatically added else]
           end
 
 
@@ -189,8 +185,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(Q_MUSICNOTE_LOVE, 1)
           when 1
             qs.give_items(Q_MUSICNOTE_BATTLE, 1)
-          else
-            # [automatically added else]
           end
 
 
@@ -205,8 +199,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(DEMONS_BOOTS, 1)
           when 3
             qs.give_items(DEMONS_GLOVES, 1)
-          else
-            # [automatically added else]
           end
 
 
@@ -217,8 +209,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(Q_GOLD_CIRCLET, 1)
           when 1
             qs.give_items(Q_SILVER_CIRCLET, 1)
-          else
-            # [automatically added else]
           end
 
 
@@ -228,8 +218,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
         npc.delete_me
         return html
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -262,8 +250,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
     when WISDOM_CHEST
       start_quest_timer("2336007", 120 * 1000, npc, nil)
       npc.say(NpcString::I_HAVE_WISDOM_IN_ME_I_AM_THE_BOX_OF_WISDOM)
-    else
-      # [automatically added else]
     end
 
 
@@ -419,8 +405,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
           i0 = Rnd.rand(2)
         when 2..4
           i0 = Rnd.rand(3)
-        else
-          # [automatically added else]
         end
 
         case i0
@@ -440,8 +424,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
           when 4
             add_spawn(WISDOM_CHEST, npc, true, 0, false)
             qs.set("Exchange", 0)
-          else
-            # [automatically added else]
           end
 
         when 1
@@ -461,8 +443,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
           when 4
             add_spawn(WISDOM_CHEST, npc, true, 0, false)
             qs.set("Exchange", 0)
-          else
-            # [automatically added else]
           end
 
         when 2
@@ -476,20 +456,12 @@ class Scripts::Q00334_TheWishingPotion < Quest
           when 4
             add_spawn(WISDOM_CHEST, npc, true, 0, false)
             qs.set("Exchange", 0)
-          else
-            # [automatically added else]
           end
 
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 
@@ -650,8 +622,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
               qs.give_items(DEMONS_BOOTS_FABRIC, 1)
             when 3
               qs.give_items(DEMONS_GLOVES_FABRIC, 1)
-            else
-              # [automatically added else]
             end
 
           end
@@ -671,8 +641,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
               qs.give_items(DEMONS_BOOTS_FABRIC, 1)
             when 3
               qs.give_items(DEMONS_GLOVES_FABRIC, 1)
-            else
-              # [automatically added else]
             end
 
           end
@@ -692,14 +660,10 @@ class Scripts::Q00334_TheWishingPotion < Quest
               qs.give_items(DEMONS_BOOTS_FABRIC, 1)
             when 3
               qs.give_items(DEMONS_GLOVES_FABRIC, 1)
-            else
-              # [automatically added else]
             end
 
           end
         end
-      else
-        # [automatically added else]
       end
 
     end

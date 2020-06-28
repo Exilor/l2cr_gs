@@ -126,8 +126,6 @@ class Scripts::WyvernManager < AbstractNpcAI
       npc.conquerable_hall.not_nil!.name
     when ManagerType::FORT
       npc.fort.name
-    else
-      # [automatically added else]
     end
 
   end
@@ -178,8 +176,6 @@ class Scripts::WyvernManager < AbstractNpcAI
       else
         html = mount_wyvern(npc, pc)
       end
-    else
-      # [automatically added else]
     end
 
 

@@ -67,14 +67,10 @@ class Scripts::Q10502_FreyaEmbroideredSoulCloak < Quest
           st.exit_quest(false, true)
           html = "32612-06.html"
         end
-      else
-        # [automatically added else]
       end
 
     when State::COMPLETED
       html = "32612-03.html"
-    else
-      # [automatically added else]
     end
 
 

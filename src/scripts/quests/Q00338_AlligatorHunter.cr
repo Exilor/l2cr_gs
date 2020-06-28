@@ -67,8 +67,6 @@ class Scripts::Q00338_AlligatorHunter < Quest
       html = pc.level >= MIN_LEVEL ? "30892-02.htm" : "30892-01.htm"
     when State::STARTED
       html = "30892-04.html"
-    else
-      # [automatically added else]
     end
 
 

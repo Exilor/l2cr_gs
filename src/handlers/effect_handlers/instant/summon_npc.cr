@@ -4,7 +4,7 @@ class EffectHandler::SummonNpc < AbstractEffect
   @despawn_delay : Int32
   @npc_id : Int32
   @npc_count : Int32
-  @random_offset : Int32
+  @random_offset : Bool
   @is_summon_spawn : Bool
 
   def initialize(attach_cond, apply_cond, set, params)
@@ -13,7 +13,7 @@ class EffectHandler::SummonNpc < AbstractEffect
     @despawn_delay = params.get_i32("despawnDelay", 20_000)
     @npc_id = params.get_i32("npcId", 0)
     @npc_count = params.get_i32("npcCount", 1)
-    @random_offset = params.get_i32("randomOffset", 0)
+    @random_offset = params.get_bool("randomOffset", false)
     @is_summon_spawn = params.get_bool("isSummonSpawn", false)
   end
 
@@ -73,12 +73,9 @@ class EffectHandler::SummonNpc < AbstractEffect
       sp = L2Spawn.new(@npc_id)
       x, y = pc.x, pc.y
 
-      if @random_offset <= 20
-        x += Rnd.bool ? Rnd.rand(20..50) : Rnd.rand(-50..-20)
-        y += Rnd.bool ? Rnd.rand(20..50) : Rnd.rand(-50..-20)
-      else
-        x += Rnd.bool ? Rnd.rand(20..@random_offset) : Rnd.rand(-@random_offset..-20)
-        y += Rnd.bool ? Rnd.rand(20..@random_offset) : Rnd.rand(-@random_offset..-20)
+      if @random_offset
+        x += Rnd.bool ? rand(20..50) : rand(-50..-20)
+        y += Rnd.bool ? rand(20..50) : rand(-50..-20)
       end
 
       sp.x, sp.y, sp.z = x, y, pc.z

@@ -35,8 +35,6 @@ class Scripts::Q00163_LegacyOfThePoet < Quest
       when "30220-05.htm"
         st.start_quest
         html = event
-      else
-        # [automatically added else]
       end
 
     end
@@ -108,8 +106,6 @@ class Scripts::Q00163_LegacyOfThePoet < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     end

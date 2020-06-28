@@ -1,9 +1,9 @@
 require "../interfaces/script_type"
 
-abstract class AbstractVariables
+abstract class AbstractVariables < StatsSet
   include ScriptType
 
-  private struct AtomicBool
+  private class AtomicBool
     def initialize(value : Bool)
       @atomic = Atomic(UInt8).new(coerce(value))
     end
@@ -38,14 +38,11 @@ abstract class AbstractVariables
     end
   end
 
-  @stats_set = StatsSet.new
   @has_changes = AtomicBool.new(false)
-
-  forward_missing_to @stats_set
 
   def []=(key : String, value)
     @has_changes.compare_and_set(false, true)
-    @stats_set[key] = value
+    super
   end
 
   def has_changes? : Bool
@@ -54,7 +51,7 @@ abstract class AbstractVariables
 
   def delete(key : String)
     @has_changes.compare_and_set(false, true)
-    @stats_set.delete(key)
+    super
   end
 
   def compare_and_set_changes(expect : Bool, update : Bool) : Bool

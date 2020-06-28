@@ -14,7 +14,7 @@ module GeoPathFinding
     Dir.glob(Config.pathnode_dir + "/*.pn") do |path|
       base_name = File.basename(path, ".pn")
       parts = base_name.split('_')
-      unless parts.size == 2 && parts.all? &.num?
+      unless parts.size == 2 && parts.all? &.number?
         raise "Invalid path node file name '#{base_name}'"
       end
       rx, ry = parts.map &.to_i8

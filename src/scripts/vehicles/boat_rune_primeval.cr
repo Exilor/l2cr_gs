@@ -73,8 +73,6 @@ class BoatRunePrimeval
       BoatManager.dock_ship(BoatManager::RUNE_HARBOR, true)
       BoatManager.broadcast_packets(RUNE_DOCK[0], PRIMEVAL_DOCK, ARRIVED_AT_RUNE, ARRIVED_AT_RUNE_2, Sound::ITEMSOUND_SHIP_ARRIVAL_DEPARTURE.with_object(@boat))
       ThreadPoolManager.schedule_general(self, 180_000)
-    else
-      # [automatically added else]
     end
 
     @shout_count = 0

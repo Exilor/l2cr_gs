@@ -37,8 +37,6 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
       else
         "31371-03.html"
       end
-    else
-      # [automatically added else]
     end
   end
 
@@ -66,15 +64,11 @@ class Scripts::Q00011_SecretMeetingWithKetraOrcs < Quest
         if st.memo_state?(21) && has_quest_items?(pc, MUNITIONS_BOX)
           html = "31371-01.html"
         end
-      else
-        # [automatically added else]
       end
     when State::COMPLETED
       if npc.id == CADMON
         html = get_already_completed_msg(pc)
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

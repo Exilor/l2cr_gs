@@ -92,8 +92,6 @@ class Scripts::Q00237_WindsOfChange < Quest
       st.add_exp_and_sp(892773, 60012)
       st.exit_quest(false, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -120,12 +118,8 @@ class Scripts::Q00237_WindsOfChange < Quest
           html = "30899-11.html"
         when 5, 6
           html = "30899-08.html"
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     when IASON
@@ -141,8 +135,6 @@ class Scripts::Q00237_WindsOfChange < Quest
           html = "30969-07.html"
         when 5, 6
           html = "30969-11.html"
-        else
-          # [automatically added else]
         end
 
       end
@@ -152,8 +144,6 @@ class Scripts::Q00237_WindsOfChange < Quest
         html = "30897-01.html"
       when 3, 4
         html = "30897-04.html"
-      else
-        # [automatically added else]
       end
 
     when MORELYN
@@ -162,8 +152,6 @@ class Scripts::Q00237_WindsOfChange < Quest
         html = "30925-01.html"
       when 4
         html = "30925-04.html"
-      else
-        # [automatically added else]
       end
 
     when HELVETICA
@@ -190,8 +178,6 @@ class Scripts::Q00237_WindsOfChange < Quest
       elsif st.cond?(6)
         html = "32643-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

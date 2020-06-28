@@ -96,8 +96,6 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
         pc.tele_to_location(TELEPORT)
       when "DELETE"
         npc.delete_me
-      else
-        # [automatically added else]
       end
 
     end
@@ -145,16 +143,12 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
             npc.drop_item(attacker, SHIELD, Rnd.rand(1i64..10i64))
           when 6
             npc.drop_item(attacker, HEALING_POTION, Rnd.rand(1i64..10i64))
-          else
-            # [automatically added else]
           end
 
 
           npc.script_value = 1
           start_quest_timer("DELETE", 3000, npc, attacker)
         end
-      else
-        # [automatically added else]
       end
 
     end

@@ -79,8 +79,6 @@ class Scripts::Q00131_BirdInACage < Quest
         pc.tele_to_location(INSTANCE_EXIT, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -110,8 +108,6 @@ class Scripts::Q00131_BirdInACage < Quest
           html = "32264-16.html"
         when 5
           html = "32264-18.html"
-        else
-          # [automatically added else]
         end
 
       elsif npc.id == PARME
@@ -121,8 +117,6 @@ class Scripts::Q00131_BirdInACage < Quest
           html = "32271-02.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

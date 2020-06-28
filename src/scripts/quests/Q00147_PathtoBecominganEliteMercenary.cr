@@ -63,8 +63,6 @@ class Scripts::Q00147_PathtoBecominganEliteMercenary < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
 

@@ -357,8 +357,6 @@ class Scripts::Beleth < AbstractNpcAI
       else
         start_quest_timer("CHECK_ATTACK", 60000, nil, nil)
       end
-    else
-      # [automatically added else]
     end
 
 

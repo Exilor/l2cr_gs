@@ -146,7 +146,7 @@ module BypassHandler::OlympiadManagerLink
         html = NpcHtmlMessage.new(target.l2id)
         params = command.split
 
-        unless params[1].num?
+        unless params[1].number?
           warn { "npcId = #{target.id} has invalid buffGroup set in the bypass for the buff selected: #{params[1]}." }
           return false
         end
@@ -210,7 +210,7 @@ module BypassHandler::OlympiadManagerLink
             names.each do |name|
               reply["%place#{index}%"] = index
               reply["%rank#{index}%"] = name
-              index += 1
+              index &+= 1
               if index > 10
                 break
               end
@@ -218,7 +218,7 @@ module BypassHandler::OlympiadManagerLink
             while index <= 10
               reply["%place#{index}%"] = ""
               reply["%rank#{index}%"] = ""
-              index += 1
+              index &+= 1
             end
 
             reply["%objectId%"] = target.l2id

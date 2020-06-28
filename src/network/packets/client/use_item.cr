@@ -130,8 +130,6 @@ class Packets::Incoming::UseItem < GameClientPacket
             when WeaponType::NONE
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
-            else
-              # [automatically added else]
             end
 
           else
@@ -139,8 +137,6 @@ class Packets::Incoming::UseItem < GameClientPacket
             when WeaponType::RAPIER, WeaponType::CROSSBOW, WeaponType::ANCIENTSWORD
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
-            else
-              # [automatically added else]
             end
 
           end
@@ -155,8 +151,6 @@ class Packets::Incoming::UseItem < GameClientPacket
           pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
           return
         end
-      else
-        # [automatically added else]
       end
 
 
@@ -177,8 +171,6 @@ class Packets::Incoming::UseItem < GameClientPacket
           pc.broadcast_user_info
           send_packet(ItemList.new(pc, false))
           return
-        else
-          # [automatically added else]
         end
 
       end

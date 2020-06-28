@@ -54,8 +54,6 @@ class Scripts::Hude < AbstractNpcAI
       if has_quest_items?(pc, PREMIUM_CERT)
         MultisellData.separate_and_send(322980002, pc, npc, false)
       end
-    else
-      # [automatically added else]
     end
 
 

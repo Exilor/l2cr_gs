@@ -252,8 +252,6 @@ class Duel
       sm.add_string(@leader_b.name)
     when DuelResult::CANCELED, DuelResult::TIMEOUT
       sm = SystemMessageId::THE_DUEL_HAS_ENDED_IN_A_TIE
-    else
-      # [automatically added else]
     end
 
 
@@ -349,14 +347,16 @@ class Duel
     @hp : Float64
     @mp : Float64
     @cp : Float64
-    @player_effects : Enumerable(BuffInfo)
-    @pet_effects : Enumerable(BuffInfo)?
+    @player_effects : Slice(BuffInfo) | Array(BuffInfo)
+    @pet_effects : Slice(BuffInfo) | Array(BuffInfo) = Slice(BuffInfo).empty
     @summon : L2Summon?
     @loc : Location?
 
     getter player
 
-    def initialize(@player : L2PcInstance, @party_duel : Bool)
+    def initialize(player : L2PcInstance, party_duel : Bool)
+      @player = player
+      @party_duel = party_duel
       @hp, @mp, @cp = player.current_hp, player.current_mp, player.current_cp
       @player_effects = player.effect_list.effects
 

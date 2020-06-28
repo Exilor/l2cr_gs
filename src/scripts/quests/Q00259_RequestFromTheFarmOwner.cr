@@ -52,8 +52,6 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
     when "30497-06.html"
       st.exit_quest(true, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -86,8 +84,6 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
         else
           html = "30497-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     when MARIUS
@@ -96,8 +92,6 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
       else
         html = "30405-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

@@ -100,8 +100,6 @@ class Scripts::Q10289_FadeToBlack < Quest
         when "30"
           reward_items(pc, 15794, 1)
           give_adena(pc, 454240, true)
-        else
-          # [automatically added else]
         end
 
 
@@ -112,8 +110,6 @@ class Scripts::Q10289_FadeToBlack < Quest
         qs.exit_quest(false, true)
         html = "32757-09.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -159,8 +155,6 @@ class Scripts::Q10289_FadeToBlack < Quest
         html = "32757-04.html"
       when 2, 3
         html = "32757-05.html"
-      else
-        # [automatically added else]
       end
 
     else

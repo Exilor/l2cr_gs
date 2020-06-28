@@ -144,8 +144,6 @@ class SevenSigns
       end
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
       last_period_change.ms = @last_save.ms + PERIOD_MINOR_LENGTH
-    else
-      # [automatically added else]
     end
 
     @last_save.ms > 7 && @last_save < last_period_change
@@ -241,8 +239,6 @@ class SevenSigns
           crest_of_dawn_spawns.each do |dawn_crest|
             AutoSpawnHandler.set_spawn_active(dawn_crest, false)
           end
-        else
-          # [automatically added else]
         end
       else
         AutoSpawnHandler.set_spawn_active(merchant_spawn, false)
@@ -358,8 +354,6 @@ class SevenSigns
       @next_period_change.minute = PERIOD_START_MINS
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
       @next_period_change.add(PERIOD_MINOR_LENGTH.milliseconds) # 15 mins
-    else
-      # [automatically added else]
     end
 
     info { "Next period change set to #{@next_period_change.time}." }
@@ -375,8 +369,6 @@ class SevenSigns
       "Quest Event Results"
     when PERIOD_SEAL_VALIDATION
       "Seal Validation"
-    else
-      # [automatically added else]
     end
   end
 
@@ -417,8 +409,6 @@ class SevenSigns
     when PERIOD_SEAL_VALIDATION
       next_quest_start = next_period_change
       next_valid_start = next_period_change + PERIOD_MAJOR_LENGTH + PERIOD_MINOR_LENGTH
-    else
-      # [automatically added else]
     end
 
     !(
@@ -435,8 +425,6 @@ class SevenSigns
       return (((@dawn_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @dawn_festival_score).to_i32
     when CABAL_DUSK
       return (((@dusk_stone_score.to_f32 / (total.to_f32 == 0 ? 1 : total)) * 500).round + @dusk_festival_score).to_i32
-    else
-      # [automatically added else]
     end
 
     0
@@ -725,8 +713,6 @@ class SevenSigns
       @dawn_stone_score += contrib_score
     when CABAL_DUSK
       @dusk_stone_score += contrib_score
-    else
-      # [automatically added else]
     end
 
     unless Config.alt_sevensigns_lazy_update
@@ -761,8 +747,6 @@ class SevenSigns
       pc.send_packet(SystemMessageId::RESULTS_PERIOD_BEGUN)
     when PERIOD_SEAL_VALIDATION
       pc.send_packet(SystemMessageId::VALIDATION_PERIOD_BEGUN)
-    else
-      # [automatically added else]
     end
   end
 
@@ -817,8 +801,6 @@ class SevenSigns
           else
             new_seal_owner = CABAL_NULL
           end
-        else
-          # [automatically added else]
         end
       when CABAL_DAWN
         case cabal_highest_score
@@ -842,8 +824,6 @@ class SevenSigns
           else
             new_seal_owner = CABAL_NULL
           end
-        else
-          # [automatically added else]
         end
       when CABAL_DUSK
         case cabal_highest_score
@@ -867,11 +847,7 @@ class SevenSigns
           else
             new_seal_owner = CABAL_NULL
           end
-        else
-          # [automatically added else]
         end
-      else
-        # [automatically added else]
       end
 
       SIGNS_SEAL_OWNERS[seal] = new_seal_owner
@@ -897,8 +873,6 @@ class SevenSigns
         end
 
         CastleManager.validate_taxes(new_seal_owner)
-      else
-        # [automatically added else]
       end
     end
   end
@@ -994,8 +968,6 @@ class SevenSigns
         send_message_to_all(SystemMessageId::DAWN_WON)
       when CABAL_DUSK
         send_message_to_all(SystemMessageId::DUSK_WON)
-      else
-        # [automatically added else]
       end
 
       @previous_winner = winner
@@ -1020,8 +992,6 @@ class SevenSigns
       @dusk_stone_score = 0.0
       @dawn_festival_score = 0
       @dusk_festival_score = 0
-    else
-      # [automatically added else]
     end
 
     save_seven_signs_data

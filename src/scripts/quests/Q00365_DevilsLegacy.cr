@@ -104,8 +104,6 @@ class Scripts::Q00365_DevilsLegacy < Quest
         take_items(pc, Inventory::ADENA_ID, 600)
         reward_items(pc, item_id, 1)
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -143,8 +141,6 @@ class Scripts::Q00365_DevilsLegacy < Quest
       if qs.started?
         html = qs.memo_state?(1) ? "30092-01.html" : "30092-07.html"
       end
-    else
-      # [automatically added else]
     end
 
 

@@ -68,8 +68,6 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
         st.exit_quest(true, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -108,8 +106,6 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
       else
         html = "32245-06.html"
       end
-    else
-      # [automatically added else]
     end
 
 

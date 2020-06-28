@@ -33,8 +33,6 @@ class Scripts::Q00053_LinnaeusSpecialBait < Quest
       else
         html = "31577-5.html"
       end
-    else
-      # [automatically added else]
     end
 
     html
@@ -72,8 +70,6 @@ class Scripts::Q00053_LinnaeusSpecialBait < Quest
       html = pc.level > 59 ? "31577-0.htm" : "31577-0a.html"
     when State::STARTED
       html = st.cond?(1) ? "31577-4.html" : "31577-2.html"
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

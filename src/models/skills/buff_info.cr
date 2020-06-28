@@ -8,7 +8,7 @@ class BuffInfo
   @tasks : Interfaces::Map(AbstractEffect, EffectTaskInfo)?
 
   getter period_start_ticks : Int32
-  getter task : TaskExecutor::Scheduler::DelayedTask?
+  getter task : TaskScheduler::DelayedTask?
   getter effects = [] of AbstractEffect
   getter effector, effected, skill
   property abnormal_time : Int32

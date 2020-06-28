@@ -33,8 +33,6 @@ class Scripts::Q00265_BondsOfSlavery < Quest
       html = event
     when "30357-08.html"
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -77,8 +75,6 @@ class Scripts::Q00265_BondsOfSlavery < Quest
       else
         html = "30357-05.html"
       end
-    else
-      # [automatically added else]
     end
 
 

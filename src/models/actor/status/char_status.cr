@@ -6,7 +6,7 @@ class CharStatus
   private REGEN_FLAG_MP = 2i8
 
   @flags_regen_active = 0i8
-  @reg_task : TaskExecutor::Scheduler::PeriodicTask?
+  @reg_task : TaskScheduler::PeriodicTask?
 
   getter current_hp = 0f64
   getter current_mp = 0f64
@@ -75,7 +75,7 @@ class CharStatus
   end
 
   def start_hp_mp_regeneration
-    if !@reg_task && !@active_char.dead?
+    if !@reg_task && @active_char.alive?
       period = Formulas.get_regenerate_period(@active_char)
       task = RegenTask.new(self)
       @reg_task = ThreadPoolManager.schedule_effect_at_fixed_rate(task, period, period)

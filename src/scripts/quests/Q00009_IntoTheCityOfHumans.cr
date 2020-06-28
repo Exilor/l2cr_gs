@@ -60,8 +60,6 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
         end
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
     when TANAPI
       if st.started?
@@ -71,8 +69,6 @@ class Scripts::Q00009_IntoTheCityOfHumans < Quest
       if st.started? && st.cond?(2)
         html = "30576-01.html"
       end
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

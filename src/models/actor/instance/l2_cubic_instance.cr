@@ -29,8 +29,8 @@ class L2CubicInstance
   SKILL_CUBIC_CURE = 5579
 
   @cubic_delay : Int32
-  @action_task : TaskExecutor::Scheduler::PeriodicTask?
-  @disappear_task : TaskExecutor::Scheduler::DelayedTask?
+  @action_task : TaskScheduler::PeriodicTask?
+  @disappear_task : TaskScheduler::DelayedTask?
   @active = false
 
   getter skills = [] of Skill
@@ -78,8 +78,6 @@ class L2CubicInstance
       @skills << SkillData[4165, 9]
     when SMART_CUBIC_SHILLIENTEMPLAR
       @skills << SkillData[4049, 8]
-    else
-      # [automatically added else]
     end
 
     task = CubicDisappear.new(self)

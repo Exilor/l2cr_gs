@@ -1014,6 +1014,7 @@ class Quest < AbstractScript
 
   def start_conditions : Hash(Proc(L2PcInstance, Bool), String)
     @start_condition || sync do
+      # parentheses are a stopgap for an error introduced in 0.35
       @start_condition ||= {} of L2PcInstance -> Bool => String
     end
   end

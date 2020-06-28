@@ -14,7 +14,7 @@ module AdminCommandHandler::AdminGrandBoss
   def use_admin_command(command, pc)
     st = command.split
     actual_command = st.shift
-    case actual_command.downcase
+    case actual_command.casecmp
     when "admin_grandboss"
       if !st.empty?
         boss_id = st.shift.to_i
@@ -86,16 +86,13 @@ module AdminCommandHandler::AdminGrandBoss
       else
         pc.send_message("Usage: #grandboss_abort Id")
       end
-    else
-      # [automatically added else]
     end
-
 
     true
   end
 
   private def manage_html(pc, boss_id)
-    if {ANTHARAS, VALAKAS, BAIUM, QUEENANT, ORFEN, CORE}.includes?(boss_id)
+    if boss_id.in?(ANTHARAS, VALAKAS, BAIUM, QUEENANT, ORFEN, CORE)
       boss_status = GrandBossManager.get_boss_status(boss_id)
       dead_status = 0
 
@@ -114,12 +111,9 @@ module AdminCommandHandler::AdminGrandBoss
         html_path = "data/html/admin/grandboss_orfen.htm"
       when CORE
         html_path = "data/html/admin/grandboss_core.htm"
-      else
-        # [automatically added else]
       end
 
-
-      if {ANTHARAS, VALAKAS, BAIUM}.includes?(boss_id)
+      if boss_id.in?(ANTHARAS, VALAKAS, BAIUM)
         dead_status = 3
         case boss_status
         when 0
@@ -134,8 +128,6 @@ module AdminCommandHandler::AdminGrandBoss
         when 3
           text_color = "FF0000" # Red
           text = "Dead"
-        else
-          # [automatically added else]
         end
 
       else
@@ -147,8 +139,6 @@ module AdminCommandHandler::AdminGrandBoss
         when 1
           text_color = "FF0000" # Red
           text = "Dead"
-        else
-          # [automatically added else]
         end
 
       end

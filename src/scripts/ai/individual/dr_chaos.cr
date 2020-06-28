@@ -50,8 +50,6 @@ class Scripts::DrChaos < AbstractNpcAI
       end
     when "6"
       npc.broadcast_packet(SpecialCamera.new(npc, 30, -200, 20, 6000, 700, 8000, 0, 0, 0, 0, 0))
-    else
-      # [automatically added else]
     end
 
 

@@ -97,8 +97,6 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
             next
           end
         end
-      else
-        # [automatically added else]
       end
 
 

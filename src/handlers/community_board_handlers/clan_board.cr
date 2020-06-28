@@ -109,11 +109,11 @@ module CommunityBoardHandler::ClanBoard
       io << "\">[GO TO MY CLAN]</a>&nbsp;&nbsp;</td><td fixWIDTH=5></td></tr><tr><td height=10></td></tr></table><br><table border=0 cellspacing=0 cellpadding=2 bgcolor=5A5A5A width=610><tr><td FIXWIDTH=5></td><td FIXWIDTH=200 align=center>CLAN NAME</td><td FIXWIDTH=200 align=center>CLAN LEADER</td><td FIXWIDTH=100 align=center>CLAN LEVEL</td><td FIXWIDTH=100 align=center>CLAN MEMBERS</td><td FIXWIDTH=5></td></tr></table><img src=\"L2UI.Squareblank\" width=\"1\" height=\"5\">"
 
       ClanTable.clans.each_with_index do |clan, i|
-        if i > ((index + 1) * 7)
+        if i > ((index &+ 1) &* 7)
           break
         end
 
-        if i >= ((index - 1) * 7)
+        if i >= ((index &- 1) &* 7)
           io << "<img src=\"L2UI.SquareBlank\" width=\"610\" height=\"3\"><table border=0 cellspacing=0 cellpadding=0 width=610><tr> <td FIXWIDTH=5></td><td FIXWIDTH=200 align=center><a action=\"bypass _bbsclan_clanhome;"
           io << clan.id
           io << "\">"
@@ -134,7 +134,7 @@ module CommunityBoardHandler::ClanBoard
         io << "<td><button action=\"\" back=\"l2ui_ch3.prev1_down\" fore=\"l2ui_ch3.prev1\" width=16 height=16 ></td>"
       else
         io << "<td><button action=\"_bbsclan_clanlist;"
-        io << (index - 1)
+        io << (index &- 1)
         io << "\" back=\"l2ui_ch3.prev1_down\" fore=\"l2ui_ch3.prev1\" width=16 height=16 ></td>"
       end
 
@@ -158,7 +158,7 @@ module CommunityBoardHandler::ClanBoard
         io << "<td><button action=\"\" back=\"l2ui_ch3.next1_down\" fore=\"l2ui_ch3.next1\" width=16 height=16 ></td>"
       else
         io << "<td><button action=\"bypass _bbsclan_clanlist;"
-        io << (index + 1)
+        io << (index &+ 1)
         io << "\" back=\"l2ui_ch3.next1_down\" fore=\"l2ui_ch3.next1\" width=16 height=16 ></td>"
       end
 

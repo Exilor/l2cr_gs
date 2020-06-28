@@ -146,8 +146,6 @@ class Scripts::Q00234_FatesWhisper < Quest
       start_quest_timer("23403", 1000 * 120, npc, nil)
     when CHEST_OF_GOLKONDA
       start_quest_timer("23404", 1000 * 120, npc, nil)
-    else
-      # [automatically added else]
     end
 
 
@@ -166,8 +164,6 @@ class Scripts::Q00234_FatesWhisper < Quest
         return "30178-03.html"
       when 8
         return "30178-04.html"
-      else
-        # [automatically added else]
       end
 
     when CLIFF
@@ -352,8 +348,6 @@ class Scripts::Q00234_FatesWhisper < Quest
           return "31002-43h.html"
         end
         return "31002-43i.html"
-      else
-        # [automatically added else]
       end
 
     when COFFER_OF_THE_DEAD
@@ -392,8 +386,6 @@ class Scripts::Q00234_FatesWhisper < Quest
       if !qs.memo_state?(2) || qs.has_quest_items?(Q_INFERNIUM_SCEPTER_3)
         return "31030-02.html"
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -407,8 +399,6 @@ class Scripts::Q00234_FatesWhisper < Quest
       case event
       when "23401", "23402", "23403", "23404"
         npc.decay_me
-      else
-        # [automatically added else]
       end
 
       return super
@@ -443,8 +433,6 @@ class Scripts::Q00234_FatesWhisper < Quest
         qs.show_question_mark(234)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "30178-02.html"
-      else
-        # [automatically added else]
       end
 
     when CLIFF
@@ -458,8 +446,6 @@ class Scripts::Q00234_FatesWhisper < Quest
           qs.give_items(Q_INFERNIUM_VARNISH, 1)
           return "30182-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     when MASTER_KASPAR
@@ -484,8 +470,6 @@ class Scripts::Q00234_FatesWhisper < Quest
           qs.show_question_mark(234)
           return "30833-03b.html"
         end
-      else
-        # [automatically added else]
       end
 
     when MAESTRO_LEORIN
@@ -733,12 +717,8 @@ class Scripts::Q00234_FatesWhisper < Quest
         if calculate_reward(qs, pc, HAMMER_OF_DESTROYER)
           return "31002-44.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 
@@ -813,8 +793,6 @@ class Scripts::Q00234_FatesWhisper < Quest
     when HALLATE_THE_DEATH_LORD
       add_spawn(CHEST_OF_HALLATE, npc.location)
       return super
-    else
-      # [automatically added else]
     end
 
 
@@ -832,8 +810,6 @@ class Scripts::Q00234_FatesWhisper < Quest
         else
           qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
-      else
-        # [automatically added else]
       end
 
     end

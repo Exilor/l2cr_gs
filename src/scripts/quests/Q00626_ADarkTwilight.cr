@@ -98,12 +98,8 @@ class Scripts::Q00626_ADarkTwilight < Quest
         html = "31517-03.html"
       when 2
         html = "31517-04.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

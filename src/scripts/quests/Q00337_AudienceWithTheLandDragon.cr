@@ -118,8 +118,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
     when "30498-02.html", "30678-01a.html", "30753-01a.html", "30753-03.htm",
          "30753-04.htm", "30753-06a.html"
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -196,8 +194,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
         if npc.hp_percent < 10
           npc.delete_me
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -217,8 +213,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
               add_spawn(GHOST_OF_OFFERING, npc, true, 180000)
             end
           end
-        else
-          # [automatically added else]
         end
 
       when CAVE_MAIDEN, CAVE_KEEPER, CAVE_KEEPER_HOLD, CAVE_MAIDEN_HOLD
@@ -235,8 +229,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
             add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
           end
-        else
-          # [automatically added else]
         end
 
       when HARIT_LIZARDMAN_MATRIARCH
@@ -249,8 +241,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
               add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
             end
           end
-        else
-          # [automatically added else]
         end
 
       when HAMRUT
@@ -260,8 +250,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             give_items(killer, HAMRUT_LEG, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
-        else
-          # [automatically added else]
         end
 
       when KRANROT
@@ -271,8 +259,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             give_items(killer, KRANROT_SKIN, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
-        else
-          # [automatically added else]
         end
 
       when MARSH_STALKER
@@ -282,8 +268,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             give_items(killer, MARSH_STALKER_HORN, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
-        else
-          # [automatically added else]
         end
 
       when MARSH_DRAKE
@@ -293,8 +277,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             give_items(killer, MARSH_DRAKE_TALONS, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
-        else
-          # [automatically added else]
         end
 
       when JEWEL_GUARDIAN_MARA
@@ -318,8 +300,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             give_items(killer, REMAINS_OF_SACRAFICE, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
-        else
-          # [automatically added else]
         end
 
       when HARIT_LIZARDMAN_ZEALOT
@@ -329,12 +309,8 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
             give_items(killer, TOTEM_OF_LAND_DRAGON, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
-        else
-          # [automatically added else]
         end
 
-      else
-        # [automatically added else]
       end
 
     end
@@ -433,8 +409,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         when 21110, 21011, 21010, 20111, 20110, 20011, 20010
           html = "30705-03.html"
-        else
-          # [automatically added else]
         end
 
         if memo_state >= 30000
@@ -458,8 +432,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         when 21110, 21101, 21100, 21011, 21010, 21001, 21000
           html = "30720-03.html"
-        else
-          # [automatically added else]
         end
 
         if memo_state >= 30000
@@ -506,8 +478,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         when 21101, 21011, 21001, 20111, 20101, 20011, 20001
           html = "30851-03.html"
-        else
-          # [automatically added else]
         end
 
         if memo_state >= 30000
@@ -530,16 +500,12 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         when 21110, 21101, 21100, 20111, 20110, 20101, 20100
           html = "30857-03.html"
-        else
-          # [automatically added else]
         end
 
 
         if memo_state >= 30000
           html = "30857-04.html"
         end
-      else
-        # [automatically added else]
       end
 
     end

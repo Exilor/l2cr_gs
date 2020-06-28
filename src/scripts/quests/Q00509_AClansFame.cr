@@ -47,8 +47,6 @@ class Scripts::Q00509_AClansFame < Quest
       pc.send_packet(RadarControl.new(0, 2, 93296, -75104, -1824))
     when "31331-5.html"
       st.exit_quest(true, true)
-    else
-      # [automatically added else]
     end
 
 
@@ -119,8 +117,6 @@ class Scripts::Q00509_AClansFame < Quest
       else
         html = "31331-0.html"
       end
-    else
-      # [automatically added else]
     end
 
 

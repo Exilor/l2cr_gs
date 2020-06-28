@@ -53,8 +53,6 @@ class Scripts::Q00379_FantasyWine < Quest
         take_all_items(pc, LEAF_OF_EUCALYPTUS, STONE_OF_CHILL)
         qs.exit_quest(true, true)
       end
-    else
-      # [automatically added else]
     end
 
 

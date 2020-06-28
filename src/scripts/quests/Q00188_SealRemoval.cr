@@ -59,8 +59,6 @@ class Scripts::Q00188_SealRemoval < Quest
         qs.exit_quest(false, true)
         html = event
       end
-    else
-      # [automatically added else]
     end
 
 
@@ -94,8 +92,6 @@ class Scripts::Q00188_SealRemoval < Quest
         if qs.memo_state?(2)
           html = "30970-01.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

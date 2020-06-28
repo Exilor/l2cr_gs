@@ -249,7 +249,7 @@ module AdminCommandHandler::AdminEffects
         radius = 0
         if st.size == 1
           param2 = st.shift
-          if param2.num?
+          if param2.number?
             radius = param2.to_i
           end
         end
@@ -369,8 +369,6 @@ module AdminCommandHandler::AdminEffects
         packet = SSQInfo.new(2)
       when "dusk"
         packet = SSQInfo.new(1)
-      else
-        # [automatically added else]
       end
     when "sky"
       case state
@@ -384,8 +382,6 @@ module AdminCommandHandler::AdminEffects
         else
           packet = ExRedSky.new(10)
         end
-      else
-        # [automatically added else]
       end
     else
       pc.send_message("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>")
@@ -412,8 +408,6 @@ module AdminCommandHandler::AdminEffects
       filename = "ave_event.htm"
     when .includes?("social")
       filename = "social.htm"
-    else
-      # [automatically added else]
     end
 
     AdminHtml.show_admin_html(pc, filename)

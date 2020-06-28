@@ -53,16 +53,12 @@ class Scripts::Q00113_StatusOfTheBeaconTower < Quest
         html = "31979-03.html"
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     when TORRANT
       if st.started?
         html = "32016-01.html"
       end
-    else
-      # [automatically added else]
     end
 
 

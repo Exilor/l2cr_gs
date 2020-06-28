@@ -60,8 +60,8 @@ class L2PcInstance < L2Playable
   private FALLING_VALIDATION_DELAY = 10_000
   private COND_OVERRIDE_KEY = "cond_override"
 
-  @reco_bonus_task : TaskExecutor::Scheduler::DelayedTask?
-  @reco_give_task : TaskExecutor::Scheduler::PeriodicTask?
+  @reco_bonus_task : TaskScheduler::DelayedTask?
+  @reco_give_task : TaskScheduler::PeriodicTask?
   @subclass_lock = MyMutex.new
   @cur_weight_penalty = 0
   @last_compass_zone = 0
@@ -96,14 +96,14 @@ class L2PcInstance < L2Playable
   @exchange_refusal = false
   @revive_pet = false
   @quests = Concurrent::Map(String, QuestState).new
-  @water_task : TaskExecutor::Scheduler::PeriodicTask?
+  @water_task : TaskScheduler::PeriodicTask?
   @transform_skills : Interfaces::Map(Int32, Skill)?
-  @vitality_task : TaskExecutor::Scheduler::PeriodicTask?
-  @teleport_watchdog : TaskExecutor::Scheduler::DelayedTask?
-  @soul_task : TaskExecutor::Scheduler::DelayedTask?
-  @charge_task : TaskExecutor::Scheduler::DelayedTask?
-  @task_warn_user_take_break : TaskExecutor::Scheduler::PeriodicTask?
-  @pvp_reg_task : TaskExecutor::Scheduler::PeriodicTask?
+  @vitality_task : TaskScheduler::PeriodicTask?
+  @teleport_watchdog : TaskScheduler::DelayedTask?
+  @soul_task : TaskScheduler::DelayedTask?
+  @charge_task : TaskScheduler::DelayedTask?
+  @task_warn_user_take_break : TaskScheduler::PeriodicTask?
+  @pvp_reg_task : TaskScheduler::PeriodicTask?
   @notify_quest_of_death : Interfaces::Set(QuestState)?
   @dwarven_recipe_book = Concurrent::Map(Int32, L2RecipeList).new
   @common_recipe_book = Concurrent::Map(Int32, L2RecipeList).new
@@ -112,13 +112,13 @@ class L2PcInstance < L2Playable
   @snoop_listener = Concurrent::Set(L2PcInstance).new(1)
   @snooped_player = Concurrent::Set(L2PcInstance).new(1)
   @fish : L2Fish?
-  @task_for_fish : TaskExecutor::Scheduler::PeriodicTask?
+  @task_for_fish : TaskScheduler::PeriodicTask?
   @friends : Interfaces::Set(Int32)?
   @level_data : L2PetLevelData?
-  @mount_feed_task : TaskExecutor::Scheduler::PeriodicTask?
-  @dismount_task : TaskExecutor::Scheduler::DelayedTask?
-  @rent_pet_task : TaskExecutor::Scheduler::PeriodicTask?
-  @fame_task : TaskExecutor::Scheduler::PeriodicTask?
+  @mount_feed_task : TaskScheduler::PeriodicTask?
+  @dismount_task : TaskScheduler::DelayedTask?
+  @rent_pet_task : TaskScheduler::PeriodicTask?
+  @fame_task : TaskScheduler::PeriodicTask?
   @manufacture_items : Interfaces::Map(Int32, L2ManufactureItem)?
   @access_level : AccessLevel?
   @html_prefix : String?
@@ -225,7 +225,7 @@ class L2PcInstance < L2Playable
   property offline_start_time : Int64 = 0i64 # L2J: _offlineShopStart
   property last_folk_npc : L2Npc?
   property last_quest_npc_l2id : Int32 = 0 # L2J: _questNpcObject
-  property henna : Slice(L2Henna?) = Slice(L2Henna?).new(3, nil.as(L2Henna?))
+  property henna : Slice(L2Henna?) = Slice(L2Henna?).new(3)
   property agathion_id : Int32 = 0
   property party_room : Int32 = 0
   property apprentice : Int32 = 0
@@ -1189,8 +1189,6 @@ class L2PcInstance < L2Playable
         send_packet(PrivateStoreListBuy.new(self, pc))
       when PrivateStoreType::MANUFACTURE
         send_packet(RecipeShopSellList.new(self, pc))
-      else
-        # [automatically added else]
       end
     elsif char
       char.on_action(self)
@@ -3141,8 +3139,6 @@ class L2PcInstance < L2Playable
       pc.send_packet(PrivateStoreMsgBuy.new(self))
     when PrivateStoreType::MANUFACTURE
       pc.send_packet(RecipeShopMsg.new(self))
-    else
-      # [automatically added else]
     end
 
     if transformed?
@@ -3160,8 +3156,6 @@ class L2PcInstance < L2Playable
       send_packet(ExBrExtraUserInfo.new(self))
     when 2
       broadcast_user_info
-    else
-      # [automatically added else]
     end
   end
 
@@ -3442,8 +3436,6 @@ class L2PcInstance < L2Playable
     when 0x2c..0x30; 248
     when 0x31..0x34; 252
     when 0x35..0x39; 247
-    else
-      # [automatically added else]
     end
 
     if item_id
@@ -5476,8 +5468,6 @@ class L2PcInstance < L2Playable
           return false
         end
       end
-    else
-      # [automatically added else]
     end
 
     true
@@ -5885,8 +5875,6 @@ class L2PcInstance < L2Playable
       end
     when MountType::WYVERN
       self.flying = true
-    else
-      # [automatically added else]
     end
 
     @mount_type = type
@@ -6830,14 +6818,12 @@ class L2PcInstance < L2Playable
     return unless event && !event.empty?
 
     unless quest = QuestManager.get_quest(quest_name)
-      # warn { "#process_quest_event: quest_name #{quest_name.inspect} not found." }
       return
     end
 
     if last_quest_npc_l2id > 0
       if npc = L2World.find_object(last_quest_npc_l2id).as?(L2Npc)
         if inside_radius?(npc, L2Npc::INTERACTION_DISTANCE, false, false)
-          # debug { "#process_quest_event: notifying quest #{quest.class.simple_name} of event #{event.inspect}." }
           quest.notify_event(event, npc, self)
         end
       end
@@ -7219,8 +7205,6 @@ class L2PcInstance < L2Playable
           check_delay = @fish.not_nil!.guts_check_time * 100
         when 6521, 6524, 6527, 8507, 8510, 8513
           check_delay = @fish.not_nil!.guts_check_time * 66
-        else
-          # [automatically added else]
         end
       end
 
@@ -7279,8 +7263,6 @@ class L2PcInstance < L2Playable
         else
           type = 6
         end
-      else
-        # [automatically added else]
       end
     when 1 # normal fish
       case @lure.not_nil!.id
@@ -7324,8 +7306,6 @@ class L2PcInstance < L2Playable
         else
           type = 2
         end
-      else
-        # [automatically added else]
       end
     when 2 # upper grade fish, luminous lure
       case @lure.not_nil!.id
@@ -7361,11 +7341,7 @@ class L2PcInstance < L2Playable
         else
           type = 9
         end
-      else
-        # [automatically added else]
       end
-    else
-      # [automatically added else]
     end
 
     type

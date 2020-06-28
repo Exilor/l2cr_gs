@@ -11,8 +11,6 @@ class Scripts::Asamah < AbstractNpcAI
     case event
     when "32115-03.htm", "32115-04.htm"
       event
-    else
-      # [automatically added else]
     end
 
   end

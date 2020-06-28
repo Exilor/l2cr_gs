@@ -188,8 +188,6 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
             # optional logging
           end
         end
-      else
-        # [automatically added else]
       end
 
 

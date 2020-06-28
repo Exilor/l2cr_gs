@@ -39,8 +39,6 @@ class Packets::Outgoing::EquipUpdate < GameServerPacket
       d 0x0f
     when L2Item::SLOT_BELT
       d 0x10
-    else
-      # [automatically added else]
     end
 
   end

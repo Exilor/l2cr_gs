@@ -65,11 +65,11 @@ abstract class AI
   @skill : Skill?
   @client_moving = false
   @client_auto_attacking = false
+  @follow_task : TaskScheduler::PeriodicTask?
 
   getter intention = IDLE
   protected getter! follow_target : L2Character
   property next_action : NextAction?
-  property follow_task : TaskExecutor::Scheduler::PeriodicTask?
   private property target : L2Object?
   property! cast_target : L2Character?
   property! attack_target : L2Character?
@@ -136,8 +136,6 @@ abstract class AI
       end
 
       on_intention_interact(arg0)
-    else
-      # [automatically added else]
     end
 
     if @next_action.try &.intention?(intention)
@@ -247,8 +245,6 @@ abstract class AI
       end
 
       on_event_afraid(arg0, arg1)
-    else
-      # [automatically added else]
     end
 
     if (ni = @next_action) && ni.event?(event)
@@ -501,11 +497,10 @@ abstract class AI
   private struct FollowTask
     include Loggable
 
-    def initialize(@char : L2Character, @range : Int32 = 70)
-    end
+    initializer char : L2Character, range : Int32 = 70
 
     def call
-      return unless @char.ai.follow_task
+      return unless @char.ai.@follow_task
 
       unless target = @char.ai.follow_target
         if smn = @char.as?(L2Summon)
@@ -531,8 +526,7 @@ abstract class AI
     end
   end
 
-  def to_s(io : IO)
-    super
-    io << '(' << actor << ')'
+  def to_log(io : IO)
+    io << self.class.name << '(' << actor.name << ')'
   end
 end

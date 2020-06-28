@@ -1,5 +1,5 @@
 class SkillChannelizer
-  @task : TaskExecutor::Scheduler::PeriodicTask?
+  @task : TaskScheduler::PeriodicTask?
 
   getter! channelized : Array(L2Character)
   getter! skill : Skill

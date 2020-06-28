@@ -69,9 +69,8 @@ module IdFactory
     timer = Timer.new
     temp = [] of Int32
     sql = String.build do |io|
-      ID_EXTRACTS.each do |pair|
-        table, col = pair
-        io << "SELECT " << col << " FROM " << table << " UNION "
+      ID_EXTRACTS.each do |table, column|
+        io << "SELECT " << column << " FROM " << table << " UNION "
       end
     end
     sql = sql.chomp("UNION ")
@@ -196,7 +195,6 @@ module IdFactory
     error e
   end
 end
-
 
 
 

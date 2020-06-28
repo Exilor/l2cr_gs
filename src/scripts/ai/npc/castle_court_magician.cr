@@ -180,8 +180,6 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
           html = "courtmagician-02.html"
         end
       end
-    else
-      # [automatically added else]
     end
 
 

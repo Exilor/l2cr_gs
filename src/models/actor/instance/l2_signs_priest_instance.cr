@@ -146,8 +146,6 @@ class L2SignsPriestInstance < L2Npc
           pc.send_packet(SystemMessageId::FIGHT_FOR_GNOSIS)
         when SevenSigns::SEAL_STRIFE
           pc.send_packet(SystemMessageId::FIGHT_FOR_STRIFE)
-        else
-          # [automatically added else]
         end
 
 
@@ -216,10 +214,7 @@ class L2SignsPriestInstance < L2Npc
           if red_contrib > contrib_red_stone_count
             red_contrib = contribution_count
           end
-        else
-          # [automatically added else]
         end
-
 
         if red_contrib > 0
           if pc.destroy_item_by_item_id("SevenSigns", SevenSigns::SEAL_STONE_RED_ID, red_contrib, self, false)
@@ -378,10 +373,7 @@ class L2SignsPriestInstance < L2Npc
           end
 
           return
-        else
-          # [automatically added else]
         end
-
 
         if is_a?(L2DawnPriestInstance)
           path = SevenSigns::SEVEN_SIGNS_HTML_PATH + "signs_6_dawn_contribute.htm"
@@ -540,10 +532,7 @@ class L2SignsPriestInstance < L2Npc
           end
 
           return
-        else
-          # [automatically added else]
         end
-
 
         if stone_instance = pc.inventory.get_item_by_item_id(stone_id)
           stone_count = stone_instance.count
@@ -596,10 +585,7 @@ class L2SignsPriestInstance < L2Npc
               ancient_adena_reward = SevenSigns.instance.calc_ancient_adena_reward(0, convert_count, 0)
             when SevenSigns::SEAL_STONE_RED_ID
               ancient_adena_reward = SevenSigns.instance.calc_ancient_adena_reward(0, 0, convert_count)
-            else
-              # [automatically added else]
             end
-
 
             if pc.destroy_item_by_item_id("SevenSigns", convert_stone_id, convert_count, self, true)
               pc.add_ancient_adena("SevenSigns", ancient_adena_reward, self, true)

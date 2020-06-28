@@ -25,8 +25,6 @@ module PunishmentHandler::JailHandler
           apply_to_player(pc)
         end
       end
-    else
-      # [automatically added else]
     end
   end
 
@@ -53,8 +51,6 @@ module PunishmentHandler::JailHandler
           remove_from_player(pc)
         end
       end
-    else
-      # [automatically added else]
     end
   end
 

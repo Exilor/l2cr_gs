@@ -12,7 +12,7 @@ module BypassHandler::Buy
       return false
     end
 
-    unless commands[1].num?
+    unless commands[1].number?
       warn { "Invalid shop_id '#{commands[1]}' (commands: '#{commands}')." }
       return false
     end

@@ -88,8 +88,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       npc_fallen = st.add_spawn(FALLEN_UNICORN, 85884, -76588, -3470, 0)
       npc_fallen.spawn.start_respawn
       return
-    else
-      # [automatically added else]
     end
 
 
@@ -139,14 +137,10 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
           st.give_items(CARADINE_LETTER, 1)
           st.add_exp_and_sp(455764, 0)
           st.exit_quest(false, true)
-        else
-          # [automatically added else]
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
-      else
-        # [automatically added else]
       end
 
     when KASSANDRA
@@ -157,8 +151,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         html = "31743-06.html"
       when 11
         html = "31743-07.html"
-      else
-        # [automatically added else]
       end
 
     when OGMAR
@@ -167,8 +159,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         html = "31744-01.html"
       when 3
         html = "31744-03.html"
-      else
-        # [automatically added else]
       end
 
     when MYSTERIOUS_KNIGHT
@@ -184,8 +174,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         end
       when 6
         html = "31751-05.html"
-      else
-        # [automatically added else]
       end
 
     when ANGEL_CORPSE
@@ -201,8 +189,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         end
       when 5
         html = "31752-02.html"
-      else
-        # [automatically added else]
       end
 
     when KALIS
@@ -217,8 +203,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         end
       when 9
         html = "30759-06.html"
-      else
-        # [automatically added else]
       end
 
     when MATILD
@@ -227,8 +211,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         html = "30738-01.html"
       when 8
         html = "30738-03.html"
-      else
-        # [automatically added else]
       end
 
     when CORNERSTONE
@@ -256,8 +238,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 10
         html = "31746-02.html"
         start_quest_timer("PURE_UNICORN", 3000, npc, pc)
-      else
-        # [automatically added else]
       end
 
     when PURE_UNICORN
@@ -267,12 +247,8 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         html = "31747-01.html"
       when 11
         html = "31747-02.html"
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

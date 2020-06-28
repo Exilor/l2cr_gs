@@ -38,8 +38,6 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
       event
     when "30141-05.html"
       event
-    else
-      # [automatically added else]
     end
   end
 
@@ -54,8 +52,6 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
       give_item(m, st, TAINT_STONE, registered_item_ids)
     when LESSER_SUCCUBUS, LESSER_SUCCUBUS_TILFO, LESSER_SUCCUBUS_TUREN
       give_item(m, st, SUCCUBUS_BLOOD, registered_item_ids)
-    else
-      # [automatically added else]
     end
 
     super
@@ -87,8 +83,6 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
       end
     when State::COMPLETED
       html = get_already_completed_msg(pc)
-    else
-      # [automatically added else]
     end
 
     html || get_no_quest_msg(pc)

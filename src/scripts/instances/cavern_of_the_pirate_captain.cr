@@ -254,8 +254,6 @@ class Scripts::CavernOfThePirateCaptain < AbstractInstance
           spawn_npc(world.is_83? ? DOLL_BLADER_83 : DOLL_BLADER_60, world.zaken_room, pc, world)
           spawn_npc(world.is_83? ? PIRATES_ZOMBIE_83 : PIRATES_ZOMBIE_60, world.zaken_room, pc, world)
           spawn_npc(world.is_83? ? PIRATES_ZOMBIE_CAPTAIN_83 : PIRATES_ZOMBIE_CAPTAIN_60, world.zaken_room, pc, world)
-        else
-          # [automatically added else]
         end
 
       end
@@ -330,8 +328,6 @@ class Scripts::CavernOfThePirateCaptain < AbstractInstance
       return 8
     when 30, 31
       return 13
-    else
-      # [automatically added else]
     end
 
 

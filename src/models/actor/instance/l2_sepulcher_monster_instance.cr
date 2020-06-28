@@ -1,10 +1,10 @@
 class L2SepulcherMonsterInstance < L2MonsterInstance
   private FAKE_PETRIFICATION = SkillHolder.new(4616)
 
-  @victim_spawn_key_box_task : TaskExecutor::Scheduler::DelayedTask?
-  @victim_shout : TaskExecutor::Scheduler::DelayedTask?
-  @change_immortal_task : TaskExecutor::Scheduler::DelayedTask?
-  @on_dead_event_task : TaskExecutor::Scheduler::DelayedTask?
+  @victim_spawn_key_box_task : TaskScheduler::DelayedTask?
+  @victim_shout : TaskScheduler::DelayedTask?
+  @change_immortal_task : TaskScheduler::DelayedTask?
+  @on_dead_event_task : TaskScheduler::DelayedTask?
 
   property mysterious_box_id : Int32 = 0
 
@@ -15,8 +15,6 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
     case template.id
     when 25339, 25342, 25346, 25349
       self.raid = true
-    else
-      # [automatically added else]
     end
 
   end
@@ -50,10 +48,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
       # nothing
     when 25339, 25342, 25346, 25349
       self.raid = true
-    else
-      # [automatically added else]
     end
-
 
     super
   end
@@ -101,10 +96,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
         task.cancel
       end
       @on_dead_event_task = ThreadPoolManager.schedule_effect(OnDeadEvent.new(self), 8500)
-    else
-      # [automatically added else]
     end
-
 
     true
   end
@@ -179,10 +171,7 @@ class L2SepulcherMonsterInstance < L2MonsterInstance
         FourSepulchersManager.spawn_archon_of_halisha(@mob.mysterious_box_id)
       when 25339, 25342, 25346, 25349
         FourSepulchersManager.spawn_emperors_grave_npc(@mob.mysterious_box_id)
-      else
-        # [automatically added else]
       end
-
     end
   end
 

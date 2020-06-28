@@ -18,7 +18,7 @@ module NpcPersonalAIData
     !!AI_DATA.dig?(spawn_name, param_name)
   end
 
-  def initialize_npc_parameters(npc : L2Npc, sp : L2Spawn, spawn_name : String?)
+  def initialize_npc_parameters(npc : L2Npc, sp : L2Spawn, spawn_name : String)
     return unless map = AI_DATA[spawn_name]?
     map.each do |key, val|
       if key == "disableRandomAnimation"

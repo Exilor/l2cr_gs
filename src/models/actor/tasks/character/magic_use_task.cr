@@ -17,9 +17,6 @@ class MagicUseTask
       @character.on_magic_hit_timer(self)
     when 3
       @character.on_magic_finalizer(self)
-    else
-      # [automatically added else]
     end
-
   end
 end

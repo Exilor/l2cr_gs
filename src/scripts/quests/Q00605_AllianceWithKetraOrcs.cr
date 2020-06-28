@@ -231,12 +231,8 @@ class Scripts::Q00605_AllianceWithKetraOrcs < Quest
         if st.has_quest_items?(KETRA_MARKS[4])
           html = "31371-24.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

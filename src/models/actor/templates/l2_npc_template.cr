@@ -245,8 +245,6 @@ class L2NpcTemplate < L2CharTemplate
         unless drops.empty?
           result ? result.concat(drops) : (result = drops)
         end
-      else
-        # [automatically added else]
       end
     end
 

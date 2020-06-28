@@ -66,8 +66,6 @@ class Scripts::Q00354_ConquestOfAlligatorIsland < Quest
       elsif count > 0
         html = "30895-12.html"
       end
-    else
-      # [automatically added else]
     end
 
 

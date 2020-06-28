@@ -115,8 +115,6 @@ class Scripts::Core < AbstractNpcAI
     when "despawn_minions"
       MINIONS.each &.decay_me
       MINIONS.clear
-    else
-      # [automatically added else]
     end
 
 

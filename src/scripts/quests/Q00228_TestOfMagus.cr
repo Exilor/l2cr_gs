@@ -126,8 +126,6 @@ class Scripts::Q00228_TestOfMagus < Quest
       give_items(pc, LILAC_CHARM, 1)
       qs.set_cond(3, true)
       html = event
-    else
-      # [automatically added else]
     end
 
 
@@ -243,8 +241,6 @@ class Scripts::Q00228_TestOfMagus < Quest
             end
           end
         end
-      else
-        # [automatically added else]
       end
 
     end
@@ -400,8 +396,6 @@ class Scripts::Q00228_TestOfMagus < Quest
         elsif has_quest_items?(pc, SCORE_OF_ELEMENTS)
           html = "30612-05.html"
         end
-      else
-        # [automatically added else]
       end
 
     elsif qs.completed?

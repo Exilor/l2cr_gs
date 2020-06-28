@@ -86,8 +86,6 @@ class Scripts::StakatoNest < AbstractNpcAI
       else
         give_cocoon(killer, npc)
       end
-    else
-      # [automatically added else]
     end
 
     super
@@ -112,8 +110,6 @@ class Scripts::StakatoNest < AbstractNpcAI
       npc_id = STAKATO_NURSE_2
     when "male_change"
       npc_id = STAKATO_MALE_2
-    else
-      # [automatically added else]
     end
 
     if npc_id

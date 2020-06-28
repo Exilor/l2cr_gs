@@ -25,8 +25,6 @@ module PunishmentHandler::ChatBanHandler
           apply_to_player(pc)
         end
       end
-    else
-      # [automatically added else]
     end
 
   end
@@ -54,8 +52,6 @@ module PunishmentHandler::ChatBanHandler
           remove_from_player(pc)
         end
       end
-    else
-      # [automatically added else]
     end
 
   end

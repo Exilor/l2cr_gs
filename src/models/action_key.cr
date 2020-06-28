@@ -12,6 +12,6 @@ class ActionKey
 
   def get_sql_save_string(pc_id : Int, order : Int, io : IO)
     {pc_id, @category, order, @command_id, @key_id, @toggle_key1, @toggle_key2,
-      @show_status}.join(", ", io)
+      @show_status}.join(io, ", ")
   end
 end

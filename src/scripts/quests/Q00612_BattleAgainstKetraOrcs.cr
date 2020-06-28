@@ -80,8 +80,6 @@ class Scripts::Q00612_BattleAgainstKetraOrcs < Quest
       html = pc.level >= MIN_LEVEL ? "31377-01.htm" : "31377-02.htm"
     when State::STARTED
       html = st.has_quest_items?(MOLAR) ? "31377-04.html" : "31377-05.html"
-    else
-      # [automatically added else]
     end
 
 

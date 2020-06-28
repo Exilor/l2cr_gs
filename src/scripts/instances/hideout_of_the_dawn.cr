@@ -32,8 +32,6 @@ class Scripts::HideoutOfTheDawn < AbstractInstance
       pc = pc.not_nil!
       enter_instance(pc, HOTDWorld.new, "HideoutOfTheDawn.xml", TEMPLATE_ID)
       event
-    else
-      # [automatically added else]
     end
 
   end

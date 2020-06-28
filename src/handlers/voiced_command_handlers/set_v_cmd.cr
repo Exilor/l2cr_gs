@@ -13,7 +13,7 @@ module VoicedCommandHandler::SetVCmd
 
       if params.starts_with?("privileges")
         val = params.from(11)
-        unless val.num?
+        unless val.number?
           return false
         end
 

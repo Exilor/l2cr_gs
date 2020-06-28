@@ -37,8 +37,6 @@ class Scripts::Q00362_BardsMandolin < Quest
         st.exit_quest(true, true)
         event
       end
-    else
-      # [automatically added else]
     end
 
   end
@@ -66,8 +64,6 @@ class Scripts::Q00362_BardsMandolin < Quest
           html = "30957-05.html"
         when 5
           html = "30957-06.html"
-        else
-          # [automatically added else]
         end
 
       when GALION
@@ -99,12 +95,8 @@ class Scripts::Q00362_BardsMandolin < Quest
         elsif st.memo_state >= 5
           html = "30956-02.html"
         end
-      else
-        # [automatically added else]
       end
 
-    else
-      # [automatically added else]
     end
 
 

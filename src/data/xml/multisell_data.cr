@@ -46,7 +46,7 @@ module MultisellData
           list.entries << entry
         elsif d_name.casecmp?("npcs")
           find_element(d, "npc") do |b|
-            if b.text.num?
+            if b.text.number?
               npc_id = get_content(b).to_i
               if npc_id > 0
                 list.allow_npc(npc_id)
@@ -74,8 +74,6 @@ module MultisellData
       when "production"
         set = get_attributes(n)
         entry.add_product(Ingredient.new(set))
-      else
-        # nothing
       end
 
       n = get_next_element(n)
@@ -117,7 +115,7 @@ module MultisellData
 
     loop do
       pc.send_packet(MultisellList.new(list, index))
-      index += PAGE_SIZE
+      index &+= PAGE_SIZE
       break unless index < list.entries.size
     end
 
@@ -144,8 +142,6 @@ module MultisellData
         pc.send_packet(SystemMessageId::NOT_ENOUGH_FAME_POINTS)
         return true
       end
-    else
-      # [automatically added else]
     end
 
     false
@@ -164,8 +160,6 @@ module MultisellData
       pc.send_packet(UserInfo.new(pc))
       pc.send_packet(ExBrExtraUserInfo.new(pc))
       return true
-    else
-      # [automatically added else]
     end
 
     false
@@ -179,8 +173,6 @@ module MultisellData
       pc.fame += amount.to_i
       pc.send_packet(UserInfo.new(pc))
       pc.send_packet(ExBrExtraUserInfo.new(pc))
-    else
-      # [automatically added else]
     end
   end
 

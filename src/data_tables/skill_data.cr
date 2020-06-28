@@ -62,7 +62,7 @@ module SkillData
 
   def []?(id : Int32, level : Int32) : Skill?
     get(id, level) do
-      warn { "#[]? - No skill found with id #{id} and level #{level}." }
+      warn { "[]? - No skill found with id #{id} and level #{level}." }
       nil
     end
   end
@@ -76,26 +76,20 @@ module SkillData
   end
 
   def get_siege_skills(noble : Bool, castle : Bool) : Indexable(Skill)
-    ret = {
-      SKILLS[SkillData.get_skill_hash(246, 1)],
-      SKILLS[SkillData.get_skill_hash(247, 1)]
-    }
+    ret = SKILLS.values_at(get_skill_hash(246, 1), get_skill_hash(247, 1))
 
     if noble
-      ret += {SKILLS[SkillData.get_skill_hash(326, 1)]}
+      ret += {SKILLS[get_skill_hash(326, 1)]}
     end
 
     if castle
-      ret += {
-        SKILLS[SkillData.get_skill_hash(844, 1)],
-        SKILLS[SkillData.get_skill_hash(845, 1)]
-      }
+      ret += SKILLS.values_at(get_skill_hash(844, 1), get_skill_hash(845, 1))
     end
 
     ret
   end
 
   def get_skill_hash(id : Int32, lvl : Int32) : Int32
-    (id * 1021) &+ lvl
+    (id &* 1021) &+ lvl
   end
 end

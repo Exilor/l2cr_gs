@@ -36,7 +36,7 @@ module AdminCommandHandler::AdminSiege
       val = st.shift
 
       if command.starts_with?("admin_clanhall")
-        if val.num?
+        if val.number?
           clanhall = ClanHallManager.get_clan_hall_by_id(val.to_i).not_nil!
           case command
           when "admin_clanhallset"
@@ -115,7 +115,7 @@ module AdminCommandHandler::AdminSiege
             pc.send_packet(SystemMessageId::INCORRECT_TARGET)
           end
         when "admin_add_guard"
-          if (val = st.shift?) && val.num?
+          if (val = st.shift?) && val.number?
             castle.siege.siege_guard_manager.add_siege_guard(pc, val.to_i)
           end
           # If doesn't have more tokens or token is not a number.

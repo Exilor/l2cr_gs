@@ -2,8 +2,8 @@ module L2Cr
   extend self
   include Packets::Outgoing
 
-  @@on_screen_info_task : TaskExecutor::Scheduler::PeriodicTask?
-  @@command_line_task : TaskExecutor::Scheduler::PeriodicTask?
+  @@on_screen_info_task : TaskScheduler::PeriodicTask?
+  @@command_line_task : TaskScheduler::PeriodicTask?
 
   def on_screen_info_task
     if task = @@on_screen_info_task
@@ -93,8 +93,6 @@ module L2Cr
         end
       when "uptime"
         puts Time.local - GameServer.start_time
-      when "pool_stats"
-        puts ThreadPoolManager.stats
       else
         return "unknown command '#{cmd}'"
       end
@@ -112,28 +110,12 @@ module L2Cr
     L2World.world_regions.each &.each do |reg|
       reg.objects.each do |l2id, obj|
         unless L2World.find_object(l2id)
-          errors += 1
+          errors &+= 1
           puts "#{obj} with object id #{l2id} found in region #{reg} but not in L2World."
         end
       end
     end
     errors = "No" if errors == 0
     puts "#{errors} errors."
-  end
-
-  def test(pc)
-    # app = PcAppearance.new(rand(4u8), rand(4u8), rand(4u8), false)
-    # app.visible_name = Time.ms.to_s
-    # app.name_color = PcAppearance::DEFAULT_TITLE_COLOR
-    # fake = L2PcInstance.new(ClassId::FIGHTER.to_i, "", app)
-    # fake.location = pc.location
-    # fake.spawn_me
-
-    # pc.send_packet(Packets::Outgoing::ShowBoard.new("<html><body><br><center>Error: HTML was too long!</center></body></html>", "101"))
-    # pc.send_packet(Packets::Outgoing::ShowBoard.new(nil, "102"))
-    # pc.send_packet(Packets::Outgoing::ShowBoard.new(nil, "103"))
-
-    # pc.send_packet(SystemMessageId::NAMING_YOU_CANNOT_SET_NAME_OF_THE_PET) # doesnt work
-    # pc.send_packet(SystemMessage.naming_you_cannot_set_name_of_the_pet) # doesnt work
   end
 end

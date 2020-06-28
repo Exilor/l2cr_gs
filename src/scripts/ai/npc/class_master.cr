@@ -223,8 +223,6 @@ class Scripts::ClassMaster < AbstractNpcAI
           end
         when 3
           io << "There is no class change available for you anymore.<br>"
-        else
-          # [automatically added else]
         end
 
         io << "</body></html>"
