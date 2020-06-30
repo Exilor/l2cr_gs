@@ -1398,7 +1398,7 @@ class SevenSignsFestival
       festival_init
     end
 
-    def festival_init
+    private def festival_init
       positive = false
 
       @participants.each do |id|

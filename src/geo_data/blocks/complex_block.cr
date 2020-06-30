@@ -20,7 +20,7 @@ struct ComplexBlock
   end
 
   def check_nearest_nswe(x : Int32, y : Int32, z : Int32, nswe : Int32) : Bool
-    (get_cell_nswe(x, y) & nswe) == nswe
+    get_cell_nswe(x, y) & nswe == nswe
   end
 
   def get_nearest_z(x : Int32, y : Int32, z : Int32) : Int32

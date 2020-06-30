@@ -199,36 +199,6 @@ class Skill
     end
   end
 
-  private def parse_extractable_skill(skill_id, skill_lvl, values)
-    products = [] of L2ExtractableProductItem
-
-    values.split(';') do |prod_list|
-      prod_data = prod_list.split(',')
-      if prod_data.size < 3
-        raise "Wrong size for extractable skill info: #{prod_data.size}"
-      end
-      chance = 0.0
-      length = prod_data.size &- 1
-      items = [] of ItemHolder
-      (0...length).step(2) do |j|
-        prod_id = prod_data[j].to_i
-        quantity = prod_data[j &+ 1].to_i64
-        if prod_id <= 0 || quantity <= 0
-          raise "Wrong prod id or quantity for extractable skill"
-        end
-        items << ItemHolder.new(prod_id, quantity)
-      end
-      chance = prod_data[length].to_f
-      products << L2ExtractableProductItem.new(items, chance)
-    end
-
-    if products.empty?
-      raise "Empty extractable skill"
-    end
-
-    L2ExtractableSkill.new(products)
-  end
-
   delegate physical?, magic?, static?, dance?, trigger?, to: @skill_type
   delegate fly_type?, active?, passive?, toggle?, self_continuous?, channeling?,
     to: @operate_type
@@ -689,37 +659,6 @@ class Skill
     !effects.empty?
   end
 
-  private def parse_abnormal_visual_effect(string)
-    return if string.nil? || string.empty?
-
-    aves_event = nil
-    aves_special = nil
-    aves = nil
-
-    string.split(';') do |ave2|
-      ave = AbnormalVisualEffect.parse(ave2)
-      if ave.event?
-        (aves_event ||= [] of AbnormalVisualEffect) << ave
-      elsif ave.special?
-        (aves_special ||= [] of AbnormalVisualEffect) << ave
-      else
-        (aves ||= [] of AbnormalVisualEffect) << ave
-      end
-    end
-
-    if aves_event
-      @abnormal_visual_effects_event = aves_event.to_slice
-    end
-
-    if aves_special
-      @abnormal_visual_effects_special = aves_special.to_slice
-    end
-
-    if aves
-      @abnormal_visual_effects = aves.to_slice
-    end
-  end
-
   def extractable_skill : L2ExtractableSkill?
     @extractable_items
   end
@@ -760,5 +699,66 @@ class Skill
 
   def to_log(io : IO)
     to_s(io)
+  end
+
+  private def parse_abnormal_visual_effect(string)
+    return if string.nil? || string.empty?
+
+    aves_event = nil
+    aves_special = nil
+    aves = nil
+
+    string.split(';') do |ave2|
+      ave = AbnormalVisualEffect.parse(ave2)
+      if ave.event?
+        (aves_event ||= [] of AbnormalVisualEffect) << ave
+      elsif ave.special?
+        (aves_special ||= [] of AbnormalVisualEffect) << ave
+      else
+        (aves ||= [] of AbnormalVisualEffect) << ave
+      end
+    end
+
+    if aves_event
+      @abnormal_visual_effects_event = aves_event.to_slice
+    end
+
+    if aves_special
+      @abnormal_visual_effects_special = aves_special.to_slice
+    end
+
+    if aves
+      @abnormal_visual_effects = aves.to_slice
+    end
+  end
+
+  private def parse_extractable_skill(skill_id, skill_lvl, values)
+    products = [] of L2ExtractableProductItem
+
+    values.split(';') do |prod_list|
+      prod_data = prod_list.split(',')
+      if prod_data.size < 3
+        raise "Wrong size for extractable skill info: #{prod_data.size}"
+      end
+      chance = 0.0
+      length = prod_data.size &- 1
+      items = [] of ItemHolder
+      (0...length).step(2) do |j|
+        prod_id = prod_data[j].to_i
+        quantity = prod_data[j &+ 1].to_i64
+        if prod_id <= 0 || quantity <= 0
+          raise "Wrong product item id or quantity for extractable skill"
+        end
+        items << ItemHolder.new(prod_id, quantity)
+      end
+      chance = prod_data[length].to_f
+      products << L2ExtractableProductItem.new(items.to_slice, chance)
+    end
+
+    if products.empty?
+      raise "Empty extractable skill"
+    end
+
+    L2ExtractableSkill.new(products)
   end
 end

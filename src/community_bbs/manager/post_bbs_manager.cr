@@ -125,8 +125,8 @@ module PostBBSManager
 
   private def show_memo_post(topic : Topic, pc : L2PcInstance, forum : Forum)
     p = get_g_post_by_topic(topic)
-    mes = p.get_c_post(0).post_txt.sub(">", "&gt;")
-    mes = mes.sub("<", "&lt;")
+    mes = p.get_c_post(0).post_txt.gsub(">", "&gt;")
+    mes = mes.gsub("<", "&lt;")
 
     html = String.build do |io|
       io << "<html><body><br><br><table border=0 width=610><tr><td width=10>" \

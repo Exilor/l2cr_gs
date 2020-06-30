@@ -43,8 +43,8 @@ class Shutdown
     end
 
     @@counter_instance.try &.abort
-    @@counter_instance = Shutdown.new(seconds, restart)
-    @@counter_instance.start
+    @@counter_instance = inst = Shutdown.new(seconds, restart)
+    inst.start
   end
 
   def start
@@ -65,8 +65,6 @@ class Shutdown
     tc2 = Timer.new
 
     if self == Shutdown.instance
-      # UPnPService.remove_all_ports
-      # UPnPService.info { "All port mappings deleted (#{tc1})." }
       tc1.start
 
       if Config.offline_trade_enable || Config.offline_craft_enable
@@ -214,7 +212,6 @@ class Shutdown
     when GM_RESTART
       info "GM restart received. Restarting now."
     end
-
 
     tc = Timer.new
 

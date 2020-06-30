@@ -1520,7 +1520,7 @@ class Scripts::Q00255_Tutorial < Quest
           qs.add_exp_and_sp(0, 50)
           qs.set_memo_state_ex(1, 4)
         end
-        start_quest_timer(npc.id.to_s, 60000, npc, pc)
+        start_quest_timer(npc.id.to_s, 60_000, npc, pc)
         qs.take_items(RECOMMENDATION_1, 1)
         show_page(pc, "30008-002.htm")
       end
@@ -1555,7 +1555,7 @@ class Scripts::Q00255_Tutorial < Quest
           end
         end
         qs.take_items(RECOMMENDATION_2, 1)
-        start_quest_timer(npc.id.to_s, 60000, npc, pc)
+        start_quest_timer(npc.id.to_s, 60_000, npc, pc)
         if qs.get_memo_state_ex(1) <= 3
           qs.set_memo_state_ex(1, 4)
         end
@@ -1729,7 +1729,7 @@ class Scripts::Q00255_Tutorial < Quest
     if qs.get_memo_state_ex(1) < 0
       if pc.class_id.fighter? && pc.race.human?
         qs.remove_radar(-71424, 258336, -3109)
-        start_quest_timer(npc.id.to_s, 30000, npc, pc)
+        start_quest_timer(npc.id.to_s, 30_000, npc, pc)
         qs.set_memo_state_ex(1, 0)
         enable_tutorial_event(qs, (qs.memo_state & 2147483392) | 1048576)
         show_page(pc, "30009-001.htm")
@@ -1743,7 +1743,7 @@ class Scripts::Q00255_Tutorial < Quest
       qs.set_memo_state_ex(1, 3)
       qs.give_items(RECOMMENDATION_1, 1)
 
-      start_quest_timer(npc.id.to_s, 30000, npc, pc)
+      start_quest_timer(npc.id.to_s, 30_000, npc, pc)
       qs.memo_state = (qs.memo_state & 2147483392) | 4
       if !pc.mage_class? && !qs.has_quest_items?(SOULSHOT_NO_GRADE_FOR_BEGINNERS)
         qs.give_items(SOULSHOT_NO_GRADE_FOR_BEGINNERS, 200)
@@ -1780,7 +1780,7 @@ class Scripts::Q00255_Tutorial < Quest
     if qs.get_memo_state_ex(1) < 0
       if pc.class_id.mage? && pc.race.human?
         qs.remove_radar(-91036, 248044, -3568)
-        start_quest_timer(npc.id.to_s, 30000, npc, pc)
+        start_quest_timer(npc.id.to_s, 30_000, npc, pc)
         qs.set_memo_state_ex(1, 0)
         enable_tutorial_event(qs, (qs.memo_state & 2147483392) | 1048576)
         show_page(pc, "30019-001.htm")
@@ -1795,7 +1795,7 @@ class Scripts::Q00255_Tutorial < Quest
       qs.set_memo_state_ex(1, 3)
       qs.give_items(RECOMMENDATION_2, 1)
 
-      start_quest_timer(npc.id.to_s, 30000, npc, pc)
+      start_quest_timer(npc.id.to_s, 30_000, npc, pc)
       qs.memo_state = (qs.memo_state & 2147483392) | 4
       if !pc.mage_class? && !qs.has_quest_items?(SOULSHOT_NO_GRADE_FOR_BEGINNERS)
         qs.give_items(SOULSHOT_NO_GRADE_FOR_BEGINNERS, 200)
@@ -1832,7 +1832,7 @@ class Scripts::Q00255_Tutorial < Quest
     if qs.get_memo_state_ex(1) < 0
       if pc.race.dark_elf?
         qs.remove_radar(28384, 11056, -4233)
-        start_quest_timer(npc.id.to_s, 30000, npc, pc)
+        start_quest_timer(npc.id.to_s, 30_000, npc, pc)
 
         if !pc.mage_class?
           show_page(pc, "30009-001.htm")
@@ -1861,7 +1861,7 @@ class Scripts::Q00255_Tutorial < Quest
       qs.take_items(BLUE_GEMSTONE, -1)
       qs.set_memo_state_ex(1, 3)
       qs.give_items(BLOOD_OF_MITRAELL, 1)
-      start_quest_timer(npc.id.to_s, 30000, npc, pc)
+      start_quest_timer(npc.id.to_s, 30_000, npc, pc)
 
       qs.memo_state = (qs.memo_state & 2147483392) | 4
 
@@ -1899,7 +1899,7 @@ class Scripts::Q00255_Tutorial < Quest
     if qs.get_memo_state_ex(1) < 0
       if pc.race.elf?
         qs.remove_radar(46112, 41200, -3504)
-        start_quest_timer(npc.id.to_s, 30000, npc, pc)
+        start_quest_timer(npc.id.to_s, 30_000, npc, pc)
         qs.set_memo_state_ex(1, 0)
         enable_tutorial_event(qs, (qs.memo_state & 2147483392) | 1048576)
         if !pc.mage_class?
@@ -1920,7 +1920,7 @@ class Scripts::Q00255_Tutorial < Quest
       qs.take_items(BLUE_GEMSTONE, -1)
       qs.set_memo_state_ex(1, 3)
       qs.give_items(LEAF_OF_THE_MOTHER_TREE, 1)
-      start_quest_timer(npc.id.to_s, 30000, npc, pc)
+      start_quest_timer(npc.id.to_s, 30_000, npc, pc)
       qs.memo_state = (qs.memo_state & 2147483392) | 4
       if !pc.mage_class? && !qs.has_quest_items?(SOULSHOT_NO_GRADE_FOR_BEGINNERS)
         qs.play_sound(Voice::TUTORIAL_VOICE_026_1000)
@@ -1962,7 +1962,7 @@ class Scripts::Q00255_Tutorial < Quest
     if qs.get_memo_state_ex(1) < 0
       if pc.race.dwarf?
         qs.remove_radar(108567, -173994, -406)
-        start_quest_timer(npc.id.to_s, 30000, npc, pc)
+        start_quest_timer(npc.id.to_s, 30_000, npc, pc)
 
         qs.set_memo_state_ex(1, 0)
         enable_tutorial_event(qs, (qs.memo_state & 2147483392) | 1048576)
@@ -1980,7 +1980,7 @@ class Scripts::Q00255_Tutorial < Quest
       qs.take_items(BLUE_GEMSTONE, -1)
       qs.set_memo_state_ex(1, 3)
       qs.give_items(LICENSE_OF_MINER, 1)
-      start_quest_timer(npc.id.to_s, 30000, npc, pc)
+      start_quest_timer(npc.id.to_s, 30_000, npc, pc)
       qs.memo_state = (qs.memo_state & 2147483392) | 4
       if !pc.mage_class? && !qs.has_quest_items?(SOULSHOT_NO_GRADE_FOR_BEGINNERS)
         qs.play_sound(Voice::TUTORIAL_VOICE_026_1000)
@@ -2020,7 +2020,7 @@ class Scripts::Q00255_Tutorial < Quest
     if qs.get_memo_state_ex(1) < 0
       if pc.race.orc?
         qs.remove_radar(-56736, -113680, -672)
-        start_quest_timer(npc.id.to_s, 30000, npc, pc)
+        start_quest_timer(npc.id.to_s, 30_000, npc, pc)
         qs.set_memo_state_ex(1, 0)
         enable_tutorial_event(qs, (qs.memo_state & 2147483392) | 1048576)
         if !pc.mage_class?
@@ -2047,7 +2047,7 @@ class Scripts::Q00255_Tutorial < Quest
       qs.take_items(BLUE_GEMSTONE, -1)
       qs.set_memo_state_ex(1, 3)
       qs.give_items(VOUCHER_OF_FLAME, 1)
-      start_quest_timer(npc.id.to_s, 30000, npc, pc)
+      start_quest_timer(npc.id.to_s, 30_000, npc, pc)
       qs.memo_state = (qs.memo_state & 2147483392) | 4
       unless qs.has_quest_items?(SOULSHOT_NO_GRADE_FOR_BEGINNERS)
         qs.give_items(SOULSHOT_NO_GRADE_FOR_BEGINNERS, 200)
@@ -2077,7 +2077,7 @@ class Scripts::Q00255_Tutorial < Quest
       if pc.race.kamael?
         qs.remove_radar(-125872, 38016, 1251)
         qs.set_memo_state_ex(1, 0)
-        start_quest_timer(npc.id.to_s, 30000, npc, pc)
+        start_quest_timer(npc.id.to_s, 30_000, npc, pc)
         enable_tutorial_event(qs, (qs.memo_state & 2147483392) | 1048576)
         show_page(pc, "32134-001.htm")
       else
@@ -2090,7 +2090,7 @@ class Scripts::Q00255_Tutorial < Quest
       qs.take_items(BLUE_GEMSTONE, -1)
       qs.set_memo_state_ex(1, 3)
       qs.give_items(DIPLOMA, 1)
-      start_quest_timer(npc.id.to_s, 30000, npc, pc)
+      start_quest_timer(npc.id.to_s, 30_000, npc, pc)
       qs.memo_state = (qs.memo_state & 2147483392) | 4
       if pc.race.kamael? && pc.class_id.level == 0 && !qs.has_quest_items?(SOULSHOT_NO_GRADE_FOR_BEGINNERS)
         qs.give_items(SOULSHOT_NO_GRADE_FOR_BEGINNERS, 200)

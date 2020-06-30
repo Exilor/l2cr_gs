@@ -1,1 +1,1 @@
-record L2ExtractableProductItem, items : Array(ItemHolder), chance : Float64
+record L2ExtractableProductItem, items : Slice(ItemHolder), chance : Float64

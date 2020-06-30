@@ -45,7 +45,7 @@ module GameDB
     end
 
     def insert(pc : L2PcInstance, new_class_index : Int32, new_skills : Array(Skill))
-      # return if new_skills.empty?
+      return if new_skills.empty?
 
       # class_index = new_class_index > -1 ? new_class_index : pc.class_index
 

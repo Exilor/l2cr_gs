@@ -71,7 +71,7 @@ class LoginServerClient
     until cancelled?
       IN_BUFFER.clear
 
-      size = socket.read_bytes(UInt16).to_i32 - 2
+      size = (socket.read_bytes(UInt16) - 2).to_i32
       unless IO.copy(socket, IN_BUFFER, size) == size
         warn "Incomplete packet received from LoginServer, closing connection."
         break
