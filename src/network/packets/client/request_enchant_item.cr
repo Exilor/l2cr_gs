@@ -99,7 +99,7 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
         it = item.template
 
         if scroll_template.get_chance(pc, item) > 0
-          item.enchant_level += 1
+          item.enchant_level &+= 1
           item.update_database
         end
         send_packet(EnchantResult::SUCCESS)

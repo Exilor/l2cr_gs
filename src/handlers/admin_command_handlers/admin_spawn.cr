@@ -57,7 +57,7 @@ module AdminCommandHandler::AdminSpawn
       begin
         st.shift
         instance = st.shift.to_i
-        if instance >= 300000
+        if instance >= 300_000
           counter = 0
           skipped = 0
           if inst = InstanceManager.get_instance(instance)
@@ -78,9 +78,9 @@ module AdminCommandHandler::AdminSpawn
                     io << ' '
                     io << npc.z
                     io << "\">Go</a></td></tr>"
-                    counter += 1
+                    counter &+= 1
                   else
-                    skipped += 1
+                    skipped &+= 1
                   end
                 end
               end

@@ -57,7 +57,6 @@ module AdminCommandHandler::AdminScan
       send_npc_list(pc, DEFAULT_RADIUS)
     end
 
-
     true
   end
 

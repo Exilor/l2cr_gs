@@ -435,11 +435,8 @@ class Scripts::Q00454_CompletelyLost < Quest
           qs.exit_quest(QuestType::DAILY, true)
           html = "32736-03.html"
         end
-
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

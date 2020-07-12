@@ -230,7 +230,7 @@ module CastleManorManager
         PROCURE_NEXT[castle_id].each do |crop|
           mature_id = get_seed_by_crop(crop.id).not_nil!.mature_id
           if crop.start_amount > 0 && cwh.get_items_by_item_id(mature_id).nil?
-            slots += 1
+            slots &+= 1
           end
 
           manor_cost = get_manor_cost(castle_id, true)
@@ -372,9 +372,9 @@ module CastleManorManager
 
     production.each do |seed|
       s = get_seed(seed.id)
-      total += s ? s.seed_reference_price * seed.start_amount : 1
+      total &+= s ? s.seed_reference_price * seed.start_amount : 1
     end
-    procure.each { |crop| total += crop.price * crop.start_amount }
+    procure.each { |crop| total &+= crop.price * crop.start_amount }
 
     total
   end

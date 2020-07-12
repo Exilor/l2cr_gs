@@ -52,14 +52,14 @@ module AdminCommandHandler::AdminMammon
 
       if merch_sp
         merch_respawn = AutoSpawnHandler.get_time_to_next_spawn(merch_sp)
-        pc.send_message("The Merchant of Mammon will respawn in #{merch_respawn // 60000} minute(s).")
+        pc.send_message("The Merchant of Mammon will respawn in #{merch_respawn // 60_000} minute(s).")
       else
         pc.send_message("Merchant of Mammon isn't registered for spawn.")
       end
 
       if black_sp
         black_respawn = AutoSpawnHandler.get_time_to_next_spawn(black_sp)
-        pc.send_message("The Blacksmith of Mammon will respawn in #{black_respawn // 60000} minute(s).")
+        pc.send_message("The Blacksmith of Mammon will respawn in #{black_respawn // 60_000} minute(s).")
       else
         pc.send_message("Blacksmith of Mammon isn't registered for spawn.")
       end

@@ -310,16 +310,16 @@ class Scripts::Q00386_StolenDignity < Quest
 
     found = 0
     # Horizontal
-    found += 1 if q[0].number? && q[1].number? && q[2].number?
-    found += 1 if q[3].number? && q[4].number? && q[5].number?
-    found += 1 if q[6].number? && q[7].number? && q[8].number?
+    found &+= 1 if q[0].number? && q[1].number? && q[2].number?
+    found &+= 1 if q[3].number? && q[4].number? && q[5].number?
+    found &+= 1 if q[6].number? && q[7].number? && q[8].number?
     # Vertical
-    found += 1 if q[0].number? && q[3].number? && q[6].number?
-    found += 1 if q[1].number? && q[4].number? && q[7].number?
-    found += 1 if q[2].number? && q[5].number? && q[8].number?
+    found &+= 1 if q[0].number? && q[3].number? && q[6].number?
+    found &+= 1 if q[1].number? && q[4].number? && q[7].number?
+    found &+= 1 if q[2].number? && q[5].number? && q[8].number?
     # Diagonal
-    found += 1 if q[0].number? && q[4].number? && q[8].number?
-    found += 1 if q[2].number? && q[4].number? && q[6].number?
+    found &+= 1 if q[0].number? && q[4].number? && q[8].number?
+    found &+= 1 if q[2].number? && q[4].number? && q[6].number?
 
     found
   end

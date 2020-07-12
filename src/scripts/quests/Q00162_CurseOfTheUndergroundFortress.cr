@@ -55,7 +55,7 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
           skulls = st.get_quest_items_count(ELF_SKULL)
           if skulls < 3
             st.give_items(ELF_SKULL, 1)
-            skulls += 1
+            skulls &+= 1
             if skulls >= 3 && st.get_quest_items_count(BONE_FRAGMENT) >= 10
               st.set_cond(2, true)
             else
@@ -68,7 +68,7 @@ class Scripts::Q00162_CurseOfTheUndergroundFortress < Quest
           bones = st.get_quest_items_count(BONE_FRAGMENT)
           if bones < 10
             st.give_items(BONE_FRAGMENT, 1)
-            bones += 1
+            bones &+= 1
             if bones >= 10 && st.get_quest_items_count(ELF_SKULL) >= 3
               st.set_cond(2, true)
             else

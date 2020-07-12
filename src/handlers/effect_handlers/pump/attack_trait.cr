@@ -5,7 +5,7 @@ class EffectHandler::AttackTrait < AbstractEffect
     super
 
     if params.empty?
-      raise "params of #{self.class} must not be empty"
+      raise "Params of #{self.class} must not be empty"
     end
 
     attack_traits = [] of {UInt8, Float32}

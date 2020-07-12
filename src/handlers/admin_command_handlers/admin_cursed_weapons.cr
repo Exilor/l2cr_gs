@@ -19,11 +19,11 @@ module AdminCommandHandler::AdminCursedWeapons
             tmp = pl ? pl.name : "nil"
             pc.send_message("  Player holding: #{tmp}")
             pc.send_message("    Player karma: #{cw.player_karma}")
-            pc.send_message("    Time Remaining: #{cw.time_left // 60000} min.")
+            pc.send_message("    Time Remaining: #{cw.time_left // 60_000} min.")
             pc.send_message("    Kills : #{cw.nb_kills}")
           elsif cw.dropped?
             pc.send_message("  Lying on the ground.")
-            pc.send_message("    Time Remaining: #{cw.time_left // 60000} min.")
+            pc.send_message("    Time Remaining: #{cw.time_left // 60_000} min.")
             pc.send_message("    Kills : #{cw.nb_kills}")
           else
             pc.send_message("  Don't exist in the world.")
@@ -52,7 +52,7 @@ module AdminCommandHandler::AdminCursedWeapons
             msg << "/"
             msg << cw.nb_kills
             msg << "</td></tr><tr><td>Time remaining:</td><td>"
-            msg << (cw.time_left // 60000)
+            msg << (cw.time_left // 60_000)
             msg << " min.</td></tr><tr><td><button value=\"Remove\" action=\"bypass -h admin_cw_remove "
             msg << item_id
             msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td><button value=\"Go\" action=\"bypass -h admin_cw_goto "
@@ -60,7 +60,7 @@ module AdminCommandHandler::AdminCursedWeapons
             msg << "\" width=73 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>"
           elsif cw.dropped?
             msg << "<tr><td>Position:</td><td>Lying on the ground</td></tr><tr><td>Time remaining:</td><td>"
-            msg << (cw.time_left // 60000)
+            msg << (cw.time_left // 60_000)
             msg << " min.</td></tr><tr><td>Kills:</td><td>"
             msg << cw.nb_kills
             msg << "</td></tr><tr><td><button value=\"Remove\" action=\"bypass -h admin_cw_remove "
@@ -119,7 +119,7 @@ module AdminCommandHandler::AdminCursedWeapons
           else
             pc.add_item("AdminCursedWeaponAdd", id, 1, pc, true)
           end
-          cw.end_time = Time.ms + (cw.duration * 60000)
+          cw.end_time = Time.ms + (cw.duration * 60_000)
           cw.reactivate
         end
       else

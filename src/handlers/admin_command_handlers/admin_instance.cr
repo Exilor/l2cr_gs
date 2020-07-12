@@ -13,7 +13,7 @@ module AdminCommandHandler::AdminInstance
       else
         begin
           id = parts[1].to_i
-          if id < 300000 && InstanceManager.create_instance_from_template(id, parts[2])
+          if id < 300_000 && InstanceManager.create_instance_from_template(id, parts[2])
             pc.send_message("Instance created.")
           else
             pc.send_message("Failed to create instance.")

@@ -801,7 +801,7 @@ abstract class Inventory < ItemContainer
       self[GLOVES] = nil
       self[CHEST] = item
     else
-      warn { "Unknown body slot #{target_slot} for item ID #{item.id}." }
+      warn { "Unknown body slot #{target_slot} for item id #{item.id}." }
     end
   end
 

@@ -40,7 +40,7 @@ class Scripts::HellboundEngine < AbstractNpcAI
       level = level()
       if level > 0 && level == cached_level
         if trust == max_trust && level != 4
-          level += 1
+          level &+= 1
           self.level = level
           on_level_change(level)
         end
@@ -64,14 +64,14 @@ class Scripts::HellboundEngine < AbstractNpcAI
         sp.stop_respawn
         if npc && npc.visible?
           npc.delete_me
-          deleted += 1
+          deleted &+= 1
         end
       else
         sp.start_respawn
 
         if npc.nil?
           sp.do_spawn
-          added += 1
+          added &+= 1
         else
           if npc.decayed?
             npc.decayed = false
@@ -83,7 +83,7 @@ class Scripts::HellboundEngine < AbstractNpcAI
 
           unless npc.visible?
             npc.visible = true
-            added += 1
+            added &+= 1
           end
 
           npc.heal!

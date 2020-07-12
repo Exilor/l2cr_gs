@@ -185,7 +185,7 @@ class Packets::Incoming::RequestSendPost < GameClientPacket
         return false
       end
 
-      fee += MESSAGE_FEE_PER_SLOT
+      fee &+= MESSAGE_FEE_PER_SLOT
 
       if item.id == Inventory::ADENA_ID
         current_adena -= i.count

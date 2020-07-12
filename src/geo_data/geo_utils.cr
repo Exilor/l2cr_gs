@@ -26,7 +26,7 @@ module GeoUtils
       elsif y < last_y
         NSWE::NORTH
       else
-        raise "something wrong with GeoUtils.compute_nswe"
+        raise "No direction"
       end
     end
   end

@@ -117,19 +117,19 @@ module TvTEvent
       highest_lvl_player = participants[highest_lvl_player_id]
       participants.delete(highest_lvl_player_id)
       TEAMS[priority].add_player(highest_lvl_player)
-      balance[priority] += highest_lvl_player.level
+      balance[priority] &+= highest_lvl_player.level
       # Exiting if no more players
       if participants.empty?
         break
       end
       # The other team gets one player
       # TODO: Code not dry
-      priority = 1 - priority
+      priority = 1 &- priority
       highest_lvl_player_id = get_highest_level_player(participants)
       highest_lvl_player = participants[highest_lvl_player_id]
       participants.delete(highest_lvl_player_id)
       TEAMS[priority].add_player(highest_lvl_player)
-      balance[priority] += highest_lvl_player.level
+      balance[priority] &+= highest_lvl_player.level
       # Recalculating priority
       priority = balance[0] > balance[1] ? 1 : 0
     end

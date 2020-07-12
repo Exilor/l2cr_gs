@@ -548,7 +548,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
         this_npc.npc.broadcast_packet(NpcSay.new(this_npc.npc.l2id, 0, this_npc.npc.id, SPAWN_CHAT.sample))
       end
       x += 65
-      idx += 1
+      idx &+= 1
     end
 
     world.rooms[:FifthRoom] = fifth_room

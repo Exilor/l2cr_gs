@@ -106,7 +106,7 @@ class Scripts::Q00292_BrigandsSweep < Quest
           if sum > 0
             adena = (necklaces * 12) + (pendants * 36) + (lord_pendants * 33)
             if sum >= 10
-              adena += 1000
+              adena &+= 1000
             end
             give_adena(pc, adena, true)
             take_items(pc, -1, {GOBLIN_NECKLACE, GOBLIN_PENDANT, GOBLIN_LORD_PENDANT})

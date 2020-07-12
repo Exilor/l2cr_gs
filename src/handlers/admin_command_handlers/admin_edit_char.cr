@@ -392,7 +392,7 @@ module AdminCommandHandler::AdminEditChar
         ip = ""
         trace[0].size.times do |o|
           ip = "#{ip}#{trace[i][o]}"
-          if o != trace[0].size - 1
+          if o != trace[0].size &- 1
             ip += "."
           end
         end
@@ -527,7 +527,7 @@ module AdminCommandHandler::AdminEditChar
           return false
         end
         playable = target
-        playable.update_pvp_flag((playable.pvp_flag.to_i32 - 1).abs)
+        playable.update_pvp_flag((playable.pvp_flag.to_i32 &- 1).abs)
       rescue e
         pc.send_message("Usage: //set_pvp_flag")
       end
@@ -703,7 +703,7 @@ module AdminCommandHandler::AdminEditChar
     compared_players.each do |player|
       name = player.name
       if name.downcase.includes?(to_find.downcase)
-        chars_found = chars_found + 1
+        chars_found = chars_found &+ 1
         rep_msg << "<tr><td width=80><a action=\"bypass -h admin_character_info "
         rep_msg << name
         rep_msg << "\">"
@@ -773,7 +773,7 @@ module AdminCommandHandler::AdminEditChar
       end
 
       name = player.name
-      chars_found = chars_found + 1
+      chars_found = chars_found &+ 1
       rep_msg << "<tr><td width=80><a action=\"bypass -h admin_character_info "
       rep_msg << name
       rep_msg << "\">"
@@ -812,7 +812,7 @@ module AdminCommandHandler::AdminEditChar
     end
 
     chars = player.account_chars
-    rep_msg = String.build(chars.size * 20) do |io|
+    rep_msg = String.build(chars.size &* 20) do |io|
       chars.each_value do |name|
         io << name << "<br1>"
       end
@@ -848,7 +848,7 @@ module AdminCommandHandler::AdminEditChar
         if count.nil?
           dualbox_ips[ip] = multibox
         else
-          dualbox_ips[ip] = count + 1
+          dualbox_ips[ip] = count &+ 1
         end
       end
     end
@@ -895,7 +895,7 @@ module AdminCommandHandler::AdminEditChar
         if count.nil?
           dualbox_ips[pack] = multibox
         else
-          dualbox_ips[pack] = count + 1
+          dualbox_ips[pack] = count &+ 1
         end
       end
     end

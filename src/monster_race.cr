@@ -34,7 +34,7 @@ module MonsterRace
               {{sub}}
           {% end %}
           else
-            raise "No constructor for '#{template.type}' found."
+            raise "No constructor for '#{template.type}' found"
           end
         {% end %}
 

@@ -8,7 +8,7 @@ class EffectHandler::Summon < AbstractEffect
     super
 
     if params.empty?
-      raise "summon effect without parameters"
+      raise "Summon effect without parameters"
     end
 
     @npc_id = params.get_i32("npcId")

@@ -12,7 +12,7 @@ class EffectHandler::ConsumeMpByLevel < AbstractEffect
     target = info.effected
     return false if target.dead?
 
-    consume = @power * ticks_multiplier * ((target.level - 1) / 7.5)
+    consume = @power * ticks_multiplier * ((target.level &- 1) / 7.5)
     mp = target.current_mp
 
     if consume < 0 && mp + consume <= 0

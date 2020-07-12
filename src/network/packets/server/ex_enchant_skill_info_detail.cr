@@ -23,7 +23,7 @@ class Packets::Outgoing::ExEnchantSkillInfoDetail < GameServerPacket
     end
 
     unless esd
-      raise "Skill with ID #{skill_id} doesn't have enchant data for level #{skill_lvl}."
+      raise "Skill with id #{skill_id} doesn't have enchant data for level #{skill_lvl}"
     end
 
     if type == 0

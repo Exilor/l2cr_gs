@@ -84,7 +84,7 @@ class Scripts::AvantGarde < AbstractNpcAI
           1.upto(Config.max_subclass) do |i|
             qvar = st.get_global_quest_var("#{var_name}#{i}")
             if !qvar.empty? && (qvar.ends_with?(';') || qvar != "0")
-              active_certifications += 1
+              active_certifications &+= 1
             end
           end
         end

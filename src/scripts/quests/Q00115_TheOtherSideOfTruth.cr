@@ -122,7 +122,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         if st.cond?(7) && st.get_int("ex") % 2 <= 1
           ex = st.get_int("ex")
           if ex == 6 || ex == 10 || ex == 12
-            ex += 1
+            ex &+= 1
             st.set("ex", ex)
             st.give_items(PIECE_OF_TABLET, 1)
             html = event
@@ -132,7 +132,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         if st.cond?(7) && st.get_int("ex") % 4 <= 1
           ex = st.get_int("ex")
           if ex == 5 || ex == 9 || ex == 12
-            ex += 2
+            ex &+= 2
             st.set("ex", ex)
             st.give_items(PIECE_OF_TABLET, 1)
             html = event
@@ -142,7 +142,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         if st.cond?(7) && st.get_int("ex") % 8 <= 3
           ex = st.get_int("ex")
           if ex == 3 || ex == 9 || ex == 10
-            ex += 4
+            ex &+= 4
             st.set("ex", ex)
             st.give_items(PIECE_OF_TABLET, 1)
             html = event
@@ -152,21 +152,20 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         if st.cond?(7) && st.get_int("ex") <= 7
           ex = st.get_int("ex")
           if ex == 3 || ex == 5 || ex == 6
-            ex += 8
+            ex &+= 8
             st.set("ex", ex)
             st.give_items(PIECE_OF_TABLET, 1)
             html = event
           end
         end
       end
-
     when "32021-03.html"
       case npc.not_nil!.id
       when ICE_SCULPTURE1
         if st.cond?(7) && st.get_int("ex") % 2 <= 1
           ex = st.get_int("ex")
           if ex == 6 || ex == 10 || ex == 12
-            ex += 1
+            ex &+= 1
             st.set("ex", ex)
             html = event
           end
@@ -175,7 +174,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         if st.cond?(7) && st.get_int("ex") % 4 <= 1
           ex = st.get_int("ex")
           if ex == 5 || ex == 9 || ex == 12
-            ex += 2
+            ex &+= 2
             st.set("ex", ex)
             html = event
           end
@@ -184,7 +183,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         if st.cond?(7) && st.get_int("ex") % 8 <= 3
           ex = st.get_int("ex")
           if ex == 3 || ex == 9 || ex == 12
-            ex += 4
+            ex &+= 4
             st.set("ex", ex)
             html = event
           end
@@ -193,13 +192,12 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         if st.cond?(7) && st.get_int("ex") <= 7
           ex = st.get_int("ex")
           if ex == 3 || ex == 5 || ex == 6
-            ex += 8
+            ex &+= 8
             st.set("ex", ex)
             html = event
           end
         end
       end
-
     when "32021-06.html"
       case npc.not_nil!.id
       when ICE_SCULPTURE1
@@ -223,9 +221,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           html = event
         end
       end
-
     end
-
 
     html
   end
@@ -285,7 +281,6 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32020-30.html"
           end
         end
-
       when MISA
         case st.cond
         when 1
@@ -303,7 +298,6 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         when 7
           html = "32018-06.html"
         end
-
       when KIER
         case st.cond
         when 8
@@ -320,7 +314,6 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32022-05.html"
           end
         end
-
       when ICE_SCULPTURE1
         case st.cond
         when 7
@@ -331,7 +324,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             elsif ex == 14
               html = "32021-05.html"
             else
-              ex += 1
+              ex &+= 1
               st.set("ex", ex)
               html = "32021-07.html"
             end
@@ -348,7 +341,6 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         end
-
       when ICE_SCULPTURE2
         case st.cond
         when 7
@@ -359,7 +351,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             elsif ex == 13
               html = "32021-05.html"
             else
-              ex += 2
+              ex &+= 2
               st.set("ex", ex)
               html = "32021-07.html"
             end
@@ -376,7 +368,6 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         end
-
       when ICE_SCULPTURE3
         case st.cond
         when 7
@@ -387,7 +378,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             elsif ex == 11
               html = "32021-05.html"
             else
-              ex += 4
+              ex &+= 4
               st.set("ex", ex)
               html = "32021-07.html"
             end
@@ -404,7 +395,6 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         end
-
       when ICE_SCULPTURE4
         case st.cond
         when 7
@@ -415,7 +405,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             elsif ex == 7
               html = "32021-05.html"
             else
-              ex += 8
+              ex &+= 8
               st.set("ex", ex)
               html = "32021-07.html"
             end
@@ -432,11 +422,8 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
             html = "32021-10.html"
           end
         end
-
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

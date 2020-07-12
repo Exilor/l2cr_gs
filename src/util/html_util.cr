@@ -83,7 +83,7 @@ module HtmlUtil
   def create_page(elements : Enumerable(T), size : Int32, page : Int32, elements_per_page : Int32, pager_function : Int32 -> String, body_function : T -> String) : PageResult forall T
     pages = size // elements_per_page
     if elements_per_page * pages < size
-      pages += 1
+      pages &+= 1
     end
 
     pager_template = String::Builder.new
@@ -92,7 +92,7 @@ module HtmlUtil
       break_it = 0
       pages.times do |i|
         pager_template << pager_function.call(i)
-        break_it += 1
+        break_it &+= 1
         if break_it > 5
           pager_template << "</tr><tr>"
           break_it = 0
@@ -101,7 +101,7 @@ module HtmlUtil
     end
 
     if page >= pages
-      page = pages - 1
+      page = pages &- 1
     end
 
     start = 0
@@ -115,7 +115,7 @@ module HtmlUtil
         next
       end
       sb << body_function.call(element)
-      if i >= elements_per_page + start
+      if i >= elements_per_page &+ start
         break
       end
     end

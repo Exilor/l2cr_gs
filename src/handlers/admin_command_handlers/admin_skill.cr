@@ -96,7 +96,7 @@ module AdminCommandHandler::AdminSkill
     max_pages = skills.size // max_skills_per_page
 
     if skills.size > max_skills_per_page * max_pages
-      max_pages += 1
+      max_pages &+= 1
     end
 
     if page > max_pages
@@ -111,7 +111,7 @@ module AdminCommandHandler::AdminSkill
     end
 
     admin_reply = NpcHtmlMessage.new
-    msg_size = 500 + (max_pages * 50) + (((skills_end - skills_start) + 1) * 50)
+    msg_size = 500 + (max_pages &* 50) + (((skills_end &- skills_start) &+ 1) * 50)
     msg = String.build(msg_size) do |io|
       io << "<html><body><table width=260><tr><td width=40><button value" \
             "=\"Main\" action=\"bypass -h admin_admin\" width=40 height=15" \
@@ -136,7 +136,7 @@ module AdminCommandHandler::AdminSkill
         io << "<td><a action=\"bypass -h admin_remove_skills "
         io << x
         io << "\">Page "
-        io << x + 1
+        io << x &+ 1
         io << "</a></td>"
       end
       io << "</tr></table></center><br><table width=270><tr><td width=80>Name:" \

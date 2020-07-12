@@ -255,7 +255,7 @@ class Packets::Incoming::UseItem < GameClientPacket
           warn "No augmentation was generated."
           return true
         end
-        attempts += 1
+        attempts &+= 1
         if attempts > 10000
           pc.send_message "No augmentation with skill could be found after 10.000 attempts."
           return true

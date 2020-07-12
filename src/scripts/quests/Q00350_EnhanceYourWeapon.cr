@@ -343,7 +343,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
               att2 = parse_string(cd, "levelList", nil)
 
               unless att1 || att2
-                raise "Missing maxlevel/levelList in NPC List (npc_id: #{npc_id})."
+                raise "Missing maxlevel/levelList in NPC List (npc_id: #{npc_id})"
               end
 
               info = LevelingInfo.new(absorb_type, skill_needed, chance)
@@ -363,7 +363,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
             end
 
             if temp.empty?
-              raise "No leveling info for npc id #{npc_id}."
+              raise "No leveling info for npc id #{npc_id}"
             end
 
             NPC_LEVELING_INFO[npc_id] = temp

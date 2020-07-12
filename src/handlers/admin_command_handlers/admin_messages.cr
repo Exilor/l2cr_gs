@@ -38,9 +38,9 @@ module AdminCommandHandler::AdminMessages
           elsif val.starts_with?("castle:")
             sm.add_castle_id(val.from(7).to_i)
           elsif val.starts_with?("str:")
-            pos = command.index("'", last_pos + 1).not_nil!
-            last_pos = command.index("'", pos + 1).not_nil!
-            sm.add_string(command[pos + 1...last_pos])
+            pos = command.index("'", last_pos &+ 1).not_nil!
+            last_pos = command.index("'", pos &+ 1).not_nil!
+            sm.add_string(command[pos &+ 1...last_pos])
           end
         rescue e
           warn e

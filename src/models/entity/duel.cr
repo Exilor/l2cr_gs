@@ -251,6 +251,7 @@ class Duel
 
       sm.add_string(@leader_b.name)
     when DuelResult::CANCELED, DuelResult::TIMEOUT
+      stop_fighting
       sm = SystemMessageId::THE_DUEL_HAS_ENDED_IN_A_TIE
     end
 

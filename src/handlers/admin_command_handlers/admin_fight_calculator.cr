@@ -131,15 +131,15 @@ module AdminCommandHandler::AdminFightCalculator
     else
       reply_msg = String.build do |io|
         io << "<html><title>Select mobs to fight</title>" \
-              "<body>" \
-              "<table>" \
-              "<tr><td>First</td><td>Second</td></tr>" \
-              "<tr><td><edit var=\"lvl1\" width=80></td><td><edit var=\"lvl2\" width=80></td></tr>" \
-              "</table>" \
-              "<center><br><br><br>" \
-              "<button value=\"OK\" action=\"bypass -h admin_fight_calculator lvl1 $lvl1 lvl2 $lvl2\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">" \
-              "</center>" \
-              "</body></html>"
+          "<body>" \
+          "<table>" \
+          "<tr><td>First</td><td>Second</td></tr>" \
+          "<tr><td><edit var=\"lvl1\" width=80></td><td><edit var=\"lvl2\" width=80></td></tr>" \
+          "</table>" \
+          "<center><br><br><br>" \
+          "<button value=\"OK\" action=\"bypass -h admin_fight_calculator lvl1 $lvl1 lvl2 $lvl2\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">" \
+          "</center>" \
+          "</body></html>"
       end
     end
 

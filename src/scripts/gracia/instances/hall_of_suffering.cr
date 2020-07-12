@@ -306,7 +306,7 @@ class Scripts::HallOfSuffering < AbstractInstance
         hate = 1000
       end
       unless npc.is_a?(L2Attackable)
-        raise "Expected #{npc} to be a L2Attackable."
+        raise "Expected #{npc} to be a L2Attackable"
       end
       npc.add_damage_hate(caster, 0, hate)
     end
@@ -324,7 +324,7 @@ class Scripts::HallOfSuffering < AbstractInstance
           return ""
         end
         unless npc.is_a?(L2Attackable)
-          raise "Expected #{npc} to be a L2Attackable."
+          raise "Expected #{npc} to be a L2Attackable"
         end
         mob = add_spawn(TWIN_MOB_IDS.sample(random: Rnd), KLODEKUS_SPAWN, false, 0, false, npc.instance_id).as(L2Attackable)
         mob.add_damage_hate(npc.most_hated, 0, 1)

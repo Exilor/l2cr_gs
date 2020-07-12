@@ -223,7 +223,7 @@ class Olympiad < ListenersContainer
       place = 1
       GameDB.each(@GET_ALL_CLASSIFIED_NOBLESS) do |rs|
         tmp[rs.get_i32(CHAR_ID)] = place
-        place += 1
+        place &+= 1
       end
     rescue e
       error e

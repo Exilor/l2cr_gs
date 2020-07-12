@@ -73,7 +73,7 @@ module BypassHandler::OlympiadManagerLink
           classed = 0
           all_classed.each do |cls|
             if cls
-              classed += cls.size
+              classed &+= cls.size
             end
           end
           html.set_file(pc, Olympiad::OLYMPIAD_HTML_PATH + "noble_registered.htm")

@@ -435,6 +435,7 @@ abstract class AbstractScript
             if count + item.count > Int64::MAX
               return Int64::MAX
             end
+            count += item.count
           end
         end
       end
@@ -456,11 +457,11 @@ abstract class AbstractScript
       current_count = 0
       items.each do |i|
         to_delete = i.count
-        if current_count + to_delete > amount
-          to_delete = amount - current_count
+        if current_count &+ to_delete > amount
+          to_delete = amount &- current_count
         end
         take_item(pc, i, to_delete)
-        current_count += to_delete
+        current_count &+= to_delete
       end
     end
 
@@ -473,9 +474,7 @@ abstract class AbstractScript
   end
 
   def self.take_items(pc : L2PcInstance, amount : Int, item_ids : Enumerable(Int32))
-    check = true
-    item_ids.each { |id| check &= take_items(pc, id, amount) }
-    check
+    item_ids.reduce(true) { |check, id| check & take_items(pc, id, amount) }
   end
 
   delegate take_items, to: AbstractScript

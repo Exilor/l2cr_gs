@@ -71,7 +71,7 @@ module AdminCommandHandler::AdminZone
         if zone.character_in_zone?(pc)
           if zone_name = zone.name
             io << zone_name << "<br1>"
-            if zone.id < 300000
+            if zone.id < 300_000
               io << "(" << zone.id << ")"
             end
           else

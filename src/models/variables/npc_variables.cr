@@ -1,7 +1,7 @@
 require "./abstract_variables"
 
 class NpcVariables < AbstractVariables
-  @objects : Hash(String, L2Object)?
+  @objects : Hash(String, L2Character)?
 
   def restore_me : Bool
     true
@@ -11,16 +11,19 @@ class NpcVariables < AbstractVariables
     true
   end
 
-  def []=(key : String, value : L2Object?)
+  def []=(key : String, value : L2Character?)
     return unless value
-    (@objects ||= {} of String => L2Object)[key] = value
+    (@objects ||= {} of String => L2Character)[key] = value
   end
 
   def get_i32(key : String) : Int32
     get_i32(key, 0)
   end
 
-  def get_object(key : String, klass : T.class) forall T
+  def get_object(key : String, klass : T.class) : T forall T
+    {% unless T.union_types.all? { |t| t == Nil || t <= L2Character } %}
+      {% raise "Can't use #{T} for NpcVariables#get_object" %}
+    {% end %}
     (@objects.try &.[key]?).as(T)
   end
 end

@@ -43,7 +43,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     if pc.transformed?
       unless ExBasicActionList::ACTIONS_ON_TRANSFORM.bincludes?(@id)
         action_failed
-        debug { "#{pc.name} requested an action #{@id} which he shouldn't have access to in his transformation." }
+        debug { "#{pc.name} requested action #{@id} which he shouldn't have access to in his transformation." }
         return
       end
     end
@@ -55,9 +55,8 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
   end
 
   private def schedule_sit(pc, target)
-    pc.ai.next_action = NextAction.new(AI::ARRIVED, AI::MOVE_TO) do
-      use_sit(pc, target)
-    end
+    na = NextAction.new(AI::ARRIVED, AI::MOVE_TO) { use_sit(pc, target) }
+    pc.ai.next_action = na
   end
 
   private def use_action(pc, summon, target)
@@ -84,8 +83,6 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       validate_summon(summon, true) do |s|
         if s.can_attack?(@ctrl)
           s.do_attack
-        else
-          debug { "#{s} can't attack" }
         end
       end
     when 17 # Pet Stop
@@ -122,8 +119,6 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       validate_summon(summon, true) do |s|
         if s.can_attack?(@ctrl)
           s.do_attack
-        else
-          debug { "#{s} can't attack" }
         end
       end
     when 23 # Servitor Stop
@@ -484,15 +479,13 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
   private def use_sit(pc : L2PcInstance, target)
     return false unless pc.mount_type.none?
 
-    if !pc.sitting? && target.is_a?(L2StaticObjectInstance)
-      if target.type == 1
-        if pc.inside_radius?(target, L2StaticObjectInstance::INTERACTION_DISTANCE, false, false)
-          cs = ChairSit.new(pc, target.id)
-          send_packet(cs)
-          pc.sit_down
-          pc.broadcast_packet(cs)
-          return true
-        end
+    if !pc.sitting? && target.is_a?(L2StaticObjectInstance) && target.type == 1
+      if pc.inside_radius?(target, L2StaticObjectInstance::INTERACTION_DISTANCE, false, false)
+        cs = ChairSit.new(pc, target.id)
+        send_packet(cs)
+        pc.sit_down
+        pc.broadcast_packet(cs)
+        return true
       end
     end
 
@@ -528,13 +521,13 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       return
     end
 
-    unless target.player?
+    unless target.is_a?(L2PcInstance)
       send_packet(SystemMessageId::INCORRECT_TARGET)
       return
     end
 
     distance = requester.calculate_distance(target, false, false).to_i
-    if distance > 125 || distance < 15 || requester == target
+    if !distance.between?(15, 125) || requester == target
       send_packet(SystemMessageId::TARGET_DO_NOT_MEET_LOC_REQUIREMENTS)
       return
     end
@@ -606,7 +599,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       return
     end
 
-    partner = target.acting_player.not_nil!
+    partner = target
 
     if partner.in_store_mode? || partner.in_craft_mode?
       sm = SystemMessage.c1_is_in_private_shop_mode_or_in_a_battle_and_cannot_be_requested_for_a_couple_action
@@ -761,11 +754,11 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     lvl = 0
     case summon
     when L2PetInstance
-      lvl = PetDataTable.get_pet_data(summon.id).get_available_level(skill_id, summon.level)
+      pet_data = PetDataTable.get_pet_data(summon.id)
+      lvl = pet_data.get_available_level(skill_id, summon.level)
     when L2ServitorInstance
       lvl = SummonSkillsTable.get_available_level(summon, skill_id)
     end
-
 
     if lvl > 0
       summon.target = target
@@ -783,20 +776,18 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     return unless summon = validate_summon(pc.summon, pet) {}
     return unless can_control?(summon)
 
-    if summon.is_a?(L2PetInstance)
-      unless summon.in_support_mode?
-        send_packet(SystemMessageId::PET_AUXILIARY_MODE_CANNOT_USE_SKILLS)
-        return
-      end
+    if summon.is_a?(L2PetInstance) && !summon.in_support_mode?
+      send_packet(SystemMessageId::PET_AUXILIARY_MODE_CANNOT_USE_SKILLS)
+      return
     end
 
     unless holder = summon.template.get_skill_holder(skill_name)
-      warn { "#{summon} requested missing skill '#{skill_name}'." }
+      warn { "#{pc.name} requested missing pet skill '#{skill_name}'." }
       return
     end
 
     unless skill = holder.skill?
-      warn { "#{summon} requested missing skill #{holder}." }
+      warn { "#{pc.name} requested missing pet skill #{holder}." }
       return
     end
 

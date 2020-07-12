@@ -218,7 +218,7 @@ class Scripts::Beleth < AbstractNpcAI
 
       a = 0
       16.times do |i|
-        a += 1
+        a &+= 1
 
         x = ((650 * Math.cos(i * 0.39)) + 16323).to_i
         y = ((650 * Math.sin(i * 0.39)) + 213170).to_i

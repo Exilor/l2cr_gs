@@ -139,8 +139,8 @@ module CommunityBoardHandler::ClanBoard
       end
 
       nbp = ClanTable.clan_count // 8
-      if nbp * 8 != ClanTable.clan_count
-        nbp += 1
+      if nbp &* 8 != ClanTable.clan_count
+        nbp &+= 1
       end
 
       1.upto(nbp) do |i|

@@ -88,7 +88,7 @@ class Scripts::Q00316_DestroyPlagueCarriers < Quest
         foulclaws = get_quest_items_count(pc, VAROOL_FOULCLAW_FANG)
         adena = (wererats * 30) + (foulclaws * 10000)
         if wererats + foulclaws >= 10
-          adena += 5000
+          adena &+= 5000
         end
         give_adena(pc, adena, true)
         take_items(pc, -1, registered_item_ids)

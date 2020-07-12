@@ -137,7 +137,7 @@ class PlayableStat < CharStat
     end
 
     level_increased = current_level + value > current_level
-    value += current_level
+    value &+= current_level
     self.level = value
 
     if exp >= get_exp_for_level(level &+ 1) || get_exp_for_level(level) > exp

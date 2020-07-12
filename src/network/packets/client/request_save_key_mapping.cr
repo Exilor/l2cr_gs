@@ -14,14 +14,14 @@ class Packets::Incoming::RequestSaveKeyMapping < GameClientPacket
         UIData.add_category(@cat_map, category, c)
       end
 
-      category += 1
+      category &+= 1
 
       cmd2_size = c
       cmd2_size.times do |j|
         UIData.add_category(@cat_map, category, c)
       end
 
-      category += 1
+      category &+= 1
 
       cmd_size = d
       cmd_size.times do |j|

@@ -209,7 +209,7 @@ module AdminCommandHandler::AdminTeleport
     return unless player
 
     if player.jailed?
-      pc.try &.send_message("#{player.name} is in jail.")
+      pc.try &.send_message(player.name + " is in jail.")
     else
       if pc && pc.instance_id >= 0
         player.instance_id = pc.instance_id

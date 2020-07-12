@@ -251,7 +251,7 @@ module BotReportTable
     c.minute = hour[1].to_i
 
     if Time.ms > c.ms
-      c.day_of_year += 1
+      c.day_of_year &+= 1
     end
 
     delay = c.ms - Time.ms

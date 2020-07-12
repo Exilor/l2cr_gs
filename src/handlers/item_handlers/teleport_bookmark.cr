@@ -17,7 +17,7 @@ module ItemHandler::TeleportBookmark
 
     pc.destroy_item("Consume", item.l2id, 1, nil, false)
 
-    pc.bookmark_slot += 3
+    pc.bookmark_slot &+= 3
     pc.send_packet(SystemMessageId::THE_NUMBER_OF_MY_TELEPORTS_SLOTS_HAS_BEEN_INCREASED)
 
     sm = SystemMessage.s1_disappeared

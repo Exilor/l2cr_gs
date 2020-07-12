@@ -146,7 +146,7 @@ module AdminCommandHandler::AdminBuffs
 
     max = effects.size // PAGE_LIMIT
     if effects.size > PAGE_LIMIT * max
-      max += 1
+      max &+= 1
     end
 
     html = String::Builder.new

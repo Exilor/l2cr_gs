@@ -112,11 +112,11 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
             pc.send_packet(SystemMessageId::SNEAK_INTO_DAWNS_DOCUMENT_STORAGE)
             pc.send_packet(SystemMessageId::MALE_GUARDS_CAN_DETECT_FEMALES_DONT)
             pc.send_packet(SystemMessageId::FEMALE_GUARDS_NOTICE_BETTER_THAN_MALE)
-            world.doors += 1
+            world.doors &+= 1
             npc.decay_me
           elsif world.doors == 1
             open_door(DOOR_TWO, world.instance_id)
-            world.doors += 1
+            world.doors &+= 1
             npc.decay_me
             world.allowed.each do |l2id|
               if pl = L2World.get_player(l2id)

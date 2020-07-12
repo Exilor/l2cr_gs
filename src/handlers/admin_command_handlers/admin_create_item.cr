@@ -88,7 +88,7 @@ module AdminCommandHandler::AdminCreateItem
         if pc != player && player.online? && client && !client.detached?
           player.inventory.add_item("Admin", id, num, player, pc)
           player.send_message("Admin gave you #{template.name} x#{num}.")
-          counter += 1
+          counter &+= 1
         end
       end
       pc.send_message("You gave #{template.name} to #{counter} players.")

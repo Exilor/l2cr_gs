@@ -217,13 +217,13 @@ module TopicBBSManager
         io << "<td><button action=\"bypass _bbstopics;read;"
         io << forum.id
         io << ';'
-        io << (index - 1)
+        io << (index &- 1)
         io << "\" back=\"l2ui_ch3.prev1_down\" fore=\"l2ui_ch3.prev1\" width=16 height=16 ></td>"
       end
 
       nbp = forum.topic_size * 8
       if nbp * 8 != ClanTable.clan_count
-        nbp += 1
+        nbp &+= 1
       end
 
       1.upto(nbp) do |i|
@@ -254,13 +254,13 @@ module TopicBBSManager
     io << "</tr></table> </td> <td align=right><button value = \"&$421;\" action=\"bypass _bbstopics;crea;"
     io << forum.id
     io << "\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore" \
-    "=\"l2ui_ch3.smallbutton2\" ></td></tr><tr><td><img src=\"l2ui.mini_l" \
-    "ogo\" width=5 height=10></td></tr><tr> <td></td><td align=center><ta" \
-    "ble border=0><tr><td></td><td><edit var = \"Search\" width=130 heigh" \
-    "t=11></td><td><button value=\"&$420;\" action=\"Write 5 -2 0 Search " \
-    "_ _\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"" \
-    "l2ui_ch3.smallbutton2\"> </td> </tr></table> </td></tr></table><br><" \
-    "br><br></center></body></html>"
+      "=\"l2ui_ch3.smallbutton2\" ></td></tr><tr><td><img src=\"l2ui.mini_l" \
+      "ogo\" width=5 height=10></td></tr><tr> <td></td><td align=center><ta" \
+      "ble border=0><tr><td></td><td><edit var = \"Search\" width=130 heigh" \
+      "t=11></td><td><button value=\"&$420;\" action=\"Write 5 -2 0 Search " \
+      "_ _\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"" \
+      "l2ui_ch3.smallbutton2\"> </td> </tr></table> </td></tr></table><br><" \
+      "br><br></center></body></html>"
 
     CommunityBoardHandler.separate_and_send(html, pc)
   end

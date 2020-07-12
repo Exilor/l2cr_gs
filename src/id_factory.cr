@@ -49,7 +49,7 @@ module IdFactory
   private FIRST_OID = 0x10000000
 
   # Ids start from FIRST_OID for compatibility with L2J.
-  IDS = RangeSet.new(0..FIRST_OID)
+  IDS = RangeSet.new(0..FIRST_OID - 1)
 
   def load
     set_all_characters_offline

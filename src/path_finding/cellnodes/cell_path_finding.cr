@@ -88,7 +88,7 @@ module CellPathFinding
       current_z = z
       mid_point = 0
 
-      while loc_end = path[mid_point + 1]?
+      while loc_end = path[mid_point &+ 1]?
         loc_middle = path[mid_point]
         if GeoData.can_move?(current_x, current_y, current_z, loc_end.x, loc_end.y, loc_end.z, instance_id)
           path.delete_at(mid_point)
@@ -97,7 +97,7 @@ module CellPathFinding
           current_x = loc_middle.x
           current_y = loc_middle.y
           current_z = loc_middle.z
-          mid_point += 1
+          mid_point &+= 1
         end
       end
 

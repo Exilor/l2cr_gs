@@ -122,7 +122,7 @@ class Scripts::Q00692_HowtoOpposeEvil < Quest
       num_items = chance // 1000
       chance = chance % 1000
       if Rnd.rand(1000) < chance
-        num_items += 1
+        num_items &+= 1
       end
       if num_items > 0
         st.give_items(tmp.id, num_items)

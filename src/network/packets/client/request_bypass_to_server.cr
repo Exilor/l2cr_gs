@@ -139,7 +139,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
         end
       when @command.starts_with?("_match")
         idx = @command.index('?') || -1
-        idx += 1
+        idx &+= 1
         params = @command.from(idx)
         st = params.split('&')
         hero_class = st.shift.split('=')[1].to_i
@@ -167,7 +167,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
       when @command.starts_with?("manor_menu_select")
         last_npc = pc.last_folk_npc
         if Config.allow_manor && last_npc && last_npc.can_interact?(pc)
-          split = @command.from(@command.index('?').try &.+(1) || 0).split('&')
+          split = @command.from(@command.index('?').try &.&+(1) || 0).split('&')
           ask = split[0].split('=')[1].to_i
           state = split[1].split('=')[1].to_i
           time = split[2].split('=')[1] == '1'

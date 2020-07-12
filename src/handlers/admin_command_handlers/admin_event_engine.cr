@@ -90,12 +90,12 @@ module AdminCommandHandler::AdminEventEngine
         until st.empty?
           temp2 = st.shift
           unless temp2 == " "
-            L2Event::TEAM_NAMES[i &+= 1] = temp2[1...temp2.size - 1]
+            L2Event::TEAM_NAMES[i &+= 1] = temp2[1...temp2.size &- 1]
           end
         end
 
         pc.send_message(L2Event.start_event_participation)
-        Broadcast.to_all_online_players("#{pc.name} has started an event. You will find a participation NPC somewhere around you.")
+        Broadcast.to_all_online_players(pc.name + " has started an event. You will find a participation NPC somewhere around you.")
 
         sound = Music::B03_F.packet
         pc.send_packet(sound)
@@ -225,9 +225,9 @@ module AdminCommandHandler::AdminEventEngine
         end
         show_event_control(pc)
       elsif actual_cmd.starts_with?("admin_event_control_prize")
-        team_ids = Slice.new(st.size - 2, 0)
+        team_ids = Slice.new(st.size &- 2, 0)
         i = 0
-        while st.size - 2 > 0 # The last 2 tokens are used for "n" and "item id"
+        while st.size &- 2 > 0 # The last 2 tokens are used for "n" and "item id"
           team_ids[i &+= 1] = st.shift.to_i
         end
 
@@ -248,18 +248,17 @@ module AdminCommandHandler::AdminEventEngine
   end
 
   private def show_stored_events : String
-    path = "#{Config.datapack_root}/data/events"
+    path = Config.datapack_root + "/data/events"
     if File.directory?(path)
-      return "<font color=\"FF0000\">The directory '#{path}' is a file or is corrupted!</font><br>"
+      return "<font color=\"FF0000\">The directory '#{path}' is a file or is corrupted</font><br>"
     end
 
-    note = ""
     unless File.exists?(path)
-      note = "<font color=\"FF0000\">The directory '#{path}' does not exist!</font><br><font color=\"0099FF\">Trying to create it now...<br></font><br>"
+      note = "<font color=\"FF0000\">The directory '#{path}' does not exist</font><br><font color=\"0099FF\">Trying to create it now...<br></font><br>"
       if (Dir.mkdir_p(path) rescue false)
-        note += "<font color=\"006600\">The directory '#{path}' has been created!</font><br>"
+        note += "<font color=\"006600\">The directory '#{path}' has been created</font><br>"
       else
-        note += "<font color=\"FF0000\">The directory '#{path}' hasn't been created!</font><br>"
+        note += "<font color=\"FF0000\">The directory '#{path}' couldn't be created</font><br>"
         return note
       end
     end
@@ -338,7 +337,7 @@ module AdminCommandHandler::AdminEventEngine
     sb << team_numbers
     sb << " "
     i = 0
-    while i - 1 < team_numbers
+    while i &- 1 < team_numbers
       sb << "$event_teams_name"
       sb << i
       sb << " - "
@@ -351,7 +350,7 @@ module AdminCommandHandler::AdminEventEngine
       "</table><br><center> <br><br>" \
       "<font color=\"LEVEL\">Teams' names:</font><br><table width=100% cellspacing=8>"
     i = 1
-    while i - 1 < team_numbers
+    while i &- 1 < team_numbers
       sb << "<tr><td align=center>Team #"
       sb << i
       sb << " name:</td><td><edit var=\"event_teams_name"

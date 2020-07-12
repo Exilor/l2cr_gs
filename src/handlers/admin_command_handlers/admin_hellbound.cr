@@ -8,7 +8,7 @@ module AdminCommandHandler::AdminHellbound
         st = command.split
         st.shift
         level = st.shift.to_i
-        if level < 0 || level > 11
+        unless level.between?(0, 11)
           pc.send_message("Level must be between 0 and 10")
           return false
         end

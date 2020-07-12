@@ -1404,13 +1404,13 @@ abstract class L2Character < L2Object
         if target.is_a?(L2Character)
           col_radius = template.collision_radius
           unless inside_radius?(*target.xyz, escape_range + col_radius, true, false)
-            skip_range += 1
+            skip_range &+= 1
             next
           end
           # i think other party type and clan targets should be ignored too
           if (!skill.target_type.party? || !skill.has_effect_type?(EffectType::HP))
             if !GeoData.can_see_target?(self, target)
-              skip_los += 1
+              skip_los &+= 1
               next
             end
           end
@@ -1418,12 +1418,12 @@ abstract class L2Character < L2Object
           if skill.bad?
             if player?
               if target.inside_peace_zone?(acting_player.not_nil!)
-                skip_peace_zone += 1
+                skip_peace_zone &+= 1
                 next
               end
             else
               if target.inside_peace_zone?(self, target)
-                skip_peace_zone += 1
+                skip_peace_zone &+= 1
                 next
               end
             end
@@ -2774,7 +2774,7 @@ abstract class L2Character < L2Object
         if obj == ai.attack_target? || obj.auto_attackable?(self)
           hitted |= do_attack_hit_simple(attack, obj, attack_percent, s_atk)
           attack_percent /= 1.15
-          attack_count += 1
+          attack_count &+= 1
           break if attack_count > attack_random_count_max
         end
       end

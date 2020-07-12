@@ -92,8 +92,8 @@ module AdminCommandHandler::AdminFortSiege
   private def show_fort_siege_page(pc, fort)
     reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/fort.htm")
-    reply["%fortName%"]= fort.name
-    reply["%fortId%"]= fort.residence_id
+    reply["%fortName%"] = fort.name
+    reply["%fortId%"] = fort.residence_id
     pc.send_packet(reply)
   end
 

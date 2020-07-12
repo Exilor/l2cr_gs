@@ -25,7 +25,7 @@ module AdminCommandHandler::AdminElement
         args = command.split
         element = Elementals.get_element_id(args[1])
         value = args[2].to_i
-        if element < -1 || element > 5 || value < 0 || value > 450
+        unless element.between?(-1, 5) && value.between?(0, 450)
           pc.send_message("Usage: //setlh/setlc/setlg/setlb/setll/setlw/setls <element> <value>[0-450]")
           return false
         end

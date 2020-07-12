@@ -74,7 +74,7 @@ module DimensionalRiftManager
 
             count.times do |i|
               unless rift_room = ROOMS.dig?(type, room_id)
-                count_bad += 1
+                count_bad &+= 1
                 next
               end
               x = rift_room.random_x
@@ -90,7 +90,7 @@ module DimensionalRiftManager
               sp.respawn_delay = delay
               SpawnTable.add_new_spawn(sp, false)
               rift_room.spawns << sp
-              count_good += 1
+              count_good &+= 1
             end
           end
         end

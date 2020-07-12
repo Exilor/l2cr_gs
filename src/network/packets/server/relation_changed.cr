@@ -102,7 +102,7 @@ class Packets::Outgoing::RelationChanged < GameServerPacket
 
   def add_relation(pl : L2Playable, relation : Int32, auto_attackable : Bool)
     if pl.invisible?
-      raise "cannot add invisible playable to multi relation packet"
+      raise "Cannot add invisible playable to multi relation packet"
     end
 
     add_relation_impl(pl, relation, auto_attackable)

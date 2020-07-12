@@ -5,11 +5,8 @@ module DecayTaskManager
   private POOL = TaskScheduler.new(pool_size: 1)
 
   def add(char : L2Character)
-    if template = char.template.as?(L2NpcTemplate)
-      delay = template.corpse_time
-    else
-      delay = Config.default_corpse_time
-    end
+    template = char.template.as?(L2NpcTemplate)
+    delay = template ? template.corpse_time : Config.default_corpse_time
 
     if char.is_a?(L2Attackable) && (char.spoiled? || char.seeded?)
       delay += Config.spoiled_corpse_extend_time
@@ -25,11 +22,13 @@ module DecayTaskManager
   end
 
   def cancel(char : L2Character)
-    TASKS.delete(char).try &.cancel
+    if task = TASKS.delete(char)
+      task.cancel
+    end
   end
 
   def get_remaining_time(char : L2Character) : Int64
-    TASKS.fetch(char) { return Int64::MAX }.delay
+    (task = TASKS[char]?) ? task.delay : Int64::MAX
   end
 
   private struct DecayTask

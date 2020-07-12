@@ -35,7 +35,7 @@ module AdminCommandHandler::AdminVitality
           if level == 0
             vitality = PcStat::MIN_VITALITY_POINTS
           else
-            vitality = PcStat::VITALITY_LEVELS[level - 1]
+            vitality = PcStat::VITALITY_LEVELS[level &- 1]
           end
           target.set_vitality_points(vitality, true)
           target.send_message("Admin set your Vitality level to #{level}")

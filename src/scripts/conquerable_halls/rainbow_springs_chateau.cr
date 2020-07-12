@@ -125,7 +125,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
         if clan && ACCEPTED_CLANS.size < 4
           ACCEPTED_CLANS << clan
           if leader = clan.leader.player_instance
-            leader.send_message("Your clan has been accepted to join the RainBow Srpings Chateau siege!")
+            leader.send_message("Your clan has joined the Rainbow Springs Chateau siege")
           end
         end
       end

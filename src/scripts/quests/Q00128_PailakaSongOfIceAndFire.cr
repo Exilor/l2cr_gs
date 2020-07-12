@@ -98,7 +98,7 @@ class Scripts::Q00128_PailakaSongOfIceAndFire < Quest
       st.exit_quest(false, true)
 
       unless inst = InstanceManager.get_instance(npc.instance_id)
-        raise "Instance with id #{npc.instance_id} not found."
+        raise "Instance with id #{npc.instance_id} not found"
       end
       inst.duration = EXIT_TIME * 60000
       inst.empty_destroy_time = 0

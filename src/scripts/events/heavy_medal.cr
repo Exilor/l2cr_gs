@@ -33,13 +33,14 @@ class Scripts::HeavyMedal < LongTimeEvent
     html = event
     level = check_level(pc)
 
-    if event.casecmp?("game")
+    case event.casecmp
+    when "game"
       if get_quest_items_count(pc, GLITTERING_MEDAL) < MEDALS[level]
         html = "31229-no.htm"
       else
         html = "31229-game.htm"
       end
-    elsif event.casecmp?("heads") || event.casecmp?("tails")
+    when "heads", "tails"
       if get_quest_items_count(pc, GLITTERING_MEDAL) < MEDALS[level]
         html = "31229-#{event.downcase}-10.htm"
       else
@@ -49,16 +50,16 @@ class Scripts::HeavyMedal < LongTimeEvent
           level = 0
         else
           if level > 0
-            take_items(pc, BADGES[level - 1], -1)
+            take_items(pc, BADGES[level &- 1], -1)
           end
           give_items(pc, BADGES[level], 1)
           play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
-          level += 1
+          level &+= 1
         end
 
         html = "31229-#{event.downcase}-#{level}.htm"
       end
-    elsif event.casecmp?("talk")
+    when "talk"
       html = "#{npc.id}-lvl-#{level}.htm"
     end
 

@@ -44,7 +44,7 @@ class Scripts::Q00637_ThroughOnceMore < Quest
         num_items = chance // 100
         chance %= 100
         if Rnd.rand(100) < chance
-          num_items += 1
+          num_items &+= 1
         end
         if num_items > 0
           if count + num_items >= 10

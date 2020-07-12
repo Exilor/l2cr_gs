@@ -85,7 +85,7 @@ class Scripts::Q00293_TheHiddenVeins < Quest
           maps = st.get_quest_items_count(HIDDEN_ORE_MAP)
           adena = (ores * 5) + (maps * 500)
           if ores + maps >= 10
-            adena += 2000
+            adena &+= 2000
           end
           st.give_adena(adena, true)
           take_items(pc, -1, {CHRYSOLITE_ORE, HIDDEN_ORE_MAP})

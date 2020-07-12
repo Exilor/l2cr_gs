@@ -352,7 +352,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         when "ICE_RUPTURE"
           if npc.core_ai_disabled?
             unless npc.is_a?(L2Attackable)
-              raise "Expected #{npc} to be a L2Attackable."
+              raise "Expected #{npc} to be a L2Attackable"
             end
             npc.disable_core_ai(false)
             npc.immobilized = false
@@ -361,7 +361,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           end
         when "FIND_TARGET"
           unless npc.is_a?(L2Attackable)
-            raise "Expected #{npc} to be a L2Attackable."
+            raise "Expected #{npc} to be a L2Attackable"
           end
           manage_random_attack(world, npc)
         when "CHANGE_STATE"
@@ -431,7 +431,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           end
         when "LEADER_RANDOMIZE"
           unless npc.is_a?(L2Attackable)
-            raise "Expected #{npc} to be a L2Attackable."
+            raise "Expected #{npc} to be a L2Attackable"
           end
           npc.clear_aggro_list
 
@@ -441,7 +441,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           start_quest_timer("LEADER_RANDOMIZE", 25000, npc, nil)
         when "LEADER_DASH"
           unless npc.is_a?(L2Attackable)
-            raise "Expected #{npc} to be a L2Attackable."
+            raise "Expected #{npc} to be a L2Attackable"
           end
           most_hated = npc.most_hated
           if Rnd.bool && !npc.casting_now? && most_hated && most_hated.alive? && npc.calculate_distance(most_hated, true, false) < 1000
@@ -451,7 +451,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           start_quest_timer("LEADER_DASH", 10000, npc, nil)
         when "LEADER_DESTROY"
           unless npc.is_a?(L2Attackable)
-            raise "Expected #{npc} to be a L2Attackable."
+            raise "Expected #{npc} to be a L2Attackable"
           end
           if npc.variables.get_i32("OFF_SHOUT") == 0
             manage_screen_msg(world, NpcString::THE_SPACE_FEELS_LIKE_ITS_GRADUALLY_STARTING_TO_SHAKE)
@@ -491,7 +491,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
 
   def on_spawn(npc)
     unless npc.is_a?(L2Attackable)
-      raise "Expected #{npc} to be a L2Attackable."
+      raise "Expected #{npc} to be a L2Attackable"
     end
     npc.on_kill_delay = 0
     super

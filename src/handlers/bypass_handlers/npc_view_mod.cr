@@ -150,8 +150,8 @@ module BypassHandler::NpcViewMod
     end
 
     pages = drop_list.size // DROP_LIST_ITEMS_PER_PAGE
-    if DROP_LIST_ITEMS_PER_PAGE * pages < drop_list.size
-      pages += 1
+    if DROP_LIST_ITEMS_PER_PAGE &* pages < drop_list.size
+      pages &+= 1
     end
 
     pages_str = String.build do |io|
@@ -173,7 +173,7 @@ module BypassHandler::NpcViewMod
     end
 
     if page >= pages
-      page = pages - 1
+      page = pages &- 1
     end
 
     # start = page > 0 ? page * DROP_LIST_ITEMS_PER_PAGE : 0
@@ -234,7 +234,7 @@ module BypassHandler::NpcViewMod
             sb << chance_format.format(Math.min(gdi.chance, 100))
             sb << "%</td></tr></table></td></tr><tr><td width=32></td><td width=259>&nbsp;</td></tr></table>"
 
-            height += 64
+            height &+= 64
           end
 
           sb << "</td></tr><tr><td width=32></td><td width=300>&nbsp;</td></tr></table>"
@@ -243,10 +243,10 @@ module BypassHandler::NpcViewMod
 
       if left_height >= right_height + height
         right_sb << sb.to_s
-        right_height += height
+        right_height &+= height
       else
         left_sb << sb.to_s
-        left_height += height
+        left_height &+= height
       end
     end
 

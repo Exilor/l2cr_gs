@@ -127,7 +127,7 @@ module AdminCommandHandler::AdminEffects
         val = st.shift.to_i
         send_message = pc.affected_by_skill?(7029)
         pc.stop_skill_effects(val == 0 && send_message, 7029)
-        if val >= 1 && val <= 4
+        if val.between?(1, 4)
           skill = SkillData[7029, val]
           pc.do_simultaneous_cast(skill)
         end

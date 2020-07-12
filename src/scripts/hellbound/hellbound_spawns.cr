@@ -2,8 +2,10 @@ module HellboundSpawns
   extend self
   extend XMLReader
 
+  private record Level, min : Int32, max : Int32
+
   private SPAWNS = [] of L2Spawn
-  private SPAWN_LEVELS = {} of Int32 => {Int32, Int32}
+  private SPAWN_LEVELS = {} of Int32 => Level
 
   def load
     SPAWNS.clear
@@ -65,7 +67,7 @@ module HellboundSpawns
     end
     sp.set_respawn_delay(delay, random_interval)
 
-    SPAWN_LEVELS[npc_id] = {min_level, max_level}
+    SPAWN_LEVELS[npc_id] = Level.new(min_level, max_level)
 
     SpawnTable.add_new_spawn(sp, false)
 
@@ -78,7 +80,7 @@ module HellboundSpawns
 
   def get_spawn_min_level(npc_id : Int32) : Int32
     if tmp = SPAWN_LEVELS[npc_id]?
-      return tmp[0]
+      return tmp.min
     end
 
     1
@@ -86,7 +88,7 @@ module HellboundSpawns
 
   def get_spawn_max_level(npc_id : Int32) : Int32
     if tmp = SPAWN_LEVELS[npc_id]?
-      return tmp[1]
+      return tmp.max
     end
 
     1

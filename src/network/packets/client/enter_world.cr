@@ -18,17 +18,12 @@ class Packets::Incoming::EnterWorld < GameClientPacket
 
     if Config.restore_player_instance
       pc.instance_id = InstanceManager.get_player_instance(pc.l2id)
-    else
-      id = InstanceManager.get_player_instance(pc.l2id)
-      if id > 0
-        InstanceManager.get_instance(id).not_nil!.remove_player(pc.l2id)
-      end
+    elsif (id = InstanceManager.get_player_instance(pc.l2id)) > 0
+      InstanceManager.get_instance(id).not_nil!.remove_player(pc.l2id)
     end
 
-    if Config.debug
-      if L2World.find_object(pc.l2id)
-        warn { "#{pc} already exists in L2World." }
-      end
+    if Config.debug && L2World.find_object(pc.l2id)
+      warn { "#{pc} already exists in L2World." }
     end
 
     client.state = GameClient::State::IN_GAME

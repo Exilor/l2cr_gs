@@ -60,7 +60,7 @@ abstract class AbstractDocument
       when Int
         get_table_value(value, template.to_i)
       else
-        raise "template error with #get_value (#{template.class})"
+        raise "Template error with #get_value (#{template.class})"
       end
     else
       value

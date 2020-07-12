@@ -124,7 +124,7 @@ class Scripts::Q10289_FadeToBlack < Quest
 
         party.members.each do |member|
           reward_player(get_quest_state(member, false), idx == rnd)
-          idx += 1
+          idx &+= 1
         end
       else
         # if no party, the winner gets it all

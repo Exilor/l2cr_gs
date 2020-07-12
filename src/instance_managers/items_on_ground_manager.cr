@@ -69,7 +69,7 @@ module ItemsOnGroundManager
       item.visible = true
       L2World.add_visible_object(item, item.world_region.not_nil!)
       ITEMS << item
-      total += 1
+      total &+= 1
       unless Config.list_protected_items.includes?(item.id)
         if drop_time > -1
           if Config.autodestroy_item_after > 0 && !item.template.has_ex_immediate_effect?

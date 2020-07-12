@@ -44,7 +44,7 @@ class Scripts::Q00512_BladeUnderFoot < Quest
 
       if pc_count > 0
         item_count //= pc_count
-    end
+      end
 
       st.give_items(FRAGMENT_OF_THE_DUNGEON_LEADER_MARK, item_count)
       st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)

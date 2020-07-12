@@ -32,8 +32,8 @@ module AdminCommandHandler::AdminLogin
       tokens = st.size
       if tokens > 1
         st.shift
-        modes = Array.new(tokens - 1, "")
-        (tokens - 1).times do |i|
+        modes = Array.new(tokens &- 1, "")
+        (tokens &- 1).times do |i|
           modes[i] = st.shift.strip
         end
         new_type = 0
@@ -124,7 +124,6 @@ module AdminCommandHandler::AdminLogin
         when 0x40
           name_type += "Free"
         end
-
       end
     end
 

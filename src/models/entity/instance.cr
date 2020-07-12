@@ -213,7 +213,7 @@ class Instance
         find_element(n, "door") do |d|
           door_id = parse_int(d, "doorId")
           unless template = DoorData.get_door_template(door_id)
-            raise "Door with id #{door_id} not found."
+            raise "Door with id #{door_id} not found"
           end
           ss = StatsSet.new
           ss.merge!(template)

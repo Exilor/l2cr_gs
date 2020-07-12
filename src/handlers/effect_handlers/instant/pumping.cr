@@ -5,7 +5,7 @@ class EffectHandler::Pumping < AbstractEffect
     super
 
     unless params.get_string("power", nil)
-      raise "effect with no power"
+      raise "Effect with no power"
     end
 
     @power = params.get_f64("power", 0)

@@ -1099,55 +1099,55 @@ module TerritoryWarManager
   end
 
   def start_siege
-    raise "not supported"
+    raise "Not supported"
   end
 
   def end_siege
-    raise "not supported"
+    raise "Not supported"
   end
 
   def get_attacker_clan(clan_id : Int32) : L2SiegeClan?
-    raise "not supported"
+    raise "Not supported"
   end
 
   def get_attacker_clan(clan : L2Clan?) : L2SiegeClan?
-    raise "not supported"
+    raise "Not supported"
   end
 
   def attacker_clans : Interfaces::Array(L2SiegeClan)?
-    raise "not supported"
+    raise "Not supported"
   end
 
   def attackers_in_zone : Array(L2PcInstance)
-    raise "not supported"
+    raise "Not supported"
   end
 
   def attacker?(clan : L2Clan?) : Bool
-    raise "not supported"
+    raise "Not supported"
   end
 
   def get_defender_clan(clan_id : Int32) : L2SiegeClan?
-    raise "not supported"
+    raise "Not supported"
   end
 
   def get_defender_clan(clan : L2Clan?) : L2SiegeClan?
-    raise "not supported"
+    raise "Not supported"
   end
 
   def defender_clans : Interfaces::Array(L2SiegeClan)?
-    raise "not supported"
+    raise "Not supported"
   end
 
   def defender?(clan : L2Clan?) : Bool
-    raise "not supported"
+    raise "Not supported"
   end
 
   def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
-    raise "not supported"
+    raise "Not supported"
   end
 
   def siege_date : Calendar
-    raise "not supported"
+    raise "Not supported"
   end
 
   def give_fame? : Bool

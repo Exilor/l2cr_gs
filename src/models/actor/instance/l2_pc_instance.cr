@@ -865,7 +865,7 @@ class L2PcInstance < L2Playable
 
   def inc_recom_have
     if @recom_have < 255
-      @recom_have += 1
+      @recom_have &+= 1
     end
   end
 
@@ -875,7 +875,7 @@ class L2PcInstance < L2Playable
 
   def dec_recom_left
     if @recom_left > 0
-      @recom_left -= 1
+      @recom_left &-= 1
     end
   end
 
