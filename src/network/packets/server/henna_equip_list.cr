@@ -1,5 +1,6 @@
 class Packets::Outgoing::HennaEquipList < GameServerPacket
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     @henna_equip_list = HennaData.get_henna_list(pc.class_id)
   end
 

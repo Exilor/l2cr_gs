@@ -1,7 +1,9 @@
 class Packets::Outgoing::ExShowCropInfo < GameServerPacket
   @crops : Array(CropProcure)?
 
-  def initialize(@manor_id : Int32, next_period : Bool, @hide_buttons : Bool)
+  def initialize(manor_id : Int32, next_period : Bool, hide_buttons : Bool)
+    @manor_id = manor_id
+    @hide_buttons = hide_buttons
     unless next_period && !CastleManorManager.manor_approved?
       @crops = CastleManorManager.get_crop_procure(manor_id, next_period)
     end

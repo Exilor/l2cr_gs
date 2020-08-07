@@ -1,7 +1,8 @@
 class Packets::Outgoing::HennaInfo < GameServerPacket
   @hennas = [] of L2Henna
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     pc.henna_list.each do |henna|
       if henna
         @hennas << henna

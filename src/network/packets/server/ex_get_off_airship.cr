@@ -2,7 +2,8 @@ class Packets::Outgoing::ExGetOffAirship < GameServerPacket
   @pc_id : Int32
   @ship_id : Int32
 
-  def initialize(pc : L2Character, ship : L2Character, @x : Int32, @y : Int32, @z : Int32)
+  def initialize(pc : L2Character, ship : L2Character, x : Int32, y : Int32, z : Int32)
+    @x, @y, @z = x, y, z
     @pc_id = pc.l2id
     @ship_id = ship.l2id
   end

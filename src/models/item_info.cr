@@ -81,71 +81,6 @@
 #   end
 # end
 
-# struct ItemInfo
-#   def initialize(@item : L2ItemInstance | TradeItem, @change : Int32? = nil)
-#   end
-
-#   delegate l2id, template, count, custom_type_1, custom_type_2, enchant_options,
-#     get_element_def_attr, attack_element_type, attack_element_power, to: @item
-
-#   private def switch(& : L2ItemInstance?, TradeItem? ->)
-#     yield @item.as?(L2ItemInstance), @item.as?(TradeItem)
-#   end
-
-#   def template : L2Item
-#     switch { |a, b| a.try &.template || b.try &.item } ||
-#     raise("will never happen")
-#   end
-
-#   def enchant : Int32
-#     switch { |a, b| a ? a.enchant_level : b ? b.enchant : 0 }
-#   end
-
-#   def augmentation_bonus : Int32
-#     switch { |a| a && a.augmented? ? a.augmentation.augmentation_id : 0 }
-#   end
-
-#   def equipped : Int32
-#     switch { |a| 1 if a && a.equipped? } || 0
-#   end
-
-#   def change : Int32
-#     switch do |a|
-#       if a
-#         return @change ||
-#         case a.last_change
-#         when L2ItemInstance::ADDED
-#           1
-#         when L2ItemInstance::MODIFIED
-#           2
-#         else
-#           3
-#         end
-#       end
-#     end
-
-#     0
-#   end
-
-#   def mana : Int32
-#     switch { |a, b| a.try &.mana || -1 }
-#   end
-
-#   def time : Int32
-#     switch do |a, b|
-#       if a && a.time_limited_item?
-#         return (a.remaining_time / 1000).to_i
-#       end
-
-#       -9999
-#     end
-#   end
-
-#   def location : Int32
-#     @item.location_slot
-#   end
-# end
-
 struct ItemInfo
   initializer item : L2ItemInstance | TradeItem, change : Int32? = nil
 
@@ -165,7 +100,7 @@ struct ItemInfo
   end
 
   def augmentation_bonus : Int32
-    switch(i.augmented? ? i.augmentation.augmentation_id : 0, 0)
+    switch((aug = i.augmentation) ? aug.augmentation_id : 0, 0)
   end
 
   def equipped : Int32

@@ -1,7 +1,7 @@
 class DropProtection
   include Synchronizable
 
-  private PROTECTED_MILLIS_TIME = 15000
+  private PROTECTED_MILLIS_TIME = 15_000
 
   @task : TaskScheduler::DelayedTask?
 

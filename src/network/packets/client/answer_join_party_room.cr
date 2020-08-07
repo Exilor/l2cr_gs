@@ -18,7 +18,7 @@ class Packets::Incoming::AnswerJoinPartyRoom < GameClientPacket
 
     if @answer == 1 && !partner.request_expired?
       unless room = PartyMatchRoomList.get_room(partner.party_room)
-        debug { "No party match room found with ID #{partner.party_room}." }
+        warn { "No party match room found with id #{partner.party_room}." }
         return
       end
 

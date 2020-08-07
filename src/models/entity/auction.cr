@@ -21,12 +21,16 @@ class Auction
   getter starting_bid = 0i64
   getter bidders = Concurrent::Map(Int32, Bidder).new
 
-  def initialize(@id : Int32)
+  def initialize(id : Int32)
+    @id = id
     load
     start_auto_task
   end
 
-  def initialize(@id : Int32, clan : L2Clan, delay : Int64, @starting_bid : Int64, @item_name : String)
+  def initialize(id : Int32, clan : L2Clan, delay : Int64, starting_bid : Int64, item_name : String)
+    @id = id
+    @starting_bid = starting_bid
+    @item_name = item_name
     @end_date = Time.ms + delay
     @item_type = "ClanHall"
     @seller_id = clan.leader_id

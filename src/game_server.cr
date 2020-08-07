@@ -192,6 +192,9 @@ module GameServer
     ClanHallSiegeManager.load
     ClanHallManager.load
     AuctionManager.load
+    # if Config.enable_community_board
+    #   ForumsBBSManager.load
+    # end
 
     GeoData.load
 

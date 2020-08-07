@@ -10,11 +10,14 @@ class UIKeysSettings
     load_from_db
   end
 
-  def store_all(@categories : Hash(Int32, Array(Int32)), @keys : Hash(Int32, Array(ActionKey)))
+  def store_all(categories : Hash(Int32, Array(Int32)), keys : Hash(Int32, Array(ActionKey)))
+    @categories = categories
+    @keys = keys
     @saved = false
   end
 
-  def store_categories(@categories : Hash(Int32, Array(Int32)))
+  def store_categories(categories : Hash(Int32, Array(Int32)))
+    @categories = categories
     @saved = false
   end
 

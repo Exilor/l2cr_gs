@@ -9,7 +9,7 @@ class Packets::Outgoing::SiegeDefenderList < GameServerPacket
     d 1
     d 0
 
-    size = @castle.siege.defender_clans.size + @castle.siege.defender_waiting_clans.size
+    size = @castle.siege.defender_clans.size &+ @castle.siege.defender_waiting_clans.size
 
     if size <= 0
       q 0

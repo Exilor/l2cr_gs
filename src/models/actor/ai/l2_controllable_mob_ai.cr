@@ -247,9 +247,11 @@ class L2ControllableMobAI < L2AttackableAI
         @actor.skills.each_value do |sk|
           cast_range = sk.cast_range
 
-          if cast_range.abs2 >= dist2 && !@actor.skill_disabled?(sk) && @actor.current_mp < @actor.stat.get_mp_consume2(sk)
-            @actor.do_cast(sk)
-            return
+          if cast_range.abs2 >= dist2 && !@actor.skill_disabled?(sk)
+            if @actor.current_mp < @actor.stat.get_mp_consume2(sk)
+              @actor.do_cast(sk)
+              return
+            end
           end
         end
       end
@@ -274,7 +276,9 @@ class L2ControllableMobAI < L2AttackableAI
   end
 
   private def check_auto_attack_condition(target : L2Character?) : Bool
-    if target.nil? || target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance)
+    return false unless target
+
+    if target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance)
       return false
     end
 
@@ -291,7 +295,11 @@ class L2ControllableMobAI < L2AttackableAI
     end
 
     me = active_char
-    if !me.inside_radius?(target, me.aggro_range, false, false) || (@actor.z - target.z).abs > 100
+    unless me.inside_radius?(target, me.aggro_range, false, false)
+      return false
+    end
+
+    unless (@actor.z - target.z).abs > 100
       return false
     end
 

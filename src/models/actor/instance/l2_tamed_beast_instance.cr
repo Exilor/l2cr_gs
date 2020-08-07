@@ -139,7 +139,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
     delay = 100
     beast_skills.each do |skill|
       ThreadPoolManager.schedule_general(BuffCast.new(self, skill), delay)
-      delay += (100 + skill.hit_time)
+      delay += (100 &+ skill.hit_time)
     end
     ThreadPoolManager.schedule_general(BuffCast.new(self, nil), delay)
   end
@@ -175,7 +175,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
         template.skills.each_value do |skill|
           # if the skill is a buff, check if the owner has it already [ owner.getEffect(L2Skill skill) ]
           if skill.continuous? && !skill.debuff?
-            total_buffs_available += 1
+            total_buffs_available &+= 1
           end
         end
 
@@ -183,7 +183,8 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
         if task = @buff_task
           task.cancel
         end
-        @buff_task = ThreadPoolManager.schedule_general_at_fixed_rate(CheckOwnerBuffs.new(self, total_buffs_available), BUFF_INTERVAL, BUFF_INTERVAL)
+        check = CheckOwnerBuffs.new(self, total_buffs_available)
+        @buff_task = ThreadPoolManager.schedule_general_at_fixed_rate(check, BUFF_INTERVAL, BUFF_INTERVAL)
       end
     else
       delete_me # despawn if no owner
@@ -333,7 +334,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
         else
           # if the owner has no food, the beast immediately despawns, except when it was only
           # newly spawned. Newly spawned beasts can last up to 5 minutes
-          if @beast.remaining_time < MAX_DURATION - 300000
+          if @beast.remaining_time < MAX_DURATION - 300_000
             @beast.remaining_time = -1
           end
         end

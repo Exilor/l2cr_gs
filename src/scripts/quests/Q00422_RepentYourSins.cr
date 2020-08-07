@@ -103,9 +103,9 @@ class Scripts::Q00422_RepentYourSins < Quest
         else
           i1 = 0
           if pc.level > qs.get_memo_state_ex(1)
-            i1 = pet_level - qs.get_memo_state_ex(1) - pc.level - qs.get_memo_state_ex(1)
+            i1 = pet_level &- qs.get_memo_state_ex(1) - pc.level &- qs.get_memo_state_ex(1)
           else
-            i1 = pet_level - qs.get_memo_state_ex(1)
+            i1 = pet_level &- qs.get_memo_state_ex(1)
           end
 
           if i1 < 0

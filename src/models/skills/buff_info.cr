@@ -201,10 +201,8 @@ class BuffInfo
 
   # Only called in AdminCommandHandler::AdminBuffs
   def get_tick_count(effect : AbstractEffect) : Int32
-    if tasks = @tasks
-      if effect_task_info = tasks[effect]?
-        return effect_task_info.effect_task.tick_count
-      end
+    if (tasks = @tasks) && (task_info = tasks[effect]?)
+      return task_info.effect_task.tick_count
     end
 
     0

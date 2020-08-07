@@ -1,6 +1,5 @@
 class Packets::Outgoing::RecipeItemMakeInfo < GameServerPacket
-  def initialize(@id : Int32, @pc : L2PcInstance, @success : Bool = true)
-  end
+  initializer id : Int32, pc : L2PcInstance, success : Bool = true
 
   private def write_impl
     if recipe = RecipeData.get_recipe_list(@id)
@@ -12,7 +11,7 @@ class Packets::Outgoing::RecipeItemMakeInfo < GameServerPacket
       d @pc.max_mp
       d @success ? 1 : 0
     else
-      warn "#{active_char} requested recipe #{@id} but it wasn't found."
+      warn { "#{active_char.try &.name} requested recipe #{@id} but it wasn't found." }
     end
   end
 end

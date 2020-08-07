@@ -197,7 +197,7 @@ class L2WorldRegion
   end
 
   def to_s(io : IO)
-    io << '(' << @tile_x << ", " << @tile_y << ')'
+    io.print('(', @tile_x, ", ", @tile_y, ')')
   end
 
   def inspect(io : IO)

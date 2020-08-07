@@ -1084,11 +1084,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
   end
 
   def clan_hall : ClanHall
-    unless ch = clan_hall?
-      raise "This #{self.class} has no clan hall."
-    end
-
-    ch
+    clan_hall? || raise "This #{self.class} has no clan hall."
   end
 
   private def do_teleport(pc : L2PcInstance, val : Int32)

@@ -23,7 +23,7 @@ class Packets::Incoming::RequestGetItemFromPet < GameClientPacket
     end
 
     unless pc.active_enchant_item_id == L2PcInstance::ID_NONE
-      debug { "#{pc.name} is enchanting an item." }
+      debug { pc.name + " is enchanting an item." }
       return
     end
 
@@ -38,7 +38,7 @@ class Packets::Incoming::RequestGetItemFromPet < GameClientPacket
     end
 
     unless pet.transfer_item("Transfer", @l2id, @amount, pc.inventory, pc, pet)
-      warn { "Invalid item transfer request from #{pet} to #{pc}." }
+      warn { "Invalid item transfer request from #{pet} to #{pc.name}." }
     end
 
     pc.send_packet(ItemList.new(pc, false)) # custom

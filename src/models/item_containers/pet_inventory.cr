@@ -1,12 +1,13 @@
 require "./inventory"
 
 class PetInventory < Inventory
-  def initialize(@owner : L2PetInstance)
+  def initialize(owner : L2PetInstance)
+    @owner = owner
     super()
   end
 
   def owner : L2PetInstance
-    owner?.not_nil!
+    @owner.not_nil!
   end
 
   def owner? : L2PetInstance

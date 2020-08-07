@@ -178,7 +178,6 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               d SystemMessageId::SEAL_NOT_OWNED_35_LESS_VOTED.id
             end
           end
-
         when SevenSigns::CABAL_DAWN
           case winning_cabal
           when SevenSigns::CABAL_NULL
@@ -209,7 +208,6 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               d SystemMessageId::SEAL_OWNED_10_LESS_VOTED.id
             end
           end
-
         when SevenSigns::CABAL_DUSK
           case winning_cabal
           when SevenSigns::CABAL_NULL
@@ -240,11 +238,8 @@ class Packets::Outgoing::SSQStatus < GameServerPacket
               d SystemMessageId::SEAL_OWNED_10_LESS_VOTED.id
             end
           end
-
         end
-
       end
     end
-
   end
 end

@@ -1,7 +1,8 @@
 class Packets::Outgoing::GMViewCharacterInfo < GameServerPacket
   @move_multiplier : Float64
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     @move_multiplier = @pc.movement_speed_multiplier
 
     if @move_multiplier == 0
@@ -32,7 +33,7 @@ class Packets::Outgoing::GMViewCharacterInfo < GameServerPacket
     d @pc.class_id.to_i
     d @pc.level
     q @pc.exp
-    f (@pc.exp.to_f - ExperienceData.get_exp_for_level(@pc.level)) / (ExperienceData.get_exp_for_level(@pc.level + 1) - ExperienceData.get_exp_for_level(@pc.level))
+    f (@pc.exp.to_f - ExperienceData.get_exp_for_level(@pc.level)) / (ExperienceData.get_exp_for_level(@pc.level &+ 1) - ExperienceData.get_exp_for_level(@pc.level))
     d @pc.str
     d @pc.dex
     d @pc.con

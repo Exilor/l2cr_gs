@@ -10,7 +10,7 @@ class EffectHandler::Unsummon < AbstractEffect
     effector, effected, skill = info.effector, info.effected, info.skill
     magic_level = skill.magic_level
 
-    if magic_level <= 0 || effected.level - 9 <= magic_level
+    if magic_level <= 0 || effected.level &- 9 <= magic_level
       chance = @chance.to_f
       chance *= Formulas.attribute_bonus(effector, effected, skill)
       chance *= Formulas.general_trait_bonus(effector, effected, skill.trait_type, false)

@@ -25,7 +25,6 @@ class L2SummonAI < L2PlayableAI
           @actor.instance_id, true
         )
       else
-        debug "#{@actor} can't find path to #{target}."
         return
       end
     end

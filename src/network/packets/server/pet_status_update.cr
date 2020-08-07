@@ -2,7 +2,8 @@ class Packets::Outgoing::PetStatusUpdate < GameServerPacket
   @cur_fed = 0
   @max_fed = 0
 
-  def initialize(@summon : L2Summon)
+  def initialize(summon : L2Summon)
+    @summon = summon
     if summon.is_a?(L2PetInstance)
       @cur_fed = summon.current_feed
       @max_fed = summon.max_fed

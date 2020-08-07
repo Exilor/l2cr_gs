@@ -22,7 +22,7 @@ class EffectHandler::ManaHealByLevel < AbstractEffect
     amount = target.calc_stat(Stats::MANA_CHARGE, @power)
 
     if target.level > info.skill.magic_level
-      lvl_diff = target.level - info.skill.magic_level
+      lvl_diff = target.level &- info.skill.magic_level
       case
       when lvl_diff == 6
         amount *= 0.9

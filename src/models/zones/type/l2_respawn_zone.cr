@@ -13,11 +13,11 @@ class L2RespawnZone < L2ZoneType
     @race_respawn_point[Race.parse(race)] = point
   end
 
-  def get_respawn_point(pc : L2PcInstance)
+  def get_respawn_point(pc : L2PcInstance) : String
     @race_respawn_point[pc.race]
   end
 
-  def all_respawn_points
+  def all_respawn_points : EnumMap(Race, String)
     @race_respawn_point
   end
 end

@@ -145,7 +145,6 @@ class Scripts::ClassMaster < AbstractNpcAI
     end
 
     unless pc.flood_protectors.server_bypass.try_perform_action("changeclass")
-      debug "Flood detected"
       return
     end
 
@@ -177,7 +176,7 @@ class Scripts::ClassMaster < AbstractNpcAI
       return
     end
 
-    unless Config.class_master_settings.allowed?(class_id.level + 1)
+    unless Config.class_master_settings.allowed?(class_id.level &+ 1)
       return
     end
 
@@ -266,7 +265,7 @@ class Scripts::ClassMaster < AbstractNpcAI
 
       end
       msg = get_htm(pc, "comebacklater.htm")
-      msg = msg.sub("%level%", get_min_lvl(level - 1).to_s)
+      msg = msg.sub("%level%", get_min_lvl(level &- 1).to_s)
       show_result(pc, msg)
       return
     end
@@ -304,7 +303,7 @@ class Scripts::ClassMaster < AbstractNpcAI
     end
 
     msg = msg.gsub("%menu%", menu)
-    msg = msg.sub("%req_items%", get_required_items(current_class_id.level + 1))
+    msg = msg.sub("%req_items%", get_required_items(current_class_id.level &+ 1))
     pc.send_packet(TutorialShowHtml.new(msg))
   end
 
@@ -318,7 +317,7 @@ class Scripts::ClassMaster < AbstractNpcAI
       return false
     end
 
-    new_job_lvl = current_class_id.level + 1
+    new_job_lvl = current_class_id.level &+ 1
 
     # Weight/Inventory check
     if !Config.class_master_settings.get_reward_items(new_job_lvl).empty? && !pc.inventory_under_90?(false)
@@ -356,7 +355,7 @@ class Scripts::ClassMaster < AbstractNpcAI
 
     pc.broadcast_user_info
 
-    if Config.class_master_settings.allowed?(pc.class_id.level + 1)
+    if Config.class_master_settings.allowed?(pc.class_id.level &+ 1)
       if Config.alternate_class_master
         if (pc.class_id.level == 1 && pc.level >= 40) || (pc.class_id.level == 2 && pc.level >= 76)
           show_question_mark(pc)

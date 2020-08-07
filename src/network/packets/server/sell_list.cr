@@ -2,7 +2,9 @@ class Packets::Outgoing::SellList < GameServerPacket
   @sell_list = [] of L2ItemInstance
   @money : Int64
 
-  def initialize(@pc : L2PcInstance, @lease : L2MerchantInstance? = nil)
+  def initialize(pc : L2PcInstance, lease : L2MerchantInstance? = nil)
+    @pc = pc
+    @lease = lease
     @money = pc.adena
     do_lease
   end

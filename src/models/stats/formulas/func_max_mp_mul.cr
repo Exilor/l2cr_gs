@@ -3,8 +3,8 @@ class FuncMaxMpMul < AbstractFunction
     super(Stats::MAX_MP)
   end
 
-  def calc(effector, effected, skill, init_val)
-    init_val * BaseStats::MEN.calc_bonus(effector)
+  def calc(effector, effected, skill, value)
+    value * BaseStats::MEN.calc_bonus(effector)
   end
 
   INSTANCE = new

@@ -23,6 +23,7 @@ class Packets::Outgoing::ConfirmDlg < Packets::Outgoing::AbstractMessagePacket
     c 0xf3
 
     super
+
     d @time
     d @requester_id
   end

@@ -48,12 +48,12 @@ module AdminCommandHandler::AdminCHSiege
       elsif split.size < 3
         pc.send_message("The date format is incorrect. Try again.")
       else
-        raw_date = split[2].split(";")
+        raw_date = split[2].split(';')
         if raw_date.size < 2
           pc.send_message("You have to specify this format DD-MM-YYYY;HH:MM")
         else
-          day = raw_date[0].split("-")
-          hour = raw_date[1].split(":")
+          day = raw_date[0].split('-')
+          hour = raw_date[1].split(':')
           if day.size < 3 || hour.size < 2
             pc.send_message("Incomplete day, hour or both")
           else

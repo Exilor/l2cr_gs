@@ -15,12 +15,6 @@ class Packets::Incoming::CannotMoveAnymore < GameClientPacket
     debug { "client x: #{@x}, client y: #{@y}, client z: #{@z}." }
     debug { "server x: #{pc.x}, server y: #{pc.y}, server z: #{pc.z}." }
 
-    #
-    # info "Custom: validating player's position."
-    # pc.set_xyz(@x, @y, @z)
-    # pc.send_packet(ValidateLocation.new(pc))
-    #
-
     pc.notify_event(AI::ARRIVED_BLOCKED, Location.new(@x, @y, @z, @heading))
   end
 end

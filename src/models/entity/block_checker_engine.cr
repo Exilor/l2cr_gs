@@ -268,13 +268,13 @@ class BlockCheckerEngine
       case @round
       when 1
         # Schedule second spawn round
-        @engine.task = ThreadPoolManager.schedule_general(SpawnRound.new(@engine, 20, 2), 60000)
+        @engine.task = ThreadPoolManager.schedule_general(SpawnRound.new(@engine, 20, 2), 60_000)
       when 2
         # Schedule third spawn round
-        @engine.task = ThreadPoolManager.schedule_general(SpawnRound.new(@engine, 14, 3), 60000)
+        @engine.task = ThreadPoolManager.schedule_general(SpawnRound.new(@engine, 14, 3), 60_000)
       when 3
         # Schedule Event End Count Down
-        @engine.task = ThreadPoolManager.schedule_general(-> { @engine.end_event_task }, 180000)
+        @engine.task = ThreadPoolManager.schedule_general(-> { @engine.end_event_task }, 180_000)
       end
 
       # random % 2, if == 0 will spawn a red block

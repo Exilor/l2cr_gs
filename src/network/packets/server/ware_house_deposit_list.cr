@@ -7,8 +7,9 @@ class Packets::Outgoing::WareHouseDepositList < Packets::Outgoing::AbstractItemP
   @adena : Int64
   @items : Array(L2ItemInstance)
 
-  def initialize(pc : L2PcInstance, @type : Int32)
+  def initialize(pc : L2PcInstance, type : Int32)
     @adena = pc.adena
+    @type = type
     is_private = type == PRIVATE
     @items = pc.inventory.get_available_items(true, is_private, false)
     @items.select! &.depositable?(is_private)

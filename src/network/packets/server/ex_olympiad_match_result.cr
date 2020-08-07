@@ -1,7 +1,11 @@
 class Packets::Outgoing::ExOlympiadMatchResult < GameServerPacket
   @lose_team = 2
 
-  def initialize(@tie : Bool, @win_team : Int32, @winner_list : Array(OlympiadInfo), @loser_list : Array(OlympiadInfo))
+  def initialize(tie : Bool, win_team : Int32, winner_list : Array(OlympiadInfo), loser_list : Array(OlympiadInfo))
+    @tie = tie
+    @win_team = win_team
+    @winner_list = winner_list
+    @loser_list = loser_list
     if @win_team == 2
       @lose_team = 1
     elsif @win_team == 0

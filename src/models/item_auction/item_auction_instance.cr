@@ -27,7 +27,9 @@ class ItemAuctionInstance
   getter current_auction : ItemAuction?
   getter next_auction : ItemAuction?
 
-  def initialize(@instance_id : Int32, @auction_ids : Atomic(Int32), node)
+  def initialize(instance_id : Int32, auction_ids : Atomic(Int32), node)
+    @instance_id = instance_id
+    @auction_ids = auction_ids
     generator_config = get_attributes(node)
 
     @date_generator = AuctionDateGenerator.new(generator_config)
@@ -42,19 +44,19 @@ class ItemAuctionInstance
         item_count = parse_long(na, "itemCount")
 
         if auction_lenght < 1
-          raise ArgumentError.new("auctionLenght < 1 for instance_id: #{@instance_id}, item_id: #{item_id}")
+          raise "auctionLenght < 1 for instance_id: #{@instance_id}, item_id: #{item_id}"
         end
 
         item_extra = StatsSet.new
         item = AuctionItem.new(auction_item_id, auction_lenght, auction_init_bid, item_id, item_count, item_extra)
 
         unless item.check_item_exists
-          raise ArgumentError.new("Item with id #{item_id} not found")
+          raise "Item with id #{item_id} not found"
         end
 
         @items.each do |tmp|
           if tmp.auction_item_id == auction_item_id
-            raise ArgumentError.new("Duplicated auction item id #{auction_item_id}")
+            raise "Duplicated auction item id #{auction_item_id}"
           end
         end
 

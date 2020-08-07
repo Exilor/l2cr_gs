@@ -11,7 +11,7 @@ class Packets::Incoming::RequestAnswerJoinParty < GameClientPacket
     return unless pc = active_char
 
     unless requestor = pc.active_requester
-      warn { "#{pc} has no active requester." }
+      warn { pc.name + " has no active requester." }
       return
     end
 

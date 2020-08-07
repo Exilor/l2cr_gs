@@ -12,12 +12,12 @@ class Packets::Outgoing::MonRaceInfo < GameServerPacket
     8.times do |i|
       mon = @monsters[i]
       d mon.l2id # npcObjectID
-      d mon.template.id + 1_000_000 # npcID
+      d mon.template.id &+ 1_000_000 # npcID
       d 14107 # origin X
-      d 181875 + (58 * (7 - i)) # origin Y
+      d 181875 &+ (58 &* (7 &- i)) # origin Y
       d -3566 # origin Z
       d 12080 # end X
-      d 181875 + (58 * (7 - i)) # end Y
+      d 181875 &+ (58 &* (7 &- i)) # end Y
       d -3566 # end Z
       f mon.template.f_collision_height # coll. height
       f mon.template.f_collision_radius # coll. radius

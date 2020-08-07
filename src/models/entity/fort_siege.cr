@@ -786,6 +786,6 @@ class FortSiege
 
   def to_log(io : IO)
     super
-    io << '(' << fort.name << ')'
+    io.print('(', fort.name, ')')
   end
 end

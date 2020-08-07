@@ -2,10 +2,14 @@ class Product
   include Loggable
 
   @restock_task : TaskScheduler::DelayedTask?
+  @restock_delay : Int64
 
   getter buy_list_id, item, restock_delay, max_count
 
-  def initialize(@buy_list_id : Int32, @item : L2Item, @price : Int64, @restock_delay : Int64, @max_count : Int64)
+  def initialize(buy_list_id : Int32, item : L2Item, price : Int64, restock_delay : Int64, max_count : Int64)
+    @buy_list_id = buy_list_id
+    @item = item
+    @price = price
     @restock_delay = restock_delay * 60_000
     @max_count = max_count
 
@@ -64,7 +68,6 @@ class Product
   end
 
   def restock
-    debug "Restocking."
     self.count = max_count
     save
   end

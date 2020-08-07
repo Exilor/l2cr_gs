@@ -58,6 +58,7 @@ module GamePacketHandler
       case opcode
       when 0x11 then EnterWorld
       when 0x12 # CharacterSelect
+      when 0xcb # GameGuardReply
       when 0xd0
         if buffer.remaining < 2
           warn { "#{client} sent a 0xd0 without the second opcode." }
@@ -456,14 +457,12 @@ module GamePacketHandler
   private def print_debug(opcode, buf, state, client)
     client.on_unknown_packet
     return unless Config.packet_handler_debug
-    size = buf.remaining
     warn { "Unknown packet 0x#{opcode.to_s(16)} on state #{state} of client #{client}." }
   end
 
   private def print_debug_double_opcode(op1, op2, buf, state, client)
     client.on_unknown_packet
     return unless Config.packet_handler_debug
-    size = buf.remaining
     warn { "Unknown packet 0x#{op1.to_s(16)}:0x#{op2.to_s(16)} on state #{state} of client #{client}." }
   end
 

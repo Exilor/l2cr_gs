@@ -92,11 +92,7 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def zone=(zone : L2ZoneForm)
-    if @zone
-      raise "zone already set"
-    end
-
-    @zone = zone
+    @zone ? raise("zone already set") : (@zone = zone)
   end
 
   def inside_zone?(x : Int32, y : Int32) : Bool
@@ -148,9 +144,8 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def remove_character(char : L2Character)
-    if @character_list.has_key?(char.l2id)
+    if @character_list.delete(char.l2id)
       OnCreatureZoneExit.new(char, self).async(self)
-      @character_list.delete(char.l2id)
       on_exit(char)
     end
   end
@@ -201,6 +196,6 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def to_log(io : IO)
-    io << self.class << '(' << @name << ')'
+    io.print(self.class, '(', @name, ')')
   end
 end

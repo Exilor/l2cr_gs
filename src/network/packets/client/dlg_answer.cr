@@ -33,8 +33,7 @@ class Packets::Incoming::DlgAnswer < GameClientPacket
         if AdminData.has_access?(command, pc.access_level)
           handler = AdminCommandHandler[command].not_nil!
           if Config.gmaudit
-            target_name = pc.target.try &.name || "no-target"
-            GMAudit.log("#{pc.name} [#{pc.l2id}]", cmd, target_name)
+            GMAudit.log(pc, cmd, pc.target.try &.name)
           end
           handler.use_admin_command(cmd, pc)
         end

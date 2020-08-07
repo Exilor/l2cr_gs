@@ -8,13 +8,13 @@ class Packets::Incoming::CharacterDelete < GameClientPacket
   private def run_impl
     flood_protection = flood_protectors.character_select
     unless flood_protection.try_perform_action("CharacterDelete")
-      debug "Flood detected."
       send_packet(CharDeleteFail::DELETION_FAILED)
       return
     end
 
     case client.mark_to_delete_char(@slot)
-    when -1 # error, do nothing
+    when -1 # error
+      # do nothing
     when 0 # success
       send_packet(CharDeleteSuccess::STATIC_PACKET)
       cip = client.get_char_selection(@slot).not_nil!

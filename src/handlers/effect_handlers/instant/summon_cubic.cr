@@ -27,12 +27,11 @@ class EffectHandler::SummonCubic < AbstractEffect
 
     if @cubic_id < 0
       raise "Invalid cubic id #{@cubic_id}"
-      return
     end
 
     cubic_skill_level = info.skill.level
     if cubic_skill_level > 100
-      cubic_skill_level = ((info.skill.level - 100) // 7) + 8
+      cubic_skill_level = ((info.skill.level &- 100) // 7) &+ 8
     end
 
     if cubic = pc.get_cubic_by_id(@cubic_id)

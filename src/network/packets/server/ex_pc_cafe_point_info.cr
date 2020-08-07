@@ -8,7 +8,10 @@ class Packets::Outgoing::ExPCCafePointInfo < GameServerPacket
     @time = 0
   end
 
-  def initialize(@points : Int32, @m_add_points : Int32, @time : Int32)
+  def initialize(points : Int32, m_add_points : Int32, time : Int32)
+    @points = points
+    @m_add_points = m_add_points
+    @time = time
     @m_period_type = 1
     @remain_time = 42
     @point_type = m_add_points < 0 ? 3 : 0

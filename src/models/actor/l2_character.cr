@@ -1638,9 +1638,9 @@ abstract class L2Character < L2Object
         targets_cast_target = target.ai.cast_target?
       end
 
-      if !Config.raid_disable_curse && ((target.is_a?(L2RaidBossInstance) && target.give_raid_curse? && level > target.level + 8) ||
-        (!skill.bad? && targets_attack_target.is_a?(L2RaidBossInstance) && targets_attack_target.give_raid_curse? && targets_attack_target.attack_by_list.includes?(target) && (level > (targets_attack_target.level + 8))) ||
-        (!skill.bad? && targets_cast_target.is_a?(L2RaidBossInstance) && targets_cast_target.give_raid_curse? && targets_cast_target.attack_by_list.includes?(target) && (level > (targets_cast_target.level + 8))))
+      if !Config.raid_disable_curse && ((target.is_a?(L2RaidBossInstance) && target.give_raid_curse? && level > target.level &+ 8) ||
+        (!skill.bad? && targets_attack_target.is_a?(L2RaidBossInstance) && targets_attack_target.give_raid_curse? && targets_attack_target.attack_by_list.includes?(target) && (level > (targets_attack_target.level &+ 8))) ||
+        (!skill.bad? && targets_cast_target.is_a?(L2RaidBossInstance) && targets_cast_target.give_raid_curse? && targets_cast_target.attack_by_list.includes?(target) && (level > (targets_cast_target.level &+ 8))))
 
         if skill.magic?
           curse = CommonSkill::RAID_CURSE
@@ -1737,7 +1737,7 @@ abstract class L2Character < L2Object
                   targets.each do |skill_target|
                     if npc_target == skill_target || mob == skill_target
                       original_caster = summon? ? summon : player
-                      hate = ((effect_point * 150) / (mob.level + 7)).to_i64
+                      hate = ((effect_point * 150) / (mob.level &+ 7)).to_i64
                       mob.add_damage_hate(original_caster, 0, hate)
                     end
                   end
@@ -2048,7 +2048,7 @@ abstract class L2Character < L2Object
   end
 
   def level_mod : Float64
-    (level + 89).fdiv(100)
+    (level &+ 89).fdiv(100)
   end
 
   def raid? : Bool
@@ -2835,7 +2835,7 @@ abstract class L2Character < L2Object
     send_damage_message(target, damage, false, crit, miss)
 
     if target.raid? && target.give_raid_curse? && !Config.raid_disable_curse
-      if level > target.level + 8
+      if level > target.level &+ 8
         if skill = CommonSkill::RAID_CURSE2.skill?
           abort_attack
           abort_cast
@@ -2857,12 +2857,12 @@ abstract class L2Character < L2Object
       reflected_damage = 0
       if weapon
         w_type = weapon.item_type
-        is_bow = w_type == WeaponType::BOW || w_type == WeaponType::CROSSBOW
+        is_bow = w_type.in?(WeaponType::BOW, WeaponType::CROSSBOW)
       end
 
       if !is_bow && !target.invul?
         acting_player = acting_player()
-        if !target.raid? || (acting_player.nil? || acting_player.level <= target.level + 8)
+        if !target.raid? || (acting_player.nil? || acting_player.level <= target.level &+ 8)
           reflect_percent = target.calc_stat(Stats::REFLECT_DAMAGE_PERCENT, 0)
           if reflect_percent > 0
             reflected_damage = (reflect_percent / 100 * damage).to_i32

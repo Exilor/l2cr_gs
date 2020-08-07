@@ -1,5 +1,8 @@
 class Packets::Outgoing::ExItemAuctionInfoPacket < Packets::Outgoing::AbstractItemPacket
-  def initialize(@refresh : Bool, @current_auction : ItemAuction, @next_auction : ItemAuction?)
+  def initialize(refresh : Bool, current_auction : ItemAuction, next_auction : ItemAuction?)
+    @refresh = refresh
+    @current_auction = current_auction
+    @next_auction = next_auction
     if current_auction.auction_state.started?
       @time_remaining = (current_auction.finishing_time_remaining / 1000).to_i
     else

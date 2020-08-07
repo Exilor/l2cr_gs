@@ -11,10 +11,6 @@ module ClanTable
   private CLANS = Concurrent::Map(Int32, L2Clan).new
 
   def load
-    if Config.enable_community_board
-      ForumsBBSManager.init_root
-    end
-
     clan_count = 0
 
     GameDB.each("SELECT clan_id FROM clan_data") do |rs|
@@ -224,7 +220,7 @@ module ClanTable
     if ally_id != 0
       CLANS.each_value do |clan|
         if clan.ally_id == ally_id
-          yield clan
+          yield(clan)
         end
       end
     end

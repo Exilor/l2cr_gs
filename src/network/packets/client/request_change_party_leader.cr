@@ -9,7 +9,7 @@ class Packets::Incoming::RequestChangePartyLeader < GameClientPacket
     return unless pc = active_char
     return unless party = pc.party
     unless party.leader?(pc)
-      debug { "#{pc.name} is not the party leader." }
+      debug { pc.name + " is not the party leader." }
       return
     end
     party.change_party_leader(@name)

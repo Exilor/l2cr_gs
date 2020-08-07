@@ -13,8 +13,6 @@ class Packets::Incoming::RequestListPartyMatchingWaitingRoom < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    # packet = ExListPartyMatchingWaitingRoom.new(pc, @page, @min_lvl, @max_lvl, @mode)
-    # @page is unused
     packet = ExListPartyMatchingWaitingRoom.new(pc, @min_lvl, @max_lvl, @mode)
     pc.send_packet(packet)
   end

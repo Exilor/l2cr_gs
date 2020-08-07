@@ -1,14 +1,12 @@
 class FuncEnchantHp < AbstractFunction
-  def calc(effector, effected, skill, val)
+  def calc(effector, effected, skill, value)
     if test(effector, effected, skill)
       owner = @owner.as(L2ItemInstance)
       if owner.enchant_level > 0
-        val + EnchantItemHPBonusData.get_hp_bonus(owner)
-      else
-        val
+        return value + EnchantItemHPBonusData.get_hp_bonus(owner)
       end
-    else
-      val
     end
+
+    value
   end
 end

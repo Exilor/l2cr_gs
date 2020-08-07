@@ -1,4 +1,7 @@
 class Packets::Outgoing::FriendListExtended < GameServerPacket
+  private record FriendInfo, l2id : Int32, name : String, online : Bool,
+    class_id : Int32, level : Int32
+
   @friends : Array(FriendInfo)?
 
   def initialize(pc : L2PcInstance)
@@ -60,7 +63,4 @@ class Packets::Outgoing::FriendListExtended < GameServerPacket
       d 0
     end
   end
-
-  private record FriendInfo, l2id : Int32, name : String, online : Bool,
-    class_id : Int32, level : Int32
 end

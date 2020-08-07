@@ -12,7 +12,7 @@ class Packets::Incoming::RequestSentPost < GameClientPacket
     return unless pc = active_char
 
     unless msg = MailManager.get_message(@msg_id)
-      warn { "Message with ID #{@msg_id} not found." }
+      warn { "Message with id #{@msg_id} not found." }
       return
     end
 
@@ -28,7 +28,7 @@ class Packets::Incoming::RequestSentPost < GameClientPacket
     end
 
     if msg.deleted_by_sender?
-      debug { "Message with ID #{@msg_id} was deleted by the sender." }
+      debug { "Message with id #{@msg_id} was deleted by the sender." }
       return
     end
 

@@ -15,12 +15,12 @@ class Packets::Outgoing::ExChooseInventoryAttributeItem < GameServerPacket
     h 0x62
 
     d @item_id
-    d @attribute == Elementals::FIRE ? 1 : 0
+    d @attribute == Elementals::FIRE  ? 1 : 0
     d @attribute == Elementals::WATER ? 1 : 0
-    d @attribute == Elementals::WIND ? 1 : 0
+    d @attribute == Elementals::WIND  ? 1 : 0
     d @attribute == Elementals::EARTH ? 1 : 0
-    d @attribute == Elementals::HOLY ? 1 : 0
-    d @attribute == Elementals::DARK ? 1 : 0
+    d @attribute == Elementals::HOLY  ? 1 : 0
+    d @attribute == Elementals::DARK  ? 1 : 0
     d @level
   end
 end

@@ -3,8 +3,9 @@ class Packets::Outgoing::ExStopMoveInAirShip < GameServerPacket
   @loc : Location
   @heading : Int32
 
-  def initialize(pc : L2PcInstance, @ship_id : Int32)
+  def initialize(pc : L2PcInstance, ship_id : Int32)
     @pc_id = pc.l2id
+    @ship_id = ship_id
     @loc = pc.in_vehicle_position.not_nil!
     @heading = pc.heading
   end

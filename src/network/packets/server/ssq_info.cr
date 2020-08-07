@@ -17,7 +17,7 @@ class Packets::Outgoing::SSQInfo < GameServerPacket
 
   private def write_impl
     c 0x73
-    h 256 + @state
+    h 256 &+ @state
   end
 
   private NULL = new(SevenSigns::CABAL_NULL)

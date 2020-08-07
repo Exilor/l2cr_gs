@@ -435,7 +435,7 @@ abstract class AbstractScript
             if count + item.count > Int64::MAX
               return Int64::MAX
             end
-            count += item.count
+            count &+= item.count
           end
         end
       end

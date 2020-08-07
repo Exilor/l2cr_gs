@@ -13,7 +13,6 @@ class Packets::Incoming::AnswerCoupleAction < GameClientPacket
     return unless pc = active_char
 
     unless target = L2World.get_player(@char_id)
-      warn { "Player with ID #{@char_id} not found in L2World." }
       return
     end
 

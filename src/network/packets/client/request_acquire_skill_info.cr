@@ -19,12 +19,12 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
     trainer = pc.last_folk_npc
 
     unless trainer.is_a?(L2NpcInstance)
-      warn { "#{pc}'s @last_folk_npc (#{trainer}) is not a trainer." }
+      warn { "#{pc.name}'s @last_folk_npc (#{trainer}) is not a trainer." }
       return
     end
 
     if !trainer.can_interact?(pc) && !pc.gm?
-      debug { "#{trainer} can't interact with #{pc}." }
+      debug { "#{trainer} can't interact with #{pc.name}." }
       return
     end
 
@@ -36,16 +36,16 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
     prev_skill_level = pc.get_skill_level(@id)
     if prev_skill_level > 0 && !(@skill_type.transfer? || @skill_type.subpledge?)
       if prev_skill_level == @level
-        warn { "#{pc} requested info for a skill he already knows." }
+        warn { pc.name + " requested info for a skill he already knows." }
         return
-      elsif prev_skill_level != @level - 1
-        warn { "#{pc} doesn't know the previous level of skill with id #{@id} and level #{@level}." }
+      elsif prev_skill_level != @level &- 1
+        warn { "#{pc.name} doesn't know the previous level of skill with id #{@id} and level #{@level}." }
         return
       end
     end
 
     unless s = SkillTreesData.get_skill_learn(@skill_type, @id, @level, pc)
-      debug { "No skill learn data for skill with ID #{@id} and level #{@level}." }
+      debug { "No skill learn data for skill with id #{@id} and level #{@level}." }
       return
     end
 

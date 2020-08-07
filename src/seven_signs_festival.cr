@@ -707,7 +707,7 @@ class SevenSignsFestival
     when FESTIVAL_LEVEL_MAX_64
       64
     else
-      Config.max_player_level - 1
+      Config.max_player_level &- 1
     end
   end
 

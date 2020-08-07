@@ -821,7 +821,7 @@ class Scripts::TreasureChest < AbstractNpcAI
         npc.variables["MAESTRO_SKILL_USED"] = 1
         start_quest_timer(TIMER_1, ATTACK_SPAWN_TIME, npc, nil)
 
-        if npc.level - npc.variables.get_i32("MAX_LEVEL_DIFFERENCE") > attacker.level
+        if npc.level &- npc.variables.get_i32("MAX_LEVEL_DIFFERENCE") > attacker.level
           add_skill_cast_desire(npc, attacker, TREASURE_BOMBS[npc.level // 10], 1_000_000)
         else
           if Rnd.rand(100) < 10

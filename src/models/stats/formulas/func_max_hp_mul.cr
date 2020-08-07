@@ -3,8 +3,8 @@ class FuncMaxHpMul < AbstractFunction
     super(Stats::MAX_HP)
   end
 
-  def calc(effector, effected, skill, init_val)
-    init_val * BaseStats::CON.calc_bonus(effector)
+  def calc(effector, effected, skill, value)
+    value * BaseStats::CON.calc_bonus(effector)
   end
 
   INSTANCE = new

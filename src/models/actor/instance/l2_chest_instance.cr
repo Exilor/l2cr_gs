@@ -27,7 +27,7 @@ class L2ChestInstance < L2MonsterInstance
     unless @special_drop
       case id
       when 18265..18286
-        id += 3536
+        id &+= 3536
       when 18287, 18288
         id = 21671
       when 18289, 18290

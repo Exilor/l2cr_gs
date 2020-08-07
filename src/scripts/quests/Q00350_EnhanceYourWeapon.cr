@@ -354,8 +354,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
                   temp[i] = info
                 end
               elsif att2
-                st = att2.split(',')
-                st.each do |token|
+                att2.split(',') do |token|
                   value = token.strip.to_i
                   temp[value] = info
                 end

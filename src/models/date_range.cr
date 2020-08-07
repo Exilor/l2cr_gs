@@ -22,11 +22,6 @@ struct DateRange
   end
 
   def to_s(io : IO)
-    io << self.class
-    io << '('
-    io << start_date
-    io << ".."
-    io << end_date
-    io << ')'
+    io.print(self.class, '(', start_date, "..", end_date, ')')
   end
 end

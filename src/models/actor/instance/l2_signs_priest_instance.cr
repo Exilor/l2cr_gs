@@ -148,7 +148,6 @@ class L2SignsPriestInstance < L2Npc
           pc.send_packet(SystemMessageId::FIGHT_FOR_STRIFE)
         end
 
-
         show_chat_window(pc, 4, SevenSigns.instance.get_cabal_short_name(cabal), false)
       when 5
         if is_a?(L2DawnPriestInstance)

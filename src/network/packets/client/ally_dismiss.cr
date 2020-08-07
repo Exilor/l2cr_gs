@@ -39,7 +39,7 @@ class Packets::Incoming::AllyDismiss < GameClientPacket
     end
 
     time = Time.ms
-    pen = time + (Config.alt_accept_clan_days_when_dismissed.to_i64 * 86400000)
+    pen = time + (Config.alt_accept_clan_days_when_dismissed.to_i64 * 86_400_000)
     leader_clan.set_ally_penalty_expiry_time(pen, L2Clan::PENALTY_TYPE_DISMISS_CLAN)
     leader_clan.update_clan_in_db
 
@@ -47,7 +47,7 @@ class Packets::Incoming::AllyDismiss < GameClientPacket
     clan.ally_name = nil
     clan.change_ally_crest(0, true)
 
-    pen = time + (Config.alt_ally_join_days_when_dismissed.to_i64 * 86400000)
+    pen = time + (Config.alt_ally_join_days_when_dismissed.to_i64 * 86_400_000)
     clan.set_ally_penalty_expiry_time(pen, L2Clan::PENALTY_TYPE_CLAN_DISMISSED)
     clan.update_clan_in_db
 

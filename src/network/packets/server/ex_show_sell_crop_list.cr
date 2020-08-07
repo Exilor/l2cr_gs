@@ -2,7 +2,8 @@ class Packets::Outgoing::ExShowSellCropList < GameServerPacket
   @crop_items = {} of Int32 => L2ItemInstance
   @castle_crops = {} of Int32 => CropProcure
 
-  def initialize(inventory : PcInventory, @manor_id : Int32)
+  def initialize(inventory : PcInventory, manor_id : Int32)
+    @manor_id = manor_id
     CastleManorManager.crop_ids.each do |crop_id|
       if item = inventory.get_item_by_item_id(crop_id)
         @crop_items[crop_id] = item

@@ -218,7 +218,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
 
   def on_attack(npc, pc, damage, is_summon)
     attacker = is_summon ? (pc.summon || pc) : pc
-    if attacker.level - npc.level >= 9
+    if attacker.level &- npc.level >= 9
       if attacker.buff_count > 0 || attacker.dance_count > 0
         npc.target = attacker
         npc.do_simultaneous_cast(RAID_CURSE)

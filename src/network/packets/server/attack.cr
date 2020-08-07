@@ -4,7 +4,9 @@ class Packets::Outgoing::Attack < GameServerPacket
   @attacker_id : Int32
   getter? has_soulshot
 
-  def initialize(attacker : L2Character, target : L2Character, @has_soulshot : Bool, @ss_grade : Int32)
+  def initialize(attacker : L2Character, target : L2Character, has_soulshot : Bool, ss_grade : Int32)
+    @has_soulshot = has_soulshot
+    @ss_grade = ss_grade
     @attacker_id = attacker.l2id
     @attacker_loc = Location.new(attacker)
     @target_loc = Location.new(target)
@@ -57,11 +59,12 @@ class Packets::Outgoing::Attack < GameServerPacket
     private HITFLAG_SHLD  = 0x40
     private HITFLAG_MISS  = 0x80
 
-    getter damage, flags : Int32, target_id : Int32
+    getter damage, flags : UInt8, target_id : Int32
 
-    def initialize(target : L2Object, @damage : Int32, miss : Bool, crit : Bool, shld : Int, soulshot : Bool, ss_grade : Int)
+    def initialize(target : L2Object, damage : Int32, miss : Bool, crit : Bool, shld : Int, soulshot : Bool, ss_grade : Int)
+      @damage = damage
       @target_id = target.l2id
-      flags = 0
+      flags = 0u8
 
       flags |= HITFLAG_USESS | ss_grade if soulshot
       flags |= HITFLAG_CRIT if crit

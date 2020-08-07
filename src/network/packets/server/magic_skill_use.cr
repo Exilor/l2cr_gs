@@ -5,7 +5,13 @@ class Packets::Outgoing::MagicSkillUse < GameServerPacket
     initialize(char, char, skill_id, skill_level, hit_time, reuse_delay)
   end
 
-  def initialize(@char : L2Character, @target : L2Character, @skill_id : Int32, @skill_level : Int32, @hit_time : Int32, @reuse_delay : Int32)
+  def initialize(char : L2Character, target : L2Character, skill_id : Int32, skill_level : Int32, hit_time : Int32, reuse_delay : Int32)
+    @char = char
+    @target = target
+    @skill_id = skill_id
+    @skill_level = skill_level
+    @hit_time = hit_time
+    @reuse_delay = reuse_delay
     if char.is_a?(L2PcInstance)
       if loc = char.current_skill_world_position
         @ground_loc = loc

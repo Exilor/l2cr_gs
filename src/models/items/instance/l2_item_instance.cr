@@ -21,12 +21,11 @@ class L2ItemInstance < L2Object
   getter owner_id = 0
   getter count : Int64 = 0i64
   getter enchant_level = 0
-  getter item_id : Int32
   getter mana = -1
   getter time : Int64 = 0i64
   getter drop_protection = DropProtection.new
   getter elementals : Array(Elementals)?
-  getter! augmentation : L2Augmentation
+  getter augmentation : L2Augmentation?
   getter? published = false
   property custom_type_1 : Int32 = 0
   property custom_type_2 : Int32 = 0
@@ -40,7 +39,7 @@ class L2ItemInstance < L2Object
   property? exists_in_db : Bool = false
   property? stored_in_db : Bool = false
 
-  def initialize(l2id : Int32, @item_id : Int32)
+  def initialize(l2id : Int32, item_id : Int32)
     super(l2id)
 
     unless item = ItemTable[item_id]?
@@ -56,12 +55,12 @@ class L2ItemInstance < L2Object
     schedule_life_time_task
   end
 
-  def initialize(l2id : Int32, @item : L2Item)
+  def initialize(l2id : Int32, item : L2Item)
+    @item = item
     super(l2id)
 
-    @item_id = item.id
-    if @item_id == 0
-      raise ArgumentError.new("@item_id cannot be 0")
+    if item.id == 0
+      raise ArgumentError.new("item id cannot be 0")
     end
     self.name = item.name
     self.count = 1
@@ -136,8 +135,8 @@ class L2ItemInstance < L2Object
         ref_name = reference
       end
 
-      target_name = pc.target.try &.name || "no-target"
-      GMAudit.log("#{pc.name} [#{pc.l2id}]", "#{process}(#{id()} name: #{name})", target_name, "L2Object referencing this action is: #{ref_name}")
+      target_name = pc.target.try &.name
+      GMAudit.log(pc, "#{process}(#{id} name: #{name})", target_name, "L2Object referencing this action is: #{ref_name}")
     end
   end
 
@@ -204,13 +203,13 @@ class L2ItemInstance < L2Object
       ref_name = "no-reference"
       case reference
       when L2Object
-        ref_name = reference.name || "no-name"
+        ref_name = reference.name.empty? ? "no-name" : reference.name
       when String
         ref_name = reference
       end
 
-      target_name = pc.target.try &.name || "no-target"
-      GMAudit.log("#{pc.name} [#{pc.l2id}]", "#{process}(#{id()} name: #{name})", target_name, "L2Object referencing this action is: #{ref_name}")
+      target_name = pc.target.try &.name
+      GMAudit.log(pc, "#{process}(#{id} name: #{name})", target_name, "L2Object referencing this action is: #{ref_name}")
     end
   end
 
@@ -243,8 +242,12 @@ class L2ItemInstance < L2Object
     @loc_data
   end
 
+  def item_id : Int32
+    @item.id
+  end
+
   def id : Int32
-    @item_id
+    item_id
   end
 
   def etc_item : L2EtcItem?
@@ -284,7 +287,7 @@ class L2ItemInstance < L2Object
   end
 
   def night_lure? : Bool
-    @item_id.between?(8505, 8513) || @item_id == 8485
+    id.between?(8505, 8513) || id == 8485
   end
 
   def auto_attackable?(attacker : L2Character) : Bool
@@ -490,7 +493,7 @@ class L2ItemInstance < L2Object
       GameDB.exec(
         sql,
         @owner_id,
-        @item_id,
+        id,
         count,
         @loc.to_s,
         @loc_data,
@@ -1022,9 +1025,9 @@ class L2ItemInstance < L2Object
 
   def to_s(io : IO)
     if stackable?
-      io << {{@type.stringify + "("}} << @item.name << " x" << @count << ')'
+      io.print({{@type.stringify + "("}}, @item.name, " x", @count, ')')
     else
-      io << {{@type.stringify + "("}} << @item.name << ')'
+      io.print({{@type.stringify + "("}}, @item.name, ')')
     end
   end
 

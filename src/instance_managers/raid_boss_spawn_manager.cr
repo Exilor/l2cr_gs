@@ -2,6 +2,7 @@ module RaidBossSpawnManager
   extend self
   extend Loggable
 
+  private EILHALDER_VON_HELLMANN = 25328
   private BOSSES      = Concurrent::Map(Int32, L2RaidBossInstance).new
   private SPAWNS      = Concurrent::Map(Int32, L2Spawn).new
   private SCHEDULES   = Concurrent::Map(Int32, TaskScheduler::DelayedTask).new
@@ -49,7 +50,7 @@ module RaidBossSpawnManager
     SpawnTable.add_new_spawn(sp, false)
 
     if respawn_time == 0 || time > respawn_time
-      if boss_id == 25328
+      if boss_id == EILHALDER_VON_HELLMANN
         raid_boss = DayNightSpawnManager.handle_boss(sp)
       else
         raid_boss = sp.do_spawn.as(L2RaidBossInstance)
@@ -235,7 +236,7 @@ module RaidBossSpawnManager
     initializer boss_id : Int32
 
     def call
-      if @boss_id == 25328
+      if @boss_id == EILHALDER_VON_HELLMANN
         raid = DayNightSpawnManager.handle_boss(SPAWNS[@boss_id])
       else
         raid = SPAWNS[@boss_id].do_spawn.as(L2RaidBossInstance)

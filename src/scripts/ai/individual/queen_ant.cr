@@ -187,7 +187,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       return
     end
 
-    if !Config.raid_disable_curse && character.level - npc.level > 8
+    if !Config.raid_disable_curse && character.level &- npc.level > 8
       curse = nil
       if is_mage
         if !character.muted? && Rnd.rand(4) == 0

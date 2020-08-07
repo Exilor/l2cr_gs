@@ -10,7 +10,8 @@ abstract class AbstractResidence < ListenersContainer
 
   def_equals @residential_skills
 
-  def initialize(@residence_id : Int32)
+  def initialize(residence_id : Int32)
+    @residence_id = residence_id
     init_residential_skills
   end
 
@@ -37,6 +38,6 @@ abstract class AbstractResidence < ListenersContainer
 
   def to_log(io : IO)
     super
-    io << '(' << name << ')'
+    io.print('(', name, ')')
   end
 end

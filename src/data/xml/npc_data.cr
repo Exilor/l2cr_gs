@@ -430,7 +430,7 @@ module NpcData
 
   def get_templates(& : L2NpcTemplate ->) : Array(L2NpcTemplate)
     ret = [] of L2NpcTemplate
-    templates.each { |template| ret << template if yield template }
+    templates.each { |template| ret << template if yield(template) }
     ret
   end
 

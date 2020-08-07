@@ -9,7 +9,6 @@ class Packets::Incoming::RequestHennaEquip < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.transaction.try_perform_action("HennaEquip")
-      debug "Flood detected."
       return
     end
 
@@ -20,7 +19,7 @@ class Packets::Incoming::RequestHennaEquip < GameClientPacket
     end
 
     unless henna = HennaData.get_henna(@symbol_id)
-      warn { "Invalid henna ID #{@symbol_id} from player #{pc}." }
+      warn { "Invalid henna id #{@symbol_id} from player #{pc.name}." }
       action_failed
       return
     end

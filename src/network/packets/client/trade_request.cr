@@ -26,12 +26,12 @@ class Packets::Incoming::TradeRequest < GameClientPacket
     end
 
     unless target = L2World.find_object(@id)
-      debug { "L2Object with ID #{@id} not found in L2World." }
+      debug { "L2Object with id #{@id} not found in L2World." }
       return
     end
 
     unless partner = target.acting_player
-      debug { "#{target} has no acting_player." }
+      debug { target.name + " has no acting_player." }
       return
     end
 
@@ -88,13 +88,13 @@ class Packets::Incoming::TradeRequest < GameClientPacket
     end
 
     if pc.processing_transaction?
-      debug "#{pc} is already in a transaction."
+      debug { pc.name + " is already in a transaction." }
       pc.send_packet(SystemMessageId::ALREADY_TRADING)
       return
     end
 
     if target.processing_request? || target.processing_transaction?
-      debug "#{target} is already in a transaction."
+      debug { target.name + " is already in a transaction." }
       sm = SystemMessage.c1_is_busy_try_later
       sm.add_string(target.name)
       pc.send_packet(sm)

@@ -2,9 +2,7 @@ require "./attackable_known_list"
 
 class DefenderKnownList < AttackableKnownList
   def add_known_object(obj : L2Object) : Bool
-    unless super
-      return false
-    end
+    return false unless super
 
     me = active_char
 

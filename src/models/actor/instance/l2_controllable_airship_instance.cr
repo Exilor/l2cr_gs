@@ -8,7 +8,8 @@ class L2ControllableAirShipInstance < L2AirshipInstance
   getter fuel = 0
   property max_fuel : Int32 = 0
 
-  def initialize(template : L2CharTemplate, @owner_id : Int32)
+  def initialize(template : L2CharTemplate, owner_id : Int32)
+    @owner_id = owner_id
     super(template)
     @helm_id = IdFactory.next
   end
@@ -81,7 +82,7 @@ class L2ControllableAirShipInstance < L2AirshipInstance
         elsif pc.fishing?
           pc.send_packet(SystemMessageId::YOU_CANNOT_CONTROL_THE_HELM_WHILE_FISHING)
           return false
-        elsif pc.dead? || pc.fake_death?
+        elsif pc.looks_dead?
           pc.send_packet(SystemMessageId::YOU_CANNOT_CONTROL_THE_HELM_WHEN_YOU_ARE_DEAD)
           return false
         elsif pc.casting_now?

@@ -48,7 +48,7 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
     list.entries.each do |entry|
       if entry.entry_id == @entry_id
         if !entry.stackable? && @amount > 1
-          warn { "#{pc} tried to buy more than one non-stackable items." }
+          warn { pc.name + " tried to buy more than one non-stackable items." }
           pc.multisell = nil
           return
         end
@@ -106,7 +106,6 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
           if e.item_id < 0
 
             unless MultisellData.has_special_ingredient?(e.item_id, e.item_count * @amount, pc)
-              debug "MultisellData.has_special_ingredient? returned false (1)"
               return
             end
           else
@@ -132,12 +131,11 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
         entry.ingredients.each do |e|
           if e.item_id < 0
             unless MultisellData.take_special_ingredient(e.item_id, e.item_count * @amount, pc)
-              debug "MultisellData.has_special_ingredient? returned false (2)"
               return
             end
           else
             unless item_to_take = inv.get_item_by_item_id(e.item_id)
-              warn { "#{pc} doesn't have an item with item_id #{e.item_id}." }
+              warn { pc.name + " doesn't have an item with item_id #{e.item_id}." }
               pc.multisell = nil
               return
             end
@@ -153,8 +151,8 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
                 if list.maintain_enchantment?
                   contents = inv.get_all_items_by_item_id(e.item_id, e.enchant_level, false)
                   (e.item_count * @amount).times do |i|
-                    if contents[i].augmented?
-                      augmentation << contents[i].augmentation
+                    if aug = contents[i].augmentation
+                      augmentation << aug
                     end
 
                     if elem = contents[i].elementals

@@ -6,7 +6,8 @@ class Packets::Outgoing::ClientSetTime < GameServerPacket
   initializer time : Int32?
   initializer time : Int32, speed : Int32
 
-  def initialize(time : String, @speed : Int32 = 6)
+  def initialize(time : String, speed : Int32 = 6)
+    @speed = speed
     hh, mm = time.split(':')
     @time = (hh.to_i * 60) + mm.to_i
   end

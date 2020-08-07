@@ -17,7 +17,9 @@ class DimensionalRift
   property spawn_timer : TaskGroup?
   property spawn_timer_task : TaskScheduler::DelayedTask?
 
-  def initialize(@party : L2Party, @type : Int8, room : Int8)
+  def initialize(party : L2Party, type : Int8, room : Int8)
+    @party = party
+    @type = type
     @current_room = room
     coords = get_room_coord(room)
     party.dimensional_rift = self

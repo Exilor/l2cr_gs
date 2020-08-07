@@ -6,17 +6,19 @@ class Scripts::Q00326_VanquishRemnants < Quest
   private BLUE_CROSS_BADGE = 1360
   private BLACK_CROSS_BADGE = 1361
   private BLACK_LION_MARK = 1369
+
+  private record BadgeReward, chance : Int8, item_id : Int32
   # Monsters
   private MONSTERS = {
-    20053 => {61, RED_CROSS_BADGE},   # Ol Mahum Patrol
-    20058 => {61, RED_CROSS_BADGE},   # Ol Mahum Guard
-    20061 => {57, BLUE_CROSS_BADGE},  # Ol Mahum Remnants
-    20063 => {63, BLUE_CROSS_BADGE},  # Ol Mahum Shooter
-    20066 => {59, BLACK_CROSS_BADGE}, # Ol Mahum Captain
-    20436 => {55, BLUE_CROSS_BADGE},  # Ol Mahum Supplier
-    20437 => {59, RED_CROSS_BADGE},   # Ol Mahum Recruit
-    20438 => {60, BLACK_CROSS_BADGE}, # Ol Mahum General
-    20439 => {62, BLUE_CROSS_BADGE}   # Ol Mahum Officer
+    20053 => BadgeReward.new(61, RED_CROSS_BADGE),   # Ol Mahum Patrol
+    20058 => BadgeReward.new(61, RED_CROSS_BADGE),   # Ol Mahum Guard
+    20061 => BadgeReward.new(57, BLUE_CROSS_BADGE),  # Ol Mahum Remnants
+    20063 => BadgeReward.new(63, BLUE_CROSS_BADGE),  # Ol Mahum Shooter
+    20066 => BadgeReward.new(59, BLACK_CROSS_BADGE), # Ol Mahum Captain
+    20436 => BadgeReward.new(55, BLUE_CROSS_BADGE),  # Ol Mahum Supplier
+    20437 => BadgeReward.new(59, RED_CROSS_BADGE),   # Ol Mahum Recruit
+    20438 => BadgeReward.new(60, BLACK_CROSS_BADGE), # Ol Mahum General
+    20439 => BadgeReward.new(62, BLUE_CROSS_BADGE)   # Ol Mahum Officer
   }
 
   # Misc
@@ -45,7 +47,6 @@ class Scripts::Q00326_VanquishRemnants < Quest
       when "30435-08.html"
         html = event
       end
-
     end
 
     html
@@ -53,8 +54,8 @@ class Scripts::Q00326_VanquishRemnants < Quest
 
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
-    if st && st.started? && Rnd.rand(100) < MONSTERS[npc.id][0]
-      st.give_items(MONSTERS[npc.id][1], 1)
+    if st && st.started? && Rnd.rand(100) < MONSTERS[npc.id].chance
+      st.give_items(MONSTERS[npc.id].item_id, 1)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
     end
 

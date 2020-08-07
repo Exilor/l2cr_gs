@@ -54,7 +54,6 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
     dy = @to_y.to_f - pc.y
 
     if (dx * dx) + (dy * dy) > 98_010_000
-      debug { "#{pc.name}: distance is too large." }
       action_failed
       return
     end

@@ -32,8 +32,6 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
   end
 
   private def run_impl
-    debug "Request to create a character named '#{@name}'."
-
     if @name.size < 1 || @name.size > 16
       debug { "'#{@name}' is either too short or too long." }
       send_packet(CharCreateFail::REASON_16_ENG_CHARS)
@@ -130,7 +128,7 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
     end
 
     if Config.starting_level > 1
-      pc.stat.add_level((Config.starting_level - 1).to_i32)
+      pc.stat.add_level((Config.starting_level &- 1).to_i32)
     end
 
     if Config.starting_sp > 0

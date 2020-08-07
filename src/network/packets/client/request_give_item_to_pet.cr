@@ -49,7 +49,7 @@ class Packets::Incoming::RequestGiveItemToPet < GameClientPacket
     end
 
     unless pc.transfer_item("Transfer", @l2id, @amount, pet.inventory, pet)
-      warn { "Invalid item transfer request from #{pc} to #{pet}." }
+      warn { "Invalid item transfer request from #{pc.name} to #{pet}." }
     end
   end
 end

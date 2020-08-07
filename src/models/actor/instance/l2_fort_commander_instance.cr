@@ -17,7 +17,7 @@ class L2FortCommanderInstance < L2DefenderInstance
     !fort.siege.defender?(attacker.clan)
   end
 
-  def add_damage_hate(attacker : L2Character?, damage : Int32, aggro : Int64)
+  def add_damage_hate(attacker : L2Character?, damage : Int, aggro : Int)
     return unless attacker
 
     unless attacker.is_a?(L2FortCommanderInstance)
@@ -75,7 +75,7 @@ class L2FortCommanderInstance < L2DefenderInstance
 
             broadcast_packet(ns)
             self.can_talk = false
-            ThreadPoolManager.schedule_general(TalkTask.new(self), 10000)
+            ThreadPoolManager.schedule_general(TalkTask.new(self), 10_000)
           end
         end
       end

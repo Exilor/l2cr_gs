@@ -7,7 +7,7 @@ class Packets::Outgoing::ExReplySentPost < Packets::Outgoing::AbstractItemPacket
       if attachments && attachments.size > 0
         @items = attachments.items
       else
-        warn "Message with ID #{msg.id} has attachments but the ItemContainer is empty."
+        warn "Message with id #{msg.id} has attachments but the ItemContainer is empty."
       end
     end
   end

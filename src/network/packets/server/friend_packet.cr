@@ -1,7 +1,9 @@
 class Packets::Outgoing::FriendPacket < GameServerPacket
   @online : Bool
 
-  def initialize(@action : Bool, @obj_id : Int32)
+  def initialize(action : Bool, obj_id : Int32)
+    @action = action
+    @obj_id = obj_id
     @name = CharNameTable.get_name_by_id(obj_id)
     @online = !!L2World.get_player(obj_id)
   end

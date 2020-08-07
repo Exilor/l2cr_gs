@@ -1,19 +1,15 @@
 class Packets::Outgoing::ExMultiPartyCommandChannelInfo < GameServerPacket
-  initializer channel : L2CommandChannel?
+  initializer channel : L2CommandChannel
 
   private def write_impl
-    unless channel = @channel
-      return
-    end
-
     c 0xfe
     h 0x31
 
-    s channel.leader.name
+    s @channel.leader.name
     d 0 # Channel loot 0 or 1
-    d channel.size
+    d @channel.size
 
-    channel.parties.each do |p|
+    @channel.parties.each do |p|
       s p.leader.name
       d p.leader_l2id
       d p.size

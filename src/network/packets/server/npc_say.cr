@@ -2,23 +2,31 @@ class Packets::Outgoing::NpcSay < GameServerPacket
   @text : String?
   @npc_id : Int32
 
-  def initialize(@l2id : Int32, @text_type : Int32, npc_id : Int32, @text : String)
+  def initialize(l2id : Int32, text_type : Int32, npc_id : Int32, text : String)
+    @l2id = l2id
+    @text_type = text_type
+    @text = text
     @npc_id = 1_000_000 + npc_id
     @npc_string = -1
   end
 
-  def initialize(npc : L2Npc, @text_type : Int32, @text : String)
+  def initialize(npc : L2Npc, text_type : Int32, text : String)
+    @text_type = text_type
+    @text = text
     @l2id = npc.l2id
     @npc_id = 1_000_000 + npc.id
     @npc_string = -1
   end
 
-  def initialize(@l2id : Int32, @text_type : Int32, npc_id : Int32, npc_string : NpcString)
+  def initialize(l2id : Int32, text_type : Int32, npc_id : Int32, npc_string : NpcString)
+    @l2id = l2id
+    @text_type = text_type
     @npc_id = 1_000_000 + npc_id
     @npc_string = npc_string.id
   end
 
-  def initialize(npc : L2Npc, @text_type : Int32, npc_string : NpcString)
+  def initialize(npc : L2Npc, text_type : Int32, npc_string : NpcString)
+    @text_type = text_type
     @l2id = npc.l2id
     @npc_id = 1_000_000 + npc.id
     @npc_string = npc_string.id

@@ -1,7 +1,11 @@
 require "../../../../enums/illegal_action_punishment_type"
 
 class IllegalPlayerActionTask
-  def initialize(@pc : L2PcInstance, @msg : String, @punishment : IllegalActionPunishmentType)
+  def initialize(pc : L2PcInstance, msg : String, punishment : IllegalActionPunishmentType)
+    @pc = pc
+    @msg = msg
+    @punishment = punishment
+
     case @punishment
     when .kick?
       pc.send_message("You will be kicked for illegal action, GM informed.")
@@ -16,7 +20,6 @@ class IllegalPlayerActionTask
       pc.send_message("Illegal action performed")
       pc.send_message("You will be teleported to GM Consultation Service area and jailed.")
     end
-
   end
 
   def call
@@ -54,6 +57,5 @@ class IllegalPlayerActionTask
       )
       PunishmentManager.start_punishment(task)
     end
-
   end
 end

@@ -128,15 +128,15 @@ class PlayableStat < CharStat
   def add_level(value : Int32) : Bool
     current_level = level
 
-    if current_level + value > max_level
+    if current_level &+ value > max_level
       if current_level < max_level
-        value = max_level - current_level
+        value = max_level &- current_level
       else
         return false
       end
     end
 
-    level_increased = current_level + value > current_level
+    level_increased = current_level &+ value > current_level
     value &+= current_level
     self.level = value
 
@@ -164,7 +164,7 @@ class PlayableStat < CharStat
       return false
     end
 
-    if sp > Int32::MAX - current_sp
+    if sp > Int32::MAX &- current_sp
       @sp.set(Int32::MAX)
     else
       @sp.add(sp)

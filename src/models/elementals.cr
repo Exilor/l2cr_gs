@@ -53,7 +53,7 @@ class Elementals
   end
 
   def to_s(io : IO)
-    io << Elementals.get_element_name(@element) << " +" << @value
+    io.print(Elementals.get_element_name(@element), " +", @value)
   end
 
   def self.get_item_element(item_id : Int) : Int8
@@ -93,7 +93,7 @@ class Elementals
   end
 
   def self.get_opposite_element(element : Int8) : Int8
-    element.even? ? element + 1 : element - 1
+    element.even? ? element &+ 1 : element &- 1
   end
 
   class ElementalStatBoni

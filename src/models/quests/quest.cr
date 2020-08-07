@@ -1198,7 +1198,7 @@ class Quest < AbstractScript
     end
 
     candidates = [] of QuestState
-    if check_party_member_conditions(qs, condition, target) && chance > 0
+    if check_party_member_conditions(qs, condition, target)
       chance.times { candidates << qs }
     end
 

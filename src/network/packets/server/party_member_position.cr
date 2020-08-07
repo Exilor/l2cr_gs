@@ -17,7 +17,7 @@ class Packets::Outgoing::PartyMemberPosition < GameServerPacket
     c 0xba
     d @locations.size
     # directly iterating the hash has raised a "can't add a new key into hash
-    # during iteration" at least once in Ruby
+    # during iteration" at least once in Ruby but Crystal as of 0.35.1 doesn't.
     @locations.each do |id, loc|
       d id
       l loc

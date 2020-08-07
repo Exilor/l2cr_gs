@@ -14,7 +14,6 @@ class QuestState
     @player = player
     @state = state
     @quest_name = quest.name
-
     player.set_quest_state(self)
   end
 
@@ -513,8 +512,6 @@ class QuestState
   end
 
   def to_log(io : IO)
-    io << "QuestState("
-    io << @quest_name
-    io << ')'
+    io.print("QuestState(", @quest_name, ')')
   end
 end

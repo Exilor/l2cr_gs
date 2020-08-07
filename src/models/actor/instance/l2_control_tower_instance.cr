@@ -10,7 +10,7 @@ class L2ControlTowerInstance < L2Tower
   def do_die(killer : L2Character?) : Bool
     if castle.siege.in_progress?
       castle.siege.killed_ct(self)
-      if @guards && !guards.empty?
+      if (guards = @guards) && !guards.empty?
         guards.each do |sp|
           begin
             sp.stop_respawn

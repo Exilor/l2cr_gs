@@ -3,7 +3,8 @@ class Packets::Outgoing::StopMoveInVehicle < GameServerPacket
   @pos : Location
   @heading : Int32
 
-  def initialize(pc : L2PcInstance, @boat_id : Int32)
+  def initialize(pc : L2PcInstance, boat_id : Int32)
+    @boat_id = boat_id
     @pc_id = pc.l2id
     @pos = pc.in_vehicle_position.not_nil!
     @heading = pc.heading

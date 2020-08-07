@@ -43,10 +43,10 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
         d Config.siege_hour_list.size
         Config.siege_hour_list.each do |hour|
           cal.hour = hour
-          d cal.ms / 1000
+          d cal.ms // 1000
         end
       else
-        d castle.siege_date.ms / 1000
+        d castle.siege_date.ms // 1000
         d 0
       end
     elsif hall = @hall
@@ -70,8 +70,8 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
         s ""
       end
 
-      d Time.ms / 1000
-      d ClanHallSiegeManager.get_siegable_hall(hall.id).not_nil!.next_siege_time / 1000
+      d Time.ms // 1000
+      d ClanHallSiegeManager.get_siegable_hall(hall.id).not_nil!.next_siege_time // 1000
       d 0
     else
       error "No castle and no hall."

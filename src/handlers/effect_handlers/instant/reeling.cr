@@ -46,7 +46,7 @@ class EffectHandler::Reeling < AbstractEffect
     dmg *= grade_bonus * ss
     dmg = dmg.to_i
 
-    if pc.get_skill_level(1315) <= info.skill.level - 2 # fish expertise
+    if pc.get_skill_level(1315) <= info.skill.level &- 2 # fish expertise
       pc.send_packet(SystemMessageId::REELING_PUMPING_3_LEVELS_HIGHER_THAN_FISHING_PENALTY)
       pen = (dmg * 0.05).to_i
       dmg = (dmg - pen).to_i

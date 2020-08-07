@@ -1,5 +1,5 @@
 class Packets::Outgoing::PledgeShowMemberListAll < GameServerPacket
-  @members : Array(L2ClanMember) | Iterator(L2ClanMember)
+  @members : Slice(L2ClanMember)
   @pledge_type = 0
 
   def initialize(clan : L2Clan, pc : L2PcInstance)

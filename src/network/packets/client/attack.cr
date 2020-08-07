@@ -22,11 +22,12 @@ class Packets::Incoming::Attack < GameClientPacket
       return
     end
 
-    info = pc.effect_list.get_buff_info_by_abnormal_type(AbnormalType::BOT_PENALTY)
-    info.try &.effects.each do |effect|
-      unless effect.check_condition(-1)
-        pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED)
-        action_failed
+    if info = pc.effect_list.get_buff_info_by_abnormal_type(AbnormalType::BOT_PENALTY)
+      info.effects.each do |effect|
+        unless effect.check_condition(-1)
+          pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED)
+          action_failed
+        end
       end
     end
 

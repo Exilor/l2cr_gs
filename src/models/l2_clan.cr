@@ -47,7 +47,6 @@ class L2Clan
   @siege_deaths = Atomic(Int32).new(0)
   @forum : Forum?
 
-  getter level = 0
   getter blood_alliance_count = 0
   getter blood_oath_count = 0
   getter skills = Concurrent::Map(Int32, Skill).new
@@ -63,6 +62,7 @@ class L2Clan
   getter? notice_enabled = false
   setter clan_id : Int32
   property name : String = ""
+  property level : Int32 = 0
   property ally_crest_id : Int32 = 0
   property crest_id : Int32 = 0
   property crest_large_id : Int32 = 0
@@ -92,8 +92,8 @@ class L2Clan
 
   delegate size, to: @members
 
-  def members : Enumerable(L2ClanMember)
-    @members.local_each_value
+  def members : Slice(L2ClanMember)
+    @members.values_slice
   end
 
   def each_player(& : L2PcInstance ->) : Nil
@@ -343,22 +343,6 @@ class L2Clan
 
   def online_members_count : Int32
     @members.count { |_, m| m.online? }
-  end
-
-  def level=(@level : Int32)
-    if level >= 2 && @forum && Config.enable_community_board
-      if forum = ForumsBBSManager.get_forum_by_name("ClanRoot")
-        unless @forum = forum.get_child_by_name(@name)
-          @forum = ForumsBBSManager.create_new_forum(
-            @name,
-            ForumsBBSManager.get_forum_by_name("ClanRoot").not_nil!,
-            Forum::CLAN,
-            Forum::CLANMEMBERONLY,
-            id
-          )
-        end
-      end
-    end
   end
 
   def member?(id : Int32) : Bool
@@ -1452,7 +1436,7 @@ class L2Clan
 
     pc.send_packet(StatusUpdate.sp(pc))
     pc.send_packet(ItemList.new(pc, false))
-    change_level(level + 1)
+    change_level(level &+ 1)
     OnPlayerClanLvlUp.new(self).async
 
     true
@@ -1471,7 +1455,7 @@ class L2Clan
       if level > 4
         SiegeManager.add_siege_skills(leader)
         leader.send_packet(SystemMessageId::CLAN_CAN_ACCUMULATE_CLAN_REPUTATION_POINTS)
-      elsif level < 5
+      else
         SiegeManager.remove_siege_skills(leader)
       end
     end
@@ -1543,7 +1527,7 @@ class L2Clan
   def learnable_sub_skill?(id : Int32, lvl : Int32) : Bool
     current = @subpledge_skills[id]?
 
-    if current && current.level + 1 == lvl
+    if current && current.level &+ 1 == lvl
       return true
     end
 
@@ -1554,7 +1538,7 @@ class L2Clan
     @subpledges.each_value do |subunit|
       next if subunit.id == -1
       current = subunit.get_skill(id)
-      if current && current.level + 1 == lvl
+      if current && current.level &+ 1 == lvl
         return true
       end
       if current.nil? && lvl == 1
@@ -1576,7 +1560,7 @@ class L2Clan
       current = @subpledges[subtype].get_skill(id)
     end
 
-    if current && current.level + 1 == skill.level
+    if current && current.level &+ 1 == skill.level
       return true
     end
 
@@ -1638,7 +1622,7 @@ class L2Clan
   end
 
   def to_s(io : IO)
-    io << "L2Clan(" << @name << ')'
+    io.print("L2Clan(", @name, ')')
   end
 
   def to_log(io : IO)

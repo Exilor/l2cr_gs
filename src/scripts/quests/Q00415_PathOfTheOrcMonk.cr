@@ -458,7 +458,6 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
 
   private def check_weapon(pc)
     return true unless weapon = pc.active_weapon_instance
-    weapon.item_type == WeaponType::FIST ||
-    weapon.item_type == WeaponType::DUALFIST
+    weapon.item_type.in?(WeaponType::FIST, WeaponType::DUALFIST)
   end
 end

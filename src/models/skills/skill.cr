@@ -690,7 +690,7 @@ class Skill
   end
 
   def to_s(io : IO)
-    io << name << " Lv " << level
+    io.print(name, " Lv ", level)
   end
 
   def inspect(io : IO)

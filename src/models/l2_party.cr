@@ -64,7 +64,7 @@ class L2Party < AbstractPlayerGroup
 
   def get_checked_next_looter(item_id : Int32, target : L2Character) : L2PcInstance?
     size.times do |i|
-      @item_last_loot += 1
+      @item_last_loot &+= 1
       if @item_last_loot >= size
         @item_last_loot = 0
       end
@@ -245,7 +245,7 @@ class L2Party < AbstractPlayerGroup
           pc.send_packet(SystemMessageId::YOU_CANNOT_TRANSFER_RIGHTS_TO_YOURSELF)
         else
           temp = leader()
-          p1 = @members.index(pc) || -1
+          p1 = @members.index(pc) || raise "#{pc.name} not in this party"
           @members[0] = pc
           @members[p1] = temp
 

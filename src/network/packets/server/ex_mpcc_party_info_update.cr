@@ -3,7 +3,8 @@ class Packets::Outgoing::ExMPCCPartyInfoUpdate < GameServerPacket
   @leader_id : Int32
   @member_count : Int32
 
-  def initialize(party : L2Party, @mode : Int32)
+  def initialize(party : L2Party, mode : Int32)
+    @mode = mode
     @name = party.leader.name
     @leader_id = party.leader_l2id
     @member_count = party.size

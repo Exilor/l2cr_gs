@@ -9,7 +9,7 @@ struct ClassInfo
   end
 
   def client_code(io : IO)
-    io << "&$" << class_client_id << ';'
+    io.print("&$", class_client_id, ';')
   end
 
   def escaped_client_code : String

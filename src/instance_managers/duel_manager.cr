@@ -18,7 +18,7 @@ module DuelManager
 
   def add_duel(pc1 : L2PcInstance, pc2 : L2PcInstance, party_duel : Bool)
     duel_id = @@current_duel_id.add(1) &+ 1
-    debug { "Created new duel with ID #{duel_id}." }
+    debug { "Created new duel with id #{duel_id}." }
     DUELS[duel_id] = Duel.new(pc1, pc2, party_duel, duel_id)
   end
 

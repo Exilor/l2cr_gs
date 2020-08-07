@@ -11,7 +11,7 @@ class Packets::Incoming::RequestRecipeShopMakeInfo < GameClientPacket
     return unless pc = active_char
 
     unless shop = L2World.get_player(@l2id)
-      warn { "Player with ID #{@l2id} not found." }
+      warn { "Player with id #{@l2id} not found." }
       return
     end
 

@@ -818,7 +818,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
         return false
       end
 
-      if summon.level - pc.level > 20
+      if summon.level &- pc.level > 20
         send_packet(SystemMessageId::PET_TOO_HIGH_TO_CONTROL)
         return false
       end

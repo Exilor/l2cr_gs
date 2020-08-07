@@ -194,7 +194,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     end
 
     if pc.cursed_weapon_equipped?
-      info { "#{pc.name} has a cursed weapon." }
+      info { pc.name + " has a cursed weapon." }
       CursedWeaponsManager.get_cursed_weapon(pc.cursed_weapon_equipped_id)
       .not_nil!.cursed_on_login
     end
@@ -231,8 +231,8 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       notice.disable_validation
       send_packet(notice)
     elsif Config.server_news
-      html = HtmCache.get_htm("data/html/servnews.htm") || "servnews.htm not found."
-      send_packet(NpcHtmlMessage.new(html))
+      html = HtmCache.get_htm("data/html/servnews.htm")
+      send_packet(NpcHtmlMessage.new(html || "servnews.htm not found."))
     end
 
     if Config.petitioning_allowed

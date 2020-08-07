@@ -45,7 +45,6 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
     end
 
     if pc.falling?(@z)
-      debug { "#{pc.name} is falling." }
       return
     end
 
@@ -86,14 +85,10 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
       end
 
       if diff_sq > 250_000 || dz.abs > 200
-        # debug "diff_sq > 250_000 || dz.abs > 200"
         if dz.abs.between?(200, 1500) && (@z - pc.client_z).abs < 800
-          # debug "dz.abs.between?(201, 1499) && (@z - pc.client_z).abs < 800"
-          # debug "Setting xyz of #{pc} at #{real_x} #{real_y} #{@z}."
           pc.set_xyz(real_x, real_y, @z) # this was wrong, using real_z instead of real_y.
           real_z = @z
         else
-          # debug "Synchronizing server/client position of #{pc.name}."
           pc.send_packet(ValidateLocation.new(pc))
         end
       end

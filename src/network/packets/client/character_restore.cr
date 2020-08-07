@@ -7,7 +7,6 @@ class Packets::Incoming::CharacterRestore < GameClientPacket
 
   private def run_impl
     unless flood_protectors.character_select.try_perform_action("CharacterRestore")
-      debug "Flood detected."
       return
     end
 

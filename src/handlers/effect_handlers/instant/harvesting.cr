@@ -56,7 +56,7 @@ class EffectHandler::Harvesting < AbstractEffect
     pc_level = pc.level
     mob_level = mob.level
 
-    diff = (pc_level - mob_level).abs
+    diff = (pc_level &- mob_level).abs
 
     basic_success = 100
 

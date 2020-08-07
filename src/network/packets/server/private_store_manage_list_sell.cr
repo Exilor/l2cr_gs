@@ -4,7 +4,8 @@ class Packets::Outgoing::PrivateStoreManageListSell < Packets::Outgoing::Abstrac
   @item_list : Array(TradeItem)
   @sell_list : Interfaces::Array(TradeItem)
 
-  def initialize(pc : L2PcInstance, @package_sale : Bool)
+  def initialize(pc : L2PcInstance, package_sale : Bool)
+    @package_sale = package_sale
     @l2id = pc.l2id
     @adena = pc.adena
     pc.sell_list.update_items

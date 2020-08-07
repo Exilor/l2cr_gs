@@ -150,7 +150,7 @@ module AdminCommandHandler::AdminFightCalculator
   private def handle_show(params, pc)
     params = params.strip
 
-    if params.size == 0
+    if params.empty?
       npc1 = pc
       unless npc2 = pc.target.as?(L2Character)
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
@@ -272,7 +272,7 @@ module AdminCommandHandler::AdminFightCalculator
             "<body>" \
             "<table>"
 
-      if params.size == 0
+      if params.empty?
         io << "<tr><td width=140>Parameter</td><td width=70>me</td><td width=70>target</td></tr>"
       else
         io << "<tr><td width=140>Parameter</td><td width=70>"
@@ -353,7 +353,7 @@ module AdminCommandHandler::AdminFightCalculator
             "</table>" \
             "<center><br>"
 
-      if params.size == 0
+      if params.empty?
         io << "<button value=\"Retry\" action=\"bypass -h admin_fight_calculator_show\"  width=100 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
       else
         io << "<button value=\"Retry\" action=\"bypass -h admin_fight_calculator_show "

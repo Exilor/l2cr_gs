@@ -8,11 +8,11 @@ struct RangeSet(T)
   end
 
   def initialize(*ranges : Range(T, T))
-    @ranges = ranges.to_a
+    @ranges = ranges.map { |r| r.excludes_end? ? r.begin..r.end.pred : r }.to_a
   end
 
   def each(& : T ->) : Nil
-    @ranges.each { |r| r.each { |n| yield n } }
+    @ranges.deep_each { |n| yield n }
   end
 
   def <<(value : T) : self
@@ -24,7 +24,7 @@ struct RangeSet(T)
     last_end = last.end
 
     if value > last_end
-      if value - 1 == last_end
+      if value.pred == last_end
         @ranges[-1] = (last.begin)..value
       else
         @ranges << (value..value)
@@ -38,8 +38,8 @@ struct RangeSet(T)
     return self if r.includes?(value)
     next_range = @ranges[i &+ 1]?
     return self if next_range && next_range.includes?(value)
-    extend_this_range = r.end + 1 == value
-    extend_next_range = next_range && next_range.begin - 1 == value
+    extend_this_range = r.end.succ == value
+    extend_next_range = next_range && next_range.begin.pred == value
 
     if extend_this_range && extend_next_range
       @ranges[i, 2] = (r.begin)..(next_range.not_nil!.end)
@@ -53,12 +53,6 @@ struct RangeSet(T)
 
     self
   end
-
-  # def self.[](*numbers : T) : RangeSet(T)
-  #   set = RangeSet(T).new
-  #   numbers.each { |n| set << n }
-  #   set
-  # end
 
   def add(value : T) : Bool
     old = size
@@ -92,7 +86,7 @@ struct RangeSet(T)
   end
 
   def first_free : T
-    (first = @ranges[0]?) ? first.begin > 0 ? 0 : first.end + 1 : T.zero
+    (first = @ranges[0]?) ? first.begin > 0 ? 0 : first.end.succ : T.zero
   end
 
   def size : Int32
@@ -120,12 +114,12 @@ struct RangeSet(T)
     when range.size == 1
       @ranges.delete_at(i)
     when range.begin == value
-      @ranges[i] = (value + 1)..(range.end)
+      @ranges[i] = value.succ..range.end
     when range.end == value
-      @ranges[i] = (range.begin)..(value - 1)
+      @ranges[i] = (range.begin)..value.pred
     else
-      @ranges[i] = (range.begin)..(value - 1)
-      @ranges.insert(i &+ 1, (value + 1)..(range.end))
+      @ranges[i] = (range.begin)..value.pred
+      @ranges.insert(i &+ 1, value.succ..(range.end))
     end
 
     value

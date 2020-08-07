@@ -32,7 +32,6 @@ class Packets::Outgoing::ExShowFortressSiegeInfo < GameServerPacket
         when 3
           d 0x00
         end
-
       when 4 # L2J TODO: change 4 to 5 once control room supporte
         case @csize2
         # L2J TODO: once control room supported, update writeD(0x0x) to support 5th room
@@ -47,9 +46,7 @@ class Packets::Outgoing::ExShowFortressSiegeInfo < GameServerPacket
         when 4
           d 0x01
         end
-
       end
-
     else
       @size.times do
         d 0

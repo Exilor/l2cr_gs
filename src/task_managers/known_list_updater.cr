@@ -16,7 +16,7 @@ module KnownListUpdater
   end
 
   def call
-    L2World.world_regions.each do |regions|
+    L2World.regions.each do |regions|
       regions.each do |reg|
         begin
           failed = FAILED_REGIONS.includes?(reg)

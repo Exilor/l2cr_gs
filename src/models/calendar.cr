@@ -92,10 +92,6 @@ class Calendar
     self
   end
 
-  # def hour # the hour of the day e.g. 15 at 15:38
-  #   @time.hour
-  # end
-
   def hour=(hour) # the hour of the day
     hour *= HOUR
     seconds = @time.hour * HOUR
@@ -166,11 +162,11 @@ class Calendar
   end
 
   def month : Int32
-    @time.month - 1
+    @time.month &- 1
   end
 
   def month=(month)
-    difference = (month - month()).abs
+    difference = (month &- month()).abs
     if month > month()
       @time += difference.months
     else
@@ -179,7 +175,7 @@ class Calendar
   end
 
   def year=(year)
-    difference = (year - @time.year).abs
+    difference = (year &- @time.year).abs
     if year > @time.year
       @time += difference.years
     else
@@ -260,7 +256,7 @@ class Calendar
   end
 
   def to_s(io : IO)
-    io << "Calendar(" << @time << ')'
+    io.print("Calendar(", @time, ')')
   end
 
   def inspect(io)

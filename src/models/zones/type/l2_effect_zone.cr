@@ -25,20 +25,18 @@ class L2EffectZone < L2ZoneType
     when "bypassSkillConditions"
       @bypass_conditions = Bool.new(value)
     when "maxDynamicSkillCount"
-      # @skills = {} of Int32 => Int32
+      # @skills already initialized
     when "skillIdLvl"
-      # skills = {} of Int32 => Int32
-      value.split(';').each do |skill|
+      value.split(';') do |skill|
         split = skill.split('-')
         if split.size != 2
-          # warn "Invalid config property (#{split.inspect})."
+          # raise "Invalid config property '#{split}'"
         else
           id = split[0].to_i
           lvl = split[1].to_i
           @skills[id] = lvl
         end
       end
-      # @skills = skills
     when "showDangerIcon"
       @show_danger_icon = Bool.new(value)
     else
@@ -86,11 +84,7 @@ class L2EffectZone < L2ZoneType
     end
   end
 
-  private def get_skill(skill_id : Int, skill_lvl : Int) : Skill?
-    SkillData[skill_id, skill_lvl]?
-  end
-
-  def add_skill(skill_id : Int, skill_lvl : Int)
+  def add_skill(skill_id : Int32, skill_lvl : Int32)
     if skill_lvl < 1
       remove_skill(skill_id)
       return
@@ -99,7 +93,7 @@ class L2EffectZone < L2ZoneType
     @skills[skill_id] = skill_lvl
   end
 
-  def remove_skill(skill_id : Int)
+  def remove_skill(skill_id : Int32)
     @skills.delete(skill_id)
   end
 
@@ -107,7 +101,7 @@ class L2EffectZone < L2ZoneType
     @skills.clear
   end
 
-  def get_skill_level(skill_id : Int) : Int32
+  def get_skill_level(skill_id : Int32) : Int32
     @skills.fetch(skill_id, 0)
   end
 
@@ -118,7 +112,7 @@ class L2EffectZone < L2ZoneType
       next unless char.alive?
       next unless Rnd.rand(100) < @chance
       @skills.each do |id, lvl|
-        if skill = get_skill(id, lvl)
+        if skill = SkillData[id, lvl]?
           if @bypass_conditions || skill.check_condition(char, char, false)
             unless char.affected_by_skill?(id)
               skill.apply_effects(char, char)

@@ -29,7 +29,7 @@ class Packets::Incoming::RequestDeleteSentPost < GameClientPacket
 
     msg_ids.each do |msg_id|
       unless msg = MailManager.get_message(msg_id)
-        warn { "Message with ID #{msg_id} not found." }
+        warn { "Message with id #{msg_id} not found." }
         next
       end
 

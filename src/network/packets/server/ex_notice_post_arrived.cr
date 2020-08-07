@@ -1,11 +1,5 @@
 class Packets::Outgoing::ExNoticePostArrived < GameServerPacket
-  protected setter show_animation
-
-  initializer show_animation : Bool
-
-  def self.new(value : Bool) : self
-    value ? TRUE : FALSE
-  end
+  private initializer show_animation : Bool
 
   private def write_impl
     c 0xfe
@@ -14,9 +8,6 @@ class Packets::Outgoing::ExNoticePostArrived < GameServerPacket
     d @show_animation ? 1 : 0
   end
 
-  TRUE = allocate
-  TRUE.show_animation = true
-
-  FALSE = allocate
-  FALSE.show_animation = false
+  TRUE  = new(true)
+  FALSE = new(false)
 end

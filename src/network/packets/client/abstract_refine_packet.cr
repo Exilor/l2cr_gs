@@ -164,27 +164,27 @@ abstract class Packets::Incoming::AbstractRefinePacket < GameClientPacket
 
       case item.item_location
       when ItemLocation::INVENTORY, ItemLocation::PAPERDOLL
-      else return false
+        # do nothing
+      else
+        return false
       end
 
       if item.template.is_a?(L2Weapon)
-        case item.template.item_type
-        when WeaponType::NONE, WeaponType::FISHINGROD
+        if item.template.item_type.in?(WeaponType::NONE, WeaponType::FISHINGROD)
           return false
         end
-
       elsif item.template.is_a?(L2Armor)
         case item.template.body_part
         when L2Item::SLOT_LR_FINGER, L2Item::SLOT_LR_EAR, L2Item::SLOT_NECK
-        else return false
+          # do nothing
+        else
+          return false
         end
       else
         return false # will never happen
       end
 
-      return false if Config.augmentation_blacklist.includes?(item.id)
-
-      true
+      !Config.augmentation_blacklist.includes?(item.id)
     else
       unless pc.private_store_type.none?
         pc.send_packet(SystemMessageId::YOU_CANNOT_AUGMENT_ITEMS_WHILE_A_PRIVATE_STORE_OR_PRIVATE_WORKSHOP_IS_IN_OPERATION)
@@ -232,7 +232,8 @@ abstract class Packets::Incoming::AbstractRefinePacket < GameClientPacket
       GEMSTONE_C
     when .s80?, .s84?
       GEMSTONE_B
-    else 0
+    else
+      0
     end
   end
 

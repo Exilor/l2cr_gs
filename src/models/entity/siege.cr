@@ -1007,6 +1007,6 @@ class Siege
 
   def to_log(io : IO)
     super
-    io << '(' << castle.name << ')'
+    io.print('(', castle.name, ')')
   end
 end

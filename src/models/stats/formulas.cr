@@ -108,8 +108,8 @@ module Formulas
   end
 
   def hp_regen(char : L2Character) : Float64
-    if char.is_a?(L2PcInstance)
-      init = char.template.get_base_hp_regen(char.level)
+    if pc = char.as?(L2PcInstance)
+      init = pc.template.get_base_hp_regen(pc.level)
     else
       init = char.template.base_hp_reg
     end
@@ -126,7 +126,7 @@ module Formulas
       hp_regen_multiplier *= Config.champion_hp_regen
     end
 
-    if pc = char.as?(L2PcInstance)
+    if pc
       if SevenSignsFestival.instance.festival_in_progress? && pc.festival_participant?
         hp_regen_multiplier *= festival_regen_modifier(pc)
       else
@@ -198,8 +198,8 @@ module Formulas
   end
 
   def mp_regen(char : L2Character) : Float64
-    if char.is_a?(L2PcInstance)
-      init = char.template.get_base_mp_regen(char.level)
+    if pc = char.as?(L2PcInstance)
+      init = pc.template.get_base_mp_regen(pc.level)
     else
       init = char.template.base_mp_reg
     end
@@ -212,7 +212,7 @@ module Formulas
 
     mp_regen_bonus = 0.0
 
-    if pc = char.as?(L2PcInstance)
+    if pc
       if SevenSignsFestival.instance.festival_in_progress? && pc.festival_participant?
         mp_regen_multiplier *= festival_regen_modifier(pc)
       else
@@ -397,7 +397,11 @@ module Formulas
     end
 
     rate = base_mod * element_mod * trait_mod * m_atk_mod * buff_debuff_mod
-    final_rate = trait_mod > 0 ? rate.clamp(skill.min_chance, skill.max_chance) : 0.0
+    if trait_mod > 0
+      final_rate = rate.clamp(skill.min_chance, skill.max_chance)
+    else
+      final_rate = 0.0
+    end
 
     if final_rate <= Rnd.rand(100)
       if attacker.acting_player
@@ -427,7 +431,7 @@ module Formulas
     case val
     when 1
       init_val = BaseStats::STR.calc_bonus(actor)
-    when
+    when 4
       init_val = BaseStats::INT.calc_bonus(actor)
     end
 
@@ -437,6 +441,7 @@ module Formulas
 
   def effect_abnormal_time(caster : L2Character, target : L2Character?, skill : Skill) : Int32
     time = skill.passive? || skill.toggle? ? -1 : skill.abnormal_time
+    return time if time <= 0 # custom
 
     if target && target.servitor? && skill.abnormal_instant?
       time //= 2
@@ -449,9 +454,9 @@ module Formulas
     if caster && target && skill.debuff?
       stat_mod = skill.basic_property.calc_bonus(target)
       res_mod = general_trait_bonus(caster, target, skill.trait_type, false)
-      lvl_bonus_mod = lvl_bonus_mod(caster, target, skill)
+      lvl_mod = lvl_bonus_mod(caster, target, skill)
       element_mod = attribute_bonus(caster, target, skill)
-      time = (((time * res_mod * lvl_bonus_mod * element_mod) / stat_mod).clamp((time * 0.5), time)).ceil
+      time = (((time * res_mod * lvl_mod * element_mod) / stat_mod).clamp(time * 0.5, time)).ceil
     end
 
     time.to_i
@@ -481,7 +486,7 @@ module Formulas
   def shld_use(attacker : L2Character, target : L2Character, skill : Skill?, send_msg : Bool) : Int8
     item = target.secondary_weapon_item
 
-    if !item || (!item.is_a?(L2Armor) || item.item_type == ArmorType::SIGIL)
+    if item.nil? || (!item.is_a?(L2Armor) || item.item_type == ArmorType::SIGIL)
       return 0i8
     end
 
@@ -544,7 +549,7 @@ module Formulas
         proximity_bonus = 1.1
       end
     end
-    damage : Float64 = attacker.get_p_atk(target)
+    damage = attacker.get_p_atk(target)
     ss_boost = ss ? 2 : 1
 
     if pvp
@@ -774,7 +779,7 @@ module Formulas
     end
 
     if Config.alt_game_cancel_bow && target.attacking_now?
-      if (wpn = target.active_weapon_item) && wpn.item_type == WeaponType::BOW
+      if (wpn = target.active_weapon_item) &&wpn.item_type == WeaponType::BOW
         init = 15.0
       end
     end
@@ -1154,8 +1159,8 @@ module Formulas
     rate = char.calc_stat(BLOW_RATE, base_rate, target)
     result = Rnd.rand(100) < rate
     if (char.acting_player || target.acting_player).try &.gm?
-      tmp = result ? "landed" : "missed"
-      debug { "Blow from #{char.name} against #{target.name} #{tmp} (chance: #{rate}%)." }
+      tmp = result ? "Landed" : "Missed"
+      debug { "#{tmp} blow from #{char.name} against #{target.name} (chance: #{rate}%)." }
     end
     if !result && (pc = char.acting_player)
       pc.send_packet(SystemMessageId::ATTACK_FAILED)

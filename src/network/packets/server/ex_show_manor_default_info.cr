@@ -1,5 +1,6 @@
 class Packets::Outgoing::ExShowManorDefaultInfo < GameServerPacket
-  def initialize(@hide_buttons : Bool)
+  def initialize(hide_buttons : Bool)
+    @hide_buttons = hide_buttons
     @crops = CastleManorManager.crops
   end
 

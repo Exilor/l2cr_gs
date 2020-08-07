@@ -36,7 +36,6 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
     end
 
     if !trainer.can_interact?(pc) && !pc.gm?
-      debug { "#{pc} can't interact with #{pc}." }
       return
     end
 
@@ -216,13 +215,13 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       unless clan.learnable_subpledge_skill?(skill, @sub_type)
         pc.send_packet(SystemMessageId::SQUAD_SKILL_ALREADY_ACQUIRED)
         Util.punish(pc, "requested skill id #{@id}, level #{@level} without knowing its previous level.")
-        warn { "#{pc} requested a subpledge skill that he can't learn." }
+        warn { pc.name + " requested a subpledge skill that he can't learn." }
         return false
       end
     when .transfer?
       unless skl
         Util.punish(pc, "requested skill id #{@id}, level #{@level} which is not included in transfer skills.")
-        warn { "#{pc} requested a transfer skill that he can't learn." }
+        warn { pc.name + " requested a transfer skill that he can't learn." }
       end
     when .subclass?
       if pc.subclass_active?
@@ -232,12 +231,12 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       end
     else
       if prev_skill_level == @level
-        warn { "#{pc} trying to learn a skill level he already knows." }
+        warn { pc.name + " trying to learn a skill level he already knows." }
         return false
       end
 
-      if @level != 1 && prev_skill_level != @level - 1
-        warn { "#{pc} trying to learn a skill level beyond his ability." }
+      if @level != 1 && prev_skill_level != @level &- 1
+        warn { pc.name + " trying to learn a skill level beyond his ability." }
         pc.send_packet(SystemMessageId::PREVIOUS_LEVEL_SKILL_NOT_LEARNED)
         Util.punish(pc, "requested skill id #{@id}, level #{@level} without knowing its previous level.")
         return false
@@ -326,6 +325,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       if klass.responds_to?(:show_fish_skill_list)
         klass.show_fish_skill_list(pc)
       end
+
       return
     end
 

@@ -29,7 +29,7 @@ class L2SiegeFlagInstance < L2Npc
     @siege ||= ClanHallSiegeManager.get_siege(pc)
 
     unless @clan && @siege
-      raise "Initialization failed @clan.nil?: #{@clan.nil?}, @siege.nil?: #{@siege.nil?}"
+      raise "Initialization failed (@clan.nil?: #{@clan.nil?}, @siege.nil?: #{@siege.nil?})"
     end
 
     unless sc = siege.get_attacker_clan(clan)

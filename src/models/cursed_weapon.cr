@@ -33,7 +33,7 @@ class CursedWeapon
   def end_of_life
     if @activated
       if player? && player.online?
-        info { "#{@name} being removed online." }
+        info { @name + " being removed online." }
 
         player.abort_attack
 
@@ -62,7 +62,7 @@ class CursedWeapon
 
         player.broadcast_user_info
       else
-        info { "#{@name} being removed offline." }
+        info { @name + " being removed offline." }
 
         begin
           del = "DELETE FROM items WHERE owner_id=? AND item_id=?"
@@ -97,7 +97,7 @@ class CursedWeapon
       elsif @item
         item.decay_me
         L2World.remove_object(item)
-        info { "#{@name} item has been removed from L2World." }
+        info { @name + " item has been removed from L2World." }
       end
     end
 
@@ -208,7 +208,7 @@ class CursedWeapon
     if @stage_kills == 0
       level = 1
     else
-      level = 1 + (@nb_kills // @stage_kills)
+      level = 1 &+ (@nb_kills // @stage_kills)
     end
 
     if level > @skill_max_level
@@ -255,16 +255,16 @@ class CursedWeapon
     if @end_time - Time.ms <= 0
       end_of_life
     else
-      @remove_task = start_remove_task(@duration_lost * 12000, @duration_lost * 12000)
+      @remove_task = start_remove_task(@duration_lost.to_i64 * 12_000, @duration_lost.to_i64 * 12_000)
     end
   end
 
   def check_drop(attackable : L2Attackable, pc : L2PcInstance) : Bool
     if Rnd.rand(100_000) < @drop_rate
       drop_it(attackable, pc)
-      @end_time = Time.ms + (@duration * 60_000)
-      @remove_task = start_remove_task(@duration_lost * 12_000, @duration_lost * 12_000)
-      info { "#{@name} has dropped from #{attackable} killed by #{pc.name}." }
+      @end_time = Time.ms + (@duration.to_i64 * 60_000)
+      @remove_task = start_remove_task(@duration_lost.to_i64 * 12_000, @duration_lost.to_i64 * 12_000)
+      info { @name + " has dropped from #{attackable} killed by #{pc.name}." }
       return true
     end
 
@@ -356,19 +356,19 @@ class CursedWeapon
   end
 
   def increase_kills
-    @nb_kills += 1
+    @nb_kills &+= 1
 
     if @player && player.online?
       player.pk_kills = @nb_kills
       player.send_packet(UserInfo.new(player))
       if @nb_kills % @stage_kills == 0
-        if @nb_kills <= @stage_kills * (@skill_max_level &- 1)
+        if @nb_kills <= @stage_kills &* (@skill_max_level &- 1)
           give_skill
         end
       end
     end
 
-    @end_time -= @duration_lost * 60_000
+    @end_time -= @duration_lost.to_i64 * 60_000
 
     save_data
   end
@@ -378,7 +378,7 @@ class CursedWeapon
   end
 
   def level : Int32
-    if @nb_kills > (@stage_kills * @skill_max_level)
+    if @nb_kills > @stage_kills &* @skill_max_level
       return @skill_max_level
     end
 
@@ -399,7 +399,7 @@ class CursedWeapon
     elsif @dropped && @item
       pc.tele_to_location(item.location, true)
     else
-      pc.send_message("#{@name} not found in the world.")
+      pc.send_message(@name + " not found in the world.")
     end
   end
 
@@ -412,16 +412,21 @@ class CursedWeapon
   end
 
   private def start_remove_task(delay, interval)
-    task = -> do
-      if Time.ms >= end_time
-        end_of_life
-      end
-    end
-
+    task = RemoveTask.new(self)
     ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, interval)
   end
 
   def to_log(io : IO)
-    io << "CursedWeapon(" << @name << ')'
+    io.print("CursedWeapon(", @name, ')')
+  end
+
+  private struct RemoveTask
+    initializer cursed_weapon : CursedWeapon
+
+    def call
+      if Time.ms >= @cursed_weapon.end_time
+        @cursed_weapon.end_of_life
+      end
+    end
   end
 end

@@ -190,7 +190,7 @@ abstract class L2Item < ListenersContainer
     Math.min(@crystal_type, CrystalType::S)
   end
 
-  def get_crystal_count(enchant_level : Int) : Int32
+  def get_crystal_count(enchant_level : Int32) : Int32
     if enchant_level > 3
       case type_2
       when .shield_armor?, .accessory?
@@ -376,7 +376,7 @@ abstract class L2Item < ListenersContainer
   end
 
   def to_s(io : IO)
-    io << {{@type.stringify + "("}} << @name << ')'
+    io.print({{@type.stringify + "("}}, @name, ')')
   end
 
   abstract def item_type : ItemType

@@ -175,7 +175,7 @@ class L2FortManagerInstance < L2MerchantInstance
         end
         return
       elsif actual_command.starts_with?("WithdrawSortedC")
-        param = command.split("_")
+        param = command.split('_')
         if param.size > 2
           show_vault_window_withdraw(pc, WarehouseListType.parse(param[1]), SortedWareHouseWithdrawalList.get_order(param[2]))
         elsif param.size > 1

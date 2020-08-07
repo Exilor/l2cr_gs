@@ -97,7 +97,7 @@ class Packets::Incoming::RequestExEnchantSkillSafe < GameClientPacket
       pc.send_skill_list
       new_level = pc.get_skill_level(@skill_id)
       pc.send_packet(ExEnchantSkillInfo.new(@skill_id, new_level))
-      pc.send_packet(ExEnchantSkillInfoDetail.new(1, @skill_id, new_level + 1, pc))
+      pc.send_packet(ExEnchantSkillInfoDetail.new(1, @skill_id, new_level &+ 1, pc))
       pc.update_shortcuts(@skill_id, new_level)
     else
       pc.send_packet(SystemMessageId::YOU_DONT_HAVE_ENOUGH_SP_TO_ENCHANT_THAT_SKILL)

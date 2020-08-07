@@ -5,6 +5,7 @@ class Packets::Outgoing::CreatureSay < GameServerPacket
   @npc_string = -1
   @char_name : String?
   @text : String?
+
   private getter(params) { Array(String).new }
 
   def initialize(@l2id : Int32, @text_type : Int32, @char_name : String, @text : String)

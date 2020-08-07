@@ -62,9 +62,11 @@ class CharEffectList
   end
 
   private def each_with_list(& : BuffInfo, Interfaces::List(BuffInfo) ->) : Nil
-    {@buffs, @triggered, @dances, @toggles, @debuffs}.each do |list|
-      list.try { |list| list.safe_each { |info| yield(info, list) } }
-    end
+    @buffs.try     { |list| list.safe_each { |info| yield(info, list) } }
+    @triggered.try { |list| list.safe_each { |info| yield(info, list) } }
+    @dances.try    { |list| list.safe_each { |info| yield(info, list) } }
+    @toggles.try   { |list| list.safe_each { |info| yield(info, list) } }
+    @debuffs.try   { |list| list.safe_each { |info| yield(info, list) } }
   end
 
   def each(dances : Bool = true, & : BuffInfo ->) : Nil
@@ -674,6 +676,6 @@ class CharEffectList
   end
 
   def to_log(io : IO)
-    io << "CharEffectList(" << @owner.name << ')'
+    io.print("CharEffectList(", @owner.name, ')')
   end
 end

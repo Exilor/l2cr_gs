@@ -61,7 +61,7 @@ abstract class AbstractPlayerGroup
   end
 
   def to_s(io : IO)
-    io << self.class << "(leader: " << leader.name << ')'
+    io.print(self.class, "(leader: ", leader.name, ')')
   end
 
   def to_log(io : IO)

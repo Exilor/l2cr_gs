@@ -9,13 +9,13 @@ class Packets::Incoming::Logout < GameClientPacket
     end
 
     if pc.active_enchant_item_id != L2PcInstance::ID_NONE || pc.active_enchant_attr_item_id != L2PcInstance::ID_NONE
-      warn { "#{pc} tried to log out while enchanting." }
+      warn { pc.name + " tried to log out while enchanting." }
       action_failed
       return
     end
 
     if pc.locked?
-      warn { "#{pc} tried to log out during class change." }
+      warn { pc.name + " tried to log out during class change." }
       action_failed
       return
     end

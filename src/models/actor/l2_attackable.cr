@@ -110,7 +110,7 @@ class L2Attackable < L2Npc
               timer = CommandChannelTimer.new(self)
               @command_channel_timer = timer
               @command_channel_last_attack = Time.ms
-              ThreadPoolManager.schedule_general(timer, 10000)
+              ThreadPoolManager.schedule_general(timer, 10_000)
               cs = CreatureSay.new(0, Packets::Incoming::Say2::PARTYROOM_ALL, "", "You have looting rights!") # L2J TODO: retail message
               cc.broadcast_packet(cs)
               @first_command_channel_attacked = cc
@@ -621,9 +621,9 @@ class L2Attackable < L2Npc
     !!@sweep_items.get
   end
 
-  def spoil_loot_items : Array(L2Item) | Slice(L2Item)
-    if value = @sweep_items.get
-      return value.map { |it| ItemTable[it.id] }
+  def spoil_loot_items : Slice(L2Item)
+    if items = @sweep_items.get
+      return items.slice_map { |it| ItemTable[it.id] }
     end
 
     Slice(L2Item).empty

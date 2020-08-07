@@ -1,8 +1,9 @@
 class Packets::Outgoing::VehicleStarted < GameServerPacket
   @l2id : Int32
 
-  def initialize(boat : L2Character, @state : Int32)
+  def initialize(boat : L2Character, state : Int32)
     @l2id = boat.l2id
+    @state = state
   end
 
   private def write_impl

@@ -3,7 +3,8 @@ require "./item_holder"
 class ItemChanceHolder < ItemHolder
   getter chance
 
-  def initialize(id : Int32, @chance : Float64, count : Int64 = 1i64)
+  def initialize(id : Int32, chance : Float64, count : Int64 = 1i64)
     super(id, count)
+    @chance = chance
   end
 end

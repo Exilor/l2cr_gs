@@ -1,8 +1,10 @@
 class Packets::Outgoing::MultisellList < GameServerPacket
   @size : Int32
 
-  def initialize(@list : Multisell::PreparedListContainer, @index : Int32)
-    @size = list.entries.size - index
+  def initialize(list : Multisell::PreparedListContainer, index : Int32)
+    @list = list
+    @index = index
+    @size = list.entries.size &- index
 
     if @size > MultisellData::PAGE_SIZE
       @finished = false

@@ -152,7 +152,7 @@ class Scripts::HellboundEngine < AbstractNpcAI
   def on_level_change(new_level : Int32)
     begin
       self.max_trust = MAX_TRUST[new_level]
-      self.min_trust = MAX_TRUST[new_level - 1]
+      self.min_trust = MAX_TRUST[new_level &- 1]
     rescue e
       error e
       self.max_trust = 0

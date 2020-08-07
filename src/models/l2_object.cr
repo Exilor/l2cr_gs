@@ -300,10 +300,10 @@ abstract class L2Object < ListenersContainer
 
     sync do
       @visible = true
-      x = L2World::MAP_MAX_X &- 5000 if x > L2World::MAP_MAX_X
-      x = L2World::MAP_MIN_X &+ 5000 if x < L2World::MAP_MIN_X
-      y = L2World::MAP_MAX_Y &- 5000 if y > L2World::MAP_MAX_Y
-      y = L2World::MAP_MIN_Y &+ 5000 if y < L2World::MAP_MIN_Y
+      x = L2World::MAP_MAX_X - 5000 if x > L2World::MAP_MAX_X
+      x = L2World::MAP_MIN_X + 5000 if x < L2World::MAP_MIN_X
+      y = L2World::MAP_MAX_Y - 5000 if y > L2World::MAP_MAX_Y
+      y = L2World::MAP_MIN_Y + 5000 if y < L2World::MAP_MIN_Y
       set_xyz(x, y, z)
       self.world_region = L2World.get_region(location)
     end
@@ -367,10 +367,10 @@ abstract class L2Object < ListenersContainer
       warn "L2Object#set_xyz_invisible: @world_region should be nil."
     end
 
-    x = L2World::MAP_MAX_X &- 5000 if x > L2World::MAP_MAX_X
-    x = L2World::MAP_MIN_X &+ 5000 if x < L2World::MAP_MIN_X
-    y = L2World::MAP_MAX_Y &- 5000 if y > L2World::MAP_MAX_Y
-    y = L2World::MAP_MIN_Y &+ 5000 if y < L2World::MAP_MIN_Y
+    x = L2World::MAP_MAX_X - 5000 if x > L2World::MAP_MAX_X
+    x = L2World::MAP_MIN_X + 5000 if x < L2World::MAP_MIN_X
+    y = L2World::MAP_MAX_Y - 5000 if y > L2World::MAP_MAX_Y
+    y = L2World::MAP_MIN_Y + 5000 if y < L2World::MAP_MIN_Y
     set_xyz(x, y, z)
     self.visible = false
   end
@@ -392,9 +392,9 @@ abstract class L2Object < ListenersContainer
   end
 
   def calculate_distance(x : Int32, y : Int32, z : Int32, z_axis : Bool, squared : Bool) : Float64
-    distance = Math.pow(x &- x(), 2) + Math.pow(y &- y(), 2)
+    distance = Math.pow(x - x(), 2) + Math.pow(y - y(), 2)
     if z_axis
-      distance += Math.pow(z &- z(), 2)
+      distance += Math.pow(z - z(), 2)
     end
     squared ? distance : Math.sqrt(distance)
   end
@@ -460,7 +460,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def to_s(io : IO)
-    io << self.class << '(' << name << ": " << l2id << ')'
+    io.print(self.class, '(', name, ": ", l2id, ')')
   end
 
   def inspect(io : IO)

@@ -48,7 +48,10 @@ class PetStat < SummonStat
     pet.stop_feed
     super
     pet.start_feed
-    pet.control_item.try &.enchant_level = level
+    if item = pet.control_item
+      item.enchant_level = level
+      pet.send_packet(InventoryUpdate.modified(item))
+    end
   end
 
   def max_feed : Int32

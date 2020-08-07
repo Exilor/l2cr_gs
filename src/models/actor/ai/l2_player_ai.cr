@@ -13,12 +13,14 @@ class L2PlayerAI < L2PlayableAI
     sync do
       if !intention.cast? || (arg0.is_a?(Skill) && !arg0.toggle?)
         @next_intention = nil
-        return super
+        super
+        return
       end
 
       if @intention == intention
         if arg0 == @intention_arg_0 && arg1 == @intention_arg_1
-          return super
+          super
+          return
         end
       end
 
@@ -70,16 +72,15 @@ class L2PlayerAI < L2PlayableAI
     set_intention(IDLE)
   end
 
-  private def on_intention_move_to(loc : Location?)
-    raise "L2PlayerAI#on_intention_move_to's loc can't be nil here" unless loc
+  private def on_intention_move_to(loc : Location)
     if intention.rest?
       client_action_failed
       return
     end
 
-    pc = @actor
+    pc = @actor.as(L2PcInstance)
 
-    if pc.acting_player.not_nil!.duel_state.dead?
+    if pc.duel_state.dead?
       client_action_failed
       pc.send_packet(SystemMessageId::CANNOT_MOVE_FROZEN)
       return
@@ -128,10 +129,10 @@ class L2PlayerAI < L2PlayableAI
     end
 
     target = cast_target?
-    pc = @actor
+    pc = @actor.as(L2PcInstance)
 
     if skill.target_type.ground?
-      pos = pc.acting_player.not_nil!.current_skill_world_position
+      pos = pc.current_skill_world_position
       range = pc.get_magical_attack_range(skill)
 
       if maybe_move_to_position(pos, range)
@@ -170,7 +171,7 @@ class L2PlayerAI < L2PlayableAI
     return if maybe_move_to_pawn(target, 36)
 
     set_intention(IDLE)
-    @actor.acting_player.not_nil!.do_pickup_item(target.as(L2ItemInstance))
+    @actor.as(L2PcInstance).do_pickup_item(target.as(L2ItemInstance))
   end
 
   private def think_interact
@@ -189,7 +190,7 @@ class L2PlayerAI < L2PlayableAI
     end
 
     unless target.is_a?(L2StaticObjectInstance)
-      @actor.acting_player.not_nil!.do_interact(target.as(L2Character))
+      @actor.as(L2PcInstance).do_interact(target.as(L2Character))
     end
 
     set_intention(IDLE)

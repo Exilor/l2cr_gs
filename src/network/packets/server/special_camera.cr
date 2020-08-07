@@ -9,7 +9,17 @@ class Packets::Outgoing::SpecialCamera < GameServerPacket
     initialize(char, force, angle1, angle2, time, duration, 0, rel_yaw, rel_pitch, is_wide, rel_angle, 0)
   end
 
-  def initialize(char : L2Character, @force : Int32, @angle1 : Int32, @angle2 : Int32, @time : Int32, range : Int32, @duration : Int32, @rel_yaw : Int32, @rel_pitch : Int32, @is_wide : Int32, @rel_angle : Int32, @unk : Int32)
+  def initialize(char : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, range : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, is_wide : Int32, rel_angle : Int32, unk : Int32)
+    @force = force
+    @angle1 = angle1
+    @angle2 = angle2
+    @time = time
+    @duration = duration
+    @rel_yaw = rel_yaw
+    @rel_pitch = rel_pitch
+    @is_wide = is_wide
+    @rel_angle = rel_angle
+    @unk = unk
     @id = char.l2id
   end
 

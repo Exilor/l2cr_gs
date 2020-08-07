@@ -7,7 +7,6 @@ abstract struct Rectangle2D < RectangularShape
     end
 
     x0, y0 = x(), y()
-
     x + w > x0 && y + h > y0 && x < x0 + width && y < y0 + height
   end
 
@@ -17,7 +16,6 @@ abstract struct Rectangle2D < RectangularShape
 
   def contains?(x : Float64, y : Float64) : Bool
     x0, y0 = x(), y()
-
     x >= x0 && y >= y0 && x < x0 + width && y < y0 + height
   end
 
@@ -27,7 +25,6 @@ abstract struct Rectangle2D < RectangularShape
     end
 
     x0, y0 = x(), y()
-
     x >= x0 && y >= y0 && x + w <= x0 + width && y + h <= y0 + height
   end
 end

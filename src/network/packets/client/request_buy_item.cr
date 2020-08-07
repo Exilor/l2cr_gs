@@ -84,7 +84,7 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
 
     @items.each do |i|
       unless product = buy_list.get_product_by_item_id(i.id)
-        warn { "No product with ID #{i.id} in BuyList #{buy_list}." }
+        warn { "No product with id #{i.id} in BuyList #{buy_list}." }
         Util.punish(pc, "sent an invalid BuyList list_id #{@list_id} and item_id #{i.id}")
         return
       end
@@ -109,7 +109,7 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
       end
 
       if price == 0 && !pc.gm? && Config.only_gm_items_free
-        warn { "#{pc} tried to buy a item for 0 adena." }
+        warn { pc.name + " tried to buy a item for 0 adena." }
         Util.punish(pc, "tried to buy an item for 0 adena.")
         return
       end

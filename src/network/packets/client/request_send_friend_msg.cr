@@ -22,7 +22,7 @@ class Packets::Incoming::RequestSendFriendMsg < GameClientPacket
       return
     end
 
-    # chat log
+    # TODO: chat log
     debug { "#{pc.name} -> #{@receiver}: '#{@message}'." }
 
     target_player.send_packet(L2FriendSay.new(pc.name, @receiver, @message))

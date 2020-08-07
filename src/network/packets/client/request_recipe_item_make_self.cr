@@ -9,7 +9,6 @@ class Packets::Incoming::RequestRecipeItemMakeSelf < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.manufacture.try_perform_action("RecipeMakeSelf")
-      debug "Flood detected."
       return
     end
 

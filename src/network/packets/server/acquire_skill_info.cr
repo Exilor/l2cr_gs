@@ -1,14 +1,13 @@
 class Packets::Outgoing::AcquireSkillInfo < GameServerPacket
-  private struct Req
-    getter_initializer type : Int32, item_id : Int32, count : Int64, unk : Int32
-  end
+  private record Req, type : Int32, item_id : Int32, count : Int64, unk : Int32
 
   @id : Int32
   @level : Int32
   @sp_cost : Int32
-  @reqs : Array(Req)?
+  @reqs : Array(Req)
 
-  def initialize(@type : AcquireSkillType, skill_learn : L2SkillLearn)
+  def initialize(type : AcquireSkillType, skill_learn : L2SkillLearn)
+    @type = type
     @id = skill_learn.skill_id
     @level = skill_learn.skill_level
     @sp_cost = skill_learn.level_up_sp
@@ -17,20 +16,20 @@ class Packets::Outgoing::AcquireSkillInfo < GameServerPacket
     end
   end
 
-  def initialize(@type : AcquireSkillType, skill_learn : L2SkillLearn, sp_cost : Int32)
+  def initialize(type : AcquireSkillType, skill_learn : L2SkillLearn, sp_cost : Int32)
+    @type = type
     @id = skill_learn.skill_id
     @level = skill_learn.skill_level
-    @sp_cost = sp_cost || skill_learn.level_up_sp
+    @sp_cost = sp_cost
+    @reqs = [] of Req
 
     if !type.pledge? || Config.life_crystal_needed
-      reqs = [] of Req
       skill_learn.required_items.each do |item|
         if !Config.divine_sp_book_needed && @id == CommonSkill::DIVINE_INSPIRATION.id
           next
         end
-        reqs << Req.new(99, item.id, item.count, 50)
+        @reqs << Req.new(99, item.id, item.count, 50)
       end
-      @reqs = reqs
     end
   end
 
@@ -41,16 +40,12 @@ class Packets::Outgoing::AcquireSkillInfo < GameServerPacket
     d @level
     d @sp_cost
     d @type.to_i
-    if reqs = @reqs
-      d reqs.size
-      reqs.each do |r|
-        d r.type
-        d r.item_id
-        q r.count
-        d r.unk
-      end
-    else
-      d 0
+    d @reqs.size
+    @reqs.each do |r|
+      d r.type
+      d r.item_id
+      q r.count
+      d r.unk
     end
   end
 end

@@ -1,7 +1,9 @@
 class Packets::Outgoing::SummonInfo < Packets::Outgoing::AbstractNpcInfo
   @form : Int32
 
-  def initialize(char : L2Summon, attacker : L2Character, @val : Int32)
+  def initialize(char : L2Summon, attacker : L2Character, val : Int32)
+    @val = val
+
     super(char)
 
     @summon = char
@@ -14,8 +16,8 @@ class Packets::Outgoing::SummonInfo < Packets::Outgoing::AbstractNpcInfo
     @l_hand = 0
     @chest = char.armor
     @enchant_effect = char.template.weapon_enchant
-    @name = char.name || "Missing name!"
-    @title = (char.owner.online? ? char.owner.name : "") || "Missing title!"
+    @name = char.name
+    @title = char.owner.online? ? char.owner.name : ""
     @id_template = char.template.display_id
     self.invisible = char.invisible?
   end

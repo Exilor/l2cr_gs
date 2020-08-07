@@ -15,7 +15,7 @@ class Packets::Incoming::RequestExMPCCShowPartyMembersInfo < GameClientPacket
     if party = player.party
       pc.send_packet(ExMPCCShowPartyMemberInfo.new(party))
     else
-      warn { "#{player.name} doesn't have a party." }
+      warn { player.name + " doesn't have a party." }
     end
   end
 end

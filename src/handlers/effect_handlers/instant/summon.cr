@@ -48,7 +48,7 @@ class EffectHandler::Summon < AbstractEffect
     summon.item_consume_interval = consume_item_interval
 
     if summon.level > Config.max_pet_level
-      exp = ExperienceData.get_exp_for_level(Config.max_pet_level - 1)
+      exp = ExperienceData.get_exp_for_level(Config.max_pet_level &- 1)
       summon.stat.exp = exp
     else
       exp = ExperienceData.get_exp_for_level(summon.level % Config.max_pet_level)

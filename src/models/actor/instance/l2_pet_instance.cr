@@ -75,7 +75,7 @@ class L2PetInstance < L2Summon
       stop_feed
       return
     elsif current_feed > feed_consume
-      self.current_feed -= feed_consume
+      self.current_feed &-= feed_consume
     else
       self.current_feed = 0
     end
@@ -158,7 +158,7 @@ class L2PetInstance < L2Summon
       send_packet(ExChangeNpcState.new(@l2id, 0x65))
     end
 
-    @current_feed = num > max_fed ? max_fed : num.to_i
+    @current_feed = num > max_fed ? max_fed : num
   end
 
   def active_weapon_instance : L2ItemInstance?
@@ -573,7 +573,7 @@ class L2PetInstance < L2Summon
   end
 
   def exp_for_next_level : Int64
-    stat.get_exp_for_level(level + 1)
+    stat.get_exp_for_level(level &+ 1)
   end
 
   def level : Int32
@@ -589,7 +589,7 @@ class L2PetInstance < L2Summon
   end
 
   def add_level(value : Int32) : Bool
-    if level + value > stat.max_level
+    if level &+ value > stat.max_level
       return false
     end
 
@@ -692,7 +692,7 @@ class L2PetInstance < L2Summon
 
   def name=(name : String?)
     if control_item = control_item()
-      if control_item.custom_type_2 == (name ? 1 : 0)
+      if control_item.custom_type_2 == (name ? 0 : 1)
         control_item.custom_type_2 = (name ? 1 : 0)
         control_item.update_database
         send_packet(InventoryUpdate.modified(control_item))

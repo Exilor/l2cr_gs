@@ -28,7 +28,7 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
               ask_join_mpcc(pc, player)
             end
           else
-            msg = "#{player.name} doesn't have party and cannot be invited to Command Channel."
+            msg = player.name + " doesn't have party and cannot be invited to Command Channel."
             pc.send_message(msg)
           end
         elsif cc && cc.leader != pc
@@ -43,7 +43,7 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
               ask_join_mpcc(pc, player)
             end
           else
-            msg = "#{player.name} doesn't have party and cannot be invited to Command Channel."
+            msg = player.name + " doesn't have party and cannot be invited to Command Channel."
             pc.send_message(msg)
           end
         end

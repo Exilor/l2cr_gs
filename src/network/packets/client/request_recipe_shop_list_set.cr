@@ -3,7 +3,7 @@ class Packets::Incoming::RequestRecipeShopListSet < GameClientPacket
 
   BATCH_LENGTH = 12
 
-  @items : Array(L2ManufactureItem)?
+  @items = Slice(L2ManufactureItem).empty
 
   private def read_impl
     count = d
@@ -11,7 +11,7 @@ class Packets::Incoming::RequestRecipeShopListSet < GameClientPacket
       return
     end
 
-    items = Array.new(count) do
+    items = Slice.new(count) do
       id = d
       cost = q
       if cost < 0
@@ -27,7 +27,7 @@ class Packets::Incoming::RequestRecipeShopListSet < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    unless _items = @items
+    if @items.empty?
       pc.private_store_type = PrivateStoreType::NONE
       pc.broadcast_user_info
       return
@@ -48,7 +48,7 @@ class Packets::Incoming::RequestRecipeShopListSet < GameClientPacket
     dwarf_recipes = pc.dwarven_recipe_book
     common_recipes = pc.common_recipe_book
 
-    _items.each do |i|
+    @items.each do |i|
       list = RecipeData.get_recipe_list(i.recipe_id)
       unless dwarf_recipes.includes?(list) || common_recipes.includes?(list)
         Util.punish(pc, "tried to set a recipe he doesn't have for private manifacture.")

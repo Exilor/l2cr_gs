@@ -13,10 +13,10 @@ class L2DoorAI < L2CharacterAI
   private def on_intention_attack(target)
   end
 
-  private def on_intention_cast(skill, target)
+  private def on_intention_cast(skill : Skill, target : L2Object?)
   end
 
-  private def on_intention_move_to(destination)
+  private def on_intention_move_to(loc : Location)
   end
 
   private def on_intention_follow(target)

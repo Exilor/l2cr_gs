@@ -16,14 +16,14 @@ class Packets::Outgoing::ExRpItemLink < GameServerPacket
     h @item.enchant_level
     h @item.custom_type_2
 
-    if @item.augmented?
-      d @item.augmentation.augmentation_id
+    if aug = @item.augmentation
+      d aug.augmentation_id
     else
       d 0
     end
 
     d @item.mana
-    d @item.time_limited_item? ? @item.remaining_time / 1000 : -9999
+    d @item.time_limited_item? ? @item.remaining_time // 1000 : -9999
     h @item.attack_element_type
     h @item.attack_element_power
     6.times { |i| h @item.get_element_def_attr(i) }

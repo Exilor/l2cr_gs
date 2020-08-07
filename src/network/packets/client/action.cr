@@ -43,7 +43,7 @@ class Packets::Incoming::Action < GameClientPacket
     end
 
     unless obj
-      warn "L2Object with ID #{@l2id} not found in L2World."
+      warn "L2Object with id #{@l2id} not found in L2World."
       summon = pc.summon
       if summon && summon.l2id == @l2id
         warn "It's #{pc.name} summon."
@@ -52,7 +52,7 @@ class Packets::Incoming::Action < GameClientPacket
         end
       end
 
-      L2World.world_regions.each &.each do |reg|
+      L2World.regions.flat_each do |reg|
         reg.objects.each do |l2id, o|
           if o.l2id == @l2id
             warn "Found object (#{o}) missing from L2World in region #{reg}."

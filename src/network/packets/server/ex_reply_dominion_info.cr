@@ -15,7 +15,7 @@ class Packets::Outgoing::ExReplyDominionInfo < GameServerPacket
       t.owned_ward_ids.each do |i|
         d i
       end
-      d TerritoryWarManager.tw_start_time_in_millis / 1000
+      d TerritoryWarManager.tw_start_time_in_millis // 1000
     end
   end
 end

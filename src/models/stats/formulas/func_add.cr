@@ -1,5 +1,5 @@
 class FuncAdd < AbstractFunction
-  def calc(effector, effected, skill, val)
-    test(effector, effected, skill) ? val + @value : val
+  def calc(effector, effected, skill, value)
+    test(effector, effected, skill) ? value + @value : value
   end
 end

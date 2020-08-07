@@ -38,7 +38,15 @@ class L2CubicInstance
   getter? given_by_other
   property target : L2Character?
 
-  def initialize(@owner : L2PcInstance, @cubic_id : Int32, @level : Int32, @cubic_power : Int32, cubic_delay : Int32, @cubic_skill_chance : Int32, @cubic_max_count : Int32, @cubic_duration : Int32, @given_by_other : Bool)
+  def initialize(owner : L2PcInstance, cubic_id : Int32, level : Int32, cubic_power : Int32, cubic_delay : Int32, cubic_skill_chance : Int32, cubic_max_count : Int32, cubic_duration : Int32, given_by_other : Bool)
+    @owner = owner
+    @cubic_id = cubic_id
+    @level = level
+    @cubic_power = cubic_power
+    @cubic_skill_chance = cubic_skill_chance
+    @cubic_max_count = cubic_max_count
+    @cubic_duration = cubic_duration
+    @given_by_other = given_by_other
     @cubic_delay = cubic_delay * 1000
 
     case @cubic_id
@@ -52,9 +60,11 @@ class L2CubicInstance
     when VIPER_CUBIC
       @skills << SkillData[4052, level]
     when POLTERGEIST_CUBIC
-      @skills << SkillData[4053, level]
-      @skills << SkillData[4054, level]
-      @skills << SkillData[4055, level]
+      @skills.push(
+        SkillData[4053, level],
+        SkillData[4054, level],
+        SkillData[4055, level]
+      )
     when BINDING_CUBIC
       @skills << SkillData[4164, level]
     when AQUA_CUBIC
@@ -62,20 +72,15 @@ class L2CubicInstance
     when SPARK_CUBIC
       @skills << SkillData[4166, level]
     when ATTRACT_CUBIC
-      @skills << SkillData[5115, level]
-      @skills << SkillData[5116, level]
+      @skills.push(SkillData[5115, level], SkillData[5116, level])
     when SMART_CUBIC_ARCANALORD
-      @skills << SkillData[4051, 7]
-      @skills << SkillData[4165, 9]
+      @skills.push(SkillData[4051, 7], SkillData[4165, 9])
     when SMART_CUBIC_ELEMENTALMASTER
-      @skills << SkillData[4049, 8]
-      @skills << SkillData[4166, 9]
+      @skills.push(SkillData[4049, 8], SkillData[4166, 9])
     when SMART_CUBIC_SPECTRALMASTER
-      @skills << SkillData[4049, 8]
-      @skills << SkillData[4052, 6]
+      @skills.push(SkillData[4049, 8], SkillData[4052, 6])
     when SMART_CUBIC_EVATEMPLAR
-      @skills << SkillData[4053, 8]
-      @skills << SkillData[4165, 9]
+      @skills.push(SkillData[4053, 8], SkillData[4165, 9])
     when SMART_CUBIC_SHILLIENTEMPLAR
       @skills << SkillData[4049, 8]
     end
@@ -466,6 +471,6 @@ class L2CubicInstance
     else "Smart Cubic ST"
     end
 
-    io << @owner << "'s " << name
+    io.print(@owner, "'s ", name)
   end
 end

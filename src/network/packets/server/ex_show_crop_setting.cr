@@ -2,7 +2,8 @@ class Packets::Outgoing::ExShowCropSetting < GameServerPacket
   @current = {} of Int32 => CropProcure
   @next = {} of Int32 => CropProcure
 
-  def initialize(@manor_id : Int32)
+  def initialize(manor_id : Int32)
+    @manor_id = manor_id
     @seeds = CastleManorManager.get_seeds_for_castle(@manor_id)
     @seeds.each do |seed|
       if cp = CastleManorManager.get_crop_procure(@manor_id, seed.crop_id, false)

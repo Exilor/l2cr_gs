@@ -10,7 +10,7 @@ class Packets::Incoming::RequestExRqItemLink < GameClientPacket
 
     item = L2World.find_object(@l2id)
     if item.is_a?(L2ItemInstance)
-      if item.published? # published in Say2
+      if item.published? # Items are published in Packets::Incoming::Say2
         client.send_packet(ExRpItemLink.new(item))
       else
         debug { "#{@client} requested item link for item #{@l2id} which isn't published." }

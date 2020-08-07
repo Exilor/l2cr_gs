@@ -1,5 +1,5 @@
 class L2GrandBossInstance < L2MonsterInstance
-  private BOSS_MAINTENANCE_INTERVAL = 10000
+  private BOSS_MAINTENANCE_INTERVAL = 10_000
 
   property? give_raid_curse : Bool = true
 

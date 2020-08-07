@@ -74,7 +74,7 @@ module AdminCommandHandler::AdminCreateItem
 
       counter = 0
       unless template = ItemTable[id]?
-        pc.send_message("No item with ID #{id} exists.")
+        pc.send_message("No item with id #{id} exists.")
         return false
       end
 
@@ -100,7 +100,7 @@ module AdminCommandHandler::AdminCreateItem
 
   private def create_item(pc, target, id, num : Int64)
     unless template = ItemTable[id]?
-      pc.send_message("No item with ID #{id} exists.")
+      pc.send_message("No item with id #{id} exists.")
       return
     end
 

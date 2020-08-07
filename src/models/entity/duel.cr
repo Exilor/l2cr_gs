@@ -93,19 +93,7 @@ class Duel
   end
 
   def stop_fighting
-    @team_a.each do |pc|
-      pc.abort_cast
-      pc.intention = AI::ACTIVE
-      pc.target = nil
-      pc.action_failed
-      if smn = pc.summon
-        smn.abort_cast
-        smn.abort_attack
-        smn.target = nil
-      end
-    end
-
-    @team_b.each do |pc|
+    {@team_a, @team_b}.flat_each do |pc|
       pc.abort_cast
       pc.intention = AI::ACTIVE
       pc.target = nil
@@ -119,11 +107,7 @@ class Duel
   end
 
   def save_player_conditions
-    @team_a.each do |pc|
-      @player_conditions[pc.l2id] = PlayerCondition.new(pc, @party_duel)
-    end
-
-    @team_b.each do |pc|
+    {@team_a, @team_b}.flat_each do |pc|
       @player_conditions[pc.l2id] = PlayerCondition.new(pc, @party_duel)
     end
   end

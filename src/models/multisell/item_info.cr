@@ -3,7 +3,7 @@ struct Multisell::ItemInfo
 
   def initialize(item : L2ItemInstance)
     @enchant_level = item.enchant_level
-    @augment_id = item.augmentation?.try &.augmentation_id || 0
+    @augment_id = item.augmentation.try &.augmentation_id || 0
     @element_id = item.attack_element_type.to_i8
     @element_power = item.attack_element_power
     @elementals = {
@@ -16,7 +16,8 @@ struct Multisell::ItemInfo
     }
   end
 
-  def initialize(@enchant_level : Int32)
+  def initialize(enchant_level : Int32)
+    @enchant_level = enchant_level
     @augment_id = 0
     @element_id = Elementals::NONE
     @element_power = 0

@@ -2,17 +2,13 @@ abstract struct Crossings
   @yranges = Slice(Float64).new(10)
   @limit = 0
 
-  getter_initializer xlo : Float64, ylo : Float64, xhi : Float64, yhi : Float64
+  initializer xlo : Float64, ylo : Float64, xhi : Float64, yhi : Float64
 
   def empty? : Bool
     @limit == 0
   end
 
   def accumulate_line(x0, y0, x1, y1)
-    accumulate_line(x1, y1, x0, y0, y0 <= y1 ? 1 : -1)
-  end
-
-  def accumulate_line(x0, y0, x1, y1, direction)
     if @yhi <= y0 || @ylo >= y1
       return false
     end
@@ -46,7 +42,7 @@ abstract struct Crossings
       return true
     end
 
-    record(ystart, yend, direction)
+    record(ystart, yend)
 
     false
   end
@@ -56,8 +52,11 @@ abstract struct Crossings
       @limit == 2 && @yranges[0] <= ystart && @yranges[1] >= yend
     end
 
-    def record(ystart, yend, direction)
+    def record(ystart, yend)
       return if ystart >= yend
+
+      ystart = ystart.to_f
+      yend = yend.to_f
 
       from = 0
       while from < @limit && ystart > @yranges[from &+ 1]
@@ -70,9 +69,9 @@ abstract struct Crossings
         yrhi = @yranges[from]
         from &+= 1
         if yend < yrlo
-          @yranges[to] = ystart.to_f64
+          @yranges[to] = ystart
           to &+= 1
-          @yranges[to] = yend.to_f64
+          @yranges[to] = yend
           to &+= 1
           ystart = yrlo
           yend = yrhi
@@ -103,9 +102,9 @@ abstract struct Crossings
             ylh = ystart
           end
           if yll != ylh
-            @yranges[to] = yll.to_f64
+            @yranges[to] = yll
             to &+= 1
-            @yranges[to] = ylh.to_f64
+            @yranges[to] = ylh
             to &+= 1
           end
           ystart = yhl
@@ -126,9 +125,9 @@ abstract struct Crossings
           new_ranges.copy_from(@yranges)
           @yranges = new_ranges
         end
-        @yranges[to] = ystart.to_f64
+        @yranges[to] = ystart
         to &+= 1
-        @yranges[to] = ystart.to_f64
+        @yranges[to] = ystart
         to &+= 1
       end
 

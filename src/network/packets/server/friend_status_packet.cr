@@ -1,7 +1,8 @@
 class Packets::Outgoing::FriendStatusPacket < GameServerPacket
   @online : Bool
 
-  def initialize(@l2id : Int32)
+  def initialize(l2id : Int32)
+    @l2id = l2id
     @name = CharNameTable.get_name_by_id(l2id)
     @online = !!L2World.get_player(l2id)
   end

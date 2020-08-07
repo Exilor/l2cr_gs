@@ -515,7 +515,7 @@ module RecipeController
           @sp = 0
         end
 
-        @skill_level.downto(recipe_level - 1) do |i|
+        @skill_level.downto(recipe_level &- 1) do |i|
           @exp //= 4
           @sp //= 4
         end

@@ -11,7 +11,7 @@ class Packets::Incoming::RequestPledgeInfo < GameClientPacket
     return unless pc = active_char
 
     unless clan = ClanTable.get_clan(@clan_id)
-      debug { "No clan with ID #{@clan_id} was found (requested by #{pc.name})." }
+      debug { "No clan with id #{@clan_id} was found (requested by #{pc.name})." }
       return
     end
 

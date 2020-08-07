@@ -69,7 +69,7 @@ class Scripts::AvantGarde < AbstractNpcAI
       end
     when "CancelCertification"
       pc.send_message("CancelCertification is not implemented.")
-      if pc.subclasses.size == 0
+      if pc.subclasses.empty?
         html = "32323-07.html"
       elsif pc.subclass_active?
         html = "32323-08.html"

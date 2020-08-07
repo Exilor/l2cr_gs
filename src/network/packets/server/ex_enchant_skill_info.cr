@@ -2,10 +2,11 @@ class Packets::Outgoing::ExEnchantSkillInfo < GameServerPacket
   @routes = [] of Int32
   @max_enchanted = false
 
-  def initialize(@id : Int32, @lvl : Int32)
-    esl = EnchantSkillGroupsData.get_skill_enchantment_by_skill_id(@id)
+  def initialize(id : Int32, lvl : Int32)
+    @id = id
+    @lvl = lvl
 
-    if esl
+    if esl = EnchantSkillGroupsData.get_skill_enchantment_by_skill_id(@id)
       if @lvl > 100
         @max_enchanted = esl.max_enchant?(@lvl)
 
@@ -16,14 +17,15 @@ class Packets::Outgoing::ExEnchantSkillInfo < GameServerPacket
         skill_lvl = @lvl % 100
 
         esl.each_route do |route|
-          if (route * 100) + skill_lvl == @lvl
+          tmp = (route &* 100) &+ skill_lvl
+          if tmp == @lvl
             next
           end
-          @routes << (route * 100) + skill_lvl
+          @routes << tmp
         end
       else
         esl.each_route do |route|
-          @routes << (route * 100) + 1
+          @routes << (route &* 100) &+ 1
         end
       end
     end

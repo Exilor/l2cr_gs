@@ -18,7 +18,8 @@ class Packets::Incoming::RequestExMagicSkillUseGround < GameClientPacket
 
     level = pc.get_skill_level(@skill_id)
     if level <= 0
-      return action_failed
+      action_failed
+      return
     end
 
     if skill = SkillData[@skill_id, level]?
@@ -28,7 +29,7 @@ class Packets::Incoming::RequestExMagicSkillUseGround < GameClientPacket
       pc.use_magic(skill, @ctrl, @shift)
     else
       action_failed
-      warn { "No skill found with ID #{@skill_id} and level #{level}." }
+      warn { "No skill found with id #{@skill_id} and level #{level}." }
     end
   end
 end

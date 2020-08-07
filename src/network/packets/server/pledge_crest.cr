@@ -3,7 +3,8 @@ class Packets::Outgoing::PledgeCrest < GameServerPacket
 
   initializer crest_id : Int32, data : Bytes
 
-  def initialize(@crest_id : Int32)
+  def initialize(crest_id : Int32)
+    @crest_id = crest_id
     @data = CrestTable.get_crest(crest_id).try &.data
   end
 

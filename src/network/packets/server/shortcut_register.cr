@@ -5,7 +5,7 @@ class Packets::Outgoing::ShortcutRegister < GameServerPacket
     c 0x44
 
     d @shortcut.type.to_i
-    d @shortcut.slot + (@shortcut.page * 12)
+    d @shortcut.slot &+ (@shortcut.page &* 12)
 
     case @shortcut.type
     when .item? # ShortcutType::ITEM

@@ -74,7 +74,7 @@ class L2CommandChannel < AbstractPlayerGroup
     @parties.any? &.includes?(pc)
   end
 
-  def each(& : L2PcInstance ->)
-    @parties.each &.each { |pc| yield pc }
+  def each(& : L2PcInstance ->) : Nil
+    @parties.flat_each { |pc| yield pc }
   end
 end

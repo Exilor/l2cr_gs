@@ -1,9 +1,10 @@
 class Packets::Outgoing::RecipeBookItemList < GameServerPacket
-  @recipes : Enumerable(L2RecipeList)?
+  @recipes = Slice(L2RecipeList).empty
 
   initializer dwarven_craft : Bool, max_mp : Int32
 
-  def add_recipes(@recipes : Enumerable(L2RecipeList))
+  def add_recipes(recipes : Slice(L2RecipeList))
+    @recipes = recipes
   end
 
   private def write_impl
@@ -12,14 +13,10 @@ class Packets::Outgoing::RecipeBookItemList < GameServerPacket
     d @dwarven_craft ? 0 : 1
     d @max_mp
 
-    if recipes = @recipes
-      d recipes.size
-      recipes.each_with_index do |rp, i|
-        d rp.id
-        d i &+ 1
-      end
-    else
-      d 0
+    d @recipes.size
+    @recipes.each_with_index(1) do |rp, i|
+      d rp.id
+      d i
     end
   end
 end

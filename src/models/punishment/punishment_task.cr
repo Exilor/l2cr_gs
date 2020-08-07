@@ -14,7 +14,14 @@ class PunishmentTask
     initialize(0, key, affect, type, exp_time, reason, punished_by, false)
   end
 
-  def initialize(@id : Int32, key : Object, @affect : PunishmentAffect, @type : PunishmentType, @expiration_time : Int64, @reason : String, @punished_by : String, @stored : Bool)
+  def initialize(id : Int32, key : Object, affect : PunishmentAffect, type : PunishmentType, expiration_time : Int64, reason : String, punished_by : String, stored : Bool)
+    @id = id
+    @affect = affect
+    @type = type
+    @expiration_time = expiration_time
+    @reason = reason
+    @punished_by = punished_by
+    @stored = stored
     @key = key.to_s
   end
 

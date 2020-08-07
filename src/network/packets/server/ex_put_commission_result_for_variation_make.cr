@@ -1,5 +1,8 @@
 class Packets::Outgoing::ExPutCommissionResultForVariationMake < GameServerPacket
-  def initialize(@gem : Int32, @count : Int64, @id : Int32)
+  def initialize(gem : Int32, count : Int64, id : Int32)
+    @gem = gem
+    @count = count
+    @id = id
     @unk1 = 0
     @unk2 = 0
     @unk3 = 1

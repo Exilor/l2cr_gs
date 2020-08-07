@@ -196,8 +196,8 @@ abstract class ItemContainer
         target_item.update_database
       end
 
-      if source_item.augmented? && actor # actor check is custom
-        source_item.augmentation.remove_bonus(actor)
+      if (aug = source_item.augmentation) && actor # actor check is custom
+        aug.remove_bonus(actor)
       end
 
       refresh_weight

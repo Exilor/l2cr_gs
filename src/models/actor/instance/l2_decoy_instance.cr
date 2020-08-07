@@ -4,11 +4,12 @@ require "../known_list/decoy_known_list"
 class L2DecoyInstance < L2Decoy
   getter time_remaining, total_life_time
 
-  def initialize(template : L2NpcTemplate, owner : L2PcInstance, @total_life_time : Int32)
+  def initialize(template : L2NpcTemplate, owner : L2PcInstance, total_life_time : Int32)
     super(template, owner)
 
+    @total_life_time = total_life_time
     @time_remaining = total_life_time
-    skill_level = template.display_id - 13070
+    skill_level = template.display_id &- 13070
     skill = SkillData[5272, skill_level]
 
     task1 = DecoyLifetime.new(owner, self)
@@ -83,6 +84,6 @@ class L2DecoyInstance < L2Decoy
   end
 
   def dec_time_temaining(value : Int32)
-    @time_remaining -= value
+    @time_remaining &-= value
   end
 end

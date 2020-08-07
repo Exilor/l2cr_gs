@@ -12,7 +12,7 @@ class Packets::Incoming::RequestDismissPartyRoom < GameClientPacket
     if room = PartyMatchRoomList.get_room(@room_id)
       PartyMatchRoomList.delete_room(@room_id)
     else
-      warn { "Room with ID #{@room_id} not found." }
+      warn { "Room with id #{@room_id} not found." }
     end
   end
 end

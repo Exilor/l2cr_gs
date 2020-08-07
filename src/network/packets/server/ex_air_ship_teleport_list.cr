@@ -9,7 +9,7 @@ class Packets::Outgoing::ExAirShipTeleportList < GameServerPacket
     if teleports = @teleports
       d teleports.size
       teleports.each_with_index do |path, i|
-        d i - 1
+        d i &- 1
         d @fuel[i]
         dst = path[-1]
         l dst

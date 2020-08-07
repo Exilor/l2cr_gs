@@ -26,7 +26,6 @@ class DimensionalRiftRoom
     @s = Polygon.new(
       Int32.slice(x_min, x_max, x_max, x_min),
       Int32.slice(y_min, y_min, y_max, y_max),
-      4
     )
   end
 

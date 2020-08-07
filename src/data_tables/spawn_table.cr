@@ -195,7 +195,7 @@ module SpawnTable
 
   def each_spawn(& : L2Spawn -> Bool) : Bool
     SPAWN_TABLE.each_value do |set|
-      set.each { |sp| return false unless yield sp }
+      set.each { |sp| return false unless yield(sp) }
     end
 
     true

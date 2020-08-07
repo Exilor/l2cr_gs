@@ -1,7 +1,8 @@
 class Packets::Outgoing::ExQuestItemList < Packets::Outgoing::AbstractItemPacket
   @items : Array(L2ItemInstance)
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     @items = pc.inventory.items.select &.quest_item?
   end
 

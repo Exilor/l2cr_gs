@@ -16,7 +16,7 @@ class Packets::Incoming::GameGuardReply < GameClientPacket
 
   private def run_impl
     # TODO: actually check the reply (requires SHA digest).
-    debug { "Received GameGuard data: #{@data}" }
+    debug { "Received GameGuard data: #{@data}." }
     client.game_guard_ok = true
   end
 end

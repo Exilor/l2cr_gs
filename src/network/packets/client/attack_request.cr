@@ -16,8 +16,7 @@ class Packets::Incoming::AttackRequest < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    info = pc.effect_list.get_buff_info_by_abnormal_type(AbnormalType::BOT_PENALTY)
-    if info
+    if info = pc.effect_list.get_buff_info_by_abnormal_type(AbnormalType::BOT_PENALTY)
       info.effects.each do |effect|
         unless effect.check_condition(-1)
           pc.send_packet(SystemMessageId::YOU_HAVE_BEEN_REPORTED_SO_ACTIONS_NOT_ALLOWED)

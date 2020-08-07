@@ -127,8 +127,8 @@ abstract class Inventory < ItemContainer
       update = false
       update_time_stamp = false
 
-      if item.augmented?
-        item.augmentation.apply_bonus(pc)
+      if aug = item.augmentation
+        aug.apply_bonus(pc)
       end
 
       item.recharge_shots(true, true)
@@ -178,7 +178,7 @@ abstract class Inventory < ItemContainer
       update = false
       update_time_stamp = false
 
-      item.augmentation?.try &.remove_bonus(pc)
+      item.augmentation.try &.remove_bonus(pc)
       item.uncharge_all_shots
       item.remove_element_attr_bonus(pc)
 
@@ -505,7 +505,7 @@ abstract class Inventory < ItemContainer
   end
 
   def get_paperdoll_augmentation_id(slot : Int) : Int32
-    self[slot].try &.augmentation?.try &.augmentation_id || 0
+    self[slot].try &.augmentation.try &.augmentation_id || 0
   end
 
   def get_paperdoll_l2id(slot : Int) : Int32

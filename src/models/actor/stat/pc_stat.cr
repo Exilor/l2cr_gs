@@ -197,7 +197,7 @@ class PcStat < PlayableStat
         return
       end
 
-      points = points.to_f
+      points = points.to_f64
 
       if use_rates
         return if active_char.lucky?
@@ -280,9 +280,9 @@ class PcStat < PlayableStat
 
   def max_exp_level : Int32
     if active_char.subclass_active?
-      Config.max_subclass_level + 1
+      Config.max_subclass_level &+ 1
     else
-      Config.max_player_level + 1
+      Config.max_player_level &+ 1
     end
   end
 

@@ -7,7 +7,7 @@ class Packets::Outgoing::ExShowSentPostList < GameServerPacket
     c 0xfe
     h 0xac
 
-    d Time.ms / 1000
+    d Time.ms // 1000
 
     if @outbox && !@outbox.empty?
       d @outbox.size

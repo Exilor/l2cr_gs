@@ -7,7 +7,8 @@ class Packets::Outgoing::ExShowDominionRegistry < GameServerPacket
   @merc_registered = 0
   @current_time : Int32 = Time.s.to_i32
 
-  def initialize(@castle_id : Int32, pc : L2PcInstance)
+  def initialize(castle_id : Int32, pc : L2PcInstance)
+    @castle_id = castle_id
     if clans = TerritoryWarManager.get_registered_clans(castle_id)
       @clan_req = clans.size
       if clan = pc.clan

@@ -24,7 +24,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     end
 
     unless item = pc.inventory.get_item_by_l2id(@id)
-      debug { "Item with object id #{@id} not found in #{pc}'s inventory." }
+      debug { "Item with object id #{@id} not found in #{pc.name}'s inventory." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_THIS_ITEM)
       return
     end
@@ -53,13 +53,13 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
     if @count < 0
       Util.punish(pc, "tried to drop item with object id #{@id} with count < 0.")
-      warn { "#{pc} attempted to drop #{item} x#{@count}." }
+      warn { "#{pc.name} attempted to drop #{item} x#{@count}." }
       return
     end
 
     if !item.stackable? && @count > 1
       Util.punish(pc, "tried to drop non_stackable item with object id #{@id} with count > 1.")
-      warn { "#{pc} attempted to drop multiple non-stackable #{item}." }
+      warn { "#{pc.name} attempted to drop multiple non-stackable #{item}." }
       return
     end
 
@@ -96,13 +96,13 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     end
 
     if item.template.type_2 == ItemType2::QUEST && !pc.override_drop_all_items?
-      debug { "#{pc} tried to drop a quest item." }
+      debug { pc.name + " tried to drop a quest item." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_EXCHANGE_ITEM)
       return
     end
 
     if !pc.inside_radius?(@x, @y, 0, 150, false, false) || (@z - pc.z).abs > 50
-      debug { "#{pc} tried to drop an item too far away." }
+      debug { pc.name + " tried to drop an item too far away." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_DISTANCE_TOO_FAR)
       return
     end
@@ -137,7 +137,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     end
 
     if drop && drop.id == Inventory::ADENA_ID && drop.count >= 1_000_000
-      msg = "#{pc} has dropped #{drop.count} adena at #{@x} #{@y} #{@z}."
+      msg = "#{pc.name} has dropped #{drop.count} adena at #{@x} #{@y} #{@z}."
       warn msg
       AdminData.broadcast_message_to_gms(msg)
     end

@@ -11,7 +11,6 @@ class Packets::Incoming::RequestPetUseItem < GameClientPacket
     return unless pet = pc.summon.as?(L2PetInstance)
 
     unless flood_protectors.use_item.try_perform_action("pet use item")
-      debug "Flood detected."
       return
     end
 

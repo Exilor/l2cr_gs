@@ -6,7 +6,7 @@ class Packets::Outgoing::HennaRemoveList < GameServerPacket
 
     q @pc.adena
     d 0x00
-    d 3 - @pc.henna_empty_slots
+    d 3 &- @pc.henna_empty_slots
 
     @pc.henna_list.each do |henna|
       if henna

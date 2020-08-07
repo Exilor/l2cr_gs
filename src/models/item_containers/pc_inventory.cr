@@ -11,7 +11,9 @@ class PcInventory < Inventory
   getter block_mode = -1
   getter block_items : Array(Int32)? | Slice(Int32)?
 
-  def initialize(@owner : L2PcInstance)
+  def initialize(owner : L2PcInstance)
+    @owner = owner
+
     super()
 
     add_paperdoll_listener(ArmorSetListener)
@@ -386,7 +388,7 @@ class PcInventory < Inventory
 
     item_list.each do |item|
       if !item.stackable? || get_inventory_item_count(item.id, -1) <= 0
-        required_slots += 1
+        required_slots &+= 1
       end
       loot_weight += item.weight
     end

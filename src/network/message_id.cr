@@ -23,11 +23,11 @@ abstract class MessageId
   end
 
   def to_s(io : IO)
-    io << {{@type.stringify + "::"}} << (@name.empty? ? @id : @name)
+    io.print({{@type.stringify + "::"}}, @name.empty? ? @id : @name)
   end
 
   def inspect(io : IO)
-    io << {{@type.stringify + "("}} << @id << ", " << @name << ')'
+    io.print({{@type.stringify + "("}}, @id, ", ", @name, ')')
   end
 
   private macro add(name, id)

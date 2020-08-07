@@ -14,11 +14,7 @@ class L2FriendlyMobInstance < L2Attackable
   end
 
   def auto_attackable?(attacker : L2Character) : Bool
-    if attacker.is_a?(L2PcInstance)
-      return attacker.karma > 0
-    end
-
-    false
+    attacker.is_a?(L2PcInstance) && attacker.karma > 0
   end
 
   def aggressive? : Bool

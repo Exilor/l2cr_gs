@@ -12,7 +12,6 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.transaction.try_perform_action("getattach")
-      debug "Flood detected."
       return
     end
 
@@ -42,7 +41,7 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     end
 
     unless msg = MailManager.get_message(@msg_id)
-      warn { "Message with ID #{@msg_id} not found." }
+      warn { "Message with id #{@msg_id} not found." }
       return
     end
 
@@ -51,12 +50,12 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     end
 
     unless msg.has_attachments?
-      warn { "Message with ID #{@msg_id} has no attachments." }
+      warn { "Message with id #{@msg_id} has no attachments." }
       return
     end
 
     unless attachments = msg.attachments
-      warn { "Message with ID #{@msg_id} has attachments but its item container couldn't be found." }
+      warn { "Message with id #{@msg_id} has attachments but its item container couldn't be found." }
       return
     end
 

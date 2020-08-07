@@ -19,12 +19,12 @@ class Packets::Incoming::RequestPledgeSetAcademyMaster < GameClientPacket
     end
 
     unless current_member = clan.get_clan_member(@current_player_name)
-      debug { "#{@current_player_name} not found in #{clan}." }
+      debug { "#{@current_player_name} not found in clan #{clan.name}." }
       return
     end
 
     unless target_member = clan.get_clan_member(@target_player_name)
-      debug { "#{@target_player_name} not found in #{clan}." }
+      debug { "#{@target_player_name} not found in clan #{clan.name}." }
       return
     end
 

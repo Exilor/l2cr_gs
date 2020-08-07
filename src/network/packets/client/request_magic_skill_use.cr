@@ -26,7 +26,7 @@ class Packets::Incoming::RequestMagicSkillUse < GameClientPacket
     unless skill = pc.get_known_skill(@id)
       unless skill = pc.get_custom_skill(@id)
         unless skill = pc.get_transform_skill(@id)
-          warn { "Skill with ID #{@id} not known by player #{pc.name}." }
+          warn { "Skill with id #{@id} not known by player #{pc.name}." }
           action_failed
           return
         end

@@ -11,7 +11,7 @@ class Packets::Outgoing::NpcInfo < Packets::Outgoing::AbstractNpcInfo
   @enchant_effect : Int32
   @attackable = false
   @name : String
-  @title : String
+  @title : String?
   @display_effect : Int32
 
   def initialize(@npc : L2Npc, attacker : L2Character?)
@@ -39,9 +39,6 @@ class Packets::Outgoing::NpcInfo < Packets::Outgoing::AbstractNpcInfo
     else
       if title = npc.title
         @title = title
-      else
-        # warn "#{npc} has a nil title."
-        @title = "missing title!"
       end
     end
 

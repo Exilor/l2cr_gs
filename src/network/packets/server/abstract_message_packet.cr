@@ -182,6 +182,6 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
   end
 
   def to_s(io : IO)
-    io << self.class.simple_name << '(' << @system_message_id << ')'
+    io.print(self.class.simple_name, '(', @system_message_id, ')')
   end
 end

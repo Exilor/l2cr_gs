@@ -257,7 +257,7 @@ module AdminCommandHandler::AdminBuffs
     pc.send_packet(NpcHtmlMessage.new(html.to_s))
 
     if Config.gmaudit
-      GMAudit.log("#{pc.name} [#{pc.l2id}]", "getbuffs", "#{target.name} (#{target.l2id})", "")
+      GMAudit.log(pc, "getbuffs", "#{target.name} (#{target.l2id})", "")
     end
   end
 
@@ -274,7 +274,7 @@ module AdminCommandHandler::AdminBuffs
 
       show_buffs(pc, target, 1, false)
       if Config.gmaudit
-        GMAudit.log("#{pc.name} [#{pc.l2id}]", "stopbuff", "#{target.name} (#{l2id})", skill_id.to_s)
+        GMAudit.log(pc, "stopbuff", "#{target.name} (#{l2id})", skill_id.to_s)
       end
     end
   end
@@ -285,7 +285,7 @@ module AdminCommandHandler::AdminBuffs
       pc.send_message("Removed all effects from #{target.name} (#{l2id})")
       show_buffs(pc, target, 1, false)
       if Config.gmaudit
-        GMAudit.log("#{pc.name} [#{pc.l2id}]", "stopallbuffs", "#{target.name} (#{l2id})", "")
+        GMAudit.log(pc, "stopallbuffs", "#{target.name} (#{l2id})", "")
       end
     end
   end

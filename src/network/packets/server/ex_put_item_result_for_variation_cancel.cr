@@ -4,11 +4,12 @@ class Packets::Outgoing::ExPutItemResultForVariationCancel < GameServerPacket
   @item_aug_1 : Int32
   @item_aug_2 : Int32
 
-  def initialize(item : L2ItemInstance, @price : Int32)
+  def initialize(item : L2ItemInstance, price : Int32)
+    @price = price
     @item_obj_id = item.l2id
     @item_id = item.display_id
-    @item_aug_1 = item.augmentation.augmentation_id
-    @item_aug_2 = item.augmentation.augmentation_id >> 16
+    @item_aug_1 = item.augmentation.not_nil!.augmentation_id
+    @item_aug_2 = item.augmentation.not_nil!.augmentation_id >> 16
   end
 
   private def write_impl

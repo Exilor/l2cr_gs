@@ -31,7 +31,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
 
     if Config.gmaudit
-      GMAudit.log("#{pc.name} [#{pc.l2id}]", @command, pc.target.try &.name || "no-target")
+      GMAudit.log(pc, @command, pc.target.try &.name)
       debug { "#{pc} used command '#{command}'." }
     end
 
@@ -475,7 +475,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
 
     pc.inventory.items.each do |item|
-      if item.weapon? || item.armor?
+      if item.template.crystal_type > CrystalType::NONE
         item.enchant_level = 8
       end
 

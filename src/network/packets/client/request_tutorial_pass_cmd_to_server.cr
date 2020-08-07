@@ -7,8 +7,6 @@ class Packets::Incoming::RequestTutorialPassCmdToServer < GameClientPacket
 
   private def run_impl
     return unless pc = active_char
-    debug @bypass
-
     OnPlayerTutorialCmd.new(pc, @bypass).async(pc)
   end
 end

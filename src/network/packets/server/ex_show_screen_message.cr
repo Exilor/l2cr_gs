@@ -13,7 +13,9 @@ class Packets::Outgoing::ExShowScreenMessage < GameServerPacket
   @text : String?
   @parameters : Array(String)?
 
-  def initialize(@text : String?, @time : Int32)
+  def initialize(text : String?, time : Int32)
+    @text = text
+    @time = time
     @type = 2
     @sys_message_id = -1
     @unk1 = 0
@@ -30,7 +32,9 @@ class Packets::Outgoing::ExShowScreenMessage < GameServerPacket
     initialize(npc_string, position, time, {param})
   end
 
-  def initialize(npc_string : NpcString, @position : Int32, @time : Int32, params : Enumerable(String))
+  def initialize(npc_string : NpcString, position : Int32, time : Int32, params : Enumerable(String))
+    @position = position
+    @time = time
     @type = 2
     @sys_message_id = -1
     @unk1 = 0
@@ -43,7 +47,9 @@ class Packets::Outgoing::ExShowScreenMessage < GameServerPacket
     add_string_parameter(params)
   end
 
-  def initialize(npc_string : NpcString, @position : Int32, @time : Int32)
+  def initialize(npc_string : NpcString, position : Int32, time : Int32)
+    @position = position
+    @time = time
     @type = 2
     @sys_message_id = -1
     @unk1 = 0
@@ -55,7 +61,18 @@ class Packets::Outgoing::ExShowScreenMessage < GameServerPacket
     @npc_string = npc_string.id
   end
 
-  def initialize(@type : Int32, @sys_message_id : Int32, @position : Int32, @unk1 : Int32, @size : Int32, @unk2 : Int32, @unk3 : Int32, @effect : Bool, @time : Int32, @fade : Bool, @text : String?, npc_string : NpcString, params : Enumerable(String)? = nil)
+  def initialize(type : Int32, sys_message_id : Int32, position : Int32, unk1 : Int32, size : Int32, unk2 : Int32, unk3 : Int32, effect : Bool, time : Int32, fade : Bool, text : String?, npc_string : NpcString, params : Enumerable(String)? = nil)
+    @type = type
+    @sys_message_id = sys_message_id
+    @position = position
+    @unk1 = unk1
+    @size = size
+    @unk2 = unk2
+    @unk3 = unk3
+    @effect = effect
+    @time = time
+    @fade = fade
+    @text = text
     @npc_string = npc_string.id
     add_string_parameter(params) if params
   end

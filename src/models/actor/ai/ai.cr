@@ -256,8 +256,8 @@ abstract class AI
   abstract def on_intention_active
   abstract def on_intention_rest
   abstract def on_intention_attack(attacker)
-  abstract def on_intention_cast(skill, target)
-  abstract def on_intention_move_to(loc)
+  abstract def on_intention_cast(skill : Skill, target : L2Object?)
+  abstract def on_intention_move_to(loc : Location)
   abstract def on_intention_follow(target)
   abstract def on_intention_pick_up(object)
   abstract def on_intention_interact(object)
@@ -307,7 +307,7 @@ abstract class AI
         end
         send_packet = false
       elsif @actor.on_geodata_path?
-        if ticks < @move_to_pawn_timeout + 10
+        if ticks < @move_to_pawn_timeout &+ 10
           return
         end
       end
@@ -316,7 +316,7 @@ abstract class AI
     @client_moving = true
     @client_moving_to_pawn_offset = offset
     @target = pawn
-    @move_to_pawn_timeout = ticks + (1000 // GameTimer::MILLIS_IN_TICK)
+    @move_to_pawn_timeout = ticks &+ (1000 // GameTimer::MILLIS_IN_TICK)
 
     unless pawn
       return
@@ -383,8 +383,7 @@ abstract class AI
   end
 
   def auto_attacking=(val : Bool)
-    me = @actor
-    if me.is_a?(L2Summon)
+    if me = @actor.as?(L2Summon)
       me.owner.ai.auto_attacking = val
       return
     end
@@ -393,8 +392,7 @@ abstract class AI
   end
 
   def client_start_auto_attack
-    me = @actor
-    if me.is_a?(L2Summon)
+    if me = @actor.as?(L2Summon)
       me.owner.ai.client_start_auto_attack
       return
     end
@@ -414,8 +412,7 @@ abstract class AI
   end
 
   def client_stop_auto_attack
-    me = @actor
-    if me.is_a?(L2Summon)
+    if me = @actor.as?(L2Summon)
       me.owner.ai.client_stop_auto_attack
       return
     end
@@ -527,6 +524,6 @@ abstract class AI
   end
 
   def to_log(io : IO)
-    io << self.class.name << '(' << actor.name << ')'
+    io.print(self.class.name, '(', actor.name, ')')
   end
 end

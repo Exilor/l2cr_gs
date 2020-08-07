@@ -22,7 +22,7 @@ class EffectHandler::Lethal < AbstractEffect
       return
     end
 
-    if skill.magic_level < target.level - 6
+    if skill.magic_level < target.level &- 6
       return
     end
 

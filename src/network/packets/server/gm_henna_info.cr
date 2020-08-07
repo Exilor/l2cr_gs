@@ -1,7 +1,8 @@
 class Packets::Outgoing::GMHennaInfo < GameServerPacket
   @hennas : Slice(L2Henna?)
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     @hennas = pc.henna_list
   end
 

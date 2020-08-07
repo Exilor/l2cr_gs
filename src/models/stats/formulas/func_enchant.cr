@@ -1,11 +1,11 @@
 class FuncEnchant < AbstractFunction
-  def calc(effector, effected, skill, val)
-    return val unless test(effector, effected, skill)
+  def calc(effector, effected, skill, value)
+    return value unless test(effector, effected, skill)
 
     item = @owner.as(L2ItemInstance)
 
     enchant = item.enchant_level
-    return val if enchant <= 0
+    return value if enchant <= 0
 
     overenchant = 0
 
@@ -16,7 +16,7 @@ class FuncEnchant < AbstractFunction
 
     if effector.is_a?(L2PcInstance)
       if effector.in_olympiad_mode? && Config.alt_oly_enchant_limit >= 0
-        if enchant + overenchant > Config.alt_oly_enchant_limit
+        if enchant &+ overenchant > Config.alt_oly_enchant_limit
           if Config.alt_oly_enchant_limit > 3
             overenchant = Config.alt_oly_enchant_limit &- 3
           else
@@ -28,20 +28,20 @@ class FuncEnchant < AbstractFunction
     end
 
     if @stat.magic_defence? || @stat.power_defence?
-      return val + enchant + (3 * overenchant)
+      return value + enchant + (3 &* overenchant)
     end
 
     if @stat.magic_attack?
       case item.template.item_grade_s_plus
       when CrystalType::S
-        val += (4 &* enchant) &+ (8 &* overenchant)
+        value += (4 &* enchant) &+ (8 &* overenchant)
       when CrystalType::A, CrystalType::B, CrystalType::C
-        val += (3 &* enchant) &+ (6 &* overenchant)
+        value += (3 &* enchant) &+ (6 &* overenchant)
       when CrystalType::D, CrystalType::NONE
-        val += (2 &* enchant) &+ (4 &* overenchant)
+        value += (2 &* enchant) &+ (4 &* overenchant)
       end
 
-      return val
+      return value
     end
 
     if item.weapon?
@@ -50,42 +50,42 @@ class FuncEnchant < AbstractFunction
       when CrystalType::S
         if item.weapon_item!.body_part == L2Item::SLOT_LR_HAND
           if type.bow? || type.crossbow?
-            val += (10 &* enchant) &+ (20 &* overenchant)
+            value += (10 &* enchant) &+ (20 &* overenchant)
           else
-            val += (6 &* enchant) &+ (12 &* overenchant)
+            value += (6 &* enchant) &+ (12 &* overenchant)
           end
         else
-          val += (5 &* enchant) &+ (10 &* overenchant)
+          value += (5 &* enchant) &+ (10 &* overenchant)
         end
       when CrystalType::A
         if item.weapon_item!.body_part == L2Item::SLOT_LR_HAND
           if type.bow? || type.crossbow?
-            val += (8 &* enchant) &+ (16 &* overenchant)
+            value += (8 &* enchant) &+ (16 &* overenchant)
           else
-            val += (5 &* enchant) &+ (10 &* overenchant)
+            value += (5 &* enchant) &+ (10 &* overenchant)
           end
         else
-          val += (4 &* enchant) &+ (8 &* overenchant)
+          value += (4 &* enchant) &+ (8 &* overenchant)
         end
       when CrystalType::B, CrystalType::C
         if item.weapon_item!.body_part == L2Item::SLOT_LR_HAND
           if type.bow? || type.crossbow?
-            val += (6 &* enchant) &+ (12 &* overenchant)
+            value += (6 &* enchant) &+ (12 &* overenchant)
           else
-            val += (4 &* enchant) &+ (8 &* overenchant)
+            value += (4 &* enchant) &+ (8 &* overenchant)
           end
         else
-          val += (3 &* enchant) &+ (6 &* overenchant)
+          value += (3 &* enchant) &+ (6 &* overenchant)
         end
       when CrystalType::D, CrystalType::NONE
         if type.bow? || type.crossbow?
-          val += (4 &* enchant) &+ (8 &* overenchant)
+          value += (4 &* enchant) &+ (8 &* overenchant)
         else
-          val += (2 &* enchant) &+ (4 &* overenchant)
+          value += (2 &* enchant) &+ (4 &* overenchant)
         end
       end
     end
 
-    val
+    value
   end
 end

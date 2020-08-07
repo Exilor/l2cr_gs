@@ -1,7 +1,5 @@
 module GMAudit
-  extend self
-
-  def log(name, action, target, params = "")
+  def self.log(name, action, target, params = "")
     if name.is_a?(L2PcInstance)
       name = "#{name.name} [#{name.l2id}]"
     end

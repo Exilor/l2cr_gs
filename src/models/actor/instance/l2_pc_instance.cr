@@ -2243,7 +2243,7 @@ class L2PcInstance < L2Playable
           disable_auto_shot(item_id)
         end
       else
-        warn { "Item with ID #{item_id} not found." }
+        warn { "Item with id #{item_id} not found." }
       end
     end
   end
@@ -2520,11 +2520,11 @@ class L2PcInstance < L2Playable
   end
 
   def add_level(value : Int32) : Bool
-    if level + value > max_level
+    if level &+ value > max_level
       return false
     end
 
-    OnPlayerLevelChanged.new(self, level.to_i8, (level + value).to_i8).async(self)
+    OnPlayerLevelChanged.new(self, level.to_i8!, (level + value).to_i8).async(self)
     level_increased = sub_stat.add_level(value)
     on_level_change(level_increased)
 
@@ -6717,7 +6717,7 @@ class L2PcInstance < L2Playable
 
       inventory.augmented_items.each do |item|
         if item.equipped?
-          item.augmentation.remove_bonus(self)
+          item.augmentation.not_nil!.remove_bonus(self)
         end
       end
 
@@ -7608,6 +7608,6 @@ class L2PcInstance < L2Playable
   end
 
   def to_log(io : IO)
-    io << "L2PcInstance(" << name << ')'
+    io.print("L2PcInstance(", name, ')')
   end
 end

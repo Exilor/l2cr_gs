@@ -10,7 +10,7 @@ module L2Cr
       task.cancel
       @@on_screen_info_task = nil
     else
-      @@on_screen_info_task = ThreadPoolManager.schedule_general_at_fixed_rate(OnScreenInfoTask, 10, 10)
+      @@on_screen_info_task = ThreadPoolManager.schedule_general_at_fixed_rate(OnScreenInfoTask, 100, 100)
     end
   end
 
@@ -93,6 +93,16 @@ module L2Cr
         end
       when "uptime"
         puts Time.local - GameServer.start_time
+      when "thatzone"
+        L2World.regions.each do |ary|
+          ary.each do |reg|
+            reg.zones.each do |zone|
+              if zone.name == "area_dehydration"
+                p zone.zone
+              end
+            end
+          end
+        end
       else
         return "unknown command '#{cmd}'"
       end
@@ -107,7 +117,7 @@ module L2Cr
 
   protected def check_ids
     errors = 0
-    L2World.world_regions.each &.each do |reg|
+    L2World.regions.flat_each do |reg|
       reg.objects.each do |l2id, obj|
         unless L2World.find_object(l2id)
           errors &+= 1

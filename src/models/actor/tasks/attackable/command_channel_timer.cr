@@ -7,7 +7,7 @@ struct CommandChannelTimer
       @mob.first_command_channel_attacked = nil
       @mob.command_channel_last_attack = 0
     else
-      ThreadPoolManager.schedule_general(self, 10000)
+      ThreadPoolManager.schedule_general(self, 10_000)
     end
   end
 end

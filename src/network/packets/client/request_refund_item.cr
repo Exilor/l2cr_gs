@@ -45,7 +45,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
     unless buy_list = BuyListData.get_buy_list(@list_id)
       Util.punish(pc, "sent an invalid BuyList list_id #{@list_id}.")
-      warn { "No buy list with ID #{@list_id}." }
+      warn { "No buy list with id #{@list_id}." }
       return
     end
 

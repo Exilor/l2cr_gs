@@ -1,14 +1,14 @@
 class Scripts::Q00508_AClansReputation < Quest
-  # NPC
   private SIR_ERIC_RODEMAI = 30868
 
+  private record Reward, npc_id : Int32, item_id : Int32, reputation : Int32
   private REWARD_POINTS = {
-    1 => {25252,  8277, 560}, # Palibati Queen Themis
-    2 => {25478, 14883, 584}, # Shilen's Priest Hisilrome
-    3 => {25255,  8280, 602}, # Gargoyle Lord Tiphon
-    4 => {25245,  8281, 784}, # Last Lesser Giant Glaki
-    5 => {25051,  8282, 558}, # Rahha
-    6 => {25524,  8494, 768}  # Flamestone Giant
+    1 => Reward.new(25252,  8277, 560), # Palibati Queen Themis
+    2 => Reward.new(25478, 14883, 584), # Shilen's Priest Hisilrome
+    3 => Reward.new(25255,  8280, 602), # Gargoyle Lord Tiphon
+    4 => Reward.new(25245,  8281, 784), # Last Lesser Giant Glaki
+    5 => Reward.new(25051,  8282, 558), # Rahha
+    6 => Reward.new(25524,  8494, 768)  # Flamestone Giant
   }
 
   private RAID_BOSS = {
@@ -59,7 +59,6 @@ class Scripts::Q00508_AClansReputation < Quest
       st.exit_quest(true, true)
     end
 
-
     event
   end
 
@@ -80,8 +79,8 @@ class Scripts::Q00508_AClansReputation < Quest
     if st && st.started?
       raid = st.get_int("raid")
       if tmp = REWARD_POINTS[raid]?
-        if npc.id == tmp[0] && !st.has_quest_items?(tmp[1])
-          st.reward_items(tmp[1], 1)
+        if npc.id == tmp.npc_id && !st.has_quest_items?(tmp.item_id)
+          st.reward_items(tmp.item_id, 1)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
@@ -110,11 +109,11 @@ class Scripts::Q00508_AClansReputation < Quest
       raid = st.get_int("raid")
 
       if tmp = REWARD_POINTS[raid]?
-        if st.has_quest_items?(tmp[1])
+        if st.has_quest_items?(tmp.item_id)
           html = "30868-#{raid}b.html"
           st.play_sound(Sound::ITEMSOUND_QUEST_FANFARE_1)
-          st.take_items(tmp[1], -1)
-          rep = tmp[2]
+          st.take_items(tmp.item_id, -1)
+          rep = tmp.reputation
           clan.add_reputation_score(rep, true)
           sm = SystemMessage.clan_quest_completed_and_s1_points_gained
           sm.add_int(rep)
@@ -127,7 +126,6 @@ class Scripts::Q00508_AClansReputation < Quest
         html = "30868-0.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

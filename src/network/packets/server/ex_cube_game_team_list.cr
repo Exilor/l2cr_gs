@@ -8,7 +8,7 @@ class Packets::Outgoing::ExCubeGameTeamList < GameServerPacket
 
     d 0x00
 
-    d @room_number - 1
+    d @room_number &- 1
     d 0xffffffff
 
     d @blue_players.size

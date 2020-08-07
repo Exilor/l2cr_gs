@@ -4,7 +4,9 @@ class Packets::Outgoing::TrapInfo < Packets::Outgoing::AbstractNpcInfo
   @r_hand : Int32
   @l_hand : Int32
 
-  def initialize(@trap : L2TrapInstance, attacker : L2Character?)
+  def initialize(trap : L2TrapInstance, attacker : L2Character?)
+    @trap = trap
+
     super(trap)
 
     @id_template = trap.template.display_id

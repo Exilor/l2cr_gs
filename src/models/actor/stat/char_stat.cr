@@ -21,7 +21,7 @@ class CharStat
   def calc_stat(stat : Stats, value : Number = 1.0, target : L2Character? = nil, skill : Skill? = nil) : Float64
     value = value.to_f64
     c = @active_char.calculators[stat.to_i]
-    if c.nil? || c.size == 0
+    if c.nil? || c.empty?
       return value
     end
 

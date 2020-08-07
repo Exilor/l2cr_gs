@@ -1,5 +1,6 @@
 class Packets::Outgoing::NpcQuestHtmlMessage < Packets::Outgoing::AbstractHtmlPacket
-  def initialize(l2id : Int32, @quest_id : Int32)
+  def initialize(l2id : Int32, quest_id : Int32)
+    @quest_id = quest_id
     super(l2id)
   end
 

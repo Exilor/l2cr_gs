@@ -16,7 +16,7 @@ class Packets::Incoming::RequestPledgeSetMemberPowerGrade < GameClientPacket
     end
 
     unless member = clan.get_clan_member(@member)
-      debug { "#{@member} not found in #{clan}." }
+      debug { "#{@member} not found in clan #{clan.name}." }
       return
     end
 

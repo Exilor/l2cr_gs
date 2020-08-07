@@ -46,7 +46,7 @@ class Packets::Incoming::RequestPrivateStoreSell < GameClientPacket
     end
 
     unless store_player = L2World.get_player(@store_player_id)
-      warn { "Player with ID #{@store_player_id} not found." }
+      warn { "Player with id #{@store_player_id} not found." }
       return
     end
 

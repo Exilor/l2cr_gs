@@ -20,9 +20,11 @@ module ChatHandler::ChatTrade
         end
       end
     elsif default.casecmp?("global")
-      if !pc.override_chat_conditions? && !pc.flood_protectors.global_chat.try_perform_action("global chat")
-        pc.send_message("Do not spam the trade channel.")
-        return
+      unless pc.override_chat_conditions?
+        unless pc.flood_protectors.global_chat.try_perform_action("global chat")
+          pc.send_message("Do not spam the trade channel.")
+          return
+        end
       end
 
       L2World.players.each do |player|

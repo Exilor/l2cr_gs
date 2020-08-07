@@ -20,7 +20,7 @@ class L2VillageMasterInstance < L2NpcInstance
     when "create_clan"
       unless st.empty?
         clan_name = st.shift
-        unless valid_name?(clan_name)
+        if !st.empty? || !valid_name?(clan_name)
           pc.send_packet(SystemMessageId::CLAN_NAME_INCORRECT)
           return
         end

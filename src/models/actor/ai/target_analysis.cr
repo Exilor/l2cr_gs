@@ -31,7 +31,7 @@ class TargetAnalysis
       @balanced = true
     else
       weapon = target.active_weapon_item
-      if weapon && (weapon.item_type == WeaponType::BOW || weapon.item_type == WeaponType::CROSSBOW)
+      if weapon && weapon.item_type.in?(WeaponType::BOW, WeaponType::CROSSBOW)
         @archer = true
       else
         @fighter = true

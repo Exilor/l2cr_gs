@@ -9,7 +9,6 @@ class Packets::Incoming::RequestHennaRemove < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.transaction.try_perform_action("HennaRemove")
-      debug "Flood detected."
       action_failed
       return
     end

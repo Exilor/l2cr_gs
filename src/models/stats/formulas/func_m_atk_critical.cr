@@ -5,10 +5,10 @@ class FuncMAtkCritical < AbstractFunction
 
   def calc(effector, effected, skill, value)
     if !effector.player? || effector.active_weapon_instance
-      value * BaseStats::WIT.calc_bonus(effector) * 10
-    else
-      value
+      return value * BaseStats::WIT.calc_bonus(effector) * 10
     end
+
+    value
   end
 
   INSTANCE = new

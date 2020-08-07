@@ -101,13 +101,6 @@ class Packets::Incoming::RequestDestroyItem < GameClientPacket
         iu.add_modified_item(item)
       end
       pc.send_packet(iu)
-      # if unequipped.size == 1
-      #   pc.send_packet(InventoryUpdate.modified(*unequipped))
-      # elsif unequipped.size > 1
-      #   iu = InventoryUpdate.new
-      #   unequipped.each { |item| iu.add_modified_item(item) }
-      #   pc.send_packet(iu)
-      # end
     end
 
     deleted_item = pc.inventory.destroy_item("Destroy", item, count, pc, nil)

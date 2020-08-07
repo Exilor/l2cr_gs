@@ -163,7 +163,7 @@ module AdminCommandHandler::AdminPunishment
 
       PunishmentManager.start_punishment(PunishmentTask.new(key, affect, type, expiration_time, reason, pc.name))
       pc.send_message("Punishment #{type} have been applied to: #{affect} #{name}")
-      GMAudit.log("#{pc.name} [#{pc.l2id}]", cmd, affect.to_s, name)
+      GMAudit.log(pc, cmd, affect.to_s, name)
       return use_admin_command("admin_punishment info #{name} #{affect}", pc)
     when "admin_punishment_remove"
       key = st.shift?
@@ -193,7 +193,7 @@ module AdminCommandHandler::AdminPunishment
 
       PunishmentManager.stop_punishment(key, affect, type)
       pc.send_message("Punishment #{type} has been lifted from: #{affect} #{name}")
-      GMAudit.log("#{pc.name} [#{pc.l2id}]", cmd, affect.to_s, name)
+      GMAudit.log(pc, cmd, affect.to_s, name)
       return use_admin_command("admin_punishment info #{name} #{affect}", pc)
     when "admin_ban_char"
       unless st.empty?

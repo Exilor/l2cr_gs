@@ -4,7 +4,7 @@ class L2VehicleAI < L2CharacterAI
   private def on_intention_attack(arg)
   end
 
-  private def on_intention_cast(arg1, arg2)
+  private def on_intention_cast(skill : Skill, target : L2Object?)
   end
 
   private def on_intention_follow(arg)

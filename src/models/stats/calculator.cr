@@ -24,15 +24,15 @@ class Calculator
       order = func.order
 
       i = 0
-      while i < funcs.size && order >= funcs[i].order
-        tmp[i] = funcs[i]
+      while i < funcs.size && order >= funcs.unsafe_fetch(i).order
+        tmp[i] = funcs.unsafe_fetch(i)
         i &+= 1
       end
 
       tmp[i] = func
 
       while i < funcs.size
-        tmp[i &+ 1] = funcs[i]
+        tmp[i &+ 1] = funcs.unsafe_fetch(i)
         i &+= 1
       end
 
@@ -46,8 +46,8 @@ class Calculator
       tmp = Pointer(AbstractFunction).malloc(funcs.size &- 1)
 
       i = 0
-      while i < funcs.size &- 1 && func != funcs[i]
-        tmp[i] = funcs[i]
+      while i < funcs.size &- 1 && func != funcs.unsafe_fetch(i)
+        tmp[i] = funcs.unsafe_fetch(i)
         i &+= 1
       end
 
@@ -56,7 +56,7 @@ class Calculator
       end
       i &+= 1
       while i < funcs.size
-        tmp[i &- 1] = funcs[i]
+        tmp[i &- 1] = funcs.unsafe_fetch(i)
         i &+= 1
       end
 

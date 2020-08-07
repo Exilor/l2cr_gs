@@ -9,7 +9,8 @@ class Packets::Outgoing::ServerObjectInfo < GameServerPacket
   @heading : Int32
   @name : String
 
-  def initialize(@npc : L2Npc, char : L2Character)
+  def initialize(npc : L2Npc, char : L2Character)
+    @npc = npc
     @template_id = npc.template.display_id
     @is_attackable = npc.auto_attackable?(char)
     @collision_height = npc.collision_height

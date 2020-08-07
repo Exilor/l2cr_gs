@@ -1,7 +1,8 @@
 class Packets::Outgoing::ExPrivateStoreSetWholeMsg < GameServerPacket
   @l2id : Int32
 
-  def initialize(pc : L2PcInstance, @msg : String)
+  def initialize(pc : L2PcInstance, message : String)
+    @message = message
     @l2id = pc.l2id
   end
 
@@ -14,6 +15,6 @@ class Packets::Outgoing::ExPrivateStoreSetWholeMsg < GameServerPacket
     h 0x80
 
     d @l2id
-    s @msg
+    s @message
   end
 end

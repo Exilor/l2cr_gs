@@ -6,7 +6,7 @@ class L2ClanHallZone < L2ResidenceZone
       if hall = ClanHallManager.get_clan_hall_by_id(residence_id)
         hall.zone = self
       else
-        warn "Clan hall with ID #{residence_id} not found."
+        warn "Clan hall with id #{residence_id} not found."
       end
     else
       super

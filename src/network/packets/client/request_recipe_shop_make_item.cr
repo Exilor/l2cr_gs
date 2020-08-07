@@ -12,12 +12,11 @@ class Packets::Incoming::RequestRecipeShopMakeItem < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.manufacture.try_perform_action("RecipeShopMake")
-      debug "Flood detected."
       return
     end
 
     unless crafter = L2World.get_player(@id)
-      warn { "Player with ID #{@id} not found." }
+      warn { "Player with id #{@id} not found." }
       return
     end
 

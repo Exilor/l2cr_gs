@@ -127,7 +127,6 @@ class Scripts:: Q00002_WhatWomenWant < Quest
       end
     end
 
-
     html || get_no_quest_msg(pc)
   end
 end

@@ -25,7 +25,7 @@ class Packets::Incoming::RequestPetition < GameClientPacket
       return
     end
 
-    total = PetitionManager.get_player_total_petition_count(pc) + 1
+    total = PetitionManager.get_player_total_petition_count(pc) &+ 1
     if total > Config.max_petitions_per_player
       sm = SystemMessage.we_have_received_s1_petitions_today
       sm.add_int(total)
@@ -46,7 +46,7 @@ class Packets::Incoming::RequestPetition < GameClientPacket
 
     sm = SystemMessage.submitted_you_s1_th_petition_s2_left
     sm.add_int(total)
-    sm.add_int(Config.max_petitions_per_player - total)
+    sm.add_int(Config.max_petitions_per_player &- total)
     pc.send_packet(sm)
 
     sm = SystemMessage.s1_petition_on_waiting_list

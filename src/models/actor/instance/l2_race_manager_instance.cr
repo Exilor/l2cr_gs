@@ -14,7 +14,7 @@ class L2RaceManagerInstance < L2Npc
     {0, 15322},
     {13765, -1}
   }
-  private COST = {100, 500, 1000, 5000, 10000, 20000, 50000, 100000}
+  private COST = {100, 500, 1000, 5000, 10_000, 20_000, 50_000, 100_000}
 
   @@not_initialized = true
   @@state = RACE_END
@@ -184,7 +184,7 @@ class L2RaceManagerInstance < L2Npc
     filename = get_html_path(npc_id, 5)
     html.set_file(pc, filename)
     8.times do |i|
-      search = "Mob#{i + 1}"
+      search = "Mob#{i &+ 1}"
       html[search] = MonsterRace.monsters[i].template.name
     end
     html["1race"] = @@race_number
@@ -200,7 +200,7 @@ class L2RaceManagerInstance < L2Npc
     filename = get_html_path(npc_id, 5)
     html.set_file(pc, filename)
     8.times do |i|
-      search = "Mob#{i + 1}"
+      search = "Mob#{i &+ 1}"
       html[search] = MonsterRace.monsters[i].template.name
     end
     html["%objectId%"] = l2id
@@ -222,7 +222,7 @@ class L2RaceManagerInstance < L2Npc
       filename = get_html_path(npc_id, 2)
       html.set_file(pc, filename)
       8.times do |i|
-        html["Mob#{i + 1}"] = MonsterRace.monsters[i].template.name
+        html["Mob#{i &+ 1}"] = MonsterRace.monsters[i].template.name
       end
       if val == 0
         html["No1"] = ""
@@ -238,12 +238,12 @@ class L2RaceManagerInstance < L2Npc
       filename = get_html_path(npc_id, 3)
       html.set_file(pc, filename)
       html["0place"] = pc.get_race(0)
-      html["Mob1"] = MonsterRace.monsters[pc.get_race(0) - 1].template.name
+      html["Mob1"] = MonsterRace.monsters[pc.get_race(0) &- 1].template.name
       if val == 10
         html["0adena"] = ""
       else
-        html["0adena"] = COST[val - 11]
-        pc.set_race(1, val - 10)
+        html["0adena"] = COST[val &- 11]
+        pc.set_race(1, val &- 10)
       end
     elsif val == 20
       if pc.get_race(0) == 0 || pc.get_race(1) == 0
@@ -253,10 +253,10 @@ class L2RaceManagerInstance < L2Npc
       filename = get_html_path(npc_id, 4)
       html.set_file(pc, filename)
       html["0place"] = pc.get_race(0)
-      html["Mob1"] = MonsterRace.monsters[pc.get_race(0) - 1].template.name
-      html["0adena"] = COST[pc.get_race(1) - 1]
+      html["Mob1"] = MonsterRace.monsters[pc.get_race(0) &- 1].template.name
+      html["0adena"] = COST[pc.get_race(1) &- 1]
       html["0tax"] = 0
-      html["0total"] = COST[pc.get_race(1) - 1]
+      html["0total"] = COST[pc.get_race(1) &- 1]
     else
       if pc.get_race(0) == 0 || pc.get_race(1) == 0
         return
@@ -273,7 +273,7 @@ class L2RaceManagerInstance < L2Npc
       item.count = 1
       item.enchant_level = @@race_number
       item.custom_type_1 = ticket
-      item.custom_type_2 = COST[price_id - 1] // 100
+      item.custom_type_2 = COST[price_id &- 1] // 100
       pc.inventory.add_item("Race", item, pc, self)
       iu = InventoryUpdate.new
       iu.add_item(item)
@@ -315,7 +315,7 @@ class L2RaceManagerInstance < L2Npc
         CODES[2][0], CODES[2][1], MonsterRace.monsters, MonsterRace.speeds
       )
       @manager.send_monster_info
-      ThreadPoolManager.schedule_general(RunEnd.new(@manager), 30000)
+      ThreadPoolManager.schedule_general(RunEnd.new(@manager), 30_000)
     end
   end
 
@@ -325,7 +325,7 @@ class L2RaceManagerInstance < L2Npc
     def call
       @manager.make_announcement(SystemMessageId::MONSRACE_FIRST_PLACE_S1_SECOND_S2)
       @manager.make_announcement(SystemMessageId::MONSRACE_S1_RACE_END)
-      L2RaceManagerInstance.race_number += 1
+      L2RaceManagerInstance.race_number &+= 1
 
       8.times do |i|
         dl = Packets::Outgoing::DeleteObject.new(MonsterRace.monsters[i])

@@ -3,7 +3,9 @@ require "./abstract_item_packet"
 class Packets::Outgoing::ItemList < Packets::Outgoing::AbstractItemPacket
   @items : Array(L2ItemInstance)
 
-  def initialize(@pc : L2PcInstance, @show_window : Bool)
+  def initialize(pc : L2PcInstance, show_window : Bool)
+    @pc = pc
+    @show_window = show_window
     @items = pc.inventory.items.reject &.quest_item?
   end
 

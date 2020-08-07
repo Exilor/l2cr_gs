@@ -7,9 +7,10 @@ class Packets::Outgoing::WareHouseWithdrawalList < Packets::Outgoing::AbstractIt
   @adena = 0i64
   @items : Interfaces::Array(L2ItemInstance)?
 
-  def initialize(pc : L2PcInstance, @type : Int32)
+  def initialize(pc : L2PcInstance, type : Int32)
+    @type = type
     unless wh = pc.active_warehouse
-      warn "#{pc.name} has no active warehouse."
+      warn { pc.name + " has no active warehouse." }
       return
     end
 

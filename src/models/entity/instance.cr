@@ -83,7 +83,7 @@ class Instance
 
   def add_door(door_id : Int32, set : StatsSet)
     if @doors.has_key?(door_id)
-      warn { "Door with ID #{door_id} already exists." }
+      warn { "Door with id #{door_id} already exists." }
       return
     end
 

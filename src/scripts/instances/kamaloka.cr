@@ -1149,7 +1149,7 @@ class Scripts::Kamaloka < AbstractInstance
     # for each party member
     party.members.each do |m|
       # player level must be in range
-      if (m.level - level).abs > MAX_LEVEL_DIFFERENCE
+      if (m.level &- level).abs > MAX_LEVEL_DIFFERENCE
         sm = SystemMessage.c1_s_level_requirement_is_not_sufficient_and_cannot_be_entered
         sm.add_pc_name(m)
         player.send_packet(sm)

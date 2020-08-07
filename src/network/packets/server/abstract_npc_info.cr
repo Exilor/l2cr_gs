@@ -8,7 +8,7 @@ abstract class Packets::Outgoing::AbstractNpcInfo < GameServerPacket
   @attackable = false
   @summoned = false
   @name = ""
-  @title = ""
+  @title : String? = ""
   @id_template = 0
   @x : Int32
   @y : Int32

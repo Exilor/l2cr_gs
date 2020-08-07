@@ -13,7 +13,6 @@ class Packets::Incoming::UseItem < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.use_item.try_perform_action("use item")
-      debug "Flood detected."
       return
     end
 
@@ -29,7 +28,7 @@ class Packets::Incoming::UseItem < GameClientPacket
 
     return unless item = pc.inventory.get_item_by_l2id(@l2id)
 
-    return if custom_item_bypass(pc, item) # custom duh
+    return if custom_item_bypass(pc, item) # custom
 
     if item.template.type_2 == ItemType2::QUEST
       pc.send_packet(SystemMessageId::CANNOT_USE_QUEST_ITEMS)
@@ -54,7 +53,7 @@ class Packets::Incoming::UseItem < GameClientPacket
       return
     end
 
-    if pc.fishing? && (item_id < 6535 || item_id > 6540)
+    if pc.fishing? && !item_id.between?(6535, 6540)
       pc.send_packet(SystemMessageId::CANNOT_DO_WHILE_FISHING_3)
       return
     end
@@ -131,14 +130,12 @@ class Packets::Incoming::UseItem < GameClientPacket
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
             end
-
           else
             case wpn.item_type
             when WeaponType::RAPIER, WeaponType::CROSSBOW, WeaponType::ANCIENTSWORD
               pc.send_packet(SystemMessageId::CANNOT_EQUIP_ITEM_DUE_TO_BAD_CONDITION)
               return
             end
-
           end
         end
       when L2Item::SLOT_CHEST, L2Item::SLOT_BACK, L2Item::SLOT_GLOVES, L2Item::SLOT_FEET, L2Item::SLOT_HEAD, L2Item::SLOT_FULL_ARMOR, L2Item::SLOT_LEGS
@@ -152,7 +149,6 @@ class Packets::Incoming::UseItem < GameClientPacket
           return
         end
       end
-
 
       if pc.casting_now? || pc.casting_simultaneously_now?
         set_next_action(pc, item)
@@ -172,7 +168,6 @@ class Packets::Incoming::UseItem < GameClientPacket
           send_packet(ItemList.new(pc, false))
           return
         end
-
       end
 
       return unless handler = ItemHandler[item.template.as?(L2EtcItem)]

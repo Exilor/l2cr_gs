@@ -57,7 +57,6 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
     end
 
     unless flood_protectors.server_bypass.try_perform_action(@command)
-      debug "Flood detected."
       return
     end
 
@@ -70,7 +69,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
           if pc.gm?
             pc.send_message("The command '#{command.from(6)}' does not exist")
           end
-          warn { "#{pc} requested an admin command that doesn't exist." }
+          warn { pc.name + " requested an admin command that doesn't exist." }
           return
         end
 
@@ -108,7 +107,6 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
 
         if id.number?
           object = L2World.find_object(id.to_i)
-          debug "Target: #{object}"
           if object.is_a?(L2Npc) && end_of_id > 0
             if pc.inside_radius?(object, L2Npc::INTERACTION_DISTANCE, false, false)
               object.on_bypass_feedback(pc, @command.from(end_of_id + 1))
@@ -184,11 +182,10 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
               handler.use_bypass(@command, pc, nil)
             end
           else
-            debug "#{handler} will handle #{@command}."
             handler.use_bypass(@command, pc, nil)
           end
         else
-          warn { "#{pc} sent an unhandled server bypass request: '#{@command}'." }
+          warn { "#{pc.name} sent an unhandled server bypass request: '#{@command}'." }
         end
       end
     rescue e

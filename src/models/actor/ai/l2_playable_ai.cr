@@ -6,7 +6,7 @@ class L2PlayableAI < L2CharacterAI
 
     if target.playable? && (pc_target = target.acting_player)
       if pc_target.protection_blessing_affected?
-        if pc_target.level - @actor.level >= 10
+        if pc_target.level &- @actor.level >= 10
           if pc_target.karma > 0 && target.inside_pvp_zone?
             @actor.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
             client_action_failed
@@ -18,7 +18,7 @@ class L2PlayableAI < L2CharacterAI
       me = @actor.acting_player.not_nil!
 
       if me.protection_blessing_affected?
-        if pc_target.level - @actor.level >= 10
+        if pc_target.level &- @actor.level >= 10
           if pc_target.karma > 0 && !target.inside_pvp_zone?
             @actor.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
             client_action_failed
@@ -51,7 +51,7 @@ class L2PlayableAI < L2CharacterAI
     if (pc_target = target.acting_player) && skill.bad?
       me = @actor.acting_player.not_nil!
       if pc_target.protection_blessing_affected?
-        if @actor.level - pc_target.level >= 10
+        if @actor.level &- pc_target.level >= 10
           if me.karma > 0 && !target.inside_pvp_zone?
             @actor.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
             client_action_failed
@@ -62,7 +62,7 @@ class L2PlayableAI < L2CharacterAI
       end
 
       if me.protection_blessing_affected?
-        if pc_target.level - @actor.level >= 10
+        if pc_target.level &- @actor.level >= 10
           if pc_target.karma > 0 && !target.inside_pvp_zone?
             @actor.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
             client_action_failed

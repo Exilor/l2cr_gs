@@ -5,7 +5,10 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
 
   getter char_info : Array(CharSelectInfoPackage)
 
-  def initialize(@account : String, @session_id : Int32, @active_id : Int32 = -1)
+  def initialize(account : String, session_id : Int32, active_id : Int32 = -1)
+    @account = account
+    @session_id = session_id
+    @active_id = active_id
     @char_info = CharSelectionInfo.load_character_select_info(account)
   end
 

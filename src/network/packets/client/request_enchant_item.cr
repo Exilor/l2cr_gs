@@ -172,7 +172,7 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
 
             crystal_id = item.template.crystal_item_id
             if crystal_id != 0 && item.template.crystallizable?
-              count = item.crystal_count - ((item.template.crystal_count + 1) // 2)
+              count = item.crystal_count - ((item.template.crystal_count &+ 1) // 2)
               count = 1 if count < 1
               inv.add_item("Enchant", crystal_id, count.to_i64, pc, item)
 

@@ -82,7 +82,7 @@ class L2DefenderInstance < L2Attackable
     @castle = CastleManager.get_castle(*xyz)
     @hall = conquerable_hall
     unless @fort || @castle || @hall
-      warn { "Spawned outside of fortress, castle or siegable hall (at #{x} #{y} #{z})." }
+      error { "Spawned outside of fortress, castle or siegable hall (at #{x} #{y} #{z})." }
     end
   end
 
@@ -96,10 +96,8 @@ class L2DefenderInstance < L2Attackable
       debug { "New target selected: #{l2id}." }
       pc.target = self
     elsif interact
-      if auto_attackable?(pc) && !looks_dead?
-        if (pc.z - z).abs < 600
-          pc.set_intention(AI::ATTACK, self)
-        end
+      if auto_attackable?(pc) && !looks_dead? && (pc.z - z).abs < 600
+        pc.set_intention(AI::ATTACK, self)
       end
 
       if !auto_attackable?(pc) && !can_interact?(pc)

@@ -25,13 +25,13 @@ class L2Npc < L2Character
   @current_l_hand_id : Int32
   @current_r_hand_id : Int32
   @current_enchant : Int32
-  @current_collision_height : Float64
-  @current_collision_radius : Float64
 
   getter display_effect = 0
   setter auto_attackable : Bool = false
   property busy_message : String = ""
   property killing_blow_weapon : Int32 = 0
+  property collision_height : Float64
+  property collision_radius : Float64
   property! summoned_npcs : Interfaces::Map(Int32, L2Npc)?
   property! spawn : L2Spawn?
   property? busy : Bool = false
@@ -50,8 +50,8 @@ class L2Npc < L2Character
     else
       @current_enchant = template.weapon_enchant
     end
-    @current_collision_height = template.f_collision_height
-    @current_collision_radius = template.f_collision_radius
+    @collision_height = template.f_collision_height
+    @collision_radius = template.f_collision_radius
     self.flying = template.flying?
 
     template.skills.each_value do |skill|
@@ -145,14 +145,6 @@ class L2Npc < L2Character
         pc.send_packet(NpcInfo.new(self, pc))
       end
     end
-  end
-
-  def collision_height : Float64
-    @current_collision_height
-  end
-
-  def collision_radius : Float64
-    @current_collision_radius
   end
 
   def right_hand_item : Int32
@@ -521,8 +513,8 @@ class L2Npc < L2Character
     @current_l_hand_id = template.l_hand_id
     @current_r_hand_id = template.r_hand_id
     @current_enchant = template.weapon_enchant
-    @current_collision_height = template.f_collision_height
-    @current_collision_radius = template.f_collision_radius
+    @collision_height = template.f_collision_height
+    @collision_radius = template.f_collision_radius
 
     @killing_blow_weapon = killer.try &.active_weapon_item.try &.id || 0
     DecayTaskManager.add(self)
@@ -607,30 +599,29 @@ class L2Npc < L2Character
     false
   end
 
-  def l_hand_id=(@current_l_hand_id : Int32)
+  def l_hand_id=(current_l_hand_id : Int32)
+    @current_l_hand_id = current_l_hand_id
     update_abnormal_effect
   end
 
-  def r_hand_id=(@current_r_hand_id : Int32)
+  def r_hand_id=(current_r_hand_id : Int32)
+    @current_r_hand_id = current_r_hand_id
     update_abnormal_effect
   end
 
-  def set_hand_id(@current_l_hand_id : Int32, @current_r_hand_id : Int32)
+  def set_hand_id(current_l_hand_id : Int32, current_r_hand_id : Int32)
+    @current_l_hand_id = current_l_hand_id
+    @current_r_hand_id = current_r_hand_id
     update_abnormal_effect
   end
 
-  def enchant=(@current_enchant : Int32)
+  def enchant=(current_enchant : Int32)
+    @current_enchant = current_enchant
     update_abnormal_effect
   end
 
   def enchant_effect : Int32
     @current_enchant
-  end
-
-  def collision_height=(@current_collision_height : Float64)
-  end
-
-  def collision_radius=(@current_collision_radius : Float64)
   end
 
   def schedule_despawn(delay : Int64)
@@ -678,11 +669,7 @@ class L2Npc < L2Character
   end
 
   def set_charged_shot(shot : ShotType, charged : Bool)
-    if charged
-      @shots_mask |= shot.mask
-    else
-      @shots_mask &= ~shot.mask
-    end
+    charged ? (@shots_mask |= shot.mask) : (@shots_mask &= ~shot.mask)
   end
 
   def recharge_shots(physical : Bool, magical : Bool)
@@ -692,7 +679,7 @@ class L2Npc < L2Character
           return
         end
 
-        @soulshot_amount -= 1
+        @soulshot_amount &-= 1
         packet = MagicSkillUse.new(self, self, 2154, 1, 0, 0)
         Broadcast.to_self_and_known_players_in_radius(self, packet, 600)
         set_charged_shot(ShotType::SOULSHOTS, true)
@@ -703,7 +690,7 @@ class L2Npc < L2Character
           return
         end
 
-        @spiritshot_amount -= 1
+        @spiritshot_amount &-= 1
         packet = MagicSkillUse.new(self, self, 2061, 1, 0, 0)
         Broadcast.to_self_and_known_players_in_radius(self, packet, 600)
         set_charged_shot(ShotType::SPIRITSHOTS, true)
@@ -883,7 +870,7 @@ class L2Npc < L2Character
 
   def in_my_spawn_group?(npc : L2Npc) : Bool
     return false unless sp = spawn?
-    !npc.spawn?.nil? && !sp.name.nil? && sp.name == npc.spawn.name
+    !!npc.spawn? && !!sp.name && sp.name == npc.spawn.name
   end
 
   def stays_in_spawn_loc? : Bool
@@ -926,9 +913,9 @@ class L2Npc < L2Character
   def show_no_teach_html(pc : L2PcInstance)
     npc_id = id
     html = ""
-    if is_a? L2WarehouseInstance
+    if is_a?(L2WarehouseInstance)
       html = HtmCache.get_htm("data/html/warehouse/#{npc_id}-noteach.htm")
-    elsif is_a? L2TrainerInstance
+    elsif is_a?(L2TrainerInstance)
       html = HtmCache.get_htm("data/html/trainer/#{npc_id}-noteach.htm")
       html ||= HtmCache.get_htm("scripts/ai/npc/Trainers/HealerTrainer/#{npc_id}-noteach.html")
     end

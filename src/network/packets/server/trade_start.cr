@@ -1,7 +1,8 @@
 class Packets::Outgoing::TradeStart < Packets::Outgoing::AbstractItemPacket
   @item_list : Array(L2ItemInstance)
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     @item_list = @pc.inventory.get_available_items(true, true, false)
   end
 

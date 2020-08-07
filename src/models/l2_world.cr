@@ -72,7 +72,7 @@ module L2World
     info { "#{REGIONS_X}x#{REGIONS_Y} region grid initialized." }
   end
 
-  def world_regions : Slice(Array(L2WorldRegion))
+  def regions : Slice(Array(L2WorldRegion))
     WORLD_REGIONS
   end
 
@@ -96,7 +96,7 @@ module L2World
 
   def store_object(obj : L2Object)
     if OBJECTS.has_key?(obj.l2id)
-      warn { "#{obj} already stored with ID #{obj.l2id}." }
+      warn { "#{obj} already stored with id #{obj.l2id}." }
     else
       OBJECTS[obj.l2id] = obj
     end
@@ -210,7 +210,7 @@ module L2World
 
   def delete_visible_npc_spawns
     info "Deleting all visible NPCs."
-    WORLD_REGIONS.each &.each &.delete_visible_npc_spawns
+    WORLD_REGIONS.flat_each &.delete_visible_npc_spawns
     info "All visible NPCs deleted."
   end
 end

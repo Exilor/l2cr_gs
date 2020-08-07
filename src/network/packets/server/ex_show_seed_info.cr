@@ -1,7 +1,9 @@
 class Packets::Outgoing::ExShowSeedInfo < GameServerPacket
   @seeds : Array(SeedProduction)?
 
-  def initialize(@manor_id : Int32, next_period : Bool, @hide_buttons : Bool)
+  def initialize(manor_id : Int32, next_period : Bool, hide_buttons : Bool)
+    @manor_id = manor_id
+    @hide_buttons = hide_buttons
     unless next_period && !CastleManorManager.manor_approved?
       @seeds = CastleManorManager.get_seed_production(manor_id, next_period)
     end

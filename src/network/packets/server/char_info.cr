@@ -16,7 +16,8 @@ class Packets::Outgoing::CharInfo < GameServerPacket
   @fly_run_spd : Int32
   @fly_walk_spd : Int32
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     @l2id = pc.l2id
     if (vehicle = pc.vehicle) && (pos = pc.in_vehicle_position)
       @x, @y, @z = pos.xyz

@@ -2,7 +2,9 @@ class Packets::Outgoing::MoveToLocationInVehicle < GameServerPacket
   @pc_id : Int32
   @boat_id : Int32
 
-  def initialize(pc : L2PcInstance, @destination : Location, @origin : Location)
+  def initialize(pc : L2PcInstance, destination : Location, origin : Location)
+    @destination = destination
+    @origin = origin
     @pc_id = pc.l2id
     @boat_id = pc.boat!.l2id
   end

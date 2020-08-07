@@ -21,12 +21,12 @@ class L2PcTemplate < L2CharTemplate
     @class_id = ClassId[set.get_i32("classId")]
     @race = @class_id.race
 
-    @base_hp = Slice(Float32).new(Config.max_player_level + 1)
-    @base_mp = Slice(Float32).new(Config.max_player_level + 1)
-    @base_cp = Slice(Float32).new(Config.max_player_level + 1)
-    @_base_hp_reg = Slice(Float64).new(Config.max_player_level + 1)
-    @_base_mp_reg = Slice(Float64).new(Config.max_player_level + 1)
-    @base_cp_reg = Slice(Float64).new(Config.max_player_level + 1)
+    @base_hp = Slice(Float32).new(Config.max_player_level &+ 1)
+    @base_mp = Slice(Float32).new(Config.max_player_level &+ 1)
+    @base_cp = Slice(Float32).new(Config.max_player_level &+ 1)
+    @_base_hp_reg = Slice(Float64).new(Config.max_player_level &+ 1)
+    @_base_mp_reg = Slice(Float64).new(Config.max_player_level &+ 1)
+    @base_cp_reg = Slice(Float64).new(Config.max_player_level &+ 1)
 
     @base_slot_def = {
       Inventory::CHEST   => set.get_i32("basePDefchest", 0),

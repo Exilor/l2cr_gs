@@ -29,7 +29,7 @@ class Packets::Incoming::AllyLeave < GameClientPacket
     clan.ally_id = 0
     clan.ally_name = nil
     clan.change_ally_crest(0, true)
-    pen = Time.ms + (Config.alt_ally_join_days_when_leaved.to_i64 * 86400000)
+    pen = Time.ms + (Config.alt_ally_join_days_when_leaved.to_i64 * 86_400_000)
     clan.set_ally_penalty_expiry_time(pen, L2Clan::PENALTY_TYPE_CLAN_LEAVED)
     clan.update_clan_in_db
 

@@ -113,7 +113,7 @@ class L2CharacterAI < AI
     notify_event(THINK)
   end
 
-  private def on_intention_move_to(loc)
+  private def on_intention_move_to(loc : Location)
     if intention.rest? || @actor.all_skills_disabled? || @actor.casting_now?
       client_action_failed
       return

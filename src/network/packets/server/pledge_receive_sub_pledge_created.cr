@@ -16,7 +16,7 @@ class Packets::Outgoing::PledgeReceiveSubPledgeCreated < GameServerPacket
     if @subpledge.id == L2Clan::SUBUNIT_ACADEMY || leader_id == 0
       ""
     elsif @clan.get_clan_member(leader_id).nil?
-      warn "Subpledge leader #{leader_id} is missing from clan #{@clan}."
+      warn { "Subpledge leader #{leader_id} is missing from clan #{@clan}." }
       ""
     else
       @clan.get_clan_member(leader_id).not_nil!.name

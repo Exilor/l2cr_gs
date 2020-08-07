@@ -35,24 +35,24 @@ class EffectHandler::Sow < AbstractEffect
   end
 
   private def calc_success(pc, mob, seed)
-    min_level_seed = seed.level - 5
-    max_level_seed = seed.level + 5
+    min_level_seed = seed.level &- 5
+    max_level_seed = seed.level &+ 5
     pc_level = pc.level
     mob_level = mob.level
     basic_success = seed.alternative? ? 20 : 90
 
     if mob_level < min_level_seed
-      basic_success -= 5 * (min_level_seed - mob_level)
+      basic_success -= 5 * (min_level_seed &- mob_level)
     end
 
     if mob_level > max_level_seed
-      basic_success -= 5 * (mob_level - max_level_seed)
+      basic_success -= 5 * (mob_level &- max_level_seed)
     end
 
     diff = (pc_level - mob_level).abs
 
     if diff > 5
-      basic_success -= 5 * (diff - 5)
+      basic_success -= 5 * (diff &- 5)
     end
 
     Rnd.rand(99) < Math.max(basic_success, 1)

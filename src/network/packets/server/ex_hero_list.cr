@@ -1,6 +1,6 @@
 class Packets::Outgoing::ExHeroList < GameServerPacket
   def initialize
-    @hero_list = Hero.heroes # Int32 => StatsSet
+    @hero_list = Hero.heroes
   end
 
   private def write_impl

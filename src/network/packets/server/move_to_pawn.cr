@@ -8,13 +8,14 @@ class Packets::Outgoing::MoveToPawn < GameServerPacket
   @target_y : Int32
   @target_z : Int32
 
-  def initialize(char : L2Character, target : L2Character, @distance : Int32)
+  def initialize(char : L2Character, target : L2Character, distance : Int32)
     @char_id = char.l2id
     @target_id = target.l2id
     @x, @y, @z = char.xyz
     @target_x = target.x
     @target_y = target.y
     @target_z = target.z
+    @distance = distance
   end
 
   private def write_impl

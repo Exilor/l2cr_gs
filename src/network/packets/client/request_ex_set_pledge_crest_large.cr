@@ -15,7 +15,7 @@ class Packets::Incoming::RequestExSetPledgeCrestLarge < GameClientPacket
     return unless clan = pc.clan
     return unless data = @data
 
-    if @size < 0 || @size > 2176
+    unless @size.between?(0, 2176)
       pc.send_packet(SystemMessageId::WRONG_SIZE_UPLOADED_CREST)
       return
     end

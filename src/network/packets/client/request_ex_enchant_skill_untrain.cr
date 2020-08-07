@@ -37,7 +37,7 @@ class Packets::Incoming::RequestExEnchantSkillUntrain < GameClientPacket
     end
 
     unless skill = SkillData[@skill_id, @skill_lvl]?
-      debug { "No skill found for skill with ID #{@skill_id} and level #{@skill_lvl}." }
+      debug { "No skill found for skill with id #{@skill_id} and level #{@skill_lvl}." }
       return
     end
 
@@ -111,7 +111,7 @@ class Packets::Incoming::RequestExEnchantSkillUntrain < GameClientPacket
     pc.send_skill_list
     after_lvl = pc.get_skill_level(@skill_id)
     pc.send_packet(ExEnchantSkillInfo.new(@skill_id, after_lvl))
-    pc.send_packet(ExEnchantSkillInfoDetail.new(2, @skill_id, after_lvl - 1, pc))
+    pc.send_packet(ExEnchantSkillInfoDetail.new(2, @skill_id, after_lvl &- 1, pc))
     pc.update_shortcuts(@skill_id, after_lvl)
   end
 end

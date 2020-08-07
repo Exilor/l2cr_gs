@@ -4,7 +4,11 @@ class Packets::Outgoing::FlyToLocation < GameServerPacket
   @char_y : Int32
   @char_z : Int32
 
-  def initialize(char : L2Character, @dest_x : Int32, @dest_y : Int32, @dest_z : Int32, @fly_type : FlyType)
+  def initialize(char : L2Character, dest_x : Int32, dest_y : Int32, dest_z : Int32, fly_type : FlyType)
+    @dest_x = dest_x
+    @dest_y = dest_y
+    @dest_z = dest_z
+    @fly_type = fly_type
     @l2id = char.l2id
     @char_x, @char_y, @char_z = char.xyz
   end

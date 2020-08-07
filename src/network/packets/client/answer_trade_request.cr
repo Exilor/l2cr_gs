@@ -10,7 +10,8 @@ class Packets::Incoming::AnswerTradeRequest < GameClientPacket
 
     unless pc.access_level.allow_transaction?
       pc.send_packet(SystemMessageId::YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT)
-      return action_failed
+      action_failed
+      return
     end
 
     partner = pc.active_requester

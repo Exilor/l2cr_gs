@@ -190,7 +190,7 @@ class L2SepulcherNpcInstance < L2Npc
 
     @close_task.try &.cancel
     task = CloseNextDoor.new(door_id)
-    @close_task = ThreadPoolManager.schedule_effect(task, 10000)
+    @close_task = ThreadPoolManager.schedule_effect(task, 10_000)
     @spawn_next_mysterious_box_task.try &.cancel
     task = SpawnNextMysteriousBoxTask.new(npc_id)
     @spawn_next_mysterious_box_task = ThreadPoolManager.schedule_effect(task, 0)

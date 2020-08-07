@@ -1,7 +1,5 @@
 class Packets::Outgoing::PlaySound < GameServerPacket
-  def sound_name
-    @sound_file
-  end
+  getter sound_name
 
   def self.create_sound(name : String) : self
     new(name)
@@ -27,7 +25,8 @@ class Packets::Outgoing::PlaySound < GameServerPacket
     new(2, name, delay)
   end
 
-  def initialize(@sound_file : String)
+  def initialize(sound_name : String)
+    @sound_name = sound_name
     @type = 0
     @bind_to_object = 0
     @l2id = 0
@@ -37,7 +36,8 @@ class Packets::Outgoing::PlaySound < GameServerPacket
     @delay = 0
   end
 
-  def initialize(@sound_file : String, obj : L2Object?)
+  def initialize(sound_name : String, obj : L2Object?)
+    @sound_name = sound_name
     @type = 0
     if obj
       @bind_to_object = 1
@@ -55,7 +55,10 @@ class Packets::Outgoing::PlaySound < GameServerPacket
     @delay = 0
   end
 
-  def initialize(@type : Int32, @sound_file : String, @delay : Int32)
+  def initialize(type : Int32, sound_name : String, delay : Int32)
+    @type = type
+    @sound_name = sound_name
+    @delay = delay
     @bind_to_object = 0
     @l2id = 0
     @loc_x = 0
@@ -67,7 +70,7 @@ class Packets::Outgoing::PlaySound < GameServerPacket
     c 0x9e
 
     d @type
-    s @sound_file
+    s @sound_name
     d @bind_to_object
     d @l2id
     d @loc_x

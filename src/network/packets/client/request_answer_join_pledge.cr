@@ -23,7 +23,7 @@ class Packets::Incoming::RequestAnswerJoinPledge < GameClientPacket
       request_packet = requestor.request.request_packet
 
       unless request_packet.is_a?(RequestJoinPledge)
-        debug "request_packet is not a RequestJoinPledge"
+        debug { "request_packet is not a RequestJoinPledge, it's a #{request_packet.class}." }
         return
       end
 

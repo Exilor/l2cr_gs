@@ -9,18 +9,16 @@ class Packets::Incoming::RequestExTryToPutEnchantTargetItem < GameClientPacket
     return if @l2id == 0
     return unless pc = active_char
     if pc.enchanting?
-      debug { "#{pc} is already enchanting." }
+      debug { pc.name + " is already enchanting." }
       return
     end
 
-    item = pc.inventory.get_item_by_l2id(@l2id)
-    unless item
+    unless item = pc.inventory.get_item_by_l2id(@l2id)
       warn { "Item with l2id #{@l2id} not found in #{pc.name}'s inventory." }
       return
     end
 
-    scroll = pc.inventory.get_item_by_l2id(pc.active_enchant_item_id)
-    unless scroll
+    unless scroll = pc.inventory.get_item_by_l2id(pc.active_enchant_item_id)
       warn { "Enchant scroll with item_id #{pc.active_enchant_item_id} not found in #{pc.name}'s inventory." }
       return
     end

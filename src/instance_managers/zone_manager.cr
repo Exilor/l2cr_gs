@@ -20,6 +20,7 @@ module ZoneManager
     CLASS_ZONES.clear
     SPAWN_TERRITORIES.clear
     parse_datapack_directory("zones")
+
     info { "Loaded #{CLASS_ZONES.size} zone classes and #{size} zones in #{timer} s." }
     timer.start
     parse_datapack_directory("zones/npcSpawnTerritories")
@@ -36,7 +37,7 @@ module ZoneManager
       end
     end
 
-    L2World.world_regions.each do |reg|
+    L2World.regions.each do |reg|
       reg.each do |r|
         r.zones.clear
         count &+= 1
@@ -190,7 +191,7 @@ module ZoneManager
 
         add_zone(zone_id, temp)
 
-        L2World.world_regions.each_with_index do |regions, x|
+        L2World.regions.each_with_index do |regions, x|
           regions.each_with_index do |reg, y|
             ax = (x - L2World::OFFSET_X) << L2World::SHIFT_BY
             bx = (x + 1 - L2World::OFFSET_X) << L2World::SHIFT_BY
@@ -227,7 +228,7 @@ module ZoneManager
   end
 
   def get_all_zones(zone_type : T.class, & : T ->) forall T
-    CLASS_ZONES[zone_type].each_value { |zone| yield zone.as(T) }
+    CLASS_ZONES[zone_type].each_value { |zone| yield(zone.as(T)) }
   end
 
   def get_zone_by_id(id : Int32) : L2ZoneType?
@@ -255,7 +256,7 @@ module ZoneManager
   end
 
   def get_zones(obj : L2Object, & : L2ZoneType ->) : Nil
-    get_zones(*obj.xyz) { |zone| yield zone }
+    get_zones(*obj.xyz) { |zone| yield(zone) }
   end
 
   def get_zones(x : Int32, y : Int32, & : L2ZoneType ->) : Nil

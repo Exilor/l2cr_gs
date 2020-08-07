@@ -18,7 +18,9 @@ class Packets::Outgoing::PetInfo < GameServerPacket
   @max_fed = 0
   @cur_fed = 0
 
-  def initialize(@summon : L2Summon, @val : Int32)
+  def initialize(summon : L2Summon, val : Int32)
+    @summon = summon
+    @val = val
     @summoned = summon.show_summon_animation?
     @x, @y, @z = summon.xyz
     @heading = summon.heading

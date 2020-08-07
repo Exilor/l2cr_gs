@@ -4,7 +4,7 @@ module AdminCommandHandler::AdminInstanceZone
 
   def use_admin_command(command, pc)
     target = pc.target.try &.name || "no-target"
-    GMAudit.log(pc.name, command, target, "")
+    GMAudit.log(pc, command, target, "")
 
     if command.starts_with?("admin_instancezone_clear")
       begin

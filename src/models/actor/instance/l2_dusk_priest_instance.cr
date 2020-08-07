@@ -28,7 +28,7 @@ class L2DuskPriestInstance < L2SignsPriestInstance
       elsif recruit_period == 0
         file_name += "dusk_priest_6.htm"
       elsif seal_validation_period
-        if comp_winner = SevenSigns::CABAL_DUSK
+        if comp_winner == SevenSigns::CABAL_DUSK
           if comp_winner != gnosis_owner
             file_name += "dusk_priest_2c.htm"
           else

@@ -22,7 +22,7 @@ class Packets::Incoming::RequestPledgeReorganizeMember < GameClientPacket
     end
 
     unless member1 = clan.get_clan_member(@member_name)
-      debug { "#{@member_name} not found in #{clan}." }
+      debug { "#{@member_name} not found in clan #{clan.name}." }
       return
     end
 
@@ -31,7 +31,7 @@ class Packets::Incoming::RequestPledgeReorganizeMember < GameClientPacket
     end
 
     unless member2 = clan.get_clan_member(@selected_member)
-      debug { "#{@selected_member} not found in #{clan}." }
+      debug { "#{@selected_member} not found in clan #{clan.name}." }
       return
     end
 

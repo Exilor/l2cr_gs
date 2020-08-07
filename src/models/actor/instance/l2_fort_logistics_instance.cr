@@ -93,7 +93,7 @@ class L2FortLogisticsInstance < L2MerchantInstance
         else
           level = fort.supply_lvl
           if level > 0
-            box_template = NpcData[SUPPLY_BOX_IDS[level - 1]]
+            box_template = NpcData[SUPPLY_BOX_IDS[level &- 1]]
             box = L2MonsterInstance.new(box_template)
             box.heal!
             box.heading = 0

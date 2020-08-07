@@ -164,7 +164,7 @@ class L2ServitorInstance < L2Summon
 
   def call
     used_time = 5000 # should be more if in combat?
-    @life_time_remaining -= used_time
+    @life_time_remaining &-= used_time
     if dead? || !visible?
       @life_task.try &.cancel
       return
@@ -177,7 +177,7 @@ class L2ServitorInstance < L2Summon
     end
 
     if @consume_item_interval > 0
-      @consume_item_interval_remaining -= used_time
+      @consume_item_interval_remaining &-= used_time
       if @consume_item_interval_remaining <= 0 && item_consume.count > 0
         if item_consume.id > 0 && alive?
           if destroy_item_by_item_id("Consume", item_consume.id, item_consume.count, self, false)
