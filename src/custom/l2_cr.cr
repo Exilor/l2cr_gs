@@ -93,16 +93,6 @@ module L2Cr
         end
       when "uptime"
         puts Time.local - GameServer.start_time
-      when "thatzone"
-        L2World.regions.each do |ary|
-          ary.each do |reg|
-            reg.zones.each do |zone|
-              if zone.name == "area_dehydration"
-                p zone.zone
-              end
-            end
-          end
-        end
       else
         return "unknown command '#{cmd}'"
       end

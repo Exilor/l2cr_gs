@@ -1007,7 +1007,8 @@ module TerritoryWarManager
     property! owner_clan : L2Clan?
     property! hq : L2SiegeFlagInstance?
 
-    def initialize(@castle_id : Int32)
+    def initialize(castle_id : Int32)
+      @castle_id = castle_id
       @territory_id = castle_id &+ 80
     end
 

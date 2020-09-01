@@ -1,14 +1,17 @@
-require "./condition_listener"
-
 abstract class Condition
-  include ConditionListener
   include Packets::Outgoing
+
+  private module Listener
+    abstract def notify_changed
+  end
+
+  include Listener
 
   private alias SystemMessage = Packets::Outgoing::SystemMessage
 
   @result = false
 
-  getter listener : ConditionListener?
+  getter listener : Listener?
   getter? add_name = false
   property message : String?
   property message_id : Int32 = 0
@@ -17,7 +20,7 @@ abstract class Condition
     @add_name = true
   end
 
-  def listener=(listener : ConditionListener?)
+  def listener=(listener : Listener?)
     @listener = listener
     notify_changed
   end

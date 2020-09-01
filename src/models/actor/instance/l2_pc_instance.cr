@@ -293,9 +293,11 @@ class L2PcInstance < L2Playable
   property? charm_of_courage : Bool = false
   property? has_pet_items : Bool = false # L2J: _petItems, havePetInvItems()
 
-  def initialize(l2id : Int32, class_id : Int32, @account_name : String, @appearance : PcAppearance)
+  def initialize(l2id : Int32, class_id : Int32, account_name : String, appearance : PcAppearance)
     super(l2id, PlayerTemplateData[class_id])
 
+    @account_name = account_name
+    @appearance = appearance
     @appearance.owner = self
 
     ai # initializes AI
@@ -2020,10 +2022,10 @@ class L2PcInstance < L2Playable
       if drop_percent > 0 && Rnd.rand(100) < drop_percent
         drop_count = 0
         item_drop_percent = 0
-        inventory.items.each do |i|
+        inventory.items.safe_each do |i|
           if i.shadow_item? || i.time_limited_item? || !i.droppable? ||
             i.id == Inventory::ADENA_ID || i.template.type_2 == ItemType2::QUEST ||
-            ((smn = summon) && smn.control_l2id == i.id) ||
+            ((smn = summon) && smn.control_l2id == i.l2id) ||
             Config.karma_list_nondroppable_items.includes?(i.id) ||
             Config.karma_list_nondroppable_pet_items.includes?(i.id)
 
@@ -4949,7 +4951,7 @@ class L2PcInstance < L2Playable
   end
 
   def account_access_level=(level : Int32)
-    LoginServerClient.instance.send_access_level(account_name, level)
+    LoginServerThread.instance.send_access_level(account_name, level)
   end
 
   def access_level : AccessLevel

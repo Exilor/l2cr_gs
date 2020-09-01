@@ -15,7 +15,7 @@ class L2SummonAI < L2PlayableAI
     @start_follow = summon.follow_status
   end
 
-  private def on_intention_attack(target)
+  private def on_intention_attack(target : L2Character?)
     return unless target
 
     if Config.pathfinding > 0
@@ -60,7 +60,7 @@ class L2SummonAI < L2PlayableAI
   end
 
   private def think_attack
-    if check_target_lost_or_dead(attack_target?)
+    if check_target_lost_or_dead(attack_target)
       self.attack_target = nil
       return
     end
@@ -136,12 +136,12 @@ class L2SummonAI < L2PlayableAI
     end
   end
 
-  private def on_event_attacked(attacker)
+  private def on_event_attacked(attacker : L2Character?)
     super
     avoid_attack(attacker)
   end
 
-  private def on_event_evaded(attacker)
+  private def on_event_evaded(attacker : L2Character?)
     super
     avoid_attack(attacker)
   end
@@ -196,7 +196,7 @@ class L2SummonAI < L2PlayableAI
   end
 
   private def on_intention_cast(skill, target)
-    @last_attack = intention.attack? ? attack_target? : nil
+    @last_attack = intention.attack? ? attack_target : nil
     super
   end
 

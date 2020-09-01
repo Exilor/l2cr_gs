@@ -745,7 +745,7 @@ class SevenSignsFestival
         dat["festivalId"] = festival_id
         dat["cabal"] = cabal
         dat["cycle"] = festival_cycle
-        dat["date"] = rs.get_i64(:"date").to_s
+        dat["date"] = rs.get_i64(:"date")
         dat["score"] = rs.get_i32(:"score")
         dat["members"] = rs.get_string(:"members")
         if cabal == "dawn"
@@ -1414,7 +1414,7 @@ class SevenSignsFestival
         end
 
         pc.intention = AI::IDLE
-        pc.tele_to_location(Location.new(x, y, @start_location.z), true)
+        pc.tele_to_location(XYZ.new(x, y, @start_location.z), true)
         pc.stop_all_effects_except_those_that_last_through_death
         if offerings = pc.inventory.get_item_by_item_id(FESTIVAL_OFFERING_ID)
           pc.destroy_item("SevenSigns", offerings, nil, true)
@@ -1579,7 +1579,7 @@ class SevenSignsFestival
       end
 
       pc.intention = AI::IDLE
-      loc = Location.new(orig_pos.x, orig_pos.y, orig_pos.z)
+      loc = XYZ.new(orig_pos.x, orig_pos.y, orig_pos.z)
       pc.tele_to_location(loc, true)
       pc.send_message("You have been removed from the festival arena.")
     end
@@ -1589,7 +1589,8 @@ class SevenSignsFestival
     getter x, y, z, npc_id
     getter heading : Int32
 
-    def initialize(@x : Int32, @y : Int32, @z : Int32, heading : Int32)
+    def initialize(x : Int32, y : Int32, z : Int32, heading : Int32)
+      @x, @y, @z = x, y, z
       @heading = heading < 0 ? Rnd.u16.to_i32 : heading
       @npc_id = -1
     end

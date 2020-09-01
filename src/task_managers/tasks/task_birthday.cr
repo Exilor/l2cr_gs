@@ -19,7 +19,8 @@ class TaskBirthday < Task
     gift_count = 0
 
     begin
-      GameDB.each(SELECT_PENDING_BIRTHDAY_GIFTS, Time.s_to_ms(last_activation)) do |rs|
+      time = Time.s_to_ms(last_activation)
+      GameDB.each(SELECT_PENDING_BIRTHDAY_GIFTS, time) do |rs|
         name = rs.get_string(:"char_name")
         age = rs.get_i32(:"age")
         id = rs.get_i32(:"charId")

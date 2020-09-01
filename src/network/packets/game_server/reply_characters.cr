@@ -1,4 +1,4 @@
-class Packets::Outgoing::ReplyCharacters < MMO::OutgoingPacket(LoginServerClient)
+class Packets::Outgoing::ReplyCharacters < MMO::OutgoingPacket(LoginServerThread)
   initializer account : String, chars : Int32, to_delete : Array(Int64)
 
   def write

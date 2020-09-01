@@ -66,8 +66,9 @@ class L2PetData
   class L2PetSkillLearn < SkillHolder
     getter min_level
 
-    def initialize(id : Int32, lvl : Int32, @min_level : Int32)
+    def initialize(id : Int32, lvl : Int32, min_level : Int32)
       super(id, lvl)
+      @min_level = min_level
     end
   end
 end

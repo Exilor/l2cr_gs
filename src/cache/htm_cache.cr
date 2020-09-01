@@ -53,7 +53,7 @@ module HtmCache
       return
     end
 
-    rel_path = path.from(@@root.size + 1)
+    rel_path = path.from(@@root.size &+ 1)
     content = file.gets_to_end.scrub
     content = content.gsub(/(?:\s?)<!--.*?-->/, "")
 

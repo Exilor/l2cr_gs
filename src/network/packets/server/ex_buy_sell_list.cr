@@ -2,7 +2,8 @@ class Packets::Outgoing::ExBuySellList < Packets::Outgoing::AbstractItemPacket
   @sell_list : Array(L2ItemInstance)
   @refund_list : Interfaces::Array(L2ItemInstance)?
 
-  def initialize(pc : L2PcInstance, @done : Bool)
+  def initialize(pc : L2PcInstance, done : Bool)
+    @done = done
     @sell_list = pc.inventory.get_available_items(false, false, false)
     if pc.has_refund?
       @refund_list = pc.refund.items

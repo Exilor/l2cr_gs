@@ -63,9 +63,7 @@ class L2Attackable < L2Npc
     super.as(AttackableKnownList)
   end
 
-  def use_magic(skill : Skill?)
-    return unless skill
-
+  def use_magic(skill : Skill)
     if looks_dead? || skill.passive? || casting_now? || skill_disabled?(skill)
       return
     end
@@ -490,7 +488,7 @@ class L2Attackable < L2Npc
     end
   end
 
-  def hate_list
+  def hate_list : Array(L2Character)?
     if @aggro_list.empty? || looks_dead?
       return
     end

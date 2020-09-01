@@ -63,7 +63,7 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
   end
 
   def run_impl
-    if pc = active_char
+    if pc = client.active_char
       pc.clear_html_actions(scope)
       return if @disable_validation
       Util.build_html_action_cache(pc, scope, @npc_l2id, @html)

@@ -22,6 +22,14 @@ class CharKnownList < ObjectKnownList
   def add_known_object(object : L2Object) : Bool
     return false unless super
 
+    if object.is_a?(L2Character)
+      evt = OnCreatureSee.new(active_char, object)
+      term = EventDispatcher.notify(evt, TerminateReturn)
+      if term && term.terminate
+        return false
+      end
+    end
+
     if object.is_a?(L2PcInstance)
       known_players[object.l2id] = object
       known_relations[object.l2id] = -1

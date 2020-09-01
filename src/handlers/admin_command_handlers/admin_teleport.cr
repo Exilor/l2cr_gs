@@ -104,7 +104,6 @@ module AdminCommandHandler::AdminTeleport
         show_teleport_window(pc)
       rescue
       end
-
     when /\Aadmin_sendhome.*/
       st = command.split
       st.shift

@@ -1,4 +1,4 @@
-class Packets::Outgoing::PlayerLogout < MMO::OutgoingPacket(LoginServerClient)
+class Packets::Outgoing::PlayerLogout < MMO::OutgoingPacket(LoginServerThread)
   initializer account : String
 
   def write

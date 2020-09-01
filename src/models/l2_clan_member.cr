@@ -64,9 +64,11 @@ class L2ClanMember
 
     if player
       @clan.add_skill_effects(player)
+
       if @clan.level > 3 && player.clan_leader?
         SiegeManager.add_siege_skills(player)
       end
+
       if player.clan_leader?
         @clan.leader = self
       end
@@ -77,8 +79,7 @@ class L2ClanMember
 
   def online? : Bool
     return false unless (pc = @player_instance) && pc.online?
-    return false if pc.in_offline_mode?
-    true
+    !pc.in_offline_mode?
   end
 
   def class_id : Int32

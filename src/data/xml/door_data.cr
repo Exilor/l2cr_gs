@@ -113,7 +113,7 @@ module DoorData
         j = i &+ 1 < 4 ? i &+ 1 : 0
         denominator = ((ty - y) * (door.get_x(i) - door.get_x(j))) - ((tx - x) * (door.get_y(i) - door.get_y(j)))
         next if denominator == 0
-
+        tx, ty, tz = tx.to_i64, ty.to_i64, tz.to_i64 # prevents overflow
         multiplier1 = (((door.get_x(j) - door.get_x(i)) * (y - door.get_y(i))) - ((door.get_y(j) - door.get_y(i)) * (x - door.get_x(i)))).fdiv(denominator)
         multiplier2 = (((tx - x) * (y - door.get_y(i))) - ((ty - y) * (x - door.get_x(i)))).fdiv(denominator)
         if multiplier1.between?(0, 1) && multiplier2.between?(0, 1)

@@ -247,7 +247,7 @@ class L2Npc < L2Character
 
   def fort : Fort
     unless fort = fort?
-      raise "No fort found for #{self}"
+      raise "This NPC has no fort."
     end
 
     fort
@@ -277,7 +277,6 @@ class L2Npc < L2Character
   end
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
-    # debug "L2Npc#on_bypass_feedback(#{pc}, #{command.inspect})"
     if busy? && busy_message.size > 0
       pc.action_failed
       html = NpcHtmlMessage.new(l2id)
@@ -288,10 +287,8 @@ class L2Npc < L2Character
       pc.send_packet(html)
     else
       if handler = BypassHandler[command]
-        debug { "#{handler} will handle '#{command}'." }
         handler.use_bypass(command, pc, self)
       else
-        warn { "Unknown NPC bypass '#{command}'." }
         if pc.gm?
           pc.send_message("Unknown NPC bypass '#{command}' (Npc id: #{id}).")
         end

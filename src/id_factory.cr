@@ -71,7 +71,7 @@ module IdFactory
     temp = [] of Int32
     sql = String.build do |io|
       ID_EXTRACTS.each do |table, column|
-        io << "SELECT " << column << " FROM " << table << " UNION "
+        io.print("SELECT ", column, " FROM ", table, " UNION ")
       end
     end
     sql = sql.chomp("UNION ")
@@ -196,6 +196,3 @@ module IdFactory
     error e
   end
 end
-
-
-

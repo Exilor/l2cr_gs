@@ -162,7 +162,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
       ThreadPoolManager.schedule_general(->set_final_attackers_task, @rainbow.not_nil!.next_siege_time)
       set_registration_end_string(@rainbow.not_nil!.next_siege_time + Time.ms - 3_600_000)
       # Teleport out of the arenas is made 2 mins after game ends
-      ThreadPoolManager.schedule_general(TeleportBack, 120000)
+      ThreadPoolManager.schedule_general(TeleportBack, 120_000)
     end
   end
 
@@ -413,7 +413,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
     end
 
     clan = player.clan
-    if clan.nil? || !ACCEPTED_CLANS.include?(clan)
+    if clan.nil? || !ACCEPTED_CLANS.includes?(clan)
       return
     end
 

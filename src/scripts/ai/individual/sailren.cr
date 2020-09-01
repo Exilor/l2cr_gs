@@ -73,7 +73,7 @@ class Scripts::Sailren < AbstractNpcAI
         end
         start_quest_timer("SPAWN_VELOCIRAPTOR", 60000, nil, nil)
         start_quest_timer("TIME_OUT", MAX_TIME * 1000, nil, nil)
-        start_quest_timer("CHECK_ATTACK", 120000, nil, nil)
+        start_quest_timer("CHECK_ATTACK", 120_000, nil, nil)
       end
 
       return html
@@ -140,11 +140,11 @@ class Scripts::Sailren < AbstractNpcAI
         end
       end
     when "CHECK_ATTACK"
-      if @zone.players_inside.any? && @last_attack + 600000 < Time.ms
+      if @zone.players_inside.any? && @last_attack + 600_000 < Time.ms
         cancel_quest_timer("TIME_OUT", nil, nil)
         notify_event("TIME_OUT", nil, nil)
       else
-        start_quest_timer("CHECK_ATTACK", 120000, nil, nil)
+        start_quest_timer("CHECK_ATTACK", 120_000, nil, nil)
       end
     end
 

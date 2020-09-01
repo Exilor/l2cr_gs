@@ -457,7 +457,7 @@ class PcInventory < Inventory
   end
 
   def block_all_items
-    set_inventory_block(Array.new(ItemTable.array_size + 2, 0), 1)
+    set_inventory_block(Array.new(ItemTable.array_size &+ 2, 0), 1)
   end
 
   def can_manipulate_with_item_id?(id : Int) : Bool
@@ -466,7 +466,7 @@ class PcInventory < Inventory
   end
 
   def get_size(quest : Bool) : Int32
-    quest ? @quest_slots : size - @quest_slots
+    quest ? @quest_slots : size &- @quest_slots
   end
 
   def apply_item_skills

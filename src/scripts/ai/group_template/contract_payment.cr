@@ -23,7 +23,7 @@ class Scripts::ContractPayment < AbstractNpcAI
       end
 
       if pc.effect_list.get_buff_info_by_skill_id(CONTRACT_PAYMENT_ID).nil?
-        attack_target = smn.ai.attack_target?
+        attack_target = smn.ai.attack_target
         skill = get_skill(smn)
         old_target = smn.target
         smn.target = pc

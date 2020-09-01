@@ -66,8 +66,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
   end
 
   private def get_skill_id_by_npc_id(npc_id)
-    diff = npc_id - EYE_IDS[0]
-    diff *= 2
+    diff = (npc_id - EYE_IDS[0]) * 2
     SKILL_ID + diff
   end
 
@@ -93,11 +92,8 @@ class Scripts::DenOfEvil < AbstractNpcAI
   end
 
   def on_kill(npc, killer, is_summon)
-    ThreadPoolManager.schedule_ai(-> {
-        add_spawn(EYE_IDS.sample(random: Rnd), npc.location, false, 0)
-      },
-      15000
-    )
+    task = -> { add_spawn(EYE_IDS.sample(random: Rnd), npc.location, false, 0) }
+    ThreadPoolManager.schedule_ai(task, 15_000)
     unless zone = ZoneManager.get_zone(npc, L2EffectZone)
       warn { "NPC #{npc} killed in a missing zone." }
       return
@@ -135,16 +131,18 @@ class Scripts::DenOfEvil < AbstractNpcAI
             if char.npc?
               # respawn eye
               if EYE_IDS.bincludes?(char.id)
-                ThreadPoolManager.schedule_ai(-> {
-                    @owner.add_spawn(EYE_IDS.sample(random: Rnd), char.location, false, 0)
-                  },
-                  15_000
-                )
+                task = -> do
+                  @owner.add_spawn(
+                    EYE_IDS.sample(random: Rnd), char.location, false, 0
+                  )
+                end
+                ThreadPoolManager.schedule_ai(task, 15_000)
               end
             end
           end
         end
       end
+
       i = SKILL_ID
       while i <= SKILL_ID + 4
         @zone.remove_skill(i)

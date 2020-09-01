@@ -1,4 +1,4 @@
-class LoginServerClient
+class LoginServerThread
   include Singleton
   include Cancellable
   include Loggable

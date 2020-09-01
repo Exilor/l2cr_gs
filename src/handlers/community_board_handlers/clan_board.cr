@@ -70,7 +70,7 @@ module CommunityBoardHandler::ClanBoard
       pc.send_packet(SystemMessageId::NO_CB_IN_MY_CLAN)
       parse_command("_bbsclan_clanlist", pc)
     else
-      parts = Array(String | Int32).new
+      parts = String::Builder.new(2000)
       parts << "<html><body><br><br><table border=0 width=610><tr><td width=10></td><td width=600 align=left><a action=\"bypass _bbshome\">HOME</a> &gt; <a action=\"bypass _bbsclan_clanlist\"> CLAN COMMUNITY </a>  &gt; <a action=\"bypass _bbsclan_clanhome;"
       parts << clan_id << "\"> &amp;$802; </a></td></tr></table>"
 
@@ -84,7 +84,7 @@ module CommunityBoardHandler::ClanBoard
 
         parts << "</td></tr></table><img src=\"L2UI.Squaregray\" width=\"610\" height=\"1\"><br> <br><table width=610 border=0 cellspacing=2 cellpadding=0><tr><td>Edit Notice: </td></tr><tr><td height=5></td></tr><tr><td><MultiEdit var =\"Content\" width=610 height=100></td></tr></table><br><table width=610 border=0 cellspacing=0 cellpadding=0><tr><td height=5></td></tr><tr><td align=center FIXWIDTH=65><button value=\"&$140;\" action=\"Write Notice Set _ Content Content Content\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td><td align=center FIXWIDTH=45></td><td align=center FIXWIDTH=500></td></tr></table></center></body></html>"
 
-        Util.send_cb_html(pc, parts.join, clan.notice)
+        Util.send_cb_html(pc, parts.to_s, clan.notice)
       else
         parts << "<img src=\"L2UI.squareblank\" width=\"1\" height=\"10\"><center><table border=0 cellspacing=0 cellpadding=0><tr><td>You are not your clan's leader, and therefore cannot change the clan notice</td></tr></table>"
         if (clan = pc.clan.not_nil!).notice_enabled?
@@ -93,7 +93,7 @@ module CommunityBoardHandler::ClanBoard
           parts << "</td><td fixqqwidth=5></td></tr></table>"
         end
         parts << "</center></body></html>"
-        CommunityBoardHandler.separate_and_send(parts.join, pc)
+        CommunityBoardHandler.separate_and_send(parts.to_s, pc)
       end
     end
   end
@@ -109,11 +109,11 @@ module CommunityBoardHandler::ClanBoard
       io << "\">[GO TO MY CLAN]</a>&nbsp;&nbsp;</td><td fixWIDTH=5></td></tr><tr><td height=10></td></tr></table><br><table border=0 cellspacing=0 cellpadding=2 bgcolor=5A5A5A width=610><tr><td FIXWIDTH=5></td><td FIXWIDTH=200 align=center>CLAN NAME</td><td FIXWIDTH=200 align=center>CLAN LEADER</td><td FIXWIDTH=100 align=center>CLAN LEVEL</td><td FIXWIDTH=100 align=center>CLAN MEMBERS</td><td FIXWIDTH=5></td></tr></table><img src=\"L2UI.Squareblank\" width=\"1\" height=\"5\">"
 
       ClanTable.clans.each_with_index do |clan, i|
-        if i > ((index &+ 1) &* 7)
+        if i > (index &+ 1) &* 7
           break
         end
 
-        if i >= ((index &- 1) &* 7)
+        if i >= (index &- 1) &* 7
           io << "<img src=\"L2UI.SquareBlank\" width=\"610\" height=\"3\"><table border=0 cellspacing=0 cellpadding=0 width=610><tr> <td FIXWIDTH=5></td><td FIXWIDTH=200 align=center><a action=\"bypass _bbsclan_clanhome;"
           io << clan.id
           io << "\">"

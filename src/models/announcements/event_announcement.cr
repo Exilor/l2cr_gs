@@ -3,12 +3,10 @@ require "./i_announcement"
 class EventAnnouncement
   include IAnnouncement
 
-  getter id : Int32
+  getter id : Int32 = IdFactory.next
   property content : String
 
-  def initialize(@range : DateRange, @content : String)
-    @id = IdFactory.next
-  end
+  initializer range : DateRange, content : String
 
   def type : AnnouncementType
     AnnouncementType::EVENT

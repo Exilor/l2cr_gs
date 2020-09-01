@@ -7,9 +7,7 @@ module AttackStances
     ThreadPoolManager.schedule_ai_at_fixed_rate(self, 0, 1000)
   end
 
-  def <<(char : L2Character?) : self
-    return self unless char
-
+  def <<(char : L2Character) : self
     char = char.acting_player.not_nil! if char.playable?
 
     if char.is_a?(L2PcInstance)
@@ -25,8 +23,7 @@ module AttackStances
     self
   end
 
-  def delete(char : L2Character?)
-    return unless char
+  def delete(char : L2Character)
     char = char.acting_player if char.summon?
     TASKS.delete(char)
   end

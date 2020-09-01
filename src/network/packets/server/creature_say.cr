@@ -8,8 +8,7 @@ class Packets::Outgoing::CreatureSay < GameServerPacket
 
   private getter(params) { Array(String).new }
 
-  def initialize(@l2id : Int32, @text_type : Int32, @char_name : String, @text : String)
-  end
+  initializer l2id : Int32, text_type : Int32, char_name : String, text : String
 
   def initialize(@l2id : Int32, @text_type : Int32, @char_id : Int32, npc_string : NpcString)
     @npc_string = npc_string.id

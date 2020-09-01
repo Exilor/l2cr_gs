@@ -94,7 +94,7 @@ class Scripts::FortressOfTheDead < ClanHallSiegeEngine
 
     if hours_left < 0 || hours_left > 6
       cancel_siege_task
-      time = (24 - hours_left).to_i64 * 10 * 60000
+      time = (24 - hours_left).to_i64 * 10 * 60_000
       @siege_task = ThreadPoolManager.schedule_general(->siege_starts_task, time)
     else
       super

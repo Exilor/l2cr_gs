@@ -11,7 +11,7 @@ module PunishmentHandler::BanHandler
       end
     when PunishmentAffect::ACCOUNT
       account = task.key.to_s
-      if client = LoginServerClient.instance.get_client(account)
+      if client = LoginServerThread.instance.get_client(account)
         if pc = client.active_char
           apply_to_player(pc)
         else

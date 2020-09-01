@@ -377,7 +377,8 @@ class CharEffectList
   end
 
   def empty? : Bool
-    none?
+    !has_buffs? && !has_triggered? && !has_dances? && !has_debuffs? &&
+    !has_toggles?
   end
 
   def has_buffs? : Bool
@@ -501,7 +502,6 @@ class CharEffectList
         unless info.in_use?
           next
         end
-
 
         if info.skill.abnormal_type.summon_condition?
           next

@@ -61,8 +61,7 @@ class Quest < AbstractScript
   end
 
   def get_quest_state(pc : L2PcInstance, init_if_none : Bool) : QuestState?
-    qs = pc.get_quest_state(@name)
-    qs || (!init_if_none ? qs : new_quest_state(pc))
+    pc.get_quest_state(@name) || (new_quest_state(pc) if init_if_none)
   end
 
   def get_quest_state!(pc : L2PcInstance, init_if_none : Bool) : QuestState
@@ -326,13 +325,9 @@ class Quest < AbstractScript
     end
     res : String? = on_see_creature(npc, creature, is_summon)
   rescue e
-    if pc
-      show_error(pc, e)
-    end
+    show_error(pc, e) if pc
   else
-    if pc
-      show_result(pc, res)
-    end
+    show_result(pc, res) if pc
   end
 
   def notify_event_received(event_name, sender, receiver, reference)
@@ -345,26 +340,18 @@ class Quest < AbstractScript
     pc = char.acting_player
     res : String? = on_enter_zone(char, zone)
   rescue e
-    if pc
-      show_error(pc, e)
-    end
+    show_error(pc, e) if pc
   else
-    if pc
-      show_result(pc, res)
-    end
+    show_result(pc, res) if pc
   end
 
   def notify_exit_zone(char, zone)
     pc = char.acting_player
     res : String? = on_exit_zone(char, zone)
   rescue e
-    if pc
-      show_error(pc, e)
-    end
+    show_error(pc, e) if pc
   else
-    if pc
-      show_result(pc, res)
-    end
+    show_result(pc, res) if pc
   end
 
   def notify_olympiad_match(winner, loser, type)
@@ -568,11 +555,7 @@ class Quest < AbstractScript
     false
   end
 
-  def show_result(pc : L2PcInstance?, res : String?) : Bool
-    show_result(pc, res, nil)
-  end
-
-  def show_result(pc : L2PcInstance?, res : String?, npc : L2Npc?) : Bool
+  def show_result(pc : L2PcInstance?, res : String?, npc : L2Npc? = nil) : Bool
     return true unless pc && res && !res.empty?
 
     if res.ends_with?(".htm", ".html")
@@ -630,6 +613,7 @@ class Quest < AbstractScript
 
           next
         end
+
         qs.set_internal(var, value)
       end
     rescue e
@@ -891,11 +875,7 @@ class Quest < AbstractScript
     end
   end
 
-  def show_page(pc : L2PcInstance, file_name : String)
-    show_page(pc, file_name, false)
-  end
-
-  def show_page(pc : L2PcInstance, file_name : String, has_quest : Bool)
+  def show_page(pc : L2PcInstance, file_name : String, has_quest : Bool = false)
     if content = get_htm(pc, file_name)
       if has_quest && (npc = pc.last_folk_npc)
         content = content.gsub("%objectId%") { npc.l2id }
@@ -964,17 +944,15 @@ class Quest < AbstractScript
       path = "data/scripts/#{description.downcase}/#{name}/#{file_name}"
     end
     # debug "First try: #{path.inspect}."
-    content = HtmCache.get_htm(path)
-    unless content
+
+    unless content = HtmCache.get_htm(path)
       path = "data/scripts/#{description}/#{name}/#{file_name}"
       # debug "Second try: #{path.inspect}."
-      content = HtmCache.get_htm(path)
-    end
-
-    unless content
-      path = "data/scripts/quests/#{name}/#{file_name}"
-      # debug "Third try: #{path.inspect}."
-      content = HtmCache.get_htm_force(path)
+      unless content = HtmCache.get_htm(path)
+        path = "data/scripts/quests/#{name}/#{file_name}"
+        # debug "Third try: #{path.inspect}."
+        content = HtmCache.get_htm_force(path)
+      end
     end
 
     content
@@ -1014,7 +992,6 @@ class Quest < AbstractScript
 
   def start_conditions : Hash(Proc(L2PcInstance, Bool), String)
     @start_condition || sync do
-      # parentheses are a stopgap for an error introduced in 0.35
       @start_condition ||= {} of L2PcInstance -> Bool => String
     end
   end
@@ -1087,18 +1064,15 @@ class Quest < AbstractScript
     DEFAULT_ALREADY_COMPLETED_MSG
   end
 
-  def get_random_party_member(pc : L2PcInstance?) : L2PcInstance?
-    return unless pc
-    return pc unless party = pc.party
-    return pc if party.members.empty?
-    party.members.sample(random: Rnd)
+  def get_random_party_member(pc : L2PcInstance) : L2PcInstance?
+    pc.party.try &.members.sample?(random: Rnd) || pc
   end
 
-  def get_random_party_member(pc : L2PcInstance?, cond : Int32) : L2PcInstance?
+  def get_random_party_member(pc : L2PcInstance, cond : Int32) : L2PcInstance?
     get_random_party_member(pc, "cond", cond.to_s)
   end
 
-  def get_random_party_member(pc : L2PcInstance?, var : String?, value : String) : L2PcInstance?
+  def get_random_party_member(pc : L2PcInstance, var : String?, value : String) : L2PcInstance?
     return unless pc
     unless var
       return get_random_party_member(pc)
@@ -1117,8 +1091,7 @@ class Quest < AbstractScript
     target = pc.target || pc
 
     party.members.select do |m|
-      temp = m.get_quest_state(name)
-      temp &&
+      (temp = m.get_quest_state(name)) &&
       (qs = temp.get(var)) &&
       qs.casecmp?(value) &&
       m.inside_radius?(target, 1500, true, false)
@@ -1126,9 +1099,8 @@ class Quest < AbstractScript
     .sample?(random: Rnd)
   end
 
-  def get_random_party_member(pc : L2PcInstance?, npc : L2Npc?) : L2PcInstance?
-    return unless pc && check_distance_to_target(pc, npc)
-    npc = npc.not_nil!
+  def get_random_party_member(pc : L2PcInstance, npc : L2Npc) : L2PcInstance?
+    return unless check_distance_to_target(pc, npc)
 
     party = pc.party
 
@@ -1150,9 +1122,7 @@ class Quest < AbstractScript
     winner if winner && check_distance_to_target(winner, npc)
   end
 
-  def get_random_party_member_state(pc : L2PcInstance?, state : State) : L2PcInstance?
-    return unless pc
-
+  def get_random_party_member_state(pc : L2PcInstance, state : State) : L2PcInstance?
     party = pc.party
     if party.nil? || party.members.empty?
       qs = pc.get_quest_state(name)
@@ -1179,8 +1149,7 @@ class Quest < AbstractScript
     candidates.sample?(random: Rnd)
   end
 
-  def get_random_party_member_state(pc : L2PcInstance?, condition : Int, chance : Int, target : L2Npc) : QuestState?
-    return unless pc
+  def get_random_party_member_state(pc : L2PcInstance, condition : Int, chance : Int, target : L2Npc) : QuestState?
     return if chance < 1
 
     return unless qs = pc.get_quest_state(name)

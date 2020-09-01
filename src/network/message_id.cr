@@ -4,11 +4,14 @@ abstract class MessageId
 
     getter id, name = "", param_count = 0
 
-    private def initialize(@id : Int32)
+    private def initialize(id : Int32)
+      @id = id
       MAP[id] = self
     end
 
-    private def initialize(@name : String, @id : Int32)
+    private def initialize(name : String, id : Int32)
+      @name = name
+      @id = id
       @param_count = Util.count_params(name)
       MAP[id] = self
     end

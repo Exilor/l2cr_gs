@@ -1,4 +1,4 @@
-class Packets::Outgoing::ChangeAccessLevel < MMO::OutgoingPacket(LoginServerClient)
+class Packets::Outgoing::ChangeAccessLevel < MMO::OutgoingPacket(LoginServerThread)
   initializer player_name : String, access : Int32
 
   def write

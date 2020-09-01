@@ -19,9 +19,9 @@ class Packets::Incoming::AuthLogin < GameClientPacket
     debug { "SessionKey: #{key}." }
 
     unless client.account_name?
-      if LoginServerClient.instance.add_game_server_login(@account, client)
+      if LoginServerThread.instance.add_game_server_login(@account, client)
         client.account_name = @account
-        LoginServerClient.instance.add_waiting_client_and_send_request(@account, client, key)
+        LoginServerThread.instance.add_waiting_client_and_send_request(@account, client, key)
       else
         client.close(nil)
       end

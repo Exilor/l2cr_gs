@@ -1,7 +1,7 @@
 require "./l2_character_ai"
 
 class L2PlayableAI < L2CharacterAI
-  private def on_intention_attack(target)
+  private def on_intention_attack(target : L2Character?)
     return unless target
 
     if target.playable? && (pc_target = target.acting_player)

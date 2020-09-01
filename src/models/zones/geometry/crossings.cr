@@ -9,18 +9,28 @@ abstract struct Crossings
   end
 
   def accumulate_line(x0, y0, x1, y1)
+    if y0 > y1
+      x0, y0, x1, y1 = x1, y1, x0, y0
+    end
+
+    x0, y0, x1, y1 = x0.to_f, y0.to_f, x1.to_f, y1.to_f
+
     if @yhi <= y0 || @ylo >= y1
       return false
     end
+
     if x0 >= @xhi && x1 >= @xhi
       return false
     end
+
     if y0 == y1
       return x0 >= @xlo || x1 >= @xlo
     end
+
     xstart = ystart = xend = yend = 0.0
     dx = x1 - x0
     dy = y1 - y0
+
     if y0 < @ylo
       xstart = x0 + (@ylo - y0) * dx / dy
       ystart = @ylo
@@ -28,6 +38,7 @@ abstract struct Crossings
       xstart = x0
       ystart = y0
     end
+
     if @yhi < y1
       xend = x0 + (@yhi - y0) * dx / dy
       yend = @yhi
@@ -35,9 +46,11 @@ abstract struct Crossings
       xend = x1
       yend = y1
     end
+
     if xstart >= @xhi && xend >= @xhi
       return false
     end
+
     if xstart > @xlo || xend > @xlo
       return true
     end
@@ -63,6 +76,7 @@ abstract struct Crossings
         from &+= 2
       end
       to = from
+
       while from < @limit
         yrlo = @yranges[from]
         from &+= 1
@@ -77,7 +91,9 @@ abstract struct Crossings
           yend = yrhi
           next
         end
+
         yll = ylh = yhl = yhh = 0.0
+
         if ystart < yrlo
           yll = ystart
           ylh = yrlo
@@ -85,6 +101,7 @@ abstract struct Crossings
           yll = yrlo
           ylh = ystart
         end
+
         if yend < yrhi
           yhl = yend
           yhh = yrhi
@@ -92,6 +109,7 @@ abstract struct Crossings
           yhl = yrhi
           yhh = yend
         end
+
         if ylh == yhl
           ystart = yll
           yend = yhh
@@ -101,15 +119,18 @@ abstract struct Crossings
             yhl = ylh
             ylh = ystart
           end
+
           if yll != ylh
             @yranges[to] = yll
             to &+= 1
             @yranges[to] = ylh
             to &+= 1
           end
+
           ystart = yhl
           yend = yhh
         end
+
         if ystart >= yend
           break
         end
@@ -118,13 +139,16 @@ abstract struct Crossings
       if to < from && from < @limit
         @yranges[to, @limit - from].copy_from(@yranges[from, @limit - from])
       end
+
       to &+= @limit - from
+
       if ystart < yend
         if to >= @yranges.size
           new_ranges = Slice(Float64).new(to &+ 10)
           new_ranges.copy_from(@yranges)
           @yranges = new_ranges
         end
+
         @yranges[to] = ystart
         to &+= 1
         @yranges[to] = ystart

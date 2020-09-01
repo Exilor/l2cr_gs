@@ -67,7 +67,7 @@ class Scripts::Venom < AbstractNpcAI
 
     current_time = Time.ms
     start_siege_date = CastleManager.get_castle_by_id(CASTLE).not_nil!.siege_date.ms
-    opening_date = start_siege_date - (HOURS_BEFORE * 360000)
+    opening_date = start_siege_date - (HOURS_BEFORE * 360_000)
     if current_time > opening_date && current_time < start_siege_date
       @prison_is_open = true
     end
@@ -85,7 +85,6 @@ class Scripts::Venom < AbstractNpcAI
       end
     end
 
-
     super
   end
 
@@ -96,7 +95,7 @@ class Scripts::Venom < AbstractNpcAI
         change_location(MoveTo::THRONE)
         broadcast_npc_say(@massymore.not_nil!, Say2::NPC_SHOUT, NpcString::OH_NO_THE_DEFENSES_HAVE_FAILED_IT_IS_TOO_DANGEROUS_TO_REMAIN_INSIDE_THE_CASTLE_FLEE_EVERY_MAN_FOR_HIMSELF)
         cancel_quest_timer("tower_check", npc, nil)
-        start_quest_timer("raid_check", 10000, npc, nil, true)
+        start_quest_timer("raid_check", 10_000, npc, nil, true)
       end
     when "raid_check"
       npc = npc.not_nil!
@@ -108,7 +107,6 @@ class Scripts::Venom < AbstractNpcAI
         npc.delete_me
       end
     end
-
 
     event
   end
@@ -133,7 +131,7 @@ class Scripts::Venom < AbstractNpcAI
       venom.current_mp = venom.max_mp.to_f
       venom.enable_skill(VENOM_TELEPORT.skill)
       venom.enable_skill(RANGE_TELEPORT.skill)
-      start_quest_timer("tower_check", 30000, venom, nil, true)
+      start_quest_timer("tower_check", 30_000, venom, nil, true)
     end
   end
 
@@ -174,7 +172,6 @@ class Scripts::Venom < AbstractNpcAI
       end
     end
 
-
     super
   end
 
@@ -196,7 +193,6 @@ class Scripts::Venom < AbstractNpcAI
         npc.delete_me
       end
     end
-
 
     if check_status == DEAD
       npc.delete_me

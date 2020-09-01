@@ -109,7 +109,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     end
   end
 
-  private def on_intention_Attack(target)
+  private def on_intention_attack(target : L2Character?)
     # Calculate the attack timeout
     @attack_timeout = MAX_ATTACK_TIMEOUT + GameTimer.ticks
 
@@ -147,7 +147,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
 
       # Chose a target from its aggroList
       if @actor.confused?
-        hated = attack_target? # Force mobs to attack anybody if confused
+        hated = attack_target # Force mobs to attack anybody if confused
       else
         hated = npc.most_hated
         # _mostHatedAnalysis.Update(hated)
@@ -193,7 +193,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
       end
     end
 
-    att_tgt = attack_target?
+    att_tgt = attack_target
     # Check if target is dead or if timeout is expired to stop this attack
     if att_tgt.nil? || att_tgt.looks_dead? || @attack_timeout < GameTimer.ticks
       # Stop hating this target after the attack timeout or if target is dead
@@ -218,7 +218,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
   end
 
   private def faction_notify_and_support
-    target = attack_target?
+    target = attack_target
     me = @actor.as(L2Npc)
     # Call all L2Object of its Faction inside the Faction Range
     if me.template.clans.empty? || target.nil?
@@ -277,7 +277,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
           if npc.ai.intention.idle? || npc.ai.intention.active?
             if target.inside_radius?(npc, 1500, true, false)
               if GeoData.can_see_target?(npc, target)
-                npc.ai.notify_event(AGGRESSION, attack_target?, 1)
+                npc.ai.notify_event(AGGRESSION, attack_target, 1)
                 return
               end
             end
@@ -332,7 +332,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
       s_guard = @actor.as(L2DefenderInstance)
     end
 
-    unless att_tgt = attack_target?
+    unless att_tgt = attack_target
       raise "Expected #{@actor} to have an attack target for #{self.class}#attack_prepare"
     end
 
@@ -542,7 +542,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     end
   end
 
-  private def on_event_attacked(attacker)
+  private def on_event_attacked(attacker : L2Character?)
     # Calculate the attack timeout
     @attack_timeout = MAX_ATTACK_TIMEOUT + GameTimer.ticks
 
@@ -567,7 +567,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     super
   end
 
-  private def on_event_aggression(target, aggro)
+  private def on_event_aggression(target : L2Character?, aggro : Int64)
     if @actor.nil?
       return
     end

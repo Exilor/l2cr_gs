@@ -9,7 +9,7 @@ class IllegalPlayerActionTask
     case @punishment
     when .kick?
       pc.send_message("You will be kicked for illegal action, GM informed.")
-    when .kickban?
+    when .kick_ban?
       unless pc.gm?
         pc.access_level = -1
         pc.account_access_level = -1
@@ -36,7 +36,7 @@ class IllegalPlayerActionTask
       # nothing
     when .kick?
       @pc.logout(false)
-    when .kickban?
+    when .kick_ban?
       task = PunishmentTask.new(
         @pc.l2id,
         PunishmentAffect::CHARACTER,

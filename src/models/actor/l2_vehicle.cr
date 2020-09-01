@@ -4,7 +4,7 @@ require "./stat/vehicle_stat"
 require "./ai/l2_vehicle_ai"
 require "../vehicle_path_point"
 
-class L2Vehicle < L2Character
+abstract class L2Vehicle < L2Character
   @engine : BoatEngine?
   @current_path : Array(VehiclePathPoint)? | Slice(VehiclePathPoint)?
   @run_state = 0

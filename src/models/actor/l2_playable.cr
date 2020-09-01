@@ -91,7 +91,7 @@ abstract class L2Playable < L2Character
     true
   end
 
-  def add_level(level) : Bool
+  def add_level(value : Int32) : Bool
     false
   end
 

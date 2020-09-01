@@ -85,12 +85,12 @@ class Scripts::FeedableBeasts < AbstractNpcAI
 
   # all mobs that grow by eating
   private struct GrowthCapableMob
-    @spice_to_mob = {} of Int32 => Array(Array(Int32))
+    @spice_to_mob = {} of Int32 => Slice(Slice(Int32))
 
     getter_initializer growth_level : Int32, chance : Int32
 
     def add_mobs(spice, mobs)
-      @spice_to_mob[spice] = mobs
+      @spice_to_mob[spice] = mobs.to_slice.map &.to_slice
     end
 
     def get_mob(spice,mob_type,class_type)
@@ -112,7 +112,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
 
     kookabura_0_gold = [[21452, 21453, 21454, 21455]]
     kookabura_0_crystal = [[21456, 21457, 21458, 21459]]
-    kookabura_1_gold_1= [[21460, 21462]]
+    kookabura_1_gold_1 = [[21460, 21462]]
     kookabura_1_gold_2 = [[21461, 21463]]
     kookabura_1_crystal_1 = [[21464, 21466]]
     kookabura_1_crystal_2 = [[21465, 21467]]
@@ -276,7 +276,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     GROWTH_CAPABLE_MONSTERS[21505] = temp
   end
 
-  private def spawn_next(npc, growth_level, player, food)
+  private def spawn_next(npc, growth_level, pc, food)
     npc_id = npc.id
     next_npc_id = 0
 
@@ -284,7 +284,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     if growth_level == 2
       # if tamed, the mob that will spawn depends on the class type (fighter/mage) of the player!
       if Rnd.rand(2) == 0
-        if player.class_id.mage_class?
+        if pc.class_id.mage_class?
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 1, 1)
         else
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 1, 0)
@@ -305,7 +305,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
 
     # remove the feedinfo of the mob that got despawned, if any
     if tmp = FEED_INFO[npc.l2id]?
-      if tmp == player.l2id
+      if tmp == pc.l2id
         FEED_INFO.delete(npc.l2id)
       end
     end
@@ -323,21 +323,21 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     # if this is finally a trained mob, then despawn any other trained mobs that the
     # player might have and initialize the Tamed Beast.
     if TAMED_BEASTS.includes?(next_npc_id)
-      player.tamed_beasts.each &.delete_me
+      pc.tamed_beasts.each &.delete_me
 
-      next_npc = L2TamedBeastInstance.new(next_npc_id, player, food - FOOD_SKILL_DIFF, *npc.xyz)
+      next_npc = L2TamedBeastInstance.new(next_npc_id, pc, food - FOOD_SKILL_DIFF, *npc.xyz)
       next_npc.set_running
-      Scripts::Q00020_BringUpWithLove.check_jewel_of_innocence(player)
+      Scripts::Q00020_BringUpWithLove.check_jewel_of_innocence(pc)
 
       # Support for A Grand Plan for Taming Wild Beasts (655) quest.
-      Scripts::Q00655_AGrandPlanForTamingWildBeasts.reward(player, next_npc)
+      Scripts::Q00655_AGrandPlanForTamingWildBeasts.reward(pc, next_npc)
 
       # also, perform a rare random chat
       if rand(20) == 0
         message = NpcString.get(rand(2024..2029))
         packet = NpcSay.new(next_npc, 0, message)
         if message.param_count > 0 # player name, $s1
-          packet.add_string_parameter(player.name)
+          packet.add_string_parameter(pc.name)
         end
         npc.broadcast_packet(packet)
       end
@@ -357,14 +357,14 @@ class Scripts::FeedableBeasts < AbstractNpcAI
       next_npc = add_spawn(next_npc_id, npc).as(L2Attackable)
 
       if MAD_COW_POLYMORPH.has_key?(next_npc_id)
-        start_quest_timer("polymorph Mad Cow", 10000, next_npc, player)
+        start_quest_timer("polymorph Mad Cow", 10000, next_npc, pc)
       end
 
       # register the player in the feedinfo for the mob that just spawned
-      FEED_INFO[next_npc.l2id] = player.l2id
+      FEED_INFO[next_npc.l2id] = pc.l2id
       next_npc.set_running
-      next_npc.add_damage_hate(player, 0, 99999)
-      next_npc.set_intention(AI::ATTACK, player)
+      next_npc.add_damage_hate(pc, 0, 99999)
+      next_npc.set_intention(AI::ATTACK, pc)
     end
   end
 
@@ -443,7 +443,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
       end
 
       # rare random talk...
-      if Rnd.rand(20) == 0
+      if rand(20) == 0
         message = TEXT[growth_level].sample
         packet = NpcSay.new(npc, 0, message)
         if message.param_count > 0 # player name, $s1

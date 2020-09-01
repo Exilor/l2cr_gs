@@ -1,6 +1,6 @@
-require "../login_server_client"
+require "../login_server_thread"
 
-abstract class LoginServerPacket < MMO::IncomingPacket(LoginServerClient)
+abstract class LoginServerPacket < MMO::IncomingPacket(LoginServerThread)
   include Loggable
 
   def read : Bool

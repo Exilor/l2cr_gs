@@ -105,7 +105,10 @@ module RecipeController
     getter? valid = false
     private getter! items : Array(TempItem)
 
-    def initialize(@pc : L2PcInstance, @recipe_list : L2RecipeList, @target : L2PcInstance)
+    def initialize(pc : L2PcInstance, recipe_list : L2RecipeList, target : L2PcInstance)
+      @pc = pc
+      @recipe_list = recipe_list
+      @target = target
       if @recipe_list.dwarven_recipe?
         @skill_id = CommonSkill::CREATE_DWARVEN.id
       else

@@ -61,7 +61,7 @@ class L2PlayerAI < L2PlayableAI
     unless intention.rest?
       change_intention(REST)
       self.target = nil
-      if attack_target?
+      if attack_target
         self.attack_target = nil
       end
       client_stop_moving(nil)
@@ -106,7 +106,7 @@ class L2PlayerAI < L2PlayableAI
   end
 
   private def think_attack
-    unless target = attack_target?
+    unless target = attack_target
       return
     end
 
@@ -128,7 +128,7 @@ class L2PlayerAI < L2PlayableAI
       return
     end
 
-    target = cast_target?
+    target = cast_target
     pc = @actor.as(L2PcInstance)
 
     if skill.target_type.ground?
@@ -141,7 +141,7 @@ class L2PlayerAI < L2PlayableAI
       end
     else
       if check_target_lost(target)
-        if skill.bad? && attack_target?
+        if skill.bad? && attack_target
           self.cast_target = nil
         end
 

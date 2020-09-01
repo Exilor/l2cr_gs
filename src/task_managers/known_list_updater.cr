@@ -37,7 +37,7 @@ module KnownListUpdater
     end
 
     @@update_pass = !@@update_pass
-    @@timer = @@timer > 0 ? @@timer - 1 : FULL_UPDATE_TIMER
+    @@timer = @@timer > 0 ? @@timer &- 1 : FULL_UPDATE_TIMER
   end
 
   private def update_region(region, full_update, forget_objects)

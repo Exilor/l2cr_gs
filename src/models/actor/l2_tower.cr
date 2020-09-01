@@ -1,4 +1,4 @@
-class L2Tower < L2Npc
+abstract class L2Tower < L2Npc
   def initialize(template : L2NpcTemplate)
     super
     self.invul = false

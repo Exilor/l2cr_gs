@@ -42,8 +42,7 @@ module Util
     calculate_distance(
       loc1.x.to_f, loc1.y.to_f, loc1.z.to_f,
       loc2.x.to_f, loc2.y.to_f, loc2.z.to_f,
-      z_axis,
-      squared
+      z_axis, squared
     )
   end
 
@@ -108,13 +107,12 @@ module Util
     true
   end
 
-  def build_html_bypass_cache(pc, scope, html)
+  private def build_html_bypass_cache(pc : L2PcInstance, scope : HtmlActionScope, html : String)
     html_lower = html.downcase
     bypass_end = 0
-    bypass_start = html_lower.index("=\"bypass ", bypass_end)
 
-    while bypass_start
-      bypass_start_end = bypass_start + 9
+    while bypass_start = html_lower.index("=\"bypass ", bypass_end)
+      bypass_start_end = bypass_start &+ 9
       break unless bypass_end = html_lower.index("\"", bypass_start_end)
       h_param_pos = html_lower.index("-h ", bypass_start_end)
       if h_param_pos && h_param_pos < bypass_end
@@ -125,20 +123,18 @@ module Util
 
       first_param_start = bypass.index(AbstractHtmlPacket::VAR_PARAM_START_CHAR)
       if first_param_start
-        bypass = bypass[0...first_param_start &+ 1]
+        bypass = bypass[0..first_param_start]
       end
 
       pc.add_html_action(scope, bypass)
-      bypass_start = html_lower.index("=\"bypass ", bypass_end)
     end
   end
 
-  def build_html_link_cache(pc, scope, html)
+  private def build_html_link_cache(pc : L2PcInstance, scope : HtmlActionScope, html : String)
     html_lower = html.downcase
     link_end = 0
-    link_start = html_lower.index("=\"link ", link_end)
 
-    while link_start
+    while link_start = html_lower.index("=\"link ", link_end)
       link_start_end = link_start &+ 7
       break unless link_end = html_lower.index("\"", link_start_end)
       html_link = html[link_start_end...link_end].strip
@@ -149,16 +145,15 @@ module Util
         next
       end
 
-      pc.add_html_action(scope, "link #{html_link}")
-      link_start = html_lower.index("=\"link ", link_end)
+      pc.add_html_action(scope, "link " + html_link)
     end
   end
 
 
-  def build_html_action_cache(pc, scope, npc_l2id, html)
+  def build_html_action_cache(pc : L2PcInstance, scope : HtmlActionScope, npc_l2id : Int32, html : String?)
     raise ArgumentError.new("npc_l2id can't be negative") if npc_l2id < 0
-    html = html.to_s
-    pc.set_html_action_origin_l2id scope, npc_l2id
+    raise ArgumentError.new("html can't be nil") if html.nil?
+    pc.set_html_action_origin_l2id(scope, npc_l2id)
     build_html_bypass_cache(pc, scope, html)
     build_html_link_cache(pc, scope, html)
   end
@@ -267,8 +262,7 @@ module Util
     count = 0
 
     0.upto(str.size &- 2) do |i|
-      case str[i]
-      when 'C', 'S'
+      if str[i].in?('C', 'S')
         c2 = str[i &+ 1]
         if c2.number?
           count = Math.max(count, c2.to_i)

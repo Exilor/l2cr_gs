@@ -20,7 +20,11 @@ class L2ArtefactInstance < L2Npc
     pc.action_failed
   end
 
-  def reduce_current_hp(*args)
+  def reduce_current_hp(value : Float64, attacker : L2Character?, skill : Skill?)
+    # no-op
+  end
+
+  def reduce_current_hp(value : Float64, attacker : L2Character?, awake : Bool, dot : Bool, skill : Skill?)
     # no-op
   end
 end

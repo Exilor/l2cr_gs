@@ -268,7 +268,7 @@ abstract class FlagWar < ClanHallSiegeEngine
                 end
 
                 @hall.siege_zone.active = true
-              }, 300000)
+              }, 300_000)
             end
           else
             @mission_accomplished = true
@@ -418,13 +418,13 @@ abstract class FlagWar < ClanHallSiegeEngine
 
     data.flag_instance = L2Spawn.new(data.flag)
     data.flag_instance.not_nil!.location = loc
-    data.flag_instance.not_nil!.respawn_delay = 10000
+    data.flag_instance.not_nil!.respawn_delay = 10_000
     data.flag_instance.not_nil!.amount = 1
     data.flag_instance.not_nil!.init
 
     data.warrior = L2Spawn.new(data.npc)
     data.warrior.not_nil!.location = loc
-    data.warrior.not_nil!.respawn_delay = 10000
+    data.warrior.not_nil!.respawn_delay = 10_000
     data.warrior.not_nil!.amount = 1
     data.warrior.not_nil!.init
     data.warrior.not_nil!.last_spawn.not_nil!.ai.as(L2SpecialSiegeGuardAI).ally.concat(data.players)

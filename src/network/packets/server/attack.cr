@@ -1,15 +1,18 @@
+require "../../../models/xyz"
+
 class Packets::Outgoing::Attack < GameServerPacket
   @single_hit : Hit?
   @other_hits : Array(Hit)?
   @attacker_id : Int32
+
   getter? has_soulshot
 
   def initialize(attacker : L2Character, target : L2Character, has_soulshot : Bool, ss_grade : Int32)
     @has_soulshot = has_soulshot
     @ss_grade = ss_grade
     @attacker_id = attacker.l2id
-    @attacker_loc = Location.new(attacker)
-    @target_loc = Location.new(target)
+    @attacker_loc = XYZ.new(attacker)
+    @target_loc = XYZ.new(target)
   end
 
   def add_hit(target : L2Character, damage : Int32, miss : Bool, crit : Bool, shld : Int)
@@ -54,22 +57,22 @@ class Packets::Outgoing::Attack < GameServerPacket
   end
 
   private struct Hit
-    private HITFLAG_USESS = 0x10
-    private HITFLAG_CRIT  = 0x20
-    private HITFLAG_SHLD  = 0x40
-    private HITFLAG_MISS  = 0x80
+    private SHOT = 0x10
+    private CRIT = 0x20
+    private SHLD = 0x40
+    private MISS = 0x80
 
     getter damage, flags : UInt8, target_id : Int32
 
-    def initialize(target : L2Object, damage : Int32, miss : Bool, crit : Bool, shld : Int, soulshot : Bool, ss_grade : Int)
+    def initialize(target : L2Character, damage : Int32, miss : Bool, crit : Bool, shld : Int, soulshot : Bool, ss_grade : Int)
       @damage = damage
       @target_id = target.l2id
       flags = 0u8
 
-      flags |= HITFLAG_USESS | ss_grade if soulshot
-      flags |= HITFLAG_CRIT if crit
-      flags |= HITFLAG_SHLD if shld > 0
-      flags |= HITFLAG_MISS if miss
+      flags |= SHOT | ss_grade if soulshot
+      flags |= CRIT if crit
+      flags |= SHLD if shld > 0
+      flags |= MISS if miss
 
       @flags = flags
     end

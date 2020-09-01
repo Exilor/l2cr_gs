@@ -38,8 +38,8 @@ class Scripts::MuscleBomber < AbstractNpcAI
       unless npc.variables.get_bool(MED_HP_FLAG, false)
         npc.variables[MED_HP_FLAG] = true
         add_skill_cast_desire(npc, npc, ENHANCE_LVL_2, 999999999000000000)
-        start_quest_timer(TIMER_SUMMON, 60000, npc, attacker)
-        start_quest_timer(TIMER_LIMIT, 300000, npc, attacker)
+        start_quest_timer(TIMER_SUMMON, 60_000, npc, attacker)
+        start_quest_timer(TIMER_LIMIT, 300_000, npc, attacker)
       end
     end
 
@@ -58,7 +58,7 @@ class Scripts::MuscleBomber < AbstractNpcAI
           add_attack_desire(add_spawn(DRAKOS_ASSASSIN, npc.x + rand(100), npc.y + rand(10), npc.z, npc.heading, false, 0), pc)
           add_attack_desire(add_spawn(DRAKOS_ASSASSIN, npc.x + rand(100), npc.y + rand(10), npc.z, npc.heading, false, 0), pc)
         end
-        start_quest_timer(TIMER_SUMMON, 60000, npc, pc)
+        start_quest_timer(TIMER_SUMMON, 60_000, npc, pc)
       end
     end
 

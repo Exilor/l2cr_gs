@@ -120,36 +120,33 @@ class Scripts::Q00325_GrimCollector < Quest
       st.give_items(ANATOMY_DIAGRAM, 1)
       html = event
     when "30434-06.html", "30434-07.html"
-      # if has_quest_items?(pc, registered_item_ids) # original L2J
-      if has_at_least_one_quest_item?(pc, registered_item_ids) # custom
-        head = st.get_quest_items_count(ZOMBIE_HEAD).to_i64
-        heart = st.get_quest_items_count(ZOMBIE_HEART).to_i64
-        liver = st.get_quest_items_count(ZOMBIE_LIVER).to_i64
-        skull = st.get_quest_items_count(SKULL).to_i64
-        rib = st.get_quest_items_count(RIB_BONE).to_i64
-        spine = st.get_quest_items_count(SPINE).to_i64
-        arm = st.get_quest_items_count(ARM_BONE).to_i64
-        thigh = st.get_quest_items_count(THIGH_BONE).to_i64
-        complete = st.get_quest_items_count(COMPLETE_SKELETON).to_i64
-        total_count = head + heart + liver + skull + rib + spine + arm + thigh + complete
+      head = st.get_quest_items_count(ZOMBIE_HEAD).to_i64
+      heart = st.get_quest_items_count(ZOMBIE_HEART).to_i64
+      liver = st.get_quest_items_count(ZOMBIE_LIVER).to_i64
+      skull = st.get_quest_items_count(SKULL).to_i64
+      rib = st.get_quest_items_count(RIB_BONE).to_i64
+      spine = st.get_quest_items_count(SPINE).to_i64
+      arm = st.get_quest_items_count(ARM_BONE).to_i64
+      thigh = st.get_quest_items_count(THIGH_BONE).to_i64
+      complete = st.get_quest_items_count(COMPLETE_SKELETON).to_i64
+      total_count = head + heart + liver + skull + rib + spine + arm + thigh + complete
 
-        if total_count > 0
-          sum = (head * 30) + (heart * 20) + (liver * 20) + (skull * 100)
-          sum += (rib * 40) + (spine * 14) + (arm * 14) + (thigh * 14)
+      if total_count > 0
+        sum = (head * 30) + (heart * 20) + (liver * 20) + (skull * 100)
+        sum += (rib * 40) + (spine * 14) + (arm * 14) + (thigh * 14)
 
-          if total_count >= 10
-            sum += 1629
-          end
-
-          if complete > 0
-            sum += 543 + (complete * 341)
-          end
-
-          st.give_adena(sum, true)
+        if total_count >= 10
+          sum += 1629
         end
 
-        take_items(pc, -1, registered_item_ids)
+        if complete > 0
+          sum += 543 + (complete * 341)
+        end
+
+        st.give_adena(sum, true)
       end
+
+      take_items(pc, -1, {ZOMBIE_HEAD, ZOMBIE_HEART, ZOMBIE_LIVER, SKULL, RIB_BONE, SPINE, ARM_BONE, THIGH_BONE, COMPLETE_SKELETON})
 
       if event == "30434-06.html"
         st.exit_quest(true, true)

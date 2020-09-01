@@ -117,7 +117,6 @@ class Scripts::Core < AbstractNpcAI
       MINIONS.clear
     end
 
-
     super
   end
 
@@ -147,17 +146,17 @@ class Scripts::Core < AbstractNpcAI
       @first_attacked = false
       GrandBossManager.set_boss_status(CORE, DEAD)
       # Calculate Min and Max respawn times randomly.
-      respawn_time = (Config.core_spawn_interval.to_i64 + Rnd.rand(-Config.core_spawn_random..Config.core_spawn_random)) * 3600000
+      respawn_time = (Config.core_spawn_interval.to_i64 + Rnd.rand(-Config.core_spawn_random..Config.core_spawn_random)) * 3_600_000
       start_quest_timer("core_unlock", respawn_time, nil, nil)
       # also save the respawn time so that the info is maintained past reboots
       info = GrandBossManager.get_stats_set(CORE).not_nil!
       info["respawn_time"] = Time.ms + respawn_time
       GrandBossManager.set_stats_set(CORE, info)
-      start_quest_timer("despawn_minions", 20000i64, nil, nil)
+      start_quest_timer("despawn_minions", 20_000, nil, nil)
       cancel_quest_timers("spawn_minion")
     elsif GrandBossManager.get_boss_status(CORE) == ALIVE && MINIONS.includes?(npc)
       MINIONS.delete_first(npc)
-      start_quest_timer("spawn_minion", 60000i64, npc, nil)
+      start_quest_timer("spawn_minion", 60_000, npc, nil)
     end
 
     super

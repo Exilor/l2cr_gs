@@ -45,17 +45,13 @@ module AugmentationData
 
   private ALL_SKILLS = {} of Int32 => SkillHolder
 
-  private struct AugmentationChance
-    getter_initializer weapon_type : String, stone_id : Int32,
-      variation_id : Int32, category_chance : Int32, augment_id : Int32,
-      augment_chance : Float32
-  end
+  private record AugmentationChance, weapon_type : String, stone_id : Int32,
+    variation_id : Int32, category_chance : Int32, augment_id : Int32,
+    augment_chance : Float32
 
-  private struct AugmentationChanceAcc
-    getter_initializer weapon_type : String, stone_id : Int32,
-      variation_id : Int32, category_chance : Int32, augment_id : Int32,
-      augment_chance : Float32
-  end
+  private record AugmentationChanceAcc, weapon_type : String, stone_id : Int32,
+    variation_id : Int32, category_chance : Int32, augment_id : Int32,
+    augment_chance : Float32
 
   def load
     RED_SKILLS.clear

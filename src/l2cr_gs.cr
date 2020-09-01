@@ -48,9 +48,9 @@ def build
 
   case $?.exit_code
   when 0
-    puts "Compiled in #{min} m. #{sec} s."
+    puts "Compiled in #{min} m. #{sec} s.\a"
   else
-    puts "Compilation failed after #{min} m. #{sec} s."
+    puts "Compilation failed after #{min} m. #{sec} s.\a\a"
     exit($?.exit_code)
   end
 end

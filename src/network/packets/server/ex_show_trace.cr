@@ -1,12 +1,12 @@
 class Packets::Outgoing::ExShowTrace < GameServerPacket
-  @locations = [] of Location
+  @locations = [] of XYZ
 
   def add_location(x : Int32, y : Int32, z : Int32)
-    @locations << Location.new(x, y, z)
+    @locations << XYZ.new(x, y, z)
   end
 
   def add_location(loc : Locatable)
-    add_location(Location.new(*loc.xyz))
+    add_location(XYZ.new(loc))
   end
 
   private def write_impl

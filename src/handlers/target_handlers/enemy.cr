@@ -3,8 +3,7 @@ module TargetHandler::Enemy
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    case skill.affect_scope
-    when AffectScope::SINGLE
+    if skill.affect_scope.single?
       unless target
         return EMPTY_TARGET_LIST
       end

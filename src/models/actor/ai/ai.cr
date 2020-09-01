@@ -68,11 +68,11 @@ abstract class AI
   @follow_task : TaskScheduler::PeriodicTask?
 
   getter intention = IDLE
-  protected getter! follow_target : L2Character
+  protected getter follow_target : L2Character?
   property next_action : NextAction?
   private property target : L2Object?
-  property! cast_target : L2Character?
-  property! attack_target : L2Character?
+  property attack_target : L2Character?
+  property cast_target : L2Character?
 
   getter_initializer actor : L2Character
 
@@ -89,7 +89,7 @@ abstract class AI
   end
 
   def set_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
-    if !intention.follow? && !intention.attack?
+    unless intention.in?(FOLLOW, ATTACK)
       stop_follow
     end
 
@@ -162,7 +162,7 @@ abstract class AI
         raise "Wrong type for on_event_aggression: #{arg0.class}, #{arg1.class}"
       end
 
-      on_event_aggression(arg0, arg1)
+      on_event_aggression(arg0, arg1.to_i64)
     when STUNNED
       unless arg0.is_a?(L2Character?)
         raise "Wrong type for on_event_stunned: #{arg0.class}"
@@ -240,7 +240,7 @@ abstract class AI
     when FINISH_CASTING
       on_event_finish_casting
     when AFRAID
-      unless arg0.is_a?(L2Character?) && arg1.is_a?(Bool)
+      unless arg0.is_a?(L2Character) && arg1.is_a?(Bool)
         raise "Wrong types for on_event_afraid: #{arg0.class}, #{arg1.class}"
       end
 
@@ -255,33 +255,33 @@ abstract class AI
   abstract def on_intention_idle
   abstract def on_intention_active
   abstract def on_intention_rest
-  abstract def on_intention_attack(attacker)
+  abstract def on_intention_attack(target : L2Character?)
   abstract def on_intention_cast(skill : Skill, target : L2Object?)
   abstract def on_intention_move_to(loc : Location)
-  abstract def on_intention_follow(target)
-  abstract def on_intention_pick_up(object)
-  abstract def on_intention_interact(object)
+  abstract def on_intention_follow(target : L2Character)
+  abstract def on_intention_pick_up(object : L2Object)
+  abstract def on_intention_interact(object : L2Object)
   abstract def on_event_think
-  abstract def on_event_attacked(attacker)
-  abstract def on_event_aggression(target, aggro)
-  abstract def on_event_stunned(attacker)
-  abstract def on_event_paralyzed(attacker)
-  abstract def on_event_sleeping(attacker)
-  abstract def on_event_rooted(attacker)
-  abstract def on_event_confused(attacker)
-  abstract def on_event_muted(attacker)
-  abstract def on_event_evaded(attacker)
+  abstract def on_event_attacked(attacker : L2Character?)
+  abstract def on_event_aggression(target : L2Character?, aggro : Int64)
+  abstract def on_event_stunned(attacker : L2Character?)
+  abstract def on_event_paralyzed(attacker : L2Character?)
+  abstract def on_event_sleeping(attacker : L2Character?)
+  abstract def on_event_rooted(attacker : L2Character?)
+  abstract def on_event_confused(attacker : L2Character?)
+  abstract def on_event_muted(attacker : L2Character?)
+  abstract def on_event_evaded(attacker : L2Character?)
   abstract def on_event_ready_to_act
-  abstract def on_event_user_cmd(arg0, arg1)
+  abstract def on_event_user_cmd(arg0 : Object, arg1 : Object)
   abstract def on_event_arrived
   abstract def on_event_arrived_revalidate
-  abstract def on_event_arrived_blocked(loc)
-  abstract def on_event_forget_object(object)
+  abstract def on_event_arrived_blocked(loc : Location?)
+  abstract def on_event_forget_object(object : L2Object?)
   abstract def on_event_cancel
   abstract def on_event_dead
   abstract def on_event_fake_death
   abstract def on_event_finish_casting
-  abstract def on_event_afraid(effector, start : Bool)
+  abstract def on_event_afraid(effector : L2Character, start : Bool)
 
   private def client_action_failed
     if pc = @actor.as?(L2PcInstance)
@@ -502,9 +502,9 @@ abstract class AI
       unless target = @char.ai.follow_target
         if smn = @char.as?(L2Summon)
           smn.follow_status = false
-          @char.intention = AI::IDLE
         end
 
+        @char.intention = AI::IDLE
         return
       end
 
@@ -513,9 +513,11 @@ abstract class AI
           if smn = @char.as?(L2Summon)
             smn.follow_status = false
           end
+
           @char.intention = AI::IDLE
           return
         end
+
         @char.ai.move_to_pawn(target, @range)
       end
     rescue e

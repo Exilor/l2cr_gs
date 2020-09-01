@@ -848,7 +848,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           else
             stop_attack(attacker)
           end
-          target = npc.ai.attack_target?
+          target = npc.ai.attack_target
           10.times do |i|
             copy = add_spawn(TEARS_COPY, *npc.xyz, 0, false, 0, false, attacker.instance_id)
             copy.set_running

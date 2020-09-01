@@ -40,13 +40,13 @@ module AdminCommandHandler::AdminMonsterRace
 
     case @@state
     when -1
-      @@state += 1
+      @@state &+= 1
       MonsterRace.new_race
       MonsterRace.new_speeds
       spk = MonRaceInfo.new(codes[@@state][0], codes[@@state][1], MonsterRace.monsters, MonsterRace.speeds)
       pc.broadcast_packet(spk)
     when 0
-      @@state += 1
+      @@state &+= 1
       sm = SystemMessageId::MONSRACE_RACE_START
       pc.send_packet(sm)
       srace = Music::S_RACE.packet
@@ -58,7 +58,6 @@ module AdminCommandHandler::AdminMonsterRace
 
       ThreadPoolManager.schedule_general(RunRace.new(codes, pc), 5000)
     end
-
   end
 
   private struct RunRace

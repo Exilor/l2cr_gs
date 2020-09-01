@@ -6,26 +6,25 @@ require "../l2_extractable_product"
 class L2EtcItem < L2Item
   getter item_type : EtcItemType
   getter handler_name : String?
-  getter extractable_items : Slice(L2ExtractableProduct)?
-  getter? blessed = false
+  getter extractable_items = Slice(L2ExtractableProduct).empty
+  getter? blessed : Bool
 
   def initialize(set : StatsSet)
     super
 
-    @item_type = set.get_enum("etcitem_type", EtcItemType, EtcItemType::NONE)
-
-    case @default_action # ActionType
+    case @default_action
     when .soulshot?, .summon_soulshot?, .spiritshot?, .summon_spiritshot?
       @item_type = EtcItemType::SHOT
+    else
+      @item_type = set.get_enum("etcitem_type", EtcItemType, EtcItemType::NONE)
     end
-
 
     @type_1 = ItemType1::ITEM_QUESTITEM_ADENA
     @type_2 = ItemType2::OTHER
 
     if quest_item?
       @type_2 = ItemType2::QUEST
-    elsif @item_id == Inventory::ADENA_ID || @item_id == Inventory::ANCIENT_ADENA_ID
+    elsif @item_id.in?(Inventory::ADENA_ID, Inventory::ANCIENT_ADENA_ID)
       @type_2 = ItemType2::MONEY
     end
 
@@ -44,10 +43,10 @@ class L2EtcItem < L2Item
           next
         end
 
-        item_id = data.shift.to_i
-        min = data.shift.to_i
-        max = data.shift.to_i
-        chance = data.shift.to_f
+        item_id = data.unsafe_fetch(0).to_i
+        min = data.unsafe_fetch(1).to_i
+        max = data.unsafe_fetch(2).to_i
+        chance = data.unsafe_fetch(3).to_f
 
         if max < min
           warn { "Capsuled item max amount (#{max}) is smaller than min amount #{min}." }

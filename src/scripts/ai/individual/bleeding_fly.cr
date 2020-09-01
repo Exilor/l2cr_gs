@@ -70,7 +70,7 @@ class Scripts::BleedingFly < AbstractNpcAI
         add_spawn(PARASITIC_LEECH, npc.x + Rnd.rand(150), npc.y + Rnd.rand(150), npc.z, npc.heading, false, 0)
 
         if npc.variables.get_bool(MID_HP_FLAG, false)
-          start_quest_timer(TIMER_MID_HP, 140000, npc, nil)
+          start_quest_timer(TIMER_MID_HP, 140_000, npc, nil)
         end
       end
     when TIMER_LOW_HP
@@ -82,11 +82,10 @@ class Scripts::BleedingFly < AbstractNpcAI
         add_spawn(PARASITIC_LEECH, npc.x + Rnd.rand(150), npc.y + Rnd.rand(150), npc.z, npc.heading, false, 0)
 
         if npc.variables.get_bool(LOW_HP_FLAG, false)
-          start_quest_timer(TIMER_LOW_HP, 80000, npc, nil)
+          start_quest_timer(TIMER_LOW_HP, 80_000, npc, nil)
         end
       end
     end
-
 
     super
   end

@@ -23,14 +23,13 @@ class Scripts::CrimsonHatuOtis < AbstractNpcAI
       end
       npc.target = pc
       npc.do_cast(BOSS_SPINING_SLASH)
-      start_quest_timer("SKILL", 60000, npc, nil)
+      start_quest_timer("SKILL", 60_000, npc, nil)
     when "BUFF"
       if npc.script_value?(2)
         npc.target = npc
         npc.do_cast(BOSS_HASTE)
       end
     end
-
 
     super
   end

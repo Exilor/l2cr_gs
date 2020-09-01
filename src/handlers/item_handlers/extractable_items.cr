@@ -10,7 +10,8 @@ module ItemHandler::ExtractableItems
 
     pc = playable.acting_player
     etc_item = item.template.as(L2EtcItem)
-    unless exitem = etc_item.extractable_items
+    exitem = etc_item.extractable_items
+    if exitem.empty?
       warn { "No extractable items for #{exitem}." }
       return false
     end

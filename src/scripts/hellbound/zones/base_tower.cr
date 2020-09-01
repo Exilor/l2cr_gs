@@ -17,8 +17,8 @@ class Scripts::BaseTower < AbstractNpcAI
     add_aggro_range_enter_id(BODY_DESTROYER)
   end
 
-  def on_first_talk(npc, player)
-    class_id = player.class_id
+  def on_first_talk(npc, pc)
+    class_id = pc.class_id
     if class_id.hell_knight? || class_id.soultaker?
       return "32301-02.htm"
     end
@@ -26,7 +26,7 @@ class Scripts::BaseTower < AbstractNpcAI
     "32301-01.htm"
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     if event.casecmp?("CLOSE")
       DoorData.get_door!(20260004).close_me
     end
@@ -34,10 +34,10 @@ class Scripts::BaseTower < AbstractNpcAI
     super
   end
 
-  def on_aggro_range_enter(npc, player, is_summon)
+  def on_aggro_range_enter(npc, pc, is_summon)
     unless BODY_DESTROYER_TARGET_LIST.has_key?(npc.l2id)
-      BODY_DESTROYER_TARGET_LIST[npc.l2id] = player
-      npc.target = player
+      BODY_DESTROYER_TARGET_LIST[npc.l2id] = pc
+      npc.target = pc
       npc.do_simultaneous_cast(DEATH_WORD)
     end
 
@@ -51,7 +51,7 @@ class Scripts::BaseTower < AbstractNpcAI
       add_spawn(KENDAL, npc.spawn.location, false, npc.spawn.respawn_delay, false)
       DoorData.get_door!(20260003).open_me
       DoorData.get_door!(20260004).open_me
-      start_quest_timer("CLOSE", 60000, npc, nil, false)
+      start_quest_timer("CLOSE", 60_000, npc, nil, false)
     when BODY_DESTROYER
       if pl = BODY_DESTROYER_TARGET_LIST[npc.l2id]?
         if pl.online? && pl.alive?
@@ -60,7 +60,6 @@ class Scripts::BaseTower < AbstractNpcAI
         BODY_DESTROYER_TARGET_LIST.delete(npc.l2id)
       end
     end
-
 
     super
   end

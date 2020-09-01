@@ -475,14 +475,12 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
 
     pc.inventory.items.each do |item|
-      if item.template.crystal_type > CrystalType::NONE
+      unless item.template.crystal_type.none?
         item.enchant_level = 8
       end
 
-      if item.item_id.in?(15717, 15718)
-        unless item.equipped?
-          pc.inventory.equip_item(item)
-        end
+      if item.item_id.in?(15717, 15718) && !item.equipped?
+        pc.inventory.equip_item(item)
       end
     end
 

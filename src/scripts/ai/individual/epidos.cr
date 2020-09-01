@@ -52,12 +52,12 @@ class Scripts::Epidos < AbstractNpcAI
         LAST_HP[npc.l2id] = npc.current_hp
       end
 
-      start_quest_timer("check_minions", 10000, npc, nil)
+      start_quest_timer("check_minions", 10_000, npc, nil)
     elsif event.casecmp?("check_idle")
       if npc.intention.active?
         npc.delete_me
       else
-        start_quest_timer("check_idle", 600000, npc, nil)
+        start_quest_timer("check_idle", 600_000, npc, nil)
       end
     end
 
@@ -75,8 +75,8 @@ class Scripts::Epidos < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    start_quest_timer("check_minions", 10000, npc, nil)
-    start_quest_timer("check_idle", 600000, npc, nil)
+    start_quest_timer("check_minions", 10_000, npc, nil)
+    start_quest_timer("check_idle", 600_000, npc, nil)
     LAST_HP[npc.l2id] = npc.max_hp.to_f
 
     super

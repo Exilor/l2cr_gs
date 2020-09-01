@@ -23,7 +23,7 @@ class L2CharacterAI < AI
     # return nil
   end
 
-  private def on_event_attacked(attacker)
+  private def on_event_attacked(attacker : L2Character?)
     if attacker.is_a?(L2Attackable) && !attacker.core_ai_disabled?
       client_start_auto_attack
     end
@@ -55,7 +55,7 @@ class L2CharacterAI < AI
     set_intention(IDLE)
   end
 
-  private def on_intention_attack(target)
+  private def on_intention_attack(target : L2Character?)
     unless target
       client_action_failed
       return
@@ -72,7 +72,7 @@ class L2CharacterAI < AI
     end
 
     if intention.attack?
-      if attack_target? != target
+      if @attack_target != target
         self.attack_target = target
         stop_follow
         notify_event(THINK)
@@ -125,7 +125,7 @@ class L2CharacterAI < AI
     move_to(*loc.xyz)
   end
 
-  private def on_intention_follow(target)
+  private def on_intention_follow(target : L2Character)
     if intention.rest? || @actor.all_skills_disabled? || @actor.casting_now?
       client_action_failed
       return
@@ -141,7 +141,7 @@ class L2CharacterAI < AI
     start_follow(target)
   end
 
-  private def on_intention_pick_up(object)
+  private def on_intention_pick_up(object : L2Object)
     if intention.rest? || @actor.all_skills_disabled? || @actor.casting_now?
       client_action_failed
       return
@@ -167,7 +167,7 @@ class L2CharacterAI < AI
     move_to_pawn(object, 20)
   end
 
-  private def on_intention_interact(object)
+  private def on_intention_interact(object : L2Object)
     if intention.rest? || @actor.all_skills_disabled? || @actor.casting_now?
       client_action_failed
       return
@@ -186,11 +186,11 @@ class L2CharacterAI < AI
     # no-op
   end
 
-  private def on_event_aggression(target, aggro)
+  private def on_event_aggression(target : L2Character?, aggro : Int64)
     # no-op
   end
 
-  private def on_event_stunned(attacker)
+  private def on_event_stunned(attacker : L2Character?)
     @actor.broadcast_packet(AutoAttackStop.new(@actor.l2id))
 
     if AttackStances.includes?(@actor)
@@ -202,7 +202,7 @@ class L2CharacterAI < AI
     on_event_attacked(attacker)
   end
 
-  private def on_event_paralyzed(attacker)
+  private def on_event_paralyzed(attacker : L2Character?)
     @actor.broadcast_packet(AutoAttackStop.new(@actor.l2id))
 
     if AttackStances.includes?(@actor)
@@ -214,7 +214,7 @@ class L2CharacterAI < AI
     on_event_attacked(attacker)
   end
 
-  private def on_event_sleeping(attacker)
+  private def on_event_sleeping(attacker : L2Character?)
     @actor.broadcast_packet(AutoAttackStop.new(@actor.l2id))
 
     if AttackStances.includes?(@actor)
@@ -225,21 +225,21 @@ class L2CharacterAI < AI
     client_stop_moving(nil)
   end
 
-  private def on_event_rooted(attacker)
+  private def on_event_rooted(attacker : L2Character?)
     client_stop_moving(nil)
     on_event_attacked(attacker)
   end
 
-  private def on_event_confused(attacker)
+  private def on_event_confused(attacker : L2Character?)
     client_stop_moving(nil)
     on_event_attacked(attacker)
   end
 
-  private def on_event_muted(attacker)
+  private def on_event_muted(attacker : L2Character?)
     on_event_attacked(attacker)
   end
 
-  private def on_event_evaded(attacker)
+  private def on_event_evaded(attacker : L2Character?)
     # no-op
   end
 
@@ -247,7 +247,7 @@ class L2CharacterAI < AI
     on_event_think
   end
 
-  private def on_event_user_cmd(arg_0, arg_1) # Object, Object
+  private def on_event_user_cmd(arg0 : Object, arg1 : Object)
     # no-op
   end
 
@@ -278,7 +278,7 @@ class L2CharacterAI < AI
     on_event_think
   end
 
-  private def on_event_arrived_blocked(loc)
+  private def on_event_arrived_blocked(loc : Location?)
     if intention.move_to? || intention.cast?
       set_intention(ACTIVE)
     end
@@ -287,7 +287,7 @@ class L2CharacterAI < AI
     on_event_think
   end
 
-  private def on_event_forget_object(object)
+  private def on_event_forget_object(object : L2Object?)
     if target == object
       self.target = nil
 
@@ -296,17 +296,17 @@ class L2CharacterAI < AI
       end
     end
 
-    if attack_target? == object
+    if attack_target == object
       self.attack_target = nil
       set_intention(ACTIVE)
     end
 
-    if cast_target? == object
+    if cast_target == object
       self.cast_target = nil
       set_intention(ACTIVE)
     end
 
-    if follow_target? == object
+    if follow_target == object
       client_stop_moving(nil)
       stop_follow
       set_intention(ACTIVE)
@@ -355,7 +355,7 @@ class L2CharacterAI < AI
     # no-op
   end
 
-  private def on_event_afraid(effector, start)
+  private def on_event_afraid(effector : L2Character, start : Bool)
     if start
       angle = Util.calculate_angle_from(effector, @actor)
       radians = Math.to_radians(angle)
@@ -427,7 +427,7 @@ class L2CharacterAI < AI
       return true
     end
 
-    if follow_target?
+    if follow_target
       stop_follow
     end
 
@@ -459,7 +459,7 @@ class L2CharacterAI < AI
     end
 
     if need_to_move
-      if follow_target?
+      if follow_target
         unless @actor.inside_radius?(target, offset + 100, false, false)
           return true
         end
@@ -503,7 +503,7 @@ class L2CharacterAI < AI
       return true
     end
 
-    if follow_target?
+    if follow_target
       stop_follow
     end
 
@@ -549,7 +549,7 @@ class L2CharacterAI < AI
 
   def can_aura?(sk)
     tt = sk.target_type
-    attack_target = attack_target?
+    attack_target = attack_target()
     if tt.aura? || tt.behind_aura? || tt.front_aura? || tt.aura_corpse_mob? || tt.aura_undead_enemy?
       @actor.known_list.each_character(sk.affect_range) do |target|
         return true if target == attack_target

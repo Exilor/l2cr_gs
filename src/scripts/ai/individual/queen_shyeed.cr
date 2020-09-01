@@ -12,7 +12,7 @@ class Scripts::QueenShyeed < AbstractNpcAI
   @pc_buff_zone : L2EffectZone
 
   def initialize
-    super(QueenShyeed.simple_name, "ai/individual")
+    super(self.class.simple_name, "ai/individual")
 
     @mob_buff_zone = ZoneManager.get_zone_by_id(200103, L2EffectZone).not_nil!
     @mob_buff_display_zone = ZoneManager.get_zone_by_id(200104, L2EffectZone).not_nil!
@@ -34,7 +34,6 @@ class Scripts::QueenShyeed < AbstractNpcAI
       end
     end
 
-
     nil
   end
 
@@ -48,13 +47,13 @@ class Scripts::QueenShyeed < AbstractNpcAI
 
   private def spawn_shyeed
     respawn = load_global_quest_var("Respawn")
-    remain = respawn.empty? ? 0i64 : respawn.to_i64 - Time.ms
+    remain = respawn.empty? ? 0 : respawn.to_i64 - Time.ms
     if remain > 0
       start_quest_timer("respawn", remain, nil, nil)
       return
     end
     npc = add_spawn(SHYEED, SHYEED_LOC, false, 0)
-    start_quest_timer("despawn", 10800000, npc, nil)
+    start_quest_timer("despawn", 10_800_000, npc, nil)
     @pc_buff_zone.enabled = false
     @mob_buff_zone.enabled = true
     @mob_buff_display_zone.enabled = true

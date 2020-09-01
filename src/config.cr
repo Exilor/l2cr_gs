@@ -1765,7 +1765,7 @@ module Config
     @@fs_time_entry = 3 if @@fs_time_entry <= 0
     @@rift_min_party_size = cfg.get_i32("RiftMinPartySize", 5)
     @@rift_max_jumps = cfg.get_i32("MaxRiftJumps", 4)
-    @@rift_spawn_delay = cfg.get_i32("RiftSpawnDelay", 10000)
+    @@rift_spawn_delay = cfg.get_i32("RiftSpawnDelay", 10_000)
     @@rift_auto_jumps_time_min = cfg.get_i32("AutoJumpsDelayMin", 480)
     @@rift_auto_jumps_time_max = cfg.get_i32("AutoJumpsDelayMax", 600)
     @@rift_boss_room_time_multiply = cfg.get_f32("BossRoomTimeMultiply", 1.5)
@@ -1775,7 +1775,7 @@ module Config
     @@rift_enter_cost_captain = cfg.get_i32("CaptainCost", 27)
     @@rift_enter_cost_commander = cfg.get_i32("CommanderCost", 30)
     @@rift_enter_cost_hero = cfg.get_i32("HeroCost", 33)
-    @@default_punish = IllegalActionPunishmentType.parse(cfg.get_string("DefautPunish", "KICK"))
+    @@default_punish = IllegalActionPunishmentType[cfg.get_i32("DefautPunish", 2)]
     @@default_punish_param = cfg.get_i32("DefaultPunishParam", 0)
     @@only_gm_items_free = cfg.get_bool("OnlyGMItemsFree", true)
     @@jail_is_pvp = cfg.get_bool("JailIsPvp")
@@ -1808,7 +1808,7 @@ module Config
     @@safe_enchant_cost_multiplier = cfg.get_i32("SafeEnchantCostMultipiler", 5)
     @@botreport_enable = cfg.get_bool("EnableBotReportButton")
     @@botreport_resetpoint_hour = cfg.get_string("BotReportPointsResetHour", "00:00").split(":").to_slice
-    @@botreport_report_delay = cfg.get_i64("BotReportDelay", 30) * 60000
+    @@botreport_report_delay = cfg.get_i64("BotReportDelay", 30) * 60_000
     @@botreport_allow_reports_from_same_clan_members = cfg.get_bool("AllowReportsFromSameClanMembers")
     @@enable_falling_damage = cfg.get_bool("EnableFallingDamage", true)
 

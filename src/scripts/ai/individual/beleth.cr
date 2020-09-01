@@ -344,7 +344,7 @@ class Scripts::Beleth < AbstractNpcAI
         c.immobilized = false
       end
     when "CHECK_ATTACK"
-      if @last_attack + 900000 < Time.ms
+      if @last_attack + 900_000 < Time.ms
         GrandBossManager.set_boss_status(REAL_BELETH, ALIVE)
         @zone.characters_inside.each do |c|
           if c.npc?
@@ -369,7 +369,7 @@ class Scripts::Beleth < AbstractNpcAI
       @stone.try &.delete_me
 
       GrandBossManager.set_boss_status(REAL_BELETH, FIGHT)
-      start_quest_timer("SPAWN1", 300000, nil, nil)
+      start_quest_timer("SPAWN1", 300_000, nil, nil)
     end
 
     super
@@ -533,9 +533,9 @@ class Scripts::Beleth < AbstractNpcAI
 
       @killed_count &+= 1
       if @killed_count >= 5
-        start_quest_timer("SPAWN_REAL", 60000, nil, nil)
+        start_quest_timer("SPAWN_REAL", 60_000, nil, nil)
       else
-        start_quest_timer("SPAWN25", 60000, nil, nil)
+        start_quest_timer("SPAWN25", 60_000, nil, nil)
       end
     end
 

@@ -19,6 +19,7 @@ module MonsterRace
             next
           end
         end
+
         break
       end
 

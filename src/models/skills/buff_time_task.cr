@@ -37,16 +37,29 @@
 #   end
 # end
 
-struct BuffTimeTask
-  @start_time = Time.s
 
+# Another alternative implementation that is not scheduled periodically.
+# It's scheduled once at the end of the effect instead.
+# struct BuffTimeTask
+#   @start_time = Time.s
+
+#   initializer info : BuffInfo
+
+#   def call
+#     @info.effected.stop_skill_effects(false, @info.skill.id)
+#   end
+
+#   def elapsed_time : Int32
+#     (Time.s &- @start_time).to_i32
+#   end
+# end
+
+
+# Yet another alternative implementation this time without unused stuff.
+struct BuffTimeTask
   initializer info : BuffInfo
 
   def call
     @info.effected.stop_skill_effects(false, @info.skill.id)
-  end
-
-  def elapsed_time : Int32
-    (Time.s &- @start_time).to_i32
   end
 end

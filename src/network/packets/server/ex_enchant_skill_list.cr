@@ -1,3 +1,4 @@
+# unused
 class Packets::Outgoing::ExEnchantSkillList < GameServerPacket
   enum EnchantSkillType : UInt8
     NORMAL
@@ -11,6 +12,10 @@ class Packets::Outgoing::ExEnchantSkillList < GameServerPacket
   @skills = [] of Skill
 
   initializer type : EnchantSkillType
+
+  def add_skill(id : Int32, level : Int32)
+    @skills << Skill.new(id, level)
+  end
 
   private def write_impl
     c 0xfe

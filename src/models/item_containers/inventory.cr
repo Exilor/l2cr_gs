@@ -148,16 +148,20 @@ abstract class Inventory < ItemContainer
           if item_skill = holder.skill?
             item_skill.reference_item_id = item.id
             pc.add_skill(item_skill, false)
+
             if item_skill.active?
               unless pc.has_skill_reuse?(item_skill.hash)
                 equip_delay = item.equip_reuse_delay
+
                 if equip_delay > 0
                   pc.add_time_stamp(item_skill, equip_delay.to_i64)
                   pc.disable_skill(item_skill, equip_delay.to_i64)
                 end
               end
+
               update_time_stamp = true
             end
+
             update = true
           end
         end
@@ -165,6 +169,7 @@ abstract class Inventory < ItemContainer
 
       if update
         pc.send_skill_list
+
         if update_time_stamp
           pc.send_packet(Packets::Outgoing::SkillCoolTime.new(pc))
         end
@@ -213,6 +218,7 @@ abstract class Inventory < ItemContainer
 
             if item_skill = sk.skill?
               pc.add_skill(item_skill, false)
+
               if item_skill.active?
                 unless pc.has_skill_reuse?(item_skill.hash)
                   equip_delay = item.equip_reuse_delay
@@ -221,8 +227,10 @@ abstract class Inventory < ItemContainer
                     pc.disable_skill(item_skill, equip_delay.to_i64)
                   end
                 end
+
                 update_time_stamp = true
               end
+
               update = true
             end
           end
@@ -708,7 +716,6 @@ abstract class Inventory < ItemContainer
              L2Item::SLOT_HEAD
           return
         end
-
       end
     end
 

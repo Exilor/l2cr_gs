@@ -20,7 +20,7 @@ class Packets::Outgoing::SetupGauge < GameServerPacket
   end
 
   def run_impl
-    @char_id = active_char.not_nil!.l2id
+    @char_id = client.active_char.not_nil!.l2id
   end
 
   private def write_impl

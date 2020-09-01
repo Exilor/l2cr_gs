@@ -8,7 +8,7 @@ require "./game_timer"
 require "./id_factory"
 require "./network/game_client"
 require "./network/game_packet_handler"
-require "./network/login_server_client"
+require "./network/login_server_thread"
 require "./handlers/master_handler"
 require "./geo_data"
 require "./path_finding"
@@ -131,9 +131,7 @@ module GameServer
     Dir.mkdir_p(Dir.current + "/log")
     time = start_time.to_s("%Y-%m-%d %H-%M-%S")
     f = File.open("#{Dir.current}/log/#{time}.log", "w")
-    Loggable.add_io(STDOUT)
-    Loggable.add_io(f)
-
+    Loggable.file = f
 
     info "Starting..."
 
@@ -323,11 +321,11 @@ module GameServer
     info { "Maximum number of connected players: #{Config.maximum_online_users}." }
     info { "Server loaded in #{timer} s." }
 
-    LoginServerClient.instance
+    LoginServerThread.instance
 
     L2Cr.command_line_task
 
-    info { "Listening for players at #{host}:#{port}" }
+    info { "Listening for players at #{host}:#{port}\a" }
 
     listener.run
   end

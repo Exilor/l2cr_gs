@@ -17,8 +17,7 @@ struct ClassInfo
   end
 
   private def class_client_id : Int32
-    id = @class_id.to_i
-    case id
+    case id = @class_id.to_i
     when 0..57
       247
     when 88..118

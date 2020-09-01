@@ -119,10 +119,6 @@ module ItemTable
       end
     end
 
-    # if Config::DEBUG
-    #   debug "Created item with oid #{item.l2id} and item id #{item.id}."
-    # end
-
     L2World.store_object(item)
 
     if item.stackable? && count > 1
@@ -140,7 +136,7 @@ module ItemTable
         ref = reference
       end
 
-      name = actor.target.try &.name || "no-name"
+      name = actor.target.try &.name || "no-target"
       GMAudit.log(actor, "#{process} (id: #{item_id}, count: #{item.count}, name: #{item.item_name}, item_obj_id: #{item.l2id})", name, "L2Object referencing this action is: #{ref}")
     end
 
@@ -180,7 +176,7 @@ module ItemTable
         begin
           GameDB.exec("DELETE FROM pets WHERE item_obj_id=?", item.l2id)
         rescue e
-          error { "Failed to delete pet associated with #{item}." }
+          error { "Failed to delete pet associated with item #{item}." }
           error e
         end
       end

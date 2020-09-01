@@ -226,7 +226,7 @@ class L2ItemInstance < L2Object
   end
 
   def equippable? : Bool
-    !(@item.body_part == 0 || @item.item_type == EtcItemType::ARROW || @item.item_type == EtcItemType::BOLT || @item.item_type == EtcItemType::LURE)
+    !(@item.body_part == 0 || @item.item_type.in?(EtcItemType::ARROW, EtcItemType::BOLT, EtcItemType::LURE))
   end
 
   def equipped? : Bool
@@ -966,7 +966,6 @@ class L2ItemInstance < L2Object
     when 1
       sm = SystemMessage.s1s_remaining_mana_is_now_1
     end
-
 
     if sm
       sm.add_item_name(@item)

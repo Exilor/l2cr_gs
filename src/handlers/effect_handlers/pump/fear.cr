@@ -29,6 +29,6 @@ class EffectHandler::Fear < AbstractEffect
       target.abort_cast
     end
 
-    target.notify_event(AI::AFRAID, target, true)
+    target.notify_event(AI::AFRAID, info.effector, true)
   end
 end

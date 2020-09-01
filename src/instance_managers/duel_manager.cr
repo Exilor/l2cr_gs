@@ -18,7 +18,6 @@ module DuelManager
 
   def add_duel(pc1 : L2PcInstance, pc2 : L2PcInstance, party_duel : Bool)
     duel_id = @@current_duel_id.add(1) &+ 1
-    debug { "Created new duel with id #{duel_id}." }
     DUELS[duel_id] = Duel.new(pc1, pc2, party_duel, duel_id)
   end
 
@@ -59,7 +58,7 @@ module DuelManager
       SystemMessage.c1_cannot_duel_because_c1_is_currently_engaged_in_battle
     when target.transformed?
       SystemMessage.c1_cannot_duel_while_polymorphed
-    when target.dead? || target.current_hp < target.max_hp // 2
+    when target.dead? || target.hp_percent < 50
       SystemMessage.c1_cannot_duel_because_c1_hp_or_mp_is_below_50_percent
     when target.in_duel?
       SystemMessage.c1_cannot_duel_because_c1_is_already_engaged_in_a_duel

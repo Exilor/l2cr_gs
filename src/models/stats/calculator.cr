@@ -5,7 +5,7 @@ class Calculator
     @functions = Slice(AbstractFunction).empty
   end
 
-  def initialize(c : Calculator)
+  def initialize(c : self)
     @functions = c.@functions
   end
 
@@ -54,7 +54,9 @@ class Calculator
       if i == funcs.size
         return
       end
+
       i &+= 1
+
       while i < funcs.size
         tmp[i &- 1] = funcs.unsafe_fetch(i)
         i &+= 1

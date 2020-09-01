@@ -33,8 +33,8 @@ class Scripts::ShadowSummoner < AbstractNpcAI
       unless npc.variables.get_bool(LOW_HP_FLAG, false)
         npc.variables[LOW_HP_FLAG] = true
         start_quest_timer(SUMMON_TIMER, 1000, npc, attacker)
-        start_quest_timer(FEED_TIMER, 30000, npc, attacker)
-        start_quest_timer(LIMIT_TIMER, 600000, npc, attacker)
+        start_quest_timer(FEED_TIMER, 30_000, npc, attacker)
+        start_quest_timer(LIMIT_TIMER, 600_000, npc, attacker)
       end
     end
 
@@ -64,12 +64,12 @@ class Scripts::ShadowSummoner < AbstractNpcAI
     when SUMMON_TIMER
       unless npc.variables.get_bool(LIMIT_FLAG, false)
         start_quest_timer(DELAY_TIMER, 5000, npc, pc)
-        start_quest_timer(SUMMON_TIMER, 30000, npc, pc)
+        start_quest_timer(SUMMON_TIMER, 30_000, npc, pc)
       end
     when FEED_TIMER
       unless npc.variables.get_bool(LIMIT_FLAG, false)
         npc.set_intention(AI::ATTACK, pc)
-        start_quest_timer(FEED_TIMER, 30000, npc, pc)
+        start_quest_timer(FEED_TIMER, 30_000, npc, pc)
       end
     when LIMIT_TIMER
       npc.variables[LIMIT_FLAG] = true

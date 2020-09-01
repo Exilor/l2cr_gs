@@ -2,7 +2,7 @@ class QuestTimer
   @task : TaskScheduler::Task?
 
   getter name, npc, player, quest
-  getter? active = true
+  getter? repeating, active = true
 
   def initialize(quest : Quest, name : String, time : Int64, npc : L2Npc?, pc : L2PcInstance?)
     initialize(quest, name, time, npc, pc, false)

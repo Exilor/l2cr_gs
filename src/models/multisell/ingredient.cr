@@ -17,7 +17,11 @@ class Multisell::Ingredient
     )
   end
 
-  def initialize(@item_id : Int32, @item_count : Int64, @tax_ingredient : Bool, @maintain_ingredient : Bool)
+  def initialize(item_id : Int32, item_count : Int64, tax_ingredient : Bool, maintain_ingredient : Bool)
+    @item_id = item_id
+    @item_count = item_count
+    @tax_ingredient = tax_ingredient
+    @maintain_ingredient = maintain_ingredient
     if @item_id > 0
       @template = ItemTable[@item_id]?
     end

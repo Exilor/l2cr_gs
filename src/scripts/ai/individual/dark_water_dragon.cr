@@ -70,7 +70,6 @@ class Scripts::DarkWaterDragon < AbstractNpcAI
       npc.reduce_current_hp(500, npc, nil) # poison kills Fafurion if he is not healed
     end
 
-
     super
   end
 
@@ -143,9 +142,9 @@ class Scripts::DarkWaterDragon < AbstractNpcAI
         start_quest_timer("first_spawn", 2000, npc, nil) # timer to delay timer "1"
         start_quest_timer("second_spawn", 4000, npc, nil) # timer to delay timer "2"
         start_quest_timer("third_spawn", 8000, npc, nil) # timer to delay timer "3"
-        start_quest_timer("fourth_spawn", 10000, npc, nil) # timer to delay timer "4"
+        start_quest_timer("fourth_spawn", 10_000, npc, nil) # timer to delay timer "4"
         start_quest_timer("fafurion_poison", 3000, npc, nil, true) # Every three seconds reduces Fafurions hp like it is poisoned
-        start_quest_timer("fafurion_despawn", 120000, npc, nil) # Fafurion Kindred disappears after two minutes
+        start_quest_timer("fafurion_despawn", 120_000, npc, nil) # Fafurion Kindred disappears after two minutes
       end
     end
 

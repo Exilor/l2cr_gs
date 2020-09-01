@@ -39,7 +39,7 @@ module ClanHallSiegeManager
   end
 
   def get_nearby_clan_hall(char : L2Character) : SiegableHall?
-    get_nearby_clan_hall(char.x, char.y, 10000)
+    get_nearby_clan_hall(char.x, char.y, 10_000)
   end
 
   def get_nearby_clan_hall(x : Int32, y : Int32, max_dist : Int32) : SiegableHall?

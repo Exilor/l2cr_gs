@@ -156,7 +156,6 @@ abstract class L2Object < ListenersContainer
       end
     end
 
-
     @instance_id.set(new_instance_id)
 
     if @visible && @known_list && !player?

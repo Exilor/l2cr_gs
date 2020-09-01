@@ -1,7 +1,9 @@
 class Packets::Outgoing::BuyListSeed < GameServerPacket
   @list = [] of SeedProduction
 
-  def initialize(@money : Int64, @manor_id : Int32)
+  def initialize(money : Int64, manor_id : Int32)
+    @money = money
+    @manor_id = manor_id
     CastleManorManager.get_seed_production(manor_id, false).each do |s|
       if s.amount > 0 && s.price > 0
         @list << s

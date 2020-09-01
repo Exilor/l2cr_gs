@@ -12,7 +12,7 @@ class Scripts::ZealotOfShilen < AbstractNpcAI
   def on_adv_event(event, npc, pc)
     return unless npc = npc.as?(L2Attackable)
 
-    start_quest_timer("WATCHING", 10000, npc, nil, true)
+    start_quest_timer("WATCHING", 10_000, npc, nil, true)
 
     if event == "WATCHING" && !npc.attacking_now?
       npc.known_list.each_character do |char|
@@ -37,7 +37,7 @@ class Scripts::ZealotOfShilen < AbstractNpcAI
     else
       npc.invul = true
       npc.as(L2Attackable).can_return_to_spawn_point = false
-      start_quest_timer("WATCHING", 10000, npc, nil, true)
+      start_quest_timer("WATCHING", 10_000, npc, nil, true)
     end
 
     super

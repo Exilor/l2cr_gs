@@ -53,7 +53,7 @@ module GraciaSeedsManager
       if time_past >= Config.sod_stage_2_length
         set_sod_state(1, true)
       else
-        task = ->update_sod_state_task
+        task = UpdateSoDStateTask.new(self)
         ThreadPoolManager.schedule_effect(task, Config.sod_stage_2_length - time_past)
       end
     when 3
@@ -123,8 +123,12 @@ module GraciaSeedsManager
     SOD_LAST_STATE_CHANGE_DATE
   end
 
-  private def update_sod_state_task
-    set_sod_state(1, true)
-    update_sod_state
+  private struct UpdateSoDStateTask
+    initializer gsm : GraciaSeedsManager
+
+    def call
+      @gsm.set_sod_state(1, true)
+      @gsm.update_sod_state
+    end
   end
 end

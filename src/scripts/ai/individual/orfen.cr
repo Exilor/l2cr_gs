@@ -103,7 +103,7 @@ class Scripts::Orfen < AbstractNpcAI
     mob = add_spawn(RAIKEL_LEOS, x - 100, y - 100, npc.z, 0, false, 0).as(L2Attackable)
     mob.raid_minion = true
     MINIONS << mob
-    start_quest_timer("check_minion_loc", 10000, npc, nil, true)
+    start_quest_timer("check_minion_loc", 10_000, npc, nil, true)
   end
 
   def on_adv_event(event, npc, player)
@@ -223,7 +223,7 @@ class Scripts::Orfen < AbstractNpcAI
       GrandBossManager.set_boss_status(ORFEN, DEAD)
       # Calculate Min and Max respawn times randomly.
       respawn_time = Config.orfen_spawn_interval + Rnd.rand(-Config.orfen_spawn_random..Config.orfen_spawn_random)
-      respawn_time *= 3600000
+      respawn_time *= 3_600_000
       start_quest_timer("orfen_unlock", respawn_time, nil, nil)
       # also save the respawn time so that the info is maintained past reboots
       unless info = GrandBossManager.get_stats_set(ORFEN)
@@ -233,12 +233,12 @@ class Scripts::Orfen < AbstractNpcAI
       GrandBossManager.set_stats_set(ORFEN, info)
       cancel_quest_timer("check_minion_loc", npc, nil)
       cancel_quest_timer("check_orfen_pos", npc, nil)
-      start_quest_timer("despawn_minions", 20000, nil, nil)
+      start_quest_timer("despawn_minions", 20_000, nil, nil)
       cancel_quest_timers("spawn_minion")
     elsif GrandBossManager.get_boss_status(ORFEN) == ALIVE
       if npc.id == RAIKEL_LEOS
         MINIONS.delete_first(npc)
-        start_quest_timer("spawn_minion", 360000, npc, nil)
+        start_quest_timer("spawn_minion", 360_000, npc, nil)
       end
     end
 

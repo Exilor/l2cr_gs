@@ -247,11 +247,11 @@ class Scripts::BeastFarm < AbstractNpcAI
     npc_id = npc.id
     skill_id = skill.id
     # check if the npc and skills used are valid for this script. Exit if invalid.
-    if FEEDABLE_BEASTS.includes?(npc_id) || (skill_id != SKILL_GOLDEN_SPICE && skill_id != SKILL_CRYSTAL_SPICE && skill_id != SKILL_BLESSED_GOLDEN_SPICE && skill_id != SKILL_BLESSED_CRYSTAL_SPICE && skill_id != SKILL_SGRADE_GOLDEN_SPICE && skill_id != SKILL_SGRADE_CRYSTAL_SPICE)
+    if !FEEDABLE_BEASTS.includes?(npc_id) || (skill_id != SKILL_GOLDEN_SPICE && skill_id != SKILL_CRYSTAL_SPICE && skill_id != SKILL_BLESSED_GOLDEN_SPICE && skill_id != SKILL_BLESSED_CRYSTAL_SPICE && skill_id != SKILL_SGRADE_GOLDEN_SPICE && skill_id != SKILL_SGRADE_CRYSTAL_SPICE)
       return super
     end
     # check if this can be done in ruby
-    # if FEEDABLE_BEASTS.includes?(npc_id) || !skill_id.in?(SKILL_GOLDEN_SPICE, SKILL_CRYSTAL_SPICE, SKILL_BLESSED_GOLDEN_SPICE, SKILL_BLESSED_CRYSTAL_SPICE, SKILL_SGRADE_GOLDEN_SPICE, SKILL_SGRADE_CRYSTAL_SPICE)
+    # if !FEEDABLE_BEASTS.includes?(npc_id) || !skill_id.in?(SKILL_GOLDEN_SPICE, SKILL_CRYSTAL_SPICE, SKILL_BLESSED_GOLDEN_SPICE, SKILL_BLESSED_CRYSTAL_SPICE, SKILL_SGRADE_GOLDEN_SPICE, SKILL_SGRADE_CRYSTAL_SPICE)
     #   return super
     # end
 

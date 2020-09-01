@@ -12,12 +12,11 @@ module AdminCommandHandler::AdminSummon
       if data.size > 2
         count = data[2].to_i
       end
-    rescue e
+    rescue
       pc.send_message("Incorrect format for command 'summon'")
-      error e
     end
 
-    if id < 1000000
+    if id < 1_000_000
       sub_command = "admin_create_item"
       unless AdminData.has_access?(sub_command, pc.access_level)
         pc.send_message("You don't have the access right to use this command.")
@@ -36,7 +35,7 @@ module AdminCommandHandler::AdminSummon
       end
 
       if ach = AdminCommandHandler[sub_command]
-        id -= 1000000
+        id -= 1_000_000
         ach.use_admin_command("#{sub_command} #{id} #{count}", pc)
       end
     end

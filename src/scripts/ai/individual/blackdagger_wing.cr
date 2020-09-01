@@ -29,7 +29,7 @@ class Scripts::BlackdaggerWing < AbstractNpcAI
     if npc.hp_percent < MID_HP_PERCENTAGE
       unless npc.variables.get_bool(MID_HP_FLAG, false)
         npc.variables[MID_HP_FLAG] = true
-        start_quest_timer(DAMAGE_TIMER, 10000, npc, attacker)
+        start_quest_timer(DAMAGE_TIMER, 10_000, npc, attacker)
       end
     end
 
@@ -66,7 +66,7 @@ class Scripts::BlackdaggerWing < AbstractNpcAI
       npc = npc.not_nil!
       pc = pc.not_nil!
       npc.set_intention(AI::ATTACK, pc) # L2J doesn't give the second arg
-      start_quest_timer(DAMAGE_TIMER, 30000, npc, pc)
+      start_quest_timer(DAMAGE_TIMER, 30_000, npc, pc)
     end
 
     super

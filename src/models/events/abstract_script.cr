@@ -35,6 +35,10 @@ abstract class AbstractScript
     register_consumer(EventType::ON_CREATURE_KILL, ListenerRegisterType::NPC, b, *id)
   end
 
+  private def set_creature_see(&b : OnCreatureSee ->)
+    register_consumer(EventType::ON_CREATURE_SEE, ListenerRegisterType::GLOBAL, b)
+  end
+
   private def set_npc_first_talk_id(*id, &b : OnNpcFirstTalk ->)
     register_consumer(EventType::ON_NPC_FIRST_TALK, ListenerRegisterType::NPC, b, *id)
   end
@@ -280,7 +284,7 @@ abstract class AbstractScript
     listeners
   end
 
-  def get_registered_ids(reg_type : ListenerRegisterType)
+  def get_registered_ids(reg_type : ListenerRegisterType) : Enumerable(Int32)
     @registered_ids.fetch(reg_type, Slice(Int32).empty)
   end
 
@@ -296,15 +300,15 @@ abstract class AbstractScript
 
   delegate play_sound, to: AbstractScript
 
-  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int)
+  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int) : Nil
     give_items(pc, item_id, count.to_i64, 0)
   end
 
-  def self.give_items(pc : L2PcInstance, holder : ItemHolder)
+  def self.give_items(pc : L2PcInstance, holder : ItemHolder) : Nil
     give_items(pc, holder.id, holder.count)
   end
 
-  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, enchant_level : Int32)
+  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, enchant_level : Int32) : Nil
     return if count <= 0
 
     item = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
@@ -317,7 +321,7 @@ abstract class AbstractScript
     send_item_get_message(pc, item, count)
   end
 
-  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, attribute_id : Int, attribute_level : Int)
+  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, attribute_id : Int, attribute_level : Int) : Nil
     return if count <= 0
 
     item = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
@@ -334,7 +338,7 @@ abstract class AbstractScript
     send_item_get_message(pc, item, count)
   end
 
-  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character)
+  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character) : Bool
     items = item.calculate_drops(victim, pc)
     if items.nil? || items.empty?
       return false
@@ -344,7 +348,7 @@ abstract class AbstractScript
     true
   end
 
-  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder))
+  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder)) : Nil
     items.each { |item| give_items(pc, item) }
   end
 
@@ -358,7 +362,7 @@ abstract class AbstractScript
     true
   end
 
-  def self.give_items(pc : L2PcInstance, item : ItemHolder, limit : Int, play_sound : Bool)
+  def self.give_items(pc : L2PcInstance, item : ItemHolder, limit : Int, play_sound : Bool) : L2ItemInstance?
     drop = give_items(pc, item, limit)
 
     if drop && play_sound
@@ -368,13 +372,15 @@ abstract class AbstractScript
     drop
   end
 
-  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder), limit : Int)
-    result = false
-    items.each { |item| result |= give_items(pc, item, limit) }
-    result
+  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder), limit : Int) : Bool
+    # result = false
+    # items.each { |item| result |= give_items(pc, item, limit) }
+    # result
+
+    items.reduce(false) { |item, result| result | give_items(pc, item, limit) }
   end
 
-  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder), limit : Int, play_sound : Bool)
+  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder), limit : Int, play_sound : Bool) : L2ItemInstance?
     drop = give_items(pc, items, limit)
 
     if drop && play_sound
@@ -384,11 +390,11 @@ abstract class AbstractScript
     drop
   end
 
-  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int)
+  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int) : Bool
     give_items(pc, item.calculate_drops(victim, pc), limit)
   end
 
-  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int, play_sound : Bool)
+  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int, play_sound : Bool) : L2ItemInstance?
     drop = give_items(pc, item, victim, limit)
 
     if drop && play_sound
@@ -473,13 +479,13 @@ abstract class AbstractScript
     take_items(pc, holder.item_id, holder.count)
   end
 
-  def self.take_items(pc : L2PcInstance, amount : Int, item_ids : Enumerable(Int32))
+  def self.take_items(pc : L2PcInstance, amount : Int, item_ids : Enumerable(Int32)) : Bool
     item_ids.reduce(true) { |check, id| check & take_items(pc, id, amount) }
   end
 
   delegate take_items, to: AbstractScript
 
-  def self.take_item(pc : L2PcInstance, item : L2ItemInstance, to_delete : Int64)
+  def self.take_item(pc : L2PcInstance, item : L2ItemInstance, to_delete : Int64) : Bool
     if item.equipped?
       unequipped = pc.inventory.unequip_item_in_body_slot_and_record(item.template.body_part)
       iu = InventoryUpdate.new
@@ -585,7 +591,7 @@ abstract class AbstractScript
 
   delegate add_minion, to: AbstractScript
 
-  def self.give_adena(pc : L2PcInstance, count : Int, apply_rates : Bool)
+  def self.give_adena(pc : L2PcInstance, count : Int, apply_rates : Bool) : Nil
     if apply_rates
       reward_items(pc, Inventory::ADENA_ID, count.to_i64)
     else
@@ -595,11 +601,11 @@ abstract class AbstractScript
 
   delegate give_adena, to: AbstractScript
 
-  def self.reward_items(pc : L2PcInstance, holder : ItemHolder)
+  def self.reward_items(pc : L2PcInstance, holder : ItemHolder) : Nil
     reward_items(pc, holder.id, holder.count)
   end
 
-  def self.reward_items(pc : L2PcInstance, item_id : Int32, count : Int)
+  def self.reward_items(pc : L2PcInstance, item_id : Int32, count : Int) : Nil
     return if count <= 0
     count = count.to_i64
 
@@ -778,7 +784,7 @@ abstract class AbstractScript
     add_spawn(npc_id, *pos.xyz, pos.heading, false, 0, false, 0)
   end
 
-  def self.add_spawn(summoner : L2Npc?, npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int)
+  def self.add_spawn(summoner : L2Npc?, npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int) : L2Npc
     add_spawn(summoner, npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, false, 0)
   end
 
@@ -818,12 +824,12 @@ abstract class AbstractScript
     if random_offset
       offset = Rnd.rand(50..100)
       if Rnd.bool
-        offset *= -1
+        offset &*= -1
       end
       x += offset
       offset = Rnd.rand(50..100)
       if Rnd.bool
-        offset *= -1
+        offset &*= -1
       end
       y += offset
     end

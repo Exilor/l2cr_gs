@@ -20,7 +20,9 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
 
   getter system_message_id
 
-  def initialize(@system_message_id : SystemMessageId)
+  def initialize(sm_id : SystemMessageId)
+    @system_message_id = sm_id
+
     if param_count > 0
       ptr = Pointer(SMParam).malloc(param_count)
     else
@@ -172,9 +174,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
         d value.id
         d value.level
       when ZoneInfo
-        d value.x
-        d value.y
-        d value.z
+        l value
       else # Int32
         d value
       end

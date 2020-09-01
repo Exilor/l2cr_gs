@@ -92,32 +92,23 @@ module BoatManager
   end
 
   def dock_ship(h : Int, val : Bool)
-    if BUSY_DOCKS[h]?.nil?
-      debug "index #{h} out of bounds"
-    else
-      BUSY_DOCKS[h] = val
-    end
+    BUSY_DOCKS[h] = val
   end
 
   def dock_busy?(h : Int) : Bool
-    ret = BUSY_DOCKS[h]?
-    if ret.nil?
-      debug "index #{h} out of bounds"
-      false
-    else
-      ret
-    end
+    BUSY_DOCKS[h]
   end
 
   def broadcast_packets(point1 : VehiclePathPoint, point2 : VehiclePathPoint, *packets : GameServerPacket)
     L2World.players.each do |pc|
-      dx = pc.x - point1.x
-      dy = pc.y - point1.y
+      x, y = pc.x, pc.y
+      dx = x - point1.x
+      dy = y - point1.y
       if Math.hypot(dx, dy) < Config.boat_broadcast_radius
         packets.each { |packet| pc.send_packet(packet) }
       else
-        dx = pc.x - point2.x
-        dy = pc.y - point2.y
+        dx = x - point2.x
+        dy = y - point2.y
         if Math.hypot(dx, dy) < Config.boat_broadcast_radius
           packets.each { |packet| pc.send_packet(packet) }
         end

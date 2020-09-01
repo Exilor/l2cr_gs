@@ -153,7 +153,7 @@ class Scripts::Valakas < AbstractNpcAI
       when "regen_task"
         # Inactivity task - 15min
         if GrandBossManager.get_boss_status(VALAKAS) == FIGHTING
-          if @time_tracker + 900000 < Time.ms
+          if @time_tracker + 900_000 < Time.ms
             npc.intention = AI::IDLE
             npc.tele_to_location(VALAKAS_REGENERATION_LOC)
 
@@ -235,10 +235,10 @@ class Scripts::Valakas < AbstractNpcAI
         zone.broadcast_packet(SpecialCamera.new(npc, 1700, 10, 0, 300, 15000, 250, 20, -20, 1, 1, 0))
 
         TELEPORT_CUBE_LOCATIONS.each do |loc|
-          add_spawn(31759, loc, false, 900000)
+          add_spawn(31759, loc, false, 900_000)
         end
 
-        start_quest_timer("remove_players", 900000, nil, nil)
+        start_quest_timer("remove_players", 900_000, nil, nil)
       when "skill_task"
         call_skill_ai(npc)
       end
@@ -314,7 +314,7 @@ class Scripts::Valakas < AbstractNpcAI
     min = -Config.valakas_spawn_random
     max = Config.valakas_spawn_random
     respawn_time = Config.valakas_spawn_interval + Rnd.rand(min..max)
-    respawn_time *= 3600000
+    respawn_time *= 3_600_000
 
     start_quest_timer("valakas_unlock", respawn_time, nil, nil)
     # also save the respawn time so that the info is maintained past reboots
@@ -361,7 +361,7 @@ class Scripts::Valakas < AbstractNpcAI
     skill = get_rand_skill(npc)
 
     # Cast the skill or follow the target.
-    range = (skill.skill.cast_range < 600) ? 600 : skill.skill.cast_range
+    range = Math.max(skill.skill.cast_range, 600)
     if Util.in_range?(range, npc, @valakas_target, true)
       npc.intention = AI::IDLE
       npc.casting_now = true
@@ -402,9 +402,7 @@ class Scripts::Valakas < AbstractNpcAI
     result = [] of L2Playable
 
     npc.known_list.each_character do |obj|
-      if obj.pet?
-        next
-      elsif obj.alive? && obj.is_a?(L2Playable)
+      if !obj.pet? && obj.alive? && obj.is_a?(L2Playable)
         result << obj
       end
     end

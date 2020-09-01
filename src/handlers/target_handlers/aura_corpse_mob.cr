@@ -10,7 +10,6 @@ module TargetHandler::AuraCorpseMob
       if obj.attackable? && obj.dead?
         if only_first
           return [obj] of L2Object
-          break
         end
 
         if max_targets > 0 && target_list && target_list.size >= max_targets

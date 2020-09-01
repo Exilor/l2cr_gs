@@ -1,4 +1,4 @@
-class Packets::Outgoing::PlayerAuthRequest < MMO::OutgoingPacket(LoginServerClient)
+class Packets::Outgoing::PlayerAuthRequest < MMO::OutgoingPacket(LoginServerThread)
   initializer account : String, session_key : SessionKey
 
   def write

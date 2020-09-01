@@ -137,11 +137,11 @@ class L2Weapon < L2Item
 
     return if trigger.toggle?
 
-    unless caster.ai.cast_target?
+    unless caster.ai.cast_target
       warn "No cast target."
     end
 
-    return if caster.ai.cast_target? != target
+    return if caster.ai.cast_target != target
 
     if cond = @skills_on_magic_condition
       return unless cond.test(caster, target, skill)

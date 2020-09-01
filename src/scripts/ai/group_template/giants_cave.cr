@@ -12,8 +12,8 @@ class Scripts::GiantsCave < AbstractNpcAI
     add_aggro_range_enter_id(SCOUTS)
   end
 
-  def on_adv_event(event, npc, player)
-    if event == "ATTACK" && player && npc && npc.alive?
+  def on_adv_event(event, npc, pc)
+    if event == "ATTACK" && pc && npc && npc.alive?
       if npc.id == SCOUTS[0] # Gamli
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::INTRUDER_DETECTED)
       else
@@ -22,7 +22,7 @@ class Scripts::GiantsCave < AbstractNpcAI
 
       npc.known_list.each_character(450) do |char|
         if char.is_a?(L2Attackable) && Rnd.bool
-          add_attack_desire(char, player)
+          add_attack_desire(char, pc)
         end
       end
     elsif event == "CLEAR" && npc && npc.alive?
@@ -36,13 +36,13 @@ class Scripts::GiantsCave < AbstractNpcAI
     if npc.script_value?(0)
       npc.script_value = 1
       start_quest_timer("ATTACK", 6000, npc, attacker)
-      start_quest_timer("CLEAR", 120000, npc, nil)
+      start_quest_timer("CLEAR", 120_000, npc, nil)
     end
 
     super
   end
 
-  def on_aggro_range_enter(npc, player, is_summon)
+  def on_aggro_range_enter(npc, pc, is_summon)
     if npc.script_value?(0)
       npc.script_value = 1
       if rand(2) == 1
@@ -50,8 +50,8 @@ class Scripts::GiantsCave < AbstractNpcAI
       else
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::WHAT_KIND_OF_CREATURES_ARE_YOU)
       end
-      start_quest_timer("ATTACK", 6000, npc, player)
-      start_quest_timer("CLEAR", 120000, npc, nil)
+      start_quest_timer("ATTACK", 6000, npc, pc)
+      start_quest_timer("CLEAR", 120_000, npc, nil)
     end
 
     super

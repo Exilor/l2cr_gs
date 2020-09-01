@@ -19,7 +19,7 @@ struct BlockList
   end
 
   protected def remove_from_block_list(target : Int32)
-    @block_list.delete(target)
+    @block_list.delete_first(target)
     remove_from_db(target)
   end
 

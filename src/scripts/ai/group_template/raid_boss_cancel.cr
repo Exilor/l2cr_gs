@@ -77,7 +77,7 @@ class Scripts::RaidBossCancel < AbstractNpcAI
   def on_attack(npc, attacker, damage, is_summon)
     if Util.in_range?(150, npc, attacker, true) && Rnd.rand(750) < 1
       unless holder = npc.template.get_skill_holder("SelfRangeCancel_a")
-        warn { "Missing skill holder SelfRangeCancel_a on #{npc}'s template." }
+        warn { "Missing skill holder 'SelfRangeCancel_a' on #{npc}'s template." }
         return super
       end
 
@@ -88,15 +88,7 @@ class Scripts::RaidBossCancel < AbstractNpcAI
   end
 
   def on_skill_see(npc, pc, skill, targets, is_summon)
-    if Util.in_range?(150, npc, pc, true) && Rnd.rand(750) < 1
-      unless holder = npc.template.get_skill_holder("SelfRangeCancel_a")
-        warn { "Missing skill holder SelfRangeCancel_a on #{npc}'s template." }
-        return super
-      end
-
-      add_skill_cast_desire(npc, pc, holder, 1_000_000)
-    end
-
+    on_attack(npc, pc, 0, false)
     super
   end
 end

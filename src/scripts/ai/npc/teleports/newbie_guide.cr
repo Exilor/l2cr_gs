@@ -228,7 +228,7 @@ class Scripts::NewbieGuide < AbstractNpcAI
             npc.do_cast(BLESS_THE_BODY_FOR_BEGINNERS)
             npc.do_cast(VAMPIRIC_RAGE_FOR_BEGINNERS)
             npc.do_cast(REGENERATION_FOR_BEGINNERS)
-            if talker.level.between?(6, 39)
+            if talker.level.between?(6, 36)
               npc.do_cast(HASTE_FOR_BEGINNERS)
             end
             if talker.level.between?(40, 75)
@@ -277,10 +277,10 @@ class Scripts::NewbieGuide < AbstractNpcAI
             npc.do_cast(ACUMEN_FOR_BEGINNERS)
             npc.do_cast(CONCENTRATION_FOR_BEGINNERS)
             npc.do_cast(EMPOWER_FOR_BEGINNERS)
-            if talker.level.between?(6, 39)
+            case talker.level
+            when 6..39
               npc.do_cast(HASTE_FOR_BEGINNERS)
-            end
-            if talker.level.between?(40, 75)
+            when 40..75
               npc.do_cast(ADVENTURERS_HASTE)
             end
           end
@@ -288,7 +288,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           show_page(talker, "buffs-no-pet.htm")
         end
       end
-
     when -1000
       case reply
       when 1
@@ -326,7 +325,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
           show_page(talker, "newbie-guide-012.htm")
         end
       end
-
     when -303
       case reply
       when 528
@@ -350,9 +348,7 @@ class Scripts::NewbieGuide < AbstractNpcAI
           show_page(talker, "newbie-guide-014.htm")
         end
       end
-
     end
-
 
     case npc.id
     when NEWBIE_GUIDE_HUMAN
@@ -386,7 +382,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
         return tmp
       end
     end
-
 
     ""
   end
@@ -838,7 +833,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
             qs.add_radar(-125872, 38208, 1251)
             return "newbie-guide-11f.htm"
           end
-
         end
         unless qs.has_nr_memo?(talker, GUIDE_MISSION)
           qs.set_nr_memo(talker, GUIDE_MISSION)
@@ -1028,7 +1022,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       return "30598-05.htm"
     end
 
-
     ""
   end
 
@@ -1177,7 +1170,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.add_radar(49262, 53607, -3216)
       return "30599-05.htm"
     end
-
 
     ""
   end
@@ -1343,7 +1335,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.add_radar(12311, 17470, -4574)
       return "30600-05.htm"
     end
-
 
     ""
   end
@@ -1514,7 +1505,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       return "30601-05.htm"
     end
 
-
     ""
   end
 
@@ -1645,7 +1635,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.add_radar(-44624, -111873, -238)
       return "30602-05.htm"
     end
-
 
     ""
   end
@@ -1851,7 +1840,6 @@ class Scripts::NewbieGuide < AbstractNpcAI
       qs.add_radar(-118080, 42835, 720)
       return "32135-05.htm"
     end
-
 
     ""
   end

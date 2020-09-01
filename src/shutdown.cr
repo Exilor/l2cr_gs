@@ -37,6 +37,7 @@ class Shutdown
     if @shutdown_mode > 0
       case seconds
       when 1..5, 10, 30, 60, 120, 180, 240, 300, 420, 480, 540
+        # do nothing
       else
         send_server_quit(seconds)
       end
@@ -96,8 +97,8 @@ class Shutdown
       end
 
       begin
-        LoginServerClient.instance.terminate
-        info { "LoginServerClient terminated (#{tc1})." }
+        LoginServerThread.instance.terminate
+        info { "LoginServerThread terminated (#{tc1})." }
         tc1.start
       rescue e
         error e
@@ -143,7 +144,7 @@ class Shutdown
         Shutdown.instance.mode = GM_RESTART
         exit(2)
       when ABORT
-        LoginServerClient.instance.server_status = ServerStatus::STATUS_AUTO
+        LoginServerThread.instance.server_status = ServerStatus::STATUS_AUTO
       end
     end
   end
@@ -189,7 +190,7 @@ class Shutdown
       when 1..5, 10, 30, 120, 180, 240, 300, 420, 480, 540
         send_server_quit(@seconds_shut)
       when 60
-        LoginServerClient.instance.server_status = ServerStatus::STATUS_DOWN
+        LoginServerThread.instance.server_status = ServerStatus::STATUS_DOWN
         send_server_quit(60)
       end
 

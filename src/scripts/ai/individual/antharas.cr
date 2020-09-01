@@ -102,14 +102,14 @@ class Scripts::Antharas < AbstractNpcAI
       @antharas = add_spawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0).as(L2GrandBossInstance)
       @antharas.not_nil!.set_current_hp_mp(curr_hp, curr_mp)
       add_boss(@antharas)
-      start_quest_timer("SPAWN_ANTHARAS", Config.antharas_wait_time * 60000, nil, nil)
+      start_quest_timer("SPAWN_ANTHARAS", Config.antharas_wait_time * 60_000, nil, nil)
     when IN_FIGHT
       @antharas = add_spawn(ANTHARAS, loc_x, loc_y, loc_z, heading, false, 0).as(L2GrandBossInstance)
       @antharas.not_nil!.set_current_hp_mp(curr_hp, curr_mp)
       add_boss(@antharas)
       @last_attack = Time.ms
-      start_quest_timer("CHECK_ATTACK", 60000, @antharas, nil)
-      start_quest_timer("SPAWN_MINION", 300000, @antharas, nil)
+      start_quest_timer("CHECK_ATTACK", 60_000, @antharas, nil)
+      start_quest_timer("SPAWN_MINION", 300_000, @antharas, nil)
     when DEAD
       remain = respawn_time - Time.ms
       if remain > 0
@@ -213,8 +213,8 @@ class Scripts::Antharas < AbstractNpcAI
         end
       end
       npc.set_intention(AI::MOVE_TO, Location.new(179011, 114871, -7704))
-      start_quest_timer("CHECK_ATTACK", 60000, npc, nil)
-      start_quest_timer("SPAWN_MINION", 300000, npc, nil)
+      start_quest_timer("CHECK_ATTACK", 60_000, npc, nil)
+      start_quest_timer("SPAWN_MINION", 300_000, npc, nil)
     when "SET_REGEN"
       if npc
         if npc.hp_percent < 25
@@ -232,10 +232,10 @@ class Scripts::Antharas < AbstractNpcAI
         elsif !npc.affected_by_skill?(ANTH_REGEN_1.skill_id)
           npc.do_cast(ANTH_REGEN_1)
         end
-        start_quest_timer("SET_REGEN", 60000, npc, nil)
+        start_quest_timer("SET_REGEN", 60_000, npc, nil)
       end
     when "CHECK_ATTACK"
-      if npc && @last_attack + 900000 < Time.ms
+      if npc && @last_attack + 900_000 < Time.ms
         set_status(ALIVE)
         @zone.characters_inside.each do |char|
           if char.npc?
@@ -252,16 +252,16 @@ class Scripts::Antharas < AbstractNpcAI
         cancel_quest_timer("SPAWN_MINION", npc, nil)
       elsif npc
         if @attacker_1_hate > 10
-          @attacker_1_hate -= Rnd.rand(10)
+          @attacker_1_hate &-= Rnd.rand(10)
         end
         if @attacker_2_hate > 10
-          @attacker_2_hate -= Rnd.rand(10)
+          @attacker_2_hate &-= Rnd.rand(10)
         end
         if @attacker_3_hate > 10
-          @attacker_3_hate -= Rnd.rand(10)
+          @attacker_3_hate &-= Rnd.rand(10)
         end
         manage_skills(npc)
-        start_quest_timer("CHECK_ATTACK", 60000, npc, nil)
+        start_quest_timer("CHECK_ATTACK", 60_000, npc, nil)
       end
     when "SPAWN_MINION"
       npc = npc.not_nil!
@@ -283,7 +283,7 @@ class Scripts::Antharas < AbstractNpcAI
       if Rnd.rand(100) > 10 && @minion_multiplier < 4
         @minion_multiplier += 1
       end
-      start_quest_timer("SPAWN_MINION", 300000, npc, nil)
+      start_quest_timer("SPAWN_MINION", 300_000, npc, nil)
     when "CLEAR_ZONE"
       @zone.characters_inside.each do |char|
         if char.npc?
@@ -298,7 +298,7 @@ class Scripts::Antharas < AbstractNpcAI
         npc.disable_core_ai(true)
         npc.set_intention(AI::MOVE_TO, Location.new(177648, 114816, -7735))
         start_quest_timer("TID_FEAR_MOVE_TIMEOVER", 2000, npc, nil)
-        start_quest_timer("TID_FEAR_COOLTIME", 300000, npc, nil)
+        start_quest_timer("TID_FEAR_COOLTIME", 300_000, npc, nil)
       end
     when "TID_FEAR_COOLTIME"
       @sandstorm = 0
@@ -311,7 +311,7 @@ class Scripts::Antharas < AbstractNpcAI
         INVISIBLE_NPC.each { |k, v| add_spawn(k, v) }
       elsif @sandstorm == 1
         if @move_chance <= 3
-          @move_chance += 1
+          @move_chance &+= 1
           npc.set_intention(AI::MOVE_TO, Location.new(177648, 114816, -7735))
           start_quest_timer("TID_FEAR_MOVE_TIMEOVER", 5000, npc, nil)
         else
@@ -347,7 +347,7 @@ class Scripts::Antharas < AbstractNpcAI
       if get_status == IN_FIGHT
         @minion_count = 0
         @zone.characters_inside.each do |char|
-          if char.npc? && (char.id == BEHEMOTH || char.id == TERASQUE)
+          if char.npc? && char.id.in?(BEHEMOTH, TERASQUE)
             char.delete_me
           end
         end
@@ -437,7 +437,7 @@ class Scripts::Antharas < AbstractNpcAI
         notify_event("DESPAWN_MINIONS", nil, nil)
         @zone.broadcast_packet(SpecialCamera.new(npc, 1200, 20, -10, 0, 10000, 13000, 0, 0, 0, 0, 0))
         @zone.broadcast_packet(Music::BS01_D_10000.packet)
-        add_spawn(CUBE, 177615, 114941, -7709, 0, false, 900000)
+        add_spawn(CUBE, 177615, 114941, -7709, 0, false, 900_000)
         respawn_time = (Config.antharas_spawn_interval.to_i64 + Rnd.rand(-Config.antharas_spawn_random..Config.antharas_spawn_random)) * 3600000
         set_respawn(respawn_time)
         start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)
@@ -462,13 +462,13 @@ class Scripts::Antharas < AbstractNpcAI
   def on_spawn(npc)
     if npc.id == ANTHARAS
       cancel_quest_timer("SET_REGEN", npc, nil)
-      start_quest_timer("SET_REGEN", 60000, npc, nil)
+      start_quest_timer("SET_REGEN", 60_000, npc, nil)
       npc.as(L2Attackable).on_kill_delay = 0
     else
       1.upto(6) do |i|
         x = npc.template.parameters.get_i32("suicide#{i}_x")
         y = npc.template.parameters.get_i32("suicide#{i}_y")
-        bomber = add_spawn(BOMBER, *npc.xyz, 0, true, 15000, true)
+        bomber = add_spawn(BOMBER, *npc.xyz, 0, true, 15_000, true)
         bomber.set_intention(AI::MOVE_TO, Location.new(x, y, npc.z))
       end
       npc.delete_me

@@ -67,12 +67,13 @@ class L2ControllableMobAI < L2AttackableAI
 
   private def think_cast
     npc = @actor.as(L2Attackable)
-    if attack_target?.nil? || attack_target.looks_dead?
+    attack_target = @attack_target
+    if attack_target.nil? || attack_target.looks_dead?
       self.attack_target = find_next_rnd_target
       client_stop_moving(nil)
     end
 
-    unless attack_target = attack_target?
+    unless attack_target = @attack_target
       return
     end
 
@@ -179,11 +180,12 @@ class L2ControllableMobAI < L2AttackableAI
   end
 
   private def think_attack
-    if attack_target?.nil? || attack_target.looks_dead?
-      if attack_target? != nil
+    attack_target = @attack_target
+    if attack_target.nil? || attack_target.looks_dead?
+      if attack_target
         # stop hating
         npc = @actor.as(L2Attackable)
-        npc.stop_hating(attack_target?)
+        npc.stop_hating(attack_target)
       end
 
       set_intention(ACTIVE)
@@ -205,7 +207,7 @@ class L2ControllableMobAI < L2AttackableAI
         end
       end
 
-      @actor.target = attack_target?
+      @actor.target = attack_target
       dist2 = @actor.calculate_distance(attack_target, false, true)
       range = @actor.physical_attack_range + @actor.template.collision_radius + attack_target.template.collision_radius
       max_range = range
@@ -231,7 +233,7 @@ class L2ControllableMobAI < L2AttackableAI
       if @actor.confused?
         hated = find_next_rnd_target
       else
-        hated = attack_target?
+        hated = attack_target
       end
 
       unless hated
@@ -239,7 +241,7 @@ class L2ControllableMobAI < L2AttackableAI
         return
       end
 
-      if hated != attack_target?
+      if hated != attack_target
         self.attack_target = hated
       end
 
@@ -266,7 +268,7 @@ class L2ControllableMobAI < L2AttackableAI
     if @actor.confused?
       hated = find_next_rnd_target
     else
-      hated = attack_target?
+      hated = attack_target
     end
 
     if hated

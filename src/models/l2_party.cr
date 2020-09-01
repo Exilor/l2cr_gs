@@ -240,14 +240,13 @@ class L2Party < AbstractPlayerGroup
 
   def leader=(pc : L2PcInstance)
     unless pc.in_duel?
-      if @members.includes?(pc)
+      if idx = @members.index(pc)
         if leader?(pc)
           pc.send_packet(SystemMessageId::YOU_CANNOT_TRANSFER_RIGHTS_TO_YOURSELF)
         else
           temp = leader()
-          p1 = @members.index(pc) || raise "#{pc.name} not in this party"
           @members[0] = pc
-          @members[p1] = temp
+          @members[idx] = temp
 
           sm = SystemMessage.c1_has_become_a_party_leader
           sm.add_string(leader().name)
@@ -271,7 +270,7 @@ class L2Party < AbstractPlayerGroup
   end
 
   def get_player_by_name(name : String) : L2PcInstance
-    @members.find { |m| m.name == name } ||
+    @members.find { |m| m.name.casecmp?(name) } ||
     raise("Party member with name '#{name}' not found.")
   end
 
@@ -404,9 +403,11 @@ class L2Party < AbstractPlayerGroup
       next if m.dead?
 
       if valid_members.includes?(m)
-        penalty = m.has_servitor? ? m.summon.as(L2ServitorInstance).exp_multiplier : 1.0
         sq_level = Math.pow(m.level, 2)
-        pre_calc = (sq_level / sq_level_sum) * penalty
+        pre_calc = sq_level / sq_level_sum
+        if smn = m.summon.as?(L2ServitorInstance)
+          pre_calc *= smn.exp_multiplier
+        end
         add_exp = m.calc_stat(Stats::EXPSP_RATE, xp_reward * pre_calc).round.to_i64
         add_sp = m.calc_stat(Stats::EXPSP_RATE, sp_reward * pre_calc).to_i32
         add_exp = calculate_exp_sp_party_cutoff(m, top_lvl, add_exp, add_sp, use_vitality_rate)
@@ -414,7 +415,7 @@ class L2Party < AbstractPlayerGroup
           m.update_vitality_points(vitality_points, true, false)
         end
       else
-        m.add_exp_and_sp(0i64, 0)
+        m.add_exp_and_sp(0, 0)
       end
     end
   end

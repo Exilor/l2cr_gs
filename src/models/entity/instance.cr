@@ -37,11 +37,14 @@ class Instance
   property? pvp_instance : Bool = false
   property reenter_type = InstanceReenterType::NONE # L2J: _type
 
-  def initialize(@id : Int32)
+  def initialize(id : Int32)
+    @id = id
     @eject_time = Config.eject_dead_player_time.to_i64
   end
 
-  def initialize(@id : Int32, @name : String)
+  def initialize(id : Int32, name : String)
+    @id = id
+    @name = name
     @eject_time = Config.eject_dead_player_time.to_i64
   end
 
@@ -182,9 +185,9 @@ class Instance
       when "activitytime"
         if temp = parse_long(n, "val", nil)
           delay = 15000
-          ctu = CheckTimeUp.new(self, temp.to_i * 60000)
+          ctu = CheckTimeUp.new(self, temp.to_i * 60_000)
           @check_time_up_task = ThreadPoolManager.schedule_general(ctu, delay)
-          @instance_end_time = Time.ms + (temp.to_i64 * 60000) + 15000
+          @instance_end_time = Time.ms + (temp.to_i64 * 60_000) + 15_000
         end
       when "allowsummon"
         temp = parse_bool(n, "val", nil)
@@ -428,6 +431,7 @@ class Instance
         end
       end
     end
+
     @eject_dead_tasks[pc.l2id] = ThreadPoolManager.schedule_general(task, @eject_time)
   end
 

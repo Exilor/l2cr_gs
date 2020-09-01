@@ -12,7 +12,7 @@ class Scripts::TarBeetle < AbstractNpcAI
   def initialize
     super(self.class.simple_name, "ai/npc")
 
-    @SPAWN = TarBeetleSpawn.new
+    @spawn = TarBeetleSpawn.new
 
     add_aggro_range_enter_id(TAR_BEETLE)
     add_spell_finished_id(TAR_BEETLE)
@@ -38,7 +38,7 @@ class Scripts::TarBeetle < AbstractNpcAI
     if skill && skill.id == TAR_SPITE
       val = npc.script_value - 1
       if val <= 0 || SKILLS[0].skill.mp_consume2 > npc.current_mp
-        @SPAWN.remove_beetle(npc)
+        @spawn.remove_beetle(npc)
       else
         npc.script_value = val
       end

@@ -106,9 +106,10 @@ module AdminCommandHandler::AdminAdmin
           pc.send_message("Invalid parameter")
         end
       rescue e
-        warn e
         if cmd.size == 2
           pc.send_message("Usage: //set parameter=value")
+        else
+          warn e
         end
       ensure
         if cmd.size == 3
@@ -125,9 +126,8 @@ module AdminCommandHandler::AdminAdmin
   end
 
   private def show_main_page(pc, command)
-    mode = command.from(11).to_i { 0 }
     file_name =
-    case mode
+    case command.from(11).to_i { 0 }
     when 1 then "main_menu.htm"
     when 2 then "game_menu.htm"
     when 3 then "effects_menu.htm"

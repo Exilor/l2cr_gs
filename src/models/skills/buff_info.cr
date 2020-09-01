@@ -8,7 +8,7 @@ class BuffInfo
   @tasks : Interfaces::Map(AbstractEffect, EffectTaskInfo)?
 
   getter period_start_ticks : Int32
-  getter task : TaskScheduler::DelayedTask?
+  getter task : TaskScheduler::DelayedTask? # L2J: _scheduledFutureTimeTask
   getter effects = [] of AbstractEffect
   getter effector, effected, skill
   property abnormal_time : Int32
@@ -28,7 +28,7 @@ class BuffInfo
     @effects << effect
   end
 
-  def add_task(effect : AbstractEffect, task : EffectTaskInfo)
+  private def add_task(effect : AbstractEffect, task : EffectTaskInfo)
     tasks = @tasks || sync do
       @tasks ||= Concurrent::Map(AbstractEffect, EffectTaskInfo).new
     end
@@ -68,14 +68,13 @@ class BuffInfo
       e.on_start(self)
 
       if e.ticks > 0
-        effect_task = EffectTickTask.new(self, e)
+        tick_task = EffectTickTask.new(self, e)
         time = e.ticks &* Config.effect_tick_ratio
-        scheduled_future = ThreadPoolManager.schedule_effect_at_fixed_rate(effect_task, time, time)
-        add_task(e, EffectTaskInfo.new(effect_task, scheduled_future))
+        delayed_task = ThreadPoolManager.schedule_effect_at_fixed_rate(tick_task, time, time)
+        add_task(e, EffectTaskInfo.new(tick_task, delayed_task))
       end
 
-      fncs = e.get_stat_funcs(effector, effected, skill)
-      effected.add_stat_funcs(fncs)
+      effected.add_stat_funcs(e.get_stat_funcs(effector, effected, skill))
     end
 
     add_abnormal_visual_effects
@@ -120,7 +119,8 @@ class BuffInfo
     # This check is custom. Allocating a packet for something that doesn't have
     # a human player behind it is a waste of resources.
     if @effected.acting_player
-      if !(@effected.summon? && !@effected.as(L2Summon).owner.has_summon?)
+      smn = @effected.as?(L2Summon)
+      if !(smn && !smn.owner.has_summon?)
         if @skill.toggle?
           sm = Packets::Outgoing::SystemMessage.s1_has_been_aborted
         elsif removed?
@@ -136,7 +136,7 @@ class BuffInfo
       end
     end
 
-    if same?(effected.effect_list.short_buff)
+    if same?(@effected.effect_list.short_buff)
       effected.effect_list.short_buff_status_update(nil)
     end
   end

@@ -63,7 +63,7 @@ module TaskManager
       end
     end
   rescue e
-    error "Error while loading Global task table."
+    error "Error while loading Global task table:"
     error e
   end
 

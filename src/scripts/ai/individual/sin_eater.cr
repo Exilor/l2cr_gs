@@ -27,7 +27,7 @@ class Scripts::SinEater < AbstractNpcAI
         end
       end
 
-      start_quest_timer("TALK", 60000, nil, player)
+      start_quest_timer("TALK", 60_000, nil, player)
     end
 
     super
@@ -69,7 +69,7 @@ class Scripts::SinEater < AbstractNpcAI
     else
       broadcast_summon_say(summon, NpcString::ALMOST_GOT_IT_OUCH_STOP_DAMN_THESE_BLOODY_MANACLES)
     end
-    start_quest_timer("TALK", 60000, nil, summon.owner)
+    start_quest_timer("TALK", 60_000, nil, summon.owner)
   end
 
   def on_summon_talk(summon)

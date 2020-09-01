@@ -14,7 +14,7 @@
 #   end
 # end
 
-# @tick_count is not used in anything other than admin snooping.
+# @tick_count only used for debug purposes and can be ignored.
 struct EffectTickTask
   getter_initializer buff_info : BuffInfo, effect : AbstractEffect
 

@@ -52,9 +52,7 @@ class QuestState
     set(var, val.to_s)
   end
 
-  def set(var : String, val : String?) : String?
-    val ||= ""
-
+  def set(var : String, val : String) : String
     _vars = (@vars ||= {} of String => String)
 
     old = _vars[var]?
@@ -105,15 +103,15 @@ class QuestState
   end
 
   def get(var : String) : String?
-    if _vars = @vars
-      _vars[var]?
+    if vars = @vars
+      vars[var]?
     end
   end
 
   def get_int(var : String) : Int32
     return -1 unless _vars = @vars
     return -1 unless variable = _vars[var]?
-    return -1 if variable.empty?# || !var.number?
+    return -1 if variable.empty?
     begin
       variable.to_i
     rescue e

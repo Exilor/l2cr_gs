@@ -7,7 +7,11 @@ require "../../enums/stat_function"
 
 #   getter stat, order, value
 
-#   def initialize(@attach_cond : Condition?, @apply_cond : Condition?, function_name : String, order : Int32, @stat : Stats, @value : Float64)
+#   def initialize(attach_cond : Condition?, apply_cond : Condition?, function_name : String, order : Int32, stat : Stats, value : Float64)
+#     @attach_cond = attach_cond
+#     @apply_cond = apply_cond
+#     @stat = stat
+#     @value = value
 #     function = StatFunction.parse(function_name)
 
 #     @order = order >= 0 ? order : function.order
@@ -39,7 +43,7 @@ require "../../enums/stat_function"
 #       return
 #     end
 
-#     Using ::new directly conflicts with subclasses with a 0-arity #initialize
+#     # Using ::new directly conflicts with subclasses with a 0-arity #initialize
 #     func = @constructor.allocate
 #     func.public_initialize(@stat, @order, owner, @value, @apply_cond)
 #     func
@@ -55,7 +59,11 @@ struct FuncTemplate
 
   getter stat, order, value
 
-  def initialize(@attach_cond : Condition?, @apply_cond : Condition?, function_name : String, order : Int32, @stat : Stats, @value : Float64)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, function_name : String, order : Int32, stat : Stats, value : Float64)
+    @attach_cond = attach_cond
+    @apply_cond = apply_cond
+    @stat = stat
+    @value = value
     function = StatFunction.parse(function_name)
     @order = order >= 0 ? order : function.order
 

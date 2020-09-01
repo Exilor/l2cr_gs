@@ -15,6 +15,6 @@ module UserCommandHandler::Dismount
   end
 
   def commands
-    {64}
+    {62}
   end
 end

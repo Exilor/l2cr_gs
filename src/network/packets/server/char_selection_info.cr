@@ -5,7 +5,7 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
 
   getter char_info : Array(CharSelectInfoPackage)
 
-  def initialize(account : String, session_id : Int32, active_id : Int32 = -1)
+  def initialize(account : String, session_id : Int32, active_id : Int8 = -1i8)
     @account = account
     @session_id = session_id
     @active_id = active_id
@@ -23,7 +23,7 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
       last_access = 0
       @char_info.each_with_index do |cip, i|
         if last_access < cip.last_access
-          @active_id = i
+          @active_id = i.to_i8!
           last_access = cip.last_access
         end
       end
@@ -78,7 +78,7 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
       c Math.min(cip.enchant_effect, 127)
       d cip.augmentation_id
 
-      d 0x00 # transformation
+      d 0x00 # transformation id, doesn't show
 
       4.times { d 0 } # pet id, level, pet food
       2.times { f 0.0 } # pet max hp, max mp

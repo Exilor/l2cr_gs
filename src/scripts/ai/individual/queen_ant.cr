@@ -76,7 +76,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       @zone.not_nil!.move_players_to(OUST_LOC_3)
     end
     GrandBossManager.add_boss(npc)
-    start_quest_timer("action", 10000, npc, nil, true)
+    start_quest_timer("action", 10_000, npc, nil, true)
     start_quest_timer("heal", 1000, nil, nil, true)
     npc.broadcast_packet(Music::BS01_A_10000.packet)
     @queen = npc
@@ -151,7 +151,6 @@ class Scripts::QueenAnt < AbstractNpcAI
       mob.raid_minion = true
     end
 
-
     super
   end
 
@@ -219,7 +218,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       min = -Config.queen_ant_spawn_random
       max = Config.queen_ant_spawn_random
       respawn_time = Config.queen_ant_spawn_interval + Rnd.rand(min..max)
-      respawn_time *= 3600000
+      respawn_time *= 3_600_000
       start_quest_timer("queen_unlock", respawn_time, nil, nil)
       cancel_quest_timer("action", npc, nil)
       cancel_quest_timer("heal", nil, nil)

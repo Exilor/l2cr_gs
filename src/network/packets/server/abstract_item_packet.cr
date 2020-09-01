@@ -1,11 +1,11 @@
 require "../../../models/trade_item"
 
 abstract class Packets::Outgoing::AbstractItemPacket < GameServerPacket
-  def write_item(item : TradeItem | L2ItemInstance)
+  private def write_item(item : TradeItem | L2ItemInstance)
     write_item(ItemInfo.new(item))
   end
 
-  def write_item(item : ItemInfo)
+  private def write_item(item : ItemInfo)
     d item.l2id
     d item.template.display_id # ItemId
     d item.location # T1

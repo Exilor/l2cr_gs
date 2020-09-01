@@ -82,7 +82,7 @@ class Scripts::Baium < AbstractNpcAI
         archangel = add_spawn(ARCHANGEL, loc, false, 0, true)
         start_quest_timer("SELECT_TARGET", 5000, archangel, nil)
       end
-      start_quest_timer("CHECK_ATTACK", 60000, @baium, nil)
+      start_quest_timer("CHECK_ATTACK", 60_000, @baium, nil)
     when DEAD
       remain = respawn_time - Time.ms
       if remain > 0
@@ -124,8 +124,8 @@ class Scripts::Baium < AbstractNpcAI
         @last_attack = Time.ms
         start_quest_timer("WAKEUP_ACTION", 50, @baium, nil)
         start_quest_timer("MANAGE_EARTHQUAKE", 2000, @baium, nil)
-        start_quest_timer("SOCIAL_ACTION", 10000, @baium, player)
-        start_quest_timer("CHECK_ATTACK", 60000, @baium, nil)
+        start_quest_timer("SOCIAL_ACTION", 10_000, @baium, player)
+        start_quest_timer("CHECK_ATTACK", 60_000, @baium, nil)
       end
     when "WAKEUP_ACTION"
       if npc
@@ -232,17 +232,17 @@ class Scripts::Baium < AbstractNpcAI
         start_quest_timer("SELECT_TARGET", 5000, npc, nil)
       end
     when "CHECK_ATTACK"
-      if npc && @last_attack + 1800000 < Time.ms
+      if npc && @last_attack + 1_800_000 < Time.ms
         cancel_quest_timers("SELECT_TARGET")
         notify_event("CLEAR_ZONE", nil, nil)
         add_spawn(BAIUM_STONE, BAIUM_LOC, false, 0)
         set_status(ALIVE)
       elsif npc
-        if @last_attack + 300000 < Time.ms && npc.hp_percent < 75
+        if @last_attack + 300_000 < Time.ms && npc.hp_percent < 75
           npc.target = npc
           npc.do_cast(HEAL_OF_BAIUM)
         end
-        start_quest_timer("CHECK_ATTACK", 60000, npc, nil)
+        start_quest_timer("CHECK_ATTACK", 60_000, npc, nil)
       end
     when "CLEAR_STATUS"
       set_status(ALIVE)
@@ -292,7 +292,6 @@ class Scripts::Baium < AbstractNpcAI
         manage_skills(npc)
       end
     end
-
 
     super
   end
@@ -348,12 +347,12 @@ class Scripts::Baium < AbstractNpcAI
   def on_kill(npc, killer, is_summon)
     if @zone.character_in_zone?(killer)
       set_status(DEAD)
-      add_spawn(TELE_CUBE, TELEPORT_CUBIC_LOC, false, 900000)
+      add_spawn(TELE_CUBE, TELEPORT_CUBIC_LOC, false, 900_000)
       @zone.broadcast_packet(Music::BS01_D_10000.packet)
       respawn_time = (Config.baium_spawn_interval.to_i64 + Rnd.rand(-Config.baium_spawn_random..Config.baium_spawn_random)) * 3600000
       set_respawn(respawn_time)
       start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)
-      start_quest_timer("CLEAR_ZONE", 900000, nil, nil)
+      start_quest_timer("CLEAR_ZONE", 900_000, nil, nil)
       cancel_quest_timer("CHECK_ATTACK", npc, nil)
       cancel_quest_timers("SELECT_TARGET")
     end

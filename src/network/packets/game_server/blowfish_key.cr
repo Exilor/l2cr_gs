@@ -1,4 +1,4 @@
-class Packets::Outgoing::BlowfishKey < MMO::OutgoingPacket(LoginServerClient)
+class Packets::Outgoing::BlowfishKey < MMO::OutgoingPacket(LoginServerThread)
   def initialize(*args)
   end
 

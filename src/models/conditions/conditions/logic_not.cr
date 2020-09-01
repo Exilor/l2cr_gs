@@ -6,7 +6,7 @@ class Condition
       end
     end
 
-    def listener=(lst : ConditionListener?)
+    def listener=(lst : Listener?)
       @condition.listener = lst ? self : nil
       super
     end

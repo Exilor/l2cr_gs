@@ -78,16 +78,24 @@ abstract class L2Character < L2Object
   property? mortal : Bool = true
   property? overloaded : Bool = false
   property? teleporting : Bool = false
-  property? immobilized : Bool = false
+  getter? immobilized : Bool = false
   property? no_random_walk : Bool = false
   property? flying : Bool = false
   property? show_summon_animation : Bool = false
+
+  def immobilized=(val : Bool)
+    if @immobilized = val
+      stop_move(nil)
+    end
+  end
 
   def initialize(template : L2CharTemplate)
     initialize(IdFactory.next, template)
   end
 
-  def initialize(l2id : Int32, @template : L2CharTemplate)
+  def initialize(l2id : Int32, template : L2CharTemplate)
+    @template = template
+
     super(l2id)
 
     init_char_stat
@@ -1252,7 +1260,8 @@ abstract class L2Character < L2Object
     end
 
     if target != self
-      self.heading = Util.calculate_heading_from(self, target)
+      heading = Util.calculate_heading_from(self, target)
+      self.heading = heading
       broadcast_packet(ExRotation.new(l2id, heading))
     end
 
@@ -1634,8 +1643,8 @@ abstract class L2Character < L2Object
       next unless target.is_a?(L2Character)
 
       if target.ai?
-        targets_attack_target = target.ai.attack_target?
-        targets_cast_target = target.ai.cast_target?
+        targets_attack_target = target.ai.attack_target
+        targets_cast_target = target.ai.cast_target
       end
 
       if !Config.raid_disable_curse && ((target.is_a?(L2RaidBossInstance) && target.give_raid_curse? && level > target.level &+ 8) ||
@@ -1709,8 +1718,10 @@ abstract class L2Character < L2Object
           end
         else
           if target.is_a?(L2PcInstance)
-            if !(target != self || target == player) && (target.pvp_flag > 0 || target.karma > 0)
-              player.update_pvp_status
+            if !(target != self || target == player)
+              if target.pvp_flag > 0 || target.karma > 0
+                player.update_pvp_status
+              end
             end
           elsif target.attackable?
             player.update_pvp_status
@@ -2771,7 +2782,7 @@ abstract class L2Character < L2Object
       next if me.is_a?(L2Attackable) && obj.attackable? && !me.chaos?
 
       unless obj.looks_dead?
-        if obj == ai.attack_target? || obj.auto_attackable?(self)
+        if obj == ai.attack_target || obj.auto_attackable?(self)
           hitted |= do_attack_hit_simple(attack, obj, attack_percent, s_atk)
           attack_percent /= 1.15
           attack_count &+= 1
@@ -3503,7 +3514,7 @@ abstract class L2Character < L2Object
   end
 
   def in_combat? : Bool
-    ai? && (!!ai.attack_target? || ai.auto_attacking?)
+    ai? && (!!ai.attack_target || ai.auto_attacking?)
   end
 
   private class MoveData
@@ -3753,7 +3764,7 @@ abstract class L2Character < L2Object
         distance = vertical_movement_only ? Math.pow(dz, 2) : Math.hypot(dx, dy)
       end
 
-      if Config.pathfinding > 0 && original_distance - distance > 30 && distance < 2000
+      if Config.pathfinding > 0 && original_distance - distance > 30 && distance < 4000
         if (playable? && !in_vehicle) || minion? || in_combat? ||         (npc? && walker?) || is_a?(L2Decoy) # custom, force
           m.geo_path = PathFinding.find_path(cur_x, cur_y, cur_z, original_x, original_y, original_z, instance_id, playable?)
           if !m.geo_path? || m.geo_path.size < 0

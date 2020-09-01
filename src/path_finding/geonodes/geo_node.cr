@@ -5,8 +5,9 @@ class GeoNode < AbstractNode(GeoNodeLoc)
   getter neighbors : Array(GeoNode)?
   getter neighbors_idx
 
-  def initialize(loc : GeoNodeLoc, @neighbors_idx : Int32)
+  def initialize(loc : GeoNodeLoc, neighbors_idx : Int32)
     super(loc)
+    @neighbors_idx = neighbors_idx
   end
 
   def cost=(cost : Int)

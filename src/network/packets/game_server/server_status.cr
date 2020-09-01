@@ -1,4 +1,4 @@
-class Packets::Outgoing::ServerStatus < MMO::OutgoingPacket(LoginServerClient)
+class Packets::Outgoing::ServerStatus < MMO::OutgoingPacket(LoginServerThread)
   STATUS_STRING = {"Auto", "Good", "Normal", "Full", "Down", "Gm Only"}
 
   SERVER_LIST_STATUS = 0x01

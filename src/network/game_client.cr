@@ -33,7 +33,8 @@ class GameClient
 
     interval = Config.char_store_interval * 60_000
     if interval > 0
-      @auto_save_task = ThreadPoolManager.schedule_general_at_fixed_rate(->auto_save_task, 300_000, interval)
+      task = AutoSaveTask.new(self)
+      @auto_save_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, 300_000, interval)
     end
   end
 
@@ -275,9 +276,11 @@ class GameClient
         if Config.packet_handler_debug
           warn "Client disconnected (too many packets in non-authed state)."
         end
+
         close_now
         return
       end
+
       ThreadPoolManager.execute_io_packet(self)
     else
       ThreadPoolManager.execute_packet(self)
@@ -343,27 +346,35 @@ class GameClient
       begin
         fast = true
         pc = @active_char
+
         if pc && !@detached
           @detached = true
+
           if offline_mode?(pc)
             pc.leave_party
             OlympiadManager.unregister_noble(pc)
-            pc.summon.try &.restore_summon = true
-            pc.summon.try &.unsummon(pc)
-            pc.summon.try &.broadcast_npc_info(0)
+
+            if smn = pc.summon
+              smn.restore_summon = true
+              smn.unsummon(pc)
+              smn.broadcast_npc_info(0)
+            end
+
             if Config.offline_set_name_color
               pc.appearance.name_color = Config.offline_name_color
               pc.broadcast_user_info
             end
+
             if pc.offline_start_time == 0
               pc.offline_start_time = Time.ms
             end
 
-            info { "#{pc.name} entering offline mode." }
+            info { pc.name + " entering offline mode." }
             # log accounting
 
             return
           end
+
           fast = !pc.in_combat? && !pc.locked?
         end
 
@@ -384,15 +395,6 @@ class GameClient
       unless @cleanup_task
         delay = fast ? 5 : 1500
         @cleanup_task = ThreadPoolManager.schedule_general(->cleanup_task, delay)
-      end
-    end
-  end
-
-  private def auto_save_task
-    if pc = @active_char
-      if pc.online?
-        save_char_to_disk
-        pc.summon.try &.store_me
       end
     end
   end
@@ -429,8 +431,8 @@ class GameClient
   rescue e
     error e
   ensure
-    {% if flag?(:preview_mt) %} debug { "Calling LoginServerClient.instance.send_logout(account_name: #{@account_name})." } {% end %}
-    LoginServerClient.instance.send_logout(@account_name)
+    {% if flag?(:preview_mt) %} debug { "Calling LoginServerThread.instance.send_logout(account_name: #{@account_name})." } {% end %}
+    LoginServerThread.instance.send_logout(@account_name)
   end
 
   def on_buffer_underflow
@@ -523,6 +525,17 @@ class GameClient
     AUTHED
     JOINING
     IN_GAME
+  end
+
+  private struct AutoSaveTask
+    initializer client : GameClient
+
+    def call
+      if (pc = @client.active_char) && pc.online?
+        @client.save_char_to_disk
+        pc.summon.try &.store_me
+      end
+    end
   end
 end
 

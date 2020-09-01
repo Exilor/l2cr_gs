@@ -68,7 +68,6 @@ class Scripts::ArenaManager < AbstractNpcAI
       end
     end
 
-
     nil
   end
 end

@@ -18,10 +18,8 @@ module TargetHandler::PartyNotMe
 
       target_list << m
 
-      if summon = m.summon
-        if summon.alive?
-          target_list << summon
-        end
+      if (smn = m.summon) && smn.alive?
+        target_list << smn
       end
     end
 

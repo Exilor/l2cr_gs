@@ -680,8 +680,7 @@ module FourSepulchersManager
 
         if mob
           mob.mysterious_box_id = npc_id
-          case npc_id
-          when 31469, 31472, 31474, 31477, 31479, 31482, 31484, 31487
+          if npc_id.in?(31469, 31472, 31474, 31477, 31479, 31482, 31484, 31487)
             mobs << mob
           end
 

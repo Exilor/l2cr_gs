@@ -79,6 +79,7 @@ class L2AttackableAI < L2CharacterAI
       if player && player.karma > 0
         return GeoData.can_see_target?(me, player)
       end
+
       if target.is_a?(L2MonsterInstance) && Config.guard_attack_aggro_mob
         return target.aggressive? && GeoData.can_see_target?(me, target)
       end
@@ -103,6 +104,7 @@ class L2AttackableAI < L2CharacterAI
           if target.in_my_clan?(me)
             return false
           end
+
           return GeoData.can_see_target?(me, target)
         end
       end
@@ -170,7 +172,7 @@ class L2AttackableAI < L2CharacterAI
     end
   end
 
-  private def on_intention_attack(target)
+  private def on_intention_attack(target : L2Character?)
     ticks = GameTimer.ticks
     @attack_timeout = MAX_ATTACK_TIMEOUT + ticks
 
@@ -228,9 +230,9 @@ class L2AttackableAI < L2CharacterAI
 
     if @global_aggro != 0
       if @global_aggro < 0
-        @global_aggro += 1
+        @global_aggro &+= 1
       else
-        @global_aggro -= 1
+        @global_aggro &-= 1
       end
     end
 
@@ -268,7 +270,7 @@ class L2AttackableAI < L2CharacterAI
       end
 
       if npc.confused?
-        hated = attack_target?
+        hated = attack_target
       else
         hated = npc.most_hated
       end
@@ -439,7 +441,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     # Check if target is dead or if timeout is expired to stop this attack
-    oat = attack_target?
+    oat = attack_target
     if oat.nil? || oat.looks_dead? || @attack_timeout < GameTimer.ticks
       # Stop hating this target after the attack timeout or if target is dead
       npc.stop_hating(oat)
@@ -498,7 +500,7 @@ class L2AttackableAI < L2CharacterAI
                       oat.is_a?(L2Summon)
                     )
                     EventDispatcher.notify(evt, obj)
-                  elsif obj.is_a?(L2Attackable) && (att = attack_target?)
+                  elsif obj.is_a?(L2Attackable) && (att = attack_target)
                     unless obj.intention.attack?
                       obj.add_damage_hate(
                         att,
@@ -831,7 +833,7 @@ class L2AttackableAI < L2CharacterAI
       if npc.movement_disabled?
         target_reconsider
       else
-        target = attack_target?
+        target = attack_target
         if target
           if target.moving?
             range &-= 100
@@ -843,7 +845,7 @@ class L2AttackableAI < L2CharacterAI
     end
 
     # Attacks target
-    @actor.do_attack(attack_target?)
+    @actor.do_attack(attack_target)
   end
 
   private def cast(sk : Skill?)
@@ -854,13 +856,13 @@ class L2AttackableAI < L2CharacterAI
       return false
     end
 
-    unless attack_target?
+    unless attack_target
       if caster.most_hated
         self.attack_target = caster.most_hated
       end
     end
 
-    unless attack_target = attack_target?
+    unless attack_target = attack_target()
       return false
     end
 
@@ -1237,7 +1239,7 @@ class L2AttackableAI < L2CharacterAI
 
   private def movement_disable
     npc = active_char
-    return unless target = attack_target?
+    return unless target = attack_target
 
     npc.target ||= target
 
@@ -1331,7 +1333,7 @@ class L2AttackableAI < L2CharacterAI
       return false
     end
     # custom, to prevent mobs trying and failing to cast short range skills from afar
-    if target = attack_target?
+    if target = attack_target
       unless caster.inside_radius?(target, skill.effect_range + caster.template.collision_radius, true, false)
         return false
       end
@@ -1342,7 +1344,7 @@ class L2AttackableAI < L2CharacterAI
 
   private def effect_target_reconsider(sk : Skill?, positive : Bool) : L2Character?
     return unless sk
-    unless attack_target?
+    unless @attack_target
       warn "No attack_target for effect_target_reconsider."
     end
     actor = active_char
@@ -1354,13 +1356,13 @@ class L2AttackableAI < L2CharacterAI
 
         actor.attack_by_list.each do |obj|
           if obj.nil? || obj.dead? || !GeoData.can_see_target?(actor, obj)
-            if obj == attack_target?
+            if obj == @attack_target
               next
             end
           end
 
           begin
-            actor.target = attack_target
+            actor.target = @attack_target
             dist = actor.calculate_distance(obj, false, false)
             dist2 = dist - actor.template.collision_radius
             range = sk.cast_range &+ actor.template.collision_radius
@@ -1373,7 +1375,7 @@ class L2AttackableAI < L2CharacterAI
             next
           end
           if dist2 <= range
-            unless attack_target.affected_by_skill?(sk.id)
+            unless @attack_target.not_nil!.affected_by_skill?(sk.id)
               return obj
             end
           end
@@ -1385,7 +1387,7 @@ class L2AttackableAI < L2CharacterAI
             next
           end
           begin
-            actor.target = attack_target
+            actor.target = @attack_target
             dist = actor.calculate_distance(obj, false, false)
             dist2 = dist
             range = sk.cast_range &+ actor.template.collision_radius
@@ -1400,7 +1402,7 @@ class L2AttackableAI < L2CharacterAI
 
           if obj.is_a?(L2PcInstance) || obj.is_a?(L2Summon)
             if dist2 <= range
-              unless attack_target.affected_by_skill?(sk.id)
+              unless @attack_target.not_nil!.affected_by_skill?(sk.id)
                 return obj
               end
             end
@@ -1429,7 +1431,7 @@ class L2AttackableAI < L2CharacterAI
           end
 
           begin
-            actor.target = attack_target
+            actor.target = @attack_target
             dist = actor.calculate_distance(obj, false, false)
             dist2 = dist - actor.template.collision_radius
             range = sk.cast_range &+ actor.template.collision_radius
@@ -1452,13 +1454,13 @@ class L2AttackableAI < L2CharacterAI
       dist = 0.0
       dist2 = 0.0
       range = sk.cast_range &+ actor.template.collision_radius
-      range &+= attack_target.template.collision_radius
+      range &+= @attack_target.not_nil!.template.collision_radius
       actor.known_list.each_character(range) do |obj|
         if obj.nil? || obj.dead? || !GeoData.can_see_target?(actor, obj)
           next
         end
         begin
-          actor.target = attack_target
+          actor.target = @attack_target
           dist = actor.calculate_distance(obj, false, false)
           dist2 = dist - actor.template.collision_radius
           range = sk.cast_range &+ actor.template.collision_radius
@@ -1473,7 +1475,7 @@ class L2AttackableAI < L2CharacterAI
 
         if obj.is_a?(L2PcInstance | L2Summon)
           if dist2 <= range
-            if attack_target.effect_list.get_first_effect(EffectType::BUFF)
+            if @attack_target.not_nil!.effect_list.get_first_effect(EffectType::BUFF)
               return obj
             end
           end
@@ -1485,8 +1487,9 @@ class L2AttackableAI < L2CharacterAI
   end
 
   private def skill_target_reconsider(sk : Skill) : L2Character?
-    unless attack_target?
-      warn "No attack_target for skill_target_reconsider."
+    unless attack_target = @attack_target
+      warn "No @attack_target for L2AttackableAI#skill_target_reconsider."
+      return
     end
     dist = 0.0
     dist2 = 0.0
@@ -1662,7 +1665,7 @@ class L2AttackableAI < L2CharacterAI
           next
         end
 
-        if obj == attack_target? || obj == actor
+        if obj == attack_target || obj == actor
           next
         end
 
@@ -1751,7 +1754,7 @@ class L2AttackableAI < L2CharacterAI
     end
   end
 
-  private def on_event_attacked(attacker : L2Character)
+  private def on_event_attacked(attacker : L2Character?)
     me = active_char
 
     @attack_timeout = MAX_ATTACK_TIMEOUT + GameTimer.ticks
@@ -1768,7 +1771,7 @@ class L2AttackableAI < L2CharacterAI
 
     if !intention.attack?
       set_intention(ATTACK, attacker)
-    elsif me.most_hated != attack_target?
+    elsif me.most_hated != attack_target
       set_intention(ATTACK, attacker)
     end
 
@@ -1787,7 +1790,7 @@ class L2AttackableAI < L2CharacterAI
     super
   end
 
-  private def on_event_aggression(target, aggro)
+  private def on_event_aggression(target : L2Character?, aggro : Int64)
     me = active_char
     if me.dead?
       return

@@ -346,11 +346,8 @@ abstract class L2Summon < L2Playable
     super || owner.spawn_protected?
   end
 
-  def use_magic(skill : Skill?, force : Bool, dont_move : Bool) : Bool
-    return false unless skill
-    return false if dead?
-    return false if skill.passive?
-    return false if casting_now?
+  def use_magic(skill : Skill, force : Bool, dont_move : Bool) : Bool
+    return false if dead? || skill.passive? || casting_now?
 
     owner.set_current_pet_skill(skill, force, dont_move)
 

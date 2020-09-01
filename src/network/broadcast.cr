@@ -69,7 +69,7 @@ module Broadcast
   end
 
   def to_all_online_players_on_screen(text : String)
-    to_all_online_players(ExShowScreenMessage.new(text, 10000))
+    to_all_online_players(ExShowScreenMessage.new(text, 10_000))
   end
 
   def to_players_in_instance(gsp : GameServerPacket, instance_id : Int32)

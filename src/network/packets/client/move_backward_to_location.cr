@@ -53,7 +53,7 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
     dx = @to_x.to_f - pc.x
     dy = @to_y.to_f - pc.y
 
-    if (dx * dx) + (dy * dy) > 98_010_000
+    if Math.pow(dx, 2) + Math.pow(dy, 2) > 98_010_000
       action_failed
       return
     end
