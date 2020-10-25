@@ -56,9 +56,9 @@ abstract class L2ZoneType < ListenersContainer
     when "targetClass"
       @target_type = InstanceType.parse(value)
     when "allowStore"
-      @allow_store = Bool.new(value)
+      @allow_store = value.to_b
     when "default_enabled"
-      @enabled = Bool.new(value)
+      @enabled = value.to_b
     else
       warn { "Unknown parameter '#{name}' in zone #{@id}." }
     end

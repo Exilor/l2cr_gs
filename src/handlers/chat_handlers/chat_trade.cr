@@ -10,7 +10,7 @@ module ChatHandler::ChatTrade
 
     cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.name, text)
     default = Config.default_trade_chat
-    if default.casecmp?("on") || default.casecmp?("gm") && pc.override_chat_conditions?
+    if default.casecmp?("on") || (default.casecmp?("gm") && pc.override_chat_conditions?)
       region = MapRegionManager.get_map_region_loc_id(pc)
       L2World.players.each do |player|
         if region == MapRegionManager.get_map_region_loc_id(player)

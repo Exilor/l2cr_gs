@@ -1,9 +1,9 @@
 abstract class Packets::Incoming::AbstractRefinePacket < GameClientPacket
   GRADE_NONE = 0
-  GRADE_MID = 1
+  GRADE_MID  = 1
   GRADE_HIGH = 2
-  GRADE_TOP = 3
-  GRADE_ACC = 4 # Accessory LS
+  GRADE_TOP  = 3
+  GRADE_ACC  = 4 # Accessory LS
 
   private GEMSTONE_D = 2130
   private GEMSTONE_C = 2131

@@ -2,9 +2,9 @@ class Condition
   class PlayerHasPet < Condition
     @item_ids : Slice(Int32)?
 
-    def initialize(item_ids : Array(Int32)?)
+    def initialize(item_ids : Slice(Int32))
       unless item_ids.size == 1 && item_ids[0] == 0
-        @item_ids = item_ids.sort.to_slice
+        @item_ids = item_ids.sort!
       end
     end
 

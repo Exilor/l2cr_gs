@@ -140,8 +140,7 @@ module ClanHallManager
 
   def get_nearby_abstract_hall(x : Int32, y : Int32, max_dist : Int32) : ClanHall?
     ALL_CLAN_HALLS.find_value do |ch|
-      zone = ch.zone?
-      !!zone && zone.get_distance_to_zone(x, y) < max_dist
+      (zone = ch.zone?) && zone.get_distance_to_zone(x, y) < max_dist
     end
   end
 

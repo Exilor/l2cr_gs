@@ -1,12 +1,12 @@
 class GameCrypt
   private KEYS = Slice.new(20) do
-    key = Slice.new(16) { Rnd.u8 }
+    key = Rnd.bytes(16)
     IO::ByteFormat::LittleEndian.encode(10894608412357896136, key + 8)
     key
   end
 
   @enabled = false
-  @key  = GC.malloc_atomic(32).as(UInt8*)
+  @key = GC.malloc_atomic(32).as(UInt8*)
 
   def key=(key : Bytes)
     @key.copy_from(key.to_unsafe, key.size)

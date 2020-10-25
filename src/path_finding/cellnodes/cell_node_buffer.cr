@@ -213,11 +213,11 @@ class CellNodeBuffer
   end
 
   private def get_cost(x : Int32, y : Int32, z : Int32, weight : Float32) : Float32
-    dx = x - @target_x
-    dy = y - @target_y
-    dz = z - @target_z
+    dx = (x - @target_x).to_f
+    dy = (y - @target_y).to_f
+    dz = (z - @target_z).to_f
 
-    result = Math.sqrt((dx * dx) + (dy * dy) + ((dz * dz) / 256.0))
+    result = Math.sqrt(dx.abs2 + dy.abs2 + (dz.abs2 / 256))
 
     if result > weight
       result += weight

@@ -4,6 +4,7 @@ module ChatHandler::ChatPartyRoomAll
 
   def handle_chat(type, pc, params, text)
     return unless party = pc.party
+    return unless party.leader?(pc)
     return unless cc = party.command_channel
 
     if pc.chat_banned? && Config.ban_chat_channels.includes?(type)

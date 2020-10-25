@@ -122,8 +122,10 @@ class ClientStats
       tick = Time.ms
       if tick - @packet_count_start_tick > 1000
         @packet_count_start_tick = tick
-        if @flood_detected && !long_flood_detected && @packets_in_second[@head] < Config.client_packet_queue_max_packets_per_second / 2
-          @flood_detected = false
+        if @flood_detected && !long_flood_detected
+          if @packets_in_second[@head] < Config.client_packet_queue_max_packets_per_second / 2
+            @flood_detected = false
+          end
         end
 
         if @head <= 0

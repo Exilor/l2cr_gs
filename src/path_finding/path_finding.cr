@@ -15,10 +15,6 @@ module PathFinding
       @@engine = CellPathFinding
     end
 
-    unless @@engine
-      raise "No engine was loaded"
-    end
-
     engine.load
   end
 

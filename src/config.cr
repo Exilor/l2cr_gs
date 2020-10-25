@@ -1567,7 +1567,7 @@ module Config
     @@party_xp_cutoff_gaps = Slice(Slice(Int32)).new(gaps.size) { |i| Slice(Int32).new(2) }
     gaps.each_with_index do |gap, i|
       temp = @@party_xp_cutoff_gaps[i]
-      temp[0], temp[1] = gap.split(',').map &.to_i
+      temp[0], temp[1] = gap.split(',').slice_map &.to_i
     end
     @@party_xp_cutoff_gap_percents = cfg.get_i32_array("PartyXpCutoffGapPercent", [100,30,0])
 
@@ -2213,7 +2213,7 @@ module Config
     @@alt_oly_wait_time = cfg.get_i32("AltOlyWaitTime", 120)
 
     hexid_path = Dir.current + HEXID_FILE
-    if File.exists?(hexid_path)
+    if File.file?(hexid_path)
       cfg.parse(hexid_path)
 
       @@server_id = cfg.get_i32("ServerId", 1)
@@ -2259,7 +2259,7 @@ module Config
 
     filter_list = [] of String
     filter_path = Dir.current + "/config/chatfilter.txt"
-    if File.exists?(filter_path)
+    if File.file?(filter_path)
       File.open(filter_path, "r") do |file|
         file.each_line do |line|
           line = line.strip
@@ -2340,7 +2340,7 @@ module Config
     when "ratequestrewardadena"
       @@rate_quest_reward_adena = value.to_f32
     when "usequestrewardmultipliers"
-      @@rate_quest_reward_use_multipliers = Bool.new(value)
+      @@rate_quest_reward_use_multipliers = value.to_b
     when "ratequestrewardpotion"
       @@rate_quest_reward_potion = value.to_f32
     when "ratequestrewardscroll"
@@ -2412,21 +2412,21 @@ module Config
     when "autodestroydroppeditemafter"
       @@autodestroy_item_after = value.to_i
     when "destroyplayerdroppeditem"
-      @@destroy_dropped_player_item = Bool.new(value)
+      @@destroy_dropped_player_item = value.to_b
     when "destroyequipableitem"
-      @@destroy_equipable_player_item = Bool.new(value)
+      @@destroy_equipable_player_item = value.to_b
     when "savedroppeditem"
-      @@save_dropped_item = Bool.new(value)
+      @@save_dropped_item = value.to_b
     when "emptydroppeditemtableafterload"
-      @@empty_dropped_item_table_after_load = Bool.new(value)
+      @@empty_dropped_item_table_after_load = value.to_b
     when "savedroppediteminterval"
       @@save_dropped_item_interval = value.to_i
     when "cleardroppeditemtable"
-      @@clear_dropped_item_table = Bool.new(value)
+      @@clear_dropped_item_table = value.to_b
     when "precisedropcalculation"
-      @@precise_drop_calculation = Bool.new(value)
+      @@precise_drop_calculation = value.to_b
     when "multipleitemdrop"
-      @@multiple_item_drop = Bool.new(value)
+      @@multiple_item_drop = value.to_b
     when "lowweight"
       @@low_weight = value.to_f32
     when "mediumweight"
@@ -2434,7 +2434,7 @@ module Config
     when "highweight"
       @@high_weight = value.to_f32
     when "advanceddiagonalstrategy"
-      @@advanced_diagonal_strategy = Bool.new(value)
+      @@advanced_diagonal_strategy = value.to_b
     when "diagonalweight"
       @@diagonal_weight = value.to_f32
     when "maxpostfilterpasses"
@@ -2468,13 +2468,13 @@ module Config
     when "clientpacketqueuemaxunknownpermin"
       @@client_packet_queue_max_unknown_per_min = value.to_i
     when "allowdiscarditem"
-      @@allow_discarditem = Bool.new(value)
+      @@allow_discarditem = value.to_b
     when "allowrefund"
-      @@allow_refund = Bool.new(value)
+      @@allow_refund = value.to_b
     when "allowwarehouse"
-      @@allow_warehouse = Bool.new(value)
+      @@allow_warehouse = value.to_b
     when "allowwear"
-      @@allow_wear = Bool.new(value)
+      @@allow_wear = value.to_b
     when "weardelay"
       @@wear_delay = value.to_i
     when "wearprice"
@@ -2482,51 +2482,51 @@ module Config
     when "defaultfinishtime"
       @@instance_finish_time = value.to_i
     when "restoreplayerinstance"
-      @@restore_player_instance = Bool.new(value)
+      @@restore_player_instance = value.to_b
     when "allowsummonininstance"
-      @@allow_summon_in_instance = Bool.new(value)
+      @@allow_summon_in_instance = value.to_b
     when "ejectdeadplayertime"
       @@eject_dead_player_time = value.to_i
     when "allowwater"
-      @@allow_water = Bool.new(value)
+      @@allow_water = value.to_b
     when "allowrentpet"
-      @@allow_rentpet = Bool.new(value)
+      @@allow_rentpet = value.to_b
     when "boatbroadcastradius"
       @@boat_broadcast_radius = value.to_i
     when "allowcursedweapons"
-      @@allow_cursed_weapons = Bool.new(value)
+      @@allow_cursed_weapons = value.to_b
     when "allowmanor"
-      @@allow_manor = Bool.new(value)
+      @@allow_manor = value.to_b
     when "allowpetwalkers"
-      @@allow_pet_walkers = Bool.new(value)
+      @@allow_pet_walkers = value.to_b
     when "enablecommunityboard"
-      @@enable_community_board = Bool.new(value)
+      @@enable_community_board = value.to_b
     when "bbsdefault"
       @@bbs_default = value
     when "showservernews"
-      @@server_news = Bool.new(value)
+      @@server_news = value.to_b
     when "shownpclevel"
-      @@show_npc_lvl = Bool.new(value)
+      @@show_npc_lvl = value.to_b
     when "showcrestwithoutquest"
-      @@show_crest_without_quest = Bool.new(value)
+      @@show_crest_without_quest = value.to_b
     when "forceinventoryupdate"
-      @@force_inventory_update = Bool.new(value)
+      @@force_inventory_update = value.to_b
     when "autodeleteinvalidquestdata"
-      @@autodelete_invalid_quest_data = Bool.new(value)
+      @@autodelete_invalid_quest_data = value.to_b
     when "maximumonlineusers"
       @@maximum_online_users = value.to_i
     when "peacezonemode"
       @@peace_zone_mode = value.to_i
     when "checkknownlist"
-      @@check_known = Bool.new(value)
+      @@check_known = value.to_b
     when "maxdriftrange"
       @@max_drift_range = value.to_i
     when "usedeepbluedroprules"
-      @@deepblue_drop_rules = Bool.new(value)
+      @@deepblue_drop_rules = value.to_b
     when "usedeepbluedroprulesraid"
-      @@deepblue_drop_rules_raid = Bool.new(value)
+      @@deepblue_drop_rules_raid = value.to_b
     when "guardattackaggromob"
-      @@guard_attack_aggro_mob = Bool.new(value)
+      @@guard_attack_aggro_mob = value.to_b
     when "maximumslotsfornodwarf"
       @@inventory_maximum_no_dwarf = value.to_i
     when "maximumslotsfordwarf"
@@ -2628,15 +2628,15 @@ module Config
     when "maxpvtstorebuyslotsother"
       @@max_pvtstorebuy_slots_other = value.to_i
     when "storeskillcooltime"
-      @@store_skill_cooltime = Bool.new(value)
+      @@store_skill_cooltime = value.to_b
     when "subclassstoreskillcooltime"
-      @@subclass_store_skill_cooltime = Bool.new(value)
+      @@subclass_store_skill_cooltime = value.to_b
     when "announcemammonspawn"
-      @@announce_mammon_spawn = Bool.new(value)
+      @@announce_mammon_spawn = value.to_b
     when "enablefallingdamage"
-      @@enable_falling_damage = Bool.new(value)
+      @@enable_falling_damage = value.to_b
     when "altgamecreation"
-      @@alt_game_creation = Bool.new(value)
+      @@alt_game_creation = value.to_b
     when "altgamecreationspeed"
       @@alt_game_creation_speed = value.to_f64
     when "altgamecreationxprate"
@@ -2648,66 +2648,66 @@ module Config
     when "altweightlimit"
       @@alt_weight_limit = value.to_f64
     when "altblacksmithuserecipes"
-      @@alt_blacksmith_use_recipes = Bool.new(value)
+      @@alt_blacksmith_use_recipes = value.to_b
     when "altgameskilllearn"
-      @@alt_game_skill_learn = Bool.new(value)
+      @@alt_game_skill_learn = value.to_b
     when "removecastlecirclets"
-      @@remove_castle_circlets = Bool.new(value)
+      @@remove_castle_circlets = value.to_b
     when "reputationscoreperkill"
       @@reputation_score_per_kill = value.to_i
     when "altgamecancelbyhit"
       @@alt_game_cancel_bow = value.casecmp?("bow") || value.casecmp?("all")
       @@alt_game_cancel_cast = value.casecmp?("cast") || value.casecmp?("all")
     when "altshieldblocks"
-      @@alt_game_shield_blocks = Bool.new(value)
+      @@alt_game_shield_blocks = value.to_b
     when "altperfectshieldblockrate"
       @@alt_perfect_shld_block = value.to_i
     when "delevel"
-      @@alt_game_delevel = Bool.new(value)
+      @@alt_game_delevel = value.to_b
     when "magicfailures"
-      @@alt_game_magicfailures = Bool.new(value)
+      @@alt_game_magicfailures = value.to_b
     when "altmobagroinpeacezone"
-      @@alt_mob_agro_in_peacezone = Bool.new(value)
+      @@alt_mob_agro_in_peacezone = value.to_b
     when "altgameexponentxp"
       @@alt_game_exponent_xp = value.to_f32
     when "altgameexponentsp"
       @@alt_game_exponent_sp = value.to_f32
     when "allowclassmasters"
-      @@allow_class_masters = Bool.new(value)
+      @@allow_class_masters = value.to_b
     when "allowentiretree"
-      @@allow_entire_tree = Bool.new(value)
+      @@allow_entire_tree = value.to_b
     when "alternateclassmaster"
-      @@alternate_class_master = Bool.new(value)
+      @@alternate_class_master = value.to_b
     when "altpartyrange"
       @@alt_party_range = value.to_i
     when "altpartyrange2"
       @@alt_party_range2 = value.to_i
     when "altleavepartyleader"
-      @@alt_leave_party_leader = Bool.new(value)
+      @@alt_leave_party_leader = value.to_b
     when "craftingenabled"
-      @@is_crafting_enabled = Bool.new(value)
+      @@is_crafting_enabled = value.to_b
     when "craftmasterwork"
-      @@craft_masterwork = Bool.new(value)
+      @@craft_masterwork = value.to_b
     when "lifecrystalneeded"
-      @@life_crystal_needed = Bool.new(value)
+      @@life_crystal_needed = value.to_b
     when "autoloot"
-      @@auto_loot = Bool.new(value)
+      @@auto_loot = value.to_b
     when "autolootraids"
-      @@auto_loot_raids = Bool.new(value)
+      @@auto_loot_raids = value.to_b
     when "autolootherbs"
-      @@auto_loot_herbs = Bool.new(value)
+      @@auto_loot_herbs = value.to_b
     when "altkarmaplayercanbekilledinpeacezone"
-      @@alt_game_karma_player_can_be_killed_in_peacezone = Bool.new(value)
+      @@alt_game_karma_player_can_be_killed_in_peacezone = value.to_b
     when "altkarmaplayercanshop"
-      @@alt_game_karma_player_can_shop = Bool.new(value)
+      @@alt_game_karma_player_can_shop = value.to_b
     when "altkarmaplayercanusegk"
-      @@alt_game_karma_player_can_use_gk = Bool.new(value)
+      @@alt_game_karma_player_can_use_gk = value.to_b
     when "altkarmaplayercanteleport"
-      @@alt_game_karma_player_can_teleport = Bool.new(value)
+      @@alt_game_karma_player_can_teleport = value.to_b
     when "altkarmaplayercantrade"
-      @@alt_game_karma_player_can_trade = Bool.new(value)
+      @@alt_game_karma_player_can_trade = value.to_b
     when "altkarmaplayercanusewarehouse"
-      @@alt_game_karma_player_can_use_warehouse = Bool.new(value)
+      @@alt_game_karma_player_can_use_warehouse = value.to_b
     when "maxpersonalfamepoints"
       @@max_personal_fame_points = value.to_i
     when "fortresszonefametaskfrequency"
@@ -2719,25 +2719,25 @@ module Config
     when "castlezonefameaquirepoints"
       @@castle_zone_fame_aquire_points = value.to_i
     when "altcastlefordawn"
-      @@alt_game_castle_dawn = Bool.new(value)
+      @@alt_game_castle_dawn = value.to_b
     when "altcastlefordusk"
-      @@alt_game_castle_dusk = Bool.new(value)
+      @@alt_game_castle_dusk = value.to_b
     when "altrequireclancastle"
-      @@alt_game_require_clan_castle = Bool.new(value)
+      @@alt_game_require_clan_castle = value.to_b
     when "altfreeteleporting"
-      @@alt_game_free_teleport = Bool.new(value)
+      @@alt_game_free_teleport = value.to_b
     when "altsubclasswithoutquests"
-      @@alt_game_subclass_without_quests = Bool.new(value)
+      @@alt_game_subclass_without_quests = value.to_b
     when "altsubclasseverywhere"
-      @@alt_game_subclass_everywhere = Bool.new(value)
+      @@alt_game_subclass_everywhere = value.to_b
     when "altmemberscanwithdrawfromclanwh"
-      @@alt_members_can_withdraw_from_clanwh = Bool.new(value)
+      @@alt_members_can_withdraw_from_clanwh = value.to_b
     when "dwarfrecipelimit"
       @@dwarf_recipe_limit = value.to_i
     when "commonrecipelimit"
       @@common_recipe_limit = value.to_i
     when "championenable"
-      @@champion_enable = Bool.new(value)
+      @@champion_enable = value.to_b
     when "championfrequency"
       @@champion_frequency = value.to_i
     when "championminlevel"
@@ -2771,27 +2771,27 @@ module Config
     when "championrewarditemqty"
       @@champion_reward_qty = value.to_i
     when "championenableininstances"
-      @@champion_enable_in_instances = Bool.new(value)
+      @@champion_enable_in_instances = value.to_b
     when "allowwedding"
-      @@allow_wedding = Bool.new(value)
+      @@allow_wedding = value.to_b
     when "weddingprice"
       @@wedding_price = value.to_i
     when "weddingpunishinfidelity"
-      @@wedding_punish_infidelity = Bool.new(value)
+      @@wedding_punish_infidelity = value.to_b
     when "weddingteleport"
-      @@wedding_teleport = Bool.new(value)
+      @@wedding_teleport = value.to_b
     when "weddingteleportprice"
       @@wedding_teleport_price = value.to_i
     when "weddingteleportduration"
       @@wedding_teleport_duration = value.to_i
     when "weddingallowsamesex"
-      @@wedding_samesex = Bool.new(value)
+      @@wedding_samesex = value.to_b
     when "weddingformalwear"
-      @@wedding_formalwear = Bool.new(value)
+      @@wedding_formalwear = value.to_b
     when "weddingdivorcecosts"
       @@wedding_divorce_costs = value.to_i
     when "tvteventenabled"
-      @@tvt_event_enabled = Bool.new(value)
+      @@tvt_event_enabled = value.to_b
     when "tvteventinterval"
       @@tvt_event_interval = value.split(',').to_slice
     when "tvteventparticipationtime"
@@ -2801,25 +2801,25 @@ module Config
     when "tvteventparticipationnpcid"
       @@tvt_event_participation_npc_id = value.to_i
     when "enablewarehousesortingclan"
-      @@enable_warehousesorting_clan = Bool.new(value)
+      @@enable_warehousesorting_clan = value.to_b
     when "enablewarehousesortingprivate"
-      @@enable_warehousesorting_private = Bool.new(value)
+      @@enable_warehousesorting_private = value.to_b
     when "enablemanapotionsupport"
-      @@enable_mana_potions_support = Bool.new(value)
+      @@enable_mana_potions_support = value.to_b
     when "displayservertime"
-      @@display_server_time = Bool.new(value)
+      @@display_server_time = value.to_b
     when "antifeedenable"
-      @@antifeed_enable = Bool.new(value)
+      @@antifeed_enable = value.to_b
     when "antifeeddualbox"
-      @@antifeed_dualbox = Bool.new(value)
+      @@antifeed_dualbox = value.to_b
     when "antifeeddisconnectedasdualbox"
-      @@antifeed_disconnected_as_dualbox = Bool.new(value)
+      @@antifeed_disconnected_as_dualbox = value.to_b
     when "antifeedinterval"
       @@antifeed_interval = 1000 * value.to_i
     when "cangmdropequipment"
-      @@karma_drop_gm = Bool.new(value)
+      @@karma_drop_gm = value.to_b
     when "awardpkkillpvppoint"
-      @@karma_award_pk_kill = Bool.new(value)
+      @@karma_award_pk_kill = value.to_b
     when "minimumpkrequiredtodrop"
       @@karma_pk_limit = value.to_i
     when "pvpvsnormaltime"
@@ -2864,7 +2864,7 @@ module Config
           {% end %}
 
           {% if var.type == Bool %}
-            @@{{var.id}} = Bool.new(value)
+            @@{{var.id}} = value.to_b
             return true
           {% end %}
 

@@ -253,7 +253,7 @@ module AdminCommandHandler::AdminEventEngine
       return "<font color=\"FF0000\">The directory '#{path}' is a file or is corrupted</font><br>"
     end
 
-    unless File.exists?(path)
+    unless File.file?(path)
       note = "<font color=\"FF0000\">The directory '#{path}' does not exist</font><br><font color=\"0099FF\">Trying to create it now...<br></font><br>"
       if (Dir.mkdir_p(path) rescue false)
         note += "<font color=\"006600\">The directory '#{path}' has been created</font><br>"

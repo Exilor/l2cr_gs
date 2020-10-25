@@ -54,7 +54,7 @@ module GeoDriver
 
   # Using the file IO to create the region is much slower.
   def load_region(path : String, x : Int32, y : Int32)
-    if File.exists?(path)
+    if File.file?(path)
       offset = (x * GEO_REGIONS_Y) + y
       File.open(path) do |f|
         size = f.size

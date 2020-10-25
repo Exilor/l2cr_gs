@@ -23,7 +23,7 @@ class L2EffectZone < L2ZoneType
     when "reuse"
       @reuse = value.to_i
     when "bypassSkillConditions"
-      @bypass_conditions = Bool.new(value)
+      @bypass_conditions = value.to_b
     when "maxDynamicSkillCount"
       # @skills already initialized
     when "skillIdLvl"
@@ -38,7 +38,7 @@ class L2EffectZone < L2ZoneType
         end
       end
     when "showDangerIcon"
-      @show_danger_icon = Bool.new(value)
+      @show_danger_icon = value.to_b
     else
       super
     end

@@ -414,8 +414,7 @@ class Duel
     initializer duel : Duel
 
     def call
-      case @duel.check_end_duel_condition
-      when DuelResult::CONTINUE
+      if @duel.check_end_duel_condition.continue?
         ThreadPoolManager.schedule_general(self, 1000)
       else
         @duel.end_duel

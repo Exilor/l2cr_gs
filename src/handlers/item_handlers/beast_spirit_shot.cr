@@ -21,7 +21,7 @@ module ItemHandler::BeastSpiritShot
     end
 
     item_id = item.id
-    blessed = item_id == 6647 || item_id == 20334
+    blessed = item_id.in?(6647, 20334)
     shot_consumption = summon.spiritshots_per_hit
     shot_count = item.count
     skills = item.template.skills

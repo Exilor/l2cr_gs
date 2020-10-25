@@ -4,7 +4,7 @@ module CellPathFinding
   extend self
   extend Loggable
 
-  ALL_BUFFERS = [] of BufferInfo
+  private ALL_BUFFERS = [] of BufferInfo
 
   @@debug_items : Array(L2ItemInstance)?
   @@find_success = 0
@@ -192,7 +192,7 @@ module CellPathFinding
     current
   end
 
-  class BufferInfo
+  private class BufferInfo
     getter buffers = [] of CellNodeBuffer
     property uses : Int32 = 0
     property playable_uses : Int32 = 0

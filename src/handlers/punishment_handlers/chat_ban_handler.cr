@@ -14,8 +14,6 @@ module PunishmentHandler::ChatBanHandler
       if client = LoginServerThread.instance.get_client(account)
         if pc = client.active_char
           apply_to_player(pc)
-        else
-          client.close_now
         end
       end
     when PunishmentAffect::IP
@@ -41,8 +39,6 @@ module PunishmentHandler::ChatBanHandler
       if client = LoginServerThread.instance.get_client(account)
         if pc = client.active_char
           remove_from_player(pc)
-        else
-          client.close_now
         end
       end
     when PunishmentAffect::IP

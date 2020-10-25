@@ -21,7 +21,7 @@ module SecondaryAuthData
       each_element(node) do |list_node, list_node_name|
         case list_node_name.casecmp
         when "enabled"
-          @@enabled = Bool.new(get_content(list_node))
+          @@enabled = get_content(list_node).to_b
         when "maxAttempts"
           @@max_attempts = get_content(list_node).to_i
         when "banTime"

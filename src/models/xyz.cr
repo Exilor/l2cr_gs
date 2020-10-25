@@ -1,3 +1,5 @@
+require "./interfaces/positionable"
+
 struct XYZ
   include Positionable
 

@@ -74,7 +74,7 @@ module HtmCache
   end
 
   def loadable?(path : String) : Bool
-    path.ends_with?(".html", ".htm") && File.exists?("#{@@root}/#{path}")
+    path.ends_with?(".html", ".htm") && File.file?("#{@@root}/#{path}")
   end
 
   def get_htm(pc : L2PcInstance, path : String) : String?
@@ -128,7 +128,7 @@ module HtmCache
     content = cache[path]?
     if Config.lazy_cache && content.nil?
       path2 = "#{@@root}/#{path}"
-      if File.exists?(path2)
+      if File.file?(path2)
         content = File.open(path2, "r") { |f| load_file(f) }
       end
     end

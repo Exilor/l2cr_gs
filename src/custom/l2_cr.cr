@@ -63,7 +63,7 @@ module L2Cr
       when "restart"
         Shutdown.start_shutdown(nil, 0, true)
       when "ids"
-        puts "#{IdFactory::IDS.@ranges} (#{IdFactory::IDS.@ranges.size} ranges)"
+        puts "#{IdFactory::IDS.ranges} (#{IdFactory::IDS.ranges.size} ranges)"
       when "check_ids"
         L2Cr.check_ids
       when /^valakas\s\w+$/

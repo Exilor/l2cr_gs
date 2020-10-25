@@ -5,7 +5,7 @@ end
 
 executable = "game_server"
 
-unless File.exists?("./#{executable}")
+unless File.file?("./#{executable}")
   puts File.expand_path(executable) + " not found. Run the 'build' command first."
   exit(0)
 end

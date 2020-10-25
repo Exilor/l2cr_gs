@@ -1,4 +1,5 @@
 require "./util/range_set"
+require "./util/l2_id_set"
 
 module IdFactory
   extend self
@@ -6,11 +7,11 @@ module IdFactory
   extend Loggable
 
   private ID_EXTRACTS = {
-    {"characters","charId"},
-    {"items","object_id"},
-    {"clan_data","clan_id"},
-    {"itemsonground","object_id"},
-    {"messages","messageId"}
+    {"characters", "charId"},
+    {"items", "object_id"},
+    {"clan_data", "clan_id"},
+    {"itemsonground", "object_id"},
+    {"messages", "messageId"}
   }
 
   private ID_CHECKS = {
@@ -48,9 +49,8 @@ module IdFactory
 
   private FIRST_OID = 0x10000000
 
-  # Ids start from FIRST_OID for compatibility with L2J. The client on the other
-  # hand needs them to start from at least 1.
-  IDS = RangeSet.new(0...FIRST_OID)
+  # Ids start from FIRST_OID for compatibility with L2J.
+  IDS = L2IdSet.new(0..FIRST_OID - 1)
 
   def load
     set_all_characters_offline
@@ -87,11 +87,7 @@ module IdFactory
   end
 
   def next : Int32
-    sync do
-      id = IDS.first_free
-      IDS << id
-      id
-    end
+    sync { IDS.take_first_id }
   end
 
   def release(id : Int32)

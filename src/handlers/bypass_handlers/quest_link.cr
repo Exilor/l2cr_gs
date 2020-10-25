@@ -70,7 +70,7 @@ module BypassHandler::QuestLink
           sb << state
         else
           quest_id = quest.id
-          if quest_id > 10000
+          if quest_id > 10_000
             quest_id -= 5000
           elsif quest_id == 146
             quest_id = 640
@@ -99,7 +99,6 @@ module BypassHandler::QuestLink
             sb << state
             sb << "</fstring> (Sponsor)]</font></a><br>"
           end
-
         end
       end
 
@@ -141,13 +140,15 @@ module BypassHandler::QuestLink
     qs = pc.get_quest_state(quest_id)
 
     if q
-      if (0...20000).covers?(q.id) && (pc.weight_penalty >= 3 || !pc.inventory_under_90?(true))
-        pc.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
-        return
+      if q.id.in?(0...20000)
+        if pc.weight_penalty >= 3 || !pc.inventory_under_90?(true)
+          pc.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
+          return
+        end
       end
 
       unless qs
-        if (0...20000).covers?(q.id)
+        if q.id.in?(0...20000)
           if pc.all_active_quests.size >= MAX_QUEST_COUNT
             html = NpcHtmlMessage.new(npc.l2id)
             html.set_file(pc, "data/html/fullquest.html")

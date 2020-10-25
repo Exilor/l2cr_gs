@@ -4,7 +4,7 @@ module SummonEffectsTable
 
   private record SummonEffect, skill : Skill, effect_time : Int32
 
-  # l2id -> (class_index -> (reference_skill -> skill.id))
+  # l2id => {class_index => {reference_skill => skill_id}}
   private SERVITOR_EFFECTS = Hash(Int32, Hash(Int32, Hash(Int32, Hash(Int32, SummonEffect)))).new do |h, k|
     h[k] = Hash(Int32, Hash(Int32, Hash(Int32, SummonEffect))).new do |h, k|
       h[k] = Hash(Int32, Hash(Int32, SummonEffect)).new do |h, k|

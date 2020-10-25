@@ -293,6 +293,7 @@ module GameServer
     Lottery.load
 
     host = Config.gameserver_hostname
+    host = "0.0.0.0" if host == "*"
     port = Config.port_game
 
     sc = SelectorConfig.new

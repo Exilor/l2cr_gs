@@ -67,7 +67,7 @@ module EnchantItemGroupsData
                 rate_group.add_slot(ItemTable::SLOTS[slot])
               end
               if mw = parse_string(z, "magicWeapon", nil)
-                rate_group.magic_weapon = Bool.new(mw)
+                rate_group.magic_weapon = mw.to_b
               end
               if id2 = parse_int(z, "id", nil)
                 rate_group.item_id = id2

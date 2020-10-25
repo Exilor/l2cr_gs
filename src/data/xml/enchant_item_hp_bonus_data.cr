@@ -1,9 +1,12 @@
+require "../../enums/crystal_type"
+
 module EnchantItemHPBonusData
   extend self
   extend XMLReader
 
   private FULL_ARMOR_MODIFIER = 1.5f32 # L2J wants to move this to config
-  private ARMOR_HP_BONUSES = Hash(CrystalType, Array(Int32)).new
+  # private ARMOR_HP_BONUSES = Hash(CrystalType, Array(Int32)).new
+  private ARMOR_HP_BONUSES = EnumMap(CrystalType, Array(Int32)).new
 
   def load
     ARMOR_HP_BONUSES.clear

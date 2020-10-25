@@ -21,7 +21,7 @@ module CoupleManager
     load
   end
 
-  def get_couple(couple_id : Int32)
+  def get_couple(couple_id : Int32) : Couple
     idx = get_couple_index(couple_id)
     if idx >= 0
       couples.unsafe_at(idx)
@@ -53,7 +53,7 @@ module CoupleManager
         pc2.couple_id = 0
       end
       couple.divorce
-      couples.delete(idx)
+      couples.delete_at(idx)
     end
   end
 
@@ -61,7 +61,7 @@ module CoupleManager
     couples.index { |c| c.id == couple_id } || -1
   end
 
-  def couples
+  def couples : Interfaces::Array(Couple)
     COUPLES
   end
 end

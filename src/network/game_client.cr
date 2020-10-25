@@ -3,7 +3,7 @@ require "./client_stats"
 require "../util/flood_protectors"
 
 class GameClient
-  include MMO::Client(GameClient)
+  include MMO::Client(self)
   include Synchronizable
   include Loggable
 
@@ -145,7 +145,7 @@ class GameClient
         GameClient.delete_char_by_l2id(id)
       else
         sql = "UPDATE characters SET deletetime=? WHERE charId=?"
-        GameDB.exec(sql, Time.ms + (Config.delete_days * 86_400_000), id)
+        GameDB.exec(sql, Time.ms + Time.days_to_ms(Config.delete_days), id)
       end
     end
 
@@ -508,12 +508,8 @@ class GameClient
     io << "GameClient("
     if pc = @active_char
       io << pc.name
-    elsif con = @connection
-      begin
-        io << con.ip
-      rescue
-        io << "socket closed"
-      end
+    elsif @connection
+      io << @connection
     else
       io << "disconnected"
     end
@@ -538,5 +534,3 @@ class GameClient
     end
   end
 end
-
-require "../models/actor/instance/l2_pc_instance"

@@ -200,17 +200,17 @@ class Instance
         end
       when "showtimer"
         if temp = parse_string(n, "val", nil)
-          @show_timer = Bool.new(temp)
+          @show_timer = temp.to_b
         end
         if temp = parse_string(n, "increase", nil)
-          @timer_increase = Bool.new(temp)
+          @timer_increase = temp.to_b
         end
         if temp = parse_string(n, "text", nil)
           @timer_text = temp
         end
       when "pvpinstance"
         if temp = parse_string(n, "val", nil)
-          self.pvp_instance = Bool.new(temp)
+          self.pvp_instance = temp.to_b
         end
       when "doorlist"
         find_element(n, "door") do |d|
@@ -243,7 +243,7 @@ class Instance
             respawn_random = parse_int(d, "respawnRandom", 0)
 
             if temp = parse_string(d, "allowRandomWalk", nil)
-              allow_random_walk = Bool.new(temp)
+              allow_random_walk = temp.to_b
             end
 
             area_name = parse_string(d, "areaName", nil)

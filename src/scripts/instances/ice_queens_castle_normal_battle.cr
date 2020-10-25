@@ -869,8 +869,9 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
   end
 
   private def check_conditions(pc)
-    party = pc.party
-    channel = party.try &.command_channel
+    if party = pc.party
+      channel = party.command_channel
+    end
 
     if pc.override_instance_conditions?
       return true
@@ -929,7 +930,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
       mob.running = true
       mob.set_intention(AI::ATTACK, target)
     else
-      start_quest_timer("FIND_TARGET", 10000, mob, nil)
+      start_quest_timer("FIND_TARGET", 10_000, mob, nil)
     end
   end
 

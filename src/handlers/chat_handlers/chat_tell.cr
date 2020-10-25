@@ -15,12 +15,11 @@ module ChatHandler::ChatTell
 
     return unless target
 
-    cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.name, text)
     receiver = L2World.get_player(target)
 
     if receiver && !receiver.silence_mode?(pc.l2id)
       if Config.jail_disable_chat && receiver.jailed? && !pc.override_chat_conditions?
-        pc.send_message("#{receiver.name} is in jail.")
+        pc.send_message(receiver.name + " is in jail.")
         return
       end
 
@@ -32,7 +31,7 @@ module ChatHandler::ChatTell
       client = receiver.client
 
       if client.nil? || client.detached?
-        pc.send_message("#{receiver.name} is in offline mode.")
+        pc.send_message(receiver.name + " is in offline mode.")
         return
       end
 
@@ -43,9 +42,9 @@ module ChatHandler::ChatTell
           pc.add_silence_mode_excluded(receiver.l2id)
         end
 
+        cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.name, text)
         receiver.send_packet(cs)
-        msg = "->" + receiver.name
-        cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, msg, text)
+        cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, "->" + receiver.name, text)
         pc.send_packet(cs)
       end
     else

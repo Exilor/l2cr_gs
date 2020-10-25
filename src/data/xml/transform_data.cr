@@ -58,7 +58,7 @@ module TransformData
                 template_data ||= TransformTemplate.new(set)
                 transform.set_template(male, template_data)
 
-                actions = get_content(z).split.map &.to_i
+                actions = get_content(z).split.slice_map &.to_i
                 list = Packets::Outgoing::ExBasicActionList.new(actions)
                 template_data.basic_action_list = list
               when "additionalskills"
@@ -91,7 +91,7 @@ module TransformData
                     if name.casecmp?("id") # CHECK
                       id = value.to_i
                       temp = get_attributes(s).to_a[i &+ 1][1]
-                      allowed = Bool.new(temp)
+                      allowed = temp.to_b
                       holder = AdditionalItemHolder.new(id, allowed)
                       template_data.add_additional_item(holder)
                     end

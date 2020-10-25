@@ -35,7 +35,7 @@ module AdminCommandHandler::AdminReload
       when "htm", "html"
         if !st.empty?
           path = "#{Config.datapack_root}/data/html/#{st.shift}"
-          if File.exists?(path)
+          if File.file?(path)
             html = File.read(path)
             HtmCache.reload(html)
             AdminData.broadcast_message_to_gms("#{pc.name}: Reloaded Htm File: #{File.basename(path)}.")

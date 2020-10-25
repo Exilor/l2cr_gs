@@ -70,7 +70,7 @@ class Scripts::SubClassSkills < Quest
       return
     end
 
-    c_skills = cert_skills.map { |s| [s.id, s.level] }
+    c_skills = cert_skills.slice_map { |s| [s.id, s.level] }
 
     cert_items = get_cert_items(pc)
     c_items = cert_items.map do |it|

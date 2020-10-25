@@ -6,7 +6,7 @@ module DuelManager
   include Packets::Outgoing
 
   private DUELS = Concurrent::Map(Int32, Duel).new
-  @@current_duel_id = Atomic(Int32).new(0)
+  private CURRENT_DUEL_ID = Atomic(Int32).new(0)
 
   def get_duel(duel_id : Int) : Duel?
     if duel = DUELS[duel_id]?
@@ -17,7 +17,7 @@ module DuelManager
   end
 
   def add_duel(pc1 : L2PcInstance, pc2 : L2PcInstance, party_duel : Bool)
-    duel_id = @@current_duel_id.add(1) &+ 1
+    duel_id = CURRENT_DUEL_ID.add(1) &+ 1
     DUELS[duel_id] = Duel.new(pc1, pc2, party_duel, duel_id)
   end
 
@@ -58,7 +58,7 @@ module DuelManager
       SystemMessage.c1_cannot_duel_because_c1_is_currently_engaged_in_battle
     when target.transformed?
       SystemMessage.c1_cannot_duel_while_polymorphed
-    when target.dead? || target.hp_percent < 50
+    when target.hp_percent < 50 || target.mp_percent < 50
       SystemMessage.c1_cannot_duel_because_c1_hp_or_mp_is_below_50_percent
     when target.in_duel?
       SystemMessage.c1_cannot_duel_because_c1_is_already_engaged_in_a_duel

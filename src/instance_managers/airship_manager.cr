@@ -155,7 +155,7 @@ module AirshipManager
       return 0
     end
 
-    all.fuel[index + 1]
+    all.fuel[index &+ 1]
   end
 
   def load

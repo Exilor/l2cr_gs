@@ -134,15 +134,6 @@ module BypassHandler::NpcViewMod
     end
   end
 
-  private struct DecimalFormat
-    initializer pattern : String
-
-    # TODO
-    def format(n)
-      n.to_s
-    end
-  end
-
   def send_npc_drop_list(pc, npc, scope, page)
     drop_list = npc.template.get_drop_list(scope)
     if drop_list.nil? || drop_list.empty?
@@ -183,9 +174,6 @@ module BypassHandler::NpcViewMod
       _end = drop_list.size
     end
 
-    amount_format = DecimalFormat.new("#,###")
-    chance_format = DecimalFormat.new("0.00##")
-
     left_height = 0
     right_height = 0
     left_sb = String::Builder.new
@@ -196,16 +184,16 @@ module BypassHandler::NpcViewMod
       height = 64
       drop_item = drop_list[i]?
       if drop_item.is_a?(GeneralDropItem)
-        add_general_drop_item(pc, npc, amount_format, chance_format, sb, drop_item)
+        add_general_drop_item(pc, npc, sb, drop_item)
       elsif drop_item.is_a?(GroupedGeneralDropItem)
         ggdi = drop_item
         if ggdi.items.size == 1
           gdi = ggdi.items[0]
-          add_general_drop_item(pc, npc, amount_format, chance_format, sb, GeneralDropItem.new(gdi.item_id, gdi.min, gdi.max, (gdi.chance * ggdi.chance) // 100, gdi.amount_strategy, gdi.chance_strategy, ggdi.precise_strategy, ggdi.killer_chance_modifier_strategy, gdi.drop_calculation_strategy))
+          add_general_drop_item(pc, npc, sb, GeneralDropItem.new(gdi.item_id, gdi.min, gdi.max, (gdi.chance * ggdi.chance) // 100, gdi.amount_strategy, gdi.chance_strategy, ggdi.precise_strategy, ggdi.killer_chance_modifier_strategy, gdi.drop_calculation_strategy))
         else
           normalized = ggdi.normalize_me(npc, pc)
           sb << "<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\"><tr><td width=32 valign=top><img src=\"L2UI_CT1.ICON_DF_premiumItem\" width=32 height=32></td><td fixwidth=300 align=center><font name=\"ScreenMessageSmall\" color=\"CD9000\">One from group</font></td></tr><tr><td width=32></td><td width=300><table width=295 cellpadding=0 cellspacing=0><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td><td width=247 align=center>"
-          sb << chance_format.format(Math.min(normalized.chance, 100))
+          sb << Math.min(normalized.chance, 100).round(4)
           sb << "%</td></tr></table><br>"
 
           normalized.items.each do |gdi|
@@ -223,15 +211,15 @@ module BypassHandler::NpcViewMod
             min = minmax.min
             max = minmax.max
             if min == max
-              sb << amount_format.format(min)
+              sb << min
             else
-              sb << amount_format.format(min)
+              sb << min
               sb << " - "
-              sb << amount_format.format(max)
+              sb << max
             end
 
             sb << "</td></tr><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td><td width=205 align=center>"
-            sb << chance_format.format(Math.min(gdi.chance, 100))
+            sb << Math.min(gdi.chance, 100).round(4)
             sb << "%</td></tr></table></td></tr><tr><td width=32></td><td width=259>&nbsp;</td></tr></table>"
 
             height &+= 64
@@ -268,7 +256,7 @@ module BypassHandler::NpcViewMod
     Util.send_cb_html(pc, html)
   end
 
-  private def add_general_drop_item(pc, npc, amount_format, chance_format, sb, drop_item)
+  private def add_general_drop_item(pc, npc, sb, drop_item)
     item = ItemTable[drop_item.item_id]
     sb << "<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\"><tr><td width=32 valign=top><img src=\""
     if icon = item.icon
@@ -282,15 +270,15 @@ module BypassHandler::NpcViewMod
     min = min_max.min
     max = min_max.max
     if min == max
-      sb << amount_format.format(min)
+      sb << min
     else
-      sb << amount_format.format(min)
+      sb << min
       sb << " - "
-      sb << amount_format.format(max)
+      sb << max
     end
 
     sb << "</td></tr><tr><td width=48 align=right valign=top><font color=\"LEVEL\">Chance:</font></td><td width=247 align=center>"
-    sb << chance_format.format(Math.min(drop_item.get_chance(npc, pc), 100))
+    sb << Math.min(drop_item.get_chance(npc, pc), 100).round(4)
     sb << "%</td></tr></table></td></tr><tr><td width=32></td><td width=300>&nbsp;</td></tr></table>"
   end
 

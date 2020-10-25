@@ -7,7 +7,7 @@ class L2NoRestartZone < L2ZoneType
   def set_parameter(name, value)
     case name.casecmp
     when "default_enabled"
-      @enabled = Bool.new(value)
+      @enabled = value.to_b
     when "restartAllowedTime"
       @restart_allowed_time = value.to_i * 1000
     when "restartTime"

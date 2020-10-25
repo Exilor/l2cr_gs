@@ -34,10 +34,10 @@ module GeoPathFinding
       return
     end
 
-    reg_offset = get_region_offset(rx, ry).to_i32
+    offset = get_region_offset(rx, ry).to_i32
 
     path = "#{Config.pathnode_dir}/#{rx}_#{ry}.pn"
-    unless File.exists?(path)
+    unless File.file?(path)
       raise "File #{path} not found"
     end
 
@@ -54,8 +54,8 @@ module GeoPathFinding
       index += (layer.to_i32 * 10) + 1
     end
 
-    PATH_NODES_INDEX[reg_offset] = indexes
-    PATH_NODES[reg_offset] = slice
+    PATH_NODES_INDEX[offset] = indexes
+    PATH_NODES[offset] = slice
   end
 
   def path_nodes_exist?(region_offset : Int16) : Bool
@@ -74,36 +74,36 @@ module GeoPathFinding
     stop = read_node(gtx, gty, gtz)
 
     unless start && stop
-      debug "!(start && stop)"
+      # debug "!(start && stop)"
       return
     end
 
     if (start.loc.z - z).abs > 55
       # wrong layer
-      debug "!(start.loc.z - z).abs > 55 (#{(start.loc.z - z).abs})"
+      # debug "!(start.loc.z - z).abs > 55 (#{(start.loc.z - z).abs})"
       return
     end
 
     if (stop.loc.z - tz).abs > 55
       # wrong layer
-      debug "!(stop.loc.z - tz).abs > 55 (#{(stop.loc.z - tz).abs})"
+      # debug "!(stop.loc.z - tz).abs > 55 (#{(stop.loc.z - tz).abs})"
       return
     end
 
     if start == stop
-      debug "start == stop"
+      # debug "start == stop"
       return
     end
 
     temp = GeoData.move_check(x, y, z, start.loc.x, start.loc.y, start.loc.z, instance_id)
     if temp.x != start.loc.x || temp.y != start.loc.y
-      debug "temp.x != start.loc.x || temp.y != start.loc.y"
+      # debug "temp.x != start.loc.x || temp.y != start.loc.y"
       return
     end
 
     temp = GeoData.move_check(tx, ty, tz, stop.loc.x, stop.loc.y, stop.loc.z, instance_id)
     if temp.x != stop.loc.x || temp.y != stop.loc.y
-      debug "temp.x != stop.loc.x || temp.y != stop.loc.y"
+      # debug "temp.x != stop.loc.x || temp.y != stop.loc.y"
       return
     end
 
@@ -120,7 +120,7 @@ module GeoPathFinding
     i = 0
     while i < 550
       unless node = to_visit.shift?
-        debug "to_visit.shift? == nil"
+        # debug "to_visit.shift? == nil"
         return
       end
       if node == stop
@@ -139,12 +139,22 @@ module GeoPathFinding
           dx = target_x - n.loc.node_x
           dy = target_y - n.loc.node_y
           n.cost = dx.abs2 + dy.abs2
-          to_visit.each_with_index do |n2, j|
-            if n2.cost > n.cost
-              to_visit.insert(j, n)
+          # to_visit.each_with_index do |n2, j|
+          #   if n2.cost > n.cost
+          #     to_visit.insert(j, n)
+          #     added = true
+          #     break
+          #   end
+          # end
+
+          index = 0
+          while index < to_visit.size
+            if to_visit.unsafe_fetch(index).cost > n.cost
+              to_visit.insert(index, n)
               added = true
               break
             end
+            index &+= 1
           end
 
           unless added

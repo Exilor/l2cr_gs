@@ -20,7 +20,8 @@ class FortSiege
   getter fort
   getter? in_progress = false
 
-  def initialize(@fort : Fort)
+  def initialize(fort : Fort)
+    @fort = fort
     check_auto_task
     FortSiegeManager.add_siege(self)
   end
@@ -443,20 +444,20 @@ class FortSiege
       if attacker_clans.empty?
         ThreadPoolManager.schedule_general(->schedule_suspicious_merchant_spawn, delay)
       else
-        if delay > 3600000
+        if delay > 3_600_000
           ThreadPoolManager.execute_general(->schedule_suspicious_merchant_spawn)
           task = -> { schedule_start_siege_task(3600) }
-          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 3600000)
-        elsif delay > 600000
+          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 3_600_000)
+        elsif delay > 600_000
           ThreadPoolManager.execute_general(->schedule_suspicious_merchant_spawn)
           task = -> { schedule_start_siege_task(600) }
-          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 600000)
-        elsif delay > 300000
+          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 600_000)
+        elsif delay > 300_000
           task = -> { schedule_start_siege_task(300) }
-          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 300000)
-        elsif delay > 60000
+          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 300_000)
+        elsif delay > 60_000
           task = -> { schedule_start_siege_task(60) }
-          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 60000)
+          @siege_start_task = ThreadPoolManager.schedule_general(task, delay - 60_000)
         else
           task = -> { schedule_start_siege_task(60) }
           @siege_start_task = ThreadPoolManager.schedule_general(task, 0)

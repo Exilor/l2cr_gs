@@ -143,36 +143,36 @@ abstract class AbstractDocument
     each_attribute(n) do |name, text|
       case name.casecmp
       when "races"
-        races = text.split(',').map { |r| Race.parse(r) }
+        races = text.split(',').slice_map { |r| Race.parse(r) }
         cond = join_and(cond, Condition::PlayerRace.new(races))
       when "level"
         lvl = get_value(text, template).to_i
         cond = join_and(cond, Condition::PlayerLevel.new(lvl))
       when "levelrange"
         if text.count(',') == 2
-          range = text.split(',').map &.to_i
+          range = text.split(',').slice_map &.to_i
           cond = join_and(cond, Condition::PlayerLevelRange.new(range[0]..range[1]))
         end
       when "resting"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::RESTING, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::RESTING, text.to_b))
       when "flying"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::FLYING, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::FLYING, text.to_b))
       when "moving"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::MOVING, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::MOVING, text.to_b))
       when "running"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::RUNNING, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::RUNNING, text.to_b))
       when "standing"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::STANDING, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::STANDING, text.to_b))
       when "behind"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::BEHIND, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::BEHIND, text.to_b))
       when "front"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::FRONT, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::FRONT, text.to_b))
       when "chaotic"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::CHAOTIC, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::CHAOTIC, text.to_b))
       when "olympiad"
-        cond = join_and(cond, Condition::PlayerState.new(PlayerState::OLYMPIAD, Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerState.new(PlayerState::OLYMPIAD, text.to_b))
       when "ishero"
-        cond = join_and(cond, Condition::PlayerIsHero.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerIsHero.new(text.to_b))
       when "transformationid"
         cond = join_and(cond, Condition::PlayerTransformationId.new(text.to_i))
       when "hp"
@@ -209,14 +209,14 @@ abstract class AbstractDocument
         value = get_value(text).to_i
         cond = join_and(cond, Condition::PlayerInvSize.new(value))
       when "isclanleader"
-        cond = join_and(cond, Condition::PlayerIsClanLeader.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerIsClanLeader.new(text.to_b))
       when "ontvtevent"
-        cond = join_and(cond, Condition::PlayerTvTEvent.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerTvTEvent.new(text.to_b))
       when "pledgeclass"
         pledge = get_value(text).to_i
         cond = join_and(cond, Condition::PlayerPledgeClass.new(pledge))
       when "clanhall"
-        array = text.split(',').map &.strip.to_i
+        array = text.split(',').slice_map &.strip.to_i
         cond = join_and(cond, Condition::PlayerHasClanHall.new(array))
       when "fort"
         fort = get_value(text).to_i
@@ -228,11 +228,11 @@ abstract class AbstractDocument
         sex = get_value(text) == "1" # 0: male, 1: female
         cond = join_and(cond, Condition::PlayerSex.new(sex))
       when "flymounted"
-        cond = join_and(cond, Condition::PlayerFlyMounted.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerFlyMounted.new(text.to_b))
       when "vehiclemounted"
-        cond = join_and(cond, Condition::PlayerVehicleMounted.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerVehicleMounted.new(text.to_b))
       when "landingzone"
-        cond = join_and(cond, Condition::PlayerLandingZone.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerLandingZone.new(text.to_b))
       when "active_effect_id"
         effect_id = get_value(text, template).to_i
         cond = join_and(cond, Condition::PlayerActiveEffectId.new(effect_id))
@@ -250,58 +250,58 @@ abstract class AbstractDocument
         skill_lvl = get_value(v2, template).to_i
         cond = join_and(cond, Condition::PlayerActiveSkillId.new(skill_id, skill_lvl))
       when "class_id_restriction"
-        array = text.split(',').map { |s| get_value(s.strip).to_i }
+        array = text.split(',').slice_map { |s| get_value(s.strip).to_i }
         cond = join_and(cond, Condition::PlayerClassIdRestriction.new(array))
       when "subclass"
-        cond = join_and(cond, Condition::PlayerSubclass.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerSubclass.new(text.to_b))
       when "instanceid"
-        array = text.split(',').map { |s| get_value(s.strip).to_i }
+        array = text.split(',').slice_map { |s| get_value(s.strip).to_i }
         cond = join_and(cond, Condition::PlayerInstanceId.new(array))
       when "agathionid"
         cond = join_and(cond, Condition::PlayerAgathionId.new(text.to_i))
       when "cloakstatus"
-        cond = join_and(cond, Condition::PlayerCloakStatus.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCloakStatus.new(text.to_b))
       when "haspet"
-        array = text.split(',').map { |s| get_value(s.strip).to_i }
+        array = text.split(',').slice_map { |s| get_value(s.strip).to_i }
         cond = join_and(cond, Condition::PlayerHasPet.new(array))
       when "hasservitor"
         cond = join_and(cond, Condition::PlayerHasServitor.new)
       when "npcidradius"
         if text.count(',') == 3
           v1, v2, v3 = text.split(',')
-          ids = v1.split(';').map { |s| get_value(s, template).to_i }
+          ids = v1.split(';').slice_map { |s| get_value(s, template).to_i }
           radius = v2.to_i
-          val = Bool.new(v3)
+          val = v3.to_b
           cond = join_and(cond, Condition::PlayerRangeFromNpc.new(ids, radius, val))
         end
       when "callpc"
-        cond = join_and(cond, Condition::PlayerCallPc.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCallPc.new(text.to_b))
       when "cancreatebase"
-        cond = join_and(cond, Condition::PlayerCanCreateBase.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanCreateBase.new(text.to_b))
       when "cancreateoutpost"
-        cond = join_and(cond, Condition::PlayerCanCreateOutpost.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanCreateOutpost.new(text.to_b))
       when "canescape"
-        cond = join_and(cond, Condition::PlayerCanEscape.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanEscape.new(text.to_b))
       when "canrefuelairship"
         cond = join_and(cond, Condition::PlayerCanRefuelAirship.new(text.to_i))
       when "canresurrect"
-        cond = join_and(cond, Condition::PlayerCanResurrect.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanResurrect.new(text.to_b))
       when "cansummon"
-        cond = join_and(cond, Condition::PlayerCanSummon.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanSummon.new(text.to_b))
       when "cansummonsiegegolem"
-        cond = join_and(cond, Condition::PlayerCanSummonSiegeGolem.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanSummonSiegeGolem.new(text.to_b))
       when "cansweep"
-        cond = join_and(cond, Condition::PlayerCanSweep.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanSweep.new(text.to_b))
       when "cantakecastle"
         cond = join_and(cond, Condition::PlayerCanTakeCastle.new)
       when "cantakefort"
-        cond = join_and(cond, Condition::PlayerCanTakeFort.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanTakeFort.new(text.to_b))
       when "cantransform"
-        cond = join_and(cond, Condition::PlayerCanTransform.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanTransform.new(text.to_b))
       when "canuntransform"
-        cond = join_and(cond, Condition::PlayerCanUntransform.new(Bool.new(text)))
+        cond = join_and(cond, Condition::PlayerCanUntransform.new(text.to_b))
       when "insidezoneid"
-        array = text.split(',').map { |s| get_value(s.strip).to_i }
+        array = text.split(',').slice_map { |s| get_value(s.strip).to_i }
         cond = join_and(cond, Condition::PlayerInsideZoneId.new(array))
       when "checkabnormal"
         if text.includes?(',')
@@ -327,7 +327,7 @@ abstract class AbstractDocument
     each_attribute(n) do |name, text|
       case name.casecmp
       when "aggro"
-        cond = join_and(cond, Condition::TargetAggro.new(Bool.new(text)))
+        cond = join_and(cond, Condition::TargetAggro.new(text.to_b))
       when "siegezone"
         value = get_value(text).to_i
         cond = join_and(cond, Condition::SiegeZone.new(value, false))
@@ -341,11 +341,11 @@ abstract class AbstractDocument
           cond = join_and(cond, Condition::TargetLevelRange.new(range))
         end
       when "mypartyexceptme"
-        cond = join_and(cond, Condition::TargetMyPartyExceptMe.new(Bool.new(text)))
+        cond = join_and(cond, Condition::TargetMyPartyExceptMe.new(text.to_b))
       when "playable"
         cond = join_and(cond, Condition::TargetPlayable.new)
       when "class_id_restriction"
-        ary = text.split(',').map { |s| get_value(s.strip).to_i }
+        ary = text.split(',').slice_map { |s| get_value(s.strip).to_i }
         cond = join_and(cond, Condition::TargetClassIdRestriction.new(ary))
       when "active_effect_id"
         effect_id = get_value(text, template).to_i
@@ -386,10 +386,10 @@ abstract class AbstractDocument
         end
         cond = join_and(cond, Condition::TargetUsesWeaponKind.new(mask))
       when "npcid"
-        array = text.split(',').map { |s| get_value(s.strip).to_i }
+        array = text.split(',').slice_map { |s| get_value(s.strip).to_i }
         cond = join_and(cond, Condition::TargetNpcId.new(array))
       when "npctype"
-        types = get_value(text, template).strip.split(';').map do |s|
+        types = get_value(text, template).strip.split(';').slice_map do |s|
           InstanceType.parse(s)
         end
         cond = join_and(cond, Condition::TargetNpcType.new(types))
@@ -455,7 +455,7 @@ abstract class AbstractDocument
 
         cond = join_and(cond, Condition::SlotItemId.new(slot, id, enchant))
       when "weaponchange"
-        cond = join_and(cond, Condition::ChangeWeapon.new(Bool.new(text)))
+        cond = join_and(cond, Condition::ChangeWeapon.new(text.to_b))
       end
     end
 
@@ -472,9 +472,9 @@ abstract class AbstractDocument
     each_attribute(n) do |name, text|
       case name.casecmp
       when "skill"
-        cond = join_and(cond, Condition::WithSkill.new(Bool.new(text)))
+        cond = join_and(cond, Condition::WithSkill.new(text.to_b))
       when "night"
-        val = Bool.new(text)
+        val = text.to_b
         night = Condition::GameTime::CheckGameTime::NIGHT
         cond = join_and(cond, Condition::GameTime.new(night, val))
       when "chance"

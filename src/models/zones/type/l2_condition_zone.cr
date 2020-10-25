@@ -4,9 +4,9 @@ class L2ConditionZone < L2ZoneType
 
   def set_parameter(name, value)
     if name.casecmp?("NoBookmark")
-      @no_bookmark = Bool.new(value)
+      @no_bookmark = value.to_b
     elsif name.casecmp?("NoItemDrop")
-      @no_item_drop = Bool.new(value)
+      @no_item_drop = value.to_b
     else
       super
     end

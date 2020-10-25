@@ -196,8 +196,8 @@ module DimensionalRiftManager
 
       party.members.each do |m|
         next if pc.gm? # custom
-        i = m.inventory.get_item_by_item_id(DIMENSIONAL_FRAGMENT_ITEM_ID)
-        unless m.destroy_item("RiftEntrance", i.not_nil!, count, nil, false)
+        item = m.inventory.get_item_by_item_id(DIMENSIONAL_FRAGMENT_ITEM_ID)
+        unless item && m.destroy_item("RiftEntrance", item, count, nil, false)
           html = NpcHtmlMessage.new(npc.l2id)
           html.set_file(pc, "data/html/seven_signs/rift/NoFragments.htm")
           html["%npc_name%"] = npc.name

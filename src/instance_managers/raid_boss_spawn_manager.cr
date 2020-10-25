@@ -192,7 +192,8 @@ module RaidBossSpawnManager
       if !SCHEDULES.has_key?(boss.id) && (min_delay > 0 || max_delay > 0)
         time = Time.from_ms(respawn_time)
         info { "Updated #{boss.name} respawn time to #{time}." }
-        task = ThreadPoolManager.schedule_general(SpawnSchedule.new(boss.id), delay)
+        ss = SpawnSchedule.new(boss.id)
+        task = ThreadPoolManager.schedule_general(ss, delay)
         SCHEDULES[boss.id] = task
         update_db
       end

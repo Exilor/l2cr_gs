@@ -1,135 +1,146 @@
-struct RangeSet(T)
+class RangeSet(T)
   include Enumerable(T)
 
-  getter ranges
-
-  def initialize
-    @ranges = [] of Range(T, T)
+  def initialize(range : Enumerable(T))
+    @first = RangeNode(T).new(range.min, range.max)
   end
 
-  def initialize(*ranges : Range(T, T))
-    @ranges = ranges.map { |r| r.excludes_end? ? r.begin..r.end.pred : r }.to_a
+  def initialize
+    @first = nil
+  end
+
+  def includes?(id : T) : Bool
+    each_range do |r|
+      if r.min <= id <= r.max
+        return true
+      end
+    end
+
+    false
+  end
+
+  def <<(id : T) : self
+    unless r = @first
+      @first = RangeNode(T).new(id, id)
+      return self
+    end
+
+    pred = nil
+    while r
+      if id < r.min
+        if id &+ 1 == r.min
+          if pred && pred.max &+ 2 == r.min
+            pred.succ = r.succ
+            pred.max = r.max
+          else
+            r.min = id
+          end
+        else
+          if pred
+            if pred.max &+ 1 == id
+              pred.max = id
+            else
+              pred.succ = RangeNode(T).new(id, id, r)
+            end
+          else
+            @first = RangeNode(T).new(id, id, r)
+          end
+        end
+
+        return self
+      elsif id <= r.max
+        return self
+      end
+
+      pred = r
+      r = r.succ
+    end
+
+    if pred
+      if pred.max &+ 1 == id
+        pred.max = id
+        return self
+      end
+
+      pred.succ = RangeNode(T).new(id, id)
+    end
+
+    self
+  end
+
+  def delete(id : T) : Bool
+    return false unless r = @first
+
+    if id < r.min
+      return false
+    end
+    pred = nil
+    while r
+      if r.min <= id <= r.max
+        if r.min == r.max
+          if pred
+            pred.succ = r.succ
+          else
+            @first = r.succ
+          end
+        elsif id == r.min
+          r.min = id &+ 1
+        elsif id == r.max
+          r.max = id &- 1
+        else
+          new_range = RangeNode(T).new(id &+ 1, r.max, r.succ)
+          r.max = id &- 1
+          r.succ = new_range
+        end
+
+        return true
+      end
+
+      pred = r
+      r = r.succ
+    end
+
+    false
   end
 
   def each(& : T ->) : Nil
-    @ranges.deep_each { |n| yield n }
+    each_range { |r| r.min.upto(r.max) { |n| yield n } }
   end
 
-  def <<(value : T) : self
-    unless last = @ranges[-1]?
-      @ranges << (value..value)
-      return self
-    end
+  def inspect(io : IO)
+    io << self.class << " {"
 
-    last_end = last.end
-
-    if value > last_end
-      if value.pred == last_end
-        @ranges[-1] = (last.begin)..value
+    r = @first
+    while r
+      if r.min == r.max
+        io << r.max
       else
-        @ranges << (value..value)
+        io << r.min << ".." << r.max
       end
 
-      return self
-    end
-
-    i = @ranges.bsearch_index { |r| r.begin >= value }.try &.pred || 0
-    r = @ranges[i]
-    return self if r.includes?(value)
-    next_range = @ranges[i &+ 1]?
-    return self if next_range && next_range.includes?(value)
-    extend_this_range = r.end.succ == value
-    extend_next_range = next_range && next_range.begin.pred == value
-
-    if extend_this_range && extend_next_range
-      @ranges[i, 2] = (r.begin)..(next_range.not_nil!.end)
-    elsif extend_this_range
-      @ranges[i] = (r.begin)..value
-    elsif extend_next_range
-      @ranges[i &+ 1] = value..(next_range.not_nil!.end)
-    else
-      @ranges.insert(i &+ 1, value..value)
-    end
-
-    self
-  end
-
-  def add(value : T) : Bool
-    old = size
-    self << value
-    size > old
-  end
-
-  def includes?(value : T) : Bool
-    !!@ranges.bsearch do |r|
-      a = value <=> r.begin
-      if a == 1
-        b = value <=> r.end
-        b == -1 ? 0 : b
-      else
-        a
+      if r = r.succ
+        io << ", "
       end
     end
-  end
 
-  def first : T
-    @ranges[0]?.try &.begin || raise EmptyError.new
-  end
-
-  def last : T
-    @ranges[-1]?.try &.end || raise EmptyError.new
+    io << '}'
   end
 
   def clear : self
-    @ranges.clear
+    @first = nil
     self
   end
 
-  def first_free : T
-    (first = @ranges[0]?) ? first.begin > 0 ? 0 : first.end.succ : T.zero
-  end
-
-  def size : Int32
-    @ranges.sum &.size
-  end
-
-  # The number of numbers it would take to unify all the ranges into one.
-  # def holes
-  #   holes = 0
-  #   @ranges.each_with_index do |r1, i|
-  #     if r2 = @ranges[i &+ 1]?
-  #       holes += r2.begin - r1.end - 1
-  #     end
-  #   end
-  #   holes
-  # end
-
-  def delete(value) : T?
-    i = @ranges.bsearch_index { |r| r.begin >= value || r.end >= value }
-    return unless i
-    range = @ranges[i]
-    return unless range.includes?(value)
-
-    case
-    when range.size == 1
-      @ranges.delete_at(i)
-    when range.begin == value
-      @ranges[i] = value.succ..range.end
-    when range.end == value
-      @ranges[i] = (range.begin)..value.pred
-    else
-      @ranges[i] = (range.begin)..value.pred
-      @ranges.insert(i &+ 1, value.succ..(range.end))
+  private def each_range
+    r = @first
+    while r
+      yield r
+      r = r.succ
     end
-
-    value
+    nil
   end
 
-  def empty? : Bool
-    @ranges.empty?
-  end
-
-  def inspect : Nil
-    "RangeSet {#{@ranges.map { |r| r.size > 1 ? r : r.end }.join(", ")}}"
+  private class RangeNode(T)
+    property_initializer min : T, max : T, succ : self? = nil
   end
 end

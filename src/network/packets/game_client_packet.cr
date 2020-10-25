@@ -1,5 +1,3 @@
-require "./server/*"
-
 abstract class GameClientPacket < MMO::IncomingPacket(GameClient)
   include Packets::Outgoing
   include Loggable
@@ -28,7 +26,9 @@ abstract class GameClientPacket < MMO::IncomingPacket(GameClient)
     end
   rescue e
     error e
-    client.close_now if is_a?(Packets::Incoming::EnterWorld)
+    if is_a?(Packets::Incoming::EnterWorld)
+      client.close_now
+    end
   end
 
   abstract def run_impl
@@ -63,3 +63,5 @@ abstract class GameClientPacket < MMO::IncomingPacket(GameClient)
     end
   end
 end
+
+require "./server/*"

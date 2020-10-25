@@ -93,7 +93,7 @@ class LoginServerThread
       when 0x03 then Packets::Incoming::PlayerAuthResponse.new
       when 0x04 then Packets::Incoming::KickPlayer.new
       when 0x05 then Packets::Incoming::RequestCharacters.new
-      # when 0x06 then Packets::Incoming::ChangePasswordResponse.new
+      when 0x06 then Packets::Incoming::ChangePasswordResponse.new
       else
         warn { "Unknown opcode: 0x#{opcode.to_s(16)}." }
       end
@@ -181,7 +181,8 @@ class LoginServerThread
     end
   end
 
-  def max_players=(@max_players : Int32)
+  def max_players=(max_players : Int32)
+    @max_players = max_players
     send_server_status(ServerStatus::MAX_PLAYERS, max_players)
   end
 

@@ -5,7 +5,7 @@ module CrestTable
   extend Loggable
 
   private CRESTS = Concurrent::Map(Int32, L2Crest).new
-  @@next_id = Atomic(Int32).new(1)
+  private NEXT_ID = Atomic(Int32).new(1)
 
   def load
     CRESTS.clear
@@ -30,11 +30,11 @@ module CrestTable
       sql = "SELECT `crest_id`, `data`, `type` FROM `crests` ORDER BY `crest_id` DESC"
       GameDB.each(sql) do |rs|
         id = rs.get_i32(:"crest_id")
-        if @@next_id.get <= id
-          @@next_id.set(id + 1)
+        if NEXT_ID.get <= id
+          NEXT_ID.set(id + 1)
         end
 
-        if !crests_in_use.includes?(id) && id != @@next_id.get &- 1
+        if !crests_in_use.includes?(id) && id != NEXT_ID.get &- 1
           GameDB.exec("DELETE FROM crests WHERE crest_id=?", id)
           next
         end
@@ -151,7 +151,7 @@ module CrestTable
   def remove_crest(crest_id : Int)
     CRESTS.delete(crest_id)
 
-    if crest_id == @@next_id.get &- 1
+    if crest_id == NEXT_ID.get &- 1
       return
     end
 
@@ -163,6 +163,6 @@ module CrestTable
   end
 
   def next_id : Int32
-    @@next_id.add(1) &+ 1
+    NEXT_ID.add(1) &+ 1
   end
 end

@@ -194,7 +194,6 @@ module MultisellData
   end
 
   private def verify_ingredient(ing : Ingredient)
-    id = ing.item_id
-    id == CLAN_REPUTATION || id == FAME || !!ing.template
+    ing.item_id.in?(CLAN_REPUTATION, FAME) || !!ing.template
   end
 end
