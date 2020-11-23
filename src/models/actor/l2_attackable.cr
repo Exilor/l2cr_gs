@@ -793,8 +793,8 @@ class L2Attackable < L2Npc
 
   def has_random_animation? : Bool
     Config.max_monster_animation > 0 &&
-    random_animation_enabled? &&
-    !is_a?(L2GrandBossInstance)
+      random_animation_enabled? &&
+      !is_a?(L2GrandBossInstance)
   end
 
   def mob? : Bool

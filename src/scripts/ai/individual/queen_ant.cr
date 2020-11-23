@@ -240,7 +240,7 @@ class Scripts::QueenAnt < AbstractNpcAI
         mob = npc.as(L2MonsterInstance)
         NURSES.delete_first(mob)
         if leader = mob.leader
-          leader.minion_list.on_minion_die(mob, 10000)
+          leader.minion_list.on_minion_die(mob, 10_000)
         end
       end
     end

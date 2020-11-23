@@ -10,7 +10,7 @@ class L2TeleporterInstance < L2Npc
     InstanceType::L2TeleporterInstance
   end
 
-  def get_html_path(npc_id : Int32, val : Int32)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "data/html/teleporter/#{npc_id}.htm"
     else

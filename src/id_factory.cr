@@ -1,4 +1,3 @@
-require "./util/range_set"
 require "./util/l2_id_set"
 
 module IdFactory
@@ -77,12 +76,11 @@ module IdFactory
     sql = sql.chomp("UNION ")
 
     GameDB.query_each(sql) do |rs|
-      value = rs.read(Number::Primitive)
-      temp << value.to_i32
+      temp << rs.read(Number::Primitive).to_i32
     end
 
-    temp.sort!
     temp.each { |id| IDS << id }
+
     info { "#{temp.size} ids loaded in #{timer} s." }
   end
 

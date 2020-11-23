@@ -250,7 +250,7 @@ class BlockCheckerEngine
       # Start up player parameters
       set_up_players
       # Set the started time
-      @engine.started_time = Time.ms + 300000
+      @engine.started_time = Time.ms + 300_000
     end
   end
 

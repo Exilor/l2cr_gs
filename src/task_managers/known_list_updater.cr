@@ -22,7 +22,7 @@ module KnownListUpdater
           failed = FAILED_REGIONS.includes?(reg)
 
           if reg.active?
-            full_update = (@@timer == FULL_UPDATE_TIMER) || failed
+            full_update = @@timer == FULL_UPDATE_TIMER || failed
             update_region(reg, full_update, @@update_pass)
           end
 
@@ -51,15 +51,15 @@ module KnownListUpdater
         next
       end
 
-      region.sorrounding_regions.each do |regi|
-        if object.playable? || (aggro && regi.active?) || full_update
-          regi.objects.each_value do |obj|
+      region.sorrounding_regions.each do |neighbor|
+        if object.playable? || (aggro && neighbor.active?) || full_update
+          neighbor.objects.each_value do |obj|
             if obj != object
               object.known_list.add_known_object(obj)
             end
           end
-        elsif object.character? && regi.active?
-          regi.playables.each_value do |obj|
+        elsif object.character? && neighbor.active?
+          neighbor.playables.each_value do |obj|
             if obj != object
               object.known_list.add_known_object(obj)
             end

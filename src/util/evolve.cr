@@ -67,7 +67,7 @@ module Evolve
 
     pc.pet = pet_summon
 
-    pc.send_packet(MagicSkillUse.new(npc, 2046, 1, 1000, 600000))
+    pc.send_packet(MagicSkillUse.new(npc, 2046, 1, 1000, 600_000))
     pc.send_packet(SystemMessageId::SUMMON_A_PET)
 
     pet_summon.spawn_me(old_x, old_y, old_z)
@@ -77,7 +77,7 @@ module Evolve
     ThreadPoolManager.schedule_general(EvolveFinalizer.new(pc, pet_summon), 900)
 
     if pet_summon.current_feed <= 0
-      ThreadPoolManager.schedule_general(EvolveFeedWait.new(pc, pet_summon), 60000)
+      ThreadPoolManager.schedule_general(EvolveFeedWait.new(pc, pet_summon), 60_000)
     else
       pet_summon.start_feed
     end
@@ -136,7 +136,7 @@ module Evolve
 
     pc.pet = pet_summon
 
-    pc.send_packet(MagicSkillUse.new(npc, 2046, 1, 1000, 600000))
+    pc.send_packet(MagicSkillUse.new(npc, 2046, 1, 1000, 600_000))
     pc.send_packet(SystemMessageId::SUMMON_A_PET)
     pet_summon.spawn_me(*pc.xyz)
     pet_summon.start_feed
@@ -152,7 +152,7 @@ module Evolve
     ThreadPoolManager.schedule_general(EvolveFinalizer.new(pc, pet_summon), 900)
 
     if pet_summon.current_feed <= 0
-      ThreadPoolManager.schedule_general(EvolveFeedWait.new(pc, pet_summon), 60000)
+      ThreadPoolManager.schedule_general(EvolveFeedWait.new(pc, pet_summon), 60_000)
     else
       pet_summon.start_feed
     end

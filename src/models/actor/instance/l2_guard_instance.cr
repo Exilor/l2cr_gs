@@ -9,7 +9,7 @@ class L2GuardInstance < L2Attackable
     @known_list = GuardKnownList.new(self)
   end
 
-  def get_html_path(npc_id, val)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "data/html/guard/#{npc_id}.htm"
     else

@@ -104,7 +104,7 @@ class L2DungeonGatekeeperInstance < L2Npc
     pc.action_failed
   end
 
-  def get_html_path(npc_id : Int, val : Int) : String
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "data/html/teleporter/#{npc_id}.htm"
     else

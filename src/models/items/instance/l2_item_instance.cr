@@ -735,7 +735,7 @@ class L2ItemInstance < L2Object
     end
   end
 
-  def decay_me
+  def decay_me : Bool
     if Config.save_dropped_item
       ItemsOnGroundManager.remove_object(self)
     end

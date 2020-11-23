@@ -199,7 +199,7 @@ class L2SepulcherNpcInstance < L2Npc
   def say_in_shout(msg : NpcString)
     cs = CreatureSay.new(0, Packets::Incoming::Say2::NPC_SHOUT, name, msg)
     L2World.players.each do |pc|
-      if Util.in_range?(15000, pc, self, true)
+      if Util.in_range?(15_000, pc, self, true)
         pc.send_packet(cs)
       end
     end

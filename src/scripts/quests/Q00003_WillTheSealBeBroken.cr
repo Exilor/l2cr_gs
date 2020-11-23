@@ -74,7 +74,7 @@ class Scripts::Q00003_WillTheSealBeBroken < Quest
         end
       end
     when State::STARTED
-      if st.cond? 1
+      if st.cond?(1)
         html = "30141-04.html"
       else
         give_items(pc, ENCHANT, 1)

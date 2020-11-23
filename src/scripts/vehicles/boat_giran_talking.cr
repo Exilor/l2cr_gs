@@ -98,7 +98,7 @@ class BoatGiranTalking
     when 6
       BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, ARRIVAL_TALKING1)
     when 7
-      if BoatManager.dock_busy? BoatManager::TALKING_ISLAND
+      if BoatManager.dock_busy?(BoatManager::TALKING_ISLAND)
         if @shout_count == 0
           BoatManager.broadcast_packets(TALKING_DOCK[0], GIRAN_DOCK, BUSY_TALKING)
         end

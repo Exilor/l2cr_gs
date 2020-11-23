@@ -61,7 +61,6 @@ abstract class L2Vehicle < L2Character
   end
 
   def oust_player(pc : L2PcInstance)
-    # debug "Kicking out #{pc.name}."
     pc.vehicle = nil
     pc.in_vehicle_position = nil
     remove_passenger(pc)
@@ -71,7 +70,6 @@ abstract class L2Vehicle < L2Character
     return false if @passengers.includes?(pc)
     return false if pc.vehicle && pc.vehicle != self
     @passengers << pc
-    # debug "Added #{pc.name} to @passengers."
     true
   end
 
@@ -202,7 +200,6 @@ abstract class L2Vehicle < L2Character
 
     @passengers.reverse_each do |pc|
       if pc.vehicle == self
-        # debug "#update_position updating the position of #{pc.name}."
         pc.set_xyz(*xyz)
         pc.revalidate_zone(false)
       end
@@ -239,7 +236,7 @@ abstract class L2Vehicle < L2Character
     end
   end
 
-  def delete_me
+  def delete_me : Bool
     @engine = nil
     begin
       stop_move(nil) if moving?
@@ -273,6 +270,7 @@ abstract class L2Vehicle < L2Character
     end
 
     L2World.remove_object(self)
+
     super
   end
 

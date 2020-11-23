@@ -84,7 +84,8 @@ abstract class L2Character < L2Object
   property? show_summon_animation : Bool = false
 
   def immobilized=(val : Bool)
-    if @immobilized = val
+    @immobilized = val
+    if val && moving?
       stop_move(nil)
     end
   end
@@ -199,7 +200,7 @@ abstract class L2Character < L2Object
     known_list.each_player &.send_packet(gsp)
   end
 
-  def broadcast_packet(gsp : GameServerPacket, radius : Number)
+  def broadcast_packet(gsp : GameServerPacket, radius : Int32)
     gsp.invisible = invisible?
     known_list.each_player do |pc|
       if inside_radius?(pc, radius, false, false)
@@ -2885,7 +2886,7 @@ abstract class L2Character < L2Object
       end
 
       target.reduce_current_hp(damage.to_f64, self, nil)
-      target.notify_damage_received(damage, self, nil, crit, false, false)
+      target.notify_damage_received(damage.to_f64, self, nil, crit, false, false)
 
       if reflected_damage > 0
         if target.playable?
@@ -2905,14 +2906,14 @@ abstract class L2Character < L2Object
         end
 
         reduce_current_hp(reflected_damage.to_f64, target, true, false, nil)
-        notify_damage_received(reflected_damage, target, nil, crit, false, true)
+        notify_damage_received(reflected_damage.to_f64, target, nil, crit, false, true)
       end
 
       unless is_bow
         absorb_percent = calc_stat(Stats::ABSORB_DAMAGE_PERCENT, 0)
         if absorb_percent > 0
           max_can_absorb = (max_recoverable_hp - current_hp).to_i
-          absorb_damage = ((absorb_percent.fdiv(100)) * damage).to_i
+          absorb_damage = (absorb_percent.fdiv(100) * damage).to_i
           if absorb_damage > max_can_absorb
             absorb_damage = max_can_absorb
           end
@@ -2925,7 +2926,7 @@ abstract class L2Character < L2Object
         absorb_percent = calc_stat(Stats::ABSORB_MANA_DAMAGE_PERCENT, 0)
         if absorb_percent > 0
           max_can_absorb = (max_recoverable_mp - current_mp).to_i
-          absorb_damage = ((absorb_percent.fdiv(100)) * damage).to_i
+          absorb_damage = (absorb_percent.fdiv(100) * damage).to_i
           if absorb_damage > max_can_absorb
             absorb_damage = max_can_absorb
           end
@@ -3258,7 +3259,7 @@ abstract class L2Character < L2Object
     @cast_interrupt_time = new_skill_cast_end_tick - 4
   end
 
-  def send_damage_message(target, damage, mcrit, pcrit, miss)
+  def send_damage_message(target : L2Character, damage : Int32, mcrit : Bool, pcrit : Bool, miss : Bool)
     if miss && target.is_a?(L2PcInstance)
       sm = SystemMessage.c1_evaded_c2_attack
       sm.add_pc_name(target)
@@ -3267,10 +3268,10 @@ abstract class L2Character < L2Object
     end
   end
 
-  def notify_damage_received(damage, attacker, skill, crit, dot, reflect)
-    e1 = OnCreatureDamageReceived.new(attacker, self, damage.to_f64, skill, crit, dot, reflect)
+  def notify_damage_received(damage : Float64, attacker : L2Character, skill : Skill?, crit : Bool, dot : Bool, reflect : Bool)
+    e1 = OnCreatureDamageReceived.new(attacker, self, damage, skill, crit, dot, reflect)
     e1.async(self)
-    e2 = OnCreatureDamageDealt.new(attacker, self, damage.to_f64, skill, crit, dot, reflect)
+    e2 = OnCreatureDamageDealt.new(attacker, self, damage, skill, crit, dot, reflect)
     e2.async(attacker)
   end
 

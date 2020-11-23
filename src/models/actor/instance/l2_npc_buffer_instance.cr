@@ -1,5 +1,5 @@
 class L2NpcBufferInstance < L2Npc
-  PAGE_VAL = {} of Int32 => Int32
+  private PAGE_VAL = {} of Int32 => Int32
 
   def instance_type : InstanceType
     InstanceType::L2NpcBufferInstance

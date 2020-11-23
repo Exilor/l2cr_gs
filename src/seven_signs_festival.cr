@@ -678,10 +678,10 @@ class SevenSignsFestival
   end
 
   def festival_signup_time : Int64
-    Config.alt_festival_cycle_length.to_i64 - Config.alt_festival_length - 60000
+    Config.alt_festival_cycle_length.to_i64 - Config.alt_festival_length - 60_000
   end
 
-  def get_festival_name(id : Int) : String
+  def get_festival_name(id : Int32) : String
     case id
     when FESTIVAL_LEVEL_MAX_31
       "Level 31 or lower"
@@ -696,7 +696,7 @@ class SevenSignsFestival
     end
   end
 
-  def get_max_level_for_festival(id : Int) : Int32
+  def get_max_level_for_festival(id : Int32) : Int32
     case id
     when FESTIVAL_LEVEL_MAX_31
       31
@@ -711,13 +711,13 @@ class SevenSignsFestival
     end
   end
 
-  def festival_archer?(npc_id : Int) : Bool
+  def festival_archer?(npc_id : Int32) : Bool
     return false unless npc_id.between?(18009, 18108)
     identifier = npc_id % 10
     identifier == 4 || identifier == 9
   end
 
-  def festival_chest?(npc_id : Int) : Bool
+  def festival_chest?(npc_id : Int32) : Bool
     !npc_id.between?(18109, 18118)
   end
 
@@ -945,7 +945,7 @@ class SevenSignsFestival
       return -1i64
     end
 
-    (@next_festival_cycle_start - Time.ms) // 60000
+    (@next_festival_cycle_start - Time.ms) // 60_000
   end
 
   def mins_to_next_festival : Int32
@@ -953,7 +953,7 @@ class SevenSignsFestival
       return -1
     end
 
-    (((@next_festival_start - Time.ms) // 60000) + 1).to_i32
+    (((@next_festival_start - Time.ms) // 60_000) + 1).to_i32
   end
 
   def time_to_next_festival_str : String
@@ -993,7 +993,7 @@ class SevenSignsFestival
     false
   end
 
-  def get_participants(oracle : Int, festival_id : Int) : Array(Int32)?
+  def get_participants(oracle : Int32, festival_id : Int32) : Array(Int32)?
     if oracle == SevenSigns::CABAL_DAWN
       DAWN_FESTIVAL_PARTICIPANTS[festival_id]?
     else
@@ -1001,7 +1001,7 @@ class SevenSignsFestival
     end
   end
 
-  def get_previous_participants(oracle : Int, festival_id : Int) : Array(Int32)?
+  def get_previous_participants(oracle : Int32, festival_id : Int32) : Array(Int32)?
     if oracle == SevenSigns::CABAL_DAWN
       DAWN_PREVIOUS_PARTICIPANTS[festival_id]?
     else
@@ -1009,7 +1009,7 @@ class SevenSignsFestival
     end
   end
 
-  def set_participants(oracle : Int, festival_id : Int, festival_party : L2Party?)
+  def set_participants(oracle : Int32, festival_id : Int32, festival_party : L2Party?)
     if festival_party
       participants = festival_party.members_l2id
     end
@@ -1055,7 +1055,7 @@ class SevenSignsFestival
     end
   end
 
-  def get_final_score(oracle : Int, festival_id : Int) : Int64
+  def get_final_score(oracle : Int32, festival_id : Int32) : Int64
     if oracle == SevenSigns::CABAL_DAWN
       DAWN_FESTIVAL_SCORES[festival_id]
     else
@@ -1063,11 +1063,11 @@ class SevenSignsFestival
     end
   end
 
-  def get_highest_score(oracle : Int, festival_id : Int) : Int32
+  def get_highest_score(oracle : Int32, festival_id : Int32) : Int32
     get_highest_score_data(oracle, festival_id).get_i32("score")
   end
 
-  def get_highest_score_data(oracle : Int, festival_id : Int) : StatsSet
+  def get_highest_score_data(oracle : Int32, festival_id : Int32) : StatsSet
     offset_id = festival_id
 
     if oracle == SevenSigns::CABAL_DAWN
@@ -1082,7 +1082,7 @@ class SevenSignsFestival
     end
   end
 
-  def get_overall_highest_score_data(festival_id : Int) : StatsSet?
+  def get_overall_highest_score_data(festival_id : Int32) : StatsSet?
     highest_score = 0
     result = nil
 
@@ -1151,7 +1151,7 @@ class SevenSignsFestival
     false
   end
 
-  def get_accumulated_bonus(festival_id : Int) : Int32
+  def get_accumulated_bonus(festival_id : Int32) : Int32
     ACCUMULATED_BONUSES[festival_id]
   end
 
@@ -1231,7 +1231,6 @@ class SevenSignsFestival
     when 31137
       @dusk_chat_guide = npc
     end
-
   end
 
   private struct FestivalManager
@@ -1368,7 +1367,7 @@ class SevenSignsFestival
       sleep(time.milliseconds)
     end
 
-    def get_festival_instance(oracle : Int, festival_id : Int) : L2DarknessFestival?
+    def get_festival_instance(oracle : Int32, festival_id : Int32) : L2DarknessFestival?
       return unless @festival.festival_initialized?
       festival_id += oracle == SevenSigns::CABAL_DUSK ? 10 : 20
       @festival_instances[festival_id]?

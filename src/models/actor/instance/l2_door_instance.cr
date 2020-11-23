@@ -329,13 +329,9 @@ class L2DoorInstance < L2Character
     template.node_z + template.height
   end
 
-  def known_defenders
+  def known_defenders : Array(L2DefenderInstance)
     ret = [] of L2DefenderInstance
-    known_list.each_object do |o|
-      if o.is_a?(L2DefenderInstance)
-        ret << o
-      end
-    end
+    known_defenders { |defender| ret << defender }
     ret
   end
 

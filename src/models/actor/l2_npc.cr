@@ -109,8 +109,6 @@ class L2Npc < L2Character
     template.level.to_i32
   end
 
-  ##############################################################################
-
   private def init_known_list
     @known_list = NpcKnownList.new(self)
   end
@@ -126,8 +124,6 @@ class L2Npc < L2Character
   private def init_char_status
     @status = NpcStatus.new(self)
   end
-
-  ##############################################################################
 
   def auto_attackable?(char : L2Character) : Bool
     @auto_attackable
@@ -220,11 +216,7 @@ class L2Npc < L2Character
 
   def get_castle(max_dst : Int64) : Castle?
     idx = CastleManager.find_nearest_castle_index(self, max_dst)
-    if idx < 0
-      return
-    end
-
-    CastleManager.castles[idx]
+    CastleManager.castles[idx] if idx >= 0
   end
 
   def fort? : Fort?
@@ -255,11 +247,7 @@ class L2Npc < L2Character
 
   def get_fort(max_dst : Int64) : Fort?
     idx = FortManager.find_nearest_fort_index(self, max_dst)
-    if idx < 0
-      return
-    end
-
-    FortManager.forts[idx]
+    FortManager.forts[idx] if idx >= 0
   end
 
   def my_lord?(pc : L2PcInstance) : Bool
@@ -273,7 +261,7 @@ class L2Npc < L2Character
   end
 
   def conquerable_hall : SiegableHall?
-    ClanHallSiegeManager.get_nearby_clan_hall(x, y, 10000)
+    ClanHallSiegeManager.get_nearby_clan_hall(x, y, 10_000)
   end
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
@@ -456,7 +444,7 @@ class L2Npc < L2Character
     pc.action_failed
   end
 
-  def show_pk_deny_chat_window(pc : L2PcInstance, type : String)
+  def show_pk_deny_chat_window(pc : L2PcInstance, type : String) : Bool
     if html = HtmCache.get_htm(pc, "data/html/#{type}/#{id}-pk.htm")
       insert_l2id_and_show_chat_window(pc, html)
       pc.action_failed
@@ -472,7 +460,7 @@ class L2Npc < L2Character
     pc.send_packet(NpcHtmlMessage.new(l2id, content))
   end
 
-  def get_html_path(npc_id : Int32, val : Int32)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       temp = "data/html/default/#{npc_id}.htm"
     else
@@ -867,7 +855,8 @@ class L2Npc < L2Character
 
   def in_my_spawn_group?(npc : L2Npc) : Bool
     return false unless sp = spawn?
-    !!npc.spawn? && !!sp.name && sp.name == npc.spawn.name
+    return false unless sp2 = npc.spawn?
+    !!sp.name && sp.name == sp2.name
   end
 
   def stays_in_spawn_loc? : Bool

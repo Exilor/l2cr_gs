@@ -100,7 +100,7 @@ class Scripts::CastleAmbassador < AbstractNpcAI
     if castle.owner_id == 0
       npc.delete_me
     else
-      start_quest_timer("DESPAWN", 3600000, npc, nil)
+      start_quest_timer("DESPAWN", 3_600_000, npc, nil)
     end
 
     super

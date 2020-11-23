@@ -87,7 +87,7 @@ class Auction
     time = Time.ms
     delay = 0i64
     if @end_date <= time
-      @end_date = time + (7i64 * 24 * 3600000)
+      @end_date = time + (7i64 * 24 * 3_600_000)
       save_auction_date
     else
       delay = @end_date - time
@@ -299,7 +299,10 @@ class Auction
     getter name, clan_name, time_bid
     property bid : Int64
 
-    def initialize(@name : String, @clan_name : String, @bid : Int64, time_bid : Int64)
+    def initialize(name : String, clan_name : String, bid : Int64, time_bid : Int64)
+      @name = name
+      @clan_name = clan_name
+      @bid = bid
       @time_bid = Calendar.new
       @time_bid.ms = time_bid
     end

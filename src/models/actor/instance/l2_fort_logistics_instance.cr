@@ -27,7 +27,7 @@ class L2FortLogisticsInstance < L2MerchantInstance
     InstanceType::L2FortLogisticsInstance
   end
 
-  def get_html_path(npc_id, val)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "data/html/fortress/logistics.htm"
     else

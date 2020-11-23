@@ -20,7 +20,7 @@ class Condition
         can = false
       end
 
-      if (fort && fort.residence_id == 0) || (castle && castle.residence_id != 0)
+      if (fort && fort.residence_id == 0) || (castle && castle.residence_id == 0)
         pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         can = false
       elsif (castle && !castle.siege.in_progress?) || (fort && !fort.siege.in_progress?)

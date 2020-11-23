@@ -87,7 +87,7 @@ abstract class L2Summon < L2Playable
     super
   end
 
-  def broadcast_packet(gsp : GameServerPacket, radius : Number)
+  def broadcast_packet(gsp : GameServerPacket, radius : Int32)
     gsp.invisible = owner.invisible?
     super
   end
@@ -100,11 +100,11 @@ abstract class L2Summon < L2Playable
     owner.in_party?
   end
 
-  def duel_id
+  def duel_id : Int32
     owner.duel_id
   end
 
-  def in_duel?
+  def in_duel? : Bool
     owner.in_duel?
   end
 
@@ -445,7 +445,7 @@ abstract class L2Summon < L2Playable
     true
   end
 
-  def send_damage_message(target, damage, mcrit, pcrit, miss)
+  def send_damage_message(target : L2Character, damage : Int32, mcrit : Bool, pcrit : Bool, miss : Bool)
     return if miss
 
     if target != owner
@@ -689,9 +689,9 @@ abstract class L2Summon < L2Playable
   end
 
   def form_id : Int32
-    level = level()
     case id
     when 16_041, 16_042, 16_025, 16_037
+      level = level()
       return 3 if level > 69
       return 2 if level > 64
       return 1 if level > 59

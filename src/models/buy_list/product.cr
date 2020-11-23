@@ -74,9 +74,8 @@ class Product
 
   def save
     sql = "INSERT INTO `buylists`(`buylist_id`, `item_id`, `count`, `next_restock_time`) VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE `count` = ?, `next_restock_time` = ?"
-    task = @restock_task
 
-    if task && task.delay > 0
+    if (task = @restock_task) && task.delay > 0
       next_restock_time = Time.ms + task.delay
       GameDB.exec(sql, buy_list_id, item_id, count, next_restock_time, count, next_restock_time)
     else

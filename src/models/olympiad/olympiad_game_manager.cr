@@ -100,14 +100,6 @@ module OlympiadGameManager
     TASKS[id]
   end
 
-  # def get_olympiad_task!(id : Int32) : OlympiadGameTask
-  #   unless task = get_olympiad_task(id)
-  #     raise "No olympiad task found with id #{id}"
-  #   end
-
-  #   task
-  # end
-
   def number_of_stadiums : Int32
     TASKS.size
   end

@@ -1,5 +1,5 @@
 class EffectHandler::HeadquarterCreate < AbstractEffect
-  private HQ_NPC_ID = 335062
+  private HQ_NPC_ID = 35062
 
   @advanced : Bool
 

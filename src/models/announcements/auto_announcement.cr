@@ -64,7 +64,7 @@ class AutoAnnouncement < Announcement
     false
   end
 
-  def delete_me
+  def delete_me : Bool
     if task = @task
       unless task.cancelled?
         task.cancel

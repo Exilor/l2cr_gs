@@ -9,9 +9,9 @@ class RangeSet(T)
     @first = nil
   end
 
-  def includes?(id : T) : Bool
+  def includes?(val : T) : Bool
     each_range do |r|
-      if r.min <= id <= r.max
+      if r.min <= val <= r.max
         return true
       end
     end
@@ -19,36 +19,36 @@ class RangeSet(T)
     false
   end
 
-  def <<(id : T) : self
+  def <<(val : T) : self
     unless r = @first
-      @first = RangeNode(T).new(id, id)
+      @first = RangeNode(T).new(val, val)
       return self
     end
 
     pred = nil
     while r
-      if id < r.min
-        if id &+ 1 == r.min
+      if val < r.min
+        if val &+ 1 == r.min
           if pred && pred.max &+ 2 == r.min
             pred.succ = r.succ
             pred.max = r.max
           else
-            r.min = id
+            r.min = val
           end
         else
           if pred
-            if pred.max &+ 1 == id
-              pred.max = id
+            if pred.max &+ 1 == val
+              pred.max = val
             else
-              pred.succ = RangeNode(T).new(id, id, r)
+              pred.succ = RangeNode(T).new(val, val, r)
             end
           else
-            @first = RangeNode(T).new(id, id, r)
+            @first = RangeNode(T).new(val, val, r)
           end
         end
 
         return self
-      elsif id <= r.max
+      elsif val <= r.max
         return self
       end
 
@@ -57,39 +57,39 @@ class RangeSet(T)
     end
 
     if pred
-      if pred.max &+ 1 == id
-        pred.max = id
+      if pred.max &+ 1 == val
+        pred.max = val
         return self
       end
 
-      pred.succ = RangeNode(T).new(id, id)
+      pred.succ = RangeNode(T).new(val, val)
     end
 
     self
   end
 
-  def delete(id : T) : Bool
+  def delete(val : T) : Bool
     return false unless r = @first
 
-    if id < r.min
+    if val < r.min
       return false
     end
     pred = nil
     while r
-      if r.min <= id <= r.max
+      if r.min <= val <= r.max
         if r.min == r.max
           if pred
             pred.succ = r.succ
           else
             @first = r.succ
           end
-        elsif id == r.min
-          r.min = id &+ 1
-        elsif id == r.max
-          r.max = id &- 1
+        elsif val == r.min
+          r.min = val &+ 1
+        elsif val == r.max
+          r.max = val &- 1
         else
-          new_range = RangeNode(T).new(id &+ 1, r.max, r.succ)
-          r.max = id &- 1
+          new_range = RangeNode(T).new(val &+ 1, r.max, r.succ)
+          r.max = val &- 1
           r.succ = new_range
         end
 

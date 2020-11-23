@@ -66,7 +66,7 @@ class PcStat < PlayableStat
       @old_max_hp = val
 
       if pc.current_hp != val
-        # The 'false' arg prevents an issue where #broadcast_status_update
+        # The `false` argument prevents an issue where #broadcast_status_update
         # from L2PcInstance would freeze the client.
         pc.set_current_hp(pc.current_hp, false)
       end
@@ -84,7 +84,7 @@ class PcStat < PlayableStat
       @old_max_mp = val
 
       if pc.current_mp != val
-        # Rhe 'false' arg prevents an issue where #broadcast_status_update
+        # The `false` argument prevents an issue where #broadcast_status_update
         # from L2PcInstance would freeze the client.
         pc.set_current_mp(pc.current_mp, false)
       end

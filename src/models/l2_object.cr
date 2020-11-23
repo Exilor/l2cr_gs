@@ -50,11 +50,7 @@ abstract class L2Object < ListenersContainer
     true
   end
 
-  def send_packet(gsp : GameServerPacket)
-    # no-op
-  end
-
-  def send_packet(id : SystemMessageId)
+  def send_packet(arg : GameServerPacket | SystemMessageId)
     # no-op
   end
 
@@ -125,34 +121,34 @@ abstract class L2Object < ListenersContainer
       return
     end
 
-    unless new_i = InstanceManager.get_instance(new_instance_id)
+    unless new_instance = InstanceManager.get_instance(new_instance_id)
       return
     end
-    old_i = InstanceManager.get_instance(instance_id)
+    old_instance = InstanceManager.get_instance(instance_id)
 
     case me = self
     when L2PcInstance
-      if instance_id > 0 && old_i
-        old_i.remove_player(l2id)
-        if old_i.show_timer?
-          me.send_instance_update(old_i, true)
+      if instance_id > 0 && old_instance
+        old_instance.remove_player(l2id)
+        if old_instance.show_timer?
+          me.send_instance_update(old_instance, true)
         end
       end
       if new_instance_id > 0
-        new_i.add_player(l2id)
-        if new_i.show_timer?
-          me.send_instance_update(new_i, false)
+        new_instance.add_player(l2id)
+        if new_instance.show_timer?
+          me.send_instance_update(new_instance, false)
         end
       end
       if smn = me.summon
         smn.instance_id = new_instance_id
       end
     when L2Npc
-      if instance_id > 0 && old_i
-        old_i.remove_npc(me)
+      if instance_id > 0 && old_instance
+        old_instance.remove_npc(me)
       end
       if new_instance_id > 0
-        new_i.add_npc(me)
+        new_instance.add_npc(me)
       end
     end
 
@@ -410,9 +406,10 @@ abstract class L2Object < ListenersContainer
 
   def invisible=(bool : Bool)
     if @invisible = bool
-      del = DeleteObject.new(self)
+      del = nil
       known_list.each_object do |obj|
         if obj.is_a?(L2PcInstance) && !visible_for?(obj)
+          del ||= DeleteObject.new(self)
           obj.send_packet(del)
         end
       end

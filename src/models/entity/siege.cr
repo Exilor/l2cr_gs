@@ -28,7 +28,8 @@ class Siege
   getter? in_progress = false
   getter? registration_over = false
 
-  def initialize(@castle : Castle)
+  def initialize(castle : Castle)
+    @castle = castle
     @siege_guard_manager = SiegeGuardManager.new(castle)
     start_auto_task
   end
@@ -933,27 +934,27 @@ class Siege
     end
 
     time = @siege_end_date.ms - Time.ms
-    if time > 3600000
+    if time > 3_600_000
       sm = SystemMessage.s1_hours_until_siege_conclusion
       sm.add_int(2)
       announce_to_player(sm, true)
-      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 3600000)
-    elsif time <= 3600000 && time > 600000
+      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 3_600_000)
+    elsif time <= 3_600_000 && time > 600_000
       sm = SystemMessage.s1_minutes_until_siege_conclusion
-      sm.add_int(time / 60000)
+      sm.add_int(time / 60_000)
       announce_to_player(sm, true)
-      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 600000)
-    elsif time <= 600000 && time > 300000
+      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 600_000)
+    elsif time <= 600_000 && time > 300_000
       sm = SystemMessage.s1_minutes_until_siege_conclusion
-      sm.add_int(time / 60000)
+      sm.add_int(time / 60_000)
       announce_to_player(sm, true)
-      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 300000)
-    elsif time <= 300000 && time > 10000
+      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 300_000)
+    elsif time <= 300_000 && time > 10_000
       sm = SystemMessage.s1_minutes_until_siege_conclusion
-      sm.add_int(time / 60000)
+      sm.add_int(time / 60_000)
       announce_to_player(sm, true)
-      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 10000)
-    elsif time <= 10000 && time > 0
+      ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 10_000)
+    elsif time <= 10_000 && time > 0
       sm = SystemMessage.castle_siege_s1_seconds_left
       sm.add_int(time / 1000)
       announce_to_player(sm, true)
@@ -981,22 +982,22 @@ class Siege
     end
 
     time = siege_date.ms - Time.ms
-    if time > 86400000
+    if time > 86_400_000
       @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 86400000)
-    elsif time <= 86400000 && time > 13600000
+    elsif time <= 86_400_000 && time > 13_600_000
       sm = SystemMessage.registration_term_for_s1_ended
       sm.add_castle_id(castle.residence_id)
       Broadcast.to_all_online_players(sm)
       @registration_over = true
       clear_siege_waiting_clan
       @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 13600000)
-    elsif time <= 13600000 && time > 600000
+    elsif time <= 13_600_000 && time > 600_000
       @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 600000)
-    elsif time <= 600000 && time > 300000
+    elsif time <= 600_000 && time > 300_000
       @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 300000)
-    elsif time <= 300000 && time > 10000
+    elsif time <= 300_000 && time > 10_000
       @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 10000)
-    elsif time <= 10000 && time > 0
+    elsif time <= 10_000 && time > 0
       @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time)
     else
       castle.siege.start_siege

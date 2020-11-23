@@ -68,7 +68,7 @@ class Scripts::Q00005_MinersFavor < Quest
       when State::CREATED
         html = pc.level >= MIN_LEVEL ? "30554-02.htm" : "30554-01.html"
       when State::STARTED
-        if st.cond? 1
+        if st.cond?(1)
           html = "30554-04.html"
         else
           give_adena(pc, 2466, true)

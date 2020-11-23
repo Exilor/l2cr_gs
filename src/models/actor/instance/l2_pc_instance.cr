@@ -396,7 +396,7 @@ class L2PcInstance < L2Playable
     nil
   end
 
-  def delete_me
+  def delete_me : Bool
     clean_up
     store_me
 
@@ -983,7 +983,7 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def broadcast_packet(gsp : GameServerPacket, radius : Number)
+  def broadcast_packet(gsp : GameServerPacket, radius : Int32)
     unless gsp.is_a?(CharInfo)
       send_packet(gsp)
     end
@@ -3171,7 +3171,7 @@ class L2PcInstance < L2Playable
     broadcast_packet(NicknameChanged.new(self))
   end
 
-  def send_damage_message(target, damage, mcrit, pcrit, miss)
+  def send_damage_message(target : L2Character, damage : Int32, mcrit : Bool, pcrit : Bool, miss : Bool)
     if miss
       if target.is_a?(L2PcInstance)
         sm = SystemMessage.c1_evaded_c2_attack
@@ -3994,8 +3994,10 @@ class L2PcInstance < L2Playable
     elsif CursedWeaponsManager.cursed?(new_item.id)
       CursedWeaponsManager.activate(self, new_item)
     elsif FortSiegeManager.combat?(item.id)
-      fort = FortManager.get_fort(self).not_nil!
-      fort.siege.announce_to_player(SystemMessage.c1_acquired_the_flag, name)
+      if FortSiegeManager.activate_combat_flag(self, item)
+        fort = FortManager.get_fort(self).not_nil!
+        fort.siege.announce_to_player(SystemMessage.c1_acquired_the_flag, name)
+      end
     elsif item.id.between?(13560, 13568)
       if ward = TerritoryWarManager.get_territory_ward(item.id - 13479)
         ward.activate(self, item)
@@ -7607,9 +7609,5 @@ class L2PcInstance < L2Playable
   private def bad_coords
     tele_to_location(Location.new(0, 0, 0), false)
     send_message("Error with your coordinates.")
-  end
-
-  def to_log(io : IO)
-    io.print("L2PcInstance(", name, ')')
   end
 end

@@ -139,13 +139,6 @@ module GeoPathFinding
           dx = target_x - n.loc.node_x
           dy = target_y - n.loc.node_y
           n.cost = dx.abs2 + dy.abs2
-          # to_visit.each_with_index do |n2, j|
-          #   if n2.cost > n.cost
-          #     to_visit.insert(j, n)
-          #     added = true
-          #     break
-          #   end
-          # end
 
           index = 0
           while index < to_visit.size

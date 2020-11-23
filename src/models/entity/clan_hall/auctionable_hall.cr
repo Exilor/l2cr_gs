@@ -43,8 +43,8 @@ class AuctionableHall < ClanHall
     if @paid_until > time
       ThreadPoolManager.schedule_general(->fee_task, @paid_until - time)
     elsif !@paid && !forced
-      if time + (3600000 * 24) <= @paid_until + @ch_rate
-        ThreadPoolManager.schedule_general(->fee_task, time + (3600000 * 24))
+      if time + (3_600_000 * 24) <= @paid_until + @ch_rate
+        ThreadPoolManager.schedule_general(->fee_task, time + (3_600_000 * 24))
       else
         ThreadPoolManager.schedule_general(->fee_task, (@paid_until + @ch_rate) - time)
       end
@@ -96,8 +96,8 @@ class AuctionableHall < ClanHall
         sm.add_int(lease)
         clan.broadcast_to_online_members(sm)
 
-        if time + (3600000 * 24) <= @paid_until + @ch_rate
-          ThreadPoolManager.schedule_general(->fee_task, time + (3600000 * 24))
+        if time + (3_600_000 * 24) <= @paid_until + @ch_rate
+          ThreadPoolManager.schedule_general(->fee_task, time + (3_600_000 * 24))
         else
           ThreadPoolManager.schedule_general(->fee_task, (@paid_until + @ch_rate) - time)
         end

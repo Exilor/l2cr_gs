@@ -21,7 +21,7 @@ class L2TrapInstance < L2Npc
   def initialize(template : L2NpcTemplate, instance_id : Int32, life_time : Int32)
     super(template)
 
-    @skill = template.get_skill_holder("trap_skill").not_nil!
+    @skill = template.get_skill_holder("trap_skill")
     @has_life_time = life_time >= 0
     @life_time = life_time != 0 ? life_time : 30_000
     @remaining_time = @life_time
@@ -62,7 +62,7 @@ class L2TrapInstance < L2Npc
     end
   end
 
-  def broadcast_packet(gsp : GameServerPacket, radius : Number)
+  def broadcast_packet(gsp : GameServerPacket, radius : Int32)
     known_list.each_player do |pc|
       if inside_radius?(pc, radius, false, false)
         if @triggered || can_be_seen?(pc)
@@ -151,7 +151,7 @@ class L2TrapInstance < L2Npc
     true
   end
 
-  def delete_me
+  def delete_me : Bool
     if owner = @owner
       owner.trap = nil
       @owner = nil
@@ -203,7 +203,7 @@ class L2TrapInstance < L2Npc
     @players_who_detected_me.clear
   end
 
-  def send_damage_message(target, damage, mcrit, pcrit, miss)
+  def send_damage_message(target : L2Character, damage : Int32, mcrit : Bool, pcrit : Bool, miss : Bool)
     return if miss
     return unless owner = @owner
 

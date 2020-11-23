@@ -35,19 +35,20 @@ struct L2Radar
     end
   end
 
-  struct RadarMarker
+  private struct RadarMarker
     @type = 1
 
     getter_initializer x : Int32, y : Int32, z : Int32
     initializer type : Int32, x : Int32, y : Int32, z : Int32
 
-    def hash
-      prime = 31
-      result = 1
-      result = (prime * result) + @type
-      result = (prime * result) + @x
-      result = (prime * result) + @y
-      (prime * result) + @z
-    end
+    # unused
+    # def hash
+    #   prime = 31
+    #   result = 1
+    #   result = (prime * result) + @type
+    #   result = (prime * result) + @x
+    #   result = (prime * result) + @y
+    #   (prime * result) + @z
+    # end
   end
 end

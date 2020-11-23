@@ -5,7 +5,7 @@ class Message
 
   private EXPIRATION = 360 # 15 days
   private COD_EXPIRATION = 12 # 12 hours
-  private UNLOAD_ATTACHMENTS_INTERVAL = 900000 # 15-30 mins
+  private UNLOAD_ATTACHMENTS_INTERVAL = 900_000 # 15-30 mins
 
   # post state
   DELETED = 0
@@ -50,19 +50,27 @@ class Message
     @returned = rs.get_bool(:"isReturned")
   end
 
-  def initialize(@sender_id : Int32, @receiver_id : Int32, cod : Bool, @subject : String, @content : String, @req_adena : Int64)
+  def initialize(sender_id : Int32, receiver_id : Int32, cod : Bool, subject : String, content : String, req_adena : Int64)
+    @sender_id = sender_id
+    @receiver_id = receiver_id
+    @subject = subject
+    @content = content
+    @req_adena = req_adena
     @message_id = IdFactory.next
-    @expiration = cod ? Time.ms + (COD_EXPIRATION * 3600000) : Time.ms + (EXPIRATION * 3600000)
+    @expiration = cod ? Time.ms + (COD_EXPIRATION * 3_600_000) : Time.ms + (EXPIRATION * 3_600_000)
     @has_attachments = false
     @unread = true
     @deleted_by_sender = false
     @deleted_by_receiver = false
   end
 
-  def initialize(@receiver_id : Int32, @subject : String, @content : String, send_by_system : SendBySystem)
+  def initialize(receiver_id : Int32, subject : String, content : String, send_by_system : SendBySystem)
+    @receiver_id = receiver_id
+    @subject = subject
+    @content = content
     @message_id = IdFactory.next
     @sender_id = -1
-    @expiration = Time.ms + (EXPIRATION * 3600000)
+    @expiration = Time.ms + (EXPIRATION * 3_600_000)
     @req_adena = 0i64
     @has_attachments = false
     @unread = true

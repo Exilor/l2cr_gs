@@ -168,7 +168,7 @@ module BotReportTable
         reuse = Time.ms - rcd_rep.last_report_time
         if reuse < Config.botreport_report_delay
           sm = SystemMessage.you_can_report_in_s1_mins_you_have_s2_points_left
-          sm.add_int(reuse // 60000)
+          sm.add_int(reuse // 60_000)
           sm.add_int(rcd_rep.points)
           reporter.send_packet(sm)
           return false

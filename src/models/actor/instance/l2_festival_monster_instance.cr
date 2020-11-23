@@ -18,13 +18,8 @@ class L2FestivalMonsterInstance < L2MonsterInstance
   end
 
   def do_item_drop(killer : L2Character?)
-    unless killer.is_a?(L2PcInstance)
-      return
-    end
-
-    unless party = killer.party
-      return
-    end
+    return unless killer.is_a?(L2PcInstance)
+    return unless party = killer.party
 
     party_leader = party.leader
     offerings = party_leader.inventory.add_item("Sign", SevenSignsFestival::FESTIVAL_OFFERING_ID, @offering_bonus.to_i64, party_leader, self)

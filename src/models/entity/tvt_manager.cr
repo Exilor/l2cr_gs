@@ -50,7 +50,7 @@ module TvTManager
       Broadcast.to_all_online_players("TvT Event: Registration opened for #{Config.tvt_event_participation_time} minute(s).")
 
       # schedule registration end
-      @@task.not_nil!.start_time = Time.ms + (60000i64 * Config.tvt_event_participation_time)
+      @@task.not_nil!.start_time = Time.ms + (60_000i64 * Config.tvt_event_participation_time)
       ThreadPoolManager.execute_general(@@task.not_nil!)
     end
   end
@@ -64,7 +64,7 @@ module TvTManager
     else
       task = @@task.not_nil!
       TvTEvent.message_all_participants("TvT Event: Teleporting participants to an arena in #{Config.tvt_event_start_leave_teleport_delay} second(s).")
-      task.start_time = Time.ms + (60000i64 * Config.tvt_event_running_time)
+      task.start_time = Time.ms + (60_000i64 * Config.tvt_event_running_time)
       ThreadPoolManager.execute_general(task)
     end
   end

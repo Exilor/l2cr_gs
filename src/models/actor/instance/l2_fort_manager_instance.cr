@@ -650,7 +650,7 @@ class L2FortManagerInstance < L2MerchantInstance
     end
   end
 
-  def show_chat_window(pc)
+  def show_chat_window(pc : L2PcInstance)
     pc.action_failed
     filename = "data/html/fortress/foreman-no.htm"
 

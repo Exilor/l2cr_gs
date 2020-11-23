@@ -21,9 +21,9 @@ class L2DefenderInstance < L2Attackable
   end
 
   private def init_ai
-    if conquerable_hall.nil? && get_castle(10000).nil?
+    if conquerable_hall.nil? && get_castle(10_000).nil?
       L2FortSiegeGuardAI.new(self)
-    elsif get_castle(10000)
+    elsif get_castle(10_000)
       L2SiegeGuardAI.new(self)
     else
       L2SpecialSiegeGuardAI.new(self)
@@ -115,14 +115,15 @@ class L2DefenderInstance < L2Attackable
       if damage == 0 && aggro <= 1 && attacker.is_a?(L2Playable)
         fort, castle, hall = @fort, @castle, @hall
 
-        pc = attacker.acting_player
+        if (fort && fort.zone.active?) || (castle && castle.zone.active?) || (hall && hall.siege_zone.active?)
+          pc = attacker.acting_player
+          siege_id = fort.try &.residence_id
+          siege_id ||= castle.try &.residence_id
+          siege_id ||= hall.try &.id || 0
 
-        siege_id = fort.try &.residence_id
-        siege_id ||= castle.try &.residence_id
-        siege_id ||= hall.try &.id || 0
-
-        if pc && ((pc.siege_state == 2 && !pc.registered_on_this_siege_field?(siege_id)) || (pc.siege_state == 1 && !TerritoryWarManager.ally_field?(pc, siege_id)) || pc.siege_state == 0)
-          return
+          if pc && ((pc.siege_state == 2 && pc.registered_on_this_siege_field?(siege_id)) || (pc.siege_state == 1 && TerritoryWarManager.ally_field?(pc, siege_id)) || pc.siege_state == 0)
+            return
+          end
         end
       end
 

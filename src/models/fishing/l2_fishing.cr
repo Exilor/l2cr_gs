@@ -14,7 +14,9 @@ class L2Fishing
   @stop = 0
   @good_use = 0
 
-  def initialize(@pc : L2PcInstance, fish : L2Fish, noob : Bool, @upper_grade : Bool)
+  def initialize(pc : L2PcInstance, fish : L2Fish, noob : Bool, upper_grade : Bool)
+    @pc = pc
+    @upper_grade = upper_grade
     @fish_max_hp = fish.fish_hp
     @fish_cur_hp = @fish_max_hp
     @regen_hp = fish.hp_regen

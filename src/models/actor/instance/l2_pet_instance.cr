@@ -67,7 +67,8 @@ class L2PetInstance < L2Summon
     @data ||= PetDataTable.get_pet_data(template.id)
   end
 
-  def pet_data=(@level_data : L2PetLevelData)
+  def pet_data=(level_data : L2PetLevelData)
+    @level_data = level_data
   end
 
   private def feed_task
@@ -508,7 +509,7 @@ class L2PetInstance < L2Summon
     sync do
       if alive? && owner.summon == self
         task = ->feed_task
-        @feed_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, 10000, 10000)
+        @feed_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, 10_000, 10_000)
       end
     end
   end

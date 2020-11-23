@@ -199,7 +199,14 @@ abstract class ClanHall
     property lvl : Int32
     property cwh : Bool = false
 
-    def initialize(@ch : ClanHall, @type : Int32, @lvl : Int32, @fee : Int32, @temp_fee : Int32, @rate : Int64, @end_date : Int64, cwh : Bool)
+    def initialize(ch : ClanHall, type : Int32, lvl : Int32, fee : Int32, temp_fee : Int32, rate : Int64, end_date : Int64, cwh : Bool)
+      @ch = ch
+      @type = type
+      @lvl = lvl
+      @fee = fee
+      @temp_fee = temp_fee
+      @rate = rate
+      @end_date = end_date
       initialize_task(cwh)
     end
 
@@ -250,14 +257,16 @@ abstract class ClanHall
       @fee
     end
 
-    def lease=(@fee : Int32)
+    def lease=(fee : Int32)
+      @fee = fee
     end
 
     def end_time : Int64
       @end_date
     end
 
-    def end_time=(@end_date : Int64)
+    def end_time=(end_date : Int64)
+      @end_date = end_date
     end
   end
 end

@@ -7,8 +7,6 @@ class PartyMatchRoom
   property loot_type : Int32
   property max_members : Int32
   property title : String
-  property min_lvl : Int32
-  property max_lvl : Int32
 
   def initialize(id : Int32, title : String, loot_type : Int32, min_lvl : Int32, max_lvl : Int32, max_members : Int32, owner : L2PcInstance)
     @id = id
@@ -50,11 +48,10 @@ class PartyMatchRoom
     @party_members[0] = new_leader
     @party_members << old_leader
 
-    sm = SystemMessageId::PARTY_ROOM_LEADER_CHANGED
     @party_members.each do |m|
       m.send_packet(ExManagePartyRoomMember.new(new_leader, self, 1))
       m.send_packet(ExManagePartyRoomMember.new(old_leader, self, 1))
-      m.send_packet(sm)
+      m.send_packet(SystemMessageId::PARTY_ROOM_LEADER_CHANGED)
     end
   end
 
@@ -63,10 +60,10 @@ class PartyMatchRoom
   end
 
   def location : Int32
-    unless temp = MapRegionManager.get_map_region(@party_members[0])
+    unless region = MapRegionManager.get_map_region(@party_members[0])
       raise "Couldn't get map region for #{@party_members[0]}."
     end
-    temp.bbs
+    region.bbs
   end
 
   def owner : L2PcInstance

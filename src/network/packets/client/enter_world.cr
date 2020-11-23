@@ -251,7 +251,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     send_packet(ExNevitAdventTimeChange.new(-1))
     send_packet(ExShowContactList.new(pc))
 
-    pc.inventory.items.each do |item|
+    pc.inventory.items.safe_each do |item|
       if item.time_limited_item?
         item.schedule_life_time_task
       end
@@ -260,7 +260,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       end
     end
 
-    pc.warehouse.items.each do |item|
+    pc.warehouse.items.safe_each do |item|
       if item.time_limited_item?
         item.schedule_life_time_task
       end

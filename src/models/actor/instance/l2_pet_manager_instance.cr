@@ -3,7 +3,7 @@ class L2PetManagerInstance < L2MerchantInstance
     InstanceType::L2PetManagerInstance
   end
 
-  def get_html_path(npc_id, val)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "data/html/petmanager/#{npc_id}.htm"
     else

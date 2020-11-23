@@ -79,7 +79,7 @@ class BoatTalkingGludin
     when 6
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], ARRIVAL_GLUDIN1)
     when 7
-      if BoatManager.dock_busy? BoatManager::GLUDIN_HARBOR
+      if BoatManager.dock_busy?(BoatManager::GLUDIN_HARBOR)
         if @shout_count == 0
           BoatManager.broadcast_packets(GLUDIN_DOCK[0], TALKING_DOCK[0], BUSY_GLUDIN)
         end
@@ -124,7 +124,7 @@ class BoatTalkingGludin
     when 15
       BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_TALKING1)
     when 16
-      if BoatManager.dock_busy? BoatManager::TALKING_ISLAND
+      if BoatManager.dock_busy?(BoatManager::TALKING_ISLAND)
         if @shout_count == 0
           BoatManager.broadcast_packets(TALKING_DOCK[0], GLUDIN_DOCK[0], BUSY_TALKING)
         end

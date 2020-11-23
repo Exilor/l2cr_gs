@@ -288,7 +288,7 @@ class SevenSigns
     (red   * SEAL_STONE_RED_VALUE)
   end
 
-  def get_cabal_short_name(num : Int) : String
+  def get_cabal_short_name(num : Int32) : String
     case num
     when CABAL_DAWN
       "dawn"
@@ -299,7 +299,7 @@ class SevenSigns
     end
   end
 
-  def get_cabal_name(num : Int) : String
+  def get_cabal_name(num : Int32) : String
     case num
     when CABAL_DAWN
       "Lords of Dawn"
@@ -310,7 +310,7 @@ class SevenSigns
     end
   end
 
-  def get_seal_name(seal : Int, shorten : Bool) : String
+  def get_seal_name(seal : Int32, shorten : Bool) : String
     case seal
     when SEAL_AVARICE
       shorten ? "Avarice" : "Seal of Avarice"
@@ -389,7 +389,7 @@ class SevenSigns
     next_quest_start = 0
     next_valid_start = 0
     till_date = date.ms - Time.ms
-    while ((2 * PERIOD_MAJOR_LENGTH) + (2 * PERIOD_MINOR_LENGTH)) < till_date
+    while (2 * PERIOD_MAJOR_LENGTH) + (2 * PERIOD_MINOR_LENGTH) < till_date
       till_date -= (2 * PERIOD_MAJOR_LENGTH) + (2 * PERIOD_MINOR_LENGTH)
     end
     while till_date < 0
@@ -418,7 +418,7 @@ class SevenSigns
     )
   end
 
-  def get_current_score(cabal : Int) : Int32
+  def get_current_score(cabal : Int32) : Int32
     total = @dawn_stone_score.to_f64 + @dusk_stone_score
     case cabal
     when CABAL_DAWN
@@ -430,7 +430,7 @@ class SevenSigns
     0
   end
 
-  def get_current_stone_score(cabal : Int) : Float64
+  def get_current_stone_score(cabal : Int32) : Float64
     case cabal
     when CABAL_DAWN
       @dawn_stone_score
@@ -441,7 +441,7 @@ class SevenSigns
     end
   end
 
-  def get_current_festival_score(cabal : Int) : Int32
+  def get_current_festival_score(cabal : Int32) : Int32
     case cabal
     when CABAL_DAWN
       @dawn_festival_score
@@ -462,11 +462,11 @@ class SevenSigns
     end
   end
 
-  def get_seal_owner(seal : Int) : Int32
+  def get_seal_owner(seal : Int32) : Int32
     SIGNS_SEAL_OWNERS[seal]
   end
 
-  def get_seal_proportion(seal : Int, cabal : Int) : Int32
+  def get_seal_proportion(seal : Int32, cabal : Int32) : Int32
     case cabal
     when CABAL_NULL
       0
@@ -477,7 +477,7 @@ class SevenSigns
     end
   end
 
-  def get_total_members(cabal : Int) : Int32
+  def get_total_members(cabal : Int32) : Int32
     members = 0
     name = get_cabal_short_name(cabal)
     SIGNS_PLAYER_DATA.each_value do |data|
@@ -489,26 +489,26 @@ class SevenSigns
     members
   end
 
-  def get_player_stone_contrib(l2id : Int) : Int32
+  def get_player_stone_contrib(l2id : Int32) : Int32
     return 0 unless data = SIGNS_PLAYER_DATA[l2id]?
     data.get_i32("red_stones") +
     data.get_i32("green_stones") +
     data.get_i32("blue_stones")
   end
 
-  def get_player_contrib_score(l2id : Int) : Int32
+  def get_player_contrib_score(l2id : Int32) : Int32
     SIGNS_PLAYER_DATA[l2id]?.try &.get_i32("contribution_score") || 0
   end
 
-  def get_player_adena_collect(l2id : Int) : Int32
+  def get_player_adena_collect(l2id : Int32) : Int32
     SIGNS_PLAYER_DATA[l2id]?.try &.get_i32("ancient_adena_amount") || 0
   end
 
-  def get_player_seal(l2id : Int) : Int32
+  def get_player_seal(l2id : Int32) : Int32
     SIGNS_PLAYER_DATA[l2id]?.try &.get_i32("seal") || SEAL_NULL
   end
 
-  def get_player_cabal(l2id : Int) : Int32
+  def get_player_cabal(l2id : Int32) : Int32
     unless data = SIGNS_PLAYER_DATA[l2id]?
       return CABAL_NULL
     end
@@ -579,7 +579,7 @@ class SevenSigns
     error e
   end
 
-  def save_seven_signs_data(l2id : Int)
+  def save_seven_signs_data(l2id : Int32)
     return unless dat = SIGNS_PLAYER_DATA[l2id]?
     # p dat
     GameDB.exec(
@@ -673,7 +673,7 @@ class SevenSigns
     cabal
   end
 
-  def get_ancient_adena_reward(id : Int, remove : Bool) : Int32
+  def get_ancient_adena_reward(id : Int32, remove : Bool) : Int32
     data = SIGNS_PLAYER_DATA[id]
     amount = data.get_i32("ancient_adena_amount")
 
@@ -723,7 +723,7 @@ class SevenSigns
     contrib_score
   end
 
-  def add_festival_score(cabal : Int, amount : Int)
+  def add_festival_score(cabal : Int32, amount : Int32)
     if cabal == CABAL_DUSK
       @dusk_festival_score += amount
       if @dawn_festival_score >= amount
@@ -897,19 +897,19 @@ class SevenSigns
     end
   end
 
-  def check_is_dawn_posting_ticket(item_id : Int) : Bool
+  def check_is_dawn_posting_ticket(item_id : Int32) : Bool
     (item_id > 6114 && item_id < 6175) || (item_id > 6801 && item_id < 6812) ||
     (item_id > 7997 && item_id < 8008) || (item_id > 7940 && item_id < 7951) ||
     (item_id > 6294 && item_id < 6307) || (item_id > 6831 && item_id < 6834) ||
     (item_id > 8027 && item_id < 8030) || (item_id > 7970 && item_id < 7973)
   end
 
-  def check_is_rookie_posting_ticket(item_id : Int) : Bool
+  def check_is_rookie_posting_ticket(item_id : Int32) : Bool
     (item_id > 6174 && item_id < 6295) || (item_id > 6811 && item_id < 6832) ||
     (item_id > 7950 && item_id < 7971) || (item_id > 8007 && item_id < 8028)
   end
 
-  def give_cp_mult(strife_owner : Int)
+  def give_cp_mult(strife_owner : Int32)
     skill1 = CommonSkill::THE_VICTOR_OF_WAR.skill
     skill2 = CommonSkill::THE_VANQUISHED_OF_WAR.skill
 

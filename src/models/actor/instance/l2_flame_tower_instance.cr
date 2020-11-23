@@ -8,7 +8,7 @@ class L2FlameTowerInstance < L2Tower
     super
   end
 
-  def delete_me
+  def delete_me : Bool
     enable_zones(false)
     super
   end
@@ -28,7 +28,8 @@ class L2FlameTowerInstance < L2Tower
     InstanceType::L2FlameTowerInstance
   end
 
-  def zone_list=(@zone_list : Array(Int32)?)
+  def zone_list=(zone_list : Array(Int32)?)
+    @zone_list = zone_list
     enable_zones(true)
   end
 end

@@ -375,7 +375,8 @@ class Castle < AbstractResidence
 
   private def load_door
     DoorData.doors.each do |door|
-      if door.castle? && door.castle.residence_id == residence_id
+      castle = door.castle?
+      if castle && castle.residence_id == residence_id
         @doors << door
       end
     end
@@ -608,7 +609,14 @@ class Castle < AbstractResidence
     getter type, rate
     property lvl : Int32
 
-    def initialize(@castle : Castle, @type : Int32, @lvl : Int32, @fee : Int32, @temp_fee : Int32, @rate : Int64, @end_date : Int64, cwh : Bool)
+    def initialize(castle : Castle, type : Int32, lvl : Int32, fee : Int32, temp_fee : Int32, rate : Int64, end_date : Int64, cwh : Bool)
+      @castle = castle
+      @type = type
+      @lvl = lvl
+      @fee = fee
+      @temp_fee = temp_fee
+      @rate = rate
+      @end_date = end_date
       initialize_task(cwh)
     end
 
@@ -623,7 +631,8 @@ class Castle < AbstractResidence
       @end_date
     end
 
-    def end_time=(@end_date : Int64)
+    def end_time=(end_date : Int64)
+      @end_date = end_date
     end
 
     private def initialize_task(cwh : Bool)

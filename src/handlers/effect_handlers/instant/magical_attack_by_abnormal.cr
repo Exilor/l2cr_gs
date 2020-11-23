@@ -45,7 +45,7 @@ class EffectHandler::MagicalAttackByAbnormal < AbstractEffect
       else
         target.reduce_current_hp(damage, char, skill)
         target.notify_damage_received(damage, char, skill, mcrit, false, false)
-        char.send_damage_message(target, damage, mcrit, false, false)
+        char.send_damage_message(target, damage.to_i32, mcrit, false, false)
       end
     end
   end

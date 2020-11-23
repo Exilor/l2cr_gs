@@ -5,7 +5,7 @@ class L2VillageMasterInstance < L2NpcInstance
     InstanceType::L2VillageMasterInstance
   end
 
-  def get_html_path(npc_id, val)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "data/html/villagemaster/#{npc_id}.htm"
     else

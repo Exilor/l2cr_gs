@@ -150,21 +150,19 @@ module MapRegionManager
         end
 
         if where.fortress?
-          fort = FortManager.get_fort_by_owner(clan)
-
-          unless fort
+          unless fort = FortManager.get_fort_by_owner(clan)
             fort = FortManager.get_fort(pc)
-            unless fort && fort.siege.in_progress? && fort.owner_clan == clan
+            if fort && fort.siege.in_progress? && fort.owner_clan != clan
               fort = nil
             end
+          end
 
-            if fort && fort.residence_id > 0
-              if pc.karma > 0
-                return fort.residence_zone.chaotic_spawn_loc
-              end
-
-              return fort.residence_zone.spawn_loc
+          if fort && fort.residence_id > 0
+            if pc.karma > 0
+              return fort.residence_zone.chaotic_spawn_loc
             end
+
+            return fort.residence_zone.spawn_loc
           end
         end
 

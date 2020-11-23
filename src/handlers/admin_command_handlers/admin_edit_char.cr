@@ -984,14 +984,10 @@ module AdminCommandHandler::AdminEditChar
   end
 
   private def compared_players
-    players = L2World.players.to_a
-    players.sort_by! &.uptime
-    players
+    L2World.players.to_a.tap &.sort_by! &.uptime
   end
 
-  private struct IpPack
-    getter_initializer ip : String, tracert : Slice(Slice(Int32))
-  end
+  private record IpPack, ip : String, tracert : Slice(Slice(Int32))
 
   def commands
     {

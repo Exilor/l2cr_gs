@@ -268,30 +268,30 @@ class Fort < AbstractResidence
       self.owner_clan = clan
       run_count = owned_time // (Config.fs_update_frq * 60)
       initial = Time.ms - @last_owned_time.ms
-      while initial > (Config.fs_update_frq * 60000)
-        initial -= (Config.fs_update_frq * 60000)
+      while initial > (Config.fs_update_frq * 60_000)
+        initial -= (Config.fs_update_frq * 60_000)
       end
-      initial = (Config.fs_update_frq * 60000) - initial
+      initial = (Config.fs_update_frq * 60_000) - initial
       if Config.fs_max_own_time <= 0 || owned_time < Config.fs_max_own_time * 3600
         @fort_updater[0] =
         ThreadPoolManager.schedule_general_at_fixed_rate(
           FortUpdater.new(self, clan, run_count, UpdaterType::PERIODIC_UPDATE),
           initial,
-          Config.fs_update_frq * 60000
+          Config.fs_update_frq * 60_000
         )
         if Config.fs_max_own_time > 0
           @fort_updater[1] =
           ThreadPoolManager.schedule_general_at_fixed_rate(
             FortUpdater.new(self, clan, run_count, UpdaterType::MAX_OWN_TIME),
-            3600000,
-            3600000
+            3_600_000,
+            3_600_000
           )
         end
       else
         @fort_updater[1] =
         ThreadPoolManager.schedule_general(
           FortUpdater.new(self, clan, 0, UpdaterType::MAX_OWN_TIME),
-          60000,
+          60_000,
         )
       end
     else
@@ -491,7 +491,7 @@ class Fort < AbstractResidence
       return 0
     end
 
-    (((time + (Config.fs_max_own_time * 3600000)) - Time.ms) / 1000).to_i32
+    (((time + (Config.fs_max_own_time * 3_600_000)) - Time.ms) / 1000).to_i32
   end
 
   def time_until_next_fort_update : Int64
@@ -516,7 +516,9 @@ class Fort < AbstractResidence
     @state
   end
 
-  def set_fort_state(@state : Int32, @castle_id : Int32)
+  def set_fort_state(state : Int32, castle_id : Int32)
+    @state = state
+    @castle_id = castle_id
     sql = "UPDATE fort SET state=?,castleId=? WHERE id = ?"
     GameDB.exec(sql, fort_state, contracted_castle_id, residence_id)
   rescue e
@@ -697,7 +699,14 @@ class Fort < AbstractResidence
     getter type, rate
     property lvl : Int32
 
-    def initialize(@fort : Fort, @type : Int32, @lvl : Int32, @fee : Int32, @temp_fee : Int32, @rate : Int64, @end_date : Int64, cwh : Bool)
+    def initialize(fort : Fort, type : Int32, lvl : Int32, fee : Int32, temp_fee : Int32, rate : Int64, end_date : Int64, cwh : Bool)
+      @fort = fort
+      @type = type
+      @lvl = lvl
+      @fee = fee
+      @temp_fee = temp_fee
+      @rate = rate
+      @end_date = end_date
       initialize_task(cwh)
     end
 
@@ -705,14 +714,16 @@ class Fort < AbstractResidence
       @fee
     end
 
-    def lease=(@fee : Int32)
+    def lease=(fee : Int32)
+      @fee = fee
     end
 
     def end_time : Int64
       @end_date
     end
 
-    def end_time=(@end_date : Int64)
+    def end_time=(end_date : Int64)
+      @end_date = end_date
     end
 
     private def initialize_task(cwh : Bool)

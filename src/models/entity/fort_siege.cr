@@ -347,7 +347,7 @@ class FortSiege
 
     if check_conditions
       case
-      when fort.siege.attacker_clans.empty? && pc.inventory.adena < 250000
+      when fort.siege.attacker_clans.empty? && pc.inventory.adena < 250_000
         return 1
       when Time.ms < TerritoryWarManager.tw_start_time_in_millis && TerritoryWarManager.registration_over?
         return 2
@@ -373,7 +373,7 @@ class FortSiege
 
     if attacker_clans.size == 1
       if check_conditions
-        pc.reduce_adena("FortressSiege", 250000, nil, true)
+        pc.reduce_adena("FortressSiege", 250_000, nil, true)
       end
 
       start_auto_task(true)

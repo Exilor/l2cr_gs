@@ -1,3 +1,5 @@
+require "./range_set"
+
 class L2IdSet < RangeSet(Int32)
   def first_free : Int32
     unless first = @first

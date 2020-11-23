@@ -1490,8 +1490,7 @@ class Scripts::Kamaloka < AbstractInstance
     end
 
     # boss was killed, finish instance
-    boss = world.boss
-    if boss && boss == npc
+    if (boss = world.boss) && boss == npc
       world.boss = nil
       finish_instance(world)
     end

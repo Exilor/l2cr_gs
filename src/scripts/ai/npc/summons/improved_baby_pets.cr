@@ -42,7 +42,7 @@ class Scripts::ImprovedBabyPets < AbstractNpcAI
         end
       elsif event == "CAST_BUFF" && !pet.affected_by_skill?(BUFF_CONTROL)
         unless pet.hungry?
-          buff_step = (((pet.level / 5) - 11).clamp(0, 3)).to_i
+          buff_step = ((pet.level / 5) - 11).to_i.clamp(0, 3)
           1.upto(2 * (1 + buff_step)) do |i|
             cast_buff_skill(pet, buff_step, i)
           end

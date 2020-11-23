@@ -1253,8 +1253,8 @@ module Formulas
 
   def lvl_bonus_mod(attacker : L2Character, target : L2Character, skill : Skill) : Float64
     attacker_lvl = skill.magic_level > 0 ? skill.magic_level : attacker.level
-    rate_mod = 1.0 + (skill.lvl_bonus_rate.fdiv 100)
-    lvl_mod = 1.0 + ((attacker_lvl &- target.level).fdiv 100)
+    rate_mod = 1.0 + skill.lvl_bonus_rate.fdiv(100)
+    lvl_mod = 1.0 + (attacker_lvl &- target.level).fdiv(100)
     rate_mod * lvl_mod
   end
 

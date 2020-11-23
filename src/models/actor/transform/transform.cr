@@ -160,7 +160,7 @@ class Transform
     val
   end
 
-  def get_base_def_by_slot(pc : L2PcInstance, slot : Int32)
+  def get_base_def_by_slot(pc : L2PcInstance, slot : Int32) : Int32
     if template = get_template(pc)
       return template.get_defense(slot)
     end

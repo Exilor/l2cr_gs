@@ -10,7 +10,8 @@ class L2StaticObjectInstance < L2Character
   getter map : ShowTownMap?
   property type : Int32 = -1
 
-  def initialize(template : L2CharTemplate, @static_l2id : Int32)
+  def initialize(template : L2CharTemplate, static_l2id : Int32)
+    @static_l2id = static_l2id
     super(template)
   end
 

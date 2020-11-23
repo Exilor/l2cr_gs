@@ -61,7 +61,7 @@ class Scripts::Q00004_LongLiveThePaagrioLord < Quest
           end
         end
       when State::STARTED
-        if st.cond? 1
+        if st.cond?(1)
           html = "30578-04.html"
         else
           give_items(pc, CLUB, 1)

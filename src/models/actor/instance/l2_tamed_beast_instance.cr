@@ -67,7 +67,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
     end
   end
 
-  def home
+  def home : Location
     Location.new(@home_x, @home_y, @home_z)
   end
 
@@ -195,7 +195,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
     !inside_radius?(@home_x, @home_y, @home_z, MAX_DISTANCE_FROM_HOME, true, true)
   end
 
-  def delete_me
+  def delete_me : Bool
     if task = @buff_task
       task.cancel
     end

@@ -154,7 +154,7 @@ abstract class ClanHallSiegeEngine < Quest
     Broadcast.to_all_online_players(sm)
     @hall.update_siege_status(SiegeStatus::WAITING_BATTLE)
 
-    @siege_task = ThreadPoolManager.schedule_general(->siege_starts_task, 3600000)
+    @siege_task = ThreadPoolManager.schedule_general(->siege_starts_task, 3_600_000)
   end
 
   def start_siege

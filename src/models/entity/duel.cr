@@ -20,7 +20,11 @@ class Duel
   getter team_b
   getter? party_duel
 
-  def initialize(@leader_a : L2PcInstance, @leader_b : L2PcInstance, @party_duel : Bool, @duel_id : Int32)
+  def initialize(leader_a : L2PcInstance, leader_b : L2PcInstance, party_duel : Bool, duel_id : Int32)
+    @leader_a = leader_a
+    @leader_b = leader_b
+    @party_duel = party_duel
+    @duel_id = duel_id
     if party_duel
       party_a, party_b = leader_a.party.not_nil!, leader_b.party.not_nil!
       @team_a = Array(L2PcInstance).new(party_a.size)

@@ -12,7 +12,7 @@ class L2MerchantInstance < L2NpcInstance
     @mpc = MerchantPriceConfigTable.get_merchant_price_config(self)
   end
 
-  def get_html_path(npc_id, val)
+  def get_html_path(npc_id : Int32, val : Int32) : String
     if val == 0
       "data/html/merchant/#{npc_id}.htm"
     else

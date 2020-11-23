@@ -114,7 +114,7 @@ class BoatGludinRune
     when 7
       BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_RUNE1)
     when 8
-      if BoatManager.dock_busy? BoatManager::RUNE_HARBOR
+      if BoatManager.dock_busy?(BoatManager::RUNE_HARBOR)
         if @shout_count == 0
           BoatManager.broadcast_packets(RUNE_DOCK[0], GLUDIN_DOCK[0], BUSY_RUNE)
         end
@@ -162,7 +162,7 @@ class BoatGludinRune
     when 17
       BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], ARRIVAL_GLUDIN1)
     when 18
-      if BoatManager.dock_busy? BoatManager::GLUDIN_HARBOR
+      if BoatManager.dock_busy?(BoatManager::GLUDIN_HARBOR)
         if @shout_count == 0
           BoatManager.broadcast_packets(GLUDIN_DOCK[0], RUNE_DOCK[0], BUSY_GLUDIN)
         end
