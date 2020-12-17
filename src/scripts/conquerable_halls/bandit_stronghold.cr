@@ -25,13 +25,15 @@ class Scripts::BanditStronghold < FlagWar
     @inner_doors_to_open[0] = 22170003
     @inner_doors_to_open[1] = 22170004
 
-    @flag_coords << Location.new(83699, -17468, -1774, 19048)
-    @flag_coords << Location.new(82053, -17060, -1784, 5432)
-    @flag_coords << Location.new(82142, -15528, -1799, 58792)
-    @flag_coords << Location.new(83544, -15266, -1770, 44976)
-    @flag_coords << Location.new(84609, -16041, -1769, 35816)
-    @flag_coords << Location.new(81981, -15708, -1858, 60392)
-    @flag_coords << Location.new(84375, -17060, -1860, 27712)
+    @flag_coords.push(
+      Location.new(83699, -17468, -1774, 19048),
+      Location.new(82053, -17060, -1784, 5432),
+      Location.new(82142, -15528, -1799, 58792),
+      Location.new(83544, -15266, -1770, 44976),
+      Location.new(84609, -16041, -1769, 35816),
+      Location.new(81981, -15708, -1858, 60392),
+      Location.new(84375, -17060, -1860, 27712)
+    )
 
     ZoneManager.get_all_zones(L2ResidenceHallTeleportZone) do |tele_zone|
       if tele_zone.residence_id != BANDIT_STRONGHOLD

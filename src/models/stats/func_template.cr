@@ -18,12 +18,12 @@ struct FuncTemplate
 
     @constructor = {% begin %}
       case "Func#{function.name}"
-      {% for sub in %w(FuncAdd FuncDiv FuncEnchant FuncEnchantHp FuncMul FuncSet FuncSub) %}
-        when {{sub}}
-          {{sub.id}}
+      {% for sub in %w(Add Div Enchant EnchantHp Mul Set Sub) %}
+        when "Func{{sub.id}}"
+          Func{{sub.id}}
       {% end %}
       else
-        raise "FuncTemplate @constructor error (#{function.name})"
+        raise "Constructor for Func#{function.name} not found"
       end
     {% end %}
   end

@@ -781,7 +781,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
           pc.target = nil
           pc.stop_move(nil)
           pc.immobilized = true
-          pc.set_intention(AI::IDLE)
+          pc.intention = AI::IDLE
         end
       end
     end
@@ -895,7 +895,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         elsif npc.id == FRINTEZZA && skill.id == SOUL_BREAKING_ARROW_SKILL_ID
           npc.script_value = 1
           npc.target = nil
-          npc.set_intention(AI::IDLE)
+          npc.intention = AI::IDLE
         end
       end
     end

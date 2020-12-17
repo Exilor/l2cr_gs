@@ -37,15 +37,18 @@ module OptionData
             id, lvl = parse_int(cd, "id"), parse_int(cd, "level")
             op.passive_skill = SkillHolder.new(id, lvl)
           when "attack_skill"
-            id, lvl, chance = parse_int(cd, "id"), parse_int(cd, "level"), parse_double(cd, "chance")
+            id, lvl = parse_int(cd, "id"), parse_int(cd, "level")
+            chance = parse_double(cd, "chance")
             sh = OptionsSkillHolder.new(id, lvl, chance, OptionsSkillType::ATTACK)
             op.add_activation_skill(sh)
           when "magic_skill"
-            id, lvl, chance = parse_int(cd, "id"), parse_int(cd, "level"), parse_double(cd, "chance")
+            id, lvl = parse_int(cd, "id"), parse_int(cd, "level")
+            chance = parse_double(cd, "chance")
             sh = OptionsSkillHolder.new(id, lvl, chance, OptionsSkillType::MAGIC)
             op.add_activation_skill(sh)
           when "critical_skill"
-            id, lvl, chance = parse_int(cd, "id"), parse_int(cd, "level"), parse_double(cd, "chance")
+            id, lvl = parse_int(cd, "id"), parse_int(cd, "level")
+            chance = parse_double(cd, "chance")
             sh = OptionsSkillHolder.new(id, lvl, chance, OptionsSkillType::CRITICAL)
             op.add_activation_skill(sh)
           end

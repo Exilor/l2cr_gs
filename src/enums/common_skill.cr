@@ -1,4 +1,4 @@
-class CommonSkill
+struct CommonSkill
   private def initialize(id, level)
     @holder = SkillHolder.new(id, level)
   end
@@ -11,13 +11,7 @@ class CommonSkill
     @holder.skill_lvl
   end
 
-  def skill : Skill
-    @holder.skill
-  end
-
-  def skill? : Skill?
-    @holder.skill?
-  end
+  delegate skill, skill?, to: @holder
 
   RAID_CURSE = new(4215, 1)
   RAID_CURSE2 = new(4515, 1)

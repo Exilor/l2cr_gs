@@ -6,7 +6,12 @@ struct ZoneCylinder < L2ZoneForm
   @rad : Int32
   @rad_s : Int32
 
-  def initialize(@x : Int32, @y : Int32, @z1 : Int32, @z2 : Int32, @rad : Int32)
+  def initialize(x : Int32, y : Int32, z1 : Int32, z2 : Int32, rad : Int32)
+    @x = x
+    @y = y
+    @z1 = z1
+    @z2 = z2
+    @rad = rad
     @rad_s = rad.abs2
   end
 

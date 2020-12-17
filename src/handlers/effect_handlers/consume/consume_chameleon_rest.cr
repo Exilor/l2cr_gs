@@ -16,7 +16,7 @@ class EffectHandler::ConsumeChameleonRest < AbstractEffect
     if pc = info.effected.as?(L2PcInstance)
       pc.sit_down(false)
     else
-      info.effected.set_intention(AI::REST)
+      info.effected.intention = AI::REST
     end
   end
 

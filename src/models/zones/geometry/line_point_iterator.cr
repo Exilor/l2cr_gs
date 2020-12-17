@@ -7,7 +7,11 @@ struct LinePointIterator
 
   getter x, y
 
-  def initialize(@x : Int32, @y : Int32, @dst_x : Int32, @dst_y : Int32)
+  def initialize(x : Int32, y : Int32, dst_x : Int32, dst_y : Int32)
+    @x = x
+    @y = y
+    @dst_x = dst_x
+    @dst_y = dst_y
     @dx = (dst_x - x).abs.to_i64
     @dy = (dst_y - y).abs.to_i64
     @sx = x < dst_x ? 1i64 : -1i64

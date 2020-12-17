@@ -71,7 +71,7 @@ class LongTimeEvent < Quest
               final_chance = 0.0
 
               if !chance.empty? && chance.ends_with?("%")
-                final_chance = chance[0...chance.size - 1].to_f * 10000
+                final_chance = chance[0...chance.size - 1].to_f * 10_000
               end
 
               unless ItemTable[item_id]?
@@ -84,7 +84,7 @@ class LongTimeEvent < Quest
                 next
               end
 
-              unless final_chance.between?(10000, 1000000)
+              unless final_chance.between?(10_000, 1_000_000)
                 warn { "Item #{item_id} - incorrect drop chance, item was not added in droplist." }
                 next
               end

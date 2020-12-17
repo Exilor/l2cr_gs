@@ -322,12 +322,12 @@ abstract class ItemContainer
     true
   end
 
-  def validate_capacity_by_item_id(id : Int, count : Int) : Bool
+  def validate_capacity_by_item_id(id : Int32, count : Int) : Bool
     t = ItemTable[id]?
     t.nil? || (t.stackable? ? validate_capacity(1) : validate_capacity(count))
   end
 
-  def validate_weight_by_item_id(id : Int, count : Int) : Bool
+  def validate_weight_by_item_id(id : Int32, count : Int) : Bool
     t = ItemTable[id]?
     t.nil? || validate_weight(t.weight * count)
   end

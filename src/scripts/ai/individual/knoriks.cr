@@ -61,9 +61,9 @@ class Scripts::Knoriks < AbstractNpcAI
       end
     end
 
-    if npc.calculate_distance(npc.spawn.location, false, false) > MAX_CHASE_DIST || (npc.z - npc.spawn.z).abs > 450
+    if npc.calculate_distance(npc.spawn, false, false) > MAX_CHASE_DIST || (npc.z - npc.spawn.z).abs > 450
       npc.disable_core_ai(true)
-      npc.tele_to_location(npc.spawn.location)
+      npc.tele_to_location(npc.spawn)
     end
 
     super

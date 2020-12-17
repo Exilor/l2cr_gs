@@ -139,12 +139,12 @@ module GeoData
 
   def can_see_target?(x : Int32, y : Int32, z : Int32, instance_id : Int32, tx : Int32, ty : Int32, tz : Int32, instance_id2 : Int32) : Bool
     instance_id == instance_id2 &&
-    can_see_target?(x, y, z, instance_id, tx, ty, tz)
+      can_see_target?(x, y, z, instance_id, tx, ty, tz)
   end
 
   def can_see_target?(x : Int32, y : Int32, z : Int32, instance_id : Int32, tx : Int32, ty : Int32, tz : Int32) : Bool
     !DoorData.check_if_doors_between(x, y, z, tx, ty, tz, instance_id, true) &&
-    can_see_target?(x, y, z, tx, ty, tz)
+      can_see_target?(x, y, z, tx, ty, tz)
   end
 
   def can_see_target?(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32) : Bool

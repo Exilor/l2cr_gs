@@ -144,7 +144,7 @@ module AdminCommandHandler::AdminEffects
       begin
         id = st.shift
         pc.poly.set_poly_info("npc", id)
-        pc.tele_to_location(pc.location)
+        pc.tele_to_location(pc)
         info1 = CharInfo.new(pc)
         pc.broadcast_packet(info1)
         info2 = UserInfo.new(pc)

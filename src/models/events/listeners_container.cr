@@ -6,17 +6,8 @@ class ListenersContainer
 
   @listeners : Interfaces::Map(EventType, Array(AbstractEventListener))?
 
-  private def listeners : Interfaces::Map(EventType, Array(AbstractEventListener))
-    @listeners ||= sync do
-      @listeners ||= begin
-        Concurrent::Map(EventType, Array(AbstractEventListener)).new
-      end
-    end
-  end
-
   def add_listener(lst : AbstractEventListener) : AbstractEventListener
-    tmp = (listeners[lst.type] ||= [] of AbstractEventListener)
-    tmp << lst
+    (listeners[lst.type] ||= [] of AbstractEventListener) << lst
     lst
   end
 
@@ -67,5 +58,13 @@ class ListenersContainer
 
   def has_listener?(type : EventType) : Bool
     !get_listeners(type).empty?
+  end
+
+  private def listeners : Interfaces::Map(EventType, Array(AbstractEventListener))
+    @listeners || sync do
+      @listeners ||= begin
+        Concurrent::Map(EventType, Array(AbstractEventListener)).new
+      end
+    end
   end
 end

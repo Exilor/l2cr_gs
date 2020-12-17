@@ -14,7 +14,7 @@ struct EnchantItemGroup
   def get_chance(index : Int) : Float64
     unless @chances.empty?
       @chances.each do |holder|
-        if holder.min <= index && holder.max >= index
+        if index.between?(holder.min, holder.max)
           return holder.chance
         end
       end

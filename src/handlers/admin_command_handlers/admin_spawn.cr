@@ -186,9 +186,9 @@ module AdminCommandHandler::AdminSpawn
       if teleport_index > -1
         if teleport_index == i
           if show_position && npc
-            pc.tele_to_location(npc.location, true)
+            pc.tele_to_location(npc, true)
           else
-            pc.tele_to_location(sp.location, true)
+            pc.tele_to_location(sp, true)
           end
         end
       else

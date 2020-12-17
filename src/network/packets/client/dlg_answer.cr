@@ -57,7 +57,7 @@ class Packets::Incoming::DlgAnswer < GameClientPacket
             sm = SystemMessage.s1_disappeared
             sm.add_item_name(holder.item_id)
           end
-          pc.tele_to_location(holder.requester.location, true)
+          pc.tele_to_location(holder.requester, true)
         end
       end
     when SystemMessageId::WOULD_YOU_LIKE_TO_OPEN_THE_GATE.id

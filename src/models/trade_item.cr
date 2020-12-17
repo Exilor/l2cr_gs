@@ -156,7 +156,8 @@ class TradeItem
 
   private initializer item : L2Item
 
-  def initialize(@item : L2ItemInstance | TradeItem)
+  def initialize(item : L2ItemInstance | TradeItem)
+    @item = item
     @l2id = item.l2id
     @attack_element_type = item.attack_element_type
     @attack_element_power = item.attack_element_power

@@ -157,6 +157,8 @@ class L2Weapon < L2Item
 
     skill.activate_skill(caster, target)
 
+    caster.recharge_shots(skill.use_soulshot?, skill.use_spiritshot?)
+
     if caster.is_a?(L2PcInstance)
       targets = [target] of L2Object
       caster.known_list.each_object do |npc|

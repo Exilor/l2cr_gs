@@ -1590,6 +1590,16 @@ abstract class L2Character < L2Object
     end
     target = targets[0]?
 
+    # custom, to fix mobs moving invisibly after being provoked with a debuff
+    if target.is_a?(L2Attackable) && target.moving? && skill.debuff?
+      offset = target.ai.@client_moving_to_pawn_offset
+      if offset > 0 && (pawn = target.target.as?(L2Character))
+        target.broadcast_packet(MoveToPawn.new(target, pawn, offset))
+      else
+        target.broadcast_packet(MoveToLocation.new(target))
+      end
+    end
+
     if mut.count > 0
       recharge_shots(mut.skill.use_soulshot?, mut.skill.use_spiritshot?)
     end

@@ -40,7 +40,8 @@ class AccessLevel
       @childs_access_level = AdminData.get_access_level(@child)
     end
 
-    @childs_access_level.not_nil!.level == other.level ||
-    @childs_access_level.not_nil!.has_child_access?(other)
+    child = @childs_access_level.not_nil!
+
+    child.level == other.level || child.has_child_access?(other)
   end
 end

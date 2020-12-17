@@ -174,7 +174,7 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
           if leader.can_summon_target?(player) # TODO: Custom one, retail dont check it but for sure lets check same conditions like when summon player by skill.
             npc.target = player
             npc.do_cast(DISPLAY_CLAN_GATE)
-            player.tele_to_location(leader.location, true)
+            player.tele_to_location(leader, true)
           end
         else
           html = "courtmagician-02.html"

@@ -8,8 +8,8 @@ class CharStatus
   @flags_regen_active = 0i8
   @reg_task : TaskScheduler::PeriodicTask?
 
-  getter current_hp = 0f64
-  getter current_mp = 0f64
+  getter current_hp = 0.0
+  getter current_mp = 0.0
   getter(status_listener) { Concurrent::Set(L2Character).new }
 
   getter_initializer active_char : L2Character

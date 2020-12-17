@@ -1,7 +1,9 @@
 abstract class L2Decoy < L2Character
   getter owner
 
-  def initialize(template : L2CharTemplate, @owner : L2PcInstance)
+  def initialize(template : L2CharTemplate, owner : L2PcInstance)
+    @owner = owner
+
     super(template)
 
     set_xyz_invisible(*owner.xyz)

@@ -17,7 +17,6 @@ class PlayerVariables < AbstractVariables
     GameDB.each(SELECT_QUERY, @l2id) do |rs|
       var = rs.get_string(:"var")
       val = rs.get_string(:"val")
-
       self[var] = val
     end
 

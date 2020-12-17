@@ -35,7 +35,7 @@ class Scripts::RangeGuard < AbstractNpcAI
     1483, 1484, # Thin Skin / Enervation
     1485, 1486, # Spite / Mental Impoverish
     1511, 1524, # Curse of Life Flow / Surrender to the Divine
-    1529  # Soul Web
+    1529 # Soul Web
   }
 
   private MIN_DISTANCE = 150
@@ -57,7 +57,7 @@ class Scripts::RangeGuard < AbstractNpcAI
 
     if npc.affected_by_skill?(skill_id) && dst <= MIN_DISTANCE
       npc.stop_skill_effects(true, skill_id)
-    elsif dst > MIN_DISTANCE && !npc.skill_disabled?(skill_id) && !(skill && NOT_ALLOWED_SKILLS.includes?(skill.id))
+    elsif dst > MIN_DISTANCE && !npc.skill_disabled?(skill_id) && !(skill && NOT_ALLOWED_SKILLS.bincludes?(skill.id))
       rate = npc.template.parameters.get_i32("LongRangeGuardRate")
       if Rnd.rand(100) < rate
         target = npc.target

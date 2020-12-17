@@ -52,7 +52,6 @@ class Scripts::SkillTransfer < AbstractNpcAI
   end
 
   def on_enter_world(pc)
-    debug "on_enter_world"
     if !pc.override_skill_conditions? || Config.skill_check_gm
       index = get_transfer_class_index(pc)
       if index < 0

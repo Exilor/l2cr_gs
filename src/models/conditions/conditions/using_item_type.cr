@@ -4,7 +4,8 @@ class Condition
   class UsingItemType < Condition
     @armor : Bool
 
-    def initialize(@mask : Int32)
+    def initialize(mask : Int32)
+      @mask = mask
       @armor = (mask & (ArmorType::MAGIC.mask | ArmorType::LIGHT.mask | ArmorType::HEAVY.mask)) != 0
     end
 

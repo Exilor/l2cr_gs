@@ -319,7 +319,7 @@ module VoicedCommandHandler::Wedding
     pc.send_message("After #{teleport_timer // 60000} min. you will be teleported to your partner.")
     pc.inventory.reduce_adena("Wedding", Config.wedding_teleport_price.to_i64, pc, nil)
 
-    pc.set_intention(AI::IDLE)
+    pc.intention = AI::IDLE
     # SoE Animation section
     pc.target = pc
     pc.disable_all_skills

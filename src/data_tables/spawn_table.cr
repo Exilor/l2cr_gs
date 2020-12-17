@@ -193,14 +193,6 @@ module SpawnTable
     false
   end
 
-  def each_spawn(& : L2Spawn -> Bool) : Bool
-    SPAWN_TABLE.each_value do |set|
-      set.each { |sp| return false unless yield(sp) }
-    end
-
-    true
-  end
-
   private def parse_document(doc, file)
     find_element(doc, "list") do |list|
       next if parse_bool(list, "enabled", nil) == false

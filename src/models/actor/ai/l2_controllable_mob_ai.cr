@@ -19,7 +19,7 @@ class L2ControllableMobAI < L2AttackableAI
     self.alternate_ai = AI_IDLE
   end
 
-  protected def think_follow
+  private def think_follow
     me = @actor.as(L2Attackable)
 
     unless Util.in_range?(MobGroupTable::FOLLOW_RANGE, me, forced_target, true)

@@ -488,7 +488,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
 
       @gourds[ACCEPTED_CLANS.size &- 1 &- i] = cur_spawn
 
-      cur_spawn.last_spawn.try &.tele_to_location(old_spawn.location)
+      cur_spawn.last_spawn.try &.tele_to_location(old_spawn)
     end
   end
 

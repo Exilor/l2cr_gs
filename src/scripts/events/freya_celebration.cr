@@ -47,7 +47,7 @@ class Scripts::FreyaCelebration < LongTimeEvent
         if curr_time > reuse_time
           take_items(pc, Inventory::ADENA_ID, 1)
           give_items(pc, FREYA_POTION, 1)
-          save_global_quest_var(pc.account_name, (Time.ms + (HOURS * 3600000)).to_s)
+          save_global_quest_var(pc.account_name, (Time.ms + (HOURS * 3_600_000)).to_s)
         else
           remaining_time = (reuse_time - Time.ms) // 1000
           hours = (remaining_time // 3600).to_i32

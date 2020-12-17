@@ -45,7 +45,7 @@ module DocumentEngine
   def load_skills(hash : Hash(Int32, Skill))
     SKILL_FILES.each_with_index(1) do |file, i|
       STDOUT.flush
-      print "\r#{file.path} (#{i}/#{SKILL_FILES.size})"
+      print "\r#{File.expand_path(file.path)} (#{i}/#{SKILL_FILES.size})"
 
       skills = load_skill_file(file)
       skills.each { |s| hash[s.hash] = s }
@@ -58,7 +58,7 @@ module DocumentEngine
     list = [] of L2Item
 
     ITEM_FILES.each_with_index(1) do |file, i|
-      print "\r#{file.path} (#{i}/#{ITEM_FILES.size})"
+      print "\r#{File.expand_path(file.path)} (#{i}/#{ITEM_FILES.size})"
       doc = ItemDocument.new(file)
       doc.parse
       list.concat(doc.item_list)

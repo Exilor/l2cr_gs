@@ -46,7 +46,7 @@ module AdminCommandHandler::AdminInstance
         target.instance_id = val
         if target.is_a?(L2PcInstance)
           target.send_message("Admin set your instance to: #{val}")
-          target.tele_to_location(target.location)
+          target.tele_to_location(target)
         end
         pc.send_message("Moved #{target.name} to instance #{target.instance_id}.")
         return true

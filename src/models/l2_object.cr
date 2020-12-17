@@ -176,8 +176,8 @@ abstract class L2Object < ListenersContainer
     InstanceType::L2Object
   end
 
-  def instance_type?(*types : InstanceType) : Bool
-    instance_type.types?(*types)
+  def instance_type?(type : InstanceType) : Bool
+    instance_type.type?(type)
   end
 
   def acting_player : L2PcInstance?

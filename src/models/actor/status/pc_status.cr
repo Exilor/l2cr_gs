@@ -7,7 +7,7 @@ class PcStatus < PlayableStatus
 
   def reduce_cp(value : Int32)
     cp = current_cp
-    self.current_cp = cp > value ? (cp - value).to_f : 0.0
+    self.current_cp = cp > value ? cp - value : 0.0
   end
 
   def reduce_hp(value : Float64, attacker : L2Character?)
@@ -82,7 +82,7 @@ class PcStatus < PlayableStatus
           pc.send_packet(SystemMessageId::MP_BECAME_0_ARCANE_SHIELD_DISAPPEARING)
           pc.stop_skill_effects(true, 1556)
           value = mp_dam - pc.current_mp
-          pc.current_mp = 0f64
+          pc.current_mp = 0.0
         else
           pc.reduce_current_mp(mp_dam.to_f64)
           sm = SystemMessage.arcane_shield_decreased_your_mp_by_s1_instead_of_hp
@@ -129,7 +129,7 @@ class PcStatus < PlayableStatus
           value = 0
         else
           value -= current_cp()
-          set_current_cp(0f64, false)
+          set_current_cp(0.0, false)
         end
       end
 

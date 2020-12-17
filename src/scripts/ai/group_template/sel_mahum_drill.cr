@@ -99,7 +99,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
             unless soldier.stays_in_spawn_loc?
               if soldier.intention.active? || soldier.intention.idle?
                 soldier.heading = npc_spawn.heading
-                soldier.tele_to_location(npc_spawn.location, false)
+                soldier.tele_to_location(npc_spawn, false)
               end
             end
           end

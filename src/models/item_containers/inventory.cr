@@ -53,8 +53,6 @@ abstract class Inventory < ItemContainer
 
     getter changed_items = [] of L2ItemInstance
 
-    # L2J has 'inventory' as an instance variable but doesn't use it anywhere
-    # outside the initializer.
     def initialize(inventory : Inventory)
       inventory.add_paperdoll_listener(self)
     end
@@ -95,11 +93,8 @@ abstract class Inventory < ItemContainer
 
       case item.item_type
       when WeaponType::BOW, WeaponType::CROSSBOW, WeaponType::FISHINGROD
-        if inv.lhand_slot
-          inv.lhand_slot = nil
-        end
+        inv.lhand_slot &&= nil
       end
-
     end
   end
 
@@ -408,7 +403,7 @@ abstract class Inventory < ItemContainer
     item
   end
 
-  def drop_item(process : String?, l2id : Int, count : Int, actor : L2PcInstance, reference) : L2ItemInstance?
+  def drop_item(process : String?, l2id : Int32, count : Int64, actor : L2PcInstance, reference) : L2ItemInstance?
     return unless item = get_item_by_l2id(l2id)
 
     item.sync do
@@ -443,16 +438,16 @@ abstract class Inventory < ItemContainer
   end
 
   # L2J: getPaperdollItem
-  def [](slot : Int) : L2ItemInstance?
+  def [](slot : Int32) : L2ItemInstance?
     @paperdoll.fetch(slot) { raise "Slot #{slot} outside of inventory bounds" }
   end
 
   # L2J: isPaperdollSlotEmpty
-  def slot_empty?(slot : Int) : Bool
+  def slot_empty?(slot : Int32) : Bool
     self[slot].nil?
   end
 
-  def self.get_paperdoll_index(slot : Int) : Int32
+  def self.get_paperdoll_index(slot : Int32) : Int32
     case slot
     when L2Item::SLOT_UNDERWEAR
       UNDER
@@ -499,32 +494,33 @@ abstract class Inventory < ItemContainer
     end
   end
 
-  def get_paperdoll_item_by_l2_item_id(slot : Int) : L2ItemInstance?
+  def get_paperdoll_item_by_l2_item_id(slot : Int32) : L2ItemInstance?
     index = Inventory.get_paperdoll_index(slot)
     self[index] unless index == -1
   end
 
-  def get_paperdoll_item_id(slot : Int) : Int32
+  def get_paperdoll_item_id(slot : Int32) : Int32
     self[slot].try &.id || 0
   end
 
-  def get_paperdoll_item_display_id(slot : Int) : Int32
+  def get_paperdoll_item_display_id(slot : Int32) : Int32
     self[slot].try &.display_id || 0
   end
 
-  def get_paperdoll_augmentation_id(slot : Int) : Int32
+  def get_paperdoll_augmentation_id(slot : Int32) : Int32
     self[slot].try &.augmentation.try &.augmentation_id || 0
   end
 
-  def get_paperdoll_l2id(slot : Int) : Int32
+  def get_paperdoll_l2id(slot : Int32) : Int32
     self[slot].try &.l2id || 0
   end
 
   def add_paperdoll_listener(listener : PaperdollListener)
     sync do
       if @paperdoll_listeners.includes?(listener)
-        fatal { "@paperdoll_listeners should not already include #{listener}." }
+        raise "@paperdoll_listeners should not already include #{listener}."
       end
+
       @paperdoll_listeners << listener
     end
   end
@@ -534,7 +530,7 @@ abstract class Inventory < ItemContainer
   end
 
   # L2J: setPaperdollItem
-  def []=(slot : Int, item : L2ItemInstance?) : L2ItemInstance?
+  def []=(slot : Int32, item : L2ItemInstance?) : L2ItemInstance?
     sync do
       old = self[slot]
 
@@ -593,7 +589,7 @@ abstract class Inventory < ItemContainer
     end
   end
 
-  def unequip_item_in_body_slot_and_record(slot : Int)
+  def unequip_item_in_body_slot_and_record(slot : Int32)
     recorder = ChangeRecorder.new(self)
 
     begin
@@ -605,11 +601,11 @@ abstract class Inventory < ItemContainer
     recorder.changed_items
   end
 
-  def unequip_item_in_slot(slot : Int)
+  def unequip_item_in_slot(slot : Int32)
     self[slot] = nil
   end
 
-  def unequip_item_in_slot_and_record(slot : Int)
+  def unequip_item_in_slot_and_record(slot : Int32)
     recorder = ChangeRecorder.new(self)
 
     begin
@@ -622,7 +618,7 @@ abstract class Inventory < ItemContainer
     recorder.changed_items
   end
 
-  def unequip_item_in_body_slot(slot : Int)
+  def unequip_item_in_body_slot(slot : Int32)
     paperdoll_slot =
     case slot
     when L2Item::SLOT_L_EAR
@@ -812,7 +808,7 @@ abstract class Inventory < ItemContainer
     end
   end
 
-  protected def refresh_weight
+  def refresh_weight
     weight = @items.sum { |item| item.template.weight.to_i64 * item.count }
     @total_weight = Math.min(weight, Int32::MAX).to_i
   end

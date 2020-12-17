@@ -203,7 +203,7 @@ class TradeList
       end
 
       if @owner.l2id > partner_list.owner.l2id
-        sync_1 , sync_2 = partner_list, self
+        sync_1, sync_2 = partner_list, self
       else
         sync_1, sync_2 = self, partner_list
       end
@@ -284,7 +284,7 @@ class TradeList
       next unless template
       if !template.stackable?
         slots += item.count
-      elsif !partner.inventory.get_item_by_item_id(item.item.id)
+      elsif partner.inventory.get_item_by_item_id(item.item.id).nil?
         slots += 1
       end
     end
@@ -313,25 +313,18 @@ class TradeList
       partner_list.owner.send_packet(SystemMessageId::SLOTS_FULL)
       @owner.send_packet(SystemMessageId::SLOTS_FULL)
     else
-      owner_iu = InventoryUpdate.new
-      partner_iu = InventoryUpdate.new
+      unless Config.force_inventory_update
+        owner_iu = InventoryUpdate.new
+        partner_iu = InventoryUpdate.new
+      end
 
       partner_list.transfer_items(@owner, partner_iu, owner_iu)
       transfer_items(partner_list.owner, owner_iu, partner_iu)
 
       partner = partner_list.owner
-      if owner_iu
-        @owner.send_packet(owner_iu)
-      else
-        @owner.send_packet(ItemList.new(@owner, false))
-      end
 
-      if partner_iu
-        partner.send_packet(partner_iu)
-      else
-        partner.send_packet(partner_iu)
-      end
-
+      @owner.send_packet(owner_iu || ItemList.new(@owner, false))
+      partner.send_packet(partner_iu || ItemList.new(partner, false))
       @owner.send_packet(StatusUpdate.current_load(@owner))
       partner.send_packet(StatusUpdate.current_load(partner))
 
@@ -370,8 +363,10 @@ class TradeList
               if ti.count < item.count
                 item.count = ti.count
               end
+
               found = true
             end
+
             break
           end
         end

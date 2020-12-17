@@ -7,7 +7,8 @@ struct L2ContactList
 
   getter contacts = Concurrent::Array(String).new
 
-  def initialize(@pc : L2PcInstance)
+  def initialize(pc : L2PcInstance)
+    @pc = pc
     restore
   end
 

@@ -4,7 +4,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
   no_action_request
 
   private SIN_EATER_ID = 12564
-  private SWITCH_STANCE_ID = 6054
+  private SWITCH_STANCE_ID = 5771
   private NPC_STRINGS = {
     NpcString::USING_A_SPECIAL_SKILL_HERE_COULD_TRIGGER_A_BLOODBATH,
     NpcString::HEY_WHAT_DO_YOU_EXPECT_OF_ME,
@@ -786,8 +786,15 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
       return
     end
 
-    unless skill = holder.skill?
-      warn { "#{pc.name} requested missing pet skill #{holder}." }
+    # unless skill = holder.skill?
+    #   warn { "#{pc.name} requested missing pet skill #{holder}." }
+    #   return
+    # end
+
+    # Custom, to get the proper hatchling/strider skill level. This is a dirty
+    # fix for something that L2J should fix in their datapack.
+    unless skill = get_skill(summon, holder)
+      warn { "Missing skill for #{summon}: #{skill_name}." }
       return
     end
 
@@ -825,5 +832,39 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     end
 
     true
+  end
+
+  private def get_skill(pet, holder)
+    case holder.skill_id
+    when 4710..4713 # Hatchling & Strider skills
+      case pet.level
+      when 0..19
+        skill = holder.get_skill(1)
+      when 20..29
+        skill = holder.get_skill(2)
+      when 30..39
+        skill = holder.get_skill(3)
+      when 40..49
+        skill = holder.get_skill(4)
+      when 50..59
+        skill = holder.get_skill(5)
+      when 60..69
+        skill = holder.get_skill(6)
+      when 70..74
+        skill = holder.get_skill(7)
+      when 75..79
+        skill = holder.get_skill(8)
+      when 80
+        skill = holder.get_skill(9)
+      when 81..82
+        skill = holder.get_skill(10)
+      when 83..84
+        skill = holder.get_skill(11)
+      else
+        skill = holder.get_skill(12)
+      end
+    end
+
+    skill || holder.skill?
   end
 end

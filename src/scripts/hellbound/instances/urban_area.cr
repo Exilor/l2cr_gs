@@ -287,7 +287,7 @@ class Scripts::UrbanArea < AbstractInstance
         world = InstanceManager.get_world(@caller.instance_id)
         if world.is_a?(UrbanAreaWorld)
           if world.spawned_amaskari? && world.spawned_amaskari.alive?
-            world.spawned_amaskari.tele_to_location(@caller.location)
+            world.spawned_amaskari.tele_to_location(@caller)
             world.spawned_amaskari.broadcast_packet(NpcSay.new(world.spawned_amaskari.l2id, Say2::NPC_ALL, world.spawned_amaskari.id, NpcString::ILL_MAKE_YOU_FEEL_SUFFERING_LIKE_A_FLAME_THAT_IS_NEVER_EXTINGUISHED))
           end
         end

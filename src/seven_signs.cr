@@ -277,15 +277,13 @@ class SevenSigns
   end
 
   def calc_contribution_score(blue : Int64, green : Int64, red : Int64) : Int64
-    (blue * BLUE_CONTRIB_POINTS) +
-    (green * GREEN_CONTRIB_POINTS) +
-    (red * RED_CONTRIB_POINTS)
+    (blue * BLUE_CONTRIB_POINTS) + (green * GREEN_CONTRIB_POINTS) +
+      (red * RED_CONTRIB_POINTS)
   end
 
   def calc_ancient_adena_reward(blue : Int64, green : Int64, red : Int64) : Int64
-    (blue  * SEAL_STONE_BLUE_VALUE) +
-    (green * SEAL_STONE_GREEN_VALUE) +
-    (red   * SEAL_STONE_RED_VALUE)
+    (blue * SEAL_STONE_BLUE_VALUE) + (green * SEAL_STONE_GREEN_VALUE) +
+      (red * SEAL_STONE_RED_VALUE)
   end
 
   def get_cabal_short_name(num : Int32) : String
@@ -491,9 +489,8 @@ class SevenSigns
 
   def get_player_stone_contrib(l2id : Int32) : Int32
     return 0 unless data = SIGNS_PLAYER_DATA[l2id]?
-    data.get_i32("red_stones") +
-    data.get_i32("green_stones") +
-    data.get_i32("blue_stones")
+    data.get_i32("red_stones") + data.get_i32("green_stones") +
+      data.get_i32("blue_stones")
   end
 
   def get_player_contrib_score(l2id : Int32) : Int32

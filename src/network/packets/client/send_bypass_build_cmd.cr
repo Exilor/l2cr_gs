@@ -287,8 +287,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   end
 
   private def toggle_champ_target
-    target = pc.try &.target
-    if target.is_a?(L2MonsterInstance)
+    if target = pc.target.as?(L2MonsterInstance)
       target.champion = !target.champion?
       target.send_info(pc)
     end
@@ -485,6 +484,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
 
     pc.broadcast_user_info
+    pc.send_packet(ItemList.new(pc, false))
 
     old_target = pc.target
     pc.target = pc

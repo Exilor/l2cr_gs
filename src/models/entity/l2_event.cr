@@ -13,6 +13,7 @@ module L2Event
   TEAMS = Concurrent::Map(Int32, Interfaces::Array(L2PcInstance)).new
   private REGISTERED_PLAYERS = Concurrent::Array(L2PcInstance).new
   private CONNECTION_LOSS_DATA = Concurrent::Map(L2PcInstance, PlayerEventHolder).new
+  private SPAWNS = Concurrent::Array(L2Spawn).new
 
   @@event_creator = ""
   @@event_info = ""
@@ -77,42 +78,41 @@ module L2Event
     end
   end
 
-  # Spawns an event participation NPC near the player. The npc id used to spawning is L2Event.@@npc_id
+  # Spawns an event participation NPC near the player.
   def spawn_event_npc(target : L2PcInstance)
-    begin
-      sp = L2Spawn.new(@@npc_id)
-      sp.x = target.x + 50
-      sp.y = target.y + 50
-      sp.z = target.z
-      sp.amount = 1
-      sp.heading = target.heading
-      sp.stop_respawn
-      SpawnTable.add_new_spawn(sp, false)
+    sp = L2Spawn.new(@@npc_id)
+    sp.x = target.x + 50
+    sp.y = target.y + 50
+    sp.z = target.z
+    sp.amount = 1
+    sp.heading = target.heading
+    sp.stop_respawn
+    SpawnTable.add_new_spawn(sp, false)
 
-      sp.init
-      sp.last_spawn.not_nil!.current_hp = 999999999
-      sp.last_spawn.not_nil!.title = @@event_name
-      sp.last_spawn.not_nil!.event_mob = true
+    sp.init
+    last_spawn = sp.last_spawn.not_nil!
+    last_spawn.current_hp = last_spawn.max_hp.to_f
+    last_spawn.title = @@event_name
+    last_spawn.event_mob = true
 
-      msu = MagicSkillUse.new(sp.last_spawn.not_nil!, sp.last_spawn.not_nil!, 1034, 1, 1, 1)
-      sp.last_spawn.not_nil!.broadcast_packet(msu)
-    rescue e
-      error e
-    end
+    msu = MagicSkillUse.new(last_spawn, last_spawn, 1034, 1, 1, 1)
+    last_spawn.broadcast_packet(msu)
+    SPAWNS << sp
+  rescue e
+    error e
   end
 
-  # TODO: Rewrite this in a way that doesn't iterate over all spawns.
   def unspawn_event_npcs
-    SpawnTable.each_spawn do |sp|
+    SPAWNS.each do |sp|
       npc = sp.last_spawn
       if npc && npc.event_mob?
         npc.delete_me
         sp.stop_respawn
         SpawnTable.delete_spawn(sp, false)
       end
-
-      true
     end
+
+    SPAWNS.clear
   end
 
   def participant?(pc : L2PcInstance) : Bool

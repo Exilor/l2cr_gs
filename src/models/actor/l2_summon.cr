@@ -21,7 +21,9 @@ abstract class L2Summon < L2Playable
   property owner : L2PcInstance
   property? restore_summon : Bool = true
 
-  def initialize(template : L2NpcTemplate, @owner : L2PcInstance)
+  def initialize(template : L2NpcTemplate, owner : L2PcInstance)
+    @owner = owner
+
     super(template)
 
     self.instance_id = owner.instance_id

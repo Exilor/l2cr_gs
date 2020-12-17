@@ -27,7 +27,7 @@ module AdminCommandHandler::AdminMammon
         if b = black_sp.npc_instance_list.first?
           pc.send_message("Blacksmith of Mammon: #{b.x} #{b.y} #{b.z}")
           if teleport_index == 1
-            pc.tele_to_location(b.location, true)
+            pc.tele_to_location(b, true)
           end
         end
       else
@@ -38,7 +38,7 @@ module AdminCommandHandler::AdminMammon
         if m = merch_sp.npc_instance_list.first?
           pc.send_message("Merchant of Mammon: #{m.x} #{m.y} #{m.z}")
           if teleport_index == 2
-            pc.tele_to_location(m.location, true)
+            pc.tele_to_location(m, true)
           end
         end
       else

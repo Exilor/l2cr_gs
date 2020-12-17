@@ -46,12 +46,16 @@ module PetDataTable
 
               each_element(s) do |b|
                 if parse_string(b, "name") == "speed_on_ride"
-                  add_from_node(b, set, "walkSpeedOnRide", "walk")
-                  add_from_node(b, set, "runSpeedOnRide", "run")
-                  add_from_node(b, set, "slowSwimSpeedOnRide", "slowSwim")
-                  add_from_node(b, set, "fastSwimSpeedOnRide", "fastSwim")
-                  add_from_node(b, set, "slowFlySpeedOnRide", "slowFly")
-                  add_from_node(b, set, "fastFlySpeedOnRide", "fastFly")
+                  set["walkSpeedOnRide"] = b["walk"]
+                  set["runSpeedOnRide"] = b["run"]
+                  set["slowSwimSpeedOnRide"] = b["slowSwim"]
+                  set["fastSwimSpeedOnRide"] = b["fastSwim"]
+                  if tmp = b["slowFly"]?
+                    set["slowFlySpeedOnRide"] = tmp
+                  end
+                  if tmp = b["fastFly"]?
+                    set["fastFlySpeedOnRide"] = tmp
+                  end
                 else
                   set[parse_string(b, "name")] = parse_string(b, "val")
                 end

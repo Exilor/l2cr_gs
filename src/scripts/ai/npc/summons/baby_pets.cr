@@ -16,23 +16,19 @@ class Scripts::BabyPets < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    # debug "on_adv_event(#{event}, #{npc}, #{pc})"
-    if event == "CAST_HEAL" && pc
-      pet = pc.summon.as?(L2PetInstance)
+    return super unless pc && pc.alive? && event == "HEAL"
 
-      if pet
-        if Rnd.rand(100) <= 25
-          sh = SkillHolder.new(HEAL_TRICK, get_heal_level(pet))
-          cast_heal_skill(pet, sh, 80)
+    if pet = pc.summon.as?(L2PetInstance)
+      if pet.alive? && !pet.hungry?
+        case pc.hp_percent
+        when ..15
+          cast_heal_skill(pet, SkillData[GREATER_HEAL_TRICK, get_heal_level(pet)])
+        when ..80
+          cast_heal_skill(pet, SkillData[HEAL_TRICK, get_heal_level(pet)])
         end
-
-        if Rnd.rand(100) <= 75
-          sh = SkillHolder.new(GREATER_HEAL_TRICK, get_heal_level(pet))
-          cast_heal_skill(pet, sh, 15)
-        end
-      else
-        cancel_quest_timer("CAST_HEAL", nil, pc)
       end
+    else
+      cancel_quest_timer("HEAL", nil, pc)
     end
 
     super
@@ -40,43 +36,30 @@ class Scripts::BabyPets < AbstractNpcAI
 
   @[Register(event: ON_PLAYER_LOGOUT, register: GLOBAL)]
   def on_player_logout(event : OnPlayerLogout)
-    cancel_quest_timer("CAST_HEAL", nil, event.active_char)
+    cancel_quest_timer("HEAL", nil, event.active_char)
   end
 
-  def on_summon_spawn(summon)
-    start_quest_timer("CAST_HEAL", 1000, nil, summon.owner, true)
+  def on_summon_spawn(pet)
+    start_quest_timer("HEAL", 1000, nil, pet.owner, true)
   end
 
-  private def cast_heal_skill(summon, skill, max_hp_per)
-    # debug "#{summon} casting #{skill.skill}."
-    owner = summon.owner
-    if owner.alive? && !summon.hungry?
-      if owner.hp_percent < max_hp_per
-        if summon.check_do_cast_conditions(skill.skill)
-          prev_follow_status = summon.follow_status
+  private def cast_heal_skill(pet, skill)
+    total_mp = pet.stat.get_mp_consume1(skill) + pet.stat.get_mp_consume2(skill)
+    if pet.current_mp < total_mp
+      return false
+    end
 
-          unless prev_follow_status
-            unless summon.inside_radius?(owner, skill.skill.cast_range, true, true)
-              return
-            end
-          end
-
-          summon.target = owner
-          summon.do_cast(skill.skill)
-          sm = SystemMessage.pet_uses_s1
-          sm.add_skill_name(skill.skill)
-          summon.send_packet(sm)
-
-          if prev_follow_status != summon.follow_status
-            summon.follow_status = prev_follow_status
-          end
-        end
-      end
+    if pet.check_do_cast_conditions(skill)
+      pet.target = pet.owner
+      pet.use_magic(skill, false, false)
+      sm = SystemMessage.pet_uses_s1
+      sm.add_skill_name(skill)
+      pet.send_packet(sm)
     end
   end
 
-  private def get_heal_level(summon)
-    lvl = summon.level
-    (lvl < 70 ? (lvl // 10) : (7 + ((lvl - 70) // 5))).clamp(1, 12)
+  private def get_heal_level(pet)
+    lvl = pet.level
+    (lvl < 70 ? (lvl // 10) : (7 &+ ((lvl &- 70) // 5))).clamp(1, 12)
   end
 end

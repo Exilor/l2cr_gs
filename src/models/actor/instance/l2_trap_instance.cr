@@ -33,7 +33,8 @@ class L2TrapInstance < L2Npc
     end
   end
 
-  def initialize(template : L2NpcTemplate, @owner : L2PcInstance, life_time : Int32)
+  def initialize(template : L2NpcTemplate, owner : L2PcInstance, life_time : Int32)
+    @owner = owner
     initialize(template, owner.instance_id, life_time)
   end
 

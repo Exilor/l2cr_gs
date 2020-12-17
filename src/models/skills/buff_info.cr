@@ -109,11 +109,7 @@ class BuffInfo
 
     remove_stats
 
-    @effects.each do |e|
-      unless e.instant?
-        e.on_exit(self)
-      end
-    end
+    @effects.each { |e| e.on_exit(self) unless e.instant? }
 
     remove_abnormal_visual_effects
     # This check is custom. Allocating a packet for something that doesn't have

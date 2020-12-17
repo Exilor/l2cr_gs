@@ -34,10 +34,10 @@ class Scripts::BloodyFamily < AbstractNpcAI
 
   def on_attack(npc, attacker, damage, is_summon)
     if npc.id.in?(FAMILY)
-      dist_spawn = npc.calculate_distance(npc.spawn.location, false, false)
+      dist_spawn = npc.calculate_distance(npc.spawn, false, false)
       if dist_spawn > 3000
         npc.disable_core_ai(true)
-        npc.tele_to_location(npc.spawn.location)
+        npc.tele_to_location(npc.spawn)
       else
         if dist_spawn > 500 && npc.in_combat? && !npc.casting_now? && Rnd.rand(100) < 1
           FAMILY.each do |npc_id|

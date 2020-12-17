@@ -62,28 +62,28 @@ class CharEffectList
   end
 
   private def each_with_list(& : BuffInfo, Interfaces::List(BuffInfo) ->) : Nil
-    @buffs.try     { |list| list.safe_each { |info| yield(info, list) } }
-    @triggered.try { |list| list.safe_each { |info| yield(info, list) } }
-    @dances.try    { |list| list.safe_each { |info| yield(info, list) } }
-    @toggles.try   { |list| list.safe_each { |info| yield(info, list) } }
-    @debuffs.try   { |list| list.safe_each { |info| yield(info, list) } }
+    @buffs.try     { |list| list.safe_each { |info| yield info, list } }
+    @triggered.try { |list| list.safe_each { |info| yield info, list } }
+    @dances.try    { |list| list.safe_each { |info| yield info, list } }
+    @toggles.try   { |list| list.safe_each { |info| yield info, list } }
+    @debuffs.try   { |list| list.safe_each { |info| yield info, list } }
   end
 
   def each(dances : Bool = true, & : BuffInfo ->) : Nil
-    @buffs.try     &.each { |info| yield(info) }
-    @triggered.try &.each { |info| yield(info) }
-    @dances.try    &.each { |info| yield(info) } if dances
-    @toggles.try   &.each { |info| yield(info) }
-    @debuffs.try   &.each { |info| yield(info) }
+    @buffs.try     &.each { |info| yield info }
+    @triggered.try &.each { |info| yield info }
+    @dances.try    &.each { |info| yield info } if dances
+    @toggles.try   &.each { |info| yield info }
+    @debuffs.try   &.each { |info| yield info }
   end
 
   def for_each(dances : Bool, & : BuffInfo -> Bool) : Nil
     update = false
-    @buffs.try     &.each { |info| update |= yield(info) }
-    @triggered.try &.each { |info| update |= yield(info) }
-    @dances.try    &.each { |info| update |= yield(info) } if dances
-    @toggles.try   &.each { |info| update |= yield(info) }
-    @debuffs.try   &.each { |info| update |= yield(info) }
+    @buffs.try     &.each { |info| update |= yield info }
+    @triggered.try &.each { |info| update |= yield info }
+    @dances.try    &.each { |info| update |= yield info } if dances
+    @toggles.try   &.each { |info| update |= yield info }
+    @debuffs.try   &.each { |info| update |= yield info }
     update_effect_list(update)
   end
 

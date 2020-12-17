@@ -2,9 +2,9 @@ module AutoSpawnHandler
   extend self
   extend Loggable
 
-  private DEFAULT_INITIAL_SPAWN = 30000 # 30 seconds after registration
-  private DEFAULT_RESPAWN = 3600000 # 1 hour
-  private DEFAULT_DESPAWN = 3600000 # 1 hour
+  private DEFAULT_INITIAL_SPAWN = 30_000 # 30 seconds after registration
+  private DEFAULT_RESPAWN = 3_600_000 # 1 hour
+  private DEFAULT_DESPAWN = 3_600_000 # 1 hour
 
   private REGISTERED_SPAWNS = Concurrent::Map(Int32, AutoSpawnInstance).new
   private RUNNING_SPAWNS = Concurrent::Map(Int32, TaskScheduler::Task).new

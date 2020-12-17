@@ -2,8 +2,11 @@ require "./inventory"
 
 class Condition
   class SlotItemId < Inventory
-    def initialize(slot : Int32, @item_id : Int32, @enchant_level : Int32)
+    def initialize(slot : Int32, item_id : Int32, enchant_level : Int32)
       super(slot)
+
+      @item_id = item_id
+      @enchant_level = enchant_level
     end
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool

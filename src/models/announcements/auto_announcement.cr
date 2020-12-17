@@ -11,8 +11,12 @@ class AutoAnnouncement < Announcement
   property delay : Int64
   property repeat : Int32 = -1
 
-  def initialize(@type : AnnouncementType, @content : String, @author : String, @initial : Int64, @delay : Int64, @repeat : Int32)
+  def initialize(type : AnnouncementType, content : String, author : String, initial : Int64, delay : Int64, repeat : Int32)
     super(type, content, author)
+
+    @initial = initial
+    @delay = delay
+    @repeat = repeat
     restart_me
   end
 

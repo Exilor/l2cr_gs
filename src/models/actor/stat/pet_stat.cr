@@ -83,7 +83,7 @@ class PetStat < SummonStat
   end
 
   def p_atk_spd : Float64
-    active_char.hungry? ? super.fdiv(2) : super.to_f
+    active_char.hungry? ? super / 2 : super
   end
 
   def m_atk_spd : Int32

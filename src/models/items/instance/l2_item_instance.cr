@@ -50,7 +50,7 @@ class L2ItemInstance < L2Object
     self.name = item.name
     self.count = 1
     @mana = item.duration
-    @time = item.time == -1 ? -1i64 : Time.ms + item.time * 60 * 1000
+    @time = item.time == -1 ? -1i64 : Time.ms + (item.time * 60 * 1000)
 
     schedule_life_time_task
   end
@@ -65,7 +65,7 @@ class L2ItemInstance < L2Object
     self.name = item.name
     self.count = 1
     @mana = item.duration
-    @time = item.time == -1 ? -1i64 : Time.ms + item.time * 60 * 1000
+    @time = item.time == -1 ? -1i64 : Time.ms + (item.time * 60 * 1000)
 
     schedule_life_time_task
   end
@@ -226,7 +226,8 @@ class L2ItemInstance < L2Object
   end
 
   def equippable? : Bool
-    !(@item.body_part == 0 || @item.item_type.in?(EtcItemType::ARROW, EtcItemType::BOLT, EtcItemType::LURE))
+    return false if @item.body_part == 0
+    !@item.item_type.in?(EtcItemType::ARROW, EtcItemType::BOLT, EtcItemType::LURE)
   end
 
   def equipped? : Bool
@@ -336,17 +337,48 @@ class L2ItemInstance < L2Object
     @item.pvp_item?
   end
 
+  # def available?(pc : L2PcInstance, allow_adena : Bool, allow_non_tradeable : Bool) : Bool
+  #   !equipped? &&
+  #   @item.type_2 != ItemType2::QUEST && # Not Quest Item
+  #   (@item.type_2 != ItemType2::MONEY || @item.type_1 != ItemType1::SHIELD_ARMOR) && # not money, not shield
+  #   # (!pc.has_summon? || @l2id != pc.summon.not_nil!.control_l2id) && # Not Control item of currently summoned pet
+  #   (smn = pc.summon; smn.nil? || @l2id != smn.control_l2id) && # Not Control item of currently summoned pet
+  #   pc.active_enchant_item_id != @l2id && # Not currently used enchant scroll
+  #   pc.active_enchant_support_item_id != @l2id && # Not currently used enchant support item
+  #   pc.active_enchant_attr_item_id != @l2id && # Not currently used enchant attribute item
+  #   (allow_adena || id != Inventory::ADENA_ID) && # Not Adena
+  #   # (!pc.current_skill || pc.current_skill.not_nil!.skill.item_consume_id != id) && (!pc.casting_simultaneously_now? || pc.last_simultaneous_skill_cast.nil? || pc.last_simultaneous_skill_cast.not_nil!.item_consume_id != id) &&
+  #   (current_skill = pc.current_skill; current_skill.nil? || current_skill.skill.item_consume_id != id) &&
+  #   (!pc.casting_simultaneously_now? || (cast = pc.last_simultaneous_skill_cast; cast.nil? || cast.item_consume_id != id)) &&
+  #   (allow_non_tradeable || (tradeable? && (!(@item.item_type == EtcItemType::PET_COLLAR && pc.has_pet_items?))))
+  # end
+
   def available?(pc : L2PcInstance, allow_adena : Bool, allow_non_tradeable : Bool) : Bool
-    !equipped? &&
-    @item.type_2 != ItemType2::QUEST && # Not Quest Item
-    (@item.type_2 != ItemType2::MONEY || @item.type_1 != ItemType1::SHIELD_ARMOR) && # not money, not shield
-    (!pc.has_summon? || @l2id != pc.summon.not_nil!.control_l2id) && # Not Control item of currently summoned pet
-    pc.active_enchant_item_id != @l2id && # Not currently used enchant scroll
-    pc.active_enchant_support_item_id != @l2id && # Not currently used enchant support item
-    pc.active_enchant_attr_item_id != @l2id && # Not currently used enchant attribute item
-    (allow_adena || id != Inventory::ADENA_ID) && # Not Adena
-    (!pc.current_skill || pc.current_skill.not_nil!.skill.item_consume_id != id) && (!pc.casting_simultaneously_now? || pc.last_simultaneous_skill_cast.nil? || pc.last_simultaneous_skill_cast.not_nil!.item_consume_id != id) &&
-    (allow_non_tradeable || (tradeable? && (!(@item.item_type == EtcItemType::PET_COLLAR && pc.has_pet_items?))))
+    return false if equipped?
+    return false if @item.type_2 == ItemType2::QUEST
+    return false if @item.type_2 == ItemType2::MONEY
+    return false if @item.type_1 == ItemType1::SHIELD_ARMOR
+    if smn = pc.summon
+      return false if smn.control_l2id == l2id
+    end
+    return false if pc.active_enchant_item_id == l2id
+    return false if pc.active_enchant_support_item_id == l2id
+    return false if pc.active_enchant_attr_item_id == l2id
+    return false if !allow_adena && id == Inventory::ADENA_ID
+    if holder = pc.current_skill
+      return false if holder.skill.item_consume_id == id
+    end
+    unless pc.casting_simultaneously_now?
+      if cast = pc.last_simultaneous_skill_cast
+        return false if cast.item_consume_id == id
+      end
+    end
+    return false if !allow_non_tradeable && !tradeable?
+    if @item.item_type == EtcItemType::PET_COLLAR && pc.has_pet_items?
+      return false
+    end
+
+    true
   end
 
   def enchant_level=(lvl : Int32)
@@ -550,32 +582,29 @@ class L2ItemInstance < L2Object
     end
   end
 
-  def self.restore_from_db(owner_id : Int32, db_item) # db_item : ResultSetReader
-    l2id = db_item.get_i32("object_id")
-    item_id = db_item.get_i32("item_id")
-    count = db_item.get_i64("count")
-    enchant_level = db_item.get_i32("enchant_level")
-    loc = ItemLocation.parse(db_item.get_string("loc"))
-    loc_data = db_item.get_i32("loc_data")
-    type_1 = db_item.get_i32("custom_type1")
-    type_2 = db_item.get_i32("custom_type2")
-    mana_left = db_item.get_i32("mana_left")
-    time = db_item.get_i64("time")
+  def self.restore_from_db(owner_id : Int32, rs : ResultSetReader)
+    l2id = rs.get_i32(:"object_id")
+    item_id = rs.get_i32(:"item_id")
+    count = rs.get_i64(:"count")
+    enchant_level = rs.get_i32(:"enchant_level")
+    loc = ItemLocation.parse(rs.get_string(:"loc"))
+    loc_data = rs.get_i32(:"loc_data")
+    type_1 = rs.get_i32(:"custom_type1")
+    type_2 = rs.get_i32(:"custom_type2")
+    mana_left = rs.get_i32(:"mana_left")
+    time = rs.get_i64(:"time")
 
     item = ItemTable[item_id]
 
     inst = new(l2id, item)
     inst.count = count
-    inst._owner_id = owner_id
-    inst._enchant_level = enchant_level
     inst.custom_type_1 = type_1
     inst.custom_type_2 = type_2
     inst.exists_in_db = true
     inst.stored_in_db = true
     inst.loc = loc
     inst.loc_data = loc_data
-    inst._mana = mana_left
-    inst._time = time
+    inst.set_attrs_from_db(owner_id, enchant_level, mana_left, time)
 
     if inst.equippable?
       inst.restore_attributes
@@ -584,16 +613,11 @@ class L2ItemInstance < L2Object
     inst
   end
 
-  protected def _owner_id=(@owner_id)
-  end
-
-  protected def _enchant_level=(@enchant_level)
-  end
-
-  protected def _mana=(@mana)
-  end
-
-  protected def _time=(@time)
+  protected def set_attrs_from_db(owner_id, enchant_level, mana_left, time)
+    @owner_id = owner_id
+    @enchant_level = enchant_level
+    @mana = mana_left
+    @time = time
   end
 
   def delete_me
@@ -620,7 +644,6 @@ class L2ItemInstance < L2Object
   end
 
   class ItemDropTask
-
     initializer item : L2ItemInstance, dropper : L2Character?, x : Int32,
       y : Int32, z : Int32
 
@@ -636,7 +659,7 @@ class L2ItemInstance < L2Object
       @item.sync do
         @item.visible = true
         @item.set_xyz(@x, @y, @z)
-        @item.world_region = L2World.get_region(@item.location)
+        @item.world_region = L2World.get_region(@item)
       end
 
       @item.world_region.not_nil!.add_visible_object(@item)
@@ -706,7 +729,7 @@ class L2ItemInstance < L2Object
 
   def has_passive_skills? : Bool
     item_type == EtcItemType::RUNE && item_location.inventory? &&
-    owner_id > 0 && @item.has_skills?
+      owner_id > 0 && @item.has_skills?
   end
 
   def give_skills_to_owner
@@ -948,7 +971,7 @@ class L2ItemInstance < L2Object
     return unless shadow_item?
 
     if @mana - count >= 0
-      @mana -= count
+      @mana &-= count
     else
       @mana = 0
     end

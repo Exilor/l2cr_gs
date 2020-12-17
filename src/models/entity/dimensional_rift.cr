@@ -46,7 +46,7 @@ class DimensionalRift
     create_teleporter_timer(true)
   end
 
-  protected def create_teleporter_timer(reason : Bool)
+  private def create_teleporter_timer(reason : Bool)
     if temp = @teleport_timer_task
       temp.cancel
       @teleport_timer_task = nil
@@ -189,7 +189,7 @@ class DimensionalRift
     kill_rift
   end
 
-  protected def teleport_to_next_room(pc : L2PcInstance)
+  private def teleport_to_next_room(pc : L2PcInstance)
     if @current_room == -1
       empty_rooms = DimensionalRiftManager.get_free_rooms(@type)
       empty_rooms -= @completed_rooms
@@ -204,7 +204,7 @@ class DimensionalRift
     pc.tele_to_location(get_room_coord(@current_room))
   end
 
-  protected def teleport_to_waiting_room(pc : L2PcInstance)
+  private def teleport_to_waiting_room(pc : L2PcInstance)
     DimensionalRiftManager.teleport_to_waiting_room(pc)
     if quest = QuestManager.get_quest(635)
       if qs = pc.get_quest_state(quest.name)

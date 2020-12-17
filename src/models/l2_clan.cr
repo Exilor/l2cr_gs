@@ -843,7 +843,9 @@ class L2Clan
     getter_initializer rank : Int32, party : Int32,
       privs : EnumBitmask(ClanPrivilege)
 
-    def initialize(@rank : Int32, @party : Int32, privs : Int32)
+    def initialize(rank : Int32, party : Int32, privs : Int32)
+      @rank = rank
+      @party = party
       @privs = EnumBitmask(ClanPrivilege).new(privs)
     end
 

@@ -1,6 +1,7 @@
 class Condition
   class LogicNot < Condition
-    def initialize(@condition : Condition)
+    def initialize(condition : Condition)
+      @condition = condition
       if listener
         condition.listener = self
       end

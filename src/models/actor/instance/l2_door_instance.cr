@@ -126,7 +126,7 @@ class L2DoorInstance < L2Character
     true
   end
 
-  protected def start_timer_open
+  private def start_timer_open
     delay = @open ? template.open_time : template.close_time
     if template.random_time > 0
       delay += Rnd.rand(template.random_time)
@@ -243,7 +243,7 @@ class L2DoorInstance < L2Character
     known_players.each_value do |pc|
       next unless visible_for?(pc)
 
-      if pc.gm? || ((castle && castle.residence_id > 0) || (fort && fort.residence_id > 0))
+      if pc.gm? || (castle && castle.residence_id > 0) || (fort && fort.residence_id > 0)
         pc.send_packet(tsu)
       else
         pc.send_packet(su)
@@ -281,7 +281,7 @@ class L2DoorInstance < L2Character
     end
   end
 
-  protected def manage_group_open(open, group_name)
+  private def manage_group_open(open, group_name)
     first = nil
 
     DoorData.get_doors_by_group(group_name).try &.each do |id|
@@ -422,11 +422,7 @@ class L2DoorInstance < L2Character
   end
 
   def castle : Castle
-    unless castle = castle?
-      raise "Castle for this door not found"
-    end
-
-    castle
+    castle? || raise("Castle for door id #{id}, l2id #{l2id} not found")
   end
 
   def fort? : Fort?
@@ -442,11 +438,7 @@ class L2DoorInstance < L2Character
   end
 
   def fort : Fort
-    unless fort = fort?
-      raise "Fort for this door not found"
-    end
-
-    fort
+    fort? || raise("Fort for door id: #{id}, l2id: #{l2id} not found")
   end
 
   private def get_sibling_door(door_id : Int32) : self?

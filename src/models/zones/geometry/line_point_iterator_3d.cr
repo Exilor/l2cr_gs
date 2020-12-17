@@ -10,7 +10,13 @@ struct LinePointIterator3D
 
   getter x, y, z
 
-  def initialize(@x : Int32, @y : Int32, @z : Int32, @dst_x : Int32, @dst_y : Int32, @dst_z : Int32)
+  def initialize(x : Int32, y : Int32, z : Int32, dst_x : Int32, dst_y : Int32, dst_z : Int32)
+    @x = x
+    @y = y
+    @z = z
+    @dst_x = dst_x
+    @dst_y = dst_y
+    @dst_z = dst_z
     @dx = (dst_x - x).abs.to_i64
     @dy = (dst_y - y).abs.to_i64
     @dz = (dst_z - z).abs.to_i64

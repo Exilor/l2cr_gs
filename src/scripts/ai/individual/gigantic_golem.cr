@@ -163,9 +163,9 @@ class Scripts::GiganticGolem < AbstractNpcAI
         start_quest_timer("FLAG", 3_600_00, npc, nil)
       end
 
-      if npc.calculate_distance(npc.spawn.location, false, false) > MAX_CHASE_DIST
+      if npc.calculate_distance(npc.spawn, false, false) > MAX_CHASE_DIST
         npc.disable_core_ai(true)
-        npc.tele_to_location(npc.spawn.location)
+        npc.tele_to_location(npc.spawn)
       end
     end
 

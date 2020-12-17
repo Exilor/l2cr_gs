@@ -373,10 +373,6 @@ abstract class AbstractScript
   end
 
   def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder), limit : Int) : Bool
-    # result = false
-    # items.each { |item| result |= give_items(pc, item, limit) }
-    # result
-
     items.reduce(false) { |item, result| result | give_items(pc, item, limit) }
   end
 
@@ -432,7 +428,12 @@ abstract class AbstractScript
   end
 
   def self.get_quest_items_count(pc : L2PcInstance, item_id : Indexable(Int32)) : Int64
-    if item_id.size > 1
+    case item_id.size
+    when 0
+      0i64
+    when 1
+      pc.inventory.get_inventory_item_count(item_id.unsafe_fetch(0), -1).to_i64
+    else
       count = 0u64
 
       pc.inventory.items.each do |item|
@@ -447,8 +448,6 @@ abstract class AbstractScript
       end
 
       count.to_i64!
-    else
-      pc.inventory.get_inventory_item_count(item_id.unsafe_fetch(1), -1).to_i64
     end
   end
 
@@ -824,12 +823,12 @@ abstract class AbstractScript
     if random_offset
       offset = Rnd.rand(50..100)
       if Rnd.bool
-        offset &*= -1
+        offset = -offset
       end
       x += offset
       offset = Rnd.rand(50..100)
       if Rnd.bool
-        offset &*= -1
+        offset = -offset
       end
       y += offset
     end

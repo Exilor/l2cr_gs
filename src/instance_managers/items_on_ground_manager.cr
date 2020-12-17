@@ -62,7 +62,7 @@ module ItemsOnGroundManager
       end
 
       item.set_xyz(x, y, z)
-      item.world_region = L2World.get_region(item.location)
+      item.world_region = L2World.get_region(item)
       item.world_region.not_nil!.add_visible_object(item)
       item.drop_time = drop_time
       item.protected = drop_time == -1

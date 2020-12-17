@@ -481,7 +481,7 @@ class L2Attackable < L2Npc
       end
     end
 
-    if attack_by_list.includes?(second_most_hated)
+    if second_most_hated && attack_by_list.includes?(second_most_hated)
       {most_hated, second_most_hated}
     else
       {most_hated, nil}
@@ -792,8 +792,7 @@ class L2Attackable < L2Npc
   end
 
   def has_random_animation? : Bool
-    Config.max_monster_animation > 0 &&
-      random_animation_enabled? &&
+    Config.max_monster_animation > 0 && random_animation_enabled? &&
       !is_a?(L2GrandBossInstance)
   end
 

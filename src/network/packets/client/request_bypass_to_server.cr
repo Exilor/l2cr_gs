@@ -103,8 +103,6 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
           id = @command.from(4)
         end
 
-        debug id
-
         if id.number?
           object = L2World.find_object(id.to_i)
           if object.is_a?(L2Npc) && end_of_id > 0

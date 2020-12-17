@@ -182,9 +182,7 @@ module IdFactory
   private def clean_up_timestamps
     time = Time.ms
     GameDB.transaction do |tr|
-      TIMESTAMPS_CLEAN.each do |sql|
-        tr.exec(sql, time)
-      end
+      TIMESTAMPS_CLEAN.each { |sql| tr.exec(sql, time) }
     end
   rescue e
     error e

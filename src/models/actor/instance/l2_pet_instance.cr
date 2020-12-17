@@ -752,4 +752,12 @@ class L2PetInstance < L2Summon
   def sin_eater? : Bool
     id == 12564
   end
+
+  def switch_mode
+    if affected_by_skill?(5771)
+      stop_skill_effects(true, 5771)
+    else
+      use_magic(SkillData[5771, 1], false, false)
+    end
+  end
 end

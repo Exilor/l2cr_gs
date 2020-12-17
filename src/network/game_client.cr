@@ -139,7 +139,6 @@ class GameClient
       error e
     end
 
-
     if answer == 0
       if Config.delete_days == 0
         GameClient.delete_char_by_l2id(id)
@@ -392,10 +391,9 @@ class GameClient
 
   def clean_me(fast : Bool)
     sync do
-      unless @cleanup_task
-        delay = fast ? 5 : 1500
-        @cleanup_task = ThreadPoolManager.schedule_general(->cleanup_task, delay)
-      end
+      @cleanup_task ||= ThreadPoolManager.schedule_general(
+        ->cleanup_task, delay = fast ? 5 : 1500
+      )
     end
   end
 

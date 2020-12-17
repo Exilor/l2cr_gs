@@ -1,7 +1,8 @@
 class Packets::Outgoing::ExReplySentPost < Packets::Outgoing::AbstractItemPacket
   @items : Interfaces::Array(L2ItemInstance)?
 
-  def initialize(@msg : Message)
+  def initialize(msg : Message)
+    @msg = msg
     if msg.has_attachments?
       attachments = msg.attachments!
       if attachments && attachments.size > 0

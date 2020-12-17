@@ -46,7 +46,7 @@ class SummonStatus < PlayableStatus
     elsif caster && caster == sum.owner
       if Util.in_range?(1000, sum, caster, true) && caster.alive?
         t_dmg = sum.calc_stat(Stats::TRANSFER_DAMAGE_TO_PLAYER, 0)
-        t_dmg = (value * t_dmg) / 100
+        t_dmg = value * t_dmg / 100
         t_dmg = Math.min(caster.current_hp - 1, t_dmg)
         if t_dmg > 0
           if attacker.playable? && caster.current_cp > 0

@@ -49,7 +49,7 @@ class Scripts::Quarry < AbstractNpcAI
           npc.set_intention(AI::ACTIVE)
           npc.auto_attackable = false
           npc.r_hand_id = 0
-          npc.tele_to_location(npc.spawn.location)
+          npc.tele_to_location(npc.spawn)
           return
         end
       end

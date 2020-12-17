@@ -14,6 +14,7 @@ class L2PlayerAI < L2PlayableAI
       if !intention.cast? || (arg0.is_a?(Skill) && !arg0.toggle?)
         @next_intention = nil
         super
+
         return
       end
 

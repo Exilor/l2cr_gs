@@ -119,7 +119,7 @@ module AdminCommandHandler::AdminEventEngine
 
           L2Event::TEAMS[team_id].each do |player|
             player.title = L2Event::TEAM_NAMES[team_id]
-            player.tele_to_location(pc.location, true)
+            player.tele_to_location(pc, true)
             player.instance_id = pc.instance_id
           end
         end
@@ -167,7 +167,7 @@ module AdminCommandHandler::AdminEventEngine
 
         L2Event::TEAMS[team_id].each do |player|
           player.poly.set_poly_info("npc", poly_ids.sample)
-          player.tele_to_location(player.location, true)
+          player.tele_to_location(player, true)
           info1 = CharInfo.new(player)
           player.broadcast_packet(info1)
           info2 = UserInfo.new(player)

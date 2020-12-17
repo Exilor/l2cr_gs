@@ -3047,7 +3047,7 @@ class L2PcInstance < L2Playable
 
   def send_info(pc : L2PcInstance)
     if boat = boat()
-      set_xyz(boat.location)
+      set_xyz(boat)
 
       pc.send_packet(CharInfo.new(self))
       pc.send_packet(ExBrExtraUserInfo.new(self))
@@ -3077,7 +3077,7 @@ class L2PcInstance < L2Playable
       gov = GetOnVehicle.new(l2id, boat.l2id, in_vehicle_position.not_nil!)
       pc.send_packet(gov)
     elsif airship = airship()
-      set_xyz(airship.location)
+      set_xyz(airship)
 
       pc.send_packet(CharInfo.new(self))
       pc.send_packet(ExBrExtraUserInfo.new(self))

@@ -381,7 +381,7 @@ module NpcData
           if item.is_a?(GeneralDropItem)
             items << item
           else
-            warn { "Grouped general drop item supports only general drop item (#{item.class})." }
+            warn { "Grouped general drop item supports only general drop item , not #{item.class}." }
           end
         end
         drop_item.items = items
@@ -481,6 +481,16 @@ module NpcData
           @minions[id] = minions
         end
       end
+    end
+  end
+
+  private def add_from_node(node, map, map_key)
+    add_from_node(node, map, map_key, map_key)
+  end
+
+  private def add_from_node(node, map, map_key, node_key)
+    if val = node[node_key]?
+      map[map_key] = val
     end
   end
 end

@@ -1,5 +1,8 @@
 struct NextAction
-  def initialize(@event : AI::Event, @intention : AI::Intention, &@callback : ->)
+  def initialize(event : AI::Event, intention : AI::Intention, &callback : ->)
+    @event = event
+    @intention = intention
+    @callback = callback
   end
 
   def event?(event : AI::Event) : Bool

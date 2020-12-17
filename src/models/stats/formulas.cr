@@ -410,9 +410,11 @@ module Formulas
         sm.add_skill_name(skill)
         attacker.send_packet(sm)
       end
+
       if (attacker.acting_player || target.acting_player).try &.gm?
         debug { "Failed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
       end
+
       return false
     end
     if (attacker.acting_player || target.acting_player).try &.gm?
@@ -549,6 +551,7 @@ module Formulas
         proximity_bonus = 1.1
       end
     end
+
     damage = attacker.get_p_atk(target)
     ss_boost = ss ? 2 : 1
 
@@ -832,10 +835,10 @@ module Formulas
         attacker.send_packet(sm)
       end
 
-      counter_dmg = ((target.get_p_atk(attacker) * 10.0) * 70.0) / attacker.get_p_def(target)
-      counter_dmg *= weapon_trait_bonus attacker, target
-      counter_dmg *= general_trait_bonus attacker, target, skill.trait_type, false
-      counter_dmg *= attribute_bonus attacker, target, skill
+      counter_dmg = ((target.get_p_atk(attacker) * 10.0) * 70) / attacker.get_p_def(target)
+      counter_dmg *= weapon_trait_bonus(attacker, target)
+      counter_dmg *= general_trait_bonus(attacker, target, skill.trait_type, false)
+      counter_dmg *= attribute_bonus(attacker, target, skill)
 
       attacker.reduce_current_hp(counter_dmg, target, skill)
 

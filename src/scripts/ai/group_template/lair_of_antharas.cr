@@ -19,7 +19,7 @@ class Scripts::LairOfAntharas < AbstractNpcAI
 
   def on_adv_event(event, npc, pc)
     if event == "CHECK_HOME" && npc && npc.alive?
-      if npc.calculate_distance(npc.spawn.location, false, false) > 10 && !npc.in_combat?
+      if npc.calculate_distance(npc.spawn, false, false) > 10 && !npc.in_combat?
         npc.as(L2Attackable).return_home
       elsif npc.heading != npc.spawn.heading && !npc.in_combat?
         npc.heading = npc.spawn.heading

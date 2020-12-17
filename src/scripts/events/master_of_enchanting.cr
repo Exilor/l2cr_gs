@@ -5,11 +5,11 @@ class Scripts::MasterOfEnchanting < LongTimeEvent
   private MASTER_YOGI_STAFF = 13539
   private MASTER_YOGI_SCROLL = 13540
   # Misc
-  private STAFF_PRICE = 1000000
-  private SCROLL_24_PRICE = 5000000
+  private STAFF_PRICE = 1_000_000
+  private SCROLL_24_PRICE = 5_000_000
   private SCROLL_24_TIME = 6
-  private SCROLL_1_PRICE = 500000
-  private SCROLL_10_PRICE = 5000000
+  private SCROLL_1_PRICE = 500_000
+  private SCROLL_10_PRICE = 5_000_000
 
   private HAT_SHADOW_REWARD = {
     13074,

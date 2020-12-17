@@ -2,8 +2,9 @@ require "./inventory"
 
 class Condition
   class SlotItemType < Inventory
-    def initialize(slot : Int32, @mask : Int32)
+    def initialize(slot : Int32, mask : Int32)
       super(slot)
+      @mask = mask
     end
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool

@@ -23,13 +23,15 @@ class Scripts::WildBeastReserve < FlagWar
     @inner_doors_to_open[0] = 21150001
     @inner_doors_to_open[1] = 21150002
 
-    @flag_coords << Location.new(56963, -92211, -1303, 60611)
-    @flag_coords << Location.new(58090, -91641, -1303, 47274)
-    @flag_coords << Location.new(58908, -92556, -1303, 34450)
-    @flag_coords << Location.new(58336, -93600, -1303, 21100)
-    @flag_coords << Location.new(57152, -93360, -1303, 8400)
-    @flag_coords << Location.new(59116, -93251, -1302, 31000)
-    @flag_coords << Location.new(56432, -92864, -1303, 64000)
+    @flag_coords.push(
+      Location.new(56963, -92211, -1303, 60611),
+      Location.new(58090, -91641, -1303, 47274),
+      Location.new(58908, -92556, -1303, 34450),
+      Location.new(58336, -93600, -1303, 21100),
+      Location.new(57152, -93360, -1303, 8400),
+      Location.new(59116, -93251, -1302, 31000),
+      Location.new(56432, -92864, -1303, 64000)
+    )
 
     ZoneManager.get_all_zones(L2ResidenceHallTeleportZone) do |tele_zone|
       if tele_zone.residence_id != BEAST_FARM

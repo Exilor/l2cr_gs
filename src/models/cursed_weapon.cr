@@ -395,9 +395,9 @@ class CursedWeapon
 
   def go_to(pc : L2PcInstance)
     if @activated && @player
-      pc.tele_to_location(player.location, true)
+      pc.tele_to_location(player, true)
     elsif @dropped && @item
-      pc.tele_to_location(item.location, true)
+      pc.tele_to_location(item, true)
     else
       pc.send_message(@name + " not found in the world.")
     end

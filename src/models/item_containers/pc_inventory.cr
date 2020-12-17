@@ -80,23 +80,23 @@ class PcInventory < Inventory
     list
   end
 
-  def get_all_items_by_item_id(item_id : Int) : Array(L2ItemInstance)
+  def get_all_items_by_item_id(item_id : Int32) : Array(L2ItemInstance)
     get_all_items_by_item_id(item_id, true)
   end
 
-  def get_all_items_by_item_id(item_id : Int, include_equipped : Bool) : Array(L2ItemInstance)
+  def get_all_items_by_item_id(item_id : Int32, include_equipped : Bool) : Array(L2ItemInstance)
     @items.select { |i| i.id == item_id && (include_equipped || !i.equipped?) }
   end
 
-  def get_all_items_by_item_id(item_id : Int, enchant : Int) : Array(L2ItemInstance)
+  def get_all_items_by_item_id(item_id : Int32, enchant : Int32) : Array(L2ItemInstance)
     get_all_items_by_item_id(item_id, enchant, true)
   end
 
-  def get_all_items_by_item_id(item_id : Int, enchant : Int, include_equipped : Bool) : Array(L2ItemInstance)
+  def get_all_items_by_item_id(item_id : Int32, enchant : Int32, include_equipped : Bool) : Array(L2ItemInstance)
     @items.select do |item|
       item.id == item_id &&
-      item.enchant_level == enchant &&
-      (include_equipped || !item.equipped?)
+        item.enchant_level == enchant &&
+        (include_equipped || !item.equipped?)
     end
   end
 
@@ -312,7 +312,7 @@ class PcInventory < Inventory
     item
   end
 
-  def drop_item(process : String?, id : Int, count : Int, actor : L2PcInstance, reference) : L2ItemInstance?
+  def drop_item(process : String?, id : Int32, count : Int64, actor : L2PcInstance, reference) : L2ItemInstance?
     item = super
 
     if (a = @adena) && (a.count <= 0 || a.owner_id != owner_id)
@@ -441,7 +441,9 @@ class PcInventory < Inventory
     @total_weight + weight <= owner.max_load
   end
 
-  def set_inventory_block(@block_items : Array(Int32), @block_mode : Int32)
+  def set_inventory_block(block_items : Array(Int32), block_mode : Int32)
+    @block_items = block_items
+    @block_mode = block_mode
     owner.send_packet(ItemList.new(owner, false))
   end
 
@@ -460,7 +462,7 @@ class PcInventory < Inventory
     set_inventory_block(Array.new(ItemTable.array_size &+ 2, 0), 1)
   end
 
-  def can_manipulate_with_item_id?(id : Int) : Bool
+  def can_manipulate_with_item_id?(id : Int32) : Bool
     return true unless b = @block_items
     !(@block_mode == 0 && b.includes?(id) || @block_mode == 1 && !b.includes?(id))
   end

@@ -322,6 +322,8 @@ abstract class AI
       return
     end
 
+    was_moving = @actor.moving? # custom for mobs moving invisibly after UD expires
+
     @actor.move_to_location(*pawn.xyz, offset)
 
     unless @actor.moving?
@@ -333,7 +335,8 @@ abstract class AI
       if @actor.on_geodata_path?
         @actor.broadcast_packet(MoveToLocation.new(@actor))
         @client_moving_to_pawn_offset = 0
-      elsif send_packet
+      # elsif send_packet
+      elsif !was_moving || send_packet # custom for mobs moving invisibly after UD expires
         @actor.broadcast_packet(MoveToPawn.new(@actor, pawn, offset))
       end
     else

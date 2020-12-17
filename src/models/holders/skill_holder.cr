@@ -17,4 +17,8 @@ class SkillHolder
   def skill? : Skill?
     SkillData[@skill_id, Math.max(@skill_lvl, 1)]?
   end
+
+  def get_skill(level : Int32) : Skill?
+    SkillData[@skill_id, Math.max(level, 1)]?
+  end
 end

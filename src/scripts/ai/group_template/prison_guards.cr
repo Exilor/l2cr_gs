@@ -24,9 +24,9 @@ class Scripts::PrisonGuards < AbstractNpcAI
       npc.not_nil!.script_value = 0
     elsif event == "CHECK_HOME"
       npc = npc.not_nil!
-      if npc.calculate_distance(npc.spawn.location, false, false) > 10
+      if npc.calculate_distance(npc.spawn, false, false) > 10
         if !npc.in_combat? && npc.alive?
-          npc.tele_to_location(npc.spawn.location)
+          npc.tele_to_location(npc.spawn)
         end
       end
       start_quest_timer("CHECK_HOME", 30_000, npc, nil)
@@ -52,7 +52,7 @@ class Scripts::PrisonGuards < AbstractNpcAI
       end
     else
       unless pc.affected_by_skill?(TIMER)
-        if npc.calculate_distance(npc.spawn.location, false, false) < 2000
+        if npc.calculate_distance(npc.spawn, false, false) < 2000
           npc.target = pc
           npc.do_cast(STONE)
           broadcast_npc_say(npc, Say2::ALL, NpcString::YOURE_OUT_OF_YOUR_MIND_COMING_HERE)

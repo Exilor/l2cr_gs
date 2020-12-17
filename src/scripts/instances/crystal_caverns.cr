@@ -594,7 +594,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     player.abort_cast
     player.break_attack
     player.break_cast
-    player.set_intention(AI::IDLE)
+    player.intention = AI::IDLE
 
     if pet = player.summon
       pet.target = nil
@@ -602,7 +602,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       pet.abort_cast
       pet.break_attack
       pet.break_cast
-      pet.set_intention(AI::IDLE)
+      pet.intention = AI::IDLE
     end
   end
 
@@ -942,7 +942,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         cancel_quest_timer("baylor_despawn", npc, nil)
         cancel_quest_timers("baylor_skill")
       elsif event.casecmp?("baylorEffect0")
-        npc.set_intention(AI::IDLE)
+        npc.intention = AI::IDLE
         npc.broadcast_social_action(1)
         start_quest_timer("baylorCamera0", 11000, npc, nil)
         start_quest_timer("baylorEffect1", 19000, npc, nil)
@@ -962,7 +962,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           x = (radius * Math.cos(i * 0.618)).to_i
           y = (radius * Math.sin(i * 0.618)).to_i
           mob = add_spawn(29104, 153571 + x, 142075 + y, -12737, 0, false, 0, false, world.instance_id)
-          mob.set_intention(AI::IDLE)
+          mob.intention = AI::IDLE
           world.animation_mobs << mob
         end
         start_quest_timer("baylorEffect0", 200, npc, nil)

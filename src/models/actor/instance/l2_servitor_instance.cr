@@ -79,7 +79,6 @@ class L2ServitorInstance < L2Summon
 
   def restore_effects
     return if owner.in_olympiad_mode?
-
     GameDB.servitor_skill_save.load(self)
     SummonEffectsTable.apply_servitor_effects(self, owner, reference_skill)
   end

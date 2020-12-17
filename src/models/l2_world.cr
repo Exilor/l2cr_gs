@@ -76,7 +76,7 @@ module L2World
     WORLD_REGIONS
   end
 
-  def get_region(loc : Location) : L2WorldRegion
+  def get_region(loc) : L2WorldRegion
     get_region(loc.x, loc.y)
   end
 

@@ -7,7 +7,7 @@ class Scripts::LoveYourGatekeeper < LongTimeEvent
   private TELEPORTER_TRANSFORM = SkillHolder.new(5655)
   # Misc
   private HOURS = 24
-  private PRICE = 10000
+  private PRICE = 10_000
   private REUSE = simple_name + "_reuse"
 
   def initialize

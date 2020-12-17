@@ -24,14 +24,12 @@ module AttackStances
   end
 
   def delete(char : L2Character)
-    char = char.acting_player if char.summon?
-    TASKS.delete(char)
+    TASKS.delete(char.summon? ? char.acting_player : char)
   end
 
   def includes?(char : L2Character?) : Bool
     return false unless char
-    char = char.acting_player if char.summon?
-    TASKS.has_key?(char)
+    TASKS.has_key?(char.summon? ? char.acting_player : char)
   end
 
   def call

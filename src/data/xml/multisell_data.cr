@@ -63,8 +63,7 @@ module MultisellData
   private def parse_entry(n, entry_id, list)
     entry = Entry.new(entry_id)
 
-    first = get_first_element_child(n)
-    n = first
+    n = get_first_element_child(n)
 
     while n
       case get_node_name(n).casecmp
@@ -92,7 +91,7 @@ module MultisellData
       return
     end
 
-    if (npc && !template.npc_allowed?(npc.id)) || (!npc && template.npc_only?)
+    if (npc && !template.npc_allowed?(npc.id)) || (npc.nil? && template.npc_only?)
       warn { "#{pc} tried to open multisell from #{npc} which isn't allowed." }
       return
     end

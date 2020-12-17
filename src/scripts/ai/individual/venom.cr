@@ -257,7 +257,7 @@ class Scripts::Venom < AbstractNpcAI
     if pc && pc.alive?
       rnd = Rnd.rand(11)
       pc.tele_to_location(TARGET_TELEPORTS[rnd], TARGET_TELEPORTS_OFFSET[rnd])
-      pc.set_intention(AI::IDLE)
+      pc.intention = AI::IDLE
     end
   end
 

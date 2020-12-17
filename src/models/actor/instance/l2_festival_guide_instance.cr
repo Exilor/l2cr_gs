@@ -35,7 +35,6 @@ class L2FestivalGuideInstance < L2Npc
       @blue_stones_needed = 6000
       @green_stones_needed = 3600
       @red_stones_needed = 1800
-
     when 31137, 31142
       @festival_type = SevenSignsFestival::FESTIVAL_LEVEL_MAX_31
       @festival_oracle = SevenSigns::CABAL_DUSK

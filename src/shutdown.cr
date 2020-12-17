@@ -204,7 +204,7 @@ class Shutdown
     warn e
   end
 
-  protected def save_data
+  private def save_data
     case @shutdown_mode
     when SIGTERM
       info "SIGTERM received. Shutting down now."
@@ -292,7 +292,7 @@ class Shutdown
     end
   end
 
-  protected def disconnect_all_characters
+  private def disconnect_all_characters
     L2World.players.each do |pc|
       begin
         client = pc.client

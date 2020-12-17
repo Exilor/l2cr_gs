@@ -1,10 +1,13 @@
 class L2OlympiadManagerInstance < L2Npc
   def show_chat_window(pc : L2PcInstance, val : Int32, suffix : String?)
-    file_name = Olympiad::OLYMPIAD_HTML_PATH
-    file_name += "noble_desc#{val}"
-    file_name += (suffix ? suffix + ".htm" : ".htm")
-    if file_name == Olympiad::OLYMPIAD_HTML_PATH + "noble_desc0.htm"
-      file_name = Olympiad::OLYMPIAD_HTML_PATH + "noble_main.htm"
+    if suffix && !suffix.empty?
+      file_name = "#{Olympiad::OLYMPIAD_HTML_PATH}noble_desc#{val}#{suffix}.htm"
+    else
+      if val == 0
+        file_name = Olympiad::OLYMPIAD_HTML_PATH + "noble_main.htm"
+      else
+        file_name = "#{Olympiad::OLYMPIAD_HTML_PATH}noble_desc#{val}.htm"
+      end
     end
 
     show_chat_window(pc, file_name)

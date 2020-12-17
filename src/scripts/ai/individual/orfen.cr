@@ -131,7 +131,7 @@ class Scripts::Orfen < AbstractNpcAI
       npc = npc.not_nil!
       MINIONS.each do |mob|
         unless npc.inside_radius?(mob, 3000, false, false)
-          mob.tele_to_location(npc.location)
+          mob.tele_to_location(npc)
           npc.as(L2Attackable).clear_aggro_list
           npc.intention = AI::IDLE
         end
@@ -156,7 +156,7 @@ class Scripts::Orfen < AbstractNpcAI
         say = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, TEXT.sample)
         say.add_string_parameter(caster.name)
         npc.broadcast_packet(say)
-        original_caster.tele_to_location(npc.location)
+        original_caster.tele_to_location(npc)
         npc.target = original_caster
         npc.do_cast(PARALYSIS)
       end
@@ -202,7 +202,7 @@ class Scripts::Orfen < AbstractNpcAI
           say = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc_id, TEXT.sample)
           say.add_string_parameter(attacker.name)
           npc.broadcast_packet(say)
-          attacker.tele_to_location(npc.location)
+          attacker.tele_to_location(npc)
           npc.target = attacker
           npc.do_cast(PARALYSIS)
         end

@@ -109,7 +109,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
           if st.empty?
             return
           end
-          val_buy = st.shift.to_i + (fn.lvl * 100000)
+          val_buy = st.shift.to_i + (fn.lvl * 100_000)
           show_buy_window(pc, val_buy)
         elsif val.casecmp?("support")
           html = NpcHtmlMessage.new(l2id)

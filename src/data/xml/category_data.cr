@@ -41,6 +41,6 @@ module CategoryData
   end
 
   def [](type : CategoryType) : Set(Int32)
-    CATEGORIES.fetch(type) { raise "No category data for '#{type}'" }
+    CATEGORIES.fetch(type) { raise "No category data for #{type}" }
   end
 end

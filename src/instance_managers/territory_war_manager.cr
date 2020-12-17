@@ -181,7 +181,7 @@ module TerritoryWarManager
     return false unless clan
 
     if clan.castle_id > 0
-      return castle_id == -1 ? true : clan.castle_id == castle_id
+      return castle_id == -1 || clan.castle_id == castle_id
     end
 
     if castle_id == -1

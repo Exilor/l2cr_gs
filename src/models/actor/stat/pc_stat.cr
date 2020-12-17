@@ -36,7 +36,8 @@ class PcStat < PlayableStat
     @cloak_slot
   end
 
-  def cloak_slot_status=(@cloak_slot : Bool)
+  def cloak_slot_status=(cloak_slot : Bool)
+    @cloak_slot = cloak_slot
   end
 
   def max_cp : Int32
@@ -48,9 +49,7 @@ class PcStat < PlayableStat
       @old_max_cp = val
 
       if pc.current_cp != val
-        # The 'false' arg prevents an issue where #broadcast_status_update
-        # from L2PcInstance would freeze the client.
-        pc.set_current_cp(pc.current_cp, false)
+        pc.set_current_cp(pc.current_cp)
       end
     end
 
@@ -66,9 +65,7 @@ class PcStat < PlayableStat
       @old_max_hp = val
 
       if pc.current_hp != val
-        # The `false` argument prevents an issue where #broadcast_status_update
-        # from L2PcInstance would freeze the client.
-        pc.set_current_hp(pc.current_hp, false)
+        pc.set_current_hp(pc.current_hp)
       end
     end
 
@@ -84,16 +81,14 @@ class PcStat < PlayableStat
       @old_max_mp = val
 
       if pc.current_mp != val
-        # The `false` argument prevents an issue where #broadcast_status_update
-        # from L2PcInstance would freeze the client.
-        pc.set_current_mp(pc.current_mp, false)
+        pc.set_current_mp(pc.current_mp)
       end
     end
 
     val
   end
 
-  def get_base_move_speed(type) : Float64
+  def get_base_move_speed(type : MoveType) : Float64
     pc = active_char
 
     if pc.transformed?
