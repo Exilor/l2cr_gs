@@ -4,7 +4,7 @@ module PetNameTable
 
   def includes?(name : String) : Bool
     begin
-      GameDB.query_each("SELECT name FROM pets WHERE name=?", name) do |rs|
+      GameDB.query_each("SELECT name FROM pets WHERE name=?", name) do
         return true
       end
     rescue e

@@ -151,28 +151,28 @@ module AdminCommandHandler::AdminSiege
             if val == "month"
               month = cal.month + st.shift.to_i
               if 1 > month || 12 < month
-                pc.send_message("Unable to change Siege Date - Incorrect month value only #{1}-#{12} is accepted")
+                pc.send_message("Unable to change Siege Date - Incorrect month value only 1-12 is accepted")
                 return false
               end
               cal.month = month
             elsif val == "day"
               day = st.shift.to_i
               if 1 > day || 31 < day
-                pc.send_message("Unable to change Siege Date - Incorrect day value only #{1}-#{31} is accepted")
+                pc.send_message("Unable to change Siege Date - Incorrect day value only 1-31 is accepted")
                 return false
               end
               cal.day = day
             elsif val == "hour"
               hour = st.shift.to_i
               if 0 > hour || 23 < hour
-                pc.send_message("Unable to change Siege Date - Incorrect hour value only #{0}-#{23} is accepted")
+                pc.send_message("Unable to change Siege Date - Incorrect hour value only 0-23 is accepted")
                 return false
               end
               cal.hour = hour
             elsif val == "min"
               min = st.shift.to_i
               if 0 > min || 59 < min
-                pc.send_message("Unable to change Siege Date - Incorrect minute value only #{0}-#{59} is accepted")
+                pc.send_message("Unable to change Siege Date - Incorrect minute value only 0-59 is accepted")
                 return false
               end
               cal.minute = min

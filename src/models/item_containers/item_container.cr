@@ -120,7 +120,7 @@ abstract class ItemContainer
         item.update_database
       end
     else
-      count.times do |i|
+      count.times do
         unless template = ItemTable[item_id]?
           raise "ItemContainer#add_item: invalid item id #{item_id}"
         end

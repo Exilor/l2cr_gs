@@ -102,7 +102,7 @@ abstract class AirShipController < Quest
         @bust = false
       end
 
-      return
+      nil
     elsif event.casecmp?("board")
       if pc.transformed?
         pc.send_packet(SystemMessageId::YOU_CANNOT_BOARD_AN_AIRSHIP_WHILE_TRANSFORMED)
@@ -148,7 +148,7 @@ abstract class AirShipController < Quest
         debug "@docked_ship is nil."
       end
 
-      return
+      nil
     elsif event.casecmp?("register")
       clan = pc.clan
       if clan.nil? || clan.level < 5
@@ -171,9 +171,10 @@ abstract class AirShipController < Quest
 
       AirshipManager.register_license(owner_id)
       pc.send_packet(SystemMessageId::THE_AIRSHIP_SUMMON_LICENSE_ENTERED)
-      return
+
+      nil
     else
-      return event
+      event
     end
   end
 

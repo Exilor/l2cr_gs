@@ -5,6 +5,6 @@ class Packets::Outgoing::BlowfishKey < MMO::OutgoingPacket(LoginServerThread)
   def write
     c 0x00
     d 128
-    128.times { |i| c Rnd.u8 }
+    128.times { c Rnd.u8 }
   end
 end

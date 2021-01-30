@@ -6,7 +6,7 @@ struct KillerChanceModifierStrategy
     @proc.call(item, victim, killer)
   end
 
-  DEFAULT_STRATEGY = new do |item, victim, killer|
+  DEFAULT_STRATEGY = new do |_, victim, killer|
     if victim.raid? && Config.deepblue_drop_rules_raid
       lvl_diff = victim.level &- killer.level
       next ((lvl_diff * 0.15) + 1).clamp(0.0, 1.0)
@@ -36,5 +36,5 @@ struct KillerChanceModifierStrategy
     1.0
   end
 
-  NO_RULES = new { |item, victim, killer| 1.0 }
+  NO_RULES = new { |_, _, _| 1.0 }
 end

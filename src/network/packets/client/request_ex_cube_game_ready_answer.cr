@@ -8,7 +8,7 @@ class Packets::Incoming::RequestExCubeGameReadyAnswer < GameClientPacket
   end
 
   private def run_impl
-    return unless pc = active_char
+    return unless active_char
 
     case @answer
     when 0

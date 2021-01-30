@@ -28,7 +28,7 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
       return
     end
 
-    unless skill = SkillData[@id, @level]?
+    unless SkillData[@id, @level]?
       warn { "Skill with id #{@id} and level #{@level} doesn't exist." }
       return
     end

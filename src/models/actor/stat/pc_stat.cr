@@ -242,7 +242,7 @@ class PcStat < PlayableStat
   end
 
   def exp_bonus_multiplier : Float64
-    bonus = vitality = nevits = hunting = bonus_exp = 1.0
+    bonus = hunting = 1.0
     vitality = vitality_multiplier
     nevits = RecoBonus.get_reco_multiplier(active_char)
     bonus_exp = 1.0 + (calc_stat(BONUS_EXP, 0) / 100)
@@ -256,7 +256,7 @@ class PcStat < PlayableStat
   end
 
   def sp_bonus_multiplier : Float64
-    bonus = vitality = nevits = hunting = bonus_sp = 1.0
+    bonus = hunting = 1.0
     vitality = vitality_multiplier
     nevits = RecoBonus.get_reco_multiplier(active_char)
     bonus_sp = 1.0 + (calc_stat(BONUS_SP, 0) / 100)

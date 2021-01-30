@@ -5,7 +5,7 @@ class Packets::Incoming::RequestDuelAnswerStart < GameClientPacket
 
   private def read_impl
     @party_duel = d
-    unknown = d
+    d # unknown
     @response = d
   end
 

@@ -19,6 +19,6 @@ class Packets::Incoming::RequestRecipeShopMakeInfo < GameClientPacket
       return
     end
 
-    send_packet(RecipeShopItemInfo.new(shop, @recipe_id))
+    pc.send_packet(RecipeShopItemInfo.new(shop, @recipe_id))
   end
 end

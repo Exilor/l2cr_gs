@@ -10,7 +10,7 @@ class Packets::Outgoing::ExEnchantSkillInfo < GameServerPacket
       if @lvl > 100
         @max_enchanted = esl.max_enchant?(@lvl)
 
-        if esd = esl.get_enchant_skill_holder(@lvl)
+        if esl.get_enchant_skill_holder(@lvl)
           @routes << @lvl
         end
 

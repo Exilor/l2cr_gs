@@ -48,7 +48,7 @@ class Scripts::Amaskari < AbstractNpcAI
       elsif Rnd.rand(100) > 40
         broadcast_npc_say(npc, Say2::NPC_ALL, MINIONS_NPCSTRING_ID[3])
       end
-      start_quest_timer("onspawn_msg", (Rnd.rand(8) + 1) * 30000, npc, nil)
+      start_quest_timer("onspawn_msg", (Rnd.rand(8) + 1) * 30_000, npc, nil)
     end
 
     nil
@@ -87,7 +87,7 @@ class Scripts::Amaskari < AbstractNpcAI
             broadcast_npc_say(master, Say2::NPC_ALL, AMASKARI_NPCSTRING_ID[3])
             # master.do_cast(INVINCIBILITY)
             master.invul = true
-            start_quest_timer("stop_toggle", 10000, master, nil)
+            start_quest_timer("stop_toggle", 10_000, master, nil)
           end
         end
       end
@@ -107,7 +107,7 @@ class Scripts::Amaskari < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    start_quest_timer("onspawn_msg", (Rnd.rand(3) + 1) * 30000, npc, nil)
-    return super
+    start_quest_timer("onspawn_msg", (Rnd.rand(3) + 1) * 30_000, npc, nil)
+    super
   end
 end

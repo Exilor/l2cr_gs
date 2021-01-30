@@ -323,7 +323,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             start_quest_timer("ICE_RUPTURE", Rnd.rand(2..5) * 1000, knight, nil)
           end
 
-          world.status.times do |i|
+          world.status.times do
             notify_event("SPAWN_GLACIER", world.controller, nil)
           end
         when "SPAWN_KNIGHT"
@@ -465,7 +465,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
               broadcast_npc_say(npc, Say2::SHOUT, NpcString::I_CAN_TAKE_IT_NO_LONGER)
             when 3
               broadcast_npc_say(npc, Say2::SHOUT, NpcString::ARCHER_HEED_MY_CALL)
-              3.times do |i|
+              3.times do
                 breath = add_spawn(BREATH, npc.location, true, 0, false, world.instance_id).as(L2Attackable)
                 breath.running = true
                 breath.add_damage_hate(npc.most_hated, 0, 999)

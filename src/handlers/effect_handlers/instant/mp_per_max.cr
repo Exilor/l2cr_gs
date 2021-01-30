@@ -18,7 +18,6 @@ class EffectHandler::MpPerMax < AbstractEffect
     target = info.effected
     return if target.dead? || target.door?
 
-    amount = 0.0
     power = @power
     full = power == 100
     amount = full ? target.max_mp.to_f : (target.max_mp * power) / 100.0

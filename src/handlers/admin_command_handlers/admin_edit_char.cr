@@ -419,7 +419,6 @@ module AdminCommandHandler::AdminEditChar
         begin
           val = command.from(20)
           level = val.to_i
-          newexp = oldexp = 0i64
           oldexp = pet.stat.exp
           newexp = pet.stat.get_exp_for_level(level)
           if oldexp > newexp
@@ -607,7 +606,7 @@ module AdminCommandHandler::AdminEditChar
     repl["%name%"] = player.name
     repl["%level%"] = player.level
     if clan = player.clan
-      repl["%clan%"] = "<a action=\"bypass -h admin_clan_info #{player.l2id}\">#{player.clan.not_nil!.name}</a>"
+      repl["%clan%"] = "<a action=\"bypass -h admin_clan_info #{player.l2id}\">#{clan.name}</a>"
     else
       repl["%clan%"] = ""
     end

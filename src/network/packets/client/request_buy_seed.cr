@@ -13,7 +13,7 @@ class Packets::Incoming::RequestBuySeed < GameClientPacket
       return
     end
 
-    items = Slice.new(count) do |i|
+    items = Slice.new(count) do
       item_id = d
       cnt = q
       if cnt < 1 || item_id < 1

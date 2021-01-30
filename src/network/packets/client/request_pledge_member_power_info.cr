@@ -2,7 +2,7 @@ class Packets::Incoming::RequestPledgeMemberPowerInfo < GameClientPacket
   @player = ""
 
   private def read_impl
-    unk1 = d
+    d # unknown
     @player = s
   end
 

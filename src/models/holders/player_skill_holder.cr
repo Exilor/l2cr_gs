@@ -4,7 +4,7 @@ struct PlayerSkillHolder
   getter skills : Hash(Int32, Skill) = {} of Int32 => Skill
 
   def initialize(pc : L2PcInstance)
-    pc.skills.each do |id, skill|
+    pc.skills.each_value do |skill|
       if SkillTreesData.skill_allowed?(pc, skill)
         add_skill(skill)
       end

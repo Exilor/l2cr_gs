@@ -327,14 +327,14 @@ class Scripts::Q00386_StolenDignity < Quest
   private def select_bingo_number(qs, num)
     numbers = qs.get("numbers").not_nil!.split
     pos = 0
-    numbers.each_with_index do |number, i|
+    numbers.each_with_index do |_, i|
       if numbers[i].to_i == num
         pos = i
         break
       end
     end
     selected = qs.get("selected").not_nil!.split
-    selected.each_with_index do |sel, i|
+    selected.each_with_index do |_, i|
       if i == pos
         selected[i] = num.to_s
         next

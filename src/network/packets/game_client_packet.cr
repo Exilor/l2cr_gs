@@ -5,12 +5,11 @@ abstract class GameClientPacket < MMO::IncomingPacket(GameClient)
   def read : Bool
     read_impl
     true
-  rescue e : IO::EOFError
-    error e
-    client.on_buffer_underflow
-    false
   rescue e
     error e
+    if e.is_a?(IO::EOFError)
+      client.on_buffer_underflow
+    end
     false
   end
 

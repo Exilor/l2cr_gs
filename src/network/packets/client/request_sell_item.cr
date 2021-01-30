@@ -84,9 +84,9 @@ class Packets::Incoming::RequestSellItem < GameClientPacket
       end
 
       if Config.allow_refund
-        item = pc.inventory.transfer_item("Sell", i.l2id, i.count, pc.refund, pc, merchant)
+        pc.inventory.transfer_item("Sell", i.l2id, i.count, pc.refund, pc, merchant)
       else
-        item = pc.inventory.destroy_item("Sell", i.l2id, i.count, pc, merchant)
+        pc.inventory.destroy_item("Sell", i.l2id, i.count, pc, merchant)
       end
     end
 

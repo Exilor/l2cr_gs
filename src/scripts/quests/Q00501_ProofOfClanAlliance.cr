@@ -335,7 +335,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
 
     candidates = [] of QuestState
     if qs && chance > 0
-      chance.times do |i|
+      chance.times do
         candidates << qs
       end
     end

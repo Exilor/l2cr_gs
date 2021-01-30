@@ -20,12 +20,12 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
     @race = d
     @sex = d.to_i8
     @class_id = d
-    int = d
-    str = d
-    con = d
-    men = d
-    dex = d
-    wit = d
+    d # int
+    d # str
+    d # con
+    d # men
+    d # dex
+    d # wit
     @hair_style = d.to_i8
     @hair_color = d.to_i8
     @face = d.to_i8

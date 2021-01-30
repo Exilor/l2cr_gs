@@ -3,7 +3,7 @@ class Packets::Incoming::RequestWithdrawPartyRoom < GameClientPacket
 
   private def read_impl
     @room_id = d
-    unk1 = d
+    d # unknown
   end
 
   private def run_impl

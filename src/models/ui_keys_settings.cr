@@ -36,7 +36,6 @@ class UIKeysSettings
     sql = String.build do |io|
       io << "REPLACE INTO character_ui_categories (`charId`, `catId`, `order`, `cmdId`) VALUES "
       @categories.each do |category, ary|
-        order = 0
         ary.each_with_index do |key, order|
           io << '(' << @pc_id << ", " << category << ", " << order << ", "
           io << key
@@ -110,10 +109,10 @@ class UIKeysSettings
         cat = rs.get_i32(:"cat")
         cmd = rs.get_i32(:"cmd")
         key = rs.get_i32(:"key")
-        tgKey1 = rs.get_i32(:"tgKey1")
-        tgKey2 = rs.get_i32(:"tgKey2")
+        tg_key1 = rs.get_i32(:"tgKey1")
+        tg_key2 = rs.get_i32(:"tgKey2")
         show = rs.get_i32(:"show")
-        ak = ActionKey.new(cat, cmd, key, tgKey1, tgKey2, show)
+        ak = ActionKey.new(cat, cmd, key, tg_key1, tg_key2, show)
         UIData.add_key(@keys, cat, ak)
       end
     rescue e

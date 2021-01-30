@@ -20,9 +20,9 @@ module PunishmentHandler::JailHandler
       end
     when PunishmentAffect::IP
       ip = task.key.to_s
-      L2World.players.each do |pc|
-        if pc.ip_address == ip
-          apply_to_player(pc)
+      L2World.players.each do |pc2|
+        if pc2.ip_address == ip
+          apply_to_player(pc2)
         end
       end
     end
@@ -46,9 +46,9 @@ module PunishmentHandler::JailHandler
       end
     when PunishmentAffect::IP
       ip = task.key.to_s
-      L2World.players.each do |pc|
-        if pc.ip_address == ip
-          remove_from_player(pc)
+      L2World.players.each do |pc2|
+        if pc2.ip_address == ip
+          remove_from_player(pc2)
         end
       end
     end
@@ -66,8 +66,8 @@ module PunishmentHandler::JailHandler
       OlympiadManager.remove_disconnected_competitor(pc)
     end
 
-    task = TeleportTask.new(pc, L2JailZone.location_in)
-    ThreadPoolManager.schedule_general(task, 2000)
+
+    ThreadPoolManager.schedule_general(TeleportTask.new(pc, L2JailZone.location_in), 2000)
 
     msg = NpcHtmlMessage.new
     if content = HtmCache.get_htm(pc, "data/html/jail_in.htm")

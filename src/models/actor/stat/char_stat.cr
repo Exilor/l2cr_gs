@@ -365,7 +365,7 @@ class CharStat
     val, max = 2i8, wind  if wind  > max
     val, max = 3i8, earth if earth > max
     val, max = 4i8, holy  if holy  > max
-    val, max = 5i8, dark  if dark  > max
+    val      = 5i8        if dark  > max
 
     val
   end

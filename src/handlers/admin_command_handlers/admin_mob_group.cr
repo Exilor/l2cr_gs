@@ -357,7 +357,7 @@ module AdminCommandHandler::AdminMobGroup
       return
     end
 
-    group.teleport_group(pc)
+    group.teleport_group(target_player)
   end
 
   private def show_group_list(pc)

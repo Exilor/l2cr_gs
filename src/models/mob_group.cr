@@ -44,7 +44,7 @@ class MobGroup
     end
 
     begin
-      max_mob_count.times do |i|
+      max_mob_count.times do
         sp = L2GroupSpawn.new(template)
 
         sx = Rnd.rand(2) == 0 ? -1 : 1

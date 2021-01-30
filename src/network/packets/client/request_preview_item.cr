@@ -13,7 +13,7 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
   @items = Slice(Int32).empty
 
   private def read_impl
-    unk = d
+    d # unknown
     @list_id = d
     @count = d
 
@@ -48,7 +48,7 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
       return
     end
 
-    unless merchant = target.as?(L2MerchantInstance)
+    unless target.is_a?(L2MerchantInstance)
       warn { "Target (#{target}) is not a L2MerchantInstance." }
       return
     end
@@ -98,7 +98,6 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
           end
         end
       end
-
 
       if item_list.has_key?(slot)
         pc.send_packet(SystemMessageId::YOU_CAN_NOT_TRY_THOSE_ITEMS_ON_AT_THE_SAME_TIME)

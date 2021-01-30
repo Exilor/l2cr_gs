@@ -72,7 +72,7 @@ module DimensionalRiftManager
             delay = parse_int(sp, "delay")
             count = parse_int(sp, "count")
 
-            count.times do |i|
+            count.times do
               unless rift_room = ROOMS.dig?(type, room_id)
                 count_bad &+= 1
                 next

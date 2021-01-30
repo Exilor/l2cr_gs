@@ -30,7 +30,7 @@ module GameDB
   delegate friend, henna, item, item_reuse, pet, pet_skill_save, player, skill,
     player_skill_save, premium_item, recipe_book, recipe_shop_list, shortcut,
     servitor_skill_save, recommendation_bonus, subclass, teleport_bookmark,
-    to: dao_factory
+    couples, to: dao_factory
 end
 
 require "./dao/interfaces/*"

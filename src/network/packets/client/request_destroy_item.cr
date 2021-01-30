@@ -97,8 +97,8 @@ class Packets::Incoming::RequestDestroyItem < GameClientPacket
       unequipped = pc.inventory.unequip_item_in_slot_and_record(item.location_slot)
 
       iu = InventoryUpdate.new
-      unequipped.each do |item|
-        iu.add_modified_item(item)
+      unequipped.each do |it|
+        iu.add_modified_item(it)
       end
       pc.send_packet(iu)
     end

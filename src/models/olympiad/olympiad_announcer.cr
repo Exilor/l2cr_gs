@@ -13,7 +13,7 @@ class OlympiadAnnouncer
   end
 
   def call
-    OlympiadGameManager.number_of_stadiums.downto(0) do |i|
+    OlympiadGameManager.number_of_stadiums.downto(0) do
       if @current_stadium > OlympiadGameManager.number_of_stadiums
         @current_stadium = 0
       end

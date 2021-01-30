@@ -64,7 +64,7 @@ class SummonStatus < PlayableStatus
       end
     end
 
-    super
+    super(value, attacker, awake, dot, hp_consume)
   end
 
   def active_char : L2Summon

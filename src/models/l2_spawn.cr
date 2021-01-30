@@ -14,7 +14,7 @@ class L2Spawn
   @constructor : L2Npc.class = L2Npc
 
   getter template
-  getter spawned_npcs = Concurrent::LinkedList(L2Npc).new
+  getter spawned_npcs = ConcurrentLinkedList(L2Npc).new
   getter spawn_territory : NpcSpawnTerritory?
   property name : String?
   property location : Location = Location.new(0, 0, 0, 0, 0)

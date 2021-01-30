@@ -2,6 +2,7 @@ class DimensionalRift
   include Loggable
 
   private SECONDS_5 = 5000i64
+  private RIFT_QUEST_ID = 635
 
   @completed_rooms = [] of Int8
   @jumps_current = 0i8
@@ -24,7 +25,7 @@ class DimensionalRift
     coords = get_room_coord(room)
     party.dimensional_rift = self
 
-    unless rift_quest = QuestManager.get_quest(635)
+    unless rift_quest = QuestManager.get_quest(RIFT_QUEST_ID)
       warn "Rift quest (Q00635_IntoTheDimensionalRift) not found."
     end
 
@@ -206,7 +207,7 @@ class DimensionalRift
 
   private def teleport_to_waiting_room(pc : L2PcInstance)
     DimensionalRiftManager.teleport_to_waiting_room(pc)
-    if quest = QuestManager.get_quest(635)
+    if quest = QuestManager.get_quest(RIFT_QUEST_ID)
       if qs = pc.get_quest_state(quest.name)
         if qs.cond?(1)
           qs.exit_quest(true, true)

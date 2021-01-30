@@ -74,7 +74,6 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       qs.set_cond(6, true)
       event
     end
-
   end
 
   def on_kill(npc, pc, is_summon)
@@ -89,7 +88,6 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       when WATER_SEER
         on_water_seer_killed(qs, pc)
       end
-
     end
 
     super
@@ -154,7 +152,6 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       when WATER_UNDINE
         html = on_talk_with_water_undine(qs, pc)
       end
-
     end
 
     html || get_no_quest_msg(pc)
@@ -162,7 +159,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
 
   private def on_talk_with_parina(qs, pc)
     if !has_quest_items?(pc, FLAME_EARING, WIND_BANGLE, WATER_NECKLACE, EARTH_RING)
-      html = "30391-05.html"
+      "30391-05.html"
     else
       give_adena(pc, 163800, true)
       take_items(pc, FLAME_EARING, 1)
@@ -184,7 +181,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       qs.exit_quest(false, true)
       pc.send_packet(SocialAction.new(pc.l2id, 3))
       qs.save_global_quest_var("1ClassQuestFinished", "1")
-      html = "30391-06.html"
+      "30391-06.html"
     end
   end
 
@@ -195,7 +192,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       end
 
       qs.set_cond(11, true)
-      html = "30409-01.html"
+      "30409-01.html"
     elsif has_quest_items?(pc, RUSTY_COIN)
       if has_quest_items?(pc, RED_SOIL)
         take_items(pc, RUSTY_COIN, 1)
@@ -205,21 +202,21 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         end
 
         qs.set_cond(13, true)
-        html = "30409-04.html"
+        "30409-04.html"
       else
-        html = "30409-02.html"
+        "30409-02.html"
       end
     elsif has_quest_items?(pc, EARTH_RING)
-      html = "30409-04.html"
+      "30409-04.html"
     end
   end
 
   private def on_talk_with_wasteland_lizardman(qs, pc)
     if has_quest_items?(pc, BROKEN_BRONZE_MIRROR)
       if has_quest_items?(pc, WIND_FEATHER)
-        html = "30410-04.html"
+        "30410-04.html"
       else
-        html = "30410-01.html"
+        "30410-01.html"
       end
     end
   end
@@ -230,10 +227,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         give_items(pc, MAP_OF_LUSTER, 1)
       end
       qs.set_cond(2, true)
-      html = "30411-01.html"
+      "30411-01.html"
     elsif has_quest_items?(pc, MAP_OF_LUSTER)
       if !has_quest_items?(pc, KEY_OF_FLAME)
-        html = "30411-02.html"
+        "30411-02.html"
       else
         take_items(pc, MAP_OF_LUSTER, 1)
         take_items(pc, KEY_OF_FLAME, 1)
@@ -241,10 +238,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
           give_items(pc, FLAME_EARING, 1)
         end
         qs.set_cond(4, true)
-        html = "30411-03.html"
+        "30411-03.html"
       end
     elsif has_quest_items?(pc, FLAME_EARING)
-      html = "30411-04.html"
+      "30411-04.html"
     end
   end
 
@@ -254,10 +251,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         give_items(pc, BROKEN_BRONZE_MIRROR, 1)
       end
       qs.set_cond(5, true)
-      html = "30412-01.html"
+      "30412-01.html"
     elsif has_quest_items?(pc, BROKEN_BRONZE_MIRROR)
       if !has_quest_items?(pc, WIND_FEATHER)
-        html = "30412-02.html"
+        "30412-02.html"
       else
         take_items(pc, BROKEN_BRONZE_MIRROR, 1)
         take_items(pc, WIND_FEATHER, 1)
@@ -265,10 +262,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
           give_items(pc, WIND_BANGLE, 1)
         end
         qs.set_cond(7, true)
-        html = "30412-03.html"
+        "30412-03.html"
       end
     elsif has_quest_items?(pc, WIND_BANGLE)
-      html = "30412-04.html"
+      "30412-04.html"
     end
   end
 
@@ -278,10 +275,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
         give_items(pc, RAMAS_DIARY, 1)
       end
       qs.set_cond(8, true)
-      html = "30413-01.html"
+      "30413-01.html"
     elsif has_quest_items?(pc, RAMAS_DIARY)
       if get_quest_items_count(pc, SPARKLE_PEBBLE) < 2
-        html = "30413-02.html"
+        "30413-02.html"
       else
         take_items(pc, RAMAS_DIARY, 1)
         take_items(pc, SPARKLE_PEBBLE, -1)
@@ -289,10 +286,10 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
           give_items(pc, WATER_NECKLACE, 1)
         end
         qs.set_cond(10, true)
-        html = "30413-03.html"
+        "30413-03.html"
       end
     elsif has_quest_items?(pc, WATER_NECKLACE)
-      html = "30413-04.html"
+      "30413-04.html"
     end
   end
 end

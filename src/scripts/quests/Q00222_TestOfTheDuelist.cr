@@ -125,8 +125,7 @@ class Scripts::Q00222_TestOfTheDuelist < Quest
       html = event
     end
 
-
-    return html
+    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -299,7 +298,6 @@ class Scripts::Q00222_TestOfTheDuelist < Quest
           end
         end
       end
-
     end
 
     super

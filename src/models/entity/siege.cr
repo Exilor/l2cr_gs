@@ -668,7 +668,7 @@ class Siege
 
     sql = "SELECT clan_id,type FROM siege_clans where castle_id=?"
     GameDB.each(sql, castle.residence_id) do |rs|
-      case type_id = rs.get_i32(:"type")
+      case rs.get_i32(:"type")
       when DEFENDER
         add_defender(rs.get_i32(:"clan_id"))
       when ATTACKER

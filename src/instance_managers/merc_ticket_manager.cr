@@ -215,7 +215,7 @@ module MercTicketManager
     npc_id = -1
 
     ITEM_IDS.zip(NPC_IDS) do |iid, nid|
-      if nid == item_id
+      if iid == item_id
         npc_id = nid
         break
       end

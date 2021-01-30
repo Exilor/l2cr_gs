@@ -147,11 +147,15 @@ module AirshipManager
   end
 
   def get_fuel_consumption(dock_id : Int32, index : Int32) : Int32
+    if index < -1
+      return 0
+    end
+
     unless all = TELEPORTS[dock_id]?
       return 0
     end
 
-    if index < -1 || index >= all.fuel.size
+    if index >= all.fuel.size
       return 0
     end
 
@@ -170,11 +174,15 @@ module AirshipManager
   end
 
   def get_teleport_destination(dock_id : Int32, index : Int32) : Slice(VehiclePathPoint)?
+    if index < -1
+      return
+    end
+
     unless all = TELEPORTS[dock_id]?
       return
     end
 
-    if index < -1 || index >= all.routes.size
+    if index >= all.routes.size
       return
     end
 

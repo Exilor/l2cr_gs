@@ -5,7 +5,7 @@ class ClassId < EnumClass
   getter! parent : self
   getter? mage_class, summoner
 
-  protected def initialize(parent : self? = nil, race = nil, mage_class = false, summoner = false)
+  protected def initialize(parent = nil, race = nil, mage_class = false, summoner = false)
     @parent     = parent
     @race       = race       || parent.try &.race || Race::NONE
     @mage_class = mage_class || !!parent && parent.mage_class?
@@ -17,12 +17,12 @@ class ClassId < EnumClass
   end
 
   def child_of?(other : self) : Bool
-    parent = @parent
-    !!parent && (parent == other || parent.child_of?(other))
+    return false unless parent = @parent
+    parent == other || parent.child_of?(other)
   end
 
   def equals_or_child_of?(other : self) : Bool
-    self == other || child_of?(other)
+    same?(other) || child_of?(other)
   end
 
   add(FIGHTER, race: Race::HUMAN)

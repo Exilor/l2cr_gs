@@ -316,7 +316,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
     world.lock.synchronize do
       SPAWN_LIST[flag].each do |spw|
         if spw.is_zone?
-          spw.count.times do |i|
+          spw.count.times do
             if SPAWN_ZONE_LIST.has_key?(spw.zone)
               if loc = SPAWN_ZONE_LIST[spw.zone].random_point
                 do_spawn(world, spw.npc_id, loc.x, loc.y, GeoData.get_spawn_height(loc), Rnd.rand(65535), spw.needed_next_flag?)

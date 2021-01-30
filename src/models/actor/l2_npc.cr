@@ -704,7 +704,7 @@ class L2Npc < L2Character
   def drop_item(pc : L2PcInstance, item_id : Int32, count : Int64) : L2ItemInstance?
     item = nil
 
-    count.times do |i|
+    count.times do
       new_x = x + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
       new_y = y + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
       new_z = z + 20

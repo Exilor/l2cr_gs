@@ -39,7 +39,7 @@ class L2FortDoormenInstance < L2DoormenInstance
   end
 
   private def owner_clan?(pc : L2PcInstance) : Bool
-    return false unless clan = pc.clan
+    return false unless pc.clan
     unless fort = fort?
       warn "This npc has no fort."
       return false

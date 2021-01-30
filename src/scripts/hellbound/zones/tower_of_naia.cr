@@ -415,19 +415,17 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     if npc_id == LOCK
       @lock = nil
       cancel_quest_timers("spawn_lock")
-      start_quest_timer("spawn_lock", 300000, nil, nil)
+      start_quest_timer("spawn_lock", 300_000, nil, nil)
     elsif TOWER_MONSTERS.bincludes?(npc_id)
       manager_id = 0
 
       ZoneManager.get_zones(npc.x, npc.y, npc.z) do |zone|
-        if ZONES.has_value?(zone.id)
-          ZONES.each do |i, id|
-            if id == zone.id
-              manager_id = id
-              break
-            end
+        ZONES.each_value do |id|
+          if id == zone.id
+            manager_id = id
+            break
           end
-        end
+          end
       end
 
       if manager_id > 0 && (spawned = NPC_SPAWNS[manager_id]?)

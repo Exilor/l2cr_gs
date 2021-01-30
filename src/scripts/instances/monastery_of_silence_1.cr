@@ -220,13 +220,13 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
         start_quest_timer("FOLLOW", 5000, npc, player)
       when "DIALOG"
         player = player.not_nil!
-        st_Q10294 = player.get_quest_state(Q10294_SevenSignsToTheMonasteryOfSilence.simple_name)
-        st_Q10295 = player.get_quest_state(Q10295_SevenSignsSolinasTomb.simple_name)
-        if st_Q10294 && st_Q10294.started?
+        st_q10294 = player.get_quest_state(Q10294_SevenSignsToTheMonasteryOfSilence.simple_name)
+        st_q10295 = player.get_quest_state(Q10295_SevenSignsSolinasTomb.simple_name)
+        if st_q10294 && st_q10294.started?
           broadcast_npc_say(npc, Say2::NPC_ALL, ELCADIA_DIALOGS_Q010294.sample)
         end
 
-        if st_Q10295 && st_Q10295.memo_state?(1)
+        if st_q10295 && st_q10295.memo_state?(1)
           broadcast_npc_say(npc, Say2::NPC_ALL, ELCADIA_DIALOGS_Q010295.sample)
         end
         start_quest_timer("DIALOG", 10000, npc, player)

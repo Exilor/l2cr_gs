@@ -15,7 +15,7 @@ class Packets::Incoming::RequestPrivateStoreSell < GameClientPacket
     end
 
     items = [] of ItemRequest
-    count.times do |i|
+    count.times do
       l2id = d
       item_id = d
       h; h # L2J doesn't know what this is

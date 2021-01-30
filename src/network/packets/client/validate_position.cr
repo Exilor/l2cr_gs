@@ -23,7 +23,7 @@ class Packets::Incoming::ValidatePosition < GameClientPacket
       return if real_x != 0
     end
 
-    dx, dy, dz, diff_sq = 0, 0, 0, 0.0
+    dx, dy, diff_sq = 0, 0, 0.0
 
     if pc.in_boat?
       if Config.coord_synchronize == 2

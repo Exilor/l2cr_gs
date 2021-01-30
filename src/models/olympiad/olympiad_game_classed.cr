@@ -32,7 +32,5 @@ class OlympiadGameClassed < OlympiadGameNormal
 
       return new(id, opponents)
     end
-
-    nil
   end
 end

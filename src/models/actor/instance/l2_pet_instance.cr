@@ -86,11 +86,11 @@ class L2PetInstance < L2Summon
     food_ids = pet_data.food
     if food_ids.empty?
       if uncontrollable?
-        if template.id == 16050 && @owner
-          owner.pk_kills = Math.max(owner.pk_kills - Rnd.rand(1..6), 0)
+        if template.id == 16050
+          owner.pk_kills = Math.max(owner.pk_kills &- Rnd.rand(1..6), 0)
         end
         send_packet(SystemMessageId::THE_HELPER_PET_LEAVING)
-        delete_me(@owner)
+        delete_me(owner)
       elsif hungry?
         send_packet(SystemMessageId::THERE_NOT_MUCH_TIME_REMAINING_UNTIL_HELPER_LEAVES)
       end
@@ -98,13 +98,10 @@ class L2PetInstance < L2Summon
       return
     end
 
-    food = nil
-    food_ids.each do |id|
-      break if food = inventory.get_item_by_item_id(id)
-    end
-
-    if food && hungry?
-      if handler = ItemHandler[food.etc_item]
+    if hungry?
+      food = nil
+      food_ids.each { |id| break if food = inventory.get_item_by_item_id(id) }
+      if food && (handler = ItemHandler[food.etc_item])
         sm = SystemMessage.pet_took_s1_because_he_was_hungry
         sm.add_item_name(food.id)
         send_packet(sm)
@@ -165,7 +162,7 @@ class L2PetInstance < L2Summon
   def active_weapon_instance : L2ItemInstance?
     inventory.items.find do |item|
       item.item_location.pet_equip? &&
-      item.template.body_part == L2Item::SLOT_R_HAND
+        item.template.body_part == L2Item::SLOT_R_HAND
     end
   end
 
@@ -174,10 +171,7 @@ class L2PetInstance < L2Summon
   end
 
   def destroy_item(process : String?, l2id : Int32, count : Int64, reference : L2Object?, send_msg : Bool) : Bool
-    if item = inventory.get_item_by_l2id(l2id)
-      item = inventory.destroy_item(process, item, count, owner, reference)
-    end
-
+    item = inventory.destroy_item(process, l2id, count, owner, reference)
     unless item
       if send_msg
         send_packet(SystemMessageId::NOT_ENOUGH_ITEMS)
@@ -275,28 +269,30 @@ class L2PetInstance < L2Summon
 
       party = party()
 
-      if ((party && party.distribution_type.finders_keepers?) || !party) && !inventory.validate_capacity(target)
+      if ((party && party.distribution_type.finders_keepers?) || party.nil?) && !inventory.validate_capacity(target)
         action_failed
         send_packet(SystemMessageId::YOUR_PET_CANNOT_CARRY_ANY_MORE_ITEMS)
         return
       end
 
-      if target.owner_id != 0 && target.owner_id != owner.l2id && !owner.in_looter_party?(target.owner_id)
-        if target.id == Inventory::ADENA_ID
-          sm = SystemMessage.failed_to_pickup_s1_adena
-          sm.add_long(target.count)
-        elsif target.count > 1
-          sm = SystemMessage.failed_to_pickup_s2_s1_s
-          sm.add_item_name(target)
-          sm.add_long(target.count)
-        else
-          sm = SystemMessage.failed_to_pickup_s1
-          sm.add_item_name(target)
-        end
+      if target.owner_id != 0 && target.owner_id != owner.l2id
+        unless owner.in_looter_party?(target.owner_id)
+          if target.id == Inventory::ADENA_ID
+            sm = SystemMessage.failed_to_pickup_s1_adena
+            sm.add_long(target.count)
+          elsif target.count > 1
+            sm = SystemMessage.failed_to_pickup_s2_s1_s
+            sm.add_item_name(target)
+            sm.add_long(target.count)
+          else
+            sm = SystemMessage.failed_to_pickup_s1
+            sm.add_item_name(target)
+          end
 
-        action_failed
-        send_packet(sm)
-        return
+          action_failed
+          send_packet(sm)
+          return
+        end
       end
 
       if target.item_loot_schedule
@@ -507,6 +503,8 @@ class L2PetInstance < L2Summon
 
   def start_feed
     sync do
+      stop_feed
+
       if alive? && owner.summon == self
         task = ->feed_task
         @feed_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, 10_000, 10_000)

@@ -256,7 +256,7 @@ module TvTEvent
 
           pc.send_packet(sm)
         else
-          reward[1].times do |i|
+          reward[1].times do
             inv.add_item("TvT Event", reward[0], 1, pc, pc)
             sm = SystemMessage.earned_item_s1
             sm.add_item_name(reward[0])

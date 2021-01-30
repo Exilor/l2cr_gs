@@ -360,7 +360,8 @@ module Hero
     end
 
     fight_reply = NpcHtmlMessage.new
-    if html_content = HtmCache.get_htm(pc, "data/html/olympiad/herohistory.htm")
+    if htm_content = HtmCache.get_htm(pc, "data/html/olympiad/herohistory.htm")
+      fight_reply.html = htm_content
       fight_reply["%heroname%"] = CharNameTable.get_name_by_id(char_id)
     end
 

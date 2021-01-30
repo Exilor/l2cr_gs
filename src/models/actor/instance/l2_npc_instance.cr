@@ -28,7 +28,7 @@ class L2NpcInstance < L2Npc
 
       counts = 0
       skills.each do |s|
-        if sk = SkillData[s.skill_id, s.skill_level]?
+        if SkillData[s.skill_id, s.skill_level]?
           counts &+= 1
           asl.add_skill(s.skill_id, s.skill_level, s.skill_level, 0, 1)
         end

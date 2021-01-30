@@ -17,8 +17,8 @@ class Scripts::WildBeastReserve < FlagWar
 
     @messenger = 35627
 
-    @outter_doors_to_open[0] = 21150003
-    @outter_doors_to_open[1] = 21150004
+    @outer_doors_to_open[0] = 21150003
+    @outer_doors_to_open[1] = 21150004
 
     @inner_doors_to_open[0] = 21150001
     @inner_doors_to_open[1] = 21150002

@@ -46,9 +46,7 @@ module CharNameTable
   end
 
   def get_id_by_name(name : String?) : Int32
-    unless name && !name.empty?
-      return -1
-    end
+    return -1 if name.nil? || name.empty?
 
     CHARS.each do |key, value|
       if value.casecmp?(name)
@@ -120,9 +118,7 @@ module CharNameTable
     sync do
       begin
         sql = "SELECT account_name FROM characters WHERE char_name=?"
-        GameDB.query_each(sql, name) do |rs|
-          return true
-        end
+        GameDB.query_each(sql, name) { return true }
       rescue e
         error e
       end

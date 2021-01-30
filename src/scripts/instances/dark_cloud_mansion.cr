@@ -208,7 +208,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
       end
     end
 
-    return true
+    true
   end
 
   def on_enter_instance(pc, world, first_entrance)
@@ -525,7 +525,6 @@ class Scripts::DarkCloudMansion < AbstractInstance
 
   private def spawn_fifth_room(world)
     idx = 0
-    temp = Slice.new(6, 0)
     fifth_room = DMCRoom.new
 
     temp = BELETHS.sample(random: Rnd)

@@ -67,7 +67,7 @@ class Scripts::Servitors < AbstractNpcAI
     if MONSTERS.has_key?(attacker.id) && target.servitor?
       if Util.in_range?(1500, attacker, target, true)
         owner = target.owner
-        if qs = owner.get_quest_state(Scripts::Q00230_TestOfTheSummoner.simple_name)
+        if owner.get_quest_state(Scripts::Q00230_TestOfTheSummoner.simple_name)
           items = MONSTERS[attacker.id]
           if has_quest_items?(owner, items[1])
             give_items(owner, items[2], 1) # Crystal of Defeat

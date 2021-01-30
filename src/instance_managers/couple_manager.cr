@@ -4,14 +4,12 @@ module CoupleManager
   extend self
   extend Loggable
 
-  private COUPLES = Concurrent::Array(Couple).new
+  private COUPLES = Concurrent::Map(Int32, Couple).new
 
   def load
     sql = "SELECT id FROM mods_wedding ORDER BY id"
-    GameDB.each(sql) do |rs|
-      couples << Couple.new(rs.get_i32(:"id"))
-    end
-    info { "Loaded #{couples.size} couples." }
+    GameDB.couples.load { |couple| COUPLES[couple.id] = couple }
+    info { "Loaded #{COUPLES.size} couples." }
   rescue e
     error e
   end
@@ -21,17 +19,14 @@ module CoupleManager
     load
   end
 
-  def get_couple(couple_id : Int32) : Couple
-    idx = get_couple_index(couple_id)
-    if idx >= 0
-      couples.unsafe_at(idx)
-    end
+  def get_couple(couple_id : Int32) : Couple?
+    COUPLES[couple_id]?
   end
 
   def create_couple(pc1 : L2PcInstance, pc2 : L2PcInstance)
     if pc1.partner_id == 0 && pc2.partner_id == 0
       couple = Couple.new(pc1, pc2)
-      couples << couple
+      COUPLES[couple.id] = couple
       pc1.partner_id = pc2.l2id
       pc2.partner_id = pc1.l2id
       pc1.couple_id = couple.id
@@ -40,8 +35,7 @@ module CoupleManager
   end
 
   def delete_couple(couple_id : Int32)
-    idx = get_couple_index(couple_id)
-    if couple = couples[idx]?
+    if couple = COUPLES.delete(couple_id)
       if pc1 = L2World.get_player(couple.player1_id)
         pc1.partner_id = 0
         pc1.married = false
@@ -52,16 +46,12 @@ module CoupleManager
         pc2.married = false
         pc2.couple_id = 0
       end
+
       couple.divorce
-      couples.delete_at(idx)
     end
   end
 
-  def get_couple_index(couple_id : Int32) : Int32
-    couples.index { |c| c.id == couple_id } || -1
-  end
-
-  def couples : Interfaces::Array(Couple)
-    COUPLES
+  def couples : Enumerable(Couple)
+    COUPLES.local_each_value
   end
 end

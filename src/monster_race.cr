@@ -23,7 +23,6 @@ module MonsterRace
         break
       end
 
-
       begin
         template = NpcData[id + random]
         constructor = nil

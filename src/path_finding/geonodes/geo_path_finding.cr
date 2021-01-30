@@ -277,7 +277,6 @@ module GeoPathFinding
     end
 
     neighbor = pn[idx].to_i8 # SW
-    idx += 1
 
     if neighbor > 0
       neighbor &-= 1

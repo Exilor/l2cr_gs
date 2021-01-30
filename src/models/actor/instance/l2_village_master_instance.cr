@@ -305,14 +305,14 @@ class L2VillageMasterInstance < L2NpcInstance
           end
         end
         # commented out to test it
-        warn "TODO: Uncomment code at #{__FILE__}##{__LINE__}."
+        warn "TODO: Uncomment code limiting subclass access."
         # if allow_addition && !Config.alt_game_subclass_without_quests
         #   allow_addition = check_quests(pc)
         # end
 
         if allow_addition && valid_new_subclass?(pc, param_one)
           unless pc.add_subclass(param_one, pc.total_subclasses &+ 1)
-            debug "L2VillageMasterInstance#on_bypass_feedback (line #{__LINE__}) pc.add_subclass returned false"
+            debug "L2VillageMasterInstance#on_bypass_feedback call to pc.add_subclass returned false"
             return
           end
           pc.change_active_class(pc.total_subclasses)

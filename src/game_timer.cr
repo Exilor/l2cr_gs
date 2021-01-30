@@ -1,8 +1,8 @@
 module GameTimer
-  extend self
   extend Synchronizable
   extend Loggable
   extend Cancellable
+  extend self
 
   TICKS_PER_SECOND       = 10
   MILLIS_IN_TICK         = 1_000 // TICKS_PER_SECOND
@@ -21,11 +21,14 @@ module GameTimer
   end
 
   private def run
-    night = night?
     change_mode = ->DayNightSpawnManager.notify_change_mode
 
+    if night = night?
+      ThreadPoolManager.execute_ai(change_mode)
+    end
+
     until cancelled?
-      next_tick = Time.ms + 100
+      next_tick = Time.ms &+ 100
 
       sync do
         begin

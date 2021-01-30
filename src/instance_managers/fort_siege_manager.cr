@@ -107,7 +107,7 @@ module FortSiegeManager
 
     begin
       sql = "SELECT clan_id FROM fortsiege_clans where clan_id=? and fort_id=?"
-      GameDB.each(sql, clan.id, fort_id) do |rs|
+      GameDB.each(sql, clan.id, fort_id) do
         register = true
         break
       end

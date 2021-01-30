@@ -123,7 +123,7 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
           take_items(pc, ENH_SWORD1, -1)
           take_items(pc, SCROLL_2, -1)
           give_items(pc, ENH_SWORD2, 1)
-          html = "32508-05.htm"
+          return "32508-05.htm"
         end
         html = "32508-04.htm"
       elsif has_quest_items?(pc, ENH_SWORD2)

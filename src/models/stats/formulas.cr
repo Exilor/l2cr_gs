@@ -1109,7 +1109,6 @@ module Formulas
     end
 
     pvp = attacker.playable? && target.playable?
-    damage = 0.0
     proximity_bonus = attacker.behind_target? ? 1.2 : attacker.in_front_of_target? ? 1.0 : 1.1
     ss_boost = ss ? 1.458 : 1.0
     pvp_bonus = 1.0
@@ -1272,7 +1271,6 @@ module Formulas
     end
 
     pvp = attacker.playable? && target.playable?
-    damage = 0.0
     proximity_bonus = attacker.behind_target? ? 1.2 : attacker.in_front_of_target? ? 1.0 : 1.1
     ss_boost = ss ? 1.458 : 1.0
     pvp_bonus = 1.0
@@ -1389,7 +1387,6 @@ module Formulas
       end
     end
 
-    damage = 0.0
     ss_boost = ss ? 2 : 1
     pvp_bonus = 1.0
 

@@ -192,7 +192,7 @@ class ItemAuctionInstance
     ret = Array(ItemAuction).new(@auctions.size)
     auctions.each do |auction|
       unless auction.auction_state.created?
-        if bid = auction.get_bid_for(bidder_l2id)
+        if auction.get_bid_for(bidder_l2id)
           ret << auction
         end
       end
@@ -357,8 +357,8 @@ class ItemAuctionInstance
     auction_bids = [] of ItemAuctionBid
     GameDB.each(SELECT_PLAYERS_ID_BY_AUCTION_ID, auction_id) do |rs|
       player_l2id = rs.get_i32(1)
-      playerBid = rs.get_i64(2)
-      bid = ItemAuctionBid.new(player_l2id, playerBid)
+      player_bid = rs.get_i64(2)
+      bid = ItemAuctionBid.new(player_l2id, player_bid)
       auction_bids << bid
     end
 

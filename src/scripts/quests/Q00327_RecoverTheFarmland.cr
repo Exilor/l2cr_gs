@@ -207,7 +207,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    if st = get_quest_state(killer, false)
+    if get_quest_state(killer, false)
       if npc.id == TUREK_ORK_SHAMAN || npc.id == TUREK_ORK_WARLORD
         give_items(killer, TUREK_MEDALLION, 1)
       else

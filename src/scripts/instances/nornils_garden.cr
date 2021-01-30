@@ -188,7 +188,7 @@ class Scripts::NornilsGarden < AbstractInstance
         return
       end
       # check what instance still exist
-      if inst = InstanceManager.get_instance(world.instance_id)
+      if InstanceManager.get_instance(world.instance_id)
         teleport_player(pc, SPAWN_PPL, world.instance_id)
       end
       return

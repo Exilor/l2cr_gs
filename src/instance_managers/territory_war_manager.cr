@@ -23,17 +23,17 @@ module TerritoryWarManager
   private PARTICIPANT_POINTS = Concurrent::Map(Int32, Slice(Int32)).new
   private START_TW_DATE = Calendar.new
 
-  @@DEFENDER_MAX_CLANS = 0
-  @@DEFENDER_MAX_PLAYERS = 0
-  @@CLAN_MIN_LEVEL = 0
-  @@PLAYER_MIN_LEVEL = 0
+  @@defender_max_clans = 0
+  @@defender_max_players = 0
+  @@clan_min_level = 0
+  @@player_min_level = 0
   class_getter min_tw_badge_for_nobless = 0
   class_getter min_tw_badge_for_striders = 0
   class_getter min_tw_badge_for_big_strider = 0
   class_getter war_length = 0i64
-  @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE = false
-  @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS = false
-  @@RETURN_WARDS_WHEN_TW_STARTS = false
+  @@player_with_ward_can_be_killed_in_peace_zone = false
+  @@spawn_wards_when_tw_is_not_in_progress = false
+  @@return_wards_when_tw_starts = false
 
   class_getter? registration_over = true
   class_getter? tw_channel_open = false
@@ -46,14 +46,14 @@ module TerritoryWarManager
     cfg = PropertiesReader.new
     cfg.parse(Dir.current + Config::TW_CONFIGURATION_FILE)
 
-    @@DEFENDER_MAX_CLANS = cfg.get_i32("DefenderMaxClans", 500)
-    @@DEFENDER_MAX_PLAYERS = cfg.get_i32("DefenderMaxPlayers", 500)
-    @@CLAN_MIN_LEVEL = cfg.get_i32("ClanMinLevel", 0)
-    @@PLAYER_MIN_LEVEL = cfg.get_i32("PlayerMinLevel", 40)
+    @@defender_max_clans = cfg.get_i32("DefenderMaxClans", 500)
+    @@defender_max_players = cfg.get_i32("DefenderMaxPlayers", 500)
+    @@clan_min_level = cfg.get_i32("ClanMinLevel", 0)
+    @@player_min_level = cfg.get_i32("PlayerMinLevel", 40)
     @@war_length = cfg.get_i64("WarLength", 120) * 60_000
-    @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE = cfg.get_bool("PlayerWithWardCanBeKilledInPeaceZone", false)
-    @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS = cfg.get_bool("SpawnWardsWhenTWIsNotInProgress", false)
-    @@RETURN_WARDS_WHEN_TW_STARTS = cfg.get_bool("ReturnWardsWhenTWStarts", false)
+    @@player_with_ward_can_be_killed_in_peace_zone = cfg.get_bool("PlayerWithWardCanBeKilledInPeaceZone", false)
+    @@spawn_wards_when_tw_is_not_in_progress = cfg.get_bool("SpawnWardsWhenTWIsNotInProgress", false)
+    @@return_wards_when_tw_starts = cfg.get_bool("ReturnWardsWhenTWStarts", false)
     @@min_tw_badge_for_nobless = cfg.get_i32("MinTerritoryBadgeForNobless", 100)
     @@min_tw_badge_for_striders = cfg.get_i32("MinTerritoryBadgeForStriders", 50)
     @@min_tw_badge_for_big_strider = cfg.get_i32("MinTerritoryBadgeForBigStrider", 80)
@@ -136,7 +136,7 @@ module TerritoryWarManager
   end
 
   def get_registered_territory_id(pc : L2PcInstance) : Int32
-    if !@@tw_channel_open || pc.level < @@PLAYER_MIN_LEVEL
+    if !@@tw_channel_open || pc.level < @@player_min_level
       return 0
     end
 
@@ -263,7 +263,7 @@ module TerritoryWarManager
 
   def register_merc(castle_id : Int32, pc : L2PcInstance)
     array = REGISTERED_MERCENARIES[castle_id]?
-    if pc.level < @@PLAYER_MIN_LEVEL || (array && array.includes?(pc.l2id))
+    if pc.level < @@player_min_level || (array && array.includes?(pc.l2id))
       return
     end
 
@@ -305,7 +305,7 @@ module TerritoryWarManager
         ward.npc_id = territory_id
         ret = spawn_npc(36491 &+ territory_id, ward.location)
         ward.npc = ret
-        if !tw_in_progress? && !@@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS
+        if !tw_in_progress? && !@@spawn_wards_when_tw_is_not_in_progress
           ret.decay_me
         end
 
@@ -649,7 +649,7 @@ module TerritoryWarManager
 
     PARTICIPANT_POINTS.clear
 
-    if @@RETURN_WARDS_WHEN_TW_STARTS
+    if @@return_wards_when_tw_starts
       TERRITORY_WARDS.each do |ward|
         if ward.owner_castle_id != ward.territory_id &- 80
           ward.unspawn_me
@@ -717,9 +717,9 @@ module TerritoryWarManager
       t.owned_ward.each do |ward|
         ward = ward.not_nil!
         if ward.npc? && t.owner_clan?
-          if !ward.npc.visible? && @@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS
+          if !ward.npc.visible? && @@spawn_wards_when_tw_is_not_in_progress
             ward.npc = ward.npc.spawn.do_spawn
-          elsif ward.npc.visible? && !@@SPAWN_WARDS_WHEN_TW_IS_NOT_IN_PROGRESS
+          elsif ward.npc.visible? && !@@spawn_wards_when_tw_is_not_in_progress
             ward.npc.decay_me
           end
         end
@@ -761,7 +761,7 @@ module TerritoryWarManager
               pc.siege_state = 0
             end
           else
-            if pc.level < @@PLAYER_MIN_LEVEL || pc.class_id.level < 2
+            if pc.level < @@player_min_level || pc.class_id.level < 2
               next
             end
 
@@ -809,7 +809,7 @@ module TerritoryWarManager
               pc.siege_side = 0
             end
           else
-            if pc.level < @@PLAYER_MIN_LEVEL || pc.class_id.level < 2
+            if pc.level < @@player_min_level || pc.class_id.level < 2
               next
             end
 
@@ -1096,7 +1096,7 @@ module TerritoryWarManager
   end
 
   def player_with_ward_can_be_killed_in_peace_zone? : Bool
-    @@PLAYER_WITH_WARD_CAN_BE_KILLED_IN_PEACE_ZONE
+    @@player_with_ward_can_be_killed_in_peace_zone
   end
 
   def start_siege

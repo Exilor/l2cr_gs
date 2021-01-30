@@ -205,7 +205,7 @@ module AutoSpawnHandler
         npc_inst.set_xyz(*npc_inst.xyz)
         sp.add_npc_instance(npc_inst)
       else
-        sp.spawn_count.times do |i|
+        sp.spawn_count.times do
           npc_inst = new_spawn.do_spawn
           # debug "Spawned #{npc_inst} (#{i})."
           npc_inst.set_xyz(npc_inst.x + Rnd.rand(50), npc_inst.y + Rnd.rand(50), npc_inst.z)
@@ -256,7 +256,7 @@ module AutoSpawnHandler
 
     getter id
     getter location_list = Concurrent::Array(Location).new
-    getter npc_instance_list = Concurrent::LinkedList(L2Npc).new
+    getter npc_instance_list = ConcurrentLinkedList(L2Npc).new
     property l2id : Int32 = 0
     property init_delay : Int32
     property respawn_delay : Int32

@@ -23,17 +23,12 @@ module BypassHandler::SupportMagic
     SkillHolder.new(4330), # Concentration
     SkillHolder.new(4331)  # Empower
   }
-  private SUMMON_BUFFS = {
-    SkillHolder.new(4322), # Wind Walk
-    SkillHolder.new(4323), # Shield
-    SkillHolder.new(5637), # Magic Barrier
-    SkillHolder.new(4324), # Bless the Body
-    SkillHolder.new(4325), # Vampiric Rage
-    SkillHolder.new(4326), # Regeneration
-    SkillHolder.new(4328), # Bless the Soul
-    SkillHolder.new(4329), # Acumen
-    SkillHolder.new(4330), # Concentration
-    SkillHolder.new(4331)  # Empower
+
+  private SUMMON_BUFFS = FIGHTER_BUFFS + {
+    MAGE_BUFFS[3],
+    MAGE_BUFFS[4],
+    MAGE_BUFFS[5],
+    MAGE_BUFFS[6]
   }
 
   # Levels

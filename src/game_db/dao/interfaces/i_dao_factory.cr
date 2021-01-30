@@ -17,5 +17,6 @@ module GameDB
     abstract def skill : SkillDAO
     abstract def subclass : SubclassDAO
     abstract def teleport_bookmark : TeleportBookmarkDAO
+    abstract def couples : CouplesDAO
   end
 end

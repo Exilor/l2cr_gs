@@ -30,7 +30,7 @@ class Scripts::Selina < AbstractNpcAI
     pc = pc.not_nil!
 
     if buff = BUFFS[event]?
-      if get_quest_items_count(pc, GOLDEN_RAM_COIN) >= buff.cost
+      if pc.destroy_item_by_item_id("Quest", GOLDEN_RAM_COIN, buff.cost, npc, true)
         cast_skill(npc.not_nil!, pc, buff)
         return on_first_talk(npc, pc)
       end

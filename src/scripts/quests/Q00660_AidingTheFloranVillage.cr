@@ -164,7 +164,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    if qs = get_random_party_member_state(pc, 2, 2, npc)
+    if get_random_party_member_state(pc, 2, 2, npc)
       if item = MONSTERS[npc.id]?
         give_item_randomly(pc, npc, item.id, item.count, 0, item.chance, true)
       else

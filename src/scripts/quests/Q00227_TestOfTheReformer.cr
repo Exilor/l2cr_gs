@@ -12,7 +12,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
   private LETTER_OF_INTRODUCTION = 2823
   private SLAS_LETTER = 2824
   private GREETINGS = 2825
-  private Ol_MAHUM_MONEY = 2826
+  private OL_MAHUM_MONEY = 2826
   private KATARIS_LETTER = 2827
   private NYAKURIS_LETTER = 2828
   private UNDEAD_LIST = 2829
@@ -83,7 +83,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
     )
     register_quest_items(
       BOOK_OF_REFORM, LETTER_OF_INTRODUCTION, SLAS_LETTER, GREETINGS,
-      Ol_MAHUM_MONEY, KATARIS_LETTER, NYAKURIS_LETTER, UNDEAD_LIST,
+      OL_MAHUM_MONEY, KATARIS_LETTER, NYAKURIS_LETTER, UNDEAD_LIST,
       RAMUSS_LETTER, RAMUSS_LETTER, RIPPED_DIARY, HUGE_NAIL, LETTER_OF_BETRAYER,
       BONE_FRAGMENT4, BONE_FRAGMENT5, BONE_FRAGMENT6, BONE_FRAGMENT7,
       BONE_FRAGMENT8, KAKANS_LETTER, LETTER_GREETINGS1, LETTER_GREETINGS2
@@ -329,8 +329,8 @@ class Scripts::Q00227_TestOfTheReformer < Quest
             html = "30666-05.html"
           end
         elsif memo_state == 10
-          if has_quest_items?(pc, Ol_MAHUM_MONEY)
-            take_items(pc, Ol_MAHUM_MONEY, 1)
+          if has_quest_items?(pc, OL_MAHUM_MONEY)
+            take_items(pc, OL_MAHUM_MONEY, 1)
             give_items(pc, GREETINGS, 1)
             give_items(pc, LETTER_GREETINGS1, 1)
             give_items(pc, LETTER_GREETINGS2, 1)
@@ -442,7 +442,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
         end
       when OL_MAHUM_PILGRIM
         if memo_state == 7
-          give_items(pc, Ol_MAHUM_MONEY, 1)
+          give_items(pc, OL_MAHUM_MONEY, 1)
           qs.memo_state = 8
           html = "30732-01.html"
         end

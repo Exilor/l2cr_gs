@@ -27,7 +27,7 @@ module AdminCommandHandler::AdminInstanceZone
       end
     elsif command.starts_with?("admin_instancezone")
       st = command.split
-      command = st.shift
+      st.shift?
 
       if !st.empty?
         player_name = st.shift

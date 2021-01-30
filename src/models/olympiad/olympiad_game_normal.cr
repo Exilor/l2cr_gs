@@ -36,8 +36,6 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
 
       return {Participant.new(p1, 1), Participant.new(p2, 2)}
     end
-
-    nil
   end
 
   def contains_participant?(pc_id : Int32) : Bool
@@ -553,6 +551,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
 
       if Config.alt_oly_log_fights
         warn "TODO: log fight."
+
         # LogRecord record = new LogRecord(Level.INFO, winner)
         # record.setParameters(new Object[]
         #   @player_one.name,

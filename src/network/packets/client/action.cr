@@ -53,7 +53,7 @@ class Packets::Incoming::Action < GameClientPacket
       end
 
       L2World.regions.flat_each do |reg|
-        reg.objects.each do |l2id, o|
+        reg.objects.each_value do |o|
           if o.l2id == @l2id
             warn "Found object (#{o}) missing from L2World in region #{reg}."
             L2World.store_object(o)

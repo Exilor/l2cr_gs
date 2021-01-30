@@ -57,9 +57,12 @@ module Evolve
       pet_exp = minimum_exp
     end
 
+    # Adding exp before setting current_feed causes #add_exp to fail because the
+    # pet is uncontrollable due to having 0 current_feed. This doesn't happen in
+    # L2J but I don't know why.
+    pet_summon.current_feed = pet_summon.max_fed
     pet_summon.add_exp(pet_exp)
     pet_summon.heal!
-    pet_summon.current_feed = pet_summon.max_fed
     pet_summon.title = pc.name
     pet_summon.name = old_name
     pet_summon.set_running
@@ -99,7 +102,7 @@ module Evolve
       old_pet_lvl = pet_min_lvl
     end
 
-    unless old_data = PetDataTable.get_pet_data_by_item_id(item_id_take)
+    unless PetDataTable.get_pet_data_by_item_id(item_id_take)
       return false
     end
 

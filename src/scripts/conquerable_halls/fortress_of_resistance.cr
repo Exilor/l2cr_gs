@@ -22,7 +22,7 @@ class Scripts::FortressOfResistance < ClanHallSiegeEngine
       nurka = L2Spawn.new(BLOODY_LORD_NURKA)
       nurka.amount = 1
       nurka.respawn_delay = 10_800
-      chance = Rnd.rand(100) + 1
+      # chance = Rnd.rand(100) + 1
       # L2J has commented this out
       # if chance <= 30
         coords = NURKA_COORDS[0]

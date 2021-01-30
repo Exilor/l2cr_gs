@@ -131,7 +131,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
       when ABYSSAL_JEWEL_1
         if qs.memo_state?(40000) || qs.memo_state?(40001)
           if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
-            20.times do |i|
+            20.times do
               spwn = add_spawn(JEWEL_GUARDIAN_MARA, npc, true, 180000)
               add_attack_desire(spwn, attacker)
             end
@@ -154,7 +154,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
       when ABYSSAL_JEWEL_2
         if qs.memo_state?(40000) || qs.memo_state?(40010)
           if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
-            20.times do |i|
+            20.times do
               add_attack_desire(add_spawn(JEWEL_GUARDIAN_MUSFEL, npc, true, 180000), attacker)
             end
             npc.variables["i_quest0"] = 1
@@ -209,7 +209,7 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
         case qs.memo_state
         when 21011, 21010, 21001, 21000, 20011, 20010, 20001, 20000
           unless has_quest_items?(killer, REMAINS_OF_SACRAFICE)
-            8.times do |i|
+            8.times do
               add_spawn(GHOST_OF_OFFERING, npc, true, 180000)
             end
           end

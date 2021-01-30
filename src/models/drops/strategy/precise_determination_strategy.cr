@@ -6,7 +6,7 @@ struct PreciseDeterminationStrategy
     @proc.call(item)
   end
 
-  ALWAYS  = new { |drop_item| true }
-  DEFAULT = new { |drop_item| Config.precise_drop_calculation }
-  NEVER   = new { |drop_item| false }
+  ALWAYS  = new { |_| true }
+  DEFAULT = new { |_| Config.precise_drop_calculation }
+  NEVER   = new { |_| false }
 end

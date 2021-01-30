@@ -1005,9 +1005,8 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.give_items(item_4, 1)
       end
 
-
       qs.set(PARAM_1, 0)
-      return "#{npc_id}-20.html"
+      "#{npc_id}-20.html"
     elsif qs.get_int(WEIGHT_POINT) == 0
       case qs.get_int(PARAM_1)
       when 21
@@ -1066,7 +1065,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         return "#{npc_id}-49.html"
       end
 
-
       qs.set(PARAM_1, 0)
     else
       i0 = qs.get_int(PARAM_1) % 4
@@ -1092,13 +1090,12 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       qs.set(WEIGHT_POINT, qs.get_int(WEIGHT_POINT) - 1)
       case qs.get_int(PARAM_3)
       when 0
-        return "#{npc_id}-52.html"
+        "#{npc_id}-52.html"
       when 1
-        return "#{npc_id}-50.html"
+        "#{npc_id}-50.html"
       when 2
-        return "#{npc_id}-51.html"
+        "#{npc_id}-51.html"
       end
-
     end
   end
 

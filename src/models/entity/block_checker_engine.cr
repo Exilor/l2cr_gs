@@ -283,7 +283,7 @@ class BlockCheckerEngine
       # Spawn blocks
       begin
         # Creates 50 new blocks
-        @num_of_boxes.times do |i|
+        @num_of_boxes.times do
           sp = L2Spawn.new(18672)
           sp.x = ARENA_COORDINATES[@engine.arena][4] + Rnd.rand(-400..400)
           sp.y = ARENA_COORDINATES[@engine.arena][5] + Rnd.rand(-400..400)

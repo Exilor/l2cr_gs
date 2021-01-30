@@ -1,3 +1,5 @@
+# A sorted set of comparable elements where T implements #succ and #pred,
+# optimized for low memory usage the less gaps there are between elements.
 class RangeSet(T)
   include Enumerable(T)
 
@@ -28,8 +30,8 @@ class RangeSet(T)
     pred = nil
     while r
       if val < r.min
-        if val &+ 1 == r.min
-          if pred && pred.max &+ 2 == r.min
+        if val.succ == r.min
+          if pred && pred.max.succ.succ == r.min
             pred.succ = r.succ
             pred.max = r.max
           else
@@ -37,7 +39,7 @@ class RangeSet(T)
           end
         else
           if pred
-            if pred.max &+ 1 == val
+            if pred.max.succ == val
               pred.max = val
             else
               pred.succ = RangeNode(T).new(val, val, r)
@@ -57,7 +59,7 @@ class RangeSet(T)
     end
 
     if pred
-      if pred.max &+ 1 == val
+      if pred.max.succ == val
         pred.max = val
         return self
       end
@@ -84,12 +86,12 @@ class RangeSet(T)
             @first = r.succ
           end
         elsif val == r.min
-          r.min = val &+ 1
+          r.min = val.succ
         elsif val == r.max
-          r.max = val &- 1
+          r.max = val.pred
         else
-          new_range = RangeNode(T).new(val &+ 1, r.max, r.succ)
-          r.max = val &- 1
+          new_range = RangeNode(T).new(val.succ, r.max, r.succ)
+          r.max = val.pred
           r.succ = new_range
         end
 
@@ -107,7 +109,7 @@ class RangeSet(T)
     each_range { |r| r.min.upto(r.max) { |n| yield n } }
   end
 
-  def inspect(io : IO)
+  def to_s(io : IO)
     io << self.class << " {"
 
     r = @first
@@ -116,6 +118,27 @@ class RangeSet(T)
         io << r.max
       else
         io << r.min << ".." << r.max
+      end
+
+      if r = r.succ
+        io << ", "
+      end
+    end
+
+    io << '}'
+  end
+
+  def inspect(io : IO)
+    io << self.class << " {"
+
+    r = @first
+    while r
+      if r.min == r.max
+        r.max.inspect(io)
+      else
+        r.min.inspect(io)
+        io << ".."
+        r.max.inspect(io)
       end
 
       if r = r.succ
@@ -137,7 +160,6 @@ class RangeSet(T)
       yield r
       r = r.succ
     end
-    nil
   end
 
   private class RangeNode(T)

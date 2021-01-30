@@ -11,6 +11,7 @@ class EnumBitmask(T)
 
   def clear
     @bitmask = 0
+    self
   end
 
   def set(*enum_members : T)

@@ -132,7 +132,7 @@ class FortSiege
     end
 
     if owner = fort.owner_clan?
-      clan = ClanTable.get_clan(fort.owner_clan.id).not_nil!
+      clan = ClanTable.get_clan(owner.id).not_nil!
       clan.each_online_player do |pc|
         pc.send_packet(sm)
       end
@@ -169,7 +169,7 @@ class FortSiege
     end
 
     if owner = fort.owner_clan?
-      clan = ClanTable.get_clan(fort.owner_clan.id).not_nil!
+      clan = ClanTable.get_clan(owner.id).not_nil!
       clan.each_online_player do |pc|
         if clear
           pc.siege_state = 0

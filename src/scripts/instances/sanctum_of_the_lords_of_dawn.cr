@@ -68,13 +68,12 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
 
 
       SotLoDWorld::MONSTERS.each do |id, monsters|
-        if tmp = monsters.find { |monster| monster.l2id == npc.l2id }
+        if monsters.any? { |monster| monster.l2id == npc.l2id }
           pc.tele_to_location(SAVE_POINT[id])
           break
         end
       end
     end
-
 
     super
   end

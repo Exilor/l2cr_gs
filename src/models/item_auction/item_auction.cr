@@ -37,16 +37,15 @@ class ItemAuction
     L2World.remove_object(item)
 
     @auction_bids.each do |bid|
-      if @highest_bid.nil? || @highest_bid.not_nil!.last_bid < bid.last_bid
+      highest = @highest_bid
+      if highest.nil? || highest.last_bid < bid.last_bid
         @highest_bid = bid
       end
     end
   end
 
   def auction_state : ItemAuctionState
-    @auction_state_lock.synchronize do
-      @auction_state
-    end
+    @auction_state_lock.synchronize { @auction_state }
   end
 
   def set_auction_state(expected : ItemAuctionState, wanted : ItemAuctionState) : Bool
@@ -65,16 +64,16 @@ class ItemAuction
     @auction_item.create_new_item_instance
   end
 
-  def auction_init_bid
+  def auction_init_bid : Int64
     @auction_item.auction_init_bid
   end
 
-  def starting_time_remaining
-    Math.max(ending_time - Time.ms, 0)
+  def starting_time_remaining : Int64
+    Math.max(ending_time - Time.ms, 0i64)
   end
 
-  def finishing_time_remaining
-    Math.max(ending_time - Time.ms, 0)
+  def finishing_time_remaining : Int64
+    Math.max(ending_time - Time.ms, 0i64)
   end
 
   def store_me
@@ -93,7 +92,7 @@ class ItemAuction
     error e
   end
 
-  def get_and_set_last_bid_player_l2id(player_l2id : Int32)
+  def get_and_set_last_bid_player_l2id(player_l2id : Int32) : Int32
     last_bid = @last_bid_player_l2id
     @last_bid_player_l2id = player_l2id
     last_bid
@@ -115,14 +114,14 @@ class ItemAuction
     error e
   end
 
-  def register_bid(player : L2PcInstance, new_bid : Int64)
+  def register_bid(pc : L2PcInstance, new_bid : Int64)
     if new_bid < auction_init_bid
-      player.send_packet(SystemMessageId::BID_PRICE_MUST_BE_HIGHER)
+      pc.send_packet(SystemMessageId::BID_PRICE_MUST_BE_HIGHER)
       return
     end
 
     if new_bid > 100_000_000_000
-      player.send_packet(SystemMessageId::BID_CANT_EXCEED_100_BILLION)
+      pc.send_packet(SystemMessageId::BID_CANT_EXCEED_100_BILLION)
       return
     end
 
@@ -130,98 +129,48 @@ class ItemAuction
       return
     end
 
-    player_l2id = player.l2id
+    pc_l2id = pc.l2id
 
     @auction_bids_lock.synchronize do
       if @highest_bid && new_bid < @highest_bid.not_nil!.last_bid
-        player.send_packet(SystemMessageId::BID_MUST_BE_HIGHER_THAN_CURRENT_BID)
+        pc.send_packet(SystemMessageId::BID_MUST_BE_HIGHER_THAN_CURRENT_BID)
         return
       end
 
-      bid = get_bid_for(player_l2id)
+      bid = get_bid_for(pc_l2id)
       if bid.nil?
-        unless reduce_item_count(player, new_bid)
-          player.send_packet(SystemMessageId::NOT_ENOUGH_ADENA_FOR_THIS_BID)
+        unless reduce_item_count(pc, new_bid)
+          pc.send_packet(SystemMessageId::NOT_ENOUGH_ADENA_FOR_THIS_BID)
           return
         end
 
-        bid = ItemAuctionBid.new(player_l2id, new_bid)
+        bid = ItemAuctionBid.new(pc_l2id, new_bid)
         @auction_bids << bid
       else
         if !bid.cancelled?
           if new_bid < bid.last_bid # just another check
-            player.send_packet(SystemMessageId::BID_MUST_BE_HIGHER_THAN_CURRENT_BID)
+            pc.send_packet(SystemMessageId::BID_MUST_BE_HIGHER_THAN_CURRENT_BID)
             return
           end
 
-          unless reduce_item_count(player, new_bid - bid.last_bid)
-            player.send_packet(SystemMessageId::NOT_ENOUGH_ADENA_FOR_THIS_BID)
+          unless reduce_item_count(pc, new_bid - bid.last_bid)
+            pc.send_packet(SystemMessageId::NOT_ENOUGH_ADENA_FOR_THIS_BID)
             return
           end
-        elsif !reduce_item_count(player, new_bid)
-          player.send_packet(SystemMessageId::NOT_ENOUGH_ADENA_FOR_THIS_BID)
+        elsif !reduce_item_count(pc, new_bid)
+          pc.send_packet(SystemMessageId::NOT_ENOUGH_ADENA_FOR_THIS_BID)
           return
         end
 
         bid.last_bid = new_bid
       end
 
-      on_player_bid(player, bid)
+      on_player_bid(pc, bid)
       update_player_bid(bid, false)
 
       sm = Packets::Outgoing::SystemMessage.submitted_a_bid_of_s1
       sm.add_long(new_bid)
-      player.send_packet(sm)
-      return
-    end
-  end
-
-  private def on_player_bid(player : L2PcInstance, bid : ItemAuctionBid)
-    if @highest_bid.nil?
-      @highest_bid = bid
-    elsif @highest_bid.not_nil!.last_bid < bid.last_bid
-      if old = @highest_bid.not_nil!.player
-        old.send_packet(SystemMessageId::YOU_HAVE_BEEN_OUTBID)
-      end
-
-      @highest_bid = bid
-    end
-
-    if ending_time - Time.ms <= 1000 * 60 * 10 # 10 minutes
-      case @auction_ending_extend_state
-      when ItemAuctionExtendState::INITIAL
-        @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_5_MIN
-        @ending_time += ENDING_TIME_EXTEND_5
-        broadcast_to_all_bidders(Packets::Outgoing::SystemMessage.bidder_exists_auction_time_extended_by_5_minutes)
-      when ItemAuctionExtendState::EXTEND_BY_5_MIN
-        if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
-          @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_3_MIN
-          @ending_time += ENDING_TIME_EXTEND_3
-          broadcast_to_all_bidders(Packets::Outgoing::SystemMessage.bidder_exists_auction_time_extended_by_3_minutes)
-        end
-      when ItemAuctionExtendState::EXTEND_BY_3_MIN
-        if Config.alt_item_auction_time_extends_on_bid > 0
-          if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
-            @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
-            @ending_time += Config.alt_item_auction_time_extends_on_bid
-          end
-        end
-      when ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
-        if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
-          if @scheduled_auction_ending_extend_state == ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_B
-            @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_B
-            @ending_time += Config.alt_item_auction_time_extends_on_bid
-          end
-        end
-      when ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_B
-        if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
-          if @scheduled_auction_ending_extend_state == ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
-            @ending_time += Config.alt_item_auction_time_extends_on_bid
-            @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
-          end
-        end
-      end
-
+      pc.send_packet(sm)
     end
   end
 
@@ -238,7 +187,7 @@ class ItemAuction
     end
   end
 
-  def cancel_bid(player : L2PcInstance)
+  def cancel_bid(player : L2PcInstance) : Bool
     case auction_state
     when ItemAuctionState::CREATED
       return false
@@ -247,7 +196,6 @@ class ItemAuction
         return false
       end
     end
-
 
     player_l2id = player.l2id
 
@@ -303,6 +251,16 @@ class ItemAuction
     end
   end
 
+  def get_last_bid(player : L2PcInstance) : Int64
+    bid = get_bid_for(player.l2id)
+    bid ? bid.last_bid : -1i64
+  end
+
+  def get_bid_for(player_l2id : Int32) : ItemAuctionBid?
+    index = get_bid_index_for(player_l2id)
+    index != -1 ? @auction_bids[index]? : nil
+  end
+
   private def reduce_item_count(player, count)
     unless player.reduce_adena("ItemAuction", count, player, true)
       player.send_packet(SystemMessageId::NOT_ENOUGH_ADENA_FOR_THIS_BID)
@@ -316,17 +274,7 @@ class ItemAuction
     player.add_adena("ItemAuction", count, player, true)
   end
 
-  def get_last_bid(player : L2PcInstance) : Int64
-    bid = get_bid_for(player.l2id)
-    bid ? bid.last_bid : -1i64
-  end
-
-  def get_bid_for(player_l2id : Int32) : ItemAuctionBid?
-    index = get_bid_index_for(player_l2id)
-    index != -1 ? @auction_bids[index]? : nil
-  end
-
-  private def get_bid_index_for(player_l2id : Int32) : Int32
+  private def get_bid_index_for(player_l2id)
     (@auction_bids.size - 1).downto(0) do |i|
       bid = @auction_bids[i]
       if bid.player_l2id == player_l2id
@@ -335,5 +283,54 @@ class ItemAuction
     end
 
     -1
+  end
+
+  private def on_player_bid(player : L2PcInstance, bid : ItemAuctionBid)
+    highest_bid = @highest_bid
+    if highest_bid.nil?
+      @highest_bid = bid
+    elsif highest_bid.last_bid < bid.last_bid
+      if old = highest_bid.player
+        old.send_packet(SystemMessageId::YOU_HAVE_BEEN_OUTBID)
+      end
+
+      @highest_bid = bid
+    end
+
+    if ending_time - Time.ms <= 1000 * 60 * 10 # 10 minutes
+      case @auction_ending_extend_state
+      when ItemAuctionExtendState::INITIAL
+        @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_5_MIN
+        @ending_time += ENDING_TIME_EXTEND_5
+        broadcast_to_all_bidders(Packets::Outgoing::SystemMessage.bidder_exists_auction_time_extended_by_5_minutes)
+      when ItemAuctionExtendState::EXTEND_BY_5_MIN
+        if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
+          @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_3_MIN
+          @ending_time += ENDING_TIME_EXTEND_3
+          broadcast_to_all_bidders(Packets::Outgoing::SystemMessage.bidder_exists_auction_time_extended_by_3_minutes)
+        end
+      when ItemAuctionExtendState::EXTEND_BY_3_MIN
+        if Config.alt_item_auction_time_extends_on_bid > 0
+          if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
+            @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
+            @ending_time += Config.alt_item_auction_time_extends_on_bid
+          end
+        end
+      when ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
+        if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
+          if @scheduled_auction_ending_extend_state == ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_B
+            @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_B
+            @ending_time += Config.alt_item_auction_time_extends_on_bid
+          end
+        end
+      when ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_B
+        if get_and_set_last_bid_player_l2id(player.l2id) != player.l2id
+          if @scheduled_auction_ending_extend_state == ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
+            @ending_time += Config.alt_item_auction_time_extends_on_bid
+            @auction_ending_extend_state = ItemAuctionExtendState::EXTEND_BY_CONFIG_PHASE_A
+          end
+        end
+      end
+    end
   end
 end

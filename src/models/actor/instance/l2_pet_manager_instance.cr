@@ -32,7 +32,7 @@ class L2PetManagerInstance < L2MerchantInstance
 
   def on_bypass_feedback(pc : L2PcInstance, command : String)
     if command.starts_with?("exchange")
-      case val = command.split[1].to_i
+      case command.split[1].to_i
       when 1
         exchange(pc, 7585, 6650)
       when 2
@@ -43,7 +43,7 @@ class L2PetManagerInstance < L2MerchantInstance
     elsif command.starts_with?("evolve")
       ok = false
 
-      case val = command.split[1].to_i
+      case command.split[1].to_i
       when 1
         ok = Evolve.do_evolve(pc, self, 2375, 9882, 55)
       when 2
@@ -64,7 +64,7 @@ class L2PetManagerInstance < L2MerchantInstance
     elsif command.starts_with?("restore")
       ok = false
 
-      case val = command.split[1].to_i
+      case command.split[1].to_i
       when 1
         ok = Evolve.do_restore(pc, self, 10307, 9882, 55)
       when 2

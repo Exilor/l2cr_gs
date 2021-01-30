@@ -111,8 +111,6 @@ class OlympiadGameTeams < AbstractOlympiadGame
       result[1] = t2
       return [t1, t2]
     end
-
-    nil
   end
 
   def self.create_game(id : Int32, list : Interfaces::Array(Interfaces::Array(Int32))) : OlympiadGameTeams?
@@ -448,7 +446,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
       return
     end
 
-    # points to be dedicted in when of losing
+    # points to be deducted when losing
     points_t1 = Slice(Int32).new(@team_one_size)
     points_t2 = Slice(Int32).new(@team_two_size)
     maxpoints_t1 = Slice(Int32).new(@team_one_size)
@@ -507,19 +505,19 @@ class OlympiadGameTeams < AbstractOlympiadGame
     end
 
     # compensating remaining points, first team from begin to end, second from end to begin
-    i = 0
-    while totalpoints_t1 > 0 && i < @team_one_size
-      if points_t1[i] < maxpoints_t1[i]
-        points_t1[i] &+= 1
+    j = 0
+    while totalpoints_t1 > 0 && j < @team_one_size
+      if points_t1[j] < maxpoints_t1[j]
+        points_t1[j] &+= 1
         totalpoints_t1 &-= 1
       end
-      i &+= 1
+      j &+= 1
     end
 
-    i = @team_two_size
-    while totalpoints_t2 > 0 && (i &-= 1) >= 0
-      if points_t2[i] < maxpoints_t2[i]
-        points_t2[i] &+= 1
+    j = @team_two_size
+    while totalpoints_t2 > 0 && (j &-= 1) >= 0
+      if points_t2[j] < maxpoints_t2[j]
+        points_t2[j] &+= 1
         totalpoints_t2 &-= 1
       end
     end

@@ -392,7 +392,7 @@ class GameClient
   def clean_me(fast : Bool)
     sync do
       @cleanup_task ||= ThreadPoolManager.schedule_general(
-        ->cleanup_task, delay = fast ? 5 : 1500
+        ->cleanup_task, fast ? 5 : 1500
       )
     end
   end

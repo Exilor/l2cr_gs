@@ -80,7 +80,7 @@ class Scripts::Sailren < AbstractNpcAI
     when "teleportOut"
       pc.not_nil!.tele_to_location(TeleportWhereType::TOWN)
     when "SPAWN_VELOCIRAPTOR"
-      3.times do |i|
+      3.times do
         add_spawn(VELOCIRAPTOR, 27313 + Rnd.rand(150), -6766 + Rnd.rand(150), -1975, 0, false, 0)
       end
     when "SPAWN_SAILREN"

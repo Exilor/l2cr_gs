@@ -179,22 +179,21 @@ class Scripts::Q00255_Tutorial < Quest
         pc.add_listener(listener)
       end
     elsif pc.has_listener?(EventType::ON_PLAYER_ITEM_PICKUP)
-      pc.remove_listener_if(EventType::ON_PLAYER_ITEM_PICKUP) do |listener|
-        listener.owner == pc
+      pc.remove_listener_if(EventType::ON_PLAYER_ITEM_PICKUP) do |lst|
+        lst.owner == pc
       end
     end
 
     if event_status & 8388608 != 0
       unless pc.has_listener?(EventType::ON_PLAYER_SIT)
-        listener = ConsumerEventListener.new(pc, EventType::ON_PLAYER_SIT, pc) do |event|
-          event = event.as(OnPlayerSit)
+        listener = ConsumerEventListener.new(pc, EventType::ON_PLAYER_SIT, pc) do
           tutorial_event(pc, 8388608)
         end
         pc.add_listener(listener)
       end
     elsif pc.has_listener?(EventType::ON_PLAYER_SIT)
-      pc.remove_listener_if(EventType::ON_PLAYER_SIT) do |listener|
-        listener.owner == pc
+      pc.remove_listener_if(EventType::ON_PLAYER_SIT) do |lst|
+        lst.owner == pc
       end
     end
 
@@ -203,15 +202,15 @@ class Scripts::Q00255_Tutorial < Quest
         listener = ConsumerEventListener.new(pc, EventType::ON_CREATURE_ATTACKED, pc) do |event|
           event = event.as(OnCreatureAttacked)
           pp = event.target.acting_player
-          if pp && pp.current_hp <= pp.max_hp * 0.3
+          if pp && pp.hp_percent <= 30
             tutorial_event(pp, 256)
           end
         end
         pc.add_listener(listener)
       end
     else
-      pc.remove_listener_if(EventType::ON_CREATURE_ATTACKED) do |listener|
-        listener.owner == pc
+      pc.remove_listener_if(EventType::ON_CREATURE_ATTACKED) do |lst|
+        lst.owner == pc
       end
     end
 
@@ -414,7 +413,7 @@ class Scripts::Q00255_Tutorial < Quest
 
   private def fire_event(timer_id, pc)
     return unless pc.is_a?(L2PcInstance)
-    if pc.dead? || timer_id <= 1000000
+    if pc.dead? || timer_id <= 1_000_000
       return
     end
 
@@ -458,7 +457,7 @@ class Scripts::Q00255_Tutorial < Quest
       unless qs.has_quest_items?(TUTORIAL_GUIDE)
         qs.give_items(TUTORIAL_GUIDE, 1)
       end
-      qs.start_quest_timer((pc.l2id + 1000000).to_s, 30000)
+      qs.start_quest_timer((pc.l2id + 1_000_000).to_s, 30_000)
       qs.set_memo_state_ex(1, -3)
     when -3
       qs.play_sound(Voice::TUTORIAL_VOICE_002_1000)
@@ -488,7 +487,7 @@ class Scripts::Q00255_Tutorial < Quest
         qs.play_sound(Voice::TUTORIAL_VOICE_006_3500)
         qs.show_question_mark(pc, 1)
         qs.play_sound(Sound::ITEMSOUND_QUEST_TUTORIAL)
-        qs.start_quest_timer((pc.l2id + 1000000).to_s, 30000)
+        qs.start_quest_timer((pc.l2id + 1_000_000).to_s, 30_000)
         if qs.get_memo_state_ex(1) < 0
           qs.set_memo_state_ex(1, -4)
         end
@@ -1253,7 +1252,7 @@ class Scripts::Q00255_Tutorial < Quest
 
       case memo_flag
       when 0
-        qs.start_quest_timer((pc.l2id + 1000000).to_s, 10000)
+        qs.start_quest_timer((pc.l2id + 1_000_000).to_s, 10_000)
         memo_state = 2147483392 & ~(8388608 | 1048576)
         qs.memo_state = 1 | memo_state
         if qs.get_memo_state_ex(1) < 0
@@ -1593,7 +1592,7 @@ class Scripts::Q00255_Tutorial < Quest
           end
         end
         qs.take_items(BLOOD_OF_MITRAELL, 1)
-        start_quest_timer(npc.id.to_s, 60000, npc, pc)
+        start_quest_timer(npc.id.to_s, 60_000, npc, pc)
         if qs.get_memo_state_ex(1) <= 3
           qs.set_memo_state_ex(1, 4)
         end
@@ -1625,7 +1624,7 @@ class Scripts::Q00255_Tutorial < Quest
           qs.add_exp_and_sp(0, 50)
         end
         qs.take_items(LEAF_OF_THE_MOTHER_TREE, 1)
-        start_quest_timer(npc.id.to_s, 60000, npc, pc)
+        start_quest_timer(npc.id.to_s, 60_000, npc, pc)
         if qs.get_memo_state_ex(1) <= 3
           qs.set_memo_state_ex(1, 4)
         end
@@ -1656,7 +1655,7 @@ class Scripts::Q00255_Tutorial < Quest
           qs.add_exp_and_sp(0, 50)
         end
         qs.take_items(LICENSE_OF_MINER, 1)
-        start_quest_timer(npc.id.to_s, 60000, npc, pc)
+        start_quest_timer(npc.id.to_s, 60_000, npc, pc)
         if qs.get_memo_state_ex(1) <= 3
           qs.set_memo_state_ex(1, 4)
         end
@@ -1677,7 +1676,7 @@ class Scripts::Q00255_Tutorial < Quest
     when 31
       if qs.has_quest_items?(VOUCHER_OF_FLAME)
         qs.take_items(VOUCHER_OF_FLAME, 1)
-        start_quest_timer(npc.id.to_s, 60000, npc, pc)
+        start_quest_timer(npc.id.to_s, 60_000, npc, pc)
         if qs.get_memo_state_ex(1) <= 3
           qs.set_memo_state_ex(1, 4)
         end
@@ -1707,7 +1706,7 @@ class Scripts::Q00255_Tutorial < Quest
         qs.set_memo_state_ex(1, 4)
       end
       qs.take_items(DIPLOMA, -1)
-      start_quest_timer(npc.id.to_s, 60000, npc, pc)
+      start_quest_timer(npc.id.to_s, 60_000, npc, pc)
       qs.add_radar(-119692, 44504, 380)
       show_page(pc, "32133-002.htm")
     end

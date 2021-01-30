@@ -20,9 +20,9 @@ module PunishmentHandler::BanHandler
       end
     when PunishmentAffect::IP
       ip = task.key.to_s
-      L2World.players.each do |pc|
-        if pc.ip_address == ip
-          apply_to_player(pc)
+      L2World.players.each do |pc2|
+        if pc2.ip_address == ip
+          apply_to_player(pc2)
         end
       end
     end

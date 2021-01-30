@@ -266,7 +266,7 @@ class Scripts::Antharas < AbstractNpcAI
     when "SPAWN_MINION"
       npc = npc.not_nil!
       if @minion_multiplier > 1 && @minion_count < 100 &- (@minion_multiplier &* 2)
-        @minion_multiplier.times do |i|
+        @minion_multiplier.times do
           add_spawn(BEHEMOTH, npc, true)
           add_spawn(TERASQUE, npc, true)
         end

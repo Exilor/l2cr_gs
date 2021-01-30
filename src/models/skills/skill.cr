@@ -120,7 +120,7 @@ class Skill
       if time = Config.skill_duration_list[@id]?
         if @level < 100 || @level > 140
           abnormal_time = time
-        elsif @level >= 100 && @level < 40
+        elsif @level >= 100 && @level < 140
           abnormal_time += time
         end
       end
@@ -204,12 +204,9 @@ class Skill
     to: @operate_type
 
   def aoe? : Bool
-    @target_type.area? ||
-    @target_type.aura? ||
-    @target_type.behind_area? ||
-    @target_type.behind_aura? ||
-    @target_type.front_area? ||
-    @target_type.front_aura?
+    @target_type.area? || @target_type.aura? || @target_type.behind_area? ||
+      @target_type.behind_aura? || @target_type.front_area? ||
+      @target_type.front_aura?
   end
 
   def damage? : Bool
@@ -222,8 +219,8 @@ class Skill
 
   def can_be_stolen? : Bool
     !passive? && !toggle? && !debuff? && !hero_skill? && !gm_skill? &&
-    !(static? && id != CommonSkill::CARAVANS_SECRET_MEDICINE.id) &&
-    !irreplaceable_buff? && id != CommonSkill::SERVITOR_SHARE.id
+      !(static? && id != CommonSkill::CARAVANS_SECRET_MEDICINE.id) &&
+      !irreplaceable_buff? && id != CommonSkill::SERVITOR_SHARE.id
   end
 
   def has_abnormal_visual_effects? : Bool
@@ -240,7 +237,7 @@ class Skill
 
   def affect_limit : Int32
     lim1 = @affect_limit[1]
-    lim1 == 0 ? @affect_limit[0] : @affect_limit[0] &+ Rnd.rand(lim1)
+    lim1 == 0 ? Int32::MAX : @affect_limit[0] &+ Rnd.rand(lim1)
   end
 
   def continuous? : Bool
@@ -740,7 +737,6 @@ class Skill
       if prod_data.size < 3
         raise "Wrong size for extractable skill info: #{prod_data.size}"
       end
-      chance = 0.0
       length = prod_data.size &- 1
       items = [] of ItemHolder
       (0...length).step(2) do |j|

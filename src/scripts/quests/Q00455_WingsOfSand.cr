@@ -114,7 +114,7 @@ class Scripts::Q00455_WingsOfSand < Quest
   end
 
   private def give_items(st)
-    1.upto(st.cond - 1) do |i|
+    1.upto(st.cond - 1) do
       chance = Rnd.rand(1000)
       parts = Rnd.rand(1..2)
       if chance < 50

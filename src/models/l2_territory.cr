@@ -74,7 +74,7 @@ class L2Territory
       end
     end
 
-    100.times do |i|
+    100.times do
       x = Rnd.rand(@x_min..@x_max)
       y = Rnd.rand(@y_min..@y_max)
 

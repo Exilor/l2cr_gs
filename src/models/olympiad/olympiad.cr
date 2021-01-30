@@ -90,23 +90,33 @@ class Olympiad < ListenersContainer
   getter? in_comp_period = false
   protected setter period : Int32
 
+  @@olympiad_get_heros = ""
+  @@get_all_classified_nobless = ""
+  @@get_each_class_leader = ""
+  @@get_each_class_leader_current = ""
+  @@get_each_class_leader_soulhound = ""
+  @@get_each_class_leader_current_soulhound = ""
+  @@comp_start = 0
+  @@comp_min = 0
+  @@comp_period = 0
+  @@weekly_period = 0
+  @@validation_period = 0
+
   class_getter(default_points) { Config.alt_oly_start_points }
   class_getter(weekly_points) { Config.alt_oly_weekly_points }
 
   private def initialize
-    @OLYMPIAD_GET_HEROS = "SELECT olympiad_nobles.charId, characters.char_name FROM olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} AND olympiad_nobles.competitions_won > 0 ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC"
-    @GET_ALL_CLASSIFIED_NOBLESS = "SELECT charId from olympiad_nobles_eom WHERE competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_points DESC, competitions_done DESC, competitions_won DESC"
-    @GET_EACH_CLASS_LEADER = "SELECT characters.char_name from olympiad_nobles_eom, characters WHERE characters.charId = olympiad_nobles_eom.charId AND olympiad_nobles_eom.class_id = ? AND olympiad_nobles_eom.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles_eom.olympiad_points DESC, olympiad_nobles_eom.competitions_done DESC, olympiad_nobles_eom.competitions_won DESC LIMIT 10"
-    @GET_EACH_CLASS_LEADER_CURRENT = "SELECT characters.char_name from olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC LIMIT 10"
-    @GET_EACH_CLASS_LEADER_SOULHOUND = "SELECT characters.char_name from olympiad_nobles_eom, characters WHERE characters.charId = olympiad_nobles_eom.charId AND (olympiad_nobles_eom.class_id = ? OR olympiad_nobles_eom.class_id = 133) AND olympiad_nobles_eom.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles_eom.olympiad_points DESC, olympiad_nobles_eom.competitions_done DESC, olympiad_nobles_eom.competitions_won DESC LIMIT 10"
-    @GET_EACH_CLASS_LEADER_CURRENT_SOULHOUND = "SELECT characters.char_name from olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND (olympiad_nobles.class_id = ? OR olympiad_nobles.class_id = 133) AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC LIMIT 10"
-    @COMP_START = Config.alt_oly_start_time # 6PM
-    @COMP_MIN = Config.alt_oly_min # 00 mins
-    @COMP_PERIOD = Config.alt_oly_cperiod # 6 hours
-    @WEEKLY_PERIOD = Config.alt_oly_wperiod # 1 week
-    @VALIDATION_PERIOD = Config.alt_oly_vperiod # 24 hours
-    @DEFAULT_POINTS = Config.alt_oly_start_points
-    @WEEKLY_POINTS = Config.alt_oly_weekly_points
+    @@olympiad_get_heros = "SELECT olympiad_nobles.charId, characters.char_name FROM olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} AND olympiad_nobles.competitions_won > 0 ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC"
+    @@get_all_classified_nobless = "SELECT charId from olympiad_nobles_eom WHERE competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_points DESC, competitions_done DESC, competitions_won DESC"
+    @@get_each_class_leader = "SELECT characters.char_name from olympiad_nobles_eom, characters WHERE characters.charId = olympiad_nobles_eom.charId AND olympiad_nobles_eom.class_id = ? AND olympiad_nobles_eom.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles_eom.olympiad_points DESC, olympiad_nobles_eom.competitions_done DESC, olympiad_nobles_eom.competitions_won DESC LIMIT 10"
+    @@get_each_class_leader_current = "SELECT characters.char_name from olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND olympiad_nobles.class_id = ? AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC LIMIT 10"
+    @@get_each_class_leader_soulhound = "SELECT characters.char_name from olympiad_nobles_eom, characters WHERE characters.charId = olympiad_nobles_eom.charId AND (olympiad_nobles_eom.class_id = ? OR olympiad_nobles_eom.class_id = 133) AND olympiad_nobles_eom.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles_eom.olympiad_points DESC, olympiad_nobles_eom.competitions_done DESC, olympiad_nobles_eom.competitions_won DESC LIMIT 10"
+    @@get_each_class_leader_current_soulhound = "SELECT characters.char_name from olympiad_nobles, characters WHERE characters.charId = olympiad_nobles.charId AND (olympiad_nobles.class_id = ? OR olympiad_nobles.class_id = 133) AND olympiad_nobles.competitions_done >= #{Config.alt_oly_min_matches} ORDER BY olympiad_nobles.olympiad_points DESC, olympiad_nobles.competitions_done DESC, olympiad_nobles.competitions_won DESC LIMIT 10"
+    @@comp_start = Config.alt_oly_start_time # 6PM
+    @@comp_min = Config.alt_oly_min # 00 mins
+    @@comp_period = Config.alt_oly_cperiod # 6 hours
+    @@weekly_period = Config.alt_oly_wperiod # 1 week
+    @@validation_period = Config.alt_oly_vperiod # 24 hours
 
     load
 
@@ -204,11 +214,11 @@ class Olympiad < ListenersContainer
         ms = millis_to_validation_end
       end
 
-      info { "#{ms // 60000} minutes until period ends." }
+      info { "#{ms // 60_000} minutes until period ends." }
 
       if @period == 0
         ms = millis_to_week_change
-        info { "Next weekly change is in #{ms // 60000} minutes." }
+        info { "Next weekly change is in #{ms // 60_000} minutes." }
       end
     end
 
@@ -221,7 +231,7 @@ class Olympiad < ListenersContainer
 
     begin
       place = 1
-      GameDB.each(@GET_ALL_CLASSIFIED_NOBLESS) do |rs|
+      GameDB.each(@@get_all_classified_nobless) do |rs|
         tmp[rs.get_i32(CHAR_ID)] = place
         place &+= 1
       end
@@ -262,9 +272,9 @@ class Olympiad < ListenersContainer
     end
 
     @comp_start = Calendar.new
-    @comp_start.hour = @COMP_START
-    @comp_start.minute = @COMP_MIN
-    @comp_end = @comp_start.ms + @COMP_PERIOD
+    @comp_start.hour = @@comp_start
+    @comp_start.minute = @@comp_min
+    @comp_end = @comp_start.ms + @@comp_period
 
     @scheduled_olympiad_end.try &.cancel
 
@@ -297,7 +307,7 @@ class Olympiad < ListenersContainer
     save_olympiad_status
     update_monthly_data
 
-    @validation_end = Time.ms + @VALIDATION_PERIOD
+    @validation_end = Time.ms + @@validation_period
 
     load_nobles_rank
     task = ->validation_end_task
@@ -437,7 +447,7 @@ class Olympiad < ListenersContainer
     cal.second = 0
     @olympiad_end = Time.ms
 
-    @next_weekly_change = Time.ms + @WEEKLY_PERIOD
+    @next_weekly_change = Time.ms + @@weekly_period
     schedule_weekly_change
   end
 
@@ -457,10 +467,10 @@ class Olympiad < ListenersContainer
 
   private def set_new_comp_begin : Int64
     @comp_start = Calendar.new
-    @comp_start.hour = @COMP_START
-    @comp_start.minute = @COMP_MIN
+    @comp_start.hour = @@comp_start
+    @comp_start.minute = @@comp_min
     @comp_start.add(:DAY, 1)
-    @comp_end = @comp_start.ms + @COMP_PERIOD
+    @comp_end = @comp_start.ms + @@comp_period
 
     info { "New schedule: #{@comp_start.time}." }
 
@@ -488,11 +498,11 @@ class Olympiad < ListenersContainer
       reset_weekly_matches
       info "Reset weekly matches to nobles."
 
-      @next_weekly_change = Time.ms + @WEEKLY_PERIOD
+      @next_weekly_change = Time.ms + @@weekly_period
     end
 
     delay = millis_to_week_change
-    @scheduled_weekly_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, @WEEKLY_PERIOD)
+    @scheduled_weekly_task = ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, @@weekly_period)
   end
 
   private def add_weekly_points
@@ -503,7 +513,7 @@ class Olympiad < ListenersContainer
 
       NOBLES.each_value do |info|
         points = info.get_i32(POINTS)
-        points += @WEEKLY_POINTS
+        points += Olympiad.weekly_points
         info[POINTS] = points
       end
     end
@@ -625,7 +635,7 @@ class Olympiad < ListenersContainer
     soul_hounds = [] of StatsSet
 
     HERO_IDS.each do |element|
-      GameDB.each(@OLYMPIAD_GET_HEROS, element) do |rs|
+      GameDB.each(@@olympiad_get_heros, element) do |rs|
         hero = StatsSet.new
         hero[CLASS_ID] = element
         hero[CHAR_ID] = rs.get_i32(CHAR_ID)
@@ -701,15 +711,15 @@ class Olympiad < ListenersContainer
     names = [] of String
     if Config.alt_oly_show_monthly_winners
       if class_id == 134
-        sql = @GET_EACH_CLASS_LEADER_SOULHOUND
+        sql = @@get_each_class_leader_soulhound
       else
-        sql = @GET_EACH_CLASS_LEADER
+        sql = @@get_each_class_leader
       end
     else
       if class_id == 132
-        sql = @GET_EACH_CLASS_LEADER_CURRENT_SOULHOUND
+        sql = @@get_each_class_leader_current_soulhound
       else
-        sql = @GET_EACH_CLASS_LEADER_CURRENT
+        sql = @@get_each_class_leader_current
       end
     end
 

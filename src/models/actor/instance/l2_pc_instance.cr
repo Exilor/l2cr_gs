@@ -1313,8 +1313,7 @@ class L2PcInstance < L2Playable
 
   def decrease_skill_level(skill : Skill, lvl_diff : Int)
     next_level = -1
-    skill_tree = SkillTreesData.get_complete_class_skill_tree(class_id)
-    skill_tree.each_value do |sl|
+    SkillTreesData.get_complete_class_skill_tree(class_id).each_value do |sl|
       if sl.skill_id == skill.id && next_level < sl.skill_level
         if level >= sl.get_level &- lvl_diff
           next_level = sl.skill_level
@@ -1336,17 +1335,12 @@ class L2PcInstance < L2Playable
     end
 
     if casting_now?
-      current_skill = current_skill()
-      if current_skill && skill.id == current_skill.skill_id
-        # debug { "#use_magic(#{skill}, #{force}, #{dont_move}) aborted (a skill is being casted)." }
-        action_failed
-        return false
-      elsif skill_disabled?(skill)
+      current = current_skill()
+      if (current && skill.id == current.skill_id) || skill_disabled?(skill)
         action_failed
         return false
       end
 
-      # debug { "#use_magic(#{skill}, #{force}, #{dont_move}) skill queued (char is casting)." }
       set_queued_skill(skill, force, dont_move)
       action_failed
       return false
@@ -1577,10 +1571,12 @@ class L2PcInstance < L2Playable
          .area_summon?, .ground?, .self?, .enemy?
       # do nothing
     else
-      if target.playable? && !access_level.allow_peace_attack? && !check_pvp_skill(target, skill)
-        send_packet(SystemMessageId::INCORRECT_TARGET)
-        action_failed
-        return false
+      if target.playable? && !access_level.allow_peace_attack?
+        unless check_pvp_skill(target, skill)
+          send_packet(SystemMessageId::INCORRECT_TARGET)
+          action_failed
+          return false
+        end
       end
     end
 
@@ -1946,15 +1942,14 @@ class L2PcInstance < L2Playable
   end
 
   def in_party_with?(target : L2Character) : Bool
-    in_party? && target.in_party? && party == target.party
+    in_party? && party == target.party
   end
 
   def in_command_channel_with?(target : L2Character) : Bool
     return false unless party = party()
     return false unless target_party = target.party
     return false unless cc = party.command_channel
-    return false unless target_cc = target_party.command_channel
-    cc == target_cc
+    cc == target_party.command_channel
   end
 
   def at_war_with?(target : L2Character?) : Bool
@@ -2023,14 +2018,12 @@ class L2PcInstance < L2Playable
         drop_count = 0
         item_drop_percent = 0
         inventory.items.safe_each do |i|
-          if i.shadow_item? || i.time_limited_item? || !i.droppable? ||
-            i.id == Inventory::ADENA_ID || i.template.type_2 == ItemType2::QUEST ||
-            ((smn = summon) && smn.control_l2id == i.l2id) ||
-            Config.karma_list_nondroppable_items.includes?(i.id) ||
-            Config.karma_list_nondroppable_pet_items.includes?(i.id)
-
-            next
-          end
+          next if i.shadow_item? || i.time_limited_item? || !i.droppable?
+          next if i.id == Inventory::ADENA_ID
+          next if i.template.type_2 == ItemType2::QUEST
+          next if (smn = summon) && smn.control_l2id == i.l2id
+          next if Config.karma_list_nondroppable_items.includes?(i.id)
+          next if Config.karma_list_nondroppable_pet_items.includes?(i.id)
 
           if i.equipped?
             if i.template.type_2 == ItemType2::WEAPON
@@ -6819,7 +6812,7 @@ class L2PcInstance < L2Playable
   end
 
   def process_quest_event(quest_name : String, event : String)
-    return unless event && !event.empty?
+    return if event.nil? || event.empty?
 
     unless quest = QuestManager.get_quest(quest_name)
       return
@@ -7525,7 +7518,7 @@ class L2PcInstance < L2Playable
   end
 
   def teleport_bookmark_delete(id : Int32)
-    if bookmark = @tp_bookmarks.delete(id)
+    if @tp_bookmarks.delete(id)
       GameDB.teleport_bookmark.delete(self, id)
       send_packet(ExGetBookMarkInfoPacket.new(self))
     end

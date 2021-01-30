@@ -226,16 +226,16 @@ module TopicBBSManager
         nbp &+= 1
       end
 
-      1.upto(nbp) do |i|
-        if i == index
-          io << "<td> " << i << " </td>"
+      1.upto(nbp) do |i2|
+        if i2 == index
+          io << "<td> " << i2 << " </td>"
         else
           io << "<td><a action=\"bypass _bbstopics;read;"
           io << forum.id
           io << ';'
-          io << i
+          io << i2
           io << "\"> "
-          io << i
+          io << i2
           io << " </a></td>"
         end
       end

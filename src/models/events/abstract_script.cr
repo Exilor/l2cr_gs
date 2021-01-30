@@ -744,7 +744,7 @@ abstract class AbstractScript
       end
 
       # Give the item to player
-      if item = pc.add_item("Quest", item_id, amount_to_give.to_i64, npc, true)
+      if pc.add_item("Quest", item_id, amount_to_give.to_i64, npc, true)
         # limit reached (if there is no limit, this block doesn't execute)
         if current_count + amount_to_give == limit
           if play_sound

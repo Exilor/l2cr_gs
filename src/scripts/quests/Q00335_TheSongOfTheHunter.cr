@@ -698,15 +698,15 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
       else
         i5 = qs.memo_state
         i0 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i1 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i2 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i3 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i4 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i0 = 33520 + i0
         i1 = 33520 + i1
         i2 = 33520 + i2
@@ -729,34 +729,34 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
             i0 = Rnd.rand(10)
             i1 = Rnd.rand(10)
             i2 = Rnd.rand(5)
-            i3 = Rnd.rand(5) + 5
+            i3 = Rnd.rand(5) &+ 5
             i4 = Rnd.rand(10)
             qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
           elsif get_quest_items_count(player, LAUREL_LEAF_PIN) < 4
             if Rnd.rand(100) < 20
-              i0 = Rnd.rand(6) + 10
+              i0 = Rnd.rand(6) &+ 10
               i1 = Rnd.rand(10)
               i2 = Rnd.rand(5)
-              i3 = Rnd.rand(5) + 5
+              i3 = Rnd.rand(5) &+ 5
               i4 = Rnd.rand(10)
               qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
             else
               i0 = Rnd.rand(10)
               i1 = Rnd.rand(10)
               i2 = Rnd.rand(5)
-              i3 = Rnd.rand(5) + 5
+              i3 = Rnd.rand(5) &+ 5
               i4 = Rnd.rand(10)
               qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
             end
           elsif Rnd.rand(100) < 20
-            i0 = Rnd.rand(6) + 10
+            i0 = Rnd.rand(6) &+ 10
             if Rnd.rand(20) == 0
               i1 = Rnd.rand(3) + 16
             else
               i1 = Rnd.rand(10)
             end
             i2 = Rnd.rand(5)
-            i3 = Rnd.rand(5) + 5
+            i3 = Rnd.rand(5) &+ 5
             i4 = Rnd.rand(10)
             qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
           else
@@ -767,7 +767,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
               i1 = Rnd.rand(10)
             end
             i2 = Rnd.rand(5)
-            i3 = Rnd.rand(5) + 5
+            i3 = Rnd.rand(5) &+ 5
             i4 = Rnd.rand(10)
             qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
           end
@@ -783,15 +783,15 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
       else
         i5 = qs.memo_state
         i0 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i1 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i2 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i3 = i5 % 32
-        i5 = i5 // 32
+        i5 //= 32
         i4 = i5 % 32
-        i5 = i5 // 32
+        # i5 //= 32
         i0 = 33520 + (i0 + 20)
         i1 = 33520 + (i1 + 20)
         i2 = 33520 + (i2 + 20)

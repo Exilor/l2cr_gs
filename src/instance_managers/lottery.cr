@@ -160,7 +160,7 @@ module Lottery
 
         count = 0
 
-        1.upto(16) do |i|
+        1.upto(16) do
           val = cur_enchant // 2
 
           if val != (cur_enchant / 2).round

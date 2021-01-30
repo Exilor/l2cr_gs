@@ -63,7 +63,7 @@ class L2Party < AbstractPlayerGroup
   end
 
   def get_checked_next_looter(item_id : Int32, target : L2Character) : L2PcInstance?
-    size.times do |i|
+    size.times do
       @item_last_loot &+= 1
       if @item_last_loot >= size
         @item_last_loot = 0
@@ -462,9 +462,6 @@ class L2Party < AbstractPlayerGroup
 
       i = members.size &- 1
       return members if i < 1
-      if i >= BONUS_EXP_SP.size
-        i = BONUS_EXP_SP.size &- 1
-      end
 
       members.each do |m|
         sq_level = Math.pow(m.level, 2)

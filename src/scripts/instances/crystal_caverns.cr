@@ -849,7 +849,7 @@ class Scripts::CrystalCaverns < AbstractInstance
             stop_attack(attacker)
           end
           target = npc.ai.attack_target
-          10.times do |i|
+          10.times do
             copy = add_spawn(TEARS_COPY, *npc.xyz, 0, false, 0, false, attacker.instance_id)
             copy.set_running
             copy.as(L2Attackable).add_damage_hate(target, 0, 99999)
@@ -1317,9 +1317,7 @@ class Scripts::CrystalCaverns < AbstractInstance
 
   def on_talk(npc, player)
     npc_id = npc.id
-    unless st = get_quest_state(player, false)
-      st = new_quest_state(player)
-    end
+    get_quest_state(player, true)
     if npc_id == ORACLE_GUIDE_1
       enter_instance(player, CCWorld.new(Time.ms + 5400000), "CrystalCaverns.xml", TEMPLATE_ID)
       return ""
@@ -1329,8 +1327,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     if world.is_a?(CCWorld)
       if npc_id == CRYSTALLINE_GOLEM
         # there's nothing here
-      elsif npc.id >= 32275 && npc.id <= 32277 && world.oracle_triggered[npc.id - 32275]
-        do_teleport = false
+      elsif npc.id.between?(32275, 32277) && world.oracle_triggered[npc.id - 32275]
         party = player.party
         do_teleport = true
 
@@ -1417,14 +1414,14 @@ class Scripts::CrystalCaverns < AbstractInstance
       elsif npc.id == ORACLE_GUIDE_3
         if world.status < 30 && check_baylor_conditions(player)
           world.raiders.clear
-          unless party = player.party
-            world.raiders << player
-          else
+          if party = player.party
             party.members.each do |m|
               # rnd = Rnd.rand(100)
               # m.destroy_item_by_item_id("Quest", (rnd < 33 ? BOSS_CRYSTAL_1:(rnd < 67 ? BOSS_CRYSTAL_2:BOSS_CRYSTAL_3)), 1, m, true); Crystals are no longer beign cunsumed while entering to Baylor Lair.
               world.raiders << m
             end
+          else
+            world.raiders << player
           end
         else
           return ""

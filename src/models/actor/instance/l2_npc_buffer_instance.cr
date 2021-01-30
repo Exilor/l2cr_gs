@@ -70,7 +70,7 @@ class L2NpcBufferInstance < L2Npc
               next
             end
           else
-            info.fee.count.times do |i|
+            info.fee.count.times do
               pc.destroy_item_by_item_id("Npc Buffer", info.fee.id, 1, pc.target, true)
             end
           end

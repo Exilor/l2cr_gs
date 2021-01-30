@@ -325,7 +325,7 @@ class Scripts::BeastFarm < AbstractNpcAI
 
     def get_leveled_npc_id(skill_id)
       if !@skill_success_npc_id_list.has_key?(skill_id)
-        return -1
+        -1
       elsif skill_id == SKILL_BLESSED_GOLDEN_SPICE || skill_id == SKILL_BLESSED_CRYSTAL_SPICE || skill_id == SKILL_SGRADE_GOLDEN_SPICE || skill_id == SKILL_SGRADE_CRYSTAL_SPICE
         if Rnd.rand(100) < SPECIAL_SPICE_CHANCES[0]
           if Rnd.rand(100) < SPECIAL_SPICE_CHANCES[1]
@@ -336,13 +336,14 @@ class Scripts::BeastFarm < AbstractNpcAI
             return @skill_success_npc_id_list[SKILL_CRYSTAL_SPICE]
           end
         end
-        return -1
+
+        -1
       elsif @growth_level == 2 && Rnd.rand(100) < TAME_CHANCE
-        return @tame_npc_id
+        @tame_npc_id
       elsif Rnd.rand(100) < @chance
-        return @skill_success_npc_id_list[skill_id]
+        @skill_success_npc_id_list[skill_id]
       else
-        return -1
+        -1
       end
     end
   end

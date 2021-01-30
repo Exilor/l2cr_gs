@@ -17,7 +17,7 @@ class Packets::Incoming::RequestPrivateStoreBuy < GameClientPacket
     end
 
     items = Set(ItemRequest).new
-    count.times do |i|
+    count.times do
       l2id = d
       count = q
       price = q

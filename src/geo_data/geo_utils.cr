@@ -49,7 +49,7 @@ module GeoUtils
             i_packet &+= 1
             pc.send_packet(exsp)
           end
-          exsp = Packets::Outgoing::ExServerPrimitive.new("DebugGrid_#{i_packet}", pc.x, pc.y, -16000)
+          exsp = Packets::Outgoing::ExServerPrimitive.new("DebugGrid_#{i_packet}", pc.x, pc.y, -16_000)
         end
 
         gx = pc_gx &+ dx

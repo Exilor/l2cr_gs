@@ -37,8 +37,12 @@ module L2Cr
     spawn do
       while cmd = STDIN.gets.try &.chomp
         print "=> "
-        response = CommandLineTask.handle_cmd(cmd)
-        puts response.colorize(:light_magenta)
+        begin
+          response = CommandLineTask.handle_cmd(cmd)
+          puts response.colorize(:light_magenta)
+        rescue e
+          puts e.inspect_with_backtrace.colorize(:red)
+        end
       end
     end
   end
@@ -93,6 +97,8 @@ module L2Cr
         end
       when "uptime"
         puts Time.local - GameServer.start_time
+      when "test"
+        L2Cr.test
       else
         return "unknown command '#{cmd}'"
       end
@@ -117,5 +123,18 @@ module L2Cr
     end
     errors = "No" if errors == 0
     puts "#{errors} errors."
+  end
+
+  private class_getter! map : Interfaces::Map(String, String)
+
+  def test
+    if rand(5).even?
+      @@map = {} of String => String
+    else
+      @@map = Concurrent::Map(String, String).new
+    end
+    map["hola"] = "mundo"
+    p [map["hola"], map["adios"]?]
+    p [map["hola"]?, map["adios"]]
   end
 end

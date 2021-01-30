@@ -165,25 +165,9 @@ module GeoData
     end
 
     if tz > z
-      tmp = tx
-      tx = x
-      x = tmp
-
-      tmp = ty
-      ty = y
-      y = tmp
-
-      tmp = tz
-      tz = z
-      z = tmp
-
-      tmp = t_geo_x
-      t_geo_x = geo_x
-      geo_x = tmp
-
-      tmp = t_geo_y
-      t_geo_y = geo_y
-      geo_y = tmp
+      tz, z = z, tz
+      t_geo_x, geo_x = geo_x, t_geo_x
+      t_geo_y, geo_y = geo_y, t_geo_y
     end
 
     iter = LinePointIterator3D.new(geo_x, geo_y, z, t_geo_x, t_geo_y, tz)

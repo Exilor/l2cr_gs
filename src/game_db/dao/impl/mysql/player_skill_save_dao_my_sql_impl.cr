@@ -72,7 +72,7 @@ module GameDB
               buff_index &+= 1
               stored_skills << hash
 
-              GameDB.exec(
+              tr.exec(
                 INSERT,
                 pc.l2id,
                 t.skill_id,

@@ -85,6 +85,8 @@ module AugmentationData
   end
 
   private def parse_document(doc, file)
+    bad_augment_data = 0
+
     find_element(doc, "list") do |l|
       find_element(l, "weapon") do |n|
         weapon_type = parse_string(n, "type")
@@ -125,8 +127,6 @@ module AugmentationData
       end
 
       find_element(l, "augmentation") do |d| # for accessory augmentations
-        bad_augment_data = 0
-
         skill_id = 0
         augmentation_id = parse_int(d, "id")
         skill_lvl = 0
@@ -159,6 +159,10 @@ module AugmentationData
 
         ALL_SKILLS[augmentation_id] = SkillHolder.new(skill_id, skill_lvl)
       end
+    end
+
+    if bad_augment_data != 0
+      warn "Error parsing augmentation."
     end
   end
 

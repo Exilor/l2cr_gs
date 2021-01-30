@@ -75,9 +75,7 @@ module IdFactory
     end
     sql = sql.chomp("UNION ")
 
-    GameDB.query_each(sql) do |rs|
-      temp << rs.read(Number::Primitive).to_i32
-    end
+    GameDB.query_each(sql) { |rs| temp << rs.read(Number::Primitive).to_i32 }
 
     temp.each { |id| IDS << id }
 

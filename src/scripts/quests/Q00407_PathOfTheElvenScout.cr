@@ -98,19 +98,19 @@ class Scripts::Q00407_PathOfTheElvenScout < Quest
           end
         end
       elsif qs.cond?(2)
-        has1stLetter = has_quest_items?(qs.player, PRIASS_1ND_TORN_LETTER)
-        has2ndLetter = has_quest_items?(qs.player, PRIASS_2ND_TORN_LETTER)
-        has3rdLetter = has_quest_items?(qs.player, PRIASS_3ND_TORN_LETTER)
-        has4thLetter = has_quest_items?(qs.player, PRIASS_4ND_TORN_LETTER)
+        has_1st_letter = has_quest_items?(qs.player, PRIASS_1ND_TORN_LETTER)
+        has_2nd_letter = has_quest_items?(qs.player, PRIASS_2ND_TORN_LETTER)
+        has_3rd_letter = has_quest_items?(qs.player, PRIASS_3ND_TORN_LETTER)
+        has_4th_letter = has_quest_items?(qs.player, PRIASS_4ND_TORN_LETTER)
 
-        if !(has1stLetter && has2ndLetter && has3rdLetter && has4thLetter)
-          if !has1stLetter
+        if !(has_1st_letter && has_2nd_letter && has_3rd_letter && has_4th_letter)
+          if !has_1st_letter
             give_letter_and_check_state(PRIASS_1ND_TORN_LETTER, qs)
-          elsif !has2ndLetter
+          elsif !has_2nd_letter
             give_letter_and_check_state(PRIASS_2ND_TORN_LETTER, qs)
-          elsif !has3rdLetter
+          elsif !has_3rd_letter
             give_letter_and_check_state(PRIASS_3ND_TORN_LETTER, qs)
-          elsif !has4thLetter
+          elsif !has_4th_letter
             give_letter_and_check_state(PRIASS_4ND_TORN_LETTER, qs)
           end
         end

@@ -93,7 +93,7 @@ class Scripts::DragonValley < AbstractNpcAI
   def on_attack(npc, attacker, damage, is_summon)
     if npc.current_hp < npc.max_hp / 2 && Rnd.rand(100) < 5 && npc.script_value?(0)
       npc.script_value = 1
-      Rnd.rand(3..5).times do |i|
+      Rnd.rand(3..5).times do
         playable = (is_summon ? attacker.summon : attacker) || attacker
         minion = add_spawn(DRAKOS_ASSASSIN, npc.x, npc.y, npc.z + 10, npc.heading, true, 0, true)
         add_attack_desire(minion, playable)

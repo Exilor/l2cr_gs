@@ -14,8 +14,8 @@ class Scripts::FrozenLabyrinth < AbstractNpcAI
       spawn_id = npc.id == PRONGHORN ? PRONGHORN_SPIRIT : LOST_BUFFALO
 
       diff = 0
-      6.times do |i|
-        x = diff  < 60 ? npc.x +      diff : npc.x
+      6.times do
+        x = diff  < 60 ? npc.x + diff      : npc.x
         y = diff >= 60 ? npc.y + diff - 40 : npc.y
         mob = add_spawn(spawn_id, x, y, npc.z, npc.heading, false, 0)
         add_attack_desire(mob, attacker)

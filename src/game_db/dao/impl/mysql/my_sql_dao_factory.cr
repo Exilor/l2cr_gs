@@ -70,5 +70,9 @@ module GameDB
     def teleport_bookmark : TeleportBookmarkDAO
       TeleportBookmarkDAOMySQLImpl
     end
+
+    def couples : CouplesDAO
+      CouplesDAOMySQLImpl
+    end
   end
 end

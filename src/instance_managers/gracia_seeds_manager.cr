@@ -35,7 +35,7 @@ module GraciaSeedsManager
   end
 
   def load_data
-    if tmp = GlobalVariablesManager.instance.has_key?("SoDState")
+    if GlobalVariablesManager.instance.has_key?("SoDState")
       @@sod_state = GlobalVariablesManager.instance.get_i32("SoDState")
       @@sod_tiat_killed = GlobalVariablesManager.instance.get_i32("SoDTiatKilled", @@sod_tiat_killed)
       SOD_LAST_STATE_CHANGE_DATE.ms = GlobalVariablesManager.instance.get_i64("SoDLSCDate")

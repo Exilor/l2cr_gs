@@ -59,7 +59,7 @@ class ObjectKnownList
 
     if me.playable?
       world_region.sorrounding_regions.each do |region|
-        world_region.objects.each_value do |object|
+        region.objects.each_value do |object|
           if object != me
             add_known_object(object)
             object.known_list.add_known_object(me)

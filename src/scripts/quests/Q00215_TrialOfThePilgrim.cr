@@ -120,7 +120,7 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
     end
 
 
-    return html
+    html
   end
 
   def on_kill(npc, killer, is_summon)

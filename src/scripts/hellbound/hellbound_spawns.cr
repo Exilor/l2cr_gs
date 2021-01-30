@@ -15,11 +15,7 @@ module HellboundSpawns
   end
 
   private def parse_document(doc, file)
-    find_element(doc, "list") do |list|
-      each_element(list) do |d|
-        parse_spawn(d)
-      end
-    end
+    find_element(doc, "list") { |l| each_element(l) { |d| parse_spawn(d) } }
   end
 
   private def parse_spawn(npc)

@@ -1,6 +1,6 @@
 class Packets::Incoming::RequestPledgeExtendedInfo < GameClientPacket
   private def read_impl
-    name = s
+    # name = s
   end
 
   private def run_impl

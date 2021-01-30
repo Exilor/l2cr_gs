@@ -96,9 +96,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       end
     when "bots_come"
       pc.known_list.known_players.values_slice.each do |player|
-        if target = pc.target.as?(L2Character)
-          player.set_intention(AI::MOVE_TO, pc)
-        end
+        player.set_intention(AI::MOVE_TO, pc)
       end
     when "champion"
       toggle_champ_target
@@ -129,7 +127,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     end
     pc.target = nil
     times = args.first.to_i
-    target.reduce_current_hp(target.max_hp - 1f64, pc, nil)
+    target.reduce_current_hp(target.max_hp - 1.0, pc, nil)
     case pc.class_id
     when .dwarven_fighter?, .scavenger?, .bounty_hunter?, .fortune_seeker?
       is_spoiler = true
@@ -141,7 +139,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
     times.times do
       if is_spoiler
-        target.spoiler_l2id = pc.l2id
+        spoil.apply_effects(pc, target)
       end
 
       target.do_die(pc)

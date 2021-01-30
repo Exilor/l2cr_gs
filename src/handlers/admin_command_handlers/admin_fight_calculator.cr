@@ -157,8 +157,6 @@ module AdminCommandHandler::AdminFightCalculator
         return
       end
     else
-      mid1 = 0
-      mid2 = 0
       st = params.split
       mid1 = st.shift.to_i
       mid2 = st.shift.to_i
@@ -183,10 +181,10 @@ module AdminCommandHandler::AdminFightCalculator
     satk1 = npc1.calculate_time_between_attacks
     satk2 = npc2.calculate_time_between_attacks
 
-    satk1 = 100000 // satk1
-    satk2 = 100000 // satk2
+    satk1 = 100_000 // satk1
+    satk2 = 100_000 // satk2
 
-    10000.times do |i|
+    10_000.times do
       _miss1 = Formulas.hit_miss(npc1, npc2)
       if _miss1
         miss1 += 1
@@ -214,7 +212,7 @@ module AdminCommandHandler::AdminFightCalculator
       end
     end
 
-    10000.times do |i|
+    10_000.times do
       _miss2 = Formulas.hit_miss(npc2, npc1)
       if _miss2
         miss2 += 1
@@ -248,22 +246,22 @@ module AdminCommandHandler::AdminFightCalculator
     shld2 /= 100
     crit1 /= 100
     crit2 /= 100
-    patk1 /= 10000
-    patk2 /= 10000
-    pdef1 /= 10000
-    pdef2 /= 10000
-    dmg1 /= 10000
-    dmg2 /= 10000
+    patk1 /= 10_000
+    patk2 /= 10_000
+    pdef1 /= 10_000
+    pdef2 /= 10_000
+    dmg1 /= 10_000
+    dmg2 /= 10_000
 
     # total damage per 100 seconds
     tdmg1 = (satk1 * dmg1).to_i
     tdmg2 = (satk2 * dmg2).to_i
     # HP restored per 100 seconds
     maxhp1 = npc1.max_hp
-    hp1 = ((Formulas.hp_regen(npc1) * 100000) / Formulas.get_regenerate_period(npc1)).to_i
+    hp1 = ((Formulas.hp_regen(npc1) * 100_000) / Formulas.get_regenerate_period(npc1)).to_i
 
     maxhp2 = npc2.max_hp
-    hp2 = ((Formulas.hp_regen(npc2) * 100000) / Formulas.get_regenerate_period(npc2)).to_i
+    hp2 = ((Formulas.hp_regen(npc2) * 100_000) / Formulas.get_regenerate_period(npc2)).to_i
 
     admin_reply = NpcHtmlMessage.new
 

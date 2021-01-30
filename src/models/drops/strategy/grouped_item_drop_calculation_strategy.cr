@@ -77,9 +77,7 @@ struct GroupedItemDropCalculationStrategy
       rolls += 1
     end
     dropped = [] of ItemHolder
-    rolls.times do |i|
-      dropped.concat(normalized.calculate_drops(victim, killer))
-    end
+    rolls.times { dropped.concat(normalized.calculate_drops(victim, killer)) }
     dropped unless dropped.empty?
   end
 end

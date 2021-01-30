@@ -250,10 +250,10 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         id = token.to_i
-        announce = AnnouncementsTable.get_announce(id)
-        if announce
-          if autoAnnounce = announce.as?(AutoAnnouncement)
-            autoAnnounce.restart_me
+
+        if announce = AnnouncementsTable.get_announce(id)
+          if auto_announce = announce.as?(AutoAnnouncement)
+            auto_announce.restart_me
             pc.send_message("Auto announcement has been successfully restarted")
           else
             pc.send_message("This option has effect only on auto announcements")

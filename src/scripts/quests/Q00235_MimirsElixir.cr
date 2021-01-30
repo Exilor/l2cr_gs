@@ -36,7 +36,7 @@ class Scripts::Q00235_MimirsElixir < Quest
 
   def check_party_member(pc, npc) : Bool
     return false unless st = get_quest_state(pc, false)
-    return st.memo_state?(3) || st.memo_state?(6)
+    st.memo_state?(3) || st.memo_state?(6)
   end
 
   def on_adv_event(event, npc, player)

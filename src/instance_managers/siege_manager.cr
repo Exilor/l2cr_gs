@@ -104,7 +104,7 @@ module SiegeManager
 
     begin
       sql = "SELECT clan_id FROM siege_clans where clan_id=? and castle_id=?"
-      GameDB.each(sql, clan.id, castle_id) do |rs|
+      GameDB.each(sql, clan.id, castle_id) do
         register = true
         break
       end

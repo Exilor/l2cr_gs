@@ -1,6 +1,6 @@
 require "../network/**"
 require "./skills/buff_info"
-require "../util/linked_list"
+require "../util/concurrent_linked_list"
 
 class CharEffectList
   include Packets::Outgoing
@@ -12,12 +12,12 @@ class CharEffectList
   @has_buffs_removed_on_damage = false
   @has_debuffs_removed_on_damage = false
   @party_only = false
-  @buffs : Interfaces::List(BuffInfo)?
-  @debuffs : Interfaces::List(BuffInfo)?
-  @dances : Interfaces::List(BuffInfo)?
-  @passives : Interfaces::List(BuffInfo)?
-  @toggles : Interfaces::List(BuffInfo)?
-  @triggered : Interfaces::List(BuffInfo)?
+  @buffs : Interfaces::Queue(BuffInfo)?
+  @debuffs : Interfaces::Queue(BuffInfo)?
+  @dances : Interfaces::Queue(BuffInfo)?
+  @passives : Interfaces::Queue(BuffInfo)?
+  @toggles : Interfaces::Queue(BuffInfo)?
+  @triggered : Interfaces::Queue(BuffInfo)?
   @blocked_buff_slots : Interfaces::Set(AbnormalType)?
   @hidden_buffs = Atomic(Int32).new(0)
 
@@ -25,28 +25,28 @@ class CharEffectList
 
   initializer owner : L2Character
 
-  def buffs : Interfaces::List(BuffInfo)
-    @buffs || sync { @buffs ||= Concurrent::LinkedList(BuffInfo).new }
+  def buffs : Interfaces::Queue(BuffInfo)
+    @buffs || sync { @buffs ||= ConcurrentLinkedList(BuffInfo).new }
   end
 
-  def debuffs : Interfaces::List(BuffInfo)
-    @debuffs || sync { @debuffs ||= Concurrent::LinkedList(BuffInfo).new }
+  def debuffs : Interfaces::Queue(BuffInfo)
+    @debuffs || sync { @debuffs ||= ConcurrentLinkedList(BuffInfo).new }
   end
 
-  def dances : Interfaces::List(BuffInfo)
-    @dances || sync { @dances ||= Concurrent::LinkedList(BuffInfo).new }
+  def dances : Interfaces::Queue(BuffInfo)
+    @dances || sync { @dances ||= ConcurrentLinkedList(BuffInfo).new }
   end
 
-  def passives : Interfaces::List(BuffInfo)
-    @passives || sync { @passives ||= Concurrent::LinkedList(BuffInfo).new }
+  def passives : Interfaces::Queue(BuffInfo)
+    @passives || sync { @passives ||= ConcurrentLinkedList(BuffInfo).new }
   end
 
-  def toggles : Interfaces::List(BuffInfo)
-    @toggles || sync { @toggles ||= Concurrent::LinkedList(BuffInfo).new }
+  def toggles : Interfaces::Queue(BuffInfo)
+    @toggles || sync { @toggles ||= ConcurrentLinkedList(BuffInfo).new }
   end
 
-  def triggered : Interfaces::List(BuffInfo)
-    @triggered || sync { @triggered ||= Concurrent::LinkedList(BuffInfo).new }
+  def triggered : Interfaces::Queue(BuffInfo)
+    @triggered || sync { @triggered ||= ConcurrentLinkedList(BuffInfo).new }
   end
 
   private def stacked_effects : Interfaces::Map(AbnormalType, BuffInfo)
@@ -61,7 +61,7 @@ class CharEffectList
     end
   end
 
-  private def each_with_list(& : BuffInfo, Interfaces::List(BuffInfo) ->) : Nil
+  private def each_with_list(& : BuffInfo, Interfaces::Queue(BuffInfo) ->) : Nil
     @buffs.try     { |list| list.safe_each { |info| yield info, list } }
     @triggered.try { |list| list.safe_each { |info| yield info, list } }
     @dances.try    { |list| list.safe_each { |info| yield info, list } }
@@ -99,7 +99,7 @@ class CharEffectList
     ret
   end
 
-  def get_effect_list(skill : Skill) : Interfaces::List(BuffInfo)
+  def get_effect_list(skill : Skill) : Interfaces::Queue(BuffInfo)
     return passives  if skill.passive?
     return debuffs   if skill.debuff?
     return triggered if skill.trigger?
@@ -494,20 +494,20 @@ class CharEffectList
         to_remove = buff_count &- @owner.stat.max_buff_count
       end
 
-      effects.safe_each do |info|
+      effects.safe_each do |info2|
         if to_remove < 0
           break
         end
 
-        unless info.in_use?
+        unless info2.in_use?
           next
         end
 
-        if info.skill.abnormal_type.summon_condition?
+        if info2.skill.abnormal_type.summon_condition?
           next
         end
 
-        stop_and_remove(info, effects)
+        stop_and_remove(info2, effects)
 
         to_remove &-= 1
       end

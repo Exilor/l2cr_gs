@@ -9,7 +9,7 @@ class Packets::Incoming::RequestDismissPartyRoom < GameClientPacket
   private def run_impl
     return unless active_char
 
-    if room = PartyMatchRoomList.get_room(@room_id)
+    if PartyMatchRoomList.get_room(@room_id)
       PartyMatchRoomList.delete_room(@room_id)
     else
       warn { "Room with id #{@room_id} not found." }

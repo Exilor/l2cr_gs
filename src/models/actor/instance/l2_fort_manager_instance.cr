@@ -686,7 +686,7 @@ class L2FortManagerInstance < L2MerchantInstance
   private def validate_condition(pc : L2PcInstance) : Int32
     fort = fort?
     if fort && fort.residence_id > 0
-      if clan = pc.clan
+      if pc.clan
         if fort.zone.active?
           return COND_BUSY_BECAUSE_OF_SIEGE # Busy because of siege
         elsif fort.owner_clan? && fort.owner_clan.id == pc.clan_id

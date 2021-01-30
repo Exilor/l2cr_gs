@@ -60,7 +60,6 @@ module QuestManager
   end
 
   def save
-    QUESTS.each_value &.save_global_data
-    SCRIPTS.each_value &.save_global_data
+    {QUESTS, SCRIPTS}.each &.each_value &.save_global_data
   end
 end

@@ -23,7 +23,7 @@ class BaseStats < EnumClass
   add(INT) { |char| INT_BONUS[char.int] }
   add(WIT) { |char| WIT_BONUS[char.wit] }
   add(MEN) { |char| MEN_BONUS[char.men] }
-  add(NONE) { |char| 1.0 }
+  add(NONE) { |_| 1.0 }
 
   def self.load
     parse_datapack_file("stats/statBonus.xml")

@@ -126,7 +126,6 @@ class LoginServerThread
     packet.buffer = OUT_BUFFER
     packet.write
 
-    size = OUT_BUFFER.pos - 2
     OUT_BUFFER.write_bytes(0)
     until (OUT_BUFFER.pos - 2) % 8 == 0
       OUT_BUFFER.write_bytes(0u8)

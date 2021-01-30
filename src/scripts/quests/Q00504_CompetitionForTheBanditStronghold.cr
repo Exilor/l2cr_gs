@@ -74,7 +74,7 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
         if !@bandit_stronghold.waiting_battle?
           html = get_htm(pc, "35437-03.html")
           format = "%Y-%m-%d %H:%M:%S"
-          html = html.gsub("%nextSiege%", @bandit_stronghold.siege_date.time)
+          html = html.gsub("%nextSiege%", @bandit_stronghold.siege_date.time.to_s(format))
         else
           html = "35437-01.htm"
         end

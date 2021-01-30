@@ -18,9 +18,9 @@ class Packets::Outgoing::FriendList < GameServerPacket
   private def write_impl
     c 0x75
 
-    if info = @info
-      d info.size
-      info.each do |info|
+    if infos = @info
+      d infos.size
+      infos.each do |info|
         d info.l2id
         s info.name
         d info.online ? 1 : 0

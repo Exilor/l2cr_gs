@@ -57,6 +57,6 @@ class Scripts::LoveYourGatekeeper < LongTimeEvent
   end
 
   def on_first_talk(npc, pc)
-    return "32477.htm"
+    "32477.htm"
   end
 end

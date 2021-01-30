@@ -1,12 +1,12 @@
 require "./skill_holder"
 
-class SkillUseHolder < SkillHolder
+struct SkillUseHolder
+  getter skill
   getter? ctrl, shift
 
-  def initialize(skill : Skill, ctrl : Bool, shift : Bool)
-    super(skill)
+  initializer skill : Skill, ctrl : Bool, shift : Bool
 
-    @ctrl = ctrl
-    @shift = shift
+  def skill_id
+    @skill.id
   end
 end

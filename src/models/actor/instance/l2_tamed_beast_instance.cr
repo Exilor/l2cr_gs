@@ -1,11 +1,11 @@
 require "./l2_feedable_beast_instance"
 
 class L2TamedBeastInstance < L2FeedableBeastInstance
-  private MAX_DISTANCE_FROM_HOME = 30000
+  private MAX_DISTANCE_FROM_HOME = 30_000
   private MAX_DISTANCE_FROM_OWNER = 2000
-  private MAX_DURATION = 1200000 # 20 minutes
-  private DURATION_CHECK_INTERVAL = 60000 # 1 minute
-  private DURATION_INCREASE_INTERVAL = 20000 # 20 secs (gained upon feeding)
+  private MAX_DURATION = 1_200_000 # 20 minutes
+  private DURATION_CHECK_INTERVAL = 60_000 # 1 minute
+  private DURATION_INCREASE_INTERVAL = 20_000 # 20 secs (gained upon feeding)
   private BUFF_INTERVAL = 5000 # 5 seconds
 
   @home_x = 0
@@ -132,7 +132,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
       return
     end
 
-    unless skills = @beast_skills
+    unless @beast_skills
       return
     end
 

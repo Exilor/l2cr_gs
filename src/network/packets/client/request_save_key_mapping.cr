@@ -10,21 +10,21 @@ class Packets::Incoming::RequestSaveKeyMapping < GameClientPacket
     tab_num = d
     tab_num.times do |i|
       cmd1_size = c
-      cmd1_size.times do |j|
+      cmd1_size.times do
         UIData.add_category(@cat_map, category, c)
       end
 
       category &+= 1
 
       cmd2_size = c
-      cmd2_size.times do |j|
+      cmd2_size.times do
         UIData.add_category(@cat_map, category, c)
       end
 
       category &+= 1
 
       cmd_size = d
-      cmd_size.times do |j|
+      cmd_size.times do
         cmd = d
         key = d
         tg_key1 = d

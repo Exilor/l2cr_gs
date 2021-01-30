@@ -129,48 +129,25 @@ module PostBBSManager
     mes = mes.gsub("<", "&lt;")
 
     html = String.build do |io|
-      io << "<html><body><br><br><table border=0 width=610><tr><td width=10>" \
-      "</td><td width=600 align=left><a action=\"bypass _bbshome\">HOME</a>&" \
-      "nbsp;>&nbsp;<a action=\"bypass _bbsmemo\">Memo Form</a></td></tr></ta" \
-      "ble><img src=\"L2UI.squareblank\" width=\"1\" height=\"10\"><center><" \
-      "table border=0 cellspacing=0 cellpadding=0 bgcolor=333333><tr><td hei" \
-      "ght=10></td></tr><tr><td fixWIDTH=55 align=right valign=top>&$413; : " \
-      "&nbsp;</td><td fixWIDTH=380 valign=top>"
+      io << "<html><body><br><br><table border=0 width=610><tr><td width=10></td><td width=600 align=left><a action=\"bypass _bbshome\">HOME</a>&nbsp;>&nbsp;<a action=\"bypass _bbsmemo\">Memo Form</a></td></tr></table><img src=\"L2UI.squareblank\" width=\"1\" height=\"10\"><center><table border=0 cellspacing=0 cellpadding=0 bgcolor=333333><tr><td height=10></td></tr><tr><td fixWIDTH=55 align=right valign=top>&$413; : &nbsp;</td><td fixWIDTH=380 valign=top>"
       io << topic.name
-      io << "</td><td fixwidth=5></td><td fixwidth=50></td><td fixWIDTH=120>" \
-      "</td></tr><tr><td height=10></td></tr><tr><td align=right><font color" \
-      "=\"AAAAAA\" >&$417; : &nbsp;</font></td><td><font color=\"AAAAAA\">"
+      io << "</td><td fixwidth=5></td><td fixwidth=50></td><td fixWIDTH=120></td></tr><tr><td height=10></td></tr><tr><td align=right><font color=\"AAAAAA\" >&$417; : &nbsp;</font></td><td><font color=\"AAAAAA\">"
       io << topic.owner_name
-      io << "</font></td><td></td><td><font color=\"AAAAAA\">&$418; :</font>" \
-      "</td><td><font color=\"AAAAAA\">"
+      io << "</font></td><td></td><td><font color=\"AAAAAA\">&$418; :</font></td><td><font color=\"AAAAAA\">"
       io << Time.from_ms(p.get_c_post(0).post_date)
-      io << "</font></td></tr><tr><td height=10></td></tr></table><br><table" \
-      " border=0 cellspacing=0 cellpadding=0><tr><td fixwidth=5></td><td FIX" \
-      "WIDTH=600 align=left>", mes, "</td><td fixqqwidth=5></td></tr></table" \
-      "><br><img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><img src=" \
-      "\"L2UI.squaregray\" width=\"610\" height=\"1\"><img src=\"L2UI.square" \
-      "blank\" width=\"1\" height=\"5\"><table border=0 cellspacing=0 cellpa" \
-      "dding=0 FIXWIDTH=610><tr><td width=50><button value=\"&$422;\" action" \
-      "=\"bypass _bbsmemo\" back=\"l2ui_ch3.smallbutton2_down\" width=65 hei" \
-      "ght=20 fore=\"l2ui_ch3.smallbutton2\"></td><td width=560 align=right>" \
-      "<table border=0 cellspacing=0><tr><td FIXWIDTH=300></td><td><button v" \
-      "alue = \"&$424;\" action=\"bypass _bbsposts;edit;"
+      io << "</font></td></tr><tr><td height=10></td></tr></table><br><table border=0 cellspacing=0 cellpadding=0><tr><td fixwidth=5></td><td FIXWIDTH=600 align=left>"
+      io << mes
+      io << "</td><td fixqqwidth=5></td></tr></table><br><img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><img src=\"L2UI.squaregray\" width=\"610\" height=\"1\"><img src=\"L2UI.squareblank\" width=\"1\" height=\"5\"><table border=0 cellspacing=0 cellpadding=0 FIXWIDTH=610><tr><td width=50><button value=\"&$422;\" action=\"bypass _bbsmemo\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\"></td><td width=560 align=right><table border=0 cellspacing=0><tr><td FIXWIDTH=300></td><td><button value = \"&$424;\" action=\"bypass _bbsposts;edit;"
       io << forum.id
       io << ';'
       io << topic.id
-      io << ";0\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 for" \
-      "e=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;<td><button value = \"&$42" \
-      "5;\" action=\"bypass _bbstopics;del;"
+      io << ";0\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;<td><button value = \"&$425;\" action=\"bypass _bbstopics;del;"
       io << forum.id
       io << ';'
       io << topic.id
-      io << "\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore" \
-      "=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;<td><button value = \"&$421;\"" \
-      " action=\"bypass _bbstopics;crea;"
+      io << "\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;<td><button value = \"&$421;\" action=\"bypass _bbstopics;crea;"
       io << forum.id
-      io << "\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore" \
-      "=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;</tr></table></td></tr></tabl" \
-      "e><br><br><br></center></body></html>"
+      io << "\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td>&nbsp;</tr></table></td></tr></table><br><br><br></center></body></html>"
     end
 
     CommunityBoardHandler.separate_and_send(html, pc)

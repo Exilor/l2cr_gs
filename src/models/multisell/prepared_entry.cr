@@ -39,8 +39,7 @@ class Multisell::PreparedEntry < Multisell::Entry
     adena_amount += @tax_amount
 
     if adena_amount > 0
-      ing = Ingredient.new(Inventory::ADENA_ID, adena_amount, false, false)
-      @ingredients << ing
+      @ingredients << Ingredient.new(Inventory::ADENA_ID, adena_amount, false, false)
     end
 
     template.products.each do |ing|

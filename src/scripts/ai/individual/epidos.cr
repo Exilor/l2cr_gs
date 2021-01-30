@@ -45,7 +45,7 @@ class Scripts::Epidos < AbstractNpcAI
           minions_count = MINIONS_COUNT[2]
         end
 
-        minions_count.times do |i|
+        minions_count.times do
           MinionList.spawn_minion(npc.as(L2MonsterInstance), MINIONS[EPIDOSES.bsearch_index_of(npc.id) || 0])
         end
 

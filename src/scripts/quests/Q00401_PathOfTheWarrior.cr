@@ -86,7 +86,7 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
   end
 
   def on_attack(npc, attacker, damage, is_summon)
-    if qs = get_quest_state(attacker, false)
+    if get_quest_state(attacker, false)
       case npc.script_value
       when 0
         npc.variables["lastAttacker"] = attacker.l2id

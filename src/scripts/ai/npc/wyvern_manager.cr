@@ -88,19 +88,22 @@ class Scripts::WyvernManager < AbstractNpcAI
       if castle = npc.castle?
         return pc.clan_id == castle.owner_id
       end
-      return false
+
+      false
     when ManagerType::CLAN_HALL
       if hall = npc.conquerable_hall
         return pc.clan_id == hall.owner_id
       end
-      return false
+
+      false
     when ManagerType::FORT
       if (fort = npc.fort?) && (clan = fort.owner_clan?)
         return pc.clan_id == clan.id
       end
-      return false
+
+      false
     else
-      return false
+      false
     end
   end
 

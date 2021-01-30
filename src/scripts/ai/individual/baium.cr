@@ -176,8 +176,8 @@ class Scripts::Baium < AbstractNpcAI
     when "SPAWN_ARCHANGEL"
       @baium.not_nil!.disable_core_ai(false)
 
-      ARCHANGEL_LOC.each do |loc|
-        archangel = add_spawn(ARCHANGEL, loc, false, 0, true)
+      ARCHANGEL_LOC.each do |l|
+        archangel = add_spawn(ARCHANGEL, l, false, 0, true)
         start_quest_timer("SELECT_TARGET", 5000, archangel, nil)
       end
       npc = npc.not_nil!

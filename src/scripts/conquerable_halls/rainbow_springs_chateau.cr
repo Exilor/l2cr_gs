@@ -3,9 +3,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
     def self.call
       ARENA_ZONES.each do |arena_id|
         chars = ZoneManager.get_zone_by_id(arena_id).not_nil!.characters_inside
-        chars.each do |chr|
-          chr.tele_to_location(TeleportWhereType::TOWN)
-        end
+        chars.each { |chr| chr.tele_to_location(TeleportWhereType::TOWN) }
       end
     end
   end
@@ -106,7 +104,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
         spot_left &-= 1
       end
 
-      spot_left.times do |i|
+      spot_left.times do
         counter = 0i64
         clan = nil
         WAR_DECREES_COUNT.each_key do |clan_id|
@@ -510,11 +508,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
       end
 
       chars = ZoneManager.get_zone_by_id(id).not_nil!.characters_inside
-      chars.each do |chr|
-        DEBUFFS.each do |sk|
-          sk.apply_effects(chr, chr)
-        end
-      end
+      chars.each { |chr| DEBUFFS.each { |sk| sk.apply_effects(chr, chr) } }
     end
   end
 
@@ -570,7 +564,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
     c = Calendar.new
     c.ms = time
     year = c.year
-    month = c.month + 1
+    month = c.month &+ 1
     day = c.day
     hour = c.hour
     mins = c.minute

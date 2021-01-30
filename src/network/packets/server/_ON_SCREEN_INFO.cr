@@ -247,7 +247,7 @@ class Packets::Outgoing::TargetInfo < Packets::Outgoing::OnScreenInfo
         pr(io, "In aggro range: ", in_aggro)
         pr(io, "Aggro targets: ", target.aggro_list.size)
         pr(io, "Most hated: ", target.most_hated.try &.name)
-        hates_you_info = if info = target.aggro_list.to_h.find { |ch, _| ch.l2id == pc.l2id}
+        if info = target.aggro_list.to_h.find { |ch, _| ch.l2id == pc.l2id}
           pr(io, "Hates you: ", "true\n  hate: ", info[1].hate, "\n  damage: ", info[1].damage)
         else
           pr(io, "Hates you: ", "false")

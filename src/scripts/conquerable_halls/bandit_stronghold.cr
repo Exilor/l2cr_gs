@@ -19,8 +19,8 @@ class Scripts::BanditStronghold < FlagWar
 
     @messenger = 35437
 
-    @outter_doors_to_open[0] = 22170001
-    @outter_doors_to_open[1] = 22170002
+    @outer_doors_to_open[0] = 22170001
+    @outer_doors_to_open[1] = 22170002
 
     @inner_doors_to_open[0] = 22170003
     @inner_doors_to_open[1] = 22170004

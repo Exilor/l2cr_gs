@@ -13,7 +13,7 @@ module AdminCommandHandler::AdminTerritoryWar
         cal = Calendar.new
         cal.ms = TerritoryWarManager.tw_start_time_in_millis
 
-        case val = st.shift
+        case st.shift
         when "month"
           month = cal.month + st.shift.to_i
           unless month.between?(cal.get_minimum(:MONTH), cal.get_maximum(:MONTH))

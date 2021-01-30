@@ -112,14 +112,14 @@ class Packets::Incoming::EnterWorld < GameClientPacket
         end
       end
 
-      ClanHallSiegeManager.conquerable_halls.each_value do |hall|
-        unless hall.in_siege?
+      ClanHallSiegeManager.conquerable_halls.each_value do |ch|
+        unless ch.in_siege?
           next
         end
 
-        if hall.registered?(clan)
+        if ch.registered?(clan)
           pc.siege_state = 1
-          pc.siege_side = hall.id
+          pc.siege_side = ch.id
           pc.in_hideout_siege = true
         end
       end
@@ -161,7 +161,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     end
 
     if Config.enable_vitality && Config.recover_vitality_on_reconnect
-      points = (Config.rate_recovery_on_reconnect * (Time.ms - pc.last_access)).fdiv(60000)
+      points = (Config.rate_recovery_on_reconnect * (Time.ms - pc.last_access)).fdiv(60_000)
       if points > 0
         pc.update_vitality_points(points, false, true)
       end
@@ -206,8 +206,8 @@ class Packets::Incoming::EnterWorld < GameClientPacket
     if pc.has_friends?
       sm = SystemMessage.friend_s1_has_logged_in
       sm.add_char_name(pc)
-      pc.friends.each do |id|
-        if friend = L2World.find_object(id)
+      pc.friends.each do |friend_id|
+        if friend = L2World.find_object(friend_id)
           friend.send_packet(sm)
         end
       end

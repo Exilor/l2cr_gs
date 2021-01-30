@@ -184,8 +184,7 @@ class L2ControllableMobAI < L2AttackableAI
     if attack_target.nil? || attack_target.looks_dead?
       if attack_target
         # stop hating
-        npc = @actor.as(L2Attackable)
-        npc.stop_hating(attack_target)
+        @actor.as(L2Attackable).stop_hating(attack_target)
       end
 
       set_intention(ACTIVE)
@@ -309,7 +308,7 @@ class L2ControllableMobAI < L2AttackableAI
       return false
     end
 
-    return me.aggressive?
+    me.aggressive?
   end
 
   private def find_next_rnd_target : L2Character?

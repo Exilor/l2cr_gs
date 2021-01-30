@@ -266,7 +266,7 @@ class Scripts::Q00023_LidiasHeart < Quest
       if npc.id == HIGH_PRIEST_INNOCENTIN
         html = get_already_completed_msg(pc)
       elsif npc.id == TRADER_VIOLET
-        unless q24 = pc.get_quest_state(Q00024_InhabitantsOfTheForestOfTheDead.simple_name)
+        unless pc.get_quest_state(Q00024_InhabitantsOfTheForestOfTheDead.simple_name)
           html = "31386-04.html"
         end
       end

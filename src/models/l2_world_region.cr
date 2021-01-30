@@ -4,7 +4,7 @@ class L2WorldRegion
 
   @neighbors_task : TaskScheduler::DelayedTask?
 
-  getter sorrounding_regions = Concurrent::LinkedList(self).new
+  getter sorrounding_regions = ConcurrentLinkedList(self).new
   getter zones = Concurrent::Array(L2ZoneType).new
   getter playables = Concurrent::Map(Int32, L2Playable).new
   getter objects = Concurrent::Map(Int32, L2Object).new

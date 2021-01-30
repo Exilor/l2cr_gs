@@ -205,7 +205,7 @@ class L2AuctioneerInstance < L2Npc
 
           io << "</tr></table><table width=280 border=0>"
 
-          auctions.each do |a|
+          auctions.each do |a2|
             if i > limit
               break
             elsif i < start
@@ -216,17 +216,17 @@ class L2AuctioneerInstance < L2Npc
             end
 
             io << "<tr><td>"
-            io << ClanHallManager.get_auctionable_hall_by_id(a.item_id).not_nil!.location
+            io << ClanHallManager.get_auctionable_hall_by_id(a2.item_id).not_nil!.location
             io << "</td><td><a action=\"bypass -h npc_"
             io << l2id
             io << "_bidding "
-            io << a.id
+            io << a2.id
             io << "\">"
-            io << a.item_name
+            io << a2.item_name
             io << "</a></td><td>"
-            io << Time.from_ms(a.end_date).to_s(format)
+            io << Time.from_ms(a2.end_date).to_s(format)
             io << "</td><td>"
-            io << a.starting_bid
+            io << a2.starting_bid
             io << "</td></tr>"
           end
 

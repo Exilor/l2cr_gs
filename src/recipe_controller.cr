@@ -122,37 +122,37 @@ module RecipeController
 
       if @pc.looks_dead?
         @pc.action_failed
-        abort
+        abort_crafting
         return
       end
 
       if @target.looks_dead?
         @target.action_failed
-        abort
+        abort_crafting
         return
       end
 
       if @target.processing_transaction?
         @target.action_failed
-        abort
+        abort_crafting
         return
       end
 
       if @pc.processing_transaction?
         @pc.action_failed
-        abort
+        abort_crafting
         return
       end
 
       if @recipe_list.recipes.empty?
         @pc.action_failed
-        abort
+        abort_crafting
         return
       end
 
       if @recipe_list.level > @skill_level
         @pc.action_failed
-        abort
+        abort_crafting
         return
       end
 
@@ -161,21 +161,21 @@ module RecipeController
           @price = item.cost
           if @target.adena < @price
             @target.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
-            abort
+            abort_crafting
             return
           end
         end
       end
 
       unless @items = list_items(false)
-        abort
+        abort_crafting
         return
       end
 
       @total_items += items.sum &.quantity
 
       unless calculate_stat_use(false, false)
-        abort
+        abort_crafting
         return
       end
 
@@ -194,13 +194,13 @@ module RecipeController
     def call
       unless Config.is_crafting_enabled
         @target.send_message("Item creation is currently disabled.")
-        abort
+        abort_crafting
         return
       end
 
       unless @pc.online? && @target.online?
         warn "Player or target not online."
-        abort
+        abort_crafting
         return
       end
 
@@ -211,7 +211,7 @@ module RecipeController
         else
           @pc.send_message("Item creation aborted")
         end
-        abort
+        abort_crafting
         return
       end
 
@@ -253,7 +253,7 @@ module RecipeController
         adena_transfer = @target.transfer_item("PayManufacture", @target.inventory.adena_instance.not_nil!.l2id, @price, @pc.inventory, @pc)
         unless adena_transfer
           @target.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
-          abort
+          abort_crafting
           return
         end
       end
@@ -370,7 +370,7 @@ module RecipeController
               ThreadPoolManager.schedule_general(self, 100 + @delay)
             else
               @target.send_packet(SystemMessageId::NOT_ENOUGH_HP)
-              abort
+              abort_crafting
             end
             ret = false
           elsif is_reduce
@@ -383,7 +383,7 @@ module RecipeController
               ThreadPoolManager.schedule_general(self, 100 + @delay)
             else
               @target.send_packet(SystemMessageId::NOT_ENOUGH_MP)
-              abort
+              abort_crafting
             end
             ret = false
           elsif is_reduce
@@ -392,7 +392,7 @@ module RecipeController
         else
           @target.send_message("Recipe error.")
           ret = false
-          abort
+          abort_crafting
         end
       end
 
@@ -412,7 +412,7 @@ module RecipeController
             sm.add_item_name(recipe.item_id)
             sm.add_long(recipe.quantity - item_quantity_amount)
             @target.send_packet(sm)
-            abort
+            abort_crafting
             return
           end
           materials << TempItem.new(item.not_nil!, recipe.quantity)
@@ -438,7 +438,7 @@ module RecipeController
       materials
     end
 
-    private def abort
+    private def abort_crafting
       update_make_info(false)
       @pc.in_craft_mode = false
       ACTIVE_MAKERS.delete(@pc.l2id)
@@ -518,7 +518,7 @@ module RecipeController
           @sp = 0
         end
 
-        @skill_level.downto(recipe_level &- 1) do |i|
+        @skill_level.downto(recipe_level &- 1) do
           @exp //= 4
           @sp //= 4
         end

@@ -188,7 +188,7 @@ class Scripts::Q00458_PerfectForm < Quest
     case st.state
     when State::COMPLETED
       unless st.now_available?
-        html = "32768-18.htm"
+        return "32768-18.htm"
       end
       st.state = State::CREATED
       html = pc.level > 81 ? "32768-01.htm" : "32768-00.htm"

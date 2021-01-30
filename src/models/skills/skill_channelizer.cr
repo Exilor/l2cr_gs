@@ -62,7 +62,7 @@ class SkillChannelizer
     end
 
     if _skill.channeling_skill_id > 0
-      unless base_skill = SkillData[_skill.channeling_skill_id, 1]?
+      unless SkillData[_skill.channeling_skill_id, 1]?
         @channelizer.abort_cast
         return
       end

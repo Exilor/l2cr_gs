@@ -33,7 +33,7 @@ module BypassHandler::ClanWarehouse
           show_withdraw_window(pc, nil, 0)
         end
       elsif command.starts_with?(commands[1]) # WithdrawSortedC
-        params = command.split
+        # params = command.split
         warn "TODO: sorted withdrawal."
       elsif command.starts_with?(commands[2]) # DespositC
         pc.action_failed

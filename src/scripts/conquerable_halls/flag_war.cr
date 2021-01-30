@@ -26,7 +26,7 @@ abstract class FlagWar < ClanHallSiegeEngine
 
   @messenger = 0
 
-  @outter_doors_to_open = Slice(Int32).new(2, 0)
+  @outer_doors_to_open = Slice(Int32).new(2, 0)
   @inner_doors_to_open = Slice(Int32).new(2, 0)
   @flag_coords = [] of Location
 
@@ -201,9 +201,7 @@ abstract class FlagWar < ClanHallSiegeEngine
           html = get_htm(pc, "messenger_registeredclans.htm")
           i = 0
           @data.each do |key, value|
-            unless attacker = ClanTable.get_clan(key)
-              next
-            end
+            next unless ClanTable.get_clan(key)
             html = html.gsub("%clan#{i}%", clan.not_nil!.name)
             html = html.gsub("%clanMem#{i}%", value.players.size.to_s)
             i &+= 1
@@ -254,21 +252,17 @@ abstract class FlagWar < ClanHallSiegeEngine
                 @hall.open_close_door(door_id, true)
               end
 
-              @data.each_value do |data|
-                do_unspawns(data)
-              end
+              @data.each_value { |data| do_unspawns(data) }
 
-              ThreadPoolManager.schedule_general(-> {
+              task = -> do
                 @inner_doors_to_open.each do |door_id|
                   @hall.open_close_door(door_id, false)
                 end
 
-                @data.each do |key, value|
-                  do_spawns(key, value)
-                end
-
+                @data.each { |key, value| do_spawns(key, value) }
                 @hall.siege_zone.active = true
-              }, 300_000)
+              end
+              ThreadPoolManager.schedule_general(task, 300_000)
             end
           else
             @mission_accomplished = true
@@ -314,9 +308,7 @@ abstract class FlagWar < ClanHallSiegeEngine
     end
 
     # Open doors for challengers
-    @outter_doors_to_open.each do |door|
-      @hall.open_close_door(door, true)
-    end
+    @outer_doors_to_open.each { |door| @hall.open_close_door(door, true) }
 
     # Teleport owner inside
     if @hall.owner_id > 0
@@ -332,15 +324,16 @@ abstract class FlagWar < ClanHallSiegeEngine
 
     # Schedule open doors closement, banish non siege participants and<br>
     # siege start in 2 minutes
-    ThreadPoolManager.schedule_general(-> {
-      @outter_doors_to_open.each do |door|
+    task = -> do
+      @outer_doors_to_open.each do |door|
         @hall.open_close_door(door, false)
       end
 
       @hall.zone.banish_non_siege_participants
 
       start_siege
-    }, 300000)
+    end
+    ThreadPoolManager.schedule_general(task, 300_000)
   end
 
   def on_siege_starts
@@ -416,18 +409,18 @@ abstract class FlagWar < ClanHallSiegeEngine
 
     loc = @flag_coords[index]
 
-    data.flag_instance = L2Spawn.new(data.flag)
-    data.flag_instance.not_nil!.location = loc
-    data.flag_instance.not_nil!.respawn_delay = 10_000
-    data.flag_instance.not_nil!.amount = 1
-    data.flag_instance.not_nil!.init
+    data.flag_instance = flag_instance = L2Spawn.new(data.flag)
+    flag_instance.location = loc
+    flag_instance.respawn_delay = 10_000
+    flag_instance.amount = 1
+    flag_instance.init
 
-    data.warrior = L2Spawn.new(data.npc)
-    data.warrior.not_nil!.location = loc
-    data.warrior.not_nil!.respawn_delay = 10_000
-    data.warrior.not_nil!.amount = 1
-    data.warrior.not_nil!.init
-    data.warrior.not_nil!.last_spawn.not_nil!.ai.as(L2SpecialSiegeGuardAI).ally.concat(data.players)
+    data.warrior = warrior = L2Spawn.new(data.npc)
+    warrior.location = loc
+    warrior.respawn_delay = 10_000
+    warrior.amount = 1
+    warrior.init
+    warrior.last_spawn.not_nil!.ai.as(L2SpecialSiegeGuardAI).ally.concat(data.players)
   rescue e
     warn "Could not make clan spawns."
   end

@@ -180,7 +180,7 @@ class L2ItemInstance < L2Object
   def change_count(process : String?, count : Int64, pc : L2PcInstance?, reference)
     return if count == 0
 
-    old = count()
+    # old = count() # commented out until logging below is implemented
 
     max = id == Inventory::ADENA_ID ? Inventory.max_adena : Int32::MAX
     max = max.to_i64
@@ -355,9 +355,7 @@ class L2ItemInstance < L2Object
 
   def available?(pc : L2PcInstance, allow_adena : Bool, allow_non_tradeable : Bool) : Bool
     return false if equipped?
-    return false if @item.type_2 == ItemType2::QUEST
-    return false if @item.type_2 == ItemType2::MONEY
-    return false if @item.type_1 == ItemType1::SHIELD_ARMOR
+    return false if @item.type_2.quest? || @item.type_2.money?
     if smn = pc.summon
       return false if smn.control_l2id == l2id
     end
@@ -368,7 +366,7 @@ class L2ItemInstance < L2Object
     if holder = pc.current_skill
       return false if holder.skill.item_consume_id == id
     end
-    unless pc.casting_simultaneously_now?
+    if pc.casting_simultaneously_now?
       if cast = pc.last_simultaneous_skill_cast
         return false if cast.item_consume_id == id
       end
@@ -433,7 +431,7 @@ class L2ItemInstance < L2Object
   def get_element_def_attr(element : Int) : Int32
     if !armor?
       # do nothing
-    elsif elementals = @item.elementals
+    elsif @item.elementals
       if elm = @item.get_elemental(element)
         return elm.value
       end
@@ -516,40 +514,38 @@ class L2ItemInstance < L2Object
   end
 
   def insert_into_db
-    unless !@exists_in_db && @l2id != 0
-      error "#insert_into_db: expectation failed"
+    # unless !@exists_in_db && @l2id != 0
+    #   error "#insert_into_db: expectation failed"
+    # end
+
+    sql = "INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time) VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+    GameDB.exec(
+      sql,
+      @owner_id,
+      id,
+      count,
+      @loc.to_s,
+      @loc_data,
+      enchant_level,
+      l2id,
+      @custom_type_1,
+      @custom_type_2,
+      mana,
+      time
+    )
+
+    @exists_in_db = true
+    @stored_in_db = true
+
+    if @augmentation
+      update_item_attributes
     end
 
-    begin
-      sql = "INSERT INTO items (owner_id,item_id,count,loc,loc_data,enchant_level,object_id,custom_type1,custom_type2,mana_left,time) VALUES (?,?,?,?,?,?,?,?,?,?,?)"
-      GameDB.exec(
-        sql,
-        @owner_id,
-        id,
-        count,
-        @loc.to_s,
-        @loc_data,
-        enchant_level,
-        l2id,
-        @custom_type_1,
-        @custom_type_2,
-        mana,
-        time
-      )
-
-      @exists_in_db = true
-      @stored_in_db = true
-
-      if @augmentation
-        update_item_attributes
-      end
-
-      if @elementals
-        update_item_elements
-      end
-    rescue e
-      error e
+    if @elementals
+      update_item_elements
     end
+  rescue e
+    error e
   end
 
   def remove_from_db

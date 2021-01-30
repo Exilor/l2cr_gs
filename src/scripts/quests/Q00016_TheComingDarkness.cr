@@ -38,7 +38,7 @@ class Scripts::Q00016_TheComingDarkness < Quest
       end
     end
 
-    return html
+    html
   end
 
   def on_talk(npc, pc)

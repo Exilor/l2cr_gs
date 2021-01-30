@@ -84,7 +84,7 @@ class L2AttackableAI < L2CharacterAI
         return target.aggressive? && GeoData.can_see_target?(me, target)
       end
 
-      return false
+      false
     elsif me.is_a?(L2FriendlyMobInstance)
       if target.is_a?(L2Npc)
         return false
@@ -93,7 +93,8 @@ class L2AttackableAI < L2CharacterAI
       if target.is_a?(L2PcInstance) && target.karma > 0
         return GeoData.can_see_target?(me, target)
       end
-      return false
+
+      false
     else
       if target.is_a?(L2Attackable)
         unless target.auto_attackable?(me)
@@ -1656,7 +1657,7 @@ class L2AttackableAI < L2CharacterAI
       rand = Rnd.rand(hate_list.size)
       count = 0
       hate_list.each do |obj|
-        if count < Rnd.rand
+        if count < rand
           count &+= 1
           next
         end

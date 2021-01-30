@@ -145,8 +145,8 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
               send_packet(sm)
             end
 
-            inv.unequip_item_in_slot_and_record(item.location_slot).each do |it|
-              iu.add_modified_item(it)
+            inv.unequip_item_in_slot_and_record(item.location_slot).each do |it2|
+              iu.add_modified_item(it2)
             end
 
             send_packet(iu)

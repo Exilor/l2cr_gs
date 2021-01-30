@@ -54,7 +54,10 @@ class Scripts::MC_Show < AbstractNpcAI
 
     @started = false
 
-    add_spawn_id(32433, 32431, 32432, 32442, 32443, 32444, 32445, 32446, 32424, 32425, 32426, 32427, 32428)
+    add_spawn_id(
+      32433, 32431, 32432, 32442, 32443, 32444, 32445, 32446, 32424, 32425,
+      32426, 32427, 32428
+    )
     load
     schedule_timer
   end
@@ -175,17 +178,21 @@ class Scripts::MC_Show < AbstractNpcAI
     minutes = game_time % 60
     hour_diff = 20 - hours
     if hour_diff < 0
-      hour_diff = 24 - (hour_diff *= -1)
+      hour_diff = 24 - hour_diff.abs
     end
     min_diff = 30 - minutes
     if min_diff < 0
-      min_diff = 60 - (min_diff *= -1)
+      min_diff = 60 - min_diff.abs
     end
     hour_diff *= 3_600_000
     min_diff *= 60_000
     diff = hour_diff + min_diff
 
-    start_quest_timer("Start", 14_400_000, nil, nil, true)
+    # TODO: implement Quest#start_quest_timer with optional delay
+    ThreadPoolManager.schedule_general(
+      -> { start_quest_timer("Start", 14_400_000, nil, nil, true) },
+      diff
+    )
   end
 
   private def auto_chat(npc, npc_string, type)

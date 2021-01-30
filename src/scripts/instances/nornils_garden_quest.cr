@@ -19,7 +19,7 @@ class Scripts::NornilsGardenQuest < AbstractInstance
     add_first_talk_id(RODENPICULA, MOTHER_NORNIL)
   end
 
-  def check_conditions(pc)
+  private def check_conditions(pc)
     qs = pc.get_quest_state(Scripts::Q00236_SeedsOfChaos.simple_name)
     !!qs && qs.memo_state.between?(40, 45)
   end
@@ -34,9 +34,9 @@ class Scripts::NornilsGardenQuest < AbstractInstance
         world.origin_loc = player.location
         enter_instance(player, world, "NornilsGardenQuest.xml", TEMPLATE_ID)
         q236.set_cond(16, true)
-        htmltext = "32190-02.html"
+        html = "32190-02.html"
       else
-        htmltext = "32190-03.html"
+        html = "32190-03.html"
       end
     when "exit"
       if q236 && q236.completed?
@@ -46,12 +46,11 @@ class Scripts::NornilsGardenQuest < AbstractInstance
 
         player.instance_id = 0
         player.tele_to_location(world.origin_loc.not_nil!)
-        htmltext = "32239-03.html"
+        html = "32239-03.html"
       end
     end
 
-
-    htmltext
+    html
   end
 
   def on_enter_instance(player, world, first_entrance)
@@ -70,6 +69,5 @@ class Scripts::NornilsGardenQuest < AbstractInstance
     when MOTHER_NORNIL
       q236 && q236.completed? ? "32239-02.html" : "32239-01.html"
     end
-
   end
 end

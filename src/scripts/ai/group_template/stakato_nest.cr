@@ -55,7 +55,7 @@ class Scripts::StakatoNest < AbstractNpcAI
     when STAKATO_NURSE
       if monster = check_minion(npc)
         Broadcast.to_self_and_known_players(npc, MagicSkillUse.new(npc, 2046, 1, 1000, 0))
-        3.times do |i|
+        3.times do
           spawned = add_spawn(STAKATO_CAPTAIN, monster, true)
           add_attack_desire(spawned, killer)
         end
@@ -68,7 +68,7 @@ class Scripts::StakatoNest < AbstractNpcAI
     when STAKATO_MALE
       if monster = check_minion(npc)
         Broadcast.to_self_and_known_players(npc, MagicSkillUse.new(npc, 2046, 1, 1000, 0))
-        3.times do |i|
+        3.times do
           spawned = add_spawn(STAKATO_GUARD, monster, true)
           add_attack_desire(spawned, killer)
         end

@@ -33,5 +33,5 @@ struct AmountMultiplierStrategy
 
   DROP   = default_strategy(->Config.rate_death_drop_amount_multiplier)
   SPOIL  = default_strategy(->Config.rate_corpse_drop_amount_multiplier)
-  STATIC = new { |item, victim| 1.0 }
+  STATIC = new { |_, _| 1.0 }
 end

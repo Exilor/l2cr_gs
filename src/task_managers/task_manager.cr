@@ -134,7 +134,7 @@ module TaskManager
 
   def add_unique_task(task : String, type : TaskType, param1 : String, param2 : String, param3 : String, last_activation : Int64 = 0i64) : Bool
     none_found = true
-    GameDB.each(SQL_STATEMENTS[2], task) do |rs|
+    GameDB.each(SQL_STATEMENTS[2], task) do
       none_found = false
     end
 

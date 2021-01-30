@@ -6,12 +6,12 @@ class Scripts::HellboundEngine < AbstractNpcAI
     {20250002, 7}
   }
   private MAX_TRUST = {
-    0, 300000, 600000, 1000000, 1010000, 1400000, 1490000, 2000000, 2000001,
-    2500000, 4000000, 0
+    0, 300_000, 600_000, 1_000_000, 1_010_000, 1_400_000, 1_490_000, 2_000_000,
+    2_000_001, 2_500_000, 4_000_000, 0
   }
   private DEREK = 18465
   private ANNOUNCEMENT = "Hellbound has reached level: %lvl%"
-  private UPDATE_INTERVAL = 60000 # 1 minute
+  private UPDATE_INTERVAL = 60_000 # 1 minute
   private UPDATE_EVENT = "UPDATE"
 
   class_getter! instance : self

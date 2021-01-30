@@ -169,6 +169,6 @@ class Scripts::WeaverOlf < AbstractNpcAI
   end
 
   def on_talk(npc, pc)
-    return "#{npc.id}-1.htm"
+    "#{npc.id}-1.htm"
   end
 end

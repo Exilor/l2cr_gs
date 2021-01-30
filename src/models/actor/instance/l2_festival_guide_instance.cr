@@ -88,8 +88,6 @@ class L2FestivalGuideInstance < L2Npc
   end
 
   def show_chat_window(pc : L2PcInstance, val : Int32, suffix : String?, is_description : Bool)
-    filename = SevenSigns::SEVEN_SIGNS_HTML_PATH + "festival/"
-
     filename = String.build do |io|
       io << SevenSigns::SEVEN_SIGNS_HTML_PATH
       io << "festival/"

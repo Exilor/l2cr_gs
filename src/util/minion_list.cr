@@ -41,12 +41,14 @@ class MinionList
   def on_master_spawn
     delete_spawned_minions
 
-    if !@reused_minion_references &&
-       !@master.template.parameters["SummonPrivateRate"]? &&
-       !@master.template.get_minion_list("Privates").empty? &&
-       ((sp = @master.spawn?) && sp.respawn_enabled?)
-
-      @reused_minion_references = Concurrent::Array(L2MonsterInstance).new
+    unless @reused_minion_references
+      unless @master.template.parameters["SummonPrivateRate"]?
+        unless @master.template.get_minion_list("Privates").empty?
+          if (sp = @master.spawn?) && sp.respawn_enabled?
+            @reused_minion_references = Concurrent::Array(L2MonsterInstance).new
+          end
+        end
+      end
     end
   end
 
@@ -65,7 +67,12 @@ class MinionList
     @minion_references.delete_first(minion)
     @reused_minion_references.try &.push(minion)
 
-    time = respawn_time < 0 ? @master.raid? ? Config.raid_minion_respawn_timer.to_i : 0 : respawn_time
+    if respawn_time < 0
+      time = @master.raid? ? Config.raid_minion_respawn_timer.to_i : 0
+    else
+      time = respawn_time
+    end
+
     if time > 0 && !@master.looks_dead?
       task = -> { minion_respawn_task(minion) }
       ThreadPoolManager.schedule_general(task, time)
@@ -80,7 +87,7 @@ class MinionList
     caller_is_master = caller == @master
     aggro = caller_is_master ? 10 : 1
     if @master.raid?
-      aggro *= 10
+      aggro &*= 10
     end
 
     @minion_references.each do |minion|
@@ -162,12 +169,12 @@ class MinionList
     new_x = Rnd.rand((min_radius.to_i * 2).to_i32..offset * 2)
     new_y = Rnd.rand(new_x..offset * 2)
     new_y = (Math.sqrt((new_y * new_y) - (new_x * new_x))).to_i
-    if new_x > (offset + min_radius)
+    if new_x > offset + min_radius
       new_x = (master.x + new_x) - offset
     else
       new_x = (master.x - new_x) + min_radius
     end
-    if new_y > (offset + min_radius)
+    if new_y > offset + min_radius
       new_y = (master.y + new_y) - offset
     else
       new_y = (master.y - new_y) + min_radius

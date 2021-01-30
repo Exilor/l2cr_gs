@@ -2,7 +2,7 @@ abstract class AbstractPlayerGroup
   include Enumerable(L2PcInstance)
   include Packets::Outgoing
 
-  abstract def members : Interfaces::Array(L2PcInstance)
+  abstract def members : Enumerable(L2PcInstance)
   abstract def leader : L2PcInstance
   abstract def leader=(pc : L2PcInstance)
   abstract def level : Int32
@@ -38,7 +38,7 @@ abstract class AbstractPlayerGroup
     broadcast_packet(SystemMessage.from_string(text))
   end
 
-  def broadcast_creature_say(creature_say, broadcaster)
+  def broadcast_creature_say(creature_say : CreatureSay, broadcaster : L2PcInstance)
     each do |m|
       unless BlockList.blocked?(m, broadcaster)
         m.send_packet(creature_say)

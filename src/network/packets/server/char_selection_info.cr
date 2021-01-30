@@ -170,8 +170,8 @@ class Packets::Outgoing::CharSelectionInfo < GameServerPacket
 
     if weapon_id > 0
       sql = "SELECT augAttributes FROM item_attributes WHERE itemId=?"
-      GameDB.each(sql, weapon_id) do |rs|
-        augment = rs.get_i32(:"augAttributes")
+      GameDB.each(sql, weapon_id) do |rs2|
+        augment = rs2.get_i32(:"augAttributes")
         cip.augmentation_id = augment == -1 ? 0 : augment
       end
     end

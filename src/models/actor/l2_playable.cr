@@ -87,6 +87,9 @@ abstract class L2Playable < L2Character
     return false unless target_player = target.acting_player
     return false if target_player == self
     return false if target_player.karma != 0
+    if (clan = player.clan) && (other_clan = target_player.clan)
+      return true if clan.at_war_with?(other_clan)
+    end
     return false if target_player.pvp_flag == 0
     true
   end
