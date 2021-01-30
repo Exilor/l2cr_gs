@@ -54,11 +54,9 @@ In order for the game server to work it needs the following:
   - [x] Riding
   - [x] Pet feeding
   - [x] Pet skills (some levels are missing)
-  - [ ] Evolving/exchanging pets
-    - [x] Hatchling to Strider
-    - [ ] All the others
+  - [x] Evolving/exchanging pets
   - [x] Servitor resummon on login
-  - [ ] Pet resummon on login
+  - [x] Pet resummon on login
 - [x] Cubics
 - [x] Traps
 - [x] Decoys
@@ -85,7 +83,6 @@ In order for the game server to work it needs the following:
     - [x] Freya
     - [x] Zaken
     - [x] Queen Ant
-  - [ ] Treasure chests
   - [x] Feedable monsters
 - [x] Walking and talking NPCs
 - [x] Parties
@@ -159,7 +156,7 @@ In order for the game server to work it needs the following:
   - [ ] Sorted
 - [x] Gatekeepers
   - [x] Low level player discount
-  - [ ] Weekend discount (untested)
+  - [x] Weekend discount (untested)
   - [x] Town-in-siege checking
 - [ ] Lottery
 - [ ] Clan halls
@@ -183,7 +180,7 @@ In order for the game server to work it needs the following:
 - [x] User commands
 - [x] Four Sepulchers (untested)
 - [x] Duels
-  - [ ] Party duels (untested)
+  - [x] Party duels
 - [x] Mail system
   - [x] Attachments
 - [x] Punishment manager (untested)
