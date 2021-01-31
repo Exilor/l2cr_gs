@@ -17,7 +17,7 @@ class EffectHandler::ResurrectionSpecial < AbstractEffect
     EffectFlag::RESURRECTION_SPECIAL.mask
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     effected, effector, skill = info.effected, info.effector, info.skill
     return unless caster = effector.acting_player
 

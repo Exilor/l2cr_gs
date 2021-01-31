@@ -20,7 +20,7 @@ module EffectHandler
       true
     end
 
-    def on_start(info)
+    def on_start(info : BuffInfo)
       target = info.effected
 
       if target.dead? || target.door? || target.invul? || target.hp_blocked?

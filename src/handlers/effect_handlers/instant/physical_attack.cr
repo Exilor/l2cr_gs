@@ -8,7 +8,7 @@ class EffectHandler::PhysicalAttack < AbstractEffect
 
     @power = params.get_f64("power", 0)
     @critical_chance = params.get_i32("criticalChance", 0)
-    @ignore_shield_defence = params.get_bool("ignoreShieldDefence", false)
+    @ignore_shield_defence = params.get_bool("ignoreShieldDefence", false) rescue false # l2j error in xml
   end
 
   def calc_success(info : BuffInfo) : Bool
@@ -23,7 +23,7 @@ class EffectHandler::PhysicalAttack < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target, char, skill = info.effected, info.effector, info.skill
     return if char.looks_dead?
 

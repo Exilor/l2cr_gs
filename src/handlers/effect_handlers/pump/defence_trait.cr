@@ -21,7 +21,7 @@ class EffectHandler::DefenceTrait < AbstractEffect
     @defence_traits = defence_traits.to_slice
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return if @defence_traits.empty?
 
     stat = info.effected.stat
@@ -35,7 +35,7 @@ class EffectHandler::DefenceTrait < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     return if @defence_traits.empty?
 
     stat = info.effected.stat

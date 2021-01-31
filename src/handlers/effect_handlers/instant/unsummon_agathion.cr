@@ -3,7 +3,7 @@ class EffectHandler::UnsummonAgathion < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effector.acting_player
     pc.agathion_id = 0
     pc.broadcast_user_info

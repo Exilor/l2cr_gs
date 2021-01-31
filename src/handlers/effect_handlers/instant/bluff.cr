@@ -10,7 +10,7 @@ class EffectHandler::Bluff < AbstractEffect
     Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected = info.effected
                       # HQs
     if effected.id == 35062 || effected.raid? || effected.raid_minion?

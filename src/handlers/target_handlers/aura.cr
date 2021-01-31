@@ -31,7 +31,7 @@ module TargetHandler::Aura
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::AURA
   end
 end

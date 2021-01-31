@@ -16,7 +16,7 @@ class EffectHandler::ThrowUp < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected, effector = info.effected, info.effector
 
     cur_x, cur_y, cur_z = effected.xyz

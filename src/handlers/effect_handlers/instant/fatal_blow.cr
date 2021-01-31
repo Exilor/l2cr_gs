@@ -24,7 +24,7 @@ class EffectHandler::FatalBlow < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char, target, skill = info.effector, info.effected, info.skill
     return if char.looks_dead?
 

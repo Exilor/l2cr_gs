@@ -17,7 +17,7 @@ class OlympiadGameNonClassed < OlympiadGameNormal
     COMP_DONE_WEEK_NON_CLASSED
   end
 
-  def self.create_game(id : Int32, class_list : Interfaces::Array(Int32)) : self?
+  def self.create_game(id : Int32, class_list : Array(Int32)) : self?
     if opponents = OlympiadGameNormal.create_list_of_participants(class_list)
       new(id, opponents)
     end

@@ -3,7 +3,7 @@ class EffectHandler::OpenDwarfRecipeBook < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effector.acting_player
     unless pc.private_store_type.none?
       pc.send_packet(SystemMessageId::CANNOT_CREATED_WHILE_ENGAGED_IN_TRADING)

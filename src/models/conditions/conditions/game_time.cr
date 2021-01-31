@@ -1,5 +1,5 @@
 class Condition
-  class GameTime < Condition
+  class GameTime < self
     enum CheckGameTime : UInt8
       NIGHT
     end

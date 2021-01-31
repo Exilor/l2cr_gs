@@ -3,7 +3,7 @@ class EffectHandler::PhysicalAttackMute < AbstractEffect
     EffectFlag::PHYSICAL_ATTACK_MUTED.mask
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.start_physical_attack_muted
   end
 end

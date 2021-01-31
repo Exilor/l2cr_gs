@@ -11,7 +11,7 @@ module EffectHandler
       EffectType::HP
     end
 
-    def on_start(info)
+    def on_start(info : BuffInfo)
       char, target = info.effector, info.effected
       skill = info.skill
 

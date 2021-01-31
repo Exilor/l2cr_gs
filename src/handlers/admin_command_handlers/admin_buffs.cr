@@ -135,9 +135,9 @@ module AdminCommandHandler::AdminBuffs
   def show_buffs(pc, target, page, passive)
     effects = [] of BuffInfo
     if passive
-      effects.concat(target.effect_list.passives)
+      target.effect_list.passives.each { |b| effects << b }
     else
-      effects.concat(target.effect_list.effects)
+      target.effect_list.effects.each { |b| effects << b }
     end
 
     if page > (effects.size // PAGE_LIMIT) + 1 || page < 1

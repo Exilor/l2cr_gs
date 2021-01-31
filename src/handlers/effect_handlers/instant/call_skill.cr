@@ -11,7 +11,7 @@ class EffectHandler::CallSkill < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effector.make_trigger_cast(@skill.skill, info.effected, true)
   end
 end

@@ -32,7 +32,7 @@ class L2Npc < L2Character
   property killing_blow_weapon : Int32 = 0
   property collision_height : Float64
   property collision_radius : Float64
-  property! summoned_npcs : Interfaces::Map(Int32, L2Npc)?
+  property! summoned_npcs : Concurrent::Map(Int32, L2Npc)?
   property! spawn : L2Spawn?
   property? busy : Bool = false
   property? random_animation_enabled : Bool = true

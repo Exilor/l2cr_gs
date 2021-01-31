@@ -722,7 +722,8 @@ class SevenSignsFestival
   end
 
   def festival_manager_schedule : TaskScheduler::PeriodicTask
-    (@manager_scheduled_task || start_festival_manager).not_nil!
+    @manager_scheduled_task || start_festival_manager
+    @manager_scheduled_task.not_nil!
   end
 
   def start_festival_manager

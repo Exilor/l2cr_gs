@@ -832,7 +832,7 @@ abstract class Inventory < ItemContainer
   end
 
   def restore
-    sql = "SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time FROM items WHERE owner_id=? AND (loc=? OR loc=?) ORDER BY loc_data"
+    sql = "SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time, agathion_energy FROM items WHERE owner_id=? AND (loc=? OR loc=?) ORDER BY loc_data"
     GameDB.each(sql, owner_id, base_location.to_s, equip_location.to_s) do |rs|
       unless item = L2ItemInstance.restore_from_db(owner_id, rs)
         next

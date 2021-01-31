@@ -1,5 +1,5 @@
 class EffectHandler::TargetMe < AbstractEffect
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effector, effected = info.effector, info.effected
     return unless effected.is_a?(L2Playable)
 
@@ -13,7 +13,7 @@ class EffectHandler::TargetMe < AbstractEffect
     effected.locked_target = effector
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     if playable = info.effected.as?(L2Playable)
       playable.locked_target = nil
     end

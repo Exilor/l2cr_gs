@@ -19,7 +19,7 @@ class L2Party < AbstractPlayerGroup
   @change_request_distribution_type : PartyDistributionType?
   @party_lvl : Int32
 
-  getter members : Interfaces::Array(L2PcInstance)
+  getter members : Concurrent::Array(L2PcInstance)
   getter? pending_invitation = false
   property distribution_type : PartyDistributionType
   property command_channel : L2CommandChannel?

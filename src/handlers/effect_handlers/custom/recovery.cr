@@ -3,7 +3,7 @@ class EffectHandler::Recovery < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if pc = info.effected.as?(L2PcInstance)
       pc.reduce_death_penalty_buff_level
     end

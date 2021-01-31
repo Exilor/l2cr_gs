@@ -6,7 +6,7 @@ module TargetHandler::Self
     [char] of L2Object
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::SELF
   end
 end

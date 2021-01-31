@@ -7,7 +7,7 @@ class EffectHandler::Disarm < AbstractEffect
     EffectFlag::DISARMED.mask
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.acting_player.not_nil!.disarm_weapons
   end
 end

@@ -5,7 +5,7 @@ class Packets::Outgoing::WareHouseWithdrawalList < Packets::Outgoing::AbstractIt
   FREIGHT = 1
 
   @adena = 0i64
-  @items : Interfaces::Array(L2ItemInstance)?
+  @items : Concurrent::Array(L2ItemInstance)?
 
   def initialize(pc : L2PcInstance, type : Int32)
     @type = type

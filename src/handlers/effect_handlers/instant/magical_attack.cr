@@ -1,9 +1,12 @@
 class EffectHandler::MagicalAttack < AbstractEffect
   @power : Float64
+  @shield_defense_percent : Float64
 
   def initialize(attach_cond, apply_cond, set, params)
     super
+
     @power = params.get_f64("power", 0)
+    @shield_defense_percent = params.get_f64("shieldDefensePercent", 0.0)
   end
 
   def instant? : Bool
@@ -14,7 +17,7 @@ class EffectHandler::MagicalAttack < AbstractEffect
       EffectType::MAGICAL_ATTACK
     end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target, char, skill = info.effected, info.effector, info.skill
 
     if char.looks_dead?
@@ -29,7 +32,7 @@ class EffectHandler::MagicalAttack < AbstractEffect
     bss = skill.use_spiritshot? && char.charged_shot?(ShotType::BLESSED_SPIRITSHOTS)
     mcrit = Formulas.m_crit(char.get_m_critical_hit(target, skill).to_f)
     shld = Formulas.shld_use(char, target, skill)
-    damage = Formulas.magic_dam(char, target, skill, shld, sps, bss, mcrit, @power)
+    damage = Formulas.magic_dam(char, target, skill, shld, @shield_defense_percent, sps, bss, mcrit, @power)
     damage *= Formulas.soul_bonus(skill, info)
 
     if damage > 0

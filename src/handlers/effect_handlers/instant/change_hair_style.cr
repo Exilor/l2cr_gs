@@ -10,7 +10,7 @@ class EffectHandler::ChangeHairStyle < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effector, effected = info.effector, info.effected
     return unless effector.is_a?(L2PcInstance) && effected.is_a?(L2PcInstance)
     return if effected.looks_dead?

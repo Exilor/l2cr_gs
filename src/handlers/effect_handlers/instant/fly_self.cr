@@ -12,7 +12,7 @@ class EffectHandler::FlySelf < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected =  info.effected
     return if effected.movement_disabled?
     effector = info.effector

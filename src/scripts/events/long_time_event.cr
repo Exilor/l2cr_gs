@@ -19,7 +19,7 @@ class LongTimeEvent < Quest
     super(-1, name, description)
 
     begin
-      parse_datapack_file("scripts/events/#{name}/config.xml")
+      parse_datapack_file("events/#{name}.xml")
     rescue e
       error e
       return

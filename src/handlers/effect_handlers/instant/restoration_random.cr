@@ -1,5 +1,5 @@
 class EffectHandler::RestorationRandom < AbstractEffect
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless info.effector.player? && info.effected.player?
 
     unless ex_skill = info.skill.extractable_skill

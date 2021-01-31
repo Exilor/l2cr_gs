@@ -40,6 +40,10 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
   private def run_custom_cmd(pc)
     case @command
+    when "timers"
+      p pc.@reuse_time_stamp_items
+      p "-" * 80
+      p pc.@reuse_time_stamp_skills
     when "save"
       pc.store_me
     when "save_all"
@@ -130,7 +134,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     target.reduce_current_hp(target.max_hp - 1.0, pc, nil)
     case pc.class_id
     when .dwarven_fighter?, .scavenger?, .bounty_hunter?, .fortune_seeker?
-      is_spoiler = true
+      spoil = pc.get_known_skill(254)
     end
 
     party = pc.party
@@ -138,13 +142,13 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
     timer = Timer.new
 
     times.times do
-      if is_spoiler
+      if spoil
         spoil.apply_effects(pc, target)
       end
 
       target.do_die(pc)
 
-      if is_spoiler
+      if spoil
         target.take_sweep.try &.each do |item|
           if party
             party.distribute_item(pc, item, true, target)

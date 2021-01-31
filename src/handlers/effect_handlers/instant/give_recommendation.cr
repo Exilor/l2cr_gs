@@ -16,7 +16,7 @@ class EffectHandler::GiveRecommendation < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless target = info.effected.as?(L2PcInstance)
 
     recs_given = @amount

@@ -13,7 +13,7 @@ class L2TamedBeastInstance < L2FeedableBeastInstance
   @home_z = 0
   @buff_task : TaskScheduler::PeriodicTask?
   @duration_check_task : TaskScheduler::PeriodicTask?
-  @beast_skills : Interfaces::Array(Skill)?
+  @beast_skills : Concurrent::Array(Skill)?
 
   getter food_type = 0
   getter! owner : L2PcInstance

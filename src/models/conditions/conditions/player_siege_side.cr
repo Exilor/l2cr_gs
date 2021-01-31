@@ -1,5 +1,5 @@
 class Condition
-  class PlayerSiegeSide < Condition
+  class PlayerSiegeSide < self
     initializer side : Int32
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool

@@ -17,7 +17,7 @@ class EffectHandler::BlockAction < AbstractEffect
     !@blocked_actions.includes?(id)
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     if @blocked_actions.includes?(BotReportTable::PARTY_ACTION_BLOCK_ID)
       PunishmentManager.stop_punishment(
         info.effected.l2id,
@@ -34,7 +34,7 @@ class EffectHandler::BlockAction < AbstractEffect
     end
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if @blocked_actions.includes?(BotReportTable::PARTY_ACTION_BLOCK_ID)
       PunishmentManager.start_punishment(
         PunishmentTask.new(

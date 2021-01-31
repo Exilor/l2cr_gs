@@ -69,12 +69,12 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
     nil
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     type = EventType::ON_CREATURE_DAMAGE_DEALT
     info.effected.remove_listener_if(type) { |l| l.owner == self }
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effected
     type = EventType::ON_CREATURE_DAMAGE_DEALT
     listener = ConsumerEventListener.new(char, type, self) do |event|

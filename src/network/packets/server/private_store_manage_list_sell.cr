@@ -2,7 +2,7 @@ class Packets::Outgoing::PrivateStoreManageListSell < Packets::Outgoing::Abstrac
   @l2id : Int32
   @adena : Int64
   @item_list : Array(TradeItem)
-  @sell_list : Interfaces::Array(TradeItem)
+  @sell_list : Concurrent::Array(TradeItem)
 
   def initialize(pc : L2PcInstance, package_sale : Bool)
     @package_sale = package_sale

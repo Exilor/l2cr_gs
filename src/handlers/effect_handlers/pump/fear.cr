@@ -23,7 +23,7 @@ class EffectHandler::Fear < AbstractEffect
     false
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected
     if target.casting_now? && target.can_abort_cast?
       target.abort_cast

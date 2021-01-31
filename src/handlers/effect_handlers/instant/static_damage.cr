@@ -6,7 +6,7 @@ class EffectHandler::StaticDamage < AbstractEffect
     @power = params.get_f64("power", 0)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effector
     return if char.looks_dead?
     target = info.effected

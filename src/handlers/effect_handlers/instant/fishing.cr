@@ -10,7 +10,7 @@ class EffectHandler::Fishing < AbstractEffect
     EffectType::FISHING_START
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     pc = info.effector
     return unless pc.is_a?(L2PcInstance)
 

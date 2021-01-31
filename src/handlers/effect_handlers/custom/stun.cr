@@ -7,11 +7,11 @@ class EffectHandler::Stun < AbstractEffect
     EffectType::STUN
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     info.effected.stop_stunning(false)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.start_stunning
   end
 end

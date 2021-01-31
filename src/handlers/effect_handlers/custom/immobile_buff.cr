@@ -3,11 +3,11 @@ class EffectHandler::ImmobileBuff < AbstractEffect
     EffectType::BUFF
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.immobilized = true
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     info.effected.immobilized = false
   end
 end

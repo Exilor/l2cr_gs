@@ -94,3 +94,6 @@ module Packets
   module Incoming
   end
 end
+
+class Skill
+end

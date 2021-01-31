@@ -24,7 +24,7 @@ module TargetHandler::CorpseMob
     [target] of L2Object
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::CORPSE_MOB
   end
 end

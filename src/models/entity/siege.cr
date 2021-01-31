@@ -18,12 +18,12 @@ class Siege
   @siege_end_date = Calendar.new
   @scheduled_start_siege_task : TaskScheduler::DelayedTask?
   @first_owner_clan_id = -1
-  @attacker_clans = Concurrent::Array(L2SiegeClan).new
-  @defender_clans = Concurrent::Array(L2SiegeClan).new
+  @attacker_clans = Array(L2SiegeClan).new
+  @defender_clans = Array(L2SiegeClan).new
 
   getter control_tower_count = 0
   getter siege_guard_manager
-  getter defender_waiting_clans = Concurrent::Array(L2SiegeClan).new
+  getter defender_waiting_clans = Array(L2SiegeClan).new
   getter! castle
   getter? in_progress = false
   getter? registration_over = false
@@ -852,7 +852,7 @@ class Siege
     attacker_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def attacker_clans : Interfaces::Array(L2SiegeClan)?
+  def attacker_clans : Array(L2SiegeClan)?
     @normal_side ? @attacker_clans : @defender_clans
   end
 
@@ -868,7 +868,7 @@ class Siege
     defender_clans.find { |sc| sc.clan_id == clan_id }
   end
 
-  def defender_clans : Interfaces::Array(L2SiegeClan)?
+  def defender_clans : Array(L2SiegeClan)?
     @normal_side ? @defender_clans : @attacker_clans
   end
 
@@ -900,7 +900,7 @@ class Siege
     end
   end
 
-  def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
+  def get_flag(clan : L2Clan?) : Array(L2Npc)?
     unless clan
       return
     end

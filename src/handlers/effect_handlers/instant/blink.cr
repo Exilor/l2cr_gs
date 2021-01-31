@@ -13,7 +13,7 @@ class EffectHandler::Blink < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effected
     angle = Util.convert_heading_to_degree(char.heading)
     radian = Math.to_radians(angle)

@@ -96,6 +96,7 @@ class LoginServerThread
       when 0x06 then Packets::Incoming::ChangePasswordResponse.new
       else
         warn { "Unknown opcode: 0x#{opcode.to_s(16)}." }
+        nil
       end
 
       if packet
@@ -144,11 +145,11 @@ class LoginServerThread
     error e
   end
 
-  def waiting_clients : Interfaces::Array(WaitingClient)
+  def waiting_clients : Concurrent::Array(WaitingClient)
     WAITING
   end
 
-  def accounts : Interfaces::Map(String, GameClient)
+  def accounts : Concurrent::Map(String, GameClient)
     ACCOUNTS
   end
 

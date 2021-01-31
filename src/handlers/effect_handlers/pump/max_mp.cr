@@ -22,7 +22,7 @@ class EffectHandler::MaxMp < AbstractEffect
     end
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected = info.effected
     char_stat = effected.stat
     amount = @power
@@ -52,7 +52,7 @@ class EffectHandler::MaxMp < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     char_stat = info.effected.stat
     char_stat.sync do
       char_stat.active_char.remove_stats_owner(self)

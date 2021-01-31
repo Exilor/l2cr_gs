@@ -22,7 +22,7 @@ class EffectHandler::Backstab < AbstractEffect
     EffectType::PHYSICAL_ATTACK
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effector
     return if char.looks_dead?
     target = info.effected

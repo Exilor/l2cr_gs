@@ -18,13 +18,13 @@ class EffectHandler::Confuse < AbstractEffect
     true
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     unless info.effected.player?
       info.effected.notify_event(AI::THINK)
     end
   end
   # L2AttackableAI expects this to set @attack_target to the new target
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected
     target.notify_event(AI::CONFUSED)
 

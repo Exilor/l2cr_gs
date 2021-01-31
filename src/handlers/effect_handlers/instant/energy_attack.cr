@@ -20,7 +20,7 @@ class EffectHandler::EnergyAttack < AbstractEffect
     EffectType::PHYSICAL_ATTACK
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless attacker = info.effector.as?(L2PcInstance)
     target = info.effected
     skill = info.skill

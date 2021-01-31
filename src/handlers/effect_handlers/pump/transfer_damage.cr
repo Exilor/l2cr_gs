@@ -1,5 +1,5 @@
 class EffectHandler::TransferDamage < AbstractEffect
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effector, effected = info.effector, info.effected
 
     if effected.is_a?(L2Playable) && effector.is_a?(L2PcInstance)
@@ -7,7 +7,7 @@ class EffectHandler::TransferDamage < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     effector, effected = info.effector, info.effected
 
     if effected.is_a?(L2Playable) && effector.is_a?(L2PcInstance)

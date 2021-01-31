@@ -19,7 +19,7 @@ class EffectHandler::StealAbnormal < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effector, effected = info.effector, info.effected
 
     return unless effected.player?

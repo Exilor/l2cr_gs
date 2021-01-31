@@ -1,5 +1,5 @@
 class Condition
-  class SiegeZone < Condition
+  class SiegeZone < self
     COND_NOT_ZONE     = 0x0001
     COND_CAST_ATTACK  = 0x0002
     COND_CAST_DEFEND  = 0x0004

@@ -27,7 +27,7 @@ module TargetHandler::BehindAura
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::BEHIND_AURA
   end
 end

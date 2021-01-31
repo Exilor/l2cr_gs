@@ -609,10 +609,18 @@ module Formulas
   end
 
   def magic_dam(attacker : L2Character, target : L2Character, skill : Skill, shld : Int, sps : Bool, bss : Bool, mcrit : Bool, power : Float64) : Float64
+    magic_dam(attacker, target, skill, shld, 0, sps, bss, mcrit, power)
+  end
+
+  def magic_dam(attacker : L2Character, target : L2Character, skill : Skill, shld : Int, shld_per : Float64, sps : Bool, bss : Bool, mcrit : Bool, power : Float64) : Float64
     mdef = target.get_m_def(attacker, skill)
     case shld
     when SHIELD_DEFENSE_SUCCEED
-      mdef += target.shld_def
+      if shld_per <= 0
+        mdef += target.shld_def
+      else
+        mdef += target.shld_def * shld_per / 100
+      end
     when SHIELD_DEFENSE_PERFECT_BLOCK
       return 1.0
     end
@@ -1189,9 +1197,9 @@ module Formulas
 
       effect_list = target.effect_list
       temp = [] of BuffInfo
-      temp.concat(effect_list.buffs) if effect_list.has_buffs?
-      temp.concat(effect_list.triggered) if effect_list.has_triggered?
-      temp.concat(effect_list.dances) if effect_list.has_dances?
+      effect_list.buffs.each { |b| temp << b } if effect_list.has_buffs?
+      effect_list.triggered.each { |b| temp << b } if effect_list.has_triggered?
+      effect_list.dances.each { |b| temp << b } if effect_list.has_dances?
       temp.each do |info|
         next unless info.skill.can_be_stolen?
         unless cancel_success(info, cancel_magic_lvl, final_rate, skill)

@@ -20,7 +20,7 @@ module TargetHandler::EnemySummon
     EMPTY_TARGET_LIST
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::ENEMY_SUMMON
   end
 end

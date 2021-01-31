@@ -1,10 +1,10 @@
 class MinionList
   @minion_references = Concurrent::Array(L2MonsterInstance).new
-  @reused_minion_references : Interfaces::Array(L2MonsterInstance)?
+  @reused_minion_references : Concurrent::Array(L2MonsterInstance)?
 
   initializer master : L2MonsterInstance
 
-  def spawned_minions : Interfaces::Array(L2MonsterInstance)
+  def spawned_minions : Concurrent::Array(L2MonsterInstance)
     @minion_references
   end
 

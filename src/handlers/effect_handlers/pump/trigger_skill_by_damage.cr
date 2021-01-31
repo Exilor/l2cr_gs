@@ -21,7 +21,7 @@ class EffectHandler::TriggerSkillByDamage < AbstractEffect
     @attacker_type = params.get_enum("attackerType", InstanceType, InstanceType::L2Character)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effected
     listener = ConsumerEventListener.new(char, EventType::ON_CREATURE_DAMAGE_RECEIVED, self) do |event|
       on_damage_received(event.as(OnCreatureDamageReceived))
@@ -29,7 +29,7 @@ class EffectHandler::TriggerSkillByDamage < AbstractEffect
     char.add_listener(listener)
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     type = EventType::ON_CREATURE_DAMAGE_RECEIVED
     info.effected.remove_listener_if(type) do |listener|
       listener.owner == self

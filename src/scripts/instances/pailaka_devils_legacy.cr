@@ -183,7 +183,11 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
 
   def on_move_finished(npc)
     if npc.location == LEMATAN_PORT_POINT
-      npc.do_cast(AV_TELEPORT)
+      if target = npc.target.as?(L2Character)
+        npc.do_cast(AV_TELEPORT)
+        npc.tele_to_location(target)
+        target.target = npc
+      end
       start_quest_timer("LEMATAN_TELEPORT", 2000, npc, nil)
     end
   end

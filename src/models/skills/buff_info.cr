@@ -5,7 +5,7 @@ require "../effects/effect_tick_task"
 class BuffInfo
   include Synchronizable
 
-  @tasks : Interfaces::Map(AbstractEffect, EffectTaskInfo)?
+  @tasks : Concurrent::Map(AbstractEffect, EffectTaskInfo)?
 
   getter period_start_ticks : Int32
   getter task : TaskScheduler::DelayedTask? # L2J: _scheduledFutureTimeTask

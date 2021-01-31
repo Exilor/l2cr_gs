@@ -3,7 +3,7 @@ class EffectHandler::ConvertItem < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless info.effected.player?
     return unless pc = info.effected.acting_player
     return if pc.looks_dead? || pc.enchanting?

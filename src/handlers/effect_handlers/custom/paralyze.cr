@@ -7,13 +7,13 @@ class EffectHandler::Paralyze < AbstractEffect
     EffectType::PARALYZE
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     unless info.effected.player?
       info.effected.notify_event(AI::THINK)
     end
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.intention = AI::IDLE
     info.effected.start_paralyze
   end

@@ -1,5 +1,5 @@
 class EffectHandler::ClanGate < AbstractEffect
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if pc = info.effected.as?(L2PcInstance)
       if clan = pc.clan
         sm = SystemMessage.court_magician_created_portal

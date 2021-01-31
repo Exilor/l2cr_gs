@@ -11,11 +11,11 @@ class EffectHandler::Betray < AbstractEffect
     EffectType::DEBUFF
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.set_intention(AI::ATTACK, info.effected.acting_player)
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     info.effected.intention = AI::IDLE
   end
 end

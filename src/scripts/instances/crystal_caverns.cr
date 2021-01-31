@@ -823,7 +823,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           return ""
         elsif !world.copies.empty?
           not_aoe = true
-          if skill && (skill.target_type.area? || skill.target_type.front_area? || skill.target_type.behind_area? || skill.target_type.aura? || skill.target_type.front_aura? || skill.target_type.behind_aura?)
+          if skill.nil? || !skill.aoe?
             not_aoe = false
           end
           if not_aoe

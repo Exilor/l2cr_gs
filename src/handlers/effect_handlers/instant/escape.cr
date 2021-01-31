@@ -14,7 +14,7 @@ class EffectHandler::Escape < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless escape_type = @escape_type
     char = info.effected
     loc = MapRegionManager.get_tele_to_location(char, escape_type)

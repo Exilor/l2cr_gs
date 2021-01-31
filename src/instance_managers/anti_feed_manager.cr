@@ -8,7 +8,7 @@ module AntiFeedManager
   L2EVENT_ID = 3
 
   private LAST_DEATH_TIMES = Concurrent::Map(Int32, Int64).new
-  private EVENT_IPS = Concurrent::Map(Int32, Interfaces::Map(UInt64, Int32)).new
+  private EVENT_IPS = Concurrent::Map(Int32, Concurrent::Map(UInt64, Int32)).new
 
   def set_last_death_time(l2id : Int32)
     LAST_DEATH_TIMES[l2id] = Time.ms

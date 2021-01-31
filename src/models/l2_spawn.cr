@@ -10,7 +10,7 @@ class L2Spawn
 
   @current_count = 0
   @do_respawn = false
-  @last_spawn_points : Interfaces::Map(Int32, Location)?
+  @last_spawn_points : Concurrent::Map(Int32, Location)?
   @constructor : L2Npc.class = L2Npc
 
   getter template

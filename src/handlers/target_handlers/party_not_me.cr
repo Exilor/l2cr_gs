@@ -26,7 +26,7 @@ module TargetHandler::PartyNotMe
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::PARTY_NOTME
   end
 end

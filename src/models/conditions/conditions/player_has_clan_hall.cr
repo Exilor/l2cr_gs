@@ -1,5 +1,5 @@
 class Condition
-  class PlayerHasClanHall < Condition
+  class PlayerHasClanHall < self
     @halls : Slice(Int32)
 
     def initialize(halls)

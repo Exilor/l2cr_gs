@@ -304,17 +304,23 @@ abstract class AbstractDocument
         array = text.split(',').slice_map { |s| get_value(s.strip).to_i }
         cond = join_and(cond, Condition::PlayerInsideZoneId.new(array))
       when "checkabnormal"
-        if text.includes?(',')
-          v1, v2 = text.split(',')
-          v1 = AbnormalType.parse(v1)
-          v2 = get_value(v2, template).to_i
-          cond = join_and(cond, Condition::PlayerCheckAbnormal.new(v1, v2))
+        if text.includes?(';')
+          v0, v1, v2 = text.split(';')
+          v0 = AbnormalType.parse(v0)
+          v1 = get_value(v1, template).to_i
+          v2 = v2.to_b
+          cond = join_and(cond, Condition::CheckAbnormal.new(v0, v1, v2))
         else
-          cond = join_and(cond, Condition::PlayerCheckAbnormal.new(AbnormalType.parse(text)))
+          type = AbnormalType.parse(text)
+          cond = join_and(cond, Condition::CheckAbnormal.new(type, -1, true))
         end
       when "categorytype"
         ary = text.split(',').map { |s| CategoryType.parse(get_value(s)) }
         cond = join_and(cond, Condition::CategoryType.new(ary))
+      when "hasagathion"
+        cond = join_and(cond, Condition::PlayerHasAgathion.new(text.to_b))
+      when "agathionenergy"
+        cond = join_and(cond, Condition::PlayerAgathionEnergy.new(text.to_i))
       end
     end
 
@@ -340,8 +346,8 @@ abstract class AbstractDocument
           range = range[0].to_i..range[1].to_i
           cond = join_and(cond, Condition::TargetLevelRange.new(range))
         end
-      when "mypartyexceptme"
-        cond = join_and(cond, Condition::TargetMyPartyExceptMe.new(text.to_b))
+      when "myparty"
+        cond = join_and(cond, Condition::TargetMyParty.new(text == "EXCEPT_ME"))
       when "playable"
         cond = join_and(cond, Condition::TargetPlayable.new)
       when "class_id_restriction"
@@ -399,6 +405,17 @@ abstract class AbstractDocument
       when "invsize"
         size = get_value(text).to_i
         cond = join_and(cond, Condition::TargetInvSize.new(size))
+      when "checkabnormal"
+        if text.includes?(';')
+          v0, v1, v2 = text.split(';')
+          v0 = AbnormalType.parse(v0)
+          v1 = get_value(v1, template).to_i
+          v2 = v2.to_b
+          cond = join_and(cond, Condition::CheckAbnormal.new(v0, v1, v2))
+        else
+          type = AbnormalType.parse(text)
+          cond = join_and(cond, Condition::CheckAbnormal.new(type, -1, true))
+        end
       end
     end
 

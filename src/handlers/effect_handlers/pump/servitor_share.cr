@@ -17,7 +17,7 @@ class EffectHandler::ServitorShare < AbstractEffect
     EffectType::BUFF
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     super
 
     pc = info.effected.acting_player.not_nil!
@@ -30,7 +30,7 @@ class EffectHandler::ServitorShare < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     pc = info.effected.acting_player.not_nil!
     pc.servitor_share = nil
 

@@ -1,7 +1,7 @@
 require "../../../enums/class_id"
 
 class Condition
-  class TargetClassIdRestriction < Condition
+  class TargetClassIdRestriction < self
     @class_ids : Slice(Int32)
     def initialize(class_ids)
       @class_ids = class_ids.sort.to_slice

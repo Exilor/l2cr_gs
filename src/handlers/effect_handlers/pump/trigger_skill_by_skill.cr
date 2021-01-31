@@ -36,12 +36,12 @@ class EffectHandler::TriggerSkillBySkill < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     type = EventType::ON_CREATURE_SKILL_USE
     info.effected.remove_listener_if(type) { |l| l.owner == self }
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effected
     type = EventType::ON_CREATURE_SKILL_USE
     listener = ConsumerEventListener.new(char, type, self) do |event|

@@ -12,7 +12,7 @@ module TargetHandler::Unlockable
     EMPTY_TARGET_LIST
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::UNLOCKABLE
   end
 end

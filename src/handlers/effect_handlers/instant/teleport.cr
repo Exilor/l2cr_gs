@@ -16,7 +16,7 @@ class EffectHandler::Teleport < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.tele_to_location(@loc, true)
   end
 end

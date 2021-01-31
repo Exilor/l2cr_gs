@@ -28,7 +28,7 @@ class EffectHandler::DispelBySlot < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return if @dispel_abnormals.empty?
 
     char = info.effected

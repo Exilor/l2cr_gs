@@ -9,7 +9,7 @@ class EffectHandler::SetSkill < AbstractEffect
     @skill_lvl = params.get_i32("skillLvl", 1)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effected.as?(L2PcInstance)
 
     if skill = SkillData[@skill_id, @skill_lvl]?

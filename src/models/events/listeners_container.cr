@@ -4,7 +4,7 @@ class ListenersContainer
   include Synchronizable
   include Loggable
 
-  @listeners : Interfaces::Map(EventType, Array(AbstractEventListener))?
+  @listeners : Concurrent::Map(EventType, Array(AbstractEventListener))?
 
   def add_listener(lst : AbstractEventListener) : AbstractEventListener
     (listeners[lst.type] ||= [] of AbstractEventListener) << lst
@@ -60,7 +60,7 @@ class ListenersContainer
     !get_listeners(type).empty?
   end
 
-  private def listeners : Interfaces::Map(EventType, Array(AbstractEventListener))
+  private def listeners : Concurrent::Map(EventType, Array(AbstractEventListener))
     @listeners || sync do
       @listeners ||= begin
         Concurrent::Map(EventType, Array(AbstractEventListener)).new

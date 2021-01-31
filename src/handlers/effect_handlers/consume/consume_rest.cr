@@ -41,7 +41,7 @@ class EffectHandler::ConsumeRest < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if pc = info.effected.as?(L2PcInstance)
       pc.sit_down(false)
     else

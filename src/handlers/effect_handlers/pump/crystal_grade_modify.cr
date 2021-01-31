@@ -10,14 +10,14 @@ class EffectHandler::CrystalGradeModify < AbstractEffect
     info.effected.player?
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if pc = info.effected.acting_player
       pc.expertise_penalty_bonus = @grade
       pc.refresh_expertise_penalty
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     if pc = info.effected.acting_player
       pc.expertise_penalty_bonus = 0
       pc.refresh_expertise_penalty

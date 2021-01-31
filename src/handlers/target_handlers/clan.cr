@@ -92,7 +92,7 @@ module TargetHandler::Clan
     target_list || EMPTY_TARGET_LIST
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::CLAN
   end
 end

@@ -1,7 +1,7 @@
 require "../../../enums/class_id"
 
 class Condition
-  class PlayerClassIdRestriction < Condition
+  class PlayerClassIdRestriction < self
     @class_ids : Slice(Int32)
 
     def initialize(class_ids)

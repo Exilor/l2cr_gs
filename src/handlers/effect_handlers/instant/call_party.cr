@@ -3,7 +3,7 @@ class EffectHandler::CallParty < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effector = info.effector
     return unless pc = effector.acting_player
     return unless party = pc.party

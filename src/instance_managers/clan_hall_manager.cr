@@ -54,19 +54,19 @@ module ClanHallManager
     error e
   end
 
-  def all_clan_halls : Interfaces::Map(Int32, ClanHall)
+  def all_clan_halls : Hash(Int32, ClanHall)
     ALL_CLAN_HALLS
   end
 
-  def free_clan_halls : Interfaces::Map(Int32, AuctionableHall)
+  def free_clan_halls : Concurrent::Map(Int32, AuctionableHall)
     FREE_CLAN_HALLS
   end
 
-  def clan_halls : Interfaces::Map(Int32, AuctionableHall)
+  def clan_halls : Concurrent::Map(Int32, AuctionableHall)
     CLAN_HALLS
   end
 
-  def auctionable_clan_halls : Interfaces::Map(Int32, AuctionableHall)
+  def auctionable_clan_halls : Hash(Int32, AuctionableHall)
     ALL_AUCTIONABLE_CLAN_HALLS
   end
 

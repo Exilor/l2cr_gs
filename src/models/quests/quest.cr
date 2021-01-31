@@ -15,7 +15,7 @@ class Quest < AbstractScript
   @rw_lock = MyMutex.new # should be a "reentrant read write lock"
   @on_enter_world = false
   @quest_item_ids = [] of Int32
-  @quest_timers : Interfaces::Map(String, Array(QuestTimer))?
+  @quest_timers : Concurrent::Map(String, Array(QuestTimer))?
   @start_condition : Hash(Proc(L2PcInstance, Bool), String)?
 
   getter name, description
@@ -76,7 +76,7 @@ class Quest < AbstractScript
     get_quest_state(pc, true).not_nil!
   end
 
-  def quest_timers : Interfaces::Map(String, Array(QuestTimer))
+  def quest_timers : Concurrent::Map(String, Array(QuestTimer))
     @quest_timers || sync do
       @quest_timers ||= Concurrent::Map(String, Array(QuestTimer)).new
     end

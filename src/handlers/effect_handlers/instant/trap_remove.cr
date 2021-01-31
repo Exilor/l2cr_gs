@@ -15,7 +15,7 @@ class EffectHandler::TrapRemove < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     trap = info.effected
     return unless trap.is_a?(L2TrapInstance)
     return if trap.looks_dead?

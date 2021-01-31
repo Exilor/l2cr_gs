@@ -21,7 +21,7 @@ class EffectHandler::SummonCubic < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effected.as?(L2PcInstance)
     return if pc.in_observer_mode? || pc.mounted? || pc.dead?
 

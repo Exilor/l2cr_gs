@@ -7,7 +7,7 @@ class EffectHandler::DispelAll < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.stop_all_effects
   end
 end

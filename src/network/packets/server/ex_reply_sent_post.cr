@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExReplySentPost < Packets::Outgoing::AbstractItemPacket
-  @items : Interfaces::Array(L2ItemInstance)?
+  @items : Concurrent::Array(L2ItemInstance)?
 
   def initialize(msg : Message)
     @msg = msg

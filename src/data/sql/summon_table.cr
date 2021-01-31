@@ -128,11 +128,11 @@ module SummonTable
     debug { "Saved #{summon}." }
   end
 
-  def pets : Interfaces::Map(Int32, Int32)
+  def pets : Concurrent::Map(Int32, Int32)
     PETS
   end
 
-  def servitors : Interfaces::Map(Int32, Int32)
+  def servitors : Concurrent::Map(Int32, Int32)
     SERVITORS
   end
 end

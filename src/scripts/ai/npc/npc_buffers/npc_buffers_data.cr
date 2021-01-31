@@ -5,7 +5,7 @@ module NpcBuffersData
   private NPC_BUFFERS = {} of Int32 => NpcBufferData
 
   def load
-    parse_datapack_file("scripts/ai/npc/NpcBuffers/NpcBuffersData.xml")
+    parse_datapack_file("ai/npc/buffer/NpcBuffersData.xml")
     info { "Loaded #{NPC_BUFFERS.size} buffers data." }
   end
 

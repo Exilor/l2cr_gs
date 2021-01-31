@@ -10,7 +10,7 @@ module TargetHandler::FlagPole
     [target.not_nil!] of L2Object
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::FLAGPOLE
   end
 end

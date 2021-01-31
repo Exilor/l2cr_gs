@@ -21,7 +21,7 @@ class EffectHandler::DispelByCategory < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected = info.effected
     return if effected.dead?
     effector = info.effector

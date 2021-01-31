@@ -45,7 +45,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     end
   end
 
-  def self.create_list_of_participants(list : Interfaces::Array(Interfaces::Array(Int32))) : Array(Array(Participant))?
+  def self.create_list_of_participants(list : Array(Array(Int32))) : Array(Array(Participant))?
     if list.nil? || list.size < 2
       return
     end
@@ -113,7 +113,7 @@ class OlympiadGameTeams < AbstractOlympiadGame
     end
   end
 
-  def self.create_game(id : Int32, list : Interfaces::Array(Interfaces::Array(Int32))) : OlympiadGameTeams?
+  def self.create_game(id : Int32, list : Array(Array(Int32))) : OlympiadGameTeams?
     unless teams = create_list_of_participants(list)
       return
     end

@@ -3,7 +3,7 @@ class EffectHandler::EnableCloak < AbstractEffect
     info.effector.player?
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.acting_player.not_nil!.stat.cloak_slot_status = true
   end
 
@@ -11,7 +11,7 @@ class EffectHandler::EnableCloak < AbstractEffect
     info.skill.passive?
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     info.effected.acting_player.not_nil!.stat.cloak_slot_status = false
   end
 end

@@ -1,5 +1,5 @@
 class Condition
-  class PlayerInstanceId < Condition
+  class PlayerInstanceId < self
     @ids : Slice(Int32)
 
     def initialize(ids)

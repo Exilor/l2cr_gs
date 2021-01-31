@@ -39,7 +39,7 @@ module TargetHandler::CommandChannel
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::COMMAND_CHANNEL
   end
 end

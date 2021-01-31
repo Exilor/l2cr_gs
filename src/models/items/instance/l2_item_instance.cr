@@ -26,6 +26,7 @@ class L2ItemInstance < L2Object
   getter drop_protection = DropProtection.new
   getter elementals : Array(Elementals)?
   getter augmentation : L2Augmentation?
+  getter agathion_remaining_energy = 0
   getter? published = false
   property custom_type_1 : Int32 = 0
   property custom_type_2 : Int32 = 0
@@ -51,6 +52,9 @@ class L2ItemInstance < L2Object
     self.count = 1
     @mana = item.duration
     @time = item.time == -1 ? -1i64 : Time.ms + (item.time * 60 * 1000)
+    if info = AgathionRepository.get_by_item_id(item_id)
+      @agathion_remaining_energy = info.max_energy
+    end
 
     schedule_life_time_task
   end
@@ -66,6 +70,9 @@ class L2ItemInstance < L2Object
     self.count = 1
     @mana = item.duration
     @time = item.time == -1 ? -1i64 : Time.ms + (item.time * 60 * 1000)
+    if info = AgathionRepository.get_by_item_id(item.id)
+      @agathion_remaining_energy = info.max_energy
+    end
 
     schedule_life_time_task
   end
@@ -589,6 +596,7 @@ class L2ItemInstance < L2Object
     type_2 = rs.get_i32(:"custom_type2")
     mana_left = rs.get_i32(:"mana_left")
     time = rs.get_i64(:"time")
+    agathion_energy = rs.get_i32(:"agathion_energy")
 
     item = ItemTable[item_id]
 
@@ -600,7 +608,7 @@ class L2ItemInstance < L2Object
     inst.stored_in_db = true
     inst.loc = loc
     inst.loc_data = loc_data
-    inst.set_attrs_from_db(owner_id, enchant_level, mana_left, time)
+    inst.set_attrs_from_db(owner_id, enchant_level, mana_left, time, agathion_energy)
 
     if inst.equippable?
       inst.restore_attributes
@@ -609,11 +617,12 @@ class L2ItemInstance < L2Object
     inst
   end
 
-  protected def set_attrs_from_db(owner_id, enchant_level, mana_left, time)
+  protected def set_attrs_from_db(owner_id, enchant_level, mana_left, time, agathion_energy)
     @owner_id = owner_id
     @enchant_level = enchant_level
     @mana = mana_left
     @time = time
+    @agathion_remaining_energy = agathion_energy
   end
 
   def delete_me
@@ -1039,6 +1048,11 @@ class L2ItemInstance < L2Object
       task.cancel
       @item_loot_schedule = nil
     end
+  end
+
+  def agathion_remaining_energy=(energy : Int32)
+    @agathion_remaining_energy = energy
+    @stored_in_db = false
   end
 
   def to_s(io : IO)

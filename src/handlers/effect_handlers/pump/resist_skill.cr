@@ -25,7 +25,7 @@ class EffectHandler::ResistSkill < AbstractEffect
     EffectType::BUFF
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected = info.effected
     @skills.each do |holder|
       effected.add_invul_against(holder)
@@ -33,7 +33,7 @@ class EffectHandler::ResistSkill < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     effected = info.effected
     @skills.each do |holder|
       effected.remove_invul_against(holder)

@@ -83,7 +83,7 @@ module TargetHandler::AreaFriendly
     true
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::AREA_FRIENDLY
   end
 end

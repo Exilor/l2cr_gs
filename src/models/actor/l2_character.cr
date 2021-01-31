@@ -31,21 +31,21 @@ abstract class L2Character < L2Object
   @zones_mutex = MyMutex.new
   @zone_validate_counter = 4i8
   @teleport_lock = MyMutex.new
-  @invul_against_skills : Interfaces::Map(Int32, InvulSkillHolder)?
-  @reuse_time_stamp_items : Interfaces::Map(Int32, TimeStamp)?
-  @reuse_time_stamp_skills : Interfaces::Map(Int32, TimeStamp)?
-  @disabled_skills : Interfaces::Map(Int32, Int64)?
-  @trigger_skills : Interfaces::Map(Int32, OptionsSkillHolder)?
+  @invul_against_skills : Concurrent::Map(Int32, InvulSkillHolder)?
+  @reuse_time_stamp_items : Concurrent::Map(Int32, TimeStamp)? | Hash(Int32, TimeStamp)?
+  @reuse_time_stamp_skills : Concurrent::Map(Int32, TimeStamp)? | Hash(Int32, TimeStamp)?
+  @disabled_skills : Concurrent::Map(Int32, Int64)?
+  @trigger_skills : Concurrent::Map(Int32, OptionsSkillHolder)?
   @all_skills_disabled : Bool = false
   @ai : L2CharacterAI?
   @exceptions = 0i64
   @move : MoveData?
   @skill_cast_2 : TaskScheduler::DelayedTask?
-  @attack_by_list : Interfaces::Set(L2Character)?
+  @attack_by_list : Concurrent::Set(L2Character)?
 
   getter title : String = ""
   getter cast_interrupt_time = 0i64
-  getter skills : Interfaces::Map(Int32, Skill) = Concurrent::Map(Int32, Skill).new
+  getter skills : Concurrent::Map(Int32, Skill) = Concurrent::Map(Int32, Skill).new
   getter abnormal_visual_effects = 0
   getter abnormal_visual_effects_special = 0
   getter abnormal_visual_effects_event = 0
@@ -276,19 +276,19 @@ abstract class L2Character < L2Object
     end
   end
 
-  def attack_by_list : Interfaces::Set(L2Character)
+  def attack_by_list : Concurrent::Set(L2Character)
     @attack_by_list || sync do
       @attack_by_list ||= Concurrent::Set(L2Character).new
     end
   end
 
-  def trigger_skills : Interfaces::Map(Int32, OptionsSkillHolder)
+  def trigger_skills : Concurrent::Map(Int32, OptionsSkillHolder)
     @trigger_skills || sync do
       @trigger_skills ||= Concurrent::Map(Int32, OptionsSkillHolder).new
     end
   end
 
-  def invul_against_skills : Interfaces::Map(Int32, InvulSkillHolder)
+  def invul_against_skills : Concurrent::Map(Int32, InvulSkillHolder)
     @invul_against_skills || sync do
       @invul_against_skills ||= Concurrent::Map(Int32, InvulSkillHolder).new
     end
@@ -400,7 +400,7 @@ abstract class L2Character < L2Object
     -1i64
   end
 
-  def item_reuse_time_stamps : Interfaces::Map(Int32, TimeStamp)?
+  def item_reuse_time_stamps# : Concurrent::Map(Int32, TimeStamp)?
     @reuse_time_stamp_items
   end
 
@@ -418,7 +418,7 @@ abstract class L2Character < L2Object
     temp.not_nil![skill.hash] = TimeStamp.new(skill, reuse, time)
   end
 
-  def skill_reuse_time_stamps : Interfaces::Map(Int32, TimeStamp)?
+  def skill_reuse_time_stamps# : Concurrent::Map(Int32, TimeStamp)?
     @reuse_time_stamp_skills
   end
 
@@ -1999,6 +1999,10 @@ abstract class L2Character < L2Object
 
   def clan_id : Int32
     0
+  end
+
+  def clan : L2Clan?
+    # return nil
   end
 
   def ally_id : Int32
@@ -3775,13 +3779,14 @@ abstract class L2Character < L2Object
         distance = vertical_movement_only ? Math.pow(dz, 2) : Math.hypot(dx, dy)
       end
 
-      if Config.pathfinding > 0 && original_distance - distance > 30 && distance < 4000
-        if (playable? && !in_vehicle) || minion? || in_combat? ||         (npc? && walker?) || is_a?(L2Decoy) # custom, force
+      if Config.pathfinding > 0 && original_distance - distance > 30
+        if (playable? && !in_vehicle) || minion? || in_combat?# ||         (npc? && walker?) || is_a?(L2Decoy) # custom, force
           m.geo_path = PathFinding.find_path(cur_x, cur_y, cur_z, original_x, original_y, original_z, instance_id, playable?)
-          if !m.geo_path? || m.geo_path.size < 0
+          if !m.geo_path? || m.geo_path.size < 2
             # debug "path not found." if !npc? || !known_list.known_players.empty?
             if player? || (!playable? && !minion? && (z - cur_z).abs > 140) || (me.is_a?(L2Summon) && !me.follow_status)
-              set_intention(AI::IDLE)
+              dst = GeoData.move_check(cur_x, cur_y, cur_z, x, y, z, instance_id)
+              set_intention(AI::MOVE_TO, dst)
               return
             end
 

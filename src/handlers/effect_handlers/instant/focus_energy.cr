@@ -6,7 +6,7 @@ class EffectHandler::FocusEnergy < AbstractEffect
     @charge = params.get_i32("charge", 0)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if pc = info.effected.as?(L2PcInstance)
       pc.increase_charges(1, @charge)
     end

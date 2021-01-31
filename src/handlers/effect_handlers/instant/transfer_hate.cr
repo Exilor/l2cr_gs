@@ -14,7 +14,7 @@ class EffectHandler::TransferHate < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     skill, effector, effected = info.skill, info.effector, info.effected
 
     unless Util.in_range?(skill.effect_range, effector, effected, true)

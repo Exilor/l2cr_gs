@@ -70,7 +70,7 @@ module TargetHandler::PartyClan
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::PARTY_CLAN
   end
 end

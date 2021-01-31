@@ -14,7 +14,7 @@ class EffectHandler::HpByLevel < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     abs = @power
     target = info.effector
     if target.current_hp > target.max_hp

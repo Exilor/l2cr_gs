@@ -10,7 +10,7 @@ class EffectHandler::RefuelAirship < AbstractEffect
     EffectType::REFUEL_AIRSHIP
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless ship = info.effector.acting_player.try &.airship
     ship.fuel += @value
     ship.update_abnormal_effect

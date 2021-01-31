@@ -37,14 +37,14 @@ class ItemAuctionInstance
     find_element(node, "item") do |na|
       begin
         auction_item_id = parse_int(na, "auctionItemId")
-        auction_lenght = parse_int(na, "auctionLenght")
+        auction_lenght = parse_int(na, "auctionLength")
         auction_init_bid = parse_long(na, "auctionInitBid")
 
         item_id = parse_int(na, "itemId")
         item_count = parse_long(na, "itemCount")
 
         if auction_lenght < 1
-          raise "auctionLenght < 1 for instance_id: #{@instance_id}, item_id: #{item_id}"
+          raise "Auction length < 1 for instance_id: #{@instance_id}, item_id: #{item_id}"
         end
 
         item_extra = StatsSet.new

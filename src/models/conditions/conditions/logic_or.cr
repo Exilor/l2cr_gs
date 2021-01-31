@@ -1,5 +1,5 @@
 class Condition
-  class LogicOr < Condition
+  class LogicOr < self
     getter conditions = Slice(Condition).empty
 
     def add(cond : Condition)

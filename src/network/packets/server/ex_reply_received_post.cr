@@ -1,5 +1,5 @@
 class Packets::Outgoing::ExReplyReceivedPost < Packets::Outgoing::AbstractItemPacket
-  @items : Interfaces::Array(L2ItemInstance)?
+  @items : Concurrent::Array(L2ItemInstance)?
 
   def initialize(@msg : Message)
     if msg.has_attachments?

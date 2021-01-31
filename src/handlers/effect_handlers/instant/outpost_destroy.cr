@@ -5,7 +5,7 @@ class EffectHandler::OutpostDestroy < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effector.acting_player
     return unless clan = pc.clan
     return unless pc.clan_leader?

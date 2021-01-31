@@ -15,7 +15,7 @@ class EffectHandler::SummonTrap < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected = info.effected
     return unless effected.player?
     return unless pc = effected.acting_player

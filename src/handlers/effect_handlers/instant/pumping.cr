@@ -19,7 +19,7 @@ class EffectHandler::Pumping < AbstractEffect
     EffectType::FISHING
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effector.as?(L2PcInstance)
 
     unless fish = pc.fish_combat

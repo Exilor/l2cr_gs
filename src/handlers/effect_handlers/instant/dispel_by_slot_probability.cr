@@ -28,7 +28,7 @@ class EffectHandler::DispelBySlotProbability < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return if @dispel_abnormals.empty?
 
     effected = info.effected

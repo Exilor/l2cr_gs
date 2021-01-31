@@ -14,7 +14,7 @@ class EffectHandler::DeathLink < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target, char, skill = info.effected, info.effector, info.skill
 
     if char.looks_dead?

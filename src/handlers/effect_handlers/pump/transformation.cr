@@ -10,11 +10,11 @@ class EffectHandler::Transformation < AbstractEffect
     info.effected.player?
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     TransformData.transform_player(@id, info.effected.acting_player.not_nil!)
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     info.effected.stop_transformation(false)
   end
 end

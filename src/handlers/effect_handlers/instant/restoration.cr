@@ -9,7 +9,7 @@ class EffectHandler::Restoration < AbstractEffect
     @item_count = params.get_i64("itemCount", 0)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless info.effected.playable?
 
     if @item_id <= 0 || @item_count <= 0

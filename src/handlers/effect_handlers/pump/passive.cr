@@ -4,7 +4,7 @@ module EffectHandler
       info.effected.attackable?
     end
 
-    def on_start(info)
+    def on_start(info : BuffInfo)
       target = info.effected
       if target.is_a?(L2Attackable)
         target.abort_attack
@@ -14,7 +14,7 @@ module EffectHandler
       end
     end
 
-    def on_exit(info)
+    def on_exit(info : BuffInfo)
       info.effected.enable_all_skills
       info.effected.immobilized = false
     end

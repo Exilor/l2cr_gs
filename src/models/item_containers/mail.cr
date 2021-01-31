@@ -41,7 +41,7 @@ class Mail < ItemContainer
   end
 
   def restore
-    sql = "SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time FROM items WHERE owner_id=? AND loc=? AND loc_data=?"
+    sql = "SELECT object_id, item_id, count, enchant_level, loc, loc_data, custom_type1, custom_type2, mana_left, time, agathion_energy FROM items WHERE owner_id=? AND loc=? AND loc_data=?"
     GameDB.each(sql, owner_id, base_location.to_s, message_id) do |rs|
       unless item = L2ItemInstance.restore_from_db(owner_id, rs)
         warn "An item wasn't restored."

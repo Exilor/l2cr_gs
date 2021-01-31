@@ -120,15 +120,15 @@ module RaidBossSpawnManager
     SPAWNS.has_key?(boss_id)
   end
 
-  def bosses : Interfaces::Map(Int32, L2RaidBossInstance)
+  def bosses : Concurrent::Map(Int32, L2RaidBossInstance)
     BOSSES
   end
 
-  def spawns : Interfaces::Map(Int32, L2Spawn)
+  def spawns : Concurrent::Map(Int32, L2Spawn)
     SPAWNS
   end
 
-  def stored_info : Interfaces::Map(Int32, StatsSet)
+  def stored_info : Concurrent::Map(Int32, StatsSet)
     STORED_INFO
   end
 

@@ -14,7 +14,7 @@ class EffectHandler::SkillTurning < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return if info.effected == info.effector || info.effected.raid?
     info.effected.break_cast
   end

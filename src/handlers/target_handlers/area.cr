@@ -50,7 +50,7 @@ module TargetHandler::Area
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::AREA
   end
 end

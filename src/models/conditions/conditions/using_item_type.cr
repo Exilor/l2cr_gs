@@ -1,7 +1,7 @@
 require "../../../enums/armor_type"
 
 class Condition
-  class UsingItemType < Condition
+  class UsingItemType < self
     @armor : Bool
 
     def initialize(mask : Int32)

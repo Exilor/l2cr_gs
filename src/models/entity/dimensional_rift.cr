@@ -275,11 +275,11 @@ class DimensionalRift
     end
   end
 
-  def dead_member_list : Interfaces::Array(L2PcInstance)
+  def dead_member_list : Concurrent::Array(L2PcInstance)
     @dead_players
   end
 
-  def revived_at_waiting_room : Interfaces::Array(L2PcInstance)
+  def revived_at_waiting_room : Concurrent::Array(L2PcInstance)
     @revived_in_waiting_room
   end
 

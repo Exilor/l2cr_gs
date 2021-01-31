@@ -255,7 +255,7 @@ module Hero
     error e
   end
 
-  def heroes : Interfaces::Map(Int32, StatsSet)
+  def heroes : Concurrent::Map(Int32, StatsSet)
     HEROES
   end
 

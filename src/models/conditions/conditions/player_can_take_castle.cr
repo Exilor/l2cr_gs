@@ -1,5 +1,5 @@
 class Condition
-  class PlayerCanTakeCastle < Condition
+  class PlayerCanTakeCastle < self
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       return false unless pc = effector.as?(L2PcInstance)
       if pc.looks_dead? || pc.cursed_weapon_equipped? || !pc.clan_leader?

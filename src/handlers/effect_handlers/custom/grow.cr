@@ -3,13 +3,13 @@ class EffectHandler::Grow < AbstractEffect
     EffectType::BUFF
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if npc = info.effected.as?(L2Npc)
       npc.collision_radius = npc.template.collision_radius_grown
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     if npc = info.effected.as?(L2Npc)
       npc.collision_radius = npc.template.f_collision_radius
     end

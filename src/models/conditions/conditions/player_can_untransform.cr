@@ -1,5 +1,5 @@
 class Condition
-  class PlayerCanUntransform < Condition
+  class PlayerCanUntransform < self
     initializer val : Bool
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool

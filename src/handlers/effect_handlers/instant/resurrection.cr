@@ -14,7 +14,7 @@ class EffectHandler::Resurrection < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target, caster = info.effected, info.effector
 
     if caster.player?

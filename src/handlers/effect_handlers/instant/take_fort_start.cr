@@ -3,7 +3,7 @@ class EffectHandler::TakeFortStart < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless info.effector.player?
     return unless pc = info.effector.acting_player
     return unless fort = FortManager.get_fort(pc)

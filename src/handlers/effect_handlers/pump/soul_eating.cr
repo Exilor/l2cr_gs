@@ -6,7 +6,7 @@ class EffectHandler::SoulEating < AbstractEffect
     @exp_needed = params.get_i32("expNeeded")
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if info.effected.player?
       type = EventType::ON_PLAYABLE_EXP_CHANGED
       lst = ConsumerEventListener.new(info.effected, type, self) do |evt|
@@ -32,7 +32,7 @@ class EffectHandler::SoulEating < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     if info.effected.player?
       type = EventType::ON_PLAYABLE_EXP_CHANGED
       info.effected.remove_listener_if(type) do |listener|

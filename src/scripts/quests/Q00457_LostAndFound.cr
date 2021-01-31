@@ -13,7 +13,7 @@ class Scripts::Q00457_LostAndFound < Quest
   private CHANCE_SPAWN = 1 # 1%
   private MIN_LVL = 82
 
-  @escort_checkers = Set(L2Spawn).new
+  @escort_checkers : Concurrent::Set(L2Spawn) | Slice(L2Spawn) | Set(L2Spawn) = Set(L2Spawn).new
 
   def initialize
     super(457, self.class.simple_name, "Lost and Found")

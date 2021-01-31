@@ -26,7 +26,7 @@ class EffectHandler::Summon < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return if !info.effected.player? || info.effected.has_summon?
     return unless pc = info.effected.acting_player
 

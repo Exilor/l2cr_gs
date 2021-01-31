@@ -3,7 +3,7 @@ class EffectHandler::TakeFort < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effector.as?(L2PcInstance)
 
     if (clan = pc.clan) && (fort = FortManager.get_fort(pc))

@@ -15,7 +15,7 @@ class EffectHandler::FoodForPet < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effector
 
     if char.is_a?(L2PetInstance)

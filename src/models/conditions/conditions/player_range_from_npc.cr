@@ -1,5 +1,5 @@
 class Condition
-  class PlayerRangeFromNpc < Condition
+  class PlayerRangeFromNpc < self
     @npc_ids : Slice(Int32)
 
     def initialize(npc_ids, radius : Int32, val : Bool)

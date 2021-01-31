@@ -13,7 +13,7 @@ class EffectHandler::CallPc < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected.acting_player.not_nil!
     char = info.effector.acting_player.not_nil!
 

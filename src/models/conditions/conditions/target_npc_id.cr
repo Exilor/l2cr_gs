@@ -1,5 +1,5 @@
 class Condition
-  class TargetNpcId < Condition
+  class TargetNpcId < self
     @npc_ids : Slice(Int32)
 
     def initialize(npc_ids)

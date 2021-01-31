@@ -7,7 +7,7 @@ class EffectHandler::RebalanceHP < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     skill, effector = info.skill, info.effector
     return unless pc = effector.as?(L2PcInstance)
 

@@ -7,7 +7,7 @@ class EffectHandler::GetAgro < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     if mob = info.effected.as?(L2Attackable)
       if mob.ai? && mob.most_hated != info.effector
         mob.set_intention(AI::ATTACK, info.effector)

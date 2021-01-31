@@ -18,7 +18,7 @@ class EffectHandler::DeleteHate < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected
     return unless target.is_a?(L2Attackable)
 

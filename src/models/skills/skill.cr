@@ -52,6 +52,7 @@ class Skill
   getter abnormal_type : AbnormalType
   getter abnormal_time : Int32
   getter hit_time : Int32
+  getter hit_cancel_time : Int32
   getter abnormal_visual_effects = Slice(AbnormalVisualEffect).empty
   getter abnormal_visual_effects_special = Slice(AbnormalVisualEffect).empty
   getter abnormal_visual_effects_event = Slice(AbnormalVisualEffect).empty
@@ -65,6 +66,7 @@ class Skill
   getter min_chance : Int32
   getter max_chance : Int32
   getter affect_range : Int32
+  getter affect_object : AffectObject
   getter attribute_type : AttributeType
   getter attribute_power : Int32
   getter basic_property : BaseStats
@@ -120,7 +122,7 @@ class Skill
       if time = Config.skill_duration_list[@id]?
         if @level < 100 || @level > 140
           abnormal_time = time
-        elsif @level >= 100 && @level < 140
+        elsif @level < 140
           abnormal_time += time
         end
       end
@@ -134,6 +136,7 @@ class Skill
     @stay_after_death = set.get_bool("stayAfterDeath", false)
     @stay_on_subclass_change = set.get_bool("stayOnSubclassChange", true)
     @hit_time = set.get_i32("hitTime", 0)
+    @hit_cancel_time = set.get_i32("hitCancelTime", 0)
     @cool_time = set.get_i32("coolTime", 0)
     @debuff = set.get_bool("isDebuff", false)
     @recovery_herb = set.get_bool("isRecoveryHerb", false)
@@ -144,6 +147,7 @@ class Skill
       @reuse_delay = set.get_i32("reuseDelay", 0)
     end
 
+    @affect_object = set.get_enum("affectObject", AffectObject, AffectObject::ALL)
     @affect_range = set.get_i32("affectRange", 0)
 
     tmp = set.get_string("rideState", nil)

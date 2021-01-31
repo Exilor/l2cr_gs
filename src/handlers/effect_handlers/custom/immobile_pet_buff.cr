@@ -3,7 +3,7 @@ class EffectHandler::ImmobilePetBuff < AbstractEffect
     EffectType::BUFF
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effected, effector = info.effected, info.effector
     if effected.is_a?(L2Summon) && effector.is_a?(L2PcInstance)
       if effected.owner == effector
@@ -12,7 +12,7 @@ class EffectHandler::ImmobilePetBuff < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     info.effected.immobilized = false
   end
 end

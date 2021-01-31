@@ -20,7 +20,7 @@ abstract class ClanHallSiegeEngine < Quest
   @siege_task : TaskScheduler::DelayedTask?
   @mission_accomplished = false
 
-  getter attackers = Concurrent::Map(Int32, L2SiegeClan).new
+  getter attackers = {} of Int32 => L2SiegeClan
 
   def initialize(name : String, description : String, hall_id : Int32)
     super(-1, name, description)
@@ -84,7 +84,7 @@ abstract class ClanHallSiegeEngine < Quest
     end
   end
 
-  def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
+  def get_flag(clan : L2Clan?) : Array(L2Npc)?
     if temp = get_attacker_clan(clan)
       temp.flag # nilable?
     end
@@ -109,7 +109,7 @@ abstract class ClanHallSiegeEngine < Quest
     end
   end
 
-  def attacker_clans : Interfaces::Array(L2SiegeClan)?
+  def attacker_clans : Array(L2SiegeClan)?
     @attackers.values
   end
 
@@ -137,7 +137,7 @@ abstract class ClanHallSiegeEngine < Quest
     # return nil
   end
 
-  def defender_clans : Interfaces::Array(L2SiegeClan)?
+  def defender_clans : Array(L2SiegeClan)?
     # return nil
   end
 

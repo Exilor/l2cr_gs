@@ -1,7 +1,7 @@
 require "../../../enums/race"
 
 class Condition
-  class PlayerRace < Condition
+  class PlayerRace < self
     @races : Slice(Race)
 
     def initialize(races)

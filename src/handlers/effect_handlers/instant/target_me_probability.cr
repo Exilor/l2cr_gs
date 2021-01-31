@@ -14,7 +14,7 @@ class EffectHandler::TargetMeProbability < AbstractEffect
     Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effector, effected = info.effector, info.effected
 
     return unless effected.playable?

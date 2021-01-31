@@ -1,5 +1,5 @@
 class Condition
-  class CategoryType < Condition
+  class CategoryType < self
     @categories : Slice(::CategoryType)
 
     def initialize(categories)

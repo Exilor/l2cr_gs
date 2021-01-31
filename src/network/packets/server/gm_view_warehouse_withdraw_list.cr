@@ -1,6 +1,6 @@
 class Packets::Outgoing::GMViewWarehouseWithdrawList < Packets::Outgoing::AbstractItemPacket
   @player_name : String
-  @items : Interfaces::Array(L2ItemInstance)
+  @items : Concurrent::Array(L2ItemInstance)
   @money : Int64
 
   def initialize(pc : L2PcInstance)

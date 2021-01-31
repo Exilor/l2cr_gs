@@ -10,7 +10,7 @@ class EffectHandler::VitalityPointUp < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effected.as?(L2PcInstance)
 
     pc.update_vitality_points(@value, false, false)

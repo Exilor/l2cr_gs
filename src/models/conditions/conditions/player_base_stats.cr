@@ -1,5 +1,5 @@
 class Condition
-  class PlayerBaseStats < Condition
+  class PlayerBaseStats < self
     enum BaseStat : UInt8
       Int
       Str

@@ -61,7 +61,7 @@ module TargetHandler::BehindArea
     target_list || EMPTY_TARGET_LIST
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::BEHIND_AREA
   end
 end

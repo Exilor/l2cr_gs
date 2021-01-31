@@ -3,7 +3,7 @@ class EffectHandler::BlockParty < AbstractEffect
     info.effected.is_a?(L2PcInstance)
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     PunishmentManager.stop_punishment(
       info.effected.l2id,
       PunishmentAffect::CHARACTER,
@@ -11,7 +11,7 @@ class EffectHandler::BlockParty < AbstractEffect
     )
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     PunishmentManager.start_punishment(
       PunishmentTask.new(
         0,

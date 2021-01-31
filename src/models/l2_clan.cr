@@ -801,11 +801,11 @@ class L2Clan
     !@at_war_with.empty?
   end
 
-  def war_list : Interfaces::Set(Int32)
+  def war_list : Concurrent::Set(Int32)
     @at_war_with
   end
 
-  def attacker_list : Interfaces::Set(Int32)
+  def attacker_list : Concurrent::Set(Int32)
     @at_war_attackers
   end
 

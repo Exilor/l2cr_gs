@@ -398,7 +398,7 @@ module TerritoryWarManager
     CLAN_FLAGS.delete(clan)
   end
 
-  def territory_wards : Interfaces::Array(TerritoryWard)
+  def territory_wards : Concurrent::Array(TerritoryWard)
     TERRITORY_WARDS
   end
 
@@ -1115,7 +1115,7 @@ module TerritoryWarManager
     raise "Not supported"
   end
 
-  def attacker_clans : Interfaces::Array(L2SiegeClan)?
+  def attacker_clans : Concurrent::Array(L2SiegeClan)?
     raise "Not supported"
   end
 
@@ -1135,7 +1135,7 @@ module TerritoryWarManager
     raise "Not supported"
   end
 
-  def defender_clans : Interfaces::Array(L2SiegeClan)?
+  def defender_clans : Concurrent::Array(L2SiegeClan)?
     raise "Not supported"
   end
 
@@ -1143,7 +1143,7 @@ module TerritoryWarManager
     raise "Not supported"
   end
 
-  def get_flag(clan : L2Clan?) : Interfaces::Array(L2Npc)?
+  def get_flag(clan : L2Clan?) : Concurrent::Array(L2Npc)?
     raise "Not supported"
   end
 

@@ -131,7 +131,7 @@ class L2CharTemplate < ListenersContainer
 
   private EMPTY_SKILLS = {} of Int32 => Skill
 
-  def skills : Interfaces::Map(Int32, Skill)
+  def skills : Concurrent::Map(Int32, Skill) | Hash(Int32, Skill)
     EMPTY_SKILLS
   end
 end

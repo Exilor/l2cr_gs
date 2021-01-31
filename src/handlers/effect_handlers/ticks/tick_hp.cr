@@ -14,7 +14,7 @@ class EffectHandler::TickHp < AbstractEffect
     EffectType::DMG_OVER_TIME
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected
     skill = info.skill
 

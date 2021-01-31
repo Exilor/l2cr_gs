@@ -32,7 +32,7 @@ module TargetHandler::Ground
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::GROUND
   end
 end

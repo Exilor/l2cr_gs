@@ -5,7 +5,7 @@ class L2CommandChannel < AbstractPlayerGroup
 
   getter leader : L2PcInstance
   getter level : Int32
-  getter parties : Interfaces::Array(L2Party)
+  getter parties : Concurrent::Array(L2Party)
 
   def initialize(leader : L2PcInstance)
     @leader = leader
@@ -51,7 +51,7 @@ class L2CommandChannel < AbstractPlayerGroup
 
   def members : Array(L2PcInstance)
     members = Array(L2PcInstance).new(size)
-    parties.each { |party| members.concat(party.members) }
+    parties.each { |party| party.members.each { |m| members << m } }
     members
   end
 

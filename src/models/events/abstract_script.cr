@@ -10,7 +10,7 @@ abstract class AbstractScript
 
   private alias Say2 = Packets::Incoming::Say2
 
-  @registered_ids = Concurrent::Map(ListenerRegisterType, Interfaces::Set(Int32)).new
+  @registered_ids = Concurrent::Map(ListenerRegisterType, Set(Int32) | Concurrent::Set(Int32)).new
 
   getter listeners = Concurrent::Array(AbstractEventListener).new
   property? active : Bool = false
@@ -284,7 +284,7 @@ abstract class AbstractScript
     listeners
   end
 
-  def get_registered_ids(reg_type : ListenerRegisterType) : Enumerable(Int32)
+  def get_registered_ids(reg_type : ListenerRegisterType) #: Enumerable(Int32)
     @registered_ids.fetch(reg_type, Slice(Int32).empty)
   end
 

@@ -13,7 +13,7 @@ class EffectHandler::SummonNpc < AbstractEffect
     @despawn_delay = params.get_i32("despawnDelay", 20_000)
     @npc_id = params.get_i32("npcId", 0)
     @npc_count = params.get_i32("npcCount", 1)
-    @random_offset = params.get_bool("randomOffset", false)
+    @random_offset = params.get_bool("randomOffset", false) rescue false # l2j error in xml
     @is_summon_spawn = params.get_bool("isSummonSpawn", false)
   end
 
@@ -25,7 +25,7 @@ class EffectHandler::SummonNpc < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effected.as?(L2PcInstance)
     return if pc.looks_dead? || pc.mounted?
 

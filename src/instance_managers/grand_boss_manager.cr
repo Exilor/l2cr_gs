@@ -199,7 +199,7 @@ module GrandBossManager
     ZONES.clear
   end
 
-  def zones : Interfaces::Map(Int32, L2BossZone)
+  def zones : Concurrent::Map(Int32, L2BossZone)
     ZONES
   end
 end

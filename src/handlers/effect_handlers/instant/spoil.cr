@@ -7,7 +7,7 @@ class EffectHandler::Spoil < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     effector, target = info.effector, info.effected
 
     if !target.monster? || target.dead?

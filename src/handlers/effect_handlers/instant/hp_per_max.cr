@@ -14,7 +14,7 @@ class EffectHandler::HpPerMax < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected
     return if target.dead? || target.door?
     power = @power

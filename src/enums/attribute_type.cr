@@ -5,7 +5,7 @@ enum AttributeType : Int8
   WIND
   EARTH
   HOLY
-  DARK
+  UNHOLY
 
   def id : Int8
     value

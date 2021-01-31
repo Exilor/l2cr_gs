@@ -1,5 +1,5 @@
 class Condition
-  class PlayerHasPet < Condition
+  class PlayerHasPet < self
     @item_ids : Slice(Int32)?
 
     def initialize(item_ids : Slice(Int32))

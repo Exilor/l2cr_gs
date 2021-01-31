@@ -1,5 +1,5 @@
 class EffectHandler::TeleportToTarget < AbstractEffect
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effector
     target = info.effected
 

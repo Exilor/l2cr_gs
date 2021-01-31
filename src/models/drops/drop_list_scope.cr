@@ -9,7 +9,7 @@ class DropListScope < EnumClass
 
   add(
     DEATH,
-    DropProc.new do |item_id, min, max, chance|
+    DropProc.new { |item_id, min, max, chance|
       GeneralDropItem.new(
         item_id,
         min,
@@ -18,13 +18,13 @@ class DropListScope < EnumClass
         AmountMultiplierStrategy::DROP,
         ChanceMultiplierStrategy::DROP
       )
-    end,
+    },
     GroupedDropProc.new { |chance| GroupedGeneralDropItem.new(chance) }
   )
 
   add(
     CORPSE,
-    DropProc.new do |item_id, min, max, chance|
+    DropProc.new { |item_id, min, max, chance|
       GeneralDropItem.new(
         item_id,
         min,
@@ -33,13 +33,13 @@ class DropListScope < EnumClass
         AmountMultiplierStrategy::SPOIL,
         ChanceMultiplierStrategy::SPOIL
       )
-    end,
+    },
     DEATH.@group_proc
   )
 
   add(
     STATIC,
-    DropProc.new do |item_id, min, max, chance|
+    DropProc.new { |item_id, min, max, chance|
       GeneralDropItem.new(
         item_id,
         min,
@@ -50,20 +50,20 @@ class DropListScope < EnumClass
         PreciseDeterminationStrategy::ALWAYS,
         KillerChanceModifierStrategy::NO_RULES
       )
-    end,
-    GroupedDropProc.new do |chance|
+    },
+    GroupedDropProc.new { |chance|
       GroupedGeneralDropItem.new(
         chance,
         GroupedItemDropCalculationStrategy::DEFAULT_STRATEGY,
         KillerChanceModifierStrategy::NO_RULES,
         PreciseDeterminationStrategy::ALWAYS
       )
-    end
+    }
   )
 
   add(
     QUEST,
-    DropProc.new do |item_id, min, max, chance|
+    DropProc.new { |item_id, min, max, chance|
       GeneralDropItem.new(
         item_id,
         min,
@@ -74,7 +74,7 @@ class DropListScope < EnumClass
         PreciseDeterminationStrategy::ALWAYS,
         KillerChanceModifierStrategy::NO_RULES
       )
-    end,
+    },
     STATIC.@group_proc
   )
 

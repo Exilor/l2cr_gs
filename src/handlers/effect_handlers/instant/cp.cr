@@ -17,7 +17,7 @@ class EffectHandler::Cp < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected
     return if target.dead? || !target.player?
     char = info.effector

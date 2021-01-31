@@ -14,7 +14,7 @@ class EffectHandler::TargetCancel < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.target = nil
     info.effected.abort_attack
     info.effected.abort_cast

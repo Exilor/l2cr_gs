@@ -12,7 +12,7 @@ class EffectHandler::ConsumeFakeDeath < AbstractEffect
     EffectType::FAKE_DEATH
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.start_fake_death
   end
 
@@ -33,7 +33,7 @@ class EffectHandler::ConsumeFakeDeath < AbstractEffect
     true
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     char = info.effected
     if char.is_a?(L2PcInstance)
       char.fake_death = false

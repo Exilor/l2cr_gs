@@ -1,5 +1,5 @@
 class ConcurrentLinkedList(E)
-  include Interfaces::Queue(E)
+  include Enumerable(E)
 
   private class Node(E)
     def initialize(item : E?)

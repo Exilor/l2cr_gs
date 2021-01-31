@@ -3,7 +3,7 @@ class EffectHandler::PhysicalMute < AbstractEffect
     EffectFlag::PHYSICAL_MUTED.mask
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.notify_event(AI::MUTED)
   end
 end

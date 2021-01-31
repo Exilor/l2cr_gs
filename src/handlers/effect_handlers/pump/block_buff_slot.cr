@@ -11,13 +11,13 @@ class EffectHandler::BlockBuffSlot < AbstractEffect
     end
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     unless @slots.empty?
       info.effected.effect_list.add_blocked_buff_slots(@slots)
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     unless @slots.empty?
       info.effected.effect_list.remove_blocked_buff_slots(@slots)
     end

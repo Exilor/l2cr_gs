@@ -10,7 +10,7 @@ module TargetHandler::Servitor
     EMPTY_TARGET_LIST
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::SERVITOR
   end
 end

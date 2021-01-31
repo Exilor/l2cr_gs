@@ -33,12 +33,12 @@ class EffectHandler::TriggerSkillByAvoid < AbstractEffect
     end
   end
 
-  def on_exit(info)
+  def on_exit(info : BuffInfo)
     type = EventType::ON_CREATURE_ATTACK_AVOID
     info.effected.remove_listener_if(type) { |l| l.owner == self }
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     char = info.effected
     type = EventType::ON_CREATURE_ATTACK_AVOID
     listener = ConsumerEventListener.new(char, type, self) do |event|

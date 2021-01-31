@@ -5,8 +5,8 @@ abstract class AbstractEffect
   include Packets::Outgoing
 
   getter name : String
-  getter ticks = 0
   getter func_templates : Array(FuncTemplate)?
+  property ticks : Int32 = 0
 
   def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     @attach_cond = attach_cond

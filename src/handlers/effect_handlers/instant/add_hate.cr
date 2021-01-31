@@ -10,7 +10,7 @@ class EffectHandler::AddHate < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless mob = info.effected.as?(L2Attackable)
 
     val = @power.to_i64

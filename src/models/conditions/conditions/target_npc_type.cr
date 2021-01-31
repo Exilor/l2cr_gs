@@ -1,7 +1,7 @@
 require "../../../enums/instance_type"
 
 class Condition
-  class TargetNpcType < Condition
+  class TargetNpcType < self
     @npc_types : Slice(InstanceType)
 
     def initialize(npc_types)

@@ -3,7 +3,7 @@ class EffectHandler::Detection < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless player = info.effector.as?(L2PcInstance)
     return unless target = info.effected.as?(L2PcInstance)
 

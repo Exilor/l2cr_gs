@@ -18,7 +18,7 @@ class EffectHandler::PhysicalAttackHpLink < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target, char, skill = info.effected, info.effector, info.skill
     return if char.looks_dead?
 

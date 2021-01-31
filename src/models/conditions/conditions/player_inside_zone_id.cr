@@ -1,5 +1,5 @@
 class Condition
-  class PlayerInsideZoneId < Condition
+  class PlayerInsideZoneId < self
     @zones : Slice(Int32)
 
     def initialize(zones)

@@ -13,7 +13,7 @@ class EffectHandler::RunAway < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless target = info.effected.as?(L2Attackable)
     return if Rnd.rand(100) > @power
 

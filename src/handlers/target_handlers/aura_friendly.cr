@@ -80,7 +80,7 @@ module TargetHandler::AuraFriendly
     true
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::AURA_FRIENDLY
   end
 end

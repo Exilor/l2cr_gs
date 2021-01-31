@@ -210,7 +210,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
 
   private INDEX_COUNT = Slice.new(2, 0)
   private ACTIVE_ROOMS = {} of Int32 => Bool
-  private NPC_SPAWNS = Concurrent::Map(Int32, Interfaces::Array(L2Npc)).new
+  private NPC_SPAWNS = Concurrent::Map(Int32, Concurrent::Array(L2Npc)).new
   private SPORE_SPAWNS = Concurrent::Set(L2Npc).new
 
   @counter = 90

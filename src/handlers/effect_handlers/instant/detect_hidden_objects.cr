@@ -3,7 +3,7 @@ class EffectHandler::DetectHiddenObjects < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     door = info.effected
     return unless door.is_a?(L2DoorInstance)
 

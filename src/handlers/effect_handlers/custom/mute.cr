@@ -7,7 +7,7 @@ class EffectHandler::Mute < AbstractEffect
     EffectType::MUTE
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     info.effected.abort_cast
     info.effected.notify_event(AI::MUTED)
   end

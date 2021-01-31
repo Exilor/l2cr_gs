@@ -10,7 +10,7 @@ class EffectHandler::ChangeFace < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless pc = info.effector.acting_player
     return if pc.looks_dead?
     pc.appearance.face = @value

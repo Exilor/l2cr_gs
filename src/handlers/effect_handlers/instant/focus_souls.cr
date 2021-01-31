@@ -10,7 +10,7 @@ class EffectHandler::FocusSouls < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return if !info.effected.player? || info.effected.looks_dead?
     return unless target = info.effected.acting_player
 

@@ -13,7 +13,7 @@ class EffectHandler::Lethal < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     target = info.effected
     char = info.effector
     skill = info.skill

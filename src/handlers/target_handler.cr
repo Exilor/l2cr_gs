@@ -24,19 +24,46 @@ module TargetHandler
   # abstract def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
   # abstract def target_type : TargetType
 
-  private def add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : L2Character?
-    if summon = owner.summon
-      add_character(caster, summon, radius, dead)
+  # def self.add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : L2Character?
+  #   if summon = owner.summon
+  #     add_character(caster, summon, radius, dead)
+  #   end
+  # end
+
+  # def self.add_character(caster : L2Character, target : L2Character, radius : Int32, dead : Bool) : L2Character?
+  #   return if dead != target.dead?
+  #   if radius > 0 && !Util.in_range?(radius, caster, target, true)
+  #     return
+  #   end
+  #   target
+  # end
+
+  # private def add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : L2Character?
+  #   TargetHandler.add_summon(caster, owner, radius, dead)
+  # end
+
+  # private def add_character(caster : L2Character, target : L2Character, radius : Int32, dead : Bool) : L2Character?
+  #   TargetHandler.add_character(caster, target, radius, dead)
+  # end
+
+  private module AddMethods
+    def add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : L2Character?
+      if summon = owner.summon
+        add_character(caster, summon, radius, dead)
+      end
+    end
+
+    def add_character(caster : L2Character, target : L2Character, radius : Int32, dead : Bool) : L2Character?
+      return if dead != target.dead?
+      if radius > 0 && !Util.in_range?(radius, caster, target, true)
+        return
+      end
+      target
     end
   end
 
-  private def add_character(caster : L2Character, target : L2Character, radius : Int32, dead : Bool) : L2Character?
-    return if dead != target.dead?
-    if radius > 0 && !Util.in_range?(radius, caster, target, true)
-      return
-    end
-    target
-  end
+  extend AddMethods
+  include AddMethods
 end
 
 require "./target_handlers/*"

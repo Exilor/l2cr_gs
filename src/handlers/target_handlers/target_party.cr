@@ -34,7 +34,7 @@ module TargetHandler::TargetParty
     target_list
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::TARGET_PARTY
   end
 end

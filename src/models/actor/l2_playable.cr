@@ -87,11 +87,15 @@ abstract class L2Playable < L2Character
     return false unless target_player = target.acting_player
     return false if target_player == self
     return false if target_player.karma != 0
-    if (clan = player.clan) && (other_clan = target_player.clan)
-      return true if clan.at_war_with?(other_clan)
+    if (clan1 = player.clan) && (clan2 = target_player.clan)
+      if clan1.at_war_with?(clan2) && clan2.at_war_with?(clan1)
+        if player.wants_peace == 0 && target_player.wants_peace == 0
+          return !player.academy_member? && !target_player.academy_member?
+        end
+      end
     end
-    return false if target_player.pvp_flag == 0
-    true
+
+    target_player.pvp_flag != 0
   end
 
   def add_level(value : Int32) : Bool

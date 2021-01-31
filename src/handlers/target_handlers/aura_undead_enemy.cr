@@ -24,7 +24,7 @@ module TargetHandler::AuraUndeadEnemy
     target_list || EMPTY_TARGET_LIST
   end
 
-  def target_type
+  def target_type : TargetType
     TargetType::AURA_UNDEAD_ENEMY
   end
 end

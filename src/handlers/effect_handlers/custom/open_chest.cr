@@ -3,7 +3,7 @@ class EffectHandler::OpenChest < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     return unless chest = info.effector.as?(L2ChestInstance)
     return unless pc = info.effector.acting_player
     return if chest.dead? || pc.instance_id != chest.instance_id

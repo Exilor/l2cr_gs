@@ -6,7 +6,7 @@ class OlympiadAnnouncer
   private OLY_MANAGER = 31688
 
   @current_stadium = 0
-  @managers : Interfaces::Set(L2Spawn)
+  @managers : Concurrent::Set(L2Spawn) | Slice(L2Spawn)
 
   def initialize
     @managers = SpawnTable.get_spawns(OLY_MANAGER)
@@ -20,7 +20,7 @@ class OlympiadAnnouncer
 
       task = OlympiadGameManager.get_olympiad_task(@current_stadium)
       if task && task.game? && task.needs_announce?
-        arena_id = (task.game.stadium_id + 1).to_s
+        arena_id = (task.game.stadium_id &+ 1).to_s
         case task.game.type
         when CompetitionType::NON_CLASSED
           npc_str = NpcString::OLYMPIAD_CLASS_FREE_INDIVIDUAL_MATCH_IS_GOING_TO_BEGIN_IN_ARENA_S1_IN_A_MOMENT

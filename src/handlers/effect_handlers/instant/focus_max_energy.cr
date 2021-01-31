@@ -3,7 +3,7 @@ class EffectHandler::FocusMaxEnergy < AbstractEffect
     true
   end
 
-  def on_start(info)
+  def on_start(info : BuffInfo)
     pc = info.effected
     return unless pc.is_a?(L2PcInstance)
 
