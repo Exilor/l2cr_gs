@@ -1,6 +1,7 @@
-# l2cr
+# l2cr_gs
 
 A Lineage 2 (High Five) server emulator ported from [L2J](http://www.l2jserver.com) (written in Java) to Crystal.
+This is the game server part. The other two are l2cr_ls (the login server) and l2cr_core (code used by both game server and login server).
 
 # Requirements
 
