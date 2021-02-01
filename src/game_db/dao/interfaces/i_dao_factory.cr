@@ -18,5 +18,8 @@ module GameDB
     abstract def subclass : SubclassDAO
     abstract def teleport_bookmark : TeleportBookmarkDAO
     abstract def couples : CouplesDAO
+    abstract def post : PostDAO
+    abstract def topic : TopicDAO
+    abstract def forum : ForumDAO
   end
 end

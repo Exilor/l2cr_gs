@@ -29,44 +29,48 @@ module TopicBBSManager
 
   def parse_write(a1 : String, a2 : String, a3 : String, a4 : String, a6 : String, pc : L2PcInstance)
     if a1 == "crea"
-      f = ForumsBBSManager.get_forum_by_id(a2.to_i)
-      if f.nil?
+      unless f = ForumsBBSManager.get_forum_by_id(a2.to_i)
         CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{a2} is not implemented yet</center><br><br></body></html>", pc)
-      else
-        f.vload
-        t = Topic.new(
-          Topic::ConstructorType::CREATE,
-          get_max_id(f) + 1,
-          a2.to_i,
-          a5,
-          Time.ms,
-          pc.name,
-          pc.l2id,
-          Topic::MEMO,
-          0
-        )
-        f.add_topic(t)
-        set_max_id(t.id, f)
-        p = Post.new(pc.name, pc.l2id, Time.ms, t.id, f.id, a4)
-        PostBBSManager.add_post_by_topic(p, t)
-        parse_cmd("_bbsmemo", pc)
+        return
       end
+
+      time = Time.ms
+      t = Topic.new(
+        get_max_id(f) + 1,
+        a2.to_i,
+        a5,
+        time,
+        pc.name,
+        pc.l2id,
+        TopicType::MEMO,
+        0
+      )
+      add_topic(t)
+      GameDB.topic.save(t)
+      f.add_topic(t)
+      set_max_id(t.id, f)
+      posts = [Post.new(0, pc.name, pc.l2id, time, t.id, f.id, a4)]
+      PostBBSManager.add_post_by_topic(t, posts)
+      parse_cmd("_bbsmemo", pc)
     elsif a1 == "del"
-      f = ForumsBBSManager.get_forum_by_id(a2.to_i)
-      if f.nil?
+      unless f = ForumsBBSManager.get_forum_by_id(a2.to_i)
         CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{a2} does not exist !</center><br><br></body></html>", pc)
-      else
-        t = f.get_topic(a3.to_i)
-        if t.nil?
-          CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the topic: #{a3} does not exist !</center><br><br></body></html>", pc)
-        else
-          if p = PostBBSManager.get_g_post_by_topic(t)
-            p.delete_me(t)
-          end
-          t.delete_me(f)
-          parse_cmd("_bbsmemo", pc)
-        end
+        return
       end
+
+      unless t = f.get_topic(a3.to_i)
+        CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the topic: #{a3} does not exist !</center><br><br></body></html>", pc)
+        return
+      end
+
+      p = PostBBSManager.get_g_post_by_topic(t)
+      unless p.empty?
+        PostBBSManager.del_post_by_topic(t)
+        GameDB.post.delete(t)
+      end
+
+      GameDB.topic.delete(t, f)
+      parse_cmd("_bbsmemo", pc)
     else
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the command: #{a1} is not implemented yet</center><br><br></body></html>", pc)
     end
@@ -90,7 +94,7 @@ module TopicBBSManager
       st = command.split(';')
       idf = st[2].to_i
       idt = st[3].to_i
-      f =ForumsBBSManager.get_forum_by_id(idf)
+      f = ForumsBBSManager.get_forum_by_id(idf)
 
       if f.nil?
         CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{idf} does not exist !</center><br><br></body></html>", pc)
@@ -100,9 +104,10 @@ module TopicBBSManager
           CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the topic: #{idt} does not exist !</center><br><br></body></html>", pc)
         else
           if p = PostBBSManager.get_g_post_by_topic(t)
-            p.delete_me
+            PostBBSManager.del_post_by_topic(t)
+            GameDB.post.delete(t)
           end
-          t.delete_me(f)
+          GameDB.topic.delete(t, f)
           parse_cmd("_bbsmemo", pc)
         end
       end
@@ -114,7 +119,7 @@ module TopicBBSManager
   private def show_new_topic(forum : Forum?, pc : L2PcInstance, idf : Int32)
     if forum.nil?
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{idf} is not implemented yet</center><br><br></body></html>", pc);
-    elsif forum.type == Forum::MEMO
+    elsif forum.type.memo?
       show_memo_new_topics(forum, pc)
     else
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{forum.name} is not implemented yet</center><br><br></body></html>", pc);
@@ -159,7 +164,7 @@ module TopicBBSManager
   private def show_topics(forum : Forum?, pc : L2PcInstance, index : Int32, idf : Int32)
     if forum.nil?
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{idf} is not implemented yet</center><br><br></body></html>", pc)
-    elsif forum.type == Forum::MEMO
+    elsif forum.type.memo?
       show_memo_topics(forum, pc, index)
     else
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{forum.name} is not implemented yet</center><br><br></body></html>", pc)
@@ -167,7 +172,7 @@ module TopicBBSManager
   end
 
   private def show_memo_topics(forum : Forum, pc : L2PcInstance, index : Int32)
-    forum.vload
+    GameDB.forum.find_by_id(forum)
     html = String.build(2000) do |io|
       io << "<html><body><br><br><table border=0 width=610><tr><td width=10>" \
       "</td><td width=600 align=left><a action=\"bypass _bbshome\">HOME</a>&" \

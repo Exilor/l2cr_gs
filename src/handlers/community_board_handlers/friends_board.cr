@@ -14,7 +14,6 @@ module CommunityBoardHandler::FriendsBoard
       CommunityBoardHandler.separate_and_send(html, pc)
     end
 
-
     true
   end
 

@@ -1,6 +1,5 @@
 require "./item_containers/clan_warehouse"
 require "./l2_clan_member"
-require "../community_bbs/forum"
 
 class L2Clan
   include Synchronizable
@@ -45,7 +44,6 @@ class L2Clan
   @notice : String?
   @siege_kills = Atomic(Int32).new(0)
   @siege_deaths = Atomic(Int32).new(0)
-  @forum : Forum?
 
   getter blood_alliance_count = 0
   getter blood_oath_count = 0

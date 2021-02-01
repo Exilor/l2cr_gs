@@ -1,63 +1,54 @@
-require "./base_bbs_manager"
-
 module ForumsBBSManager
   extend self
-  extend BaseBBSManager
   extend Loggable
 
-  private TABLE = Concurrent::Array(Forum).new
-
-  @@last_id = 1
+  private FORUMS_BY_NAME = Hash(String, Forum).new
+  private FORUMS_BY_ID = Hash(Int32, Forum).new
 
   def load
-    sql = "SELECT forum_id FROM forums WHERE forum_type = 0"
-    GameDB.each(sql) do |rs|
-      forum_id = rs.get_i32(:"forum_id")
-      f = Forum.new(forum_id, nil)
-      add_forum(f)
-    end
-  rescue e
-    error e
-  end
-
-  def init_root
-    TABLE.each &.vload
-    info { "Loaded #{TABLE.size} forums. Last forum id used: #{@@last_id}." }
-  end
-
-  def add_forum(f : Forum)
-    TABLE << f
-
-    if f.id > @@last_id
-      @@last_id = f.id
-    end
-  end
-
-  def parse_cmd(command : String, pc : L2PcInstance)
-    # no-op
+    FORUMS_BY_NAME.merge!(GameDB.forum.forums)
+    FORUMS_BY_NAME.each_value { |forum| FORUMS_BY_ID[forum.id] = forum }
+    info { "Loaded #{FORUMS_BY_NAME.size} forums." }
   end
 
   def get_forum_by_name(name : String) : Forum?
-    TABLE.find { |f| f.name == name }
-  end
-
-  def create_new_forum(name : String, parent : Forum, type : Int32, perm : Int32, oid : Int32) : Forum
-    forum = Forum.new(name, parent, type, perm, oid)
-    forum.insert_into_db
-    forum
-  end
-
-  def get_new_id
-    ret = @@last_id
-    @@last_id += 1
-    ret
+    FORUMS_BY_NAME[name]?
   end
 
   def get_forum_by_id(id : Int32) : Forum?
-    TABLE.find { |f| f.id == id }
+    FORUMS_BY_ID[id]?
   end
 
-  def parse_write(a1 : String, a2 : String, a3 : String, a4 : String, a6 : String, pc : L2PcInstance)
-    # no-op
+  def create(name : String, parent : Forum, type : ForumType, visibility : ForumVisibility, owner_id : Int32) : Forum
+    forum = Forum.new(0, name, parent, type, visibility, owner_id)
+    parent.add_child(forum)
+    GameDB.forum.save(forum)
+    FORUMS_BY_NAME[forum.name] = forum
+    FORUMS_BY_ID[forum.id] = forum
+    forum
+  end
+
+  def load(id : Int32, name : String, parent : Forum, type : ForumType, visibility : ForumVisibility, owner_id : Int32) : Forum
+    forum = Forum.new(id, name, parent, type, visibility, owner_id)
+    parent.add_child(forum)
+    FORUMS_BY_NAME[forum.name] = forum
+    FORUMS_BY_ID[forum.id] = forum
+    forum
+  end
+
+  def on_clan_level(clan : L2Clan)
+    if clan.level >= 2 && Config.enable_community_board
+      if root = get_forum_by_name("ClanRoot")
+        if forum = root.get_child_by_name(clan.name)
+          create(
+            clan.name,
+            root,
+            ForumType::CLAN,
+            ForumVisibility::CLAN_MEMBER_ONLY,
+            clan.id
+          )
+        end
+      end
+    end
   end
 end

@@ -74,5 +74,17 @@ module GameDB
     def couples : CouplesDAO
       CouplesDAOMySQLImpl
     end
+
+    def post : PostDAO
+      PostDAOMySQLImpl
+    end
+
+    def forum : ForumDAO
+      ForumDAOMySQLImpl
+    end
+
+    def topic : TopicDAO
+      TopicDAOMySQLImpl
+    end
   end
 end

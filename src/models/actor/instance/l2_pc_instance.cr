@@ -51,6 +51,7 @@ require "../../../recipe_controller"
 require "../tasks/player/*"
 require "../../quests/quest_state"
 require "../../entity/l2_event"
+require "../../../community_bbs/forum"
 
 class L2PcInstance < L2Playable
   extend Loggable
@@ -1132,19 +1133,11 @@ class L2PcInstance < L2Playable
 
   def mail : Forum
     unless @forum_mail
-      self.mail = ForumsBBSManager.get_forum_by_name("MailRoot").not_nil!
-      .get_child_by_name(name)
-
+      root = ForumsBBSManager.get_forum_by_name("MailRoot")
+      self.mail = root.get_child_by_name(name)
       unless @forum_mail
-        ForumsBBSManager.create_new_forum(
-          name,
-          ForumsBBSManager.get_forum_by_name("MailRoot"),
-          Forum::MAIL,
-          Forum::OWNERONLY,
-          l2id
-        )
-        self.mail = ForumsBBSManager.get_forum_by_name("MailRoot").not_nil!
-        .get_child_by_name(name)
+        ForumsBBSManager.create(name, root, ForumType::MAIL, ForumVisibility::OWNER_ONLY, l2id)
+        self.mail = root.get_child_by_name(name)
       end
     end
 
@@ -1157,19 +1150,11 @@ class L2PcInstance < L2Playable
 
   def memo : Forum
     unless @forum_memo
-      self.mail = ForumsBBSManager.get_forum_by_name("MemoRoot").not_nil!
-      .get_child_by_name(@account_name)
-
+      root = ForumsBBSManager.get_forum_by_name("MemoRoot")
+      self.memo = root.get_child_by_name(@account_name)
       unless @forum_memo
-        ForumsBBSManager.create_new_forum(
-          @account_name,
-          ForumsBBSManager.get_forum_by_name("MemoRoot"),
-          Forum::MEMO,
-          Forum::OWNERONLY,
-          l2id
-        )
-        self.mail = ForumsBBSManager.get_forum_by_name("MemoRoot").not_nil!
-        .get_child_by_name(@account_name)
+        ForumsBBSManager.create(@account_name, root, ForumType::MAIL, ForumVisibility::OWNER_ONLY, l2id)
+        self.memo = root.get_child_by_name(@account_name)
       end
     end
 

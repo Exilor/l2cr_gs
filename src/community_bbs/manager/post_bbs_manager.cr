@@ -4,23 +4,23 @@ module PostBBSManager
   extend self
   extend BaseBBSManager
 
-  private POST_BY_TOPIC = Concurrent::Map(Topic, Post).new
+  private POSTS_BY_TOPIC = Concurrent::Map(Topic, Array(Post)).new
 
-  def get_g_post_by_topic(t : Topic) : Post
-    unless post = POST_BY_TOPIC[t]?
-      post = Post.new(t)
-      POST_BY_TOPIC[t] = post
+  def get_g_post_by_topic(t : Topic) : Array(Post)
+    unless posts = POSTS_BY_TOPIC[t]?
+      posts = GameDB.post.load(t)
+      POSTS_BY_TOPIC[t] = posts
     end
 
-    post
+    posts
   end
 
   def del_post_by_topic(t : Topic)
-    POST_BY_TOPIC.delete(t)
+    POSTS_BY_TOPIC.delete(t)
   end
 
-  def add_post_by_topic(p : Post, t : Topic)
-    POST_BY_TOPIC[t] ||= p
+  def add_post_by_topic(topic : Topic, posts : Array(Post))
+    POSTS_BY_TOPIC[topic] ||= posts
   end
 
   def parse_cmd(command : String, pc : L2PcInstance)
@@ -67,7 +67,7 @@ module PostBBSManager
   private def show_post(topic : Topic?, forum : Forum?, pc : L2PcInstance, ind : Int32)
     if forum.nil? || topic.nil?
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>Error: This forum is not implemented yet!</center></body></html>", pc)
-    elsif forum.type == Forum::MEMO
+    elsif forum.type == ForumType::MEMO
       show_memo_post(topic, pc, forum)
     else
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>The forum: #{forum.name} is not implemented yet!</center></body></html>", pc)
@@ -117,7 +117,7 @@ module PostBBSManager
     send_1001(html, pc)
     send_1002(
       pc,
-      p.get_c_post(0).post_txt,
+      p.get_c_post(0).text,
       topic.name,
       Time.from_ms(topic.date).to_s
     )
@@ -125,7 +125,7 @@ module PostBBSManager
 
   private def show_memo_post(topic : Topic, pc : L2PcInstance, forum : Forum)
     p = get_g_post_by_topic(topic)
-    mes = p.get_c_post(0).post_txt.gsub(">", "&gt;")
+    mes = p.get_c_post(0).text.gsub(">", "&gt;")
     mes = mes.gsub("<", "&lt;")
 
     html = String.build do |io|
@@ -167,13 +167,14 @@ module PostBBSManager
       if t.nil?
         CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the topic: #{idt} does not exist !</center><br><br></body></html>", pc)
       else
-        if p = get_g_post_by_topic(t)
-          cp = p.get_c_post(idp)
+        p = get_g_post_by_topic(t)
+        unless p.empty?
+          cp = p[idp]?
           if cp.nil?
             CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the post: #{idp} does not exist !</center><br><br></body></html>", pc)
           else
-            p.get_c_post(idp).post_txt = a4
-            p.update_txt(idp)
+            p.get_c_post(idp).text = a4
+            GameDB.post.update(p)
             parse_cmd("_bbsposts;read;#{f.id};#{t.id}", pc)
           end
         end
