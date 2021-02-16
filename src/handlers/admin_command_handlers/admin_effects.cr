@@ -79,7 +79,7 @@ module AdminCommandHandler::AdminEffects
         warn e
       end
     elsif command == "admin_para_all"
-      pc.known_list.each_character do |p|
+      pc.known_list.known_characters do |p|
         unless p.gm?
           p.start_abnormal_visual_effect(true, AbnormalVisualEffect::PARALYZE)
           p.paralyzed = true
@@ -87,7 +87,7 @@ module AdminCommandHandler::AdminEffects
         end
       end
     elsif command == "admin_unpara_all"
-      pc.known_list.each_character do |p|
+      pc.known_list.known_characters do |p|
         p.stop_abnormal_visual_effect(true, AbnormalVisualEffect::PARALYZE)
         p.paralyzed = false
       end
@@ -165,7 +165,7 @@ module AdminCommandHandler::AdminEffects
       pc.broadcast_packet(ExBrExtraUserInfo.new(pc))
     elsif command == "admin_clearteams"
       begin
-        pc.known_list.each_player do |pl|
+        pc.known_list.known_players.each_value do |pl|
           pl.team = Team::NONE
           pl.broadcast_user_info
         end
@@ -180,7 +180,7 @@ module AdminCommandHandler::AdminEffects
           radius = st.shift.to_i
         end
         team = Team.parse(val)
-        pc.known_list.each_character(radius) do |char|
+        pc.known_list.get_known_characters_in_radius(radius) do |char|
           char.team = team
         end
       rescue e

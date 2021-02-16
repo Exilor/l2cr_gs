@@ -35,7 +35,7 @@ class Scripts::NecromancerOfTheValley < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc.known_list.each_character(200) do |obj|
+    npc.known_list.get_known_characters_in_radius(200) do |obj|
       if obj.player? && obj.alive?
         add_skill_cast_desire(npc, obj, SELF_DESTRUCTION, 1000000)
       end

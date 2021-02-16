@@ -2,7 +2,7 @@ module TargetHandler
   include Loggable
 
   private HANDLERS = EnumMap(TargetType, self).new
-  private EMPTY_TARGET_LIST = [] of L2Object
+  EMPTY_TARGET_LIST = [] of L2Object
 
   def self.load
     {% for const in @type.constants %}

@@ -4,7 +4,7 @@ class Condition
 
     def test_impl(effector : L2Character, effected : L2Character?, skill : Skill?, item : L2Item?) : Bool
       return false unless effected && skill
-      return false unless pc = effected.acting_player
+      return false unless pc = effector.acting_player
 
       if @except_me && pc == effected
         effector.send_packet(SystemMessageId::CANNOT_USE_ON_YOURSELF)

@@ -35,7 +35,7 @@ class Scripts::IceQueensCastle < AbstractInstance
     case event
     when "ATTACK_KNIGHT"
       npc = npc.not_nil!
-      npc.known_list.each_character do |char|
+      npc.known_list.known_characters do |char|
         if char.id == ARCHERY_KNIGHT && char.alive? && !char.as(L2Attackable).decayed?
           npc.running = true
           npc.set_intention(AI::ATTACK, char)
@@ -79,7 +79,7 @@ class Scripts::IceQueensCastle < AbstractInstance
 
   def on_see_creature(npc, creature, is_summon)
     if creature.player? && npc.script_value?(0)
-      npc.known_list.each_character do |char|
+      npc.known_list.known_characters do |char|
         if char.id == ARCHERY_KNIGHT && char.alive? && !char.as(L2Attackable).decayed?
           npc.running = true
           npc.set_intention(AI::ATTACK, char)

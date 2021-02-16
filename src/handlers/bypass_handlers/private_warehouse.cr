@@ -31,7 +31,7 @@ module BypassHandler::PrivateWarehouse
       pc.action_failed
       pc.active_warehouse = pc.warehouse
       pc.inventory_blocking_status = true
-      packet = WareHouseDepositList.new(pc, WareHouseDepositList::PRIVATE)
+      packet = WarehouseDepositList.new(pc, WarehouseDepositList::PRIVATE)
       pc.send_packet(packet)
       true
     end
@@ -46,7 +46,7 @@ module BypassHandler::PrivateWarehouse
       pc.send_packet(SystemMessage.no_item_deposited_in_wh)
       return
     end
-    pc.send_packet(WareHouseWithdrawalList.new(pc, WareHouseWithdrawalList::PRIVATE))
+    pc.send_packet(WarehouseWithdrawalList.new(pc, WarehouseWithdrawalList::PRIVATE))
   end
 
   def commands

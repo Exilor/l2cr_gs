@@ -389,7 +389,7 @@ class Scripts::Beleth < AbstractNpcAI
   def on_aggro_range_enter(npc, pc, is_summon)
     if npc.alive? && !npc.casting_now?
       if Rnd.rand(100) < 40
-        unless npc.known_list.each_player(200).empty?
+        unless npc.known_list.get_known_players_in_radius(200).empty?
           npc.do_cast(BLEED)
           return
         end
@@ -420,12 +420,12 @@ class Scripts::Beleth < AbstractNpcAI
         return
       end
       if Rnd.rand(100) < 40
-        unless npc.known_list.each_player(200).empty?
+        unless npc.known_list.get_known_players_in_radius(200).empty?
           npc.do_cast(LIGHTENING)
           return
         end
       end
-      npc.known_list.each_player(950) do |plr|
+      npc.known_list.get_known_players_in_radius(950) do |plr|
         npc.target = plr
         npc.do_cast(FIREBALL)
         return
@@ -438,7 +438,7 @@ class Scripts::Beleth < AbstractNpcAI
 
   def on_spawn(npc)
     npc.set_running
-    if !npc.known_list.each_player(300).empty? && Rnd.rand(100) < 60
+    if !npc.known_list.get_known_players_in_radius(300).empty? && Rnd.rand(100) < 60
       npc.do_cast(BLEED)
     end
     if npc.id == REAL_BELETH
@@ -483,7 +483,7 @@ class Scripts::Beleth < AbstractNpcAI
         beleth.do_cast(FIREBALL)
       end
     elsif npc.alive? && !npc.casting_now?
-      unless npc.known_list.each_player(200).empty?
+      unless npc.known_list.get_known_players_in_radius(200).empty?
         npc.do_cast(LIGHTENING)
         return
       end

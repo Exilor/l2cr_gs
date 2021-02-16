@@ -1,4 +1,4 @@
-class Packets::Outgoing::ExStopMoveInAirShip < GameServerPacket
+class Packets::Outgoing::ExStopMoveInAirship < GameServerPacket
   @pc_id : Int32
   @loc : Location
   @heading : Int32

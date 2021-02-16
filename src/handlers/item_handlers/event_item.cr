@@ -40,7 +40,7 @@ module ItemHandler::EventItem
     block = pc.target.as(L2BlockInstance)
     if holder = HandysBlockCheckerManager.get_holder(arena)
       team = holder.get_player_team(pc)
-      block.known_list.each_player(sk.effect_range) do |pc2|
+      block.known_list.get_known_players_in_radius(sk.effect_range) do |pc2|
         enemy_team = holder.get_player_team(pc2)
         if enemy_team != -1 && enemy_team != team
           sk.apply_effects(pc, pc2)

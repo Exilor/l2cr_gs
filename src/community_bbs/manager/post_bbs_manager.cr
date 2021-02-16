@@ -67,7 +67,7 @@ module PostBBSManager
   private def show_post(topic : Topic?, forum : Forum?, pc : L2PcInstance, ind : Int32)
     if forum.nil? || topic.nil?
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>Error: This forum is not implemented yet!</center></body></html>", pc)
-    elsif forum.type == ForumType::MEMO
+    elsif forum.type.memo?
       show_memo_post(topic, pc, forum)
     else
       CommunityBoardHandler.separate_and_send("<html><body><br><br><center>The forum: #{forum.name} is not implemented yet!</center></body></html>", pc)

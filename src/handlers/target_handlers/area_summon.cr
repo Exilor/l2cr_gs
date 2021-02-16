@@ -13,7 +13,7 @@ module TargetHandler::AreaSummon
     target_list = nil
     src_in_arena = char.inside_pvp_zone? && !char.inside_siege_zone?
     max_targets = skill.affect_limit
-    char.known_list.each_character do |obj|
+    char.known_list.known_characters do |obj|
       next if obj == target || obj == char
 
       next unless Util.in_range?(skill.affect_range, target, obj, true)

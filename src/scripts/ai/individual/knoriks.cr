@@ -52,7 +52,7 @@ class Scripts::Knoriks < AbstractNpcAI
         npc.do_cast(Rnd.bool ? DARK_STORM : DARK_BLADE)
       end
 
-      npc.known_list.each_character(200) do |obj|
+      npc.known_list.get_known_characters_in_radius(200) do |obj|
         if obj.monster?
           if Rnd.rand(100) < 10 && obj.in_combat? && !obj.casting_now?
             obj.do_cast(Rnd.bool ? DARK_STORM : DARK_BLADE)

@@ -15,7 +15,7 @@ class Scripts::ZealotOfShilen < AbstractNpcAI
     start_quest_timer("WATCHING", 10_000, npc, nil, true)
 
     if event == "WATCHING" && !npc.attacking_now?
-      npc.known_list.each_character do |char|
+      npc.known_list.known_characters do |char|
         if char.is_a?(L2MonsterInstance) && char.alive? && !char.decayed?
           npc.set_running
           npc.add_damage_hate(char, 0, 999)

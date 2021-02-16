@@ -60,7 +60,7 @@ abstract class L2Decoy < L2Character
 
   def update_abnormal_effect
     ci = CharInfo.new(self)
-    known_list.each_player &.send_packet(ci)
+    known_list.known_players.each_value &.send_packet(ci)
   end
 
   def template : L2NpcTemplate

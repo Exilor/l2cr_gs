@@ -403,9 +403,9 @@ class L2AttackableAI < L2CharacterAI
         else
           delta_x = Rnd.rand(range * 2) # x
           delta_y = Rnd.rand(delta_x..range * 2) # distance
-          delta_y = Math.sqrt((delta_y * delta_y) - (delta_x * delta_x)).to_i32 # y
-          x1 = (delta_x + x1) - range
-          y1 = (delta_y + y1) - range
+          delta_y = Math.sqrt(delta_y.abs2 - delta_x.abs2).to_i32 # y
+          x1 = delta_x + x1 - range
+          y1 = delta_y + y1 - range
           z1 = npc.z
         end
       end
@@ -423,6 +423,10 @@ class L2AttackableAI < L2CharacterAI
     end
 
     if npc.core_ai_disabled?
+      return
+    end
+
+    if npc.out_of_control?
       return
     end
 
@@ -466,7 +470,7 @@ class L2AttackableAI < L2CharacterAI
     if clans && !clans.empty?
       faction_range = npc.template.clan_help_range + collision
       begin
-        npc.known_list.each_character(faction_range) do |obj|
+        npc.known_list.get_known_characters_in_radius(faction_range) do |obj|
           if obj.is_a?(L2Npc)
             unless active_char.template.clan?(obj.template.clans)
               next
@@ -694,7 +698,7 @@ class L2AttackableAI < L2CharacterAI
           end
 
           if sk.target_type.one?
-            npc.known_list.each_character(sk.cast_range + collision) do |obj|
+            npc.known_list.get_known_characters_in_radius(sk.cast_range + collision) do |obj|
               unless obj.is_a?(L2Attackable) && obj.alive?
                 next
               end
@@ -766,7 +770,7 @@ class L2AttackableAI < L2CharacterAI
             next
           end
           if sk.target_type.one?
-            npc.known_list.each_character(sk.cast_range + collision) do |obj|
+            npc.known_list.get_known_characters_in_radius(sk.cast_range + collision) do |obj|
               unless obj.is_a?(L2Attackable) && obj.dead?
                 next
               end
@@ -998,7 +1002,7 @@ class L2AttackableAI < L2CharacterAI
 
       if sk.target_type.one?
         tmp = sk.cast_range + caster.template.collision_radius
-        caster.known_list.each_character(tmp) do |obj|
+        caster.known_list.get_known_characters_in_radius(tmp) do |obj|
           unless obj.is_a?(L2Attackable) && obj.alive?
             next
           end
@@ -1021,7 +1025,7 @@ class L2AttackableAI < L2CharacterAI
       end
       if party?(sk)
         tmp = sk.affect_range + caster.template.collision_radius
-        caster.known_list.each_character(tmp) do |obj|
+        caster.known_list.get_known_characters_in_radius(tmp) do |obj|
           unless obj.is_a?(L2Attackable)
             next
           end
@@ -1174,7 +1178,7 @@ class L2AttackableAI < L2CharacterAI
         end
 
         tmp = sk.cast_range + caster.template.collision_radius
-        caster.known_list.each_character(tmp) do |obj|
+        caster.known_list.get_known_characters_in_radius(tmp) do |obj|
           unless obj.is_a?(L2Attackable) && obj.dead?
             next
           end
@@ -1195,7 +1199,7 @@ class L2AttackableAI < L2CharacterAI
         end
       elsif party?(sk)
         tmp = sk.affect_range + caster.template.collision_radius
-        caster.known_list.each_character(tmp) do |obj|
+        caster.known_list.get_known_characters_in_radius(tmp) do |obj|
           unless obj.is_a?(L2Attackable)
             next
           end
@@ -1383,7 +1387,7 @@ class L2AttackableAI < L2CharacterAI
         end
 
         # If there is nearby Target with aggro, start going on random target that is attackable
-        actor.known_list.each_character(range) do |obj|
+        actor.known_list.get_known_characters_in_radius(range) do |obj|
           if obj.dead? || !GeoData.can_see_target?(actor, obj)
             next
           end
@@ -1413,7 +1417,7 @@ class L2AttackableAI < L2CharacterAI
         dist = 0.0
         dist2 = 0.0
         range = 0
-        actor.known_list.each_character(range) do |obj|
+        actor.known_list.get_known_characters_in_radius(range) do |obj|
           unless obj.is_a?(L2Attackable)
             next
           end
@@ -1456,7 +1460,7 @@ class L2AttackableAI < L2CharacterAI
       dist2 = 0.0
       range = sk.cast_range &+ actor.template.collision_radius
       range &+= @attack_target.not_nil!.template.collision_radius
-      actor.known_list.each_character(range) do |obj|
+      actor.known_list.get_known_characters_in_radius(range) do |obj|
         if obj.nil? || obj.dead? || !GeoData.can_see_target?(actor, obj)
           next
         end

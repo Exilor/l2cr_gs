@@ -34,7 +34,7 @@ class Scripts::PlainsOfDion < AbstractNpcAI
         broadcast_npc_say(npc, Say2::NPC_ALL, MONSTERS_MSG[i])
       end
 
-      npc.known_list.each_character(npc.template.clan_help_range) do |obj|
+      npc.known_list.get_known_characters_in_radius(npc.template.clan_help_range) do |obj|
         if obj.is_a?(L2MonsterInstance) && DELU_LIZARDMEN.includes?(obj.id)
           if !obj.attacking_now? && obj.alive?
             if GeoData.can_see_target?(npc, obj)

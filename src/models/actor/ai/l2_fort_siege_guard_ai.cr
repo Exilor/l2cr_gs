@@ -133,7 +133,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
     # Add all autoAttackable L2Character in L2Attackable Aggro Range to its _aggroList with 0 damage and 1 hate
     # A L2Attackable isn't aggressive during 10s after its spawn because @global_aggro is set to -10
     if @global_aggro >= 0
-      npc.known_list.each_character(@attack_range) do |target|
+      npc.known_list.get_known_characters_in_radius(@attack_range) do |target|
         if auto_attack_condition(target) # check aggression
           # Get the hate level of the L2Attackable against this L2Character target contained in _aggroList
           hating = npc.get_hating(target)
@@ -230,8 +230,8 @@ class L2FortSiegeGuardAI < L2CharacterAI
     end
 
     # Go through all L2Character that belong to its faction
-    # for (L2Character cha : @actor.known_list.each_character(((L2NpcInstance) @actor).getFactionRange+@actor.template.collisionRadius))
-    me.known_list.each_character(1000) do |cha|
+    # for (L2Character cha : @actor.known_list.get_known_characters_in_radius(((L2NpcInstance) @actor).getFactionRange+@actor.template.collisionRadius))
+    me.known_list.get_known_characters_in_radius(1000) do |cha|
       unless cha.is_a?(L2Npc)
         if @self_analysis.has_heal_or_resurrect? && cha.is_a?(L2PcInstance) && me.fort.siege.defender?(cha.clan)
           # heal friends

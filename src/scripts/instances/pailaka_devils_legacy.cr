@@ -110,7 +110,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
       case npc.id
       when POWDER_KEG
         if damage > 0 && npc.script_value?(0)
-          npc.known_list.each_character(600) do |mob|
+          npc.known_list.get_known_characters_in_radius(600) do |mob|
             if mob.is_a?(L2Attackable) && mob.monster?
               mob.add_damage_hate(npc, 0, 999)
               mob.set_intention(AI::ATTACK, npc)

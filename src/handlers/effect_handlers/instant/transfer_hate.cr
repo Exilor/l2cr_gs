@@ -1,13 +1,13 @@
 class EffectHandler::TransferHate < AbstractEffect
-  @chance : Int32
+  @chance : Float64
 
   def initialize(attach_cond, apply_cond, set, params)
     super
-    @chance = params.get_i32("chance", 100)
+    @chance = params.get_f64("chance", 100)
   end
 
   def calc_success(info : BuffInfo) : Bool
-    Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
+    Formulas.probability(@chance, info.effector, info.effected, info.skill)
   end
 
   def instant? : Bool
@@ -21,14 +21,14 @@ class EffectHandler::TransferHate < AbstractEffect
       return
     end
 
-    effector.known_list.each_character(skill.affect_range) do |obj|
-      next unless obj.is_a?(L2Attackable) && obj.alive?
+    effector.known_list.get_known_characters_in_radius(skill.affect_range) do |hater|
+      next unless hater.is_a?(L2Attackable) && hater.alive?
 
-      hate = obj.get_hating(effector)
+      hate = hater.get_hating(effector)
       next if hate <= 0
 
-      obj.reduce_hate(effector, -hate)
-      obj.add_damage_hate(effected, 0, hate)
+      hater.reduce_hate(effector, -hate)
+      hater.add_damage_hate(effected, 0, hate)
     end
   end
 end

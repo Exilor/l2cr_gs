@@ -1,3 +1,4 @@
+# A set of types T that respond to #mask.
 class EnumBitmask(T)
   property_initializer bitmask : Int32 = 0
 

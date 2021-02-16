@@ -20,7 +20,7 @@ class Scripts::GiantsCave < AbstractNpcAI
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::OH_GIANTS_AN_INTRUDER_HAS_BEEN_DISCOVERED)
       end
 
-      npc.known_list.each_character(450) do |char|
+      npc.known_list.get_known_characters_in_radius(450) do |char|
         if char.is_a?(L2Attackable) && Rnd.bool
           add_attack_desire(char, pc)
         end

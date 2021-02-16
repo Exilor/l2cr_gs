@@ -313,7 +313,7 @@ class L2ControllableMobAI < L2AttackableAI
 
   private def find_next_rnd_target : L2Character?
     targets = [] of L2Character
-    @actor.known_list.each_character(active_char.aggro_range) do |char|
+    @actor.known_list.get_known_characters_in_radius(active_char.aggro_range) do |char|
       if check_auto_attack_condition(char)
         targets << char
       end

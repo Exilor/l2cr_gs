@@ -126,7 +126,7 @@ abstract class L2Summon < L2Playable
     update_and_broadcast_status(0)
     rc = RelationChanged.new(self, owner.get_relation(owner), false)
     send_packet(rc)
-    owner.known_list.each_player(800) do |pc|
+    owner.known_list.get_known_players_in_radius(800) do |pc|
       relation = owner.get_relation(pc)
       rc = RelationChanged.new(self, relation, auto_attackable?(pc))
       pc.send_packet(rc)
@@ -140,7 +140,7 @@ abstract class L2Summon < L2Playable
   end
 
   def update_abnormal_effect
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       pc.send_packet(SummonInfo.new(self, pc, 1))
     end
   end
@@ -187,7 +187,7 @@ abstract class L2Summon < L2Playable
   end
 
   def broadcast_npc_info(val : Int32)
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       unless pc == owner
         pc.send_packet(SummonInfo.new(self, pc, val))
       end
@@ -298,7 +298,7 @@ abstract class L2Summon < L2Playable
 
     return false unless super(killer)
 
-    known_list.each_character do |mob|
+    known_list.known_characters do |mob|
       if mob.is_a?(L2Attackable) && mob.alive?
         if info = mob.aggro_list[self]?
           mob.add_damage_hate(owner, info.damage, info.hate)

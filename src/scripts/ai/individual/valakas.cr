@@ -401,7 +401,7 @@ class Scripts::Valakas < AbstractNpcAI
   private def get_rand_target(npc)
     result = [] of L2Playable
 
-    npc.known_list.each_character do |obj|
+    npc.known_list.known_characters do |obj|
       if !obj.pet? && obj.alive? && obj.is_a?(L2Playable)
         result << obj
       end

@@ -45,7 +45,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
     case event
     when "TRAINING"
       npc = npc.not_nil!
-      npc.known_list.each_character(400) do |char|
+      npc.known_list.get_known_characters_in_radius(400) do |char|
         if Rnd.rand(100) < 30 && char.is_a?(L2Npc) && char.alive? && !char.in_combat?
           if char.id == CAPTAIN
             if Rnd.rand(100) < 10 && npc.script_value?(0)

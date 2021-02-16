@@ -170,7 +170,7 @@ abstract class L2Vehicle < L2Character
   end
 
   def pay_for_ride(item_id : Int32, count : Int64, oust_x : Int32, oust_y : Int32, oust_z : Int32)
-    known_list.each_player(1000) do |pc|
+    known_list.get_known_players_in_radius(1000) do |pc|
       if pc.in_boat? && pc.boat == self
         if item_id > 0
           ticket = pc.inventory.get_item_by_item_id(item_id)

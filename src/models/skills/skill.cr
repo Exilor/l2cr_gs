@@ -355,15 +355,18 @@ class Skill
 
         return false if target_player.in_observer_mode?
 
-        if bad? && player.siege_state > 0 && player.inside_siege_zone?
-          if player.siege_state == target_player.siege_state
-            if player.siege_side == target_player.siege_side
-              return false
+        if bad?
+          if player.siege_state > 0 && player.inside_siege_zone?
+            if player.siege_state == target_player.siege_state
+              if player.siege_side == target_player.siege_side
+                return false
+              end
             end
           end
-        end
-        if bad? && target.inside_peace_zone?
-          return false
+
+          if target.inside_peace_zone?
+            return false
+          end
         end
 
         if (party1 = player.party) && (party2 = target_player.party)
@@ -670,8 +673,8 @@ class Skill
 
   def removed_on_damage? : Bool
     @abnormal_type.sleep? ||
-    @abnormal_type.force_meditation? ||
-    @abnormal_type.hide?
+      @abnormal_type.force_meditation? ||
+      @abnormal_type.hide?
   end
 
   def hero_skill? : Bool
@@ -739,7 +742,7 @@ class Skill
     values.split(';') do |prod_list|
       prod_data = prod_list.split(',')
       if prod_data.size < 3
-        raise "Wrong size for extractable skill info: #{prod_data.size}"
+        raise "Wrong size for extractable skill info: #{prod_data.size} (id: #{id})"
       end
       length = prod_data.size &- 1
       items = [] of ItemHolder
@@ -747,7 +750,7 @@ class Skill
         prod_id = prod_data[j].to_i
         quantity = prod_data[j &+ 1].to_i64
         if prod_id <= 0 || quantity <= 0
-          raise "Wrong product item id or quantity for extractable skill"
+          raise "Wrong product item id or quantity for extractable skill (id: #{id})"
         end
         items << ItemHolder.new(prod_id, quantity)
       end
@@ -756,7 +759,7 @@ class Skill
     end
 
     if products.empty?
-      raise "Empty extractable skill"
+      raise "Empty extractable skill (id: #{id})"
     end
 
     L2ExtractableSkill.new(products)

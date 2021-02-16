@@ -197,12 +197,12 @@ abstract class L2Character < L2Object
 
   def broadcast_packet(gsp : GameServerPacket)
     gsp.invisible = invisible?
-    known_list.each_player &.send_packet(gsp)
+    known_list.known_players.each_value &.send_packet(gsp)
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Int32)
     gsp.invisible = invisible?
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       if inside_radius?(pc, radius, false, false)
         pc.send_packet(gsp)
       end
@@ -526,7 +526,9 @@ abstract class L2Character < L2Object
   def do_revive
     return unless dead?
 
-    if !teleporting?
+    if teleporting?
+      self.pending_revive = true
+    else
       self.pending_revive = false
       self.dead = false
 
@@ -545,8 +547,6 @@ abstract class L2Character < L2Object
       broadcast_packet(Revive.new(self))
 
       world_region.try &.on_revive(self)
-    else
-      self.pending_revive = true
     end
   end
 
@@ -929,7 +929,7 @@ abstract class L2Character < L2Object
       end
     elsif me.is_a?(L2Npc)
       if broadcast_full
-        known_list.each_player do |pc|
+        known_list.known_players.each_value do |pc|
           if visible_for?(pc)
             if run_speed == 0
               pc.send_packet(ServerObjectInfo.new(me, pc))
@@ -1015,7 +1015,7 @@ abstract class L2Character < L2Object
     when L2Summon
       me.broadcast_status_update
     when L2Npc
-      known_list.each_player do |pc|
+      known_list.known_players.each_value do |pc|
         if visible_for?(pc)
           if run_speed == 0
             op = ServerObjectInfo.new(me, pc)
@@ -1659,8 +1659,8 @@ abstract class L2Character < L2Object
       end
 
       if !Config.raid_disable_curse && ((target.is_a?(L2RaidBossInstance) && target.give_raid_curse? && level > target.level &+ 8) ||
-        (!skill.bad? && targets_attack_target.is_a?(L2RaidBossInstance) && targets_attack_target.give_raid_curse? && targets_attack_target.attack_by_list.includes?(target) && (level > (targets_attack_target.level &+ 8))) ||
-        (!skill.bad? && targets_cast_target.is_a?(L2RaidBossInstance) && targets_cast_target.give_raid_curse? && targets_cast_target.attack_by_list.includes?(target) && (level > (targets_cast_target.level &+ 8))))
+        (!skill.bad? && targets_attack_target.is_a?(L2RaidBossInstance) && targets_attack_target.give_raid_curse? && targets_attack_target.attack_by_list.includes?(target) && level > targets_attack_target.level &+ 8) ||
+        (!skill.bad? && targets_cast_target.is_a?(L2RaidBossInstance) && targets_cast_target.give_raid_curse? && targets_cast_target.attack_by_list.includes?(target) && level > targets_cast_target.level &+ 8))
 
         if skill.magic?
           curse = CommonSkill::RAID_CURSE

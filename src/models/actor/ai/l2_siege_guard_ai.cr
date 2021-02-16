@@ -113,7 +113,7 @@ class L2SiegeGuardAI < L2CharacterAI
     end
 
     if @global_aggro >= 0
-      npc.known_list.each_character(@attack_range) do |target|
+      npc.known_list.get_known_characters_in_radius(@attack_range) do |target|
         if auto_attack_condition(target)
           hating = npc.get_hating(target)
 
@@ -193,8 +193,8 @@ class L2SiegeGuardAI < L2CharacterAI
     end
 
     # Go through all that belong to its faction
-    # for (L2Character cha : @actor.known_list.each_character(((L2NpcInstance) @actor).getFactionRange+@actor.template.collisionRadius))
-    @actor.known_list.each_character(1000) do |cha|
+    # for (L2Character cha : @actor.known_list.get_known_characters_in_radius(((L2NpcInstance) @actor).getFactionRange+@actor.template.collisionRadius))
+    @actor.known_list.get_known_characters_in_radius(1000) do |cha|
       unless cha.is_a?(L2Npc)
         if @self_analysis.has_heal_or_resurrect? && cha.is_a?(L2PcInstance) && @actor.as(L2Npc).castle.siege.defender?(cha.clan)
           # heal friends

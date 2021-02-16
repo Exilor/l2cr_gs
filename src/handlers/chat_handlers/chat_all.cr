@@ -34,7 +34,7 @@ module ChatHandler::ChatAll
         pc.send_packet(SystemMessageId::INCORRECT_SYNTAX)
       else
         cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.appearance.visible_name, text)
-        pc.known_list.each_player do |player|
+        pc.known_list.known_players.each_value do |player|
           if pc.inside_radius?(player, 1250, false, true)
             unless BlockList.blocked?(player, pc)
               player.send_packet(cs)

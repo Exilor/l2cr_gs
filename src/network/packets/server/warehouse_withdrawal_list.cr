@@ -1,4 +1,4 @@
-class Packets::Outgoing::WareHouseWithdrawalList < Packets::Outgoing::AbstractItemPacket
+class Packets::Outgoing::WarehouseWithdrawalList < Packets::Outgoing::AbstractItemPacket
   PRIVATE = 1
   CLAN = 4
   CASTLE = 3 # not sure

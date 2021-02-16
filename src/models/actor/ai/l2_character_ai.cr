@@ -551,7 +551,7 @@ class L2CharacterAI < AI
     tt = sk.target_type
     attack_target = attack_target()
     if tt.aura? || tt.behind_aura? || tt.front_aura? || tt.aura_corpse_mob? || tt.aura_undead_enemy?
-      @actor.known_list.each_character(sk.affect_range) do |target|
+      @actor.known_list.get_known_characters_in_radius(sk.affect_range) do |target|
         return true if target == attack_target
       end
     end
@@ -564,7 +564,7 @@ class L2CharacterAI < AI
     if sk.has_effect_type?(EffectType::DISPEL)
       if tt.aura? || tt.behind_aura? || tt.front_aura? || tt.aura_corpse_mob? || tt.aura_undead_enemy?
         can_cast = true
-        @actor.known_list.each_character(sk.affect_range) do |target|
+        @actor.known_list.get_known_characters_in_radius(sk.affect_range) do |target|
           next unless GeoData.can_see_target?(@actor, target)
           if target.is_a?(L2Attackable)
             next unless target.chaos?
@@ -577,7 +577,7 @@ class L2CharacterAI < AI
         return true if can_cast
       elsif tt.area? || tt.behind_area? || tt.front_area?
         can_cast = true
-        @actor.known_list.each_character(sk.affect_range) do |target|
+        @actor.known_list.get_known_characters_in_radius(sk.affect_range) do |target|
           next unless GeoData.can_see_target?(@actor, target)
           if target.is_a?(L2Attackable)
             next unless target.chaos?
@@ -592,7 +592,7 @@ class L2CharacterAI < AI
     else
       if tt.aura? || tt.behind_aura? || tt.front_aura? || tt.aura_corpse_mob? || tt.aura_undead_enemy?
         can_cast = true
-        @actor.known_list.each_character(sk.affect_range) do |target|
+        @actor.known_list.get_known_characters_in_radius(sk.affect_range) do |target|
           next unless GeoData.can_see_target?(@actor, target)
           if target.is_a?(L2Attackable)
             next unless target.chaos?
@@ -605,7 +605,7 @@ class L2CharacterAI < AI
         return true if can_cast
       elsif tt.area? || tt.behind_area? || tt.front_area?
         can_cast = true
-        @actor.known_list.each_character(sk.affect_range) do |target|
+        @actor.known_list.get_known_characters_in_radius(sk.affect_range) do |target|
           next unless GeoData.can_see_target?(@actor, target)
           if target.is_a?(L2Attackable)
             next unless target.chaos?
@@ -626,7 +626,7 @@ class L2CharacterAI < AI
     if party?(sk)
       count = 0
       count2 = 0
-      @actor.known_list.each_character(sk.affect_range) do |target|
+      @actor.known_list.get_known_characters_in_radius(sk.affect_range) do |target|
         next unless target.is_a?(L2Attackable)
         next unless GeoData.can_see_target?(@actor, target)
 

@@ -38,7 +38,7 @@ module TargetHandler::BehindArea
 
     max_targets = skill.affect_limit
 
-    char.known_list.each_character do |obj|
+    char.known_list.known_characters do |obj|
       next unless char.playable? || obj.attackable?
       next if obj == origin
 

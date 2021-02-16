@@ -16,7 +16,7 @@ module BypassHandler::Freight
             freight.destroy_item("L2ItemInstance", item, pc, nil)
           end
         end
-        pc.send_packet(WareHouseWithdrawalList.new(pc, WareHouseWithdrawalList::FREIGHT))
+        pc.send_packet(WarehouseWithdrawalList.new(pc, WarehouseWithdrawalList::FREIGHT))
       else
         pc.send_packet(SystemMessageId::NO_ITEM_DEPOSITED_IN_WH)
       end

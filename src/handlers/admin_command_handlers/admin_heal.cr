@@ -19,7 +19,7 @@ module AdminCommandHandler::AdminHeal
         obj = player
       else
         radius = target.to_i
-        pc.known_list.each_character(radius) do |char|
+        pc.known_list.get_known_characters_in_radius(radius) do |char|
           char.heal!
         end
         pc.send_message("Healed characters within #{radius} unit radius.")

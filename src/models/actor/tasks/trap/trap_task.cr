@@ -27,7 +27,7 @@ struct TrapTask
       end
     end
 
-    @trap.known_list.each_character do |target|
+    @trap.known_list.known_characters do |target|
       if @trap.check_target(target)
         @trap.trigger_trap(target)
         break

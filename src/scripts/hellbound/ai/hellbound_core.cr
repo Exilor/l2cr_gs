@@ -12,7 +12,7 @@ class Scripts::HellboundCore < AbstractNpcAI
 
   def on_adv_event(event, npc, player)
     if npc && event.casecmp?("cast") && HellboundEngine.instance.level <= 6
-      npc.known_list.each_character(900) do |naia|
+      npc.known_list.get_known_characters_in_radius(900) do |naia|
         if naia.monster? && naia.id == NAIA && naia.alive? && !naia.channeling?
           naia.target = npc
           naia.do_simultaneous_cast(BEAM)

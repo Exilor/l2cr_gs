@@ -196,18 +196,18 @@ module Util
       fill_multi_edit_content(pc, fill_multi_edit)
     else
       size = html.size
-      if size < 16250
+      if size < 16_250
         pc.send_packet(ShowBoard.new(html, "101"))
         pc.send_packet(ShowBoard.new(nil, "102"))
         pc.send_packet(ShowBoard.new(nil, "103"))
-      elsif size < 16250 &* 2
-        pc.send_packet(ShowBoard.new(html[0...16250], "101"))
-        pc.send_packet(ShowBoard.new(html.from(16250), "102"))
+      elsif size < 16_250 &* 2
+        pc.send_packet(ShowBoard.new(html[0...16_250], "101"))
+        pc.send_packet(ShowBoard.new(html.from(16_250), "102"))
         pc.send_packet(ShowBoard.new(nil, "103"))
-      elsif size < 16250 &* 3
-        pc.send_packet(ShowBoard.new(html[0...16250], "101"))
-        pc.send_packet(ShowBoard.new(html[16250...16250 &* 2], "102"))
-        pc.send_packet(ShowBoard.new(html.from(16250 &* 2), "103"))
+      elsif size < 16_250 &* 3
+        pc.send_packet(ShowBoard.new(html[0...16_250], "101"))
+        pc.send_packet(ShowBoard.new(html[16_250...16_250 &* 2], "102"))
+        pc.send_packet(ShowBoard.new(html.from(16_250 &* 2), "103"))
       else
         pc.send_packet(ShowBoard.new("<html><body><br><center>Error: HTML was too long!</center></body></html>", "101"))
         pc.send_packet(ShowBoard.new(nil, "102"))
@@ -251,21 +251,6 @@ module Util
 
         if Util.in_range?(range, npc, obj, true) && c.alive?
           count &+= 1
-        end
-      end
-    end
-
-    count
-  end
-
-  def count_params(str : String) : Int32
-    count = 0
-
-    0.upto(str.size &- 2) do |i|
-      if str[i].in?('C', 'S')
-        c2 = str[i &+ 1]
-        if c2.number?
-          count = Math.max(count, c2.to_i)
         end
       end
     end

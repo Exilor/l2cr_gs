@@ -960,7 +960,7 @@ class L2PcInstance < L2Playable
 
     gsp.invisible = invisible?
 
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       unless visible_for?(pc)
         next
       end
@@ -991,7 +991,7 @@ class L2PcInstance < L2Playable
 
     gsp.invisible = invisible?
 
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       if inside_radius?(pc, radius, false, false)
         pc.send_packet(gsp)
 
@@ -2727,7 +2727,7 @@ class L2PcInstance < L2Playable
     send_packet(UserInfo.new(self))
     send_packet(ExBrExtraUserInfo.new(self))
 
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn = summon
@@ -2740,7 +2740,7 @@ class L2PcInstance < L2Playable
   def broadcast_karma
     send_packet(StatusUpdate.karma(self))
 
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn = summon
@@ -4739,7 +4739,7 @@ class L2PcInstance < L2Playable
       send_packet(RelationChanged.new(smn, get_relation(self), false))
     end
 
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn

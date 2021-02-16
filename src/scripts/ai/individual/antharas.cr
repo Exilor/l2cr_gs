@@ -206,7 +206,7 @@ class Scripts::Antharas < AbstractNpcAI
       @zone.broadcast_packet(SocialAction.new(npc.l2id, 2))
     when "START_MOVE"
       npc = npc.not_nil!
-      npc.known_list.each_player(4000) do |plr|
+      npc.known_list.get_known_players_in_radius(4000) do |plr|
         if plr.hero?
           @zone.broadcast_packet(ExShowScreenMessage.new(NpcString::S1_YOU_CANNOT_HOPE_TO_DEFEAT_ME_WITH_YOUR_MEAGER_STRENGTH, 2, 4000, plr.name))
           break

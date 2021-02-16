@@ -7,7 +7,7 @@ module TargetHandler::Aura
 
     src_in_arena = char.inside_pvp_zone? && !char.inside_siege_zone?
 
-    char.known_list.each_character(skill.affect_range) do |obj|
+    char.known_list.get_known_characters_in_radius(skill.affect_range) do |obj|
       unless obj.attackable? || obj.playable? || obj.door? || obj.trap?
         next
       end

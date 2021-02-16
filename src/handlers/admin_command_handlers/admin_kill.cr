@@ -13,7 +13,7 @@ module AdminCommandHandler::AdminKill
         if player = L2World.get_player(first_param)
           unless st.empty?
             radius = st.shift.to_i
-            player.known_list.each_character(radius) do |known_char|
+            player.known_list.get_known_characters_in_radius(radius) do |known_char|
               if known_char.is_a?(L2ControllableMobInstance) || pc == known_char
                 next
               end
@@ -27,7 +27,7 @@ module AdminCommandHandler::AdminKill
           return true
         else
           radius = first_param.to_i
-          pc.known_list.each_character(radius) do |known_char|
+          pc.known_list.get_known_characters_in_radius(radius) do |known_char|
             if known_char.is_a?(L2ControllableMobInstance) || pc == known_char
               next
             end

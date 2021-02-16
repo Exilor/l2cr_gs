@@ -3,7 +3,7 @@ class L2FortManagerInstance < L2MerchantInstance
   private COND_BUSY_BECAUSE_OF_SIEGE = 1
   private COND_OWNER = 2
 
-  private alias WarehouseListType = SortedWareHouseWithdrawalList::WarehouseListType
+  private alias WarehouseListType = SortedWarehouseWithdrawalList::WarehouseListType
 
   def instance_type : InstanceType
     InstanceType::L2FortManagerInstance
@@ -177,11 +177,11 @@ class L2FortManagerInstance < L2MerchantInstance
       elsif actual_command.starts_with?("WithdrawSortedC")
         param = command.split('_')
         if param.size > 2
-          show_vault_window_withdraw(pc, WarehouseListType.parse(param[1]), SortedWareHouseWithdrawalList.get_order(param[2]))
+          show_vault_window_withdraw(pc, WarehouseListType.parse(param[1]), SortedWarehouseWithdrawalList.get_order(param[2]))
         elsif param.size > 1
-          show_vault_window_withdraw(pc, WarehouseListType.parse(param[1]), SortedWareHouseWithdrawalList::A2Z)
+          show_vault_window_withdraw(pc, WarehouseListType.parse(param[1]), SortedWarehouseWithdrawalList::A2Z)
         else
-          show_vault_window_withdraw(pc, WarehouseListType::ALL, SortedWareHouseWithdrawalList::A2Z)
+          show_vault_window_withdraw(pc, WarehouseListType::ALL, SortedWarehouseWithdrawalList::A2Z)
         end
         return
       elsif actual_command.casecmp?("functions")
@@ -701,7 +701,7 @@ class L2FortManagerInstance < L2MerchantInstance
   private def show_vault_window_deposit(pc)
     pc.action_failed
     pc.active_warehouse = pc.clan.not_nil!.warehouse
-    pc.send_packet(WareHouseDepositList.new(pc, WareHouseDepositList::CLAN))
+    pc.send_packet(WarehouseDepositList.new(pc, WarehouseDepositList::CLAN))
   end
 
   private def show_vault_window_withdraw(pc, item_type, sort_order)
@@ -709,9 +709,9 @@ class L2FortManagerInstance < L2MerchantInstance
       pc.action_failed
       pc.active_warehouse = pc.clan.not_nil!.warehouse
       if item_type
-        pc.send_packet(SortedWareHouseWithdrawalList.new(pc, WareHouseWithdrawalList::CLAN, item_type, sort_order))
+        pc.send_packet(SortedWarehouseWithdrawalList.new(pc, WarehouseWithdrawalList::CLAN, item_type, sort_order))
       else
-        pc.send_packet(WareHouseWithdrawalList.new(pc, WareHouseWithdrawalList::CLAN))
+        pc.send_packet(WarehouseWithdrawalList.new(pc, WarehouseWithdrawalList::CLAN))
       end
     else
       html = NpcHtmlMessage.new(l2id)

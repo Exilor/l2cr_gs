@@ -25,7 +25,7 @@ module AdminCommandHandler::AdminRes
       else
         begin
           radius = param.to_i
-          pc.known_list.each_player(radius) do |kp|
+          pc.known_list.get_known_players_in_radius(radius) do |kp|
             do_resurrect(kp)
           end
           pc.send_message("Resurrected all players within a #{radius} unit radius.")
@@ -55,7 +55,7 @@ module AdminCommandHandler::AdminRes
       radius = 0
       unless radius_str.empty?
         radius = radius_str.to_i
-        pc.known_list.each_character(radius) do |kc|
+        pc.known_list.get_known_characters_in_radius(radius) do |kc|
           unless kc.is_a?(L2PcInstance) || kc.is_a?(L2ControllableMobInstance)
             do_resurrect(kc)
           end

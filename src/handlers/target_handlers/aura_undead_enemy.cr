@@ -6,7 +6,7 @@ module TargetHandler::AuraUndeadEnemy
     target_list = nil
     max_targets = skill.affect_limit
 
-    char.known_list.each_character(skill.affect_range) do |obj|
+    char.known_list.get_known_characters_in_radius(skill.affect_range) do |obj|
       if obj.attackable? && obj.undead?
         if only_first
           return [obj] of L2Object

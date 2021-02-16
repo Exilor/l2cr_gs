@@ -274,7 +274,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   end
 
   private def all_go_back
-    pc.known_list.each_character do |obj|
+    pc.known_list.known_characters do |obj|
       if obj.is_a?(L2Npc) && (sp = obj.spawn?)
         obj.set_intention(AI::MOVE_TO, sp.location)
       end
@@ -282,7 +282,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
   end
 
   private def all_follow_me
-    pc.known_list.each_character do |obj|
+    pc.known_list.known_characters do |obj|
       obj.running = true
       obj.set_intention(AI::FOLLOW, pc)
     end

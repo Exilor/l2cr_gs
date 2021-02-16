@@ -435,7 +435,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           end
           npc.clear_aggro_list
 
-          npc.known_list.each_character(1000) do |char|
+          npc.known_list.get_known_characters_in_radius(1000) do |char|
             npc.add_damage_hate(char, 0, Rnd.rand(10000..20000))
           end
           start_quest_timer("LEADER_RANDOMIZE", 25000, npc, nil)

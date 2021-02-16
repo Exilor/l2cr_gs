@@ -1,9 +1,9 @@
 class EffectHandler::TargetMeProbability < AbstractEffect
-  @chance : Int32
+  @chance : Float64
 
   def initialize(attach_cond, apply_cond, set, params)
     super
-    @chance = params.get_i32("chance", 100)
+    @chance = params.get_f64("chance", 100)
   end
 
   def instant? : Bool
@@ -11,7 +11,7 @@ class EffectHandler::TargetMeProbability < AbstractEffect
   end
 
   def calc_success(info : BuffInfo) : Bool
-    Formulas.probability(@chance.to_f, info.effector, info.effected, info.skill)
+    Formulas.probability(@chance, info.effector, info.effected, info.skill)
   end
 
   def on_start(info : BuffInfo)

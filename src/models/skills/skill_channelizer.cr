@@ -101,14 +101,19 @@ class SkillChannelizer
               channelizer.as(L2PcInstance).update_pvp_status(character)
             end
 
-            skill.apply_effects(@channelizer, character)
+            skill.apply_effects(channelizer, character)
 
             if _skill.use_spiritshot?
-              @channelizer.set_charged_shot(@channelizer.charged_shot?(ShotType::BLESSED_SPIRITSHOTS) ? ShotType::BLESSED_SPIRITSHOTS : ShotType::SPIRITSHOTS, false)
+              if @channelizer.charged_shot?(ShotType::BLESSED_SPIRITSHOTS)
+                @channelizer.set_charged_shot(ShotType::BLESSED_SPIRITSHOTS, false)
+              else
+                @channelizer.set_charged_shot(ShotType::SPIRITSHOTS, false)
+              end
             else
               @channelizer.set_charged_shot(ShotType::SOULSHOTS, false)
             end
           end
+
           msl = Packets::Outgoing::MagicSkillLaunched.new(@channelizer, _skill.id, _skill.level, character)
           @channelizer.broadcast_packet(msl)
         end

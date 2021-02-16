@@ -137,9 +137,9 @@ module GamePacketHandler
       when 0x3a then Appearing.new
       when 0x3b
         if Config.allow_warehouse
-          SendWareHouseDepositList.new
+          SendWarehouseDepositList.new
         end
-      when 0x3c then SendWareHouseWithDrawList.new
+      when 0x3c then SendWarehouseWithDrawList.new
       when 0x3d then RequestShortcutRegister.new
       when 0x3f then RequestShortcutDelete.new
       when 0x40 then RequestBuyItem.new

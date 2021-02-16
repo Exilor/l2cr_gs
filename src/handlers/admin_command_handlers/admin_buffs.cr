@@ -64,7 +64,7 @@ module AdminCommandHandler::AdminBuffs
       begin
         radius = val.to_i
 
-        pc.known_list.each_character(radius) do |char|
+        pc.known_list.get_known_characters_in_radius(radius) do |char|
           if char.player? && char != pc
             char.stop_all_effects
           end

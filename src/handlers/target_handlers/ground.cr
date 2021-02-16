@@ -11,7 +11,7 @@ module TargetHandler::Ground
       return EMPTY_TARGET_LIST
     end
 
-    char.known_list.each_character do |obj|
+    char.known_list.known_characters do |obj|
       if obj.inside_radius?(pos, skill.affect_range, false, false)
         unless skill.offensive_aoe_check(char, obj, src_in_arena)
           next

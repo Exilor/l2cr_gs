@@ -130,17 +130,9 @@ class L2Weapon < L2Item
 
   def cast_on_magic_skill(caster : L2Character, target : L2Character, trigger : Skill)
     return unless skill = @skills_on_magic.try &.skill
-
     return if trigger.bad? != skill.bad?
-
     return unless trigger.magic? && skill.magic?
-
     return if trigger.toggle?
-
-    unless caster.ai.cast_target
-      warn "No cast target."
-    end
-
     return if caster.ai.cast_target != target
 
     if cond = @skills_on_magic_condition

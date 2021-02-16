@@ -4,7 +4,7 @@ class AffectObject < EnumClass
 
   protected initializer proc : AffectProc
 
-  def affect_object?(caster : L2Character, object : L2Object) : Bool
+  def affect?(caster : L2Character, object : L2Object) : Bool
     @proc.call(caster, object)
   end
 
@@ -38,9 +38,7 @@ class AffectObject < EnumClass
     object.invisible?
   })
 
-  add(NONE, AffectProc.new { |caster, object|
-    false
-  })
+  add(NONE, AffectProc.new { |caster, object| false })
 
   add(NOT_FRIEND, AffectProc.new { |caster, object|
     object.auto_attackable?(caster)

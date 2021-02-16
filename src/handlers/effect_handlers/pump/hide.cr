@@ -8,7 +8,7 @@ class EffectHandler::Hide < AbstractEffect
       pc.intention = AI::IDLE
     end
 
-    pc.known_list.each_character do |target|
+    pc.known_list.known_characters do |target|
       if target.target == pc
         target.target = nil
         target.abort_attack

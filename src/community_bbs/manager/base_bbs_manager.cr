@@ -22,7 +22,7 @@ module BaseBBSManager
       "0",
       "0",
       pc.name,
-      pc.l2id.to_s,
+      pc.l2id,
       pc.account_name,
       "9",
       string2, # subject?

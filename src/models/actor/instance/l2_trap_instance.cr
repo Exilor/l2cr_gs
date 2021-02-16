@@ -56,7 +56,7 @@ class L2TrapInstance < L2Npc
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       if @triggered || can_be_seen?(pc)
         pc.send_packet(gsp)
       end
@@ -64,7 +64,7 @@ class L2TrapInstance < L2Npc
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Int32)
-    known_list.each_player do |pc|
+    known_list.known_players.each_value do |pc|
       if inside_radius?(pc, radius, false, false)
         if @triggered || can_be_seen?(pc)
           pc.send_packet(gsp)

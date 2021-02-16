@@ -50,7 +50,7 @@ class NpcKnownList < CharKnownList
       npc = @npc
       return unless npc.is_a?(L2Attackable)
       return unless npc.intention.move_to?
-      npc.known_list.each_player do |pl|
+      npc.known_list.known_players.each_value do |pl|
         if pl.alive? && !pl.invul?
           if pl.inside_radius?(npc, npc.aggro_range, true, false)
             if npc.monster? || (npc.is_a?(L2GuardInstance) && pl.karma > 0)

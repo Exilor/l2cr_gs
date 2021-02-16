@@ -17,7 +17,7 @@ module GameTimer
   private REFERENCE_TIME = Time.local.at_beginning_of_day.ms
 
   def load
-    spawn run
+    spawn { run }
   end
 
   private def run

@@ -1,24 +1,24 @@
 class AffectScope < EnumClass
-  private alias AffectProc = L2Character, L2Character, Skill -> Slice(L2Object) | Array(L2Object)
+  private alias AffectProc = L2Character, L2Character, Skill -> Array(L2Object)?
+  private NO_TARGETS = [] of L2Object
 
   protected initializer proc : AffectProc
 
-  def affect_targets(caster : L2Character, target : L2Character, skill : Skill) : Slice(L2Object) | Array(L2Object)
-    @proc.call(caster, target, skill)
+  def get_affected_targets(caster : L2Character, target : L2Character, skill : Skill) : Array(L2Object)
+    @proc.call(caster, target, skill) || NO_TARGETS
   end
 
   add(BALAKAS_SCOPE, AffectProc.new { |caster, target, skill|
     # L2J TODO
-    Slice(L2Object).empty
   })
 
   add(DEAD_PLEDGE, AffectProc.new { |caster, target, skill|
     unless caster.playable? && (pc = caster.acting_player)
-      return Slice(L2Object).empty
+      return
     end
 
     if pc.clan_id == 0
-      return Slice(L2Object).empty
+      return
     end
 
     affect_limit = skill.affect_limit
@@ -38,7 +38,7 @@ class AffectScope < EnumClass
         next
       end
 
-      unless affect_object.affect_object?(caster, target_pc)
+      unless affect_object.affect?(caster, target_pc)
         next
       end
 
@@ -50,16 +50,15 @@ class AffectScope < EnumClass
 
   add(FAN, AffectProc.new { |caster, target, skill|
     # L2J TODO
-    Slice(L2Object).empty
   })
 
   add(NONE, AffectProc.new { |caster, target, skill|
-    Slice(L2Object).empty
+    # return nil
   })
 
   add(PARTY, AffectProc.new { |caster, target, skill|
     affect_range = skill.affect_range
-    targets = Array(L2Object).new(affect_range) # affect_range as initial size?
+    targets = Array(L2Object).new(affect_range) # affect *range* as initial size?
 
     if party = caster.party
       party.members.each do |m|
@@ -86,8 +85,9 @@ class AffectScope < EnumClass
   })
 
   add(PARTY_PLEDGE, AffectProc.new { |caster, target, skill|
-    PARTY.affect_targets(caster, target, skill).to_a +
-      PLEDGE.affect_targets(caster, target, skill).to_a
+    party = PARTY.get_affected_targets(caster, target, skill)
+    pledge = PLEDGE.get_affected_targets(caster, target, skill)
+    (party && pledge) ? (party + pledge) : (party || pledge)
   })
 
   add(PLEDGE, AffectProc.new { |caster, target, skill|
@@ -136,7 +136,7 @@ class AffectScope < EnumClass
         return targets
       end
 
-      npc.known_list.each_character(affect_range) do |char|
+      npc.known_list.get_known_characters_in_radius(affect_range) do |char|
         if affect_limit > 0 && targets.size >= affect_limit
           break
         end
@@ -156,9 +156,9 @@ class AffectScope < EnumClass
     affect_object = skill.affect_object
     targets = Array(L2Object).new(affect_limit)
 
-    caster.known_list.each_character(skill.affect_range) do |char|
+    caster.known_list.get_known_characters_in_radius(skill.affect_range) do |char|
       break if affect_limit > 0 && targets.size >= affect_limit
-      next unless affect_object.affect_object?(caster, char)
+      next unless affect_object.affect?(caster, char)
       targets << char
     end
 
@@ -179,40 +179,34 @@ class AffectScope < EnumClass
   })
 
   add(RANGE_SORT_BY_HP, AffectProc.new { |caster, target, skill|
-    RANGE.affect_targets(caster, target, skill)
-      .sort_by! &.as(L2Character).hp_percent
+    if targets = RANGE.get_affected_targets(caster, target, skill)
+      targets.sort_by! &.as(L2Character).hp_percent
+    end
   })
 
   add(RING_RANGE, AffectProc.new { |caster, target, skill|
     # L2J TODO
-    Slice(L2Object).empty
   })
 
   add(SINGLE, AffectProc.new { |caster, target, skill|
-    if skill.affect_object.affect_object?(caster, target)
-      return Slice.new(1, target.as(L2Object))
+    if skill.affect_object.affect?(caster, target)
+      [target] of L2Object
     end
-
-    Slice(L2Object).empty
   })
 
   add(SQUARE, AffectProc.new { |caster, target, skill|
     # L2J TODO
-    Slice(L2Object).empty
   })
 
   add(SQUARE_PB, AffectProc.new { |caster, target, skill|
     # L2J TODO
-    Slice(L2Object).empty
   })
 
   add(STATIC_OBJECT_SCOPE, AffectProc.new { |caster, target, skill|
     # L2J TODO
-    Slice(L2Object).empty
   })
 
   add(WYVERN_SCOPE, AffectProc.new { |caster, target, skill|
     # L2J TODO
-    Slice(L2Object).empty
   })
 end

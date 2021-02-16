@@ -36,7 +36,7 @@ struct NpcBufferAI
         end
       end
     when AffectScope::RANGE
-      @npc.known_list.each_character(skill.affect_range) do |target|
+      @npc.known_list.get_known_characters_in_radius(skill.affect_range) do |target|
         case @skill_data.affect_object
         when AffectObject::FRIEND
           if friendly?(pc, target) && target.alive?

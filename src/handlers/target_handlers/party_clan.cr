@@ -22,7 +22,7 @@ module TargetHandler::PartyClan
 
     max_targets = skill.affect_limit
 
-    pc.known_list.each_player(radius) do |obj|
+    pc.known_list.get_known_players_in_radius(radius) do |obj|
       if pc.in_olympiad_mode?
         next unless obj.in_olympiad_mode?
         next if pc.olympiad_game_id != obj.olympiad_game_id

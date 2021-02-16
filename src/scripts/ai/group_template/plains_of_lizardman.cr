@@ -58,7 +58,7 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
     if npc && player && event == "fantasy_mushroom"
       npc.do_cast(FANTASY_MUSHROOM_SKILL)
 
-      npc.known_list.each_character(200) do |target|
+      npc.known_list.get_known_characters_in_radius(200) do |target|
         if target.is_a?(L2Attackable)
           monster = target
           npc.target = monster
@@ -92,7 +92,7 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
       if npc.script_value?(0)
         npc.script_value = 1
         npc.invul = true
-        npc.known_list.each_character(1000) do |target|
+        npc.known_list.get_known_characters_in_radius(1000) do |target|
           if target.is_a?(L2Attackable)
             if target.id == TANTA_MAGICIAN || target.id == TANTA_SCOUT
               target.running = true

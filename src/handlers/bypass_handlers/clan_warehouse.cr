@@ -39,7 +39,7 @@ module BypassHandler::ClanWarehouse
         pc.action_failed
         pc.active_warehouse = clan.warehouse
         pc.inventory_blocking_status = true
-        wdl = WareHouseDepositList.new(pc, WareHouseDepositList::CLAN)
+        wdl = WarehouseDepositList.new(pc, WarehouseDepositList::CLAN)
         pc.send_packet(wdl)
         return true
       end
@@ -74,9 +74,9 @@ module BypassHandler::ClanWarehouse
     end
 
     if item_type
-      wd = SortedWareHouseWithdrawalList.new(pc, WareHouseWithdrawalList::CLAN, item_type, sort_order)
+      wd = SortedWarehouseWithdrawalList.new(pc, WarehouseWithdrawalList::CLAN, item_type, sort_order)
     else
-      wd = WareHouseWithdrawalList.new(pc, WareHouseWithdrawalList::CLAN)
+      wd = WarehouseWithdrawalList.new(pc, WarehouseWithdrawalList::CLAN)
     end
 
     pc.send_packet(wd)

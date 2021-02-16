@@ -1,3 +1,4 @@
+# Thread-safe doubly-linked list.
 class ConcurrentLinkedList(E)
   include Enumerable(E)
 

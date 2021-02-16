@@ -12,7 +12,7 @@ module TargetHandler::Target
       end
     end
 
-    skill.affect_scope.affect_targets(char, target, skill).to_a
+    skill.affect_scope.get_affected_targets(char, target, skill)
   end
 
   def target_type : TargetType

@@ -12,7 +12,7 @@ class Condition
       exist = false
 
       if !@npc_ids.empty? && @radius > 0
-        effector.known_list.each_character(@radius) do |char|
+        effector.known_list.get_known_characters_in_radius(@radius) do |char|
           if char.npc? && @npc_ids.bincludes?(char.id)
             exist = true
             break

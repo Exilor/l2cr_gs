@@ -5,17 +5,12 @@ module TargetHandler::EnemyNot
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
     return EMPTY_TARGET_LIST unless target
 
-    if target.dead?
+    if target.dead? || target.auto_attackable?(char)
       char.send_packet(SystemMessageId::INCORRECT_TARGET)
       return EMPTY_TARGET_LIST
     end
 
-    if target.auto_attackable?(char)
-      char.send_packet(SystemMessageId::INCORRECT_TARGET)
-      return EMPTY_TARGET_LIST
-    end
-
-    skill.affect_scope.affect_targets(char, target, skill).to_a
+    skill.affect_scope.get_affected_targets(char, target, skill)
   end
 
   def target_type : TargetType

@@ -58,7 +58,7 @@ class Scripts::MithrilMine < AbstractInstance
         end
       end
     when "FINISH"
-      npc.known_list.each_character do |char|
+      npc.known_list.known_characters do |char|
         if char.id == KEGOR
           kegor = char.as(L2Npc)
           kegor.script_value = 2

@@ -12,7 +12,7 @@ abstract class MessageId
     private def initialize(name : String, id : Int32)
       @name = name
       @id = id
-      @param_count = Util.count_params(name)
+      @param_count = count_params(name)
       MAP[id] = self
     end
 
@@ -31,6 +31,21 @@ abstract class MessageId
 
   def inspect(io : IO)
     io.print({{@type.stringify + "("}}, @id, ", ", @name, ')')
+  end
+
+  private def count_params(str)
+    count = 0
+
+    0.upto(str.size &- 2) do |i|
+      if str[i].in?('C', 'S')
+        c2 = str[i &+ 1]
+        if c2.number?
+          count = Math.max(count, c2.to_i)
+        end
+      end
+    end
+
+    count
   end
 
   private macro add(name, id)

@@ -97,6 +97,11 @@ module L2Cr
         end
       when "uptime"
         puts Time.local - GameServer.start_time
+      when "test"
+        p "Known characters: #{L2World.players.first.known_list.known_characters.to_a.size}"
+        p "Known characters in radius: #{L2World.players.first.known_list.get_known_characters_in_radius(500).to_a.size}"
+        # p "Known players: #{L2World.players.first.known_list.each_player.to_a.size}"
+        p "Known players in radius: #{L2World.players.first.known_list.get_known_players_in_radius(500).to_a.size}"
       else
         return "unknown command '#{cmd}'"
       end

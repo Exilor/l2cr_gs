@@ -17,7 +17,7 @@ module TargetHandler::AreaCorpseMob
 
     src_in_arena = char.inside_pvp_zone? && !char.inside_siege_zone?
 
-    char.known_list.each_character do |obj|
+    char.known_list.known_characters do |obj|
       if !(obj.attackable? || obj.playable?) || !Util.in_range?(skill.affect_range, target, obj, true)
         next
       end

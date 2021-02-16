@@ -64,7 +64,7 @@ module AdminCommandHandler::AdminScan
     html = NpcHtmlMessage.new
     html.set_file(pc, "data/html/admin/scan.htm")
     sb = String.build do |io|
-      pc.known_list.each_character(radius) do |c|
+      pc.known_list.get_known_characters_in_radius(radius) do |c|
         next unless c.is_a?(L2Npc)
         io << "<tr><td width=\"54\">"
         io << c.id

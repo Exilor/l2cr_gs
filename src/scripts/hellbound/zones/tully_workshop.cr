@@ -421,7 +421,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       @allow_servant_spawn = true
       @allow_agent_spawn = true
     elsif event.casecmp?("despawn_agent_7")
-      npc.known_list.each_player(300) do |pl|
+      npc.known_list.get_known_players_in_radius(300) do |pl|
         pl.tele_to_location(-12176, 279696, -10492, true)
       end
 
@@ -429,7 +429,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       @spawned_agent = nil
       npc.delete_me
     elsif event.casecmp?("cube_68_despawn")
-      npc.known_list.each_player(500) do |pl|
+      npc.known_list.get_known_players_in_radius(500) do |pl|
         pl.tele_to_location(-12176, 279696, -10492, true)
       end
 

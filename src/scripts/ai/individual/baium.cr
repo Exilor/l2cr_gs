@@ -205,7 +205,7 @@ class Scripts::Baium < AbstractNpcAI
           add_attack_desire(mob, most_hated)
         else
           found = false
-          mob.known_list.each_character(1000) do |char|
+          mob.known_list.get_known_characters_in_radius(1000) do |char|
             if char.playable? && @zone.inside_zone?(char) && char.alive?
               if mob.target != char
                 mob.clear_aggro_list
@@ -503,7 +503,7 @@ class Scripts::Baium < AbstractNpcAI
   end
 
   private def get_random_player(npc)
-    npc.known_list.each_player(2000) do |pc|
+    npc.known_list.get_known_players_in_radius(2000) do |pc|
       if @zone.inside_zone?(pc) && pc.alive?
         return pc
       end

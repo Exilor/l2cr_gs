@@ -20,7 +20,7 @@ module TargetHandler::AreaFriendly
     if target
       target_list << target
       max_targets = skill.affect_limit
-      target.known_list.each_character(skill.affect_range) do |obj|
+      target.known_list.get_known_characters_in_radius(skill.affect_range) do |obj|
         if max_targets > 0 && target_list.size >= max_targets
           break
         end

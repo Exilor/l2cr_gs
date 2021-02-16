@@ -219,7 +219,7 @@ class Scripts::PrimevalIsle < AbstractNpcAI
       if Rnd.rand(100) <= 80 && npc.script_value?(0)
         npc.script_value = 1
         playable = (is_summon ? attacker.summon : attacker) || attacker
-        npc.known_list.each_character(500) do |char|
+        npc.known_list.get_known_characters_in_radius(500) do |char|
           if char.is_a?(L2Attackable) && Rnd.bool
             add_attack_desire(char, playable)
           end

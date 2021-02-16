@@ -107,7 +107,7 @@ class Scripts::GiganticGolem < AbstractNpcAI
       end
     when "MOVE_TIME"
       if npc
-        npc.known_list.each_character(3000) do |obj|
+        npc.known_list.get_known_characters_in_radius(3000) do |obj|
           if obj.raid?
             add_move_to_desire(npc, Location.new(obj.x + Rnd.rand(-200..200), obj.y + Rnd.rand(-200..200), obj.z + 20, 0), 0)
           end

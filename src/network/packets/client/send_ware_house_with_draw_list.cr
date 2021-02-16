@@ -1,4 +1,4 @@
-class Packets::Incoming::SendWareHouseWithDrawList < GameClientPacket
+class Packets::Incoming::SendWarehouseWithDrawList < GameClientPacket
   BATCH_LENGTH = 12
 
   @items : Array(ItemHolder)?

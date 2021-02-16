@@ -1,4 +1,4 @@
-class Packets::Outgoing::SortedWareHouseWithdrawalList < GameServerPacket
+class Packets::Outgoing::SortedWarehouseWithdrawalList < GameServerPacket
   enum WarehouseListType : UInt8
     WEAPON
     ARMOR
