@@ -639,7 +639,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
     return unless party
     return unless tmp = ZONES[manager_id]?
     return unless zone = ZoneManager.get_zone_by_id(tmp)
-    zone.players_inside.each do |pc|
+    zone.each_player_inside do |pc|
       if party2 = pc.party
         if party2.leader_l2id != party.leader_l2id
           pc.tele_to_location(16110, 243841, 11616)
@@ -651,7 +651,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
   private def remove_all_players(manager_id)
     return unless tmp = ZONES[manager_id]?
     return unless zone = ZoneManager.get_zone_by_id(tmp)
-    zone.players_inside.each do |pc|
+    zone.each_player_inside do |pc|
       pc.tele_to_location(16110, 243841, 11616)
     end
   end

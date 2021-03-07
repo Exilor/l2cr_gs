@@ -142,7 +142,7 @@ class L2SiegeZone < L2ZoneType
   end
 
   def banish_foreigners(owner_clan_id : Int32)
-    players_inside.each do |pc|
+    each_player_inside do |pc|
       if pc.clan_id != owner_clan_id
         pc.tele_to_location(TeleportWhereType::TOWN)
       end
@@ -151,11 +151,11 @@ class L2SiegeZone < L2ZoneType
 
   def update_zone_status_for_characters_inside
     if settings.active_siege?
-      characters_inside.each do |char|
+      each_character_inside do |char|
         on_enter(char)
       end
     else
-      characters_inside.each do |char|
+      each_character_inside do |char|
         char.inside_pvp_zone = false
         char.inside_siege_zone = false
         char.inside_no_summon_friend_zone = false
@@ -172,6 +172,6 @@ class L2SiegeZone < L2ZoneType
   end
 
   def announce_to_players(msg : String)
-    players_inside.each &.send_message(msg)
+    each_player_inside &.send_message(msg)
   end
 end

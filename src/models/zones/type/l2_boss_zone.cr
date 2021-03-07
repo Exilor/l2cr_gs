@@ -110,7 +110,7 @@ class L2BossZone < L2ZoneType
       unless characters_inside.none?
         settings.raid_list.clear
         count = 0
-        characters_inside.each do |obj|
+        each_character_inside do |obj|
           if obj.playable?
             count &+= 1
           elsif obj.attackable? && obj.raid?
@@ -176,20 +176,16 @@ class L2BossZone < L2ZoneType
   end
 
   def move_players_to(loc : Location)
-    return if @character_list.empty?
-
-    characters_inside.each do |pc|
-      if pc.is_a?(L2PcInstance) && pc.online?
+    each_player_inside do |pc|
+      if pc.online?
         pc.tele_to_location(loc)
       end
     end
   end
 
   def oust_all_players
-    return if @character_list.empty?
-
-    characters_inside.each do |pc|
-      if pc.is_a?(L2PcInstance) && pc.online?
+    each_player_inside do |pc|
+      if pc.online?
         if !@oust_loc.includes?(0)
           pc.tele_to_location(@oust_loc[0], @oust_loc[1], @oust_loc[2])
         else
@@ -225,8 +221,8 @@ class L2BossZone < L2ZoneType
 
     known_players = npc.known_list.known_players
 
-    characters_inside.each do |pc|
-      if pc.player? && pc.online?
+    each_player_inside do |pc|
+      if pc.online?
         known_players[pc.l2id] = pc
       end
     end

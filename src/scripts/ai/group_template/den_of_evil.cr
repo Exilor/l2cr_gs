@@ -123,7 +123,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
     end
 
     private def destroy_zone
-      @zone.characters_inside.each do |char|
+      @zone.each_character_inside do |char|
         if char.playable?
           KASHAS_BETRAYAL.skill.apply_effects(char, char)
         else

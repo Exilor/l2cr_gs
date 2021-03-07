@@ -164,7 +164,7 @@ class Scripts::Baium < AbstractNpcAI
         npc.do_cast(BAIUM_PRESENT)
       end
 
-      @zone.players_inside.each do |plr|
+      @zone.each_player_inside do |plr|
         if plr.hero?
           npc_str = NpcString::NOT_EVEN_THE_GODS_THEMSELVES_COULD_TOUCH_ME_BUT_YOU_S1_YOU_DARE_CHALLENGE_ME_IGNORANT_MORTAL
           msg = ExShowScreenMessage.new(npc_str, 2, 4000, plr.name)
@@ -248,7 +248,7 @@ class Scripts::Baium < AbstractNpcAI
       set_status(ALIVE)
       add_spawn(BAIUM_STONE, BAIUM_LOC, false, 0)
     when "CLEAR_ZONE"
-      @zone.characters_inside.each do |char|
+      @zone.each_character_inside do |char|
         if char.npc?
           char.delete_me
         elsif char.player?
@@ -276,7 +276,7 @@ class Scripts::Baium < AbstractNpcAI
       cancel_quest_timers("SELECT_TARGET")
     when "DESPAWN_MINIONS"
       if get_status == IN_FIGHT
-        @zone.characters_inside.each do |char|
+        @zone.each_character_inside do |char|
           if char.npc? && char.id == ARCHANGEL
             char.delete_me
           end

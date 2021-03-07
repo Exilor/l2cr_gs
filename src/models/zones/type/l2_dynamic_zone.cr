@@ -56,7 +56,7 @@
 
 #     @region.remove_zone(self)
 
-#     characters_inside.each &.stop_skill_effects(true, @skill.id)
+#     each_character_inside &.stop_skill_effects(true, @skill.id)
 
 #     @owner.stop_skill_effects(true, @skill.id)
 #   end

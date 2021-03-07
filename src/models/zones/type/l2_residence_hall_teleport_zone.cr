@@ -28,7 +28,7 @@ class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
 
     def call
       loc = @zone.spawns.sample(random: Rnd)
-      @zone.players_inside.each &.tele_to_location(loc, false)
+      @zone.each_player_inside &.tele_to_location(loc, false)
     end
   end
 end

@@ -183,12 +183,20 @@ abstract class L2ZoneType < ListenersContainer
     @character_list.local_each_value
   end
 
+  def each_character_inside(& : L2Character ->) : Nil
+    @character_list.each_value { |char| yield char }
+  end
+
   def players_inside : Enumerable(L2PcInstance)
     characters_inside.select(L2PcInstance)
   end
 
+  def each_player_inside(& : L2PcInstance ->) : Nil
+    each_character_inside { |char| yield char if char.is_a?(L2PcInstance) }
+  end
+
   def broadcast_packet(gsp : GameServerPacket)
-    players_inside.each &.broadcast_packet(gsp)
+    each_player_inside { |pc| broadcast_packet(gsp) }
   end
 
   def target_type=(type : InstanceType)

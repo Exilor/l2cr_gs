@@ -132,7 +132,7 @@ class Scripts::Sailren < AbstractNpcAI
       if @status.in_combat?
         @status = Status::ALIVE
       end
-      @zone.characters_inside.each do |char|
+      @zone.each_character_inside do |char|
         if char.player?
           char.tele_to_location(TeleportWhereType::TOWN)
         elsif char.npc?

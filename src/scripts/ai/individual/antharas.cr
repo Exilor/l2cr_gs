@@ -237,7 +237,7 @@ class Scripts::Antharas < AbstractNpcAI
     when "CHECK_ATTACK"
       if npc && @last_attack + 900_000 < Time.ms
         set_status(ALIVE)
-        @zone.characters_inside.each do |char|
+        @zone.each_character_inside do |char|
           if char.npc?
             if char.id == ANTHARAS
               char.tele_to_location(185708, 114298, -8221)
@@ -285,7 +285,7 @@ class Scripts::Antharas < AbstractNpcAI
       end
       start_quest_timer("SPAWN_MINION", 300_000, npc, nil)
     when "CLEAR_ZONE"
-      @zone.characters_inside.each do |char|
+      @zone.each_character_inside do |char|
         if char.npc?
           char.delete_me
         elsif char.player?
@@ -346,7 +346,7 @@ class Scripts::Antharas < AbstractNpcAI
     when "DESPAWN_MINIONS"
       if get_status == IN_FIGHT
         @minion_count = 0
-        @zone.characters_inside.each do |char|
+        @zone.each_character_inside do |char|
           if char.npc? && char.id.in?(BEHEMOTH, TERASQUE)
             char.delete_me
           end
@@ -363,7 +363,7 @@ class Scripts::Antharas < AbstractNpcAI
         set_status(ALIVE)
         cancel_quest_timer("CHECK_ATTACK", @antharas, nil)
         cancel_quest_timer("SPAWN_MINION", @antharas, nil)
-        @zone.characters_inside.each do |char|
+        @zone.each_character_inside do |char|
           if char.npc?
             if char.id == ANTHARAS
               char.tele_to_location(185708, 114298, -8221)

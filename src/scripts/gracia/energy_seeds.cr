@@ -419,7 +419,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
           door.close_me
         end
       end
-      ZoneManager.get_zone_by_id(SOD_ZONE).not_nil!.players_inside.each do |ch|
+      ZoneManager.get_zone_by_id(SOD_ZONE).not_nil!.each_player_inside do |ch|
         ch.tele_to_location(SOD_EXIT_POINT)
       end
       stop_ai(GraciaSeed::DESTRUCTION)

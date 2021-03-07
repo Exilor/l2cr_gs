@@ -44,7 +44,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
 
   def broadcast_status_update(pc)
     packet = ExOlympiadUserInfo.new(pc)
-    players_inside.each do |target|
+    each_player_inside do |target|
       if target.in_observer_mode? || target.olympiad_side != pc.olympiad_side
         target.send_packet(packet)
       end
@@ -52,7 +52,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   def broadcast_packet_to_observers(gsp)
-    players_inside.each do |pc|
+    each_player_inside do |pc|
       if pc.in_observer_mode?
         pc.send_packet(gsp)
       end
@@ -102,7 +102,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
       sm = SystemMessageId::LEFT_COMBAT_ZONE
     end
 
-    characters_inside.each do |char|
+    each_character_inside do |char|
       if battle_started
         char.inside_pvp_zone = true
         if char.player?

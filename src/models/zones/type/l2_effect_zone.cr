@@ -108,7 +108,7 @@ class L2EffectZone < L2ZoneType
   private def apply_skill
     return unless enabled?
 
-    characters_inside.each do |char|
+    each_character_inside do |char|
       next unless char.alive?
       next unless Rnd.rand(100) < @chance
       @skills.each do |id, lvl|

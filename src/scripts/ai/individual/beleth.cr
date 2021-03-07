@@ -76,7 +76,7 @@ class Scripts::Beleth < AbstractNpcAI
         npc.do_cast(FIREBALL)
       end
     when "SPAWN1"
-      @zone.characters_inside.each do |c|
+      @zone.each_character_inside do |c|
         c.disable_all_skills
         c.invul = true
         c.immobilized = true
@@ -202,7 +202,7 @@ class Scripts::Beleth < AbstractNpcAI
       @camera3.not_nil!.delete_me
       @camera4.not_nil!.delete_me
 
-      @zone.characters_inside.each do |c|
+      @zone.each_character_inside do |c|
         c.enable_all_skills
         c.invul = false
         c.immobilized = false
@@ -338,7 +338,7 @@ class Scripts::Beleth < AbstractNpcAI
       @camera2.not_nil!.delete_me
       @whirpool.not_nil!.delete_me
 
-      @zone.characters_inside.each do |c|
+      @zone.each_character_inside do |c|
         c.enable_all_skills
         c.invul = false
         c.immobilized = false
@@ -346,7 +346,7 @@ class Scripts::Beleth < AbstractNpcAI
     when "CHECK_ATTACK"
       if @last_attack + 900_000 < Time.ms
         GrandBossManager.set_boss_status(REAL_BELETH, ALIVE)
-        @zone.characters_inside.each do |c|
+        @zone.each_character_inside do |c|
           if c.npc?
             c.delete_me
           elsif c.player?
@@ -508,7 +508,7 @@ class Scripts::Beleth < AbstractNpcAI
       delete_all
       npc.delete_me
 
-      @zone.characters_inside.each do |c|
+      @zone.each_character_inside do |c|
         c.disable_all_skills
         c.invul = true
         c.immobilized = true

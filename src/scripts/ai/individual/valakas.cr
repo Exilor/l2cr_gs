@@ -133,7 +133,7 @@ class Scripts::Valakas < AbstractNpcAI
         npc.tele_to_location(VALAKAS_LAIR)
 
         # Sound + socialAction.
-        zone.players_inside.each do |pl|
+        zone.each_player_inside do |pl|
           pl.send_packet(Music::BS03_A_10000.packet)
           pl.send_packet(SocialAction.new(npc.l2id, 3))
         end

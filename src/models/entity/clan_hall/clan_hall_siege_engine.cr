@@ -115,7 +115,7 @@ abstract class ClanHallSiegeEngine < Quest
 
   def attackers_in_zone : Array(L2PcInstance)
     # attackers = [] of L2PcInstance
-    # @hall.siege_zone.players_inside.each do |pc|
+    # @hall.siege_zone.each_player_inside do |pc|
     #   clan = pc.clan
     #   if clan && @attackers.has_key?(clan.id)
     #     attackers << pc
@@ -232,7 +232,7 @@ abstract class ClanHallSiegeEngine < Quest
       end
     end
 
-    @hall.siege_zone.players_inside.each &.start_pvp_flag
+    @hall.siege_zone.each_player_inside &.start_pvp_flag
 
     @attackers.clear
 

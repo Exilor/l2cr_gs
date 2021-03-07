@@ -74,7 +74,7 @@ class L2DamageZone < L2ZoneType
       end
     end
 
-    characters_inside.each do |char|
+    each_character_inside do |char|
       if char.alive?
         if siege
           pc = char.acting_player
