@@ -30,11 +30,22 @@ class L2Spawn
 
   def initialize(template : L2NpcTemplate)
     @template = template
+    # {% begin %}
+    #   @constructor =
+    #   case "#{template.type}Instance"
+    #   {% for sub in L2Npc.all_subclasses.reject &.abstract? %}
+    #     when {{sub.stringify}}
+    #       {{sub}}
+    #   {% end %}
+    #   else
+    #     raise "No constructor for '#{template.type}' found"
+    #   end
+    # {% end %}
     {% begin %}
       @constructor =
-      case "#{template.type}Instance"
+      case template.type
       {% for sub in L2Npc.all_subclasses.reject &.abstract? %}
-        when {{sub.stringify}}
+        when {{sub.stringify.gsub(/Instance/, "")}}
           {{sub}}
       {% end %}
       else
@@ -52,11 +63,12 @@ class L2Spawn
   end
 
   def get_location(obj : L2Object?) : Location
-    if !@last_spawn_points || !obj || !@last_spawn_points.not_nil!.has_key?(obj.l2id)
+    points = @last_spawn_points
+    if points.nil? || obj.nil?
       return @location
     end
 
-    @last_spawn_points.not_nil![obj.l2id]
+    points.fetch(obj.l2id, @location)
   end
 
   def x : Int32

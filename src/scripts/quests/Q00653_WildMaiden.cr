@@ -30,7 +30,7 @@ class Scripts::Q00653_WildMaiden < Quest
       st.start_quest
       st.take_items(SOE, 1)
       npc.delete_me
-      html = Rnd.rand(2) == 0 ? event : "32013-04a.htm"
+      html = Rnd.bool ? event : "32013-04a.htm"
     end
 
     html

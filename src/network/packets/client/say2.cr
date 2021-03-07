@@ -102,17 +102,17 @@ class Packets::Incoming::Say2 < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    debug { "[#{CHAT_NAMES[@type]}] #{pc.name}: #{@text}" }
+    debug { "[#{CHAT_NAMES[@type]}] #{pc}: #{@text}" }
 
     if @type < 0 || @type >= CHAT_NAMES.size
-      warn { "Invalid pc type #{@type} from #{pc.name}." }
+      warn { "Invalid pc type #{@type} from #{pc}." }
       pc.action_failed
       pc.logout
       return
     end
 
     if @text.empty?
-      warn { "#{pc.name} sent an empty chat message." }
+      warn { "#{pc} sent an empty chat message." }
       pc.action_failed
       pc.logout
       return
@@ -152,7 +152,7 @@ class Packets::Incoming::Say2 < GameClientPacket
     end
 
     if pc.jailed? && Config.jail_disable_chat
-      if @type == TELL || @type == SHOUT || @type == TRADE || @type == HERO_VOICE
+      if @type.in?(TELL, SHOUT, TRADE, HERO_VOICE)
         pc.send_message("You can not chat with players outside of the jail.")
         return
       end
@@ -185,7 +185,7 @@ class Packets::Incoming::Say2 < GameClientPacket
     if handler = ChatHandler[@type]
       handler.handle_chat(@type, pc, @target, @text)
     else
-      warn { "No handler registered for chat type #{@type} (player: #{pc.name})." }
+      warn { "No handler registered for chat type #{@type} (player: #{pc})." }
     end
   end
 
@@ -206,8 +206,8 @@ class Packets::Incoming::Say2 < GameClientPacket
       unless pos = @text.index("ID=", pos1)
         return false
       end
-      result = String.build do |io|
-        pos &+= 3
+      pos &+= 3
+      result = String.build(9) do |io|
         while (temp = @text[pos]).number?
           io << temp
           pos &+= 1
@@ -218,18 +218,18 @@ class Packets::Incoming::Say2 < GameClientPacket
 
       if item.is_a?(L2ItemInstance)
         unless pc.inventory.get_item_by_l2id(id)
-          warn { "#{pc.name} tried to publish an item he doesn't own (ID: #{id})." }
+          warn { "#{pc} tried to publish an item he doesn't own (ID: #{id})." }
           return false
         end
 
         item.publish
       else
-        warn { "#{pc.name} tried to publish an object that is not an item: #{item}:#{item.class}." }
+        warn { "#{pc} tried to publish an object that is not an item: #{item}:#{item.class}." }
         return false
       end
 
       unless pos1 = @text.index("\b", pos)
-        warn { "#{pc.name} sent an invalid publish item message (ID: #{id})." }
+        warn { "#{pc} sent an invalid publish item message (ID: #{id})." }
         return false
       end
       pos1 &+= 1

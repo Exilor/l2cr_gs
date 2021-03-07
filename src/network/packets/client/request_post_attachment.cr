@@ -66,7 +66,7 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     attachments.items.each do |item|
       if item.owner_id != msg.sender_id
         Util.punish(pc, "tried to get items intended to someone else.")
-        warn { "#{pc.name} tried to receive a mailed item not owned by its sender (1)." }
+        warn { "#{pc} tried to receive a mailed item not owned by its sender (1)." }
         return
       end
 
@@ -78,7 +78,7 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
 
       if item.location_slot != msg.id
         Util.punish(pc, "tried to get items from another mail attachment.")
-        warn { "#{pc.name} tried to receive a mailed item from a different attachment." }
+        warn { "#{pc} tried to receive a mailed item from a different attachment." }
         return
       end
 
@@ -116,7 +116,7 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
       debug "Transferring #{item}."
       if item.owner_id != msg.sender_id
         Util.punish(pc, "tried to get items from a mail sent to somebody else.")
-        warn { "#{pc.name} tried to receive an item not owned by its sender (2)." }
+        warn { "#{pc} tried to receive an item not owned by its sender (2)." }
         return
       end
 

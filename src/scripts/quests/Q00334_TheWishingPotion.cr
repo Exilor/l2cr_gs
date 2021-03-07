@@ -610,7 +610,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
       when DLORD_ALEXANDROSANCHES
         if qs.memo_state?(2) && qs.get_int(FLAG) == 3
           npc.say(NpcString::BONAPARTERIUS_ABYSS_KING_WILL_PUNISH_YOU)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             add_spawn(ABYSSKING_BONAPARTERIUS, npc, true, 0, false)
           else
             case Rnd.rand(4)
@@ -629,7 +629,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
       when ABYSSKING_BONAPARTERIUS
         if qs.memo_state?(2) && qs.get_int(FLAG) == 3
           npc.say(NpcString::REVENGE_IS_OVERLORD_RAMSEBALIUS_OF_THE_EVIL_WORLD)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             add_spawn(EVILOVERLORD_RAMSEBALIUS, npc, true, 0, false)
           else
             case Rnd.rand(4)
@@ -648,7 +648,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
       when EVILOVERLORD_RAMSEBALIUS
         if qs.memo_state?(2) && qs.get_int(FLAG) == 3
           npc.say(NpcString::OH_GREAT_DEMON_KING)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             add_spawn(GREAT_DEMON_KING, npc, true, 0, false)
           else
             case Rnd.rand(4)

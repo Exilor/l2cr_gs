@@ -1,4 +1,4 @@
-require "../models/actor/tasks/npc/start_moving_task"
+require "../instance_managers/tasks/start_moving_task"
 require "../models/actor/tasks/npc/arrived_task"
 
 class WalkInfo

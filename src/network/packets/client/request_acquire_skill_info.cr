@@ -19,12 +19,12 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
     trainer = pc.last_folk_npc
 
     unless trainer.is_a?(L2NpcInstance)
-      warn { "#{pc.name}'s @last_folk_npc (#{trainer}) is not a trainer." }
+      warn { "#{pc}'s @last_folk_npc (#{trainer}) is not a trainer." }
       return
     end
 
     if !trainer.can_interact?(pc) && !pc.gm?
-      debug { "#{trainer} can't interact with #{pc.name}." }
+      debug { "#{trainer} can't interact with #{pc}." }
       return
     end
 
@@ -39,7 +39,7 @@ class Packets::Incoming::RequestAcquireSkillInfo < GameClientPacket
         warn { pc.name + " requested info for a skill he already knows." }
         return
       elsif prev_skill_level != @level &- 1
-        warn { "#{pc.name} doesn't know the previous level of skill with id #{@id} and level #{@level}." }
+        warn { "#{pc} doesn't know the previous level of skill with id #{@id} and level #{@level}." }
         return
       end
     end

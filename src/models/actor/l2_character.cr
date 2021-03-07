@@ -28,9 +28,9 @@ abstract class L2Character < L2Object
   @hp_update_dec_check = 0.0
   @hp_update_interval  = 0.0
   @zones = Bytes.new(ZoneId.size)
-  @zones_mutex = MyMutex.new
+  @zones_mutex = Mutex.new
   @zone_validate_counter = 4i8
-  @teleport_lock = MyMutex.new
+  @teleport_lock = Mutex.new(:Reentrant)
   @invul_against_skills : Concurrent::Map(Int32, InvulSkillHolder)?
   @reuse_time_stamp_items : Concurrent::Map(Int32, TimeStamp)? | Hash(Int32, TimeStamp)?
   @reuse_time_stamp_skills : Concurrent::Map(Int32, TimeStamp)? | Hash(Int32, TimeStamp)?
@@ -197,12 +197,12 @@ abstract class L2Character < L2Object
 
   def broadcast_packet(gsp : GameServerPacket)
     gsp.invisible = invisible?
-    known_list.known_players.each_value &.send_packet(gsp)
+    known_list.each_player &.send_packet(gsp)
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Int32)
     gsp.invisible = invisible?
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       if inside_radius?(pc, radius, false, false)
         pc.send_packet(gsp)
       end
@@ -798,7 +798,7 @@ abstract class L2Character < L2Object
   end
 
   def add_stat_funcs(functions : Enumerable(AbstractFunction))
-    if !player? && known_list.known_players.empty?
+    if !player? && !known_list.knows_players?
       functions.each { |f| add_stat_func(f) }
     else
       modified_stats = functions.map do |f|
@@ -836,7 +836,7 @@ abstract class L2Character < L2Object
   end
 
   def remove_stat_funcs(functions : Enumerable(AbstractFunction))
-    if !player? && known_list.known_players.empty?
+    if !player? && !known_list.knows_players?
       functions.each { |f| remove_stat_func(f) }
     else
       modified_stats = functions.map do |f|
@@ -929,7 +929,7 @@ abstract class L2Character < L2Object
       end
     elsif me.is_a?(L2Npc)
       if broadcast_full
-        known_list.known_players.each_value do |pc|
+        known_list.each_player do |pc|
           if visible_for?(pc)
             if run_speed == 0
               pc.send_packet(ServerObjectInfo.new(me, pc))
@@ -1015,7 +1015,7 @@ abstract class L2Character < L2Object
     when L2Summon
       me.broadcast_status_update
     when L2Npc
-      known_list.known_players.each_value do |pc|
+      known_list.each_player do |pc|
         if visible_for?(pc)
           if run_speed == 0
             op = ServerObjectInfo.new(me, pc)

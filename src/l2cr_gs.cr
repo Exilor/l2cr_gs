@@ -1,3 +1,5 @@
+# crystal build -Dgc_none --release --no-debug ./src/l2cr_gs.cr
+
 if ARGV.delete("build")
   build
   exit(0)
@@ -39,7 +41,7 @@ def build
   start_time = Time.local
   puts "Compilation started at #{start_time}"
 
-  build_cmd = "crystal build ./src/game_server.cr #{ARGV.join(' ')}"
+  build_cmd = "crystal build -Dpreview_mt ./src/game_server.cr #{ARGV.join(' ')}"
   puts build_cmd
 
   system(build_cmd)

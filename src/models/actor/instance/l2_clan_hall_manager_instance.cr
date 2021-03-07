@@ -1095,7 +1095,7 @@ class L2ClanHallManagerInstance < L2MerchantInstance
         pc.send_packet(SystemMessageId::YOU_CANNOT_TELEPORT_WHILE_IN_POSSESSION_OF_A_WARD)
         return
       elsif pc.destroy_item_by_item_id("Teleport", list.item_id, list.price.to_i64, self, true)
-        debug { "Teleporting player #{pc.name} from CH to #{list.x}, #{list.y}, #{list.z}." }
+        debug { "Teleporting player #{pc} from CH to #{list.x}, #{list.y}, #{list.z}." }
       end
     else
       warn { "No teleport destination with id #{val}." }

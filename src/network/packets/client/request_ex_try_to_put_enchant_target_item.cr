@@ -14,12 +14,12 @@ class Packets::Incoming::RequestExTryToPutEnchantTargetItem < GameClientPacket
     end
 
     unless item = pc.inventory.get_item_by_l2id(@l2id)
-      warn { "Item with l2id #{@l2id} not found in #{pc.name}'s inventory." }
+      warn { "Item with l2id #{@l2id} not found in #{pc}'s inventory." }
       return
     end
 
     unless scroll = pc.inventory.get_item_by_l2id(pc.active_enchant_item_id)
-      warn { "Enchant scroll with item_id #{pc.active_enchant_item_id} not found in #{pc.name}'s inventory." }
+      warn { "Enchant scroll with item_id #{pc.active_enchant_item_id} not found in #{pc}'s inventory." }
       return
     end
 

@@ -44,8 +44,10 @@
           cancel_quest_timer("CHECK", npc, nil)
         end
         if @current || @pot < 4
-          players = npc.known_list.known_players.values_slice
-          target = players.sample?(random: Rnd)
+          if npc.known_list.knows_players?
+            players = npc.known_list.known_players.values_slice
+            target = players.sample?(random: Rnd)
+          end
           @next_target = target || npc.target.as?(L2PcInstance)
           b = DIVINE_BURNERS[@pot]
           @pot += 1

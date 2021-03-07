@@ -181,7 +181,7 @@ class L2VillageMasterInstance < L2NpcInstance
         html.set_file(pc, get_subclass_menu(pc.race))
       when 1 # add subclass
         if pc.total_subclasses >= Config.max_subclass
-          debug "#{pc.name} already has the maximum number of subclasses #{Config.max_subclass}."
+          debug "#{pc} already has the maximum number of subclasses #{Config.max_subclass}."
           html.set_file(pc, subclass_fail)
           exit_case = true
         end
@@ -279,19 +279,19 @@ class L2VillageMasterInstance < L2NpcInstance
         end
       when 4 # add subclass (action)
         unless pc.flood_protectors.subclass.try_perform_action("add subclass")
-          warn "Player #{pc.name} tried to change subclass too fast."
+          warn "Player #{pc} tried to change subclass too fast."
           return
         end
 
         allow_addition = true
 
         if pc.total_subclasses >= Config.max_subclass
-          debug "#{pc.name} already has the maximum number of subclasses (#{Config.max_subclass})."
+          debug "#{pc} already has the maximum number of subclasses (#{Config.max_subclass})."
           allow_addition = false
         end
 
         if pc.level < 75
-          debug "#{pc.name}'s level is too low to add a subclass."
+          debug "#{pc}'s level is too low to add a subclass."
           allow_addition = false
         end
 
@@ -324,7 +324,7 @@ class L2VillageMasterInstance < L2NpcInstance
         end
       when 5 # change class (action)
         unless pc.flood_protectors.subclass.try_perform_action("change class")
-          warn "Player #{pc.name} tried to change subclass too fast."
+          warn "Player #{pc} tried to change subclass too fast."
           return
         end
 
@@ -385,7 +385,7 @@ class L2VillageMasterInstance < L2NpcInstance
         html["%list%"] = content6
       when 7 # change subclass (action)
         unless pc.flood_protectors.subclass.try_perform_action("change class")
-          warn "Player #{pc.name} tried to change subclass too fast."
+          warn "Player #{pc} tried to change subclass too fast."
           return
         end
 

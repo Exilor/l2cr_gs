@@ -27,9 +27,7 @@ module AgathionRepository
     1584 => Agathion.new(1584, 584, 20991, 1000, 1000)
   }
 
-  private AGATHION_ITEMS = Hash(Int32, Agathion).new(initial_capacity: AGATHIONS.size)
-
-  AGATHIONS.each_value { |a| AGATHION_ITEMS[a.item_id] = a }
+  AGATHION_ITEMS = AGATHIONS.transform_keys { |k| AGATHIONS[k].item_id }
 
   def get_by_npc_id(npc_id : Int32) : Agathion?
     AGATHIONS[npc_id]?

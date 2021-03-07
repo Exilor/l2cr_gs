@@ -10,7 +10,7 @@ class Packets::Incoming::RequestPetGetItem < GameClientPacket
     return unless pet = pc.summon.as?(L2PetInstance)
 
     item = L2World.find_object(@l2id)
-    if !item || !pc.has_pet?
+    if item.nil? || !pc.has_pet?
       action_failed
       return
     end

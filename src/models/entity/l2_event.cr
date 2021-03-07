@@ -233,7 +233,7 @@ module L2Event
           spawn_event_npc(pc)
           temp << pc
         end
-        pc.known_list.known_players.each_value do |pl|
+        pc.known_list.each_player do |pl|
           if (pl.x - pc.x).abs < 1000 && (pl.y - pc.y).abs < 1000
             if (pl.z - pc.z).abs < 1000
               temp << pl

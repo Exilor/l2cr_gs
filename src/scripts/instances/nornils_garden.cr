@@ -300,7 +300,7 @@ class Scripts::NornilsGarden < AbstractInstance
   private def chech_conditions(npc, pc) : String
     # custom
     if pc.gm?
-      debug "Skipping conditions check because #{pc.name} is a GM (custom)."
+      debug "Skipping conditions check because #{pc} is a GM (custom)."
       return "ok"
     end
 

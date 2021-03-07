@@ -81,7 +81,7 @@ module GameDB
 
         if pc.class_index == 0 && active_class_id != pc.base_class
           pc.class_id = pc.base_class
-          warn { "Reverted #{pc.name} to base class." }
+          warn { "Reverted #{pc} to base class." }
         else
           pc.active_class = active_class_id
         end
@@ -171,7 +171,7 @@ module GameDB
         pc.access_level.level,
         pc.online_int,
         pc.in_7s_dungeon? ? 1 : 0,
-        pc.clan_privileges.bitmask,
+        pc.clan_privileges.mask.to_i32,
         pc.wants_peace,
         pc.base_class,
         pc.newbie,
@@ -225,7 +225,7 @@ module GameDB
         pc.access_level.level,
         pc.online_int,
         pc.in_7s_dungeon? ? 1 : 0,
-        pc.clan_privileges.bitmask,
+        pc.clan_privileges.mask.to_i32,
         pc.wants_peace,
         pc.base_class,
         total_online_time,

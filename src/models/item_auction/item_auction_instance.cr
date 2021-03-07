@@ -20,7 +20,7 @@ class ItemAuctionInstance
   private SELECT_PLAYERS_ID_BY_AUCTION_ID = "SELECT playerObjId, playerBid FROM item_auction_bid WHERE auctionId = ?"
 
   @auctions = {} of Int32 => ItemAuction
-  @auctions_lock = MyMutex.new
+  @auctions_lock = Mutex.new(:Reentrant)
   @items = [] of AuctionItem
   @state_task : TaskScheduler::DelayedTask?
 
@@ -278,7 +278,7 @@ class ItemAuctionInstance
       if pc = bid.player
         pc.warehouse.add_item("ItemAuction", item, nil, nil)
         pc.send_packet(SystemMessageId::WON_BID_ITEM_CAN_BE_FOUND_IN_WAREHOUSE)
-        info { "Auction ID #{auction.auction_id} has finished. Highest bid by #{pc.name} for instance ID #{@instance_id}." }
+        info { "Auction ID #{auction.auction_id} has finished. Highest bid by #{pc} for instance ID #{@instance_id}." }
       else
         item.owner_id = bid.player_l2id
         item.item_location = ItemLocation::WAREHOUSE

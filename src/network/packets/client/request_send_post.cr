@@ -213,13 +213,13 @@ class Packets::Incoming::RequestSendPost < GameClientPacket
     _items.each do |i|
       old_item = pc.check_item_manipulation(i.l2id, i.count, "attach")
       if old_item.nil? || (!old_item.tradeable? || old_item.equipped?)
-        warn { "Error adding attachment for #{pc.name} (old_item is nil)." }
+        warn { "Error adding attachment for #{pc} (old_item is nil)." }
         return false
       end
 
       new_item = pc.inventory.transfer_item("SendMail", i.l2id, i.count, attachments, pc, receiver)
       unless new_item
-        warn { "Error adding attachment for #{pc.name} (new_item is nil)." }
+        warn { "Error adding attachment for #{pc} (new_item is nil)." }
         next
       end
       new_item.set_item_location(new_item.item_location, msg.id)

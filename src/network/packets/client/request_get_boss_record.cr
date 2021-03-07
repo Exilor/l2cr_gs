@@ -11,7 +11,7 @@ class Packets::Incoming::RequestGetBossRecord < GameClientPacket
     return unless pc = active_char
 
     if @boss_id != 0
-      debug { "#{pc.name} @boss_id: #{@boss_id}" }
+      debug { "#{pc} @boss_id: #{@boss_id}" }
     end
 
     points = RaidBossPointsManager.get_points_by_owner_id(pc.l2id)

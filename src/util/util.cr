@@ -18,9 +18,9 @@ module Util
       rad &+= obj2.template.collision_radius
     end
 
-    d = Math.hypot(obj1.x &- obj2.x, obj1.y &- obj2.y)
+    d = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y)
     if z_axis
-      d = Math.hypot(d, obj1.z &- obj2.z)
+      d = Math.hypot(d, obj1.z - obj2.z)
     end
 
     d - (rad / 2) <= range
@@ -30,9 +30,9 @@ module Util
     return false unless obj1 && obj2
     return true if radius == -1
 
-    d = Math.hypot(obj1.x &- obj2.x, obj1.y &- obj2.y)
+    d = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y)
     if z_axis
-      return Math.hypot(d, obj1.z &- obj2.z) <= radius
+      return Math.hypot(d, obj1.z - obj2.z) <= radius
     end
 
     d <= radius
@@ -92,15 +92,6 @@ module Util
     heading / 182.044444444
   end
 
-  # # unused
-  # def convert_degree_to_client_heading(degree)
-  #   if degree < 0
-  #     degree = 360 + degree
-  #   end
-  #
-  #   (degree * 182.044444444).to_i
-  # end
-
   def inside_range_of_l2id?(obj, target_obj_id, radius)
     return false unless target = obj.known_list.known_objects[target_obj_id]?
     return false if obj.calculate_distance(target, false, false) > radius
@@ -149,7 +140,6 @@ module Util
     end
   end
 
-
   def build_html_action_cache(pc : L2PcInstance, scope : HtmlActionScope, npc_l2id : Int32, html : String?)
     raise ArgumentError.new("npc_l2id can't be negative") if npc_l2id < 0
     raise ArgumentError.new("html can't be nil") if html.nil?
@@ -162,13 +152,6 @@ module Util
     input = input.clamp(input_min, input_max)
     (((input - input_min) * (output_max - output_min)) / (input_max - input_min)) + output_min
   end
-
-  # unused
-  # def send_html(pc, html)
-  #   npc_html = NpcHtmlMessage.new
-  #   npc_html.html = html
-  #   pc.send_packet(npc_html)
-  # end
 
   def send_cb_html(pc : L2PcInstance, html : String)
     send_cb_html(pc, html, 0)
@@ -241,7 +224,7 @@ module Util
 
         c = obj.as(L2Character)
 
-        if c.z < npc.z &- 100 && c.z > npc.z &+ 100
+        if c.z < npc.z - 100 && c.z > npc.z + 100
           next
         end
 
@@ -263,7 +246,7 @@ module Util
   end
 
   def punish(pc : L2PcInstance, reason : String, type : IllegalActionPunishmentType)
-    msg = "Player #{pc.name} of account #{pc.account_name} #{reason}"
+    msg = "Player #{pc} of account #{pc.account_name} #{reason}"
     handle_illegal_player_action(pc, msg, type)
   end
 
@@ -276,16 +259,16 @@ module Util
     ThreadPoolManager.schedule_general(task, 5000)
   end
 
-  def format_adena(amount : Number) : String
-    sprintf("%.2f", amount)
+  def format_adena(amount : Int) : String
+    amount.to_s.gsub(/\B(?=(...)*\b)/, ',')
   end
 
-  def min(val, *args : Object)
-    Math.min(val, args.min)
+  def min(*args : Object)
+    args.min
   end
 
-  def max(val, *args : Object)
-    Math.max(val, args.max)
+  def max(*args : Object)
+    args.max
   end
 
   def get_index_of_min_value(*args : Int32) : Int32

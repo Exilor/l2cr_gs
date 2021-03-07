@@ -103,7 +103,11 @@ class L2Clan
   end
 
   def each_online_player(& : L2PcInstance ->) : Nil
-    each_player { |pc| yield pc if pc.online? }
+    @members.each_value do |m|
+      if m.online? && (pc = m.player_instance)
+        yield pc
+      end
+    end
   end
 
   def id : Int32
@@ -334,9 +338,9 @@ class L2Clan
   end
 
   def get_online_members(exclude : Int32) : Array(L2PcInstance)
-    @members.local_each_value
-    .select { |m| m.online? && m.l2id != exclude }
-    .map &.player_instance
+    ret = [] of L2PcInstance
+    each_player { |pc| ret << pc if pc.l2id != exclude }
+    ret
   end
 
   def online_members_count : Int32
@@ -836,19 +840,19 @@ class L2Clan
 
   class RankPrivs
     getter rank, party
-    property privs : EnumBitmask(ClanPrivilege)
+    property privs : EnumSet(ClanPrivilege)
 
     getter_initializer rank : Int32, party : Int32,
-      privs : EnumBitmask(ClanPrivilege)
+      privs : EnumSet(ClanPrivilege)
 
     def initialize(rank : Int32, party : Int32, privs : Int32)
       @rank = rank
       @party = party
-      @privs = EnumBitmask(ClanPrivilege).new(privs)
+      @privs = EnumSet(ClanPrivilege).new(privs)
     end
 
     def privs=(privs : Int32)
-      @privs.bitmask = privs
+      @privs.mask = privs
     end
   end
 
@@ -964,12 +968,12 @@ class L2Clan
 
   def initialize_privs
     (1...10).each do |i|
-      @privs[i] = RankPrivs.new(i, 0, EnumBitmask(ClanPrivilege).new(false))
+      @privs[i] = RankPrivs.new(i, 0, EnumSet(ClanPrivilege).new(false))
     end
   end
 
-  def get_rank_privs(rank : Int32) : EnumBitmask(ClanPrivilege)
-    @privs[rank]?.try &.privs || EnumBitmask(ClanPrivilege).new(false)
+  def get_rank_privs(rank : Int32) : EnumSet(ClanPrivilege)
+    @privs[rank]?.try &.privs || EnumSet(ClanPrivilege).new(false)
   end
 
   def set_rank_privs(rank : Int32, privs : Int32)
@@ -985,7 +989,7 @@ class L2Clan
       members.each do |cm|
         if cm.online? && cm.power_grade == rank
           if pc_inst = cm.player_instance
-            pc_inst.clan_privileges.bitmask = privs
+            pc_inst.clan_privileges.mask = privs
             pc_inst.send_packet(UserInfo.new(pc_inst))
             pc_inst.send_packet(ExBrExtraUserInfo.new(pc_inst))
           end
@@ -1030,12 +1034,14 @@ class L2Clan
 
   private def set_reputation_score(value : Int32, save : Bool)
     if @reputation_score >= 0 && value < 0
-      broadcast_to_online_members(SystemMessage.reputation_points_0_or_lower_clan_skills_deactivated)
+      sm = SystemMessage.reputation_points_0_or_lower_clan_skills_deactivated
+      broadcast_to_online_members(sm)
       each_online_player do |pc|
         skills_status(pc, true)
       end
     elsif @reputation_score < 0 && value >= 0
-      broadcast_to_online_members(SystemMessage.clan_skills_will_be_activated_since_reputation_is_0_or_higher)
+      sm = SystemMessage.clan_skills_will_be_activated_since_reputation_is_0_or_higher
+      broadcast_to_online_members(sm)
       each_online_player do |pc|
         skills_status(pc, false)
       end

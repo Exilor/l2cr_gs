@@ -4,6 +4,7 @@ require "./task_zone_settings"
 require "../events/event_type"
 
 abstract class L2ZoneType < ListenersContainer
+  include Loggable
   include Packets::Outgoing
 
   @check_affected = false
@@ -196,6 +197,6 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def to_log(io : IO)
-    io.print(self.class, '(', @name, ')')
+    io.print(self.class, '(', @name, ' ', @id, ')')
   end
 end

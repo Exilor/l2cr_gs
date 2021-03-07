@@ -227,6 +227,7 @@ class L2DoorInstance < L2Character
   end
 
   def broadcast_status_update
+    return unless known_list.knows_players?
     known_players = known_list.known_players
     return if known_players.empty?
 

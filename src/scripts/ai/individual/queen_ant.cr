@@ -70,7 +70,7 @@ class Scripts::QueenAnt < AbstractNpcAI
     GrandBossManager.add_boss(npc)
     if Rnd.rand(100) < 33
       @zone.not_nil!.move_players_to(OUST_LOC_1)
-    elsif Rnd.rand(100) < 50
+    elsif Rnd.bool
       @zone.not_nil!.move_players_to(OUST_LOC_2)
     else
       @zone.not_nil!.move_players_to(OUST_LOC_3)
@@ -121,7 +121,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       end
     elsif event.casecmp?("action") && npc
       if Rnd.rand(3) == 0
-        if Rnd.rand(2) == 0
+        if Rnd.bool
           npc.broadcast_social_action(3)
         else
           npc.broadcast_social_action(4)

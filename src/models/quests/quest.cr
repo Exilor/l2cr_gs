@@ -12,7 +12,7 @@ class Quest < AbstractScript
   private RESET_HOUR = 6
   private RESET_MINUTES = 30
 
-  @rw_lock = MyMutex.new # should be a "reentrant read write lock"
+  @rw_lock = Mutex.new(:Reentrant) # should be a "reentrant read write lock"
   @on_enter_world = false
   @quest_item_ids = [] of Int32
   @quest_timers : Concurrent::Map(String, Array(QuestTimer))?
@@ -66,7 +66,7 @@ class Quest < AbstractScript
 
   def get_quest_state!(pc : L2PcInstance, init_if_none : Bool) : QuestState
     unless qs = get_quest_state(pc, init_if_none)
-      raise "QuestState for quest #{name} and player #{pc.name} not found"
+      raise "QuestState for quest #{name} and player #{pc} not found"
     end
 
     qs
@@ -580,7 +580,7 @@ class Quest < AbstractScript
         state_name = rs.get_string(:"value")
 
         unless q = QuestManager.get_quest(id)
-          warn { "Missing quest '#{id}' for player #{pc.name}." }
+          warn { "Missing quest '#{id}' for player #{pc}." }
           if Config.autodelete_invalid_quest_data
             warn { "Deleting invalid quest data for '#{id}'." }
             sql = "DELETE FROM character_quests WHERE charId = ? AND name = ?"
@@ -604,7 +604,7 @@ class Quest < AbstractScript
         value = rs.get_string(:"value")
 
         unless qs = pc.get_quest_state(id)
-          warn { "Missing variable '#{var}' in quest '#{id}' for player #{pc.name}." }
+          warn { "Missing variable '#{var}' in quest '#{id}' for player #{pc}." }
           if Config.autodelete_invalid_quest_data
             warn { "Deleting invalid variable '#{var}' for quest '#{id}'." }
             sql = "DELETE FROM character_quests WHERE charId = ? AND name = ? AND var = ?"

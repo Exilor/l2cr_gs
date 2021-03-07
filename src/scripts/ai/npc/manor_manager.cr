@@ -80,7 +80,7 @@ class Scripts::ManorManager < AbstractNpcAI
     when 9 # Edit sales (Crop sales)
       pc.send_packet(ExShowProcureCropDetail.new(evt.manor_id))
     else
-      warn "Player #{pc.name} (#{pc.l2id}) sent unknown request id #{evt.request}."
+      warn "Player #{pc} (#{pc.l2id}) sent unknown request id #{evt.request}."
     end
   end
 end

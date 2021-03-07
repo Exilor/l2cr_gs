@@ -84,7 +84,7 @@ class Scripts::Q00450_GraveRobberRescue < Quest
         end
         html = "32651-01.html"
       else
-        if Rnd.rand(100) < 50
+        if Rnd.bool
           npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::GRUNT_OH))
         else
           npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::GRUNT_WHATS_WRONG_WITH_ME))

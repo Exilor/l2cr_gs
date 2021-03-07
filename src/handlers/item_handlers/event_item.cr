@@ -50,7 +50,7 @@ module ItemHandler::EventItem
       return true
     end
 
-    warn { "Player #{pc.name} [#{pc.l2id}] is in an unknown block checker arena." }
+    warn { "Player #{pc} [#{pc.l2id}] is in an unknown block checker arena." }
 
     false
   end

@@ -183,7 +183,7 @@ class Packets::Incoming::RequestBypassToServer < GameClientPacket
             handler.use_bypass(@command, pc, nil)
           end
         else
-          warn { "#{pc.name} sent an unhandled server bypass request: '#{@command}'." }
+          warn { "#{pc} sent an unhandled server bypass request: '#{@command}'." }
         end
       end
     rescue e

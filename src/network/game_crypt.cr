@@ -44,7 +44,7 @@ class GameCrypt
     @key.as(Int32*)[2] &+= size
   end
 
-  def self.sample : Bytes
+  def self.random_key : Bytes
     KEYS.sample(random: Rnd)
   end
 end

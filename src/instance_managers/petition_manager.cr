@@ -284,7 +284,7 @@ module PetitionManager
     pending_petitions[new_petition_id] = new_petition
 
     # Notify all GMs that a new petition has been submitted.
-    content = "#{pc.name} has submitted a new petition."
+    content = "#{pc} has submitted a new petition."
     cs = CreatureSay.new(pc.l2id, Say2::HERO_VOICE, "Petition System", content)
     AdminData.broadcast_to_gms(cs)
 

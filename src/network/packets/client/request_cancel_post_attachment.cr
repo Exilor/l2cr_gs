@@ -105,7 +105,7 @@ class Packets::Incoming::RequestCancelPostAttachment < GameClientPacket
 
       new_item = attachments.transfer_item(attachments.name, item.l2id, count, pc.inventory, pc, nil)
       unless new_item
-        warn { "Failed to transfer item to #{pc.name}'s inventory." }
+        warn { "Failed to transfer item to #{pc}'s inventory." }
         return
       end
 

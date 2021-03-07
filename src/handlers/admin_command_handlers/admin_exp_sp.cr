@@ -74,8 +74,8 @@ module AdminCommandHandler::AdminExpSp
       player.add_exp_and_sp(expval, spval)
       player.broadcast_user_info
 
-      pc.send_message("Added #{expval} xp and #{spval} sp to #{player.name}.")
-      debug { "GM: #{pc.name}(#{pc.l2id}) added #{expval} xp and #{spval} sp to #{player.l2id}." }
+      pc.send_message("Added #{expval} xp and #{spval} sp to #{player}.")
+      debug { "GM: #{pc}(#{pc.l2id}) added #{expval} xp and #{spval} sp to #{player.l2id}." }
     end
 
     true
@@ -112,8 +112,8 @@ module AdminCommandHandler::AdminExpSp
       player.remove_exp_and_sp(expval, spval)
       player.broadcast_user_info
       # Admin information
-      pc.send_message("Removed #{expval} xp and #{spval} sp from #{player.name}.")
-      debug { "GM: #{pc.name}(#{pc.l2id}) removed #{expval} xp and #{spval} sp from #{player.l2id}." }
+      pc.send_message("Removed #{expval} xp and #{spval} sp from #{player}.")
+      debug { "GM: #{pc}(#{pc.l2id}) removed #{expval} xp and #{spval} sp from #{player.l2id}." }
     end
 
     true

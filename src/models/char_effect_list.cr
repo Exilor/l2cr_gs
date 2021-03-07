@@ -676,6 +676,6 @@ class CharEffectList
   end
 
   def to_log(io : IO)
-    io.print("CharEffectList(", @owner.name, ')')
+    io.print("CharEffectList(", @owner, ')')
   end
 end

@@ -13,7 +13,6 @@ abstract struct L2ZoneForm
     item = L2ItemInstance.new(IdFactory.next, item_id)
     item.count = num.to_i64
     item.spawn_me(x, y, z + 5)
-    # debug "Spawning #{item} at #{item.location}"
     ZoneManager.debug_items << item
   end
 end

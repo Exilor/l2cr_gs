@@ -140,10 +140,8 @@ module L2World
     radius *= radius
     object.world_region.try &.sorrounding_regions.each do |regi|
       regi.objects.each_value do |obj|
-        if obj != object
-          if radius > object.calculate_distance(obj, false, true)
-            yield obj
-          end
+        if obj != object && radius > object.calculate_distance(obj, false, true)
+          yield obj
         end
       end
     end

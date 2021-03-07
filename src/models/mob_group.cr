@@ -47,8 +47,8 @@ class MobGroup
       max_mob_count.times do
         sp = L2GroupSpawn.new(template)
 
-        sx = Rnd.rand(2) == 0 ? -1 : 1
-        sy = Rnd.rand(2) == 0 ? -1 : 1
+        sx = Rnd.bool ? -1 : 1
+        sy = Rnd.bool ? -1 : 1
         rx = Rnd.rand(MobGroupTable::RANDOM_RANGE)
         ry = Rnd.rand(MobGroupTable::RANDOM_RANGE)
 
@@ -142,19 +142,15 @@ class MobGroup
 
   def set_idle_mode
     remove_dead
-
-    mobs.each do |mob_inst|
-      ai = mob_inst.ai.as(L2ControllableMobAI)
-      ai.stop
-    end
+    mobs.each { |inst| inst.ai.as(L2ControllableMobAI).stop }
   end
 
   def return_group(pc : L2Character)
     set_idle_mode
 
     mobs.each do |mob_inst|
-      sx = Rnd.rand(2) == 0 ? -1 : 1
-      sy = Rnd.rand(2) == 0 ? -1 : 1
+      sx = Rnd.bool ? -1 : 1
+      sy = Rnd.bool ? -1 : 1
       rx = Rnd.rand(MobGroupTable::RANDOM_RANGE)
       ry = Rnd.rand(MobGroupTable::RANDOM_RANGE)
 

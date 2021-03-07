@@ -307,7 +307,7 @@ class Scripts::Q00620_FourGoblets < Quest
       return ""
     when "31919-02.html"
       if has_quest_items?(pc, SEALED_BOX)
-        if Rnd.rand(100) < 50
+        if Rnd.bool
           i2 = get_reward(pc)
           html = i2 ? event : "31919-03.html"
         else

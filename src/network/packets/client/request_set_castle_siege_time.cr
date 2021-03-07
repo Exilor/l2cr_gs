@@ -26,10 +26,10 @@ class Packets::Incoming::RequestSetCastleSiegeTime < GameClientPacket
         Broadcast.to_all_online_players(sm)
         pc.send_packet(SiegeInfo.new(castle))
       else
-        warn { "#{pc.name} tried to set an invalid castle siege time (#{Time.from_ms(@time)})." }
+        warn { "#{pc} tried to set an invalid castle siege time (#{Time.from_ms(@time)})." }
       end
     else
-      warn { "Error while #{pc.name} tried to change the date for castle #{castle.name}." }
+      warn { "Error while #{pc} tried to change the date for castle #{castle.name}." }
     end
   end
 

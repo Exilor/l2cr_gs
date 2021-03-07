@@ -6,7 +6,7 @@ class Packets::Outgoing::ManagePledgePower < GameServerPacket
       c 0x2a
 
       q 0
-      d @clan.get_rank_privs(@rank).bitmask
+      d @clan.get_rank_privs(@rank).mask
     end
   end
 end

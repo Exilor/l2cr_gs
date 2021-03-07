@@ -26,7 +26,7 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
 
     unless AdminData.has_access?(command, pc.access_level)
       pc.send_message("You don't have the access right to use this command")
-      warn { "#{pc.name} tried to use admin command '#{command}' without the proper access level." }
+      warn { "#{pc} tried to use admin command '#{command}' without the proper access level." }
       return
     end
 

@@ -3,7 +3,7 @@ require "./l2_playable_ai"
 class L2PlayerAI < L2PlayableAI
   @thinking = false
 
-  getter next_intention : IntentionCommand?
+  getter next_intention
 
   def save_next_intention(intention : Intention, arg0 : IntentionArgType = nil, arg1 : IntentionArgType = nil)
     @next_intention = IntentionCommand.new(intention, arg0, arg1)

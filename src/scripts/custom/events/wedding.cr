@@ -89,7 +89,7 @@ class Scripts::Wedding < AbstractNpcAI
           partner.do_cast(skill)
         end
 
-        Broadcast.to_all_online_players("Congratulations to #{player.name} and #{partner.name}! They have been married.")
+        Broadcast.to_all_online_players("Congratulations to #{player} and #{partner.name}! They have been married.")
 
         html = send_html(partner, "Accepted.html", nil, nil)
       end

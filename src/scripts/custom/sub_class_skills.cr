@@ -58,7 +58,7 @@ class Scripts::SubClassSkills < Quest
       cert_skills.each do |s|
         Util.handle_illegal_player_action(
           pc,
-          "Player #{pc.name} has cert skill on subclass :#{s.name}(#{s.id}/#{s.level}), class: #{ClassListData.get_class(pc.class_id).class_name}",
+          "Player #{pc} has cert skill on subclass :#{s.name}(#{s.id}/#{s.level}), class: #{ClassListData.get_class(pc.class_id).class_name}",
           IllegalActionPunishmentType::NONE
         )
 
@@ -159,9 +159,9 @@ class Scripts::SubClassSkills < Quest
         skill = cert_skills[i]
         if c_skills[i][1] > 0
           if c_skills[i][1] == skill.level
-            Util.handle_illegal_player_action(pc, "Player #{pc.name} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level})", IllegalActionPunishmentType::NONE)
+            Util.handle_illegal_player_action(pc, "Player #{pc} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level})", IllegalActionPunishmentType::NONE)
           else
-            Util.handle_illegal_player_action(pc, "Player #{pc.name} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level}), level too high", IllegalActionPunishmentType::NONE)
+            Util.handle_illegal_player_action(pc, "Player #{pc} has invalid cert skill :#{skill.name}(#{skill.id}/#{skill.level}), level too high", IllegalActionPunishmentType::NONE)
           end
 
           if Config.skill_check_remove

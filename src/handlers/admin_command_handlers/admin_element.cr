@@ -83,9 +83,9 @@ module AdminCommandHandler::AdminElement
       iu = InventoryUpdate.modified(item_instance)
       player.send_packet(iu)
 
-      pc.send_message("Changed the elemental power of #{player.name}'s #{item_instance.template.name} from #{old} to #{current}.")
+      pc.send_message("Changed the elemental power of #{player}'s #{item_instance.template.name} from #{old} to #{current}.")
       if player != pc
-        player.send_message("#{pc.name} has changed the elemental power of your #{item_instance.template.name} from #{old} to #{current}.")
+        player.send_message("#{pc} has changed the elemental power of your #{item_instance.template.name} from #{old} to #{current}.")
       end
     end
   end

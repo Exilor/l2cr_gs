@@ -144,7 +144,7 @@ class L2AttackableAI < L2CharacterAI
       if intention.idle? || intention.active?
         npc = active_char
         unless npc.looks_dead?
-          if !npc.known_list.known_players.empty?
+          if npc.known_list.knows_players?
             intention = ACTIVE
           else
             if npc.spawn?

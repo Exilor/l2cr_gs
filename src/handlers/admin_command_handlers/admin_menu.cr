@@ -31,7 +31,7 @@ module AdminCommandHandler::AdminMenu
           return true
         end
         unless party = player.party
-          pc.send_message("#{player.name} is not in a party.")
+          pc.send_message("#{player} is not in a party.")
           teleport_character(player, pc.location, pc, "A GM teleported you.")
           return true
         end
@@ -49,7 +49,7 @@ module AdminCommandHandler::AdminMenu
           return true
         end
         unless clan = player.clan
-          pc.send_message("#{player.name} is not in a clan.")
+          pc.send_message("#{player} is not in a clan.")
           teleport_character(player, pc.location, pc, "A GM teleported you.")
           return true
         end
@@ -91,7 +91,7 @@ module AdminCommandHandler::AdminMenu
         sub_cmd = "admin_ban_char"
         unless AdminData.has_access?(sub_cmd, pc.access_level)
           pc.send_message("You are not allowed to use this command.")
-          warn { "Player #{pc.name} tried to use admin command #{sub_cmd}, but has no access to it." }
+          warn { "Player #{pc} tried to use admin command #{sub_cmd}, but has no access to it." }
           return false
         end
         ach = AdminCommandHandler[sub_cmd].not_nil!
@@ -104,7 +104,7 @@ module AdminCommandHandler::AdminMenu
         sub_cmd = "admin_unban_char"
         unless AdminData.has_access?(sub_cmd, pc.access_level)
           pc.send_message("You are not allowed to use this command.")
-          warn { "Player #{pc.name} tried to use admin command #{sub_cmd}, but has no access to it." }
+          warn { "Player #{pc} tried to use admin command #{sub_cmd}, but has no access to it." }
           return false
         end
         ach = AdminCommandHandler[sub_cmd].not_nil!

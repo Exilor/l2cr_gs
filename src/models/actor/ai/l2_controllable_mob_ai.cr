@@ -23,8 +23,8 @@ class L2ControllableMobAI < L2AttackableAI
     me = @actor.as(L2Attackable)
 
     unless Util.in_range?(MobGroupTable::FOLLOW_RANGE, me, forced_target, true)
-      sx = Rnd.rand(2) == 0 ? -1 : 1
-      sy = Rnd.rand(2) == 0 ? -1 : 1
+      sx = Rnd.bool ? -1 : 1
+      sy = Rnd.bool ? -1 : 1
       rx = Rnd.rand(MobGroupTable::FOLLOW_RANGE)
       ry = Rnd.rand(MobGroupTable::FOLLOW_RANGE)
 

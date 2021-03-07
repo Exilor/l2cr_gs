@@ -1,6 +1,6 @@
 require "../../../models/ui_keys_settings"
 
-class Packets::Outgoing::ExUConcurrent::Setting < GameServerPacket
+class Packets::Outgoing::ExUISetting < GameServerPacket
   @buff_size = 0
   @categories = 0
   @ui_settings : UIKeysSettings

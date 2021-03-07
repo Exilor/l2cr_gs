@@ -71,7 +71,7 @@ class L2WorldRegion
     return if bool == @active
     @active = bool
     switch_ai(bool)
-    # debug bool ? 'Starting grid.' : 'Stopping grid.'
+    debug { bool ? "Starting grid." : "Stopping grid." }
   end
 
   private def start_activation
@@ -101,23 +101,23 @@ class L2WorldRegion
   end
 
   private def switch_ai(val : Bool)
-    # c = 0
+    c = 0
 
     if val
       @objects.each_value do |o|
         if o.is_a?(L2Attackable)
-          # c &+= 1
+          c &+= 1
           o.status.start_hp_mp_regeneration
         elsif o.is_a?(L2Npc)
           o.start_random_animation_timer
         end
       end
 
-      # debug "#{c} mobs were turned on."
+      debug { "#{c} mobs were turned on." }
     else
       @objects.each_value do |o|
         if o.is_a?(L2Attackable)
-          # c &+= 1
+          c &+= 1
           o.target = nil
           o.stop_move(nil)
           o.stop_all_effects
@@ -130,12 +130,12 @@ class L2WorldRegion
             o.ai.stop_ai_task
           end
         elsif o.vehicle?
-          # c &+= 1
+          c &+= 1
           o.known_list.remove_all_known_objects
         end
       end
 
-      # debug "#{c} mobs were turned off."
+      debug { "#{c} mobs were turned off." }
     end
   end
 
@@ -189,7 +189,7 @@ class L2WorldRegion
           sp.stop_respawn
           SpawnTable.delete_spawn(sp, false)
         end
-        # debug "Removed #{obj}."
+        debug { "Removed #{obj}." }
       end
     end
 
@@ -213,7 +213,7 @@ class L2WorldRegion
 
     def call
       if @activate
-        @region.sorrounding_regions.each &.active = true
+        @region.sorrounding_regions.each { |reg| active = true }
       else
         if @region.neighbors_empty?
           @region.active = false

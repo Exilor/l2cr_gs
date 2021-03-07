@@ -176,7 +176,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
     world.status = 0
     dungeon.reenter_time = Time.ms + REENTERTIME
     InstanceManager.add_world(world)
-    info { "Fortress AwlUnderFoot started #{template} Instance: #{instance_id} created by player: #{pc.name}." }
+    info { "Fortress AwlUnderFoot started #{template} Instance: #{instance_id} created by player: #{pc}." }
     ThreadPoolManager.schedule_general(SpawnRaid.new(self, world.as(FAUWorld)), RAID_SPAWN_DELAY)
 
     # teleport pcs

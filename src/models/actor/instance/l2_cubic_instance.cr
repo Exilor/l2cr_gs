@@ -471,6 +471,6 @@ class L2CubicInstance
     else "Smart Cubic ST"
     end
 
-    io.print(@owner.name, "'s ", name)
+    io.print(@owner, "'s ", name)
   end
 end

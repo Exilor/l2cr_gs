@@ -468,7 +468,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
             INDEX_COUNT[(spore_group - 1).abs] &+= 1
           end
 
-          if INDEX_COUNT[spore_group].abs < ELEMENT_INDEX_LIMIT && INDEX_COUNT[spore_group].abs > 0 && INDEX_COUNT[spore_group] % 20 == 0 && Rnd.rand(100) < 50
+          if INDEX_COUNT[spore_group].abs < ELEMENT_INDEX_LIMIT && INDEX_COUNT[spore_group].abs > 0 && INDEX_COUNT[spore_group] % 20 == 0 && Rnd.bool
             el = ELEMENTS_NAME[ELEMENTS.bsearch_index_of(npc_id) || 0]
             SPORE_SPAWNS.each do |spore|
               if spore && spore.alive? && spore.id == npc_id

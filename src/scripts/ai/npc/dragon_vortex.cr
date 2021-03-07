@@ -65,7 +65,7 @@ class Scripts::DragonVortex < AbstractNpcAI
           when 108924
             loc = SPOT_4
           else
-            raise "Couldn't get location from #{npc.name}'s x coordinate (#{npc.x})"
+            raise "Couldn't get location from #{npc}'s x coordinate (#{npc.x})"
           end
 
           npc.variables[I_QUEST0] = true

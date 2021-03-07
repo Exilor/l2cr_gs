@@ -156,7 +156,7 @@ class Scripts::Q00228_TestOfMagus < Quest
         end
       when WYRM
         if has_quest_items?(killer, SCORE_OF_ELEMENTS, SYLPH_CHARM) && get_quest_items_count(killer, WYRMS_WINGBONE) < 10
-          if Rnd.rand(100) < 50
+          if Rnd.bool
             give_items(killer, WYRMS_WINGBONE, 1)
             if get_quest_items_count(killer, WYRMS_WINGBONE) >= 10
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -167,7 +167,7 @@ class Scripts::Q00228_TestOfMagus < Quest
         end
       when WINDSUS
         if has_quest_items?(killer, SCORE_OF_ELEMENTS, SYLPH_CHARM) && get_quest_items_count(killer, WINDSUS_MANE) < 10
-          if Rnd.rand(100) < 50
+          if Rnd.bool
             give_items(killer, WINDSUS_MANE, 1)
             if get_quest_items_count(killer, WINDSUS_MANE) >= 10
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -232,7 +232,7 @@ class Scripts::Q00228_TestOfMagus < Quest
         end
       when GHOST_FIRE
         if has_quest_items?(killer, SCORE_OF_ELEMENTS, SALAMANDER_CHARM) && get_quest_items_count(killer, FLAME_CRYSTAL) < 5
-          if Rnd.rand(100) < 50
+          if Rnd.bool
             give_items(killer, FLAME_CRYSTAL, 1)
             if get_quest_items_count(killer, FLAME_CRYSTAL) >= 5
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)

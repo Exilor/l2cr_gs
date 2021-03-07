@@ -63,7 +63,7 @@ class L2SiegeGuardAI < L2CharacterAI
         unless @actor.looks_dead?
           npc = @actor.as(L2Attackable)
 
-          if npc.known_list.known_players.empty?
+          if !npc.known_list.knows_players?
             intention = IDLE
           else
             intention = ACTIVE

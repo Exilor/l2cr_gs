@@ -43,7 +43,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     if pc.transformed?
       unless ExBasicActionList::ACTIONS_ON_TRANSFORM.bincludes?(@id)
         action_failed
-        debug { "#{pc.name} requested action #{@id} which he shouldn't have access to in his transformation." }
+        debug { "#{pc} requested action #{@id} which he shouldn't have access to in his transformation." }
         return
       end
     end
@@ -472,7 +472,7 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     when 66 # Shyness
       try_broadcast_social(15)
     else
-      warn { "#{pc.name} requested an unhandled action type: #{@id}." }
+      warn { "#{pc} requested an unhandled action type: #{@id}." }
     end
   end
 
@@ -782,12 +782,12 @@ class Packets::Incoming::RequestActionUse < GameClientPacket
     end
 
     unless holder = summon.template.get_skill_holder(skill_name)
-      warn { "#{pc.name} requested missing pet skill '#{skill_name}'." }
+      warn { "#{pc} requested missing pet skill '#{skill_name}'." }
       return
     end
 
     # unless skill = holder.skill?
-    #   warn { "#{pc.name} requested missing pet skill #{holder}." }
+    #   warn { "#{pc} requested missing pet skill #{holder}." }
     #   return
     # end
 

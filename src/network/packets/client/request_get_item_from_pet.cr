@@ -28,7 +28,7 @@ class Packets::Incoming::RequestGetItemFromPet < GameClientPacket
     end
 
     unless item = pet.inventory.get_item_by_l2id(@l2id)
-      debug { "Item with l2id #{@l2id} not found in #{pc.name}'s pet." }
+      debug { "Item with l2id #{@l2id} not found in #{pc}'s pet." }
       return
     end
 
@@ -38,7 +38,7 @@ class Packets::Incoming::RequestGetItemFromPet < GameClientPacket
     end
 
     unless pet.transfer_item("Transfer", @l2id, @amount, pc.inventory, pc, pet)
-      warn { "Invalid item transfer request from #{pet} to #{pc.name}." }
+      warn { "Invalid item transfer request from #{pet} to #{pc}." }
     end
 
     pc.send_packet(ItemList.new(pc, false)) # custom

@@ -119,7 +119,7 @@ class L2OlympiadStadiumZone < L2ZoneRespawn
   end
 
   def parse_loc(x, y, z, type)
-    if type && type == "spectatorSpawn"
+    if type == "spectatorSpawn"
       @spectator_spawns << Location.new(x, y, z)
     else
       super

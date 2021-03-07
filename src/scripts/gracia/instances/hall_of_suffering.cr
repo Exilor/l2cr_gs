@@ -2,7 +2,7 @@ require "../../instances/abstract_instance"
 
 class Scripts::HallOfSuffering < AbstractInstance
   private class HOSWorld < InstanceWorld
-    property npc_list = {} of L2Npc => Bool
+    getter npc_list = {} of L2Npc => Bool
     property start_time = 0i64
     property party_leader_name = ""
     property reward_item_id = -1
@@ -296,7 +296,7 @@ class Scripts::HallOfSuffering < AbstractInstance
 
   private def get_party_leader_text(pc, world)
     html = HtmCache.get_htm(pc, "/data/scripts/gracia/instances/SeedOfInfinity/HallOfSuffering/32530-10.htm")
-    html.not_nil!.gsub("%ptLeader%", world.party_leader_name.to_s)
+    html.not_nil!.gsub("%ptLeader%", world.party_leader_name)
   end
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
@@ -426,7 +426,7 @@ class Scripts::HallOfSuffering < AbstractInstance
     if npc.id == TEPIOS
       world = InstanceManager.get_player_world(pc)
       if world.as(HOSWorld).reward_item_id == -1
-        warn { "Hall of Suffering: #{pc.name}(#{pc.l2id}) is try to cheat!" }
+        warn { "Hall of Suffering: #{pc}(#{pc.l2id}) is try to cheat!" }
         return get_party_leader_text(pc, world.as(HOSWorld))
       elsif world.as(HOSWorld).rewarded?
         return "32530-11.htm"

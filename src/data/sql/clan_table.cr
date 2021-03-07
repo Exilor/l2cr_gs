@@ -40,7 +40,7 @@ module ClanTable
   def create_clan(pc : L2PcInstance, clan_name : String) : L2Clan?
     return unless pc
 
-    debug { "#{pc.name} (#{pc.l2id}) requested a clan creation." }
+    debug { "#{pc} (#{pc.l2id}) requested a clan creation." }
 
     if pc.level < 10
       pc.send_packet(SystemMessageId::YOU_DO_NOT_MEET_CRITERIA_IN_ORDER_TO_CREATE_A_CLAN)
@@ -81,7 +81,7 @@ module ClanTable
     clan.store
     pc.clan = clan
     pc.pledge_class = L2ClanMember.calculate_pledge_class(pc)
-    pc.clan_privileges = EnumBitmask(ClanPrivilege).new(true)
+    pc.clan_privileges = EnumSet(ClanPrivilege).new(true)
 
     CLANS[clan.id] = clan
 

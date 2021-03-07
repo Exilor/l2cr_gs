@@ -19,7 +19,7 @@ module AdminCommandHandler::AdminAnnouncements
         Broadcast.to_all_online_players_on_screen(announce)
       else
         if Config.gm_announcer_name
-          announce = "#{announce} [#{pc.name}]"
+          announce = "#{announce} [#{pc}]"
         end
         Broadcast.to_all_online_players(announce, cmd == "admin_announce_crit")
       end

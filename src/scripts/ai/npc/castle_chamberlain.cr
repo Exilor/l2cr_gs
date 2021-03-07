@@ -859,7 +859,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         end
         pc.send_packet(ExShowCropSetting.new(castle_id))
       else
-        warn { "pc #{pc.name} (#{pc.l2id}) sent unknown request id #{evt.request}." }
+        warn { "pc #{pc} (#{pc.l2id}) sent unknown request id #{evt.request}." }
       end
     end
   end

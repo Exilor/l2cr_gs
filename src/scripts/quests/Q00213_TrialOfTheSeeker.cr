@@ -201,7 +201,7 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
         end
       when NEER_GHOUL_BERSERKER
         if has_quest_items?(killer, TERRYS_1ST_ORDER) && !has_quest_items?(killer, MYSTERIOUS_SPIRIT_ORE)
-          if Rnd.rand(100) < 50
+          if Rnd.bool
             give_items(killer, MYSTERIOUS_SPIRIT_ORE, 1)
             qs.set_cond(3, true)
           end

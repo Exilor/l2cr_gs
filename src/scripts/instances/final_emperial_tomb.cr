@@ -2,7 +2,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
   include XMLReader
 
   private class FETWorld < InstanceWorld
-    getter lock = MyMutex.new
+    getter lock = Mutex.new(:Reentrant)
     getter demons = Concurrent::Array(L2MonsterInstance).new
     getter portraits = Concurrent::Map(L2MonsterInstance, Int32).new
     getter npc_list = Concurrent::Array(L2Npc).new
@@ -85,7 +85,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
   private TEMPLATE_ID = 136 # this is the client number
   private MIN_PLAYERS = 18
   private MAX_PLAYERS = 45
-  private TIME_BETWEEN_DEMON_SPAWNS = 20000
+  private TIME_BETWEEN_DEMON_SPAWNS = 20_000
   private MAX_DEMONS = 24
   private SPAWN_ZONE_LIST = {} of Int32 => L2Territory
   private SPAWN_LIST = {} of Int32 => Array(FETSpawn)
@@ -348,7 +348,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         SECOND_ROUTE_DOORS.each do |door_id|
           open_door(door_id, world.instance_id)
         end
-        ThreadPoolManager.schedule_general(IntroTask.new(self, world, 0), 600000)
+        ThreadPoolManager.schedule_general(IntroTask.new(self, world, 0), 600_000)
       when 3 # first morph
         if task = world.song_effect_task
           task.cancel
@@ -386,7 +386,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         world.song_effect_task = nil
         ThreadPoolManager.schedule_general(IntroTask.new(self, world, 33), 500)
       when 6 # open doors
-        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300000
+        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300_000
         FIRST_ROOM_DOORS.each do |door_id|
           open_door(door_id, world.instance_id)
         end
@@ -476,7 +476,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
                 @world.on_song = element
                 @tomb.broadcast_packet(@world, ExShowScreenMessage.new(2, -1, 2, 0, 0, 0, 0, true, 4000, false, nil, element.song_name))
                 @tomb.broadcast_packet(@world, MagicSkillUse.new(@world.frintezza, @world.frintezza, element.skill.skill_id, element.skill.skill_lvl, element.skill.skill.hit_time, 0))
-                @world.song_effect_task = ThreadPoolManager.schedule_general(SongTask.new(@tomb, @world, 1), element.skill.skill.hit_time &- 10000)
+                @world.song_effect_task = ThreadPoolManager.schedule_general(SongTask.new(@tomb, @world, 1), element.skill.skill.hit_time &- 10_000)
                 @world.song_task = ThreadPoolManager.schedule_general(SongTask.new(@tomb, @world, 0), element.skill.skill.hit_time)
                 break
               end
@@ -525,8 +525,8 @@ class Scripts::FinalEmperialTomb < AbstractInstance
     def call
       case @status
       when 0
-        ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 1), 27000)
-        ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 2), 30000)
+        ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 1), 27_000)
+        ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 2), 30_000)
         @tomb.broadcast_packet(@world, Earthquake.new(-87784, -155083, -9087, 45, 27))
       when 1
         FIRST_ROOM_DOORS.each do |door_id|
@@ -611,11 +611,11 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @tomb.broadcast_packet(@world, SocialAction.new(@world.demons[0].l2id, 1))
         @tomb.broadcast_packet(@world, SocialAction.new(@world.demons[3].l2id, 1))
         send_packet_x(SpecialCamera.new(@world.portrait_dummy1, 1000, 118, 0, 0, 1000, 0, 0, 1, 0, 0), SpecialCamera.new(@world.portrait_dummy3, 1000, 62, 0, 0, 1000, 0, 0, 1, 0, 0), -87784)
-        send_packet_x(SpecialCamera.new(@world.portrait_dummy1, 1000, 118, 0, 0, 10000, 0, 0, 1, 0, 0), SpecialCamera.new(@world.portrait_dummy3, 1000, 62, 0, 0, 10000, 0, 0, 1, 0, 0), -87784)
+        send_packet_x(SpecialCamera.new(@world.portrait_dummy1, 1000, 118, 0, 0, 10_000, 0, 0, 1, 0, 0), SpecialCamera.new(@world.portrait_dummy3, 1000, 62, 0, 0, 10_000, 0, 0, 1, 0, 0), -87784)
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 11), 2000)
       when 11
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 240, 90, 0, 0, 1000, 0, 0, 1, 0, 0))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 240, 90, 25, 5500, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 240, 90, 25, 5500, 10_000, 0, 0, 1, 0, 0))
         @tomb.broadcast_packet(@world, SocialAction.new(@world.frintezza.l2id, 3))
         @world.portrait_dummy1.delete_me
         @world.portrait_dummy3.delete_me
@@ -623,25 +623,25 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.portrait_dummy3 = nil
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 12), 4500)
       when 12
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 100, 195, 35, 0, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 100, 195, 35, 0, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 13), 700)
       when 13
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 100, 195, 35, 0, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 100, 195, 35, 0, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 14), 1300)
       when 14
         @tomb.broadcast_packet(@world, ExShowScreenMessage.new(NpcString::MOURNFUL_CHORALE_PRELUDE, 2, 5000))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 120, 180, 45, 1500, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 120, 180, 45, 1500, 10_000, 0, 0, 1, 0, 0))
         @tomb.broadcast_packet(@world, MagicSkillUse.new(@world.frintezza, @world.frintezza, 5006, 1, 34000, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 15), 1500)
       when 15
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 520, 135, 45, 8000, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 520, 135, 45, 8000, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 16), 7500)
       when 16
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 1500, 110, 25, 10000, 13000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 1500, 110, 25, 10_000, 13000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 17), 9500)
       when 17
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.overhead_dummy, 930, 160, -20, 0, 1000, 0, 0, 1, 0, 0))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.overhead_dummy, 600, 180, -25, 0, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.overhead_dummy, 600, 180, -25, 0, 10_000, 0, 0, 1, 0, 0))
         @tomb.broadcast_packet(@world, MagicSkillUse.new(@world.scarlet_dummy, @world.overhead_dummy, 5004, 1, 5800, 0))
 
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 18), 5000)
@@ -653,10 +653,10 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.active_scarlet.disable_all_skills
         @tomb.update_known_list(@world, @world.active_scarlet)
         @tomb.broadcast_packet(@world, SocialAction.new(@world.active_scarlet.l2id, 3))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.scarlet_dummy, 800, 180, 10, 1000, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.scarlet_dummy, 800, 180, 10, 1000, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 19), 2100)
       when 19
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 300, 60, 8, 0, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 300, 60, 8, 0, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 20), 2000)
       when 20
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 500, 90, 10, 3000, 5000, 0, 0, 1, 0, 0))
@@ -696,7 +696,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       when 24
         stop_pc
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 250, 120, 15, 0, 1000, 0, 0, 1, 0, 0))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 250, 120, 15, 0, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 250, 120, 15, 0, 10_000, 0, 0, 1, 0, 0))
         @world.active_scarlet.abort_attack
         @world.active_scarlet.abort_cast
         @world.active_scarlet.invul = true
@@ -705,10 +705,10 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 25), 7000)
       when 25
         @tomb.broadcast_packet(@world, MagicSkillUse.new(@world.frintezza, @world.frintezza, 5006, 1, 34000, 0))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 500, 70, 15, 3000, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 500, 70, 15, 3000, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 26), 3000)
       when 26
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 2500, 90, 12, 6000, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 2500, 90, 12, 6000, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 27), 3000)
       when 27
         @world.scarlet_x = @world.active_scarlet.x
@@ -721,7 +721,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
           @world.scarlet_a = (540 &- (@world.scarlet_h / 182.044444444).to_i).abs
         end
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 250, @world.scarlet_a, 12, 0, 1000, 0, 0, 1, 0, 0))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 250, @world.scarlet_a, 12, 0, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 250, @world.scarlet_a, 12, 0, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 28), 500)
       when 28
         @world.active_scarlet.do_die(@world.active_scarlet)
@@ -752,7 +752,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.video = false
       when 33
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 300, @world.scarlet_a &- 180, 5, 0, 7000, 0, 0, 1, 0, 0))
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 200, @world.scarlet_a, 85, 4000, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.active_scarlet, 200, @world.scarlet_a, 85, 4000, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 34), 7400)
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 35), 7500)
       when 34
@@ -762,7 +762,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 100, 90, 5, 5000, 15000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 36), 7000)
       when 36
-        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 900, 90, 25, 7000, 10000, 0, 0, 1, 0, 0))
+        @tomb.broadcast_packet(@world, SpecialCamera.new(@world.frintezza, 900, 90, 25, 7000, 10_000, 0, 0, 1, 0, 0))
         ThreadPoolManager.schedule_general(IntroTask.new(@tomb, @world, 37), 9000)
       when 37
         @tomb.control_status(@world)

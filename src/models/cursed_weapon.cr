@@ -264,7 +264,7 @@ class CursedWeapon
       drop_it(attackable, pc)
       @end_time = Time.ms + (@duration.to_i64 * 60_000)
       @remove_task = start_remove_task(@duration_lost.to_i64 * 12_000, @duration_lost.to_i64 * 12_000)
-      info { @name + " has dropped from #{attackable} killed by #{pc.name}." }
+      info { @name + " has dropped from #{attackable} killed by #{pc}." }
       return true
     end
 

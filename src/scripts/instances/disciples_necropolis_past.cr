@@ -179,7 +179,6 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
                   pc.send_packet(NpcSay.new(caster.l2id, Say2::TELL, caster.id, NpcString::DEAR_S1_GIVE_ME_MORE_STRENGTH).add_string_parameter(pc.name))
                 end
               end
-
             end
           end
         end
@@ -200,7 +199,6 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
           break
         end
       end
-
     end
 
     super
@@ -230,7 +228,6 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
       end
     end
 
-
     super
   end
 
@@ -245,7 +242,7 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
           cancel_quest_timer("FIGHT", npc, pc)
         end
       end
-      if Rnd.rand(100) < 50
+      if Rnd.bool
         npc.do_cast(SEAL_ISOLATION)
       end
     end
@@ -271,7 +268,6 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
     when LILIM_SLAYER
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::FOR_SHILEN))
     end
-
 
     super
   end

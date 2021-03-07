@@ -42,7 +42,7 @@ class Packets::Incoming::Logout < GameClientPacket
       end
 
       if party = pc.party
-        msg = "#{pc.name} has been removed from the upcoming Festival."
+        msg = "#{pc} has been removed from the upcoming Festival."
         sm = SystemMessage.from_string(msg)
         party.broadcast_packet(sm)
       end

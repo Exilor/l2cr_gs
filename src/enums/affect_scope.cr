@@ -179,9 +179,26 @@ class AffectScope < EnumClass
   })
 
   add(RANGE_SORT_BY_HP, AffectProc.new { |caster, target, skill|
-    if targets = RANGE.get_affected_targets(caster, target, skill)
-      targets.sort_by! &.as(L2Character).hp_percent
+    # if targets = RANGE.get_affected_targets(caster, target, skill)
+    #   targets.sort_by! &.as(L2Character).hp_percent
+    # end
+
+    ret = [] of L2Character
+    L2World.get_visible_objects(target, skill.affect_range) do |obj|
+      if obj.is_a?(L2Character)
+        if obj.alive? && skill.bad? == obj.auto_attackable?(caster)
+          ret << obj
+        end
+      end
     end
+    ret << caster unless skill.bad?
+    ret << target if skill.bad? == target.auto_attackable?(caster)
+    ret.sort! { |a, b| a.hp_percent <=> b.hp_percent }
+    if skill.affect_limit > 0
+      ret = ret.first(skill.affect_limit)
+    end
+
+    ret.unsafe_as(Array(L2Object))
   })
 
   add(RING_RANGE, AffectProc.new { |caster, target, skill|

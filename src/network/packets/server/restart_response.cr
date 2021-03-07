@@ -1,11 +1,11 @@
 class Packets::Outgoing::RestartResponse < GameServerPacket
-  private initializer response : Bool
+  private initializer response : UInt8
 
   private def write_impl
     c 0x71
-    d @response ? 1 : 0
+    d @response
   end
 
-  NO  = new(false)
-  YES = new(true)
+  NO  = new(0)
+  YES = new(1)
 end

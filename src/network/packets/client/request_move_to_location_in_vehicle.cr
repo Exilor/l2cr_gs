@@ -24,7 +24,7 @@ class Packets::Incoming::RequestMoveToLocationInVehicle < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    # debug "#{pc.name} is at #{[pc.x, pc.y, pc.z]} and wants to move to move from #{[@origin_x, @origin_y, @origin_z]} to #{[@target_x, @target_y, @target_z]}."
+    # debug "#{pc} is at #{[pc.x, pc.y, pc.z]} and wants to move to move from #{[@origin_x, @origin_y, @origin_z]} to #{[@target_x, @target_y, @target_z]}."
 
     if Config.player_movement_block_time && !pc.gm?
       if pc.not_move_until > Time.ms

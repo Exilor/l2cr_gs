@@ -66,7 +66,7 @@ class Petition
       # Allows petitioners to see the results of their petition when
       # they log back into the game.
 
-      # end_petition_consultation(PetitionState::Petitioner_Missing)
+      # end_petition_consultation(PetitionState::PETITIONER_MISSING)
       return
     end
 

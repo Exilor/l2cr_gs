@@ -17,7 +17,7 @@ class Packets::Incoming::RequestQuestAbort < GameClientPacket
       qs.exit_quest(true)
       send_packet(QuestList.new)
     else
-      warn { "No QuestState for quest #{q.name} and player #{pc.name}." }
+      warn { "No QuestState for quest #{q.name} and player #{pc}." }
     end
   end
 end

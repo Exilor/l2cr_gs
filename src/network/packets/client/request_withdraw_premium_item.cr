@@ -1,4 +1,4 @@
-class Packets::Incoming::RequestWithDrawPremiumItem < GameClientPacket
+class Packets::Incoming::RequestWithdrawPremiumItem < GameClientPacket
   @item_num = 0
   @char_id = 0
   @item_count = 0i64

@@ -165,7 +165,7 @@ module AdminCommandHandler::AdminEffects
       pc.broadcast_packet(ExBrExtraUserInfo.new(pc))
     elsif command == "admin_clearteams"
       begin
-        pc.known_list.known_players.each_value do |pl|
+        pc.known_list.each_player do |pl|
           pl.team = Team::NONE
           pl.broadcast_user_info
         end
@@ -207,7 +207,7 @@ module AdminCommandHandler::AdminEffects
           if target = st.shift?
             if player = L2World.get_player(target)
               if perform_social(social, player, pc)
-                pc.send_message("#{player.name} was affected by your command.")
+                pc.send_message("#{player} was affected by your command.")
               end
             else
               begin
@@ -229,7 +229,7 @@ module AdminCommandHandler::AdminEffects
           obj ||= pc
 
           if perform_social(social, obj, pc)
-            pc.send_message("#{obj.name} was affected by your command.")
+            pc.send_message("#{obj} was affected by your command.")
           end
         elsif !command.includes?("menu")
           pc.send_message("Usage: //social <social_id> [player_name|radius]")
@@ -265,7 +265,7 @@ module AdminCommandHandler::AdminEffects
         else
           obj = pc.target || pc
           if perform_abnormal_visual_effect(ave, obj)
-            pc.send_message("#{obj.name} affected by #{param1} abnormal visual effect.")
+            pc.send_message("#{obj} affected by #{param1} abnormal visual effect.")
           else
             pc.send_packet(SystemMessageId::NOTHING_HAPPENED)
           end
@@ -286,7 +286,7 @@ module AdminCommandHandler::AdminEffects
         if obj.is_a?(L2Character)
           msu = MagicSkillUse.new(obj, pc, skill, level, hit_time, 0)
           obj.broadcast_packet(msu)
-          pc.send_message("#{obj.name} performed skill animation (id: #{skill}, level: #{level}) by your command")
+          pc.send_message("#{obj} performed skill animation (id: #{skill}, level: #{level}) by your command")
         else
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         end

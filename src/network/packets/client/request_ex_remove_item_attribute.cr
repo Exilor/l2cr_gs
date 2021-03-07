@@ -11,7 +11,7 @@ class Packets::Incoming::RequestExRemoveItemAttribute < GameClientPacket
     return unless pc = active_char
 
     unless target_item = pc.inventory.get_item_by_l2id(@l2id)
-      warn { "Item with l2id #{@l2id} not found in #{pc.name}'s inventory." }
+      warn { "Item with l2id #{@l2id} not found in #{pc}'s inventory." }
       return
     end
 

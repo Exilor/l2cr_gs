@@ -7,7 +7,7 @@ class Packets::Incoming::RequestKeyMapping < GameClientPacket
 
   private def run_impl
     if Config.store_ui_settings && (pc = active_char)
-      pc.send_packet(ExUConcurrent::Setting.new(pc))
+      pc.send_packet(ExUISetting.new(pc))
     end
   end
 end

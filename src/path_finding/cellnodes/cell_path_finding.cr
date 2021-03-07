@@ -6,14 +6,6 @@ module CellPathFinding
 
   private ALL_BUFFERS = [] of BufferInfo
 
-  @@debug_items : Array(L2ItemInstance)?
-  @@find_success = 0
-  @@find_fails = 0
-  @@post_filter_uses = 0
-  @@post_filter_playable_uses = 0
-  @@post_filter_passes = 0
-  @@post_filter_elapsed = 0i64
-
   def load
     Config.pathfind_buffers.split(';') do |buf|
       args = buf.split('x')
@@ -43,7 +35,7 @@ module CellPathFinding
     end
     gtz = GeoData.get_height(tx, ty, tz)
 
-    buffer = alloc(64 &+ (2 &* Math.max((gx &- gtx).abs, (gy &- gty).abs)), playable)
+    buffer = alloc(64 &+ (2 &* Math.max((gx &- gtx).abs, (gy &- gty).abs)))
     unless buffer
       return
     end
@@ -52,8 +44,6 @@ module CellPathFinding
       result = buffer.find_path(gx, gy, gz, gtx, gty, gtz)
 
       unless result
-        # debug "Couldn't find a buffer."
-        # @@find_fails &+= 1
         return
       end
 
@@ -66,22 +56,13 @@ module CellPathFinding
     end
 
     if path.size < 3 || Config.max_postfilter_passes <= 0
-      # @@find_success &+= 1
       return path
     end
-
-    # time_stamp = Time.ms
-    # @@post_filter_uses &+= 1
-
-    # if playable
-    #   @@post_filter_playable_uses += 1
-    # end
 
     pass = 0
 
     loop do
       pass &+= 1
-      # @@post_filter_passes &+= 1
       remove = false
       current_x = x
       current_y = y
@@ -105,11 +86,6 @@ module CellPathFinding
         break
       end
     end
-
-    # debug
-
-    # @@find_success += 1
-    # @@post_filter_elapsed += Time.ms - time_stamp
 
     path
   end
@@ -152,18 +128,13 @@ module CellPathFinding
     path
   end
 
-  private def alloc(size, playable)
+  private def alloc(size)
     current = nil
 
     ALL_BUFFERS.each do |i|
       if i.map_size >= size
         i.buffers.each do |buf|
           if buf.lock
-            i.uses &+= 1
-            if playable
-              i.playable_uses &+= 1
-            end
-            i.elapsed &+= buf.elapsed_time
             current = buf
             break
           end
@@ -175,16 +146,7 @@ module CellPathFinding
         current.lock
         if i.buffers.size < i.count
           i.buffers << current
-          i.uses &+= 1
-          if playable
-            i.playable_uses &+= 1
-          end
           break
-        end
-
-        i.overflows &+= 1
-        if playable
-          i.playable_overflows &+= 1
         end
       end
     end
@@ -192,14 +154,8 @@ module CellPathFinding
     current
   end
 
-  private class BufferInfo
+  private struct BufferInfo
     getter buffers = [] of CellNodeBuffer
-    property uses : Int32 = 0
-    property playable_uses : Int32 = 0
-    property overflows : Int32 = 0
-    property playable_overflows : Int32 = 0
-    property elapsed : Int64 = 0i64
-
     getter_initializer map_size : Int32, count : Int32
   end
 end

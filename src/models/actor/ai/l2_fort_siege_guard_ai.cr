@@ -77,7 +77,7 @@ class L2FortSiegeGuardAI < L2CharacterAI
           npc = @actor.as(L2Attackable)
 
           # If its _knownPlayer isn't empty set the Intention to ACTIVE
-          if !npc.known_list.known_players.empty?
+          if npc.known_list.knows_players?
             intention = ACTIVE
           else
             intention = IDLE

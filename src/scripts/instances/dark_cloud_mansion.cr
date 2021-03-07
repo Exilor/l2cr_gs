@@ -572,10 +572,6 @@ class Scripts::DarkCloudMansion < AbstractInstance
       return
     end
 
-    # i = Rnd.rand(GOLEM_SPAWN.size)
-    # mob_id = GOLEM_SPAWN[i][0]
-    # x = GOLEM_SPAWN[i][1]
-    # y = GOLEM_SPAWN[i][2]
     mob_id, x, y = GOLEM_SPAWN.sample(random: Rnd)
 
     npc.golem = add_spawn(mob_id, x, y, -6117, 0, false, 0, false, world.instance_id)

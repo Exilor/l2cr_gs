@@ -130,21 +130,21 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
           qs.set("param1", 2)
           html = "30934-08c.html"
         elsif i0 >= 20 && i0 < 50 && i1 == 0
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             qs.set("param1", 0)
           else
             qs.set("param1", 1)
           end
           html = "30934-09a.html"
         elsif i0 >= 20 && i0 < 50 && i1 == 1
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             qs.set("param1", 1)
           else
             qs.set("param1", 2)
           end
           html = "30934-09b.html"
         elsif i0 >= 20 && i0 < 50 && i1 == 2
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             qs.set("param1", 2)
           else
             qs.set("param1", 0)

@@ -265,7 +265,7 @@ module DimensionalRiftManager
   def handle_cheat(pc : L2PcInstance, npc : L2Npc)
     show_html_file(pc, "data/html/seven_signs/rift/Cheater.htm", npc)
     unless pc.gm?
-      warn { "Player #{pc.name} (#{pc.l2id}) was cheating in dimensional rift area." }
+      warn { "Player #{pc} (#{pc.l2id}) was cheating in dimensional rift area." }
       Util.punish(pc, "tried to cheat in dimensional rift.")
     end
   end

@@ -321,7 +321,7 @@ class Scripts::PrimevalIsle < AbstractNpcAI
       if pc.inventory.get_size(false) <= pc.inventory_limit * 0.8
         give_items(pc, DEINONYCHUS, 1)
         unless summon_item = pc.inventory.get_item_by_item_id(DEINONYCHUS)
-          warn "#{pc.name} was expected to have item with id #{DEINONYCHUS}."
+          warn "#{pc} was expected to have item with id #{DEINONYCHUS}."
           return super
         end
         handler = ItemHandler[summon_item.etc_item]

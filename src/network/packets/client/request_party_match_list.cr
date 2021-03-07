@@ -20,7 +20,7 @@ class Packets::Incoming::RequestPartyMatchList < GameClientPacket
 
     if @room_id > 0
       if room = PartyMatchRoomList.get_room(@room_id)
-        debug { "PartyMatchRoom ##{room.id} changed by #{pc.name}." }
+        debug { "PartyMatchRoom ##{room.id} changed by #{pc}." }
         room.max_members = @max_members
         room.min_lvl = @min_lvl
         room.max_lvl = @max_lvl
@@ -35,7 +35,7 @@ class Packets::Incoming::RequestPartyMatchList < GameClientPacket
     else
       max_id = PartyMatchRoomList.max_id
       room = PartyMatchRoom.new(max_id, @room_title, @loot, @min_lvl, @max_lvl, @max_members, pc)
-      info { "PartyMatchRoom ##{max_id} created by #{pc.name}." }
+      info { "PartyMatchRoom ##{max_id} created by #{pc}." }
       PartyMatchWaitingList.remove_player(pc)
       PartyMatchRoomList.add_party_match_room(max_id, room)
 

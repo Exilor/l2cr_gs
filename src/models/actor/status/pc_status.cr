@@ -183,7 +183,7 @@ class PcStatus < PlayableStatus
 
         return
       end
-      pc.do_die attacker
+      pc.do_die(attacker)
     end
   end
 

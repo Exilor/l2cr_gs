@@ -56,8 +56,8 @@ module GamePacketHandler
     when .joining?
       case opcode
       when 0x11 then EnterWorld.new
-      when 0x12 # CharacterSelect
-      when 0xcb # GameGuardReply
+      when 0x12 # CharacterSelect # L2J forgot about this one
+      when 0xcb # GameGuardReply # L2J forgot about this one
       when 0xd0
         if buffer.remaining < 2
           warn { "#{client} sent a 0xd0 without the second opcode." }
@@ -89,9 +89,7 @@ module GamePacketHandler
       when 0x0b then RequestGiveNickName.new
       when 0x0f then MoveBackwardToLocation.new
       when 0x10 # Say
-      when 0x12 # CharacterSelect ("Start" was spammed when AUTHED)
-        debug "Ignoring duplicate CharacterSelect packet."
-        nil
+      when 0x12 # CharacterSelect
       when 0x14 then RequestItemList.new
       when 0x15 # RequestEquipItem
         warn { "Received obsolete RequestEquipItem packet from #{client}." }
@@ -139,7 +137,7 @@ module GamePacketHandler
         if Config.allow_warehouse
           SendWarehouseDepositList.new
         end
-      when 0x3c then SendWarehouseWithDrawList.new
+      when 0x3c then SendWarehouseWithdrawList.new
       when 0x3d then RequestShortcutRegister.new
       when 0x3f then RequestShortcutDelete.new
       when 0x40 then RequestBuyItem.new
@@ -382,7 +380,7 @@ module GamePacketHandler
             print_debug_double_opcode(opcode, op3, buffer, state, client)
             nil
           end
-        when 0x52 then RequestWithDrawPremiumItem.new
+        when 0x52 then RequestWithdrawPremiumItem.new
         when 0x53 # RequestJump
         when 0x54 # RequestStartShowCrataeCubeRank
         when 0x55 # RequestStopShowCrataeCubeRank

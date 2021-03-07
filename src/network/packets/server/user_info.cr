@@ -151,7 +151,7 @@ class Packets::Outgoing::UserInfo < GameServerPacket
     d @pc.invisible? ? @pc.abnormal_visual_effects | AbnormalVisualEffect::STEALTH.mask : @pc.abnormal_visual_effects
     c @pc.inside_water_zone? ? 1 : @pc.flying_mounted? ? 2 : 0
 
-    d @pc.clan_privileges.bitmask
+    d @pc.clan_privileges.mask
 
     h @pc.recom_left
     h @pc.recom_have

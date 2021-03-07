@@ -449,7 +449,7 @@ module FourSepulchersManager
         # ID ok
       else
         unless pc.gm?
-          warn { "Player #{pc.name} (#{pc.l2id}) tried to cheat in four sepulchers." }
+          warn { "Player #{pc} (#{pc.l2id}) tried to cheat in four sepulchers." }
           Util.punish(pc, "tried to enter four sepulchers with an invalid npc id (#{npc_id}).")
         end
         return
@@ -635,7 +635,7 @@ module FourSepulchersManager
     end
 
     mobs = Array(L2SepulcherMonsterInstance).new
-    if Rnd.rand(2) == 0
+    if Rnd.bool
       monster_list = PHYSICAL_MONSTERS[npc_id]?
     else
       monster_list = MAGICAL_MONSTERS[npc_id]?

@@ -7,8 +7,6 @@ class CellNodeBuffer
 
   @current : CellNode?
 
-  getter elapsed_time
-
   def initialize(size : Int32)
     @map_size = size
     @buffer = Slice(Slice(CellNode?)).new(size) { Slice(CellNode?).new(size) }
@@ -18,8 +16,7 @@ class CellNodeBuffer
     @target_y = 0
     @target_z = 0
     @time_stamp = 0i64
-    @elapsed_time = 0i64
-    @lock = MyMutex.new
+    @lock = Mutex.new(:Reentrant)
   end
 
   def lock : Bool
@@ -60,7 +57,6 @@ class CellNodeBuffer
     @current = nil
     @buffer.flat_each &.try &.free
     @lock.unlock
-    @elapsed_time = Time.ms - @time_stamp
   end
 
   private def find_neighbors

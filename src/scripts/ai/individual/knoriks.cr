@@ -87,7 +87,7 @@ class Scripts::Knoriks < AbstractNpcAI
   end
 
   def on_aggro_range_enter(npc, pc, is_summon)
-    if Rnd.rand(100) < 50 && !npc.variables.get_bool(SHOUT_FLAG, false)
+    if Rnd.bool && !npc.variables.get_bool(SHOUT_FLAG, false)
       npc.variables[SHOUT_FLAG] = true
       broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::WHOS_THERE_IF_YOU_DISTURB_THE_TEMPER_OF_THE_GREAT_LAND_DRAGON_ANTHARAS_I_WILL_NEVER_FORGIVE_YOU)
     end

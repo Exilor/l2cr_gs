@@ -53,7 +53,7 @@ module VoicedCommandHandler::ChatAdmin
 
           task = PunishmentTask.new(l2id, PunishmentAffect::CHARACTER, PunishmentType::CHAT_BAN, expiration_time, "Chat banned by moderator", pc.name)
           PunishmentManager.start_punishment(task)
-          player.send_message("You have been chat banned by moderator #{pc.name}.")
+          player.send_message("You have been chat banned by moderator #{pc}.")
 
           if expiration_time > 0
             pc.send_message("Player #{name} has been chat banned for #{expiration_time} minutes.")
@@ -90,7 +90,7 @@ module VoicedCommandHandler::ChatAdmin
           PunishmentManager.stop_punishment(l2id, PunishmentAffect::CHARACTER, PunishmentType::CHAT_BAN)
 
           pc.send_message("Player #{name} chat ban has been lifted.")
-          player.send_message("Chat unbanned by moderator #{pc.name}.")
+          player.send_message("Chat unbanned by moderator #{pc}.")
         else
           pc.send_message("Player #{name} not found.")
           return false

@@ -13,7 +13,7 @@ class Packets::Incoming::MultisellChoose < GameClientPacket
     return unless pc = active_char
 
     unless flood_protectors.multisell.try_perform_action("multisell choose")
-      debug { "#{pc.name} is spamming multisell." }
+      debug { "#{pc} is spamming multisell." }
       pc.multisell = nil
       return
     end

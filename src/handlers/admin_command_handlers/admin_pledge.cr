@@ -26,7 +26,7 @@ module AdminCommandHandler::AdminPledge
         cet = player.clan_create_expiry_time
         player.clan_create_expiry_time = 0
         if clan = ClanTable.create_clan(player, parameter)
-          pc.send_message("Clan #{parameter} created. Leader: #{player.name}")
+          pc.send_message("Clan #{parameter} created. Leader: #{player}")
         else
           player.clan_create_expiry_time = cet
           pc.send_message("There was a problem while creating the clan.")

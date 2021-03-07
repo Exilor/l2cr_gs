@@ -46,7 +46,7 @@ class Packets::Incoming::Action < GameClientPacket
       warn "L2Object with id #{@l2id} not found in L2World."
       summon = pc.summon
       if summon && summon.l2id == @l2id
-        warn "It's #{pc.name} summon."
+        warn "It's #{pc} summon."
         if summon.world_region.nil?
           warn "Its region is nil."
         end
@@ -88,8 +88,8 @@ class Packets::Incoming::Action < GameClientPacket
       return
     end
 
-    if pc.active_requester
-      debug { "#{pc} has an active requester (#{pc.active_requester})." }
+    if req = pc.active_requester
+      debug { "#{pc} has an active requester (#{req})." }
       action_failed
       return
     end

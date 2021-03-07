@@ -20,7 +20,7 @@ module AdminCommandHandler::AdminUnblockIp
   private def unblock_ip(ip, pc)
     # L2J TODO
     # LoginServerThread.instance.unblock_ip(ip)
-    warn { "GM #{pc.name} unblocked IP #{ip}." }
+    warn { "GM #{pc} unblocked IP #{ip}." }
     true
   end
 

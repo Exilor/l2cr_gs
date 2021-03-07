@@ -51,7 +51,7 @@ class L2NpcBufferInstance < L2Npc
         buff_group = buff_group_list.to_i
 
         unless info = NpcBufferTable.get_skill_info(npc_id, buff_group)
-          warn { "NPC with id #{npc_id} located at #{x}, #{y}, #{y} player #{pc.name} has tried to use skill group (#{buff_group}) not assigned to the NPC buffer." }
+          warn { "NPC with id #{npc_id} located at #{x}, #{y}, #{y} player #{pc} has tried to use skill group (#{buff_group}) not assigned to the NPC buffer." }
           return
         end
 

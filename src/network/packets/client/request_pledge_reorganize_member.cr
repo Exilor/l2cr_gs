@@ -17,7 +17,7 @@ class Packets::Incoming::RequestPledgeReorganizeMember < GameClientPacket
     return unless clan = pc.clan
 
     unless pc.has_clan_privilege?(ClanPrivilege::CL_MANAGE_RANKS)
-      debug { "#{pc.name} isn't allowed to manage ranks." }
+      debug { "#{pc} isn't allowed to manage ranks." }
       return
     end
 

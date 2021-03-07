@@ -512,7 +512,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
       if st && st.cond?(3)
         handle_quest_drop(pc, 15535)
       end
-      if Rnd.rand(100) < 50
+      if Rnd.bool
         mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[0].sample(random: Rnd))
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)
@@ -522,7 +522,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
       if st && st.cond?(3)
         handle_quest_drop(pc, 15535)
       end
-      if Rnd.rand(100) < 50
+      if Rnd.bool
         mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[1].sample(random: Rnd))
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)
@@ -532,7 +532,7 @@ class Scripts::EnergySeeds < AbstractNpcAI
       if st && st.cond?(3)
         handle_quest_drop(pc, 15535)
       end
-      if Rnd.rand(100) < 50
+      if Rnd.bool
         mob = spawn_suprise_mob(seed_energy, ANNIHILATION_SUPRISE_MOB_IDS[2].sample(random: Rnd))
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)

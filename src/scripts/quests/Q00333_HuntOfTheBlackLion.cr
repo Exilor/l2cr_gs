@@ -223,7 +223,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
       if !has_quest_items?(pc, STATUE_OF_SHILEN_HEAD, STATUE_OF_SHILEN_TORSO, STATUE_OF_SHILEN_ARM, STATUE_OF_SHILEN_LEG)
         html = event
       else
-        if Rnd.rand(100) < 50
+        if Rnd.bool
           give_items(pc, COMPLETE_STATUE_OF_SHILEN, 1)
           take_items(pc, STATUE_OF_SHILEN_HEAD, 1)
           take_items(pc, STATUE_OF_SHILEN_TORSO, 1)
@@ -242,7 +242,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
       if !has_quest_items?(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE)
         html = event
       else
-        if Rnd.rand(100) < 50
+        if Rnd.bool
           give_items(pc, COMPLETE_ANCIENT_TABLET, 1)
           take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE, 1)
           take_items(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE, 1)
@@ -325,7 +325,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         elsif chance < 76
           give_items(pc, IMPERIAL_DIAMOND, 1)
           html = "30736-04m.html"
-        elsif Rnd.rand(100) < 50
+        elsif Rnd.bool
           if chance1 < 25
             give_items(pc, STATUE_OF_SHILEN_HEAD, 1)
           elsif chance1 < 50
@@ -456,7 +456,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when NEER_CRAWLER
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, UNDEAD_ASH, 1)
           end
           if Rnd.rand(100) < 11
@@ -483,7 +483,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when NEER_CRAWLER_BERSERKER
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, UNDEAD_ASH, 1)
           end
           if Rnd.rand(100) < 12
@@ -492,7 +492,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when STRAIN
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, UNDEAD_ASH, 1)
           end
           if Rnd.rand(100) < 13
@@ -501,7 +501,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when GHOUL
         if has_quest_items?(killer, SOPHYAS_1ST_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, UNDEAD_ASH, 1)
           end
           if Rnd.rand(100) < 15
@@ -510,7 +510,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when OL_MAHUM_GUERILLA
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
           if Rnd.rand(100) < 9
@@ -519,7 +519,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when OL_MAHUM_RAIDER
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
           if Rnd.rand(100) < 10
@@ -528,7 +528,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when OL_MAHUM_MARKSMAN
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
           if Rnd.rand(100) < 11
@@ -537,7 +537,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when OL_MAHUM_SERGEANT
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
           if Rnd.rand(100) < 12
@@ -546,7 +546,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when OL_MAHUM_CAPTAIN
         if has_quest_items?(killer, SOPHYAS_2ND_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, BLOODY_AXE_INSIGNIA, 1)
           end
           if Rnd.rand(100) < 13
@@ -591,7 +591,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when DELU_LIZARDMAN, DELU_LIZARDMAN_SCOUT
         if has_quest_items?(killer, SOPHYAS_3RD_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, DELU_LIZARDMAN_FANG, 1)
           end
           if Rnd.rand(100) < 14
@@ -604,7 +604,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when DELU_LIZARDMAN_WARRIOR
         if has_quest_items?(killer, SOPHYAS_3RD_ORDER)
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, DELU_LIZARDMAN_FANG, 1)
           end
           if Rnd.rand(100) < 15

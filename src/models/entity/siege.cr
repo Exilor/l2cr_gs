@@ -291,7 +291,7 @@ class Siege
 
         m.send_packet(UserInfo.new(m))
         m.send_packet(ExBrExtraUserInfo.new(m))
-        m.known_list.known_players.each_value do |pc|
+        m.known_list.each_player do |pc|
           rc = RelationChanged.new(m, m.get_relation(pc), m.auto_attackable?(pc))
           pc.send_packet(rc)
           if s = m.summon
@@ -321,7 +321,7 @@ class Siege
 
         m.send_packet(UserInfo.new(m))
         m.send_packet(ExBrExtraUserInfo.new(m))
-        m.known_list.known_players.each_value do |pc|
+        m.known_list.each_player do |pc|
           rc = RelationChanged.new(m, m.get_relation(pc), m.auto_attackable?(pc))
           pc.send_packet(rc)
           if s = m.summon

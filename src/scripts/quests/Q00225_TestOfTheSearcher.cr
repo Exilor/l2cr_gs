@@ -162,11 +162,11 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
       when HANGMAN_TREE
         if has_quest_items?(killer, JAXS_DIARY) && !has_quest_items?(killer, MAKELS_MAP) && (get_quest_items_count(killer, TORN_MAP_PIECE_2ND) < 4)
           if get_quest_items_count(killer, TORN_MAP_PIECE_2ND) < 3
-            if Rnd.rand(100) < 50
+            if Rnd.bool
               give_items(killer, TORN_MAP_PIECE_2ND, 1)
               play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
             end
-          elsif Rnd.rand(100) < 50
+          elsif Rnd.bool
             take_items(killer, TORN_MAP_PIECE_2ND, -1)
             give_items(killer, MAKELS_MAP, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)

@@ -49,12 +49,9 @@ struct ItemInfo
     @attack_element_type = item.attack_element_type.to_i32
     @attack_element_power = item.attack_element_power
     @elem_def_attr = {
-      item.get_element_def_attr(0),
-      item.get_element_def_attr(1),
-      item.get_element_def_attr(2),
-      item.get_element_def_attr(3),
-      item.get_element_def_attr(4),
-      item.get_element_def_attr(5)
+      item.get_element_def_attr(0), item.get_element_def_attr(1),
+      item.get_element_def_attr(2), item.get_element_def_attr(3),
+      item.get_element_def_attr(4), item.get_element_def_attr(5)
     }
     @enchant_options = item.enchant_options
     @location = item.location_slot
@@ -72,12 +69,9 @@ struct ItemInfo
     @attack_element_type = item.attack_element_type.to_i32
     @attack_element_power = item.attack_element_power
     @elem_def_attr = {
-      item.get_element_def_attr(0),
-      item.get_element_def_attr(1),
-      item.get_element_def_attr(2),
-      item.get_element_def_attr(3),
-      item.get_element_def_attr(4),
-      item.get_element_def_attr(5)
+      item.get_element_def_attr(0), item.get_element_def_attr(1),
+      item.get_element_def_attr(2), item.get_element_def_attr(3),
+      item.get_element_def_attr(4), item.get_element_def_attr(5)
     }
     @enchant_options = item.enchant_options
     @location = item.location_slot
@@ -87,58 +81,3 @@ struct ItemInfo
     @elem_def_attr[i]
   end
 end
-
-# struct ItemInfo
-#   initializer item : L2ItemInstance | TradeItem, change : Int32? = nil
-
-#   delegate l2id, template, count, custom_type_1, custom_type_2, enchant_options,
-#     get_element_def_attr, attack_element_type, attack_element_power, to: @item
-
-#   private macro switch(a, b)
-#     (i = @item).is_a?(L2ItemInstance) ? {{a}} : {{b}}
-#   end
-
-#   def template : L2Item
-#     switch(i.template, i.item)
-#   end
-
-#   def enchant : Int32
-#     switch(i.enchant_level, i.enchant)
-#   end
-
-#   def augmentation_bonus : Int32
-#     switch((aug = i.augmentation) ? aug.augmentation_id : 0, 0)
-#   end
-
-#   def equipped : Int32
-#     switch(i.equipped? ? 1 : 0, 0)
-#   end
-
-#   def change : Int32
-#     switch(get_last_change(i), 0)
-#   end
-
-#   private def get_last_change(item)
-#     @change ||
-#     case item.last_change
-#     when L2ItemInstance::ADDED
-#       1
-#     when L2ItemInstance::MODIFIED
-#       2
-#     else
-#       3
-#     end
-#   end
-
-#   def mana : Int32
-#     switch(i.mana, -1)
-#   end
-
-#   def time : Int32
-#     switch(i.time_limited_item? ? (i.remaining_time / 1000).to_i : -9999, -9999)
-#   end
-
-#   def location : Int32
-#     @item.location_slot
-#   end
-# end

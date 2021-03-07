@@ -102,7 +102,7 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
       case npc.id
       when MARSH_ZOMBIE
         if has_quest_items?(killer, LUCKY_KEY) && get_quest_items_count(killer, FAMILYS_REMAINS) < 3
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, FAMILYS_REMAINS, 1)
             if get_quest_items_count(killer, FAMILYS_REMAINS) == 3
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -113,7 +113,7 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
         end
       when MISERY_SKELETON, SKELETON_HUNTER, SKELETON_HUNTER_ARCHER
         if has_quest_items?(killer, CANDLE) && get_quest_items_count(killer, KNEE_BONE) < 2
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, KNEE_BONE, 1)
             if get_quest_items_count(killer, KNEE_BONE) == 2
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -124,7 +124,7 @@ class Scripts::Q00412_PathOfTheDarkWizard < Quest
         end
       when SKELETON_SCOUT
         if has_quest_items?(killer, HUB_SCENT) && get_quest_items_count(killer, HEART_OF_LUNACY) < 3
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(killer, HEART_OF_LUNACY, 1)
             if get_quest_items_count(killer, HEART_OF_LUNACY) == 3
               play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)

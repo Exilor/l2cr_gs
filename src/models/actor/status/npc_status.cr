@@ -5,10 +5,8 @@ class NpcStatus < CharStatus
     return if @active_char.dead?
 
     if attacker
-      if pc = attacker.acting_player
-        if pc.in_duel?
-          pc.duel_state = DuelState::INTERRUPTED
-        end
+      if (pc = attacker.acting_player) && pc.in_duel?
+        pc.duel_state = DuelState::INTERRUPTED
       end
 
       active_char.add_attacker_to_attack_by_list(attacker)

@@ -36,7 +36,7 @@ abstract class AbstractInstance < AbstractNpcAI
       end
 
       if Config.debug_instances
-        debug "Instance #{inst.name} #{instance.template_id} has been created by #{pc.name}."
+        debug "Instance #{inst.name} #{instance.template_id} has been created by #{pc}."
       end
     end
   end

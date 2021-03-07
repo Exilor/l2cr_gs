@@ -28,7 +28,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
     end
 
     unless pc.has_refund?
-      debug { "#{pc.name} doesn't have a refund." }
+      debug { "#{pc} doesn't have a refund." }
       action_failed
       return
     end
@@ -130,7 +130,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
       )
 
       unless item
-        warn { "Error refunding item for player #{pc.name} (new item is nil)." }
+        warn { "Error refunding item for player #{pc} (new item is nil)." }
         next
       end
     end

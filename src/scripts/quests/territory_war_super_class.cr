@@ -172,7 +172,7 @@ class TerritoryWarSuperClass < Quest
           st ||= killthe.new_quest_state(pc)
           pc.add_notify_quest_of_death(st)
         else
-          warn { "TerritoryWar: Missing Kill the quest for player #{pc.name} whose class id: #{pc.class_id.to_i}" }
+          warn { "TerritoryWar: Missing Kill the quest for player #{pc} whose class id: #{pc.class_id.to_i}" }
         end
       end
     end
@@ -265,7 +265,7 @@ class TerritoryWarSuperClass < Quest
               st ||= killthe.new_quest_state(pc)
               pc.add_notify_quest_of_death(st)
             else
-              warn { "TerritoryWar: Missing Kill the quest for player #{pc.name} whose class id: #{pc.class_id.to_i}." }
+              warn { "TerritoryWar: Missing Kill the quest for player #{pc} whose class id: #{pc.class_id.to_i}." }
             end
           end
         else

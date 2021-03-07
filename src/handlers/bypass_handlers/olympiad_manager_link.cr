@@ -159,7 +159,7 @@ module BypassHandler::OlympiadManagerLink
 
         npc_buff_group_info = NpcBufferTable.get_skill_info(target.id, BUFFS[index])
         unless npc_buff_group_info
-          warn { "npcId = #{target.id} Location: #{target.x}, #{target.y}, #{target.y} Player: #{pc.name} tried to use skill group #{params[1]} not assigned to the NPC Buffer." }
+          warn { "npcId = #{target.id} Location: #{target.x}, #{target.y}, #{target.y} Player: #{pc} tried to use skill group #{params[1]} not assigned to the NPC Buffer." }
           return false
         end
 

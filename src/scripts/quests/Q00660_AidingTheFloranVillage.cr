@@ -114,7 +114,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
         trade_items(pc, 200, count1, count2, count3)
 
         if Rnd.rand(100) >= 50
-          if Rnd.rand(2) == 0
+          if Rnd.bool
             give_items(pc, SCROLL_ENCHANT_ARMOR_D_GRADE, 1)
             give_adena(pc, ADENA_REWARD_3, true)
           else

@@ -15,7 +15,7 @@ class GameClient
   getter state = State::CONNECTED
   getter stats = ClientStats.new
   getter start_time = Time.ms
-  getter active_char_lock = MyMutex.new
+  getter active_char_lock = Mutex.new(:Reentrant)
   getter(flood_protectors) { FloodProtectors.new(self) }
   property active_char : L2PcInstance?
   property additional_close_packet : GameServerPacket?
@@ -232,7 +232,7 @@ class GameClient
   end
 
   def enable_crypt : Bytes
-    key = GameCrypt.sample
+    key = GameCrypt.random_key
     @crypt.key = key
     key
   end
@@ -407,7 +407,6 @@ class GameClient
   end
 
   private def cleanup_task
-    {% if flag?(:preview_mt) %} debug "cleanup_task" {% end %}
     if auto_save_task = @auto_save_task
       auto_save_task.cancel
       @auto_save_task = nil
@@ -415,7 +414,7 @@ class GameClient
 
     if pc = @active_char
       if pc.locked?
-        debug { "cleanup_task: #{pc.name} is locked."}
+        debug { "cleanup_task: #{pc} is locked."}
       end
 
       pc.client = nil
@@ -429,7 +428,6 @@ class GameClient
   rescue e
     error e
   ensure
-    {% if flag?(:preview_mt) %} debug { "Calling LoginServerThread.instance.send_logout(account_name: #{@account_name})." } {% end %}
     LoginServerThread.instance.send_logout(@account_name)
   end
 

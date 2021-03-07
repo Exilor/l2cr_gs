@@ -167,7 +167,7 @@ module AdminCommandHandler::AdminTeleport
 
     msg = <<-TEXT
       <html><title>Teleport Character</title>
-      <body>The character you will teleport is #{player.name}.<br>
+      <body>The character you will teleport is #{player}.<br>
       Co-ordinate x<edit var="char_cord_x" width=110>
       Co-ordinate y<edit var="char_cord_y" width=110>
       Co-ordinate z<edit var="char_cord_z" width=110>
@@ -212,7 +212,7 @@ module AdminCommandHandler::AdminTeleport
     else
       if pc && pc.instance_id >= 0
         player.instance_id = pc.instance_id
-        pc.send_message("You have recalled #{player.name}.")
+        pc.send_message("You have recalled #{player}.")
       else
         player.instance_id = 0
       end
@@ -276,7 +276,7 @@ module AdminCommandHandler::AdminTeleport
         pc.send_message("Created #{target.template.name} on #{target.l2id}.")
 
         debug { "Spawn at #{target.xyz}." }
-        debug { "GM #{pc.name} (#{pc.l2id}) moved NPC #{target.l2id}." }
+        debug { "GM #{pc} (#{pc.l2id}) moved NPC #{target.l2id}." }
       rescue e
         warn e
         pc.send_message("Target is not in game.")

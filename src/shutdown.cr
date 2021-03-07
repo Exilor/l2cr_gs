@@ -169,7 +169,7 @@ class Shutdown
 
   def abort(pc = nil)
     if pc
-      warn { "GM #{pc.name} aborted the #{MODE_TEXT[@shutdown_mode]}." }
+      warn { "GM #{pc} aborted the #{MODE_TEXT[@shutdown_mode]}." }
       if inst = @@counter_instance
         inst.abort
         msg = "Server aborts #{MODE_TEXT[@shutdown_mode]}."
@@ -303,7 +303,7 @@ class Shutdown
         end
         pc.delete_me
       rescue e
-        error { "Error disconnecting #{pc.name}." }
+        error { "Error disconnecting #{pc}." }
         error e
       end
     end

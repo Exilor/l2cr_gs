@@ -15,7 +15,7 @@ module AdminCommandHandler::AdminInstanceZone
         instance_id = st.shift.to_i
         name = InstanceManager.get_instance_id_name(instance_id)
         InstanceManager.delete_instance_time(player.l2id, instance_id)
-        pc.send_message("Instance zone #{name} cleared for player #{player.name}")
+        pc.send_message("Instance zone #{name} cleared for player #{player}")
         player.send_message("Admin cleared instance zone #{name} for you")
 
         return true

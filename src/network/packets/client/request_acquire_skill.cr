@@ -176,10 +176,10 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
                   end
                 end
               else
-                warn { "Non-existent item for object id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
+                warn { "Non-existent item for object id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc}." }
               end
             else
-              warn { "Invalid item object id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc.name}." }
+              warn { "Invalid item object id #{item_l2id} for subclass skill id #{@id}, level #{@level} for player #{pc}." }
             end
           end
         end
@@ -275,7 +275,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
         s.required_items.each do |item|
           count = pc.inventory.get_inventory_item_count(item.id, -1)
           if count < item.count
-            debug { "#{pc.name} needs #{item.count} of item with id #{item.id} (has #{count})." }
+            debug { "#{pc} needs #{item.count} of item with id #{item.id} (has #{count})." }
             pc.send_packet(SystemMessageId::ITEM_OR_PREREQUISITES_MISSING_TO_LEARN_SKILL)
             show_skill_list(trainer, pc)
             return false
@@ -285,7 +285,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
         s.required_items.each do |item|
           unless pc.destroy_item_by_item_id("SkillLearn", item.id, item.count, trainer, true)
             Util.punish(pc, "requested skill id #{@id}, level #{@level} possessing its required item.", IllegalActionPunishmentType::NONE)
-            warn { "Player #{pc.name} tried to learn a skill without the required item." }
+            warn { "Player #{pc} tried to learn a skill without the required item." }
           end
         end
       end

@@ -38,7 +38,7 @@ module AdminCommandHandler::AdminReload
           if File.file?(path)
             html = File.read(path)
             HtmCache.reload(html)
-            AdminData.broadcast_message_to_gms("#{pc.name}: Reloaded Htm File: #{File.basename(path)}.")
+            AdminData.broadcast_message_to_gms("#{pc}: Reloaded Htm File: #{File.basename(path)}.")
           else
             pc.send_message("File or Directory #{path} does not exist.")
           end

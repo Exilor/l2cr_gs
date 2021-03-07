@@ -32,7 +32,7 @@ module BypassHandler::QuestLink
   end
 
   private def show_quest_choose_window(pc, npc, quests)
-    # debug "#show_quest_choose_window pc: #{pc.name}, npc: #{npc.name}, quests: #{quests.map(&.class)}"
+    # debug "#show_quest_choose_window pc: #{pc}, npc: #{npc}, quests: #{quests.map(&.class)}"
 
     str = String.build(150) do |sb|
       sb << "<html><body>"
@@ -176,7 +176,7 @@ module BypassHandler::QuestLink
     condition_meet = false
     options = Set(Quest).new
     quests = get_quests_for_talk(pc, npc.id)
-    # debug { "Checking the quest conditions for #{npc.name} (#{quests.size} quests)." }
+    # debug { "Checking the quest conditions for #{npc} (#{quests.size} quests)." }
     quests.each do |state|
       unless quest = state.quest
         # warn { "#{pc} requested incorrect quest state for non existing quest #{state.quest_name}." }
@@ -188,7 +188,7 @@ module BypassHandler::QuestLink
         if quest.can_start_quest?(pc)
           condition_meet = true
         # else
-        #   debug { "#{pc.name} can't start quest #{quest}" }
+        #   debug { "#{pc} can't start quest #{quest}" }
         end
       end
     end
@@ -204,7 +204,7 @@ module BypassHandler::QuestLink
             if quest.can_start_quest?(pc)
               condition_meet = true
             else
-              # debug { "#{pc.name} can't start quest #{quest}" }
+              # debug { "#{pc} can't start quest #{quest}" }
             end
           end
         else

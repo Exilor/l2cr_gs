@@ -12,7 +12,7 @@ class Packets::Incoming::RequestRestartPoint < GameClientPacket
       pc.stop_fake_death(true)
       return
     elsif pc.alive?
-      warn { "Living player #{pc.name} sent a respawn request." }
+      warn { "Living player #{pc} sent a respawn request." }
       return
     end
 
@@ -57,7 +57,7 @@ class Packets::Incoming::RequestRestartPoint < GameClientPacket
     case @point
     when 1 # clan hall
       if clan.nil? || clan.hideout_id == 0
-        warn { "#{pc.name} attempted to respawn on a clan hall his clan doesn't own." }
+        warn { "#{pc} attempted to respawn on a clan hall his clan doesn't own." }
         return
       end
 
@@ -75,7 +75,7 @@ class Packets::Incoming::RequestRestartPoint < GameClientPacket
         elsif castle.siege.attacker?(clan)
           loc = MapRegionManager.get_tele_to_location(pc, TeleportWhereType::TOWN)
         else
-          warn { "#{pc.name} attempted to respawn on a castle his clan doesn't own." }
+          warn { "#{pc} attempted to respawn on a castle his clan doesn't own." }
           return
         end
       else
@@ -95,7 +95,7 @@ class Packets::Incoming::RequestRestartPoint < GameClientPacket
     when 3 # fortress
       return unless clan
       if clan.fort_id == 0 && !in_defense
-        warn { "#{pc.name} attempted to respawn on a fort his clan doesn't own." }
+        warn { "#{pc} attempted to respawn on a fort his clan doesn't own." }
         return
       end
 
@@ -124,7 +124,7 @@ class Packets::Incoming::RequestRestartPoint < GameClientPacket
       if (siege_clan.nil? || siege_clan.flag.empty?) && flag.nil?
         if hall
           unless loc = hall.siege.get_inner_spawn_loc(pc)
-            warn { "#{pc.name} attempted to respawn on a siege HQ he doesn't own." }
+            warn { "#{pc} attempted to respawn on a siege HQ he doesn't own." }
           end
         end
       end
@@ -134,7 +134,7 @@ class Packets::Incoming::RequestRestartPoint < GameClientPacket
       end
     when 5 # fixed/festival
       if !pc.gm? && !pc.festival_participant? && !pc.inventory.has_item_for_self_resurrection?
-        warn { "#{pc.name} attempted to respawn in place without being a festival participant." }
+        warn { "#{pc} attempted to respawn in place without being a festival participant." }
         return
       end
 

@@ -200,7 +200,7 @@ module AdminCommandHandler::AdminSkill
         pc.add_skill(skill, true)
       end
 
-      pc.send_message("You now have all the skills of #{player.name}.")
+      pc.send_message("You now have all the skills of #{player}.")
       pc.send_skill_list
     end
 
@@ -230,7 +230,7 @@ module AdminCommandHandler::AdminSkill
       admin_skills.each do |skill|
         pc.add_skill(skill, true)
       end
-      player.send_message("GM #{pc.name} updated your skills.")
+      player.send_message("GM #{pc} updated your skills.")
       pc.send_message("You now have all your skills back.")
       @@admin_skills = nil
       pc.send_skill_list
@@ -263,8 +263,8 @@ module AdminCommandHandler::AdminSkill
         pc.send_message("Admin gave you the skill #{name}.")
         pc.add_skill(skill, true)
         pc.send_skill_list
-        pc.send_message("You have the skill #{name} to #{player.name}.")
-        debug { "GM #{pc.name} gave skill #{name} to #{player.name}." }
+        pc.send_message("You have the skill #{name} to #{player}.")
+        debug { "GM #{pc} gave skill #{name} to #{player}." }
         pc.send_skill_list
       else
         pc.send_message("Error: there is no such skill.")
@@ -282,10 +282,10 @@ module AdminCommandHandler::AdminSkill
 
     if skill = SkillData[id, player.get_skill_level(id)]?
       name = skill.name
-      pc.send_message("GM #{pc.name} removed skill #{name} from your skill list.")
+      pc.send_message("GM #{pc} removed skill #{name} from your skill list.")
       pc.remove_skill(skill)
-      pc.send_message("You removed the skill #{name} from #{player.name}.")
-      debug { "GM #{pc.name} removed skill #{name} from #{player.name}." }
+      pc.send_message("You removed the skill #{name} from #{player}.")
+      debug { "GM #{pc} removed skill #{name} from #{player}." }
       pc.send_skill_list
     else
       pc.send_message("Error: no such skill.")

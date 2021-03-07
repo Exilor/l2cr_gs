@@ -24,7 +24,7 @@ struct Shortcuts
     sync do
       if shortcut.type.item?
         unless item = @owner.inventory.get_item_by_l2id(shortcut.id)
-          debug "Item with Object ID #{shortcut.id} not found in #{@owner.name}'s inventory."
+          debug "Item with Object ID #{shortcut.id} not found in #{@owner}'s inventory."
           return
         end
         shortcut.shared_reuse_group = item.shared_reuse_group

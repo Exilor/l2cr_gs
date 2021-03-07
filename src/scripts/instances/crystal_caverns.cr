@@ -387,8 +387,8 @@ class Scripts::CrystalCaverns < AbstractInstance
     # {22417, 149782, 150188, -12151, 64001}
   }
 
-  private DRAGONSCALETIME = 3000
-  private DRAGONCLAWTIME = 3000
+  private DRAGON_SCALE_TIME = 3000
+  private DRAGON_CLAW_TIME = 3000
 
   def initialize
     super(self.class.simple_name)
@@ -725,7 +725,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       end
       npc.show_chat_window(player)
       return
-    elsif npc.id >= 32275 && npc.id <= 32277
+    elsif npc.id.between?(32275, 32277)
       world = InstanceManager.get_world(npc.instance_id)
       if world.is_a?(CCWorld)
         unless world.oracle_triggered[npc.id - 32275]
@@ -750,7 +750,7 @@ class Scripts::CrystalCaverns < AbstractInstance
   end
 
   def on_skill_see(npc, caster, skill, targets, is_summon)
-    if targets.any? { |obj| obj == npc }
+    if targets.includes?(npc)
       return super
     end
 
@@ -761,7 +761,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       return super
     end
 
-    if npc.id >= 32275 && npc.id <= 32277 && skill.id != 2360 && skill.id != 2369
+    if npc.id.between?(32275, 32277) && skill.id != 2360 && skill.id != 2369
       world = InstanceManager.get_world(npc.instance_id)
       if world.is_a?(CCWorld) && Rnd.rand(100) < 15
         world.oracles.each_key do |oracle|
@@ -777,7 +777,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       end
       world = InstanceManager.get_world(npc.instance_id)
       if world.is_a?(CCWorld)
-        if world.dragon_claw_start + DRAGONCLAWTIME <= Time.ms || world.dragon_claw_need <= 0
+        if world.dragon_claw_start + DRAGON_CLAW_TIME <= Time.ms || world.dragon_claw_need <= 0
           world.dragon_claw_start = Time.ms
           world.dragon_claw_need = caster.party.not_nil!.size - 1
         else
@@ -796,7 +796,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       if world.is_a?(CCWorld)
         if caster.party.nil?
           return super
-        elsif world.dragon_scale_start + DRAGONSCALETIME <= Time.ms || world.dragon_scale_needed <= 0
+        elsif world.dragon_scale_start + DRAGON_SCALE_TIME <= Time.ms || world.dragon_scale_needed <= 0
           world.dragon_scale_start = Time.ms
           world.dragon_scale_needed = caster.party.not_nil!.size - 1
         else

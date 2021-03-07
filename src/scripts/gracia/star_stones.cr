@@ -28,7 +28,7 @@ class Scripts::StarStones < AbstractNpcAI
       if Rnd.rand(100) < 33
         caster.send_packet(SystemMessageId::THE_COLLECTION_HAS_SUCCEEDED)
         caster.add_item("StarStone", item_id, Rnd.rand(COLLECTION_RATE + 1..2i64 * COLLECTION_RATE), nil, true)
-      elsif (skill.level == 1 && Rnd.rand(100) < 15) || (skill.level == 2 && Rnd.rand(100) < 50) || (skill.level == 3 && Rnd.rand(100) < 75)
+      elsif (skill.level == 1 && Rnd.rand(100) < 15) || (skill.level == 2 && Rnd.bool) || (skill.level == 3 && Rnd.rand(100) < 75)
         caster.send_packet(SystemMessageId::THE_COLLECTION_HAS_SUCCEEDED)
         caster.add_item("StarStone", item_id, Rnd.rand(1i64..COLLECTION_RATE), nil, true)
       else

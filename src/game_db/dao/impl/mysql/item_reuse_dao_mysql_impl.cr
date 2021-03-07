@@ -31,7 +31,7 @@ module GameDB
         end
       end
     rescue e
-      error "Could not store #{pc.name}'s item reuse data."
+      error "Could not store #{pc}'s item reuse data."
       error e
     end
 
@@ -66,7 +66,7 @@ module GameDB
 
       delete(pc)
     rescue e
-      error { "Could not restore #{pc.name}'s item reuse data." }
+      error { "Could not restore #{pc}'s item reuse data." }
       error e
     end
   end

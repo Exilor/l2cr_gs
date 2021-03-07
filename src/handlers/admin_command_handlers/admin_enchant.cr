@@ -87,7 +87,7 @@ module AdminCommandHandler::AdminEnchant
       player.send_packet(UserInfo.new(player))
       player.broadcast_packet(ExBrExtraUserInfo.new(player))
 
-      pc.send_message("Changed enchantment of #{pc.name}'s #{item_instance.template.name} from #{cur_enchant} to #{ench}.")
+      pc.send_message("Changed enchantment of #{pc}'s #{item_instance.template.name} from #{cur_enchant} to #{ench}.")
       player.send_message("Admin has changed the enchantment of your #{item_instance.template.name} from #{cur_enchant} to #{ench}.")
     end
   end

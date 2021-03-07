@@ -41,7 +41,6 @@ require "../../holders/player_event_holder"
 require "../../calendar"
 require "../../l2_request"
 require "../../interfaces/event_listener"
-require "../../../util/enum_bitmask"
 require "../../../instance_managers/duel_manager"
 require "../../l2_party"
 require "../../l2_clan"
@@ -63,7 +62,7 @@ class L2PcInstance < L2Playable
 
   @reco_bonus_task : TaskScheduler::DelayedTask?
   @reco_give_task : TaskScheduler::PeriodicTask?
-  @subclass_lock = MyMutex.new
+  @subclass_lock = Mutex.new(:Reentrant)
   @cur_weight_penalty = 0
   @last_compass_zone = 0
   @charges = Atomic(Int32).new(0)
@@ -163,7 +162,7 @@ class L2PcInstance < L2Playable
   getter active_enchant_item_id = ID_NONE
   getter cubics = Concurrent::Map(Int32, L2CubicInstance).new
   getter active_shots = Concurrent::Set(Int32).new(1)
-  getter soulshot_lock = MyMutex.new
+  getter soulshot_lock = Mutex.new(:Reentrant)
   getter fish_x = 0
   getter fish_y = 0
   getter fish_z = 0
@@ -263,7 +262,7 @@ class L2PcInstance < L2Playable
   property admin_confirm_cmd : String?
   property active_warehouse : ItemContainer?
   property multisell : Multisell::PreparedListContainer?
-  property clan_privileges : EnumBitmask(ClanPrivilege) = EnumBitmask(ClanPrivilege).new
+  property clan_privileges : EnumSet(ClanPrivilege) = EnumSet(ClanPrivilege).new
   property control_item_id : Int32 = 0
   property fists_weapon_item : L2Weapon?
   property client : GameClient?
@@ -960,7 +959,7 @@ class L2PcInstance < L2Playable
 
     gsp.invisible = invisible?
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       unless visible_for?(pc)
         next
       end
@@ -991,7 +990,7 @@ class L2PcInstance < L2Playable
 
     gsp.invisible = invisible?
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       if inside_radius?(pc, radius, false, false)
         pc.send_packet(gsp)
 
@@ -2727,7 +2726,7 @@ class L2PcInstance < L2Playable
     send_packet(UserInfo.new(self))
     send_packet(ExBrExtraUserInfo.new(self))
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn = summon
@@ -2740,7 +2739,7 @@ class L2PcInstance < L2Playable
   def broadcast_karma
     send_packet(StatusUpdate.karma(self))
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn = summon
@@ -4739,7 +4738,7 @@ class L2PcInstance < L2Playable
       send_packet(RelationChanged.new(smn, get_relation(self), false))
     end
 
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       rc = RelationChanged.new(self, get_relation(pc), auto_attackable?(pc))
       pc.send_packet(rc)
       if smn
@@ -5263,7 +5262,7 @@ class L2PcInstance < L2Playable
 
     unless clan
       @clan_id = 0
-      @clan_privileges = EnumBitmask(ClanPrivilege).new(false)
+      @clan_privileges = EnumSet(ClanPrivilege).new(false)
       @pledge_type = 0
       @power_grade = 0
       @lvl_joined_academy = 0
@@ -5991,10 +5990,10 @@ class L2PcInstance < L2Playable
   end
 
   def has_clan_privilege?(priv : ClanPrivilege) : Bool
-    @clan_privileges.has?(priv)
+    @clan_privileges.includes?(priv)
   end
 
-  def clan_privileges=(privs : EnumBitmask(ClanPrivilege))
+  def clan_privileges=(privs : EnumSet(ClanPrivilege))
     @clan_privileges = privs.clone
   end
 

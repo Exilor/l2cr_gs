@@ -271,15 +271,15 @@ class Scripts::CavernOfThePirateCaptain < AbstractInstance
           if pc.instance_id == world.instance_id
             if pc.inside_radius?(npc, 1500, true, true)
               time = Time.ms - world.store_time
-              if time <= 300000 # 5 minutes
+              if time <= 300_000 # 5 minutes
                 if Rnd.bool
                   give_items(pc, VORPAL_RING, 1)
                 end
-              elsif time <= 600000 # 10 minutes
+              elsif time <= 600_000 # 10 minutes
                 if Rnd.rand(100) < 30
                   give_items(pc, VORPAL_EARRING, 1)
                 end
-              elsif time <= 900000 # 15 minutes
+              elsif time <= 900_000 # 15 minutes
                 if Rnd.rand(100) < 25
                   give_items(pc, VORPAL_RING, 1)
                 end
@@ -329,7 +329,6 @@ class Scripts::CavernOfThePirateCaptain < AbstractInstance
     when 30, 31
       return 13
     end
-
 
     0
   end

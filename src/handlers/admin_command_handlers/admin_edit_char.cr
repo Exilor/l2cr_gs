@@ -86,7 +86,7 @@ module AdminCommandHandler::AdminEditChar
           player.send_packet(UserInfo.new(player))
           player.send_packet(ExBrExtraUserInfo.new(player))
           player.send_message("A GM changed your PK count to #{pk}")
-          pc.send_message("#{player.name}'s PK count changed to #{pk}")
+          pc.send_message("#{player}'s PK count changed to #{pk}")
         else
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         end
@@ -109,7 +109,7 @@ module AdminCommandHandler::AdminEditChar
           player.send_packet(UserInfo.new(player))
           player.send_packet(ExBrExtraUserInfo.new(player))
           player.send_message("A GM changed your PVP count to #{pvp}")
-          pc.send_message("#{player.name}'s PVP count changed to #{pvp}")
+          pc.send_message("#{player}'s PVP count changed to #{pvp}")
         else
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         end
@@ -132,7 +132,7 @@ module AdminCommandHandler::AdminEditChar
           player.send_packet(UserInfo.new(player))
           player.send_packet(ExBrExtraUserInfo.new(player))
           player.send_message("A GM changed your Reputation points to #{fame}")
-          pc.send_message("#{player.name}'s Fame changed to #{fame}")
+          pc.send_message("#{player}'s Fame changed to #{fame}")
         else
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         end
@@ -156,7 +156,7 @@ module AdminCommandHandler::AdminEditChar
           player.send_packet(ExBrExtraUserInfo.new(player))
           player.send_packet(ExVoteSystemInfo.new(player))
           player.send_message("A GM changed your Recommend points to #{rec_val}")
-          pc.send_message("#{player.name}'s Recommend changed to #{rec_val}")
+          pc.send_message("#{player}'s Recommend changed to #{rec_val}")
         else
           pc.send_packet(SystemMessageId::INCORRECT_TARGET)
         end
@@ -187,7 +187,7 @@ module AdminCommandHandler::AdminEditChar
           player.broadcast_user_info
           pc.target = nil
           pc.target = player
-          pc.send_message("#{player.name} is a #{new_class}.")
+          pc.send_message("#{player} is a #{new_class}.")
         else
           pc.send_message("Usage: //setclass <valid_new_classid>")
         end
@@ -670,12 +670,12 @@ module AdminCommandHandler::AdminEditChar
       sm.add_int(new_karma)
       player.send_packet(sm)
       # Admin information
-      pc.send_message("Successfully Changed karma for #{player.name} from #{old_karma} to #{new_karma}.")
-      debug { "[SET KARMA] [GM] #{pc.name} Changed karma for #{player.name} from #{old_karma} to #{new_karma}." }
+      pc.send_message("Successfully Changed karma for #{player} from #{old_karma} to #{new_karma}.")
+      debug { "[SET KARMA] [GM] #{pc} Changed karma for #{player} from #{old_karma} to #{new_karma}." }
     else
       # tell admin of mistake
       pc.send_message("You must enter a value for karma greater than or equal to 0.")
-      debug { "[SET KARMA] ERROR: [GM] #{pc.name} entered an incorrect value for new karma: #{new_karma} for #{player.name}." }
+      debug { "[SET KARMA] ERROR: [GM] #{pc} entered an incorrect value for new karma: #{new_karma} for #{player}." }
     end
   end
 

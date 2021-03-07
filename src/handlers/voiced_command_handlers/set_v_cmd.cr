@@ -19,12 +19,12 @@ module VoicedCommandHandler::SetVCmd
 
         n = val.to_i
 
-        if pc.clan_privileges.bitmask <= n || !pc.clan_leader?
+        if pc.clan_privileges.mask <= n || !pc.clan_leader?
           return false
         end
 
-        pc.clan_privileges.bitmask = n
-        pc.send_message("Your clan privileges have been set to #{n} by #{pc.name}.")
+        pc.clan_privileges.mask = n
+        pc.send_message("Your clan privileges have been set to #{n} by #{pc}.")
       elsif params.starts_with?("title")
         # L2J TODO
       end

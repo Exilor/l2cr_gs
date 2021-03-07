@@ -105,7 +105,7 @@ class Scripts::AvantGarde < AbstractNpcAI
                     st.save_global_quest_var(qvar_name, "0")
                   end
                 else
-                  warn { "Invalid subclass skill id #{skill_id_var} for player #{pc.name}." }
+                  warn { "Invalid subclass skill id #{skill_id_var} for player #{pc}." }
                 end
               elsif !qvar.empty? && qvar != "0"
                 if qvar.number?
@@ -124,7 +124,7 @@ class Scripts::AvantGarde < AbstractNpcAI
                   end
                   st.save_global_quest_var(qvar_name, "0")
                 else
-                  warn { "Invalid item object id #{qvar} for player #{pc.name}." }
+                  warn { "Invalid item object id #{qvar} for player #{pc}." }
                 end
               end
             end
@@ -139,7 +139,7 @@ class Scripts::AvantGarde < AbstractNpcAI
       # Let's consume all certification books, even those not present in database.
       ITEMS.each do |item_id|
         if item = pc.inventory.get_item_by_item_id(item_id)
-          warn { "Player #{pc.name} had 'extra' certification skill books while cancelling sub-class certifications." }
+          warn { "Player #{pc} had 'extra' certification skill books while cancelling sub-class certifications." }
           pc.destroy_item("CancelCertificationExtraBooks", item, npc, false)
         end
       end

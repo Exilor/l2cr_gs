@@ -119,7 +119,6 @@ class LoginServerThread
   end
 
   def send_packet(packet : MMO::OutgoingPacket(self))
-    {% if flag?(:preview_mt) %} debug { "send_packet start: #{packet}" } {% end %}
     return if cancelled?
 
     OUT_BUFFER.clear
@@ -139,8 +138,6 @@ class LoginServerThread
     OUT_BUFFER.write_bytes(remaining.to_u16)
 
     socket.write(OUT_BUFFER.to_slice)
-
-    {% if flag?(:preview_mt) %} debug { "send_packet end: #{packet}" } {% end %}
   rescue e : IO::Error
     error e
   end

@@ -10,9 +10,9 @@ abstract class AbstractScript
 
   private alias Say2 = Packets::Incoming::Say2
 
-  @registered_ids = Concurrent::Map(ListenerRegisterType, Set(Int32) | Concurrent::Set(Int32)).new
+  @registered_ids = {} of ListenerRegisterType => Array(Int32)
 
-  getter listeners = Concurrent::Array(AbstractEventListener).new
+  getter listeners = [] of AbstractEventListener
   property? active : Bool = false
 
   def initialize
@@ -256,11 +256,11 @@ abstract class AbstractScript
             listeners << temp.add_listener(block.call(temp))
           end
         else
-          warn { "'#{register_type}' not handled." }
+          warn { "#{register_type.inspect} not handled." }
         end
 
-        set = @registered_ids[register_type] ||= Concurrent::Set(Int32).new
-        set << id
+        set = @registered_ids[register_type] ||= [] of Int32
+        set << id unless set.includes?(id)
       end
     else
       case register_type
@@ -275,7 +275,7 @@ abstract class AbstractScript
       when ListenerRegisterType::GLOBAL_PLAYERS
         listeners << Containers::PLAYERS.add_listener(block.call(Containers::PLAYERS))
       else
-        warn { "#{register_type} not handled." }
+        warn { "#{register_type.inspect} not handled." }
       end
     end
 
@@ -284,7 +284,7 @@ abstract class AbstractScript
     listeners
   end
 
-  def get_registered_ids(reg_type : ListenerRegisterType) #: Enumerable(Int32)
+  def get_registered_ids(reg_type : ListenerRegisterType) : Enumerable(Int32)
     @registered_ids.fetch(reg_type, Slice(Int32).empty)
   end
 
@@ -637,7 +637,7 @@ abstract class AbstractScript
     if inst = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
       send_item_get_message(pc, inst, count)
     else
-      warn { "Failed to add item with id #{item_id} x#{count} to #{pc.name}." }
+      warn { "Failed to add item with id #{item_id} x#{count} to #{pc}." }
     end
   end
 
@@ -937,7 +937,7 @@ abstract class AbstractScript
   annotation Register; end
 
   private def initialize_annotation_listeners
-    ids = Set(Int32).new
+    ids = [] of Int32
 
     {% for m in @type.methods %}
       {% if ann = m.annotation(Register) %}
@@ -996,7 +996,7 @@ abstract class AbstractScript
         priority = {{ann[:priority]}} || 0
 
         unless ids.empty?
-          @registered_ids[register_type] ||= ids
+          @registered_ids[register_type] ||= ids.uniq!
         end
 
         register_annotation(event_type, register_type, method, priority, ids)

@@ -1,4 +1,4 @@
-class Packets::Incoming::SendWarehouseWithDrawList < GameClientPacket
+class Packets::Incoming::SendWarehouseWithdrawList < GameClientPacket
   BATCH_LENGTH = 12
 
   @items : Array(ItemHolder)?
@@ -96,12 +96,12 @@ class Packets::Incoming::SendWarehouseWithDrawList < GameClientPacket
     _items.each do |i|
       old_item = warehouse.get_item_by_l2id(i.id) # shouldn't this be by_item_id ?
       if old_item.nil? || old_item.count < i.count
-        warn { "Error withdrawing a warehouse object for char #{pc.name} (old_item == nil)." }
+        warn { "Error withdrawing a warehouse object for char #{pc} (old_item == nil)." }
         return
       end
       new_item = warehouse.transfer_item(warehouse.name, i.id, i.count, pc.inventory, pc, manager)
       unless new_item
-        warn { "Error withdrawing a warehouse object for char #{pc.name} (new_item == nil)." }
+        warn { "Error withdrawing a warehouse object for char #{pc} (new_item == nil)." }
         return
       end
 

@@ -31,7 +31,7 @@ class Packets::Incoming::RequestCrystallizeItem < GameClientPacket
       send_packet(SystemMessageId::CRYSTALLIZE_LEVEL_TOO_LOW)
       action_failed
       if !pc.race.dwarf? && pc.class_id.to_i != 117 && pc.class_id.to_i != 55
-        warn { "Player #{pc.name} used crystallize with class #{pc.class_id}." }
+        warn { "Player #{pc} used crystallize with class #{pc.class_id}." }
       end
       return
     end
@@ -53,7 +53,7 @@ class Packets::Incoming::RequestCrystallizeItem < GameClientPacket
     end
 
     if !item.template.crystallizable? ||item.template.crystal_count <= 0 || item.template.crystal_type.none?
-      warn { "Player #{pc.name} tried to crystallize #{item.name}, which cannot be crystallized." }
+      warn { "Player #{pc} tried to crystallize #{item.name}, which cannot be crystallized." }
       return
     end
 

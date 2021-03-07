@@ -10,7 +10,7 @@ class Packets::Incoming::EndScenePlayer < GameClientPacket
     return unless pc = active_char
 
     if pc.movie_id != @movie_id
-      warn { "Player #{pc.name} requested to end wrong movie id #{@movie_id}." }
+      warn { "Player #{pc} requested to end wrong movie id #{@movie_id}." }
       return
     end
 

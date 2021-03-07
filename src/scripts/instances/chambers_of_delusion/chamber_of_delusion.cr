@@ -363,10 +363,10 @@ abstract class ChamberOfDelusion < AbstractInstance
         if Rnd.rand(100) < 33
           npc.drop_item(attacker, ENRIA, (3 * Config.rate_quest_drop).to_i64)
         end
-        if Rnd.rand(100) < 50
+        if Rnd.bool
           npc.drop_item(attacker, THONS, (4 * Config.rate_quest_drop).to_i64)
         end
-        if Rnd.rand(100) < 50
+        if Rnd.bool
           npc.drop_item(attacker, ASOFE, (4 * Config.rate_quest_drop).to_i64)
         end
         if Rnd.rand(100) < 16

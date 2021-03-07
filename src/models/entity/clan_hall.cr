@@ -84,7 +84,7 @@ abstract class ClanHall
     if pc.clan_id == owner_id
       open_close_door(door_id, open)
     else
-      debug { "#{pc.name}'s clan with id #{pc.clan_id} is not the owner of this clan hall with owner id #{owner_id}." }
+      debug { "#{pc}'s clan with id #{pc.clan_id} is not the owner of this clan hall with owner id #{owner_id}." }
     end
   end
 

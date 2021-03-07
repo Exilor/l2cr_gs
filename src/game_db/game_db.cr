@@ -24,8 +24,8 @@ module GameDB
     info { "Using #{Config.database_engine}." }
   end
 
-  delegate transaction, query_each, each, exec, scalar, prepare, close,
-    "log=", to: db
+  delegate transaction, query_each, each, exec, scalar, prepare, close, "log=",
+    to: db
 
   delegate friend, henna, item, item_reuse, pet, pet_skill_save, player, skill,
     player_skill_save, premium_item, recipe_book, recipe_shop_list, shortcut,

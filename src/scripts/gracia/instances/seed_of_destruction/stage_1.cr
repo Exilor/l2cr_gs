@@ -4,7 +4,7 @@ class Scripts::Stage1 < AbstractInstance
   private class SOD1World < InstanceWorld
     getter players_inside = [] of L2PcInstance
     getter npc_list = {} of L2Npc => Bool
-    getter lock = MyMutex.new
+    getter lock = Mutex.new(:Reentrant)
     property device_spawned_mob_count = 0
     property! tiat : L2MonsterInstance
   end
@@ -66,8 +66,8 @@ class Scripts::Stage1 < AbstractInstance
   private TIAT_GUARD = 29162
   private TIAT_GUARD_NUMBER = 5
   private TIAT_VIDEO_NPC = 29169
-  private  MOVE_TO_TIAT = Location.new(-250403, 207273, -11952, 16384)
-  private  MOVE_TO_DOOR = Location.new(-251432, 214905, -12088, 16384)
+  private MOVE_TO_TIAT = Location.new(-250403, 207273, -11952, 16384)
+  private MOVE_TO_DOOR = Location.new(-251432, 214905, -12088, 16384)
 
   # TODO: handle this better
   private SPAWN_MOB_IDS = {

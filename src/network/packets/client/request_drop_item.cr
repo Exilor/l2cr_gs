@@ -24,7 +24,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     end
 
     unless item = pc.inventory.get_item_by_l2id(@id)
-      debug { "Item with object id #{@id} not found in #{pc.name}'s inventory." }
+      debug { "Item with object id #{@id} not found in #{pc}'s inventory." }
       pc.send_packet(SystemMessageId::CANNOT_DISCARD_THIS_ITEM)
       return
     end
@@ -53,13 +53,13 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
 
     if @count < 0
       Util.punish(pc, "tried to drop item with object id #{@id} with count < 0.")
-      warn { "#{pc.name} attempted to drop #{item} x#{@count}." }
+      warn { "#{pc} attempted to drop #{item} x#{@count}." }
       return
     end
 
     if !item.stackable? && @count > 1
       Util.punish(pc, "tried to drop non_stackable item with object id #{@id} with count > 1.")
-      warn { "#{pc.name} attempted to drop multiple non-stackable #{item}." }
+      warn { "#{pc} attempted to drop multiple non-stackable #{item}." }
       return
     end
 
@@ -137,7 +137,7 @@ class Packets::Incoming::RequestDropItem < GameClientPacket
     end
 
     if drop && drop.id == Inventory::ADENA_ID && drop.count >= 1_000_000
-      msg = "#{pc.name} has dropped #{drop.count} adena at #{@x} #{@y} #{@z}."
+      msg = "#{pc} has dropped #{drop.count} adena at #{@x} #{@y} #{@z}."
       warn msg
       AdminData.broadcast_message_to_gms(msg)
     end

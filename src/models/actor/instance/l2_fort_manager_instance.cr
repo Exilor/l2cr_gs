@@ -674,7 +674,7 @@ class L2FortManagerInstance < L2MerchantInstance
     debug "do_teleport(pc, val) called"
     if list = TeleportLocationTable[val]?
       if pc.destroy_item_by_item_id("Teleport", list.item_id, list.price, self, true)
-        debug { "Teleporting player #{pc.name} for Fortress to new location: #{list.x} #{list.y} #{list.z}" }
+        debug { "Teleporting player #{pc} for Fortress to new location: #{list.x} #{list.y} #{list.z}" }
         pc.tele_to_location(list.x, list.y, list.z)
       end
     else

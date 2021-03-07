@@ -455,37 +455,19 @@ abstract class L2Object < ListenersContainer
     get_script(ObjectPoly)
   end
 
-  # thinking it over
-  # def in_range?(other : self?, range : Int32, z_axis : Bool) : Bool
-  #   return false unless other && instance_id == other.instance_id
-  #   return true if range == -1
-
-  #   rad = 0
-  #   me = self
-  #   if me.is_a?(L2Character)
-  #     rad &+= me.template.collision_radius
-  #   end
-  #   if other.is_a?(L2Character)
-  #     rad &+= other.template.collision_radius
-  #   end
-
-  #   d = Math.hypot(x &- other.x, y &- other.y)
-  #   if z_axis
-  #     d = Math.hypot(d, z &- other.z)
-  #   end
-
-  #   d - (rad / 2) <= range
-  # end
-
   def to_s(io : IO)
-    io.print(self.class, '(', name, ": ", l2id, ')')
+    if name.empty?
+      io.print(self.class, '(', @l2id, ')')
+    else
+      io << name
+    end
   end
 
   def inspect(io : IO)
-    to_s(io)
+    io.print(self.class, '(', name, ": ", l2id, ')')
   end
 
   def to_log(io : IO)
-    to_s(io)
+    inspect(io)
   end
 end

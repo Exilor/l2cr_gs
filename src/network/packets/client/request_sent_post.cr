@@ -23,7 +23,7 @@ class Packets::Incoming::RequestSentPost < GameClientPacket
 
     if msg.sender_id != pc.l2id
       Util.punish(pc, "tried to read a mail message sent to somebody else.")
-      warn { "Player #{pc.name} tried to read a sent post he didn't send." }
+      warn { "Player #{pc} tried to read a sent post he didn't send." }
       return
     end
 

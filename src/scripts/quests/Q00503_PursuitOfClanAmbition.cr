@@ -252,7 +252,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       if leader_qs.memo_state < 8511 || leader_qs.memo_state >= 8500
         leader_qs.memo_state = leader_qs.memo_state + 1
 
-        if leader_qs.memo_state >= 8505 && Rnd.rand(100) < 50
+        if leader_qs.memo_state >= 8505 && Rnd.bool
           leader_qs.memo_state = 8500
           add_spawn(GRAVE_KEYMASTER, npc, true, 0, false)
         elsif leader_qs.memo_state >= 8510

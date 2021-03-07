@@ -20,12 +20,12 @@ module AdminCommandHandler::AdminInvul
   private def handle_invul(pc)
     if pc.invul?
       pc.invul = false
-      text = "#{pc.name} is now mortal"
-      debug { "GM removed invul mode from player #{pc.name}(#{pc.l2id})" }
+      text = "#{pc} is now mortal"
+      debug { "GM removed invul mode from player #{pc}(#{pc.l2id})" }
     else
       pc.invul = true
-      text = "#{pc.name} is now invulnerable"
-      debug { "GM activated invul mode for player #{pc.name}(#{pc.l2id})" }
+      text = "#{pc} is now invulnerable"
+      debug { "GM activated invul mode for player #{pc}(#{pc.l2id})" }
     end
     pc.send_message(text)
   end

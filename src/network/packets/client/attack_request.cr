@@ -38,8 +38,8 @@ class Packets::Incoming::AttackRequest < GameClientPacket
     end
 
     if (!target.targetable? && !pc.override_target_all?) ||
-      (target.instance_id != pc.instance_id && pc.instance_id != -1) ||
-      !target.visible_for?(pc)
+        (target.instance_id != pc.instance_id && pc.instance_id != -1) ||
+        !target.visible_for?(pc)
 
       action_failed
       return

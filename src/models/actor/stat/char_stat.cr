@@ -35,7 +35,7 @@ class CharStat
     end
 
     value = c.calc(@active_char, target, skill, value)
-    value <= 0 && stat.check_negative? ? 1.0 : value
+    value <= 0 && stat.never_negative? ? 1.0 : value
   end
 
   def accuracy : Int32

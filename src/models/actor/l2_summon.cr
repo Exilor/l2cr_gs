@@ -33,9 +33,7 @@ abstract class L2Summon < L2Playable
     y = owner.y + rand(-100..100)
     set_xyz_invisible(x, y, owner.z)
 
-    template.skills.each_value do |skill|
-      add_skill(skill)
-    end
+    template.skills.each_value { |skill| add_skill(skill) }
 
     Formulas.add_funcs_to_new_summon(self)
   end
@@ -139,12 +137,6 @@ abstract class L2Summon < L2Playable
     OnPlayerSummonSpawn.new(self).async(self)
   end
 
-  def update_abnormal_effect
-    known_list.known_players.each_value do |pc|
-      pc.send_packet(SummonInfo.new(self, pc, 1))
-    end
-  end
-
   def control_l2id : Int32
     0
   end
@@ -187,11 +179,15 @@ abstract class L2Summon < L2Playable
   end
 
   def broadcast_npc_info(val : Int32)
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       unless pc == owner
         pc.send_packet(SummonInfo.new(self, pc, val))
       end
     end
+  end
+
+  def update_abnormal_effect
+    known_list.each_player { |pc| pc.send_packet(SummonInfo.new(self, pc, 1)) }
   end
 
   def delete_me(owner : L2PcInstance?)
@@ -202,13 +198,15 @@ abstract class L2Summon < L2Playable
       end
       owner.active_shots.each do |item_id|
         handler = ItemTable[item_id].as(L2EtcItem).handler_name
-        if handler.try &.includes?("Beast")
+        if handler && handler.includes?("Beast")
           owner.disable_auto_shot(item_id)
         end
       end
     end
 
-    inventory?.try &.destroy_all_items("pet deleted", owner, self)
+    if inv = inventory?
+      inv.destroy_all_items("pet deleted", owner, self)
+    end
     decay_me
     known_list.remove_all_known_objects
     owner().pet = nil
@@ -237,18 +235,22 @@ abstract class L2Summon < L2Playable
       abort_cast
       store_me
       store_effect(true)
-      owner.try &.pet = nil
+      if o = owner
+        o.pet = nil
+      end
       ai.stop_ai_task if ai?
       stop_all_effects
       old_region = world_region
       decay_me
-      old_region.try &.remove_from_zones(self)
+      if old_reg = old_region
+        old_reg.remove_from_zones(self)
+      end
       known_list.remove_all_known_objects
       self.target = nil
       if owner
         owner.active_shots.each do |item_id|
           handler = ItemTable[item_id].as(L2EtcItem).handler_name
-          if handler.try &.includes?("Beast")
+          if handler && handler.includes?("Beast")
             owner.disable_auto_shot(item_id)
           end
         end
@@ -670,11 +672,15 @@ abstract class L2Summon < L2Playable
     owner.active_shots.each do |item_id|
       if item = owner.inventory.get_item_by_item_id(item_id)
         if magic && item.template.default_action.summon_spiritshot?
-          ItemHandler[item.etc_item].try &.use_item(owner, item, false)
+          if handler = ItemHandler[item.etc_item]
+            handler.use_item(owner, item, false)
+          end
         end
 
         if physical && item.template.default_action.summon_soulshot?
-          ItemHandler[item.etc_item].try &.use_item(owner, item, false)
+          if handler = ItemHandler[item.etc_item]
+            handler.use_item(owner, item, false)
+          end
         end
       else
         owner.remove_auto_shot(item_id)
@@ -703,7 +709,7 @@ abstract class L2Summon < L2Playable
   end
 
   def to_s(io : IO)
-    io.print(@owner.name, "'s ", name)
+    io.print(@owner, "'s ", name)
   end
 
   abstract def summon_type : Int32

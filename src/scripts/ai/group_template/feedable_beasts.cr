@@ -283,7 +283,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     # find the next mob to spawn, based on the current npc_id, growth_level, and food.
     if growth_level == 2
       # if tamed, the mob that will spawn depends on the class type (fighter/mage) of the player!
-      if Rnd.rand(2) == 0
+      if Rnd.bool
         if pc.class_id.mage_class?
           next_npc_id = GROWTH_CAPABLE_MONSTERS[npc_id].get_mob(food, 1, 1)
         else

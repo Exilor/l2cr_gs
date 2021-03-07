@@ -820,7 +820,7 @@ class L2Npc < L2Character
   end
 
   def update_abnormal_effect
-    known_list.known_players.each_value do |pc|
+    known_list.each_player do |pc|
       next unless visible_for?(pc)
 
       if run_speed == 0

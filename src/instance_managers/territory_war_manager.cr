@@ -8,7 +8,7 @@ module TerritoryWarManager
 
   private DELETE = "DELETE FROM territory_registrations WHERE castleId = ? and registeredId = ?"
   private INSERT = "INSERT INTO territory_registrations (castleId, registeredId) values (?, ?)"
-  QN = "TerritoryWarSuperClass"
+  QUEST_NAME = "TerritoryWarSuperClass"
   GLOBAL_VARIABLE = "nextTWStartDate"
   TERRITORY_ITEM_IDS = {
     81 => 13757, 82 => 13758, 83 => 13759, 84 => 13760, 85 => 13761,
@@ -16,7 +16,7 @@ module TerritoryWarManager
   }
   private REGISTERED_CLANS = Concurrent::Map(Int32, Array(L2Clan)).new
   private REGISTERED_MERCENARIES = Concurrent::Map(Int32, Array(Int32)).new
-  private TERRITORY_LIST = Concurrent::Map(Int32, Territory).new
+  private TERRITORY_LIST = {} of Int32 => Territory
   private DISGUISED_PLAYERS = Concurrent::Array(Int32).new
   private TERRITORY_WARDS = Concurrent::Array(TerritoryWard).new
   private CLAN_FLAGS = Concurrent::Map(L2Clan, L2SiegeFlagInstance).new
@@ -747,7 +747,7 @@ module TerritoryWarManager
   end
 
   private def update_player_tw_state_flags(clear : Bool) : Bool
-    unless tw_quest = QuestManager.get_quest(QN)
+    unless tw_quest = QuestManager.get_quest(QUEST_NAME)
       warn "Missing main quest."
       return false
     end

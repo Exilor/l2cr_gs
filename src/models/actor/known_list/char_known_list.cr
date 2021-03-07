@@ -140,15 +140,6 @@ class CharKnownList < ObjectKnownList
   end
 
   def get_known_players_in_radius(radius : Int32, & : L2PcInstance ->) : Nil
-    me = active_char
-    @known_players.try &.each_value do |pc|
-      if Util.in_range?(radius, me, pc, true)
-        yield pc
-      end
-    end
-  end
-
-  def get_known_players_in_radius(radius : Int32, & : L2PcInstance ->) : Nil
     return unless players = @known_players
     me = active_char
     players.each_value { |pc| yield pc if Util.in_range?(radius, me, pc, true) }
@@ -158,6 +149,15 @@ class CharKnownList < ObjectKnownList
     return Iterator(L2PcInstance).empty unless players = @known_players
     it = players.local_each_value
     KnownInRadiusIterator(L2PcInstance, typeof(it)).new(active_char, it, radius)
+  end
+
+  def each_player : Nil
+    @known_players.try &.each_value { |pc| yield pc }
+  end
+
+  def knows_players? : Bool
+    return false unless known_players = @known_players
+    !known_players.empty?
   end
 
   def active_char : L2Character

@@ -1,12 +1,12 @@
 class Stats < EnumClass
   getter value
-  getter? check_negative
+  getter? never_negative
 
-  protected initializer value : String, check_negative : Bool = false
+  protected initializer value : String, never_negative : Bool = false
 
   def self.from_value(str : String) : self
     find { |stat| stat.value == str } ||
-    raise("No member with value '#{str}' found")
+      raise("No member with value '#{str}' found")
   end
 
   # HP, MP & CP

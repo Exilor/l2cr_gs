@@ -7,6 +7,6 @@ class Packets::Outgoing::PledgeReceivePowerInfo < GameServerPacket
 
     d @member.power_grade
     s @member.name
-    d @member.clan.not_nil!.get_rank_privs(@member.power_grade).bitmask
+    d @member.clan.not_nil!.get_rank_privs(@member.power_grade).mask
   end
 end
