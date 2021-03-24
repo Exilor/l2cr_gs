@@ -498,7 +498,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
   end
 
   def add_damage(player, damage : Int32)
-    unless @player_one.player?.nil? || @player_two.player?.nil?
+    if @player_one.player?.nil? || @player_two.player?.nil?
       return
     end
 
