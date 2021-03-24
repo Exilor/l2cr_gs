@@ -46,8 +46,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30644-04.htm"
@@ -108,7 +107,6 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -181,8 +179,8 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
       when 8
         html = "30646-06.html"
       when 10
-        add_exp_and_sp(pc, 1067606, 69242)
-        give_adena(pc, 194556, true)
+        add_exp_and_sp(pc, 1_067_606, 69_242)
+        give_adena(pc, 194_556, true)
         give_items(pc, MARK_OF_CHALLENGER, 1)
 
         # redundant retail check - already rewarded at beginning of quest
@@ -222,7 +220,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
     when SHYSLASSYS
       if qs.cond?(1)
         if SpawnTable.get_spawns(npc.id).size < 10
-          add_spawn(CHEST_OF_SHYSLASSYS, npc, false, 200000)
+          add_spawn(CHEST_OF_SHYSLASSYS, npc, false, 200_000)
         end
         give_items(killer, SCROLL_OF_SHYSLASSYS, 1)
         give_items(killer, BROKEN_KEY, 1)
@@ -236,7 +234,7 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
     when BARAHAM
       if qs.cond?(6)
         if SpawnTable.get_spawns(npc.id).size < 10
-          add_spawn(RALDO, npc, false, 100000)
+          add_spawn(RALDO, npc, false, 100_000)
         end
         give_items(killer, WATCHERS_EYE2, 1)
         qs.set_cond(7, true)
@@ -244,12 +242,11 @@ class Scripts::Q00211_TrialOfTheChallenger < Quest
     when QUEEN_OF_SUCCUBUS
       if qs.cond?(9)
         if SpawnTable.get_spawns(npc.id).size < 10
-          add_spawn(RALDO, npc, false, 100000)
+          add_spawn(RALDO, npc, false, 100_000)
         end
         qs.set_cond(10, true)
       end
     end
-
 
     super
   end

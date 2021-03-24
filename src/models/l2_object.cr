@@ -10,6 +10,7 @@ abstract class L2Object < ListenersContainer
   include Positionable
   include AbstractEventListener::Owner
   include Packets::Outgoing
+  include Loggable
 
   @visible = false
   @x = Atomic(Int32).new(0)
@@ -44,6 +45,7 @@ abstract class L2Object < ListenersContainer
       self.world_region = nil
     end
 
+    L2World.remove_visible_object(self, region)
     L2World.remove_visible_object(self, region)
     L2World.remove_object(self)
 
@@ -295,10 +297,10 @@ abstract class L2Object < ListenersContainer
 
     sync do
       @visible = true
-      x = L2World::MAP_MAX_X - 5000 if x > L2World::MAP_MAX_X
-      x = L2World::MAP_MIN_X + 5000 if x < L2World::MAP_MIN_X
-      y = L2World::MAP_MAX_Y - 5000 if y > L2World::MAP_MAX_Y
-      y = L2World::MAP_MIN_Y + 5000 if y < L2World::MAP_MIN_Y
+      x = L2World::MAP_MAX_X &- 5000 if x > L2World::MAP_MAX_X
+      x = L2World::MAP_MIN_X &+ 5000 if x < L2World::MAP_MIN_X
+      y = L2World::MAP_MAX_Y &- 5000 if y > L2World::MAP_MAX_Y
+      y = L2World::MAP_MIN_Y &+ 5000 if y < L2World::MAP_MIN_Y
       set_xyz(x, y, z)
       self.world_region = L2World.get_region(location)
     end
@@ -362,10 +364,10 @@ abstract class L2Object < ListenersContainer
       warn "L2Object#set_xyz_invisible: @world_region should be nil."
     end
 
-    x = L2World::MAP_MAX_X - 5000 if x > L2World::MAP_MAX_X
-    x = L2World::MAP_MIN_X + 5000 if x < L2World::MAP_MIN_X
-    y = L2World::MAP_MAX_Y - 5000 if y > L2World::MAP_MAX_Y
-    y = L2World::MAP_MIN_Y + 5000 if y < L2World::MAP_MIN_Y
+    x = L2World::MAP_MAX_X &- 5000 if x > L2World::MAP_MAX_X
+    x = L2World::MAP_MIN_X &+ 5000 if x < L2World::MAP_MIN_X
+    y = L2World::MAP_MAX_Y &- 5000 if y > L2World::MAP_MAX_Y
+    y = L2World::MAP_MIN_Y &+ 5000 if y < L2World::MAP_MIN_Y
     set_xyz(x, y, z)
     self.visible = false
   end
@@ -400,7 +402,7 @@ abstract class L2Object < ListenersContainer
 
   def calculate_direction_to(loc : Locatable) : Float64
     heading = Util.calculate_heading_from(self, loc) &- heading()
-    heading += 65_535 if heading < 0
+    heading &+= 65_535 if heading < 0
     Util.convert_heading_to_degree(heading)
   end
 
@@ -465,9 +467,5 @@ abstract class L2Object < ListenersContainer
 
   def inspect(io : IO)
     io.print(self.class, '(', name, ": ", l2id, ')')
-  end
-
-  def to_log(io : IO)
-    inspect(io)
   end
 end

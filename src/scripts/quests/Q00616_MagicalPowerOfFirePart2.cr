@@ -19,11 +19,11 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
     register_quest_items(RED_TOTEM, NASTRON_HEART)
 
     var = load_global_quest_var("Q00616_respawn")
-    remain = var.empty? ? 0i64 : var.to_i64 - Time.ms
+    remain = var.empty? ? 0i64 : var.to_i64 &- Time.ms
     if remain > 0
       start_quest_timer("spawn_npc", remain, nil, nil)
     else
-      add_spawn(KETRA_TOTEM, 142368, -82512, -6487, 58000, false, 0, true)
+      add_spawn(KETRA_TOTEM, 142368, -82512, -6487, 58_000, false, 0, true)
     end
   end
 
@@ -40,7 +40,6 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
           end
           st.set_cond(3, true)
         end
-
       end
     end
   end
@@ -57,7 +56,7 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
         html = event
       when "give_heart"
         if st.has_quest_items?(NASTRON_HEART)
-          st.add_exp_and_sp(10000, 0)
+          st.add_exp_and_sp(10_000, 0)
           st.exit_quest(true, true)
           html = "31379-06.html"
         else
@@ -70,7 +69,6 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
           html = "31558-04.html"
         end
       end
-
     else
       if event == "despawn_nastron"
         npc = npc.not_nil!
@@ -86,11 +84,11 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    respawn_min_delay = (43200000i64 * Config.raid_min_respawn_multiplier).to_i64
-    respawn_max_delay = (129600000i64 * Config.raid_max_respawn_multiplier).to_i64
+    respawn_min_delay = (43200000 * Config.raid_min_respawn_multiplier).to_i
+    respawn_max_delay = (129600000 * Config.raid_max_respawn_multiplier).to_i
     respawn_delay = Rnd.rand(respawn_min_delay..respawn_max_delay)
     cancel_quest_timer("despawn_nastron", npc, nil)
-    save_global_quest_var("Q00616_respawn", (Time.ms + respawn_delay).to_s)
+    save_global_quest_var("Q00616_respawn", (Time.ms &+ respawn_delay).to_s)
     start_quest_timer("spawn_npc", respawn_delay, nil, nil)
     execute_for_each_player(killer, npc, is_summon, true, false)
 
@@ -123,7 +121,6 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
           end
         end
       end
-
     when KETRA_TOTEM
       if st.started?
         case st.cond
@@ -134,10 +131,8 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
         when 3
           html = "31558-05.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -153,7 +148,7 @@ class Scripts::Q00616_MagicalPowerOfFirePart2 < Quest
     npc.delete_me
     nastron = add_spawn(NASTRON, 142528, -82528, -6496, 0, false, 0)
     nastron.broadcast_packet(NpcSay.new(nastron, Say2::NPC_ALL, NpcString::THE_MAGICAL_POWER_OF_FIRE_IS_ALSO_THE_POWER_OF_FLAMES_AND_LAVA_IF_YOU_DARE_TO_CONFRONT_IT_ONLY_DEATH_WILL_AWAIT_YOU))
-    start_quest_timer("despawn_nastron", 1200000, nastron, nil)
+    start_quest_timer("despawn_nastron", 1_200_000, nastron, nil)
     "31558-02.html"
   end
 end

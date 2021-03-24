@@ -2,7 +2,7 @@ module BypassHandler::SupportBlessing
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2Npc)
 
     if pc.level > 39 || pc.class_id.level >= 2
@@ -14,7 +14,7 @@ module BypassHandler::SupportBlessing
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"GiveBlessing"}
   end
 end

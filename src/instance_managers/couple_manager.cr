@@ -2,12 +2,11 @@ require "../models/entity/couple"
 
 module CoupleManager
   extend self
-  extend Loggable
+  include Loggable
 
   private COUPLES = Concurrent::Map(Int32, Couple).new
 
   def load
-    sql = "SELECT id FROM mods_wedding ORDER BY id"
     GameDB.couples.load { |couple| COUPLES[couple.id] = couple }
     info { "Loaded #{COUPLES.size} couples." }
   rescue e

@@ -52,10 +52,7 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30754-03.htm", "30754-16.html"
@@ -73,7 +70,7 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
         else
           take_items(pc, ARTICLES, -1)
           if Rnd.rand(1000) >= count
-            give_adena(pc, count * 60, true)
+            give_adena(pc, count &* 60, true)
             html = event
           else
             qs.set_cond(2, true)
@@ -91,7 +88,6 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
               qs.memo_state = 4
               give_items(pc, CRUCIFIX)
             end
-
 
             html = "30754-09.html"
           end
@@ -113,9 +109,7 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
       when 4
         html = "30754-13.html"
       end
-
     end
-
 
     html
   end
@@ -214,7 +208,6 @@ class Scripts::Q00344_1000YearsTheEndOfLamentation < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

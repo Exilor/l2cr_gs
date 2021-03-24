@@ -36,7 +36,7 @@ module TopicBBSManager
 
       time = Time.ms
       t = Topic.new(
-        get_max_id(f) + 1,
+        get_max_id(f) &+ 1,
         a2.to_i,
         a5,
         time,
@@ -103,7 +103,7 @@ module TopicBBSManager
         if t.nil?
           CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the topic: #{idt} does not exist !</center><br><br></body></html>", pc)
         else
-          if p = PostBBSManager.get_g_post_by_topic(t)
+          if PostBBSManager.get_g_post_by_topic(t)
             PostBBSManager.del_post_by_topic(t)
             GameDB.post.delete(t)
           end
@@ -118,11 +118,11 @@ module TopicBBSManager
 
   private def show_new_topic(forum : Forum?, pc : L2PcInstance, idf : Int32)
     if forum.nil?
-      CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{idf} is not implemented yet</center><br><br></body></html>", pc);
+      CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{idf} is not implemented yet</center><br><br></body></html>", pc)
     elsif forum.type.memo?
       show_memo_new_topics(forum, pc)
     else
-      CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{forum.name} is not implemented yet</center><br><br></body></html>", pc);
+      CommunityBoardHandler.separate_and_send("<html><body><br><br><center>the forum: #{forum.name} is not implemented yet</center><br><br></body></html>", pc)
     end
   end
 
@@ -184,14 +184,14 @@ module TopicBBSManager
       "></tr></table>"
 
       i = 0
-      j = get_max_id(forum) + 1
-      while i < (12 * index)
+      j = get_max_id(forum) &+ 1
+      while i < (12 &* index)
         if j < 0
           break
         end
 
         if t = forum.get_topic(j)
-          if i >= 12 * (index - 1)
+          if i >= 12 &* (index &- 1)
             io << "<table border=0 cellspacing=0 cellpadding=5 WIDTH=610><tr>" \
             "<td FIXWIDTH=5></td><td FIXWIDTH=415><a action=\"bypass _bbspost" \
             "s;read;"
@@ -226,7 +226,7 @@ module TopicBBSManager
         io << "\" back=\"l2ui_ch3.prev1_down\" fore=\"l2ui_ch3.prev1\" width=16 height=16 ></td>"
       end
 
-      nbp = forum.topic_size * 8
+      nbp = forum.topic_size &* 8
       if nbp * 8 != ClanTable.clan_count
         nbp &+= 1
       end

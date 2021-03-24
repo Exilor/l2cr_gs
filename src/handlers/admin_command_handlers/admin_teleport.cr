@@ -300,8 +300,8 @@ module AdminCommandHandler::AdminTeleport
         dat.x, dat.y, dat.z = pc.xyz
         dat.amount = 1
         dat.heading = pc.heading
-        dat.respawn_min_delay = 43200
-        dat.respawn_max_delay = 129600
+        dat.respawn_min_delay = 43_200
+        dat.respawn_max_delay = 129_600
 
         RaidBossSpawnManager.add_new_spawn(dat, 0, cur_hp, cur_mp, true)
       rescue e
@@ -342,7 +342,7 @@ module AdminCommandHandler::AdminTeleport
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     %w(
     admin_show_moves
     admin_show_moves_other

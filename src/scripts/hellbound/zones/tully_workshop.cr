@@ -382,7 +382,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       end
     elsif event.casecmp?("cube_68_spawn")
       spawned_npc = add_spawn(CUBE_68, 12527, 279714, -11622, 16384, false, 0, false)
-      start_quest_timer("cube_68_despawn", 600000, spawned_npc, nil)
+      start_quest_timer("cube_68_despawn", 600_000, spawned_npc, nil)
     elsif event.casecmp?("end_7th_floor_attack")
       do_7th_floor_despawn
     elsif event.casecmp?("start_7th_floor_spawn")
@@ -414,7 +414,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         npc.delete_me
         @allow_servant_spawn = true
       else
-        start_quest_timer("despawn_servant", 180000, npc, nil)
+        start_quest_timer("despawn_servant", 180_000, npc, nil)
       end
     elsif event.casecmp?("despawn_agent")
       npc.delete_me
@@ -466,7 +466,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         DoorData.get_door!(door_id).open_me
       end
 
-      start_quest_timer("close", 120000, npc, nil)
+      start_quest_timer("close", 120_000, npc, nil)
       html = nil
     elsif event.matches?(/\Aup|down\z/i) && TELE_COORDS.has_key?(npc_id)
       direction = event.casecmp?("up") ? 0 : 1
@@ -496,7 +496,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           html = player.class_id.maestro? ? "32371-03a.htm" : "32371-03.htm"
         else
           BROKEN_CONTRAPTIONS << npc.l2id
-          start_quest_timer("repair_device", 60000, npc, nil)
+          start_quest_timer("repair_device", 60_000, npc, nil)
           html = "32371-04.htm"
         end
       elsif event.casecmp?("take_reward")
@@ -571,7 +571,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
             npc.target = m
             npc.do_cast(CHALLENGERS_BLESSING)
           end
-          start_quest_timer("despawn_agent_7", 60000, npc, nil)
+          start_quest_timer("despawn_agent_7", 60_000, npc, nil)
         end
       elsif event.casecmp?("refuse") && !@allow_agent_spawn_7th
         @allow_agent_spawn_7th = true
@@ -600,7 +600,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
         unless @has_7th_floor_attack_began
           @has_7th_floor_attack_began = true
-          start_quest_timer("end_7th_floor_attack", 1200000, nil, nil)
+          start_quest_timer("end_7th_floor_attack", 1_200_000, nil, nil)
         end
       end
     elsif event.casecmp?("teleport") && npc_id == DWARVEN_GHOST
@@ -665,14 +665,14 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
         if actor && actor.alive?
           transf_hp = actor.max_hp * 0.0001
-          if Rnd.rand(10000) > 1500 && victim1 && victim1.alive?
+          if Rnd.rand(10_000) > 1500 && victim1 && victim1.alive?
             if actor.current_hp - transf_hp > 1
               actor.current_hp -= transf_hp
               victim1.current_hp += transf_hp
             end
           end
 
-          if Rnd.rand(10000) > 3000 && victim2 && victim2.alive?
+          if Rnd.rand(10_000) > 3000 && victim2 && victim2.alive?
             if actor.current_hp - transf_hp > 1
               actor.current_hp -= transf_hp
               victim2.current_hp += transf_hp
@@ -682,7 +682,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       end
     end
 
-    if (npc_id == TEMENIR || npc_id == DRAXIUS) && SPAWNED_FOLLOWERS.includes?(npc)
+    if npc_id.in?(TEMENIR, DRAXIUS) && SPAWNED_FOLLOWERS.includes?(npc)
       victim = npc_id == TEMENIR ? SPAWNED_FOLLOWERS[1] : SPAWNED_FOLLOWERS[2]
       actor = SPAWNED_FOLLOWERS[0]
 
@@ -735,17 +735,17 @@ class Scripts::TullyWorkshop < AbstractNpcAI
       DoorData.get_door!(19260051).open_me
       DoorData.get_door!(19260052).open_me
 
-      @countdown_time = 600000
+      @countdown_time = 600_000
       task = -> do
-        @countdown_time -= 10000
+        @countdown_time &-= 10_000
         _npc = nil
         unless POSTMORTEM_SPAWNS.empty?
           _npc = POSTMORTEM_SPAWNS[0]
         end
-        if @countdown_time > 60000
-          if @countdown_time % 60000 == 0
+        if @countdown_time > 60_000
+          if @countdown_time % 60_000 == 0
             if _npc && _npc.id == INGENIOUS_CONTRAPTION
-              broadcast_npc_say(_npc, Say2::NPC_SHOUT, NpcString::S1_MINUTES_REMAINING, @countdown_time // 60000)
+              broadcast_npc_say(_npc, Say2::NPC_SHOUT, NpcString::S1_MINUTES_REMAINING, @countdown_time // 60_000)
             end
           end
         elsif @countdown_time <= 0
@@ -767,20 +767,20 @@ class Scripts::TullyWorkshop < AbstractNpcAI
           if dmg_zone = ZoneManager.get_zone_by_id(200011)
             dmg_zone.enabled = true
           end
-          start_quest_timer("disable_zone", 300000, nil, nil)
+          start_quest_timer("disable_zone", 300_000, nil, nil)
         else
           if _npc && _npc.id == INGENIOUS_CONTRAPTION
             broadcast_npc_say(_npc, Say2::NPC_SHOUT, NpcString::S1_SECONDS_REMAINING, @countdown_time // 1000)
           end
         end
       end
-      @countdown = ThreadPoolManager.schedule_general_at_fixed_rate(task, 60000, 10000)
-      broadcast_npc_say(POSTMORTEM_SPAWNS[0], Say2::NPC_SHOUT, NpcString::DETONATOR_INITIALIZATION_TIME_S1_MINUTES_FROM_NOW, (@countdown_time / 60000).to_i)
+      @countdown = ThreadPoolManager.schedule_general_at_fixed_rate(task, 60_000, 10_000)
+      broadcast_npc_say(POSTMORTEM_SPAWNS[0], Say2::NPC_SHOUT, NpcString::DETONATOR_INITIALIZATION_TIME_S1_MINUTES_FROM_NOW, (@countdown_time / 60_000).to_i)
     elsif npc_id == TIMETWISTER_GOLEM && @countdown
       if Rnd.rand(1000) >= 700
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::A_FATAL_ERROR_HAS_OCCURRED)
-        if @countdown_time > 180000
-          @countdown_time = Math.max(@countdown_time - 180000, 60000)
+        if @countdown_time > 180_000
+          @countdown_time = Math.max(@countdown_time &- 180_000, 60_000)
           tmp = POSTMORTEM_SPAWNS[0]?
           if tmp && tmp.id == INGENIOUS_CONTRAPTION
             broadcast_npc_say(tmp, Say2::NPC_SHOUT, NpcString::ZZZZ_CITY_INTERFERENCE_ERROR_FORWARD_EFFECT_CREATED)
@@ -788,8 +788,8 @@ class Scripts::TullyWorkshop < AbstractNpcAI
         end
       else
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::TIME_RIFT_DEVICE_ACTIVATION_SUCCESSFUL)
-        if @countdown_time > 0 && @countdown_time <= 420000
-          @countdown_time += 180000
+        if @countdown_time > 0 && @countdown_time <= 420_000
+          @countdown_time &+= 180_000
           tmp = POSTMORTEM_SPAWNS[0]?
           if tmp && tmp.id == INGENIOUS_CONTRAPTION
             broadcast_npc_say(tmp, Say2::NPC_SHOUT, NpcString::ZZZZ_CITY_INTERFERENCE_ERROR_RECURRENCE_EFFECT_CREATED)
@@ -814,11 +814,11 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
           if room >= 0 && max >= DEATH_COUNTS[floor]
             cf = floor == 1 ? 3 : 0
-            servant_id = SERVANT_FIRST + @next_servant_idx + cf
+            servant_id = SERVANT_FIRST + @next_servant_idx &+ cf
             coords = SERVANT_COORDINATES[room + cf]
             spawned_npc = add_spawn(servant_id, coords[0], coords[1], coords[2], 0, false, 0, false)
             @allow_servant_spawn = false
-            start_quest_timer("despawn_servant", 180000, spawned_npc, nil)
+            start_quest_timer("despawn_servant", 180_000, spawned_npc, nil)
           end
         end
       end
@@ -834,9 +834,9 @@ class Scripts::TullyWorkshop < AbstractNpcAI
             @allow_agent_spawn = false
             @allow_servant_spawn = false
             cf = room_data[0] == 1 ? 3 : 0
-            coords = AGENT_COORDINATES[room_data[1] + cf]
+            coords = AGENT_COORDINATES[room_data[1] &+ cf]
             spawned_npc = add_spawn(AGENT, coords[0], coords[1], coords[2], 0, false, 0, false)
-            start_quest_timer("despawn_agent", 180000, spawned_npc, nil)
+            start_quest_timer("despawn_agent", 180_000, spawned_npc, nil)
           end
         else
           4.times do |i|
@@ -874,7 +874,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
       handle_doors_on_death
     elsif npc_id == PILLAR
-      add_spawn(DWARVEN_GHOST, npc.x + 30, npc.y - 30, npc.z, 0, false, 900000, false)
+      add_spawn(DWARVEN_GHOST, npc.x + 30, npc.y - 30, npc.z, 0, false, 900_000, false)
     end
 
     super
@@ -954,8 +954,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
     SPAWNLIST_7TH_FLOOR.each do |data|
       monster = add_spawn(*data, false, 0, false).as(L2MonsterInstance)
-      tmp = data[0]
-      if tmp == TEMENIR || tmp == DRAXIUS || tmp == KIRETCENAH
+      if data[0].in?(TEMENIR, DRAXIUS, KIRETCENAH)
         SPAWNED_FOLLOWERS << monster
       else
         SPAWNED_FOLLOWER_MINIONS << monster
@@ -979,7 +978,7 @@ class Scripts::TullyWorkshop < AbstractNpcAI
 
     SPAWNED_FOLLOWERS.clear
     SPAWNED_FOLLOWER_MINIONS.clear
-    start_quest_timer("cube_68_spawn", 60000, nil, nil)
+    start_quest_timer("cube_68_spawn", 60_000, nil, nil)
   end
 
   private def do_on_load_spawn

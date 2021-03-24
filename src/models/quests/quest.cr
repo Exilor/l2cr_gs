@@ -572,59 +572,6 @@ class Quest < AbstractScript
     false
   end
 
-  def self.player_enter(pc : L2PcInstance)
-    begin
-      sql = "SELECT name, value FROM character_quests WHERE charId = ? AND var = ?"
-      GameDB.each(sql, pc.l2id, "<state>") do |rs|
-        id = rs.get_string(:"name")
-        state_name = rs.get_string(:"value")
-
-        unless q = QuestManager.get_quest(id)
-          warn { "Missing quest '#{id}' for player #{pc}." }
-          if Config.autodelete_invalid_quest_data
-            warn { "Deleting invalid quest data for '#{id}'." }
-            sql = "DELETE FROM character_quests WHERE charId = ? AND name = ?"
-            GameDB.exec(sql, pc.l2id, id)
-          end
-
-          next
-        end
-
-        QuestState.new(q, pc, State.parse(state_name))
-      end
-    rescue e
-      error e
-    end
-
-    begin
-      sql = "SELECT name, var, value FROM character_quests WHERE charId = ? AND var <> ?"
-      GameDB.each(sql, pc.l2id, "<state>") do |rs|
-        id = rs.get_string(:"name")
-        var = rs.get_string(:"var")
-        value = rs.get_string(:"value")
-
-        unless qs = pc.get_quest_state(id)
-          warn { "Missing variable '#{var}' in quest '#{id}' for player #{pc}." }
-          if Config.autodelete_invalid_quest_data
-            warn { "Deleting invalid variable '#{var}' for quest '#{id}'." }
-            sql = "DELETE FROM character_quests WHERE charId = ? AND name = ? AND var = ?"
-            GameDB.exec(sql, pc.l2id, id, var)
-          end
-
-          next
-        end
-
-        qs.set_internal(var, value)
-      end
-    rescue e
-      error e
-    end
-
-    QuestManager.quests.each_key do |name|
-      pc.process_quest_event(name, "enter")
-    end
-  end
-
   def save_global_quest_var(var : String, value : String)
     sql = "REPLACE INTO quest_global_data (quest_name,var,value) VALUES (?,?,?)"
     GameDB.exec(sql, name, var, value)
@@ -659,57 +606,113 @@ class Quest < AbstractScript
     error e
   end
 
-  def self.create_quest_var_in_db(qs : QuestState, var : String, value : String)
-    sql = "INSERT INTO character_quests (charId,name,var,value) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE value=?"
-    GameDB.exec(sql, qs.player.l2id, qs.quest_name, var, value, value)
-  rescue e
-    error e
-  end
-
-  def self.update_quest_var_in_db(qs : QuestState, var : String, value : String)
-    sql = "UPDATE character_quests SET value=? WHERE charId=? AND name=? AND var = ?"
-    GameDB.exec(sql, value, qs.player.l2id, qs.quest_name, var)
-  rescue e
-    error e
-  end
-
-  def self.delete_quest_var_in_db(qs : QuestState, var : String)
-    sql = "DELETE FROM character_quests WHERE charId=? AND name=? AND var=?"
-    GameDB.exec(sql, qs.player.l2id, qs.quest_name, var)
-  rescue e
-    error e
-  end
-
-  def self.delete_quest_in_db(qs : QuestState, repeatable : Bool)
-    if repeatable
-      sql = QUEST_DELETE_FROM_CHAR_QUERY
-      GameDB.exec(sql, qs.player.l2id, qs.quest_name)
-    else
-      sql = QUEST_DELETE_FROM_CHAR_QUERY_NON_REPEATABLE_QUERY
-      GameDB.exec(sql, qs.player.l2id, qs.quest_name, "<state>")
-    end
-  rescue e
-    error e
-  end
-
-  def self.create_quest_in_db(qs : QuestState)
-    create_quest_var_in_db(qs, "<state>", qs.state.name)
-  end
-
-  def self.update_quest_in_db(qs : QuestState)
-    update_quest_var_in_db(qs, "<state>", qs.state.name)
-  end
-
-  def self.get_no_quest_msg(pc : L2PcInstance) : String
-    result = HtmCache.get_htm(pc, "data/html/noquest.htm")
-    if result && !result.empty?
-      return result
+  private module InstanceAndClassMethods
+    def create_quest_var_in_db(qs : QuestState, var : String, value : String)
+      sql = "INSERT INTO character_quests (charId,name,var,value) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE value=?"
+      GameDB.exec(sql, qs.player.l2id, qs.quest_name, var, value, value)
+    rescue e
+      error e
     end
 
-    DEFAULT_NO_QUEST_MSG
+    def update_quest_var_in_db(qs : QuestState, var : String, value : String)
+      sql = "UPDATE character_quests SET value=? WHERE charId=? AND name=? AND var = ?"
+      GameDB.exec(sql, value, qs.player.l2id, qs.quest_name, var)
+    rescue e
+      error e
+    end
+
+    def delete_quest_var_in_db(qs : QuestState, var : String)
+      sql = "DELETE FROM character_quests WHERE charId=? AND name=? AND var=?"
+      GameDB.exec(sql, qs.player.l2id, qs.quest_name, var)
+    rescue e
+      error e
+    end
+
+    def delete_quest_in_db(qs : QuestState, repeatable : Bool)
+      if repeatable
+        sql = QUEST_DELETE_FROM_CHAR_QUERY
+        GameDB.exec(sql, qs.player.l2id, qs.quest_name)
+      else
+        sql = QUEST_DELETE_FROM_CHAR_QUERY_NON_REPEATABLE_QUERY
+        GameDB.exec(sql, qs.player.l2id, qs.quest_name, "<state>")
+      end
+    rescue e
+      error e
+    end
+
+    def create_quest_in_db(qs : QuestState)
+      create_quest_var_in_db(qs, "<state>", qs.state.name)
+    end
+
+    def update_quest_in_db(qs : QuestState)
+      update_quest_var_in_db(qs, "<state>", qs.state.name)
+    end
+
+    def get_no_quest_msg(pc : L2PcInstance) : String
+      result = HtmCache.get_htm(pc, "data/html/noquest.htm")
+      if result && !result.empty?
+        return result
+      end
+
+      DEFAULT_NO_QUEST_MSG
+    end
+
+    def player_enter(pc : L2PcInstance)
+      begin
+        sql = "SELECT name, value FROM character_quests WHERE charId = ? AND var = ?"
+        GameDB.each(sql, pc.l2id, "<state>") do |rs|
+          id = rs.get_string(:"name")
+          state_name = rs.get_string(:"value")
+
+          unless q = QuestManager.get_quest(id)
+            warn { "Missing quest '#{id}' for player #{pc}." }
+            if Config.autodelete_invalid_quest_data
+              warn { "Deleting invalid quest data for '#{id}'." }
+              sql = "DELETE FROM character_quests WHERE charId = ? AND name = ?"
+              GameDB.exec(sql, pc.l2id, id)
+            end
+
+            next
+          end
+
+          QuestState.new(q, pc, State.parse(state_name))
+        end
+      rescue e
+        error e
+      end
+
+      begin
+        sql = "SELECT name, var, value FROM character_quests WHERE charId = ? AND var <> ?"
+        GameDB.each(sql, pc.l2id, "<state>") do |rs|
+          id = rs.get_string(:"name")
+          var = rs.get_string(:"var")
+          value = rs.get_string(:"value")
+
+          unless qs = pc.get_quest_state(id)
+            warn { "Missing variable '#{var}' in quest '#{id}' for player #{pc}." }
+            if Config.autodelete_invalid_quest_data
+              warn { "Deleting invalid variable '#{var}' for quest '#{id}'." }
+              sql = "DELETE FROM character_quests WHERE charId = ? AND name = ? AND var = ?"
+              GameDB.exec(sql, pc.l2id, id, var)
+            end
+
+            next
+          end
+
+          qs.set_internal(var, value)
+        end
+      rescue e
+        error e
+      end
+
+      QuestManager.quests.each_key do |name|
+        pc.process_quest_event(name, "enter")
+      end
+    end
   end
 
-  delegate get_no_quest_msg, to: Quest
+  include InstanceAndClassMethods
+  extend InstanceAndClassMethods
 
   def add_start_npc(*id)
     set_npc_quest_start_id(*id)
@@ -898,8 +901,8 @@ class Quest < AbstractScript
     end
   end
 
-  def check_distance_to_target(pc : L2PcInstance, target) : Bool
-    target.nil? || Util.in_range?(1500, pc, target, true)
+  def check_distance_to_target(pc : L2PcInstance, target : L2Character) : Bool
+    Util.in_range?(1500, pc, target, true)
   end
 
   def show_html_file(pc : L2PcInstance, file_name : String) : String
@@ -916,7 +919,7 @@ class Quest < AbstractScript
         content = content.gsub("%objectId%") { npc.l2id }
       end
 
-      if quest_window && quest_id > 0 && quest_id < 20000 && quest_id != 999
+      if quest_window && quest_id > 0 && quest_id < 20_000 && quest_id != 999
         reply = NpcQuestHtmlMessage.new(npc ? npc.l2id : 0, quest_id)
         reply.html = content
         reply["%playername%"] = pc.name
@@ -1061,7 +1064,7 @@ class Quest < AbstractScript
 
   def get_already_completed_msg(pc : L2PcInstance) : String
     HtmCache.get_htm(pc, "data/html/alreadycompleted.htm") ||
-    DEFAULT_ALREADY_COMPLETED_MSG
+      DEFAULT_ALREADY_COMPLETED_MSG
   end
 
   def get_random_party_member(pc : L2PcInstance) : L2PcInstance?
@@ -1221,10 +1224,6 @@ class Quest < AbstractScript
   def get_one_time_quest_flag(pc, quest_id)
     quest = QuestManager.get_quest(quest_id)
     (quest && quest.get_quest_state!(pc).completed?) ? 1 : 0
-  end
-
-  def self.play_sound(pc : L2PcInstance, sound : IAudio)
-    pc.send_packet(sound.packet)
   end
 
   def show_radar(pc : L2PcInstance, x : Int32, y : Int32, z : Int32, type : Int32) # type is unused

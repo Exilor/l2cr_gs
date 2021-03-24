@@ -22,7 +22,6 @@ class Scripts::Q00053_LinnaeusSpecialBait < Quest
     end
 
     html = event
-
     case event
     when "31577-1.htm"
       st.start_quest

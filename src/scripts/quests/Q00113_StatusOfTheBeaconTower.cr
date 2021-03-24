@@ -15,10 +15,7 @@ class Scripts::Q00113_StatusOfTheBeaconTower < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -27,11 +24,11 @@ class Scripts::Q00113_StatusOfTheBeaconTower < Quest
       st.give_items(FLAME_BOX, 1)
     when "32016-02.html"
       if st.has_quest_items?(FIRE_BOX)
-        st.give_adena(21578, true)
-        st.add_exp_and_sp(76665, 5333)
+        st.give_adena(21_578, true)
+        st.add_exp_and_sp(76_665, 5333)
       else
         st.give_adena(154800, true)
-        st.add_exp_and_sp(619300, 44200)
+        st.add_exp_and_sp(619_300, 44_200)
       end
       st.exit_quest(false, true)
     else
@@ -54,13 +51,11 @@ class Scripts::Q00113_StatusOfTheBeaconTower < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when TORRANT
       if st.started?
         html = "32016-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

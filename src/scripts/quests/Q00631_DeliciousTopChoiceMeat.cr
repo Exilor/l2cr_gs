@@ -56,10 +56,7 @@ class Scripts::Q00631_DeliciousTopChoiceMeat < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "quest_accept"
@@ -82,9 +79,9 @@ class Scripts::Q00631_DeliciousTopChoiceMeat < Quest
           when 3
             st.reward_items(PIECE.sample(random: Rnd), 3)
           when 4
-            st.reward_items(PIECE.sample(random: Rnd), Rnd.rand(5) + 2)
+            st.reward_items(PIECE.sample(random: Rnd), Rnd.rand(5) &+ 2)
           when 5
-            st.reward_items(PIECE.sample(random: Rnd), Rnd.rand(7) + 2)
+            st.reward_items(PIECE.sample(random: Rnd), Rnd.rand(7) &+ 2)
           when 6
             st.reward_items(GOLDEN_SPICE_CRATE, 1)
           when 7
@@ -100,7 +97,6 @@ class Scripts::Q00631_DeliciousTopChoiceMeat < Quest
         end
       end
     end
-
 
     html
   end

@@ -5,7 +5,7 @@ class L2MotherTreeZone < L2ZoneType
   getter mp_regen_bonus = 0
   getter hp_regen_bonus = 0
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name
     when "enterMsgId"
       @enter_msg = value.to_i

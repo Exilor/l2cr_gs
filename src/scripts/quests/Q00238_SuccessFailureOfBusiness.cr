@@ -25,10 +25,7 @@ class Scripts::Q00238_SuccessFailureOfBusiness < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32461-02.htm"
@@ -42,7 +39,6 @@ class Scripts::Q00238_SuccessFailureOfBusiness < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -107,15 +103,13 @@ class Scripts::Q00238_SuccessFailureOfBusiness < Quest
       when 4
         if st.get_quest_items_count(GUARDIAN_SPIRIT_FRAGMENT) == GUARDIAN_SPIRIT_FRAGMENT_NEEDED
           html = "32461-08.html"
-          st.give_adena(283346, true)
+          st.give_adena(283_346, true)
           st.take_items(VICINITY_OF_FOS, 1)
-          st.add_exp_and_sp(1319736, 103553)
+          st.add_exp_and_sp(1_319_736, 103_553)
           st.exit_quest(false, true)
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

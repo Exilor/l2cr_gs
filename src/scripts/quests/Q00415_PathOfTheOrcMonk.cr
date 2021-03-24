@@ -77,8 +77,7 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -121,15 +120,15 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
       end
     when "31979-03.html"
       if qs.memo_state?(5)
-        give_adena(pc, 81900, true)
+        give_adena(pc, 81_900, true)
         give_items(pc, KHAVATARI_TOTEM, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 12646)
+          add_exp_and_sp(pc, 160_267, 12_646)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 15995)
+          add_exp_and_sp(pc, 228_064, 15_995)
         else
-          add_exp_and_sp(pc, 295862, 19344)
+          add_exp_and_sp(pc, 295_862, 19_344)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -159,7 +158,6 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -315,7 +313,6 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
           end
         end
       end
-
     end
 
     super
@@ -359,7 +356,7 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
         elsif !has_quest_items?(pc, FIG) && has_at_least_one_quest_item?(pc, LEATHER_POUCH_4TF, LEATHER_POUCH_4TF_FULL)
           html = "30501-03.html"
         elsif has_quest_items?(pc, IRON_WILL_SCROLL)
-          give_adena(pc, 163800, true)
+          give_adena(pc, 163_800, true)
           give_items(pc, KHAVATARI_TOTEM, 1)
           level = pc.level
           if level >= 20
@@ -450,7 +447,6 @@ class Scripts::Q00415_PathOfTheOrcMonk < Quest
           html = "32056-09.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

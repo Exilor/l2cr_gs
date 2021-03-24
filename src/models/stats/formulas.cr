@@ -4,7 +4,7 @@ require "../../enums/shot_type"
 
 module Formulas
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   SHIELD_DEFENSE_FAILED = 0i8
@@ -411,15 +411,15 @@ module Formulas
         attacker.send_packet(sm)
       end
 
-      if (attacker.acting_player || target.acting_player).try &.gm?
-        debug { "Failed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
-      end
+      # if (attacker.acting_player || target.acting_player).try &.gm?
+      #   debug { "Failed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
+      # end
 
       return false
     end
-    if (attacker.acting_player || target.acting_player).try &.gm?
-      debug { "Landed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
-    end
+    # if (attacker.acting_player || target.acting_player).try &.gm?
+    #   debug { "Landed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
+    # end
     true
   end
 
@@ -1168,10 +1168,10 @@ module Formulas
     base_rate = blow_chance * dex_mod * side_mod
     rate = char.calc_stat(BLOW_RATE, base_rate, target)
     result = Rnd.rand(100) < rate
-    if (char.acting_player || target.acting_player).try &.gm?
-      tmp = result ? "Landed" : "Missed"
-      debug { "#{tmp} blow from #{char.name} against #{target.name} (chance: #{rate}%)." }
-    end
+    # if (char.acting_player || target.acting_player).try &.gm?
+    #   tmp = result ? "Landed" : "Missed"
+    #   debug { "#{tmp} blow from #{char.name} against #{target.name} (chance: #{rate}%)." }
+    # end
     if !result && (pc = char.acting_player)
       pc.send_packet(SystemMessageId::ATTACK_FAILED)
     end

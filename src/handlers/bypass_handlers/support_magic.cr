@@ -38,7 +38,7 @@ module BypassHandler::SupportMagic
   private CUBIC_HIGHEST = 34
   private HASTE_LEVEL_2 = 40
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2Npc)
     return false if pc.cursed_weapon_equipped?
 
@@ -98,7 +98,7 @@ module BypassHandler::SupportMagic
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"supportmagic", "supportmagicservitor"}
   end
 end

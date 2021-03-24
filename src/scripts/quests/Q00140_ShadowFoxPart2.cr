@@ -32,10 +32,7 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -66,9 +63,9 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
       end
       st.take_items(DARK_CRYSTAL, 5)
     when "30895-11.html"
-      st.give_adena(18775, true)
+      st.give_adena(18_775, true)
       if pc.level <= MAX_REWARD_LEVEL
-        st.add_exp_and_sp(30000, 2000)
+        st.add_exp_and_sp(30_000, 2000)
       end
       st.exit_quest(false, true)
     else
@@ -124,11 +121,9 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
             html = "30895-09.html"
           end
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when XENOVIA
       if st.started?
         case st.cond
@@ -145,11 +140,8 @@ class Scripts::Q00140_ShadowFoxPart2 < Quest
         when 4
           html = "30912-15.html"
         end
-
       end
     end
-
-
 
     html || get_no_quest_msg(pc)
   end

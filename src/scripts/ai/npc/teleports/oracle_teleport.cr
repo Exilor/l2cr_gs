@@ -110,8 +110,7 @@ class Scripts::OracleTeleport < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc && npc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && npc && (st = get_quest_state(pc, false))
 
     html = ""
 
@@ -167,11 +166,11 @@ class Scripts::OracleTeleport < AbstractNpcAI
       elsif lvl >= 40 && lvl < 50
         take_items(pc, Inventory::ADENA_ID, 8000)
       elsif lvl >= 50 && lvl < 60
-        take_items(pc, Inventory::ADENA_ID, 12500)
+        take_items(pc, Inventory::ADENA_ID, 12_500)
       elsif lvl >= 60 && lvl < 70
-        take_items(pc, Inventory::ADENA_ID, 18000)
+        take_items(pc, Inventory::ADENA_ID, 18_000)
       elsif lvl >= 70
-        take_items(pc, Inventory::ADENA_ID, 24500)
+        take_items(pc, Inventory::ADENA_ID, 24_500)
       end
       i = 0
       TELEPORTERS.each do |ziggurat|
@@ -255,13 +254,13 @@ class Scripts::OracleTeleport < AbstractNpcAI
       elsif lvl >= 40 && lvl < 50 && pc.adena < 8000
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
-      elsif lvl >= 50 && lvl < 60 && pc.adena < 12500
+      elsif lvl >= 50 && lvl < 60 && pc.adena < 12_500
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
-      elsif lvl >= 60 && lvl < 70 && pc.adena < 18000
+      elsif lvl >= 60 && lvl < 70 && pc.adena < 18_000
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
-      elsif lvl >= 70 && pc.adena < 24500
+      elsif lvl >= 70 && pc.adena < 24_500
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       else

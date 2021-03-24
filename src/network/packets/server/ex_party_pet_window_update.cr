@@ -6,7 +6,7 @@ class Packets::Outgoing::ExPartyPetWindowUpdate < GameServerPacket
     h 0x19
 
     d @summon.l2id
-    d @summon.template.display_id + 1_000_000
+    d @summon.template.display_id &+ 1_000_000
     d @summon.summon_type
     d @summon.owner.l2id
 

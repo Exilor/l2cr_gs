@@ -46,8 +46,7 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32792-02.htm", "32792-04.htm", "32792-05.htm", "32792-06.htm",
@@ -157,7 +156,6 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
       end
     end
 
-
     html
   end
 
@@ -186,7 +184,7 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
           if pc.subclass_active?
             html = "32792-10.html"
           else
-            add_exp_and_sp(pc, 125000000, 12500000)
+            add_exp_and_sp(pc, 125_000_000, 12_500_000)
             st.exit_quest(false, true)
             html = "32792-11.html"
           end
@@ -202,7 +200,6 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
         when 6
           html = "32793-11.html"
         end
-
       when SOLINA
         if st.memo_state?(4)
           html = "32794-01.html"
@@ -297,10 +294,8 @@ class Scripts::Q10295_SevenSignsSolinasTomb < Quest
           when 5
             html = "32787-06.html"
           end
-
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

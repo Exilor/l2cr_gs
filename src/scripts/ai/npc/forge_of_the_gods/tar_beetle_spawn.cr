@@ -132,9 +132,13 @@ class TarBeetleSpawn
           npc.delete_me
           @spawn.delete_first(npc)
         else
-          npc.script_value = val + 1
+          npc.script_value = val &+ 1
         end
       end
     end
+  end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
   end
 end

@@ -47,10 +47,7 @@ class Scripts::Q00422_RepentYourSins < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -75,7 +72,7 @@ class Scripts::Q00422_RepentYourSins < Quest
         html = "30981-06.htm"
       end
     when "30981-11.html"
-      if qs.memo_state >= 9 && qs.memo_state <= 12
+      if qs.memo_state.between?(9, 12)
         if has_at_least_one_quest_item?(pc, MANACLES_OF_PENITENT, PENITENTS_MANACLES1)
           if has_quest_items?(pc, PENITENTS_MANACLES1)
             take_items(pc, PENITENTS_MANACLES1, 1)
@@ -91,19 +88,19 @@ class Scripts::Q00422_RepentYourSins < Quest
         end
       end
     when "30981-14.html", "30981-17.html"
-      if qs.memo_state >= 9 && qs.memo_state <= 12
+      if qs.memo_state.between?(9, 12)
         html = event
       end
     when "30981-15t.html"
       pet_item = pc.inventory.get_item_by_item_id(PENITENTS_MANACLES)
       pet_level = pet_item ? pet_item.enchant_level : 0
-      if qs.memo_state >= 9 && qs.memo_state <= 12 && pet_level > qs.get_memo_state_ex(1)
+      if qs.memo_state.between?(9, 12) && pet_level > qs.get_memo_state_ex(1)
         if pc.summon
           html = event
         else
           i1 = 0
           if pc.level > qs.get_memo_state_ex(1)
-            i1 = pet_level &- qs.get_memo_state_ex(1) - pc.level &- qs.get_memo_state_ex(1)
+            i1 = pet_level &- qs.get_memo_state_ex(1) &- pc.level &- qs.get_memo_state_ex(1)
           else
             i1 = pet_level &- qs.get_memo_state_ex(1)
           end
@@ -112,7 +109,7 @@ class Scripts::Q00422_RepentYourSins < Quest
             i1 = 0
           end
 
-          i0 = Rnd.rand(i1) + 1
+          i0 = Rnd.rand(i1) &+ 1
           if pc.pk_kills <= i0
             give_items(pc, MANACLES_OF_PENITENT, 1)
             if pet_item
@@ -129,18 +126,17 @@ class Scripts::Q00422_RepentYourSins < Quest
             end
             html = "30981-16.html"
 
-            pc.pk_kills = pc.pk_kills - i0
+            pc.pk_kills = pc.pk_kills &- i0
             qs.set_memo_state_ex(1, 0)
           end
         end
       end
     when "30981-18.html"
-      if qs.memo_state >= 9 && qs.memo_state <= 12
+      if qs.memo_state.between?(9, 12)
         qs.exit_quest(true, true)
         html = event
       end
     end
-
 
     html
   end
@@ -185,7 +181,6 @@ class Scripts::Q00422_RepentYourSins < Quest
           end
         end
       end
-
     end
 
     super
@@ -222,7 +217,7 @@ class Scripts::Q00422_RepentYourSins < Quest
           elsif has_quest_items?(pc, PENITENTS_MANACLES)
             pet_item = pc.inventory.get_item_by_item_id(PENITENTS_MANACLES)
             pet_level = pet_item ? pet_item.enchant_level : 0
-            if pet_level < qs.get_memo_state_ex(1) + 1
+            if pet_level < qs.get_memo_state_ex(1) &+ 1
               html = "30981-12.html"
             else
               html = "30981-13.html"
@@ -320,7 +315,6 @@ class Scripts::Q00422_RepentYourSins < Quest
           html = "30718-04.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

@@ -20,9 +20,8 @@ class Scripts::Q00277_GatekeepersOffering < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event.casecmp?("30576-03.htm")
+    return unless pc && (st = get_quest_state(pc, false))
+    if event.casecmp?("30576-03.htm")
       if pc.level < MIN_LEVEL
         return "30576-01.htm"
       end
@@ -63,7 +62,6 @@ class Scripts::Q00277_GatekeepersOffering < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

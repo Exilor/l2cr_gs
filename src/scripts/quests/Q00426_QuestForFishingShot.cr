@@ -297,10 +297,7 @@ class Scripts::Q00426_QuestForFishingShot < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "QUEST_ACEPT"
@@ -315,7 +312,6 @@ class Scripts::Q00426_QuestForFishingShot < Quest
       return "08.html"
     end
 
-
     event
   end
 
@@ -323,7 +319,7 @@ class Scripts::Q00426_QuestForFishingShot < Quest
     if qs = get_random_party_member_state(killer, -1, 2, npc)
       if tmp = MOBS_SPECIAL[npc.id]?
         if Rnd.rand(1000) <= tmp.chance
-          reward_items(qs.player, SWEET_FLUID, tmp.reward + 1)
+          reward_items(qs.player, SWEET_FLUID, tmp.reward &+ 1)
         else
           reward_items(qs.player, SWEET_FLUID, tmp.reward)
         end
@@ -352,7 +348,6 @@ class Scripts::Q00426_QuestForFishingShot < Quest
       end
       return "05.html"
     end
-
 
     get_no_quest_msg(pc)
   end

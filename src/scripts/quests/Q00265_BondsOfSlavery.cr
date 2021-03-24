@@ -21,8 +21,7 @@ class Scripts::Q00265_BondsOfSlavery < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30357-04.htm"
@@ -34,7 +33,6 @@ class Scripts::Q00265_BondsOfSlavery < Quest
     when "30357-08.html"
       html = event
     end
-
 
     html
   end
@@ -68,7 +66,7 @@ class Scripts::Q00265_BondsOfSlavery < Quest
     when State::STARTED
       if st.has_quest_items?(IMP_SHACKLES)
         shackles = st.get_quest_items_count(IMP_SHACKLES)
-        st.give_adena((shackles * 12) + (shackles >= 10 ? 500 : 0), true)
+        st.give_adena((shackles &* 12) &+ (shackles >= 10 ? 500 : 0), true)
         st.take_items(IMP_SHACKLES, -1)
         Q00281_HeadForTheHills.give_newbie_reward(pc)
         html = "30357-06.html"
@@ -76,7 +74,6 @@ class Scripts::Q00265_BondsOfSlavery < Quest
         html = "30357-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

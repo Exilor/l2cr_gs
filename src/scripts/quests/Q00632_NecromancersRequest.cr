@@ -53,10 +53,7 @@ class Scripts::Q00632_NecromancersRequest < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31522-104.htm"
@@ -81,7 +78,6 @@ class Scripts::Q00632_NecromancersRequest < Quest
       qs.exit_quest(true, true)
       html = event
     end
-
 
     html
   end

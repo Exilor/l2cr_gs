@@ -2,7 +2,7 @@ module UserCommandHandler::Dismount
   extend self
   extend UserCommandHandler
 
-  def use_user_command(id, pc)
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
     return false unless id == commands[0]
 
     if pc.rented_pet?
@@ -14,7 +14,7 @@ module UserCommandHandler::Dismount
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {62}
   end
 end

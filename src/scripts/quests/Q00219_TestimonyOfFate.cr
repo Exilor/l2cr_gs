@@ -92,8 +92,7 @@ class Scripts::Q00219_TestimonyOfFate < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -150,7 +149,6 @@ class Scripts::Q00219_TestimonyOfFate < Quest
       html = event
     end
 
-
     html
   end
 
@@ -165,11 +163,11 @@ class Scripts::Q00219_TestimonyOfFate < Quest
           qs.set_cond(3, true)
         end
       when MARSH_STAKATO, MARSH_STAKATO_WORKER, MARSH_STAKATO_SOLDIER, MARSH_STAKATO_DRONE
-        if has_quest_items?(killer, IXIAS_LIST) && (get_quest_items_count(killer, NIGHTSHADE_ROOT) < 10)
+        if has_quest_items?(killer, IXIAS_LIST) && get_quest_items_count(killer, NIGHTSHADE_ROOT) < 10
           if get_quest_items_count(killer, NIGHTSHADE_ROOT) == 9
             give_items(killer, NIGHTSHADE_ROOT, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
-            if (get_quest_items_count(killer, MEDUSAS_ICHOR) >= 10) && (get_quest_items_count(killer, MARSH_SPIDER_FLUIDS) >= 10) && (get_quest_items_count(killer, DEAD_SEEKER_DUNG) >= 10) && (get_quest_items_count(killer, TYRANTS_BLOOD) >= 10)
+            if (get_quest_items_count(killer, MEDUSAS_ICHOR) >= 10) && get_quest_items_count(killer, MARSH_SPIDER_FLUIDS) >= 10 && get_quest_items_count(killer, DEAD_SEEKER_DUNG) >= 10 && get_quest_items_count(killer, TYRANTS_BLOOD) >= 10
               qs.set_cond(7)
             end
           else
@@ -178,11 +176,11 @@ class Scripts::Q00219_TestimonyOfFate < Quest
           end
         end
       when MEDUSA
-        if has_quest_items?(killer, IXIAS_LIST) && (get_quest_items_count(killer, MEDUSAS_ICHOR) < 10)
+        if has_quest_items?(killer, IXIAS_LIST) && get_quest_items_count(killer, MEDUSAS_ICHOR) < 10
           if get_quest_items_count(killer, MEDUSAS_ICHOR) == 9
             give_items(killer, MEDUSAS_ICHOR, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
-            if (get_quest_items_count(killer, MARSH_SPIDER_FLUIDS) >= 10) && (get_quest_items_count(killer, DEAD_SEEKER_DUNG) >= 10) && (get_quest_items_count(killer, TYRANTS_BLOOD) >= 10) && (get_quest_items_count(killer, NIGHTSHADE_ROOT) >= 10)
+            if get_quest_items_count(killer, MARSH_SPIDER_FLUIDS) >= 10 && get_quest_items_count(killer, DEAD_SEEKER_DUNG) >= 10 && get_quest_items_count(killer, TYRANTS_BLOOD) >= 10 && get_quest_items_count(killer, NIGHTSHADE_ROOT) >= 10
               qs.set_cond(7)
             end
           else
@@ -191,11 +189,11 @@ class Scripts::Q00219_TestimonyOfFate < Quest
           end
         end
       when TYRANT, TYRANT_KINGPIN
-        if has_quest_items?(killer, IXIAS_LIST) && (get_quest_items_count(killer, TYRANTS_BLOOD) < 10)
+        if has_quest_items?(killer, IXIAS_LIST) && get_quest_items_count(killer, TYRANTS_BLOOD) < 10
           if get_quest_items_count(killer, TYRANTS_BLOOD) == 9
             give_items(killer, TYRANTS_BLOOD, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
-            if (get_quest_items_count(killer, MEDUSAS_ICHOR) >= 10) && (get_quest_items_count(killer, MARSH_SPIDER_FLUIDS) >= 10) && (get_quest_items_count(killer, DEAD_SEEKER_DUNG) >= 10) && (get_quest_items_count(killer, NIGHTSHADE_ROOT) >= 10)
+            if get_quest_items_count(killer, MEDUSAS_ICHOR) >= 10 && get_quest_items_count(killer, MARSH_SPIDER_FLUIDS) >= 10 && get_quest_items_count(killer, DEAD_SEEKER_DUNG) >= 10 && get_quest_items_count(killer, NIGHTSHADE_ROOT) >= 10
               qs.set_cond(7)
             end
           else
@@ -263,7 +261,6 @@ class Scripts::Q00219_TestimonyOfFate < Quest
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
       end
-
     end
 
     super
@@ -396,9 +393,9 @@ class Scripts::Q00219_TestimonyOfFate < Quest
           elsif has_quest_items?(pc, ARKENIAS_NOTE)
             html = "30358-03.html"
           elsif has_quest_items?(pc, ARKENIAS_LETTER)
-            give_adena(pc, 247708, true)
+            give_adena(pc, 247_708, true)
             give_items(pc, MARK_OF_FATE, 1)
-            add_exp_and_sp(pc, 1365470, 91124)
+            add_exp_and_sp(pc, 1_365_470, 91_124)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30358-04.html"
@@ -454,7 +451,6 @@ class Scripts::Q00219_TestimonyOfFate < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == MAGISTER_KAIRA
         html = get_already_completed_msg(pc)

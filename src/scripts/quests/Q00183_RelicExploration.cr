@@ -15,10 +15,7 @@ class Scripts::Q00183_RelicExploration < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30512-04.htm"
@@ -29,9 +26,9 @@ class Scripts::Q00183_RelicExploration < Quest
       html = event
     when "30621-02.html"
       if qs.memo_state?(2)
-        qs.give_adena(18100, true)
+        qs.give_adena(18_100, true)
         if pc.level < MAX_LEVEL_FOR_EXP_SP
-          qs.add_exp_and_sp(60000, 3000)
+          qs.add_exp_and_sp(60_000, 3000)
         end
         qs.exit_quest(false, true)
         html = event
@@ -70,7 +67,6 @@ class Scripts::Q00183_RelicExploration < Quest
       end
     end
 
-
     html
   end
 
@@ -96,7 +92,6 @@ class Scripts::Q00183_RelicExploration < Quest
           html = "30673-05.html"
         end
       end
-
     elsif qs.completed?
       html = get_already_completed_msg(pc)
     end

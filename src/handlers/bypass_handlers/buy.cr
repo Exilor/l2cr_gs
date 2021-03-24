@@ -2,7 +2,7 @@ module BypassHandler::Buy
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2MerchantInstance)
 
     commands = command.split
@@ -24,7 +24,7 @@ module BypassHandler::Buy
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"Buy"}
   end
 end

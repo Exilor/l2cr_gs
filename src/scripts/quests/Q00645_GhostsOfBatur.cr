@@ -29,10 +29,7 @@ class Scripts::Q00645_GhostsOfBatur < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if pc.level >= MIN_LEVEL
       case event
@@ -45,7 +42,6 @@ class Scripts::Q00645_GhostsOfBatur < Quest
         st.exit_quest(true, true)
         html = event
       end
-
     end
 
     html
@@ -78,7 +74,7 @@ class Scripts::Q00645_GhostsOfBatur < Quest
       # Support for old quest reward.
       count = st.get_quest_items_count(CURSED_GRAVE_GOODS)
       if count > 0 && count < 180
-        st.give_adena(56000 + (count * 64), false)
+        st.give_adena(56000 &+ (count &* 64), false)
         st.add_exp_and_sp(138000, 7997)
         st.exit_quest(true, true)
         html = "32017-07.html"
@@ -90,7 +86,6 @@ class Scripts::Q00645_GhostsOfBatur < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

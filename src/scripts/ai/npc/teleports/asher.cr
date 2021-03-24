@@ -4,7 +4,7 @@ class Scripts::Asher < AbstractNpcAI
   # Location
   private LOCATION = Location.new(43835, -47749, -792)
   # Misc
-  private ADENA = 50000
+  private ADENA = 50_000
 
   def initialize
     super(self.class.simple_name, "ai/npc/teleports")

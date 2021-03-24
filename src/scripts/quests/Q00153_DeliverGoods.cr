@@ -71,7 +71,6 @@ class Scripts::Q00153_DeliverGoods < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     else
       case npc.id
       when JACKSON_ID
@@ -100,7 +99,6 @@ class Scripts::Q00153_DeliverGoods < Quest
           html = "30054-02.html"
         end
       end
-
 
       if st.cond?(1) && st.has_quest_items?(JACKSONS_RECEIPT_ID)
         if st.has_quest_items?(SILVIAS_RECEIPT_ID)

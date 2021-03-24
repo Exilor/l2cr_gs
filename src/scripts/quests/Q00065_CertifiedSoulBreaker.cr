@@ -69,8 +69,7 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
       return super
     end
 
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -238,9 +237,9 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
         elsif memo_state > 1 && memo_state < 24
           html = "32213-08.html"
         elsif memo_state == 24
-          give_adena(pc, 71194, true)
+          give_adena(pc, 71_194, true)
           give_items(pc, SOUL_BREAKER_CERTIFICATE, 1)
-          add_exp_and_sp(pc, 393750, 27020)
+          add_exp_and_sp(pc, 393_750, 27_020)
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = "32213-10.html"
@@ -445,7 +444,7 @@ class Scripts::Q00065_CertifiedSoulBreaker < Quest
       npc.running = true
       npc.set_intention(AI::MOVE_TO, MOVE_TO)
     elsif npc.id == GUARDIAN_ANGEL
-      start_quest_timer("DESPAWN_70", 70000, npc, nil)
+      start_quest_timer("DESPAWN_70", 70_000, npc, nil)
       if c0 = npc.variables.get_object("player0", L2PcInstance?)
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::S1_STEP_BACK_FROM_THE_CONFOUNDED_BOX_I_WILL_TAKE_IT_MYSELF).add_string_parameter(c0.appearance.visible_name))
       end

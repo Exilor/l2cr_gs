@@ -1,6 +1,6 @@
 module AutoSpawnHandler
   extend self
-  extend Loggable
+  include Loggable
 
   private DEFAULT_INITIAL_SPAWN = 30_000 # 30 seconds after registration
   private DEFAULT_RESPAWN = 3_600_000 # 1 hour

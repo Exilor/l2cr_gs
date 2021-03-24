@@ -23,7 +23,7 @@ module ItemsAutoDestroy
         ITEMS.delete(item.l2id)
       else
         if item.template.auto_destroy_time > 0
-          if cur_time - item.drop_time > item.template.auto_destroy_time
+          if cur_time &- item.drop_time > item.template.auto_destroy_time
             L2World.remove_visible_object(item, item.world_region)
             L2World.remove_object(item)
             ITEMS.delete(item.l2id)
@@ -32,7 +32,7 @@ module ItemsAutoDestroy
             end
           end
         elsif item.template.has_ex_immediate_effect?
-          if cur_time - item.drop_time > Config.herb_auto_destroy_time
+          if cur_time &- item.drop_time > Config.herb_auto_destroy_time
             L2World.remove_visible_object(item, item.world_region)
             L2World.remove_object(item)
             ITEMS.delete(item.l2id)
@@ -47,7 +47,7 @@ module ItemsAutoDestroy
             sleep_time = Config.autodestroy_item_after * 1000
           end
 
-          if cur_time - item.drop_time > sleep_time
+          if cur_time &- item.drop_time > sleep_time
             L2World.remove_visible_object(item, item.world_region)
             L2World.remove_object(item)
             ITEMS.delete(item.l2id)

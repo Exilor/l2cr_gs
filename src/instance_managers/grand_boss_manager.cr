@@ -1,6 +1,6 @@
 module GrandBossManager
   extend self
-  extend Loggable
+  include Loggable
 
   private DELETE_GRAND_BOSS_LIST = "DELETE FROM grandboss_list"
   private INSERT_GRAND_BOSS_LIST = "INSERT INTO grandboss_list (player_id,zone) VALUES (?,?)"

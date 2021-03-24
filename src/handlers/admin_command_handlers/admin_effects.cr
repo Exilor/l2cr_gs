@@ -413,7 +413,7 @@ module AdminCommandHandler::AdminEffects
     AdminHtml.show_admin_html(pc, filename)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_invis",
       "admin_invisible",

@@ -42,10 +42,7 @@ class Scripts::Q00601_WatchingEyes < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -59,7 +56,7 @@ class Scripts::Q00601_WatchingEyes < Quest
       i = Rnd.rand(4)
       if i < 3
         st.give_items(REWARD[i][0], 5)
-        st.add_exp_and_sp(120000, 10000)
+        st.add_exp_and_sp(120_000, 10_000)
       end
       st.give_adena(REWARD[i][1], true)
       st.exit_quest(true, true)
@@ -93,7 +90,6 @@ class Scripts::Q00601_WatchingEyes < Quest
     when State::STARTED
       html = st.cond?(1) ? "31683-03.html" : "31683-04.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

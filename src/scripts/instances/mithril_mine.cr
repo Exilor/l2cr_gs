@@ -46,7 +46,7 @@ class Scripts::MithrilMine < AbstractInstance
           npc.do_cast(BLESS_OF_SWORD)
         end
       end
-      start_quest_timer("BUFF", 30000, npc, pc)
+      start_quest_timer("BUFF", 30_000, npc, pc)
     when "TIMER"
       if world.is_a?(MMWorld)
         MOB_SPAWNS.each do |loc|
@@ -70,7 +70,6 @@ class Scripts::MithrilMine < AbstractInstance
       end
       InstanceManager.get_instance(world.instance_id).not_nil!.duration = 3000
     end
-
 
     super
   end

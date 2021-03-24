@@ -1,6 +1,6 @@
 module ItemTable
   extend self
-  extend Loggable
+  include Loggable
 
   private TEMPLATES = [] of L2Item?
   private ETC_ITEMS = {} of Int32 => L2EtcItem
@@ -77,7 +77,7 @@ module ItemTable
     info { "Loaded #{ETC_ITEMS.size} etc item templates." }
     info { "Loaded #{ARMORS.size} armor item templates." }
     info { "Loaded #{WEAPONS.size} weapon item templates." }
-    info { "Loaded #{ETC_ITEMS.size + ARMORS.size + WEAPONS.size} item templates in #{timer} s." }
+    info { "Loaded #{ETC_ITEMS.size &+ ARMORS.size &+ WEAPONS.size} item templates in #{timer} s." }
   end
 
   def [](id : Int32) : L2Item
@@ -125,7 +125,16 @@ module ItemTable
       item.count = count
     end
 
-    # TODO: Config::LOG_ITEMS
+    if Config.log_items && process != "Reset"
+      if !Config.log_items_small_log || item.equippable? || item.id == Inventory::ADENA_ID
+        case item.item_type
+        when EtcItemType::ARROW,  EtcItemType::SHOT
+          # do nothing
+        else
+          Logs[:items].info("Created #{item} by #{actor}, referenced by #{reference}.")
+        end
+      end
+    end
 
     if actor && actor.gm? && Config.gmaudit
       ref = "no-reference"
@@ -147,6 +156,7 @@ module ItemTable
 
   def destroy_item(process : String?, item : L2ItemInstance, actor : L2PcInstance?, reference)
     item.sync do
+      old = item.count
       item.count = 0
       item.owner_id = 0
       item.item_location = ItemLocation::VOID
@@ -156,7 +166,14 @@ module ItemTable
       IdFactory.release(item.l2id)
 
       if Config.log_items
-        # TODO
+        if !Config.log_items_small_log || item.equippable? || item.id == Inventory::ADENA_ID
+          case item.item_type
+          when EtcItemType::ARROW,  EtcItemType::SHOT
+            # do nothing
+          else
+            Logs[:items].info("Destroyed #{item} x#{old} by #{actor}, referenced by #{reference}.")
+          end
+        end
       end
 
       if actor && actor.gm? && Config.gmaudit
@@ -169,7 +186,7 @@ module ItemTable
         end
 
         name = actor.target.try &.name || "no-target"
-        GMAudit.log(actor, "#{process} (id: #{item.id}, count: #{item.count}, item_obj_id: #{item.l2id})", name, "L2Object referencing this action is: #{ref}")
+        GMAudit.log(actor, "#{process} (id: #{item.id}, count: #{old}, item_obj_id: #{item.l2id})", name, "L2Object referencing this action is: #{ref}")
       end
 
       if item.pet_item?

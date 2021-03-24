@@ -2,18 +2,14 @@ require "../models/entity/duel"
 
 module DuelManager
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   private DUELS = Concurrent::Map(Int32, Duel).new
   private CURRENT_DUEL_ID = Atomic(Int32).new(0)
 
   def get_duel(duel_id : Int) : Duel?
-    if duel = DUELS[duel_id]?
-      return duel
-    end
-
-    nil
+    DUELS[duel_id]?
   end
 
   def add_duel(pc1 : L2PcInstance, pc2 : L2PcInstance, party_duel : Bool)
@@ -26,23 +22,18 @@ module DuelManager
   end
 
   def do_surrender(pc : L2PcInstance)
-    return unless pc.in_duel?
-    unless duel = get_duel(pc.duel_id)
-      return
-    end
+    return unless pc.in_duel? && (duel = get_duel(pc.duel_id))
     duel.do_surrender(pc)
   end
 
   def on_player_defeat(pc : L2PcInstance)
-    return unless pc.in_duel?
-    if duel = get_duel(pc.duel_id)
+    if pc.in_duel? && (duel = get_duel(pc.duel_id))
       duel.on_player_defeat(pc)
     end
   end
 
   def broadcast_to_opposite_team(pc : L2PcInstance, packet : GameServerPacket)
-    return unless pc.in_duel?
-    return unless duel = get_duel(pc.duel_id)
+    return unless pc.in_duel? && (duel = get_duel(pc.duel_id))
 
     if duel.team_a.includes?(pc)
       duel.broadcast_to_team_2(packet)

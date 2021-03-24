@@ -8,11 +8,9 @@ module DocumentEngine
   private SKILL_FILES = [] of File
 
   def load
-    return if loaded?
-
-    ITEM_FILES.each &.close
+    ITEM_FILES.each { |f| f.close }
     ITEM_FILES.clear
-    SKILL_FILES.each &.close
+    SKILL_FILES.each { |f| f.close }
     ITEM_FILES.clear
 
     hash_files("stats/items", ITEM_FILES)
@@ -24,10 +22,6 @@ module DocumentEngine
     if Config.custom_skills_load
       hash_files("stats/skills/custom", SKILL_FILES)
     end
-  end
-
-  def loaded? : Bool
-    !ITEM_FILES.empty? || !SKILL_FILES.empty?
   end
 
   private def hash_files(dir_name, array)

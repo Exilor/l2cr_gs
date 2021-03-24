@@ -82,14 +82,13 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       npc.spawn.stop_respawn
       npc.delete_me
       npc_pure = st.add_spawn(PURE_UNICORN, 85884, -76588, -3470, 30000)
-      start_quest_timer("FALLEN_UNICORN", 30000, npc_pure, pc)
+      start_quest_timer("FALLEN_UNICORN", 30_000, npc_pure, pc)
       return
     when "FALLEN_UNICORN"
       npc_fallen = st.add_spawn(FALLEN_UNICORN, 85884, -76588, -3470, 0)
       npc_fallen.spawn.start_respawn
       return
     end
-
 
     event
   end
@@ -135,14 +134,13 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         when 11
           html = "31742-04.html"
           st.give_items(CARADINE_LETTER, 1)
-          st.add_exp_and_sp(455764, 0)
+          st.add_exp_and_sp(455_764, 0)
           st.exit_quest(false, true)
         end
 
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when KASSANDRA
       case st.cond
       when 1
@@ -152,7 +150,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 11
         html = "31743-07.html"
       end
-
     when OGMAR
       case st.cond
       when 2
@@ -160,7 +157,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 3
         html = "31744-03.html"
       end
-
     when MYSTERIOUS_KNIGHT
       case st.cond
       when 3
@@ -175,7 +171,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 6
         html = "31751-05.html"
       end
-
     when ANGEL_CORPSE
       case st.cond
       when 4
@@ -190,7 +185,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 5
         html = "31752-02.html"
       end
-
     when KALIS
       case st.cond
       when 6
@@ -204,7 +198,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 9
         html = "30759-06.html"
       end
-
     when MATILD
       case st.cond
       when 7
@@ -212,7 +205,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 8
         html = "30738-03.html"
       end
-
     when CORNERSTONE
       if st.cond?(9)
         if st.has_quest_items?(ORB_OF_BINDING)
@@ -220,7 +212,7 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
           st.take_items(ORB_OF_BINDING, 1)
           npc.do_die(npc)
 
-          st.set("cornerstones", (st.get_int("cornerstones") + 1).to_s)
+          st.set("cornerstones", (st.get_int("cornerstones") &+ 1).to_s)
           if st.get_int("cornerstones") == 4
             st.set_cond(10)
           end
@@ -239,7 +231,6 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
         html = "31746-02.html"
         start_quest_timer("PURE_UNICORN", 3000, npc, pc)
       end
-
     when PURE_UNICORN
       case st.cond
       when 10
@@ -248,9 +239,7 @@ class Scripts::Q00242_PossessorOfAPreciousSoul2 < Quest
       when 11
         html = "31747-02.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

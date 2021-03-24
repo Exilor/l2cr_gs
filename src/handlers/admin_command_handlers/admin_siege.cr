@@ -333,7 +333,7 @@ module AdminCommandHandler::AdminSiege
     pc.send_packet(msg)
   end
 
-  def commands
+  def commands : Enumerable(String)
     ADMIN_COMMANDS
   end
 end

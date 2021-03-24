@@ -2,7 +2,7 @@ require "./geo_node"
 
 module GeoPathFinding
   extend self
-  extend Loggable
+  include Loggable
 
   private PATH_NODES = {} of Int32 => Slice(UInt8)
   private PATH_NODES_INDEX = {} of Int32 => Slice(Int32)

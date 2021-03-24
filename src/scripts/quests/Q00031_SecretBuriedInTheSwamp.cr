@@ -28,10 +28,7 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31555-02.html"
@@ -53,14 +50,14 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
       end
     when "31661-02.html", "31662-02.html", "31663-02.html", "31664-02.html"
       idx = MONUMENTS.index(npc.not_nil!.id)
-      if idx && st.cond?(idx + 3)
-        st.set_cond(st.cond + 1, true)
+      if idx && st.cond?(idx &+ 3)
+        st.set_cond(st.cond &+ 1, true)
         html = event
       end
     when "31555-08.html"
       if st.cond?(7)
-        st.add_exp_and_sp(490000, 45880)
-        st.give_adena(120000, true)
+        st.add_exp_and_sp(490_000, 45_880)
+        st.give_adena(120_000, true)
         st.exit_quest(false, true)
         html = event
       end
@@ -101,10 +98,10 @@ class Scripts::Q00031_SecretBuriedInTheSwamp < Quest
         html = "31665-03.html"
       end
     when FORGOTTEN_MONUMENT_1..FORGOTTEN_MONUMENT_4
-      loc = MONUMENTS.index(npc.id).not_nil! + 3
+      loc = MONUMENTS.index(npc.id).not_nil! &+ 3
       if st.cond?(loc)
         html = "#{npc.id}-01.html"
-      elsif st.cond?(loc + 1)
+      elsif st.cond?(loc &+ 1)
         html = "#{npc.id}-03.html"
       end
     end

@@ -109,7 +109,7 @@ class LoginServerThread
   rescue IO::EOFError
     warn "Disconnected from LoginServer."
   rescue e : IO::Error
-    error e.message
+    warn e.message
   rescue e
     unless cancelled?
       error e
@@ -127,7 +127,7 @@ class LoginServerThread
     packet.write
 
     OUT_BUFFER.write_bytes(0)
-    until (OUT_BUFFER.pos - 2) % 8 == 0
+    until (OUT_BUFFER.pos &- 2) % 8 == 0
       OUT_BUFFER.write_bytes(0u8)
     end
     NewCrypt.append_checksum(OUT_BUFFER.slice, 2, OUT_BUFFER.pos)
@@ -271,7 +271,7 @@ class LoginServerThread
 
   def do_kick_player(account : String)
     if client = ACCOUNTS[account]?
-      warn { "#{client} kicked out by LoginServer." }
+      Logs[:accounting].warn { "Account #{account} kicked by LoginServer." }
       client.additional_close_packet = SystemMessage.another_login_with_account
       client.close_now
     end
@@ -283,6 +283,10 @@ class LoginServerThread
 
   def get_client(name : String) : GameClient?
     ACCOUNTS[name]?
+  end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
   end
 end
 

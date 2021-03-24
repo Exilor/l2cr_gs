@@ -30,8 +30,8 @@ class Scripts::Q00511_AwlUnderFoot < Quest
     end
   end
 
-  private REENTERTIME = 14400000
-  private RAID_SPAWN_DELAY = 120000
+  private REENTERTIME = 14_400_000
+  private RAID_SPAWN_DELAY = 120_000
   private FORT_DUNGEONS = {} of Int32 => FortDungeon
   # QUEST ITEMS
   private DL_MARK = 9797
@@ -95,7 +95,6 @@ class Scripts::Q00511_AwlUnderFoot < Quest
       add_attack_id(i)
     end
   end
-
 
   private def check_conditions(pc)
     unless party = pc.party
@@ -246,7 +245,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
         end
 
         instance_obj = InstanceManager.get_instance(world.instance_id).not_nil!
-        instance_obj.duration = 360000
+        instance_obj.duration = 360_000
         instance_obj.remove_npcs
       else
         world.inc_status
@@ -277,7 +276,7 @@ class Scripts::Q00511_AwlUnderFoot < Quest
         html = "FortressWarden-00.htm"
         st.exit_quest(true)
       end
-    elsif FORT_DUNGEONS.has_key?(npc_id) && cond > 0 && st.state == State::STARTED
+    elsif FORT_DUNGEONS.has_key?(npc_id) && cond > 0 && st.state.started?
       count = st.get_quest_items_count(DL_MARK)
       if cond == 1 && count > 0
         html = "FortressWarden-14.htm"

@@ -48,10 +48,7 @@ class Scripts::Q00633_InTheForgottenVillage < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31388-03.htm"
@@ -82,7 +79,6 @@ class Scripts::Q00633_InTheForgottenVillage < Quest
       end
     end
 
-
     html
   end
 
@@ -99,7 +95,6 @@ class Scripts::Q00633_InTheForgottenVillage < Quest
       when ZOMBIES_LIVER
         give_item_randomly(qs.player, npc, ZOMBIES_LIVER, 1, 0, info.chance, true)
       end
-
     end
 
     super

@@ -28,10 +28,7 @@ class Scripts::Q00252_ItSmellsDelicious < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30200-04.htm"
@@ -43,13 +40,12 @@ class Scripts::Q00252_ItSmellsDelicious < Quest
       end
     when "30200-08.html"
       if qs.cond?(2)
-        give_adena(pc, 147656, true)
-        add_exp_and_sp(pc, 716238, 78324)
+        give_adena(pc, 147_656, true)
+        add_exp_and_sp(pc, 716_238, 78_324)
         qs.exit_quest(false, true)
         html = event
       end
     end
-
 
     html
   end
@@ -95,7 +91,6 @@ class Scripts::Q00252_ItSmellsDelicious < Quest
           html = "30200-07.html"
         end
       end
-
     else
       html = "30200-03.html"
     end

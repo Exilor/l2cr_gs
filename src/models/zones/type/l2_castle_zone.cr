@@ -1,7 +1,7 @@
 require "./l2_residence_zone"
 
 class L2CastleZone < L2ResidenceZone
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     if name == "castleId"
       self.residence_id = value.to_i
     else

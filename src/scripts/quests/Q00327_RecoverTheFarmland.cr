@@ -71,10 +71,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30034-01.html", "30313-01.html", "30314-02.html", "30314-08.html",
@@ -97,7 +94,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       if !has_quest_items?(pc, item.id)
         html = "30034-02.html"
       else
-        add_exp_and_sp(pc, get_quest_items_count(pc, item.id) * item.count, 0)
+        add_exp_and_sp(pc, get_quest_items_count(pc, item.id) &* item.count, 0)
         take_items(pc, item.id, -1)
         play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
         html = event
@@ -106,7 +103,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       rewarded = false
       FULL_REWARD_DATA.each do |it|
         if has_quest_items?(pc, it.id)
-          add_exp_and_sp(pc, get_quest_items_count(pc, it.id) * it.count, 0)
+          add_exp_and_sp(pc, get_quest_items_count(pc, it.id) &* it.count, 0)
           take_items(pc, it.id, -1)
           play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
           rewarded = true
@@ -202,7 +199,6 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
       end
     end
 
-
     html
   end
 
@@ -252,7 +248,7 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
             html = "30597-05.html"
             dog_tags = get_quest_items_count(pc, TUREK_DOG_TAG)
             medallions = get_quest_items_count(pc, TUREK_MEDALLION)
-            count = (dog_tags * 40) + (medallions * 50) + (dog_tags + medallions >= 10 ? 619 : 0)
+            count = (dog_tags &* 40) &+ (medallions &* 50) &+ (dog_tags &+ medallions >= 10 ? 619 : 0)
             give_adena(pc, count, true)
             take_items(pc, TUREK_DOG_TAG, -1)
             take_items(pc, TUREK_MEDALLION, -1)
@@ -273,7 +269,6 @@ class Scripts::Q00327_RecoverTheFarmland < Quest
         html = "30314-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -39,7 +39,6 @@ class Scripts::Q00699_GuardianOfTheSkies < Quest
         st.exit_quest(true, true)
         html = event
       end
-
     end
 
     html
@@ -51,13 +50,13 @@ class Scripts::Q00699_GuardianOfTheSkies < Quest
         amount = 0
         chance = Rnd.rand(1000)
         if chance < 215
-          amount = Rnd.rand(10) + 90
+          amount = Rnd.rand(10) &+ 90
         elsif chance < 446
-          amount = Rnd.rand(10) + 80
+          amount = Rnd.rand(10) &+ 80
         elsif chance < 715
-          amount = Rnd.rand(10) + 70
+          amount = Rnd.rand(10) &+ 70
         else
-          amount = Rnd.rand(10) + 60
+          amount = Rnd.rand(10) &+ 60
         end
         st.give_items(VULTURES_GOLDEN_FEATHER, amount)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -86,7 +85,7 @@ class Scripts::Q00699_GuardianOfTheSkies < Quest
     when State::STARTED
       feathers = st.get_quest_items_count(VULTURES_GOLDEN_FEATHER)
       if feathers > 0
-        adena = feathers * VULTURES_GOLDEN_FEATHER_ADENA
+        adena = feathers &* VULTURES_GOLDEN_FEATHER_ADENA
         if feathers > BONUS_COUNT
           adena += BONUS
         end
@@ -97,7 +96,6 @@ class Scripts::Q00699_GuardianOfTheSkies < Quest
         html = "32557-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

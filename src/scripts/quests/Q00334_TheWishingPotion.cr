@@ -150,7 +150,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(DEMONS_GLOVES_FABRIC, 1)
           end
 
-
           html = "30742-02.html"
         end
 
@@ -177,7 +176,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(DEMONS_GLOVES_FABRIC, 1)
           end
 
-
           html = "30743-03.html"
         elsif random >= 50 && random < 100
           case Rnd.rand(2)
@@ -186,7 +184,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
           when 1
             qs.give_items(Q_MUSICNOTE_BATTLE, 1)
           end
-
 
           html = "30743-04.html"
         elsif random >= 85 && random < 95
@@ -201,7 +198,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(DEMONS_GLOVES, 1)
           end
 
-
           html = "30743-05.html"
         elsif random >= 95
           case Rnd.rand(2)
@@ -211,7 +207,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.give_items(Q_SILVER_CIRCLET, 1)
           end
 
-
           html = "30743-06.htm"
         end
         qs.set(FLAG, 0)
@@ -220,38 +215,36 @@ class Scripts::Q00334_TheWishingPotion < Quest
       end
     end
 
-
     html || get_no_quest_msg(pc)
   end
 
   def on_spawn(npc)
     case npc.id
     when GRIMA
-      start_quest_timer("2336002", 1000 * 200, npc, nil)
+      start_quest_timer("2336002", 1000 &* 200, npc, nil)
       npc.say(NpcString::OH_OH_OH)
     when SUCCUBUS_OF_SEDUCTION
-      start_quest_timer("2336003", 1000 * 200, npc, nil)
+      start_quest_timer("2336003", 1000 &* 200, npc, nil)
       npc.say(NpcString::DO_YOU_WANT_US_TO_LOVE_YOU_OH)
     when GREAT_DEMON_KING
-      start_quest_timer("2336007", 1000 * 600, npc, nil)
+      start_quest_timer("2336007", 1000 &* 600, npc, nil)
       npc.say(NpcString::WHO_KILLED_MY_UNDERLING_DEVIL)
     when DLORD_ALEXANDROSANCHES
-      start_quest_timer("2336004", 1000 * 200, npc, nil)
+      start_quest_timer("2336004", 1000 &* 200, npc, nil)
       npc.say(NpcString::WHO_IS_CALLING_THE_LORD_OF_DARKNESS)
     when ABYSSKING_BONAPARTERIUS
-      start_quest_timer("2336005", 1000 * 200, npc, nil)
+      start_quest_timer("2336005", 1000 &* 200, npc, nil)
       npc.say(NpcString::I_AM_A_GREAT_EMPIRE_BONAPARTERIUS)
     when EVILOVERLORD_RAMSEBALIUS
-      start_quest_timer("2336006", 1000 * 200, npc, nil)
+      start_quest_timer("2336006", 1000 &* 200, npc, nil)
       npc.say(NpcString::LET_YOUR_HEAD_DOWN_BEFORE_THE_LORD)
     when FAIRY_RUPINA
-      start_quest_timer("2336001", 120 * 1000, npc, nil)
+      start_quest_timer("2336001", 120 &* 1000, npc, nil)
       npc.say(NpcString::I_WILL_MAKE_YOUR_LOVE_COME_TRUE_LOVE_LOVE_LOVE)
     when WISDOM_CHEST
-      start_quest_timer("2336007", 120 * 1000, npc, nil)
+      start_quest_timer("2336007", 120 &* 1000, npc, nil)
       npc.say(NpcString::I_HAVE_WISDOM_IN_ME_I_AM_THE_BOX_OF_WISDOM)
     end
-
 
     super
   end
@@ -349,7 +342,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 1)
             qs.set(FLAG, 1)
-            start_quest_timer("2336008", 3 * 1000, npc, pc)
+            start_quest_timer("2336008", 3 &* 1000, npc, pc)
             return "30738-16.html"
           end
           return "30738-20.html"
@@ -361,7 +354,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 2)
             qs.set(FLAG, 2)
-            start_quest_timer("2336008", 3 * 1000, npc, pc)
+            start_quest_timer("2336008", 3 &* 1000, npc, pc)
             return "30738-17.html"
           end
           return "30738-20.html"
@@ -373,7 +366,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 3)
             qs.set(FLAG, 3)
-            start_quest_timer("2336008", 3 * 1000, npc, pc)
+            start_quest_timer("2336008", 3 &* 1000, npc, pc)
             return "30738-18.html"
           end
           return "30738-20.html"
@@ -385,7 +378,7 @@ class Scripts::Q00334_TheWishingPotion < Quest
             qs.take_items(Q_WISH_POTION, 1)
             qs.set(I_QUEST0, 4)
             qs.set(FLAG, 4)
-            start_quest_timer("2336008", 3 * 1000, npc, pc)
+            start_quest_timer("2336008", 3 &* 1000, npc, pc)
             return "30738-19.html"
           end
           return "30738-20.html"
@@ -393,10 +386,10 @@ class Scripts::Q00334_TheWishingPotion < Quest
         return "30738-14.html"
       when 2336008
         npc.say(NpcString::OK_EVERYBODY_PRAY_FERVENTLY)
-        start_quest_timer("2336009", 4 * 1000, npc, pc)
+        start_quest_timer("2336009", 4 &* 1000, npc, pc)
       when 2336009
         npc.say(NpcString::BOTH_HANDS_TO_HEAVEN_EVERYBODY_YELL_TOGETHER)
-        start_quest_timer("2336010", 4 * 1000, npc, pc)
+        start_quest_timer("2336010", 4 &* 1000, npc, pc)
       when 2336010
         npc.say(NpcString::ONE_TWO_MAY_YOUR_DREAMS_COME_TRUE)
         i0 = 0
@@ -425,7 +418,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             add_spawn(WISDOM_CHEST, npc, true, 0, false)
             qs.set("Exchange", 0)
           end
-
         when 1
           case qs.get_int(I_QUEST0)
           when 1
@@ -444,7 +436,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             add_spawn(WISDOM_CHEST, npc, true, 0, false)
             qs.set("Exchange", 0)
           end
-
         when 2
           case qs.get_int(I_QUEST0)
           when 2
@@ -457,13 +448,9 @@ class Scripts::Q00334_TheWishingPotion < Quest
             add_spawn(WISDOM_CHEST, npc, true, 0, false)
             qs.set("Exchange", 0)
           end
-
         end
-
       end
-
     end
-
 
     super
   end
@@ -623,7 +610,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             when 3
               qs.give_items(DEMONS_GLOVES_FABRIC, 1)
             end
-
           end
         end
       when ABYSSKING_BONAPARTERIUS
@@ -642,7 +628,6 @@ class Scripts::Q00334_TheWishingPotion < Quest
             when 3
               qs.give_items(DEMONS_GLOVES_FABRIC, 1)
             end
-
           end
         end
       when EVILOVERLORD_RAMSEBALIUS
@@ -661,11 +646,9 @@ class Scripts::Q00334_TheWishingPotion < Quest
             when 3
               qs.give_items(DEMONS_GLOVES_FABRIC, 1)
             end
-
           end
         end
       end
-
     end
 
     super

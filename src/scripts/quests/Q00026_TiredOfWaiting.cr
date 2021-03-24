@@ -19,10 +19,7 @@ class Scripts::Q00026_TiredOfWaiting < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30655-02.htm",  "30655-03.htm",  "30655-05.html", "30655-06.html",

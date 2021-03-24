@@ -67,6 +67,6 @@ class Scripts::Warpgate < AbstractNpcAI
     end
 
     pc.quest_completed?(Scripts::Q00130_PathToHellbound.simple_name) ||
-    pc.quest_completed?(Scripts::Q00133_ThatsBloodyHot.simple_name)
+      pc.quest_completed?(Scripts::Q00133_ThatsBloodyHot.simple_name)
   end
 end

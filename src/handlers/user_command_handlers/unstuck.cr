@@ -2,7 +2,7 @@ module UserCommandHandler::Unstuck
   extend self
   extend UserCommandHandler
 
-  def use_user_command(id, pc)
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
     if !TvTEvent.on_escape_use(pc.l2id)
       pc.action_failed
       return false
@@ -70,7 +70,7 @@ module UserCommandHandler::Unstuck
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {52}
   end
 end

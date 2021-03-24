@@ -73,13 +73,13 @@ module WalkingManager
         npc.running = node.run_to_location?
         npc.set_intention(AI::MOVE_TO, node)
         task = StartMovingTask.new(npc, route_name)
-        task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 60000, 60000)
+        task = ThreadPoolManager.schedule_ai_at_fixed_rate(task, 60_000, 60_000)
         walk.walk_check_task = task
         npc.known_list.start_tracking_task
         ACTIVE_ROUTES[npc.l2id] = walk
       else
         task = StartMovingTask.new(npc, route_name)
-        ThreadPoolManager.schedule_general(task, 60000)
+        ThreadPoolManager.schedule_general(task, 60_000)
       end
     else # walk was stopped for some reason
       if ACTIVE_ROUTES.has_key?(npc.l2id) && (npc.intention.active? || npc.intention.idle?)
@@ -153,7 +153,7 @@ module WalkingManager
         # end
 
         task = ArrivedTask.new(npc, walk)
-        ThreadPoolManager.schedule_general(task, 100 + (node.delay * 1000))
+        ThreadPoolManager.schedule_general(task, 100 &+ (node.delay &* 1000))
       end
     end
   end
@@ -175,19 +175,18 @@ module WalkingManager
       find_element(n, "route") do |d|
         route_name = parse_string(d, "name")
         repeat = parse_bool(d, "repeat")
-        repeat_style = parse_string(d, "repeatStyle")
-        repeat_type =
-        case repeat_style.casecmp
+
+        case parse_string(d, "repeatStyle")
         when "back"
-          REPEAT_GO_BACK
+          repeat_type = REPEAT_GO_BACK
         when "cycle"
-          REPEAT_GO_FIRST
+          repeat_type = REPEAT_GO_FIRST
         when "conveyor"
-          REPEAT_TELE_FIRST
+          repeat_type = REPEAT_TELE_FIRST
         when "random"
-          REPEAT_RANDOM
+          repeat_type = REPEAT_RANDOM
         else
-          NO_REPEAT
+          repeat_type = NO_REPEAT
         end
 
         list = [] of L2NpcWalkerNode

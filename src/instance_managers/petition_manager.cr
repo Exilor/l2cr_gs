@@ -2,7 +2,7 @@ require "../models/petition"
 
 module PetitionManager
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   private alias Say2 = Packets::Incoming::Say2
@@ -214,7 +214,7 @@ module PetitionManager
   end
 
   def send_pending_petition_list(pc : L2PcInstance)
-    content = String.build(600 + (pending_petition_count * 300)) do |io|
+    content = String.build(600 &+ (pending_petition_count &* 300)) do |io|
       io << "<html><body><center><table width=270><tr>" \
         "<td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
         "<td width=180><center>Petition Menu</center></td>" \

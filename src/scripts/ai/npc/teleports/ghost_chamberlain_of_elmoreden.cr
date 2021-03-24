@@ -47,7 +47,6 @@ class Scripts::GhostChamberlainOfElmoreden < AbstractNpcAI
       end
     end
 
-
     super
   end
 end

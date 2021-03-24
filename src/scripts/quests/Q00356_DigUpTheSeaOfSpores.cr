@@ -24,10 +24,7 @@ class Scripts::Q00356_DigUpTheSeaOfSpores < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30717-02.htm", "30717-03.htm", "30717-04.htm", "30717-10.html",
@@ -37,7 +34,7 @@ class Scripts::Q00356_DigUpTheSeaOfSpores < Quest
       qs.start_quest
       html = event
     when "30717-09.html"
-      add_exp_and_sp(pc, 31850, 0)
+      add_exp_and_sp(pc, 31_850, 0)
       take_items(pc, CARNIVORE_SPORE, -1)
       take_items(pc, HERBIVOROUS_SPORE, -1)
       html = event
@@ -45,26 +42,25 @@ class Scripts::Q00356_DigUpTheSeaOfSpores < Quest
       qs.exit_quest(true, true)
       html = event
     when "30717-14.html"
-      add_exp_and_sp(pc, 45500, 2600)
+      add_exp_and_sp(pc, 45_500, 2600)
       qs.exit_quest(true, true)
       html = event
     when "FINISH"
       value = Rnd.rand(100)
       adena = 0
       if value < 20
-        adena = 44000
+        adena = 44_000
         html = "30717-15.html"
       elsif value < 70
-        adena = 20950
+        adena = 20_950
         html = "30717-16.html"
       else
-        adena = 10400
+        adena = 10_400
         html = "30717-17.html"
       end
       give_adena(pc, adena.to_i64, true)
       qs.exit_quest(true, true)
     end
-
 
     html
   end

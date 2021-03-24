@@ -1,6 +1,8 @@
 module GameDB
   module CouplesDAO
-    include Loggable
+    macro extended
+      include Loggable
+    end
 
     abstract def load(& : Couple ->)
     abstract def insert(id : Int32, pc1_id : Int32, pc2_id : Int32, affiance_date : Int64, wedding_date : Int64)

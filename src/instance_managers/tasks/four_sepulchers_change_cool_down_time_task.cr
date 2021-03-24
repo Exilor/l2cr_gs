@@ -20,10 +20,10 @@ struct FourSepulchersChangeCoolDownTimeTask
       manager.first_time_run = false
     end
 
-    interval = time.ms - Time.ms
+    interval = time.ms &- Time.ms
 
-    manager.change_entry_time_task =
-    ThreadPoolManager.schedule_general(FourSepulchersChangeEntryTimeTask.new, interval)
+    task = FourSepulchersChangeEntryTimeTask.new
+    manager.change_entry_time_task = ThreadPoolManager.schedule_general(task, interval)
 
     if task = manager.change_cool_down_time_task
       task.cancel

@@ -37,8 +37,7 @@ class Scripts::Q00107_MercilessPunishment < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30568-04.htm"
@@ -67,7 +66,6 @@ class Scripts::Q00107_MercilessPunishment < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -111,8 +109,8 @@ class Scripts::Q00107_MercilessPunishment < Quest
         when 7
           if has_quest_items?(pc, HATOSS_ORDER_3, LETTER_TO_HUMAN, LETTER_TO_DARK_ELF, LETTER_TO_ELF)
             Q00281_HeadForTheHills.give_newbie_reward(pc)
-            add_exp_and_sp(pc, 34565, 2962)
-            give_adena(pc, 14666, true)
+            add_exp_and_sp(pc, 34_565, 2962)
+            give_adena(pc, 14_666, true)
             REWARDS.each { |reward| give_items(pc, reward) }
             give_items(pc, BUTCHER, 1)
             qs.exit_quest(false, true)
@@ -133,7 +131,6 @@ class Scripts::Q00107_MercilessPunishment < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -158,7 +155,6 @@ class Scripts::Q00107_MercilessPunishment < Quest
           qs.set_cond(7, true)
         end
       end
-
     end
 
     super

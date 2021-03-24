@@ -21,9 +21,9 @@ class Scripts::TerritoryManagers < AbstractNpcAI
     super(self.class.simple_name, "ai/npc")
 
     9.times do |i|
-      add_first_talk_id(36490 + i)
-      add_talk_id(36490 + i)
-      add_start_npc(36490 + i)
+      add_first_talk_id(36490 &+ i)
+      add_talk_id(36490 &+ i)
+      add_start_npc(36490 &+ i)
     end
   end
 
@@ -41,8 +41,8 @@ class Scripts::TerritoryManagers < AbstractNpcAI
     pc = pc.not_nil!
 
     npc_id = npc.id
-    item_id = 13757 + (npc_id - 36490)
-    territory_id = 81 + (npc_id - 36490)
+    item_id = 13757 &+ (npc_id &- 36490)
+    territory_id = 81 &+ (npc_id &- 36490)
     case event
     when "36490-04.html"
       # L2J Custom for minimum badges required.
@@ -53,7 +53,7 @@ class Scripts::TerritoryManagers < AbstractNpcAI
     when "BuyProducts"
       if pc.inventory.get_item_by_item_id(item_id)
         # If the player has at least one Territory Badges then show the multisell.
-        multisell_id = 364900001 + ((npc_id - 36490) * 10000)
+        multisell_id = 364900001 + ((npc_id &- 36490) &* 10000)
         MultisellData.separate_and_send(multisell_id, pc, npc, false)
       else
         # If the player does not have Territory Badges, it cannot continue.
@@ -119,14 +119,14 @@ class Scripts::TerritoryManagers < AbstractNpcAI
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-0a.html")
       elsif reward[0] != territory_id
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-0b.html")
-        html["%castle%"] = CastleManager.get_castle_by_id(reward[0] - 80).not_nil!.name
+        html["%castle%"] = CastleManager.get_castle_by_id(reward[0] &- 80).not_nil!.name
       elsif reward[1] == 0
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-0a.html")
       else
         html.set_file(prefix, "data/scripts/ai/npc/TerritoryManagers/reward-1.html")
-        html["%castle%"] = CastleManager.get_castle_by_id(reward[0] - 80).not_nil!.name
+        html["%castle%"] = CastleManager.get_castle_by_id(reward[0] &- 80).not_nil!.name
         html["%badge%"] = reward[1]
-        html["%adena%"] = reward[1] * 5000
+        html["%adena%"] = reward[1] &* 5000
       end
       html["%territoryId%"] = territory_id
       html["%objectId%"] = npc.l2id
@@ -147,7 +147,7 @@ class Scripts::TerritoryManagers < AbstractNpcAI
         html.set_file(pc, "data/scripts/ai/npc/TerritoryManagers/reward-2.html")
         count = reward[1].to_i64
         pc.add_item("ReceiveRewards", badge_id, count, npc, true)
-        pc.add_adena("ReceiveRewards", count * 5000, npc, true)
+        pc.add_adena("ReceiveRewards", count &* 5000, npc, true)
         TerritoryWarManager.reset_reward(pc)
       end
 
@@ -174,9 +174,7 @@ class Scripts::TerritoryManagers < AbstractNpcAI
     unless qs.completed?
       # Take the quest specific items.
       if item_ids
-        item_ids.each do |item_id|
-          take_items(pc, item_id, -1)
-        end
+        item_ids.each { |item_id| take_items(pc, item_id, -1) }
       end
       # Completes the quest.
       qs.exit_quest(false)

@@ -18,7 +18,8 @@ class Scripts::HellboundCore < AbstractNpcAI
           naia.do_simultaneous_cast(BEAM)
         end
       end
-      start_quest_timer("cast", 10000, npc, nil)
+
+      start_quest_timer("cast", 10_000, npc, nil)
     end
 
     super
@@ -28,7 +29,7 @@ class Scripts::HellboundCore < AbstractNpcAI
     if npc.id == NAIA
       npc.no_random_walk = true
     else
-      start_quest_timer("cast", 10000, npc, nil)
+      start_quest_timer("cast", 10_000, npc, nil)
     end
 
     super

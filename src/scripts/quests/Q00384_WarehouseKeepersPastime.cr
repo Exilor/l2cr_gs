@@ -147,12 +147,12 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
           end
           return "30182-11.html"
         when 10..18
-          select_bingo_number(qs, ask - 10 + 1)
+          select_bingo_number(qs, ask &- 10 &+ 1)
           return fill_board(pc, qs, get_htm(pc, "30182-13.html"))
         when 19..27
-          return take_html(pc, qs, ask - 18, CLIFF)
+          return take_html(pc, qs, ask &- 18, CLIFF)
         when 55..63
-          return before_reward(pc, qs, ask - 54, CLIFF)
+          return before_reward(pc, qs, ask &- 54, CLIFF)
         end
       when WAREHOUSE_CHIEF_BAXT
         ask = event.to_i
@@ -181,12 +181,12 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
           end
           return "30685-11.html"
         when 10..18
-          select_bingo_number(qs, ask - 9)
+          select_bingo_number(qs, ask &- 9)
           return fill_board(pc, qs, get_htm(pc, "30685-13.html"))
         when 19..27
-          return take_html(pc, qs, ask - 18, WAREHOUSE_CHIEF_BAXT)
+          return take_html(pc, qs, ask &- 18, WAREHOUSE_CHIEF_BAXT)
         when 55..63
-          return before_reward(pc, qs, ask - 54, WAREHOUSE_CHIEF_BAXT)
+          return before_reward(pc, qs, ask &- 54, WAREHOUSE_CHIEF_BAXT)
         end
       end
     end
@@ -232,9 +232,9 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
     9.times do |i0|
       i1 = get_number_from_bingo_board(qs, i0)
       if selected_bingo_number?(qs, i1)
-        html = html.sub("<?Cell#{i0 + 1}?>", i1.to_s)
+        html = html.sub("<?Cell#{i0 &+ 1}?>", i1.to_s)
       else
-        html = html.sub("<?Cell#{i0 + 1}?>", "?")
+        html = html.sub("<?Cell#{i0 &+ 1}?>", "?")
       end
     end
 
@@ -244,8 +244,8 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
   private def color_board(pc, qs, html : String)
     9.times do |i0|
       i1 = get_number_from_bingo_board(qs, i0)
-      html = html.sub("<?FontColor#{i0 + 1}?>", selected_bingo_number?(qs, i1) ? "ff0000" : "ffffff")
-      html = html.sub("<?Cell#{i0 + 1}?>", i1.to_s)
+      html = html.sub("<?FontColor#{i0 &+ 1}?>", selected_bingo_number?(qs, i1) ? "ff0000" : "ffffff")
+      html = html.sub("<?Cell#{i0 &+ 1}?>", i1.to_s)
     end
 
     html

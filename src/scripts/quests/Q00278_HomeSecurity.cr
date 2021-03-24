@@ -67,7 +67,6 @@ class Scripts::Q00278_HomeSecurity < Quest
       html = "31537-07.html"
     end
 
-
     html
   end
 
@@ -75,7 +74,7 @@ class Scripts::Q00278_HomeSecurity < Quest
     if st = get_random_party_member_state(pc, 1, 3, npc)
       case npc.id
       when 18905 # Farm Ravager (Crazy)
-        count = (Rnd.rand(1000) < 486 ? Rnd.rand(6) : Rnd.rand(5)) + 1
+        count = (Rnd.rand(1000) < 486 ? Rnd.rand(6) : Rnd.rand(5)) &+ 1
         if st.give_item_randomly(npc, SEL_MAHUM_MANE, count, SEL_MAHUM_MANE_COUNT, 1.0, true)
           st.set_cond(2, true)
         end

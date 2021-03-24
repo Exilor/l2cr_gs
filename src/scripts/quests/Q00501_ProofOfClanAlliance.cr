@@ -68,10 +68,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc && npc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && npc && (qs = get_quest_state(pc, false))
 
     case event
     when "30756-06.html", "30756-08.html", "30757-05.html", "30758-02.html",
@@ -103,7 +100,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           lqs.set("flag", 0)
           npc.script_value = 0
           LOCS.each do |loc|
-            box = add_spawn(npc, Rnd.rand(BOX_OF_ATHREA_1..BOX_OF_ATHREA_5), loc, false, 300000)
+            box = add_spawn(npc, Rnd.rand(BOX_OF_ATHREA_1..BOX_OF_ATHREA_5), loc, false, 300_000)
             box.disable_core_ai(true)
             box.no_random_walk = true
           end
@@ -144,7 +141,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
       end
     end
 
-
     html
   end
 
@@ -175,27 +171,26 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         if summoner && summoner.npc? && lqs.memo_state?(4)
           arthea = summoner.as(L2Npc)
           if lqs.get_int("flag") == 3 && arthea.script_value?(15)
-            lqs.set("flag", lqs.get_int("flag") + 1)
+            lqs.set("flag", lqs.get_int("flag") &+ 1)
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::BINGO))
           elsif lqs.get_int("flag") == 2 && arthea.script_value?(14)
-            lqs.set("flag", lqs.get_int("flag") + 1)
+            lqs.set("flag", lqs.get_int("flag") &+ 1)
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::BINGO))
           elsif lqs.get_int("flag") == 1 && arthea.script_value?(13)
-            lqs.set("flag", lqs.get_int("flag") + 1)
+            lqs.set("flag", lqs.get_int("flag") &+ 1)
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::BINGO))
           elsif lqs.get_int("flag") == 0 && arthea.script_value?(12)
-            lqs.set("flag", lqs.get_int("flag") + 1)
+            lqs.set("flag", lqs.get_int("flag") &+ 1)
             npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::BINGO))
           elsif lqs.get_int("flag") < 4
             if Rnd.rand(4) == 0
-              lqs.set("flag", lqs.get_int("flag") + 1)
+              lqs.set("flag", lqs.get_int("flag") &+ 1)
               npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::BINGO))
             end
           end
-          arthea.script_value = arthea.script_value + 1
+          arthea.script_value = arthea.script_value &+ 1
         end
       end
-
     end
 
     super
@@ -235,7 +230,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           html = "30756-10.html"
         end
       end
-
     when STATUE_OF_OFFERING
       if lqs && lqs.memo_state?(2)
         if !pc.clan_leader?
@@ -271,7 +265,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         when 5
           html = "30758-09.html"
         end
-
       end
     when KALIS
       if qs.memo_state?(1) && !has_quest_items?(pc, SYMBOL_OF_LOYALTY)
@@ -303,7 +296,6 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
         html = "30759-12.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

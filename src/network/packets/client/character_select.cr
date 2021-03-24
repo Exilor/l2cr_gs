@@ -40,9 +40,7 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
           end
         end
 
-        if pc = client.load_char_from_disk(@slot)
-          debug { "#{pc} loaded from disk." }
-        else
+        unless pc = client.load_char_from_disk(@slot)
           error "Char couldn't be loaded from disk."
           return
         end
@@ -66,6 +64,8 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
 
         client.state = GameClient::State::JOINING
         send_packet(CharSelected.new(pc, client.session_id.play_ok_1))
+
+        Logs[:accounting].info { "Client #{client} logged in." }
       end
     end
   end

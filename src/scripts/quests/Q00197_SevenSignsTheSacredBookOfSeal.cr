@@ -35,10 +35,7 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
       return super
     end
 
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32593-02.htm", "32593-03.htm"
@@ -53,7 +50,7 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
     when "32593-09.html"
       if st.cond?(6)
         if pc.level >= MIN_LEVEL
-          st.add_exp_and_sp(52518015, 5817677)
+          st.add_exp_and_sp(52_518_015, 5_817_677)
           st.exit_quest(false, true)
           html = event
         else
@@ -113,7 +110,6 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -202,9 +198,7 @@ class Scripts::Q00197_SevenSignsTheSacredBookOfSeal < Quest
           end
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

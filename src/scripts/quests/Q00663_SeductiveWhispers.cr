@@ -115,12 +115,12 @@ class Scripts::Q00663_SeductiveWhispers < Quest
         when 7
           if (qs.memo_state % 100) // 10 >= 7
             qs.memo_state = 1
-            give_adena(pc, 2384000, true)
+            give_adena(pc, 2_384_000, true)
             give_items(pc, SCROLL_ENCHANT_WEAPON_A_GRADE)
             give_items(pc, SCROLL_ENCHANT_ARMOR_A_GRADE)
             html = "30846-17.html"
           else
-            win_count = (qs.memo_state // 10) + 1
+            win_count = (qs.memo_state // 10) &+ 1
             html = get_html(pc, "30846-16.html", 0, 0, win_count, 0)
           end
         end
@@ -131,7 +131,6 @@ class Scripts::Q00663_SeductiveWhispers < Quest
         html = "30846-26.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -168,7 +167,7 @@ class Scripts::Q00663_SeductiveWhispers < Quest
             html = "30846-10.html"
           end
         else
-          qs.memo_state = (memo_state * 10) + 5
+          qs.memo_state = (memo_state &* 10) &+ 5
           qs.set_memo_state_ex(1, 0)
           html = "30846-09a.html"
         end
@@ -177,13 +176,13 @@ class Scripts::Q00663_SeductiveWhispers < Quest
       if qs.started? && qs.memo_state % 10 == 5 && qs.memo_state // 1000 == 0
         card1pic = Math.max(qs.get_memo_state_ex(1), 0)
         i1 = card1pic % 10
-        i2 = (card1pic - i1) // 10
-        rnd1 = Rnd.rand(2) + 1
-        rnd2 = Rnd.rand(5) + 1
-        win_count = (qs.memo_state // 10) + 1
-        card2pic = (rnd1 * 10) + rnd2
+        i2 = (card1pic &- i1) // 10
+        rnd1 = Rnd.rand(2) &+ 1
+        rnd2 = Rnd.rand(5) &+ 1
+        win_count = (qs.memo_state // 10) &+ 1
+        card2pic = (rnd1 &* 10) &+ rnd2
         if rnd1 == i2
-          i3 = rnd2 + i1
+          i3 = rnd2 &+ i1
           if i3 % 5 == 0 && i3 != 10
             if (qs.memo_state % 100) // 10 >= 7
               give_adena(player, 2384000, true)
@@ -192,11 +191,11 @@ class Scripts::Q00663_SeductiveWhispers < Quest
               qs.memo_state = 4
               html = get_html(player, "30846-14.html", card1pic, card2pic, win_count, -1)
             else
-              qs.memo_state = ((qs.memo_state // 10) * 10) + 7
+              qs.memo_state = ((qs.memo_state // 10) &* 10) &+ 7
               html = get_html(player, "30846-13.html", card1pic, card2pic, win_count, -1)
             end
           else
-            qs.memo_state = ((qs.memo_state // 10) * 10) + 6
+            qs.memo_state = ((qs.memo_state // 10) &* 10) &+ 6
             qs.set_memo_state_ex(1, card2pic)
             html = get_html(player, "30846-12.html", card1pic, card2pic, win_count, -1)
           end
@@ -209,11 +208,11 @@ class Scripts::Q00663_SeductiveWhispers < Quest
               qs.memo_state = 4
               html = get_html(player, "30846-14.html", card1pic, card2pic, win_count, -1)
             else
-              qs.memo_state = ((qs.memo_state // 10) * 10) + 7
+              qs.memo_state = ((qs.memo_state // 10) &* 10) &+ 7
               html = get_html(player, "30846-13.html", card1pic, card2pic, win_count, -1)
             end
           else
-            qs.memo_state = ((qs.memo_state // 10) * 10) + 6
+            qs.memo_state = ((qs.memo_state // 10) &* 10) &+ 6
             qs.set_memo_state_ex(1, card2pic)
             html = get_html(player, "30846-12.html", card1pic, card2pic, win_count, -1)
           end
@@ -223,18 +222,18 @@ class Scripts::Q00663_SeductiveWhispers < Quest
       if qs.started? && qs.memo_state % 10 == 6 && qs.memo_state // 1000 == 0
         card1pic = Math.max(qs.get_memo_state_ex(1), 0)
         i1 = card1pic % 10
-        i2 = (card1pic - i1) // 10
-        rnd1 = Rnd.rand(2) + 1
-        rnd2 = Rnd.rand(5) + 1
-        card2pic = (rnd1 * 10) + rnd2
+        i2 = (card1pic &- i1) // 10
+        rnd1 = Rnd.rand(2) &+ 1
+        rnd2 = Rnd.rand(5) &+ 1
+        card2pic = (rnd1 &* 10) &+ rnd2
         if rnd1 == i2
-          i3 = rnd2 + i1
+          i3 = rnd2 &+ i1
           if i3 % 5 == 0 && i3 != 10
             qs.memo_state = 1
             qs.set_memo_state_ex(1, 0)
             html = get_html(player, "30846-19.html", card1pic, card2pic, -1, -1)
           else
-            qs.memo_state = ((qs.memo_state // 10) * 10) + 5
+            qs.memo_state = ((qs.memo_state // 10) &* 10) &+ 5
             qs.set_memo_state_ex(1, card2pic)
             html = get_html(player, "30846-18.html", card1pic, card2pic, -1, -1)
           end
@@ -243,7 +242,7 @@ class Scripts::Q00663_SeductiveWhispers < Quest
             qs.memo_state = 1
             html = get_html(player, "30846-19.html", card1pic, card2pic, -1, -1)
           else
-            qs.memo_state = ((qs.memo_state // 10) * 10) + 5
+            qs.memo_state = ((qs.memo_state // 10) &* 10) &+ 5
             qs.set_memo_state_ex(1, card2pic)
             html = get_html(player, "30846-18.html", card1pic, card2pic, -1, -1)
           end
@@ -251,7 +250,7 @@ class Scripts::Q00663_SeductiveWhispers < Quest
       end
     when "30846-20.html"
       if qs.started? && qs.memo_state % 10 == 7 && qs.memo_state // 1000 == 0
-        qs.memo_state = (((qs.memo_state // 10) + 1) * 10) + 4
+        qs.memo_state = (((qs.memo_state // 10) &+ 1) &* 10) &+ 4
         qs.set_memo_state_ex(1, 0)
         html = event
       end
@@ -259,18 +258,18 @@ class Scripts::Q00663_SeductiveWhispers < Quest
       if qs.started? && qs.memo_state % 10 == 7 && qs.memo_state // 1000 == 0
         i0 = qs.memo_state // 10
         if i0 == 0
-          give_adena(player, 40000, true)
+          give_adena(player, 40_000, true)
         elsif i0 == 1
-          give_adena(player, 80000, true)
+          give_adena(player, 80_000, true)
         elsif i0 == 2
-          give_adena(player, 110000, true)
+          give_adena(player, 110_000, true)
           give_items(player, SCROLL_ENCHANT_WEAPON_D_GRADE, 1)
         elsif i0 == 3
-          give_adena(player, 199000, true)
+          give_adena(player, 199_000, true)
           give_items(player, SCROLL_ENCHANT_WEAPON_C_GRADE, 1)
         elsif i0 == 4
-          give_adena(player, 388000, true)
-          rnd = Rnd.rand(18) + 1
+          give_adena(player, 388_000, true)
+          rnd = Rnd.rand(18) &+ 1
           if rnd == 1
             give_items(player, RECIPE_GREAT_SWORD_60)
           elsif rnd == 2
@@ -309,8 +308,8 @@ class Scripts::Q00663_SeductiveWhispers < Quest
             give_items(player, RECIPE_BOW_OF_PERIL_60)
           end
         elsif i0 == 5
-          give_adena(player, 675000, true)
-          rnd = Rnd.rand(18) + 1
+          give_adena(player, 675_000, true)
+          rnd = Rnd.rand(18) &+ 1
           if rnd == 1
             give_items(player, GREAT_SWORD_BLADE)
           elsif rnd == 2
@@ -349,7 +348,7 @@ class Scripts::Q00663_SeductiveWhispers < Quest
             give_items(player, BOW_OF_PERIL_SHAFT)
           end
         elsif i0 == 6
-          give_adena(player, 1284000, true)
+          give_adena(player, 1_284_000, true)
           give_items(player, SCROLL_ENCHANT_WEAPON_B_GRADE)
           give_items(player, SCROLL_ENCHANT_ARMOR_B_GRADE)
         end
@@ -378,12 +377,12 @@ class Scripts::Q00663_SeductiveWhispers < Quest
           card1pic = 0
         end
         card1 = card1pic % 10
-        i2 = (card1pic - card1) // 10
-        rnd1 = Rnd.rand(2) + 1
-        rnd2 = Rnd.rand(5) + 1
-        card2pic = (rnd1 * 10) + rnd2
+        i2 = (card1pic &- card1) // 10
+        rnd1 = Rnd.rand(2) &+ 1
+        rnd2 = Rnd.rand(5) &+ 1
+        card2pic = (rnd1 &* 10) &+ rnd2
         if rnd1 == i2
-          i3 = rnd2 + card1
+          i3 = rnd2 &+ card1
           if i3 % 5 == 0 && i3 != 10
             qs.memo_state = 1
             qs.set_memo_state_ex(1, 0)
@@ -411,12 +410,12 @@ class Scripts::Q00663_SeductiveWhispers < Quest
       if qs.started? && qs.memo_state?(1006)
         card1pic = Math.max(qs.get_memo_state_ex(1), 0)
         i1 = card1pic % 10
-        i2 = (card1pic - i1) // 10
-        rnd1 = Rnd.rand(2) + 1
-        rnd2 = Rnd.rand(5) + 1
-        card2pic = (rnd1 * 10) + rnd2
+        i2 = (card1pic &- i1) // 10
+        rnd1 = Rnd.rand(2) &+ 1
+        rnd2 = Rnd.rand(5) &+ 1
+        card2pic = (rnd1 &* 10) &+ rnd2
         if rnd1 == i2
-          i3 = rnd2 + i1
+          i3 = rnd2 &+ i1
           if i3 % 5 == 0 && i3 != 10
             qs.memo_state = 1
             qs.set_memo_state_ex(1, 0)
@@ -448,7 +447,6 @@ class Scripts::Q00663_SeductiveWhispers < Quest
         html = event
       end
     end
-
 
     html
   end

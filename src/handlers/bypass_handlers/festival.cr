@@ -2,7 +2,7 @@ module BypassHandler::Festival
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target) : Bool
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     unless npc = target.as?(L2FestivalGuideInstance)
       return false
     end
@@ -250,7 +250,7 @@ module BypassHandler::Festival
     io << cal.year << '/' << cal.month << '/' << cal.day
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"festival", "festivaldesc"}
   end
 end

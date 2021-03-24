@@ -37,9 +37,7 @@ class Packets::Outgoing::BuyListSeed < GameServerPacket
         d -9999 # Time
         h 0x00 # Element Type
         h 0x00 # Element Power
-        6.times do
-          h 0
-        end
+        6.times { h 0 }
         h 0
         h 0
         h 0

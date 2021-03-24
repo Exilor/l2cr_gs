@@ -2,7 +2,7 @@ module ChatHandler::ChatPartyRoomCommander
   extend self
   extend ChatHandler
 
-  def handle_chat(type, pc, params, text)
+  def handle_chat(type : Int32, pc : L2PcInstance, target : String?, text : String)
     if (party = pc.party) && (cc = party.command_channel)
       if cc.leader == pc
         if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
@@ -16,7 +16,7 @@ module ChatHandler::ChatPartyRoomCommander
     end
   end
 
-  def chat_type_list
+  def chat_type_list : Enumerable(Int32)
     {15}
   end
 end

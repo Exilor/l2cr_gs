@@ -1,6 +1,6 @@
 module RaidBossSpawnManager
   extend self
-  extend Loggable
+  include Loggable
 
   private EILHALDER_VON_HELLMANN = 25328
   private BOSSES      = Concurrent::Map(Int32, L2RaidBossInstance).new

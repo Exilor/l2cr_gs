@@ -31,10 +31,7 @@ class Scripts::Q00369_CollectorOfJewels < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30376-02.htm"
@@ -54,7 +51,6 @@ class Scripts::Q00369_CollectorOfJewels < Quest
       html = event
     end
 
-
     html
   end
 
@@ -66,7 +62,7 @@ class Scripts::Q00369_CollectorOfJewels < Quest
         item_count = st.memo_state?(1) ? 50 : 200
         cond = st.memo_state?(1) ? 2 : 4
         if give_item_randomly(winner, npc, item.id, item.count, item_count, 1.0, true)
-          if get_quest_items_count(winner, FLARE_SHARD, FREEZING_SHARD) >= item_count * 2
+          if get_quest_items_count(winner, FLARE_SHARD, FREEZING_SHARD) >= item_count &* 2
             st.set_cond(cond)
           end
         end
@@ -104,7 +100,6 @@ class Scripts::Q00369_CollectorOfJewels < Quest
           html = "30376-11.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

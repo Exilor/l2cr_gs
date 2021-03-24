@@ -57,10 +57,7 @@ class Scripts::Q00309_ForAGoodCause < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32647-02.htm", "32647-03.htm", "32647-04.htm", "32647-08.html",
@@ -92,7 +89,6 @@ class Scripts::Q00309_ForAGoodCause < Quest
       st.exit_quest(true, true)
       html = event
     end
-
 
     html
   end
@@ -133,28 +129,28 @@ class Scripts::Q00309_ForAGoodCause < Quest
     html || get_no_quest_msg(pc)
   end
 
-  private def can_give_item?(st, quanty)
+  private def can_give_item?(st, quantity)
     mucrokian = st.get_quest_items_count(MUCROKIAN_HIDE)
     fallen = st.get_quest_items_count(FALLEN_MUCROKIAN_HIDE)
     if fallen > 0
-      if fallen >= quanty // 2
-        st.take_items(FALLEN_MUCROKIAN_HIDE, quanty // 2)
+      if fallen >= quantity // 2
+        st.take_items(FALLEN_MUCROKIAN_HIDE, quantity // 2)
         return true
-      elsif mucrokian >= quanty - (fallen * 2)
+      elsif mucrokian >= quantity &- (fallen &* 2)
         st.take_items(FALLEN_MUCROKIAN_HIDE, fallen)
-        st.take_items(MUCROKIAN_HIDE, quanty - (fallen * 2))
+        st.take_items(MUCROKIAN_HIDE, quantity &- (fallen &* 2))
         return true
       end
-    elsif mucrokian >= quanty
-      st.take_items(MUCROKIAN_HIDE, quanty)
+    elsif mucrokian >= quantity
+      st.take_items(MUCROKIAN_HIDE, quantity)
       return true
     end
 
     false
   end
 
-  private def on_item_exchange_request(st, item, quanty)
-    if can_give_item?(st, quanty)
+  private def on_item_exchange_request(st, item, quantity)
+    if can_give_item?(st, quantity)
       if MOIRAI_PIECES.includes?(item)
         st.give_items(item, Rnd.rand(1..4))
       else

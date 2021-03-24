@@ -39,8 +39,7 @@ class Scripts::Q00405_PathOfTheCleric < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -62,7 +61,6 @@ class Scripts::Q00405_PathOfTheCleric < Quest
         html = "30022-02.htm"
       end
     end
-
 
     html
   end
@@ -98,17 +96,17 @@ class Scripts::Q00405_PathOfTheCleric < Quest
         if !has_quest_items?(pc, LEMONIELLS_COVENANT) && has_quest_items?(pc, LETTER_OF_ORDER_2ND)
           html = "30022-07.html"
         elsif has_quest_items?(pc, LETTER_OF_ORDER_2ND, LEMONIELLS_COVENANT)
-          give_adena(pc, 163800, true)
+          give_adena(pc, 163_800, true)
           take_items(pc, LETTER_OF_ORDER_2ND, 1)
           take_items(pc, LEMONIELLS_COVENANT, 1)
           give_items(pc, MARK_OF_FAITH, 1)
           level = pc.level
           if level >= 20
-            add_exp_and_sp(pc, 320534, 23152)
+            add_exp_and_sp(pc, 320_534, 23_152)
           elsif level == 19
-            add_exp_and_sp(pc, 456128, 28630)
+            add_exp_and_sp(pc, 456_128, 28_630)
           else
-            add_exp_and_sp(pc, 591724, 35328)
+            add_exp_and_sp(pc, 591_724, 35_328)
           end
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -199,7 +197,6 @@ class Scripts::Q00405_PathOfTheCleric < Quest
           html = "30408-05.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

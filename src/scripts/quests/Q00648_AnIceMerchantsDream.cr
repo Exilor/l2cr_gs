@@ -43,10 +43,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
     q115 = pc.get_quest_state(Q00115_TheOtherSideOfTruth.simple_name)
 
     case event
@@ -70,8 +67,8 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
       if st.cond >= 1
         silver_count = get_quest_items_count(pc, SILVER_ICE_CRYSTAL)
         black_count = get_quest_items_count(pc, BLACK_ICE_CRYSTAL)
-        if silver_count + black_count > 0
-          give_adena(pc, (silver_count * 300) + (black_count * 1200), true)
+        if silver_count &+ black_count > 0
+          give_adena(pc, (silver_count &* 300) &+ (black_count &* 1200), true)
           take_items(pc, -1, {SILVER_ICE_CRYSTAL, BLACK_ICE_CRYSTAL})
           html = q115 && !q115.completed? ? "32020-16.html" : "32020-17.html"
         else
@@ -99,7 +96,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
     when "32023-04.html"
       if st.cond >= 1 && has_quest_items?(pc, SILVER_ICE_CRYSTAL)
         if st.get_int("ex") == 0
-          st.set("ex", (Rnd.rand(4) + 1) * 10)
+          st.set("ex", (Rnd.rand(4) &+ 1) &* 10)
           html = event
         end
       end
@@ -107,7 +104,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
       if st.cond >= 1 && has_quest_items?(pc, SILVER_ICE_CRYSTAL)
         if st.get_int("ex") > 0
           take_items(pc, SILVER_ICE_CRYSTAL, 1)
-          val = st.get_int("ex") + 1
+          val = st.get_int("ex") &+ 1
           st.set("ex", val)
           play_sound(pc, Sound::ITEMSOUND_BROKEN_KEY)
           html = event
@@ -117,7 +114,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
       if st.cond >= 1 && has_quest_items?(pc, SILVER_ICE_CRYSTAL)
         if st.get_int("ex") > 0
           take_items(pc, SILVER_ICE_CRYSTAL, 1)
-          val = st.get_int("ex") + 2
+          val = st.get_int("ex") &+ 2
           st.set("ex", val)
           play_sound(pc, Sound::ITEMSOUND_BROKEN_KEY)
           html = event
@@ -127,7 +124,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
       if st.cond >= 1 && st.get_int("ex") > 0
         ex = st.get_int("ex")
         val1 = ex // 10
-        val2 = ex - (val1 * 10)
+        val2 = ex &- (val1 &* 10)
         if val1 == val2
           html = "32023-07.html"
           give_items(pc, BLACK_ICE_CRYSTAL, 1)
@@ -142,7 +139,7 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
       if st.cond >= 1 && st.get_int("ex") > 0
         ex = st.get_int("ex")
         val1 = ex // 10
-        val2 = (ex - (val1 * 10)) + 2
+        val2 = (ex &- (val1 &* 10)) &+ 2
         if val1 == val2
           html = "32023-07.html"
           give_items(pc, BLACK_ICE_CRYSTAL, 1)
@@ -221,7 +218,6 @@ class Scripts::Q00648_AnIceMerchantsDream < Quest
         html = "32023-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

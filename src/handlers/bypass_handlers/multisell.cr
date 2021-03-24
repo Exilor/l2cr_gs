@@ -2,7 +2,7 @@ module BypassHandler::Multisell
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2Npc)
 
     command = command.downcase
@@ -19,7 +19,7 @@ module BypassHandler::Multisell
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"multisell", "exc_multisell"}
   end
 end

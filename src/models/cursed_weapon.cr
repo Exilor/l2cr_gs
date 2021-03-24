@@ -416,7 +416,7 @@ class CursedWeapon
     ThreadPoolManager.schedule_general_at_fixed_rate(task, delay, interval)
   end
 
-  def to_log(io : IO)
+  def to_s(io : IO)
     io.print("CursedWeapon(", @name, ')')
   end
 

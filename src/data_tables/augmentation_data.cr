@@ -5,7 +5,7 @@ module AugmentationData
   # stats
   private STAT_BLOCKSIZE = 3640
   private STAT_SUBBLOCKSIZE = 91
-  MIN_SKILL_ID = STAT_BLOCKSIZE * 4
+  MIN_SKILL_ID = STAT_BLOCKSIZE &* 4
 
   # skills
   private BLUE_START = 14561
@@ -22,17 +22,17 @@ module AugmentationData
 
   private ACC_RING_START = ACC_START
   private ACC_RING_SKILLS = 18
-  private ACC_RING_BLOCKSIZE = ACC_RING_SKILLS + (4 * ACC_STAT_SUBBLOCKSIZE)
-  private ACC_RING_END = (ACC_RING_START + (ACC_BLOCKS_NUM * ACC_RING_BLOCKSIZE)) - 1
+  private ACC_RING_BLOCKSIZE = ACC_RING_SKILLS &+ (4 &* ACC_STAT_SUBBLOCKSIZE)
+  private ACC_RING_END = (ACC_RING_START &+ (ACC_BLOCKS_NUM &* ACC_RING_BLOCKSIZE)) &- 1
 
-  private ACC_EAR_START = ACC_RING_END + 1
+  private ACC_EAR_START = ACC_RING_END &+ 1
   private ACC_EAR_SKILLS = 18
-  private ACC_EAR_BLOCKSIZE = ACC_EAR_SKILLS + (4 * ACC_STAT_SUBBLOCKSIZE)
-  private ACC_EAR_END = (ACC_EAR_START + (ACC_BLOCKS_NUM * ACC_EAR_BLOCKSIZE)) - 1
+  private ACC_EAR_BLOCKSIZE = ACC_EAR_SKILLS &+ (4 &* ACC_STAT_SUBBLOCKSIZE)
+  private ACC_EAR_END = (ACC_EAR_START &+ (ACC_BLOCKS_NUM &* ACC_EAR_BLOCKSIZE)) &- 1
 
-  private ACC_NECK_START = ACC_EAR_END + 1
+  private ACC_NECK_START = ACC_EAR_END &+ 1
   private ACC_NECK_SKILLS = 24
-  private ACC_NECK_BLOCKSIZE = ACC_NECK_SKILLS + (4 * ACC_STAT_SUBBLOCKSIZE)
+  private ACC_NECK_BLOCKSIZE = ACC_NECK_SKILLS &+ (4 &* ACC_STAT_SUBBLOCKSIZE)
 
   #
 
@@ -147,7 +147,7 @@ module AugmentationData
           next
         end
 
-        k = (augmentation_id - BLUE_START) // SKILLS_BLOCKSIZE
+        k = (augmentation_id &- BLUE_START) // SKILLS_BLOCKSIZE
 
         if type.casecmp?("blue")
           BLUE_SKILLS[k] << augmentation_id
@@ -192,8 +192,8 @@ module AugmentationData
             end
           end
         end
-        r = Rnd.rand(10000)
-        s = 10000
+        r = Rnd.rand(10_000)
+        s = 10_000
         selected_chances_12.each do |ac|
           if s > r
             s -= ac.augment_chance * 100
@@ -216,9 +216,9 @@ module AugmentationData
         c = Rnd.rand(100)
         if c < grade_chance[0]
           c = 55
-        elsif c < grade_chance[0] + grade_chance[1]
+        elsif c < grade_chance[0] &+ grade_chance[1]
           c = 35
-        elsif c < grade_chance[0] + grade_chance[1] + grade_chance[2]
+        elsif c < grade_chance[0] &+ grade_chance[1] &+ grade_chance[2]
           c = 7
         else
           c = 3
@@ -229,8 +229,8 @@ module AugmentationData
             selected_chances_34_final << ac
           end
         end
-        r = Rnd.rand(10000)
-        s = 10000
+        r = Rnd.rand(10_000)
+        s = 10_000
         selected_chances_34_final.each do |ac|
           if s > r
             s -= ac.augment_chance * 100
@@ -249,8 +249,8 @@ module AugmentationData
             end
           end
         end
-        r = Rnd.rand(10000)
-        s = 10000
+        r = Rnd.rand(10_000)
+        s = 10_000
         selected_chances_12.each do |ac|
           if s > r
             s -= ac.augment_chance * 100
@@ -273,9 +273,9 @@ module AugmentationData
         c = Rnd.rand(100)
         if c < grade_chance[0]
           c = 55
-        elsif c < grade_chance[0] + grade_chance[1]
+        elsif c < grade_chance[0] &+ grade_chance[1]
           c = 35
-        elsif c < grade_chance[0] + grade_chance[1] + grade_chance[2]
+        elsif c < grade_chance[0] &+ grade_chance[1] &+ grade_chance[2]
           c = 7
         else
           c = 3
@@ -286,8 +286,8 @@ module AugmentationData
             selected_chances_34_final << ac
           end
         end
-        r = Rnd.rand(10000)
-        s = 10000
+        r = Rnd.rand(10_000)
+        s = 10_000
         selected_chances_34_final.each do |ac|
           if s > r
             s -= ac.augment_chance * 100
@@ -296,7 +296,7 @@ module AugmentationData
         end
       end
 
-      return L2Augmentation.new((stat34 << 16) + stat12)
+      return L2Augmentation.new((stat34 << 16) &+ stat12)
     end
 
     generate_skill = false
@@ -343,7 +343,6 @@ module AugmentationData
       end
     end
 
-
     if !generate_skill && Rnd.rand(1..100) <= Config.augmentation_basestat_chance
       stat34 = Rnd.rand(BASESTAT_STR..BASESTAT_MEN)
     end
@@ -351,15 +350,15 @@ module AugmentationData
     result_color = Rnd.rand(0..100)
 
     if stat34 == 0 && !generate_skill
-      if result_color <= (15 * ls_grade) + 40
+      if result_color <= (15 &* ls_grade) &+ 40
         result_color = 1
       else
         result_color = 0
       end
     else
-      if result_color <= (10 * ls_grade) + 5 || stat34 != 0
+      if result_color <= (10 &* ls_grade) &+ 5 || stat34 != 0
         result_color = 3
-      elsif result_color <= (10 * ls_grade) + 10
+      elsif result_color <= (10 &* ls_grade) &+ 10
         result_color = 1
       else
         result_color = 2
@@ -379,28 +378,26 @@ module AugmentationData
 
     if stat34 == 0
       temp = Rnd.rand(2..3)
-      color_offset = (result_color * (10 * STAT_SUBBLOCKSIZE)) + (temp * STAT_BLOCKSIZE) + 1
-      offset = (ls_level * STAT_SUBBLOCKSIZE) + color_offset
-      stat34 = Rnd.rand(offset..(offset + STAT_SUBBLOCKSIZE) - 1)
+      color_offset = (result_color &* (10 &* STAT_SUBBLOCKSIZE)) &+ (temp &* STAT_BLOCKSIZE) &+ 1
+      offset = (ls_level &* STAT_SUBBLOCKSIZE) &+ color_offset
+      stat34 = Rnd.rand(offset..(offset &+ STAT_SUBBLOCKSIZE) &- 1)
 
       if generate_glow && ls_grade >= 2
-        offset = (ls_level * STAT_SUBBLOCKSIZE) + ((temp - 2) * STAT_BLOCKSIZE) + (ls_grade * (10 * STAT_SUBBLOCKSIZE)) + 1
+        offset = (ls_level &* STAT_SUBBLOCKSIZE) &+ ((temp &- 2) &* STAT_BLOCKSIZE) &+ (ls_grade &* (10 &* STAT_SUBBLOCKSIZE)) &+ 1
       else
-        offset = (ls_level * STAT_SUBBLOCKSIZE) + ((temp - 2) * STAT_BLOCKSIZE) + (Rnd.rand(0..1) * (10 * STAT_SUBBLOCKSIZE)) + 1
+        offset = (ls_level &* STAT_SUBBLOCKSIZE) &+ ((temp &- 2) &* STAT_BLOCKSIZE) &+ (Rnd.rand(0..1) &* (10 &* STAT_SUBBLOCKSIZE)) &+ 1
       end
     else
       if !generate_glow
-        offset = (ls_level * STAT_SUBBLOCKSIZE) + (Rnd.rand(0..1) * STAT_BLOCKSIZE) + 1
+        offset = (ls_level &* STAT_SUBBLOCKSIZE) &+ (Rnd.rand(0..1) &* STAT_BLOCKSIZE) &+ 1
       else
-        offset = (ls_level * STAT_SUBBLOCKSIZE) + (Rnd.rand(0..1) * STAT_BLOCKSIZE) + (((ls_grade + result_color) // 2) * (10 * STAT_SUBBLOCKSIZE)) + 1
+        offset = (ls_level &* STAT_SUBBLOCKSIZE) &+ (Rnd.rand(0..1) &* STAT_BLOCKSIZE) &+ (((ls_grade &+ result_color) // 2) &* (10 &* STAT_SUBBLOCKSIZE)) &+ 1
       end
     end
 
-    stat12 = Rnd.rand(offset..(offset + STAT_SUBBLOCKSIZE) - 1)
+    stat12 = Rnd.rand(offset..(offset &+ STAT_SUBBLOCKSIZE) &- 1)
 
-    debug { "Augmentation success: stat12=#{stat12}, stat34=#{stat34}, result_color=#{result_color}, level=#{ls_level}, grade=#{ls_grade}." }
-
-    L2Augmentation.new((stat34 << 16) + stat12)
+    L2Augmentation.new((stat34 << 16) &+ stat12)
   end
 
   private def generate_random_accessory_augmentation(ls_level : Int32, body_part : Int32, ls_id : Int32) : L2Augmentation?
@@ -419,8 +416,8 @@ module AugmentationData
           end
         end
       end
-      r = Rnd.rand(10000)
-      s = 10000
+      r = Rnd.rand(10_000)
+      s = 10_000
       selected_chances_12.each do |ac|
         if s > r
           s -= ac.augment_chance * 100
@@ -435,7 +432,7 @@ module AugmentationData
       elsif c < 99
         c = 9
       else
-        c = 1;
+        c = 1
       end
       selected_chances_34_final = [] of AugmentationChanceAcc
       selected_chances_34.each do |ac|
@@ -443,8 +440,8 @@ module AugmentationData
           selected_chances_34_final << ac
         end
       end
-      r = Rnd.rand(10000)
-      s = 10000
+      r = Rnd.rand(10_000)
+      s = 10_000
       selected_chances_34_final.each do |ac|
         if s > r
           s -= ac.augment_chance * 100
@@ -452,7 +449,7 @@ module AugmentationData
         end
       end
 
-      return L2Augmentation.new((stat34 << 16) + stat12)
+      return L2Augmentation.new((stat34 << 16) &+ stat12)
     end
 
     ls_level = Math.min(ls_level, 9)
@@ -461,13 +458,13 @@ module AugmentationData
 
     case body_part
     when L2Item::SLOT_LR_FINGER
-      base = ACC_RING_START + (ACC_RING_BLOCKSIZE * ls_level)
+      base = ACC_RING_START &+ (ACC_RING_BLOCKSIZE &* ls_level)
       skills_length = ACC_RING_SKILLS
     when L2Item::SLOT_LR_EAR
-      base = ACC_EAR_START + (ACC_EAR_BLOCKSIZE * ls_level)
+      base = ACC_EAR_START &+ (ACC_EAR_BLOCKSIZE &* ls_level)
       skills_length = ACC_EAR_SKILLS
     when L2Item::SLOT_NECK
-      base = ACC_NECK_START + (ACC_NECK_BLOCKSIZE * ls_level)
+      base = ACC_NECK_START &+ (ACC_NECK_BLOCKSIZE &* ls_level)
       skills_length = ACC_NECK_SKILLS
     else
       return
@@ -477,18 +474,16 @@ module AugmentationData
 
     stat12 = Rnd.rand(ACC_STAT_SUBBLOCKSIZE)
     if Rnd.rand(1..100) <= Config.augmentation_acc_skill_chance
-      stat34 = base + Rnd.rand(skills_length)
+      stat34 = base &+ Rnd.rand(skills_length)
       op = OptionData[stat34]
     end
 
     if !op || (!op.has_active_skill? && !op.has_passive_skill? && !op.has_activation_skills?)
-      stat34 = (stat12 + 1 + Rnd.rand(ACC_STAT_SUBBLOCKSIZE - 1)) % ACC_STAT_SUBBLOCKSIZE
-      stat34 = base + skills_length + (ACC_STAT_SUBBLOCKSIZE * result_color) + stat34
+      stat34 = (stat12 &+ 1 &+ Rnd.rand(ACC_STAT_SUBBLOCKSIZE &- 1)) % ACC_STAT_SUBBLOCKSIZE
+      stat34 = base &+ skills_length &+ (ACC_STAT_SUBBLOCKSIZE &* result_color) &+ stat34
     end
-    stat12 = base + skills_length + (ACC_STAT_SUBBLOCKSIZE * result_color) + stat12
+    stat12 = base &+ skills_length &+ (ACC_STAT_SUBBLOCKSIZE &* result_color) &+ stat12
 
-    debug { "Accessory augmentation success: stat12=#{stat12}, stat34=#{stat34}, level=#{ls_level}." }
-
-    L2Augmentation.new((stat34 << 16) + stat12)
+    L2Augmentation.new((stat34 << 16) &+ stat12)
   end
 end

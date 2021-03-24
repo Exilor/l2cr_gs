@@ -45,8 +45,7 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30307-04.htm"
@@ -80,8 +79,8 @@ class Scripts::Q00103_SpiritOfCraftsman < Quest
           html = "30307-06.html"
         elsif has_quest_items?(pc, STEELBENDERS_HEAD)
           Q00281_HeadForTheHills.give_newbie_reward(pc)
-          add_exp_and_sp(pc, 46663, 3999)
-          give_adena(pc, 19799, true)
+          add_exp_and_sp(pc, 46_663, 3999)
+          give_adena(pc, 19_799, true)
           REWARDS.each { |reward| reward_items(pc, reward) }
           reward_items(pc, BLOODSABER, 1)
           qs.exit_quest(false, true)

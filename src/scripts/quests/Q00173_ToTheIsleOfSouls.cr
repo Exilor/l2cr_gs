@@ -18,10 +18,7 @@ class Scripts::Q00173_ToTheIsleOfSouls < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -62,13 +59,11 @@ class Scripts::Q00173_ToTheIsleOfSouls < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when GENTLER
       if st.started?
         html = st.cond?(1) ? "30094-01.html" : "30094-03.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

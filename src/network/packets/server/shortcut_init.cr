@@ -11,7 +11,7 @@ class Packets::Outgoing::ShortcutInit < GameServerPacket
     d @shortcuts.size
     @shortcuts.all_shortcuts.each do |sc|
       d sc.type.to_i
-      d sc.slot + (sc.page * 12)
+      d sc.slot &+ (sc.page &* 12)
       case sc.type
       when .item? # ShortcutType::ITEM
         d sc.id

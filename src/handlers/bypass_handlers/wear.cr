@@ -2,9 +2,8 @@ module BypassHandler::Wear
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
-    return false unless target.is_a?(L2Npc)
-    return false unless Config.allow_wear
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
+    return false unless target.is_a?(L2Npc) && Config.allow_wear
 
     st = command.split
     st.shift
@@ -29,7 +28,7 @@ module BypassHandler::Wear
     pc.send_packet(spl)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"Wear"}
   end
 end

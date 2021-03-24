@@ -30,10 +30,7 @@ class Scripts::Q00371_ShrieksOfGhosts < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30867-02.htm"
@@ -45,18 +42,18 @@ class Scripts::Q00371_ShrieksOfGhosts < Quest
       if urn_count < 1
         html = event
       elsif urn_count < 100
-        give_adena(pc, (urn_count * 1000) + 15000, true)
+        give_adena(pc, (urn_count &* 1000) &+ 15_000, true)
         take_items(pc, ANCIENT_ASH_URN, -1)
         html = "30867-06.html"
       else
-        give_adena(pc, (urn_count * 1000) + 37700, true)
+        give_adena(pc, (urn_count &* 1000) &+ 37_700, true)
         take_items(pc, ANCIENT_ASH_URN, -1)
         html = "30867-07.html"
       end
     when "30867-08.html", "30929-01.html", "30929-02.html"
       html = event
     when "30867-09.html"
-      give_adena(pc, get_quest_items_count(pc, ANCIENT_ASH_URN) * 1000, true)
+      give_adena(pc, get_quest_items_count(pc, ANCIENT_ASH_URN) &* 1000, true)
       qs.exit_quest(true, true)
       html = "30867-09.html"
     when "30929-03.html"
@@ -85,7 +82,6 @@ class Scripts::Q00371_ShrieksOfGhosts < Quest
         take_items(pc, ANCIENT_PORCELAIN, 1)
       end
     end
-
 
     html
   end

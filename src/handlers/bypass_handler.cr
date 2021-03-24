@@ -1,5 +1,7 @@
 module BypassHandler
-  include Loggable
+  macro extended
+    include Loggable
+  end
   include Packets::Outgoing
 
   private HANDLERS = {} of String => self
@@ -27,8 +29,8 @@ module BypassHandler
     HANDLERS[cmd.downcase]?
   end
 
-  # abstract def use_bypass(cmd : String, pc : L2PcInstance, target : L2Character) : Bool
-  # abstract def commands : Enumerable(String)
+  abstract def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
+  abstract def commands : Enumerable(String)
 end
 
 require "./bypass_handlers/*"

@@ -28,10 +28,7 @@ class Scripts::Q00701_ProofOfExistence < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -56,15 +53,15 @@ class Scripts::Q00701_ProofOfExistence < Quest
     if npc.id == ENIRA
       chance = Rnd.rand(1000)
       if chance < 708
-        count = Rnd.rand(2) + 1
+        count = Rnd.rand(2) &+ 1
       elsif chance < 978
-        count = Rnd.rand(3) + 3
+        count = Rnd.rand(3) &+ 3
       elsif chance < 994
-        count = Rnd.rand(4) + 6
+        count = Rnd.rand(4) &+ 6
       elsif chance < 998
-        count = Rnd.rand(4) + 10
+        count = Rnd.rand(4) &+ 10
       else
-        count = Rnd.rand(5) + 14
+        count = Rnd.rand(5) &+ 14
       end
       st.give_items(BANSHEE_QUEENS_EYE, count)
       st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -88,21 +85,20 @@ class Scripts::Q00701_ProofOfExistence < Quest
       end
     when State::STARTED
       if st.has_quest_items?(BANSHEE_QUEENS_EYE)
-        adena = st.get_quest_items_count(DEADMANS_REMAINS) * 2500
-        adena += st.get_quest_items_count(BANSHEE_QUEENS_EYE) * 50000
-        st.give_adena(adena + 23835, true)
+        adena = st.get_quest_items_count(DEADMANS_REMAINS) &* 2500
+        adena &+= st.get_quest_items_count(BANSHEE_QUEENS_EYE) &* 50000
+        st.give_adena(adena &+ 23835, true)
         st.take_items(BANSHEE_QUEENS_EYE, -1)
         st.take_items(DEADMANS_REMAINS, -1)
         html = "32559-07.html"
       elsif st.has_quest_items?(DEADMANS_REMAINS)
-        st.give_adena(st.get_quest_items_count(DEADMANS_REMAINS) * 2500, true)
+        st.give_adena(st.get_quest_items_count(DEADMANS_REMAINS) &* 2500, true)
         st.take_items(DEADMANS_REMAINS, -1)
         html = "32559-06.html"
       else
         html = "32559-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

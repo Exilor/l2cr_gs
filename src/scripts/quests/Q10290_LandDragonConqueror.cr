@@ -94,15 +94,14 @@ class Scripts::Q10290_LandDragonConqueror < Quest
         end
       elsif st.cond?(2) && st.has_quest_items?(MIRACLE_NECKLACE)
         html = "30755-08.html"
-        st.give_adena(131236, true)
-        st.add_exp_and_sp(702557, 76334)
+        st.give_adena(131_236, true)
+        st.add_exp_and_sp(702_557, 76_334)
         st.give_items(ANTHARAS_SLAYER_CIRCLET, 1)
         st.exit_quest(false, true)
       end
     when State::COMPLETED
       html = "30755-09.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

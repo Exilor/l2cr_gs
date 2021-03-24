@@ -122,8 +122,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
       return super
     end
 
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32138-04.htm"
@@ -422,7 +421,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
       html = event
     end
 
-
     html
   end
 
@@ -457,7 +455,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
           end
         end
       end
-
     end
 
     super
@@ -493,7 +490,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 40
           html = "32138-13.html"
         end
-
       when KURSTIN
         case qs.memo_state
         when 11
@@ -505,7 +501,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
             html = "31387-11.html"
           end
         end
-
       when MYSTERIOU_WIZARD
         case qs.memo_state
         when 1
@@ -542,7 +537,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 11
           html = "31522-16b.html"
         end
-
       when VICE_HIERARCH_MAO
         if qs.memo_state >= 40 && qs.memo_state <= 45
           html = "32190-01.html"
@@ -563,7 +557,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
             html = "32235-09z.html"
           end
         end
-
       when HARKILGAMED
         case qs.memo_state
         when 20
@@ -580,7 +573,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 22
           html = "32236-08z.html"
         end
-
       when RODENPICULA
         case qs.memo_state
         when 40
@@ -594,7 +586,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 45
           html = "32237-15.html"
         end
-
       when ROCK
         case qs.memo_state
         when 20
@@ -606,7 +597,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 30
           html = "32238-09.html"
         end
-
       when MOTHER_NORNIL
         case qs.memo_state
         when 40
@@ -620,7 +610,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 45
           html = "32239-09.html"
         end
-
       when KATENAR_A
         case qs.memo_state
         when 3
@@ -639,7 +628,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
             html = "32332-05z.html"
           end
         end
-
       when KATENAR_B
         case qs.memo_state
         when 7
@@ -660,7 +648,6 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 11
           html = "32333-06b.html"
         end
-
       when HARKILGAMED_A
         case qs.memo_state
         when 22
@@ -675,9 +662,7 @@ class Scripts::Q00236_SeedsOfChaos < Quest
         when 30
           html = "32334-18.html"
         end
-
       end
-
     elsif qs.completed?
       if npc.id == HIERARCH_KEKROPUS
         html = get_already_completed_msg(pc)
@@ -691,33 +676,32 @@ class Scripts::Q00236_SeedsOfChaos < Quest
     case npc.id
     when KATENAR
       c0 = npc.variables.get_object("player0", L2PcInstance?)
-      start_quest_timer("KATENAR_120", 120000, npc, nil)
+      start_quest_timer("KATENAR_120", 120_000, npc, nil)
       if c0
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::S1_FINALLY_WE_MEET).add_string_parameter(c0.appearance.visible_name))
       end
     when HARKILGAMED
-      start_quest_timer("HARKILGAMED_120", 120000, npc, nil)
+      start_quest_timer("HARKILGAMED_120", 120_000, npc, nil)
       npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::HMM_IS_SOMEONE_APPROACHING))
     when KATENAR_A
       c0 = npc.variables.get_object("player0", L2PcInstance?)
-      start_quest_timer("KATENAR_A_120", 120000, npc, nil)
+      start_quest_timer("KATENAR_A_120", 120_000, npc, nil)
       if c0
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::S1_DID_YOU_WAIT_FOR_LONG).add_string_parameter(c0.appearance.visible_name))
       end
     when KATENAR_B
       c0 = npc.variables.get_object("player0", L2PcInstance?)
-      start_quest_timer("KATENAR_B_120", 120000, npc, nil)
+      start_quest_timer("KATENAR_B_120", 120_000, npc, nil)
       if c0
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::DID_YOU_BRING_WHAT_I_ASKED_S1).add_string_parameter(c0.appearance.visible_name))
       end
     when HARKILGAMED_A
       c0 = npc.variables.get_object("player0", L2PcInstance?)
-      start_quest_timer("HARKILGAMED_A_120", 120000, npc, nil)
+      start_quest_timer("HARKILGAMED_A_120", 120_000, npc, nil)
       if c0
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::S1_HAS_EVERYTHING_BEEN_FOUND).add_string_parameter(c0.appearance.visible_name))
       end
     end
-
 
     super
   end

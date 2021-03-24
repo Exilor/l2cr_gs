@@ -69,7 +69,7 @@ class Scripts::SelMahumSquad < AbstractNpcAI
       end
     when "fire"
       npc = npc.not_nil!
-      start_quest_timer("fire", 30_000 + Rnd.rand(5000), npc, nil)
+      start_quest_timer("fire", 30_000 &+ Rnd.rand(5000), npc, nil)
       npc.display_effect = FIRE_EFFECT_NONE
 
       if Rnd.rand(GameTimer.night? ? 2 : 4) < 1
@@ -111,7 +111,6 @@ class Scripts::SelMahumSquad < AbstractNpcAI
         npc.return_home
       end
     end
-
 
     super
   end

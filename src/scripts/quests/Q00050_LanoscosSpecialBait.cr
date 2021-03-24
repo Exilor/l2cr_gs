@@ -22,7 +22,6 @@ class Scripts::Q00050_LanoscosSpecialBait < Quest
     end
 
     html = event
-
     case event
     when "31570-03.htm"
       st.start_quest
@@ -43,7 +42,6 @@ class Scripts::Q00050_LanoscosSpecialBait < Quest
     end
 
     st = get_quest_state(member, false).not_nil!
-
     if st.get_quest_items_count(ESSENCE_OF_WIND) < 100
       chance = 33 * Config.rate_quest_drop
       if Rnd.rand(100) < chance

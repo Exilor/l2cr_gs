@@ -2,7 +2,7 @@ module BypassHandler::VoiceCommand
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     if command.size > 7 && command[6] == '.'
       if end_of_cmd = command.index(' ', 7)
         vc = command[7...end_of_cmd].strip
@@ -22,7 +22,7 @@ module BypassHandler::VoiceCommand
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"voice"}
   end
 end

@@ -24,7 +24,7 @@ module AdminCommandHandler::AdminUnblockIp
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_unblockip"}
   end
 end

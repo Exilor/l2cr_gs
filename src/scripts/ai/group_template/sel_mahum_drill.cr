@@ -63,7 +63,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
     add_spawn_id(MAHUM_CHIEFS)
     add_spawn_id(MAHUM_SOLDIERS)
     # Start global return home timer
-    start_quest_timer("return_home", 120000, nil, nil, true)
+    start_quest_timer("return_home", 120_000, nil, nil, true)
   end
 
   def on_adv_event(event, npc, pc)

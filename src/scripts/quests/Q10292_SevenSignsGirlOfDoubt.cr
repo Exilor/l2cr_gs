@@ -34,10 +34,7 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32593-02.htm", "32593-04.htm", "32597-02.html", "32597-04.html"
@@ -186,7 +183,7 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
           if pc.subclass_active?
             html = "32784-15.html"
           else
-            add_exp_and_sp(pc, 10000000, 1000000)
+            add_exp_and_sp(pc, 10_000_000, 1_000_000)
             st.exit_quest(false, true)
             html = "32784-16.html"
           end

@@ -58,7 +58,7 @@ module AdminCommandHandler::AdminGeodata
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_geo_pos",
       "admin_geo_spawn_pos",

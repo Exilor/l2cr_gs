@@ -345,7 +345,7 @@ class Scripts::PrimevalIsle < AbstractNpcAI
       collect_despawn = npc.template.parameters.get_i32("CollectGhostDespawnTime", 30)
 
       if collect_ghost == 1
-        start_quest_timer("GHOST_DESPAWN", collect_despawn * 60_000, npc, nil)
+        start_quest_timer("GHOST_DESPAWN", collect_despawn &* 60_000, npc, nil)
       end
     else
       npc.variables["SELFBUFF_USED"] = 0

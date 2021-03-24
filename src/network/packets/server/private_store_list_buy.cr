@@ -20,7 +20,7 @@ class Packets::Outgoing::PrivateStoreListBuy < Packets::Outgoing::AbstractItemPa
       write_item(item)
       d item.l2id
       q item.price
-      q item.item.reference_price * 2
+      q item.item.reference_price &* 2
       q item.store_count
     end
   end

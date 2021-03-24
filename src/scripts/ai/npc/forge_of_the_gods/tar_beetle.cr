@@ -36,7 +36,7 @@ class Scripts::TarBeetle < AbstractNpcAI
 
   def on_spell_finished(npc, pc, skill)
     if skill && skill.id == TAR_SPITE
-      val = npc.script_value - 1
+      val = npc.script_value &- 1
       if val <= 0 || SKILLS[0].skill.mp_consume2 > npc.current_mp
         @spawn.remove_beetle(npc)
       else

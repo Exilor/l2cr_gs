@@ -24,9 +24,8 @@ class Scripts::Q00274_SkirmishWithTheWerewolves < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event.casecmp?("30569-04.htm")
+    return unless pc && (st = get_quest_state(pc, false))
+    if event.casecmp?("30569-04.htm")
       st.start_quest
       event
     end
@@ -75,14 +74,12 @@ class Scripts::Q00274_SkirmishWithTheWerewolves < Quest
         heads = st.get_quest_items_count(WEREWOLF_HEAD)
         if heads >= 40
           totems = st.get_quest_items_count(WEREWOLF_TOTEM)
-          st.give_adena((heads * 30) + (totems * 600) + 2300, true)
+          st.give_adena((heads &* 30) &+ (totems &* 600) &+ 2300, true)
           st.exit_quest(true, true)
           html = totems > 0 ? "30569-07.html" : "30569-06.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

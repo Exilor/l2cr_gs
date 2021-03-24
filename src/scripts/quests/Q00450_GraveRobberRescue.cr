@@ -18,10 +18,7 @@ class Scripts::Q00450_GraveRobberRescue < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -65,7 +62,6 @@ class Scripts::Q00450_GraveRobberRescue < Quest
           html = "32650-10.html"
         end
       end
-
     elsif st.cond?(1)
       if npc.busy?
         return
@@ -92,7 +88,7 @@ class Scripts::Q00450_GraveRobberRescue < Quest
         npc.delete_me
         html = nil
 
-        mob = add_spawn(WARRIOR_MON, *npc.xyz, npc.heading, true, 600000).as(L2Attackable)
+        mob = add_spawn(WARRIOR_MON, *npc.xyz, npc.heading, true, 600_000).as(L2Attackable)
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)
         mob.set_intention(AI::ATTACK, pc)

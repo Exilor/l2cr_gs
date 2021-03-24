@@ -121,10 +121,7 @@ class Scripts::Keltas < AbstractNpcAI
   end
 
   private def despawn_minions
-    if @spawned_monsters.empty?
-      return
-    end
-
+    return if @spawned_monsters.empty?
     @spawned_monsters.each do |sp|
       sp.stop_respawn
       minion = sp.last_spawn

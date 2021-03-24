@@ -66,7 +66,6 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::WHO_ARE_YOU_A_NEW_FACE_LIKE_YOU_CAN_T_APPROACH_THIS_PLACE)
       end
 
-
       SotLoDWorld::MONSTERS.each do |id, monsters|
         if monsters.any? { |monster| monster.l2id == npc.l2id }
           pc.tele_to_location(SAVE_POINT[id])
@@ -120,7 +119,7 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
             world.allowed.each do |l2id|
               if pl = L2World.get_player(l2id)
                 pl.show_quest_movie(11)
-                start_quest_timer("spawn", 35000, nil, pc)
+                start_quest_timer("spawn", 35_000, nil, pc)
               end
             end
           end
@@ -143,11 +142,10 @@ class Scripts::SanctumOftheLordsOfDawn < AbstractInstance
       return "32579-01.html"
     when SHELF
       world = InstanceManager.get_world(npc.instance_id).not_nil!
-      InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300000
+      InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300_000
       pc.tele_to_location(-75925, 213399, -7128)
       return "32580-01.html"
     end
-
 
     ""
   end

@@ -17,11 +17,8 @@ class Scripts::Q00170_DangerousSeduction < Quest
     register_quest_items(NIGHTMARE_CRYSTAL)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    unless st = get_quest_state(player, false)
-      return
-    end
+  def on_adv_event(event, npc, pc)
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event.casecmp?("30305-04.htm")
       st.start_quest
@@ -60,15 +57,14 @@ class Scripts::Q00170_DangerousSeduction < Quest
       if st.cond?(1)
         html = "30305-05.html"
       else
-        st.give_adena(102680, true)
-        st.add_exp_and_sp(38607, 4018)
+        st.give_adena(102_680, true)
+        st.add_exp_and_sp(38_607, 4018)
         st.exit_quest(false, true)
         html = "30305-06.html"
       end
     when State::COMPLETED
       html = get_already_completed_msg(player)
     end
-
 
     html || get_no_quest_msg(player)
   end

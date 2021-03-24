@@ -6,7 +6,7 @@ module AdminCommandHandler::AdminBBS
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_bbs"}
   end
 end

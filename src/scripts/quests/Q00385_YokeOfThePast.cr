@@ -66,8 +66,7 @@ class Scripts::Q00385_YokeOfThePast < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ziggurat-03.htm", "ziggurat-04.htm", "ziggurat-06.htm",
@@ -82,7 +81,6 @@ class Scripts::Q00385_YokeOfThePast < Quest
       qs.exit_quest(true, true)
       event
     end
-
   end
 
   def on_talk(npc, pc)
@@ -103,7 +101,6 @@ class Scripts::Q00385_YokeOfThePast < Quest
         html = "ziggurat-08.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

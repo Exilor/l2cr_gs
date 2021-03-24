@@ -29,9 +29,8 @@ class Scripts::Q00168_DeliverSupplies < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event == "30349-03.htm"
+    return unless pc && (st = get_quest_state(pc, false))
+    if event == "30349-03.htm"
       st.start_quest
       st.give_items(JENNAS_LETTER, 1)
       event
@@ -76,11 +75,9 @@ class Scripts::Q00168_DeliverSupplies < Quest
               html = "30349-07.html" # it looks like this needs a file ending in -08
             end
           end
-
         when State::COMPLETED
           html = get_already_completed_msg(pc)
         end
-
       when HARANT
         if st.cond?(1) && st.has_quest_items?(JENNAS_LETTER)
           st.take_items(JENNAS_LETTER, -1)
@@ -104,7 +101,6 @@ class Scripts::Q00168_DeliverSupplies < Quest
           html = "#{npc.id}-02.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

@@ -32,10 +32,7 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     npc = npc.not_nil!
 
@@ -192,7 +189,7 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
     when "31001-03.html"
       if st.cond?(12)
         if pc.level >= MIN_LEVEL
-          st.add_exp_and_sp(52518015, 5817677)
+          st.add_exp_and_sp(52_518_015, 5_817_677)
           st.exit_quest(false, true)
           html = event
         else
@@ -200,7 +197,6 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
         end
       end
     end
-
 
     html
   end
@@ -280,7 +276,6 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
         when 12
           html = "32571-28.html"
         end
-
       when FROG
         case st.cond
         when 1..3
@@ -296,7 +291,6 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
             html = "32572-07.html"
           end
         end
-
       when TESS
         case st.cond
         when 1..6
@@ -314,7 +308,6 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
             end
           end
         end
-
       when KUTA
         case st.cond
         when 1..9
@@ -330,15 +323,12 @@ class Scripts::Q00194_SevenSignsMammonsContract < Quest
             html = "32574-07.html"
           end
         end
-
       when CLAUDIA_ATHEBALDT
         if st.cond?(12)
           html = "31001-01.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

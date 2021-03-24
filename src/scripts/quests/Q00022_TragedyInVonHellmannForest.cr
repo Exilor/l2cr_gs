@@ -49,8 +49,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
 
   def on_adv_event(event, npc, pc)
     debug "#on_adv_event(event: #{event}, npc: #{npc}, player: #{pc})"
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31529-02.html", "31529-04.html", "31529-05.html", "31529-06.html",
@@ -304,7 +303,7 @@ class Scripts::Q00022_TragedyInVonHellmannForest < Quest
       when 15
         html = "31328-12.html"
       when 16
-        add_exp_and_sp(pc, 345966, 31578)
+        add_exp_and_sp(pc, 345_966, 3_1578)
         qs.exit_quest(false, true)
         if pc.level >= MIN_LVL
           html = "31328-20.html"

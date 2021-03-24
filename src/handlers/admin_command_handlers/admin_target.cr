@@ -21,7 +21,7 @@ module AdminCommandHandler::AdminTarget
     pc.send_message("Invalid name")
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_target"}
   end
 end

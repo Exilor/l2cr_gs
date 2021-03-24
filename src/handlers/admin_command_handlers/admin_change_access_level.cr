@@ -58,7 +58,7 @@ module AdminCommandHandler::AdminChangeAccessLevel
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_changelvl"}
   end
 end

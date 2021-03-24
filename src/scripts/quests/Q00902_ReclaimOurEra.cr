@@ -45,10 +45,7 @@ class Scripts::Q00902_ReclaimOurEra < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31340-04.htm"
@@ -81,15 +78,12 @@ class Scripts::Q00902_ReclaimOurEra < Quest
       end
     end
 
-
     html
   end
 
   def on_kill(npc, killer, is_summon)
     if party = killer.party
-      party.members.each do |m|
-        give_item(npc, m)
-      end
+      party.members.each { |m| give_item(npc, m) }
     else
       give_item(npc, killer)
     end
@@ -121,20 +115,18 @@ class Scripts::Q00902_ReclaimOurEra < Quest
       when 5
         if st.has_quest_items?(SHATTERED_BONES)
           st.give_items(PROOF_OF_CHALLENGE, 1)
-          st.give_adena(134038, true)
+          st.give_adena(134_038, true)
         elsif st.has_quest_items?(CANNIBALISTIC_STAKATO_LDR_CLAW)
           st.give_items(PROOF_OF_CHALLENGE, 3)
-          st.give_adena(210119, true)
+          st.give_adena(210_119, true)
         elsif st.has_quest_items?(ANAIS_SCROLL)
           st.give_items(PROOF_OF_CHALLENGE, 3)
-          st.give_adena(348155, true)
+          st.give_adena(348_155, true)
         end
         st.exit_quest(QuestType::DAILY, true)
         html = "31340-14.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

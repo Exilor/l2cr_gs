@@ -25,10 +25,7 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30873-03.htm", "30873-09.html"
@@ -40,7 +37,6 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
       st.exit_quest(false, true)
       event
     end
-
   end
 
   def on_kill(npc, killer, is_pet)
@@ -83,17 +79,17 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
         if recipe_count == 0
           html = "30873-05.html"
         else
-          st.give_adena(recipe_count * 6000, true)
+          st.give_adena(recipe_count &* 6000, true)
           st.take_items(RECIPE_OF_SUPPLY, -1)
           html = "30873-08.html"
         end
       else
         if recipe_count == 0
-          st.give_adena((supply_count * 100) + 6000, true)
+          st.give_adena((supply_count &* 100) &+ 6000, true)
           st.take_items(SUPPLY_ITEMS, -1)
           html = "30873-06.html"
         else
-          adena = (supply_count * 100) + 6000 + (recipe_count * 6000)
+          adena = (supply_count &* 100) &+ 6000 &+ (recipe_count &* 6000)
           st.give_adena(adena, true)
           st.take_items(SUPPLY_ITEMS, -1)
           st.take_items(RECIPE_OF_SUPPLY, -1)
@@ -101,7 +97,6 @@ class Scripts::Q00360_PlunderTheirSupplies < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

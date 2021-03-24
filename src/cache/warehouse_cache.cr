@@ -20,7 +20,7 @@ module WarehouseCache
 
   def call
     CACHE.each do |pc, time|
-      if Time.ms - time > @@cache_time
+      if Time.ms &- time > @@cache_time
         pc.clear_warehouse
         CACHE.delete(pc)
       end

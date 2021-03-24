@@ -29,7 +29,7 @@ class Scripts::TownPets < AbstractNpcAI
       loc_y = npc.spawn.y + Rnd.rand(-100..100)
       # npc.set_running # custom (looks better if they don't run)
       npc.set_intention(AI::MOVE_TO, Location.new(loc_x, loc_y, npc.z, 0))
-      start_quest_timer("move", 10000, npc, nil)
+      start_quest_timer("move", 10_000, npc, nil)
     end
 
     nil

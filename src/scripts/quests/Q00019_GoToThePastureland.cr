@@ -26,13 +26,13 @@ class Scripts::Q00019_GoToThePastureland < Quest
       st.give_items(VEAL, 1)
     elsif event.casecmp?("31537-02.html")
       if st.has_quest_items?(YOUNG_WILD_BEAST_MEAT)
-        st.give_adena(50000, true)
-        st.add_exp_and_sp(136766, 12688)
+        st.give_adena(50_000, true)
+        st.add_exp_and_sp(136_766, 12_688)
         st.exit_quest(false, true)
         html = "31537-02.html"
       elsif st.has_quest_items?(VEAL)
-        st.give_adena(147200, true)
-        st.add_exp_and_sp(385040, 75250)
+        st.give_adena(147_200, true)
+        st.add_exp_and_sp(385_040, 75_250)
         st.exit_quest(false, true)
         html = "31537-02.html"
       else

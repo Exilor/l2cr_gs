@@ -3,7 +3,7 @@ require "./tvt_event_listener"
 
 module TvTEvent
   extend self
-  extend Loggable
+  include Loggable
   extend Synchronizable
   include Packets::Outgoing
 

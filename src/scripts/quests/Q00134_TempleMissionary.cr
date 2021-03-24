@@ -39,10 +39,7 @@ class Scripts::Q00134_TempleMissionary < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -58,9 +55,9 @@ class Scripts::Q00134_TempleMissionary < Quest
       st.unset("talk")
     when "30067-10.html"
       st.give_items(BADGE_TEMPLE_MISSIONARY, 1)
-      st.give_adena(15100, true)
+      st.give_adena(15_100, true)
       if pc.level < MAX_REWARD_LEVEL
-        st.add_exp_and_sp(30000, 2000)
+        st.add_exp_and_sp(30_000, 2000)
       end
       st.exit_quest(false, true)
     else
@@ -87,7 +84,7 @@ class Scripts::Q00134_TempleMissionary < Quest
       if st.has_quest_items?(GIANTS_EXPERIMENTAL_TOOL)
         st.take_items(GIANTS_EXPERIMENTAL_TOOL, 1)
         if Rnd.rand(100) != 0
-          add_spawn(CRUMA_MARSHLANDS_TRAITOR, npc.x + 20, npc.y + 20, npc.z, npc.heading, false, 60000)
+          add_spawn(CRUMA_MARSHLANDS_TRAITOR, npc.x + 20, npc.y + 20, npc.z, npc.heading, false, 60_000)
         end
       elsif Rnd.rand(100) < MOBS[npc.id]
         st.give_items(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, 1)
@@ -121,11 +118,9 @@ class Scripts::Q00134_TempleMissionary < Quest
             html = "30067-08.html"
           end
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when ROUKE
       if st.started?
         case st.cond
@@ -155,10 +150,8 @@ class Scripts::Q00134_TempleMissionary < Quest
         when 5
           html = "31418-09.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

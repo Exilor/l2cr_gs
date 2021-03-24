@@ -170,7 +170,7 @@ module AdminCommandHandler::AdminMenu
     AdminHtml.show_admin_html(pc, "charmanage.htm")
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_char_manage",
       "admin_teleport_character_to_menu",

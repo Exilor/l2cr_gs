@@ -41,8 +41,7 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -110,7 +109,6 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
       html = event
     end
 
-
     html
   end
 
@@ -152,7 +150,6 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
           end
         end
       end
-
     end
 
     super
@@ -196,17 +193,17 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
           end
         else
           if !has_at_least_one_quest_item?(pc, ROSELLAS_LETTER, APPETIZING_APPLE, IMMORTAL_LOVE, GREENISS_CHARM, SAP_OF_THE_MOTHER_TREE, LUCKY_POTPOURRI) && has_quest_items?(pc, FERTILITY_PERIDOT, MAGICAL_POWERS_RUBY, NOBILITY_AMETHYST, PURE_AQUAMARINE)
-            give_adena(pc, 163800, true)
+            give_adena(pc, 163_800, true)
             unless has_quest_items?(pc, ETERNITY_DIAMOND)
               give_items(pc, ETERNITY_DIAMOND, 1)
             end
             level = pc.level
             if level >= 20
-              add_exp_and_sp(pc, 320534, 22532)
+              add_exp_and_sp(pc, 320_534, 22_532)
             elsif level == 19
-              add_exp_and_sp(pc, 456128, 29230)
+              add_exp_and_sp(pc, 456_128, 29_230)
             else
-              add_exp_and_sp(pc, 591724, 35928)
+              add_exp_and_sp(pc, 591_724, 35_928)
             end
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -264,7 +261,6 @@ class Scripts::Q00408_PathOfTheElvenWizard < Quest
           end
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

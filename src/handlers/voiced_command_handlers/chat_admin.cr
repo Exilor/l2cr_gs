@@ -98,7 +98,6 @@ module VoicedCommandHandler::ChatAdmin
       end
     end
 
-
     true
   end
 

@@ -22,8 +22,7 @@ class Scripts::Q00260_OrcHunting < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30221-04.htm"
@@ -35,7 +34,6 @@ class Scripts::Q00260_OrcHunting < Quest
     when "30221-08.html"
       event
     end
-
   end
 
   def on_kill(npc, killer, is_summon)
@@ -68,18 +66,16 @@ class Scripts::Q00260_OrcHunting < Quest
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         amulets = st.get_quest_items_count(ORC_AMULET)
         necklaces = st.get_quest_items_count(ORC_NECKLACE)
-        adena = (amulets * 12) + (necklaces * 30)
-        adena += ((amulets + necklaces) >= 10 ? 1000 : 0)
+        adena = (amulets &* 12) &+ (necklaces &* 30)
+        adena &+= ((amulets &+ necklaces) >= 10 ? 1000 : 0)
         st.give_adena(adena, true)
         take_items(pc, -1, registered_item_ids)
         Q00281_HeadForTheHills.give_newbie_reward(pc)
         html = "30221-06.html"
       else
-        debug "#{pc} has no quest items."
         html = "30221-05.html"
       end
     end
-
 
     html
   end

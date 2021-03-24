@@ -31,7 +31,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
       st.memo_state = 1
       st.set_memo_state_ex(1, 0)
     when "31688-04.html"
-      if st.get_quest_items_count(CERT_3) + st.get_quest_items_count(CERT_5) > 0
+      if st.get_quest_items_count(CERT_3) &+ st.get_quest_items_count(CERT_5) > 0
         if st.has_quest_items?(CERT_3)
           st.give_items(OLY_CHEST, 1)
           st.take_items(CERT_3, -1)
@@ -47,7 +47,6 @@ class Scripts::Q00551_OlympiadStarter < Quest
       end
     end
 
-
     html
   end
 
@@ -57,7 +56,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
       if st && st.started? && st.memo_state?(1)
         memo_state_ex = st.get_memo_state_ex(1)
         if memo_state_ex == 9
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1)
           st.memo_state = 2
           st.set_cond(2, true)
           st.give_items(CERT_10, 1)
@@ -68,7 +67,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
             st.give_items(CERT_5, 1)
           end
 
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
@@ -84,7 +83,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
       if st && st.started? && st.memo_state?(1)
         memo_state_ex = st.get_memo_state_ex(1)
         if memo_state_ex == 9
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1)
           st.memo_state = 2
           st.set_cond(2, true)
           st.give_items(CERT_10, 1)
@@ -95,7 +94,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
             st.give_items(CERT_5, 1)
           end
 
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
@@ -109,7 +108,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
       if st && st.started? && st.memo_state?(1)
         memo_state_ex = st.get_memo_state_ex(1)
         if memo_state_ex == 9
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1)
           st.memo_state = 2
           st.set_cond(2, true)
           st.give_items(CERT_10, 1)
@@ -120,7 +119,7 @@ class Scripts::Q00551_OlympiadStarter < Quest
             st.give_items(CERT_5, 1)
           end
 
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1)
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end

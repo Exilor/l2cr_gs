@@ -49,10 +49,7 @@ class Scripts::SubclassCertification < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc && npc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && npc && (st = get_quest_state(pc, false))
 
     case event
     when "GetCertified"

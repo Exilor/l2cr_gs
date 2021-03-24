@@ -68,7 +68,7 @@ module AdminCommandHandler::AdminMammon
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_mammon_find",
       "admin_mammon_respawn"

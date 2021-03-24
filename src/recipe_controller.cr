@@ -216,9 +216,7 @@ module RecipeController
       end
 
       if Config.alt_game_creation && !items.empty?
-        unless calculate_stat_use(true, true)
-          return
-        end
+        return unless calculate_stat_use(true, true)
 
         update_current_mp
         grab_some_items

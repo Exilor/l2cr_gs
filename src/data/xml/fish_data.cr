@@ -13,7 +13,7 @@ module FishData
     NORMAL.clear
     HARD.clear
     parse_datapack_file("stats/fishing/fishes.xml")
-    info { "Loaded #{EASY.size + NORMAL.size + HARD.size} fishes." }
+    info { "Loaded #{EASY.size &+ NORMAL.size &+ HARD.size} fishes." }
   end
 
   def get_fish(level : Int32, group : Int32, grade : Int32) : Array(L2Fish)

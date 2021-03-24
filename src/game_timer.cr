@@ -1,16 +1,16 @@
 module GameTimer
   extend Synchronizable
-  extend Loggable
+  include Loggable
   extend Cancellable
   extend self
 
   TICKS_PER_SECOND       = 10
   MILLIS_IN_TICK         = 1_000 // TICKS_PER_SECOND
   IG_DAYS_PER_DAY        = 6
-  MILLIS_PER_IG_DAY      = (3_600_000 * 24) // IG_DAYS_PER_DAY
+  MILLIS_PER_IG_DAY      = (3_600_000 &* 24) // IG_DAYS_PER_DAY
   SECONDS_PER_IG_DAY     = MILLIS_PER_IG_DAY // 1_000
   MINUTES_PER_IG_DAY     = SECONDS_PER_IG_DAY // 60
-  TICKS_PER_IG_DAY       = SECONDS_PER_IG_DAY * TICKS_PER_SECOND
+  TICKS_PER_IG_DAY       = SECONDS_PER_IG_DAY &* TICKS_PER_SECOND
   TICKS_SUN_STATE_CHANGE = TICKS_PER_IG_DAY // 4
 
   private MOVING_OBJECTS = Set(L2Character).new
@@ -38,7 +38,7 @@ module GameTimer
         end
       end
 
-      sleep_time = next_tick - Time.ms
+      sleep_time = next_tick &- Time.ms
       if sleep_time > 0
         sleep(sleep_time.milliseconds)
       end
@@ -55,7 +55,7 @@ module GameTimer
   end
 
   def ticks : Int32
-    ((Time.ms - REFERENCE_TIME) // MILLIS_IN_TICK).to_i32
+    ((Time.ms &- REFERENCE_TIME) // MILLIS_IN_TICK).to_i32
   end
 
   def time : Int32

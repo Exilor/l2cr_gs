@@ -31,14 +31,11 @@ class Scripts::Q00510_AClansPrestige < Quest
       st.exit_quest(true, true)
     end
 
-
     event
   end
 
   def on_kill(npc, pc, is_summon)
-    unless clan = pc.clan
-      return
-    end
+    return unless clan = pc.clan
 
     if pc.clan_leader?
       st = get_quest_state(pc, false)
@@ -78,7 +75,7 @@ class Scripts::Q00510_AClansPrestige < Quest
         html = "31331-4.html"
       else
         count = st.get_quest_items_count(TYRANNOSAURUS_CLAW)
-        reward = count < 10 ? 30 * count : 59 + (30 * count)
+        reward = count < 10 ? 30 &* count : 59 &+ (30 &* count)
         st.play_sound(Sound::ITEMSOUND_QUEST_FANFARE_1)
         st.take_items(TYRANNOSAURUS_CLAW, -1)
         clan.add_reputation_score(reward, true)
@@ -89,7 +86,6 @@ class Scripts::Q00510_AClansPrestige < Quest
         html = "31331-7.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

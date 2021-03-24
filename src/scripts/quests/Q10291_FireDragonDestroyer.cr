@@ -55,12 +55,12 @@ class Scripts::Q10291_FireDragonDestroyer < Quest
     else
       party.each do |p|
         if Util.in_range?(8000, npc, p, false)
-          st = get_quest_state(p, false)
-
-          if st && st.cond?(1) && st.has_quest_items?(POOR_NECKLACE)
-            st.take_items(POOR_NECKLACE, -1)
-            st.give_items(VALOR_NECKLACE, 1)
-            st.set_cond(2, true)
+          if st = get_quest_state(p, false)
+            if st.cond?(1) && st.has_quest_items?(POOR_NECKLACE)
+              st.take_items(POOR_NECKLACE, -1)
+              st.give_items(VALOR_NECKLACE, 1)
+              st.set_cond(2, true)
+            end
           end
         end
       end
@@ -93,15 +93,14 @@ class Scripts::Q10291_FireDragonDestroyer < Quest
         end
       elsif st.cond?(2) && st.has_quest_items?(VALOR_NECKLACE)
         html = "31540-08.html"
-        st.give_adena(126549, true)
-        st.add_exp_and_sp(717291, 77397)
+        st.give_adena(126_549, true)
+        st.add_exp_and_sp(717_291, 77_397)
         st.give_items(VALAKAS_SLAYER_CIRCLET, 1)
         st.exit_quest(false, true)
       end
     when State::COMPLETED
       html = "31540-09.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

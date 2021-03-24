@@ -25,10 +25,7 @@ class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31067-02.htm", "31067-03.htm", "31067-07.html", "31067-10.html"
@@ -41,7 +38,6 @@ class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
       qs.exit_quest(true, true)
       html = event
     end
-
 
     html
   end
@@ -78,15 +74,15 @@ class Scripts::Q00352_HelpRoodRaiseANewPet < Quest
         html = "31067-06.html"
       elsif egg1_count >= 1 && egg2_count == 0
         if egg1_count >= 10
-          give_adena(pc, (egg1_count * 34) + 4000, true)
+          give_adena(pc, (egg1_count &* 34) &+ 4000, true)
         else
-          give_adena(pc, (egg1_count * 34) + 2000, true)
+          give_adena(pc, (egg1_count &* 34) &+ 2000, true)
         end
 
         take_items(pc, LIENRIK_EGG1, -1)
         html = "31067-10.html"
       elsif egg1_count >= 1
-        give_adena(pc, 4000i64 + ((egg1_count * 34) + (egg2_count * 1025)), true)
+        give_adena(pc, 4000i64 &+ ((egg1_count &* 34) &+ (egg2_count &* 1025)), true)
         take_items(pc, LIENRIK_EGG1, -1)
         take_items(pc, LIENRIK_EGG2, -1)
         html = "31067-11.html"

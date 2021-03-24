@@ -35,7 +35,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
       end
 
-
       if st.has_quest_items?(BEHEMOTH_DRAGON_LEATHER)
         if st.has_quest_items?(TARASK_DRAGONS_LEATHER_FRAGMENT)
           st.set_cond(2, true)
@@ -45,10 +44,7 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if pc.level >= MIN_LEVEL && st.has_quest_items?(PORTAL_STONE)
       case event
@@ -58,7 +54,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
         st.start_quest
         html = event
       end
-
     end
 
     html
@@ -91,7 +86,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
         st.exit_quest(QuestType::DAILY, true)
         html = "30755-08.html"
       end
-
     when State::COMPLETED
       if !st.now_available?
         html = "30755-02.html"
@@ -106,7 +100,6 @@ class Scripts::Q00903_TheCallOfAntharas < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

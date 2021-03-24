@@ -196,7 +196,7 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    each_player_inside { |pc| broadcast_packet(gsp) }
+    each_player_inside { |pc| pc.send_packet(gsp) }
   end
 
   def target_type=(type : InstanceType)
@@ -204,7 +204,7 @@ abstract class L2ZoneType < ListenersContainer
     @check_affected = true
   end
 
-  def to_log(io : IO)
+  def to_s(io : IO)
     io.print(self.class, '(', @name, ' ', @id, ')')
   end
 end

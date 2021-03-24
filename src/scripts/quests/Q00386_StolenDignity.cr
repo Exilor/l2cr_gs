@@ -136,14 +136,13 @@ class Scripts::Q00386_StolenDignity < Quest
         end
         return "30843-11.html"
       when 10..18
-        select_bingo_number(qs, ask - 9)
+        select_bingo_number(qs, ask &- 9)
         return fill_board(pc, qs, get_htm(pc, "30843-13.html"))
       when 19..27
-        return take_html(pc, qs, ask - 18)
+        return take_html(pc, qs, ask &- 18)
       when 55..63
-        return before_reward(pc, qs, ask - 54)
+        return before_reward(pc, qs, ask &- 54)
       end
-
     end
 
     super
@@ -184,9 +183,9 @@ class Scripts::Q00386_StolenDignity < Quest
     9.times do |i0|
       i1 = get_number_from_bingo_board(qs, i0)
       if selected_bingo_number?(qs, i1)
-        html = html.sub("<?Cell#{i0 + 1}?>", i1.to_s)
+        html = html.sub("<?Cell#{i0 &+ 1}?>", i1.to_s)
       else
-        html = html.sub("<?Cell#{i0 + 1}?>", "?")
+        html = html.sub("<?Cell#{i0 &+ 1}?>", "?")
       end
     end
 
@@ -197,11 +196,11 @@ class Scripts::Q00386_StolenDignity < Quest
     9.times do |i0|
       i1 = get_number_from_bingo_board(qs, i0)
       if selected_bingo_number?(qs, i1)
-        html = html.sub("<?FontColor#{i0 + 1}?>", "ff0000")
+        html = html.sub("<?FontColor#{i0 &+ 1}?>", "ff0000")
       else
-        html = html.sub("<?FontColor#{i0 + 1}?>", "ffffff")
+        html = html.sub("<?FontColor#{i0 &+ 1}?>", "ffffff")
       end
-      html = html.sub("<?Cell#{i0 + 1}?>", i1.to_s)
+      html = html.sub("<?Cell#{i0 &+ 1}?>", i1.to_s)
     end
 
     html.not_nil!
@@ -295,7 +294,6 @@ class Scripts::Q00386_StolenDignity < Quest
     when 32
       qs.give_items(CRYSTAL_OF_DEAMON_PIECE, count)
     end
-
   end
 
   private def create_bingo_board(qs)
@@ -341,7 +339,7 @@ class Scripts::Q00386_StolenDignity < Quest
       end
     end
     result = selected[0]
-    1.upto(selected.size - 1) do |i|
+    1.upto(selected.size &- 1) do |i|
       result = "#{result} #{selected[i]}"
     end
     qs.set("selected", result)
@@ -460,7 +458,6 @@ class Scripts::Q00386_StolenDignity < Quest
           give_item_randomly(qs.player, npc, Q_STOLEN_INF_ORE, 1, 0, 1, true)
         end
       end
-
     end
 
     super

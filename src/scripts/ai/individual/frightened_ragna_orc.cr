@@ -19,7 +19,7 @@ class Scripts::FrightenedRagnaOrc < AbstractNpcAI
   def on_attack(npc, attacker, damage, is_summon)
     if npc.script_value?(0)
       npc.script_value = 1
-      start_quest_timer("say",  (Rnd.rand(5) + 3) * 1000, npc, nil, true)
+      start_quest_timer("say",  (Rnd.rand(5) &+ 3) &* 1000, npc, nil, true)
     elsif npc.hp_percent < 20 && npc.script_value?(1)
       start_quest_timer("reward", 10_000, npc, attacker)
       msg = NpcString::WAIT_WAIT_STOP_SAVE_ME_AND_ILL_GIVE_YOU_10000000_ADENA

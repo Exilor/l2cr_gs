@@ -3,7 +3,7 @@ require "./tasks/message_deletion_task"
 
 module MailManager
   extend self
-  extend Loggable
+  include Loggable
 
   private MESSAGES = Concurrent::Map(Int32, Message).new
 
@@ -22,7 +22,7 @@ module MailManager
       if expiration < time
         ThreadPoolManager.schedule_general(task, 10_000)
       else
-        ThreadPoolManager.schedule_general(task, expiration - time)
+        ThreadPoolManager.schedule_general(task, expiration &- time)
       end
     end
 
@@ -98,7 +98,7 @@ module MailManager
     end
 
     task = MessageDeletionTask.new(msg.id)
-    ThreadPoolManager.schedule_general(task, msg.expiration - Time.ms)
+    ThreadPoolManager.schedule_general(task, msg.expiration &- Time.ms)
   end
 
   def mark_as_read_in_db(msg_id : Int32)

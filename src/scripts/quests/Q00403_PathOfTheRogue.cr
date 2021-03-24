@@ -48,8 +48,7 @@ class Scripts::Q00403_PathOfTheRogue < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -89,7 +88,6 @@ class Scripts::Q00403_PathOfTheRogue < Quest
 
       event
     end
-
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -116,7 +114,6 @@ class Scripts::Q00403_PathOfTheRogue < Quest
           npc.script_value = 2
         end
       end
-
     end
 
     super
@@ -178,7 +175,7 @@ class Scripts::Q00403_PathOfTheRogue < Quest
       case npc.id
       when CAPTAIN_BEZIQUE
         if has_quest_items?(pc, STOLEN_JEWELRY, STOLEN_TOMES, STOLEN_RING, STOLEN_NECKLACE)
-          give_adena(pc, 163800, true)
+          give_adena(pc, 163_800, true)
           take_items(pc, NETIS_BOW, 1)
           take_items(pc, NETIS_DAGGER, 1)
           take_items(pc, MOST_WANTED_LIST, 1)
@@ -190,11 +187,11 @@ class Scripts::Q00403_PathOfTheRogue < Quest
 
           level = pc.level
           if level >= 20
-            add_exp_and_sp(pc, 320534, 20232)
+            add_exp_and_sp(pc, 320_534, 20_232)
           elsif level == 19
-            add_exp_and_sp(pc, 456128, 26930)
+            add_exp_and_sp(pc, 456_128, 26_930)
           else
-            add_exp_and_sp(pc, 591724, 33628)
+            add_exp_and_sp(pc, 591_724, 33_628)
           end
 
           qs.exit_quest(false, true)
@@ -231,7 +228,6 @@ class Scripts::Q00403_PathOfTheRogue < Quest
           html = "30425-08.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

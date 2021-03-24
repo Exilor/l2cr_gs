@@ -32,7 +32,6 @@ class Scripts::PaganTeleporters < AbstractNpcAI
       close_door(19160011, 0)
     end
 
-
     ""
   end
 
@@ -51,27 +50,26 @@ class Scripts::PaganTeleporters < AbstractNpcAI
         return "noItem.htm"
       end
       open_door(19160001, 0)
-      start_quest_timer("Close_Door1", 10000, nil, nil)
+      start_quest_timer("Close_Door1", 10_000, nil, nil)
       return "FadedMark.htm"
     when 32035
       open_door(19160001, 0)
-      start_quest_timer("Close_Door1", 10000, nil, nil)
+      start_quest_timer("Close_Door1", 10_000, nil, nil)
       return "FadedMark.htm"
     when 32036
       unless has_quest_items?(pc, PAGANS_MARK)
         return "noMark.htm"
       end
-      start_quest_timer("Close_Door2", 10000, nil, nil)
+      start_quest_timer("Close_Door2", 10_000, nil, nil)
       open_door(19160010, 0)
       open_door(19160011, 0)
       return "open_door.htm"
     when 32037
       open_door(19160010, 0)
       open_door(19160011, 0)
-      start_quest_timer("Close_Door2", 10000, nil, nil)
+      start_quest_timer("Close_Door2", 10_000, nil, nil)
       return "FadedMark.htm"
     end
-
 
     super
   end

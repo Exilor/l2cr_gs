@@ -76,7 +76,6 @@ class Scripts::Q00901_HowLavasaurusesAreMade < Quest
       when LAVASAURUS_ELDERLY
         give_quest_items(st, FRAGMENT_HORN)
       end
-
     end
 
     super
@@ -110,7 +109,6 @@ class Scripts::Q00901_HowLavasaurusesAreMade < Quest
         html = "32049-16.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

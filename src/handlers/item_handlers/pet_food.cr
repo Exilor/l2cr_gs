@@ -2,7 +2,7 @@ module ItemHandler::PetFood
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     if playable.is_a?(L2PetInstance) && !playable.can_eat_food_id?(item.id)
       playable.send_packet(SystemMessageId::PET_CANNOT_USE_ITEM)
       return false

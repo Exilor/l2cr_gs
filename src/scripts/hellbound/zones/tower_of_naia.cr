@@ -333,7 +333,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
           spawn_opposite_spore(npc_id)
         else
           @challenge_state = STATE_SPORE_IDLE_TOO_LONG
-          start_quest_timer("despawn_total", 60000, nil, nil)
+          start_quest_timer("despawn_total", 60_000, nil, nil)
         end
       end
     elsif event.casecmp?("18492-05.htm")
@@ -345,7 +345,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
           @lock = nil
         end
         cancel_quest_timers("spawn_lock")
-        start_quest_timer("spawn_lock", 300000, nil, nil)
+        start_quest_timer("spawn_lock", 300_000, nil, nil)
         npc.target = player
         npc.do_cast(OVERFLOW)
       end
@@ -362,7 +362,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
           lock.delete_me
           @lock = nil
           cancel_quest_timers("spawn_lock")
-          start_quest_timer("spawn_lock", 1200000, nil, nil)
+          start_quest_timer("spawn_lock", 1_200_000, nil, nil)
         else
           npc.target = player
           npc.do_cast(OVERFLOW)
@@ -372,7 +372,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
         lock.delete_me
         @lock = nil
         cancel_quest_timers("spawn_lock")
-        start_quest_timer("spawn_lock", 1200000, nil, nil)
+        start_quest_timer("spawn_lock", 1_200_000, nil, nil)
       end
     elsif event.casecmp?("go") && ACTIVE_ROOMS.has_key?(npc_id) && !ACTIVE_ROOMS[npc_id]
       html = nil
@@ -380,7 +380,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       if party = player.party
         remove_foreigners(npc_id, party)
         start_room(npc_id)
-        ThreadPoolManager.schedule_general(StopRoomTask.new(self, npc_id), 300000)
+        ThreadPoolManager.schedule_general(StopRoomTask.new(self, npc_id), 300_000)
       else
         player.send_packet(SystemMessageId::CAN_OPERATE_MACHINE_WHEN_IN_PARTY)
       end
@@ -402,7 +402,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
           MinionList.spawn_minion(lock, 18493)
         end
         broadcast_npc_say(controller, Say2::NPC_ALL, NpcString::EMERGENCY_EMERGENCY_THE_OUTER_WALL_IS_WEAKENING_RAPIDLY)
-        @counter -= 10
+        @counter &-= 10
       end
     end
 
@@ -425,7 +425,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
             manager_id = id
             break
           end
-          end
+        end
       end
 
       if manager_id > 0 && (spawned = NPC_SPAWNS[manager_id]?)
@@ -489,11 +489,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
             @win_index = ELEMENTS.bsearch_index_of(npc_id) || 0
             coord = SPORES_MERGE_POSITION[@win_index]
 
-            SPORE_SPAWNS.each do |spore|
-              if spore.alive?
-                move_to(spore, coord)
-              end
-            end
+            SPORE_SPAWNS.each { |spore| move_to(spore, coord) if spore.alive? }
 
             start_quest_timer("despawn_total", 3000, nil, nil)
           end
@@ -657,11 +653,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
   end
 
   private def remove_spores
-    SPORE_SPAWNS.each do |spore|
-      if spore.alive?
-        spore.delete_me
-      end
-    end
+    SPORE_SPAWNS.each { |spore| spore.delete_me if spore.alive? }
     SPORE_SPAWNS.clear
     cancel_quest_timers("despawn_spore")
   end

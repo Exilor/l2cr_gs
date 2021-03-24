@@ -51,7 +51,6 @@ class Scripts::Q00137_TempleChampionPart1 < Quest
       end
     end
 
-
     event
   end
 

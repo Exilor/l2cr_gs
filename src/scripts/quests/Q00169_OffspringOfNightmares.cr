@@ -32,14 +32,13 @@ class Scripts::Q00169_OffspringOfNightmares < Quest
       when "30145-07.html"
         if st.cond?(2) && st.has_quest_items?(PERFECT_SKULL)
           st.give_items(BONE_GAITERS, 1)
-          st.add_exp_and_sp(17475, 818)
-          st.give_adena(17030i64 + (10 * st.get_quest_items_count(CRACKED_SKULL)), true)
+          st.add_exp_and_sp(17_475, 818)
+          st.give_adena(17_030_i64 + (10 * st.get_quest_items_count(CRACKED_SKULL)), true)
           st.exit_quest(false, true)
           show_on_screen_msg(pc, NpcString::LAST_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000) # TODO: Newbie Guide
           html = event
         end
       end
-
     end
 
     html
@@ -84,7 +83,6 @@ class Scripts::Q00169_OffspringOfNightmares < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
 
     html || get_no_quest_msg(pc)

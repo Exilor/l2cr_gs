@@ -66,7 +66,7 @@ module AdminCommandHandler::AdminRide
     target.is_a?(L2PcInstance) && target != pc ? target : pc
   end
 
-  def commands
+  def commands : Enumerable(String)
     %w(
       admin_ride_horse
       admin_ride_bike

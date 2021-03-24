@@ -103,7 +103,10 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
           item.update_database
         end
         send_packet(EnchantResult::SUCCESS)
-        # optional logging
+
+        if Config.log_item_enchants
+          Logs[:enchant_item].info { "ENCHANTED #{item} using #{scroll} and #{support} by #{pc}." }
+        end
 
         min_enchant_announce = item.armor? ? 6 : 7
         max_enchant_announce = item.armor? ? 0 : 15
@@ -131,7 +134,9 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
         if scroll_template.safe?
           send_packet(SystemMessageId::SAFE_ENCHANT_FAILED)
           send_packet(EnchantResult::FAILURE)
-          # optional logging
+          if Config.log_item_enchants
+            Logs[:enchant_item].info { "FAILED_SAFE_ENCHANTING #{item} using #{scroll} and #{support} by #{pc}." }
+          end
         else
           if item.equipped?
             if item.enchant_level > 0
@@ -158,13 +163,17 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
             item.enchant_level = 0
             item.update_database
             send_packet(EnchantResult::BLESSED_FAILURE)
-            # optional logging
+            if Config.log_item_enchants
+              Logs[:enchant_item].info { "FAILED_BLESSED_ENCHANTING #{item} using #{scroll} and #{support} by #{pc}." }
+            end
           else
             unless item = inv.destroy_item("Enchant", item, pc, nil)
               Util.punish(pc, "unable to delete item on enchant failure.")
               pc.active_enchant_item_id = L2PcInstance::ID_NONE
               send_packet(EnchantResult::ERROR)
-              # optional logging
+              if Config.log_item_enchants
+                Logs[:enchant_item].warn { "CANNOT_DESTROY #{item} using #{scroll} and #{support} by #{pc}." }
+              end
               return
             end
 
@@ -185,7 +194,9 @@ class Packets::Incoming::RequestEnchantItem < GameClientPacket
               send_packet(EnchantResult::NO_CRYSTAL_FAILURE)
             end
 
-            # optional logging
+            if Config.log_item_enchants
+              Logs[:enchant_item].warn { "FAILED_ENCHANTING #{item} using #{scroll} and #{support} by #{pc}." }
+            end
           end
         end
       end

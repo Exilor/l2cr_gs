@@ -122,10 +122,7 @@ class Scripts::Q00373_SupplierOfReagents < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30166-03.htm", "30166-06.html", "30166-04a.html", "30166-04b.html",
@@ -191,7 +188,7 @@ class Scripts::Q00373_SupplierOfReagents < Quest
     when "mixitems"
       memo_state = qs.memo_state
       item1 = MEMO_STATE_TO_ITEM[memo_state % 100]?
-      item2 = MEMO_STATE_TO_ITEM[(memo_state / 100) * 100]?
+      item2 = MEMO_STATE_TO_ITEM[(memo_state // 100) &* 100]?
       reward = MEMO_STATE_TO_REWARD[memo_state]?
       q235 = pc.get_quest_state(Q00235_MimirsElixir.simple_name)
       if reward.nil? || qs.memo_state_ex?(1, 0)
@@ -216,7 +213,6 @@ class Scripts::Q00373_SupplierOfReagents < Quest
         html = "31149-44.html"
       end
     end
-
 
     html
   end
@@ -266,7 +262,6 @@ class Scripts::Q00373_SupplierOfReagents < Quest
           give_item_randomly(qs.player, npc, QUICKSILVER, 2, 0, 1, true)
         end
       end
-
     end
 
     super

@@ -2,7 +2,7 @@ require "./l2_world_region"
 
 module L2World
   extend self
-  extend Loggable
+  include Loggable
 
   # Gracia border Flying objects not allowed to the east of it.
   GRACIA_MAX_X = -166168

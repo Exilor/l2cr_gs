@@ -438,7 +438,7 @@ class Fort < AbstractResidence
         @fort_updater[1].try &.cancel
         @fort_updater[0] = ThreadPoolManager.schedule_general_at_fixed_rate(FortUpdater.new(self, clan, 0, UpdaterType::PERIODIC_UPDATE), Config.fs_update_frq * 60000, Config.fs_update_frq * 60000)
         if Config.fs_max_own_time > 0
-          @fort_updater[1] = ThreadPoolManager.schedule_general_at_fixed_rate(FortUpdater.new(self, clan, 0, UpdaterType::MAX_OWN_TIME), 3600000, 3600000)
+          @fort_updater[1] = ThreadPoolManager.schedule_general_at_fixed_rate(FortUpdater.new(self, clan, 0, UpdaterType::MAX_OWN_TIME), 3_600_000, 3_600_000)
         end
       else
         @fort_updater[0].try &.cancel

@@ -1,6 +1,6 @@
 module HtmCache
   extend self
-  extend Loggable
+  include Loggable
 
   @@root = ""
   @@bytes_buff_len = 0u64
@@ -42,7 +42,7 @@ module HtmCache
   end
 
   private def parse_dir(dir : String)
-    Dir.glob(dir + "/**/*.{htm,html}") do |path|
+    Dir.glob(dir + "/data/**/*.{htm,html}") do |path|
       File.open(path) { |file| load_file(file) }
     end
   end
@@ -58,9 +58,9 @@ module HtmCache
     content = content.gsub(/(?:\s?)<!--.*?-->/, "")
 
     if old = cache[rel_path]?
-      @@bytes_buff_len = @@bytes_buff_len - old.bytesize + content.bytesize
+      @@bytes_buff_len = @@bytes_buff_len &- old.bytesize &+ content.bytesize
     else
-      @@bytes_buff_len += content.bytesize
+      @@bytes_buff_len &+= content.bytesize
       @@loaded_files &+= 1
     end
 
@@ -121,9 +121,7 @@ module HtmCache
   end
 
   private def internal_get_htm(path : String) : String?
-    if path.empty?
-      return ""
-    end
+    return "" if path.empty?
 
     content = cache[path]?
     if Config.lazy_cache && content.nil?

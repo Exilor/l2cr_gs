@@ -27,10 +27,9 @@ class Scripts::Q10277_MutatedKaneusDion < Quest
     when "30071-03.html"
       st.start_quest
     when "30461-03.html"
-      st.give_adena(20000, true)
+      st.give_adena(20_000, true)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -79,7 +78,6 @@ class Scripts::Q10277_MutatedKaneusDion < Quest
       when State::COMPLETED
         html = "30071-06.html"
       end
-
     when MIRIEN
       case st.state
       when State::STARTED
@@ -91,9 +89,7 @@ class Scripts::Q10277_MutatedKaneusDion < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

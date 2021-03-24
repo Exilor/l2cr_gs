@@ -3,7 +3,7 @@ module BypassHandler
     extend self
     extend BypassHandler
 
-    def use_bypass(command, pc, target)
+    def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
       unless target.is_a?(L2Npc)
         return false
       end
@@ -74,7 +74,7 @@ module BypassHandler
       true
     end
 
-    def commands
+    def commands : Enumerable(String)
       {"ItemAuction"}
     end
   end

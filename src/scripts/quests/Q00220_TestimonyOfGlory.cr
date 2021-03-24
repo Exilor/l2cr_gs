@@ -193,26 +193,26 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
       if has_quest_items?(pc, MANAKIA_1ST_LETTER)
         give_items(pc, GLOVE_OF_VOLTAR, 1)
         take_items(pc, MANAKIA_1ST_LETTER, 1)
-        add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200000), pc)
-        add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200_000), pc)
+        add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200_000), pc)
         html = event
       end
     when "30616-04.html"
       if has_quest_items?(pc, MANAKIA_2ND_LETTER)
         give_items(pc, GLOVE_OF_KEPRA, 1)
         take_items(pc, MANAKIA_2ND_LETTER, 1)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
-        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200_000), pc)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200_000), pc)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200_000), pc)
+        add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200_000), pc)
         html = event
       end
     when "30617-03.html"
       if has_quest_items?(pc, KASMANS_2ND_LETTER)
         give_items(pc, GLOVE_OF_BURAI, 1)
         take_items(pc, KASMANS_2ND_LETTER, 1)
-        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
-        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
+        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200_000), pc)
+        add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200_000), pc)
         html = event
       end
     when "30618-03.html"
@@ -254,7 +254,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
       end
     end
 
-
     html
   end
 
@@ -273,7 +272,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         when 1
           npc.script_value = 2
         end
-
       when REVENANT_OF_TANTOS_CHIEF
         case npc.script_value
         when 0
@@ -288,9 +286,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
             npc.script_value = 2
           end
         end
-
       end
-
     end
 
     super
@@ -377,7 +373,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         end
       when RAGNA_ORC_OVERLORD, RAGNA_ORC_SEER
         if has_quest_items?(killer, TANAPIS_ORDER) && !has_quest_items?(killer, SCEPTER_OF_TANTOS)
-          add_spawn(REVENANT_OF_TANTOS_CHIEF, npc, true, 200000)
+          add_spawn(REVENANT_OF_TANTOS_CHIEF, npc, true, 200_000)
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::TOO_LATE))
         end
       when PASHIKA_SON_OF_VOLTAR
@@ -431,7 +427,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           qs.set_cond(10, true)
         end
       end
-
     end
 
     super
@@ -521,10 +516,10 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           elsif has_quest_items?(pc, MANAKIA_1ST_LETTER)
             html = "30615-02.html"
             pc.radar.remove_marker(80100, 119991, -2264)
-          elsif !has_quest_items?(pc, SCEPTER_OF_BREKA) && has_quest_items?(pc, GLOVE_OF_VOLTAR) && get_quest_items_count(pc, PASHIKAS_HEAD) + get_quest_items_count(pc, VULTUS_HEAD) < 2
+          elsif !has_quest_items?(pc, SCEPTER_OF_BREKA) && has_quest_items?(pc, GLOVE_OF_VOLTAR) && get_quest_items_count(pc, PASHIKAS_HEAD) &+ get_quest_items_count(pc, VULTUS_HEAD) < 2
             if npc.summoned_npc_count < 2
-              add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200000), pc)
-              add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200000), pc)
+              add_attack_desire(add_spawn(npc, PASHIKA_SON_OF_VOLTAR, npc, true, 200_000), pc)
+              add_attack_desire(add_spawn(npc, VULTUS_SON_OF_VOLTAR, npc, true, 200_000), pc)
             end
             html = "30615-05.html"
           elsif has_quest_items?(pc, PASHIKAS_HEAD, VULTUS_HEAD)
@@ -550,7 +545,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
             html = "30616-02.html"
           elsif has_quest_items?(pc, GLOVE_OF_KEPRA) && get_quest_items_count(pc, ENKU_OVERLORD_HEAD) < 4
             if npc.summoned_npc_count < 5
-              add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200000), pc)
+              add_attack_desire(add_spawn(npc, ENKU_ORC_OVERLORD, npc, true, 200_000), pc)
             end
             html = "30616-05.html"
           elsif get_quest_items_count(pc, ENKU_OVERLORD_HEAD) >= 4
@@ -575,8 +570,8 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
             html = "30617-02.html"
           elsif has_quest_items?(pc, GLOVE_OF_BURAI)
             if npc.summoned_npc_count < 3
-              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
-              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200000), pc)
+              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200_000), pc)
+              add_attack_desire(add_spawn(npc, MAKUM_BUGBEAR_THUG, npc, true, 200_000), pc)
             end
             html = "30617-04.html"
           elsif get_quest_items_count(pc, MAKUM_BUGBEAR_HEAD) >= 2
@@ -634,7 +629,7 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
         if has_quest_items?(pc, NECKLACE_OF_AUTHORITY, VOKIANS_ORDER2)
           html = "30642-01.html"
         elsif has_quest_items?(pc, NECKLACE_OF_AUTHORITY, CHIANTA_1ST_ORDER)
-          if get_quest_items_count(pc, SCEPTER_OF_BREKA) + get_quest_items_count(pc, SCEPTER_OF_VUKU) + get_quest_items_count(pc, SCEPTER_OF_TUREK) + get_quest_items_count(pc, SCEPTER_OF_TUNATH) + get_quest_items_count(pc, SCEPTER_OF_ENKU) < 5
+          if get_quest_items_count(pc, SCEPTER_OF_BREKA) &+ get_quest_items_count(pc, SCEPTER_OF_VUKU) &+ get_quest_items_count(pc, SCEPTER_OF_TUREK) &+ get_quest_items_count(pc, SCEPTER_OF_TUNATH) &+ get_quest_items_count(pc, SCEPTER_OF_ENKU) < 5
             html = "30642-04.html"
           elsif has_quest_items?(pc, SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH, SCEPTER_OF_ENKU)
             html = "30642-05.html"
@@ -661,7 +656,6 @@ class Scripts::Q00220_TestimonyOfGlory < Quest
           html = "30642-13.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == PREFECT_VOKIAN
         html = get_already_completed_msg(pc)

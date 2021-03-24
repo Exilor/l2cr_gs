@@ -196,7 +196,7 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
       broadcast_in_gracia(NpcString::THE_REGULARLY_SCHEDULED_AIRSHIP_HAS_ARRIVED_IT_WILL_DEPART_FOR_THE_ADEN_CONTINENT_IN_1_MINUTE)
       @ship.dock_id = GRACIA_DOCK_ID
       @ship.oust_players
-      ThreadPoolManager.schedule_general(self, 60000)
+      ThreadPoolManager.schedule_general(self, 60_000)
     when 4
       broadcast_in_gracia(NpcString::THE_REGULARLY_SCHEDULED_AIRSHIP_THAT_FLIES_TO_THE_ADEN_CONTINENT_HAS_DEPARTED)
       @ship.dock_id = 0
@@ -211,10 +211,10 @@ class Scripts::AirShipGludioGracia < AbstractNpcAI
       broadcast_in_gludio(NpcString::THE_REGULARLY_SCHEDULED_AIRSHIP_HAS_ARRIVED_IT_WILL_DEPART_FOR_THE_GRACIA_CONTINENT_IN_1_MINUTE)
       @ship.dock_id = GLUDIO_DOCK_ID
       @ship.oust_players
-      ThreadPoolManager.schedule_general(self, 60000)
+      ThreadPoolManager.schedule_general(self, 60_000)
     end
 
-    @cycle += 1
+    @cycle &+= 1
     if @cycle > 7
       @cycle = 0
     end

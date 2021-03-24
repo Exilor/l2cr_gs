@@ -57,10 +57,7 @@ class Scripts::Q00308_ReedFieldMaintenance < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32646-02.htm", "32646-03.htm", "32646-06.html", "32646-07.html",
@@ -92,7 +89,6 @@ class Scripts::Q00308_ReedFieldMaintenance < Quest
       st.exit_quest(true, true)
       event
     end
-
   end
 
   def on_kill(npc, killer, is_summon)
@@ -154,9 +150,9 @@ class Scripts::Q00308_ReedFieldMaintenance < Quest
       if awakened >= count // 2
         st.take_items(AWAKENED_MUCROKIAN_HIDE, count // 2)
         return true
-      elsif mucrokian >= count - (awakened * 2)
+      elsif mucrokian >= count &- (awakened &* 2)
         st.take_items(AWAKENED_MUCROKIAN_HIDE, awakened)
-        st.take_items(MUCROKIAN_HIDE, count - (awakened * 2))
+        st.take_items(MUCROKIAN_HIDE, count &- (awakened &* 2))
         return true
       end
     elsif mucrokian >= count

@@ -50,7 +50,7 @@ class Packets::Incoming::Logout < GameClientPacket
 
     pc.remove_from_boss_zone
 
-    # TODO: log record
+    Logs[:accounting].info { "Client #{client} logged out." }
 
     pc.logout
   end

@@ -15,9 +15,7 @@ module HellboundPointData
 
   private def parse_document(doc, file)
     find_element(doc, "list") do |list|
-      find_element(list, "npc") do |d|
-        parse_point(d)
-      end
+      find_element(list, "npc") { |d| parse_point(d) }
     end
   end
 

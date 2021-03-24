@@ -15,10 +15,7 @@ class Scripts::Q00119_LastImperialPrince < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -29,8 +26,8 @@ class Scripts::Q00119_LastImperialPrince < Quest
       html = event
     when "31453-11.html"
       if st.cond?(2)
-        st.give_adena(150292, true)
-        st.add_exp_and_sp(902439, 90067)
+        st.give_adena(150_292, true)
+        st.add_exp_and_sp(902_439, 90_067)
         st.exit_quest(false, true)
         html = event
       end
@@ -42,7 +39,6 @@ class Scripts::Q00119_LastImperialPrince < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -81,7 +77,6 @@ class Scripts::Q00119_LastImperialPrince < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

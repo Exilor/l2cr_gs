@@ -2,7 +2,7 @@ module BypassHandler::TerritoryStatus
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless npc = target.as?(L2Npc)
 
     html = NpcHtmlMessage.new(npc.l2id)
@@ -30,7 +30,7 @@ module BypassHandler::TerritoryStatus
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"TerritoryStatus"}
   end
 end

@@ -2,7 +2,7 @@ module ItemHandler::Disguise
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     unless playable.player?
       playable.send_packet(SystemMessageId::ITEM_NOT_FOR_PETS)
       return false
@@ -11,7 +11,7 @@ module ItemHandler::Disguise
     pc = playable.acting_player
 
     reg_id = TerritoryWarManager.get_registered_territory_id(pc)
-    if reg_id > 0 && reg_id == item.id - 13596
+    if reg_id > 0 && reg_id == item.id &- 13596
       clan = pc.clan
       if clan && clan.castle_id > 0
         pc.send_packet(SystemMessageId::TERRITORY_OWNING_CLAN_CANNOT_USE_DISGUISE_SCROLL)

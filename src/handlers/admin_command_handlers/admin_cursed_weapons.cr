@@ -119,7 +119,7 @@ module AdminCommandHandler::AdminCursedWeapons
           else
             pc.add_item("AdminCursedWeaponAdd", id, 1, pc, true)
           end
-          cw.end_time = Time.ms + (cw.duration * 60_000)
+          cw.end_time = Time.ms &+ (cw.duration &* 60_000)
           cw.reactivate
         end
       else
@@ -130,7 +130,7 @@ module AdminCommandHandler::AdminCursedWeapons
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_cw_info",
       "admin_cw_remove",

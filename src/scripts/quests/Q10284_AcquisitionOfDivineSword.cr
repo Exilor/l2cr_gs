@@ -20,10 +20,7 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32020-02.html"
@@ -104,7 +101,6 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
       end
     end
 
-
     html
   end
 
@@ -130,7 +126,6 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
         when 2
           html = "32020-07.html"
         end
-
       when JINIA
         if st.memo_state?(1)
           msx1 = st.get_memo_state_ex(1)
@@ -170,14 +165,12 @@ class Scripts::Q10284_AcquisitionOfDivineSword < Quest
         when 2
           html = pc.level >= MIN_LEVEL ? "32653-01.html" : "32653-05.html"
         when 3
-          st.give_adena(296425, true)
-          st.add_exp_and_sp(921805, 82230)
+          st.give_adena(296_425, true)
+          st.add_exp_and_sp(921_805, 82_230)
           st.exit_quest(false, true)
           html = "32653-04.html"
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)

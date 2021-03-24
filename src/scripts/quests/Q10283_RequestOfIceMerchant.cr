@@ -25,10 +25,7 @@ class Scripts::Q10283_RequestOfIceMerchant < Quest
       return super
     end
 
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32020-03.htm"
@@ -64,14 +61,13 @@ class Scripts::Q10283_RequestOfIceMerchant < Quest
       end
     when "32760-04.html"
       if st.memo_state?(2)
-        give_adena(pc, 190000, true)
-        add_exp_and_sp(pc, 627000, 50300)
+        give_adena(pc, 190_000, true)
+        add_exp_and_sp(pc, 627_000, 50_300)
         st.exit_quest(false, true)
         html = event
         start_quest_timer("DESPAWN", 2000, npc, nil)
       end
     end
-
 
     html
   end
@@ -108,7 +104,6 @@ class Scripts::Q10283_RequestOfIceMerchant < Quest
           html = @talker == pc.l2id ? "32760-01.html" : "32760-05.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

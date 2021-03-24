@@ -50,7 +50,7 @@ class Scripts::WeaverOlf < AbstractNpcAI
     }
   }
 
-  private POUCHS = {
+  private POUCHES = {
     {
       13918, # Sealed Magic Pouch (C-Grade)
       13925, # Top-Grade Magic Pouch (C-Grade)
@@ -129,7 +129,7 @@ class Scripts::WeaverOlf < AbstractNpcAI
         item_ids = PINS[grade]
       elsif event.ends_with?("_pouch")
         price = UNSEAL_PRICE[grade]
-        item_ids = POUCHS[grade]
+        item_ids = POUCHES[grade]
       elsif event.ends_with?("_clip")
         price = UNSEAL_PRICE[grade]
         item_ids = CLIPS_ORNAMENTS[grade - 2]

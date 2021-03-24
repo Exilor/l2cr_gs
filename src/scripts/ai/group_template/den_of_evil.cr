@@ -66,8 +66,8 @@ class Scripts::DenOfEvil < AbstractNpcAI
   end
 
   private def get_skill_id_by_npc_id(npc_id)
-    diff = (npc_id - EYE_IDS[0]) * 2
-    SKILL_ID + diff
+    diff = (npc_id &- EYE_IDS[0]) &* 2
+    SKILL_ID &+ diff
   end
 
   def on_spawn(npc)
@@ -112,7 +112,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
 
     def call
       i = SKILL_ID
-      while i <= SKILL_ID + 4
+      while i <= SKILL_ID &+ 4
         # test 3 skills if some is lvl 4
         if @zone.get_skill_level(i) > 3
           destroy_zone
@@ -144,7 +144,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
       end
 
       i = SKILL_ID
-      while i <= SKILL_ID + 4
+      while i <= SKILL_ID &+ 4
         @zone.remove_skill(i)
         i &+= 2
       end

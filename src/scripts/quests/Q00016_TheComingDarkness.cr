@@ -32,9 +32,9 @@ class Scripts::Q00016_TheComingDarkness < Quest
       st.give_items(CRYSTAL_OF_SEAL, 5)
     when "31512-01.html", "31513-01.html", "31514-01.html", "31515-01.html", "31516-01.html"
       npc_id = event.to_i
-      if cond == npc_id - 31511 && st.has_quest_items?(CRYSTAL_OF_SEAL)
+      if cond == npc_id &- 31511 && st.has_quest_items?(CRYSTAL_OF_SEAL)
         st.take_items(CRYSTAL_OF_SEAL, 1)
-        st.set_cond(cond + 1, true)
+        st.set_cond(cond &+ 1, true)
       end
     end
 
@@ -59,13 +59,13 @@ class Scripts::Q00016_TheComingDarkness < Quest
       npc_id = npc.id
       if npc_id == HIERARCH
         if st.cond?(6)
-          st.add_exp_and_sp(865187, 69172)
+          st.add_exp_and_sp(865_187, 69_172)
           st.exit_quest(false, true)
           html = "31517-03.html"
         else
           html = "31517-02a.html"
         end
-      elsif npc_id - 31511 == st.cond
+      elsif npc_id &- 31511 == st.cond
         html = "#{npc_id}-00.html"
       else
         html = "#{npc_id}-01.html"

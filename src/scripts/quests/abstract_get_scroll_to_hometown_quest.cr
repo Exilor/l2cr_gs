@@ -39,8 +39,8 @@ abstract class AbstractGetScrollToHometownQuest < Quest
     )
   end
 
-  abstract def scroll_item_id# : Int32
-  abstract def parent_quest_name# : String
+  abstract def scroll_item_id : Int32
+  abstract def parent_quest_name : String
 
   def on_adv_event(event, npc, pc)
     return unless pc
@@ -71,7 +71,6 @@ abstract class AbstractGetScrollToHometownQuest < Quest
       end
     end
 
-
     event
   end
 
@@ -79,7 +78,7 @@ abstract class AbstractGetScrollToHometownQuest < Quest
     if st.cond?(cond) && st.has_quest_items?(item1)
       st.take_items(item1, 1)
       st.give_items(item2, 1)
-      st.set_cond(cond + 1, true)
+      st.set_cond(cond &+ 1, true)
       html
     end
   end
@@ -136,7 +135,7 @@ abstract class AbstractGetScrollToHometownQuest < Quest
           if st.has_quest_items?(item_id)
             html = "#{npc.id}-01.html"
           end
-        elsif st.cond?(cond + 1)
+        elsif st.cond?(cond &+ 1)
           html = "#{npc.id}-04.html"
         end
       end

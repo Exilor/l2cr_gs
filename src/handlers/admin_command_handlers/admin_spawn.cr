@@ -61,7 +61,7 @@ module AdminCommandHandler::AdminSpawn
           counter = 0
           skipped = 0
           if inst = InstanceManager.get_instance(instance)
-            html = String.build(500 + 1000) do |io|
+            html = String.build(500 &+ 1000) do |io|
               io << "<html><table width=\"100%\"><tr><td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=180><center><font color=\"LEVEL\">Spawns for "
               io << instance
               io << "</font></td><td width=45><button value=\"Back\" action=\"bypass -h admin_current_player\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><table width=\"100%\"><tr><td width=200>NpcName</td><td width=70>Action</td></tr>"
@@ -219,7 +219,6 @@ module AdminCommandHandler::AdminSpawn
     when 2
       info { "{ #{i}, #{x}, #{y}, #{z}, #{h} }," }
     end
-
   end
 
   private def spawn_monster(pc, mob_id, respawn_time, mob_count, permanent)
@@ -257,8 +256,8 @@ module AdminCommandHandler::AdminSpawn
       pc.send_message("You cannot spawn another instance of #{template.name}.")
     else
       if template.type?("L2RaidBoss")
-        sp.respawn_min_delay = 43200
-        sp.respawn_max_delay = 129600
+        sp.respawn_min_delay = 43_200
+        sp.respawn_max_delay = 129_600
         RaidBossSpawnManager.add_new_spawn(sp, 0, template.base_hp_max.to_f, template.base_mp_max.to_f, permanent)
       else
         SpawnTable.add_new_spawn(sp, permanent)
@@ -276,7 +275,7 @@ module AdminCommandHandler::AdminSpawn
   private def show_monsters(pc, level, from)
     mobs = NpcData.get_all_monsters_of_level(level)
     mob_count = mobs.size
-    tb = String.build(500 + (mob_count * 80)) do |io|
+    tb = String.build(500 &+ (mob_count &* 80)) do |io|
       io << "<html><title>Spawn Monster:</title><body><p> Level : "
       io << level
       io << "<br>Total Npc's : "
@@ -312,7 +311,7 @@ module AdminCommandHandler::AdminSpawn
   private def show_npcs(pc, starting, from)
     mobs = NpcData.get_all_npc_starting_with(starting)
     mob_count = mobs.size
-    tb = String.build(500 + (mob_count * 80)) do |io|
+    tb = String.build(500 &+ (mob_count &* 80)) do |io|
       io << "<html><title>Spawn Monster:</title><body><p> There are "
       io << mob_count
       io << " Npcs whose name starts with "
@@ -345,7 +344,7 @@ module AdminCommandHandler::AdminSpawn
     pc.send_packet(NpcHtmlMessage.new(tb))
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_show_spawns",
       "admin_spawn",

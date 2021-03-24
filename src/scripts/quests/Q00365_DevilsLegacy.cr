@@ -38,10 +38,7 @@ class Scripts::Q00365_DevilsLegacy < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc && npc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && npc && (qs = get_quest_state(pc, false))
 
     case event
     when "30095-02.htm"
@@ -74,6 +71,7 @@ class Scripts::Q00365_DevilsLegacy < Quest
           else
             item_id = ANIMAL_BONE
           end
+
           html = "30092-05.html"
         else
           chance = Rnd.rand(1000)
@@ -106,7 +104,6 @@ class Scripts::Q00365_DevilsLegacy < Quest
       end
     end
 
-
     html
   end
 
@@ -130,7 +127,7 @@ class Scripts::Q00365_DevilsLegacy < Quest
       elsif qs.started?
         if has_quest_items?(pc, PIRATES_TREASURE_CHEST)
           chest_count = get_quest_items_count(pc, PIRATES_TREASURE_CHEST)
-          give_adena(pc, (chest_count * 400) + 19800, true)
+          give_adena(pc, (chest_count &* 400) &+ 19800, true)
           take_items(pc, PIRATES_TREASURE_CHEST, -1)
           html = "30095-04.html"
         else
@@ -142,7 +139,6 @@ class Scripts::Q00365_DevilsLegacy < Quest
         html = qs.memo_state?(1) ? "30092-01.html" : "30092-07.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

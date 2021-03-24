@@ -28,7 +28,7 @@ class Packets::Outgoing::ServerObjectInfo < GameServerPacket
     c 0x92
 
     d @npc.l2id
-    d @template_id + 1_000_000
+    d @template_id &+ 1_000_000
     s @name
     d @is_attackable ? 1 : 0
     d @x

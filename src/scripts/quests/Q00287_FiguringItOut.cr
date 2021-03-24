@@ -54,10 +54,7 @@ class Scripts::Q00287_FiguringItOut < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -131,7 +128,6 @@ class Scripts::Q00287_FiguringItOut < Quest
         html = "32742-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

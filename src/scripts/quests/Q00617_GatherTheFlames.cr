@@ -139,7 +139,6 @@ class Scripts::Q00617_GatherTheFlames < Quest
       end
     end
 
-
     html || get_no_quest_msg(pc)
   end
 end

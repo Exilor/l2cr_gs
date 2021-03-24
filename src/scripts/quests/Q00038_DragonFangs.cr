@@ -37,8 +37,7 @@ class Scripts::Q00038_DragonFangs < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30386-03.htm"
@@ -81,7 +80,7 @@ class Scripts::Q00038_DragonFangs < Quest
     when "30034-10.html"
       if qs.cond?(7)
         if has_item?(pc, TOTEM_TOOTH_2ND)
-          add_exp_and_sp(pc, 435117, 23977)
+          add_exp_and_sp(pc, 435_117, 23_977)
           chance = Rnd.rand(1000)
           if chance < 250
             reward_items(pc, BONE_HELMET, 1)

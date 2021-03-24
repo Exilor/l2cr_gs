@@ -62,7 +62,6 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
       end
     end
 
-
     html
   end
 
@@ -137,12 +136,12 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
       else
         inst = InstanceManager.get_instance(npc.instance_id).not_nil!
         qs.exit_quest(false, true)
-        inst.duration = EXIT_TIME * 60000
+        inst.duration = EXIT_TIME * 60_000
         inst.empty_destroy_time = 0
         if inst.includes?(pc.l2id)
           npc.target = pc
           npc.do_cast(VITALITY_REPLENISHING)
-          add_exp_and_sp(pc, 10800000, 950000)
+          add_exp_and_sp(pc, 10_800_000, 950_000)
           reward_items(pc, BRACELET, 1)
           reward_items(pc, ESCAPE, 1)
         # else
@@ -152,7 +151,6 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -177,7 +175,6 @@ class Scripts::Q00129_PailakaDevilsLegacy < Quest
           qs.set_cond(4, true)
         end
       end
-
     end
 
     super

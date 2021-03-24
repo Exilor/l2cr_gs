@@ -31,8 +31,6 @@ module GameDB
 
         if name = rs.get_string?(:"name")
           pet.name = name
-        else
-          debug { "#{pet} has no name in DB." }
         end
 
         exp = rs.get_i64(:"exp")

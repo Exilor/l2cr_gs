@@ -38,7 +38,7 @@ module AdminCommandHandler::AdminHellbound
     pc.send_packet(html)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_hellbound_setlevel",
       "admin_hellbound"

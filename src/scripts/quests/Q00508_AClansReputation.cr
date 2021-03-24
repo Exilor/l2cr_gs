@@ -63,9 +63,7 @@ class Scripts::Q00508_AClansReputation < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    unless clan = pc.clan
-      return
-    end
+    return unless clan = pc.clan
 
     if pc.clan_leader?
       st = pc.get_quest_state(name)

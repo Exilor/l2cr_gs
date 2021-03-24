@@ -154,9 +154,7 @@ class Scripts::Q00456_DontKnowDontCare < Quest
             html = "32864-10.html"
           end
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)
@@ -183,7 +181,6 @@ class Scripts::Q00456_DontKnowDontCare < Quest
       ALLOWED_PLAYER_MAP.delete(npc.l2id)
       npc.delete_me
     end
-
 
     html
   end
@@ -217,7 +214,7 @@ class Scripts::Q00456_DontKnowDontCare < Quest
       # This depends on the boss respawn delay being at least 5 minutes.
       spawned = add_spawn(MONSTER_NPCS[npc.id], npc, true, 0)
       ALLOWED_PLAYER_MAP[spawned.l2id] = allowed_players
-      start_quest_timer(TIMER_UNSPAWN_RAID_CORPSE, 300000, npc, nil)
+      start_quest_timer(TIMER_UNSPAWN_RAID_CORPSE, 300_000, npc, nil)
     end
 
     super

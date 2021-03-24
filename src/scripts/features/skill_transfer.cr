@@ -58,7 +58,7 @@ class Scripts::SkillTransfer < AbstractNpcAI
         return super
       end
 
-      count = POMANDERS[index].count - pc.inventory.get_inventory_item_count(POMANDERS[index].id, -1, false)
+      count = POMANDERS[index].count &- pc.inventory.get_inventory_item_count(POMANDERS[index].id, -1, false)
       pc.all_skills.each do |sk|
         SkillTreesData.get_transfer_skill_tree(pc.class_id).each_value do |s|
           if s.skill_id == sk.id
@@ -72,7 +72,6 @@ class Scripts::SkillTransfer < AbstractNpcAI
             if count < 0
               class_name = ClassListData.get_class(pc.class_id).class_name
               Util.punish(pc, "has too many transferred skills or items (id: #{sk.id}, level: #{sk.level}, class: #{class_name}).", IllegalActionPunishmentType::BROADCAST)
-              warn { "Illegal count #{count} from #{pc}." }
               if Config.skill_check_remove
                 pc.remove_skill(sk)
               end

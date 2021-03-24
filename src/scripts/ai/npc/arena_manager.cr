@@ -60,9 +60,7 @@ class Scripts::ArenaManager < AbstractNpcAI
       if pc.adena >= BUFF_COST
         take_items(pc, Inventory::ADENA_ID, BUFF_COST)
         npc.target = pc
-        BUFFS.each do |skill|
-          npc.do_cast(skill.skill)
-        end
+        BUFFS.each { |skill| npc.do_cast(skill.skill) }
       else
         pc.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
       end

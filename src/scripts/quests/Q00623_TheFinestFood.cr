@@ -32,10 +32,7 @@ class Scripts::Q00623_TheFinestFood < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31521-03.htm"
@@ -48,17 +45,17 @@ class Scripts::Q00623_TheFinestFood < Quest
         if has_all_items?(pc, true, LEAF_OF_FLAVA, BUFFALO_MEAT, HORN_OF_ANTELOPE)
           random = Rnd.rand(1000)
           if random < 120
-            give_adena(pc, 25000, true)
+            give_adena(pc, 25_000, true)
             reward_items(pc, RING_OF_AURAKYRA)
           elsif random < 240
-            give_adena(pc, 65000, true)
+            give_adena(pc, 65_000, true)
             reward_items(pc, SEALED_SANDDRAGONS_EARING)
           elsif random < 340
-            give_adena(pc, 25000, true)
+            give_adena(pc, 25_000, true)
             reward_items(pc, DRAGON_NECKLACE)
           elsif random < 940
-            give_adena(pc, 73000, true)
-            add_exp_and_sp(pc, 230000, 18200)
+            give_adena(pc, 73_000, true)
+            add_exp_and_sp(pc, 230_000, 18_200)
           end
           qs.exit_quest(true, true)
           html = event
@@ -67,7 +64,6 @@ class Scripts::Q00623_TheFinestFood < Quest
         end
       end
     end
-
 
     html
   end
@@ -86,12 +82,10 @@ class Scripts::Q00623_TheFinestFood < Quest
         when 2
           html = "31521-05.html"
         end
-
       elsif qs.completed?
         html = get_already_completed_msg(talker)
       end
     end
-
 
     html || get_no_quest_msg(talker)
   end

@@ -48,8 +48,8 @@ class Packets::Outgoing::ExBasicActionList < GameServerPacket
 
   DEFAULT_ACTION_LIST = Slice(Int32).new(189)
   0.upto(73) { |i| DEFAULT_ACTION_LIST[i] = i }
-  (1000..1098).each_with_index { |i, j| DEFAULT_ACTION_LIST[j + 74] = i }
-  (5000..5015).each_with_index { |i, j| DEFAULT_ACTION_LIST[j + 74 + 99] = i }
+  (1000..1098).each_with_index { |i, j| DEFAULT_ACTION_LIST[j &+ 74] = i }
+  (5000..5015).each_with_index { |i, j| DEFAULT_ACTION_LIST[j &+ 74 &+ 99] = i }
 
   DEFAULT_LIST = new(DEFAULT_ACTION_LIST)
   ON_TRANSFORM = new(ACTIONS_ON_TRANSFORM)

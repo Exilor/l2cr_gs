@@ -74,12 +74,18 @@ class Packets::Incoming::RequestExEnchantSkill < GameClientPacket
       rate = esd.get_rate(pc)
 
       if Rnd.rand(100) <= rate
+        if Config.log_skill_enchants
+          Logs[:enchant_skill].info { "ENCHANTED #{skill} using #{spb} with rate #{rate} by #{pc}." }
+        end
         pc.add_skill(skill, true)
         pc.send_packet(ExEnchantSkillResult::TRUE)
         sm = SystemMessage.you_have_succeeded_in_enchanting_the_skill_s1
         sm.add_skill_name(@skill_id)
         pc.send_packet(sm)
       else
+        if Config.log_skill_enchants
+          Logs[:enchant_skill].info { "FAILED_ENCHANTING #{skill} using #{spb} with rate #{rate} by #{pc}." }
+        end
         pc.add_skill(SkillData[@skill_id, esl.base_level], true)
         sm = SystemMessage.you_have_failed_to_enchant_the_skill_s1
         sm.add_skill_name(@skill_id)

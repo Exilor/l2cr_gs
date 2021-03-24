@@ -20,10 +20,9 @@ class Scripts::Q00121_PavelTheGiant < Quest
     when "31961-02.htm"
       st.start_quest
     when "32041-02.html"
-      st.add_exp_and_sp(346320, 26069)
+      st.add_exp_and_sp(346_320, 26_069)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -40,13 +39,11 @@ class Scripts::Q00121_PavelTheGiant < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when YUMI
       if st.started?
         html = "32041-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

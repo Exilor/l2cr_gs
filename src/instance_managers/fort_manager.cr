@@ -2,7 +2,7 @@ require "../models/entity/fort"
 
 module FortManager
   extend self
-  extend Loggable
+  include Loggable
 
   private FORTS = [] of Fort
 

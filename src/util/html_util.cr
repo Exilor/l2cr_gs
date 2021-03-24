@@ -50,7 +50,7 @@ module HtmlUtil
       io << "\"><img src=\""
       io << image
       io << "\" width="
-      io << ((current // max) * width).to_i64
+      io << ((current // max) &* width).to_i64
       io << " height="
       io << image_height
       io << "></td></tr><tr><td align=center><table cellpadding=0 cellspacing="
@@ -61,7 +61,7 @@ module HtmlUtil
         io.printf("%.2f", (current / max) * 100)
         io << "</td></tr></table>"
       else
-        td_width = (width - 10) // 2
+        td_width = (width &- 10) // 2
         io << "<table cellpadding=0 cellspacing=0><tr><td width="
         io << td_width
         io << " align=right>"
@@ -106,7 +106,7 @@ module HtmlUtil
 
     start = 0
     if page > 0
-      start = elements_per_page * page
+      start = elements_per_page &* page
     end
 
     sb = String::Builder.new

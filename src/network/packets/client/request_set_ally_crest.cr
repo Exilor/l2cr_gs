@@ -6,7 +6,6 @@ class Packets::Incoming::RequestSetAllyCrest < GameClientPacket
     @length = d
 
     if @length > 192
-      debug { "Length is too large (#{@length})." }
       return
     end
 

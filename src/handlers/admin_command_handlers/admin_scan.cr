@@ -87,7 +87,7 @@ module AdminCommandHandler::AdminScan
     pc.send_packet(html)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_scan", "admin_deleteNpcByObjectId"}
   end
 end

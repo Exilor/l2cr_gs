@@ -14,10 +14,7 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event == "32012-04.htm"
       if st.get_quest_items_count(SOULSHOT_C) < 100
@@ -48,7 +45,6 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
       when State::STARTED
         html = "32012-02.html"
       end
-
     when SARA
       if st.started?
         if Rnd.rand(10) <= 4
@@ -56,13 +52,12 @@ class Scripts::Q00652_AnAgedExAdventurer < Quest
           st.give_adena(5026, true)
           html = "30180-01.html"
         else
-          st.give_adena(10000, true)
+          st.give_adena(10_000, true)
           html = "30180-02.html"
         end
         st.exit_quest(true, true)
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -11,9 +11,7 @@ module AdminCommandHandler::AdminDisconnect
   end
 
   private def disconnect_character(pc)
-    unless target = pc.target.as?(L2PcInstance)
-      return
-    end
+    return unless target = pc.target.as?(L2PcInstance)
 
     if target == pc
       pc.send_message("You cannot log out your own character.")
@@ -23,7 +21,7 @@ module AdminCommandHandler::AdminDisconnect
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_character_disconnect"}
   end
 end

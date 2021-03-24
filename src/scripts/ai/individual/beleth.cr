@@ -52,7 +52,7 @@ class Scripts::Beleth < AbstractNpcAI
     info = GrandBossManager.get_stats_set(REAL_BELETH).not_nil!
     status = GrandBossManager.get_boss_status(REAL_BELETH)
     if status == DEAD
-      time = info.get_i64("respawn_time") - Time.ms
+      time = info.get_i64("respawn_time") &- Time.ms
       if time > 0
         start_quest_timer("BELETH_UNLOCK", time, nil, nil)
       else
@@ -210,9 +210,9 @@ class Scripts::Beleth < AbstractNpcAI
 
       @last_attack = Time.ms
 
-      start_quest_timer("CHECK_ATTACK", 60000, nil, nil)
+      start_quest_timer("CHECK_ATTACK", 60_000, nil, nil)
 
-      start_quest_timer("SPAWN25", 60000, nil, nil)
+      start_quest_timer("SPAWN25", 60_000, nil, nil)
     when "SPAWN25"
       MINIONS.clear
 
@@ -344,7 +344,7 @@ class Scripts::Beleth < AbstractNpcAI
         c.immobilized = false
       end
     when "CHECK_ATTACK"
-      if @last_attack + 900_000 < Time.ms
+      if @last_attack &+ 900_000 < Time.ms
         GrandBossManager.set_boss_status(REAL_BELETH, ALIVE)
         @zone.each_character_inside do |c|
           if c.npc?
@@ -355,7 +355,7 @@ class Scripts::Beleth < AbstractNpcAI
         end
         cancel_quest_timer("CHECK_ATTACK", nil, nil)
       else
-        start_quest_timer("CHECK_ATTACK", 60000, nil, nil)
+        start_quest_timer("CHECK_ATTACK", 60_000, nil, nil)
       end
     end
 
@@ -499,7 +499,7 @@ class Scripts::Beleth < AbstractNpcAI
 
       set_beleth_killer(killer)
       GrandBossManager.set_boss_status(REAL_BELETH, DEAD)
-      respawn_time = (Config.beleth_spawn_interval.to_i64 + Rnd.rand(-Config.beleth_spawn_random..Config.beleth_spawn_random)) * 3600000
+      respawn_time = (Config.beleth_spawn_interval &+ Rnd.rand(-Config.beleth_spawn_random..Config.beleth_spawn_random)) &* 3_600_000
       info = GrandBossManager.get_stats_set(REAL_BELETH).not_nil!
       info["respawn_time"] = Time.ms + respawn_time
       GrandBossManager.set_stats_set(REAL_BELETH, info)

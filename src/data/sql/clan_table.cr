@@ -4,7 +4,7 @@ require "../../community_bbs/manager/forums_bbs_manager"
 module ClanTable
   extend self
   extend Synchronizable
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   CLAN_NAME_MAX_LENGTH = 16
@@ -39,8 +39,6 @@ module ClanTable
 
   def create_clan(pc : L2PcInstance, clan_name : String) : L2Clan?
     return unless pc
-
-    debug { "#{pc} (#{pc.l2id}) requested a clan creation." }
 
     if pc.level < 10
       pc.send_packet(SystemMessageId::YOU_DO_NOT_MEET_CRITERIA_IN_ORDER_TO_CREATE_A_CLAN)
@@ -136,72 +134,36 @@ module ClanTable
 
       IdFactory.release(clan_id)
 
-      GameDB.transaction do |tr|
-        begin
-          tr.exec("DELETE FROM character_contacts WHERE charId=? OR contactId=?", clan_id, clan_id)
-        rescue e
-          error e
-        end
-
-        begin
+      begin
+        GameDB.transaction do |tr|
           tr.exec("DELETE FROM clan_data WHERE clan_id=?", clan_id)
-        rescue e
-          error e
-        end
-
-        begin
           tr.exec("DELETE FROM clan_privs WHERE clan_id=?", clan_id)
-        rescue e
-          error e
-        end
-
-        begin
           tr.exec("DELETE FROM clan_skills WHERE clan_id=?", clan_id)
-        rescue e
-          error e
-        end
-
-        begin
           tr.exec("DELETE FROM clan_subpledges WHERE clan_id=?", clan_id)
-        rescue e
-          error e
-        end
-
-        begin
           tr.exec("DELETE FROM clan_wars WHERE clan1=? OR clan2=?", clan_id, clan_id)
-        rescue e
-          error e
-        end
-
-        begin
           tr.exec("DELETE FROM clan_notices WHERE clan_id=?", clan_id)
-        rescue e
-          error e
-        end
-
-        if castle_id != 0
-          begin
+          if castle_id != 0
             tr.exec("UPDATE castle SET taxPercent = 0 WHERE id = ?", clan_id)
-          rescue e
-            error e
           end
-        end
 
-        if fort_id != 0
-          if fort = FortManager.get_fort_by_id(fort_id)
-            owner = fort.owner_clan?
-            if clan == owner
-              fort.remove_owner(true)
+          if fort_id != 0
+            if fort = FortManager.get_fort_by_id(fort_id)
+              owner = fort.owner_clan?
+              if clan == owner
+                fort.remove_owner(true)
+              end
+            end
+          end
+
+          if hall_id != 0
+            hall = ClanHallSiegeManager.get_siegable_hall(hall_id)
+            if hall && hall.owner_id == clan_id
+              hall.free
             end
           end
         end
-
-        if hall_id != 0
-          hall = ClanHallSiegeManager.get_siegable_hall(hall_id)
-          if hall && hall.owner_id == clan_id
-            hall.free
-          end
-        end
+      rescue e
+        error e
       end
 
       OnPlayerClanDestroy.new(leader_member, clan)
@@ -220,7 +182,7 @@ module ClanTable
     if ally_id != 0
       CLANS.each_value do |clan|
         if clan.ally_id == ally_id
-          yield(clan)
+          yield clan
         end
       end
     end
@@ -237,7 +199,7 @@ module ClanTable
   end
 
   def store_clan_score
-    CLANS.each_value &.update_clan_score_in_db
+    CLANS.each_value { |clan| clan.update_clan_score_in_db }
   end
 
   def check_surrender(clan1 : L2Clan, clan2 : L2Clan)

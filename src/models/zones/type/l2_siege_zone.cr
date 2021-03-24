@@ -6,7 +6,7 @@ class L2SiegeZone < L2ZoneType
     self.settings = ZoneManager.get_settings(name) || Settings.new
   end
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name
     when "castleId", "fortId"
       if settings.siegable_id != -1

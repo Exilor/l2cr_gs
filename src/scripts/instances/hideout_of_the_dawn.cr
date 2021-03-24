@@ -33,7 +33,6 @@ class Scripts::HideoutOfTheDawn < AbstractInstance
       enter_instance(pc, HOTDWorld.new, "HideoutOfTheDawn.xml", TEMPLATE_ID)
       event
     end
-
   end
 
   def on_enter_instance(pc, world, first_entrance)

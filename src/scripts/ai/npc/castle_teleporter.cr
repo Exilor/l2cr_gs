@@ -26,7 +26,7 @@ class Scripts::CastleTeleporter < AbstractNpcAI
     if event.casecmp?("teleporter-03.html")
       if npc.script_value?(0)
         siege = npc.castle.siege
-        time = siege.in_progress? && siege.control_tower_count == 0 ? 480000 : 30000
+        time = siege.in_progress? && siege.control_tower_count == 0 ? 480_000 : 30_000
         start_quest_timer("teleport", time, npc, nil)
         npc.script_value = 1
       end

@@ -14,7 +14,7 @@ class Packets::Incoming::ProtocolVersion < GameClientPacket
       client.protocol_ok = true
       send_packet(KeyPacket.new(client.enable_crypt, true))
     else
-      warn { "Incompatible protocol #{@version}." }
+      Logs[:accounting].warn { "Wrong protocol from #{client}: #{@version}." }
       client.protocol_ok = false
       send_packet(KeyPacket.new(client.enable_crypt, false))
     end

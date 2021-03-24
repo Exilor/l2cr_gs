@@ -33,11 +33,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    debug "#on_adv_event(#{event}, #{npc}, #{pc})"
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     npc = npc.not_nil!
 
@@ -99,7 +95,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
     when "reward"
       if st.cond?(4) && st.has_quest_items?(SHUNAIMANS_CONTRACT)
         if pc.level >= MIN_LEVEL
-          st.add_exp_and_sp(52518015, 5817677)
+          st.add_exp_and_sp(52_518_015, 5_817_677)
           st.exit_quest(false, true)
           html = "30969-03.html"
         else
@@ -107,7 +103,6 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         end
       end
     end
-
 
     html
   end
@@ -123,11 +118,9 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
     when SHELF
       "32580-01.html"
     end
-
   end
 
   def on_talk(npc, pc)
-    debug "#on_talk(#{npc}, #{pc})"
     st = get_quest_state!(pc)
 
     case st.state
@@ -154,7 +147,6 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         when 2
           html = "32576-03.html"
         end
-
       when RAYMOND
         case st.cond
         when 2
@@ -174,7 +166,6 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
         when 4
           html = "30289-12.html"
         end
-
       when LIGHT_OF_DAWN
         if st.cond?(3)
           if st.has_quest_items?(IDENTITY_CARD)
@@ -200,9 +191,7 @@ class Scripts::Q00195_SevenSignsSecretRitualOfThePriests < Quest
           html = "30969-01.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

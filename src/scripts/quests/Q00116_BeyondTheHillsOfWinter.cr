@@ -21,10 +21,7 @@ class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30535-02.htm"
@@ -45,19 +42,18 @@ class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
     when "MATERIAL"
       if st.memo_state?(2)
         st.reward_items(SOULSHOT_D, 1740)
-        st.add_exp_and_sp(82792, 4981)
+        st.add_exp_and_sp(82_792, 4981)
         st.exit_quest(false, true)
         html = "32052-03.html"
       end
     when "ADENA"
       if st.memo_state?(2)
-        st.give_adena(17387, true)
-        st.add_exp_and_sp(82792, 4981)
+        st.give_adena(17_387, true)
+        st.add_exp_and_sp(82_792, 4981)
         st.exit_quest(false, true)
         html = "32052-03.html"
       end
     end
-
 
     html
   end
@@ -91,9 +87,7 @@ class Scripts::Q00116_BeyondTheHillsOfWinter < Quest
           html = "32052-01.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

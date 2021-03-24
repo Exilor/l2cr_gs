@@ -77,8 +77,7 @@ class Scripts::Q00224_TestOfSagittarius < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -128,7 +127,6 @@ class Scripts::Q00224_TestOfSagittarius < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -210,7 +208,7 @@ class Scripts::Q00224_TestOfSagittarius < Quest
            LETO_LIZARDMAN_OVERLORD
         if qs.memo_state?(13) && get_quest_items_count(killer, BLOOD_OF_LIZARDMAN) < 140
           if (get_quest_items_count(killer, BLOOD_OF_LIZARDMAN) - 10) * 5 > Rnd.rand(100)
-            add_spawn(SERPENT_DEMON_KADESH, npc, true, 300000)
+            add_spawn(SERPENT_DEMON_KADESH, npc, true, 300_000)
             take_items(killer, BLOOD_OF_LIZARDMAN, -1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
           else
@@ -225,11 +223,10 @@ class Scripts::Q00224_TestOfSagittarius < Quest
             qs.memo_state = 14
             qs.set_cond(14, true)
           else
-            add_spawn(SERPENT_DEMON_KADESH, npc, true, 300000)
+            add_spawn(SERPENT_DEMON_KADESH, npc, true, 300_000)
           end
         end
       end
-
     end
 
     super
@@ -311,9 +308,9 @@ class Scripts::Q00224_TestOfSagittarius < Quest
           html = "30626-12.html"
         elsif memo_state == 14
           if has_quest_items?(pc, TALISMAN_OF_KADESH)
-            give_adena(pc, 161806, true)
+            give_adena(pc, 161_806, true)
             give_items(pc, MARK_OF_SAGITTARIUS, 1)
-            add_exp_and_sp(pc, 894888, 61408)
+            add_exp_and_sp(pc, 894_888, 61_408)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30626-13.html"
@@ -353,7 +350,6 @@ class Scripts::Q00224_TestOfSagittarius < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == GUILD_PRESIDENT_BERNARD
         html = get_already_completed_msg(pc)

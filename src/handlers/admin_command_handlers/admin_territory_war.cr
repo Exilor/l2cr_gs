@@ -56,7 +56,7 @@ module AdminCommandHandler::AdminTerritoryWar
     elsif command.casecmp?("admin_territory_war_start")
       TerritoryWarManager.tw_start_time_in_millis = Time.ms
     elsif command.casecmp?("admin_territory_war_end")
-      TerritoryWarManager.tw_start_time_in_millis = Time.ms - TerritoryWarManager.war_length
+      TerritoryWarManager.tw_start_time_in_millis = Time.ms &- TerritoryWarManager.war_length
     elsif command.casecmp?("admin_territory_wards_list")
       html_msg = NpcHtmlMessage.new(0, 1)
       sb = String.build do |io|
@@ -112,7 +112,7 @@ module AdminCommandHandler::AdminTerritoryWar
     AdminHtml.show_admin_html(pc, "territorywar.htm")
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_territory_war",
       "admin_territory_war_time",

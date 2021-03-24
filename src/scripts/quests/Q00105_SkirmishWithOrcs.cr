@@ -45,8 +45,7 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30218-04.html"
@@ -99,11 +98,9 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
         html = "30218-06.html"
       end
       if st.cond?(2) && st.has_quest_items?(KABOO_CHIEFS_1ST_TORQUE)
-        4.times do |i|
-          st.take_items(KENDNELLS_ORDERS[i], -1)
-        end
+        4.times { |i| st.take_items(KENDNELLS_ORDERS[i], -1) }
         st.take_items(KABOO_CHIEFS_1ST_TORQUE, 1)
-        st.give_items(KENDNELLS_ORDERS[rand(4..7)], 1)
+        st.give_items(KENDNELLS_ORDERS[Rnd.rand(4..7)], 1)
         st.set_cond(3, true)
         html = "30218-07.html"
       end
@@ -113,8 +110,8 @@ class Scripts::Q00105_SkirmishWithOrcs < Quest
       if st.cond?(4) && st.has_quest_items?(KABOO_CHIEFS_2ST_TORQUE)
         Q00281_HeadForTheHills.give_newbie_reward(pc)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
-        st.give_adena(17599, true)
-        st.add_exp_and_sp(41478, 3555)
+        st.give_adena(17_599, true)
+        st.add_exp_and_sp(41_478, 3555)
         st.exit_quest(false, true)
         html = "30218-09.html"
       end

@@ -56,13 +56,12 @@ class Scripts::LibraryOfSages < AbstractInstance
         npc.running = true
         npc.ai.start_follow(pc)
         broadcast_npc_say(npc, Say2::NPC_ALL, ELCADIA_DIALOGS.sample)
-        start_quest_timer("FOLLOW", 10000, npc, pc)
+        start_quest_timer("FOLLOW", 10_000, npc, pc)
       when "ENTER"
         cancel_quest_timer("FOLLOW", npc, pc)
         teleport_player(pc, START_LOC, world.instance_id)
         world.elcadia.tele_to_location(*START_LOC.xyz, 0, world.instance_id)
       end
-
     end
 
     super

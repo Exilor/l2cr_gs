@@ -26,13 +26,12 @@ class Scripts::Q00112_WalkOfFate < Quest
       st.start_quest
       html = event
     when "32017-02.html"
-      st.give_adena(22308, true)
-      st.add_exp_and_sp(112876, 5774)
+      st.give_adena(22_308, true)
+      st.add_exp_and_sp(112_876, 5774)
       st.give_items(SCROLL_ENCHANT_ARMOR_D_GRADE, 1)
       st.exit_quest(false, true)
       html = event
     end
-
 
     html
   end
@@ -54,7 +53,6 @@ class Scripts::Q00112_WalkOfFate < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -24,7 +24,6 @@ module PunishmentHandler::ChatBanHandler
         end
       end
     end
-
   end
 
   def on_end(task)
@@ -49,11 +48,10 @@ module PunishmentHandler::ChatBanHandler
         end
       end
     end
-
   end
 
   private def apply_to_player(task, pc)
-    delay = (task.expiration_time - Time.ms) // 1000
+    delay = (task.expiration_time &- Time.ms) // 1000
     if delay > 0
       if delay > 60
         pc.send_message("You've been chat banned for #{delay // 60} minutes.")
@@ -72,7 +70,7 @@ module PunishmentHandler::ChatBanHandler
     pc.send_packet(EtcStatusUpdate.new(pc))
   end
 
-  def type
+  def type : PunishmentType
     PunishmentType::CHAT_BAN
   end
 end

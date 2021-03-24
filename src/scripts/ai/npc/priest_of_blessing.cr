@@ -76,9 +76,9 @@ class Scripts::PriestOfBlessing < AbstractNpcAI
         if Time.ms > _reuse_time
           take_items(pc, Inventory::ADENA_ID, PRICE_VOICE)
           give_items(pc, NEVIT_VOICE, 1)
-          save_global_quest_var(pc.account_name + "_voice", (Time.ms + (20 * 3600000)).to_s)
+          save_global_quest_var(pc.account_name + "_voice", (Time.ms &+ (20 &* 3_600_000)).to_s)
         else
-          rem_time = (_reuse_time - Time.ms) / 1000
+          rem_time = (_reuse_time &- Time.ms) / 1000
           hours = (rem_time / 3600).to_i
           minutes = ((rem_time % 3600) / 60).to_i
           sm = SystemMessage.available_after_s1_s2_hours_s3_minutes
@@ -105,9 +105,9 @@ class Scripts::PriestOfBlessing < AbstractNpcAI
           _nevit_hourglass = _hg.sample(random: Rnd)
           take_items(pc, Inventory::ADENA_ID, _price_hourglass)
           give_items(pc, _nevit_hourglass, 1)
-          save_global_quest_var("#{pc.account_name}_hg_#{_index}", (Time.ms + (20 * 3600000)).to_s)
+          save_global_quest_var("#{pc.account_name}_hg_#{_index}", (Time.ms &+ (20 &* 3_600_000)).to_s)
         else
-          rem_time = (_reuse_time - Time.ms) / 1000
+          rem_time = (_reuse_time &- Time.ms) / 1000
           hours = (rem_time / 3600).to_i
           minutes = ((rem_time % 3600) / 60).to_i
           sm = SystemMessage.available_after_s1_s2_hours_s3_minutes

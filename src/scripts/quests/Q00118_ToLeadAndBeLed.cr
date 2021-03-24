@@ -82,10 +82,8 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
               html = "30298-11a.html"
             end
           end
-
         end
       end
-
 
       return html
     end
@@ -129,7 +127,6 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
       end
     end
 
-
     html
   end
 
@@ -155,7 +152,6 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
           end
         end
       end
-
     end
 
     super
@@ -240,7 +236,6 @@ class Scripts::Q00118_ToLeadAndBeLed < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -27,10 +27,9 @@ class Scripts::Q10278_MutatedKaneusHeine < Quest
     when "30916-03.htm"
       st.start_quest
     when "30907-03.htm"
-      st.give_adena(50000, true)
+      st.give_adena(50_000, true)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -79,7 +78,6 @@ class Scripts::Q10278_MutatedKaneusHeine < Quest
       when State::COMPLETED
         html = "30916-06.htm"
       end
-
     when MINEVIA
       case st.state
       when State::STARTED
@@ -91,9 +89,7 @@ class Scripts::Q10278_MutatedKaneusHeine < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

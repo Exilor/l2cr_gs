@@ -39,13 +39,10 @@ class Scripts::Q00235_MimirsElixir < Quest
     st.memo_state?(3) || st.memo_state?(6)
   end
 
-  def on_adv_event(event, npc, player)
+  def on_adv_event(event, npc, pc)
     npc = npc.not_nil!
 
-    return unless player
-    unless st = get_quest_state(player, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -63,7 +60,7 @@ class Scripts::Q00235_MimirsElixir < Quest
       end
     when "30721-15.html"
       if st.memo_state?(5)
-        give_items(player, MAGISTERS_MIXING_STONE, 1)
+        give_items(pc, MAGISTERS_MIXING_STONE, 1)
         st.memo_state = 6
         st.set_cond(6)
         html = event
@@ -74,13 +71,13 @@ class Scripts::Q00235_MimirsElixir < Quest
       end
     when "30721-19.html"
       if st.memo_state?(8)
-        if has_quest_items?(player, MAGISTERS_MIXING_STONE, MIMIRS_ELIXIR)
-          npc.target = player
+        if has_quest_items?(pc, MAGISTERS_MIXING_STONE, MIMIRS_ELIXIR)
+          npc.target = pc
           npc.do_cast(QUEST_MIMIRS_ELIXIR)
-          take_items(player, STAR_OF_DESTINY, -1)
-          reward_items(player, ENCHANT_WEAPON_A, 1)
+          take_items(pc, STAR_OF_DESTINY, -1)
+          reward_items(pc, ENCHANT_WEAPON_A, 1)
           st.exit_quest(false, true)
-          player.send_packet(SocialAction.new(player.l2id, 3))
+          pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = event
         end
       end
@@ -95,9 +92,9 @@ class Scripts::Q00235_MimirsElixir < Quest
         html = event
       end
     when "30718-06.html"
-      if st.memo_state?(4) && has_quest_items?(player, SAGES_STONE)
-        give_items(player, TRUE_GOLD, 1)
-        take_items(player, SAGES_STONE, -1)
+      if st.memo_state?(4) && has_quest_items?(pc, SAGES_STONE)
+        give_items(pc, TRUE_GOLD, 1)
+        take_items(pc, SAGES_STONE, -1)
         st.memo_state = 5
         st.set_cond(5, true)
         html = event
@@ -109,7 +106,7 @@ class Scripts::Q00235_MimirsElixir < Quest
       end
     when "PURE_SILVER"
       if st.memo_state?(7)
-        if has_quest_items?(player, PURE_SILVER)
+        if has_quest_items?(pc, PURE_SILVER)
           html = "31149-04.html"
         else
           html = "31149-03.html"
@@ -117,7 +114,7 @@ class Scripts::Q00235_MimirsElixir < Quest
       end
     when "TRUE_GOLD"
       if st.memo_state?(7)
-        if has_quest_items?(player, TRUE_GOLD)
+        if has_quest_items?(pc, TRUE_GOLD)
           html = "31149-06.html"
         else
           html = "31149-03.html"
@@ -125,7 +122,7 @@ class Scripts::Q00235_MimirsElixir < Quest
       end
     when "BLOOD_FIRE"
       if st.memo_state?(7)
-        if has_quest_items?(player, BLOOD_FIRE)
+        if has_quest_items?(pc, BLOOD_FIRE)
           html = "31149-08.html"
         else
           html = "31149-03.html"
@@ -133,9 +130,9 @@ class Scripts::Q00235_MimirsElixir < Quest
       end
     when "31149-11.html"
       if st.memo_state?(7)
-        if has_quest_items?(player, BLOOD_FIRE, PURE_SILVER, TRUE_GOLD)
-          give_items(player, MIMIRS_ELIXIR, 1)
-          take_items(player, -1, {BLOOD_FIRE, PURE_SILVER, TRUE_GOLD})
+        if has_quest_items?(pc, BLOOD_FIRE, PURE_SILVER, TRUE_GOLD)
+          give_items(pc, MIMIRS_ELIXIR, 1)
+          take_items(pc, -1, {BLOOD_FIRE, PURE_SILVER, TRUE_GOLD})
           st.memo_state = 8
           st.set_cond(8, true)
           html = event
@@ -143,36 +140,33 @@ class Scripts::Q00235_MimirsElixir < Quest
       end
     end
 
-
     html
   end
 
-  def on_kill(npc, player, is_summon)
-    if Rnd.rand(5) == 0
-      if winner = get_random_party_member(player, npc)
-        item = MOBS[npc.id]
-        if give_item_randomly(winner, npc, item.id, item.count, item.count, 1.0, true)
-          st = winner.get_quest_state(name).not_nil!
-          st.memo_state = item.chance
-          st.set_cond(item.chance)
-        end
+  def on_kill(npc, pc, is_summon)
+    if Rnd.rand(5) == 0 && (winner = get_random_party_member(pc, npc))
+      item = MOBS[npc.id]
+      if give_item_randomly(winner, npc, item.id, item.count, item.count, 1.0, true)
+        st = winner.get_quest_state(name).not_nil!
+        st.memo_state = item.chance
+        st.set_cond(item.chance)
       end
     end
 
     super
   end
 
-  def on_talk(npc, player)
-    st = get_quest_state!(player)
+  def on_talk(npc, pc)
+    st = get_quest_state!(pc)
 
     if st.created?
       if npc.id == LADD
-        if player.race.kamael?
+        if pc.race.kamael?
           html = "30721-09.html"
-        elsif player.level < MIN_LEVEL
+        elsif pc.level < MIN_LEVEL
           html = "30721-08.html"
         else
-          if has_quest_items?(player, STAR_OF_DESTINY)
+          if has_quest_items?(pc, STAR_OF_DESTINY)
             html = "30721-01.htm"
           else
             html = "30721-07.html"
@@ -184,7 +178,7 @@ class Scripts::Q00235_MimirsElixir < Quest
       when LADD
         case st.memo_state
         when 1
-          if has_quest_items?(player, PURE_SILVER)
+          if has_quest_items?(pc, PURE_SILVER)
             html = "30721-11.html"
           else
             html = "30721-10.html"
@@ -198,7 +192,6 @@ class Scripts::Q00235_MimirsElixir < Quest
         when 8
           html = "30721-17.html"
         end
-
       when JOAN
         case st.memo_state
         when 2
@@ -208,19 +201,17 @@ class Scripts::Q00235_MimirsElixir < Quest
         when 4
           html = "30718-05.html"
         end
-
       when ALCHEMISTS_MIXING_URN
-        if st.memo_state?(7) && has_quest_items?(player, MAGISTERS_MIXING_STONE)
+        if st.memo_state?(7) && has_quest_items?(pc, MAGISTERS_MIXING_STONE)
           html = "31149-01.html"
         end
       end
-
     elsif st.completed?
       if npc.id == LADD
-        html = get_already_completed_msg(player)
+        html = get_already_completed_msg(pc)
       end
     end
 
-    html || get_no_quest_msg(player)
+    html || get_no_quest_msg(pc)
   end
 end

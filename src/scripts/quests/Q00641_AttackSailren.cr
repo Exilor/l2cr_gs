@@ -39,7 +39,6 @@ class Scripts::Q00641_AttackSailren < Quest
       end
     end
 
-
     event
   end
 
@@ -74,7 +73,6 @@ class Scripts::Q00641_AttackSailren < Quest
     when State::STARTED
       html = st.cond?(1) ? "32109-1a.html" : "32109-2.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

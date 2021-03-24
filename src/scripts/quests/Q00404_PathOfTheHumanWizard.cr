@@ -46,8 +46,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -161,7 +160,7 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
     if !has_quest_items?(pc, FLAME_EARING, WIND_BANGLE, WATER_NECKLACE, EARTH_RING)
       "30391-05.html"
     else
-      give_adena(pc, 163800, true)
+      give_adena(pc, 163_800, true)
       take_items(pc, FLAME_EARING, 1)
       take_items(pc, WIND_BANGLE, 1)
       take_items(pc, WATER_NECKLACE, 1)
@@ -171,11 +170,11 @@ class Scripts::Q00404_PathOfTheHumanWizard < Quest
       end
 
       if pc.level >= 20
-        add_exp_and_sp(pc, 320534, 23152)
+        add_exp_and_sp(pc, 320_534, 23_152)
       elsif pc.level == 19
-        add_exp_and_sp(pc, 456128, 29850)
+        add_exp_and_sp(pc, 456_128, 29_850)
       else
-        add_exp_and_sp(pc, 591724, 36548)
+        add_exp_and_sp(pc, 591_724, 36_548)
       end
 
       qs.exit_quest(false, true)

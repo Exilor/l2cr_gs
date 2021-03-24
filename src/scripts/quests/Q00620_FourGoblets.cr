@@ -233,7 +233,6 @@ class Scripts::Q00620_FourGoblets < Quest
 
         st.set_memo_state_ex(1, 2)
       end
-
     end
   end
 
@@ -323,7 +322,6 @@ class Scripts::Q00620_FourGoblets < Quest
       return ""
     end
 
-
     html
   end
 
@@ -332,8 +330,7 @@ class Scripts::Q00620_FourGoblets < Quest
     when HALISHA_ALECTIA, HALISHA_TISHAS, HALISHA_MEKARA, HALISHA_MORIGUL
       execute_for_each_player(pc, npc, is_summon, true, false)
     else
-      st = get_random_party_member_state(pc, -1, 3, npc)
-      if st
+      if st = get_random_party_member_state(pc, -1, 3, npc)
         npc_id = npc.id
         if MOB1.has_key?(npc_id)
           st.give_item_randomly(npc, SEALED_BOX, 1, 0, MOB1[npc_id], true)
@@ -422,7 +419,6 @@ class Scripts::Q00620_FourGoblets < Quest
       when JUDGES_SEPULCHER_MANAGER
         html = "31924-01.html"
       end
-
     end
 
     html
@@ -433,7 +429,7 @@ class Scripts::Q00620_FourGoblets < Quest
     case Rnd.rand(5)
     when 0
       i2 = true
-      give_adena(pc, 10000, true)
+      give_adena(pc, 10_000, true)
     when 1
       if Rnd.rand(1000) < 848
         i2 = true
@@ -617,7 +613,6 @@ class Scripts::Q00620_FourGoblets < Quest
         end
       end
     end
-
 
     take_items(pc, SEALED_BOX, 1)
 

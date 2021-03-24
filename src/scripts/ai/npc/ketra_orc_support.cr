@@ -113,7 +113,6 @@ class Scripts::KetraOrcSupport < AbstractNpcAI
       end
     end
 
-
     html || get_no_quest_msg(pc)
   end
 end

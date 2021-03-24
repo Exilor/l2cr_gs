@@ -40,10 +40,7 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
       return super
     end
 
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30969-02.htm", "30969-03.htm", "30969-04.htm"
@@ -111,7 +108,7 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
     when "finish"
       if st.cond?(6)
         if pc.level >= MIN_LEVEL
-          add_exp_and_sp(pc, 52518015, 5817677)
+          add_exp_and_sp(pc, 52_518_015, 5_817_677)
           st.exit_quest(false, true)
           html = "32593-02.html"
         else
@@ -124,7 +121,6 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -164,7 +160,6 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
         when 6
           html = "30969-15.html"
         end
-
       when MERCHANT_OF_MAMMON
         if st.cond?(1)
           if npc.script_value?(0)
@@ -195,7 +190,6 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
         when 5
           html = "32586-15.html"
         end
-
       when WOOD
         if st.cond?(6)
           html = "32593-01.html"
@@ -210,9 +204,7 @@ class Scripts::Q00196_SevenSignsSealOfTheEmperor < Quest
           pc.send_packet(SystemMessageId::USING_COURT_MAGICIANS_STAFF_TO_OPEN_DOOR)
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

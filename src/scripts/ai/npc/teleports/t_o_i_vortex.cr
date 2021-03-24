@@ -60,7 +60,7 @@ class Scripts::ToIVortex < AbstractNpcAI
     npc_id = npc.id
 
     case event
-    when "1".."10" # "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+    when "1".."10"
       loc = TOI_FLOORS[event]
       item_id = TOI_FLOOR_ITEMS[event]
       if has_quest_items?(pc, item_id)
@@ -70,14 +70,13 @@ class Scripts::ToIVortex < AbstractNpcAI
         return "no-stones.htm"
       end
     when "GREEN", "BLUE", "RED"
-      if pc.adena >= 10000
-        take_items(pc, Inventory::ADENA_ID, 10000)
+      if pc.adena >= 10_000
+        take_items(pc, Inventory::ADENA_ID, 10_000)
         give_items(pc, DIMENSION_TRADE[event], 1)
       else
         return "#{npc_id}no-adena.htm"
       end
     end
-
 
     super
   end

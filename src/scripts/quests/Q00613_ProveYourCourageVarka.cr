@@ -28,10 +28,7 @@ class Scripts::Q00613_ProveYourCourageVarka < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -40,7 +37,7 @@ class Scripts::Q00613_ProveYourCourageVarka < Quest
     when "31377-07.html"
       if st.has_quest_items?(HEKATON_HEAD) && st.cond?(2)
         st.give_items(VALOR_FEATHER, 1)
-        st.add_exp_and_sp(10000, 0)
+        st.add_exp_and_sp(10_000, 0)
         st.exit_quest(true, true)
       else
         html = get_no_quest_msg(pc)

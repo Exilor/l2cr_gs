@@ -71,8 +71,7 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
     coin_count = get_quest_items_count(pc, COIN_OF_LORDS1, COIN_OF_LORDS2, COIN_OF_LORDS3, COIN_OF_LORDS4, COIN_OF_LORDS5, COIN_OF_LORDS6)
 
     case event
@@ -104,11 +103,11 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
         give_items(pc, SWORD_OF_RITUAL, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 11576)
+          add_exp_and_sp(pc, 160_267, 11_576)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 14925)
+          add_exp_and_sp(pc, 228_064, 14_925)
         else
-          add_exp_and_sp(pc, 295862, 18274)
+          add_exp_and_sp(pc, 295_862, 18_274)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -121,11 +120,11 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
         give_items(pc, SWORD_OF_RITUAL, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 11576)
+          add_exp_and_sp(pc, 160_267, 11_576)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 14925)
+          add_exp_and_sp(pc, 228_064, 14_925)
         else
-          add_exp_and_sp(pc, 295862, 18274)
+          add_exp_and_sp(pc, 295_862, 18_274)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -151,7 +150,6 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
       give_items(pc, GLUDIO_GUARDS_1ST_BADGE, 1)
       event
     end
-
   end
 
   def on_kill(npc, killer, is_summon)
@@ -172,7 +170,6 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
       when UNDEAD_PRIEST
         reward_kill(killer, EINHASADS_1ST_TEMPLE_BADGE, EINHASAD_CRUCIFIX, 12, 5)
       end
-
     end
 
     super
@@ -221,11 +218,11 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
             level = pc.level
 
             if level >= 20
-              add_exp_and_sp(pc, 320534, 23152)
+              add_exp_and_sp(pc, 320_534, 23_152)
             elsif level == 10
-              add_exp_and_sp(pc, 456128, 29850)
+              add_exp_and_sp(pc, 456_128, 29_850)
             else
-              add_exp_and_sp(pc, 591724, 36542)
+              add_exp_and_sp(pc, 591_724, 36_542)
             end
 
             qs.exit_quest(false, true)
@@ -329,7 +326,6 @@ class Scripts::Q00402_PathOfTheHumanKnight < Quest
           html = "30653-01.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

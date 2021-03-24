@@ -31,7 +31,7 @@ class Scripts::Q00012_SecretMeetingWithVarkaSilenos < Quest
       event
     when "31378-02.html"
       if has_quest_items?(pc, MUNITIONS_BOX)
-        add_exp_and_sp(pc, 233125, 18142)
+        add_exp_and_sp(pc, 233_125, 18_142)
         st.exit_quest(false, true)
         event
       else

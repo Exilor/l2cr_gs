@@ -39,8 +39,8 @@ class Scripts::Q00132_MatrasCuriosity < Quest
         html = "32245-03a.htm"
       end
     elsif event.casecmp?("32245-07.htm") && st.cond?(3) && !st.completed?
-      st.give_adena(65884, true)
-      st.add_exp_and_sp(50541, 5094)
+      st.give_adena(65_884, true)
+      st.add_exp_and_sp(50_541, 5094)
       st.give_items(FIRE, 1)
       st.give_items(WATER, 1)
       st.give_items(EARTH, 1)
@@ -81,7 +81,6 @@ class Scripts::Q00132_MatrasCuriosity < Quest
       end
     end
 
-
     nil
   end
 
@@ -106,7 +105,6 @@ class Scripts::Q00132_MatrasCuriosity < Quest
       when 3
         html = "32245-06.htm"
       end
-
     end
 
     html || get_no_quest_msg(pc)

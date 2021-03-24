@@ -75,8 +75,7 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -166,7 +165,6 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
       html = event
     end
 
-
     html
   end
 
@@ -255,7 +253,6 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
           end
         end
       end
-
     end
 
     super
@@ -283,9 +280,9 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
         elsif !has_at_least_one_quest_item?(pc, DUFNERS_LETTER, TERRYS_REPORT)
           html = "30106-07.html"
         elsif has_quest_items?(pc, TERRYS_REPORT) && !has_quest_items?(pc, DUFNERS_LETTER)
-          give_adena(pc, 187606, true)
+          give_adena(pc, 187_606, true)
           give_items(pc, MARK_OF_SEEKER, 1)
-          add_exp_and_sp(pc, 1029478, 66768)
+          add_exp_and_sp(pc, 1_029_478, 66_768)
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = "30106-08.html"
@@ -300,7 +297,7 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
             html = "30064-05.html"
           end
         elsif has_quest_items?(pc, TERRYS_2ND_ORDER)
-          if get_quest_items_count(pc, OL_MAHUM_SPIRIT_ORE) + get_quest_items_count(pc, TUREK_SPIRIT_ORE) + get_quest_items_count(pc, ANT_SPIRIT_ORE) + get_quest_items_count(pc, TURAK_BUGBEAR_SPIRIT_ORE) < 4
+          if get_quest_items_count(pc, OL_MAHUM_SPIRIT_ORE) &+ get_quest_items_count(pc, TUREK_SPIRIT_ORE) &+ get_quest_items_count(pc, ANT_SPIRIT_ORE) &+ get_quest_items_count(pc, TURAK_BUGBEAR_SPIRIT_ORE) < 4
             html = "30064-08.html"
           else
             html = "30064-09.html"
@@ -328,7 +325,7 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
             html = "30064-21.html"
           end
         elsif has_quest_items?(pc, LIST_OF_HOST)
-          if get_quest_items_count(pc, ABYSS_SPIRIT_ORE1) + get_quest_items_count(pc, ABYSS_SPIRIT_ORE2) + get_quest_items_count(pc, ABYSS_SPIRIT_ORE3) + get_quest_items_count(pc, ABYSS_SPIRIT_ORE4) < 4
+          if get_quest_items_count(pc, ABYSS_SPIRIT_ORE1) &+ get_quest_items_count(pc, ABYSS_SPIRIT_ORE2) &+ get_quest_items_count(pc, ABYSS_SPIRIT_ORE3) &+ get_quest_items_count(pc, ABYSS_SPIRIT_ORE4) < 4
             html = "30064-22.html"
           else
             take_items(pc, LIST_OF_HOST, 1)
@@ -381,7 +378,6 @@ class Scripts::Q00213_TrialOfTheSeeker < Quest
           html = "30715-06.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == MASTER_DUFNER
         html = get_already_completed_msg(pc)

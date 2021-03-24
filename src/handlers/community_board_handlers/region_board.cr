@@ -1,10 +1,11 @@
 module CommunityBoardHandler::RegionBoard
   extend self
   extend IParseBoardHandler
+  include Loggable
 
   private REGIONS = {1049, 1052, 1053, 1057, 1060, 1059, 1248, 1247, 1056}
 
-  def parse_command(command, pc)
+  def parse_command(command : String, pc : L2PcInstance) : Bool
     if command == "_bbsloc"
       CommunityBoardHandler.add_bypass(pc, "Region", command)
 
@@ -42,7 +43,7 @@ module CommunityBoardHandler::RegionBoard
     false # L2J TODO
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"_bbsloc"}
   end
 end

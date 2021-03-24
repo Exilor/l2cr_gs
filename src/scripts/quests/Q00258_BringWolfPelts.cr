@@ -30,9 +30,8 @@ class Scripts::Q00258_BringWolfPelts < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event.casecmp?("30001-03.html")
+    return unless pc && (st = get_quest_state(pc, false))
+    if event.casecmp?("30001-03.html")
       st.start_quest
       event
     end
@@ -41,7 +40,7 @@ class Scripts::Q00258_BringWolfPelts < Quest
   def on_kill(npc, killer, is_summon)
     st = get_quest_state(killer, false)
     if st && st.cond?(1)
-      st.give_items WOLF_PELT, 1
+      st.give_items(WOLF_PELT, 1)
       if st.get_quest_items_count(WOLF_PELT) >= WOLF_PELT_COUNT
         st.set_cond(2, true)
       else
@@ -77,9 +76,7 @@ class Scripts::Q00258_BringWolfPelts < Quest
           html = "30001-05.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

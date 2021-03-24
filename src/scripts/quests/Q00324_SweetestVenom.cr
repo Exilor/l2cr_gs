@@ -24,17 +24,10 @@ class Scripts::Q00324_SweetestVenom < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
-    if st
-      st.start_quest
-      if event == "30351-04.htm"
-        html = event
-      end
-    end
-
-    html
+    st.start_quest
+    event if event == "30351-04.htm"
   end
 
   def on_talk(npc, pc)
@@ -51,7 +44,6 @@ class Scripts::Q00324_SweetestVenom < Quest
           html = "30351-05.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)
@@ -64,7 +56,7 @@ class Scripts::Q00324_SweetestVenom < Quest
       if sacs < REQUIRED_COUNT
         if Rnd.rand(100) < MONSTERS[npc.id]
           st.give_items(VENOM_SAC, 1)
-          if sacs + 1 < REQUIRED_COUNT
+          if sacs &+ 1 < REQUIRED_COUNT
             st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
           else
             st.set_cond(2, true)

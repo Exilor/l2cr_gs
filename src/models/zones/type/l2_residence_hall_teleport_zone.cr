@@ -3,7 +3,7 @@ require "./l2_residence_teleport_zone"
 class L2ResidenceHallTeleportZone < L2ResidenceTeleportZone
   @tele_task : TaskScheduler::DelayedTask?
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     if name == "residenceZoneId"
       @id = value.to_i
     else

@@ -31,10 +31,7 @@ class Scripts::Q00629_CleanUpTheSwampOfScreams < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31553-03.htm"
@@ -60,7 +57,6 @@ class Scripts::Q00629_CleanUpTheSwampOfScreams < Quest
         html = event
       end
     end
-
 
     html
   end

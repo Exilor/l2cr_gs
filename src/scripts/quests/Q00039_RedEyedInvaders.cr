@@ -29,10 +29,7 @@ class Scripts::Q00039_RedEyedInvaders < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30334-03.htm"
@@ -61,7 +58,7 @@ class Scripts::Q00039_RedEyedInvaders < Quest
           reward_items(pc, GREEN_HIGH_LURE)
           reward_items(pc, BABYDUCK_ROD)
           reward_items(pc, FISHING_SHOT_NONE)
-          add_exp_and_sp(pc, 62366, 2783)
+          add_exp_and_sp(pc, 62_366, 2783)
           qs.exit_quest(false, true)
           html = event
         else

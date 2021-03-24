@@ -41,7 +41,7 @@ module AdminCommandHandler::AdminTest
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_stats", "admin_skill_test", "admin_known"}
   end
 end

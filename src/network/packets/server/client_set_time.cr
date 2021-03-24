@@ -9,7 +9,7 @@ class Packets::Outgoing::ClientSetTime < GameServerPacket
   def initialize(time : String, speed : Int32 = 6)
     @speed = speed
     hh, mm = time.split(':')
-    @time = (hh.to_i * 60) + mm.to_i
+    @time = (hh.to_i &* 60) &+ mm.to_i
   end
 
   private def write_impl

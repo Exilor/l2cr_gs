@@ -55,8 +55,8 @@ class Scripts::Minigame < AbstractNpcAI
       cancel_quest_timer("hurry_up2", npc, nil)
       cancel_quest_timer("expire", npc, nil)
 
-      start_quest_timer("hurry_up", 120000, npc, nil)
-      start_quest_timer("expire", 190000, npc, nil)
+      start_quest_timer("hurry_up", 120_000, npc, nil)
+      start_quest_timer("expire", 190_000, npc, nil)
       start_quest_timer("start", 1000, npc, nil)
       return
     when "off"
@@ -83,7 +83,7 @@ class Scripts::Minigame < AbstractNpcAI
         b.display_effect = 1
         b.running = false
         start_quest_timer("off", 2000, b, nil) # Stopping burning each pot 2s after
-        start_quest_timer("timer", TIMER_INTERVAL * 1000, npc, nil)
+        start_quest_timer("timer", TIMER_INTERVAL &* 1000, npc, nil)
         room.current_pot += 1
       else
         broadcast_npc_say(room.manager, Say2::NPC_ALL, NpcString::NOW_LIGHT_THE_FURNACES_FIRE)
@@ -98,10 +98,10 @@ class Scripts::Minigame < AbstractNpcAI
       end
     when "hurry_up"
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THERES_ABOUT_1_MINUTE_LEFT)
-      start_quest_timer("hurry_up2", 60000, npc, nil)
+      start_quest_timer("hurry_up2", 60_000, npc, nil)
     when "hurry_up2"
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THERES_JUST_10_SECONDS_LEFT)
-      start_quest_timer("expire", 10000, npc, nil)
+      start_quest_timer("expire", 10_000, npc, nil)
     when "expire"
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::TIME_IS_UP_AND_YOU_HAVE_FAILED_ANY_MORE_WILL_BE_DIFFICULT)
     when "end"
@@ -112,7 +112,6 @@ class Scripts::Minigame < AbstractNpcAI
     when "afterthat"
       npc.delete_me
     end
-
 
     event
   end
@@ -148,9 +147,8 @@ class Scripts::Minigame < AbstractNpcAI
       ROOMS << init_room(npc)
     when TREASURE_BOX
       npc.disable_core_ai(true)
-      start_quest_timer("afterthat", 180000, npc, nil)
+      start_quest_timer("afterthat", 180_000, npc, nil)
     end
-
 
     super
   end
@@ -169,7 +167,7 @@ class Scripts::Minigame < AbstractNpcAI
                 npc.display_effect = 1
                 npc.running = false
                 start_quest_timer("off", 2000, npc, nil)
-                room.current_pot += 1
+                room.current_pot &+= 1
               else
                 add_spawn(TREASURE_BOX, room.participant.location, true, 0)
                 broadcast_npc_say(room.manager, Say2::NPC_ALL, NpcString::OH_YOUVE_SUCCEEDED)
@@ -192,7 +190,7 @@ class Scripts::Minigame < AbstractNpcAI
                 broadcast_npc_say(room.manager, Say2::NPC_ALL, NpcString::AH_IS_THIS_FAILURE_BUT_IT_LOOKS_LIKE_I_CAN_KEEP_GOING)
                 room.burn_them_all
                 start_quest_timer("off", 2000, room.manager, nil)
-                room.attempt_number += 1
+                room.attempt_number &+= 1
               end
             end
             break
@@ -211,7 +209,7 @@ class Scripts::Minigame < AbstractNpcAI
       if pot_number <= 8 && Util.in_range?(1000, manager, last_spawn, false)
         last_spawn.auto_attackable = true
         burners << last_spawn
-        pot_number += 1
+        pot_number &+= 1
       end
     end
 

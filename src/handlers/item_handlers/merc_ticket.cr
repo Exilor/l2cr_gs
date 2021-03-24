@@ -2,7 +2,7 @@ module ItemHandler::MercTicket
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     unless pc = playable.as?(L2PcInstance)
       playable.send_packet(SystemMessageId::ITEM_NOT_FOR_PETS)
       return false

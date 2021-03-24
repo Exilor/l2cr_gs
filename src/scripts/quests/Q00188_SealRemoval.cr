@@ -19,10 +19,7 @@ class Scripts::Q00188_SealRemoval < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30673-03.htm"
@@ -52,15 +49,14 @@ class Scripts::Q00188_SealRemoval < Quest
       end
     when "30970-03.html"
       if qs.memo_state?(2)
-        give_adena(pc, 98583, true)
+        give_adena(pc, 98_583, true)
         if pc.level < MAX_LEVEL_FOR_EXP_SP
-          add_exp_and_sp(pc, 285935, 18711)
+          add_exp_and_sp(pc, 285_935, 18_711)
         end
         qs.exit_quest(false, true)
         html = event
       end
     end
-
 
     html
   end
@@ -93,7 +89,6 @@ class Scripts::Q00188_SealRemoval < Quest
           html = "30970-01.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == RESEARCHER_LORAIN
         html = get_already_completed_msg(pc)

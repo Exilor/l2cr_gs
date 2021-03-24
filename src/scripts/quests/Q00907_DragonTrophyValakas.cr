@@ -25,10 +25,7 @@ class Scripts::Q00907_DragonTrophyValakas < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if pc.level >= MIN_LEVEL && st.has_quest_items?(VACUALITE_FLOATING_STONE)
       case event
@@ -38,7 +35,6 @@ class Scripts::Q00907_DragonTrophyValakas < Quest
         st.start_quest
         html = event
       end
-
     end
 
     html
@@ -71,7 +67,6 @@ class Scripts::Q00907_DragonTrophyValakas < Quest
         st.exit_quest(QuestType::DAILY, true)
         html = "31540-09.html"
       end
-
     when State::COMPLETED
       if !st.now_available?
         html = "31540-03.html"
@@ -86,7 +81,6 @@ class Scripts::Q00907_DragonTrophyValakas < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

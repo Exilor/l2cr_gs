@@ -17,8 +17,7 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -42,7 +41,15 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
     when ANDELLIA
       case st.state
       when State::CREATED
-        html = pc.race.elf? ? pc.level >= MIN_LEVEL ? "30362-03.htm" : "30362-02.htm" : "30362-01.htm"
+        if pc.race.elf?
+          if pc.level >= MIN_LEVEL
+            html = "30362-03.htm"
+          else
+            html = "30362-02.htm"
+          end
+        else
+          html = "30362-01.htm"
+        end
       when State::STARTED
         if st.cond?(1)
           html = "30362-05.html"
@@ -55,7 +62,6 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when THALIA
       if st.started?
         if st.cond?(1) && st.has_quest_items?(ANDELLRIAS_LETTER)
@@ -68,7 +74,6 @@ class Scripts::Q00161_FruitOfTheMotherTree < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

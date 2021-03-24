@@ -57,4 +57,8 @@ abstract class AbstractVariables < StatsSet
   def compare_and_set_changes(expect : Bool, update : Bool) : Bool
     @has_changes.compare_and_set(expect, update)[1]
   end
+
+  def to_s(io)
+    self.class.to_s(io)
+  end
 end

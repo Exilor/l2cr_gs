@@ -37,7 +37,7 @@ class Scripts::CastleMercenaryManager < AbstractNpcAI
       else
         msg.html = get_htm(pc, "mercmanager-limit.html")
       end
-      msg["%feud_name%"] = 1001000 + castle.residence_id
+      msg["%feud_name%"] = 1001000 &+ castle.residence_id
       pc.send_packet(msg)
     when "buy"
       if SevenSigns.instance.seal_validation_period?
@@ -54,7 +54,6 @@ class Scripts::CastleMercenaryManager < AbstractNpcAI
     when "mercmanager-01.html"
       html = event
     end
-
 
     html
   end

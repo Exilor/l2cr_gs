@@ -85,7 +85,6 @@ class Scripts::Q00251_NoSecrets < Quest
       html = "30201-06.htm"
     end
 
-
     html || get_no_quest_msg(pc)
   end
 end

@@ -46,7 +46,6 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
           st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
-
     end
   end
 
@@ -76,10 +75,10 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
       end
     when "32566-04.html"
       if st.memo_state?(4)
-        if get_quest_items_count(pc, Inventory::ADENA_ID) < 10000
+        if pc.adena < 10_000
           html = event
         else
-          take_items(pc, Inventory::ADENA_ID, 10000)
+          take_items(pc, Inventory::ADENA_ID, 10_000)
           st.memo_state = 5
           html = "32566-05.html"
         end
@@ -130,7 +129,6 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
         end
       end
     end
-
 
     html
   end
@@ -203,15 +201,13 @@ class Scripts::Q10270_BirthOfTheSeed < Quest
           end
         when 20
           if pc.level >= MIN_LEVEL
-            give_adena(pc, 133590, true)
-            add_exp_and_sp(pc, 625343, 48222)
+            give_adena(pc, 133_590, true)
+            add_exp_and_sp(pc, 625_343, 48_222)
             st.exit_quest(false, true)
             html = "32559-11.html"
           end
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)

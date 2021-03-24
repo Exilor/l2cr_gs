@@ -24,9 +24,9 @@ class Scripts::GatekeeperSpirit < AbstractNpcAI
   def on_adv_event(event, npc, pc)
     case event
     when "ANAKIM"
-      add_spawn(GATEKEEPER_SPIRIT_EXIT, SPAWN_ANAKIM_GATEKEEPER, false, 900000)
+      add_spawn(GATEKEEPER_SPIRIT_EXIT, SPAWN_ANAKIM_GATEKEEPER, false, 900_000)
     when "LILITH"
-      add_spawn(GATEKEEPER_SPIRIT_EXIT, SPAWN_LILITH_GATEKEEPER, false, 900000)
+      add_spawn(GATEKEEPER_SPIRIT_EXIT, SPAWN_LILITH_GATEKEEPER, false, 900_000)
     when "TeleportIn"
       pc = pc.not_nil!
       cabal = SevenSigns.instance.get_player_cabal(pc.l2id)
@@ -45,18 +45,16 @@ class Scripts::GatekeeperSpirit < AbstractNpcAI
       pc.not_nil!.tele_to_location(EXIT, true)
     end
 
-
     html
   end
 
   def on_kill(npc, killer, is_summon)
     case npc.id
     when ANAKIM
-      start_quest_timer("ANAKIM", 10000, npc, killer)
+      start_quest_timer("ANAKIM", 10_000, npc, killer)
     when LILITH
-      start_quest_timer("LILITH", 10000, npc, killer)
+      start_quest_timer("LILITH", 10_000, npc, killer)
     end
-
 
     super
   end

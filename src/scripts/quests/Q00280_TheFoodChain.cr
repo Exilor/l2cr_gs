@@ -37,8 +37,7 @@ class Scripts::Q00280_TheFoodChain < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32175-03.htm"
@@ -48,7 +47,7 @@ class Scripts::Q00280_TheFoodChain < Quest
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         grey_teeth = st.get_quest_items_count(GREY_KELTIR_TOOTH)
         black_teeth = st.get_quest_items_count(BLACK_WOLF_TOOTH)
-        st.give_adena(2i64 * (grey_teeth + black_teeth), true)
+        st.give_adena(2i64 &* (grey_teeth &+ black_teeth), true)
         take_items(pc, -1, {GREY_KELTIR_TOOTH, BLACK_WOLF_TOOTH})
         html = event
       else
@@ -75,7 +74,6 @@ class Scripts::Q00280_TheFoodChain < Quest
         html = "32175-10.html"
       end
     end
-
 
     html
   end
@@ -108,7 +106,6 @@ class Scripts::Q00280_TheFoodChain < Quest
         html = "32175-04.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

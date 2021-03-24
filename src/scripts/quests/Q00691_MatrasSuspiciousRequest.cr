@@ -29,10 +29,7 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32245-02.htm", "32245-11.html"
@@ -44,7 +41,7 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
       if st.started?
         gem_count = st.get_int("submitted_gems")
         if gem_count >= 744
-          st.set("submitted_gems", (gem_count - 744).to_s)
+          st.set("submitted_gems", (gem_count &- 744).to_s)
           st.give_items(DYNASTY_SOUL_II, 1)
           html = "32245-09.html"
         else
@@ -64,12 +61,11 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
       end
     when "32245-12.html"
       if st.started?
-        st.give_adena(st.get_int("submitted_gems") * 10000, true)
+        st.give_adena(st.get_int("submitted_gems") &* 10_000, true)
         st.exit_quest(true, true)
         html = event
       end
     end
-
 
     html
   end
@@ -107,7 +103,6 @@ class Scripts::Q00691_MatrasSuspiciousRequest < Quest
         html = "32245-06.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

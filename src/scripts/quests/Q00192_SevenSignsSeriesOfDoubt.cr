@@ -21,10 +21,7 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30676-02.htm"
@@ -36,7 +33,7 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
       if st.cond?(1)
         st.set_cond(2, true)
         pc.show_quest_movie(8)
-        start_quest_timer("back", 32000, npc, pc)
+        start_quest_timer("back", 32_000, npc, pc)
         return ""
       end
     when "back"
@@ -85,7 +82,7 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
     when "reward"
       if st.cond?(7) && st.has_quest_items?(CROOPS_LETTER)
         if pc.level >= MIN_LEVEL
-          st.add_exp_and_sp(52518015, 5817677)
+          st.add_exp_and_sp(52_518_015, 5_817_677)
           st.exit_quest(false, true)
           html = "30191-03.html"
         else
@@ -93,7 +90,6 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
         end
       end
     end
-
 
     html
   end
@@ -131,7 +127,6 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
             html = "30676-09.html"
           end
         end
-
       when HECTOR
         if st.cond?(3)
           if st.has_quest_items?(CROOPS_INTRODUCTION)
@@ -157,9 +152,7 @@ class Scripts::Q00192_SevenSignsSeriesOfDoubt < Quest
           html = "30191-01.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

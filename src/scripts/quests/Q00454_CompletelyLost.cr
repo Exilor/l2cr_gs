@@ -51,22 +51,22 @@ class Scripts::Q00454_CompletelyLost < Quest
       start_quest_timer("CHECK_TIMER", 2000, npc, nil)
     when "TIME_LIMIT1"
       if leader = npc.variables.get_object("leader", L2PcInstance?)
-        start_quest_timer("TIME_LIMIT2", 150000, npc, nil)
+        start_quest_timer("TIME_LIMIT2", 150_000, npc, nil)
         whisper(npc, leader, NpcString::IS_IT_STILL_LONG_OFF)
       end
     when "TIME_LIMIT2"
       if leader = npc.variables.get_object("leader", L2PcInstance?)
-        start_quest_timer("TIME_LIMIT3", 150000, npc, nil)
+        start_quest_timer("TIME_LIMIT3", 150_000, npc, nil)
         whisper(npc, leader, NpcString::IS_ERMIAN_WELL_EVEN_I_CANT_BELIEVE_THAT_I_SURVIVED_IN_A_PLACE_LIKE_THIS)
       end
     when "TIME_LIMIT3"
       if leader = npc.variables.get_object("leader", L2PcInstance?)
-        start_quest_timer("TIME_LIMIT4", 150000, npc, nil)
+        start_quest_timer("TIME_LIMIT4", 150_000, npc, nil)
         whisper(npc, leader, NpcString::I_DONT_KNOW_HOW_LONG_ITS_BEEN_SINCE_I_PARTED_COMPANY_WITH_YOU_TIME_DOESNT_SEEM_TO_MOVE_IT_JUST_FEELS_TOO_LONG)
       end
     when "TIME_LIMIT4"
       if leader = npc.variables.get_object("leader", L2PcInstance?)
-        start_quest_timer("TIME_LIMIT5", 150000, npc, nil)
+        start_quest_timer("TIME_LIMIT5", 150_000, npc, nil)
         whisper(npc, leader, NpcString::SORRY_TO_SAY_THIS_BUT_THE_PLACE_YOU_STRUCK_ME_BEFORE_NOW_HURTS_GREATLY)
       end
     when "TIME_LIMIT5"
@@ -78,7 +78,6 @@ class Scripts::Q00454_CompletelyLost < Quest
     when "EXPIRED_TIMER"
       npc.delete_me
     end
-
 
     # For NPC-only timers, player is nil and no further checks or actions are required.
     unless pc
@@ -151,7 +150,6 @@ class Scripts::Q00454_CompletelyLost < Quest
       end
     end
 
-
     html
   end
 
@@ -184,7 +182,7 @@ class Scripts::Q00454_CompletelyLost < Quest
       end
 
       start_quest_timer("CHECK_TIMER", 1000, receiver, nil)
-      start_quest_timer("TIME_LIMIT1", 60000, receiver, nil)
+      start_quest_timer("TIME_LIMIT1", 60_000, receiver, nil)
       receiver.variables["state"] = 2
       receiver.variables["quest_escort"] = 99
     when "SCE_A_SEED_ESCORT_QUEST_SUCCESS"
@@ -237,7 +235,6 @@ class Scripts::Q00454_CompletelyLost < Quest
       cancel_quest_timer("TIME_LIMIT4", receiver, nil)
       cancel_quest_timer("TIME_LIMIT5", receiver, nil)
     end
-
 
     super
   end

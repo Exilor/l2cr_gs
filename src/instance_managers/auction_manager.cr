@@ -2,7 +2,7 @@ require "../models/entity/auction"
 
 module AuctionManager
   extend self
-  extend Loggable
+  include Loggable
 
   private AUCTIONS = [] of Auction
 

@@ -8,8 +8,8 @@ struct NpcBufferSkillData
 
   def initialize(set : StatsSet)
     @skill = SkillHolder.new(set.get_i32("id"), set.get_i32("level"))
-    @initial_delay = set.get_i32("initialDelay", 0) * 1000
-    @delay = set.get_i32("delay") * 1000
+    @initial_delay = set.get_i32("initialDelay", 0) &* 1000
+    @delay = set.get_i32("delay") &* 1000
     @affect_scope = set.get_enum("affectScope", AffectScope)
     @affect_object = set.get_enum("affectObject", AffectObject)
   end

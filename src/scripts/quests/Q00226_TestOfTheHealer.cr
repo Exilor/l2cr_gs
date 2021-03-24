@@ -60,8 +60,7 @@ class Scripts::Q00226_TestOfTheHealer < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -92,9 +91,9 @@ class Scripts::Q00226_TestOfTheHealer < Quest
       end
     when "30473-09.html"
       if qs.memo_state?(10) && has_quest_items?(pc, GOLDEN_STATUE)
-        give_adena(pc, 233490, true)
+        give_adena(pc, 233_490, true)
         give_items(pc, MARK_OF_HEALER, 1)
-        add_exp_and_sp(pc, 738283, 50662)
+        add_exp_and_sp(pc, 738_283, 50_662)
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         html = event
@@ -104,14 +103,14 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         npc = npc.not_nil!
         qs.set_cond(2, true)
         if npc.summoned_npc_count < 1
-          add_attack_desire(add_spawn(npc, TATOMA, npc, true, 200000), pc)
+          add_attack_desire(add_spawn(npc, TATOMA, npc, true, 200_000), pc)
         end
       end
       html = event
     when "30658-02.html"
       if qs.memo_state?(4) && !has_at_least_one_quest_item?(pc, PICTURE_OF_WINDY, WINDYS_PEBBLES, GOLDEN_STATUE)
-        if get_quest_items_count(pc, ADENA) >= 100000
-          take_items(pc, ADENA, 100000)
+        if get_quest_items_count(pc, ADENA) >= 100_000
+          take_items(pc, ADENA, 100_000)
           give_items(pc, PICTURE_OF_WINDY, 1)
           qs.set_cond(7, true)
           html = event
@@ -140,7 +139,7 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         html = event
       end
     when "30665-02.html"
-      if get_quest_items_count(pc, SECRET_LETTER1) + get_quest_items_count(pc, SECRET_LETTER2) + get_quest_items_count(pc, SECRET_LETTER3) + get_quest_items_count(pc, SECRET_LETTER4) == 4
+      if get_quest_items_count(pc, SECRET_LETTER1) &+ get_quest_items_count(pc, SECRET_LETTER2) &+ get_quest_items_count(pc, SECRET_LETTER3) &+ get_quest_items_count(pc, SECRET_LETTER4) == 4
         give_items(pc, CRISTINAS_LETTER, 1)
         take_items(pc, SECRET_LETTER1, 1)
         take_items(pc, SECRET_LETTER2, 1)
@@ -155,14 +154,13 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         npc = npc.not_nil!
         qs.set_cond(11)
         take_items(pc, ORDER_OF_SORIUS, 1)
-        add_spawn(npc, LERO_LIZARDMAN_AGENT, npc, true, 200000)
-        add_spawn(npc, LERO_LIZARDMAN_AGENT, npc, true, 200000)
-        add_spawn(npc, LERO_LIZARDMAN_LEADER, npc, true, 200000)
+        add_spawn(npc, LERO_LIZARDMAN_AGENT, npc, true, 200_000)
+        add_spawn(npc, LERO_LIZARDMAN_AGENT, npc, true, 200_000)
+        add_spawn(npc, LERO_LIZARDMAN_LEADER, npc, true, 200_000)
         play_sound(pc, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
         html = event
       end
     end
-
 
     html
   end
@@ -198,7 +196,6 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
       end
-
     end
 
     super
@@ -229,9 +226,9 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           if has_quest_items?(pc, GOLDEN_STATUE)
             html = "30473-07.html"
           else
-            give_adena(pc, 266980, true)
+            give_adena(pc, 266_980, true)
             give_items(pc, MARK_OF_HEALER, 1)
-            add_exp_and_sp(pc, 1476566, 101324)
+            add_exp_and_sp(pc, 1_476_566, 101_324)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30473-06.html"
@@ -318,9 +315,9 @@ class Scripts::Q00226_TestOfTheHealer < Quest
         if memo_state == 8
           if has_quest_items?(pc, SECRET_LETTER1) && !has_quest_items?(pc, SECRET_LETTER2)
             if npc.summoned_npc_count < 36
-              add_spawn(npc, LERO_LIZARDMAN_ASSASSIN, npc, true, 200000)
-              add_spawn(npc, LERO_LIZARDMAN_ASSASSIN, npc, true, 200000)
-              add_spawn(npc, LERO_LIZARDMAN_ASSASSIN, npc, true, 200000)
+              add_spawn(npc, LERO_LIZARDMAN_ASSASSIN, npc, true, 200_000)
+              add_spawn(npc, LERO_LIZARDMAN_ASSASSIN, npc, true, 200_000)
+              add_spawn(npc, LERO_LIZARDMAN_ASSASSIN, npc, true, 200_000)
               play_sound(pc, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
             end
             qs.set_cond(14)
@@ -328,9 +325,9 @@ class Scripts::Q00226_TestOfTheHealer < Quest
             html = "30661-01.html"
           elsif has_quest_items?(pc, SECRET_LETTER1, SECRET_LETTER2) && !has_quest_items?(pc, SECRET_LETTER3)
             if npc.summoned_npc_count < 36
-              add_spawn(npc, LERO_LIZARDMAN_SNIPER, npc, true, 200000)
-              add_spawn(npc, LERO_LIZARDMAN_SNIPER, npc, true, 200000)
-              add_spawn(npc, LERO_LIZARDMAN_SNIPER, npc, true, 200000)
+              add_spawn(npc, LERO_LIZARDMAN_SNIPER, npc, true, 200_000)
+              add_spawn(npc, LERO_LIZARDMAN_SNIPER, npc, true, 200_000)
+              add_spawn(npc, LERO_LIZARDMAN_SNIPER, npc, true, 200_000)
               play_sound(pc, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
             end
             qs.set_cond(16)
@@ -338,15 +335,15 @@ class Scripts::Q00226_TestOfTheHealer < Quest
             html = "30661-02.html"
           elsif has_quest_items?(pc, SECRET_LETTER1, SECRET_LETTER2, SECRET_LETTER3) && !has_quest_items?(pc, SECRET_LETTER4)
             if npc.summoned_npc_count < 36
-              add_spawn(npc, LERO_LIZARDMAN_WIZARD, npc, true, 200000)
-              add_spawn(npc, LERO_LIZARDMAN_WIZARD, npc, true, 200000)
-              add_spawn(npc, LERO_LIZARDMAN_LORD, npc, true, 200000)
+              add_spawn(npc, LERO_LIZARDMAN_WIZARD, npc, true, 200_000)
+              add_spawn(npc, LERO_LIZARDMAN_WIZARD, npc, true, 200_000)
+              add_spawn(npc, LERO_LIZARDMAN_LORD, npc, true, 200_000)
               play_sound(pc, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
             end
             qs.set_cond(18)
             npc.delete_me
             html = "30661-03.html"
-          elsif get_quest_items_count(pc, SECRET_LETTER1) + get_quest_items_count(pc, SECRET_LETTER2) + get_quest_items_count(pc, SECRET_LETTER3) + get_quest_items_count(pc, SECRET_LETTER4) == 4
+          elsif get_quest_items_count(pc, SECRET_LETTER1) &+ get_quest_items_count(pc, SECRET_LETTER2) &+ get_quest_items_count(pc, SECRET_LETTER3) &+ get_quest_items_count(pc, SECRET_LETTER4) == 4
             qs.set_cond(20, true)
             html = "30661-04.html"
           end
@@ -385,10 +382,10 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           end
         end
       when SAINT_KRISTINA
-        if get_quest_items_count(pc, SECRET_LETTER1) + get_quest_items_count(pc, SECRET_LETTER2) + get_quest_items_count(pc, SECRET_LETTER3) + get_quest_items_count(pc, SECRET_LETTER4) == 4
+        if get_quest_items_count(pc, SECRET_LETTER1) &+ get_quest_items_count(pc, SECRET_LETTER2) &+ get_quest_items_count(pc, SECRET_LETTER3) &+ get_quest_items_count(pc, SECRET_LETTER4) == 4
           html = "30665-01.html"
         elsif memo_state < 9
-          if get_quest_items_count(pc, SECRET_LETTER1) + get_quest_items_count(pc, SECRET_LETTER2) + get_quest_items_count(pc, SECRET_LETTER3) + get_quest_items_count(pc, SECRET_LETTER4) < 4
+          if get_quest_items_count(pc, SECRET_LETTER1) &+ get_quest_items_count(pc, SECRET_LETTER2) &+ get_quest_items_count(pc, SECRET_LETTER3) &+ get_quest_items_count(pc, SECRET_LETTER4) < 4
             html = "30665-03.html"
           end
         elsif memo_state >= 9
@@ -400,8 +397,8 @@ class Scripts::Q00226_TestOfTheHealer < Quest
             html = "30674-01.html"
           elsif !has_at_least_one_quest_item?(pc, SECRET_LETTER1, ORDER_OF_SORIUS)
             if npc.summoned_npc_count < 4
-              add_spawn(npc, LERO_LIZARDMAN_AGENT, npc, true, 200000)
-              add_spawn(npc, LERO_LIZARDMAN_LEADER, npc, true, 200000)
+              add_spawn(npc, LERO_LIZARDMAN_AGENT, npc, true, 200_000)
+              add_spawn(npc, LERO_LIZARDMAN_LEADER, npc, true, 200_000)
             end
             html = "30674-02a.html"
           elsif has_quest_items?(pc, SECRET_LETTER1)
@@ -413,7 +410,6 @@ class Scripts::Q00226_TestOfTheHealer < Quest
           html = "30674-04.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == PRIEST_BANDELLOS
         html = get_already_completed_msg(pc)

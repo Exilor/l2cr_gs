@@ -180,7 +180,6 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
       when State::STARTED
         html = "31740-5.html"
       end
-
     when OSSIAN
       case st.state
       when State::STARTED
@@ -206,9 +205,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
             html = "31741-11.html"
           end
         end
-
       end
-
     when LADD
       case st.state
       when State::STARTED
@@ -218,9 +215,7 @@ class Scripts::Q00246_PossessorOfAPreciousSoul3 < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

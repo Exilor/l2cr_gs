@@ -20,8 +20,7 @@ class Scripts::Q00267_WrathOfVerdure < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31853-04.htm"
@@ -33,7 +32,6 @@ class Scripts::Q00267_WrathOfVerdure < Quest
     when "31853-08.html"
       html = event
     end
-
 
     html
   end
@@ -75,7 +73,6 @@ class Scripts::Q00267_WrathOfVerdure < Quest
         html = "31853-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

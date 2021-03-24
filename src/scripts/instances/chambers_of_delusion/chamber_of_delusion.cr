@@ -8,13 +8,13 @@ abstract class ChamberOfDelusion < AbstractInstance
       @chamber = chamber
       @current_room = 0
       @party_inside = party
-      @banish_task = ThreadPoolManager.schedule_general_at_fixed_rate(BanishTask.new(self), 60000, 60000)
+      @banish_task = ThreadPoolManager.schedule_general_at_fixed_rate(BanishTask.new(self), 60_000, 60_000)
     end
 
     def schedule_room_change(boss_room)
       inst = InstanceManager.get_instance(@chamber.instance_id).not_nil!
       if boss_room
-        next_interval = 60000
+        next_interval = 60_000
       else
         next_interval = (ROOM_CHANGE_INTERVAL + Rnd.rand(ROOM_CHANGE_RANDOM_TIME)) * 1000
       end
@@ -39,7 +39,7 @@ abstract class ChamberOfDelusion < AbstractInstance
       def call
         inst = InstanceManager.get_instance(@world.chamber.instance_id)
 
-        if inst.nil? || inst.instance_end_time - Time.ms < 60000
+        if inst.nil? || inst.instance_end_time - Time.ms < 60_000
           @world.banish_task.try &.cancel
         else
           inst.players.each do |l2id|
@@ -201,7 +201,7 @@ abstract class ChamberOfDelusion < AbstractInstance
       return
 
     # Teleport to raid room 10 min or lesser before instance end time for Tower and Square Chambers
-    elsif is_big_chamber && inst.instance_end_time - Time.ms < 600000
+    elsif is_big_chamber && inst.instance_end_time - Time.ms < 600_000
       new_room = @room_enter_points.size - 1
 
     # 10% chance for teleport to raid room if not here already for Northern, Southern, Western and Eastern Chambers
@@ -224,7 +224,7 @@ abstract class ChamberOfDelusion < AbstractInstance
 
     # Do not schedule room change for Square and Tower Chambers, if raid room is reached
     if is_big_chamber && is_boss_room(world)
-      inst.duration = (inst.instance_end_time - Time.ms) + 1200000 # Add 20 min to instance time if raid room is reached
+      inst.duration = inst.instance_end_time - Time.ms + 1_200_000 # Add 20 min to instance time if raid room is reached
 
       inst.npcs.each do |npc|
         if npc.id == @room_gatekeeper_last
@@ -393,7 +393,6 @@ abstract class ChamberOfDelusion < AbstractInstance
       receiver.do_cast(FAIL_SKILL)
     end
 
-
     nil
   end
 
@@ -404,8 +403,8 @@ abstract class ChamberOfDelusion < AbstractInstance
 
       if is_big_chamber
         mark_restriction(world) # Set reenter restriction
-        if inst.instance_end_time - Time.ms > 300000
-          inst.duration = 300000 # Finish instance in 5 minutes
+        if inst.instance_end_time - Time.ms > 300_000
+          inst.duration = 300_000 # Finish instance in 5 minutes
         end
       else
         world.stop_room_change_task

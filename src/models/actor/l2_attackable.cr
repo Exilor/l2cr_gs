@@ -432,7 +432,6 @@ class L2Attackable < L2Npc
     end
 
     unless info = @aggro_list[target]?
-      debug { "Target #{target} not present in aggro list of #{self}" }
       return
     end
 

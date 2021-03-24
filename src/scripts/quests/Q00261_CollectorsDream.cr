@@ -25,9 +25,8 @@ class Scripts::Q00261_CollectorsDream < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event == "30222-03.htm"
+    return unless pc && (st = get_quest_state(pc, false))
+    if event == "30222-03.htm"
       st.start_quest
       event
     end
@@ -65,9 +64,7 @@ class Scripts::Q00261_CollectorsDream < Quest
           html = "30222-05.html"
         end
       end
-
     end
-
 
     html
   end
@@ -75,10 +72,10 @@ class Scripts::Q00261_CollectorsDream < Quest
   def self.give_newbie_reward(pc : L2PcInstance)
     vars = pc.variables
     if vars["GUIDE_MISSION"]?.nil?
-      vars["GUIDE_MISSION"] = 100000
+      vars["GUIDE_MISSION"] = 100_000
       pc.send_packet(MESSAGE)
-    elsif (vars.get_i32("GUIDE_MISSION") % 100000000) / 10000000 != 1
-      vars["GUIDE_MISSION"] =  vars.get_i32("GUIDE_MISSION") + 10000000
+    elsif (vars.get_i32("GUIDE_MISSION") % 100_000_000) / 10_000_000 != 1
+      vars["GUIDE_MISSION"] =  vars.get_i32("GUIDE_MISSION") + 10_000_000
       pc.send_packet(MESSAGE)
     end
   end

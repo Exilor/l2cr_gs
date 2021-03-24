@@ -25,8 +25,7 @@ class Scripts::Q00284_MuertosFeather < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32166-03.htm"
@@ -46,7 +45,6 @@ class Scripts::Q00284_MuertosFeather < Quest
       qs.exit_quest(true, true)
       html = event
     end
-
 
     html
   end

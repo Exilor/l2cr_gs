@@ -452,7 +452,7 @@ class L2CubicInstance
     @target = target
   end
 
-  def to_log(io : IO)
+  def to_s(io : IO)
     name =
     case @cubic_id
     when STORM_CUBIC then "Storm Cubic"

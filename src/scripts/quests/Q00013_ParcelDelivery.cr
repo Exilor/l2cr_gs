@@ -14,8 +14,7 @@ class Scripts::Q00013_ParcelDelivery < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31274-02.html"
@@ -23,8 +22,8 @@ class Scripts::Q00013_ParcelDelivery < Quest
       st.give_items(PACKAGE, 1)
     when "31539-01.html"
       if st.cond?(1) && st.has_quest_items?(PACKAGE)
-        st.give_adena(157834, true)
-        st.add_exp_and_sp(589092, 58794)
+        st.give_adena(157_834, true)
+        st.add_exp_and_sp(589_092, 58_794)
         st.exit_quest(false, true)
       else
         return "31539-02.html"

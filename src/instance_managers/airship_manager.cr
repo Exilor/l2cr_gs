@@ -2,7 +2,7 @@ require "../models/airship_teleport_list"
 
 module AirshipManager
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   private LOAD_DB = "SELECT * FROM airships"
@@ -13,7 +13,7 @@ module AirshipManager
   private AIRSHIPS = {} of Int32 => L2AirshipInstance
   private TELEPORTS = {} of Int32 => AirshipTeleportList
 
-  private TEMPLATE = L2CharTemplate.new StatsSet {
+  private TEMPLATE = L2CharTemplate.new(StatsSet {
     "npcId" => 9,
     "level" => 0,
     "baseSTR" => 0,
@@ -52,7 +52,7 @@ module AirshipManager
     "baseMpReg" => 3e-3,
     "basePDef" => 100,
     "baseMDef" => 100
-  }
+  })
 
   def get_new_airship(x : Int32, y : Int32, z : Int32, heading : Int32) : L2AirshipInstance
     airship = L2AirshipInstance.new(TEMPLATE)
@@ -186,7 +186,7 @@ module AirshipManager
       return
     end
 
-    all.routes[index + 1]
+    all.routes[index &+ 1]
   end
 
   private def store_in_db(owner_id)

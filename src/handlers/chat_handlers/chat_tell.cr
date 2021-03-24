@@ -2,7 +2,7 @@ module ChatHandler::ChatTell
   extend self
   extend ChatHandler
 
-  def handle_chat(type, pc, target, text)
+  def handle_chat(type : Int32, pc : L2PcInstance, params : String?, text : String)
     if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
       pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)
       return
@@ -13,9 +13,9 @@ module ChatHandler::ChatTell
       return
     end
 
-    return unless target
+    return unless params
 
-    receiver = L2World.get_player(target)
+    receiver = L2World.get_player(params)
 
     if receiver && !receiver.silence_mode?(pc.l2id)
       if Config.jail_disable_chat && receiver.jailed? && !pc.override_chat_conditions?
@@ -52,7 +52,7 @@ module ChatHandler::ChatTell
     end
   end
 
-  def chat_type_list
+  def chat_type_list : Enumerable(Int32)
     {2}
   end
 end

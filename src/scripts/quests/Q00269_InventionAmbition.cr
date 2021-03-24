@@ -27,8 +27,7 @@ class Scripts::Q00269_InventionAmbition < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32486-03.htm"
@@ -66,14 +65,13 @@ class Scripts::Q00269_InventionAmbition < Quest
     when State::STARTED
       if st.has_quest_items?(ENERGY_ORE)
         count = st.get_quest_items_count(ENERGY_ORE)
-        st.give_adena((count * 50) + (count >= 10 ? 2044 : 0), true)
+        st.give_adena((count &* 50) &+ (count >= 10 ? 2044 : 0), true)
         st.take_items(ENERGY_ORE, -1)
         html = "32486-06.html"
       else
         html = "32486-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

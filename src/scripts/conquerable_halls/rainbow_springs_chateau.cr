@@ -84,7 +84,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
     if @rainbow = ClanHallSiegeManager.get_siegable_hall(RAINBOW_SPRINGS)
       delay = @rainbow.not_nil!.next_siege_time
       if delay > -1
-        set_registration_end_string(delay - 3_600_000)
+        set_registration_end_string(delay &- 3_600_000)
         @next_siege = ThreadPoolManager.schedule_general(->set_final_attackers_task, delay)
       else
         warn "No date set for RainBow Springs Chateau Clan hall siege."
@@ -158,7 +158,7 @@ class Scripts::RainbowSpringsChateau < ClanHallSiegeEngine
       # XXX @rainbow.not_nil!.siegeEnds
 
       ThreadPoolManager.schedule_general(->set_final_attackers_task, @rainbow.not_nil!.next_siege_time)
-      set_registration_end_string(@rainbow.not_nil!.next_siege_time + Time.ms - 3_600_000)
+      set_registration_end_string(@rainbow.not_nil!.next_siege_time &+ Time.ms &- 3_600_000)
       # Teleport out of the arenas is made 2 mins after game ends
       ThreadPoolManager.schedule_general(TeleportBack, 120_000)
     end

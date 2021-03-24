@@ -25,15 +25,7 @@ abstract class Condition
     notify_changed
   end
 
-  def test(caster : L2Character, target : L2Character?, skill : Skill?) : Bool
-    test(caster, target, skill, nil)
-  end
-
-  def test(caster : L2Character, target : L2Character?, item : L2Item?) : Bool
-    test(caster, target, nil, nil)
-  end
-
-  def test(caster : L2Character, target : L2Character?, skill : Skill?, item : L2Item?) : Bool
+  def test(caster : L2Character, target : L2Character?, skill : Skill?, item : L2Item? = nil) : Bool
     res = test_impl(caster, target, skill, item)
 
     if @listener && res != @result

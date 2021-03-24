@@ -36,7 +36,6 @@ class Scripts::BlackJudge < AbstractNpcAI
       end
     end
 
-
     html
   end
 end

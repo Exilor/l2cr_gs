@@ -252,7 +252,7 @@ class Scripts::MC_Show < AbstractNpcAI
         when 32433
           auto_chat(npc, MESSAGES[7], Say2::NPC_SHOUT)
           npc.set_intention(AI::MOVE_TO, Location.new(-56698, -56430, -2008, 32768))
-          start_quest_timer("8", 12000, npc, nil)
+          start_quest_timer("8", 12_000, npc, nil)
         else
           cancel_quest_timer("social1", npc, nil)
           npc.set_intention(AI::MOVE_TO, Location.new(-56594, -56064, -2008, 32768))

@@ -1,6 +1,8 @@
 module GameDB
   module ForumDAO
-    include Loggable
+    macro extended
+      include Loggable
+    end
 
     abstract def forums : Hash(String, Forum)
     abstract def save(forum : Forum)

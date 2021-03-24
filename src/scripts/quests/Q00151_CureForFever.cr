@@ -40,6 +40,7 @@ class Scripts::Q00151_CureForFever < Quest
       st.give_items(POISON_SAC, 1)
       st.set_cond(2, true)
     end
+
     super
   end
 
@@ -54,7 +55,7 @@ class Scripts::Q00151_CureForFever < Quest
       when State::STARTED
         if st.cond?(3) && st.has_quest_items?(FEVER_MEDICINE)
           st.give_items(ROUND_SHIELD, 1)
-          st.add_exp_and_sp(13106, 613)
+          st.add_exp_and_sp(13_106, 613)
           st.exit_quest(false, true)
           show_on_screen_msg(pc, NpcString::LAST_DUTY_COMPLETE_N_GO_FIND_THE_NEWBIE_GUIDE, 2, 5000) # TODO: Newbie Guide
           html = "30050-06.html"
@@ -66,7 +67,6 @@ class Scripts::Q00151_CureForFever < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when YOHANES
       if st.started?
         if st.cond?(2) && st.has_quest_items?(POISON_SAC)
@@ -79,7 +79,6 @@ class Scripts::Q00151_CureForFever < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

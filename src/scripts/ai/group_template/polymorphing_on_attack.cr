@@ -44,8 +44,7 @@ class Scripts::PolymorphingOnAttack < AbstractNpcAI
   def on_attack(npc, attacker, damage, is_summon)
     return unless npc.visible? && npc.alive?
     return unless tmp = MOBS[npc.id]?
-    # return unless npc.current_hp <= (npc.max_hp * tmp.hp_percent) / 100
-    return unless npc.hp_percent <= tmp.hp_percent
+    return unless npc.current_hp <= (npc.max_hp * tmp.hp_percent) / 100
     return unless Rnd.rand(100) < tmp.chance
 
     if tmp.messages_index >= 0

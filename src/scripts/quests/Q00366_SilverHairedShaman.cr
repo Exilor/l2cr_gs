@@ -27,10 +27,7 @@ class Scripts::Q00366_SilverHairedShaman < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30111-02.htm"
@@ -42,7 +39,6 @@ class Scripts::Q00366_SilverHairedShaman < Quest
     when "30111-06.html"
       event
     end
-
   end
 
   def on_kill(npc, pc, is_summon)
@@ -64,7 +60,7 @@ class Scripts::Q00366_SilverHairedShaman < Quest
     elsif st.started?
       if has_quest_items?(pc, SAIRONS_SILVER_HAIR)
         item_count = get_quest_items_count(pc, SAIRONS_SILVER_HAIR)
-        give_adena(pc, (item_count * 500) + 29000, true)
+        give_adena(pc, (item_count &* 500) &+ 29_000, true)
         take_items(pc, SAIRONS_SILVER_HAIR, -1)
         html = "30111-04.html"
       else

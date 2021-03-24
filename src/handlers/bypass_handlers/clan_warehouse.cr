@@ -2,7 +2,7 @@ module BypassHandler::ClanWarehouse
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target) : Bool
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     unless target.is_a?(L2WarehouseInstance) || target.is_a?(L2ClanHallManagerInstance)
       return false
     end
@@ -82,7 +82,7 @@ module BypassHandler::ClanWarehouse
     pc.send_packet(wd)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"withdrawc", "withdrawsortedc", "depositc"}
   end
 end

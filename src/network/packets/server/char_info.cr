@@ -74,7 +74,7 @@ class Packets::Outgoing::CharInfo < GameServerPacket
       c 0x0c
 
       d @l2id
-      d template.id + 1_000_000
+      d template.id &+ 1_000_000
       d @pc.karma > 0 ? 1 : 0
       d @x
       d @y
@@ -214,7 +214,7 @@ class Packets::Outgoing::CharInfo < GameServerPacket
 
       h @pc.recom_have
 
-      d @pc.mount_npc_id + 1_000_000
+      d @pc.mount_npc_id &+ 1_000_000
       d @pc.class_id.to_i
       d 0x00 # unk
       c @pc.mounted? ? 0 : @pc.enchant_effect

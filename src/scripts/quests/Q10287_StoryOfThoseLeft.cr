@@ -16,10 +16,7 @@ class Scripts::Q10287_StoryOfThoseLeft < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -66,7 +63,6 @@ class Scripts::Q10287_StoryOfThoseLeft < Quest
         st.exit_quest(false, true)
       end
     end
-
 
     html
   end
@@ -126,7 +122,6 @@ class Scripts::Q10287_StoryOfThoseLeft < Quest
           end
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

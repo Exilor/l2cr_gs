@@ -1,12 +1,13 @@
 module CommunityBoardHandler::FavoriteBoard
   extend self
   extend IParseBoardHandler
+  include Loggable
 
   private SELECT_FAVORITES = "SELECT * FROM `bbs_favorites` WHERE `playerId`=? ORDER BY `favAddDate` DESC"
   private DELETE_FAVORITE = "DELETE FROM `bbs_favorites` WHERE `playerId`=? AND `favId`=?"
   private ADD_FAVORITE = "REPLACE INTO `bbs_favorites`(`playerId`, `favTitle`, `favBypass`) VALUES(?, ?, ?)"
 
-  def parse_command(command, pc)
+  def parse_command(command : String, pc : L2PcInstance) : Bool
     if command.starts_with?("_bbsgetfav")
       list = HtmCache.get_htm(pc, "data/html/CommunityBoard/favorite_list.html").not_nil!
       sb = String::Builder.new
@@ -57,7 +58,7 @@ module CommunityBoardHandler::FavoriteBoard
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"_bbsgetfav", "bbs_add_fav", "_bbsdelfav_"}
   end
 end

@@ -18,6 +18,6 @@ class Q00730_ProtectTheSuppliesSafe < TerritoryWarSuperClass
   end
 
   def get_territory_id_for_this_npc_id(npc_id : Int32) : Int32
-    npc_id - 36510
+    npc_id &- 36510
   end
 end

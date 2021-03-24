@@ -72,8 +72,7 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -139,7 +138,6 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
       end
     end
 
-
     html
   end
 
@@ -148,7 +146,7 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
     if qs && qs.started?
       if npc.script_value?(0) && has_quest_items?(attacker, LEIRYNNS_1ST_ORDER)
         npc.script_value = 1
-        add_attack_desire(add_spawn(NEER_BODYGUARD, npc, true, 200000), attacker)
+        add_attack_desire(add_spawn(NEER_BODYGUARD, npc, true, 200_000), attacker)
       end
     end
 
@@ -160,7 +158,7 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
     if qs && qs.started? && Util.in_range?(1500, npc, killer, true)
       case npc.id
       when HANGMAN_TREE
-        if has_quest_items?(killer, JAXS_DIARY) && !has_quest_items?(killer, MAKELS_MAP) && (get_quest_items_count(killer, TORN_MAP_PIECE_2ND) < 4)
+        if has_quest_items?(killer, JAXS_DIARY) && !has_quest_items?(killer, MAKELS_MAP) && get_quest_items_count(killer, TORN_MAP_PIECE_2ND) < 4
           if get_quest_items_count(killer, TORN_MAP_PIECE_2ND) < 3
             if Rnd.bool
               give_items(killer, TORN_MAP_PIECE_2ND, 1)
@@ -176,7 +174,7 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
           end
         end
       when ROAD_SCAVENGER
-        if has_quest_items?(killer, JAXS_DIARY) && !has_quest_items?(killer, SOLTS_MAP) && (get_quest_items_count(killer, TORN_MAP_PIECE_1ST) < 4)
+        if has_quest_items?(killer, JAXS_DIARY) && !has_quest_items?(killer, SOLTS_MAP) && get_quest_items_count(killer, TORN_MAP_PIECE_1ST) < 4
           if get_quest_items_count(killer, TORN_MAP_PIECE_1ST) < 3
             give_items(killer, TORN_MAP_PIECE_1ST, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -369,9 +367,9 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
         if has_quest_items?(pc, OLD_ORDER)
           html = "30730-01.html"
         elsif has_quest_items?(pc, JAXS_DIARY)
-          if get_quest_items_count(pc, SOLTS_MAP) + get_quest_items_count(pc, MAKELS_MAP) < 2
+          if get_quest_items_count(pc, SOLTS_MAP) &+ get_quest_items_count(pc, MAKELS_MAP) < 2
             html = "30730-02.html"
-          elsif get_quest_items_count(pc, SOLTS_MAP) + get_quest_items_count(pc, MAKELS_MAP) == 2
+          elsif get_quest_items_count(pc, SOLTS_MAP) &+ get_quest_items_count(pc, MAKELS_MAP) == 2
             take_items(pc, LAMBERTS_MAP, 1)
             take_items(pc, JAXS_DIARY, 1)
             take_items(pc, SOLTS_MAP, 1)
@@ -384,7 +382,6 @@ class Scripts::Q00225_TestOfTheSearcher < Quest
           html = "30730-04.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == MASTER_LUTHER
         html = get_already_completed_msg(pc)

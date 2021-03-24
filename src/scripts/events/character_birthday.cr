@@ -68,7 +68,7 @@ class Scripts::CharacterBirthday < Quest
       return "tooclose.htm"
     else
       spawned = add_spawn(32600, pc.x + 10, pc.y + 10, pc.z + 10, 0, false, 0, true)
-      start_quest_timer("despawn_npc", 180000, spawned, pc)
+      start_quest_timer("despawn_npc", 180_000, spawned, pc)
       @spawns &+= 1
     end
 

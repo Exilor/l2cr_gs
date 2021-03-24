@@ -26,7 +26,7 @@ class Scripts::Rignos < AbstractNpcAI
       pc = pc.not_nil!
       if npc.script_value?(0)
         npc.script_value = 1
-        start_quest_timer("TIME_OUT", 1800000, npc, nil)
+        start_quest_timer("TIME_OUT", 1_800_000, npc, nil)
         TIMER.skill.apply_effects(pc, pc)
         if summon = pc.summon
           TIMER.skill.apply_effects(summon, summon)
@@ -45,7 +45,6 @@ class Scripts::Rignos < AbstractNpcAI
     when "TIME_OUT"
       npc.not_nil!.script_value = 0
     end
-
 
     super
   end

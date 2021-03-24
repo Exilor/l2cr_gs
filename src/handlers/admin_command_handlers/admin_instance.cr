@@ -80,7 +80,7 @@ module AdminCommandHandler::AdminInstance
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_setinstance",
       "admin_ghoston",

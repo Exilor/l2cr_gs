@@ -26,6 +26,6 @@ class Packets::Outgoing::ExPCCafePointInfo < GameServerPacket
     c @m_period_type
     d @remain_time
     c @point_type
-    d @time * 3
+    d @time &* 3
   end
 end

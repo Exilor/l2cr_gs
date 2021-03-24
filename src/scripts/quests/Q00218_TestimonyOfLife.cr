@@ -87,8 +87,7 @@ class Scripts::Q00218_TestimonyOfLife < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -173,7 +172,6 @@ class Scripts::Q00218_TestimonyOfLife < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -293,8 +291,6 @@ class Scripts::Q00218_TestimonyOfLife < Quest
           end
         end
       end
-
-
     end
 
     super
@@ -325,9 +321,9 @@ class Scripts::Q00218_TestimonyOfLife < Quest
         elsif has_quest_items?(pc, MOONFLOWER_CHARM)
           html = "30460-06.html"
         elsif has_quest_items?(pc, CAMOMILE_CHARM)
-          give_adena(pc, 342288, true)
+          give_adena(pc, 342_288, true)
           give_items(pc, MARK_OF_LIFE, 1)
-          add_exp_and_sp(pc, 1886832, 125918)
+          add_exp_and_sp(pc, 1_886_832, 125_918)
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = "30460-07.html"
@@ -478,7 +474,6 @@ class Scripts::Q00218_TestimonyOfLife < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == MASTER_CARDIEN
         html = get_already_completed_msg(pc)

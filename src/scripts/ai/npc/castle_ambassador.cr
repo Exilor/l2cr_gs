@@ -54,8 +54,6 @@ class Scripts::CastleAmbassador < AbstractNpcAI
         npc.delete_me
       end
 
-
-
       if html && player
         packet = NpcHtmlMessage.new(npc.l2id)
         packet.html = get_htm(player, html)

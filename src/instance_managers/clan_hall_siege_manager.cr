@@ -2,7 +2,7 @@ require "../models/entity/clan_hall/siegable_hall"
 
 module ClanHallSiegeManager
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   private SQL_LOAD_HALLS = "SELECT * FROM siegable_clanhall"

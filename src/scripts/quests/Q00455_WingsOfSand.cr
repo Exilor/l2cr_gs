@@ -54,10 +54,7 @@ class Scripts::Q00455_WingsOfSand < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if pc.level >= MIN_LEVEL
       case event
@@ -67,7 +64,6 @@ class Scripts::Q00455_WingsOfSand < Quest
         st.start_quest
         html = event
       end
-
     end
 
     html
@@ -97,7 +93,6 @@ class Scripts::Q00455_WingsOfSand < Quest
         give_items(st)
         html = "32864-07.html"
       end
-
     when State::COMPLETED
       if !st.now_available?
         html = "32864-08.html"
@@ -108,7 +103,6 @@ class Scripts::Q00455_WingsOfSand < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

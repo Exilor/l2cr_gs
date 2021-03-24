@@ -1,6 +1,6 @@
 module SummonTable
   extend self
-  extend Loggable
+  include Loggable
 
   private PETS = Concurrent::Map(Int32, Int32).new
   private SERVITORS = Concurrent::Map(Int32, Int32).new
@@ -124,8 +124,6 @@ module SummonTable
       summon.current_mp.to_i32,
       summon.life_time_remaining
     )
-
-    debug { "Saved #{summon}." }
   end
 
   def pets : Concurrent::Map(Int32, Int32)

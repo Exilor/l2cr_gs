@@ -4,6 +4,8 @@ require "../item_containers/inventory"
 require "../l2_extractable_product"
 
 class L2EtcItem < L2Item
+  include Loggable
+
   getter item_type : EtcItemType
   getter handler_name : String?
   getter extractable_items = Slice(L2ExtractableProduct).empty

@@ -22,8 +22,7 @@ class Scripts::Q00271_ProofOfValor < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event.casecmp?("30577-04.htm")
       st.start_quest
@@ -41,7 +40,7 @@ class Scripts::Q00271_ProofOfValor < Quest
       count = st.get_quest_items_count(KASHA_WOLF_FANG)
       amount = Rnd.rand(100) < 25 && count < 49 ? 2 : 1
       st.give_items(KASHA_WOLF_FANG, amount)
-      if count + amount >= 50
+      if count &+ amount >= 50
         st.set_cond(2, true)
       else
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -86,9 +85,7 @@ class Scripts::Q00271_ProofOfValor < Quest
           html = "30577-06.html"
         end
       end
-
     end
-
 
     html
   end

@@ -1,15 +1,15 @@
 module ThreadPoolManager
   extend self
-  extend Loggable
+  include Loggable
 
-  private class_getter(effects_scheduled_thread_pool) { TaskScheduler.new(pool_size: Config.thread_p_effects, error_handler: ->error(Exception)) }
-  private class_getter(general_scheduled_thread_pool) { TaskScheduler.new(pool_size: Config.thread_p_general, error_handler: ->error(Exception)) }
-  private class_getter(event_scheduled_thread_pool)   { TaskScheduler.new(pool_size: Config.thread_e_events, error_handler: ->error(Exception)) }
-  private class_getter(io_packets_thread_pool)        { TaskExecutor.new(pool_size: Config.io_packet_thread_core_size, error_handler: ->error(Exception)) }
-  private class_getter(general_packets_thread_pool)   { TaskExecutor.new(pool_size: Config.general_packet_thread_core_size + 2, error_handler: ->error(Exception)) }
-  private class_getter(general_thread_pool)           { TaskExecutor.new(pool_size: Config.general_thread_core_size, error_handler: ->error(Exception)) }
-  private class_getter(ai_scheduled_thread_pool)      { TaskScheduler.new(pool_size: Config.ai_max_thread, error_handler: ->error(Exception)) }
-  private class_getter(event_thread_pool)             { TaskExecutor.new(pool_size: Config.event_max_thread + 2, error_handler: ->error(Exception)) }
+  private class_getter(effects_scheduled_thread_pool) { TaskScheduler.new(pool_size: Config.thread_p_effects, error_handler: ->Logs.error(Exception)) }
+  private class_getter(general_scheduled_thread_pool) { TaskScheduler.new(pool_size: Config.thread_p_general, error_handler: ->Logs.error(Exception)) }
+  private class_getter(event_scheduled_thread_pool)   { TaskScheduler.new(pool_size: Config.thread_e_events, error_handler: ->Logs.error(Exception)) }
+  private class_getter(io_packets_thread_pool)        { TaskExecutor.new(pool_size: Config.io_packet_thread_core_size, error_handler: ->Logs.error(Exception)) }
+  private class_getter(general_packets_thread_pool)   { TaskExecutor.new(pool_size: Config.general_packet_thread_core_size + 2, error_handler: ->Logs.error(Exception)) }
+  private class_getter(general_thread_pool)           { TaskExecutor.new(pool_size: Config.general_thread_core_size, error_handler: ->Logs.error(Exception)) }
+  private class_getter(ai_scheduled_thread_pool)      { TaskScheduler.new(pool_size: Config.ai_max_thread, error_handler: ->Logs.error(Exception)) }
+  private class_getter(event_thread_pool)             { TaskExecutor.new(pool_size: Config.event_max_thread + 2, error_handler: ->Logs.error(Exception)) }
 
   def schedule_effect(task, delay) : TaskScheduler::DelayedTask
     schedule_delayed(task, delay, effects_scheduled_thread_pool)

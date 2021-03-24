@@ -81,11 +81,11 @@ module MapRegionManager
   end
 
   def get_map_region_x(x : Int32) : Int32
-    (x >> 15) + 9 + 11
+    (x >> 15) &+ 9 &+ 11
   end
 
   def get_map_region_y(y : Int32) : Int32
-    (y >> 15) + 10 + 8
+    (y >> 15) &+ 10 &+ 8
   end
 
   def get_closest_town_name(char : L2Character) : String
@@ -169,7 +169,7 @@ module MapRegionManager
         if where.siegeflag?
           castle = CastleManager.get_castle(pc)
           fort = FortManager.get_fort(pc)
-          clan_hall = ClanHallManager.get_nearby_abstract_hall(pc.x, pc.y, 10000)
+          clan_hall = ClanHallManager.get_nearby_abstract_hall(pc.x, pc.y, 10_000)
           if tw_flag = TerritoryWarManager.get_hq_for_clan(clan)
             return tw_flag.location
           elsif castle

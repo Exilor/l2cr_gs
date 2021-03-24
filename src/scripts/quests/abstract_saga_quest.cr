@@ -68,7 +68,7 @@ abstract class AbstractSagaQuest < Quest
         archon = st2.add_spawn(@mob[1], xx, yy, zz)
         add_spawn(st2, archon)
         st2.set("spawned", "1")
-        st2.start_quest_timer("Archon Hellisha has despawned", 600000, archon)
+        st2.start_quest_timer("Archon Hellisha has despawned", 600_000, archon)
         auto_chat(archon, @text[13].sub("PLAYERNAME", st2.player.name))
         unless archon.is_a?(L2Attackable)
           raise "#{archon} is not a L2Attackable"
@@ -113,8 +113,8 @@ abstract class AbstractSagaQuest < Quest
         html = "0-08.htm"
       else
         take_items(pc, @items[10], -1)
-        add_exp_and_sp(pc, 2299404, 0)
-        give_adena(pc, 5000000, true)
+        add_exp_and_sp(pc, 2_299_404, 0)
+        give_adena(pc, 5_000_000, true)
         give_items(pc, 6622, 1)
         klass = get_class_id(pc)
         prev_class = get_prev_class(pc)
@@ -224,9 +224,9 @@ abstract class AbstractSagaQuest < Quest
         st.set("Quest0", "1")
         st.set("Quest1", "45")
         st.start_repeating_quest_timer("Mob_3 Timer 1", 500, mob3)
-        st.start_quest_timer("Mob_3 has despawned", 59000, mob3)
+        st.start_quest_timer("Mob_3 has despawned", 59_000, mob3)
         st.start_quest_timer("Mob_2 Timer 1", 500, mob2)
-        st.start_quest_timer("Mob_2 has despawned", 60000, mob2)
+        st.start_quest_timer("Mob_2 has despawned", 60_000, mob2)
         html = "10-02.htm"
       elsif st.get_int("Quest1") == 45
         html = "10-03.htm"
@@ -278,11 +278,11 @@ abstract class AbstractSagaQuest < Quest
       return
     when "Mob_2 Timer 2"
       auto_chat(npc, @text[8].sub("PLAYERNAME", pc.name))
-      st.start_quest_timer("Mob_2 Timer 3", 10000, npc)
+      st.start_quest_timer("Mob_2 Timer 3", 10_000, npc)
       return
     when "Mob_2 Timer 3"
       if st.get_int("Quest0") == 0
-        st.start_quest_timer("Mob_2 Timer 3", 13000, npc)
+        st.start_quest_timer("Mob_2 Timer 3", 13_000, npc)
         if Rnd.bool
           auto_chat(npc, @text[9].sub("PLAYERNAME", pc.name))
         else
@@ -291,7 +291,7 @@ abstract class AbstractSagaQuest < Quest
       end
       return
     when "Mob_2 has despawned"
-      st.set("Quest1", (st.get_int("Quest1") + 1).to_s)
+      st.set("Quest1", (st.get_int("Quest1") &+ 1).to_s)
       if st.get_int("Quest0") == 1 || st.get_int("Quest0") == 2 || st.get_int("Quest1") > 3
         st.set("Quest0", "0")
         # TODO this IF will never be true
@@ -318,7 +318,7 @@ abstract class AbstractSagaQuest < Quest
       st = get_quest_state!(pc, false)
       npc_id = npc.id
       if npc_id == @mob[2] && st == st2 && cond == 17
-        quest0 = st.get_int("Quest0") + 1
+        quest0 = st.get_int("Quest0") &+ 1
         if quest0 == 1
           auto_chat(npc, @text[16].sub("PLAYERNAME", pc.name))
         end
@@ -452,7 +452,7 @@ abstract class AbstractSagaQuest < Quest
         if st1 && st1.cond?(6)
           kills = st1.get_int("kills")
           if kills < 9
-            st1.set("kills", (kills + 1).to_s)
+            st1.set("kills", (kills &+ 1).to_s)
           else
             st1.give_items(@items[5], 1)
             st.not_nil!.set_cond(7, true)
@@ -655,8 +655,8 @@ abstract class AbstractSagaQuest < Quest
             html = "0-09.htm"
             unless get_class_id(pc).between?(131, 135) # in Kamael quests, npc wants to chat for a bit before changing class
               st.exit_quest(false)
-              add_exp_and_sp(pc, 2299404, 0)
-              give_adena(pc, 5000000, true)
+              add_exp_and_sp(pc, 2_299_404, 0)
+              give_adena(pc, 5_000_000, true)
               give_items(pc, 6622, 1) # XXX rewardItems?
               class_id = get_class_id(pc)
               prev_class = get_prev_class(pc)

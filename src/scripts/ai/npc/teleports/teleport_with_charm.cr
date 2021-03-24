@@ -34,7 +34,6 @@ class Scripts::TeleportWithCharm < AbstractNpcAI
       end
     end
 
-
     super
   end
 end

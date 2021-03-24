@@ -40,7 +40,7 @@ class Scripts::QueenAnt < AbstractNpcAI
     info = GrandBossManager.get_stats_set(QUEEN).not_nil!
     status = GrandBossManager.get_boss_status(QUEEN)
     if status == DEAD
-      temp = info.get_i64("respawn_time") - Time.ms
+      temp = info.get_i64("respawn_time") &- Time.ms
       if temp > 0
         start_quest_timer("queen_unlock", temp, nil, nil)
       else
@@ -217,8 +217,8 @@ class Scripts::QueenAnt < AbstractNpcAI
       GrandBossManager.set_boss_status(QUEEN, DEAD)
       min = -Config.queen_ant_spawn_random
       max = Config.queen_ant_spawn_random
-      respawn_time = Config.queen_ant_spawn_interval + Rnd.rand(min..max)
-      respawn_time *= 3_600_000
+      respawn_time = Config.queen_ant_spawn_interval &+ Rnd.rand(min..max)
+      respawn_time &*= 3_600_000
       start_quest_timer("queen_unlock", respawn_time, nil, nil)
       cancel_quest_timer("action", npc, nil)
       cancel_quest_timer("heal", nil, nil)
@@ -234,7 +234,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       if npc_id == ROYAL
         mob = npc.as(L2MonsterInstance)
         if leader = mob.leader
-          leader.minion_list.on_minion_die(mob, (280 + Rnd.rand(40)) * 1000)
+          leader.minion_list.on_minion_die(mob, (280 &+ Rnd.rand(40)) &* 1000)
         end
       elsif npc_id == NURSE
         mob = npc.as(L2MonsterInstance)

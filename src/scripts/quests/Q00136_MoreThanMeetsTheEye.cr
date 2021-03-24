@@ -47,8 +47,7 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -67,7 +66,7 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
       st.set("talked", "2")
     when "30832-19.html"
       st.give_items(TRANSFORM_BOOK, 1)
-      st.give_adena(67550, true)
+      st.give_adena(67_550, true)
       st.exit_quest(false, true)
     when "30701-03.html"
       st.set_cond(3, true)
@@ -86,7 +85,7 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
 
     npc_id = npc.id
     if npc_id != GLASS_JAGUAR && st.cond?(3)
-      if npc_id == MIRROR && st.get_quest_items_count(ECTOPLASM) + 2 < ECTOPLASM_COUNT
+      if npc_id == MIRROR && st.get_quest_items_count(ECTOPLASM) &+ 2 < ECTOPLASM_COUNT
         count = 2
       else
         count = 1
@@ -94,7 +93,7 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
 
       index = npc_id - GHOST1
 
-      if Rnd.rand(1000) < CHANCES[index] && st.get_quest_items_count(ECTOPLASM) + count < ECTOPLASM_COUNT
+      if Rnd.rand(1000) < CHANCES[index] && st.get_quest_items_count(ECTOPLASM) &+ count < ECTOPLASM_COUNT
         st.give_items(ECTOPLASM, 1)
       end
       give_item(st, ECTOPLASM, count, ECTOPLASM_COUNT, 4)
@@ -146,11 +145,9 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
             html = "30832-16.html"
           end
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when ERRICKIN
       if st.started?
         case st.cond
@@ -192,7 +189,6 @@ class Scripts::Q00136_MoreThanMeetsTheEye < Quest
         end
       end
     end
-
 
     html
   end

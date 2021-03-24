@@ -25,19 +25,14 @@ abstract class AbstractResidence < ListenersContainer
   end
 
   def give_residential_skills(pc)
-    @residential_skills.each do |sh|
-      pc.add_skill(sh.skill, false)
-    end
+    @residential_skills.each { |sh| pc.add_skill(sh.skill, false) }
   end
 
   def remove_residential_skills(pc)
-    @residential_skills.each do |sh|
-      pc.remove_skill(sh.skill, false)
-    end
+    @residential_skills.each { |sh| pc.remove_skill(sh.skill, false) }
   end
 
-  def to_log(io : IO)
-    super
-    io.print('(', name, ')')
+  def to_s(io : IO)
+    io.print(self.class, '(', name, ')')
   end
 end

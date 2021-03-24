@@ -29,8 +29,7 @@ class Scripts::Q00316_DestroyPlagueCarriers < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30155-04.htm"
@@ -44,7 +43,6 @@ class Scripts::Q00316_DestroyPlagueCarriers < Quest
     when "30155-09.html"
       html = event
     end
-
 
     html
   end
@@ -86,8 +84,8 @@ class Scripts::Q00316_DestroyPlagueCarriers < Quest
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         wererats = get_quest_items_count(pc, WERERAT_FANG)
         foulclaws = get_quest_items_count(pc, VAROOL_FOULCLAW_FANG)
-        adena = (wererats * 30) + (foulclaws * 10000)
-        if wererats + foulclaws >= 10
+        adena = (wererats &* 30) &+ (foulclaws &* 10_000)
+        if wererats &+ foulclaws >= 10
           adena &+= 5000
         end
         give_adena(pc, adena, true)

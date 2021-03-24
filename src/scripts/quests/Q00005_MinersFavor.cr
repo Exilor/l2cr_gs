@@ -22,11 +22,7 @@ class Scripts::Q00005_MinersFavor < Quest
     add_start_npc(BOLTER)
     add_talk_id(BOLTER, SHARI, GARITA, REED, BRUNON)
     register_quest_items(
-      BOLTERS_LIST,
-      MINING_BOOTS,
-      MINERS_PICK,
-      BOOMBOOM_POWDER,
-      REDSTONE_BEER,
+      BOLTERS_LIST,  MINING_BOOTS, MINERS_PICK, BOOMBOOM_POWDER, REDSTONE_BEER,
       BOLTERS_SMELLY_SOCKS
     )
   end

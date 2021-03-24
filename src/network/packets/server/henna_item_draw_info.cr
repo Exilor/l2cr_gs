@@ -11,16 +11,16 @@ class Packets::Outgoing::HennaItemDrawInfo < GameServerPacket
     d @henna.allowed_class?(@pc.class_id) ? 0x01 : 0x00
     q @pc.adena
     d @pc.int
-    c @pc.int + @henna.int
+    c @pc.int &+ @henna.int
     d @pc.str
-    c @pc.str + @henna.str
+    c @pc.str &+ @henna.str
     d @pc.con
-    c @pc.con + @henna.con
+    c @pc.con &+ @henna.con
     d @pc.men
-    c @pc.men + @henna.men
+    c @pc.men &+ @henna.men
     d @pc.dex
-    c @pc.dex + @henna.dex
+    c @pc.dex &+ @henna.dex
     d @pc.wit
-    c @pc.wit + @henna.wit
+    c @pc.wit &+ @henna.wit
   end
 end

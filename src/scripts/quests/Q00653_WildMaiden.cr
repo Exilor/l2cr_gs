@@ -15,10 +15,7 @@ class Scripts::Q00653_WildMaiden < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event == "32013-03.html"
       html = event
@@ -47,7 +44,6 @@ class Scripts::Q00653_WildMaiden < Quest
       when State::STARTED
         html = "32013-02.htm"
       end
-
     when GALIBREDO
       if st.started?
         st.give_adena(2553, true)
@@ -55,7 +51,6 @@ class Scripts::Q00653_WildMaiden < Quest
         html = "30181-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

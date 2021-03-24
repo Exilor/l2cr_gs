@@ -193,10 +193,10 @@ module ZoneManager
 
         L2World.regions.each_with_index do |regions, x|
           regions.each_with_index do |reg, y|
-            ax = (x - L2World::OFFSET_X) << L2World::SHIFT_BY
-            bx = (x + 1 - L2World::OFFSET_X) << L2World::SHIFT_BY
-            ay = (y - L2World::OFFSET_Y) << L2World::SHIFT_BY
-            by = (y + 1 - L2World::OFFSET_Y) << L2World::SHIFT_BY
+            ax = (x &- L2World::OFFSET_X) << L2World::SHIFT_BY
+            bx = (x &+ 1 &- L2World::OFFSET_X) << L2World::SHIFT_BY
+            ay = (y &- L2World::OFFSET_Y) << L2World::SHIFT_BY
+            by = (y &+ 1 &- L2World::OFFSET_Y) << L2World::SHIFT_BY
 
             if temp.zone.intersects_rectangle?(ax, bx, ay, by)
               reg.add_zone(temp)

@@ -1,6 +1,8 @@
 module GameDB
   module SubclassDAO
-    include Loggable
+    macro extended
+      include Loggable
+    end
 
     abstract def update(pc : L2PcInstance)
     abstract def insert(pc : L2PcInstance, new_class : Subclass) : Bool

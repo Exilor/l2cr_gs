@@ -33,10 +33,7 @@ class Scripts::Q00700_CursedLife < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32560-02.htm"
@@ -56,7 +53,6 @@ class Scripts::Q00700_CursedLife < Quest
       html = event
     end
 
-
     html
   end
 
@@ -70,13 +66,13 @@ class Scripts::Q00700_CursedLife < Quest
       bones = st.get_quest_items_count(SWALLOWED_BONES)
       ribs = st.get_quest_items_count(SWALLOWED_STERNUM)
       skulls = st.get_quest_items_count(SWALLOWED_SKULL)
-      sum = bones + ribs + skulls
+      sum = bones &+ ribs &+ skulls
       if sum > 0
-        adena = bones * SWALLOWED_BONES_ADENA
-        adena += ribs * SWALLOWED_STERNUM_ADENA
-        adena += skulls * SWALLOWED_SKULL_ADENA
+        adena = bones &* SWALLOWED_BONES_ADENA
+        adena &+= ribs &* SWALLOWED_STERNUM_ADENA
+        adena &+= skulls &* SWALLOWED_SKULL_ADENA
         if sum >= 10
-          adena += BONUS
+          adena &+= BONUS
         end
         st.give_adena(adena, true)
         take_items(pc, -1, {SWALLOWED_BONES, SWALLOWED_STERNUM, SWALLOWED_SKULL})
@@ -85,7 +81,6 @@ class Scripts::Q00700_CursedLife < Quest
         html = "32560-06.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -102,17 +97,17 @@ class Scripts::Q00700_CursedLife < Quest
         elsif chance < 949
           amount = 3
         elsif chance < 966
-          amount = Rnd.rand(5) + 4
+          amount = Rnd.rand(5) &+ 4
         elsif chance < 985
-          amount = Rnd.rand(9) + 4
+          amount = Rnd.rand(9) &+ 4
         elsif chance < 993
-          amount = Rnd.rand(7) + 13
+          amount = Rnd.rand(7) &+ 13
         elsif chance < 997
-          amount = Rnd.rand(15) + 9
+          amount = Rnd.rand(15) &+ 9
         elsif chance < 999
-          amount = Rnd.rand(23) + 53
+          amount = Rnd.rand(23) &+ 53
         else
-          amount = Rnd.rand(49) + 76
+          amount = Rnd.rand(49) &+ 76
         end
         st.give_items(SWALLOWED_BONES, amount)
         chance = Rnd.rand(1000)
@@ -123,24 +118,24 @@ class Scripts::Q00700_CursedLife < Quest
         elsif chance < 836
           amount = 3
         elsif chance < 985
-          amount = Rnd.rand(2) + 4
+          amount = Rnd.rand(2) &+ 4
         elsif chance < 995
-          amount = Rnd.rand(4) + 5
+          amount = Rnd.rand(4) &+ 5
         else
-          amount = Rnd.rand(8) + 6
+          amount = Rnd.rand(8) &+ 6
         end
         st.give_items(SWALLOWED_STERNUM, amount)
         chance = Rnd.rand(1000)
         if chance < 185
-          amount = Rnd.rand(2) + 1
+          amount = Rnd.rand(2) &+ 1
         elsif chance < 370
-          amount = Rnd.rand(6) + 2
+          amount = Rnd.rand(6) &+ 2
         elsif chance < 570
-          amount = Rnd.rand(6) + 7
+          amount = Rnd.rand(6) &+ 7
         elsif chance < 850
-          amount = Rnd.rand(6) + 12
+          amount = Rnd.rand(6) &+ 12
         else
-          amount = Rnd.rand(6) + 17
+          amount = Rnd.rand(6) &+ 17
         end
         st.give_items(SWALLOWED_SKULL, amount)
         st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

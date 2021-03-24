@@ -42,7 +42,7 @@ class Scripts::MasterOfEnchanting < LongTimeEvent
 
     html = event
     if event.casecmp?("buy_staff")
-      if !has_quest_items?(pc, MASTER_YOGI_STAFF) && get_quest_items_count(pc, Inventory::ADENA_ID) > STAFF_PRICE
+      if !has_quest_items?(pc, MASTER_YOGI_STAFF) && pc.adena > STAFF_PRICE
         take_items(pc, Inventory::ADENA_ID, STAFF_PRICE)
         give_items(pc, MASTER_YOGI_STAFF, 1)
         html = "32599-staffbuyed.htm"
@@ -59,10 +59,10 @@ class Scripts::MasterOfEnchanting < LongTimeEvent
       reuse = value.empty? ? 0i64 : value.to_i64
 
       if cur_time > reuse
-        if get_quest_items_count(pc, Inventory::ADENA_ID) > SCROLL_24_PRICE
+        if pc.adena > SCROLL_24_PRICE
           take_items(pc, Inventory::ADENA_ID, SCROLL_24_PRICE)
           give_items(pc, MASTER_YOGI_SCROLL, 24)
-          save_global_quest_var(pc.account_name, (Time.ms + (SCROLL_24_TIME * 3_600_000)).to_s)
+          save_global_quest_var(pc.account_name, (Time.ms &+ (SCROLL_24_TIME &* 3_600_000)).to_s)
           html = "32599-scroll24.htm"
         else
           html = "32599-s24-no.htm"
@@ -85,10 +85,10 @@ class Scripts::MasterOfEnchanting < LongTimeEvent
         else
           # Little glitch. There is no SystemMessage with seconds only.
           # If time is less than 1 minute pc can buy scrolls
-          if get_quest_items_count(pc, Inventory::ADENA_ID) > SCROLL_24_PRICE
+          if pc.adena > SCROLL_24_PRICE
             take_items(pc, Inventory::ADENA_ID, SCROLL_24_PRICE)
             give_items(pc, MASTER_YOGI_SCROLL, 24)
-            save_global_quest_var(pc.account_name, (Time.ms + (SCROLL_24_TIME * 3_600_000)).to_s)
+            save_global_quest_var(pc.account_name, (Time.ms &+ (SCROLL_24_TIME &* 3_600_000)).to_s)
             html = "32599-scroll24.htm"
           else
             html = "32599-s24-no.htm"
@@ -96,7 +96,7 @@ class Scripts::MasterOfEnchanting < LongTimeEvent
         end
       end
     elsif event.casecmp?("buy_scroll_1")
-      if get_quest_items_count(pc, Inventory::ADENA_ID) > SCROLL_1_PRICE
+      if pc.adena > SCROLL_1_PRICE
         take_items(pc, Inventory::ADENA_ID, SCROLL_1_PRICE)
         give_items(pc, MASTER_YOGI_SCROLL, 1)
         html = "32599-scroll-ok.htm"
@@ -104,7 +104,7 @@ class Scripts::MasterOfEnchanting < LongTimeEvent
         html = "32599-s1-no.htm"
       end
     elsif event.casecmp?("buy_scroll_10")
-      if get_quest_items_count(pc, Inventory::ADENA_ID) > SCROLL_10_PRICE
+      if pc.adena > SCROLL_10_PRICE
         take_items(pc, Inventory::ADENA_ID, SCROLL_10_PRICE)
         give_items(pc, MASTER_YOGI_SCROLL, 10)
         html = "32599-scroll-ok.htm"

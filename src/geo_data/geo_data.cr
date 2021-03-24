@@ -5,7 +5,7 @@ require "../models/zones/geometry/line_point_iterator_3d"
 
 module GeoData
   extend self
-  extend Loggable
+  include Loggable
 
   private ELEVATED_SEE_OVER_DISTANCE = 2
   private MAX_SEE_OVER_HEIGHT = 48
@@ -51,23 +51,23 @@ module GeoData
     can = true
 
     if nswe & NSWE::NORTH_EAST == NSWE::NORTH_EAST
-      can = check_nearest_nswe(x, y &- 1, z, NSWE::EAST) &&
-        check_nearest_nswe(x &+ 1, y, z, NSWE::NORTH)
+      can = check_nearest_nswe(x, y - 1, z, NSWE::EAST) &&
+        check_nearest_nswe(x + 1, y, z, NSWE::NORTH)
     end
 
     if can && nswe & NSWE::NORTH_WEST == NSWE::NORTH_WEST
-      can = check_nearest_nswe(x, y &- 1, z, NSWE::WEST) &&
-        check_nearest_nswe(x, y &- 1, z, NSWE::NORTH)
+      can = check_nearest_nswe(x, y - 1, z, NSWE::WEST) &&
+        check_nearest_nswe(x, y - 1, z, NSWE::NORTH)
     end
 
     if can && nswe & NSWE::SOUTH_EAST == NSWE::SOUTH_EAST
-      can = check_nearest_nswe(x, y &+ 1, z, NSWE::EAST) &&
-        check_nearest_nswe(x &+ 1, y, z, NSWE::SOUTH)
+      can = check_nearest_nswe(x, y + 1, z, NSWE::EAST) &&
+        check_nearest_nswe(x + 1, y, z, NSWE::SOUTH)
     end
 
     if can && nswe & NSWE::SOUTH_WEST == NSWE::SOUTH_WEST
-      can = check_nearest_nswe(x, y &+ 1, z, NSWE::WEST) &&
-        check_nearest_nswe(x &- 1, y, z, NSWE::SOUTH)
+      can = check_nearest_nswe(x, y + 1, z, NSWE::WEST) &&
+        check_nearest_nswe(x - 1, y, z, NSWE::SOUTH)
     end
 
     can && check_nearest_nswe(x, y, z, nswe)
@@ -116,9 +116,9 @@ module GeoData
       return z
     end
 
-    next_lower_z = get_next_lower_z(geo_x, geo_y, z &+ 20).to_i
+    next_lower_z = get_next_lower_z(geo_x, geo_y, z + 20).to_i
 
-    (next_lower_z &- z).abs <= SPAWN_Z_DELTA_LIMIT ? next_lower_z : z
+    (next_lower_z - z).abs <= SPAWN_Z_DELTA_LIMIT ? next_lower_z : z
   end
 
   def can_see_target?(char : L2Object, target : L2Object?) : Bool
@@ -194,30 +194,30 @@ module GeoData
         cur_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, cur_x, cur_y, nswe)
 
         if pt_index < ELEVATED_SEE_OVER_DISTANCE
-          max_height = z &+ MAX_SEE_OVER_HEIGHT
+          max_height = z + MAX_SEE_OVER_HEIGHT
         else
-          max_height = bee_cur_z &+ MAX_SEE_OVER_HEIGHT
+          max_height = bee_cur_z + MAX_SEE_OVER_HEIGHT
         end
 
         can_see_through = false
 
         if cur_geo_z <= max_height
           if nswe & NSWE::NORTH_EAST == NSWE::NORTH_EAST
-            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y &- 1, NSWE::EAST)
-            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x &+ 1, prev_y, NSWE::NORTH)
-            can_see_through = north_geo_z <= max_height && east_geo_z <= max_height && north_geo_z <= get_nearest_z(prev_x, prev_y &- 1, bee_cur_z) && east_geo_z <= get_nearest_z(prev_x &+ 1, prev_y, bee_cur_z)
+            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, NSWE::EAST)
+            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, NSWE::NORTH)
+            can_see_through = north_geo_z <= max_height && east_geo_z <= max_height && north_geo_z <= get_nearest_z(prev_x, prev_y - 1, bee_cur_z) && east_geo_z <= get_nearest_z(prev_x + 1, prev_y, bee_cur_z)
           elsif nswe & NSWE::NORTH_WEST == NSWE::NORTH_WEST
-            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y &- 1, NSWE::WEST)
-            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x &- 1, prev_y, NSWE::NORTH)
-            can_see_through = north_geo_z <= max_height && west_geo_z <= max_height && north_geo_z <= get_nearest_z(prev_x, prev_y &- 1, bee_cur_z) && west_geo_z <= get_nearest_z(prev_x &- 1, prev_y, bee_cur_z)
+            north_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y - 1, NSWE::WEST)
+            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, NSWE::NORTH)
+            can_see_through = north_geo_z <= max_height && west_geo_z <= max_height && north_geo_z <= get_nearest_z(prev_x, prev_y - 1, bee_cur_z) && west_geo_z <= get_nearest_z(prev_x - 1, prev_y, bee_cur_z)
           elsif nswe & NSWE::SOUTH_EAST == NSWE::SOUTH_EAST
-            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y &+ 1, NSWE::EAST)
-            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x &+ 1, prev_y, NSWE::SOUTH)
-            can_see_through = south_geo_z <= max_height && east_geo_z <= max_height && south_geo_z <= get_nearest_z(prev_x, prev_y &+ 1, bee_cur_z) && east_geo_z <= get_nearest_z(prev_x &+ 1, prev_y, bee_cur_z)
+            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, NSWE::EAST)
+            east_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x + 1, prev_y, NSWE::SOUTH)
+            can_see_through = south_geo_z <= max_height && east_geo_z <= max_height && south_geo_z <= get_nearest_z(prev_x, prev_y + 1, bee_cur_z) && east_geo_z <= get_nearest_z(prev_x + 1, prev_y, bee_cur_z)
           elsif nswe & NSWE::SOUTH_WEST == NSWE::SOUTH_WEST
-            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y &+ 1, NSWE::WEST)
-            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x &- 1, prev_y, NSWE::SOUTH)
-            can_see_through = south_geo_z <= max_height && west_geo_z <= max_height && south_geo_z <= get_nearest_z(prev_x, prev_y &+ 1, bee_cur_z) && west_geo_z <= get_nearest_z(prev_x &- 1, prev_y, bee_cur_z)
+            south_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x, prev_y + 1, NSWE::WEST)
+            west_geo_z = get_los_geo_z(prev_x, prev_y, prev_geo_z, prev_x - 1, prev_y, NSWE::SOUTH)
+            can_see_through = south_geo_z <= max_height && west_geo_z <= max_height && south_geo_z <= get_nearest_z(prev_x, prev_y + 1, bee_cur_z) && west_geo_z <= get_nearest_z(prev_x - 1, prev_y, bee_cur_z)
           else
             can_see_through = true
           end
@@ -231,7 +231,7 @@ module GeoData
       prev_x = cur_x
       prev_y = cur_y
       prev_geo_z = cur_geo_z
-      pt_index &+= 1
+      pt_index += 1
     end
 
     true

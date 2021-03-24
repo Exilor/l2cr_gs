@@ -2,7 +2,7 @@ module ChatHandler::ChatPetition
   extend self
   extend ChatHandler
 
-  def handle_chat(type, pc, params, text)
+  def handle_chat(type : Int32, pc : L2PcInstance, target : String?, text : String)
     if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
       pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)
       return
@@ -16,7 +16,7 @@ module ChatHandler::ChatPetition
     PetitionManager.send_active_petition_message(pc, text)
   end
 
-  def chat_type_list
+  def chat_type_list : Enumerable(Int32)
     {6, 7}
   end
 end

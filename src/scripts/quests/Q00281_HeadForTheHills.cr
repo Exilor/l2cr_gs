@@ -43,8 +43,7 @@ class Scripts::Q00281_HeadForTheHills < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32173-03.htm"
@@ -53,7 +52,7 @@ class Scripts::Q00281_HeadForTheHills < Quest
     when "32173-06.html"
       if st.has_quest_items?(CLAWS)
         claws = st.get_quest_items_count(CLAWS)
-        st.give_adena(((claws * 23) + (claws >= 10 ? 400 : 0)), true)
+        st.give_adena(((claws &* 23) &+ (claws >= 10 ? 400 : 0)), true)
         st.take_items(CLAWS, -1)
         self.class.give_newbie_reward(pc)
         event
@@ -80,7 +79,6 @@ class Scripts::Q00281_HeadForTheHills < Quest
         "32173-10.html"
       end
     end
-
   end
 
   def on_kill(npc, killer, is_summon)
@@ -125,7 +123,7 @@ class Scripts::Q00281_HeadForTheHills < Quest
     if !vars.has_key?("GUIDE_MISSION")
       vars["GUIDE_MISSION"] = 1000
       pc.send_packet(MESSAGE)
-    elsif (vars.get_i32("GUIDE_MISSION") % 10000) / 1000 != 1
+    elsif (vars.get_i32("GUIDE_MISSION") % 10_000) / 1000 != 1
       vars["GUIDE_MISSION"] = vars.get_i32("GUIDE_MISSION") + 1000
       pc.send_packet(MESSAGE)
     end

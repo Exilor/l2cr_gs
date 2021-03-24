@@ -2,7 +2,7 @@ module BypassHandler::PlayerHelp
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false if command.size < 13
 
     path = command.from(12)
@@ -22,7 +22,7 @@ module BypassHandler::PlayerHelp
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"player_help"}
   end
 end

@@ -2,7 +2,7 @@ module UserCommandHandler::PartyInfo
   extend self
   extend UserCommandHandler
 
-  def use_user_command(id, pc)
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
     return false unless id == commands[0]
 
     pc.send_packet(SystemMessageId::PARTY_INFORMATION)
@@ -21,7 +21,6 @@ module UserCommandHandler::PartyInfo
         pc.send_packet(SystemMessageId::LOOTING_BY_TURN_INCLUDE_SPOIL)
       end
 
-
       unless party.leader?(pc)
         sm = Packets::Outgoing::SystemMessage.party_leader_c1
         sm.add_pc_name(party.leader)
@@ -36,7 +35,7 @@ module UserCommandHandler::PartyInfo
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {81}
   end
 end

@@ -21,10 +21,9 @@ class Scripts::Q00122_OminousNews < Quest
       st.start_quest
     when "32017-02.html"
       st.give_adena(8923, true)
-      st.add_exp_and_sp(45151, 2310)
+      st.add_exp_and_sp(45_151, 2310)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -41,13 +40,11 @@ class Scripts::Q00122_OminousNews < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when KARUDA
       if st.started?
         html = "32017-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

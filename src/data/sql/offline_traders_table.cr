@@ -1,6 +1,6 @@
 module OfflineTradersTable
   extend self
-  extend Loggable
+  include Loggable
 
   private SAVE_OFFLINE_STATUS = "INSERT INTO character_offline_trade (`charId`,`time`,`type`,`title`) VALUES (?,?,?,?)"
   private SAVE_ITEMS = "INSERT INTO character_offline_trade_items (`charId`,`item`,`count`,`price`) VALUES (?,?,?,?)"

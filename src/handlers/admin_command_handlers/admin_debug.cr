@@ -35,7 +35,7 @@ module AdminCommandHandler::AdminDebug
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_debug"}
   end
 end

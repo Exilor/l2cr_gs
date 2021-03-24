@@ -103,8 +103,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
       return super
     end
 
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -186,7 +185,6 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           npc.script_value = attacker.l2id
         end
       end
-
     end
 
     super
@@ -242,7 +240,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           end
         end
       when NAMELESS_REVENANT
-        if qs.memo_state?(1) && npc.script_value?(1) && !has_quest_items?(killer, HUGE_NAIL) && has_quest_items?(killer, BOOK_OF_REFORM) && (get_quest_items_count(killer, RIPPED_DIARY) < 7)
+        if qs.memo_state?(1) && npc.script_value?(1) && !has_quest_items?(killer, HUGE_NAIL) && has_quest_items?(killer, BOOK_OF_REFORM) && get_quest_items_count(killer, RIPPED_DIARY) < 7
           if get_quest_items_count(killer, RIPPED_DIARY) == 6
             add_spawn(ARURAUNE, npc, true, 0, false)
             take_items(killer, RIPPED_DIARY, -1)
@@ -253,7 +251,7 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           end
         end
       when ARURAUNE
-        if !has_quest_items?(killer, HUGE_NAIL)
+        unless has_quest_items?(killer, HUGE_NAIL)
           npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::THE_CONCEALED_TRUTH_WILL_ALWAYS_BE_REVEALED))
           give_items(killer, HUGE_NAIL, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
@@ -283,7 +281,6 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           qs.set_cond(16, true)
         end
       end
-
     end
 
     super
@@ -347,9 +344,9 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           end
         elsif memo_state == 18
           if has_quest_items?(pc, KATARIS_LETTER, KAKANS_LETTER, NYAKURIS_LETTER, RAMUSS_LETTER)
-            give_adena(pc, 226528, true)
+            give_adena(pc, 226_528, true)
             give_items(pc, MARK_OF_REFORMER, 1)
-            add_exp_and_sp(pc, 1252844, 85972)
+            add_exp_and_sp(pc, 1_252_844, 85_972)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30666-07.html"
@@ -447,7 +444,6 @@ class Scripts::Q00227_TestOfTheReformer < Quest
           html = "30732-01.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == PRIESTESS_PUPINA
         html = get_already_completed_msg(pc)
@@ -468,7 +464,6 @@ class Scripts::Q00227_TestOfTheReformer < Quest
       npc.set_intention(AI::MOVE_TO, MOVE_TO)
       npc.variables["SPAWNED"] = 0
     end
-
 
     super
   end

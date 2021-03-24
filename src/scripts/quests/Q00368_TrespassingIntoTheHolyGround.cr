@@ -23,10 +23,7 @@ class Scripts::Q00368_TrespassingIntoTheHolyGround < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30926-02.htm"
@@ -38,7 +35,6 @@ class Scripts::Q00368_TrespassingIntoTheHolyGround < Quest
     when "30926-06.html"
       event
     end
-
   end
 
   def on_kill(npc, pc, is_summon)
@@ -65,7 +61,7 @@ class Scripts::Q00368_TrespassingIntoTheHolyGround < Quest
       if has_quest_items?(pc, BLADE_STAKATO_FANG)
         count = get_quest_items_count(pc, BLADE_STAKATO_FANG)
         bonus = count >= 10 ? 9450 : 2000
-        give_adena(pc, (count * 250) + bonus, true)
+        give_adena(pc, (count &* 250) &+ bonus, true)
         take_items(pc, BLADE_STAKATO_FANG, -1)
         html = "30926-04.html"
       else

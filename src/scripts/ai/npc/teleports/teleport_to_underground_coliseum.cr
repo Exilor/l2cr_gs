@@ -67,7 +67,7 @@ class Scripts::TeleportToUndergroundColiseum < AbstractNpcAI
     elsif event == "return"
       pc.tele_to_location(RETURN_LOCS.sample(random: Rnd), false)
     elsif event.number?
-      val = event.to_i &- 1
+      val = event.to_i - 1
       pc.tele_to_location(MANAGERS_LOCS[val].sample(random: Rnd), false)
     end
 

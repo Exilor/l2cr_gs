@@ -36,8 +36,7 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -65,7 +64,6 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
       qs.set_cond(4, true)
       html = event
     end
-
 
     html
   end
@@ -121,17 +119,17 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
             html = "30327-11.html"
           end
         else
-          give_adena(pc, 163800, true)
+          give_adena(pc, 163_800, true)
           unless has_quest_items?(pc, ELVEN_KNIGHT_BROOCH)
             give_items(pc, ELVEN_KNIGHT_BROOCH, 1)
           end
           level = pc.level
           if level >= 20
-            add_exp_and_sp(pc, 320534, 23152)
+            add_exp_and_sp(pc, 320_534, 23_152)
           elsif level == 19
-            add_exp_and_sp(pc, 456128, 29850)
+            add_exp_and_sp(pc, 456_128, 29_850)
           else
-            add_exp_and_sp(pc, 591724, 33328)
+            add_exp_and_sp(pc, 591_724, 33_328)
           end
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -160,7 +158,6 @@ class Scripts::Q00406_PathOfTheElvenKnight < Quest
           html = "30317-06.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

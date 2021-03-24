@@ -21,8 +21,7 @@ class Scripts::Q00178_IconicTrinity < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32138-05.htm"
@@ -60,19 +59,19 @@ class Scripts::Q00178_IconicTrinity < Quest
     when "PASS1_1"
       if qs.memo_state?(2)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 1)
+        qs.set_memo_state_ex(1, i0 &+ 1)
         html = "32255-04.html"
       end
     when "PASS1_2"
       if qs.memo_state?(2)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 10)
+        qs.set_memo_state_ex(1, i0 &+ 10)
         html = "32255-05.html"
       end
     when "PASS1_3"
       if qs.memo_state?(2)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 100)
+        qs.set_memo_state_ex(1, i0 &+ 100)
         html = "32255-06.html"
       end
     when "PASS1_4"
@@ -105,19 +104,19 @@ class Scripts::Q00178_IconicTrinity < Quest
     when "PASS2_1"
       if qs.memo_state?(5)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 1)
+        qs.set_memo_state_ex(1, i0 &+ 1)
         html = "32256-04.html"
       end
     when "PASS2_2"
       if qs.memo_state?(5)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 10)
+        qs.set_memo_state_ex(1, i0 &+ 10)
         html = "32256-05.html"
       end
     when "PASS2_3"
       if qs.memo_state?(5)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 100)
+        qs.set_memo_state_ex(1, i0 &+ 100)
         html = "32256-06.html"
       end
     when "PASS2_4"
@@ -150,25 +149,25 @@ class Scripts::Q00178_IconicTrinity < Quest
     when "PASS3_1"
       if qs.memo_state?(8)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 1)
+        qs.set_memo_state_ex(1, i0 &+ 1)
         html = "32257-04.html"
       end
     when "PASS3_2"
       if qs.memo_state?(8)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 10)
+        qs.set_memo_state_ex(1, i0 &+ 10)
         html = "32257-05.html"
       end
     when "PASS3_3"
       if qs.memo_state?(8)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 100)
+        qs.set_memo_state_ex(1, i0 &+ 100)
         html = "32257-06.html"
       end
     when "PASS3_4"
       if qs.memo_state?(8)
         i0 = qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, i0 + 1000)
+        qs.set_memo_state_ex(1, i0 &+ 1000)
         html = "32257-07.html"
       end
     when "PASS3_5"
@@ -197,7 +196,6 @@ class Scripts::Q00178_IconicTrinity < Quest
          "32257-11.html"
       html = event
     end
-
 
     html
   end
@@ -238,7 +236,6 @@ class Scripts::Q00178_IconicTrinity < Quest
             html = "32138-15.html"
           end
         end
-
       when ICON_OF_THE_PAST
         case qs.memo_state
         when 1
@@ -251,7 +248,6 @@ class Scripts::Q00178_IconicTrinity < Quest
         when 4, 5
           html = "32255-14.html"
         end
-
       when ICON_OF_THE_PRESENT
         case qs.memo_state
         when 4
@@ -264,7 +260,6 @@ class Scripts::Q00178_IconicTrinity < Quest
         when 7, 8
           html = "32256-15.html"
         end
-
       when ICON_OF_THE_FUTURE
         case qs.memo_state
         when 7
@@ -277,9 +272,7 @@ class Scripts::Q00178_IconicTrinity < Quest
         when 10
           html = "32257-13.html"
         end
-
       end
-
     elsif qs.completed?
       if npc.id == HIERARCH_KEKROPUS
         html = get_already_completed_msg(pc)

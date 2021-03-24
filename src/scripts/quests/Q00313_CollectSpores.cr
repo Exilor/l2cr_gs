@@ -19,8 +19,7 @@ class Scripts::Q00313_CollectSpores < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30150-05.htm"
@@ -66,9 +65,7 @@ class Scripts::Q00313_CollectSpores < Quest
           html = "30150-07.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -136,7 +136,7 @@ module VoicedCommandHandler::Wedding
     pc_target.add_action(PlayerAction::USER_ENGAGE)
 
     dlg = ConfirmDlg.new(pc.name + " is asking to engage you. Do you want to start a new relationship?")
-    dlg.time = 15 * 1000
+    dlg.time = 15 &* 1000
     pc_target.send_packet(dlg)
 
     true
@@ -316,7 +316,7 @@ module VoicedCommandHandler::Wedding
     end
 
     teleport_timer = Config.wedding_teleport_duration * 1000
-    pc.send_message("After #{teleport_timer // 60000} min. you will be teleported to your partner.")
+    pc.send_message("After #{teleport_timer // 60_000} min. you will be teleported to your partner.")
     pc.inventory.reduce_adena("Wedding", Config.wedding_teleport_price.to_i64, pc, nil)
 
     pc.intention = AI::IDLE

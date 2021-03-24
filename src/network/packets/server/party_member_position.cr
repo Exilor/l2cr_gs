@@ -7,9 +7,7 @@ class Packets::Outgoing::PartyMemberPosition < GameServerPacket
 
   def reuse(party : L2Party)
     @locations.clear
-    party.each do |m|
-      @locations[m.l2id] = m.location
-    end
+    party.each { |m| @locations[m.l2id] = m.location }
     self
   end
 

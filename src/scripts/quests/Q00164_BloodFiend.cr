@@ -55,8 +55,8 @@ class Scripts::Q00164_BloodFiend < Quest
       end
     when State::STARTED
       if st.cond?(2) && st.has_quest_items?(KIRUNAK_SKULL)
-        st.give_adena(42130, true)
-        st.add_exp_and_sp(35637, 1854)
+        st.give_adena(42_130, true)
+        st.add_exp_and_sp(35_637, 1854)
         st.exit_quest(false, true)
         html = "30149-06.html"
       else
@@ -65,7 +65,6 @@ class Scripts::Q00164_BloodFiend < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

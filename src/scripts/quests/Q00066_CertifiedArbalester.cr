@@ -70,8 +70,7 @@ class Scripts::Q00066_CertifiedArbalester < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -339,7 +338,7 @@ class Scripts::Q00066_CertifiedArbalester < Quest
         if qs.memo_state?(32)
           i4 = qs.get_memo_state_ex(1)
           if i4 < 5
-            qs.set_memo_state_ex(1, i4 + 1)
+            qs.set_memo_state_ex(1, i4 &+ 1)
           elsif i4 >= 4
             qs.set_memo_state_ex(1, 0)
             add_spawn(CRIMSON_LADY, npc, true, 0, false)
@@ -460,7 +459,7 @@ class Scripts::Q00066_CertifiedArbalester < Quest
           html = "32201-09.html"
         elsif memo_state == 2
           html = "32201-10.html"
-        elsif (memo_state > 2) && (memo_state < 11)
+        elsif memo_state > 2 && memo_state < 11
           html = "32201-11.html"
         elsif memo_state >= 11
           html = "32201-12.html"
@@ -605,9 +604,9 @@ class Scripts::Q00066_CertifiedArbalester < Quest
           if !has_quest_items?(pc, RESEARCH_ON_THE_GIANTS_AND_THE_ANCIENT_RACE)
             html = "32220-27.html"
           else
-            give_adena(pc, 77666, true)
+            give_adena(pc, 77_666, true)
             give_items(pc, KAMAEL_INQUISITOR_MARK, 1)
-            add_exp_and_sp(pc, 429546, 29476)
+            add_exp_and_sp(pc, 429_546, 29_476)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "32220-28.html"

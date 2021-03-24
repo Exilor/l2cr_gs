@@ -36,7 +36,6 @@ class Scripts::Q00163_LegacyOfThePoet < Quest
         st.start_quest
         html = event
       end
-
     end
 
     html
@@ -97,8 +96,8 @@ class Scripts::Q00163_LegacyOfThePoet < Quest
         end
       when State::STARTED
         if st.has_quest_items?(RUMIELS_1ST_POEM, RUMIELS_2ND_POEM, RUMIELS_3RD_POEM, RUMIELS_4TH_POEM)
-          st.add_exp_and_sp(21643, 943)
-          st.give_adena(13890, true)
+          st.add_exp_and_sp(21_643, 943)
+          st.give_adena(13_890, true)
           st.exit_quest(false, true)
           html = "30220-07.html"
         else
@@ -107,7 +106,6 @@ class Scripts::Q00163_LegacyOfThePoet < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
 
     html || get_no_quest_msg(pc)

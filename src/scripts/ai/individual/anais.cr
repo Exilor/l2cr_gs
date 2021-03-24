@@ -58,7 +58,7 @@
           ward.running = true
           ward.set_intention(AI::ATTACK, @next_target, nil)
           start_quest_timer("GUARD_ATTACK", 1000, ward, @next_target, true)
-          start_quest_timer("SUICIDE", 20000, ward, nil)
+          start_quest_timer("SUICIDE", 20_000, ward, nil)
           ward.set_intention(AI::ATTACK, @next_target)
         end
       when "GUARD_ATTACK"

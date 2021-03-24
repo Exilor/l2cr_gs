@@ -70,10 +70,7 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -88,14 +85,14 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
         html = "32106-07.html"
       end
     when "32106-09.html"
-      st.give_adena(1374 * st.get_quest_items_count(BONES_OF_A_PLAINS_DINOSAUR), true)
+      st.give_adena(1374 &* st.get_quest_items_count(BONES_OF_A_PLAINS_DINOSAUR), true)
       st.take_items(BONES_OF_A_PLAINS_DINOSAUR, -1)
       html = event
     when "exit"
       if !st.has_quest_items?(BONES_OF_A_PLAINS_DINOSAUR)
         html = "32106-11.html"
       else
-        st.give_adena(1374 * st.get_quest_items_count(BONES_OF_A_PLAINS_DINOSAUR), true)
+        st.give_adena(1374 &* st.get_quest_items_count(BONES_OF_A_PLAINS_DINOSAUR), true)
         html = "32106-12.html"
       end
       st.exit_quest(true, true)
@@ -109,7 +106,6 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
         html = "32117-05.html"
       end
     end
-
 
     html
   end
@@ -173,7 +169,6 @@ class Scripts::Q00643_RiseAndFallOfTheElrokiTribe < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -2,7 +2,7 @@ module BypassHandler::Rift
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     unless target.is_a?(L2Npc)
       return false
     end
@@ -38,7 +38,7 @@ module BypassHandler::Rift
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"enterrift", "changeriftroom", "exitrift"}
   end
 end

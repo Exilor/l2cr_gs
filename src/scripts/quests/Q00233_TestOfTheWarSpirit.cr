@@ -90,8 +90,7 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -105,9 +104,9 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
           html = "30510-05.htm"
         end
       end
-    when "30510-05a.html", "30510-05b.html", "30510-05c.html",
-         "30510-05d.html", "30510-05.html", "30030-02.html", "30030-03.html",
-         "30630-02.html", "30630-03.html", "30649-02.html"
+    when "30510-05a.html", "30510-05b.html", "30510-05c.html", "30510-05d.html",
+         "30510-05.html", "30030-02.html", "30030-03.html", "30630-02.html",
+         "30630-03.html", "30649-02.html"
       html = event
     when "30030-04.html"
       give_items(pc, VIVIANTES_LETTER, 1)
@@ -123,9 +122,9 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
       html = event
     when "30649-03.html"
       if has_quest_items?(pc, TONARS_REMAINS2)
-        give_adena(pc, 161806, true)
+        give_adena(pc, 161_806, true)
         give_items(pc, MARK_OF_WARSPIRIT, 1)
-        add_exp_and_sp(pc, 894888, 61408)
+        add_exp_and_sp(pc, 894_888, 61_408)
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         html = event
@@ -134,7 +133,6 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
       give_items(pc, PEKIRONS_TOTEM, 1)
       html = event
     end
-
 
     html
   end
@@ -228,8 +226,6 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
       end
-
-
     end
 
     super
@@ -360,7 +356,7 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
         if !has_at_least_one_quest_item?(pc, ORIMS_CONTRACT, BRAKIS_REMAINS1, BRAKIS_REMAINS2, VENDETTA_TOTEM)
           html = "30630-01.html"
         elsif has_quest_items?(pc, ORIMS_CONTRACT)
-          if get_quest_items_count(pc, PORTAS_EYE) + get_quest_items_count(pc, EXCUROS_SCALE) + get_quest_items_count(pc, MORDEOS_TALON) < 30
+          if get_quest_items_count(pc, PORTAS_EYE) &+ get_quest_items_count(pc, EXCUROS_SCALE) &+ get_quest_items_count(pc, MORDEOS_TALON) < 30
             html = "30630-05.html"
           else
             take_items(pc, ORIMS_CONTRACT, 1)
@@ -405,7 +401,6 @@ class Scripts::Q00233_TestOfTheWarSpirit < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == SEER_SOMAK
         html = get_already_completed_msg(pc)

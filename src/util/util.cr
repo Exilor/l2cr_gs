@@ -2,7 +2,7 @@ require "../models/actor/tasks/player/illegal_player_action_task"
 
 module Util
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   def in_range?(range : Int32, obj1 : L2Object?, obj2 : L2Object?, z_axis : Bool) : Bool

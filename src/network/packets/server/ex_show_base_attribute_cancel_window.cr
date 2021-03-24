@@ -27,7 +27,6 @@ class Packets::Outgoing::ExShowBaseAttributeCancelWindow < GameServerPacket
       @price = item.template.is_a?(L2Weapon) ? 200_000_i64 : 160_000_i64
     end
 
-
     @price
   end
 end

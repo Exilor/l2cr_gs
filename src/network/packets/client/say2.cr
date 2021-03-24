@@ -102,8 +102,6 @@ class Packets::Incoming::Say2 < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    debug { "[#{CHAT_NAMES[@type]}] #{pc}: #{@text}" }
-
     if @type < 0 || @type >= CHAT_NAMES.size
       warn { "Invalid pc type #{@type} from #{pc}." }
       pc.action_failed
@@ -162,11 +160,18 @@ class Packets::Incoming::Say2 < GameClientPacket
       @type = PETITION_GM
     end
 
-    # chat logging
+    if Config.log_chat
+      if @type == TELL
+        msg = "[#{CHAT_NAMES[@type]}] #{pc} -> #{@target}: \"#{@text}\"."
+      else
+        msg = "[#{CHAT_NAMES[@type]}] #{pc}: \"#{@text}\"."
+      end
+
+      Logs[:chat].info(msg)
+    end
 
     if @text.includes?("\b")
       unless parse_and_publish_item(pc)
-        debug "#parse_and_publish_item returned false."
         return
       end
     end

@@ -44,10 +44,7 @@ class Scripts::Q00647_InfluxOfMachines < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32069-03.htm"
@@ -62,7 +59,6 @@ class Scripts::Q00647_InfluxOfMachines < Quest
         html = "32069-07.html"
       end
     end
-
 
     html
   end
@@ -97,7 +93,6 @@ class Scripts::Q00647_InfluxOfMachines < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

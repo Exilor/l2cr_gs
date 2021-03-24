@@ -29,7 +29,7 @@ class SevenSigns
   # The quest event and seal validation periods last for approximately one week
   # with a 15 minutes "interval" period sandwiched between them.
   PERIOD_MINOR_LENGTH = 900_000
-  PERIOD_MAJOR_LENGTH = 604_800_000 - PERIOD_MINOR_LENGTH
+  PERIOD_MAJOR_LENGTH = 604_800_000 &- PERIOD_MINOR_LENGTH
 
   RECORD_SEVEN_SIGNS_ID = 5707
   RECORD_SEVEN_SIGNS_COST = 500i64
@@ -143,7 +143,7 @@ class SevenSigns
         last_period_change.add(-7.days)
       end
     when PERIOD_COMP_RECRUITING, PERIOD_COMP_RESULTS
-      last_period_change.ms = @last_save.ms + PERIOD_MINOR_LENGTH
+      last_period_change.ms = @last_save.ms &+ PERIOD_MINOR_LENGTH
     end
 
     @last_save.ms > 7 && @last_save < last_period_change
@@ -277,13 +277,13 @@ class SevenSigns
   end
 
   def calc_contribution_score(blue : Int64, green : Int64, red : Int64) : Int64
-    (blue * BLUE_CONTRIB_POINTS) + (green * GREEN_CONTRIB_POINTS) +
-      (red * RED_CONTRIB_POINTS)
+    (blue &* BLUE_CONTRIB_POINTS) &+ (green &* GREEN_CONTRIB_POINTS) &+
+      (red &* RED_CONTRIB_POINTS)
   end
 
   def calc_ancient_adena_reward(blue : Int64, green : Int64, red : Int64) : Int64
-    (blue * SEAL_STONE_BLUE_VALUE) + (green * SEAL_STONE_GREEN_VALUE) +
-      (red * SEAL_STONE_RED_VALUE)
+    (blue &* SEAL_STONE_BLUE_VALUE) &+ (green &* SEAL_STONE_GREEN_VALUE) &+
+      (red &* SEAL_STONE_RED_VALUE)
   end
 
   def get_cabal_short_name(num : Int32) : String
@@ -387,26 +387,26 @@ class SevenSigns
     next_quest_start = 0
     next_valid_start = 0
     till_date = date.ms - Time.ms
-    while (2 * PERIOD_MAJOR_LENGTH) + (2 * PERIOD_MINOR_LENGTH) < till_date
-      till_date -= (2 * PERIOD_MAJOR_LENGTH) + (2 * PERIOD_MINOR_LENGTH)
+    while (2 &* PERIOD_MAJOR_LENGTH) &+ (2 &* PERIOD_MINOR_LENGTH) < till_date
+      till_date &-= (2 &* PERIOD_MAJOR_LENGTH) + (2 &* PERIOD_MINOR_LENGTH)
     end
     while till_date < 0
-      till_date += (2 * PERIOD_MAJOR_LENGTH) + (2 * PERIOD_MINOR_LENGTH)
+      till_date &+= (2 &* PERIOD_MAJOR_LENGTH) + (2 &* PERIOD_MINOR_LENGTH)
     end
 
     case current_period
     when PERIOD_COMP_RECRUITING
-      next_valid_start = next_period_change + PERIOD_MAJOR_LENGTH
-      next_quest_start = next_valid_start + PERIOD_MAJOR_LENGTH + PERIOD_MINOR_LENGTH
+      next_valid_start = next_period_change &+ PERIOD_MAJOR_LENGTH
+      next_quest_start = next_valid_start &+ PERIOD_MAJOR_LENGTH &+ PERIOD_MINOR_LENGTH
     when PERIOD_COMPETITION
       next_valid_start = next_period_change
-      next_quest_start = next_period_change + PERIOD_MAJOR_LENGTH + PERIOD_MINOR_LENGTH
+      next_quest_start = next_period_change &+ PERIOD_MAJOR_LENGTH &+ PERIOD_MINOR_LENGTH
     when PERIOD_COMP_RESULTS
-      next_quest_start = next_period_change + PERIOD_MAJOR_LENGTH
-      next_valid_start = next_quest_start + PERIOD_MAJOR_LENGTH + PERIOD_MINOR_LENGTH
+      next_quest_start = next_period_change &+ PERIOD_MAJOR_LENGTH
+      next_valid_start = next_quest_start &+ PERIOD_MAJOR_LENGTH &+ PERIOD_MINOR_LENGTH
     when PERIOD_SEAL_VALIDATION
       next_quest_start = next_period_change
-      next_valid_start = next_period_change + PERIOD_MAJOR_LENGTH + PERIOD_MINOR_LENGTH
+      next_valid_start = next_period_change &+ PERIOD_MAJOR_LENGTH &+ PERIOD_MINOR_LENGTH
     end
 
     !(
@@ -480,7 +480,7 @@ class SevenSigns
     name = get_cabal_short_name(cabal)
     SIGNS_PLAYER_DATA.each_value do |data|
       if data.get_string("cabal") == name
-        members += 1
+        members &+= 1
       end
     end
 
@@ -658,9 +658,9 @@ class SevenSigns
     end
 
     if data["cabal"] == "dawn"
-      SIGNS_DAWN_SEAL_TOTALS[seal] += 1
+      SIGNS_DAWN_SEAL_TOTALS[seal] &+= 1
     else
-      SIGNS_DUSK_SEAL_TOTALS[seal] += 1
+      SIGNS_DUSK_SEAL_TOTALS[seal] &+= 1
     end
 
     unless Config.alt_sevensigns_lazy_update
@@ -693,15 +693,15 @@ class SevenSigns
   def add_player_stone_contrib(id : Int32, blue : Int64, green : Int64, red : Int64) : Int64
     data = SIGNS_PLAYER_DATA[id]
     contrib_score = calc_contribution_score(blue, green, red)
-    total_ancient_adena = data.get_i64("ancient_adena_amount") + calc_ancient_adena_reward(blue, green, red)
-    total_contrib_score = data.get_i64("contribution_score") + contrib_score
+    total_ancient_adena = data.get_i64("ancient_adena_amount") &+ calc_ancient_adena_reward(blue, green, red)
+    total_contrib_score = data.get_i64("contribution_score") &+ contrib_score
     if total_contrib_score > Config.alt_maximum_player_contrib
       return -1i64
     end
 
-    data["red_stones"] = data.get_i32("red_stones") + red
-    data["green_stones"] = data.get_i32("green_stones") + green
-    data["blue_stones"] = data.get_i32("blue_stones") + blue
+    data["red_stones"] = data.get_i32("red_stones") &+ red
+    data["green_stones"] = data.get_i32("green_stones") &+ green
+    data["blue_stones"] = data.get_i32("blue_stones") &+ blue
     data["ancient_adena_amount"] = total_ancient_adena
     data["contribution_score"] = total_contrib_score
 
@@ -722,14 +722,14 @@ class SevenSigns
 
   def add_festival_score(cabal : Int32, amount : Int32)
     if cabal == CABAL_DUSK
-      @dusk_festival_score += amount
+      @dusk_festival_score &+= amount
       if @dawn_festival_score >= amount
-        @dawn_festival_score -= amount
+        @dawn_festival_score &-= amount
       end
     else
-      @dawn_festival_score += amount
+      @dawn_festival_score &+= amount
       if @dusk_festival_score >= amount
-        @dusk_festival_score -= amount
+        @dusk_festival_score &-= amount
       end
     end
   end
@@ -949,7 +949,7 @@ class SevenSigns
 
   private def seven_signs_period_change
     period_ended = current_period
-    @active_period += 1
+    @active_period &+= 1
     case period_ended
     when PERIOD_COMP_RECRUITING
       SevenSignsFestival.instance.start_festival_manager
@@ -983,7 +983,7 @@ class SevenSigns
       remove_cp_mult
       reset_player_data
       reset_seals
-      @current_cycle += 1
+      @current_cycle &+= 1
       SevenSignsFestival.instance.reset_festival_data(false)
       @dawn_stone_score = 0.0
       @dusk_stone_score = 0.0
@@ -1011,6 +1011,10 @@ class SevenSigns
 
   private def send_message_to_all(sm_id : SystemMessageId)
     Broadcast.to_all_online_players(SystemMessage[sm_id])
+  end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
   end
 end
 

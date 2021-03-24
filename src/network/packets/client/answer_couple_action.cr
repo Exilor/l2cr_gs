@@ -46,7 +46,6 @@ class Packets::Incoming::AnswerCoupleAction < GameClientPacket
       target.send_packet(sm)
     end
 
-
     target.set_multi_social_action(0, 0)
   end
 end

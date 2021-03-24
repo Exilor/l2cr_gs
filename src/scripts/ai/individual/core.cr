@@ -33,7 +33,7 @@ class Scripts::Core < AbstractNpcAI
 
     if status == DEAD
       # load the unlock date and time for Core from DB
-      temp = info.get_i64("respawn_time") - Time.ms
+      temp = info.get_i64("respawn_time") &- Time.ms
       # if Core is locked until a certain time, mark it so and start the unlock timer
       # the unlock time has not yet expired.
       if temp > 0
@@ -72,21 +72,21 @@ class Scripts::Core < AbstractNpcAI
 
     # Spawn minions
     5.times do |i|
-      x = 16800 + (i * 360)
-      mob = add_spawn(DEATH_KNIGHT, x, 110000, npc.z, 280 + Rnd.rand(40), false, 0i64).as(L2Attackable)
+      x = 16_800 &+ (i &* 360)
+      mob = add_spawn(DEATH_KNIGHT, x, 110000, npc.z, 280 &+ Rnd.rand(40), false, 0i64).as(L2Attackable)
       mob.raid_minion = true
       MINIONS << mob
-      mob = add_spawn(DEATH_KNIGHT, x, 109000, npc.z, 280 + Rnd.rand(40), false, 0i64).as(L2Attackable)
+      mob = add_spawn(DEATH_KNIGHT, x, 109000, npc.z, 280 &+ Rnd.rand(40), false, 0i64).as(L2Attackable)
       mob.raid_minion = true
       MINIONS << mob
-      x2 = 16800 + (i * 600)
-      mob = add_spawn(DOOM_WRAITH, x2, 109300, npc.z, 280 + Rnd.rand(40), false, 0i64).as(L2Attackable)
+      x2 = 16_800 &+ (i &* 600)
+      mob = add_spawn(DOOM_WRAITH, x2, 109300, npc.z, 280 &+ Rnd.rand(40), false, 0i64).as(L2Attackable)
       mob.raid_minion = true
       MINIONS << mob
     end
     4.times do |i|
-      x = 16800 + (i * 450)
-      mob = add_spawn(SUSCEPTOR, x, 110300, npc.z, 280 + Rnd.rand(40), false, 0i64).as(L2Attackable)
+      x = 16_800 &+ (i &* 450)
+      mob = add_spawn(SUSCEPTOR, x, 110300, npc.z, 280 &+ Rnd.rand(40), false, 0i64).as(L2Attackable)
       mob.raid_minion = true
       MINIONS << mob
     end
@@ -146,11 +146,11 @@ class Scripts::Core < AbstractNpcAI
       @first_attacked = false
       GrandBossManager.set_boss_status(CORE, DEAD)
       # Calculate Min and Max respawn times randomly.
-      respawn_time = (Config.core_spawn_interval.to_i64 + Rnd.rand(-Config.core_spawn_random..Config.core_spawn_random)) * 3_600_000
+      respawn_time = (Config.core_spawn_interval &+ Rnd.rand(-Config.core_spawn_random..Config.core_spawn_random)) &* 3_600_000
       start_quest_timer("core_unlock", respawn_time, nil, nil)
       # also save the respawn time so that the info is maintained past reboots
       info = GrandBossManager.get_stats_set(CORE).not_nil!
-      info["respawn_time"] = Time.ms + respawn_time
+      info["respawn_time"] = Time.ms &+ respawn_time
       GrandBossManager.set_stats_set(CORE, info)
       start_quest_timer("despawn_minions", 20_000, nil, nil)
       cancel_quest_timers("spawn_minion")

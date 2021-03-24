@@ -13,7 +13,6 @@ class Packets::Incoming::RequestWriteHeroWords < GameClientPacket
     end
 
     if @msg.size > 300
-      debug { "Message too long (#{@msg.size}/300)." }
       return
     end
 

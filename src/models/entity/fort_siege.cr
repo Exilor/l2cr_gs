@@ -388,7 +388,6 @@ class FortSiege
     end
 
     if clan.fort_id == fort.residence_id
-      debug { "#{clan}'s fort is this fort." }
       return
     end
 
@@ -785,8 +784,7 @@ class FortSiege
     error e
   end
 
-  def to_log(io : IO)
-    super
-    io.print('(', fort.name, ')')
+  def to_s(io : IO)
+    io.print(self.class, '(', fort.name, ')')
   end
 end

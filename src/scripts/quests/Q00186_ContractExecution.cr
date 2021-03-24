@@ -30,10 +30,7 @@ class Scripts::Q00186_ContractExecution < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30673-03.htm"
@@ -65,9 +62,9 @@ class Scripts::Q00186_ContractExecution < Quest
       end
     when "31437-06.html"
       if qs.memo_state?(3)
-        give_adena(pc, 105083, true)
+        give_adena(pc, 105_083, true)
         if pc.level < MAX_LEVEL_FOR_EXP_SP
-          add_exp_and_sp(pc, 285935, 18711)
+          add_exp_and_sp(pc, 285_935, 18_711)
         end
         qs.exit_quest(false, true)
         html = event
@@ -127,7 +124,6 @@ class Scripts::Q00186_ContractExecution < Quest
           html = "31437-05.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == RESEARCHER_LORAIN
         html = get_already_completed_msg(pc)

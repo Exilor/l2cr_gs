@@ -22,8 +22,7 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32792-02.htm"
@@ -55,7 +54,7 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
         if pc.subclass_active?
           html = event
         else
-          add_exp_and_sp(pc, 125000000, 12500000)
+          add_exp_and_sp(pc, 125_000_000, 12_500_000)
           give_items(pc, CERTIFICATE_OF_DAWN, 1)
           st.exit_quest(false, true)
           html = "32597-04.html"
@@ -72,7 +71,6 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -151,7 +149,6 @@ class Scripts::Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal < Quest
           html = "32787-04.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

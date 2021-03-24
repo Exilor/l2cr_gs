@@ -75,7 +75,6 @@ class Scripts::FortressSiegeManager < AbstractNpcAI
             pc.send_packet(sm)
             html = "FortressSiegeManager-05.html"
           end
-
         end
       end
     when "cancel"
@@ -106,7 +105,6 @@ class Scripts::FortressSiegeManager < AbstractNpcAI
         html = "FortressSiegeManager-21.html"
       end
     end
-
 
     html
   end

@@ -42,10 +42,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30608-06.htm"
@@ -74,7 +71,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       count &+= get_quest_items_count(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD)
       count &+= get_quest_items_count(pc, DELU_LIZARDMANS_SCALE)
       if count > 0
-        give_adena(pc, count * 100, true)
+        give_adena(pc, count &* 100, true)
         take_items(pc, -1, {WATCHING_EYES, ROUGHLY_HEWN_ROCK_GOLEM_SHARD, DELU_LIZARDMANS_SCALE})
         html = event
       else
@@ -130,7 +127,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       count1 = get_quest_items_count(pc, WATCHING_EYES)
       count2 = get_quest_items_count(pc, ROUGHLY_HEWN_ROCK_GOLEM_SHARD)
       count3 = get_quest_items_count(pc, DELU_LIZARDMANS_SCALE)
-      count = count1 + count2 + count3
+      count = count1 &+ count2 &+ count3
       if count < 500
         html = "30291-19.html"
       else
@@ -152,7 +149,7 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       if count <= 0
         html = "30291-23.html"
       else
-        give_adena(pc, count * 100, true)
+        give_adena(pc, count &* 100, true)
         html = event
       end
 
@@ -190,7 +187,6 @@ class Scripts::Q00660_AidingTheFloranVillage < Quest
       when ALEX
         html = pc.level >= MIN_LEVEL ? "30291-01.htm" : "30291-02.htm"
       end
-
     elsif qs.started?
       case npc.id
       when MARIA

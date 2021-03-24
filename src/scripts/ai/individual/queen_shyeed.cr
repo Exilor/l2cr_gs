@@ -4,7 +4,7 @@ class Scripts::QueenShyeed < AbstractNpcAI
   private SHYEED_LOC = Location.new(79634, -55428, -6104, 0)
 
   # Respawn
-  private RESPAWN = 86400000 # 24 h
+  private RESPAWN = 86_400_000 # 24 h
   private RANDOM_RESPAWN = 43200000 # 12 h
 
   @mob_buff_zone : L2EffectZone
@@ -47,7 +47,7 @@ class Scripts::QueenShyeed < AbstractNpcAI
 
   private def spawn_shyeed
     respawn = load_global_quest_var("Respawn")
-    remain = respawn.empty? ? 0 : respawn.to_i64 - Time.ms
+    remain = respawn.empty? ? 0 : respawn.to_i64 &- Time.ms
     if remain > 0
       start_quest_timer("respawn", remain, nil, nil)
       return
@@ -61,7 +61,7 @@ class Scripts::QueenShyeed < AbstractNpcAI
 
   private def start_respawn
     respawn_time = RESPAWN - Rnd.rand(RANDOM_RESPAWN)
-    save_global_quest_var("Respawn", (Time.ms + respawn_time).to_s)
+    save_global_quest_var("Respawn", (Time.ms &+ respawn_time).to_s)
     start_quest_timer("respawn", respawn_time, nil, nil)
     @mob_buff_zone.enabled = false
     @mob_buff_display_zone.enabled = false

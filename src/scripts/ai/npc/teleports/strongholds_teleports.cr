@@ -12,10 +12,6 @@ class Scripts::StrongholdsTeleports < AbstractNpcAI
   end
 
   def on_first_talk(npc, pc)
-    if pc.level < 20
-      return "#{npc.id}.htm"
-    end
-
-    "#{npc.id}-no.htm"
+    pc.level < 20 ? "#{npc.id}.htm" : "#{npc.id}-no.htm"
   end
 end

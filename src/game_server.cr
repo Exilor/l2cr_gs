@@ -114,7 +114,7 @@ require "./custom/l2_cr"
 
 module GameServer
   extend self
-  extend Loggable
+  include Loggable
 
   @@listener : MMO::PacketManager(GameClient)?
 
@@ -124,14 +124,6 @@ module GameServer
     timer = Timer.new
 
     Config.load
-
-    if Config.debug
-      Loggable.severity = :DEBUG
-    end
-    Dir.mkdir_p(Dir.current + "/log")
-    time = start_time.to_s("%Y-%m-%d %H-%M-%S")
-    f = File.open("#{Dir.current}/log/#{time}.log", "w")
-    Loggable.file = f
 
     info "Starting..."
 
@@ -315,9 +307,7 @@ module GameServer
 
     @@listener = listener
 
-    gc_timer = Timer.new
     GC.collect
-    debug { "Garbage collected in #{gc_timer} s." }
 
     info { "Maximum number of connected players: #{Config.maximum_online_users}." }
     info { "Server loaded in #{timer} s." }

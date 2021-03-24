@@ -38,8 +38,7 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -82,7 +81,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
         event
       end
     end
-
   end
 
   def on_attack(npc, attacker, damage, is_summon)
@@ -102,7 +100,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
           npc.script_value = 2
         end
       end
-
     end
 
     super
@@ -138,7 +135,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
           end
         end
       end
-
     end
 
     super
@@ -168,11 +164,11 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
             give_adena(pc, 163_800, true)
             give_items(pc, MEDALLION_OF_WARRIOR, 1)
             if pc.level >= 20
-              add_exp_and_sp(pc, 320534, 21012)
+              add_exp_and_sp(pc, 320_534, 21_012)
             elsif pc.level == 19
-              add_exp_and_sp(pc, 456128, 27710)
+              add_exp_and_sp(pc, 456_128, 27_710)
             else
-              add_exp_and_sp(pc, 160267, 34408)
+              add_exp_and_sp(pc, 160_267, 34_408)
             end
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -200,7 +196,6 @@ class Scripts::Q00401_PathOfTheWarrior < Quest
           html = "30253-06.html"
         end
       end
-
     end
 
     html

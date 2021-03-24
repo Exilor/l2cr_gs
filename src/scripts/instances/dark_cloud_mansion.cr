@@ -842,8 +842,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
   end
 
   def on_talk(npc, pc)
-    npc_id = npc.id
-    if npc_id == YIYEN
+    if npc.id == YIYEN
       enter_instance(pc, DMCWorld.new, "DarkCloudMansion.xml", TEMPLATE_ID)
     else
       world = InstanceManager.get_world(npc.instance_id)
@@ -851,7 +850,7 @@ class Scripts::DarkCloudMansion < AbstractInstance
         return ""
       end
 
-      if npc_id == SYM_TRUTH
+      if npc.id == SYM_TRUTH
         if world.allowed?(pc.l2id)
           world.remove_allowed(pc.l2id)
         end

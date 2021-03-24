@@ -148,7 +148,6 @@ class Scripts::Q00234_FatesWhisper < Quest
       start_quest_timer("23404", 1000 * 120, npc, nil)
     end
 
-
     super
   end
 
@@ -183,7 +182,7 @@ class Scripts::Q00234_FatesWhisper < Quest
 
       bloody_fabric_count = qs.get_quest_items_count(Q_BLOODY_FABRIC_Q0234)
       white_fabric_count = qs.get_quest_items_count(Q_WHITE_FABRIC_Q0234)
-      white_bloody_fabric_count = bloody_fabric_count + white_fabric_count
+      white_bloody_fabric_count = bloody_fabric_count &+ white_fabric_count
       if qs.memo_state?(8) && !qs.has_quest_items?(Q_RED_PIPETTE_KNIFE)
         if white_bloody_fabric_count <= 0
           return "30833-03.html"
@@ -349,7 +348,6 @@ class Scripts::Q00234_FatesWhisper < Quest
         end
         return "31002-43i.html"
       end
-
     when COFFER_OF_THE_DEAD
       if qs.memo_state?(1) && !qs.has_quest_items?(Q_REIRIAS_SOULORB)
         qs.give_items(Q_REIRIAS_SOULORB, 1)
@@ -387,7 +385,6 @@ class Scripts::Q00234_FatesWhisper < Quest
         return "31030-02.html"
       end
     end
-
 
     get_no_quest_msg(pc)
   end
@@ -434,7 +431,6 @@ class Scripts::Q00234_FatesWhisper < Quest
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "30178-02.html"
       end
-
     when CLIFF
       case event_id
       when 1
@@ -447,7 +443,6 @@ class Scripts::Q00234_FatesWhisper < Quest
           return "30182-04.html"
         end
       end
-
     when MASTER_KASPAR
       case event_id
       when 1
@@ -471,7 +466,6 @@ class Scripts::Q00234_FatesWhisper < Quest
           return "30833-03b.html"
         end
       end
-
     when MAESTRO_LEORIN
       case event_id
       when 1
@@ -718,9 +712,7 @@ class Scripts::Q00234_FatesWhisper < Quest
           return "31002-44.html"
         end
       end
-
     end
-
 
     html
   end
@@ -795,9 +787,7 @@ class Scripts::Q00234_FatesWhisper < Quest
       return super
     end
 
-
-    qs = get_random_party_member_state(killer, -1, 2, npc)
-    if qs
+    if qs = get_random_party_member_state(killer, -1, 2, npc)
       case npc.id
       when PLATINUM_TRIBE_GRUNT, PLATINUM_TRIBE_ARCHER, PLATINUM_TRIBE_WARRIOR,
            PLATINUM_TRIBE_SHAMAN, PLATINUM_TRIBE_LORD, GUARDIAN_ANGEL,
@@ -811,7 +801,6 @@ class Scripts::Q00234_FatesWhisper < Quest
           qs.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
         end
       end
-
     end
 
     super

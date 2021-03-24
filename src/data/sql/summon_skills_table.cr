@@ -1,6 +1,6 @@
 module SummonSkillsTable
   extend self
-  extend Loggable
+  include Loggable
 
   private record SummonSkill, id : Int32, level : Int32, min_level : Int32
 
@@ -51,7 +51,7 @@ module SummonSkillsTable
         end
       end
     end
-    debug { "Available level: #{lvl}." }
+
     lvl
   end
 end

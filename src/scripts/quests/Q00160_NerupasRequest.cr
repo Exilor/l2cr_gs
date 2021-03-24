@@ -33,7 +33,7 @@ class Scripts::Q00160_NerupasRequest < Quest
         give_items(pc, SILVERY_SPIDERSILK, 1)
       end
 
-      return event
+      event
     end
   end
 
@@ -103,9 +103,7 @@ class Scripts::Q00160_NerupasRequest < Quest
           html = "30152-02.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

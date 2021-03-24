@@ -74,7 +74,6 @@ class Scripts::Kief < AbstractNpcAI
       end
     end
 
-
     html
   end
 

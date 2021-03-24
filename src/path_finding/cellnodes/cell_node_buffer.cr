@@ -35,7 +35,7 @@ class CellNodeBuffer
 
     MAX_ITERATIONS.times do
       if current.loc.node_x == @target_x && current.loc.node_y == @target_y
-        if (current.loc.z &- @target_z).abs < 64
+        if (current.loc.z - @target_z).abs < 64
           return current
         end
       end
@@ -69,43 +69,43 @@ class CellNodeBuffer
     z = current!.loc.z
 
     if current!.loc.can_go_east?
-      node_e = add_node(x &+ 1, y, z, false)
+      node_e = add_node(x + 1, y, z, false)
     end
 
     if current!.loc.can_go_south?
-      node_s = add_node(x, y &+ 1, z, false)
+      node_s = add_node(x, y + 1, z, false)
     end
 
     if current!.loc.can_go_west?
-      node_w = add_node(x &- 1, y, z, false)
+      node_w = add_node(x - 1, y, z, false)
     end
 
     if current!.loc.can_go_north?
-      node_n = add_node(x, y &- 1, z, false)
+      node_n = add_node(x, y - 1, z, false)
     end
 
     if Config.advanced_diagonal_strategy
       if node_e && node_s
         if node_e.loc.can_go_south? && node_s.loc.can_go_east?
-          add_node(x &+ 1, y &+ 1, z, true)
+          add_node(x + 1, y + 1, z, true)
         end
       end
 
       if node_s && node_w
         if node_w.loc.can_go_south? && node_s.loc.can_go_west?
-          add_node(x &- 1, y &+ 1, z, true)
+          add_node(x - 1, y + 1, z, true)
         end
       end
 
       if node_n && node_e
         if node_e.loc.can_go_north? && node_n.loc.can_go_east?
-          add_node(x &+ 1, y &- 1, z, true)
+          add_node(x + 1, y - 1, z, true)
         end
       end
 
       if node_n && node_w
         if node_w.loc.can_go_north? && node_n.loc.can_go_west?
-          add_node(x &- 1, y &- 1, z, true)
+          add_node(x - 1, y - 1, z, true)
         end
       end
     end
@@ -157,13 +157,13 @@ class CellNodeBuffer
     if !new_node.loc.can_go_all? || step_z > 16
       weight = Config.high_weight
     else
-      if high_weight?(x &+ 1, y, geo_z)
+      if high_weight?(x + 1, y, geo_z)
         weight = Config.medium_weight
-      elsif high_weight?(x &- 1, y, geo_z)
+      elsif high_weight?(x - 1, y, geo_z)
         weight = Config.medium_weight
-      elsif high_weight?(x, y &+ 1, geo_z)
+      elsif high_weight?(x, y + 1, geo_z)
         weight = Config.medium_weight
-      elsif high_weight?(x, y &- 1, geo_z)
+      elsif high_weight?(x, y - 1, geo_z)
         weight = Config.medium_weight
       end
     end
@@ -201,7 +201,7 @@ class CellNodeBuffer
       return true
     end
 
-    if (result.loc.z &- z).abs > 16
+    if (result.loc.z - z).abs > 16
       return true
     end
 

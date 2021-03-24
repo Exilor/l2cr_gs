@@ -94,7 +94,6 @@ module AdminCommandHandler::AdminCreateItem
       pc.send_message("You gave #{template.name} to #{counter} players.")
     end
 
-
     true
   end
 
@@ -132,7 +131,7 @@ module AdminCommandHandler::AdminCreateItem
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_itemcreate",
       "admin_create_item",

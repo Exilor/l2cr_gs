@@ -80,7 +80,7 @@ module PunishmentHandler::JailHandler
 
     pc.send_packet(msg)
 
-    delay = (task.expiration_time - Time.ms) // 1000
+    delay = (task.expiration_time &- Time.ms) // 1000
     if delay > 0
       if delay > 60
         pc.send_message("You've been jailed for #{delay // 60} minutes.")
@@ -107,7 +107,7 @@ module PunishmentHandler::JailHandler
     pc.send_packet(msg)
   end
 
-  def type
+  def type : PunishmentType
     PunishmentType::JAIL
   end
 end

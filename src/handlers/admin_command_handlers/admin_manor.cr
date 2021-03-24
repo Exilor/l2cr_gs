@@ -32,7 +32,7 @@ module AdminCommandHandler::AdminManor
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_manor"}
   end
 end

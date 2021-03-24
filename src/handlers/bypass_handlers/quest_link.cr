@@ -6,7 +6,7 @@ module BypassHandler::QuestLink
   private TO_LEAD_AND_BE_LED = 118
   private THE_LEADER_AND_THE_FOLLOWER = 123
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     debug { "#use_bypass command: '#{command}', pc: #{pc}, target: #{target}" }
     quest = command.from(5).strip
     if quest.empty?
@@ -71,7 +71,7 @@ module BypassHandler::QuestLink
         else
           quest_id = quest.id
           if quest_id > 10_000
-            quest_id -= 5000
+            quest_id &-= 5000
           elsif quest_id == 146
             quest_id = 640
           end
@@ -140,7 +140,7 @@ module BypassHandler::QuestLink
     qs = pc.get_quest_state(quest_id)
 
     if q
-      if q.id.in?(0...20000)
+      if q.id.in?(0...20_000)
         if pc.weight_penalty >= 3 || !pc.inventory_under_90?(true)
           pc.send_packet(SystemMessageId::INVENTORY_LESS_THAN_80_PERCENT)
           return
@@ -148,7 +148,7 @@ module BypassHandler::QuestLink
       end
 
       unless qs
-        if q.id.in?(0...20000)
+        if q.id.in?(0...20_000)
           if pc.all_active_quests.size >= MAX_QUEST_COUNT
             html = NpcHtmlMessage.new(npc.l2id)
             html.set_file(pc, "data/html/fullquest.html")
@@ -183,7 +183,7 @@ module BypassHandler::QuestLink
         next
       end
 
-      if (0...20000).covers?(quest.id)
+      if (0...20_000).covers?(quest.id)
         options << quest
         if quest.can_start_quest?(pc)
           condition_meet = true
@@ -199,7 +199,7 @@ module BypassHandler::QuestLink
 
       if quest = listener.owner.as?(Quest)
         if quest.visible_in_quest_window?
-          if (0...20000).covers?(quest.id)
+          if (0...20_000).covers?(quest.id)
             options << quest
             if quest.can_start_quest?(pc)
               condition_meet = true
@@ -232,7 +232,7 @@ module BypassHandler::QuestLink
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"Quest"}
   end
 end

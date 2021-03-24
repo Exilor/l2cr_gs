@@ -41,8 +41,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31349-06.html", "31349-07.html", "31349-08.html", "31349-09.html",
@@ -143,7 +142,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
       if qs.get_memo_state_ex(npc.id) != -1 # original: 0
         html = "31533-03.html"
       elsif Rnd.rand(60) > qs.get_memo_state_ex(1)
-        qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 20)
+        qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 20)
         qs.set_memo_state_ex(npc.id, 1)
         html = "31533-03.html"
       else
@@ -211,7 +210,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
       if qs.memo_state?(13)
         memo_state_ex = qs.get_memo_state_ex(1)
         if memo_state_ex <= 3
-          qs.set_memo_state_ex(1, memo_state_ex + 1)
+          qs.set_memo_state_ex(1, memo_state_ex &+ 1)
           play_sound(pc, Sound::CHRSOUND_FDELF_CRY)
           html = event
         else
@@ -235,7 +234,7 @@ class Scripts::Q00025_HidingBehindTheTruth < Quest
         take_items(pc, MAP_FOREST_OF_THE_DEAD, -1)
         reward_items(pc, EARING_OF_BLESSING, 1)
         reward_items(pc, RING_OF_BLESSING, 2)
-        add_exp_and_sp(pc, 572277, 53750)
+        add_exp_and_sp(pc, 572_277, 53_750)
         qs.exit_quest(false, true)
         html = event
       end

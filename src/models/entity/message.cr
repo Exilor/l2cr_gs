@@ -57,7 +57,7 @@ class Message
     @content = content
     @req_adena = req_adena
     @message_id = IdFactory.next
-    @expiration = cod ? Time.ms + (COD_EXPIRATION * 3_600_000) : Time.ms + (EXPIRATION * 3_600_000)
+    @expiration = cod ? Time.ms &+ (COD_EXPIRATION &* 3_600_000) : Time.ms &+ (EXPIRATION &* 3_600_000)
     @has_attachments = false
     @unread = true
     @deleted_by_sender = false
@@ -70,7 +70,7 @@ class Message
     @content = content
     @message_id = IdFactory.next
     @sender_id = -1
-    @expiration = Time.ms + (EXPIRATION * 3_600_000)
+    @expiration = Time.ms &+ (EXPIRATION &* 3_600_000)
     @req_adena = 0i64
     @has_attachments = false
     @unread = true
@@ -86,7 +86,7 @@ class Message
     @receiver_id = msg.sender_id
     @subject = ""
     @content = ""
-    @expiration = Time.ms + (EXPIRATION * 3600000)
+    @expiration = Time.ms &+ (EXPIRATION &* 3_600_000)
     @unread = true
     @deleted_by_sender = true
     @deleted_by_receiver = false

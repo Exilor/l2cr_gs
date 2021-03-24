@@ -2,7 +2,7 @@ module BypassHandler::EventEngine
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2Npc)
 
     begin
@@ -20,7 +20,7 @@ module BypassHandler::EventEngine
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"event_participate", "event_unregister"}
   end
 end

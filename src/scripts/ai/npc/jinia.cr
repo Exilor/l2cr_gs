@@ -36,7 +36,6 @@ class Scripts::Jinia < AbstractNpcAI
       end
     end
 
-
     html
   end
 

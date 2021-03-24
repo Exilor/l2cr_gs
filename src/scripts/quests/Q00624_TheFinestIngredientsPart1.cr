@@ -29,10 +29,7 @@ class Scripts::Q00624_TheFinestIngredientsPart1 < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31521-02.htm"
@@ -49,7 +46,6 @@ class Scripts::Q00624_TheFinestIngredientsPart1 < Quest
       end
     end
 
-
     html
   end
 
@@ -58,9 +54,9 @@ class Scripts::Q00624_TheFinestIngredientsPart1 < Quest
     if m && m.inside_radius?(npc, 1500, true, false)
       item = MONSTER_DROPS[npc.id]
       count = get_quest_items_count(m, item)
-      if count + 1 >= 50
+      if count &+ 1 >= 50
         if count < 50
-          give_items(m, item, 50 - count)
+          give_items(m, item, 50 &- count)
           play_sound(m, Sound::ITEMSOUND_QUEST_FANFARE_MIDDLE)
         end
         if get_quest_items_count(m, registered_item_ids) == 150
@@ -88,9 +84,7 @@ class Scripts::Q00624_TheFinestIngredientsPart1 < Quest
       when 2
         html = "31521-04.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

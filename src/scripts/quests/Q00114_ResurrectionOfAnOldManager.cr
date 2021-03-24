@@ -27,10 +27,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -51,7 +48,6 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
       when 5
         html = "32041-14.html"
       end
-
     when "32041-15.html"
       st.set("talk", "1")
     when "32041-23.html"
@@ -80,7 +76,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
     when "32046-03.html"
       st.set_cond(19, true)
     when "32046-07.html"
-      st.add_exp_and_sp(1846611, 144270)
+      st.add_exp_and_sp(1_846_611, 144_270)
       st.exit_quest(false, true)
     # Wendy
     when "32047-02.html"
@@ -125,7 +121,7 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         golem.add_damage_hate(pc, 0, 999)
         golem.set_intention(AI::ATTACK, pc)
         st.set("spawned", "1")
-        start_quest_timer("golem_despawn", 300000, nil, pc)
+        start_quest_timer("golem_despawn", 300_000, nil, pc)
       elsif st.get_int("spawned") == 1
         html = "32047-17b.html"
       else
@@ -255,7 +251,6 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           when 2
             html = "32041-24.html"
           end
-
         when 6..8, 10, 11, 13..15
           html = "32041-27.html"
         when 9, 12, 16
@@ -274,11 +269,9 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 27
           html = "32041-42.html"
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when WENDY
       if st.started?
         case st.cond
@@ -303,7 +296,6 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
           when 3
             html = "32047-11c.html"
           end
-
         when 7
           html = "32047-11c.html"
         when 8
@@ -337,7 +329,6 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 26
           html = "32047-32c.html"
         end
-
       end
     when NEWYEAR
       if st.started?
@@ -347,7 +338,6 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 22
           html = "31961-03.html"
         end
-
       end
     when BOX
       if st.started?
@@ -361,7 +351,6 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 24
           html = "32050-05z.html"
         end
-
       end
     when STONES
       if st.started?
@@ -373,10 +362,8 @@ class Scripts::Q00114_ResurrectionOfAnOldManager < Quest
         when 27
           html = "32046-04.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

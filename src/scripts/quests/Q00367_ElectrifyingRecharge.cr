@@ -28,10 +28,7 @@ class Scripts::Q00367_ElectrifyingRecharge < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30673-02.htm"
@@ -44,7 +41,6 @@ class Scripts::Q00367_ElectrifyingRecharge < Quest
       st.exit_quest(true, true)
       html = event
     end
-
 
     html
   end

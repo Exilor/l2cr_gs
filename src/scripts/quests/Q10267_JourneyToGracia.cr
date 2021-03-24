@@ -27,11 +27,10 @@ class Scripts::Q10267_JourneyToGracia < Quest
     when "32564-02.html"
       st.set_cond(2, true)
     when "32548-02.html"
-      st.give_adena(92500, true)
-      st.add_exp_and_sp(75480, 7570)
+      st.give_adena(92_500, true)
+      st.add_exp_and_sp(75_480, 7570)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -61,7 +60,6 @@ class Scripts::Q10267_JourneyToGracia < Quest
         html = "32548-03.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -5,29 +5,26 @@ require "../../models/drops/drop_list_scope"
 module NpcData
   extend self
   extend XMLReader
-  extend Synchronizable
 
-  private NPCS = Concurrent::Map(Int32, L2NpcTemplate).new
-  private CLANS = Concurrent::Map(String, Int32).new
+  private NPCS = {} of Int32 => L2NpcTemplate
+  private CLANS = {} of String => Int32
 
   private class_getter! minion_data : MinionData
 
   def load
-    sync do
-      debug "Loading NPC data..."
-      timer = Timer.new
-      @@minion_data = MinionData.new
-      parse_datapack_directory("stats/npcs")
-      info { "Loaded #{NPCS.size} NPC templates in #{timer} s." }
-      if Config.custom_npc_data
-        timer.start
-        count = NPCS.size
-        parse_datapack_directory("stats/npcs/custom", true)
-        info { "Loaded #{NPCS.size &- count} custom NPC templates in #{timer} s." }
-      end
-      @@minion_data = nil
-      load_npcs_skill_learn
+    debug "Loading NPC data..."
+    timer = Timer.new
+    @@minion_data = MinionData.new
+    parse_datapack_directory("stats/npcs")
+    info { "Loaded #{NPCS.size} NPC templates in #{timer} s." }
+    if Config.custom_npc_data
+      timer.start
+      count = NPCS.size
+      parse_datapack_directory("stats/npcs/custom", true)
+      info { "Loaded #{NPCS.size &- count} custom NPC templates in #{timer} s." }
     end
+    @@minion_data = nil
+    load_npcs_skill_learn
   end
 
   def [](id : Int32) : L2NpcTemplate
@@ -429,9 +426,7 @@ module NpcData
   end
 
   def get_templates(& : L2NpcTemplate ->) : Array(L2NpcTemplate)
-    ret = [] of L2NpcTemplate
-    templates.each { |template| ret << template if yield(template) }
-    ret
+    NPCS.select_values { |template| yield template }
   end
 
   def get_all_of_level(*lvls : Int32) : Array(L2NpcTemplate)
@@ -456,7 +451,6 @@ module NpcData
 
   private struct MinionData
     include XMLReader
-    include Loggable
 
     getter minions
 
@@ -481,6 +475,10 @@ module NpcData
           @minions[id] = minions
         end
       end
+    end
+
+    def to_s(io : IO)
+      self.class.to_s(io)
     end
   end
 

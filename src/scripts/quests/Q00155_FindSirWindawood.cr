@@ -41,7 +41,6 @@ class Scripts::Q00155_FindSirWindawood < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when SIR_COLLIN_WINDAWOOD
       if st.started? && st.has_quest_items?(OFFICIAL_LETTER)
         st.give_items(HASTE_POTION, 1)
@@ -49,7 +48,6 @@ class Scripts::Q00155_FindSirWindawood < Quest
         html = "30311-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -1,6 +1,6 @@
 module SummonEffectsTable
   extend self
-  extend Loggable
+  include Loggable
 
   private record SummonEffect, skill : Skill, effect_time : Int32
 

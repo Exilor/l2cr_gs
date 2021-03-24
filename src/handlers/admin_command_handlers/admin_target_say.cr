@@ -28,7 +28,7 @@ module AdminCommandHandler::AdminTargetSay
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_targetsay"}
   end
 end

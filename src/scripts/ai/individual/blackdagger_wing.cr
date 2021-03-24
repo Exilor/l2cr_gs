@@ -51,7 +51,7 @@ class Scripts::BlackdaggerWing < AbstractNpcAI
 
   def on_spell_finished(npc, pc, skill)
     if skill.id == POWER_STRIKE.skill_id
-      npc.variables[POWER_STRIKE_CAST_COUNT] = npc.variables.get_i32(POWER_STRIKE_CAST_COUNT) + 1
+      npc.variables[POWER_STRIKE_CAST_COUNT] = npc.variables.get_i32(POWER_STRIKE_CAST_COUNT) &+ 1
       if npc.variables.get_i32(POWER_STRIKE_CAST_COUNT) > 3
         add_skill_cast_desire(npc, pc, RANGE_MAGIC_ATTACK, 9999900000000000)
         npc.variables[POWER_STRIKE_CAST_COUNT] = 0

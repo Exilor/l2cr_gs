@@ -2,7 +2,7 @@ module ChatHandler::ChatPartyRoomAll
   extend self
   extend ChatHandler
 
-  def handle_chat(type, pc, params, text)
+  def handle_chat(type : Int32, pc : L2PcInstance, target : String?, text : String)
     return unless party = pc.party
     return unless party.leader?(pc)
     return unless cc = party.command_channel
@@ -16,7 +16,7 @@ module ChatHandler::ChatPartyRoomAll
     cc.broadcast_creature_say(cs, pc)
   end
 
-  def chat_type_list
+  def chat_type_list : Enumerable(Int32)
     {16}
   end
 end

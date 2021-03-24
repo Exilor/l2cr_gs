@@ -25,10 +25,7 @@ class Scripts::Q00307_ControlDeviceOfTheGiants < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -102,7 +99,6 @@ class Scripts::Q00307_ControlDeviceOfTheGiants < Quest
       end
     end
 
-
     super
   end
 
@@ -128,7 +124,6 @@ class Scripts::Q00307_ControlDeviceOfTheGiants < Quest
         html = "32711-10.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

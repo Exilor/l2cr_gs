@@ -119,7 +119,6 @@ class Scripts::Q00458_PerfectForm < Quest
       end
     end
 
-
     if overhit_html
       html = get_htm(pc, html)
       html = html.sub("<?number?>", overhits.to_s)
@@ -132,25 +131,25 @@ class Scripts::Q00458_PerfectForm < Quest
     st = get_quest_state(pc, false)
     if st && st.cond?(1)
       npc_id = npc.id
-      if npc_id == KOOKABURRAS[0] || npc_id == COUGARS[0] || npc_id == BUFFALOS[0] || npc_id == GRENDELS[0]
-        npc_id += 1
+      if npc_id.in?(KOOKABURRAS[0], COUGARS[0], BUFFALOS[0], GRENDELS[0])
+        npc_id &+= 1
       end
 
       variable = npc_id.to_s # i3
       current_val = st.get_int(variable)
       if current_val < 10
-        st.set(variable, (current_val + 1).to_s) # IncreaseNPCLogByID
+        st.set(variable, (current_val &+ 1).to_s) # IncreaseNPCLogByID
 
         mob = npc.as(L2Attackable)
         if mob.overhit?
-          st.set("overhitsTotal", (st.get_int("overhitsTotal") + 1).to_s) # memo_stateEx 1
+          st.set("overhitsTotal", (st.get_int("overhitsTotal") &+ 1).to_s) # memo_stateEx 1
           max_hp = mob.max_hp
           # L2Attackable#calculateOverhitExp way of calculating overhit % seems illogical
           overhit_percentage = (max_hp + mob.overhit_damage) // max_hp
           if overhit_percentage >= 1.2
-            st.set("overhitsCritical", (st.get_int("overhitsCritical") + 1).to_s) # memo_stateEx 2
+            st.set("overhitsCritical", (st.get_int("overhitsCritical") &+ 1).to_s) # memo_stateEx 2
           end
-          overhits_consecutive = st.get_int("overhitsConsecutive") + 1
+          overhits_consecutive = st.get_int("overhitsConsecutive") &+ 1
           st.set("overhitsConsecutive", overhits_consecutive.to_s) # memo_stateEx 3
           # /*
           #  * Retail logic (makes for a long/messy string in database): i0 = overhits_consecutive % 100; i1 = overhitsConsecutive - (i0 * 100); if i0 < i1) { st.set("overhitsConsecutive", String.valueOf((i1 * 100) + i1)); }
@@ -205,9 +204,7 @@ class Scripts::Q00458_PerfectForm < Quest
       when 2
         html = "32768-13.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

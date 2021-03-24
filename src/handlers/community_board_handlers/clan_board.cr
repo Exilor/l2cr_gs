@@ -1,8 +1,9 @@
 module CommunityBoardHandler::ClanBoard
   extend self
   extend IParseBoardHandler
+  include Loggable
 
-  def parse_command(command, pc)
+  def parse_command(command : String, pc : L2PcInstance) : Bool
     if command == "_bbsclan"
       CommunityBoardHandler.add_bypass(pc, "Clan", command)
       clan = pc.clan
@@ -221,7 +222,7 @@ module CommunityBoardHandler::ClanBoard
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"_bbsclan", "_bbsclan_list", "_bbsclan_clanhome"}
   end
 end

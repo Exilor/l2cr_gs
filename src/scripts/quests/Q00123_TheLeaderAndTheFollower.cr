@@ -77,10 +77,8 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
               html = "31961-11a.html"
             end
           end
-
         end
       end
-
 
       return html
     end
@@ -124,7 +122,6 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
       end
     end
 
-
     html
   end
 
@@ -150,7 +147,6 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
           end
         end
       end
-
     end
 
     super
@@ -235,7 +231,6 @@ class Scripts::Q00123_TheLeaderAndTheFollower < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

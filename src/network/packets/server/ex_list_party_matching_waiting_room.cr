@@ -6,7 +6,7 @@ class Packets::Outgoing::ExListPartyMatchingWaitingRoom < GameServerPacket
   def initialize(page : Int32, min_lvl : Int32, max_lvl : Int32, classes : Set(Int32), filter : String)
     @players = PartyMatchWaitingList.find_players(min_lvl, max_lvl, classes, filter)
     @total_matching_players = @players.size
-    @players = @players.skip((page - 1) * TOTAL)[0..page * TOTAL]
+    @players = @players.skip((page &- 1) &* TOTAL)[0..page &* TOTAL]
   end
 
   private def write_impl
@@ -22,9 +22,7 @@ class Packets::Outgoing::ExListPartyMatchingWaitingRoom < GameServerPacket
       d MapRegionManager.get_map_region(pc).not_nil!.bbs
       instances = InstanceManager.get_all_instance_times(pc.l2id)
       d instances.size
-      instances.each_key do |id|
-        d id
-      end
+      instances.each_key { |id| d id }
     end
   end
 end

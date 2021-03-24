@@ -4,7 +4,7 @@ require "../models/holders/punishment_holder"
 
 module PunishmentManager
   extend self
-  extend Loggable
+  include Loggable
 
   private TASKS = EnumMap(PunishmentAffect, PunishmentHolder).new
 

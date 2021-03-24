@@ -678,7 +678,7 @@ class SevenSignsFestival
   end
 
   def festival_signup_time : Int64
-    Config.alt_festival_cycle_length.to_i64 - Config.alt_festival_length - 60_000
+    Config.alt_festival_cycle_length.to_i64 &- Config.alt_festival_length &- 60_000
   end
 
   def get_festival_name(id : Int32) : String
@@ -750,7 +750,7 @@ class SevenSignsFestival
         dat["score"] = rs.get_i32(:"score")
         dat["members"] = rs.get_string(:"members")
         if cabal == "dawn"
-          festival_id += FESTIVAL_COUNT
+          festival_id &+= FESTIVAL_COUNT
         end
         temp = FESTIVAL_DATA[festival_cycle] ||= {} of Int32 => StatsSet
         temp[festival_id] = dat
@@ -889,7 +889,7 @@ class SevenSignsFestival
     (FESTIVAL_COUNT * 2).times do |i|
       festival_id = i
       if i >= FESTIVAL_COUNT
-        festival_id -= FESTIVAL_COUNT
+        festival_id &-= FESTIVAL_COUNT
       end
 
       temp = StatsSet.new
@@ -946,7 +946,7 @@ class SevenSignsFestival
       return -1i64
     end
 
-    (@next_festival_cycle_start - Time.ms) // 60_000
+    (@next_festival_cycle_start &- Time.ms) // 60_000
   end
 
   def mins_to_next_festival : Int32
@@ -954,7 +954,7 @@ class SevenSignsFestival
       return -1
     end
 
-    (((@next_festival_start - Time.ms) // 60_000) + 1).to_i32
+    (((@next_festival_start &- Time.ms) // 60_000) &+ 1).to_i32
   end
 
   def time_to_next_festival_str : String
@@ -1072,7 +1072,7 @@ class SevenSignsFestival
     offset_id = festival_id
 
     if oracle == SevenSigns::CABAL_DAWN
-      offset_id += 5
+      offset_id &+= 5
     end
 
     FESTIVAL_DATA[@signs_cycle]?.try &.[offset_id]? || begin
@@ -1173,7 +1173,7 @@ class SevenSignsFestival
     end
 
 
-    total = ACCUMULATED_BONUSES[festival_id] + (stone_amount * bonus)
+    total = ACCUMULATED_BONUSES[festival_id] &+ (stone_amount &* bonus)
     ACCUMULATED_BONUSES[festival_id] = total
   end
 
@@ -1194,7 +1194,7 @@ class SevenSignsFestival
           total_accum_bonus = ACCUMULATED_BONUSES[festival_id]
 
           bonus = total_accum_bonus // num_party_members
-          ACCUMULATED_BONUSES[festival_id] = total_accum_bonus - bonus
+          ACCUMULATED_BONUSES[festival_id] = total_accum_bonus &- bonus
           break
         end
       end
@@ -1241,10 +1241,10 @@ class SevenSignsFestival
 
     def initialize(festival : SevenSignsFestival)
       @festival = festival
-      @festival.festival_cycle += 1
+      @festival.festival_cycle &+= 1
       @festival.set_next_cycle_start
       @festival.set_next_festival_start(
-        Config.alt_festival_cycle_length - @festival.festival_signup_time
+        Config.alt_festival_cycle_length &- @festival.festival_signup_time
       )
     end
 
@@ -1270,9 +1270,9 @@ class SevenSignsFestival
         if DUSK_FESTIVAL_PARTICIPANTS.empty? && DAWN_FESTIVAL_PARTICIPANTS.empty?
           @festival.set_next_cycle_start
           @festival.set_next_festival_start(
-            Config.alt_festival_cycle_length - @festival.festival_signup_time
+            Config.alt_festival_cycle_length &- @festival.festival_signup_time
           )
-          wait(Config.alt_festival_cycle_length - @festival.festival_signup_time)
+          wait(Config.alt_festival_cycle_length &- @festival.festival_signup_time)
           @festival_instances.each_value do |inst|
             unless inst.npc_instances.empty?
               inst.unspawn_mobs
@@ -1313,17 +1313,17 @@ class SevenSignsFestival
         inst.send_message_to_participants(NpcString::THE_MAIN_EVENT_IS_NOW_STARTING)
       end
 
-      wait(Config.alt_festival_first_swarm - Config.alt_festival_first_spawn)
+      wait(Config.alt_festival_first_swarm &- Config.alt_festival_first_spawn)
 
-      elapsed_time += Config.alt_festival_first_swarm - Config.alt_festival_first_spawn
+      elapsed_time += Config.alt_festival_first_swarm &- Config.alt_festival_first_spawn
 
       @festival_instances.each_value &.move_monsters_to_center
 
-      wait(Config.alt_festival_second_spawn - Config.alt_festival_first_swarm)
+      wait(Config.alt_festival_second_spawn &- Config.alt_festival_first_swarm)
 
       @festival_instances.each_value do |inst|
         inst.spawn_festival_monsters(FESTIVAL_DEFAULT_RESPAWN // 2, 2)
-        _end = (Config.alt_festival_length - Config.alt_festival_second_spawn) // 60000
+        _end = (Config.alt_festival_length &- Config.alt_festival_second_spawn) // 60_000
         if _end == 2
           inst.send_message_to_participants(NpcString::THE_FESTIVAL_OF_DARKNESS_WILL_END_IN_TWO_MINUTES)
         else
@@ -1331,24 +1331,24 @@ class SevenSignsFestival
         end
       end
 
-      elapsed_time += Config.alt_festival_second_spawn - Config.alt_festival_first_swarm
+      elapsed_time += Config.alt_festival_second_spawn &- Config.alt_festival_first_swarm
 
-      wait(Config.alt_festival_second_swarm - Config.alt_festival_second_spawn)
+      wait(Config.alt_festival_second_swarm &- Config.alt_festival_second_spawn)
 
       @festival_instances.each_value &.move_monsters_to_center
 
-      elapsed_time += Config.alt_festival_second_swarm - Config.alt_festival_second_spawn
+      elapsed_time += Config.alt_festival_second_swarm &- Config.alt_festival_second_spawn
 
-      wait(Config.alt_festival_chest_spawn - Config.alt_festival_second_swarm)
+      wait(Config.alt_festival_chest_spawn &- Config.alt_festival_second_swarm)
 
       @festival_instances.each_value do |inst|
         inst.spawn_festival_monsters(FESTIVAL_DEFAULT_RESPAWN, 3)
         inst.send_message_to_participants("The chests have spawned! Be quick, the festival will end soon.")
       end
 
-      elapsed_time += Config.alt_festival_chest_spawn - Config.alt_festival_second_swarm
+      elapsed_time += Config.alt_festival_chest_spawn &- Config.alt_festival_second_swarm
 
-      wait(Config.alt_festival_length - elapsed_time)
+      wait(Config.alt_festival_length &- elapsed_time)
 
       @festival.festival_in_progress = false
 
@@ -1370,7 +1370,7 @@ class SevenSignsFestival
 
     def get_festival_instance(oracle : Int32, festival_id : Int32) : L2DarknessFestival?
       return unless @festival.festival_initialized?
-      festival_id += oracle == SevenSigns::CABAL_DUSK ? 10 : 20
+      festival_id &+= oracle == SevenSigns::CABAL_DUSK ? 10 : 20
       @festival_instances[festival_id]?
     end
   end
@@ -1600,5 +1600,9 @@ class SevenSignsFestival
       @heading = data[3] < 3 ? Rnd.u16.to_i32 : data[3]
       @npc_id = data.size > 4 ? data[-1] : -1
     end
+  end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
   end
 end

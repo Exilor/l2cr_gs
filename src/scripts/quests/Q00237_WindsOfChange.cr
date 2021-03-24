@@ -24,10 +24,7 @@ class Scripts::Q00237_WindsOfChange < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -94,7 +91,6 @@ class Scripts::Q00237_WindsOfChange < Quest
       html = event
     end
 
-
     html
   end
 
@@ -119,9 +115,7 @@ class Scripts::Q00237_WindsOfChange < Quest
         when 5, 6
           html = "30899-08.html"
         end
-
       end
-
     when IASON
       if st.completed?
         html = get_no_quest_msg(pc)
@@ -136,7 +130,6 @@ class Scripts::Q00237_WindsOfChange < Quest
         when 5, 6
           html = "30969-11.html"
         end
-
       end
     when ROMAN
       case st.cond
@@ -145,7 +138,6 @@ class Scripts::Q00237_WindsOfChange < Quest
       when 3, 4
         html = "30897-04.html"
       end
-
     when MORELYN
       case st.cond
       when 3
@@ -153,7 +145,6 @@ class Scripts::Q00237_WindsOfChange < Quest
       when 4
         html = "30925-04.html"
       end
-
     when HELVETICA
       if st.completed?
         if st.has_quest_items?(VICINITY_OF_FOS) || st.player.quest_completed?(Q00238_SuccessFailureOfBusiness.simple_name)
@@ -179,7 +170,6 @@ class Scripts::Q00237_WindsOfChange < Quest
         html = "32643-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -60,7 +60,6 @@ class Packets::Incoming::RequestDuelStart < GameClientPacket
         if !party_leader.processing_request?
           pc.on_transaction_request(party_leader)
           party_leader.send_packet(ExDuelAskStart.new(pc.name, @party_duel))
-          debug { "#{pc} requested a duel with #{party_leader.name}." }
 
           sm = SystemMessage.c1_party_has_been_challenged_to_a_duel
           sm.add_string(party_leader.name)
@@ -79,7 +78,6 @@ class Packets::Incoming::RequestDuelStart < GameClientPacket
       if !target.processing_request?
         pc.on_transaction_request(target)
         target.send_packet(ExDuelAskStart.new(pc.name, @party_duel))
-        debug { "#{pc} requested a duel with #{target.name}." }
 
         sm = SystemMessage.c1_has_been_challenged_to_a_duel
         sm.add_string(target.name)

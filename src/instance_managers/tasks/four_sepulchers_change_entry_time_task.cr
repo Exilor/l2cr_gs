@@ -7,9 +7,9 @@ struct FourSepulchersChangeEntryTimeTask
     manager.cool_down_time = false
 
     if manager.first_time_run?
-      interval = manager.entry_time_end - Time.ms
+      interval = manager.entry_time_end &- Time.ms
     else
-      interval = Config.fs_time_entry.to_i64 * 60000
+      interval = Config.fs_time_entry.to_i64 &* 60_000
     end
 
     ThreadPoolManager.schedule_general(FourSepulchersManagerSayTask.new, 0)

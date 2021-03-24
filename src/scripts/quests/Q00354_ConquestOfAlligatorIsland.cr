@@ -30,10 +30,7 @@ class Scripts::Q00354_ConquestOfAlligatorIsland < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30895-04.html", "30895-05.html", "30895-09.html"
@@ -44,11 +41,11 @@ class Scripts::Q00354_ConquestOfAlligatorIsland < Quest
     when "ADENA"
       count = st.get_quest_items_count(ALLIGATOR_TOOTH)
       if count >= 100
-        st.give_adena((count * 220) + 10700, true)
+        st.give_adena((count &* 220) &+ 10700, true)
         st.take_items(ALLIGATOR_TOOTH, -1)
         html = "30895-06.html"
       elsif count > 0
-        st.give_adena((count * 220) + 3100, true)
+        st.give_adena((count &* 220) &+ 3100, true)
         st.take_items(ALLIGATOR_TOOTH, -1)
         html = "30895-07.html"
       else

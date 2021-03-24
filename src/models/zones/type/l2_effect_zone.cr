@@ -14,7 +14,7 @@ class L2EffectZone < L2ZoneType
     self.settings = ZoneManager.get_settings(name) || TaskZoneSettings.new
   end
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name
     when "chance"
       @chance = value.to_i

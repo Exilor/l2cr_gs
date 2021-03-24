@@ -53,8 +53,7 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -96,9 +95,9 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
       end
     when "30650-02.html"
       if qs.memo_state?(6) && has_quest_items?(pc, TAG_OF_RUMOR)
-        if get_quest_items_count(pc, ADENA) >= 100000
+        if get_quest_items_count(pc, ADENA) >= 100_000
           give_items(pc, BOOK_OF_GERALD, 1)
-          take_items(pc, ADENA, 100000)
+          take_items(pc, ADENA, 100_000)
           qs.memo_state = 7
           html = event
         else
@@ -174,9 +173,9 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
           if !has_quest_items?(pc, BOOK_OF_SAGE)
             html = "30648-09.html"
           else
-            give_adena(pc, 229298, true)
+            give_adena(pc, 229_298, true)
             give_items(pc, MARK_OF_PILGRIM, 1)
-            add_exp_and_sp(pc, 1258250, 81606)
+            add_exp_and_sp(pc, 1_258_250, 81_606)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30648-10.html"
@@ -298,7 +297,7 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
             html = "30650-01.html"
           end
         elsif has_quest_items?(pc, GREY_BADGE, BOOK_OF_GERALD)
-          give_adena(pc, 100000, true)
+          give_adena(pc, 100_000, true)
           take_items(pc, BOOK_OF_GERALD, 1)
           html = "30650-04.html"
         end
@@ -332,7 +331,6 @@ class Scripts::Q00215_TrialOfThePilgrim < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == HERMIT_SANTIAGO
         html = get_already_completed_msg(pc)

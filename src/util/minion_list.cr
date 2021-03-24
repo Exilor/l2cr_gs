@@ -166,8 +166,8 @@ class MinionList
     offset = 200
     min_radius = master.collision_radius + 30
 
-    new_x = Rnd.rand((min_radius.to_i * 2).to_i32..offset * 2)
-    new_y = Rnd.rand(new_x..offset * 2)
+    new_x = Rnd.rand((min_radius.to_i * 2).to_i32..offset &* 2)
+    new_y = Rnd.rand(new_x..offset &* 2)
     new_y = (Math.sqrt((new_y * new_y) - (new_x * new_x))).to_i
     if new_x > offset + min_radius
       new_x = (master.x + new_x) - offset

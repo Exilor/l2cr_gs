@@ -25,8 +25,7 @@ class Scripts::Q00347_GoGetTheCalculator < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30526-03.htm", "30526-04.htm", "30526-05.htm", "30526-06.htm",
@@ -59,13 +58,12 @@ class Scripts::Q00347_GoGetTheCalculator < Quest
         html = event
       end
     when "30533-02.html"
-      if qs.cond?(2) && (pc.adena > 100)
+      if qs.cond?(2) && pc.adena > 100
         take_items(pc, Inventory::ADENA_ID, 100)
         qs.set_cond(3, true)
         html = event
       end
     end
-
 
     html
   end
@@ -95,7 +93,6 @@ class Scripts::Q00347_GoGetTheCalculator < Quest
         when 6
           html = "30526-09.html"
         end
-
       when SPIRON
         html = qs.cond?(1) ? "30532-01.html" : "30532-05.html"
       when BALANKI
@@ -123,13 +120,10 @@ class Scripts::Q00347_GoGetTheCalculator < Quest
         when 6
           html = "30527-05.html"
         end
-
       end
-
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

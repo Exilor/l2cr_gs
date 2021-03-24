@@ -19,10 +19,7 @@ class Scripts::Q00338_AlligatorHunter < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -33,7 +30,7 @@ class Scripts::Q00338_AlligatorHunter < Quest
         return "30892-05.html"
       end
       amount = st.get_quest_items_count(ALLIGATOR_LEATHER) >= 10 ? 3430 : 0
-      amount += 60 * st.get_quest_items_count(ALLIGATOR_LEATHER)
+      amount &+= 60 &* st.get_quest_items_count(ALLIGATOR_LEATHER)
       st.give_adena(amount, true)
       st.take_items(ALLIGATOR_LEATHER, -1)
     when "30892-10.html"
@@ -68,7 +65,6 @@ class Scripts::Q00338_AlligatorHunter < Quest
     when State::STARTED
       html = "30892-04.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

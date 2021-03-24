@@ -53,7 +53,7 @@ module AdminCommandHandler::AdminGmChat
     warn e
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_gmchat",
       "admin_snoop",

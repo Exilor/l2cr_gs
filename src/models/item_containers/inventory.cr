@@ -44,8 +44,8 @@ abstract class Inventory < ItemContainer
   delegate size, to: @paperdoll
 
   private module PaperdollListener
-    abstract def notify_equipped(slot, item, inv)
-    abstract def notify_unequipped(slot, item, inv)
+    abstract def notify_equipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
+    abstract def notify_unequipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
   end
 
   private struct ChangeRecorder
@@ -57,13 +57,13 @@ abstract class Inventory < ItemContainer
       inventory.add_paperdoll_listener(self)
     end
 
-    def notify_equipped(slot, item, inv)
+    def notify_equipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       unless @changed_items.includes?(item)
         @changed_items << item
       end
     end
 
-    def notify_unequipped(slot, item, inv)
+    def notify_unequipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       unless @changed_items.includes?(item)
         @changed_items << item
       end
@@ -74,7 +74,7 @@ abstract class Inventory < ItemContainer
     extend self
     extend PaperdollListener
 
-    def notify_equipped(slot, item, inv)
+    def notify_equipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       return unless slot == RHAND
 
       if item.item_type == WeaponType::BOW
@@ -88,7 +88,7 @@ abstract class Inventory < ItemContainer
       end
     end
 
-    def notify_unequipped(slot, item, inv)
+    def notify_unequipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       return unless slot == RHAND
 
       case item.item_type
@@ -115,7 +115,7 @@ abstract class Inventory < ItemContainer
     extend self
     extend PaperdollListener
 
-    def notify_equipped(slot, item, inv)
+    def notify_equipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       return unless pc = inv.owner.as?(L2PcInstance)
 
       it = item.template
@@ -171,7 +171,7 @@ abstract class Inventory < ItemContainer
       end
     end
 
-    def notify_unequipped(slot, item, inv)
+    def notify_unequipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       return unless pc = inv.owner.as?(L2PcInstance)
 
       it = item.template
@@ -249,7 +249,7 @@ abstract class Inventory < ItemContainer
     extend self
     extend PaperdollListener
 
-    def notify_equipped(slot, item, inv)
+    def notify_equipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       return unless pc = inv.owner.as?(L2PcInstance)
       return unless chest_item = inv.chest_slot
 
@@ -313,7 +313,7 @@ abstract class Inventory < ItemContainer
       end
     end
 
-    def notify_unequipped(slot, item, inv)
+    def notify_unequipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       return unless pc = inv.owner.as?(L2PcInstance)
 
       remove = false
@@ -367,11 +367,11 @@ abstract class Inventory < ItemContainer
     extend self
     extend PaperdollListener
 
-    def notify_equipped(slot, item, inv)
+    def notify_equipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       # no-op
     end
 
-    def notify_unequipped(slot, item, inv)
+    def notify_unequipped(slot : Int32, item : L2ItemInstance, inv : Inventory)
       if item.template.body_part == L2Item::SLOT_R_BRACELET
         inv.unequip_item_in_slot(DECO1)
         inv.unequip_item_in_slot(DECO2)

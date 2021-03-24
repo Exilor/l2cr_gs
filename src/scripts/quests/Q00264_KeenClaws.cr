@@ -32,9 +32,8 @@ class Scripts::Q00264_KeenClaws < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event == "30136-03.htm"
+    return unless pc && (st = get_quest_state(pc, false))
+    if event == "30136-03.htm"
       st.start_quest
       return event
     end
@@ -87,9 +86,7 @@ class Scripts::Q00264_KeenClaws < Quest
           html = "30136-05.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

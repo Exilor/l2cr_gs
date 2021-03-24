@@ -73,7 +73,7 @@ class Packets::Outgoing::ExEnchantSkillInfoDetail < GameServerPacket
     d @type
     d @skill_id
     d @skill_lvl
-    d @sp * @multi
+    d @sp &* @multi
     d @chance
     d 0x02
     d Inventory::ADENA_ID

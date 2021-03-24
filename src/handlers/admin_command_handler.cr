@@ -1,5 +1,7 @@
 module AdminCommandHandler
-  include Loggable
+  macro extended
+    include Loggable
+  end
   include Packets::Outgoing
 
   private HANDLERS = {} of String => self
@@ -25,7 +27,7 @@ module AdminCommandHandler
     HANDLERS[cmd]?
   end
 
-  # abstract def commands : Enumerable(String)
+  abstract def commands : Enumerable(String)
 end
 
 require "./admin_command_handlers/*"

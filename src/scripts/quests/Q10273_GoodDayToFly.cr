@@ -44,9 +44,7 @@ class Scripts::Q10273_GoodDayToFly < Quest
       when 2
         AURA_BIRD_OWL.skill.apply_effects(pc, pc)
       end
-
     end
-
 
     event
   end
@@ -87,8 +85,8 @@ class Scripts::Q10273_GoodDayToFly < Quest
         elsif transform == 2
           st.give_items(13554, 1)
         end
-        st.give_items(13857, 1)
-        st.add_exp_and_sp(25160, 2525)
+        st.give_items(13_857, 1)
+        st.add_exp_and_sp(25_160, 2525)
         st.exit_quest(false, true)
       elsif transform == 0
         html = "32557-07.html"

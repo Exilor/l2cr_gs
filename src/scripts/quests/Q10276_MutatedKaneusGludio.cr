@@ -31,7 +31,6 @@ class Scripts::Q10276_MutatedKaneusGludio < Quest
       st.exit_quest(false, true)
     end
 
-
     event
   end
 
@@ -78,7 +77,6 @@ class Scripts::Q10276_MutatedKaneusGludio < Quest
       when State::COMPLETED
         html = "30332-06.htm"
       end
-
     when ROHMER
       case st.state
       when State::STARTED
@@ -90,9 +88,7 @@ class Scripts::Q10276_MutatedKaneusGludio < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

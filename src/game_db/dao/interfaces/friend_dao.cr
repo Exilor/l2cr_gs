@@ -1,6 +1,8 @@
 module GameDB
   module FriendDAO
-    include Loggable
+    macro extended
+      include Loggable
+    end
 
     abstract def load(pc : L2PcInstance)
     abstract def insert(pc : L2PcInstance, friend : L2PcInstance)

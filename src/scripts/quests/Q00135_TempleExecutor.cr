@@ -38,10 +38,7 @@ class Scripts::Q00135_TempleExecutor < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -56,9 +53,9 @@ class Scripts::Q00135_TempleExecutor < Quest
       st.set_cond(3, true)
     when "30068-11.html"
       st.give_items(BADGE_TEMPLE_EXECUTOR, 1)
-      st.give_adena(16924, true)
+      st.give_adena(16_924, true)
       if pc.level < MAX_REWARD_LEVEL
-        st.add_exp_and_sp(30000, 2000)
+        st.add_exp_and_sp(30_000, 2000)
       end
       st.exit_quest(false, true)
     else

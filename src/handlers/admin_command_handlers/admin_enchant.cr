@@ -96,7 +96,7 @@ module AdminCommandHandler::AdminEnchant
     AdminHtml.show_admin_html(pc, "enchant.htm")
   end
 
-  def commands
+  def commands : Enumerable(String)
     %w(
       admin_seteh
       admin_setec

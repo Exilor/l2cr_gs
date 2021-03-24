@@ -47,10 +47,7 @@ class Scripts::Q00464_Oath < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc && npc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && npc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -88,7 +85,7 @@ class Scripts::Q00464_Oath < Quest
         return get_no_quest_msg(pc)
       end
 
-      i = st.cond - 1
+      i = st.cond &- 1
       st.add_exp_and_sp(NPC[i][1], NPC[i][2])
       st.give_adena(NPC[i][3], true)
       st.exit_quest(QuestType::DAILY, true)
@@ -119,7 +116,6 @@ class Scripts::Q00464_Oath < Quest
         html = "strongbox-03.html"
       end
     end
-
 
     if start_quest
       if pc.level >= MIN_LEVEL
@@ -168,7 +164,6 @@ class Scripts::Q00464_Oath < Quest
         when 9
           html = "32596-05g.html"
         end
-
       elsif st.cond > 1 && st.get_int("npc") == npc_id
         html = "#{npc_id}-01.html"
       end

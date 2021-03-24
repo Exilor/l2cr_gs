@@ -91,10 +91,7 @@ class Scripts::Q00638_SeekersOfTheHolyGrail < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31328-03.htm"
@@ -117,7 +114,7 @@ class Scripts::Q00638_SeekersOfTheHolyGrail < Quest
             end
             html = "31328-07.html"
           else
-            give_adena(pc, 3576000, true)
+            give_adena(pc, 3_576_000, true)
             html = "31328-08.html"
           end
           take_items(pc, TOTEM, 2000)
@@ -129,7 +126,6 @@ class Scripts::Q00638_SeekersOfTheHolyGrail < Quest
         html = "31328-09.html"
       end
     end
-
 
     html
   end

@@ -754,10 +754,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       return super
     end
 
-    case skill.id
-    when 1011, 1015, 1217, 1218, 1401, 2360, 2369, 5146
-      # proceed
-    else
+    unless skill.id.in?(1011, 1015, 1217, 1218, 1401, 2360, 2369, 5146)
       return super
     end
 
@@ -779,7 +776,7 @@ class Scripts::CrystalCaverns < AbstractInstance
       if world.is_a?(CCWorld)
         if world.dragon_claw_start + DRAGON_CLAW_TIME <= Time.ms || world.dragon_claw_need <= 0
           world.dragon_claw_start = Time.ms
-          world.dragon_claw_need = caster.party.not_nil!.size - 1
+          world.dragon_claw_need = caster.party.not_nil!.size &- 1
         else
           world.dragon_claw_need &-= 1
         end
@@ -798,7 +795,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           return super
         elsif world.dragon_scale_start + DRAGON_SCALE_TIME <= Time.ms || world.dragon_scale_needed <= 0
           world.dragon_scale_start = Time.ms
-          world.dragon_scale_needed = caster.party.not_nil!.size - 1
+          world.dragon_scale_needed = caster.party.not_nil!.size &- 1
         else
           world.dragon_scale_needed &-= 1
         end
@@ -897,13 +894,13 @@ class Scripts::CrystalCaverns < AbstractInstance
           teleport_player(player, Location.new(144653, 152606, -12126), world.instance_id)
           player.stop_skill_effects(true, 5239)
           EVENT_TIMER_1.skill.apply_effects(player, player)
-          start_quest_timer("Timer2", 300000, npc, player)
+          start_quest_timer("Timer2", 300_000, npc, player)
         end
       elsif event.matches?(/\ATimer[2-5]1\z/i)
         InstanceManager.get_instance(world.instance_id).not_nil!.remove_npcs
         world.npc_list_2.clear
         run_steam_rooms(world, STEAM1_SPAWNS, 22)
-        start_quest_timer("Timer21", 300000, npc, nil)
+        start_quest_timer("Timer21", 300_000, npc, nil)
       elsif event.casecmp?("checkKechiAttack")
         if npc.in_combat?
           start_quest_timer("spawnGuards", SPAWN[0], npc, nil)
@@ -1046,7 +1043,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         end
 
         cry_golem = world.crystal_golems[npc]
-        min_dist = 300000
+        min_dist = 300_000
         L2World.get_visible_objects(npc, 300) do |object|
           if object.is_a?(L2ItemInstance) && object.id == CRYSTAL_FRAGMENT
             dx = npc.x - object.x
@@ -1059,7 +1056,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           end
         end
 
-        if min_dist != 300000
+        if min_dist != 300_000
           start_quest_timer("getFood", 2000, npc, nil)
         else
           if Rnd.rand(100) < 5
@@ -1173,7 +1170,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           start_quest_timer("autoFood", 2000, cry_golem, nil)
         end
       elsif world.status == 4 && npc.id == TEARS
-        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300000
+        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300_000
         add_spawn(32280, 144312, 154420, -11855, 0, false, 0, false, world.instance_id)
         give_rewards(player, npc.instance_id, CLEAR_CRYSTAL, false)
       elsif world.status == 2 && world.key_keepers.includes?(npc)
@@ -1187,14 +1184,14 @@ class Scripts::CrystalCaverns < AbstractInstance
             party.members.each do |m|
               if m.instance_id == world.instance_id
                 EVENT_TIMER_1.skill.apply_effects(m, m)
-                start_quest_timer("Timer2", 300000, npc, m)
+                start_quest_timer("Timer2", 300_000, npc, m)
               end
             end
           else
             EVENT_TIMER_1.skill.apply_effects(player, player)
-            start_quest_timer("Timer2", 300000, npc, player)
+            start_quest_timer("Timer2", 300_000, npc, player)
           end
-          start_quest_timer("Timer21", 300000, npc, nil)
+          start_quest_timer("Timer21", 300_000, npc, nil)
         end
         world.key_keepers.each do |gk|
           if gk != npc
@@ -1281,7 +1278,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           run_steam_oracles(world, oracle_order)
         end
       elsif (world.status == 9 && npc.id == DARNEL) || (world.status == 26 && npc.id == KECHI)
-        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300000
+        InstanceManager.get_instance(world.instance_id).not_nil!.duration = 300_000
         if npc.id == KECHI
           boss_cry = RED_CRYSTAL
           cancel_quest_timers("spawnGuards")
@@ -1306,7 +1303,7 @@ class Scripts::CrystalCaverns < AbstractInstance
         world.status = 31
         world.baylor = nil
         baylor_instance = InstanceManager.get_instance(npc.instance_id).not_nil!
-        baylor_instance.duration = 300000
+        baylor_instance.duration = 300_000
         start_quest_timer("spawn_oracle", 1000, npc, nil)
         give_rewards(player, npc.instance_id, -1, true)
       end
@@ -1319,7 +1316,7 @@ class Scripts::CrystalCaverns < AbstractInstance
     npc_id = npc.id
     get_quest_state(player, true)
     if npc_id == ORACLE_GUIDE_1
-      enter_instance(player, CCWorld.new(Time.ms + 5400000), "CrystalCaverns.xml", TEMPLATE_ID)
+      enter_instance(player, CCWorld.new(Time.ms + 5_400_000), "CrystalCaverns.xml", TEMPLATE_ID)
       return ""
     end
 
@@ -1344,15 +1341,15 @@ class Scripts::CrystalCaverns < AbstractInstance
               if m.instance_id == world.instance_id
                 m.stop_skill_effects(true, 5239)
                 EVENT_TIMER_2.skill.apply_effects(m, m)
-                start_quest_timer("Timer3", 600000, npc, m)
+                start_quest_timer("Timer3", 600_000, npc, m)
               end
             end
           else
             player.stop_skill_effects(true, 5239)
             EVENT_TIMER_2.skill.apply_effects(player, player)
-            start_quest_timer("Timer3", 600000, npc, player)
+            start_quest_timer("Timer3", 600_000, npc, player)
           end
-          start_quest_timer("Timer31", 600000, npc, nil)
+          start_quest_timer("Timer31", 600_000, npc, nil)
         when 32276
           if world.status == 23
             run_steam_rooms(world, STEAM3_SPAWNS, 24)
@@ -1365,15 +1362,15 @@ class Scripts::CrystalCaverns < AbstractInstance
               if m.instance_id == world.instance_id
                 m.stop_skill_effects(true, 5239)
                 EVENT_TIMER_4.skill.apply_effects(m, m)
-                start_quest_timer("Timer4", 1200000, npc, m)
+                start_quest_timer("Timer4", 1_200_000, npc, m)
               end
             end
           else
             player.stop_skill_effects(true, 5239)
             EVENT_TIMER_4.skill.apply_effects(player, player)
-            start_quest_timer("Timer4", 1200000, npc, player)
+            start_quest_timer("Timer4", 1_200_000, npc, player)
           end
-          start_quest_timer("Timer41", 1200000, npc, nil)
+          start_quest_timer("Timer41", 1_200_000, npc, nil)
         when 32277
           if world.status == 24
             run_steam_rooms(world, STEAM4_SPAWNS, 25)
@@ -1386,15 +1383,15 @@ class Scripts::CrystalCaverns < AbstractInstance
               if m.instance_id == world.instance_id
                 m.stop_skill_effects(true, 5239)
                 EVENT_TIMER_3.skill.apply_effects(m, m)
-                start_quest_timer("Timer5", 900000, npc, m)
+                start_quest_timer("Timer5", 900_000, npc, m)
               end
             end
           else
             player.stop_skill_effects(true, 5239)
             EVENT_TIMER_3.skill.apply_effects(player, player)
-            start_quest_timer("Timer5", 900000, npc, player)
+            start_quest_timer("Timer5", 900_000, npc, player)
           end
-          start_quest_timer("Timer51", 900000, npc, nil)
+          start_quest_timer("Timer51", 900_000, npc, nil)
         else
           # something is wrong
           do_teleport = false
@@ -1488,7 +1485,7 @@ class Scripts::CrystalCaverns < AbstractInstance
             return super
           end
           InstanceManager.get_instance(world.instance_id).not_nil!.doors.each do |door|
-            if door.id == room + 24220000
+            if door.id == room &+ 24220000
               if door.open?
                 return ""
               end

@@ -66,11 +66,10 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
       st.give_items(YANGSWORD, 1, AttributeType::EARTH.id.to_i32, 10)
     end
 
-
     if event.number?
       html = "#{npc.not_nil!.id}-1#{event}.html"
-      st.give_items(10520 + event.to_i, 2)
-      st.add_exp_and_sp(202160, 20375)
+      st.give_items(10520 &+ event.to_i, 2)
+      st.add_exp_and_sp(202_160, 20_375)
       st.exit_quest(false, true)
     end
 
@@ -89,7 +88,7 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
           if st.get_quest_items_count(SOULPIECE_AIR) < 6 && Rnd.rand(100) < 30
             st.give_items(SOULPIECE_AIR, 1)
             if st.get_quest_items_count(SOULPIECE_AIR) >= 6
-              st.set_cond(st.cond + 1, true)
+              st.set_cond(st.cond &+ 1, true)
             else
               st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             end
@@ -102,7 +101,7 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
           if st.get_quest_items_count(SOULPIECE_WATER) < 6 && Rnd.rand(100) < 30
             st.give_items(SOULPIECE_WATER, 1)
             if st.get_quest_items_count(SOULPIECE_WATER) >= 6
-              st.set_cond(st.cond + 1, true)
+              st.set_cond(st.cond &+ 1, true)
             else
               st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)
             end
@@ -110,7 +109,6 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         end
       end
     end
-
 
     nil
   end
@@ -130,11 +128,9 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 2
           html = "30839-05.html"
         end
-
       when State::COMPLETED
         html = "30839-0a.html"
       end
-
     when WEBER
       case st.state
       when State::CREATED
@@ -146,11 +142,9 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 7
           html = "31307-05.html"
         end
-
       when State::COMPLETED
         html = "31307-0a.html"
       end
-
     when YIN
       if st.started?
         case st.cond
@@ -165,7 +159,6 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 6
           html = "32325-10.html"
         end
-
       end
     when YANG
       if st.started?
@@ -181,10 +174,8 @@ class Scripts::Q10275_ContainingTheAttributePower < Quest
         when 11
           html = "32326-10.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

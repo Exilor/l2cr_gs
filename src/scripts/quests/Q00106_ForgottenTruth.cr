@@ -26,8 +26,7 @@ class Scripts::Q00106_ForgottenTruth < Quest
   end
 
   def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+    return unless player && (st = get_quest_state(player, false))
 
     case event
     when "30358-04.htm"
@@ -80,8 +79,8 @@ class Scripts::Q00106_ForgottenTruth < Quest
         elsif st.cond?(4) && st.has_quest_items?(KARTAS_TRANSLATION)
           Q00281_HeadForTheHills.give_newbie_reward(pc)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
-          st.give_adena(10266, true)
-          st.add_exp_and_sp(24195, 2074)
+          st.give_adena(10_266, true)
+          st.add_exp_and_sp(24_195, 2074)
           st.exit_quest(false, true)
           html = "30358-07.html"
         end

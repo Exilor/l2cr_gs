@@ -64,8 +64,6 @@ class L2SepulcherNpcInstance < L2Npc
     end
 
     if self != pc.target
-      debug { "New target selected: #{l2id}." }
-
       pc.target = self
     elsif interact
       if auto_attackable?(pc) && !looks_dead?

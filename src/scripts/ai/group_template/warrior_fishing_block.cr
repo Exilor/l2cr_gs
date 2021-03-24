@@ -58,7 +58,6 @@ class Scripts::WarriorFishingBlock < AbstractNpcAI
       npc.decay_me
     end
 
-
     super
   end
 

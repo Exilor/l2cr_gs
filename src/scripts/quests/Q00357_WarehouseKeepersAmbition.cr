@@ -37,7 +37,7 @@ class Scripts::Q00357_WarehouseKeepersAmbition < Quest
       when "30686-09.html"
         crystal_count = get_quest_items_count(player, JADE_CRYSTAL)
         if crystal_count > 0
-          adena = crystal_count * 425
+          adena = crystal_count &* 425
           if crystal_count < 100
             adena += 13500
             html = "30686-08.html"
@@ -51,7 +51,7 @@ class Scripts::Q00357_WarehouseKeepersAmbition < Quest
       when "30686-11.html"
         crystal_count = get_quest_items_count(player, JADE_CRYSTAL)
         if crystal_count > 0
-          adena = (crystal_count * 425) + (crystal_count >= 100 ? 40500 : 0)
+          adena = (crystal_count &* 425) &+ (crystal_count >= 100 ? 40500 : 0)
           give_adena(player, adena, true)
           take_items(player, JADE_CRYSTAL, -1)
         end

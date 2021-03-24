@@ -64,7 +64,6 @@ class Scripts::SeparatedSoul < AbstractNpcAI
       return "separatedsoul.htm"
     end
 
-
     super
   end
 end

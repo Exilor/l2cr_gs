@@ -31,10 +31,7 @@ class Scripts::Q10505_JewelOfValakas < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if pc.level >= MIN_LEVEL && has_quest_items?(pc, VACUALITE_FLOATING_STONE)
       case event
@@ -45,7 +42,6 @@ class Scripts::Q10505_JewelOfValakas < Quest
         give_items(pc, EMPTY_CRYSTAL, 1)
         html = event
       end
-
     end
 
     html
@@ -83,11 +79,9 @@ class Scripts::Q10505_JewelOfValakas < Quest
         st.exit_quest(false, true)
         html = "31540-10.html"
       end
-
     when State::COMPLETED
       html = "31540-03.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -1,6 +1,9 @@
 module ItemHandler
-  include Loggable
   include Packets::Outgoing
+
+  macro extended
+    include Loggable
+  end
 
   private HANDLERS = {} of String => self
 
@@ -18,18 +21,12 @@ module ItemHandler
   end
 
   def self.[](item : L2Item?) : self?
-    return unless item
-
-    if handler_name = item.handler_name
-      if handler = HANDLERS[handler_name]?
-        return handler
-      end
+    if name = item.try &.handler_name
+      HANDLERS[name]?
     end
-
-    nil
   end
 
-  # abstract def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
+  abstract def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
 end
 
 require "./item_handlers/*"

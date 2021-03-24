@@ -24,10 +24,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "START"
@@ -54,7 +51,6 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
       st.set_cond(3, true)
       html = event
     end
-
 
     html
   end
@@ -84,11 +80,10 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           st.play_sound(Sound::ITEMSOUND_QUEST_GIVEUP)
           html = "30956-10.html"
         end
-
       when POITAN
         if st.memo_state?(2) && st.get_int("ex") % 100 < 10
           ex = st.get_int("ex")
-          st.set("ex", ex + 11)
+          st.set("ex", ex &+ 11)
           case Rnd.rand(3)
           when 0
             html = "30458-01.html"
@@ -98,15 +93,14 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30458-03.html"
           end
 
-
           st.set_cond(2, true)
         elsif st.memo_state >= 2 && st.get_int("ex") % 100 >= 10
           html = "30458-04.html"
         end
       when RANSPO
-        if st.memo_state?(2) && st.get_int("ex") % 10000 < 1000
+        if st.memo_state?(2) && st.get_int("ex") % 10_000 < 1000
           ex = st.get_int("ex")
-          st.set("ex", ex + 1001)
+          st.set("ex", ex &+ 1001)
           case Rnd.rand(3)
           when 0
             html = "30594-01.html"
@@ -116,15 +110,14 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30594-03.html"
           end
 
-
           st.set_cond(2, true)
-        elsif st.memo_state >= 2 && st.get_int("ex") % 10000 >= 1000
+        elsif st.memo_state >= 2 && st.get_int("ex") % 10_000 >= 1000
           html = "30594-04.html"
         end
       when ALDO
-        if st.memo_state?(2) && st.get_int("ex") % 100000 < 10000
+        if st.memo_state?(2) && st.get_int("ex") % 100_000 < 10_000
           ex = st.get_int("ex")
-          st.set("ex", ex + 10001)
+          st.set("ex", ex &+ 10001)
           case Rnd.rand(3)
           when 0
             html = "30057-01.html"
@@ -134,15 +127,14 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30057-03.html"
           end
 
-
           st.set_cond(2, true)
-        elsif st.memo_state >= 2 && st.get_int("ex") % 100000 >= 10000
+        elsif st.memo_state >= 2 && st.get_int("ex") % 100_000 >= 10_000
           html = "30057-04.html"
         end
       when HOLVAS
         if st.memo_state?(2) && st.get_int("ex") % 1000 < 100
           ex = st.get_int("ex")
-          st.set("ex", ex + 101)
+          st.set("ex", ex &+ 101)
           case Rnd.rand(3)
           when 0
             html = "30058-01.html"
@@ -152,15 +144,14 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30058-03.html"
           end
 
-
           st.set_cond(2, true)
         elsif st.memo_state >= 2 && st.get_int("ex") % 1000 >= 100
           html = "30058-04.html"
         end
       when OPIX
-        if st.memo_state?(2) && st.get_int("ex") < 100000
+        if st.memo_state?(2) && st.get_int("ex") < 100_000
           ex = st.get_int("ex")
-          st.set("ex", ex + 100001)
+          st.set("ex", ex &+ 100_001)
           case Rnd.rand(3)
           when 0
             html = "30595-01.html"
@@ -170,14 +161,13 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
             html = "30595-03.html"
           end
 
-
           st.set_cond(2, true)
-        elsif st.memo_state >= 2 && st.get_int("ex") >= 100000
+        elsif st.memo_state >= 2 && st.get_int("ex") >= 100_000
           html = "30595-04.html"
         end
       when BARBADO
         if st.memo_state?(4)
-          ex = (st.get_int("ex") % 10) * 20
+          ex = (st.get_int("ex") % 10) &* 20
           if Rnd.rand(100) < ex
             if st.has_quest_items?(EVENT_CLOTHES)
               st.take_items(EVENT_CLOTHES, -1)
@@ -198,9 +188,7 @@ class Scripts::Q00363_SorrowfulSoundOfFlute < Quest
           html = "30959-03.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

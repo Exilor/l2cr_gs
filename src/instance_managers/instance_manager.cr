@@ -41,7 +41,6 @@ module InstanceManager
   end
 
   def set_instance_time(pc_l2id : Int32, id : Int32, time : Int64)
-    # debug "set_instance_time instance id: #{id}, time: #{time}."
     unless PLAYER_INSTANCE_TIMES.has_key?(pc_l2id)
       restore_instance_times(pc_l2id)
     end

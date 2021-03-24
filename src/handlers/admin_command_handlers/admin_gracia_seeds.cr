@@ -26,7 +26,7 @@ module AdminCommandHandler::AdminGraciaSeeds
     html["%sodtiatkill%"] = GraciaSeedsManager.sod_tiat_killed
     if GraciaSeedsManager.sod_time_for_next_state_change > 0
       next_change_date = Calendar.new
-      next_change_date.ms = Time.ms + GraciaSeedsManager.sod_time_for_next_state_change
+      next_change_date.ms = Time.ms &+ GraciaSeedsManager.sod_time_for_next_state_change
       html["%sodtime%"] = next_change_date.time
     else
       html["%sodtime%"] = "-1"
@@ -35,7 +35,7 @@ module AdminCommandHandler::AdminGraciaSeeds
     pc.send_packet(html)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_gracia_seeds",
       "admin_kill_tiat",

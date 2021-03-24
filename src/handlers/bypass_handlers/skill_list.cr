@@ -2,7 +2,7 @@ module BypassHandler::SkillList
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target) : Bool
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2NpcInstance)
 
     if Config.alt_game_skill_learn
@@ -61,7 +61,7 @@ module BypassHandler::SkillList
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"SkillList"}
   end
 end

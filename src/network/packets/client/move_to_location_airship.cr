@@ -53,11 +53,10 @@ class Packets::Incoming::MoveToLocationAirship < GameClientPacket
           return
         end
 
-        ship.fuel -= fuel_consumption
+        ship.fuel &-= fuel_consumption
       end
 
       ship.execute_path(dst)
     end
-
   end
 end

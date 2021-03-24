@@ -107,6 +107,8 @@ class Packets::Incoming::CharacterCreate < GameClientPacket
       init_new_char(new_char)
     # end
     send_packet(CharCreateOk::STATIC_PACKET)
+
+    Logs[:accounting].info { "Created new character #{new_char} #{client}." }
   end
 
   private def init_new_char(pc)

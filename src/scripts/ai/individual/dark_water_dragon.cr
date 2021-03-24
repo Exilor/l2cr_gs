@@ -24,21 +24,21 @@ class Scripts::DarkWaterDragon < AbstractNpcAI
 
     case event.casecmp
     when "first_spawn" # timer to start timer "1"
-      start_quest_timer("1", 40000, npc, nil, true) # spawns detractor every 40 seconds
+      start_quest_timer("1", 40_000, npc, nil, true) # spawns detractor every 40 seconds
     when "second_spawn" # timer to start timer "2"
-      start_quest_timer("2", 40000, npc, nil, true) # spawns detractor every 40 seconds
+      start_quest_timer("2", 40_000, npc, nil, true) # spawns detractor every 40 seconds
     when "third_spawn" # timer to start timer "3"
-      start_quest_timer("3", 40000, npc, nil, true) # spawns detractor every 40 seconds
+      start_quest_timer("3", 40_000, npc, nil, true) # spawns detractor every 40 seconds
     when "fourth_spawn" # timer to start timer "4"
-      start_quest_timer("4", 40000, npc, nil, true) # spawns detractor every 40 seconds
+      start_quest_timer("4", 40_000, npc, nil, true) # spawns detractor every 40 seconds
     when "1" # spawns a detractor
-      add_spawn(DETRACTOR1, npc.x + 100, npc.y + 100, npc.z, 0, false, 40000)
+      add_spawn(DETRACTOR1, npc.x + 100, npc.y + 100, npc.z, 0, false, 40_000)
     when "2" # spawns a detractor
-      add_spawn(DETRACTOR2, npc.x + 100, npc.y - 100, npc.z, 0, false, 40000)
+      add_spawn(DETRACTOR2, npc.x + 100, npc.y - 100, npc.z, 0, false, 40_000)
     when "3" # spawns a detractor
-      add_spawn(DETRACTOR1, npc.x - 100, npc.y + 100, npc.z, 0, false, 40000)
+      add_spawn(DETRACTOR1, npc.x - 100, npc.y + 100, npc.z, 0, false, 40_000)
     when "4" # spawns a detractor
-      add_spawn(DETRACTOR2, npc.x - 100, npc.y - 100, npc.z, 0, false, 40000)
+      add_spawn(DETRACTOR2, npc.x - 100, npc.y - 100, npc.z, 0, false, 40_000)
     when "fafurion_despawn" # Fafurion Kindred disappears and drops reward
       cancel_quest_timer("fafurion_poison", npc, nil)
       cancel_quest_timer("1", npc, nil)
@@ -135,10 +135,10 @@ class Scripts::DarkWaterDragon < AbstractNpcAI
         # Spawn 4 Detractors on spawn of Fafurion
         x = npc.x
         y = npc.y
-        add_spawn(DETRACTOR2, x + 100, y + 100, npc.z, 0, false, 40000)
-        add_spawn(DETRACTOR1, x + 100, y - 100, npc.z, 0, false, 40000)
-        add_spawn(DETRACTOR2, x - 100, y + 100, npc.z, 0, false, 40000)
-        add_spawn(DETRACTOR1, x - 100, y - 100, npc.z, 0, false, 40000)
+        add_spawn(DETRACTOR2, x + 100, y + 100, npc.z, 0, false, 40_000)
+        add_spawn(DETRACTOR1, x + 100, y - 100, npc.z, 0, false, 40_000)
+        add_spawn(DETRACTOR2, x - 100, y + 100, npc.z, 0, false, 40_000)
+        add_spawn(DETRACTOR1, x - 100, y - 100, npc.z, 0, false, 40_000)
         start_quest_timer("first_spawn", 2000, npc, nil) # timer to delay timer "1"
         start_quest_timer("second_spawn", 4000, npc, nil) # timer to delay timer "2"
         start_quest_timer("third_spawn", 8000, npc, nil) # timer to delay timer "3"

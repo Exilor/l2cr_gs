@@ -16,9 +16,9 @@ class Scripts::AnomicFoundry < AbstractNpcAI
   }
   private SPAWNED = Slice.new(5, 0)
 
-  @respawn_time = 60000
-  @respawn_min = 20000
-  @respawn_max = 300000
+  @respawn_time = 60_000
+  @respawn_min = 20_000
+  @respawn_max = 300_000
 
   def initialize
     super(self.class.simple_name, "hellbound/AI/Zones")
@@ -39,7 +39,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
         if SPAWNED[idx] < SPAWNS[idx][5]
           tmp = SPAWNS[idx]
           add_spawn(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], false, 0, false)
-          @respawn_time += 10000
+          @respawn_time &+= 10_000
         end
         start_quest_timer("make_spawn_1", @respawn_time, nil, nil)
       end
@@ -53,7 +53,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
         npc.as(L2Attackable).return_home
       end
     when "reset_respawn_time"
-      @respawn_time = 60000
+      @respawn_time = 60_000
     end
 
 
@@ -61,7 +61,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
   end
 
   def on_aggro_range_enter(npc, player, is_summon)
-    if Rnd.rand(10000) < 2000
+    if Rnd.rand(10_000) < 2000
       request_help(npc, player, 500, FOREMAN)
       request_help(npc, player, 500, LESSER_EVIL)
       request_help(npc, player, 500, GREATER_EVIL)
@@ -75,18 +75,18 @@ class Scripts::AnomicFoundry < AbstractNpcAI
     if atk_idx == 0
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::ENEMY_INVASION_HURRY_UP)
       cancel_quest_timer("return_laborer", npc, nil)
-      start_quest_timer("return_laborer", 60000, npc, nil)
+      start_quest_timer("return_laborer", 60_000, npc, nil)
 
       if @respawn_time > @respawn_min
-        @respawn_time -= 5000
+        @respawn_time &-= 5000
       elsif @respawn_time <= @respawn_min
         unless get_quest_timer("reset_respawn_time", nil, nil)
-          start_quest_timer("reset_respawn_time", 600000, nil, nil)
+          start_quest_timer("reset_respawn_time", 60_0000, nil, nil)
         end
       end
     end
 
-    if Rnd.rand(10000) < 2000
+    if Rnd.rand(10_000) < 2000
       atk_idx &+= 1
       ATTACK_INDEX[npc.l2id] = atk_idx
       request_help(npc, attacker, 1000 * atk_idx, FOREMAN)
@@ -108,13 +108,13 @@ class Scripts::AnomicFoundry < AbstractNpcAI
       SPAWNED[get_spawn_group(npc)] &-= 1
       SpawnTable.delete_spawn(npc.spawn, false)
     elsif npc.id == LABORER
-      if Rnd.rand(10000) < 8000
+      if Rnd.rand(10_000) < 8000
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::PROCESS_SHOULDNT_BE_DELAYED_BECAUSE_OF_ME)
         if @respawn_time < @respawn_max
-          @respawn_time += 10000
+          @respawn_time &+= 10_000
         elsif @respawn_time >= @respawn_max &&
           unless get_quest_timer("reset_respawn_time", nil, nil)
-            start_quest_timer("reset_respawn_time", 600000, nil, nil)
+            start_quest_timer("reset_respawn_time", 600_000, nil, nil)
           end
         end
       end
@@ -138,8 +138,8 @@ class Scripts::AnomicFoundry < AbstractNpcAI
   end
 
   def on_teleport(npc)
-    if get_spawn_group(npc) >= 0 && get_spawn_group(npc) <= 2
-      SPAWNED[get_spawn_group(npc)] -= 1
+    if get_spawn_group(npc).between?(0, 2)
+      SPAWNED[get_spawn_group(npc)] &-= 1
       SpawnTable.delete_spawn(npc.spawn, false)
       npc.schedule_despawn(100)
       if SPAWNED[3] < SPAWNS[3][5]
@@ -148,7 +148,7 @@ class Scripts::AnomicFoundry < AbstractNpcAI
       end
     elsif get_spawn_group(npc) == 3
       start_quest_timer("make_spawn_2", @respawn_time * 2, nil, nil)
-      SPAWNED[3] -= 1
+      SPAWNED[3] &-= 1
       SpawnTable.delete_spawn(npc.spawn, false)
       npc.schedule_despawn(100)
     end

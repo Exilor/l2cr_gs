@@ -20,7 +20,7 @@ class Packets::Outgoing::ExQuestNpcLogList < GameServerPacket
     d @quest_id
     c @npcs.size
     @npcs.each do |holder|
-      d holder.npc_id + 1_000_000
+      d holder.npc_id &+ 1_000_000
       c holder.unknown
       d holder.count
     end

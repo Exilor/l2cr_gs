@@ -509,7 +509,7 @@ class QuestState
     unset("FlagJournal")
   end
 
-  def to_log(io : IO)
+  def to_s(io : IO)
     io.print("QuestState(", @quest_name, ')')
   end
 end

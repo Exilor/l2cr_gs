@@ -36,17 +36,15 @@ class Scripts::Q00328_SenseForBusiness < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    if st = get_quest_state(pc, false)
-      case event
-      when "30436-03.htm"
-        st.start_quest
-        html = event
-      when "30436-06.html"
-        st.exit_quest(true, true)
-        html = event
-      end
+    return unless pc && (st = get_quest_state(pc, false))
 
+    case event
+    when "30436-03.htm"
+      st.start_quest
+      html = event
+    when "30436-06.html"
+      st.exit_quest(true, true)
+      html = event
     end
 
     html
@@ -62,12 +60,12 @@ class Scripts::Q00328_SenseForBusiness < Quest
       carcass = st.get_quest_items_count(MONSTER_EYE_CARCASS)
       lens = st.get_quest_items_count(MONSTER_EYE_LENS)
       gizzards = st.get_quest_items_count(BASILISK_GIZZARD)
-      if carcass + lens + gizzards > 0
-        adena = carcass * MONSTER_EYE_CARCASS_ADENA
-        adena += lens * MONSTER_EYE_LENS_ADENA
-        adena += gizzards * BASILISK_GIZZARD_ADENA
-        if carcass + lens + gizzards >= BONUS_COUNT
-          adena += BONUS
+      if carcass &+ lens &+ gizzards > 0
+        adena = carcass &* MONSTER_EYE_CARCASS_ADENA
+        adena &+= lens &* MONSTER_EYE_LENS_ADENA
+        adena &+= gizzards &* BASILISK_GIZZARD_ADENA
+        if carcass &+ lens &+ gizzards >= BONUS_COUNT
+          adena &+= BONUS
         end
         st.give_adena(adena, true)
         take_items(pc, -1, {MONSTER_EYE_CARCASS, MONSTER_EYE_LENS, BASILISK_GIZZARD})
@@ -76,7 +74,6 @@ class Scripts::Q00328_SenseForBusiness < Quest
         html = "30436-04.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

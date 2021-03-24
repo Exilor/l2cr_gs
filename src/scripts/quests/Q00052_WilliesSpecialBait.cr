@@ -59,6 +59,7 @@ class Scripts::Q00052_WilliesSpecialBait < Quest
 
   def on_talk(npc, pc)
     st = get_quest_state!(pc)
+
     case st.state
     when State::COMPLETED
       html = get_already_completed_msg(pc)

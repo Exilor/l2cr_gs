@@ -53,9 +53,8 @@ class Scripts::Q00250_WatchWhatYouEat < Quest
   end
 
   def on_kill(npc, pc, is_summon)
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless st = get_quest_state(pc, false)
+
     if st.started? && st.cond?(1)
       MOBS.each do |mob|
         if npc.id == mob[0]
@@ -95,7 +94,6 @@ class Scripts::Q00250_WatchWhatYouEat < Quest
       when State::COMPLETED
         html = "32743-done.htm"
       end
-
     end
 
     html || get_no_quest_msg(pc)

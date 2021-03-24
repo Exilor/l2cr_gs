@@ -1,6 +1,6 @@
 module L2Event
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   enum EventState : UInt8

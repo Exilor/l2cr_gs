@@ -2,19 +2,19 @@ module ItemHandler::EventItem
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     unless pc = playable.as?(L2PcInstance)
       playable.send_packet(SystemMessageId::ITEM_NOT_FOR_PETS)
       return false
     end
 
-    case item_id = item.id
+    case item.id
     when 13787
       use_block_checker_item(pc, item)
     when 13788
       use_block_checker_item(pc, item)
     else
-      warn { "Item with id #{item_id} is not handled." }
+      warn { "Item with id #{item.id} is not handled." }
       false
     end
   end

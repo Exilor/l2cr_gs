@@ -42,7 +42,6 @@ class Scripts::Q00152_ShardsOfGolem < Quest
           html = event
         end
       end
-
     end
 
     html
@@ -60,6 +59,7 @@ class Scripts::Q00152_ShardsOfGolem < Quest
         end
       end
     end
+
     super
   end
 
@@ -88,11 +88,9 @@ class Scripts::Q00152_ShardsOfGolem < Quest
               html = "30035-05.html"
             end
           end
-
         when State::COMPLETED
-            html = get_already_completed_msg(pc)
+          html = get_already_completed_msg(pc)
         end
-
       when ALTRAN
         case st.cond
         when 1
@@ -119,9 +117,7 @@ class Scripts::Q00152_ShardsOfGolem < Quest
             html = "30283-05.html"
           end
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)

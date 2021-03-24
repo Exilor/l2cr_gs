@@ -93,8 +93,7 @@ class Scripts::Q00325_GrimCollector < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30336-03.htm"
@@ -129,18 +128,18 @@ class Scripts::Q00325_GrimCollector < Quest
       arm = st.get_quest_items_count(ARM_BONE).to_i64
       thigh = st.get_quest_items_count(THIGH_BONE).to_i64
       complete = st.get_quest_items_count(COMPLETE_SKELETON).to_i64
-      total_count = head + heart + liver + skull + rib + spine + arm + thigh + complete
+      total_count = head &+ heart &+ liver &+ skull &+ rib &+ spine &+ arm &+ thigh &+ complete
 
       if total_count > 0
-        sum = (head * 30) + (heart * 20) + (liver * 20) + (skull * 100)
-        sum += (rib * 40) + (spine * 14) + (arm * 14) + (thigh * 14)
+        sum = (head &* 30) &+ (heart &* 20) &+ (liver &* 20) &+ (skull &* 100)
+        sum &+= (rib &* 40) &+ (spine &* 14) &+ (arm &* 14) &+ (thigh &* 14)
 
         if total_count >= 10
-          sum += 1629
+          sum &+= 1629
         end
 
         if complete > 0
-          sum += 543 + (complete * 341)
+          sum &+= 543 &+ (complete &* 341)
         end
 
         st.give_adena(sum, true)
@@ -156,7 +155,7 @@ class Scripts::Q00325_GrimCollector < Quest
     when "30434-09.html"
       complete = st.get_quest_items_count(COMPLETE_SKELETON)
       if complete > 0
-        st.give_adena(((complete * 341) + 543), true)
+        st.give_adena(((complete &* 341) &+ 543), true)
         st.take_items(COMPLETE_SKELETON, -1)
       end
     end

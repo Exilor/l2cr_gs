@@ -38,12 +38,8 @@ abstract class AbstractPlayerGroup
     broadcast_packet(SystemMessage.from_string(text))
   end
 
-  def broadcast_creature_say(creature_say : CreatureSay, broadcaster : L2PcInstance)
-    each do |m|
-      unless BlockList.blocked?(m, broadcaster)
-        m.send_packet(creature_say)
-      end
-    end
+  def broadcast_creature_say(cs : CreatureSay, broadcaster : L2PcInstance)
+    each { |m| m.send_packet(cs) unless BlockList.blocked?(m, broadcaster) }
   end
 
   def random_player : L2PcInstance
@@ -62,9 +58,5 @@ abstract class AbstractPlayerGroup
 
   def to_s(io : IO)
     io.print(self.class, "(leader: ", leader.name, ')')
-  end
-
-  def to_log(io : IO)
-    to_s(io)
   end
 end

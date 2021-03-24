@@ -56,7 +56,7 @@ module AdminCommandHandler::AdminShutdown
     Shutdown.abort(pc)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_server_shutdown",
       "admin_server_restart",

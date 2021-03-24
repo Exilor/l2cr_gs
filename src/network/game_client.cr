@@ -146,6 +146,8 @@ class GameClient
         sql = "UPDATE characters SET deletetime=? WHERE charId=?"
         GameDB.exec(sql, Time.ms + Time.days_to_ms(Config.delete_days), id)
       end
+
+      Logs[:accounting].info { "Deleted character id #{id} for client #{self}." }
     end
 
     answer
@@ -163,7 +165,7 @@ class GameClient
       error e
     end
 
-    # LogRecord
+    Logs[:accounting].info { "Restoring character id #{l2id} for client #{self}." }
   end
 
   def self.delete_char_by_l2id(id : Int32)
@@ -318,7 +320,9 @@ class GameClient
       return true
     end
 
-    warn { "Kicked for cheating: #{punishment}." }
+    debug { "Kicked for cheating: #{punishment}." }
+
+    Logs[:audit].warn { "Client #{self} kicked for #{punishment}." }
 
     close_now
 
@@ -368,8 +372,7 @@ class GameClient
               pc.offline_start_time = Time.ms
             end
 
-            info { pc.name + " entering offline mode." }
-            # log accounting
+            Logs[:accounting].info { "Client #{self} entering offline mode." }
 
             return
           end
@@ -385,8 +388,8 @@ class GameClient
   end
 
   def on_forced_disconnection
-    # log accounting
-    warn "Disconnected abnormally."
+    Logs[:accounting].warn { "Client #{self} disconnected abnormally." }
+    debug "Disconnected abnormally."
   end
 
   def clean_me(fast : Bool)
@@ -500,16 +503,8 @@ class GameClient
     can_set_shop
   end
 
-  def to_log(io : IO)
-    io << "GameClient("
-    if pc = @active_char
-      io << pc.name
-    elsif @connection
-      io << @connection
-    else
-      io << "disconnected"
-    end
-    io << ')'
+  def to_s(io : IO)
+    io.print("GameClient(", @active_char || @connection || "disconnected", ')')
   end
 
   enum State : UInt8

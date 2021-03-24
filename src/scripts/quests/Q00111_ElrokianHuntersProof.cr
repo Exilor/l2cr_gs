@@ -52,10 +52,7 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32113-02.htm", "32113-05.htm", "32113-04.html", "32113-10.html",
@@ -117,13 +114,12 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
         take_items(pc, PRACTICE_ELROKIAN_TRAP, -1)
         give_items(pc, ELROKIAN_TRAP, 1)
         give_items(pc, TRAP_STONE, 100)
-        give_adena(pc, 1071691, true)
-        add_exp_and_sp(pc, 553524, 55538)
+        give_adena(pc, 1_071_691, true)
+        add_exp_and_sp(pc, 553_524, 55_538)
         qs.exit_quest(false, true)
         html = event
       end
     end
-
 
     html
   end
@@ -192,7 +188,6 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
         when 10..12
           html = "32113-30.html"
         end
-
       when MUSHIKA
         if qs.memo_state?(1)
           qs.set_cond(2, true)
@@ -230,7 +225,6 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
         when 12
           html = "32115-12.html"
         end
-
       when KIRIKACHIN
         case qs.memo_state
         when 1..5
@@ -251,11 +245,8 @@ class Scripts::Q00111_ElrokianHuntersProof < Quest
         when 12
           html = "32116-09.html"
         end
-
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

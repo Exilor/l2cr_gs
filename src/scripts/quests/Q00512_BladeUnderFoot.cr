@@ -77,7 +77,6 @@ class Scripts::Q00512_BladeUnderFoot < Quest
       html = event
     end
 
-
     html
   end
 

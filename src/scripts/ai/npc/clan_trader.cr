@@ -50,7 +50,6 @@ class Scripts::ClanTrader < AbstractNpcAI
     when "exchange-ke"
       give_reputation(npc, pc, Config.knightsepaulette_points, KNIGHTS_EPAULETTE, KNIGHTS_EPAULETTE_COUNT)
     end
-
   end
 
   def on_first_talk(npc, pc)

@@ -983,20 +983,20 @@ class Siege
 
     time = siege_date.ms - Time.ms
     if time > 86_400_000
-      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 86400000)
+      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time &- 86_400_000)
     elsif time <= 86_400_000 && time > 13_600_000
       sm = SystemMessage.registration_term_for_s1_ended
       sm.add_castle_id(castle.residence_id)
       Broadcast.to_all_online_players(sm)
       @registration_over = true
       clear_siege_waiting_clan
-      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 13600000)
+      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time &- 13_600_000)
     elsif time <= 13_600_000 && time > 600_000
-      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 600000)
+      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time &- 600_000)
     elsif time <= 600_000 && time > 300_000
-      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 300000)
+      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time &- 300_000)
     elsif time <= 300_000 && time > 10_000
-      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time - 10000)
+      @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time &- 10_000)
     elsif time <= 10_000 && time > 0
       @scheduled_start_siege_task = ThreadPoolManager.schedule_general(->schedule_start_siege_task, time)
     else
@@ -1006,8 +1006,7 @@ class Siege
     error e
   end
 
-  def to_log(io : IO)
-    super
-    io.print('(', castle.name, ')')
+  def to_s(io : IO)
+    io.print(self.class, '(', castle.name, ')')
   end
 end

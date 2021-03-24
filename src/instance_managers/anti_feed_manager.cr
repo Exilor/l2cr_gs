@@ -1,6 +1,6 @@
 module AntiFeedManager
   extend self
-  extend Loggable
+  include Loggable
 
   GAME_ID = 0
   OLYMPIAD_ID = 1
@@ -25,7 +25,7 @@ module AntiFeedManager
 
     if Config.antifeed_interval > 0
       if tmp = LAST_DEATH_TIMES[target_player.l2id]?
-        if Time.ms - tmp < Config.antifeed_interval
+        if Time.ms &- tmp < Config.antifeed_interval
           return false
         end
       end
@@ -65,14 +65,7 @@ module AntiFeedManager
   end
 
   def try_add_client(event_id : Int32, client : GameClient?, max : Int32) : Bool
-    unless client
-      return false
-    end
-
-    unless event = EVENT_IPS[event_id]?
-      return false
-    end
-
+    return false unless client && (event = EVENT_IPS[event_id]?)
     addr_hash = client.connection.ip.hash
 
     connection_count = event.fetch(addr_hash, 0)
@@ -102,7 +95,7 @@ module AntiFeedManager
 
     if temp = event[addr_hash]?
       if temp > 0
-        event[addr_hash] = temp - 1
+        event[addr_hash] = temp &- 1
       end
 
       return true

@@ -48,8 +48,7 @@ class Scripts::Q00064_CertifiedBerserker < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -70,9 +69,9 @@ class Scripts::Q00064_CertifiedBerserker < Quest
       end
     when "32207-11.html"
       if qs.memo_state?(11)
-        give_adena(pc, 63104, true)
+        give_adena(pc, 63_104, true)
         give_items(pc, ORKURUS_RECOMMENDATION, 1)
-        add_exp_and_sp(pc, 349006, 23948)
+        add_exp_and_sp(pc, 349_006, 23_948)
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         html = event
@@ -166,7 +165,7 @@ class Scripts::Q00064_CertifiedBerserker < Quest
       when DIVINE_EMISSARY
         if qs.memo_state?(9)
           if Rnd.rand(100) < 20
-             kamael = add_spawn(HARKILGAMED, npc, true, 60000)
+             kamael = add_spawn(HARKILGAMED, npc, true, 60_000)
             kamael.broadcast_packet(NpcSay.new(kamael, Say2::NPC_ALL, NpcString::S1_DID_YOU_COME_TO_HELP_ME).add_string_parameter(killer.appearance.visible_name))
             play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
           end

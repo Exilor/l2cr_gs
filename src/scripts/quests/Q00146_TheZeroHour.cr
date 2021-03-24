@@ -59,14 +59,13 @@ class Scripts::Q00146_TheZeroHour < Quest
         html = "31554-06.html"
       else
         st.give_items(KAHMANS_SUPPLY_BOX, 1)
-        st.add_exp_and_sp(154616, 12500)
+        st.add_exp_and_sp(154_616, 12_500)
         st.exit_quest(false, true)
         html = "31554-05.html"
       end
     when State::COMPLETED
       html = "31554-01b.htm"
     end
-
 
     html || get_no_quest_msg(pc)
   end

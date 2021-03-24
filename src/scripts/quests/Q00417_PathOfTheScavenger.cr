@@ -61,10 +61,7 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -102,10 +99,9 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           give_items(pc, BRONKS_INGOT, 1)
           html = "30519-04.html"
         end
-
       end
     when "30519-07.html"
-      qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 1)
+      qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 1)
       html = event
     when "reply_2"
       case Rnd.rand(2)
@@ -114,15 +110,14 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
       when 1
         html = "30519-11.html"
       end
-
     when "reply_3"
       if qs.get_memo_state_ex(1) % 10 < 2
-        qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 1)
+        qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 1)
         html = "30519-07.html"
       elsif qs.get_memo_state_ex(1) % 10 == 2 && qs.memo_state?(0)
         html = "30519-07.html"
       elsif qs.get_memo_state_ex(1) % 10 == 2 && qs.memo_state?(1)
-        qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 1)
+        qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 1)
         html = "30519-09.html"
       elsif (qs.get_memo_state_ex(1) % 10) >= 3 && qs.memo_state?(1)
         give_items(pc, MIONS_LETTER, 1)
@@ -147,7 +142,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         give_items(pc, BRONKS_INGOT, 1)
         html = "30519-04.html"
       end
-
     when "30556-05b.html"
       if has_quest_items?(pc, TARANTULA_PICTURE) && get_quest_items_count(pc, BEAD) >= 20
         take_items(pc, TARANTULA_PICTURE, 1)
@@ -189,15 +183,15 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
       end
     when "31958-02.html"
       if qs.memo_state?(2) && has_quest_items?(pc, BEAD_PARCEL2)
-        give_adena(pc, 163800, true)
+        give_adena(pc, 163_800, true)
         give_items(pc, RING_OF_RAVEN, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 320534, 35412)
+          add_exp_and_sp(pc, 320_534, 35_412)
         elsif level == 19
-          add_exp_and_sp(pc, 456128, 42110)
+          add_exp_and_sp(pc, 456_128, 42_110)
         else
-          add_exp_and_sp(pc, 591724, 48808)
+          add_exp_and_sp(pc, 591_724, 48_808)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -205,7 +199,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -235,10 +228,8 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         if attacker.last_skill_cast && attacker.last_skill_cast.not_nil!.id == SPOIL
           npc.script_value = 2
           attacker.last_skill_cast = nil # Reset last skill cast.
-        else
         end
       end
-
     end
 
     super
@@ -252,11 +243,11 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
       when HUNTER_BEAR
         if npc.script_value?(1) && first_attacker && has_quest_items?(killer, BEAR_PICTURE) && get_quest_items_count(killer, HONEY_JAR) < 5
           flag = qs.get_int(FLAG)
-          if flag > 0 && Rnd.rand(100) < 20 * flag
+          if flag > 0 && Rnd.rand(100) < 20 &* flag
             add_spawn(HONEY_BEAR, npc, true, 0, true)
             qs.set(FLAG, 0)
           else
-            qs.set(FLAG, flag + 1)
+            qs.set(FLAG, flag &+ 1)
           end
         end
       when HONEY_BEAR
@@ -272,7 +263,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           end
         end
       end
-
     end
 
     super
@@ -296,13 +286,13 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         if has_quest_items?(pc, PIPPIS_LETTER_OF_RECOMMENDATION)
           qs.set_cond(2, true)
           html = "30519-01.html"
-        elsif (get_quest_items_count(pc, SHARIS_AXE) + get_quest_items_count(pc, BRONKS_INGOT) + get_quest_items_count(pc, ZIMENFS_POTION)) == 1
+        elsif (get_quest_items_count(pc, SHARIS_AXE) &+ get_quest_items_count(pc, BRONKS_INGOT) &+ get_quest_items_count(pc, ZIMENFS_POTION)) == 1
           if qs.get_memo_state_ex(1) % 10 == 0
             html = "30519-05.html"
           elsif qs.get_memo_state_ex(1) % 10 > 0
             html = "30519-08.html"
           end
-        elsif (get_quest_items_count(pc, SHARIS_PAY) + get_quest_items_count(pc, BRONKS_PAY) + get_quest_items_count(pc, ZIMENFS_PAY)) == 1
+        elsif (get_quest_items_count(pc, SHARIS_PAY) &+ get_quest_items_count(pc, BRONKS_PAY) &+ get_quest_items_count(pc, ZIMENFS_PAY)) == 1
           if qs.get_memo_state_ex(1) < 50
             html = "30519-12.html"
           else
@@ -323,13 +313,13 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           if qs.get_memo_state_ex(1) < 20
             take_items(pc, SHARIS_AXE, 1)
             give_items(pc, SHARIS_PAY, 1)
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 10)
             html = "30517-01.html"
           else
             take_items(pc, SHARIS_AXE, 1)
             give_items(pc, SHARIS_PAY, 1)
             qs.memo_state=(1)
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 10)
             qs.set_cond(3, true)
             html = "30517-02.html"
           end
@@ -341,13 +331,13 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           if qs.get_memo_state_ex(1) < 20
             take_items(pc, BRONKS_INGOT, 1)
             give_items(pc, BRONKS_PAY, 1)
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 10)
             html = "30525-01.html"
           else
             take_items(pc, BRONKS_INGOT, 1)
             give_items(pc, BRONKS_PAY, 1)
             qs.memo_state=(1)
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 10)
             qs.set_cond(3, true)
             html = "30525-02.html"
           end
@@ -359,13 +349,13 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           if qs.get_memo_state_ex(1) < 20
             take_items(pc, ZIMENFS_POTION, 1)
             give_items(pc, ZIMENFS_PAY, 1)
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 10)
             html = "30538-01.html"
           else
             take_items(pc, ZIMENFS_POTION, 1)
             give_items(pc, ZIMENFS_PAY, 1)
             qs.memo_state=(1)
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 10)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 10)
             qs.set_cond(3, true)
             html = "30538-02.html"
           end
@@ -408,15 +398,15 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
         elsif has_quest_items?(pc, ROUTS_TELEPORT_SCROLL)
           html = "30316-04.html"
         elsif has_quest_items?(pc, SUCCUBUS_UNDIES)
-          give_adena(pc, 81900, true)
+          give_adena(pc, 81_900, true)
           give_items(pc, RING_OF_RAVEN, 1)
           level = pc.level
           if level >= 20
-            add_exp_and_sp(pc, 160267, 17706)
+            add_exp_and_sp(pc, 160_267, 17_706)
           elsif level == 19
-            add_exp_and_sp(pc, 228064, 21055)
+            add_exp_and_sp(pc, 228_064, 21_055)
           else
-            add_exp_and_sp(pc, 295862, 24404)
+            add_exp_and_sp(pc, 295_862, 24_404)
           end
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -432,7 +422,6 @@ class Scripts::Q00417_PathOfTheScavenger < Quest
           html = "31958-01.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

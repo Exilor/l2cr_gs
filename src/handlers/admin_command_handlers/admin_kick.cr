@@ -28,7 +28,7 @@ module AdminCommandHandler::AdminKick
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_kick",
       "admin_kick_non_gm"

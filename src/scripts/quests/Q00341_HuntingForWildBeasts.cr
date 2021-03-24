@@ -25,15 +25,14 @@ class Scripts::Q00341_HuntingForWildBeasts < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    if st = get_quest_state(pc, false)
-      case event
-      when "30078-03.htm"
-        html = event
-      when "30078-04.htm"
-        st.start_quest
-        html = event
-      end
+    return unless pc && (st = get_quest_state(pc, false))
+
+    case event
+    when "30078-03.htm"
+      html = event
+    when "30078-04.htm"
+      st.start_quest
+      html = event
     end
 
     html

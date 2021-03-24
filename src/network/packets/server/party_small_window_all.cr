@@ -6,7 +6,7 @@ class Packets::Outgoing::PartySmallWindowAll < GameServerPacket
 
     d @party.leader_l2id
     d @party.distribution_type.to_i
-    d @party.size - 1
+    d @party.size &- 1
 
     @party.each do |m|
       next if m == @newcomer
@@ -29,7 +29,7 @@ class Packets::Outgoing::PartySmallWindowAll < GameServerPacket
 
       if summon = m.summon
         d summon.l2id
-        d summon.id + 1_000_000
+        d summon.id &+ 1_000_000
         d summon.summon_type
         s summon.name
 

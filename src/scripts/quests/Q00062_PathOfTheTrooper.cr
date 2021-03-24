@@ -29,8 +29,7 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -119,16 +118,16 @@ class Scripts::Q00062_PathOfTheTrooper < Quest
           if !has_quest_items?(pc, TUMRAN_BUGBEAR_HEART)
             html = "32197-09.html"
           else
-            give_adena(pc, 163800, true)
+            give_adena(pc, 163_800, true)
             take_items(pc, TUMRAN_BUGBEAR_HEART, 1)
             give_items(pc, GWAINS_RECOMMENDATION, 1)
             level = pc.level
             if level >= 20
-              add_exp_and_sp(pc, 320534, 20848)
+              add_exp_and_sp(pc, 320_534, 20_848)
             elsif level == 19
-              add_exp_and_sp(pc, 456128, 27546)
+              add_exp_and_sp(pc, 456_128, 27_546)
             else
-              add_exp_and_sp(pc, 591724, 34244)
+              add_exp_and_sp(pc, 591_724, 34_244)
             end
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))

@@ -18,10 +18,7 @@ class Scripts::Q00423_TakeYourBestShot < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32744-06.htm"
@@ -38,7 +35,6 @@ class Scripts::Q00423_TakeYourBestShot < Quest
       html = event
     end
 
-
     html
   end
 
@@ -52,7 +48,6 @@ class Scripts::Q00423_TakeYourBestShot < Quest
           qs.set_cond(2, true)
         end
       end
-
     end
 
     super
@@ -96,7 +91,6 @@ class Scripts::Q00423_TakeYourBestShot < Quest
           html = "32740-03.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

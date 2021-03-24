@@ -163,7 +163,7 @@ module AdminCommandHandler::AdminAdmin
     pc.send_packet(admin_reply)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_admin",
       "admin_admin1",

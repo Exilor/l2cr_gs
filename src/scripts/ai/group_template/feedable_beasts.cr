@@ -357,7 +357,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
       next_npc = add_spawn(next_npc_id, npc).as(L2Attackable)
 
       if MAD_COW_POLYMORPH.has_key?(next_npc_id)
-        start_quest_timer("polymorph Mad Cow", 10000, next_npc, pc)
+        start_quest_timer("polymorph Mad Cow", 10_000, next_npc, pc)
       end
 
       # register the player in the feedinfo for the mob that just spawned
@@ -370,7 +370,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
 
   def on_adv_event(event, npc, player)
     if npc && player && event.casecmp?("polymorph Mad Cow")
-      if MAD_COW_POLYMORPH.has_key?(npc.id)
+      if tmp = MAD_COW_POLYMORPH[npc.id]?
         # remove the feed info from the previous mob
         if FEED_INFO[npc.l2id] == player.l2id
           FEED_INFO.delete(npc.l2id)
@@ -378,7 +378,7 @@ class Scripts::FeedableBeasts < AbstractNpcAI
         # despawn the mad cow
         npc.delete_me
         # spawn the new mob
-        next_npc = add_spawn(MAD_COW_POLYMORPH[npc.id], npc).as(L2Attackable)
+        next_npc = add_spawn(tmp, npc).as(L2Attackable)
 
         # register the player in the feedinfo for the mob that just spawned
         FEED_INFO[next_npc.l2id] = player.l2id
@@ -411,8 +411,8 @@ class Scripts::FeedableBeasts < AbstractNpcAI
     # first gather some values on local variables
     l2id = npc.l2id
     growth_level = 3 # if a mob is in FEEDABLE_BEASTS but not in _GrowthCapableMobs, then it's at max growth (3)
-    if GROWTH_CAPABLE_MONSTERS.has_key?(npc_id)
-      growth_level = GROWTH_CAPABLE_MONSTERS[npc_id].growth_level
+    if tmp = GROWTH_CAPABLE_MONSTERS[npc_id]?
+      growth_level = tmp.growth_level
     end
 
     # prevent exploit which allows 2 players to simultaneously raise the same 0-growth beast

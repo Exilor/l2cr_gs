@@ -30,7 +30,6 @@ class Scripts::Q00157_RecoverSmuggledGoods < Quest
         st.start_quest
         html = event
       end
-
     end
 
     html
@@ -69,7 +68,6 @@ class Scripts::Q00157_RecoverSmuggledGoods < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
 
     html

@@ -18,11 +18,7 @@ class Scripts::Q00172_NewHorizons < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st.nil?
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -62,13 +58,11 @@ class Scripts::Q00172_NewHorizons < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when RAGARA
       if st.started?
         html = "32163-01.html"
       end
     end
-
 
     html
   end

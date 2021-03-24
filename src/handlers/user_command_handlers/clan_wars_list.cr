@@ -1,15 +1,14 @@
 module UserCommandHandler::ClanWarsList
   extend self
   extend UserCommandHandler
+  include Loggable
 
   private ATTACK_LIST = "SELECT clan_name,clan_id,ally_id,ally_name FROM clan_data,clan_wars WHERE clan1=? AND clan_id=clan2 AND clan2 NOT IN (SELECT clan1 FROM clan_wars WHERE clan2=?)"
   private UNDER_ATTACK_LIST = "SELECT clan_name,clan_id,ally_id,ally_name FROM clan_data,clan_wars WHERE clan2=? AND clan_id=clan1 AND clan1 NOT IN (SELECT clan2 FROM clan_wars WHERE clan1=?)"
   private WAR_LIST = "SELECT clan_name,clan_id,ally_id,ally_name FROM clan_data,clan_wars WHERE clan1=? AND clan_id=clan2 AND clan2 IN (SELECT clan1 FROM clan_wars WHERE clan2=?)"
 
-  def use_user_command(id, pc)
-    unless commands.includes?(id)
-      return false
-    end
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
+    return false unless commands.includes?(id)
 
     unless clan = pc.clan
       pc.send_packet(SystemMessageId::NOT_JOINED_IN_ANY_CLAN)
@@ -55,7 +54,7 @@ module UserCommandHandler::ClanWarsList
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {88, 89, 90}
   end
 end

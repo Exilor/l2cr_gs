@@ -20,10 +20,7 @@ class Scripts::Q10286_ReunionWithSirra < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -83,7 +80,6 @@ class Scripts::Q10286_ReunionWithSirra < Quest
       end
     end
 
-
     html
   end
 
@@ -118,7 +114,6 @@ class Scripts::Q10286_ReunionWithSirra < Quest
           when 2
             html = "32760-06.html"
           end
-
         end
       when SIRRA
         if st.memo_state?(1)
@@ -130,12 +125,11 @@ class Scripts::Q10286_ReunionWithSirra < Quest
         end
       when JINIA2
         if st.memo_state?(10)
-          st.add_exp_and_sp(2152200, 181070)
+          st.add_exp_and_sp(2_152_200, 181_070)
           st.exit_quest(false, true)
           html = "32781-01.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

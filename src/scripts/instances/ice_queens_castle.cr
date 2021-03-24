@@ -59,7 +59,7 @@ class Scripts::IceQueensCastle < AbstractInstance
         pc = pc.not_nil!
         pc.show_quest_movie(21)
         npc.delete_me
-        start_quest_timer("TIMER_PC_LEAVE", 24000, npc, pc)
+        start_quest_timer("TIMER_PC_LEAVE", 24_000, npc, pc)
       end
     when "TIMER_PC_LEAVE"
       pc = pc.not_nil!
@@ -72,7 +72,6 @@ class Scripts::IceQueensCastle < AbstractInstance
         pc.tele_to_location(EXIT_LOC, 0)
       end
     end
-
 
     super
   end
@@ -96,8 +95,8 @@ class Scripts::IceQueensCastle < AbstractInstance
   end
 
   def on_spawn(npc)
-    start_quest_timer("TIMER_MOVING", 60000, npc, nil)
-    start_quest_timer("TIMER_BLIZZARD", 180000, npc, nil)
+    start_quest_timer("TIMER_MOVING", 60_000, npc, nil)
+    start_quest_timer("TIMER_BLIZZARD", 180_000, npc, nil)
 
     super
   end

@@ -57,9 +57,7 @@ class Scripts::Q00609_MagicalPowerOfWaterPart1 < Quest
 
   def on_adv_event(event, npc, pc)
     pc = pc.not_nil!
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless st = get_quest_state(pc, false)
 
     case event
     when "31371-02.html"
@@ -85,7 +83,6 @@ class Scripts::Q00609_MagicalPowerOfWaterPart1 < Quest
       npc.delete_me
     end
 
-
     html
   end
 
@@ -97,7 +94,7 @@ class Scripts::Q00609_MagicalPowerOfWaterPart1 < Quest
       npc.do_cast(GOW)
       eye = add_spawn(UDANS_EYE, npc)
       eye.broadcast_packet(NpcSay.new(eye, Say2::NPC_ALL, NpcString::YOU_CANT_AVOID_THE_EYES_OF_UDAN))
-      start_quest_timer("eye_despawn", 10000, eye, attacker)
+      start_quest_timer("eye_despawn", 10_000, eye, attacker)
     end
 
     super
@@ -123,7 +120,6 @@ class Scripts::Q00609_MagicalPowerOfWaterPart1 < Quest
           html = "31371-03.html"
         end
       end
-
     when ASEFA
       if st.started?
         case st.cond
@@ -152,7 +148,6 @@ class Scripts::Q00609_MagicalPowerOfWaterPart1 < Quest
         html = "31561-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

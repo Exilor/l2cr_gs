@@ -64,19 +64,19 @@ class TerritoryWarSuperClass < Quest
         max = Rnd.rand(@random_min..@random_max)
         st.set("max", max.to_s)
       else
-        kill = st.get_int("kill") + 1
+        kill = st.get_int("kill") &+ 1
         max = st.get_int("max")
       end
       if kill >= max
         TerritoryWarManager.give_tw_quest_point(pc)
-        add_exp_and_sp(pc, 534000, 51000)
+        add_exp_and_sp(pc, 534_000, 51_000)
         st.set("doneDate", Calendar.new.day_of_year.to_s)
         st.exit_quest(true)
-        pc.send_packet(ExShowScreenMessage.new(@npc_string[1], 2, 10000))
+        pc.send_packet(ExShowScreenMessage.new(@npc_string[1], 2, 10_000))
       else
         st.set("kill", kill.to_s)
 
-        message = ExShowScreenMessage.new(@npc_string[0], 2, 10000)
+        message = ExShowScreenMessage.new(@npc_string[0], 2, 10_000)
         message.add_string_parameter(max.to_s)
         message.add_string_parameter(kill.to_s)
         pc.send_packet(message)
@@ -88,7 +88,7 @@ class TerritoryWarSuperClass < Quest
       max = Rnd.rand(@random_min..@random_max)
       st.set("max", max.to_s)
 
-      message = ExShowScreenMessage.new(@npc_string[0], 2, 10000)
+      message = ExShowScreenMessage.new(@npc_string[0], 2, 10_000)
       message.add_string_parameter(max.to_s)
       message.add_string_parameter(kill.to_s)
       pc.send_packet(message)
@@ -100,7 +100,7 @@ class TerritoryWarSuperClass < Quest
       max = Rnd.rand(@random_min..@random_max)
       st.set("max", max.to_s)
 
-      message = ExShowScreenMessage.new(@npc_string[0], 2, 10000)
+      message = ExShowScreenMessage.new(@npc_string[0], 2, 10_000)
       message.add_string_parameter(max.to_s)
       message.add_string_parameter(kill.to_s)
       pc.send_packet(message)
@@ -110,7 +110,7 @@ class TerritoryWarSuperClass < Quest
   def on_attack(npc : L2Npc, pc : L2PcInstance, damage : Int32, is_summon : Bool) : String?
     if npc.current_hp == npc.max_hp && @npc_ids.includes?(npc.id)
       territory_id = get_territory_id_for_this_npc_id(npc.id)
-      if territory_id >= 81 && territory_id <= 89
+      if territory_id.between?(81, 89)
         L2World.players.each do |pl|
           if pl.siege_side == territory_id
             st = pl.get_quest_state(name)
@@ -183,16 +183,16 @@ class TerritoryWarSuperClass < Quest
   def on_kill(npc : L2Npc, killer : L2PcInstance, is_summon : Bool) : String?
     manager = TerritoryWarManager
     if npc.id == @catapult_id
-      manager.territory_catapult_destroyed(@territory_id - 80)
+      manager.territory_catapult_destroyed(@territory_id &- 80)
       manager.give_tw_point(killer, @territory_id, 4)
-      manager.announce_to_participants(ExShowScreenMessage.new(@npc_string[0], 2, 10000), 135000, 13500)
+      manager.announce_to_participants(ExShowScreenMessage.new(@npc_string[0], 2, 10_000), 135_000, 13_500)
       handle_become_mercenary_quest(killer, true)
     elsif @leader_ids.includes?(npc.id)
       manager.give_tw_point(killer, @territory_id, 3)
     end
 
-    if killer.siege_side != @territory_id && TerritoryWarManager.get_territory(killer.siege_side - 80)
-      manager.get_territory(killer.siege_side - 80).not_nil!.quest_done[0] += 1
+    if killer.siege_side != @territory_id && TerritoryWarManager.get_territory(killer.siege_side &- 80)
+      manager.get_territory(killer.siege_side &- 80).not_nil!.quest_done[0] &+= 1
     end
 
     super
@@ -213,7 +213,7 @@ class TerritoryWarSuperClass < Quest
         unless ward = TerritoryWarManager.get_territory_ward(caster)
           return super
         end
-        if caster.siege_side - 80 == ward.owner_castle_id
+        if caster.siege_side &- 80 == ward.owner_castle_id
           TerritoryWarManager.get_territory(ward.owner_castle_id).not_nil!.owned_ward.each do |ward_spawn|
             ward_spawn = ward_spawn.not_nil!
             if ward_spawn.id == ward.territory_id
@@ -224,9 +224,9 @@ class TerritoryWarSuperClass < Quest
           end
         else
           ward.unspawn_me
-          ward.npc = TerritoryWarManager.add_territory_ward(ward.territory_id, caster.siege_side - 80, ward.owner_castle_id, true)
-          ward.owner_castle_id = caster.siege_side - 80
-          TerritoryWarManager.get_territory(caster.siege_side - 80).not_nil!.quest_done[1] += 1
+          ward.npc = TerritoryWarManager.add_territory_ward(ward.territory_id, caster.siege_side &- 80, ward.owner_castle_id, true)
+          ward.owner_castle_id = caster.siege_side &- 80
+          TerritoryWarManager.get_territory(caster.siege_side &- 80).not_nil!.quest_done[1] &+= 1
         end
       end
     end
@@ -300,14 +300,14 @@ class TerritoryWarSuperClass < Quest
       cond = st.cond
       if catapult
         if cond == 1 || cond == 2
-          count = st.get_int("catapult") + 1
+          count = st.get_int("catapult") &+ 1
           st.set("catapult", count.to_s)
           if count >= catapult_count
             st.set_cond(cond == 1 ? 3 : 4)
           end
         end
       elsif cond == 1 || cond == 3
-        kills = st.get_int("kills") + 1
+        kills = st.get_int("kills") &+ 1
         st.set("kills", kills.to_s)
         if kills >= enemy_count
           st.set_cond(cond == 1 ? 2 : 4)
@@ -321,7 +321,7 @@ class TerritoryWarSuperClass < Quest
     if sfh && sfh.started?
       cond = sfh.cond
       if cond == 1 || cond == 3 || cond == 5 || cond == 7
-        kills = sfh.get_int("kills") + 1
+        kills = sfh.get_int("kills") &+ 1
         sfh.set("kills", kills)
         if cond == 1 && kills >= 9
           sfh.set_cond(2)

@@ -8,7 +8,7 @@ module ActionHandler::L2StaticObjectInstanceAction
     end
 
     if target.type < 0
-      warn { "StaticObject with invalid type #{target.type}." }
+      raise "StaticObject with invalid type #{target.type}."
     end
 
     if pc.target != target

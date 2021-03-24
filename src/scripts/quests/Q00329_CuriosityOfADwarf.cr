@@ -28,10 +28,7 @@ class Scripts::Q00329_CuriosityOfADwarf < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30437-03.htm"
@@ -45,7 +42,6 @@ class Scripts::Q00329_CuriosityOfADwarf < Quest
     when "30437-07.html"
       html = event
     end
-
 
     html
   end
@@ -75,9 +71,9 @@ class Scripts::Q00329_CuriosityOfADwarf < Quest
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         broken = st.get_quest_items_count(BROKEN_HEARTSTONE)
         golem = st.get_quest_items_count(GOLEM_HEARTSTONE)
-        adena = (broken * 50) + (golem * 1000)
-        if broken + golem >= 10
-          adena += 1183
+        adena = (broken &* 50) &+ (golem &* 1000)
+        if broken &+ golem >= 10
+          adena &+= 1183
         end
         st.give_adena(adena, true)
         take_items(pc, -1, registered_item_ids)
@@ -86,7 +82,6 @@ class Scripts::Q00329_CuriosityOfADwarf < Quest
         html = "30437-04.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

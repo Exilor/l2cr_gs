@@ -205,8 +205,8 @@ class Scripts::NornilsGarden < AbstractInstance
     inst.name = InstanceManager.get_instance_id_name(TEMPLATE_ID)
     inst.exit_loc = Location.new(pc)
     inst.allow_summon = false
-    inst.duration = DURATION_TIME * 60000
-    inst.empty_destroy_time = EMPTY_DESTROY_TIME.to_i64 * 60000
+    inst.duration = DURATION_TIME &* 60_000
+    inst.empty_destroy_time = EMPTY_DESTROY_TIME.to_i64 &* 60_000
     world = NornilsWorld.new
     world.instance_id = instance_id
     world.template_id = TEMPLATE_ID

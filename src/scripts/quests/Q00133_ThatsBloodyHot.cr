@@ -16,10 +16,7 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32264-04.html"
@@ -57,20 +54,19 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
     when "32292-06.html"
       if st.cond?(4)
         if !HellboundEngine.instance.locked?
-          st.give_adena(254247, true)
-          st.add_exp_and_sp(331457, 32524)
+          st.give_adena(254_247, true)
+          st.add_exp_and_sp(331_457, 32_524)
           st.exit_quest(false, true)
           html = event
         else
           HellboundEngine.instance.level = 1
-          st.give_adena(254247, true)
-          st.add_exp_and_sp(325881, 32524)
+          st.give_adena(254_247, true)
+          st.add_exp_and_sp(325_881, 32_524)
           st.exit_quest(false, true)
           html = "32292-07.html"
         end
       end
     end
-
 
     html
   end
@@ -108,7 +104,6 @@ class Scripts::Q00133_ThatsBloodyHot < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -23,14 +23,14 @@ class Packets::Outgoing::PrivateStoreManageListSell < Packets::Outgoing::Abstrac
     d @item_list.size
     @item_list.each do |item|
       write_item(item)
-      q item.item.reference_price * 2
+      q item.item.reference_price &* 2
     end
 
     d @sell_list.size
     @sell_list.each do |item|
       write_item(item)
       q item.price
-      q item.item.reference_price * 2
+      q item.item.reference_price &* 2
     end
   end
 end

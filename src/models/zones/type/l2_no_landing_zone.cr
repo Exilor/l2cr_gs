@@ -1,7 +1,7 @@
 class L2NoLandingZone < L2ZoneType
   @dismount_delay = 5
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     if name == "dismountDelay"
       @dismount_delay = value.to_i
     else

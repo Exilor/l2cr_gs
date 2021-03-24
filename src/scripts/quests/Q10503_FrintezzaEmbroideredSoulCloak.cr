@@ -25,8 +25,8 @@ class Scripts::Q10503_FrintezzaEmbroideredSoulCloak < Quest
     if st && st.cond?(1) && Util.in_range?(1500, npc, pc, false)
       current_count = get_quest_items_count(pc, FRINTEZZAS_SOUL_FRAGMENT)
       count = Rnd.rand(1..3)
-      if count >= FRAGMENT_COUNT - current_count
-        give_items(pc, FRINTEZZAS_SOUL_FRAGMENT, FRAGMENT_COUNT - current_count)
+      if count >= FRAGMENT_COUNT &- current_count
+        give_items(pc, FRINTEZZAS_SOUL_FRAGMENT, FRAGMENT_COUNT &- current_count)
         st.set_cond(2, true)
       else
         give_items(pc, FRINTEZZAS_SOUL_FRAGMENT, count)
@@ -69,11 +69,9 @@ class Scripts::Q10503_FrintezzaEmbroideredSoulCloak < Quest
           html = "32612-06.html"
         end
       end
-
     when State::COMPLETED
       html = "32612-03.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

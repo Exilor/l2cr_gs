@@ -2,7 +2,7 @@ module ItemHandler::Calculator
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force) : Bool
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     if playable.player?
       playable.send_packet(ShowCalculator.new(item.id))
       return true

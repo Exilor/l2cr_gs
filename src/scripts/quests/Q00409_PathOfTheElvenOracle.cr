@@ -34,8 +34,7 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -66,9 +65,9 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
     when "replay_1"
       npc = npc.not_nil!
       qs.memo_state = 2
-      add_attack_desire(add_spawn(LIZARDMAN_WARRIOR, npc, true, 0i64, false), pc)
-      add_attack_desire(add_spawn(LIZARDMAN_SCOUT, npc, true, 0i64, false), pc)
-      add_attack_desire(add_spawn(LIZARDMAN_SOLDIER, npc, true, 0i64, false), pc)
+      add_attack_desire(add_spawn(LIZARDMAN_WARRIOR, npc, true, 0, false), pc)
+      add_attack_desire(add_spawn(LIZARDMAN_SCOUT, npc, true, 0, false), pc)
+      add_attack_desire(add_spawn(LIZARDMAN_SOLDIER, npc, true, 0, false), pc)
     when "30428-02.html", "30428-03.html"
       if qs.memo_state?(2)
         html = event
@@ -77,10 +76,9 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
       if qs.memo_state?(2)
         npc = npc.not_nil!
         qs.memo_state = 3
-        add_attack_desire(add_spawn(TAMIL, npc, true, 0i64, true), pc)
+        add_attack_desire(add_spawn(TAMIL, npc, true, 0, true), pc)
       end
     end
-
 
     html
   end
@@ -108,7 +106,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           npc.script_value = 2
         end
       end
-
     end
 
     super
@@ -135,7 +132,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           qs.set_cond(5, true)
         end
       end
-
     end
 
     super
@@ -166,15 +162,15 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
             end
           elsif has_quest_items?(pc, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER)
             unless has_quest_items?(pc, HALF_OF_DAIRY)
-              give_adena(pc, 163800, true)
+              give_adena(pc, 163_800, true)
               give_items(pc, LEAF_OF_ORACLE, 1)
               level = pc.level
               if level >= 20
-                add_exp_and_sp(pc, 320534, 20392)
+                add_exp_and_sp(pc, 320_534, 20_392)
               elsif level == 19
-                add_exp_and_sp(pc, 456128, 27090)
+                add_exp_and_sp(pc, 456_128, 27_090)
               else
-                add_exp_and_sp(pc, 591724, 33788)
+                add_exp_and_sp(pc, 591_724, 33_788)
               end
               qs.exit_quest(false, true)
               pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -233,7 +229,6 @@ class Scripts::Q00409_PathOfTheElvenOracle < Quest
           end
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

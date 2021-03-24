@@ -21,10 +21,7 @@ class Scripts::Q00189_ContractCompletion < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31437-03.htm"
@@ -36,9 +33,9 @@ class Scripts::Q00189_ContractCompletion < Quest
       end
     when "30512-02.html"
       if qs.memo_state?(4)
-        give_adena(pc, 121527, true)
+        give_adena(pc, 121_527, true)
         if pc.level < MAX_LEVEL_FOR_EXP_SP
-          add_exp_and_sp(pc, 309467, 20614)
+          add_exp_and_sp(pc, 309_467, 20_614)
         end
         qs.exit_quest(false, true)
         html = event
@@ -61,7 +58,6 @@ class Scripts::Q00189_ContractCompletion < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -98,7 +94,6 @@ class Scripts::Q00189_ContractCompletion < Quest
         when 4
           html = "30673-05.html"
         end
-
       when SHEGFIELD
         case qs.cond
         when 2
@@ -106,9 +101,7 @@ class Scripts::Q00189_ContractCompletion < Quest
         when 3
           html = "30068-04.html"
         end
-
       end
-
     elsif qs.completed?
       if npc.id == BLUEPRINT_SELLER_LUKA
         html = get_already_completed_msg(pc)

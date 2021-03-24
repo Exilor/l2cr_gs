@@ -3,7 +3,7 @@ require "../models/territory_ward"
 module TerritoryWarManager
   extend self
   extend Siegable
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   private DELETE = "DELETE FROM territory_registrations WHERE castleId = ? and registeredId = ?"
@@ -493,7 +493,7 @@ module TerritoryWarManager
       PARTICIPANT_POINTS[killer.l2id] ||= Int32.slice(
         killer.siege_side, 0, 0, 0, 0, 0, 0
       )
-      PARTICIPANT_POINTS[killer.l2id][type] += 1
+      PARTICIPANT_POINTS[killer.l2id][type] &+= 1
     end
   end
 
@@ -506,24 +506,24 @@ module TerritoryWarManager
         return reward
       end
 
-      reward[1] += (temp[6] > 70 ? 7 : (temp[6] * 0.1).to_i)
-      reward[1] += temp[2] * 7
+      reward[1] &+= (temp[6] > 70 ? 7 : (temp[6] * 0.1).to_i)
+      reward[1] &+= temp[2] &* 7
 
       if temp[1] < 50
-        reward[1] += (temp[1] * 0.1).to_i
+        reward[1] &+= (temp[1] * 0.1).to_i
       elsif temp[1] < 120
-        reward[1] += 5 + ((temp[1] - 50) // 14)
+        reward[1] &+= 5 &+ ((temp[1] &- 50) // 14)
       else
-        reward[1] += 10
+        reward[1] &+= 10
       end
 
-      reward[1] += temp[3]
-      reward[1] += temp[4] * 2
-      reward[1] += temp[5] > 0 ? 5 : 0
+      reward[1] &+= temp[3]
+      reward[1] &+= temp[4] &* 2
+      reward[1] &+= temp[5] > 0 ? 5 : 0
 
-      reward[1] += Math.min(TERRITORY_LIST[temp[0] &- 80].quest_done[0], 10)
-      reward[1] += TERRITORY_LIST[temp[0] &- 80].quest_done[1]
-      reward[1] += TERRITORY_LIST[temp[0] &- 80].owned_ward_ids.size
+      reward[1] &+= Math.min(TERRITORY_LIST[temp[0] &- 80].quest_done[0], 10)
+      reward[1] &+= TERRITORY_LIST[temp[0] &- 80].quest_done[1]
+      reward[1] &+= TERRITORY_LIST[temp[0] &- 80].owned_ward_ids.size
       return reward
     end
 
@@ -881,7 +881,7 @@ module TerritoryWarManager
       @@registration_over = true
       update_player_tw_state_flags(false)
       @@scheduled_start_tw_task = ThreadPoolManager.schedule_general(->schedule_start_tw_task, time) # Prepare task for TW start.
-    elsif time + @@war_length > 0
+    elsif time &+ @@war_length > 0
       @@tw_channel_open = true
       @@registration_over = true
       start_territory_war
@@ -894,28 +894,28 @@ module TerritoryWarManager
 
   private def schedule_end_tw_task
     @@scheduled_end_tw_task.not_nil!.cancel
-    time = START_TW_DATE.ms + @@war_length - Time.ms
+    time = START_TW_DATE.ms &+ @@war_length &- Time.ms
     if time > 3_600_000
       sm = SystemMessage.the_territory_war_will_end_in_s1_hours
       sm.add_int(2)
       announce_to_participants(sm, 0, 0)
-      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 3_600_000) # Prepare task for 1 hr left.
+      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time &- 3_600_000) # Prepare task for 1 hr left.
     elsif time <= 3_600_000 && time > 600_000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
       sm.add_int((time // 60_000).to_i)
       announce_to_participants(sm, 0, 0)
-      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 600_000) # Prepare task for 10 minute left.
+      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time &- 600_000) # Prepare task for 10 minute left.
     elsif time <= 600_000 && time > 300_000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
       sm.add_int((time // 60_000).to_i)
       announce_to_participants(sm, 0, 0)
-      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 300_000) # Prepare task for 5 minute left.
-    elsif time <= 300_000 && time > 10000
+      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time &- 300_000) # Prepare task for 5 minute left.
+    elsif time <= 300_000 && time > 10_000
       sm = SystemMessage.the_territory_war_will_end_in_s1_minutes
       sm.add_int((time // 60_000).to_i)
       announce_to_participants(sm, 0, 0)
-      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time - 10000) # Prepare task for 10 seconds count down
-    elsif time <= 10000 && time > 0
+      @@scheduled_end_tw_task = ThreadPoolManager.schedule_general(->schedule_end_tw_task, time &- 10000) # Prepare task for 10 seconds count down
+    elsif time <= 10_000 && time > 0
       sm = SystemMessage.s1_seconds_to_the_end_of_territory_war
       sm.add_int((time // 1000).to_i)
       announce_to_participants(sm, 0, 0)

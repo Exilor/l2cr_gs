@@ -4,7 +4,7 @@ require "../scripts/**"
 # 511 quests and 176 scripts
 module QuestManager
   extend self
-  extend Loggable
+  include Loggable
 
   private QUESTS = {} of String => Quest
   private SCRIPTS = {} of String => Quest

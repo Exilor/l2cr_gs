@@ -59,8 +59,8 @@ class Scripts::GrandBossTeleporters < AbstractNpcAI
               warn { "Grand boss zone at 212852 -114842 -1632 not found." }
             end
 
-            x = TELEPORT_INTO_VALAKAS_LAIR.x + Rnd.rand(600)
-            y = TELEPORT_INTO_VALAKAS_LAIR.y + Rnd.rand(600)
+            x = TELEPORT_INTO_VALAKAS_LAIR.x &+ Rnd.rand(600)
+            y = TELEPORT_INTO_VALAKAS_LAIR.y &+ Rnd.rand(600)
             z = TELEPORT_INTO_VALAKAS_LAIR.z
             pc.tele_to_location(x, y, z)
 
@@ -68,7 +68,7 @@ class Scripts::GrandBossTeleporters < AbstractNpcAI
 
             if status == 0
               valakas = GrandBossManager.get_boss(29028)
-              wait_time = Config.valakas_wait_time * 60000
+              wait_time = Config.valakas_wait_time &* 60_000
               ai.start_quest_timer("beginning", wait_time, valakas, nil)
               GrandBossManager.set_boss_status(29028, 1)
             end
@@ -102,12 +102,11 @@ class Scripts::GrandBossTeleporters < AbstractNpcAI
         html = "31540-05.htm"
       end
     when 31759
-      x = TELEPORT_OUT_OF_VALAKAS_LAIR.x + Rnd.rand(500)
-      y = TELEPORT_OUT_OF_VALAKAS_LAIR.y + Rnd.rand(500)
+      x = TELEPORT_OUT_OF_VALAKAS_LAIR.x &+ Rnd.rand(500)
+      y = TELEPORT_OUT_OF_VALAKAS_LAIR.y &+ Rnd.rand(500)
       z = TELEPORT_OUT_OF_VALAKAS_LAIR.z
       pc.tele_to_location(x, y, z)
     end
-
 
     html
   end

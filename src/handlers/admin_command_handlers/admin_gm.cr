@@ -13,7 +13,7 @@ module AdminCommandHandler::AdminGm
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_gm"}
   end
 end

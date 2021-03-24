@@ -32,7 +32,7 @@ class Packets::Outgoing::SiegeInfo < GameServerPacket
         s ""
       end
 
-      d Time.ms / 1000
+      d Time.ms // 1000
 
       if !castle.time_registration_over? && pc.clan_leader? && pc.clan_id == castle.owner_id
         cal = Calendar.new

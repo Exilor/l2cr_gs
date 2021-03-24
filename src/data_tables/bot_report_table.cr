@@ -1,6 +1,6 @@
 module BotReportTable
   extend self
-  extend Loggable
+  include Loggable
   extend Synchronizable
   extend XMLReader
   include Packets::Outgoing
@@ -101,9 +101,7 @@ module BotReportTable
   end
 
   def report_bot(reporter : L2PcInstance) : Bool
-    unless target = reporter.target
-      return false
-    end
+    return false unless target = reporter.target
 
     bot = target.acting_player
 
@@ -259,7 +257,7 @@ module BotReportTable
     ThreadPoolManager.schedule_general(->reset_points_and_schedule, delay)
   rescue e
     warn e
-    ThreadPoolManager.schedule_general(->reset_points_and_schedule, 24 * 3600 * 1000)
+    ThreadPoolManager.schedule_general(->reset_points_and_schedule, 24 &* 3600 &* 1000)
   end
 
   private def hash_ip(pc) : Int32

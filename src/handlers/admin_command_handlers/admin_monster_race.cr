@@ -14,7 +14,7 @@ module AdminCommandHandler::AdminMonsterRace
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_mons"}
   end
 

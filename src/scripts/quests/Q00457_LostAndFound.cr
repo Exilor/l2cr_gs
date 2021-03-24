@@ -41,14 +41,14 @@ class Scripts::Q00457_LostAndFound < Quest
       npc.set_walking
       npc.set_intention(AI::FOLLOW, pc)
       start_quest_timer("CHECK", 1000, npc, pc, true)
-      start_quest_timer("TIME_LIMIT", 600000, npc, pc)
-      start_quest_timer("TALK_TIME", 120000, npc, pc)
-      start_quest_timer("TALK_TIME2", 30000, npc, pc)
+      start_quest_timer("TIME_LIMIT", 600_000, npc, pc)
+      start_quest_timer("TALK_TIME", 120_000, npc, pc)
+      start_quest_timer("TALK_TIME2", 30_000, npc, pc)
     when "TALK_TIME"
       broadcast_npc_say(npc, pc, NpcString::AH_I_THINK_I_REMEMBER_THIS_PLACE, false)
     when "TALK_TIME2"
       broadcast_npc_say(npc, pc, NpcString::WHAT_WERE_YOU_DOING_HERE, false)
-      start_quest_timer("TALK_TIME3", 10 * 1000, npc, pc)
+      start_quest_timer("TALK_TIME3", 10 &* 1000, npc, pc)
     when "TALK_TIME3"
       broadcast_npc_say(npc, pc, NpcString::I_GUESS_YOURE_THE_SILENT_TYPE_THEN_ARE_YOU_LOOKING_FOR_TREASURE_LIKE_ME, false)
     when "TIME_LIMIT"
@@ -131,7 +131,6 @@ class Scripts::Q00457_LostAndFound < Quest
         html = "32759-02.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

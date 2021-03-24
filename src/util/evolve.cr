@@ -1,6 +1,6 @@
 module Evolve
   extend self
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   def do_evolve(pc : L2PcInstance, npc : L2Npc, item_id_take : Int32, item_id_give : Int32, pet_min_lvl : Int32) : Bool

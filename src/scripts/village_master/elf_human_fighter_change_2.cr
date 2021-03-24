@@ -87,7 +87,6 @@ class Scripts::ElfHumanFighterChange2 < AbstractNpcAI
     when "2", "3", "5", "6", "8", "9", "20", "21", "23", "24"
       class_change_requested(pc, event.to_i)
     end
-
   end
 
   private def class_change_requested(pc, class_id)

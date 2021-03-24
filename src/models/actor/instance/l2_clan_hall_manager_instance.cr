@@ -1088,8 +1088,6 @@ class L2ClanHallManagerInstance < L2MerchantInstance
   end
 
   private def do_teleport(pc : L2PcInstance, val : Int32)
-    debug { "L2ClanHallManagerInstance#do_teleport(#{pc}, #{val})" }
-
     if list = TeleportLocationTable[val]?
       if pc.combat_flag_equipped?
         pc.send_packet(SystemMessageId::YOU_CANNOT_TELEPORT_WHILE_IN_POSSESSION_OF_A_WARD)

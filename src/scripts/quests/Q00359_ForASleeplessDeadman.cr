@@ -34,10 +34,7 @@ class Scripts::Q00359_ForASleeplessDeadman < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30857-02.htm", "30857-03.htm", "30857-04.htm"
@@ -51,7 +48,6 @@ class Scripts::Q00359_ForASleeplessDeadman < Quest
       st.exit_quest(true, true)
       html = event
     end
-
 
     html
   end

@@ -67,13 +67,13 @@ struct ZoneCuboid < L2ZoneForm
     _y2 = @r.y + @r.height
 
     _x1.step(to: _x2 - 1, by: STEP) do |x|
-      drop_debug_item(Inventory::ADENA_ID, 1, x, _y1, z);
-      drop_debug_item(Inventory::ADENA_ID, 1, x, _y2, z);
+      drop_debug_item(Inventory::ADENA_ID, 1, x, _y1, z)
+      drop_debug_item(Inventory::ADENA_ID, 1, x, _y2, z)
     end
 
     _y1.step(to: _y2 - 1, by: STEP) do |y|
-      drop_debug_item(Inventory::ADENA_ID, 1, _x1, y, z);
-      drop_debug_item(Inventory::ADENA_ID, 1, _x2, y, z);
+      drop_debug_item(Inventory::ADENA_ID, 1, _x1, y, z)
+      drop_debug_item(Inventory::ADENA_ID, 1, _x2, y, z)
     end
   end
 

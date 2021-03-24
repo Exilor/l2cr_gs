@@ -24,10 +24,7 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30210-01.htm", "30210-02.htm", "30210-04.html", "30210-06.html"
@@ -41,9 +38,9 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
       sting_count = get_quest_items_count(pc, BIG_HORNET_STING)
       gem_count = get_quest_items_count(pc, CLOUD_GEM)
       claw_count = get_quest_items_count(pc, YOUNG_ARANEID_CLAW)
-      reward = (57 * sting_count) + (56 * gem_count) + (60 * claw_count)
-      if sting_count + gem_count + claw_count >= 10
-        reward += 5773
+      reward = (57 &* sting_count) &+ (56 &* gem_count) &+ (60 &* claw_count)
+      if sting_count &+ gem_count &+ claw_count >= 10
+        reward &+= 5773
       end
       take_items(pc, BIG_HORNET_STING, -1)
       take_items(pc, CLOUD_GEM, -1)
@@ -54,7 +51,6 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
       qs.exit_quest(true, true)
       html = event
     end
-
 
     html
   end
@@ -72,7 +68,6 @@ class Scripts::Q00661_MakingTheHarvestGroundsSafe < Quest
         html = "30210-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

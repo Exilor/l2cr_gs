@@ -15,8 +15,8 @@ class Packets::Outgoing::AllianceInfo < GameServerPacket
     total = online = 0
     ClanTable.get_clan_allies(alliance_id) do |clan|
       ci = ClanInfo.new(clan)
-      total += ci.total
-      online += ci.online
+      total &+= ci.total
+      online &+= ci.online
       @allies << ci
     end
     @total = total

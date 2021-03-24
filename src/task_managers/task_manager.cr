@@ -4,7 +4,7 @@ require "./tasks/*"
 
 module TaskManager
   extend self
-  extend Loggable
+  include Loggable
 
   SQL_STATEMENTS = {
     "SELECT id,task,type,last_activation,param1,param2,param3 FROM global_tasks",

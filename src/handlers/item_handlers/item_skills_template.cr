@@ -2,7 +2,7 @@ module ItemHandler::ItemSkillsTemplate
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force) : Bool
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     unless playable.player? || playable.pet?
       return false
     end
@@ -68,7 +68,7 @@ module ItemHandler::ItemSkillsTemplate
           playable.do_simultaneous_cast(skill)
         else
           playable.intention = AI::IDLE
-          unless playable.use_magic(skill, force, false)
+          unless playable.use_magic(skill, force_use, false)
             # debug "#use_magic returned false."
             return false
           end
@@ -97,7 +97,6 @@ module ItemHandler::ItemSkillsTemplate
         return true
       end
     end
-
 
     false
   end

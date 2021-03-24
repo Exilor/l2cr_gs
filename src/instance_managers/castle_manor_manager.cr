@@ -168,7 +168,7 @@ module CastleManorManager
         PROCURE[castle_id].each do |crop|
           if crop.start_amount > 0
             if crop.start_amount != crop.amount
-              count = ((crop.start_amount - crop.amount) * 0.9).to_i64
+              count = ((crop.start_amount &- crop.amount) * 0.9).to_i64
               if count < 1 && Rnd.rand(99) < 90
                 count = 1i64
               end

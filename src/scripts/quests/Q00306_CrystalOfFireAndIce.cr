@@ -27,10 +27,7 @@ class Scripts::Q00306_CrystalOfFireAndIce < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30004-04.htm"
@@ -74,14 +71,13 @@ class Scripts::Q00306_CrystalOfFireAndIce < Quest
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         flame = st.get_quest_items_count(FLAME_SHARD)
         ice = st.get_quest_items_count(ICE_SHARD)
-        st.give_adena(((flame * 40) + (ice * 40) + (flame + ice >= 10 ? 5000 : 0)), true)
+        st.give_adena(((flame &* 40) &+ (ice &* 40) &+ (flame &+ ice >= 10 ? 5000 : 0)), true)
         take_items(pc, -1, registered_item_ids)
         html = "30004-07.html"
       else
         html = "30004-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

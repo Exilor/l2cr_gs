@@ -36,9 +36,7 @@ class Packets::Outgoing::ExShowFortressMapInfo < GameServerPacket
         end
       end
     else
-      @fort.fort_size.times do
-        d 0
-      end
+      @fort.fort_size.times { d 0 }
     end
   end
 

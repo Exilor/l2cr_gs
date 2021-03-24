@@ -55,7 +55,6 @@ class Scripts::OrcChange2 < AbstractNpcAI
     when "46", "48", "51", "52"
       class_change_requested(pc, event.to_i)
     end
-
   end
 
   private def class_change_requested(pc, class_id)

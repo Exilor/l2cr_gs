@@ -33,10 +33,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30970-02.htm"
@@ -57,7 +54,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
       useless_bone_pieces_count = get_quest_items_count(pc, USELESS_BONE_PIECES)
 
       if useless_bone_pieces_count > 0
-        give_adena(pc, useless_bone_pieces_count * 104, true)
+        give_adena(pc, useless_bone_pieces_count &* 104, true)
         take_items(pc, USELESS_BONE_PIECES, -1)
         html = event
       end
@@ -106,7 +103,6 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
         end
       end
     end
-
 
     html
   end
@@ -196,7 +192,7 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
 
           if memo_state_ex == 1 || memo_state_ex == 2
             give_items(pc, BILL_OF_IASON_HEINE, 3)
-            give_adena(pc, 5390i64 + (70 * useless_bone_pieces_count), true)
+            give_adena(pc, 5390i64 &+ (70 &* useless_bone_pieces_count), true)
             html = "30970-11.html"
           elsif memo_state_ex == 3
             if Rnd.rand(100) <= 92
@@ -205,13 +201,12 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
               give_items(pc, IMPERIAL_DIAMOND, 1)
             end
 
-            give_adena(pc, 3040i64 + (70 * useless_bone_pieces_count), true)
+            give_adena(pc, 3040i64 &+ (70 &* useless_bone_pieces_count), true)
             html = "30970-12.html"
           end
 
           qs.exit_quest(true, true)
         end
-
       when ORPHEUS
         if has_quest_items?(pc, USELESS_BONE_PIECES)
           html = "30971-01.html"
@@ -246,7 +241,6 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
         when 8
           html = "30973-11.html"
         end
-
       when XENOVIA
         if qs.memo_state?(2)
           html = "30912-01.html"
@@ -254,7 +248,6 @@ class Scripts::Q00345_MethodToRaiseTheDead < Quest
           html = "30912-06.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

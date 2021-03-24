@@ -84,7 +84,7 @@ class BoatInnadrilTour
       ThreadPoolManager.schedule_general(self, 300_000)
     end
 
-    @cycle += 1
+    @cycle &+= 1
     if @cycle > 9
       @cycle = 0
     end

@@ -46,7 +46,7 @@ class Scripts::Fisherman < AbstractNpcAI
     when "fishing_championship.htm"
       html = event
     when "BuySellRefund"
-      npc.show_buy_window(pc, npc.id * 100, true)
+      npc.show_buy_window(pc, npc.id &* 100, true)
     end
 
     html

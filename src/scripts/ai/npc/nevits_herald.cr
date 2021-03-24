@@ -58,7 +58,7 @@ class Scripts::NevitsHerald < AbstractNpcAI
       cancel_quest_timer("text_spam", npc, pc)
       say = NpcSay.new(NEVITS_HERALD, Say2::SHOUT, NEVITS_HERALD, SPAM.sample(random: Rnd))
       npc.broadcast_packet(say)
-      start_quest_timer("text_spam", 60000, npc, pc)
+      start_quest_timer("text_spam", 60_000, npc, pc)
       return
     elsif event.casecmp?("despawn")
       despawn_heralds
@@ -69,14 +69,11 @@ class Scripts::NevitsHerald < AbstractNpcAI
 
   def on_kill(npc, killer, is_pet)
     if npc.id == VALAKAS
-      msg = ExShowScreenMessage.new(NpcString::THE_EVIL_FIRE_DRAGON_VALAKAS_HAS_BEEN_DEFEATED, 2, 10000)
+      msg = ExShowScreenMessage.new(NpcString::THE_EVIL_FIRE_DRAGON_VALAKAS_HAS_BEEN_DEFEATED, 2, 10_000)
     else
-      msg = ExShowScreenMessage.new(NpcString::THE_EVIL_LAND_DRAGON_ANTHARAS_HAS_BEEN_DEFEATED, 2, 10000)
+      msg = ExShowScreenMessage.new(NpcString::THE_EVIL_LAND_DRAGON_ANTHARAS_HAS_BEEN_DEFEATED, 2, 10_000)
     end
 
-    # L2World.players.each do |pc|
-    #   pc.send_packet(msg)
-    # end
     Broadcast.to_all_online_players(msg)
 
     unless @active
@@ -88,7 +85,7 @@ class Scripts::NevitsHerald < AbstractNpcAI
         herald = add_spawn(NEVITS_HERALD, loc, false, 0)
         SPAWNS << herald
       end
-      start_quest_timer("despawn", 14400000, npc, killer) # 4 hours
+      start_quest_timer("despawn", 14_400_000, npc, killer) # 4 hours
       start_quest_timer("text_spam", 3000, npc, killer)
     end
 

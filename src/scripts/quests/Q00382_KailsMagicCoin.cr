@@ -32,10 +32,7 @@ class Scripts::Q00382_KailsMagicCoin < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30386-03.htm"
@@ -48,7 +45,6 @@ class Scripts::Q00382_KailsMagicCoin < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -75,7 +71,7 @@ class Scripts::Q00382_KailsMagicCoin < Quest
       if npc.id == FALLEN_ORC_CAPTAIN
         give_item_randomly(
           killer,
-          KAILS_SILVER_BASILISK + Rnd.rand(3),
+          KAILS_SILVER_BASILISK &+ Rnd.rand(3),
           1,
           0,
           ORC_CAPTAIN_DROP_CHANCE,

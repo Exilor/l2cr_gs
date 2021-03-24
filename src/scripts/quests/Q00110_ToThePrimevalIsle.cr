@@ -24,11 +24,10 @@ class Scripts::Q00110_ToThePrimevalIsle < Quest
       st.give_items(ANCIENT_BOOK, 1)
       st.start_quest
     when "32113-2.html", "32113-2a.html"
-      st.give_adena(191678, true)
-      st.add_exp_and_sp(251602, 25245)
+      st.give_adena(191_678, true)
+      st.add_exp_and_sp(251_602, 25_245)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -45,13 +44,11 @@ class Scripts::Q00110_ToThePrimevalIsle < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when MARQUEZ
       if st.cond?(1)
         html = "32113-1.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

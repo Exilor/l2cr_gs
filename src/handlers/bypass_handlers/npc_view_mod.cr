@@ -6,7 +6,7 @@ module BypassHandler::NpcViewMod
 
   private DROP_LIST_ITEMS_PER_PAGE = 10
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     st = command.split
     st.shift
 
@@ -290,10 +290,10 @@ module BypassHandler::NpcViewMod
     end
 
     mult = (chance // 100).to_i64
-    MinMax.new(mult * min, chance % 100 > 0 ? (mult + 1) * max : mult * max)
+    MinMax.new(mult * min, chance % 100 > 0 ? (mult &+ 1) &* max : mult * max)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"NpcViewMod"}
   end
 end

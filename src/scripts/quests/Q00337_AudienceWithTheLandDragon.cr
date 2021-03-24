@@ -85,30 +85,27 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
       return super
     end
 
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30753-05.htm"
       if qs.created?
         give_items(pc, FEATHER_OF_GABRIELLE, 1)
         qs.start_quest
-        qs.memo_state = 20000
+        qs.memo_state = 20_000
         html = event
       end
     when "30753-09.html"
       take_items(pc, MARK_OF_WATCHMAN, -1)
-      qs.memo_state = 40000
+      qs.memo_state = 40_000
       qs.set_cond(2, true)
       html = event
     when "30754-03.html"
-      qs.memo_state = 70000
+      qs.memo_state = 70_000
       qs.set_cond(4, true)
       html = event
     when "30755-05.html"
-      if qs.memo_state?(70000)
+      if qs.memo_state?(70_000)
         if has_quest_items?(pc, FRAGMENT_OF_ABYSS_JEWEL_3RD)
           give_items(pc, PORTAL_STONE, 1)
           qs.exit_quest(true, true)
@@ -120,7 +117,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
       html = event
     end
 
-
     html
   end
 
@@ -129,14 +125,14 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
     if qs && qs.started?
       case npc.id
       when ABYSSAL_JEWEL_1
-        if qs.memo_state?(40000) || qs.memo_state?(40001)
+        if qs.memo_state?(40_000) || qs.memo_state?(40_001)
           if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
             20.times do
-              spwn = add_spawn(JEWEL_GUARDIAN_MARA, npc, true, 180000)
+              spwn = add_spawn(JEWEL_GUARDIAN_MARA, npc, true, 180_000)
               add_attack_desire(spwn, attacker)
             end
             npc.variables["i_quest0"] = 1
-            start_quest_timer("DESPAWN", 900000, npc, attacker)
+            start_quest_timer("DESPAWN", 900_000, npc, attacker)
           end
 
           if npc.hp_percent < 40
@@ -152,20 +148,20 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           npc.delete_me
         end
       when ABYSSAL_JEWEL_2
-        if qs.memo_state?(40000) || qs.memo_state?(40010)
+        if qs.memo_state?(40_000) || qs.memo_state?(40_010)
           if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
             20.times do
-              add_attack_desire(add_spawn(JEWEL_GUARDIAN_MUSFEL, npc, true, 180000), attacker)
+              add_attack_desire(add_spawn(JEWEL_GUARDIAN_MUSFEL, npc, true, 180_000), attacker)
             end
             npc.variables["i_quest0"] = 1
-            start_quest_timer("DESPAWN", 900000, npc, attacker)
+            start_quest_timer("DESPAWN", 900_000, npc, attacker)
           end
 
           if npc.hp_percent < 40
             unless has_quest_items?(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND)
               give_items(attacker, FRAGMENT_OF_ABYSS_JEWEL_2ND, 1)
               play_sound(attacker, Sound::ITEMSOUND_QUEST_ITEMGET)
-              start_quest_timer("DESPAWN_240", 240000, npc, attacker)
+              start_quest_timer("DESPAWN_240", 240_000, npc, attacker)
             end
           end
         end
@@ -174,12 +170,12 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           npc.delete_me
         end
       when ABYSSAL_JEWEL_3
-        if qs.memo_state?(70000)
+        if qs.memo_state?(70_000)
           if npc.hp_percent < 80 && npc.variables.get_i32("i_quest0") == 0
-            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180000), attacker)
-            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180000), attacker)
-            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180000), attacker)
-            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180000), attacker)
+            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180_000), attacker)
+            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180_000), attacker)
+            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180_000), attacker)
+            add_attack_desire(add_spawn(JEWEL_GUARDIAN_PYTON, npc, true, 180_000), attacker)
             npc.variables["i_quest0"] = 1
           end
 
@@ -195,7 +191,6 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           npc.delete_me
         end
       end
-
     end
 
     super
@@ -207,78 +202,71 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
       case npc.id
       when BLOOD_QUEEN
         case qs.memo_state
-        when 21011, 21010, 21001, 21000, 20011, 20010, 20001, 20000
+        when 21_011, 21_010, 21_001, 21_000, 20_011, 20_010, 20_001, 20_000
           unless has_quest_items?(killer, REMAINS_OF_SACRAFICE)
             8.times do
-              add_spawn(GHOST_OF_OFFERING, npc, true, 180000)
+              add_spawn(GHOST_OF_OFFERING, npc, true, 180_000)
             end
           end
         end
-
       when CAVE_MAIDEN, CAVE_KEEPER, CAVE_KEEPER_HOLD, CAVE_MAIDEN_HOLD
-        if qs.memo_state?(70000) && !has_quest_items?(killer, FRAGMENT_OF_ABYSS_JEWEL_3RD)
+        if qs.memo_state?(70_000) && !has_quest_items?(killer, FRAGMENT_OF_ABYSS_JEWEL_3RD)
           if Rnd.rand(5) == 0
             add_spawn(ABYSSAL_JEWEL_3, npc, true, 180000)
           end
         end
       when HARIT_LIZARDMAN_SHAMAN
         case qs.memo_state
-        when 21110, 21100, 21010, 21000, 20110, 20100, 20010, 20000
+        when 21_110, 21_100, 21_010, 21_000, 20_110, 20_100, 20_010, 20_000
           unless has_quest_items?(killer, TOTEM_OF_LAND_DRAGON)
-            add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
-            add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
-            add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
+            add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180_000), killer)
+            add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180_000), killer)
+            add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180_000), killer)
           end
         end
-
       when HARIT_LIZARDMAN_MATRIARCH
         case qs.memo_state
-        when 21110, 21100, 21010, 21000, 20110, 20100, 20010, 20000
+        when 21_110, 21_100, 21_010, 21_000, 20_110, 20_100, 20_010, 20_000
           unless has_quest_items?(killer, TOTEM_OF_LAND_DRAGON)
             if Rnd.rand(5) == 0
-              add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
-              add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
-              add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180000), killer)
+              add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180_000), killer)
+              add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180_000), killer)
+              add_attack_desire(add_spawn(HARIT_LIZARDMAN_ZEALOT, npc, true, 180_000), killer)
             end
           end
         end
-
       when HAMRUT
         case qs.memo_state
-        when 21101, 21100, 21001, 21000, 20101, 20100, 20001, 20000
+        when 21_101, 21_100, 21_001, 21_000, 20_101, 20_100, 20_001, 20_000
           unless has_quest_items?(killer, HAMRUT_LEG)
             give_items(killer, HAMRUT_LEG, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-
       when KRANROT
         case qs.memo_state
-        when 21101, 21100, 21001, 21000, 20101, 20100, 20001, 20000
+        when 21_101, 21_100, 21_001, 21_000, 20_101, 20_100, 20_001, 20_000
           unless has_quest_items?(killer, KRANROT_SKIN)
             give_items(killer, KRANROT_SKIN, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-
       when MARSH_STALKER
         case qs.memo_state
-        when 20111, 20110, 20101, 20100, 20011, 20010, 20001, 20000
+        when 20_111, 20_110, 20_101, 20_100, 20_011, 20_010, 20_001, 20_000
           unless has_quest_items?(killer, MARSH_STALKER_HORN)
             give_items(killer, MARSH_STALKER_HORN, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-
       when MARSH_DRAKE
         case qs.memo_state
-        when 20111, 20110, 20101, 20100, 20011, 20010, 20001, 20000
+        when 20_111, 20_110, 20_101, 20_100, 20_011, 20_010, 20_001, 20_000
           unless has_quest_items?(killer, MARSH_DRAKE_TALONS)
             give_items(killer, MARSH_DRAKE_TALONS, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-
       when JEWEL_GUARDIAN_MARA
         if qs.memo_state?(40000) || qs.memo_state?(40001)
           unless has_quest_items?(killer, MARA_FANG)
@@ -295,24 +283,21 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
         end
       when GHOST_OF_OFFERING
         case qs.memo_state
-        when 21011, 21010, 21001, 21000, 20011, 20010, 20001, 20000
+        when 21_011, 21_010, 21_001, 21_000, 20_011, 20_010, 20_001, 20_000
           unless has_quest_items?(killer, REMAINS_OF_SACRAFICE)
             give_items(killer, REMAINS_OF_SACRAFICE, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-
       when HARIT_LIZARDMAN_ZEALOT
         case qs.memo_state
-        when 21110, 21100, 21010, 21000, 20110, 20100, 20010, 20000
+        when 21_110, 21_100, 21_010, 21_000, 20_110, 20_100, 20_010, 20_000
           unless has_quest_items?(killer, TOTEM_OF_LAND_DRAGON)
             give_items(killer, TOTEM_OF_LAND_DRAGON, 1)
             play_sound(killer, Sound::ITEMSOUND_QUEST_ITEMGET)
           end
         end
-
       end
-
     end
 
     super
@@ -333,116 +318,116 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
     elsif qs.started?
       case npc.id
       when GABRIELLE
-        if memo_state >= 20000 && memo_state < 30000
+        if memo_state >= 20_000 && memo_state < 30_000
           html = "30753-06.html"
-        elsif memo_state == 30000
+        elsif memo_state == 30_000
           html = "30753-08.html"
-        elsif memo_state >= 40000 && memo_state < 50000
+        elsif memo_state >= 40_000 && memo_state < 50_000
           html = "30753-10.html"
-        elsif memo_state == 50000
+        elsif memo_state == 50_000
           take_items(pc, FEATHER_OF_GABRIELLE, -1)
           take_items(pc, MARK_OF_WATCHMAN, -1)
           give_items(pc, HERALD_OF_SLAYER, 1)
-          qs.memo_state = 60000
+          qs.memo_state = 60_000
           qs.set_cond(3, true)
           html = "30753-11.html"
-        elsif memo_state == 60000
+        elsif memo_state == 60_000
           html = "30753-12.html"
-        elsif memo_state == 70000
+        elsif memo_state == 70_000
           html = "30753-13.html"
         end
       when WAREHOUSE_CHIEF_MOKE
-        if memo_state == 40000 || memo_state == 40001
+        if memo_state == 40_000 || memo_state == 40_001
           if has_quest_items?(pc, FRAGMENT_OF_ABYSS_JEWEL_1ST, MARA_FANG)
             take_items(pc, FRAGMENT_OF_ABYSS_JEWEL_1ST, -1)
             take_items(pc, MARA_FANG, -1)
             give_items(pc, MARK_OF_WATCHMAN, 1)
-            if qs.memo_state == 40001
-              qs.memo_state = 50000
+            if qs.memo_state == 40_001
+              qs.memo_state = 50_000
             else
-              qs.memo_state = 40010
+              qs.memo_state = 40_010
             end
             html = "30498-03.html"
           else
             html = "30498-01.html"
           end
-        elsif memo_state == 40010
+        elsif memo_state == 40_010
           html = "30498-04.html"
-        elsif memo_state >= 50000
+        elsif memo_state >= 50_000
           html = "30498-05.html"
         end
       when BLACKSMITH_HELTON
-        if memo_state == 40000 || memo_state == 40010
+        if memo_state == 40_000 || memo_state == 40_010
           if has_quest_items?(pc, FRAGMENT_OF_ABYSS_JEWEL_2ND, MUSFEL_FANG)
             take_items(pc, FRAGMENT_OF_ABYSS_JEWEL_2ND, -1)
             take_items(pc, MUSFEL_FANG, -1)
             give_items(pc, MARK_OF_WATCHMAN, 1)
-            if qs.memo_state == 40010
-              qs.memo_state = 50000
+            if qs.memo_state == 40_010
+              qs.memo_state = 50_000
             else
-              qs.memo_state = 40001
+              qs.memo_state = 40_001
             end
             html = "30678-02.html"
           else
             html = "30678-01.html"
           end
-        elsif memo_state == 40001
+        elsif memo_state == 40_001
           html = "30678-03.html"
-        elsif memo_state >= 50000
+        elsif memo_state >= 50_000
           html = "30678-04.html"
         end
       when PREFECT_CHAKIRIS
         case qs.memo_state
-        when 21101, 21000, 21100, 21001, 20101, 20100, 20001, 20000
+        when 21_101, 21_000, 21_100, 21_001, 20_101, 20_100, 20_001, 20_000
           if has_quest_items?(pc, KRANROT_SKIN, HAMRUT_LEG)
             take_items(pc, KRANROT_SKIN, -1)
             take_items(pc, HAMRUT_LEG, -1)
             give_items(pc, MARK_OF_WATCHMAN, 1)
-            if qs.memo_state + 10 == 21111
-              qs.memo_state = 30000
+            if qs.memo_state &+ 10 == 21111
+              qs.memo_state = 30_000
             else
-              qs.memo_state += 10
+              qs.memo_state &+= 10
             end
             html = "30705-02.html"
           else
             html = "30705-01.html"
           end
-        when 21110, 21011, 21010, 20111, 20110, 20011, 20010
+        when 21_110, 21_011, 21_010, 20_111, 20_110, 20_011, 20_010
           html = "30705-03.html"
         end
 
-        if memo_state >= 30000
+        if memo_state >= 30_000
           html = "30705-04.html"
         end
       when MAGISTER_KAIENA
         case qs.memo_state
-        when 20111, 20110, 20101, 20100, 20010, 20011, 20001, 20000
+        when 20_111, 20_110, 20_101, 20_100, 20_010, 20_011, 20_001, 20_000
           if has_quest_items?(pc, MARSH_STALKER_HORN, MARSH_DRAKE_TALONS)
             take_items(pc, MARSH_STALKER_HORN, -1)
             take_items(pc, MARSH_DRAKE_TALONS, -1)
             give_items(pc, MARK_OF_WATCHMAN, 1)
-            if qs.memo_state + 1000 == 21111
-              qs.memo_state = 30000
+            if qs.memo_state &+ 1000 == 21111
+              qs.memo_state = 30_000
             else
-              qs.memo_state += 1000
+              qs.memo_state &+= 1000
             end
             html = "30720-02.html"
           else
             html = "30720-01.html"
           end
-        when 21110, 21101, 21100, 21011, 21010, 21001, 21000
+        when 21_110, 21_101, 21_100, 21_011, 21_010, 21_001, 21_000
           html = "30720-03.html"
         end
 
-        if memo_state >= 30000
+        if memo_state >= 30_000
           html = "30720-04.html"
         end
       when ANTHARAS_WATCHMAN_GILMORE
-        if memo_state < 60000
+        if memo_state < 60_000
           html = "30754-01.html"
-        elsif memo_state == 60000
+        elsif memo_state == 60_000
           html = "30754-02.html"
-        elsif memo_state == 70000
+        elsif memo_state == 70_000
           if has_quest_items?(pc, FRAGMENT_OF_ABYSS_JEWEL_3RD)
             html = "30754-05.html"
           else
@@ -450,11 +435,11 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
           end
         end
       when ANTHARAS_WATCHMAN_THEODRIC
-        if memo_state < 60000
+        if memo_state < 60_000
           html = "30755-01.html"
-        elsif memo_state == 60000
+        elsif memo_state == 60_000
           html = "30755-02.html"
-        elsif memo_state == 70000
+        elsif memo_state == 70_000
           if !has_quest_items?(pc, FRAGMENT_OF_ABYSS_JEWEL_3RD)
             html = "30755-03.html"
           else
@@ -463,51 +448,49 @@ class Scripts::Q00337_AudienceWithTheLandDragon < Quest
         end
       when MASTER_KENDRA
         case qs.memo_state
-        when 21110, 21100, 21010, 21000, 20110, 20100, 20010, 20000
+        when 21_110, 21_100, 21_010, 21_000, 20_110, 20_100, 20_010, 20_000
           if !has_quest_items?(pc, TOTEM_OF_LAND_DRAGON)
             html = "30851-01.html"
           else
             take_items(pc, TOTEM_OF_LAND_DRAGON, -1)
             give_items(pc, MARK_OF_WATCHMAN, 1)
-            if qs.memo_state + 1 == 21111
-              qs.memo_state = 30000
+            if qs.memo_state &+ 1 == 21111
+              qs.memo_state = 30_000
             else
-              qs.memo_state += 1
+              qs.memo_state &+= 1
             end
             html = "30851-02.html"
           end
-        when 21101, 21011, 21001, 20111, 20101, 20011, 20001
+        when 21_101, 21_011, 21_001, 20_111, 20_101, 20_011, 20_001
           html = "30851-03.html"
         end
 
-        if memo_state >= 30000
+        if memo_state >= 30_000
           html = "30851-04.html"
         end
       when HIGH_PRIEST_ORVEN
         case qs.memo_state
-        when 21011, 21010, 21001, 21000, 20011, 20010, 20001, 20000
+        when 21_011, 21_010, 21_001, 21_000, 20_011, 20_010, 20_001, 20_000
           if !has_quest_items?(pc, REMAINS_OF_SACRAFICE)
             html = "30857-01.html"
           else
             take_items(pc, REMAINS_OF_SACRAFICE, -1)
             give_items(pc, MARK_OF_WATCHMAN, 1)
-            if qs.memo_state + 100 == 21111
-              qs.memo_state = 30000
+            if qs.memo_state &+ 100 == 21111
+              qs.memo_state = 30_000
             else
-              qs.memo_state += 100
+              qs.memo_state &+= 100
             end
             html = "30857-02.html"
           end
-        when 21110, 21101, 21100, 20111, 20110, 20101, 20100
+        when 21_110, 21_101, 21_100, 20_111, 20_110, 20_101, 20_100
           html = "30857-03.html"
         end
 
-
-        if memo_state >= 30000
+        if memo_state >= 30_000
           html = "30857-04.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

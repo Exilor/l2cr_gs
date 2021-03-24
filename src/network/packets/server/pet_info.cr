@@ -50,7 +50,7 @@ class Packets::Outgoing::PetInfo < GameServerPacket
 
     d @summon.summon_type
     d @summon.l2id
-    d @summon.template.display_id + 1_000_000
+    d @summon.template.display_id &+ 1_000_000
     d 0 # 1 -> attackable
     d @x
     d @y

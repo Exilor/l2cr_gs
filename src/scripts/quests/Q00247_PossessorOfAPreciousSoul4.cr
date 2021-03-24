@@ -41,7 +41,7 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
     when "31745-5.html"
       if st.cond?(2)
         pc.noble = true
-        st.add_exp_and_sp(93836, 0)
+        st.add_exp_and_sp(93_836, 0)
         st.give_items(NOBLESS_TIARA, 1)
         npc.target = pc
         npc.do_cast(MIMIRS_ELIXIR)
@@ -49,7 +49,6 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
         st.exit_quest(false, true)
       end
     end
-
 
     event
   end
@@ -74,13 +73,11 @@ class Scripts::Q00247_PossessorOfAPreciousSoul4 < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when LADY_OF_LAKE
       if st.cond?(2)
         html = "31745-1.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

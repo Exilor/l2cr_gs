@@ -2,7 +2,7 @@ module CommunityBoardHandler::MailBoard
   extend self
   extend IParseBoardHandler
 
-  def parse_command(command, pc)
+  def parse_command(command : String, pc : L2PcInstance) : Bool
     CommunityBoardHandler.add_bypass(pc, "Mail Command", command)
 
     html = HtmCache.get_htm(pc, "data/html/CommunityBoard/mail.html")
@@ -14,7 +14,7 @@ module CommunityBoardHandler::MailBoard
     false # L2J TODO
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"_maillist"}
   end
 end

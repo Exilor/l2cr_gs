@@ -2,7 +2,7 @@ require "../models/tower_spawn"
 
 module SiegeManager
   extend self
-  extend Loggable
+  include Loggable
 
   private CONTROL_TOWERS = {} of Int32 => Array(TowerSpawn)
   private FLAME_TOWERS = {} of Int32 => Array(TowerSpawn)
@@ -52,9 +52,7 @@ module SiegeManager
 
       (1...0xff).each do |i|
         key_name = "#{castle.name}FlameTower#{i}"
-        unless cfg.has_key?(key_name)
-          break
-        end
+        break unless cfg.has_key?(key_name)
 
         st = cfg.get_string(key_name, "").split(',')
         begin
@@ -86,7 +84,8 @@ module SiegeManager
   end
 
   def add_siege_skills(pc : L2PcInstance)
-    SkillData.get_siege_skills(pc.noble?, pc.clan.not_nil!.castle_id > 0).each do |sk|
+    clan = pc.clan.not_nil!
+    SkillData.get_siege_skills(pc.noble?, clan.castle_id > 0).each do |sk|
       pc.add_skill(sk, false)
     end
   end

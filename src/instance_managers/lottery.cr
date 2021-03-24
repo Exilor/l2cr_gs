@@ -1,6 +1,6 @@
 module Lottery
   extend self
-  extend Loggable
+  include Loggable
 
   private SECOND = 1000i64
   private MINUTE = 60000i64
@@ -50,18 +50,18 @@ module Lottery
           @@prize = rs.get_i64(:"prize")
           @@end_date = rs.get_i64(:"enddate")
 
-          if @@end_date <= Time.ms + (2 * MINUTE)
+          if @@end_date <= Time.ms &+ (2 &* MINUTE)
             finish_lottery_task
             return
           end
 
           if @@end_date > Time.ms
             @@started = true
-            ThreadPoolManager.schedule_general(->finish_lottery_task, @@end_date - Time.ms)
+            ThreadPoolManager.schedule_general(->finish_lottery_task, @@end_date &- Time.ms)
 
-            if @@end_date > Time.ms + (12 * MINUTE)
+            if @@end_date > Time.ms &+ (12 &* MINUTE)
               @@selling_tickets = true
-              ThreadPoolManager.schedule_general(->stop_selling_tickets_task, @@end_date - Time.ms - (10 * MINUTE))
+              ThreadPoolManager.schedule_general(->stop_selling_tickets_task, @@end_date &- Time.ms &- (10 &* MINUTE))
             end
             return
           end
@@ -90,8 +90,8 @@ module Lottery
       @@end_date = finish_time.ms
     end
 
-    ThreadPoolManager.schedule_general(->stop_selling_tickets_task, @@end_date - Time.ms - (10 * MINUTE))
-    ThreadPoolManager.schedule_general(->finish_lottery_task, @@end_date - Time.ms)
+    ThreadPoolManager.schedule_general(->stop_selling_tickets_task, @@end_date &- Time.ms &- (10 &* MINUTE))
+    ThreadPoolManager.schedule_general(->finish_lottery_task, @@end_date &- Time.ms)
 
     begin
       GameDB.exec(INSERT_LOTTERY, 1, id, end_date, prize, prize)
@@ -116,7 +116,7 @@ module Lottery
       found = true
 
       while found
-        lucky_num = Rnd.rand(20) + 1
+        lucky_num = Rnd.rand(20) &+ 1
         found = false
 
         i.times do |j|
@@ -197,15 +197,15 @@ module Lottery
     prize3 = 0i64
 
     if count1 > 0
-      prize1 = ((prize.to_i64 - prize4) * Config.alt_lottery_5_number_rate) // count1
+      prize1 = ((prize.to_i64 &- prize4) * Config.alt_lottery_5_number_rate).to_i64 // count1
     end
 
     if count2 > 0
-      prize2 = ((prize.to_i64 - prize4) * Config.alt_lottery_4_number_rate) // count2
+      prize2 = ((prize.to_i64 &- prize4) * Config.alt_lottery_4_number_rate).to_i64 // count2
     end
 
     if count3 > 0
-      prize3 = ((prize.to_i64 - prize4) * Config.alt_lottery_3_number_rate) // count3
+      prize3 = ((prize.to_i64 &- prize4) * Config.alt_lottery_3_number_rate).to_i64 // count3
     end
 
     if Config.debug
@@ -215,7 +215,7 @@ module Lottery
       debug "Lottery: #{count4} players with ONE or TWO numbers each win #{prize4}."
     end
 
-    newprize = prize.to_i64 - (prize1 + prize2 + prize3 + prize4)
+    newprize = prize.to_i64 &- (prize1 &+ prize2 &+ prize3 &+ prize4)
 
     debug { "Lottery: Jackpot for next lottery is #{newprize}." }
 

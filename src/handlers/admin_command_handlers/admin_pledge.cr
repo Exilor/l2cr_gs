@@ -87,7 +87,7 @@ module AdminCommandHandler::AdminPledge
     AdminCommandHandler::AdminHtml.show_admin_html(pc, "game_menu.htm")
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_pledge"}
   end
 end

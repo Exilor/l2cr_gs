@@ -2,7 +2,7 @@ require "../models/actor/instance/l2_boat_instance"
 
 module BoatManager
   extend self
-  extend Loggable
+  include Loggable
 
   private BOATS = Concurrent::Map(Int32, L2BoatInstance).new
   private BUSY_DOCKS = Slice.new(3, false)

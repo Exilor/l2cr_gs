@@ -25,10 +25,7 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30621-06.htm"
@@ -78,8 +75,8 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
           qs.exit_quest(false, true)
         end
         if pc.level < MAX_LEVEL_FOR_EXP_SP
-          give_adena(pc, 72527, true)
-          add_exp_and_sp(pc, 203717, 14032)
+          give_adena(pc, 72_527, true)
+          add_exp_and_sp(pc, 203_717, 14_032)
         else
           give_adena(pc, 72527, true)
         end
@@ -108,7 +105,6 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -156,7 +152,6 @@ class Scripts::Q00184_ArtOfPersuasion < Quest
           html = "32366-07.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == MAESTRO_NIKOLA
         html = get_already_completed_msg(pc)

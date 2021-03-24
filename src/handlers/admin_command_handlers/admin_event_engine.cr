@@ -420,7 +420,7 @@ module AdminCommandHandler::AdminEventEngine
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_event",
       "admin_event_new",

@@ -1,7 +1,7 @@
 module ItemsOnGroundManager
   extend self
   extend Synchronizable
-  extend Loggable
+  include Loggable
 
   private ITEMS = Concurrent::Array(L2ItemInstance).new
 

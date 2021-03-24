@@ -4,7 +4,7 @@ module GMAudit
       name = "#{name.name} [#{name.l2id}]"
     end
     target ||= "no-target"
-    dir = Dir.current + "/log/GMAudit"
+    dir = Dir.current + "/logs/GMAudit"
     unless Dir.exists?(dir)
       Dir.mkdir_p(dir)
     end

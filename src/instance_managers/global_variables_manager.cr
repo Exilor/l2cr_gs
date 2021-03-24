@@ -32,9 +32,7 @@ class GlobalVariablesManager < AbstractVariables
   end
 
   def store_me : Bool
-    unless has_changes?
-      return false
-    end
+    return false unless has_changes?
 
     begin
       GameDB.transaction do |tr|

@@ -27,10 +27,7 @@ class Scripts::Q00649_ALooterAndARailroadMan < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32052-03.htm"
@@ -40,12 +37,11 @@ class Scripts::Q00649_ALooterAndARailroadMan < Quest
       end
     when "32052-06.html"
       if st.cond?(2) && st.has_quest_items?(THIEF_GUILD_MARK)
-        st.give_adena(21698, true)
+        st.give_adena(21_698, true)
         st.exit_quest(true, true)
         html = event
       end
     end
-
 
     html
   end
@@ -60,7 +56,6 @@ class Scripts::Q00649_ALooterAndARailroadMan < Quest
       count = st.get_quest_items_count(THIEF_GUILD_MARK)
       html = count == 200 ? "32052-04.html" : "32052-05.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

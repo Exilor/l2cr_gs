@@ -104,7 +104,6 @@ class Scripts::PlainsOfLizardman < AbstractNpcAI
       end
     end
 
-
     super
   end
 

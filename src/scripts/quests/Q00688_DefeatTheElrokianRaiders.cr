@@ -18,10 +18,7 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32105-02.htm", "32105-10.html"
@@ -31,7 +28,7 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
       html = event
     when "32105-06.html"
       if st.has_quest_items?(DINOSAUR_FANG_NECKLACE)
-        adena = 3000 * st.get_quest_items_count(DINOSAUR_FANG_NECKLACE)
+        adena = 3000 &* st.get_quest_items_count(DINOSAUR_FANG_NECKLACE)
         st.give_adena(adena, true)
         st.take_items(DINOSAUR_FANG_NECKLACE, -1)
         html = event
@@ -41,23 +38,22 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
         html = "32105-07.html"
       else
         if Rnd.rand(1000) < 500
-          st.give_adena(450000, true)
+          st.give_adena(450_000, true)
           html = "32105-08.html"
         else
-          st.give_adena(150000, true)
+          st.give_adena(150_000, true)
           html = "32105-09.html"
         end
         st.take_items(DINOSAUR_FANG_NECKLACE, 100)
       end
     when "32105-11.html"
       if st.has_quest_items?(DINOSAUR_FANG_NECKLACE)
-        adena = 3000 * st.get_quest_items_count(DINOSAUR_FANG_NECKLACE)
+        adena = 3000 &* st.get_quest_items_count(DINOSAUR_FANG_NECKLACE)
         st.give_adena(adena, true)
       end
       st.exit_quest(true, true)
       html = event
     end
-
 
     html
   end
@@ -91,7 +87,6 @@ class Scripts::Q00688_DefeatTheElrokianRaiders < Quest
         html = "32105-12.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

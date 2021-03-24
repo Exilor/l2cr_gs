@@ -812,9 +812,7 @@ module AdminCommandHandler::AdminEditChar
 
     chars = player.account_chars
     rep_msg = String.build(chars.size &* 20) do |io|
-      chars.each_value do |name|
-        io << name << "<br1>"
-      end
+      chars.each_value { |name| io << name << "<br1>" }
     end
 
     repl = NpcHtmlMessage.new
@@ -988,7 +986,7 @@ module AdminCommandHandler::AdminEditChar
 
   private record IpPack, ip : String, tracert : Slice(Slice(Int32))
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_edit_character",
       "admin_current_player",

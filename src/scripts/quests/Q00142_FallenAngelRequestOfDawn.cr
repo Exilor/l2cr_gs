@@ -41,10 +41,7 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -69,9 +66,9 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
         return "32368-03.html"
       end
       npc = npc.not_nil!
-      add_spawn(FALLEN_ANGEL, npc.x + 100, npc.y + 100, npc.z, 0, false, 120000)
+      add_spawn(FALLEN_ANGEL, npc.x + 100, npc.y + 100, npc.z, 0, false, 120_000)
       @angel_spawned = true
-      start_quest_timer("despawn", 120000, nil, pc)
+      start_quest_timer("despawn", 120_000, nil, pc)
     when "despawn"
       if @angel_spawned
         @angel_spawned = false
@@ -125,7 +122,6 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when RAYMOND
       if st.started?
         case st.cond
@@ -142,14 +138,13 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
         when 3..5
           html = "30289-06.html"
         when 6
-          st.give_adena(92676, true)
+          st.give_adena(92_676, true)
           if pc.level <= MAX_REWARD_LEVEL
-            st.add_exp_and_sp(223036, 13091)
+            st.add_exp_and_sp(223_036, 13_091)
           end
           st.exit_quest(false, true)
           html = "30289-07.html"
         end
-
       end
     when CASIAN
       if st.started?
@@ -168,7 +163,6 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
         when 4..6
           html = "30612-09.html"
         end
-
       end
     when ROCK
       if st.started?
@@ -182,7 +176,6 @@ class Scripts::Q00142_FallenAngelRequestOfDawn < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

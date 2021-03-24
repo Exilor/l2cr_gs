@@ -22,9 +22,8 @@ class Scripts::Q00268_TracesOfEvil < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event.casecmp?("30559-03.htm")
+    return unless pc && (st = get_quest_state(pc, false))
+    if event.casecmp?("30559-03.htm")
       st.start_quest
       event
     end
@@ -65,9 +64,7 @@ class Scripts::Q00268_TracesOfEvil < Quest
             html = "30559-06.html"
           end
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)

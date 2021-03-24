@@ -1,6 +1,6 @@
 module ForumsBBSManager
   extend self
-  extend Loggable
+  include Loggable
 
   private FORUMS_BY_NAME = Hash(String, Forum).new
   private FORUMS_BY_ID = Hash(Int32, Forum).new
@@ -39,7 +39,7 @@ module ForumsBBSManager
   def on_clan_level(clan : L2Clan)
     if clan.level >= 2 && Config.enable_community_board
       if root = get_forum_by_name("ClanRoot")
-        if forum = root.get_child_by_name(clan.name)
+        if root.get_child_by_name(clan.name)
           create(
             clan.name,
             root,

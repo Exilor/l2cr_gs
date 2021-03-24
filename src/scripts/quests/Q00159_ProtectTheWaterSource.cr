@@ -30,8 +30,7 @@ class Scripts::Q00159_ProtectTheWaterSource < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    st = get_quest_state(killer, false)
-    if st
+    if st = get_quest_state(killer, false)
       case st.cond
       when 1
         if Rnd.rand(100) < 40 && st.has_quest_items?(HYACINTH_CHARM)
@@ -52,7 +51,6 @@ class Scripts::Q00159_ProtectTheWaterSource < Quest
           end
         end
       end
-
     end
 
     super
@@ -100,11 +98,9 @@ class Scripts::Q00159_ProtectTheWaterSource < Quest
             end
           end
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
 
     html || get_no_quest_msg(pc)

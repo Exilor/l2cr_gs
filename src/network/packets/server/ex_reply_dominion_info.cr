@@ -12,9 +12,7 @@ class Packets::Outgoing::ExReplyDominionInfo < GameServerPacket
       s CastleManager.get_castle_by_id(t.castle_id).not_nil!.name.downcase + "_dominion"
       s t.owner_clan.name
       d t.owned_ward_ids.size
-      t.owned_ward_ids.each do |i|
-        d i
-      end
+      t.owned_ward_ids.each { |i| d i }
       d TerritoryWarManager.tw_start_time_in_millis // 1000
     end
   end

@@ -37,7 +37,6 @@ class Scripts::Rafforty < AbstractNpcAI
       give_items(pc, BLESSED_NECKLACE, 1)
     end
 
-
     html
   end
 end

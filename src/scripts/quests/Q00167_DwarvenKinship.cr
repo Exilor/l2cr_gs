@@ -24,7 +24,7 @@ class Scripts::Q00167_DwarvenKinship < Quest
       case event
       when "30210-02.html"
         if st.cond?(2) && st.has_quest_items?(NORMANS_LETTER)
-          st.give_adena(20000, true)
+          st.give_adena(20_000, true)
           st.exit_quest(false, true)
           html = event
         end
@@ -40,7 +40,7 @@ class Scripts::Q00167_DwarvenKinship < Quest
         end
       when "30255-04.html"
         if st.cond?(1) && st.has_quest_items?(CARLONS_LETTER)
-          st.give_adena(15000, true)
+          st.give_adena(15_000, true)
           st.exit_quest(false, true)
           html = event
         end
@@ -49,7 +49,6 @@ class Scripts::Q00167_DwarvenKinship < Quest
         st.give_items(CARLONS_LETTER, 1)
         html = event
       end
-
     end
 
     html
@@ -69,7 +68,6 @@ class Scripts::Q00167_DwarvenKinship < Quest
         when State::COMPLETED
           html = get_already_completed_msg(pc)
         end
-
       when HAPROCK
         if st.cond?(1) && st.has_quest_items?(CARLONS_LETTER)
           html = "30255-01.html"
@@ -81,7 +79,6 @@ class Scripts::Q00167_DwarvenKinship < Quest
           html = "30210-01.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

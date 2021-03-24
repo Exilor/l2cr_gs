@@ -24,8 +24,7 @@ class Scripts::Q00296_TarantulasSpiderSilk < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30519-03.htm"
@@ -45,8 +44,8 @@ class Scripts::Q00296_TarantulasSpiderSilk < Quest
     when "30548-03.html"
       if qs.started?
         if has_quest_items?(pc, TARANTULA_SPINNERETTE)
-          amount = 15 + Rnd.rand(9)
-          amount *= get_quest_items_count(pc, TARANTULA_SPINNERETTE)
+          amount = 15 &+ Rnd.rand(9)
+          amount &*= get_quest_items_count(pc, TARANTULA_SPINNERETTE)
           give_items(pc, TARANTULA_SPIDER_SILK, amount)
           take_items(pc, TARANTULA_SPINNERETTE, -1)
           html = event
@@ -55,7 +54,6 @@ class Scripts::Q00296_TarantulasSpiderSilk < Quest
         end
       end
     end
-
 
     html
   end
@@ -83,7 +81,7 @@ class Scripts::Q00296_TarantulasSpiderSilk < Quest
       if npc.id == TRADER_MION
         silk = get_quest_items_count(pc, TARANTULA_SPIDER_SILK)
         if silk >= 1
-          give_adena(pc, (silk * 30) + (silk >= 10 ? 2000 : 0), true)
+          give_adena(pc, (silk &* 30) &+ (silk >= 10 ? 2000 : 0), true)
           take_items(pc, TARANTULA_SPIDER_SILK, -1)
           Q00281_HeadForTheHills.give_newbie_reward(pc) # TODO: It's using wrong bitmask, need to create a general bitmask for this using EnumIntBitmask class inside Quest class for handling Quest rewards.
           html = "30519-05.html"

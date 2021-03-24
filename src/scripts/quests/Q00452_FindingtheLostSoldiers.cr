@@ -60,8 +60,8 @@ class Scripts::Q00452_FindingtheLostSoldiers < Quest
         elsif st.cond?(2)
           html = "32773-5.html"
           st.take_items(TAG_ID, -1)
-          st.give_adena(95200, true)
-          st.add_exp_and_sp(435024, 50366)
+          st.give_adena(95_200, true)
+          st.add_exp_and_sp(435_024, 50_366)
           st.exit_quest(QuestType::DAILY, true)
         end
       when State::COMPLETED
@@ -72,7 +72,6 @@ class Scripts::Q00452_FindingtheLostSoldiers < Quest
           html = "32773-6.html"
         end
       end
-
     else
       if st.cond?(1)
         html = "corpse-1.html"

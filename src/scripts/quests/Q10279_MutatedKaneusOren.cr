@@ -27,10 +27,9 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
     when "30196-03.htm"
       st.start_quest
     when "30189-03.htm"
-      st.give_adena(100000, true)
+      st.give_adena(100_000, true)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -79,7 +78,6 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
       when State::COMPLETED
         html = "30916-06.htm"
       end
-
     when ROVIA
       case st.state
       when State::STARTED
@@ -93,7 +91,6 @@ class Scripts::Q10279_MutatedKaneusOren < Quest
       else
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

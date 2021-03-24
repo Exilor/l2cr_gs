@@ -83,6 +83,10 @@ class Packets::Incoming::RequestExEnchantSkillRouteChange < GameClientPacket
       end
 
       if skill = SkillData[@skill_id, @skill_lvl]?
+        if Config.log_skill_enchants
+          Logs[:enchant_skill].info { "ROUTE_CHANGED #{skill} using #{spb} by #{pc}." }
+        end
+
         pc.add_skill(skill, true)
         pc.send_packet(ExEnchantSkillResult::TRUE)
       end

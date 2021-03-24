@@ -34,8 +34,8 @@ class Instance
   property name : String = ""
   property eject_time : Int64
   property exit_loc : Location?
+  property reenter_type : InstanceReenterType = InstanceReenterType::NONE # L2J: _type
   property? pvp_instance : Bool = false
-  property reenter_type = InstanceReenterType::NONE # L2J: _type
 
   def initialize(id : Int32)
     @id = id
@@ -54,7 +54,7 @@ class Instance
 
   def duration=(val : Int)
     @check_time_up_task.try &.cancel
-    task = CheckTimeUp.new(self, val.to_i32)
+    task = CheckTimeUp.new(self, val.to_i64)
     @check_time_up_task = ThreadPoolManager.schedule_general(task, 500)
     @instance_end_time = Time.ms + val + 500
   end
@@ -111,7 +111,7 @@ class Instance
   end
 
   def remove_players
-    @players.each do |id|
+    @players.safe_each do |id|
       if pc = L2World.get_player(id)
         next unless pc.instance_id == @id
         pc.instance_id = 0
@@ -127,7 +127,7 @@ class Instance
   end
 
   def remove_npcs
-    @npcs.each do |npc|
+    @npcs.safe_each do |npc|
       npc.spawn?.try &.stop_respawn
       npc.delete_me
     end
@@ -139,7 +139,7 @@ class Instance
     @doors.each_value do |door|
       region = door.world_region
       door.decay_me
-      region.try &.remove_visible_object door
+      region.try &.remove_visible_object(door)
       door.known_list.remove_all_known_objects
       L2World.remove_object(door)
     end
@@ -185,7 +185,7 @@ class Instance
       when "activitytime"
         if temp = parse_long(n, "val", nil)
           delay = 15000
-          ctu = CheckTimeUp.new(self, temp.to_i * 60_000)
+          ctu = CheckTimeUp.new(self, temp * 60_000)
           @check_time_up_task = ThreadPoolManager.schedule_general(ctu, delay)
           @instance_end_time = Time.ms + (temp.to_i64 * 60_000) + 15_000
         end
@@ -341,17 +341,17 @@ class Instance
     end
   end
 
-  protected def do_check_time_up(remaining : Int32)
+  protected def do_check_time_up(remaining : Int64)
     cs = nil
 
     if @players.empty? && @empty_destroy_time == 0
-      remaining = 0
+      remaining = 0i64
       interval = 500
     elsif @players.empty? && @empty_destroy_time > 0
       empty_time_left = (@last_left + @empty_destroy_time) + Time.ms
       if empty_time_left <= 0
         interval = 0
-        remaining = 0
+        remaining = 0i64
       elsif remaining > 300_000 && empty_time_left > 300_000
         interval = 300_000
         remaining -= 300_000
@@ -446,7 +446,7 @@ class Instance
   end
 
   private struct CheckTimeUp
-    initializer instance : Instance, remaining : Int32
+    initializer instance : Instance, remaining : Int64
 
     def call
       @instance.do_check_time_up(@remaining)

@@ -14,7 +14,6 @@ class Scripts::NpcBuffers < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    debug "#on_spawn: npc: #{npc}."
     data = NpcBuffersData.get_npc_buffer(npc.id)
     data.skills.each do |skill|
       task = NpcBufferAI.new(npc, skill)

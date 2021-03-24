@@ -2,7 +2,7 @@ module Hero
   include Packets::Outgoing
   extend self
   extend Synchronizable
-  extend Loggable
+  include Loggable
 
   private GET_HEROES = "SELECT heroes.charId, characters.char_name, heroes.class_id, heroes.count, heroes.played, heroes.claimed FROM heroes, characters WHERE characters.charId = heroes.charId AND heroes.played = 1"
   private GET_ALL_HEROES = "SELECT heroes.charId, characters.char_name, heroes.class_id, heroes.count, heroes.played, heroes.claimed FROM heroes, characters WHERE characters.charId = heroes.charId"

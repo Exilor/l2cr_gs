@@ -38,7 +38,7 @@ class Scripts::Quarry < AbstractNpcAI
       npc.set_walking
 
       unless get_quest_timer("TIME_LIMIT", npc, nil)
-        start_quest_timer("TIME_LIMIT", 900000, npc, nil) # 15 min limit for save
+        start_quest_timer("TIME_LIMIT", 900_000, npc, nil) # 15 min limit for save
       end
       html = "32299-02.htm"
     when "TIME_LIMIT"
@@ -72,7 +72,6 @@ class Scripts::Quarry < AbstractNpcAI
       end
     end
 
-
     html
   end
 
@@ -99,17 +98,11 @@ class Scripts::Quarry < AbstractNpcAI
   end
 
   def on_enter_zone(npc, zone)
-    if npc.is_a?(L2Attackable)
-      if npc.id == SLAVE
-        if npc.alive? && !npc.decayed? && npc.intention.follow?
-          if HellboundEngine.instance.level == 5
-            start_quest_timer("DECAY", 1000, npc, nil)
-            begin
-              broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THANK_YOU_FOR_THE_RESCUE_ITS_A_SMALL_GIFT)
-            rescue e
-              error e
-            end
-          end
+    if npc.is_a?(L2Attackable) && npc.id == SLAVE
+      if npc.alive? && !npc.decayed? && npc.intention.follow?
+        if HellboundEngine.instance.level == 5
+          start_quest_timer("DECAY", 1000, npc, nil)
+          broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THANK_YOU_FOR_THE_RESCUE_ITS_A_SMALL_GIFT)
         end
       end
     end

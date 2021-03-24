@@ -83,7 +83,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         html["%AgitDecoEffect%"] = "<fstring p1=\"#{level}\">#{fstring}</fstring>"
       else
         html = get_html_packet(pc, npc, "castledeco-0#{func}.html")
-        html["%AgitDecoCost%"] = "<fstring p1=\"#{get_function_fee(func, level)}\" p2=\"#{get_function_ratio(func) / 86400000}\">6</fstring>"
+        html["%AgitDecoCost%"] = "<fstring p1=\"#{get_function_fee(func, level)}\" p2=\"#{get_function_ratio(func) / 86_400_000}\">6</fstring>"
         html["%AgitDecoEffect%"] = "<fstring p1=\"#{level}\">#{fstring}</fstring>"
         html["%AgitDecoSubmit%"] = "#{func} #{level}"
       end
@@ -110,8 +110,8 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       cal = Calendar.new
       cal.ms = fn.end_time
       html["%#{str}Depth%"] = "<fstring p1=\"#{fn.lvl}\">#{fstring}</fstring>"
-      html["%#{str}Cost%"] = "<fstring p1=\"#{fn.lease}\" p2=\"#{fn.rate / 86400000}\">6</fstring>"
-      html["%#{str}Expire%"] = "<fstring p1=\"#{cal.day}\" p2=\"#{cal.month + 1}\" p3=\"#{cal.year}\">5</fstring>"
+      html["%#{str}Cost%"] = "<fstring p1=\"#{fn.lease}\" p2=\"#{fn.rate / 86_400_000}\">6</fstring>"
+      html["%#{str}Expire%"] = "<fstring p1=\"#{cal.day}\" p2=\"#{cal.month &+ 1}\" p3=\"#{cal.year}\">5</fstring>"
       html["%#{str}Reset%"] = "[<a action=\"bypass -h Quest CastleChamberlain #{str} 0\">Deactivate</a>]"
     end
   end
@@ -163,7 +163,6 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       when 5
         price = Config.outer_door_upgrade_price5
       end
-
     when 2 # Inner Door
       case level
       when 2
@@ -173,7 +172,6 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       when 5
         price = Config.inner_door_upgrade_price5
       end
-
     when 3 # Wall
       case level
       when 2
@@ -183,9 +181,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       when 5
         price = Config.wall_upgrade_price5
       end
-
     end
-
 
     case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DUSK
@@ -193,7 +189,6 @@ class Scripts::CastleChamberlain < AbstractNpcAI
     when SevenSigns::CABAL_DAWN
       price *= 0.8
     end
-
 
     price.to_i
   end
@@ -233,14 +228,12 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       price = Config.trap_upgrade_price4
     end
 
-
     case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DUSK
       price *= 3
     when SevenSigns::CABAL_DAWN
       price *= 0.8
     end
-
 
     price.to_i
   end
@@ -338,7 +331,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         level = st.shift.to_i
         html = get_html_packet(pc, npc, "chamberlain-14.html")
         html["%gate_price%"] = get_door_upgrade_price(type, level)
-        html["%event%"] = event.from("upgrade_doors".size + 1)
+        html["%event%"] = event.from("upgrade_doors".size &+ 1)
         pc.send_packet(html)
       else
         htmltext = "chamberlain-21.html"
@@ -438,7 +431,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
           html = get_html_packet(pc, npc, "chamberlain-02.html")
           html["%clanleadername%"] = clan.leader_name
           html["%clanname%"] = clan.name
-          html["%castlename%"] = 1001000 + castle.residence_id
+          html["%castlename%"] = 1001000 &+ castle.residence_id
 
           case SevenSigns.instance.current_period
           when SevenSigns::PERIOD_COMP_RECRUITING
@@ -501,9 +494,9 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         seed_income = 0i64
         if Config.allow_manor
           CastleManorManager.get_seed_production(castle.residence_id, false).each do |sp|
-            diff = sp.start_amount - sp.amount
+            diff = sp.start_amount &- sp.amount
             if diff != 0
-              seed_income += diff * sp.price
+              seed_income &+= diff &* sp.price
             end
           end
         end
@@ -535,7 +528,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_TAXES)
         amount = st.empty? ? 0i64 : st.shift.to_i64
         if amount <= castle.treasury
-          castle.add_to_treasury_no_tax(-1i64 * amount)
+          castle.add_to_treasury_no_tax(-1i64 &* amount)
           give_adena(pc, amount, false)
           htmltext = "chamberlain-01.html"
         else
@@ -761,7 +754,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         else
           html = get_html_packet(pc, npc, "chamberlain-25.html")
           html["%owner_name%"] = pc.name
-          html["%feud_name%"] = 1001000 + castle.residence_id
+          html["%feud_name%"] = 1001000 &+ castle.residence_id
           pc.send_packet(html)
           give_items(pc, CROWN, 1)
         end
@@ -818,7 +811,6 @@ class Scripts::CastleChamberlain < AbstractNpcAI
         htmltext = "chamberlain-21.html"
       end
     end
-
 
     htmltext
   end

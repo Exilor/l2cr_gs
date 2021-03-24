@@ -2,7 +2,7 @@ module ChatHandler::ChatAll
   extend self
   extend ChatHandler
 
-  def handle_chat(type, pc, params, text)
+  def handle_chat(type : Int32, pc : L2PcInstance, target : String?, text : String)
     vcd_used = false
 
     if text.starts_with?('.')
@@ -11,7 +11,7 @@ module ChatHandler::ChatAll
 
       if st.size > 1
         command = st.shift.from(1)
-        params = text.from(command.size + 2)
+        params = text.from(command.size &+ 2)
         vch = VoicedCommandHandler[command]
       else
         command = text.from(1)
@@ -47,7 +47,7 @@ module ChatHandler::ChatAll
     end
   end
 
-  def chat_type_list
+  def chat_type_list : Enumerable(Int32)
     {0}
   end
 end

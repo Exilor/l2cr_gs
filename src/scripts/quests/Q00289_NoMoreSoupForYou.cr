@@ -54,10 +54,7 @@ class Scripts::Q00289_NoMoreSoupForYou < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     b = Rnd.rand(18)
     c = Rnd.rand(7)
@@ -126,7 +123,6 @@ class Scripts::Q00289_NoMoreSoupForYou < Quest
           end
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

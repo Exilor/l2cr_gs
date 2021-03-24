@@ -55,7 +55,7 @@ class Scripts::FortressOfResistance < ClanHallSiegeEngine
     clan_id = pc.clan_id
     if clan_id > 0
       if tmp = DAMAGE_TO_NURKA[clan_id]?
-        clan_dmg = tmp + damage
+        clan_dmg = tmp &+ damage
       else
         clan_dmg = damage.to_i64
       end

@@ -24,7 +24,7 @@ class L2DamageZone < L2ZoneType
     @castle
   end
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name.casecmp
     when "dmgHPSec"
       @hp_damage_per_second = value.to_i

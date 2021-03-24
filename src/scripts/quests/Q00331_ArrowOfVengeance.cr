@@ -29,19 +29,17 @@ class Scripts::Q00331_ArrowOfVengeance < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    if st = get_quest_state(pc, false)
-      case event
-      when "30125-03.htm"
-        st.start_quest
-        html = event
-      when "30125-06.html"
-        st.exit_quest(true, true)
-        html = event
-      when "30125-07.html"
-        html = event
-      end
+    return unless pc && (st = get_quest_state(pc, false))
 
+    case event
+    when "30125-03.htm"
+      st.start_quest
+      html = event
+    when "30125-06.html"
+      st.exit_quest(true, true)
+      html = event
+    when "30125-07.html"
+      html = event
     end
 
     html
@@ -57,12 +55,12 @@ class Scripts::Q00331_ArrowOfVengeance < Quest
       harpy_feathers = st.get_quest_items_count(HARPY_FEATHER)
       medusa_venoms = st.get_quest_items_count(MEDUSA_VENOM)
       wyrms_teeth = st.get_quest_items_count(WYRMS_TOOTH)
-      if harpy_feathers + medusa_venoms + wyrms_teeth > 0
-        adena = harpy_feathers * HARPY_FEATHER_ADENA
-        adena += medusa_venoms * MEDUSA_VENOM_ADENA
-        adena += wyrms_teeth * WYRMS_TOOTH_ADENA
-        if harpy_feathers + medusa_venoms + wyrms_teeth >= BONUS_COUNT
-          adena += BONUS
+      if harpy_feathers &+ medusa_venoms &+ wyrms_teeth > 0
+        adena = harpy_feathers &* HARPY_FEATHER_ADENA
+        adena &+= medusa_venoms &* MEDUSA_VENOM_ADENA
+        adena &+= wyrms_teeth &* WYRMS_TOOTH_ADENA
+        if harpy_feathers &+ medusa_venoms &+ wyrms_teeth >= BONUS_COUNT
+          adena &+= BONUS
         end
         st.give_adena(adena, true)
         take_items(pc, -1, {HARPY_FEATHER, MEDUSA_VENOM, WYRMS_TOOTH})
@@ -71,7 +69,6 @@ class Scripts::Q00331_ArrowOfVengeance < Quest
         html = "30125-04.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

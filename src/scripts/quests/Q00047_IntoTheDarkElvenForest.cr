@@ -5,11 +5,11 @@ class Scripts::Q00047_IntoTheDarkElvenForest < AbstractGetScrollToHometownQuest
     super(47, self.class.simple_name, "Into the Dark Elven Forest")
   end
 
-  def scroll_item_id
+  def scroll_item_id : Int32
     SCROLL_OF_ESCAPE_DARK_ELF_VILLAGE
   end
 
-  def parent_quest_name
+  def parent_quest_name : String
     "Q00008_AnAdventureBegins"
   end
 end

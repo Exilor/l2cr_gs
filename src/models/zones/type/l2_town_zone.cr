@@ -1,7 +1,7 @@
 class L2TownZone < L2ZoneType
   getter town_id = 0, tax_by_id = 0
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name
     when "townId"
       @town_id = value.to_i

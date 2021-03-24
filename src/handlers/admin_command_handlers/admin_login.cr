@@ -140,7 +140,7 @@ module AdminCommandHandler::AdminLogin
     Config.server_gmonly = true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_server_gm_only",
       "admin_server_all",

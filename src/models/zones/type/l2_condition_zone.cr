@@ -2,7 +2,7 @@ class L2ConditionZone < L2ZoneType
   @no_item_drop = false
   @no_bookmark = false
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     if name.casecmp?("NoBookmark")
       @no_bookmark = value.to_b
     elsif name.casecmp?("NoItemDrop")

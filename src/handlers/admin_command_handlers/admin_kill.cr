@@ -73,7 +73,7 @@ module AdminCommandHandler::AdminKill
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_kill", "admin_kill_monster"}
   end
 end

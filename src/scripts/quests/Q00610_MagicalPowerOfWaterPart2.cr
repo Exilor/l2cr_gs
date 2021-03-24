@@ -19,11 +19,11 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
     register_quest_items(GREEN_TOTEM, ASHUTAR_HEART)
 
     var = load_global_quest_var("Q00610_respawn")
-    remain = var.empty? ? 0i64 : var.to_i64 - Time.ms
+    remain = var.empty? ? 0 : var.to_i64 &- Time.ms
     if remain > 0
       start_quest_timer("spawn_npc", remain, nil, nil)
     else
-      add_spawn(VARKA_TOTEM, 105452, -36775, -1050, 34000, false, 0, true)
+      add_spawn(VARKA_TOTEM, 105452, -36775, -1050, 34_000, false, 0, true)
     end
   end
 
@@ -40,7 +40,6 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
           end
           st.set_cond(3, true)
         end
-
       end
     end
   end
@@ -57,7 +56,7 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
         html = event
       when "give_heart"
         if st.has_quest_items?(ASHUTAR_HEART)
-          st.add_exp_and_sp(10000, 0)
+          st.add_exp_and_sp(10_000, 0)
           st.exit_quest(true, true)
           html = "31372-06.html"
         else
@@ -76,9 +75,9 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
         npc = npc.not_nil!
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::THE_POWER_OF_CONSTRAINT_IS_GETTING_WEAKER_YOUR_RITUAL_HAS_FAILED))
         npc.delete_me
-        add_spawn(VARKA_TOTEM, 105452, -36775, -1050, 34000, false, 0, true)
+        add_spawn(VARKA_TOTEM, 105452, -36775, -1050, 34_000, false, 0, true)
       elsif event == "spawn_npc"
-        add_spawn(VARKA_TOTEM, 105452, -36775, -1050, 34000, false, 0, true)
+        add_spawn(VARKA_TOTEM, 105452, -36775, -1050, 34_000, false, 0, true)
       end
     end
 
@@ -86,11 +85,11 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    respawn_min_delay = (43200000 * Config.raid_min_respawn_multiplier).to_i
-    respawn_max_delay = (129600000 * Config.raid_max_respawn_multiplier).to_i
+    respawn_min_delay = (43_200_000 * Config.raid_min_respawn_multiplier).to_i
+    respawn_max_delay = (129_600_000 * Config.raid_max_respawn_multiplier).to_i
     respawn_delay = Rnd.rand(respawn_min_delay..respawn_max_delay)
     cancel_quest_timer("despawn_ashutar", npc, nil)
-    save_global_quest_var("Q00610_respawn", (Time.ms + respawn_delay).to_s)
+    save_global_quest_var("Q00610_respawn", (Time.ms &+ respawn_delay).to_s)
     start_quest_timer("spawn_npc", respawn_delay, nil, nil)
     execute_for_each_player(killer, npc, is_summon, true, false)
 
@@ -123,7 +122,6 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
           end
         end
       end
-
     when VARKA_TOTEM
       if st.started?
         case st.cond
@@ -134,10 +132,8 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
         when 3
           html = "31560-05.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -155,7 +151,7 @@ class Scripts::Q00610_MagicalPowerOfWaterPart2 < Quest
     npc.delete_me
     ashutar = add_spawn(ASHUTAR, 104825, -36926, -1136, 0, false, 0)
     ashutar.broadcast_packet(NpcSay.new(ashutar, Say2::NPC_ALL, NpcString::THE_MAGICAL_POWER_OF_WATER_COMES_FROM_THE_POWER_OF_STORM_AND_HAIL_IF_YOU_DARE_TO_CONFRONT_IT_ONLY_DEATH_WILL_AWAIT_YOU))
-    start_quest_timer("despawn_ashutar", 1200000, ashutar, nil)
+    start_quest_timer("despawn_ashutar", 1_200_000, ashutar, nil)
     "31560-02.html"
   end
 end

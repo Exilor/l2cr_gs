@@ -23,8 +23,7 @@ class Scripts::Q00273_InvadersOfTheHolyLand < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     if st
       case event
@@ -37,7 +36,6 @@ class Scripts::Q00273_InvadersOfTheHolyLand < Quest
       when "30566-09.html"
         html = event
       end
-
     end
 
     html
@@ -74,13 +72,13 @@ class Scripts::Q00273_InvadersOfTheHolyLand < Quest
       if has_at_least_one_quest_item?(pc, BLACK_SOULSTONE, RED_SOULSTONE)
         black = st.get_quest_items_count(BLACK_SOULSTONE)
         red = st.get_quest_items_count(RED_SOULSTONE)
-        adena = (red * 10) + (black * 3)
+        adena = (red &* 10) &+ (black &* 3)
         if red > 0
-          if red + black >= 10
-            adena += 1800
+          if red &+ black >= 10
+            adena &+= 1800
           end
         elsif black >= 10
-          adena += 1500
+          adena &+= 1500
         end
         st.give_adena(adena, true)
         take_items(pc, -1, {BLACK_SOULSTONE, RED_SOULSTONE})
@@ -90,7 +88,6 @@ class Scripts::Q00273_InvadersOfTheHolyLand < Quest
         html = "30566-05.html"
       end
     end
-
 
     html
   end

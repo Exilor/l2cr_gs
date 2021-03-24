@@ -2,7 +2,7 @@ require "../models/entity/castle"
 
 module CastleManager
   extend self
-  extend Loggable
+  include Loggable
 
   private CASTLES = [] of Castle
   private CASTLE_SIEGE_DATES = Concurrent::Map(Int32, Int64).new

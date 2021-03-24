@@ -30,17 +30,17 @@ class Scripts::Rooney < AbstractNpcAI
     when "message1"
       unless npc.decayed?
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::HURRY_HURRY)
-        start_quest_timer("message2", 60000, npc, nil)
+        start_quest_timer("message2", 60_000, npc, nil)
       end
     when "message2"
       unless npc.decayed?
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::I_AM_NOT_THAT_TYPE_OF_PERSON_WHO_STAYS_IN_ONE_PLACE_FOR_A_LONG_TIME)
-        start_quest_timer("message3", 60000, npc, nil)
+        start_quest_timer("message3", 60_000, npc, nil)
       end
     when "message3"
       unless npc.decayed?
         broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::ITS_HARD_FOR_ME_TO_KEEP_STANDING_LIKE_THIS)
-        start_quest_timer("message4", 60000, npc, nil)
+        start_quest_timer("message4", 60_000, npc, nil)
       end
     when "message4"
       unless npc.decayed?
@@ -48,15 +48,14 @@ class Scripts::Rooney < AbstractNpcAI
       end
     end
 
-
     return
   end
 
   def on_see_creature(npc, creature, is_summon)
     if creature.player? && npc.script_value?(0)
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::WELCOME)
-      start_quest_timer("teleport", 3600000, npc, nil)
-      start_quest_timer("message1", 60000, npc, nil)
+      start_quest_timer("teleport", 360_0000, npc, nil)
+      start_quest_timer("message1", 60_000, npc, nil)
       npc.script_value = 1
     end
 

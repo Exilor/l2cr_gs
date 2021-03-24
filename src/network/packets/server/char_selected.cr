@@ -30,7 +30,7 @@ class Packets::Outgoing::CharSelected < GameServerPacket
     d @pc.dex
     d @pc.wit
 
-    d GameTimer.time % (24 * 60)
+    d GameTimer.time % (24 &* 60)
     d 0x00
 
     d @pc.class_id.to_i

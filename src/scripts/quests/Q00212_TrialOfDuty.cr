@@ -65,8 +65,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
     html = nil
 
     case event
@@ -94,7 +93,6 @@ class Scripts::Q00212_TrialOfDuty < Quest
         qs.set_cond(14, true)
       end
     end
-
 
     html
   end
@@ -148,12 +146,8 @@ class Scripts::Q00212_TrialOfDuty < Quest
           qs.set("flag", flag + 1)
         end
       end
-    when LETO_LIZARDMAN,
-         LETO_LIZARDMAN_ARCHER,
-         LETO_LIZARDMAN_SOLDIER,
-         LETO_LIZARDMAN_WARRIOR,
-         LETO_LIZARDMAN_SHAMAN,
-         LETO_LIZARDMAN_OVERLORD
+    when LETO_LIZARDMAN, LETO_LIZARDMAN_ARCHER, LETO_LIZARDMAN_SOLDIER,
+         LETO_LIZARDMAN_WARRIOR, LETO_LIZARDMAN_SHAMAN, LETO_LIZARDMAN_OVERLORD
       if qs.memo_state?(9) && give_item_randomly(killer, npc, MILITAS_ARTICLE.id, 1, MILITAS_ARTICLE.count, 1, true)
         qs.set_cond(12)
       end
@@ -171,7 +165,6 @@ class Scripts::Q00212_TrialOfDuty < Quest
         end
       end
     end
-
 
     super
   end
@@ -205,7 +198,6 @@ class Scripts::Q00212_TrialOfDuty < Quest
             reward_dimensional_diamonds(pc)
           end
         end
-
       else
         html = get_already_completed_msg(pc)
       end
@@ -234,7 +226,6 @@ class Scripts::Q00212_TrialOfDuty < Quest
       when 4
         html = "30653-04.html"
       end
-
     when SIR_KIEL_NIGHTHAWK
       case qs.memo_state
       when 4
@@ -264,7 +255,6 @@ class Scripts::Q00212_TrialOfDuty < Quest
       when 8
         html = "30654-06.html"
       end
-
     when SPIRIT_OF_SIR_TALIANUS
       if qs.memo_state?(6)
         if has_quest_items?(pc, MIRROR_OF_ORPIC, TALIANUSS_REPORT)
@@ -301,7 +291,6 @@ class Scripts::Q00212_TrialOfDuty < Quest
           html = "30655-05.html"
         end
       end
-
     when DUSTIN
       case qs.memo_state
       when 10
@@ -335,7 +324,6 @@ class Scripts::Q00212_TrialOfDuty < Quest
           html = "30116-10.html"
         end
       end
-
     when SIR_COLLIN_WINDAWOOD
       case qs.memo_state
       when 12
@@ -351,9 +339,7 @@ class Scripts::Q00212_TrialOfDuty < Quest
           html = "30311-02.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

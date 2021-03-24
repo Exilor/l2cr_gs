@@ -3,7 +3,7 @@ require "../models/combat_flag"
 
 module FortSiegeManager
   extend self
-  extend Loggable
+  include Loggable
 
   private COMMANDER_SPAWN_LIST = Concurrent::Map(Int32, Array(FortSiegeSpawn)).new
   private FLAG_LIST = Concurrent::Map(Int32, Array(CombatFlag)).new

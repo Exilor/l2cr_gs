@@ -24,10 +24,7 @@ class Scripts::Q00166_MassOfDarkness < Quest
     add_start_npc(UNDRIAS)
     add_talk_id(UNDRIAS, IRIA, DORANKUS, TRUDY)
     register_quest_items(
-      UNDRIAS_LETTER,
-      CEREMONIAL_DAGGER,
-      DREVIANT_WINE,
-      GARMIELS_SCRIPTURE
+      UNDRIAS_LETTER, CEREMONIAL_DAGGER, DREVIANT_WINE, GARMIELS_SCRIPTURE
     )
   end
 
@@ -90,7 +87,6 @@ class Scripts::Q00166_MassOfDarkness < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

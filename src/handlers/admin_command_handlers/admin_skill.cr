@@ -76,7 +76,7 @@ module AdminCommandHandler::AdminSkill
       return
     end
 
-    pc.send_message("You gave #{pc.give_available_skills(include_fs, true)} skills to #{target.name}")
+    pc.send_message("You gave #{target.give_available_skills(include_fs, true)} skills to #{target.name}")
     target.send_skill_list
   end
 
@@ -95,7 +95,7 @@ module AdminCommandHandler::AdminSkill
     max_skills_per_page = 10
     max_pages = skills.size // max_skills_per_page
 
-    if skills.size > max_skills_per_page * max_pages
+    if skills.size > max_skills_per_page &* max_pages
       max_pages &+= 1
     end
 
@@ -103,15 +103,15 @@ module AdminCommandHandler::AdminSkill
       page = max_pages
     end
 
-    skills_start = max_skills_per_page * page
+    skills_start = max_skills_per_page &* page
     skills_end = skills.size
 
-    if skills_end - skills_start > max_skills_per_page
-      skills_end = skills_start + max_skills_per_page
+    if skills_end &- skills_start > max_skills_per_page
+      skills_end = skills_start &+ max_skills_per_page
     end
 
     admin_reply = NpcHtmlMessage.new
-    msg_size = 500 + (max_pages &* 50) + (((skills_end &- skills_start) &+ 1) * 50)
+    msg_size = 500 &+ (max_pages &* 50) + (((skills_end &- skills_start) &+ 1) &* 50)
     msg = String.build(msg_size) do |io|
       io << "<html><body><table width=260><tr><td width=40><button value" \
             "=\"Main\" action=\"bypass -h admin_admin\" width=40 height=15" \
@@ -192,13 +192,8 @@ module AdminCommandHandler::AdminSkill
     else
       skills = pc.all_skills
       admin_skills = player.all_skills
-      admin_skills.each do |skill|
-        pc.remove_skill(skill)
-      end
-
-      skills.each do |skill|
-        pc.add_skill(skill, true)
-      end
+      admin_skills.each { |skill| pc.remove_skill(skill) }
+      skills.each { |skill| pc.add_skill(skill, true) }
 
       pc.send_message("You now have all the skills of #{player}.")
       pc.send_skill_list
@@ -218,18 +213,10 @@ module AdminCommandHandler::AdminSkill
       pc.send_message("You must copy the skills of someone else in order to do this.")
     else
       skills = player.all_skills
-      skills.each do |skill|
-        player.remove_skill(skill)
-      end
-      pc.all_skills.each do |skill|
-        player.add_skill(skill, true)
-      end
-      skills.each do |skill|
-        pc.remove_skill(skill)
-      end
-      admin_skills.each do |skill|
-        pc.add_skill(skill, true)
-      end
+      skills.each { |skill| player.remove_skill(skill) }
+      pc.all_skills.each { |skill| player.add_skill(skill, true) }
+      skills.each { |skill| pc.remove_skill(skill) }
+      admin_skills.each { |skill| pc.add_skill(skill, true) }
       player.send_message("GM #{pc} updated your skills.")
       pc.send_message("You now have all your skills back.")
       @@admin_skills = nil
@@ -332,7 +319,7 @@ module AdminCommandHandler::AdminSkill
     show_main_page(pc)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_show_skills",
       "admin_remove_skills",

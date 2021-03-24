@@ -97,7 +97,6 @@ class Packets::Incoming::EnterWorld < GameClientPacket
         end
       end
 
-
       FortSiegeManager.sieges.each do |siege|
         unless siege.in_progress?
           next

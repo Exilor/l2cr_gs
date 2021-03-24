@@ -6,7 +6,6 @@ class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
     @length = d
 
     if @length > 256
-      debug { "Crest data size is too large (#{@length}/256)." }
       return
     end
 

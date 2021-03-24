@@ -1,6 +1,6 @@
 module TvTManager
   extend self
-  extend Loggable
+  include Loggable
 
   @@task : TvTStartTask?
 

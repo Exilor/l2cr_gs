@@ -2,7 +2,7 @@ module BypassHandler::PrivateWarehouse
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2Npc)
     return false if pc.enchanting?
 
@@ -49,7 +49,7 @@ module BypassHandler::PrivateWarehouse
     pc.send_packet(WarehouseWithdrawalList.new(pc, WarehouseWithdrawalList::PRIVATE))
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"withdrawp", "withdrawsortedp", "depositp"}
   end
 end

@@ -171,8 +171,8 @@ class Scripts::Q00692_HowtoOpposeEvil < Quest
     end
 
     count //= min_count
-    st.take_items(item_id, count * min_count)
-    st.reward_items(reward_item_id, reward_count * count)
+    st.take_items(item_id, count &* min_count)
+    st.reward_items(reward_item_id, reward_count &* count)
 
     true
   end

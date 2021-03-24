@@ -29,16 +29,15 @@ module AdminCommandHandler::AdminHtml
 
   def show_html(pc, path, reload)
     if reload
-      file = File.open(Config.datapack_root + '/' + path)
+      file = File.open("#{Config.datapack_root}/#{path}")
       content = HtmCache.load_file(file)
       file.close
     else
       content = HtmCache.get_htm_force(path)
     end
 
-    debug path
-
     html = NpcHtmlMessage.new
+
     if content
       html.html = content
     else
@@ -48,7 +47,7 @@ module AdminCommandHandler::AdminHtml
     pc.send_packet(html)
   end
 
-  def commands
+  def commands : Enumerable(String)
     %w(admin_html admin_loadhtml)
   end
 end

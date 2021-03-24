@@ -187,15 +187,15 @@ module AdminCommandHandler::AdminFightCalculator
     10_000.times do
       _miss1 = Formulas.hit_miss(npc1, npc2)
       if _miss1
-        miss1 += 1
+        miss1 &+= 1
       end
       _shld1 = Formulas.shld_use(npc1, npc2, nil, false)
       if _shld1 > 0
-        shld1 += 1
+        shld1 &+= 1
       end
       _crit1 = Formulas.crit(npc1, npc2)
       if _crit1
-        crit1 += 1
+        crit1 &+= 1
       end
 
       _patk1 = npc1.get_p_atk(npc2)
@@ -215,15 +215,15 @@ module AdminCommandHandler::AdminFightCalculator
     10_000.times do
       _miss2 = Formulas.hit_miss(npc2, npc1)
       if _miss2
-        miss2 += 1
+        miss2 &+= 1
       end
       _shld2 = Formulas.shld_use(npc2, npc1, nil, false)
       if _shld2 > 0
-        shld2 += 1
+        shld2 &+= 1
       end
       _crit2 = Formulas.crit(npc2, npc1)
       if _crit2
-        crit2 += 1
+        crit2 &+= 1
       end
 
       _patk2 = npc2.get_p_atk(npc1)
@@ -373,7 +373,7 @@ module AdminCommandHandler::AdminFightCalculator
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_fight_calculator",
       "admin_fight_calculator_show",

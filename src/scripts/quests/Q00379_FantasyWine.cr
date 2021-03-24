@@ -23,10 +23,7 @@ class Scripts::Q00379_FantasyWine < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30074-02.htm", "30074-03.htm", "30074-05.html"
@@ -54,7 +51,6 @@ class Scripts::Q00379_FantasyWine < Quest
         qs.exit_quest(true, true)
       end
     end
-
 
     html
   end

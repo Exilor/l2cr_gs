@@ -51,9 +51,7 @@ class Scripts::Q10269_ToTheSeedOfDestruction < Quest
       when State::COMPLETED
         html = "32526-02.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

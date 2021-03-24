@@ -77,18 +77,16 @@ class Scripts::Q00240_ImTheOnlyOneYouCanTrust < Quest
         end
       when 2
         if st.get_quest_items_count(STAKATO_FANG) >= 25
-          st.give_adena(147200, true)
+          st.give_adena(147_200, true)
           st.take_items(STAKATO_FANG, -1)
-          st.add_exp_and_sp(589542, 36800)
+          st.add_exp_and_sp(589_542, 36_800)
           st.exit_quest(false, true)
           html = "32640-10.html"
         end
       end
-
     when State::COMPLETED
       html = "32640-11.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

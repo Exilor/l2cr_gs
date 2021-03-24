@@ -26,10 +26,7 @@ class Scripts::Q00364_JovialAccordion < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "START"
@@ -71,7 +68,6 @@ class Scripts::Q00364_JovialAccordion < Quest
       st.set_cond(2, true)
       html = event
     end
-
 
     html
   end
@@ -152,11 +148,8 @@ class Scripts::Q00364_JovialAccordion < Quest
         when 5
           html = "30957-07.html"
         end
-
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

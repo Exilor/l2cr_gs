@@ -32,8 +32,7 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -82,7 +81,6 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
       end
     end
 
-
     html
   end
 
@@ -119,7 +117,6 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
           end
         end
       end
-
     end
 
     super
@@ -144,15 +141,15 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
             html = "30329-09.html"
           end
         elsif has_quest_items?(pc, COFFIN_OF_ETERNAL_REST)
-          give_adena(pc, 163800, true)
+          give_adena(pc, 163_800, true)
           give_items(pc, GAZE_OF_ABYSS, 1)
           level = pc.level
           if level >= 20
-            add_exp_and_sp(pc, 320534, 26212)
+            add_exp_and_sp(pc, 320_534, 26_212)
           elsif level == 19
-            add_exp_and_sp(pc, 456128, 32910)
+            add_exp_and_sp(pc, 456_128, 32_910)
           else
-            add_exp_and_sp(pc, 591724, 39608)
+            add_exp_and_sp(pc, 591_724, 39_608)
           end
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -178,7 +175,6 @@ class Scripts::Q00410_PathOfThePalusKnight < Quest
           html = "30422-06.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

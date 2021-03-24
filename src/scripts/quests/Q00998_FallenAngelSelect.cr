@@ -24,7 +24,6 @@ class Scripts::Q00998_FallenAngelSelect < Quest
       start_quest(Q00143_FallenAngelRequestOfDusk.simple_name, pc)
     end
 
-
     nil
   end
 

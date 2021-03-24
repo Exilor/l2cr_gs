@@ -40,20 +40,17 @@ class Scripts::Q10268_ToTheSeedOfInfinity < Quest
       when State::COMPLETED
         html = "32548-0a.html"
       end
-
     when TEPIOS
       case st.state
       when State::STARTED
         html = "32530-01.html"
-        st.give_adena(16671, true)
-        st.add_exp_and_sp(100640, 10098)
+        st.give_adena(16_671, true)
+        st.add_exp_and_sp(100_640, 10_098)
         st.exit_quest(false, true)
       when State::COMPLETED
         html = "32530-02.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

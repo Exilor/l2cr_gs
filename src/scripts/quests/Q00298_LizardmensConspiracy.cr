@@ -27,10 +27,7 @@ class Scripts::Q00298_LizardmensConspiracy < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30333-03.htm"
@@ -48,7 +45,7 @@ class Scripts::Q00298_LizardmensConspiracy < Quest
     when "30344-06.html"
       if qs.started?
         if qs.cond?(3)
-          add_exp_and_sp(pc, 0, 42000)
+          add_exp_and_sp(pc, 0, 42_000)
           qs.exit_quest(true, true)
           html = event
         else
@@ -56,7 +53,6 @@ class Scripts::Q00298_LizardmensConspiracy < Quest
         end
       end
     end
-
 
     html
   end

@@ -227,7 +227,7 @@ class Scripts::Q00125_TheNameOfEvil1 < Quest
         when 8
           if st.has_quest_items?(EPITAPH_OF_WISDOM)
             html = "32114-12.html"
-            st.add_exp_and_sp(859195, 86603)
+            st.add_exp_and_sp(859_195, 86_603)
             st.exit_quest(false, true)
           end
         end

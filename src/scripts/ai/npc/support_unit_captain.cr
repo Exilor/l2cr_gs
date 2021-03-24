@@ -176,7 +176,6 @@ class Scripts::SupportUnitCaptain < AbstractNpcAI
       end
     end
 
-
     html
   end
 

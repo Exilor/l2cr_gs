@@ -1,5 +1,5 @@
 class L2ClanHallZone < L2ResidenceZone
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     if name == "clanHallId"
       self.residence_id = value.to_i
 

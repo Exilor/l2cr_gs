@@ -195,8 +195,7 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
 
 
     # For NPC-only timers, player is nil and no further checks or actions are required.
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -437,8 +436,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           end
           npc.delete_me
         end
-      else
-        # Syntactically required else
       end
     when MIMI_THE_CAT
       case npc.script_value
@@ -641,8 +638,6 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           give_items(killer, data.crystal_of_victory, 1)
           play_sound(killer, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
-      else
-        # Syntactically required else
       end
     end
 
@@ -675,9 +670,9 @@ class Scripts::Q00230_TestOfTheSummoner < Quest
           elsif !has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA) && has_quest_items?(pc, BEGINNERS_ARCANA)
             html = "30634-11.html"
           elsif has_quest_items?(pc, ALMORS_ARCANA, BASILLIA_ARCANA, CAMONIELL_ARCANA, CELESTIEL_ARCANA, BELTHUS_ARCANA, BRYNTHEA_ARCANA)
-            give_adena(pc, 300960, true)
+            give_adena(pc, 300_960, true)
             give_items(pc, MARK_OF_SUMMONER, 1)
-            add_exp_and_sp(pc, 1664494, 114220)
+            add_exp_and_sp(pc, 1_664_494, 114_220)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30634-12.html"

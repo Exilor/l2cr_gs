@@ -22,8 +22,7 @@ class Scripts::Q00293_TheHiddenVeins < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30535-04.htm"
@@ -43,7 +42,6 @@ class Scripts::Q00293_TheHiddenVeins < Quest
         html = "30539-02.html"
       end
     end
-
 
     html
   end
@@ -83,7 +81,7 @@ class Scripts::Q00293_TheHiddenVeins < Quest
         if has_at_least_one_quest_item?(pc, CHRYSOLITE_ORE, HIDDEN_ORE_MAP)
           ores = st.get_quest_items_count(CHRYSOLITE_ORE)
           maps = st.get_quest_items_count(HIDDEN_ORE_MAP)
-          adena = (ores * 5) + (maps * 500)
+          adena = (ores &* 5) &+ (maps &* 500)
           if ores + maps >= 10
             adena &+= 2000
           end
@@ -95,11 +93,9 @@ class Scripts::Q00293_TheHiddenVeins < Quest
           html = "30535-05.html"
         end
       end
-
     when CHICHIRIN
       html = "30539-01.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -370,7 +370,7 @@ module AdminCommandHandler::AdminMobGroup
     pc.send_packet(SystemMessageId::FRIEND_LIST_FOOTER)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_mobmenu",
       "admin_mobgroup_list",

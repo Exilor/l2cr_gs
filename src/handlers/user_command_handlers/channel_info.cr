@@ -2,11 +2,8 @@ module UserCommandHandler::ChannelInfo
   extend self
   extend UserCommandHandler
 
-  def use_user_command(id, pc)
-    unless id == commands[0]
-      return false
-    end
-
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
+    return false unless id == commands[0]
     return false unless (party = pc.party) && (cc = party.command_channel)
 
     ex = Packets::Outgoing::ExMultiPartyCommandChannelInfo.new(cc)
@@ -15,7 +12,7 @@ module UserCommandHandler::ChannelInfo
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {97}
   end
 end

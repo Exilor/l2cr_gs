@@ -2,7 +2,7 @@ module BypassHandler::OlympiadObservation
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target) : Bool
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     manager = pc.last_folk_npc
 
     if command.starts_with?(commands[0])
@@ -49,7 +49,7 @@ module BypassHandler::OlympiadObservation
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"watchmatch", "arenachange"}
   end
 end

@@ -76,7 +76,7 @@ class Scripts::Valakas < AbstractNpcAI
     status = GrandBossManager.get_boss_status(VALAKAS)
 
     if status == DEAD
-      temp = info.get_i64("respawn_time") - Time.ms
+      temp = info.get_i64("respawn_time") &- Time.ms
       if temp > 0
         start_quest_timer("valakas_unlock", temp, nil, nil)
       else
@@ -108,7 +108,7 @@ class Scripts::Valakas < AbstractNpcAI
         # stores current time for inactivity task.
         @time_tracker = Time.ms
 
-        start_quest_timer("regen_task", 60000, valakas, nil, true)
+        start_quest_timer("regen_task", 60_000, valakas, nil, true)
         start_quest_timer("skill_task", 2000, valakas, nil, true)
       else
         valakas.invul = true
@@ -116,7 +116,7 @@ class Scripts::Valakas < AbstractNpcAI
 
         # Start timer to lock entry after 30 minutes
         if status == WAITING
-          start_quest_timer("beginning", Config.valakas_wait_time * 60000, valakas, nil)
+          start_quest_timer("beginning", Config.valakas_wait_time * 60_000, valakas, nil)
         end
       end
     end
@@ -143,17 +143,17 @@ class Scripts::Valakas < AbstractNpcAI
         start_quest_timer("spawn_2", 3200, npc, nil) # 1500
         start_quest_timer("spawn_3", 6500, npc, nil) # 3300
         start_quest_timer("spawn_4", 9400, npc, nil) # 2900
-        start_quest_timer("spawn_5", 12100, npc, nil) # 2700
-        start_quest_timer("spawn_6", 12430, npc, nil) # 330
-        start_quest_timer("spawn_7", 15430, npc, nil) # 3000
-        start_quest_timer("spawn_8", 16830, npc, nil) # 1400
-        start_quest_timer("spawn_9", 23530, npc, nil) # 6700 - end of cinematic
-        start_quest_timer("spawn_10", 26000, npc, nil) # 2500 - AI + unlock
+        start_quest_timer("spawn_5", 12_100, npc, nil) # 2700
+        start_quest_timer("spawn_6", 12_430, npc, nil) # 330
+        start_quest_timer("spawn_7", 15_430, npc, nil) # 3000
+        start_quest_timer("spawn_8", 16_830, npc, nil) # 1400
+        start_quest_timer("spawn_9", 23_530, npc, nil) # 6700 - end of cinematic
+        start_quest_timer("spawn_10", 26_000, npc, nil) # 2500 - AI + unlock
         # Regeneration && inactivity task
       when "regen_task"
         # Inactivity task - 15min
         if GrandBossManager.get_boss_status(VALAKAS) == FIGHTING
-          if @time_tracker + 900_000 < Time.ms
+          if @time_tracker &+ 900_000 < Time.ms
             npc.intention = AI::IDLE
             npc.tele_to_location(VALAKAS_REGENERATION_LOC)
 
@@ -193,23 +193,23 @@ class Scripts::Valakas < AbstractNpcAI
         end
       # Spawn cinematic, regen_task and choose of skill.
       when "spawn_1"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1800, 180, -1, 1500, 15000, 10000, 0, 0, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1800, 180, -1, 1500, 15_000, 10_000, 0, 0, 1, 0, 0))
       when "spawn_2"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1300, 180, -5, 3000, 15000, 10000, 0, -5, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1300, 180, -5, 3000, 15_000, 10_000, 0, -5, 1, 0, 0))
       when "spawn_3"
-        zone.broadcast_packet(SpecialCamera.new(npc, 500, 180, -8, 600, 15000, 10000, 0, 60, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 500, 180, -8, 600, 15_000, 10_000, 0, 60, 1, 0, 0))
       when "spawn_4"
-        zone.broadcast_packet(SpecialCamera.new(npc, 800, 180, -8, 2700, 15000, 10000, 0, 30, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 800, 180, -8, 2700, 15_000, 10_000, 0, 30, 1, 0, 0))
       when "spawn_5"
-        zone.broadcast_packet(SpecialCamera.new(npc, 200, 250, 70, 0, 15000, 10000, 30, 80, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 200, 250, 70, 0, 15_000, 10_000, 30, 80, 1, 0, 0))
       when "spawn_6"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1100, 250, 70, 2500, 15000, 10000, 30, 80, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1100, 250, 70, 2500, 15_000, 10_000, 30, 80, 1, 0, 0))
       when "spawn_7"
-        zone.broadcast_packet(SpecialCamera.new(npc, 700, 150, 30, 0, 15000, 10000, -10, 60, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 700, 150, 30, 0, 15_000, 10_000, -10, 60, 1, 0, 0))
       when "spawn_8"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1200, 150, 20, 2900, 15000, 10000, -10, 30, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1200, 150, 20, 2900, 15_000, 10_000, -10, 30, 1, 0, 0))
       when "spawn_9"
-        zone.broadcast_packet(SpecialCamera.new(npc, 750, 170, -10, 3400, 15000, 4000, 10, -15, 1, 0, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 750, 170, -10, 3400, 15_000, 4000, 10, -15, 1, 0, 0))
       when "spawn_10"
         GrandBossManager.set_boss_status(VALAKAS, FIGHTING)
         npc.invul = false
@@ -218,21 +218,21 @@ class Scripts::Valakas < AbstractNpcAI
         start_quest_timer("skill_task", 2000, npc, nil, true)
       # Death cinematic, spawn of Teleport Cubes.
       when "die_1"
-        zone.broadcast_packet(SpecialCamera.new(npc, 2000, 130, -1, 0, 15000, 10000, 0, 0, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 2000, 130, -1, 0, 15_000, 10_000, 0, 0, 1, 1, 0))
       when "die_2"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1100, 210, -5, 3000, 15000, 10000, -13, 0, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1100, 210, -5, 3000, 15_000, 10_000, -13, 0, 1, 1, 0))
       when "die_3"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1300, 200, -8, 3000, 15000, 10000, 0, 15, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1300, 200, -8, 3000, 15_000, 10_000, 0, 15, 1, 1, 0))
       when "die_4"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1000, 190, 0, 500, 15000, 10000, 0, 10, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1000, 190, 0, 500, 15_000, 10_000, 0, 10, 1, 1, 0))
       when "die_5"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 120, 0, 2500, 15000, 10000, 12, 40, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 120, 0, 2500, 15_000, 10_000, 12, 40, 1, 1, 0))
       when "die_6"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 20, 0, 700, 15000, 10000, 10, 10, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 20, 0, 700, 15_000, 10_000, 10, 10, 1, 1, 0))
       when "die_7"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 10, 0, 1000, 15000, 10000, 20, 70, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 10, 0, 1000, 15_000, 10_000, 20, 70, 1, 1, 0))
       when "die_8"
-        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 10, 0, 300, 15000, 250, 20, -20, 1, 1, 0))
+        zone.broadcast_packet(SpecialCamera.new(npc, 1700, 10, 0, 300, 15_000, 250, 20, -20, 1, 1, 0))
 
         TELEPORT_CUBE_LOCATIONS.each do |loc|
           add_spawn(31759, loc, false, 900_000)
@@ -298,28 +298,28 @@ class Scripts::Valakas < AbstractNpcAI
 
     # Launch death animation.
     zone.broadcast_packet(Music::B03_D_10000.packet)
-    zone.broadcast_packet(SpecialCamera.new(npc, 1200, 20, -10, 0, 10000, 13000, 0, 0, 0, 0, 0))
+    zone.broadcast_packet(SpecialCamera.new(npc, 1200, 20, -10, 0, 10_000, 13_000, 0, 0, 0, 0, 0))
 
     start_quest_timer("die_1", 300, npc, nil) # 300
     start_quest_timer("die_2", 600, npc, nil) # 300
     start_quest_timer("die_3", 3800, npc, nil) # 3200
     start_quest_timer("die_4", 8200, npc, nil) # 4400
     start_quest_timer("die_5", 8700, npc, nil) # 500
-    start_quest_timer("die_6", 13300, npc, nil) # 4600
-    start_quest_timer("die_7", 14000, npc, nil) # 700
-    start_quest_timer("die_8", 16500, npc, nil) # 2500
+    start_quest_timer("die_6", 13_300, npc, nil) # 4600
+    start_quest_timer("die_7", 14_000, npc, nil) # 700
+    start_quest_timer("die_8", 16_500, npc, nil) # 2500
 
     GrandBossManager.set_boss_status(VALAKAS, DEAD)
     # Calculate Min and Max respawn times randomly.
     min = -Config.valakas_spawn_random
     max = Config.valakas_spawn_random
-    respawn_time = Config.valakas_spawn_interval + Rnd.rand(min..max)
+    respawn_time = Config.valakas_spawn_interval &+ Rnd.rand(min..max)
     respawn_time *= 3_600_000
 
     start_quest_timer("valakas_unlock", respawn_time, nil, nil)
     # also save the respawn time so that the info is maintained past reboots
     info = GrandBossManager.get_stats_set(VALAKAS).not_nil!
-    info["respawn_time"] = Time.ms + respawn_time
+    info["respawn_time"] = Time.ms &+ respawn_time
     GrandBossManager.set_stats_set(VALAKAS, info)
 
     super

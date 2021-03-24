@@ -8,7 +8,7 @@ class Scripts::Q00174_SupplyCheck < Quest
   # Items
   private WAREHOUSE_MANIFEST = 9792
   private GROCERY_STORE_MANIFEST = 9793
-  private REWARD = {
+  private REWARDS = {
     23,   # Wooden Breastplate
     43,   # Wooden Helmet
     49,   # Gloves
@@ -25,12 +25,10 @@ class Scripts::Q00174_SupplyCheck < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    if st = get_quest_state(pc, false)
-      if event.casecmp?("32173-03.htm")
-        st.start_quest
-        event
-      end
+    return unless pc && (st = get_quest_state(pc, false))
+    if event.casecmp?("32173-03.htm")
+      st.start_quest
+      event
     end
   end
 
@@ -55,7 +53,7 @@ class Scripts::Q00174_SupplyCheck < Quest
         when 3
           html = "32173-06.html"
         when 4
-          REWARD.each { |item_id| st.give_items(item_id, 1) }
+          REWARDS.each { |item_id| st.give_items(item_id, 1) }
           st.give_adena(2466, true)
           st.add_exp_and_sp(5672, 446)
           st.exit_quest(false, true)
@@ -63,11 +61,9 @@ class Scripts::Q00174_SupplyCheck < Quest
           show_on_screen_msg(pc, npc_str, 2, 5000)
           html = "32173-07.html"
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when BENIS
       if st.started?
         case st.cond
@@ -80,7 +76,6 @@ class Scripts::Q00174_SupplyCheck < Quest
         when 3
           html = "32170-03.html"
         end
-
       end
     when NIKA
       if st.started?
@@ -94,10 +89,8 @@ class Scripts::Q00174_SupplyCheck < Quest
         when 4
           html = "32167-03.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

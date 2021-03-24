@@ -1,6 +1,6 @@
 module GraciaSeedsManager
   extend self
-  extend Loggable
+  include Loggable
 
   ENERGY_SEEDS = "EnergySeeds"
 

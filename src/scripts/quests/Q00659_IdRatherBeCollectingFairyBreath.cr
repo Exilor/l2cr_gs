@@ -24,10 +24,7 @@ class Scripts::Q00659_IdRatherBeCollectingFairyBreath < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30634-02.htm"
@@ -38,7 +35,7 @@ class Scripts::Q00659_IdRatherBeCollectingFairyBreath < Quest
         count = get_quest_items_count(pc, FAIRY_BREATH)
         bonus = count >= 10 ? 5365 : 0
         st.take_items(FAIRY_BREATH, -1)
-        st.give_adena((count * 50) + bonus, true)
+        st.give_adena((count &* 50) &+ bonus, true)
         html = "30634-05.html"
       else
         html = "30634-06.html"
@@ -49,7 +46,6 @@ class Scripts::Q00659_IdRatherBeCollectingFairyBreath < Quest
       st.exit_quest(true, true)
       html = event
     end
-
 
     html
   end

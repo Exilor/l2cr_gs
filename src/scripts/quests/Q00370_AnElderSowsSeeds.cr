@@ -35,10 +35,7 @@ class Scripts::Q00370_AnElderSowsSeeds < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30612-02.htm", "30612-03.htm", "30612-06.html", "30612-07.html",
@@ -62,7 +59,6 @@ class Scripts::Q00370_AnElderSowsSeeds < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -103,7 +99,7 @@ class Scripts::Q00370_AnElderSowsSeeds < Quest
     fire_chapters = get_quest_items_count(pc, CHAPTER_OF_FIRE)
     min_count = Util.min(water_chapters, earth_chapters, wind_chapters, fire_chapters)
     if min_count > 0
-      give_adena(pc, min_count * 3600, true)
+      give_adena(pc, min_count &* 3600, true)
     end
     count_to_take = take_all_items ? -1 : min_count
     take_items(pc, count_to_take, {CHAPTER_OF_WATER, CHAPTER_OF_EARTH, CHAPTER_OF_WIND, CHAPTER_OF_FIRE})

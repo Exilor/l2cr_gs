@@ -6,7 +6,7 @@ module GamePacketHandler
   extend MMO::IPacketHandler(GameClient)
   extend MMO::IPacketExecutor(GameClient)
   extend MMO::IClientFactory(GameClient)
-  extend Loggable
+  include Loggable
   include Packets::Incoming
 
   def handle(buffer : ByteBuffer, client : GameClient) : MMO::IncomingPacket(GameClient)?

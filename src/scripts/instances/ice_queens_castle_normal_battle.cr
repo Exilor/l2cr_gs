@@ -153,7 +153,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
                 end
               end
             end
-            start_quest_timer("STAGE_1_MOVIE", 60000, world.controller, nil)
+            start_quest_timer("STAGE_1_MOVIE", 60_000, world.controller, nil)
           end
         when "portInside"
           teleport_player(player.not_nil!, BATTLE_PORT, world.instance_id)
@@ -195,16 +195,16 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           world.freya.disable_core_ai(true)
           manage_timer(world, 60, NpcString::TIME_REMAINING_UNTIL_NEXT_BATTLE)
           world.status = 2
-          start_quest_timer("STAGE_2_START", 60000, world.controller, nil)
+          start_quest_timer("STAGE_2_START", 60_000, world.controller, nil)
         when "STAGE_2_START"
           world.can_spawn_mobs = true
           notify_event("START_SPAWN", world.controller, nil)
           manage_screen_msg(world, NpcString::BEGIN_STAGE_2)
 
           if world.hard_mode?
-            start_quest_timer("STAGE_2_FAILED", 360000, world.controller, nil)
+            start_quest_timer("STAGE_2_FAILED", 360_000, world.controller, nil)
             manage_timer(world, 360, NpcString::BATTLE_END_LIMIT_TIME)
-            world.controller.variables["TIMER_END"] = Time.ms + 360000
+            world.controller.variables["TIMER_END"] = Time.ms + 360_000
           end
         when "STAGE_2_MOVIE"
           manage_movie(world, 23)
@@ -241,7 +241,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           world.freya = add_spawn(world.hard_mode? ? FREYA_STAND_ULTIMATE : FREYA_STAND, FREYA_SPAWN, false, 0, true, world.instance_id).as(L2GrandBossInstance)
           world.controller.variables["FREYA_MOVE"] = 0
           notify_event("START_SPAWN", world.controller, nil)
-          start_quest_timer("START_MOVE", 10000, world.controller, nil)
+          start_quest_timer("START_MOVE", 10_000, world.controller, nil)
           start_quest_timer("CAST_BLIZZARD", 50000, world.controller, nil)
           manage_screen_msg(world, NpcString::BEGIN_STAGE_3)
 
@@ -302,7 +302,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           if world.support_active?
             world.supp_jinia.do_cast(JINIAS_PRAYER)
             world.supp_kegor.do_cast(KEGORS_COURAGE)
-            start_quest_timer("GIVE_SUPPORT", 25000, world.controller, nil)
+            start_quest_timer("GIVE_SUPPORT", 25_000, world.controller, nil)
           end
         when "FINISH_STAGE"
           world.supp_jinia.delete_me
@@ -366,7 +366,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           manage_random_attack(world, npc)
         when "CHANGE_STATE"
           npc.display_effect = 2
-          start_quest_timer("CAST_SKILL", 20000, npc, nil)
+          start_quest_timer("CAST_SKILL", 20_000, npc, nil)
         when "CAST_SKILL"
           if npc.script_value?(0) && npc.alive?
             npc.target = npc
@@ -382,13 +382,13 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
 
           if npc.variables.get_i32("SUICIDE_ON") == 0
             if npc.variables.get_i32("SUICIDE_COUNT") == 2
-              start_quest_timer("ELEMENTAL_SUICIDE", 20000, npc, nil)
+              start_quest_timer("ELEMENTAL_SUICIDE", 20_000, npc, nil)
             else
               if npc.check_do_cast_conditions(BREATH_OF_ICE_PALACE.skill) && !npc.casting_now?
                 npc.target = npc
                 npc.do_cast(BREATH_OF_ICE_PALACE)
               end
-              start_quest_timer("BLIZZARD", 20000, npc, nil)
+              start_quest_timer("BLIZZARD", 20_000, npc, nil)
             end
           end
         when "ELEMENTAL_SUICIDE"
@@ -405,7 +405,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             if npc.check_do_cast_conditions(skill.skill) && !npc.casting_now?
               npc.target = world.freya
               npc.do_cast(skill)
-              start_quest_timer("ATTACK_FREYA", 20000, npc, nil)
+              start_quest_timer("ATTACK_FREYA", 20_000, npc, nil)
             else
               start_quest_timer("ATTACK_FREYA", 5000, npc, nil)
             end
@@ -427,7 +427,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             npc.target = npc
             npc.do_cast(LEADERS_ROAR)
           else
-            start_quest_timer("LEADER_RANGEBUFF", 30000, npc, nil)
+            start_quest_timer("LEADER_RANGEBUFF", 30_000, npc, nil)
           end
         when "LEADER_RANDOMIZE"
           unless npc.is_a?(L2Attackable)
@@ -436,9 +436,9 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           npc.clear_aggro_list
 
           npc.known_list.get_known_characters_in_radius(1000) do |char|
-            npc.add_damage_hate(char, 0, Rnd.rand(10000..20000))
+            npc.add_damage_hate(char, 0, Rnd.rand(10_000..20_000))
           end
-          start_quest_timer("LEADER_RANDOMIZE", 25000, npc, nil)
+          start_quest_timer("LEADER_RANDOMIZE", 25_000, npc, nil)
         when "LEADER_DASH"
           unless npc.is_a?(L2Attackable)
             raise "Expected #{npc} to be a L2Attackable"
@@ -448,7 +448,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             npc.target = most_hated
             npc.do_cast(RUSH)
           end
-          start_quest_timer("LEADER_DASH", 10000, npc, nil)
+          start_quest_timer("LEADER_DASH", 10_000, npc, nil)
         when "LEADER_DESTROY"
           unless npc.is_a?(L2Attackable)
             raise "Expected #{npc} to be a L2Attackable"
@@ -470,7 +470,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
                 breath.running = true
                 breath.add_damage_hate(npc.most_hated, 0, 999)
                 breath.set_intention(AI::ATTACK, npc.most_hated)
-                start_quest_timer("BLIZZARD", 20000, breath, nil)
+                start_quest_timer("BLIZZARD", 20_000, breath, nil)
                 world.spawned_mobs << breath
               end
             end
@@ -494,6 +494,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
       raise "Expected #{npc} to be a L2Attackable"
     end
     npc.on_kill_delay = 0
+
     super
   end
 
@@ -543,7 +544,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           most_hated = npc.as(L2Attackable).most_hated
           can_reach_most_hated = most_hated && most_hated.alive? && npc.calculate_distance(most_hated, true, false) <= 800
 
-          if Rnd.rand(10000) < 3333
+          if Rnd.rand(10_000) < 3333
             if Rnd.bool
               if npc.calculate_distance(attacker, true, false) <= 800 && npc.check_do_cast_conditions(ICE_BALL.skill) && !npc.casting_now?
                 npc.target = attacker
@@ -555,7 +556,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
                 npc.do_cast(ICE_BALL)
               end
             end
-          elsif Rnd.rand(10000) < 800
+          elsif Rnd.rand(10_000) < 800
             if Rnd.bool
               if npc.calculate_distance(attacker, true, false) <= 800 && npc.check_do_cast_conditions(SUMMON_SPIRITS.skill) && !npc.casting_now?
                 npc.target = attacker
@@ -567,7 +568,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
                 npc.do_cast(SUMMON_SPIRITS)
               end
             end
-          elsif Rnd.rand(10000) < 1500
+          elsif Rnd.rand(10_000) < 1500
             if !npc.affected_by_skill?(ATTACK_NEARBY_RANGE.skill_id) && npc.check_do_cast_conditions(ATTACK_NEARBY_RANGE.skill) && !npc.casting_now?
               npc.target = npc
               npc.do_cast(ATTACK_NEARBY_RANGE)
@@ -590,7 +591,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             plr.abort_attack
           end
           manage_movie(world, 18)
-          start_quest_timer("SPAWN_SUPPORT", 27000, world.controller, nil)
+          start_quest_timer("SPAWN_SUPPORT", 27_000, world.controller, nil)
         end
 
         if attacker.mount_type.strider? && !attacker.affected_by_skill?(HINDER_STRIDER.skill_id) && !npc.casting_now?
@@ -601,9 +602,10 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         end
 
         most_hated = npc.as(L2Attackable).most_hated
-        can_reach_most_hated = most_hated && most_hated.alive? && npc.calculate_distance(most_hated, true, false) <= 800
+        can_reach_most_hated = most_hated && most_hated.alive? &&
+          npc.calculate_distance(most_hated, true, false) <= 800
 
-        if Rnd.rand(10000) < 3333
+        if Rnd.rand(10_000) < 3333
           if Rnd.bool
             if npc.calculate_distance(attacker, true, false) <= 800
               if npc.check_do_cast_conditions(ICE_BALL.skill)
@@ -623,7 +625,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
               end
             end
           end
-        elsif Rnd.rand(10000) < 1333
+        elsif Rnd.rand(10_000) < 1333
           if Rnd.bool
             if npc.calculate_distance(attacker, true, false) <= 800
               if npc.check_do_cast_conditions(SUMMON_SPIRITS.skill)
@@ -643,7 +645,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
               end
             end
           end
-        elsif Rnd.rand(10000) < 1500
+        elsif Rnd.rand(10_000) < 1500
           unless npc.affected_by_skill?(ATTACK_NEARBY_RANGE.skill_id)
             if npc.check_do_cast_conditions(ATTACK_NEARBY_RANGE.skill)
               unless npc.casting_now?
@@ -652,7 +654,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
               end
             end
           end
-        elsif Rnd.rand(10000) < 1333
+        elsif Rnd.rand(10_000) < 1333
           unless npc.affected_by_skill?(REFLECT_MAGIC.skill_id)
             if npc.check_do_cast_conditions(REFLECT_MAGIC.skill)
               unless npc.casting_now?
@@ -700,14 +702,14 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
 
           if npc.variables.get_i32("TIMER_ON") == 0
             npc.variables["TIMER_ON"] = 1
-            start_quest_timer("LEADER_RANGEBUFF", Rnd.rand(5..30) * 1000, npc, nil)
-            start_quest_timer("LEADER_RANDOMIZE", 25000, npc, nil)
+            start_quest_timer("LEADER_RANGEBUFF", Rnd.rand(5..30) &* 1000, npc, nil)
+            start_quest_timer("LEADER_RANDOMIZE", 25_000, npc, nil)
             start_quest_timer("LEADER_DASH", 5000, npc, nil)
-            start_quest_timer("LEADER_DESTROY", 60000, npc, nil)
+            start_quest_timer("LEADER_DESTROY", 60_000, npc, nil)
           end
 
-          if Rnd.rand(10000) < 2500
-            if Rnd.rand(10000) < 2500
+          if Rnd.rand(10_000) < 2500
+            if Rnd.rand(10_000) < 2500
               if npc.check_do_cast_conditions(POWER_STRIKE.skill) && !npc.casting_now?
                 npc.target = attacker
                 npc.do_cast(POWER_STRIKE)
@@ -716,7 +718,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
               npc.target = npc.as(L2Attackable).most_hated
               npc.do_cast(POWER_STRIKE)
             end
-          elsif Rnd.rand(10000) < 1500
+          elsif Rnd.rand(10_000) < 1500
             if Rnd.bool
               if npc.check_do_cast_conditions(POINT_TARGET.skill) && !npc.casting_now?
                 npc.target = attacker
@@ -726,7 +728,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
               npc.target = npc.as(L2Attackable).most_hated
               npc.do_cast(POINT_TARGET)
             end
-          elsif Rnd.rand(10000) < 1500
+          elsif Rnd.rand(10_000) < 1500
             if Rnd.bool
               if npc.check_do_cast_conditions(CYLINDER_THROW.skill) && !npc.casting_now?
                 npc.target = attacker
@@ -739,7 +741,6 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
           end
         end
       end
-
     end
 
     super
@@ -761,7 +762,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
               manage_random_attack(world, breath)
             end
             world.spawned_mobs << breath
-            start_quest_timer("BLIZZARD", 20000, breath, nil)
+            start_quest_timer("BLIZZARD", 20_000, breath, nil)
           end
           notify_event("SUICIDE", npc, nil)
         end
@@ -784,7 +785,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         manage_despawn_minions(world)
         manage_timer(world, 60, NpcString::TIME_REMAINING_UNTIL_NEXT_BATTLE)
         cancel_quest_timer("STAGE_2_FAILED", world.controller, nil)
-        start_quest_timer("STAGE_3_MOVIE", 60000, world.controller, nil)
+        start_quest_timer("STAGE_3_MOVIE", 60_000, world.controller, nil)
       when FREYA_STAND, FREYA_STAND_ULTIMATE
         world.support_active = false
         manage_movie(world, 19)
@@ -796,8 +797,8 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         cancel_quest_timer("GIVE_SUPPORT", world.controller, nil)
         cancel_quest_timer("CAST_BLIZZARD", world.controller, nil)
         cancel_quest_timer("FREYA_BUFF", world.controller, nil)
-        start_quest_timer("FINISH_STAGE", 16000, world.controller, nil)
-        start_quest_timer("FINISH_WORLD", 300000, world.controller, nil)
+        start_quest_timer("FINISH_STAGE", 16_000, world.controller, nil)
+        start_quest_timer("FINISH_WORLD", 300_000, world.controller, nil)
       when KNIGHT, KNIGHT_ULTIMATE
         spawned_by = npc.variables.get_object("SPAWNED_NPC", L2Npc?)
         var = world.controller.variables
@@ -821,12 +822,12 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         end
 
         if spawned_by
-          time = world.hard_mode? ? Rnd.rand(30..60) : Rnd.rand(50..60) * 1000
+          time = world.hard_mode? ? Rnd.rand(30..60) : Rnd.rand(50..60) &* 1000
           start_quest_timer("SPAWN_KNIGHT", time, spawned_by, nil)
         end
         world.spawned_mobs.delete_first(npc)
       when GLACIER
-        start_quest_timer("SPAWN_GLACIER", Rnd.rand(30..60) * 1000, world.controller, nil)
+        start_quest_timer("SPAWN_GLACIER", Rnd.rand(30..60) &* 1000, world.controller, nil)
         world.spawned_mobs.delete_first(npc)
       when BREATH
         world.spawned_mobs.delete_first(npc)

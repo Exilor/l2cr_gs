@@ -49,14 +49,11 @@ class Scripts::Q00509_AClansFame < Quest
       st.exit_quest(true, true)
     end
 
-
     event
   end
 
   def on_kill(npc, pc, is_summon)
-    unless clan = pc.clan
-      return
-    end
+    return unless clan = pc.clan
 
     st = nil
     if pc.clan_leader?
@@ -118,7 +115,6 @@ class Scripts::Q00509_AClansFame < Quest
         html = "31331-0.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

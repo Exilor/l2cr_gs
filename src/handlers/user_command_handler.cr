@@ -1,6 +1,4 @@
 module UserCommandHandler
-  include Loggable
-
   private HANDLERS = {} of Int32 => self
 
   def self.load
@@ -20,8 +18,8 @@ module UserCommandHandler
     HANDLERS[cmd]?
   end
 
-  # abstract def use_user_command(id : Int32, pc : L2PcInstance) : Bool
-  # abstract def commands : Enumerable(Int32)
+  abstract def use_user_command(id : Int32, pc : L2PcInstance) : Bool
+  abstract def commands : Enumerable(Int32)
 end
 
 require "./user_command_handlers/*"

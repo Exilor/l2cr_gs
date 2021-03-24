@@ -73,7 +73,6 @@ module VoicedCommandHandler::CastkeVCmd
       end
     end
 
-
     true
   end
 

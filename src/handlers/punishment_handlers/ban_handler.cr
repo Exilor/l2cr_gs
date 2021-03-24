@@ -26,7 +26,6 @@ module PunishmentHandler::BanHandler
         end
       end
     end
-
   end
 
   def on_end(task)
@@ -37,7 +36,7 @@ module PunishmentHandler::BanHandler
     pc.logout
   end
 
-  def type
+  def type : PunishmentType
     PunishmentType::BAN
   end
 end

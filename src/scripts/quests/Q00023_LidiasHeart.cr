@@ -132,7 +132,7 @@ class Scripts::Q00023_LidiasHeart < Quest
       unless has_quest_items?(pc, LIDIAS_HAIRPIN)
         give_items(pc, LIDIAS_HAIRPIN, 1)
       end
-      qs.memo_state += 1
+      qs.memo_state &+= 1
       if has_quest_items?(pc, LIDIAS_DIARY)
         qs.set_cond(4)
       end
@@ -145,7 +145,7 @@ class Scripts::Q00023_LidiasHeart < Quest
       html = event
     when "31526-11.html"
       give_items(pc, LIDIAS_DIARY, 1)
-      qs.memo_state += 1
+      qs.memo_state &+= 1
       if has_quest_items?(pc, LIDIAS_HAIRPIN)
         qs.set_cond(4)
       end
@@ -204,8 +204,8 @@ class Scripts::Q00023_LidiasHeart < Quest
           if !has_quest_items?(pc, SILVER_SPEAR)
             html = "31386-02.html"
           else
-            give_adena(pc, 350000, true)
-            add_exp_and_sp(pc, 456893, 42112)
+            give_adena(pc, 350_000, true)
+            add_exp_and_sp(pc, 456_893, 42_112)
             qs.exit_quest(false, true)
             html = "31386-03.html"
           end

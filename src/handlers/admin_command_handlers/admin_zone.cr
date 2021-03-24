@@ -96,7 +96,7 @@ module AdminCommandHandler::AdminZone
     pc.send_message("GeoRegion: #{geo_x}_#{geo_y}")
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_zone_check",
       "admin_zone_visual",

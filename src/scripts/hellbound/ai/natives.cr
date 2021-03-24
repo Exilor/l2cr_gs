@@ -44,7 +44,6 @@ class Scripts::Natives < AbstractNpcAI
       end
     end
 
-
     html
   end
 
@@ -66,7 +65,7 @@ class Scripts::Natives < AbstractNpcAI
           end
 
           cancel_quest_timers("close_doors")
-          start_quest_timer("close_doors", 1800000, npc, pc) # 30 min
+          start_quest_timer("close_doors", 1_800_000, npc, pc) # 30 min
         elsif has_quest_items?(pc, MARK_OF_BETRAYAL)
           html = "32364-01.htm"
         else
@@ -106,7 +105,7 @@ class Scripts::Natives < AbstractNpcAI
 
   def on_spawn(npc)
     if npc.id == NATIVE && HellboundEngine.instance.level < 6
-      start_quest_timer("hungry_death", 600000, npc, nil)
+      start_quest_timer("hungry_death", 600_000, npc, nil)
     end
 
     super

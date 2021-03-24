@@ -30,8 +30,7 @@ class Scripts::Q00032_AnObviousLie < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30120-02.html"

@@ -36,7 +36,7 @@ module AdminCommandHandler::AdminHeal
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_heal"}
   end
 end

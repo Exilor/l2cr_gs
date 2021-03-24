@@ -24,10 +24,9 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
     when "31340-03.htm"
       st.start_quest
     when "31335-03.htm"
-      st.give_adena(360000, true)
+      st.give_adena(360_000, true)
       st.exit_quest(false, true)
     end
-
 
     event
   end
@@ -70,7 +69,6 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
       when State::COMPLETED
         html = "31340-06.htm"
       end
-
     when KAYAN
       case st.state
       when State::STARTED
@@ -78,9 +76,7 @@ class Scripts::Q10281_MutatedKaneusRune < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

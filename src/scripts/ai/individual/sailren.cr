@@ -37,7 +37,7 @@ class Scripts::Sailren < AbstractNpcAI
     add_kill_id(VELOCIRAPTOR, PTEROSAUR, TREX, SAILREN)
     add_attack_id(VELOCIRAPTOR, PTEROSAUR, TREX, SAILREN)
 
-    remain = GlobalVariablesManager.instance.get_i64("SailrenRespawn", 0) - Time.ms
+    remain = GlobalVariablesManager.instance.get_i64("SailrenRespawn", 0) &- Time.ms
     if remain > 0
       @status = Status::DEAD
       start_quest_timer("CLEAR_STATUS", remain, nil, nil)
@@ -81,14 +81,14 @@ class Scripts::Sailren < AbstractNpcAI
       pc.not_nil!.tele_to_location(TeleportWhereType::TOWN)
     when "SPAWN_VELOCIRAPTOR"
       3.times do
-        add_spawn(VELOCIRAPTOR, 27313 + Rnd.rand(150), -6766 + Rnd.rand(150), -1975, 0, false, 0)
+        add_spawn(VELOCIRAPTOR, 27313 &+ Rnd.rand(150), -6766 &+ Rnd.rand(150), -1975, 0, false, 0)
       end
     when "SPAWN_SAILREN"
       sailren = add_spawn(SAILREN, 27549, -6638, -2008, 0, false, 0).as(L2RaidBossInstance)
       movie_npc = add_spawn(MOVIE_NPC, sailren.x, sailren.y, sailren.z + 30, 0, false, 26000)
       sailren.invul = true
       sailren.immobilized = true
-      @zone.broadcast_packet(SpecialCamera.new(movie_npc, 60, 110, 30, 4000, 1500, 20000, 0, 65, 1, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(movie_npc, 60, 110, 30, 4000, 1500, 20_000, 0, 65, 1, 0, 0))
 
       start_quest_timer("ATTACK", 24600, sailren, nil)
       start_quest_timer("ANIMATION", 2000, movie_npc, nil)
@@ -101,23 +101,23 @@ class Scripts::Sailren < AbstractNpcAI
       end
     when "CAMERA_1"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 100, 180, 30, 3000, 1500, 20000, 0, 50, 1, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 100, 180, 30, 3000, 1500, 20_000, 0, 50, 1, 0, 0))
       start_quest_timer("CAMERA_2", 3000, npc, nil)
     when "CAMERA_2"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 150, 270, 25, 3000, 1500, 20000, 0, 30, 1, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 150, 270, 25, 3000, 1500, 20_000, 0, 30, 1, 0, 0))
       start_quest_timer("CAMERA_3", 3000, npc, nil)
     when "CAMERA_3"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 160, 360, 20, 3000, 1500, 20000, 10, 15, 1, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 160, 360, 20, 3000, 1500, 20_000, 10, 15, 1, 0, 0))
       start_quest_timer("CAMERA_4", 3000, npc, nil)
     when "CAMERA_4"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 160, 450, 10, 3000, 1500, 20000, 0, 10, 1, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 160, 450, 10, 3000, 1500, 20_000, 0, 10, 1, 0, 0))
       start_quest_timer("CAMERA_5", 3000, npc, nil)
     when "CAMERA_5"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 160, 560, 0, 3000, 1500, 20000, 0, 10, 1, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 160, 560, 0, 3000, 1500, 20_000, 0, 10, 1, 0, 0))
       start_quest_timer("CAMERA_6", 7000, npc, nil)
     when "CAMERA_6"
       npc = npc.not_nil!
@@ -140,7 +140,7 @@ class Scripts::Sailren < AbstractNpcAI
         end
       end
     when "CHECK_ATTACK"
-      if @zone.players_inside.any? && @last_attack + 600_000 < Time.ms
+      if @zone.players_inside.any? && @last_attack &+ 600_000 < Time.ms
         cancel_quest_timer("TIME_OUT", nil, nil)
         notify_event("TIME_OUT", nil, nil)
       else
@@ -165,8 +165,8 @@ class Scripts::Sailren < AbstractNpcAI
       when SAILREN
         @status = Status::DEAD
         add_spawn(CUBIC, 27644, -6638, -2008, 0, false, 300_000)
-        respawn_time = RESPAWN * 3_600_000
-        GlobalVariablesManager.instance["SailrenRespawn"] = Time.ms + respawn_time
+        respawn_time = RESPAWN &* 3_600_000
+        GlobalVariablesManager.instance["SailrenRespawn"] = Time.ms &+ respawn_time
         cancel_quest_timer("CHECK_ATTACK", nil, nil)
         cancel_quest_timer("TIME_OUT", nil, nil)
         start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)

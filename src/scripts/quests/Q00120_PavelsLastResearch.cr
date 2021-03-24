@@ -262,8 +262,8 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       if qs.memo_state?(26) && has_quest_items?(pc, WENDYS_NECKLACE)
         take_items(pc, WENDYS_NECKLACE, -1)
         reward_items(pc, SEALED_PHOENIX_EARRING, 1)
-        give_adena(pc, 783720, true)
-        add_exp_and_sp(pc, 3447315, 272615)
+        give_adena(pc, 783_720, true)
+        add_exp_and_sp(pc, 3_447_315, 272_615)
         qs.exit_quest(false, true)
         html = event
       end
@@ -320,7 +320,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       end
     when "wm1_return"
       if qs.memo_state?(10)
-        if qs.memo_state_ex?(0, 10101)
+        if qs.memo_state_ex?(0, 10_101)
           html = "32042-13.html"
         else
           html = "32042-09.html"
@@ -341,11 +341,11 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       end
     when "32042-12.html"
       if qs.memo_state?(10)
-        qs.set_memo_state_ex(0, 10000 + (qs.get_memo_state_ex(0) % 10000))
+        qs.set_memo_state_ex(0, 10_000 + (qs.get_memo_state_ex(0) % 10_000))
         html = event
       end
     when "32042-14.html"
-      if qs.memo_state?(10) && qs.memo_state_ex?(0, 10101)
+      if qs.memo_state?(10) && qs.memo_state_ex?(0, 10_101)
         qs.memo_state = 11
         qs.set_cond(12, true)
         qs.set_memo_state_ex(0, 0)
@@ -434,7 +434,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
     when "32043-17.html"
       if qs.memo_state?(18)
         memo_state_ex = qs.get_memo_state_ex(0)
-        i1 = (memo_state_ex // 10000) * 10000
+        i1 = (memo_state_ex // 10_000) * 10_000
         i2 = (memo_state_ex % 1000) + 1000
         qs.set_memo_state_ex(0, i1 + i2)
         play_sound(pc, Sound::AMBSOUND_DRONE)
@@ -651,7 +651,6 @@ class Scripts::Q00120_PavelsLastResearch < Quest
             html = "32046-45.html"
           end
         end
-
       else
         if pc.quest_completed?(Q00114_ResurrectionOfAnOldManager.simple_name)
           html = get_already_completed_msg(pc)
@@ -694,7 +693,6 @@ class Scripts::Q00120_PavelsLastResearch < Quest
           html = "32047-34.html"
         end
       end
-
     when YUMI
       case qs.memo_state
       when 2
@@ -706,7 +704,6 @@ class Scripts::Q00120_PavelsLastResearch < Quest
         when 2
           html = "32041-06.html"
         end
-
       when 5
         if qs.get_memo_state_ex(0) > 0
           html = "32041-07.html"
@@ -736,7 +733,6 @@ class Scripts::Q00120_PavelsLastResearch < Quest
           html = "32041-28.html"
         end
       end
-
     when WEATHERMASTER_1
       case qs.memo_state
       when 8
@@ -753,7 +749,6 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       when 11
         html = "32042-14.html"
       end
-
     when WEATHERMASTER_2
       case qs.memo_state
       when 16
@@ -765,7 +760,6 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       when 19
         html = "32043-23.html"
       end
-
     when WEATHERMASTER_3
       case qs.memo_state
       when 20
@@ -775,7 +769,6 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       when 22
         html = "32044-22.html"
       end
-
     when DOCTOR_CHAOS_SECRET_BOOKSHELF
       case qs.memo_state
       when 13
@@ -783,9 +776,7 @@ class Scripts::Q00120_PavelsLastResearch < Quest
       when 14
         html = "32045-03.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

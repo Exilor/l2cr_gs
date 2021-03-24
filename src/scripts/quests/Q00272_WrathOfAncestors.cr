@@ -21,9 +21,8 @@ class Scripts::Q00272_WrathOfAncestors < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event.casecmp?("30572-04.htm")
+    return unless pc && (st = get_quest_state(pc, false))
+    if event.casecmp?("30572-04.htm")
       st.start_quest
       event
     end
@@ -66,9 +65,7 @@ class Scripts::Q00272_WrathOfAncestors < Quest
         st.exit_quest(true, true)
         html = "30572-06.html"
       end
-
     end
-
 
     html
   end

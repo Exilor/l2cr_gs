@@ -2,7 +2,7 @@ module ChatHandler::ChatPartyMatchRoom
   extend self
   extend ChatHandler
 
-  def handle_chat(type, pc, params, text)
+  def handle_chat(type : Int32, pc : L2PcInstance, target : String?, text : String)
     return unless pc.in_party_match_room?
     return unless room = PartyMatchRoomList.get_player_room(pc)
 
@@ -15,7 +15,7 @@ module ChatHandler::ChatPartyMatchRoom
     room.party_members.each &.send_packet(cs)
   end
 
-  def chat_type_list
+  def chat_type_list : Enumerable(Int32)
     {14}
   end
 end

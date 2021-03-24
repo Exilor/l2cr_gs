@@ -31,10 +31,7 @@ class Scripts::Q00355_FamilyHonor < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30181-02.htm", "30181-09.html", "30929-01.html", "30929-02.html"
@@ -48,11 +45,11 @@ class Scripts::Q00355_FamilyHonor < Quest
       if bust_count < 1
         html = event
       elsif bust_count >= 100
-        give_adena(pc, (bust_count * 120) + 7800, true)
+        give_adena(pc, (bust_count &* 120) &+ 7800, true)
         take_items(pc, GALFREDO_ROMERS_BUST, -1)
         html = "30181-07.html"
       else
-        give_adena(pc, (bust_count * 120) + 2800, true)
+        give_adena(pc, (bust_count &* 120) &+ 2800, true)
         take_items(pc, GALFREDO_ROMERS_BUST, -1)
         html = "30181-08.html"
       end
@@ -60,7 +57,7 @@ class Scripts::Q00355_FamilyHonor < Quest
       bust_count = get_quest_items_count(pc, GALFREDO_ROMERS_BUST)
 
       if bust_count > 0
-        give_adena(pc, bust_count * 120, true)
+        give_adena(pc, bust_count &* 120, true)
       end
 
       take_items(pc, GALFREDO_ROMERS_BUST, -1)
@@ -91,7 +88,6 @@ class Scripts::Q00355_FamilyHonor < Quest
         html = "30929-08.html"
       end
     end
-
 
     html
   end

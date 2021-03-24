@@ -41,10 +41,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30834-05.htm"
@@ -60,7 +57,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
       end
     when "30834-08.html"
       if has_quest_items?(pc, NEBULITE_ORB)
-        give_adena(pc, get_quest_items_count(pc, NEBULITE_ORB) * 120, true)
+        give_adena(pc, get_quest_items_count(pc, NEBULITE_ORB) &* 120, true)
         take_items(pc, NEBULITE_ORB, -1)
         html = event
       else
@@ -80,9 +77,9 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
         elsif chance <= 169
           give_items(pc, SCROLL_ENCHANT_WEAPON_C_GRADE, 1)
         elsif chance <= 329
-          give_items(pc, SPIRITSHOT_C_GRADE, Rnd.rand(200) + 401)
+          give_items(pc, SPIRITSHOT_C_GRADE, Rnd.rand(200) &+ 401)
         elsif chance <= 559
-          give_items(pc, SPIRITSHOT_D_GRADE, Rnd.rand(200) + 401)
+          give_items(pc, SPIRITSHOT_D_GRADE, Rnd.rand(200) &+ 401)
         elsif chance <= 561
           give_items(pc, SAGES_BLOOD, 1)
         elsif chance <= 578
@@ -120,7 +117,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
         i1 = Rnd.rand(3)
 
         if i0 < 20 && i1 == 0
-          qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) + 4)
+          qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &+ 4)
           qs.set("param1", 0)
           html = event
         elsif i0 < 20 && i1 == 1
@@ -300,7 +297,6 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
       html = event
     end
 
-
     html
   end
 
@@ -316,7 +312,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
 
         if qs.get_memo_state_ex(1) > 1
           if Rnd.rand(100) <= 12
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) - 1)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &- 1)
           end
         end
       when ENCHANTED_STONE_GOLEM
@@ -327,7 +323,7 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
 
         if qs.get_memo_state_ex(1) > 1
           if Rnd.rand(100) <= 12
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) - 1)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &- 1)
           end
         end
       when ENCHANTED_IRON_GOLEM
@@ -338,11 +334,10 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
 
         if qs.get_memo_state_ex(1) > 1
           if Rnd.rand(100) <= 13
-            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) - 1)
+            qs.set_memo_state_ex(1, qs.get_memo_state_ex(1) &- 1)
           end
         end
       end
-
     end
 
     super
@@ -385,7 +380,6 @@ class Scripts::Q00343_UnderTheShadowOfTheIvoryTower < Quest
         qs.set("param1", 0)
         html = "30935-01.html"
       end
-
     end
 
     html || get_no_quest_msg(pc)

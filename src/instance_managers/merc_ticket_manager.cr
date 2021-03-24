@@ -1,6 +1,6 @@
 module MercTicketManager
   extend self
-  extend Loggable
+  include Loggable
 
   private DROPPED_TICKETS = Concurrent::Array(L2ItemInstance).new
 
@@ -100,7 +100,7 @@ module MercTicketManager
         if item_id >= ITEM_IDS[i2 + (i * GUARDIAN_TYPES_COUNT)] && item_id <= ITEM_IDS[i2 &+ 9 &+ (i &* GUARDIAN_TYPES_COUNT)]
           return i &+ 1
         end
-        i2 += 10
+        i2 &+= 10
       end
 
       if item_id >= ITEM_IDS[50] && item_id <= ITEM_IDS[51]

@@ -45,8 +45,7 @@ class Scripts::Q00063_PathOfTheWarder < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -168,7 +167,7 @@ class Scripts::Q00063_PathOfTheWarder < Quest
         if qs.memo_state?(16) && !has_quest_items?(killer, TAKS_CAPTURED_SOUL)
           i4 = qs.get_int("ex")
           if i4 < 4
-            qs.set("ex", i4 + 1)
+            qs.set("ex", i4 &+ 1)
           else
             qs.set("ex", 0)
              monster = add_spawn(OL_MAHUM_OFFICER_TAK, npc, true, 0, false)
@@ -269,16 +268,16 @@ class Scripts::Q00063_PathOfTheWarder < Quest
             qs.set("ex", 0)
             html = "32198-18.html"
           else
-            give_adena(pc, 163800, true)
+            give_adena(pc, 163_800, true)
             take_items(pc, TAKS_CAPTURED_SOUL, 1)
             give_items(pc, STEELRAZOR_EVALUTION, 1)
             level = pc.level
             if level >= 20
-              add_exp_and_sp(pc, 320534, 22046)
+              add_exp_and_sp(pc, 320_534, 22_046)
             elsif level == 19
-              add_exp_and_sp(pc, 456128, 28744)
+              add_exp_and_sp(pc, 456_128, 28_744)
             else
-              add_exp_and_sp(pc, 591724, 35442)
+              add_exp_and_sp(pc, 591_724, 35_442)
             end
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))

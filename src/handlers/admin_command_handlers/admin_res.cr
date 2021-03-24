@@ -87,7 +87,7 @@ module AdminCommandHandler::AdminRes
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_res", "admin_res_monster"}
   end
 end

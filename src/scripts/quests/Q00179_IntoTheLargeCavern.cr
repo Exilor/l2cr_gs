@@ -66,7 +66,6 @@ class Scripts::Q00179_IntoTheLargeCavern < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     elsif npc.id == MENACING_MACHINE && st.state == State::STARTED
       html = "32258-01.html"
     end

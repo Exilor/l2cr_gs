@@ -7,9 +7,9 @@ struct FourSepulchersChangeWarmUpTimeTask
     manager.cool_down_time = false
 
     if manager.first_time_run?
-      interval = manager.warm_up_time_end - Time.ms
+      interval = manager.warm_up_time_end &- Time.ms
     else
-      interval = Config.fs_time_warmup.to_i64 * 60000
+      interval = Config.fs_time_warmup.to_i64 &* 60_000
     end
 
     manager.change_attack_time_task =

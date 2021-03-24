@@ -58,7 +58,7 @@ module AdminCommandHandler::AdminTvTEvent
     TvTEventTeleporter.new(target, coordinates, true, true)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_tvt_add",
       "admin_tvt_remove",

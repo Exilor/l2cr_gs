@@ -20,10 +20,7 @@ class Scripts::Q00131_BirdInACage < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32264-04.html"
@@ -62,8 +59,8 @@ class Scripts::Q00131_BirdInACage < Quest
       end
     when "32264-19.html"
       if st.cond?(5) && st.has_quest_items?(ECHO_CRYSTAL_OF_FREE_THOUGHT)
-        st.add_exp_and_sp(250677, 25019)
-        st.give_items(FIRE_STONE + Rnd.rand(4), 4)
+        st.add_exp_and_sp(250_677, 25_019)
+        st.give_items(FIRE_STONE &+ Rnd.rand(4), 4)
         st.exit_quest(false, true)
         html = event
       end
@@ -80,7 +77,6 @@ class Scripts::Q00131_BirdInACage < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -109,7 +105,6 @@ class Scripts::Q00131_BirdInACage < Quest
         when 5
           html = "32264-18.html"
         end
-
       elsif npc.id == PARME
         if st.cond < 3
           html = "32271-01.html"
@@ -118,7 +113,6 @@ class Scripts::Q00131_BirdInACage < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

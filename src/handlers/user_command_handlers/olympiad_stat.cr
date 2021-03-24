@@ -2,7 +2,7 @@ module UserCommandHandler::OlympiadStat
   extend self
   extend UserCommandHandler
 
-  def use_user_command(id, pc)
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
     unless id == commands[0]
       return false
     end
@@ -39,7 +39,7 @@ module UserCommandHandler::OlympiadStat
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {109}
   end
 end

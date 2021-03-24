@@ -34,22 +34,18 @@ class Scripts::Q00326_VanquishRemnants < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
+    return unless pc && (st = get_quest_state(pc, false))
 
-    if st = get_quest_state(pc, false)
-      case event
-      when "30435-03.htm"
-        st.start_quest
-        html = event
-      when "30435-07.html"
-        st.exit_quest(true, true)
-        html = event
-      when "30435-08.html"
-        html = event
-      end
+    case event
+    when "30435-03.htm"
+      st.start_quest
+      event
+    when "30435-07.html"
+      st.exit_quest(true, true)
+      event
+    when "30435-08.html"
+      event
     end
-
-    html
   end
 
   def on_kill(npc, killer, is_summon)
@@ -72,13 +68,13 @@ class Scripts::Q00326_VanquishRemnants < Quest
       red_badges = st.get_quest_items_count(RED_CROSS_BADGE)
       blue_badges = st.get_quest_items_count(BLUE_CROSS_BADGE)
       black_badges = st.get_quest_items_count(BLACK_CROSS_BADGE)
-      sum = red_badges + blue_badges + black_badges
+      sum = red_badges &+ blue_badges &+ black_badges
       if sum > 0
         if sum >= 100 && !st.has_quest_items?(BLACK_LION_MARK)
           st.give_items(BLACK_LION_MARK, 1)
         end
-        badges = (red_badges * 46) + (blue_badges * 52) + (black_badges * 58)
-        amount = badges + (sum >= 10 ? 4320 : 0)
+        badges = (red_badges &* 46) &+ (blue_badges &* 52) &+ (black_badges &* 58)
+        amount = badges &+ (sum >= 10 ? 4320 : 0)
         st.give_adena(amount, true)
         take_items(pc, -1, {RED_CROSS_BADGE, BLUE_CROSS_BADGE, BLACK_CROSS_BADGE})
         if sum >= 100
@@ -94,7 +90,6 @@ class Scripts::Q00326_VanquishRemnants < Quest
         html = "30435-04.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

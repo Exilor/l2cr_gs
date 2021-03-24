@@ -43,7 +43,7 @@ module AdminCommandHandler::AdminSummon
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_summon"}
   end
 end

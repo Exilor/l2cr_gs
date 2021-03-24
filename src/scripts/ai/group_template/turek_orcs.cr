@@ -73,7 +73,7 @@ class Scripts::TurekOrcs < AbstractNpcAI
     if npc.variables.get_i32("state") == 1
       if npc.x == npc.get_ai_value("fleeX") && npc.y == npc.get_ai_value("fleeY")
         npc.disable_core_ai(false)
-        start_quest_timer("checkState", 15000, npc, nil)
+        start_quest_timer("checkState", 15_000, npc, nil)
         npc.variables["state"] = 2
         npc.broadcast_event("WARNING", 400, L2World.get_player(npc.variables.get_i32("attacker")))
       else

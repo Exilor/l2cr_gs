@@ -1,5 +1,5 @@
 class L2FortZone < L2ResidenceZone
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     if name == "fortId"
       self.residence_id = value.to_i
     else

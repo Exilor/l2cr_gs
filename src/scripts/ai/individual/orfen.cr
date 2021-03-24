@@ -44,7 +44,7 @@ class Scripts::Orfen < AbstractNpcAI
 
     if status == DEAD
       # load the unlock date and time for Orfen from DB
-      temp = info.get_i64("respawn_time") - Time.ms
+      temp = info.get_i64("respawn_time") &- Time.ms
       # if Orfen is locked until a certain time, mark it so and start the unlock timer
       # the unlock time has not yet expired.
       if temp > 0
@@ -87,7 +87,7 @@ class Scripts::Orfen < AbstractNpcAI
   def spawn_boss(npc)
     GrandBossManager.add_boss(npc)
     npc.broadcast_packet(Music::BS01_A_7000.packet)
-    start_quest_timer("check_orfen_pos", 10000, npc, nil, true)
+    start_quest_timer("check_orfen_pos", 10_000, npc, nil, true)
     # Spawn minions
     x = npc.x
     y = npc.y
@@ -122,7 +122,7 @@ class Scripts::Orfen < AbstractNpcAI
     elsif event.casecmp?("check_orfen_pos")
       npc = npc.not_nil!
       if (@teleported && npc.current_hp > npc.max_hp * 0.95) || (!@zone.inside_zone?(npc) && !@teleported)
-        set_spawn_point(npc, Rnd.rand(3) + 1)
+        set_spawn_point(npc, Rnd.rand(3) &+ 1)
         @teleported = false
       elsif @teleported && !@zone.inside_zone?(npc)
         set_spawn_point(npc, 0)
@@ -222,8 +222,8 @@ class Scripts::Orfen < AbstractNpcAI
       npc.broadcast_packet(Music::BS02_D_7000.packet)
       GrandBossManager.set_boss_status(ORFEN, DEAD)
       # Calculate Min and Max respawn times randomly.
-      respawn_time = Config.orfen_spawn_interval + Rnd.rand(-Config.orfen_spawn_random..Config.orfen_spawn_random)
-      respawn_time *= 3_600_000
+      respawn_time = Config.orfen_spawn_interval &+ Rnd.rand(-Config.orfen_spawn_random..Config.orfen_spawn_random)
+      respawn_time &*= 3_600_000
       start_quest_timer("orfen_unlock", respawn_time, nil, nil)
       # also save the respawn time so that the info is maintained past reboots
       unless info = GrandBossManager.get_stats_set(ORFEN)

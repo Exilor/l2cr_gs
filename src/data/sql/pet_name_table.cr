@@ -1,6 +1,6 @@
 module PetNameTable
   extend self
-  extend Loggable
+  include Loggable
 
   def includes?(name : String) : Bool
     begin

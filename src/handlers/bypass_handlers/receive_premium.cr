@@ -2,7 +2,7 @@ module BypassHandler::ReceivePremium
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     unless target && target.npc?
       return false
     end
@@ -16,7 +16,7 @@ module BypassHandler::ReceivePremium
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"ReceivePremium"}
   end
 end

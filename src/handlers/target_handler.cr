@@ -1,8 +1,6 @@
 module TargetHandler
-  include Loggable
-
   private HANDLERS = EnumMap(TargetType, self).new
-  EMPTY_TARGET_LIST = [] of L2Object
+  private EMPTY_TARGET_LIST = [] of L2Object
 
   def self.load
     {% for const in @type.constants %}
@@ -20,31 +18,6 @@ module TargetHandler
   def self.[](type : TargetType) : self?
     HANDLERS[type]?
   end
-
-  # abstract def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
-  # abstract def target_type : TargetType
-
-  # def self.add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : L2Character?
-  #   if summon = owner.summon
-  #     add_character(caster, summon, radius, dead)
-  #   end
-  # end
-
-  # def self.add_character(caster : L2Character, target : L2Character, radius : Int32, dead : Bool) : L2Character?
-  #   return if dead != target.dead?
-  #   if radius > 0 && !Util.in_range?(radius, caster, target, true)
-  #     return
-  #   end
-  #   target
-  # end
-
-  # private def add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : L2Character?
-  #   TargetHandler.add_summon(caster, owner, radius, dead)
-  # end
-
-  # private def add_character(caster : L2Character, target : L2Character, radius : Int32, dead : Bool) : L2Character?
-  #   TargetHandler.add_character(caster, target, radius, dead)
-  # end
 
   private module AddMethods
     def add_summon(caster : L2Character, owner : L2PcInstance, radius : Int32, dead : Bool) : L2Character?
@@ -64,6 +37,9 @@ module TargetHandler
 
   extend AddMethods
   include AddMethods
+
+  abstract def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
+  abstract def target_type : TargetType
 end
 
 require "./target_handlers/*"

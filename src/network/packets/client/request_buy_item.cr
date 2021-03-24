@@ -84,7 +84,6 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
 
     @items.each do |i|
       unless product = buy_list.get_product_by_item_id(i.id)
-        warn { "No product with id #{i.id} in BuyList #{buy_list}." }
         Util.punish(pc, "sent an invalid BuyList list_id #{@list_id} and item_id #{i.id}")
         return
       end
@@ -109,7 +108,6 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
       end
 
       if price == 0 && !pc.gm? && Config.only_gm_items_free
-        warn { pc.name + " tried to buy a item for 0 adena." }
         Util.punish(pc, "tried to buy an item for 0 adena.")
         return
       end
@@ -154,7 +152,6 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
     end
 
     if sub_total < 0 || !pc.reduce_adena("Buy", sub_total.to_i64, pc.last_folk_npc, false)
-      debug { "Not enough adena (subtotal: #{sub_total})." }
       pc.send_packet(SystemMessageId::YOU_NOT_ENOUGH_ADENA)
       action_failed
       return
@@ -166,11 +163,8 @@ class Packets::Incoming::RequestBuyItem < GameClientPacket
         next
       end
       if product.limited_stock?
-        debug { "#{i} has limited stock." }
         if product.decrease_count(i.count)
           pc.inventory.add_item("Buy", i.id, i.count, pc, merchant)
-        else
-          debug "Failed to decrease the count of an item with limited stock."
         end
       else
         pc.inventory.add_item("Buy", i.id, i.count, pc, merchant)

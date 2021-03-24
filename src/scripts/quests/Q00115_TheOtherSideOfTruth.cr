@@ -29,10 +29,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32020-02.html"
@@ -81,8 +78,8 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
     when "finish"
       if st.cond?(10)
         if st.has_quest_items?(PIECE_OF_TABLET)
-          st.give_adena(115673, true)
-          st.add_exp_and_sp(493595, 40442)
+          st.give_adena(115_673, true)
+          st.add_exp_and_sp(493_595, 40_442)
           st.exit_quest(false, true)
           html = "32020-25.html"
         else
@@ -94,8 +91,8 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
     when "finish2"
       if st.cond?(10)
         if st.has_quest_items?(PIECE_OF_TABLET)
-          st.give_adena(115673, true)
-          st.add_exp_and_sp(493595, 40442)
+          st.give_adena(115_673, true)
+          st.add_exp_and_sp(493_595, 40_442)
           st.exit_quest(false, true)
           html = "32020-27.html"
         else
@@ -275,8 +272,8 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
           if !st.has_quest_items?(PIECE_OF_TABLET)
             html = "32020-29.html"
           else
-            st.give_adena(115673, true)
-            st.add_exp_and_sp(493595, 40442)
+            st.give_adena(115_673, true)
+            st.add_exp_and_sp(493_595, 40_442)
             st.exit_quest(false, true)
             html = "32020-30.html"
           end
@@ -319,7 +316,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         when 7
           if st.get_int("ex") % 2 <= 1
             ex = st.get_int("ex")
-            if ex == 6 || ex == 10 || ex == 12
+            if ex.in?(6, 10, 12)
               html = "32021-01.html"
             elsif ex == 14
               html = "32021-05.html"
@@ -346,7 +343,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         when 7
           if st.get_int("ex") % 4 <= 1
             ex = st.get_int("ex")
-            if ex == 5 || ex == 9 || ex == 12
+            if ex.in?(5, 9, 12)
               html = "32021-01.html"
             elsif ex == 13
               html = "32021-05.html"
@@ -373,7 +370,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         when 7
           if st.get_int("ex") % 8 <= 3
             ex = st.get_int("ex")
-            if ex == 3 || ex == 9 || ex == 10
+            if ex.in?(3, 9, 10)
               html = "32021-01.html"
             elsif ex == 11
               html = "32021-05.html"
@@ -400,7 +397,7 @@ class Scripts::Q00115_TheOtherSideOfTruth < Quest
         when 7
           if st.get_int("ex") <= 7
             ex = st.get_int("ex")
-            if ex == 3 || ex == 5 || ex == 6
+            if ex.in?(3, 5, 6)
               html = "32021-01.html"
             elsif ex == 7
               html = "32021-05.html"

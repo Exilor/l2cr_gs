@@ -99,8 +99,7 @@ class Scripts::Q00420_LittleWing < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30610-02.html", "30610-03.html", "30610-04.html", "30711-02.html",
@@ -204,7 +203,7 @@ class Scripts::Q00420_LittleWing < Quest
         end
       end
     when "30747-02.html", "30747-04.html"
-      if qs.cond?(4) && ((get_quest_items_count(pc, FAIRY_STONE) + get_quest_items_count(pc, DELUXE_FAIRY_STONE)) > 0)
+      if qs.cond?(4) && get_quest_items_count(pc, FAIRY_STONE) &+ get_quest_items_count(pc, DELUXE_FAIRY_STONE) > 0
         take_items(pc, -1, {FAIRY_STONE, DELUXE_FAIRY_STONE})
         if qs.get_int("fairy_stone") == 2
           give_items(pc, FAIRY_DUST, 1)
@@ -298,7 +297,6 @@ class Scripts::Q00420_LittleWing < Quest
       end
     end
 
-
     html
   end
 
@@ -346,7 +344,6 @@ class Scripts::Q00420_LittleWing < Quest
             html = "30610-11.html"
           end
         end
-
       when MARIA
         case qs.cond
         when 2
@@ -360,7 +357,6 @@ class Scripts::Q00420_LittleWing < Quest
         when 3
           html = "30608-06.html"
         end
-
       when BYRON
         case qs.cond
         when 2
@@ -384,7 +380,6 @@ class Scripts::Q00420_LittleWing < Quest
             html = "30711-07.html"
           end
         end
-
       when MIMYU
         case qs.cond
         when 4
@@ -412,7 +407,6 @@ class Scripts::Q00420_LittleWing < Quest
         when 8
           html = "30747-12.html"
         end
-
       when EXARION
         case qs.cond
         when 5
@@ -431,7 +425,6 @@ class Scripts::Q00420_LittleWing < Quest
         when 7
           html = "30748-05.html"
         end
-
       when ZWOV
         case qs.cond
         when 5
@@ -450,7 +443,6 @@ class Scripts::Q00420_LittleWing < Quest
         when 7
           html = "30749-05.html"
         end
-
       when KALIBRAN
         case qs.cond
         when 5
@@ -466,7 +458,6 @@ class Scripts::Q00420_LittleWing < Quest
         when 7
           html = "30750-06.html"
         end
-
       when SUZET
         case qs.cond
         when 5
@@ -485,7 +476,6 @@ class Scripts::Q00420_LittleWing < Quest
         when 7
           html = "30751-06.html"
         end
-
       when SHAMHAI
         case qs.cond
         when 5
@@ -504,20 +494,16 @@ class Scripts::Q00420_LittleWing < Quest
         when 7
           html = "30752-05.html"
         end
-
       end
-
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end
 
   def on_kill(npc, killer, is_summon)
-    qs = get_random_party_member_state(killer, -1, 3, npc)
-    if qs
+    if qs = get_random_party_member_state(killer, -1, 3, npc)
       if qs.cond?(2) && npc.id == TOAD_LORD
         if qs.get_int("fairy_stone") == 1
           give_item_randomly(qs.player, npc, TOAD_SKIN, 1, 10, 0.3, true)
@@ -536,20 +522,20 @@ class Scripts::Q00420_LittleWing < Quest
     random = Rnd.rand(100)
     EGGS.each_with_index do |i, j|
       if has_quest_items?(pc, i)
-        mul = j * 5
+        mul = j &* 5
         if has_quest_items?(pc, FAIRY_DUST)
-          if random < 45 + mul
+          if random < 45 &+ mul
             give_items(pc, DRAGONFLUTE_OF_WIND, 1)
-          elsif random < 75 + mul
+          elsif random < 75 &+ mul
             give_items(pc, DRAGONFLUTE_OF_STAR, 1)
           else
             give_items(pc, DRAGONFLUTE_OF_TWILIGHT, 1)
           end
         end
 
-        if random < 50 + mul
+        if random < 50 &+ mul
           give_items(pc, DRAGONFLUTE_OF_WIND, 1)
-        elsif random < 85 + mul
+        elsif random < 85 &+ mul
           give_items(pc, DRAGONFLUTE_OF_STAR, 1)
         else
           give_items(pc, DRAGONFLUTE_OF_TWILIGHT, 1)

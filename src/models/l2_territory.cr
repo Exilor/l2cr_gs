@@ -12,7 +12,7 @@ class L2Territory
     @terr = terr
     @x_min = @y_min = @z_min = 999999
     @x_max = @y_max = @z_max = -999999
-    @points = Concurrent::Array(Point).new
+    @points = [] of Point
   end
 
   def add(x : Int32, y : Int32, z_min : Int32, z_max : Int32, proc : Int32)

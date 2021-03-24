@@ -2,7 +2,7 @@ module ItemHandler::NicknameColor
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     if playable.player?
       playable.send_packet(ExRequestChangeNicknameColor.new(item.l2id))
       true

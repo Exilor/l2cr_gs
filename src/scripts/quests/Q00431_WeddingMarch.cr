@@ -23,10 +23,7 @@ class Scripts::Q00431_WeddingMarch < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event.casecmp?("31042-02.htm")
       st.start_quest
@@ -67,7 +64,6 @@ class Scripts::Q00431_WeddingMarch < Quest
     when State::STARTED
       html = st.cond?(1) ? "31042-03.html" : "31042-04.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

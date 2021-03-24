@@ -54,8 +54,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
       return super
     end
 
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30610-05.htm"
@@ -102,7 +101,6 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
       html = event
     end
 
-
     html
   end
 
@@ -132,7 +130,6 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when MIMYU
       case qs.memo_state
       when 100
@@ -206,9 +203,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
           end
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -221,7 +216,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
         if qs.memo_state % data.memo_state_mod < data.memo_state_value
           smn = attacker.summon
           if smn && smn.control_l2id == qs.get_int("fluteObjectId")
-            hits = qs.get_int("hits") + 1
+            hits = qs.get_int("hits") &+ 1
             qs.set("hits", hits)
 
             if hits < data.min_hits
@@ -258,7 +253,7 @@ class Scripts::Q00421_LittleWingsBigAdventure < Quest
         npc.target = attacker
         npc.do_cast(VICIOUS_POISON.skill)
       end
-    elsif npc.current_hp < (npc.max_hp * 0.67) && Rnd.rand(100) < 30
+    elsif npc.current_hp < npc.max_hp * 0.67 && Rnd.rand(100) < 30
       npc.target = attacker
       npc.do_cast(VICIOUS_POISON.skill)
     end

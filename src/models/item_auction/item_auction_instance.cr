@@ -92,7 +92,7 @@ class ItemAuctionInstance
       return
     end
 
-    info { "Loaded #{@items.size} item(s) and registered #{@auctions.size} auction(s) for NPC ID #{@instance_id}." }
+    info { "Loaded #{@items.size} item(s) and registered #{@auctions.size} auction(s) for npc with id #{@instance_id}." }
     check_and_set_current_and_next_auction
   end
 
@@ -177,10 +177,10 @@ class ItemAuctionInstance
         self.state_task = ThreadPoolManager.schedule_general(ScheduleAuctionTask.new(self, current_auction), Math.max(current_auction.starting_time - Time.ms, 0))
       end
 
-      info { "Scheduled current auction ID #{current_auction.auction_id} for NPC ID #{@instance_id}." }
+      info { "Scheduled current auction id #{current_auction.auction_id} for npc with id #{@instance_id}." }
     else
       self.state_task = ThreadPoolManager.schedule_general(ScheduleAuctionTask.new(self, next_auction), Math.max(next_auction.starting_time - Time.ms, 0))
-      info { "Scheduled next auction ID #{next_auction.auction_id} on #{Time.now.to_s(DATE_FORMAT)} for NPC ID #{@instance_id}." }
+      info { "Scheduled next auction id #{next_auction.auction_id} on #{Time.now.to_s(DATE_FORMAT)} for npc with id #{@instance_id}." }
     end
   end
 
@@ -203,7 +203,7 @@ class ItemAuctionInstance
 
   def auctions : Enumerable(ItemAuction)
     @auctions_lock.synchronize do
-      @auctions.values_slice
+      @auctions.local_each_value
     end
   end
 
@@ -225,7 +225,7 @@ class ItemAuctionInstance
           raise "Could not set auction state: #{ItemAuctionState::STARTED}, expected: #{state}"
         end
 
-        info { "Auction ID #{@auction.auction_id} has started for NPC ID #{@auction.instance_id}." }
+        info { "Auction id #{@auction.auction_id} has started for npc id #{@auction.instance_id}." }
         @instance.check_and_set_current_and_next_auction
       when ItemAuctionState::STARTED
         case @auction.auction_ending_extend_state
@@ -266,6 +266,10 @@ class ItemAuctionInstance
         raise "Invalid state: #{state}"
       end
     end
+
+    def to_s(io : IO)
+      self.class.to_s(io)
+    end
   end
 
   def on_auction_finished(auction : ItemAuction)
@@ -278,7 +282,7 @@ class ItemAuctionInstance
       if pc = bid.player
         pc.warehouse.add_item("ItemAuction", item, nil, nil)
         pc.send_packet(SystemMessageId::WON_BID_ITEM_CAN_BE_FOUND_IN_WAREHOUSE)
-        info { "Auction ID #{auction.auction_id} has finished. Highest bid by #{pc} for instance ID #{@instance_id}." }
+        info { "Auction id #{auction.auction_id} has finished. Highest bid by #{pc} for instance id #{@instance_id}." }
       else
         item.owner_id = bid.player_l2id
         item.item_location = ItemLocation::WAREHOUSE
@@ -286,12 +290,12 @@ class ItemAuctionInstance
         L2World.remove_object(item)
 
         pc_name = CharNameTable.get_name_by_id(bid.player_l2id)
-        info { "Auction ID #{auction.auction_id} has finished. Highest bid by #{pc_name} for instance ID #{@instance_id}." }
+        info { "Auction id #{auction.auction_id} has finished. Highest bid by #{pc_name} for instance id #{@instance_id}." }
       end
 
       auction.clear_cancelled_bids
     else
-      info { "Auction ID #{auction.auction_id} has finished. There hasn't been any bid for instance ID #{@instance_id}." }
+      info { "Auction id #{auction.auction_id} has finished. There hasn't been any bid for instance id #{@instance_id}." }
     end
   end
 
@@ -326,29 +330,29 @@ class ItemAuctionInstance
       auction_state_id = rs.get_i8(4)
     end
     unless found
-      warn { "Auction data not found for auction ID #{auction_id}." }
+      warn { "Auction data not found for auction id #{auction_id}." }
       return
     end
 
     if starting_time >= ending_time
-      warn { "Invalid starting/ending paramaters for auction ID #{auction_id}." }
+      warn { "Invalid starting/ending paramaters for auction id #{auction_id}." }
       return
     end
 
     auction_item = get_auction_item(auction_item_id)
     unless auction_item
-      warn { "Auction item ID #{auction_item_id} not found for auction ID #{auction_id}." }
+      warn { "Auction item id #{auction_item_id} not found for auction id #{auction_id}." }
       return
     end
 
     auction_state = ItemAuctionState.state_for_state_id(auction_state_id)
     unless auction_state
-      warn { "Invalid auction state ID #{auction_state_id} for auction ID #{auction_id}." }
+      warn { "Invalid auction state id #{auction_state_id} for auction id #{auction_id}." }
       return
     end
 
     if auction_state.finished? && starting_time < Time.ms - Time.days_to_ms(Config.alt_item_auction_expired_after)
-      info { "Clearing expired auction ID #{auction_id}." }
+      info { "Clearing expired auction id #{auction_id}." }
       GameDB.exec(DELETE_AUCTION_INFO_BY_AUCTION_ID, auction_id)
       GameDB.exec(DELETE_AUCTION_BID_INFO_BY_AUCTION_ID, auction_id)
       return
@@ -363,5 +367,9 @@ class ItemAuctionInstance
     end
 
     ItemAuction.new(auction_id, @instance_id, starting_time, ending_time, auction_item, auction_bids, auction_state)
+  end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
   end
 end

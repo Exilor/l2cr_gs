@@ -1184,7 +1184,7 @@ class Scripts::Kamaloka < AbstractInstance
 
   private def remove_buffs_impl(ch)
     ch.effect_list.for_each(false) do |info|
-      if !info.skill.stay_after_death? && BUFFS_WHITELIST.bincludes?(info.skill.id)
+      if !info.skill.stay_after_death? && !BUFFS_WHITELIST.bincludes?(info.skill.id)
         info.effected.effect_list.stop_skill_effects(true, info.skill)
         true
       else

@@ -6,24 +6,31 @@ class Packets::Outgoing::CreatureSay < GameServerPacket
   @char_name : String?
   @text : String?
 
-  private getter(params) { Array(String).new }
-
   initializer l2id : Int32, text_type : Int32, char_name : String, text : String
 
-  def initialize(@l2id : Int32, @text_type : Int32, @char_id : Int32, npc_string : NpcString)
+  def initialize(l2id : Int32, text_type : Int32, char_id : Int32, npc_string : NpcString)
+    @l2id = l2id
+    @text_type = text_type
+    @char_id = char_id
     @npc_string = npc_string.id
   end
 
-  def initialize(@l2id : Int32, @text_type : Int32, @char_name : String, npc_string : NpcString)
+  def initialize(l2id : Int32, text_type : Int32, char_name : String, npc_string : NpcString)
+    @l2id = l2id
+    @text_type = text_type
+    @char_name = char_name
     @npc_string = npc_string.id
   end
 
-  def initialize(@l2id : Int32, @text_type : Int32, @char_id : Int32, sys_string : SystemMessageId)
+  def initialize(l2id : Int32, text_type : Int32, char_id : Int32, sys_string : SystemMessageId)
+    @l2id = l2id
+    @text_type = text_type
+    @char_id = char_id
     @npc_string = sys_string.id
   end
 
   def add_string(text : String)
-    params << text
+    (@params ||= [] of String) << text
   end
 
   private def write_impl

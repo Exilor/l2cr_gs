@@ -8,9 +8,7 @@ class Packets::Outgoing::ExOlympiadUserInfo < GameServerPacket
   @par : Participant?
 
   def initialize(pc : L2PcInstance?)
-    @pc = pc
-
-    if pc
+    if @pc = pc
       @cur_hp = pc.current_hp.to_i
       @max_hp = pc.max_hp
       @cur_cp = pc.current_cp.to_i

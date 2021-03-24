@@ -1,7 +1,6 @@
 class Packets::Outgoing::QuestList < GameServerPacket
   private def write_impl
     unless pc = @client.try &.active_char
-      warn "No client or no active_char"
       return
     end
 

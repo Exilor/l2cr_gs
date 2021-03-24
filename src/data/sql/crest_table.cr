@@ -2,7 +2,7 @@ require "../../models/l2_crest"
 
 module CrestTable
   extend self
-  extend Loggable
+  include Loggable
 
   private CRESTS = Concurrent::Map(Int32, L2Crest).new
   private NEXT_ID = Atomic(Int32).new(1)
@@ -51,14 +51,12 @@ module CrestTable
       error e
     end
 
-    move_old_crests_to_db(crests_in_use)
-
     info { "Loaded #{CRESTS.size} crests." }
 
     ClanTable.clans.each do |clan|
       if clan.crest_id != 0
         unless get_crest(clan.crest_id)
-          info { "Removing non-existent crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.crest_id}." }
+          info { "Removing non-existent crest for clan #{clan.name} (#{clan.id}). Crest id: #{clan.crest_id}." }
           clan.crest_id = 0
           clan.change_clan_crest(0)
         end
@@ -66,7 +64,7 @@ module CrestTable
 
       if clan.crest_large_id != 0
         unless get_crest(clan.crest_large_id)
-          info { "Removing non-existent large crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.crest_large_id}." }
+          info { "Removing non-existent large crest for clan #{clan.name} (#{clan.id}). Crest id: #{clan.crest_large_id}." }
           clan.crest_large_id = 0
           clan.change_large_crest(0)
         end
@@ -74,60 +72,9 @@ module CrestTable
 
       if clan.ally_crest_id != 0
         unless get_crest(clan.ally_crest_id)
-          info { "Removing non-existent ally crest for clan #{clan.name} (#{clan.id}). Crest ID: #{clan.ally_crest_id}." }
+          info { "Removing non-existent ally crest for clan #{clan.name} (#{clan.id}). Crest id: #{clan.ally_crest_id}." }
           clan.ally_crest_id = 0
           clan.change_ally_crest(0, true)
-        end
-      end
-    end
-  end
-
-  private def move_old_crests_to_db(crests_in_use)
-    # TODO: delete each crest file
-    dir = Config.datapack_root + "/crests"
-
-    return unless Dir.exists?(dir)
-
-    Dir.glob("#{dir}/*.bmp") do |path|
-      size = File.size(path)
-      data = Bytes.new(size)
-      File.open(path, "r", &.read_fully(data))
-      file_name = File.basename(path, ".bmp")
-      if file_name.starts_with?("Crest_Large_")
-        crest_id = file_name.from(12).to_i
-        if crests_in_use.includes?(crest_id)
-          if crest = create_crest(data, L2Crest::PLEDGE_LARGE)
-            ClanTable.clans.each do |clan|
-              if clan.crest_large_id == crest_id
-                clan.crest_large_id = 0
-                clan.change_large_crest(crest.id)
-              end
-            end
-          end
-        end
-      elsif file_name.starts_with?("Crest_")
-        crest_id = file_name.from(6).to_i
-        if crests_in_use.includes?(crest_id)
-          if crest = create_crest(data, L2Crest::PLEDGE)
-            ClanTable.clans.each do |clan|
-              if clan.crest_id == crest_id
-                clan.crest_id = 0
-                clan.change_clan_crest(crest.id)
-              end
-            end
-          end
-        end
-      elsif file_name.starts_with?("AllyCrest_")
-        crest_id = file_name.from(10).to_i
-        if crests_in_use.includes?(crest_id)
-          if crest = create_crest(data, L2Crest::ALLY)
-            ClanTable.clans.each do |clan|
-              if clan.ally_crest_id == crest_id
-                clan.ally_crest_id = 0
-                clan.change_ally_crest(crest.id, false)
-              end
-            end
-          end
         end
       end
     end

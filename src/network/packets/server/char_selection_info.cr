@@ -1,7 +1,7 @@
 require "../../../models/char_select_info_package"
 
 class Packets::Outgoing::CharSelectionInfo < GameServerPacket
-  extend Loggable
+  include Loggable
 
   getter char_info : Array(CharSelectInfoPackage)
 

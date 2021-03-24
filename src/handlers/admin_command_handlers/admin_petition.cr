@@ -62,7 +62,7 @@ module AdminCommandHandler::AdminPetition
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_view_petitions",
       "admin_view_petition",

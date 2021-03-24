@@ -58,7 +58,7 @@ module AdminCommandHandler::AdminInstanceZone
   private def display(player, pc)
     times = InstanceManager.get_all_instance_times(player.l2id)
 
-    html = String.build(500 + (times.size * 200)) do |io|
+    html = String.build(500 &+ (times.size &* 200)) do |io|
       io << "<html><center><table width=260><tr>" \
             "<td width=40><button value=\"Main\" action=\"bypass -h admin_admin\" width=40 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>" \
             "<td width=180><center>Character Instances</center></td>" \
@@ -100,7 +100,7 @@ module AdminCommandHandler::AdminInstanceZone
     pc.send_packet(ms)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_instancezone",
       "admin_instancezone_clear"

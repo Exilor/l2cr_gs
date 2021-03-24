@@ -2,7 +2,7 @@ module CommunityBoardHandler::MemoBoard
   extend self
   extend IParseBoardHandler
 
-  def parse_command(command, pc)
+  def parse_command(command : String, pc : L2PcInstance) : Bool
     CommunityBoardHandler.add_bypass(pc, "Memo Command", command)
 
     html = HtmCache.get_htm(pc, "data/html/CommunityBoard/memo.html")
@@ -14,7 +14,7 @@ module CommunityBoardHandler::MemoBoard
     false # L2J TODO
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"_bbsmemo", "_bbstopics"}
   end
 end

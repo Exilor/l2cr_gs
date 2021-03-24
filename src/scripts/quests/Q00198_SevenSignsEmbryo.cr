@@ -35,10 +35,7 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
       return super
     end
 
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -56,13 +53,13 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
         ns = NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::S1_THAT_STRANGER_MUST_BE_DEFEATED_HERE_IS_THE_ULTIMATE_HELP)
         ns.add_string_parameter(pc.name)
         npc.broadcast_packet(ns)
-        start_quest_timer("heal", 30000 - Rnd.rand(20000), npc, pc)
+        start_quest_timer("heal", 30_000 - Rnd.rand(20_000), npc, pc)
         mob = add_spawn(SHILENS_EVIL_THOUGHTS, -23734, -9184, -5384, 0, false, 0, false, npc.instance_id).as(L2MonsterInstance)
         mob.broadcast_packet(NpcSay.new(mob.l2id, Say2::NPC_ALL, mob.id, NpcString::YOU_ARE_NOT_THE_OWNER_OF_THAT_ITEM))
         mob.set_running
         mob.add_damage_hate(pc, 0, 999)
         mob.set_intention(AI::ATTACK, pc)
-        start_quest_timer("despawn", 300000, mob, nil)
+        start_quest_timer("despawn", 300_000, mob, nil)
       end
     when "heal"
       if !npc.inside_radius?(pc, 600, true, false)
@@ -73,7 +70,7 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
         npc.target = pc
         npc.do_cast(NPC_HEAL)
       end
-      start_quest_timer("heal", 30000 - Rnd.rand(20000), npc, pc)
+      start_quest_timer("heal", 30_000 - Rnd.rand(20_000), npc, pc)
     when "32597-08.html", "32597-09.html", "32597-10.html"
       if st.cond?(2) && st.has_quest_items?(SCULPTURE_OF_DOUBT)
         html = event
@@ -88,7 +85,6 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
     when "32617-02.html"
       html = event
     end
-
 
     html
   end
@@ -136,9 +132,9 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
           html = "32593-04.html"
         elsif st.cond?(3)
           if pc.level >= MIN_LEVEL
-            st.add_exp_and_sp(315108090, 34906059)
+            st.add_exp_and_sp(315_108_090, 34_906_059)
             st.give_items(DAWNS_BRACELET, 1)
-            st.give_items(Inventory::ANCIENT_ADENA_ID, 1500000)
+            st.give_items(Inventory::ANCIENT_ADENA_ID, 1_500_000)
             st.exit_quest(false, true)
             html = "32593-05.html"
           else
@@ -156,10 +152,8 @@ class Scripts::Q00198_SevenSignsEmbryo < Quest
         when 3
           html = "32597-12.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

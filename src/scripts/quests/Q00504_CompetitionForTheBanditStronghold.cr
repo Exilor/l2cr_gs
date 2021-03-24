@@ -37,8 +37,8 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
   end
 
   def on_kill(npc, killer, is_summon)
-    st = get_quest_state(killer, false)
-    if st.nil? || (!st.has_quest_items?(CONTEST_CERTIFICATE) || !st.started?)
+    return unless st = get_quest_state(killer, false)
+    unless st.has_quest_items?(CONTEST_CERTIFICATE) && st.started?
       return
     end
 
@@ -90,7 +90,6 @@ class Scripts::Q00504_CompetitionForTheBanditStronghold < Quest
       when State::COMPLETED
         html = "35437-07a.html"
       end
-
     end
 
     html || get_no_quest_msg(pc)

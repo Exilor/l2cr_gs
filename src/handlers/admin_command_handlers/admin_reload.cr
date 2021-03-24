@@ -101,7 +101,7 @@ module AdminCommandHandler::AdminReload
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_reload"}
   end
 end

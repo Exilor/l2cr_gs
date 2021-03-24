@@ -133,7 +133,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       end
     end
 
-
     event
   end
 
@@ -177,7 +176,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       end
     end
 
-
     super
   end
 
@@ -219,11 +217,9 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
         when 11
           html = "31739-12.html"
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when GABRIELLE
       case st.cond
       when 1
@@ -231,7 +227,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 2
         html = "30753-03.html"
       end
-
     when GILMORE
       case st.cond
       when 2
@@ -239,7 +234,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 3
         html = "30754-03.html"
       end
-
     when KANTABILON
       case st.cond
       when 5
@@ -253,7 +247,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 8
         html = "31042-06.html"
       end
-
     when STEDMIEL
       case st.cond
       when 9
@@ -261,7 +254,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 10
         html = "30692-03.html"
       end
-
     when VIRGIL
       case st.cond
       when 11
@@ -273,7 +265,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 18
         html = "31742-06.html"
       end
-
     when OGMAR
       case st.cond
       when 12
@@ -281,7 +272,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 13
         html = "31744-03.html"
       end
-
     when RAHORAKTI
       case st.cond
       when 13
@@ -295,7 +285,6 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 16
         html = "31336-06.html"
       end
-
     when KASSANDRA
       case st.cond
       when 16
@@ -305,13 +294,11 @@ class Scripts::Q00241_PossessorOfAPreciousSoul1 < Quest
       when 17
         html = "31743-03.html"
       end
-
     when CARADINE
       if st.cond >= 18
         html = "31740-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

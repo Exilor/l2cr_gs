@@ -53,7 +53,7 @@ class Scripts::Q00021_HiddenTruth < Quest
     when "31328-05.html"
       if st.cond?(7)
         st.give_items(CROSS_OF_EINHASAD2, 1)
-        st.add_exp_and_sp(131228, 11978)
+        st.add_exp_and_sp(131_228, 11_978)
         st.exit_quest(false, true)
         html = event
       end
@@ -73,7 +73,7 @@ class Scripts::Q00021_HiddenTruth < Quest
         say = NpcSay.new(ghost.l2id, 0, ghost.id, NpcString::WHO_AWOKE_ME)
         ghost.broadcast_packet(say)
         @ghost_spawned = true
-        st.start_quest_timer("DESPAWN_GHOST", 300000, ghost)
+        st.start_quest_timer("DESPAWN_GHOST", 300_000, ghost)
         st.set_cond(2)
         st.play_sound(Sound::SKILLSOUND_HORROR_2)
         html = event
@@ -247,7 +247,7 @@ class Scripts::Q00021_HiddenTruth < Quest
 
   def on_route_finished(npc)
     if st = L2World.get_player(npc.script_value).try &.get_quest_state(name)
-      st.start_quest_timer("DESPAWN", 15000, npc)
+      st.start_quest_timer("DESPAWN", 15_000, npc)
       @move_ended = true
     end
   end

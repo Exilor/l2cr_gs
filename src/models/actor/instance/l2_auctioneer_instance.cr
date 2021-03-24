@@ -45,7 +45,7 @@ class L2AuctioneerInstance < L2Npc
               bid = Math.min(st.shift.to_i64, Inventory.max_adena)
             end
             clan = pc.clan.not_nil!
-            a = Auction.new(clan.hideout_id, clan, days * 86400000, bid, ClanHallManager.get_clan_hall_by_owner(clan).not_nil!.name)
+            a = Auction.new(clan.hideout_id, clan, days * 86_400_000, bid, ClanHallManager.get_clan_hall_by_owner(clan).not_nil!.name)
 
             @pending_auctions[a.id] = a
 

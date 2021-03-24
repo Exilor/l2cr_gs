@@ -1,5 +1,7 @@
 module VoicedCommandHandler
-  include Loggable
+  macro extended
+    include Loggable
+  end
   include Packets::Outgoing
 
   private HANDLERS = {} of String => self

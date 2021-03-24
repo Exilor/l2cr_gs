@@ -58,13 +58,11 @@ class Scripts::Q00171_ActsOfEvil < Quest
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::YOU_SHOULD_CONSIDER_GOING_BACK))
         npc.delete_me
       end
+
       return super
     end
 
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -100,7 +98,6 @@ class Scripts::Q00171_ActsOfEvil < Quest
       qs.set_cond(10, true)
       html = event
     end
-
 
     html
   end
@@ -232,7 +229,6 @@ class Scripts::Q00171_ActsOfEvil < Quest
           end
         end
       end
-
     end
 
     super
@@ -287,12 +283,11 @@ class Scripts::Q00171_ActsOfEvil < Quest
         when 10
           html = "30381-16.html"
         when 11
-          give_adena(pc, 95000, true)
-          add_exp_and_sp(pc, 159820, 9182)
+          give_adena(pc, 95_000, true)
+          add_exp_and_sp(pc, 159_820, 9182)
           html = "30381-17.html"
           qs.exit_quest(false, true)
         end
-
       when TRADER_ARODIN
         if memo_state == 1
           qs.memo_state = 2
@@ -365,7 +360,6 @@ class Scripts::Q00171_ActsOfEvil < Quest
           html = "30617-08.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == GUARD_ALVAH
         html = get_already_completed_msg(pc)
@@ -376,7 +370,7 @@ class Scripts::Q00171_ActsOfEvil < Quest
   end
 
   def on_spawn(npc)
-    start_quest_timer("DESPAWN", 200000, npc, nil)
+    start_quest_timer("DESPAWN", 200_000, npc, nil)
     super
   end
 end

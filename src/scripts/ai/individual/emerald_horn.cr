@@ -54,7 +54,7 @@ class Scripts::EmeraldHorn < AbstractNpcAI
       npc.variables[TOTAL_DAMAGE_COUNT] = 0
       npc.variables[CAST_FLAG] = true
       add_skill_cast_desire(npc, npc, REFLECT_ATTACK, 99999000000000000)
-      start_quest_timer(DAMAGE_TIMER_15S, 15 * 1000, npc, pc)
+      start_quest_timer(DAMAGE_TIMER_15S, 15 &* 1000, npc, pc)
     end
 
     super

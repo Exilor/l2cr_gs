@@ -48,9 +48,7 @@ class Packets::Outgoing::ExShowFortressSiegeInfo < GameServerPacket
         end
       end
     else
-      @size.times do
-        d 0
-      end
+      @size.times { d 0 }
     end
   end
 end

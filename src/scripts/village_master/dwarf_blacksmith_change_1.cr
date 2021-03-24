@@ -44,7 +44,6 @@ class Scripts::DwarfBlacksmithChange1 < AbstractNpcAI
     when "56"
       class_change_requested(player, npc, event.to_i)
     end
-
   end
 
   private def class_change_requested(pc, npc, class_id)

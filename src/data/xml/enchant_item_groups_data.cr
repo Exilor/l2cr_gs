@@ -44,8 +44,8 @@ module EnchantItemGroupsData
             if range.includes?('-')
               split = range.split('-')
               if split.size == 2 && split.all? &.number?
-                min = split[0].to_i
-                max = split[1].to_i
+                min = split.unsafe_fetch(0).to_i
+                max = split.unsafe_fetch(1).to_i
               end
             elsif range.number?
               min = range.to_i

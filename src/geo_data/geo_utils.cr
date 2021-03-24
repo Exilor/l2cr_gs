@@ -46,14 +46,14 @@ module GeoUtils
         if i_block >= blocks_per_packet
           i_block = 0
           if exsp
-            i_packet &+= 1
+            i_packet += 1
             pc.send_packet(exsp)
           end
           exsp = Packets::Outgoing::ExServerPrimitive.new("DebugGrid_#{i_packet}", pc.x, pc.y, -16_000)
         end
 
-        gx = pc_gx &+ dx
-        gy = pc_gy &+ dy
+        gx = pc_gx + dx
+        gy = pc_gy + dy
 
         x = gd.get_world_x(gx)
         y = gd.get_world_y(gy)
@@ -62,32 +62,32 @@ module GeoUtils
         exsp = exsp.not_nil!
         # north arrow
         col = get_direction_color(gx, gy, z, NSWE::NORTH)
-        exsp.add_line(col, x &- 1, y &- 7, z, x &+ 1, y &- 7, z)
-        exsp.add_line(col, x &- 2, y &- 6, z, x &+ 2, y &- 6, z)
-        exsp.add_line(col, x &- 3, y &- 5, z, x &+ 3, y &- 5, z)
-        exsp.add_line(col, x &- 4, y &- 4, z, x &+ 4, y &- 4, z)
+        exsp.add_line(col, x - 1, y - 7, z, x + 1, y - 7, z)
+        exsp.add_line(col, x - 2, y - 6, z, x + 2, y - 6, z)
+        exsp.add_line(col, x - 3, y - 5, z, x + 3, y - 5, z)
+        exsp.add_line(col, x - 4, y - 4, z, x + 4, y - 4, z)
 
         # east arrow
         col = get_direction_color(gx, gy, z, NSWE::EAST)
-        exsp.add_line(col, x &+ 7, y &- 1, z, x &+ 7, y &+ 1, z)
-        exsp.add_line(col, x &+ 6, y &- 2, z, x &+ 6, y &+ 2, z)
-        exsp.add_line(col, x &+ 5, y &- 3, z, x &+ 5, y &+ 3, z)
-        exsp.add_line(col, x &+ 4, y &- 4, z, x &+ 4, y &+ 4, z)
+        exsp.add_line(col, x + 7, y - 1, z, x + 7, y + 1, z)
+        exsp.add_line(col, x + 6, y - 2, z, x + 6, y + 2, z)
+        exsp.add_line(col, x + 5, y - 3, z, x + 5, y + 3, z)
+        exsp.add_line(col, x + 4, y - 4, z, x + 4, y + 4, z)
 
         # south arrow
         col = get_direction_color(gx, gy, z, NSWE::SOUTH)
-        exsp.add_line(col, x &- 1, y &+ 7, z, x &+ 1, y &+ 7, z)
-        exsp.add_line(col, x &- 2, y &+ 6, z, x &+ 2, y &+ 6, z)
-        exsp.add_line(col, x &- 3, y &+ 5, z, x &+ 3, y &+ 5, z)
-        exsp.add_line(col, x &- 4, y &+ 4, z, x &+ 4, y &+ 4, z)
+        exsp.add_line(col, x - 1, y + 7, z, x + 1, y + 7, z)
+        exsp.add_line(col, x - 2, y + 6, z, x + 2, y + 6, z)
+        exsp.add_line(col, x - 3, y + 5, z, x + 3, y + 5, z)
+        exsp.add_line(col, x - 4, y + 4, z, x + 4, y + 4, z)
 
         col = get_direction_color(gx, gy, z, NSWE::WEST)
-        exsp.add_line(col, x &- 7, y &- 1, z, x &- 7, y &+ 1, z)
-        exsp.add_line(col, x &- 6, y &- 2, z, x &- 6, y &+ 2, z)
-        exsp.add_line(col, x &- 5, y &- 3, z, x &- 5, y &+ 3, z)
-        exsp.add_line(col, x &- 4, y &- 4, z, x &- 4, y &+ 4, z)
+        exsp.add_line(col, x - 7, y - 1, z, x - 7, y + 1, z)
+        exsp.add_line(col, x - 6, y - 2, z, x - 6, y + 2, z)
+        exsp.add_line(col, x - 5, y - 3, z, x - 5, y + 3, z)
+        exsp.add_line(col, x - 4, y - 4, z, x - 4, y + 4, z)
 
-        i_block &+= 1
+        i_block += 1
       end
     end
 

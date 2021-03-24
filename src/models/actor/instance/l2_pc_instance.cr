@@ -53,7 +53,7 @@ require "../../entity/l2_event"
 require "../../../community_bbs/forum"
 
 class L2PcInstance < L2Playable
-  extend Loggable
+  include Loggable
 
   ID_NONE = -1
   REQUEST_TIMEOUT = 15
@@ -2103,7 +2103,6 @@ class L2PcInstance < L2Playable
   end
 
   def increase_death_penalty_buff_level
-    debug { "Increasing death penalty (current: #{death_penalty_buff_level})." }
     return if death_penalty_buff_level >= 15
 
     if death_penalty_buff_level != 0
@@ -5565,13 +5564,11 @@ class L2PcInstance < L2Playable
 
     if ((smn = summon) && smn.control_l2id == id) || mount_l2id == id
       debug { "Tried to #{action} pet control item." }
-
       return
     end
 
     if active_enchant_item_id == id
       debug { "Tried to #{action} an enchant scroll in use." }
-
       return
     end
 

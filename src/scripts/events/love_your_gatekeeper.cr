@@ -26,7 +26,7 @@ class Scripts::LoveYourGatekeeper < LongTimeEvent
       if pc.adena >= PRICE
         reuse = pc.variables.get_i64(REUSE, 0)
         if reuse > Time.ms
-          remaining_time = (reuse - Time.ms) // 1000
+          remaining_time = (reuse &- Time.ms) // 1000
           hours = (remaining_time // 3600).to_i32
           minutes = ((remaining_time % 3600) // 60).to_i32
           sm = SystemMessage.available_after_s1_s2_hours_s3_minutes
@@ -37,7 +37,7 @@ class Scripts::LoveYourGatekeeper < LongTimeEvent
         else
           take_items(pc, Inventory::ADENA_ID, PRICE)
           give_items(pc, GATEKEEPER_TRANSFORMATION_STICK, 1)
-          pc.variables[REUSE] = Time.ms + (HOURS * 3_600_000)
+          pc.variables[REUSE] = Time.ms &+ (HOURS &* 3_600_000)
         end
       else
         return "32477-3.htm"
@@ -51,7 +51,6 @@ class Scripts::LoveYourGatekeeper < LongTimeEvent
 
       return
     end
-
 
     event
   end

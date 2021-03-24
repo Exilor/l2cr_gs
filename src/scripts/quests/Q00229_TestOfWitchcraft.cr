@@ -76,8 +76,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -127,9 +126,9 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
       end
     when "30630-22.htm"
       if has_quest_items?(pc, ZERUEL_BIND_CRYSTAL)
-        give_adena(pc, 372154, true)
+        give_adena(pc, 372_154, true)
         give_items(pc, MARK_OF_WITCHCRAFT, 1)
-        add_exp_and_sp(pc, 2058244, 141240)
+        add_exp_and_sp(pc, 2_058_244, 141_240)
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         html = event
@@ -186,7 +185,6 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
       html = event
     end
 
-
     html
   end
 
@@ -216,7 +214,6 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
           end
         end
       end
-
     end
 
     super
@@ -311,7 +308,6 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
           end
         end
       end
-
     end
 
     super
@@ -383,7 +379,7 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
           if !has_at_least_one_quest_item?(pc, IKERS_LIST, AKLANTOTH_1ST_GEM)
             html = "30110-01.htm"
           elsif has_quest_items?(pc, IKERS_LIST)
-            if (get_quest_items_count(pc, DIRE_WYRM_FANG) >= 20) && (get_quest_items_count(pc, LETO_LIZARDMAN_CHARM) >= 20) && (get_quest_items_count(pc, ENCHANTED_STONE_GOLEM_HEARTSTONE) >= 20)
+            if (get_quest_items_count(pc, DIRE_WYRM_FANG) >= 20) && get_quest_items_count(pc, LETO_LIZARDMAN_CHARM) >= 20 && get_quest_items_count(pc, ENCHANTED_STONE_GOLEM_HEARTSTONE) >= 20
               take_items(pc, IKERS_LIST, 1)
               take_items(pc, DIRE_WYRM_FANG, -1)
               take_items(pc, LETO_LIZARDMAN_CHARM, -1)
@@ -500,7 +496,6 @@ class Scripts::Q00229_TestOfWitchcraft < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == SHADOW_ORIM
         html = get_already_completed_msg(pc)

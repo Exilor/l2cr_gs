@@ -116,7 +116,6 @@ class Scripts::DisciplesNecropolisPast < AbstractInstance
       when 40
         open_door(DOOR_5, world.instance_id)
       end
-
     end
   end
 

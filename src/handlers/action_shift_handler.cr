@@ -1,7 +1,6 @@
 require "../enums/instance_type"
 
 module ActionShiftHandler
-  include Loggable
   include Packets::Outgoing
 
   private HANDLERS = EnumMap(InstanceType, self).new
@@ -25,12 +24,11 @@ module ActionShiftHandler
       break if handler = HANDLERS[type]?
       type = type.parent
     end
-
     handler
   end
 
-  # abstract def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
-  # abstract def instance_type : InstanceType
+  abstract def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
+  abstract def instance_type : InstanceType
 end
 
 require "./action_shift_handlers/*"

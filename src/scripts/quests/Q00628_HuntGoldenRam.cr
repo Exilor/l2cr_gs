@@ -33,12 +33,7 @@ class Scripts::Q00628_HuntGoldenRam < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    qs = get_quest_state(pc, false)
-    html = nil
-    if qs.nil?
-      return html
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "accept"
@@ -71,7 +66,6 @@ class Scripts::Q00628_HuntGoldenRam < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -134,9 +128,7 @@ class Scripts::Q00628_HuntGoldenRam < Quest
           end
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

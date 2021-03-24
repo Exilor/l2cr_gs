@@ -150,7 +150,7 @@ class Scripts::Q00662_AGameOfCards < Quest
           i5 &-= 14
         end
 
-        st.set("v1", (i4 * 1000000) + (i3 * 10000) + (i2 * 100) + i1)
+        st.set("v1", (i4 &* 1000000) &+ (i3 &* 10000) &+ (i2 &* 100) &+ i1)
         st.set("ExMemoState", i5)
         st.take_items(RED_GEM, REQUIRED_CHIP_COUNT)
         html = event
@@ -170,35 +170,35 @@ class Scripts::Q00662_AGameOfCards < Quest
           i9 &+= 1
         end
         if i9 % 32 < 31
-          st.set("ExMemoState", (i9 * 100) + i5)
+          st.set("ExMemoState", (i9 &* 100) &+ i5)
         end
       when "turncard2"
         if i9 % 4 < 2
           i9 &+= 2
         end
         if i9 % 32 < 31
-          st.set("ExMemoState", (i9 * 100) + i5)
+          st.set("ExMemoState", (i9 &* 100) &+ i5)
         end
       when "turncard3"
         if i9 % 8 < 4
           i9 &+= 4
         end
         if i9 % 32 < 31
-          st.set("ExMemoState", (i9 * 100) + i5)
+          st.set("ExMemoState", (i9 &* 100) &+ i5)
         end
       when "turncard4"
         if i9 % 16 < 8
           i9 &+= 8
         end
         if i9 % 32 < 31
-          st.set("ExMemoState", (i9 * 100) + i5)
+          st.set("ExMemoState", (i9 &* 100) &+ i5)
         end
       when "turncard5"
         if i9 % 32 < 16
           i9 &+= 16
         end
         if i9 % 32 < 31
-          st.set("ExMemoState", (i9 * 100) + i5)
+          st.set("ExMemoState", (i9 &* 100) &+ i5)
         end
       end
 
@@ -406,7 +406,6 @@ class Scripts::Q00662_AGameOfCards < Quest
       end
     end
 
-
     html
   end
 
@@ -475,7 +474,6 @@ class Scripts::Q00662_AGameOfCards < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

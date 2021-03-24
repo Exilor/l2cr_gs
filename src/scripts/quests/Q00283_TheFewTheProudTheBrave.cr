@@ -20,8 +20,7 @@ class Scripts::Q00283_TheFewTheProudTheBrave < Quest
   end
 
   def on_adv_event(event, npc, oc)
-    return unless oc
-    return unless st = get_quest_state(oc, false)
+    return unless oc && (st = get_quest_state(oc, false))
 
     case event
     when "32133-03.htm"
@@ -32,7 +31,7 @@ class Scripts::Q00283_TheFewTheProudTheBrave < Quest
     when "32133-08.html"
       if st.has_quest_items?(CRIMSON_SPIDER_CLAW)
         claws = st.get_quest_items_count(CRIMSON_SPIDER_CLAW)
-        st.give_adena((claws * CLAW_PRICE) + (claws >= 10 ? BONUS : 0), true)
+        st.give_adena((claws &* CLAW_PRICE) &+ (claws >= 10 ? BONUS : 0), true)
         st.take_items(CRIMSON_SPIDER_CLAW, -1)
         Q00261_CollectorsDream.give_newbie_reward(oc)
         html = event
@@ -43,7 +42,6 @@ class Scripts::Q00283_TheFewTheProudTheBrave < Quest
       st.exit_quest(true, true)
       html = event
     end
-
 
     html
   end
@@ -70,7 +68,6 @@ class Scripts::Q00283_TheFewTheProudTheBrave < Quest
         html = "32133-05.html"
       end
     end
-
 
     html
   end

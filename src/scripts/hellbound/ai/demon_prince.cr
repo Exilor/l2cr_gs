@@ -57,7 +57,7 @@ class Scripts::DemonPrince < AbstractNpcAI
 
   def on_spawn(npc)
     if npc.id == FIEND
-      start_quest_timer("cast", 15000, npc, nil)
+      start_quest_timer("cast", 15_000, npc, nil)
     end
 
     super

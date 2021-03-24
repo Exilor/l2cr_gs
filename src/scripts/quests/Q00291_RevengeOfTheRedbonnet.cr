@@ -24,9 +24,8 @@ class Scripts::Q00291_RevengeOfTheRedbonnet < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    qs = get_quest_state(pc, false)
-    if qs && event == "30553-03.htm"
+    return unless pc && (qs = get_quest_state(pc, false))
+    if event == "30553-03.htm"
       qs.start_quest
       event
     end

@@ -30,10 +30,7 @@ class Scripts::Q00603_DaimonTheWhiteEyedPart1 < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31683-03.htm"
@@ -73,7 +70,6 @@ class Scripts::Q00603_DaimonTheWhiteEyedPart1 < Quest
       end
     end
 
-
     html
   end
 
@@ -97,7 +93,6 @@ class Scripts::Q00603_DaimonTheWhiteEyedPart1 < Quest
         when 8
           html = "31683-08.html"
         end
-
       elsif qs.get_int("TABLET_#{npc.id}") == 0
         html = "#{npc.id}-01.html"
       else
@@ -106,7 +101,6 @@ class Scripts::Q00603_DaimonTheWhiteEyedPart1 < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

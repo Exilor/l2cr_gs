@@ -3,7 +3,7 @@ require "./models/holders/item_holder"
 
 module Config
   extend self
-  extend Loggable
+  include Loggable
 
   {% if flag?(:win32) %}
     EOL = "\r\n"
@@ -1026,35 +1026,35 @@ module Config
   # GrandBoss Settings
 
   # Antharas
-  class_property antharas_wait_time : Int32 = 0
-  class_property antharas_spawn_interval : Int32 = 0
-  class_property antharas_spawn_random : Int32 = 0
+  class_property antharas_wait_time : Int64 = 0i64
+  class_property antharas_spawn_interval : Int64 = 0i64
+  class_property antharas_spawn_random : Int64 = 0i64
 
   # Valakas
-  class_property valakas_wait_time : Int32 = 0
-  class_property valakas_spawn_interval : Int32 = 0
-  class_property valakas_spawn_random : Int32 = 0
+  class_property valakas_wait_time : Int64 = 0i64
+  class_property valakas_spawn_interval : Int64 = 0i64
+  class_property valakas_spawn_random : Int64 = 0i64
 
   # Baium
-  class_property baium_spawn_interval : Int32 = 0
-  class_property baium_spawn_random : Int32 = 0
+  class_property baium_spawn_interval : Int64 = 0i64
+  class_property baium_spawn_random : Int64 = 0i64
 
   # Core
-  class_property core_spawn_interval : Int32 = 0
-  class_property core_spawn_random : Int32 = 0
+  class_property core_spawn_interval : Int64 = 0i64
+  class_property core_spawn_random : Int64 = 0i64
 
   # Offen
-  class_property orfen_spawn_interval : Int32 = 0
-  class_property orfen_spawn_random : Int32 = 0
+  class_property orfen_spawn_interval : Int64 = 0i64
+  class_property orfen_spawn_random : Int64 = 0i64
 
   # Queen Ant
-  class_property queen_ant_spawn_interval : Int32 = 0
-  class_property queen_ant_spawn_random : Int32 = 0
+  class_property queen_ant_spawn_interval : Int64 = 0i64
+  class_property queen_ant_spawn_random : Int64 = 0i64
 
   # Beleth
   class_property beleth_min_players : Int32 = 0
-  class_property beleth_spawn_interval : Int32 = 0
-  class_property beleth_spawn_random : Int32 = 0
+  class_property beleth_spawn_interval : Int64 = 0i64
+  class_property beleth_spawn_random : Int64 = 0i64
 
   # Gracia Seeds Settings
   class_property sod_tiat_kill_count : Int32 = 0
@@ -1199,7 +1199,7 @@ module Config
     @@ch_tele_fee_ratio = cfg.get_i64("ClanHallTeleportFunctionFeeRatio", 604800000)
     @@ch_tele1_fee = cfg.get_i32("ClanHallTeleportFunctionFeeLvl1", 7000)
     @@ch_tele2_fee = cfg.get_i32("ClanHallTeleportFunctionFeeLvl2", 14000)
-    @@ch_support_fee_ratio = cfg.get_i64("ClanHallSupportFunctionFeeRatio", 86400000)
+    @@ch_support_fee_ratio = cfg.get_i64("ClanHallSupportFunctionFeeRatio", 86_400_000)
     @@ch_support1_fee = cfg.get_i32("ClanHallSupportFeeLvl1", 2500)
     @@ch_support2_fee = cfg.get_i32("ClanHallSupportFeeLvl2", 5000)
     @@ch_support3_fee = cfg.get_i32("ClanHallSupportFeeLvl3", 7000)
@@ -1208,13 +1208,13 @@ module Config
     @@ch_support6_fee = cfg.get_i32("ClanHallSupportFeeLvl6", 36000)
     @@ch_support7_fee = cfg.get_i32("ClanHallSupportFeeLvl7", 37000)
     @@ch_support8_fee = cfg.get_i32("ClanHallSupportFeeLvl8", 52000)
-    @@ch_mpreg_fee_ratio = cfg.get_i64("ClanHallMpRegenerationFunctionFeeRatio", 86400000)
+    @@ch_mpreg_fee_ratio = cfg.get_i64("ClanHallMpRegenerationFunctionFeeRatio", 86_400_000)
     @@ch_mpreg1_fee = cfg.get_i32("ClanHallMpRegenerationFeeLvl1", 2000)
     @@ch_mpreg2_fee = cfg.get_i32("ClanHallMpRegenerationFeeLvl2", 3750)
     @@ch_mpreg3_fee = cfg.get_i32("ClanHallMpRegenerationFeeLvl3", 6500)
     @@ch_mpreg4_fee = cfg.get_i32("ClanHallMpRegenerationFeeLvl4", 13750)
     @@ch_mpreg5_fee = cfg.get_i32("ClanHallMpRegenerationFeeLvl5", 20000)
-    @@ch_hpreg_fee_ratio = cfg.get_i64("ClanHallHpRegenerationFunctionFeeRatio", 86400000)
+    @@ch_hpreg_fee_ratio = cfg.get_i64("ClanHallHpRegenerationFunctionFeeRatio", 86_400_000)
     @@ch_hpreg1_fee = cfg.get_i32("ClanHallHpRegenerationFeeLvl1", 700)
     @@ch_hpreg2_fee = cfg.get_i32("ClanHallHpRegenerationFeeLvl2", 800)
     @@ch_hpreg3_fee = cfg.get_i32("ClanHallHpRegenerationFeeLvl3", 1000)
@@ -1228,7 +1228,7 @@ module Config
     @@ch_hpreg11_fee = cfg.get_i32("ClanHallHpRegenerationFeeLvl11", 3270)
     @@ch_hpreg12_fee = cfg.get_i32("ClanHallHpRegenerationFeeLvl12", 4250)
     @@ch_hpreg13_fee = cfg.get_i32("ClanHallHpRegenerationFeeLvl13", 5166)
-    @@ch_expreg_fee_ratio = cfg.get_i64("ClanHallExpRegenerationFunctionFeeRatio", 86400000)
+    @@ch_expreg_fee_ratio = cfg.get_i64("ClanHallExpRegenerationFunctionFeeRatio", 86_400_000)
     @@ch_expreg1_fee = cfg.get_i32("ClanHallExpRegenerationFeeLvl1", 3000)
     @@ch_expreg2_fee = cfg.get_i32("ClanHallExpRegenerationFeeLvl2", 6000)
     @@ch_expreg3_fee = cfg.get_i32("ClanHallExpRegenerationFeeLvl3", 9000)
@@ -1236,7 +1236,7 @@ module Config
     @@ch_expreg5_fee = cfg.get_i32("ClanHallExpRegenerationFeeLvl5", 21000)
     @@ch_expreg6_fee = cfg.get_i32("ClanHallExpRegenerationFeeLvl6", 23330)
     @@ch_expreg7_fee = cfg.get_i32("ClanHallExpRegenerationFeeLvl7", 30000)
-    @@ch_item_fee_ratio = cfg.get_i64("ClanHallItemCreationFunctionFeeRatio", 86400000)
+    @@ch_item_fee_ratio = cfg.get_i64("ClanHallItemCreationFunctionFeeRatio", 86_400_000)
     @@ch_item1_fee = cfg.get_i32("ClanHallItemCreationFunctionFeeLvl1", 30000)
     @@ch_item2_fee = cfg.get_i32("ClanHallItemCreationFunctionFeeLvl2", 70000)
     @@ch_item3_fee = cfg.get_i32("ClanHallItemCreationFunctionFeeLvl3", 140000)
@@ -1282,16 +1282,16 @@ module Config
     @@fs_tele_fee_ratio = cfg.get_i64("FortressTeleportFunctionFeeRatio", 604800000)
     @@fs_tele1_fee = cfg.get_i32("FortressTeleportFunctionFeeLvl1", 1000)
     @@fs_tele2_fee = cfg.get_i32("FortressTeleportFunctionFeeLvl2", 10000)
-    @@fs_support_fee_ratio = cfg.get_i64("FortressSupportFunctionFeeRatio", 86400000)
+    @@fs_support_fee_ratio = cfg.get_i64("FortressSupportFunctionFeeRatio", 86_400_000)
     @@fs_support1_fee = cfg.get_i32("FortressSupportFeeLvl1", 7000)
     @@fs_support2_fee = cfg.get_i32("FortressSupportFeeLvl2", 17000)
-    @@fs_mpreg_fee_ratio = cfg.get_i64("FortressMpRegenerationFunctionFeeRatio", 86400000)
+    @@fs_mpreg_fee_ratio = cfg.get_i64("FortressMpRegenerationFunctionFeeRatio", 86_400_000)
     @@fs_mpreg1_fee = cfg.get_i32("FortressMpRegenerationFeeLvl1", 6500)
     @@fs_mpreg2_fee = cfg.get_i32("FortressMpRegenerationFeeLvl2", 9300)
-    @@fs_hpreg_fee_ratio = cfg.get_i64("FortressHpRegenerationFunctionFeeRatio", 86400000)
+    @@fs_hpreg_fee_ratio = cfg.get_i64("FortressHpRegenerationFunctionFeeRatio", 86_400_000)
     @@fs_hpreg1_fee = cfg.get_i32("FortressHpRegenerationFeeLvl1", 2000)
     @@fs_hpreg2_fee = cfg.get_i32("FortressHpRegenerationFeeLvl2", 3500)
-    @@fs_expreg_fee_ratio = cfg.get_i64("FortressExpRegenerationFunctionFeeRatio", 86400000)
+    @@fs_expreg_fee_ratio = cfg.get_i64("FortressExpRegenerationFunctionFeeRatio", 86_400_000)
     @@fs_expreg1_fee = cfg.get_i32("FortressExpRegenerationFeeLvl1", 9000)
     @@fs_expreg2_fee = cfg.get_i32("FortressExpRegenerationFeeLvl2", 10000)
     @@fs_update_frq = cfg.get_i32("FortressPeriodicUpdateFrequency", 360)
@@ -2179,7 +2179,7 @@ module Config
     @@alt_oly_cperiod = cfg.get_i64("AltOlyCPeriod", 21600000)
     @@alt_oly_battle = cfg.get_i64("AltOlyBattle", 300000)
     @@alt_oly_wperiod = cfg.get_i64("AltOlyWPeriod", 604800000)
-    @@alt_oly_vperiod = cfg.get_i64("AltOlyVPeriod", 86400000)
+    @@alt_oly_vperiod = cfg.get_i64("AltOlyVPeriod", 86_400_000)
     @@alt_oly_start_points = cfg.get_i32("AltOlyStartPoints", 10)
     @@alt_oly_weekly_points = cfg.get_i32("AltOlyWeeklyPoints", 10)
     @@alt_oly_classed = cfg.get_i32("AltOlyClassedParticipants", 11)
@@ -2228,34 +2228,34 @@ module Config
 
     # Grand bosses
     cfg.parse(Dir.current + GRANDBOSS_CONFIG_FILE)
-    @@antharas_wait_time = cfg.get_i32("AntharasWaitTime", 30)
-    @@antharas_spawn_interval = cfg.get_i32("IntervalOfAntharasSpawn", 264)
-    @@antharas_spawn_random = cfg.get_i32("RandomOfAntharasSpawn", 72)
+    @@antharas_wait_time = cfg.get_i64("AntharasWaitTime", 30)
+    @@antharas_spawn_interval = cfg.get_i64("IntervalOfAntharasSpawn", 264)
+    @@antharas_spawn_random = cfg.get_i64("RandomOfAntharasSpawn", 72)
 
-    @@valakas_wait_time = cfg.get_i32("ValakasWaitTime", 30)
-    @@valakas_spawn_interval = cfg.get_i32("IntervalOfValakasSpawn", 264)
-    @@valakas_spawn_random = cfg.get_i32("RandomOfValakasSpawn", 72)
+    @@valakas_wait_time = cfg.get_i64("ValakasWaitTime", 30)
+    @@valakas_spawn_interval = cfg.get_i64("IntervalOfValakasSpawn", 264)
+    @@valakas_spawn_random = cfg.get_i64("RandomOfValakasSpawn", 72)
 
-    @@baium_spawn_interval = cfg.get_i32("IntervalOfBaiumSpawn", 168)
-    @@baium_spawn_random = cfg.get_i32("RandomOfBaiumSpawn", 48)
+    @@baium_spawn_interval = cfg.get_i64("IntervalOfBaiumSpawn", 168)
+    @@baium_spawn_random = cfg.get_i64("RandomOfBaiumSpawn", 48)
 
-    @@core_spawn_interval = cfg.get_i32("IntervalOfCoreSpawn", 60)
-    @@core_spawn_random = cfg.get_i32("RandomOfCoreSpawn", 24)
+    @@core_spawn_interval = cfg.get_i64("IntervalOfCoreSpawn", 60)
+    @@core_spawn_random = cfg.get_i64("RandomOfCoreSpawn", 24)
 
-    @@orfen_spawn_interval = cfg.get_i32("IntervalOfOrfenSpawn", 48)
-    @@orfen_spawn_random = cfg.get_i32("RandomOfOrfenSpawn", 20)
+    @@orfen_spawn_interval = cfg.get_i64("IntervalOfOrfenSpawn", 48)
+    @@orfen_spawn_random = cfg.get_i64("RandomOfOrfenSpawn", 20)
 
-    @@queen_ant_spawn_interval = cfg.get_i32("IntervalOfQueenAntSpawn", 36)
-    @@queen_ant_spawn_random = cfg.get_i32("RandomOfQueenAntSpawn", 17)
+    @@queen_ant_spawn_interval = cfg.get_i64("IntervalOfQueenAntSpawn", 36)
+    @@queen_ant_spawn_random = cfg.get_i64("RandomOfQueenAntSpawn", 17)
 
-    @@beleth_spawn_interval = cfg.get_i32("IntervalOfBelethSpawn", 192)
-    @@beleth_spawn_random = cfg.get_i32("RandomOfBelethSpawn", 148)
+    @@beleth_spawn_interval = cfg.get_i64("IntervalOfBelethSpawn", 192)
+    @@beleth_spawn_random = cfg.get_i64("RandomOfBelethSpawn", 148)
     @@beleth_min_players = cfg.get_i32("BelethMinPlayers", 36)
 
     # Gracia seeds
     cfg.parse(Dir.current + GRACIASEEDS_CONFIG_FILE)
     @@sod_tiat_kill_count = cfg.get_i32("TiatKillCountForNextState", 10)
-    @@sod_stage_2_length = cfg.get_i64("Stage2Length", 720) * 60000
+    @@sod_stage_2_length = cfg.get_i64("Stage2Length", 720) * 60_000
 
     filter_list = [] of String
     filter_path = Dir.current + "/config/chatfilter.txt"

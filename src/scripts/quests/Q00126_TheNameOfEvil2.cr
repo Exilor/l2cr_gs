@@ -223,7 +223,6 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
       st.exit_quest(false, true)
     end
 
-
     event
   end
 
@@ -258,11 +257,9 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
         when 22
           html = "32115-5a.html"
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when ULU_KAIMU
       if st.started?
         case st.cond
@@ -278,7 +275,6 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
         when 5
           html = "32119-5a.html"
         end
-
       end
     when BALU_KAIMU
       if st.started?
@@ -381,7 +377,6 @@ class Scripts::Q00126_TheNameOfEvil2 < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -28,7 +28,7 @@ class Packets::Outgoing::ExShowDominionRegistry < GameServerPacket
     c 0xfe
     h 0x90
 
-    d MINID + @castle_id
+    d MINID &+ @castle_id
     territory = TerritoryWarManager.get_territory(@castle_id)
 
     if territory.nil?
@@ -58,9 +58,7 @@ class Packets::Outgoing::ExShowDominionRegistry < GameServerPacket
       territory_list.each do |t|
         d t.territory_id
         d t.owned_ward_ids.size
-        t.owned_ward_ids.each do |i|
-          d i
-        end
+        t.owned_ward_ids.each { |i| d i }
       end
     end
   end

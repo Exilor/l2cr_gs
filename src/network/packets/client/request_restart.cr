@@ -57,6 +57,8 @@ class Packets::Incoming::RequestRestart < GameClientPacket
       return
     end
 
+    Logs[:accounting].info { "Client #{client} restarted." }
+
     pc.remove_from_boss_zone
 
     pc.client = nil

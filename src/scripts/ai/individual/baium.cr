@@ -232,13 +232,13 @@ class Scripts::Baium < AbstractNpcAI
         start_quest_timer("SELECT_TARGET", 5000, npc, nil)
       end
     when "CHECK_ATTACK"
-      if npc && @last_attack + 1_800_000 < Time.ms
+      if npc && @last_attack &+ 1_800_000 < Time.ms
         cancel_quest_timers("SELECT_TARGET")
         notify_event("CLEAR_ZONE", nil, nil)
         add_spawn(BAIUM_STONE, BAIUM_LOC, false, 0)
         set_status(ALIVE)
       elsif npc
-        if @last_attack + 300_000 < Time.ms && npc.hp_percent < 75
+        if @last_attack &+ 300_000 < Time.ms && npc.hp_percent < 75
           npc.target = npc
           npc.do_cast(HEAL_OF_BAIUM)
         end
@@ -308,15 +308,15 @@ class Scripts::Baium < AbstractNpcAI
       end
 
       if skill.nil?
-        refresh_ai_params(attacker, npc, damage.to_i64 * 1000)
+        refresh_ai_params(attacker, npc, damage.to_i64 &* 1000)
       elsif npc.hp_percent < 25
-        refresh_ai_params(attacker, npc, (damage // 3) * 100)
+        refresh_ai_params(attacker, npc, (damage // 3) &* 100)
       elsif npc.hp_percent < 50
-        refresh_ai_params(attacker, npc, damage * 20)
+        refresh_ai_params(attacker, npc, damage &* 20)
       elsif npc.hp_percent < 75
-        refresh_ai_params(attacker, npc, (damage * 10))
+        refresh_ai_params(attacker, npc, (damage &* 10))
       else
-        refresh_ai_params(attacker, npc, (damage // 3) * 20)
+        refresh_ai_params(attacker, npc, (damage // 3) &* 20)
       end
       manage_skills(npc)
     else
@@ -349,7 +349,7 @@ class Scripts::Baium < AbstractNpcAI
       set_status(DEAD)
       add_spawn(TELE_CUBE, TELEPORT_CUBIC_LOC, false, 900_000)
       @zone.broadcast_packet(Music::BS01_D_10000.packet)
-      respawn_time = (Config.baium_spawn_interval.to_i64 + Rnd.rand(-Config.baium_spawn_random..Config.baium_spawn_random)) * 3600000
+      respawn_time = (Config.baium_spawn_interval &+ Rnd.rand(-Config.baium_spawn_random..Config.baium_spawn_random)) &* 3_600_000
       set_respawn(respawn_time)
       start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)
       start_quest_timer("CLEAR_ZONE", 900_000, nil, nil)
@@ -367,16 +367,16 @@ class Scripts::Baium < AbstractNpcAI
 
     if creature.in_category?(CategoryType::CLERIC_GROUP)
       if npc.hp_percent < 25
-        refresh_ai_params(creature, npc, 10000)
+        refresh_ai_params(creature, npc, 10_000)
       elsif npc.hp_percent < 50
-        refresh_ai_params(creature, npc, 10000, 6000)
+        refresh_ai_params(creature, npc, 10_000, 6000)
       elsif npc.hp_percent < 75
-        refresh_ai_params(creature, npc, 10000, 3000)
+        refresh_ai_params(creature, npc, 10_000, 3000)
       else
-        refresh_ai_params(creature, npc, 10000, 2000)
+        refresh_ai_params(creature, npc, 10_000, 2000)
       end
     else
-      refresh_ai_params(creature, npc, 10000, 1000)
+      refresh_ai_params(creature, npc, 10_000, 1000)
     end
 
     manage_skills(npc)

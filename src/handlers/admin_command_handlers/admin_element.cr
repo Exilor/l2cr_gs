@@ -41,7 +41,6 @@ module AdminCommandHandler::AdminElement
   end
 
   private def set_element(pc, type, value, armor_type)
-    debug "#set_element pc: #{pc}, type: #{type}, value: #{value}, armor_type: #{armor_type}"
     player = pc.target || pc
 
     unless player.is_a?(L2PcInstance)
@@ -90,7 +89,7 @@ module AdminCommandHandler::AdminElement
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_setlh",
       "admin_setlc",

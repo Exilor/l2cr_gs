@@ -33,10 +33,7 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30063-02.html"
@@ -89,7 +86,6 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
       end
     end
 
-
     html
   end
 
@@ -118,7 +114,6 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
       when 4
         html = "30063-03.html"
       end
-
     when BRIGHT
       case qs.cond
       when 5
@@ -126,7 +121,6 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
       when 6
         html = "30466-03.html"
       end
-
     when EMILLY
       case qs.state
       when State::CREATED
@@ -152,11 +146,8 @@ class Scripts::Q00299_GatherIngredientsForPie < Quest
             html = "30620-13.html"
           end
         end
-
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

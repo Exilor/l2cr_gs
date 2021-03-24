@@ -1,7 +1,7 @@
 module CharNameTable
   extend self
   extend Synchronizable
-  extend Loggable
+  include Loggable
 
   private CHARS = Concurrent::Map(Int32, String).new
   private ACCESS_LEVELS = Concurrent::Map(Int32, Int32).new

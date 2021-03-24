@@ -141,7 +141,7 @@ module AdminCommandHandler::AdminPunishment
 
       expiration_time = exp.to_i64
       if expiration_time > 0
-        expiration_time = Time.ms + (expiration_time * 60 * 1000)
+        expiration_time = Time.ms + (expiration_time &* 60 &* 1000)
       end
 
       affect = PunishmentAffect.parse?(af)
@@ -229,7 +229,6 @@ module AdminCommandHandler::AdminPunishment
       end
     end
 
-
     true
   end
 
@@ -242,7 +241,7 @@ module AdminCommandHandler::AdminPunishment
     key
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_punishment",
       "admin_punishment_add",

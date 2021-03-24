@@ -140,12 +140,12 @@ module AdminCommandHandler::AdminBuffs
       target.effect_list.effects.each { |b| effects << b }
     end
 
-    if page > (effects.size // PAGE_LIMIT) + 1 || page < 1
+    if page > (effects.size // PAGE_LIMIT) &+ 1 || page < 1
       return
     end
 
     max = effects.size // PAGE_LIMIT
-    if effects.size > PAGE_LIMIT * max
+    if effects.size > PAGE_LIMIT &* max
       max &+= 1
     end
 
@@ -154,8 +154,8 @@ module AdminCommandHandler::AdminBuffs
     html << target.name
     html << "</font></td><td width=45><button value=\"Back\" action=\"bypass -h admin_current_player\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><table width=\"100%\"><tr><td width=200>Skill</td><td width=30>Rem. Time</td><td width=70>Action</td></tr>"
 
-    start = (page - 1) * PAGE_LIMIT
-    _end = Math.min(((page - 1) * PAGE_LIMIT) + PAGE_LIMIT, effects.size)
+    start = (page &- 1) &* PAGE_LIMIT
+    _end = Math.min(((page &- 1) &* PAGE_LIMIT) &+ PAGE_LIMIT, effects.size)
     count = 0
     effects.each do |info|
       if count >= start && count < _end
@@ -249,7 +249,7 @@ module AdminCommandHandler::AdminBuffs
       end
 
       if !slots.empty? && slots.size > 3
-        html << slots[0...slots.size - 2]
+        html << slots[0...slots.size &- 2]
       end
     end
     html << "</html>"
@@ -290,7 +290,7 @@ module AdminCommandHandler::AdminBuffs
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_getbuffs",
       "admin_getbuffs_ps",

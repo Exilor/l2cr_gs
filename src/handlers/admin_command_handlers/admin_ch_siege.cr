@@ -206,7 +206,7 @@ module AdminCommandHandler::AdminCHSiege
     pc.send_packet(msg)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_chsiege_siegablehall",
       "admin_chsiege_start_siege",

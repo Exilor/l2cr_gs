@@ -147,7 +147,7 @@ module AdminCommandHandler::AdminQuest
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_quest_reload",
       "admin_script_load",

@@ -37,10 +37,10 @@ class Scripts::Q00017_LightAndDarkness < Quest
     when "31508-02.html", "31509-02.html", "31510-02.html", "31511-02.html"
       cond = st.cond
       npc_id = event.to_i
-      if cond == npc_id - 31507 && st.has_quest_items?(BLOOD_OF_SAINT)
+      if cond == npc_id &- 31507 && st.has_quest_items?(BLOOD_OF_SAINT)
         html = "#{npc_id}-01.html"
         st.take_items(BLOOD_OF_SAINT, 1)
-        st.set_cond(cond + 1, true)
+        st.set_cond(cond &+ 1, true)
       end
     end
 
@@ -74,7 +74,7 @@ class Scripts::Q00017_LightAndDarkness < Quest
       when SAINT_ALTAR_1, SAINT_ALTAR_2, SAINT_ALTAR_3, SAINT_ALTAR_4
         if npc_id - 31507 == st.cond
           html = blood > 0 ? "#{npc_id}-00.html" : "#{npc_id}-02.html"
-        elsif st.cond > npc_id - 31507
+        elsif st.cond > npc_id &- 31507
           html = "#{npc_id}-03.html"
         end
       end

@@ -114,8 +114,7 @@ class Scripts::CastleDungeon < AbstractInstance
       num_fort = (castle.residence_id == 1 || castle.residence_id == 5) ? 2 : 1
       fort = FORTRESS[castle.residence_id]
       num_fort.times do |i|
-        fortress = FortManager.get_fort_by_id(fort[i]).not_nil!
-        if fortress.fort_state == 0
+        if FortManager.get_fort_by_id(fort[i]).not_nil!.fort_state == 0
           return "36403-05.html"
         end
       end

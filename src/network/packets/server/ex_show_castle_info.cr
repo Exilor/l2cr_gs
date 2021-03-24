@@ -15,7 +15,6 @@ class Packets::Outgoing::ExShowCastleInfo < GameServerPacket
         if clan = ClanTable.get_clan(castle.owner_id)
           s clan.name
         else
-          warn "Castle with owner_id > 0 (#{castle.owner_id}) but without clan."
           s ""
         end
       else

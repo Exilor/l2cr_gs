@@ -20,10 +20,7 @@ class Scripts::Q10285_MeetingSirra < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32020-02.htm"
@@ -106,7 +103,6 @@ class Scripts::Q10285_MeetingSirra < Quest
       end
     end
 
-
     html
   end
 
@@ -132,12 +128,11 @@ class Scripts::Q10285_MeetingSirra < Quest
         when 2
           html = "32020-07.html"
         when 3
-          st.give_adena(283425, true)
-          st.add_exp_and_sp(939075, 83855)
+          st.give_adena(283_425, true)
+          st.add_exp_and_sp(939_075, 83_855)
           st.exit_quest(false, true)
           html = "32020-08.html"
         end
-
       when JINIA
         if st.memo_state?(1)
           case st.get_memo_state_ex(1)
@@ -154,7 +149,6 @@ class Scripts::Q10285_MeetingSirra < Quest
           when 5
             html = "32760-15.html"
           end
-
         end
       when KEGOR
         if st.memo_state?(1)
@@ -166,7 +160,6 @@ class Scripts::Q10285_MeetingSirra < Quest
           when 3
             html = "32761-04.html"
           end
-
         end
       when SIRRA
         if st.memo_state?(1)
@@ -188,7 +181,6 @@ class Scripts::Q10285_MeetingSirra < Quest
           st.set_cond(8, true)
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

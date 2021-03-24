@@ -59,8 +59,7 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "START"
@@ -106,13 +105,13 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         give_items(pc, MASK_OF_MEDIUM, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 320534, 22992)
+          add_exp_and_sp(pc, 320_534, 22_992)
         elsif level >= 19
-          add_exp_and_sp(pc, 456128, 29690)
+          add_exp_and_sp(pc, 456_128, 29_690)
         else
-          add_exp_and_sp(pc, 591724, 36388)
+          add_exp_and_sp(pc, 591_724, 36_388)
         end
-        give_adena(pc, 163800, true)
+        give_adena(pc, 163_800, true)
         st.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         st.save_global_quest_var("1ClassQuestFinished", "1")
@@ -164,7 +163,6 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
       end
     end
 
-
     html
   end
 
@@ -194,7 +192,6 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         st.set_cond(19, true)
       end
 
-
       return super
     end
 
@@ -212,7 +209,7 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         !has_quest_items?(st.player, BOUND_DURKA_SPIRIT) &&
         get_quest_items_count(st.player, DURKA_PARASITE) <= 8
 
-        if npc.id == 20038 || npc.id == 20043
+        if npc.id.in?(20038, 20043)
           random = Rnd.rand(10)
           item_count = get_quest_items_count(st.player, DURKA_PARASITE)
           if (item_count == 5 && random < 1) ||
@@ -303,11 +300,11 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
           give_items(pc, MASK_OF_MEDIUM, 1)
           level = pc.level
           if level >= 20
-            add_exp_and_sp(pc, 160267, 11496)
+            add_exp_and_sp(pc, 160_267, 11_496)
           elsif level >= 19
-            add_exp_and_sp(pc, 228064, 14845)
+            add_exp_and_sp(pc, 228_064, 14_845)
           else
-            add_exp_and_sp(pc, 295862, 18194)
+            add_exp_and_sp(pc, 295_862, 18_194)
           end
           give_adena(pc, 81900, true)
           st.exit_quest(false, true)
@@ -334,7 +331,6 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
           st.set_cond(20, true)
           html = "32090-08.html"
         end
-
       when DUDA_MARA_TOTEM_SPIRIT
         if st.memo_state?(1)
           if has_quest_items?(pc, BLOOD_CAULDRON)
@@ -369,9 +365,7 @@ class Scripts::Q00416_PathOfTheOrcShaman < Quest
         when 109
           html = "32057-04.html"
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)

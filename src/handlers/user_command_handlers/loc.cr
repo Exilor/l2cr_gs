@@ -2,7 +2,7 @@ module UserCommandHandler::Loc
   extend self
   extend UserCommandHandler
 
-  def use_user_command(id, pc)
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
     if zone = ZoneManager.get_zone(pc, L2RespawnZone)
       region = MapRegionManager.get_restart_region(pc, zone.all_respawn_points[Race::HUMAN]).loc_id
     else
@@ -26,7 +26,7 @@ module UserCommandHandler::Loc
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {0}
   end
 end

@@ -41,9 +41,9 @@ class Petition
           sm = SystemMessage.recent_no_s1_canceled
           sm.add_int(id)
           responder.send_packet(sm)
+        end
       end
     end
-  end
 
     # End petition consultation and inform them, if they are still online. And if petitioner is online, enable Evaluation button
     petitioner = petitioner?

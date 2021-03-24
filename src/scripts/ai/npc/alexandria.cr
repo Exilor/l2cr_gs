@@ -11,7 +11,7 @@ class Scripts::Alexandria < AbstractNpcAI
 
   private ALEXANDRIA = 30098
   private REQUIRED_ITEMS = {
-    ItemHolder.new(57, 3550000),
+    ItemHolder.new(57, 3_550_000),
     ItemHolder.new(5094, 400),
     ItemHolder.new(6471, 200),
     ItemHolder.new(9814, 40),
@@ -57,7 +57,7 @@ class Scripts::Alexandria < AbstractNpcAI
       chance = Rnd.rand(1000)
       chance2 = chance3 = 0
       tmp.each do |agathion|
-        chance3 += agathion.chance
+        chance3 &+= agathion.chance
 
         if chance >= chance2 && chance2 < chance3
           if take_all_items(pc, REQUIRED_ITEMS)
@@ -75,7 +75,7 @@ class Scripts::Alexandria < AbstractNpcAI
           break
         end
 
-        chance2 += agathion.chance
+        chance2 &+= agathion.chance
       end
     end
 

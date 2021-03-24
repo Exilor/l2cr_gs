@@ -1,6 +1,8 @@
 module GameDB
   module PlayerSkillSaveDAO
-    include Loggable
+    macro extended
+      include Loggable
+    end
 
     abstract def delete(pc : L2PcInstance, class_id : Int32)
     abstract def delete(pc : L2PcInstance)

@@ -21,7 +21,7 @@ class Packets::Outgoing::PrivateStoreListSell < Packets::Outgoing::AbstractItemP
     @items.each do |item|
       write_item(item)
       q item.price
-      q item.item.reference_price * 2
+      q item.item.reference_price &* 2
     end
   end
 end

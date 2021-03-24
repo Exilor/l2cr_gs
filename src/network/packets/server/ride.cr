@@ -8,7 +8,7 @@ class Packets::Outgoing::Ride < GameServerPacket
     @l2id = pc.l2id
     @mounted = pc.mounted? ? 1 : 0
     @ride_type = pc.mount_type.to_i
-    @ride_npc_id = pc.mount_npc_id + 1_000_000
+    @ride_npc_id = pc.mount_npc_id &+ 1_000_000
     @loc = pc.location
   end
 

@@ -13,8 +13,6 @@ class Packets::Incoming::AuthResponse < LoginServerPacket
   end
 
   private def run_impl
-    debug { "server_id: #{@server_id}, server_name: #{@server_name}." }
-
     ss = Outgoing::ServerStatus.new
     if Config.server_list_bracket
       ss.add(ServerStatus::SERVER_LIST_SQUARE_BRACKET, ServerStatus::ON)

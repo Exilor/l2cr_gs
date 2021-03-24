@@ -1,6 +1,6 @@
 module MonsterRace
   extend self
-  extend Loggable
+  include Loggable
 
   private MONSTERS = Array(L2Npc).new(8)
   private SPEEDS   = Slice.new(8) { Slice.new(20, 0) }
@@ -24,7 +24,7 @@ module MonsterRace
       end
 
       begin
-        template = NpcData[id + random]
+        template = NpcData[id &+ random]
         constructor = nil
         # {% begin %}
         #   constructor =

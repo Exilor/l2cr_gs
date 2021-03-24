@@ -94,7 +94,7 @@ module AdminCommandHandler::AdminEvents
     pc.send_packet(html)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_event_menu",
       "admin_event_start",

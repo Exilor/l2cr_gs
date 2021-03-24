@@ -17,10 +17,7 @@ class Scripts::Q10289_FadeToBlack < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32757-02.htm"
@@ -43,75 +40,73 @@ class Scripts::Q10289_FadeToBlack < Quest
         case event
         when "11"
           reward_items(pc, 15775, 1)
-          give_adena(pc, 420920, true)
+          give_adena(pc, 420_920, true)
         when "12"
           reward_items(pc, 15776, 1)
-          give_adena(pc, 420920, true)
+          give_adena(pc, 420_920, true)
         when "13"
           reward_items(pc, 15777, 1)
-          give_adena(pc, 420920, true)
+          give_adena(pc, 420_920, true)
         when "14"
           reward_items(pc, 15778, 1)
         when "15"
           reward_items(pc, 15779, 1)
-          give_adena(pc, 168360, true)
+          give_adena(pc, 168_360, true)
         when "16"
           reward_items(pc, 15780, 1)
-          give_adena(pc, 168360, true)
+          give_adena(pc, 168_360, true)
         when "17"
           reward_items(pc, 15781, 1)
-          give_adena(pc, 252540, true)
+          give_adena(pc, 252_540, true)
         when "18"
           reward_items(pc, 15782, 1)
-          give_adena(pc, 357780, true)
+          give_adena(pc, 357_780, true)
         when "19"
           reward_items(pc, 15783, 1)
-          give_adena(pc, 357780, true)
+          give_adena(pc, 357_780, true)
         when "20"
           reward_items(pc, 15784, 1)
-          give_adena(pc, 505100, true)
+          give_adena(pc, 505_100, true)
         when "21"
           reward_items(pc, 15785, 1)
-          give_adena(pc, 505100, true)
+          give_adena(pc, 505_100, true)
         when "22"
           reward_items(pc, 15786, 1)
-          give_adena(pc, 505100, true)
+          give_adena(pc, 505_100, true)
         when "23"
           reward_items(pc, 15787, 1)
-          give_adena(pc, 505100, true)
+          give_adena(pc, 505_100, true)
         when "24"
           reward_items(pc, 15787, 1)
-          give_adena(pc, 505100, true)
+          give_adena(pc, 505_100, true)
         when "25"
           reward_items(pc, 15789, 1)
-          give_adena(pc, 505100, true)
+          give_adena(pc, 505_100, true)
         when "26"
           reward_items(pc, 15790, 1)
-          give_adena(pc, 496680, true)
+          give_adena(pc, 496_680, true)
         when "27"
           reward_items(pc, 15791, 1)
-          give_adena(pc, 496680, true)
+          give_adena(pc, 496_680, true)
         when "28"
           reward_items(pc, 15792, 1)
-          give_adena(pc, 563860, true)
+          give_adena(pc, 563_860, true)
         when "29"
           reward_items(pc, 15793, 1)
-          give_adena(pc, 509040, true)
+          give_adena(pc, 509_040, true)
         when "30"
           reward_items(pc, 15794, 1)
-          give_adena(pc, 454240, true)
+          give_adena(pc, 454_240, true)
         end
-
 
         marks_of_darkness = get_quest_items_count(pc, MARK_OF_DARKNESS)
         if marks_of_darkness > 0
-          add_exp_and_sp(pc, 55983 * marks_of_darkness, 136500 * marks_of_darkness.to_i)
+          add_exp_and_sp(pc, marks_of_darkness &* 55_983, marks_of_darkness &* 136_500)
         end
         qs.exit_quest(false, true)
         html = "32757-09.html"
       end
     end
-
 
     html
   end

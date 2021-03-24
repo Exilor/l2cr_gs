@@ -23,7 +23,7 @@ class IllegalPlayerActionTask
   end
 
   def call
-    # TODO: log record
+    Logs[:audit].info { "Illegal action #{@msg} by player #{@pc}, action taken: #{@punishment}." }
 
     AdminData.broadcast_message_to_gms(@msg)
 

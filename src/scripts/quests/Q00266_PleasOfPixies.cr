@@ -30,9 +30,8 @@ class Scripts::Q00266_PleasOfPixies < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && "31852-04.htm" == event
+    return unless pc && (st = get_quest_state(pc, false))
+    if "31852-04.htm" == event
       st.start_quest
       event
     end
@@ -90,9 +89,7 @@ class Scripts::Q00266_PleasOfPixies < Quest
           html = "31852-06.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

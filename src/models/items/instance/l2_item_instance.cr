@@ -130,7 +130,14 @@ class L2ItemInstance < L2Object
     self.owner_id = id
 
     if Config.log_items
-      # TODO
+      if !Config.log_items_small_log || template.equippable? || template.id == Inventory::ADENA_ID
+        case item_type
+        when EtcItemType::ARROW,  EtcItemType::SHOT
+          # do nothing
+        else
+          Logs[:items].info("SET_OWNER #{self} by #{pc}, referenced by #{reference}.")
+        end
+      end
     end
 
     if Config.gmaudit && pc && pc.gm?
@@ -187,7 +194,7 @@ class L2ItemInstance < L2Object
   def change_count(process : String?, count : Int64, pc : L2PcInstance?, reference)
     return if count == 0
 
-    # old = count() # commented out until logging below is implemented
+    old = count()
 
     max = id == Inventory::ADENA_ID ? Inventory.max_adena : Int32::MAX
     max = max.to_i64
@@ -204,7 +211,16 @@ class L2ItemInstance < L2Object
 
     @stored_in_db = false
 
-    # logging
+    if Config.log_items
+      if !Config.log_items_small_log || template.equippable? || template.id == Inventory::ADENA_ID
+        case item_type
+        when EtcItemType::ARROW,  EtcItemType::SHOT
+          # do nothing
+        else
+          Logs[:items].info("CHANGED #{self} x#{old} by #{pc}, referenced by #{reference}.")
+        end
+      end
+    end
 
     if Config.gmaudit && pc && pc.gm?
       ref_name = "no-reference"
@@ -1056,11 +1072,7 @@ class L2ItemInstance < L2Object
   end
 
   def to_s(io : IO)
-    if stackable?
-      io.print({{@type.stringify + "("}}, @item.name, " x", @count, ')')
-    else
-      io.print({{@type.stringify + "("}}, @item.name, ')')
-    end
+    io.print({{@type.stringify + "("}}, @item.name, ')')
   end
 
   private struct LifetimeTask

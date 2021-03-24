@@ -35,10 +35,7 @@ class Scripts::Q00377_ExplorationOfTheGiantsCavePart2 < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31147-02.htm"
@@ -50,7 +47,6 @@ class Scripts::Q00377_ExplorationOfTheGiantsCavePart2 < Quest
       qs.exit_quest(true, true)
       event
     end
-
   end
 
   def on_kill(npc, pc, is_summon)

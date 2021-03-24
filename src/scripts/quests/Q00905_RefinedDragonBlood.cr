@@ -60,10 +60,7 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if pc.level >= MIN_LEVEL
       case event
@@ -83,7 +80,6 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
         st.exit_quest(QuestType::DAILY, true)
         html = event
       end
-
     end
 
     html
@@ -112,7 +108,6 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
           html = "32864-08.html"
         end
       end
-
     when State::COMPLETED
       if !st.now_available?
         html = "32864-03.html"
@@ -121,7 +116,6 @@ class Scripts::Q00905_RefinedDragonBlood < Quest
         html = pc.level < MIN_LEVEL ? "32864-02.html" : "32864-01.htm"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

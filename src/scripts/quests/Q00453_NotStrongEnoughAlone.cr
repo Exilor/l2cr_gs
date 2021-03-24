@@ -69,10 +69,7 @@ class Scripts::Q00453_NotStrongEnoughAlone < Quest
   end
 
   private def increase_kill(pc, npc)
-    return unless pc && npc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && npc && (st = get_quest_state(pc, false))
 
     npc_id = npc.id
 

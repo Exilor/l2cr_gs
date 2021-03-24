@@ -32,10 +32,7 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31521-04.htm"
@@ -91,7 +88,6 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
       end
     end
 
-
     html
   end
 
@@ -115,7 +111,6 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
         when 3
           html = "31521-07.html"
         end
-
       elsif qs.completed?
         html = get_already_completed_msg(talker)
       end
@@ -136,15 +131,13 @@ class Scripts::Q00625_TheFinestIngredientsPart2 < Quest
       when 3
         html = "31542-05.html"
       end
-
     end
-
 
     html || get_no_quest_msg(talker)
   end
 
   def on_spawn(npc)
-    start_quest_timer("NPC_TALK", 1000 * 1200, npc, nil)
+    start_quest_timer("NPC_TALK", 1000 &* 1200, npc, nil)
     npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::I_SMELL_SOMETHING_DELICIOUS))
 
     super

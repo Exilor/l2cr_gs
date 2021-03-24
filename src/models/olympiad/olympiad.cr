@@ -3,6 +3,7 @@ require "./olympiad_announcer"
 
 class Olympiad < ListenersContainer
   include Singleton
+  include Loggable
 
   private alias SystemMessage = Packets::Outgoing::SystemMessage
 
@@ -148,7 +149,6 @@ class Olympiad < ListenersContainer
       warn "Failed to load data from database. Trying to load from file."
       cfg = PropertiesReader.new
       cfg.parse(Dir.current + Config::OLYMPIAD_CONFIG_FILE)
-      # error check
 
       @current_cycle = cfg.get_i32("CurrentCycle", 1)
       @period = cfg.get_i32("Period", 0)
@@ -175,7 +175,7 @@ class Olympiad < ListenersContainer
         set_new_olympiad_end
       end
     else
-      raise "Wrong period #{@period}."
+      raise "Wrong period #{@period}"
     end
 
     begin
@@ -357,9 +357,11 @@ class Olympiad < ListenersContainer
         Broadcast.to_all_online_players(sm)
         info "Olympiad Game Started."
 
-        @game_manager = ThreadPoolManager.schedule_general_at_fixed_rate(OlympiadGameManager, 30000, 30000)
+        Logs[:olympiad].info("Result,Player1,Player2,Player1 HP,Player2 HP,Player1 Damage,Player2 Damage,Points,Classed")
+
+        @game_manager = ThreadPoolManager.schedule_general_at_fixed_rate(OlympiadGameManager, 30_000, 30_000)
         if Config.alt_oly_announce_games
-          @game_announcer = ThreadPoolManager.schedule_general_at_fixed_rate(OlympiadAnnouncer.new, 30000, 500)
+          @game_announcer = ThreadPoolManager.schedule_general_at_fixed_rate(OlympiadAnnouncer.new, 30_000, 500)
         end
 
         reg_end = millis_to_comp_end - 600_000
@@ -630,7 +632,10 @@ class Olympiad < ListenersContainer
       return
     end
 
-    # logging
+    Logs[:olympiad].info("Noble, charid, classid, compDone, points")
+    NOBLES.each do |char_id, i|
+      Logs[:olympiad].info { "#{i.get_string(CHAR_NAME)}, #{char_id}, #{i.get_i32(CLASS_ID)}, #{i.get_i32(COMP_DONE)}, #{i.get_i32(POINTS)}" }
+    end
 
     soul_hounds = [] of StatsSet
 
@@ -646,7 +651,7 @@ class Olympiad < ListenersContainer
           hero[CHAR_ID] = rs.get_i32(CHAR_ID)
           soul_hounds << hero
         else
-          # logging
+          Logs[:olympiad].info { "Hero #{hero.get_string(CHAR_NAME)} #{hero.get_i32(CHAR_ID)} #{hero.get_i32(CLASS_ID)}" }
           HEROS_TO_BE << hero
         end
       end
@@ -662,7 +667,7 @@ class Olympiad < ListenersContainer
       hero[CHAR_ID] = winner.get_i32(CHAR_ID)
       hero[CHAR_NAME] = winner.get_string(CHAR_NAME)
 
-      # logging
+      Logs[:olympiad].info { "Hero #{hero.get_string(CHAR_NAME)} #{hero.get_i32(CHAR_ID)} #{hero.get_i32(CLASS_ID)}" }
 
       HEROS_TO_BE << hero
     when 2
@@ -697,12 +702,10 @@ class Olympiad < ListenersContainer
       hero[CHAR_ID] = winner.get_i32(CHAR_ID)
       hero[CHAR_NAME] = winner.get_string(CHAR_NAME)
 
-      # logging
+      Logs[:olympiad].info { "Hero #{hero.get_string(CHAR_NAME)} #{hero.get_i32(CHAR_ID)} #{hero.get_i32(CLASS_ID)}" }
 
       HEROS_TO_BE << hero
     end
-
-
   rescue e
     error e
   end
@@ -897,5 +900,9 @@ class Olympiad < ListenersContainer
 
   def self.in_comp_period? : Bool
     instance.in_comp_period?
+  end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
   end
 end

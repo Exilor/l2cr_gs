@@ -110,7 +110,6 @@ class Scripts::Q00042_HelpTheUncle < Quest
         when 5
           html = "30735-03.html"
         end
-
       end
     end
 

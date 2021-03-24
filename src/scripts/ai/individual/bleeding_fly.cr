@@ -64,7 +64,7 @@ class Scripts::BleedingFly < AbstractNpcAI
     case event
     when TIMER_MID_HP
       if npc.variables.get_i32(MID_HP_MINION_COUNT) > 0
-        npc.variables[MID_HP_MINION_COUNT] = npc.variables.get_i32(MID_HP_MINION_COUNT) - 1
+        npc.variables[MID_HP_MINION_COUNT] = npc.variables.get_i32(MID_HP_MINION_COUNT) &- 1
         add_skill_cast_desire(npc, npc, SUMMON_PARASITE_LEECH, 9999999999900000)
         add_spawn(PARASITIC_LEECH, npc.x + Rnd.rand(150), npc.y + Rnd.rand(150), npc.z, npc.heading, false, 0)
         add_spawn(PARASITIC_LEECH, npc.x + Rnd.rand(150), npc.y + Rnd.rand(150), npc.z, npc.heading, false, 0)
@@ -75,7 +75,7 @@ class Scripts::BleedingFly < AbstractNpcAI
       end
     when TIMER_LOW_HP
       if npc.variables.get_i32(LOW_HP_MINION_COUNT) > 0
-        npc.variables[LOW_HP_MINION_COUNT] = npc.variables.get_i32(LOW_HP_MINION_COUNT) - 1
+        npc.variables[LOW_HP_MINION_COUNT] = npc.variables.get_i32(LOW_HP_MINION_COUNT) &- 1
         add_skill_cast_desire(npc, npc, SUMMON_PARASITE_LEECH, 9999999999900000)
         add_skill_cast_desire(npc, npc, NPC_ACUMEN_LVL_3, 9999999999900000)
         add_spawn(PARASITIC_LEECH, npc.x + Rnd.rand(150), npc.y + Rnd.rand(150), npc.z, npc.heading, false, 0)

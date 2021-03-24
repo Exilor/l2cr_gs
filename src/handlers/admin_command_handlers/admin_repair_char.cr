@@ -33,7 +33,7 @@ module AdminCommandHandler::AdminRepairChar
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_restore", "admin_repair"}
   end
 end

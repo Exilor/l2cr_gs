@@ -5,9 +5,9 @@ module BypassHandler::RentPet
   private COST = {1800, 7200, 720000, 6480000}
   private RIDE_TIME = {30, 60, 600, 1900}
 
-  def use_bypass(command, pc, target)
-    return unless target.is_a?(L2MerchantInstance)
-    return unless Config.allow_rentpet
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
+    return false unless target.is_a?(L2MerchantInstance)
+    return false unless Config.allow_rentpet
     return false unless Config.list_pet_rent_npc.includes?(target.id)
 
     st = command.split
@@ -49,12 +49,12 @@ module BypassHandler::RentPet
     return unless pc.reduce_adena("Rent", price.to_i64, pc.last_folk_npc, true)
 
     pc.mount(pet_id, 0, false)
-    sg = SetupGauge.green(time * 1000)
+    sg = SetupGauge.green(time &* 1000)
     pc.send_packet(sg)
     pc.start_rent_pet(time)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"RentPet"}
   end
 end

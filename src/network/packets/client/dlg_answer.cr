@@ -71,6 +71,5 @@ class Packets::Incoming::DlgAnswer < GameClientPacket
         holder.door.close_me
       end
     end
-
   end
 end

@@ -10,7 +10,6 @@ require "../stats/func_template"
 
 abstract class L2Item < ListenersContainer
   include Packets::Outgoing
-  include Loggable
 
   SLOT_NONE       = 0x0000
   SLOT_UNDERWEAR  = 0x0001

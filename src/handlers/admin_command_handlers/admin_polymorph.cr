@@ -105,7 +105,7 @@ module AdminCommandHandler::AdminPolymorph
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_polymorph",
       "admin_unpolymorph",

@@ -2,7 +2,7 @@ require "../../models/l2_teleport_location"
 
 module TeleportLocationTable
   extend self
-  extend Loggable
+  include Loggable
 
   private TELEPORTS = {} of Int32 => L2TeleportLocation
 

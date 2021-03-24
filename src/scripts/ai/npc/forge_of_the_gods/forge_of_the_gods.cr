@@ -53,7 +53,7 @@ class Scripts::ForgeOfTheGods < AbstractNpcAI
 
     add_kill_id(FOG_MOBS)
     add_spawn_id(LAVASAURI)
-    start_quest_timer("refresh", REFRESH * 1000, nil, nil, true)
+    start_quest_timer("refresh", REFRESH &* 1000, nil, nil, true)
   end
 
   def on_adv_event(event, npc, player)
@@ -111,7 +111,7 @@ class Scripts::ForgeOfTheGods < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    start_quest_timer("suicide", 60000, npc, nil)
+    start_quest_timer("suicide", 60_000, npc, nil)
     super
   end
 

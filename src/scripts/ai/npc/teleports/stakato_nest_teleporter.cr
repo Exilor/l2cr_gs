@@ -18,7 +18,7 @@ class Scripts::StakatoNestTeleporter < AbstractNpcAI
 
   def on_adv_event(event, npc, pc)
     pc = pc.not_nil!
-    index = event.to_i &- 1
+    index = event.to_i - 1
 
     if LOCS.size > index
       loc = LOCS[index]

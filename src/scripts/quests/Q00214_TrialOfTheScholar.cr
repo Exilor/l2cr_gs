@@ -111,8 +111,7 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -281,7 +280,6 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
       html = event
     end
 
-
     html
   end
 
@@ -367,7 +365,6 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
           end
         end
       end
-
     end
 
     super
@@ -420,9 +417,9 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
           if !has_quest_items?(pc, SYMBOL_OF_CRONOS)
             html = "30461-13.html"
           else
-            give_adena(pc, 319628, true)
+            give_adena(pc, 319_628, true)
             give_items(pc, MARK_OF_SCHOLAR, 1)
-            add_exp_and_sp(pc, 1753926, 113754)
+            add_exp_and_sp(pc, 1_753_926, 113_754)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30461-14.html"
@@ -506,7 +503,7 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
           if !has_at_least_one_quest_item?(pc, GRAND_MAGISTER_SIGIL, SYMBOL_OF_JUREK)
             html = "30115-01.html"
           elsif has_quest_items?(pc, JUREKS_LIST)
-            if get_quest_items_count(pc, MONSTER_EYE_DESTROYER_SKIN) + get_quest_items_count(pc, SHAMANS_NECKLACE) + get_quest_items_count(pc, SHACKLES_SCALP) < 12
+            if get_quest_items_count(pc, MONSTER_EYE_DESTROYER_SKIN) &+ get_quest_items_count(pc, SHAMANS_NECKLACE) &+ get_quest_items_count(pc, SHACKLES_SCALP) < 12
               html = "30115-04.html"
             else
               take_items(pc, GRAND_MAGISTER_SIGIL, 1)
@@ -651,7 +648,7 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
               html = "30612-01.html"
             end
           else
-            if get_quest_items_count(pc, GHOULS_SKIN) + get_quest_items_count(pc, MEDUSAS_BLOOD) + get_quest_items_count(pc, FETTERED_SOULS_ICHOR) + get_quest_items_count(pc, ENCHANTED_GARGOYLES_NAIL) < 32
+            if get_quest_items_count(pc, GHOULS_SKIN) &+ get_quest_items_count(pc, MEDUSAS_BLOOD) &+ get_quest_items_count(pc, FETTERED_SOULS_ICHOR) &+ get_quest_items_count(pc, ENCHANTED_GARGOYLES_NAIL) < 32
               html = "30612-05.html"
             else
               html = "30612-06.html"
@@ -661,7 +658,6 @@ class Scripts::Q00214_TrialOfTheScholar < Quest
           html = "30612-08.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == MAGISTER_MIRIEN
         html = get_already_completed_msg(pc)

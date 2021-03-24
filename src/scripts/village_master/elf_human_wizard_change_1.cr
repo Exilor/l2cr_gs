@@ -147,7 +147,7 @@ class Scripts::ElfHumanWizardChange1 < AbstractNpcAI
       if has_quest_items?(pc, item)
         "#{npc.id}-#{htm_idx}.htm"
       else
-        "#{npc.id}-#{htm_idx + 1}.htm"
+        "#{npc.id}-#{htm_idx &+ 1}.htm"
       end
     elsif has_quest_items?(pc, item)
       take_items(pc, item, -1)
@@ -155,9 +155,9 @@ class Scripts::ElfHumanWizardChange1 < AbstractNpcAI
       pc.base_class = klass
       pc.broadcast_user_info
       give_items(pc, SHADOW_ITEM_EXCHANGE_COUPON_D_GRADE, 15)
-      "#{npc.id}-#{htm_idx + 2}.htm"
+      "#{npc.id}-#{htm_idx &+ 2}.htm"
     else
-      "#{npc.id}-#{htm_idx + 3}.htm"
+      "#{npc.id}-#{htm_idx &+ 3}.htm"
     end
   end
 end

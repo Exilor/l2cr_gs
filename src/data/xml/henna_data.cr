@@ -47,6 +47,6 @@ module HennaData
   end
 
   def get_henna_list(class_id : ClassId) : Array(L2Henna)
-    HENNA_LIST.local_each_value.select(&.allowed_class?(class_id)).to_a
+    HENNA_LIST.select_values { |henna| henna.allowed_class?(class_id) }
   end
 end

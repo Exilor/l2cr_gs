@@ -28,7 +28,7 @@ class Scripts::Q00015_SweetWhispers < Quest
       end
     when "31517-01.html"
       if st.cond?(2)
-        st.add_exp_and_sp(350531, 28204)
+        st.add_exp_and_sp(350_531, 28_204)
         st.exit_quest(false, true)
       end
     end

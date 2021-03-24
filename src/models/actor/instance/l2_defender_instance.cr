@@ -93,7 +93,6 @@ class L2DefenderInstance < L2Attackable
     end
 
     if self != pc.target
-      debug { "New target selected: #{l2id}." }
       pc.target = self
     elsif interact
       if auto_attackable?(pc) && !looks_dead? && (pc.z - z).abs < 600

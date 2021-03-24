@@ -64,7 +64,7 @@ module AdminCommandHandler::AdminVitality
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_set_vitality",
       "admin_set_vitality_level",

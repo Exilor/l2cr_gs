@@ -69,9 +69,7 @@ class Scripts::TowerOfInfinitum < AbstractNpcAI
               return "32302-02.htm"
             end
           end
-          party.members.each do |m|
-            m.tele_to_location(ENTER_LOCATION, true)
-          end
+          party.members.each { |m| m.tele_to_location(ENTER_LOCATION, true) }
           html = nil
         else
           html = "32302-02a.htm"
@@ -95,11 +93,8 @@ class Scripts::TowerOfInfinitum < AbstractNpcAI
             end
           end
 
-
           if tele = TELE_COORDS.dig?(npc_id, direction)
-            party.members.each do |m|
-              m.tele_to_location(tele, true)
-            end
+            party.members.each { |m| m.tele_to_location(tele, true) }
           end
           html = nil
         end

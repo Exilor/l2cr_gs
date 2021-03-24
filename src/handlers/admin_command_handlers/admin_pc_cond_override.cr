@@ -62,7 +62,7 @@ module AdminCommandHandler::AdminPcCondOverride
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_exceptions",
       "admin_set_exception"

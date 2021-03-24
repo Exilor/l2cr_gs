@@ -335,7 +335,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
       when "START_MOVIE_Q10296"
         player = player.not_nil!
         player.show_quest_movie(29)
-        start_quest_timer("TELEPORT_SPACE", 60000, npc, player)
+        start_quest_timer("TELEPORT_SPACE", 60_000, npc, player)
         world.elcadia.tele_to_location(ELCADIA_LOC, world.instance_id, 0)
       when "TELEPORT_SPACE"
         player = player.not_nil!
@@ -378,7 +378,7 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
       when ETIS_VAN_ETINA
         pc.show_quest_movie(30)
         world.elcadia.tele_to_location(ELCADIA_LOC, world.instance_id, 0)
-        start_quest_timer("TELEPORT_TO_PLAYER", 63000, npc, pc)
+        start_quest_timer("TELEPORT_TO_PLAYER", 63_000, npc, pc)
         st = pc.get_quest_state(Q10296_SevenSignsOneWhoSeeksThePowerOfTheSeal.simple_name)
         if st && st.memo_state?(2)
           st.memo_state = 3
@@ -412,6 +412,6 @@ class Scripts::MonasteryOfSilence1 < AbstractInstance
     world.elcadia?.try &.delete_me
     world.elcadia = add_spawn(ELCADIA_INSTANCE, *pc.xyz, 0, false, 0, false, world.instance_id)
     start_quest_timer("FOLLOW", 5000, world.elcadia, pc)
-    start_quest_timer("DIALOG", 10000, world.elcadia, pc)
+    start_quest_timer("DIALOG", 10_000, world.elcadia, pc)
   end
 end

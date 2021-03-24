@@ -48,7 +48,7 @@ class Scripts::GiganticGolem < AbstractNpcAI
         if obj = sp.last_spawn
           if npc.id == DR_CHAOS
             npc.set_intention(AI::ATTACK, obj)
-            npc.broadcast_packet(SpecialCamera.new(npc, 1, -200, 15, 10000, 1000, 20000, 0, 0, 0, 0, 0))
+            npc.broadcast_packet(SpecialCamera.new(npc, 1, -200, 15, 10_000, 1000, 20_000, 0, 0, 0, 0, 0))
           end
         end
       end
@@ -56,7 +56,7 @@ class Scripts::GiganticGolem < AbstractNpcAI
     when "ACTION_CAMERA"
       npc = npc.not_nil!
       start_quest_timer("MOVE_SHOW", 2500, npc, pc)
-      npc.broadcast_packet(SpecialCamera.new(npc, 1, -150, 10, 3000, 1000, 20000, 0, 0, 0, 0, 0))
+      npc.broadcast_packet(SpecialCamera.new(npc, 1, -150, 10, 3000, 1000, 20_000, 0, 0, 0, 0, 0))
     when "MOVE_SHOW"
       npc = npc.not_nil!
       start_quest_timer("TELEPORT", 2000, npc, pc)
@@ -173,8 +173,8 @@ class Scripts::GiganticGolem < AbstractNpcAI
   end
 
   def on_kill(npc, killer, is_summon)
-    respawn_time = RESPAWN * 3_600_000
-    GlobalVariablesManager.instance["GolemRespawn"] = Time.ms + respawn_time
+    respawn_time = RESPAWN &* 3_600_000
+    GlobalVariablesManager.instance["GolemRespawn"] = Time.ms &+ respawn_time
     start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)
     cancel_quest_timer("CHECK_ATTACK", npc, nil)
 

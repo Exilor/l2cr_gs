@@ -112,7 +112,6 @@ class Scripts::Q00604_DaimonTheWhiteEyedPart2 < Quest
       end
     end
 
-
     html
   end
 
@@ -122,7 +121,7 @@ class Scripts::Q00604_DaimonTheWhiteEyedPart2 < Quest
   end
 
   def on_spawn(npc)
-    start_quest_timer("DESPAWN", 1200000, npc, nil)
+    start_quest_timer("DESPAWN", 1_200_000, npc, nil)
     npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.template.display_id, NpcString::WHO_IS_CALLING_ME))
 
     super

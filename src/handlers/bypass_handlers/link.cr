@@ -2,7 +2,7 @@ module BypassHandler::Link
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target) : Bool
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     html_path = command.from(4).strip
 
     if html_path.empty?
@@ -25,7 +25,7 @@ module BypassHandler::Link
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"Link"}
   end
 end

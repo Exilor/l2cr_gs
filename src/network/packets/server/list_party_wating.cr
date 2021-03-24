@@ -11,9 +11,7 @@ class Packets::Outgoing::ListPartyWating < GameServerPacket
         next
       end
 
-      if @loc > 0 && @loc != room.location
-        next
-      end
+      next if @loc > 0 && @loc != room.location
 
       if @lim == 0 && (@pc.level < room.min_lvl || @pc.level > room.max_lvl)
         next

@@ -32,10 +32,7 @@ class Scripts::Q00642_APowerfulPrimevalCreature < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     html = event
     case event
@@ -45,14 +42,14 @@ class Scripts::Q00642_APowerfulPrimevalCreature < Quest
       qs.exit_quest(true)
     when "32105-09.html"
       if has_quest_items?(pc, DINOSAUR_TISSUE)
-        give_adena(pc, 5000 * get_quest_items_count(pc, DINOSAUR_TISSUE), true)
+        give_adena(pc, 5000 &* get_quest_items_count(pc, DINOSAUR_TISSUE), true)
         take_items(pc, DINOSAUR_TISSUE, -1)
       else
         html = "32105-14.html"
       end
     when "exit"
       if has_quest_items?(pc, DINOSAUR_TISSUE)
-        give_adena(pc, 5000 * get_quest_items_count(pc, DINOSAUR_TISSUE), true)
+        give_adena(pc, 5000 &* get_quest_items_count(pc, DINOSAUR_TISSUE), true)
         qs.exit_quest(true, true)
         html = "32105-12.html"
       else
@@ -60,7 +57,6 @@ class Scripts::Q00642_APowerfulPrimevalCreature < Quest
         html = "32105-13.html"
       end
     end
-
 
     html
   end

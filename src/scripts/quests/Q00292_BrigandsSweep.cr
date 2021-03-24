@@ -32,8 +32,7 @@ class Scripts::Q00292_BrigandsSweep < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30532-03.htm"
@@ -62,7 +61,7 @@ class Scripts::Q00292_BrigandsSweep < Quest
       chance = Rnd.rand(10)
       if chance > 5
         give_item_randomly(killer, npc, MOB_ITEM_DROP[npc.id], 1, 0, 1.0, true)
-      elsif qs.cond?(1) && (chance > 4) && !has_quest_items?(killer, SUSPICIOUS_CONTRACT)
+      elsif qs.cond?(1) && chance > 4 && !has_quest_items?(killer, SUSPICIOUS_CONTRACT)
          memos = get_quest_items_count(killer, SUSPICIOUS_MEMO)
         if memos < 3
           if give_item_randomly(killer, npc, SUSPICIOUS_MEMO, 1, 3, 1.0, false)
@@ -82,6 +81,7 @@ class Scripts::Q00292_BrigandsSweep < Quest
 
   def on_talk(npc, pc)
     qs = get_quest_state!(pc)
+
     case npc.id
     when SPIRON
       case qs.state
@@ -102,9 +102,9 @@ class Scripts::Q00292_BrigandsSweep < Quest
           necklaces = get_quest_items_count(pc, GOBLIN_NECKLACE)
           pendants = get_quest_items_count(pc, GOBLIN_PENDANT)
           lord_pendants = get_quest_items_count(pc, GOBLIN_LORD_PENDANT)
-          sum = necklaces + pendants + lord_pendants
+          sum = necklaces &+ pendants &+ lord_pendants
           if sum > 0
-            adena = (necklaces * 12) + (pendants * 36) + (lord_pendants * 33)
+            adena = (necklaces &* 12) &+ (pendants &* 36) &+ (lord_pendants &* 33)
             if sum >= 10
               adena &+= 1000
             end
@@ -130,7 +130,6 @@ class Scripts::Q00292_BrigandsSweep < Quest
           end
         end
       end
-
     when BALANKI
       if qs.started?
         if has_quest_items?(pc, SUSPICIOUS_CONTRACT)
@@ -142,7 +141,6 @@ class Scripts::Q00292_BrigandsSweep < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

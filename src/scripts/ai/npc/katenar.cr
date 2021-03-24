@@ -39,7 +39,6 @@ class Scripts::Katenar < AbstractNpcAI
       end
     end
 
-
     nil
   end
 
@@ -71,7 +70,7 @@ class Scripts::Katenar < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    start_quest_timer("CREATED_50", 50000, npc, nil)
+    start_quest_timer("CREATED_50", 50_000, npc, nil)
     if npc.variables.get_object("player0", L2PcInstance?)
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::I_AM_LATE)
     end

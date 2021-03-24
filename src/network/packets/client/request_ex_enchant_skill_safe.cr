@@ -78,14 +78,14 @@ class Packets::Incoming::RequestExEnchantSkillSafe < GameClientPacket
       end
 
       if Rnd.rand(100) <= rate
-        # logging
+        Logs[:enchant_skill].info { "SAFE_ENCHANTED #{skill} using #{spb} with rate #{rate} by #{pc}." }
         pc.add_skill(skill, true)
         pc.send_packet(ExEnchantSkillResult::TRUE)
         sm = SystemMessage.you_have_succeeded_in_enchanting_the_skill_s1
         sm.add_skill_name(@skill_id)
         pc.send_packet(sm)
       else
-        # logging
+        Logs[:enchant_skill].info { "FAILED_SAFE_ENCHANTED #{skill} using #{spb} with rate #{rate} by #{pc}." }
         sm = SystemMessage.skill_enchant_failed_s1_level_will_remain
         sm.add_skill_name(@skill_id)
         pc.send_packet(sm)

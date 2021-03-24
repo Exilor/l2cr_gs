@@ -220,8 +220,7 @@ class Scripts::Q00336_CoinsOfMagic < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     html = nil
 
@@ -279,20 +278,18 @@ class Scripts::Q00336_CoinsOfMagic < Quest
           return "#{npc_id}-16.html"
         end
       when 16
-        qs.set(FLAG, qs.get_int(FLAG) + 4)
+        qs.set(FLAG, qs.get_int(FLAG) &+ 4)
         return "#{npc_id}-17.html"
       when 17
-        qs.set(FLAG, qs.get_int(FLAG) + 8)
+        qs.set(FLAG, qs.get_int(FLAG) &+ 8)
         return "#{npc_id}-18.html"
       when 18
-        qs.set(FLAG, qs.get_int(FLAG) + 12)
+        qs.set(FLAG, qs.get_int(FLAG) &+ 12)
         return "#{npc_id}-19.html"
       when 22
         return "#{npc_id}-01.html"
       end
-
     end
-
 
     case npc_id
     when PANO
@@ -316,7 +313,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, PANO, 3, Q_BERETHS_SILVER_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_SILVER_DRAGON)
       end
-
     when COLLOB
       case event_id
       when 6
@@ -338,7 +334,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, COLLOB, 3, Q_BERETHS_GOLD_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_BLOOD_DRAGON)
       end
-
     when RAPIN
       case event_id
       when 6
@@ -360,7 +355,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, RAPIN, 3, Q_MANAKS_BLOOD_WEREWOLF, Q_SILVER_UNDINE, Q_SILVER_DRYAD, Q_GOLD_WYRM)
       end
-
     when HAGGER
       case event_id
       when 6
@@ -382,7 +376,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, HAGGER, 3, Q_NIAS_SILVER_FAIRY, Q_BLOOD_WEREWOLF, Q_SILVER_GOLEM, Q_GOLD_DRAKE)
       end
-
     when STAN
       case event_id
       when 6
@@ -404,7 +397,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, STAN, 3, Q_MANAKS_SILVER_DRYAD, Q_SILVER_DRYAD, Q_BLOOD_BASILISK, Q_GOLD_GIANT)
       end
-
     when RESEARCHER_LORAIN
       case event_id
       when 6
@@ -426,7 +418,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, RESEARCHER_LORAIN, 3, Q_NIAS_GOLD_WYVERN, Q_BLOOD_DREVANUL, Q_SILVER_GOLEM, Q_GOLD_KNIGHT)
       end
-
     when BLACKSMITH_DUNING
       case event_id
       when 6
@@ -448,7 +439,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, BLACKSMITH_DUNING, 3, Q_MANAKS_GOLD_GIANT, Q_SILVER_UNDINE, Q_BLOOD_SUCCUBUS, Q_GOLD_GIANT)
       end
-
     when MAGISTER_PAGE
       case event_id
       when 6
@@ -470,7 +460,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, MAGISTER_PAGE, 3, Q_NIAS_BLOOD_MEDUSA, Q_BLOOD_WEREWOLF, Q_SILVER_FAIRY, Q_GOLD_KNIGHT)
       end
-
     when HEAD_BLACKSMITH_FERRIS
       case event.to_i
       when 6
@@ -492,7 +481,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       when 21
         return short_third_step(qs, HEAD_BLACKSMITH_FERRIS, 3, Q_BERETHS_BLOOD_DRAGON, Q_GOLD_DRAGON, Q_SILVER_DRAGON, Q_BLOOD_DRAGON)
       end
-
     when UNION_PRESIDENT_BERNARD
       case event_id
       when 1
@@ -515,7 +503,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "30702-06.html"
       end
-
     when WAREHOUSE_KEEPER_SORINT
       case event_id
       when 1
@@ -718,9 +705,7 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.exit_quest(true)
         return "30232-18a.html"
       end
-
     end
-
 
     html
   end
@@ -738,7 +723,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
 
       return super
     end
-
 
     if qs = get_random_player_from_party(killer, npc, 3)
       case npc.id
@@ -844,7 +828,6 @@ class Scripts::Q00336_CoinsOfMagic < Quest
           give_item_randomly(qs.player, npc, Q_BLOOD_MEDUSA, 1, 0, 1, true)
         end
       end
-
     end
 
     super
@@ -861,16 +844,16 @@ class Scripts::Q00336_CoinsOfMagic < Quest
   private def short_first_steps(qs, npc_id, weight_point, base, item_1_1, item_1_2, item_1_mul, item_2, item_3, item_4)
     case qs.get_int(PARAM_2)
     when 42
-      if qs.get_quest_items_count(item_1_1) >= base * item_1_mul && (item_1_2 == 0 || qs.get_quest_items_count(item_1_2) >= base)
+      if qs.get_quest_items_count(item_1_1) >= base &* item_1_mul && (item_1_2 == 0 || qs.get_quest_items_count(item_1_2) >= base)
         qs.set(FLAG, 1)
-        qs.take_items(item_1_1, base * item_1_mul)
+        qs.take_items(item_1_1, base &* item_1_mul)
         if item_1_2 > 0
           qs.take_items(item_1_2, base)
         end
         qs.set(WEIGHT_POINT, weight_point)
-        param1 = Rnd.rand(3) + 1
-        param1 += (Rnd.rand(3) + 1) * 4
-        param1 += (Rnd.rand(3) + 1) * 16
+        param1 = Rnd.rand(3) &+ 1
+        param1 &+= (Rnd.rand(3) &+ 1) &* 4
+        param1 &+= (Rnd.rand(3) &+ 1) &* 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -879,9 +862,9 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.set(FLAG, 1)
         qs.take_items(item_2, base)
         qs.set(WEIGHT_POINT, weight_point)
-        param1 = Rnd.rand(3) + 1
-        param1 += (Rnd.rand(3) + 1) * 4
-        param1 += (Rnd.rand(3) + 1) * 16
+        param1 = Rnd.rand(3) &+ 1
+        param1 &+= (Rnd.rand(3) &+ 1) &* 4
+        param1 &+= (Rnd.rand(3) &+ 1) &* 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -890,9 +873,9 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.set(FLAG, 1)
         qs.take_items(item_3, base)
         qs.set(WEIGHT_POINT, weight_point)
-        param1 = Rnd.rand(3) + 1
-        param1 += (Rnd.rand(3) + 1) * 4
-        param1 += (Rnd.rand(3) + 1) * 16
+        param1 = Rnd.rand(3) &+ 1
+        param1 &+= (Rnd.rand(3) &+ 1) &* 4
+        param1 &+= (Rnd.rand(3) &+ 1) &* 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -901,9 +884,9 @@ class Scripts::Q00336_CoinsOfMagic < Quest
         qs.set(FLAG, 1)
         qs.take_items(item_4, base)
         qs.set(WEIGHT_POINT, weight_point)
-        param1 = Rnd.rand(3) + 1
-        param1 += (Rnd.rand(3) + 1) * 4
-        param1 += (Rnd.rand(3) + 1) * 16
+        param1 = Rnd.rand(3) &+ 1
+        param1 &+= (Rnd.rand(3) &+ 1) &* 4
+        param1 &+= (Rnd.rand(3) &+ 1) &* 16
         qs.set(PARAM_1, param1)
         return "#{npc_id}-11.html"
       end
@@ -916,30 +899,30 @@ class Scripts::Q00336_CoinsOfMagic < Quest
   private def short_second_step_one_item(qs, npc_id, mul, item_1, item_1_mul, reward_1, item_2, reward_2, item_3, reward_3, item_4, reward_4)
     case qs.get_int(PARAM_2)
     when 42
-      if qs.get_quest_items_count(item_1) >= 10 * mul * item_1_mul
-        qs.take_items(item_1, 10 * mul * item_1_mul)
-        qs.give_items(reward_1, 1 * mul)
+      if qs.get_quest_items_count(item_1) >= 10 &* mul &* item_1_mul
+        qs.take_items(item_1, 10 &* mul &* item_1_mul)
+        qs.give_items(reward_1, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 31
-      if qs.get_quest_items_count(item_2) >= 5 * mul
-        qs.take_items(item_2, 5 * mul)
-        qs.give_items(reward_2, 1 * mul)
+      if qs.get_quest_items_count(item_2) >= 5 &* mul
+        qs.take_items(item_2, 5 &* mul)
+        qs.give_items(reward_2, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 21
-      if qs.get_quest_items_count(item_3) >= 5 * mul
-        qs.take_items(item_3, 5 * mul)
-        qs.give_items(reward_3, 1 * mul)
+      if qs.get_quest_items_count(item_3) >= 5 &* mul
+        qs.take_items(item_3, 5 &* mul)
+        qs.give_items(reward_3, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 11
-      if qs.get_quest_items_count(item_4) >= 5 * mul
-        qs.take_items(item_4, 5 * mul)
-        qs.give_items(reward_4, 1 * mul)
+      if qs.get_quest_items_count(item_4) >= 5 &* mul
+        qs.take_items(item_4, 5 &* mul)
+        qs.give_items(reward_4, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
@@ -952,34 +935,34 @@ class Scripts::Q00336_CoinsOfMagic < Quest
   private def short_second_step_two_items(qs, npc_id, mul, item_1_1, item_1_2, reward_1, item_2_1, item_2_2, reward_2, item_3_1, item_3_2, reward_3, item_4_1, item_4_2, reward_4)
     case qs.get_int(PARAM_2)
     when 42
-      if qs.get_quest_items_count(item_1_1) >= 10 * mul && qs.get_quest_items_count(item_1_2) >= 10 * mul
-        qs.take_items(item_1_1, 10 * mul)
-        qs.take_items(item_1_2, 10 * mul)
-        qs.give_items(reward_1, 1 * mul)
+      if qs.get_quest_items_count(item_1_1) >= 10 &* mul && qs.get_quest_items_count(item_1_2) >= 10 &* mul
+        qs.take_items(item_1_1, 10 &* mul)
+        qs.take_items(item_1_2, 10 &* mul)
+        qs.give_items(reward_1, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 31
-      if qs.get_quest_items_count(item_2_1) >= 5 * mul && qs.get_quest_items_count(item_2_2) >= 5 * mul
-        qs.take_items(item_2_1, 5 * mul)
-        qs.take_items(item_2_2, 5 * mul)
-        qs.give_items(reward_2, 1 * mul)
+      if qs.get_quest_items_count(item_2_1) >= 5 &* mul && qs.get_quest_items_count(item_2_2) >= 5 &* mul
+        qs.take_items(item_2_1, 5 &* mul)
+        qs.take_items(item_2_2, 5 &* mul)
+        qs.give_items(reward_2, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 21
-      if qs.get_quest_items_count(item_3_1) >= 5 * mul && qs.get_quest_items_count(item_3_2) >= 5 * mul
-        qs.take_items(item_3_1, 5 * mul)
-        qs.take_items(item_3_2, 5 * mul)
-        qs.give_items(reward_3, 1 * mul)
+      if qs.get_quest_items_count(item_3_1) >= 5 &* mul && qs.get_quest_items_count(item_3_2) >= 5 &* mul
+        qs.take_items(item_3_1, 5 &* mul)
+        qs.take_items(item_3_2, 5 &* mul)
+        qs.give_items(reward_3, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
     when 11
-      if qs.get_quest_items_count(item_4_1) >= 5 * mul && qs.get_quest_items_count(item_4_2) >= 5 * mul
-        qs.take_items(item_4_1, 5 * mul)
-        qs.take_items(item_4_2, 5 * mul)
-        qs.give_items(reward_4, 1 * mul)
+      if qs.get_quest_items_count(item_4_1) >= 5 &* mul && qs.get_quest_items_count(item_4_2) >= 5 &* mul
+        qs.take_items(item_4_1, 5 &* mul)
+        qs.take_items(item_4_2, 5 &* mul)
+        qs.give_items(reward_4, 1 &* mul)
         qs.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
         return "#{npc_id}-07.html"
       end
@@ -991,7 +974,7 @@ class Scripts::Q00336_CoinsOfMagic < Quest
 
   private def short_third_step(qs, npc_id, flag, item_1, item_2, item_3, item_4)
     qs.set(PARAM_3, 0)
-    qs.set(FLAG, qs.get_int(FLAG) + flag)
+    qs.set(FLAG, qs.get_int(FLAG) &+ flag)
     if qs.get_int(PARAM_1) == qs.get_int(FLAG) && qs.get_int(WEIGHT_POINT) >= 0
       qs.set(WEIGHT_POINT, 0)
       case qs.get_int(PARAM_2)
@@ -1078,13 +1061,13 @@ class Scripts::Q00336_CoinsOfMagic < Quest
       i4 = i4 % 4
 
       if i0 == i3
-        qs.set(PARAM_3, qs.get_int(PARAM_3) + 1)
+        qs.set(PARAM_3, qs.get_int(PARAM_3) &+ 1)
       end
       if i1 == i4
-        qs.set(PARAM_3, qs.get_int(PARAM_3) + 1)
+        qs.set(PARAM_3, qs.get_int(PARAM_3) &+ 1)
       end
       if i2 == i5
-        qs.set(PARAM_3, qs.get_int(PARAM_3) + 1)
+        qs.set(PARAM_3, qs.get_int(PARAM_3) &+ 1)
       end
       qs.set(FLAG, 1)
       qs.set(WEIGHT_POINT, qs.get_int(WEIGHT_POINT) - 1)

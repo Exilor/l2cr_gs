@@ -32,10 +32,7 @@ class Scripts::Q00290_ThreatRemoval < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30201-02.html"
@@ -59,7 +56,6 @@ class Scripts::Q00290_ThreatRemoval < Quest
           st.reward_items(FIRE_CRYSTAL, 2)
         end
 
-
         html = event
       end
     when "30201-07.html"
@@ -81,7 +77,6 @@ class Scripts::Q00290_ThreatRemoval < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -121,7 +116,6 @@ class Scripts::Q00290_ThreatRemoval < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

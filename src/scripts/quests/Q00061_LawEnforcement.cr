@@ -14,10 +14,7 @@ class Scripts::Q00061_LawEnforcement < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32222-02.htm"
@@ -65,7 +62,7 @@ class Scripts::Q00061_LawEnforcement < Quest
         pc.class_id = 136
         # SystemMessage and cast skill is done by class_id=
         pc.broadcast_user_info
-        give_adena(pc, 26000, true)
+        give_adena(pc, 26_000, true)
         qs.exit_quest(false, true)
         html = event
       end

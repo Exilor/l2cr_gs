@@ -19,12 +19,7 @@ class Packets::Outgoing::GmViewQuestInfo < GameServerPacket
 
     quest_list.each do |q|
       d q.id
-
-      if qs = @pc.get_quest_state(q.name)
-        d qs.get_int("cond")
-      else
-        d 0
-      end
+      d (qs = @pc.get_quest_state(q.name)) ? qs.get_int("cond") : 0
     end
   end
 end

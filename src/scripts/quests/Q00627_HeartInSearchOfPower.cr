@@ -42,10 +42,7 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -64,7 +61,7 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
       end
       case event
       when "Adena"
-        st.give_adena(100000, true)
+        st.give_adena(100_000, true)
       when "Asofes"
         st.reward_items(ASOFE, 13)
         st.give_adena(6400, true)
@@ -73,10 +70,10 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
         st.give_adena(6400, true)
       when "Enrias"
         st.reward_items(ENRIA, 6)
-        st.give_adena(13600, true)
+        st.give_adena(13_600, true)
       when "Mold_Hardener"
         st.reward_items(MOLD_HARDENER, 3)
-        st.give_adena(17200, true)
+        st.give_adena(17_200, true)
       end
 
       html = "31518-10.html"
@@ -144,11 +141,8 @@ class Scripts::Q00627_HeartInSearchOfPower < Quest
         when 4
           html = "31519-03.html"
         end
-
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

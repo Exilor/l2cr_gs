@@ -1,6 +1,8 @@
 module GameDB
   module PremiumItemDAO
-    include Loggable
+    macro extended
+      include Loggable
+    end
 
     abstract def load(pc : L2PcInstance)
     abstract def update(pc : L2PcInstance, item_num : Int32, new_count : Int64)

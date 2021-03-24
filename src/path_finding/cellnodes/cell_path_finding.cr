@@ -2,7 +2,7 @@ require "./cell_node_buffer"
 
 module CellPathFinding
   extend self
-  extend Loggable
+  include Loggable
 
   private ALL_BUFFERS = [] of BufferInfo
 

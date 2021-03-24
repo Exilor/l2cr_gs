@@ -1,6 +1,6 @@
 module NpcBufferTable
   extend self
-  extend Loggable
+  include Loggable
 
   private BUFFERS = {} of Int32 => NpcBufferSkills
 
@@ -21,10 +21,6 @@ module NpcBufferTable
 
       GameDB.each(sql) do |rs|
         npc_id = rs.get_i32(:"npc_id")
-        if npc_id < 0
-          error { "npc_id #{npc_id} is negative." }
-          npc_id = npc_id.to_u16!.to_i32
-        end
         skill_id = rs.get_i32(:"skill_id")
         skill_level = rs.get_i32(:"skill_level")
         fee_id = rs.get_i32(:"skill_fee_id")

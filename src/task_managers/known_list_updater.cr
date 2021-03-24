@@ -1,6 +1,6 @@
 module KnownListUpdater
   extend self
-  extend Loggable
+  include Loggable
 
   private FULL_UPDATE_TIMER = 100
   private FAILED_REGIONS = Set(L2WorldRegion).new

@@ -33,10 +33,7 @@ class Scripts::Q00358_IllegitimateChildOfTheGoddess < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30862-02.htm", "30862-03.htm"
@@ -45,7 +42,6 @@ class Scripts::Q00358_IllegitimateChildOfTheGoddess < Quest
       st.start_quest
       event
     end
-
   end
 
   def on_kill(npc, pc, is_summon)

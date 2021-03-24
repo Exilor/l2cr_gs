@@ -6,7 +6,7 @@ require "./tasks/four_sepulchers_change_warm_up_time_task"
 module FourSepulchersManager
   extend self
   extend Synchronizable
-  extend Loggable
+  include Loggable
   include Packets::Outgoing
 
   private QUEST_ID       = 620
@@ -69,7 +69,7 @@ module FourSepulchersManager
 
   private PHYSICAL_SPAWNS       = [] of L2Spawn
   private MAGICAL_SPAWNS        = [] of L2Spawn
-  private MANAGERS              = Concurrent::Array(L2Spawn).new
+  private MANAGERS              = [] of L2Spawn
   private DUKE_FINAL_SPAWNS     = [] of L2Spawn
   private EMPERORS_GRAVE_SPAWNS = [] of L2Spawn
   private ALL_MOBS              = Concurrent::Array(L2Npc).new
@@ -171,7 +171,7 @@ module FourSepulchersManager
     close_all_doors
 
     HALL_IN_USE.clear
-    (31921..31924).each { |n| HALL_IN_USE[n] = false }
+    31921.upto(31924) { |n| HALL_IN_USE[n] = false }
 
     ARCHON_SPAWNED.transform_values! { |_| false }
   end

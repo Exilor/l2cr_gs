@@ -119,7 +119,7 @@ module AdminCommandHandler::AdminExpSp
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_add_exp_sp_to_character",
       "admin_add_exp_sp",

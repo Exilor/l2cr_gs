@@ -1,7 +1,7 @@
 class L2ResidenceTeleportZone < L2ZoneRespawn
   getter residence_id = 0
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     if name == "residenceId"
       @residence_id = value.to_i
     else

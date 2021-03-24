@@ -67,7 +67,7 @@ module AdminCommandHandler::AdminFortSiege
     reply = NpcHtmlMessage.new
     reply.set_file(pc, "data/html/admin/forts.htm")
     forts = FortManager.forts
-    list = String.build(forts.size * 100) do |io|
+    list = String.build(forts.size &* 100) do |io|
       forts.each do |fort|
         io << "<td fixwidth=90><a action=\"bypass -h admin_fortsiege "
         io << fort.residence_id
@@ -97,7 +97,7 @@ module AdminCommandHandler::AdminFortSiege
     pc.send_packet(reply)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_fortsiege",
       "admin_add_fortattacker",

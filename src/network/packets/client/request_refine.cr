@@ -18,7 +18,6 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
     return unless gemstone_item = pc.inventory.get_item_by_l2id(@gemstone_item_obj_id)
 
     unless valid?(pc, target_item, refiner_item, gemstone_item)
-      debug "#valid? returned false."
       pc.send_packet(ExVariationResult::STATIC_PACKET)
       pc.send_packet(SystemMessageId::AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS)
       return
@@ -30,7 +29,6 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
     ls_grade = ls.grade
 
     if @gemstone_count != get_gemstone_count(target_item.template.item_grade, ls_grade)
-      debug { "Incorrect gemstone count: #{@gemstone_count}/#{get_gemstone_count(target_item.template.item_grade, ls_grade)}." }
       pc.send_packet(ExVariationResult::STATIC_PACKET)
       pc.send_packet(SystemMessageId::AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS)
       return
@@ -45,18 +43,15 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
     end
 
     unless pc.destroy_item("RequestRefine", refiner_item, 1, nil, false)
-      debug "Destroying refiner item failed."
       return
     end
 
     unless pc.destroy_item("RequestRefine", gemstone_item, @gemstone_count, nil, false)
-      debug "Destroying the gemstones failed."
       return
     end
 
     aug = AugmentationData.generate_random_augmentation(ls_level, ls_grade, target_item.template.body_part, refiner_item.id, target_item)
     unless aug
-      warn "An augmentation wasn't successfully created."
       return
     end
     target_item.set_augmentation(aug)

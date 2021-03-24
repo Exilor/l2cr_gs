@@ -32,7 +32,7 @@ class Scripts::Q00279_TargetOfOpportunity < Quest
     return unless pc
     html = event
     unless st = get_quest_state(pc, false)
-      return
+      return get_no_quest_msg(pc)
     end
     if pc.level < 82
       return get_no_quest_msg(pc)

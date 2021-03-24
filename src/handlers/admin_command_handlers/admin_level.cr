@@ -45,7 +45,7 @@ module AdminCommandHandler::AdminLevel
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_add_level",
       "admin_set_level"

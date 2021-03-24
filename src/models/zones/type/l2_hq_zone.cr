@@ -1,5 +1,5 @@
 class L2HqZone < L2ZoneType
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name
     when "castleId"
       # L2J TODO

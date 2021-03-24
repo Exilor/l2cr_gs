@@ -92,11 +92,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    qs = get_quest_state(pc, false)
-    if qs.nil?
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -175,7 +171,6 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
       end
     end
 
-
     html
   end
 
@@ -187,7 +182,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
         if qs.memo_state?(2)
           flag = killer.variables.get_i32("flag", +1)
           if Rnd.rand(100) < (flag * 33)
-            add_spawn(ACTEA_OF_VERDANT_WILDS, npc, true, 200000)
+            add_spawn(ACTEA_OF_VERDANT_WILDS, npc, true, 200_000)
             play_sound(killer, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
           end
         end
@@ -195,7 +190,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
         if qs.memo_state?(2)
           flag = killer.variables.get_i32("flag", +1)
           if Rnd.rand(100) < (flag * 33)
-            add_spawn(LUELL_OF_ZEPHYR_WINDS, npc, true, 200000)
+            add_spawn(LUELL_OF_ZEPHYR_WINDS, npc, true, 200_000)
             play_sound(killer, Sound::ITEMSOUND_QUEST_BEFORE_BATTLE)
           end
         end
@@ -309,7 +304,6 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
           end
         end
       end
-
     end
 
     super
@@ -364,9 +358,9 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
       when HIGH_PRIEST_BIOTIN
         if memo_state == 19
           if has_quest_items?(pc, RECOMMENDATION_OF_HOLLIN)
-            give_adena(pc, 252212, true)
+            give_adena(pc, 252_212, true)
             give_items(pc, MARK_OF_TRUST, 1)
-            add_exp_and_sp(pc, 1390298, 92782)
+            add_exp_and_sp(pc, 1_390_298, 92_782)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30031-01.html"
@@ -400,7 +394,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
             html = "30358-01.html"
           end
         elsif memo_state == 6
-          if has_quest_items?(pc, ORDER_OF_CLAYTON) && get_quest_items_count(pc, STAKATO_ICHOR) + get_quest_items_count(pc, HONEY_DEW) + get_quest_items_count(pc, BASILISK_PLASMA) == 3
+          if has_quest_items?(pc, ORDER_OF_CLAYTON) && get_quest_items_count(pc, STAKATO_ICHOR) &+ get_quest_items_count(pc, HONEY_DEW) &+ get_quest_items_count(pc, BASILISK_PLASMA) == 3
             give_items(pc, SCROLL_OF_DARKELF_TRUST, 1)
             take_items(pc, BASILISK_PLASMA, -1)
             take_items(pc, HONEY_DEW, -1)
@@ -425,7 +419,7 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
             html = "30464-01.html"
           end
         elsif memo_state == 6
-          if has_quest_items?(pc, ORDER_OF_CLAYTON) && get_quest_items_count(pc, STAKATO_ICHOR) + get_quest_items_count(pc, HONEY_DEW) + get_quest_items_count(pc, BASILISK_PLASMA) < 3
+          if has_quest_items?(pc, ORDER_OF_CLAYTON) && get_quest_items_count(pc, STAKATO_ICHOR) &+ get_quest_items_count(pc, HONEY_DEW) &+ get_quest_items_count(pc, BASILISK_PLASMA) < 3
             html = "30464-02.html"
           else
             qs.set_cond(8, true)
@@ -508,7 +502,6 @@ class Scripts::Q00217_TestimonyOfTrust < Quest
           html = "30657-05.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == HIGH_PRIEST_HOLLINT
         html = get_already_completed_msg(pc)

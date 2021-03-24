@@ -6,7 +6,7 @@ require "./olympiad_game_non_classed"
 
 module OlympiadGameManager
   extend self
-  extend Loggable
+  include Loggable
 
   private TASKS = [] of OlympiadGameTask
 

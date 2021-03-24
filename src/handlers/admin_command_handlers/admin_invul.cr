@@ -30,7 +30,7 @@ module AdminCommandHandler::AdminInvul
     pc.send_message(text)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_invul",
       "admin_setinvul"

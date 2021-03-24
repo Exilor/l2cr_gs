@@ -1,6 +1,6 @@
 module RaidBossPointsManager
   extend self
-  extend Loggable
+  include Loggable
 
   private LIST = Concurrent::Map(Int32, Hash(Int32, Int32)).new
 

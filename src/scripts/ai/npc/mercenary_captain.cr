@@ -92,18 +92,17 @@ class Scripts::MercenaryCaptain < AbstractNpcAI
         if !has_quest_items?(pc, ELITE_MERCENARY_CERTIFICATE)
           htmltext = "36481-10.html"
         else
-          list_id = 676 + npc.castle.residence_id
+          list_id = 676 &+ npc.castle.residence_id
           MultisellData.separate_and_send(list_id, pc, npc, false)
         end
       when "top-elite"
         if !has_quest_items?(pc, TOP_ELITE_MERCENARY_CERTIFICATE)
           htmltext = "36481-10.html"
         else
-          list_id = 685 + npc.castle.residence_id
+          list_id = 685 &+ npc.castle.residence_id
           MultisellData.separate_and_send(list_id, pc, npc, false)
         end
       end
-
     elsif event.casecmp?("say") && !npc.decayed?
       if TerritoryWarManager.tw_in_progress?
         broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::CHARGE_CHARGE_CHARGE)

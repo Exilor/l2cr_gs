@@ -4,7 +4,7 @@ module BypassHandler::Loto
 
   private TICKET = 4442
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     unless target.is_a?(L2Npc)
       return false
     end
@@ -227,7 +227,7 @@ module BypassHandler::Loto
     pc.action_failed
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"Loto"}
   end
 end

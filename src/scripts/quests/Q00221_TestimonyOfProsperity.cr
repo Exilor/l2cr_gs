@@ -115,8 +115,7 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -224,7 +223,6 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
       end
     end
 
-
     html
   end
 
@@ -297,7 +295,6 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
           end
         end
       end
-
     end
 
     super
@@ -339,9 +336,9 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
           elsif has_at_least_one_quest_item?(pc, CLAY_DOUGH, PATTERN_OF_KEYHOLE, NIKOLAS_LIST)
             html = "30104-12.html"
           elsif has_quest_items?(pc, MAPHR_TABLET_FRAGMENT)
-            give_adena(pc, 217682, true)
+            give_adena(pc, 217_682, true)
             give_items(pc, MARK_OF_PROSPERITY, 1)
-            add_exp_and_sp(pc, 1199958, 80080)
+            add_exp_and_sp(pc, 1_199_958, 80_080)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30104-13.html"
@@ -453,10 +450,10 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
         end
       when SILVER_SCALES_BALANKI
         if has_quest_items?(pc, RING_OF_TESTIMONY_1ST, COLLECTION_LICENSE)
-          if has_quest_items?(pc, LOCKIRINS_2ND_NOTICE) && !has_quest_items?(pc, RECEIPT_OF_CONTRIBUTION_2ND) && get_quest_items_count(pc, CONTRIBUTION_OF_MION) + get_quest_items_count(pc, CONTRIBUTION_OF_MARYSE) < 2
+          if has_quest_items?(pc, LOCKIRINS_2ND_NOTICE) && !has_quest_items?(pc, RECEIPT_OF_CONTRIBUTION_2ND) && get_quest_items_count(pc, CONTRIBUTION_OF_MION) &+ get_quest_items_count(pc, CONTRIBUTION_OF_MARYSE) < 2
             take_items(pc, LOCKIRINS_2ND_NOTICE, 1)
             html = "30533-01.html"
-          elsif !has_at_least_one_quest_item?(pc, LOCKIRINS_2ND_NOTICE, RECEIPT_OF_CONTRIBUTION_2ND) && get_quest_items_count(pc, CONTRIBUTION_OF_MION) + get_quest_items_count(pc, CONTRIBUTION_OF_MARYSE) < 2
+          elsif !has_at_least_one_quest_item?(pc, LOCKIRINS_2ND_NOTICE, RECEIPT_OF_CONTRIBUTION_2ND) && get_quest_items_count(pc, CONTRIBUTION_OF_MION) &+ get_quest_items_count(pc, CONTRIBUTION_OF_MARYSE) < 2
             html = "30533-02.html"
           elsif !has_at_least_one_quest_item?(pc, LOCKIRINS_2ND_NOTICE, RECEIPT_OF_CONTRIBUTION_2ND) && has_quest_items?(pc, CONTRIBUTION_OF_MION, CONTRIBUTION_OF_MARYSE)
             take_items(pc, CONTRIBUTION_OF_MION, 1)
@@ -606,7 +603,6 @@ class Scripts::Q00221_TestimonyOfProsperity < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == WAREHOUSE_KEEPER_PARMAN
         html = get_already_completed_msg(pc)

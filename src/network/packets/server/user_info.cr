@@ -72,17 +72,11 @@ class Packets::Outgoing::UserInfo < GameServerPacket
 
     inv = @pc.inventory
 
-    paperdoll_order do |slot|
-      d inv.get_paperdoll_l2id(slot)
-    end
+    paperdoll_order { |slot| d inv.get_paperdoll_l2id(slot) }
 
-    paperdoll_order do |slot|
-      d inv.get_paperdoll_item_display_id(slot)
-    end
+    paperdoll_order { |slot| d inv.get_paperdoll_item_display_id(slot) }
 
-    paperdoll_order do |slot|
-      d inv.get_paperdoll_augmentation_id(slot)
-    end
+    paperdoll_order { |slot| d inv.get_paperdoll_augmentation_id(slot) }
 
 
     d inv.talisman_slots

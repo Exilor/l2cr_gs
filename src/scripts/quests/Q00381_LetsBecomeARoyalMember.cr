@@ -25,10 +25,7 @@ class Scripts::Q00381_LetsBecomeARoyalMember < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30232-03.htm"
@@ -44,7 +41,6 @@ class Scripts::Q00381_LetsBecomeARoyalMember < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -94,9 +90,7 @@ class Scripts::Q00381_LetsBecomeARoyalMember < Quest
           html = "30090-03.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

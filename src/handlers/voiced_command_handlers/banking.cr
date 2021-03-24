@@ -10,7 +10,7 @@ module VoicedCommandHandler::Banking
       msg = ".deposit (#{Config.banking_system_adena} Adena = #{Config.banking_system_goldbars} Goldbar) / .withdraw (#{Config.banking_system_goldbars} Goldbar = #{Config.banking_system_adena} Adena)"
       pc.send_message(msg)
     when "deposit"
-      if pc.inventory.get_inventory_item_count(57, 0) >= Config.banking_system_adena
+      if pc.adena >= Config.banking_system_adena
         unless pc.reduce_adena("Goldbar", Config.banking_system_adena, pc, false)
           return false
         end
@@ -34,7 +34,6 @@ module VoicedCommandHandler::Banking
         pc.send_message("You do not have any Goldbars to turn into #{Config.banking_system_adena} Adena.")
       end
     end
-
 
     true
   end

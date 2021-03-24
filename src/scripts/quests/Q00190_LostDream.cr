@@ -16,10 +16,7 @@ class Scripts::Q00190_LostDream < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -47,7 +44,6 @@ class Scripts::Q00190_LostDream < Quest
       end
     end
 
-
     html
   end
 
@@ -72,9 +68,9 @@ class Scripts::Q00190_LostDream < Quest
           html = "30512-07.html"
         elsif memo_state == 5
           html = "30512-08.html"
-          give_adena(pc, 109427, true)
+          give_adena(pc, 109_427, true)
           if pc.level < MAX_LEVEL_FOR_EXP_SP
-            add_exp_and_sp(pc, 309467, 20614)
+            add_exp_and_sp(pc, 309_467, 20_614)
           end
           qs.exit_quest(false, true)
         end
@@ -101,7 +97,6 @@ class Scripts::Q00190_LostDream < Quest
           html = "30673-02.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == HEAD_BLACKSMITH_KUSTO
         html = get_already_completed_msg(pc)

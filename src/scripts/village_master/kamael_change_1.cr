@@ -36,7 +36,6 @@ class Scripts::KamaelChange1 < AbstractNpcAI
     when "125", "126"
       class_change_requested(pc, event.to_i)
     end
-
   end
 
   private def class_change_requested(pc, class_id)

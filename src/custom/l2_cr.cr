@@ -21,7 +21,6 @@ module L2Cr
       L2World.players.each do |pc|
         if pc.online? && !pc.teleporting?
           op = Packets::Outgoing::PcInfo.new(pc)
-          # op = Packets::Outgoing::ServerInfo.new
           pc.send_packet(op)
           op = Packets::Outgoing::ZoneInfo.new(pc)
           pc.send_packet(op)
@@ -91,17 +90,11 @@ module L2Cr
             pc.access_level = 8
           end
         else
-          puts "Player '#{name}' not found in game."
-          # sql = "UPDATE characters SET accesslevel=? WHERE char_name=?"
-          # GameDB.exec(sql, 8, name)
+          sql = "UPDATE characters SET accesslevel=? WHERE char_name=?"
+          GameDB.exec(sql, 8, name)
         end
       when "uptime"
         puts Time.local - GameServer.start_time
-      when "test"
-        p "Known characters: #{L2World.players.first.known_list.known_characters.to_a.size}"
-        p "Known characters in radius: #{L2World.players.first.known_list.get_known_characters_in_radius(500).to_a.size}"
-        # p "Known players: #{L2World.players.first.known_list.each_player.to_a.size}"
-        p "Known players in radius: #{L2World.players.first.known_list.get_known_players_in_radius(500).to_a.size}"
       else
         return "unknown command '#{cmd}'"
       end

@@ -1,6 +1,6 @@
 module DayNightSpawnManager
   extend self
-  extend Loggable
+  include Loggable
 
   private DAY_CREATURES = [] of L2Spawn
   private NIGHT_CREATURES = [] of L2Spawn

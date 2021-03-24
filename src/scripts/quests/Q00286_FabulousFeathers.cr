@@ -24,10 +24,7 @@ class Scripts::Q00286_FabulousFeathers < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32164-03.htm"
@@ -43,7 +40,6 @@ class Scripts::Q00286_FabulousFeathers < Quest
         html = "32164-07.html"
       end
     end
-
 
     html
   end

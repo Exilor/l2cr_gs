@@ -324,4 +324,8 @@ class Shutdown
   def self.abort(pc = nil)
     instance.abort(pc) if @@instance
   end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
+  end
 end

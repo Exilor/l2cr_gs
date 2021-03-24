@@ -701,10 +701,6 @@ class Skill
     to_s(io)
   end
 
-  def to_log(io : IO)
-    to_s(io)
-  end
-
   private def parse_abnormal_visual_effect(string)
     return if string.nil? || string.empty?
 

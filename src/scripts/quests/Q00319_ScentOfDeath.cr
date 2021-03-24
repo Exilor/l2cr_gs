@@ -22,8 +22,7 @@ class Scripts::Q00319_ScentOfDeath < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     if pc.level >= MIN_LEVEL
       case event
@@ -72,9 +71,7 @@ class Scripts::Q00319_ScentOfDeath < Quest
         st.exit_quest(true, true)
         html = "30138-06.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

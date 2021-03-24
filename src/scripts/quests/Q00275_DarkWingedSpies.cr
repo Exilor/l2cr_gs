@@ -22,9 +22,8 @@ class Scripts::Q00275_DarkWingedSpies < Quest
     register_quest_items(DARKWING_BAT_FANG, VARANGKAS_PARASITE)
   end
 
-  def on_adv_event(event, npc, player)
-    return unless player
-    return unless st = get_quest_state(player, false)
+  def on_adv_event(event, npc, pc)
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event == "30567-03.htm"
       st.start_quest
@@ -54,7 +53,6 @@ class Scripts::Q00275_DarkWingedSpies < Quest
           st.take_items(VARANGKAS_PARASITE, -1)
         end
       end
-
     end
 
     super
@@ -91,14 +89,12 @@ class Scripts::Q00275_DarkWingedSpies < Quest
       when 2
         count = st.get_quest_items_count(DARKWING_BAT_FANG)
         if count >= MAX_BAT_FANG_COUNT
-          st.give_adena(count * FANG_PRICE, true)
+          st.give_adena(count &* FANG_PRICE, true)
           st.exit_quest(true, true)
           html = "30567-05.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

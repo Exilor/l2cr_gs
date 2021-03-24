@@ -24,8 +24,7 @@ class Scripts::Q00263_OrcSubjugation < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30346-04.htm"
@@ -37,7 +36,6 @@ class Scripts::Q00263_OrcSubjugation < Quest
     when "30346-08.html"
       html = event
     end
-
 
     html
   end
@@ -70,8 +68,8 @@ class Scripts::Q00263_OrcSubjugation < Quest
       if has_at_least_one_quest_item?(pc, registered_item_ids)
         amulets = st.get_quest_items_count(ORC_AMULET)
         necklaces = st.get_quest_items_count(ORC_NECKLACE)
-        adena = (amulets * 20) + (necklaces * 30)
-        adena += (amulets + necklaces >= 10 ? 1100 : 0)
+        adena = (amulets &* 20) &+ (necklaces &* 30)
+        adena &+= (amulets &+ necklaces >= 10 ? 1100 : 0)
         st.give_adena(adena, true)
         take_items(pc, -1, registered_item_ids)
         html = "30346-06.html"
@@ -79,7 +77,6 @@ class Scripts::Q00263_OrcSubjugation < Quest
         html = "30346-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

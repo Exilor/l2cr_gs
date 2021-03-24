@@ -1,6 +1,8 @@
 module GameDB
   module RecipeShopListDAO
-    include Loggable
+    macro extended
+      include Loggable
+    end
 
     abstract def load(pc : L2PcInstance)
     abstract def delete(pc : L2PcInstance)

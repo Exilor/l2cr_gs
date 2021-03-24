@@ -47,7 +47,6 @@ class Scripts::Q00156_MillenniumLove < Quest
           html = event
         end
       end
-
     end
 
     html
@@ -72,7 +71,6 @@ class Scripts::Q00156_MillenniumLove < Quest
         when State::COMPLETED
           html = get_already_completed_msg(pc)
         end
-
       when BAENEDES
         case st.cond
         when 1
@@ -84,9 +82,7 @@ class Scripts::Q00156_MillenniumLove < Quest
             html = "30369-04.html"
           end
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)

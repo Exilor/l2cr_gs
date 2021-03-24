@@ -90,12 +90,29 @@ class CharEffectList
   def effects : Indexable(BuffInfo)
     return Slice(BuffInfo).empty if empty?
 
-    ret = [] of BuffInfo
-    buffs.each { |b| ret << b }     if has_buffs?
-    triggered.each { |b| ret << b } if has_triggered?
-    dances.each { |b| ret << b }    if has_dances?
-    toggles.each { |b| ret << b }   if has_toggles?
-    debuffs.each { |b| ret << b }   if has_debuffs?
+    size = 0
+    if buffs = @buffs
+      size &+= buffs.size
+    end
+    if debuffs = @debuffs
+      size &+= debuffs.size
+    end
+    if triggered = @triggered
+      size &+= triggered.size
+    end
+    if dances = @dances
+      size &+= dances.size
+    end
+    if toggles = @toggles
+      size &+= toggles.size
+    end
+
+    ret = Array(BuffInfo).new(size)
+    ret.concat(buffs)     if buffs
+    ret.concat(triggered) if triggered
+    ret.concat(dances)    if dances
+    ret.concat(toggles)   if toggles
+    ret.concat(debuffs)   if debuffs
     ret
   end
 
@@ -114,7 +131,7 @@ class CharEffectList
 
   def get_buff_info_by_skill_id(id : Int32) : BuffInfo?
     find { |info| info.skill.id == id } ||
-    @passives.try &.find { |info| info.skill.id == id }
+      @passives.try &.find { |info| info.skill.id == id }
   end
 
   def affected_by_skill?(id : Int32) : Bool
@@ -134,17 +151,17 @@ class CharEffectList
   end
 
   def short_buff_status_update(info : BuffInfo?)
-    if @owner.player?
-      @short_buff = info
+    return unless @owner.player?
 
-      if info
-        id = info.skill.id
-        level = info.skill.level
-        time = info.time
-        @owner.send_packet(ShortBuffStatusUpdate.new(id, level, time))
-      else
-        @owner.send_packet(ShortBuffStatusUpdate::CLEAR)
-      end
+    @short_buff = info
+
+    if info
+      id = info.skill.id
+      level = info.skill.level
+      time = info.time
+      @owner.send_packet(ShortBuffStatusUpdate.new(id, level, time))
+    else
+      @owner.send_packet(ShortBuffStatusUpdate::CLEAR)
     end
   end
 
@@ -261,21 +278,21 @@ class CharEffectList
   end
 
   def stop_all_toggles(update : Bool = true)
-    if has_toggles?
+    if toggles = @toggles
       toggles.safe_each { |i| stop_and_remove(i, toggles) }
       update_effect_list(update)
     end
   end
 
   def stop_all_dances(update : Bool = true)
-    if has_dances?
+    if dances = @dances
       dances.safe_each { |i| stop_and_remove(i, dances) }
       update_effect_list(update)
     end
   end
 
   def stop_all_debuffs(update : Bool = true)
-    if has_debuffs?
+    if debuffs = @debuffs
       debuffs.safe_each { |i| stop_and_remove(i, debuffs) }
       update_effect_list(update)
     end
@@ -305,11 +322,9 @@ class CharEffectList
   end
 
   def stop_skill_effects(removed : Bool, type : AbnormalType) : Bool
-    if effects = @stacked_effects
-      if old = effects.delete(type)
-        stop_skill_effects(removed, old.skill)
-        return true
-      end
+    if (effects = @stacked_effects) && (old = effects.delete(type))
+      stop_skill_effects(removed, old.skill)
+      return true
     end
 
     false
@@ -378,7 +393,7 @@ class CharEffectList
 
   def empty? : Bool
     !has_buffs? && !has_triggered? && !has_dances? && !has_debuffs? &&
-    !has_toggles?
+      !has_toggles?
   end
 
   def has_buffs? : Bool
@@ -667,7 +682,7 @@ class CharEffectList
 
   private def compute_effect_flags
     @effect_flags = reduce(0) do |flags, info|
-      info.effects.reduce(flags) { |f, e| f | e.effect_flags }
+      info.effects.reduce(flags) { |flag, effect| flag | effect.effect_flags }
     end
   end
 
@@ -675,7 +690,7 @@ class CharEffectList
     @effect_flags & flag.mask != 0
   end
 
-  def to_log(io : IO)
+  def to_s(io : IO)
     io.print("CharEffectList(", @owner, ')')
   end
 end

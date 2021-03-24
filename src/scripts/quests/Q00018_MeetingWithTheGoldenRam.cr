@@ -33,8 +33,8 @@ class Scripts::Q00018_MeetingWithTheGoldenRam < Quest
       st.give_items(BOX, 1)
     when "31555-02.html"
       if st.has_quest_items?(BOX)
-        st.give_adena(40000, true)
-        st.add_exp_and_sp(126668, 11731)
+        st.give_adena(40_000, true)
+        st.add_exp_and_sp(126_668, 11_731)
         st.exit_quest(false, true)
       end
     end

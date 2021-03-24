@@ -108,10 +108,8 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
+
     chance = Rnd.rand(100)
     chance1 = Rnd.rand(100)
 
@@ -264,9 +262,9 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         html = event
       end
     when "30736-03.html"
-      if get_quest_items_count(pc, Inventory::ADENA_ID) < 650 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+      if pc.adena < 650 && get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
         html = event
-      elsif get_quest_items_count(pc, Inventory::ADENA_ID) >= 650 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+      elsif pc.adena >= 650 && get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
         take_items(pc, Inventory::ADENA_ID, 650)
         if has_quest_items?(pc, CARGO_BOX_1ST)
           take_items(pc, CARGO_BOX_1ST, 1)
@@ -348,13 +346,13 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           end
           html = "30736-04o.html"
         end
-      elsif get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) < 1
+      elsif get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) < 1
         html = "30736-05.html"
       end
     when "30736-07.html"
-      if pc.adena < 200 + (qs.memo_state * 200)
+      if pc.adena < 200 &+ (qs.memo_state &* 200)
         html = event
-      elsif qs.memo_state * 100 > 200
+      elsif qs.memo_state &* 100 > 200
         html = "30736-08.html"
       else
         if chance < 5
@@ -398,11 +396,11 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         else
           html = "30736-08t.html"
         end
-        take_items(pc, Inventory::ADENA_ID, 200 + (qs.memo_state * 200))
-        qs.memo_state += 1
+        take_items(pc, Inventory::ADENA_ID, 200 &+ (qs.memo_state &* 200))
+        qs.memo_state &+= 1
       end
     when "30737-06.html"
-      if get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) < 1
+      if get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) < 1
         html = event
       else
         if has_quest_items?(pc, CARGO_BOX_1ST)
@@ -433,7 +431,6 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       end
     end
-
 
     html
   end
@@ -650,14 +647,14 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
     elsif qs.started?
       case npc.id
       when MERCENARY_CAPTAIN_SOPHYA
-        if get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 0
+        if get_quest_items_count(pc, SOPHYAS_1ST_ORDER) &+ get_quest_items_count(pc, SOPHYAS_2ND_ORDER) &+ get_quest_items_count(pc, SOPHYAS_3RD_ORDER) &+ get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 0
           html = "30735-14.html"
-        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) < 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) < 1
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) &+ get_quest_items_count(pc, SOPHYAS_2ND_ORDER) &+ get_quest_items_count(pc, SOPHYAS_3RD_ORDER) &+ get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) &+ get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) &+ get_quest_items_count(pc, DELU_LIZARDMAN_FANG) &+ get_quest_items_count(pc, STAKATO_TALON) < 1 && get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) < 1
           html = "30735-15.html"
-        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) < 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) &+ get_quest_items_count(pc, SOPHYAS_2ND_ORDER) &+ get_quest_items_count(pc, SOPHYAS_3RD_ORDER) &+ get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) &+ get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) &+ get_quest_items_count(pc, DELU_LIZARDMAN_FANG) &+ get_quest_items_count(pc, STAKATO_TALON) < 1 && get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
           html = "30735-15a.html"
-        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) >= 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) == 0
-          itemcount = get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON)
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) &+ get_quest_items_count(pc, SOPHYAS_2ND_ORDER) &+ get_quest_items_count(pc, SOPHYAS_3RD_ORDER) &+ get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) &+ get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) &+ get_quest_items_count(pc, DELU_LIZARDMAN_FANG) &+ get_quest_items_count(pc, STAKATO_TALON) >= 1 && get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) == 0
+          itemcount = get_quest_items_count(pc, UNDEAD_ASH) &+ get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) &+ get_quest_items_count(pc, DELU_LIZARDMAN_FANG) &+ get_quest_items_count(pc, STAKATO_TALON)
           if itemcount < 20
 
           elsif itemcount < 50
@@ -671,15 +668,15 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           insignia = get_quest_items_count(pc, BLOODY_AXE_INSIGNIA)
           fang = get_quest_items_count(pc, DELU_LIZARDMAN_FANG)
           talon = get_quest_items_count(pc, STAKATO_TALON)
-          give_adena(pc, (ash * 35) + (insignia * 35) + fang + 35 + (talon * 35), true)
+          give_adena(pc, (ash &* 35) &+ (insignia &* 35) &+ fang &+ 35 &+ (talon &* 35), true)
           take_items(pc, UNDEAD_ASH, -1)
           take_items(pc, BLOODY_AXE_INSIGNIA, -1)
           take_items(pc, DELU_LIZARDMAN_FANG, -1)
           take_items(pc, STAKATO_TALON, -1)
           qs.memo_state = 0
           html = "30735-22.html"
-        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) + get_quest_items_count(pc, SOPHYAS_2ND_ORDER) + get_quest_items_count(pc, SOPHYAS_3RD_ORDER) + get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON) >= 1 && get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
-          itemcount = get_quest_items_count(pc, UNDEAD_ASH) + get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) + get_quest_items_count(pc, DELU_LIZARDMAN_FANG) + get_quest_items_count(pc, STAKATO_TALON)
+        elsif get_quest_items_count(pc, SOPHYAS_1ST_ORDER) &+ get_quest_items_count(pc, SOPHYAS_2ND_ORDER) &+ get_quest_items_count(pc, SOPHYAS_3RD_ORDER) &+ get_quest_items_count(pc, SOPHYAS_4TH_ORDER) == 1 && get_quest_items_count(pc, UNDEAD_ASH) &+ get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) &+ get_quest_items_count(pc, DELU_LIZARDMAN_FANG) &+ get_quest_items_count(pc, STAKATO_TALON) >= 1 && get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+          itemcount = get_quest_items_count(pc, UNDEAD_ASH) &+ get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) &+ get_quest_items_count(pc, DELU_LIZARDMAN_FANG) &+ get_quest_items_count(pc, STAKATO_TALON)
           if itemcount < 20
 
           elsif itemcount < 50
@@ -689,10 +686,10 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           else
             give_items(pc, LIONS_CLAW, 3)
           end
-          give_adena(pc, get_quest_items_count(pc, UNDEAD_ASH) * 35, true)
-          give_adena(pc, get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) * 35, true)
-          give_adena(pc, get_quest_items_count(pc, DELU_LIZARDMAN_FANG) * 35, true)
-          give_adena(pc, get_quest_items_count(pc, STAKATO_TALON) * 35, true)
+          give_adena(pc, get_quest_items_count(pc, UNDEAD_ASH) &* 35, true)
+          give_adena(pc, get_quest_items_count(pc, BLOODY_AXE_INSIGNIA) &* 35, true)
+          give_adena(pc, get_quest_items_count(pc, DELU_LIZARDMAN_FANG) &* 35, true)
+          give_adena(pc, get_quest_items_count(pc, STAKATO_TALON) &* 35, true)
           take_items(pc, UNDEAD_ASH, -1)
           take_items(pc, BLOODY_AXE_INSIGNIA, -1)
           take_items(pc, DELU_LIZARDMAN_FANG, -1)
@@ -702,7 +699,7 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
         end
       when ABYSSAL_CELEBRANT_UNDRIAS
         if !has_quest_items?(pc, COMPLETE_STATUE_OF_SHILEN)
-          if get_quest_items_count(pc, STATUE_OF_SHILEN_HEAD) + get_quest_items_count(pc, STATUE_OF_SHILEN_TORSO) + get_quest_items_count(pc, STATUE_OF_SHILEN_ARM) + get_quest_items_count(pc, STATUE_OF_SHILEN_LEG) >= 1
+          if get_quest_items_count(pc, STATUE_OF_SHILEN_HEAD) &+ get_quest_items_count(pc, STATUE_OF_SHILEN_TORSO) &+ get_quest_items_count(pc, STATUE_OF_SHILEN_ARM) &+ get_quest_items_count(pc, STATUE_OF_SHILEN_LEG) >= 1
             html = "30130-02.html"
           else
             html = "30130-01.html"
@@ -711,14 +708,14 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           html = "30130-03.html"
         end
       when BLACKSMITH_RUPIO
-        if get_quest_items_count(pc, STATUE_OF_SHILEN_HEAD) + get_quest_items_count(pc, STATUE_OF_SHILEN_TORSO) + get_quest_items_count(pc, STATUE_OF_SHILEN_ARM) + get_quest_items_count(pc, STATUE_OF_SHILEN_LEG) >= 1 || get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
+        if get_quest_items_count(pc, STATUE_OF_SHILEN_HEAD) &+ get_quest_items_count(pc, STATUE_OF_SHILEN_TORSO) &+ get_quest_items_count(pc, STATUE_OF_SHILEN_ARM) &+ get_quest_items_count(pc, STATUE_OF_SHILEN_LEG) >= 1 || get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) &+ get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) &+ get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) &+ get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
           html = "30471-02.html"
         else
           html = "30471-01.html"
         end
       when IRON_GATES_LOCKIRIN
         if !has_quest_items?(pc, COMPLETE_ANCIENT_TABLET)
-          if get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) + get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
+          if get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_1ST_PIECE) &+ get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_2ND_PIECE) &+ get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_3RD_PIECE) &+ get_quest_items_count(pc, FRAGMENT_OF_ANCIENT_TABLET_4TH_PIECE) >= 1
             html = "30531-02.html"
           else
             html = "30531-01.html"
@@ -727,13 +724,13 @@ class Scripts::Q00333_HuntOfTheBlackLion < Quest
           html = "30531-03.html"
         end
       when MERCENARY_REEDFOOT
-        if get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+        if get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
           html = "30736-02.html"
         else
           html = "30736-01.html"
         end
       when GUILDSMAN_MORGON
-        if get_quest_items_count(pc, CARGO_BOX_1ST) + get_quest_items_count(pc, CARGO_BOX_2ND) + get_quest_items_count(pc, CARGO_BOX_3RD) + get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
+        if get_quest_items_count(pc, CARGO_BOX_1ST) &+ get_quest_items_count(pc, CARGO_BOX_2ND) &+ get_quest_items_count(pc, CARGO_BOX_3RD) &+ get_quest_items_count(pc, CARGO_BOX_4TH) >= 1
           html = "30737-02.html"
         else
           html = "30737-01.html"

@@ -31,7 +31,7 @@ class Scripts::Shadai < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    start_quest_timer("VALIDATE_POS", 60000, npc, nil, true)
+    start_quest_timer("VALIDATE_POS", 60_000, npc, nil, true)
     super
   end
 end

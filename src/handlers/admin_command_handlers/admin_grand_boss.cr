@@ -140,7 +140,6 @@ module AdminCommandHandler::AdminGrandBoss
           text_color = "FF0000" # Red
           text = "Dead"
         end
-
       end
 
       html = NpcHtmlMessage.new(0, 1)
@@ -186,7 +185,7 @@ module AdminCommandHandler::AdminGrandBoss
     ai
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_grandboss",
       "admin_grandboss_skip",

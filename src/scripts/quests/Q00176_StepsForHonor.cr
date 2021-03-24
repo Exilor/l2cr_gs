@@ -14,9 +14,9 @@ class Scripts::Q00176_StepsForHonor < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event.casecmp?("36479-04.html")
+    return unless pc && (st = get_quest_state(pc, false))
+
+    if event.casecmp?("36479-04.html")
       st.start_quest
       return event
     end
@@ -58,11 +58,9 @@ class Scripts::Q00176_StepsForHonor < Quest
         st.exit_quest(false, true)
         html = "36479-13.html"
       end
-
     when State::COMPLETED
       html = "36479-01.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

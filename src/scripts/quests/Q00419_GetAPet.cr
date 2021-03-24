@@ -136,8 +136,7 @@ class Scripts::Q00419_GetAPet < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -163,9 +162,9 @@ class Scripts::Q00419_GetAPet < Quest
           give_items(pc, ANIMAL_SLAYERS_LIST, 1)
           html = "30731-08a.htm"
         end
-
       end
-    when "30731-03.htm", "30072-02.html", "30091-02.html", "30256-02.html", "30256-03.html"
+    when "30731-03.htm", "30072-02.html", "30091-02.html", "30256-02.html",
+         "30256-03.html"
       html = event
     when "30731-12.html"
       case pc.race

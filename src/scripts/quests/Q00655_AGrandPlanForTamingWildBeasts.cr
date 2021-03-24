@@ -19,10 +19,7 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     html = nil
     clan = pc.clan
@@ -49,7 +46,6 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
         html = html.sub("%next_siege%", siege_date)
       end
     end
-
 
     html
   end
@@ -122,7 +118,7 @@ class Scripts::Q00655_AGrandPlanForTamingWildBeasts < Quest
 
   private def minutes_to_siege
     if hall = ClanHallSiegeManager.get_siegable_hall(ClanHallSiegeEngine::BEAST_FARM)
-      return (hall.next_siege_time - Time.ms) / 3600
+      return (hall.next_siege_time &- Time.ms) / 3600
     end
 
     -1

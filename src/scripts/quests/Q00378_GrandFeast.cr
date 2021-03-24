@@ -29,10 +29,7 @@ class Scripts::Q00378_GrandFeast < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30594-02.htm"
@@ -43,7 +40,7 @@ class Scripts::Q00378_GrandFeast < Quest
       i0 = qs.get_memo_state_ex(1)
       if has_quest_items?(pc, OLD_WINE_15_YEAR)
         take_items(pc, OLD_WINE_15_YEAR, 1)
-        qs.set_memo_state_ex(1, i0 + 10)
+        qs.set_memo_state_ex(1, i0 &+ 10)
         qs.set_cond(2, true)
         html = event
       else
@@ -53,7 +50,7 @@ class Scripts::Q00378_GrandFeast < Quest
       i0 = qs.get_memo_state_ex(1)
       if has_quest_items?(pc, OLD_WINE_30_YEAR)
         take_items(pc, OLD_WINE_30_YEAR, 1)
-        qs.set_memo_state_ex(1, i0 + 20)
+        qs.set_memo_state_ex(1, i0 &+ 20)
         qs.set_cond(2, true)
         html = event
       else
@@ -63,7 +60,7 @@ class Scripts::Q00378_GrandFeast < Quest
       i0 = qs.get_memo_state_ex(1)
       if has_quest_items?(pc, OLD_WINE_60_YEAR)
         take_items(pc, OLD_WINE_60_YEAR, 1)
-        qs.set_memo_state_ex(1, i0 + 30)
+        qs.set_memo_state_ex(1, i0 &+ 30)
         qs.set_cond(2, true)
         html = event
       else
@@ -83,7 +80,7 @@ class Scripts::Q00378_GrandFeast < Quest
       i0 = qs.get_memo_state_ex(1)
       if has_quest_items?(pc, JONAS_SALAD_RECIPE)
         take_items(pc, JONAS_SALAD_RECIPE, 1)
-        qs.set_memo_state_ex(1, i0 + 1)
+        qs.set_memo_state_ex(1, i0 &+ 1)
         qs.set_cond(4, true)
         html = event
       else
@@ -93,7 +90,7 @@ class Scripts::Q00378_GrandFeast < Quest
       i0 = qs.get_memo_state_ex(1)
       if has_quest_items?(pc, JONAS_SAUCE_RECIPE)
         take_items(pc, JONAS_SAUCE_RECIPE, 1)
-        qs.set_memo_state_ex(1, i0 + 2)
+        qs.set_memo_state_ex(1, i0 &+ 2)
         qs.set_cond(4, true)
         html = event
       else
@@ -103,14 +100,13 @@ class Scripts::Q00378_GrandFeast < Quest
       i0 = qs.get_memo_state_ex(1)
       if has_quest_items?(pc, JONAS_STEAK_RECIPE)
         take_items(pc, JONAS_STEAK_RECIPE, 1)
-        qs.set_memo_state_ex(1, i0 + 3)
+        qs.set_memo_state_ex(1, i0 &+ 3)
         qs.set_cond(4, true)
         html = event
       else
         html = "30594-17.html"
       end
     end
-
 
     html
   end
@@ -175,7 +171,6 @@ class Scripts::Q00378_GrandFeast < Quest
             adena = 2200i64
           end
 
-
           give_items(pc, item, quantity)
           give_adena(pc, adena, true)
           qs.exit_quest(true, true)
@@ -184,7 +179,6 @@ class Scripts::Q00378_GrandFeast < Quest
           html = "30594-19.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

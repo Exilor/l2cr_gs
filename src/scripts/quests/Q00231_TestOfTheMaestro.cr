@@ -62,8 +62,7 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -116,7 +115,6 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
       add_attack_desire(add_spawn(KING_BUGBEAR, 140395, -194147, -3146, 0, false, 200000, false), pc)
     end
 
-
     html
   end
 
@@ -165,7 +163,6 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
           end
         end
       end
-
     end
 
     super
@@ -193,9 +190,9 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
         if memo_state >= 1 && !has_quest_items?(pc, RECOMMENDATION_OF_BALANKI, RECOMMENDATION_OF_FILAUR, RECOMMENDATION_OF_ARIN)
           html = "30531-05.html"
         elsif has_quest_items?(pc, RECOMMENDATION_OF_BALANKI, RECOMMENDATION_OF_FILAUR, RECOMMENDATION_OF_ARIN)
-          give_adena(pc, 372154, true)
+          give_adena(pc, 372_154, true)
           give_items(pc, MARK_OF_MAESTRO, 1)
-          add_exp_and_sp(pc, 2085244, 141240)
+          add_exp_and_sp(pc, 2_085_244, 141_240)
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = "30531-06.html"
@@ -308,7 +305,6 @@ class Scripts::Q00231_TestOfTheMaestro < Quest
           end
         end
       end
-
     elsif qs.completed?
       if npc.id == IRON_GATES_LOCKIRIN
         html = get_already_completed_msg(pc)

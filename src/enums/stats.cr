@@ -110,8 +110,6 @@ class Stats < EnumClass
   add(HOLY_RES, "holyRes")
   add(DARK_RES, "darkRes")
   add(MAGIC_SUCCESS_RES, "magicSuccRes")
-  # BUFF_IMMUNITY("buffImmunity") #TODO: Implement me
-  add(DEBUFF_IMMUNITY, "debuffImmunity")
 
   # ELEMENT POWER
   add(FIRE_POWER, "firePower")

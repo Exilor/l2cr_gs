@@ -4,7 +4,7 @@ require "../../models/announcements/auto_announcement"
 
 module AnnouncementsTable
   extend self
-  extend Loggable
+  include Loggable
 
   private alias CreatureSay = Packets::Outgoing::CreatureSay
   private alias Say2 = Packets::Incoming::Say2

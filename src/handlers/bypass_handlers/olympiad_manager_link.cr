@@ -19,7 +19,7 @@ module BypassHandler::OlympiadManagerLink
   class_getter(more_than) { "More than #{Config.alt_oly_reg_display}" }
   class_getter(gate_pass) { Config.alt_oly_comp_ritem }
 
-  def use_bypass(command, pc, target) : Bool
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     unless target.is_a?(L2OlympiadManagerInstance)
       return false
     end
@@ -245,7 +245,7 @@ module BypassHandler::OlympiadManagerLink
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "olympiaddesc",
       "olympiadnoble",

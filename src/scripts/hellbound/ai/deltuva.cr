@@ -19,6 +19,7 @@ class Scripts::Deltuva < AbstractNpcAI
       if q.nil? || !q.completed?
         return "32313-02.htm"
       end
+
       pc.tele_to_location(TELEPORT)
     end
 

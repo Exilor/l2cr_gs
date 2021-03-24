@@ -1,10 +1,11 @@
 module CommunityBoardHandler::HomeBoard
   extend self
   extend IParseBoardHandler
+  include Loggable
 
   private COUNT_FAVORITES = "SELECT COUNT(*) AS favorites FROM `bbs_favorites` WHERE `playerId`=?"
 
-  def parse_command(command, pc)
+  def parse_command(command : String, pc : L2PcInstance) : Bool
     if commands.includes?(command)
       CommunityBoardHandler.add_bypass(pc, "Home", command)
 
@@ -40,7 +41,7 @@ module CommunityBoardHandler::HomeBoard
     0 # L2J hasn't implemented it
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"_bbshome", "_bbstop"}
   end
 end

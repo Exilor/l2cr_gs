@@ -1,6 +1,9 @@
 module CommunityBoardHandler
   extend self
-  extend Loggable
+  include Loggable
+  macro extended
+    include Loggable
+  end
 
   private HANDLERS = {} of String => IParseBoardHandler
   private BYPASSES = Hash(Int32, String).new
@@ -15,21 +18,13 @@ module CommunityBoardHandler
   end
 
   def [](cmd : String) : IParseBoardHandler?
-    HANDLERS.each_value do |cb|
-      cb.commands.each do |command|
-        if cmd.downcase.starts_with?(command.downcase)
-          return cb
-        end
-      end
+    HANDLERS.find_value do |cb|
+      cb.commands.any? { |command| cmd.downcase.starts_with?(command.downcase) }
     end
-
-    nil
   end
 
   def register(handler : IParseBoardHandler)
-    handler.commands.each do |cmd|
-      HANDLERS[cmd.downcase] = handler
-    end
+    handler.commands.each { |cmd| HANDLERS[cmd.downcase] = handler }
   end
 
   def community_board_command?(cmd : String)
@@ -73,7 +68,7 @@ module CommunityBoardHandler
     end
 
     unless cb = self[cmd]
-      debug "No handler found for command '#{cmd}'"
+      debug { "No handler found for command '#{cmd}'" }
       return
     end
 
@@ -89,7 +84,7 @@ module CommunityBoardHandler
     BYPASSES[pc.l2id] = "#{title}&#{bypass}"
   end
 
-  def remove_bypass(pc)
+  def remove_bypass(pc : L2PcInstance) : String?
     BYPASSES.delete(pc.l2id)
   end
 
@@ -100,8 +95,8 @@ module CommunityBoardHandler
   module IParseBoardHandler
     include Loggable
 
-    # abstract def parse_command(cmd : String, pc : L2PcInstance) : Bool
-    # abstract def commands : Enumerable(String)
+    abstract def parse_command(cmd : String, pc : L2PcInstance) : Bool
+    abstract def commands : Enumerable(String)
   end
 end
 

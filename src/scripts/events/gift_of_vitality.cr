@@ -72,7 +72,7 @@ class Scripts::GiftOfVitality < LongTimeEvent
       else
         pc.do_cast(GIFT_OF_VITALITY)
         pc.do_simultaneous_cast(JOY_OF_VITALITY)
-        pc.variables[REUSE] = Time.ms + (HOURS * 3_600_000)
+        pc.variables[REUSE] = Time.ms &+ (HOURS &* 3_600_000)
         html = "4306-okvitality.htm"
       end
     when "memories_player"
@@ -101,7 +101,6 @@ class Scripts::GiftOfVitality < LongTimeEvent
         html = "4306-okbuff.htm"
       end
     end
-
 
     html
   end

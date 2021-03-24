@@ -2,7 +2,7 @@ module CommunityBoardHandler::FriendsBoard
   extend self
   extend IParseBoardHandler
 
-  def parse_command(command, pc)
+  def parse_command(command : String, pc : L2PcInstance) : Bool
     case command
     when "_friendlist"
       CommunityBoardHandler.add_bypass(pc, "Friends List", command)
@@ -17,7 +17,7 @@ module CommunityBoardHandler::FriendsBoard
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"_friendlist", "_friendblocklist"}
   end
 end

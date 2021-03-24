@@ -80,8 +80,7 @@ class Scripts::Q00634_InSearchOfFragmentsOfDimension < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31494-02.htm"
@@ -97,13 +96,12 @@ class Scripts::Q00634_InSearchOfFragmentsOfDimension < Quest
         event
       end
     end
-
   end
 
   def on_kill(npc, pc, is_summon)
     if qs = get_random_party_member_state(pc, -1, 3, npc)
-      i0 = ((0.15 * npc.level) + 1.6).to_i
       if Rnd.rand(100) < 10
+        i0 = ((0.15 * npc.level) + 1.6).to_i
         give_item_randomly(qs.player, npc, DIMENSIONAL_FRAGMENT, i0, 0, 1.0, true)
       end
     end

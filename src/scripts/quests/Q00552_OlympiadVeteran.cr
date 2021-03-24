@@ -54,19 +54,19 @@ class Scripts::Q00552_OlympiadVeteran < Quest
       if st && st.started?
         case type
         when CompetitionType::CLASSED
-          matches = st.get_int("classed") + 1
+          matches = st.get_int("classed") &+ 1
           st.set("classed", matches.to_s)
           if matches == 5 && !st.has_quest_items?(CLASS_BATTLE_CERTIFICATE)
             st.give_items(CLASS_BATTLE_CERTIFICATE, 1)
           end
         when CompetitionType::NON_CLASSED
-          matches = st.get_int("nonclassed") + 1
+          matches = st.get_int("nonclassed") &+ 1
           st.set("nonclassed", matches.to_s)
           if matches == 5 && !st.has_quest_items?(CLASS_FREE_BATTLE_CERTIFICATE)
             st.give_items(CLASS_FREE_BATTLE_CERTIFICATE, 1)
           end
         when CompetitionType::TEAMS
-          matches = st.get_int("teams") + 1
+          matches = st.get_int("teams") &+ 1
           st.set("teams", matches.to_s)
           if matches == 5 && !st.has_quest_items?(TEAM_EVENT_CERTIFICATE)
             st.give_items(TEAM_EVENT_CERTIFICATE, 1)
@@ -83,19 +83,19 @@ class Scripts::Q00552_OlympiadVeteran < Quest
       if st && st.started?
         case type
         when CompetitionType::CLASSED
-          matches = st.get_int("classed") + 1
+          matches = st.get_int("classed") &+ 1
           st.set("classed", matches.to_s)
           if matches == 5
             st.give_items(CLASS_BATTLE_CERTIFICATE, 1)
           end
         when CompetitionType::NON_CLASSED
-          matches = st.get_int("nonclassed") + 1
+          matches = st.get_int("nonclassed") &+ 1
           st.set("nonclassed", matches.to_s)
           if matches == 5
             st.give_items(CLASS_FREE_BATTLE_CERTIFICATE, 1)
           end
         when CompetitionType::TEAMS
-          matches = st.get_int("teams") + 1
+          matches = st.get_int("teams") &+ 1
           st.set("teams", matches.to_s)
           if matches == 5
             st.give_items(TEAM_EVENT_CERTIFICATE, 1)

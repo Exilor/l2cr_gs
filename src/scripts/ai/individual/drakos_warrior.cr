@@ -13,7 +13,7 @@ class Scripts::DrakosWarrior < AbstractNpcAI
   def on_attack(npc, attacker, damage, is_summon)
     if Rnd.rand(100) < 1
       add_skill_cast_desire(npc, npc, SUMMON, 99999999900000000)
-      count = Rnd.rand(3) + 2
+      count = Rnd.rand(3) &+ 2
       count.times do
         add_spawn(DRAKOS_ASSASSIN, npc.x + rand(200), npc.y + rand(200), npc.z, 0, false, 0, false)
       end

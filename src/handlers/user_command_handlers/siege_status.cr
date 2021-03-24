@@ -5,10 +5,8 @@ module UserCommandHandler::SiegeStatus
   private INSIDE_SIEGE_ZONE = "Castle Siege in Progress"
   private OUTSIDE_SIEGE_ZONE = "No Castle Siege Area"
 
-  def use_user_command(id, pc)
-    unless id == commands[0]
-      return false
-    end
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
+    return false unless id == commands[0]
 
     if !pc.noble? || !pc.clan_leader?
       pc.send_packet(SystemMessageId::ONLY_NOBLESSE_LEADER_CAN_VIEW_SIEGE_STATUS_WINDOW)
@@ -18,9 +16,7 @@ module UserCommandHandler::SiegeStatus
     return false unless clan = pc.clan
 
     SiegeManager.sieges.each do |siege|
-      unless siege.in_progress?
-        next
-      end
+      next unless siege.in_progress?
 
       if !siege.attacker?(clan) && !siege.defender?(clan)
         next
@@ -48,9 +44,12 @@ module UserCommandHandler::SiegeStatus
 
       return true
     end
+
+    pc.send_packet(SystemMessageId::ONLY_NOBLESSE_LEADER_CAN_VIEW_SIEGE_STATUS_WINDOW)
+    false
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {99}
   end
 end

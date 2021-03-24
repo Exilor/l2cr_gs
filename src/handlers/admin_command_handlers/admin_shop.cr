@@ -29,7 +29,7 @@ module AdminCommandHandler::AdminShop
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     %w(admin_buy admin_gmshop)
   end
 end

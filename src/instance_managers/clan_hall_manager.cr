@@ -3,7 +3,7 @@ require "../models/entity/clan_hall/auctionable_hall"
 
 module ClanHallManager
   extend self
-  extend Loggable
+  include Loggable
   extend Synchronizable
 
   private CLAN_HALLS = Concurrent::Map(Int32, AuctionableHall).new

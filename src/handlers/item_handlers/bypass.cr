@@ -2,7 +2,7 @@ module ItemHandler::Bypass
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force) : Bool
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     return false unless pc = playable.as?(L2PcInstance)
 
     item_id = item.id

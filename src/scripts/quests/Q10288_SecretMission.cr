@@ -38,8 +38,8 @@ class Scripts::Q10288_SecretMission < Quest
       end
     when "32757-03.html"
       if st.cond?(2) && st.has_quest_items?(LETTER)
-        st.give_adena(106583, true)
-        st.add_exp_and_sp(417788, 46320)
+        st.give_adena(106_583, true)
+        st.add_exp_and_sp(417_788, 46_320)
         st.exit_quest(false, true)
       end
     when "teleport"
@@ -48,7 +48,6 @@ class Scripts::Q10288_SecretMission < Quest
         return
       end
     end
-
 
     html
   end
@@ -77,7 +76,6 @@ class Scripts::Q10288_SecretMission < Quest
       when State::COMPLETED
         html = "31350-07.html"
       end
-
     when AQUILANI
       if st.started?
         if st.cond?(1) && st.has_quest_items?(LETTER)
@@ -91,7 +89,6 @@ class Scripts::Q10288_SecretMission < Quest
         return "32757-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

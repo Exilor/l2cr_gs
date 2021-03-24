@@ -6,7 +6,6 @@ abstract class AbstractScript
   include AbstractEventListener::Owner
   include Packets::Outgoing
   include Loggable
-  extend Loggable
 
   private alias Say2 = Packets::Incoming::Say2
 
@@ -288,606 +287,544 @@ abstract class AbstractScript
     @registered_ids.fetch(reg_type, Slice(Int32).empty)
   end
 
-  def self.show_on_screen_msg(pc : L2PcInstance, *args)
-    pc.send_packet(ExShowScreenMessage.new(*args))
-  end
-
-  delegate show_on_screen_msg, to: AbstractScript
-
-  def self.play_sound(pc : L2PcInstance, sound : IAudio)
-    pc.send_packet(sound.packet)
-  end
-
-  delegate play_sound, to: AbstractScript
-
-  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int) : Nil
-    give_items(pc, item_id, count.to_i64, 0)
-  end
-
-  def self.give_items(pc : L2PcInstance, holder : ItemHolder) : Nil
-    give_items(pc, holder.id, holder.count)
-  end
-
-  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, enchant_level : Int32) : Nil
-    return if count <= 0
-
-    item = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
-    return unless item
-
-    if enchant_level > 0 && item_id != Inventory::ADENA_ID
-      item.enchant_level = enchant_level
+  private module InstanceAndClassMethods
+    def show_on_screen_msg(pc : L2PcInstance, *args)
+      pc.send_packet(ExShowScreenMessage.new(*args))
     end
 
-    send_item_get_message(pc, item, count)
-  end
+    def play_sound(pc : L2PcInstance, sound : IAudio)
+      pc.send_packet(sound.packet)
+    end
 
-  def self.give_items(pc : L2PcInstance, item_id : Int32, count : Int, attribute_id : Int, attribute_level : Int) : Nil
-    return if count <= 0
+    def give_items(pc : L2PcInstance, item_id : Int32, count : Int) : Nil
+      give_items(pc, item_id, count.to_i64, 0)
+    end
 
-    item = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
-    return unless item
+    def give_items(pc : L2PcInstance, holder : ItemHolder) : Nil
+      give_items(pc, holder.id, holder.count)
+    end
 
-    if attribute_id >= 0 && attribute_level > 0
-      item.set_element_attr(attribute_id.to_i8, attribute_level)
-      if item.equipped?
-        item.update_element_attr_bonus(pc)
+    def give_items(pc : L2PcInstance, item_id : Int32, count : Int, enchant_level : Int32) : Nil
+      return if count <= 0
+
+      item = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
+      return unless item
+
+      if enchant_level > 0 && item_id != Inventory::ADENA_ID
+        item.enchant_level = enchant_level
       end
-      pc.send_packet(InventoryUpdate.modified(item))
+
+      send_item_get_message(pc, item, count)
     end
 
-    send_item_get_message(pc, item, count)
-  end
+    def give_items(pc : L2PcInstance, item_id : Int32, count : Int, attribute_id : Int, attribute_level : Int) : Nil
+      return if count <= 0
 
-  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character) : Bool
-    items = item.calculate_drops(victim, pc)
-    if items.nil? || items.empty?
-      return false
+      item = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
+      return unless item
+
+      if attribute_id >= 0 && attribute_level > 0
+        item.set_element_attr(attribute_id.to_i8, attribute_level)
+        if item.equipped?
+          item.update_element_attr_bonus(pc)
+        end
+        pc.send_packet(InventoryUpdate.modified(item))
+      end
+
+      send_item_get_message(pc, item, count)
     end
 
-    give_items(pc, items)
-    true
-  end
+    def give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character) : Bool
+      items = item.calculate_drops(victim, pc)
+      if items.nil? || items.empty?
+        return false
+      end
 
-  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder)) : Nil
-    items.each { |item| give_items(pc, item) }
-  end
-
-  def self.give_items(pc : L2PcInstance, item : ItemHolder, limit : Int) : Bool
-    max_to_give = limit - pc.inventory.get_inventory_item_count(item.id, -1)
-    if max_to_give <= 0
-      return false
+      give_items(pc, items)
+      true
     end
 
-    give_items(pc, item.id, Math.min(max_to_give, item.count))
-    true
-  end
-
-  def self.give_items(pc : L2PcInstance, item : ItemHolder, limit : Int, play_sound : Bool) : L2ItemInstance?
-    drop = give_items(pc, item, limit)
-
-    if drop && play_sound
-      play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+    def give_items(pc : L2PcInstance, items : Indexable(ItemHolder)) : Nil
+      items.each { |item| give_items(pc, item) }
     end
 
-    drop
-  end
+    def give_items(pc : L2PcInstance, item : ItemHolder, limit : Int) : Bool
+      max_to_give = limit - pc.inventory.get_inventory_item_count(item.id, -1)
+      if max_to_give <= 0
+        return false
+      end
 
-  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder), limit : Int) : Bool
-    items.reduce(false) { |item, result| result | give_items(pc, item, limit) }
-  end
-
-  def self.give_items(pc : L2PcInstance, items : Enumerable(ItemHolder), limit : Int, play_sound : Bool) : L2ItemInstance?
-    drop = give_items(pc, items, limit)
-
-    if drop && play_sound
-      play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+      give_items(pc, item.id, Math.min(max_to_give, item.count))
+      true
     end
 
-    drop
-  end
+    def give_items(pc : L2PcInstance, item : ItemHolder, limit : Int, play_sound : Bool) : L2ItemInstance?
+      drop = give_items(pc, item, limit)
 
-  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int) : Bool
-    give_items(pc, item.calculate_drops(victim, pc), limit)
-  end
+      if drop && play_sound
+        play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+      end
 
-  def self.give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int, play_sound : Bool) : L2ItemInstance?
-    drop = give_items(pc, item, victim, limit)
-
-    if drop && play_sound
-      play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+      drop
     end
 
-    drop
-  end
+    def give_items(pc : L2PcInstance, items : Indexable(ItemHolder), limit : Int) : Bool
+      items.reduce(false) { |item, result| result | give_items(pc, item, limit) }
+    end
 
-  delegate give_items, to: AbstractScript
+    def give_items(pc : L2PcInstance, items : Indexable(ItemHolder), limit : Int, play_sound : Bool) : L2ItemInstance?
+      drop = give_items(pc, items, limit)
 
-  def self.send_item_get_message(pc : L2PcInstance, item : L2ItemInstance, count : Int)
-    if item.id == Inventory::ADENA_ID
-      sm = SystemMessage.earned_s1_adena
-      sm.add_long(count)
-      pc.send_packet(sm)
-    else
-      if count > 1
-        sm = SystemMessage.earned_s2_s1_s
-        sm.add_item_name(item)
+      if drop && play_sound
+        play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+      end
+
+      drop
+    end
+
+    def give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int) : Bool
+      give_items(pc, item.calculate_drops(victim, pc), limit)
+    end
+
+    def give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character, limit : Int, play_sound : Bool) : L2ItemInstance?
+      drop = give_items(pc, item, victim, limit)
+
+      if drop && play_sound
+        play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+      end
+
+      drop
+    end
+
+    def send_item_get_message(pc : L2PcInstance, item : L2ItemInstance, count : Int)
+      if item.id == Inventory::ADENA_ID
+        sm = SystemMessage.earned_s1_adena
         sm.add_long(count)
         pc.send_packet(sm)
       else
-        sm = SystemMessage.earned_item_s1
-        sm.add_item_name(item)
-        pc.send_packet(sm)
-      end
-    end
-
-    pc.send_packet(StatusUpdate.current_load(pc))
-  end
-
-  def self.get_quest_items_count(pc : L2PcInstance, *item_id : Int32) : Int64
-    get_quest_items_count(pc, item_id)
-  end
-
-  def self.get_quest_items_count(pc : L2PcInstance, item_id : Indexable(Int32)) : Int64
-    case item_id.size
-    when 0
-      0i64
-    when 1
-      pc.inventory.get_inventory_item_count(item_id.unsafe_fetch(0), -1).to_i64
-    else
-      count = 0u64
-
-      pc.inventory.items.each do |item|
-        item_id.each do |id|
-          if item.id == id
-            if count + item.count > Int64::MAX
-              return Int64::MAX
-            end
-            count &+= item.count
-          end
-        end
-      end
-
-      count.to_i64!
-    end
-  end
-
-  delegate get_quest_items_count, to: AbstractScript
-
-  def self.take_items(pc : L2PcInstance, item_id : Int32, amount : Int) : Bool
-    items = pc.inventory.get_items_by_item_id(item_id)
-    if amount < 0
-      items.each { |i| take_item(pc, i, i.count) }
-    else
-      amount = amount.to_i64
-      current_count = 0
-      items.each do |i|
-        to_delete = i.count
-        if current_count &+ to_delete > amount
-          to_delete = amount &- current_count
-        end
-        take_item(pc, i, to_delete)
-        current_count &+= to_delete
-      end
-    end
-
-    true
-  end
-
-  def self.take_items(pc : L2PcInstance, holder : ItemHolder?) : Bool
-    return false unless holder
-    take_items(pc, holder.item_id, holder.count)
-  end
-
-  def self.take_items(pc : L2PcInstance, amount : Int, item_ids : Enumerable(Int32)) : Bool
-    item_ids.reduce(true) { |check, id| check & take_items(pc, id, amount) }
-  end
-
-  delegate take_items, to: AbstractScript
-
-  def self.take_item(pc : L2PcInstance, item : L2ItemInstance, to_delete : Int64) : Bool
-    if item.equipped?
-      unequipped = pc.inventory.unequip_item_in_body_slot_and_record(item.template.body_part)
-      iu = InventoryUpdate.new
-      unequipped.each { |itm| iu.add_modified_item(itm) }
-      pc.send_packet(iu)
-      pc.broadcast_user_info
-    end
-
-    pc.destroy_item_by_item_id("Quest", item.id, to_delete, pc, true)
-  end
-
-  def self.take_item(pc : L2PcInstance, holder : ItemHolder?) : Bool
-    return false unless holder
-    take_items(pc, holder.id, holder.count)
-  end
-
-  delegate take_item, to: AbstractScript
-
-  def self.take_all_items(pc : L2PcInstance, *item_list : ItemHolder) : Bool
-    take_all_items(pc, item_list)
-  end
-
-  def self.take_all_items(pc : L2PcInstance, item_list : Enumerable(ItemHolder)) : Bool
-    return false if !item_list || item_list.empty?
-    return false if !has_all_items?(pc, true, item_list)
-    item_list.all? { |item| take_item(pc, item) }
-  end
-
-  delegate take_all_items, to: AbstractScript
-
-  def self.has_all_items?(pc : L2PcInstance, check_count : Bool, *items : ItemHolder) : Bool
-    has_all_items?(pc, check_count, items)
-  end
-
-  def self.has_all_items?(pc : L2PcInstance, check_count : Bool, item_list : Enumerable(ItemHolder)) : Bool
-    return false if !item_list || item_list.empty?
-    item_list.all? { |item| has_item?(pc, item, check_count) }
-  end
-
-  delegate has_all_items?, to: AbstractScript
-
-  def self.has_item?(pc : L2PcInstance, item : ItemHolder?) : Bool
-    has_item?(pc, item, true)
-  end
-
-  def self.has_item?(pc : L2PcInstance, item : ItemHolder?, check_count : Bool) : Bool
-    return false unless item
-    if check_count
-      get_quest_items_count(pc, item.id) >= item.count
-    else
-      has_quest_items?(pc, item.id)
-    end
-  end
-
-  delegate has_item?, to: AbstractScript
-
-  def self.has_quest_items?(pc : L2PcInstance, *item_ids : Int32) : Bool
-    has_quest_items?(pc, item_ids)
-  end
-
-  def self.has_quest_items?(pc : L2PcInstance, item_ids : Enumerable(Int32)) : Bool
-    if item_ids.empty?
-      warn "Empty item_id list."
-      return false
-    end
-
-    inv = pc.inventory
-    item_ids.all? { |id| inv.get_item_by_item_id(id) }
-  end
-
-  delegate has_quest_items?, to: AbstractScript
-
-  def self.add_exp_and_sp(pc : L2PcInstance, exp : Int, sp : Int)
-    exp = (exp * Config.rate_quest_reward_xp).to_i64
-    sp = (sp * Config.rate_quest_reward_sp).to_i32
-    pc.add_exp_and_sp_quest(exp, sp)
-  end
-
-  delegate add_exp_and_sp, to: AbstractScript
-
-  def self.has_at_least_one_quest_item?(pc : L2PcInstance, *item_ids : Int32) : Bool
-    has_at_least_one_quest_item?(pc, item_ids)
-  end
-
-  def self.has_at_least_one_quest_item?(pc : L2PcInstance, item_ids : Enumerable(Int32)) : Bool
-    inv = pc.inventory
-    item_ids.any? { |id| inv.get_item_by_item_id(id) }
-  end
-
-  delegate has_at_least_one_quest_item?, to: AbstractScript
-
-  def get_enchant_level(pc : L2PcInstance, item_id : Int32) : Int32
-    if item = pc.inventory.get_item_by_item_id(item_id)
-      return item.enchant_level
-    end
-
-    0
-  end
-
-  def self.add_minion(master : L2MonsterInstance, minion_id : Int32) : L2Npc?
-    MinionList.spawn_minion(master, minion_id)
-  end
-
-  delegate add_minion, to: AbstractScript
-
-  def self.give_adena(pc : L2PcInstance, count : Int, apply_rates : Bool) : Nil
-    if apply_rates
-      reward_items(pc, Inventory::ADENA_ID, count.to_i64)
-    else
-      give_items(pc, Inventory::ADENA_ID, count.to_i64)
-    end
-  end
-
-  delegate give_adena, to: AbstractScript
-
-  def self.reward_items(pc : L2PcInstance, holder : ItemHolder) : Nil
-    reward_items(pc, holder.id, holder.count)
-  end
-
-  def self.reward_items(pc : L2PcInstance, item_id : Int32, count : Int) : Nil
-    return if count <= 0
-    count = count.to_i64
-
-    return unless item = ItemTable[item_id]?
-
-    if item_id == Inventory::ADENA_ID
-      count *= Config.rate_quest_reward_adena
-    elsif Config.rate_quest_reward_use_multipliers
-      if item.is_a?(L2EtcItem)
-        case item.item_type
-        when EtcItemType::POTION
-          count *= Config.rate_quest_reward_potion
-        when EtcItemType::SCRL_ENCHANT_WP..EtcItemType::SCROLL
-          count *= Config.rate_quest_reward_scroll
-        when EtcItemType::RECIPE
-          count *= Config.rate_quest_reward_recipe
-        when EtcItemType::MATERIAL
-          count *= Config.rate_quest_reward_material
+        if count > 1
+          sm = SystemMessage.earned_s2_s1_s
+          sm.add_item_name(item)
+          sm.add_long(count)
+          pc.send_packet(sm)
         else
-          count *= Config.rate_quest_reward
+          sm = SystemMessage.earned_item_s1
+          sm.add_item_name(item)
+          pc.send_packet(sm)
         end
       end
-    else
-      count *= Config.rate_quest_reward
+
+      pc.send_packet(StatusUpdate.current_load(pc))
     end
 
-    # Multiplying by the rates results in a Float and we need an Integer.
-    count = count.to_i64
-
-    if inst = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
-      send_item_get_message(pc, inst, count)
-    else
-      warn { "Failed to add item with id #{item_id} x#{count} to #{pc}." }
-    end
-  end
-
-  delegate reward_items, to: AbstractScript
-
-  def self.add_attack_desire(npc : L2Npc, target : L2Character)
-    add_attack_desire(npc, target, 999i64)
-  end
-
-  def self.add_attack_desire(npc : L2Npc, target : L2Character, desire : Int)
-    if npc.is_a?(L2Attackable)
-      npc.add_damage_hate(target, 0, desire)
+    def get_quest_items_count(pc : L2PcInstance, *item_id : Int32) : Int64
+      get_quest_items_count(pc, item_id)
     end
 
-    npc.running = true
-    npc.set_intention(AI::ATTACK, target)
-  end
-
-  delegate add_attack_desire, to: AbstractScript
-
-  def self.add_move_to_desire(npc : L2Npc, loc : Location, desire : Int32) # desire unused
-    npc.set_intention(AI::MOVE_TO, loc)
-  end
-
-  delegate add_move_to_desire, to: AbstractScript
-
-  def self.add_skill_cast_desire(npc : L2Npc, target : L2Character, sh : SkillHolder, desire : Int)
-    add_skill_cast_desire(npc, target, sh.skill, desire)
-  end
-
-  def self.add_skill_cast_desire(npc : L2Npc, target : L2Character, skill : Skill, desire : Int)
-    if npc.is_a?(L2Attackable)
-      npc.add_damage_hate(target, 0, desire)
-    end
-
-    npc.target = target
-    npc.set_intention(AI::CAST, skill, target)
-  end
-
-  delegate add_skill_cast_desire, to: AbstractScript
-
-  def self.special_camera(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, range : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32)
-    pc.send_packet(SpecialCamera.new(creature, force, angle1, angle2, time, range, duration, rel_yaw, rel_pitch, wide, rel_angle))
-  end
-
-  def self.special_camera_ex(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32)
-    pc.send_packet(SpecialCamera.new(creature, pc, force, angle1, angle2, time, duration, rel_yaw, rel_pitch, wide, rel_angle))
-  end
-
-  def self.special_camera_3(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, range : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32, unk : Int32)
-    pc.send_packet(SpecialCamera.new(creature, force, angle1, angle2, time, range, duration, rel_yaw, rel_pitch, wide, rel_angle, unk))
-  end
-
-  def self.cast_skill(npc : L2Npc, target : L2Playable, sh : SkillHolder)
-    npc.target = target
-    npc.do_cast(sh.skill)
-  end
-
-  def self.cast_skill(npc : L2Npc, target : L2Playable, skill : Skill)
-    npc.target = target
-    npc.do_cast(skill)
-  end
-
-  delegate cast_skill, to: AbstractScript
-
-  def self.give_item_randomly(pc : L2PcInstance, item_id : Int, amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
-    give_item_randomly(pc, nil, item_id, amount, limit, drop_chance, play_sound)
-  end
-
-  def self.give_item_randomly(pc : L2PcInstance, npc : L2Npc?, item_id : Int, amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
-    give_item_randomly(pc, npc, item_id, amount, amount, limit, drop_chance, play_sound)
-  end
-
-  def self.give_item_randomly(pc : L2PcInstance, npc : L2Npc?, item_id : Int, min_amount : Int, max_amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
-    current_count = get_quest_items_count(pc, item_id)
-
-    return true if limit > 0 && current_count >= limit
-
-    min_amount *= Config.rate_quest_drop
-    max_amount *= Config.rate_quest_drop
-    drop_chance *= Config.rate_quest_drop
-    if npc && Config.champion_enable && npc.champion?
-      if item_id == Inventory::ADENA_ID || item_id == Inventory::ANCIENT_ADENA_ID
-        drop_chance *= Config.champion_adenas_rewards_chance
-        min_amount *= Config.champion_adenas_rewards_amount
-        max_amount *= Config.champion_adenas_rewards_amount
+    def get_quest_items_count(pc : L2PcInstance, item_id : Indexable(Int32)) : Int64
+      case item_id.size
+      when 0
+        0i64
+      when 1
+        pc.inventory.get_inventory_item_count(item_id.unsafe_fetch(0), -1).to_i64
       else
-        drop_chance *= Config.champion_rewards_chance
-        min_amount *= Config.champion_rewards_amount
-        max_amount *= Config.champion_rewards_amount
+        count = 0u64
+
+        pc.inventory.items.each do |item|
+          item_id.each do |id|
+            if item.id == id
+              if count + item.count > Int64::MAX
+                return Int64::MAX
+              end
+              count &+= item.count
+            end
+          end
+        end
+
+        count.to_i64!
       end
     end
 
-    amount_to_give = min_amount == max_amount ? min_amount : Rnd.rand(min_amount.to_i64..max_amount.to_i64)
-    amount_to_give = amount_to_give.to_i64
-
-    # debug "#give_item_randomly amount to give: #{amount_to_give}"
-
-    random = Rnd.rand
-    # Inventory slot check (almost useless for non-stacking items)
-    if drop_chance >= random && amount_to_give > 0 && pc.inventory.validate_capacity_by_item_id(item_id)
-      if limit > 0 && current_count + amount_to_give > limit
-        amount_to_give = limit - current_count
+    def take_items(pc : L2PcInstance, item_id : Int32, amount : Int) : Bool
+      items = pc.inventory.get_items_by_item_id(item_id)
+      if amount < 0
+        items.each { |i| take_item(pc, i, i.count) }
+      else
+        amount = amount.to_i64
+        current_count = 0
+        items.each do |i|
+          to_delete = i.count
+          if current_count &+ to_delete > amount
+            to_delete = amount &- current_count
+          end
+          take_item(pc, i, to_delete)
+          current_count &+= to_delete
+        end
       end
 
-      # Give the item to player
-      if pc.add_item("Quest", item_id, amount_to_give.to_i64, npc, true)
-        # limit reached (if there is no limit, this block doesn't execute)
-        if current_count + amount_to_give == limit
-          if play_sound
-            play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+      true
+    end
+
+    def take_items(pc : L2PcInstance, holder : ItemHolder) : Bool
+      take_items(pc, holder.item_id, holder.count)
+    end
+
+    def take_items(pc : L2PcInstance, amount : Int, item_ids : Indexable(Int32)) : Bool
+      item_ids.reduce(true) { |check, id| check & take_items(pc, id, amount) }
+    end
+
+    def take_item(pc : L2PcInstance, item : L2ItemInstance, to_delete : Int64) : Bool
+      if item.equipped?
+        unequipped = pc.inventory.unequip_item_in_body_slot_and_record(item.template.body_part)
+        iu = InventoryUpdate.new
+        unequipped.each { |itm| iu.add_modified_item(itm) }
+        pc.send_packet(iu)
+        pc.broadcast_user_info
+      end
+
+      pc.destroy_item_by_item_id("Quest", item.id, to_delete, pc, true)
+    end
+
+    def take_item(pc : L2PcInstance, holder : ItemHolder?) : Bool
+      return false unless holder
+      take_items(pc, holder.id, holder.count)
+    end
+
+    def take_all_items(pc : L2PcInstance, *item_list : ItemHolder) : Bool
+      take_all_items(pc, item_list)
+    end
+
+    def take_all_items(pc : L2PcInstance, item_list : Indexable(ItemHolder)) : Bool
+      return false if item_list.empty? || !has_all_items?(pc, true, item_list)
+      item_list.all? { |item| take_item(pc, item) }
+    end
+
+    def has_all_items?(pc : L2PcInstance, check_count : Bool, *items : ItemHolder) : Bool
+      has_all_items?(pc, check_count, items)
+    end
+
+    def has_all_items?(pc : L2PcInstance, check_count : Bool, item_list : Indexable(ItemHolder)) : Bool
+      return false if item_list.empty?
+      item_list.all? { |item| has_item?(pc, item, check_count) }
+    end
+
+    def has_item?(pc : L2PcInstance, item : ItemHolder?) : Bool
+      has_item?(pc, item, true)
+    end
+
+    def has_item?(pc : L2PcInstance, item : ItemHolder?, check_count : Bool) : Bool
+      return false unless item
+      if check_count
+        get_quest_items_count(pc, item.id) >= item.count
+      else
+        has_quest_items?(pc, item.id)
+      end
+    end
+
+    def has_quest_items?(pc : L2PcInstance, *item_ids : Int32) : Bool
+      has_quest_items?(pc, item_ids)
+    end
+
+    def has_quest_items?(pc : L2PcInstance, item_ids : Indexable(Int32)) : Bool
+      return false if item_ids.empty?
+      inv = pc.inventory
+      item_ids.all? { |id| inv.get_item_by_item_id(id) }
+    end
+
+    def add_exp_and_sp(pc : L2PcInstance, exp : Int, sp : Int)
+      exp = (exp * Config.rate_quest_reward_xp).to_i64
+      sp = (sp * Config.rate_quest_reward_sp).to_i32
+      pc.add_exp_and_sp_quest(exp, sp)
+    end
+
+    def has_at_least_one_quest_item?(pc : L2PcInstance, *item_ids : Int32) : Bool
+      has_at_least_one_quest_item?(pc, item_ids)
+    end
+
+    def has_at_least_one_quest_item?(pc : L2PcInstance, item_ids : Indexable(Int32)) : Bool
+      inv = pc.inventory
+      item_ids.any? { |id| inv.get_item_by_item_id(id) }
+    end
+
+    def get_enchant_level(pc : L2PcInstance, item_id : Int32) : Int32
+      if item = pc.inventory.get_item_by_item_id(item_id)
+        return item.enchant_level
+      end
+
+      0
+    end
+
+    def add_minion(master : L2MonsterInstance, minion_id : Int32) : L2Npc?
+      MinionList.spawn_minion(master, minion_id)
+    end
+
+    def give_adena(pc : L2PcInstance, count : Int, apply_rates : Bool) : Nil
+      if apply_rates
+        reward_items(pc, Inventory::ADENA_ID, count.to_i64)
+      else
+        give_items(pc, Inventory::ADENA_ID, count.to_i64)
+      end
+    end
+
+    def reward_items(pc : L2PcInstance, holder : ItemHolder) : Nil
+      reward_items(pc, holder.id, holder.count)
+    end
+
+    def reward_items(pc : L2PcInstance, item_id : Int32, count : Int) : Nil
+      return if count <= 0
+      count = count.to_i64
+
+      return unless item = ItemTable[item_id]?
+
+      if item_id == Inventory::ADENA_ID
+        count *= Config.rate_quest_reward_adena
+      elsif Config.rate_quest_reward_use_multipliers
+        if item.is_a?(L2EtcItem)
+          case item.item_type
+          when EtcItemType::POTION
+            count *= Config.rate_quest_reward_potion
+          when EtcItemType::SCRL_ENCHANT_WP..EtcItemType::SCROLL
+            count *= Config.rate_quest_reward_scroll
+          when EtcItemType::RECIPE
+            count *= Config.rate_quest_reward_recipe
+          when EtcItemType::MATERIAL
+            count *= Config.rate_quest_reward_material
+          else
+            count *= Config.rate_quest_reward
+          end
+        end
+      else
+        count *= Config.rate_quest_reward
+      end
+
+      count = count.to_i64
+
+      if inst = pc.inventory.add_item("Quest", item_id, count, pc, pc.target)
+        send_item_get_message(pc, inst, count)
+      end
+    end
+
+    def add_attack_desire(npc : L2Npc, target : L2Character)
+      add_attack_desire(npc, target, 999i64)
+    end
+
+    def add_attack_desire(npc : L2Npc, target : L2Character, desire : Int)
+      if npc.is_a?(L2Attackable)
+        npc.add_damage_hate(target, 0, desire)
+      end
+
+      npc.running = true
+      npc.set_intention(AI::ATTACK, target)
+    end
+
+    def add_move_to_desire(npc : L2Npc, loc : Location, desire : Int32) # desire unused
+      npc.set_intention(AI::MOVE_TO, loc)
+    end
+
+    def add_skill_cast_desire(npc : L2Npc, target : L2Character, sh : SkillHolder, desire : Int)
+      add_skill_cast_desire(npc, target, sh.skill, desire)
+    end
+
+    def add_skill_cast_desire(npc : L2Npc, target : L2Character, skill : Skill, desire : Int)
+      if npc.is_a?(L2Attackable)
+        npc.add_damage_hate(target, 0, desire)
+      end
+
+      npc.target = target
+      npc.set_intention(AI::CAST, skill, target)
+    end
+
+    def special_camera(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, range : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32)
+      pc.send_packet(SpecialCamera.new(creature, force, angle1, angle2, time, range, duration, rel_yaw, rel_pitch, wide, rel_angle))
+    end
+
+    def special_camera_ex(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32)
+      pc.send_packet(SpecialCamera.new(creature, pc, force, angle1, angle2, time, duration, rel_yaw, rel_pitch, wide, rel_angle))
+    end
+
+    def special_camera_3(pc : L2PcInstance, creature : L2Character, force : Int32, angle1 : Int32, angle2 : Int32, time : Int32, range : Int32, duration : Int32, rel_yaw : Int32, rel_pitch : Int32, wide : Int32, rel_angle : Int32, unk : Int32)
+      pc.send_packet(SpecialCamera.new(creature, force, angle1, angle2, time, range, duration, rel_yaw, rel_pitch, wide, rel_angle, unk))
+    end
+
+    def cast_skill(npc : L2Npc, target : L2Playable, sh : SkillHolder)
+      npc.target = target
+      npc.do_cast(sh.skill)
+    end
+
+    def cast_skill(npc : L2Npc, target : L2Playable, skill : Skill)
+      npc.target = target
+      npc.do_cast(skill)
+    end
+
+    def give_item_randomly(pc : L2PcInstance, item_id : Int, amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
+      give_item_randomly(pc, nil, item_id, amount, limit, drop_chance, play_sound)
+    end
+
+    def give_item_randomly(pc : L2PcInstance, npc : L2Npc?, item_id : Int, amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
+      give_item_randomly(pc, npc, item_id, amount, amount, limit, drop_chance, play_sound)
+    end
+
+    def give_item_randomly(pc : L2PcInstance, npc : L2Npc?, item_id : Int, min_amount : Int, max_amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
+      current_count = get_quest_items_count(pc, item_id)
+
+      return true if limit > 0 && current_count >= limit
+
+      min_amount *= Config.rate_quest_drop
+      max_amount *= Config.rate_quest_drop
+      drop_chance *= Config.rate_quest_drop
+      if npc && Config.champion_enable && npc.champion?
+        if item_id.in?(Inventory::ADENA_ID, Inventory::ANCIENT_ADENA_ID)
+          drop_chance *= Config.champion_adenas_rewards_chance
+          min_amount *= Config.champion_adenas_rewards_amount
+          max_amount *= Config.champion_adenas_rewards_amount
+        else
+          drop_chance *= Config.champion_rewards_chance
+          min_amount *= Config.champion_rewards_amount
+          max_amount *= Config.champion_rewards_amount
+        end
+      end
+
+      amount_to_give = min_amount == max_amount ? min_amount : Rnd.rand(min_amount.to_i64..max_amount.to_i64)
+      amount_to_give = amount_to_give.to_i64
+
+      # debug "#give_item_randomly amount to give: #{amount_to_give}"
+
+      random = Rnd.rand
+      # Inventory slot check (almost useless for non-stacking items)
+      if drop_chance >= random && amount_to_give > 0 && pc.inventory.validate_capacity_by_item_id(item_id)
+        if limit > 0 && current_count + amount_to_give > limit
+          amount_to_give = limit - current_count
+        end
+
+        # Give the item to player
+        if pc.add_item("Quest", item_id, amount_to_give.to_i64, npc, true)
+          # limit reached (if there is no limit, this block doesn't execute)
+          if current_count + amount_to_give == limit
+            if play_sound
+              play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+            end
+
+            return true
           end
 
-          return true
-        end
-
-        if play_sound
-          play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
-        end
-        # if there is no limit, return true every time an item is given
-        if limit <= 0
-          return true
+          if play_sound
+            play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+          end
+          # if there is no limit, return true every time an item is given
+          if limit <= 0
+            return true
+          end
         end
       end
+
+      false
     end
 
-    false
-  end
-
-  def give_item_randomly(pc : L2PcInstance, item_id : Int, amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
-    AbstractScript.give_item_randomly(pc, item_id, amount, limit, drop_chance, play_sound)
-  end
-
-  def give_item_randomly(pc : L2PcInstance, npc : L2Npc?, item_id : Int, amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
-    AbstractScript.give_item_randomly(pc, npc, item_id, amount, limit, drop_chance, play_sound)
-  end
-
-  def give_item_randomly(pc : L2PcInstance, npc : L2Npc?, item_id : Int, min_amount : Int, max_amount : Int, limit : Int, drop_chance : Float64, play_sound : Bool) : Bool
-    AbstractScript.give_item_randomly(pc, npc, item_id, min_amount, max_amount, limit, drop_chance, play_sound)
-  end
-
-  def self.add_spawn(npc_id : Int, pos : Positionable) : L2Npc
-    add_spawn(npc_id, *pos.xyz, pos.heading, false, 0, false, 0)
-  end
-
-  def self.add_spawn(summoner : L2Npc?, npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int) : L2Npc
-    add_spawn(summoner, npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, false, 0)
-  end
-
-  def self.add_spawn(npc_id : Int, pos : Positionable, is_summon_spawn : Bool) : L2Npc
-    add_spawn(npc_id, *pos.xyz, pos.heading, false, 0, is_summon_spawn, 0)
-  end
-
-  def self.add_spawn(npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int) : L2Npc
-    add_spawn(npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, false, 0)
-  end
-
-  def self.add_spawn(npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool) : L2Npc
-    add_spawn(npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, is_summon_spawn, 0)
-  end
-
-  def self.add_spawn(npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool, instance_id : Int) : L2Npc
-    add_spawn(npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, is_summon_spawn, instance_id)
-  end
-
-  def self.add_spawn(npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int) : L2Npc
-    add_spawn(npc_id, x, y, z, heading, random_offset, despawn_delay, false, 0)
-  end
-
-  def self.add_spawn(npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool) : L2Npc
-    add_spawn(npc_id, x, y, z, heading, random_offset, despawn_delay, is_summon_spawn, 0)
-  end
-
-  def self.add_spawn(npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool, instance_id : Int) : L2Npc
-    add_spawn(nil, npc_id, x, y, z, heading, random_offset, despawn_delay, is_summon_spawn, instance_id)
-  end
-
-  def self.add_spawn(summoner : L2Npc?, npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool, instance_id : Int) : L2Npc
-    if x == 0 && y == 0
-      raise "Invalid spawn coordinates for NPC #{npc_id}"
+    def add_spawn(npc_id : Int, pos : Positionable) : L2Npc
+      add_spawn(npc_id, *pos.xyz, pos.heading, false, 0, false, 0)
     end
 
-    if random_offset
-      offset = Rnd.rand(50..100)
-      if Rnd.bool
-        offset = -offset
+    def add_spawn(summoner : L2Npc?, npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int) : L2Npc
+      add_spawn(summoner, npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, false, 0)
+    end
+
+    def add_spawn(npc_id : Int, pos : Positionable, is_summon_spawn : Bool) : L2Npc
+      add_spawn(npc_id, *pos.xyz, pos.heading, false, 0, is_summon_spawn, 0)
+    end
+
+    def add_spawn(npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int) : L2Npc
+      add_spawn(npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, false, 0)
+    end
+
+    def add_spawn(npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool) : L2Npc
+      add_spawn(npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, is_summon_spawn, 0)
+    end
+
+    def add_spawn(npc_id : Int, pos : Positionable, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool, instance_id : Int) : L2Npc
+      add_spawn(npc_id, *pos.xyz, pos.heading, random_offset, despawn_delay, is_summon_spawn, instance_id)
+    end
+
+    def add_spawn(npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int) : L2Npc
+      add_spawn(npc_id, x, y, z, heading, random_offset, despawn_delay, false, 0)
+    end
+
+    def add_spawn(npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool) : L2Npc
+      add_spawn(npc_id, x, y, z, heading, random_offset, despawn_delay, is_summon_spawn, 0)
+    end
+
+    def add_spawn(npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool, instance_id : Int) : L2Npc
+      add_spawn(nil, npc_id, x, y, z, heading, random_offset, despawn_delay, is_summon_spawn, instance_id)
+    end
+
+    def add_spawn(summoner : L2Npc?, npc_id : Int, x : Int, y : Int, z : Int, heading : Int, random_offset : Bool, despawn_delay : Int, is_summon_spawn : Bool, instance_id : Int) : L2Npc
+      if x == 0 && y == 0
+        raise "Invalid spawn coordinates for NPC #{npc_id}"
       end
-      x += offset
-      offset = Rnd.rand(50..100)
-      if Rnd.bool
-        offset = -offset
+
+      if random_offset
+        offset = Rnd.rand(50..100)
+        if Rnd.bool
+          offset = -offset
+        end
+        x += offset
+        offset = Rnd.rand(50..100)
+        if Rnd.bool
+          offset = -offset
+        end
+        y += offset
       end
-      y += offset
+
+      sp = L2Spawn.new(npc_id)
+      sp.instance_id = instance_id
+      sp.heading = heading
+      sp.x, sp.y, sp.z = x, y, z
+      sp.stop_respawn
+
+      npc = sp.spawn_one(is_summon_spawn).not_nil!
+
+      if despawn_delay > 0
+        npc.schedule_despawn(despawn_delay.to_i64)
+      end
+
+      summoner.try &.add_summoned_npc(npc)
+
+      npc
     end
 
-    sp = L2Spawn.new(npc_id)
-    sp.instance_id = instance_id
-    sp.heading = heading
-    sp.x, sp.y, sp.z = x, y, z
-    sp.stop_respawn
-
-    unless npc = sp.spawn_one(is_summon_spawn)
-      raise "NPC wasn't spawned"
+    def add_trap(trap_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, skill : Skill?, instance_id : Int32) : L2TrapInstance
+      template = NpcData[trap_id]
+      trap = L2TrapInstance.new(template, instance_id, -1)
+      trap.heal!
+      trap.invul = true
+      trap.heading = heading
+      trap.spawn_me(x, y, z)
+      trap
     end
 
-    if despawn_delay > 0
-      npc.schedule_despawn(despawn_delay.to_i64)
+    def add_radar(pc : L2PcInstance, x : Int32, y : Int32, z : Int32)
+      pc.radar.add_marker(x, y, z)
     end
 
-    summoner.try &.add_summoned_npc(npc)
+    def remove_radar(pc : L2PcInstance, x : Int32, y : Int32, z : Int32)
+      pc.radar.remove_marker(x, y, z)
+    end
 
-    npc
+    def teleport_player(pc : L2PcInstance, loc : Location, instance_id : Int32)
+      teleport_player(pc, loc, instance_id, true)
+    end
+
+    def teleport_player(pc : L2PcInstance, loc : Location, instance_id : Int32, allow_random_offset : Bool)
+      offset = allow_random_offset ? Config.max_offset_on_teleport : 0
+      pc.tele_to_location(loc, instance_id, offset)
+    end
+
+    def get_item_equipped(pc : L2PcInstance, slot : Int32) : Int32
+      pc.inventory.get_paperdoll_item_id(slot)
+    end
   end
 
-  delegate add_spawn, to: AbstractScript
-
-  def add_trap(trap_id : Int32, x : Int32, y : Int32, z : Int32, heading : Int32, skill : Skill?, instance_id : Int32) : L2TrapInstance
-    template = NpcData[trap_id]
-    trap = L2TrapInstance.new(template, instance_id, -1)
-    trap.heal!
-    trap.invul = true
-    trap.heading = heading
-    trap.spawn_me(x, y, z)
-    trap
-  end
-
-  def self.add_radar(pc : L2PcInstance, x : Int32, y : Int32, z : Int32)
-    pc.radar.add_marker(x, y, z)
-  end
-
-  delegate add_radar, to: AbstractScript
-
-  def self.remove_radar(pc : L2PcInstance, x : Int32, y : Int32, z : Int32)
-    pc.radar.remove_marker(x, y, z)
-  end
-
-  def self.teleport_player(pc : L2PcInstance, loc : Location, instance_id : Int32)
-    teleport_player(pc, loc, instance_id, true)
-  end
-
-  def self.teleport_player(pc : L2PcInstance, loc : Location, instance_id : Int32, allow_random_offset : Bool)
-    offset = allow_random_offset ? Config.max_offset_on_teleport : 0
-    pc.tele_to_location(loc, instance_id, offset)
-  end
-
-  delegate teleport_player, to: AbstractScript
-
-  def get_item_equipped(pc : L2PcInstance, slot : Int32) : Int32
-    pc.inventory.get_paperdoll_item_id(slot)
-  end
+  include InstanceAndClassMethods
+  extend InstanceAndClassMethods
 
   def execute_for_each_player(pc : L2PcInstance, npc : L2Npc, is_summon : Bool, include_party : Bool, include_cc : Bool)
     if (include_party || include_cc) && (party = pc.party)
@@ -1002,5 +939,9 @@ abstract class AbstractScript
         register_annotation(event_type, register_type, method, priority, ids)
       {% end %}
     {% end %}
+  end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
   end
 end

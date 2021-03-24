@@ -2,10 +2,8 @@ module UserCommandHandler::ChannelLeave
   extend self
   extend UserCommandHandler
 
-  def use_user_command(id, pc)
-    unless id == commands[0]
-      return false
-    end
+  def use_user_command(id : Int32, pc : L2PcInstance) : Bool
+    return false unless id == commands[0]
 
     unless party = pc.party
       pc.send_packet(SystemMessageId::ONLY_PARTY_LEADER_CAN_LEAVE_CHANNEL)
@@ -29,7 +27,7 @@ module UserCommandHandler::ChannelLeave
     true
   end
 
-  def commands
+  def commands : Enumerable(Int32)
     {96}
   end
 end

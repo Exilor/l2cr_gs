@@ -3,7 +3,6 @@ module TargetHandler::CorpseClan
   extend TargetHandler
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
-    debug "#{skill}, #{char}, #{target}"
     target_list = nil
 
     if char.playable?
@@ -88,8 +87,6 @@ module TargetHandler::CorpseClan
         end
       end
     end
-
-    debug "target list: #{target_list}"
 
     target_list || EMPTY_TARGET_LIST
   end

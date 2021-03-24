@@ -57,7 +57,7 @@ module AdminCommandHandler::AdminAnnouncements
           return false
         end
         delay = ann_delay.to_i * 1000
-        if delay < 10 * 1000 && (type.auto_normal? || type.auto_critical?)
+        if delay < 10 &* 1000 && (type.auto_normal? || type.auto_critical?)
           pc.send_message("Delay cannot be less then 10 seconds")
           return false
         end
@@ -363,7 +363,7 @@ module AdminCommandHandler::AdminAnnouncements
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_announce",
       "admin_announce_crit",

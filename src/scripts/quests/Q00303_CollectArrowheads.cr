@@ -59,9 +59,7 @@ class Scripts::Q00303_CollectArrowheads < Quest
           html = "30029-06.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

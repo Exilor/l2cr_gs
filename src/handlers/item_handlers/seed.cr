@@ -2,7 +2,7 @@ module ItemHandler::Seed
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     if !Config.allow_manor
       return false
     elsif !playable.player?
@@ -45,9 +45,7 @@ module ItemHandler::Seed
     target.set_seeded(seed, pc)
 
     if skills = item.template.skills
-      skills.each do |sk|
-        pc.use_magic(sk.skill, false, false)
-      end
+      skills.each { |sk| pc.use_magic(sk.skill, false, false) }
     end
 
     true

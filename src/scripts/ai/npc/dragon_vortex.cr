@@ -70,7 +70,7 @@ class Scripts::DragonVortex < AbstractNpcAI
 
           npc.variables[I_QUEST0] = true
           add_spawn(raid, loc, false, 0, true)
-          start_quest_timer("CANSPAWN", 60000, npc, nil)
+          start_quest_timer("CANSPAWN", 60_000, npc, nil)
         else
           return "32871-02.html"
         end
@@ -80,7 +80,6 @@ class Scripts::DragonVortex < AbstractNpcAI
     when "CANSPAWN"
       npc.variables[I_QUEST0] = false
     end
-
 
     super
   end

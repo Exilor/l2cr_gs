@@ -116,7 +116,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
     when ASCETIC
       if npc.most_hated == pc && npc.script_value?(0)
         npc.script_value = 1
-        start_quest_timer("DO_CAST", 20000, npc, pc)
+        start_quest_timer("DO_CAST", 20_000, npc, pc)
       end
     end
 
@@ -146,7 +146,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
 
         if npc.script_value?(0)
           npc.script_value = 1
-          start_quest_timer("DO_CAST", 20000, npc, pc)
+          start_quest_timer("DO_CAST", 20_000, npc, pc)
         end
       end
 
@@ -186,7 +186,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
   def on_spawn(npc)
     npc.invul = true
     npc.disable_core_ai(true)
-    start_quest_timer("TRAINING", 30000, npc, nil, true)
+    start_quest_timer("TRAINING", 30_000, npc, nil, true)
 
     super
   end

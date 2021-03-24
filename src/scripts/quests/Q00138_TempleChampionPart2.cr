@@ -39,9 +39,9 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
       st.start_quest
       st.give_items(TEMPLE_MANIFESTO, 1)
     when "30070-05.html"
-      st.give_adena(84593, true)
+      st.give_adena(84_593, true)
       if pc.level < 42
-        st.add_exp_and_sp(187062, 11307)
+        st.add_exp_and_sp(187_062, 11_307)
       end
       st.exit_quest(false, true)
     when "30070-03.html"
@@ -67,7 +67,6 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
       st.set_cond(7, true)
       st.unset("talk")
     end
-
 
     event
   end
@@ -126,7 +125,6 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
       when 6
         html = "30118-10.html"
       end
-
     when ANGUS
       case st.cond
       when 3
@@ -143,7 +141,6 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
       when 5
         html = "30474-05.html"
       end
-
     when SLA
       case st.cond
       when 6
@@ -158,9 +155,7 @@ class Scripts::Q00138_TempleChampionPart2 < Quest
       when 7
         html = "30666-09.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

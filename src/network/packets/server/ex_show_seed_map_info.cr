@@ -10,7 +10,7 @@ class Packets::Outgoing::ExShowSeedMapInfo < GameServerPacket
     d -246857
     d 251960
     d 4331
-    d 2770 + GraciaSeedsManager.sod_state
+    d 2770 &+ GraciaSeedsManager.sod_state
 
     d -213770
     d 210760

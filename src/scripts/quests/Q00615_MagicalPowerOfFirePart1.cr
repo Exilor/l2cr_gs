@@ -56,10 +56,7 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31378-02.html"
@@ -85,7 +82,6 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
       npc.delete_me
     end
 
-
     html
   end
 
@@ -97,7 +93,7 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
       npc.do_cast(GOW)
       eye = add_spawn(ASEFA_EYE, npc)
       eye.broadcast_packet(NpcSay.new(eye, Say2::NPC_ALL, NpcString::YOU_CANT_AVOID_THE_EYES_OF_ASEFA))
-      start_quest_timer("eye_despawn", 10000, eye, attacker)
+      start_quest_timer("eye_despawn", 10_000, eye, attacker)
     end
 
     super
@@ -123,7 +119,6 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
           html = "31378-03.html"
         end
       end
-
     when UDAN
       if st.started?
         case st.cond
@@ -145,14 +140,12 @@ class Scripts::Q00615_MagicalPowerOfFirePart1 < Quest
           st.exit_quest(true, true)
           html = "31379-04.html"
         end
-
       end
     when ASEFA_BOX
       if st.cond?(2)
         html = "31559-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

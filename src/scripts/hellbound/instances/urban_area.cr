@@ -91,9 +91,9 @@ class Scripts::UrbanArea < AbstractInstance
             npc.busy = true
             # destroy instance after 5 min
             inst = InstanceManager.get_instance(world.instance_id).not_nil!
-            inst.duration = 5 * 60000
+            inst.duration = 5 * 60_000
             inst.empty_destroy_time = 0
-            ThreadPoolManager.schedule_general(ExitInstance.new(self, party, world), 285000)
+            ThreadPoolManager.schedule_general(ExitInstance.new(self, party, world), 285_000)
             html = "32343-02d.htm"
           end
         else
@@ -149,7 +149,7 @@ class Scripts::UrbanArea < AbstractInstance
       npc.as(L2QuestGuardInstance).passive = true
       npc.as(L2QuestGuardInstance).auto_attackable = false
       STONE.skill.apply_effects(npc, npc)
-      start_quest_timer("rebuff", 357000, npc, nil)
+      start_quest_timer("rebuff", 357_000, npc, nil)
     elsif npc.id == TOWN_GUARD || npc.id == KEYMASTER
       npc.busy = false
       npc.busy_message = ""
@@ -204,7 +204,7 @@ class Scripts::UrbanArea < AbstractInstance
           if Rnd.rand(1000) < 25
             if Util.in_range?(range, npc, world.spawned_amaskari, false)
               world.active_amaskari_call.try &.cancel
-              world.active_amaskari_call = ThreadPoolManager.schedule_general(CallAmaskari.new(npc), 25000)
+              world.active_amaskari_call = ThreadPoolManager.schedule_general(CallAmaskari.new(npc), 25_000)
             end
           end
         end

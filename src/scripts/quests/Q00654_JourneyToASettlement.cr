@@ -22,10 +22,7 @@ class Scripts::Q00654_JourneyToASettlement < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31453-02.htm"
@@ -45,7 +42,6 @@ class Scripts::Q00654_JourneyToASettlement < Quest
         html = event
       end
     end
-
 
     html
   end

@@ -72,10 +72,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       return super
     end
 
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30760-08.html"
@@ -98,7 +95,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
     when "30760-20.html"
       if has_quest_items?(pc, SCEPTER_OF_JUDGMENT)
         give_items(pc, SEAL_OF_ASPIRATION, 1)
-        add_exp_and_sp(pc, 0, 250000)
+        add_exp_and_sp(pc, 0, 250_000)
         qs.exit_quest(false, true)
         html = event
       end
@@ -109,7 +106,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
     when "30760-23.html"
       if has_quest_items?(pc, SCEPTER_OF_JUDGMENT)
         give_items(pc, SEAL_OF_ASPIRATION, 1)
-        add_exp_and_sp(pc, 0, 250000)
+        add_exp_and_sp(pc, 0, 250_000)
         qs.exit_quest(false, true)
         html = event
       end
@@ -127,37 +124,37 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
     when "30761-02.html"
       if qs.memo_state?(2000) || qs.memo_state?(2011) || qs.memo_state?(2010) || qs.memo_state?(2001)
         give_items(pc, BLITZ_WYRM_EGG, 3)
-        qs.memo_state = qs.memo_state + 100
+        qs.memo_state &+= 100
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
-        start_quest_timer("DESPAWN", 10000, npc, pc)
+        start_quest_timer("DESPAWN", 10_000, npc, pc)
         html = event
       elsif qs.memo_state?(2100) || qs.memo_state?(2111) || qs.memo_state?(2110) || qs.memo_state?(2101)
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
-        start_quest_timer("DESPAWN", 10000, npc, pc)
+        start_quest_timer("DESPAWN", 10_000, npc, pc)
         html = "30761-03.html"
       end
     when "30762-02.html"
       if qs.memo_state?(2000) || qs.memo_state?(2101) || qs.memo_state?(2001) || qs.memo_state?(2100)
         give_items(pc, BLITZ_WYRM_EGG, 3)
         give_items(pc, MIST_DRAKES_EGG, 4)
-        qs.memo_state = qs.memo_state + 10
+        qs.memo_state &+= 10
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
-        start_quest_timer("DESPAWN", 10000, npc, pc)
+        start_quest_timer("DESPAWN", 10_000, npc, pc)
         html = event
       elsif qs.memo_state?(2100) || qs.memo_state?(2111) || qs.memo_state?(2011) || qs.memo_state?(2110)
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
         add_attack_desire(add_spawn(BLITZ_WYRM, npc, true, 0, false), pc)
-        start_quest_timer("DESPAWN", 10000, npc, pc)
+        start_quest_timer("DESPAWN", 10_000, npc, pc)
         html = "30762-03.html"
       end
     when "30763-02.html"
       if qs.memo_state?(2000) || qs.memo_state?(2110) || qs.memo_state?(2010) || qs.memo_state?(2100)
         give_items(pc, BROOCH_OF_THE_MAGPIE, 1)
         give_items(pc, MIST_DRAKES_EGG, 6)
-        qs.memo_state = qs.memo_state + 1
+        qs.memo_state &+= 1
         npc.delete_me
         html = event
       end
@@ -187,7 +184,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
     when "30766-08.html"
       if has_quest_items?(pc, SCEPTER_OF_JUDGMENT)
         give_items(pc, SEAL_OF_ASPIRATION, 1)
-        add_exp_and_sp(pc, 0, 250000)
+        add_exp_and_sp(pc, 0, 250_000)
         qs.exit_quest(false, true)
         html = event
       end
@@ -210,7 +207,6 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
        kalis = add_spawn(WITCH_KALIS, 160690, 21176, -3712, 0, false, 0)
       kalis.script_value = 50302
     end
-
 
     html
   end
@@ -283,7 +279,6 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
       end
     end
 
-
     super
   end
 
@@ -343,7 +338,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
             html = "30760-19.html"
           elsif qs.memo_state == 9000 && !pc.clan_leader?
             html = "30760-19t.html"
-          elsif qs.memo_state == 10000
+          elsif qs.memo_state == 10_000
             if !pc.clan_leader?
               html = "30760-24t.html"
             else
@@ -404,9 +399,9 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
           html = "30762-01.html"
         end
       when CORPSE_OF_KURTZ
-        if qs.memo_state < 3000 && qs.memo_state == 2000 || qs.memo_state == 2110 || qs.memo_state == 2010 || qs.memo_state == 2100
+        if qs.memo_state < 3000 && qs.memo_state.in?(2000, 2110, 2010, 2100)
           html = "30763-01.html"
-        elsif qs.memo_state == 2001 || qs.memo_state == 2111 || qs.memo_state == 2011 || qs.memo_state == 2101
+        elsif qs.memo_state.in?(2001, 2111, 2011, 2101)
           html = "30763-03.html"
         end
       when BALTHAZAR
@@ -456,7 +451,7 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
             html = "30766-05.html"
           elsif qs.memo_state > 8100 && qs.memo_state < 10000
             html = "30766-06.html"
-          elsif qs.memo_state == 10000 && pc.clan_leader?
+          elsif qs.memo_state == 10_000 && pc.clan_leader?
             html = "30766-07.html"
           end
         end
@@ -487,7 +482,6 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
           end
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)
@@ -506,12 +500,11 @@ class Scripts::Q00503_PursuitOfClanAmbition < Quest
         npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::AMBITION_AND_POWER))
       end
     when IMPERIAL_COFFER
-      start_quest_timer("DESPAWN_IMPERIAL_COFFER", 180000, npc, nil)
+      start_quest_timer("DESPAWN_IMPERIAL_COFFER", 180_000, npc, nil)
       npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::CURSE_OF_THE_GODS_ON_THE_ONE_THAT_DEFILES_THE_PROPERTY_OF_THE_EMPIRE))
     when BLITZ_WYRM
-      start_quest_timer("DESPAWN_BLITZ_WYRM", 180000, npc, nil)
+      start_quest_timer("DESPAWN_BLITZ_WYRM", 180_000, npc, nil)
     end
-
 
     super
   end

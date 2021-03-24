@@ -2,7 +2,7 @@ module ItemHandler::CharmOfCourage
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     return false unless playable.player?
 
     pc = playable.acting_player

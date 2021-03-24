@@ -90,8 +90,7 @@ class Scripts::Q00232_TestOfTheLord < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -155,7 +154,6 @@ class Scripts::Q00232_TestOfTheLord < Quest
       end
       html = event
     end
-
 
     html
   end
@@ -235,7 +233,6 @@ class Scripts::Q00232_TestOfTheLord < Quest
           end
         end
       end
-
     end
 
     super
@@ -443,7 +440,6 @@ class Scripts::Q00232_TestOfTheLord < Quest
           html = "30649-08.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == FLAME_LORD_KAKAI
         html = get_already_completed_msg(pc)

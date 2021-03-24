@@ -47,7 +47,6 @@ class Scripts::ElfHumanClericChange2 < AbstractNpcAI
     when "16", "17", "30"
       class_change_requested(pc, event.to_i)
     end
-
   end
 
   private def class_change_requested(pc, class_id)

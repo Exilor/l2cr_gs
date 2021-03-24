@@ -4,12 +4,12 @@ module ItemHandler::ItemSkills
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force) : Bool
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     if playable.acting_player.try &.in_olympiad_mode?
       playable.send_packet(SystemMessageId::THIS_ITEM_IS_NOT_AVAILABLE_FOR_THE_OLYMPIAD_EVENT)
       return false
     end
 
-    ItemHandler::ItemSkillsTemplate.use_item(playable, item, force)
+    ItemHandler::ItemSkillsTemplate.use_item(playable, item, force_use)
   end
 end

@@ -57,7 +57,7 @@ class Scripts::PailakaSongOfIceAndFire < AbstractInstance
       end
     when "BLOOM_TIMER"
       npc = npc.not_nil!
-      start_quest_timer("BLOOM_TIMER2", Rnd.rand(2..4) * 60 * 1000, npc, nil)
+      start_quest_timer("BLOOM_TIMER2", Rnd.rand(2..4) &* 60 &* 1000, npc, nil)
     when "BLOOM_TIMER2"
       npc = npc.not_nil!
       npc.invisible = !npc.invisible?
@@ -84,7 +84,6 @@ class Scripts::PailakaSongOfIceAndFire < AbstractInstance
       when 4, 5
         npc.drop_item(pc, HEAL_POTION, Rnd.rand(1i64..10i64))
       end
-
 
       npc.script_value = 1
       start_quest_timer("DELETE", 3000, npc, nil)

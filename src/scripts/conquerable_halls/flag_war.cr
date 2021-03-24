@@ -48,9 +48,7 @@ abstract class FlagWar < ClanHallSiegeEngine
     add_first_talk_id(@messenger)
     add_talk_id(@messenger)
 
-    6.times do |i|
-      add_first_talk_id(@teleport_1 + i)
-    end
+    6.times { |i| add_first_talk_id(@teleport_1 &+ i) }
 
     add_kill_id(@ally_1)
     add_kill_id(@ally_2)
@@ -80,7 +78,7 @@ abstract class FlagWar < ClanHallSiegeEngine
         html = "messenger_initial.htm"
       end
     else
-      index = npc.id - @teleport_1
+      index = npc.id &- @teleport_1
       if index == 0 && @first_phase
         html = "teleporter_notyet.htm"
       else
@@ -129,7 +127,7 @@ abstract class FlagWar < ClanHallSiegeEngine
               end
             # Register paying the fee
             elsif arg[1] == "wFee" && can_pay_registration?
-              if pc.reduce_adena(name + " Siege", 200000, npc, false) # Fee payed
+              if pc.reduce_adena(name + " Siege", 200_000, npc, false) # Fee payed
                 register_clan(clan)
                 html = get_flag_html(@data[clan.id].flag)
               else
@@ -293,7 +291,7 @@ abstract class FlagWar < ClanHallSiegeEngine
     Broadcast.to_all_online_players(sm)
     @hall.update_siege_status(SiegeStatus::WAITING_BATTLE)
 
-    @siege_task = ThreadPoolManager.schedule_general(->siege_starts_task, 3600000)
+    @siege_task = ThreadPoolManager.schedule_general(->siege_starts_task, 3_600_000)
   end
 
   def start_siege
@@ -379,7 +377,7 @@ abstract class FlagWar < ClanHallSiegeEngine
       loc = @hall.zone.spawns[0]
     else
       if cd = @data[player.clan_id]?
-        index = cd.flag - @flag_red
+        index = cd.flag &- @flag_red
         if index.between?(0, 4)
           loc = @hall.zone.challenger_spawns[index]
         else
@@ -402,7 +400,7 @@ abstract class FlagWar < ClanHallSiegeEngine
   def do_spawns(clan_id, data)
     index = 0
     if @first_phase
-      index = data.flag - @flag_red
+      index = data.flag &- @flag_red
     else
       index = clan_id == @hall.owner_id ? 5 : 6
     end
@@ -440,7 +438,7 @@ abstract class FlagWar < ClanHallSiegeEngine
     attackers[clan_id] = sc
 
     data = ClanData.new
-    data.flag = @royal_flag + @data.size
+    data.flag = @royal_flag &+ @data.size
     data.players << clan.leader_id
     @data[clan_id] = data
 

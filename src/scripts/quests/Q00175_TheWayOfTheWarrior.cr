@@ -51,8 +51,7 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32138-02.htm"
@@ -74,7 +73,7 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
         REWARDS.each { |reward| give_items(pc, reward) }
         Q00175_TheWayOfTheWarrior.give_newbie_reward(pc)
         give_items(pc, WARRIORS_SWORD, 1)
-        add_exp_and_sp(pc, 20739, 1777)
+        add_exp_and_sp(pc, 20_739, 1777)
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
         html = event
@@ -87,7 +86,6 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
       npc.do_cast(UNSEALED_ALTAR.skill)
       html = event
     end
-
 
     html
   end
@@ -140,7 +138,6 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
             html = "32138-12.html"
           end
         end
-
       elsif qs.completed?
         html = get_already_completed_msg(pc)
       end
@@ -166,9 +163,7 @@ class Scripts::Q00175_TheWayOfTheWarrior < Quest
       when 6
         html = "32133-07.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

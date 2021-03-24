@@ -61,8 +61,8 @@ class Scripts::Q00101_SwordOfSolidarity < Quest
       if st.cond?(5) && st.has_quest_items?(BROKEN_SWORD_HANDLE)
         Q00281_HeadForTheHills.give_newbie_reward(pc)
         REWARDS.each { |rw| st.give_items(rw) }
-        st.add_exp_and_sp 25747, 2171
-        st.give_adena(10981, true)
+        st.add_exp_and_sp(25_747, 2171)
+        st.give_adena(10_981, true)
         st.exit_quest(false, true)
         html = event
       end

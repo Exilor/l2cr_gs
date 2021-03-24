@@ -89,7 +89,9 @@ class Packets::Incoming::RequestExEnchantSkillUntrain < GameClientPacket
 
     pc.stat.add_sp((required_sp * 0.8).to_i)
 
-    # optional logging
+    if Config.log_skill_enchants
+      Logs[:enchant_skill].info { "UNTRAINED #{skill} using #{spb} by #{pc}." }
+    end
 
     pc.add_skill(skill, true)
     pc.send_packet(ExEnchantSkillResult::TRUE)

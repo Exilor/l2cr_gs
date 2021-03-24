@@ -182,7 +182,6 @@ class Scripts::CastleCourtMagician < AbstractNpcAI
       end
     end
 
-
     html
   end
 

@@ -35,10 +35,7 @@ class Scripts::Q00351_BlackSwan < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     html = nil
     case event
@@ -55,7 +52,7 @@ class Scripts::Q00351_BlackSwan < Quest
         html = event
       else
         adena_bonus = lizard_fang_count >= 10 ? 3880i64 : 0i64
-        give_adena(pc, adena_bonus + (20 * lizard_fang_count), true)
+        give_adena(pc, adena_bonus &+ (20 &* lizard_fang_count), true)
         take_items(pc, LIZARD_FANG, -1)
         html = "30969-04.html"
       end
@@ -137,7 +134,6 @@ class Scripts::Q00351_BlackSwan < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -33,7 +33,6 @@ class Scripts::SymbolMaker < AbstractNpcAI
       pc.send_packet(HennaRemoveList.new(pc))
     end
 
-
     nil
   end
 

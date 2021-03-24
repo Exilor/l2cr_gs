@@ -27,7 +27,7 @@ class Packets::Outgoing::SellList < GameServerPacket
     q @money
 
     if lease = @lease
-      d 1_000_000 + lease.template.id
+      d 1_000_000 &+ lease.template.id
     else
       d 0
     end

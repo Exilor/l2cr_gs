@@ -34,7 +34,7 @@ module AdminCommandHandler::AdminDelete
     end
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_delete"}
   end
 end

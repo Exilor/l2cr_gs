@@ -36,7 +36,6 @@ class Scripts::Q00001_LettersOfLove < Quest
         event
       end
     end
-
   end
 
   def on_talk(npc, pc)

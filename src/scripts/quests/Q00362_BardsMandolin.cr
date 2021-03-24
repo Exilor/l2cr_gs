@@ -20,10 +20,7 @@ class Scripts::Q00362_BardsMandolin < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30957-02.htm"
@@ -32,13 +29,12 @@ class Scripts::Q00362_BardsMandolin < Quest
       event
     when "30957-07.html", "30957-08.html"
       if st.memo_state?(5)
-        st.give_adena(10000, true)
+        st.give_adena(10_000, true)
         st.reward_items(THEME_OF_JOURNEY, 1)
         st.exit_quest(true, true)
         event
       end
     end
-
   end
 
   def on_talk(npc, pc)
@@ -65,7 +61,6 @@ class Scripts::Q00362_BardsMandolin < Quest
         when 5
           html = "30957-06.html"
         end
-
       when GALION
         if st.memo_state?(2)
           st.memo_state = 3
@@ -96,9 +91,7 @@ class Scripts::Q00362_BardsMandolin < Quest
           html = "30956-02.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

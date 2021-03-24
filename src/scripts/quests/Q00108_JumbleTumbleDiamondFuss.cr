@@ -60,8 +60,7 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30523-04.htm"
@@ -85,7 +84,6 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -130,8 +128,8 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         when 12
           if st.has_quest_items?(STAR_DIAMOND)
             Q00281_HeadForTheHills.give_newbie_reward(pc)
-            st.add_exp_and_sp(34565, 2962)
-            st.give_adena(14666, true)
+            st.add_exp_and_sp(34_565, 2962)
+            st.give_adena(14_666, true)
             REWARDS.each { |reward| st.give_items(reward) }
             st.give_items(SILVERSMITH_HAMMER, 1)
             st.exit_quest(false, true)
@@ -139,11 +137,9 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
             html = "30523-09.html"
           end
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(pc)
       end
-
     when TRADER_REEP
       case st.cond
       when 1
@@ -240,7 +236,6 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
           html = "30526-08.html"
         end
       end
-
     when WAREHOUSE_KEEPER_MURDOC
       case st.cond
       when 9
@@ -257,7 +252,6 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
       when 11, 12
         html = "30521-03.html"
       end
-
     when WAREHOUSE_KEEPER_AIRY
       case st.cond
       when 10
@@ -281,7 +275,6 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -321,7 +314,6 @@ class Scripts::Q00108_JumbleTumbleDiamondFuss < Quest
           end
         end
       end
-
     end
 
     super

@@ -139,7 +139,7 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
       zone.add_skill(ZONE_BUFFS[REGION_DATA[i].active_buff], 1)
     end
 
-    start_quest_timer("ChangeSeedsStatus", @seeds_next_status_change - Time.ms, nil, nil)
+    start_quest_timer("ChangeSeedsStatus", @seeds_next_status_change &- Time.ms, nil, nil)
   end
 
   private def spawn_group_of_minions(npc, mob_ids)
@@ -157,8 +157,6 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
   end
 
   def on_adv_event(event, npc, pc)
-    debug { "on_adv_event(event: #{event}, npc: #{npc}, pc: #{pc})" }
-
     if event.casecmp?("ChangeSeedsStatus")
       buffs_now = Rnd.rand(ZONE_BUFFS_LIST.size)
       save_global_quest_var("SeedBuffsList", buffs_now.to_s)
@@ -176,7 +174,7 @@ class Scripts::SeedOfAnnihilation < AbstractNpcAI
         zone.clear_skills
         zone.add_skill(ZONE_BUFFS[REGION_DATA[i].active_buff], 1)
       end
-      start_quest_timer("ChangeSeedsStatus", @seeds_next_status_change - Time.ms, nil, nil)
+      start_quest_timer("ChangeSeedsStatus", @seeds_next_status_change &- Time.ms, nil, nil)
     elsif event.casecmp?("transform")
       return unless pc && npc
       if pc.affected_by_skill?(SOUL_WEAKNESS.skill_id)

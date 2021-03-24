@@ -2,7 +2,7 @@ module ItemHandler::ExtractableItems
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     unless playable.player?
       playable.send_packet(SystemMessageId::ITEM_NOT_FOR_PETS)
       return false
@@ -17,14 +17,13 @@ module ItemHandler::ExtractableItems
     end
 
     unless pc.destroy_item("Extract", item.l2id, 1, pc, true)
-      debug "destroy_item returned false."
       return false
     end
 
     created = false
 
     exitem.each do |expi|
-      if Rnd.rand(100000) <= expi.chance
+      if Rnd.rand(100_000) <= expi.chance
         min = (expi.min * Config.rate_extractable).to_i64
         max = (expi.max * Config.rate_extractable).to_i64
 

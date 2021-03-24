@@ -46,6 +46,7 @@ class Scripts::Q00158_SeedOfEvil < Quest
       st.set_cond(2, true)
     end
     npc.broadcast_packet(NpcSay.new(npc, Say2::NPC_ALL, NpcString::THE_POWER_OF_LORD_BELETH_RULES_THE_WHOLE_WORLD))
+
     super
   end
 
@@ -60,7 +61,7 @@ class Scripts::Q00158_SeedOfEvil < Quest
         html = "30031-04.html"
       elsif st.cond?(2) && st.has_quest_items?(CLAY_TABLET)
         st.give_items(ENCHANT_ARMOR_D, 1)
-        st.add_exp_and_sp(17818, 927)
+        st.add_exp_and_sp(17_818, 927)
         st.give_adena(1495, true)
         st.exit_quest(false, true)
         html = "30031-05.html"
@@ -68,7 +69,6 @@ class Scripts::Q00158_SeedOfEvil < Quest
     when State::COMPLETED
       html = get_already_completed_msg(pc)
     end
-
 
     html || get_no_quest_msg(pc)
   end

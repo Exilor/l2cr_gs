@@ -3,7 +3,7 @@ class L2SwampZone < L2ZoneType
 
   getter move_bonus = 0.0
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name
     when "move_bonus"
       @move_bonus = value.to_f

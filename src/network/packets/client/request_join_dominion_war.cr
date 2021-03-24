@@ -54,7 +54,7 @@ class Packets::Incoming::RequestJoinDominionWar < GameClientPacket
           pc.send_packet(SystemMessageId::YOU_ALREADY_REQUESTED_TW_REGISTRATION)
           return
         elsif clan && TerritoryWarManager.registered?(-1, clan)
-          pc.send_packet(SystemMessageId::YOU_ALREADY_REQUESTED_TW_REGISTRATION);
+          pc.send_packet(SystemMessageId::YOU_ALREADY_REQUESTED_TW_REGISTRATION)
           return
         end
 

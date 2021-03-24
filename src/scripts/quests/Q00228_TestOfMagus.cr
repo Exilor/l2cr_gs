@@ -79,8 +79,7 @@ class Scripts::Q00228_TestOfMagus < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -127,7 +126,6 @@ class Scripts::Q00228_TestOfMagus < Quest
       qs.set_cond(3, true)
       html = event
     end
-
 
     html
   end
@@ -242,7 +240,6 @@ class Scripts::Q00228_TestOfMagus < Quest
           end
         end
       end
-
     end
 
     super
@@ -278,9 +275,9 @@ class Scripts::Q00228_TestOfMagus < Quest
           end
         elsif has_quest_items?(pc, SCORE_OF_ELEMENTS)
           if has_quest_items?(pc, TONE_OF_WATER, TONE_OF_FIRE, TONE_OF_WIND, TONE_OF_EARTH)
-            give_adena(pc, 372154, true)
+            give_adena(pc, 372_154, true)
             give_items(pc, MARK_OF_MAGUS, 1)
-            add_exp_and_sp(pc, 2058244, 141240)
+            add_exp_and_sp(pc, 2_058_244, 141_240)
             qs.exit_quest(false, true)
             pc.send_packet(SocialAction.new(pc.l2id, 3))
             html = "30629-12.html"
@@ -397,7 +394,6 @@ class Scripts::Q00228_TestOfMagus < Quest
           html = "30612-05.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == BARD_RUKAL
         html = get_already_completed_msg(pc)

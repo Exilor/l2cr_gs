@@ -2,7 +2,7 @@ module ItemHandler::SummonItems
   extend self
   extend ItemHandler
 
-  def use_item(playable, item, force)
+  def use_item(playable : L2Playable, item : L2ItemInstance, force_use : Bool) : Bool
     unless playable.player?
       playable.send_packet(SystemMessageId::ITEM_NOT_FOR_PETS)
       return false
@@ -14,7 +14,7 @@ module ItemHandler::SummonItems
 
     pc = playable.acting_player
 
-    if !pc.flood_protectors.item_pet_summon.try_perform_action("summon items")
+    unless pc.flood_protectors.item_pet_summon.try_perform_action("summon items")
       return false
     end
     return false if pc.block_checker_arena != -1
@@ -46,6 +46,6 @@ module ItemHandler::SummonItems
 
     pc.add_script(PetItemHolder.new(item))
 
-    ItemSkillsTemplate.use_item(pc, item, force)
+    ItemSkillsTemplate.use_item(pc, item, force_use)
   end
 end

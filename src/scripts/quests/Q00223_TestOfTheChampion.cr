@@ -63,8 +63,7 @@ class Scripts::Q00223_TestOfTheChampion < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -131,7 +130,6 @@ class Scripts::Q00223_TestOfTheChampion < Quest
       end
     end
 
-
     html
   end
 
@@ -157,7 +155,6 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         when 1
           npc.script_value = 2
         end
-
       when ROAD_SCAVENGER
         case npc.script_value
         when 0
@@ -176,7 +173,6 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         when 1
           npc.script_value = 2
         end
-
       when BLOODY_AXE_ELITE
         case npc.script_value
         when 0
@@ -190,9 +186,7 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         when 1
           npc.script_value = 2
         end
-
       end
-
     end
 
     super
@@ -272,7 +266,6 @@ class Scripts::Q00223_TestOfTheChampion < Quest
           end
         end
       end
-
     end
 
     super
@@ -317,9 +310,9 @@ class Scripts::Q00223_TestOfTheChampion < Quest
         elsif has_at_least_one_quest_item?(pc, MOUENS_1ST_ORDER, MOUENS_2ND_ORDER)
           html = "30624-16.html"
         elsif has_quest_items?(pc, MOUENS_LETTER)
-          give_adena(pc, 229764, true)
+          give_adena(pc, 229_764, true)
           give_items(pc, MARK_OF_CHAMPION, 1)
-          add_exp_and_sp(pc, 1270742, 87200)
+          add_exp_and_sp(pc, 1_270_742, 87_200)
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = "30624-17.html"
@@ -385,7 +378,6 @@ class Scripts::Q00223_TestOfTheChampion < Quest
           html = "30625-07.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == VETERAN_ASCALON
         html = get_already_completed_msg(pc)

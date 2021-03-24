@@ -58,7 +58,7 @@ class Scripts::LairOfAntharas < AbstractNpcAI
     mob.on_kill_delay = 0
     if npc.id == DRAGON_GUARD || npc.id == DRAGON_MAGE
       mob.no_random_walk = true
-      start_quest_timer("CHECK_HOME", 10000, npc, nil, true)
+      start_quest_timer("CHECK_HOME", 10_000, npc, nil, true)
     end
 
     super

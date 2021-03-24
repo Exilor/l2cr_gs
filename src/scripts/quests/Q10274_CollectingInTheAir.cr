@@ -78,12 +78,12 @@ class Scripts::Q10274_CollectingInTheAir < Quest
         html = "32557-00.html"
       end
     when State::STARTED
-      count = st.get_quest_items_count(RED) + st.get_quest_items_count(BLUE)
+      count = st.get_quest_items_count(RED) &+ st.get_quest_items_count(BLUE)
       count &+= st.get_quest_items_count(GREEN)
       if count >= 8
         html = "32557-05.html"
         st.give_items(13728, 1)
-        st.add_exp_and_sp(25160, 2525)
+        st.add_exp_and_sp(25_160, 2525)
         st.exit_quest(false, true)
       else
         html = "32557-04.html"

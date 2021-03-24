@@ -16,10 +16,7 @@ class Scripts::Q00130_PathToHellbound < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30612-04.htm"
@@ -52,7 +49,6 @@ class Scripts::Q00130_PathToHellbound < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -87,7 +83,6 @@ class Scripts::Q00130_PathToHellbound < Quest
         when 3
           html = "30612-09.html"
         end
-
       elsif npc.id == GALATE
         case st.cond
         when 1
@@ -97,10 +92,8 @@ class Scripts::Q00130_PathToHellbound < Quest
         when 3
           html = "32292-05.html"
         end
-
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

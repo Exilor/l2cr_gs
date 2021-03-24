@@ -457,7 +457,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
           count = {
             get_quest_items_count(player, GUARDIAN_BASILISK_SCALE) >= 40,
             get_quest_items_count(player, KARUT_WEED) >= 20,
-            get_quest_items_count(player, HAKAS_HEAD) + get_quest_items_count(player, JAKAS_HEAD) + get_quest_items_count(player, MARKAS_HEAD) >= 3,
+            get_quest_items_count(player, HAKAS_HEAD) &+ get_quest_items_count(player, JAKAS_HEAD) &+ get_quest_items_count(player, MARKAS_HEAD) >= 3,
             has_quest_items?(player, WINDSUS_ALEPH_SKIN),
             get_quest_items_count(player, INDIGO_SPIRIT_ORE) >= 20,
             get_quest_items_count(player, SPORESEA_SEED) >= 30
@@ -495,7 +495,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
             get_quest_items_count(player, AMBROSIUS_FRUIT) >= 30,
             get_quest_items_count(player, BALEFIRE_CRYSTAL) >= 20,
             get_quest_items_count(player, IMPERIAL_ARROWHEAD) >= 20,
-            get_quest_items_count(player, ATHUS_HEAD) + get_quest_items_count(player, LANKAS_HEAD) + get_quest_items_count(player, TRISKAS_HEAD) + get_quest_items_count(player, MOTURAS_HEAD) + get_quest_items_count(player, KALATHS_HEAD) >= 5
+            get_quest_items_count(player, ATHUS_HEAD) &+ get_quest_items_count(player, LANKAS_HEAD) &+ get_quest_items_count(player, TRISKAS_HEAD) &+ get_quest_items_count(player, MOTURAS_HEAD) &+ get_quest_items_count(player, KALATHS_HEAD) >= 5
           }.count &.itself
           if count < 3
             html = "30744-11.html"
@@ -600,13 +600,13 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
          "30745-05c.html"
       html = event
     when "30744-09.html"
-      if (get_quest_items_count(player, FIRST_CIRCLE_REQUEST_1C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_2C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_3C) +
-          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_4C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_4C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_6C) +
-          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_7C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_8C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_9C) +
-          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_10C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_11C) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_12C) +
-          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_1B) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_2B) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_3B) +
-          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_4B) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_5B) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_6B) +
-          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_1A) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_2A) + get_quest_items_count(player, FIRST_CIRCLE_REQUEST_3A)) == 0
+      if (get_quest_items_count(player, FIRST_CIRCLE_REQUEST_1C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_2C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_3C) +
+          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_4C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_4C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_6C) +
+          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_7C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_8C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_9C) +
+          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_10C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_11C) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_12C) +
+          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_1B) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_2B) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_3B) +
+          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_4B) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_5B) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_6B) +
+          get_quest_items_count(player, FIRST_CIRCLE_REQUEST_1A) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_2A) &+ get_quest_items_count(player, FIRST_CIRCLE_REQUEST_3A)) == 0
         give_items(player, TEST_INSTRUCTIONS_2, 1)
         html = event
       else
@@ -646,53 +646,53 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
             i2 = Rnd.rand(12)
             i3 = Rnd.rand(12)
             i4 = Rnd.rand(12)
-            qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+            qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
           elsif get_quest_items_count(player, LAUREL_LEAF_PIN) < 4
             if Rnd.rand(100) < 20
-              i0 = Rnd.rand(6) + 12
+              i0 = Rnd.rand(6) &+ 12
               i1 = Rnd.rand(12)
               i2 = Rnd.rand(6)
-              i3 = Rnd.rand(6) + 6
+              i3 = Rnd.rand(6) &+ 6
               i4 = Rnd.rand(12)
-              qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+              qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
             else
               i0 = Rnd.rand(12)
               i1 = Rnd.rand(12)
               i2 = Rnd.rand(12)
               i3 = Rnd.rand(12)
               i4 = Rnd.rand(12)
-              qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+              qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
             end
           elsif Rnd.rand(100) < 20
-            i0 = Rnd.rand(6) + 12
+            i0 = Rnd.rand(6) &+ 12
             if Rnd.rand(20) == 0
-              i1 = Rnd.rand(2) + 18
+              i1 = Rnd.rand(2) &+ 18
             else
               i1 = Rnd.rand(12)
             end
             i2 = Rnd.rand(6)
-            i3 = Rnd.rand(6) + 6
+            i3 = Rnd.rand(6) &+ 6
             i4 = Rnd.rand(12)
-            qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+            qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
           else
             i0 = Rnd.rand(12)
             if Rnd.rand(20) == 0
-              i1 = Rnd.rand(2) + 18
+              i1 = Rnd.rand(2) &+ 18
             else
               i1 = Rnd.rand(12)
             end
             i2 = Rnd.rand(6)
-            i3 = Rnd.rand(6) + 6
+            i3 = Rnd.rand(6) &+ 6
             i4 = Rnd.rand(12)
-            qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+            qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
           end
         end
 
-        i0 = 33520 + i0
-        i1 = 33520 + i1
-        i2 = 33520 + i2
-        i3 = 33520 + i3
-        i4 = 33520 + i4
+        i0 = 33520 &+ i0
+        i1 = 33520 &+ i1
+        i2 = 33520 &+ i2
+        i3 = 33520 &+ i3
+        i4 = 33520 &+ i4
 
         html = get_html(player, "30745-16.html", i0, i1, i2, i3, i4)
       else
@@ -707,11 +707,11 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
         i5 //= 32
         i4 = i5 % 32
         i5 //= 32
-        i0 = 33520 + i0
-        i1 = 33520 + i1
-        i2 = 33520 + i2
-        i3 = 33520 + i3
-        i4 = 33520 + i4
+        i0 = 33520 &+ i0
+        i1 = 33520 &+ i1
+        i2 = 33520 &+ i2
+        i3 = 33520 &+ i3
+        i4 = 33520 &+ i4
 
         html = get_html(player, "30745-16.html", i4, i3, i2, i1, i0)
       end
@@ -731,7 +731,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
             i2 = Rnd.rand(5)
             i3 = Rnd.rand(5) &+ 5
             i4 = Rnd.rand(10)
-            qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+            qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
           elsif get_quest_items_count(player, LAUREL_LEAF_PIN) < 4
             if Rnd.rand(100) < 20
               i0 = Rnd.rand(6) &+ 10
@@ -739,45 +739,45 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
               i2 = Rnd.rand(5)
               i3 = Rnd.rand(5) &+ 5
               i4 = Rnd.rand(10)
-              qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+              qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
             else
               i0 = Rnd.rand(10)
               i1 = Rnd.rand(10)
               i2 = Rnd.rand(5)
               i3 = Rnd.rand(5) &+ 5
               i4 = Rnd.rand(10)
-              qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+              qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
             end
           elsif Rnd.rand(100) < 20
             i0 = Rnd.rand(6) &+ 10
             if Rnd.rand(20) == 0
-              i1 = Rnd.rand(3) + 16
+              i1 = Rnd.rand(3) &+ 16
             else
               i1 = Rnd.rand(10)
             end
             i2 = Rnd.rand(5)
             i3 = Rnd.rand(5) &+ 5
             i4 = Rnd.rand(10)
-            qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+            qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
           else
             i0 = Rnd.rand(10)
             if Rnd.rand(20) == 0
-              i1 = Rnd.rand(3) + 16
+              i1 = Rnd.rand(3) &+ 16
             else
               i1 = Rnd.rand(10)
             end
             i2 = Rnd.rand(5)
             i3 = Rnd.rand(5) &+ 5
             i4 = Rnd.rand(10)
-            qs.memo_state = (i0 * 32 * 32 * 32 * 32) + (i1 * 32 * 32 * 32) + (i2 * 32 * 32) + (i3 * 32 * 1) + (i4 * 1 * 1)
+            qs.memo_state = (i0 &* 32 &* 32 &* 32 &* 32) &+ (i1 &* 32 &* 32 &* 32) &+ (i2 &* 32 &* 32) &+ (i3 &* 32 &* 1) &+ (i4 &* 1 &* 1)
           end
         end
 
-        i0 = 33520 + (i0 + 20)
-        i1 = 33520 + (i1 + 20)
-        i2 = 33520 + (i2 + 20)
-        i3 = 33520 + (i3 + 20)
-        i4 = 33520 + (i4 + 20)
+        i0 = 33520 &+ (i0 &+ 20)
+        i1 = 33520 &+ (i1 &+ 20)
+        i2 = 33520 &+ (i2 &+ 20)
+        i3 = 33520 &+ (i3 &+ 20)
+        i4 = 33520 &+ (i4 &+ 20)
 
         html = get_html(player, "30745-16.html", i0, i1, i2, i3, i4)
       else
@@ -792,11 +792,11 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
         i5 //= 32
         i4 = i5 % 32
         # i5 //= 32
-        i0 = 33520 + (i0 + 20)
-        i1 = 33520 + (i1 + 20)
-        i2 = 33520 + (i2 + 20)
-        i3 = 33520 + (i3 + 20)
-        i4 = 33520 + (i4 + 20)
+        i0 = 33520 &+ (i0 &+ 20)
+        i1 = 33520 &+ (i1 &+ 20)
+        i2 = 33520 &+ (i2 &+ 20)
+        i3 = 33520 &+ (i3 &+ 20)
+        i4 = 33520 &+ (i4 &+ 20)
 
         html = get_html(player, "30745-16.html", i4, i3, i2, i1, i0)
       end
@@ -998,7 +998,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
 
       case npc.id
       when BREKA_ORC_WARRIOR
-        if has_quest_items?(qs.player, TEST_INSTRUCTIONS_1) && get_quest_items_count(qs.player, HAKAS_HEAD) + get_quest_items_count(qs.player, JAKAS_HEAD) + get_quest_items_count(qs.player, MARKAS_HEAD) < 3
+        if has_quest_items?(qs.player, TEST_INSTRUCTIONS_1) && get_quest_items_count(qs.player, HAKAS_HEAD) &+ get_quest_items_count(qs.player, JAKAS_HEAD) &+ get_quest_items_count(qs.player, MARKAS_HEAD) < 3
           if Rnd.rand(10) < 2
             if !has_quest_items?(qs.player, HAKAS_HEAD)
               add_spawn(BREKA_OVERLORD_HAKA, npc.x, npc.y, npc.z + 10, npc.heading, false, 0, true)
@@ -1018,7 +1018,7 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
           add_spawn(GOK_MAGOK, npc.x, npc.y, npc.z + 10, npc.heading, false, 0, true)
         end
       when TARLK_BUGBEAR_WARRIOR
-        if has_quest_items?(qs.player, TEST_INSTRUCTIONS_2) && get_quest_items_count(qs.player, ATHUS_HEAD) + get_quest_items_count(qs.player, LANKAS_HEAD) + get_quest_items_count(qs.player, TRISKAS_HEAD) + get_quest_items_count(qs.player, MOTURAS_HEAD) + get_quest_items_count(qs.player, KALATHS_HEAD) < 5
+        if has_quest_items?(qs.player, TEST_INSTRUCTIONS_2) && get_quest_items_count(qs.player, ATHUS_HEAD) &+ get_quest_items_count(qs.player, LANKAS_HEAD) &+ get_quest_items_count(qs.player, TRISKAS_HEAD) &+ get_quest_items_count(qs.player, MOTURAS_HEAD) &+ get_quest_items_count(qs.player, KALATHS_HEAD) < 5
           if Rnd.rand(10) < 2
             if !has_quest_items?(qs.player, ATHUS_HEAD)
               add_spawn(TARLK_RAIDER_ATHU, npc.x, npc.y, npc.z + 10, npc.heading, false, 0, true)
@@ -1156,7 +1156,6 @@ class Scripts::Q00335_TheSongOfTheHunter < Quest
            HARIT_LIZARDMAN_ARCHER, HARIT_LIZARDMAN_WARRIOR
         evolve_blood_crystal(qs.player)
       end
-
     end
 
     super

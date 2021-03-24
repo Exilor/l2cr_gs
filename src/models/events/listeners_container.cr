@@ -2,7 +2,6 @@ require "./listeners/abstract_event_listener"
 
 class ListenersContainer
   include Synchronizable
-  include Loggable
 
   @listeners : Concurrent::Map(EventType, Array(AbstractEventListener))?
 

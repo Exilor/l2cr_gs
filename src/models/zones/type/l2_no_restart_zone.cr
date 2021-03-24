@@ -4,7 +4,7 @@ class L2NoRestartZone < L2ZoneType
   property restart_allowed_time : Int32 = 0
   property restart_time : Int32 = 0
 
-  def set_parameter(name, value)
+  def set_parameter(name : String, value : String)
     case name.casecmp
     when "default_enabled"
       @enabled = value.to_b

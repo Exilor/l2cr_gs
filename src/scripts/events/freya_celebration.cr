@@ -39,7 +39,7 @@ class Scripts::FreyaCelebration < LongTimeEvent
   def on_adv_event(event, npc, pc)
     if event.casecmp?("give_potion")
       pc = pc.not_nil!
-      if get_quest_items_count(pc, Inventory::ADENA_ID) > 1
+      if pc.adena > 1
         curr_time = Time.ms
         value = load_global_quest_var(pc.account_name)
         reuse_time = value.empty? ? 0i64 : value.to_i64
@@ -47,7 +47,7 @@ class Scripts::FreyaCelebration < LongTimeEvent
         if curr_time > reuse_time
           take_items(pc, Inventory::ADENA_ID, 1)
           give_items(pc, FREYA_POTION, 1)
-          save_global_quest_var(pc.account_name, (Time.ms + (HOURS * 3_600_000)).to_s)
+          save_global_quest_var(pc.account_name, (Time.ms &+ (HOURS &* 3_600_000)).to_s)
         else
           remaining_time = (reuse_time - Time.ms) // 1000
           hours = (remaining_time // 3600).to_i32
@@ -65,7 +65,6 @@ class Scripts::FreyaCelebration < LongTimeEvent
         pc.send_packet(sm)
       end
     end
-
 
     nil
   end

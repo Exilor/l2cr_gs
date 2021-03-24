@@ -25,10 +25,7 @@ class Scripts::Q00461_RumbleInTheBase < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event.casecmp?("30200-05.htm")
       st.start_quest
@@ -83,7 +80,7 @@ class Scripts::Q00461_RumbleInTheBase < Quest
       if st.cond?(1)
         html = "30200-06.html"
       else
-        st.add_exp_and_sp(224784, 342528)
+        st.add_exp_and_sp(224_784, 342_528)
         st.exit_quest(QuestType::DAILY, true)
         html = "30200-07.html"
       end
@@ -99,7 +96,6 @@ class Scripts::Q00461_RumbleInTheBase < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

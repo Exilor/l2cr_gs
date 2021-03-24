@@ -54,7 +54,7 @@ module AdminCommandHandler::AdminMessages
     false
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_msg",
       "admin_msgx"

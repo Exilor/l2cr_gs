@@ -48,8 +48,8 @@ class Scripts::Q10272_LightFragment < Quest
     when "32559-07.html"
       st.set_cond(3, true)
     when "pay"
-      if st.get_quest_items_count(Inventory::ADENA_ID) >= 10000
-        st.take_items(Inventory::ADENA_ID, 10000)
+      if st.get_quest_items_count(Inventory::ADENA_ID) >= 10_000
+        st.take_items(Inventory::ADENA_ID, 10_000)
         event = "32566-05.html"
       else
         event = "32566-04a.html"
@@ -67,7 +67,6 @@ class Scripts::Q10272_LightFragment < Quest
       end
     end
 
-
     event
   end
 
@@ -80,11 +79,11 @@ class Scripts::Q10272_LightFragment < Quest
         num_items = chance // 100
         chance = chance % 100
         if Rnd.rand(100) < chance
-          num_items += 1
+          num_items &+= 1
         end
         if num_items > 0
-          if count + num_items > 100
-            num_items = 100 - count.to_i
+          if count &+ num_items > 100
+            num_items = 100 &- count.to_i
           end
           if num_items > 0
             st.give_items(FRAGMENT_POWDER, num_items)
@@ -118,7 +117,6 @@ class Scripts::Q10272_LightFragment < Quest
       when State::COMPLETED
         html = "32560-04.html"
       end
-
     when ARTIUS
       if st.completed?
         html = "32559-19.html"
@@ -154,11 +152,10 @@ class Scripts::Q10272_LightFragment < Quest
           # TODO Nothing here?
         when 8
           html = "32559-18.html"
-          st.give_adena(556980, true)
-          st.add_exp_and_sp(1009016, 91363)
+          st.give_adena(556_980, true)
+          st.add_exp_and_sp(1_009_016, 91_363)
           st.exit_quest(false, true)
         end
-
       end
     when GINBY
       case st.cond
@@ -173,7 +170,6 @@ class Scripts::Q10272_LightFragment < Quest
       when 6
         html = "32566-10.html"
       end
-
     when LELRIKIA
       case st.cond
       when 3
@@ -181,7 +177,6 @@ class Scripts::Q10272_LightFragment < Quest
       when 4
         html = "32567-05.html"
       end
-
     when LEKON
       case st.cond
       when 7
@@ -196,9 +191,7 @@ class Scripts::Q10272_LightFragment < Quest
       when 8
         html = "32557-06.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

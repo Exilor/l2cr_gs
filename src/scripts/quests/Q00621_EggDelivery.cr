@@ -30,10 +30,7 @@ class Scripts::Q00621_EggDelivery < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31521-03.htm"
@@ -66,9 +63,9 @@ class Scripts::Q00621_EggDelivery < Quest
     when "31544-02.html", "31545-02.html", "31546-02.html", "31547-02.html"
       npc = npc.not_nil!
       idx = TALKERS.index(npc.id)
-      if idx && qs.cond?(idx + 2)
+      if idx && qs.cond?(idx &+ 2)
         if has_quest_items?(pc, BOILED_EGG)
-          qs.set_cond(qs.cond + 1, true)
+          qs.set_cond(qs.cond &+ 1, true)
           take_items(pc, BOILED_EGG, 1)
           give_items(pc, EGG_PRICE, 1)
           html = event
@@ -81,7 +78,7 @@ class Scripts::Q00621_EggDelivery < Quest
         rnd = Rnd.rand(1000)
         if rnd < 800
           reward_items(pc, QUICK_STEP_POTION, 1)
-          give_adena(pc, 18800, true)
+          give_adena(pc, 18_800, true)
         elsif rnd < 880
           reward_items(pc, SEALED_RING_OF_AURAKYRA, 1)
         elsif rnd < 960
@@ -93,7 +90,6 @@ class Scripts::Q00621_EggDelivery < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -119,11 +115,9 @@ class Scripts::Q00621_EggDelivery < Quest
             html = "31521-08.html"
           end
         end
-
       when State::COMPLETED
         html = get_already_completed_msg(talker)
       end
-
     when PULIN
       if qs.started?
         case qs.cond
@@ -134,15 +128,14 @@ class Scripts::Q00621_EggDelivery < Quest
         when 2
           html = "31543-04.html"
         end
-
       end
     when NAFF, CROCUS, KUBER, BOELIN
       if qs.started?
         idx = TALKERS.index(npc.id).not_nil!
-        cond = idx + 2
+        cond = idx &+ 2
         if qs.cond?(cond) && has_quest_items?(talker, EGG_PRICE) # 2,3,4,5
           html = "#{npc.id}-01.html"
-        elsif qs.cond?(cond + 1) # 3,4,5,6
+        elsif qs.cond?(cond &+ 1) # 3,4,5,6
           html = "#{npc.id}-04.html"
         end
       end
@@ -151,7 +144,6 @@ class Scripts::Q00621_EggDelivery < Quest
         html = "31584-01.html"
       end
     end
-
 
     html || get_no_quest_msg(talker)
   end

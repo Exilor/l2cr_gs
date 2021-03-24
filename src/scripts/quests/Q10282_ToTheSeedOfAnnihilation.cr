@@ -25,10 +25,9 @@ class Scripts::Q10282_ToTheSeedOfAnnihilation < Quest
       st.start_quest
       st.give_items(SOA_ORDERS, 1)
     when "32734-02.htm"
-      st.add_exp_and_sp(1148480, 99110)
+      st.add_exp_and_sp(1_148_480, 99_110)
       st.exit_quest(false)
     end
-
 
     html
   end
@@ -54,7 +53,6 @@ class Scripts::Q10282_ToTheSeedOfAnnihilation < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

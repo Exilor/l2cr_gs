@@ -3,7 +3,7 @@ require "mysql"
 
 module GameDB
   extend self
-  extend Loggable
+  include Loggable
 
   private class_getter! db : DBConnector(self.class)
   private class_getter! dao_factory : IDAOFactory

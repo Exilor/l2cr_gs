@@ -15,4 +15,8 @@ abstract class Task
   def on_destroy
     # no-op
   end
+
+  def to_s(io : IO)
+    self.class.to_s(io)
+  end
 end

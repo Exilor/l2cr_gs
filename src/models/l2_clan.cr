@@ -73,6 +73,8 @@ class L2Clan
   property char_penalty_expiry_time : Int64 = 0i64
   property dissolving_expiry_time : Int64 = 0i64
 
+  def_equals_and_hash @clan_id
+
   def initialize(clan_id : Int32)
     @clan_id = clan_id
 
@@ -1629,9 +1631,5 @@ class L2Clan
 
   def to_s(io : IO)
     io.print("L2Clan(", @name, ')')
-  end
-
-  def to_log(io : IO)
-    to_s(io)
   end
 end

@@ -2,7 +2,7 @@ module ChatHandler::ChatParty
   extend self
   extend ChatHandler
 
-  def handle_chat(type, pc, params, text)
+  def handle_chat(type : Int32, pc : L2PcInstance, target : String?, text : String)
     if party = pc.party
       if pc.chat_banned? && Config.ban_chat_channels.includes?(type)
         pc.send_packet(SystemMessageId::CHATTING_IS_CURRENTLY_PROHIBITED)
@@ -14,7 +14,7 @@ module ChatHandler::ChatParty
     end
   end
 
-  def chat_type_list
+  def chat_type_list : Enumerable(Int32)
     {3}
   end
 end

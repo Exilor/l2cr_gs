@@ -77,12 +77,11 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
-      if get_quest_items_count(pc, Inventory::ADENA_ID) >= 2000
+      if pc.adena >= 2000
         qs.start_quest
         take_items(pc, Inventory::ADENA_ID, 2000)
         if !has_quest_items?(pc, VALKONS_RECOMMENDATION)
@@ -108,9 +107,9 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
     when "30103-09a.html"
       if has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
         if get_quest_items_count(pc, JOURNEYMAN_RING) >= 7
-          give_adena(pc, 187606, true)
+          give_adena(pc, 187_606, true)
           give_items(pc, MARK_OF_GUILDSMAN, 1)
-          add_exp_and_sp(pc, 1029478, 66768)
+          add_exp_and_sp(pc, 1_029_478, 66_768)
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = event
@@ -119,9 +118,9 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
     when "30103-09b.html"
       if has_quest_items?(pc, ALLTRANS_INSTRUCTIONS)
         if get_quest_items_count(pc, JOURNEYMAN_RING) >= 7
-          give_adena(pc, 93803, true)
+          give_adena(pc, 93_803, true)
           give_items(pc, MARK_OF_GUILDSMAN, 1)
-          add_exp_and_sp(pc, 514739, 33384)
+          add_exp_and_sp(pc, 514_739, 33_384)
           qs.exit_quest(false, true)
           pc.send_packet(SocialAction.new(pc.l2id, 3))
           html = event
@@ -190,7 +189,7 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
           play_sound(qs.player, Sound::ITEMSOUND_QUEST_MIDDLE)
         end
 
-        if get_quest_items_count(qs.player, AMBER_BEAD) + count < 70
+        if get_quest_items_count(qs.player, AMBER_BEAD) &+ count < 70
           count &+= 5
         end
 
@@ -388,22 +387,21 @@ class Scripts::Q00216_TrialOfTheGuildsman < Quest
   end
 
   def check_party_member(pc : L2PcInstance, npc : L2Npc) : Bool
-    check = false
     case npc.id
     when ANT, ANT_CAPTAIN, ANT_OVERSEER
-      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, PINTERS_INSTRUCTIONS) && get_quest_items_count(pc, AMBER_BEAD) < 70
+      has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, PINTERS_INSTRUCTIONS) && get_quest_items_count(pc, AMBER_BEAD) < 70
     when GRANITE_GOLEM
-      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, GRANITE_WHETSTONE) < 70
+      has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, GRANITE_WHETSTONE) < 70
     when SILENOS
-      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, BRAIDED_YARN) < 70
+      has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, BRAIDED_YARN) < 70
     when STRAIN, GHOUL
-      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, GRAY_BONE_POWDER) < 70
+      has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, GRAY_BONE_POWDER) < 70
     when DEAD_SEEKER
-      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, RED_PIGMENT) < 70
+      has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_LIST) && get_quest_items_count(pc, RED_PIGMENT) < 70
     when BREKA_ORC, BREKA_ORC_ARCHER, BREKA_ORC_SHAMAN, BREKA_ORC_OVERLORD, BREKA_ORC_WARRIOR
-      check = has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS) && get_quest_items_count(pc, DUNINGS_KEY) < 30
+      has_quest_items?(pc, ALLTRANS_INSTRUCTIONS, NORMANS_INSTRUCTIONS, DUNINGS_INSTRUCTIONS) && get_quest_items_count(pc, DUNINGS_KEY) < 30
+    else
+      false
     end
-
-    check
   end
 end

@@ -111,7 +111,7 @@ class Scripts::Antharas < AbstractNpcAI
       start_quest_timer("CHECK_ATTACK", 60_000, @antharas, nil)
       start_quest_timer("SPAWN_MINION", 300_000, @antharas, nil)
     when DEAD
-      remain = respawn_time - Time.ms
+      remain = respawn_time &- Time.ms
       if remain > 0
         start_quest_timer("CLEAR_STATUS", remain, nil, nil)
       else
@@ -121,7 +121,6 @@ class Scripts::Antharas < AbstractNpcAI
         add_boss(@antharas)
       end
     end
-
   end
 
   def on_adv_event(event, npc, player)
@@ -149,12 +148,12 @@ class Scripts::Antharas < AbstractNpcAI
           npc = npc.not_nil!
           members.each do |member|
             if member.inside_radius?(npc, 1000, true, false)
-              member.tele_to_location(179700 + Rnd.rand(700), 113800 + Rnd.rand(2100), -7709)
+              member.tele_to_location(179700 &+ Rnd.rand(700), 113800 &+ Rnd.rand(2100), -7709)
             end
           end
           if get_status != WAITING
             set_status(WAITING)
-            start_quest_timer("SPAWN_ANTHARAS", Config.antharas_wait_time * 60000, nil, nil)
+            start_quest_timer("SPAWN_ANTHARAS", Config.antharas_wait_time * 60_000, nil, nil)
           end
         end
       else
@@ -162,17 +161,17 @@ class Scripts::Antharas < AbstractNpcAI
         if !has_quest_items?(player, STONE)
           html = "13001-03.html"
         else
-          player.tele_to_location(179700 + Rnd.rand(700), 113800 + Rnd.rand(2100), -7709)
+          player.tele_to_location(179700 &+ Rnd.rand(700), 113800 &+ Rnd.rand(2100), -7709)
           if get_status != WAITING
             set_status(WAITING)
-            start_quest_timer("SPAWN_ANTHARAS", Config.antharas_wait_time * 60000, nil, nil)
+            start_quest_timer("SPAWN_ANTHARAS", Config.antharas_wait_time &* 60_000, nil, nil)
           end
         end
       end
       return html
     when "teleportOut"
       player = player.not_nil!
-      player.tele_to_location(79800 + Rnd.rand(600), 151200 + Rnd.rand(1100), -3534)
+      player.tele_to_location(79800 &+ Rnd.rand(600), 151200 &+ Rnd.rand(1100), -3534)
     when "SPAWN_ANTHARAS"
       @antharas.not_nil!.tele_to_location(181323, 114850, -7623, 32542)
       set_status(IN_FIGHT)
@@ -235,7 +234,7 @@ class Scripts::Antharas < AbstractNpcAI
         start_quest_timer("SET_REGEN", 60_000, npc, nil)
       end
     when "CHECK_ATTACK"
-      if npc && @last_attack + 900_000 < Time.ms
+      if npc && @last_attack &+ 900_000 < Time.ms
         set_status(ALIVE)
         @zone.each_character_inside do |char|
           if char.npc?
@@ -245,7 +244,7 @@ class Scripts::Antharas < AbstractNpcAI
               char.delete_me
             end
           elsif char.player?
-            char.tele_to_location(79800 + Rnd.rand(600), 151200 + Rnd.rand(1100), -3534)
+            char.tele_to_location(79800 &+ Rnd.rand(600), 151200 &+ Rnd.rand(1100), -3534)
           end
         end
         cancel_quest_timer("CHECK_ATTACK", npc, nil)
@@ -371,7 +370,7 @@ class Scripts::Antharas < AbstractNpcAI
               char.delete_me
             end
           elsif char.player? && !char.gm?
-            char.tele_to_location(79800 + Rnd.rand(600), 151200 + Rnd.rand(1100), -3534)
+            char.tele_to_location(79800 &+ Rnd.rand(600), 151200 &+ Rnd.rand(1100), -3534)
           end
         end
         player.send_message("#{self.class.simple_name}: Fight has been aborted.")
@@ -414,15 +413,15 @@ class Scripts::Antharas < AbstractNpcAI
       end
 
       if skill.nil?
-        refresh_ai_params(attacker, damage * 1000)
+        refresh_ai_params(attacker, damage &* 1000)
       elsif npc.hp_percent < 25
-        refresh_ai_params(attacker, (damage // 3) * 100)
+        refresh_ai_params(attacker, (damage // 3) &* 100)
       elsif npc.hp_percent < 50
-        refresh_ai_params(attacker, damage * 20)
+        refresh_ai_params(attacker, damage &* 20)
       elsif npc.hp_percent < 75
-        refresh_ai_params(attacker, damage * 10)
+        refresh_ai_params(attacker, damage &* 10)
       else
-        refresh_ai_params(attacker, (damage // 3) * 20)
+        refresh_ai_params(attacker, (damage // 3) &* 20)
       end
       manage_skills(npc)
     end
@@ -435,16 +434,16 @@ class Scripts::Antharas < AbstractNpcAI
       if npc.id == ANTHARAS
         @antharas = nil
         notify_event("DESPAWN_MINIONS", nil, nil)
-        @zone.broadcast_packet(SpecialCamera.new(npc, 1200, 20, -10, 0, 10000, 13000, 0, 0, 0, 0, 0))
+        @zone.broadcast_packet(SpecialCamera.new(npc, 1200, 20, -10, 0, 10_000, 13_000, 0, 0, 0, 0, 0))
         @zone.broadcast_packet(Music::BS01_D_10000.packet)
         add_spawn(CUBE, 177615, 114941, -7709, 0, false, 900_000)
-        respawn_time = (Config.antharas_spawn_interval.to_i64 + Rnd.rand(-Config.antharas_spawn_random..Config.antharas_spawn_random)) * 3600000
+        respawn_time = (Config.antharas_spawn_interval &+ Rnd.rand(-Config.antharas_spawn_random..Config.antharas_spawn_random)) &* 3_600_000
         set_respawn(respawn_time)
         start_quest_timer("CLEAR_STATUS", respawn_time, nil, nil)
         cancel_quest_timer("SET_REGEN", npc, nil)
         cancel_quest_timer("CHECK_ATTACK", npc, nil)
         cancel_quest_timer("SPAWN_MINION", npc, nil)
-        start_quest_timer("CLEAR_ZONE", 900000, nil, nil)
+        start_quest_timer("CLEAR_ZONE", 900_000, nil, nil)
         set_status(DEAD)
       else
         @minion_count &-= 1
@@ -509,32 +508,32 @@ class Scripts::Antharas < AbstractNpcAI
 
   private def set_respawn(respawn_time)
     stats_set = GrandBossManager.get_stats_set(ANTHARAS).not_nil!
-    stats_set["respawn_time"] = Time.ms + respawn_time
+    stats_set["respawn_time"] = Time.ms &+ respawn_time
   end
 
   private def refresh_ai_params(attacker, damage)
     if @attacker_1 && attacker == @attacker_1
-      if @attacker_1_hate < damage + 1000
-        @attacker_1_hate = damage + Rnd.rand(3000)
+      if @attacker_1_hate < damage &+ 1000
+        @attacker_1_hate = damage &+ Rnd.rand(3000)
       end
     elsif @attacker_2 && attacker == @attacker_2
-      if @attacker_2_hate < damage + 1000
-        @attacker_2_hate = damage + Rnd.rand(3000)
+      if @attacker_2_hate < damage &+ 1000
+        @attacker_2_hate = damage &+ Rnd.rand(3000)
       end
     elsif @attacker_3 && attacker == @attacker_3
-      if @attacker_3_hate < damage + 1000
-        @attacker_3_hate = damage + Rnd.rand(3000)
+      if @attacker_3_hate < damage &+ 1000
+        @attacker_3_hate = damage &+ Rnd.rand(3000)
       end
     else
       i1 = Util.min(@attacker_1_hate, @attacker_2_hate, @attacker_3_hate)
       if @attacker_1_hate == i1
-        @attacker_1_hate = damage + Rnd.rand(3000)
+        @attacker_1_hate = damage &+ Rnd.rand(3000)
         @attacker_1 = attacker
       elsif @attacker_2_hate == i1
-        @attacker_2_hate = damage + Rnd.rand(3000)
+        @attacker_2_hate = damage &+ Rnd.rand(3000)
         @attacker_2 = attacker
       elsif @attacker_3_hate == i1
-        @attacker_3_hate = damage + Rnd.rand(3000)
+        @attacker_3_hate = damage &+ Rnd.rand(3000)
         @attacker_3 = attacker
       end
     end
@@ -586,7 +585,6 @@ class Scripts::Antharas < AbstractNpcAI
         when 4
           @attacker_3_hate = 500
         end
-
       end
 
       distance_c2 = npc.calculate_distance(c2.not_nil!, true, false)

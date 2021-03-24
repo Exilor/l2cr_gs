@@ -88,13 +88,11 @@ class Packets::Incoming::TradeRequest < GameClientPacket
     end
 
     if pc.processing_transaction?
-      debug { pc.name + " is already in a transaction." }
       pc.send_packet(SystemMessageId::ALREADY_TRADING)
       return
     end
 
     if target.processing_request? || target.processing_transaction?
-      debug { target.name + " is already in a transaction." }
       sm = SystemMessage.c1_is_busy_try_later
       sm.add_string(target.name)
       pc.send_packet(sm)

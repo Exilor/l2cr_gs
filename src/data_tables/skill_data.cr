@@ -3,7 +3,7 @@ require "../data/xml/enchant_skill_groups_data"
 
 module SkillData
   extend self
-  extend Loggable
+  include Loggable
 
   private SKILLS = {} of Int32 => Skill
   private SKILLS_MAX_LEVEL = {} of Int32 => Int32

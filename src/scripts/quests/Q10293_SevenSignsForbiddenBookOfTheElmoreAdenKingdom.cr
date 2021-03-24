@@ -28,10 +28,7 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32784-03.htm", "32784-05.html", "32861-13.html", "32863-02.html",
@@ -48,7 +45,7 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
       if pc.subclass_active?
         html = "32784-10.html"
       else
-        add_exp_and_sp(pc, 15000000, 1500000)
+        add_exp_and_sp(pc, 15_000_000, 1_500_000)
         qs.exit_quest(false, true)
         html = "32784-09.html"
       end
@@ -99,7 +96,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -157,7 +153,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
       when 8
         html = "32785-12.html"
       end
-
     when SOPHIA1
       if qs.started?
         if qs.cond >= 1 && qs.cond < 8
@@ -183,7 +178,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
       when 8
         html = "32861-14.html"
       end
-
     when PILE_OF_BOOKS1
       if qs.cond?(6)
         html = "32809-01.html"
@@ -205,7 +199,6 @@ class Scripts::Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom < Quest
         html = "32813-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -25,10 +25,7 @@ class Scripts::Q00451_LuciensAltar < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event == "30537-04.htm"
       html = event
@@ -61,12 +58,11 @@ class Scripts::Q00451_LuciensAltar < Quest
             html = "30537-09.html"
           end
         else
-          st.give_adena(255380, true) # Tauti reward: 13 773 960 exp, 16 232 820 sp, 742 800 Adena
+          st.give_adena(255_380, true) # Tauti reward: 13 773 960 exp, 16 232 820 sp, 742 800 Adena
           st.exit_quest(QuestType::DAILY, true)
           html = "30537-08.html"
         end
       end
-
     elsif st.cond?(1) && st.has_quest_items?(REPLENISHED_BEAD)
       npc_id_str = npc_id.to_s
       if st.get_int(npc_id_str) == 0

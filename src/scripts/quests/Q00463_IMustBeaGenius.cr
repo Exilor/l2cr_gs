@@ -48,16 +48,13 @@ class Scripts::Q00463_IMustBeaGenius < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
     when "32069-03.htm"
       st.start_quest
-      number = Rnd.rand(51) + 550
+      number = Rnd.rand(51) &+ 550
       st.set("number", number.to_s)
       st.set("chance", Rnd.rand(4).to_s)
       html = get_htm(pc, event).sub("%num%", number)
@@ -90,13 +87,13 @@ class Scripts::Q00463_IMustBeaGenius < Quest
       number = MOBS[npc.id].count
 
       if MOBS[npc.id].special_chance == st.get_int("chance")
-        number = Rnd.rand(100) + 1
+        number = Rnd.rand(100) &+ 1
       end
 
       if number > 0
         st.give_items(CORPSE_LOG, number)
         msg = true
-      elsif number < 0 && st.get_quest_items_count(CORPSE_LOG + number) > 0
+      elsif number < 0 && st.get_quest_items_count(CORPSE_LOG &+ number) > 0
         st.take_items(CORPSE_LOG, number.abs)
         msg = true
       end
@@ -142,7 +139,6 @@ class Scripts::Q00463_IMustBeaGenius < Quest
         end
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

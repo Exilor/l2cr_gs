@@ -32,8 +32,7 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30405-03.html", "30405-05b.html", "30405-05d.html", "30497-07.html"
@@ -53,7 +52,6 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
       st.exit_quest(true, true)
       html = event
     end
-
 
     html
   end
@@ -78,7 +76,7 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
       when State::STARTED
         if st.has_quest_items?(SPIDER_SKIN)
           skins = st.get_quest_items_count(SPIDER_SKIN)
-          st.give_adena((skins * SKIN_REWARD) + (skins >= 10 ? SKIN_BONUS : 0), true)
+          st.give_adena((skins &* SKIN_REWARD) &+ (skins >= 10 ? SKIN_BONUS : 0), true)
           st.take_items(SPIDER_SKIN, -1)
           html = "30497-05.html"
         else
@@ -93,7 +91,6 @@ class Scripts::Q00259_RequestFromTheFarmOwner < Quest
         html = "30405-01.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

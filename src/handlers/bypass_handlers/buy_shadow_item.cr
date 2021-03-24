@@ -2,7 +2,7 @@ module BypassHandler::BuyShadowItem
   extend self
   extend BypassHandler
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     return false unless target.is_a?(L2MerchantInstance)
 
     html = NpcHtmlMessage.new(target.l2id)
@@ -24,7 +24,7 @@ module BypassHandler::BuyShadowItem
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"BuyShadowItem"}
   end
 end

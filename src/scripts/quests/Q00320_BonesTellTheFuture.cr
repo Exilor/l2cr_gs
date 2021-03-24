@@ -23,9 +23,8 @@ class Scripts::Q00320_BonesTellTheFuture < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    st = get_quest_state(pc, false)
-    if st && event == "30359-04.htm"
+    return unless pc && (st = get_quest_state(pc, false))
+    if event == "30359-04.htm"
       st.start_quest
       event
     end
@@ -63,7 +62,6 @@ class Scripts::Q00320_BonesTellTheFuture < Quest
         html = "30359-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

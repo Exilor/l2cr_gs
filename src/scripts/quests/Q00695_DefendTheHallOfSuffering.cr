@@ -29,7 +29,6 @@ class Scripts::Q00695_DefendTheHallOfSuffering < Quest
         event
       end
     end
-
   end
 
   def on_talk(npc, pc)

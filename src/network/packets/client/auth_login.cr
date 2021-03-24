@@ -15,8 +15,8 @@ class Packets::Incoming::AuthLogin < GameClientPacket
 
     key = SessionKey.new(@lk_1, @lk_2, @pk_1, @pk_2)
 
-    debug { "User: #{@account}." }
-    debug { "SessionKey: #{key}." }
+    # debug { "User: #{@account}." }
+    # debug { "SessionKey: #{key}." }
 
     unless client.account_name?
       if LoginServerThread.instance.add_game_server_login(@account, client)

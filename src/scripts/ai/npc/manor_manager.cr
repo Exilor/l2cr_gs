@@ -29,7 +29,6 @@ class Scripts::ManorManager < AbstractNpcAI
     when "manager-help-01.htm", "manager-help-02.htm", "manager-help-03.htm"
       event
     end
-
   end
 
   def on_first_talk(npc, pc)
@@ -76,7 +75,7 @@ class Scripts::ManorManager < AbstractNpcAI
     when 5 # Basic info
       pc.send_packet(ExShowManorDefaultInfo.new(false))
     when 6 # Buy harvester
-      npc.as(L2MerchantInstance).show_buy_window(pc, 300000 + npc.id)
+      npc.as(L2MerchantInstance).show_buy_window(pc, 300_000 &+ npc.id)
     when 9 # Edit sales (Crop sales)
       pc.send_packet(ExShowProcureCropDetail.new(evt.manor_id))
     else

@@ -97,7 +97,6 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
       when "DELETE"
         npc.delete_me
       end
-
     end
 
     html
@@ -145,12 +144,10 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
             npc.drop_item(attacker, HEALING_POTION, Rnd.rand(1i64..10i64))
           end
 
-
           npc.script_value = 1
           start_quest_timer("DELETE", 3000, npc, attacker)
         end
       end
-
     end
 
     super

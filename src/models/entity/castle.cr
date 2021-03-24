@@ -2,6 +2,8 @@ require "./abstract_residence"
 require "./siege"
 
 class Castle < AbstractResidence
+  include Loggable
+
   # Castle Functions
   FUNC_TELEPORT = 1
   FUNC_RESTORE_HP = 2

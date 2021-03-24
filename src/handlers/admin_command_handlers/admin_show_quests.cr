@@ -350,7 +350,7 @@ module AdminCommandHandler::AdminShowQuests
     show_quest_menu(target, actor, outval)
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"admin_charquestmenu", "admin_setcharquest"}
   end
 end

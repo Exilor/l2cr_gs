@@ -100,20 +100,19 @@ class Scripts::Q00128_PailakaSongOfIceAndFire < Quest
       unless inst = InstanceManager.get_instance(npc.instance_id)
         raise "Instance with id #{npc.instance_id} not found"
       end
-      inst.duration = EXIT_TIME * 60000
+      inst.duration = EXIT_TIME * 60_000
       inst.empty_destroy_time = 0
 
       if inst.includes?(pc.l2id)
         npc.target = pc
         npc.do_cast(VITALITY_REPLENISHING)
-        add_exp_and_sp(pc, 810000, 50000)
+        add_exp_and_sp(pc, 810_000, 50_000)
         REWARDS.each do |id|
           give_items(pc, id, 1)
         end
       end
       html = event
     end
-
 
     html
   end
@@ -171,7 +170,6 @@ class Scripts::Q00128_PailakaSongOfIceAndFire < Quest
       end
     end
 
-
     html || get_no_quest_msg(pc)
   end
 
@@ -221,7 +219,6 @@ class Scripts::Q00128_PailakaSongOfIceAndFire < Quest
           add_spawn(ADLER2, -53297, 185027, -4617, 33486, false, 0, false, npc.instance_id)
         end
       end
-
     end
 
     super

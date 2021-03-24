@@ -152,11 +152,11 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       if st.memo_state?(11) && get_quest_items_count(player, WHITE_FABRIC_1) == 1 && st.get_memo_state_ex(1) > 0
         case st.get_memo_state_ex(1)
         when 1
-          give_adena(player, 43000, true)
+          give_adena(player, 43_000, true)
         when 2
           give_adena(player, 4000, true)
         when 3
-          give_adena(player, 13000, true)
+          give_adena(player, 13_000, true)
         end
 
 
@@ -169,10 +169,10 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       end
     when "30864-29.html"
       if st.memo_state?(11) && st.get_memo_state_ex(1) == 0 && get_quest_items_count(player, WHITE_FABRIC_1) == 1
-        give_adena(player, 49000, true)
+        give_adena(player, 49_000, true)
         st.memo_state = 12 # Custom line
         st.set_memo_state_ex(0, 12)
-        st.set_memo_state_ex(1, 20000)
+        st.set_memo_state_ex(1, 20_000)
         st.set_cond(24)
         html = event
       end
@@ -180,7 +180,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       if st.memo_state?(11) && st.get_memo_state_ex(1) == 0 && get_quest_items_count(player, WHITE_FABRIC_1) == 1
         st.memo_state = 13 # Custom line
         st.set_memo_state_ex(0, 13)
-        st.set_memo_state_ex(1, 20000)
+        st.set_memo_state_ex(1, 20_000)
         st.set_cond(25)
         html = event
       end
@@ -225,7 +225,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       html = event
     end
 
-
     html
   end
 
@@ -246,7 +245,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       if st && st.get_memo_state_ex(0) < 8 && !has_quest_items?(attacker, FIRST_KEY_OF_ARK) && !has_quest_items?(attacker, BLOOD_OF_SAINT)
         if (st.get_memo_state_ex(1) % 100) // 10 == 1
           if npc.hp_percent < MIN_HP_PERCENTAGE
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 10)
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 10)
             if st.get_memo_state_ex(1) % 10 == 0
               st.clear_radar
               st.add_radar(-2908, 44128, -2712)
@@ -270,8 +269,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       if st && npc.inside_radius?(attacker, 1500, true, false)
         if (st.get_memo_state_ex(0) == 12 || st.get_memo_state_ex(0) == 13) && has_quest_items?(st.player, WHITE_FABRIC_1)
           if st.get_memo_state_ex(0) == 12
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 60)
-            if st.get_memo_state_ex(1) + 60 > 80000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 60)
+            if st.get_memo_state_ex(1) &+ 60 > 80_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.exit_quest(true, true)
@@ -279,8 +278,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
 
           if st.get_memo_state_ex(0) == 13
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 60)
-            if st.get_memo_state_ex(1) + 60 > 100000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 60)
+            if st.get_memo_state_ex(1) &+ 60 > 100_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.memo_state = 14 # Custom line
@@ -295,8 +294,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       if st && npc.inside_radius?(attacker, 1500, true, false)
         if (st.get_memo_state_ex(0) == 12 || st.get_memo_state_ex(0) == 13) && has_quest_items?(st.player, WHITE_FABRIC_1)
           if st.get_memo_state_ex(0) == 12
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 70)
-            if st.get_memo_state_ex(1) + 70 > 80000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 70)
+            if st.get_memo_state_ex(1) &+ 70 > 80_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.exit_quest(true, true)
@@ -304,8 +303,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
 
           if st.get_memo_state_ex(0) == 13
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 70)
-            if st.get_memo_state_ex(1) + 70 > 100000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 70)
+            if st.get_memo_state_ex(1) &+ 70 > 100_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.memo_state = 14 # Custom line
@@ -317,7 +316,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       end
     end
 
-
     super
   end
 
@@ -328,7 +326,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       when ARK_GUARDIAN_ELBEROTH
         if npc.inside_radius?(player, 1500, true, false)
           if st.get_memo_state_ex(0) < 8 && (st.get_memo_state_ex(1) % 1000) // 100 == 1 && !has_quest_items?(st.player, SECOND_KEY_OF_ARK) && !has_quest_items?(st.player, BOOK_OF_SAINT)
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 100)
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 100)
             if st.get_memo_state_ex(1) % 10 != 0
               st.set_cond(11)
             end
@@ -340,8 +338,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         end
       when ARK_GUARDIAN_SHADOWFANG
         if npc.inside_radius?(player, 1500, true, false)
-          if st.get_memo_state_ex(0) < 8 && (st.get_memo_state_ex(1) % 10000) // 1000 == 1 && !has_quest_items?(st.player, THIRD_KEY_OF_ARK) && !has_quest_items?(st.player, BOUGH_OF_SAINT)
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1000)
+          if st.get_memo_state_ex(0) < 8 && (st.get_memo_state_ex(1) % 10_000) // 1000 == 1 && !has_quest_items?(st.player, THIRD_KEY_OF_ARK) && !has_quest_items?(st.player, BOUGH_OF_SAINT)
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1000)
             if (st.get_memo_state_ex(1) % 10) != 0
               st.set_cond(15)
             end
@@ -359,8 +357,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       when PLATINUM_TRIBE_SHAMAN
         if (st.get_memo_state_ex(0) == 12 || st.get_memo_state_ex(0) == 13) && has_quest_items?(st.player, WHITE_FABRIC_1)
           if st.get_memo_state_ex(0) == 12
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 600)
-            if st.get_memo_state_ex(1) + 600 > 80000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 600)
+            if st.get_memo_state_ex(1) &+ 600 > 80_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.exit_quest(true, true)
@@ -368,8 +366,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
 
           if st.get_memo_state_ex(0) == 13
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 600)
-            if st.get_memo_state_ex(1) + 600 > 100000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 600)
+            if st.get_memo_state_ex(1) &+ 600 > 100_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.memo_state = 14 # Custom line
@@ -381,8 +379,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       when PLATINUM_TRIBE_OVERLORD
         if (st.get_memo_state_ex(0) == 12 || st.get_memo_state_ex(0) == 13) && has_quest_items?(st.player, WHITE_FABRIC_1)
           if st.get_memo_state_ex(0) == 12
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 700)
-            if st.get_memo_state_ex(1) + 700 > 80000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 700)
+            if st.get_memo_state_ex(1) &+ 700 > 80_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.exit_quest(true, true)
@@ -390,8 +388,8 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
 
           if st.get_memo_state_ex(0) == 13
-            st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 700)
-            if st.get_memo_state_ex(1) + 700 > 100000
+            st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 700)
+            if st.get_memo_state_ex(1) &+ 700 > 100_000
               give_items(st.player, BLOODED_FABRIC, 1)
               take_items(st.player, WHITE_FABRIC_1, 1)
               st.memo_state = 14 # Custom line
@@ -402,9 +400,9 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         end
       when GUARDIAN_ANGEL, SEAL_ANGEL_1, SEAL_ANGEL_2
         if st.get_memo_state_ex(0) == 17 && has_quest_items?(st.player, WHITE_FABRIC_1)
-          i0 = st.get_memo_state_ex(1) + Rnd.rand(100) + 100
+          i0 = st.get_memo_state_ex(1) &+ Rnd.rand(100) &+ 100
           st.set_memo_state_ex(1, i0)
-          if st.get_memo_state_ex(1) + i0 > 750
+          if st.get_memo_state_ex(1) &+ i0 > 750
             give_items(st.player, BLOODED_FABRIC, 1)
             take_items(st.player, WHITE_FABRIC_1, 1)
             st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
@@ -412,7 +410,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
         end
       end
-
     end
 
     super
@@ -432,7 +429,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       npc.broadcast_packet(NpcSay.new(npc.l2id, Say2::NPC_ALL, npc.id, NpcString::I_HAVE_THE_KEY_WHY_DONT_YOU_COME_AND_TAKE_IT))
       start_quest_timer("DESPAWN", 600000, npc, nil)
     end
-
 
     super
   end
@@ -487,7 +483,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             give_items(player, HANELLINS_3RD_LETTER, 1)
             st.set_cond(8, true)
           end
-
         when 5
           if st.get_memo_state_ex(1) % 10 == 0
             html = "30864-16.html"
@@ -500,7 +495,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             when 3
               html = "30864-19.html"
             end
-
           end
 
           # Custom part
@@ -594,11 +588,11 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             if st.get_memo_state_ex(1) > 0
               case st.get_memo_state_ex(1)
               when 1
-                give_adena(player, 43000, true)
+                give_adena(player, 43_000, true)
               when 2
                 give_adena(player, 4000, true)
               when 3
-                give_adena(player, 13000, true)
+                give_adena(player, 13_000, true)
               end
 
 
@@ -644,7 +638,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             if blooded_fabric_count >= 10
               html = "30864-46.html"
             else
-              give_adena(player, (blooded_fabric_count * 1000) + 4000, true)
+              give_adena(player, (blooded_fabric_count &* 1000) &+ 4000, true)
               take_items(player, BLOODED_FABRIC, -1)
               st.exit_quest(true, true)
               html = "30864-48.html"
@@ -657,26 +651,26 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             i2 = 0
             i0 = memo_state_ex % 10
             if i0 >= 4
-              i1 = i1 + 6
-              i0 = i0 - 4
-              i2 = i2 + 1
+              i1 = i1 &+ 6
+              i0 = i0 &- 4
+              i2 = i2 &+ 1
             end
 
             if i0 >= 2
-              i0 = i0 - 2
-              i1 = i1 + 1
-              i2 = i2 + 1
+              i0 = i0 &- 2
+              i1 = i1 &+ 1
+              i2 = i2 &+ 1
             end
 
             if i0 >= 1
-              i1 = i1 + 3
-              i2 = i2 + 1
-              i0 = i0 - 1
+              i1 = i1 &+ 3
+              i2 = i2 &+ 1
+              i0 = i0 &- 1
             end
 
             if i0 == 0
               blooded_fabric_count = get_quest_items_count(player, BLOODED_FABRIC)
-              if blooded_fabric_count + i1 >= 10
+              if blooded_fabric_count &+ i1 >= 10
                 html = "30864-52.html"
               else
                 html = "30864-53.html"
@@ -698,13 +692,12 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         when 19
           html = "30864-49.html"
         end
-
       when IASON_HEINE
         if st.get_memo_state_ex(0) == 18
           if st.get_memo_state_ex(1) % 8 < 4
             if get_quest_items_count(player, BLOODED_FABRIC) >= 6
               take_items(player, BLOODED_FABRIC, 6)
-              st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 4)
+              st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 4)
               html = "30969-01.html"
             else
               html = "30969-02.html"
@@ -726,12 +719,12 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
 
           take_items(player, FIRST_KEY_OF_ARK, 1)
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) - 20)
-          if ((st.get_memo_state_ex(1) - 20) % 100) // 10 == 0
-            st.set_memo_state_ex(0, st.get_memo_state_ex(0) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &- 20)
+          if ((st.get_memo_state_ex(1) &- 20) % 100) // 10 == 0
+            st.set_memo_state_ex(0, st.get_memo_state_ex(0) &+ 1)
           end
 
-          if (st.get_memo_state_ex(1) - 20) % 10 == 1
+          if (st.get_memo_state_ex(1) &- 20) % 10 == 1
             st.set_memo_state_ex(0, 8)
           end
 
@@ -756,12 +749,12 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             st.set_cond(12, true)
           end
 
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) - 200)
-          if ((st.get_memo_state_ex(1) - 200) % 1000) // 100 == 0
-            st.set_memo_state_ex(0, st.get_memo_state_ex(0) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &- 200)
+          if ((st.get_memo_state_ex(1) &- 200) % 1000) // 100 == 0
+            st.set_memo_state_ex(0, st.get_memo_state_ex(0) &+ 1)
           end
 
-          if (st.get_memo_state_ex(1) - 200) % 10 == 2
+          if (st.get_memo_state_ex(1) &- 200) % 10 == 2
             st.set_memo_state_ex(0, 8)
           end
 
@@ -793,18 +786,18 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             st.set_cond(16, true)
           end
 
-          st.set_memo_state_ex(1, st.get_memo_state_ex(1) - 2000)
-          if ((st.get_memo_state_ex(1) - 2000) % 10000) // 1000 == 0
-            st.set_memo_state_ex(0, st.get_memo_state_ex(0) + 1)
+          st.set_memo_state_ex(1, st.get_memo_state_ex(1) &- 2000)
+          if ((st.get_memo_state_ex(1) &- 2000) % 10_000) // 1000 == 0
+            st.set_memo_state_ex(0, st.get_memo_state_ex(0) &+ 1)
           end
 
-          if (st.get_memo_state_ex(1) - 2000) % 10 == 3
+          if (st.get_memo_state_ex(1) &- 2000) % 10 == 3
             st.set_memo_state_ex(0, 8)
           end
 
           html = "30979-01.html"
         else
-          if st.memo_state < 8 && (st.get_memo_state_ex(1) % 10000) // 1000 == 1
+          if st.memo_state < 8 && (st.get_memo_state_ex(1) % 10_000) // 1000 == 1
             html = "30979-02.html"
             if st.get_memo_state_ex(1) % 10 != 0
               st.set_cond(14, true)
@@ -813,7 +806,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
             # TODO (Adry_85): Missing Question Mark
             st.play_sound(Sound::ITEMSOUND_QUEST_MIDDLE)
             add_spawn(ARK_GUARDIAN_SHADOWFANG, *player.xyz, 0, false, 0, false) # ark_guardian_shadowfang
-          elsif st.memo_state <= 8 && (st.get_memo_state_ex(1) % 10000) // 1000 == 0 && has_quest_items?(player, BOUGH_OF_SAINT)
+          elsif st.memo_state <= 8 && (st.get_memo_state_ex(1) % 10_000) // 1000 == 0 && has_quest_items?(player, BOUGH_OF_SAINT)
             html = "30979-03.html"
           end
         end
@@ -837,7 +830,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         end
       when CLAUDIA_ATHEBALDT
         if has_quest_items?(player, HANELLINS_2ND_LETTER)
-          i0 = st.get_memo_state_ex(1) + 100
+          i0 = st.get_memo_state_ex(1) &+ 100
           if i0 % 10 == 0
             st.add_radar(181472, 7158, -2725)
           else
@@ -865,7 +858,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         end
       when HARNE
         if has_quest_items?(player, HANELLINS_1ST_LETTER)
-          i0 = st.get_memo_state_ex(1) + 10
+          i0 = st.get_memo_state_ex(1) &+ 10
           if i0 % 10 == 0
             st.add_radar(2908, 44128, -2712)
           else
@@ -893,7 +886,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
         end
       when MARTIEN
         if has_quest_items?(player, HANELLINS_3RD_LETTER)
-          i0 = st.get_memo_state_ex(1) + 1000
+          i0 = st.get_memo_state_ex(1) &+ 1000
           if i0 % 10 == 0
             st.add_radar(50693, 158674, 376)
           else
@@ -903,7 +896,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           st.set_memo_state_ex(1, i0)
           take_items(player, HANELLINS_3RD_LETTER, 1)
           html = "30645-01.html"
-        elsif st.memo_state < 8 && (st.get_memo_state_ex(1) % 10000) // 1000 == 1 && !has_quest_items?(player, THIRD_KEY_OF_ARK)
+        elsif st.memo_state < 8 && (st.get_memo_state_ex(1) % 10_000) // 1000 == 1 && !has_quest_items?(player, THIRD_KEY_OF_ARK)
           # retail typo
           if st.get_memo_state_ex(1) % 10 == 0
             st.add_radar(50693, 158674, 376)
@@ -924,7 +917,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           if st.get_memo_state_ex(1) % 2 == 0
             if get_quest_items_count(player, BLOODED_FABRIC) >= 3
               take_items(player, BLOODED_FABRIC, 3)
-              st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 1)
+              st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 1)
               html = "30760-01.html"
             else
               html = "30760-02.html"
@@ -938,7 +931,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           if st.get_memo_state_ex(1) % 4 < 2
             if get_quest_items_count(player, BLOODED_FABRIC) >= 1
               take_items(player, BLOODED_FABRIC, 1)
-              st.set_memo_state_ex(1, st.get_memo_state_ex(1) + 2)
+              st.set_memo_state_ex(1, st.get_memo_state_ex(1) &+ 2)
               html = "30832-01.html"
             elsif get_quest_items_count(player, BLOODED_FABRIC) < 3
               html = "30832-02.html"
@@ -948,7 +941,6 @@ class Scripts::Q00348_AnArrogantSearch < Quest
           end
         end
       end
-
     end
 
     html || get_no_quest_msg(player)
@@ -1036,7 +1028,7 @@ class Scripts::Q00348_AnArrogantSearch < Quest
       give_items(player, ART_OF_BATTLE_AXE_BLADE, 1)
       give_items(player, ENRIA, 1)
     else
-      give_adena(player, 49000, true)
+      give_adena(player, 49_000, true)
     end
   end
 end

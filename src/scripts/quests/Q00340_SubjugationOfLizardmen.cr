@@ -39,10 +39,7 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30385-03.htm"
@@ -91,7 +88,6 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
       end
     end
 
-
     html
   end
 
@@ -134,7 +130,6 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
       when SERPENT_DEMON_BIFRONS
         add_spawn(CHEST_OF_BIFRONS, npc, true, 30000)
       end
-
     end
 
     super
@@ -162,7 +157,7 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
         elsif memo_state >= 3 && memo_state < 7
           html = "30385-12.html"
         elsif memo_state == 7
-          give_adena(pc, 14700, true)
+          give_adena(pc, 14_700, true)
           qs.exit_quest(false, true)
           html = "30385-13.html"
         end
@@ -202,7 +197,6 @@ class Scripts::Q00340_SubjugationOfLizardmen < Quest
           html = "30989-01.html"
         end
       end
-
     elsif qs.completed?
       if npc.id == GUARD_WEISZ
         html = get_already_completed_msg(pc)

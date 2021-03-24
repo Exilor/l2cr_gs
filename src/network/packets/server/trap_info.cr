@@ -27,7 +27,7 @@ class Packets::Outgoing::TrapInfo < Packets::Outgoing::AbstractNpcInfo
     c 0x0c
 
     d @trap.l2id
-    d @id_template + 1_000_000
+    d @id_template &+ 1_000_000
     d @attackable ? 1 : 0
     d @x
     d @y

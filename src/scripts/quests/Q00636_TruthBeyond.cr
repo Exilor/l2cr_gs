@@ -15,10 +15,7 @@ class Scripts::Q00636_TruthBeyond < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event == "31329-04.htm"
       st.start_quest

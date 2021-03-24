@@ -2,7 +2,7 @@ require "../../models/l2_territory"
 
 module TerritoryTable
   extend self
-  extend Loggable
+  include Loggable
 
   private TERRITORIES = {} of Int32 => L2Territory
 

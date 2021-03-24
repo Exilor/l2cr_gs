@@ -16,19 +16,19 @@ abstract struct RectangularShape
   end
 
   def max_x : Int32
-    x + width
+    x &+ width
   end
 
   def max_y : Int32
-    y + height
+    y &+ height
   end
 
   def center_x : Float64
-    (x + width) / 2.0
+    (x &+ width) / 2
   end
 
   def center_y : Float64
-    (y + height) / 2.0
+    (y &+ height) / 2
   end
 
   # Unused. Would prevent this hierarchy from being a struct.

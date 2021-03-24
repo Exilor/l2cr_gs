@@ -2,7 +2,7 @@ require "./containers"
 
 module EventDispatcher
   extend self
-  extend Loggable
+  include Loggable
 
   def notify(event : BaseEvent) : AbstractEventReturn?
     notify(event, nil, Nil)

@@ -46,8 +46,7 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless st = get_quest_state(pc, false)
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "30039-03.htm"
@@ -88,8 +87,8 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
       if has_at_least_one_quest_item?(pc, ORC_AMULET, ORC_NECKLACE, WEREWOLF_FANG)
         amulets = st.get_quest_items_count(ORC_AMULET)
         common = get_quest_items_count(pc, ORC_NECKLACE, WEREWOLF_FANG)
-        amount = (amulets * 10) + (common * 20)
-        amount += (amulets + common >= 10 ? 1000 : 0)
+        amount = (amulets &* 10) &+ (common &* 20)
+        amount &+= (amulets &+ common >= 10 ? 1000 : 0)
         st.give_adena(amount, true)
         take_items(pc, -1, {ORC_AMULET, ORC_NECKLACE, WEREWOLF_FANG})
         Q00281_HeadForTheHills.give_newbie_reward(pc)
@@ -98,7 +97,6 @@ class Scripts::Q00257_TheGuardIsBusy < Quest
         html = "30039-04.html"
       end
     end
-
 
     html
   end

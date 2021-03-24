@@ -31,10 +31,7 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     rags_count = st.get_quest_items_count(TATTERED_MONK_CLOTHES)
     case event
@@ -63,9 +60,9 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
       if rags_count >= 100
         if Rnd.rand(10) < 5
           if Rnd.rand(1000) < 438
-            st.give_items(10373 + Rnd.rand(9), 1)
+            st.give_items(10373 &+ Rnd.rand(9), 1)
           else
-            st.give_items(10397 + Rnd.rand(9), 1)
+            st.give_items(10397 &+ Rnd.rand(9), 1)
           end
         else
           reward_scroll(st, 1)
@@ -80,9 +77,9 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
     when "rags200"
       if rags_count >= 200
         if Rnd.rand(1000) < 549
-          st.give_items(10373 + Rnd.rand(9), 1)
+          st.give_items(10373 &+ Rnd.rand(9), 1)
         else
-          st.give_items(10397 + Rnd.rand(9), 1)
+          st.give_items(10397 &+ Rnd.rand(9), 1)
         end
         reward_scroll(st, 2)
 
@@ -94,8 +91,8 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
       end
     when "rags300"
       if rags_count >= 300
-        st.give_items(10373 + Rnd.rand(9), 1)
-        st.give_items(10397 + Rnd.rand(9), 1)
+        st.give_items(10373 &+ Rnd.rand(9), 1)
+        st.give_items(10397 &+ Rnd.rand(9), 1)
         reward_scroll(st, 3)
 
         st.take_items(TATTERED_MONK_CLOTHES, 300)
@@ -106,15 +103,15 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
       end
     when "rags400"
       if rags_count >= 400
-        st.give_items(10373 + Rnd.rand(9), 1)
-        st.give_items(10397 + Rnd.rand(9), 1)
+        st.give_items(10373 &+ Rnd.rand(9), 1)
+        st.give_items(10397 &+ Rnd.rand(9), 1)
         reward_scroll(st, 3)
 
         if Rnd.rand(10) < 5
           if Rnd.rand(1000) < 438
-            st.give_items(10373 + Rnd.rand(9), 1)
+            st.give_items(10373 &+ Rnd.rand(9), 1)
           else
-            st.give_items(10397 + Rnd.rand(9), 1)
+            st.give_items(10397 &+ Rnd.rand(9), 1)
           end
         else
           reward_scroll(st, 1)
@@ -128,14 +125,14 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
       end
     when "rags500"
       if rags_count >= 500
-        st.give_items(10373 + Rnd.rand(9), 1)
-        st.give_items(10397 + Rnd.rand(9), 1)
+        st.give_items(10373 &+ Rnd.rand(9), 1)
+        st.give_items(10397 &+ Rnd.rand(9), 1)
         reward_scroll(st, 3)
 
         if Rnd.rand(1000) < 549
-          st.give_items(10373 + Rnd.rand(9), 1)
+          st.give_items(10373 &+ Rnd.rand(9), 1)
         else
-          st.give_items(10397 + Rnd.rand(9), 1)
+          st.give_items(10397 &+ Rnd.rand(9), 1)
         end
 
         reward_scroll(st, 2)
@@ -160,7 +157,6 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
         html = "32757-13.html"
       end
     end
-
 
     html
   end
@@ -189,7 +185,6 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
       give_item(get_random_party_member(killer, 1), npc, 953, true)
     end
 
-
     super
   end
 
@@ -207,7 +202,6 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
         html = "32757-05.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end
@@ -250,13 +244,12 @@ class Scripts::Q00270_TheOneWhoEndsSilence < Quest
       end
     end
 
-
     qs.give_items(scroll_id, 1)
   end
 
   private def give_item(pc, npc, chance, at_least_one)
     if pc && Util.in_range?(1500, npc, pc, false)
-      count = (Rnd.rand(1000) < chance ? 1 : 0) + (at_least_one ? 1 : 0)
+      count = (Rnd.rand(1000) < chance ? 1 : 0) &+ (at_least_one ? 1 : 0)
       if count > 0
         qs = pc.get_quest_state(Q00270_TheOneWhoEndsSilence.simple_name).not_nil!
         qs.give_items(TATTERED_MONK_CLOTHES, count)

@@ -26,8 +26,8 @@ class Scripts::Q00014_WhereaboutsOfTheArchaeologist < Quest
       st.give_items(LETTER, 1)
     when "31538-01.html"
       if st.cond?(1) && st.has_quest_items?(LETTER)
-        st.give_adena(136928, true)
-        st.add_exp_and_sp(325881, 32524)
+        st.give_adena(136_928, true)
+        st.add_exp_and_sp(325_881, 32_524)
         st.exit_quest(false, true)
       else
         html = "31538-02.html"

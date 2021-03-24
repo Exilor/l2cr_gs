@@ -18,10 +18,7 @@ class Scripts::Q00432_BirthdayPartySong < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -64,7 +61,6 @@ class Scripts::Q00432_BirthdayPartySong < Quest
     when State::STARTED
       html = st.cond?(1) ? "31043-03.html" : "31043-04.html"
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -5,11 +5,11 @@ class Scripts::Q00046_OnceMoreInTheArmsOfTheMotherTree < AbstractGetScrollToHome
     super(46, self.class.simple_name, "Once More In the Arms of the Mother Tree")
   end
 
-  def scroll_item_id
+  def scroll_item_id : Int32
     SCROLL_OF_ESCAPE_ELVEN_VILLAGE
   end
 
-  def parent_quest_name
+  def parent_quest_name : String
     "Q00007_ATripBegins"
   end
 end

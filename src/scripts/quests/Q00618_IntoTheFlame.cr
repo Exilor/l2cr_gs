@@ -32,10 +32,7 @@ class Scripts::Q00618_IntoTheFlame < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "31540-03.htm"
@@ -64,7 +61,6 @@ class Scripts::Q00618_IntoTheFlame < Quest
         html = "31271-03.html"
       end
     end
-
 
     html
   end
@@ -107,9 +103,7 @@ class Scripts::Q00618_IntoTheFlame < Quest
       when 4
         html = "31271-06.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

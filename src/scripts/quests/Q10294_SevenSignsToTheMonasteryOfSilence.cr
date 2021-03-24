@@ -66,10 +66,7 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "32784-03.htm", "32784-04.htm"
@@ -104,7 +101,7 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
         qs.unset("good2")
         qs.unset("good3")
         qs.unset("good4")
-        add_exp_and_sp(pc, 25000000, 2500000)
+        add_exp_and_sp(pc, 25_000_000, 2_500_000)
         qs.exit_quest(false, true)
         html = event
       end
@@ -112,19 +109,15 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
       npc = npc.not_nil!
       npc.target = pc
       if pc.mage_class?
-        MAGE_BUFFS.each do |sh|
-          npc.do_simultaneous_cast(sh)
-        end
+        MAGE_BUFFS.each { |sh| npc.do_simultaneous_cast(sh) }
       else
-        WARRIOR_BUFFS.each do |sh|
-          npc.do_simultaneous_cast(sh)
-        end
+        WARRIOR_BUFFS.each { |sh| npc.do_simultaneous_cast(sh) }
       end
     when "RIGHT_BOOK1"
       npc = npc.not_nil!
       qs.set("good1", "1")
       npc.display_effect = 1
-      start_quest_timer("SPAWN_MOBS", 22000, npc, pc)
+      start_quest_timer("SPAWN_MOBS", 22_000, npc, pc)
       html = "32821-02.html"
       if has_checked_all_right_books?(qs)
         pc.show_quest_movie(25)
@@ -176,7 +169,6 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
       add_spawn(SOLINA_LAY_BROTHER, 88655, -250591, -8320, 144, false, 0, false, pc.instance_id)
     end
 
-
     html
   end
 
@@ -211,7 +203,6 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
       when 3
         html = pc.subclass_active? ? "32792-09.html" : "32792-07.html"
       end
-
     when RELIC_GUARDIAN
       if qs.cond?(2)
         if has_checked_all_right_books?(qs)
@@ -254,12 +245,11 @@ class Scripts::Q10294_SevenSignsToTheMonasteryOfSilence < Quest
       end
     end
 
-
     html || get_no_quest_msg(pc)
   end
 
   private def has_checked_all_right_books?(qs)
     qs.get_int("good1") == 1 && qs.get_int("good2") == 1 &&
-    qs.get_int("good3") == 1 && qs.get_int("good4") == 1
+      qs.get_int("good3") == 1 && qs.get_int("good4") == 1
   end
 end

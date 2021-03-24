@@ -48,7 +48,7 @@ module BypassHandler::Observation
     {-78930, 110005, -4300, 500}
   }
 
-  def use_bypass(command, pc, target)
+  def use_bypass(command : String, pc : L2PcInstance, target : L2Character?) : Bool
     unless target.is_a?(L2ObservationInstance)
       return false
     end
@@ -109,7 +109,7 @@ module BypassHandler::Observation
     pc.action_failed
   end
 
-  def commands
+  def commands : Enumerable(String)
     {"observesiege", "observeoracle", "observe"}
   end
 end

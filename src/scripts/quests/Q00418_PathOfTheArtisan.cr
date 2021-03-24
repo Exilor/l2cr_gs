@@ -44,8 +44,7 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "ACCEPT"
@@ -114,15 +113,15 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
       html = event
     when "30317-10.html"
       if has_quest_items?(pc, PASS_2ND_CERTIFICATE, SECRET_BOX)
-        give_adena(pc, 163800, true)
+        give_adena(pc, 163_800, true)
         give_items(pc, FINAL_PASS_CERTIFICATE, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 320534, 32452)
+          add_exp_and_sp(pc, 320_534, 32_452)
         elsif level == 19
-          add_exp_and_sp(pc, 456128, 30150)
+          add_exp_and_sp(pc, 456_128, 30_150)
         else
-          add_exp_and_sp(pc, 591724, 36848)
+          add_exp_and_sp(pc, 591_724, 36_848)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -135,11 +134,11 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         give_items(pc, FINAL_PASS_CERTIFICATE, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 11726)
+          add_exp_and_sp(pc, 160_267, 11_726)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 15075)
+          add_exp_and_sp(pc, 228_064, 15_075)
         else
-          add_exp_and_sp(pc, 295862, 18424)
+          add_exp_and_sp(pc, 295_862, 18_424)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -148,15 +147,15 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
       end
     when "30531-05.html"
       if qs.memo_state?(101)
-        give_adena(pc, 81900, true)
+        give_adena(pc, 81_900, true)
         give_items(pc, FINAL_PASS_CERTIFICATE, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 11726)
+          add_exp_and_sp(pc, 160_267, 11_726)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 15075)
+          add_exp_and_sp(pc, 228_064, 15_075)
         else
-          add_exp_and_sp(pc, 295862, 18424)
+          add_exp_and_sp(pc, 295_862, 18_424)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -165,15 +164,15 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
       end
     when "31956-04.html"
       if qs.memo_state?(201)
-        give_adena(pc, 81900, true)
+        give_adena(pc, 81_900, true)
         give_items(pc, FINAL_PASS_CERTIFICATE, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 11726)
+          add_exp_and_sp(pc, 160_267, 11_726)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 15075)
+          add_exp_and_sp(pc, 228_064, 15_075)
         else
-          add_exp_and_sp(pc, 295862, 18424)
+          add_exp_and_sp(pc, 295_862, 18_424)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -209,15 +208,15 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
       end
     when "31963-10.html"
       if qs.memo_state?(202)
-        give_adena(pc, 81900, true)
+        give_adena(pc, 81_900, true)
         give_items(pc, FINAL_PASS_CERTIFICATE, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 11726)
+          add_exp_and_sp(pc, 160_267, 11_726)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 15075)
+          add_exp_and_sp(pc, 228_064, 15_075)
         else
-          add_exp_and_sp(pc, 295862, 18424)
+          add_exp_and_sp(pc, 295_862, 18_424)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -232,15 +231,15 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
       end
     when "32052-13.html"
       if qs.memo_state?(102)
-        give_adena(pc, 81900, true)
+        give_adena(pc, 81_900, true)
         give_items(pc, FINAL_PASS_CERTIFICATE, 1)
         level = pc.level
         if level >= 20
-          add_exp_and_sp(pc, 160267, 11726)
+          add_exp_and_sp(pc, 160_267, 11_726)
         elsif level == 19
-          add_exp_and_sp(pc, 228064, 15075)
+          add_exp_and_sp(pc, 228_064, 15_075)
         else
-          add_exp_and_sp(pc, 295862, 18424)
+          add_exp_and_sp(pc, 295_862, 18_424)
         end
         qs.exit_quest(false, true)
         pc.send_packet(SocialAction.new(pc.l2id, 3))
@@ -248,7 +247,6 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -295,7 +293,6 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
           end
         end
       end
-
     end
 
     super
@@ -311,7 +308,7 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
     elsif qs.started?
       case npc.id
       when BLACKSMITH_SILVERA
-        if has_quest_items?(pc, SILVERYS_RING) && ((get_quest_items_count(pc, BOOGLE_RATMAN_TOOTH) + get_quest_items_count(pc, BOOGLE_RATMAN_LEADERS_TOOTH)) < 12)
+        if has_quest_items?(pc, SILVERYS_RING) && ((get_quest_items_count(pc, BOOGLE_RATMAN_TOOTH) &+ get_quest_items_count(pc, BOOGLE_RATMAN_LEADERS_TOOTH)) < 12)
           html = "30527-07.html"
         elsif has_quest_items?(pc, SILVERYS_RING) && get_quest_items_count(pc, BOOGLE_RATMAN_TOOTH) >= 10 && get_quest_items_count(pc, BOOGLE_RATMAN_LEADERS_TOOTH) >= 2
           html = "30527-08a.html"
@@ -359,7 +356,6 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         when 202
           html = "31963-11.html"
         end
-
       when RAILROAD_WORKER_OBI
         case qs.memo_state
         when 10
@@ -369,9 +365,7 @@ class Scripts::Q00418_PathOfTheArtisan < Quest
         when 102
           html = "32052-09.html"
         end
-
       end
-
     end
 
     html || get_no_quest_msg(pc)

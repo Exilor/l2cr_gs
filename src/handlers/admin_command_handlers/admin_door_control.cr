@@ -62,7 +62,7 @@ module AdminCommandHandler::AdminDoorControl
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_open",
       "admin_close",

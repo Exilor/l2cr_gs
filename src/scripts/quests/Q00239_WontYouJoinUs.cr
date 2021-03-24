@@ -25,10 +25,7 @@ class Scripts::Q00239_WontYouJoinUs < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32643-02.htm"
@@ -42,7 +39,6 @@ class Scripts::Q00239_WontYouJoinUs < Quest
         html = event
       end
     end
-
 
     html
   end
@@ -119,9 +115,7 @@ class Scripts::Q00239_WontYouJoinUs < Quest
           st.exit_quest(false, true)
         end
       end
-
     end
-
 
     html || get_no_quest_msg(talker)
   end

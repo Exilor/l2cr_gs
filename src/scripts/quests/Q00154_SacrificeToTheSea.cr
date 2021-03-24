@@ -57,7 +57,6 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
           qs.exit_quest(false, true)
           html = "30312-06.html"
         end
-
       else
         html = get_already_completed_msg(pc)
       end
@@ -75,7 +74,6 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
       when 4
         html = "30051-04.html"
       end
-
     when ROLLFNAN
       case qs.cond
       when 1, 2
@@ -88,9 +86,7 @@ class Scripts::Q00154_SacrificeToTheSea < Quest
       when 4
         html = "30055-02.html"
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -24,20 +24,20 @@ struct FourSepulchersChangeAttackTimeTask
         if min % 5 == 0
           inter = Calendar.new
           inter.minute = min.to_i
-          ThreadPoolManager.schedule_general(FourSepulchersManagerSayTask.new, inter.ms - Time.ms)
+          ThreadPoolManager.schedule_general(FourSepulchersManagerSayTask.new, inter.ms &- Time.ms)
           break
         end
 
         min += 1
       end
     else
-      ThreadPoolManager.schedule_general(FourSepulchersManagerSayTask.new, 5 * 60400)
+      ThreadPoolManager.schedule_general(FourSepulchersManagerSayTask.new, 5 &* 60400)
     end
 
     if manager.first_time_run?
-      interval = manager.attack_time_end - Time.ms
+      interval = manager.attack_time_end &- Time.ms
     else
-      interval = Config.fs_time_attack.to_i64 * 60000
+      interval = Config.fs_time_attack.to_i64 &* 60_000
     end
 
     manager.change_cool_down_time_task =

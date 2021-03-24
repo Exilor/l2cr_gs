@@ -21,10 +21,7 @@ class Scripts::Q00637_ThroughOnceMore < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     if event == "32010-03.htm"
       st.start_quest
@@ -47,8 +44,8 @@ class Scripts::Q00637_ThroughOnceMore < Quest
           num_items &+= 1
         end
         if num_items > 0
-          if count + num_items >= 10
-            num_items = 10 - count.to_i
+          if count &+ num_items >= 10
+            num_items = 10 &- count.to_i
             st.set_cond(2, true)
           else
             st.play_sound(Sound::ITEMSOUND_QUEST_ITEMGET)

@@ -51,7 +51,6 @@ module AdminCommandHandler::AdminClan
         return true
       end
 
-
       unless clan = player.clan
         pc.send_packet(SystemMessageId::TARGET_MUST_BE_IN_CLAN)
         return false
@@ -134,7 +133,7 @@ module AdminCommandHandler::AdminClan
     player
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_clan_info",
       "admin_clan_changeleader",

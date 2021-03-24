@@ -22,8 +22,7 @@ class Scripts::Q00317_CatchTheWind < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    return unless qs = get_quest_state(pc, false)
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "30361-04.htm"
@@ -34,7 +33,7 @@ class Scripts::Q00317_CatchTheWind < Quest
     when "30361-08.html", "30361-09.html"
       shard_count = get_quest_items_count(pc, WIND_SHARD)
       if shard_count > 0
-        adena = (shard_count * 40) + (shard_count >= 10 ? 2988 : 0)
+        adena = (shard_count &* 40) &+ (shard_count >= 10 ? 2988 : 0)
         give_adena(pc, adena, true)
         take_items(pc, WIND_SHARD, -1)
       end
@@ -45,7 +44,6 @@ class Scripts::Q00317_CatchTheWind < Quest
 
       html = event
     end
-
 
     html
   end

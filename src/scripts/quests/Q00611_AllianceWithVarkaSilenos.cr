@@ -108,15 +108,11 @@ class Scripts::Q00611_AllianceWithVarkaSilenos < Quest
       count = CAPTAIN_BADGE_COUNT[st.cond - 1]
     end
 
-
     st.get_quest_items_count(item_id) < count
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     html = event
     case event
@@ -232,9 +228,7 @@ class Scripts::Q00611_AllianceWithVarkaSilenos < Quest
           html = "31378-24.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

@@ -130,7 +130,6 @@ class Scripts::WyvernManager < AbstractNpcAI
     when ManagerType::FORT
       npc.fort.name
     end
-
   end
 
   private def gsub(npc, html_prefix)
@@ -180,7 +179,6 @@ class Scripts::WyvernManager < AbstractNpcAI
         html = mount_wyvern(npc, pc)
       end
     end
-
 
     html
   end

@@ -100,11 +100,11 @@ class Scripts::Q00605_AllianceWithKetraOrcs < Quest
   private def can_get_item?(st, item_id) : Bool
     case item_id
     when VARKA_BADGE_SOLDIER
-      count = SOLDIER_BADGE_COUNT[st.cond - 1]
+      count = SOLDIER_BADGE_COUNT[st.cond &- 1]
     when VARKA_BADGE_OFFICER
-      count = OFFICER_BADGE_COUNT[st.cond - 1]
+      count = OFFICER_BADGE_COUNT[st.cond &- 1]
     when VARKA_BADGE_CAPTAIN
-      count = CAPTAIN_BADGE_COUNT[st.cond - 1]
+      count = CAPTAIN_BADGE_COUNT[st.cond &- 1]
     else
       return false
     end
@@ -130,8 +130,8 @@ class Scripts::Q00605_AllianceWithKetraOrcs < Quest
       st.play_sound(Sound::ITEMSOUND_QUEST_ACCEPT)
       KETRA_MARKS.each_with_index do |mark, i|
         if st.has_quest_items?(mark)
-          st.set_cond(i + 2)
-          return "31371-0#{i + 5}.htm"
+          st.set_cond(i &+ 2)
+          return "31371-0#{i &+ 5}.htm"
         end
       end
       st.set_cond(1)
@@ -232,9 +232,7 @@ class Scripts::Q00605_AllianceWithKetraOrcs < Quest
           html = "31371-24.html"
         end
       end
-
     end
-
 
     html || get_no_quest_msg(pc)
   end

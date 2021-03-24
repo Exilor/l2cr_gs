@@ -33,7 +33,7 @@ module AdminCommandHandler::AdminCamera
     true
   end
 
-  def commands
+  def commands : Enumerable(String)
     {
       "admin_cam",
       "admin_camex",

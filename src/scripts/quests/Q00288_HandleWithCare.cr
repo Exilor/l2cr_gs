@@ -30,10 +30,7 @@ class Scripts::Q00288_HandleWithCare < Quest
   end
 
   def on_adv_event(event, npc, pc)
-    return unless pc
-    unless st = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (st = get_quest_state(pc, false))
 
     case event
     when "32741-03.htm"
@@ -85,7 +82,6 @@ class Scripts::Q00288_HandleWithCare < Quest
       end
     end
 
-
     html
   end
 
@@ -123,7 +119,6 @@ class Scripts::Q00288_HandleWithCare < Quest
         html = "32741-07.html"
       end
     end
-
 
     html || get_no_quest_msg(pc)
   end

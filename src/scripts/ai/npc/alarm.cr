@@ -22,13 +22,13 @@ class Scripts::Alarm < AbstractNpcAI
 
     case event
     when "SELF_DESTRUCT_IN_60"
-      start_quest_timer("SELF_DESTRUCT_IN_30", 30000, npc, nil)
+      start_quest_timer("SELF_DESTRUCT_IN_30", 30_000, npc, nil)
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THE_ALARM_WILL_SELF_DESTRUCT_IN_60_SECONDS_ENTER_PASSCODE_TO_OVERRIDE)
     when "SELF_DESTRUCT_IN_30"
-      start_quest_timer("SELF_DESTRUCT_IN_10", 20000, npc, nil)
+      start_quest_timer("SELF_DESTRUCT_IN_10", 20_000, npc, nil)
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THE_ALARM_WILL_SELF_DESTRUCT_IN_30_SECONDS_ENTER_PASSCODE_TO_OVERRIDE)
     when "SELF_DESTRUCT_IN_10"
-      start_quest_timer("RECORDER_CRUSHED", 10000, npc, nil)
+      start_quest_timer("RECORDER_CRUSHED", 10_000, npc, nil)
       broadcast_npc_say(npc, Say2::NPC_ALL, NpcString::THE_ALARM_WILL_SELF_DESTRUCT_IN_10_SECONDS_ENTER_PASSCODE_TO_OVERRIDE)
     when "RECORDER_CRUSHED"
       if npc0
@@ -115,7 +115,6 @@ class Scripts::Alarm < AbstractNpcAI
       end
     end
 
-
     html
   end
 
@@ -151,7 +150,6 @@ class Scripts::Alarm < AbstractNpcAI
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     end
 
-
     !!qs && (memo_state < 0 || qs.memo_state?(memo_state))
   end
 
@@ -162,7 +160,6 @@ class Scripts::Alarm < AbstractNpcAI
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     end
-
 
     if qs
       qs.memo_state = memo_state
@@ -177,7 +174,6 @@ class Scripts::Alarm < AbstractNpcAI
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     end
 
-
     qs ? qs.get_memo_state_ex(slot) : -1
   end
 
@@ -188,7 +184,6 @@ class Scripts::Alarm < AbstractNpcAI
     when NIKOLAS_COOPERATION_ID
       qs = player.get_quest_state("Q00185_NikolasCooperation")
     end
-
 
     if qs
       qs.set_memo_state_ex(slot, memo_state_ex)

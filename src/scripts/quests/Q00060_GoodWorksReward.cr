@@ -62,10 +62,7 @@ class Scripts::Q00060_GoodWorksReward < Quest
       return super
     end
 
-    return unless pc
-    unless qs = get_quest_state(pc, false)
-      return
-    end
+    return unless pc && (qs = get_quest_state(pc, false))
 
     case event
     when "31435-07.htm"
@@ -102,7 +99,7 @@ class Scripts::Q00060_GoodWorksReward < Quest
     when "30081-05.html"
       memo_state = qs.memo_state
       if memo_state >= 5 && memo_state <= 6
-        if get_quest_items_count(pc, Inventory::ADENA_ID) >= THREE_MILLION
+        if pc.adena >= THREE_MILLION
           give_items(pc, HELVETIAS_ANTIDOTE, 1)
           take_items(pc, Inventory::ADENA_ID, THREE_MILLION)
           qs.memo_state = 7
@@ -810,7 +807,7 @@ class Scripts::Q00060_GoodWorksReward < Quest
   end
 
   def on_spawn(npc)
-    start_quest_timer("DESPAWN", 60000, npc, nil)
+    start_quest_timer("DESPAWN", 60_000, npc, nil)
     if pc = npc.variables.get_object("pc0", L2PcInstance?)
       npc_str = NpcString::S1_I_MUST_KILL_YOU_BLAME_YOUR_OWN_CURIOSITY
       say = NpcSay.new(npc, Say2::NPC_ALL, npc_str)

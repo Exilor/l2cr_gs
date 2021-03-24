@@ -67,7 +67,7 @@ class Scripts::Venom < AbstractNpcAI
 
     current_time = Time.ms
     start_siege_date = CastleManager.get_castle_by_id(CASTLE).not_nil!.siege_date.ms
-    opening_date = start_siege_date - (HOURS_BEFORE * 360_000)
+    opening_date = start_siege_date &- (HOURS_BEFORE &* 360_000)
     if current_time > opening_date && current_time < start_siege_date
       @prison_is_open = true
     end
@@ -227,7 +227,7 @@ class Scripts::Venom < AbstractNpcAI
     broadcast_npc_say(npc, Say2::NPC_SHOUT, NpcString::ITS_NOT_OVER_YET_IT_WONT_BE_OVER_LIKE_THIS_NEVER)
     unless CastleManager.get_castle_by_id(CASTLE).not_nil!.siege.in_progress?
       cube = add_spawn(TELEPORT_CUBE, CUBE, false, 0)
-      start_quest_timer("cube_despawn", 120000, cube, nil)
+      start_quest_timer("cube_despawn", 120_000, cube, nil)
     end
     cancel_quest_timer("raid_check", npc, nil)
 

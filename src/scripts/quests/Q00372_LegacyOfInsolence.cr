@@ -284,7 +284,6 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
       html = event
     end
 
-
     html
   end
 
@@ -453,7 +452,6 @@ class Scripts::Q00372_LegacyOfInsolence < Quest
           html = "31001-01.html"
         end
       end
-
     end
 
     html || get_no_quest_msg(pc)

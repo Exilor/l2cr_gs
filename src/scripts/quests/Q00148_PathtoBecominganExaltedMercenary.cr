@@ -68,7 +68,6 @@ class Scripts::Q00148_PathtoBecominganExaltedMercenary < Quest
       html = get_already_completed_msg(pc)
     end
 
-
     html || get_no_quest_msg(pc)
   end
 end

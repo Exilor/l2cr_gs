@@ -54,7 +54,6 @@ abstract class AI
   private FOLLOW_INTERVAL = 1000
   private ATTACK_FOLLOW_INTERVAL = 500
 
-  # Use Object instead if/when Crystal supports it.
   private alias IntentionArgType = L2Object | Skill | Location?
   private alias EventArgType = L2Object | Location | Number::Primitive | Bool?
 
@@ -528,7 +527,7 @@ abstract class AI
     end
   end
 
-  def to_log(io : IO)
+  def to_s(io : IO)
     io.print(self.class.name, '(', actor.name, ')')
   end
 end

@@ -27,7 +27,7 @@ class Packets::Outgoing::ExUISetting < GameServerPacket
       category &+= 1
       size &+= 4
       if temp = @ui_settings.keys[i]?
-        size &+= temp.size * 20
+        size &+= temp.size &* 20
       end
     end
 
