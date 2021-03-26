@@ -34,18 +34,21 @@ abstract class MessageId
   end
 
   private def count_params(str)
+    return 0 if str.empty?
+
     count = 0
 
-    0.upto(str.size &- 2) do |i|
-      if str[i].in?('C', 'S')
-        c2 = str[i &+ 1]
-        if c2.number?
-          count = Math.max(count, c2.to_i)
+    0.upto(str.bytesize &- 2) do |i|
+      case str.unsafe_byte_at(i)
+      when 67, 83 # "C", "S"
+        case c2 = str.unsafe_byte_at(i &+ 1)
+        when 48..57 # 0..9
+          count = Math.max(count, c2 &- 48)
         end
       end
     end
 
-    count
+    count.to_i!
   end
 
   private macro add(name, id)
