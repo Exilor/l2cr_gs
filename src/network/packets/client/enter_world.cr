@@ -4,17 +4,22 @@ class Packets::Incoming::EnterWorld < GameClientPacket
   MIN_HP = 0.5
   COMBAT_FLAG = 9819
 
-  @tracert = Slice(Slice(UInt8)).empty
+  @traceroute = Slice(Bytes).empty
 
   private def read_impl
     buffer.pos += 84
-    @tracert = Slice.new(5) { b 4 }
+    @traceroute = Slice.new(5) { b 4 }
   end
 
   private def run_impl
-    return unless pc = active_char
-    # LoginServerThread.send_client_tracert(pc.account_name, address)
-    # client.tracert = @tracert
+    unless pc = active_char
+      client.close_now
+      return
+    end
+
+    address = @traceroute.map { |part| part.join('.') }
+    LoginServerThread.instance.send_client_traceroute(pc.account_name, address)
+    client.traceroute = @traceroute
 
     if Config.restore_player_instance
       pc.instance_id = InstanceManager.get_player_instance(pc.l2id)

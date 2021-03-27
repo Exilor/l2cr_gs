@@ -277,6 +277,12 @@ class LoginServerThread
     end
   end
 
+  def send_client_traceroute(account : String, address : Slice(String))
+    send_packet(PlayerTracert.new(account, address))
+  rescue e
+    error e
+  end
+
   def status_string : String
     ServerStatus::STATUS_STRING[@status]
   end

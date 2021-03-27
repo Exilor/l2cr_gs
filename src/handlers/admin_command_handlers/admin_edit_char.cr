@@ -387,7 +387,7 @@ module AdminCommandHandler::AdminEditChar
         return false
       end
 
-      trace = client.trace
+      trace = client.traceroute
       trace.size.times do |i|
         ip = ""
         trace[0].size.times do |o|
@@ -884,7 +884,7 @@ module AdminCommandHandler::AdminEditChar
         next
       end
 
-      pack = IpPack.new(client.connection.ip, client.trace)
+      pack = IpPack.new(client.connection.ip, client.traceroute)
       (ip_map[pack] ||= [] of L2PcInstance) << player
 
       if ip_map[pack].size >= multibox
@@ -984,7 +984,7 @@ module AdminCommandHandler::AdminEditChar
     L2World.players.to_a.tap &.sort_by! &.uptime
   end
 
-  private record IpPack, ip : String, tracert : Slice(Slice(Int32))
+  private record IpPack, ip : String, tracert : Slice(Bytes)
 
   def commands : Enumerable(String)
     {

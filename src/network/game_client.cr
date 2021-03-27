@@ -19,7 +19,7 @@ class GameClient
   getter(flood_protectors) { FloodProtectors.new(self) }
   property active_char : L2PcInstance?
   property additional_close_packet : GameServerPacket?
-  property trace : Slice(Slice(Int32)) = Slice(Slice(Int32)).empty
+  property traceroute : Slice(Bytes) = Slice(Bytes).empty
   property! account_name : String
   property! session_id : SessionKey
   property? protocol_ok : Bool = false
