@@ -82,7 +82,7 @@ class L2CubicInstance
     when SMART_CUBIC_EVATEMPLAR
       @skills.push(SkillData[4053, 8], SkillData[4165, 9])
     when SMART_CUBIC_SHILLIENTEMPLAR
-      @skills << SkillData[4049, 8]
+      @skills.push(SkillData[4049, 8], SkillData[5115, 4])
     end
 
     task = CubicDisappear.new(self)
