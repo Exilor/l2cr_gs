@@ -100,7 +100,7 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
   end
 
   def add_npc_name(id : Int32) : self
-    add_param(SMParam.new(NPC_NAME, id + 1_000_000))
+    add_param(SMParam.new(NPC_NAME, id &+ 1_000_000))
   end
 
   def add_item_name(item : L2Item | L2ItemInstance) : self

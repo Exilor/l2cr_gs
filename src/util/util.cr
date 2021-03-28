@@ -271,7 +271,7 @@ module Util
     args.max
   end
 
-  def get_index_of_min_value(*args : Int32) : Int32
+  def get_index_of_min_value(*args : Object) : Int32
     index = 0
 
     1.upto(args.size &- 1) do |i|
@@ -283,7 +283,7 @@ module Util
     index
   end
 
-  def get_index_of_max_value(*args : Int32) : Int32
+  def get_index_of_max_value(*args : Object) : Int32
     index = 0
 
     1.upto(args.size &- 1) do |i|

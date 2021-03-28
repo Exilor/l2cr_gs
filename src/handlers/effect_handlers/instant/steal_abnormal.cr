@@ -21,9 +21,7 @@ class EffectHandler::StealAbnormal < AbstractEffect
 
   def on_start(info : BuffInfo)
     effector, effected = info.effector, info.effected
-
     return unless effected.player?
-
     return if effected == effector
 
     buffs = Formulas.steal_effects(effector, effected, info.skill, @slot, @rate, @max)

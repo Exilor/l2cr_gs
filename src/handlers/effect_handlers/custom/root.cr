@@ -1,5 +1,5 @@
 class EffectHandler::Root < AbstractEffect
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::ROOTED.mask
   end
 

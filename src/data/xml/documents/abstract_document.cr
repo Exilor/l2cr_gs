@@ -523,7 +523,7 @@ abstract class AbstractDocument
         condition.message_id = get_value(msg_id).to_i
         add_name = parse_string(n, "addName", nil)
         if add_name && get_value(msg_id).to_i > 0
-          condition.add_name
+          condition.add_name = true
         end
       end
 

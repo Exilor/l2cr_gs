@@ -1,5 +1,5 @@
 class EffectHandler::Mute < AbstractEffect
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::MUTED.mask
   end
 

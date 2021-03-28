@@ -27,8 +27,6 @@ class EffectHandler::DispelByCategory < AbstractEffect
     effector = info.effector
     skill = info.skill
     cancelled = Formulas.steal_effects(effector, effected, skill, @slot, @rate, @max)
-    cancelled.each do |ccl|
-      effected.stop_skill_effects(true, ccl.skill)
-    end
+    cancelled.each { |ccl| effected.stop_skill_effects(true, ccl.skill) }
   end
 end

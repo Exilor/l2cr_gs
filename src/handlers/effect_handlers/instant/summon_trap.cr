@@ -19,8 +19,7 @@ class EffectHandler::SummonTrap < AbstractEffect
     effected = info.effected
     return unless effected.player?
     return unless pc = effected.acting_player
-    return if pc.looks_dead?
-    return if pc.in_observer_mode?
+    return if pc.looks_dead? || pc.in_observer_mode?
 
     if @npc_id <= 0
       warn { "Invalid NPC id: #{@npc_id} in skill id: #{info.skill.id}." }

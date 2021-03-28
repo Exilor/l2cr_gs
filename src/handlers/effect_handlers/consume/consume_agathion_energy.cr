@@ -9,9 +9,8 @@ class EffectHandler::ConsumeAgathionEnergy < AbstractEffect
   end
 
   def on_action_time(info : BuffInfo) : Bool
-    return false if info.effected.dead?
-    return false unless info.effected.player?
-    return false unless target = info.effected.acting_player
+    return false unless target = info.effected.as?(L2PcInstance)
+    return false if target.dead?
 
     agathion_info = AgathionRepository.get_by_npc_id(target.agathion_id)
     if agathion_info.nil? || agathion_info.max_energy <= 0

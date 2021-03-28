@@ -12,7 +12,7 @@ class EffectHandler::AttackTrait < AbstractEffect
 
     params.each do |key, val|
       trait_type = TraitType.parse(key)
-      value = (val.to_s.to_f32 + 100) / 100
+      value = (val.to_f32 + 100) / 100
       attack_traits << {trait_type.to_u8, value}
     end
 

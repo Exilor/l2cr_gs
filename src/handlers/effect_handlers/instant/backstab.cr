@@ -14,8 +14,8 @@ class EffectHandler::Backstab < AbstractEffect
   def calc_success(info : BuffInfo) : Bool
     effected, effector, skill = info.effected, info.effector, info.skill
     !info.effected.in_front_of?(effected) &&
-    !Formulas.physical_skill_evasion(effector, effected, skill) &&
-    Formulas.blow_success(effector, effected, skill, @blow_chance)
+      !Formulas.physical_skill_evasion(effector, effected, skill) &&
+      Formulas.blow_success(effector, effected, skill, @blow_chance)
   end
 
   def effect_type : EffectType

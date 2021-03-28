@@ -1,7 +1,7 @@
 class Scripts::NonLethalableNpcs < AbstractNpcAI
   private NPCS = {
     22857, # Knoriks (Lair of Antharas)
-    35062 # Headquarters
+    35062  # Headquarters
   }
 
   def initialize

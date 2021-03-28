@@ -26,17 +26,6 @@ module MonsterRace
       begin
         template = NpcData[id &+ random]
         constructor = nil
-        # {% begin %}
-        #   constructor =
-        #   case "#{template.type}Instance"
-        #   {% for sub in L2Npc.all_subclasses.reject &.abstract? %}
-        #     when {{sub.stringify}}
-        #       {{sub}}
-        #   {% end %}
-        #   else
-        #     raise "No constructor for '#{template.type}' found"
-        #   end
-        # {% end %}
         {% begin %}
           constructor =
           case template.type

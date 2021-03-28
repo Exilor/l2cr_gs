@@ -1,5 +1,5 @@
 class EffectHandler::Stun < AbstractEffect
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::STUNNED.mask
   end
 

@@ -800,9 +800,9 @@ class L2PcInstance < L2Playable
   end
 
   def class_id=(id : Int32)
-    # unless @subclass_lock.lock?
-    #   return
-    # end
+    unless @subclass_lock.lock?
+      return
+    end
 
     begin
       if lvl_joined_academy != 0 && @clan && PlayerClass[id].level.third?
@@ -840,8 +840,8 @@ class L2PcInstance < L2Playable
       if !override_skill_conditions? && Config.decrease_skill_level
         check_player_skills
       end
-    # ensure
-      # @subclass_lock.unlock
+    ensure
+      @subclass_lock.unlock
     end
   end
 
@@ -4947,8 +4947,7 @@ class L2PcInstance < L2Playable
   end
 
   def locked? : Bool
-    # @subclass_lock.locked?
-    false
+    @subclass_lock.locked?
   end
 
   def get_last_server_distance(x : Int32, y : Int32, z : Int32)
@@ -6614,10 +6613,10 @@ class L2PcInstance < L2Playable
   end
 
   def add_subclass(class_id : Int32, class_index : Int32)
-    # unless @subclass_lock.lock?
-    #   debug "Subclass lock is locked."
-    #   return false
-    # end
+    unless @subclass_lock.lock?
+      debug "Subclass lock is locked."
+      return false
+    end
 
     begin
       if total_subclasses == Config.max_subclass || class_index == 0
@@ -6659,13 +6658,13 @@ class L2PcInstance < L2Playable
     rescue e
       error e
       false
-    # ensure
-    #   @subclass_lock.unlock
+    ensure
+      @subclass_lock.unlock
     end
   end
 
   def modify_subclass(class_index : Int32, new_class_id : Int32) : Bool
-    # return false unless @subclass_lock.lock?
+    return false unless @subclass_lock.lock?
 
     begin
       GameDB.transaction do
@@ -6680,15 +6679,15 @@ class L2PcInstance < L2Playable
       OnPlayerProfessionCancel.new(self, class_id).async(self)
 
       subclasses.delete(class_index)
-    # ensure
-    #   @subclass_lock.unlock
+    ensure
+      @subclass_lock.unlock
     end
 
     add_subclass(new_class_id, class_index)
   end
 
   def change_active_class(class_index : Int32)
-    # return false unless @subclass_lock.lock?
+    return false unless @subclass_lock.lock?
 
     begin
       return false if @transformation
@@ -6787,8 +6786,8 @@ class L2PcInstance < L2Playable
       send_packet(ExStorageMaxCount.new(self))
 
       true
-    # ensure
-    #   @subclass_lock.unlock
+    ensure
+      @subclass_lock.unlock
     end
   end
 
@@ -6811,7 +6810,7 @@ class L2PcInstance < L2Playable
   def max_load : Int32
     calc_stat(
       Stats::WEIGHT_LIMIT,
-      (BaseStats::CON.calc_bonus(self) * 69000 * Config.alt_weight_limit).floor,
+      (BaseStats::CON.calc_bonus(self) * 69_000 * Config.alt_weight_limit).floor,
       self
     ).to_i32
   end

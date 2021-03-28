@@ -11,7 +11,7 @@ class EffectHandler::BlockDamage < AbstractEffect
     @type = params.get_enum("type", BlockType, BlockType::HP)
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     @type.hp? ? EffectFlag::BLOCK_HP.mask : EffectFlag::BLOCK_MP.mask
   end
 end

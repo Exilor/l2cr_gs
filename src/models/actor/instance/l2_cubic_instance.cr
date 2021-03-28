@@ -33,7 +33,7 @@ class L2CubicInstance
   @disappear_task : TaskScheduler::DelayedTask?
   @active = false
 
-  getter skills = [] of Skill
+  getter skills = Slice(Skill).empty
   getter owner, cubic_power, cubic_max_count
   getter? given_by_other
   property target : L2Character?
@@ -51,38 +51,36 @@ class L2CubicInstance
 
     case @cubic_id
     when STORM_CUBIC
-      @skills << SkillData[4049, level]
+      @skills = Slice[SkillData[4049, level]]
     when VAMPIRIC_CUBIC
-      @skills << SkillData[4050, level]
+      @skills = Slice[SkillData[4050, level]]
     when LIFE_CUBIC
-      @skills << SkillData[4051, level]
+      @skills = Slice[SkillData[4051, level]]
       do_action
     when VIPER_CUBIC
-      @skills << SkillData[4052, level]
+      @skills = Slice[SkillData[4052, level]]
     when POLTERGEIST_CUBIC
-      @skills.push(
-        SkillData[4053, level],
-        SkillData[4054, level],
-        SkillData[4055, level]
-      )
+      @skills = Slice[
+        SkillData[4053, level], SkillData[4054, level], SkillData[4055, level]
+      ]
     when BINDING_CUBIC
-      @skills << SkillData[4164, level]
+      @skills = Slice[SkillData[4164, level]]
     when AQUA_CUBIC
-      @skills << SkillData[4165, level]
+      @skills = Slice[SkillData[4165, level]]
     when SPARK_CUBIC
-      @skills << SkillData[4166, level]
+      @skills = Slice[SkillData[4166, level]]
     when ATTRACT_CUBIC
-      @skills.push(SkillData[5115, level], SkillData[5116, level])
+      @skills = Slice[SkillData[5115, level], SkillData[5116, level]]
     when SMART_CUBIC_ARCANALORD
-      @skills.push(SkillData[4051, 7], SkillData[4165, 9])
+      @skills = Slice[SkillData[4051, 7], SkillData[4165, 9]]
     when SMART_CUBIC_ELEMENTALMASTER
-      @skills.push(SkillData[4049, 8], SkillData[4166, 9])
+      @skills = Slice[SkillData[4049, 8], SkillData[4166, 9]]
     when SMART_CUBIC_SPECTRALMASTER
-      @skills.push(SkillData[4049, 8], SkillData[4052, 6])
+      @skills = Slice[SkillData[4049, 8], SkillData[4052, 6]]
     when SMART_CUBIC_EVATEMPLAR
-      @skills.push(SkillData[4053, 8], SkillData[4165, 9])
+      @skills = Slice[SkillData[4053, 8], SkillData[4165, 9]]
     when SMART_CUBIC_SHILLIENTEMPLAR
-      @skills.push(SkillData[4049, 8], SkillData[5115, 4])
+      @skills = Slice[SkillData[4049, 8], SkillData[5115, 4]]
     end
 
     task = CubicDisappear.new(self)
@@ -283,14 +281,19 @@ class L2CubicInstance
     end
   end
 
-  def use_cubic_continuous(skill : Skill, targets : Enumerable(L2Object))
+  def use_cubic_continuous(skill : Skill, *targets : L2Object)
     targets.each do |target|
-      next if target.dead?
+      if target.looks_dead?
+        if target.player?
+          target.stop_fake_death(true)
+        else
+          next
+        end
+      end
 
       if skill.bad?
         shld = Formulas.shld_use(@owner, target, skill)
-        acted = Formulas.cubic_skill_success(self, target, skill, shld)
-        unless acted
+        unless Formulas.cubic_skill_success(self, target, skill, shld)
           @owner.action_failed
           next
         end
@@ -300,7 +303,7 @@ class L2CubicInstance
     end
   end
 
-  def use_cubic_m_dam(skill : Skill, targets : Array(L2Object))
+  def use_cubic_m_dam(skill : Skill, *targets : L2Object)
     targets.each do |target|
       if target.looks_dead?
         if target.player?
@@ -331,7 +334,7 @@ class L2CubicInstance
     end
   end
 
-  def use_cubic_drain(skill : Skill, targets : Array(L2Object))
+  def use_cubic_drain(skill : Skill, *targets : L2Object)
     targets.each do |target|
       if target.looks_dead?
         if target.player?
@@ -368,7 +371,7 @@ class L2CubicInstance
     end
   end
 
-  def use_cubic_disabler(skill : Skill, targets : Array(L2Object))
+  def use_cubic_disabler(skill : Skill, *targets : L2Object)
     targets.each do |target|
       if target.looks_dead?
         if target.player?
@@ -387,12 +390,12 @@ class L2CubicInstance
     end
   end
 
-  def self.in_cubic_range?(owner : L2Character?, target : L2Character?) : Bool
-    return false unless owner && target
+  def in_range?(target : L2Character?) : Bool
+    return false unless target
 
-    x = owner.x - target.x
-    y = owner.y - target.y
-    z = owner.z - target.z
+    x = @owner.x - target.x
+    y = @owner.y - target.y
+    z = @owner.z - target.z
     Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2) <= MAX_MAGIC_RANGE.abs2
   end
 
@@ -409,20 +412,15 @@ class L2CubicInstance
 
     if party && !@owner.in_olympiad_mode?
       party.each do |m|
-        if m.alive?
-          if L2CubicInstance.in_cubic_range?(@owner, m)
-            if m.current_hp < m.max_hp
-              if percent_left > m.current_hp / m.max_hp
-                percent_left = m.current_hp / m.max_hp
-                target = m
-              end
-            end
+        if m.alive? && in_range?(m) && m.current_hp < m.max_hp
+          if percent_left > m.current_hp / m.max_hp
+            percent_left = m.current_hp / m.max_hp
+            target = m
           end
         end
 
         if smn = m.summon
-          next if smn.dead?
-          next unless L2CubicInstance.in_cubic_range?(@owner, smn)
+          next if smn.dead? || !in_range?(smn)
 
           if smn.current_hp < smn.max_hp
             if percent_left > smn.current_hp / m.max_hp
@@ -441,7 +439,7 @@ class L2CubicInstance
       if smn = @owner.summon
         if smn.alive? && smn.current_hp < smn.max_hp
           if percent_left > smn.current_hp / smn.max_hp
-            if L2CubicInstance.in_cubic_range?(@owner, smn)
+            if in_range?(smn)
               target = smn
             end
           end
@@ -450,27 +448,5 @@ class L2CubicInstance
     end
 
     @target = target
-  end
-
-  def to_s(io : IO)
-    name =
-    case @cubic_id
-    when STORM_CUBIC then "Storm Cubic"
-    when VAMPIRIC_CUBIC then "Vampiric Cubic"
-    when LIFE_CUBIC then "Life Cubic "
-    when VIPER_CUBIC then "Viper Cubic"
-    when POLTERGEIST_CUBIC then "Poltergeist Cubic"
-    when BINDING_CUBIC then "Binding Cubic"
-    when AQUA_CUBIC then "Aqua Cubic"
-    when SPARK_CUBIC then "Spark Cubic"
-    when ATTRACT_CUBIC then "Attract Cubic"
-    when SMART_CUBIC_ARCANALORD then "Smart Cubic AL"
-    when SMART_CUBIC_ELEMENTALMASTER then "Smart Cubic EM"
-    when SMART_CUBIC_SPECTRALMASTER then "Smart Cubic SM"
-    when SMART_CUBIC_EVATEMPLAR then "Smart Cubic ET"
-    else "Smart Cubic ST"
-    end
-
-    io.print(@owner, "'s ", name)
   end
 end

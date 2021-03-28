@@ -14,7 +14,7 @@ class EffectHandler::Fishing < AbstractEffect
     pc = info.effector
     return unless pc.is_a?(L2PcInstance)
 
-    if !Config.allowfishing && !pc.override_skill_conditions?
+    if !Config.allow_fishing && !pc.override_skill_conditions?
       pc.send_message("Fishing is disabled.")
       return
     end

@@ -320,8 +320,6 @@ class GameClient
       return true
     end
 
-    debug { "Kicked for cheating: #{punishment}." }
-
     Logs[:audit].warn { "Client #{self} kicked for #{punishment}." }
 
     close_now

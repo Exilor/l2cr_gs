@@ -22,11 +22,11 @@ class EffectHandler::GiveRecommendation < AbstractEffect
     recs_given = @amount
 
     if target.recom_have + @amount >= 255
-      recs_given = 255 - target.recom_have
+      recs_given = 255 &- target.recom_have
     end
 
     if recs_given > 0
-      target.recom_have += recs_given
+      target.recom_have &+= recs_given
 
       sm = SystemMessage.you_obtained_s1_recommendations
       sm.add_int(recs_given)

@@ -13,7 +13,7 @@ class EffectHandler::InstantBetray < AbstractEffect
     true
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::BETRAYED.mask
   end
 

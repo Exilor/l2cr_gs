@@ -24,11 +24,11 @@ class EffectHandler::HeadquarterCreate < AbstractEffect
     flag.spawn_me(pc.x, pc.y, pc.z + 50)
 
     if castle = CastleManager.get_castle(pc)
-      castle.siege.get_flag(pc.clan).not_nil! << flag
+      castle.siege.get_flag(clan).not_nil! << flag
     elsif fort = FortManager.get_fort(pc)
-      fort.siege.get_flag(pc.clan).not_nil! << flag
+      fort.siege.get_flag(clan).not_nil! << flag
     else
-      ClanHallSiegeManager.get_nearby_clan_hall(pc).not_nil!.siege.get_flag(pc.clan).not_nil! << flag
+      ClanHallSiegeManager.get_nearby_clan_hall(pc).not_nil!.siege.get_flag(clan).not_nil! << flag
     end
   end
 end

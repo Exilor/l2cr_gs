@@ -8,7 +8,7 @@ class EffectHandler::ConsumeRest < AbstractEffect
     @ticks = params.get_i32("ticks")
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::RELAXING.mask
   end
 

@@ -17,9 +17,7 @@ class EffectHandler::MagicalAttackByAbnormal < AbstractEffect
   def on_start(info : BuffInfo)
     target, char, skill = info.effected, info.effector, info.skill
 
-    if char.is_a?(L2PcInstance) && char.fake_death?
-      return
-    end
+    return if char.is_a?(L2PcInstance) && char.fake_death?
 
     if target.is_a?(L2PcInstance) && target.fake_death?
       target.stop_fake_death(true)

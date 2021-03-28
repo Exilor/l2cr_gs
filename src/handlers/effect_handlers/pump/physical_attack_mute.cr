@@ -1,5 +1,5 @@
 class EffectHandler::PhysicalAttackMute < AbstractEffect
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::PHYSICAL_ATTACK_MUTED.mask
   end
 

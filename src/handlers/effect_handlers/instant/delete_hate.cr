@@ -21,7 +21,6 @@ class EffectHandler::DeleteHate < AbstractEffect
   def on_start(info : BuffInfo)
     target = info.effected
     return unless target.is_a?(L2Attackable)
-
     target.clear_aggro_list
     target.set_walking
     target.intention = AI::ACTIVE

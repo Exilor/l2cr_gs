@@ -8,7 +8,7 @@ class EffectHandler::ThrowUp < AbstractEffect
     @fly_radius = params.get_i32("flyRadius", 0)
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::STUNNED.mask
   end
 

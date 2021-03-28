@@ -4,13 +4,10 @@ abstract class AbstractEffect
   include AbstractEventListener::Owner
   include Packets::Outgoing
 
-  getter name : String
   getter func_templates : Array(FuncTemplate)?
   property ticks : Int32 = 0
 
   def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
-    @attach_cond = attach_cond
-    @name = set.get_string("name")
   end
 
   def self.create_effect(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet?) : self
@@ -55,7 +52,7 @@ abstract class AbstractEffect
     # no-op
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::NONE.mask
   end
 

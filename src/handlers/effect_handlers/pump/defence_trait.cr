@@ -12,7 +12,7 @@ class EffectHandler::DefenceTrait < AbstractEffect
 
     params.each do |key, val|
       trait_type = TraitType.parse(key)
-      value = val.to_s.to_f32
+      value = val.to_f32
       next if value == 0
 
       defence_traits << {trait_type.to_u8, (value + 100) / 100}

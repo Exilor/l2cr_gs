@@ -161,7 +161,7 @@ class SkillDocument < AbstractDocument
             elsif condition && msg_id
               condition.message_id = get_value(msg_id, nil).to_i
               if parse_string(n, "addName", nil) && get_value(msg_id, nil).to_i > 0
-                condition.add_name
+                condition.add_name = true
               end
             end
 
@@ -214,7 +214,7 @@ class SkillDocument < AbstractDocument
             elsif condition && msg_id
               condition.message_id = msg_id
               if parse_string(n, "addName", nil) && msg_id > 0
-                condition.add_name
+                condition.add_name = true
               end
             end
 
@@ -259,7 +259,7 @@ class SkillDocument < AbstractDocument
               elsif condition && msg_id
                 condition.message_id = msg_id
                 if parse_string(n, "addName", nil) && msg_id > 0
-                  condition.add_name
+                  condition.add_name = true
                 end
               end
 

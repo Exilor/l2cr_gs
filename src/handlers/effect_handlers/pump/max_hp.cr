@@ -54,8 +54,6 @@ class EffectHandler::MaxHp < AbstractEffect
 
   def on_exit(info : BuffInfo)
     char_stat = info.effected.stat
-    char_stat.sync do
-      char_stat.active_char.remove_stats_owner(self)
-    end
+    char_stat.sync { char_stat.active_char.remove_stats_owner(self) }
   end
 end

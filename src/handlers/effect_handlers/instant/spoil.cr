@@ -10,12 +10,10 @@ class EffectHandler::Spoil < AbstractEffect
   def on_start(info : BuffInfo)
     effector, target = info.effector, info.effected
 
-    if !target.monster? || target.dead?
+    if !target.is_a?(L2MonsterInstance) || target.dead?
       effector.send_packet(SystemMessageId::INCORRECT_TARGET)
       return
     end
-
-    target = target.as(L2MonsterInstance)
 
     if target.spoiled?
       effector.send_packet(SystemMessageId::ALREADY_SPOILED)

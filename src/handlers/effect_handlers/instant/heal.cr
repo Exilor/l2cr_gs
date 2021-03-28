@@ -55,19 +55,17 @@ module EffectHandler
       end
 
       if target.player?
-        if skill.id == 4051
+        if skill.id == L2CubicInstance::SKILL_CUBIC_HEAL
           target.send_packet(SystemMessageId::REJUVENATING_HP)
+        elsif char.player? && char != target
+          sm = SystemMessage.s2_hp_has_been_restored_by_c1
+          sm.add_string(char.name)
+          sm.add_int(amount)
+          target.send_packet(sm)
         else
-          if char.player? && char != target
-            sm = SystemMessage.s2_hp_has_been_restored_by_c1
-            sm.add_string(char.name)
-            sm.add_int(amount)
-            target.send_packet(sm)
-          else
-            sm = SystemMessage.s1_hp_has_been_restored
-            sm.add_int(amount)
-            target.send_packet(sm)
-          end
+          sm = SystemMessage.s1_hp_has_been_restored
+          sm.add_int(amount)
+          target.send_packet(sm)
         end
       end
     end

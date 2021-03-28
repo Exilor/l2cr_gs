@@ -3,7 +3,7 @@ class EffectHandler::Betray < AbstractEffect
     info.effector.player? && info.effected.summon?
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::BETRAYED.mask
   end
 

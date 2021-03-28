@@ -35,7 +35,8 @@ class CubicAction
 
     use_cubic_cure = false
 
-    if @cubic.id.between?(L2CubicInstance::SMART_CUBIC_EVATEMPLAR, L2CubicInstance::SMART_CUBIC_SPECTRALMASTER)
+    case @cubic.id
+    when L2CubicInstance::SMART_CUBIC_EVATEMPLAR..L2CubicInstance::SMART_CUBIC_SPECTRALMASTER
       @cubic.owner.effect_list.debuffs.each do |info|
         unless info.skill.irreplaceable_buff?
           use_cubic_cure = true
@@ -56,7 +57,7 @@ class CubicAction
       else
         @cubic.cubic_target
 
-        unless L2CubicInstance.in_cubic_range?(@cubic.owner, @cubic.target)
+        unless @cubic.in_range?(@cubic.target)
           @cubic.target = nil
         end
       end
@@ -65,20 +66,19 @@ class CubicAction
       if target && target.alive?
         msu = Packets::Outgoing::MagicSkillUse.new(@cubic.owner, target, skill.id, skill.level, 0, 0)
         @cubic.owner.broadcast_packet(msu)
-        targets = [target]
 
         if skill.has_effect_type?(EffectType::MAGICAL_ATTACK)
-          @cubic.use_cubic_m_dam(skill, targets)
+          @cubic.use_cubic_m_dam(skill, target)
         elsif skill.has_effect_type?(EffectType::HP_DRAIN)
-          @cubic.use_cubic_drain(skill, targets)
+          @cubic.use_cubic_drain(skill, target)
         elsif skill.has_effect_type?(EffectType::STUN, EffectType::ROOT, EffectType::PARALYZE)
-          @cubic.use_cubic_disabler(skill, targets)
+          @cubic.use_cubic_disabler(skill, target)
         elsif skill.continuous?
-          @cubic.use_cubic_continuous(skill, targets)
+          @cubic.use_cubic_continuous(skill, target)
         elsif skill.has_effect_type?(EffectType::AGGRESSION)
-          @cubic.use_cubic_disabler(skill, targets)
+          @cubic.use_cubic_disabler(skill, target)
         else
-          skill.activate_skill(@cubic, targets)
+          skill.activate_skill(@cubic, target)
         end
 
         @current_count.add(1)

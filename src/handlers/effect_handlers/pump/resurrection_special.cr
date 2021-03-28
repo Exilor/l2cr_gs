@@ -13,7 +13,7 @@ class EffectHandler::ResurrectionSpecial < AbstractEffect
     EffectType::RESURRECTION_SPECIAL
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::RESURRECTION_SPECIAL.mask
   end
 

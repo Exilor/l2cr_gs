@@ -10,7 +10,7 @@ class EffectHandler::Confuse < AbstractEffect
     Formulas.probability(@chance, info.effector, info.effected, info.skill)
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::CONFUSED.mask
   end
 

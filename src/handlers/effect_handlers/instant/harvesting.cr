@@ -61,7 +61,7 @@ class EffectHandler::Harvesting < AbstractEffect
     basic_success = 100
 
     if diff < 5
-      basic_success -= (diff - 5) * 5
+      basic_success &-= (diff &- 5) &* 5
     end
 
     if basic_success < 1

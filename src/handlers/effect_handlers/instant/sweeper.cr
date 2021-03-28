@@ -6,10 +6,7 @@ class EffecyHandler::Sweeper < AbstractEffect
   def on_start(info : BuffInfo)
     return unless mob = info.effected.as?(L2Attackable)
     return unless pc = info.effector.as?(L2PcInstance)
-
-    unless mob.check_spoil_owner(pc, false)
-      return
-    end
+    return unless mob.check_spoil_owner(pc, false)
 
     mob.take_sweep.try &.each do |item|
       if party = pc.party

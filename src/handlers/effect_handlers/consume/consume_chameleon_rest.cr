@@ -40,7 +40,7 @@ class EffectHandler::ConsumeChameleonRest < AbstractEffect
     true
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::SILENT_MOVE.mask | EffectFlag::RELAXING.mask
   end
 end

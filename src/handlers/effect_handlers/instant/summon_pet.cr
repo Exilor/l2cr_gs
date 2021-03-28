@@ -30,7 +30,7 @@ class EffectHandler::SummonPet < AbstractEffect
 
     pet_data = PetDataTable.get_pet_data_by_item_id(item.id)
 
-    return if !pet_data || pet_data.npc_id == -1
+    return if pet_data.nil? || pet_data.npc_id == -1
 
     template = NpcData[pet_data.npc_id]
     unless pet = L2PetInstance.spawn_pet(template, pc, item)

@@ -30,17 +30,6 @@ class L2Spawn
 
   def initialize(template : L2NpcTemplate)
     @template = template
-    # {% begin %}
-    #   @constructor =
-    #   case "#{template.type}Instance"
-    #   {% for sub in L2Npc.all_subclasses.reject &.abstract? %}
-    #     when {{sub.stringify}}
-    #       {{sub}}
-    #   {% end %}
-    #   else
-    #     raise "No constructor for '#{template.type}' found"
-    #   end
-    # {% end %}
     {% begin %}
       @constructor =
       case template.type

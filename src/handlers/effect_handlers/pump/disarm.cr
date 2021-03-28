@@ -3,11 +3,13 @@ class EffectHandler::Disarm < AbstractEffect
     info.effected.player?
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::DISARMED.mask
   end
 
   def on_start(info : BuffInfo)
-    info.effected.acting_player.not_nil!.disarm_weapons
+    if pc = info.effected.acting_player
+      pc.disarm_weapons
+    end
   end
 end

@@ -404,14 +404,14 @@ class Scripts::Baium < AbstractNpcAI
     vars = npc.variables
     3.times do |i|
       if attacker == vars.get_object("c_quest#{i}", L2Character?)
-        if vars.get_i32("i_quest#{i}") < aggro_val
+        if vars.get_i64("i_quest#{i}") < aggro_val
           vars["i_quest#{i}"] = new_aggro_val
         end
 
         return
       end
     end
-    index = Util.get_index_of_min_value(vars.get_i32("i_quest0"), vars.get_i32("i_quest1"), vars.get_i32("i_quest2"))
+    index = Util.get_index_of_min_value(vars.get_i64("i_quest0"), vars.get_i64("i_quest1"), vars.get_i64("i_quest2"))
     vars["i_quest#{index}"] = new_aggro_val
     vars["c_quest#{index}"] = attacker
   end
@@ -445,9 +445,9 @@ class Scripts::Baium < AbstractNpcAI
         vars["i_quest#{i}"] = 0
       end
     end
-    index = Util.get_index_of_max_value(vars.get_i32("i_quest0"), vars.get_i32("i_quest1"), vars.get_i32("i_quest2"))
+    index = Util.get_index_of_max_value(vars.get_i64("i_quest0"), vars.get_i64("i_quest1"), vars.get_i64("i_quest2"))
     player = vars.get_object("c_quest#{index}", L2Character?)
-    i2 = vars.get_i32("i_quest#{index}")
+    i2 = vars.get_i64("i_quest#{index}")
     if i2 > 0 && Rnd.rand(100) < 70
       vars["i_quest#{index}"] = 500
     end

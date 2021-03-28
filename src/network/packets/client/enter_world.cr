@@ -89,9 +89,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       end
 
       SiegeManager.sieges.each do |siege|
-        unless siege.in_progress?
-          next
-        end
+        next unless siege.in_progress?
 
         if siege.attacker?(clan)
           pc.siege_state = 1
@@ -103,9 +101,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       end
 
       FortSiegeManager.sieges.each do |siege|
-        unless siege.in_progress?
-          next
-        end
+        next unless siege.in_progress?
 
         if siege.attacker?(clan)
           pc.siege_state = 1
@@ -117,9 +113,7 @@ class Packets::Incoming::EnterWorld < GameClientPacket
       end
 
       ClanHallSiegeManager.conquerable_halls.each_value do |ch|
-        unless ch.in_siege?
-          next
-        end
+        next unless ch.in_siege?
 
         if ch.registered?(clan)
           pc.siege_state = 1

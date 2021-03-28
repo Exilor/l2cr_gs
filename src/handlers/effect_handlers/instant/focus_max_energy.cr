@@ -7,7 +7,7 @@ class EffectHandler::FocusMaxEnergy < AbstractEffect
     pc = info.effected
     return unless pc.is_a?(L2PcInstance)
 
-    if mastery = (pc.skills[992]? || pc.skills[993]?)
+    if mastery = (pc.get_known_skill(992) || pc.get_known_skill(993))
       max_charge = mastery.level
 
       if max_charge != 0

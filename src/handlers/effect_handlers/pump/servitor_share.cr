@@ -9,7 +9,7 @@ class EffectHandler::ServitorShare < AbstractEffect
     end
   end
 
-  def effect_flags
+  def effect_flags : UInt32
     EffectFlag::SERVITOR_SHARE.mask
   end
 
