@@ -177,7 +177,7 @@ abstract class L2Vehicle < L2Character
 
           if !ticket || !pc.inventory.destroy_item("Boat", ticket, count, pc, self)
             pc.send_packet(SystemMessageId::NOT_CORRECT_BOAT_TICKET)
-            pc.tele_to_location(Location.new(oust_x, oust_y, oust_z), true)
+            pc.tele_to_location(oust_x, oust_y, oust_z, true)
             # This is custom. Without it, a player that has sailed but no longer
             # has the correct ticket will still be considered a passenger even
             # after being teleported away from the vehicle and will still be

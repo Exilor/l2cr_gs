@@ -1850,13 +1850,7 @@ class L2PcInstance < L2Playable
     return false if wpn.weapon_item!.force_equip?
 
     old = inventory.unequip_item_in_body_slot_and_record(wpn.template.body_part)
-    if old.size == 1
-      send_packet(InventoryUpdate.modified(old[0]))
-    elsif old.size > 1
-      iu = InventoryUpdate.new
-      old.each { |i| iu.add_modified_item(i) }
-      send_packet(iu)
-    end
+    send_packet(InventoryUpdate.modified(old))
 
     abort_attack
     broadcast_user_info
@@ -1884,13 +1878,7 @@ class L2PcInstance < L2Playable
     end
 
     old = inventory.unequip_item_in_body_slot_and_record(shld.template.body_part)
-    if old.size == 1
-      send_packet(InventoryUpdate.modified(old.first))
-    elsif old.size > 1
-      iu = InventoryUpdate.new
-      old.each { |i| iu.add_modified_item(i) }
-      send_packet(iu)
-    end
+    send_packet(InventoryUpdate.modified(old))
 
     abort_attack
     broadcast_user_info
@@ -7580,7 +7568,7 @@ class L2PcInstance < L2Playable
   end
 
   private def bad_coords
-    tele_to_location(Location.new(0, 0, 0), false)
+    tele_to_location(0, 0, 0, false)
     send_message("Error with your coordinates.")
   end
 end

@@ -41,7 +41,7 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
     if pc.tele_mode > 0
       pc.tele_mode = 0 if pc.tele_mode == 1
       action_failed
-      pc.tele_to_location(Location.new(@to_x, @to_y, @to_z))
+      pc.tele_to_location(@to_x, @to_y, @to_z)
       return
     end
 

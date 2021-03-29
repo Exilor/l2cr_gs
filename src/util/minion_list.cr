@@ -116,7 +116,7 @@ class MinionList
         else
           new_y = (@master.y + new_y) + min_radius
         end
-        minion.tele_to_location(Location.new(new_x, new_y.to_i32, @master.z))
+        minion.tele_to_location(new_x, new_y.to_i32, @master.z)
       end
     end
   end

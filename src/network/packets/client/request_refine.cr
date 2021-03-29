@@ -13,9 +13,10 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
 
   private def run_impl
     return unless pc = active_char
-    return unless target_item = pc.inventory.get_item_by_l2id(@target_item_obj_id)
-    return unless refiner_item = pc.inventory.get_item_by_l2id(@refiner_item_obj_id)
-    return unless gemstone_item = pc.inventory.get_item_by_l2id(@gemstone_item_obj_id)
+    inv = pc.inventory
+    return unless target_item = inv.get_item_by_l2id(@target_item_obj_id)
+    return unless refiner_item = inv.get_item_by_l2id(@refiner_item_obj_id)
+    return unless gemstone_item = inv.get_item_by_l2id(@gemstone_item_obj_id)
 
     unless valid?(pc, target_item, refiner_item, gemstone_item)
       pc.send_packet(ExVariationResult::STATIC_PACKET)
@@ -35,10 +36,8 @@ class Packets::Incoming::RequestRefine < Packets::Incoming::AbstractRefinePacket
     end
 
     if target_item.equipped?
-      unequipped = pc.inventory.unequip_item_in_slot_and_record(target_item.location_slot)
-      iu = InventoryUpdate.new
-      unequipped.each { |i| iu.add_modified_item(i) }
-      pc.send_packet(iu)
+      unequipped = inv.unequip_item_in_slot_and_record(target_item.location_slot)
+      pc.send_packet(InventoryUpdate.modified(unequipped))
       pc.broadcast_user_info
     end
 

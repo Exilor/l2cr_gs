@@ -25,10 +25,10 @@ class Scripts::Venom < AbstractNpcAI
     Location.new(17001, -49149, -1064)
   }
 
-  private  TRHONE = Location.new(11025, -49152, -537)
-  private  DUNGEON = Location.new(11882, -49216, -3008)
-  private  TELEPORT = Location.new(12589, -49044, -3008)
-  private  CUBE = Location.new(12047, -49211, -3009)
+  private TRHONE = Location.new(11025, -49152, -537)
+  private DUNGEON = Location.new(11882, -49216, -3008)
+  private TELEPORT = Location.new(12589, -49044, -3008)
+  private CUBE = Location.new(12047, -49211, -3009)
 
   private VENOM_STRIKE = SkillHolder.new(4993)
   private SONIC_STORM = SkillHolder.new(4994)

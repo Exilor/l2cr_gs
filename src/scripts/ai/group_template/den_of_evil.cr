@@ -6,7 +6,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
     18814
   }
   private SKILL_ID = 6150 # others +2
-  private KASHA_DESTRUCT_DELAY = 120000
+  private KASHA_DESTRUCT_DELAY = 120_000
 
   private EYE_SPAWNS = {
     Location.new(71544, -129400, -3360, 16472),

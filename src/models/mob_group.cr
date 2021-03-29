@@ -77,7 +77,7 @@ class MobGroup
         x = pc.x + Rnd.rand(50)
         y = pc.y + Rnd.rand(50)
 
-        mob_inst.tele_to_location(Location.new(x, y, pc.z), true)
+        mob_inst.tele_to_location(x, y, pc.z, true)
         ai = mob_inst.ai.as(L2ControllableMobAI)
         ai.follow(pc)
       end

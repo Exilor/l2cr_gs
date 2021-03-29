@@ -100,7 +100,7 @@ module AdminCommandHandler::AdminTeleport
           z -= int_val
         end
 
-        pc.tele_to_location(Location.new(x, y, z))
+        pc.tele_to_location(x, y, z)
         show_teleport_window(pc)
       rescue
       end

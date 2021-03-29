@@ -86,9 +86,7 @@ class Packets::Incoming::RequestCrystallizeItem < GameClientPacket
 
     if item.equipped?
       unequipped = inv.unequip_item_in_slot_and_record(item.location_slot)
-      iu = InventoryUpdate.new
-      unequipped.each { |it| iu.add_modified_item(it) }
-      send_packet(iu)
+      send_packet(InventoryUpdate.modified(unequipped))
       if item.enchant_level > 0
         sm = SystemMessage.equipment_s1_s2_removed
         sm.add_int(item.enchant_level)

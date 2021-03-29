@@ -283,7 +283,7 @@ abstract class AbstractScript
     listeners
   end
 
-  def get_registered_ids(reg_type : ListenerRegisterType) : Enumerable(Int32)
+  def get_registered_ids(reg_type : ListenerRegisterType) : Indexable(Int32)
     @registered_ids.fetch(reg_type, Slice(Int32).empty)
   end
 
@@ -336,10 +336,7 @@ abstract class AbstractScript
 
     def give_items(pc : L2PcInstance, item : IDropItem, victim : L2Character) : Bool
       items = item.calculate_drops(victim, pc)
-      if items.nil? || items.empty?
-        return false
-      end
-
+      return false if items.nil? || items.empty?
       give_items(pc, items)
       true
     end
@@ -350,10 +347,7 @@ abstract class AbstractScript
 
     def give_items(pc : L2PcInstance, item : ItemHolder, limit : Int) : Bool
       max_to_give = limit - pc.inventory.get_inventory_item_count(item.id, -1)
-      if max_to_give <= 0
-        return false
-      end
-
+      return false if max_to_give <= 0
       give_items(pc, item.id, Math.min(max_to_give, item.count))
       true
     end
@@ -476,9 +470,7 @@ abstract class AbstractScript
     def take_item(pc : L2PcInstance, item : L2ItemInstance, to_delete : Int64) : Bool
       if item.equipped?
         unequipped = pc.inventory.unequip_item_in_body_slot_and_record(item.template.body_part)
-        iu = InventoryUpdate.new
-        unequipped.each { |itm| iu.add_modified_item(itm) }
-        pc.send_packet(iu)
+        pc.send_packet(InventoryUpdate.modified(unequipped))
         pc.broadcast_user_info
       end
 
@@ -684,35 +676,40 @@ abstract class AbstractScript
         end
       end
 
-      amount_to_give = min_amount == max_amount ? min_amount : Rnd.rand(min_amount.to_i64..max_amount.to_i64)
-      amount_to_give = amount_to_give.to_i64
+      if min_amount == max_amount
+        amount_to_give = min_amount.to_i64
+      else
+        amount_to_give = Rnd.rand(min_amount..max_amount).to_i64
+      end
 
       # debug "#give_item_randomly amount to give: #{amount_to_give}"
 
       random = Rnd.rand
       # Inventory slot check (almost useless for non-stacking items)
-      if drop_chance >= random && amount_to_give > 0 && pc.inventory.validate_capacity_by_item_id(item_id)
-        if limit > 0 && current_count + amount_to_give > limit
-          amount_to_give = limit - current_count
-        end
+      if drop_chance >= random && amount_to_give > 0
+        if pc.inventory.validate_capacity_by_item_id(item_id)
+          if limit > 0 && current_count + amount_to_give > limit
+            amount_to_give = limit - current_count
+          end
 
-        # Give the item to player
-        if pc.add_item("Quest", item_id, amount_to_give.to_i64, npc, true)
-          # limit reached (if there is no limit, this block doesn't execute)
-          if current_count + amount_to_give == limit
-            if play_sound
-              play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+          # Give the item to player
+          if pc.add_item("Quest", item_id, amount_to_give.to_i64, npc, true)
+            # limit reached (if there is no limit, this block doesn't execute)
+            if current_count + amount_to_give == limit
+              if play_sound
+                play_sound(pc, Sound::ITEMSOUND_QUEST_MIDDLE)
+              end
+
+              return true
             end
 
-            return true
-          end
-
-          if play_sound
-            play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
-          end
-          # if there is no limit, return true every time an item is given
-          if limit <= 0
-            return true
+            if play_sound
+              play_sound(pc, Sound::ITEMSOUND_QUEST_ITEMGET)
+            end
+            # if there is no limit, return true every time an item is given
+            if limit <= 0
+              return true
+            end
           end
         end
       end

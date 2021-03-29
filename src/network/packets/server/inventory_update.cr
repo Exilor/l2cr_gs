@@ -20,6 +20,21 @@ class Packets::Outgoing::InventoryUpdate < Packets::Outgoing::AbstractInventoryU
     SingleItem.new(item)
   end
 
+  def self.added(items : Array(L2ItemInstance)) SingleAddedItem | InventoryUpdate
+    return added(items.unsafe_fetch(0)) if items.size == 1
+    new.tap &.each { |item| iu.add_new_item(item) }
+  end
+
+  def self.modified(items : Array(L2ItemInstance)) SingleModifiedItem | InventoryUpdate
+    return modified(items.unsafe_fetch(0)) if items.size == 1
+    new.tap { |iu| items.each { |item| iu.add_modified_item(item) } }
+  end
+
+  def self.removed(items : Array(L2ItemInstance)) SingleRemovedItem | InventoryUpdate
+    return removed(items.unsafe_fetch(0)) if items.size == 1
+    new.tap { |iu| items.each { |item| iu.add_new_item(item) } }
+  end
+
   private class SingleItem < Packets::Outgoing::AbstractItemPacket
     def initialize(item : L2ItemInstance)
       @item = ItemInfo.new(item)

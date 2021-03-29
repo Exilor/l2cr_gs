@@ -17,9 +17,7 @@ class EffectHandler::ConvertItem < AbstractEffect
     elementals = wpn.elementals.try &.first?
     unequipped = pc.inventory.unequip_item_in_body_slot_and_record(wpn.template.body_part)
     return if unequipped.empty?
-    iu = InventoryUpdate.new
-    unequipped.each { |item| iu.add_modified_item(item) }
-    pc.send_packet(iu)
+    pc.send_packet(InventoryUpdate.modified(unequipped))
 
     count = 0
     unequipped.each do |item|

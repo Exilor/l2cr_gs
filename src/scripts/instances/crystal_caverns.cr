@@ -1433,9 +1433,9 @@ class Scripts::CrystalCaverns < AbstractInstance
         world.raiders.each_with_index do |p, i|
           x = (radius * Math.cos((i &* 2 * Math::PI) / members)).to_i
           y = (radius * Math.sin((i &* 2 * Math::PI) / members)).to_i
-          p.tele_to_location(Location.new(153571 + x, 142075 + y, -12737))
+          p.tele_to_location(153571 + x, 142075 + y, -12737)
           if pet = p.summon
-            pet.tele_to_location(Location.new(153571 + x, 142075 + y, -12737), true)
+            pet.tele_to_location(153571 + x, 142075 + y, -12737, true)
             pet.broadcast_packet(ValidateLocation.new(pet))
           end
           p.paralyzed = true

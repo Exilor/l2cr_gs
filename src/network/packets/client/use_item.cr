@@ -232,9 +232,7 @@ class Packets::Incoming::UseItem < GameClientPacket
       return true unless wpn = pc.active_weapon_instance
 
       unequipped = pc.inventory.unequip_item_in_slot_and_record(wpn.location_slot)
-      iu = InventoryUpdate.new
-      unequipped.each { |i| iu.add_modified_item(i) }
-      pc.send_packet(iu)
+      pc.send_packet(InventoryUpdate.modified(unequipped))
       pc.broadcast_user_info
       wpn.remove_augmentation
 

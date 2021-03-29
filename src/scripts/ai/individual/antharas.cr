@@ -180,25 +180,25 @@ class Scripts::Antharas < AbstractNpcAI
       start_quest_timer("CAMERA_1", 23, @antharas, nil)
     when "CAMERA_1"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 700, 13, -19, 0, 10000, 20000, 0, 0, 0, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 700, 13, -19, 0, 10_000, 20_000, 0, 0, 0, 0, 0))
       start_quest_timer("CAMERA_2", 3000, npc, nil)
     when "CAMERA_2"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 700, 13, 0, 6000, 10000, 20000, 0, 0, 0, 0, 0))
-      start_quest_timer("CAMERA_3", 10000, npc, nil)
+      @zone.broadcast_packet(SpecialCamera.new(npc, 700, 13, 0, 6000, 10_000, 20_000, 0, 0, 0, 0, 0))
+      start_quest_timer("CAMERA_3", 10_000, npc, nil)
     when "CAMERA_3"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 3700, 0, -3, 0, 10000, 10000, 0, 0, 0, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 3700, 0, -3, 0, 10_000, 10_000, 0, 0, 0, 0, 0))
       @zone.broadcast_packet(SocialAction.new(npc.l2id, 1))
       start_quest_timer("CAMERA_4", 200, npc, nil)
       start_quest_timer("SOCIAL", 5200, npc, nil)
     when "CAMERA_4"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 1100, 0, -3, 22000, 10000, 30000, 0, 0, 0, 0, 0))
-      start_quest_timer("CAMERA_5", 10800, npc, nil)
+      @zone.broadcast_packet(SpecialCamera.new(npc, 1100, 0, -3, 22000, 10_000, 30000, 0, 0, 0, 0, 0))
+      start_quest_timer("CAMERA_5", 10_800, npc, nil)
     when "CAMERA_5"
       npc = npc.not_nil!
-      @zone.broadcast_packet(SpecialCamera.new(npc, 1100, 0, -3, 300, 10000, 7000, 0, 0, 0, 0, 0))
+      @zone.broadcast_packet(SpecialCamera.new(npc, 1100, 0, -3, 300, 10_000, 7000, 0, 0, 0, 0, 0))
       start_quest_timer("START_MOVE", 1900, npc, nil)
     when "SOCIAL"
       npc = npc.not_nil!

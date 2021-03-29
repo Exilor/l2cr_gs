@@ -38,8 +38,7 @@ struct ChanceMultiplierStrategy
   STATIC = new { |_, _| 1.0 }
   QUEST  = new do |item, victim|
     if Config.champion_enable && victim.champion?
-      id = item.item_id
-      if id == Inventory::ADENA_ID || id == Inventory::ANCIENT_ADENA_ID
+      if item.item_id.in?(Inventory::ADENA_ID, Inventory::ANCIENT_ADENA_ID)
         champion_mult = Config.champion_adenas_rewards_chance
       else
         champion_mult = Config.champion_rewards_chance

@@ -128,62 +128,50 @@ class Scripts::OracleTeleport < AbstractNpcAI
     elsif event.casecmp?("Festival")
       id = st.get_int("id")
       if TOWN_DAWN.includes?(id)
-        pc.tele_to_location(Location.new(-80157, 111344, -4901))
+        pc.tele_to_location(-80157, 111344, -4901)
         pc.in_7s_dungeon = true
       elsif TOWN_DUSK.includes?(id)
-        pc.tele_to_location(Location.new(-81261, 86531, -5157))
+        pc.tele_to_location(-81261, 86531, -5157)
         pc.in_7s_dungeon = true
       else
         html = "oracle1.htm"
       end
     elsif event.casecmp?("Dimensional")
       html = "oracle.htm"
-      pc.tele_to_location(Location.new(-114755, -179466, -6752))
+      pc.tele_to_location(-114755, -179466, -6752)
     elsif event.casecmp?("5.htm")
       id = st.get_int("id")
       if id > -1
         html = "5a.htm"
       end
-      i = 0
-      TELEPORTERS.each do |id1|
-        if id1 == npc_id
-          break
-        end
-        i &+= 1
-      end
+      i = TELEPORTERS.index { |t| t == npc_id } || "0"
       st.set("id", i.to_s)
       st.state = State::STARTED
-      pc.tele_to_location(Location.new(-114755, -179466, -6752))
+      pc.tele_to_location(-114755, -179466, -6752)
     elsif event.casecmp?("6.htm")
       html = "6.htm"
       st.exit_quest(true)
     elsif event.casecmp?("zigurratDimensional")
-      lvl = pc.level
-      if lvl >= 20 && lvl < 30
+      case pc.level
+      when 20...30
         take_items(pc, Inventory::ADENA_ID, 2000)
-      elsif lvl >= 30 && lvl < 40
+      when 30...40
         take_items(pc, Inventory::ADENA_ID, 4500)
-      elsif lvl >= 40 && lvl < 50
+      when 40...50
         take_items(pc, Inventory::ADENA_ID, 8000)
-      elsif lvl >= 50 && lvl < 60
+      when 50...60
         take_items(pc, Inventory::ADENA_ID, 12_500)
-      elsif lvl >= 60 && lvl < 70
+      when 60...70
         take_items(pc, Inventory::ADENA_ID, 18_000)
-      elsif lvl >= 70
+      when 70..
         take_items(pc, Inventory::ADENA_ID, 24_500)
       end
-      i = 0
-      TELEPORTERS.each do |ziggurat|
-        if ziggurat == npc_id
-          break
-        end
-        i &+= 1
-      end
+      i = TELEPORTERS.index { |t| t == npc_id } || "0"
       st.set("id", i.to_s)
       st.state = State::STARTED
       play_sound(pc, Sound::ITEMSOUND_QUEST_ACCEPT)
       html = "ziggurat_rift.htm"
-      pc.tele_to_location(Location.new(-114755, -179466, -6752))
+      pc.tele_to_location(-114755, -179466, -6752)
     end
 
     html
@@ -196,30 +184,18 @@ class Scripts::OracleTeleport < AbstractNpcAI
     npc_id = npc.id
     if TOWN_DAWN.includes?(npc_id)
       st.state = State::STARTED
-      i = 0
-      TELEPORTERS.each do |dawn|
-        if dawn == npc_id
-          break
-        end
-        i &+= 1
-      end
+      i = TELEPORTERS.index { |t| t == npc_id } || "0"
       st.set("id", i.to_s)
       play_sound(pc, Sound::ITEMSOUND_QUEST_ACCEPT)
-      pc.tele_to_location(Location.new(-80157, 111344, -4901))
+      pc.tele_to_location(-80157, 111344, -4901)
       pc.in_7s_dungeon = true
     end
     if TOWN_DUSK.includes?(npc_id)
       st.state = State::STARTED
-      i = 0
-      TELEPORTERS.each do |dusk|
-        if dusk == npc_id
-          break
-        end
-        i &+= 1
-      end
+      i = TELEPORTERS.index { |t| t == npc_id } || "0"
       st.set("id", i.to_s)
       play_sound(pc, Sound::ITEMSOUND_QUEST_ACCEPT)
-      pc.tele_to_location(Location.new(-81261, 86531, -5157))
+      pc.tele_to_location(-81261, 86531, -5157)
       pc.in_7s_dungeon = true
     elsif npc_id.between?(31494, 31507)
       if pc.level < 20
@@ -245,19 +221,19 @@ class Scripts::OracleTeleport < AbstractNpcAI
       elsif !has_quest_items?(pc, DIMENSIONAL_FRAGMENT)
         html = "ziggurat_nofrag.htm"
         st.exit_quest(true)
-      elsif lvl >= 20 && lvl < 30 && pc.adena < 2000
+      elsif lvl.in?(20...30) && pc.adena < 2000
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
-      elsif lvl >= 30 && lvl < 40 && pc.adena < 4500
+      elsif lvl.in?(30...40) && pc.adena < 4500
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
-      elsif lvl >= 40 && lvl < 50 && pc.adena < 8000
+      elsif lvl.in?(40...50) && pc.adena < 8000
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
-      elsif lvl >= 50 && lvl < 60 && pc.adena < 12_500
+      elsif lvl.in?(50...60) && pc.adena < 12_500
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
-      elsif lvl >= 60 && lvl < 70 && pc.adena < 18_000
+      elsif lvl.in?(60...70) && pc.adena < 18_000
         html = "ziggurat_noadena.htm"
         st.exit_quest(true)
       elsif lvl >= 70 && pc.adena < 24_500
