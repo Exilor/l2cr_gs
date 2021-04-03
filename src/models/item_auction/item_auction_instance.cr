@@ -75,8 +75,8 @@ class ItemAuctionInstance
     end
 
     begin
-      GameDB.each(SELECT_AUCTION_ID_BY_INSTANCE_ID, @instance_id) do |rs|
-        auction_id = rs.get_i32(1)
+      GameDB.query_each(SELECT_AUCTION_ID_BY_INSTANCE_ID, @instance_id) do |rs|
+        auction_id = rs.read(Int32)
         begin
           if auction = load_auction(auction_id)
             @auctions[auction_id] = auction
@@ -268,7 +268,7 @@ class ItemAuctionInstance
     end
 
     def to_s(io : IO)
-      self.class.to_s(io)
+      io << {{@type.stringify}}
     end
   end
 
@@ -322,12 +322,12 @@ class ItemAuctionInstance
     ending_time = 0i64
     auction_state_id = 0i8
     found = false
-    GameDB.each(SELECT_AUCTION_INFO, auction_id) do |rs|
+    GameDB.query_each(SELECT_AUCTION_INFO, auction_id) do |rs|
       found = true
-      auction_item_id = rs.get_i32(1)
-      starting_time = rs.get_i64(2)
-      ending_time = rs.get_i64(3)
-      auction_state_id = rs.get_i8(4)
+      auction_item_id = rs.read(Int32)
+      starting_time = rs.read(Int64)
+      ending_time = rs.read(Int64)
+      auction_state_id = rs.read(Int8)
     end
     unless found
       warn { "Auction data not found for auction id #{auction_id}." }
@@ -359,9 +359,9 @@ class ItemAuctionInstance
     end
 
     auction_bids = [] of ItemAuctionBid
-    GameDB.each(SELECT_PLAYERS_ID_BY_AUCTION_ID, auction_id) do |rs|
-      player_l2id = rs.get_i32(1)
-      player_bid = rs.get_i64(2)
+    GameDB.query_each(SELECT_PLAYERS_ID_BY_AUCTION_ID, auction_id) do |rs|
+      player_l2id = rs.read(Int32)
+      player_bid = rs.read(Int64)
       bid = ItemAuctionBid.new(player_l2id, player_bid)
       auction_bids << bid
     end
@@ -370,6 +370,6 @@ class ItemAuctionInstance
   end
 
   def to_s(io : IO)
-    self.class.to_s(io)
+    io << {{@type.stringify}}
   end
 end

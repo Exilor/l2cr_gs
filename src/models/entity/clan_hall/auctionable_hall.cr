@@ -1,7 +1,7 @@
 require "../clan_hall"
 
 class AuctionableHall < ClanHall
-  @ch_rate = 604800000
+  @ch_rate = 604_800_000
 
   getter lease : Int32
   getter paid_until : Int64
@@ -96,8 +96,8 @@ class AuctionableHall < ClanHall
         sm.add_int(lease)
         clan.broadcast_to_online_members(sm)
 
-        if time + (3_600_000 * 24) <= @paid_until + @ch_rate
-          ThreadPoolManager.schedule_general(->fee_task, time + (3_600_000 * 24))
+        if time + (3_600_000 &* 24) <= @paid_until + @ch_rate
+          ThreadPoolManager.schedule_general(->fee_task, time + (3_600_000 &* 24))
         else
           ThreadPoolManager.schedule_general(->fee_task, (@paid_until + @ch_rate) - time)
         end

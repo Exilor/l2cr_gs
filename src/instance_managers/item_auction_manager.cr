@@ -15,8 +15,8 @@ module ItemAuctionManager
 
     begin
       sql = "SELECT auctionId FROM item_auction ORDER BY auctionId DESC LIMIT 0, 1"
-      GameDB.each(sql) do |rs|
-        AUCTION_IDS.set(rs.get_i32(1) + 1)
+      GameDB.query_each(sql) do |rs|
+        AUCTION_IDS.set(rs.read(Int32) + 1)
       end
     rescue e
       error e

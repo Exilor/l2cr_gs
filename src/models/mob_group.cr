@@ -17,15 +17,15 @@ class MobGroup
     ai = mobs[0].ai
 
     case ai.as(L2ControllableMobAI).alternate_ai
-    when L2ControllableMobAI::AI_NORMAL
+    when L2ControllableMobAI::AlternateAI::NORMAL
       "Idle"
-    when L2ControllableMobAI::AI_FORCEATTACK
+    when L2ControllableMobAI::AlternateAI::FORCE_ATTACK
       "Force Attacking"
-    when L2ControllableMobAI::AI_FOLLOW
+    when L2ControllableMobAI::AlternateAI::FOLLOW
       "Following"
-    when L2ControllableMobAI::AI_CAST
+    when L2ControllableMobAI::AlternateAI::CAST
       "Casting"
-    when L2ControllableMobAI::AI_ATTACK_GROUP
+    when L2ControllableMobAI::AlternateAI::ATTACK_GROUP
       "Attacking Group"
     else
       "Idle"
@@ -126,7 +126,7 @@ class MobGroup
 
     mobs.each do |mob_inst|
       ai = mob_inst.ai.as(L2ControllableMobAI)
-      ai.alternate_ai = L2ControllableMobAI::AI_NORMAL
+      ai.alternate_ai = L2ControllableMobAI::AlternateAI::NORMAL
       ai.intention = AI::ACTIVE
     end
   end
@@ -173,7 +173,7 @@ class MobGroup
 
     mobs.each do |mob_inst|
       ai = mob_inst.ai.as(L2ControllableMobAI)
-      ai.alternate_ai = L2ControllableMobAI::AI_CAST
+      ai.alternate_ai = L2ControllableMobAI::AlternateAI::CAST
     end
   end
 

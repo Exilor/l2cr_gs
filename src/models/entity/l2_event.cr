@@ -24,10 +24,6 @@ module L2Event
   class_property teams_number : Int32 = 0
 
   def get_player_team_id(pc : L2PcInstance) : Int32
-    if pc.nil?
-      return -1
-    end
-
     TEAMS.each do |team_id, team|
       if team.includes?(pc)
         return team_id
@@ -116,9 +112,7 @@ module L2Event
   end
 
   def participant?(pc : L2PcInstance) : Bool
-    if pc.nil? || pc.event_status.nil?
-      return false
-    end
+    return false unless pc.event_status
 
     case @@event_state
     when EventState::OFF
@@ -136,7 +130,7 @@ module L2Event
     false
   end
 
-  def register_player(pc)
+  def register_player(pc : L2PcInstance)
     unless @@event_state.standby?
       pc.send_message("The registration period for this event is over.")
       return
@@ -149,7 +143,7 @@ module L2Event
     end
   end
 
-  def remove_and_reset_player(pc)
+  def remove_and_reset_player(pc : L2PcInstance)
     if participant?(pc)
       if pc.dead?
         pc.restore_exp(100.0)
@@ -182,7 +176,7 @@ module L2Event
     error e
   end
 
-  def save_player_event_status(pc)
+  def save_player_event_status(pc : L2PcInstance)
     CONNECTION_LOSS_DATA[pc] = pc.event_status
   end
 
@@ -279,9 +273,7 @@ module L2Event
           end
         end
 
-        unless toplvl_pc
-          next
-        end
+        next unless toplvl_pc
 
         REGISTERED_PLAYERS.delete_first(toplvl_pc)
         TEAMS[i &+ 1] << toplvl_pc

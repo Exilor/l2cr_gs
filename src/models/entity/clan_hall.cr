@@ -46,11 +46,7 @@ abstract class ClanHall
   end
 
   def get_door(door_id : Int32) : L2DoorInstance?
-    if door_id < 0
-      return
-    end
-
-    doors.find { |door| door.id == door_id }
+    doors.find { |door| door.id == door_id } unless door_id < 0
   end
 
   def get_function(type : Int32) : ClanHallFunction?
@@ -70,8 +66,7 @@ abstract class ClanHall
   end
 
   def owner=(clan : L2Clan?)
-    return unless clan
-    return if @owner_id > 0
+    return if clan.nil? || @owner_id > 0
 
     @owner_id = clan.id
     @free = false
@@ -142,9 +137,7 @@ abstract class ClanHall
   end
 
   def update_functions(pc : L2PcInstance?, type : Int32, lvl : Int32, lease : Int32, rate : Int64, add_new : Bool) : Bool
-    unless pc
-      return false
-    end
+    return false unless pc
 
     if lease > 0
       unless pc.destroy_item_by_item_id("Consume", Inventory::ADENA_ID, lease.to_i64, nil, true)

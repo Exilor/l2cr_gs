@@ -3,7 +3,7 @@ class FuncGatesPDefMod < AbstractFunction
     super(Stats::POWER_DEFENCE)
   end
 
-  def calc(effector, effected, skill, value)
+  def calc(effector : L2Character, effected : L2Character?, skill : Skill?, value : Float64) : Float64
     case SevenSigns.instance.get_seal_owner(SevenSigns::SEAL_STRIFE)
     when SevenSigns::CABAL_DAWN
       value *= Config.alt_siege_dawn_gates_pdef_mult

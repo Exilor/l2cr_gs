@@ -18,9 +18,9 @@ module PartyMatchWaitingList
   def find_players(min_lvl : Int32, max_lvl : Int32, classes : Set(Int32), filter : String) : Array(L2PcInstance)
     PLAYERS.select do |pc|
       pc.level.between?(min_lvl, max_lvl) &&
-      (classes.empty? || classes.includes?(pc.class_id.to_i)) &&
-      (filter.empty? || pc.name.downcase.includes?(filter.downcase)) &&
-      pc.party_waiting?
+        (classes.empty? || classes.includes?(pc.class_id.to_i)) &&
+        (filter.empty? || pc.name.downcase.includes?(filter.downcase)) &&
+        pc.party_waiting?
     end
   end
 end

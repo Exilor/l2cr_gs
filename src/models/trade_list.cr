@@ -241,7 +241,7 @@ class TradeList
 
     @items.each do |it|
       item = @owner.check_item_manipulation(it.l2id, it.count, "transfer")
-      if !item || item.count < 1
+      if item.nil? || item.count < 1
         warn { "Invalid item in TradeList: #{it}." }
         return false
       end

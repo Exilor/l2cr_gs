@@ -35,9 +35,7 @@ class Siege
   end
 
   def end_siege
-    unless in_progress?
-      return
-    end
+    return unless in_progress?
 
     sm = SystemMessage.siege_of_s1_has_ended
     sm.add_castle_id(castle.residence_id)
@@ -69,19 +67,13 @@ class Siege
     end
 
     attacker_clans.each do |attacker_clan|
-      unless clan = ClanTable.get_clan(attacker_clan.clan_id)
-        next
-      end
-
+      next unless clan = ClanTable.get_clan(attacker_clan.clan_id)
       clan.clear_siege_kills
       clan.clear_siege_deaths
     end
 
     defender_clans.each do |defender_clan|
-      unless clan = ClanTable.get_clan(defender_clan.clan_id)
-        next
-      end
-
+      next unless clan = ClanTable.get_clan(defender_clan.clan_id)
       clan.clear_siege_kills
       clan.clear_siege_deaths
     end
@@ -107,39 +99,28 @@ class Siege
   end
 
   private def remove_defender(sc : L2SiegeClan?)
-    if sc
-      defender_clans.delete_first(sc)
-    end
+    defender_clans.delete_first(sc) if sc
   end
 
   private def remove_attacker(sc : L2SiegeClan?)
-    if sc
-      attacker_clans.delete_first(sc)
-    end
+    attacker_clans.delete_first(sc) if sc
   end
 
   private def add_defender(sc : L2SiegeClan?, type : SiegeClanType)
-    unless sc
-      return
-    end
+    return unless sc
 
     sc.type = type
     defender_clans << sc
   end
 
   private def add_attacker(sc : L2SiegeClan?)
-    unless sc
-      return
-    end
-
+    return unless sc
     sc.type = SiegeClanType::ATTACKER
     attacker_clans << sc
   end
 
   def mid_victory
-    unless in_progress?
-      return
-    end
+    return unless in_progress?
 
     if castle.owner_id > 0
       @siege_guard_manager.remove_mercs
@@ -203,9 +184,7 @@ class Siege
   end
 
   def start_siege
-    if in_progress?
-      return
-    end
+    return if in_progress?
 
     @first_owner_clan_id = castle.owner_id
 
@@ -259,9 +238,7 @@ class Siege
       end
     end
 
-    unless both_sides
-      return
-    end
+    return unless both_sides
 
     attacker_clans.each do |siege_clan|
       clan = ClanTable.get_clan(siege_clan.clan_id).not_nil!
@@ -334,10 +311,7 @@ class Siege
   end
 
   def approve_siege_defender_clan(clan_id : Int32)
-    if clan_id <= 0
-      return
-    end
-
+    return if clan_id <= 0
     save_siege_clan(ClanTable.get_clan(clan_id).not_nil!, DEFENDER, true)
     load_siege_clan
   end
@@ -449,9 +423,7 @@ class Siege
   end
 
   def register_attacker(pc : L2PcInstance, force : Bool)
-    unless clan = pc.clan
-      return
-    end
+    return unless clan = pc.clan
 
     ally_id = 0
     if castle.owner_id != 0
@@ -506,9 +478,7 @@ class Siege
   end
 
   def remove_siege_clan(clan_id : Int32)
-    if clan_id <= 0
-      return
-    end
+    return if clan_id <= 0
 
     sql = "DELETE FROM siege_clans WHERE castle_id=? and clan_id=?"
     GameDB.exec(sql, castle.residence_id, clan_id)
@@ -519,17 +489,9 @@ class Siege
   end
 
   def remove_siege_clan(clan : L2Clan?)
-    unless clan
-      return
-    end
-
-    if clan.castle_id == castle.residence_id
-      return
-    end
-
-    unless SiegeManager.registered?(clan, castle.residence_id)
-      return
-    end
+    return unless clan
+    return if clan.castle_id == castle.residence_id
+    return unless SiegeManager.registered?(clan, castle.residence_id)
 
     remove_siege_clan(clan.id)
   end
@@ -569,10 +531,7 @@ class Siege
 
     if players
       players.each do |pc|
-        if pc.override_castle_conditions? || pc.jailed?
-          next
-        end
-
+        next if pc.override_castle_conditions? || pc.jailed?
         pc.tele_to_location(where)
       end
     end
@@ -615,7 +574,7 @@ class Siege
       pc.send_packet(SystemMessageId::APPLICATION_DENIED_BECAUSE_ALREADY_SUBMITTED_A_REQUEST_FOR_ANOTHER_SIEGE_BATTLE)
     when type_id == ATTACKER && attacker_clans.size >= SiegeManager.attacker_max_clans
       pc.send_packet(SystemMessageId::ATTACKER_SIDE_FULL)
-    when (type_id == DEFENDER || type_id == DEFENDER_NOT_APPROVED || type_id == OWNER) && defender_clans.size + defender_waiting_clans.size >= SiegeManager.defender_max_clans
+    when type_id.in?(DEFENDER, DEFENDER_NOT_APPROVED, OWNER) && defender_clans.size + defender_waiting_clans.size >= SiegeManager.defender_max_clans
       pc.send_packet(SystemMessageId::DEFENDER_SIDE_FULL)
     else
       return true
@@ -626,22 +585,12 @@ class Siege
 
   def already_registered_for_same_day?(clan : L2Clan) : Bool
     SiegeManager.sieges.each do |siege|
-      if siege == self
-        next
-      end
+      next if siege == self
 
       if siege.siege_date.day == siege_date.day
-        if siege.attacker?(clan)
-          return true
-        end
-
-        if siege.defender?(clan)
-          return true
-        end
-
-        if siege.defender_waiting?(clan)
-          return true
-        end
+        return true if siege.attacker?(clan)
+        return true if siege.defender?(clan)
+        return true if siege.defender_waiting?(clan)
       end
     end
 
@@ -729,9 +678,7 @@ class Siege
   end
 
   private def save_siege_clan(clan : L2Clan, type_id : Int, update_registration : Bool)
-    if clan.castle_id > 0
-      return
-    end
+    return if clan.castle_id > 0
 
     case type_id
     when DEFENDER, DEFENDER_NOT_APPROVED, OWNER
@@ -739,9 +686,7 @@ class Siege
         return
       end
     else
-      if attacker_clans.size >= SiegeManager.attacker_max_clans
-        return
-      end
+      return if attacker_clans.size >= SiegeManager.attacker_max_clans
     end
 
     if !update_registration
@@ -760,7 +705,6 @@ class Siege
     when DEFENDER_NOT_APPROVED
       add_defender_waiting(clan.id)
     end
-
   rescue e
     error e
   end
@@ -894,16 +838,11 @@ class Siege
 
   def end_time_registration(automatic : Bool)
     castle.time_registration_over = true
-
-    unless automatic
-      save_siege_date
-    end
+    save_siege_date unless automatic
   end
 
   def get_flag(clan : L2Clan?) : Array(L2Npc)?
-    unless clan
-      return
-    end
+    return unless clan
 
     if sc = get_attacker_clan(clan)
       sc.flag
@@ -929,9 +868,7 @@ class Siege
   #
 
   private def schedule_end_siege_task
-    unless in_progress?
-      return
-    end
+    return unless in_progress?
 
     time = @siege_end_date.ms - Time.ms
     if time > 3_600_000
@@ -941,22 +878,22 @@ class Siege
       ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 3_600_000)
     elsif time <= 3_600_000 && time > 600_000
       sm = SystemMessage.s1_minutes_until_siege_conclusion
-      sm.add_int(time / 60_000)
+      sm.add_int(time // 60_000)
       announce_to_player(sm, true)
       ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 600_000)
     elsif time <= 600_000 && time > 300_000
       sm = SystemMessage.s1_minutes_until_siege_conclusion
-      sm.add_int(time / 60_000)
+      sm.add_int(time // 60_000)
       announce_to_player(sm, true)
       ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 300_000)
     elsif time <= 300_000 && time > 10_000
       sm = SystemMessage.s1_minutes_until_siege_conclusion
-      sm.add_int(time / 60_000)
+      sm.add_int(time // 60_000)
       announce_to_player(sm, true)
       ThreadPoolManager.schedule_general(->schedule_end_siege_task, time - 10_000)
     elsif time <= 10_000 && time > 0
       sm = SystemMessage.castle_siege_s1_seconds_left
-      sm.add_int(time / 1000)
+      sm.add_int(time // 1000)
       announce_to_player(sm, true)
       ThreadPoolManager.schedule_general(->schedule_end_siege_task, time)
     else
@@ -968,9 +905,7 @@ class Siege
 
   private def schedule_start_siege_task
     @scheduled_start_siege_task.try &.cancel
-    if in_progress?
-      return
-    end
+    return if in_progress?
 
     unless time_registration_over?
       time = time_registration_over_date.ms - Time.ms
@@ -1007,6 +942,6 @@ class Siege
   end
 
   def to_s(io : IO)
-    io.print(self.class, '(', castle.name, ')')
+    io.print({{@type.stringify + "("}}, castle.name, ')')
   end
 end

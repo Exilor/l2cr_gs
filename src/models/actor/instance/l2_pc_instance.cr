@@ -3514,7 +3514,7 @@ class L2PcInstance < L2Playable
   end
 
   def trap! : L2TrapInstance
-    trap || raise("Player #{name} has no trap")
+    trap || raise "Player #{name} has no trap"
   end
 
   def in_looter_party?(looter_id : Int32) : Bool

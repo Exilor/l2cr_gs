@@ -121,7 +121,7 @@ module AdminCommandHandler::AdminPunishment
         end
 
         unless reason.empty?
-          reason = reason.gsub("\\$", "\\\\\\$")
+          reason = reason.gsub("\$", "\\\\\$")
           reason = reason.gsub("\r\n", "<br1>")
           reason = reason.sub("<", "&lt;")
           reason = reason.sub(">", "&gt;")

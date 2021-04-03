@@ -17,7 +17,7 @@ module DimensionalRiftManager
 
   def get_room(type : Int8, room : Int8) : DimensionalRiftRoom
     ROOMS.dig?(type, room) ||
-    raise("Room with type #{type} and room #{room} not found")
+      raise "Room with type #{type} and room #{room} not found"
   end
 
   private def load_rooms

@@ -54,9 +54,7 @@ class L2Npc < L2Character
     @collision_radius = template.f_collision_radius
     self.flying = template.flying?
 
-    template.skills.each_value do |skill|
-      add_skill(skill)
-    end
+    template.skills.each_value { |skill| add_skill(skill) }
 
     init_char_status_update_values
   end
@@ -207,11 +205,7 @@ class L2Npc < L2Character
   end
 
   def castle : Castle
-    unless castle = castle?
-      raise "No castle found for #{self}"
-    end
-
-    castle
+    castle? || raise "No castle found for #{self}"
   end
 
   def get_castle(max_dst : Int64) : Castle?
@@ -238,11 +232,7 @@ class L2Npc < L2Character
   end
 
   def fort : Fort
-    unless fort = fort?
-      raise "This NPC has no fort."
-    end
-
-    fort
+    fort? || raise "No fort found for #{self}."
   end
 
   def get_fort(max_dst : Int64) : Fort?
@@ -705,8 +695,8 @@ class L2Npc < L2Character
     item = nil
 
     count.times do
-      new_x = x + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
-      new_y = y + Rnd.rand((RANDOM_ITEM_DROP_LIMIT * 2) + 1) - RANDOM_ITEM_DROP_LIMIT
+      new_x = x + Rnd.rand((RANDOM_ITEM_DROP_LIMIT &* 2) &+ 1) - RANDOM_ITEM_DROP_LIMIT
+      new_y = y + Rnd.rand((RANDOM_ITEM_DROP_LIMIT &* 2) &+ 1) - RANDOM_ITEM_DROP_LIMIT
       new_z = z + 20
 
       unless ItemTable[item_id]?

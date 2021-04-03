@@ -283,6 +283,18 @@ class LoginServerThread
     error e
   end
 
+  def send_mail(account : String, mail_id : String, *args : String)
+    send_packet(SendMail.new(account, mail_id, args.to_slice))
+  rescue e
+    error e
+  end
+
+  def send_temp_ban(account : String, ip : String, time : Int64)
+    send_packet(TempBan.new(account, ip, time))
+  rescue e
+    error e
+  end
+
   def status_string : String
     ServerStatus::STATUS_STRING[@status]
   end
@@ -292,7 +304,7 @@ class LoginServerThread
   end
 
   def to_s(io : IO)
-    self.class.to_s(io)
+    io << {{@type.stringify}}
   end
 end
 

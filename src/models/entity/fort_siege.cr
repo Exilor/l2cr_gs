@@ -274,9 +274,7 @@ class FortSiege
   end
 
   def killed_commander(instance : L2FortCommanderInstance)
-    if @commanders.empty?
-      return
-    end
+    return if @commanders.empty?
 
     if sp = instance.spawn?
       commanders = FortSiegeManager.get_commander_spawn_list(fort.residence_id)
@@ -311,10 +309,7 @@ class FortSiege
         end
 
         fort.doors.each do |door|
-          if door.show_hp?
-            next
-          end
-
+          next if door.show_hp?
           door.open_me
         end
 
@@ -333,17 +328,11 @@ class FortSiege
   end
 
   def killed_flag(flag : L2Npc?)
-    unless flag
-      return
-    end
-
-    attacker_clans.each &.remove_flag(flag)
+    attacker_clans.each &.remove_flag(flag) if flag
   end
 
   def add_attacker(pc : L2PcInstance, check_conditions : Bool) : Int32
-    unless clan = pc.clan
-      return 0
-    end
+    return 0 unless clan = pc.clan
 
     if check_conditions
       case
@@ -427,9 +416,7 @@ class FortSiege
   end
 
   def check_auto_task
-    if @siege_start_task
-      return
-    end
+    return if @siege_start_task
 
     delay = fort.siege_date.ms - Time.ms
 
@@ -468,9 +455,7 @@ class FortSiege
   end
 
   def start_auto_task(set_time : Bool)
-    if @siege_start_task
-      return
-    end
+    return if @siege_start_task
 
     if set_time
       set_siege_date_time(false)
@@ -495,10 +480,7 @@ class FortSiege
     end
 
     players.each do |pc|
-      if pc.override_fortress_conditions? || pc.jailed?
-        next
-      end
-
+      next if pc.override_fortress_conditions? || pc.jailed?
       pc.tele_to_location(where)
     end
   end
@@ -509,9 +491,7 @@ class FortSiege
 
   def already_registered_for_same_day?(clan : L2Clan) : Bool
     FortSiegeManager.sieges.each do |siege|
-      if siege == self
-        next
-      end
+      next if siege == self
 
       if siege.siege_date.day == siege_date.day
         if siege.attacker?(clan)
@@ -629,9 +609,7 @@ class FortSiege
   end
 
   def get_attacker_clan(clan : L2Clan?) : L2SiegeClan?
-    if clan
-      get_attacker_clan(clan.id)
-    end
+    get_attacker_clan(clan.id) if clan
   end
 
   def get_attacker_clan(clan_id : Int32) : L2SiegeClan?
@@ -695,10 +673,7 @@ class FortSiege
   #
 
   private def schedule_end_siege_task
-    unless in_progress?
-      return
-    end
-
+    return unless in_progress?
     @siege_end = nil
     end_siege
   rescue e
@@ -763,20 +738,14 @@ class FortSiege
   end
 
   private def schedule_suspicious_merchant_spawn
-    if in_progress?
-      return
-    end
-
+    return if in_progress?
     @fort.spawn_suspicious_merchant
   rescue e
     error e
   end
 
   private def schedule_siege_restore
-    unless in_progress?
-      return
-    end
-
+    return unless in_progress?
     @siege_restore = nil
     reset_siege
     announce_to_player(SystemMessageId::BARRACKS_FUNCTION_RESTORED)
@@ -785,6 +754,6 @@ class FortSiege
   end
 
   def to_s(io : IO)
-    io.print(self.class, '(', fort.name, ')')
+    io.print({{@type.stringify + "("}}, fort.name, ')')
   end
 end

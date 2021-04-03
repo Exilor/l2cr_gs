@@ -1,4 +1,4 @@
-class TvTEventTeleporter
+struct TvTEventTeleporter
   def initialize(pc : L2PcInstance, coordinates : Slice(Int32), fast_schedule : Bool, admin_remove : Bool)
     @pc = pc
     @coordinates = coordinates
@@ -28,7 +28,6 @@ class TvTEventTeleporter
 
     if @pc.in_duel?
       @pc.duel_state = DuelState::INTERRUPTED
-
     end
 
     tvt_instance = TvTEvent.tvt_event_instance
@@ -52,15 +51,7 @@ class TvTEventTeleporter
     )
 
     if TvTEvent.started? && !@admin_remove
-      team_id = TvTEvent.get_participant_team_id(@pc.l2id) + 1
-      case team_id
-      when 0
-        @pc.team = Team::NONE
-      when 1
-        @pc.team = Team::BLUE
-      when 2
-        @pc.team = Team::RED
-      end
+      @pc.team = Team[TvTEvent.get_participant_team_id(@pc.l2id) + 1]
     else
       @pc.team = Team::NONE
     end

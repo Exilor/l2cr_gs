@@ -343,12 +343,11 @@ module NpcData
             end
 
             ai_skill_scopes.each do |scope|
-              ai_skills = ai_skill_lists[scope]?
-              unless ai_skills
-                ai_skills = [] of Skill
-                ai_skill_lists[scope] = ai_skills
+              if ai_skills = ai_skill_lists[scope]?
+                ai_skills << skill
+              else
+                ai_skill_lists[scope] = [skill]
               end
-              ai_skills << skill
             end
           end
           template.skills = skills
@@ -478,7 +477,7 @@ module NpcData
     end
 
     def to_s(io : IO)
-      self.class.to_s(io)
+      io << "MinionData"
     end
   end
 

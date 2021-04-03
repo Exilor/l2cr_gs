@@ -606,9 +606,8 @@ class L2Clan
           sql = "UPDATE clan_skills SET skill_level=? WHERE skill_id=? AND clan_id=?"
           GameDB.exec(sql, new_skill.level, old_skill.id, id)
         else
-          sql = "INSERT INTO clan_skills (clan_id,skill_id,skill_level,skill_name,sub_pledge_id) VALUES (?,?,?,?,?)"
           GameDB.exec(
-            sql,
+            "INSERT INTO clan_skills (clan_id,skill_id,skill_level,skill_name,sub_pledge_id) VALUES (?,?,?,?,?)",
             id,
             new_skill.id,
             new_skill.level,
@@ -757,11 +756,11 @@ class L2Clan
     end
   end
 
-  def at_war_with?(clan : self) : Bool
-    at_war_with?(clan.id)
+  def at_war_with?(clan : self?) : Bool
+    !!clan && at_war_with?(clan.id)
   end
 
-  def at_war_with?(id) : Bool
+  def at_war_with?(id : Int32) : Bool
     @at_war_with.includes?(id)
   end
 
@@ -769,7 +768,7 @@ class L2Clan
     at_war_attacker?(clan.id)
   end
 
-  def at_war_attacker?(id) : Bool
+  def at_war_attacker?(id : Int32) : Bool
     @at_war_attackers.includes?(id)
   end
 
@@ -969,7 +968,7 @@ class L2Clan
   end
 
   def initialize_privs
-    (1...10).each do |i|
+    1.upto(9) do |i|
       @privs[i] = RankPrivs.new(i, 0, EnumSet(ClanPrivilege).new(false))
     end
   end
@@ -1127,12 +1126,15 @@ class L2Clan
   def check_ally_join_condition(pc : L2PcInstance?, target : L2PcInstance?) : Bool
     return false unless pc
 
-    if pc.ally_id == 0 || !pc.clan_leader? || pc.clan_id != pc.ally_id
+    unless leader_clan = pc.clan
       pc.send_packet(SystemMessageId::FEATURE_ONLY_FOR_ALLIANCE_LEADER)
       return false
     end
 
-    leader_clan = pc.clan.not_nil!
+    if pc.ally_id == 0 || !pc.clan_leader? || pc.clan_id != pc.ally_id
+      pc.send_packet(SystemMessageId::FEATURE_ONLY_FOR_ALLIANCE_LEADER)
+      return false
+    end
 
     if leader_clan.ally_penalty_expiry_time > Time.ms
       if leader_clan.ally_penalty_type == PENALTY_TYPE_DISMISS_CLAN
@@ -1313,31 +1315,31 @@ class L2Clan
 
     case level
     when 0
-      if pc.sp >= 20000 && pc.adena >= 650000
-        if pc.reduce_adena("ClanLvl", 650000, pc.target, true)
-          pc.sp -= 20000
+      if pc.sp >= 20_000 && pc.adena >= 650_000
+        if pc.reduce_adena("ClanLvl", 650_000, pc.target, true)
+          pc.sp &-= 20_000
           sm = SystemMessage.sp_decreased_s1
-          sm.add_int(20000)
+          sm.add_int(20_000)
           pc.send_packet(sm)
           increase_clan_level = true
         end
       end
     when 1
-      if pc.sp >= 100000 && pc.adena >= 2500000
-        if pc.reduce_adena("ClanLvl", 2500000, pc.target, true)
-          pc.sp -= 100000
+      if pc.sp >= 100_000 && pc.adena >= 2_500_000
+        if pc.reduce_adena("ClanLvl", 2_500_000, pc.target, true)
+          pc.sp &-= 100_000
           sm = SystemMessage.sp_decreased_s1
-          sm.add_int(100000)
+          sm.add_int(100_000)
           pc.send_packet(sm)
           increase_clan_level = true
         end
       end
     when 2
-      if pc.sp >= 350000 && pc.inventory.get_item_by_item_id(1419)
+      if pc.sp >= 350_000 && pc.inventory.get_item_by_item_id(1419)
         if pc.destroy_item_by_item_id("ClanLvl", 1419, 1, pc.target, false)
-          pc.sp -= 350000
+          pc.sp &-= 350_000
           sm = SystemMessage.sp_decreased_s1
-          sm.add_int(350000)
+          sm.add_int(350_000)
           pc.send_packet(sm)
           sm = SystemMessage.s1_disappeared
           sm.add_item_name(1419)
@@ -1346,11 +1348,11 @@ class L2Clan
         end
       end
     when 3
-      if pc.sp >= 1000000 && pc.inventory.get_item_by_item_id(3874)
+      if pc.sp >= 1_000_000 && pc.inventory.get_item_by_item_id(3874)
         if pc.destroy_item_by_item_id("ClanLvl", 3874, 1, pc.target, false)
-          pc.sp -= 1000000
+          pc.sp &-= 1_000_000
           sm = SystemMessage.sp_decreased_s1
-          sm.add_int(1000000)
+          sm.add_int(1_000_000)
           pc.send_packet(sm)
           sm = SystemMessage.s1_disappeared
           sm.add_item_name(3874)
@@ -1359,11 +1361,11 @@ class L2Clan
         end
       end
     when 4
-      if pc.sp >= 2500000 && pc.inventory.get_item_by_item_id(3870)
+      if pc.sp >= 2_500_000 && pc.inventory.get_item_by_item_id(3870)
         if pc.destroy_item_by_item_id("ClanLvl", 3870, 1, pc.target, false)
-          pc.sp -= 2500000
+          pc.sp &-= 2_500_000
           sm = SystemMessage.sp_decreased_s1
-          sm.add_int(2500000)
+          sm.add_int(2_500_000)
           pc.send_packet(sm)
           sm = SystemMessage.s1_disappeared
           sm.add_item_name(3870)
@@ -1614,11 +1616,11 @@ class L2Clan
   end
 
   def add_siege_kill: Int32
-    @siege_kills.add(1) + 1
+    @siege_kills.add(1) &+ 1
   end
 
   def add_siege_death: Int32
-    @siege_deaths.add(1) + 1
+    @siege_deaths.add(1) &+ 1
   end
 
   def clear_siege_kills

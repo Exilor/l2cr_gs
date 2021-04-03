@@ -11,7 +11,7 @@ struct ZoneNPoly < L2ZoneForm
   end
 
   def inside_zone?(x : Int32, y : Int32, z : Int32) : Bool
-    @p.contains?(x, y) && z.between?(@z1, @z2)
+    z.between?(@z1, @z2) && @p.contains?(x, y)
   end
 
   def intersects_rectangle?(ax1 : Int32, ax2 : Int32, ay1 : Int32, ay2 : Int32) : Bool

@@ -48,9 +48,7 @@ class Castle < AbstractResidence
 
   def engrave(clan : L2Clan, target : L2Object)
     sync do
-      unless @artefacts.includes?(target)
-        return
-      end
+      return unless @artefacts.includes?(target)
 
       self.owner = clan
       sm = SystemMessage.clan_s1_engraved_ruler
@@ -60,9 +58,7 @@ class Castle < AbstractResidence
   end
 
   def add_to_treasury(amount : Int64)
-    if owner_id <= 0
-      return
-    end
+    return if owner_id <= 0
 
     if name.casecmp?("Schuttgart") || name.casecmp?("Goddard")
       if rune = CastleManager.get_castle("rune")
@@ -88,21 +84,17 @@ class Castle < AbstractResidence
   end
 
   def add_to_treasury_no_tax(amount : Int64) : Bool
-    if owner_id <= 0
-      return false
-    end
+    return false if owner_id <= 0
 
     if amount < 0
       amount = amount.abs
-      if @treasury < amount
-        return false
-      end
+      return false if @treasury < amount
       @treasury -= amount
     else
       if @treasury + amount > Inventory.max_adena
         @treasury = Inventory.max_adena
       else
-        @treasury += amount
+        @treasury &+= amount
       end
     end
 
@@ -135,10 +127,10 @@ class Castle < AbstractResidence
     end
 
     @zone.as?(L2SiegeZone) ||
-    raise("Couldn't find siege zone for castle with id #{residence_id}")
+      raise "Couldn't find siege zone for castle with id #{residence_id}"
   end
 
-  def residence_zone
+  def residence_zone : L2CastleZone
     super.as(L2CastleZone)
   end
 
@@ -153,7 +145,7 @@ class Castle < AbstractResidence
     end
 
     @tele_zone.as?(L2ResidenceTeleportZone) ||
-    raise("Couldn't find teleport zone for castle with id #{residence_id}")
+      raise "Couldn't find teleport zone for castle with id #{residence_id}"
   end
 
   def oust_all_players
@@ -173,9 +165,7 @@ class Castle < AbstractResidence
   end
 
   def open_close_door(pc : L2PcInstance, door_id : Int32, open : Bool)
-    if pc.clan_id != owner_id
-      return
-    end
+    return if pc.clan_id != owner_id
 
     if door = get_door(door_id)
       open ? door.open_me : door.close_me
@@ -261,8 +251,9 @@ class Castle < AbstractResidence
     @functions.clear
   end
 
-  def tax_percent=(@tax_percent : Int32)
-    @tax_rate = @tax_percent / 100.0
+  def tax_percent=(tax_percent : Int32)
+    @tax_percent = tax_percent
+    @tax_rate = tax_percent / 100.0
 
     sql = "UPDATE castle SET taxPercent = ? WHERE id = ?"
     GameDB.exec(sql, tax_percent, residence_id)
@@ -274,11 +265,11 @@ class Castle < AbstractResidence
     spawn_door(false)
   end
 
-  def spawn_door(is_door_weak : Bool)
+  def spawn_door(weak_door : Bool)
     @doors.each do |door|
       if door.dead?
         door.do_revive
-        door.current_hp = (is_door_weak ? door.max_hp / 2 : door.max_hp).to_f
+        door.current_hp = (weak_door ? door.max_hp / 2 : door.max_hp).to_f
       end
 
       if door.open?
@@ -310,9 +301,7 @@ class Castle < AbstractResidence
 
     @tax_rate = @tax_percent / 100.0
 
-    GameDB.each(sql2, residence_id) do |rs|
-      @owner_id = rs.get_i32(:"clan_id")
-    end
+    GameDB.each(sql2, residence_id) { |rs| @owner_id = rs.get_i32(:"clan_id") }
   rescue e
     error e
   end
@@ -414,9 +403,7 @@ class Castle < AbstractResidence
       get_door(door_id)
     end
 
-    unless door
-      raise "#set_door_upgrade: couldn't find door"
-    end
+    raise "#set_door_upgrade: couldn't find door" unless door
 
     door.stat.upgrade_hp_ratio = ratio
     door.max_hp!
@@ -455,32 +442,22 @@ class Castle < AbstractResidence
   end
 
   def get_door(door_id : Int32) : L2DoorInstance?
-    if door_id <= 0
-      return
-    end
-
-    doors.find { |door| door.id == door_id }
+    doors.find { |door| door.id == door_id } unless door_id <= 0
   end
 
   def owner? : L2Clan?
-    if @owner_id != 0
-      ClanTable.get_clan(@owner_id)
-    end
+    ClanTable.get_clan(@owner_id) if @owner_id != 0
   end
 
   def owner : L2Clan
-    unless owner = owner?
-      raise "This castle (#{self}) has no owner"
-    end
-
-    owner
+    owner? || raise "This castle (#{self}) has no owner"
   end
 
-  def siege
+  def siege #: Siege
     @siege ||= Siege.new(self)
   end
 
-  def time_registration_over_date
+  def time_registration_over_date : Calendar
     @siege_time_registration_end_date ||= Calendar.new
   end
 
@@ -492,9 +469,7 @@ class Castle < AbstractResidence
   end
 
   def update_clans_reputation
-    former_owner = @former_owner
-
-    if former_owner
+    if former_owner = @former_owner
       if former_owner != ClanTable.get_clan(owner_id).not_nil!
         max_reward = Math.max(0, former_owner.reputation_score)
         former_owner.take_reputation_score(Config.lose_castle_points, true)
@@ -520,7 +495,7 @@ class Castle < AbstractResidence
 
   def give_residential_skills(pc : L2PcInstance)
     territory = TerritoryWarManager.get_territory(residence_id)
-    if territory && territory.owned_ward_ids.includes?(residence_id + 80)
+    if territory && territory.owned_ward_ids.includes?(residence_id &+ 80)
       territory.owned_ward_ids.each do |ward_id|
         SkillTreesData.get_available_residential_skills(ward_id).each do |s|
           if sk = SkillData[s.skill_id, s.skill_level]?
@@ -536,8 +511,7 @@ class Castle < AbstractResidence
   end
 
   def remove_residential_skills(pc : L2PcInstance)
-    territory = TerritoryWarManager.get_territory(residence_id)
-    if territory
+    if territory = TerritoryWarManager.get_territory(residence_id)
       territory.owned_ward_ids.each do |ward_id|
         SkillTreesData.get_available_residential_skills(ward_id).each do |s|
           if sk = SkillData[s.skill_id, s.skill_level]?
@@ -559,10 +533,12 @@ class Castle < AbstractResidence
   def ticket_buy_count=(count : Int32)
     @ticket_buy_count = count
 
-    sql = "UPDATE castle SET ticketBuyCount = ? WHERE id = ?"
-    GameDB.exec(sql, count, residence_id)
-  rescue e
-    error e
+    begin
+      sql = "UPDATE castle SET ticketBuyCount = ? WHERE id = ?"
+      GameDB.exec(sql, count, residence_id)
+    rescue e
+      error e
+    end
   end
 
   def get_trap_upgrade_level(tower_index : Int32) : Int32
@@ -591,10 +567,12 @@ class Castle < AbstractResidence
   def remove_trap_upgrade
     SiegeManager.get_flame_towers(residence_id).each &.upgrade_level = 0
 
-    sql = "DELETE FROM castle_trapupgrade WHERE castleId=?"
-    GameDB.exec(sql, residence_id)
-  rescue e
-    error e
+    begin
+      sql = "DELETE FROM castle_trapupgrade WHERE castleId=?"
+      GameDB.exec(sql, residence_id)
+    rescue e
+      error e
+    end
   end
 
   private def init_residence_zone
@@ -626,7 +604,8 @@ class Castle < AbstractResidence
       @fee
     end
 
-    def lease=(@fee : Int32)
+    def lease=(fee : Int32)
+      @fee = fee
     end
 
     def end_time : Int64
@@ -638,9 +617,7 @@ class Castle < AbstractResidence
     end
 
     private def initialize_task(cwh : Bool)
-      if @castle.owner_id <= 0
-        return
-      end
+      return if @castle.owner_id <= 0
 
       time = Time.ms
       task = -> { function_task(cwh) }
@@ -653,9 +630,7 @@ class Castle < AbstractResidence
     end
 
     private def function_task(cwh : Bool)
-      if @castle.owner_id <= 0
-        return
-      end
+      return if @castle.owner_id <= 0
 
       clan = ClanTable.get_clan(@castle.owner_id).not_nil!
       ware = clan.warehouse

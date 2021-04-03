@@ -6,8 +6,8 @@ require "../../actor/known_list/null_known_list"
 class L2ItemInstance < L2Object
   UNCHANGED = 0
   ADDED = 1
-  REMOVED = 3
   MODIFIED = 2
+  REMOVED = 3
 
   DEFAULT_ENCHANT_OPTIONS = Slice.new(3, 0, read_only: true)
   private MANA_CONSUMPTION_RATE = 60_000

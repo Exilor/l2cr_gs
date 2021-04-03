@@ -158,6 +158,7 @@ struct BlockList
       return BlockList.blocked?(pc, target_id)
     end
 
-    (OFFLINE_LIST[owner_id] ||= BlockList.load_list(owner_id)).includes?(target_id)
+    OFFLINE_LIST.store_if_absent(owner_id) { BlockList.load_list(owner_id) }
+    .includes?(target_id)
   end
 end

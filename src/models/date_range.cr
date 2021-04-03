@@ -22,6 +22,6 @@ struct DateRange
   end
 
   def to_s(io : IO)
-    io.print(self.class, '(', start_date, "..", end_date, ')')
+    io.print({{@type.stringify + "("}}, start_date, "..", end_date, ')')
   end
 end

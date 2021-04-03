@@ -5,7 +5,7 @@ module SecondaryAuthData
   private FORBIDDEN_PASSWORDS = Set(String).new
 
   class_getter max_attempts = 5
-  class_getter ban_time = 480
+  class_getter ban_time = 480i64
   class_getter recovery_link = ""
   class_getter? enabled = false
 
@@ -25,7 +25,7 @@ module SecondaryAuthData
         when "maxAttempts"
           @@max_attempts = get_content(list_node).to_i
         when "banTime"
-          @@ban_time = get_content(list_node).to_i
+          @@ban_time = get_content(list_node).to_i64
         when "recoveryLink"
           @@recovery_link = get_content(list_node)
         when "forbiddenPasswords"
@@ -37,10 +37,6 @@ module SecondaryAuthData
     end
   rescue e
     error e
-  end
-
-  def forbidden_passwords : Set(String)
-    FORBIDDEN_PASSWORDS
   end
 
   def forbidden_password?(pass : String) : Bool

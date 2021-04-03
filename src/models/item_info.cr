@@ -13,7 +13,7 @@ struct ItemInfo
   getter mana = -1
   getter time = -9999
   getter location : Int32
-  getter attack_element_type = -2
+  getter attack_element_type = -2i8
   getter attack_element_power = 0
   getter enchant_options : Slice(Int32)
 
@@ -30,23 +30,18 @@ struct ItemInfo
       @augmentation_bonus = aug.augmentation_id
     end
 
-    @count = item.count.to_i64
+    @count = item.count
     @custom_type_1 = item.custom_type_1
     @custom_type_2 = item.custom_type_2
     @equipped = item.equipped? ? 1 : 0
 
-    case item.last_change
-    when L2ItemInstance::ADDED
-      @change = 1
-    when L2ItemInstance::MODIFIED
-      @change = 2
-    when L2ItemInstance::REMOVED
-      @change = 3
+    if item.last_change > 0
+      @change = item.last_change
     end
 
     @mana = item.mana
     @time = item.time_limited_item? ? (item.remaining_time // 1000).to_i : -9999
-    @attack_element_type = item.attack_element_type.to_i32
+    @attack_element_type = item.attack_element_type
     @attack_element_power = item.attack_element_power
     @elem_def_attr = {
       item.get_element_def_attr(0), item.get_element_def_attr(1),
@@ -66,7 +61,7 @@ struct ItemInfo
     @custom_type_1 = item.custom_type_1
     @custom_type_2 = item.custom_type_2
 
-    @attack_element_type = item.attack_element_type.to_i32
+    @attack_element_type = item.attack_element_type
     @attack_element_power = item.attack_element_power
     @elem_def_attr = {
       item.get_element_def_attr(0), item.get_element_def_attr(1),

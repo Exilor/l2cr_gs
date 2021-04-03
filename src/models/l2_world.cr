@@ -25,22 +25,22 @@ module L2World
   TILE_ZERO_COORD_X = 20
   TILE_ZERO_COORD_Y = 18
 
-  MAP_MIN_X = (TILE_X_MIN - TILE_ZERO_COORD_X) * TILE_SIZE
-  MAP_MIN_Y = (TILE_Y_MIN - TILE_ZERO_COORD_Y) * TILE_SIZE
+  MAP_MIN_X = (TILE_X_MIN &- TILE_ZERO_COORD_X) &* TILE_SIZE
+  MAP_MIN_Y = (TILE_Y_MIN &- TILE_ZERO_COORD_Y) &* TILE_SIZE
 
-  MAP_MAX_X = ((TILE_X_MAX - TILE_ZERO_COORD_X) + 1) * TILE_SIZE
-  MAP_MAX_Y = ((TILE_Y_MAX - TILE_ZERO_COORD_Y) + 1) * TILE_SIZE
+  MAP_MAX_X = ((TILE_X_MAX &- TILE_ZERO_COORD_X) &+ 1) &* TILE_SIZE
+  MAP_MAX_Y = ((TILE_Y_MAX &- TILE_ZERO_COORD_Y) &+ 1) &* TILE_SIZE
 
   # calculated offset used so top left region is 0,0
   OFFSET_X = (MAP_MIN_X >> SHIFT_BY).abs
   OFFSET_Y = (MAP_MIN_Y >> SHIFT_BY).abs
 
   # number of regions
-  REGIONS_X = (MAP_MAX_X >> SHIFT_BY) + OFFSET_X
-  REGIONS_Y = (MAP_MAX_Y >> SHIFT_BY) + OFFSET_Y
+  REGIONS_X = (MAP_MAX_X >> SHIFT_BY) &+ OFFSET_X
+  REGIONS_Y = (MAP_MAX_Y >> SHIFT_BY) &+ OFFSET_Y
 
-  private WORLD_REGIONS = Slice(Array(L2WorldRegion)).new(REGIONS_X + 1) do
-    Array(L2WorldRegion).new(REGIONS_Y + 1)
+  private WORLD_REGIONS = Slice(Array(L2WorldRegion)).new(REGIONS_X &+ 1) do
+    Array(L2WorldRegion).new(REGIONS_Y &+ 1)
   end
 
   private OBJECTS = Concurrent::Map(Int32, L2Object).new

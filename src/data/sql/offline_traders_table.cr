@@ -123,7 +123,7 @@ module OfflineTradersTable
           case type
           when .buy?
             GameDB.each(LOAD_OFFLINE_ITEMS, pc.l2id) do |items|
-              arg1, arg2, arg3 = items.get_i32(2), items.get_i64(3), items.get_i64(4)
+              arg1, arg2, arg3 = items.get_i32(:"item"), items.get_i64(:"count"), items.get_i64(:"price")
               unless pc.buy_list.add_item_by_item_id(arg1, arg2, arg3)
                 raise "add_item_by_item_id(#{arg1}, #{arg2}, #{arg3}) returned nil."
               end
@@ -132,7 +132,7 @@ module OfflineTradersTable
             pc.buy_list.title = rs.get_string(:"title")
           when .sell?, .package_sell?
             GameDB.each(LOAD_OFFLINE_ITEMS, pc.l2id) do |items|
-              arg1, arg2, arg3 = items.get_i32(2), items.get_i64(3), items.get_i64(4)
+              arg1, arg2, arg3 = items.get_i32(:"item"), items.get_i64(:"count"), items.get_i64(:"price")
               unless pc.sell_list.add_item(arg1, arg2, arg3)
                 raise "add_item_by_item_id(#{arg1}, #{arg2}, #{arg3}) returned nil."
               end
@@ -142,7 +142,7 @@ module OfflineTradersTable
             pc.sell_list.packaged = type.package_sell?
           when .manufacture?
             GameDB.each(LOAD_OFFLINE_ITEMS, pc.l2id) do |items|
-              arg1, arg2 = items.get_i32(2), items.get_i64(4)
+              arg1, arg2 = items.get_i32(:"item"), items.get_i64(:"price")
               pc.manufacture_items[arg1] = L2ManufactureItem.new(arg1, arg2)
             end
 

@@ -29,8 +29,8 @@ abstract class L2Summon < L2Playable
     self.instance_id = owner.instance_id
     self.show_summon_animation = true
     ai
-    x = owner.x + rand(-100..100)
-    y = owner.y + rand(-100..100)
+    x = owner.x + Rnd.rand(-100..100)
+    y = owner.y + Rnd.rand(-100..100)
     set_xyz_invisible(x, y, owner.z)
 
     template.skills.each_value { |skill| add_skill(skill) }

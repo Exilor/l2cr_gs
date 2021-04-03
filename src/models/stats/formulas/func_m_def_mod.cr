@@ -5,7 +5,7 @@ class FuncMDefMod < AbstractFunction
     super(Stats::MAGIC_DEFENCE)
   end
 
-  def calc(effector, effected, skill, value)
+  def calc(effector : L2Character, effected : L2Character?, skill : Skill?, value : Float64) : Float64
     if pc = effector.as?(L2PcInstance)
       inv = pc.inventory
       if pc.transformed?

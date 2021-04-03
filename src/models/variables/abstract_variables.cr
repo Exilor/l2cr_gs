@@ -59,6 +59,6 @@ abstract class AbstractVariables < StatsSet
   end
 
   def to_s(io)
-    self.class.to_s(io)
+    io << {{@type.stringify}}
   end
 end

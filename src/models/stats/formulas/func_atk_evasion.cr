@@ -3,7 +3,7 @@ class FuncAtkEvasion < AbstractFunction
     super(Stats::EVASION_RATE)
   end
 
-  def calc(effector, effected, skill, value)
+  def calc(effector : L2Character, effected : L2Character?, skill : Skill?, value : Float64) : Float64
     level = effector.level
     if effector.player?
       value += (Math.sqrt(effector.dex) * 6) + level

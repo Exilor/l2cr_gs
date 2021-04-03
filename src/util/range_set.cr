@@ -110,7 +110,7 @@ class RangeSet(T)
   end
 
   def to_s(io : IO)
-    io << self.class << " {"
+    io << {{@type.stringify + "{"}}
 
     r = @first
     while r
@@ -129,7 +129,7 @@ class RangeSet(T)
   end
 
   def inspect(io : IO)
-    io << self.class << " {"
+    io << {{@type.stringify + "{"}}
 
     r = @first
     while r

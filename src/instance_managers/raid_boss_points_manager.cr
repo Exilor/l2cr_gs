@@ -10,7 +10,7 @@ module RaidBossPointsManager
       char_id = rs.get_i32(:"charId")
       boss_id = rs.get_i32(:"boss_id")
       points = rs.get_i32(:"points")
-      values = LIST[char_id] ||= {} of Int32 => Int32
+      values = LIST.store_if_absent(char_id) { {} of Int32 => Int32 }
       values[boss_id] = points
     end
 
@@ -27,26 +27,18 @@ module RaidBossPointsManager
   end
 
   def add_points(pc : L2PcInstance, boss_id : Int32, points : Int32)
-    hash = LIST[pc.l2id] ||= {} of Int32 => Int32
-    hash[boss_id] ||= 0
-    hash[boss_id] += points
+    hash = LIST.store_if_absent(pc.l2id) { {} of Int32 => Int32 }
+    if hash.has_key?(boss_id)
+      hash[boss_id] += points
+    else
+      hash[boss_id] = points
+    end
     update_points_in_db(pc, boss_id, hash[boss_id])
   end
 
   def get_points_by_owner_id(owner_id : Int32) : Int32
-    tmp = LIST[owner_id]?
-
-    if tmp.nil? || tmp.empty?
-      return 0
-    end
-
-    total_points = 0
-
-    tmp.each_value do |points|
-      total_points += points
-    end
-
-    total_points
+    return 0 unless tmp = LIST[owner_id]?
+    tmp.sum(0) { |_, points| points }
   end
 
   def get_list(pc : L2PcInstance)
@@ -62,8 +54,7 @@ module RaidBossPointsManager
   end
 
   def calculate_ranking(l2id : Int32) : Int32
-    rank = rank_list
-    rank.fetch(l2id, 0)
+    rank_list.fetch(l2id, 0)
   end
 
   def rank_list : Hash(Int32, Int32)

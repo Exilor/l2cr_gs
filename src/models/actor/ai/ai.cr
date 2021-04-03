@@ -528,6 +528,6 @@ abstract class AI
   end
 
   def to_s(io : IO)
-    io.print(self.class.name, '(', actor.name, ')')
+    io.print({{@type.stringify + "("}}, actor.name, ')')
   end
 end

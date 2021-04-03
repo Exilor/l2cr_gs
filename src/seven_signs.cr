@@ -1014,7 +1014,7 @@ class SevenSigns
   end
 
   def to_s(io : IO)
-    self.class.to_s(io)
+    io << {{@type.stringify}}
   end
 end
 

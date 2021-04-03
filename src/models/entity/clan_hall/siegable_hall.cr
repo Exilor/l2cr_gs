@@ -118,10 +118,7 @@ class SiegableHall < ClanHall
   end
 
   def registered?(clan : L2Clan) : Bool
-    unless siege = siege?
-      return false
-    end
-
+    return false unless siege = siege?
     siege.attacker?(clan)
   end
 
@@ -141,7 +138,8 @@ class SiegableHall < ClanHall
     @status.waiting_battle?
   end
 
-  def update_siege_status(@status : SiegeStatus)
+  def update_siege_status(status : SiegeStatus)
+    @status = status
   end
 
   def update_siege_zone(active : Bool)

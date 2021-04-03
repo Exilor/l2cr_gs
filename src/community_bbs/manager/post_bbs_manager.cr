@@ -20,7 +20,7 @@ module PostBBSManager
   end
 
   def add_post_by_topic(topic : Topic, posts : Array(Post))
-    POSTS_BY_TOPIC[topic] ||= posts
+    POSTS_BY_TOPIC.store_if_absent(topic, posts)
   end
 
   def parse_cmd(command : String, pc : L2PcInstance)

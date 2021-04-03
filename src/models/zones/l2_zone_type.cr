@@ -205,6 +205,6 @@ abstract class L2ZoneType < ListenersContainer
   end
 
   def to_s(io : IO)
-    io.print(self.class, '(', @name, ' ', @id, ')')
+    io.print({{@type.stringify + "("}}, @name, ' ', @id, ')')
   end
 end

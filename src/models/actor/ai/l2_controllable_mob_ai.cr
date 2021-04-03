@@ -1,14 +1,17 @@
 require "../../mob_group"
 
 class L2ControllableMobAI < L2AttackableAI
-  AI_IDLE = 1
-  AI_NORMAL = 2
-  AI_FORCEATTACK = 3
-  AI_FOLLOW = 4
-  AI_CAST = 5
-  AI_ATTACK_GROUP = 6
+  enum AlternateAI : UInt8
+    NONE
+    IDLE
+    NORMAL
+    FORCE_ATTACK
+    FOLLOW
+    CAST
+    ATTACK_GROUP
+  end
 
-  property alternate_ai : Int32 = 0
+  property alternate_ai : AlternateAI = AlternateAI::NONE
   property! group_target : MobGroup?
   property! forced_target : L2Character?
   property? thinking : Bool = false
@@ -16,7 +19,7 @@ class L2ControllableMobAI < L2AttackableAI
 
   def initialize(creature : L2ControllableMobInstance)
     super
-    self.alternate_ai = AI_IDLE
+    self.alternate_ai = AlternateAI::IDLE
   end
 
   private def think_follow
@@ -33,25 +36,23 @@ class L2ControllableMobAI < L2AttackableAI
   end
 
   private def on_event_think
-    if thinking?
-      return
-    end
+    return if thinking?
 
     self.thinking = true
 
     begin
       case alternate_ai
-      when AI_IDLE
+      when AlternateAI::IDLE
         unless intention.active?
           set_intention(ACTIVE)
         end
-      when AI_FOLLOW
+      when AlternateAI::FOLLOW
         think_follow
-      when AI_CAST
+      when AlternateAI::CAST
         think_cast
-      when AI_FORCEATTACK
+      when AlternateAI::FORCE_ATTACK
         think_force_attack
-      when AI_ATTACK_GROUP
+      when AlternateAI::ATTACK_GROUP
         think_attack_group
       else
         if intention.active?
@@ -73,9 +74,7 @@ class L2ControllableMobAI < L2AttackableAI
       client_stop_moving(nil)
     end
 
-    unless attack_target = @attack_target
-      return
-    end
+    return unless attack_target = @attack_target
 
     npc.target = attack_target
 
@@ -111,9 +110,7 @@ class L2ControllableMobAI < L2AttackableAI
       client_stop_moving(nil)
     end
 
-    unless target.is_a?(L2ControllableMobInstance)
-      return
-    end
+    return unless target.is_a?(L2ControllableMobInstance)
 
     @actor.target = target
     # as a response, we put the target in a forced attack mode
@@ -149,7 +146,7 @@ class L2ControllableMobAI < L2AttackableAI
     if forced_target?.nil? || forced_target.looks_dead?
       client_stop_moving(nil)
       set_intention(ACTIVE)
-      self.alternate_ai = AI_IDLE
+      self.alternate_ai = AlternateAI::IDLE
     end
 
     @actor.target = forced_target
@@ -192,13 +189,8 @@ class L2ControllableMobAI < L2AttackableAI
       # notify aggression
       unless @actor.as(L2Npc).template.clans.empty?
         @actor.known_list.each_object do |npc|
-          unless npc.is_a?(L2Npc)
-            next
-          end
-
-          unless npc.in_my_clan?(@actor.as(L2Npc))
-            next
-          end
+          next unless npc.is_a?(L2Npc)
+          next unless npc.in_my_clan?(@actor.as(L2Npc))
 
           if @actor.inside_radius?(npc, npc.template.clan_help_range, false, true) && (attack_target.z - npc.z).abs < 200
             npc.notify_event(AGGRESSION, attack_target, 1)
@@ -278,35 +270,15 @@ class L2ControllableMobAI < L2AttackableAI
 
   private def check_auto_attack_condition(target : L2Character?) : Bool
     return false unless target
-
-    if target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance)
-      return false
-    end
-
-    if target.npc?
-      return false
-    end
-
-    if target.invul? || target.looks_dead?
-      return false
-    end
-
-    if target.is_a?(L2PcInstance) && target.spawn_protected?
-      return false
-    end
+    return false if target.is_a?(L2NpcInstance) || target.is_a?(L2DoorInstance)
+    return false if target.npc?
+    return false if target.invul? || target.looks_dead?
+    return false if target.is_a?(L2PcInstance) && target.spawn_protected?
 
     me = active_char
-    unless me.inside_radius?(target, me.aggro_range, false, false)
-      return false
-    end
-
-    unless (@actor.z - target.z).abs > 100
-      return false
-    end
-
-    if target.is_a?(L2Playable) && target.silent_move_affected?
-      return false
-    end
+    return false unless me.inside_radius?(target, me.aggro_range, false, false)
+    return false unless (@actor.z - target.z).abs > 100
+    return false if target.is_a?(L2Playable) && target.silent_move_affected?
 
     me.aggressive?
   end
@@ -327,18 +299,18 @@ class L2ControllableMobAI < L2AttackableAI
   end
 
   def force_attack(target)
-    self.alternate_ai = AI_FORCEATTACK
+    self.alternate_ai = AlternateAI::FORCE_ATTACK
     self.forced_target = target
   end
 
   def force_attack_group(group)
     self.forced_target = nil
     self.group_target = group
-    self.alternate_ai = AI_ATTACK_GROUP
+    self.alternate_ai = AlternateAI::ATTACK_GROUP
   end
 
   def stop
-    self.alternate_ai = AI_IDLE
+    self.alternate_ai = AlternateAI::IDLE
     client_stop_moving(nil)
   end
 
@@ -347,7 +319,7 @@ class L2ControllableMobAI < L2AttackableAI
   end
 
   def follow(target : L2Character)
-    self.alternate_ai = AI_FOLLOW
+    self.alternate_ai = AlternateAI::FOLLOW
     self.forced_target = target
   end
 end

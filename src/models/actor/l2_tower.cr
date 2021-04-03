@@ -17,9 +17,7 @@ abstract class L2Tower < L2Npc
   end
 
   def on_action(pc : L2PcInstance, interact : Bool)
-    unless can_target?(pc)
-      return
-    end
+    return unless can_target?(pc)
 
     if self != pc.target
       pc.target = self

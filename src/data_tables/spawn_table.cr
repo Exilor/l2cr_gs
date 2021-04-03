@@ -42,9 +42,8 @@ module SpawnTable
     sql = is_custom ? SELECT_CUSTOM_SPAWNS : SELECT_SPAWNS
     GameDB.each(sql) do |rs|
       npc_id = rs.get_i32(:"npc_templateid").to_u16!.to_i32
-      unless check_template(npc_id)
-        next
-      end
+
+      next unless check_template(npc_id)
 
       dat["npcTemplateid"] = npc_id
       dat["count"] = rs.get_i32(:"count")
@@ -65,7 +64,7 @@ module SpawnTable
   end
 
   private def add_spawn(sp : L2Spawn)
-    (SPAWN_TABLE[sp.id] ||= Concurrent::Set(L2Spawn).new) << sp
+    SPAWN_TABLE.store_if_absent(sp.id) { Concurrent::Set(L2Spawn).new } << sp
   end
 
   private def add_spawn(data : StatsSet) : Int32

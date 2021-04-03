@@ -1,5 +1,5 @@
 class FuncArmorSet < AbstractFunction
-  def calc(effector, effected, skill, value)
+  def calc(effector : L2Character, effected : L2Character?, skill : Skill?, value : Float64) : Float64
     return value unless pc = effector.acting_player
     return value unless chest = pc.chest_armor_instance
     return value unless set = ArmorSetsData[chest.id]

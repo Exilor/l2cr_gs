@@ -1360,7 +1360,7 @@ class L2AttackableAI < L2CharacterAI
         range = 0
 
         actor.attack_by_list.each do |obj|
-          if obj.nil? || obj.dead? || !GeoData.can_see_target?(actor, obj)
+          if obj.dead? || !GeoData.can_see_target?(actor, obj)
             if obj == @attack_target
               next
             end

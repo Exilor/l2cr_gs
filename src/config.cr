@@ -128,7 +128,7 @@ module Config
   class_property auto_learn_divine_inspiration : Bool = false
   class_property alt_game_cancel_bow : Bool = false
   class_property alt_game_cancel_cast : Bool = false
-  class_property alt_game_magicfailures : Bool = false
+  class_property alt_game_magic_failures : Bool = false
   class_property player_fakedeath_up_protection : Int32 = 0
   class_property store_skill_cooltime : Bool = false
   class_property subclass_store_skill_cooltime : Bool = false
@@ -1403,7 +1403,7 @@ module Config
     @@auto_learn_divine_inspiration = cfg.get_bool("AutoLearnDivineInspiration")
     @@alt_game_cancel_bow = cfg.get_string("AltGameCancelByHit", "Cast").casecmp?("bow") || cfg.get_string("AltGameCancelByHit", "Cast").casecmp?("all")
     @@alt_game_cancel_cast = cfg.get_string("AltGameCancelByHit", "Cast").casecmp?("cast") || cfg.get_string("AltGameCancelByHit", "Cast").casecmp?("all")
-    @@alt_game_magicfailures = cfg.get_bool("MagicFailures", true)
+    @@alt_game_magic_failures = cfg.get_bool("MagicFailures", true)
     @@player_fakedeath_up_protection = cfg.get_i32("PlayerFakeDeathUpProtection", 0)
     @@store_skill_cooltime = cfg.get_bool("StoreSkillCooltime", true)
     @@subclass_store_skill_cooltime = cfg.get_bool("SubclassStoreSkillCooltime")
@@ -2665,7 +2665,7 @@ module Config
     when "delevel"
       @@alt_game_delevel = value.to_b
     when "magicfailures"
-      @@alt_game_magicfailures = value.to_b
+      @@alt_game_magic_failures = value.to_b
     when "altmobagroinpeacezone"
       @@alt_mob_agro_in_peacezone = value.to_b
     when "altgameexponentxp"

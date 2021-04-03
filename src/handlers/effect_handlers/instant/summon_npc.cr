@@ -74,8 +74,8 @@ class EffectHandler::SummonNpc < AbstractEffect
       x, y = pc.x, pc.y
 
       if @random_offset
-        x += Rnd.bool ? rand(20..50) : rand(-50..-20)
-        y += Rnd.bool ? rand(20..50) : rand(-50..-20)
+        x += Rnd.bool ? Rnd.rand(20..50) : Rnd.rand(-50..-20)
+        y += Rnd.bool ? Rnd.rand(20..50) : Rnd.rand(-50..-20)
       end
 
       sp.x, sp.y, sp.z = x, y, pc.z

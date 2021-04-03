@@ -20,6 +20,6 @@ class PcAppearance
   end
 
   def set_name_color(red : Int32, green : Int32, blue : Int32)
-    @name_color = (red & 0xff) + ((green & 0xff) << 8) + ((blue & 0xff) << 16)
+    @name_color = (red & 0xff) &+ ((green & 0xff) << 8) &+ ((blue & 0xff) << 16)
   end
 end

@@ -6,7 +6,7 @@ struct SkillUseHolder
 
   initializer skill : Skill, ctrl : Bool, shift : Bool
 
-  def skill_id
+  def skill_id : Int32
     @skill.id
   end
 end

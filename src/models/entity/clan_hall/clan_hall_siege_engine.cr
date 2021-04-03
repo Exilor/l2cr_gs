@@ -91,8 +91,7 @@ abstract class ClanHallSiegeEngine < Quest
   end
 
   def attacker?(clan : L2Clan?) : Bool
-    return false unless clan
-    @attackers.has_key?(clan.id)
+    !!clan && @attackers.has_key?(clan.id)
   end
 
   def defender?(clan : L2Clan?) : Bool
@@ -104,9 +103,7 @@ abstract class ClanHallSiegeEngine < Quest
   end
 
   def get_attacker_clan(clan : L2Clan?) : L2SiegeClan?
-    if clan
-      get_attacker_clan(clan.id)
-    end
+    get_attacker_clan(clan.id) if clan
   end
 
   def attacker_clans : Array(L2SiegeClan)?
@@ -114,19 +111,14 @@ abstract class ClanHallSiegeEngine < Quest
   end
 
   def attackers_in_zone : Array(L2PcInstance)
-    # attackers = [] of L2PcInstance
-    # @hall.siege_zone.each_player_inside do |pc|
-    #   clan = pc.clan
-    #   if clan && @attackers.has_key?(clan.id)
-    #     attackers << pc
-    #   end
-    # end
-    # attackers
-
-    @hall.siege_zone.players_inside.select do |pc|
+    attackers = [] of L2PcInstance
+    @hall.siege_zone.each_player_inside do |pc|
       clan = pc.clan
-      clan && @attackers.has_key?(clan.id)
+      if clan && @attackers.has_key?(clan.id)
+        attackers << pc
+      end
     end
+    attackers
   end
 
   def get_defender_clan(clan_id : Int32) : L2SiegeClan?
@@ -177,9 +169,7 @@ abstract class ClanHallSiegeEngine < Quest
 
     state = 1i8
     @attackers.each_value do |s_clan|
-      unless clan = ClanTable.get_clan(s_clan.clan_id)
-        next
-      end
+      next unless clan = ClanTable.get_clan(s_clan.clan_id)
 
       clan.each_online_player do |pc|
         pc.siege_state = state
@@ -221,9 +211,7 @@ abstract class ClanHallSiegeEngine < Quest
 
     state = 0i8
     @attackers.each_value do |s_clan|
-      unless clan = ClanTable.get_clan(s_clan.clan_id)
-        next
-      end
+      next unless clan = ClanTable.get_clan(s_clan.clan_id)
 
       clan.each_online_player do |pc|
         pc.siege_state = state
@@ -284,15 +272,15 @@ abstract class ClanHallSiegeEngine < Quest
     end
   end
 
-  def get_inner_spawn_loc(pc : L2PcInstance)
+  def get_inner_spawn_loc(pc : L2PcInstance) : Location?
     # return nil
   end
 
-  def can_plant_flag?
+  def can_plant_flag? : Bool
     true
   end
 
-  def door_is_auto_attackable?
+  def door_is_auto_attackable? : Bool
     true
   end
 

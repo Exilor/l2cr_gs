@@ -87,9 +87,8 @@ class Quest < AbstractScript
   end
 
   def start_quest_timer(name : String, time : Int, npc : L2Npc?, pc : L2PcInstance?, repeating : Bool)
-    timers = (quest_timers[name] ||= [] of QuestTimer)
-
     unless get_quest_timer(name, npc, pc)
+      timers = quest_timers.store_if_absent(name) { [] of QuestTimer }
       @rw_lock.synchronize do
         timers << QuestTimer.new(self, name, time.to_i64, npc, pc, repeating)
       end

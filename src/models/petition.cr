@@ -84,10 +84,6 @@ class Petition
   end
 
   def responder=(pc : L2PcInstance)
-    if responder?
-      return
-    end
-
-    @responder = pc
+    @responder = pc unless responder?
   end
 end

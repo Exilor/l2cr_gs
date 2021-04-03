@@ -11,7 +11,6 @@ class L2SummonAI < L2PlayableAI
 
   def initialize(summon : L2Summon)
     super
-
     @start_follow = summon.follow_status
   end
 
@@ -19,12 +18,7 @@ class L2SummonAI < L2PlayableAI
     return unless target
 
     if Config.pathfinding > 0
-      if PathFinding.find_path(
-          *@actor.xyz,
-          *target.xyz,
-          @actor.instance_id, true
-        )
-      else
+      unless PathFinding.find_path(*@actor.xyz, *target.xyz, @actor.instance_id, true)
         return
       end
     end
@@ -65,9 +59,7 @@ class L2SummonAI < L2PlayableAI
       return
     end
 
-    if maybe_move_to_pawn(attack_target, @actor.physical_attack_range)
-      return
-    end
+    return if maybe_move_to_pawn(attack_target, @actor.physical_attack_range)
 
     client_stop_moving(nil)
     @actor.do_attack(attack_target)
@@ -105,9 +97,7 @@ class L2SummonAI < L2PlayableAI
   end
 
   private def on_event_think
-    if @thinking || @actor.casting_now? || @actor.all_skills_disabled?
-      return
-    end
+    return if @thinking || @actor.casting_now? || @actor.all_skills_disabled?
 
     @thinking = true
 
@@ -170,7 +160,7 @@ class L2SummonAI < L2PlayableAI
         owner_x = @actor.as(L2Summon).owner.x
         owner_y = @actor.as(L2Summon).owner.y
 
-        angle = Math.to_radians(rand(-90..90))
+        angle = Math.to_radians(Rnd.rand(-90..90))
         angle += Math.atan2(owner_y - @actor.y, owner_x - @actor.x)
 
         target_x = owner_x + (AVOID_RADIUS * Math.cos(angle)).to_i
@@ -186,8 +176,7 @@ class L2SummonAI < L2PlayableAI
   def notify_follow_status_change
     @start_follow = !@start_follow
 
-    case intention
-    when ACTIVE, FOLLOW, IDLE, MOVE_TO, PICK_UP
+    if intention.in?(ACTIVE, FOLLOW, IDLE, MOVE_TO, PICK_UP)
       @actor.as(L2Summon).follow_status = @start_follow
     end
   end
@@ -196,7 +185,7 @@ class L2SummonAI < L2PlayableAI
   end
 
   private def on_intention_cast(skill, target)
-    @last_attack = intention.attack? ? attack_target : nil
+    @last_attack = (attack_target if intention.attack?)
     super
   end
 

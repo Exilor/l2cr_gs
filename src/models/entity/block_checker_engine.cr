@@ -66,12 +66,12 @@ class BlockCheckerEngine
   # Event end
   setter task : TaskScheduler::DelayedTask?
   # The initial points of the event
-  property red_points = 15
-  property blue_points = 15
+  property red_points : Int32 = 15
+  property blue_points : Int32 = 15
   # Time when the event starts. Used on packet sending
-  property started_time = 0i64
+  property started_time : Int64 = 0i64
   # Event is started
-  property? started = false
+  property? started : Bool = false
 
   def initialize(holder : ArenaParticipantsHolder, arena : Int32)
     @holder = holder
@@ -110,7 +110,7 @@ class BlockCheckerEngine
   # * @param red
   # * @return int
   def get_player_points(pc : L2PcInstance, red : Bool)
-    red ? @red_team_points[pc]? || 0 : @blue_team_points[pc]? || 0
+    (red ? @red_team_points[pc]? : @blue_team_points[pc]?) || 0
   end
 
   # * Increases player points for his teams
@@ -285,8 +285,8 @@ class BlockCheckerEngine
         # Creates 50 new blocks
         @num_of_boxes.times do
           sp = L2Spawn.new(18672)
-          sp.x = ARENA_COORDINATES[@engine.arena][4] + Rnd.rand(-400..400)
-          sp.y = ARENA_COORDINATES[@engine.arena][5] + Rnd.rand(-400..400)
+          sp.x = ARENA_COORDINATES[@engine.arena][4] &+ Rnd.rand(-400..400)
+          sp.y = ARENA_COORDINATES[@engine.arena][5] &+ Rnd.rand(-400..400)
           sp.z = @engine.z_coord
           sp.amount = 1
           sp.heading = 1
@@ -303,18 +303,18 @@ class BlockCheckerEngine
 
           block.disable_core_ai(true)
           @engine.spawns << sp
-          random += 1
+          random &+= 1
         end
       rescue e
         error e
       end
 
       # Spawn the block carrying girl
-      if @round == 1 || @round == 2
+      if @round.in?(1, 2)
         begin
           girl_sp = L2Spawn.new(18676)
-          girl_sp.x = ARENA_COORDINATES[@engine.arena][4] + Rnd.rand(-400..400)
-          girl_sp.y = ARENA_COORDINATES[@engine.arena][5] + Rnd.rand(-400..400)
+          girl_sp.x = ARENA_COORDINATES[@engine.arena][4] &+ Rnd.rand(-400..400)
+          girl_sp.y = ARENA_COORDINATES[@engine.arena][5] &+ Rnd.rand(-400..400)
           girl_sp.z = @engine.z_coord
           girl_sp.amount = 1
           girl_sp.heading = 1

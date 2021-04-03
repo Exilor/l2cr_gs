@@ -336,7 +336,7 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
 
   private def create_bingo_board(qs)
     ary = 1.upto(9).to_a.shuffle!(random: Rnd)
-    qs.set("numbers", ary.to_s.gsub(/[^\\d ]/, ""))
+    qs.set("numbers", ary.to_s.gsub(/[^\d ]/, ""))
     qs.set("selected", "? ? ? ? ? ? ? ? ?")
   end
 
@@ -344,30 +344,30 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
     q = qs.get("selected").not_nil!.split
     found = 0
     # Horizontal
-    if ("#{q[0]}#{q[1]}#{q[2]}").matches?(/\\d+/)
+    if ("#{q[0]}#{q[1]}#{q[2]}").matches?(/\d+/)
       found &+= 1
     end
-    if ("#{q[3]}#{q[4]}#{q[5]}").matches?(/\\d+/)
+    if ("#{q[3]}#{q[4]}#{q[5]}").matches?(/\d+/)
       found &+= 1
     end
-    if ("#{q[6]}#{q[7]}#{q[8]}").matches?(/\\d+/)
+    if ("#{q[6]}#{q[7]}#{q[8]}").matches?(/\d+/)
       found &+= 1
     end
     # Vertical
-    if ("#{q[0]}#{q[3]}#{q[6]}").matches?(/\\d+/)
+    if ("#{q[0]}#{q[3]}#{q[6]}").matches?(/\d+/)
       found &+= 1
     end
-    if ("#{q[1]}#{q[4]}#{q[7]}").matches?(/\\d+/)
+    if ("#{q[1]}#{q[4]}#{q[7]}").matches?(/\d+/)
       found &+= 1
     end
-    if ("#{q[2]}#{q[5]}#{q[8]}").matches?(/\\d+/)
+    if ("#{q[2]}#{q[5]}#{q[8]}").matches?(/\d+/)
       found &+= 1
     end
     # Diagonal
-    if ("#{q[0]}#{q[4]}#{q[8]}").matches?(/\\d+/)
+    if ("#{q[0]}#{q[4]}#{q[8]}").matches?(/\d+/)
       found &+= 1
     end
-    if ("#{q[2]}#{q[4]}#{q[6]}").matches?(/\\d+/)
+    if ("#{q[2]}#{q[4]}#{q[6]}").matches?(/\d+/)
       found &+= 1
     end
 
@@ -406,7 +406,7 @@ class Scripts::Q00384_WarehouseKeepersPastime < Quest
 
   private def get_bingo_select_count(qs)
     current = qs.get("selected").not_nil!
-    current.gsub(/\\D/, "").size
+    current.gsub(/\D/, "").size
   end
 
   def on_kill(npc, killer, is_summon)

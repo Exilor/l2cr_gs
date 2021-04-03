@@ -184,7 +184,7 @@ class L2WorldRegion
   end
 
   def to_s(io : IO)
-    io.print(self.class, '(', @tile_x, ", ", @tile_y, ')')
+    io.print({{@type.stringify + "("}}, @tile_x, ", ", @tile_y, ')')
   end
 
   def inspect(io : IO)

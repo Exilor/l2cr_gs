@@ -7,7 +7,9 @@ struct PunishmentHolder
   def add_punishment(task : PunishmentTask)
     unless task.expired?
       key = task.key.to_s
-      val = (@holder[key] ||= Concurrent::Map(PunishmentType, PunishmentTask).new)
+      val = @holder.store_if_absent(key) do
+        Concurrent::Map(PunishmentType, PunishmentTask).new
+      end
       val[task.type] = task
     end
   end

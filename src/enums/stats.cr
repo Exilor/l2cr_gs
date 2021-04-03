@@ -6,7 +6,7 @@ class Stats < EnumClass
 
   def self.from_value(str : String) : self
     find { |stat| stat.value == str } ||
-      raise("No member with value '#{str}' found")
+      raise "No member with value '#{str}' found"
   end
 
   # HP, MP & CP

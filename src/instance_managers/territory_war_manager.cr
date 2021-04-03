@@ -123,11 +123,9 @@ module TerritoryWarManager
         castle_id = rs.get_i32(:"castleId")
         registered_id = rs.get_i32(:"registeredId")
         if clan = ClanTable.get_clan(registered_id)
-          REGISTERED_CLANS[castle_id] ||= [] of L2Clan
-          REGISTERED_CLANS[castle_id] << clan
+          REGISTERED_CLANS.store_if_absent(castle_id) { [] of L2Clan } << clan
         else
-          REGISTERED_MERCENARIES[castle_id] ||= [] of Int32
-          REGISTERED_MERCENARIES[castle_id] << registered_id
+          REGISTERED_MERCENARIES.store_if_absent(castle_id) { [] of Int32 } << registered_id
         end
       end
     rescue e
@@ -257,17 +255,16 @@ module TerritoryWarManager
       return
     end
 
-    (REGISTERED_CLANS[castle_id] ||= [] of L2Clan) << clan
+    REGISTERED_CLANS.store_if_absent(castle_id) { [] of L2Clan } << clan
     change_registration(castle_id, clan.id, false)
   end
 
   def register_merc(castle_id : Int32, pc : L2PcInstance)
+    return if pc.level < @@player_min_level
     array = REGISTERED_MERCENARIES[castle_id]?
-    if pc.level < @@player_min_level || (array && array.includes?(pc.l2id))
-      return
-    end
+    return if array && array.includes?(pc.l2id)
 
-    (REGISTERED_MERCENARIES[castle_id] ||= [] of Int32) << pc.l2id
+    REGISTERED_MERCENARIES.store_if_absent(castle_id) { [] of Int32 } << pc.l2id
     change_registration(castle_id, pc.l2id, false)
   end
 
@@ -448,16 +445,10 @@ module TerritoryWarManager
   end
 
   def give_tw_quest_point(pc : L2PcInstance)
-    PARTICIPANT_POINTS[pc.l2id] ||= Int32.slice(
-      pc.siege_side,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    )
-    PARTICIPANT_POINTS[pc.l2id][2] += 1
+    slice = PARTICIPANT_POINTS.store_if_absent(pc.l2id) do
+      Int32.slice(pc.siege_side, 0, 0, 0, 0, 0, 0)
+    end
+    slice[2] += 1
   end
 
   def give_tw_point(killer : L2PcInstance, victim_side : Int32, type : Int32)
@@ -467,33 +458,23 @@ module TerritoryWarManager
 
     if (party = killer.party) && type < 5
       party.members.each do |pc|
-        if pc.siege_side == victim_side || pc.siege_side == 0
-          next
-        end
-        unless Util.in_range?(2000, killer, pc, false)
-          next
-        end
+        next if pc.siege_side == victim_side || pc.siege_side == 0
+        next unless Util.in_range?(2000, killer, pc, false)
 
-        PARTICIPANT_POINTS[pc.l2id] ||= Int32.slice(
-          pc.siege_side,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        )
-        PARTICIPANT_POINTS[pc.l2id][type] += 1
+        ary = PARTICIPANT_POINTS.store_if_absent(pc.l2id) do
+          Int32.slice(pc.siege_side, 0, 0, 0, 0, 0, 0)
+        end
+        ary[type] += 1
       end
     else
       if killer.siege_side == victim_side || killer.siege_side == 0
         return
       end
 
-      PARTICIPANT_POINTS[killer.l2id] ||= Int32.slice(
-        killer.siege_side, 0, 0, 0, 0, 0, 0
-      )
-      PARTICIPANT_POINTS[killer.l2id][type] &+= 1
+      ary = PARTICIPANT_POINTS.store_if_absent(killer.l2id) do
+        Int32.slice(killer.siege_side, 0, 0, 0, 0, 0, 0)
+      end
+      ary[type] += 1
     end
   end
 

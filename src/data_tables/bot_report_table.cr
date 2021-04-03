@@ -5,9 +5,9 @@ module BotReportTable
   extend XMLReader
   include Packets::Outgoing
 
-  private COLUMN_BOT_ID = 1
-  private COLUMN_REPORTER_ID = 2
-  private COLUMN_REPORT_TIME = 3
+  private COLUMN_BOT_ID = :"botId"
+  private COLUMN_REPORTER_ID = :"reporterId"
+  private COLUMN_REPORT_TIME = :"reportDate"
 
   ATTACK_ACTION_BLOCK_ID = -1
   TRADE_ACTION_BLOCK_ID = -2
@@ -90,8 +90,7 @@ module BotReportTable
     GameDB.transaction do |tr|
       tr.exec(SQL_CLEAR_REPORTED_CHAR_DATA)
       REPORTS.each do |key, value|
-        report_table = value.reporters
-        report_table.each do |k, v|
+        value.reporters.each do |k, v|
           tr.exec(SQL_INSERT_REPORTED_CHAR_DATA, key, k, v)
         end
       end
@@ -302,7 +301,7 @@ module BotReportTable
 
     def reported_by_same_clan?(clan : L2Clan?)
       return false unless clan
-      @reporters.local_each_key.any? { |reporter_id| clan.member?(reporter_id) }
+      @reporters.any? { |reporter_id, _| clan.member?(reporter_id) }
     end
   end
 

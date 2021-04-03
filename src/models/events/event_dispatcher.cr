@@ -35,8 +35,8 @@ module EventDispatcher
   end
 
   def async(event : BaseEvent, containers : Enumerable(ListenersContainer))
-    has_listeners = Containers::GLOBAL.has_listener?(event.type) ||
-    containers.any? &.has_listener?(event.type)
+    has_listeners = Containers::GLOBAL.has_listener?(event.type)
+    has_listeners ||= containers.any? &.has_listener?(event.type)
 
     if has_listeners
       task = -> { to_multiple_containers(event, containers, Nil) }

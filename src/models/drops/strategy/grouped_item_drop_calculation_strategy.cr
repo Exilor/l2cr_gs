@@ -13,18 +13,19 @@ struct GroupedItemDropCalculationStrategy
 
   private def self.get_single_item(i : GroupedGeneralDropItem) : GeneralDropItem
     item1 = i.items.first
-    SINGLE_ITEM_CACHE[i] ||=
-    GeneralDropItem.new(
-      item1.item_id,
-      item1.min,
-      item1.max,
-      (item1.chance * i.chance) / 100,
-      item1.amount_strategy,
-      item1.chance_strategy,
-      i.precise_strategy,
-      i.killer_chance_modifier_strategy,
-      item1.drop_calculation_strategy
-    )
+    SINGLE_ITEM_CACHE.store_if_absent(i) do
+      GeneralDropItem.new(
+        item1.item_id,
+        item1.min,
+        item1.max,
+        (item1.chance * i.chance) / 100,
+        item1.amount_strategy,
+        item1.chance_strategy,
+        i.precise_strategy,
+        i.killer_chance_modifier_strategy,
+        item1.drop_calculation_strategy
+      )
+    end
   end
 
   DEFAULT_STRATEGY = new do |item, victim, killer|

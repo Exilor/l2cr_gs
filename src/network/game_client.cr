@@ -17,10 +17,11 @@ class GameClient
   getter start_time = Time.ms
   getter active_char_lock = Mutex.new(:Reentrant)
   getter(flood_protectors) { FloodProtectors.new(self) }
+  getter! secondary_auth : SecondaryPasswordAuth
+  getter! account_name : String
   property active_char : L2PcInstance?
   property additional_close_packet : GameServerPacket?
   property traceroute : Slice(Bytes) = Slice(Bytes).empty
-  property! account_name : String
   property! session_id : SessionKey
   property? protocol_ok : Bool = false
   property? game_guard_ok : Bool = false
@@ -59,6 +60,13 @@ class GameClient
     if @state != new_state
       @state = new_state
       @packet_queue.@queue.try &.clear
+    end
+  end
+
+  def account_name=(name)
+    @account_name = name
+    if SecondaryAuthData.enabled?
+      @secondary_auth = SecondaryPasswordAuth.new(self)
     end
   end
 

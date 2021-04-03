@@ -231,7 +231,7 @@ module AdminCommandHandler::AdminEventEngine
           team_ids[i &+= 1] = st.shift.to_i
         end
 
-        n = st.shift.split(/\\*/)
+        n = st.shift.split(/\*/)
         item_id = st.shift.to_i
 
         team_ids.each do |team_id|

@@ -57,7 +57,7 @@ module AntiFeedManager
   end
 
   def register_event(event_id : Int32)
-    EVENT_IPS[event_id] ||= Concurrent::Map(UInt64, Int32).new
+    EVENT_IPS.store_if_absent(event_id) { Concurrent::Map(UInt64, Int32).new }
   end
 
   def try_add_player(event_id : Int32, pc : L2PcInstance, max : Int32) : Bool
@@ -83,13 +83,8 @@ module AntiFeedManager
   end
 
   def remove_client(event_id : Int32, client : GameClient?) : Bool
-    unless client
-      return false
-    end
-
-    unless event = EVENT_IPS[event_id]?
-      return false
-    end
+    return false unless client
+    return false unless event = EVENT_IPS[event_id]?
 
     addr_hash = client.connection.ip.hash
 
@@ -105,10 +100,7 @@ module AntiFeedManager
   end
 
   def on_disconnect(client : GameClient?)
-    unless client
-      return
-    end
-
+    return unless client
     EVENT_IPS.each_key { |k| remove_client(k, client) }
   end
 
@@ -121,9 +113,7 @@ module AntiFeedManager
   end
 
   def get_limit(client : GameClient?, max : Int32) : Int32
-    unless client
-      return max
-    end
+    return max unless client
 
     addr_hash = client.connection.ip.hash.to_i32
 

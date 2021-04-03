@@ -1,7 +1,6 @@
 require "./skill_holder"
 
 class InvulSkillHolder < SkillHolder
-
   @instances = Atomic(Int32).new(1)
 
   def initialize(skill_id : Int32, skill_level : Int32)

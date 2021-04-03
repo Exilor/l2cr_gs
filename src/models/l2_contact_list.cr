@@ -13,8 +13,8 @@ struct L2ContactList
   end
 
   def restore
-    GameDB.each(QUERY_LOAD, @pc.l2id) do |rs|
-      id = rs.get_i32(1)
+    GameDB.query_each(QUERY_LOAD, @pc.l2id) do |rs|
+      id = rs.read(Int32)
       name = CharNameTable.get_name_by_id(id)
       if name.nil? || (name == @pc.name || id == @pc.l2id)
         next

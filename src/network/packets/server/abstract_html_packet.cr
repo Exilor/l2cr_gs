@@ -30,19 +30,19 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
 
   def html=(html : String)
     if html.size > 17_200
+      warn "Html is too long. It would crash the client."
       html = html[0, 17_200]
     end
 
     unless html.includes?("<html")
-      warn "Html is too long. It would crash the client."
       html = "<html><body>#{html}</body></html>"
     end
 
     @html = html
   end
 
-  def set_file(pc, path : String) : Bool
-    unless content = HtmCache.get_htm(pc, path)
+  def set_file(arg : String? | L2PcInstance, path : String) : Bool
+    unless content = HtmCache.get_htm(arg, path)
       self.html = "<html><body>My Text is missing:<br>#{path}</body></html>"
       return false
     end
@@ -55,11 +55,8 @@ abstract class Packets::Outgoing::AbstractHtmlPacket < GameServerPacket
     @disable_validation = false
   end
 
-  def []=(pattern : String, val)
-    # if html = @html
-    #   @html = html.gsub(pattern, val.to_s)
-    # end
-    @html = @html.not_nil!.gsub(pattern, val.to_s)
+  def []=(pattern : String, replacement : Object)
+    @html = @html.not_nil!.gsub(pattern) { replacement }
   end
 
   def run_impl

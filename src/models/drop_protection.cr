@@ -24,16 +24,10 @@ class DropProtection
 
   def try_pick_up(pc : L2PcInstance) : Bool
     sync do
-      unless @protected
-        return true
-      end
-
-      if @owner == pc
-        return true
-      end
+      return true unless @protected
+      return true if @owner == pc
 
       owner = @owner.not_nil!
-
       !!owner.party && owner.party == pc.party
     end
   end

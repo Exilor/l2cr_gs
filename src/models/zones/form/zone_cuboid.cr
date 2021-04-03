@@ -15,7 +15,7 @@ struct ZoneCuboid < L2ZoneForm
   end
 
   def inside_zone?(x : Int32, y : Int32, z : Int32) : Bool
-    @r.contains?(x.to_f64, y.to_f64) && z.between?(@z1, @z2)
+    z.between?(@z1, @z2) && @r.contains?(x.to_f64, y.to_f64)
   end
 
   def intersects_rectangle?(ax1 : Int32, ax2 : Int32, ay1 : Int32, ay2 : Int32) : Bool

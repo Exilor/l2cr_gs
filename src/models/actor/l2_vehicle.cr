@@ -52,7 +52,7 @@ abstract class L2Vehicle < L2Character
 
   def oust_loc : Location
     @oust_loc ||
-    MapRegionManager.get_tele_to_location(self, TeleportWhereType::TOWN)
+      MapRegionManager.get_tele_to_location(self, TeleportWhereType::TOWN)
   end
 
   def oust_players

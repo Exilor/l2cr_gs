@@ -1,9 +1,5 @@
 class Packets::Outgoing::Ex2ndPasswordCheck < GameServerPacket
-  PASSWORD_NEW = 0x00
-  PASSWORD_PROMPT = 0x01
-  PASSWORD_OK = 0x02
-
-  initializer window_type : Int32
+  private initializer window_type : UInt8
 
   private def write_impl
     c 0xfe
@@ -12,4 +8,8 @@ class Packets::Outgoing::Ex2ndPasswordCheck < GameServerPacket
     d @window_type
     d 0x00
   end
+
+  NEW = new(0)
+  PROMPT = new(1)
+  OK = new(2)
 end

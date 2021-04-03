@@ -57,6 +57,6 @@ abstract class AbstractPlayerGroup
   end
 
   def to_s(io : IO)
-    io.print(self.class, "(leader: ", leader.name, ')')
+    io.print({{@type.stringify + "("}}, "(leader: ", leader.name, ')')
   end
 end

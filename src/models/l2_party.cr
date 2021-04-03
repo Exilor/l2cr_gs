@@ -3,7 +3,6 @@ require "./entity/dimensional_rift"
 
 class L2Party < AbstractPlayerGroup
   include Synchronizable
-  include Loggable
 
   private BONUS_EXP_SP = {1.0, 1.10, 1.20, 1.30, 1.40, 1.50, 2.0, 2.10, 2.20}
   private PARTY_POSITION_BROADCAST_INTERVAL = 12
@@ -57,7 +56,7 @@ class L2Party < AbstractPlayerGroup
   def get_checked_random_member(item_id : Int32, target : L2Character) : L2PcInstance?
     @members.select do |m|
       m.inventory.validate_capacity_by_item_id(item_id) &&
-      Util.in_range?(Config.alt_party_range2, target, m, true)
+        Util.in_range?(Config.alt_party_range2, target, m, true)
     end
     .sample?(random: Rnd)
   end
@@ -138,7 +137,7 @@ class L2Party < AbstractPlayerGroup
 
     @position_broadcast_task ||= begin
       task = -> { broadcast_packet(position_packet.reuse(self)) }
-      time = (PARTY_POSITION_BROADCAST_INTERVAL * 1000) / 2
+      time = (PARTY_POSITION_BROADCAST_INTERVAL &* 1000) / 2
       ThreadPoolManager.schedule_general_at_fixed_rate(task, time, time)
     end
   end
@@ -163,14 +162,10 @@ class L2Party < AbstractPlayerGroup
         SevenSignsFestival.instance.update_participants(pc, self)
       end
 
-      begin
-        if pc.channeling? && pc.skill_channelizer.has_channelized?
-          pc.abort_cast
-        elsif pc.channelized?
-          pc.skill_channelized.abort_channelization
-        end
-      rescue e
-        warn e
+      if pc.channeling? && pc.skill_channelizer.has_channelized?
+        pc.abort_cast
+      elsif pc.channelized?
+        pc.skill_channelized.abort_channelization
       end
 
       if type.expelled?
@@ -229,9 +224,7 @@ class L2Party < AbstractPlayerGroup
   def disband_party
     @disbanding = true
     broadcast_packet(SystemMessage.party_dispersed)
-    @members.each do |m|
-      remove_party_member(m, MessageType::None)
-    end
+    @members.each { |m| remove_party_member(m, MessageType::None) }
   end
 
   def change_party_leader(name : String)
@@ -239,39 +232,39 @@ class L2Party < AbstractPlayerGroup
   end
 
   def leader=(pc : L2PcInstance)
-    unless pc.in_duel?
-      if idx = @members.index(pc)
-        if leader?(pc)
-          pc.send_packet(SystemMessageId::YOU_CANNOT_TRANSFER_RIGHTS_TO_YOURSELF)
-        else
-          temp = leader()
-          @members[0] = pc
-          @members[idx] = temp
+    return if pc.in_duel?
 
-          sm = SystemMessage.c1_has_become_a_party_leader
-          sm.add_string(leader().name)
-          broadcast_packet(sm)
-          broadcast_to_party_members_new_leader
-          if (cc = command_channel) && cc.leader?(temp)
-            cc.leader = leader()
-            sm = SystemMessage.command_channel_leader_now_c1
-            sm.add_string(cc.leader.name)
-            cc.broadcast_packet(sm)
-          end
-          if pc.in_party_match_room?
-            room = PartyMatchRoomList.get_player_room(pc).not_nil!
-            room.change_leader(pc)
-          end
-        end
+    if idx = @members.index(pc)
+      if leader?(pc)
+        pc.send_packet(SystemMessageId::YOU_CANNOT_TRANSFER_RIGHTS_TO_YOURSELF)
       else
-        pc.send_packet(SystemMessageId::YOU_CAN_TRANSFER_RIGHTS_ONLY_TO_ANOTHER_PARTY_MEMBER)
+        temp = leader()
+        @members[0] = pc
+        @members[idx] = temp
+
+        sm = SystemMessage.c1_has_become_a_party_leader
+        sm.add_string(leader().name)
+        broadcast_packet(sm)
+        broadcast_to_party_members_new_leader
+        if (cc = command_channel) && cc.leader?(temp)
+          cc.leader = leader()
+          sm = SystemMessage.command_channel_leader_now_c1
+          sm.add_string(cc.leader.name)
+          cc.broadcast_packet(sm)
+        end
+        if pc.in_party_match_room?
+          room = PartyMatchRoomList.get_player_room(pc).not_nil!
+          room.change_leader(pc)
+        end
       end
+    else
+      pc.send_packet(SystemMessageId::YOU_CAN_TRANSFER_RIGHTS_ONLY_TO_ANOTHER_PARTY_MEMBER)
     end
   end
 
   def get_player_by_name(name : String) : L2PcInstance
     @members.find { |m| m.name.casecmp?(name) } ||
-    raise("Party member with name '#{name}' not found.")
+      raise "Party member with name '#{name}' not found."
   end
 
   def recalculate_party_level : Int32
@@ -365,9 +358,7 @@ class L2Party < AbstractPlayerGroup
       end
     end
 
-    if rewards.empty?
-      return
-    end
+    return if rewards.empty?
 
     count, left_over = adena.divmod(rewards.size)
 
@@ -520,7 +511,7 @@ class L2Party < AbstractPlayerGroup
 
       @change_request_distribution_type = distribution_type
       @change_distribution_type_answers = Set(Int32).new
-      delay = PARTY_DISTRIBUTION_TYPE_REQUEST_TIMEOUT * 1000
+      delay = PARTY_DISTRIBUTION_TYPE_REQUEST_TIMEOUT &* 1000
       task = -> { finish_loot_request(false) }
       @change_distribution_type_request_task = ThreadPoolManager.schedule_general(task, delay)
 

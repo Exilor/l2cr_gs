@@ -127,10 +127,7 @@ module ItemTable
 
     if Config.log_items && process != "Reset"
       if !Config.log_items_small_log || item.equippable? || item.id == Inventory::ADENA_ID
-        case item.item_type
-        when EtcItemType::ARROW,  EtcItemType::SHOT
-          # do nothing
-        else
+        unless item.item_type.in?(EtcItemType::ARROW, EtcItemType::SHOT)
           Logs[:items].info("Created #{item} by #{actor}, referenced by #{reference}.")
         end
       end
@@ -167,10 +164,7 @@ module ItemTable
 
       if Config.log_items
         if !Config.log_items_small_log || item.equippable? || item.id == Inventory::ADENA_ID
-          case item.item_type
-          when EtcItemType::ARROW,  EtcItemType::SHOT
-            # do nothing
-          else
+          unless item.item_type.in?(EtcItemType::ARROW, EtcItemType::SHOT)
             Logs[:items].info("Destroyed #{item} x#{old} by #{actor}, referenced by #{reference}.")
           end
         end

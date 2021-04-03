@@ -120,7 +120,6 @@ module Hero
 
   def load_diary(char_id : Int32)
     diary = [] of StatsSet
-    diary_entries = 0
     sql = "SELECT * FROM  heroes_diary WHERE charId=? ORDER BY time ASC"
     GameDB.each(sql, char_id) do |rs|
       diary_entry = StatsSet.new
@@ -144,15 +143,13 @@ module Hero
         end
       end
 
-
       diary << diary_entry
-      diary_entries &+= 1
     end
 
     HERO_DIARY[char_id] = diary
 
     char_name = CharNameTable.get_name_by_id(char_id)
-    info { "Loaded #{diary_entries} diary entries for hero #{char_name}." }
+    info { "Loaded #{diary.size} diary entries for hero #{char_name}." }
   rescue e
     error e
   end
@@ -330,7 +327,7 @@ module Hero
           end
         end
 
-        if breakat < list.size - 1
+        if breakat < list.size &- 1
           diary_reply["%buttprev%"] = "<button value=\"Prev\" action=\"bypass _diary?class=#{hero_class}&page=#{page + 1}\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
         else
           diary_reply["%buttprev%"] = ""
@@ -419,7 +416,7 @@ module Hero
           i &+= 1
         end
 
-        if breakat < hero_fights.size - 1
+        if breakat < hero_fights.size &- 1
           fight_reply["%buttprev%"] = "<button value=\"Prev\" action=\"bypass _match?class=#{hero_class}&page=#{page + 1}\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\">"
         else
           fight_reply["%buttprev%"] = ""

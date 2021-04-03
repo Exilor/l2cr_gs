@@ -14,7 +14,6 @@ class L2PlayerAI < L2PlayableAI
       if !intention.cast? || (arg0.is_a?(Skill) && !arg0.toggle?)
         @next_intention = nil
         super
-
         return
       end
 
@@ -107,27 +106,21 @@ class L2PlayerAI < L2PlayableAI
   end
 
   private def think_attack
-    unless target = attack_target
-      return
-    end
+    return unless target = attack_target
 
     if check_target_lost_or_dead(target)
       self.attack_target = nil
       return
     end
 
-    if maybe_move_to_pawn(target, @actor.physical_attack_range)
-      return
-    end
+    return if maybe_move_to_pawn(target, @actor.physical_attack_range)
 
     client_stop_moving(nil)
     @actor.do_attack(target)
   end
 
   private def think_cast
-    unless skill = @skill
-      return
-    end
+    return unless skill = @skill
 
     target = cast_target
     pc = @actor.as(L2PcInstance)
@@ -176,19 +169,11 @@ class L2PlayerAI < L2PlayableAI
   end
 
   private def think_interact
-    if @actor.all_skills_disabled? || @actor.casting_now?
-      return
-    end
+    return if @actor.all_skills_disabled? || @actor.casting_now?
 
     target = target()
 
-    if check_target_lost(target)
-      return
-    end
-
-    if maybe_move_to_pawn(target, 36)
-      return
-    end
+    return if check_target_lost(target) || maybe_move_to_pawn(target, 36)
 
     unless target.is_a?(L2StaticObjectInstance)
       @actor.as(L2PcInstance).do_interact(target.as(L2Character))
@@ -198,9 +183,7 @@ class L2PlayerAI < L2PlayableAI
   end
 
   private def on_event_think
-    if @thinking && !intention.cast?
-      return
-    end
+    return if @thinking && !intention.cast?
 
     @thinking = true
 

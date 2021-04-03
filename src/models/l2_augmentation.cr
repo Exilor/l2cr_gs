@@ -18,13 +18,6 @@ struct L2Augmentation
     augmentation_id
   end
 
-  # Custom, only used in use_item.cr to force an augmentation with a skill.
-  def has_skill?
-    @boni.@options.any? do |o|
-      o.has_active_skill? || o.has_passive_skill? || o.has_activation_skills?
-    end
-  end
-
   private class AugmentationStatBoni
     @active = false
     @options : {Options, Options}

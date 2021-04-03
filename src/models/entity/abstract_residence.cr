@@ -8,7 +8,7 @@ abstract class AbstractResidence < ListenersContainer
   # L2J: _zone (Castle has its own @zone but of another type)
   property residence_zone : L2ResidenceZone?
 
-  def_equals @residential_skills
+  def_equals @residence_id
 
   def initialize(residence_id : Int32)
     @residence_id = residence_id
@@ -24,15 +24,15 @@ abstract class AbstractResidence < ListenersContainer
     end
   end
 
-  def give_residential_skills(pc)
+  def give_residential_skills(pc : L2PcInstance)
     @residential_skills.each { |sh| pc.add_skill(sh.skill, false) }
   end
 
-  def remove_residential_skills(pc)
+  def remove_residential_skills(pc : L2PcInstance)
     @residential_skills.each { |sh| pc.remove_skill(sh.skill, false) }
   end
 
   def to_s(io : IO)
-    io.print(self.class, '(', name, ')')
+    io.print({{@type.stringify + "("}}, name, ')')
   end
 end

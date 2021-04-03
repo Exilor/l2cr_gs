@@ -14,7 +14,10 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
       return
     end
 
-    # secondary auth check
+    if SecondaryAuthData.enabled? && !client.secondary_auth.authed?
+      client.secondary_auth.open_dialog
+      return
+    end
 
     client.active_char_lock.synchronize do
       unless client.active_char
@@ -53,8 +56,7 @@ class Packets::Incoming::CharacterSelect < GameClientPacket
         pc.set_online_status(true, true)
 
         evt = OnPlayerSelect.new(pc, pc.l2id, pc.name, client)
-        container, ret = Containers::PLAYERS, TerminateReturn
-        term = EventDispatcher.notify(evt, container, ret)
+        term = EventDispatcher.notify(evt, Containers::PLAYERS, TerminateReturn)
         if term && term.terminate
           pc.delete_me
           return

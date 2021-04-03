@@ -423,7 +423,7 @@ class L2DoorInstance < L2Character
   end
 
   def castle : Castle
-    castle? || raise("Castle for door id #{id}, l2id #{l2id} not found")
+    castle? || raise "Castle for door id #{id}, l2id #{l2id} not found"
   end
 
   def fort? : Fort?
@@ -439,7 +439,7 @@ class L2DoorInstance < L2Character
   end
 
   def fort : Fort
-    fort? || raise("Fort for door id: #{id}, l2id: #{l2id} not found")
+    fort? || raise "Fort for door id: #{id}, l2id: #{l2id} not found"
   end
 
   private def get_sibling_door(door_id : Int32) : self?

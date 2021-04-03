@@ -52,15 +52,16 @@ class L2Fishing
     end
   end
 
-  def change_hp(hp, pen)
+  def change_hp(hp : Int32, pen : Int32)
     @fish_cur_hp -= hp
     if @fish_cur_hp < 0
       @fish_cur_hp = 0
     end
-    ex = ExFishingHpRegen.new(@pc.not_nil!, @time, @fish_cur_hp, @mode, @good_use, @anim, pen, @deceptive_mode)
-    @pc.not_nil!.broadcast_packet(ex)
+    pc = @pc.not_nil!
+    ex = ExFishingHpRegen.new(pc, @time, @fish_cur_hp, @mode, @good_use, @anim, pen, @deceptive_mode)
+    pc.broadcast_packet(ex)
     @anim = 0
-    if @fish_cur_hp > (@fish_max_hp * 2)
+    if @fish_cur_hp > @fish_max_hp * 2
       @fish_cur_hp = @fish_max_hp * 2
       do_die(false)
     elsif @fish_cur_hp == 0
@@ -68,7 +69,7 @@ class L2Fishing
     end
   end
 
-  def do_die(win)
+  def do_die(win : Bool)
     sync do
       if task = @task
         task.cancel
@@ -129,16 +130,17 @@ class L2Fishing
       end
     ensure
       @thinking = false
-      ex = ExFishingHpRegen.new(@pc.not_nil!, @time, @fish_cur_hp, @mode, 0, @anim, 0, @deceptive_mode)
+      pc = @pc.not_nil!
+      ex = ExFishingHpRegen.new(pc, @time, @fish_cur_hp, @mode, 0, @anim, 0, @deceptive_mode)
       if @anim == 0
-        @pc.not_nil!.send_packet(ex)
+        pc.send_packet(ex)
       else
-        @pc.not_nil!.broadcast_packet(ex)
+        pc.broadcast_packet(ex)
       end
     end
   end
 
-  def use_reeling(dmg, pen)
+  def use_reeling(dmg : Int32, pen : Int32)
     @anim = 2
     if Rnd.rand(100) > 90
       @pc.not_nil!.send_packet(SystemMessageId::FISH_RESISTED_ATTEMPT_TO_BRING_IT_IN)
@@ -147,24 +149,24 @@ class L2Fishing
       return
     end
 
-    return unless @pc
+    return unless pc = @pc
 
     if @mode == 1
       if @deceptive_mode == 0
         sm = SystemMessage.reeling_succesful_s1_damage
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         if pen > 0
           sm = SystemMessage.reeling_successful_penalty_s1
           sm.add_int(pen)
-          @pc.not_nil!.send_packet(sm)
+          pc.send_packet(sm)
         end
         @good_use = 1
         change_hp(dmg, pen)
       else
         sm = SystemMessage.fish_resisted_reeling_s1_hp_regained
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         @good_use = 2
         change_hp(-dmg, pen)
       end
@@ -172,17 +174,17 @@ class L2Fishing
       if @deceptive_mode == 0
         sm = SystemMessage.fish_resisted_reeling_s1_hp_regained
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         @good_use = 2
         change_hp(-dmg, pen)
       else
         sm = SystemMessage.reeling_succesful_s1_damage
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         if pen > 0
           sm = SystemMessage.reeling_successful_penalty_s1
           sm.add_int(pen)
-          @pc.not_nil!.send_packet(sm)
+          pc.send_packet(sm)
         end
         @good_use = 1
         change_hp(dmg, pen)
@@ -190,34 +192,36 @@ class L2Fishing
     end
   end
 
-  def use_pumping(dmg, pen)
+  def use_pumping(dmg : Int32, pen : Int32)
     @anim = 1
 
+    pc = @pc
+
     if Rnd.rand(100) > 90
-      @pc.not_nil!.send_packet(SystemMessageId::FISH_RESISTED_ATTEMPT_TO_BRING_IT_IN)
+      pc.not_nil!.send_packet(SystemMessageId::FISH_RESISTED_ATTEMPT_TO_BRING_IT_IN)
       @good_use = 0
       change_hp(0, pen)
       return
     end
 
-    return unless @pc
+    return unless pc
 
     if @mode == 0
       if @deceptive_mode == 0
         sm = SystemMessage.pumping_succesful_s1_damage
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         if pen > 0
           sm = SystemMessage.pumping_successful_penalty_s1
           sm.add_int(pen)
-          @pc.not_nil!.send_packet(sm)
+          pc.send_packet(sm)
         end
         @good_use = 1
         change_hp(dmg, pen)
       else
         sm = SystemMessage.fish_resisted_pumping_s1_hp_regained
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         @good_use = 2
         change_hp(-dmg, pen)
       end
@@ -225,17 +229,17 @@ class L2Fishing
       if @deceptive_mode == 0
         sm = SystemMessage.fish_resisted_pumping_s1_hp_regained
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         @good_use = 2
         change_hp(-dmg, pen)
       else
         sm = SystemMessage.pumping_succesful_s1_damage
         sm.add_int(dmg)
-        @pc.not_nil!.send_packet(sm)
+        pc.send_packet(sm)
         if pen > 0
           sm = SystemMessage.pumping_successful_penalty_s1
           sm.add_int(pen)
-          @pc.not_nil!.send_packet(sm)
+          pc.send_packet(sm)
         end
         @good_use = 1
         change_hp(dmg, pen)

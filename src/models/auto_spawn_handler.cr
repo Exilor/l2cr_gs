@@ -41,10 +41,10 @@ module AutoSpawnHandler
       inst.random_spawn = rs.get_bool(:"randomSpawn")
 
       GameDB.each(sql2, rs.get_i32(:"groupId")) do |rs2|
-        x = rs2.get_i32("x")
-        y = rs2.get_i32("y")
-        z = rs2.get_i32("z")
-        heading = rs2.get_i32("heading")
+        x = rs2.get_i32(:"x")
+        y = rs2.get_i32(:"y")
+        z = rs2.get_i32(:"z")
+        heading = rs2.get_i32(:"heading")
         inst.add_spawn_location(x, y, z, heading)
       end
     end
@@ -148,7 +148,7 @@ module AutoSpawnHandler
   end
 
   def get_auto_spawn_instances(npc_id : Int32) : Array(AutoSpawnInstance)
-    REGISTERED_SPAWNS.local_each_value.select { |sp| sp.id == npc_id }.to_a
+    REGISTERED_SPAWNS.select_values { |sp| sp.id == npc_id }
   end
 
   def spawn_registered?(l2id : Int32) : Bool
@@ -182,10 +182,11 @@ module AutoSpawnHandler
         sp.last_loc_index = location_index
       end
 
-      x = location_list[location_index].x
-      y = location_list[location_index].y
-      z = location_list[location_index].z
-      heading = location_list[location_index].heading
+      loc = location_list[location_index]
+      x = loc.x
+      y = loc.y
+      z = loc.z
+      heading = loc.heading
 
       new_spawn = L2Spawn.new(sp.id)
       new_spawn.x, new_spawn.y, new_spawn.z = x, y, z

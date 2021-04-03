@@ -242,7 +242,7 @@ class Packets::Incoming::UseItem < GameClientPacket
         return true
       end
       attempts = 0
-      until aug.has_skill?
+      until aug.@boni.@options.any? { |o| o.has_active_skill? || o.has_passive_skill? || o.has_activation_skills? }
         aug = AugmentationData.generate_random_augmentation(ls.level, ls.grade, wpn.template.body_part, item.id, wpn)
         unless aug
           warn "No augmentation was generated."

@@ -82,7 +82,7 @@ class Fort < AbstractResidence
     raise("Couldn't find siege zone for fort with id #{residence_id}")
   end
 
-  def residence_zone
+  def residence_zone : L2FortZone
     super.as(L2FortZone)
   end
 
@@ -465,22 +465,16 @@ class Fort < AbstractResidence
   end
 
   def get_door(door_id : Int32) : L2DoorInstance?
-    if door_id <= 0
-      return
-    end
-
-    doors.find { |door| door.id == door_id }
+    doors.find { |door| door.id == door_id } unless door_id <= 0
   end
 
-  def siege
+  def siege : FortSiege
     @siege ||= FortSiege.new(self)
   end
 
   def owned_time : Int32
     time = @last_owned_time.ms
-    if time == 0
-      return 0
-    end
+    return 0 if time == 0
 
     ((Time.ms - time) / 1000).to_i32
   end

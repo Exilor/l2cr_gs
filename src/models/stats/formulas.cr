@@ -639,7 +639,7 @@ module Formulas
     matk *= bss ? 4 : sps ? 2 : 1
 
     damage = ((91 * Math.sqrt(matk)) / mdef) * power
-    if Config.alt_game_magicfailures && !magic_success(attacker, target, skill)
+    if Config.alt_game_magic_failures && !magic_success(attacker, target, skill)
       if attacker.player?
         if magic_success(attacker, target, skill) && target.level &- attacker.level <= 9
           if skill.has_effect_type?(EffectType::HP_DRAIN)
@@ -704,7 +704,7 @@ module Formulas
 
     owner = attacker.owner
 
-    if Config.alt_game_magicfailures && !magic_success(owner, target, skill)
+    if Config.alt_game_magic_failures && !magic_success(owner, target, skill)
       if magic_success(owner, target, skill) && target.level &- skill.magic_level <= 9
         if skill.has_effect_type?(EffectType::HP_DRAIN)
           owner.send_packet(SystemMessageId::DRAIN_HALF_SUCCESFUL)
@@ -992,7 +992,6 @@ module Formulas
       return 1.0
     end
 
-
     result = (attacker.stat.get_attack_trait(trait_type).to_f - target.stat.get_defence_trait(trait_type)) + 1.0
     result.clamp(0.05, 2.0)
   end
@@ -1031,7 +1030,7 @@ module Formulas
       end
     end
 
-    if Config.alt_game_magicfailures && !magic_success(attacker, target, skill)
+    if Config.alt_game_magic_failures && !magic_success(attacker, target, skill)
       if attacker.player?
         sm = SystemMessage.damage_decreased_because_c1_resisted_c2_magic
         sm.add_char_name(target)
@@ -1231,7 +1230,7 @@ module Formulas
   end
 
   def skill_resurrect_restore_percent(base : Float64, caster : L2Character) : Float64
-    if base == 0 || base == 100
+    if base.in?(0, 100)
       return base
     end
 

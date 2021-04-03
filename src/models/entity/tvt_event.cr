@@ -162,7 +162,7 @@ module TvTEvent
         inst = InstanceManager.get_instance(@@tvt_event_instance).not_nil!
         inst.allow_summon = false
         inst.pvp_instance = true
-        inst.empty_destroy_time = (Config.tvt_event_start_leave_teleport_delay.to_i64 * 1000) + 60000
+        inst.empty_destroy_time = (Config.tvt_event_start_leave_teleport_delay.to_i64 * 1000) + 60_000
       rescue e
         error e
         @@tvt_event_instance = 0
@@ -355,7 +355,7 @@ module TvTEvent
 
   def needs_participation_fee?
     Config.tvt_event_participation_fee[0] != 0 &&
-    Config.tvt_event_participation_fee[1] != 0
+      Config.tvt_event_participation_fee[1] != 0
   end
 
   def has_participation_fee?(pc : L2PcInstance) : Bool

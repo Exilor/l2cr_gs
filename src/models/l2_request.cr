@@ -47,7 +47,7 @@ class L2Request
 
   protected def on_request_timer=(is_requestor : Bool)
     @answerer = !(@requestor = is_requestor)
-    ThreadPoolManager.schedule_general(->clear, REQUEST_TIMEOUT * 1000)
+    ThreadPoolManager.schedule_general(->clear, REQUEST_TIMEOUT &* 1000)
   end
 
   def on_request_response

@@ -30,7 +30,7 @@ module ChatHandler::ChatAll
         return
       end
 
-      if text.matches?(/\\.{1}[^\\.]+/)
+      if text.matches?(/\.{1}[^\.]+/)
         pc.send_packet(SystemMessageId::INCORRECT_SYNTAX)
       else
         cs = Packets::Outgoing::CreatureSay.new(pc.l2id, type, pc.appearance.visible_name, text)
