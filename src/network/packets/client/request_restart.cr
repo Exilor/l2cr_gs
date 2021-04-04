@@ -66,7 +66,9 @@ class Packets::Incoming::RequestRestart < GameClientPacket
     client.active_char = nil
     AntiFeedManager.on_disconnect(client)
     client.state = :AUTHED
-    client.secondary_auth.authed = false
+    if SecondaryAuthData.enabled?
+      client.secondary_auth.authed = false
+    end
     send_packet(RestartResponse::YES)
 
     csi = CharSelectionInfo.new(client.account_name, client.session_id.play_ok_1)
