@@ -18,7 +18,7 @@ class L2ChestInstance < L2MonsterInstance
     super
 
     @special_drop = false
-    @must_reward_exp_sp = true
+    self.must_reward_exp_sp = true
   end
 
   def do_item_drop(template : L2NpcTemplate, killer : L2Character?)

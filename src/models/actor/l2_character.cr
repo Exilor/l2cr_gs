@@ -33,8 +33,8 @@ abstract class L2Character < L2Object
   @zone_validate_counter = 4i8
   @teleport_lock = Mutex.new(:Reentrant)
   @invul_against_skills : Concurrent::Map(Int32, InvulSkillHolder)?
-  @reuse_time_stamp_items : Concurrent::Map(Int32, TimeStamp)? | Hash(Int32, TimeStamp)?
-  @reuse_time_stamp_skills : Concurrent::Map(Int32, TimeStamp)? | Hash(Int32, TimeStamp)?
+  @reuse_time_stamp_items : Concurrent::Map(Int32, TimeStamp)?
+  @reuse_time_stamp_skills : Concurrent::Map(Int32, TimeStamp)?
   @disabled_skills : Concurrent::Map(Int32, Int64)?
   @trigger_skills : Concurrent::Map(Int32, OptionsSkillHolder)?
   @ai : L2CharacterAI?
@@ -68,115 +68,6 @@ abstract class L2Character < L2Object
   property summoner : L2Character?
   property! template : L2CharTemplate
 
-  def immobilized=(val : Bool)
-    @char_flags.immobilized = val
-    stop_move(nil) if val && moving?
-  end
-
-  def immobilized? : Bool
-    @char_flags.immobilized?
-  end
-
-  def running? : Bool
-    @char_flags.running?
-  end
-
-  def core_ai_disabled? : Bool
-    @char_flags.core_ai_disabled?
-  end
-
-  def pending_revive=(val : Bool)
-    @char_flags.pending_revive = val
-  end
-
-  def paralyzed=(val : Bool)
-    @char_flags.paralyzed = val
-  end
-
-  def invul=(val : Bool)
-    @char_flags.invul = val
-  end
-
-  def casting_now? : Bool
-    @char_flags.casting_now?
-  end
-
-  def casting_now=(val : Bool)
-    @char_flags.casting_now = val
-  end
-
-  def casting_simultaneously_now? : Bool
-    @char_flags.casting_simultaneously_now?
-  end
-
-  def casting_simultaneously_now=(val : Bool)
-    @char_flags.casting_simultaneously_now = val
-  end
-
-  def dead? : Bool
-    @char_flags.dead?
-  end
-
-  def dead=(val : Bool)
-    @char_flags.dead = val
-  end
-
-  def no_random_walk? : Bool
-    @char_flags.no_random_walk?
-  end
-
-  def no_random_walk=(val : Bool)
-    @char_flags.no_random_walk = val
-  end
-
-  def show_summon_animation? : Bool
-    @char_flags.show_summon_animation?
-  end
-
-  def show_summon_animation=(val : Bool)
-    @char_flags.show_summon_animation = val
-  end
-
-  def teleporting? : Bool
-    @char_flags.teleporting?
-  end
-
-  def teleporting=(val : Bool)
-    @char_flags.teleporting = val
-  end
-
-  def mortal? : Bool
-    @char_flags.mortal?
-  end
-
-  def mortal=(val : Bool)
-    @char_flags.mortal = val
-  end
-
-  def flying? : Bool
-    @char_flags.flying?
-  end
-
-  def flying=(val : Bool)
-    @char_flags.flying = val
-  end
-
-  def overloaded? : Bool
-    @char_flags.overloaded?
-  end
-
-  def overloaded=(val : Bool)
-    @char_flags.overloaded = val
-  end
-
-  def lethalable? : Bool
-    @char_flags.lethalable?
-  end
-
-  def lethalable=(val : Bool)
-    @char_flags.lethalable = val
-  end
-
   def initialize(template : L2CharTemplate)
     initialize(IdFactory.next, template)
   end
@@ -197,7 +88,9 @@ abstract class L2Character < L2Object
       @calculators = Slice(Calculator?).new(Stats.size)
     end
 
+    self.lethalable = true
     self.invul = true
+    self.mortal = true
   end
 
   def instance_type : InstanceType
@@ -361,6 +254,115 @@ abstract class L2Character < L2Object
     unless walker?
       self.ai = nil
     end
+  end
+
+  def immobilized=(val : Bool)
+    @char_flags.immobilized = val
+    stop_move(nil) if val && moving?
+  end
+
+  def immobilized? : Bool
+    @char_flags.immobilized?
+  end
+
+  def running? : Bool
+    @char_flags.running?
+  end
+
+  def core_ai_disabled? : Bool
+    @char_flags.core_ai_disabled?
+  end
+
+  def pending_revive=(val : Bool)
+    @char_flags.pending_revive = val
+  end
+
+  def paralyzed=(val : Bool)
+    @char_flags.paralyzed = val
+  end
+
+  def invul=(val : Bool)
+    @char_flags.invul = val
+  end
+
+  def casting_now? : Bool
+    @char_flags.casting_now?
+  end
+
+  def casting_now=(val : Bool)
+    @char_flags.casting_now = val
+  end
+
+  def casting_simultaneously_now? : Bool
+    @char_flags.casting_simultaneously_now?
+  end
+
+  def casting_simultaneously_now=(val : Bool)
+    @char_flags.casting_simultaneously_now = val
+  end
+
+  def dead? : Bool
+    @char_flags.dead?
+  end
+
+  def dead=(val : Bool)
+    @char_flags.dead = val
+  end
+
+  def no_random_walk? : Bool
+    @char_flags.no_random_walk?
+  end
+
+  def no_random_walk=(val : Bool)
+    @char_flags.no_random_walk = val
+  end
+
+  def show_summon_animation? : Bool
+    @char_flags.show_summon_animation?
+  end
+
+  def show_summon_animation=(val : Bool)
+    @char_flags.show_summon_animation = val
+  end
+
+  def teleporting? : Bool
+    @char_flags.teleporting?
+  end
+
+  def teleporting=(val : Bool)
+    @char_flags.teleporting = val
+  end
+
+  def mortal? : Bool
+    @char_flags.mortal?
+  end
+
+  def mortal=(val : Bool)
+    @char_flags.mortal = val
+  end
+
+  def flying? : Bool
+    @char_flags.flying?
+  end
+
+  def flying=(val : Bool)
+    @char_flags.flying = val
+  end
+
+  def overloaded? : Bool
+    @char_flags.overloaded?
+  end
+
+  def overloaded=(val : Bool)
+    @char_flags.overloaded = val
+  end
+
+  def lethalable? : Bool
+    @char_flags.lethalable?
+  end
+
+  def lethalable=(val : Bool)
+    @char_flags.lethalable = val
   end
 
   def attack_by_list : Concurrent::Set(L2Character)
@@ -690,6 +692,7 @@ abstract class L2Character < L2Object
 
     sync do
       if dead?
+        puts "already dead"
         return false
       end
 

@@ -7,6 +7,7 @@ require "./l2_cubic_instance"
 require "./l2_guard_instance"
 require "./l2_control_tower_instance"
 require "../l2_vehicle"
+require "../../player_flags"
 require "../../subclass"
 require "../../shortcuts"
 require "../../macro_list"
@@ -90,11 +91,7 @@ class L2PcInstance < L2Playable
   @last_item_auction_info_request = 0i64
   @custom_skills : Concurrent::Map(Int32, Skill)?
   @action_mask = 0
-  @can_feed = false
   @offline_shop_start = 0
-  @in_duel = false
-  @exchange_refusal = false
-  @revive_pet = false
   @quests = Concurrent::Map(String, QuestState).new
   @water_task : TaskScheduler::PeriodicTask?
   @transform_skills : Concurrent::Map(Int32, Skill)?
@@ -128,6 +125,7 @@ class L2PcInstance < L2Playable
   @race = Slice(Int32).new(2)
   @forum_mail : Forum?
   @forum_memo : Forum?
+  @player_flags = PlayerFlags.new
 
   getter henna_str = 0
   getter henna_dex = 0
@@ -192,16 +190,7 @@ class L2PcInstance < L2Playable
   getter clan : L2Clan?
   getter transformation : Transform?
   getter! ui_settings : UIKeysSettings
-  getter? online = false
-  getter? in_observer_mode = false # L2J: _observerMode
-  getter? noble = false
-  getter? hero = false
-  getter? message_refusal = false
-  getter? silence_mode = false
-  getter? inventory_disabled = false
-  getter? engage_request = false
   setter uptime : Int64 = 0i64
-  setter can_revive : Bool = true
   setter active_requester : L2PcInstance?
   setter learning_class : ClassId?
   property original_cp_hp_mp : {Float64, Float64, Float64}?
@@ -271,30 +260,11 @@ class L2PcInstance < L2Playable
   property servitor_share : EnumMap(Stats, Float64)?
   property lure : L2ItemInstance?
   property event_status : PlayerEventHolder?
-  property? sitting : Bool = false
-  property? reco_two_hours_given : Bool = false
-  property? enchanting : Bool = false
-  property? in_crystallize : Bool = false
-  property? in_craft_mode : Bool = false
-  property? in_siege : Bool = false
-  property? in_hideout_siege : Bool = false
-  property? in_7s_dungeon : Bool = false
-  property? minimap_allowed : Bool = false
-  property? diet_mode : Bool = false
-  property? trade_refusal : Bool = false
-  property? fake_death : Bool = false
-  property? married : Bool = false
-  property? marry_request : Bool = false
-  property? marry_accepted : Bool = false
-  property? combat_flag_equipped : Bool = false # L2J: _combatFlagEquippedId
-  property? fishing : Bool = false
-  property? in_olympiad_mode : Bool = false
-  property? olympiad_start : Bool = false
-  property? charm_of_courage : Bool = false
-  property? has_pet_items : Bool = false # L2J: _petItems, havePetInvItems()
 
   def initialize(l2id : Int32, class_id : Int32, account_name : String, appearance : PcAppearance)
     super(l2id, PlayerTemplateData[class_id])
+
+    self.can_revive = true
 
     @account_name = account_name
     @appearance = appearance
@@ -433,7 +403,7 @@ class L2PcInstance < L2Playable
       end
 
       begin
-        @online = false
+        @player_flags.online = false
         abort_attack
         abort_cast
         stop_move(nil)
@@ -1102,7 +1072,7 @@ class L2PcInstance < L2Playable
   end
 
   def online_int : Int32
-    if @online && (client = @client)
+    if @player_flags.online? && (client = @client)
       return client.detached? ? 2 : 1
     end
 
@@ -1110,7 +1080,7 @@ class L2PcInstance < L2Playable
   end
 
   def set_online_status(online : Bool, update_db : Bool)
-    @online = online if online != @online
+    @player_flags.online = online if online != @player_flags.online?
     if update_db
       GameDB.player.update_online_status(self)
     end
@@ -1864,7 +1834,7 @@ class L2PcInstance < L2Playable
   end
 
   def reviving_pet? : Bool
-    @revive_pet
+    @player_flags.revive_pet?
   end
 
   def remove_reviving
@@ -2715,7 +2685,7 @@ class L2PcInstance < L2Playable
       end
     end
 
-    @noble = val
+    @player_flags.noble = val
     send_skill_list
   end
 
@@ -2888,7 +2858,7 @@ class L2PcInstance < L2Playable
   end
 
   def message_refusal=(val : Bool)
-    @message_refusal = val
+    @player_flags.message_refusal = val
     send_packet(EtcStatusUpdate.new(self))
   end
 
@@ -2903,7 +2873,7 @@ class L2PcInstance < L2Playable
       end
     end
 
-    @hero = val
+    @player_flags.hero = val
     send_skill_list
   end
 
@@ -3614,7 +3584,7 @@ class L2PcInstance < L2Playable
     return unless max_load > 0
     weight_proc = ((current_load - bonus_weight_penalty) * 1000) / max_load
     case
-    when weight_proc < 500 || @diet_mode
+    when weight_proc < 500 || @player_flags.diet_mode?
       new_weight_penalty = 0
     when weight_proc < 666
       new_weight_penalty = 1
@@ -3628,7 +3598,7 @@ class L2PcInstance < L2Playable
 
     if @cur_weight_penalty != new_weight_penalty
       @cur_weight_penalty = new_weight_penalty
-      if new_weight_penalty > 0 && !@diet_mode
+      if new_weight_penalty > 0 && !@player_flags.diet_mode?
         add_skill(SkillData[4270, new_weight_penalty])
         self.overloaded = current_load > max_load
       else
@@ -3715,7 +3685,7 @@ class L2PcInstance < L2Playable
   end
 
   def weight_penalty : Int32
-    @diet_mode ? 0 : @cur_weight_penalty
+    @player_flags.diet_mode? ? 0 : @cur_weight_penalty
   end
 
   def add_action(act : PlayerAction) : Bool
@@ -3774,9 +3744,7 @@ class L2PcInstance < L2Playable
   end
 
   def engage_answer(answer : Int32)
-    if !@engage_request
-      # do nothing
-    elsif @engage_id == 0
+    if !@player_flags.engage_request? || @engage_id == 0
       # do nothing
     else
       set_engage_request(false, 0)
@@ -3791,7 +3759,9 @@ class L2PcInstance < L2Playable
     end
   end
 
-  def set_engage_request(@engage_request : Bool, @engage_id : Int32)
+  def set_engage_request(engage_request : Bool, engage_id : Int32)
+    @player_flags.engage_request = engage_request
+    @engage_id = engage_id
   end
 
   def set_event_status
@@ -4421,7 +4391,8 @@ class L2PcInstance < L2Playable
     0
   end
 
-  def online_time=(@online_time : Int64)
+  def online_time=(online_time : Int64)
+    @online_time = online_time
     @online_begin_time = Time.ms
   end
 
@@ -4945,7 +4916,7 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if !@sitting && !attacking_disabled? && !out_of_control? && !moving?
+    if !@player_flags.sitting? && !attacking_disabled? && !out_of_control? && !moving?
       unless immobilized?
         break_attack
         self.sitting = true
@@ -4962,7 +4933,7 @@ class L2PcInstance < L2Playable
       return
     end
 
-    if @sitting && !looks_dead? && !in_store_mode?
+    if @player_flags.sitting? && !looks_dead? && !in_store_mode?
       if effect_list.affected?(EffectFlag::RELAXING)
         stop_effects(EffectType::RELAXING)
       end
@@ -5811,7 +5782,7 @@ class L2PcInstance < L2Playable
   end
 
   def start_feed(npc_id : Int32)
-    @can_feed = npc_id > 0
+    @player_flags.can_feed = npc_id > 0
     return unless mounted?
     if has_summon?
       self.current_feed = summon.as(L2PetInstance).current_feed
@@ -5826,7 +5797,7 @@ class L2PcInstance < L2Playable
           PetFeedTask.new(self), 10_000, 10_000
         )
       end
-    elsif @can_feed
+    elsif @player_flags.can_feed?
       self.current_feed = max_feed
       sg = SetupGauge.green(
         (current_feed * 10_000) // feed_consume,
@@ -5871,7 +5842,7 @@ class L2PcInstance < L2Playable
   end
 
   def hungry? : Bool
-    if @can_feed
+    if @player_flags.can_feed?
       data = PetDataTable.get_pet_data(mount_npc_id)
       return current_feed < data.hungry_limit.fdiv(100) * get_pet_level_data(mount_npc_id).pet_max_feed
     end
@@ -6036,7 +6007,7 @@ class L2PcInstance < L2Playable
       end
     end
 
-    @can_revive
+    @player_flags.can_revive?
   end
 
   def on_event? : Bool
@@ -6301,14 +6272,15 @@ class L2PcInstance < L2Playable
   end
 
   def silence_mode?(pc_id : Int32) : Bool
-    if Config.silence_mode_exclude && @silence_mode && @silence_mode_excluded
+    if Config.silence_mode_exclude && @player_flags.silence_mode? && @silence_mode_excluded
       !@silence_mode_excluded.not_nil!.includes?(pc_id)
     else
-      @silence_mode
+      @player_flags.silence_mode?
     end
   end
 
-  def silence_mode=(@silence_mode : Bool)
+  def silence_mode=(silence_mode : Bool)
+    @player_flags.silence_mode = silence_mode
     @silence_mode_excluded.try &.clear
     send_packet(EtcStatusUpdate.new(self))
   end
@@ -6381,8 +6353,9 @@ class L2PcInstance < L2Playable
     update_and_broadcast_status(2)
   end
 
-  def inventory_blocking_status=(@inventory_disabled : Bool)
-    if @inventory_disabled
+  def inventory_blocking_status=(val : Bool)
+    @player_flags.inventory_disabled = val
+    if val
       task = InventoryEnableTask.new(self)
       ThreadPoolManager.schedule_general(task, 1500)
     end
@@ -6882,7 +6855,7 @@ class L2PcInstance < L2Playable
 
     update_effect_icons
     send_packet(EtcStatusUpdate.new(self))
-    @revive_pet = false
+    @player_flags.revive_pet = false
     @revive_requested = 0
     @revive_power = 0.0
 
@@ -6918,7 +6891,7 @@ class L2PcInstance < L2Playable
     end
 
     if @revive_requested == 1
-      if @revive_pet == pet
+      if @player_flags.revive_pet? == pet
         reviver.send_packet(SystemMessageId::RES_HAS_ALREADY_BEEN_PROPOSED)
       else
         if pet
@@ -6936,7 +6909,7 @@ class L2PcInstance < L2Playable
       @revive_recovery = recovery
       @revive_power = Formulas.skill_resurrect_restore_percent(power.to_f, reviver)
       restore_exp = (((exp_before_death - exp) * @revive_power) / 100).round.to_i!
-      @revive_pet = pet
+      @player_flags.revive_pet = pet
 
       if charm_of_courage?
         dlg = ConfirmDlg.resurrect_using_charm_of_courage
@@ -6953,11 +6926,11 @@ class L2PcInstance < L2Playable
 
   def revive_answer(answer : Int)
     return if @revive_requested != 1
-    return if alive? && !@revive_pet
-    return if @revive_pet && (pet = summon.as?(L2PetInstance)) && pet.alive?
+    return if alive? && !@player_flags.revive_pet?
+    return if @player_flags.revive_pet? && (pet = summon.as?(L2PetInstance)) && pet.alive?
 
     if answer == 1
-      if !@revive_pet
+      if !@player_flags.revive_pet?
         @revive_power != 0 ? do_revive(@revive_power) : do_revive
 
         if @revive_recovery != 0
@@ -6975,7 +6948,7 @@ class L2PcInstance < L2Playable
       end
     end
 
-    @revive_pet = false
+    @player_flags.revive_pet = false
     @revive_requested = 0
     @revive_power = 0.0
     @revive_recovery = 0
@@ -7061,7 +7034,7 @@ class L2PcInstance < L2Playable
   def start_fishing(x : Int32, y : Int32, z : Int32)
     stop_move(nil)
     self.immobilized = true
-    @fishing = true
+    @player_flags.fishing = true
     @fish_x, @fish_y, @fish_z = x, y, z
 
     lvl = random_fish_lvl
@@ -7307,7 +7280,7 @@ class L2PcInstance < L2Playable
   end
 
   def end_fishing(win : Bool)
-    @fishing = false
+    @player_flags.fishing = false
     @fish_x = @fish_y = @fish_z = 0
 
     unless @fish_combat
@@ -7507,6 +7480,242 @@ class L2PcInstance < L2Playable
     end
 
     super
+  end
+
+  def sitting? : Bool
+    @player_flags.sitting?
+  end
+
+  def sitting=(val : Bool)
+    @player_flags.sitting = val
+  end
+
+  def reco_two_hours_given? : Bool
+    @player_flags.reco_two_hours_given?
+  end
+
+  def reco_two_hours_given=(val : Bool)
+    @player_flags.reco_two_hours_given = val
+  end
+
+  def enchanting? : Bool
+    @player_flags.enchanting?
+  end
+
+  def enchanting=(val : Bool)
+    @player_flags.enchanting = val
+  end
+
+  def in_crystallize? : Bool
+    @player_flags.in_crystallize?
+  end
+
+  def in_crystallize=(val : Bool)
+    @player_flags.in_crystallize = val
+  end
+
+  def in_craft_mode? : Bool
+    @player_flags.in_craft_mode?
+  end
+
+  def in_craft_mode=(val : Bool)
+    @player_flags.in_craft_mode = val
+  end
+
+  def in_siege? : Bool
+    @player_flags.in_siege?
+  end
+
+  def in_siege=(val : Bool)
+    @player_flags.in_siege = val
+  end
+
+  def in_hideout_siege? : Bool
+    @player_flags.in_hideout_siege?
+  end
+
+  def in_hideout_siege=(val : Bool)
+    @player_flags.in_hideout_siege = val
+  end
+
+  def in_7s_dungeon? : Bool
+    @player_flags.in_7s_dungeon?
+  end
+
+  def in_7s_dungeon=(val : Bool)
+    @player_flags.in_7s_dungeon = val
+  end
+
+  def minimap_allowed? : Bool
+    @player_flags.minimap_allowed?
+  end
+
+  def minimap_allowed=(val : Bool)
+    @player_flags.minimap_allowed = val
+  end
+
+  def diet_mode? : Bool
+    @player_flags.diet_mode?
+  end
+
+  def diet_mode=(val : Bool)
+    @player_flags.diet_mode = val
+  end
+
+  def trade_refusal? : Bool
+    @player_flags.trade_refusal?
+  end
+
+  def trade_refusal=(val : Bool)
+    @player_flags.trade_refusal = val
+  end
+
+  def fake_death? : Bool
+    @player_flags.fake_death?
+  end
+
+  def fake_death=(val : Bool)
+    @player_flags.fake_death = val
+  end
+
+  def married? : Bool
+    @player_flags.married?
+  end
+
+  def married=(val : Bool)
+    @player_flags.married = val
+  end
+
+  def marry_request? : Bool
+    @player_flags.marry_request?
+  end
+
+  def marry_request=(val : Bool)
+    @player_flags.marry_request = val
+  end
+
+  def marry_accepted? : Bool
+    @player_flags.marry_accepted?
+  end
+
+  def marry_accepted=(val : Bool)
+    @player_flags.marry_accepted = val
+  end
+
+  def combat_flag_equipped? : Bool
+    @player_flags.combat_flag_equipped?
+  end
+
+  def combat_flag_equipped=(val : Bool)
+    @player_flags.combat_flag_equipped = val
+  end
+
+  def fishing? : Bool
+    @player_flags.fishing?
+  end
+
+  def fishing=(val : Bool)
+    @player_flags.fishing = val
+  end
+
+  def in_olympiad_mode? : Bool
+    @player_flags.in_olympiad_mode?
+  end
+
+  def in_olympiad_mode=(val : Bool)
+    @player_flags.in_olympiad_mode = val
+  end
+
+  def olympiad_start? : Bool
+    @player_flags.olympiad_start?
+  end
+
+  def olympiad_start=(val : Bool)
+    @player_flags.olympiad_start = val
+  end
+
+  def charm_of_courage? : Bool
+    @player_flags.charm_of_courage?
+  end
+
+  def charm_of_courage=(val : Bool)
+    @player_flags.charm_of_courage = val
+  end
+
+  def has_pet_items? : Bool
+    @player_flags.has_pet_items?
+  end
+
+  def has_pet_items=(val : Bool)
+    @player_flags.has_pet_items = val
+  end
+
+  def online? : Bool
+    @player_flags.online?
+  end
+
+  def online=(val : Bool)
+    @player_flags.online = val
+  end
+
+  def in_observer_mode? : Bool
+    @player_flags.in_observer_mode?
+  end
+
+  def in_observer_mode=(val : Bool)
+    @player_flags.in_observer_mode = val
+  end
+
+  def noble? : Bool
+    @player_flags.noble?
+  end
+
+  def noble=(val : Bool)
+    @player_flags.noble = val
+  end
+
+  def hero? : Bool
+    @player_flags.hero?
+  end
+
+  def hero=(val : Bool)
+    @player_flags.hero = val
+  end
+
+  def message_refusal? : Bool
+    @player_flags.message_refusal?
+  end
+
+  def message_refusal=(val : Bool)
+    @player_flags.message_refusal = val
+  end
+
+  def silence_mode? : Bool
+    @player_flags.silence_mode?
+  end
+
+  def silence_mode=(val : Bool)
+    @player_flags.silence_mode = val
+  end
+
+  def inventory_disabled? : Bool
+    @player_flags.inventory_disabled?
+  end
+
+  def inventory_disabled=(val : Bool)
+    @player_flags.inventory_disabled = val
+  end
+
+  def engage_request? : Bool
+    @player_flags.engage_request?
+  end
+
+  def engage_request=(val : Bool)
+    @player_flags.engage_request = val
+  end
+
+  def can_revive=(val : Bool)
+    @player_flags.can_revive = val
   end
 
   private def bad_coords

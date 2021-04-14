@@ -1,6 +1,7 @@
 require "./l2_npc"
 require "../aggro_info"
 require "../absorber_info"
+require "../attackable_flags"
 require "../l2_command_channel"
 require "./ai/l2_attackable_ai"
 require "./known_list/attackable_known_list"
@@ -9,6 +10,7 @@ require "../damage_done_info"
 require "./tasks/attackable/*"
 
 class L2Attackable < L2Npc
+  @attackable_flags = AttackableFlags.new
   @harvest_item = Atomic(ItemHolder?).new(nil.as(ItemHolder?))
   @sweep_items = Atomic(Array(ItemHolder)?).new(nil.as(Array(ItemHolder)?))
 
@@ -17,26 +19,19 @@ class L2Attackable < L2Npc
   getter overhit_damage = 0.0
   getter absorbers_list = Concurrent::Map(Int32, AbsorberInfo).new
   getter seed : L2Seed?
-  getter? seeded = false
-  getter? raid_minion = false
-  getter? absorbed = false
   property seeder_id : Int32 = 0
   property spoiler_l2id : Int32 = 0
   property command_channel_last_attack : Int64 = 0
   property on_kill_delay : Int32 = 5000
   property command_channel_timer : CommandChannelTimer?
   property first_command_channel_attacked : L2CommandChannel?
-  property? overhit : Bool = false
-  property? champion : Bool = false
-  property? raid : Bool = false
-  property? must_reward_exp_sp : Bool = true
-  property? can_return_to_spawn_point : Bool = true
-  property? returning_to_spawn_point : Bool = false
-  property? can_see_through_silent_move : Bool = false
 
   def initialize(template : L2NpcTemplate)
-    super(template)
+    super
+
     self.invul = false
+    self.must_reward_exp_sp = true
+    self.can_return_to_spawn_point = true
   end
 
   def instance_type : InstanceType
@@ -603,7 +598,7 @@ class L2Attackable < L2Npc
 
   def clear_aggro_list
     @aggro_list.clear
-    @overhit = false
+    @attackable_flags.overhit = false
     @overhit_damage = 0
     @overhit_attacker = nil
   end
@@ -668,7 +663,7 @@ class L2Attackable < L2Npc
   end
 
   def absorb_soul
-    @absorbed = true
+    @attackable_flags.absorbed = true
   end
 
   def add_absorber(attacker : L2PcInstance)
@@ -682,7 +677,7 @@ class L2Attackable < L2Npc
   end
 
   def reset_absorb_list
-    @absorbed = false
+    @attackable_flags.absorbed = false
     @absorbers_list.clear
   end
 
@@ -732,7 +727,7 @@ class L2Attackable < L2Npc
     self.spoiler_l2id = 0
     clear_aggro_list
     @harvest_item.set(nil)
-    @seeded = false
+    @attackable_flags.seeded = false
     @seed = nil
     @seeder_id = 0
     self.overhit = false
@@ -751,7 +746,7 @@ class L2Attackable < L2Npc
 
   def set_seeded(seeder : L2PcInstance)
     if (seed = @seed) && @seeder_id == seeder.l2id
-      @seeded = true
+      @attackable_flags.seeded = true
 
       count = 1i64
       template.skills.each_key do |skill_id|
@@ -778,7 +773,7 @@ class L2Attackable < L2Npc
   end
 
   def set_seeded(seed : L2Seed, seeder : L2PcInstance)
-    unless @seeded
+    unless @attackable_flags.seeded?
       @seed = seed
       @seeder_id = seeder.l2id
     end
@@ -821,8 +816,8 @@ class L2Attackable < L2Npc
   end
 
   def raid_minion=(val : Bool)
-    @raid = val
-    @raid_minion = val
+    @attackable_flags.raid = val
+    @attackable_flags.raid_minion = val
   end
 
   def leader : L2Attackable?
@@ -835,5 +830,73 @@ class L2Attackable < L2Npc
 
   def attackable? : Bool
     true
+  end
+
+  def seeded? : Bool
+    @attackable_flags.seeded?
+  end
+
+  def raid_minion? : Bool
+    @attackable_flags.raid_minion?
+  end
+
+  def absorbed? : Bool
+    @attackable_flags.absorbed?
+  end
+
+  def overhit? : Bool
+    @attackable_flags.overhit?
+  end
+
+  def overhit=(val : Bool)
+    @attackable_flags.overhit = val
+  end
+
+  def champion? : Bool
+    @attackable_flags.champion?
+  end
+
+  def champion=(val : Bool)
+    @attackable_flags.champion = val
+  end
+
+  def raid? : Bool
+    @attackable_flags.raid?
+  end
+
+  def raid=(val : Bool)
+    @attackable_flags.raid = val
+  end
+
+  def must_reward_exp_sp? : Bool
+    @attackable_flags.must_reward_exp_sp?
+  end
+
+  def must_reward_exp_sp=(val : Bool)
+    @attackable_flags.must_reward_exp_sp = val
+  end
+
+  def can_return_to_spawn_point? : Bool
+    @attackable_flags.can_return_to_spawn_point?
+  end
+
+  def can_return_to_spawn_point=(val : Bool)
+    @attackable_flags.can_return_to_spawn_point = val
+  end
+
+  def returning_to_spawn_point? : Bool
+    @attackable_flags.returning_to_spawn_point?
+  end
+
+  def returning_to_spawn_point=(val : Bool)
+    @attackable_flags.returning_to_spawn_point = val
+  end
+
+  def can_see_through_silent_move? : Bool
+    @attackable_flags.can_see_through_silent_move?
+  end
+
+  def can_see_through_silent_move=(val : Bool)
+    @attackable_flags.can_see_through_silent_move = val
   end
 end
