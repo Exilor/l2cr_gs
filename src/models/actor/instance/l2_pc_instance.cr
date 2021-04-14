@@ -263,12 +263,12 @@ class L2PcInstance < L2Playable
 
   def initialize(l2id : Int32, class_id : Int32, account_name : String, appearance : PcAppearance)
     super(l2id, PlayerTemplateData[class_id])
-
-    self.can_revive = true
-
+    
     @account_name = account_name
     @appearance = appearance
     @appearance.owner = self
+    
+    self.can_revive = true
 
     ai # initializes AI
 
