@@ -30,7 +30,7 @@ abstract class MessageId
   end
 
   def inspect(io : IO)
-    io.print({{@type.stringify + "("}}, @id, ", ", @name, ')')
+    to_s(io)
   end
 
   private def count_params(str)

@@ -30,6 +30,6 @@ module AdminCommandHandler::AdminShop
   end
 
   def commands : Enumerable(String)
-    %w(admin_buy admin_gmshop)
+    {"admin_buy", "admin_gmshop"}
   end
 end

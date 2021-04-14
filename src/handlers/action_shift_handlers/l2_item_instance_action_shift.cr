@@ -5,9 +5,7 @@ module ActionShiftHandler::L2ItemInstanceActionShift
   def action(pc, target, interact) : Bool
     if pc.access_level.gm?
       item = target
-      unless item.is_a?(L2ItemInstance)
-        raise "Expected #{item}:#{item.class} to be a L2ItemInstance"
-      end
+      return false unless item.is_a?(L2ItemInstance)
       str = String.build do |io|
         io << "<html><body><center><font color=\"LEVEL\">Item Info</font></center><br><table border=0><tr><td>Object ID: </td><td>"
         io << item.l2id

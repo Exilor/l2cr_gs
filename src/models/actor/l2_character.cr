@@ -6,6 +6,7 @@ require "./known_list/char_known_list"
 require "./ai/l2_character_ai"
 require "../holders/invul_skill_holder"
 require "../time_stamp"
+require "../char_flags"
 require "./tasks/character/*"
 require "../../enums/zone_id"
 require "../../enums/team"
@@ -36,12 +37,12 @@ abstract class L2Character < L2Object
   @reuse_time_stamp_skills : Concurrent::Map(Int32, TimeStamp)? | Hash(Int32, TimeStamp)?
   @disabled_skills : Concurrent::Map(Int32, Int64)?
   @trigger_skills : Concurrent::Map(Int32, OptionsSkillHolder)?
-  @all_skills_disabled : Bool = false
   @ai : L2CharacterAI?
   @exceptions = 0i64
   @move : MoveData?
   @skill_cast_2 : TaskScheduler::DelayedTask?
   @attack_by_list : Concurrent::Set(L2Character)?
+  @char_flags = CharFlags.new
 
   getter title : String = ""
   getter cast_interrupt_time = 0i64
@@ -56,12 +57,7 @@ abstract class L2Character < L2Object
   getter(skill_channelized) { SkillChannelized.new }
   getter! stat : CharStat
   getter! status : CharStatus
-  getter? running = false
-  getter? core_ai_disabled = false
-  setter paralyzed : Bool = false
-  setter pending_revive : Bool = false
   setter skill_cast : TaskScheduler::DelayedTask?
-  setter invul : Bool = false
   property attack_end_time : Int64 = 0i64
   property bow_attack_end_time : Int32 = 0
   property cross_bow_attack_end_time : Int64 = 0i64
@@ -71,23 +67,114 @@ abstract class L2Character < L2Object
   property team : Team = Team::NONE
   property summoner : L2Character?
   property! template : L2CharTemplate
-  property? lethalable : Bool = true
-  property? casting_now : Bool = false
-  property? casting_simultaneously_now : Bool = false
-  property? dead : Bool = false
-  property? mortal : Bool = true
-  property? overloaded : Bool = false
-  property? teleporting : Bool = false
-  getter? immobilized : Bool = false
-  property? no_random_walk : Bool = false
-  property? flying : Bool = false
-  property? show_summon_animation : Bool = false
 
   def immobilized=(val : Bool)
-    @immobilized = val
-    if val && moving?
-      stop_move(nil)
-    end
+    @char_flags.immobilized = val
+    stop_move(nil) if val && moving?
+  end
+
+  def immobilized? : Bool
+    @char_flags.immobilized?
+  end
+
+  def running? : Bool
+    @char_flags.running?
+  end
+
+  def core_ai_disabled? : Bool
+    @char_flags.core_ai_disabled?
+  end
+
+  def pending_revive=(val : Bool)
+    @char_flags.pending_revive = val
+  end
+
+  def paralyzed=(val : Bool)
+    @char_flags.paralyzed = val
+  end
+
+  def invul=(val : Bool)
+    @char_flags.invul = val
+  end
+
+  def casting_now? : Bool
+    @char_flags.casting_now?
+  end
+
+  def casting_now=(val : Bool)
+    @char_flags.casting_now = val
+  end
+
+  def casting_simultaneously_now? : Bool
+    @char_flags.casting_simultaneously_now?
+  end
+
+  def casting_simultaneously_now=(val : Bool)
+    @char_flags.casting_simultaneously_now = val
+  end
+
+  def dead? : Bool
+    @char_flags.dead?
+  end
+
+  def dead=(val : Bool)
+    @char_flags.dead = val
+  end
+
+  def no_random_walk? : Bool
+    @char_flags.no_random_walk?
+  end
+
+  def no_random_walk=(val : Bool)
+    @char_flags.no_random_walk = val
+  end
+
+  def show_summon_animation? : Bool
+    @char_flags.show_summon_animation?
+  end
+
+  def show_summon_animation=(val : Bool)
+    @char_flags.show_summon_animation = val
+  end
+
+  def teleporting? : Bool
+    @char_flags.teleporting?
+  end
+
+  def teleporting=(val : Bool)
+    @char_flags.teleporting = val
+  end
+
+  def mortal? : Bool
+    @char_flags.mortal?
+  end
+
+  def mortal=(val : Bool)
+    @char_flags.mortal = val
+  end
+
+  def flying? : Bool
+    @char_flags.flying?
+  end
+
+  def flying=(val : Bool)
+    @char_flags.flying = val
+  end
+
+  def overloaded? : Bool
+    @char_flags.overloaded?
+  end
+
+  def overloaded=(val : Bool)
+    @char_flags.overloaded = val
+  end
+
+  def lethalable? : Bool
+    @char_flags.lethalable?
+  end
+
+  def lethalable=(val : Bool)
+    @char_flags.lethalable = val
   end
 
   def initialize(template : L2CharTemplate)
@@ -500,11 +587,11 @@ abstract class L2Character < L2Object
   end
 
   def disable_all_skills
-    @all_skills_disabled = true
+    @char_flags.all_skills_disabled = true
   end
 
   def enable_all_skills
-    @all_skills_disabled = false
+    @char_flags.all_skills_disabled = false
   end
 
   def can_revive? : Bool
@@ -516,7 +603,7 @@ abstract class L2Character < L2Object
   end
 
   def pending_revive? : Bool
-    dead? && @pending_revive
+    dead? && @char_flags.pending_revive?
   end
 
   def do_revive(revive_power : Float64)
@@ -1000,10 +1087,10 @@ abstract class L2Character < L2Object
     @target = object
   end
 
-  def running=(bool : Bool)
-    return if @running == bool # appears to work better without this
+  def running=(val : Bool)
+    return if @char_flags.running? == val
 
-    @running = bool
+    @char_flags.running = val
 
     if run_speed != 0
       broadcast_packet(ChangeMoveType.new(self))
@@ -1905,7 +1992,7 @@ abstract class L2Character < L2Object
 
     if wep = active_weapon_item
       if wep.use_weapon_skills_only? && !gm? && wep.has_skills?
-        unless wep.skills.try &.any? { |sh| sh.skill_id == skill.id }
+        unless wep.skills.any? { |sh| sh.skill_id == skill.id }
           acting_player.try &.send_packet(SystemMessageId::WEAPON_CAN_USE_ONLY_WEAPON_SKILL)
         end
 
@@ -1953,7 +2040,7 @@ abstract class L2Character < L2Object
         skill_channelizer.stop_channeling
       end
 
-      if @all_skills_disabled
+      if @char_flags.all_skills_disabled?
         enable_all_skills
       end
 
@@ -2018,7 +2105,7 @@ abstract class L2Character < L2Object
   end
 
   def invul? : Bool
-    @invul || @teleporting
+    @char_flags.invul? || @char_flags.teleporting?
   end
 
   def access_level : AccessLevel
@@ -2113,7 +2200,8 @@ abstract class L2Character < L2Object
     0
   end
 
-  def set_teleporting(@teleporting : Bool)
+  def set_teleporting(val : Bool)
+    @char_flags.teleporting = val
   end
 
   def race : Race
@@ -3086,7 +3174,8 @@ abstract class L2Character < L2Object
   end
 
   def all_skills_disabled? : Bool
-    @all_skills_disabled || stunned? || sleeping? || paralyzed?
+    return true if @char_flags.all_skills_disabled?
+    stunned? || sleeping? || paralyzed?
   end
 
   def affected_by_skill?(skill_id : Int32) : Bool
@@ -3114,7 +3203,7 @@ abstract class L2Character < L2Object
   end
 
   def paralyzed? : Bool
-    @paralyzed || affected?(EffectFlag::PARALYZED)
+    @char_flags.paralyzed? || affected?(EffectFlag::PARALYZED)
   end
 
   def confused? : Bool
@@ -3158,7 +3247,7 @@ abstract class L2Character < L2Object
 
   def movement_disabled? : Bool
     stunned? || rooted? || sleeping? || overloaded? || paralyzed? ||
-    immobilized? || looks_dead? || teleporting?
+      immobilized? || looks_dead? || teleporting?
   end
 
   def can_revive? : Bool
@@ -3175,10 +3264,11 @@ abstract class L2Character < L2Object
 
   def attacking_disabled? : Bool
     flying? || stunned? || sleeping? || attacking_now? || looks_dead? ||
-    paralyzed? || physical_attack_muted? || core_ai_disabled?
+      paralyzed? || physical_attack_muted? || core_ai_disabled?
   end
 
-  def disable_core_ai(@core_ai_disabled : Bool)
+  def disable_core_ai(val : Bool)
+    @char_flags.core_ai_disabled = val
   end
 
   def give_raid_curse? : Bool
@@ -3330,7 +3420,8 @@ abstract class L2Character < L2Object
     end
   {% end %}
 
-  def override_cond=(@exceptions : Int64)
+  def override_cond=(exceptions : Int64)
+    @exceptions = exceptions
   end
 
   def min_level : Int32
@@ -3445,7 +3536,7 @@ abstract class L2Character < L2Object
   def tele_to_location(x : Int32, y : Int32, z : Int32, heading : Int32, instance_id : Int32, random_offset : Int32)
     self.instance_id = instance_id
 
-    if @pending_revive
+    if @char_flags.pending_revive?
       do_revive
     end
 

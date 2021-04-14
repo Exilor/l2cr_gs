@@ -10,7 +10,7 @@ module AdminCommandHandler::AdminGmChat
     end
 
     if cmd.starts_with?("admin_gmchat_menu")
-      AdminCommandHandler::AdminHtml.show_admin_html(pc, "gm_menu.htm")
+      AdminHtml.show_admin_html(pc, "gm_menu.htm")
     end
 
     true

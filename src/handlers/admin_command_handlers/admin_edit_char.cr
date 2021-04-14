@@ -741,7 +741,7 @@ module AdminCommandHandler::AdminEditChar
     if ip_address == "disconnected"
       find_disconnected = true
     else
-      unless /^(?:(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2(?:[0-4][0-9]|5[0-5]))\.){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2(?:[0-4][0-9]|5[0-5]))$/ == ip_address
+      unless ip_address.matches?(/^(?:(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2(?:[0-4][0-9]|5[0-5]))\.){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2(?:[0-4][0-9]|5[0-5]))$/)
         raise "Malformed IPv4 number '#{ip_address}'"
       end
     end
@@ -752,27 +752,19 @@ module AdminCommandHandler::AdminEditChar
     repl = NpcHtmlMessage.new
     repl.set_file(pc, "data/html/admin/ipfind.htm")
     compared_players.each do |player|
-      unless client = player.client
-        next
-      end
+      next unless client = player.client
 
-      if (client.detached?)
-        if (!find_disconnected)
-          next
-        end
+      if client.detached?
+        next unless find_disconnected
       else
-        if (find_disconnected)
-          next
-        end
+        next if find_disconnected
 
         ip = client.connection.ip
-        if ip != ip_address
-          next
-        end
+        next if ip != ip_address
       end
 
       name = player.name
-      chars_found = chars_found &+ 1
+      chars_found += 1
       rep_msg << "<tr><td width=80><a action=\"bypass -h admin_character_info "
       rep_msg << name
       rep_msg << "\">"
@@ -807,7 +799,7 @@ module AdminCommandHandler::AdminEditChar
 
   private def find_characters_per_account(pc, char_name)
     unless player = L2World.get_player(char_name)
-      raise "Player doesn't exist"
+      raise "Player not found"
     end
 
     chars = player.account_chars
@@ -835,10 +827,7 @@ module AdminCommandHandler::AdminEditChar
       end
 
       ip = client.connection.ip
-      if ip_map[ip]?.nil?
-        ip_map[ip] = [] of L2PcInstance
-      end
-      ip_map[ip] << player
+      (ip_map[ip] ||= [] of L2PcInstance) << player
 
       if ip_map[ip].size >= multibox
         count = dualbox_ips[ip]?

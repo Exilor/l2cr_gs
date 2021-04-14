@@ -6,9 +6,7 @@ module ActionShiftHandler::L2DoorInstanceActionShift
     if pc.access_level.gm?
       pc.target = target
       door = target
-      unless door.is_a?(L2DoorInstance)
-        raise "Expected #{door}:#{door.class} to be a L2DoorInstance"
-      end
+      return false unless door.is_a?(L2DoorInstance)
       html = NpcHtmlMessage.new
 
       html.set_file(pc, "data/html/admin/doorinfo.htm")

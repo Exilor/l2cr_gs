@@ -31,6 +31,7 @@ class Skill
   @item_pre_condition : Array(Condition)?
   @func_templates : Array(FuncTemplate)?
   @effect_types : EnumSet(EffectType)?
+  @ride_state : EnumSet(MountType)?
 
   getter id : Int32
   getter level : Int32
@@ -74,7 +75,6 @@ class Skill
   getter charge_consume : Int32
   getter max_soul_consume_count : Int32
   getter effect_point : Int32
-  getter ride_state : EnumSet(MountType)?
   getter channeling_skill_id : Int32
   getter channeling_tick_initial_delay : Int32
   getter channeling_tick_interval : Int32
@@ -286,9 +286,7 @@ class Skill
 
     conditions = item_or_weapon ? @item_pre_condition : @pre_condition
 
-    if conditions.nil? || conditions.empty?
-      return true
-    end
+    return true if conditions.nil? || conditions.empty?
 
     target = object.as?(L2Character)
 
@@ -349,35 +347,24 @@ class Skill
 
     if player
       if target_player
-        if target_player == caster || target_player == player
-          return false
-        end
-
+        return false if target_player == caster || target_player == player
         return false if target_player.in_observer_mode?
 
         if bad?
           if player.siege_state > 0 && player.inside_siege_zone?
             if player.siege_state == target_player.siege_state
-              if player.siege_side == target_player.siege_side
-                return false
-              end
+              return false if player.siege_side == target_player.siege_side
             end
           end
 
-          if target.inside_peace_zone?
-            return false
-          end
+          return false if target.inside_peace_zone?
         end
 
         if (party1 = player.party) && (party2 = target_player.party)
-          if party1 == party2
-            return false
-          end
+          return false if party1 == party2
 
           if (cc1 = party1.command_channel) && (cc2 = party2.command_channel)
-            if cc1 == cc2
-              return false
-            end
+            return false if cc1 == cc2
           end
         end
 
@@ -403,35 +390,27 @@ class Skill
       end
     else
       if target_player.nil? && target.is_a?(L2Attackable)
-        if caster.is_a?(L2Attackable)
-          return false
-        end
+        return false if caster.is_a?(L2Attackable)
       end
     end
 
-    unless GeoData.can_see_target?(caster, target)
-      return false
-    end
+    return false unless GeoData.can_see_target?(caster, target)
 
     true
   end
 
-  def get_stat_funcs(effect : AbstractEffect?, player : L2Character) : Indexable(AbstractFunction)
-    unless templates = @func_templates
+  def get_stat_funcs(effect : AbstractEffect?, char : L2Character) : Indexable(AbstractFunction)
+    unless (templates = @func_templates) && !templates.empty?
       return Slice(AbstractFunction).empty
     end
 
-    unless player.is_a?(L2Playable | L2Attackable)
-      return Slice(AbstractFunction).empty
-    end
-
-    if templates.empty?
+    unless char.is_a?(L2Playable) || char.is_a?(L2Attackable)
       return Slice(AbstractFunction).empty
     end
 
     ary = [] of AbstractFunction
     templates.each do |t|
-      if f = t.get_func(player, nil, self, self)
+      if f = t.get_func(char, nil, self, self)
         ary << f
       end
     end
@@ -484,9 +463,7 @@ class Skill
       return unless pc = caster.as?(L2PcInstance)
       arena = pc.block_checker_arena
       if arena != -1
-        unless holder = HandysBlockCheckerManager.get_holder(arena)
-          return
-        end
+        return unless holder = HandysBlockCheckerManager.get_holder(arena)
 
         team = holder.get_player_team(pc)
         color = block.color_effect
@@ -551,23 +528,14 @@ class Skill
 
   def apply_effects(effector : L2Character, effected : L2Character, this : Bool, passive : Bool, instant : Bool, abnormal_time)
     if effector != effected && bad?
-      if effected.invul?
-        return
-      end
-
-      if effector.gm? && !effector.access_level.can_give_damage?
-        return
-      end
+      return if effected.invul?
+      return if effector.gm? && !effector.access_level.can_give_damage?
     end
 
     if debuff?
-      if effected.debuff_blocked?
-        return
-      end
+      return if effected.debuff_blocked?
     else
-      if effected.buff_blocked? && !bad?
-        return
-      end
+      return if effected.buff_blocked? && !bad?
     end
 
     if effected.invul_against?(id, level)

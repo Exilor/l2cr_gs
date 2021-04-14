@@ -6,8 +6,8 @@ module TargetHandler::TargetParty
     target_list = [char] of L2Object
     return target_list if only_first
 
+    return target_list unless player = char.acting_player
     radius = skill.affect_range
-    player = char.acting_player.not_nil!
 
     if char.summon?
       if add_character(char, player, radius, false)

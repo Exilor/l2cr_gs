@@ -333,7 +333,6 @@ module AdminCommandHandler::AdminTeleport
     msu = MagicSkillUse.new(pc, pc, 628, 1, 1, 1)
     pc.broadcast_packet(msu)
 
-
     if smn = pc.summon
       msu = MagicSkillUse.new(smn, smn, 628, 1, 1, 1)
       smn.broadcast_packet(msu)
@@ -343,30 +342,30 @@ module AdminCommandHandler::AdminTeleport
   end
 
   def commands : Enumerable(String)
-    %w(
-    admin_show_moves
-    admin_show_moves_other
-    admin_show_teleport
-    admin_teleport_to_character
-    admin_teleportto
-    admin_move_to
-    admin_teleport_character
-    admin_recall
-    admin_walk
-    teleportto
-    recall
-    admin_recall_npc
-    admin_gonorth
-    admin_gosouth
-    admin_goeast
-    admin_gowest
-    admin_goup
-    admin_godown
-    admin_tele
-    admin_teleto
-    admin_instant_move
-    admin_sendhome
-    admin_warp
-    )
+    {
+      "admin_show_moves",
+      "admin_show_moves_other",
+      "admin_show_teleport",
+      "admin_teleport_to_character",
+      "admin_teleportto",
+      "admin_move_to",
+      "admin_teleport_character",
+      "admin_recall",
+      "admin_walk",
+      "teleportto",
+      "recall",
+      "admin_recall_npc",
+      "admin_gonorth",
+      "admin_gosouth",
+      "admin_goeast",
+      "admin_gowest",
+      "admin_goup",
+      "admin_godown",
+      "admin_tele",
+      "admin_teleto",
+      "admin_instant_move",
+      "admin_sendhome",
+      "admin_warp"
+    }
   end
 end

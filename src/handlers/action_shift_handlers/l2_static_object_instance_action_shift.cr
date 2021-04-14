@@ -6,9 +6,7 @@ module ActionShiftHandler::L2StaticObjectInstanceActionShift
     if pc.access_level.gm?
       pc.target = target
       obj = target
-      unless obj.is_a?(L2StaticObjectInstance)
-        raise "Expected #{obj}:#{obj.class} to be a L2StaticObjectInstance"
-      end
+      return false unless obj.is_a?(L2StaticObjectInstance)
 
       pc.send_packet(StaticObject.new(obj))
       str = String.build do |io|

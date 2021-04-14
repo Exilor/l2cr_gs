@@ -24,11 +24,6 @@ module ItemHandler::FishShots
     return false if count < 1
     skills = item.template.skills
 
-    if skills.nil?
-      warn { "#{item.name} is missing skills." }
-      return false
-    end
-
     grade_check = item.etc_item?
     grade_check &= item.etc_item!.default_action == ActionType::FISHINGSHOT
     grade_check &= weapon_inst.template.item_grade_s_plus == item.template.item_grade_s_plus

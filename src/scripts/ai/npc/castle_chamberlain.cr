@@ -738,9 +738,7 @@ class Scripts::CastleChamberlain < AbstractNpcAI
       end
     when "buy"
       if owner?(pc, npc) && pc.has_clan_privilege?(ClanPrivilege::CS_USE_FUNCTIONS)
-        unless npc.is_a?(L2MerchantInstance)
-          raise "Expected #{npc} to be a L2MerchantInstance"
-        end
+        return unless npc.is_a?(L2MerchantInstance)
         npc.show_buy_window(pc, st.shift.to_i)
       else
         htmltext = "chamberlain-21.html"

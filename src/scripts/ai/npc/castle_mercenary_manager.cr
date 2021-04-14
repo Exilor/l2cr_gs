@@ -42,9 +42,7 @@ class Scripts::CastleMercenaryManager < AbstractNpcAI
     when "buy"
       if SevenSigns.instance.seal_validation_period?
         list_id = "#{npc.id}#{st.shift}".to_i
-        unless npc.is_a?(L2MerchantInstance)
-          raise "Expected #{npc} to be a L2MerchantInstance"
-        end
+        return unless npc.is_a?(L2MerchantInstance)
         npc.show_buy_window(pc, list_id, false) # NOTE: Not affected by Castle Taxes, baseTax is 20% (done in merchant buylists)
       else
         html = "mercmanager-ssq.html"

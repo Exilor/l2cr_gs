@@ -4,7 +4,7 @@ module TargetHandler::AreaSummon
 
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
     target = char.summon
-    if target.nil? || (!target.servitor? || target.dead?)
+    unless target.is_a?(L2ServitorInstance) && target.alive?
       return EMPTY_TARGET_LIST
     end
 

@@ -67,7 +67,7 @@ module TargetHandler::Clan
     elsif char.is_a?(L2Npc)
       npc = char
 
-      if npc.template.clans.nil? || npc.template.clans.empty?
+      if npc.template.clans.empty?
         return [char] of L2Object
       end
 

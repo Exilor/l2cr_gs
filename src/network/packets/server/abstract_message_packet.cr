@@ -37,8 +37,9 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
 
   private def add_param(param)
     if @params.size == param_count
-      raise "#{@system_message_id} already has the maximum number of " \
-        "parameters (#{param_count})"
+      warn { "#{@system_message_id} already has the maximum number of " \
+        "parameters (#{param_count})" }
+      return self
     end
 
     @params << param
@@ -103,17 +104,21 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
     add_param(SMParam.new(NPC_NAME, id &+ 1_000_000))
   end
 
-  def add_item_name(item : L2Item | L2ItemInstance) : self
-    add_item_name(item.id)
-  end
-
   def add_item_name(id : Int32) : self
     item = ItemTable[id]
-    if item.display_id != id
+    add_item_name(item)
+  end
+
+  def add_item_name(item : L2ItemInstance) : self
+    add_item_name(item.template)
+  end
+
+  def add_item_name(item : L2Item) : self
+    if item.display_id != item.id
       return add_string(item.name)
     end
 
-    add_param(SMParam.new(ITEM_NAME, id))
+    add_param(SMParam.new(ITEM_NAME, item.id))
   end
 
   def add_zone_name(x : Int32, y : Int32, z : Int32) : self
@@ -157,8 +162,9 @@ abstract class Packets::Outgoing::AbstractMessagePacket < GameServerPacket
     end
 
     if @params.size < param_count
-      raise "Too few parameters for #{@system_message_id} " \
-        "(#{@params.size} were given but #{param_count} are required)"
+      warn { "Too few parameters for #{@system_message_id} (#{@params.size} " \
+        "were given but #{param_count} are required)" }
+      return
     end
 
     d param_count

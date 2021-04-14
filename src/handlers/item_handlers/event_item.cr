@@ -28,7 +28,7 @@ module ItemHandler::EventItem
       return false
     end
 
-    unless sk = item.etc_item!.skills.not_nil!.first.skill?
+    unless sk = item.etc_item!.skills.first.skill?
       warn { "Skill for item #{item} not found." }
       return false
     end

@@ -78,13 +78,9 @@ class L2Attackable < L2Npc
 
     unless skill.static?
       if skill.magic?
-        if muted?
-          return
-        end
-      else
-        if physical_muted?
-          return
-        end
+        return if muted?
+      elsif physical_muted?
+        return
       end
     end
 
@@ -130,9 +126,7 @@ class L2Attackable < L2Npc
 
     if monster?
       master = self
-      unless master.is_a?(L2MonsterInstance)
-        raise "Expected #{master}:#{master.class} to be a L2MonsterInstance"
-      end
+      return unless master.is_a?(L2MonsterInstance)
       if master.has_minions?
         master.minion_list.on_assist(self, attacker)
       end

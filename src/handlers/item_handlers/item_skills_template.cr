@@ -25,7 +25,7 @@ module ItemHandler::ItemSkillsTemplate
     tpl = item.etc_item!
     skills = tpl.skills
 
-    if skills.nil? || skills.empty?
+    if skills.empty?
       warn { "#{tpl} has no skills." }
       return false
     end

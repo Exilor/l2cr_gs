@@ -138,27 +138,25 @@ abstract class Inventory < ItemContainer
 
       item.apply_enchant_stats
 
-      if skills = it.skills
-        skills.each do |holder|
-          if item_skill = holder.skill?
-            item_skill.reference_item_id = item.id
-            pc.add_skill(item_skill, false)
+      it.skills.each do |holder|
+        if item_skill = holder.skill?
+          item_skill.reference_item_id = item.id
+          pc.add_skill(item_skill, false)
 
-            if item_skill.active?
-              unless pc.has_skill_reuse?(item_skill.hash)
-                equip_delay = item.equip_reuse_delay
+          if item_skill.active?
+            unless pc.has_skill_reuse?(item_skill.hash)
+              equip_delay = item.equip_reuse_delay
 
-                if equip_delay > 0
-                  pc.add_time_stamp(item_skill, equip_delay.to_i64)
-                  pc.disable_skill(item_skill, equip_delay.to_i64)
-                end
+              if equip_delay > 0
+                pc.add_time_stamp(item_skill, equip_delay.to_i64)
+                pc.disable_skill(item_skill, equip_delay.to_i64)
               end
-
-              update_time_stamp = true
             end
 
-            update = true
+            update_time_stamp = true
           end
+
+          update = true
         end
       end
 
@@ -191,22 +189,20 @@ abstract class Inventory < ItemContainer
 
       item.clear_enchant_stats
 
-      if skills = it.skills
-        skills.each do |holder|
-          if item_skill = holder.skill
-            pc.remove_skill(item_skill, false, item_skill.passive?)
-            update = true
-          end
+      it.skills.each do |holder|
+        if item_skill = holder.skill
+          pc.remove_skill(item_skill, false, item_skill.passive?)
+          update = true
         end
       end
 
       if item.armor?
         inv.items.each do |itm|
-          if !itm.equipped? || !itm.template.skills || itm == item
+          if !itm.equipped? || itm == item
             next
           end
 
-          itm.template.skills.try &.each do |sk|
+          itm.template.skills.each do |sk|
             if pc.get_skill_level(sk.skill_id) != -1
               next
             end

@@ -10,11 +10,6 @@ module ItemHandler::Harvester
       return false
     end
 
-    unless skills = item.template.skills
-      warn { "#{item.name} is missing skills." }
-      return false
-    end
-
     pc = playable.acting_player
     target = pc.target
 
@@ -24,7 +19,7 @@ module ItemHandler::Harvester
       return false
     end
 
-    skills.each { |sk| pc.use_magic(sk.skill, false, false) }
+    item.template.skills.each { |sk| pc.use_magic(sk.skill, false, false) }
 
     true
   end

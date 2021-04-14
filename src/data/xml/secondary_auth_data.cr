@@ -12,7 +12,8 @@ module SecondaryAuthData
   def load
     debug "Loading..."
     FORBIDDEN_PASSWORDS.clear
-    parse_datapack_file("../config/SecondaryAuth.xml")
+    path = Dir.current + "/config/SecondaryAuth.xml"
+    XMLReader.parse_file(path) { |doc, file| parse_document(doc, file) }
     info { "Loaded #{FORBIDDEN_PASSWORDS.size} forbidden passwords." }
   end
 

@@ -12,8 +12,17 @@ module TargetHandler::EnemySummon
     pc = char.as?(L2PcInstance)
     owner = target.owner
 
-    if (pc && char.summon != target && target.alive? && (owner.pvp_flag != 0 || owner.karma > 0)) || (owner.inside_pvp_zone? && (pc && pc.inside_pvp_zone?)) || (owner.in_duel? && pc && (pc.in_duel? && owner.duel_id == pc.duel_id))
+    if pc && char.summon != target && target.alive?
+      if owner.pvp_flag != 0 || owner.karma > 0
+        return [target] of L2Object
+      end
+    end
 
+    if owner.inside_pvp_zone? && (pc && pc.inside_pvp_zone?)
+      return [target] of L2Object
+    end
+
+    if owner.in_duel? && pc && (pc.in_duel? && owner.duel_id == pc.duel_id)
       return [target] of L2Object
     end
 

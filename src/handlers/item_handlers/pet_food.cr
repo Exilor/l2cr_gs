@@ -8,8 +8,8 @@ module ItemHandler::PetFood
       return false
     end
 
-    if skills = item.template.skills
-      skills.each { |sk| use_food(playable, sk.skill_id, sk.skill_lvl, item) }
+    item.template.skills.each do |sk|
+      use_food(playable, sk.skill_id, sk.skill_lvl, item)
     end
 
     true

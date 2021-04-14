@@ -48,6 +48,6 @@ module AdminCommandHandler::AdminHtml
   end
 
   def commands : Enumerable(String)
-    %w(admin_html admin_loadhtml)
+    {"admin_html", "admin_loadhtml"}
   end
 end

@@ -12,7 +12,6 @@ class Packets::Incoming::MoveBackwardToLocation < GameClientPacket
 
     unless buffer.remaining >= 4
       if Config.l2walker_protection
-        warn { "Player #{client.active_char} is trying to use L2Walker." }
         if pc = client.active_char
           Util.punish(pc, "tried to use L2Walker and got kicked.")
         end

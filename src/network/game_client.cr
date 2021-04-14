@@ -40,14 +40,10 @@ class GameClient
   end
 
   def send_packet(gsp : GameServerPacket)
-    if detached?
-      return
-    end
+    return if detached?
 
     if gsp.invisible? && (pc = @active_char)
-      unless pc.override_see_all_players?
-        return
-      end
+      return unless pc.override_see_all_players?
     end
 
     connection.send_packet(gsp)
@@ -223,9 +219,7 @@ class GameClient
   end
 
   def close(gsp : GameServerPacket?)
-    unless con = @connection
-      return
-    end
+    return unless con = @connection
 
     if tmp = @additional_close_packet
       con.close({tmp, gsp})
@@ -395,7 +389,6 @@ class GameClient
 
   def on_forced_disconnection
     Logs[:accounting].warn { "Client #{self} disconnected abnormally." }
-    debug "Disconnected abnormally."
   end
 
   def clean_me(fast : Bool)
@@ -471,32 +464,16 @@ class GameClient
   end
 
   def offline_mode?(pc : L2PcInstance) : Bool
-    if pc.in_olympiad_mode?
-      return false
-    end
-
-    if pc.festival_participant?
-      return false
-    end
-
-    if pc.blocked_from_exit?
-      return false
-    end
-
-    if pc.jailed?
-      return false
-    end
-
-    if pc.vehicle
-      return false
-    end
+    return false if pc.in_olympiad_mode?
+    return false if pc.festival_participant?
+    return false if pc.blocked_from_exit?
+    return false if pc.jailed?
+    return false if pc.vehicle
 
     can_set_shop = false
 
     case pc.private_store_type
-    when .sell?, .package_sell?, .buy?
-      can_set_shop = Config.offline_trade_enable
-    when .manufacture?
+    when .sell?, .package_sell?, .buy?, .manufacture?
       can_set_shop = Config.offline_trade_enable
     else
       can_set_shop = Config.offline_trade_enable && pc.in_craft_mode?

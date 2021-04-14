@@ -44,9 +44,7 @@ module ItemHandler::Seed
     pc = playable.acting_player
     target.set_seeded(seed, pc)
 
-    if skills = item.template.skills
-      skills.each { |sk| pc.use_magic(sk.skill, false, false) }
-    end
+    item.template.skills.each { |sk| pc.use_magic(sk.skill, false, false) }
 
     true
   end

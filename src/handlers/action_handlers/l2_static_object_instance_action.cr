@@ -3,9 +3,7 @@ module ActionHandler::L2StaticObjectInstanceAction
   extend ActionHandler
 
   def action(pc, target, interact) : Bool
-    unless target.is_a?(L2StaticObjectInstance)
-      return false
-    end
+    return false unless target.is_a?(L2StaticObjectInstance)
 
     if target.type < 0
       raise "StaticObject with invalid type #{target.type}."

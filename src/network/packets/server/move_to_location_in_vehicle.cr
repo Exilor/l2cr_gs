@@ -6,7 +6,7 @@ class Packets::Outgoing::MoveToLocationInVehicle < GameServerPacket
     @destination = destination
     @origin = origin
     @pc_id = pc.l2id
-    @boat_id = pc.boat!.l2id
+    @boat_id = pc.boat.not_nil!.l2id
   end
 
   private def write_impl

@@ -26,11 +26,6 @@ module ItemHandler::BeastSpiritShot
     shot_count = item.count
     skills = item.template.skills
 
-    if skills.nil? || skills.empty?
-      warn { "#{item.template} has no skills." }
-      return false
-    end
-
     if shot_count < shot_consumption
       owner.send_packet(SystemMessageId::NOT_ENOUGH_SPIRITSHOTS_FOR_PET)
       return false

@@ -14,10 +14,6 @@ module AdminCommandHandler::AdminMonsterRace
     true
   end
 
-  def commands : Enumerable(String)
-    {"admin_mons"}
-  end
-
   private def handle_send_packet(pc)
     codes = [
       [
@@ -83,5 +79,9 @@ module AdminCommandHandler::AdminMonsterRace
 
       AdminMonsterRace.state = -1
     end
+  end
+
+  def commands : Enumerable(String)
+    {"admin_mons"}
   end
 end

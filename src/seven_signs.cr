@@ -506,14 +506,12 @@ class SevenSigns
   end
 
   def get_player_cabal(l2id : Int32) : Int32
-    unless data = SIGNS_PLAYER_DATA[l2id]?
-      return CABAL_NULL
-    end
+    return CABAL_NULL unless data = SIGNS_PLAYER_DATA[l2id]?
 
-    cabal = data.get_string("cabal")
-    if cabal.casecmp?("dawn")
+    case data.get_string("cabal").casecmp
+    when "dawn"
       CABAL_DAWN
-    elsif cabal.casecmp?("dusk")
+    when "dusk"
       CABAL_DUSK
     else
       CABAL_NULL

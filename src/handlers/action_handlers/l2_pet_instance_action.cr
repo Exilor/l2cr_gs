@@ -8,9 +8,7 @@ module ActionHandler::L2PetInstanceAction
       return false
     end
 
-    unless target.is_a?(L2PetInstance)
-      raise "Expected #{target}:#{target.class} to be a L2PetInstance"
-    end
+    return false unless target.is_a?(L2PetInstance)
 
     is_owner = pc.l2id == target.owner.l2id
 

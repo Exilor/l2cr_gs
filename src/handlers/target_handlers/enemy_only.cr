@@ -21,6 +21,13 @@ module TargetHandler::EnemyOnly
       return EMPTY_TARGET_LIST
     end
 
+    # custom. fixes an issue in a recent l2j update that prevents mobs from
+    # using many skills
+    if char.attackable?
+      return [target] of L2Object
+    end
+    #
+
     if target.npc?
       if target.attackable?
         return [target] of L2Object
@@ -44,9 +51,8 @@ module TargetHandler::EnemyOnly
     end
 
     # In Duel, different sides.
-    if pc.in_duel_with?(target)
+    if pc.in_duel_with?(target) && (duel = DuelManager.get_duel(pc.duel_id))
       target_pc = target.acting_player
-      duel = DuelManager.get_duel(pc.duel_id).not_nil!
       team_a = duel.team_a
       team_b = duel.team_b
       if team_a.includes?(pc) && team_b.includes?(target_pc)

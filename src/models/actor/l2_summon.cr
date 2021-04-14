@@ -15,7 +15,7 @@ abstract class L2Summon < L2Playable
   @shots_mask = 0
   @previous_follow_status = true
 
-  getter follow_status = true # L2R: @follow
+  getter follow_status = true
   getter attack_range = 36
   property original_hp_mp : {Float64, Float64}?
   property owner : L2PcInstance
@@ -29,8 +29,8 @@ abstract class L2Summon < L2Playable
     self.instance_id = owner.instance_id
     self.show_summon_animation = true
     ai
-    x = owner.x + Rnd.rand(-100..100)
-    y = owner.y + Rnd.rand(-100..100)
+    x = owner.x + (Rnd.bool ? Rnd.rand(50..100) : Rnd.rand(-100..-50))
+    y = owner.y + (Rnd.bool ? Rnd.rand(50..100) : Rnd.rand(-100..-50))
     set_xyz_invisible(x, y, owner.z)
 
     template.skills.each_value { |skill| add_skill(skill) }

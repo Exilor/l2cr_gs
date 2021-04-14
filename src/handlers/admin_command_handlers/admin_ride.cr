@@ -67,16 +67,16 @@ module AdminCommandHandler::AdminRide
   end
 
   def commands : Enumerable(String)
-    %w(
-      admin_ride_horse
-      admin_ride_bike
-      admin_ride_wyvern
-      admin_ride_strider
-      admin_unride_wyvern
-      admin_unride_strider
-      admin_unride
-      admin_ride_wolf
-      admin_unride_wolf
-    )
+    {
+      "admin_ride_horse",
+      "admin_ride_bike",
+      "admin_ride_wyvern",
+      "admin_ride_strider",
+      "admin_unride_wyvern",
+      "admin_unride_strider",
+      "admin_unride",
+      "admin_ride_wolf",
+      "admin_unride_wolf"
+    }
   end
 end

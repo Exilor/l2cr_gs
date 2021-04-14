@@ -293,7 +293,7 @@ class DimensionalRift
 
   def max_jumps : Int8
     if Config.rift_max_jumps.between?(1, 8)
-      return Config.rift_max_jumps.to_i8
+      return Config.rift_max_jumps.to_i8!
     end
 
     4i8

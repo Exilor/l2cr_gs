@@ -12,11 +12,6 @@ module ItemHandler::SoulShots
     item_id = item.id
     skills = item.template.skills
 
-    if skills.nil? || skills.empty?
-      warn { "#{item.template} has no skills." }
-      return false
-    end
-
     if weapon_inst.nil? || pc.active_weapon_item.not_nil!.soulshot_count == 0
       unless pc.active_shots.includes?(item_id)
         pc.send_packet(SystemMessageId::CANNOT_USE_SOULSHOTS)

@@ -11,8 +11,7 @@ class Packets::Incoming::RequestGetOnVehicle < GameClientPacket
     return unless pc = active_char
     return unless pos = @pos
 
-    if pc.in_boat?
-      boat = pc.boat!
+    if boat = pc.boat
       if boat.l2id != @boat_id
         action_failed
         return

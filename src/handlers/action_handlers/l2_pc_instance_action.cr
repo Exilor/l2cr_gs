@@ -19,7 +19,7 @@ module ActionHandler::L2PcInstanceAction
     if pc.target != target
       pc.target = target
     elsif interact
-      player = target.acting_player.not_nil!
+      player = target.as(L2PcInstance)
       if !player.private_store_type.none?
         pc.set_intention(AI::INTERACT, player)
       else

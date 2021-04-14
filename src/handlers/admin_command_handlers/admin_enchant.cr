@@ -97,23 +97,23 @@ module AdminCommandHandler::AdminEnchant
   end
 
   def commands : Enumerable(String)
-    %w(
-      admin_seteh
-      admin_setec
-      admin_seteg
-      admin_setel
-      admin_seteb
-      admin_setew
-      admin_setes
-      admin_setle
-      admin_setre
-      admin_setlf
-      admin_setrf
-      admin_seten
-      admin_setun
-      admin_setba
-      admin_setbe
-      admin_enchant
-    )
+    {
+      "admin_seteh",
+      "admin_setec",
+      "admin_seteg",
+      "admin_setel",
+      "admin_seteb",
+      "admin_setew",
+      "admin_setes",
+      "admin_setle",
+      "admin_setre",
+      "admin_setlf",
+      "admin_setrf",
+      "admin_seten",
+      "admin_setun",
+      "admin_setba",
+      "admin_setbe",
+      "admin_enchant"
+    }
   end
 end

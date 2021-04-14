@@ -757,7 +757,7 @@ class L2ItemInstance < L2Object
     return unless has_passive_skills?
 
     if pc = acting_player
-      @item.skills.try &.each do |sh|
+      @item.skills.each do |sh|
         skill = sh.skill?
         if skill && skill.passive?
           pc.add_skill(skill, false)
@@ -770,7 +770,7 @@ class L2ItemInstance < L2Object
     return unless has_passive_skills?
 
     if pc = acting_player
-      @item.skills.try &.each do |sh|
+      @item.skills.each do |sh|
         skill = sh.skill?
         if skill && skill.passive?
           pc.remove_skill(skill, false, true)

@@ -59,7 +59,7 @@ class Packets::Incoming::UseItem < GameClientPacket
     end
 
     if !Config.alt_game_karma_player_can_teleport && pc.karma > 0
-      item.template.skills.try &.each do |holder|
+      item.template.skills.each do |holder|
         if skill = holder.skill?
           if skill.has_effect_type?(EffectType::TELEPORT)
             return

@@ -5,12 +5,10 @@ module TargetHandler::AreaFriendly
   def get_target_list(skill, char, only_first, target) : Array(L2Object)
     pc = char.acting_player.not_nil!
 
-    if !check_target(pc, target) && skill.cast_range >= 0
+    if target.nil? || (!check_target(pc, target) && skill.cast_range >= 0)
       pc.send_packet(SystemMessageId::TARGET_IS_INCORRECT)
       return EMPTY_TARGET_LIST
     end
-
-    target = target.not_nil!
 
     return [target] of L2Object if only_first
 
@@ -42,7 +40,6 @@ module TargetHandler::AreaFriendly
   end
 
   private def check_target(char, target) : Bool
-    return false unless target
     return false unless GeoData.can_see_target?(char, target)
 
     if target.looks_dead? || target.door? || target.is_a?(L2SiegeFlagInstance)

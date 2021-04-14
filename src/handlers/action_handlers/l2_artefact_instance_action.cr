@@ -3,9 +3,7 @@ module ActionHandler::L2ArtefactInstanceAction
   extend ActionHandler
 
   def action(pc, target, interact) : Bool
-    unless target.is_a?(L2Npc)
-      raise "Expected #{target}:#{target.class} to be a L2Npc"
-    end
+    return false unless target.is_a?(L2Npc)
 
     unless target.can_target?(pc)
       return false

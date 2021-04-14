@@ -765,10 +765,6 @@ class L2PcInstance < L2Playable
     super.as(L2PcTemplate)
   end
 
-  def name : String
-    super.not_nil!
-  end
-
   def name=(value : String)
     super
 
@@ -953,16 +949,12 @@ class L2PcInstance < L2Playable
   end
 
   def broadcast_packet(gsp : GameServerPacket)
-    unless gsp.is_a?(CharInfo)
-      send_packet(gsp)
-    end
+    send_packet(gsp) unless gsp.is_a?(CharInfo)
 
     gsp.invisible = invisible?
 
     known_list.each_player do |pc|
-      unless visible_for?(pc)
-        next
-      end
+      next unless visible_for?(pc)
 
       pc.send_packet(gsp)
 
@@ -984,9 +976,7 @@ class L2PcInstance < L2Playable
   end
 
   def broadcast_packet(gsp : GameServerPacket, radius : Int32)
-    unless gsp.is_a?(CharInfo)
-      send_packet(gsp)
-    end
+    send_packet(gsp) unless gsp.is_a?(CharInfo)
 
     gsp.invisible = invisible?
 
@@ -1031,32 +1021,28 @@ class L2PcInstance < L2Playable
       rel |= RelationChanged::LEADER
     end
 
-    party = party()
-
-    if party && party == pc.party
+    if (party = party()) && party == pc.party
       rel |= RelationChanged::HAS_PARTY
 
-      case i = party.members.index(self)
+      case party.members.index(self)
       when 0
         rel |= RelationChanged::PARTYLEADER
       when 1
         rel |= RelationChanged::PARTY4
       when 2
-        rel |= RelationChanged::PARTY3 + RelationChanged::PARTY2 + RelationChanged::PARTY1
+        rel |= RelationChanged::PARTY3 &+ RelationChanged::PARTY2 &+ RelationChanged::PARTY1
       when 3
-        rel |= RelationChanged::PARTY3 + RelationChanged::PARTY2
+        rel |= RelationChanged::PARTY3 &+ RelationChanged::PARTY2
       when 4
-        rel |= RelationChanged::PARTY3 + RelationChanged::PARTY1
+        rel |= RelationChanged::PARTY3 &+ RelationChanged::PARTY1
       when 5
         rel |= RelationChanged::PARTY3
       when 6
-        rel |= RelationChanged::PARTY2 + RelationChanged::PARTY1
+        rel |= RelationChanged::PARTY2 &+ RelationChanged::PARTY1
       when 7
         rel |= RelationChanged::PARTY2
       when 8
         rel |= RelationChanged::PARTY1
-      else
-        raise "Wrong index for member in party: '#{i}'"
       end
     end
 
@@ -1077,12 +1063,12 @@ class L2PcInstance < L2Playable
       end
     end
 
-    if clan && (pc_clan = pc.clan)
+    if clan && (other_clan = pc.clan)
       if pc.pledge_type != L2Clan::SUBUNIT_ACADEMY
         if pledge_type != L2Clan::SUBUNIT_ACADEMY
-          if pc_clan.at_war_with?(clan.id)
+          if other_clan.at_war_with?(clan.id)
             rel |= RelationChanged::ONE_SIDED_WAR
-            if clan.at_war_with?(pc_clan.id)
+            if clan.at_war_with?(other_clan.id)
               rel |= RelationChanged::MUTUAL_WAR
             end
           end
@@ -1510,10 +1496,8 @@ class L2PcInstance < L2Playable
         return false
       end
 
-      if target.is_a?(L2EventMonsterInstance)
-        if target.block_skill_attack?
-          return false
-        end
+      if target.is_a?(L2EventMonsterInstance) && target.block_skill_attack?
+        return false
       end
 
       if !target.auto_attackable?(self) && !force_use
@@ -1682,34 +1666,20 @@ class L2PcInstance < L2Playable
     true
   end
 
-  def set_current_skill(skill : Skill?, ctrl : Bool, shift : Bool)
-    unless skill
-      @current_skill = nil
-      return
-    end
-
-    @current_skill = SkillUseHolder.new(skill, ctrl, shift)
-  end
-
   def pet=(summon : L2Summon?)
     @summon = summon
   end
 
   def set_current_pet_skill(skill : Skill?, ctrl : Bool, shift : Bool)
-    unless skill
-      @current_pet_skill = nil
-      return
-    end
-
-    @current_pet_skill = SkillUseHolder.new(skill, ctrl, shift)
+    @current_pet_skill = skill ? SkillUseHolder.new(skill, ctrl, shift) : nil
   end
 
   def add_transform_skill(sk : Skill)
-    unless @transform_skills
-      sync { @transform_skills ||= Concurrent::Map(Int32, Skill).new }
+    skills = @transform_skills || sync do
+      @transform_skills ||= Concurrent::Map(Int32, Skill).new
     end
 
-    @transform_skills.not_nil![sk.id] = sk
+    skills[sk.id] = sk
 
     if sk.passive?
       add_skill(sk, false)
@@ -1723,11 +1693,8 @@ class L2PcInstance < L2Playable
   end
 
   def has_transform_skill?(id : Int32) : Bool
-    if tmp = @transform_skills
-      return tmp.has_key?(id)
-    end
-
-    false
+    return false unless tmp = @transform_skills
+    tmp.has_key?(id)
   end
 
   def remove_all_transform_skills
@@ -1736,10 +1703,8 @@ class L2PcInstance < L2Playable
 
   def get_custom_skill(id : Int32) : Skill?
     if tmp = @custom_skills
-      return tmp[id]?
+      tmp[id]?
     end
-
-    nil
   end
 
   def reward_skills
@@ -1873,9 +1838,7 @@ class L2PcInstance < L2Playable
   end
 
   def disarm_shield : Bool
-    unless shld = inventory.lhand_slot
-      return true
-    end
+    return true unless shld = inventory.lhand_slot
 
     old = inventory.unequip_item_in_body_slot_and_record(shld.template.body_part)
     send_packet(InventoryUpdate.modified(old))
@@ -1943,20 +1906,13 @@ class L2PcInstance < L2Playable
   end
 
   private def on_die_drop_item(killer : L2Character?)
-    unless killer
-      return
-    end
-
-    if L2Event.participant?(self)
-      return
-    end
+    return unless killer
+    return if L2Event.participant?(self)
 
     pk = killer.acting_player
 
     if karma <= 0 && pk && (pk_clan = pk.clan) && clan
-      if pk_clan.at_war_with?(clan_id)
-        return
-      end
+      return if pk_clan.at_war_with?(clan_id)
     end
 
     if (!inside_pvp_zone? || !pk) && (!gm? || Config.karma_drop_gm)
@@ -2026,9 +1982,7 @@ class L2PcInstance < L2Playable
   end
 
   def calculate_death_penalty_buff_level(killer : L2Character?)
-    unless killer
-      return
-    end
+    return unless killer
 
     if resurrect_special_affected? || lucky? || blocked_from_death_penalty? ||
       inside_pvp_zone? || inside_siege_zone? || override_death_penalty?
@@ -3405,11 +3359,8 @@ class L2PcInstance < L2Playable
     end
 
     if item_id
-      return ItemTable[item_id].as(L2Weapon)
+      ItemTable[item_id].as(L2Weapon)
     end
-
-    # warn { "No fists found for #{ClassId[class_id]}." }
-    nil
   end
 
   def active_weapon_instance : L2ItemInstance?
@@ -5941,8 +5892,7 @@ class L2PcInstance < L2Playable
   end
 
   def get_pet_level_data(npc_id : Int32) : L2PetLevelData?
-    @level_data ||=
-    PetDataTable.get_pet_data(npc_id).get_pet_level_data(mount_level)
+    @level_data ||= PetDataTable.get_pet_data(npc_id).get_pet_level_data(mount_level)
   end
 
   def rented_pet? : Bool
@@ -5951,10 +5901,6 @@ class L2PcInstance < L2Playable
 
   def uptime : Int64
     Time.ms - @uptime
-  end
-
-  def invul? : Bool
-    super || @teleporting
   end
 
   def vehicle=(vehicle : L2Vehicle?)
@@ -5967,10 +5913,6 @@ class L2PcInstance < L2Playable
 
   def boat : L2BoatInstance?
     @vehicle.as?(L2BoatInstance)
-  end
-
-  def boat! : L2BoatInstance
-    boat.not_nil!
   end
 
   def has_clan_privilege?(priv : ClanPrivilege) : Bool

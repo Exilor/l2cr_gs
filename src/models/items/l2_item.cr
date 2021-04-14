@@ -47,10 +47,9 @@ abstract class L2Item < ListenersContainer
   SLOT_MULTI_ALLWEAPON = SLOT_LR_HAND | SLOT_R_HAND
 
   @item_id : Int32
-  @pre_conditions : Array(Condition)?
-  @func_templates : Array(FuncTemplate)?
+  @pre_conditions = Slice(Condition).empty
+  @func_templates = Slice(FuncTemplate).empty
   @unequip_skill : SkillHolder?
-  @skill_holder : Array(SkillHolder)?
 
   getter display_id : Int32
   getter name : String
@@ -72,6 +71,7 @@ abstract class L2Item < ListenersContainer
   getter use_skill_dis_time : Int32
   getter reuse_delay : Int32
   getter shared_reuse_group : Int32
+  getter skills = Slice(SkillHolder).empty
   getter! type_1 : ItemType1
   getter! type_2 : ItemType2
   getter? stackable : Bool
@@ -145,7 +145,7 @@ abstract class L2Item < ListenersContainer
         level = skill_split[1].to_i
         skill_holder << SkillHolder.new(id, level)
       end
-      @skill_holder = skill_holder.trim
+      @skills = skill_holder.to_slice
     end
 
     skills = set.get_string("unequip_skill", nil)
@@ -242,17 +242,13 @@ abstract class L2Item < ListenersContainer
   end
 
   def get_stat_funcs(item : L2ItemInstance, char : L2Character) : Indexable(AbstractFunction)
-    unless templates = @func_templates
-      return Slice(AbstractFunction).empty
-    end
-
-    if templates.empty?
+    if @func_templates.empty?
       return Slice(AbstractFunction).empty
     end
 
     funcs = [] of AbstractFunction
 
-    templates.each do |t|
+    @func_templates.each do |t|
       if f = t.get_func(char, char, item, item)
         funcs << f
       end
@@ -261,47 +257,33 @@ abstract class L2Item < ListenersContainer
     funcs
   end
 
-  def attach(obj : FuncTemplate)
-    case obj.stat
+  def attach(func : FuncTemplate)
+    case func.stat
     when Stats::FIRE_RES, Stats::FIRE_POWER
-      self.elementals = Elementals.new(Elementals::FIRE, obj.value.to_i)
+      self.elementals = Elementals.new(Elementals::FIRE, func.value.to_i)
     when Stats::WATER_RES, Stats::WATER_POWER
-      self.elementals = Elementals.new(Elementals::WATER, obj.value.to_i)
+      self.elementals = Elementals.new(Elementals::WATER, func.value.to_i)
     when Stats::WIND_RES, Stats::WIND_POWER
-      self.elementals = Elementals.new(Elementals::WIND, obj.value.to_i)
+      self.elementals = Elementals.new(Elementals::WIND, func.value.to_i)
     when Stats::EARTH_RES, Stats::EARTH_POWER
-      self.elementals = Elementals.new(Elementals::EARTH, obj.value.to_i)
+      self.elementals = Elementals.new(Elementals::EARTH, func.value.to_i)
     when Stats::HOLY_RES, Stats::HOLY_POWER
-      self.elementals = Elementals.new(Elementals::HOLY, obj.value.to_i)
+      self.elementals = Elementals.new(Elementals::HOLY, func.value.to_i)
     when Stats::DARK_RES, Stats::DARK_POWER
-      self.elementals = Elementals.new(Elementals::DARK, obj.value.to_i)
+      self.elementals = Elementals.new(Elementals::DARK, func.value.to_i)
     end
 
-
-    if temp = @func_templates
-      temp << obj
-    else
-      @func_templates = [obj] of FuncTemplate
-    end
+    @func_templates = @func_templates.add(func)
   end
 
-  def attach(obj : Condition)
-    if conds = @pre_conditions
-      unless conds.includes?(obj)
-        conds << obj
-      end
-    else
-      @pre_conditions = [obj] of Condition
+  def attach(cond : Condition)
+    unless @pre_conditions.includes?(cond)
+      @pre_conditions = @pre_conditions.add(cond)
     end
   end
 
   def has_skills? : Bool
-    return false unless temp = @skill_holder
-    !temp.empty?
-  end
-
-  def skills : Array(SkillHolder)?
-    @skill_holder
+    !@skills.empty?
   end
 
   def unequip_skill : Skill?
@@ -325,11 +307,9 @@ abstract class L2Item < ListenersContainer
       end
     end
 
-    return true unless condition_attached?
-
     target = object.as?(L2Character)
 
-    @pre_conditions.try &.each do |cond|
+    @pre_conditions.each do |cond|
       unless cond.test(char, target, nil, nil)
         if char.is_a?(L2Summon)
           char.send_packet(SystemMessageId::PET_CANNOT_USE_ITEM)
@@ -358,8 +338,7 @@ abstract class L2Item < ListenersContainer
   end
 
   def condition_attached? : Bool
-    return false unless conds = @pre_conditions
-    !conds.empty?
+    !@pre_conditions.empty?
   end
 
   def oly_restricted_item? : Bool
